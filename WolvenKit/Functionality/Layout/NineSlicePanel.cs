@@ -95,20 +95,43 @@ namespace WolvenKit.Functionality.Layout
                 double y1 = np.NineSlice.Top, y2 = bm.Height - np.NineSlice.Bottom;
                 double w1 = np.NineSlice.Left, w3 = np.NineSlice.Right, w2 = bm.Width - w1 - w3;
                 double h1 = np.NineSlice.Top, h3 = np.NineSlice.Bottom, h2 = bm.Height - h1 - h3;
-                np.patchs = new[] {
-                    new CroppedBitmap(bm, new Int32Rect(0, 0, (int)w1, (int)h1)),
-                    new CroppedBitmap(bm, new Int32Rect((int)x1, 0, (int)w2, (int)h1)),
-                    new CroppedBitmap(bm, new Int32Rect((int)x2, 0, (int)w3, (int)h1)),
-                    new CroppedBitmap(bm, new Int32Rect(0, (int)y1, (int)w1, (int)h2)),
-                    new CroppedBitmap(bm, new Int32Rect((int)x1, (int)y1, (int)w2, (int)h2)),
-                    new CroppedBitmap(bm, new Int32Rect((int)x2, (int)y1, (int)w3, (int)h2)),
-                    new CroppedBitmap(bm, new Int32Rect(0, (int)y2, (int)w1, (int)h3)),
-                    new CroppedBitmap(bm, new Int32Rect((int)x1, (int)y2, (int)w2, (int)h3)),
-                    new CroppedBitmap(bm, new Int32Rect((int)x2, (int)y2, (int)w3, (int)h3))
-                };
+                np.patchs = new ImageSource[9];
+
+                np.patchs[0] = new CroppedBitmap(bm, new Int32Rect(0, 0, (int)w1, (int)h1));
+                np.patchs[1] = new CroppedBitmap(bm, new Int32Rect((int)x1, 0, (int)w2, (int)h1));
+                np.patchs[2] = new CroppedBitmap(bm, new Int32Rect((int)x2, 0, (int)w3, (int)h1));
+
+                np.patchs[3] = new CroppedBitmap(bm, new Int32Rect(0, (int)y1, (int)w1, (int)h2));
+                np.patchs[4] = new CroppedBitmap(bm, new Int32Rect((int)x1, (int)y1, (int)w2, (int)h2));
+                np.patchs[5] = new CroppedBitmap(bm, new Int32Rect((int)x2, (int)y1, (int)w3, (int)h2));
+
+                np.patchs[6] = new CroppedBitmap(bm, new Int32Rect(0, (int)y2, (int)w1, (int)h3));
+                np.patchs[7] = new CroppedBitmap(bm, new Int32Rect((int)x1, (int)y2, (int)w2, (int)h3));
+                np.patchs[8] = new CroppedBitmap(bm, new Int32Rect((int)x2, (int)y2, (int)w3, (int)h3));
             }
             catch (Exception)
             {
+                var w1_3 = bm.PixelWidth / 3;
+                var h1_3 = bm.PixelHeight / 3;
+                np.SetCurrentValue(NineSliceProperty, new Thickness(w1_3, h1_3, w1_3, h1_3));
+
+                double x1 = np.NineSlice.Left, x2 = bm.Width - np.NineSlice.Right;
+                double y1 = np.NineSlice.Top, y2 = bm.Height - np.NineSlice.Bottom;
+                double w1 = np.NineSlice.Left, w3 = np.NineSlice.Right, w2 = bm.Width - w1 - w3;
+                double h1 = np.NineSlice.Top, h3 = np.NineSlice.Bottom, h2 = bm.Height - h1 - h3;
+                np.patchs = new ImageSource[9];
+
+                np.patchs[0] = new CroppedBitmap(bm, new Int32Rect(0, 0, (int)w1, (int)h1));
+                np.patchs[1] = new CroppedBitmap(bm, new Int32Rect((int)x1, 0, (int)w2, (int)h1));
+                np.patchs[2] = new CroppedBitmap(bm, new Int32Rect((int)x2, 0, (int)w3, (int)h1));
+
+                np.patchs[3] = new CroppedBitmap(bm, new Int32Rect(0, (int)y1, (int)w1, (int)h2));
+                np.patchs[4] = new CroppedBitmap(bm, new Int32Rect((int)x1, (int)y1, (int)w2, (int)h2));
+                np.patchs[5] = new CroppedBitmap(bm, new Int32Rect((int)x2, (int)y1, (int)w3, (int)h2));
+
+                np.patchs[6] = new CroppedBitmap(bm, new Int32Rect(0, (int)y2, (int)w1, (int)h3));
+                np.patchs[7] = new CroppedBitmap(bm, new Int32Rect((int)x1, (int)y2, (int)w2, (int)h3));
+                np.patchs[8] = new CroppedBitmap(bm, new Int32Rect((int)x2, (int)y2, (int)w3, (int)h3));
 
             }
         }

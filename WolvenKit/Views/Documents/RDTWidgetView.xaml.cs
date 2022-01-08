@@ -126,126 +126,28 @@ namespace WolvenKit.Views.Documents
             float right = widget.Layout.Margin.Right;
             float bottom = widget.Layout.Margin.Bottom;
 
-            if (parent.Children.Count > 0)
+            if (parentWidget is not inkFlexWidget)
             {
-                if (parentWidget is inkHorizontalPanelWidget hpw)
+                if ((widget.Layout.Anchor.Value == Enums.inkEAnchor.Fill ||
+                    widget.Layout.Anchor.Value == Enums.inkEAnchor.BottomFillHorizontaly ||
+                    widget.Layout.Anchor.Value == Enums.inkEAnchor.CenterFillHorizontaly ||
+                    widget.Layout.Anchor.Value == Enums.inkEAnchor.TopFillHorizontaly
+                    ) && !Double.IsNaN(parent.Width))
                 {
-                    if (hpw.ChildOrder.Value == Enums.inkEChildOrder.Forward)
-                    {
-                        left += (float)(parent.Children[0] as FrameworkElement).Margin.Left;
-                        foreach (FrameworkElement child in parent.Children)
-                        {
-                            left += (float)(child.Width);
-                            //width -= (float)(child.Width + child.Margin.Left);
-                        }
-                    }
-                    else
-                    {
-                        right += (float)(parent.Children[0] as FrameworkElement).Margin.Right;
-                        foreach (FrameworkElement child in parent.Children)
-                        {
-                            right += (float)(child.Width);
-                            //width -= (float)(child.Width + child.Margin.Right);
-                        }
-                    }
+                    width = (float)parent.Width;
                 }
-                else if (parentWidget is inkVerticalPanelWidget vpw)
+
+                if ((widget.Layout.Anchor.Value == Enums.inkEAnchor.Fill ||
+                    widget.Layout.Anchor.Value == Enums.inkEAnchor.CenterFillVerticaly ||
+                    widget.Layout.Anchor.Value == Enums.inkEAnchor.LeftFillVerticaly ||
+                    widget.Layout.Anchor.Value == Enums.inkEAnchor.RightFillVerticaly
+                    ) && !Double.IsNaN(parent.Height))
                 {
-                    if (vpw.ChildOrder.Value == Enums.inkEChildOrder.Forward)
-                    {
-                        top += (float)(parent.Children[0] as FrameworkElement).Margin.Top;
-                        foreach (FrameworkElement child in parent.Children)
-                        {
-                            top += (float)(child.Height);
-                            //height -= (float)child.Height;
-                        }
-                    }
-                    else
-                    {
-                        bottom += (float)(parent.Children[0] as FrameworkElement).Margin.Bottom;
-                        foreach (FrameworkElement child in parent.Children)
-                        {
-                            bottom += (float)child.Height;
-                            //height -= (float)child.Height;
-                        }
-                    }
+                    height = (float)parent.Height;
                 }
             }
 
-            if (widget.Layout.HAlign.Value == Enums.inkEHorizontalAlign.Center && widget.Layout.Anchor.Value == Enums.inkEAnchor.TopLeft)
-            {
-                left -= width / 2;
-                right -= width / 2;
-            }
-
-            if ((parent.Tag is inkFlexWidget ||
-                widget.Layout.Anchor.Value == Enums.inkEAnchor.Fill ||
-                widget.Layout.Anchor.Value == Enums.inkEAnchor.BottomFillHorizontaly ||
-                widget.Layout.Anchor.Value == Enums.inkEAnchor.CenterFillHorizontaly ||
-                widget.Layout.Anchor.Value == Enums.inkEAnchor.TopFillHorizontaly
-                ) && !Double.IsNaN(parent.Width))
-            {
-                width = (float)parent.Width;
-                left = 0;
-                right = 0;
-            }
-
-                if (widget.Layout.VAlign.Value == Enums.inkEVerticalAlign.Center && widget.Layout.Anchor.Value == Enums.inkEAnchor.TopLeft)
-            {
-                top -= height / 2;
-                bottom -= height / 2;
-            }
-
-            if ((parent.Tag is inkFlexWidget ||
-                widget.Layout.Anchor.Value == Enums.inkEAnchor.Fill ||
-                widget.Layout.Anchor.Value == Enums.inkEAnchor.CenterFillVerticaly ||
-                widget.Layout.Anchor.Value == Enums.inkEAnchor.LeftFillVerticaly ||
-                widget.Layout.Anchor.Value == Enums.inkEAnchor.RightFillVerticaly
-                ) && !Double.IsNaN(parent.Height))
-            {
-                height = (float)parent.Height;
-                top = 0;
-                bottom = 0;
-            }
-
-
-            left -= width * (widget.RenderTransform.Scale.X - 1) * widget.RenderTransformPivot.X;
-            top -= height * (widget.RenderTransform.Scale.Y - 1) * widget.RenderTransformPivot.Y;
-
-            left += widget.RenderTransform.Translation.X;
-            top += widget.RenderTransform.Translation.Y;
-
-            width *= widget.RenderTransform.Scale.X;
-            height *= widget.RenderTransform.Scale.Y;
-
-            //if (widget is inkImageWidget)
-            //{
-            //    if (widget.Layout.Anchor.Value == Enums.inkEAnchor.BottomCenter ||
-            //        widget.Layout.Anchor.Value == Enums.inkEAnchor.Centered ||
-            //        widget.Layout.Anchor.Value == Enums.inkEAnchor.TopCenter ||
-            //        widget.Layout.Anchor.Value == Enums.inkEAnchor.BottomFillHorizontaly ||
-            //        widget.Layout.Anchor.Value == Enums.inkEAnchor.CenterFillHorizontaly ||
-            //        widget.Layout.Anchor.Value == Enums.inkEAnchor.TopFillHorizontaly)
-            //    {
-            //        left -= width / 2;
-            //        right -= width / 2;
-            //    }
-
-            //    if (widget.Layout.Anchor.Value == Enums.inkEAnchor.CenterLeft ||
-            //        widget.Layout.Anchor.Value == Enums.inkEAnchor.Centered ||
-            //        widget.Layout.Anchor.Value == Enums.inkEAnchor.CenterRight ||
-            //        widget.Layout.Anchor.Value == Enums.inkEAnchor.CenterFillVerticaly ||
-            //        widget.Layout.Anchor.Value == Enums.inkEAnchor.LeftFillVerticaly ||
-            //        widget.Layout.Anchor.Value == Enums.inkEAnchor.RightFillVerticaly)
-            //    {
-            //        top -= height / 2;
-            //        bottom -= height / 2;
-            //    }
-            //}
-
-
-
-            if (widget is inkCompoundWidget)
+            if (widget is inkCompoundWidget cw)
             {
                 Panel panel;
                 if (widget is inkCanvasWidget)
@@ -258,11 +160,10 @@ namespace WolvenKit.Views.Documents
                 }
                 else if (widget is inkHorizontalPanelWidget)
                 {
-                    //panel = new StackPanel()
-                    //{
-                    //    Orientation = Orientation.Horizontal
-                    //};
-                    panel = new Canvas();
+                    panel = new StackPanel()
+                    {
+                        Orientation = Orientation.Horizontal
+                    };
                     panel.Background = new SolidColorBrush(ToColor(widget.TintColor))
                     {
                         Opacity = 0.0
@@ -270,11 +171,10 @@ namespace WolvenKit.Views.Documents
                 }
                 else if (widget is inkVerticalPanelWidget)
                 {
-                    //panel = new StackPanel()
-                    //{
-                    //    Orientation = Orientation.Vertical
-                    //};
-                    panel = new Canvas();
+                    panel = new StackPanel()
+                    {
+                        Orientation = Orientation.Vertical
+                    };
                     panel.Background = new SolidColorBrush(ToColor(widget.TintColor))
                     {
                         Opacity = 0.0
@@ -282,41 +182,71 @@ namespace WolvenKit.Views.Documents
                 }
                 else
                 {
-                    panel = new Canvas();
+                    panel = new Grid();
                 }
-                element = panel;
+
+                if (ToThickness(cw.ChildMargin) != new Thickness(0, 0, 0, 0))
+                {
+                    var border = new Border();
+                    border.Child = panel;
+                    panel.Margin = ToThickness(cw.ChildMargin);
+                    element = border;
+                }
+                else
+                {
+                    element = panel;
+                }
             }
             else if (widget is inkTextWidget textWidget && (int)height > 0 && (int)width > 0)
             {
-                //if (textWidget.TextOverflowPolicy.Value == Enums.textOverflowPolicy.None)
-                //{
-                width = (float)(parent.Width > 0 ? parent.Width : width);
-                height = (float)(parent.Height > 0 ? parent.Height : height);
-                //}
                 var text = textWidget.Text.GetValue();
+                if (text == "")
+                    text = "empty text";
                 if (textWidget.LetterCase.Value == Enums.textLetterCase.UpperCase)
                     text = text.ToUpper();
+                // not totally sure why this is required - some dpi issue?
+                //uint fontSize = (uint)(textWidget.FontSize * 0.8);
+                uint fontSize = (uint)(textWidget.FontSize);
                 var fontPath = textWidget.FontFamily.DepotPath?.ToString() ?? "";
                 if (ViewModel.Fonts.ContainsKey(fontPath) && ViewModel.Fonts[fontPath].ContainsKey(textWidget.FontStyle))
                 {
                     var fc = ViewModel.Fonts[fontPath][textWidget.FontStyle];
-                    //text.FontFamily = new System.Windows.Media.FontFamily(fc.Families[0].Name);
+                    Font f = new Font(fc.Families.First(), fontSize);
+
+                    var wrapWidth = 10000;
+                    if (textWidget.WrappingInfo.AutoWrappingEnabled && textWidget.WrappingInfo.WrappingAtPosition != 0)
+                    {
+                        wrapWidth = (int)textWidget.WrappingInfo.WrappingAtPosition;
+                    }
+                    float actualTextWidth, actualTextHeight;
+                    using (var tempbmp = new Bitmap(wrapWidth, 10000, System.Drawing.Imaging.PixelFormat.Format32bppPArgb))
+                    {
+                        using (var g = Graphics.FromImage(tempbmp))
+                        {
+                            SizeF s = g.MeasureString(text, f, new SizeF(wrapWidth, 10000));
+                            actualTextWidth = s.Width;
+                            actualTextHeight = s.Height;
+                        }
+                    }
+                    if (widget.FitToContent)
+                    {
+                        width = actualTextWidth;
+                        height = actualTextHeight;
+                    }
 
                     var bmp = new Bitmap((int)width, (int)height, System.Drawing.Imaging.PixelFormat.Format32bppPArgb);
                     using (var g = Graphics.FromImage(bmp))
                     {
-                        // Create a font instance based on one of the font families in the PrivateFontCollection
-                        Font f = new Font(fc.Families.First(), textWidget.FontSize);
                         g.TextRenderingHint = System.Drawing.Text.TextRenderingHint.AntiAliasGridFit;
-                        g.DrawString(text, f, ToBrush(widget.TintColor), 0, 0);
+                        g.DrawString(text, f, ToBrush(widget.TintColor), new RectangleF(0, 0, wrapWidth, 10000));
                     }
 
+                    // premultiplied alpha issues here too - opacitymask addresses it
                     var bitmapSource = System.Windows.Interop.Imaging.CreateBitmapSourceFromHBitmap(
                         bmp.GetHbitmap(),
                         IntPtr.Zero,
                         Int32Rect.Empty,
                         BitmapSizeOptions.FromEmptyOptions());
-                    //var image = new System.Windows.Controls.Image();
                     var imageBrush = new ImageBrush()
                     {
                         ImageSource = bitmapSource
@@ -325,16 +255,13 @@ namespace WolvenKit.Views.Documents
                     grid.OpacityMask = imageBrush;
                     grid.Background = new SolidColorBrush(ToColor(widget.TintColor));
                     element = grid;
-
-                    //image.Source = bitmapSource;
-                    //element = image;
                 }
                 else
                 {
                     // fallback for font failure
                     var textblock = new TextBlock();
                     textblock.Text = textWidget.Text;
-                    textblock.FontSize = textWidget.FontSize;
+                    textblock.FontSize = fontSize;
                     textblock.Foreground = new SolidColorBrush(ToColor(widget.TintColor));
 
                     if (textWidget.TextHorizontalAlignment.ToEnumString() == "Center")
@@ -342,11 +269,12 @@ namespace WolvenKit.Views.Documents
 
                     element = textblock;
                 }
+                RenderOptions.SetBitmapScalingMode(element, BitmapScalingMode.NearestNeighbor);
 
                 //element.Margin = ToThickness(widget.Layout.Margin);
 
             }
-            else if (widget is inkImageWidget imageWidget && imageWidget.TextureAtlas != null && (int)height > 0 && (int)width > 0)
+            else if (widget is inkImageWidget imageWidget && imageWidget.TextureAtlas != null)
             {
                 var atlasPath = imageWidget.TextureAtlas.DepotPath?.GetValue() ?? "";
                 if (ViewModel.AtlasParts.ContainsKey(atlasPath))
@@ -369,17 +297,43 @@ namespace WolvenKit.Views.Documents
                         {
                             renderWidth = bitmap.Width;
                             renderHeight = bitmap.Height;
+                            if (widget.FitToContent && parentWidget is inkFlexWidget)
+                            {
+                                height = bitmap.Height;
+                                width = bitmap.Width;
+                            }
+                        }
+                        else if (widget.FitToContent)
+                        {
+                            height = bitmap.Height;
+                            width = bitmap.Width;
+                            renderHeight = bitmap.Height;
+                            renderWidth = bitmap.Width;
                         }
                         else
                         {
                             renderWidth = (int)Math.Round(width);
                             renderHeight = (int)Math.Round(height);
                         }
+                        //}
+
+                        //if (imageWidget.Layout.HAlign.Value != Enums.inkEHorizontalAlign.Fill)
+                        //{
+                            //renderWidth = bitmap.Width;
+                            //width = renderWidth;
+                        //}
+
+                        //if (imageWidget.Layout.VAlign.Value != Enums.inkEVerticalAlign.Fill)
+                        //{
+                            //renderHeight = bitmap.Height;
+                            //height = renderHeight;
+                        //}
 
                         Bitmap bmp = new Bitmap(renderWidth, renderHeight, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
 
                         using (Graphics gfx = Graphics.FromImage(bmp))
                         {
+                            // this is doesn't account for premultipied alpha, so the opacity mask is still needed
                             var matrix = new ColorMatrix(new float[][]
                             {
                                 new float[] { 0, 0, 0, 0, 0},
@@ -403,6 +357,21 @@ namespace WolvenKit.Views.Documents
                             IntPtr.Zero,
                             Int32Rect.Empty,
                             BitmapSizeOptions.FromEmptyOptions());
+
+                        switch (imageWidget.MirrorType.Value)
+                        {
+                            case Enums.inkBrushMirrorType.Both:
+                                bitmapSource = new TransformedBitmap(bitmapSource, new ScaleTransform(-1, -1));
+                                break;
+                            case Enums.inkBrushMirrorType.Horizontal:
+                                bitmapSource = new TransformedBitmap(bitmapSource, new ScaleTransform(-1, 1));
+                                break;
+                            case Enums.inkBrushMirrorType.Vertical:
+                                bitmapSource = new TransformedBitmap(bitmapSource, new ScaleTransform(1, -1));
+                                break;
+                            case Enums.inkBrushMirrorType.NoMirror:
+                                break;
+                        }
 
                         //var hb = bitmap.GetHbitmap();
                         //var stride = ((renderWidth * 32 + 31) & ~31) >> 3;
@@ -428,6 +397,7 @@ namespace WolvenKit.Views.Documents
                         {
                             var imagebrush = new ImageBrush();
                             imagebrush.ImageSource = bitmapSource;
+                            //RenderOptions.SetBitmapScalingMode(imagebrush, BitmapScalingMode.NearestNeighbor);
 
                             var grid = new Canvas();
                             grid.Background = new SolidColorBrush(ToColor(widget.TintColor));
@@ -449,97 +419,211 @@ namespace WolvenKit.Views.Documents
             element.ToolTip = widget.Name + $" ({widget.GetType().Name})";
             element.Name = widget.GetType().Name + "_" + widget.Name.GetValue().Replace(" ", "_").Replace("-", "_").Replace("/", "_");
 
-            //if (parent.Tag is inkCanvasWidget)
-            //{
-            //    Canvas.SetLeft(element, widget.Layout.Margin.Left);
-            //    Canvas.SetTop(element, widget.Layout.Margin.Top);
-            //    Canvas.SetRight(element, widget.Layout.Margin.Right);
-            //    Canvas.SetBottom(element, widget.Layout.Margin.Bottom);
-            //}
-
             element.Width = width > 0 ? width : 0;
             element.Height = height > 0 ? height : 0;
             
+
+            if (parentWidget is inkBasePanelWidget || parentWidget is inkFlexWidget)
+            {
+                switch (widget.Layout.HAlign.Value)
+                {
+                    case Enums.inkEHorizontalAlign.Center:
+                        element.HorizontalAlignment = HorizontalAlignment.Center;
+                        break;
+                    case Enums.inkEHorizontalAlign.Left:
+                        element.HorizontalAlignment = HorizontalAlignment.Left;
+                        break;
+                    case Enums.inkEHorizontalAlign.Right:
+                        element.HorizontalAlignment = HorizontalAlignment.Right;
+                        break;
+                    case Enums.inkEHorizontalAlign.Fill:
+                        element.HorizontalAlignment = HorizontalAlignment.Stretch;
+                        break;
+                }
+
+                switch (widget.Layout.VAlign.Value)
+                {
+                    case Enums.inkEVerticalAlign.Center:
+                        element.VerticalAlignment = VerticalAlignment.Center;
+                        break;
+                    case Enums.inkEVerticalAlign.Top:
+                        element.VerticalAlignment = VerticalAlignment.Top;
+                        break;
+                    case Enums.inkEVerticalAlign.Bottom:
+                        element.VerticalAlignment = VerticalAlignment.Bottom;
+                        break;
+                    case Enums.inkEVerticalAlign.Fill:
+                        element.VerticalAlignment = VerticalAlignment.Stretch;
+                        break;
+                }
+            }
+
             parent.Children.Add(element);
-            //if (parentWidget?.FitToContent ?? false)
-            //{
-                //if ( element)
-                //parent.SetCurrentValue(WidthProperty, element.Width);
-                //parent.SetCurrentValue(HeightProperty, element.Height);
-            //}
 
-            if (widget.Layout.Anchor.Value == Enums.inkEAnchor.BottomLeft ||
-                widget.Layout.Anchor.Value == Enums.inkEAnchor.LeftFillVerticaly ||
-                widget.Layout.Anchor.Value == Enums.inkEAnchor.CenterLeft ||
-                widget.Layout.Anchor.Value == Enums.inkEAnchor.TopLeft
-                )
+            if (parentWidget is inkCanvasWidget)
             {
-                //Canvas.SetLeft(element, left);
-            }
-            else if (widget.Layout.Anchor.Value == Enums.inkEAnchor.BottomRight ||
-                widget.Layout.Anchor.Value == Enums.inkEAnchor.RightFillVerticaly ||
-                widget.Layout.Anchor.Value == Enums.inkEAnchor.CenterRight ||
-                widget.Layout.Anchor.Value == Enums.inkEAnchor.TopRight
-                )
-            {
-                //Canvas.SetRight(element, right);
+                if (widget.Layout.Anchor.Value == Enums.inkEAnchor.BottomLeft ||
+                    widget.Layout.Anchor.Value == Enums.inkEAnchor.LeftFillVerticaly ||
+                    widget.Layout.Anchor.Value == Enums.inkEAnchor.CenterLeft ||
+                    widget.Layout.Anchor.Value == Enums.inkEAnchor.TopLeft
+                    )
+                {
+                    Canvas.SetLeft(element, -element.Width * widget.Layout.AnchorPoint.X + left);
+                }
+                else if (widget.Layout.Anchor.Value == Enums.inkEAnchor.BottomRight ||
+                    widget.Layout.Anchor.Value == Enums.inkEAnchor.RightFillVerticaly ||
+                    widget.Layout.Anchor.Value == Enums.inkEAnchor.CenterRight ||
+                    widget.Layout.Anchor.Value == Enums.inkEAnchor.TopRight
+                    )
+                {
+                    Canvas.SetRight(element, -element.Width * (1.0 - widget.Layout.AnchorPoint.X) + right);
+                }
+                else
+                {
+                    Canvas.SetLeft(element, parent.Width / 2 - element.Width / 2 + left);
+                }
+
+                if (widget.Layout.Anchor.Value == Enums.inkEAnchor.TopCenter ||
+                    widget.Layout.Anchor.Value == Enums.inkEAnchor.TopFillHorizontaly ||
+                    widget.Layout.Anchor.Value == Enums.inkEAnchor.TopLeft ||
+                    widget.Layout.Anchor.Value == Enums.inkEAnchor.TopRight
+                    )
+                {
+                    Canvas.SetTop(element, -element.Height * widget.Layout.AnchorPoint.Y + top);
+                }
+                else if (widget.Layout.Anchor.Value == Enums.inkEAnchor.BottomCenter ||
+                    widget.Layout.Anchor.Value == Enums.inkEAnchor.BottomFillHorizontaly ||
+                    widget.Layout.Anchor.Value == Enums.inkEAnchor.BottomLeft ||
+                    widget.Layout.Anchor.Value == Enums.inkEAnchor.BottomRight
+                    )
+                {
+                    Canvas.SetBottom(element, -element.Height * (1.0 - widget.Layout.AnchorPoint.Y) + bottom);
+                }
+                else
+                {
+                    Canvas.SetTop(element, parent.Height / 2 - element.Height / 2 + top);
+                }
             }
             else
             {
-                Canvas.SetLeft(element, parent.Width / 2 - element.Width / 2);
+                element.Margin = new Thickness(left * widget.Layout.SizeCoefficient, top * widget.Layout.SizeCoefficient,
+                    right * widget.Layout.SizeCoefficient, bottom * widget.Layout.SizeCoefficient);
             }
-
-            if (widget.Layout.Anchor.Value == Enums.inkEAnchor.TopCenter ||
-                widget.Layout.Anchor.Value == Enums.inkEAnchor.TopFillHorizontaly ||
-                widget.Layout.Anchor.Value == Enums.inkEAnchor.TopLeft ||
-                widget.Layout.Anchor.Value == Enums.inkEAnchor.TopRight
-                )
-            {
-                //Canvas.SetTop(element, top);
-            }
-            else if (widget.Layout.Anchor.Value == Enums.inkEAnchor.BottomCenter ||
-                widget.Layout.Anchor.Value == Enums.inkEAnchor.BottomFillHorizontaly ||
-                widget.Layout.Anchor.Value == Enums.inkEAnchor.BottomLeft ||
-                widget.Layout.Anchor.Value == Enums.inkEAnchor.BottomRight
-                )
-            {
-                //Canvas.SetBottom(element, bottom);
-            }
-            else
-            {
-                Canvas.SetTop(element, parent.Height / 2 - element.Height / 2);
-            }
-
-            element.Margin = new Thickness(left, top, right, bottom);
-
 
             // lots of elements are hidden by default
-            if (widget.Name != "Root" && parent is not StackPanel)
+            if (parentWidget is not null)
                 element.Opacity = widget.Opacity;
 
-            //element.Visibility = widget.Visible ? Visibility.Visible : Visibility.Collapsed;
+            if (!widget.Visible)
+            {
+                if (widget.AffectsLayoutWhenHidden)
+                {
+                    element.Visibility = Visibility.Hidden;
+                    //element.Opacity *= 0.1;
+                }
+                else
+                {
+                    element.Visibility = Visibility.Collapsed;
+                    //element.Opacity *= 0.1;
+                }
+            }
 
 
             if (widget is inkCompoundWidget comp)
             {
                 var panel = element as Panel;
+                if (element is Border b)
+                {
+                    //if (widget.FitToContent)
+                    //{ 
+                        b.Width = Double.NaN;
+                        b.Height = Double.NaN;
+                    //}
+                    panel = (Panel)b.Child;
+                }
                 //panel.ClipToBounds = true;
                 if (comp.Children != null && comp.Children.GetValue() is inkMultiChildren imc)
                 {
                     var children = imc.Children.Reverse();
                     if (comp.ChildOrder.Value == Enums.inkEChildOrder.Forward)
                         children = children.Reverse();
+
                     foreach (var child in children)
                     {
                         RenderWidget(panel, child);
                     }
-                    panel.Background = new SolidColorBrush(ToColor(widget.TintColor))
+                    //double totalHeight = 0, totalWidth = 0;
+                    //foreach (FrameworkElement child in panel.Children)
+                    //{
+                    //    totalHeight += child.Height;
+                    //    totalWidth += child.Width;
+                    //}
+
+                    if (widget is inkBasePanelWidget || widget is inkFlexWidget)
                     {
-                        Opacity = 0.01
-                    };
+                        panel.Height = Double.NaN;
+                        panel.Width = Double.NaN;
+
+                        foreach (FrameworkElement child in panel.Children)
+                        {
+                            if (child.Tag is inkImageWidget iw && iw.UseNineSliceScale)
+                            {
+                                if (iw.Layout.HAlign.Value == Enums.inkEHorizontalAlign.Fill)
+                                {
+                                    child.Width = Double.NaN;
+                                }
+
+                                if (iw.Layout.VAlign.Value == Enums.inkEVerticalAlign.Fill)
+                                {
+                                    child.Height = Double.NaN;
+                                }
+                            }
+                        }
+                    }
+                    else
+                    {
+                        panel.Width = width;
+                        panel.Height = height;
+                    }
+                    //panel.Background = new SolidColorBrush(ToColor(widget.TintColor))
+                    //{
+                    //    Opacity = 0.01
+                    //};
+                    //var style = new Style();
+                    //style.Setters.Add(new Setter(BackgroundProperty, new SolidColorBrush(ToColor(widget.TintColor))
+                    //{
+                    //    Opacity = 0.01
+                    //}));
+                    //var trigger = new Trigger()
+                    //{
+                    //    Property = IsMouseOverProperty,
+                    //    Value = true
+                    //};
+                    //trigger.Setters.Add(new Setter(BackgroundProperty, new SolidColorBrush(ToColor(widget.TintColor))
+                    //{
+                    //    Opacity = 0.1
+                    //}));
+                    //style.Triggers.Add(trigger);
+                    //panel.Style = style;
                 }
             }
 
+            element.RenderTransformOrigin = ToPoint(widget.RenderTransformPivot);
+            element.RenderTransform = new TransformGroup()
+            {
+                Children = new TransformCollection(new List<System.Windows.Media.Transform>()
+                {
+                    new ScaleTransform(widget.RenderTransform.Scale.X, widget.RenderTransform.Scale.Y),
+                    new TranslateTransform(widget.RenderTransform.Translation.X, widget.RenderTransform.Translation.Y),
+                    new SkewTransform(Math.Atan(widget.RenderTransform.Shear.X) * 180/Math.PI, Math.Atan(widget.RenderTransform.Shear.Y) * 180/Math.PI),
+                    new RotateTransform(widget.RenderTransform.Rotation)
+                })
+            };
+        }
+
+        private Thickness AddToThickness(inkMargin m, Thickness t)
+        {
+            return new Thickness(m.Left + t.Left, m.Top + t.Top, m.Right + t.Right, m.Bottom + t.Bottom);
         }
 
         private HorizontalAlignment ToHorizontalAlignment(CEnum<Enums.inkEHorizontalAlign> hAlign)
@@ -630,7 +714,7 @@ namespace WolvenKit.Views.Documents
             ScaleTransform transform = (ScaleTransform)transformGroup.Children[0];
             TranslateTransform pan = (TranslateTransform)transformGroup.Children[1];
 
-            double zoom = e.Delta > 0 ? 1.2 : (1 / 1.2);
+            double zoom = e.Delta > 0 ? 1.189207115 : (1 / 1.189207115);
 
             var CursorPosCanvas = e.GetPosition(WidgetPreviewCanvas);
             pan.X += Math.Round(-(CursorPosCanvas.X - WidgetPreviewCanvas.RenderSize.Width / 2.0 - pan.X) * (zoom - 1.0));
@@ -638,9 +722,14 @@ namespace WolvenKit.Views.Documents
             end.X = pan.X;
             end.Y = pan.Y;
 
-            transform.ScaleX *= zoom;
-            transform.ScaleY *= zoom;
+            transform.ScaleX = zoom * transform.ScaleX;
+            transform.ScaleY = transform.ScaleX;
+            UpdateZoomText(transform.ScaleX);
+        }
 
+        public void UpdateZoomText(double scale)
+        {
+            ZoomText.SetCurrentValue(TextBlock.TextProperty, $"{(scale*100).ToString("F1")}%");
         }
 
         public void SetRealPixelZoom(object sender, RoutedEventArgs e)
@@ -661,6 +750,7 @@ namespace WolvenKit.Views.Documents
 
             transform.ScaleX = 1;
             transform.ScaleY = 1;
+            UpdateZoomText(transform.ScaleX);
             pan.X = 0;
             pan.Y = 0;
             end.X = 0;
@@ -675,6 +765,7 @@ namespace WolvenKit.Views.Documents
 
             transform.ScaleX = 1;
             transform.ScaleY = 1;
+            UpdateZoomText(transform.ScaleX);
             pan.X = 0;
             pan.Y = 0;
             end.X = 0;
