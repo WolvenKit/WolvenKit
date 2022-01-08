@@ -32,12 +32,12 @@ namespace WolvenKit.RED4.Types
 
         public void Write(Red4Writer writer)
         {
-            var dynProps = GetDynamicPropertyNames();
+            var dynProps = Values.GetDynamicPropertyNames();
 
             writer.BaseWriter.Write(dynProps.Count);
             foreach (var propertyName in dynProps)
             {
-                var value = GetObjectByRedName(propertyName);
+                var value = Values.GetObjectByRedName(propertyName);
 
                 var startPos = writer.BaseStream.Position;
 
