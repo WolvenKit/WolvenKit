@@ -23,15 +23,15 @@
   </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="DynamicData" Version="7.3.1" />
+        <PackageReference Include="DynamicData" Version="7.4.9" />
         <PackageReference Include="FastMember" Version="1.5.0" />
         <PackageReference Include="DotNetHelper.FastMember.Extension" Version="2.0.0" />
-        <PackageReference Include="CsvHelper" Version="27.1.1" />
+        <PackageReference Include="CsvHelper" Version="27.2.1" />
         <PackageReference Include="Microsoft.Win32.Registry" Version="5.0.0" />
         <PackageReference Include="protobuf-net.Core" Version="3.0.101" />
-        <PackageReference Include="ReactiveUI" Version="16.2.6" />
+        <PackageReference Include="ReactiveUI" Version="17.1.17" />
         <PackageReference Include="semver" Version="2.0.6" />
-        <PackageReference Include="System.Reflection.MetadataLoadContext" Version="5.0.1" />
+        <PackageReference Include="System.Reflection.MetadataLoadContext" Version="6.0.0" />
     </ItemGroup>
 
 </Project>
