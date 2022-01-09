@@ -93,7 +93,6 @@ jobs:
     - run: echo "PORTABLE=${{env.NAME}}-${{env.VERSION}}.zip" >> $env:GITHUB_ENV
     - run: echo "CONSOLE=${{env.NAME}}.Console-${{env.VERSIONC}}.zip" >> $env:GITHUB_ENV
     - run: echo "INSTALLER=${{env.NAME}}-installer-${{env.VERSION}}.exe" >> $env:GITHUB_ENV
-    - run: echo "MANIFEST=manifest.json" >> $env:GITHUB_ENV
 
     # Create assets
     # create zip
@@ -112,11 +111,6 @@ jobs:
     #  with:
     #    name: ${{env.NAME}}-installer-${{env.VERSION}}
     #    path: ${{env.FINALOUT}}/${{env.INSTALLER}}
-    # MANIFEST
-    #- uses: actions/upload-artifact@v2
-    #  with:
-    #    name: ${{env.MANIFEST}}
-    #    path: ${{env.FINALOUT}}/${{env.MANIFEST}}
     # CONSOLE
     #- uses: actions/upload-artifact@v2
     #  with:
@@ -129,7 +123,7 @@ jobs:
           gh release create ${{ env.VERSION }} -n "${{ env.MESSAGE }}" -t "${{ env.VERSION }}" -R ${{ env.REPO }} ${{ env.FILES }}
       env:
         MESSAGE: "This is a beta release so you may encounter bugs. Please report them. The latest commit this release is based on is: [#${{env.SHA}}](https://github.com/${{env.MREPO}}/commit/${{env.SHA}})"
-        FILES: ${{env.FINALOUT}}/${{env.PORTABLE}} ${{env.FINALOUT}}/${{env.CONSOLE}} ${{env.FINALOUT}}/${{env.INSTALLER}} ${{env.FINALOUT}}/${{env.MANIFEST}}
+        FILES: ${{env.FINALOUT}}/${{env.PORTABLE}} ${{env.FINALOUT}}/${{env.CONSOLE}} ${{env.FINALOUT}}/${{env.INSTALLER}}
         REPO: WolvenKit/WolvenKit-nightly-releases
         GITHUB_TOKEN: ${{ secrets.RELEASE_TOKEN }}
     
