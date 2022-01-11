@@ -31,10 +31,40 @@ namespace WolvenKit.Functionality.Layout.inkWidgets
 
         public System.Windows.Size RenderedSize = new System.Windows.Size(0, 0);
 
+        public double TextWidth;
+        public double TextHeight;
+
+        public override double Width => Widget.FitToContent ? TextWidth : Widget.Size.X;
+        public override double Height => Widget.FitToContent ? TextHeight : Widget.Size.Y;
+
+        public float offsetY
+        {
+            get
+            {
+                if (TextWidget.TextVerticalAlignment.Value == Enums.textVerticalAlignment.Top)
+                    return -TextWidget.FontSize * 0.25F;
+                else if (TextWidget.TextVerticalAlignment.Value == Enums.textVerticalAlignment.Bottom)
+                    return TextWidget.FontSize * 0.25F;
+                return TextWidget.FontSize * 0.1F;
+            }
+        }
+
+        public StringAlignment TextAlignment
+        {
+            get
+            {
+                if (TextWidget.TextHorizontalAlignment.Value == Enums.textHorizontalAlignment.Left)
+                    return StringAlignment.Near;
+                if (TextWidget.TextHorizontalAlignment.Value == Enums.textHorizontalAlignment.Right)
+                    return StringAlignment.Far;
+                return StringAlignment.Center;
+            }
+        }
+
         public inkTextControl(inkTextWidget widget) : base(widget)
         {
             TintBrush = new SolidColorBrush(ToColor(Widget.TintColor));
-            Background = TintBrush;
+            //Background = TintBrush;
 
             Text = TextWidget.Text.GetValue();
 
@@ -45,8 +75,8 @@ namespace WolvenKit.Functionality.Layout.inkWidgets
                 Text = Text.ToUpper();
 
             // not totally sure why this is required - some dpi issue?
-            //uint fontSize = (uint)(TextWidget.FontSize * 0.8);
-            uint fontSize = (uint)(TextWidget.FontSize);
+            float fontSize = (float)(TextWidget.FontSize * 0.8);
+            //float fontSize = (float)(TextWidget.FontSize);
             var fontPath = TextWidget.FontFamily.DepotPath?.ToString() ?? "";
 
             var fontCollection = (FontCollection)Application.Current.TryFindResource("FontCollection/" + fontPath + "#" + TextWidget.FontStyle);
@@ -61,21 +91,15 @@ namespace WolvenKit.Functionality.Layout.inkWidgets
             {
                 WrapWidth = (int)TextWidget.WrappingInfo.WrappingAtPosition;
             }
-            float actualTextWidth, actualTextHeight;
+
             using (var tempbmp = new Bitmap((int)WrapWidth, 10000, System.Drawing.Imaging.PixelFormat.Format32bppPArgb))
             {
                 using (var g = Graphics.FromImage(tempbmp))
                 {
                     SizeF s = g.MeasureString(Text, Font, new SizeF(WrapWidth, 10000));
-                    actualTextWidth = s.Width;
-                    actualTextHeight = s.Height;
+                    TextWidth = s.Width;
+                    TextHeight = s.Height;
                 }
-            }
-
-            if (widget.FitToContent)
-            {
-                Width = actualTextWidth;
-                Height = actualTextHeight;
             }
 
             if (Text != "")
@@ -88,11 +112,15 @@ namespace WolvenKit.Functionality.Layout.inkWidgets
         private void DrawText(System.Windows.Size size)
         {
             RenderedSize = size;
-            var bmp = new Bitmap((int)size.Width, (int)size.Height, System.Drawing.Imaging.PixelFormat.Format32bppPArgb);
+            var wrapWidth = Math.Min(WrapWidth, size.Width);
+            var bmp = new Bitmap((int)size.Width, (int)(size.Height), System.Drawing.Imaging.PixelFormat.Format32bppPArgb);
             using (var g = Graphics.FromImage(bmp))
             {
                 g.TextRenderingHint = TextRenderingHint.AntiAliasGridFit;
-                g.DrawString(Text, Font, ToDrawingBrush(Widget.TintColor), new RectangleF(0, 0, WrapWidth, 10000));
+                g.DrawString(Text, Font, ToDrawingBrush(Widget.TintColor), new RectangleF(0, offsetY, (float)wrapWidth, (float)size.Height), new StringFormat()
+                {
+                    LineAlignment = StringAlignment.Center
+                });
             }
 
             // premultiplied alpha issues here too - opacitymask addresses it
@@ -109,21 +137,22 @@ namespace WolvenKit.Functionality.Layout.inkWidgets
             SetCurrentValue(OpacityMaskProperty, new ImageBrush()
             {
                 ImageSource = ImageSource,
-                Stretch = Stretch.Fill,
+                Stretch = Stretch.None,
+                AlignmentY = AlignmentY.Center
             });
         }
 
         protected override void OnRender(DrawingContext dc)
         {
             base.OnRender(dc);
-            var newSize = new System.Windows.Size(ActualWidth, ActualHeight);
+            var newSize = new System.Windows.Size(RenderSize.Width, RenderSize.Height);
+            dc.DrawRectangle(TintBrush, null, new System.Windows.Rect(0, 0, newSize.Width, newSize.Height));
             if (Text != "" && RenderedSize != newSize)
                 DrawText(newSize);
             //FormattedText formattedText = new FormattedText("Different Test", CultureInfo.GetCultureInfo("en-us"),
             //    FlowDirection.LeftToRight, new Typeface(FontFamily, FontStyles.Normal, FontWeights.Regular, FontStretches.Normal), TextWidget.FontSize, TintBrush,
             //    VisualTreeHelper.GetDpi(this).PixelsPerDip);
             //dc.DrawText(formattedText, new System.Windows.Point(0,0));
-            //dc.DrawRectangle(TintBrush, null, new System.Windows.Rect(0, 0, ActualWidth, ActualHeight));
         }
     }
 }

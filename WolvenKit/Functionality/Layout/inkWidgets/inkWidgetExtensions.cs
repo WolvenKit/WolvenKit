@@ -18,8 +18,8 @@ namespace WolvenKit.Functionality.Layout.inkWidgets
                 element = new inkCanvasControl(canvas);
             else if (widget is inkFlexWidget flex)
                 element = new inkFlexControl(flex);
-            else if (widget is inkCompoundWidget compound)
-                element = new inkCompoundControl(compound);
+            else if (widget is inkBasePanelWidget panel)
+                element = new inkBasePanelControl(panel);
             else if (widget is inkImageWidget image)
                 element = new inkImageControl(image);
             else if (widget is inkRectangleWidget rectangle)

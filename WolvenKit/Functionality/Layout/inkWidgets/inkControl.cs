@@ -7,117 +7,64 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using WolvenKit.RED4.Types;
+using Rect = System.Windows.Rect;
 
 namespace WolvenKit.Functionality.Layout.inkWidgets
 {
-    public class inkControl : Panel
+    public class inkControl : UIElement
     {
         public inkWidget Widget;
-        public inkControl ParentControl => Parent as inkControl;
+        //public inkControl ParentControl => Parent as inkControl;
+
+        /// <summary>
+        ///     The DependencyProperty for the Name property.
+        /// </summary>
+        public static readonly DependencyProperty NameProperty =
+                    DependencyProperty.Register(
+                                nameof(Name),
+                                typeof(string),
+                                typeof(inkControl),
+                                new FrameworkPropertyMetadata(
+                                    string.Empty,                           // defaultValue
+                                    FrameworkPropertyMetadataOptions.None,  // flags
+                                    null,                                   // propertyChangedCallback
+                                    null,                                   // coerceValueCallback
+                                    true)                                  // isAnimationProhibited
+                                );
+
+        public string Name
+        {
+            get { return (string)GetValue(NameProperty); }
+            set { SetValue(NameProperty, value); }
+        }
+
+        public virtual double Width => Widget.Size.X;
+        public virtual double Height => Widget.Size.Y;
+
+        public Thickness Margin => ToThickness(Widget.Layout.Margin);
 
         public inkControl(inkWidget widget) : base()
         {
             Widget = widget;
-            Tag = Widget;
+            //Tag = Widget;
 
             //Background = Brushes.Transparent;
 
             //Background = ToBrush(Widget.TintColor);
 
-            ToolTip = Widget.Name + $" ({Widget.GetType().Name})";
-            Name = Widget.GetType().Name + "_" + Widget.Name.GetValue().Replace(" ", "_").Replace("-", "_").Replace("/", "_");
+            //ToolTip = Widget.Name + $" ({Widget.GetType().Name})";
+            Name = Widget.Name;
 
-            Width = Widget.Size.X;
-            Height = Widget.Size.Y;
+            //Width = Widget.Size.X;
+            //Height = Widget.Size.Y;
 
             //Margin = ToThickness(Widget.Layout.Margin);
 
-            //HorizontalAlignment = ToHorizontalAlignment(Widget.Layout.HAlign.Value);
-            //VerticalAlignment = ToVerticalAlignment(Widget.Layout.VAlign.Value);
-
-            //if (Widget.GetParent() is inkFlexWidget && (Widget is inkImageWidget iw3 && iw3.UseNineSliceScale))
-            //{
-            //    HorizontalAlignment = HorizontalAlignment.Stretch;
-            //    VerticalAlignment = VerticalAlignment.Stretch;
-            //}
-
-            //if (Widget.GetParent() is inkCanvasWidget)
-            //{
-            //    //if (widget is inkBasePanelWidget || widget is inkFlexWidget)
-            //    //{
-            //    //    Canvas.SetLeft(element, left);
-            //    //    Canvas.SetRight(element, right);
-            //    //    Canvas.SetTop(element, top);
-            //    //    Canvas.SetBottom(element, bottom);
-            //    //}
-            //    //else
-            //    //{
-            //    if (Widget.Layout.Anchor.Value == Enums.inkEAnchor.BottomLeft ||
-            //         Widget.Layout.Anchor.Value == Enums.inkEAnchor.LeftFillVerticaly ||
-            //         Widget.Layout.Anchor.Value == Enums.inkEAnchor.CenterLeft ||
-            //         Widget.Layout.Anchor.Value == Enums.inkEAnchor.TopLeft
-            //         )
-            //    {
-            //        Canvas.SetLeft(this, -Width * Widget.Layout.AnchorPoint.X + left);
-            //    }
-            //    else if (Widget.Layout.Anchor.Value == Enums.inkEAnchor.BottomRight ||
-            //        Widget.Layout.Anchor.Value == Enums.inkEAnchor.RightFillVerticaly ||
-            //        Widget.Layout.Anchor.Value == Enums.inkEAnchor.CenterRight ||
-            //        Widget.Layout.Anchor.Value == Enums.inkEAnchor.TopRight
-            //        )
-            //    {
-            //        Canvas.SetRight(this, -Width * (1.0 - Widget.Layout.AnchorPoint.X) + right);
-            //    }
-            //    else if (Widget.Layout.Anchor.Value == Enums.inkEAnchor.Fill ||
-            //        Widget.Layout.Anchor.Value == Enums.inkEAnchor.CenterFillHorizontaly ||
-            //        Widget.Layout.Anchor.Value == Enums.inkEAnchor.BottomFillHorizontaly ||
-            //        Widget.Layout.Anchor.Value == Enums.inkEAnchor.TopFillHorizontaly
-            //        )
-            //    {
-            //        Canvas.SetLeft(this, left);
-            //        Canvas.SetRight(this, right);
-            //    }
-            //    else
-            //    {
-            //        Canvas.SetLeft(this, ParentControl.Width / 2 - Width * Widget.Layout.AnchorPoint.X + left);
-            //    }
-
-            //    if (Widget.Layout.Anchor.Value == Enums.inkEAnchor.TopCenter ||
-            //        Widget.Layout.Anchor.Value == Enums.inkEAnchor.TopFillHorizontaly ||
-            //        Widget.Layout.Anchor.Value == Enums.inkEAnchor.TopLeft ||
-            //        Widget.Layout.Anchor.Value == Enums.inkEAnchor.TopRight
-            //        )
-            //    {
-            //        Canvas.SetTop(this, -Height * Widget.Layout.AnchorPoint.Y + top);
-            //    }
-            //    else if (Widget.Layout.Anchor.Value == Enums.inkEAnchor.BottomCenter ||
-            //        Widget.Layout.Anchor.Value == Enums.inkEAnchor.BottomFillHorizontaly ||
-            //        Widget.Layout.Anchor.Value == Enums.inkEAnchor.BottomLeft ||
-            //        Widget.Layout.Anchor.Value == Enums.inkEAnchor.BottomRight
-            //        )
-            //    {
-            //        Canvas.SetBottom(this, -Height * (1.0 - Widget.Layout.AnchorPoint.Y) + bottom);
-            //    }
-            //    else if (Widget.Layout.Anchor.Value == Enums.inkEAnchor.Fill ||
-            //        Widget.Layout.Anchor.Value == Enums.inkEAnchor.CenterFillVerticaly ||
-            //        Widget.Layout.Anchor.Value == Enums.inkEAnchor.LeftFillVerticaly ||
-            //        Widget.Layout.Anchor.Value == Enums.inkEAnchor.RightFillVerticaly
-            //        )
-            //    {
-            //        Canvas.SetBottom(this, bottom);
-            //        Canvas.SetTop(this, top);
-            //    }
-            //    else
-            //    {
-            //        Canvas.SetTop(this, ParentControl.Height / 2 - Height * Widget.Layout.AnchorPoint.Y + top);
-            //    }
-            //    //}
-            //}
 
             if (Widget.GetParent() is not null)
                 Opacity = Widget.Opacity;
-            else
-                HorizontalAlignment = HorizontalAlignment.Left;
+            //else
+            //    HorizontalAlignment = HorizontalAlignment.Left;
 
             if (!Widget.Visible)
             {
@@ -149,55 +96,34 @@ namespace WolvenKit.Functionality.Layout.inkWidgets
         //    base.OnRender(dc);
         //}
 
-        protected override Size MeasureOverride(Size availableSize)
+        protected override Size MeasureCore(Size availableSize)
         {
             //return base.MeasureOverride(availableSize);
             var size = new Size(Width, Height);
             //size = availableSize;
-            if ((AnchorToFillH(this) && Widget.GetParent() is inkCanvasWidget) || (HAlignToFill(this) && Widget.GetParent() is not inkCanvasWidget))
+            if ((AnchorToFillH(this) && Widget.GetParent() is inkCanvasWidget) || (HAlignToFill(this) && Widget.GetParent() is not inkCanvasWidget) || Widget.Layout.SizeRule.Value == Enums.inkESizeRule.Stretch)
                 size.Width = availableSize.Width;
-            if ((AnchorToFillV(this) && Widget.GetParent() is inkCanvasWidget) || (VAlignToFill(this) && Widget.GetParent() is not inkCanvasWidget))
+            if ((AnchorToFillV(this) && Widget.GetParent() is inkCanvasWidget) || (VAlignToFill(this) && Widget.GetParent() is not inkCanvasWidget) || Widget.Layout.SizeRule.Value == Enums.inkESizeRule.Stretch)
                 size.Height = availableSize.Height;
-            return base.MeasureOverride(size);
+            return size;
         }
 
-        protected override Size ArrangeOverride(Size finalSize)
+        protected override void ArrangeCore(Rect finalRect)
         {
-            var size = new Size(Width, Height);
+            finalRect.X = Math.Round(finalRect.X);
+            finalRect.Y = Math.Round(finalRect.Y);
+            finalRect.Width = Math.Round(finalRect.Width);
+            finalRect.Height = Math.Round(finalRect.Height);
+
+            base.ArrangeCore(finalRect);
+            //var size = new Size(Width, Height);
             //size = finalSize;
-            if ((AnchorToFillH(this) && Widget.GetParent() is inkCanvasWidget) || (HAlignToFill(this) && Widget.GetParent() is not inkCanvasWidget))
-                size.Width = finalSize.Width;
-            if ((AnchorToFillV(this) && Widget.GetParent() is inkCanvasWidget) || (VAlignToFill(this) && Widget.GetParent() is not inkCanvasWidget))
-                size.Height = finalSize.Height;
-            return base.ArrangeOverride(size);
+            //if ((AnchorToFillH(this) && Widget.GetParent() is inkCanvasWidget) || (HAlignToFill(this) && Widget.GetParent() is not inkCanvasWidget) || Widget.Layout.SizeRule.Value == Enums.inkESizeRule.Stretch)
+            //    size.Width = finalSize.Width;
+            //if ((AnchorToFillV(this) && Widget.GetParent() is inkCanvasWidget) || (VAlignToFill(this) && Widget.GetParent() is not inkCanvasWidget) || Widget.Layout.SizeRule.Value == Enums.inkESizeRule.Stretch)
+            //    size.Height = finalSize.Height;
+            //return finalSize;
         }
-
-        // Override the default Measure method of Panel
-        //protected override Size MeasureOverride(Size availableSize)
-        //{
-        //    Size panelDesiredSize = new Size();
-
-        //    // In our example, we just have one child.
-        //    // Report that our panel requires just the size of its only child.
-        //    foreach (UIElement child in InternalChildren)
-        //    {
-        //        child.Measure(availableSize);
-        //        panelDesiredSize = child.DesiredSize;
-        //    }
-
-        //    return panelDesiredSize;
-        //}
-        //protected override Size ArrangeOverride(Size finalSize)
-        //{
-        //    foreach (UIElement child in InternalChildren)
-        //    {
-        //        double x = 50;
-        //        double y = 50;
-
-        //        child.Arrange(new System.Windows.Rect(new System.Windows.Point(x, y), child.DesiredSize));
-        //    }
-        //    return finalSize; // Returns the final Arranged size
-        //}
 
         public static System.Windows.Point ToPoint(Vector2 v)
         {

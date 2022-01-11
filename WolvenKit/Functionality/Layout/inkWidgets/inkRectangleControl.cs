@@ -17,13 +17,13 @@ namespace WolvenKit.Functionality.Layout.inkWidgets
         public inkRectangleControl(inkWidget widget) : base(widget)
         {
             TintBrush = new SolidColorBrush(ToColor(Widget.TintColor));
-            Background = TintBrush;
+            //Background = TintBrush;
         }
 
-        //protected override void OnRender(DrawingContext dc)
-        //{
-        //    dc.DrawRectangle(TintBrush, null, new System.Windows.Rect(0, 0, ActualWidth, ActualHeight));
-        //    base.OnRender(dc);
-        //}
+        protected override void OnRender(DrawingContext dc)
+        {
+            dc.DrawRectangle(TintBrush, null, new System.Windows.Rect(0, 0, RenderSize.Width, RenderSize.Height));
+            base.OnRender(dc);
+        }
     }
 }

@@ -11,6 +11,7 @@ using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using WolvenKit.RED4.Types;
+using Rect = System.Windows.Rect;
 using SizeF = System.Windows.Size;
 
 namespace WolvenKit.Functionality.Layout.inkWidgets
@@ -30,10 +31,13 @@ namespace WolvenKit.Functionality.Layout.inkWidgets
 
         public SizeF RenderedSize = new SizeF();
 
+        public override double Width => Widget.FitToContent ? OriginalImageSize.Width : Widget.Size.X;
+        public override double Height => Widget.FitToContent ? OriginalImageSize.Height : Widget.Size.Y;
+
         public inkImageControl(inkImageWidget widget) : base(widget)
         {
             TintBrush = new SolidColorBrush(ToColor(Widget.TintColor));
-            Background = TintBrush;
+            //Background = TintBrush;
 
             if (ImageWidget.TextureAtlas == null)
                 return;
@@ -43,13 +47,13 @@ namespace WolvenKit.Functionality.Layout.inkWidgets
             if (OriginalImageSource == null)
                 return;
 
-            OriginalImageSize = new System.Drawing.Size((int)OriginalImageSource.Width, (int)OriginalImageSource.Height);
+            OriginalImageSize = new System.Drawing.Size((int)Math.Round(OriginalImageSource.Width), (int)Math.Round(OriginalImageSource.Height));
 
-            if (Widget.FitToContent || ImageWidget.UseNineSliceScale)
-            {
-                Width = OriginalImageSize.Width;
-                Height = OriginalImageSize.Height;
-            }
+            //if (Widget.FitToContent || ImageWidget.UseNineSliceScale)
+            //{
+            //    Width = OriginalImageSize.Width;
+            //    Height = OriginalImageSize.Height;
+            //}
 
             if (ImageWidget.UseNineSliceScale)
             {
@@ -75,6 +79,9 @@ namespace WolvenKit.Functionality.Layout.inkWidgets
         protected void DrawImage(SizeF size)
         {
             RenderedSize = size;
+            if (size.Width == 0 || size.Height == 0)
+                return;
+
             Bitmap sourceBitmap;
             using (var outStream = new MemoryStream())
             {
@@ -191,28 +198,28 @@ namespace WolvenKit.Functionality.Layout.inkWidgets
         protected override void OnRender(DrawingContext dc)
         {
             base.OnRender(dc);
-            //var newSize = new SizeF(ActualWidth, ActualHeight);
             var newSize = new SizeF(RenderSize.Width, RenderSize.Height);
             if (OriginalImageSource != null && RenderedSize != newSize)
                 DrawImage(newSize);
-            //if (TintBrush != null && ImageSource != null)
-            //    dc.DrawRectangle(TintBrush, null, new System.Windows.Rect(0, 0, ActualWidth, ActualHeight));
+            if (TintBrush != null && ImageSource != null)
+                dc.DrawRectangle(TintBrush, null, new System.Windows.Rect(0, 0, newSize.Width, newSize.Height));
         }
 
-        protected override SizeF MeasureOverride(SizeF availableSize)
+        protected override SizeF MeasureCore(SizeF availableSize)
         {
-            if (Widget.FitToContent)
-            {
-                var newSize = new SizeF(OriginalImageSource.Width, OriginalImageSource.Height);
-                return base.MeasureOverride(newSize);
-            }
-            else
-            {
-                return base.MeasureOverride(new SizeF(Width, Height));
-            }
+            //if (Widget.FitToContent)
+            //{
+            //    var newSize = new SizeF(OriginalImageSource.Width, OriginalImageSource.Height);
+            //    return base.MeasureOverride(newSize);
+            //}
+            //else
+            //{
+            //    return base.MeasureOverride(new SizeF(Width, Height));
+            //}
+            return base.MeasureCore(availableSize);
         }
 
-        protected override SizeF ArrangeOverride(SizeF finalSize)
+        protected override void ArrangeCore(Rect finalRect)
         {
             //if (Widget.FitToContent)
             //{
@@ -224,7 +231,10 @@ namespace WolvenKit.Functionality.Layout.inkWidgets
             //    return base.ArrangeOverride(new SizeF(Width, Height));
             //}
             //return base.ArrangeOverride(finalSize);
-            return base.ArrangeOverride(finalSize);
+            //if (OriginalImageSource != null && RenderedSize != finalSize)
+            //    DrawImage(finalSize);
+            //return finalSize;
+            base.ArrangeCore(finalRect);
         }
     }
 }
