@@ -26,7 +26,6 @@ namespace WolvenKit.Functionality.Layout.inkWidgets
         private WolvenKit.RED4.Types.Rect Rect;
 
         private ImageSource ImageSource;
-        private System.Windows.Media.Brush TintBrush;
         public bool UsingNineScale = false;
 
         public SizeF RenderedSize = new SizeF();
@@ -36,8 +35,6 @@ namespace WolvenKit.Functionality.Layout.inkWidgets
 
         public inkImageControl(inkImageWidget widget) : base(widget)
         {
-            TintBrush = new SolidColorBrush(ToColor(Widget.TintColor));
-            //Background = TintBrush;
 
             if (ImageWidget.TextureAtlas == null)
                 return;
@@ -48,12 +45,6 @@ namespace WolvenKit.Functionality.Layout.inkWidgets
                 return;
 
             OriginalImageSize = new System.Drawing.Size((int)Math.Round(OriginalImageSource.Width), (int)Math.Round(OriginalImageSource.Height));
-
-            //if (Widget.FitToContent || ImageWidget.UseNineSliceScale)
-            //{
-            //    Width = OriginalImageSize.Width;
-            //    Height = OriginalImageSize.Height;
-            //}
 
             if (ImageWidget.UseNineSliceScale)
             {
@@ -191,7 +182,9 @@ namespace WolvenKit.Functionality.Layout.inkWidgets
             SetCurrentValue(OpacityMaskProperty, new ImageBrush()
             {
                 ImageSource = ImageSource,
-                Stretch = Stretch.Fill,
+                Stretch = Stretch.None,
+                AlignmentY = AlignmentY.Center,
+                AlignmentX = AlignmentX.Center
             });
         }
 
@@ -199,10 +192,11 @@ namespace WolvenKit.Functionality.Layout.inkWidgets
         {
             base.OnRender(dc);
             var newSize = new SizeF(RenderSize.Width, RenderSize.Height);
+            //var newSize = DesiredSize;
             if (OriginalImageSource != null && RenderedSize != newSize)
                 DrawImage(newSize);
             if (TintBrush != null && ImageSource != null)
-                dc.DrawRectangle(TintBrush, null, new System.Windows.Rect(0, 0, newSize.Width, newSize.Height));
+                dc.DrawRectangle(TintBrush, null, new Rect(0, 0, newSize.Width, newSize.Height));
         }
 
         protected override SizeF MeasureCore(SizeF availableSize)
@@ -221,19 +215,6 @@ namespace WolvenKit.Functionality.Layout.inkWidgets
 
         protected override void ArrangeCore(Rect finalRect)
         {
-            //if (Widget.FitToContent)
-            //{
-            //    var newSize = new SizeF(OriginalImageSource.Width, OriginalImageSource.Height);
-            //    return base.ArrangeOverride(newSize);
-            //}
-            //else
-            //{
-            //    return base.ArrangeOverride(new SizeF(Width, Height));
-            //}
-            //return base.ArrangeOverride(finalSize);
-            //if (OriginalImageSource != null && RenderedSize != finalSize)
-            //    DrawImage(finalSize);
-            //return finalSize;
             base.ArrangeCore(finalRect);
         }
     }

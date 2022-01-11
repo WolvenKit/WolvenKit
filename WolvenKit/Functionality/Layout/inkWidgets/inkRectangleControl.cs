@@ -12,12 +12,9 @@ namespace WolvenKit.Functionality.Layout.inkWidgets
     {
         public inkRectangleWidget RectangleWidget => Widget as inkRectangleWidget;
 
-        public Brush TintBrush;
-
         public inkRectangleControl(inkWidget widget) : base(widget)
         {
-            TintBrush = new SolidColorBrush(ToColor(Widget.TintColor));
-            //Background = TintBrush;
+
         }
 
         protected override void OnRender(DrawingContext dc)

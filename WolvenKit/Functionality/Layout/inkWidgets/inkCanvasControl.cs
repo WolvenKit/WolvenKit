@@ -22,6 +22,8 @@ namespace WolvenKit.Functionality.Layout.inkWidgets
         {
             var internalSize = new Size(Width, Height);
 
+            InternalMargin = new();
+
             foreach (inkControl child in children)
             {
                 if (child.Visibility == Visibility.Collapsed)
@@ -34,27 +36,26 @@ namespace WolvenKit.Functionality.Layout.inkWidgets
                 var x = AnchorToX(child) * width - child.Widget.Layout.AnchorPoint.X * width;
                 var y = AnchorToY(child) * height - child.Widget.Layout.AnchorPoint.Y * height;
 
-                //x += child.Widget.Layout.Margin.Left - child.Widget.Layout.Margin.Right;
-                //y += child.Widget.Layout.Margin.Top - child.Widget.Layout.Margin.Bottom;
-
-                if (AnchorToX(child) == 0)
-                    x += child.Widget.Layout.Margin.Left;
-                else if (AnchorToX(child) == 1)
-                    x -= child.Widget.Layout.Margin.Right;
+                if (AnchorLeft(child))
+                    x += child.Margin.Left;
+                else if (AnchorRight(child))
+                    x -= child.Margin.Right;
                 else
-                    x += (child.Widget.Layout.Margin.Left - child.Widget.Layout.Margin.Right);
+                    x += (child.Margin.Left - child.Margin.Right);
 
-                if (AnchorToY(child) == 0)
-                    y += child.Widget.Layout.Margin.Top;
-                else if (AnchorToY(child) == 1)
-                    y -= child.Widget.Layout.Margin.Bottom;
+                if (AnchorTop(child))
+                    y += child.Margin.Top;
+                else if (AnchorBottom(child))
+                    y -= child.Margin.Bottom;
                 else
-                    y += (child.Widget.Layout.Margin.Top - child.Widget.Layout.Margin.Bottom);
+                    y += (child.Margin.Top - child.Margin.Bottom);
 
                 InternalMargin.Left = Math.Min(x, InternalMargin.Left);
                 InternalMargin.Top = Math.Min(y, InternalMargin.Top);
                 InternalMargin.Right = Math.Min(Width - (x + width), InternalMargin.Right);
                 InternalMargin.Bottom = Math.Min(Height - (y + height), InternalMargin.Bottom);
+                //InternalMargin.Right = Math.Min(Width - (x + width + child.Margin.Right), InternalMargin.Right);
+                //InternalMargin.Bottom = Math.Min(Height - (y + height + child.Margin.Bottom), InternalMargin.Bottom);
             }
 
             internalSize.Width -= (InternalMargin.Left + InternalMargin.Right);
@@ -65,62 +66,62 @@ namespace WolvenKit.Functionality.Layout.inkWidgets
                 if (child.Visibility == Visibility.Collapsed)
                     continue;
 
-                var width = child.Width;
-                var height = child.Height;
+                var width = child.DesiredSize.Width;
+                var height = child.DesiredSize.Height;
 
                 if (AnchorToFillH(child))
-                    width = internalSize.Width + child.Widget.Layout.Margin.Left + child.Widget.Layout.Margin.Right;
+                    width = internalSize.Width - child.Margin.Left - child.Margin.Right;
                 if (AnchorToFillV(child))
-                    height = internalSize.Height + child.Widget.Layout.Margin.Top + child.Widget.Layout.Margin.Bottom;
+                    height = internalSize.Height - child.Margin.Top - child.Margin.Bottom;
 
-                child.Measure(new Size(width, height));
+                child.Measure(new Size(width, height + 10));
             }
 
-            return internalSize;
+            return new Size(Width, Height);
         }
 
         protected override void ArrangeCore(Rect finalRect)
         {
-            var internalSize = finalRect.Size;
-            internalSize.Width -= (InternalMargin.Right + InternalMargin.Left);
-            internalSize.Height -= (InternalMargin.Bottom + InternalMargin.Top);
+            //var internalSize = finalRect.Size;
+            //internalSize.Width -= (InternalMargin.Right + InternalMargin.Left);
+            //internalSize.Height -= (InternalMargin.Bottom + InternalMargin.Top);
 
             foreach (inkControl child in children)
             {
                 if (child.Visibility == Visibility.Collapsed)
                     continue;
 
-                var width = child.Width;
-                var height = child.Height;
+                var width = child.DesiredSize.Width;
+                var height = child.DesiredSize.Height;
 
-                if (AnchorToFillH(child))
-                    width = internalSize.Width + child.Widget.Layout.Margin.Left + child.Widget.Layout.Margin.Right;
-                if (AnchorToFillV(child))
-                    height = internalSize.Height + child.Widget.Layout.Margin.Top + child.Widget.Layout.Margin.Bottom;
+                //if (AnchorToFillH(child))
+                //    width = finalRect.Size.Width - child.Margin.Left - child.Margin.Right;
+                //if (AnchorToFillV(child))
+                //    height = finalRect.Size.Height - child.Margin.Top - child.Margin.Bottom;
 
                 var x = AnchorToX(child) * finalRect.Size.Width - child.Widget.Layout.AnchorPoint.X * width;
                 var y = AnchorToY(child) * finalRect.Size.Height - child.Widget.Layout.AnchorPoint.Y * height;
 
-                if (AnchorToX(child) == 0)
-                    x += child.Widget.Layout.Margin.Left;
-                else if (AnchorToX(child) == 1)
-                    x -= child.Widget.Layout.Margin.Right;
+                if (AnchorLeft(child))
+                    x += child.Margin.Left;
+                else if (AnchorRight(child))
+                    x -= child.Margin.Right;
                 else
-                    x += (child.Widget.Layout.Margin.Left - child.Widget.Layout.Margin.Right);
+                    x += (child.Margin.Left - child.Margin.Right);
 
-                if (AnchorToY(child) == 0)
-                    y += child.Widget.Layout.Margin.Top;
-                else if (AnchorToY(child) == 1)
-                    y -= child.Widget.Layout.Margin.Bottom;
+                if (AnchorTop(child))
+                    y += child.Margin.Top;
+                else if (AnchorBottom(child))
+                    y -= child.Margin.Bottom;
                 else
-                    y += (child.Widget.Layout.Margin.Top - child.Widget.Layout.Margin.Bottom);
+                    y += (child.Margin.Top - child.Margin.Bottom);
 
-                //x += InternalMargin.Left;
-                //y += InternalMargin.Top;
+                //x -= InternalMargin.Left;
+                //y -= InternalMargin.Top;
 
-                child.Arrange(new System.Windows.Rect(x, y, width, height));
+                child.Arrange(new Rect(x, y, width, height));
             }
-
+            //finalRect.Size = internalSize;
             base.ArrangeCore(finalRect);
         }
     }

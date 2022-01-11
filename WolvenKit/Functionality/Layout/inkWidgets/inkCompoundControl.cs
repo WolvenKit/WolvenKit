@@ -17,9 +17,10 @@ namespace WolvenKit.Functionality.Layout.inkWidgets
 
         public Thickness InternalMargin = new();
 
+        public Thickness ChildMargin => ToThickness(CompoundWidget.ChildMargin);
+
         public inkCompoundControl(inkCompoundWidget widget) : base(widget)
         {
-            //Background = new SolidColorBrush(Color.FromArgb(4, 255, 255, 255));
             children = new UIElementCollection(this, null);
 
             foreach (var child in CompoundWidget.GetChildren())
@@ -53,13 +54,13 @@ namespace WolvenKit.Functionality.Layout.inkWidgets
         protected override void OnRender(DrawingContext dc)
         {
             base.OnRender(dc);
-            // use for quick debugging
-            if (false)
+            // use for quick debugging & eventual debug mode
+            if (true)
             {
                 dc.DrawRectangle(new SolidColorBrush(Color.FromArgb(4, 255, 255, 255)), null, new Rect(0, 0, Width, Height));
                 dc.DrawRectangle(null, new Pen(new SolidColorBrush(Color.FromArgb(16, 255, 255, 255)), 0.5), new Rect(0, 0, RenderSize.Width, RenderSize.Height));
                 dc.DrawText(new FormattedText(Widget.Name + $" ({Widget.GetType().Name})", CultureInfo.CurrentCulture, FlowDirection.LeftToRight,
-                    new Typeface("Arial"), 8, new SolidColorBrush(Color.FromArgb(100, 255, 255, 255)), 1.0), new Point(0, 1 + Height));
+                    new Typeface("Arial"), 8, new SolidColorBrush(Color.FromArgb(16, 255, 255, 255)), 1.0), new Point(0, 1 + Height));
             }
         }
     }

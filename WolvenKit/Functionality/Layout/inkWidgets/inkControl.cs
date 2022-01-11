@@ -14,11 +14,7 @@ namespace WolvenKit.Functionality.Layout.inkWidgets
     public class inkControl : UIElement
     {
         public inkWidget Widget;
-        //public inkControl ParentControl => Parent as inkControl;
 
-        /// <summary>
-        ///     The DependencyProperty for the Name property.
-        /// </summary>
         public static readonly DependencyProperty NameProperty =
                     DependencyProperty.Register(
                                 nameof(Name),
@@ -43,6 +39,9 @@ namespace WolvenKit.Functionality.Layout.inkWidgets
 
         public Thickness Margin => ToThickness(Widget.Layout.Margin);
 
+        public Color TintColor => ToColor(Widget.TintColor);
+        public Brush TintBrush => new SolidColorBrush(TintColor);
+
         public inkControl(inkWidget widget) : base()
         {
             Widget = widget;
@@ -54,12 +53,6 @@ namespace WolvenKit.Functionality.Layout.inkWidgets
 
             //ToolTip = Widget.Name + $" ({Widget.GetType().Name})";
             Name = Widget.Name;
-
-            //Width = Widget.Size.X;
-            //Height = Widget.Size.Y;
-
-            //Margin = ToThickness(Widget.Layout.Margin);
-
 
             if (Widget.GetParent() is not null)
                 Opacity = Widget.Opacity;
@@ -98,12 +91,10 @@ namespace WolvenKit.Functionality.Layout.inkWidgets
 
         protected override Size MeasureCore(Size availableSize)
         {
-            //return base.MeasureOverride(availableSize);
             var size = new Size(Width, Height);
-            //size = availableSize;
-            if ((AnchorToFillH(this) && Widget.GetParent() is inkCanvasWidget) || (HAlignToFill(this) && Widget.GetParent() is not inkCanvasWidget) || Widget.Layout.SizeRule.Value == Enums.inkESizeRule.Stretch)
+            if (!Double.IsPositiveInfinity(availableSize.Width) && FillH(this))
                 size.Width = availableSize.Width;
-            if ((AnchorToFillV(this) && Widget.GetParent() is inkCanvasWidget) || (VAlignToFill(this) && Widget.GetParent() is not inkCanvasWidget) || Widget.Layout.SizeRule.Value == Enums.inkESizeRule.Stretch)
+            if (!Double.IsPositiveInfinity(availableSize.Height) && FillV(this))
                 size.Height = availableSize.Height;
             return size;
         }
@@ -116,13 +107,6 @@ namespace WolvenKit.Functionality.Layout.inkWidgets
             finalRect.Height = Math.Round(finalRect.Height);
 
             base.ArrangeCore(finalRect);
-            //var size = new Size(Width, Height);
-            //size = finalSize;
-            //if ((AnchorToFillH(this) && Widget.GetParent() is inkCanvasWidget) || (HAlignToFill(this) && Widget.GetParent() is not inkCanvasWidget) || Widget.Layout.SizeRule.Value == Enums.inkESizeRule.Stretch)
-            //    size.Width = finalSize.Width;
-            //if ((AnchorToFillV(this) && Widget.GetParent() is inkCanvasWidget) || (VAlignToFill(this) && Widget.GetParent() is not inkCanvasWidget) || Widget.Layout.SizeRule.Value == Enums.inkESizeRule.Stretch)
-            //    size.Height = finalSize.Height;
-            //return finalSize;
         }
 
         public static System.Windows.Point ToPoint(Vector2 v)
@@ -199,6 +183,86 @@ namespace WolvenKit.Functionality.Layout.inkWidgets
             return new Thickness(value.Left, value.Top, value.Right, value.Bottom);
         }
 
+        public static bool FillH(inkControl control)
+        {
+            switch (control.Widget.GetParent())
+            {
+                case inkCanvasWidget:
+                    return AnchorToFillH(control);
+                case inkFlexWidget:
+                case inkBasePanelWidget:
+                    return HAlignToFill(control);
+                default:
+                    return false;
+            }
+        }
+
+        public static bool FillV(inkControl control)
+        {
+            switch (control.Widget.GetParent())
+            {
+                case inkCanvasWidget:
+                    return AnchorToFillV(control);
+                case inkFlexWidget:
+                case inkBasePanelWidget:
+                    return VAlignToFill(control);
+                default:
+                    return false;
+            }
+        }
+
+        public static bool AnchorLeft(inkControl control)
+        {
+            switch (control.Widget.Layout.Anchor.Value)
+            {
+                case Enums.inkEAnchor.TopLeft:
+                case Enums.inkEAnchor.CenterLeft:
+                case Enums.inkEAnchor.BottomLeft:
+                case Enums.inkEAnchor.LeftFillVerticaly:
+                    return true;
+                case Enums.inkEAnchor.CenterFillHorizontaly:
+                case Enums.inkEAnchor.BottomFillHorizontaly:
+                case Enums.inkEAnchor.TopFillHorizontaly:
+                case Enums.inkEAnchor.Fill:
+                case Enums.inkEAnchor.TopCenter:
+                case Enums.inkEAnchor.Centered:
+                case Enums.inkEAnchor.BottomCenter:
+                case Enums.inkEAnchor.CenterFillVerticaly:
+                case Enums.inkEAnchor.TopRight:
+                case Enums.inkEAnchor.CenterRight:
+                case Enums.inkEAnchor.BottomRight:
+                case Enums.inkEAnchor.RightFillVerticaly:
+                default:
+                    return false;
+            }
+        }
+
+        public static bool AnchorRight(inkControl control)
+        {
+            switch (control.Widget.Layout.Anchor.Value)
+            {
+                case Enums.inkEAnchor.TopRight:
+                case Enums.inkEAnchor.CenterRight:
+                case Enums.inkEAnchor.BottomRight:
+                case Enums.inkEAnchor.RightFillVerticaly:
+                    return true;
+                case Enums.inkEAnchor.TopLeft:
+                case Enums.inkEAnchor.CenterLeft:
+                case Enums.inkEAnchor.BottomLeft:
+                case Enums.inkEAnchor.LeftFillVerticaly:
+                case Enums.inkEAnchor.CenterFillHorizontaly:
+                case Enums.inkEAnchor.BottomFillHorizontaly:
+                case Enums.inkEAnchor.TopFillHorizontaly:
+                case Enums.inkEAnchor.Fill:
+                case Enums.inkEAnchor.TopCenter:
+                case Enums.inkEAnchor.Centered:
+                case Enums.inkEAnchor.BottomCenter:
+                case Enums.inkEAnchor.CenterFillVerticaly:
+                default:
+                    return false;
+            }
+        }
+
         public static double AnchorToX(inkControl control)
         {
             switch (control.Widget.Layout.Anchor.Value)
@@ -224,6 +288,58 @@ namespace WolvenKit.Functionality.Layout.inkWidgets
                     return 1;
                 default:
                     return 0;
+            }
+        }
+
+        public static bool AnchorTop(inkControl control)
+        {
+            switch (control.Widget.Layout.Anchor.Value)
+            {
+                case Enums.inkEAnchor.TopLeft:
+                case Enums.inkEAnchor.TopFillHorizontaly:
+                case Enums.inkEAnchor.TopCenter:
+                case Enums.inkEAnchor.TopRight:
+                    return true;
+                case Enums.inkEAnchor.LeftFillVerticaly:
+                case Enums.inkEAnchor.CenterFillVerticaly:
+                case Enums.inkEAnchor.RightFillVerticaly:
+                case Enums.inkEAnchor.Fill:
+                case Enums.inkEAnchor.CenterLeft:
+                case Enums.inkEAnchor.CenterFillHorizontaly:
+                case Enums.inkEAnchor.Centered:
+                case Enums.inkEAnchor.CenterRight:
+                case Enums.inkEAnchor.BottomLeft:
+                case Enums.inkEAnchor.BottomFillHorizontaly:
+                case Enums.inkEAnchor.BottomCenter:
+                case Enums.inkEAnchor.BottomRight:
+                default:
+                    return false;
+            }
+        }
+
+        public static bool AnchorBottom(inkControl control)
+        {
+            switch (control.Widget.Layout.Anchor.Value)
+            {
+                case Enums.inkEAnchor.BottomLeft:
+                case Enums.inkEAnchor.BottomFillHorizontaly:
+                case Enums.inkEAnchor.BottomCenter:
+                case Enums.inkEAnchor.BottomRight:
+                    return true;
+                case Enums.inkEAnchor.TopLeft:
+                case Enums.inkEAnchor.TopFillHorizontaly:
+                case Enums.inkEAnchor.TopCenter:
+                case Enums.inkEAnchor.TopRight:
+                case Enums.inkEAnchor.LeftFillVerticaly:
+                case Enums.inkEAnchor.CenterFillVerticaly:
+                case Enums.inkEAnchor.RightFillVerticaly:
+                case Enums.inkEAnchor.Fill:
+                case Enums.inkEAnchor.CenterLeft:
+                case Enums.inkEAnchor.CenterFillHorizontaly:
+                case Enums.inkEAnchor.Centered:
+                case Enums.inkEAnchor.CenterRight:
+                default:
+                    return false;
             }
         }
 
