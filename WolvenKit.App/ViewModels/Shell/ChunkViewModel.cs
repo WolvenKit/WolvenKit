@@ -174,7 +174,18 @@ namespace WolvenKit.ViewModels.Shell
 
         [Reactive] public IRedType Data { get; set; }
 
-        public IRedType ResolvedData => Data is IRedBaseHandle handle ? handle.GetValue() : Data;
+        public IRedType ResolvedData
+        {
+            get
+            {
+                if (Data is IRedBaseHandle handle)
+                    return handle.GetValue();
+                else if (Data is CVariant v)
+                    return v.Value;
+                else
+                    return Data;
+            }
+        }
 
         public ChunkViewModel Parent { get; set; }
 
@@ -332,6 +343,10 @@ namespace WolvenKit.ViewModels.Shell
                 {
                     //this.File.Chunks[handle.Pointer].IsHandled = true;
                     obj = handle.GetValue();
+                }
+                if (obj is CVariant v)
+                {
+                    obj = v.Value;
                 }
                 if (obj is IRedArray ary)
                 {
@@ -498,7 +513,11 @@ namespace WolvenKit.ViewModels.Shell
             {
                 if (Data is IRedBaseHandle handle)
                 {
-                    return handle?.GetValue().GetType() ?? handle.InnerType;
+                    return handle?.GetValue()?.GetType() ?? handle.InnerType;
+                }
+                if (Data is CVariant v)
+                {
+                    return v?.Value.GetType() ?? null;
                 }
                 return PropertyType;
             }

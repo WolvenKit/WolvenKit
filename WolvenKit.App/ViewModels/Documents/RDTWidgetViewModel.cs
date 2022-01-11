@@ -33,16 +33,6 @@ namespace WolvenKit.ViewModels.Documents
         protected readonly RedBaseClass _data;
         public inkWidgetLibraryResource library;
         public RedDocumentViewModel File;
-        //protected Stream ImageStream;
-
-        // [atlasPath][partName]
-        public Dictionary<string, Dictionary<string, ImageSource>> AtlasParts = new();
-
-        // [atlasPath][partName]
-        public Dictionary<string, Dictionary<string, RectF>> AtlasSlices = new();
-
-        // [fontfamily][styleName] 
-        public Dictionary<string, Dictionary<string, PrivateFontCollection>> Fonts = new();
 
         public RDTWidgetViewModel(RedBaseClass data, RedDocumentViewModel file)
         {
@@ -61,8 +51,6 @@ namespace WolvenKit.ViewModels.Documents
                     if (atlasFile == null || atlasFile.RootChunk is not inkTextureAtlas atlas)
                         continue;
 
-                    AtlasParts[itemPath] = new Dictionary<string, ImageSource>();
-                    AtlasSlices[itemPath] = new Dictionary<string, RectF>();
                     var xbmHash = FNV1A64HashAlgorithm.HashString(atlas.Slots[0].Texture.DepotPath.ToString());
                     var xbmFile = File.GetFileFromHash(xbmHash);
                     if (xbmFile == null || xbmFile.RootChunk is not CBitmapTexture xbm)
@@ -80,17 +68,25 @@ namespace WolvenKit.ViewModels.Documents
 
                     foreach (var part in atlas.Slots[0].Parts)
                     {
-                        var Left = Math.Round(part.ClippingRectInUVCoords.Left * xbm.Width);
-                        var Top = Math.Round(part.ClippingRectInUVCoords.Top * xbm.Height);
-                        var Width = Math.Round(part.ClippingRectInUVCoords.Right * xbm.Width) - Left;
-                        var Height = Math.Round(part.ClippingRectInUVCoords.Bottom * xbm.Height) - Top;
-                        var partImage = new CroppedBitmap(image, new Int32Rect((int)Left, (int)Top, (int)Width, (int)Height));
-                        AtlasParts[itemPath][part.PartName] = partImage;
+                        var key = "ImageSource/" + itemPath + "#" + part.PartName;
+                        if (!Application.Current.Resources.Contains(key))
+                        {
+                            var Left = Math.Round(part.ClippingRectInUVCoords.Left * xbm.Width);
+                            var Top = Math.Round(part.ClippingRectInUVCoords.Top * xbm.Height);
+                            var Width = Math.Round(part.ClippingRectInUVCoords.Right * xbm.Width) - Left;
+                            var Height = Math.Round(part.ClippingRectInUVCoords.Bottom * xbm.Height) - Top;
+                            var partImage = new CroppedBitmap(image, new Int32Rect((int)Left, (int)Top, (int)Width, (int)Height));
+                            partImage.Freeze();
+
+                            Application.Current.Resources.Add(key, partImage);
+                        }
                     }
 
                     foreach (var slice in atlas.Slots[0].Slices)
                     {
-                        AtlasSlices[itemPath][slice.PartName] = slice.NineSliceScaleRect;
+                        var key = "RectF/" + itemPath + "#" + slice.PartName;
+                        if (!Application.Current.Resources.Contains(key))
+                            Application.Current.Resources.Add(key, slice.NineSliceScaleRect);
                     }
                 }
                 else if (Path.GetExtension(itemPath) == ".inkfontfamily")
@@ -100,42 +96,43 @@ namespace WolvenKit.ViewModels.Documents
                     if (ffFile == null || ffFile.RootChunk is not inkFontFamilyResource ffr)
                         continue;
 
-                    Fonts[itemPath] = new Dictionary<string, PrivateFontCollection>();
                     foreach(var fs in ffr.FontStyles)
                     {
-                        var fontHash = FNV1A64HashAlgorithm.HashString(fs.Font.DepotPath.ToString());
-                        var fontFile = File.GetFileFromHash(fontHash);
-                        if (fontFile == null || fontFile.RootChunk is not rendFont rf)
-                            continue;
+                        var key = "FontCollection/" + itemPath + "#" + fs.StyleName;
+                        if (!Application.Current.Resources.Contains(key))
+                        {
+                            var fontHash = FNV1A64HashAlgorithm.HashString(fs.Font.DepotPath.ToString());
+                            var fontFile = File.GetFileFromHash(fontHash);
+                            if (fontFile == null || fontFile.RootChunk is not rendFont rf)
+                                continue;
 
-                        PrivateFontCollection pfc = new();
-                        var fontBytes = rf.FontBuffer.Buffer.GetBytes();
-                        IntPtr ptrData = Marshal.AllocCoTaskMem(fontBytes.Length);
-                        Marshal.Copy(fontBytes, 0, ptrData, fontBytes.Length);
-                        pfc.AddMemoryFont(ptrData, fontBytes.Length);
-                        Marshal.FreeCoTaskMem(ptrData);
-                        //var font = pfc.Families[0];
+                            PrivateFontCollection pfc = new();
+                            var fontBytes = rf.FontBuffer.Buffer.GetBytes();
+                            IntPtr ptrData = Marshal.AllocCoTaskMem(fontBytes.Length);
+                            Marshal.Copy(fontBytes, 0, ptrData, fontBytes.Length);
+                            pfc.AddMemoryFont(ptrData, fontBytes.Length);
+                            Marshal.FreeCoTaskMem(ptrData);
 
-                        //Writing bytes to a temporary file.
-                        //string tempFontFileLoation = Path.Combine(ISettingsManager.GetManagerCacheDir(), fontHash + "_" + fs.StyleName + ".ttf");
-                        //System.IO.File.WriteAllBytes(tempFontFileLoation, fontBytes);
-
-                        ////Creating an instance of System.Windows.Media.GlyphTypeface.
-                        ////From here we will read all the needed font details.
-                        //var glyphTypeface = new GlyphTypeface(new Uri(tempFontFileLoation));
-
-                        ////Reading font family name
-                        //string fontFamilyName = String.Join(" ", glyphTypeface.FamilyNames.Values.ToArray<string>());
-
-                        ////This is what we actually need... the right font family name, to be able to create a correct FontFamily Uri
-                        //string fontUri = new Uri(tempFontFileLoation.Replace(Path.GetFileName(tempFontFileLoation), ""), UriKind.RelativeOrAbsolute).AbsoluteUri + "/#" + fontFamilyName;
-
-                        ////And here is the instance of System.Windows.Media.FontFamily
-                        //var fontFamily = new FontFamily(fontUri);
-
-                        Fonts[itemPath][fs.StyleName] = pfc;
+                            Application.Current.Resources.Add(key, pfc);
+                        }
                     }
                 }
+                //else if(Path.GetExtension(itemPath) == ".inkstyle")
+                //{
+                //    var styleHash = FNV1A64HashAlgorithm.HashString(itemPath);
+                //    var styleFile = File.GetFileFromHash(styleHash);
+
+                //    if (styleFile == null || styleFile.RootChunk is not inkStyleResource sr)
+                //        continue;
+
+                //    foreach (inkStyle style in sr.Styles)
+                //    {
+                //        foreach (inkStyleProperty prop in style.Properties)
+                //        {
+                //            Application.Current.Resources.Add("CVariant/" + itemPath + "#" + prop.PropertyPath, prop.Value);
+                //        }
+                //    }
+                //}
             }
             library = _library;
         }

@@ -93,8 +93,8 @@ namespace WolvenKit.Functionality.Layout
             {
                 double x1 = np.NineSlice.Left, x2 = bm.Width - np.NineSlice.Right;
                 double y1 = np.NineSlice.Top, y2 = bm.Height - np.NineSlice.Bottom;
-                double w1 = np.NineSlice.Left, w3 = np.NineSlice.Right, w2 = bm.Width - w1 - w3;
-                double h1 = np.NineSlice.Top, h3 = np.NineSlice.Bottom, h2 = bm.Height - h1 - h3;
+                double w1 = np.NineSlice.Left, w3 = np.NineSlice.Right % (bm.Width - w1), w2 = bm.Width - w1 - w3;
+                double h1 = np.NineSlice.Top, h3 = np.NineSlice.Bottom % (bm.Height - h1), h2 = bm.Height - h1 - h3;
                 np.patchs = new ImageSource[9];
 
                 np.patchs[0] = new CroppedBitmap(bm, new Int32Rect(0, 0, (int)w1, (int)h1));
