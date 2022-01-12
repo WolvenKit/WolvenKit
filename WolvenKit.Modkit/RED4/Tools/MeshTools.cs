@@ -983,16 +983,15 @@ namespace CP77.CR2W
                     Rig.Parent[i] = -1;
                 }
 
-                throw new TodoException("");
-                /*if (cr2w.Chunks.OfType<CMesh>().Any())
+                if (cr2w.RootChunk is CMesh meshBlob)
                 {
-                    var meshBlob = cr2w.Chunks.OfType<CMesh>().First();
                     for (var i = 0; i < Rig.BoneCount; i++)
                     {
                         Rig.Names[i] = meshBlob.BoneNames[i];
                     }
                 }
-                return Rig;*/
+
+                return Rig;
             }
             return null;
         }

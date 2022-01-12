@@ -305,14 +305,14 @@ namespace WolvenKit.RED4.Types
             }
         }
 
-        public List<string> FindType(Type targetType, string rootName = "root")
+        public List<FindResult> FindType(Type targetType, string rootName = "root")
         {
-            var result = new List<string>();
+            var result = new List<FindResult>();
             foreach (var tuple in GetEnumerator(rootName))
             {
-                if (tuple.value.GetType() == targetType)
+                if (targetType.IsInstanceOfType(tuple.value))
                 {
-                    result.Add(tuple.propPath);
+                    result.Add(new FindResult(tuple.propPath, tuple.value));
                 }
             }
 
@@ -324,9 +324,9 @@ namespace WolvenKit.RED4.Types
             return GetFromXPath(xPath.Split('.'));
         }
 
-        public (bool, object) GetFromXPath(string[] xPath)
+        public (bool, IRedType) GetFromXPath(string[] xPath)
         {
-            object result = null;
+            IRedType result = null;
             var currentProps = _properties;
             foreach (var part in xPath)
             {
@@ -351,7 +351,7 @@ namespace WolvenKit.RED4.Types
                                 return (false, null);
                             }
 
-                            result = lst[index];
+                            result = (IRedType)lst[index];
                         }
                     }
 
@@ -468,5 +468,18 @@ namespace WolvenKit.RED4.Types
         }
 
         public override int GetHashCode() => base.GetHashCode();
+
+        public class FindResult
+        {
+            public string Path { get; }
+            public string Name => Path.Split('.')[^1];
+            public IRedType Value { get; }
+
+            internal FindResult(string path, IRedType value)
+            {
+                Path = path;
+                Value = value;
+            }
+        }
     }
 }

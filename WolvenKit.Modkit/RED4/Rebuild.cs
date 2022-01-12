@@ -30,8 +30,7 @@ namespace WolvenKit.Modkit.RED4
         /// <returns></returns>
         private bool Rebuild(Stream redfileStream, IEnumerable<byte[]> buffersenumerable)
         {
-            throw new TodoException();
-            /*var isResource = _wolvenkitFileService.IsCr2wFile(redfileStream);
+            var isResource = _wolvenkitFileService.IsCr2wFile(redfileStream);
             if (!isResource)
             {
                 return false;
@@ -40,18 +39,17 @@ namespace WolvenKit.Modkit.RED4
             using var reader = new CR2WReader(redfileStream);
             _ = reader.ReadFile(out var cr2w, false);
 
-            var existingBuffers = cr2w.Debug.BufferInfos.ToList();
-
+            var existingBuffers = cr2w.GetBuffers();
             var buffers = buffersenumerable.ToList();
+
+            if (buffers.Count != existingBuffers.Count)
+            {
+                throw new NotSupportedException("Rebuild: Adding/Removing buffers is not supported");
+            }
+
             for (var i = 0; i < buffers.Count; i++)
             {
-                uint flags = 0;
-                if (i < existingBuffers.Count)
-                {
-                    flags = existingBuffers[i].flags;
-                }
-
-                cr2w.Buffers.Add(RedBuffer.CreateBuffer(flags, buffers[i]));
+                existingBuffers[i].SetBytes(buffers[i]);
             }
 
             // write cr2w
@@ -59,7 +57,7 @@ namespace WolvenKit.Modkit.RED4
             using var writer = new CR2WWriter(redfileStream);
             writer.WriteFile(cr2w);
 
-            return true;*/
+            return true;
         }
 
         /// <summary>

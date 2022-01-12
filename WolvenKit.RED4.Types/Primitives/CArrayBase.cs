@@ -1,10 +1,13 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 
 namespace WolvenKit.RED4.Types
 {
+    [DebuggerTypeProxy(typeof(ICollectionDebugView<>))]
+    [DebuggerDisplay("Count = {Count}")]
     public class CArrayBase<T> : IRedArray<T>, IRedNotifyObjectChanged, IEquatable<CArrayBase<T>>
     {
         public int MaxSize { get; set; } = -1;
