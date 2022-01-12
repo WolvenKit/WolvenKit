@@ -34,6 +34,8 @@ namespace WolvenKit.ViewModels.Documents
         public inkWidgetLibraryResource library;
         public RedDocumentViewModel File;
 
+        [Reactive] public Dictionary<object, inkTextWidget> TextWidgets { get; set; }
+
         public RDTWidgetViewModel(RedBaseClass data, RedDocumentViewModel file)
         {
             Header = "Widget Preview";

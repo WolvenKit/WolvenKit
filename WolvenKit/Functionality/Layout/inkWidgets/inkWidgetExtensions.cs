@@ -6,35 +6,38 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using WolvenKit.RED4.Types;
+using WolvenKit.Views.Documents;
 
 namespace WolvenKit.Functionality.Layout.inkWidgets
 {
     public static class inkWidgetExtensions
     {
-        public static inkControl CreateControl(this inkWidget widget)
+        public static inkControl CreateControl(this inkWidget widget, RDTWidgetView widgetView)
         {
             switch (widget)
             {
                 case inkCanvasWidget Canvas:
-                    return new inkCanvasControl(Canvas);
+                    return new inkCanvasControl(Canvas, widgetView);
                 case inkBasePanelWidget BasePanel:
-                    return new inkBasePanelControl(BasePanel);
+                    return new inkBasePanelControl(BasePanel, widgetView);
                 case inkFlexWidget Flex:
-                    return new inkFlexControl(Flex);
+                    return new inkFlexControl(Flex, widgetView);
+                case inkGridWidget Grid:
+                    return new inkGridControl(Grid, widgetView);
                 case inkCompoundWidget Compound:
-                    return new inkCompoundControl(Compound);
+                    return new inkCompoundControl(Compound, widgetView);
                 case inkImageWidget Image:
-                    return new inkImageControl(Image);
+                    return new inkImageControl(Image, widgetView);
                 case inkMaskWidget Mask:
-                    return new inkMaskControl(Mask);
+                    return new inkMaskControl(Mask, widgetView);
                 case inkTextWidget Text:
-                    return new inkTextControl(Text);
+                    return new inkTextControl(Text, widgetView);
                 case inkRectangleWidget Rectangle:
-                    return new inkRectangleControl(Rectangle);
+                    return new inkRectangleControl(Rectangle, widgetView);
                 case inkBorderWidget Border:
-                    return new inkBorderControl(Border);
+                    return new inkBorderControl(Border, widgetView);
                 default:
-                    return new inkControl(widget);
+                    return new inkControl(widget, widgetView);
             }
         }
 

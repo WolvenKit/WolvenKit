@@ -1,24 +1,10 @@
 using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Drawing.Imaging;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Reactive.Disposables;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using ReactiveUI;
-using Splat;
-using WolvenKit.Common.Services;
-using WolvenKit.Functionality.Layout;
 using WolvenKit.Functionality.Layout.inkWidgets;
 using WolvenKit.RED4.Archive.Buffer;
 using WolvenKit.RED4.Types;
@@ -38,11 +24,17 @@ namespace WolvenKit.Views.Documents
 
             this.WhenActivated(disposables =>
             {
+
                 this.ViewModel.WhenAnyValue(x => x.library).Subscribe(library =>
                 {
                     var stack = new StackPanel();
                     WidgetPreview.Children.Clear();
                     WidgetPreview.Children.Add(stack);
+
+                    if (ViewModel.TextWidgets == null)
+                        ViewModel.TextWidgets = new();
+                    ViewModel.TextWidgets.Clear();
+
                     foreach (var item in library.LibraryItems)
                     {
                         if (item.PackageData == null || item.PackageData.Data is not Package04 pkg)
@@ -59,9 +51,21 @@ namespace WolvenKit.Views.Documents
                         if (inst.RootWidget.GetValue() is not inkWidget root)
                             return;
 
-                        stack.Children.Add(root.CreateControl());
+                        stack.Children.Add(new TextBlock()
+                        {
+                            Text = item.Name,
+                            Margin = new Thickness(0,5,0,5),
+                            Foreground = new SolidColorBrush(Color.FromArgb(30, 255, 255, 255))
+                        });
+
+                        stack.Children.Add(root.CreateControl(this));
                     }
-                });
+                }).DisposeWith(disposables);
+
+                this.OneWayBind(ViewModel,
+                        x => x.TextWidgets.Values,
+                        x => x.TextWidgetList.ItemsSource)
+                    .DisposeWith(disposables);
             });
         }
 
@@ -70,6 +74,11 @@ namespace WolvenKit.Views.Documents
         private System.Windows.Point origin;
         private System.Windows.Point start;
         private System.Windows.Point end;
+
+        public void AddTextWidget(inkTextControl control, inkTextWidget widget)
+        {
+            ViewModel.TextWidgets.Add(control, widget);
+        }
 
         private void SetupWidgetPreview()
         {
@@ -194,6 +203,17 @@ namespace WolvenKit.Views.Documents
             pan.Y = 0;
             end.X = 0;
             end.Y = 0;
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            foreach ((var control, var widget) in ViewModel.TextWidgets)
+            {
+                if (control is inkTextControl itc)
+                {
+                    itc.InvalidateMeasure();
+                }
+            }
         }
     }
 }

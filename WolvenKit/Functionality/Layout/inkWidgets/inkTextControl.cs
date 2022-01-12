@@ -14,6 +14,8 @@ using NarcityMedia.DrawStringLineHeight;
 using Size = System.Windows.Size;
 using Rect = System.Windows.Rect;
 using FontFamily = System.Drawing.FontFamily;
+using WolvenKit.Views.Documents;
+using ReactiveUI;
 
 namespace WolvenKit.Functionality.Layout.inkWidgets
 {
@@ -21,20 +23,20 @@ namespace WolvenKit.Functionality.Layout.inkWidgets
     {
         public inkTextWidget TextWidget => Widget as inkTextWidget;
 
-        private string _text;
-
         public string Text
         {
-            get { return _text; }
-            set {
-                var text = value;
-                if (text == "")
+            get {
+                string text = TextWidget.Text;
+                if (TextWidget.Text == "")
                     text = "Test";
                 if (TextWidget.LetterCase.Value == Enums.textLetterCase.UpperCase)
                     text = text.ToUpper();
                 else if (TextWidget.LetterCase.Value == Enums.textLetterCase.LowerCase)
                     text = text.ToLower();
-                _text = text;
+                return text;
+            }
+            set {
+                TextWidget.Text = value;
             }
         }
 
@@ -53,7 +55,7 @@ namespace WolvenKit.Functionality.Layout.inkWidgets
         public int LineHeight => (int)Math.Round(TextWidget.FontSize * TextWidget.LineHeightPercentage);
 
         // not totally sure why this is required - some dpi issue?
-        public int FontSize => (int)Math.Round(TextWidget.FontSize * 0.75);
+        public int FontSize => (int)Math.Round(TextWidget.FontSize * 0.85);
 
         public double CorrectionY => (FontFamily.GetCellDescent(System.Drawing.FontStyle.Regular)) / 1000.0 * Font.Size;
 
@@ -86,11 +88,8 @@ namespace WolvenKit.Functionality.Layout.inkWidgets
             }
         }
 
-        public inkTextControl(inkTextWidget widget) : base(widget)
+        public inkTextControl(inkTextWidget widget, RDTWidgetView widgetView) : base(widget, widgetView)
         {
-            if (TextWidget.FontSize == 0)
-                return;
-
             var fontPath = TextWidget.FontFamily.DepotPath?.ToString() ?? "";
 
             var fontCollection = (FontCollection)Application.Current.TryFindResource("FontCollection/" + fontPath + "#" + TextWidget.FontStyle);
@@ -106,10 +105,9 @@ namespace WolvenKit.Functionality.Layout.inkWidgets
             //if (Text != "")
             //    DrawText(new System.Windows.Size(Width, Height));
 
-            Text = TextWidget.Text;
-
             RenderOptions.SetBitmapScalingMode(this, BitmapScalingMode.NearestNeighbor);
 
+            WidgetView.AddTextWidget(this, TextWidget);
         }
 
         private double GetWrapLength(Size size)
@@ -128,13 +126,16 @@ namespace WolvenKit.Functionality.Layout.inkWidgets
 
         private void MeasureText(Size size)
         {
+            if (size.Width == 0 || size.Height == 0 || FontSize == 0)
+                return;
+
             using (var tempbmp = new Bitmap(1, 1))
             {
                 using (var g = Graphics.FromImage(tempbmp))
                 {
                     SizeF textSize = g.MeasureStringLineHeight(Text, Font, (int)Math.Round(GetWrapLength(size)), LineHeight);
                     TextWidth = textSize.Width;
-                    TextHeight = textSize.Height - CorrectionY * 2;
+                    TextHeight = Math.Max(textSize.Height - CorrectionY * 2, 0);
                 }
             }
         }
@@ -173,7 +174,7 @@ namespace WolvenKit.Functionality.Layout.inkWidgets
         {
             RenderedSize = size;
 
-            if (size.Width == 0 || size.Height == 0)
+            if (size.Width == 0 || size.Height == 0 || FontSize == 0)
                 return;
 
             double x = 0, y = 0;
@@ -246,17 +247,19 @@ namespace WolvenKit.Functionality.Layout.inkWidgets
         {
             MeasureText(availableSize);
             var size = new Size(Width, Height);
-            if (Widget.FitToContent)
-            {
+            //if (Widget.FitToContent)
+            //{
+            if (TextWidth > size.Width)
                 size.Width = TextWidth;
+            if (TextHeight > size.Height)
                 size.Height = TextHeight;
-            }
+            //}
             return MeasureForDimensions(size, availableSize);
         }
 
         protected override void ArrangeCore(Rect finalRect)
         {
-            MeasureText(finalRect.Size);
+            //MeasureText(finalRect.Size);
             base.ArrangeCore(finalRect);
         }
 

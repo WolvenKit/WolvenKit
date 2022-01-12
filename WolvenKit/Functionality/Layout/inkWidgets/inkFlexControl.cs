@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using WolvenKit.RED4.Types;
 using Rect = System.Windows.Rect;
+using WolvenKit.Views.Documents;
 
 namespace WolvenKit.Functionality.Layout.inkWidgets
 {
@@ -13,7 +14,7 @@ namespace WolvenKit.Functionality.Layout.inkWidgets
     {
         public inkFlexWidget FlexWidget => Widget as inkFlexWidget;
 
-        public inkFlexControl(inkFlexWidget widget) : base(widget)
+        public inkFlexControl(inkFlexWidget widget, RDTWidgetView widgetView) : base(widget, widgetView)
         {
 
         }

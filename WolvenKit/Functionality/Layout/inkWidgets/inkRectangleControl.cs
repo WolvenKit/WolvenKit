@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Media;
 using WolvenKit.RED4.Types;
+using WolvenKit.Views.Documents;
 
 namespace WolvenKit.Functionality.Layout.inkWidgets
 {
@@ -12,7 +13,7 @@ namespace WolvenKit.Functionality.Layout.inkWidgets
     {
         public inkRectangleWidget RectangleWidget => Widget as inkRectangleWidget;
 
-        public inkRectangleControl(inkWidget widget) : base(widget)
+        public inkRectangleControl(inkWidget widget, RDTWidgetView widgetView) : base(widget, widgetView)
         {
 
         }

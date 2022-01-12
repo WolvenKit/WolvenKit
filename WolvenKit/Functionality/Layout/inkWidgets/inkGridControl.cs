@@ -10,14 +10,16 @@ using WolvenKit.Views.Documents;
 
 namespace WolvenKit.Functionality.Layout.inkWidgets
 {
-    public class inkBasePanelControl : inkCompoundControl
+    public class inkGridControl : inkCompoundControl
     {
-        public inkBasePanelWidget BasePanelWidget => Widget as inkBasePanelWidget;
+        public inkGridWidget GridWidget => Widget as inkGridWidget;
 
-        public inkBasePanelControl(inkBasePanelWidget widget, RDTWidgetView widgetView) : base(widget, widgetView)
+        public inkGridControl(inkGridWidget widget, RDTWidgetView widgetView) : base(widget, widgetView)
         {
 
         }
+
+        // all copy & pasted from inkBasePanelControl until i find an example
 
         protected override Size MeasureCore(Size availableSize)
         {
@@ -34,7 +36,7 @@ namespace WolvenKit.Functionality.Layout.inkWidgets
                 var width = child.DesiredSize.Width + child.Margin.Left + child.Margin.Right;
                 var height = child.DesiredSize.Height + child.Margin.Top + child.Margin.Bottom;
 
-                if (Widget is inkHorizontalPanelWidget)
+                if (GridWidget.Orientation.Value == Enums.inkEOrientation.Horizontal)
                 {
                     panelContentSize.Width += Math.Max(width, 0);
                     panelContentSize.Height = Math.Max(height, panelContentSize.Height);
@@ -73,14 +75,14 @@ namespace WolvenKit.Functionality.Layout.inkWidgets
                 var width = child.DesiredSize.Width;
                 var height = child.DesiredSize.Height;
 
-                if (HAlignToFill(child) && Widget is inkVerticalPanelWidget)
+                if (HAlignToFill(child) && GridWidget.Orientation.Value == Enums.inkEOrientation.Vertical)
                     width = panelDesiredSize.Width - child.Margin.Left - child.Margin.Right - ChildMargin.Left - ChildMargin.Right;
-                if (VAlignToFill(child) && Widget is inkHorizontalPanelWidget)
+                if (VAlignToFill(child) && GridWidget.Orientation.Value == Enums.inkEOrientation.Horizontal)
                     height = panelDesiredSize.Height - child.Margin.Top - child.Margin.Bottom - ChildMargin.Top - ChildMargin.Bottom;
 
                 if (child.Widget.Layout.SizeRule.Value == Enums.inkESizeRule.Stretch)
                 {
-                    if (Widget is inkHorizontalPanelWidget)
+                    if (GridWidget.Orientation.Value == Enums.inkEOrientation.Horizontal)
                     {
                         width = child.Widget.Layout.SizeCoefficient * (panelDesiredSize.Width - fixedSize - ChildMargin.Left - ChildMargin.Right) / totalUnits - child.Margin.Left - child.Margin.Right;
                     }
@@ -176,11 +178,11 @@ namespace WolvenKit.Functionality.Layout.inkWidgets
 
                 child.Arrange(new Rect(ChildMargin.Left + x, ChildMargin.Top + y, width, height));
 
-                if (Widget is inkVerticalPanelWidget)
+                if (GridWidget.Orientation.Value == Enums.inkEOrientation.Vertical)
                 {
                     currentY = y + height + child.Margin.Bottom;
                 }
-                else if (Widget is inkHorizontalPanelWidget)
+                else
                 {
                     currentX = x + width + child.Margin.Right;
                 }

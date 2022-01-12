@@ -4,6 +4,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using WolvenKit.RED4.Types;
+using WolvenKit.Views.Documents;
 using Point = System.Windows.Point;
 using Rect = System.Windows.Rect;
 
@@ -19,13 +20,13 @@ namespace WolvenKit.Functionality.Layout.inkWidgets
 
         public Thickness ChildMargin => ToThickness(CompoundWidget.ChildMargin);
 
-        public inkCompoundControl(inkCompoundWidget widget) : base(widget)
+        public inkCompoundControl(inkCompoundWidget widget, RDTWidgetView widgetView) : base(widget, widgetView)
         {
             children = new UIElementCollection(this, null);
 
             foreach (var child in CompoundWidget.GetChildren())
             {
-                var childControl = child.CreateControl();
+                var childControl = child.CreateControl(WidgetView);
                 if (childControl != null)
                     children.Add(childControl);
             }
@@ -55,13 +56,13 @@ namespace WolvenKit.Functionality.Layout.inkWidgets
         {
             base.OnRender(dc);
             // use for quick debugging & eventual debug mode
-            //if (false)
-            //{
-            //    dc.DrawRectangle(new SolidColorBrush(Color.FromArgb(4, 255, 255, 255)), null, new Rect(0, 0, Width, Height));
-            //    dc.DrawRectangle(null, new Pen(new SolidColorBrush(Color.FromArgb(16, 255, 255, 255)), 0.5), new Rect(0, 0, RenderSize.Width, RenderSize.Height));
-            //    dc.DrawText(new FormattedText(Widget.Name + $" ({Widget.GetType().Name})", CultureInfo.CurrentCulture, FlowDirection.LeftToRight,
-            //        new Typeface("Arial"), 8, new SolidColorBrush(Color.FromArgb(16, 255, 255, 255)), 1.0), new Point(0, 1 + Height));
-            //}
+            if (Widget.GetParent() == null)
+            {
+                dc.DrawRectangle(new SolidColorBrush(Color.FromArgb(255, 0, 0, 0)), null, new Rect(0, 0, RenderSize.Width, RenderSize.Height));
+                dc.DrawRectangle(null, new Pen(new SolidColorBrush(Color.FromArgb(16, 255, 255, 255)), 0.5), new Rect(-0.5, -0.5, RenderSize.Width + 0.5, RenderSize.Height + 0.5));
+                //dc.DrawText(new FormattedText(Widget.Name + $" ({Widget.GetType().Name})", CultureInfo.CurrentCulture, FlowDirection.LeftToRight,
+                //    new Typeface("Arial"), 8, new SolidColorBrush(Color.FromArgb(16, 255, 255, 255)), 1.0), new Point(0, -10));
+            }
         }
     }
 }

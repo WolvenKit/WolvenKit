@@ -13,6 +13,7 @@ using System.Windows.Media.Imaging;
 using WolvenKit.RED4.Types;
 using Rect = System.Windows.Rect;
 using SizeF = System.Windows.Size;
+using WolvenKit.Views.Documents;
 
 namespace WolvenKit.Functionality.Layout.inkWidgets
 {
@@ -36,7 +37,7 @@ namespace WolvenKit.Functionality.Layout.inkWidgets
         public override double Width => Widget.FitToContent ? OriginalImageSize.Width : Widget.Size.X;
         public override double Height => Widget.FitToContent ? OriginalImageSize.Height : Widget.Size.Y;
 
-        public inkImageControl(inkImageWidget widget) : base(widget)
+        public inkImageControl(inkImageWidget widget, RDTWidgetView widgetView) : base(widget, widgetView)
         {
 
             if (ImageWidget.TextureAtlas == null)

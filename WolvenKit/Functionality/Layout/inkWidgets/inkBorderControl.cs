@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Windows.Media;
 using WolvenKit.RED4.Types;
 using Rect = System.Windows.Rect;
+using WolvenKit.Views.Documents;
 
 namespace WolvenKit.Functionality.Layout.inkWidgets
 {
@@ -15,7 +16,7 @@ namespace WolvenKit.Functionality.Layout.inkWidgets
 
         public float Thickness => BorderWidget.Thickness;
 
-        public inkBorderControl(inkBorderWidget widget) : base(widget)
+        public inkBorderControl(inkBorderWidget widget, RDTWidgetView widgetView) : base(widget, widgetView)
         {
 
         }

@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Windows.Media;
 using WolvenKit.RED4.Types;
 using Rect = System.Windows.Rect;
+using WolvenKit.Views.Documents;
 
 namespace WolvenKit.Functionality.Layout.inkWidgets
 {
@@ -13,7 +14,7 @@ namespace WolvenKit.Functionality.Layout.inkWidgets
     {
         public inkMaskWidget MaskWidget => Widget as inkMaskWidget;
 
-        public inkMaskControl(inkMaskWidget widget) : base(widget)
+        public inkMaskControl(inkMaskWidget widget, RDTWidgetView widgetView) : base(widget, widgetView)
         {
 
         }

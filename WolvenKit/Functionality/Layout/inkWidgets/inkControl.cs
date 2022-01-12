@@ -7,6 +7,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using WolvenKit.RED4.Types;
+using WolvenKit.Views.Documents;
 using Rect = System.Windows.Rect;
 
 namespace WolvenKit.Functionality.Layout.inkWidgets
@@ -27,10 +28,13 @@ namespace WolvenKit.Functionality.Layout.inkWidgets
         public Color TintColor => ToColor(Widget.TintColor);
         public Brush TintBrush => new SolidColorBrush(TintColor);
 
-        public inkControl(inkWidget widget) : base()
+        public RDTWidgetView WidgetView;
+
+        public inkControl(inkWidget widget, RDTWidgetView widgetView) : base()
         {
             _widget = widget;
             Name = Widget.Name;
+            WidgetView = widgetView;
 
             //ToolTip = Widget.Name + $" ({Widget.GetType().Name})";
 
