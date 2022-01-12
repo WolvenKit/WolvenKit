@@ -71,11 +71,11 @@ namespace WolvenKit.ViewModels.Documents
                         var key = "ImageSource/" + itemPath + "#" + part.PartName;
                         if (!Application.Current.Resources.Contains(key))
                         {
-                            var Left = Math.Round(part.ClippingRectInUVCoords.Left * xbm.Width);
-                            var Top = Math.Round(part.ClippingRectInUVCoords.Top * xbm.Height);
-                            var Width = Math.Round(part.ClippingRectInUVCoords.Right * xbm.Width) - Left;
-                            var Height = Math.Round(part.ClippingRectInUVCoords.Bottom * xbm.Height) - Top;
-                            var partImage = new CroppedBitmap(image, new Int32Rect((int)Left, (int)Top, (int)Width, (int)Height));
+                            var Left = part.ClippingRectInUVCoords.Left * xbm.Width;
+                            var Top = part.ClippingRectInUVCoords.Top * xbm.Height;
+                            var Width = part.ClippingRectInUVCoords.Right * xbm.Width - Left;
+                            var Height = part.ClippingRectInUVCoords.Bottom * xbm.Height - Top;
+                            var partImage = new CroppedBitmap(image, new Int32Rect((int)Math.Round(Left), (int)Math.Round(Top), (int)Math.Round(Width), (int)Math.Round(Height)));
                             partImage.Freeze();
 
                             Application.Current.Resources.Add(key, partImage);

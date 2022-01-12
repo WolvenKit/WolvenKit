@@ -10,6 +10,7 @@ using System.Windows;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using WolvenKit.RED4.Types;
+using NarcityMedia.DrawStringLineHeight;
 
 namespace WolvenKit.Functionality.Layout.inkWidgets
 {
@@ -45,8 +46,11 @@ namespace WolvenKit.Functionality.Layout.inkWidgets
 
         public System.Windows.Size RenderedSize = new System.Windows.Size(0, 0);
 
-        public double TextWidth;
+        public double TextWidth = 10000;
         public double TextHeight;
+
+        //public int LineHeight => Font.Height;
+        public int LineHeight => (int)Math.Round(TextWidget.FontSize * TextWidget.LineHeightPercentage);
 
         public override double Width => Widget.FitToContent ? TextWidth : Widget.Size.X;
         public override double Height => Widget.FitToContent ? TextHeight : Widget.Size.Y;
@@ -59,7 +63,7 @@ namespace WolvenKit.Functionality.Layout.inkWidgets
                     return -TextWidget.FontSize * 0.25F;
                 else if (TextWidget.TextVerticalAlignment.Value == Enums.textVerticalAlignment.Bottom)
                     return TextWidget.FontSize * 0.25F;
-                return TextWidget.FontSize * 0.2F;
+                return TextWidget.FontSize * 0.1F;
             }
         }
 
@@ -88,13 +92,10 @@ namespace WolvenKit.Functionality.Layout.inkWidgets
             if (fontCollection == null)
                 return;
 
-            Font = new Font(fontCollection.Families.First(), fontSize);
-            //FontFamily = new System.Windows.Media.FontFamily(Font.Name);
+            var FontFamily = fontCollection.Families.First();
 
-            if (TextWidget.WrappingInfo.AutoWrappingEnabled && TextWidget.WrappingInfo.WrappingAtPosition != 0)
-            {
-                WrapWidth = (int)TextWidget.WrappingInfo.WrappingAtPosition;
-            }
+            Font = new Font(FontFamily, fontSize);
+            //FontFamily = new System.Windows.Media.FontFamily(Font.Name);
 
             //if (Text != "")
             //    DrawText(new System.Windows.Size(Width, Height));
@@ -108,14 +109,53 @@ namespace WolvenKit.Functionality.Layout.inkWidgets
 
         private void MeasureText()
         {
-            using (var tempbmp = new Bitmap((int)WrapWidth, 10000, System.Drawing.Imaging.PixelFormat.Format32bppPArgb))
+            var width = 10000D;
+            if (TextWidget.WrappingInfo.AutoWrappingEnabled)
+            {
+                if (TextWidget.WrappingInfo.WrappingAtPosition != 0)
+                    width = TextWidget.WrappingInfo.WrappingAtPosition;
+                else
+                    width = Width;
+            }
+            using (var tempbmp = new Bitmap(10, 10))
             {
                 using (var g = Graphics.FromImage(tempbmp))
                 {
-                    SizeF s = g.MeasureString(Text, Font, new SizeF(WrapWidth, 10000));
+                    //SizeF s = g.MeasureString(Text, Font, new SizeF((float)width, 10000));
+                    var s = g.MeasureStringLineHeight(Text, Font, (int)Math.Round(width), LineHeight);
                     TextWidth = s.Width;
                     TextHeight = s.Height;
                 }
+            }
+        }
+
+        public static StringAlignment ToStringAlignment(Enums.textHorizontalAlignment a)
+        {
+            switch (a)
+            {
+                case Enums.textHorizontalAlignment.Left:
+                    return StringAlignment.Near;
+                case Enums.textHorizontalAlignment.Center:
+                    return StringAlignment.Center;
+                case Enums.textHorizontalAlignment.Right:
+                    return StringAlignment.Far;
+                default:
+                    return StringAlignment.Near;
+            }
+        }
+
+        public static StringAlignment ToStringAlignment(Enums.textVerticalAlignment a)
+        {
+            switch (a)
+            {
+                case Enums.textVerticalAlignment.Top:
+                    return StringAlignment.Near;
+                case Enums.textVerticalAlignment.Center:
+                    return StringAlignment.Center;
+                case Enums.textVerticalAlignment.Bottom:
+                    return StringAlignment.Far;
+                default:
+                    return StringAlignment.Near;
             }
         }
 
@@ -123,14 +163,48 @@ namespace WolvenKit.Functionality.Layout.inkWidgets
         {
             RenderedSize = size;
 
-            var wrapWidth = Math.Min(WrapWidth, size.Width);
+            if (size.Width == 0 || size.Height == 0)
+                return;
+
+            double x = 0, y = 0;
+            switch (TextWidget.TextHorizontalAlignment.Value)
+            {
+                case Enums.textHorizontalAlignment.Left:
+                    x = 0;
+                    break;
+                case Enums.textHorizontalAlignment.Center:
+                    x = (size.Width - TextWidth) / 2;
+                    break;
+                case Enums.textHorizontalAlignment.Right:
+                    x = size.Width - TextWidth;
+                    break;
+                default:
+                    break;
+            }
+
+            switch (TextWidget.TextVerticalAlignment.Value)
+            {
+                case Enums.textVerticalAlignment.Top:
+                    y = 0;
+                    break;
+                case Enums.textVerticalAlignment.Center:
+                    y = (size.Height - TextHeight) / 2;
+                    break;
+                case Enums.textVerticalAlignment.Bottom:
+                    y = size.Height - TextHeight;
+                    break;
+                default:
+                    break;
+            }
+
             var bmp = new Bitmap((int)size.Width, (int)(size.Height), System.Drawing.Imaging.PixelFormat.Format32bppPArgb);
             using (var g = Graphics.FromImage(bmp))
             {
                 g.TextRenderingHint = TextRenderingHint.AntiAliasGridFit;
-                g.DrawString(Text, Font, ToDrawingBrush(Widget.TintColor), new RectangleF(0, offsetY, (float)wrapWidth, (float)size.Height), new StringFormat()
+                g.DrawString(Text, Font, ToDrawingBrush(Widget.TintColor), (int)Math.Round(TextWidth), LineHeight, new RectangleF((float)x, (float)y, (float)TextWidth, (float)TextHeight), new StringFormat()
                 {
-                    LineAlignment = StringAlignment.Center,
+                    Alignment = ToStringAlignment(TextWidget.TextHorizontalAlignment.Value.GetValueOrDefault()),
+                    LineAlignment = ToStringAlignment(TextWidget.TextVerticalAlignment.Value.GetValueOrDefault()),
                     Trimming = StringTrimming.None
                 });
             }

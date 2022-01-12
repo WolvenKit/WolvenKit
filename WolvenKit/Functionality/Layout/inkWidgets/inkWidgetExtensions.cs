@@ -13,20 +13,29 @@ namespace WolvenKit.Functionality.Layout.inkWidgets
     {
         public static inkControl CreateControl(this inkWidget widget)
         {
-            inkControl element = null;
-            if (widget is inkCanvasWidget canvas)
-                element = new inkCanvasControl(canvas);
-            else if (widget is inkFlexWidget flex)
-                element = new inkFlexControl(flex);
-            else if (widget is inkBasePanelWidget panel)
-                element = new inkBasePanelControl(panel);
-            else if (widget is inkImageWidget image)
-                element = new inkImageControl(image);
-            else if (widget is inkRectangleWidget rectangle)
-                element = new inkRectangleControl(rectangle);
-            else if (widget is inkTextWidget text)
-                element = new inkTextControl(text);
-            return element;
+            switch (widget)
+            {
+                case inkCanvasWidget Canvas:
+                    return new inkCanvasControl(Canvas);
+                case inkBasePanelWidget BasePanel:
+                    return new inkBasePanelControl(BasePanel);
+                case inkFlexWidget Flex:
+                    return new inkFlexControl(Flex);
+                case inkCompoundWidget Compound:
+                    return new inkCompoundControl(Compound);
+                case inkImageWidget Image:
+                    return new inkImageControl(Image);
+                case inkMaskWidget Mask:
+                    return new inkMaskControl(Mask);
+                case inkTextWidget Text:
+                    return new inkTextControl(Text);
+                case inkRectangleWidget Rectangle:
+                    return new inkRectangleControl(Rectangle);
+                case inkBorderWidget Border:
+                    return new inkBorderControl(Border);
+                default:
+                    return new inkControl(widget);
+            }
         }
 
         public static inkWidget GetParent(this inkWidget widget)

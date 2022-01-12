@@ -20,7 +20,6 @@ namespace WolvenKit.Functionality.Layout.inkWidgets
 
         protected override Size MeasureCore(Size availableSize)
         {
-            var internalSize = new Size(Width, Height);
 
             InternalMargin = new();
 
@@ -29,37 +28,41 @@ namespace WolvenKit.Functionality.Layout.inkWidgets
                 if (child.Visibility == Visibility.Collapsed)
                     continue;
 
-                child.Measure(internalSize);
+                child.Measure(new Size(Double.PositiveInfinity, Double.PositiveInfinity));
 
-                var width = child.DesiredSize.Width;
-                var height = child.DesiredSize.Height;
-                var x = AnchorToX(child) * width - child.Widget.Layout.AnchorPoint.X * width;
-                var y = AnchorToY(child) * height - child.Widget.Layout.AnchorPoint.Y * height;
+                //var width = child.DesiredSize.Width;
+                //var height = child.DesiredSize.Height;
+                //var x = AnchorToX(child) * width - child.Widget.Layout.AnchorPoint.X * width;
+                //var y = AnchorToY(child) * height - child.Widget.Layout.AnchorPoint.Y * height;
 
-                if (AnchorLeft(child))
-                    x += child.Margin.Left;
-                else if (AnchorRight(child))
-                    x -= child.Margin.Right;
-                else
-                    x += (child.Margin.Left - child.Margin.Right);
+                //if (AnchorLeft(child))
+                //    x += child.Margin.Left;
+                //else if (AnchorRight(child))
+                //    x -= child.Margin.Right;
+                //else
+                //    x += (child.Margin.Left - child.Margin.Right);
 
-                if (AnchorTop(child))
-                    y += child.Margin.Top;
-                else if (AnchorBottom(child))
-                    y -= child.Margin.Bottom;
-                else
-                    y += (child.Margin.Top - child.Margin.Bottom);
+                //if (AnchorTop(child))
+                //    y += child.Margin.Top;
+                //else if (AnchorBottom(child))
+                //    y -= child.Margin.Bottom;
+                //else
+                //    y += (child.Margin.Top - child.Margin.Bottom);
 
-                InternalMargin.Left = Math.Min(x, InternalMargin.Left);
-                InternalMargin.Top = Math.Min(y, InternalMargin.Top);
-                InternalMargin.Right = Math.Min(Width - (x + width), InternalMargin.Right);
-                InternalMargin.Bottom = Math.Min(Height - (y + height), InternalMargin.Bottom);
+                //InternalMargin.Left = Math.Min(x, InternalMargin.Left);
+                //InternalMargin.Top = Math.Min(y, InternalMargin.Top);
+                //InternalMargin.Right = Math.Min(Width - (x + width), InternalMargin.Right);
+                //InternalMargin.Bottom = Math.Min(Height - (y + height), InternalMargin.Bottom);
                 //InternalMargin.Right = Math.Min(Width - (x + width + child.Margin.Right), InternalMargin.Right);
                 //InternalMargin.Bottom = Math.Min(Height - (y + height + child.Margin.Bottom), InternalMargin.Bottom);
             }
 
-            internalSize.Width -= (InternalMargin.Left + InternalMargin.Right);
-            internalSize.Height -= (InternalMargin.Top + InternalMargin.Bottom);
+            //var internalSize = new Size(Width, Height);
+
+            //internalSize.Width -= (InternalMargin.Left + InternalMargin.Right);
+            //internalSize.Height -= (InternalMargin.Top + InternalMargin.Bottom);
+
+            var internalSize = MeasureForDimensions(new Size(Width, Height), availableSize);
 
             foreach (inkControl child in children)
             {
@@ -70,14 +73,14 @@ namespace WolvenKit.Functionality.Layout.inkWidgets
                 var height = child.DesiredSize.Height;
 
                 if (AnchorToFillH(child))
-                    width = internalSize.Width - child.Margin.Left - child.Margin.Right;
+                    width = Math.Max(internalSize.Width - child.Margin.Left - child.Margin.Right, 0);
                 if (AnchorToFillV(child))
-                    height = internalSize.Height - child.Margin.Top - child.Margin.Bottom;
+                    height = Math.Max(internalSize.Height - child.Margin.Top - child.Margin.Bottom, 0);
 
-                child.Measure(new Size(width, height + 10));
+                child.Measure(new Size(width, height));
             }
 
-            return new Size(Width, Height);
+            return MeasureForDimensions(new Size(Width, Height), availableSize);
         }
 
         protected override void ArrangeCore(Rect finalRect)
@@ -99,22 +102,27 @@ namespace WolvenKit.Functionality.Layout.inkWidgets
                 //if (AnchorToFillV(child))
                 //    height = finalRect.Size.Height - child.Margin.Top - child.Margin.Bottom;
 
-                var x = AnchorToX(child) * finalRect.Size.Width - child.Widget.Layout.AnchorPoint.X * width;
-                var y = AnchorToY(child) * finalRect.Size.Height - child.Widget.Layout.AnchorPoint.Y * height;
+                var x = AnchorToX(child) * finalRect.Size.Width;
+                var y = AnchorToY(child) * finalRect.Size.Height;
+
+                if (!AnchorToFillH(child))
+                    x -= child.Widget.Layout.AnchorPoint.X * width;
+                if (!AnchorToFillV(child))
+                    y -= child.Widget.Layout.AnchorPoint.Y * height;
 
                 if (AnchorLeft(child))
                     x += child.Margin.Left;
                 else if (AnchorRight(child))
                     x -= child.Margin.Right;
                 else
-                    x += (child.Margin.Left - child.Margin.Right);
+                    x += child.Margin.Left;
 
                 if (AnchorTop(child))
                     y += child.Margin.Top;
                 else if (AnchorBottom(child))
                     y -= child.Margin.Bottom;
                 else
-                    y += (child.Margin.Top - child.Margin.Bottom);
+                    y += child.Margin.Top;
 
                 //x -= InternalMargin.Left;
                 //y -= InternalMargin.Top;

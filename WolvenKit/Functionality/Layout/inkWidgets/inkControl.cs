@@ -13,26 +13,11 @@ namespace WolvenKit.Functionality.Layout.inkWidgets
 {
     public class inkControl : UIElement
     {
-        public inkWidget Widget;
+        public inkWidget Widget => _widget;
 
-        public static readonly DependencyProperty NameProperty =
-                    DependencyProperty.Register(
-                                nameof(Name),
-                                typeof(string),
-                                typeof(inkControl),
-                                new FrameworkPropertyMetadata(
-                                    string.Empty,                           // defaultValue
-                                    FrameworkPropertyMetadataOptions.None,  // flags
-                                    null,                                   // propertyChangedCallback
-                                    null,                                   // coerceValueCallback
-                                    true)                                  // isAnimationProhibited
-                                );
+        protected inkWidget _widget;
 
-        public string Name
-        {
-            get { return (string)GetValue(NameProperty); }
-            set { SetValue(NameProperty, value); }
-        }
+        public string Name => Widget.Name;
 
         public virtual double Width => Widget.Size.X;
         public virtual double Height => Widget.Size.Y;
@@ -44,15 +29,9 @@ namespace WolvenKit.Functionality.Layout.inkWidgets
 
         public inkControl(inkWidget widget) : base()
         {
-            Widget = widget;
-            //Tag = Widget;
-
-            //Background = Brushes.Transparent;
-
-            //Background = ToBrush(Widget.TintColor);
+            _widget = widget;
 
             //ToolTip = Widget.Name + $" ({Widget.GetType().Name})";
-            Name = Widget.Name;
 
             if (Widget.GetParent() is not null)
                 Opacity = Widget.Opacity;
@@ -91,7 +70,12 @@ namespace WolvenKit.Functionality.Layout.inkWidgets
 
         protected override Size MeasureCore(Size availableSize)
         {
-            var size = new Size(Width, Height);
+            return MeasureForDimensions(new Size(Width, Height), availableSize);
+        }
+
+        protected Size MeasureForDimensions(Size dimensions, Size availableSize)
+        {
+            var size = dimensions;
             if (!Double.IsPositiveInfinity(availableSize.Width) && FillH(this))
                 size.Width = availableSize.Width;
             if (!Double.IsPositiveInfinity(availableSize.Height) && FillV(this))
@@ -190,8 +174,10 @@ namespace WolvenKit.Functionality.Layout.inkWidgets
                 case inkCanvasWidget:
                     return AnchorToFillH(control);
                 case inkFlexWidget:
-                case inkBasePanelWidget:
+                case inkVerticalPanelWidget:
                     return HAlignToFill(control);
+                case inkHorizontalPanelWidget:
+                    return control.Widget.Layout.SizeRule.Value == Enums.inkESizeRule.Stretch;
                 default:
                     return false;
             }
@@ -204,8 +190,10 @@ namespace WolvenKit.Functionality.Layout.inkWidgets
                 case inkCanvasWidget:
                     return AnchorToFillV(control);
                 case inkFlexWidget:
-                case inkBasePanelWidget:
+                case inkHorizontalPanelWidget:
                     return VAlignToFill(control);
+                case inkVerticalPanelWidget:
+                    return control.Widget.Layout.SizeRule.Value == Enums.inkESizeRule.Stretch;
                 default:
                     return false;
             }

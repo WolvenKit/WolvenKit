@@ -20,23 +20,23 @@ namespace WolvenKit.Functionality.Layout.inkWidgets
 
         protected override Size MeasureCore(Size availableSize)
         {
-            Size panelDesiredSize = new Size(Width, Height);
-
             var totalUnits = 0D;
             var fixedSize = 0D;
+            var panelContentSize = new Size(0, 0);
             foreach (inkControl child in children)
             {
                 if (child.Visibility == Visibility.Collapsed)
                     continue;
-                child.Measure(availableSize);
 
-                var width = child.DesiredSize.Width + child.Widget.Layout.Margin.Left + child.Widget.Layout.Margin.Right;
-                var height = child.DesiredSize.Height + child.Widget.Layout.Margin.Top + child.Widget.Layout.Margin.Bottom;
+                child.Measure(new Size(Double.PositiveInfinity, Double.PositiveInfinity));
+
+                var width = child.DesiredSize.Width + child.Margin.Left + child.Margin.Right;
+                var height = child.DesiredSize.Height + child.Margin.Top + child.Margin.Bottom;
 
                 if (Widget is inkHorizontalPanelWidget)
                 {
-                    panelDesiredSize.Width += Math.Max(width, 0);
-                    panelDesiredSize.Height = Math.Max(height, panelDesiredSize.Height);
+                    panelContentSize.Width += Math.Max(width, 0);
+                    panelContentSize.Height = Math.Max(height, panelContentSize.Height);
 
                     if (child.Widget.Layout.SizeRule.Value == Enums.inkESizeRule.Fixed)
                         fixedSize += width;
@@ -45,8 +45,8 @@ namespace WolvenKit.Functionality.Layout.inkWidgets
                 }
                 else
                 {
-                    panelDesiredSize.Width = Math.Max(width, panelDesiredSize.Width);
-                    panelDesiredSize.Height += Math.Max(height, 0);
+                    panelContentSize.Width = Math.Max(width, panelContentSize.Width);
+                    panelContentSize.Height += Math.Max(height, 0);
 
                     if (child.Widget.Layout.SizeRule.Value == Enums.inkESizeRule.Fixed)
                         fixedSize += height;
@@ -55,9 +55,11 @@ namespace WolvenKit.Functionality.Layout.inkWidgets
                 }
             }
 
-            if (!Widget.FitToContent)
+            var panelDesiredSize = MeasureForDimensions(new Size(Width, Height), availableSize);
+
+            if (Widget.FitToContent)
             {
-                panelDesiredSize = new Size(Width, Height);
+                panelDesiredSize = MeasureForDimensions(panelContentSize, availableSize);
             }
 
             foreach (inkControl child in children)
@@ -77,11 +79,11 @@ namespace WolvenKit.Functionality.Layout.inkWidgets
                 {
                     if (Widget is inkHorizontalPanelWidget)
                     {
-                        width = child.Widget.Layout.SizeCoefficient * (panelDesiredSize.Width - fixedSize) / totalUnits;
+                        width = child.Widget.Layout.SizeCoefficient * (panelDesiredSize.Width - fixedSize) / totalUnits - child.Margin.Left - child.Margin.Right;
                     }
                     else
                     {
-                        height = child.Widget.Layout.SizeCoefficient * (panelDesiredSize.Height - fixedSize) / totalUnits;
+                        height = child.Widget.Layout.SizeCoefficient * (panelDesiredSize.Height - fixedSize) / totalUnits - child.Margin.Top - child.Margin.Bottom;
                     }
                 }
 
@@ -89,23 +91,12 @@ namespace WolvenKit.Functionality.Layout.inkWidgets
 
             }
 
-            if (Widget.FitToContent)
-            {
-                return panelDesiredSize;
-            }
-            else
-            {
-                return new Size(Width, Height);
-            }
+            return MeasureForDimensions(panelDesiredSize, availableSize);
 
         }
 
         protected override void ArrangeCore(Rect finalRect)
         {
-            //var internalSize = finalRect.Size;
-            //internalSize.Width -= (InternalMargin.Right + InternalMargin.Left);
-            //internalSize.Height -= (InternalMargin.Bottom + InternalMargin.Top);
-
             double currentX = 0, currentY = 0;
             foreach (inkControl child in children)
             {
@@ -115,32 +106,80 @@ namespace WolvenKit.Functionality.Layout.inkWidgets
                 var width = child.DesiredSize.Width;
                 var height = child.DesiredSize.Height;
 
-                //if (HAlignToFill(child) && Widget is inkVerticalPanelWidget)
-                //    width = Math.Max(finalRect.Size.Width - child.Margin.Left - child.Margin.Right, 0);
-                //if (VAlignToFill(child) && Widget is inkHorizontalPanelWidget)
-                //    height = Math.Max(finalRect.Size.Height - child.Margin.Top - child.Margin.Bottom, 0);
-
-                var x = currentX + child.Margin.Left;
-                var y = currentY + child.Margin.Top;
+                double x = currentX;
+                double y = currentY;
 
                 if (Widget is inkVerticalPanelWidget)
                 {
-                    x += HAlignToX(child) * finalRect.Size.Width;
+                    switch (child.Widget.Layout.HAlign.Value)
+                    {
+                        case Enums.inkEHorizontalAlign.Fill:
+                            x += child.Margin.Left;
+                            break;
+                        case Enums.inkEHorizontalAlign.Left:
+                            x += child.Margin.Left;
+                            break;
+                        case Enums.inkEHorizontalAlign.Right:
+                            x += finalRect.Size.Width - width - child.Margin.Right;
+                            break;
+                        case Enums.inkEHorizontalAlign.Center:
+                            x += (finalRect.Size.Width - width) / 2 + child.Margin.Left - child.Margin.Right;
+                            break;
+                    }
+
+                    y += child.Margin.Top;
                 }
                 else
                 {
-                    y += VAlignToY(child) * finalRect.Size.Height;
+                    switch (child.Widget.Layout.VAlign.Value)
+                    {
+                        case Enums.inkEVerticalAlign.Fill:
+                            y += child.Margin.Top;
+                            break;
+                        case Enums.inkEVerticalAlign.Top:
+                            y += child.Margin.Top;
+                            break;
+                        case Enums.inkEVerticalAlign.Bottom:
+                            y += finalRect.Size.Height - height - child.Margin.Bottom;
+                            break;
+                        case Enums.inkEVerticalAlign.Center:
+                            y += (finalRect.Size.Height - height) / 2 + child.Margin.Top + child.Margin.Bottom;
+                            break;
+                    }
+
+                    x += child.Margin.Left;
                 }
+
+
+                //if (child.Widget.Layout.HAlign.Value == Enums.inkEHorizontalAlign.Center)
+                //    x -= child.Widget.Layout.AnchorPoint.X * width;
+                //if (child.Widget.Layout.VAlign.Value == Enums.inkEVerticalAlign.Center)
+                //    y -= child.Widget.Layout.AnchorPoint.Y * height;
+
+                //if (child.Widget.Layout.HAlign.Value == Enums.inkEHorizontalAlign.Left)
+                //    x += child.Margin.Left;
+                //else if (child.Widget.Layout.HAlign.Value == Enums.inkEHorizontalAlign.Right)
+                //    x -= child.Margin.Right;
+                //else
+                //    x += (child.Margin.Left - child.Margin.Right);
+
+                //if (child.Widget.Layout.VAlign.Value == Enums.inkEVerticalAlign.Top)
+                //    y += child.Margin.Top;
+                //else if (child.Widget.Layout.VAlign.Value == Enums.inkEVerticalAlign.Bottom)
+                //    y -= child.Margin.Bottom;
+                //else
+                //    y += (child.Margin.Top - child.Margin.Bottom);
+
 
                 child.Arrange(new Rect(x, y, width, height));
 
                 if (Widget is inkVerticalPanelWidget)
                 {
-                    currentY += height + child.Widget.Layout.Margin.Top;
+                    currentY = y + height + child.Margin.Bottom;
                 }
                 else if (Widget is inkHorizontalPanelWidget)
                 {
-                    currentX += width + child.Widget.Layout.Margin.Left;
+                    currentX = x + width + child.Margin.Right;
                 }
             }
 
