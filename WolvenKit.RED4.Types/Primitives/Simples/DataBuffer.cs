@@ -4,7 +4,7 @@ using System.ComponentModel;
 
 namespace WolvenKit.RED4.Types
 {
-    public class DataBuffer : IRedDataBuffer, IRedBufferPointer, IEquatable<DataBuffer>
+    public class DataBuffer : IRedBufferWrapper, IRedBufferPointer, IRedPrimitive, IEquatable<DataBuffer>
     {
         [Browsable(false)]
         public RedBuffer Buffer { get; set; }

@@ -196,17 +196,16 @@ namespace CP77Tools.Tasks
                                 return;
                             }
 
-                            if (cr2w.Info.ImportInfo.Length > 0)
+                            var imports = cr2w.GetImports();
+                            if (imports.Count > 0)
                             {
-                                throw new WolvenKit.RED4.Types.Exceptions.TodoException();
-                                //foreach (var info in cr2w.Debug.ImportInfos)
-                                //{
-                                //    var importhash = cr2w.Debug.s stringDict[info.offset];
-                                //    if (!_hashService.Contains(importhash))
-                                //    {
-                                //        importDictionary.AddOrUpdate(importhash, item, (arg1, o) => item);
-                                //    }
-                                //}
+                                foreach (var import in imports)
+                                {
+                                    if (!_hashService.Contains(import.GetRedHash()))
+                                    {
+                                        importDictionary.AddOrUpdate(import.GetRedHash(), import, (arg1, o) => import);
+                                    }
+                                }
                             }
                         }
 

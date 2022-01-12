@@ -5,7 +5,7 @@ using System.ComponentModel;
 namespace WolvenKit.RED4.Types
 {
     [RED("serializationDeferredDataBuffer")]
-    public class SerializationDeferredDataBuffer : IRedPrimitive, IRedBufferPointer, IEquatable<SerializationDeferredDataBuffer>
+    public class SerializationDeferredDataBuffer : IRedBufferWrapper, IRedBufferPointer, IRedPrimitive, IEquatable<SerializationDeferredDataBuffer>
     {
         [Browsable(false)]
         public RedBuffer Buffer { get; set; }

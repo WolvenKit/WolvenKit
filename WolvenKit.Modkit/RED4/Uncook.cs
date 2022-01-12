@@ -578,16 +578,13 @@ namespace WolvenKit.Modkit.RED4
                 yield break;
             }
 
-            throw new TodoException("get all buffers");
-
-            /*var buffers = cr2w.Buffers;
-            foreach (var buffer in buffers)
+            foreach (var buffer in cr2w.GetBuffers())
             {
                 var ms = new MemoryStream();
                 ms.Write(buffer.GetBytes());
 
                 yield return ms;
-            }*/
+            }
         }
 
         private bool UncookTexarray(Stream cr2wStream, Stream outstream)

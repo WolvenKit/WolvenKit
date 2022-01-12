@@ -10,8 +10,8 @@ namespace WolvenKit.RED4.Types
         public IParseableBuffer Data { get; set; }
     }
 
-    public interface IRedDataBuffer : IRedPrimitive
+    public interface IRedBufferWrapper
     {
-
+        public RedBuffer Buffer { get; }
     }
 }
