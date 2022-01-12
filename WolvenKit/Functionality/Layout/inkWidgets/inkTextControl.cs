@@ -11,6 +11,9 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using WolvenKit.RED4.Types;
 using NarcityMedia.DrawStringLineHeight;
+using Size = System.Windows.Size;
+using Rect = System.Windows.Rect;
+using FontFamily = System.Drawing.FontFamily;
 
 namespace WolvenKit.Functionality.Layout.inkWidgets
 {
@@ -32,7 +35,6 @@ namespace WolvenKit.Functionality.Layout.inkWidgets
                 else if (TextWidget.LetterCase.Value == Enums.textLetterCase.LowerCase)
                     text = text.ToLower();
                 _text = text;
-                MeasureText();
             }
         }
 
@@ -40,20 +42,25 @@ namespace WolvenKit.Functionality.Layout.inkWidgets
 
         public Font Font;
 
-        public System.Windows.Media.FontFamily FontFamily;
-
         public float WrapWidth = 10000;
 
-        public System.Windows.Size RenderedSize = new System.Windows.Size(0, 0);
+        public Size RenderedSize = new Size(0, 0);
 
         public double TextWidth = 10000;
         public double TextHeight;
 
-        //public int LineHeight => Font.Height;
+        // unaffected by the font scaling we need to do
         public int LineHeight => (int)Math.Round(TextWidget.FontSize * TextWidget.LineHeightPercentage);
 
-        public override double Width => Widget.FitToContent ? TextWidth : Widget.Size.X;
-        public override double Height => Widget.FitToContent ? TextHeight : Widget.Size.Y;
+        // not totally sure why this is required - some dpi issue?
+        public int FontSize => (int)Math.Round(TextWidget.FontSize * 0.75);
+
+        public double CorrectionY => (FontFamily.GetCellDescent(System.Drawing.FontStyle.Regular)) / 1000.0 * Font.Size;
+
+        public FontFamily FontFamily { get; set; }
+
+        //public override double Width => Widget.FitToContent ? TextWidth : Widget.Size.X;
+        //public override double Height => Widget.FitToContent ? TextHeight : Widget.Size.Y;
 
         public float offsetY
         {
@@ -81,10 +88,9 @@ namespace WolvenKit.Functionality.Layout.inkWidgets
 
         public inkTextControl(inkTextWidget widget) : base(widget)
         {
+            if (TextWidget.FontSize == 0)
+                return;
 
-            // not totally sure why this is required - some dpi issue?
-            float fontSize = (float)(TextWidget.FontSize * 0.8);
-            //float fontSize = (float)(TextWidget.FontSize);
             var fontPath = TextWidget.FontFamily.DepotPath?.ToString() ?? "";
 
             var fontCollection = (FontCollection)Application.Current.TryFindResource("FontCollection/" + fontPath + "#" + TextWidget.FontStyle);
@@ -92,39 +98,43 @@ namespace WolvenKit.Functionality.Layout.inkWidgets
             if (fontCollection == null)
                 return;
 
-            var FontFamily = fontCollection.Families.First();
+            FontFamily = fontCollection.Families.First();
 
-            Font = new Font(FontFamily, fontSize);
+            Font = new Font(FontFamily, FontSize);
             //FontFamily = new System.Windows.Media.FontFamily(Font.Name);
 
             //if (Text != "")
             //    DrawText(new System.Windows.Size(Width, Height));
 
             Text = TextWidget.Text;
-            MeasureText();
 
             RenderOptions.SetBitmapScalingMode(this, BitmapScalingMode.NearestNeighbor);
 
         }
 
-        private void MeasureText()
+        private double GetWrapLength(Size size)
         {
             var width = 10000D;
-            if (TextWidget.WrappingInfo.AutoWrappingEnabled)
+            if (TextWidget.WrappingInfo.AutoWrappingEnabled && !Double.IsPositiveInfinity(size.Width) && !Widget.FitToContent)
             {
-                if (TextWidget.WrappingInfo.WrappingAtPosition != 0)
-                    width = TextWidget.WrappingInfo.WrappingAtPosition;
-                else
-                    width = Width;
+                width = size.Width;
             }
-            using (var tempbmp = new Bitmap(10, 10))
+            if (TextWidget.WrappingInfo.WrappingAtPosition != 0)
+            {
+                width = TextWidget.WrappingInfo.WrappingAtPosition;
+            }
+            return width;
+        }
+
+        private void MeasureText(Size size)
+        {
+            using (var tempbmp = new Bitmap(1, 1))
             {
                 using (var g = Graphics.FromImage(tempbmp))
                 {
-                    //SizeF s = g.MeasureString(Text, Font, new SizeF((float)width, 10000));
-                    var s = g.MeasureStringLineHeight(Text, Font, (int)Math.Round(width), LineHeight);
-                    TextWidth = s.Width;
-                    TextHeight = s.Height;
+                    SizeF textSize = g.MeasureStringLineHeight(Text, Font, (int)Math.Round(GetWrapLength(size)), LineHeight);
+                    TextWidth = textSize.Width;
+                    TextHeight = textSize.Height - CorrectionY * 2;
                 }
             }
         }
@@ -159,7 +169,7 @@ namespace WolvenKit.Functionality.Layout.inkWidgets
             }
         }
 
-        private void DrawText(System.Windows.Size size)
+        private void DrawText(Size size)
         {
             RenderedSize = size;
 
@@ -185,13 +195,13 @@ namespace WolvenKit.Functionality.Layout.inkWidgets
             switch (TextWidget.TextVerticalAlignment.Value)
             {
                 case Enums.textVerticalAlignment.Top:
-                    y = 0;
+                    y = -CorrectionY;
                     break;
                 case Enums.textVerticalAlignment.Center:
-                    y = (size.Height - TextHeight) / 2;
+                    y = (size.Height - TextHeight) / 2 - CorrectionY;
                     break;
                 case Enums.textVerticalAlignment.Bottom:
-                    y = size.Height - TextHeight;
+                    y = size.Height - TextHeight - CorrectionY;
                     break;
                 default:
                     break;
@@ -201,10 +211,12 @@ namespace WolvenKit.Functionality.Layout.inkWidgets
             using (var g = Graphics.FromImage(bmp))
             {
                 g.TextRenderingHint = TextRenderingHint.AntiAliasGridFit;
-                g.DrawString(Text, Font, ToDrawingBrush(Widget.TintColor), (int)Math.Round(TextWidth), LineHeight, new RectangleF((float)x, (float)y, (float)TextWidth, (float)TextHeight), new StringFormat()
+                g.DrawString(Text, Font, ToDrawingBrush(Widget.TintColor), (int)Math.Round(GetWrapLength(size)), LineHeight, new RectangleF((float)x, (float)y, (float)TextWidth, (float)TextWidth), new StringFormat()
                 {
-                    Alignment = ToStringAlignment(TextWidget.TextHorizontalAlignment.Value.GetValueOrDefault()),
-                    LineAlignment = ToStringAlignment(TextWidget.TextVerticalAlignment.Value.GetValueOrDefault()),
+                    //Alignment = ToStringAlignment(TextWidget.TextHorizontalAlignment.Value.GetValueOrDefault()),
+                    //LineAlignment = ToStringAlignment(TextWidget.TextVerticalAlignment.Value.GetValueOrDefault()),
+                    Alignment = StringAlignment.Center,
+                    LineAlignment = StringAlignment.Center,
                     Trimming = StringTrimming.None
                 });
             }
@@ -230,13 +242,33 @@ namespace WolvenKit.Functionality.Layout.inkWidgets
             });
         }
 
+        protected override Size MeasureCore(Size availableSize)
+        {
+            MeasureText(availableSize);
+            var size = new Size(Width, Height);
+            if (Widget.FitToContent)
+            {
+                size.Width = TextWidth;
+                size.Height = TextHeight;
+            }
+            return MeasureForDimensions(size, availableSize);
+        }
+
+        protected override void ArrangeCore(Rect finalRect)
+        {
+            MeasureText(finalRect.Size);
+            base.ArrangeCore(finalRect);
+        }
+
         protected override void OnRender(DrawingContext dc)
         {
             base.OnRender(dc);
-            var newSize = new System.Windows.Size(RenderSize.Width, RenderSize.Height);
-            dc.DrawRectangle(TintBrush, null, new System.Windows.Rect(0, 0, newSize.Width, newSize.Height));
+            var newSize = new Size(RenderSize.Width, RenderSize.Height);
+            dc.DrawRectangle(TintBrush, null, new Rect(0, 0, newSize.Width, newSize.Height));
             if (Text != "" && RenderedSize != newSize)
+            {
                 DrawText(newSize);
+            }
             // this is supposed to be faster, but i couldn't get it working with custom fonts
             //FormattedText formattedText = new FormattedText("Different Test", CultureInfo.GetCultureInfo("en-us"),
             //    FlowDirection.LeftToRight, new Typeface(FontFamily, FontStyles.Normal, FontWeights.Regular, FontStretches.Normal), TextWidget.FontSize, TintBrush,

@@ -28,6 +28,9 @@ namespace WolvenKit.Functionality.Layout.inkWidgets
         private ImageSource ImageSource;
         public bool UsingNineScale { get; set; }
 
+        public string TextureAtlas { get; set; }
+        public string TexturePart { get; set; }
+
         public SizeF RenderedSize = new SizeF();
 
         public override double Width => Widget.FitToContent ? OriginalImageSize.Width : Widget.Size.X;
@@ -39,7 +42,10 @@ namespace WolvenKit.Functionality.Layout.inkWidgets
             if (ImageWidget.TextureAtlas == null)
                 return;
 
-            OriginalImageSource = (ImageSource)Application.Current.TryFindResource("ImageSource/" + ImageWidget.TextureAtlas.DepotPath + "#" + ImageWidget.TexturePart);
+            TextureAtlas = ImageWidget.TextureAtlas.DepotPath;
+            TexturePart = ImageWidget.TexturePart;
+
+            OriginalImageSource = (ImageSource)Application.Current.TryFindResource("ImageSource/" + TextureAtlas + "#" + TexturePart);
 
             if (OriginalImageSource == null)
                 return;
@@ -48,7 +54,7 @@ namespace WolvenKit.Functionality.Layout.inkWidgets
 
             if (ImageWidget.UseNineSliceScale)
             {
-                nsRect = (RectF)Application.Current.TryFindResource("RectF/" + ImageWidget.TextureAtlas.DepotPath + "#" + ImageWidget.TexturePart);
+                nsRect = (RectF)Application.Current.TryFindResource("RectF/" + TextureAtlas + "#" + TexturePart);
                 if (nsRect != null)
                 {
                     UsingNineScale = true;
@@ -100,52 +106,107 @@ namespace WolvenKit.Functionality.Layout.inkWidgets
                 matrix.Matrix41 = Widget.TintColor.Green;
                 matrix.Matrix42 = Widget.TintColor.Blue;
 
-                ImageAttributes attributes2 = new ImageAttributes();
-                attributes2.SetWrapMode(System.Drawing.Drawing2D.WrapMode.Clamp, System.Drawing.Color.Red);
                 ImageAttributes attributes = new ImageAttributes();
                 attributes.SetColorMatrix(matrix, ColorMatrixFlag.Default, ColorAdjustType.Bitmap);
                 if (UsingNineScale)
                 {
                     attributes.SetWrapMode(System.Drawing.Drawing2D.WrapMode.TileFlipXY);
 
-                    gfx.DrawImage(sourceBitmap, new Rectangle(
-                        0, 0, Rect.Left, Rect.Top),
-                        0, 0, Rect.Left, Rect.Top,
-                        GraphicsUnit.Pixel, attributes);
-                    gfx.DrawImage(sourceBitmap, new Rectangle(
-                        Rect.Left, 0, (destBitmap.Width - Rect.Left - Rect.Right), Rect.Top),
-                        Rect.Left, 0, Math.Max(OriginalImageSize.Width - Rect.Left - Rect.Right, 1), Rect.Top,
-                        GraphicsUnit.Pixel, attributes);
-                    gfx.DrawImage(sourceBitmap, new Rectangle(
-                        (destBitmap.Width - Rect.Right), 0, (Rect.Right), Rect.Top),
-                        (OriginalImageSize.Width - Rect.Right), 0, (Rect.Right), Rect.Top,
-                        GraphicsUnit.Pixel, attributes);
+                    if (Rect.Top != 0)
+                    {
+                        if (Rect.Left != 0)
+                            gfx.DrawImage(sourceBitmap, new Rectangle(
+                                0, 0, Rect.Left, Rect.Top),
+                                0, 0, Rect.Left, Rect.Top,
+                                GraphicsUnit.Pixel, attributes);
+                        gfx.DrawImage(sourceBitmap, new Rectangle(
+                            Rect.Left, 0, (destBitmap.Width - Rect.Left - Rect.Right), Rect.Top),
+                            Rect.Left + (Rect.Right == 0 ? -1 : 0) + (Rect.Left == 0 ? -1 : 0), 0, Math.Max(OriginalImageSize.Width - Rect.Left - Rect.Right, 1), Rect.Top,
+                            GraphicsUnit.Pixel, attributes);
+                        if (Rect.Right != 0)
+                            gfx.DrawImage(sourceBitmap, new Rectangle(
+                                (destBitmap.Width - Rect.Right), 0, (Rect.Right), Rect.Top),
+                                (OriginalImageSize.Width - Rect.Right), 0, (Rect.Right), Rect.Top,
+                                GraphicsUnit.Pixel, attributes);
+                    }
 
-                    gfx.DrawImage(sourceBitmap, new Rectangle(
-                        0, Rect.Top, Rect.Left, destBitmap.Height - Rect.Top - Rect.Bottom),
-                        0, Rect.Top, Rect.Left, Math.Max(OriginalImageSize.Height - Rect.Top - Rect.Bottom, 1),
-                        GraphicsUnit.Pixel, attributes);
+                    if (Rect.Left != 0)
+                        gfx.DrawImage(sourceBitmap, new Rectangle(
+                            0, Rect.Top, Rect.Left, destBitmap.Height - Rect.Top - Rect.Bottom),
+                            0, Rect.Top + (Rect.Bottom == 0 ? -1 : 0) + (Rect.Top == 0 ? -1 : 0), Rect.Left, Math.Max(OriginalImageSize.Height - Rect.Top - Rect.Bottom, 1),
+                            GraphicsUnit.Pixel, attributes);
                     gfx.DrawImage(sourceBitmap, new Rectangle(
                         Rect.Left, Rect.Top, (destBitmap.Width - Rect.Left - Rect.Right), (destBitmap.Height - Rect.Top - Rect.Bottom)),
-                        Rect.Left, Rect.Top, OriginalImageSize.Width - Rect.Left - Rect.Right, OriginalImageSize.Height - Rect.Top - Rect.Bottom,
-                        GraphicsUnit.Pixel, attributes2);
-                    gfx.DrawImage(sourceBitmap, new Rectangle(
-                        (destBitmap.Width - Rect.Right), Rect.Top, (Rect.Right), (destBitmap.Height - Rect.Top - Rect.Bottom)),
-                        (OriginalImageSize.Width - Rect.Right), Rect.Top, (Rect.Right),Math.Max(OriginalImageSize.Height - Rect.Top - Rect.Bottom, 1),
+                        Rect.Left + (Rect.Right == 0 ? -1 : 0) + (Rect.Left == 0 ? -1 : 0), Rect.Top + (Rect.Bottom == 0 ? -1 : 0) + (Rect.Top == 0 ? -1 : 0), Math.Max(OriginalImageSize.Width - Rect.Left - Rect.Right, 1), Math.Max(OriginalImageSize.Height - Rect.Top - Rect.Bottom, 1),
                         GraphicsUnit.Pixel, attributes);
+                    if (Rect.Right != 0)
+                        gfx.DrawImage(sourceBitmap, new Rectangle(
+                            (destBitmap.Width - Rect.Right), Rect.Top, (Rect.Right), (destBitmap.Height - Rect.Top - Rect.Bottom)),
+                            (OriginalImageSize.Width - Rect.Right), Rect.Top + (Rect.Bottom == 0 ? -1 : 0) + (Rect.Top == 0 ? -1 : 0), (Rect.Right), Math.Max(OriginalImageSize.Height - Rect.Top - Rect.Bottom, 1),
+                            GraphicsUnit.Pixel, attributes);
 
-                    gfx.DrawImage(sourceBitmap, new Rectangle(
-                        0, (destBitmap.Height - Rect.Bottom), Rect.Left, Rect.Bottom),
-                        0, (OriginalImageSize.Height - Rect.Bottom), Rect.Left, Rect.Bottom,
-                        GraphicsUnit.Pixel, attributes);
-                    gfx.DrawImage(sourceBitmap, new Rectangle(
-                        Rect.Left, (destBitmap.Height - Rect.Bottom), (destBitmap.Width - Rect.Left - Rect.Right), Rect.Bottom),
-                        Rect.Left, (OriginalImageSize.Height - Rect.Bottom), Math.Max(OriginalImageSize.Width - Rect.Left - Rect.Right, 1), Rect.Bottom,
-                        GraphicsUnit.Pixel, attributes);
-                    gfx.DrawImage(sourceBitmap, new Rectangle(
-                        (destBitmap.Width - Rect.Right), (destBitmap.Height - Rect.Bottom), (Rect.Right), Rect.Bottom),
-                        (OriginalImageSize.Width - Rect.Right), (OriginalImageSize.Height - Rect.Bottom), (Rect.Right), Rect.Bottom,
-                        GraphicsUnit.Pixel, attributes);
+                    if (Rect.Bottom != 0)
+                    {
+                        if (Rect.Left != 0)
+                            gfx.DrawImage(sourceBitmap, new Rectangle(
+                            0, (destBitmap.Height - Rect.Bottom), Rect.Left, Rect.Bottom),
+                            0, (OriginalImageSize.Height - Rect.Bottom), Rect.Left, Rect.Bottom,
+                            GraphicsUnit.Pixel, attributes);
+                        gfx.DrawImage(sourceBitmap, new Rectangle(
+                            Rect.Left, (destBitmap.Height - Rect.Bottom), (destBitmap.Width - Rect.Left - Rect.Right), Rect.Bottom),
+                            Rect.Left + (Rect.Right == 0 ? -1 : 0) + (Rect.Left == 0 ? -1 : 0), (OriginalImageSize.Height - Rect.Bottom), Math.Max(OriginalImageSize.Width - Rect.Left - Rect.Right, 1), Rect.Bottom,
+                            GraphicsUnit.Pixel, attributes);
+                        if (Rect.Right != 0)
+                            gfx.DrawImage(sourceBitmap, new Rectangle(
+                            (destBitmap.Width - Rect.Right), (destBitmap.Height - Rect.Bottom), (Rect.Right), Rect.Bottom),
+                            (OriginalImageSize.Width - Rect.Right), (OriginalImageSize.Height - Rect.Bottom), (Rect.Right), Rect.Bottom,
+                            GraphicsUnit.Pixel, attributes);
+                    }
+
+                    //        gfx.DrawImage(sourceBitmap, new Rectangle(
+                    //            0, 0, Rect.Left, Rect.Top),
+                    //            0, 0, Rect.Left, Rect.Top,
+                    //            GraphicsUnit.Pixel, attributes);
+                    //    gfx.DrawImage(sourceBitmap, new Rectangle(
+                    //        Rect.Left, 0, (destBitmap.Width - Rect.Left - Rect.Right), Rect.Top),
+                    //        Rect.Left, 0, OriginalImageSize.Width - Rect.Left - Rect.Right, Rect.Top,
+                    //        GraphicsUnit.Pixel, attributes);
+
+                    //        gfx.DrawImage(sourceBitmap, new Rectangle(
+                    //            (destBitmap.Width - Rect.Right), 0, (Rect.Right), Rect.Top),
+                    //            (OriginalImageSize.Width - Rect.Right), 0, (Rect.Right), Rect.Top,
+                    //            GraphicsUnit.Pixel, attributes);
+
+
+
+                    //    gfx.DrawImage(sourceBitmap, new Rectangle(
+                    //        0, Rect.Top, Rect.Left, destBitmap.Height - Rect.Top - Rect.Bottom),
+                    //        0, Rect.Top, Rect.Left, OriginalImageSize.Height - Rect.Top - Rect.Bottom,
+                    //        GraphicsUnit.Pixel, attributes);
+                    //gfx.DrawImage(sourceBitmap, new Rectangle(
+                    //    Rect.Left, Rect.Top, (destBitmap.Width - Rect.Left - Rect.Right), (destBitmap.Height - Rect.Top - Rect.Bottom)),
+                    //    Rect.Left, Rect.Top, OriginalImageSize.Width - Rect.Left - Rect.Right, OriginalImageSize.Height - Rect.Top - Rect.Bottom,
+                    //    GraphicsUnit.Pixel, attributes);
+
+                    //    gfx.DrawImage(sourceBitmap, new Rectangle(
+                    //        (destBitmap.Width - Rect.Right), Rect.Top, (Rect.Right), (destBitmap.Height - Rect.Top - Rect.Bottom)),
+                    //        (OriginalImageSize.Width - Rect.Right), Rect.Top, (Rect.Right), OriginalImageSize.Height - Rect.Top - Rect.Bottom,
+                    //        GraphicsUnit.Pixel, attributes);
+
+
+                    //        gfx.DrawImage(sourceBitmap, new Rectangle(
+                    //        0, (destBitmap.Height - Rect.Bottom), Rect.Left, Rect.Bottom),
+                    //        0, (OriginalImageSize.Height - Rect.Bottom), Rect.Left, Rect.Bottom,
+                    //        GraphicsUnit.Pixel, attributes);
+                    //    gfx.DrawImage(sourceBitmap, new Rectangle(
+                    //        Rect.Left, (destBitmap.Height - Rect.Bottom), (destBitmap.Width - Rect.Left - Rect.Right), Rect.Bottom),
+                    //        Rect.Left, (OriginalImageSize.Height - Rect.Bottom), OriginalImageSize.Width - Rect.Left - Rect.Right, Rect.Bottom,
+                    //        GraphicsUnit.Pixel, attributes);
+                    //        gfx.DrawImage(sourceBitmap, new Rectangle(
+                    //        (destBitmap.Width - Rect.Right), (destBitmap.Height - Rect.Bottom), (Rect.Right), Rect.Bottom),
+                    //        (OriginalImageSize.Width - Rect.Right), (OriginalImageSize.Height - Rect.Bottom), (Rect.Right), Rect.Bottom,
+                    //        GraphicsUnit.Pixel, attributes);
+
                 }
                 else
                 {

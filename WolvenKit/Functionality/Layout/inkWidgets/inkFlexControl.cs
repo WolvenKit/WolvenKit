@@ -21,7 +21,7 @@ namespace WolvenKit.Functionality.Layout.inkWidgets
         protected override Size MeasureCore(Size availableSize)
         {
 
-            InternalMargin = new();
+            //InternalMargin = new();
 
             var contentSize = new Size();
 
@@ -40,24 +40,24 @@ namespace WolvenKit.Functionality.Layout.inkWidgets
 
                 //if (!HAlignToFill(child))
                 //{
-                    InternalMargin.Left = Math.Min(child.Margin.Left, InternalMargin.Left);
-                    InternalMargin.Right = Math.Min(Width - (width + Math.Max(child.Margin.Left, 0) + Math.Max(child.Margin.Right, 0)), InternalMargin.Right);
+                    //InternalMargin.Left = Math.Min(child.Margin.Left, InternalMargin.Left);
+                    //InternalMargin.Right = Math.Min(Width - (width + Math.Max(child.Margin.Left, 0) + Math.Max(child.Margin.Right, 0)), InternalMargin.Right);
                     //InternalMargin.Right = Math.Min(Width - (x + width + child.Margin.Right), InternalMargin.Right);
                 //}
                 //if (!VAlignToFill(child))
                 //{
-                    InternalMargin.Top = Math.Min(child.Margin.Top, InternalMargin.Top);
-                    InternalMargin.Bottom = Math.Min(Height - (height + Math.Max(child.Margin.Top, 0) + Math.Max(child.Margin.Bottom, 0)), InternalMargin.Bottom);
+                    //InternalMargin.Top = Math.Min(child.Margin.Top, InternalMargin.Top);
+                    //InternalMargin.Bottom = Math.Min(Height - (height + Math.Max(child.Margin.Top, 0) + Math.Max(child.Margin.Bottom, 0)), InternalMargin.Bottom);
                     //InternalMargin.Bottom = Math.Min(Height - (y + height + child.Margin.Bottom), InternalMargin.Bottom);
                 //}
             }
 
-            var internalSize = new Size(Width, Height);
+            //var internalSize = new Size(Width, Height);
 
-            internalSize.Width -= (InternalMargin.Left + InternalMargin.Right);
-            internalSize.Height -= (InternalMargin.Top + InternalMargin.Bottom);
+            //internalSize.Width -= (InternalMargin.Left + InternalMargin.Right);
+            //internalSize.Height -= (InternalMargin.Top + InternalMargin.Bottom);
 
-            internalSize = MeasureForDimensions(contentSize, availableSize);
+            var internalSize = MeasureForDimensions(contentSize, availableSize);
 
             foreach (inkControl child in children)
             {

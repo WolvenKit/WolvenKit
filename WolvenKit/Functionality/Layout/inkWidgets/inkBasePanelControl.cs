@@ -59,6 +59,8 @@ namespace WolvenKit.Functionality.Layout.inkWidgets
 
             if (Widget.FitToContent)
             {
+                panelContentSize.Width += ChildMargin.Left + ChildMargin.Right;
+                panelContentSize.Height += ChildMargin.Top + ChildMargin.Bottom;
                 panelDesiredSize = MeasureForDimensions(panelContentSize, availableSize);
             }
 
@@ -71,19 +73,19 @@ namespace WolvenKit.Functionality.Layout.inkWidgets
                 var height = child.DesiredSize.Height;
 
                 if (HAlignToFill(child) && Widget is inkVerticalPanelWidget)
-                    width = panelDesiredSize.Width - child.Margin.Left - child.Margin.Right;
+                    width = panelDesiredSize.Width - child.Margin.Left - child.Margin.Right - ChildMargin.Left - ChildMargin.Right;
                 if (VAlignToFill(child) && Widget is inkHorizontalPanelWidget)
-                    height = panelDesiredSize.Height - child.Margin.Top - child.Margin.Bottom;
+                    height = panelDesiredSize.Height - child.Margin.Top - child.Margin.Bottom - ChildMargin.Top - ChildMargin.Bottom;
 
                 if (child.Widget.Layout.SizeRule.Value == Enums.inkESizeRule.Stretch)
                 {
                     if (Widget is inkHorizontalPanelWidget)
                     {
-                        width = child.Widget.Layout.SizeCoefficient * (panelDesiredSize.Width - fixedSize) / totalUnits - child.Margin.Left - child.Margin.Right;
+                        width = child.Widget.Layout.SizeCoefficient * (panelDesiredSize.Width - fixedSize - ChildMargin.Left - ChildMargin.Right) / totalUnits - child.Margin.Left - child.Margin.Right;
                     }
                     else
                     {
-                        height = child.Widget.Layout.SizeCoefficient * (panelDesiredSize.Height - fixedSize) / totalUnits - child.Margin.Top - child.Margin.Bottom;
+                        height = child.Widget.Layout.SizeCoefficient * (panelDesiredSize.Height - fixedSize - ChildMargin.Top - ChildMargin.Bottom) / totalUnits - child.Margin.Top - child.Margin.Bottom;
                     }
                 }
 
@@ -143,7 +145,7 @@ namespace WolvenKit.Functionality.Layout.inkWidgets
                             y += finalRect.Size.Height - height - child.Margin.Bottom;
                             break;
                         case Enums.inkEVerticalAlign.Center:
-                            y += (finalRect.Size.Height - height) / 2 + child.Margin.Top + child.Margin.Bottom;
+                            y += (finalRect.Size.Height - height) / 2 + child.Margin.Top - child.Margin.Bottom;
                             break;
                     }
 
@@ -171,7 +173,7 @@ namespace WolvenKit.Functionality.Layout.inkWidgets
                 //    y += (child.Margin.Top - child.Margin.Bottom);
 
 
-                child.Arrange(new Rect(x, y, width, height));
+                child.Arrange(new Rect(ChildMargin.Left + x, ChildMargin.Top + y, width, height));
 
                 if (Widget is inkVerticalPanelWidget)
                 {

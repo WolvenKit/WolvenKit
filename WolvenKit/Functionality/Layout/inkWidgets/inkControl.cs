@@ -17,7 +17,7 @@ namespace WolvenKit.Functionality.Layout.inkWidgets
 
         protected inkWidget _widget;
 
-        public string Name => Widget.Name;
+        public string Name { get; set; }
 
         public virtual double Width => Widget.Size.X;
         public virtual double Height => Widget.Size.Y;
@@ -30,23 +30,25 @@ namespace WolvenKit.Functionality.Layout.inkWidgets
         public inkControl(inkWidget widget) : base()
         {
             _widget = widget;
+            Name = Widget.Name;
 
             //ToolTip = Widget.Name + $" ({Widget.GetType().Name})";
 
+            // unhide the roots at least
             if (Widget.GetParent() is not null)
-                Opacity = Widget.Opacity;
-            //else
-            //    HorizontalAlignment = HorizontalAlignment.Left;
-
-            if (!Widget.Visible)
             {
-                if (Widget.AffectsLayoutWhenHidden)
+                Opacity = Widget.Opacity;
+
+                if (!Widget.Visible)
                 {
-                    Visibility = Visibility.Hidden;
-                }
-                else
-                {
-                    Visibility = Visibility.Collapsed;
+                    if (Widget.AffectsLayoutWhenHidden)
+                    {
+                        Visibility = Visibility.Hidden;
+                    }
+                    else
+                    {
+                        Visibility = Visibility.Collapsed;
+                    }
                 }
             }
 

@@ -51,7 +51,7 @@ namespace WolvenKit.ViewModels.Documents
                     if (atlasFile == null || atlasFile.RootChunk is not inkTextureAtlas atlas)
                         continue;
 
-                    var xbmHash = FNV1A64HashAlgorithm.HashString(atlas.Slots[0].Texture.DepotPath.ToString());
+                    var xbmHash = FNV1A64HashAlgorithm.HashString(atlas?.Slots[0]?.Texture?.DepotPath?.ToString() ?? "");
                     var xbmFile = File.GetFileFromHash(xbmHash);
                     if (xbmFile == null || xbmFile.RootChunk is not CBitmapTexture xbm)
                         continue;
