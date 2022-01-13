@@ -36,7 +36,17 @@ namespace WolvenKit.ViewModels.Documents
 
         [Reactive] public Dictionary<object, inkTextWidget> TextWidgets { get; set; }
 
+        [Reactive] public List<string> StyleStates { get; set; }
+
+        [Reactive] public string CurrentStyleState { get; set; }
+
+        [Reactive] public List<string> Themes { get; set; }
+
+        [Reactive] public string CurrentTheme { get; set; }
+
         [Reactive] public Color WidgetBackground { get; set; }
+
+        [Reactive] public List<string> Bindings { get; set; }
 
         public RDTWidgetViewModel(RedBaseClass data, RedDocumentViewModel file)
         {
@@ -44,6 +54,9 @@ namespace WolvenKit.ViewModels.Documents
             File = file;
             _data = data;
             var _library = data as inkWidgetLibraryResource;
+
+            StyleStates = new();
+            Themes = new();
 
             foreach (var f in _library.ExternalDependenciesForInternalItems)
             {
@@ -121,22 +134,55 @@ namespace WolvenKit.ViewModels.Documents
                         }
                     }
                 }
-                //else if(Path.GetExtension(itemPath) == ".inkstyle")
-                //{
-                //    var styleHash = FNV1A64HashAlgorithm.HashString(itemPath);
-                //    var styleFile = File.GetFileFromHash(styleHash);
+                else if(Path.GetExtension(itemPath) == ".inkstyle")
+                {
+                    var styleHash = FNV1A64HashAlgorithm.HashString(itemPath);
+                    var styleFile = File.GetFileFromHash(styleHash);
 
-                //    if (styleFile == null || styleFile.RootChunk is not inkStyleResource sr)
-                //        continue;
+                    if (styleFile == null || styleFile.RootChunk is not inkStyleResource sr)
+                        continue;
 
-                //    foreach (inkStyle style in sr.Styles)
-                //    {
-                //        foreach (inkStyleProperty prop in style.Properties)
-                //        {
-                //            Application.Current.Resources.Add("CVariant/" + itemPath + "#" + prop.PropertyPath, prop.Value);
-                //        }
-                //    }
-                //}
+                    Themes.Add("Default");
+                    CurrentTheme = "Default";
+
+                    foreach (inkStyle style in sr.Styles)
+                    {
+                        if (!StyleStates.Contains(style.State))
+                            StyleStates.Add(style.State);
+                        foreach (inkStyleProperty prop in style.Properties)
+                        {
+                            var key = "CVariant/Default/" + prop.PropertyPath + "#" + style.State;
+                            if (!Application.Current.Resources.Contains(key))
+                                Application.Current.Resources.Add(key, prop.Value);
+                        }
+                    }
+
+                    if (StyleStates.Count > 0)
+                        CurrentStyleState = StyleStates[0];
+
+                    foreach (inkStyleTheme theme in sr.Themes)
+                    {
+                        var themeHash = FNV1A64HashAlgorithm.HashString(theme.StyleResource.DepotPath.ToString());
+                        var themeFile = File.GetFileFromHash(themeHash);
+                        if (themeFile == null || themeFile.RootChunk is not inkStyleResource isr)
+                            continue;
+
+                        foreach (inkStyle style in isr.Styles)
+                        {
+                            if (!StyleStates.Contains(style.State))
+                                StyleStates.Add(style.State);
+                            foreach (inkStyleProperty prop in style.Properties)
+                            {
+                                var key = "CVariant/" + theme.ThemeID  + "/" + prop.PropertyPath + "#" + style.State;
+                                if (!Application.Current.Resources.Contains(key))
+                                    Application.Current.Resources.Add(key, prop.Value);
+                            }
+                        }
+
+                        if (!Themes.Contains(theme.ThemeID))
+                            Themes.Add(theme.ThemeID);
+                    }
+                }
             }
             library = _library;
         }

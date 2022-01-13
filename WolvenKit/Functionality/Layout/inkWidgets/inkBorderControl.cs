@@ -21,9 +21,9 @@ namespace WolvenKit.Functionality.Layout.inkWidgets
 
         }
 
-        protected override void OnRender(DrawingContext dc)
+        protected override void Render(DrawingContext dc)
         {
-            base.OnRender(dc);
+            base.Render(dc);
             dc.DrawRectangle(null, new Pen(TintBrush, Thickness), new Rect(0, 0, RenderSize.Width, RenderSize.Height));
         }
     }

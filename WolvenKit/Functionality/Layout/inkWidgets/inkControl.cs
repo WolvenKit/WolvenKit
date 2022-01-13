@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 using System.Windows.Media;
 using WolvenKit.RED4.Types;
 using WolvenKit.Views.Documents;
@@ -25,12 +26,62 @@ namespace WolvenKit.Functionality.Layout.inkWidgets
 
         public Thickness Margin => ToThickness(Widget.Layout.Margin);
 
-        public Color TintColor => ToColor(Widget.TintColor);
+        public Dictionary<string, string> PropertyBindings = new();
+
+        private List<string> _stateStack = new();
+
+        public string LocalState => _stateStack.FirstOrDefault(defaultValue: null);
+
+        public inkControl Parent { get; set; }
+
+        public Color TintColor
+        {
+            get
+            {
+                SetCurrentValue(OpacityProperty, (double)WidgetOpacity);
+                if (!PropertyBindings.ContainsKey("tintColor"))
+                    goto NoOverride;
+
+                var variant = GetProperty(PropertyBindings["tintColor"]);
+
+                if (variant == null)
+                    goto NoOverride;
+
+                if (variant.Value is HDRColor color)
+                    return ToColor(color);
+
+                NoOverride:
+                return ToColor(Widget.TintColor);
+            }
+        }
+
         public Brush TintBrush => new SolidColorBrush(TintColor);
 
         public RDTWidgetView WidgetView;
 
         public string WidgetPath => Widget.Path;
+
+        DrawingGroup backingStore = new DrawingGroup();
+
+        public float WidgetOpacity
+        {
+            get
+            {
+                if (!PropertyBindings.ContainsKey("opacity"))
+                    goto NoOverride;
+
+                var variant = GetProperty(PropertyBindings["opacity"]);
+
+                if (variant == null)
+                    goto NoOverride;
+
+                if (variant.Value is CFloat opacity)
+                    return opacity;
+
+                NoOverride:
+                return Widget.Opacity;
+            }
+        }
 
         public inkControl(inkWidget widget, RDTWidgetView widgetView) : base()
         {
@@ -38,12 +89,23 @@ namespace WolvenKit.Functionality.Layout.inkWidgets
             Name = Widget.Name;
             WidgetView = widgetView;
 
+            if (Widget.PropertyManager != null && Widget.PropertyManager.GetValue() is inkPropertyManager ipm)
+            {
+                foreach (inkPropertyBinding ipb in ipm.Bindings)
+                {
+                    PropertyBindings.Add(ipb.PropertyName, ipb.StylePath);
+                    //if (WidgetView.ViewModel.Bindings == null)
+                    //    WidgetView.ViewModel.Bindings = new();
+                    //WidgetView.ViewModel.Bindings.Add(ipb.PropertyName);
+                }
+            }
+
             //ToolTip = Widget.Name + $" ({Widget.GetType().Name})";
 
             // unhide the roots at least
             if (Widget.GetParent() is not null)
             {
-                Opacity = Widget.Opacity;
+                Opacity = WidgetOpacity;
 
                 if (!Widget.Visible)
                 {
@@ -69,12 +131,106 @@ namespace WolvenKit.Functionality.Layout.inkWidgets
                     new RotateTransform(Widget.RenderTransform.Rotation)
                 })
             };
+
+            if (Widget.IsInteractive)
+            {
+                MouseEnter += MouseEnterControl;
+                MouseLeave += MouseLeaveControl;
+                MouseDown += MouseDownControl;
+                MouseUp += MouseUpControl;
+            }
+            else
+            {
+                //IsHitTestVisible = false;
+            }
         }
 
-        //protected override void OnRender(DrawingContext dc)
-        //{
-        //    base.OnRender(dc);
-        //}
+
+        public virtual void MouseEnterControl(object sender, MouseEventArgs e)
+        {
+            _stateStack.Insert(0, "Hover");
+            Render();
+        }
+
+        public virtual void MouseLeaveControl(object sender, MouseEventArgs e)
+        {
+            _stateStack.Remove("Hover");
+            Render();
+        }
+
+        public virtual void MouseDownControl(object sender, MouseButtonEventArgs e)
+        {
+            _stateStack.Insert(0, "Press");
+            if (_stateStack.Contains("Active"))
+                _stateStack.Remove("Active");
+            else
+                _stateStack.Insert(0, "Active");
+            Render();
+        }
+
+        public virtual void MouseUpControl(object sender, MouseButtonEventArgs e)
+        {
+            _stateStack.Remove("Press");
+            Render();
+        }
+
+        public CVariant GetProperty(string propertyPath)
+        {
+
+            if (WidgetView.ViewModel == null)
+                return null;
+
+            if (WidgetView.ViewModel.CurrentStyleState == null)
+                return null;
+
+            if (WidgetView.ViewModel.CurrentTheme == null)
+                return null;
+
+            CVariant variant;
+            foreach (var state in _stateStack)
+            {
+                variant = (CVariant)Application.Current.TryFindResource("CVariant/" + WidgetView.ViewModel.CurrentTheme + "/" + propertyPath + "#" + state);
+
+                if (variant != null)
+                    goto ValidVariant;
+            }
+
+            variant = (CVariant)Application.Current.TryFindResource("CVariant/" + WidgetView.ViewModel.CurrentTheme + "/" + propertyPath + "#" + WidgetView.ViewModel.CurrentStyleState);
+
+            if (variant == null)
+                return null;
+
+            ValidVariant:
+
+            if (variant.Value is inkStylePropertyReference ispr)
+            {
+                variant = GetProperty(ispr.ReferencedPath);
+            }
+
+            return variant;
+        }
+
+        protected override void OnRender(DrawingContext dc)
+        {
+            base.OnRender(dc);
+
+            Render();
+            dc.DrawDrawing(backingStore);
+        }
+
+        public void Render()
+        {
+            var drawingContext = backingStore.Open();
+            Render(drawingContext);
+            drawingContext.Close();
+        }
+
+        protected virtual void Render(DrawingContext dc)
+        {
+
+        }
+
+        public virtual void RenderRecursive() => Render();
 
         protected override Size MeasureCore(Size availableSize)
         {
@@ -107,7 +263,7 @@ namespace WolvenKit.Functionality.Layout.inkWidgets
         }
 
         // i'm pretty sure this isn't the right way to convert these
-        public static Color ToColor(HDRColor hdr)
+        public static Color ToColor(HDRColor hdr, float alpha = 1)
         {
             float r = hdr.Red;
             float g = hdr.Green;
@@ -119,7 +275,10 @@ namespace WolvenKit.Functionality.Layout.inkWidgets
                 g /= scale;
                 b /= scale;
             }
-            return Color.FromArgb((byte)(hdr.Alpha * 255), (byte)(r * 255), (byte)(g * 255), (byte)(b * 255));
+            //r /= 2F;
+            //g /= 2F;
+            //b /= 2F;
+            return Color.FromArgb((byte)(hdr.Alpha * 255 * alpha), (byte)(r * 255), (byte)(g * 255), (byte)(b * 255));
         }
 
         public static Brush ToBrush(HDRColor hdr)

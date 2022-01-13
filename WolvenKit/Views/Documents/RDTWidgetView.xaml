@@ -74,6 +74,38 @@
                     <TextBlock
                         Margin="5,5"
                         VerticalAlignment="Center"
+                        Text="Style" />
+                    <ComboBox
+                        Grid.Column="1"
+                        ItemsSource="{Binding StyleStates, Mode=OneWay}"
+                        SelectedItem="{Binding CurrentStyleState, Mode=TwoWay}"
+                        SelectionChanged="ComboBox_SelectionChanged" />
+                </Grid>
+                <Border BorderBrush="{StaticResource BorderAlt}" BorderThickness="0,1,0,0" />
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition />
+                        <ColumnDefinition />
+                    </Grid.ColumnDefinitions>
+                    <TextBlock
+                        Margin="5,5"
+                        VerticalAlignment="Center"
+                        Text="Theme" />
+                    <ComboBox
+                        Grid.Column="1"
+                        ItemsSource="{Binding Themes, Mode=OneWay}"
+                        SelectedItem="{Binding CurrentTheme, Mode=TwoWay}"
+                        SelectionChanged="ComboBox_SelectionChanged" />
+                </Grid>
+                <Border BorderBrush="{StaticResource BorderAlt}" BorderThickness="0,1,0,0" />
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition />
+                        <ColumnDefinition />
+                    </Grid.ColumnDefinitions>
+                    <TextBlock
+                        Margin="5,5"
+                        VerticalAlignment="Center"
                         Text="Background" />
                     <syncfusion:ColorPicker x:Name="WidgetBackgroundColorEditor" Grid.Column="1" />
                 </Grid>
@@ -108,7 +140,8 @@
                                     <TextBlock
                                         Margin="5,0"
                                         VerticalAlignment="Center"
-                                        Text="{Binding Path}" />
+                                        Text="{Binding Name}"
+                                        ToolTip="{Binding Path}" />
                                 </StackPanel>
                                 <GridSplitter
                                     Grid.Column="1"

@@ -384,15 +384,17 @@ namespace WolvenKit.Functionality.Layout.inkWidgets
             }
         }
 
-        protected override void OnRender(DrawingContext dc)
+        protected override void Render(DrawingContext dc)
         {
-            base.OnRender(dc);
-            var newSize = new SizeF(RenderSize.Width, RenderSize.Height);
-            //var newSize = DesiredSize;
-            if (OriginalImageSource != null && RenderedSize != newSize)
-                DrawImage(newSize);
-            if (TintBrush != null && ImageSource != null)
-                dc.DrawRectangle(TintBrush, null, new Rect(0, 0, newSize.Width, newSize.Height));
+            base.Render(dc);
+            if (TintBrush != null)
+            {
+                var newSize = new SizeF(RenderSize.Width, RenderSize.Height);
+                if (OriginalImageSource != null && newSize != RenderedSize)
+                    DrawImage(newSize);
+                if (ImageSource != null)
+                    dc.DrawRectangle(TintBrush, null, new Rect(0, 0, newSize.Width, newSize.Height));
+            }
         }
 
         protected override SizeF MeasureCore(SizeF availableSize)

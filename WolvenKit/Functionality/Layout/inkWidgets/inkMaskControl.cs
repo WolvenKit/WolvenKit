@@ -19,9 +19,9 @@ namespace WolvenKit.Functionality.Layout.inkWidgets
 
         }
 
-        protected override void OnRender(DrawingContext dc)
+        protected override void Render(DrawingContext dc)
         {
-            base.OnRender(dc);
+            base.Render(dc);
         }
     }
 }
