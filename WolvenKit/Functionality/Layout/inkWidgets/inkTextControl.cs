@@ -33,6 +33,7 @@ namespace WolvenKit.Functionality.Layout.inkWidgets
                     text = text.ToUpper();
                 else if (TextWidget.LetterCase.Value == Enums.textLetterCase.LowerCase)
                     text = text.ToLower();
+                text = text.Replace("\n", System.Environment.NewLine);
                 return text;
             }
             set {
@@ -249,10 +250,8 @@ namespace WolvenKit.Functionality.Layout.inkWidgets
             var size = new Size(Width, Height);
             //if (Widget.FitToContent)
             //{
-            if (TextWidth > size.Width)
-                size.Width = TextWidth;
-            if (TextHeight > size.Height)
-                size.Height = TextHeight;
+            size.Width = Math.Max(TextWidth, 0);
+            size.Height = Math.Max(TextHeight, 0);
             //}
             return MeasureForDimensions(size, availableSize);
         }

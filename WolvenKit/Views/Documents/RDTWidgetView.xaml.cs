@@ -1,9 +1,14 @@
 using System;
+using System.Collections.Generic;
+using System.IO;
 using System.Reactive.Disposables;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
+using System.Windows.Media.Imaging;
+using Microsoft.Win32;
 using ReactiveUI;
 using WolvenKit.Functionality.Layout.inkWidgets;
 using WolvenKit.RED4.Archive.Buffer;
@@ -12,11 +17,14 @@ using WolvenKit.ViewModels.Documents;
 
 namespace WolvenKit.Views.Documents
 {
+
     /// <summary>
     /// Interaction logic for RDTWidgetView.xaml
     /// </summary>
     public partial class RDTWidgetView : ReactiveUserControl<RDTWidgetViewModel>
     {
+        public List<inkControl> Widgets = new();
+
         public RDTWidgetView()
         {
             InitializeComponent();
@@ -28,6 +36,7 @@ namespace WolvenKit.Views.Documents
                 this.ViewModel.WhenAnyValue(x => x.library).Subscribe(library =>
                 {
                     var stack = new StackPanel();
+                    Widgets.Clear();
                     WidgetPreview.Children.Clear();
                     WidgetPreview.Children.Add(stack);
 
@@ -58,13 +67,20 @@ namespace WolvenKit.Views.Documents
                             Foreground = new SolidColorBrush(Color.FromArgb(30, 255, 255, 255))
                         });
 
-                        stack.Children.Add(root.CreateControl(this));
+                        var widget = root.CreateControl(this);
+                        Widgets.Add(widget);
+                        stack.Children.Add(widget);
                     }
                 }).DisposeWith(disposables);
 
                 this.OneWayBind(ViewModel,
                         x => x.TextWidgets.Values,
                         x => x.TextWidgetList.ItemsSource)
+                    .DisposeWith(disposables);
+
+                this.Bind(ViewModel,
+                        x => x.WidgetBackground,
+                        x => x.WidgetBackgroundColorEditor.Color)
                     .DisposeWith(disposables);
             });
         }
@@ -214,6 +230,34 @@ namespace WolvenKit.Views.Documents
                     itc.InvalidateMeasure();
                 }
             }
+        }
+
+        private void SaveAsImage(object sender, RoutedEventArgs e)
+        {
+            foreach (var widget in Widgets)
+            {
+                var bitmap = new RenderTargetBitmap((int)widget.RenderSize.Width, (int)widget.RenderSize.Height, 96D, 96D, PixelFormats.Default);
+                bitmap.Render(widget);
+
+                SaveFileDialog saveFileDialog1 = new SaveFileDialog();
+                saveFileDialog1.Filter = "PNG Image|*.png";
+                saveFileDialog1.Title = "Save an Image As";
+                saveFileDialog1.FileName = widget.Name + ".png";
+                saveFileDialog1.ShowDialog();
+
+                if (saveFileDialog1.FileName != "")
+                {
+
+                    BitmapEncoder encoder = new PngBitmapEncoder();
+                    encoder.Frames.Add(BitmapFrame.Create(bitmap));
+
+                    using (var fileStream = new FileStream(saveFileDialog1.FileName, FileMode.Create))
+                    {
+                        encoder.Save(fileStream);
+                    }
+                }
+            }
+
         }
     }
 }

@@ -80,6 +80,22 @@ namespace WolvenKit.Functionality.Layout.inkWidgets
             if (size.Width == 0 || size.Height == 0)
                 return;
 
+            switch (ImageWidget.TileType.Value)
+            {
+                case Enums.inkBrushTileType.Both:
+                    size.Width = OriginalImageSize.Width;
+                    size.Height = OriginalImageSize.Height;
+                    break;
+                case Enums.inkBrushTileType.Vertical:
+                    size.Height = OriginalImageSize.Height;
+                    break;
+                case Enums.inkBrushTileType.Horizontal:
+                    size.Width = OriginalImageSize.Width;
+                    break;
+                default:
+                    break;
+            }
+            
             Bitmap sourceBitmap;
             using (var outStream = new MemoryStream())
             {
@@ -102,12 +118,16 @@ namespace WolvenKit.Functionality.Layout.inkWidgets
                         new float[] { 0, 0, 0, 0, 0},
                         new float[] { 0, 0, 0, 0, 0},
                 });
-                matrix.Matrix03 = Widget.TintColor.Alpha;
-                matrix.Matrix40 = Widget.TintColor.Red;
-                matrix.Matrix41 = Widget.TintColor.Green;
-                matrix.Matrix42 = Widget.TintColor.Blue;
+                matrix.Matrix03 = Widget.TintColor.Alpha / 3F;
+                matrix.Matrix13 = Widget.TintColor.Alpha / 3F;
+                matrix.Matrix23 = Widget.TintColor.Alpha / 3F;
+                //matrix.Matrix40 = Widget.TintColor.Red;
+                //matrix.Matrix41 = Widget.TintColor.Green;
+                //matrix.Matrix42 = Widget.TintColor.Blue;
 
                 ImageAttributes attributes = new ImageAttributes();
+
+                //attributes.SetColorKey(System.Drawing.Color.Black, System.Drawing.Color.White);
                 attributes.SetColorMatrix(matrix, ColorMatrixFlag.Default, ColorAdjustType.Bitmap);
                 if (UsingNineScale)
                 {
@@ -214,34 +234,48 @@ namespace WolvenKit.Functionality.Layout.inkWidgets
                     int x = 0, y = 0, width = OriginalImageSize.Width, height = OriginalImageSize.Height;
                     if (Widget.FitToContent)
                     {
-
-                        switch (ImageWidget.Layout.HAlign.Value)
+                        if (ImageWidget.TileType.Value == Enums.inkBrushTileType.Horizontal || ImageWidget.TileType.Value == Enums.inkBrushTileType.Both)
                         {
-                            case Enums.inkEHorizontalAlign.Right:
-                                x = destBitmap.Width - OriginalImageSize.Width;
-                                break;
-                            case Enums.inkEHorizontalAlign.Center:
-                                x = (destBitmap.Width - OriginalImageSize.Width) / 2;
-                                break;
-                            case Enums.inkEHorizontalAlign.Fill:
-                                width = destBitmap.Width;
-                                break;
-                            default:
-                                break;
+                            x = 0;
                         }
-                        switch (ImageWidget.Layout.VAlign.Value)
+                        else
                         {
-                            case Enums.inkEVerticalAlign.Bottom:
-                                y = destBitmap.Height - OriginalImageSize.Height;
-                                break;
-                            case Enums.inkEVerticalAlign.Center:
-                                y = (destBitmap.Height - OriginalImageSize.Height) / 2;
-                                break;
-                            case Enums.inkEVerticalAlign.Fill:
-                                height = destBitmap.Height;
-                                break;
-                            default:
-                                break;
+                            switch (ImageWidget.Layout.HAlign.Value)
+                            {
+                                case Enums.inkEHorizontalAlign.Right:
+                                    x = destBitmap.Width - OriginalImageSize.Width;
+                                    break;
+                                case Enums.inkEHorizontalAlign.Center:
+                                    x = (destBitmap.Width - OriginalImageSize.Width) / 2;
+                                    break;
+                                case Enums.inkEHorizontalAlign.Fill:
+                                    width = destBitmap.Width;
+                                    break;
+                                default:
+                                    break;
+                            }
+                        }
+
+                        if (ImageWidget.TileType.Value == Enums.inkBrushTileType.Vertical || ImageWidget.TileType.Value == Enums.inkBrushTileType.Both)
+                        {
+                            y = 0;
+                        }
+                        else
+                        {
+                            switch (ImageWidget.Layout.VAlign.Value)
+                            {
+                                case Enums.inkEVerticalAlign.Bottom:
+                                    y = destBitmap.Height - OriginalImageSize.Height;
+                                    break;
+                                case Enums.inkEVerticalAlign.Center:
+                                    y = (destBitmap.Height - OriginalImageSize.Height) / 2;
+                                    break;
+                                case Enums.inkEVerticalAlign.Fill:
+                                    height = destBitmap.Height;
+                                    break;
+                                default:
+                                    break;
+                            }
                         }
                     }
                     else
@@ -249,6 +283,23 @@ namespace WolvenKit.Functionality.Layout.inkWidgets
                         width = destBitmap.Width;
                         height = destBitmap.Height;
                     }
+
+                    switch (ImageWidget.TileType.Value)
+                    {
+                        case Enums.inkBrushTileType.Both:
+                            width = OriginalImageSize.Width;
+                            height = OriginalImageSize.Height;
+                            break;
+                        case Enums.inkBrushTileType.Vertical:
+                            height = OriginalImageSize.Height;
+                            break;
+                        case Enums.inkBrushTileType.Horizontal:
+                            width = OriginalImageSize.Width;
+                            break;
+                        default:
+                            break;
+                    }
+
                     gfx.DrawImage(sourceBitmap, new Rectangle(x, y, width, height), 0, 0, OriginalImageSize.Width, OriginalImageSize.Height, GraphicsUnit.Pixel, attributes);
                 }
             }
@@ -283,13 +334,54 @@ namespace WolvenKit.Functionality.Layout.inkWidgets
 
             ImageSource.Freeze();
 
-            SetCurrentValue(OpacityMaskProperty, new ImageBrush()
+            SetCurrentValue(OpacityMaskProperty, new ImageBrush(ImageSource)
             {
-                ImageSource = ImageSource,
-                Stretch = Stretch.Fill,
-                AlignmentY = AlignmentY.Center,
-                AlignmentX = AlignmentX.Center
+                Stretch = Stretch.None,
+                TileMode = ToTileMode(ImageWidget.TileType.Value),
+                AlignmentX = ToAlignmentX(ImageWidget.TileHAlign.Value),
+                AlignmentY = ToAlignmentY(ImageWidget.TileVAlign.Value),
+                ViewportUnits = BrushMappingMode.Absolute,
+                Viewport = new Rect(0, 0, size.Width, size.Height)
             });
+        }
+
+        public static TileMode ToTileMode(Enums.inkBrushTileType? tile)
+        {
+            switch (tile)
+            {
+                case Enums.inkBrushTileType.NoTile:
+                    return TileMode.None;
+                default:
+                    return TileMode.Tile;
+            }
+        }
+
+        public static AlignmentX ToAlignmentX(Enums.inkEHorizontalAlign? type)
+        {
+            switch (type)
+            {
+                case Enums.inkEHorizontalAlign.Left:
+                    return AlignmentX.Left;
+                case Enums.inkEHorizontalAlign.Right:
+                    return AlignmentX.Right;
+                case Enums.inkEHorizontalAlign.Center:
+                default:
+                    return AlignmentX.Center;
+            }
+        }
+
+        public static AlignmentY ToAlignmentY(Enums.inkEVerticalAlign? type)
+        {
+            switch (type)
+            {
+                case Enums.inkEVerticalAlign.Top:
+                    return AlignmentY.Top;
+                case Enums.inkEVerticalAlign.Bottom:
+                    return AlignmentY.Bottom;
+                case Enums.inkEVerticalAlign.Center:
+                default:
+                    return AlignmentY.Center;
+            }
         }
 
         protected override void OnRender(DrawingContext dc)
@@ -307,12 +399,11 @@ namespace WolvenKit.Functionality.Layout.inkWidgets
         {
             //if (Widget.FitToContent)
             //{
-            //    var newSize = new SizeF(OriginalImageSource.Width, OriginalImageSource.Height);
-            //    return base.MeasureOverride(newSize);
+            //    return MeasureForDimensions(new SizeF(OriginalImageSource.Width, OriginalImageSource.Height), availableSize);
             //}
             //else
             //{
-            //    return base.MeasureOverride(new SizeF(Width, Height));
+            //    return MeasureForDimensions(new SizeF(Width, Height), availableSize);
             //}
             return base.MeasureCore(availableSize);
         }

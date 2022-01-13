@@ -41,14 +41,21 @@ namespace WolvenKit.Functionality.Layout.inkWidgets
             }
         }
 
-        public static inkWidget GetParent(this inkWidget widget)
-        {
-            if (widget.ParentWidget != null)
-            {
-                return (inkWidget)widget.ParentWidget.GetValue();
-            }
-            return null;
-        }
+        //public static string GetPath(this inkWidget widget)
+        //{
+        //    if (widget.GetParent() is inkWidget parent)
+        //        return parent.Name + "/" + widget.Name;
+        //    return widget.Name;
+        //}
+
+        //public static inkWidget GetParent(this inkWidget widget)
+        //{
+        //    if (widget.ParentWidget != null)
+        //    {
+        //        return (inkWidget)widget.ParentWidget.GetValue();
+        //    }
+        //    return null;
+        //}
 
         public static List<inkWidget> GetChildren(this inkCompoundWidget widget)
         {

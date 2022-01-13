@@ -30,6 +30,8 @@ namespace WolvenKit.Functionality.Layout.inkWidgets
 
         public RDTWidgetView WidgetView;
 
+        public string WidgetPath => Widget.Path;
+
         public inkControl(inkWidget widget, RDTWidgetView widgetView) : base()
         {
             _widget = widget;

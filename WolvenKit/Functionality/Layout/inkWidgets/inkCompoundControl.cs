@@ -3,6 +3,7 @@ using System.Globalization;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
+using ReactiveUI;
 using WolvenKit.RED4.Types;
 using WolvenKit.Views.Documents;
 using Point = System.Windows.Point;
@@ -20,8 +21,16 @@ namespace WolvenKit.Functionality.Layout.inkWidgets
 
         public Thickness ChildMargin => ToThickness(CompoundWidget.ChildMargin);
 
+        public Brush Background { get; set; }
+
         public inkCompoundControl(inkCompoundWidget widget, RDTWidgetView widgetView) : base(widget, widgetView)
         {
+            if (Widget.GetParent() == null)
+            {
+                //Background = new SolidColorBrush(Color.FromArgb(255, 0, 0, 0));
+                WidgetView.WhenAnyValue(x => x.ViewModel.WidgetBackground).Subscribe(x => Background = new SolidColorBrush(x));
+            }
+
             children = new UIElementCollection(this, null);
 
             foreach (var child in CompoundWidget.GetChildren())
@@ -55,14 +64,13 @@ namespace WolvenKit.Functionality.Layout.inkWidgets
         protected override void OnRender(DrawingContext dc)
         {
             base.OnRender(dc);
-            // use for quick debugging & eventual debug mode
-            if (Widget.GetParent() == null)
+            if (Background != null)
             {
-                dc.DrawRectangle(new SolidColorBrush(Color.FromArgb(255, 0, 0, 0)), null, new Rect(0, 0, RenderSize.Width, RenderSize.Height));
+                dc.DrawRectangle(Background, null, new Rect(0, 0, RenderSize.Width, RenderSize.Height));
                 dc.DrawRectangle(null, new Pen(new SolidColorBrush(Color.FromArgb(16, 255, 255, 255)), 0.5), new Rect(-0.5, -0.5, RenderSize.Width + 0.5, RenderSize.Height + 0.5));
+            }
                 //dc.DrawText(new FormattedText(Widget.Name + $" ({Widget.GetType().Name})", CultureInfo.CurrentCulture, FlowDirection.LeftToRight,
                 //    new Typeface("Arial"), 8, new SolidColorBrush(Color.FromArgb(16, 255, 255, 255)), 1.0), new Point(0, -10));
-            }
         }
     }
 }

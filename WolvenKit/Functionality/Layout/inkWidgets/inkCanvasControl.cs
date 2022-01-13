@@ -116,14 +116,14 @@ namespace WolvenKit.Functionality.Layout.inkWidgets
                 else if (AnchorRight(child))
                     x -= child.Margin.Right;
                 else
-                    x += child.Margin.Left;
+                    x += child.Margin.Left - child.Margin.Right;
 
                 if (AnchorTop(child))
                     y += child.Margin.Top;
                 else if (AnchorBottom(child))
                     y -= child.Margin.Bottom;
                 else
-                    y += child.Margin.Top;
+                    y += child.Margin.Top - child.Margin.Bottom;
 
                 //x -= InternalMargin.Left;
                 //y -= InternalMargin.Top;

@@ -66,6 +66,18 @@
             Padding="0"
             VerticalScrollBarVisibility="Auto">
             <StackPanel Orientation="Vertical">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition />
+                        <ColumnDefinition />
+                    </Grid.ColumnDefinitions>
+                    <TextBlock
+                        Margin="5,5"
+                        VerticalAlignment="Center"
+                        Text="Background" />
+                    <syncfusion:ColorPicker x:Name="WidgetBackgroundColorEditor" Grid.Column="1" />
+                </Grid>
+                <Border BorderBrush="{StaticResource BorderAlt}" BorderThickness="0,1,0,0" />
                 <StackPanel Orientation="Horizontal">
                     <TextBlock
                         Margin="5,5"
@@ -92,10 +104,12 @@
                                     <ColumnDefinition Width="3" />
                                     <ColumnDefinition Width="2*" />
                                 </Grid.ColumnDefinitions>
-                                <TextBlock
-                                    Margin="5,0"
-                                    VerticalAlignment="Center"
-                                    Text="{Binding Path=Name}" />
+                                <StackPanel>
+                                    <TextBlock
+                                        Margin="5,0"
+                                        VerticalAlignment="Center"
+                                        Text="{Binding Path}" />
+                                </StackPanel>
                                 <GridSplitter
                                     Grid.Column="1"
                                     HorizontalAlignment="Stretch"
@@ -107,13 +121,17 @@
                 </ItemsControl>
             </StackPanel>
         </ScrollViewer>
+        <StackPanel HorizontalAlignment="Right" VerticalAlignment="Top">
+            <Button
+                Margin="5"
+                Click="Button_Click"
+                Content="Regenerate inkTextWidgets" />
+            <Button
+                Margin="5"
+                Click="SaveAsImage"
+                Content="Save as Images" />
 
-        <Button
-            Margin="5"
-            HorizontalAlignment="Right"
-            VerticalAlignment="Top"
-            Click="Button_Click"
-            Content="Regenerate inkTextWidgets" />
+        </StackPanel>
         <TextBlock
             x:Name="ZoomText"
             Margin="4,4"
