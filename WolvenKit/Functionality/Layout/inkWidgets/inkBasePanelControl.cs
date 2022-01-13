@@ -60,8 +60,8 @@ namespace WolvenKit.Functionality.Layout.inkWidgets
 
             if (Widget.FitToContent)
             {
-                panelContentSize.Width += ChildMargin.Left + ChildMargin.Right;
-                panelContentSize.Height += ChildMargin.Top + ChildMargin.Bottom;
+                panelContentSize.Width += Math.Max(ChildMargin.Left + ChildMargin.Right, 0);
+                panelContentSize.Height += Math.Max(ChildMargin.Top + ChildMargin.Bottom, 0);
                 panelDesiredSize = MeasureForDimensions(panelContentSize, availableSize);
             }
 

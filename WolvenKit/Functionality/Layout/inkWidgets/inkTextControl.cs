@@ -27,7 +27,7 @@ namespace WolvenKit.Functionality.Layout.inkWidgets
         {
             get {
                 string text = TextWidget.Text;
-                if (TextWidget.Text == "")
+                if (text == "" || text == null)
                     text = "Test";
                 if (TextWidget.LetterCase.Value == Enums.textLetterCase.UpperCase)
                     text = text.ToUpper();

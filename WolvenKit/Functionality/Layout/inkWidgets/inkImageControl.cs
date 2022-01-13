@@ -118,9 +118,9 @@ namespace WolvenKit.Functionality.Layout.inkWidgets
                         new float[] { 0, 0, 0, 0, 0},
                         new float[] { 0, 0, 0, 0, 0},
                 });
-                matrix.Matrix03 = Widget.TintColor.Alpha / 3F;
-                matrix.Matrix13 = Widget.TintColor.Alpha / 3F;
-                matrix.Matrix23 = Widget.TintColor.Alpha / 3F;
+                matrix.Matrix03 = Widget.TintColor.Alpha;
+                //matrix.Matrix13 = Widget.TintColor.Alpha / 3F;
+                //matrix.Matrix23 = Widget.TintColor.Alpha / 3F;
                 //matrix.Matrix40 = Widget.TintColor.Red;
                 //matrix.Matrix41 = Widget.TintColor.Green;
                 //matrix.Matrix42 = Widget.TintColor.Blue;

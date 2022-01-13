@@ -134,9 +134,10 @@ namespace WolvenKit.Functionality.Layout.inkWidgets
             float b = hdr.Blue;
             if (r > 1.0 || g > 1.0 || b > 1.0)
             {
-                r /= 2F;
-                g /= 2F;
-                b /= 2F;
+                var scale = Math.Max(Math.Max(r, g), b);
+                r /= scale;
+                g /= scale;
+                b /= scale;
             }
             return System.Drawing.Color.FromArgb((byte)(hdr.Alpha * 255 * alpha), (byte)(r * 255), (byte)(g * 255), (byte)(b * 255));
         }
