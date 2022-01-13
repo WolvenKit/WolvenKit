@@ -106,9 +106,20 @@ namespace WolvenKit.Functionality.Layout.inkWidgets
             return new System.Windows.Point(v.X, v.Y);
         }
 
+        // i'm pretty sure this isn't the right way to convert these
         public static Color ToColor(HDRColor hdr)
         {
-            return Color.FromArgb((byte)(hdr.Alpha * 255), (byte)(hdr.Red * 255), (byte)(hdr.Green * 255), (byte)(hdr.Blue * 255));
+            float r = hdr.Red;
+            float g = hdr.Green;
+            float b = hdr.Blue;
+            if (r > 1.0 || g > 1.0 || b > 1.0)
+            {
+                var scale = Math.Max(Math.Max(r, g), b);
+                r /= scale;
+                g /= scale;
+                b /= scale;
+            }
+            return Color.FromArgb((byte)(hdr.Alpha * 255), (byte)(r * 255), (byte)(g * 255), (byte)(b * 255));
         }
 
         public static Brush ToBrush(HDRColor hdr)
@@ -118,7 +129,16 @@ namespace WolvenKit.Functionality.Layout.inkWidgets
 
         public static System.Drawing.Color ToDrawingColor(HDRColor hdr, float alpha = 1)
         {
-            return System.Drawing.Color.FromArgb((byte)(hdr.Alpha * 255 * alpha), (byte)(hdr.Red * 255), (byte)(hdr.Green * 255), (byte)(hdr.Blue * 255));
+            float r = hdr.Red;
+            float g = hdr.Green;
+            float b = hdr.Blue;
+            if (r > 1.0 || g > 1.0 || b > 1.0)
+            {
+                r /= 2F;
+                g /= 2F;
+                b /= 2F;
+            }
+            return System.Drawing.Color.FromArgb((byte)(hdr.Alpha * 255 * alpha), (byte)(r * 255), (byte)(g * 255), (byte)(b * 255));
         }
 
         public static System.Drawing.Brush ToDrawingBrush(HDRColor hdr)
