@@ -1,9 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
 namespace WolvenKit.Functionality.Helpers
 {
     public static class ImportExport_Helpers
@@ -15,7 +9,7 @@ namespace WolvenKit.Functionality.Helpers
 
     }
 
- 
+
 
 
     public enum MeshExportOptions
@@ -30,7 +24,8 @@ namespace WolvenKit.Functionality.Helpers
 
 
 
-    public enum WemExportOptions {
+    public enum WemExportOptions
+    {
         Wav,
         MP3,
     }

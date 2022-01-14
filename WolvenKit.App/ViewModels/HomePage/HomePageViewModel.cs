@@ -6,7 +6,6 @@ using ReactiveUI.Fody.Helpers;
 using Splat;
 using WolvenKit.Functionality.Commands;
 using WolvenKit.Functionality.Services;
-using WolvenKit.Functionality.WKitGlobal.Helpers;
 using WolvenKit.ViewModels.Shell;
 
 namespace WolvenKit.ViewModels.HomePage

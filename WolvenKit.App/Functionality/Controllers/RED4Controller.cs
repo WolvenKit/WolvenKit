@@ -4,13 +4,11 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Xml.Linq;
-using DynamicData;
 using ReactiveUI;
-using ReactiveUI.Fody.Helpers;
 using WolvenKit.Common;
 using WolvenKit.Common.Interfaces;
-using WolvenKit.Common.Model;
 using WolvenKit.Common.Oodle;
 using WolvenKit.Common.Services;
 using WolvenKit.Common.Tools.Oodle;
@@ -19,9 +17,7 @@ using WolvenKit.Functionality.Services;
 using WolvenKit.Models;
 using WolvenKit.Modkit.RED4.Serialization;
 using WolvenKit.MVVM.Model.ProjectManagement.Project;
-using WolvenKit.RED4.Types;
 using WolvenKit.RED4.TweakDB;
-using System.Windows;
 
 namespace WolvenKit.Functionality.Controllers
 {
@@ -205,7 +201,7 @@ namespace WolvenKit.Functionality.Controllers
 
                 var buffer = br.ReadBytes(file.Length - 8);
 
-                byte[] unpacked = new byte[size];
+                var unpacked = new byte[size];
                 long unpackedSize = OodleHelper.Decompress(buffer, unpacked);
 
                 using var msout = new MemoryStream();

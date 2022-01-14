@@ -1,29 +1,15 @@
 using System;
-using System.IO;
-using DynamicData;
-using ReactiveUI.Fody.Helpers;
-using WolvenKit.Common.Extensions;
-using WolvenKit.Common.Model;
-using WolvenKit.Functionality.Ab4d;
-using WolvenKit.RED4;
-using WolvenKit.RED4.Archive;
-using WolvenKit.RED4.Archive.CR2W;
-using WolvenKit.RED4.CR2W;
-using WolvenKit.RED4.Types;
-using WolvenKit.Modkit.RED4;
-using Splat;
-using System.Windows.Media.Imaging;
-using System.Threading.Tasks;
-using System.Windows.Media;
-using WolvenKit.RED4.Archive.Buffer;
 using System.Collections.Generic;
-using System.Linq;
-using WolvenKit.ViewModels.Shell;
 using System.ComponentModel;
+using System.IO;
 using System.Windows;
 using System.Windows.Input;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
 using Microsoft.Win32;
+using ReactiveUI.Fody.Helpers;
 using WolvenKit.Functionality.Commands;
+using WolvenKit.RED4.Types;
 
 namespace WolvenKit.ViewModels.Documents
 {
@@ -67,14 +53,12 @@ namespace WolvenKit.ViewModels.Documents
             [Browsable(false)]
             [Reactive] public string Name { get; set; }
             [Browsable(false)]
-            [Reactive] public string RedscriptExample
+            [Reactive]
+            public string RedscriptExample
             {
-                get
-                {
-                    return $@"let image = new inkImage();
+                get => $@"let image = new inkImage();
 image.SetAtlasResource(r""{AtlasPath}"");
 image.SetTexturePart(n""{PartName}"");";
-                }
                 set
                 {
 
@@ -108,10 +92,12 @@ image.SetTexturePart(n""{PartName}"");";
             private bool CanSaveImage() => Image != null;
             private void ExecuteSaveImage()
             {
-                SaveFileDialog saveFileDialog1 = new SaveFileDialog();
-                saveFileDialog1.Filter = "PNG Image|*.png";
-                saveFileDialog1.Title = "Save an Image As";
-                saveFileDialog1.FileName = PartName + ".png";
+                var saveFileDialog1 = new SaveFileDialog
+                {
+                    Filter = "PNG Image|*.png",
+                    Title = "Save an Image As",
+                    FileName = PartName + ".png"
+                };
                 saveFileDialog1.ShowDialog();
 
                 if (saveFileDialog1.FileName != "")

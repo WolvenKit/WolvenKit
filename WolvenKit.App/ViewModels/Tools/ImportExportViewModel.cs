@@ -7,7 +7,6 @@ using System.Linq;
 using System.Reactive;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
-using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Media3D;
@@ -570,7 +569,7 @@ namespace WolvenKit.ViewModels.Tools
                 {
                     await Task.Run(() => ConvertSingle(itemViewModel));
                 }
-                
+
             }
             IsProcessing = false;
             _notificationService.Success($"Files have been processed and are available in the Project Explorer");
@@ -639,7 +638,7 @@ namespace WolvenKit.ViewModels.Tools
                     }
                     meshExportArgs.MaterialRepo = _settingsManager.MaterialRepositoryPath;
                 }
-                if(item.Properties is MorphTargetExportArgs morphTargetExportArgs)
+                if (item.Properties is MorphTargetExportArgs morphTargetExportArgs)
                 {
                     if (_gameController.GetController() is RED4Controller cp77Controller)
                     {
@@ -810,7 +809,7 @@ namespace WolvenKit.ViewModels.Tools
                         outfile = Path.Combine(ISettingsManager.GetTemp_OBJPath(), qx.Name);
                         outfile = Path.ChangeExtension(outfile, ".glb");
 
-                        if(!_meshTools.ExportMeshPreviewer(meshStream, new FileInfo(outfile)))
+                        if (!_meshTools.ExportMeshPreviewer(meshStream, new FileInfo(outfile)))
                         {
                             outfile = "";
                         }

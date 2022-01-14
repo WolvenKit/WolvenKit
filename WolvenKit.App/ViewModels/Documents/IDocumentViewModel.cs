@@ -35,7 +35,7 @@ namespace WolvenKit.ViewModels.Documents
 
         Task<bool> OpenFileAsync(string path);
 
-        bool OpenFile(string path); 
+        bool OpenFile(string path);
 
         #endregion Methods
     }

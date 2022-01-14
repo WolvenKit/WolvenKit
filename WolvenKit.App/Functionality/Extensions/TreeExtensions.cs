@@ -1,8 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using WolvenKit.Functionality.Interfaces;
 
 namespace WolvenKit.Functionality.Extensions
@@ -17,7 +15,9 @@ namespace WolvenKit.Functionality.Extensions
         public static ITree<T> ToTree<T>(this IList<T> items, Func<T, T, bool> parentSelector)
         {
             if (items == null)
+            {
                 throw new ArgumentNullException(nameof(items));
+            }
 
             var lookup = items.ToLookup(item => items.FirstOrDefault(parent => parentSelector(parent, item)),
                 child => child);

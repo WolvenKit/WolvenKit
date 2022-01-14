@@ -1,27 +1,15 @@
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.IO;
-using System.Linq;
 using System.Windows.Input;
-using System.Windows.Media;
-using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using Splat;
 using WolvenKit.Common;
 using WolvenKit.Common.FNV1A;
-using WolvenKit.Common.Model;
 using WolvenKit.Functionality.Commands;
 using WolvenKit.Functionality.Controllers;
 using WolvenKit.RED4.Archive;
-using WolvenKit.RED4.Archive.CR2W;
 using WolvenKit.RED4.Types;
 using WolvenKit.ViewModels.Shell;
-using WolvenKit.Common.Conversion;
-using Newtonsoft.Json;
-using System.Runtime.Serialization;
-using System.Windows.Forms;
-using System.Collections.Specialized;
 
 namespace WolvenKit.ViewModels.Documents
 {
@@ -77,21 +65,17 @@ namespace WolvenKit.ViewModels.Documents
             {
                 if (_chunks == null || _chunks.Count == 0)
                 {
-                    _chunks = new List<ChunkViewModel>();
-                    _chunks.Add(GenerateChunks());
+                    _chunks = new List<ChunkViewModel>
+                    {
+                        GenerateChunks()
+                    };
                 }
                 return _chunks;
             }
-            set
-            {
-                _chunks = value;
-            }
+            set => _chunks = value;
         }
 
-        public virtual ChunkViewModel GenerateChunks()
-        {
-            return new ChunkViewModel(_data, this);
-        }
+        public virtual ChunkViewModel GenerateChunks() => new ChunkViewModel(_data, this);
 
         [Reactive] public ChunkViewModel SelectedChunk { get; set; }
 

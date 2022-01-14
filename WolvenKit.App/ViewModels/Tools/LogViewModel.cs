@@ -1,10 +1,4 @@
-using System;
-using System.Collections.ObjectModel;
-using System.Reactive.Linq;
-using System.Threading.Tasks;
 using System.Windows.Documents;
-using DynamicData;
-using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using WolvenKit.Common.Services;
 using WolvenKit.Models.Docking;

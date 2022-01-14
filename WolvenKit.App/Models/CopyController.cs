@@ -1,5 +1,3 @@
-using System.Collections.Generic;
-
 namespace WolvenKit.Models
 {
     //public static class CopyController
