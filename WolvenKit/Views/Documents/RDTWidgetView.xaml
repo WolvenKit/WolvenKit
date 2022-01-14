@@ -135,12 +135,10 @@
                                     <ColumnDefinition Width="3" />
                                     <ColumnDefinition Width="2*" />
                                 </Grid.ColumnDefinitions>
-                                <StackPanel>
-                                    <TextBlock
-                                        Margin="5,0"
-                                        VerticalAlignment="Center"
-                                        Text="{Binding Name}" />
-                                </StackPanel>
+                                <TextBlock
+                                    Margin="5,0"
+                                    VerticalAlignment="Center"
+                                    Text="{Binding Name}" />
                                 <GridSplitter
                                     Grid.Column="1"
                                     HorizontalAlignment="Stretch"

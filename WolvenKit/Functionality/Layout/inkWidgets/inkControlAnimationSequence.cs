@@ -34,14 +34,19 @@ namespace WolvenKit.Functionality.Layout.inkWidgets
                 return;
 
             Storyboard = new();
-            //Storyboard.RepeatBehavior = RepeatBehavior.Forever;
-            Storyboard.Duration = new Duration(TimeSpan.FromSeconds(2));
+            Storyboard.RepeatBehavior = RepeatBehavior.Forever;
+            //Storyboard.Duration = new Duration(TimeSpan.FromSeconds(2));
             //Storyboard.AutoReverse = true;
 
 
             for (var i = 0; i < Sequence.Targets.Count; i++)
             {
                 var info = (inkanimSequenceTargetInfo)Sequence.Targets[i].GetValue();
+
+                if (info == null)
+                {
+                    continue;
+                }
 
                 var element = Root;
                 foreach (var index in info.Path)
@@ -61,112 +66,309 @@ namespace WolvenKit.Functionality.Layout.inkWidgets
                     var animI = (inkanimInterpolator)animIHandle.GetValue();
                     List<AnimationTimeline> anims = new();
                     List<PropertyPath> paths = new();
-                    DependencyObject target = element;
+                    object target = element;
 
                     if (animI is inkanimTransparencyInterpolator animTrnsp)
                     {
-                        anims.Add(new DoubleAnimation()
+                        var d = new DoubleAnimationUsingKeyFrames();
+                        if (animI.StartDelay != 0)
                         {
-                            From = animTrnsp.StartValue,
-                            To = animTrnsp.EndValue
-                        });
-                        paths.Add(new PropertyPath(UIElement.OpacityProperty));
+                            d.KeyFrames.Add(ToDoubleKeyframe(animI.InterpolationType.Value, animI.InterpolationMode.Value, animTrnsp.StartValue, 0));
+                        }
+                        d.KeyFrames.Add(ToDoubleKeyframe(animI.InterpolationType.Value, animI.InterpolationMode.Value, animTrnsp.StartValue, animTrnsp.StartDelay));
+                        d.KeyFrames.Add(ToDoubleKeyframe(animI.InterpolationType.Value, animI.InterpolationMode.Value, animTrnsp.EndValue, animTrnsp.StartDelay + animTrnsp.Duration));
 
-                        //element.Opacity = animTrnsp.StartValue;
+                        anims.Add(d);
+                        paths.Add(new PropertyPath(UIElement.OpacityProperty));
+                        target = "element" + element.GetHashCode();
+                    }
+
+                    if (animI is inkanimMarginInterpolator animMargin)
+                    {
+                        var d = new ThicknessAnimationUsingKeyFrames();
+                        if (animI.StartDelay != 0)
+                        {
+                            d.KeyFrames.Add(ToThicknessKeyframe(animI.InterpolationType.Value, animI.InterpolationMode.Value, animMargin.StartValue, 0));
+                        }
+                        d.KeyFrames.Add(ToThicknessKeyframe(animI.InterpolationType.Value, animI.InterpolationMode.Value, animMargin.StartValue, animMargin.StartDelay));
+                        d.KeyFrames.Add(ToThicknessKeyframe(animI.InterpolationType.Value, animI.InterpolationMode.Value, animMargin.EndValue, animMargin.StartDelay + animMargin.Duration));
+
+                        anims.Add(d);
+                        paths.Add(new PropertyPath(inkControl.MarginProperty));
+                        target = "element" + element.GetHashCode();
                     }
 
                     if (animI is inkanimRotationInterpolator animRot)
                     {
-                        anims.Add(new DoubleAnimation()
+                        var d = new DoubleAnimationUsingKeyFrames();
+                        if (animI.StartDelay != 0)
                         {
-                            From = animRot.StartValue,
-                            To = animRot.EndValue
-                        });
-                        paths.Add(new PropertyPath(RotateTransform.AngleProperty));
-                        target = element.Rotation;
+                            d.KeyFrames.Add(ToDoubleKeyframe(animI.InterpolationType.Value, animI.InterpolationMode.Value, animRot.StartValue, 0));
+                        }
+                        d.KeyFrames.Add(ToDoubleKeyframe(animI.InterpolationType.Value, animI.InterpolationMode.Value, animRot.StartValue, animRot.StartDelay));
+                        d.KeyFrames.Add(ToDoubleKeyframe(animI.InterpolationType.Value, animI.InterpolationMode.Value, animRot.EndValue, animRot.StartDelay + animRot.Duration));
 
-                        //element.Rotation.Angle = animRot.StartValue;
+                        anims.Add(d);
+                        paths.Add(new PropertyPath(RotateTransform.AngleProperty));
+                        target = "rotation" + element.GetHashCode();
                     }
 
                     if (animI is inkanimTranslationInterpolator animTrnsl)
                     {
-                        anims.Add(new DoubleAnimation()
+                        var d = new DoubleAnimationUsingKeyFrames();
+                        if (animI.StartDelay != 0)
                         {
-                            From = animTrnsl.StartValue.X,
-                            To = animTrnsl.EndValue.X
-                        });
+                            d.KeyFrames.Add(ToDoubleKeyframe(animI.InterpolationType.Value, animI.InterpolationMode.Value, animTrnsl.StartValue.X, 0));
+                        }
+                        d.KeyFrames.Add(ToDoubleKeyframe(animI.InterpolationType.Value, animI.InterpolationMode.Value, animTrnsl.StartValue.X, animTrnsl.StartDelay));
+                        d.KeyFrames.Add(ToDoubleKeyframe(animI.InterpolationType.Value, animI.InterpolationMode.Value, animTrnsl.EndValue.X, animTrnsl.StartDelay + animTrnsl.Duration));
+
+                        anims.Add(d);
                         paths.Add(new PropertyPath(TranslateTransform.XProperty));
 
-                        anims.Add(new DoubleAnimation()
+                        if (animI.StartDelay != 0)
                         {
-                            From = animTrnsl.StartValue.Y,
-                            To = animTrnsl.EndValue.Y
-                        });
+                            d.KeyFrames.Add(ToDoubleKeyframe(animI.InterpolationType.Value, animI.InterpolationMode.Value, animTrnsl.StartValue.Y, 0));
+                        }
+                        d.KeyFrames.Add(ToDoubleKeyframe(animI.InterpolationType.Value, animI.InterpolationMode.Value, animTrnsl.StartValue.Y, animTrnsl.StartDelay));
+                        d.KeyFrames.Add(ToDoubleKeyframe(animI.InterpolationType.Value, animI.InterpolationMode.Value, animTrnsl.EndValue.Y, animTrnsl.StartDelay + animTrnsl.Duration));
+
+                        anims.Add(d);
                         paths.Add(new PropertyPath(TranslateTransform.YProperty));
 
-                        target = element.Rotation;
-
-                        //element.Translation.X = animTrnsl.StartValue.X;
-                        //element.Translation.Y = animTrnsl.StartValue.Y;
+                        target = "translation" + element.GetHashCode();
                     }
 
                     if (animI is inkanimScaleInterpolator animScale)
                     {
-                        anims.Add(new DoubleAnimation()
+                        var d = new DoubleAnimationUsingKeyFrames();
+                        if (animI.StartDelay != 0)
                         {
-                            From = animScale.StartValue.X,
-                            To = animScale.EndValue.X
-                        });
+                            d.KeyFrames.Add(ToDoubleKeyframe(animI.InterpolationType.Value, animI.InterpolationMode.Value, animScale.StartValue.X, 0));
+                        }
+                        d.KeyFrames.Add(ToDoubleKeyframe(animI.InterpolationType.Value, animI.InterpolationMode.Value, animScale.StartValue.X, animScale.StartDelay));
+                        d.KeyFrames.Add(ToDoubleKeyframe(animI.InterpolationType.Value, animI.InterpolationMode.Value, animScale.EndValue.X, animScale.StartDelay + animScale.Duration));
+
+                        anims.Add(d);
                         paths.Add(new PropertyPath(ScaleTransform.ScaleXProperty));
 
-                        anims.Add(new DoubleAnimation()
+                        if (animI.StartDelay != 0)
                         {
-                            From = animScale.StartValue.Y,
-                            To = animScale.EndValue.Y
-                        });
-                        paths.Add(new PropertyPath(ScaleTransform.ScaleYProperty));
-                        target = element.Scale;
+                            d.KeyFrames.Add(ToDoubleKeyframe(animI.InterpolationType.Value, animI.InterpolationMode.Value, animScale.StartValue.Y, 0));
+                        }
+                        d.KeyFrames.Add(ToDoubleKeyframe(animI.InterpolationType.Value, animI.InterpolationMode.Value, animScale.StartValue.Y, animScale.StartDelay));
+                        d.KeyFrames.Add(ToDoubleKeyframe(animI.InterpolationType.Value, animI.InterpolationMode.Value, animScale.EndValue.Y, animScale.StartDelay + animScale.Duration));
 
-                        //element.Scale.ScaleX = animScale.StartValue.X;
-                        //element.Scale.ScaleY = animScale.StartValue.Y;
+                        anims.Add(d);
+                        paths.Add(new PropertyPath(ScaleTransform.ScaleYProperty));
+
+                        target = "scale" + element.GetHashCode();
                     }
 
                     foreach (var anim in anims)
                     {
-                        anim.Duration = new Duration(TimeSpan.FromSeconds(animI.Duration));
-                        //anim.RepeatBehavior = new RepeatBehavior(TimeSpan.FromSeconds(animI.Duration));
-                        //Storyboard.Duration = new Duration(TimeSpan.FromMilliseconds(Math.Max(anim.Duration.TimeSpan.Milliseconds, Storyboard.Duration.TimeSpan.Milliseconds)));
-                        //anim.EasingFunction = ti.InterpolationType;
-                        //anim.AutoReverse = true;
-                        anim.BeginTime = TimeSpan.FromSeconds(animI.StartDelay);
                         anim.FillBehavior = FillBehavior.HoldEnd;
                         Storyboard.Children.Add(anim);
-                        Storyboard.SetTarget(anim, target);
+                        if (target is string targetName)
+                        {
+                            Storyboard.SetTargetName(anim, targetName);
+                        }
+                        else
+                        {
+                            Storyboard.SetTarget(anim, (DependencyObject)target);
+                        }
                         Storyboard.SetTargetProperty(anim, paths[anims.IndexOf(anim)]);
                     }
                 }
-
-                //foreach (var anim in Storyboard.Children)
-                //{
-                //    anim.RepeatBehavior = new RepeatBehavior(Storyboard.Duration.TimeSpan);
-                //}
             }
         }
 
         public ICommand PlayCommand { get; set; }
         //public bool CanPlay() => Storyboard != null && Storyboard.GetCurrentState() == ClockState.Stopped;
-        public void Play()
-        {
-            foreach (var anim in Storyboard.Children)
-            {
-                
-            }
-
-            Storyboard.Begin();
-        }
+        public void Play() => Storyboard.Begin(Root.WidgetView, true);
 
         public ICommand StopCommand { get; set; }
         //public bool CanStop() => Storyboard != null && Storyboard.GetCurrentState() != ClockState.Stopped;
-        public void Stop() => Storyboard.Stop();
+        public void Stop() => Storyboard.Stop(Root.WidgetView);
+
+        public static DoubleKeyFrame ToDoubleKeyframe(Enums.inkanimInterpolationType? type, Enums.inkanimInterpolationMode? mode, float value, float keyframe)
+        {
+            switch (type)
+            {
+                case Enums.inkanimInterpolationType.Linear:
+                    return new LinearDoubleKeyFrame(value, KeyTime.FromTimeSpan(TimeSpan.FromSeconds(keyframe)));
+                case Enums.inkanimInterpolationType.Quadratic:
+                    return new EasingDoubleKeyFrame(value, KeyTime.FromTimeSpan(TimeSpan.FromSeconds(keyframe)))
+                    {
+                        EasingFunction = new QuadraticEase()
+                        {
+                            EasingMode = ToEasingMode(mode)
+                        }
+                    };
+                case Enums.inkanimInterpolationType.Qubic:
+                    return new EasingDoubleKeyFrame(value, KeyTime.FromTimeSpan(TimeSpan.FromSeconds(keyframe)))
+                    {
+                        EasingFunction = new CubicEase()
+                        {
+                            EasingMode = ToEasingMode(mode)
+                        }
+                    };
+                case Enums.inkanimInterpolationType.Quartic:
+                    return new EasingDoubleKeyFrame(value, KeyTime.FromTimeSpan(TimeSpan.FromSeconds(keyframe)))
+                    {
+                        EasingFunction = new QuarticEase()
+                        {
+                            EasingMode = ToEasingMode(mode)
+                        }
+                    };
+                case Enums.inkanimInterpolationType.Quintic:
+                    return new EasingDoubleKeyFrame(value, KeyTime.FromTimeSpan(TimeSpan.FromSeconds(keyframe)))
+                    {
+                        EasingFunction = new QuinticEase()
+                        {
+                            EasingMode = ToEasingMode(mode)
+                        }
+                    };
+                case Enums.inkanimInterpolationType.Sinusoidal:
+                    return new EasingDoubleKeyFrame(value, KeyTime.FromTimeSpan(TimeSpan.FromSeconds(keyframe)))
+                    {
+                        EasingFunction = new SineEase()
+                        {
+                            EasingMode = ToEasingMode(mode)
+                        }
+                    };
+                case Enums.inkanimInterpolationType.Exponential:
+                    return new EasingDoubleKeyFrame(value, KeyTime.FromTimeSpan(TimeSpan.FromSeconds(keyframe)))
+                    {
+                        EasingFunction = new ExponentialEase()
+                        {
+                            EasingMode = ToEasingMode(mode)
+                        }
+                    };
+                case Enums.inkanimInterpolationType.Elastic:
+                    return new EasingDoubleKeyFrame(value, KeyTime.FromTimeSpan(TimeSpan.FromSeconds(keyframe)))
+                    {
+                        EasingFunction = new ElasticEase()
+                        {
+                            EasingMode = ToEasingMode(mode)
+                        }
+                    };
+                case Enums.inkanimInterpolationType.Circular:
+                    return new EasingDoubleKeyFrame(value, KeyTime.FromTimeSpan(TimeSpan.FromSeconds(keyframe)))
+                    {
+                        EasingFunction = new CircleEase()
+                        {
+                            EasingMode = ToEasingMode(mode)
+                        }
+                    };
+                case Enums.inkanimInterpolationType.Back:
+                    return new EasingDoubleKeyFrame(value, KeyTime.FromTimeSpan(TimeSpan.FromSeconds(keyframe)))
+                    {
+                        EasingFunction = new BackEase()
+                        {
+                            EasingMode = ToEasingMode(mode)
+                        }
+                    };
+                default:
+                    return null;
+            }
+        }
+        public static ThicknessKeyFrame ToThicknessKeyframe(Enums.inkanimInterpolationType? type, Enums.inkanimInterpolationMode? mode, inkMargin value, float keyframe)
+        {
+            switch (type)
+            {
+                case Enums.inkanimInterpolationType.Linear:
+                    return new LinearThicknessKeyFrame(inkControl.ToThickness(value), KeyTime.FromTimeSpan(TimeSpan.FromSeconds(keyframe)));
+                case Enums.inkanimInterpolationType.Quadratic:
+                    return new EasingThicknessKeyFrame(inkControl.ToThickness(value), KeyTime.FromTimeSpan(TimeSpan.FromSeconds(keyframe)))
+                    {
+                        EasingFunction = new QuadraticEase()
+                        {
+                            EasingMode = ToEasingMode(mode)
+                        }
+                    };
+                case Enums.inkanimInterpolationType.Qubic:
+                    return new EasingThicknessKeyFrame(inkControl.ToThickness(value), KeyTime.FromTimeSpan(TimeSpan.FromSeconds(keyframe)))
+                    {
+                        EasingFunction = new CubicEase()
+                        {
+                            EasingMode = ToEasingMode(mode)
+                        }
+                    };
+                case Enums.inkanimInterpolationType.Quartic:
+                    return new EasingThicknessKeyFrame(inkControl.ToThickness(value), KeyTime.FromTimeSpan(TimeSpan.FromSeconds(keyframe)))
+                    {
+                        EasingFunction = new QuarticEase()
+                        {
+                            EasingMode = ToEasingMode(mode)
+                        }
+                    };
+                case Enums.inkanimInterpolationType.Quintic:
+                    return new EasingThicknessKeyFrame(inkControl.ToThickness(value), KeyTime.FromTimeSpan(TimeSpan.FromSeconds(keyframe)))
+                    {
+                        EasingFunction = new QuinticEase()
+                        {
+                            EasingMode = ToEasingMode(mode)
+                        }
+                    };
+                case Enums.inkanimInterpolationType.Sinusoidal:
+                    return new EasingThicknessKeyFrame(inkControl.ToThickness(value), KeyTime.FromTimeSpan(TimeSpan.FromSeconds(keyframe)))
+                    {
+                        EasingFunction = new SineEase()
+                        {
+                            EasingMode = ToEasingMode(mode)
+                        }
+                    };
+                case Enums.inkanimInterpolationType.Exponential:
+                    return new EasingThicknessKeyFrame(inkControl.ToThickness(value), KeyTime.FromTimeSpan(TimeSpan.FromSeconds(keyframe)))
+                    {
+                        EasingFunction = new ExponentialEase()
+                        {
+                            EasingMode = ToEasingMode(mode)
+                        }
+                    };
+                case Enums.inkanimInterpolationType.Elastic:
+                    return new EasingThicknessKeyFrame(inkControl.ToThickness(value), KeyTime.FromTimeSpan(TimeSpan.FromSeconds(keyframe)))
+                    {
+                        EasingFunction = new ElasticEase()
+                        {
+                            EasingMode = ToEasingMode(mode)
+                        }
+                    };
+                case Enums.inkanimInterpolationType.Circular:
+                    return new EasingThicknessKeyFrame(inkControl.ToThickness(value), KeyTime.FromTimeSpan(TimeSpan.FromSeconds(keyframe)))
+                    {
+                        EasingFunction = new CircleEase()
+                        {
+                            EasingMode = ToEasingMode(mode)
+                        }
+                    };
+                case Enums.inkanimInterpolationType.Back:
+                    return new EasingThicknessKeyFrame(inkControl.ToThickness(value), KeyTime.FromTimeSpan(TimeSpan.FromSeconds(keyframe)))
+                    {
+                        EasingFunction = new BackEase()
+                        {
+                            EasingMode = ToEasingMode(mode)
+                        }
+                    };
+                default:
+                    return null;
+            }
+        }
+
+        public static EasingMode ToEasingMode(Enums.inkanimInterpolationMode? mode)
+        {
+            switch (mode)
+            {
+                case Enums.inkanimInterpolationMode.EasyOut:
+                    return EasingMode.EaseOut;
+                case Enums.inkanimInterpolationMode.EasyInOut:
+                case Enums.inkanimInterpolationMode.EasyOutIn:
+                    return EasingMode.EaseInOut;
+                case Enums.inkanimInterpolationMode.EasyIn:
+                default:
+                    return EasingMode.EaseIn;
+            }
+        }
     }
 }

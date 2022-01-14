@@ -24,7 +24,7 @@ namespace WolvenKit.Functionality.Layout.inkWidgets
         public virtual double Width => Widget.Size.X;
         public virtual double Height => Widget.Size.Y;
 
-        public Thickness Margin => ToThickness(Widget.Layout.Margin);
+        //public Thickness Margin => ToThickness(Widget.Layout.Margin);
 
         public Dictionary<string, string> PropertyBindings = new();
 
@@ -66,16 +66,17 @@ namespace WolvenKit.Functionality.Layout.inkWidgets
 
         public TranslateTransform Translation { get; set; } = new();
 
-        //public static readonly DependencyProperty RotationProperty = DependencyProperty.Register(
-        //    nameof(Rotation), typeof(RotateTransform),
-        //    typeof(inkControl)
-        //);
+        public static readonly DependencyProperty MarginProperty = DependencyProperty.Register(
+            nameof(Margin), typeof(Thickness),
+            typeof(inkControl),
+            new PropertyMetadata(new Thickness())
+        );
 
-        //public RotateTransform Rotation
-        //{
-        //    get => (RotateTransform)GetValue(RotationProperty);
-        //    set => SetValue(RotationProperty, value);
-        //}
+        public Thickness Margin
+        {
+            get => (Thickness)GetValue(MarginProperty);
+            set => SetValue(MarginProperty, value);
+        }
 
         public float WidgetOpacity
         {
@@ -112,6 +113,9 @@ namespace WolvenKit.Functionality.Layout.inkWidgets
                 }
             }
 
+            //WidgetView.RegisterName("margin" + GetHashCode(), Margin);
+            Margin = ToThickness(Widget.Layout.Margin);
+
             //ToolTip = Widget.Name + $" ({Widget.GetType().Name})";
 
             // unhide the roots at least
@@ -137,11 +141,16 @@ namespace WolvenKit.Functionality.Layout.inkWidgets
                 //ClipToBounds = true;
             }
 
+            WidgetView.RegisterName("element" + GetHashCode(), this);
+
             RenderTransformOrigin = ToPoint(Widget.RenderTransformPivot);
 
+            WidgetView.RegisterName("rotation" + GetHashCode(), Rotation);
             Rotation.Angle = Widget.RenderTransform.Rotation;
+            WidgetView.RegisterName("scale" + GetHashCode(), Scale);
             Scale.ScaleX = Widget.RenderTransform.Scale.X;
             Scale.ScaleY = Widget.RenderTransform.Scale.Y;
+            WidgetView.RegisterName("translation" + GetHashCode(), Translation);
             Translation.X = Widget.RenderTransform.Translation.X;
             Translation.Y = Widget.RenderTransform.Translation.Y;
 
