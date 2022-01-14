@@ -1,12 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Dynamic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using WolvenKit.RED4.Archive.Buffer;
 using WolvenKit.RED4.Archive.CR2W;
-using WolvenKit.RED4.CR2W;
 using WolvenKit.RED4.Types;
 
 namespace WolvenKit.Common.Conversion
@@ -53,7 +49,9 @@ namespace WolvenKit.Common.Conversion
             Type = RedReflection.GetRedTypeFromCSType(_propertyType);
 
             if (_data == null)
+            {
                 return;
+            }
 
             try
             {
@@ -133,7 +131,9 @@ namespace WolvenKit.Common.Conversion
         private object PrimativeDecider(IRedType data, string propertyName, RedClassDto parent)
         {
             if (data == null)
+            {
                 return null;
+            }
 
             if (data is IRedArray ary)
             {
@@ -148,11 +148,17 @@ namespace WolvenKit.Common.Conversion
             Package04 pkg = null;
 
             if (data is SerializationDeferredDataBuffer sddb && sddb.Buffer.Data is Package04 sddbp4)
+            {
                 pkg = sddbp4;
+            }
             else if (data is DataBuffer db && db.Buffer.Data is Package04 dbp4)
+            {
                 pkg = dbp4;
+            }
             else if (data is SharedDataBuffer sdb && sdb.Buffer.Data is Package04 sdbp4)
+            {
                 pkg = sdbp4;
+            }
 
             if (pkg != null)
             {

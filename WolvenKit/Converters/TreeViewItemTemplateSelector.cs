@@ -1,16 +1,8 @@
-
-using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Collections.ObjectModel;
-using System.ComponentModel;
-using System.Windows.Controls;
 using System.Windows;
-using WolvenKit.ViewModels.Documents;
-using WolvenKit.Views.Documents;
-using WolvenKit.ViewModels.Shell;
-using WolvenKit.RED4.Types;
+using System.Windows.Controls;
 using Syncfusion.UI.Xaml.TreeView.Engine;
+using WolvenKit.RED4.Types;
+using WolvenKit.ViewModels.Shell;
 
 namespace WolvenKit.Converters
 {

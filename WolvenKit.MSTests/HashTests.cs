@@ -4,14 +4,10 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.InteropServices;
-using System.Text;
-using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using WolvenKit.Common.Extensions;
 using WolvenKit.Common.FNV1A;
 using WolvenKit.Common.Model;
 using WolvenKit.Common.Oodle;
-using WolvenKit.Core;
 using WolvenKit.Interfaces.Extensions;
 using WolvenKit.RED4.Archive;
 
@@ -41,7 +37,7 @@ namespace WolvenKit.MSTests
             {
                 assembly = mlc.LoadFromAssemblyPath("WolvenKit.Common.dll");
                 using var stream = assembly.GetManifestResourceStream(s_used);
-            
+
                 // read KARK header
                 var oodleCompression = stream.ReadStruct<uint>();
                 if (oodleCompression != OodleHelper.KARK)
@@ -55,7 +51,7 @@ namespace WolvenKit.MSTests
                 var outputbuffer = new byte[outputsize];
                 var inbuffer = stream.ToByteArray(true);
                 OozNative.Kraken_Decompress(inbuffer, inbuffer.Length, outputbuffer, outputbuffer.Length);
-            
+
 
                 using (var ms = new MemoryStream(outputbuffer))
                 using (var sr = new StreamReader(ms))
@@ -178,7 +174,7 @@ namespace WolvenKit.MSTests
 
 
 
-            
+
 
         }
 
@@ -229,7 +225,7 @@ namespace WolvenKit.MSTests
                 using (var ms = new MemoryStream(outputbuffer))
                 using (var sr = new StreamReader(ms))
                 {
-                    
+
                     string line;
                     while ((line = sr.ReadLine()) != null)
                     {
@@ -261,7 +257,7 @@ namespace WolvenKit.MSTests
                             hashDictionary[hash][i] = idx;
                         }
                     }
-                    
+
                 }
             }
 

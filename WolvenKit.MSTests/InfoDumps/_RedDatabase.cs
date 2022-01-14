@@ -7,7 +7,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using Catel.IoC;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using WolvenKit.Common.FNV1A;
 using WolvenKit.Common.Model.Database;
 using WolvenKit.Common.Services;
 using WolvenKit.Modkit.RED4;
@@ -245,9 +244,9 @@ namespace WolvenKit.MSTests
 
                 var uses = item.Uses != null ? string.Join('-', item.Uses) : "";
                 var usedby = string.Join('-', x.Select(_ => _.RedFileId));
-                Console.WriteLine($"{item.RedFileId}, {item.Archive}, {item.Name}, {uses}, {usedby}");   
+                Console.WriteLine($"{item.RedFileId}, {item.Archive}, {item.Name}, {uses}, {usedby}");
             }
         }
-        
+
     }
 }

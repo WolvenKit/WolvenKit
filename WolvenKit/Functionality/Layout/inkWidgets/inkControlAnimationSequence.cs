@@ -1,8 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
@@ -31,7 +28,9 @@ namespace WolvenKit.Functionality.Layout.inkWidgets
             StopCommand = new RelayCommand(Stop);
 
             if (Sequence.Targets.Count != Sequence.Definitions.Count)
+            {
                 return;
+            }
 
             Storyboard = new();
             Storyboard.RepeatBehavior = RepeatBehavior.Forever;
@@ -52,11 +51,15 @@ namespace WolvenKit.Functionality.Layout.inkWidgets
                 foreach (var index in info.Path)
                 {
                     if (element is inkCompoundControl cc)
+                    {
                         element = cc.GetChild(Convert.ToInt32(index));
+                    }
                 }
 
                 if (element == null)
+                {
                     continue;
+                }
 
                 Targets.Add(element);
 

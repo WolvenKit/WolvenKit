@@ -1,17 +1,13 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
 //using System.IO;
-using System.Linq;
-using System.Runtime.InteropServices;
 using CP77.Common.Image;
-using WolvenKit.RED4.Types;
+using WolvenKit.Common;
 using WolvenKit.Common.DDS;
 using WolvenKit.Common.Model.Arguments;
-using WolvenKit.Common.Oodle;
 using WolvenKit.Common.Services;
-using WolvenKit.Common;
-using System.Collections.Generic;
-using WolvenKit.Core;
+using WolvenKit.RED4.Types;
 
 namespace WolvenKit.Modkit.RED4
 {
@@ -108,7 +104,7 @@ namespace WolvenKit.Modkit.RED4
                 // create dds stream
                 DDSUtils.GenerateAndWriteHeader(ms, new DDSMetadata(
                     maskWidth, maskHeight,
-                    1, 1, 0, 0, 0, DXGI_FORMAT.DXGI_FORMAT_R8_UNORM, TEX_DIMENSION.TEX_DIMENSION_TEXTURE2D, 8,  true));
+                    1, 1, 0, 0, 0, DXGI_FORMAT.DXGI_FORMAT_R8_UNORM, TEX_DIMENSION.TEX_DIMENSION_TEXTURE2D, 8, true));
                 ms.Write(maskData);
 
                 if (args.UncookExtension == EUncookExtension.dds)

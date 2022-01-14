@@ -1,19 +1,14 @@
 using System;
-using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using WolvenKit.RED4.Types;
+using WolvenKit.Views.Documents;
 using Rect = System.Windows.Rect;
 using SizeF = System.Windows.Size;
-using WolvenKit.Views.Documents;
 
 namespace WolvenKit.Functionality.Layout.inkWidgets
 {
@@ -41,7 +36,9 @@ namespace WolvenKit.Functionality.Layout.inkWidgets
         {
 
             if (ImageWidget.TextureAtlas == null)
+            {
                 return;
+            }
 
             TextureAtlas = ImageWidget.TextureAtlas.DepotPath;
             TexturePart = ImageWidget.TexturePart;
@@ -49,7 +46,9 @@ namespace WolvenKit.Functionality.Layout.inkWidgets
             OriginalImageSource = (ImageSource)Application.Current.TryFindResource("ImageSource/" + TextureAtlas + "#" + TexturePart);
 
             if (OriginalImageSource == null)
+            {
                 return;
+            }
 
             OriginalImageSize = new System.Drawing.Size((int)Math.Round(OriginalImageSource.Width), (int)Math.Round(OriginalImageSource.Height));
 
@@ -78,7 +77,9 @@ namespace WolvenKit.Functionality.Layout.inkWidgets
         {
             RenderedSize = size;
             if (size.Width == 0 || size.Height == 0)
+            {
                 return;
+            }
 
             switch (ImageWidget.TileType.Value)
             {
@@ -95,7 +96,7 @@ namespace WolvenKit.Functionality.Layout.inkWidgets
                 default:
                     break;
             }
-            
+
             Bitmap sourceBitmap;
             using (var outStream = new MemoryStream())
             {
@@ -105,9 +106,9 @@ namespace WolvenKit.Functionality.Layout.inkWidgets
                 sourceBitmap = new Bitmap(outStream);
             }
 
-            Bitmap destBitmap = new Bitmap((int)Math.Round(size.Width), (int)Math.Round(size.Height));
+            var destBitmap = new Bitmap((int)Math.Round(size.Width), (int)Math.Round(size.Height));
 
-            using (Graphics gfx = Graphics.FromImage(destBitmap))
+            using (var gfx = Graphics.FromImage(destBitmap))
             {
                 // this is doesn't account for premultipied alpha, so the opacity mask is still needed
                 var matrix = new ColorMatrix(new float[][]
@@ -117,15 +118,17 @@ namespace WolvenKit.Functionality.Layout.inkWidgets
                         new float[] { 0, 0, 0, 0, 0},
                         new float[] { 0, 0, 0, 0, 0},
                         new float[] { 0, 0, 0, 0, 0},
-                });
-                matrix.Matrix03 = Widget.TintColor.Alpha;
+                })
+                {
+                    Matrix03 = Widget.TintColor.Alpha
+                };
                 //matrix.Matrix13 = Widget.TintColor.Alpha / 3F;
                 //matrix.Matrix23 = Widget.TintColor.Alpha / 3F;
                 //matrix.Matrix40 = Widget.TintColor.Red;
                 //matrix.Matrix41 = Widget.TintColor.Green;
                 //matrix.Matrix42 = Widget.TintColor.Blue;
 
-                ImageAttributes attributes = new ImageAttributes();
+                var attributes = new ImageAttributes();
 
                 //attributes.SetColorKey(System.Drawing.Color.Black, System.Drawing.Color.White);
                 attributes.SetColorMatrix(matrix, ColorMatrixFlag.Default, ColorAdjustType.Bitmap);
@@ -136,52 +139,67 @@ namespace WolvenKit.Functionality.Layout.inkWidgets
                     if (Rect.Top != 0)
                     {
                         if (Rect.Left != 0)
+                        {
                             gfx.DrawImage(sourceBitmap, new Rectangle(
                                 0, 0, Rect.Left, Rect.Top),
                                 0, 0, Rect.Left, Rect.Top,
                                 GraphicsUnit.Pixel, attributes);
+                        }
+
                         gfx.DrawImage(sourceBitmap, new Rectangle(
                             Rect.Left, 0, (destBitmap.Width - Rect.Left - Rect.Right), Rect.Top),
                             Rect.Left + (Rect.Right == 0 ? -1 : 0) + (Rect.Left == 0 ? -1 : 0), 0, Math.Max(OriginalImageSize.Width - Rect.Left - Rect.Right, 1), Rect.Top,
                             GraphicsUnit.Pixel, attributes);
                         if (Rect.Right != 0)
+                        {
                             gfx.DrawImage(sourceBitmap, new Rectangle(
                                 (destBitmap.Width - Rect.Right), 0, (Rect.Right), Rect.Top),
                                 (OriginalImageSize.Width - Rect.Right), 0, (Rect.Right), Rect.Top,
                                 GraphicsUnit.Pixel, attributes);
+                        }
                     }
 
                     if (Rect.Left != 0)
+                    {
                         gfx.DrawImage(sourceBitmap, new Rectangle(
                             0, Rect.Top, Rect.Left, destBitmap.Height - Rect.Top - Rect.Bottom),
                             0, Rect.Top + (Rect.Bottom == 0 ? -1 : 0) + (Rect.Top == 0 ? -1 : 0), Rect.Left, Math.Max(OriginalImageSize.Height - Rect.Top - Rect.Bottom, 1),
                             GraphicsUnit.Pixel, attributes);
+                    }
+
                     gfx.DrawImage(sourceBitmap, new Rectangle(
                         Rect.Left, Rect.Top, (destBitmap.Width - Rect.Left - Rect.Right), (destBitmap.Height - Rect.Top - Rect.Bottom)),
                         Rect.Left + (Rect.Right == 0 ? -1 : 0) + (Rect.Left == 0 ? -1 : 0), Rect.Top + (Rect.Bottom == 0 ? -1 : 0) + (Rect.Top == 0 ? -1 : 0), Math.Max(OriginalImageSize.Width - Rect.Left - Rect.Right, 1), Math.Max(OriginalImageSize.Height - Rect.Top - Rect.Bottom, 1),
                         GraphicsUnit.Pixel, attributes);
                     if (Rect.Right != 0)
+                    {
                         gfx.DrawImage(sourceBitmap, new Rectangle(
                             (destBitmap.Width - Rect.Right), Rect.Top, (Rect.Right), (destBitmap.Height - Rect.Top - Rect.Bottom)),
                             (OriginalImageSize.Width - Rect.Right), Rect.Top + (Rect.Bottom == 0 ? -1 : 0) + (Rect.Top == 0 ? -1 : 0), (Rect.Right), Math.Max(OriginalImageSize.Height - Rect.Top - Rect.Bottom, 1),
                             GraphicsUnit.Pixel, attributes);
+                    }
 
                     if (Rect.Bottom != 0)
                     {
                         if (Rect.Left != 0)
+                        {
                             gfx.DrawImage(sourceBitmap, new Rectangle(
                             0, (destBitmap.Height - Rect.Bottom), Rect.Left, Rect.Bottom),
                             0, (OriginalImageSize.Height - Rect.Bottom), Rect.Left, Rect.Bottom,
                             GraphicsUnit.Pixel, attributes);
+                        }
+
                         gfx.DrawImage(sourceBitmap, new Rectangle(
                             Rect.Left, (destBitmap.Height - Rect.Bottom), (destBitmap.Width - Rect.Left - Rect.Right), Rect.Bottom),
                             Rect.Left + (Rect.Right == 0 ? -1 : 0) + (Rect.Left == 0 ? -1 : 0), (OriginalImageSize.Height - Rect.Bottom), Math.Max(OriginalImageSize.Width - Rect.Left - Rect.Right, 1), Rect.Bottom,
                             GraphicsUnit.Pixel, attributes);
                         if (Rect.Right != 0)
+                        {
                             gfx.DrawImage(sourceBitmap, new Rectangle(
                             (destBitmap.Width - Rect.Right), (destBitmap.Height - Rect.Bottom), (Rect.Right), Rect.Bottom),
                             (OriginalImageSize.Width - Rect.Right), (OriginalImageSize.Height - Rect.Bottom), (Rect.Right), Rect.Bottom,
                             GraphicsUnit.Pixel, attributes);
+                        }
                     }
 
                     //        gfx.DrawImage(sourceBitmap, new Rectangle(
@@ -391,14 +409,18 @@ namespace WolvenKit.Functionality.Layout.inkWidgets
             {
                 var newSize = new SizeF(RenderSize.Width, RenderSize.Height);
                 if (OriginalImageSource != null && newSize != RenderedSize)
+                {
                     DrawImage(newSize);
+                }
+
                 if (ImageSource != null)
+                {
                     dc.DrawRectangle(TintBrush, null, new Rect(0, 0, newSize.Width, newSize.Height));
+                }
             }
         }
 
-        protected override SizeF MeasureCore(SizeF availableSize)
-        {
+        protected override SizeF MeasureCore(SizeF availableSize) =>
             //if (Widget.FitToContent)
             //{
             //    return MeasureForDimensions(new SizeF(OriginalImageSource.Width, OriginalImageSource.Height), availableSize);
@@ -407,12 +429,8 @@ namespace WolvenKit.Functionality.Layout.inkWidgets
             //{
             //    return MeasureForDimensions(new SizeF(Width, Height), availableSize);
             //}
-            return base.MeasureCore(availableSize);
-        }
+            base.MeasureCore(availableSize);
 
-        protected override void ArrangeCore(Rect finalRect)
-        {
-            base.ArrangeCore(finalRect);
-        }
+        protected override void ArrangeCore(Rect finalRect) => base.ArrangeCore(finalRect);
     }
 }

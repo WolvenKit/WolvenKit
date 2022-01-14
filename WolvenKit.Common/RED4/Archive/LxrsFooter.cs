@@ -1,14 +1,9 @@
-using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using WolvenKit.Common.Oodle;
-using WolvenKit.Interfaces.Core;
 using WolvenKit.Interfaces.Extensions;
 using WolvenKit.RED4.CR2W;
-using WolvenKit.RED4.Types;
 using WolvenKit.RED4.Types.Exceptions;
 
 namespace WolvenKit.Common.RED4.Archive

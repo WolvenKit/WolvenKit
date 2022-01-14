@@ -3,14 +3,9 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Runtime.InteropServices;
 using System.Text;
-using WolvenKit.Common.FNV1A;
 using WolvenKit.RED4.Archive.Buffer;
-using WolvenKit.RED4.Archive.CR2W;
 using WolvenKit.RED4.Types;
-using WolvenKit.RED4.Types.Compression;
-using WolvenKit.RED4.Types.Exceptions;
 
 namespace WolvenKit.RED4.Archive.IO
 {
@@ -319,7 +314,7 @@ namespace WolvenKit.RED4.Archive.IO
                 _chunkInfos[chunk].Id = chunkCounter;
                 file.StartChunk(chunk);
                 chunkDesc.Add(WriteChunk(file, chunk));
-                
+
                 var guid = _chunkInfos[chunk].Guid;
                 if (guid != Guid.Empty && file.ChunkReferences.ContainsKey(guid))
                 {
@@ -352,7 +347,7 @@ namespace WolvenKit.RED4.Archive.IO
 
             stringDict.Remove("");
 
-            for (int i = 0; i < chunkDesc.Count; i++)
+            for (var i = 0; i < chunkDesc.Count; i++)
             {
                 var chunkInfo = chunkDesc[i];
                 chunkInfo.typeID = stringDict[chunkClassNames[i]];

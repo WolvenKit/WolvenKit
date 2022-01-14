@@ -8,7 +8,6 @@ using System.Text;
 using WolvenKit.RED4.Archive.Buffer;
 using WolvenKit.RED4.Archive.CR2W;
 using WolvenKit.RED4.Types;
-using WolvenKit.RED4.Types.Compression;
 using WolvenKit.RED4.Types.Exceptions;
 
 namespace WolvenKit.RED4.Archive.IO
@@ -300,7 +299,7 @@ namespace WolvenKit.RED4.Archive.IO
         private CR2WEmbeddedInfo WriteEmbedded(CR2WWriter writer, ICR2WEmbeddedFile embeddedData, IList<(string, CName, ushort)> importsList)
         {
             var importIndex = -1;
-            for (int i = 0; i < importsList.Count; i++)
+            for (var i = 0; i < importsList.Count; i++)
             {
                 if (importsList[i].Item2 == embeddedData.FileName)
                 {
@@ -316,7 +315,7 @@ namespace WolvenKit.RED4.Archive.IO
 
             return new CR2WEmbeddedInfo
             {
-                chunkIndex = (uint)_chunkInfos[(RedBaseClass)embeddedData.Content].Id,
+                chunkIndex = (uint)_chunkInfos[embeddedData.Content].Id,
                 importIndex = (uint)importIndex,
                 pathHash = 0
             };
@@ -397,10 +396,10 @@ namespace WolvenKit.RED4.Archive.IO
 
             var bufferInfoList = new List<CR2WBufferInfo>();
 
-            InternalWriteChunks((RedBaseClass)_file.RootChunk);
+            InternalWriteChunks(_file.RootChunk);
             foreach (var embeddedFile in _file.EmbeddedFiles)
             {
-                InternalWriteChunks((RedBaseClass)embeddedFile.Content);
+                InternalWriteChunks(embeddedFile.Content);
             }
 
             void InternalWriteChunks(RedBaseClass rootChunk)
@@ -458,8 +457,8 @@ namespace WolvenKit.RED4.Archive.IO
             var (stringDict, importDict) = file.GenerateStringDictionary();
             result.StringList = file.StringCacheList.ToList();
             result.ImportList = file.ImportCacheList.ToList();
-            
-            for (int i = 0; i < chunkInfoList.Count; i++)
+
+            for (var i = 0; i < chunkInfoList.Count; i++)
             {
                 var chunkInfo = chunkInfoList[i];
                 chunkInfo.className = stringDict[chunkClassNames[i]];
@@ -473,15 +472,15 @@ namespace WolvenKit.RED4.Archive.IO
 
             foreach (var embeddedFile in _file.EmbeddedFiles)
             {
-                var typeInfo = RedReflection.GetTypeInfo(((RedBaseClass)embeddedFile.Content).GetType());
-                SetParent(_chunkInfos[(RedBaseClass)embeddedFile.Content].Id, maxDepth: typeInfo.ChildLevel);
+                var typeInfo = RedReflection.GetTypeInfo(embeddedFile.Content.GetType());
+                SetParent(_chunkInfos[embeddedFile.Content].Id, maxDepth: typeInfo.ChildLevel);
             }
 
             var ms2 = new MemoryStream();
             var bw = new BinaryWriter(ms2);
 
             var bufferList = file.BufferCacheList.ToList();
-            for (int i = 0; i < bufferList.Count; i++)
+            for (var i = 0; i < bufferList.Count; i++)
             {
                 bufferInfoList.Add(WriteBuffer(bw, bufferList[i]));
             }

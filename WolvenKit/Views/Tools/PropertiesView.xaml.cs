@@ -49,9 +49,9 @@ namespace WolvenKit.Views.Tools
             Helpers.LoadAssimpNativeLibrary();
 
             var assimpWpfImporter = new AssimpWpfImporter();
-            string[] supportedImportFormats = assimpWpfImporter.SupportedImportFormats;
+            var supportedImportFormats = assimpWpfImporter.SupportedImportFormats;
             var assimpWpfExporter = new AssimpWpfExporter();
-            string[] supportedExportFormats = assimpWpfExporter.ExportFormatDescriptions.Select(f => f.FileExtension).ToArray();
+            var supportedExportFormats = assimpWpfExporter.ExportFormatDescriptions.Select(f => f.FileExtension).ToArray();
 
             //var themeResources = Application.LoadComponent(new Uri("Resources/Styles/ExpressionDark.xaml", UriKind.Relative)) as ResourceDictionary;
             //Resources.MergedDictionaries.Add(themeResources);
@@ -128,16 +128,16 @@ namespace WolvenKit.Views.Tools
             return bmp;
         }
 
-        public void LoadImage(BitmapSource qa) => bold.SetCurrentValue(Syncfusion.UI.Xaml.ImageEditor.SfImageEditor.ImageProperty, (System.IO.Stream)StreamFromBitmapSource(qa));
+        public void LoadImage(BitmapSource qa) => bold.SetCurrentValue(Syncfusion.UI.Xaml.ImageEditor.SfImageEditor.ImageProperty, StreamFromBitmapSource(qa));
 
         public void LoadModel(string fileName)
         {
-            bool isNewFile = false;
+            var isNewFile = false;
 
             // Create an instance of AssimpWpfImporter
             var assimpWpfImporter = new AssimpWpfImporter();
 
-            string fileExtension = System.IO.Path.GetExtension(fileName);
+            var fileExtension = System.IO.Path.GetExtension(fileName);
             if (!assimpWpfImporter.IsImportFormatSupported(fileExtension))
             {
                 MessageBox.Show("Assimp does not support importing files file extension: " + fileExtension);
@@ -251,9 +251,13 @@ namespace WolvenKit.Views.Tools
 
                 // If the read model already define some lights, then do not show the Camera's light
                 if (ModelUtils.HasAnyLight(model3D))
+                {
                     Camera1.SetCurrentValue(Ab3d.Cameras.BaseCamera.ShowCameraLightProperty, ShowCameraLightType.Never);
+                }
                 else
+                {
                     Camera1.SetCurrentValue(Ab3d.Cameras.BaseCamera.ShowCameraLightProperty, ShowCameraLightType.Always);
+                }
 
                 ShowInfoButton.SetCurrentValue(IsEnabledProperty, true);
             }
@@ -264,31 +268,43 @@ namespace WolvenKit.Views.Tools
 
         public void LoadButton_OnClick(object sender, RoutedEventArgs e)
         {
-            var openFileDialog = new Microsoft.Win32.OpenFileDialog();
-            openFileDialog.InitialDirectory = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Resources");
+            var openFileDialog = new Microsoft.Win32.OpenFileDialog
+            {
+                InitialDirectory = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Resources"),
 
-            openFileDialog.Filter = "3D model file (*.*)|*.*";
-            openFileDialog.Title = "Open 3D model file file";
+                Filter = "3D model file (*.*)|*.*",
+                Title = "Open 3D model file file"
+            };
 
             if ((openFileDialog.ShowDialog() ?? false) && !string.IsNullOrEmpty(openFileDialog.FileName))
+            {
                 LoadModel(openFileDialog.FileName);
+            }
         }
 
         public void OnShowWireframeCheckBoxCheckedChanged(object sender, RoutedEventArgs e)
         {
-            if (!this.IsLoaded)
+            if (!IsLoaded)
+            {
                 return;
+            }
 
             if (ShowWireframeCheckBox.IsChecked ?? false)
+            {
                 ContentWireframeVisual.SetCurrentValue(WireframeVisual3D.WireframeTypeProperty, WireframeVisual3D.WireframeTypes.Wireframe);
+            }
             else
+            {
                 ContentWireframeVisual.SetCurrentValue(WireframeVisual3D.WireframeTypeProperty, WireframeVisual3D.WireframeTypes.None);
+            }
         }
 
         public void OnAddLineDepthBiasCheckBoxCheckedChanged(object sender, RoutedEventArgs e)
         {
             if (ContentWireframeVisual == null || ContentWireframeVisual.OriginalModel == null)
+            {
                 return;
+            }
 
             double depthBiasValue;
             if (AddLineDepthBiasCheckBox.IsChecked ?? false)
@@ -316,10 +332,14 @@ namespace WolvenKit.Views.Tools
         public void OnReadPolygonIndicesCheckBoxCheckedChanged(object sender, RoutedEventArgs e)
         {
             if (_fileName == null)
+            {
                 return;
+            }
 
             if ((ReadPolygonIndicesCheckBox.IsChecked ?? false) && !(ShowWireframeCheckBox.IsChecked ?? false))
+            {
                 ShowWireframeCheckBox.SetCurrentValue(System.Windows.Controls.Primitives.ToggleButton.IsCheckedProperty, true); // Turn on showing wireframe if it was off and if ReadPolygonIndicesCheckBox is checked
+            }
 
             // Read file again
             LoadModel(_fileName);
@@ -330,9 +350,11 @@ namespace WolvenKit.Views.Tools
             var shownModel = ContentVisual.Content;
 
             if (shownModel == null)
+            {
                 return;
+            }
 
-            string objectInfo = Ab3d.Utilities.Dumper.GetObjectHierarchyString(shownModel);
+            var objectInfo = Ab3d.Utilities.Dumper.GetObjectHierarchyString(shownModel);
 
             var textBox = new TextBox()
             {
@@ -454,7 +476,7 @@ namespace WolvenKit.Views.Tools
         /// <param name="path"></param>
         public void TempConvertToWemWav(string path)
         {
-            string ManagerCacheDir = Path.Combine(ISettingsManager.GetTemp_AudioPath());
+            var ManagerCacheDir = Path.Combine(ISettingsManager.GetTemp_AudioPath());
 
             //Clean directory
             Directory.CreateDirectory(ManagerCacheDir);
@@ -494,13 +516,15 @@ namespace WolvenKit.Views.Tools
 
             mediaPlayer.Open(new Uri(outf));
 
-            DispatcherTimer timer = new DispatcherTimer();
-            timer.Interval = TimeSpan.FromSeconds(1);
+            var timer = new DispatcherTimer
+            {
+                Interval = TimeSpan.FromSeconds(1)
+            };
             timer.Tick += Timer_Tick;
 
             timer.Start();
 
-            DispatcherTimer ChannelPositionTimer = new DispatcherTimer
+            var ChannelPositionTimer = new DispatcherTimer
             {
                 Interval = TimeSpan.FromMilliseconds(1)
             };
@@ -512,11 +536,11 @@ namespace WolvenKit.Views.Tools
             //ChannelLength = $"{mediaPlayer.Position.TotalMinutes} : {mediaPlayer.Position.TotalSeconds} : {mediaPlayer.Position.TotalMilliseconds}";
             NAudioSimpleEngine.Instance.OpenFile(outf);
             RunnerText.SetCurrentValue(ContentProperty, Path.GetFileNameWithoutExtension(outf));
-            
+
 
             //AudioFileList.Add(lvi);
         }
-        
+
 
         /// <summary>
         /// property changed for naudio
@@ -549,10 +573,7 @@ namespace WolvenKit.Views.Tools
             }
         }
 
-        private void ChannelPositionTimer_Tick(object sender, EventArgs e)
-        {
-            NAudioSimpleEngine.Instance.ChannelPosition = mediaPlayer.Position.TotalSeconds;
-        }
+        private void ChannelPositionTimer_Tick(object sender, EventArgs e) => NAudioSimpleEngine.Instance.ChannelPosition = mediaPlayer.Position.TotalSeconds;
 
         private void PlayButton_Click_1(object sender, RoutedEventArgs e)
         {
@@ -566,10 +587,7 @@ namespace WolvenKit.Views.Tools
             mediaPlayer.Play();
         }
 
-        private void PauseButton_Click_1(object sender, RoutedEventArgs e)
-        {
-            mediaPlayer.Pause();
-        }
+        private void PauseButton_Click_1(object sender, RoutedEventArgs e) => mediaPlayer.Pause();
 
         private void StopButton_Click_1(object sender, RoutedEventArgs e)
         {
@@ -579,9 +597,6 @@ namespace WolvenKit.Views.Tools
 
         #endregion AudioPreview
 
-        private void CopyMenuItem_Click(object sender, RoutedEventArgs e)
-        {
-            Clipboard.SetText((DataContext as PropertiesViewModel).PE_SelectedItem.FullName);
-        }
+        private void CopyMenuItem_Click(object sender, RoutedEventArgs e) => Clipboard.SetText((DataContext as PropertiesViewModel).PE_SelectedItem.FullName);
     }
 }

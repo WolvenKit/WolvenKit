@@ -33,9 +33,9 @@ namespace RED.CRC32
 
         public uint Append(uint crc, byte[] input, int offset, int length)
         {
-            uint crcLocal = uint.MaxValue ^ crc;
+            var crcLocal = uint.MaxValue ^ crc;
 
-            uint[] table = _table;
+            var table = _table;
             while (length >= 16)
             {
                 var a = table[(3 * 256) + input[offset + 12]]
@@ -64,7 +64,9 @@ namespace RED.CRC32
             }
 
             while (--length >= 0)
+            {
                 crcLocal = table[(byte)(crcLocal ^ input[offset++])] ^ crcLocal >> 8;
+            }
 
             return crcLocal ^ uint.MaxValue;
         }
@@ -74,11 +76,14 @@ namespace RED.CRC32
             var table = _table;
             for (uint i = 0; i < 256; i++)
             {
-                uint res = i;
-                for (int t = 0; t < 16; t++)
+                var res = i;
+                for (var t = 0; t < 16; t++)
                 {
-                    for (int k = 0; k < 8; k++)
+                    for (var k = 0; k < 8; k++)
+                    {
                         res = (res & 1) == 1 ? poly ^ (res >> 1) : (res >> 1);
+                    }
+
                     table[(t * 256) + i] = res;
                 }
             }

@@ -1,32 +1,28 @@
 using System;
-using System.Linq;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.IO;
-using System.Reactive;
+using System.Linq;
+using System.Reactive.Disposables;
+using System.Reactive.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
-using System.Windows.Controls.Primitives;
 using HandyControl.Data;
 using ReactiveUI;
-using System.Reactive.Disposables;
-using System.Reactive.Linq;
 using Splat;
 using Syncfusion.UI.Xaml.Grid;
 using Syncfusion.UI.Xaml.ScrollAxis;
 using Syncfusion.UI.Xaml.TreeGrid;
 using WolvenKit.Functionality.Helpers;
 using WolvenKit.Functionality.Services;
-using WolvenKit.Functionality.WKitGlobal.Helpers;
 using WolvenKit.Interaction;
 using WolvenKit.Models;
-using WolvenKit.ViewModels.Dialogs;
-using WolvenKit.ViewModels.Wizards;
-using WolvenKit.Views.Dialogs;
-using WolvenKit.ViewModels.Tools;
-using System.Collections.ObjectModel;
 using WolvenKit.MVVM.Model.ProjectManagement.Project;
+using WolvenKit.ViewModels.Dialogs;
+using WolvenKit.ViewModels.Tools;
+using WolvenKit.Views.Dialogs;
 
 namespace WolvenKit.Views.Tools
 {
@@ -75,7 +71,7 @@ namespace WolvenKit.Views.Tools
                         {
                             interaction.SetOutput(false);
                         }
-                        
+
                     });
                 Interactions.Rename.RegisterHandler(
                     interaction =>
@@ -84,7 +80,7 @@ namespace WolvenKit.Views.Tools
                         var vm = Locator.Current.GetService<RenameDialogViewModel>();
                         vm.Text = interaction.Input;
                         dialog.ViewModel.HostedViewModel = vm;
-                        
+
 
                         return Observable.Start(() =>
                         {
@@ -94,7 +90,7 @@ namespace WolvenKit.Views.Tools
                             if (dialog.ShowDialog() == true)
                             {
                                 var innerVm = (RenameDialogViewModel)dialog.ViewModel.HostedViewModel;
-                                
+
                                 result = innerVm.Text;
                             }
 
@@ -160,12 +156,12 @@ namespace WolvenKit.Views.Tools
                     if (viewModel.LastSelected != null)
                     {
                         TreeGrid.ExpandAllNodes();
-                        var rowIndex = this.TreeGrid.ResolveToRowIndex(viewModel.LastSelected);
+                        var rowIndex = TreeGrid.ResolveToRowIndex(viewModel.LastSelected);
                         if (rowIndex > -1)
                         {
                             var q = TreeGrid.ResolveToRowIndex(rowIndex - 1);
-                            var columnIndex = this.TreeGrid.ResolveToStartColumnIndex();
-                            this.TreeGrid.ScrollInView(new RowColumnIndex(q, columnIndex));
+                            var columnIndex = TreeGrid.ResolveToStartColumnIndex();
+                            TreeGrid.ScrollInView(new RowColumnIndex(q, columnIndex));
                             TreeGrid.SelectRows(q, q);
                         }
                     }
@@ -191,12 +187,12 @@ namespace WolvenKit.Views.Tools
                 {
                     if (viewModel.LastSelected != null)
                     {
-                        var rowIndex = this.TreeGridFlat.ResolveToRowIndex(viewModel.LastSelected);
+                        var rowIndex = TreeGridFlat.ResolveToRowIndex(viewModel.LastSelected);
                         if (rowIndex > -1)
                         {
                             var q = TreeGridFlat.ResolveToRowIndex(rowIndex - 1);
-                            var columnIndex = this.TreeGridFlat.ResolveToStartColumnIndex();
-                            this.TreeGridFlat.ScrollInView(new RowColumnIndex(q, columnIndex));
+                            var columnIndex = TreeGridFlat.ResolveToStartColumnIndex();
+                            TreeGridFlat.ScrollInView(new RowColumnIndex(q, columnIndex));
                             TreeGridFlat.SelectRows(q, q);
                         }
                     }
@@ -213,17 +209,29 @@ namespace WolvenKit.Views.Tools
             {
                 includeFile = true;
                 if (tabControl.SelectedIndex == 0)
+                {
                     includeFile &= fm.FullName.StartsWith((fm.Project as Cp77Project).FileDirectory);
+                }
                 else if (tabControl.SelectedIndex == 1)
+                {
                     includeFile &= fm.FullName.StartsWith((fm.Project as Cp77Project).ModDirectory);
+                }
                 else if (tabControl.SelectedIndex == 2)
+                {
                     includeFile &= fm.FullName.ToLower().StartsWith((fm.Project as Cp77Project).RawDirectory.ToLower());
+                }
                 else if (tabControl.SelectedIndex == 3)
+                {
                     includeFile &= fm.FullName.StartsWith((fm.Project as Cp77Project).ScriptDirectory);
+                }
                 else if (tabControl.SelectedIndex == 4)
+                {
                     includeFile &= fm.FullName.StartsWith((fm.Project as Cp77Project).TweakDirectory);
+                }
                 else if (tabControl.SelectedIndex == 5)
+                {
                     includeFile &= fm.FullName.StartsWith((fm.Project as Cp77Project).PackedRootDirectory);
+                }
 
                 //if (ViewModel != null && ViewModel.IsFlatModeEnabled)
                 //    includeFile &= !fm.IsDirectory;
@@ -278,55 +286,7 @@ namespace WolvenKit.Views.Tools
 #pragma warning disable 1998
 
 
-        private async Task<bool> DisplayModSortDialog(IEnumerable<string> input)
-#pragma warning restore 1998
-        {
-
-            return false;
-
-
-            //var inputDialog = new PackageResolverView(new PackageResolverViewModel(input))
-            //{
-            //    Owner = Application.Current.MainWindow
-            //};
-            //this.Overlay.Opacity = 0.5;
-            //this.Overlay.Background = new SolidColorBrush(Colors.White);
-
-            //var output = new Dictionary<string, string>();
-            //if (inputDialog.ShowDialog() == true)
-            //{
-            //    output = inputDialog.GetOutput().ToDictionary(_ => _.Name, _ => _.ComputedFullName);
-            //}
-
-            //this.Overlay.Opacity = 1;
-            //this.Overlay.Background = new SolidColorBrush(Colors.Transparent);
-
-            //return new ZipModifyArgs(output);
-
-
-            //var visualizerService = ServiceLocator.Default.ResolveType<IUIVisualizerService>();
-            //var viewModel = new InputDialogViewModel() { Text = SelectedItem.Name };
-            //await visualizerService.ShowDialogAsync(viewModel, delegate (object sender, UICompletedEventArgs args)
-            //{
-            //    if (args.Result != true)
-            //    {
-            //        return;
-            //    }
-
-            //    if (args.DataContext is not Dialogs.InputDialogViewModel vm)
-            //    {
-            //        return;
-            //    }
-
-
-
-            //    finally
-            //    {
-            //        SelectedItem.RaiseRequestRefresh();
-            //    }
-            //});
-
-        }
+        private async Task<bool> DisplayModSortDialog(IEnumerable<string> input) => false;//var inputDialog = new PackageResolverView(new PackageResolverViewModel(input))//{//    Owner = Application.Current.MainWindow//};//this.Overlay.Opacity = 0.5;//this.Overlay.Background = new SolidColorBrush(Colors.White);//var output = new Dictionary<string, string>();//if (inputDialog.ShowDialog() == true)//{//    output = inputDialog.GetOutput().ToDictionary(_ => _.Name, _ => _.ComputedFullName);//}//this.Overlay.Opacity = 1;//this.Overlay.Background = new SolidColorBrush(Colors.Transparent);//return new ZipModifyArgs(output);//var visualizerService = ServiceLocator.Default.ResolveType<IUIVisualizerService>();//var viewModel = new InputDialogViewModel() { Text = SelectedItem.Name };//await visualizerService.ShowDialogAsync(viewModel, delegate (object sender, UICompletedEventArgs args)//{//    if (args.Result != true)//    {//        return;//    }//    if (args.DataContext is not Dialogs.InputDialogViewModel vm)//    {//        return;//    }//    finally//    {//        SelectedItem.RaiseRequestRefresh();//    }//});
 
         //private void View_NodeCollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         //{
@@ -452,7 +412,7 @@ namespace WolvenKit.Views.Tools
                         {
                             e.ShowDragUI = true;
                             e.Handled = false;
-                        } 
+                        }
                     }
                 }
             }
@@ -486,7 +446,9 @@ namespace WolvenKit.Views.Tools
                     var treeNodes = e.Data.GetData("Nodes") as ObservableCollection<TreeNode>;
 
                     if (treeNodes.Count == 0 || treeNodes == null)
+                    {
                         return;
+                    }
 
                     if (e.TargetNode.Item is FileModel targetFile)
                     {
@@ -517,27 +479,21 @@ namespace WolvenKit.Views.Tools
 
         }
 
-        public bool IsControlBeingHeld
-        {
-            get
-            {
-                return Keyboard.IsKeyDown(Key.LeftCtrl) || Keyboard.IsKeyDown(Key.RightCtrl);
-            }
-        }
+        public bool IsControlBeingHeld => Keyboard.IsKeyDown(Key.LeftCtrl) || Keyboard.IsKeyDown(Key.RightCtrl);
 
         private void ProcessFileAction(List<string> sourceFiles, string targetDirectory, bool onlyCopy)
         {
-            foreach (string sourceFile in sourceFiles)
+            foreach (var sourceFile in sourceFiles)
             {
                 var newFile = Path.Combine(targetDirectory, Path.GetFileName(sourceFile));
                 if (File.GetAttributes(sourceFile).HasFlag(FileAttributes.Directory))
                 {
-                    foreach (string dirPath in Directory.GetDirectories(sourceFile, "*", SearchOption.AllDirectories))
+                    foreach (var dirPath in Directory.GetDirectories(sourceFile, "*", SearchOption.AllDirectories))
                     {
                         Directory.CreateDirectory(dirPath.Replace(sourceFile, newFile));
                     }
 
-                    foreach (string newPath in Directory.GetFiles(sourceFile, "*.*", SearchOption.AllDirectories))
+                    foreach (var newPath in Directory.GetFiles(sourceFile, "*.*", SearchOption.AllDirectories))
                     {
                         File.Copy(newPath, newPath.Replace(sourceFile, newFile), true);
                     }
@@ -574,7 +530,7 @@ namespace WolvenKit.Views.Tools
 
             if (e.ChangedButton == MouseButton.Left && e.ClickCount == 2)
             {
-                SfTreeGrid dg = sender as SfTreeGrid;
+                var dg = sender as SfTreeGrid;
                 if (dg.SelectedItem == null)
                 {
                     return;

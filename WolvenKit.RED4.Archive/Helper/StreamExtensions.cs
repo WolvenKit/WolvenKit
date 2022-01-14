@@ -16,7 +16,9 @@ namespace WolvenKit.RED4.Archive
             var item = Marshal.PtrToStructure<T>(handle.AddrOfPinnedObject());
 
             if (crc32 != null)
+            {
                 crc32.Append(m_temp);
+            }
 
             handle.Free();
 
@@ -32,7 +34,9 @@ namespace WolvenKit.RED4.Archive
             m_stream.Write(m_temp, 0, m_temp.Length);
 
             if (crc32 != null)
+            {
                 crc32.Append(m_temp);
+            }
 
             handle.Free();
         }
@@ -51,7 +55,9 @@ namespace WolvenKit.RED4.Archive
                 items[i] = Marshal.PtrToStructure<T>(handle.AddrOfPinnedObject());
 
                 if (crc32 != null)
+                {
                     crc32.Append(m_temp);
+                }
 
                 handle.Free();
             }
@@ -63,7 +69,7 @@ namespace WolvenKit.RED4.Archive
         {
             var size = Marshal.SizeOf<T>();
             var m_temp = new byte[size];
-            for (int i = 0; i < array.Length; i++)
+            for (var i = 0; i < array.Length; i++)
             {
                 var handle = GCHandle.Alloc(m_temp, GCHandleType.Pinned);
 
@@ -71,7 +77,9 @@ namespace WolvenKit.RED4.Archive
                 m_stream.Write(m_temp, 0, m_temp.Length);
 
                 if (crc32 != null)
+                {
                     crc32.Append(m_temp);
+                }
 
                 handle.Free();
             }

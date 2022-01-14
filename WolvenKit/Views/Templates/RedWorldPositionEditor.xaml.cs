@@ -1,4 +1,3 @@
-using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -18,24 +17,24 @@ namespace WolvenKit.Views.Editors
 
         public FixedPoint X
         {
-            get => (FixedPoint)this.GetValue(XProperty);
-            set => this.SetValue(XProperty, value);
+            get => (FixedPoint)GetValue(XProperty);
+            set => SetValue(XProperty, value);
         }
         public static readonly DependencyProperty XProperty = DependencyProperty.Register(
             nameof(X), typeof(FixedPoint), typeof(RedWorldPositionEditor), new PropertyMetadata(default(FixedPoint)));
 
         public FixedPoint Y
         {
-            get => (FixedPoint)this.GetValue(YProperty);
-            set => this.SetValue(YProperty, value);
+            get => (FixedPoint)GetValue(YProperty);
+            set => SetValue(YProperty, value);
         }
         public static readonly DependencyProperty YProperty = DependencyProperty.Register(
             nameof(Y), typeof(FixedPoint), typeof(RedWorldPositionEditor), new PropertyMetadata(default(FixedPoint)));
 
         public FixedPoint Z
         {
-            get => (FixedPoint)this.GetValue(ZProperty);
-            set => this.SetValue(ZProperty, value);
+            get => (FixedPoint)GetValue(ZProperty);
+            set => SetValue(ZProperty, value);
         }
         public static readonly DependencyProperty ZProperty = DependencyProperty.Register(
             nameof(Z), typeof(FixedPoint), typeof(RedWorldPositionEditor), new PropertyMetadata(default(FixedPoint)));
@@ -67,10 +66,7 @@ namespace WolvenKit.Views.Editors
         private string GetValueFromZValue() => ((float)Z).ToString("R");
 
 
-        private void NumberValidationTextBox(object sender, TextCompositionEventArgs e)
-        {
-            e.Handled = float.TryParse(e.Text, out var _);
-        }
+        private void NumberValidationTextBox(object sender, TextCompositionEventArgs e) => e.Handled = float.TryParse(e.Text, out var _);
 
     }
 }

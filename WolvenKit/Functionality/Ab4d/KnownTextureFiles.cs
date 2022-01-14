@@ -42,22 +42,24 @@ namespace WolvenKit.Functionality.Ab4d
         {
             // Based on https://help.sketchfab.com/hc/en-us/articles/202600873-Materials-and-Textures
 
-            TextureFiles = new List<KnownTextureFile>();
-            TextureFiles.Add(new KnownTextureFile(TextureMapTypes.DiffuseColor, "color, diffuse"));
-            TextureFiles.Add(new KnownTextureFile(TextureMapTypes.Albedo, "albedo"));
-            TextureFiles.Add(new KnownTextureFile(TextureMapTypes.BaseColor, "basecolor"));
-            TextureFiles.Add(new KnownTextureFile(TextureMapTypes.Metalness, "metalness, metallic, metal, m"));
-            TextureFiles.Add(new KnownTextureFile(TextureMapTypes.SpecularColor, "specular, spec, s"));
-            TextureFiles.Add(new KnownTextureFile(TextureMapTypes.SpecularF0, "specularf0, f0"));
-            TextureFiles.Add(new KnownTextureFile(TextureMapTypes.Roughness, "roughness, rough, r"));
-            TextureFiles.Add(new KnownTextureFile(TextureMapTypes.MetalnessRoughness, "metalnessroughness"));
-            TextureFiles.Add(new KnownTextureFile(TextureMapTypes.Glossiness, "glossiness, glossness, gloss, g, glossy"));
-            TextureFiles.Add(new KnownTextureFile(TextureMapTypes.AmbientOcclusion, "ambientocclusion, ambient occlusion, ao, occlusion, lightmap, diffuseintensity"));
-            TextureFiles.Add(new KnownTextureFile(TextureMapTypes.Cavity, "cavity"));
-            TextureFiles.Add(new KnownTextureFile(TextureMapTypes.NormalMap, "normal, nrm, nmap, normalmap"));
-            TextureFiles.Add(new KnownTextureFile(TextureMapTypes.Emissive, "emission, emit, emissive"));
-            TextureFiles.Add(new KnownTextureFile(TextureMapTypes.Transparency, "transparency, transparent, opacity, mask, alpha"));
-            TextureFiles.Add(new KnownTextureFile(TextureMapTypes.ReflectionMap, "reflection, reflect"));
+            TextureFiles = new List<KnownTextureFile>
+            {
+                new KnownTextureFile(TextureMapTypes.DiffuseColor, "color, diffuse"),
+                new KnownTextureFile(TextureMapTypes.Albedo, "albedo"),
+                new KnownTextureFile(TextureMapTypes.BaseColor, "basecolor"),
+                new KnownTextureFile(TextureMapTypes.Metalness, "metalness, metallic, metal, m"),
+                new KnownTextureFile(TextureMapTypes.SpecularColor, "specular, spec, s"),
+                new KnownTextureFile(TextureMapTypes.SpecularF0, "specularf0, f0"),
+                new KnownTextureFile(TextureMapTypes.Roughness, "roughness, rough, r"),
+                new KnownTextureFile(TextureMapTypes.MetalnessRoughness, "metalnessroughness"),
+                new KnownTextureFile(TextureMapTypes.Glossiness, "glossiness, glossness, gloss, g, glossy"),
+                new KnownTextureFile(TextureMapTypes.AmbientOcclusion, "ambientocclusion, ambient occlusion, ao, occlusion, lightmap, diffuseintensity"),
+                new KnownTextureFile(TextureMapTypes.Cavity, "cavity"),
+                new KnownTextureFile(TextureMapTypes.NormalMap, "normal, nrm, nmap, normalmap"),
+                new KnownTextureFile(TextureMapTypes.Emissive, "emission, emit, emissive"),
+                new KnownTextureFile(TextureMapTypes.Transparency, "transparency, transparent, opacity, mask, alpha"),
+                new KnownTextureFile(TextureMapTypes.ReflectionMap, "reflection, reflect")
+            };
         }
 
 
@@ -68,26 +70,34 @@ namespace WolvenKit.Functionality.Ab4d
         // Returns TextureMapTypes.Unknown when texture type cannot be determined
         public static TextureMapTypes GetTextureType(string fileName)
         {
-            string rawFileName = System.IO.Path.GetFileNameWithoutExtension(fileName);
+            var rawFileName = System.IO.Path.GetFileNameWithoutExtension(fileName);
 
             if (string.IsNullOrEmpty(rawFileName))
+            {
                 return TextureMapTypes.Unknown;
+            }
 
-            int pos1 = rawFileName.LastIndexOf('_');
-            int pos2 = rawFileName.LastIndexOf('-');
+            var pos1 = rawFileName.LastIndexOf('_');
+            var pos2 = rawFileName.LastIndexOf('-');
 
             if (pos2 > pos1)
+            {
                 pos1 = pos2;
+            }
 
             if (pos1 == -1)
+            {
                 return TextureMapTypes.Unknown;
+            }
 
-            string fileSuffix = rawFileName.Substring(pos1 + 1).ToLower();
+            var fileSuffix = rawFileName.Substring(pos1 + 1).ToLower();
 
             for (var i = 0; i < TextureFiles.Count; i++)
             {
                 if (TextureFiles[i].FileSuffixes.Contains(fileSuffix))
+                {
                     return TextureFiles[i].TextureMapType;
+                }
             }
 
             return TextureMapTypes.Unknown;
@@ -95,19 +105,25 @@ namespace WolvenKit.Functionality.Ab4d
 
         public static string GetFileNameWithoutKnownSuffix(string fileName)
         {
-            string rawFileName = System.IO.Path.GetFileNameWithoutExtension(fileName);
+            var rawFileName = System.IO.Path.GetFileNameWithoutExtension(fileName);
 
             if (string.IsNullOrEmpty(rawFileName))
+            {
                 return rawFileName;
+            }
 
-            int pos1 = rawFileName.LastIndexOf('_');
-            int pos2 = rawFileName.LastIndexOf('-');
+            var pos1 = rawFileName.LastIndexOf('_');
+            var pos2 = rawFileName.LastIndexOf('-');
 
             if (pos2 > pos1)
+            {
                 pos1 = pos2;
+            }
 
             if (pos1 == -1)
+            {
                 return rawFileName;
+            }
 
             return rawFileName.Substring(0, pos1);
         }

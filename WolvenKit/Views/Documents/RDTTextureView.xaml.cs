@@ -1,17 +1,9 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using ReactiveUI;
 using Splat;
 using WolvenKit.Common.Services;
@@ -39,14 +31,14 @@ namespace WolvenKit.Views.Documents
 
         private void SetupImagePreview()
         {
-            TransformGroup group = new TransformGroup();
+            var group = new TransformGroup();
 
 
-            ScaleTransform xform = new ScaleTransform();
+            var xform = new ScaleTransform();
             //xform.ScaleY = -1;
             group.Children.Add(xform);
 
-            TranslateTransform tt = new TranslateTransform();
+            var tt = new TranslateTransform();
             group.Children.Add(tt);
 
             //TranslateTransform zoomCenter = new TranslateTransform();
@@ -68,15 +60,9 @@ namespace WolvenKit.Views.Documents
             ActualImage.SetCurrentValue(RenderTransformProperty, _imageScale);
         }
 
-        private void ImageDropZone_DragEnter(object sender, DragEventArgs e)
-        {
-            ViewModel.IsDragging = true;
-        }
+        private void ImageDropZone_DragEnter(object sender, DragEventArgs e) => ViewModel.IsDragging = true;
 
-        private void ImageDropZone_DragLeave(object sender, DragEventArgs e)
-        {
-            ViewModel.IsDragging = false;
-        }
+        private void ImageDropZone_DragLeave(object sender, DragEventArgs e) => ViewModel.IsDragging = false;
 
         private void ImageDropZone_Drop(object sender, DragEventArgs e)
         {
@@ -129,7 +115,7 @@ namespace WolvenKit.Views.Documents
             {
                 ImagePreviewCanvas.ReleaseMouseCapture();
                 ImagePreviewCanvas.SetCurrentValue(CursorProperty, Cursors.Arrow);
-                TranslateTransform tt = (TranslateTransform)((TransformGroup)ImagePreview.RenderTransform).Children[1];
+                var tt = (TranslateTransform)((TransformGroup)ImagePreview.RenderTransform).Children[1];
                 end = new System.Windows.Point(tt.X, tt.Y);
             }
         }
@@ -137,10 +123,12 @@ namespace WolvenKit.Views.Documents
         private void ImagePreview_MouseMove(object sender, MouseEventArgs e)
         {
             if (!ImagePreviewCanvas.IsMouseCaptured)
+            {
                 return;
+            }
 
-            TranslateTransform tt = (TranslateTransform)((TransformGroup)ImagePreview.RenderTransform).Children[1];
-            Vector v = start - Mouse.GetPosition(ImagePreviewCanvas);
+            var tt = (TranslateTransform)((TransformGroup)ImagePreview.RenderTransform).Children[1];
+            var v = start - Mouse.GetPosition(ImagePreviewCanvas);
             tt.X = origin.X - v.X;
             tt.Y = origin.Y - v.Y;
         }
@@ -153,7 +141,7 @@ namespace WolvenKit.Views.Documents
             {
                 ImagePreviewCanvas.CaptureMouse();
                 // resets when children are hittble? idk
-                TranslateTransform tt = (TranslateTransform)((TransformGroup)ImagePreview.RenderTransform).Children[1];
+                var tt = (TranslateTransform)((TransformGroup)ImagePreview.RenderTransform).Children[1];
                 origin = end;
                 tt.X = origin.X;
                 tt.Y = origin.Y;
@@ -163,11 +151,11 @@ namespace WolvenKit.Views.Documents
 
         private void ImagePreview_MouseWheel(object sender, MouseWheelEventArgs e)
         {
-            TransformGroup transformGroup = (TransformGroup)ImagePreview.RenderTransform;
-            ScaleTransform transform = (ScaleTransform)transformGroup.Children[0];
-            TranslateTransform pan = (TranslateTransform)transformGroup.Children[1];
+            var transformGroup = (TransformGroup)ImagePreview.RenderTransform;
+            var transform = (ScaleTransform)transformGroup.Children[0];
+            var pan = (TranslateTransform)transformGroup.Children[1];
 
-            double zoom = e.Delta > 0 ? 1.2 : (1 / 1.2);
+            var zoom = e.Delta > 0 ? 1.2 : (1 / 1.2);
 
             var CursorPosCanvas = e.GetPosition(ImagePreviewCanvas);
             pan.X += -(CursorPosCanvas.X - ImagePreviewCanvas.RenderSize.Width / 2.0 - pan.X) * (zoom - 1.0);
@@ -182,9 +170,9 @@ namespace WolvenKit.Views.Documents
 
         public void SetRealPixelZoom(object sender, RoutedEventArgs e)
         {
-            TransformGroup transformGroup = (TransformGroup)ImagePreview.RenderTransform;
-            ScaleTransform transform = (ScaleTransform)transformGroup.Children[0];
-            TranslateTransform pan = (TranslateTransform)transformGroup.Children[1];
+            var transformGroup = (TransformGroup)ImagePreview.RenderTransform;
+            var transform = (ScaleTransform)transformGroup.Children[0];
+            var pan = (TranslateTransform)transformGroup.Children[1];
 
             //double zoom = ViewModel.Image.Width / ImagePreview.RenderSize.Width;
             //double zoomQuot = zoom / transform.ScaleX;
@@ -206,9 +194,9 @@ namespace WolvenKit.Views.Documents
 
         public void ResetZoomPan(object sender, RoutedEventArgs e)
         {
-            TransformGroup transformGroup = (TransformGroup)ImagePreview.RenderTransform;
-            ScaleTransform transform = (ScaleTransform)transformGroup.Children[0];
-            TranslateTransform pan = (TranslateTransform)transformGroup.Children[1];
+            var transformGroup = (TransformGroup)ImagePreview.RenderTransform;
+            var transform = (ScaleTransform)transformGroup.Children[0];
+            var pan = (TranslateTransform)transformGroup.Children[1];
 
             transform.ScaleX = 1;
             transform.ScaleY = 1;

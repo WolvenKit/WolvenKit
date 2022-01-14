@@ -18,14 +18,8 @@ namespace WolvenKit.Functionality.Ab4d
         /// </summary>
         public object InfoText
         {
-            get
-            {
-                return (object)base.GetValue(InfoTextProperty);
-            }
-            set
-            {
-                base.SetValue(InfoTextProperty, value);
-            }
+            get => base.GetValue(InfoTextProperty);
+            set => base.SetValue(InfoTextProperty, value);
         }
 
         private static void OnInfoTextChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
@@ -54,14 +48,8 @@ namespace WolvenKit.Functionality.Ab4d
         /// </summary>
         public double InfoWidth
         {
-            get
-            {
-                return (double)base.GetValue(InfoWidthProperty);
-            }
-            set
-            {
-                base.SetValue(InfoWidthProperty, value);
-            }
+            get => (double)base.GetValue(InfoWidthProperty);
+            set => base.SetValue(InfoWidthProperty, value);
         }
 
         private static void OnInfoWidthChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
@@ -70,7 +58,9 @@ namespace WolvenKit.Functionality.Ab4d
             var newWidth = (double)e.NewValue;
 
             if (newWidth == 0)
+            {
                 newWidth = double.NaN;
+            }
 
             thisInfoControl._tooltipTextBlock.SetCurrentValue(WidthProperty, newWidth);
         }
@@ -85,14 +75,8 @@ namespace WolvenKit.Functionality.Ab4d
         /// </summary>
         public int ShowDuration
         {
-            get
-            {
-                return (int)base.GetValue(ShowDurationProperty);
-            }
-            set
-            {
-                base.SetValue(ShowDurationProperty, value);
-            }
+            get => (int)base.GetValue(ShowDurationProperty);
+            set => base.SetValue(ShowDurationProperty, value);
         }
 
         private static void OnShowDurationChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
@@ -118,8 +102,8 @@ namespace WolvenKit.Functionality.Ab4d
         /// </summary>
         public Brush EllipseFillBrush
         {
-            get { return BackGroundEllipse.Fill; }
-            set { BackGroundEllipse.SetValue(Shape.FillProperty, value); }
+            get => BackGroundEllipse.Fill;
+            set => BackGroundEllipse.SetValue(Shape.FillProperty, value);
         }
 
         /// <summary>
@@ -127,8 +111,8 @@ namespace WolvenKit.Functionality.Ab4d
         /// </summary>
         public Brush QuestionCharacterForeground
         {
-            get { return QuestionTextBlock.Foreground; }
-            set { QuestionTextBlock.SetValue(TextBlock.ForegroundProperty, value); }
+            get => QuestionTextBlock.Foreground;
+            set => QuestionTextBlock.SetValue(TextBlock.ForegroundProperty, value);
         }
 
         /// <summary>
@@ -136,8 +120,8 @@ namespace WolvenKit.Functionality.Ab4d
         /// </summary>
         public double QuestionCharacterFontSize
         {
-            get { return QuestionTextBlock.FontSize; }
-            set { QuestionTextBlock.SetValue(TextBlock.FontSizeProperty, value); }
+            get => QuestionTextBlock.FontSize;
+            set => QuestionTextBlock.SetValue(TextBlock.FontSizeProperty, value);
         }
 
 
@@ -150,9 +134,9 @@ namespace WolvenKit.Functionality.Ab4d
 
         public InfoControl()
         {
-            this.Width = 12;
-            this.Height = 12;
-            this.VerticalAlignment = VerticalAlignment.Center;
+            Width = 12;
+            Height = 12;
+            VerticalAlignment = VerticalAlignment.Center;
 
             BackGroundEllipse = new Ellipse()
             {
@@ -172,14 +156,16 @@ namespace WolvenKit.Functionality.Ab4d
                 HorizontalAlignment = HorizontalAlignment.Center,
             };
 
-            this.Children.Add(BackGroundEllipse);
-            this.Children.Add(QuestionTextBlock);
+            Children.Add(BackGroundEllipse);
+            Children.Add(QuestionTextBlock);
 
 
-            _tooltipTextBlock = new TextBlock();
-            _tooltipTextBlock.TextWrapping = TextWrapping.Wrap;
+            _tooltipTextBlock = new TextBlock
+            {
+                TextWrapping = TextWrapping.Wrap
+            };
 
-            this.Loaded += (sender, args) => ToolTipService.SetShowDuration(this, this.ShowDuration);
+            Loaded += (sender, args) => ToolTipService.SetShowDuration(this, ShowDuration);
         }
     }
 }

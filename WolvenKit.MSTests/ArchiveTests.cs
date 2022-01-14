@@ -1,9 +1,6 @@
 using System;
-using System.Collections.Concurrent;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Newtonsoft.Json;
 using ProtoBuf;
@@ -113,7 +110,7 @@ namespace WolvenKit.MSTests
             Assert.AreEqual(x.GetGroupedFiles().Count(), s_bm.GetGroupedFiles().Count());
         }
 
-        
+
 
         #endregion Methods
     }

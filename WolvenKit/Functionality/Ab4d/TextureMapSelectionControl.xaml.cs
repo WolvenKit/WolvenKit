@@ -36,20 +36,22 @@ namespace WolvenKit.Functionality.Ab4d
 
         public bool ShowTextureTextBox
         {
-            get { return _showTextureTextBox; }
+            get => _showTextureTextBox;
             set
             {
                 _showTextureTextBox = value;
                 TextureGrid.SetCurrentValue(VisibilityProperty, value ? Visibility.Visible : Visibility.Hidden);
 
                 if (!value)
+                {
                     TextureCheckBox.SetCurrentValue(System.Windows.Controls.Primitives.ToggleButton.IsCheckedProperty, false);
+                }
             }
         }
 
         public bool ShowFilter
         {
-            get { return _showFilter; }
+            get => _showFilter;
             set
             {
                 _showFilter = value;
@@ -73,7 +75,7 @@ namespace WolvenKit.Functionality.Ab4d
 
         public bool ShowMask
         {
-            get { return _showMask; }
+            get => _showMask;
             set
             {
                 _showMask = value;
@@ -95,7 +97,7 @@ namespace WolvenKit.Functionality.Ab4d
 
         public float CurrentFilterValue
         {
-            get { return _currentFilterValue; }
+            get => _currentFilterValue;
             set
             {
                 _currentFilterValue = value;
@@ -107,7 +109,7 @@ namespace WolvenKit.Functionality.Ab4d
 
         public Color CurrentMaskColor
         {
-            get { return _currentMaskColor; }
+            get => _currentMaskColor;
             set
             {
                 _currentMaskColor = value;
@@ -131,7 +133,9 @@ namespace WolvenKit.Functionality.Ab4d
             TextureMapType = textureMapType;
 
             if (baseFolder != null && !baseFolder.EndsWith("\\") && !baseFolder.EndsWith("/"))
+            {
                 baseFolder += '\\';
+            }
 
             BaseFolder = baseFolder;
 
@@ -157,13 +161,19 @@ namespace WolvenKit.Functionality.Ab4d
                            textureMapType == TextureMapTypes.DiffuseColor;
 
                 if (textureMapType == TextureMapTypes.Metalness || textureMapType == TextureMapTypes.MetalnessRoughness)
+                {
                     CurrentFilterValue = _physicallyBasedMaterial.Metalness;
+                }
 
                 if (textureMapType == TextureMapTypes.Roughness || textureMapType == TextureMapTypes.MetalnessRoughness)
+                {
                     CurrentFilterValue = _physicallyBasedMaterial.Roughness;
+                }
 
                 if (ShowMask)
+                {
                     CurrentMaskColor = _physicallyBasedMaterial.BaseColor.ToWpfColor();
+                }
             }
             else
             {
@@ -192,9 +202,13 @@ namespace WolvenKit.Functionality.Ab4d
             else
             {
                 if (BaseFolder != null && _textureMapInfo.TextureResourceName.StartsWith(BaseFolder))
+                {
                     FileNameTextBox.Text = _textureMapInfo.TextureResourceName.Substring(BaseFolder.Length);
+                }
                 else
+                {
                     FileNameTextBox.Text = _textureMapInfo.TextureResourceName;
+                }
 
                 TextureCheckBox.IsChecked = true;
             }
@@ -205,19 +219,25 @@ namespace WolvenKit.Functionality.Ab4d
 
         private void LoadCurrentTexture()
         {
-            if (this.DXDevice == null)
+            if (DXDevice == null)
+            {
                 return;
+            }
 
-            bool hasChanges = false;
+            var hasChanges = false;
 
 
             if (_textureMapInfo != null)
             {
                 if (_textureMapInfo.ShaderResourceView != null)
+                {
                     _textureMapInfo.ShaderResourceView.Dispose();
+                }
 
                 if (_textureMapInfo.SamplerState != null)
+                {
                     _textureMapInfo.SamplerState.Dispose();
+                }
 
                 Material.TextureMaps.Remove(_textureMapInfo);
 
@@ -237,7 +257,9 @@ namespace WolvenKit.Functionality.Ab4d
                 if (!string.IsNullOrEmpty(fileName))
                 {
                     if (BaseFolder != null && !System.IO.Path.IsPathRooted(fileName))
+                    {
                         fileName = System.IO.Path.Combine(BaseFolder, fileName);
+                    }
 
                     if (!System.IO.File.Exists(fileName))
                     {
@@ -253,13 +275,12 @@ namespace WolvenKit.Functionality.Ab4d
 
                     // To load a texture from file, you can use the TextureLoader.LoadShaderResourceView (this supports loading standard image files and also loading dds files).
                     // This method returns a ShaderResourceView and it can also set a textureInfo parameter that defines some of the properties of the loaded texture (bitmap size, dpi, format, hasTransparency).
-                    TextureInfo textureInfo;
-                    var shaderResourceView = Ab3d.DirectX.TextureLoader.LoadShaderResourceView(this.DXDevice.Device,
+                    var shaderResourceView = Ab3d.DirectX.TextureLoader.LoadShaderResourceView(DXDevice.Device,
                                                                                                fileName,
                                                                                                loadDdsIfPresent: true,
                                                                                                convertTo32bppPRGBA: isBaseColor,
                                                                                                generateMipMaps: true,
-                                                                                               textureInfo: out textureInfo);
+                                                                                               textureInfo: out var textureInfo);
 
                     // Only 2D textures are supported
                     if (shaderResourceView.Description.Dimension != ShaderResourceViewDimension.Texture2D)
@@ -279,7 +300,7 @@ namespace WolvenKit.Functionality.Ab4d
                     {
                         // Get recommended BlendState based on HasTransparency and HasPreMultipliedAlpha values.
                         // Possible values are: CommonStates.Opaque, CommonStates.PremultipliedAlphaBlend or CommonStates.NonPremultipliedAlphaBlend.
-                        var recommendedBlendState = this.DXDevice.CommonStates.GetRecommendedBlendState(textureInfo.HasTransparency, textureInfo.HasPremultipliedAlpha);
+                        var recommendedBlendState = DXDevice.CommonStates.GetRecommendedBlendState(textureInfo.HasTransparency, textureInfo.HasPremultipliedAlpha);
 
                         physicallyBasedMaterial.BlendState = recommendedBlendState;
                         physicallyBasedMaterial.HasTransparency = textureInfo.HasTransparency;
@@ -287,10 +308,14 @@ namespace WolvenKit.Functionality.Ab4d
 
 
                     if (CurrentMaskColor == Colors.Black)
+                    {
                         CurrentMaskColor = Colors.White;
+                    }
 
                     if (CurrentFilterValue <= 0.01)
+                    {
                         CurrentFilterValue = 1.0f;
+                    }
 
                     hasChanges = true;
                 }
@@ -298,19 +323,23 @@ namespace WolvenKit.Functionality.Ab4d
 
 
             if (hasChanges)
+            {
                 OnMapSettingsChanged();
+            }
         }
 
         private void OpenFileButton_OnClick(object sender, RoutedEventArgs e)
         {
-            var openFileDialog = new Microsoft.Win32.OpenFileDialog();
-
-            openFileDialog.Filter = "All texture files (*.*)|*.*";
-            openFileDialog.Title = "Select texture file";
+            var openFileDialog = new Microsoft.Win32.OpenFileDialog
+            {
+                Filter = "All texture files (*.*)|*.*",
+                Title = "Select texture file"
+            };
 
             if (!string.IsNullOrEmpty(BaseFolder) && System.IO.Directory.Exists(BaseFolder))
+            {
                 openFileDialog.InitialDirectory = BaseFolder;
-
+            }
 
             if ((openFileDialog.ShowDialog() ?? false) && !string.IsNullOrEmpty(openFileDialog.FileName))
             {
@@ -324,13 +353,17 @@ namespace WolvenKit.Functionality.Ab4d
         protected void OnMapSettingsChanged()
         {
             if (MapSettingsChanged != null)
+            {
                 MapSettingsChanged(this, null);
+            }
         }
 
         private void OnTextureCheckBoxCheckedChanged(object sender, RoutedEventArgs e)
         {
-            if (!this.IsLoaded)
+            if (!IsLoaded)
+            {
                 return;
+            }
 
             LoadCurrentTexture();
 
@@ -340,22 +373,28 @@ namespace WolvenKit.Functionality.Ab4d
         private void UpdateMaskHeadingTextBlock()
         {
             if (TextureCheckBox.IsChecked ?? false)
+            {
                 MaskHeadingTextBlock.SetCurrentValue(TextBlock.TextProperty, "Mask: #");
+            }
             else
+            {
                 MaskHeadingTextBlock.SetCurrentValue(TextBlock.TextProperty, "Color: #");
+            }
         }
 
         private void UpdateShownFilterValue()
         {
-            FilterValueTextBlock.SetCurrentValue(TextBlock.TextProperty, String.Format("{0:0}%", FilterSlider.Value * 100));
+            FilterValueTextBlock.SetCurrentValue(TextBlock.TextProperty, string.Format("{0:0}%", FilterSlider.Value * 100));
 
             OnMapSettingsChanged();
         }
 
         private void FilterSlider_OnValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
-            if (!this.IsLoaded)
+            if (!IsLoaded)
+            {
                 return;
+            }
 
             CurrentFilterValue = (float)FilterSlider.Value;
             UpdateShownFilterValue();
@@ -363,13 +402,19 @@ namespace WolvenKit.Functionality.Ab4d
             if (_physicallyBasedMaterial != null)
             {
                 if (TextureMapType == TextureMapTypes.Metalness || TextureMapType == TextureMapTypes.MetalnessRoughness)
+                {
                     _physicallyBasedMaterial.Metalness = CurrentFilterValue;
+                }
 
                 if (TextureMapType == TextureMapTypes.Roughness || TextureMapType == TextureMapTypes.MetalnessRoughness)
+                {
                     _physicallyBasedMaterial.Roughness = CurrentFilterValue;
+                }
 
                 if (TextureMapType == TextureMapTypes.AmbientOcclusion)
+                {
                     _physicallyBasedMaterial.AmbientOcclusionFactor = CurrentFilterValue;
+                }
 
                 OnMapSettingsChanged();
             }
@@ -377,7 +422,7 @@ namespace WolvenKit.Functionality.Ab4d
 
         private void MaskTextBox_OnTextChanged(object sender, TextChangedEventArgs e)
         {
-            bool isMaskValid = false;
+            var isMaskValid = false;
 
             try
             {
@@ -391,9 +436,9 @@ namespace WolvenKit.Functionality.Ab4d
                 var maskText = MaskTextBox.Text.Trim();
                 if (maskText.Length == 6)
                 {
-                    int red = HexToByte(maskText, 0);
-                    int green = HexToByte(maskText, 2);
-                    int blue = HexToByte(maskText, 4);
+                    var red = HexToByte(maskText, 0);
+                    var green = HexToByte(maskText, 2);
+                    var blue = HexToByte(maskText, 4);
 
                     if (red != -1 && green != -1 && blue != -1)
                     {
@@ -416,7 +461,9 @@ namespace WolvenKit.Functionality.Ab4d
                 if (_physicallyBasedMaterial != null)
                 {
                     if (TextureMapType == TextureMapTypes.Albedo || TextureMapType == TextureMapTypes.BaseColor || TextureMapType == TextureMapTypes.DiffuseColor)
+                    {
                         _physicallyBasedMaterial.BaseColor = CurrentMaskColor.ToColor4();
+                    }
 
                     OnMapSettingsChanged();
                 }
@@ -433,19 +480,26 @@ namespace WolvenKit.Functionality.Ab4d
         private int HexCharToInt(string text, int index)
         {
             if (index >= text.Length)
+            {
                 return -1;
+            }
 
-
-            char ch = text[index];
+            var ch = text[index];
 
             if (ch >= '0' && ch <= '9')
+            {
                 return ch - '0';
+            }
 
             if (ch >= 'A' && ch <= 'F')
+            {
                 return ch - 'A' + 10;
+            }
 
             if (ch >= 'a' && ch <= 'f')
+            {
                 return ch - 'a' + 10;
+            }
 
             return -1;
         }
@@ -453,11 +507,13 @@ namespace WolvenKit.Functionality.Ab4d
         // Returns -1 if not valid
         private int HexToByte(string text, int index)
         {
-            int v1 = HexCharToInt(text, index);
-            int v2 = HexCharToInt(text, index + 1);
+            var v1 = HexCharToInt(text, index);
+            var v2 = HexCharToInt(text, index + 1);
 
             if (v1 == -1 || v2 == -1)
+            {
                 return -1;
+            }
 
             return v1 * 16 + v2;
         }

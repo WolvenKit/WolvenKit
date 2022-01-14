@@ -3,12 +3,11 @@ using System.Collections.Generic;
 using System.IO;
 using System.IO.MemoryMappedFiles;
 using CP77Tools.Model;
-using WolvenKit.Common.RED4.Archive;
-using WolvenKit.Interfaces.Core;
 using WolvenKit.Common.Extensions;
+using WolvenKit.Common.RED4.Archive;
 using WolvenKit.RED4.CR2W.Archive;
-using Index = CP77Tools.Model.Index;
 using WolvenKit.RED4.Types.Exceptions;
+using Index = CP77Tools.Model.Index;
 
 namespace WolvenKit.Common.Services
 {

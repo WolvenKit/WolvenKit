@@ -10,7 +10,7 @@ namespace WolvenKit.Common.Conversion
     {
         public const string Magic = "w2rc";
 
-        public Dictionary<int,RedExportDto> Chunks { get; set; } = new();
+        public Dictionary<int, RedExportDto> Chunks { get; set; } = new();
 
         public List<RedBufferDto> Buffers { get; set; } = new();
 
@@ -42,7 +42,7 @@ namespace WolvenKit.Common.Conversion
             // chunks
             // order so that parent chunks get created first
             var groupedChunks = Chunks.GroupBy(_ => _.Value.ParentIndex);
-            foreach (IGrouping<int, KeyValuePair<int, RedExportDto>> groupedChunk in groupedChunks)
+            foreach (var groupedChunk in groupedChunks)
             {
                 foreach (var (chunkIndex, chunk) in groupedChunk.OrderBy(_ => _.Key))
                 {

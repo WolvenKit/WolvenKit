@@ -1,9 +1,7 @@
 using System;
 using System.Collections.ObjectModel;
-using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
-using WolvenKit.RED4.CR2W.Reflection;
 using WolvenKit.RED4.Types;
 using WolvenKit.RED4.Types.Exceptions;
 using UserControl = System.Windows.Controls.UserControl;
@@ -105,13 +103,7 @@ namespace WolvenKit.Views.Templates
             //RedChunkPtr.SetValue(SelectedItem.ChunkIndex + 1);
         }
 
-        private void ButtonBase_OnClick(object sender, RoutedEventArgs e)
-        {
-            throw new TodoException("handle editor");
-
-            //var target = RedChunkPtr.Pointer;
-            //GoToChunkRequested?.Invoke(this, new GoToChunkRequestedEventArgs() { Export = target });
-        }
+        private void ButtonBase_OnClick(object sender, RoutedEventArgs e) => throw new TodoException("handle editor");//var target = RedChunkPtr.Pointer;//GoToChunkRequested?.Invoke(this, new GoToChunkRequestedEventArgs() { Export = target });
     }
 
     public class GoToChunkRequestedEventArgs : EventArgs

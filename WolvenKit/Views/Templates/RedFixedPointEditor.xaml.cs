@@ -1,4 +1,3 @@
-using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -18,8 +17,8 @@ namespace WolvenKit.Views.Editors
 
         public FixedPoint RedNumber
         {
-            get => (FixedPoint)this.GetValue(RedNumberProperty);
-            set => this.SetValue(RedNumberProperty, value);
+            get => (FixedPoint)GetValue(RedNumberProperty);
+            set => SetValue(RedNumberProperty, value);
         }
         public static readonly DependencyProperty RedNumberProperty = DependencyProperty.Register(
             nameof(RedNumber), typeof(FixedPoint), typeof(RedFixedPointEditor), new PropertyMetadata(default(FixedPoint)));
@@ -35,10 +34,7 @@ namespace WolvenKit.Views.Editors
 
         private string GetValueFromRedValue() => ((float)RedNumber).ToString("R");
 
-        private void NumberValidationTextBox(object sender, TextCompositionEventArgs e)
-        {
-            e.Handled = float.TryParse(e.Text, out var _);
-        }
+        private void NumberValidationTextBox(object sender, TextCompositionEventArgs e) => e.Handled = float.TryParse(e.Text, out var _);
 
     }
 }

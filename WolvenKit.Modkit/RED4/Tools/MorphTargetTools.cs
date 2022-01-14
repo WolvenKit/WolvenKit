@@ -6,7 +6,6 @@ using CP77.CR2W;
 using SharpGLTF.Schema2;
 using WolvenKit.Common.DDS;
 using WolvenKit.Common.FNV1A;
-using WolvenKit.Common.Oodle;
 using WolvenKit.Common.Services;
 using WolvenKit.Modkit.RED4.GeneralStructs;
 using WolvenKit.Modkit.RED4.RigFile;
@@ -52,7 +51,7 @@ namespace WolvenKit.Modkit.RED4
             var meshesinfo = MeshTools.GetMeshesinfo(rendblob, cr2w);
 
             var expMeshes = MeshTools.ContainRawMesh(meshbuffer, meshesinfo, true);
-            
+
             var diffsbuffer = new MemoryStream();
             var mappingbuffer = new MemoryStream();
             var texbuffer = new MemoryStream();

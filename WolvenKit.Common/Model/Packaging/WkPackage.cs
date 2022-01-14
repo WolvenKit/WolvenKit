@@ -55,16 +55,19 @@ namespace WolvenKit.Common.Model.Packaging
         /// <param name="nameOverride">Rename the file to a costum name.</param>
         public static void CompressFile(string filename, ZipOutputStream zipStream, string nameOverride = "")
         {
-            FileInfo fi = new FileInfo(filename);
+            var fi = new FileInfo(filename);
 
-            string entryName = Path.GetFileName(filename);
+            var entryName = Path.GetFileName(filename);
             if (nameOverride != "")
+            {
                 entryName = nameOverride;
+            }
+
             entryName = ZipEntry.CleanName(entryName);
-            ZipEntry newEntry = new ZipEntry(entryName) { DateTime = fi.LastWriteTime, Size = fi.Length };
+            var newEntry = new ZipEntry(entryName) { DateTime = fi.LastWriteTime, Size = fi.Length };
             zipStream.PutNextEntry(newEntry);
-            byte[] buffer = new byte[4096];
-            using (FileStream streamReader = File.OpenRead(filename))
+            var buffer = new byte[4096];
+            using (var streamReader = File.OpenRead(filename))
             {
                 StreamUtils.Copy(streamReader, zipStream, buffer);
             }
@@ -79,24 +82,24 @@ namespace WolvenKit.Common.Model.Packaging
         /// <param name="folderOffset">The folderoffset.</param>
         public static void CompressFolder(string path, ZipOutputStream zipStream, int folderOffset)
         {
-            string[] files = Directory.GetFiles(path);
+            var files = Directory.GetFiles(path);
 
-            foreach (string filename in files)
+            foreach (var filename in files)
             {
-                FileInfo fi = new FileInfo(filename);
-                string entryName = filename.Substring(folderOffset);
+                var fi = new FileInfo(filename);
+                var entryName = filename.Substring(folderOffset);
                 entryName = ZipEntry.CleanName(entryName);
-                ZipEntry newEntry = new ZipEntry(entryName) { DateTime = fi.LastWriteTime, Size = fi.Length };
+                var newEntry = new ZipEntry(entryName) { DateTime = fi.LastWriteTime, Size = fi.Length };
                 zipStream.PutNextEntry(newEntry);
-                byte[] buffer = new byte[4096];
-                using (FileStream streamReader = File.OpenRead(filename))
+                var buffer = new byte[4096];
+                using (var streamReader = File.OpenRead(filename))
                 {
                     StreamUtils.Copy(streamReader, zipStream, buffer);
                 }
                 zipStream.CloseEntry();
             }
-            string[] folders = Directory.GetDirectories(path);
-            foreach (string folder in folders)
+            var folders = Directory.GetDirectories(path);
+            foreach (var folder in folders)
             {
                 CompressFolder(folder, zipStream, folderOffset);
             }
@@ -111,9 +114,9 @@ namespace WolvenKit.Common.Model.Packaging
         public static void CompressStream(byte[] file, string filename, ZipOutputStream zipStream)
         {
             filename = ZipEntry.CleanName(filename);
-            ZipEntry newEntry = new ZipEntry(filename) { DateTime = DateTime.Now, Size = file.Length };
+            var newEntry = new ZipEntry(filename) { DateTime = DateTime.Now, Size = file.Length };
             zipStream.PutNextEntry(newEntry);
-            byte[] buffer = new byte[4096];
+            var buffer = new byte[4096];
             StreamUtils.Copy(new MemoryStream(file), zipStream, buffer);
             zipStream.CloseEntry();
         }
@@ -149,22 +152,46 @@ namespace WolvenKit.Common.Model.Packaging
             var authorelement = new XElement("author", new XElement("displayName", Author.Item1));
             var metadataelement = new XElement("metadata");
             if (Author.Item2 != null || Author.Item2 != "")
+            {
                 authorelement.Add(new XElement("actionLink", Author.Item2));
+            }
+
             if (Author.Item3 != null || Author.Item3 != "")
+            {
                 authorelement.Add(new XElement("web", Author.Item3));
+            }
+
             if (Author.Item4 != null || Author.Item4 != "")
+            {
                 authorelement.Add(new XElement("facebook", Author.Item4));
+            }
+
             if (Author.Item5 != null || Author.Item5 != "")
+            {
                 authorelement.Add(new XElement("twitter", Author.Item5));
+            }
+
             if (Author.Item6 != null || Author.Item6 != "")
+            {
                 authorelement.Add(new XElement("youtube", Author.Item6));
+            }
+
             metadataelement.Add(authorelement);
             if (description?.Length > 0)
+            {
                 metadataelement.Add(new XElement("description", description));
+            }
+
             if (Largedescription?.Length > 0)
+            {
                 metadataelement.Add(new XElement("largeDescription", Largedescription));
+            }
+
             if (license?.Length > 0)
+            {
                 metadataelement.Add(new XElement("license", license));
+            }
+
             rootnode.Add(metadataelement);
             rootnode.Add(new XElement("colors", new XElement("headerBackground", ColorTranslator.ToHtml(Colors.Item1), new XAttribute("useBlackTextColor", Colors.Item2)), new XElement("iconBackground", ColorTranslator.ToHtml(Colors.Item3))));
             rootnode.Add(new XElement("content", Contents));
@@ -178,12 +205,14 @@ namespace WolvenKit.Common.Model.Packaging
         /// <returns>The byte contents of the array.</returns>
         public static byte[] XDocToByteArray(XDocument xdoc)
         {
-            MemoryStream ms = new MemoryStream();
-            XmlWriterSettings xws = new XmlWriterSettings();
-            xws.OmitXmlDeclaration = true;
-            xws.Indent = true;
+            var ms = new MemoryStream();
+            var xws = new XmlWriterSettings
+            {
+                OmitXmlDeclaration = true,
+                Indent = true
+            };
 
-            using (XmlWriter xw = XmlWriter.Create(ms, xws))
+            using (var xw = XmlWriter.Create(ms, xws))
             {
                 xdoc.WriteTo(xw);
             }
@@ -198,9 +227,9 @@ namespace WolvenKit.Common.Model.Packaging
         {
             if (Icon != null && Assembly != null)
             {
-                FileStream fsOut = File.Create(OutputPath);
-                ZipOutputStream zipStream = new ZipOutputStream(fsOut);
-                int folderOffset = RootFolder.Length + (RootFolder.EndsWith("\\") ? 0 : 1);
+                var fsOut = File.Create(OutputPath);
+                var zipStream = new ZipOutputStream(fsOut);
+                var folderOffset = RootFolder.Length + (RootFolder.EndsWith("\\") ? 0 : 1);
                 CompressFolder(RootFolder, zipStream, folderOffset);
                 CompressFile(Icon, zipStream, "Icon" + Path.GetExtension(Icon));
                 CompressStream(XDocToByteArray(Assembly), "Assembly.xml", zipStream);

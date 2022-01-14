@@ -1,11 +1,10 @@
-using Syncfusion.UI.Xaml.Grid;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Linq;
 using System.Windows.Input;
+using Syncfusion.UI.Xaml.Grid;
 using Syncfusion.UI.Xaml.Grid.Helpers;
 using Syncfusion.UI.Xaml.ScrollAxis;
-using System.Collections.Specialized;
-using Splat;
 using WolvenKit.Common.Interfaces;
 
 namespace WolvenKit
@@ -21,15 +20,17 @@ namespace WolvenKit
         {
             if (rowColumnIndex.ColumnIndex == 0)
             {
-                List<object> Selection = new List<object>();
+                var Selection = new List<object>();
 
-                foreach (GridRowInfo gri in this.SelectedRows)
+                foreach (var gri in SelectedRows)
+                {
                     Selection.Add(gri);
+                }
 
                 base.ProcessPointerReleased(args, rowColumnIndex);
 
                 // Was the current row in the selection before?
-                object griCurrent = Selection.SingleOrDefault(item => ((GridRowInfo)item).RowIndex == rowColumnIndex.RowIndex);
+                var griCurrent = Selection.SingleOrDefault(item => ((GridRowInfo)item).RowIndex == rowColumnIndex.RowIndex);
 
                 if (griCurrent != null)
                 {
@@ -37,16 +38,20 @@ namespace WolvenKit
                 }
                 else
                 {
-                    griCurrent = this.SelectedRows.SingleOrDefault(item => item.RowIndex == rowColumnIndex.RowIndex);
+                    griCurrent = SelectedRows.SingleOrDefault(item => item.RowIndex == rowColumnIndex.RowIndex);
 
                     if (griCurrent != null)
+                    {
                         Selection.Add(griCurrent);
+                    }
                 }
 
-                this.ClearSelections(false);
+                ClearSelections(false);
 
                 if (Selection.Count > 0)
-                    this.AddSelection(Selection, SelectionReason.SelectedItemsChanged);
+                {
+                    AddSelection(Selection, SelectionReason.SelectedItemsChanged);
+                }
             }
             else
             {
@@ -55,7 +60,7 @@ namespace WolvenKit
                 var SelectedRows = this.SelectedRows.FindAll(item => item.RowIndex == rowColumnIndex.RowIndex);
                 if (SelectedRows.Count == 0)
                 {
-                    var row = this.DataGrid.GetRecordAtRowIndex(rowColumnIndex.RowIndex);
+                    var row = DataGrid.GetRecordAtRowIndex(rowColumnIndex.RowIndex);
                     (row as ISelectableViewModel).IsChecked = false;
                 }
                 else
@@ -72,7 +77,7 @@ namespace WolvenKit
         protected override void ProcessSelectedItemsChanged(NotifyCollectionChangedEventArgs e)
         {
             base.ProcessSelectedItemsChanged(e);
-            
+
             if (e.Action == NotifyCollectionChangedAction.Reset)
             {
                 if (DataGrid.SelectedItem is ISelectableViewModel m)

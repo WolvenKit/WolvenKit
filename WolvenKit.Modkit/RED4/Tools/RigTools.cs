@@ -1,17 +1,15 @@
 using System;
-using System.IO;
-using WolvenKit.RED4.CR2W;
-using WolvenKit.RED4.Types;
-using WolvenKit.Modkit.RED4.GeneralStructs;
-using SharpGLTF.Schema2;
 using System.Collections.Generic;
 using System.Linq;
+using SharpGLTF.Schema2;
+using WolvenKit.Modkit.RED4.GeneralStructs;
 using WolvenKit.RED4.Archive.CR2W;
+using WolvenKit.RED4.Types;
 
 namespace WolvenKit.Modkit.RED4.RigFile
 {
-    using Vec3 = System.Numerics.Vector3;
     using Quat = System.Numerics.Quaternion;
+    using Vec3 = System.Numerics.Vector3;
 
     public class RIG
     {
@@ -22,40 +20,42 @@ namespace WolvenKit.Modkit.RED4.RigFile
                 return null;
             }
 
-            RawArmature Rig = new RawArmature();
-            Rig.BoneCount = animrig.BoneNames.Count;
+            var Rig = new RawArmature
+            {
+                BoneCount = animrig.BoneNames.Count
+            };
 
             Rig.Names = new string[Rig.BoneCount];
-            for (int i = 0; i < animrig.BoneNames.Count; i++)
+            for (var i = 0; i < animrig.BoneNames.Count; i++)
             {
                 Rig.Names[i] = animrig.BoneNames[i];
             }
 
-            Rig.Parent = new Int16[Rig.BoneCount];
-            for (int i = 0; i < animrig.Unk1.Count; i++)
+            Rig.Parent = new short[Rig.BoneCount];
+            for (var i = 0; i < animrig.Unk1.Count; i++)
             {
                 Rig.Parent[i] = animrig.Unk1[i];
             }
 
             Rig.LocalPosn = new Vec3[Rig.BoneCount];
-            for (int i = 0; i < Rig.BoneCount; i++)
+            for (var i = 0; i < Rig.BoneCount; i++)
             {
-                Vec3 v = new Vec3(animrig.Unk2[i][0].X, animrig.Unk2[i][0].Y, animrig.Unk2[i][0].Z);
+                var v = new Vec3(animrig.Unk2[i][0].X, animrig.Unk2[i][0].Y, animrig.Unk2[i][0].Z);
                 Rig.LocalPosn[i] = new Vec3(v.X, v.Z, -v.Y);
             }
 
             Rig.LocalRot = new Quat[Rig.BoneCount];
 
-            for (int i = 0; i < Rig.BoneCount; i++)
+            for (var i = 0; i < Rig.BoneCount; i++)
             {
-                Quat q = new Quat(animrig.Unk2[i][1].X, animrig.Unk2[i][1].Y, animrig.Unk2[i][1].Z, animrig.Unk2[i][1].W);
+                var q = new Quat(animrig.Unk2[i][1].X, animrig.Unk2[i][1].Y, animrig.Unk2[i][1].Z, animrig.Unk2[i][1].W);
                 Rig.LocalRot[i] = new Quat(q.X, q.Z, -q.Y, q.W);
             }
 
             Rig.LocalScale = new Vec3[Rig.BoneCount];
-            for (int i = 0; i < Rig.BoneCount; i++)
+            for (var i = 0; i < Rig.BoneCount; i++)
             {
-                Vec3 v = new Vec3(animrig.Unk2[i][2].X, animrig.Unk2[i][2].Y, animrig.Unk2[i][2].Z);
+                var v = new Vec3(animrig.Unk2[i][2].X, animrig.Unk2[i][2].Y, animrig.Unk2[i][2].Z);
                 Rig.LocalScale[i] = new Vec3(v.X, v.Y, v.Z);
             }
 
@@ -69,7 +69,7 @@ namespace WolvenKit.Modkit.RED4.RigFile
                     Rig.AposeMSRot = new Quat[Rig.BoneCount];
                     Rig.AposeMSScale = new Vec3[Rig.BoneCount];
 
-                    for (int i = 0; i < Rig.BoneCount; i++)
+                    for (var i = 0; i < Rig.BoneCount; i++)
                     {
                         float x = aRig.APoseMS[i].Translation.X;
                         float y = aRig.APoseMS[i].Translation.Y;
@@ -95,7 +95,7 @@ namespace WolvenKit.Modkit.RED4.RigFile
                     Rig.AposeLSRot = new Quat[Rig.BoneCount];
                     Rig.AposeLSScale = new Vec3[Rig.BoneCount];
 
-                    for (int i = 0; i < Rig.BoneCount; i++)
+                    for (var i = 0; i < Rig.BoneCount; i++)
                     {
                         float x = aRig.APoseLS[i].Translation.X;
                         float y = aRig.APoseLS[i].Translation.Y;
@@ -114,12 +114,12 @@ namespace WolvenKit.Modkit.RED4.RigFile
                 }
             }
 
-            string[] baseTendencyBoneNames = new string[] { "Root", "Hips", "Spine", "LeftUpLeg", "RightUpLeg", "Spine1", "LeftLeg", "RightLeg", "Spine2", "LeftFoot", "RightFoot", "Spine3",
+            var baseTendencyBoneNames = new string[] { "Root", "Hips", "Spine", "LeftUpLeg", "RightUpLeg", "Spine1", "LeftLeg", "RightLeg", "Spine2", "LeftFoot", "RightFoot", "Spine3",
                 "LeftShoulder", "RightShoulder", "Neck", "LeftArm", "RightArm", "Neck1", "LeftForeArm", "RightForeArm", "Head" };
             Rig.baseTendencyCount = 0;
-            for(int i = 0; i < baseTendencyBoneNames.Length; i++)
+            for (var i = 0; i < baseTendencyBoneNames.Length; i++)
             {
-                if(Rig.Names.Contains(baseTendencyBoneNames[i]))
+                if (Rig.Names.Contains(baseTendencyBoneNames[i]))
                 {
                     Rig.baseTendencyCount++;
                 }
@@ -131,20 +131,20 @@ namespace WolvenKit.Modkit.RED4.RigFile
             rigs = rigs.OrderByDescending(_ => _.BoneCount).ToList();
             rigs = rigs.OrderByDescending(_ => _.baseTendencyCount).ToList();
 
-            List<string> Names = new List<string>();
+            var Names = new List<string>();
 
-            List<Int16> Parent = new List<Int16>();
-            int BoneCount = 0;
-            List<Vec3> LocalPosn = new List<Vec3>();
-            List<Quat> LocalRot = new List<Quat>();
-            List<Vec3> LocalScale = new List<Vec3>();
+            var Parent = new List<short>();
+            var BoneCount = 0;
+            var LocalPosn = new List<Vec3>();
+            var LocalRot = new List<Quat>();
+            var LocalScale = new List<Vec3>();
 
-            for (int i = 0; i < rigs.Count; i++)
+            for (var i = 0; i < rigs.Count; i++)
             {
-                for (int e = 0; e < rigs[i].BoneCount; e++)
+                for (var e = 0; e < rigs[i].BoneCount; e++)
                 {
-                    bool found = false;
-                    for (int eye = 0; eye < BoneCount; eye++)
+                    var found = false;
+                    for (var eye = 0; eye < BoneCount; eye++)
                     {
                         if (Names[eye] == rigs[i].Names[e])
                         {
@@ -173,14 +173,14 @@ namespace WolvenKit.Modkit.RED4.RigFile
             }
             // this rig merging is gonna break if someone tries to merge rigs not having a "Root" bone, generally seen with weapons etc.
             Parent.Add(-1); // assuming at i = 0 is always "Root" bone
-            for (int i = 1; i < BoneCount; i++)  // i = 1, assuming at i = 0 is always "Root" bone
+            for (var i = 1; i < BoneCount; i++)  // i = 1, assuming at i = 0 is always "Root" bone
             {
-                bool found = false;
-                string parentName = string.Empty;
+                var found = false;
+                var parentName = string.Empty;
 
-                for (int e = 0; e < rigs.Count; e++)
+                for (var e = 0; e < rigs.Count; e++)
                 {
-                    for (int eye = 0; eye < rigs[e].BoneCount; eye++)
+                    for (var eye = 0; eye < rigs[e].BoneCount; eye++)
                     {
                         if (Names[i] == rigs[e].Names[eye])
                         {
@@ -190,9 +190,11 @@ namespace WolvenKit.Modkit.RED4.RigFile
                         }
                     }
                     if (found)
+                    {
                         break;
+                    }
                 }
-                for (Int16 r = 0; r < BoneCount; r++)
+                for (short r = 0; r < BoneCount; r++)
                 {
                     if (parentName == Names[r])
                     {
@@ -202,15 +204,17 @@ namespace WolvenKit.Modkit.RED4.RigFile
                 }
             }
 
-            RawArmature CombinedRig = new RawArmature();
-            CombinedRig.BoneCount = BoneCount;
-            CombinedRig.Names = Names.ToArray();
-            CombinedRig.Parent = Parent.ToArray();
-            CombinedRig.LocalPosn = LocalPosn.ToArray();
-            CombinedRig.LocalScale = LocalScale.ToArray();
-            CombinedRig.LocalRot = LocalRot.ToArray();
-            CombinedRig.AposeLSExits = false;
-            CombinedRig.AposeMSExits = false;
+            var CombinedRig = new RawArmature
+            {
+                BoneCount = BoneCount,
+                Names = Names.ToArray(),
+                Parent = Parent.ToArray(),
+                LocalPosn = LocalPosn.ToArray(),
+                LocalScale = LocalScale.ToArray(),
+                LocalRot = LocalRot.ToArray(),
+                AposeLSExits = false,
+                AposeMSExits = false
+            };
 
             return CombinedRig;
         }
@@ -218,7 +222,7 @@ namespace WolvenKit.Modkit.RED4.RigFile
         {
             var bonesMapping = new Dictionary<int, Node>();
             var armature = model.UseScene(0).CreateNode("Armature");
-            for (int i = 0; i < srcBones.BoneCount; i++)
+            for (var i = 0; i < srcBones.BoneCount; i++)
             {
                 if (srcBones.Parent[i] > -1)
                 {

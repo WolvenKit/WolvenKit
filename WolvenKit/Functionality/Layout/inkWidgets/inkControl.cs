@@ -1,10 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 using WolvenKit.RED4.Types;
@@ -40,14 +37,18 @@ namespace WolvenKit.Functionality.Layout.inkWidgets
             {
                 SetCurrentValue(OpacityProperty, (double)WidgetOpacity);
                 if (!PropertyBindings.ContainsKey("tintColor"))
+                {
                     goto NoOverride;
+                }
 
                 var variant = GetProperty(PropertyBindings["tintColor"]);
 
                 if (variant?.Value is HDRColor color)
+                {
                     return ToColor(color);
+                }
 
-                NoOverride:
+            NoOverride:
                 return ToColor(Widget.TintColor);
             }
         }
@@ -83,14 +84,18 @@ namespace WolvenKit.Functionality.Layout.inkWidgets
             get
             {
                 if (!PropertyBindings.ContainsKey("opacity"))
+                {
                     goto NoOverride;
+                }
 
                 var variant = GetProperty(PropertyBindings["opacity"]);
 
                 if (variant?.Value is CFloat opacity)
+                {
                     return opacity;
+                }
 
-                NoOverride:
+            NoOverride:
                 return Widget.Opacity;
             }
         }
@@ -103,13 +108,18 @@ namespace WolvenKit.Functionality.Layout.inkWidgets
 
             if (Widget.PropertyManager != null && Widget.PropertyManager.GetValue() is inkPropertyManager ipm)
             {
-                foreach (inkPropertyBinding ipb in ipm.Bindings)
+                foreach (var ipb in ipm.Bindings)
                 {
                     PropertyBindings.Add(ipb.PropertyName, ipb.StylePath);
                     if (WidgetView.ViewModel.Bindings == null)
+                    {
                         WidgetView.ViewModel.Bindings = new();
+                    }
+
                     if (!WidgetView.ViewModel.Bindings.Contains(ipb.PropertyName))
+                    {
                         WidgetView.ViewModel.Bindings.Add(ipb.PropertyName);
+                    }
                 }
             }
 
@@ -195,9 +205,14 @@ namespace WolvenKit.Functionality.Layout.inkWidgets
         {
             _stateStack.Insert(0, "Press");
             if (_stateStack.Contains("Active"))
+            {
                 _stateStack.Remove("Active");
+            }
             else
+            {
                 _stateStack.Insert(0, "Active");
+            }
+
             Render();
         }
 
@@ -211,13 +226,19 @@ namespace WolvenKit.Functionality.Layout.inkWidgets
         {
 
             if (WidgetView.ViewModel == null)
+            {
                 return null;
+            }
 
             if (WidgetView.ViewModel.CurrentStyleState == null)
+            {
                 return null;
+            }
 
             if (WidgetView.ViewModel.CurrentTheme == null)
+            {
                 return null;
+            }
 
             CVariant variant;
             foreach (var state in _stateStack)
@@ -225,15 +246,19 @@ namespace WolvenKit.Functionality.Layout.inkWidgets
                 variant = (CVariant)Application.Current.TryFindResource("CVariant/" + WidgetView.ViewModel.CurrentTheme + "/" + propertyPath + "#" + state);
 
                 if (variant != null)
+                {
                     goto ValidVariant;
+                }
             }
 
             variant = (CVariant)Application.Current.TryFindResource("CVariant/" + WidgetView.ViewModel.CurrentTheme + "/" + propertyPath + "#" + WidgetView.ViewModel.CurrentStyleState);
 
             if (variant == null)
+            {
                 return null;
+            }
 
-            ValidVariant:
+        ValidVariant:
 
             if (variant.Value is inkStylePropertyReference ispr)
             {
@@ -265,18 +290,21 @@ namespace WolvenKit.Functionality.Layout.inkWidgets
 
         public virtual void RenderRecursive() => Render();
 
-        protected override Size MeasureCore(Size availableSize)
-        {
-            return MeasureForDimensions(new Size(Width, Height), availableSize);
-        }
+        protected override Size MeasureCore(Size availableSize) => MeasureForDimensions(new Size(Width, Height), availableSize);
 
         protected Size MeasureForDimensions(Size dimensions, Size availableSize)
         {
             var size = dimensions;
-            if (!Double.IsPositiveInfinity(availableSize.Width) && FillH(this))
+            if (!double.IsPositiveInfinity(availableSize.Width) && FillH(this))
+            {
                 size.Width = availableSize.Width;
-            if (!Double.IsPositiveInfinity(availableSize.Height) && FillV(this))
+            }
+
+            if (!double.IsPositiveInfinity(availableSize.Height) && FillV(this))
+            {
                 size.Height = availableSize.Height;
+            }
+
             return size;
         }
 
@@ -290,10 +318,7 @@ namespace WolvenKit.Functionality.Layout.inkWidgets
             base.ArrangeCore(finalRect);
         }
 
-        public static System.Windows.Point ToPoint(Vector2 v)
-        {
-            return new System.Windows.Point(v.X, v.Y);
-        }
+        public static System.Windows.Point ToPoint(Vector2 v) => new System.Windows.Point(v.X, v.Y);
 
         // i'm pretty sure this isn't the right way to convert these
         public static Color ToColor(HDRColor hdr, float alpha = 1)
@@ -314,10 +339,7 @@ namespace WolvenKit.Functionality.Layout.inkWidgets
             return Color.FromArgb((byte)(hdr.Alpha * 255 * alpha), (byte)(r * 255), (byte)(g * 255), (byte)(b * 255));
         }
 
-        public static Brush ToBrush(HDRColor hdr)
-        {
-            return new SolidColorBrush(ToColor(hdr));
-        }
+        public static Brush ToBrush(HDRColor hdr) => new SolidColorBrush(ToColor(hdr));
 
         public static System.Drawing.Color ToDrawingColor(HDRColor hdr, float alpha = 1)
         {
@@ -334,15 +356,9 @@ namespace WolvenKit.Functionality.Layout.inkWidgets
             return System.Drawing.Color.FromArgb((byte)(hdr.Alpha * 255 * alpha), (byte)(r * 255), (byte)(g * 255), (byte)(b * 255));
         }
 
-        public static System.Drawing.Brush ToDrawingBrush(HDRColor hdr)
-        {
-            return new System.Drawing.SolidBrush(ToDrawingColor(hdr));
-        }
+        public static System.Drawing.Brush ToDrawingBrush(HDRColor hdr) => new System.Drawing.SolidBrush(ToDrawingColor(hdr));
 
-        public static Thickness AddToThickness(inkMargin m, Thickness t)
-        {
-            return new Thickness(m.Left + t.Left, m.Top + t.Top, m.Right + t.Right, m.Bottom + t.Bottom);
-        }
+        public static Thickness AddToThickness(inkMargin m, Thickness t) => new Thickness(m.Left + t.Left, m.Top + t.Top, m.Right + t.Right, m.Bottom + t.Bottom);
 
         public static HorizontalAlignment ToHorizontalAlignment(CEnum<Enums.inkEHorizontalAlign> hAlign)
         {
@@ -378,15 +394,9 @@ namespace WolvenKit.Functionality.Layout.inkWidgets
             }
         }
 
-        public static Thickness ToThickness(inkMargin value)
-        {
-            return new Thickness(value.Left, value.Top, value.Right, value.Bottom);
-        }
+        public static Thickness ToThickness(inkMargin value) => new Thickness(value.Left, value.Top, value.Right, value.Bottom);
 
-        public static Thickness ToThickness(RectF value)
-        {
-            return new Thickness(value.Left, value.Top, value.Right, value.Bottom);
-        }
+        public static Thickness ToThickness(RectF value) => new Thickness(value.Left, value.Top, value.Right, value.Bottom);
 
         public static bool FillH(inkControl control)
         {
@@ -716,14 +726,8 @@ namespace WolvenKit.Functionality.Layout.inkWidgets
             }
         }
 
-        public static bool HAlignToFill(inkControl control)
-        {
-            return control.Widget.Layout.HAlign.Value == Enums.inkEHorizontalAlign.Fill;
-        }
+        public static bool HAlignToFill(inkControl control) => control.Widget.Layout.HAlign.Value == Enums.inkEHorizontalAlign.Fill;
 
-        public static bool VAlignToFill(inkControl control)
-        {
-            return control.Widget.Layout.VAlign.Value == Enums.inkEVerticalAlign.Fill;
-        }
+        public static bool VAlignToFill(inkControl control) => control.Widget.Layout.VAlign.Value == Enums.inkEVerticalAlign.Fill;
     }
 }

@@ -38,7 +38,7 @@ namespace CP77Tools.Tasks
 
                 var buffer = br.ReadBytes(file.Length - 8);
 
-                byte[] unpacked = new byte[size];
+                var unpacked = new byte[size];
                 long unpackedSize = OodleHelper.Decompress(buffer, unpacked);
 
                 using var msout = new MemoryStream();

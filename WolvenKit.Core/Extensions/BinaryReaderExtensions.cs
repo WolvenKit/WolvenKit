@@ -36,7 +36,10 @@ namespace WolvenKit.Core.Extensions
             {
                 b = stream.ReadByte();
                 if (b == 128)
+                {
                     return 0;
+                }
+
                 byte s = 6;
                 byte mask = 255;
                 if (b > 127)
@@ -61,11 +64,11 @@ namespace WolvenKit.Core.Extensions
 
         public static float ReadHalfFloat(this BinaryReader stream)
         {
-            ushort data = stream.ReadUInt16();
+            var data = stream.ReadUInt16();
             // half (binary16) format IEEE 754-2008
-            uint dataSign = (uint)data >> 15;
-            uint dataExp = ((uint)data >> 10) & 0x001F;
-            uint dataFrac = (uint)data & 0x03FF;
+            var dataSign = (uint)data >> 15;
+            var dataExp = ((uint)data >> 10) & 0x001F;
+            var dataFrac = (uint)data & 0x03FF;
 
             uint floatExp = 0;
             uint floatFrac = 0;
@@ -95,7 +98,7 @@ namespace WolvenKit.Core.Extensions
                     break;
             }
             // single precision floating point (binary32) format IEEE 754-2008
-            uint floatNum = dataSign << 31 | floatExp << 23 | floatFrac;
+            var floatNum = dataSign << 31 | floatExp << 23 | floatFrac;
             return BitConverter.ToSingle(BitConverter.GetBytes(floatNum), 0);
         }
 
@@ -114,7 +117,9 @@ namespace WolvenKit.Core.Extensions
             var length = Math.Abs(prefix);
 
             if (length == 0)
+            {
                 return string.Empty;
+            }
 
             // The character width is determined by the sign of the prefix
             return prefix > 0
@@ -216,7 +221,7 @@ namespace WolvenKit.Core.Extensions
         {
             var b = br.ReadByte();
             // Initial value from the lower 7 bits
-            uint value = (uint)b & s_VLQ_ValueMask;
+            var value = (uint)b & s_VLQ_ValueMask;
 
             // First octet stores the continuation flag in the 6th bit
             // Is value larger than 7 bits?

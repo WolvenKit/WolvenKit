@@ -1,5 +1,3 @@
-using System.IO;
-
 namespace WolvenKit.RED4.TweakDB.Types
 {
     public class LocKey : CUint64

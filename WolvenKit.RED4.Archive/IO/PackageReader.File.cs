@@ -1,15 +1,14 @@
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Text;
 using Splat;
 using WolvenKit.Common.FNV1A;
+using WolvenKit.Common.Services;
 using WolvenKit.Core.Extensions;
+using WolvenKit.RED4.Archive.Buffer;
 using WolvenKit.RED4.Types;
 using WolvenKit.RED4.Types.Exceptions;
-using WolvenKit.Common.Services;
-using WolvenKit.RED4.Archive.Buffer;
 
 namespace WolvenKit.RED4.Archive.IO
 {
@@ -116,13 +115,13 @@ namespace WolvenKit.RED4.Archive.IO
             BaseStream.Position = baseOff + header.chunkDescOffset;
             var chunkDesc = BaseStream.ReadStructs<Package04ChunkHeader>(chunkCount);
 
-            for (int i = 0; i < chunkDesc.Length; i++)
+            for (var i = 0; i < chunkDesc.Length; i++)
             {
                 _chunks.Add(ReadChunk(chunkDesc[i]));
             }
 
             var newChunks = new List<RedBaseClass>();
-            for (int i = 0; i < _chunks.Count; i++)
+            for (var i = 0; i < _chunks.Count; i++)
             {
                 if (!HandleQueue.ContainsKey(i))
                 {
@@ -192,6 +191,6 @@ namespace WolvenKit.RED4.Archive.IO
         public string DepotPath { get; set; }
 
         public ulong Hash { get; set; }
-        public InternalEnums.EImportFlags Flags { get; set;  }
+        public InternalEnums.EImportFlags Flags { get; set; }
     }
 }

@@ -53,10 +53,7 @@ namespace WolvenKit.RED3.CR2W.Reflection
 
         #region Methods
 
-        public override string ToString()
-        {
-            return $"{Name} [{String.Join(",", Flags)}]";
-        }
+        public override string ToString() => $"{Name} [{string.Join(",", Flags)}]";
 
         #endregion Methods
     }
@@ -87,10 +84,7 @@ namespace WolvenKit.RED3.CR2W.Reflection
 
         #region Methods
 
-        public override string ToString()
-        {
-            return String.Format($"{IsIgnored}");
-        }
+        public override string ToString() => string.Format($"{IsIgnored}");
 
         #endregion Methods
     }
@@ -124,10 +118,7 @@ namespace WolvenKit.RED3.CR2W.Reflection
 
         #region Methods
 
-        public override string ToString()
-        {
-            return $"{String.Join(",", Keywords)}";
-        }
+        public override string ToString() => $"{string.Join(",", Keywords)}";
 
         #endregion Methods
     }

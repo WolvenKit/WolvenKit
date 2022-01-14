@@ -1,7 +1,4 @@
 using Octokit;
-using WolvenKit.ViewModels.Shell;
-using WolvenKit.Views.Editor;
-using WolvenKit.Views.Shell;
 
 namespace WolvenKit.Functionality.Helpers
 {

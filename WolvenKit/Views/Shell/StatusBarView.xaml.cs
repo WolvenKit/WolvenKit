@@ -2,8 +2,6 @@ using System;
 using System.Reactive.Disposables;
 using ReactiveUI;
 using Splat;
-using WolvenKit.Common.Services;
-using WolvenKit.Functionality.Services;
 using WolvenKit.ViewModels.Shell;
 
 namespace WolvenKit.Views.Shell

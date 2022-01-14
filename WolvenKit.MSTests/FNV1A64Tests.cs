@@ -30,11 +30,9 @@ namespace WolvenKit.MSTests
         [DataRow("feedfacedeadbeef", 0xcac54572bb1a6fc8UL)]
         [DataRow("feedfacedeadbeef\0", 0xa7a4c9f3edebf0d8UL)]
         [DataRow("line 1\nline 2\nline 3", 0x7829851fac17b143UL)]
-        public void TestFNV1a64(string test, ulong result)
-        {
+        public void TestFNV1a64(string test, ulong result) =>
             // Assert.AreEqual(FNV1A64HashAlgorithm.HashString(test), result);
             Assert.AreEqual(FNV1A64HashAlgorithm.HashString(test), result);
-        }
 
         [TestMethod]
         [DataRow(new byte[] { 0xff, 0x00, 0x00, 0x01 }, 0x6961196491cc682dUL)]
@@ -51,10 +49,7 @@ namespace WolvenKit.MSTests
         [DataRow(new byte[] { 0x4a, 0x4e, 0x51, 0x40 }, 0x6067dce9932ad458UL)]
         [DataRow(new byte[] { 0x40, 0x51, 0x4e, 0x54 }, 0xe3b37596127cf208UL)]
         [DataRow(new byte[] { 0x54, 0x4e, 0x51, 0x40 }, 0x4b7b10fa9fe83936UL)]
-        public void TestFNV1a64_ByteSpan(byte[] test, ulong result)
-        {
-            Assert.AreEqual(FNV1A64HashAlgorithm.HashReadOnlySpan(test), result);
-        }
+        public void TestFNV1a64_ByteSpan(byte[] test, ulong result) => Assert.AreEqual(FNV1A64HashAlgorithm.HashReadOnlySpan(test), result);
 
         [TestMethod]
         [DataRow("\xff\x00\x00\x01", 0x6961196491cc682dUL)]
@@ -90,10 +85,7 @@ namespace WolvenKit.MSTests
         [DataRow("feedfacedeadbeef", 0xcac54572bb1a6fc8UL)]
         [DataRow("feedfacedeadbeef\0", 0xa7a4c9f3edebf0d8UL)]
         [DataRow("line 1\nline 2\nline 3", 0x7829851fac17b143UL)]
-        public void TestFNV1a64_CharSpan(string test, ulong result)
-        {
-            Assert.AreEqual(FNV1A64HashAlgorithm.HashReadOnlySpan(test.AsSpan()), result);
-        }
+        public void TestFNV1a64_CharSpan(string test, ulong result) => Assert.AreEqual(FNV1A64HashAlgorithm.HashReadOnlySpan(test.AsSpan()), result);
 
         [TestMethod]
         [DataRow("", 0xaf63bd4c8601b7dfUL)]
@@ -102,10 +94,7 @@ namespace WolvenKit.MSTests
         [DataRow("hello", 0xa9bc8acca21f39b1UL)]
         [DataRow("foobar", 0x34531ca7168b8f38UL)]
         [DataRow("feedfacedeadbeef", 0xa7a4c9f3edebf0d8UL)]
-        public void TestFNV1a64_NullEnded(string test, ulong result)
-        {
-            Assert.AreEqual(FNV1A64HashAlgorithm.HashString(test, Encoding.ASCII, true), result);
-        }
+        public void TestFNV1a64_NullEnded(string test, ulong result) => Assert.AreEqual(FNV1A64HashAlgorithm.HashString(test, Encoding.ASCII, true), result);
 
         #endregion Methods
     }

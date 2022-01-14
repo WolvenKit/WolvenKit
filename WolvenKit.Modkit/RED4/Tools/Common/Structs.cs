@@ -1,8 +1,7 @@
-using System;
-using System.Numerics;
 using System.Collections.Generic;
-using Newtonsoft.Json;
+using System.Numerics;
 using System.Runtime.CompilerServices;
+using Newtonsoft.Json;
 
 namespace WolvenKit.Modkit.RED4.GeneralStructs
 {
@@ -10,7 +9,7 @@ namespace WolvenKit.Modkit.RED4.GeneralStructs
     {
         public string[] Names;
 
-        public Int16[] Parent;
+        public short[] Parent;
         public int BoneCount;
         public Vector3[] LocalPosn;
         public Quaternion[] LocalRot;
@@ -29,47 +28,47 @@ namespace WolvenKit.Modkit.RED4.GeneralStructs
     }
     public class MeshesInfo
     {
-        public UInt32[] vertCounts { get; set; }
-        public UInt32[] indCounts { get; set; }
-        public UInt32[] posnOffsets { get; set; }
-        public UInt32[] tex0Offsets { get; set; }
-        public UInt32[] normalOffsets { get; set; }
-        public UInt32[] tangentOffsets { get; set; }
-        public UInt32[] colorOffsets { get; set; }
-        public UInt32[] tex1Offsets { get; set; }
-        public UInt32[] unknownOffsets { get; set; }
-        public UInt32[] indicesOffsets { get; set; }
-        public UInt32[] vpStrides { get; set; }
-        public UInt32[] weightCounts { get; set; }
+        public uint[] vertCounts { get; set; }
+        public uint[] indCounts { get; set; }
+        public uint[] posnOffsets { get; set; }
+        public uint[] tex0Offsets { get; set; }
+        public uint[] normalOffsets { get; set; }
+        public uint[] tangentOffsets { get; set; }
+        public uint[] colorOffsets { get; set; }
+        public uint[] tex1Offsets { get; set; }
+        public uint[] unknownOffsets { get; set; }
+        public uint[] indicesOffsets { get; set; }
+        public uint[] vpStrides { get; set; }
+        public uint[] weightCounts { get; set; }
         public bool[] garmentSupportExists { get; set; }
         public Vector4 quantTrans { get; set; }
         public Vector4 quantScale { get; set; }
         public int meshCount { get; set; }
-        public UInt32[] LODLvl { get; set; }
+        public uint[] LODLvl { get; set; }
         public Dictionary<string, string[]> appearances { get; set; }
-        public UInt32 vertBufferSize { get; set; }
-        public UInt32 indexBufferSize { get; set; }
-        public UInt32 indexBufferOffset { get; set; }
+        public uint vertBufferSize { get; set; }
+        public uint indexBufferSize { get; set; }
+        public uint indexBufferOffset { get; set; }
 
         public MeshesInfo() { }
         public MeshesInfo(int meshCount)
         {
             this.meshCount = meshCount;
 
-            vertCounts = new UInt32[meshCount];
-            indCounts = new UInt32[meshCount];
-            posnOffsets = new UInt32[meshCount];
-            tex0Offsets = new UInt32[meshCount];
-            normalOffsets = new UInt32[meshCount];
-            tangentOffsets = new UInt32[meshCount];
-            colorOffsets = new UInt32[meshCount];
-            tex1Offsets = new UInt32[meshCount];
-            unknownOffsets = new UInt32[meshCount];
-            indicesOffsets = new UInt32[meshCount];
-            vpStrides = new UInt32[meshCount];
-            weightCounts = new UInt32[meshCount];
+            vertCounts = new uint[meshCount];
+            indCounts = new uint[meshCount];
+            posnOffsets = new uint[meshCount];
+            tex0Offsets = new uint[meshCount];
+            normalOffsets = new uint[meshCount];
+            tangentOffsets = new uint[meshCount];
+            colorOffsets = new uint[meshCount];
+            tex1Offsets = new uint[meshCount];
+            unknownOffsets = new uint[meshCount];
+            indicesOffsets = new uint[meshCount];
+            vpStrides = new uint[meshCount];
+            weightCounts = new uint[meshCount];
             garmentSupportExists = new bool[meshCount];
-            LODLvl = new UInt32[meshCount];
+            LODLvl = new uint[meshCount];
 
         }
     }
@@ -84,26 +83,26 @@ namespace WolvenKit.Modkit.RED4.GeneralStructs
         public Vector4[] colors0 { get; set; }
         public Vector4[] colors1 { get; set; }
         public float[,] weights { get; set; }
-        public UInt16[,] boneindices { get; set; }
+        public ushort[,] boneindices { get; set; }
         public Vector3[] garmentMorph { get; set; }
         public string name { get; set; }
-        public UInt32 weightCount { get; set; }
+        public uint weightCount { get; set; }
         public string[] materialNames { get; set; }
     }
     public class Re4MeshContainer
     {
-        public Int16[,] ExpVerts { get; set; }
-        public UInt32[] Nor32s { get; set; }
-        public UInt32[] Tan32s { get; set; }
-        public UInt16[] indices { get; set; }
-        public UInt16[,] uv0s { get; set; }
-        public UInt16[,] uv1s { get; set; }
-        public Byte[,] colors { get; set; }
-        public Byte[,] weights { get; set; }
-        public Byte[,] boneindices { get; set; }
+        public short[,] ExpVerts { get; set; }
+        public uint[] Nor32s { get; set; }
+        public uint[] Tan32s { get; set; }
+        public ushort[] indices { get; set; }
+        public ushort[,] uv0s { get; set; }
+        public ushort[,] uv1s { get; set; }
+        public byte[,] colors { get; set; }
+        public byte[,] weights { get; set; }
+        public byte[,] boneindices { get; set; }
         public string name { get; set; }
-        public UInt32 weightcount { get; set; }
-        public UInt16[,] garmentMorph { get; set; }
+        public uint weightcount { get; set; }
+        public ushort[,] garmentMorph { get; set; }
     }
 
     public class RawTargetContainer
@@ -111,22 +110,22 @@ namespace WolvenKit.Modkit.RED4.GeneralStructs
         public TargetVec3[] vertexDelta { get; set; }
         public Vector3[] normalDelta { get; set; }
         public Vector3[] tangentDelta { get; set; }
-        public UInt16[] vertexMapping { get; set; }
-        public UInt32 diffsCount { get; set; }
+        public ushort[] vertexMapping { get; set; }
+        public uint diffsCount { get; set; }
     }
     public class TargetsInfo
     {
-        public UInt32[,] NumVertexDiffsInEachChunk { get; set; }
-        public UInt32 NumDiffs { get; set; }
-        public UInt32 NumDiffsMapping { get; set; }
-        public UInt32[,] NumVertexDiffsMappingInEachChunk { get; set; }
-        public UInt32[] TargetStartsInVertexDiffs { get; set; }
-        public UInt32[] TargetStartsInVertexDiffsMapping { get; set; }
+        public uint[,] NumVertexDiffsInEachChunk { get; set; }
+        public uint NumDiffs { get; set; }
+        public uint NumDiffsMapping { get; set; }
+        public uint[,] NumVertexDiffsMappingInEachChunk { get; set; }
+        public uint[] TargetStartsInVertexDiffs { get; set; }
+        public uint[] TargetStartsInVertexDiffsMapping { get; set; }
         public Vector4[] TargetPositionDiffOffset { get; set; }
         public Vector4[] TargetPositionDiffScale { get; set; }
         public string[] Names { get; set; }
         public string[] RegionNames { get; set; }
-        public UInt32 NumTargets { get; set; }
+        public uint NumTargets { get; set; }
         public string BaseMesh { get; set; }
         public string BaseTexture { get; set; }
     }
@@ -134,8 +133,8 @@ namespace WolvenKit.Modkit.RED4.GeneralStructs
     public struct TargetVec3
     {
         public float X { get; set; }
-        public float Y {  get; set; }
-        public float Z {  get; set; }
+        public float Y { get; set; }
+        public float Z { get; set; }
 
         [MethodImpl(MethodImplOptions.NoOptimization)]
         public TargetVec3(float x, float y, float z)
@@ -151,7 +150,7 @@ namespace WolvenKit.Modkit.RED4.GeneralStructs
         public float X { get; set; }
         public float Y { get; set; }
         public float Z { get; set; }
-        public float W {  get; set; }
+        public float W { get; set; }
 
         [MethodImpl(MethodImplOptions.NoOptimization)]
         public TargetVec4(float x, float y, float z, float w)

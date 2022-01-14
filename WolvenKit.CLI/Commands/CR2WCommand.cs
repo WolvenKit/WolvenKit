@@ -24,10 +24,10 @@ namespace CP77Tools.Commands
             AddOption(new Option<string>(new[] { "--outpath", "-o" }, "Output path."));
             AddOption(new Option<bool>(new[] { "--deserialize", "-d" }, "Create a CR2W file from json or xml"));
             AddOption(new Option<bool>(new[] { "--serialize", "-s" }, "Serialize the CR2W file to json or xml."));
-            AddOption(new Option<string>(new[] {"--pattern", "-w"},
+            AddOption(new Option<string>(new[] { "--pattern", "-w" },
                 "Use optional search pattern (e.g. *.ink), if both regex and pattern is defined, pattern will be prioritized"));
             AddOption(new Option<string>(new[] { "--regex", "-r" }, "Use optional regex pattern."));
-            AddOption(new Option<ETextConvertFormat>(new[] {"--format", "-ft"},
+            AddOption(new Option<ETextConvertFormat>(new[] { "--format", "-ft" },
                 "Use optional serialization format. Options are json and xml"));
 
             Handler = CommandHandler
@@ -39,7 +39,7 @@ namespace CP77Tools.Commands
         {
             var serviceProvider = host.Services;
             var consoleFunctions = serviceProvider.GetRequiredService<ConsoleFunctions>();
-            consoleFunctions.Cr2wTask(path, outpath, deserialize,serialize, pattern, regex, format);
+            consoleFunctions.Cr2wTask(path, outpath, deserialize, serialize, pattern, regex, format);
         }
 
         #endregion Constructors

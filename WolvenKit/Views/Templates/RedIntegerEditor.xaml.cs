@@ -1,19 +1,7 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using WolvenKit.RED4.Types;
-using WolvenKit.RED4.Types.Exceptions;
 
 namespace WolvenKit.Views.Editors
 {
@@ -31,8 +19,8 @@ namespace WolvenKit.Views.Editors
 
         public IRedInteger RedInteger
         {
-            get => (IRedInteger)this.GetValue(RedIntegerProperty);
-            set => this.SetValue(RedIntegerProperty, value);
+            get => (IRedInteger)GetValue(RedIntegerProperty);
+            set => SetValue(RedIntegerProperty, value);
         }
         public static readonly DependencyProperty RedIntegerProperty = DependencyProperty.Register(
             nameof(RedInteger), typeof(IRedInteger), typeof(RedIntegerEditor), new PropertyMetadata(default(IRedInteger)));

@@ -1,5 +1,4 @@
 using System;
-using System.Collections.ObjectModel;
 using System.Reactive.Linq;
 using System.Windows;
 using System.Windows.Documents;
@@ -28,11 +27,10 @@ namespace WolvenKit.Views.Tools
             ViewModel = Locator.Current.GetService<LogViewModel>();
             DataContext = ViewModel;
 
-            ReadOnlyObservableCollection<LogEntry> _logEntries;
             var logger = Locator.Current.GetService<ILoggerService>();
             logger.Connect()
                 .ObserveOn(RxApp.MainThreadScheduler)
-                .Bind(out _logEntries)
+                .Bind(out var _logEntries)
                 .Subscribe(OnNext);
 
             var firaCode = new FontFamily("Fira Code");

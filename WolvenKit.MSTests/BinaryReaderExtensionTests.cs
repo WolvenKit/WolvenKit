@@ -1,4 +1,3 @@
-using System;
 using System.IO;
 using Microsoft.IO;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -6,8 +5,6 @@ using WolvenKit.Core.Extensions;
 
 namespace WolvenKit.MSTests
 {
-    using ReadVLQUInt32Test = Tuple<byte[], uint>;
-
     [TestClass]
     public class BinaryReaderExtensionTests
     {
@@ -68,68 +65,53 @@ namespace WolvenKit.MSTests
             "They say if you wanna understand the streets, you gotta live 'em. Gangs, fixers, dolls, small-time pushers – you were raised by them all. Down here the law of the jungle dictates the weak serve the strong – the only law in Night City you have yet to break.",
             DisplayName = "05. From lang_en_text/onscreens.json: The entire streetkid life path description"
         )]
-        public void Test_ReadLengthPrefixedString(byte[] input, string expected)
-        {
-            Assert.AreEqual(expected, GetReaderFromByteArray(input).ReadLengthPrefixedString());
-        }
+        public void Test_ReadLengthPrefixedString(byte[] input, string expected) => Assert.AreEqual(expected, GetReaderFromByteArray(input).ReadLengthPrefixedString());
 
 
         [TestMethod]
-        [DataRow(new byte[] { 0x00 },   0, DisplayName = "00. Zero value")]
-        [DataRow(new byte[] { 0x2A },  42, DisplayName = "01. Positive 1-byte value")]
+        [DataRow(new byte[] { 0x00 }, 0, DisplayName = "00. Zero value")]
+        [DataRow(new byte[] { 0x2A }, 42, DisplayName = "01. Positive 1-byte value")]
         [DataRow(new byte[] { 0xAA }, -42, DisplayName = "02. Negative 1-byte value")]
-        [DataRow(new byte[] { 0x3F },  63, DisplayName = "03. Max positive 1-byte value  (2^6 - 1)")]
+        [DataRow(new byte[] { 0x3F }, 63, DisplayName = "03. Max positive 1-byte value  (2^6 - 1)")]
         [DataRow(new byte[] { 0xBF }, -63, DisplayName = "04. Min negative 1-byte value -(2^6 - 1)")]
-        [DataRow(new byte[] { 0x40, 0x01 },    64, DisplayName = "05. Min 2-byte value (2^6)")]
-        [DataRow(new byte[] { 0x7F, 0x7F },  8191, DisplayName = "06. Max positive 2-byte value  (2^13 - 1)")]
+        [DataRow(new byte[] { 0x40, 0x01 }, 64, DisplayName = "05. Min 2-byte value (2^6)")]
+        [DataRow(new byte[] { 0x7F, 0x7F }, 8191, DisplayName = "06. Max positive 2-byte value  (2^13 - 1)")]
         [DataRow(new byte[] { 0xFF, 0x7F }, -8191, DisplayName = "07. Max negative 2-byte value -(2^13 - 1)")]
-        [DataRow(new byte[] { 0x40, 0x80, 0x01 },     8192, DisplayName = "08. Min 3-byte value (2^13)")]
-        [DataRow(new byte[] { 0x7F, 0xFF, 0x7F },  1048575, DisplayName = "09. Max positive 3-byte value  (2^20 - 1)")]
+        [DataRow(new byte[] { 0x40, 0x80, 0x01 }, 8192, DisplayName = "08. Min 3-byte value (2^13)")]
+        [DataRow(new byte[] { 0x7F, 0xFF, 0x7F }, 1048575, DisplayName = "09. Max positive 3-byte value  (2^20 - 1)")]
         [DataRow(new byte[] { 0xFF, 0xFF, 0x7F }, -1048575, DisplayName = "10. Max negative 3-byte value -(2^20 - 1)")]
-        [DataRow(new byte[] { 0x40, 0x80, 0x80, 0x01 },    1048576, DisplayName = "11. Min 4-byte value (2^20)")]
-        [DataRow(new byte[] { 0x7F, 0xFF, 0xFF, 0x7F },  134217727, DisplayName = "12. Max positive 4-byte value  (2^27 - 1)")]
+        [DataRow(new byte[] { 0x40, 0x80, 0x80, 0x01 }, 1048576, DisplayName = "11. Min 4-byte value (2^20)")]
+        [DataRow(new byte[] { 0x7F, 0xFF, 0xFF, 0x7F }, 134217727, DisplayName = "12. Max positive 4-byte value  (2^27 - 1)")]
         [DataRow(new byte[] { 0xFF, 0xFF, 0xFF, 0x7F }, -134217727, DisplayName = "13. Max negative 4-byte value -(2^27 - 1)")]
-        [DataRow(new byte[] { 0x40, 0x80, 0x80, 0x80, 0x01 },   134217728, DisplayName = "14. Min 5-byte value (2^27)")]
-        [DataRow(new byte[] { 0x7F, 0xFF, 0xFF, 0xFF, 0x0F },  2147483647, DisplayName = "15. Max positive 32-bit value  (2^31 - 1)")]
+        [DataRow(new byte[] { 0x40, 0x80, 0x80, 0x80, 0x01 }, 134217728, DisplayName = "14. Min 5-byte value (2^27)")]
+        [DataRow(new byte[] { 0x7F, 0xFF, 0xFF, 0xFF, 0x0F }, 2147483647, DisplayName = "15. Max positive 32-bit value  (2^31 - 1)")]
         [DataRow(new byte[] { 0xFF, 0xFF, 0xFF, 0xFF, 0x0F }, -2147483647, DisplayName = "16. Max negative 32-bit value -(2^31 - 1)")]
-        public void Test_ReadVLQInt32(byte[] input, int expected)
-        {
-            Assert.AreEqual(expected, GetReaderFromByteArray(input).ReadVLQInt32());
-        }
+        public void Test_ReadVLQInt32(byte[] input, int expected) => Assert.AreEqual(expected, GetReaderFromByteArray(input).ReadVLQInt32());
 
         [TestMethod]
         [ExpectedException(typeof(InvalidDataException))]
         [DataRow(new byte[] { 0xFF, 0xFF, 0xFF, 0xFF, 0xFF })]
-        public void Test_ReadVLQInt32_InvalidData(byte[] input)
-        {
-            GetReaderFromByteArray(input).ReadVLQInt32();
-        }
+        public void Test_ReadVLQInt32_InvalidData(byte[] input) => GetReaderFromByteArray(input).ReadVLQInt32();
 
 
         [TestMethod]
-        [DataRow(new byte[] { 0x00 },   0u, DisplayName = "00. Zero value")]
-        [DataRow(new byte[] { 0x45 },  69u, DisplayName = "01. Random 1-byte value")]
+        [DataRow(new byte[] { 0x00 }, 0u, DisplayName = "00. Zero value")]
+        [DataRow(new byte[] { 0x45 }, 69u, DisplayName = "01. Random 1-byte value")]
         [DataRow(new byte[] { 0x7F }, 127u, DisplayName = "02. Max 1-byte value (2^7 - 1)")]
-        [DataRow(new byte[] { 0x80, 0x01 },   128u, DisplayName = "03. Min 2-byte value (2^7)")]
+        [DataRow(new byte[] { 0x80, 0x01 }, 128u, DisplayName = "03. Min 2-byte value (2^7)")]
         [DataRow(new byte[] { 0xFF, 0x7F }, 16383u, DisplayName = "04. Max 2-byte value (2^14 - 1)")]
-        [DataRow(new byte[] { 0x80, 0x80, 0x01 },   16384u, DisplayName = "05. Min 3-byte value (2^14)")]
+        [DataRow(new byte[] { 0x80, 0x80, 0x01 }, 16384u, DisplayName = "05. Min 3-byte value (2^14)")]
         [DataRow(new byte[] { 0xFF, 0xFF, 0x7F }, 2097151u, DisplayName = "06. Max 3-byte value (2^21 - 1)")]
-        [DataRow(new byte[] { 0x80, 0x80, 0x80, 0x01 },   2097152u, DisplayName = "07. Min 4-byte value (2^21)")]
+        [DataRow(new byte[] { 0x80, 0x80, 0x80, 0x01 }, 2097152u, DisplayName = "07. Min 4-byte value (2^21)")]
         [DataRow(new byte[] { 0xFF, 0xFF, 0xFF, 0x7F }, 268435455u, DisplayName = "08. Max 4-byte value (2^28 - 1)")]
-        [DataRow(new byte[] { 0x80, 0x80, 0x80, 0x80, 0x01 },  268435456u, DisplayName = "09. Min 5-byte value (2^21)")]
+        [DataRow(new byte[] { 0x80, 0x80, 0x80, 0x80, 0x01 }, 268435456u, DisplayName = "09. Min 5-byte value (2^21)")]
         [DataRow(new byte[] { 0xFF, 0xFF, 0xFF, 0xFF, 0x0F }, 4294967295u, DisplayName = "10. Max 32-bit value (2^32)")]
-        public void Test_ReadVLQUInt32(byte[] input, uint expected)
-        {
-            Assert.AreEqual(expected, GetReaderFromByteArray(input).ReadVLQUInt32());
-        }
+        public void Test_ReadVLQUInt32(byte[] input, uint expected) => Assert.AreEqual(expected, GetReaderFromByteArray(input).ReadVLQUInt32());
 
         [TestMethod]
         [ExpectedException(typeof(InvalidDataException))]
         [DataRow(new byte[] { 0xFF, 0xFF, 0xFF, 0xFF, 0xFF })]
-        public void Test_ReadVLQUInt32_InvalidData(byte[] input)
-        {
-            GetReaderFromByteArray(input).ReadVLQUInt32();
-        }
+        public void Test_ReadVLQUInt32_InvalidData(byte[] input) => GetReaderFromByteArray(input).ReadVLQUInt32();
 
         #endregion
     }

@@ -7,7 +7,6 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Shapes;
-using WolvenKit.Common;
 using WolvenKit.RED4.Types;
 using WolvenKit.ViewModels;
 using Point = System.Windows.Point;
@@ -45,7 +44,7 @@ namespace WolvenKit.Views.Editors
             var values = points.Select(x => x.GetValue()).ToArray();
             var type = model.InterpolationType;
 
-            
+
 
             switch (_elementType)
             {
@@ -191,8 +190,8 @@ namespace WolvenKit.Views.Editors
 
         private void MainWindow1_OnLoaded(object sender, RoutedEventArgs e)
         {
-            this.KeyDown += OnKeyDown;
-            this.KeyUp += OnKeyUp;
+            KeyDown += OnKeyDown;
+            KeyUp += OnKeyUp;
 
             if (DataContext is CurveEditorViewModel vm)
             {
@@ -285,14 +284,14 @@ namespace WolvenKit.Views.Editors
 
         private void SaveButton_OnClick(object sender, RoutedEventArgs e)
         {
-            this.DialogResult = true;
-            this.Close();
+            DialogResult = true;
+            Close();
         }
 
         private void CloseButton_OnClick(object sender, RoutedEventArgs e)
         {
-            this.DialogResult = false;
-            this.Close();
+            DialogResult = false;
+            Close();
         }
 
         #endregion
@@ -515,7 +514,7 @@ namespace WolvenKit.Views.Editors
             }
             Canvas.SetLeft(label, x);
 
-            double y = location.Y;
+            var y = location.Y;
             switch (valign)
             {
                 case VerticalAlignment.Center:

@@ -1,6 +1,5 @@
 using ReactiveUI;
 using Splat;
-using WolvenKit.Functionality.WKitGlobal.Helpers;
 using WolvenKit.ViewModels.Wizards;
 
 namespace WolvenKit.Views.Wizards

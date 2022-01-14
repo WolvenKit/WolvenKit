@@ -77,7 +77,7 @@ namespace RED.CRC64
 
         public static ulong Compute(byte[] s, ulong crc = ~(ulong)0)
         {
-            for (int j = 0; j < s.Length; j++)
+            for (var j = 0; j < s.Length; j++)
             {
                 crc = (crc >> 8) ^ Crc64.Table[(byte)(crc ^ s[j])];
             }

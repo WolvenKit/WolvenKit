@@ -52,7 +52,7 @@ namespace WolvenKit.RED4.Archive.CR2W
 
         private void OnObjectChanged(object sender, ObjectChangedEventArgs e)
         {
-            
+
         }
 
         #endregion
@@ -96,7 +96,7 @@ namespace WolvenKit.RED4.Archive.CR2W
 
             result.AddRange(RootChunk.FindType(targetTypes));
 
-            for (int i = 0; i < EmbeddedFiles.Count; i++)
+            for (var i = 0; i < EmbeddedFiles.Count; i++)
             {
                 result.AddRange(EmbeddedFiles[i].Content.FindType(targetTypes, $"emb{i}"));
             }

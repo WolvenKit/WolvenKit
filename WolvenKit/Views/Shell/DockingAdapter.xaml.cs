@@ -10,9 +10,6 @@ using System.Linq;
 using System.Reactive.Linq;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Resources;
 using System.Xml;
 using ReactiveUI;
 using Splat;
@@ -22,7 +19,6 @@ using WolvenKit.Functionality.Services;
 using WolvenKit.Functionality.WKitGlobal.Helpers;
 using WolvenKit.Models;
 using WolvenKit.Models.Docking;
-using WolvenKit.MVVM.Model.ProjectManagement.Project;
 using WolvenKit.ViewModels.Documents;
 using WolvenKit.ViewModels.Shell;
 using WolvenKit.ViewModels.Tools;
@@ -121,7 +117,7 @@ namespace WolvenKit.Views.Shell
 
             if (DebuggingLayouts)
             {
-                XmlWriter writer = XmlWriter.Create("DockStates.xml");
+                var writer = XmlWriter.Create("DockStates.xml");
 
                 PART_DockingManager.SaveDockState(writer);
 
@@ -140,7 +136,9 @@ namespace WolvenKit.Views.Shell
             }
 
             if (viewModel is null)
+            {
                 viewModel = DataContext as AppViewModel;
+            }
 
             SizeChanged += Window_SizeChanged;
         }
@@ -148,7 +146,9 @@ namespace WolvenKit.Views.Shell
         private void Window_SizeChanged(object sender, SizeChangedEventArgs e)
         {
             if (!UsingProjectLayout)
+            {
                 PART_DockingManager.SaveDockState();
+            }
         }
 
         public IDocumentViewModel ActiveDocument
@@ -163,7 +163,7 @@ namespace WolvenKit.Views.Shell
 
         public object ItemsSource
         {
-            get => (object)GetValue(ItemsSourceProperty);
+            get => GetValue(ItemsSourceProperty);
             set => SetValue(ItemsSourceProperty, value);
         }
 
@@ -194,14 +194,20 @@ namespace WolvenKit.Views.Shell
                 adapter.PART_DockingManager.SetCurrentValue(DockingManager.ActiveWindowProperty, control);
 
                 if (adapter.viewModel != null)
+                {
                     adapter.viewModel.UpdateTitle();
+                }
+
                 break;
             }
         }
         public void OnActiveProjectChanged()
         {
             if (viewModel is null || viewModel.ActiveProject is null)
+            {
                 return;
+            }
+
             try
             {
                 // need to also handle if files have been modified (probably elsewhere, though)
@@ -231,7 +237,10 @@ namespace WolvenKit.Views.Shell
         public void SaveLayoutToProject()
         {
             if (viewModel is null || viewModel.ActiveProject is null)
+            {
                 return;
+            }
+
             var layoutPath = Path.Combine(viewModel.ActiveProject.ProjectDirectory, "layout.xml");
             var writer = XmlWriter.Create(layoutPath);
             PART_DockingManager.SaveDockState(writer);
@@ -328,7 +337,7 @@ namespace WolvenKit.Views.Shell
                     PART_DockingManager.Children.Remove(control);
                     if (control.Content is IDocumentViewModel document)
                     {
-                      
+
                         if (ActiveDocument == document)
                         {
                             SetCurrentValue(ActiveDocumentProperty, null);
@@ -423,7 +432,8 @@ namespace WolvenKit.Views.Shell
                     _ = propertiesViewModel.ExecuteSelectFile(abvm.RightSelectedItem as FileModel);
                 }
 
-                if (content.Content != null) {
+                if (content.Content != null)
+                {
                     DiscordHelper.SetDiscordRPCStatus(content.Content as string);
                 }
 
@@ -442,7 +452,9 @@ namespace WolvenKit.Views.Shell
             }
 
             if (viewModel != null)
+            {
                 viewModel.UpdateTitle();
+            }
         }
     }
 }

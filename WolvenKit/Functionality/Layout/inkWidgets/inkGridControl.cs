@@ -1,12 +1,8 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using WolvenKit.RED4.Types;
-using Rect = System.Windows.Rect;
 using WolvenKit.Views.Documents;
+using Rect = System.Windows.Rect;
 
 namespace WolvenKit.Functionality.Layout.inkWidgets
 {
@@ -26,12 +22,14 @@ namespace WolvenKit.Functionality.Layout.inkWidgets
             var totalUnits = 0D;
             var fixedSize = 0D;
             var panelContentSize = new Size(0, 0);
-            foreach (inkControl child in Children)
+            foreach (var child in Children)
             {
                 if (child.Visibility == Visibility.Collapsed)
+                {
                     continue;
+                }
 
-                child.Measure(new Size(Double.PositiveInfinity, Double.PositiveInfinity));
+                child.Measure(new Size(double.PositiveInfinity, double.PositiveInfinity));
 
                 var width = child.DesiredSize.Width + child.Margin.Left + child.Margin.Right;
                 var height = child.DesiredSize.Height + child.Margin.Top + child.Margin.Bottom;
@@ -42,9 +40,13 @@ namespace WolvenKit.Functionality.Layout.inkWidgets
                     panelContentSize.Height = Math.Max(height, panelContentSize.Height);
 
                     if (child.Widget.Layout.SizeRule.Value == Enums.inkESizeRule.Fixed)
+                    {
                         fixedSize += width;
+                    }
                     else
+                    {
                         totalUnits += child.Widget.Layout.SizeCoefficient;
+                    }
                 }
                 else
                 {
@@ -52,9 +54,13 @@ namespace WolvenKit.Functionality.Layout.inkWidgets
                     panelContentSize.Height += Math.Max(height, 0);
 
                     if (child.Widget.Layout.SizeRule.Value == Enums.inkESizeRule.Fixed)
+                    {
                         fixedSize += height;
+                    }
                     else
+                    {
                         totalUnits += child.Widget.Layout.SizeCoefficient;
+                    }
                 }
             }
 
@@ -67,18 +73,25 @@ namespace WolvenKit.Functionality.Layout.inkWidgets
                 panelDesiredSize = MeasureForDimensions(panelContentSize, availableSize);
             }
 
-            foreach (inkControl child in Children)
+            foreach (var child in Children)
             {
                 if (child.Visibility == Visibility.Collapsed)
+                {
                     continue;
+                }
 
                 var width = child.DesiredSize.Width;
                 var height = child.DesiredSize.Height;
 
                 if (HAlignToFill(child) && GridWidget.Orientation.Value == Enums.inkEOrientation.Vertical)
+                {
                     width = panelDesiredSize.Width - child.Margin.Left - child.Margin.Right - ChildMargin.Left - ChildMargin.Right;
+                }
+
                 if (VAlignToFill(child) && GridWidget.Orientation.Value == Enums.inkEOrientation.Horizontal)
+                {
                     height = panelDesiredSize.Height - child.Margin.Top - child.Margin.Bottom - ChildMargin.Top - ChildMargin.Bottom;
+                }
 
                 if (child.Widget.Layout.SizeRule.Value == Enums.inkESizeRule.Stretch)
                 {
@@ -103,16 +116,18 @@ namespace WolvenKit.Functionality.Layout.inkWidgets
         protected override void ArrangeCore(Rect finalRect)
         {
             double currentX = 0, currentY = 0;
-            foreach (inkControl child in Children)
+            foreach (var child in Children)
             {
                 if (child.Visibility == Visibility.Collapsed)
+                {
                     continue;
+                }
 
                 var width = child.DesiredSize.Width;
                 var height = child.DesiredSize.Height;
 
-                double x = currentX;
-                double y = currentY;
+                var x = currentX;
+                var y = currentY;
 
                 if (Widget is inkVerticalPanelWidget)
                 {

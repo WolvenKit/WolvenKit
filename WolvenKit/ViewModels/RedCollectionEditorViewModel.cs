@@ -1,14 +1,8 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Linq;
 using System.Runtime.CompilerServices;
-using System.Windows;
 using System.Windows.Input;
-using System.Windows.Media;
-using WinCopies.Util;
 using WolvenKit.Common.Annotations;
 using WolvenKit.Functionality.Commands;
 using WolvenKit.RED4.Types;
@@ -91,7 +85,7 @@ namespace WolvenKit.ViewModels
                     .GetMethod(nameof(AddElement));
             var generic = method.MakeGenericMethod(_innerType);
 
-            generic.Invoke(this, new object[] {  });
+            generic.Invoke(this, new object[] { });
         }
 
         public void AddElement<T>() where T : IRedType
@@ -113,7 +107,7 @@ namespace WolvenKit.ViewModels
                     }
                 }
             }
-            
+
         }
 
         private void RemoveElement()

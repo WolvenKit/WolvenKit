@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
-using WolvenKit.RED4.Archive.CR2W;
 using WolvenKit.RED4.IO;
 using WolvenKit.RED4.Types;
 
@@ -25,10 +24,7 @@ namespace WolvenKit.RED4.Archive.IO
         {
         }
 
-        public override void Write(CRUID val)
-        {
-            _writer.Write(val);
-        }
+        public override void Write(CRUID val) => _writer.Write(val);
 
         private readonly List<Type> _ignoreCRUIDS = new()
         {
@@ -139,7 +135,7 @@ namespace WolvenKit.RED4.Archive.IO
             var flags = enumString.Split(',');
 
             _writer.Write((byte)flags.Length);
-            for (int i = 0; i < flags.Length; i++)
+            for (var i = 0; i < flags.Length; i++)
             {
                 var tFlag = flags[i].Trim();
                 CNameRef.Add(_writer.BaseStream.Position, tFlag);

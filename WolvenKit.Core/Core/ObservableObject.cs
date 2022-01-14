@@ -21,10 +21,7 @@ namespace WolvenKit.Common
         /// Invoke the PropertyChanged event using the caller property name with <see cref="CallerMemberNameAttribute"/>.
         /// </summary>
         /// <param name="propertyName">The name of the property that was changed.</param>
-        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
+        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null) => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
 
         #endregion NotifyPropertyChanged
 
@@ -36,10 +33,7 @@ namespace WolvenKit.Common
         /// Invoke the PropertyChanging event using the caller property name with <see cref="CallerMemberNameAttribute"/>.
         /// </summary>
         /// <param name="propertyName">The name of the property that is changing.</param>
-        protected virtual void OnPropertyChanging([CallerMemberName] string propertyName = null)
-        {
-            PropertyChanging?.Invoke(this, new PropertyChangingEventArgs(propertyName));
-        }
+        protected virtual void OnPropertyChanging([CallerMemberName] string propertyName = null) => PropertyChanging?.Invoke(this, new PropertyChangingEventArgs(propertyName));
 
         #endregion NotifyPropertyChanging
 

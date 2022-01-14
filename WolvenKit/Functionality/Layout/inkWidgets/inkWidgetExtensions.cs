@@ -1,10 +1,6 @@
 using System;
 using System.Collections.Generic;
-using System.Drawing;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
 using WolvenKit.RED4.Types;
 using WolvenKit.Views.Documents;
 
@@ -64,7 +60,10 @@ namespace WolvenKit.Functionality.Layout.inkWidgets
             {
                 var childrenHandles = imc.Children.Reverse();
                 if (widget.ChildOrder.Value == Enums.inkEChildOrder.Forward)
+                {
                     childrenHandles = childrenHandles.Reverse();
+                }
+
                 foreach (var childHandle in childrenHandles)
                 {
                     children.Add((inkWidget)childHandle.GetValue());

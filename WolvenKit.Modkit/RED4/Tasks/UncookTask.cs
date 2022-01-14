@@ -1,12 +1,10 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Threading.Tasks;
 using WolvenKit.Common;
-using WolvenKit.RED4.CR2W.Archive;
-using WolvenKit.Common.DDS;
 using WolvenKit.Common.Model.Arguments;
 using WolvenKit.Common.Services;
+using WolvenKit.RED4.CR2W.Archive;
 
 namespace CP77Tools.Tasks
 {

@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -39,8 +38,10 @@ namespace WolvenKit.RED4.Archive.IO
                 return EFileReadErrorCodes.NoCr2w;
             }
 
-            var result = new CR2WFileInfo();
-            result.FileHeader = BaseStream.ReadStruct<CR2WFileHeader>();
+            var result = new CR2WFileInfo
+            {
+                FileHeader = BaseStream.ReadStruct<CR2WFileHeader>()
+            };
 
             if (result.FileHeader.version > 195 || result.FileHeader.version < 163)
             {
@@ -83,7 +84,7 @@ namespace WolvenKit.RED4.Archive.IO
             _cr2wFile.MetaData.Version = _cr2wFile.Info.FileHeader.version;
             _cr2wFile.MetaData.BuildVersion = _cr2wFile.Info.FileHeader.buildVersion;
             _cr2wFile.MetaData.ObjectsEnd = _cr2wFile.Info.FileHeader.objectsEnd;
-            
+
             // use 1 as 0 is always empty
             _cr2wFile.MetaData.HashVersion = IdentifyHash(_cr2wFile.Info.StringDict[1], _cr2wFile.Info.NameInfo[1].hash);
             if (_cr2wFile.MetaData.HashVersion == EHashVersion.Unknown)
@@ -92,17 +93,17 @@ namespace WolvenKit.RED4.Archive.IO
             }
 
             #region Read Data
-            
+
             foreach (var nameInfo in _cr2wFile.Info.NameInfo)
             {
                 _namesList.Add(ReadName(nameInfo, _cr2wFile.Info.StringDict));
             }
-            
+
             foreach (var importInfo in _cr2wFile.Info.ImportInfo)
             {
                 importsList.Add(ReadImport(importInfo, _cr2wFile.Info.StringDict));
             }
-            
+
             foreach (var propertyInfo in _cr2wFile.Info.PropertyInfo)
             {
                 _cr2wFile.Properties.Add(ReadProperty(propertyInfo));
@@ -112,19 +113,19 @@ namespace WolvenKit.RED4.Archive.IO
             {
                 throw new TodoException();
             }
-            
-            for (int i = 0; i < _cr2wFile.Info.ExportInfo.Length; i++)
+
+            for (var i = 0; i < _cr2wFile.Info.ExportInfo.Length; i++)
             {
                 var chunk = ReadChunk(_cr2wFile.Info.ExportInfo[i]);
                 if (i == 0)
                 {
                     _cr2wFile.RootChunk = chunk;
                 }
-                
+
                 _chunks.Add(i, chunk);
             }
 
-            for (int i = _chunks.Count - 1; i >= 0; i--)
+            for (var i = _chunks.Count - 1; i >= 0; i--)
             {
                 if (!HandleQueue.ContainsKey(i))
                 {
@@ -138,8 +139,8 @@ namespace WolvenKit.RED4.Archive.IO
 
                 //_chunks.Remove(i);
             }
-            
-            for (int i = 0; i < _cr2wFile.Info.BufferInfo.Length; i++)
+
+            for (var i = 0; i < _cr2wFile.Info.BufferInfo.Length; i++)
             {
                 var buffer = ReadBuffer(_cr2wFile.Info.BufferInfo[i]);
                 if (!BufferQueue.ContainsKey(i))
@@ -159,7 +160,7 @@ namespace WolvenKit.RED4.Archive.IO
 
                 ParseBuffer(buffer);
             }
-            
+
             foreach (var embeddedInfo in _cr2wFile.Info.EmbeddedInfo)
             {
                 _cr2wFile.EmbeddedFiles.Add(ReadEmbedded(embeddedInfo));
@@ -195,20 +196,14 @@ namespace WolvenKit.RED4.Archive.IO
             return stringDict[info.offset];
         }
 
-        private CR2WImport ReadImport(CR2WImportInfo info, IDictionary<uint, CName> stringDict)
+        private CR2WImport ReadImport(CR2WImportInfo info, IDictionary<uint, CName> stringDict) => new CR2WImport
         {
-            return new CR2WImport
-            {
-                ClassName = _namesList[info.className],
-                DepotPath = stringDict[info.offset],
-                Flags = (InternalEnums.EImportFlags)info.flags
-            };
-        }
+            ClassName = _namesList[info.className],
+            DepotPath = stringDict[info.offset],
+            Flags = (InternalEnums.EImportFlags)info.flags
+        };
 
-        private CR2WProperty ReadProperty(CR2WPropertyInfo info)
-        {
-            return new CR2WProperty();
-        }
+        private CR2WProperty ReadProperty(CR2WPropertyInfo info) => new CR2WProperty();
 
         private RedBaseClass ReadChunk(CR2WExportInfo info)
         {

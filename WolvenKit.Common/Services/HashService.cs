@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using WolvenKit.Common.Extensions;
 using WolvenKit.Common.FNV1A;
 using WolvenKit.Common.Model;
 using WolvenKit.Common.Oodle;
@@ -220,7 +219,7 @@ namespace WolvenKit.Common.Services
                 {
                     continue;
                 }
-                
+
                 if (!hashDict.ContainsKey(hash))
                 {
                     hashDict.Add(hash, new SAsciiString(line));

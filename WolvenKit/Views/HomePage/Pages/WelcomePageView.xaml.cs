@@ -1,12 +1,9 @@
 using System;
 using System.Reactive.Disposables;
 using System.Threading.Tasks;
-using AdonisUI.Controls;
 using ReactiveUI;
 using Splat;
 using WolvenKit.Functionality.Helpers;
-using WolvenKit.Interaction;
-using WolvenKit.ViewModels.HomePage.Pages;
 using WolvenKit.ViewModels.Shared;
 
 namespace WolvenKit.Views.HomePage.Pages
@@ -25,28 +22,28 @@ namespace WolvenKit.Views.HomePage.Pages
             this.WhenActivated(disposables =>
             {
                 this.BindCommand(
-                    this.ViewModel,
+                    ViewModel,
                     vm => vm.OpenLinkCommand,
                     v => v.DiscordLinkButton,
                     vm => vm.DiscordLink);
                 this.BindCommand(
-                    this.ViewModel,
+                    ViewModel,
                     vm => vm.OpenLinkCommand,
                     v => v.YoutubeLinkButton,
                     vm => vm.YoutubeLink);
                 //Twitter Link Not Used
                 //this.BindCommand(
-                    //this.ViewModel,
-                    //vm => vm.OpenLinkCommand,
-                    //v => v.TwitterLinkButton,
-                    //vm => vm.TwitterLink);
+                //this.ViewModel,
+                //vm => vm.OpenLinkCommand,
+                //v => v.TwitterLinkButton,
+                //vm => vm.TwitterLink);
                 this.BindCommand(
-                    this.ViewModel,
+                    ViewModel,
                     vm => vm.OpenLinkCommand,
                     v => v.OpenCollectiveLinkButton,
                     vm => vm.OpenCollectiveLink);
                 this.BindCommand(
-                    this.ViewModel,
+                    ViewModel,
                     vm => vm.OpenLinkCommand,
                     v => v.PatreonLinkButton,
                     vm => vm.PatreonLink);

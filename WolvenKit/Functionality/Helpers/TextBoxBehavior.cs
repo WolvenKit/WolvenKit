@@ -1,8 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -39,14 +34,8 @@ namespace WolvenKit.Functionality.Helpers
             }
         }
 
-        public static void SetTripleClickSelectAll(DependencyObject element, bool value)
-        {
-            element.SetValue(TripleClickSelectAllProperty, value);
-        }
+        public static void SetTripleClickSelectAll(DependencyObject element, bool value) => element.SetValue(TripleClickSelectAllProperty, value);
 
-        public static bool GetTripleClickSelectAll(DependencyObject element)
-        {
-            return (bool)element.GetValue(TripleClickSelectAllProperty);
-        }
+        public static bool GetTripleClickSelectAll(DependencyObject element) => (bool)element.GetValue(TripleClickSelectAllProperty);
     }
 }

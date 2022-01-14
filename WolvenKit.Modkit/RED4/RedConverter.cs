@@ -2,14 +2,11 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Runtime.Serialization;
-using System.Text;
 using Newtonsoft.Json;
 using WolvenKit.Common;
 using WolvenKit.Common.Conversion;
-using WolvenKit.Interfaces.Core;
 using WolvenKit.RED4.Archive.CR2W;
 using WolvenKit.RED4.Archive.IO;
-using WolvenKit.RED4.CR2W;
 using WolvenKit.RED4.Types;
 using WolvenKit.RED4.Types.Exceptions;
 
@@ -35,11 +32,12 @@ namespace WolvenKit.Modkit.RED4
             }
 
             var json = "";
-            var list = new List<object>();
-
-            list.Add(new Dictionary<string, object>() {
+            var list = new List<object>
+            {
+                new Dictionary<string, object>() {
                 { ":" + RedReflection.GetRedTypeFromCSType(cr2w.RootChunk.GetType()), new RedClassDto(cr2w.RootChunk) }
-            });
+            }
+            };
 
             var dto = new
             {

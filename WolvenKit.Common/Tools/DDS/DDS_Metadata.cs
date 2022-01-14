@@ -1,5 +1,4 @@
 using DirectXTexSharp;
-using WolvenKit.RED4.Types;
 
 namespace WolvenKit.Common.DDS
 {
@@ -88,6 +87,6 @@ namespace WolvenKit.Common.DDS
 
         #endregion Constructors
 
-        
+
     }
 }

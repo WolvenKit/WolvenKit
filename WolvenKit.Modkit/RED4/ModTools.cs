@@ -1,4 +1,3 @@
-using System;
 using CP77.CR2W;
 using WolvenKit.Common;
 using WolvenKit.Common.Interfaces;

@@ -1,12 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Reflection.Metadata;
 using System.Runtime.InteropServices;
 using WolvenKit.Common;
 using WolvenKit.Common.DDS;
-using WolvenKit.Interfaces.Extensions;
-using WolvenKit.RED4;
 using WolvenKit.RED4.Archive.CR2W;
 using WolvenKit.RED4.Archive.IO;
 using WolvenKit.RED4.Types;
@@ -364,11 +361,11 @@ namespace WolvenKit.Modkit.RED4.MLMask
                             if (_mlmask.Layers[I].Tiles[Convert.ToInt32(tx + (ty * _mlmask.Layers[I].WidthInTiles0))].RangeMax > 0)
                             {
                                 var layer = new TileView
-                                    {
-                                        LayerIndex = I,
-                                        LayerTileIndex = tx + (ty * _mlmask.Layers[I].WidthInTiles0),
-                                        AtlasInPosition = PackTileInAtlas(I, tx, ty)
-                                    };
+                                {
+                                    LayerIndex = I,
+                                    LayerTileIndex = tx + (ty * _mlmask.Layers[I].WidthInTiles0),
+                                    AtlasInPosition = PackTileInAtlas(I, tx, ty)
+                                };
                                 _mlmask.MaskTilesLow[x + (y * _mlmask.WidthInTilesLow)].Layers.Add(layer);
                             }
                         }
@@ -386,11 +383,11 @@ namespace WolvenKit.Modkit.RED4.MLMask
                             if (_mlmask.Layers[I].Tiles[Convert.ToInt32(tx + (ty * _mlmask.Layers[I].WidthInTiles0))].RangeMax > 0)
                             {
                                 var layer = new TileView
-                                    {
-                                        LayerIndex = I,
-                                        LayerTileIndex = tx + (ty * _mlmask.Layers[I].WidthInTiles0),
-                                        AtlasInPosition = PackTileInAtlas(I, tx, ty)
-                                    };
+                                {
+                                    LayerIndex = I,
+                                    LayerTileIndex = tx + (ty * _mlmask.Layers[I].WidthInTiles0),
+                                    AtlasInPosition = PackTileInAtlas(I, tx, ty)
+                                };
                                 _mlmask.MaskTilesHigh[x + (y * _mlmask.WidthInTilesHigh)].Layers.Add(layer);
                             }
                         }
@@ -430,11 +427,11 @@ namespace WolvenKit.Modkit.RED4.MLMask
                 {
 
                     var atlasTile = new TileView
-                        {
-                            AtlasInPosition = _mlmask.AtlasTilesCount++,
-                            LayerIndex = layerIdx,
-                            LayerTileIndex = tileIndex
-                        };
+                    {
+                        AtlasInPosition = _mlmask.AtlasTilesCount++,
+                        LayerIndex = layerIdx,
+                        LayerTileIndex = tileIndex
+                    };
 
                     atlasView = atlasTile;
                     _mlmask.AtlasTiles.Add(recursiveHash, atlasTile);

@@ -7,7 +7,7 @@ namespace WolvenKit.Views.Documents
     {
         public MyEditorCollection()
         {
-            
+
 
 
 
@@ -47,7 +47,7 @@ namespace WolvenKit.Views.Documents
         {
             get
             {
-                for (int i = 0; i < base.Items.Count; i++)
+                for (var i = 0; i < base.Items.Count; i++)
                 {
                     _ = base.Items[i];
                 }
@@ -60,7 +60,7 @@ namespace WolvenKit.Views.Documents
         {
             get
             {
-                for (int i = 0; i < base.Items.Count; i++)
+                for (var i = 0; i < base.Items.Count; i++)
                 {
                     ITypeCustomEditor typeCustomEditor = base.Items[i];
                     if (typeCustomEditor.HasPropertyType)

@@ -28,8 +28,8 @@ namespace WolvenKit.Common.FNV1A
 
         public FNV1A64HashAlgorithm(Encoding encoding)
         {
-            this.Initialize();
-            this.HashSizeValue = 64;
+            Initialize();
+            HashSizeValue = 64;
             this.encoding = encoding ?? Encoding.ASCII;
         }
 
@@ -85,10 +85,7 @@ namespace WolvenKit.Common.FNV1A
             return hash;
         }
 
-        public static ulong HashString(string value)
-        {
-            return HashString(value, Encoding.ASCII, false, false);
-        }
+        public static ulong HashString(string value) => HashString(value, Encoding.ASCII, false, false);
 
         public static ulong HashString(string value, Encoding encoding, bool nullEnded = false, bool useSignedBuffer = false)
         {
@@ -120,15 +117,14 @@ namespace WolvenKit.Common.FNV1A
             }
         }
 
-        public void AppendString(string value)
-        {
-            AppendString(value, false);
-        }
+        public void AppendString(string value) => AppendString(value, false);
 
         public void AppendString(string value, bool nullEnded)
         {
             if (string.IsNullOrEmpty(value))
+            {
                 return;
+            }
 
             var length = encoding.GetMaxByteCount(nullEnded ? value.Length + 1 : value.Length);
             var buffer = ArrayPool<byte>.Shared.Rent(length);
@@ -149,10 +145,7 @@ namespace WolvenKit.Common.FNV1A
             }
         }
 
-        public override void Initialize()
-        {
-            this.fnvhash = FnvHashInitial;
-        }
+        public override void Initialize() => fnvhash = FnvHashInitial;
 
         protected override void HashCore(byte[] array, int ibStart, int cbSize)
         {
@@ -169,17 +162,14 @@ namespace WolvenKit.Common.FNV1A
 
             unchecked
             {
-                for (int i = ibStart; i < ibEnd; i++)
+                for (var i = ibStart; i < ibEnd; i++)
                 {
-                    this.fnvhash = (this.fnvhash ^ array[i]) * FnvHashPrime;
+                    fnvhash = (fnvhash ^ array[i]) * FnvHashPrime;
                 }
             }
         }
 
-        protected override byte[] HashFinal()
-        {
-            return BitConverter.GetBytes(this.HashUInt64);
-        }
+        protected override byte[] HashFinal() => BitConverter.GetBytes(HashUInt64);
 
         #endregion Methods
     }

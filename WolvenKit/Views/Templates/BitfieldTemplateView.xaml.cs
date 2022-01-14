@@ -1,13 +1,9 @@
 using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Collections.Specialized;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
-using WolvenKit.RED4.CR2W.Reflection;
 using WolvenKit.RED4.Types;
-using static WolvenKit.RED4.Types.Enums;
 using UserControl = System.Windows.Controls.UserControl;
 
 namespace WolvenKit.Views.Templates
@@ -74,10 +70,7 @@ namespace WolvenKit.Views.Templates
             }
         }
 
-        public void CollectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            SetRedValue(string.Join(", ", comboboxadv.SelectedItems.Cast<string>()));
-        }
+        public void CollectionChanged(object sender, SelectionChangedEventArgs e) => SetRedValue(string.Join(", ", comboboxadv.SelectedItems.Cast<string>()));
 
         private void SetRedValue(string value)
         {
@@ -92,12 +85,7 @@ namespace WolvenKit.Views.Templates
             //SetCurrentValue(RedBitfieldProperty, Enum.Parse(RedBitfield.GetInnerType(), value));
         }
 
-        private void SetRedValue(ObservableCollection<string> value)
-        {
-            SetRedValue(string.Join(", ", value));
-            //Type type = typeof(CBitField<>).MakeGenericType(RedBitfield.GetInnerType());
-            //SetCurrentValue(RedBitfieldProperty, (IRedBitField)System.Activator.CreateInstance(type, value.ToList()));
-        }
+        private void SetRedValue(ObservableCollection<string> value) => SetRedValue(string.Join(", ", value));//Type type = typeof(CBitField<>).MakeGenericType(RedBitfield.GetInnerType());//SetCurrentValue(RedBitfieldProperty, (IRedBitField)System.Activator.CreateInstance(type, value.ToList()));
 
         private ObservableCollection<string> GetValueFromRedValue() => new ObservableCollection<string>(RedBitfield?.ToBitFieldString().Split(", ") ?? Array.Empty<string>());
     }

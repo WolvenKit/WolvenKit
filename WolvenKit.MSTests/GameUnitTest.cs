@@ -1,8 +1,8 @@
 using System;
-using System.Linq;
 using System.Collections.Generic;
 using System.Configuration;
 using System.IO;
+using System.Linq;
 using Catel.IoC;
 using CP77.CR2W;
 using Microsoft.Extensions.Configuration;
@@ -10,15 +10,14 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using ProtoBuf.Meta;
 using Splat;
 using WolvenKit.Common;
+using WolvenKit.Common.Interfaces;
 using WolvenKit.Common.Services;
 using WolvenKit.Common.Tools.Oodle;
 using WolvenKit.Core.Services;
-using WolvenKit.Modkit.RED4.RigFile;
-using WolvenKit.RED4.CR2W;
-using WolvenKit.RED4.CR2W.Archive;
-using WolvenKit.Common.Interfaces;
 using WolvenKit.Modkit.RED4;
 using WolvenKit.MSTests.Model;
+using WolvenKit.RED4.CR2W;
+using WolvenKit.RED4.CR2W.Archive;
 
 namespace WolvenKit.MSTests
 {

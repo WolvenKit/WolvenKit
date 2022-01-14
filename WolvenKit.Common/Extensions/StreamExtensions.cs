@@ -1,14 +1,12 @@
 using System;
 using System.IO;
-using System.Runtime.InteropServices;
-using RED.CRC32;
 
 namespace WolvenKit.Common.Extensions
 
 {
     public static class StreamExtensions
     {
-        
+
         //https://stackoverflow.com/a/13022108
         public static void CopyToWithLength(this Stream input, Stream output, int bytes)
         {

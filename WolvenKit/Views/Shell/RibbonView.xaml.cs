@@ -2,15 +2,12 @@ using System;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Windows;
-using System.Windows.Media;
-using Ab3d.DirectX;
 using Ab3d.DirectX.Client.Settings;
 using ReactiveUI;
 using Splat;
 using Syncfusion.Windows.Tools.Controls;
 using WolvenKit.Functionality.Ab4d;
 using WolvenKit.Interaction;
-using WolvenKit.Models;
 using WolvenKit.ViewModels.Shell;
 using WolvenKit.ViewModels.Tools;
 using WolvenKit.ViewModels.Wizards;
@@ -32,7 +29,7 @@ namespace WolvenKit.Views.Shell
 
             var dxEngineSettingsStorage = new DXEngineSettingsStorage();
             DXEngineSettings.Initialize(dxEngineSettingsStorage);
-            this.MaxBackgroundThreadsCount = Environment.ProcessorCount - 1;
+            MaxBackgroundThreadsCount = Environment.ProcessorCount - 1;
 
             this.WhenActivated(disposables =>
             {
@@ -81,7 +78,7 @@ namespace WolvenKit.Views.Shell
                 //    documentContextTab.SetCurrentValue(ContextTabGroup.IsGroupVisibleProperty, b));
 
                 #region commands
-                
+
                 this.BindCommand(ViewModel,
                         viewModel => viewModel._mainViewModel.ShowHomePageCommand,
                         view => view.HomePageButton)
@@ -300,7 +297,7 @@ namespace WolvenKit.Views.Shell
 
             dxEngineSettingsWindow.ShowDialog();
 
-            GraphicsProfile selectedGraphicsProfile = dxEngineSettingsWindow.SelectedGraphicsProfile;
+            var selectedGraphicsProfile = dxEngineSettingsWindow.SelectedGraphicsProfile;
 
             // Save the selected GraphicsProfile to application settings
             DXEngineSettings.Current.SaveGraphicsProfile(selectedGraphicsProfile);
@@ -355,7 +352,9 @@ namespace WolvenKit.Views.Shell
             base.OnMouseLeftButtonDown(e);
             var mainWindow = (MainView)Locator.Current.GetService<IViewFor<AppViewModel>>();
             if (e.LeftButton == System.Windows.Input.MouseButtonState.Pressed)
+            {
                 mainWindow?.DragMove();
+            }
         }
 
         ///// <summary>

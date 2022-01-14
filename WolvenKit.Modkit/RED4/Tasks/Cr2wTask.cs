@@ -5,12 +5,8 @@ using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using Newtonsoft.Json;
 using WolvenKit.Common;
 using WolvenKit.Common.Extensions;
-using WolvenKit.Common.Tools;
-using WolvenKit.Interfaces.Core;
-using Formatting = Newtonsoft.Json.Formatting;
 
 namespace CP77Tools.Tasks
 {
@@ -103,7 +99,7 @@ namespace CP77Tools.Tasks
             var finalMatchesList = finalmatches.ToList();
             _loggerService.Info($"Found {finalMatchesList.Count} files to process.");
 
-            int progress = 0;
+            var progress = 0;
 
             //foreach (var fileInfo in finalMatchesList)
             Parallel.ForEach(finalMatchesList, fileInfo =>

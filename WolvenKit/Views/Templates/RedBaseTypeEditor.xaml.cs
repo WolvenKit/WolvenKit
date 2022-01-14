@@ -17,8 +17,8 @@ namespace WolvenKit.Views.Editors
 
         public IRedType RedType
         {
-            get => (IRedType)this.GetValue(RedTypeProperty);
-            set => this.SetValue(RedTypeProperty, value);
+            get => (IRedType)GetValue(RedTypeProperty);
+            set => SetValue(RedTypeProperty, value);
         }
         public static readonly DependencyProperty RedTypeProperty = DependencyProperty.Register(
             nameof(RedType), typeof(IRedType), typeof(RedBaseTypeEditor), new PropertyMetadata(default(IRedType)));

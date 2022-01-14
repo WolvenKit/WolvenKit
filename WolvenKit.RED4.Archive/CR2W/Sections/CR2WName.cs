@@ -1,8 +1,4 @@
-using System;
 using System.Runtime.InteropServices;
-using System.Runtime.Serialization;
-using System.Xml.Serialization;
-using WolvenKit.RED4.Types;
 
 namespace WolvenKit.RED4.Archive.CR2W
 {
@@ -18,6 +14,6 @@ namespace WolvenKit.RED4.Archive.CR2W
 
     public class CR2WName : ICR2WName
     {
-        
+
     }
 }

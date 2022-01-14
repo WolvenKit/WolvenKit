@@ -1,28 +1,13 @@
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using CP77.CR2W;
-using CP77Tools.Tasks;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using WolvenKit.CLI.Services;
 using WolvenKit.Common;
 using WolvenKit.Common.Services;
 using WolvenKit.Common.Tools.Oodle;
-using WolvenKit.Core;
-using WolvenKit.Interfaces.Core;
-using WolvenKit.Modkit.RED4.RigFile;
-using WolvenKit.RED4.Archive.CR2W;
-using WolvenKit.RED4.Archive.IO;
-using WolvenKit.RED4.CR2W;
-using WolvenKit.RED4.CR2W.Archive;
-using WolvenKit.RED4.Types;
 
 namespace WolvenKit.CLI
 {
@@ -114,7 +99,7 @@ namespace WolvenKit.CLI
             //            using var ms = new MemoryStream();
             //            ar.CopyFileToStreamWithoutBuffers(ms, file.NameHash64);
 
-                        
+
             //            using var reader = new CR2WReader(ms);
             //            var result = reader.ReadFile(out var c, false);
             //            switch (result)

@@ -173,8 +173,8 @@ namespace WolvenKit.Common.Oodle
                 fixed (byte* bpi = &inputBufferSpan.GetPinnableReference())
                 fixed (byte* bpo = &outputBufferSpan.GetPinnableReference())
                 {
-                    IntPtr pInputBufferSpan = (IntPtr)bpi;
-                    IntPtr pOutputBufferSpan = (IntPtr)bpo;
+                    var pInputBufferSpan = (IntPtr)bpi;
+                    var pOutputBufferSpan = (IntPtr)bpo;
 
                     var r = OodleLoadLib.OodleLZ_Decompress(pInputBufferSpan,
                         pOutputBufferSpan,
@@ -215,7 +215,7 @@ namespace WolvenKit.Common.Oodle
 
 
 
-                    var r= OodleLoadLib.OodleLZ_Decompress(inputAddress,
+                    var r = OodleLoadLib.OodleLZ_Decompress(inputAddress,
                         outputAddress,
                         inputBuffer.Length,
                         outputBuffer.Length
@@ -291,7 +291,7 @@ namespace WolvenKit.Common.Oodle
 
                     stream.Read(inputBufferSpan);
 
-                    long unpackedSize = OodleHelper.Decompress(inputBufferSpan, outputBufferSpan);
+                    var unpackedSize = OodleHelper.Decompress(inputBufferSpan, outputBufferSpan);
                     if (unpackedSize != size)
                     {
                         throw new DecompressionException(
@@ -339,7 +339,7 @@ namespace WolvenKit.Common.Oodle
                     stream.Read(inputBuffer);
                     var outputBuffer = new byte[size];
 
-                    long unpackedSize =  await Task.Run(() => OodleHelper.Decompress(inputBuffer, outputBuffer));
+                    long unpackedSize = await Task.Run(() => OodleHelper.Decompress(inputBuffer, outputBuffer));
 
                     if (unpackedSize != size)
                     {

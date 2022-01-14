@@ -1,10 +1,8 @@
 using System.CommandLine;
 using System.CommandLine.Invocation;
-using System.Threading.Tasks;
 using CP77Tools.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 
 namespace CP77Tools.Commands
 {

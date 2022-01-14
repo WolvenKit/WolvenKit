@@ -1,10 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Runtime.InteropServices;
 using System.Text;
 using WolvenKit.RED4.Archive.Buffer;
-using WolvenKit.RED4.Archive.CR2W;
 using WolvenKit.RED4.IO;
 using WolvenKit.RED4.Types;
 using WolvenKit.RED4.Types.Exceptions;
@@ -67,7 +65,7 @@ namespace WolvenKit.RED4.Archive.IO
             {
                 return ReadClass(type);
             }
-            
+
             return base.Read(type, size, flags);
         }
 
@@ -91,7 +89,7 @@ namespace WolvenKit.RED4.Archive.IO
             var cnt = _reader.ReadByte();
 
             var enumString = "";
-            for (int i = 0; i < cnt; i++)
+            for (var i = 0; i < cnt; i++)
             {
                 var index = _reader.ReadUInt16();
                 if (index == 0)

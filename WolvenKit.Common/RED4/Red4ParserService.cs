@@ -1,9 +1,7 @@
 using System;
 using System.IO;
 using System.Text;
-using WolvenKit.Common.RED4.Compiled;
 using WolvenKit.Common.Services;
-using WolvenKit.Core.Exceptions;
 using WolvenKit.RED4.Archive.CR2W;
 using WolvenKit.RED4.Archive.IO;
 
@@ -51,9 +49,9 @@ namespace WolvenKit.RED4.CR2W
 
             //try
             //{
-                using var reader = new CR2WReader(br);
-                var readResult = reader.ReadFile(out var c, true);
-                return c;
+            using var reader = new CR2WReader(br);
+            var readResult = reader.ReadFile(out var c, true);
+            return c;
             //}
             //catch (MissingRTTIException e)
             //{

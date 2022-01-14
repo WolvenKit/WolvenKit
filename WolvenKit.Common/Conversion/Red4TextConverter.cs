@@ -3,7 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Newtonsoft.Json.Linq;
-using WolvenKit.Interfaces.Core;
 using WolvenKit.RED4.Types;
 using WolvenKit.RED4.Types.Exceptions;
 
@@ -171,33 +170,7 @@ namespace WolvenKit.Common.Conversion
             }
         }
 
-        private static IRedType GetRedProperty(IRedType cvar, string propertyName)
-        {
-            throw new NotImplementedException();
-            //foreach (var member in REDReflection.GetMembers(cvar))
-            //{
-            //    try
-            //    {
-            //        var redname = REDReflection.GetREDNameString(member);
-            //        if (redname != propertyName)
-            //        {
-            //            continue;
-            //        }
-
-            //        var prop = cvar.accessor[cvar, member.Name];
-            //        var cprop = prop as IRedType;
-
-            //        return cprop;
-            //    }
-            //    catch (Exception e)
-            //    {
-            //        Console.WriteLine(e);
-            //        throw;
-            //    }
-            //}
-
-            //return null;
-        }
+        private static IRedType GetRedProperty(IRedType cvar, string propertyName) => throw new NotImplementedException();//foreach (var member in REDReflection.GetMembers(cvar))//{//    try//    {//        var redname = REDReflection.GetREDNameString(member);//        if (redname != propertyName)//        {//            continue;//        }//        var prop = cvar.accessor[cvar, member.Name];//        var cprop = prop as IRedType;//        return cprop;//    }//    catch (Exception e)//    {//        Console.WriteLine(e);//        throw;//    }//}//return null;
 
         public static object ToObject(this IRedType data)
         {
