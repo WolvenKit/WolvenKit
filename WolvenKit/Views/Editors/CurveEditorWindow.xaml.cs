@@ -38,7 +38,7 @@ namespace WolvenKit.Views.Editors
 
             _model = model;
 
-            _elementType = model.GetType().ToString();
+            _elementType = model.ElementType;
 
             var points = model.GetCurvePoints().ToArray();
             var times = points.Select(x => (double)x.GetPoint()).ToArray();
@@ -47,7 +47,7 @@ namespace WolvenKit.Views.Editors
 
             
 
-            switch (model.ElementType)
+            switch (_elementType)
             {
                 case "HDRColor":
                 {
@@ -76,35 +76,39 @@ namespace WolvenKit.Views.Editors
 
                     break;
                 }
-                case "Vector2":
+                //case "Vector2":
+                //{
+                //    var floats = values.OfType<Vector2>().ToList();
+                //    var xs = floats.Select(x => (double)x.X).ToArray();
+                //    var ys = floats.Select(x => (double)x.Y).ToArray();
+                //
+                //
+                //    break;
+                //}
+                //case "Vector3":
+                //{
+                //    var floats = values.OfType<Vector3>().ToList();
+                //    var xs = floats.Select(x => (double)x.X).ToArray();
+                //    var ys = floats.Select(x => (double)x.Y).ToArray();
+                //    var zs = floats.Select(x => (double)x.Z).ToArray();
+                //
+                //
+                //    break;
+                //}
+                //case "Vector4":
+                //{
+                //    var floats = values.OfType<Vector4>().ToList();
+                //    var xs = floats.Select(x => (double)x.X).ToArray();
+                //    var ys = floats.Select(x => (double)x.Y).ToArray();
+                //    var zs = floats.Select(x => (double)x.Z).ToArray();
+                //    var ws = floats.Select(x => (double)x.W).ToArray();
+                //
+                //
+                //    break;
+                //}
+                default:
                 {
-                    var floats = values.OfType<Vector2>().ToList();
-                    var xs = floats.Select(x => (double)x.X).ToArray();
-                    var ys = floats.Select(x => (double)x.Y).ToArray();
-
-
-                    break;
-                }
-                case "Vector3":
-                {
-                    var floats = values.OfType<Vector3>().ToList();
-                    var xs = floats.Select(x => (double)x.X).ToArray();
-                    var ys = floats.Select(x => (double)x.Y).ToArray();
-                    var zs = floats.Select(x => (double)x.Z).ToArray();
-
-
-                    break;
-                }
-                case "Vector4":
-                {
-                    var floats = values.OfType<Vector4>().ToList();
-                    var xs = floats.Select(x => (double)x.X).ToArray();
-                    var ys = floats.Select(x => (double)x.Y).ToArray();
-                    var zs = floats.Select(x => (double)x.Z).ToArray();
-                    var ws = floats.Select(x => (double)x.W).ToArray();
-
-
-                    break;
+                    throw new NotImplementedException($"CurveEditor: {_elementType}");
                 }
             }
         }
@@ -533,59 +537,38 @@ namespace WolvenKit.Views.Editors
                 {
                     case "HDRColor":
                     {
-                        throw new WolvenKit.RED4.Types.Exceptions.TodoException("CurveEditor");
+                        var alpha = vm.Curve.Select(_ => new Tuple<double, object>(_.T, (float)_.V)).ToList();
+                        var type = vm.GetInterpolationTypeEnum();
 
-                        //// TODO
-                        //var alpha = vm.Curve.Select(_ => new Tuple<double, object>(_.T, (float)_.V)).ToList();
-                        //var type = vm.GetInterpolationTypeEnum();
-
-                        //var values = _model.GetCurvePoints()
-                        //    .Select(x => x.GetValue())
-                        //    .OfType<Tuple<IRedType, IRedType>>()
-                        //    .Select(x => x.Item1)
-                        //    .OfType<HDRColor>()
-                        //    .ToList();
+                        var values = _model.GetCurvePoints()
+                            .Select(x => x.GetValue())
+                            .OfType<Tuple<IRedType, IRedType>>()
+                            .Select(x => x.Item1)
+                            .OfType<HDRColor>()
+                            .ToList();
 
 
-                        //var vec = new List<Tuple<double, object>>();
-                        //for (var i = 0; i < values.Count; i++)
-                        //{
-                        //    var item = values[i];
-                        //    item.Alpha = (float)alpha[i].Item2;
-                        //    vec.Add(new Tuple<double, object>(alpha[i].Item1, item));
-                        //}
+                        var vec = new List<Tuple<double, IRedType>>();
+                        for (var i = 0; i < values.Count; i++)
+                        {
+                            var item = values[i];
+                            item.Alpha = (CFloat)alpha[i].Item2;
+                            vec.Add(new Tuple<double, IRedType>(alpha[i].Item1, item));
+                        }
 
-                        //return new CurveDto(vec, type);
+                        return new CurveDto(vec, type);
                     }
                     case "Float":
                     {
-                        var vec = vm.Curve.Select(_ => new Tuple<double, object>(_.T, (float)_.V));
+                        var vec = vm.Curve.Select(_ => new Tuple<double, IRedType>(_.T, (CFloat)_.V));
                         var type = vm.GetInterpolationTypeEnum();
                         return new CurveDto(vec, type);
                     }
-                    case "Vector2":
-                    {// TODO
-
-                        break;
-                    }
-                    case "Vector3":
+                    default:
                     {
-                        // TODO
-
-                        break;
-                    }
-                    case "Vector4":
-                    {
-                        // TODO
-
-                        break;
+                        throw new NotImplementedException($"CurveEditor: {_elementType}");
                     }
                 }
-
-
-
-
-
             }
 
             return null;

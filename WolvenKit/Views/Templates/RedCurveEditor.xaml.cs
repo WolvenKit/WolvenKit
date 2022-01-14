@@ -34,11 +34,13 @@ namespace WolvenKit.Views.Editors
                 var c = curveEditorWindow.GetCurve();
                 if (c is not null)
                 {
-                    throw new WolvenKit.RED4.Types.Exceptions.TodoException("RedCurveEditor");
+                    RedCurve.InterpolationType = c.Type;
 
-                    // set tag data
-                    //RedCurve.SetInterpolationType(c.Type);
-                    //RedCurve.SetCurvePoints(c.Points);
+                    RedCurve.Clear();
+                    foreach (var point in c.Points)
+                    {
+                        RedCurve.Add((float)point.Item1, point.Item2);
+                    }
                 }
             }
         }

@@ -9,10 +9,13 @@ namespace WolvenKit.RED4.Types
         public Enums.ESegmentsLinkType LinkType { get; set; }
 
         public IEnumerable<IRedCurvePoint> GetCurvePoints();
+
+        public void Add(float point, object value);
     }
 
     public interface IRedLegacySingleChannelCurve<T> : IRedLegacySingleChannelCurve, IRedType<T>, IRedGenericType<T> where T : IRedType
     {
+        public void Add(float point, T value);
     }
 
     public interface IRedCurvePoint

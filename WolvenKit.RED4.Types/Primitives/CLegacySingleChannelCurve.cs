@@ -65,6 +65,9 @@ namespace WolvenKit.RED4.Types
 
         public IEnumerable<IRedCurvePoint> GetCurvePoints() => this;
 
+        public void Add(float point, object value) => Add(point, (T)value);
+        public void Add(float point, T value) => Add(new CurvePoint<T> {Point = point, Value = value});
+
         public override bool Equals(object obj)
         {
             if (obj is CLegacySingleChannelCurve<T> cObj)
