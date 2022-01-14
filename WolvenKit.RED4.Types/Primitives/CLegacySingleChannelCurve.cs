@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
 
 namespace WolvenKit.RED4.Types
 {
@@ -58,8 +57,13 @@ namespace WolvenKit.RED4.Types
     [RED("curveData")]
     public class CLegacySingleChannelCurve<T> : List<IRedCurvePoint>, IRedLegacySingleChannelCurve<T>, IEquatable<CLegacySingleChannelCurve<T>> where T : IRedType
     {
-        public ushort Tail { get; set; }
+        public string ElementType => RedReflection.GetRedTypeFromCSType(typeof(T));
 
+        public Enums.EInterpolationType InterpolationType { get; set; }
+        public Enums.ESegmentsLinkType LinkType { get; set; }
+
+
+        public IEnumerable<IRedCurvePoint> GetCurvePoints() => this;
 
         public override bool Equals(object obj)
         {
@@ -78,9 +82,9 @@ namespace WolvenKit.RED4.Types
                 return false;
             }
 
-            return this.SequenceEqual(other) && Tail.Equals(other.Tail);
+            return this.SequenceEqual(other) && InterpolationType.Equals(other.InterpolationType) && LinkType.Equals(other.LinkType);
         }
 
-        public override int GetHashCode() => HashCode.Combine(base.GetHashCode(), Tail.GetHashCode());
+        public override int GetHashCode() => HashCode.Combine(base.GetHashCode(), InterpolationType.GetHashCode(), LinkType.GetHashCode());
     }
 }

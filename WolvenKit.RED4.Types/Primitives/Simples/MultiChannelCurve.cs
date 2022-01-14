@@ -6,7 +6,7 @@ namespace WolvenKit.RED4.Types
     public class MultiChannelCurve<T> : IRedMultiChannelCurve<T>, IEquatable<MultiChannelCurve<T>> where T : IRedType
     {
         public uint NumChannels { get; set; }
-        public Enums.EInterPolationType InterPolationType { get; set; }
+        public Enums.EInterpolationType InterpolationType { get; set; }
         public Enums.EChannelLinkType LinkType { get; set; }
         public uint Alignment { get; set; }
         public byte[] Data { get; set; }
@@ -23,7 +23,7 @@ namespace WolvenKit.RED4.Types
                 return true;
             }
 
-            return NumChannels == other.NumChannels && InterPolationType == other.InterPolationType && LinkType == other.LinkType && Alignment == other.Alignment && Equals(Data, other.Data);
+            return NumChannels == other.NumChannels && InterpolationType == other.InterpolationType && LinkType == other.LinkType && Alignment == other.Alignment && Equals(Data, other.Data);
         }
 
         public override bool Equals(object obj)
@@ -46,6 +46,6 @@ namespace WolvenKit.RED4.Types
             return Equals((MultiChannelCurve<T>)obj);
         }
 
-        public override int GetHashCode() => HashCode.Combine(NumChannels, (byte)InterPolationType, (byte)LinkType, Alignment, Data);
+        public override int GetHashCode() => HashCode.Combine(NumChannels, (byte)InterpolationType, (byte)LinkType, Alignment, Data);
     }
 }

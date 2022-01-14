@@ -6,7 +6,7 @@ namespace WolvenKit.RED4.Types
     {
         // flags
 
-        public enum EInterPolationType
+        public enum EInterpolationType
         {
             Constant,
             Linear,
@@ -14,6 +14,13 @@ namespace WolvenKit.RED4.Types
             BezierCubic,
             Hermite
         }
+
+        public enum ESegmentsLinkType
+        {
+            ESLT_Normal,
+            ESLT_Smooth,
+            ESLT_SmoothSymmetric
+        };
 
         public enum EChannelLinkType
         {

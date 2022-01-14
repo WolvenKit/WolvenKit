@@ -1,11 +1,14 @@
-using System.Collections;
 using System.Collections.Generic;
 
 namespace WolvenKit.RED4.Types
 {
     public interface IRedLegacySingleChannelCurve : IList<IRedCurvePoint>, IRedType
     {
-        public ushort Tail { get; set; }
+        public string ElementType { get; }
+        public Enums.EInterpolationType InterpolationType { get; set; }
+        public Enums.ESegmentsLinkType LinkType { get; set; }
+
+        public IEnumerable<IRedCurvePoint> GetCurvePoints();
     }
 
     public interface IRedLegacySingleChannelCurve<T> : IRedLegacySingleChannelCurve, IRedType<T>, IRedGenericType<T> where T : IRedType
