@@ -182,7 +182,7 @@ namespace WolvenKit.RED4.IO
             var result = new MultiChannelCurve<T>();
 
             result.NumChannels = _reader.ReadUInt32();
-            result.InterPolationType = (Enums.EInterPolationType)_reader.ReadByte();
+            result.InterpolationType = (Enums.EInterpolationType)_reader.ReadByte();
             result.LinkType = (Enums.EChannelLinkType)_reader.ReadByte();
             result.Alignment = _reader.ReadUInt32();
 
@@ -385,7 +385,8 @@ namespace WolvenKit.RED4.IO
                 }
             }
 
-            instance.Tail = _reader.ReadUInt16();
+            instance.InterpolationType = (Enums.EInterpolationType)_reader.ReadByte();
+            instance.LinkType = (Enums.ESegmentsLinkType)_reader.ReadByte();
 
             return instance;
         }

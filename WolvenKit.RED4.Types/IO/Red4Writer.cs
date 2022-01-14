@@ -576,7 +576,8 @@ namespace WolvenKit.RED4.IO
 
                 _writer.Write(curvePoint.GetPoint());
             }
-            _writer.Write(instance.Tail);
+            _writer.Write((byte)instance.InterpolationType);
+            _writer.Write((byte)instance.LinkType);
         }
 
         public virtual void Write(IRedMultiChannelCurve instance)
@@ -593,7 +594,7 @@ namespace WolvenKit.RED4.IO
         public virtual void Write<T>(MultiChannelCurve<T> instance) where T : IRedType
         {
             _writer.Write(instance.NumChannels);
-            _writer.Write((byte)instance.InterPolationType);
+            _writer.Write((byte)instance.InterpolationType);
             _writer.Write((byte)instance.LinkType);
             _writer.Write(instance.Alignment);
 
