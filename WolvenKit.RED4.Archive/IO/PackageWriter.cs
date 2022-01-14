@@ -267,8 +267,8 @@ namespace WolvenKit.RED4.Archive.IO
         {
             if (_header.version == 02 || _header.version == 03)
             {
-                _writer.Write((short)val.Text.Length);
-                _writer.Write(Encoding.UTF8.GetBytes(val.Text));
+                _writer.Write((short)val.Length);
+                _writer.Write(Encoding.UTF8.GetBytes(val));
             }
             else if (_header.version == 04)
             {

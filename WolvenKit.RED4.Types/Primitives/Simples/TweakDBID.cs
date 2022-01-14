@@ -1,17 +1,55 @@
 using System;
+using System.Diagnostics;
+using WolvenKit.Core.CRC;
 
 namespace WolvenKit.RED4.Types
 {
-    public class TweakDBID : IRedPrimitive, IEquatable<TweakDBID>
+    [RED("TweakDBID")]
+    [REDType(IsValueType = true)]
+    [DebuggerDisplay("{_value}", Type = "TweakDBID")]
+    public sealed class TweakDBID : IRedPrimitive, IEquatable<TweakDBID>
     {
-        public string Text { get; set; }
-        public ulong Value { get; set; }
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        private string _value;
 
-        public static implicit operator TweakDBID(string value) => new() { Text = value };
-        public static implicit operator string(TweakDBID value) => value.Text;
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        private ulong _hash;
 
-        public static implicit operator TweakDBID(ulong value) => new() { Value = value };
-        public static implicit operator ulong(TweakDBID value) => value.Value;
+
+        // TODO: Just to support current rtti classes, will be removed in the future
+        internal ulong Value
+        {
+            set
+            {
+                _value = null;
+                _hash = value;
+            }
+        }
+        
+        public TweakDBID() { }
+
+        private TweakDBID(string val)
+        {
+            _value = val;
+            _hash = CalculateHash();
+        }
+
+        private TweakDBID(ulong value)
+        {
+            _value = null;
+            _hash = value;
+        }
+
+        public int Length => _value?.Length ?? 0;
+
+        private ulong CalculateHash() => Crc32Algorithm.Compute(_value) + ((ulong)_value.Length << 32);
+
+
+        public static implicit operator TweakDBID(string value) => new(value);
+        public static implicit operator string(TweakDBID value) => value._value;
+
+        public static implicit operator TweakDBID(ulong value) => new(value);
+        public static implicit operator ulong(TweakDBID value) => value._hash;
 
         public bool Equals(TweakDBID other)
         {
@@ -25,7 +63,7 @@ namespace WolvenKit.RED4.Types
                 return true;
             }
 
-            return Equals(Text, other.Text) && Equals(Value, other.Value);
+            return Equals(_value, other._value) && Equals(_hash, other._hash);
         }
 
         public override bool Equals(object obj)
@@ -48,6 +86,6 @@ namespace WolvenKit.RED4.Types
             return Equals((TweakDBID)obj);
         }
 
-        public override int GetHashCode() => HashCode.Combine(Text.GetHashCode(), Value.GetHashCode());
+        public override int GetHashCode() => HashCode.Combine(_value.GetHashCode(), _hash.GetHashCode());
     }
 }

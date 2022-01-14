@@ -643,7 +643,7 @@ namespace WolvenKit.ViewModels.Shell
             else if (PropertyType.IsAssignableTo(typeof(TweakDBID)))
             {
                 var value = (TweakDBID)Data;
-                return value.Value.ToString();
+                return value;
             }
             else if (PropertyType.IsAssignableTo(typeof(CBool)))
             {

@@ -299,7 +299,7 @@ namespace WolvenKit.RED4.IO
         }
 
         public virtual void Write(SharedDataBuffer val) => _writer.Write(val.Buffer.GetBytes());
-        public virtual void Write(TweakDBID val) => _writer.Write(val.Value);
+        public virtual void Write(TweakDBID val) => _writer.Write((ulong)val);
 
         #endregion Simple
 
