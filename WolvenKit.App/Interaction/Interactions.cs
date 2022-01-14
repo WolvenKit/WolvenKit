@@ -1,9 +1,6 @@
-using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Reactive;
 using System.Reactive.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using ReactiveUI;
 using WolvenKit.Common.Model;
@@ -39,9 +36,9 @@ namespace WolvenKit.Interaction
         public static readonly Interaction<Unit, bool> ShowBugReport = new();
         public static readonly Interaction<Unit, bool> ShowFeedback = new();
 
-       
 
-        
+
+
     }
 
     public enum WMessageBoxImage

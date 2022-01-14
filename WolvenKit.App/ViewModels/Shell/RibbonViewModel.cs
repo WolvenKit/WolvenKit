@@ -4,10 +4,7 @@ using System.Linq;
 using System.Reactive;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
-using System.Windows.Input;
 using ReactiveUI;
-using ReactiveUI.Fody.Helpers;
-using Splat;
 using WolvenKit.Common;
 using WolvenKit.Common.Interfaces;
 using WolvenKit.Common.Services;
@@ -17,7 +14,6 @@ using WolvenKit.Functionality.Services;
 using WolvenKit.Interaction;
 using WolvenKit.Models;
 using WolvenKit.RED4.CR2W.Archive;
-using WolvenKit.ViewModels.HomePage;
 
 namespace WolvenKit.ViewModels.Shell
 { // #MVVM
@@ -82,7 +78,7 @@ namespace WolvenKit.ViewModels.Shell
             {
                 var result = await Interactions.ShowBugReport.Handle(Unit.Default);
             });
-            ShowFeedbackCommand = ReactiveCommand.CreateFromTask(async  () =>
+            ShowFeedbackCommand = ReactiveCommand.CreateFromTask(async () =>
             {
                 var result = await Interactions.ShowFeedback.Handle(Unit.Default);
             });
@@ -110,7 +106,7 @@ namespace WolvenKit.ViewModels.Shell
                     var progress = 0;
                     _progressService.Report(0);
 
-                    for (int i = 0; i < archives.Count; i++)
+                    for (var i = 0; i < archives.Count; i++)
                     {
                         var archive = archives[i];
                         _modTools.ExtractAll(archive as Archive, depotPath);

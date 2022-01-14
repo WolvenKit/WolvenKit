@@ -40,7 +40,7 @@ namespace WolvenKit.MVVM.Model.ProjectManagement.Project
                 if (Directory.Exists(oldDir))
                 {
                     return oldDir;
-                }     
+                }
                 var dir = Path.Combine(FileDirectory, "tweaks");
                 if (!Directory.Exists(dir))
                 {

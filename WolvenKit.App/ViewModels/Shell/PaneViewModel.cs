@@ -9,7 +9,7 @@ namespace WolvenKit.ViewModels.Shell
     {
         public PaneViewModel()
         {
-            
+
         }
 
         #region Properties
@@ -32,6 +32,6 @@ namespace WolvenKit.ViewModels.Shell
 
         #endregion Properties
 
-        
+
     }
 }

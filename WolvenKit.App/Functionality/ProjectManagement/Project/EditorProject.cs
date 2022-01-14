@@ -112,15 +112,17 @@ namespace WolvenKit.MVVM.Model.ProjectManagement.Project
             }
         }
 
-        static public bool DirExistsMatchCase(string path)
+        public static bool DirExistsMatchCase(string path)
         {
             // If it definitely doesn't return false
             if (!Directory.Exists(path))
+            {
                 return false;
+            }
 
             // Figure out if the case (of the final part) is the same
-            string thisDir = Path.GetFileName(path);
-            string actualDir = Path.GetFileName(Directory.GetDirectories(Path.GetDirectoryName(path), thisDir)[0]);
+            var thisDir = Path.GetFileName(path);
+            var actualDir = Path.GetFileName(Directory.GetDirectories(Path.GetDirectoryName(path), thisDir)[0]);
             return thisDir == actualDir;
         }
 
@@ -167,7 +169,9 @@ namespace WolvenKit.MVVM.Model.ProjectManagement.Project
             }
         }
 
-        public string ProjectDirectory { get
+        public string ProjectDirectory
+        {
+            get
             {
                 var oldDir = Path.Combine(Path.GetDirectoryName(Location), Name);
                 if (Directory.Exists(oldDir))

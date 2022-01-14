@@ -1,8 +1,8 @@
+using System.Collections.ObjectModel;
+using System.Linq;
 using ReactiveUI;
 using WolvenKit.RED4.TweakDB;
 using WolvenKit.RED4.TweakDB.Types;
-using System.Collections.ObjectModel;
-using System.Linq;
 
 namespace WolvenKit.ViewModels.Documents
 {
@@ -26,10 +26,11 @@ namespace WolvenKit.ViewModels.Documents
             _value = value;
 
             Members = new ObservableCollection<FlatViewModel>(_value.Members
-                .Select(f => new FlatViewModel(f.Key, f.Value) {
+                .Select(f => new FlatViewModel(f.Key, f.Value)
+                {
                     GroupName = Name
                 }));
-            
+
         }
 
         public ObservableCollection<FlatViewModel> Members { get; set; }
@@ -58,7 +59,7 @@ namespace WolvenKit.ViewModels.Documents
                         ArrayName = Name
                     }));
             }
-            
+
         }
 
         public ObservableCollection<FlatViewModel> Members { get; set; } = new();
@@ -67,7 +68,7 @@ namespace WolvenKit.ViewModels.Documents
         public override string DisplayString => _value.ToString();
         public override string DisplayType => _value.Name;
 
-        public bool IsArray => _value is IArray array;  
+        public bool IsArray => _value is IArray array;
 
         public IType GetValue() => _value;
 

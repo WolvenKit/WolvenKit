@@ -1,13 +1,13 @@
 using System;
+using System.IO;
 using System.Text;
+using System.Threading.Tasks;
 using ICSharpCode.AvalonEdit.Document;
 using ICSharpCode.AvalonEdit.Highlighting;
 using ICSharpCode.AvalonEdit.Utils;
-using WolvenKit.Common.Services;
-using System.Threading.Tasks;
-using Splat;
 using ReactiveUI.Fody.Helpers;
-using System.IO;
+using Splat;
+using WolvenKit.Common.Services;
 
 namespace WolvenKit.ViewModels.Documents
 {

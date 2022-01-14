@@ -1,5 +1,3 @@
-using WolvenKit.Models.Docking;
-
 namespace WolvenKit.Models.Docking
 {
     public interface IDockElement

@@ -1,11 +1,8 @@
-using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 using System.Windows.Input;
-using WolvenKit.Models;
-using WolvenKit.Models.Docking;
 using WolvenKit.Common;
+using WolvenKit.Models.Docking;
 using WolvenKit.ViewModels.Documents;
 
 namespace WolvenKit.ViewModels.Shell

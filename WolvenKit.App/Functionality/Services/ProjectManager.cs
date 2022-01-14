@@ -4,7 +4,6 @@ using System.Linq;
 using System.Reactive;
 using System.Threading.Tasks;
 using System.Xml.Serialization;
-using Microsoft.WindowsAPICodePack.Dialogs;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using WolvenKit.Common.Services;
@@ -145,7 +144,8 @@ namespace WolvenKit.Functionality.Services
                 //        Version = obj.Version,
                 //    };
                 //}
-                /*else*/ if (typeof(T) == typeof(Cp77Project))
+                /*else*/
+                if (typeof(T) == typeof(Cp77Project))
                 {
                     return new Cp77Project(path)
                     {

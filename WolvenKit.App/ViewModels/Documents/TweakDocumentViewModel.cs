@@ -1,5 +1,4 @@
 using System;
-using System.Collections;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
@@ -133,7 +132,7 @@ namespace WolvenKit.ViewModels.Documents
                 }
                 group.GetValue().Members.Add(FlatName, ivalue);
             }
-            else if (SelectedItem is FlatViewModel { IsArray:true } arrayVm && arrayVm.GetValue() is IArray array)
+            else if (SelectedItem is FlatViewModel { IsArray: true } arrayVm && arrayVm.GetValue() is IArray array)
             {
                 var x = array.GetItems();
 
@@ -239,7 +238,7 @@ namespace WolvenKit.ViewModels.Documents
                     }
                     else if (!string.IsNullOrEmpty(fvm.ArrayName))
                     {
-                        
+
                     }
                     else
                     {
@@ -310,7 +309,7 @@ namespace WolvenKit.ViewModels.Documents
                 _loggerService.Error(e);
             }
 
-            _loggerService.Success($"{this.FilePath} saved.");
+            _loggerService.Success($"{FilePath} saved.");
             SetIsDirty(false);
 
             //dbg

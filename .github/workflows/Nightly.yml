@@ -97,13 +97,10 @@ jobs:
 
     # Create assets
     # create zip
-    #- run: ${{env.OUT}}/WolvenManager.Installer.exe create -a ${{env.OUT}}${{env.NAME}}.exe -o ${{env.FINALOUT}}
     - run: Compress-Archive -Path ${{env.OUT}}* -DestinationPath ${{env.FINALOUT}}/${{env.PORTABLE}}
     - run: Compress-Archive -Path ${{env.OUTC}}* -DestinationPath ${{env.FINALOUT}}/${{env.CONSOLE}}
     # create installer
     - run: .\Installers\ISCC\ISCC.exe /O"${{env.FINALOUT}}" /dMyAppBaseDir=".${{env.OUT}}" .\Installers\installer.iss
-    # create manifest
-    - run: ${{env.OUT}}lib/WolvenManager.Installer.exe manifest -a ${{env.OUT}}${{env.NAME}}.exe -i ${{env.FINALOUT}} -o ${{env.FINALOUT}}
 
     # PORTABLE
     #- uses: actions/upload-artifact@v2

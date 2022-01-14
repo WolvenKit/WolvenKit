@@ -1,7 +1,5 @@
 using System.Collections.ObjectModel;
 using System.Windows.Controls;
-using ReactiveUI;
-using WolvenKit.ViewModels.HomePage;
 
 
 namespace WolvenKit.ViewModels.HomePage.Pages

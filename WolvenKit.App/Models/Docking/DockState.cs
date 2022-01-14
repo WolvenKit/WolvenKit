@@ -1,5 +1,3 @@
-using System;
-
 namespace WolvenKit.Models.Docking
 {
     public enum DockState
