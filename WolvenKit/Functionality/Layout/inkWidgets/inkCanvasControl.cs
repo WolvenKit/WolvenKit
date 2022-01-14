@@ -24,7 +24,7 @@ namespace WolvenKit.Functionality.Layout.inkWidgets
 
             InternalMargin = new();
 
-            foreach (inkControl child in children)
+            foreach (inkControl child in Children)
             {
                 if (child.Visibility == Visibility.Collapsed)
                     continue;
@@ -65,7 +65,7 @@ namespace WolvenKit.Functionality.Layout.inkWidgets
 
             var internalSize = MeasureForDimensions(new Size(Width, Height), availableSize);
 
-            foreach (inkControl child in children)
+            foreach (inkControl child in Children)
             {
                 if (child.Visibility == Visibility.Collapsed)
                     continue;
@@ -90,7 +90,7 @@ namespace WolvenKit.Functionality.Layout.inkWidgets
             //internalSize.Width -= (InternalMargin.Right + InternalMargin.Left);
             //internalSize.Height -= (InternalMargin.Bottom + InternalMargin.Top);
 
-            foreach (inkControl child in children)
+            foreach (inkControl child in Children)
             {
                 if (child.Visibility == Visibility.Collapsed)
                     continue;
@@ -115,15 +115,19 @@ namespace WolvenKit.Functionality.Layout.inkWidgets
                     x += child.Margin.Left;
                 else if (AnchorRight(child))
                     x -= child.Margin.Right;
-                else
+                else if (AnchorCenterH(child))
                     x += child.Margin.Left - child.Margin.Right;
+                else
+                    x += child.Margin.Left;
 
                 if (AnchorTop(child))
                     y += child.Margin.Top;
                 else if (AnchorBottom(child))
                     y -= child.Margin.Bottom;
-                else
+                else if (AnchorCenterV(child))
                     y += child.Margin.Top - child.Margin.Bottom;
+                else
+                    y += child.Margin.Top;
 
                 //x -= InternalMargin.Left;
                 //y -= InternalMargin.Top;

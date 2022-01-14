@@ -26,7 +26,7 @@ namespace WolvenKit.Functionality.Layout.inkWidgets
 
             var contentSize = new Size();
 
-            foreach (inkControl child in children)
+            foreach (inkControl child in Children)
             {
                 if (child.Visibility == Visibility.Collapsed)
                     continue;
@@ -60,7 +60,7 @@ namespace WolvenKit.Functionality.Layout.inkWidgets
 
             var internalSize = MeasureForDimensions(contentSize, availableSize);
 
-            foreach (inkControl child in children)
+            foreach (inkControl child in Children)
             {
                 if (child.Visibility == Visibility.Collapsed)
                     continue;
@@ -86,7 +86,7 @@ namespace WolvenKit.Functionality.Layout.inkWidgets
             //internalSize.Width -= (InternalMargin.Right + InternalMargin.Left);
             //internalSize.Height -= (InternalMargin.Bottom + InternalMargin.Top);
 
-            foreach (inkControl child in children)
+            foreach (inkControl child in Children)
             {
                 if (child.Visibility == Visibility.Collapsed)
                     continue;

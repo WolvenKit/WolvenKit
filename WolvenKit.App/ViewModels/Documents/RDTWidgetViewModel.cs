@@ -34,19 +34,21 @@ namespace WolvenKit.ViewModels.Documents
         public inkWidgetLibraryResource library;
         public RedDocumentViewModel File;
 
-        [Reactive] public Dictionary<object, inkTextWidget> TextWidgets { get; set; }
+        [Reactive] public Dictionary<object, inkTextWidget> TextWidgets { get; set; } = new();
 
-        [Reactive] public List<string> StyleStates { get; set; }
+        [Reactive] public List<string> StyleStates { get; set; } = new();
 
         [Reactive] public string CurrentStyleState { get; set; }
 
-        [Reactive] public List<string> Themes { get; set; }
+        [Reactive] public List<string> Themes { get; set; } = new();
 
         [Reactive] public string CurrentTheme { get; set; }
 
         [Reactive] public Color WidgetBackground { get; set; }
 
-        [Reactive] public List<string> Bindings { get; set; }
+        [Reactive] public List<string> Bindings { get; set; } = new();
+
+        [Reactive] public List<inkanimSequence> inkAnimations { get; set; } = new();
 
         public RDTWidgetViewModel(RedBaseClass data, RedDocumentViewModel file)
         {
@@ -55,8 +57,17 @@ namespace WolvenKit.ViewModels.Documents
             _data = data;
             var _library = data as inkWidgetLibraryResource;
 
-            StyleStates = new();
-            Themes = new();
+            var animPath = _library.AnimationLibraryResRef?.DepotPath?.GetValue() ?? "";
+            var animHash = FNV1A64HashAlgorithm.HashString(animPath);
+            var animFile = File.GetFileFromHash(animHash);
+
+            if (animFile != null && animFile.RootChunk is inkanimAnimationLibraryResource alr)
+            {
+                foreach (var seq in alr.Sequences)
+                {
+                    inkAnimations.Add((inkanimSequence)seq.GetValue());
+                }
+            }
 
             foreach (var f in _library.ExternalDependenciesForInternalItems)
             {

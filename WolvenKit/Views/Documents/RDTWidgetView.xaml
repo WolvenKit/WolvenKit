@@ -5,6 +5,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:documents="clr-namespace:WolvenKit.ViewModels.Documents;assembly=WolvenKit.App"
     xmlns:editors="clr-namespace:WolvenKit.Views.Editors"
+    xmlns:inkControls="clr-namespace:WolvenKit.Functionality.Layout.inkWidgets"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:reactiveUi="http://reactiveui.net"
     xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
@@ -97,7 +98,7 @@
                         SelectedItem="{Binding CurrentTheme, Mode=TwoWay}"
                         SelectionChanged="ComboBox_SelectionChanged" />
                 </Grid>
-                <Border BorderBrush="{StaticResource BorderAlt}" BorderThickness="0,1,0,0" />
+                <!--Border BorderBrush="{StaticResource BorderAlt}" BorderThickness="0,1,0,0" />
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition />
@@ -108,7 +109,53 @@
                         VerticalAlignment="Center"
                         Text="Background" />
                     <syncfusion:ColorPicker x:Name="WidgetBackgroundColorEditor" Grid.Column="1" />
-                </Grid>
+                </Grid-->
+                <Border BorderBrush="{StaticResource BorderAlt}" BorderThickness="0,1,0,0" />
+                <TextBlock
+                    Margin="5,5"
+                    VerticalAlignment="Center"
+                    Text="Animations" />
+                <Border BorderBrush="{StaticResource BorderAlt}" BorderThickness="0,1,0,0" />
+                <ItemsControl x:Name="AnimationList">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <StackPanel Orientation="Vertical" />
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                    <ItemsControl.Template>
+                        <ControlTemplate>
+                            <ItemsPresenter />
+                        </ControlTemplate>
+                    </ItemsControl.Template>
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate DataType="{x:Type inkControls:inkControlAnimation}">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="1*" />
+                                    <ColumnDefinition Width="3" />
+                                    <ColumnDefinition Width="2*" />
+                                </Grid.ColumnDefinitions>
+                                <StackPanel>
+                                    <TextBlock
+                                        Margin="5,0"
+                                        VerticalAlignment="Center"
+                                        Text="{Binding Name}" />
+                                </StackPanel>
+                                <GridSplitter
+                                    Grid.Column="1"
+                                    HorizontalAlignment="Stretch"
+                                    Background="{StaticResource WolvenKitCyan}" />
+                                <StackPanel
+                                    Grid.Column="2"
+                                    Margin="3"
+                                    Orientation="Horizontal">
+                                    <Button Command="{Binding PlayCommand}" Content="Play" />
+                                    <Button Command="{Binding StopCommand}" Content="Stop" />
+                                </StackPanel>
+                            </Grid>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
                 <Border BorderBrush="{StaticResource BorderAlt}" BorderThickness="0,1,0,0" />
                 <StackPanel Orientation="Horizontal">
                     <TextBlock
@@ -149,6 +196,13 @@
                                     Background="{StaticResource WolvenKitCyan}" />
                                 <editors:RedStringEditor Grid.Column="2" RedString="{Binding Text, Mode=TwoWay}" />
                             </Grid>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+                <ItemsControl ItemsSource="{Binding Bindings}">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding}" />
                         </DataTemplate>
                     </ItemsControl.ItemTemplate>
                 </ItemsControl>

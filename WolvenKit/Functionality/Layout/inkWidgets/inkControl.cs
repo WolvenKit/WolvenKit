@@ -44,10 +44,7 @@ namespace WolvenKit.Functionality.Layout.inkWidgets
 
                 var variant = GetProperty(PropertyBindings["tintColor"]);
 
-                if (variant == null)
-                    goto NoOverride;
-
-                if (variant.Value is HDRColor color)
+                if (variant?.Value is HDRColor color)
                     return ToColor(color);
 
                 NoOverride:
@@ -63,6 +60,23 @@ namespace WolvenKit.Functionality.Layout.inkWidgets
 
         DrawingGroup backingStore = new DrawingGroup();
 
+        public RotateTransform Rotation { get; set; } = new();
+
+        public ScaleTransform Scale { get; set; } = new();
+
+        public TranslateTransform Translation { get; set; } = new();
+
+        //public static readonly DependencyProperty RotationProperty = DependencyProperty.Register(
+        //    nameof(Rotation), typeof(RotateTransform),
+        //    typeof(inkControl)
+        //);
+
+        //public RotateTransform Rotation
+        //{
+        //    get => (RotateTransform)GetValue(RotationProperty);
+        //    set => SetValue(RotationProperty, value);
+        //}
+
         public float WidgetOpacity
         {
             get
@@ -72,10 +86,7 @@ namespace WolvenKit.Functionality.Layout.inkWidgets
 
                 var variant = GetProperty(PropertyBindings["opacity"]);
 
-                if (variant == null)
-                    goto NoOverride;
-
-                if (variant.Value is CFloat opacity)
+                if (variant?.Value is CFloat opacity)
                     return opacity;
 
                 NoOverride:
@@ -94,9 +105,10 @@ namespace WolvenKit.Functionality.Layout.inkWidgets
                 foreach (inkPropertyBinding ipb in ipm.Bindings)
                 {
                     PropertyBindings.Add(ipb.PropertyName, ipb.StylePath);
-                    //if (WidgetView.ViewModel.Bindings == null)
-                    //    WidgetView.ViewModel.Bindings = new();
-                    //WidgetView.ViewModel.Bindings.Add(ipb.PropertyName);
+                    if (WidgetView.ViewModel.Bindings == null)
+                        WidgetView.ViewModel.Bindings = new();
+                    if (!WidgetView.ViewModel.Bindings.Contains(ipb.PropertyName))
+                        WidgetView.ViewModel.Bindings.Add(ipb.PropertyName);
                 }
             }
 
@@ -109,26 +121,38 @@ namespace WolvenKit.Functionality.Layout.inkWidgets
 
                 if (!Widget.Visible)
                 {
-                    if (Widget.AffectsLayoutWhenHidden)
-                    {
-                        Visibility = Visibility.Hidden;
-                    }
-                    else
-                    {
-                        Visibility = Visibility.Collapsed;
-                    }
+                    //if (Widget.AffectsLayoutWhenHidden)
+                    //{
+                    //    Visibility = Visibility.Hidden;
+                    //}
+                    //else
+                    //{
+                    //    Visibility = Visibility.Collapsed;
+                    //}
                 }
+                //ClipToBounds = false;
+            }
+            else
+            {
+                //ClipToBounds = true;
             }
 
             RenderTransformOrigin = ToPoint(Widget.RenderTransformPivot);
+
+            Rotation.Angle = Widget.RenderTransform.Rotation;
+            Scale.ScaleX = Widget.RenderTransform.Scale.X;
+            Scale.ScaleY = Widget.RenderTransform.Scale.Y;
+            Translation.X = Widget.RenderTransform.Translation.X;
+            Translation.Y = Widget.RenderTransform.Translation.Y;
+
             RenderTransform = new TransformGroup()
             {
                 Children = new TransformCollection(new List<System.Windows.Media.Transform>()
                 {
-                    new ScaleTransform(Widget.RenderTransform.Scale.X, Widget.RenderTransform.Scale.Y),
-                    new TranslateTransform(Widget.RenderTransform.Translation.X, Widget.RenderTransform.Translation.Y),
+                    Scale,
+                    Translation,
                     new SkewTransform(Math.Atan(Widget.RenderTransform.Shear.X) * 180/Math.PI, Math.Atan(Widget.RenderTransform.Shear.Y) * 180/Math.PI),
-                    new RotateTransform(Widget.RenderTransform.Rotation)
+                    Rotation
                 })
             };
 
@@ -433,6 +457,58 @@ namespace WolvenKit.Functionality.Layout.inkWidgets
                 case Enums.inkEAnchor.TopCenter:
                 case Enums.inkEAnchor.Centered:
                 case Enums.inkEAnchor.BottomCenter:
+                case Enums.inkEAnchor.CenterFillVerticaly:
+                default:
+                    return false;
+            }
+        }
+
+        public static bool AnchorCenterH(inkControl control)
+        {
+            switch (control.Widget.Layout.Anchor.Value)
+            {
+                case Enums.inkEAnchor.Centered:
+                case Enums.inkEAnchor.TopCenter:
+                case Enums.inkEAnchor.BottomCenter:
+                case Enums.inkEAnchor.CenterFillVerticaly:
+                    return true;
+                case Enums.inkEAnchor.TopRight:
+                case Enums.inkEAnchor.CenterRight:
+                case Enums.inkEAnchor.CenterLeft:
+                case Enums.inkEAnchor.CenterFillHorizontaly:
+                case Enums.inkEAnchor.BottomRight:
+                case Enums.inkEAnchor.RightFillVerticaly:
+                case Enums.inkEAnchor.TopLeft:
+                case Enums.inkEAnchor.BottomLeft:
+                case Enums.inkEAnchor.LeftFillVerticaly:
+                case Enums.inkEAnchor.BottomFillHorizontaly:
+                case Enums.inkEAnchor.TopFillHorizontaly:
+                case Enums.inkEAnchor.Fill:
+                default:
+                    return false;
+            }
+        }
+
+        public static bool AnchorCenterV(inkControl control)
+        {
+            switch (control.Widget.Layout.Anchor.Value)
+            {
+                case Enums.inkEAnchor.Centered:
+                case Enums.inkEAnchor.CenterRight:
+                case Enums.inkEAnchor.CenterLeft:
+                case Enums.inkEAnchor.CenterFillHorizontaly:
+                    return true;
+                case Enums.inkEAnchor.TopRight:
+                case Enums.inkEAnchor.TopCenter:
+                case Enums.inkEAnchor.BottomCenter:
+                case Enums.inkEAnchor.BottomRight:
+                case Enums.inkEAnchor.RightFillVerticaly:
+                case Enums.inkEAnchor.TopLeft:
+                case Enums.inkEAnchor.BottomLeft:
+                case Enums.inkEAnchor.LeftFillVerticaly:
+                case Enums.inkEAnchor.BottomFillHorizontaly:
+                case Enums.inkEAnchor.TopFillHorizontaly:
+                case Enums.inkEAnchor.Fill:
                 case Enums.inkEAnchor.CenterFillVerticaly:
                 default:
                     return false;

@@ -60,7 +60,7 @@ namespace WolvenKit.Functionality.Layout.inkWidgets
         // not totally sure why this is required - some dpi issue?
         public uint FontSize => (uint)Math.Round(_fontSize * 0.85);
 
-        public double CorrectionY => (FontFamily.GetCellDescent(System.Drawing.FontStyle.Regular)) / 1000.0 * Font.Size;
+        public double CorrectionY => (FontFamily.GetCellDescent(System.Drawing.FontStyle.Regular)) / 2000.0 * LineHeight;
 
         public FontFamily FontFamily { get; set; }
 
@@ -124,6 +124,9 @@ namespace WolvenKit.Functionality.Layout.inkWidgets
         {
             RenderedFontSize = FontSize;
             RenderedFontStyle = _fontStyle;
+
+            if (FontSize == 0)
+                return;
 
             var fontPath = TextWidget.FontFamily.DepotPath?.ToString() ?? "";
 

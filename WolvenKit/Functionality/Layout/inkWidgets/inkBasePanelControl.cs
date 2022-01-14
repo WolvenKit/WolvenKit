@@ -24,7 +24,7 @@ namespace WolvenKit.Functionality.Layout.inkWidgets
             var totalUnits = 0D;
             var fixedSize = 0D;
             var panelContentSize = new Size(0, 0);
-            foreach (inkControl child in children)
+            foreach (inkControl child in Children)
             {
                 if (child.Visibility == Visibility.Collapsed)
                     continue;
@@ -65,7 +65,7 @@ namespace WolvenKit.Functionality.Layout.inkWidgets
                 panelDesiredSize = MeasureForDimensions(panelContentSize, availableSize);
             }
 
-            foreach (inkControl child in children)
+            foreach (inkControl child in Children)
             {
                 if (child.Visibility == Visibility.Collapsed)
                     continue;
@@ -101,7 +101,7 @@ namespace WolvenKit.Functionality.Layout.inkWidgets
         protected override void ArrangeCore(Rect finalRect)
         {
             double currentX = 0, currentY = 0;
-            foreach (inkControl child in children)
+            foreach (inkControl child in Children)
             {
                 if (child.Visibility == Visibility.Collapsed)
                     continue;

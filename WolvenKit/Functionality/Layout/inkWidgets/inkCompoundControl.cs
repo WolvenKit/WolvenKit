@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.Windows;
 using System.Windows.Controls;
@@ -17,7 +18,7 @@ namespace WolvenKit.Functionality.Layout.inkWidgets
     {
         public inkCompoundWidget CompoundWidget => Widget as inkCompoundWidget;
 
-        protected readonly UIElementCollection children;
+        public List<inkControl> Children { get; private set; } = new();
 
         public Thickness InternalMargin = new();
 
@@ -30,71 +31,84 @@ namespace WolvenKit.Functionality.Layout.inkWidgets
             if (Widget.GetParent() == null)
             {
                 //Background = new SolidColorBrush(Color.FromArgb(255, 0, 0, 0));
-                WidgetView.WhenAnyValue(x => x.ViewModel.WidgetBackground).Subscribe(x => Background = new SolidColorBrush(x));
+                //WidgetView.WhenAnyValue(x => x.ViewModel.WidgetBackground).Subscribe(x => Background = new SolidColorBrush(x));
                 //Effect = new BlurEffect()
                 //{
                 //    Radius = 20
                 //};
             }
 
-            children = new UIElementCollection(this, null);
+            //Children = new UIElementCollection(this, null);
 
             foreach (var child in CompoundWidget.GetChildren())
             {
                 var childControl = child.CreateControl(WidgetView);
-                if (childControl != null)
-                    children.Add(childControl);
+                Children.Add(childControl);
             }
         }
 
         public override void MouseEnterControl(object sender, MouseEventArgs e)
         {
-            foreach (inkControl child in children)
+            foreach (inkControl child in Children)
                 child.MouseEnterControl(sender, e);
             base.MouseEnterControl(sender, e);
         }
 
         public override void MouseLeaveControl(object sender, MouseEventArgs e)
         {
-            foreach (inkControl child in children)
+            foreach (inkControl child in Children)
                 child.MouseLeaveControl(sender, e);
             base.MouseLeaveControl(sender, e);
         }
 
         public override void MouseDownControl(object sender, MouseButtonEventArgs e)
         {
-            foreach (inkControl child in children)
+            foreach (inkControl child in Children)
                 child.MouseDownControl(sender, e);
             base.MouseDownControl(sender, e);
         }
 
         public override void MouseUpControl(object sender, MouseButtonEventArgs e)
         {
-            foreach (inkControl child in children)
+            foreach (inkControl child in Children)
                 child.MouseUpControl(sender, e);
             base.MouseUpControl(sender, e);
         }
 
         public void AddChild(inkControl element)
         {
-            children.Add(element);
+            Children.Add(element);
+            AddVisualChild(element);
             element.Parent = this;
         }
 
         public void RemoveChild(inkControl element)
         {
-            children.Remove(element);
-            element.Parent = null;
+            if (Children.Remove(element))
+            {
+                element.Parent = null;
+                RemoveVisualChild(element);
+            }
         }
+
+        public inkControl GetChild(int index)
+        {
+            if (Children.Count <= index)
+                return null;
+            if (CompoundWidget.ChildOrder.Value == Enums.inkEChildOrder.Forward)
+                return Children[index];
+            else
+                return Children[Children.Count - index - 1];
+        } 
 
         protected override int VisualChildrenCount
         {
-            get { return children?.Count ?? 0; }
+            get { return Children?.Count ?? 0; }
         }
 
         protected override Visual GetVisualChild(int index)
         {
-            return children[index];
+            return Children[index];
         }
 
         protected override void Render(DrawingContext dc)
@@ -108,7 +122,7 @@ namespace WolvenKit.Functionality.Layout.inkWidgets
 
         public override void RenderRecursive()
         {
-            foreach (inkControl child in children)
+            foreach (inkControl child in Children)
             {
                 child.RenderRecursive();
             }

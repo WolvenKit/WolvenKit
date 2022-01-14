@@ -17,13 +17,14 @@ using WolvenKit.ViewModels.Documents;
 
 namespace WolvenKit.Views.Documents
 {
-
     /// <summary>
     /// Interaction logic for RDTWidgetView.xaml
     /// </summary>
     public partial class RDTWidgetView : ReactiveUserControl<RDTWidgetViewModel>
     {
         public List<inkControl> Widgets = new();
+
+        public List<inkControlAnimation> Animations = new();
 
         public RDTWidgetView()
         {
@@ -32,7 +33,6 @@ namespace WolvenKit.Views.Documents
 
             this.WhenActivated(disposables =>
             {
-
                 this.ViewModel.WhenAnyValue(x => x.library).Subscribe(library =>
                 {
                     var stack = new StackPanel();
@@ -71,6 +71,11 @@ namespace WolvenKit.Views.Documents
                         Widgets.Add(widget);
                         stack.Children.Add(widget);
                     }
+
+                    foreach (var animation in ViewModel.inkAnimations)
+                    {
+                        Animations.Add(new inkControlAnimation(animation, Widgets[0]));
+                    }
                 }).DisposeWith(disposables);
 
                 this.OneWayBind(ViewModel,
@@ -78,10 +83,17 @@ namespace WolvenKit.Views.Documents
                         x => x.TextWidgetList.ItemsSource)
                     .DisposeWith(disposables);
 
-                this.Bind(ViewModel,
-                        x => x.WidgetBackground,
-                        x => x.WidgetBackgroundColorEditor.Color)
-                    .DisposeWith(disposables);
+                //this.OneWayBind(this,
+                //        x => x.Animations,
+                //        x => x.AnimationList.ItemsSource)
+                //    .DisposeWith(disposables);
+
+                AnimationList.SetCurrentValue(ItemsControl.ItemsSourceProperty, Animations);
+
+                //this.Bind(ViewModel,
+                //        x => x.WidgetBackground,
+                //        x => x.WidgetBackgroundColorEditor.Color)
+                //    .DisposeWith(disposables);
             });
         }
 
