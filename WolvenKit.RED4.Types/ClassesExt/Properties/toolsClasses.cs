@@ -376,6 +376,8 @@ namespace WolvenKit.RED4.Types
         public toolsSocketDescription()
         {
             Id = uint.MaxValue;
+            CaptionColor = new();
+            LinkColor = new();
         }
     }
 
