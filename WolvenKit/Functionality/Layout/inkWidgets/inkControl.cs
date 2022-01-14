@@ -121,14 +121,14 @@ namespace WolvenKit.Functionality.Layout.inkWidgets
 
                 if (!Widget.Visible)
                 {
-                    //if (Widget.AffectsLayoutWhenHidden)
-                    //{
-                    //    Visibility = Visibility.Hidden;
-                    //}
-                    //else
-                    //{
-                    //    Visibility = Visibility.Collapsed;
-                    //}
+                    if (Widget.AffectsLayoutWhenHidden)
+                    {
+                        Visibility = Visibility.Hidden;
+                    }
+                    else
+                    {
+                        Visibility = Visibility.Collapsed;
+                    }
                 }
                 //ClipToBounds = false;
             }

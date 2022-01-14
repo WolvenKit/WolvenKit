@@ -34,6 +34,10 @@ namespace WolvenKit.Functionality.Layout.inkWidgets
                 return;
 
             Storyboard = new();
+            //Storyboard.RepeatBehavior = RepeatBehavior.Forever;
+            Storyboard.Duration = new Duration(TimeSpan.FromSeconds(2));
+            //Storyboard.AutoReverse = true;
+
 
             for (var i = 0; i < Sequence.Targets.Count; i++)
             {
@@ -67,6 +71,8 @@ namespace WolvenKit.Functionality.Layout.inkWidgets
                             To = animTrnsp.EndValue
                         });
                         paths.Add(new PropertyPath(UIElement.OpacityProperty));
+
+                        //element.Opacity = animTrnsp.StartValue;
                     }
 
                     if (animI is inkanimRotationInterpolator animRot)
@@ -78,6 +84,8 @@ namespace WolvenKit.Functionality.Layout.inkWidgets
                         });
                         paths.Add(new PropertyPath(RotateTransform.AngleProperty));
                         target = element.Rotation;
+
+                        //element.Rotation.Angle = animRot.StartValue;
                     }
 
                     if (animI is inkanimTranslationInterpolator animTrnsl)
@@ -97,6 +105,9 @@ namespace WolvenKit.Functionality.Layout.inkWidgets
                         paths.Add(new PropertyPath(TranslateTransform.YProperty));
 
                         target = element.Rotation;
+
+                        //element.Translation.X = animTrnsl.StartValue.X;
+                        //element.Translation.Y = animTrnsl.StartValue.Y;
                     }
 
                     if (animI is inkanimScaleInterpolator animScale)
@@ -114,27 +125,45 @@ namespace WolvenKit.Functionality.Layout.inkWidgets
                             To = animScale.EndValue.Y
                         });
                         paths.Add(new PropertyPath(ScaleTransform.ScaleYProperty));
-
                         target = element.Scale;
+
+                        //element.Scale.ScaleX = animScale.StartValue.X;
+                        //element.Scale.ScaleY = animScale.StartValue.Y;
                     }
 
                     foreach (var anim in anims)
                     {
                         anim.Duration = new Duration(TimeSpan.FromSeconds(animI.Duration));
+                        //anim.RepeatBehavior = new RepeatBehavior(TimeSpan.FromSeconds(animI.Duration));
+                        //Storyboard.Duration = new Duration(TimeSpan.FromMilliseconds(Math.Max(anim.Duration.TimeSpan.Milliseconds, Storyboard.Duration.TimeSpan.Milliseconds)));
                         //anim.EasingFunction = ti.InterpolationType;
+                        //anim.AutoReverse = true;
                         anim.BeginTime = TimeSpan.FromSeconds(animI.StartDelay);
-                        anim.RepeatBehavior = RepeatBehavior.Forever;
+                        anim.FillBehavior = FillBehavior.HoldEnd;
                         Storyboard.Children.Add(anim);
                         Storyboard.SetTarget(anim, target);
                         Storyboard.SetTargetProperty(anim, paths[anims.IndexOf(anim)]);
                     }
                 }
+
+                //foreach (var anim in Storyboard.Children)
+                //{
+                //    anim.RepeatBehavior = new RepeatBehavior(Storyboard.Duration.TimeSpan);
+                //}
             }
         }
 
         public ICommand PlayCommand { get; set; }
         //public bool CanPlay() => Storyboard != null && Storyboard.GetCurrentState() == ClockState.Stopped;
-        public void Play() => Storyboard.Begin();
+        public void Play()
+        {
+            foreach (var anim in Storyboard.Children)
+            {
+                
+            }
+
+            Storyboard.Begin();
+        }
 
         public ICommand StopCommand { get; set; }
         //public bool CanStop() => Storyboard != null && Storyboard.GetCurrentState() != ClockState.Stopped;
