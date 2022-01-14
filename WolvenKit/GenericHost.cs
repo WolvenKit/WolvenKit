@@ -30,7 +30,6 @@ using WolvenKit.Views.HomePage.Pages;
 using WolvenKit.Views.Shell;
 using WolvenKit.Views.Tools;
 using WolvenKit.Views.Wizards;
-using WolvenManager.Installer.Services;
 
 namespace WolvenKit
 {
@@ -55,7 +54,6 @@ namespace WolvenKit
                     services.AddSingleton(typeof(ISettingsManager), SettingsManager.Load());
                     services.AddSingleton<IProgressService<double>, ProgressService<double>>();
                     services.AddSingleton<ILoggerService, ReactiveLoggerService>();
-                    services.AddSingleton<IUpdateService, UpdateService>();
 
                     // singletons
                     services.AddSingleton<IHashService, HashService>();
