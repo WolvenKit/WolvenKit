@@ -382,13 +382,17 @@ namespace WolvenKit.RED4.Types
 
         public object DeepCopy()
         {
-            var other = (RedBaseClass)MemberwiseClone();
+            var other = RedTypeManager.Create(GetType());
 
             foreach (var property in _properties)
             {
                 if (property.Value is IRedCloneable cl)
                 {
                     other._properties[property.Key] = (IRedType)cl.DeepCopy();
+                }
+                else
+                {
+                    other._properties[property.Key] = property.Value;
                 }
             }
 
