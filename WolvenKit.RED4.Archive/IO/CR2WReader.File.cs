@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -294,8 +293,7 @@ namespace WolvenKit.RED4.Archive.IO
 
         private T[] ReadTable<T>(CR2WTable tableHeader) where T : struct
         {
-            var hash = new Crc32Algorithm(false);
-            return BaseStream.ReadStructs<T>(tableHeader.itemCount, hash);
+            return BaseStream.ReadStructs<T>(tableHeader.itemCount);
         }
 
         public EHashVersion IdentifyHash(CName value, uint hash)

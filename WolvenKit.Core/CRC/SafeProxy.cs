@@ -1,4 +1,14 @@
-namespace WolvenKit.RED4.Archive
+/* This is .NET safe implementation of Crc32 algorithm.
+ * This implementation was investigated as fastest from different variants. It based on Robert Vazan native implementations of Crc32C
+ * Also, it is good for x64 and for x86, so, it seems, there is no sense to do 2 different realizations.
+ *
+ * Addition: some speed increase was found with splitting xor to 4 independent blocks. Also, some attempts to optimize unaligned tails was unsuccessfull (JIT limitations?).
+ *
+ *
+ * Max Vysokikh, 2016-2017
+ */
+
+namespace WolvenKit.Core.CRC
 {
     internal class SafeProxy
     {
