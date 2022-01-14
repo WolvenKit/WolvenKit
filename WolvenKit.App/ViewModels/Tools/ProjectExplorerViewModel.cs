@@ -121,15 +121,9 @@ namespace WolvenKit.ViewModels.Tools
 
         public ICommand OpenFileCommand { get; private set; }
         private bool CanOpenFile() => true;
-        private void ExecuteOpenFile()
-        {
+        private void ExecuteOpenFile() =>
             // TODO: Handle command logic here
             Locator.Current.GetService<AppViewModel>().OpenFileAsyncCommand.SafeExecute(SelectedItem);
-
-
-
-
-        }
 
         /// <summary>
         /// Copies selected node to the clipboard.
@@ -502,10 +496,7 @@ namespace WolvenKit.ViewModels.Tools
 
         #region Methods
 
-        private void OnNext(IChangeSet<FileModel, ulong> obj)
-        {
-            BindGrid1 = new ObservableCollection<FileModel>(_observableList.Items);
-        }
+        private void OnNext(IChangeSet<FileModel, ulong> obj) => BindGrid1 = new ObservableCollection<FileModel>(_observableList.Items);
 
 
         /// <summary>

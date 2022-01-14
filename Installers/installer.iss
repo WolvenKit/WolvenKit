@@ -32,6 +32,7 @@ PrivilegesRequired=lowest
 Compression=lzma
 SolidCompression=yes
 WizardStyle=modern
+ChangesAssociations=yes
 
 [Messages]
 SetupWindowTitle=Setup - {#MyAppName} {#MyAppVersion}
@@ -46,6 +47,12 @@ Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{
 Source: {#MyAppPath}; DestDir: "{app}"; Flags: ignoreversion
 Source: "{#MyAppBaseDir}*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
+
+[Registry]
+Root: HKCR; Subkey: ".cpmodproj"; ValueType: string; ValueName: ""; ValueData: "WolvenKit.cpmodproj"; Flags: uninsdeletevalue
+Root: HKCR; Subkey: "WolvenKit.cpmodproj"; ValueType: string; ValueName: ""; ValueData: "Cyberpunk 2077 Mod Project"; Flags: uninsdeletekey
+Root: HKCR; Subkey: "WolvenKit.cpmodproj\DefaultIcon"; ValueType: string; ValueName: ""; ValueData: "{app}\{#MyAppExeName},0"
+Root: HKCR; Subkey: "WolvenKit.cpmodproj\shell\open\command"; ValueType: string; ValueName: ""; ValueData: """{app}\{#MyAppExeName}"" ""%1"""
 
 [Icons]
 Name: "{autoprograms}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"

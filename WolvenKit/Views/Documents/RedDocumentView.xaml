@@ -1,62 +1,66 @@
 <reactiveUi:ReactiveUserControl
-    x:TypeArguments="docVM:RedDocumentViewModel"
     x:Class="WolvenKit.Views.Documents.RedDocumentView"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:reactiveUi="http://reactiveui.net"
+    xmlns:converters="clr-namespace:WolvenKit.Converters"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:hc="https://handyorg.github.io/handycontrol"
-    xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
-    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:templates="clr-namespace:WolvenKit.Views.Templates"
+    xmlns:docV="clr-namespace:WolvenKit.Views.Documents"
     xmlns:docVM="clr-namespace:WolvenKit.ViewModels.Documents;assembly=WolvenKit.App"
-    xmlns:docV="clr-namespace:WolvenKit.Views.Documents" xmlns:converters="clr-namespace:WolvenKit.Converters"
+    xmlns:hc="https://handyorg.github.io/handycontrol"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:reactiveUi="http://reactiveui.net"
+    xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
+    xmlns:templates="clr-namespace:WolvenKit.Views.Templates"
+    d:DataContext="{d:DesignInstance Type={x:Type docVM:RedDocumentViewModel}}"
     d:DesignHeight="450"
     d:DesignWidth="800"
-    mc:Ignorable="d"
-    d:DataContext="{d:DesignInstance Type={x:Type docVM:RedDocumentViewModel}}"
-    >
+    x:TypeArguments="docVM:RedDocumentViewModel"
+    mc:Ignorable="d">
 
     <Grid hc:ThemeManager.RequestedAccentColor="{DynamicResource MahApps.Brushes.Accent3}">
 
         <Grid.Resources>
-            
+
             <DataTemplate DataType="{x:Type docVM:RDTDataViewModel}">
-                <docV:RDTDataView ViewModel="{Binding}"/>
+                <docV:RDTDataView ViewModel="{Binding}" />
             </DataTemplate>
 
             <DataTemplate DataType="{x:Type docVM:RDTTextureViewModel}">
-                <docV:RDTTextureView ViewModel="{Binding}"/>
+                <docV:RDTTextureView ViewModel="{Binding}" />
             </DataTemplate>
 
             <DataTemplate DataType="{x:Type docVM:RDTMeshViewModel}">
-                <docV:RDTMeshView ViewModel="{Binding}"/>
+                <docV:RDTMeshView ViewModel="{Binding}" />
+            </DataTemplate>
+
+            <DataTemplate DataType="{x:Type docVM:RDTWidgetViewModel}">
+                <docV:RDTWidgetView ViewModel="{Binding}" />
             </DataTemplate>
 
         </Grid.Resources>
 
         <syncfusion:TabControlExt
             x:Name="TabControl"
+            Margin="-3,-2,-3,-3"
+            Padding="0"
+            AllowDragDrop="True"
+            BorderThickness="0,0,0,0"
+            CloseButtonType="Hide"
+            EnableLabelEdit="False"
             ItemsSource="{Binding TabItemViewModels, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
             SelectedIndex="{Binding SelectedIndex, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
             SelectedItem="{Binding SelectedTabItemViewModel, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-            CloseButtonType="Hide"
             ShowTabItemContextMenu="False"
-            EnableLabelEdit="False"
-            AllowDragDrop="True"
-            Margin="-3,-2,-3,-3"
-            BorderThickness="0,0,0,0"
-            Padding="0"
             Style="{StaticResource WolvenKitTabControl}"
             TabPanelBackground="#313131">
             <syncfusion:TabControlExt.ItemTemplate>
                 <DataTemplate>
-                    <TextBlock Text="{Binding Header}"/>
+                    <TextBlock Text="{Binding Header}" />
                 </DataTemplate>
             </syncfusion:TabControlExt.ItemTemplate>
         </syncfusion:TabControlExt>
-        
-       
+
+
     </Grid>
 
 </reactiveUi:ReactiveUserControl>

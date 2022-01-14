@@ -264,7 +264,7 @@ namespace WolvenKit.RED4.Archive.IO
                 using var ms = new MemoryStream();
                 using var packageWriter = new PackageWriter(ms);
 
-                packageWriter.WritePackage(p4);
+                packageWriter.WritePackage(p4, _file.RootChunk.GetType());
 
                 var newData = ms.ToArray();
 
@@ -432,10 +432,21 @@ namespace WolvenKit.RED4.Archive.IO
                     if (guid != Guid.Empty && file.ChunkReferences.ContainsKey(guid))
                     {
                         var startPos = file.BaseStream.Position;
-                        foreach (var (position, offset) in file.ChunkReferences[guid])
+                        foreach (var (position, offset, indexType) in file.ChunkReferences[guid])
                         {
                             file.BaseStream.Position = position;
-                            file.BaseWriter.Write(_chunkInfos[chunk].Id + offset);
+                            if (indexType == typeof(int))
+                            {
+                                file.BaseWriter.Write(_chunkInfos[chunk].Id + offset);
+                            }
+                            else if (indexType == typeof(short))
+                            {
+                                file.BaseWriter.Write((short)(_chunkInfos[chunk].Id + offset));
+                            }
+                            else
+                            {
+                                throw new NotSupportedException(nameof(InternalHandleWriter));
+                            }
                         }
                         file.BaseStream.Position = startPos;
                     }
@@ -468,9 +479,11 @@ namespace WolvenKit.RED4.Archive.IO
 
             var ms2 = new MemoryStream();
             var bw = new BinaryWriter(ms2);
-            foreach (var redBuffer in file.BufferCacheList.ToList())
+
+            var bufferList = file.BufferCacheList.ToList();
+            for (int i = 0; i < bufferList.Count; i++)
             {
-                bufferInfoList.Add(WriteBuffer(bw, redBuffer));
+                bufferInfoList.Add(WriteBuffer(bw, bufferList[i]));
             }
 
             result.BufferInfoList = bufferInfoList;

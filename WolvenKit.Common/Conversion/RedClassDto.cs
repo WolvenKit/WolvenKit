@@ -184,7 +184,7 @@ namespace WolvenKit.Common.Conversion
                 case IRedString s:
                     return s.GetValue();
                 case IRedRef r:
-                    return r.DepotPath.GetValue();
+                    return r.DepotPath?.GetValue() ?? null;
                 case IRedEnum e:
                     return e.ToEnumString();
                 case IRedBitField e:

@@ -1,8 +1,13 @@
+using System;
+using System.Linq;
+using System.Reactive.Linq;
 using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using ReactiveUI;
 using WolvenKit.RED4.Types;
+using WolvenKit.ViewModels.Shell;
 
 namespace WolvenKit.Views.Editors
 {
@@ -11,42 +16,61 @@ namespace WolvenKit.Views.Editors
     /// </summary>
     public partial class RedQuaternionEditor : UserControl
     {
+        public ChunkViewModel cvm => DataContext as ChunkViewModel;
+
         public RedQuaternionEditor()
         {
             InitializeComponent();
+
+            Observable.FromEventPattern<TextChangedEventHandler, TextChangedEventArgs>(
+                handler => ITextBox.TextChanged += handler,
+                handler => ITextBox.TextChanged -= handler)
+                .Throttle(TimeSpan.FromSeconds(.5))
+                .ObserveOn(RxApp.MainThreadScheduler)
+                .Subscribe(x =>
+                {
+                    SetIValue(ITextBox.Text);
+                });
+
+            Observable.FromEventPattern<TextChangedEventHandler, TextChangedEventArgs>(
+                handler => JTextBox.TextChanged += handler,
+                handler => JTextBox.TextChanged -= handler)
+                .Throttle(TimeSpan.FromSeconds(.5))
+                .ObserveOn(RxApp.MainThreadScheduler)
+                .Subscribe(x =>
+                {
+                    SetJValue(JTextBox.Text);
+                });
+
+            Observable.FromEventPattern<TextChangedEventHandler, TextChangedEventArgs>(
+                handler => KTextBox.TextChanged += handler,
+                handler => KTextBox.TextChanged -= handler)
+                .Throttle(TimeSpan.FromSeconds(.5))
+                .ObserveOn(RxApp.MainThreadScheduler)
+                .Subscribe(x =>
+                {
+                    SetKValue(KTextBox.Text);
+                });
+
+            Observable.FromEventPattern<TextChangedEventHandler, TextChangedEventArgs>(
+                handler => RTextBox.TextChanged += handler,
+                handler => RTextBox.TextChanged -= handler)
+                .Throttle(TimeSpan.FromSeconds(.5))
+                .ObserveOn(RxApp.MainThreadScheduler)
+                .Subscribe(x =>
+                {
+                    SetRValue(RTextBox.Text);
+                });
+
         }
 
-        public CFloat I
-        {
-            get => (CFloat)this.GetValue(IProperty);
-            set => this.SetValue(IProperty, value);
-        }
-        public static readonly DependencyProperty IProperty = DependencyProperty.Register(
-            nameof(I), typeof(CFloat), typeof(RedQuaternionEditor), new PropertyMetadata(default(CFloat)));
-
-        public CFloat J
-        {
-            get => (CFloat)this.GetValue(JProperty);
-            set => this.SetValue(JProperty, value);
-        }
-        public static readonly DependencyProperty JProperty = DependencyProperty.Register(
-            nameof(J), typeof(CFloat), typeof(RedQuaternionEditor), new PropertyMetadata(default(CFloat)));
-
-        public CFloat K
-        {
-            get => (CFloat)this.GetValue(KProperty);
-            set => this.SetValue(KProperty, value);
-        }
-        public static readonly DependencyProperty KProperty = DependencyProperty.Register(
-            nameof(K), typeof(CFloat), typeof(RedQuaternionEditor), new PropertyMetadata(default(CFloat)));
-
-        public CFloat R
-        {
-            get => (CFloat)this.GetValue(RProperty);
-            set => this.SetValue(RProperty, value);
-        }
-        public static readonly DependencyProperty RProperty = DependencyProperty.Register(
-            nameof(R), typeof(CFloat), typeof(RedQuaternionEditor), new PropertyMetadata(default(CFloat)));
+        //public Quaternion RedQuaternion
+        //{
+        //    get => (Quaternion)this.GetValue(RedQuaternionProperty);
+        //    set => this.SetValue(RedQuaternionProperty, value);
+        //}
+        //public static readonly DependencyProperty RedQuaternionProperty = DependencyProperty.Register(
+        //    nameof(RedQuaternion), typeof(Quaternion), typeof(RedQuaternionEditor), new PropertyMetadata(default(Quaternion)));
 
 
         public string IText
@@ -73,21 +97,63 @@ namespace WolvenKit.Views.Editors
             set => SetRValue(value);
         }
 
-        private void SetIValue(string value) => SetCurrentValue(IProperty, (CFloat)float.Parse(value));
-        private void SetJValue(string value) => SetCurrentValue(JProperty, (CFloat)float.Parse(value));
-        private void SetKValue(string value) => SetCurrentValue(KProperty, (CFloat)float.Parse(value));
-        private void SetRValue(string value) => SetCurrentValue(RProperty, (CFloat)float.Parse(value));
+        private void SetIValue(string value)
+        {
+            ((Quaternion)cvm.Data).I = float.Parse(value);
+            var x = cvm.Properties?.FirstOrDefault(prop => prop.Name == "i") ?? null;
+            if (x != null)
+                x.Data = (CFloat)float.Parse(value);
+        }
 
-        private string GetValueFromIValue() => ((float)I).ToString("R");
-        private string GetValueFromJValue() => ((float)J).ToString("R");
-        private string GetValueFromKValue() => ((float)K).ToString("R");
-        private string GetValueFromRValue() => ((float)R).ToString("R");
+        private void SetJValue(string value)
+        {
+            ((Quaternion)cvm.Data).J = float.Parse(value);
+            var x = cvm.Properties?.FirstOrDefault(prop => prop.Name == "j") ?? null;
+            if (x != null)
+                x.Data = (CFloat)float.Parse(value);
+        }
+
+        private void SetKValue(string value)
+        {
+            ((Quaternion)cvm.Data).K = float.Parse(value);
+            var x = cvm.Properties?.FirstOrDefault(prop => prop.Name == "k") ?? null;
+            if (x != null)
+                x.Data = (CFloat)float.Parse(value);
+        }
+
+        private void SetRValue(string value)
+        {
+            ((Quaternion)cvm.Data).R = float.Parse(value);
+            var x = cvm.Properties?.FirstOrDefault(prop => prop.Name == "r") ?? null;
+            if (x != null)
+                x.Data = (CFloat)float.Parse(value);
+        }
+
+        private string GetValueFromIValue()
+        {
+            return ((float)((Quaternion)cvm.Data).I).ToString("R");
+        }
+
+        private string GetValueFromJValue()
+        {
+            return ((float)((Quaternion)cvm.Data).J).ToString("R");
+        }
+
+        private string GetValueFromKValue()
+        {
+            return ((float)((Quaternion)cvm.Data).K).ToString("R");
+        }
+
+        private string GetValueFromRValue()
+        {
+            return ((float)((Quaternion)cvm.Data).R).ToString("R");
+        }
 
 
         private void NumberValidationTextBox(object sender, TextCompositionEventArgs e)
         {
-            Regex regex = new Regex("[^0-9\\.]+");
-            e.Handled = regex.IsMatch(e.Text);
+            var tb = (TextBox)e.Source;
+            e.Handled = !float.TryParse(tb.Text.Insert(tb.CaretIndex, e.Text), out _);
         }
 
     }

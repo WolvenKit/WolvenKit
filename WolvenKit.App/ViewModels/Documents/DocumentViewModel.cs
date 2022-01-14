@@ -80,7 +80,7 @@ namespace WolvenKit.ViewModels.Documents
 
         [Reactive] public bool IsDirty { get; protected set; }
 
-        
+
 
         #endregion Properties
 
@@ -92,16 +92,14 @@ namespace WolvenKit.ViewModels.Documents
             Header = GetHeader();
         }
 
-        private string GetHeader()
-        {
+        private string GetHeader() =>
             // not sure this is that useful
             //if (FilePath == null)
             //{
             //    return "Noname" + (IsDirty ? "*" : "");
             //}
 
-            return Path.GetFileName(ContentId) + (IsDirty ? "*" : "");
-        }
+            Path.GetFileName(ContentId) + (IsDirty ? "*" : "");
 
 
         /// <summary>
@@ -121,10 +119,7 @@ namespace WolvenKit.ViewModels.Documents
 
         public abstract Task OnSave(object parameter);
 
-        private void OnSaveAs(object parameter)
-        {
-            throw new NotImplementedException();
-        }
+        private void OnSaveAs(object parameter) => throw new NotImplementedException();
 
         #endregion methods
 

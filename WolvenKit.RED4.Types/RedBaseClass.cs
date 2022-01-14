@@ -25,6 +25,12 @@ namespace WolvenKit.RED4.Types
             {
                 _delegateCache.Add(redPropertyName, delegate (object sender, ObjectChangedEventArgs args)
                 {
+                    if (args._callStack.Contains(this))
+                    {
+                        return;
+                    }
+                    args._callStack.Add(this);
+
                     if (sender != null)
                     {
                         var path = $"{redPropertyName}.{args.RedPath}";
@@ -32,11 +38,17 @@ namespace WolvenKit.RED4.Types
                         {
                             path = $"{redPropertyName}{args.RedPath}";
                         }
-                        ObjectChanged?.Invoke(sender, new ObjectChangedEventArgs(args.ChangeType, path, args.RedName, args.OldValue, args.NewValue));
+
+                        args.RedPath = path;
+
+                        ObjectChanged?.Invoke(sender, args);
                     }
                     else
                     {
-                        ObjectChanged?.Invoke(this, new ObjectChangedEventArgs(args.ChangeType, redPropertyName, redPropertyName, args.OldValue, args.NewValue));
+                        args.RedName = redPropertyName;
+                        args.RedPath = redPropertyName;
+
+                        ObjectChanged?.Invoke(this, args);
                     }
                 });
             }
@@ -62,7 +74,13 @@ namespace WolvenKit.RED4.Types
 
         private void OnObjectChanged(string redPropertyName, object oldValue, object newValue)
         {
-            ObjectChanged?.Invoke(this, new ObjectChangedEventArgs(ObjectChangedType.Modified, redPropertyName, redPropertyName, oldValue, newValue));
+            if (ObjectChanged != null)
+            {
+                var args = new ObjectChangedEventArgs(ObjectChangedType.Modified, redPropertyName, redPropertyName, oldValue, newValue);
+                args._callStack.Add(this);
+
+                ObjectChanged.Invoke(this, args);
+            }
         }
 
         #endregion
@@ -161,6 +179,27 @@ namespace WolvenKit.RED4.Types
 
                 OnObjectChanged(redPropertyName, oldValue, value);
             }
+        }
+
+        internal void InternalForceSetPropertyValue(string redPropertyName, IRedType value, bool native)
+        {
+            object oldValue = null;
+            if (_properties.ContainsKey(redPropertyName))
+            {
+                oldValue = _properties[redPropertyName];
+            }
+
+            RemoveEventHandler(redPropertyName);
+
+            _properties[redPropertyName] = value;
+            if (!native)
+            {
+                _dynamicProperties.Add(redPropertyName);
+            }
+
+            AddEventHandler(redPropertyName);
+
+            OnObjectChanged(redPropertyName, oldValue, value);
         }
 
         public IRedType GetObjectByRedName(string redName)
@@ -266,14 +305,14 @@ namespace WolvenKit.RED4.Types
             }
         }
 
-        public List<string> FindType(Type targetType, string rootName = "root")
+        public List<FindResult> FindType(Type targetType, string rootName = "root")
         {
-            var result = new List<string>();
+            var result = new List<FindResult>();
             foreach (var tuple in GetEnumerator(rootName))
             {
-                if (tuple.value.GetType() == targetType)
+                if (targetType.IsInstanceOfType(tuple.value))
                 {
-                    result.Add(tuple.propPath);
+                    result.Add(new FindResult(tuple.propPath, tuple.value));
                 }
             }
 
@@ -285,9 +324,9 @@ namespace WolvenKit.RED4.Types
             return GetFromXPath(xPath.Split('.'));
         }
 
-        public (bool, object) GetFromXPath(string[] xPath)
+        public (bool, IRedType) GetFromXPath(string[] xPath)
         {
-            object result = null;
+            IRedType result = null;
             var currentProps = _properties;
             foreach (var part in xPath)
             {
@@ -312,7 +351,7 @@ namespace WolvenKit.RED4.Types
                                 return (false, null);
                             }
 
-                            result = lst[index];
+                            result = (IRedType)lst[index];
                         }
                     }
 
@@ -324,7 +363,7 @@ namespace WolvenKit.RED4.Types
                     if (result is IRedBaseHandle handle)
                     {
                         var cCls = handle.GetValue();
-                        currentProps = ((RedBaseClass)cCls)._properties;
+                        currentProps = cCls._properties;
                     }
 
                     continue;
@@ -359,6 +398,7 @@ namespace WolvenKit.RED4.Types
         #region DynamicObject
 
         private readonly IDictionary<string, IRedType> _properties = new Dictionary<string, IRedType>();
+        internal readonly IList<string> _writtenProperties = new List<string>();
         private readonly IList<string> _dynamicProperties = new List<string>();
 
         public override bool TrySetMember(SetMemberBinder binder, object value)
@@ -374,6 +414,11 @@ namespace WolvenKit.RED4.Types
 
             result = obj;
             return success;
+        }
+
+        public List<string> GetWrittenPropertyNames()
+        {
+            return new List<string>(_writtenProperties);
         }
 
         public List<string> GetDynamicPropertyNames()
@@ -423,5 +468,18 @@ namespace WolvenKit.RED4.Types
         }
 
         public override int GetHashCode() => base.GetHashCode();
+
+        public class FindResult
+        {
+            public string Path { get; }
+            public string Name => Path.Split('.')[^1];
+            public IRedType Value { get; }
+
+            internal FindResult(string path, IRedType value)
+            {
+                Path = path;
+                Value = value;
+            }
+        }
     }
 }

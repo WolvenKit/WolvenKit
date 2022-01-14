@@ -43,6 +43,7 @@
     <PackageReference Include="ControlzEx" Version="5.0.1" />
     <PackageReference Include="AdonisUI" Version="1.17.1" />
     <PackageReference Include="AdonisUI.ClassicTheme" Version="1.17.1" />
+    <PackageReference Include="DrawStringLineHeight" Version="1.0.0" />
     <PackageReference Include="Fluent.Ribbon" Version="8.0.3" />
     <PackageReference Include="Ab3d.DXEngine.Wpf" Version="4.4.7874" />
     <PackageReference Include="Ab3d.DXEngine" Version="4.4.7874" />

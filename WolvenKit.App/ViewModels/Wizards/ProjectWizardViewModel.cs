@@ -1,15 +1,13 @@
 using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Reactive;
+using System.Threading.Tasks;
 using System.Windows.Input;
-using System.Windows.Media;
 using Microsoft.WindowsAPICodePack.Dialogs;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
-using WolvenKit.ViewModels.Dialogs;
 using WolvenKit.Functionality.Commands;
-using System.Threading.Tasks;
+using WolvenKit.ViewModels.Dialogs;
 
 namespace WolvenKit.ViewModels.Wizards
 {
@@ -38,7 +36,7 @@ namespace WolvenKit.ViewModels.Wizards
             CreateCommand = ReactiveCommand.Create(() => FileHandler(this), CanExecute);
             Cancel2Command = ReactiveCommand.Create(() => FileHandler(null));
 
-            ProjectType = new ObservableCollection<string> {"Cyberpunk 2077"};
+            ProjectType = new ObservableCollection<string> { "Cyberpunk 2077" };
             //ProjectType.Add("Witcher 3");
         }
 
@@ -117,7 +115,7 @@ namespace WolvenKit.ViewModels.Wizards
             ProjectPath = result;
         }
 
-        
+
 
     }
 }

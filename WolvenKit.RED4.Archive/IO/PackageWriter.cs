@@ -50,20 +50,45 @@ namespace WolvenKit.RED4.Archive.IO
 
             var nonDefaultProperties = new List<RedReflection.ExtendedPropertyInfo>();
 
-            foreach (var propertyInfo in typeInfo.PropertyInfos)
+            if (PackageWriter.IsDebug)
             {
-                var value = propertyInfo.GetValue(cls);
-                if (!typeInfo.SerializeDefault && !propertyInfo.SerializeDefault && RedReflection.IsDefault(cls.GetType(), propertyInfo, value))
+                var tmp = cls.GetWrittenPropertyNames();
+                var tmp2 = new RedReflection.ExtendedPropertyInfo[tmp.Count];
+                foreach (var propertyInfo in typeInfo.PropertyInfos)
                 {
+                    var value = propertyInfo.GetValue(cls);
                     if (propertyInfo.Type == typeof(CRUID) && _doubleHeaderCRUIDS.Contains(cls.GetType()))
                     {
                         _cruids.Add((CRUID)value);
                     }
 
-                    continue;
+                    var index = tmp.IndexOf(propertyInfo.RedName);
+                    if (index != -1)
+                    {
+                        tmp2[index] = propertyInfo;
+                    }
                 }
-                nonDefaultProperties.Add(propertyInfo);
+
+                nonDefaultProperties = tmp2.ToList();
             }
+            else
+            {
+                foreach (var propertyInfo in typeInfo.PropertyInfos)
+                {
+                    var value = propertyInfo.GetValue(cls);
+                    if (!typeInfo.SerializeDefault && !propertyInfo.SerializeDefault && RedReflection.IsDefault(cls.GetType(), propertyInfo, value))
+                    {
+                        if (propertyInfo.Type == typeof(CRUID) && _doubleHeaderCRUIDS.Contains(cls.GetType()))
+                        {
+                            _cruids.Add((CRUID)value);
+                        }
+
+                        continue;
+                    }
+                    nonDefaultProperties.Add(propertyInfo);
+                }
+            }
+
 
             _writer.Write((ushort)nonDefaultProperties.Count);
             var currentDataPosition = BaseStream.Position + nonDefaultProperties.Count * 8;
@@ -124,19 +149,51 @@ namespace WolvenKit.RED4.Archive.IO
 
         public override void Write(IRedHandle instance)
         {
-            var target = (RedBaseClass)instance.GetValue();
+            var target = instance.GetValue();
 
-            if (target != null)
+            if (_header.version == 2)
             {
-                InternalHandleWriter(target, 0);
+                if (target != null)
+                {
+                    InternalHandleWriter(target, 0, typeof(short));
+                }
+                else
+                {
+                    BaseWriter.Write((short)-1);
+                }
+            }
+            else if (_header.version == 03 || _header.version == 04)
+            {
+                if (target != null)
+                {
+                    InternalHandleWriter(target, 0);
+                }
+                else
+                {
+                    BaseWriter.Write(-1);
+                }
             }
             else
             {
-                BaseWriter.Write(-1);
+                throw new NotSupportedException(nameof(Write));
             }
         }
 
-        public override void Write(IRedWeakHandle instance) => InternalHandleWriter((RedBaseClass)instance.GetValue(), 0);
+        public override void Write(IRedWeakHandle instance)
+        {
+            if (_header.version == 2)
+            {
+                InternalHandleWriter(instance.GetValue(), 0, typeof(short));
+            }
+            else if (_header.version == 03 || _header.version == 04)
+            {
+                InternalHandleWriter(instance.GetValue(), 0);
+            }
+            else
+            {
+                throw new NotSupportedException(nameof(Write));
+            }
+        }
 
         public override void Write(IRedResourceReference instance)
         {
@@ -170,21 +227,27 @@ namespace WolvenKit.RED4.Archive.IO
 
         public override void Write(NodeRef val)
         {
-            _writer.Write((short)(val.Text.Length));
-            _writer.Write(val.Text.ToCharArray());
+            var strBytes = Encoding.UTF8.GetBytes(val);
+
+            _writer.Write((short)strBytes.Length);
+            _writer.Write(strBytes);
         }
 
         public override void Write(LocalizationString val)
         {
+            var strBytes = Encoding.UTF8.GetBytes(val.Value);
+
             _writer.Write(val.Unk1);
-            _writer.Write((short)(val.Value.Length));
-            _writer.Write(val.Value.ToCharArray());
+            _writer.Write((short)strBytes.Length);
+            _writer.Write(strBytes);
         }
 
         public override void Write(CString val)
         {
-            _writer.Write((short)(val.GetValue().Length));
-            _writer.Write(val.GetValue().ToCharArray());
+            var strBytes = Encoding.UTF8.GetBytes(val);
+
+            _writer.Write((short)strBytes.Length);
+            _writer.Write(strBytes);
         }
 
         public override void Write(DataBuffer val)
@@ -197,6 +260,23 @@ namespace WolvenKit.RED4.Archive.IO
             {
                 _writer.Write(val.Buffer.MemSize);
                 _writer.Write(val.Buffer.GetBytes());
+            }
+        }
+
+        public override void Write(TweakDBID val)
+        {
+            if (_header.version == 02 || _header.version == 03)
+            {
+                _writer.Write((short)val.Text.Length);
+                _writer.Write(Encoding.UTF8.GetBytes(val.Text));
+            }
+            else if (_header.version == 04)
+            {
+                base.Write(val);
+            }
+            else
+            {
+                throw new NotSupportedException(nameof(Write));
             }
         }
     }

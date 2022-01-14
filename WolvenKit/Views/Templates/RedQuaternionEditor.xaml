@@ -20,19 +20,19 @@
             <ColumnDefinition />
         </Grid.ColumnDefinitions>
         <TextBlock Text="I" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.Column="0"/>
-        <TextBox PreviewTextInput="NumberValidationTextBox"  Grid.Column="1"
+        <TextBox x:Name="ITextBox" PreviewTextInput="NumberValidationTextBox"  Grid.Column="1"
             Text="{Binding IText}"
             />
         <TextBlock Text="J" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.Column="2"/>
-        <TextBox PreviewTextInput="NumberValidationTextBox"  Grid.Column="3"
+        <TextBox x:Name="JTextBox" PreviewTextInput="NumberValidationTextBox"  Grid.Column="3"
             Text="{Binding JText}"
             />
         <TextBlock Text="K" VerticalAlignment="Center"  HorizontalAlignment="Center" Grid.Column="4"/>
-        <TextBox PreviewTextInput="NumberValidationTextBox"  Grid.Column="5"
+        <TextBox x:Name="KTextBox" PreviewTextInput="NumberValidationTextBox"  Grid.Column="5"
             Text="{Binding KText}"
             />
         <TextBlock Text="R" VerticalAlignment="Center"  HorizontalAlignment="Center" Grid.Column="6"/>
-        <TextBox PreviewTextInput="NumberValidationTextBox"  Grid.Column="7"
+        <TextBox x:Name="RTextBox" PreviewTextInput="NumberValidationTextBox"  Grid.Column="7"
             Text="{Binding RText}"
             />
 

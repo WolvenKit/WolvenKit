@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 
 namespace WolvenKit.RED4.Types
 {
@@ -6,6 +7,8 @@ namespace WolvenKit.RED4.Types
 
     public class ObjectChangedEventArgs : EventArgs
     {
+        internal List<IRedType> _callStack = new();
+
         public ObjectChangedType ChangeType { get; set; }
 
         public string RedPath { get; internal set; }

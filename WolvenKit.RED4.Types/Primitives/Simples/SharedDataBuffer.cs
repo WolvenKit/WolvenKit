@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace WolvenKit.RED4.Types
 {
-    public class SharedDataBuffer : IRedPrimitive, IEquatable<SharedDataBuffer>
+    public class SharedDataBuffer : IRedBufferWrapper, IRedPrimitive, IEquatable<SharedDataBuffer>
     {
         [Browsable(false)]
         public RedBuffer Buffer { get; set; }
@@ -30,7 +30,7 @@ namespace WolvenKit.RED4.Types
                 return true;
             }
 
-            return Equals(Buffer, other.Buffer);
+            return ReferenceEquals(Buffer, other.Buffer);
         }
 
         public override bool Equals(object obj)

@@ -4,7 +4,11 @@ namespace WolvenKit.RED4.Types
 {
     public class TweakDBID : IRedPrimitive, IEquatable<TweakDBID>
     {
+        public string Text { get; set; }
         public ulong Value { get; set; }
+
+        public static implicit operator TweakDBID(string value) => new() { Text = value };
+        public static implicit operator string(TweakDBID value) => value.Text;
 
         public static implicit operator TweakDBID(ulong value) => new() { Value = value };
         public static implicit operator ulong(TweakDBID value) => value.Value;
@@ -21,7 +25,7 @@ namespace WolvenKit.RED4.Types
                 return true;
             }
 
-            return Value == other.Value;
+            return Equals(Text, other.Text) && Equals(Value, other.Value);
         }
 
         public override bool Equals(object obj)
@@ -44,6 +48,6 @@ namespace WolvenKit.RED4.Types
             return Equals((TweakDBID)obj);
         }
 
-        public override int GetHashCode() => Value.GetHashCode();
+        public override int GetHashCode() => HashCode.Combine(Text.GetHashCode(), Value.GetHashCode());
     }
 }

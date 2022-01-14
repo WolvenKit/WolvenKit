@@ -1,11 +1,9 @@
 using System;
 using System.Reactive.Linq;
-using System.Threading.Tasks;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using WolvenKit.Core.Services;
 using WolvenKit.Functionality.Services;
-using WolvenKit.Functionality.WKitGlobal.Helpers;
 
 namespace WolvenKit.ViewModels.Shell
 {

@@ -1,9 +1,7 @@
 using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reactive;
-using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
@@ -11,7 +9,6 @@ using Microsoft.Win32;
 using Microsoft.WindowsAPICodePack.Dialogs;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
-using WolvenKit.Common.Services;
 using WolvenKit.Functionality.Commands;
 using WolvenKit.Functionality.Services;
 using WolvenKit.ViewModels.Dialogs;
@@ -67,7 +64,7 @@ namespace WolvenKit.ViewModels.Wizards
 
 
             CheckForUpdates = _settingsManager.CheckForUpdates;
-           // W3ExePath = _settingsManager.W3ExecutablePath;
+            // W3ExePath = _settingsManager.W3ExecutablePath;
             CP77ExePath = _settingsManager.CP77ExecutablePath;
             //WccLitePath = _settingsManager.WccLitePath;
 
@@ -158,7 +155,7 @@ namespace WolvenKit.ViewModels.Wizards
         {
 
             _settingsManager.CheckForUpdates = CheckForUpdates;
-           // _settingsManager.W3ExecutablePath = W3ExePath;
+            // _settingsManager.W3ExecutablePath = W3ExePath;
             _settingsManager.CP77ExecutablePath = CP77ExePath;
             //_settingsManager.WccLitePath = WccLitePath;
             _settingsManager.MaterialRepositoryPath = MaterialDepotPath;
@@ -168,7 +165,7 @@ namespace WolvenKit.ViewModels.Wizards
 
         }
 
-        
+
 
 
 

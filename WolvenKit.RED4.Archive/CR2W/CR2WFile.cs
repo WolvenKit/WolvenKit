@@ -24,7 +24,6 @@ namespace WolvenKit.RED4.Archive.CR2W
         public CR2WMetaData MetaData { get; } = new();
 
 
-        public IReadOnlyList<IRedRef> Imports { get; }
         public IList<ICR2WProperty> Properties { get; }
 
         public RedBaseClass RootChunk { get; set; }
@@ -60,34 +59,65 @@ namespace WolvenKit.RED4.Archive.CR2W
 
         #region Methods
 
-        public List<string> FindType(Type type)
+        public List<RedBuffer> GetBuffers()
         {
-            var result = new List<string>();
+            var result = new List<RedBuffer>();
 
-            result.AddRange(((RedBaseClass)RootChunk).FindType(type));
-
-            for (int i = 0; i < EmbeddedFiles.Count; i++)
+            var buffers = FindType(typeof(IRedBufferWrapper));
+            foreach (var entry in buffers)
             {
-                result.AddRange(((RedBaseClass)EmbeddedFiles[i].Content).FindType(type, $"emb{i}"));
+                result.Add(((IRedBufferWrapper)entry.Value).Buffer);
             }
 
             return result;
         }
 
-        public (bool, object) GetFromXPath(string xPath)
+        public List<CName> GetImports()
+        {
+            var result = new List<CName>();
+
+            foreach (var embeddedFile in EmbeddedFiles)
+            {
+                result.Add(embeddedFile.FileName);
+            }
+
+            var resources = FindType(typeof(IRedRef));
+            foreach (var entry in resources)
+            {
+                result.Add(((IRedRef)entry.Value).DepotPath);
+            }
+
+            return result;
+        }
+
+        public List<RedBaseClass.FindResult> FindType(Type targetTypes)
+        {
+            var result = new List<RedBaseClass.FindResult>();
+
+            result.AddRange(RootChunk.FindType(targetTypes));
+
+            for (int i = 0; i < EmbeddedFiles.Count; i++)
+            {
+                result.AddRange(EmbeddedFiles[i].Content.FindType(targetTypes, $"emb{i}"));
+            }
+
+            return result;
+        }
+
+        public (bool, IRedType) GetFromXPath(string xPath)
         {
             var parts = xPath.Split('.');
 
             if (parts[0] == "root")
             {
-                return ((RedBaseClass)RootChunk).GetFromXPath(parts[1..]);
+                return RootChunk.GetFromXPath(parts[1..]);
             }
 
             if (parts[0].StartsWith("emb"))
             {
                 if (int.TryParse(parts[0][3..], out var index))
                 {
-                    return ((RedBaseClass)EmbeddedFiles[index].Content).GetFromXPath(parts[1..]);
+                    return EmbeddedFiles[index].Content.GetFromXPath(parts[1..]);
                 }
             }
 

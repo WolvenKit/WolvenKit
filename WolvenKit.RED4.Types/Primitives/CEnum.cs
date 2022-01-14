@@ -99,5 +99,7 @@ namespace WolvenKit.RED4.Types
         }
 
         public override int GetHashCode() => HashCode.Combine(Value, StringValue);
+
+        public override string ToString() => Value.ToString();
     }
 }

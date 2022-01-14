@@ -1,24 +1,19 @@
 using System;
-using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.IO;
 using System.Linq;
-using System.Text;
+using System.Reactive.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
-using System.Reactive;
+using System.Windows.Input;
+using System.Xml.Serialization;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
-using System.Collections.ObjectModel;
+using Splat;
 using WolvenKit.Common;
 using WolvenKit.Common.Model;
-using System.Xml.Serialization;
-using System.Reflection;
-using System.Windows.Input;
-using WolvenKit.Functionality.Commands;
-using System.IO;
 using WolvenKit.Functionality.Services;
-using Splat;
 using WolvenKit.MVVM.Model.ProjectManagement.Project;
-using WolvenKit.ViewModels.Shell;
-using System.Reactive.Linq;
 using WolvenKit.RED4.CR2W;
 
 namespace WolvenKit.ViewModels.Dialogs
@@ -101,7 +96,8 @@ namespace WolvenKit.ViewModels.Dialogs
                     {
                         FullPath = Path.Combine(GetDefaultDir(SelectedFile.Type), x);
                         WhyNotCreate = File.Exists(FullPath) ? "Filename already in use" : "";
-                    } else
+                    }
+                    else
                     {
                         WhyNotCreate = "";
                     }
@@ -172,7 +168,7 @@ namespace WolvenKit.ViewModels.Dialogs
         }
     }
 
-   
 
-    
+
+
 }

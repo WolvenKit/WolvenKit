@@ -11,10 +11,8 @@ using Splat;
 using WolvenKit.Common;
 using WolvenKit.Common.FNV1A;
 using WolvenKit.Functionality.Commands;
-using WolvenKit.Functionality.Services;
 using WolvenKit.Interaction;
 using WolvenKit.MVVM.Model.ProjectManagement.Project;
-using WolvenKit.RED4.Archive;
 using WolvenKit.ViewModels.Shell;
 
 namespace WolvenKit.Models
@@ -117,7 +115,8 @@ namespace WolvenKit.Models
 
         [Browsable(false)] public bool IsExpanded { get; set; }
 
-        [Browsable(false)] public bool IsConvertable => !IsDirectory
+        [Browsable(false)]
+        public bool IsConvertable => !IsDirectory
                                                        && !string.IsNullOrEmpty(GetExtension())
                                                        && Enum.GetNames(typeof(EConvertableFileFormat)).Contains(GetExtension());
         [Browsable(false)]
@@ -142,7 +141,8 @@ namespace WolvenKit.Models
             }
         }
 
-        [Browsable(false)] public bool IsExportable => !IsDirectory
+        [Browsable(false)]
+        public bool IsExportable => !IsDirectory
                                                        && !string.IsNullOrEmpty(GetExtension())
                                                        && Enum.GetNames(typeof(ECookedFileFormat)).Contains(GetExtension());
 
@@ -156,6 +156,11 @@ namespace WolvenKit.Models
 
         public string GetRelativeName(EditorProject project)
         {
+            if (project == null)
+            {
+                return FullName;
+            }
+
             var filedir = project.FileDirectory;
             var moddir = project.ModDirectory;
             var rawDirectory = project.RawDirectory;
@@ -207,16 +212,16 @@ namespace WolvenKit.Models
         {
             if (project == null)
             {
-                throw new ArgumentNullException(nameof(project));
+                return 0;
             }
 
             if (fullname.Equals(project.FileDirectory, StringComparison.Ordinal))
             {
-                return (ulong)0;
+                return 0;
             }
             else if (fullname.Equals(project.PackedRootDirectory, StringComparison.Ordinal))
             {
-                return (ulong)0;
+                return 0;
             }
             else
             {
@@ -232,10 +237,7 @@ namespace WolvenKit.Models
         /// Delets selected node.
         /// </summary>
         [Browsable(false)] public ICommand DeleteFileCommand { get; private set; }
-        private bool CanDeleteFile()
-        {
-            return true;
-        }
+        private bool CanDeleteFile() => true;
         private async void ExecuteDeleteFile()
         {
             var delete = await Interactions.DeleteFiles.Handle(new List<string>() { Name });

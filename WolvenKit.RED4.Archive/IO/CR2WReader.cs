@@ -116,7 +116,28 @@ namespace WolvenKit.RED4.Archive.IO
                 prop.SetValue(cls, value);
             }
 
+            PostProcess();
+
             return true;
+
+            void PostProcess()
+            {
+                if (value is IRedBufferPointer buf)
+                {
+                    buf.GetValue().ParentTypes.Add($"{cls.GetType().Name}.{varname}");
+                }
+
+                if (value is IRedArray arr)
+                {
+                    if (typeof(IRedBufferPointer).IsAssignableFrom(arr.InnerType))
+                    {
+                        foreach (IRedBufferPointer entry in arr)
+                        {
+                            entry.GetValue().ParentTypes.Add($"{cls.GetType().Name}.{varname}");
+                        }
+                    }
+                }
+            }
         }
 
         public override SharedDataBuffer ReadSharedDataBuffer(uint size)

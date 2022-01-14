@@ -789,11 +789,9 @@ namespace WolvenKit.Modkit.RED4
             BaseMaterials.Add(cMaterialInstance);
             foreach (var mi in BaseMaterials)
             {
-                foreach (var propertyName in mi.Values.GetDynamicPropertyNames())
+                foreach (var kvp in mi.Values)
                 {
-                    var value = mi.Values.GetObjectByRedName(propertyName);
-
-                    if (value is CColor col)
+                    if (kvp.Value is CColor col)
                     {
                         var col_ = new CColor();
                         col_.Red = col.Red;
@@ -801,24 +799,24 @@ namespace WolvenKit.Modkit.RED4
                         col_.Blue = col.Blue;
                         col_.Alpha = col.Alpha;
 
-                        if (rawMaterial.Data.ContainsKey(propertyName))
+                        if (rawMaterial.Data.ContainsKey(kvp.Key))
                         {
-                            rawMaterial.Data[propertyName] = col_.ToObject();
+                            rawMaterial.Data[kvp.Key] = col_.ToObject();
                         }
                         else
                         {
-                            rawMaterial.Data.Add(propertyName, col_.ToObject());
+                            rawMaterial.Data.Add(kvp.Key, col_.ToObject());
                         }
                     }
                     else
                     {
-                        if (rawMaterial.Data.ContainsKey(propertyName))
+                        if (rawMaterial.Data.ContainsKey(kvp.Key))
                         {
-                            rawMaterial.Data[propertyName] = value.ToObject();
+                            rawMaterial.Data[kvp.Key] = kvp.Value.ToObject();
                         }
                         else
                         {
-                            rawMaterial.Data.Add(propertyName, value.ToObject());
+                            rawMaterial.Data.Add(kvp.Key, kvp.Value.ToObject());
                         }
                     }
                 }

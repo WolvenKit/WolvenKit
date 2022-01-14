@@ -5,7 +5,7 @@ using System.ComponentModel;
 namespace WolvenKit.RED4.Types
 {
     [RED("serializationDeferredDataBuffer")]
-    public class SerializationDeferredDataBuffer : IRedPrimitive, IRedBufferPointer, IEquatable<SerializationDeferredDataBuffer>
+    public class SerializationDeferredDataBuffer : IRedBufferWrapper, IRedBufferPointer, IRedPrimitive, IEquatable<SerializationDeferredDataBuffer>
     {
         [Browsable(false)]
         public RedBuffer Buffer { get; set; }
@@ -44,7 +44,7 @@ namespace WolvenKit.RED4.Types
                 return true;
             }
 
-            return Buffer == other.Buffer;
+            return ReferenceEquals(Buffer, other.Buffer);
         }
 
         public override bool Equals(object obj)

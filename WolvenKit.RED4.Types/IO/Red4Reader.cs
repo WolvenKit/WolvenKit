@@ -182,7 +182,7 @@ namespace WolvenKit.RED4.IO
             var result = new MultiChannelCurve<T>();
 
             result.NumChannels = _reader.ReadUInt32();
-            result.InterPolationType = (Enums.EInterPolationType)_reader.ReadByte();
+            result.InterpolationType = (Enums.EInterpolationType)_reader.ReadByte();
             result.LinkType = (Enums.EChannelLinkType)_reader.ReadByte();
             result.Alignment = _reader.ReadUInt32();
 
@@ -385,7 +385,8 @@ namespace WolvenKit.RED4.IO
                 }
             }
 
-            instance.Tail = _reader.ReadUInt16();
+            instance.InterpolationType = (Enums.EInterpolationType)_reader.ReadByte();
+            instance.LinkType = (Enums.ESegmentsLinkType)_reader.ReadByte();
 
             return instance;
         }
@@ -462,8 +463,6 @@ namespace WolvenKit.RED4.IO
 
         public virtual IRedStatic<T> ReadCStaticArray<T>(uint size, Flags flags) where T : IRedType
         {
-            var array = new CStatic<T>(flags.MoveNext() ? flags.Current : 0);
-
             var elementCount = _reader.ReadUInt32();
 
             uint elementSize = 0;
@@ -471,6 +470,9 @@ namespace WolvenKit.RED4.IO
             {
                 elementSize = (size - 4) / elementCount;
             }
+
+            var array = new CStatic<T>((int)elementCount);
+            array.MaxSize = flags.MoveNext() ? flags.Current : 0;
 
             for (var i = 0; i < elementCount; i++)
             {

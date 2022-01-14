@@ -462,6 +462,15 @@
                     <ToggleButton ToolTip="Toggle Flat File List" Margin="3,0,0,0"
                                   IsChecked="{Binding IsFlatModeEnabled}"
                                   hc:VisualElement.HighlightBackground="{StaticResource WolvenKitRed}">
+                        <ToggleButton.Style>
+                            <Style TargetType="ToggleButton" BasedOn="{StaticResource {x:Type ToggleButton}}">
+                                <Style.Triggers>
+                                    <Trigger Property="IsChecked" Value="True">
+                                        <Setter Property="Background" Value="{StaticResource WolvenKitRed}" />
+                                    </Trigger>
+                                </Style.Triggers>
+                            </Style>
+                        </ToggleButton.Style>
                         <iconPacks:PackIconCodicons
                                     Width="13"
                                     Height="13"
