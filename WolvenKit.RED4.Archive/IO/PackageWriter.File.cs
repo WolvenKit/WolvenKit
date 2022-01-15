@@ -76,24 +76,6 @@ namespace WolvenKit.RED4.Archive.IO
                 }
             }
 
-            if (fileRootType != typeof(inkWidgetLibraryResource))
-            {
-                if (cuidsIndex != file.CruidIndex)
-                {
-                    Debugger.Break();
-                }
-
-                if (cruids.Count != file.RootCruids.Count)
-                {
-                    Debugger.Break();
-                }
-
-                if (!cruids.SequenceEqual(file.RootCruids))
-                {
-                    Debugger.Break();
-                }
-            }
-
             if (fileRootType == typeof(gamePersistentStateDataResource))
             {
                 BaseWriter.Write(cruids.Count);
