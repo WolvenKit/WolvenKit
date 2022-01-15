@@ -1,15 +1,9 @@
-using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using WolvenKit.Common.DDS;
 using WolvenKit.Common.Model;
 using WolvenKit.Common.Model.Arguments;
-using WolvenKit.RED4.Archive.CR2W;
 using WolvenKit.RED4.CR2W.Archive;
-using WolvenKit.RED4.Types;
 
 namespace WolvenKit.Common.Interfaces
 {
@@ -43,7 +37,8 @@ namespace WolvenKit.Common.Interfaces
             ECookedFileFormat[] forcebuffers = null);
         void UncookAll(Archive ar, DirectoryInfo outDir, GlobalExportArgs args, bool unbundle = false, string pattern = "", string regex = "", DirectoryInfo rawOutDir = null, ECookedFileFormat[] forcebuffers = null);
 
-        public bool ConvertToAndWrite(ETextConvertFormat format, string infile, DirectoryInfo outputDirInfo);
+        public Task<bool> ConvertToAndWriteAsync(ETextConvertFormat format, string infile, DirectoryInfo outputDirInfo);
+
         public bool ConvertFromAndWrite(FileInfo fileInfo, DirectoryInfo outputDirInfo);
     }
 

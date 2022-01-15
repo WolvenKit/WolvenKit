@@ -58,6 +58,13 @@
       },
       "SolutionConfiguration": "Debug",
       "SolutionPlatform": "x64"
+    },
+    "Wolvenkit Console (Debug x64)": {
+      "Projects": {
+        "WolvenKit.CLI": {}
+      },
+      "SolutionConfiguration": "Debug",
+      "SolutionPlatform": "x64"
     }
   }
 }

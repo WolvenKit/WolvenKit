@@ -5,12 +5,8 @@ using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using Newtonsoft.Json;
 using WolvenKit.Common;
 using WolvenKit.Common.Extensions;
-using WolvenKit.Common.Tools;
-using WolvenKit.Interfaces.Core;
-using Formatting = Newtonsoft.Json.Formatting;
 
 namespace CP77Tools.Tasks
 {
@@ -18,7 +14,7 @@ namespace CP77Tools.Tasks
     {
         #region Methods
 
-        public void Cr2wTask(string[] path, string outpath, bool deserialize, bool serialize, string pattern, string regex, ETextConvertFormat format)
+        public async Task Cr2wTask(string[] path, string outpath, bool deserialize, bool serialize, string pattern, string regex, ETextConvertFormat format)
         {
             if (path == null || path.Length < 1)
             {
@@ -28,7 +24,7 @@ namespace CP77Tools.Tasks
 
             foreach (var s in path)
             {
-                Cr2wTaskInner(s, outpath, deserialize, serialize, pattern, regex, format);
+                await Cr2wTaskInner(s, outpath, deserialize, serialize, pattern, regex, format);
             }
 
             // Parallel.ForEach(path, file =>
@@ -37,7 +33,7 @@ namespace CP77Tools.Tasks
             // });
         }
 
-        private void Cr2wTaskInner(string path, string outputDirectory, bool deserialize, bool serialize,
+        private async Task Cr2wTaskInner(string path, string outputDirectory, bool deserialize, bool serialize,
             string pattern = "", string regex = "", ETextConvertFormat format = ETextConvertFormat.json)
         {
             #region checks
@@ -103,10 +99,10 @@ namespace CP77Tools.Tasks
             var finalMatchesList = finalmatches.ToList();
             _loggerService.Info($"Found {finalMatchesList.Count} files to process.");
 
-            int progress = 0;
+            var progress = 0;
 
-            //foreach (var fileInfo in finalMatchesList)
-            Parallel.ForEach(finalMatchesList, fileInfo =>
+            foreach (var fileInfo in finalMatchesList)
+            //Parallel.ForEach(finalMatchesList, fileInfo =>
             {
                 var outputDirInfo = string.IsNullOrEmpty(outputDirectory)
                     ? fileInfo.Directory
@@ -120,7 +116,7 @@ namespace CP77Tools.Tasks
                 if (serialize)
                 {
                     var infile = fileInfo.FullName;
-                    if (_modTools.ConvertToAndWrite(format, infile, outputDirInfo))
+                    if (await _modTools.ConvertToAndWriteAsync(format, infile, outputDirInfo))
                     {
                         _loggerService.Success($"Saved {infile} to {format.ToString()}.");
                     }
@@ -142,8 +138,8 @@ namespace CP77Tools.Tasks
                 }
 
                 Interlocked.Increment(ref progress);
-            });
-            //}
+                //});
+            }
 
             watch.Stop();
             _loggerService.Info($"Elapsed time: {watch.ElapsedMilliseconds.ToString()}ms.");

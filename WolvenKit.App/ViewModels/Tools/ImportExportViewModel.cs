@@ -28,6 +28,7 @@ using WolvenKit.Functionality.Commands;
 using WolvenKit.Functionality.Controllers;
 using WolvenKit.Functionality.Services;
 using WolvenKit.Interaction;
+using WolvenKit.Models;
 using WolvenKit.Models.Docking;
 using WolvenKit.Modkit.RED4.Opus;
 using WolvenKit.RED4.CR2W.Archive;
@@ -805,7 +806,7 @@ namespace WolvenKit.ViewModels.Tools
 
                 var qx = item.GetBaseFile();
                 var proj = _projectManager.ActiveProject;
-                var relativename = qx.GetRelativeName(proj);
+                var relativename = FileModel.GetRelativeName(qx.FullName, proj);
                 var newname = Path.ChangeExtension(relativename, ".mesh");
                 var hash = FNV1A64HashAlgorithm.HashString(newname);
                 var cp77Controller = _gameController.GetController() as RED4Controller;

@@ -87,7 +87,7 @@ namespace WolvenKit.Models
 
             Hash = GenerateKey(FullName, project);
             ParentHash = GenerateKey(parentfullname, project);
-            RelativePath = GetRelativeName(project);
+            RelativePath = GetRelativeName(FullName, project);
             OpenFileCommand = new RelayCommand(ExecuteOpenFile, CanOpenFile);
             DeleteFileCommand = new RelayCommand(ExecuteDeleteFile, CanDeleteFile);
             RenameFileCommand = new RelayCommand(ExecuteRenameFile, CanRenameFile);
@@ -153,9 +153,9 @@ namespace WolvenKit.Models
 
         public override int GetHashCode() => (int)Hash;
 
-        public ulong GetRedHash(EditorProject project) => FNV1A64HashAlgorithm.HashString(GetRelativeName(project));
+        public ulong GetRedHash(EditorProject project) => FNV1A64HashAlgorithm.HashString(GetRelativeName(FullName, project));
 
-        public string GetRelativeName(EditorProject project)
+        public static string GetRelativeName(string FullName, EditorProject project)
         {
             if (project == null)
             {
