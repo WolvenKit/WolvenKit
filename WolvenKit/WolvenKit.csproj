@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <Platforms>x64</Platforms>
     <TargetFramework>net6.0-windows</TargetFramework>
@@ -24,12 +24,6 @@
     <SatelliteResourceLanguages>en</SatelliteResourceLanguages>
       <Product>WolvenKit</Product>
       <ApplicationManifest>app.manifest</ApplicationManifest>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net5.0-windows|AnyCPU'">
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net5.0-windows|AnyCPU'">
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
 
 
@@ -111,28 +105,23 @@
     <PackageReference Include="WpfAnalyzers" Version="3.5.4" PrivateAssets="all">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
     </PackageReference>
-    <!--<PackageReference Update="NETStandard.Library" Version="2.0.1" />-->
   </ItemGroup>
 
 
   <ItemGroup>
     <Compile Remove="Functionality\Behavior\**" />
-    <Compile Remove="NewFolder1\**" />
     <Compile Remove="Resources\Styles\CustomBase\**" />
     <Compile Remove="Resources\Styles\Custom\**" />
     <Compile Remove="Views\Wizards\PublishWizard\**" />
     <EmbeddedResource Remove="Functionality\Behavior\**" />
-    <EmbeddedResource Remove="NewFolder1\**" />
     <EmbeddedResource Remove="Resources\Styles\CustomBase\**" />
     <EmbeddedResource Remove="Resources\Styles\Custom\**" />
     <EmbeddedResource Remove="Views\Wizards\PublishWizard\**" />
     <None Remove="Functionality\Behavior\**" />
-    <None Remove="NewFolder1\**" />
     <None Remove="Resources\Styles\CustomBase\**" />
     <None Remove="Resources\Styles\Custom\**" />
     <None Remove="Views\Wizards\PublishWizard\**" />
     <Page Remove="Functionality\Behavior\**" />
-    <Page Remove="NewFolder1\**" />
     <Page Remove="Resources\Styles\CustomBase\**" />
     <Page Remove="Resources\Styles\Custom\**" />
     <Page Remove="Views\Wizards\PublishWizard\**" />
@@ -1616,7 +1605,6 @@
     <None Remove="Assimp64.dll" />
     <None Remove="AssimpNet.dll" />
     <None Remove="distraction_generic.bk2" />
-    <None Remove="lib\WolvenManager.Installer.exe" />
     <None Remove="Obsolete.dll" />
     <None Remove="Resources\Media\bkmk.kark" />
     <None Remove="Resources\Media\Images\Application\.cpmodproj.png" />
@@ -1847,8 +1835,5 @@
       <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
       <SubType>Designer</SubType>
     </Page>
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="lib\" />
   </ItemGroup>
 </Project>

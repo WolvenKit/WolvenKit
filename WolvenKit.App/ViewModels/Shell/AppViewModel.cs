@@ -23,7 +23,6 @@ using WolvenKit.Common.Extensions;
 using WolvenKit.Common.FNV1A;
 using WolvenKit.Common.Services;
 using WolvenKit.Core.Services;
-using WolvenKit.Functionality;
 using WolvenKit.Functionality.Commands;
 using WolvenKit.Functionality.Controllers;
 using WolvenKit.Functionality.Helpers;
@@ -42,7 +41,6 @@ using WolvenKit.ViewModels.Documents;
 using WolvenKit.ViewModels.HomePage;
 using WolvenKit.ViewModels.Tools;
 using WolvenKit.ViewModels.Wizards;
-using WolvenManager.Installer.Services;
 using NativeMethods = WolvenKit.Functionality.NativeWin.NativeMethods;
 
 namespace WolvenKit.ViewModels.Shell
@@ -151,7 +149,7 @@ namespace WolvenKit.ViewModels.Shell
                 AssetBrowserVM,
                 ImportExportToolVM,
             };
-                
+
             //_settingsManager
             //    .WhenAnyValue(x => x.UpdateChannel)
             //    .Subscribe(_ =>
@@ -209,7 +207,7 @@ namespace WolvenKit.ViewModels.Shell
 
         private void InitUpdateService()
         {
-            
+
         }
 
 
