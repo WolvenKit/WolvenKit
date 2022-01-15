@@ -19,9 +19,10 @@ namespace WolvenKit.Models
 {
     public class FileModel : ReactiveObject
     {
-
         private readonly string _extension = ".default";
+
         public const string s_moddir = "wkitmoddir";
+
         public const string s_rawdir = "wkitrawdir";
 
         public FileModel(string path, EditorProject project)

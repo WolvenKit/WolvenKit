@@ -1,17 +1,13 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
 //using System.IO;
-using System.Linq;
-using System.Runtime.InteropServices;
 using CP77.Common.Image;
-using WolvenKit.RED4.Types;
+using WolvenKit.Common;
 using WolvenKit.Common.DDS;
 using WolvenKit.Common.Model.Arguments;
-using WolvenKit.Common.Oodle;
 using WolvenKit.Common.Services;
-using WolvenKit.Common;
-using System.Collections.Generic;
-using WolvenKit.Core;
+using WolvenKit.RED4.Types;
 
 namespace WolvenKit.Modkit.RED4
 {
@@ -77,13 +73,17 @@ namespace WolvenKit.Modkit.RED4
                 }
             }
 
-            var maskData = new byte[maskWidth * maskHeight];
+            // write texture to file
+            var subdir = new DirectoryInfo(Path.GetFullPath(outfile.FullName));
+            if (!subdir.Exists)
+            {
+                Directory.CreateDirectory(subdir.FullName);
+            }
 
+            var maskData = new byte[maskWidth * maskHeight];
+            var masks = new List<string>();
             for (var i = 0; i < maskCount; i++)
             {
-                var mFilename = Path.GetFileNameWithoutExtension(outfile.FullName) + $"_{i}.dds";
-                //var mFilename = Path.GetFileName(outfile.FullName) + $".{i}.dds"; // TODO:we should use this at some point
-                var newpath = Path.Combine(outfile.Directory.FullName, mFilename);
 
                 //Clear instead of allocate new is faster?
                 //Mandatory cause decode does not always write to every pixel
@@ -103,19 +103,22 @@ namespace WolvenKit.Modkit.RED4
                     continue;
                 }
 
-                // write texture to file
-                using var ms = new MemoryStream();
                 // create dds stream
+                using var ms = new MemoryStream();
                 DDSUtils.GenerateAndWriteHeader(ms, new DDSMetadata(
                     maskWidth, maskHeight,
-                    1, 1, 0, 0, 0, DXGI_FORMAT.DXGI_FORMAT_R8_UNORM, TEX_DIMENSION.TEX_DIMENSION_TEXTURE2D, 8,  true));
+                    1, 1, 0, 0, 0, DXGI_FORMAT.DXGI_FORMAT_R8_UNORM, TEX_DIMENSION.TEX_DIMENSION_TEXTURE2D, 8, true));
                 ms.Write(maskData);
 
+
+                var newpath = Path.Combine(subdir.FullName, $"{i}.dds");
                 if (args.UncookExtension == EUncookExtension.dds)
                 {
                     using var ddsStream = new FileStream($"{newpath}", FileMode.Create, FileAccess.Write);
                     ms.Seek(0, SeekOrigin.Begin);
                     ms.CopyTo(ddsStream);
+
+                    masks.Add($"{subdir.Name}/{i}.dds");
                 }
                 //else if (args.UncookExtension == EUncookExtension.tga)
                 //{
@@ -154,6 +157,11 @@ namespace WolvenKit.Modkit.RED4
                     }
                 }
             }
+
+            // write metadata
+            var masklist = Path.ChangeExtension(outfile.FullName, "masklist");
+            File.WriteAllLines(masklist, masks.ToArray());
+
             return true;
         }
 

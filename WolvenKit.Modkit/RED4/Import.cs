@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using BigGustave;
 using WolvenKit.Common;
 using WolvenKit.Common.DDS;
 using WolvenKit.Common.Extensions;
@@ -16,7 +15,6 @@ using WolvenKit.RED4.Archive.CR2W;
 using WolvenKit.RED4.Archive.IO;
 using WolvenKit.RED4.CR2W;
 using WolvenKit.RED4.Types;
-using WolvenKit.RED4.Types.Exceptions;
 
 namespace WolvenKit.Modkit.RED4
 {
@@ -131,7 +129,15 @@ namespace WolvenKit.Modkit.RED4
             var ext = rawRelative.Extension;
             if (Enum.TryParse(ext, true, out ERawFileFormat extAsEnum))
             {
-                var redfile = new RedRelativePath(rawRelative).ChangeBaseDir(outDir).ChangeExtension(string.IsNullOrEmpty(".mlmask") ? FromRawExtension(extAsEnum).ToString() : ".mlmask");
+                if (extAsEnum != ERawFileFormat.masklist)
+                {
+                    return false;
+                }
+
+                var redfile = new RedRelativePath(rawRelative)
+                    .ChangeBaseDir(outDir)
+                    .ChangeExtension(ERedExtension.mlmask.ToString());
+
                 try
                 {
                     mlmask.Import(rawRelative.ToFileInfo(), redfile.ToFileInfo());
@@ -344,7 +350,7 @@ namespace WolvenKit.Modkit.RED4
                     return false;
                 }
             }
-            
+
             using var ms = new MemoryStream();
 
             // convert to dds if not already

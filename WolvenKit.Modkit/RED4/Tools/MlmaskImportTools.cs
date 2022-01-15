@@ -1,12 +1,10 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Reflection.Metadata;
+using System.Linq;
 using System.Runtime.InteropServices;
 using WolvenKit.Common;
 using WolvenKit.Common.DDS;
-using WolvenKit.Interfaces.Extensions;
-using WolvenKit.RED4;
 using WolvenKit.RED4.Archive.CR2W;
 using WolvenKit.RED4.Archive.IO;
 using WolvenKit.RED4.Types;
@@ -20,9 +18,13 @@ namespace WolvenKit.Modkit.RED4.MLMask
         //if it creates a dx9 or both we will have to check for it, headerlength = 128, if(dx10) headerlength += 20
 
         private MlMaskContainer _mlmask;
+
         public void Import(FileInfo txtimageList, FileInfo outFile)
         {
-            var files = File.ReadAllLines(txtimageList.FullName);
+            // relative and absolute paths
+            var paths = File.ReadAllLines(txtimageList.FullName);
+            var baseDir = txtimageList.Directory;
+            var files = paths.Select(x => Path.Combine(baseDir.FullName, x));
 
             #region InitandVerify
 
@@ -47,7 +49,7 @@ namespace WolvenKit.Modkit.RED4.MLMask
 
                 var ms = new MemoryStream(File.ReadAllBytes(f));
                 var s = Path.GetExtension(f).ToLower();
-                var euncook = Enum.Parse<EUncookExtension>(Path.GetExtension(f).ToLower().Replace(".", ""));
+                var euncook = Enum.Parse<EUncookExtension>(Path.GetExtension(f).ToLower().TrimStart('.'));
                 if (euncook != EUncookExtension.dds)
                 {
                     ms = new MemoryStream(DDSUtils.ConvertToDdsMemory(ms, euncook, DXGI_FORMAT.DXGI_FORMAT_R8_UNORM));
@@ -109,6 +111,7 @@ namespace WolvenKit.Modkit.RED4.MLMask
             Create();
             Write(outFile);
         }
+
         #region Methods
 
         private void Write(FileInfo f)
@@ -364,11 +367,11 @@ namespace WolvenKit.Modkit.RED4.MLMask
                             if (_mlmask.Layers[I].Tiles[Convert.ToInt32(tx + (ty * _mlmask.Layers[I].WidthInTiles0))].RangeMax > 0)
                             {
                                 var layer = new TileView
-                                    {
-                                        LayerIndex = I,
-                                        LayerTileIndex = tx + (ty * _mlmask.Layers[I].WidthInTiles0),
-                                        AtlasInPosition = PackTileInAtlas(I, tx, ty)
-                                    };
+                                {
+                                    LayerIndex = I,
+                                    LayerTileIndex = tx + (ty * _mlmask.Layers[I].WidthInTiles0),
+                                    AtlasInPosition = PackTileInAtlas(I, tx, ty)
+                                };
                                 _mlmask.MaskTilesLow[x + (y * _mlmask.WidthInTilesLow)].Layers.Add(layer);
                             }
                         }
@@ -386,11 +389,11 @@ namespace WolvenKit.Modkit.RED4.MLMask
                             if (_mlmask.Layers[I].Tiles[Convert.ToInt32(tx + (ty * _mlmask.Layers[I].WidthInTiles0))].RangeMax > 0)
                             {
                                 var layer = new TileView
-                                    {
-                                        LayerIndex = I,
-                                        LayerTileIndex = tx + (ty * _mlmask.Layers[I].WidthInTiles0),
-                                        AtlasInPosition = PackTileInAtlas(I, tx, ty)
-                                    };
+                                {
+                                    LayerIndex = I,
+                                    LayerTileIndex = tx + (ty * _mlmask.Layers[I].WidthInTiles0),
+                                    AtlasInPosition = PackTileInAtlas(I, tx, ty)
+                                };
                                 _mlmask.MaskTilesHigh[x + (y * _mlmask.WidthInTilesHigh)].Layers.Add(layer);
                             }
                         }
@@ -430,11 +433,11 @@ namespace WolvenKit.Modkit.RED4.MLMask
                 {
 
                     var atlasTile = new TileView
-                        {
-                            AtlasInPosition = _mlmask.AtlasTilesCount++,
-                            LayerIndex = layerIdx,
-                            LayerTileIndex = tileIndex
-                        };
+                    {
+                        AtlasInPosition = _mlmask.AtlasTilesCount++,
+                        LayerIndex = layerIdx,
+                        LayerTileIndex = tileIndex
+                    };
 
                     atlasView = atlasTile;
                     _mlmask.AtlasTiles.Add(recursiveHash, atlasTile);
@@ -627,6 +630,7 @@ namespace WolvenKit.Modkit.RED4.MLMask
             return ++v;
         }
         #endregion
+
         #region Structs
 
         private struct RawTexContainer
@@ -687,6 +691,7 @@ namespace WolvenKit.Modkit.RED4.MLMask
         }
         #endregion
     }
+
     #region FNV1A
 
     internal class FNV1A
