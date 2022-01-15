@@ -50,11 +50,11 @@ Download either the latest stable version or the current nightly (beta) version 
 | [WolvenKit](https://github.com/WolvenKit/WolvenKit/) | [![GitHub release (latest by date)](https://img.shields.io/github/v/release/WolvenKit/WolvenKit)](https://github.com/WolvenKit/WolvenKit/releases/latest) | ![GitHub branch checks state](https://img.shields.io/github/checks-status/WolvenKit/WolvenKit/master) | 
 
 ### Installer
-1. Install the NET 5 Runtime: https://dotnet.microsoft.com/download/dotnet/5.0
+1. Install the NET 6 Runtime: https://dotnet.microsoft.com/en-us/download/dotnet/thank-you/runtime-6.0.1-windows-x64-installer
 2. Double click on the .exe to start the installation procedure and the program will take care of the rest.
 
 ### Portable
-1. Install the NET 5 Runtime: https://dotnet.microsoft.com/download/dotnet/5.0
+1. Install the NET 6 Runtime: https://dotnet.microsoft.com/en-us/download/dotnet/thank-you/runtime-6.0.1-windows-x64-installer
 2. Download Wolvenkit.zip
 3. Run WolvenKit.exe
 
@@ -64,7 +64,7 @@ Download either the latest stable version or the current nightly (beta) version 
 
 
 ## Build instructions
-1. Download and install [Visual Studio 2019 Community Edition](https://www.visualstudio.com/) or a higher version.
+1. Download and install [Visual Studio 2022 Community Edition](https://www.visualstudio.com/) or a higher version.
 2. Clone this repository.
 3. Clone the dependencies (`git submodule update --init --recursive`).
 4. Open the solution (`All.sln`)
