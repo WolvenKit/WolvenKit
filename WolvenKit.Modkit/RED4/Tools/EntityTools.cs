@@ -15,8 +15,7 @@ namespace WolvenKit.Modkit.RED4
         public bool DumpEntityPackageAsJson(Stream entStream, FileInfo outfile)
         {
             string outpath = Path.ChangeExtension(outfile.FullName, ".json");
-            var cr2w = _wolvenkitFileService.TryReadRed4File(entStream);
-            if (cr2w == null)
+            if (!_wolvenkitFileService.TryReadRed4File(entStream, out var cr2w))
             {
                 return false;
             }

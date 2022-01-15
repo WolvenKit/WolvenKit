@@ -470,8 +470,7 @@ namespace WolvenKit.MSTests
                     #region convert to json
                     using var originalMemoryStream = new MemoryStream();
                     ModTools.ExtractSingleToStream(archive, hash, originalMemoryStream);
-                    var originalFile = parsers.TryReadRed4File(originalMemoryStream);
-                    if (originalFile == null)
+                    if (!parsers.TryReadRed4File(originalMemoryStream, out var originalFile))
                     {
 #if IS_PARALLEL
                         return;
@@ -517,7 +516,7 @@ namespace WolvenKit.MSTests
                     var newBytes = newMemoryStream.ToByteArray();
 
                     newMemoryStream.Seek(0, SeekOrigin.Begin);
-                    var dbg = parsers.TryReadRed4File(newMemoryStream);
+                    var dbg = parsers.ReadRed4File(newMemoryStream);
                     //var newExportStartOffset = (int)dbg.Chunks.FirstOrDefault().GetOffset();
 
 

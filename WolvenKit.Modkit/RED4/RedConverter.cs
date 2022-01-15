@@ -28,8 +28,7 @@ namespace WolvenKit.Modkit.RED4
         /// <exception cref="ArgumentOutOfRangeException"></exception>
         public string ConvertToText(ETextConvertFormat format, Stream instream)
         {
-            var cr2w = _wolvenkitFileService.TryReadRed4File(instream);
-            if (cr2w == null)
+            if (!_wolvenkitFileService.TryReadRed4File(instream, out var cr2w))
             {
                 throw new InvalidParsingException("ConvertToText");
             }

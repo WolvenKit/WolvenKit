@@ -190,8 +190,7 @@ namespace CP77Tools.Tasks
                         {
                             using var ms = new MemoryStream();
                             ar.CopyFileToStream(ms, fileEntry.NameHash64, false);
-                            var cr2w = _wolvenkitFileService.TryReadRed4FileHeaders(ms);
-                            if (cr2w == null)
+                            if (!_wolvenkitFileService.TryReadRed4File(ms, out var cr2w))
                             {
                                 return;
                             }
@@ -215,7 +214,7 @@ namespace CP77Tools.Tasks
                             {
                                 using var ms = new MemoryStream();
                                 ar.CopyFileToStream(ms, (fileEntry as FileEntry).NameHash64, false);
-                                var cr2w = _wolvenkitFileService.TryReadRed4File(ms);
+                                var cr2w = _wolvenkitFileService.ReadRed4File(ms);
                                 if (cr2w == null || cr2w.RootChunk is not CBitmapTexture xbm || xbm.RenderTextureResource.RenderResourceBlobPC.Chunk is not rendIRenderTextureBlob blob)
                                 {
                                     return;

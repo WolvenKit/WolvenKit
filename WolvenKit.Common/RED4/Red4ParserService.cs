@@ -1,9 +1,8 @@
+#nullable enable
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
-using System.Text;
-using WolvenKit.Common.RED4.Compiled;
 using WolvenKit.Common.Services;
-using WolvenKit.Core.Exceptions;
 using WolvenKit.RED4.Archive.CR2W;
 using WolvenKit.RED4.Archive.IO;
 
@@ -22,69 +21,104 @@ namespace WolvenKit.RED4.CR2W
         #region Methods
 
         /// <summary>
-        /// Try reading a cr2w file from a stream, returns null if unsuccesful
+        /// Try reading a <see cref="CR2WFile">CR2WFile</see> from a <see cref="Stream">Stream</see>
         /// </summary>
-        /// <param name="stream"></param>
-        /// <returns></returns>
-        public CR2WFile TryReadRed4File(Stream stream)
+        /// <param name="stream">The <see cref="Stream">Stream</see> to read from</param>
+        /// <param name="redFile">The resulting <see cref="CR2WFile">CR2WFile</see></param>
+        /// <returns>Returns true if successful, otherwise false</returns>
+        public bool TryReadRed4File(Stream stream, [NotNullWhen(true)] out CR2WFile? redFile)
         {
-            using var br = new BinaryReader(stream, Encoding.Default, true);
-            return TryReadRed4File(br);
-        }
-
-        public CR2WFile TryReadRed4File(BinaryReader br)
-        {
-            // peak if cr2w
-            if (br.BaseStream.Length < 4)
-            {
-                return null;
-            }
-
-            br.BaseStream.Seek(0, SeekOrigin.Begin);
-            var magic = br.ReadUInt32();
-            var isCr2wFile = magic == CR2WFile.MAGIC;
-            if (!isCr2wFile)
-            {
-                return null;
-            }
-            br.BaseStream.Seek(-4, SeekOrigin.Current);
-
-            //try
-            //{
-                using var reader = new CR2WReader(br);
-                var readResult = reader.ReadFile(out var c, true);
-                return c;
-            //}
-            //catch (MissingRTTIException e)
-            //{
-            //    Console.WriteLine(e.Message);
-            //    return null;
-            //}
-            //catch (Exception e)
-            //{
-            //    Console.WriteLine(e.Message);
-            //    return null;
-            //}
+            using var reader = new CR2WReader(stream);
+            return reader.ReadFile(out redFile) == EFileReadErrorCodes.NoError;
         }
 
         /// <summary>
-        /// Try reading the cr2w file headers only from a stream, returns null if unsuccesful
+        /// Try reading <see cref="CR2WFile">CR2WFile</see> from a <see cref="BinaryReader">BinaryReader</see>
         /// </summary>
-        /// <param name="stream"></param>
-        /// <returns></returns>
-        public CR2WFile TryReadRed4FileHeaders(Stream stream)
+        /// <param name="br">The <see cref="BinaryReader">BinaryReader</see> to read from</param>
+        /// <param name="redFile">The resulting <see cref="CR2WFile">CR2WFile</see></param>
+        /// <returns>Returns true if successful, otherwise false</returns>
+        public bool TryReadRed4File(BinaryReader br, [NotNullWhen(true)] out CR2WFile? redFile)
         {
-            using var br = new BinaryReader(stream, Encoding.Default, true);
-            return TryReadRed4FileHeaders(br);
+            using var reader = new CR2WReader(br);
+            return reader.ReadFile(out redFile) == EFileReadErrorCodes.NoError;
+        }
+
+        /// <summary>
+        /// Reads a <see cref="CR2WFile">CR2WFile</see> from a <see cref="Stream">Stream</see>
+        /// </summary>
+        /// <param name="stream">The <see cref="Stream">Stream</see> to read from</param>
+        /// <returns>The resulting <see cref="CR2WFile">CR2WFile</see> or null if unsuccessful</returns>
+        public CR2WFile? ReadRed4File(Stream stream)
+        {
+            TryReadRed4File(stream, out var redFile);
+            return redFile;
+        }
+
+        /// <summary>
+        /// Reads a <see cref="CR2WFile">CR2WFile</see> from a <see cref="BinaryReader">BinaryReader</see>
+        /// </summary>
+        /// <param name="br">The <see cref="BinaryReader">BinaryReader</see> to read from</param>
+        /// <returns>The resulting <see cref="CR2WFile">CR2WFile</see> or null if unsuccessful</returns>
+        public CR2WFile? ReadRed4File(BinaryReader br)
+        {
+            TryReadRed4File(br, out var redFile);
+            return redFile;
+        }
+
+        /// <summary>
+        /// Try reading a <see cref="CR2WFileInfo">CR2WFileInfo</see> from a <see cref="Stream">Stream</see>
+        /// </summary>
+        /// <param name="stream">The <see cref="Stream">Stream</see> to read from</param>
+        /// <param name="info">The resulting <see cref="CR2WFileInfo">CR2WFileInfo</see></param>
+        /// <returns>Returns true if successful, otherwise false</returns>
+        public bool TryReadRed4FileHeaders(Stream stream, [NotNullWhen(true)] out CR2WFileInfo? info)
+        {
+            using var reader = new CR2WReader(stream);
+            return reader.ReadFileInfo(out info) == EFileReadErrorCodes.NoError;
+        }
+
+        /// <summary>
+        /// Try reading a <see cref="CR2WFileInfo">CR2WFileInfo</see> from a <see cref="BinaryReader">BinaryReader</see>
+        /// </summary>
+        /// <param name="br">The <see cref="BinaryReader">BinaryReader</see> to read from</param>
+        /// <param name="info">The resulting <see cref="CR2WFileInfo">CR2WFileInfo</see></param>
+        /// <returns>Returns true if successful, otherwise false</returns>
+        public bool TryReadRed4FileHeaders(BinaryReader br, [NotNullWhen(true)] out CR2WFileInfo? info)
+        {
+            using var reader = new CR2WReader(br);
+            return reader.ReadFileInfo(out info) == EFileReadErrorCodes.NoError;
+        }
+
+        /// <summary>
+        /// Reads a <see cref="CR2WFileInfo">CR2WFileInfo</see> from a <see cref="Stream">Stream</see>
+        /// </summary>
+        /// <param name="stream">The <see cref="Stream">Stream</see> to read from</param>
+        /// <returns>The resulting <see cref="CR2WFileInfo">CR2WFileInfo</see> or null if unsuccessful</returns>
+        public CR2WFileInfo? ReadRed4FileHeaders(Stream stream)
+        {
+            TryReadRed4FileHeaders(stream, out var info);
+            return info;
+        }
+
+        /// <summary>
+        /// Reads a <see cref="CR2WFileInfo">CR2WFileInfo</see> from a <see cref="Stream">Stream</see>
+        /// </summary>
+        /// <param name="br">The <see cref="BinaryReader">BinaryReader</see> to read from</param>
+        /// <returns>The resulting <see cref="CR2WFileInfo">CR2WFileInfo</see> or null if unsuccessful</returns>
+        public CR2WFileInfo? ReadRed4FileHeaders(BinaryReader br)
+        {
+            TryReadRed4FileHeaders(br, out var info);
+            return info;
         }
 
         /// <summary>
         /// Checks if a stream is a cr2w file
         /// seeks to the beginning of the stream
         /// </summary>
-        /// <param name="br"></param>
+        /// <param name="stream"></param>
         /// <returns></returns>
-        public bool IsCr2wFile(Stream stream, bool seek = true)
+        public bool IsCR2WFile(Stream stream, bool seek = true)
         {
             if (seek)
             {
@@ -109,34 +143,6 @@ namespace WolvenKit.RED4.CR2W
             }
 
             return true;
-        }
-
-        public CR2WFile TryReadRed4FileHeaders(BinaryReader br)
-        {
-            // peak if cr2w
-            if (br.BaseStream.Length < 4)
-            {
-                return null;
-            }
-
-            br.BaseStream.Seek(0, SeekOrigin.Begin);
-            var magic = br.ReadUInt32();
-            var isCr2wFile = magic == CR2WFile.MAGIC;
-            if (!isCr2wFile)
-            {
-                return null;
-            }
-
-            try
-            {
-                using var reader = new CR2WReader(br);
-                var readResult = reader.ReadFile(out var c, false);
-                return c;
-            }
-            catch (Exception)
-            {
-                return null;
-            }
         }
 
         #endregion Methods
