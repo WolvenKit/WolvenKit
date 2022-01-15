@@ -92,7 +92,7 @@ namespace WolvenKit.ViewModels.Documents
         {
             using var reader = new BinaryReader(stream);
 
-            if (!_parser.TryReadRed4File(reader, out var Cr2wFile))
+            if (!_parser.TryReadRed4File(reader, out Cr2wFile))
             {
                 _loggerService.Error($"Failed to read cr2w file {path}");
                 return false;
