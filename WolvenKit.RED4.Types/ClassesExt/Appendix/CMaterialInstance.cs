@@ -2,7 +2,7 @@ using WolvenKit.RED4.IO;
 
 namespace WolvenKit.RED4.Types
 {
-    public partial class CMaterialInstance : IRedAppendix
+    public partial class CMaterialInstance : IRedAppendix, IRedOverload
     {
         [RED("values")]
         [REDProperty(IsIgnored = true)]
@@ -14,8 +14,6 @@ namespace WolvenKit.RED4.Types
 
         public void Read(Red4Reader reader, uint size)
         {
-            Values = new CArray<CKeyValuePair>();
-
             var entryCount = reader.BaseReader.ReadInt32();
             for (int i = 0; i < entryCount; i++)
             {
@@ -50,6 +48,11 @@ namespace WolvenKit.RED4.Types
                 writer.BaseWriter.Write((uint)innerSize);
                 writer.BaseStream.Position = endPos;
             }
+        }
+
+        void IRedOverload.ConstructorOverload()
+        {
+            Values = new CArray<CKeyValuePair>();
         }
     }
 }

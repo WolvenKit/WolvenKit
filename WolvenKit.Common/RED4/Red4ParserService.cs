@@ -2,6 +2,7 @@
 using System;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
+using System.Text;
 using WolvenKit.Common.Services;
 using WolvenKit.RED4.Archive.CR2W;
 using WolvenKit.RED4.Archive.IO;
@@ -28,7 +29,7 @@ namespace WolvenKit.RED4.CR2W
         /// <returns>Returns true if successful, otherwise false</returns>
         public bool TryReadRed4File(Stream stream, [NotNullWhen(true)] out CR2WFile? redFile)
         {
-            using var reader = new CR2WReader(stream);
+            using var reader = new CR2WReader(stream, Encoding.Default, true);
             return reader.ReadFile(out redFile) == EFileReadErrorCodes.NoError;
         }
 
@@ -74,7 +75,7 @@ namespace WolvenKit.RED4.CR2W
         /// <returns>Returns true if successful, otherwise false</returns>
         public bool TryReadRed4FileHeaders(Stream stream, [NotNullWhen(true)] out CR2WFileInfo? info)
         {
-            using var reader = new CR2WReader(stream);
+            using var reader = new CR2WReader(stream, Encoding.Default, true);
             return reader.ReadFileInfo(out info) == EFileReadErrorCodes.NoError;
         }
 

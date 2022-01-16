@@ -145,16 +145,7 @@ namespace WolvenKit.Common.Conversion
                 return list;
             }
 
-            Package04 pkg = null;
-
-            if (data is SerializationDeferredDataBuffer sddb && sddb.Buffer.Data is Package04 sddbp4)
-                pkg = sddbp4;
-            else if (data is DataBuffer db && db.Buffer.Data is Package04 dbp4)
-                pkg = dbp4;
-            else if (data is SharedDataBuffer sdb && sdb.Buffer.Data is Package04 sdbp4)
-                pkg = sdbp4;
-
-            if (pkg != null)
+            if (data is IRedBufferWrapper bw && bw.Buffer.Data is Package04 pkg)
             {
                 var list = new List<object>();
                 var chunks = pkg.Chunks;

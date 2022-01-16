@@ -499,7 +499,7 @@ namespace WolvenKit.Common.Model.Arguments
         [Category("WithMaterials Settings")]
         [Display(Name = "Select Texture Format")]
         [Description("Select the preferred texture format to be exported within the Material Repository.")]
-        public EUncookExtension MaterialUncookExtension { get; set; } = EUncookExtension.dds;
+        public EUncookExtension MaterialUncookExtension { get; set; } = EUncookExtension.png;
 
         /// <summary>
         /// List of Archives for WithMaterials Mesh Export.

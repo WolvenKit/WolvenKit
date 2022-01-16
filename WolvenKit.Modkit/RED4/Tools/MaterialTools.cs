@@ -86,6 +86,7 @@ namespace WolvenKit.Modkit.RED4
                     {
                         var ms = new MemoryStream();
                         ExtractSingleToStream(ar, hash, ms);
+                        ms.Seek(0, SeekOrigin.Begin);
 
                         var isResource = _wolvenkitFileService.IsCR2WFile(ms);
                         if (!isResource)
@@ -121,6 +122,7 @@ namespace WolvenKit.Modkit.RED4
                     {
                         var ms = new MemoryStream();
                         ExtractSingleToStream(ar, hash, ms);
+                        ms.Seek(0, SeekOrigin.Begin);
 
                         var isResource = _wolvenkitFileService.IsCR2WFile(ms);
                         if (!isResource)
@@ -232,6 +234,7 @@ namespace WolvenKit.Modkit.RED4
                         {
                             var ms = new MemoryStream();
                             ExtractSingleToStream(ar, hash, ms);
+                            ms.Seek(0, SeekOrigin.Begin);
 
                             var isResource = _wolvenkitFileService.IsCR2WFile(ms);
                             if (!isResource)
@@ -262,6 +265,7 @@ namespace WolvenKit.Modkit.RED4
                     {
                         var ms = new MemoryStream();
                         ExtractSingleToStream(ar, mt, ms);
+                        ms.Seek(0, SeekOrigin.Begin);
 
                         var isResource = _wolvenkitFileService.IsCR2WFile(ms);
                         if (!isResource)
@@ -363,6 +367,8 @@ namespace WolvenKit.Modkit.RED4
                             {
                                 var ms = new MemoryStream();
                                 ExtractSingleToStream(ar, hash, ms);
+                                ms.Seek(0, SeekOrigin.Begin);
+
                                 HairProfileNames.Add(primaryDependencies[i]);
                                 string path = Path.Combine(matRepo, Path.ChangeExtension(primaryDependencies[i], ".hp.json"));
                                 if (!File.Exists(path))
@@ -373,7 +379,7 @@ namespace WolvenKit.Modkit.RED4
                                     }
                                     var hp = _wolvenkitFileService.ReadRed4File(ms);
                                     //hp.FileName = primaryDependencies[i];
-                                    var dto = new RedFileDto(hp);
+                                    var dto = new CR2WFileDto(hp);
                                     var doc = JsonConvert.SerializeObject(dto, settings);
                                     File.WriteAllText(path, doc);
                                 }
@@ -394,6 +400,7 @@ namespace WolvenKit.Modkit.RED4
                             {
                                 var ms = new MemoryStream();
                                 ExtractSingleToStream(ar, hash, ms);
+                                ms.Seek(0, SeekOrigin.Begin);
 
                                 var isResource = _wolvenkitFileService.IsCR2WFile(ms);
                                 if (!isResource)
@@ -413,7 +420,7 @@ namespace WolvenKit.Modkit.RED4
                                         Directory.CreateDirectory(new FileInfo(path).Directory.FullName);
                                     }
                                     //mls.FileName = primaryDependencies[i];
-                                    var dto = new RedFileDto(mls);
+                                    var dto = new CR2WFileDto(mls);
                                     var doc = JsonConvert.SerializeObject(dto, settings);
                                     File.WriteAllText(path, doc);
                                 }
@@ -450,6 +457,7 @@ namespace WolvenKit.Modkit.RED4
                                                 {
                                                     var mss = new MemoryStream();
                                                     ExtractSingleToStream(arr, hash2, mss);
+                                                    mss.Seek(0, SeekOrigin.Begin);
 
                                                     var mlt = _wolvenkitFileService.ReadRed4File(mss);
                                                     mlTemplateNames.Add(reader.ImportsList[e].DepotPath);
@@ -462,7 +470,7 @@ namespace WolvenKit.Modkit.RED4
                                                             Directory.CreateDirectory(new FileInfo(path1).Directory.FullName);
                                                         }
                                                         //mlt.FileName = mls.Imports[e].DepotPath;
-                                                        var dto1 = new RedFileDto(mlt);
+                                                        var dto1 = new CR2WFileDto(mlt);
                                                         var doc1 = JsonConvert.SerializeObject(dto1, settings);
                                                         File.WriteAllText(path1, doc1);
                                                     }
@@ -601,7 +609,7 @@ namespace WolvenKit.Modkit.RED4
 
             if (materialParameter is CMaterialParameterStructBuffer str)
             {
-                throw new TodoException(nameof(CMaterialParameterStructBuffer));
+                // TODO: Is there something I'm missing here?
             }
 
             if (materialParameter is CMaterialParameterTerrainSetup ter)
@@ -690,7 +698,7 @@ namespace WolvenKit.Modkit.RED4
 
             if (materialParameter is CMaterialParameterStructBuffer str)
             {
-                throw new TodoException(nameof(CMaterialParameterStructBuffer));
+                // TODO: Is there something I'm missing here?
             }
 
             if (materialParameter is CMaterialParameterTerrainSetup ter)
@@ -741,7 +749,9 @@ namespace WolvenKit.Modkit.RED4
                     if (ar.Files.ContainsKey(hash))
                     {
                         var ms = new MemoryStream();
-                        ModTools.ExtractSingleToStream(ar, hash, ms);
+                        ExtractSingleToStream(ar, hash, ms);
+                        ms.Seek(0, SeekOrigin.Begin);
+
                         var mi = _wolvenkitFileService.ReadRed4File(ms);
                         BaseMaterials.Add(mi.RootChunk as CMaterialInstance);
                         path = (mi.RootChunk as CMaterialInstance).BaseMaterial.DepotPath;
@@ -764,7 +774,9 @@ namespace WolvenKit.Modkit.RED4
                     if (ar.Files.ContainsKey(hash))
                     {
                         var ms = new MemoryStream();
-                        ModTools.ExtractSingleToStream(ar, hash, ms);
+                        ExtractSingleToStream(ar, hash, ms);
+                        ms.Seek(0, SeekOrigin.Begin);
+
                         mt = (CMaterialTemplate)_wolvenkitFileService.ReadRed4File(ms).RootChunk;
                         mts.Add(path, mt);
                         break;
@@ -879,7 +891,9 @@ namespace WolvenKit.Modkit.RED4
                             if (ar.Files.ContainsKey(hash))
                             {
                                 var ms = new MemoryStream();
-                                ModTools.ExtractSingleToStream(ar, hash, ms);
+                                ExtractSingleToStream(ar, hash, ms);
+                                ms.Seek(0, SeekOrigin.Begin);
+
                                 mt = (CMaterialTemplate)_wolvenkitFileService.ReadRed4File(ms).RootChunk;
                                 mts.Add(mat.MaterialTemplate, mt);
                                 break;
