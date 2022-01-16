@@ -29,6 +29,8 @@ namespace WolvenKit.RED4.CR2W
         /// <returns>Returns true if successful, otherwise false</returns>
         public bool TryReadRed4File(Stream stream, [NotNullWhen(true)] out CR2WFile? redFile)
         {
+            // TODO: Shouldn't be done here...
+            stream.Seek(0, SeekOrigin.Begin);
             using var reader = new CR2WReader(stream, Encoding.Default, true);
             return reader.ReadFile(out redFile) == EFileReadErrorCodes.NoError;
         }
@@ -41,6 +43,8 @@ namespace WolvenKit.RED4.CR2W
         /// <returns>Returns true if successful, otherwise false</returns>
         public bool TryReadRed4File(BinaryReader br, [NotNullWhen(true)] out CR2WFile? redFile)
         {
+            // TODO: Shouldn't be done here...
+            br.BaseStream.Seek(0, SeekOrigin.Begin);
             using var reader = new CR2WReader(br);
             return reader.ReadFile(out redFile) == EFileReadErrorCodes.NoError;
         }
@@ -75,6 +79,8 @@ namespace WolvenKit.RED4.CR2W
         /// <returns>Returns true if successful, otherwise false</returns>
         public bool TryReadRed4FileHeaders(Stream stream, [NotNullWhen(true)] out CR2WFileInfo? info)
         {
+            // TODO: Shouldn't be done here...
+            stream.Seek(0, SeekOrigin.Begin);
             using var reader = new CR2WReader(stream, Encoding.Default, true);
             return reader.ReadFileInfo(out info) == EFileReadErrorCodes.NoError;
         }
@@ -87,6 +93,8 @@ namespace WolvenKit.RED4.CR2W
         /// <returns>Returns true if successful, otherwise false</returns>
         public bool TryReadRed4FileHeaders(BinaryReader br, [NotNullWhen(true)] out CR2WFileInfo? info)
         {
+            // TODO: Shouldn't be done here...
+            br.BaseStream.Seek(0, SeekOrigin.Begin);
             using var reader = new CR2WReader(br);
             return reader.ReadFileInfo(out info) == EFileReadErrorCodes.NoError;
         }
