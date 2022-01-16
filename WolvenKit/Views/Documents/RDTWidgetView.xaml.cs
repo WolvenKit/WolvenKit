@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Reactive.Disposables;
 using System.Threading.Tasks;
 using System.Windows;
@@ -10,6 +11,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using Microsoft.Win32;
 using ReactiveUI;
+using WolvenKit.Functionality.Commands;
 using WolvenKit.Functionality.Layout.inkWidgets;
 using WolvenKit.RED4.Archive.Buffer;
 using WolvenKit.RED4.Types;
@@ -74,7 +76,7 @@ namespace WolvenKit.Views.Documents
 
                     foreach (var animation in ViewModel.inkAnimations)
                     {
-                        Animations.Add(new inkControlAnimation(animation, Widgets[0]));
+                        Animations.Add(new inkControlAnimation(animation, this));
                     }
                 }).DisposeWith(disposables);
 
@@ -90,6 +92,10 @@ namespace WolvenKit.Views.Documents
 
                 AnimationList.SetCurrentValue(ItemsControl.ItemsSourceProperty, Animations);
 
+                WidgetExportButtons.SetCurrentValue(ItemsControl.ItemsSourceProperty, Widgets.Select(x => x.Widget));
+
+                ExportWidgetCommand = new DelegateCommand((w) => ViewModel.ExportWidget((inkWidget)w));
+
                 //this.Bind(ViewModel,
                 //        x => x.WidgetBackground,
                 //        x => x.WidgetBackgroundColorEditor.Color)
@@ -98,6 +104,8 @@ namespace WolvenKit.Views.Documents
         }
 
         // Image Preview
+
+        public ICommand ExportWidgetCommand { get; set; }
 
         private System.Windows.Point origin;
         private System.Windows.Point start;
@@ -190,6 +198,14 @@ namespace WolvenKit.Views.Documents
 
         public void UpdateZoomText(double scale)
         {
+            if (scale >= 1.0)
+            {
+                RenderOptions.SetBitmapScalingMode(this, BitmapScalingMode.NearestNeighbor);
+            }
+            else
+            {
+                RenderOptions.SetBitmapScalingMode(this, BitmapScalingMode.HighQuality);
+            }
             ZoomText.SetCurrentValue(TextBlock.TextProperty, $"{(scale*100).ToString("F1")}%");
         }
 
@@ -248,19 +264,19 @@ namespace WolvenKit.Views.Documents
         {
             foreach (var widget in Widgets)
             {
-                var bitmap = new RenderTargetBitmap((int)widget.RenderSize.Width, (int)widget.RenderSize.Height, 96D, 96D, PixelFormats.Default);
+                var bitmap = new RenderTargetBitmap((int)widget.RenderSize.Width, (int)widget.RenderSize.Height, 96D, 96D, PixelFormats.Pbgra32);
                 bitmap.Render(widget);
 
                 SaveFileDialog saveFileDialog1 = new SaveFileDialog();
-                saveFileDialog1.Filter = "PNG Image|*.png";
+                saveFileDialog1.Filter = "TIFF Image|*.tiff";
                 saveFileDialog1.Title = "Save an Image As";
-                saveFileDialog1.FileName = widget.Name + ".png";
+                saveFileDialog1.FileName = widget.Name + ".tiff";
                 saveFileDialog1.ShowDialog();
 
                 if (saveFileDialog1.FileName != "")
                 {
 
-                    BitmapEncoder encoder = new PngBitmapEncoder();
+                    BitmapEncoder encoder = new TiffBitmapEncoder();
                     encoder.Frames.Add(BitmapFrame.Create(bitmap));
 
                     using (var fileStream = new FileStream(saveFileDialog1.FileName, FileMode.Create))

@@ -2,15 +2,24 @@ using System;
 using System.Collections.Generic;
 using System.Drawing.Text;
 using System.IO;
+using System.Linq;
 using System.Runtime.InteropServices;
+using System.Runtime.Serialization;
 using System.Windows;
+using System.Windows.Forms;
+using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using System.Xml.Serialization;
+using Newtonsoft.Json;
 using ReactiveUI.Fody.Helpers;
+using WolvenKit.Common.Conversion;
 using WolvenKit.Common.FNV1A;
 using WolvenKit.Functionality.Ab4d;
+using WolvenKit.Functionality.Commands;
 using WolvenKit.Modkit.RED4;
 using WolvenKit.RED4.Types;
+using Application = System.Windows.Application;
 
 namespace WolvenKit.ViewModels.Documents
 {
@@ -36,6 +45,8 @@ namespace WolvenKit.ViewModels.Documents
 
         [Reactive] public List<inkanimSequence> inkAnimations { get; set; } = new();
 
+        [Reactive] public List<inkIEffect> inkEffects { get; set; } = new();
+
         public RDTWidgetViewModel(RedBaseClass data, RedDocumentViewModel file)
         {
             Header = "Widget Preview";
@@ -60,58 +71,7 @@ namespace WolvenKit.ViewModels.Documents
                 var itemPath = f.DepotPath.GetValue();
                 if (Path.GetExtension(itemPath) == ".inkatlas")
                 {
-                    var atlasHash = FNV1A64HashAlgorithm.HashString(itemPath);
-                    var atlasFile = File.GetFileFromHash(atlasHash);
-                    if (atlasFile == null || atlasFile.RootChunk is not inkTextureAtlas atlas)
-                    {
-                        continue;
-                    }
-
-                    var xbmHash = FNV1A64HashAlgorithm.HashString(atlas?.Slots[0]?.Texture?.DepotPath?.ToString() ?? "");
-                    var xbmFile = File.GetFileFromHash(xbmHash);
-                    if (xbmFile == null || xbmFile.RootChunk is not CBitmapTexture xbm)
-                    {
-                        continue;
-                    }
-
-                    using var ddsstream = new MemoryStream();
-                    if (!ModTools.ConvertRedClassToDdsStream(xbm, ddsstream, out _))
-                    {
-                        continue;
-                    }
-
-                    var qa = ImageDecoder.RenderToBitmapSourceDds(ddsstream);
-                    if (qa.Result == null)
-                    {
-                        continue;
-                    }
-
-                    var image = new TransformedBitmap(qa.Result, new ScaleTransform(1, -1));
-
-                    foreach (var part in atlas.Slots[0].Parts)
-                    {
-                        var key = "ImageSource/" + itemPath + "#" + part.PartName;
-                        if (!Application.Current.Resources.Contains(key))
-                        {
-                            var Left = part.ClippingRectInUVCoords.Left * xbm.Width;
-                            var Top = part.ClippingRectInUVCoords.Top * xbm.Height;
-                            var Width = part.ClippingRectInUVCoords.Right * xbm.Width - Left;
-                            var Height = part.ClippingRectInUVCoords.Bottom * xbm.Height - Top;
-                            var partImage = new CroppedBitmap(image, new Int32Rect((int)Math.Round(Left), (int)Math.Round(Top), (int)Math.Round(Width), (int)Math.Round(Height)));
-                            partImage.Freeze();
-
-                            Application.Current.Resources.Add(key, partImage);
-                        }
-                    }
-
-                    foreach (var slice in atlas.Slots[0].Slices)
-                    {
-                        var key = "RectF/" + itemPath + "#" + slice.PartName;
-                        if (!Application.Current.Resources.Contains(key))
-                        {
-                            Application.Current.Resources.Add(key, slice.NineSliceScaleRect);
-                        }
-                    }
+                    LoadInkAtlas(itemPath);
                 }
                 else if (Path.GetExtension(itemPath) == ".inkfontfamily")
                 {
@@ -216,6 +176,71 @@ namespace WolvenKit.ViewModels.Documents
             library = _library;
         }
 
+        public void LoadInkAtlas(string path)
+        {
+            if (Application.Current.Resources.Contains(path))
+            {
+                return;
+            }
+
+            Application.Current.Resources.Add(path, false);
+
+            var atlasHash = FNV1A64HashAlgorithm.HashString(path);
+            var atlasFile = File.GetFileFromHash(atlasHash);
+            if (atlasFile == null || atlasFile.RootChunk is not inkTextureAtlas atlas)
+            {
+                return;
+            }
+
+            var xbmHash = FNV1A64HashAlgorithm.HashString(atlas?.Slots[0]?.Texture?.DepotPath?.ToString() ?? "");
+            var xbmFile = File.GetFileFromHash(xbmHash);
+            if (xbmFile == null || xbmFile.RootChunk is not CBitmapTexture xbm)
+            {
+                return;
+            }
+
+            using var ddsstream = new MemoryStream();
+            if (!ModTools.ConvertRedClassToDdsStream(xbm, ddsstream, out _))
+            {
+                return;
+            }
+
+            var qa = ImageDecoder.RenderToBitmapSourceDds(ddsstream);
+            if (qa.Result == null)
+            {
+                return;
+            }
+
+            var image = new TransformedBitmap(qa.Result, new ScaleTransform(1, -1));
+
+            foreach (var part in atlas.Slots[0].Parts)
+            {
+                var key = "ImageSource/" + path + "#" + part.PartName;
+                if (!Application.Current.Resources.Contains(key))
+                {
+                    var Left = part.ClippingRectInUVCoords.Left * xbm.Width;
+                    var Top = part.ClippingRectInUVCoords.Top * xbm.Height;
+                    var Width = part.ClippingRectInUVCoords.Right * xbm.Width - Left;
+                    var Height = part.ClippingRectInUVCoords.Bottom * xbm.Height - Top;
+                    var partImage = new CroppedBitmap(image, new Int32Rect((int)Math.Round(Left), (int)Math.Round(Top), (int)Math.Round(Width), (int)Math.Round(Height)));
+                    partImage.Freeze();
+
+                    Application.Current.Resources.Add(key, partImage);
+                }
+            }
+
+            foreach (var slice in atlas.Slots[0].Slices)
+            {
+                var key = "RectF/" + path + "#" + slice.PartName;
+                if (!Application.Current.Resources.Contains(key))
+                {
+                    Application.Current.Resources.Add(key, slice.NineSliceScaleRect);
+                }
+            }
+
+            Application.Current.Resources[path] = true;
+        }
+
         public override ERedDocumentItemType DocumentItemType => ERedDocumentItemType.W2rcBuffer;
 
         [Reactive] public ImageSource Image { get; set; }
@@ -223,6 +248,42 @@ namespace WolvenKit.ViewModels.Documents
         [Reactive] public object SelectedItem { get; set; }
 
         [Reactive] public bool IsDragging { get; set; }
+
+        public void ExportWidget(inkWidget widget)
+        {
+            Stream myStream;
+            var saveFileDialog = new SaveFileDialog
+            {
+                Filter = "XML files (*.xml)|*.xml|All files (*.*)|*.*",
+                FilterIndex = 2,
+                FileName = widget.Name + ".xml",
+                RestoreDirectory = true
+            };
+
+            if (saveFileDialog.ShowDialog() == DialogResult.OK)
+            {
+                if ((myStream = saveFileDialog.OpenFile()) != null)
+                {
+                    var dto = new inkWidgetDto(widget, new
+                    {
+                        WolvenKitVersion = "8.4.0",
+                        WKitJsonVersion = "0.0.1",
+                        Exported = DateTime.UtcNow.ToString("o")
+                    });
+                    var x = new XmlSerializer(typeof(inkWidgetDto));
+                    x.Serialize(myStream, dto);
+                    //var json = JsonConvert.SerializeObject(dto, Formatting.Indented);
+
+                    //if (string.IsNullOrEmpty(xml))
+                    //{
+                    //    throw new SerializationException();
+                    //}
+
+                    //myStream.Write(xml.ToCharArray().Select(c => (byte)c).ToArray());
+                    //myStream.Close();
+                }
+            }
+        }
 
     }
 }

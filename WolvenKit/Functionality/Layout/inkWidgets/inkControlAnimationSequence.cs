@@ -9,6 +9,7 @@ using System.Windows.Media;
 using System.Windows.Media.Animation;
 using WolvenKit.Functionality.Commands;
 using WolvenKit.RED4.Types;
+using WolvenKit.Views.Documents;
 
 namespace WolvenKit.Functionality.Layout.inkWidgets
 {
@@ -16,14 +17,14 @@ namespace WolvenKit.Functionality.Layout.inkWidgets
     {
         public string Name => Sequence.Name;
         public inkanimSequence Sequence { get; set; }
-        public inkControl Root { get; set; }
+        public RDTWidgetView WidgetView { get; set; }
         public List<inkControl> Targets { get; set; } = new();
         public Storyboard Storyboard { get; set; }
 
-        public inkControlAnimation(inkanimSequence seq, inkControl root)
+        public inkControlAnimation(inkanimSequence seq, RDTWidgetView wv)
         {
             Sequence = seq;
-            Root = root;
+            WidgetView = wv;
 
             //PlayCommand = new RelayCommand(Play, CanPlay);
             //StopCommand = new RelayCommand(Stop, CanStop);
@@ -34,7 +35,10 @@ namespace WolvenKit.Functionality.Layout.inkWidgets
                 return;
 
             Storyboard = new();
-            Storyboard.RepeatBehavior = RepeatBehavior.Forever;
+            if (Name.Contains("loop"))
+            {
+                Storyboard.RepeatBehavior = RepeatBehavior.Forever;
+            }
             //Storyboard.Duration = new Duration(TimeSpan.FromSeconds(2));
             //Storyboard.AutoReverse = true;
 
@@ -48,136 +52,169 @@ namespace WolvenKit.Functionality.Layout.inkWidgets
                     continue;
                 }
 
-                var element = Root;
-                foreach (var index in info.Path)
+                foreach (var root in WidgetView.Widgets)
                 {
-                    if (element is inkCompoundControl cc)
-                        element = cc.GetChild(Convert.ToInt32(index));
-                }
-
-                if (element == null)
-                    continue;
-
-                Targets.Add(element);
-
-                var animDef = (inkanimDefinition)Sequence.Definitions[i].GetValue();
-                foreach (var animIHandle in animDef.Interpolators)
-                {
-                    var animI = (inkanimInterpolator)animIHandle.GetValue();
-                    List<AnimationTimeline> anims = new();
-                    List<PropertyPath> paths = new();
-                    object target = element;
-
-                    if (animI is inkanimTransparencyInterpolator animTrnsp)
+                    var element = root;
+                    foreach (var index in info.Path)
                     {
-                        var d = new DoubleAnimationUsingKeyFrames();
-                        if (animI.StartDelay != 0)
-                        {
-                            d.KeyFrames.Add(ToDoubleKeyframe(animI.InterpolationType.Value, animI.InterpolationMode.Value, animTrnsp.StartValue, 0));
-                        }
-                        d.KeyFrames.Add(ToDoubleKeyframe(animI.InterpolationType.Value, animI.InterpolationMode.Value, animTrnsp.StartValue, animTrnsp.StartDelay));
-                        d.KeyFrames.Add(ToDoubleKeyframe(animI.InterpolationType.Value, animI.InterpolationMode.Value, animTrnsp.EndValue, animTrnsp.StartDelay + animTrnsp.Duration));
-
-                        anims.Add(d);
-                        paths.Add(new PropertyPath(UIElement.OpacityProperty));
-                        target = "element" + element.GetHashCode();
+                        if (element is inkCompoundControl cc)
+                            element = cc.GetChild(Convert.ToInt32(index));
                     }
 
-                    if (animI is inkanimMarginInterpolator animMargin)
+                    if (element == null)
+                        continue;
+
+                    Targets.Add(element);
+
+                    var animDef = (inkanimDefinition)Sequence.Definitions[i].GetValue();
+                    foreach (var animIHandle in animDef.Interpolators)
                     {
-                        var d = new ThicknessAnimationUsingKeyFrames();
-                        if (animI.StartDelay != 0)
+                        var animI = (inkanimInterpolator)animIHandle.GetValue();
+                        List<AnimationTimeline> anims = new();
+                        List<PropertyPath> paths = new();
+                        object target = element;
+
+                        if (animI is inkanimTransparencyInterpolator animTrnsp)
                         {
-                            d.KeyFrames.Add(ToThicknessKeyframe(animI.InterpolationType.Value, animI.InterpolationMode.Value, animMargin.StartValue, 0));
+                            var d = new DoubleAnimationUsingKeyFrames();
+                            if (animI.StartDelay != 0)
+                            {
+                                d.KeyFrames.Add(ToDoubleKeyframe(animI.InterpolationType.Value, animI.InterpolationMode.Value, animTrnsp.StartValue, 0));
+                            }
+                            d.KeyFrames.Add(ToDoubleKeyframe(animI.InterpolationType.Value, animI.InterpolationMode.Value, animTrnsp.StartValue, animTrnsp.StartDelay));
+                            d.KeyFrames.Add(ToDoubleKeyframe(animI.InterpolationType.Value, animI.InterpolationMode.Value, animTrnsp.EndValue, animTrnsp.StartDelay + animTrnsp.Duration));
+
+                            anims.Add(d);
+                            paths.Add(new PropertyPath(UIElement.OpacityProperty));
+                            target = "element" + element.GetHashCode();
                         }
-                        d.KeyFrames.Add(ToThicknessKeyframe(animI.InterpolationType.Value, animI.InterpolationMode.Value, animMargin.StartValue, animMargin.StartDelay));
-                        d.KeyFrames.Add(ToThicknessKeyframe(animI.InterpolationType.Value, animI.InterpolationMode.Value, animMargin.EndValue, animMargin.StartDelay + animMargin.Duration));
 
-                        anims.Add(d);
-                        paths.Add(new PropertyPath(inkControl.MarginProperty));
-                        target = "element" + element.GetHashCode();
-                    }
-
-                    if (animI is inkanimRotationInterpolator animRot)
-                    {
-                        var d = new DoubleAnimationUsingKeyFrames();
-                        if (animI.StartDelay != 0)
+                        if (animI is inkanimMarginInterpolator animMargin)
                         {
-                            d.KeyFrames.Add(ToDoubleKeyframe(animI.InterpolationType.Value, animI.InterpolationMode.Value, animRot.StartValue, 0));
+                            var d = new ThicknessAnimationUsingKeyFrames();
+                            if (animI.StartDelay != 0)
+                            {
+                                d.KeyFrames.Add(ToThicknessKeyframe(animI.InterpolationType.Value, animI.InterpolationMode.Value, animMargin.StartValue, 0));
+                            }
+                            d.KeyFrames.Add(ToThicknessKeyframe(animI.InterpolationType.Value, animI.InterpolationMode.Value, animMargin.StartValue, animMargin.StartDelay));
+                            d.KeyFrames.Add(ToThicknessKeyframe(animI.InterpolationType.Value, animI.InterpolationMode.Value, animMargin.EndValue, animMargin.StartDelay + animMargin.Duration));
+
+                            anims.Add(d);
+                            paths.Add(new PropertyPath(inkControl.MarginProperty));
+                            target = "element" + element.GetHashCode();
                         }
-                        d.KeyFrames.Add(ToDoubleKeyframe(animI.InterpolationType.Value, animI.InterpolationMode.Value, animRot.StartValue, animRot.StartDelay));
-                        d.KeyFrames.Add(ToDoubleKeyframe(animI.InterpolationType.Value, animI.InterpolationMode.Value, animRot.EndValue, animRot.StartDelay + animRot.Duration));
 
-                        anims.Add(d);
-                        paths.Add(new PropertyPath(RotateTransform.AngleProperty));
-                        target = "rotation" + element.GetHashCode();
-                    }
-
-                    if (animI is inkanimTranslationInterpolator animTrnsl)
-                    {
-                        var d = new DoubleAnimationUsingKeyFrames();
-                        if (animI.StartDelay != 0)
+                        if (animI is inkanimSizeInterpolator animSize)
                         {
-                            d.KeyFrames.Add(ToDoubleKeyframe(animI.InterpolationType.Value, animI.InterpolationMode.Value, animTrnsl.StartValue.X, 0));
+                            var d = new DoubleAnimationUsingKeyFrames();
+                            if (animI.StartDelay != 0)
+                            {
+                                d.KeyFrames.Add(ToDoubleKeyframe(animI.InterpolationType.Value, animI.InterpolationMode.Value, animSize.StartValue.X, 0));
+                            }
+                            d.KeyFrames.Add(ToDoubleKeyframe(animI.InterpolationType.Value, animI.InterpolationMode.Value, animSize.StartValue.X, animSize.StartDelay));
+                            d.KeyFrames.Add(ToDoubleKeyframe(animI.InterpolationType.Value, animI.InterpolationMode.Value, animSize.EndValue.X, animSize.StartDelay + animSize.Duration));
+
+                            anims.Add(d);
+
+                            d = new DoubleAnimationUsingKeyFrames();
+                            if (animI.StartDelay != 0)
+                            {
+                                d.KeyFrames.Add(ToDoubleKeyframe(animI.InterpolationType.Value, animI.InterpolationMode.Value, animSize.StartValue.Y, 0));
+                            }
+                            d.KeyFrames.Add(ToDoubleKeyframe(animI.InterpolationType.Value, animI.InterpolationMode.Value, animSize.StartValue.Y, animSize.StartDelay));
+                            d.KeyFrames.Add(ToDoubleKeyframe(animI.InterpolationType.Value, animI.InterpolationMode.Value, animSize.EndValue.Y, animSize.StartDelay + animSize.Duration));
+
+                            anims.Add(d);
+                            paths.Add(new PropertyPath(inkControl.WidthProperty));
+                            paths.Add(new PropertyPath(inkControl.HeightProperty));
+                            target = "element" + element.GetHashCode();
                         }
-                        d.KeyFrames.Add(ToDoubleKeyframe(animI.InterpolationType.Value, animI.InterpolationMode.Value, animTrnsl.StartValue.X, animTrnsl.StartDelay));
-                        d.KeyFrames.Add(ToDoubleKeyframe(animI.InterpolationType.Value, animI.InterpolationMode.Value, animTrnsl.EndValue.X, animTrnsl.StartDelay + animTrnsl.Duration));
 
-                        anims.Add(d);
-                        paths.Add(new PropertyPath(TranslateTransform.XProperty));
-
-                        if (animI.StartDelay != 0)
+                        if (animI is inkanimRotationInterpolator animRot)
                         {
-                            d.KeyFrames.Add(ToDoubleKeyframe(animI.InterpolationType.Value, animI.InterpolationMode.Value, animTrnsl.StartValue.Y, 0));
+                            var d = new DoubleAnimationUsingKeyFrames();
+                            if (animI.StartDelay != 0)
+                            {
+                                d.KeyFrames.Add(ToDoubleKeyframe(animI.InterpolationType.Value, animI.InterpolationMode.Value, animRot.StartValue, 0));
+                            }
+                            d.KeyFrames.Add(ToDoubleKeyframe(animI.InterpolationType.Value, animI.InterpolationMode.Value, animRot.StartValue, animRot.StartDelay));
+                            d.KeyFrames.Add(ToDoubleKeyframe(animI.InterpolationType.Value, animI.InterpolationMode.Value, animRot.EndValue, animRot.StartDelay + animRot.Duration));
+
+                            anims.Add(d);
+                            paths.Add(new PropertyPath(RotateTransform.AngleProperty));
+                            target = "rotation" + element.GetHashCode();
                         }
-                        d.KeyFrames.Add(ToDoubleKeyframe(animI.InterpolationType.Value, animI.InterpolationMode.Value, animTrnsl.StartValue.Y, animTrnsl.StartDelay));
-                        d.KeyFrames.Add(ToDoubleKeyframe(animI.InterpolationType.Value, animI.InterpolationMode.Value, animTrnsl.EndValue.Y, animTrnsl.StartDelay + animTrnsl.Duration));
 
-                        anims.Add(d);
-                        paths.Add(new PropertyPath(TranslateTransform.YProperty));
-
-                        target = "translation" + element.GetHashCode();
-                    }
-
-                    if (animI is inkanimScaleInterpolator animScale)
-                    {
-                        var d = new DoubleAnimationUsingKeyFrames();
-                        if (animI.StartDelay != 0)
+                        if (animI is inkanimTranslationInterpolator animTrnsl)
                         {
-                            d.KeyFrames.Add(ToDoubleKeyframe(animI.InterpolationType.Value, animI.InterpolationMode.Value, animScale.StartValue.X, 0));
+                            var d = new DoubleAnimationUsingKeyFrames();
+                            if (animI.StartDelay != 0)
+                            {
+                                d.KeyFrames.Add(ToDoubleKeyframe(animI.InterpolationType.Value, animI.InterpolationMode.Value, animTrnsl.StartValue.X, 0));
+                            }
+                            d.KeyFrames.Add(ToDoubleKeyframe(animI.InterpolationType.Value, animI.InterpolationMode.Value, animTrnsl.StartValue.X, animTrnsl.StartDelay));
+                            d.KeyFrames.Add(ToDoubleKeyframe(animI.InterpolationType.Value, animI.InterpolationMode.Value, animTrnsl.EndValue.X, animTrnsl.StartDelay + animTrnsl.Duration));
+
+                            anims.Add(d);
+
+                            d = new DoubleAnimationUsingKeyFrames();
+                            paths.Add(new PropertyPath(TranslateTransform.XProperty));
+
+                            if (animI.StartDelay != 0)
+                            {
+                                d.KeyFrames.Add(ToDoubleKeyframe(animI.InterpolationType.Value, animI.InterpolationMode.Value, animTrnsl.StartValue.Y, 0));
+                            }
+                            d.KeyFrames.Add(ToDoubleKeyframe(animI.InterpolationType.Value, animI.InterpolationMode.Value, animTrnsl.StartValue.Y, animTrnsl.StartDelay));
+                            d.KeyFrames.Add(ToDoubleKeyframe(animI.InterpolationType.Value, animI.InterpolationMode.Value, animTrnsl.EndValue.Y, animTrnsl.StartDelay + animTrnsl.Duration));
+
+                            anims.Add(d);
+                            paths.Add(new PropertyPath(TranslateTransform.YProperty));
+
+                            target = "translation" + element.GetHashCode();
                         }
-                        d.KeyFrames.Add(ToDoubleKeyframe(animI.InterpolationType.Value, animI.InterpolationMode.Value, animScale.StartValue.X, animScale.StartDelay));
-                        d.KeyFrames.Add(ToDoubleKeyframe(animI.InterpolationType.Value, animI.InterpolationMode.Value, animScale.EndValue.X, animScale.StartDelay + animScale.Duration));
 
-                        anims.Add(d);
-                        paths.Add(new PropertyPath(ScaleTransform.ScaleXProperty));
-
-                        if (animI.StartDelay != 0)
+                        if (animI is inkanimScaleInterpolator animScale)
                         {
-                            d.KeyFrames.Add(ToDoubleKeyframe(animI.InterpolationType.Value, animI.InterpolationMode.Value, animScale.StartValue.Y, 0));
+                            var d = new DoubleAnimationUsingKeyFrames();
+                            if (animI.StartDelay != 0)
+                            {
+                                d.KeyFrames.Add(ToDoubleKeyframe(animI.InterpolationType.Value, animI.InterpolationMode.Value, animScale.StartValue.X, 0));
+                            }
+                            d.KeyFrames.Add(ToDoubleKeyframe(animI.InterpolationType.Value, animI.InterpolationMode.Value, animScale.StartValue.X, animScale.StartDelay));
+                            d.KeyFrames.Add(ToDoubleKeyframe(animI.InterpolationType.Value, animI.InterpolationMode.Value, animScale.EndValue.X, animScale.StartDelay + animScale.Duration));
+
+                            anims.Add(d);
+
+                            d = new DoubleAnimationUsingKeyFrames();
+                            paths.Add(new PropertyPath(ScaleTransform.ScaleXProperty));
+
+                            if (animI.StartDelay != 0)
+                            {
+                                d.KeyFrames.Add(ToDoubleKeyframe(animI.InterpolationType.Value, animI.InterpolationMode.Value, animScale.StartValue.Y, 0));
+                            }
+                            d.KeyFrames.Add(ToDoubleKeyframe(animI.InterpolationType.Value, animI.InterpolationMode.Value, animScale.StartValue.Y, animScale.StartDelay));
+                            d.KeyFrames.Add(ToDoubleKeyframe(animI.InterpolationType.Value, animI.InterpolationMode.Value, animScale.EndValue.Y, animScale.StartDelay + animScale.Duration));
+
+                            anims.Add(d);
+                            paths.Add(new PropertyPath(ScaleTransform.ScaleYProperty));
+
+                            target = "scale" + element.GetHashCode();
                         }
-                        d.KeyFrames.Add(ToDoubleKeyframe(animI.InterpolationType.Value, animI.InterpolationMode.Value, animScale.StartValue.Y, animScale.StartDelay));
-                        d.KeyFrames.Add(ToDoubleKeyframe(animI.InterpolationType.Value, animI.InterpolationMode.Value, animScale.EndValue.Y, animScale.StartDelay + animScale.Duration));
 
-                        anims.Add(d);
-                        paths.Add(new PropertyPath(ScaleTransform.ScaleYProperty));
-
-                        target = "scale" + element.GetHashCode();
-                    }
-
-                    foreach (var anim in anims)
-                    {
-                        anim.FillBehavior = FillBehavior.HoldEnd;
-                        Storyboard.Children.Add(anim);
-                        if (target is string targetName)
+                        foreach (var anim in anims)
                         {
-                            Storyboard.SetTargetName(anim, targetName);
+                            anim.FillBehavior = FillBehavior.HoldEnd;
+                            Storyboard.Children.Add(anim);
+                            if (target is string targetName)
+                            {
+                                Storyboard.SetTargetName(anim, targetName);
+                            }
+                            else
+                            {
+                                Storyboard.SetTarget(anim, (DependencyObject)target);
+                            }
+                            Storyboard.SetTargetProperty(anim, paths[anims.IndexOf(anim)]);
                         }
-                        else
-                        {
-                            Storyboard.SetTarget(anim, (DependencyObject)target);
-                        }
-                        Storyboard.SetTargetProperty(anim, paths[anims.IndexOf(anim)]);
                     }
                 }
             }
@@ -185,11 +222,11 @@ namespace WolvenKit.Functionality.Layout.inkWidgets
 
         public ICommand PlayCommand { get; set; }
         //public bool CanPlay() => Storyboard != null && Storyboard.GetCurrentState() == ClockState.Stopped;
-        public void Play() => Storyboard.Begin(Root.WidgetView, true);
+        public void Play() => Storyboard.Begin(WidgetView, true);
 
         public ICommand StopCommand { get; set; }
         //public bool CanStop() => Storyboard != null && Storyboard.GetCurrentState() != ClockState.Stopped;
-        public void Stop() => Storyboard.Stop(Root.WidgetView);
+        public void Stop() => Storyboard.Stop(WidgetView);
 
         public static DoubleKeyFrame ToDoubleKeyframe(Enums.inkanimInterpolationType? type, Enums.inkanimInterpolationMode? mode, float value, float keyframe)
         {

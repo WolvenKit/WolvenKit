@@ -14,6 +14,11 @@ namespace WolvenKit.Functionality.Layout.inkWidgets
     {
         public inkCanvasWidget CanvasWidget => Widget as inkCanvasWidget;
 
+        public inkCanvasControl() : base()
+        {
+
+        }
+
         public inkCanvasControl(inkCanvasWidget widget, RDTWidgetView widgetView) : base(widget, widgetView)
         {
 

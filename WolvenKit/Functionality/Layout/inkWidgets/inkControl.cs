@@ -10,6 +10,8 @@ using System.Windows.Media;
 using WolvenKit.RED4.Types;
 using WolvenKit.Views.Documents;
 using Rect = System.Windows.Rect;
+using Point = System.Windows.Point;
+using System.Globalization;
 
 namespace WolvenKit.Functionality.Layout.inkWidgets
 {
@@ -21,8 +23,10 @@ namespace WolvenKit.Functionality.Layout.inkWidgets
 
         public string Name { get; set; }
 
-        public virtual double Width => Widget.Size.X;
-        public virtual double Height => Widget.Size.Y;
+        //public virtual double Width => Widget?.Size.X ?? 0;
+        //public virtual double Height => Widget?.Size.Y ?? 0;
+
+        public Enums.inkEAnchor Anchor { get; set; }
 
         //public Thickness Margin => ToThickness(Widget.Layout.Margin);
 
@@ -38,7 +42,11 @@ namespace WolvenKit.Functionality.Layout.inkWidgets
         {
             get
             {
-                SetCurrentValue(OpacityProperty, (double)WidgetOpacity);
+                var opacity = WidgetOpacity;
+                if (opacity >= 0.0)
+                {
+                    SetCurrentValue(OpacityProperty, (double)opacity);
+                }
                 if (!PropertyBindings.ContainsKey("tintColor"))
                     goto NoOverride;
 
@@ -48,7 +56,7 @@ namespace WolvenKit.Functionality.Layout.inkWidgets
                     return ToColor(color);
 
                 NoOverride:
-                return ToColor(Widget.TintColor);
+                return ToColor(Widget?.TintColor ?? new HDRColor() { Alpha = 1, Blue = 1, Green = 1, Red = 1});
             }
         }
 
@@ -56,7 +64,7 @@ namespace WolvenKit.Functionality.Layout.inkWidgets
 
         public RDTWidgetView WidgetView;
 
-        public string WidgetPath => Widget.Path;
+        public string WidgetPath => Widget?.Path ?? "";
 
         DrawingGroup backingStore = new DrawingGroup();
 
@@ -66,16 +74,70 @@ namespace WolvenKit.Functionality.Layout.inkWidgets
 
         public TranslateTransform Translation { get; set; } = new();
 
-        public static readonly DependencyProperty MarginProperty = DependencyProperty.Register(
-            nameof(Margin), typeof(Thickness),
-            typeof(inkControl),
-            new PropertyMetadata(new Thickness())
-        );
+        public SkewTransform Skew { get; set; } = new();
+
+        private bool _debug = false;
+
+        public bool Debug
+        {
+            get => _debug || (Parent != null && Parent.Debug);
+            set => _debug = value;
+        }
+
+        //private IsMouse
+
+        //
+        // Summary:
+        //     Identifies the WolvenKit.Functionality.Layout.inkWidgets.inkControl.Margin dependency property.
+        public static readonly DependencyProperty MarginProperty = DependencyProperty.Register(nameof(Margin), typeof(Thickness), typeof(inkControl),
+            new FrameworkPropertyMetadata(new Thickness(), FrameworkPropertyMetadataOptions.AffectsMeasure, OnMarginChanged));
+
+        private static void OnMarginChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            ((inkControl)d).InvalidateMeasure();
+            //((inkControl)d).Render();
+        }
 
         public Thickness Margin
         {
             get => (Thickness)GetValue(MarginProperty);
             set => SetValue(MarginProperty, value);
+        }
+
+        //
+        // Summary:
+        //     Identifies the WolvenKit.Functionality.Layout.inkWidgets.inkControl.Width dependency property.
+        public static readonly DependencyProperty WidthProperty = DependencyProperty.Register(nameof(Width), typeof(double), typeof(inkControl),
+            new FrameworkPropertyMetadata(0D, FrameworkPropertyMetadataOptions.AffectsMeasure, OnWidthChanged));
+
+        private static void OnWidthChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            ((inkControl)d).InvalidateMeasure();
+            //((inkControl)d).Render();
+        }
+
+        public double Width
+        {
+            get => (double)GetValue(WidthProperty);
+            set => SetValue(WidthProperty, value);
+        }
+
+        //
+        // Summary:
+        //     Identifies the WolvenKit.Functionality.Layout.inkWidgets.inkControl.Height dependency property.
+        public static readonly DependencyProperty HeightProperty = DependencyProperty.Register(nameof(Height), typeof(double), typeof(inkControl),
+            new FrameworkPropertyMetadata(0D, FrameworkPropertyMetadataOptions.AffectsMeasure, OnHeightChanged));
+
+        private static void OnHeightChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            ((inkControl)d).InvalidateMeasure();
+            //((inkControl)d).Render();
+        }
+
+        public double Height
+        {
+            get => (double)GetValue(HeightProperty);
+            set => SetValue(HeightProperty, value);
         }
 
         public float WidgetOpacity
@@ -91,11 +153,30 @@ namespace WolvenKit.Functionality.Layout.inkWidgets
                     return opacity;
 
                 NoOverride:
-                return Widget.Opacity;
+                return -1;
             }
         }
 
-        public inkControl(inkWidget widget, RDTWidgetView widgetView) : base()
+        public inkControl() : base()
+        {
+            MouseEnter += MouseEnterCore;
+            MouseLeave += MouseLeaveCore;
+            MouseDown += MouseDownCore;
+            MouseUp += MouseUpCore;
+
+            RenderTransform = new TransformGroup()
+            {
+                Children = new TransformCollection(new List<System.Windows.Media.Transform>()
+                {
+                    Scale,
+                    Translation,
+                    Skew,
+                    Rotation
+                })
+            };
+        }
+
+        public inkControl(inkWidget widget, RDTWidgetView widgetView) : this()
         {
             _widget = widget;
             Name = Widget.Name;
@@ -106,22 +187,37 @@ namespace WolvenKit.Functionality.Layout.inkWidgets
                 foreach (inkPropertyBinding ipb in ipm.Bindings)
                 {
                     PropertyBindings.Add(ipb.PropertyName, ipb.StylePath);
-                    if (WidgetView.ViewModel.Bindings == null)
-                        WidgetView.ViewModel.Bindings = new();
                     if (!WidgetView.ViewModel.Bindings.Contains(ipb.PropertyName))
                         WidgetView.ViewModel.Bindings.Add(ipb.PropertyName);
                 }
             }
 
+            if (Widget.Effects != null)
+            {
+                foreach (var handle in Widget.Effects)
+                {
+                    var effect = (inkIEffect)handle.GetValue();
+                    if (!WidgetView.ViewModel.inkEffects.Contains(effect))
+                        WidgetView.ViewModel.inkEffects.Add(effect);
+                    if (effect is inkMaskEffect me)
+                    {
+                        if (me.IsEnabled)
+                            ClipToBounds = true;
+                    }
+                }
+            }
+
             //WidgetView.RegisterName("margin" + GetHashCode(), Margin);
             Margin = ToThickness(Widget.Layout.Margin);
+            Width = Widget.Size.X;
+            Height = Widget.Size.Y;
 
             //ToolTip = Widget.Name + $" ({Widget.GetType().Name})";
 
             // unhide the roots at least
             if (Widget.GetParent() is not null)
             {
-                Opacity = WidgetOpacity;
+                Opacity = Widget.Opacity;
 
                 if (!Widget.Visible)
                 {
@@ -153,17 +249,8 @@ namespace WolvenKit.Functionality.Layout.inkWidgets
             WidgetView.RegisterName("translation" + GetHashCode(), Translation);
             Translation.X = Widget.RenderTransform.Translation.X;
             Translation.Y = Widget.RenderTransform.Translation.Y;
-
-            RenderTransform = new TransformGroup()
-            {
-                Children = new TransformCollection(new List<System.Windows.Media.Transform>()
-                {
-                    Scale,
-                    Translation,
-                    new SkewTransform(Math.Atan(Widget.RenderTransform.Shear.X) * 180/Math.PI, Math.Atan(Widget.RenderTransform.Shear.Y) * 180/Math.PI),
-                    Rotation
-                })
-            };
+            Skew.AngleX = Math.Atan(Widget.RenderTransform.Shear.X) * 180 / Math.PI;
+            Skew.AngleY = Math.Atan(Widget.RenderTransform.Shear.Y) * 180 / Math.PI;
 
             if (Widget.IsInteractive)
             {
@@ -176,6 +263,27 @@ namespace WolvenKit.Functionality.Layout.inkWidgets
             {
                 //IsHitTestVisible = false;
             }
+        }
+
+
+        public void MouseEnterCore(object sender, MouseEventArgs e)
+        {
+            Render();
+        }
+
+        public void MouseLeaveCore(object sender, MouseEventArgs e)
+        {
+            Render();
+        }
+
+        public void MouseDownCore(object sender, MouseButtonEventArgs e)
+        {
+            Render();
+        }
+
+        public void MouseUpCore(object sender, MouseButtonEventArgs e)
+        {
+            Render();
         }
 
 
@@ -209,6 +317,8 @@ namespace WolvenKit.Functionality.Layout.inkWidgets
 
         public CVariant GetProperty(string propertyPath)
         {
+            if (WidgetView == null)
+                return null;
 
             if (WidgetView.ViewModel == null)
                 return null;
@@ -254,8 +364,94 @@ namespace WolvenKit.Functionality.Layout.inkWidgets
         public void Render()
         {
             var drawingContext = backingStore.Open();
-            Render(drawingContext);
+            RenderCore(drawingContext);
             drawingContext.Close();
+        }
+
+        protected virtual void RenderCore(DrawingContext dc)
+        {
+            var drawOpacity = Opacity;
+            if (Debug)
+            {
+                var lineThickness = 0.1;
+                drawOpacity = IsMouseOver ? 1.0 : 0.1;
+                byte debugOpacity = (byte)(IsMouseOver ? 255 : 100);
+
+                dc.DrawText(new FormattedText(Name, CultureInfo.CurrentCulture, FlowDirection.LeftToRight, new Typeface("Arial"), 4D, new SolidColorBrush(Color.FromArgb(debugOpacity, 255, 255, 255)), 96D), new Point(0, -6));
+                dc.DrawRectangle(new SolidColorBrush(Color.FromArgb(10, 0, 0, 0)), new Pen(new SolidColorBrush(Color.FromArgb(debugOpacity, 0, 255, 255)), lineThickness), new Rect(0, 0, RenderSize.Width, RenderSize.Height));
+                if (Margin != new Thickness())
+                {
+                    if (Margin.Top != 0)
+                    {
+                        dc.DrawLine(new Pen(new SolidColorBrush(Color.FromArgb(debugOpacity, 255, 0, 255)), lineThickness), new Point(Margin.Left, Margin.Top), new Point(RenderSize.Width * AnchorToX(this), Margin.Top));
+                        dc.DrawLine(new Pen(new SolidColorBrush(Color.FromArgb(debugOpacity, 255, 0, 255)), lineThickness), new Point(RenderSize.Width * AnchorToX(this), Margin.Top), new Point(RenderSize.Width * AnchorToX(this), 0));
+                    }
+                    if (Margin.Bottom != 0)
+                    {
+                        dc.DrawLine(new Pen(new SolidColorBrush(Color.FromArgb(debugOpacity, 255, 0, 0)), lineThickness), new Point(Margin.Left, RenderSize.Height + Margin.Bottom), new Point(Margin.Left + RenderSize.Width + Margin.Right, RenderSize.Height + Margin.Bottom));
+                        dc.DrawLine(new Pen(new SolidColorBrush(Color.FromArgb(debugOpacity, 255, 0, 0)), lineThickness), new Point(RenderSize.Width * AnchorToX(this), RenderSize.Width + Margin.Bottom), new Point(RenderSize.Width * AnchorToX(this), RenderSize.Height + Margin.Bottom));
+                    }
+                    if (Margin.Left != 0)
+                    {
+                        dc.DrawLine(new Pen(new SolidColorBrush(Color.FromArgb(debugOpacity, 0, 0, 255)), lineThickness), new Point(Margin.Left, RenderSize.Height + Margin.Bottom), new Point(Margin.Left, Margin.Top));
+                        dc.DrawLine(new Pen(new SolidColorBrush(Color.FromArgb(debugOpacity, 0, 0, 255)), lineThickness), new Point(Margin.Left, RenderSize.Height * AnchorToY(this)), new Point(0, RenderSize.Height * AnchorToY(this)));
+                    }
+                    if (Margin.Right != 0)
+                    {
+                        dc.DrawLine(new Pen(new SolidColorBrush(Color.FromArgb(debugOpacity, 255, 255, 0)), lineThickness), new Point(RenderSize.Width + Margin.Right, RenderSize.Height + Margin.Bottom), new Point(RenderSize.Width + Margin.Right, Margin.Top));
+                        dc.DrawLine(new Pen(new SolidColorBrush(Color.FromArgb(debugOpacity, 255, 255, 0)), lineThickness), new Point(RenderSize.Width + Margin.Right, RenderSize.Height * AnchorToX(this)), new Point(0, RenderSize.Height * AnchorToY(this)));
+                    }
+                    //dc.DrawRectangle(null, new Pen(new SolidColorBrush(Color.FromArgb(16, 255, 0, 255)), 1), new Rect(Margin.Left, Margin.Top, Math.Max(RenderSize.Width + Margin.Left + Margin.Right, 0), Math.Max(RenderSize.Height + Margin.Top + Margin.Bottom, 0)));
+                }
+            }
+            dc.PushOpacity(drawOpacity);
+
+            var isMasked = false;
+
+            if (Parent != null)
+            {
+                inkMaskControl mask = null;
+                foreach (inkControl control in ((inkCompoundControl)Parent).Children)
+                {
+                    if (control is inkMaskControl _mask)
+                    {
+                        mask = _mask;
+                        continue;
+                    }
+
+                    if (control == this && mask != null)
+                    {
+                        isMasked = true;
+                        var point = mask.TranslatePoint(new Point(0, 0), this);
+                        //SetCurrentValue(OpacityMaskProperty, new ImageBrush(mask.ImageSource)
+                        //dc.PushOpacityMask(new ImageBrush(mask.ImageSource)
+                        //{
+                        //    Viewport = new Rect(point, mask.RenderSize),
+                        //    ViewportUnits = BrushMappingMode.Absolute,
+                        //    Viewbox = new Rect(new Point(0, 0), mask.RenderSize),
+                        //    ViewboxUnits = BrushMappingMode.Absolute
+                        //});
+                        dc.PushClip(new RectangleGeometry(new Rect(point, mask.RenderSize)));
+                        //var maskDc = new DrawingGroup();
+
+                        //var drawingContext = maskDc.Open();
+                        //drawingContext.DrawImage(mask.ImageSource, new Rect(point, mask.RenderSize));
+                        //drawingContext.Close();
+                        //dc.PushOpacityMask(new DrawingBrush(maskDc));
+
+                        //SetCurrentValue(OpacityMaskProperty, new VisualBrush(mask));
+                    }
+                }
+            }
+
+            Render(dc);
+
+            if (isMasked)
+            {
+                dc.Pop();
+            }
+
+            dc.Pop();
         }
 
         protected virtual void Render(DrawingContext dc)
@@ -290,9 +486,11 @@ namespace WolvenKit.Functionality.Layout.inkWidgets
             base.ArrangeCore(finalRect);
         }
 
-        public static System.Windows.Point ToPoint(Vector2 v)
+        // conversion functions
+
+        public static Point ToPoint(Vector2 v)
         {
-            return new System.Windows.Point(v.X, v.Y);
+            return new Point(v.X, v.Y);
         }
 
         // i'm pretty sure this isn't the right way to convert these

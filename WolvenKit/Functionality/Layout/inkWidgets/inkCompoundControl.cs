@@ -4,8 +4,10 @@ using System.Globalization;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using System.Windows.Markup;
 using System.Windows.Media;
 using System.Windows.Media.Effects;
+using System.Windows.Media.Imaging;
 using ReactiveUI;
 using WolvenKit.RED4.Types;
 using WolvenKit.Views.Documents;
@@ -14,17 +16,23 @@ using Rect = System.Windows.Rect;
 
 namespace WolvenKit.Functionality.Layout.inkWidgets
 {
+    [ContentProperty(nameof(Children))]
     public class inkCompoundControl : inkControl
     {
         public inkCompoundWidget CompoundWidget => Widget as inkCompoundWidget;
 
-        public List<inkControl> Children { get; private set; } = new();
+        public UIElementCollection Children { get; private set; }
 
         public Thickness InternalMargin = new();
 
         public Thickness ChildMargin => ToThickness(CompoundWidget.ChildMargin);
 
         public Brush Background { get; set; }
+
+        public inkCompoundControl() : base()
+        {
+            Children = new UIElementCollection(this, null);
+        }
 
         public inkCompoundControl(inkCompoundWidget widget, RDTWidgetView widgetView) : base(widget, widgetView)
         {
@@ -36,14 +44,31 @@ namespace WolvenKit.Functionality.Layout.inkWidgets
                 //{
                 //    Radius = 20
                 //};
+                //if (Name == "Root")
+                //{ 
+                //    var im = BitmapFrame.Create(new Uri("pack://application:,,,/WolvenKit;component/Resources/Media/Images/Screenshot-1.jpg", UriKind.RelativeOrAbsolute));
+                //    im.Freeze();
+                //    Background = new ImageBrush()
+                //    {
+                //        ImageSource = im
+                //    };
+                //}
             }
 
-            //Children = new UIElementCollection(this, null);
+            Children = new UIElementCollection(this, null);
 
             foreach (var child in CompoundWidget.GetChildren())
             {
                 var childControl = child.CreateControl(WidgetView);
-                Children.Add(childControl);
+                //if (Name == "Root")
+                //{
+                //    childControl.Effect = new DropShadowEffect()
+                //    {
+                //        BlurRadius = 3.6 * Width,
+                //        ShadowDepth = 0.08 * Width
+                //    };
+                //}
+                AddChild(childControl);
             }
         }
 
@@ -78,17 +103,14 @@ namespace WolvenKit.Functionality.Layout.inkWidgets
         public void AddChild(inkControl element)
         {
             Children.Add(element);
-            AddVisualChild(element);
+            //AddVisualChild(element);
             element.Parent = this;
         }
 
         public void RemoveChild(inkControl element)
         {
-            if (Children.Remove(element))
-            {
-                element.Parent = null;
-                RemoveVisualChild(element);
-            }
+            Children.Remove(element);
+            element.Parent = null;
         }
 
         public inkControl GetChild(int index)
@@ -96,9 +118,9 @@ namespace WolvenKit.Functionality.Layout.inkWidgets
             if (Children.Count <= index)
                 return null;
             if (CompoundWidget.ChildOrder.Value == Enums.inkEChildOrder.Forward)
-                return Children[index];
+                return (inkControl)Children[index];
             else
-                return Children[Children.Count - index - 1];
+                return (inkControl)Children[Children.Count - index - 1];
         } 
 
         protected override int VisualChildrenCount

@@ -6,6 +6,7 @@
     xmlns:documents="clr-namespace:WolvenKit.ViewModels.Documents;assembly=WolvenKit.App"
     xmlns:editors="clr-namespace:WolvenKit.Views.Editors"
     xmlns:inkControls="clr-namespace:WolvenKit.Functionality.Layout.inkWidgets"
+    xmlns:local="clr-namespace:WolvenKit.Views.Documents"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:reactiveUi="http://reactiveui.net"
     xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
@@ -27,10 +28,10 @@
                     <hc:Theme />
                 </ResourceDictionary.MergedDictionaries>-->
 
-                <ResourceDictionary.MergedDictionaries>
+                <!--ResourceDictionary.MergedDictionaries>
                     <ResourceDictionary Source="pack://application:,,,/AdonisUI;component/ColorSchemes/Dark.xaml" />
                     <ResourceDictionary Source="pack://application:,,,/AdonisUI.ClassicTheme;component/Resources.xaml" />
-                </ResourceDictionary.MergedDictionaries>
+                </ResourceDictionary.MergedDictionaries-->
             </ResourceDictionary>
         </Grid.Resources>
         <Grid.ColumnDefinitions>
@@ -197,10 +198,78 @@
                         </DataTemplate>
                     </ItemsControl.ItemTemplate>
                 </ItemsControl>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock
+                        Margin="5,5"
+                        VerticalAlignment="Center"
+                        Text="Style Bindings" />
+                </StackPanel>
+                <Border BorderBrush="{StaticResource BorderAlt}" BorderThickness="0,1,0,0" />
                 <ItemsControl ItemsSource="{Binding Bindings}">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <StackPanel Orientation="Vertical" />
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                    <ItemsControl.Template>
+                        <ControlTemplate>
+                            <ItemsPresenter />
+                        </ControlTemplate>
+                    </ItemsControl.Template>
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
                             <TextBlock Text="{Binding}" />
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock
+                        Margin="5,5"
+                        VerticalAlignment="Center"
+                        Text="Effects" />
+                </StackPanel>
+                <Border BorderBrush="{StaticResource BorderAlt}" BorderThickness="0,1,0,0" />
+                <ItemsControl ItemsSource="{Binding inkEffects}">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <StackPanel Orientation="Vertical" />
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                    <ItemsControl.Template>
+                        <ControlTemplate>
+                            <ItemsPresenter />
+                        </ControlTemplate>
+                    </ItemsControl.Template>
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding EffectName}" />
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock
+                        Margin="5,5"
+                        VerticalAlignment="Center"
+                        Text="Export Widget" />
+                </StackPanel>
+                <Border BorderBrush="{StaticResource BorderAlt}" BorderThickness="0,1,0,0" />
+                <ItemsControl x:Name="WidgetExportButtons">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <StackPanel Orientation="Vertical" />
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                    <ItemsControl.Template>
+                        <ControlTemplate>
+                            <ItemsPresenter />
+                        </ControlTemplate>
+                    </ItemsControl.Template>
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <Button
+                                Command="{Binding ExportWidgetCommand, RelativeSource={RelativeSource AncestorType={x:Type local:RDTWidgetView}}}"
+                                CommandParameter="{Binding}"
+                                Content="{Binding Name}" />
                         </DataTemplate>
                     </ItemsControl.ItemTemplate>
                 </ItemsControl>

@@ -77,7 +77,10 @@ namespace WolvenKit.ViewModels.Shell
                     {
                         return Properties;
                     }
-                }).ToPropertyEx(this, x => x.DisplayProperties, deferSubscription: true);
+                })
+                .Throttle(TimeSpan.FromSeconds(0.01))
+                .ObserveOn(RxApp.MainThreadScheduler)
+                .ToPropertyEx(this, x => x.DisplayProperties, deferSubscription: true);
 
             //dataObserver
             //    .Select(x => CalculatePropertyGridData())
