@@ -74,9 +74,6 @@
                             </Style>
                             <Style TargetType="TextBlock">
                                 <Style.Triggers>
-                                    <DataTrigger Binding="{Binding IsHandled}" Value="True">
-                                        <Setter Property="Foreground" Value="{StaticResource Border}" />
-                                    </DataTrigger>
                                     <DataTrigger Binding="{Binding IsDefault}" Value="True">
                                         <Setter Property="Foreground" Value="{StaticResource BorderAlt2}" />
                                         <Setter Property="FontStyle" Value="Italic" />
@@ -92,14 +89,14 @@
                             Grid.Column="1"
                             Width="Auto"
                             Margin="0,0,0,2"
-                            Text="{Binding Name}" />
+                            Text="{Binding Name, Mode=OneTime}" />
                         <TextBlock
                             Grid.Column="2"
                             Width="Auto"
                             Margin="0,0,0,2"
                             Foreground="{StaticResource Border}"
                             Style="{StaticResource ExpanderHider}"
-                            Text="{Binding Type, StringFormat=' {0}'}" />
+                            Text="{Binding Type, StringFormat=' {0}', Mode=OneTime}" />
                     </Grid>
                 </DataTemplate>
 
@@ -108,9 +105,6 @@
                         <Grid.Resources>
                             <Style TargetType="{x:Type TextBlock}">
                                 <Style.Triggers>
-                                    <DataTrigger Binding="{Binding IsHandled}" Value="True">
-                                        <Setter Property="Foreground" Value="{StaticResource Border}" />
-                                    </DataTrigger>
                                     <DataTrigger Binding="{Binding IsDefault}" Value="True">
                                         <Setter Property="Foreground" Value="{StaticResource BorderAlt2}" />
                                         <Setter Property="FontStyle" Value="Italic" />
@@ -119,9 +113,6 @@
                             </Style>
                             <Style TargetType="{x:Type iconPacks:PackIconCodicons}">
                                 <Style.Triggers>
-                                    <DataTrigger Binding="{Binding IsHandled}" Value="True">
-                                        <Setter Property="Foreground" Value="{StaticResource Border}" />
-                                    </DataTrigger>
                                     <DataTrigger Binding="{Binding IsDefault}" Value="True">
                                         <Setter Property="Foreground" Value="{StaticResource BorderAlt2}" />
                                     </DataTrigger>
@@ -139,7 +130,7 @@
                             Margin="0,0,6,0"
                             HorizontalAlignment="Center"
                             VerticalAlignment="Center"
-                            Kind="{Binding Extension}" />
+                            Kind="{Binding Extension, Mode=OneTime}" />
                         <StackPanel
                             Grid.Column="1"
                             Margin="0,0,4,0"
@@ -157,7 +148,7 @@
                             <TextBlock
                                 Name="PropertyType"
                                 Foreground="{StaticResource WolvenKitTan}"
-                                Text="{Binding Type}" />
+                                Text="{Binding Type, Mode=OneTime}" />
                             <StackPanel Orientation="Horizontal">
                                 <StackPanel.Style>
                                     <Style TargetType="StackPanel">
@@ -195,25 +186,25 @@
                 <Style x:Key="ArrayNameColumnWidth" TargetType="ColumnDefinition">
                     <Setter Property="Width" Value="218" />
                     <Style.Triggers>
-                        <DataTrigger Binding="{Binding Level}" Value="1">
+                        <DataTrigger Binding="{Binding Level, Mode=OneTime}" Value="1">
                             <Setter Property="Width" Value="200" />
                         </DataTrigger>
-                        <DataTrigger Binding="{Binding Level}" Value="2">
+                        <DataTrigger Binding="{Binding Level, Mode=OneTime}" Value="2">
                             <Setter Property="Width" Value="180" />
                         </DataTrigger>
-                        <DataTrigger Binding="{Binding Level}" Value="3">
+                        <DataTrigger Binding="{Binding Level, Mode=OneTime}" Value="3">
                             <Setter Property="Width" Value="160" />
                         </DataTrigger>
-                        <DataTrigger Binding="{Binding Level}" Value="4">
+                        <DataTrigger Binding="{Binding Level, Mode=OneTime}" Value="4">
                             <Setter Property="Width" Value="140" />
                         </DataTrigger>
-                        <DataTrigger Binding="{Binding Level}" Value="5">
+                        <DataTrigger Binding="{Binding Level, Mode=OneTime}" Value="5">
                             <Setter Property="Width" Value="120" />
                         </DataTrigger>
-                        <DataTrigger Binding="{Binding IsInArray}" Value="True">
+                        <DataTrigger Binding="{Binding IsInArray, Mode=OneTime}" Value="True">
                             <Setter Property="Width" Value="{Binding ArrayIndexWidth}" />
                         </DataTrigger>
-                        <DataTrigger Binding="{Binding Name}" Value="{x:Null}">
+                        <DataTrigger Binding="{Binding Name, Mode=OneTime}" Value="{x:Null}">
                             <Setter Property="Width" Value="0" />
                         </DataTrigger>
                     </Style.Triggers>
@@ -276,7 +267,7 @@
                                 Background="Transparent"
                                 ContextMenu="{StaticResource TreeViewContextMenu}"
                                 Tag="{Binding}"
-                                ToolTip="{Binding Type}">
+                                ToolTip="{Binding Type, Mode=OneTime}">
                                 <Grid.CommandBindings>
                                     <CommandBinding
                                         CanExecute="Copy_CanExecute"
@@ -309,7 +300,7 @@
                                 Background="Transparent"
                                 ContextMenu="{StaticResource TreeViewContextMenu}"
                                 Tag="{Binding}"
-                                ToolTip="{Binding Type}">
+                                ToolTip="{Binding Type, Mode=OneTime}">
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Style="{StaticResource ArrayNameColumnWidth}" />
                                     <ColumnDefinition Width="Auto" />
@@ -336,7 +327,7 @@
                                 Background="Transparent"
                                 ContextMenu="{StaticResource TreeViewContextMenu}"
                                 Tag="{Binding}"
-                                ToolTip="{Binding Type}">
+                                ToolTip="{Binding Type, Mode=OneTime}">
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Style="{StaticResource ArrayNameColumnWidth}" />
                                     <ColumnDefinition Width="Auto" />
@@ -364,7 +355,7 @@
                                 Background="Transparent"
                                 ContextMenu="{StaticResource TreeViewContextMenu}"
                                 Tag="{Binding}"
-                                ToolTip="{Binding Type}">
+                                ToolTip="{Binding Type, Mode=OneTime}">
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Style="{StaticResource ArrayNameColumnWidth}" />
                                     <ColumnDefinition Width="Auto" />
