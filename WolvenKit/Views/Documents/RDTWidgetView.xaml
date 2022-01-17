@@ -186,8 +186,7 @@
                                     <TextBlock
                                         Margin="5,0"
                                         VerticalAlignment="Center"
-                                        Text="{Binding Name}"
-                                        ToolTip="{Binding Path}" />
+                                        Text="{Binding Name}" />
                                 </StackPanel>
                                 <GridSplitter
                                     Grid.Column="1"

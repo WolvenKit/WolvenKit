@@ -10,6 +10,7 @@ using System.Windows.Forms;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using System.Xml;
 using System.Xml.Serialization;
 using Newtonsoft.Json;
 using ReactiveUI.Fody.Helpers;
@@ -264,14 +265,13 @@ namespace WolvenKit.ViewModels.Documents
             {
                 if ((myStream = saveFileDialog.OpenFile()) != null)
                 {
-                    var dto = new inkWidgetDto(widget, new
+                    var dto = new inkWidgetSerializer(widget);
+                    var x = new XmlSerializer(typeof(inkWidgetSerializer));
+
+                    using (var xmlWriter = XmlWriter.Create(myStream, new XmlWriterSettings { Indent = true }))
                     {
-                        WolvenKitVersion = "8.4.0",
-                        WKitJsonVersion = "0.0.1",
-                        Exported = DateTime.UtcNow.ToString("o")
-                    });
-                    var x = new XmlSerializer(typeof(inkWidgetDto));
-                    x.Serialize(myStream, dto);
+                        x.Serialize(xmlWriter, dto);
+                    }
                     //var json = JsonConvert.SerializeObject(dto, Formatting.Indented);
 
                     //if (string.IsNullOrEmpty(xml))

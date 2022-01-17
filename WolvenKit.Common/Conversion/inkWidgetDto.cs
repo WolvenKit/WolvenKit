@@ -208,7 +208,7 @@ namespace WolvenKit.Common.Conversion
                     }
                     else
                     {
-                        return w.Path;
+                        return w.GetPath();
                     }
                 default:
                     return data.ToString();
