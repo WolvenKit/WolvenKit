@@ -360,6 +360,7 @@
                                     <ColumnDefinition Style="{StaticResource ArrayNameColumnWidth}" />
                                     <ColumnDefinition Width="Auto" />
                                     <ColumnDefinition Width="Auto" MinWidth="20" />
+                                    <ColumnDefinition Width="Auto" MinWidth="20" />
                                 </Grid.ColumnDefinitions>
                                 <ContentPresenter
                                     Grid.Column="0"
@@ -387,6 +388,19 @@
                                         Foreground="{StaticResource WolvenKitCyan}"
                                         Kind="ArrowCircleUp"
                                         RotationAngle="45" />
+                                </Button>
+                                <Button
+                                    Grid.Column="3"
+                                    Margin="5,0,0,0"
+                                    Background="Transparent"
+                                    Command="{Binding AddRefCommand}"
+                                    Style="{StaticResource ButtonCustom}"
+                                    ToolTip="Add File to Mod">
+                                    <iconPacks:PackIconVaadinIcons
+                                        Padding="2"
+                                        VerticalAlignment="Center"
+                                        Foreground="{StaticResource WolvenKitYellow}"
+                                        Kind="ArrowCircleLeft" />
                                 </Button>
                             </Grid>
                         </DataTemplate>

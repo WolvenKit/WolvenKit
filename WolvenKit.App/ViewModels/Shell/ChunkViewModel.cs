@@ -12,9 +12,11 @@ using Newtonsoft.Json;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using Splat;
+using WolvenKit.Common;
 using WolvenKit.Common.Conversion;
 using WolvenKit.Common.Services;
 using WolvenKit.Functionality.Commands;
+using WolvenKit.Functionality.Controllers;
 using WolvenKit.RED4.Archive.Buffer;
 using WolvenKit.RED4.Archive.CR2W;
 using WolvenKit.RED4.Types;
@@ -122,6 +124,7 @@ namespace WolvenKit.ViewModels.Shell
                 });
 
             OpenRefCommand = new DelegateCommand(p => ExecuteOpenRef(), (p) => CanOpenRef());
+            AddRefCommand = new DelegateCommand(p => ExecuteAddRef(), (p) => CanAddRef());
             ExportChunkCommand = new DelegateCommand((p) => ExecuteExportChunk(), (p) => CanExportChunk());
             AddItemToArrayCommand = new DelegateCommand((p) => ExecuteAddItemToArray(), (p) => CanAddItemToArray());
             AddHandleCommand = new DelegateCommand((p) => ExecuteAddHandle(), (p) => CanAddHandle());
@@ -838,6 +841,27 @@ namespace WolvenKit.ViewModels.Shell
             //{
             //    _gameControllerFactory.GetController().AddToMod(key);
             //}
+        }
+
+        public ICommand AddRefCommand { get; private set; }
+        private bool CanAddRef() => Data is IRedRef r && r.DepotPath != null;
+        private void ExecuteAddRef()
+        {
+            if (Data is IRedRef r)
+            {
+                //string depotpath = r.DepotPath;
+                //Tab.File.OpenRefAsTab(depotpath);
+                //Locator.Current.GetService<AppViewModel>().OpenFileFromDepotPath(r.DepotPath);
+                var key = r.DepotPath.GetRedHash();
+
+                var gameControllerFactory = Locator.Current.GetService<IGameControllerFactory>();
+                var archiveManager = Locator.Current.GetService<IArchiveManager>();
+
+                if (archiveManager.Lookup(key).HasValue)
+                {
+                    gameControllerFactory.GetController().AddToMod(key);
+                }
+            }
         }
 
 
