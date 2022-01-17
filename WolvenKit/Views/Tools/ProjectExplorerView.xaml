@@ -119,6 +119,16 @@
 
 
                 <Separator />
+                <MenuItem Command="{Binding DeleteFileCommand}" Header="Delete">
+                    <MenuItem.Icon>
+                        <iconPacks:PackIconForkAwesome
+                            Width="13"
+                            Height="13"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Stretch"
+                            Kind="Trash" />
+                    </MenuItem.Icon>
+                </MenuItem>
                 <MenuItem Command="{Binding RenameFileCommand}" Header="Rename">
                     <MenuItem.Icon>
                         <iconPacks:PackIconForkAwesome
@@ -156,11 +166,29 @@
                 <MenuItem
                     Command="{Binding OpenInAssetBrowserCommand}"
                     Header="Open in Asset Browser"
-                    Visibility="{Binding Path=IsEnabled, RelativeSource={RelativeSource Self}, Mode=OneWay, Converter={StaticResource Boolean2VisibilityConverter}}" />
+                    Visibility="{Binding Path=IsEnabled, RelativeSource={RelativeSource Self}, Mode=OneWay, Converter={StaticResource Boolean2VisibilityConverter}}">
+                    <MenuItem.Icon>
+                        <iconPacks:PackIconForkAwesome
+                            Width="13"
+                            Height="13"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Stretch"
+                            Kind="ArrowCircleRight" />
+                    </MenuItem.Icon>
+                </MenuItem>
                 <MenuItem
                     Command="{Binding ReimportFileCommand}"
                     Header="Replace with original"
-                    Visibility="{Binding Path=IsEnabled, RelativeSource={RelativeSource Self}, Mode=OneWay, Converter={StaticResource Boolean2VisibilityConverter}}" />
+                    Visibility="{Binding Path=IsEnabled, RelativeSource={RelativeSource Self}, Mode=OneWay, Converter={StaticResource Boolean2VisibilityConverter}}">
+                    <MenuItem.Icon>
+                        <iconPacks:PackIconForkAwesome
+                            Width="13"
+                            Height="13"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Stretch"
+                            Kind="Refresh" />
+                    </MenuItem.Icon>
+                </MenuItem>
 
                 <!--<Separator/>-->
 
