@@ -9,6 +9,7 @@ using System.Reactive.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
+using AsyncAwaitBestPractices.MVVM;
 using DynamicData;
 using DynamicData.Binding;
 using ReactiveUI;
@@ -371,16 +372,16 @@ namespace WolvenKit.ViewModels.Tools
             process?.WaitForInputIdle();
         }
 
-        public IAsyncCommand ConvertToJsonCommand { get; private set; }
-        public IAsyncCommand ConvertToXmlCommand { get; private set; }
+        public AsyncAwaitBestPractices.MVVM.IAsyncCommand ConvertToJsonCommand { get; private set; }
+        public AsyncAwaitBestPractices.MVVM.IAsyncCommand ConvertToXmlCommand { get; private set; }
 
-        private bool CanConvertTo() => SelectedItem != null
+        private bool CanConvertTo(object arg) => SelectedItem != null
                 && !IsInRawFolder(SelectedItem)
                 //&& Enum.GetNames<ERedExtension>().Contains(SelectedItem.Extension.ToLower())
                 ;
 
         private async Task ExecuteConvertToJsonAsync() => await ExecuteConvertToAsync(ETextConvertFormat.json);
-        private async Task ExecuteConvertToXml() => await ExecuteConvertToAsync(ETextConvertFormat.xml);
+        private async Task ExecuteConvertToXmlAsync() => await ExecuteConvertToAsync(ETextConvertFormat.xml);
         private async Task ExecuteConvertToAsync(ETextConvertFormat fmt)
         {
             if (SelectedItem.IsDirectory)
@@ -559,8 +560,8 @@ namespace WolvenKit.ViewModels.Tools
             //{
             //    ByteCount = await MyService.DownloadAndCountBytesAsync(Url);
             //});
-            ConvertToJsonCommand = new AsyncCommand(async () => await ExecuteConvertToJsonAsync(), CanConvertTo);
-            ConvertToXmlCommand = new AsyncCommand(async () => await ExecuteConvertToXml(), CanConvertTo);
+            ConvertToJsonCommand = new AsyncCommand(ExecuteConvertToJsonAsync, CanConvertTo);
+            ConvertToXmlCommand = new AsyncCommand(ExecuteConvertToXmlAsync, CanConvertTo);
             ConvertFromJsonCommand = new RelayCommand(ExecuteConvertFromJson, CanConvertFromJson);
 
             //PESearchStartedCommand = new DelegateCommand<object>(ExecutePESearchStartedCommand, CanPESearchStartedCommand);

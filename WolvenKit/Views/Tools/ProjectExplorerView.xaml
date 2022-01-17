@@ -35,6 +35,7 @@
                         Foreground="#ffffff" />
                 </Border>
             </DataTemplate>
+
             <ContextMenu x:Key="TreeGridContextMenu" FontSize="11" Style="{DynamicResource WPFContextMenuStyle}">
                 <MenuItem
                         Margin="0"
@@ -81,8 +82,8 @@
                 </MenuItem>
                 <Separator/>
                 <MenuItem x:Name="ConvertToXmlMenuItem"
-                                      Command="{Binding ConvertToXmlCommand}"
-                                      Header="Convert to XML">
+                                        Command="{Binding ConvertToXmlCommand}"
+                                        Header="Convert to XML">
                     <MenuItem.Icon>
                         <Grid>
                             <iconPacks:PackIconCodicons
@@ -96,15 +97,15 @@
                     </MenuItem.Icon>
                 </MenuItem>
                 <!--<MenuItem x:Name="ConvertFromXmlMenuItem"
-                                      Command="{Binding ConvertFromXmlCommand}"
-                                      Header="Convert from JSON" />-->
+                                        Command="{Binding ConvertFromXmlCommand}"
+                                        Header="Convert from JSON" />-->
 
                 <MenuItem x:Name="BKImport"
-                                      Command="{Binding Bk2ImportCommand}"
-                                      Header="Import Avi to BK2" />
+                                        Command="{Binding Bk2ImportCommand}"
+                                        Header="Import Avi to BK2" />
                 <MenuItem x:Name="BKExport"
-                                      Command="{Binding Bk2ExportCommand}"
-                                      Header="Export BK2 to Avi" />
+                                        Command="{Binding Bk2ExportCommand}"
+                                        Header="Export BK2 to Avi" />
 
 
                 <Separator/>
@@ -153,6 +154,7 @@
                     <MenuItem Click="ExpandAll_OnClick" Header="Expand all" />
                     <MenuItem Click="CollapseAll_OnClick" Header="Collapse all" />-->
             </ContextMenu>
+
             <DataTemplate x:Key="TreeGridCellTemplate">
                 <Grid>
                     <Grid.Resources>
@@ -257,6 +259,7 @@
                     </StackPanel>
                 </Grid>
             </DataTemplate>
+
             <DataTemplate x:Key="TreeGridCellTemplateSimple">
                 <Grid>
                     <Grid.Resources>
@@ -287,6 +290,7 @@
                                     Text="{Binding Path=Name}" />
                 </Grid>
             </DataTemplate>
+
             <Style x:Key="WolvenKitPESourceTabs" TargetType="{x:Type syncfusion:TabItemExt}" BasedOn="{StaticResource SyncfusionTabItemExtStyle}">
                 <Setter Property="Background" Value="Transparent" />
                 <Setter Property="Foreground" Value="White" />
@@ -319,6 +323,7 @@
                     </Setter.Value>
                 </Setter>
             </Style>
+
         </ResourceDictionary>
     </UserControl.Resources>
 

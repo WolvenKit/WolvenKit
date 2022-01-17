@@ -72,6 +72,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="AsyncAwaitBestPractices.MVVM" Version="6.0.4" />
     <PackageReference Include="AvalonEdit" Version="6.1.2.30" />
     <PackageReference Include="Microsoft.Extensions.FileSystemGlobbing" Version="5.0.0" />
     <PackageReference Include="SharpZipLib" Version="1.3.3" />
