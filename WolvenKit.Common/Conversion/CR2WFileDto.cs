@@ -8,7 +8,7 @@ public class CR2WFileDto
 {
     public CR2WFileDto(CR2WFile cr2w)
     {
-        RootChunk = new RedClassDto(cr2w.RootChunk);
+        //RootChunk = new RedClassDto(cr2w.RootChunk);
         EmbeddedFiles = cr2w.EmbeddedFiles.Select((s, i) => new { s, i }).ToDictionary(x => x.i, x => new RedEmbeddedDto(x.s));
     }
 

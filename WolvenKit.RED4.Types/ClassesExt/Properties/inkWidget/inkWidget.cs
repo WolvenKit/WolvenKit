@@ -10,13 +10,11 @@ public partial class inkWidget
         set => SetPropertyValue<CHandle<inkWidgetBackendData>>(value);
     }
 
-    public CString Path 
+    public string GetPath()
     {
-        get { 
-            if (GetParent() is inkWidget parent)
-                return parent.Path + "/" + Name.GetValue();
-            return Name.GetValue();
-        }
+        if (GetParent() is inkWidget parent)
+            return parent.GetPath() + "/" + Name.GetValue();
+        return Name.GetValue();
     }
 
     public inkWidget GetParent()

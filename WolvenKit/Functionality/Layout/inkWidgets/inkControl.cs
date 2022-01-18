@@ -56,7 +56,7 @@ namespace WolvenKit.Functionality.Layout.inkWidgets
 
         public RDTWidgetView WidgetView;
 
-        public string WidgetPath => Widget.Path;
+        public string WidgetPath => Widget.GetPath();
 
         DrawingGroup backingStore = new DrawingGroup();
 

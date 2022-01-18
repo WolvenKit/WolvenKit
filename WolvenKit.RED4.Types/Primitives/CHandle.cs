@@ -1,9 +1,26 @@
 using System;
+using System.Reflection;
 using System.Collections.Generic;
 using System.Diagnostics;
 
 namespace WolvenKit.RED4.Types
 {
+    public static class CHandle
+    {
+        public static IRedBaseHandle Parse(Type handleType, RedBaseClass value)
+        {
+            var method = typeof(CHandle).GetMethod(nameof(Parse), BindingFlags.Public | BindingFlags.Static, null, new[] { typeof(RedBaseClass) }, null);
+            var generic = method.MakeGenericMethod(handleType);
+
+            return (IRedBaseHandle)generic.Invoke(null, new object[] { value });
+        }
+
+        public static CHandle<T> Parse<T>(RedBaseClass value) where T : RedBaseClass
+        {
+            return new CHandle<T>((T)value);
+        }
+    }
+
     [RED("handle")]
     public class CHandle<T> : IRedHandle<T>, IRedNotifyObjectChanged, IEquatable<CHandle<T>> where T : RedBaseClass
     {

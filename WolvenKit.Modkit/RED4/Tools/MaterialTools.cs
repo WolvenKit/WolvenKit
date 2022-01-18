@@ -379,7 +379,7 @@ namespace WolvenKit.Modkit.RED4
                                     }
                                     var hp = _wolvenkitFileService.ReadRed4File(ms);
                                     //hp.FileName = primaryDependencies[i];
-                                    var dto = new CR2WFileDto(hp);
+                                    var dto = new RedFileDto(hp);
                                     var doc = JsonConvert.SerializeObject(dto, settings);
                                     File.WriteAllText(path, doc);
                                 }
@@ -420,7 +420,7 @@ namespace WolvenKit.Modkit.RED4
                                         Directory.CreateDirectory(new FileInfo(path).Directory.FullName);
                                     }
                                     //mls.FileName = primaryDependencies[i];
-                                    var dto = new CR2WFileDto(mls);
+                                    var dto = new RedFileDto(mls);
                                     var doc = JsonConvert.SerializeObject(dto, settings);
                                     File.WriteAllText(path, doc);
                                 }
@@ -470,7 +470,7 @@ namespace WolvenKit.Modkit.RED4
                                                             Directory.CreateDirectory(new FileInfo(path1).Directory.FullName);
                                                         }
                                                         //mlt.FileName = mls.Imports[e].DepotPath;
-                                                        var dto1 = new CR2WFileDto(mlt);
+                                                        var dto1 = new RedFileDto(mlt);
                                                         var doc1 = JsonConvert.SerializeObject(dto1, settings);
                                                         File.WriteAllText(path1, doc1);
                                                     }

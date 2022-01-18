@@ -349,7 +349,7 @@ namespace WolvenKit.ViewModels.Shell
             try
             {
                 var obj = Data;
-                if (Data is IRedBaseHandle handle)
+                if (obj is IRedBaseHandle handle)
                 {
                     //this.File.Chunks[handle.Pointer].IsHandled = true;
                     obj = handle.GetValue();
@@ -364,6 +364,11 @@ namespace WolvenKit.ViewModels.Shell
                     {
                         properties.Add(new ChunkViewModel((IRedType)ary[i], this));
                     }
+                }
+                else if (obj is inkWidgetReference iwr)
+                {
+                    // need to add XPath somewhere in the data structure
+                    properties.Add(new ChunkViewModel((CString)"TODO", this));
                 }
                 else if (obj is RedBaseClass redClass)
                 {
@@ -1042,12 +1047,7 @@ namespace WolvenKit.ViewModels.Shell
             {
                 if ((myStream = saveFileDialog.OpenFile()) != null)
                 {
-                    var dto = new RedClassDto(PropertyGridData, new
-                    {
-                        WolvenKitVersion = "8.4.0",
-                        WKitJsonVersion = "0.0.1",
-                        Exported = DateTime.UtcNow.ToString("o")
-                    });
+                    var dto = new RedClassDto(ResolvedData, null);
                     var json = JsonConvert.SerializeObject(dto, Formatting.Indented);
 
                     if (string.IsNullOrEmpty(json))
