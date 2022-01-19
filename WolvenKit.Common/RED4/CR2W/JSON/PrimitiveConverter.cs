@@ -1000,11 +1000,151 @@ public class CLegacySingleChannelCurveConverterFactory : JsonConverterFactory
     }
 }
 
-public class MultiChannelCurveConverter : JsonConverter<IRedMultiChannelCurve>
+public class MultiChannelCurveConverterFactory : JsonConverterFactory
 {
-    public override IRedMultiChannelCurve Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options) => throw new NotSupportedException();
+    public override bool CanConvert(Type typeToConvert)
+    {
+        return typeof(IRedMultiChannelCurve).IsAssignableFrom(typeToConvert);
+    }
 
-    public override void Write(Utf8JsonWriter writer, IRedMultiChannelCurve value, JsonSerializerOptions options) => throw new NotSupportedException();
+    public override JsonConverter CreateConverter(Type typeToConvert, JsonSerializerOptions options)
+    {
+        if (typeof(IRedMultiChannelCurve).IsAssignableFrom(typeToConvert))
+        {
+            return new MultiChannelCurveConverter();
+        }
+
+        throw new NotSupportedException("CreateConverter got called on a type that this converter factory doesn't support");
+    }
+
+    private class MultiChannelCurveConverter : JsonConverter<IRedMultiChannelCurve>
+    {
+        public override IRedMultiChannelCurve Read(ref Utf8JsonReader reader, Type typeToConvert,
+            JsonSerializerOptions options)
+        {
+            if (reader.TokenType != JsonTokenType.StartObject)
+            {
+                throw new JsonException();
+            }
+
+            var result = (IRedMultiChannelCurve?)RedTypeManager.CreateRedType(typeToConvert);
+            if (result == null)
+            {
+                throw new JsonException();
+            }
+
+            while (reader.Read())
+            {
+                if (reader.TokenType == JsonTokenType.EndObject)
+                {
+                    return result;
+                }
+
+                if (reader.TokenType != JsonTokenType.PropertyName)
+                {
+                    throw new JsonException();
+                }
+
+                var propertyName = reader.GetString();
+                reader.Read();
+
+                switch (propertyName)
+                {
+                    case "NumChannels":
+                    {
+                        if (reader.TokenType != JsonTokenType.Number)
+                        {
+                            throw new JsonException();
+                        }
+
+                        result.NumChannels = reader.GetUInt32();
+
+                        break;
+                    }
+
+                    case "InterpolationType":
+                    {
+                        if (reader.TokenType != JsonTokenType.String)
+                        {
+                            throw new JsonException();
+                        }
+
+                        var enumStr = reader.GetString();
+                        if (enumStr == null)
+                        {
+                            throw new JsonException();
+                        }
+
+                        result.InterpolationType = Enum.Parse<Enums.EInterpolationType>(enumStr);
+
+                        break;
+                    }
+
+                    case "LinkType":
+                    {
+                        if (reader.TokenType != JsonTokenType.String)
+                        {
+                            throw new JsonException();
+                        }
+
+                        var enumStr = reader.GetString();
+                        if (enumStr == null)
+                        {
+                            throw new JsonException();
+                        }
+
+                        result.LinkType = Enum.Parse<Enums.EChannelLinkType>(enumStr);
+
+                        break;
+                    }
+
+                    case "Alignment":
+                    {
+                        if (reader.TokenType != JsonTokenType.Number)
+                        {
+                            throw new JsonException();
+                        }
+
+                        result.Alignment = reader.GetUInt32();
+
+                        break;
+                    }
+
+                    case "Data":
+                    {
+                        if (reader.TokenType != JsonTokenType.String)
+                        {
+                            throw new JsonException();
+                        }
+
+                        result.Data = reader.GetBytesFromBase64();
+
+                        break;
+                    }
+
+                    default:
+                    {
+                        throw new JsonException();
+                    }
+                }
+            }
+
+            throw new JsonException();
+        }
+
+        public override void Write(Utf8JsonWriter writer, IRedMultiChannelCurve value, JsonSerializerOptions options)
+        {
+            writer.WriteStartObject();
+
+            writer.WriteNumber("NumChannels", value.NumChannels);
+            writer.WriteString("InterpolationType", value.InterpolationType.ToString());
+            writer.WriteString("LinkType", value.LinkType.ToString());
+            writer.WriteNumber("Alignment", value.Alignment);
+            writer.WriteBase64String("Data", value.Data);
+
+            writer.WriteEndObject();
+        }
+    }
 }
 
 public class NodeRefConverter : JsonConverter<NodeRef>
@@ -2121,7 +2261,7 @@ public static class RedJsonOptions
                 new BufferConverterFactory(),
                 new LocalizationStringConverter(),
                 new CLegacySingleChannelCurveConverterFactory(),
-                new MultiChannelCurveConverter(),
+                new MultiChannelCurveConverterFactory(),
                 new NodeRefConverter(),
                 new TweakDBIDConverter(),
                 new CByteArrayConverter(),
