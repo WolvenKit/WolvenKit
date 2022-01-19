@@ -143,6 +143,17 @@ namespace WolvenKit.RED4.Types
                     {
                         ((RedBaseClass)_properties[propertyInfo.RedName]).InternalInitClass();
                     }
+
+                    if (typeof(IRedArray).IsAssignableFrom(propertyInfo.Type))
+                    {
+                        foreach (var entry in (IRedArray)_properties[propertyInfo.RedName])
+                        {
+                            if (entry is RedBaseClass cls)
+                            {
+                                cls.InternalInitClass();
+                            }
+                        }
+                    }
                 }
             }
         }
