@@ -2104,7 +2104,7 @@ public class Package04Converter : JsonConverter<Package04>
                         throw new JsonException();
                     }
 
-                    result.Sections = reader.GetUInt16();
+                    result.CruidIndex = reader.GetInt16();
                     break;
                 }
 

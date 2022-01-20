@@ -10,8 +10,10 @@ using WolvenKit.Interfaces.Core;
 using WolvenKit.RED4.Archive.CR2W;
 using WolvenKit.RED4.Archive.IO;
 using WolvenKit.RED4.CR2W;
+using WolvenKit.RED4.CR2W.JSON;
 using WolvenKit.RED4.Types;
 using WolvenKit.RED4.Types.Exceptions;
+using JsonSerializer = System.Text.Json.JsonSerializer;
 
 namespace WolvenKit.Modkit.RED4
 {
@@ -37,8 +39,8 @@ namespace WolvenKit.Modkit.RED4
 
             cr2w.MetaData.FileName = infile;
 
-            var dto = new RedFileDto(cr2w);
-            var json = JsonConvert.SerializeObject(dto, Formatting.Indented);
+            var dto = new CR2WFileDto(cr2w);
+            var json = JsonSerializer.Serialize(dto, RedJsonOptions.Get());
 
             if (string.IsNullOrEmpty(json))
             {
@@ -106,8 +108,8 @@ namespace WolvenKit.Modkit.RED4
         /// <exception cref="InvalidParsingException"></exception>
         public static CR2WFile ConvertFromJson(string json)
         {
-            var newdto = JsonConvert.DeserializeObject<RedFileDto>(json);
-            return newdto != null ? newdto.ToW2rc() : throw new InvalidParsingException("ConvertFromJson");
+            var dto = JsonSerializer.Deserialize<CR2WFileDto>(json, RedJsonOptions.Get());
+            return dto.Data;
         }
 
         /// <summary>
