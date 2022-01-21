@@ -4,16 +4,16 @@ namespace WolvenKit.RED4.Types
 {
     public partial class gameCompiledSmartObjectData : IRedCustomData
     {
-        private byte[] _buffer;
-
-        public void CustomRead(Red4Reader reader, uint size)
+        [RED("buffer")]
+        [REDProperty(IsIgnored = true)]
+        public CByteArray Buffer
         {
-            _buffer = reader.BaseReader.ReadBytes((int)size);
+            get => GetPropertyValue<CByteArray>();
+            set => SetPropertyValue<CByteArray>(value);
         }
 
-        public void CustomWrite(Red4Writer writer)
-        {
-            writer.BaseWriter.Write(_buffer);
-        }
+        public void CustomRead(Red4Reader reader, uint size) => Buffer = reader.BaseReader.ReadBytes((int)size);
+
+        public void CustomWrite(Red4Writer writer) => writer.BaseWriter.Write(Buffer);
     }
 }

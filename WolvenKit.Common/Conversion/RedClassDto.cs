@@ -4,6 +4,8 @@ using System.Dynamic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using WolvenKit.RED4.Archive.Buffer;
 using WolvenKit.RED4.Archive.CR2W;
 using WolvenKit.RED4.CR2W;
@@ -11,31 +13,41 @@ using WolvenKit.RED4.Types;
 
 namespace WolvenKit.Common.Conversion
 {
-    public class RedClassDto : DynamicObject
+    public class RedClassDto
     {
-        internal object Header;
-        internal string Type;
-        internal Dictionary<string, object> Properties = new();
         internal RedClassDto _parent;
         internal IRedType _data;
         internal Type _propertyType;
         internal string _propertyName;
+        internal RedFileDto _file;
+
+        public string Type;
+
+        public Dictionary<string, object> Properties = new();
+
+        public bool ShouldSerializeProperties()
+        {
+            return Properties.Count > 0;
+        }
+
+        public string XPath;
+
+        public bool ShouldSerializeXPath()
+        {
+            return XPath != null;
+        }
 
         public RedClassDto()
         {
 
         }
 
-        public RedClassDto(IRedType chunk, object header) : this(chunk)
-        {
-            Header = header;
-        }
-
-        public RedClassDto(IRedType chunk, string propertyName = null, RedClassDto parent = null)
+        public RedClassDto(IRedType chunk, RedFileDto file, string propertyName = null, RedClassDto parent = null)
         {
             _data = chunk;
             _propertyName = propertyName;
             _parent = parent;
+            _file = file;
 
             var type = _data?.GetType() ?? null;
             if (type == null && _parent != null)
@@ -49,6 +61,11 @@ namespace WolvenKit.Common.Conversion
                 var propInfo = RedReflection.GetPropertyByName(parent.GetType(), _propertyName) ?? null;
                 type = propInfo?.Type ?? null;
             }
+            if (_data is IRedBaseHandle handl)
+            {
+                type = handl.GetValue().GetType();
+            }
+
             _propertyType = type;
             Type = RedReflection.GetRedTypeFromCSType(_propertyType);
 
@@ -58,9 +75,22 @@ namespace WolvenKit.Common.Conversion
             try
             {
                 var data = chunk;
-                if (chunk is IRedBaseHandle handle)
+                if (data is inkWidgetReference iwr && iwr.Widget != null)
                 {
-                    data = handle.GetValue();
+                    XPath = ((inkWidget)iwr.Widget.GetValue()).GetPath();
+                    return;
+                }
+                if (data is IRedBaseHandle handle)
+                {
+                    if (_file == null || _file.RegisterHandle(_data.GetHashCode()))
+                    {
+                        data = handle.GetValue();
+                    }
+                    else
+                    {
+                        XPath = "need.to.implement.this.still";
+                        return;
+                    }
                 }
                 if (data is RedBaseClass redClass)
                 {
@@ -71,14 +101,14 @@ namespace WolvenKit.Common.Conversion
                         IRedType value;
                         if (pi.RedName == null)
                         {
-                            value = (IRedType)redClass.GetType().GetProperty(pi.Name).GetValue(redClass, null);
+                            value = (IRedType)redClass.GetType().GetProperty(pi.RedName).GetValue(redClass, null);
                         }
                         else
                         {
                             value = (IRedType)pi.GetValue(redClass);
                         }
                         var redType = RedReflection.GetRedTypeFromCSType(pi.Type);
-                        Properties.Add(pi.Name + ":" + redType, PrimativeDecider(value, pi.Name, this));
+                        Properties.Add(pi.RedName, PrimativeDecider(value, pi.RedName, this));
                     });
                 }
             }
@@ -89,46 +119,46 @@ namespace WolvenKit.Common.Conversion
             }
         }
 
-        public override IEnumerable<string> GetDynamicMemberNames()
-        {
-            if (Header != null)
-            {
-                yield return nameof(Header);
-                yield return ":" + Type;
-            }
-            else
-            {
-                foreach (var (name, _) in Properties)
-                {
-                    if (name != null)
-                    {
-                        yield return name;
-                    }
-                }
-            }
-        }
+        //public override IEnumerable<string> GetDynamicMemberNames()
+        //{
+        //    if (Header != null)
+        //    {
+        //        yield return nameof(Header);
+        //        yield return ":" + Type;
+        //    }
+        //    else
+        //    {
+        //        foreach (var (name, _) in Properties)
+        //        {
+        //            if (name != null)
+        //            {
+        //                yield return name;
+        //            }
+        //        }
+        //    }
+        //}
 
-        public override bool TryGetMember(GetMemberBinder binder, out object result)
-        {
-            if (Header != null)
-            {
-                if (binder.Name == "Header")
-                {
-                    result = Header;
-                    return true;
-                }
-                else if (binder.Name == (":" + Type))
-                {
-                    result = Properties;
-                    return true;
-                }
-                return base.TryGetMember(binder, out result);
-            }
-            else
-            {
-                return Properties.TryGetValue(binder.Name, out result);
-            }
-        }
+        //public override bool TryGetMember(GetMemberBinder binder, out object result)
+        //{
+        //    if (Header != null)
+        //    {
+        //        if (binder.Name == "Header")
+        //        {
+        //            result = Header;
+        //            return true;
+        //        }
+        //        else if (binder.Name == (":" + Type))
+        //        {
+        //            result = Properties;
+        //            return true;
+        //        }
+        //        return base.TryGetMember(binder, out result);
+        //    }
+        //    else
+        //    {
+        //        return Properties.TryGetValue(binder.Name, out result);
+        //    }
+        //}
 
         private object PrimativeDecider(IRedType data, string propertyName, RedClassDto parent)
         {
@@ -145,36 +175,32 @@ namespace WolvenKit.Common.Conversion
                 return list;
             }
 
-            Package04 pkg = null;
-
-            if (data is SerializationDeferredDataBuffer sddb && sddb.Buffer.Data is Package04 sddbp4)
-                pkg = sddbp4;
-            else if (data is DataBuffer db && db.Buffer.Data is Package04 dbp4)
-                pkg = dbp4;
-            else if (data is SharedDataBuffer sdb && sdb.Buffer.Data is Package04 sdbp4)
-                pkg = sdbp4;
-
-            if (pkg != null)
+            if (data is IRedBufferWrapper bw && bw.Buffer.Data is Package04 pkg)
             {
                 var list = new List<object>();
                 var chunks = pkg.Chunks;
                 for (var i = 0; i < chunks.Count; i++)
                 {
                     var obj = PrimativeDecider(chunks[i], null, this);
-                    if (obj is RedClassDto rcd)
-                    {
-                        list.Add(new Dictionary<string, object>() {
-                            {":" + rcd.Type, obj }
-                        });
-                    }
-                    else
-                    {
-                        list.Add(new Dictionary<string, object>() {
-                            { ":" + obj.GetType(), obj }
-                        });
-                    }
+                    list.Add(obj);
+                    //if (obj is RedClassDto rcd)
+                    //{
+                    //    list.Add(new Dictionary<string, object>() {
+                    //        {":" + rcd.Type, obj }
+                    //    });
+                    //}
+                    //else
+                    //{
+                    //    list.Add(new Dictionary<string, object>() {
+                    //        { ":" + obj.GetType(), obj }
+                    //    });
+                    //}
                 }
                 return list;
+            }
+            else if (data is SharedDataBuffer sdb && sdb.File is CR2WFile cr2wFile)
+            {
+                data = cr2wFile.RootChunk;
             }
 
             switch (data)
@@ -211,33 +237,149 @@ namespace WolvenKit.Common.Conversion
                     return (long)uint64;
                 case IRedPrimitive<float> i:
                     return ((float)(CFloat)i);
+                case TweakDBID t:
+                    return ((ulong)t).ToString();
+                case LocalizationString lockey:
+                    return lockey.Value;
                 default:
-                    return new RedClassDto(data, propertyName, parent);
+                    return new RedClassDto(data, _file, propertyName, parent);
             }
         }
 
-        public CR2WFile ToW2rc()
+        public IRedType PropertyParser(Type type, object value)
         {
-            var cr2w = new CR2WFile
+            if (value is JObject jo && jo.ContainsKey("Type"))
             {
-                //Buffers = Buffers
-                //    .OrderBy(_ => _.Index)
-                //    .Select(_ => _.ToRedBuffer())
-                //    .ToList()
-            };
+                return JsonConvert.DeserializeObject<RedClassDto>(jo.ToString()).ToRedBaseClass();
+            }
+            if (value is RedClassDto rcdto)
+            {
+                return rcdto.ToRedBaseClass();
+            }
+            else if (type.IsAssignableTo(typeof(IRedArray)))
+            {
+                var cary = (IRedArray)RedTypeManager.CreateRedType(type);
+                var ja = (JArray)value;
+                var innerType = type.GetGenericArguments()[0];
+                foreach (var j in ja)
+                {
+                    cary.Add(PropertyParser(innerType, j));
+                }
+                return cary;
+            }
+            else if (type.IsAssignableTo(typeof(CBool)))
+            {
+                return (CBool)(bool)value;
+            }
+            else if (type.IsAssignableTo(typeof(CName)))
+            {
+                return (CName)(string)value;
+            }
+            else if (type.IsAssignableTo(typeof(CString)))
+            {
+                return (CString)(string)value;
+            }
+            else if (type.IsAssignableTo(typeof(IRedRef)))
+            {
+                var irr = (IRedRef)RedTypeManager.CreateRedType(type);
+                if (value is JValue jv)
+                {
+                    value = jv.Value;
+                }
+                irr.DepotPath = (string)value;
+                return irr;
+            }
+            else if (type.IsAssignableTo(typeof(IRedEnum)))
+            {
+                var innerType = type.GetGenericArguments()[0];
+                return CEnum.Parse(innerType, (string)value);
+            }
+            else if (type.IsAssignableTo(typeof(IRedBitField)))
+            {
+                var innerType = type.GetGenericArguments()[0];
+                return CBitField.Parse(innerType, (string) value);
+            }
+            else if (type.IsAssignableTo(typeof(CDateTime)))
+            {
+                return CDateTime.Parse((ulong)value);
+            }
+            else if (type.IsAssignableTo(typeof(CRUID)))
+            {
+                return (CRUID)Convert.ToUInt64(value);
+            }
+            else if (type.IsAssignableTo(typeof(CUInt64)))
+            {
+                return (CUInt64)Convert.ToUInt64(value);
+            }
+            else if (type.IsAssignableTo(typeof(CUInt8)))
+            {
+                return (CUInt8)Convert.ToByte(value);
+            }
+            else if (type.IsAssignableTo(typeof(CInt8)))
+            {
+                return (CInt8)Convert.ToSByte(value);
+            }
+            else if (type.IsAssignableTo(typeof(CInt16)))
+            {
+                return (CInt16)Convert.ToInt16(value);
+            }
+            else if (type.IsAssignableTo(typeof(CUInt16)))
+            {
+                return (CUInt16)Convert.ToUInt16(value);
+            }
+            else if (type.IsAssignableTo(typeof(CInt32)))
+            {
+                return (CInt32)Convert.ToInt32(value);
+            }
+            else if (type.IsAssignableTo(typeof(CUInt32)))
+            {
+                return (CUInt32)Convert.ToUInt32(value);
+            }
+            else if (type.IsAssignableTo(typeof(CInt64)))
+            {
+                return (CInt64)Convert.ToInt64(value);
+            }
+            else if (type.IsAssignableTo(typeof(IRedPrimitive<float>)))
+            {
+                return (CFloat)(float)(double)value;
+            }
+            else
+            {
+                return null;
+            }
+        }
 
-            // chunks
-            // order so that parent chunks get created first
-            //var groupedChunks = Chunks.GroupBy(_ => _.Value.ParentIndex);
-            //foreach (IGrouping<int, KeyValuePair<int, RedExportDto>> groupedChunk in groupedChunks)
+        public RedBaseClass ToRedBaseClass()
+        {
+            var chunk = RedTypeManager.Create(Type);
+
+            var ti = RedReflection.GetTypeInfo(chunk.GetType());
+            //foreach (var pi in ti.PropertyInfos)
             //{
-            //    foreach (var (chunkIndex, chunk) in groupedChunk.OrderBy(_ => _.Key))
-            //    {
-            //        chunk.CreateChunkInFile(cr2w, chunkIndex);
-            //    }
+            //    if (pi.RedName
             //}
 
-            return cr2w;
+            foreach (var (propertyName, propertyValue) in Properties)
+            {
+                if (ti.PropertyInfos.First(x => x.RedName == propertyName) is var propertyInfo && propertyInfo != null)
+                {
+                    var redValue = PropertyParser(propertyInfo.Type, propertyValue);
+                    if (redValue != null)
+                    {
+                        if (propertyInfo.Type.IsAssignableTo(typeof(IRedBaseHandle)))
+                        {
+                            var innerType = propertyInfo.Type.GetGenericArguments()[0];
+                            propertyInfo.SetValue(chunk, (IRedType)CHandle.Parse(innerType, (RedBaseClass)redValue));
+                        }
+                        else
+                        {
+                            propertyInfo.SetValue(chunk, redValue);
+                        }
+                    }
+                }
+            }
+
+            return chunk;
         }
     }
 }

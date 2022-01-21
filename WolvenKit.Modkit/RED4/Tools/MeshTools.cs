@@ -31,7 +31,7 @@ namespace CP77.CR2W
         }
         public bool ExportMeshPreviewer(Stream meshStream, FileInfo outFile)
         {
-            var cr2w = _red4ParserService.TryReadRed4File(meshStream);
+            var cr2w = _red4ParserService.ReadRed4File(meshStream);
 
             if (cr2w == null || cr2w.RootChunk is not CMesh cMesh || cMesh.RenderResourceBlob.Chunk is not rendRenderMeshBlob rendblob)
             {
@@ -68,7 +68,7 @@ namespace CP77.CR2W
 
         public bool ExportMesh(Stream meshStream, FileInfo outfile, bool lodFilter = true, bool isGLBinary = true, ValidationMode vmode = ValidationMode.TryFix)
         {
-            var cr2w = _red4ParserService.TryReadRed4File(meshStream);
+            var cr2w = _red4ParserService.ReadRed4File(meshStream);
 
             if (cr2w == null || cr2w.RootChunk is not CMesh cMesh || cMesh.RenderResourceBlob.Chunk is not rendRenderMeshBlob rendblob)
             {
@@ -109,7 +109,7 @@ namespace CP77.CR2W
         }
         public bool ExportMeshWithoutRig(Stream meshStream, FileInfo outfile, bool lodFilter = true, bool isGLBinary = true, ValidationMode vmode = ValidationMode.TryFix)
         {
-            var cr2w = _red4ParserService.TryReadRed4File(meshStream);
+            var cr2w = _red4ParserService.ReadRed4File(meshStream);
 
             if (cr2w == null || cr2w.RootChunk is not CMesh cMesh || cMesh.RenderResourceBlob.Chunk is not rendRenderMeshBlob rendblob)
             {
@@ -148,7 +148,7 @@ namespace CP77.CR2W
 
             foreach (var meshStream in meshStreamS)
             {
-                var cr2w = _red4ParserService.TryReadRed4File(meshStream);
+                var cr2w = _red4ParserService.ReadRed4File(meshStream);
 
                 if (cr2w == null || cr2w.RootChunk is not CMesh cMesh || cMesh.RenderResourceBlob.Chunk is not rendRenderMeshBlob rendblob)
                 {
@@ -188,7 +188,7 @@ namespace CP77.CR2W
         }
         public bool ExportMeshWithRig(Stream meshStream, Stream rigStream, FileInfo outfile, bool lodFilter = true, bool isGLBinary = true, ValidationMode vmode = ValidationMode.TryFix)
         {
-            var cr2w = _red4ParserService.TryReadRed4File(meshStream);
+            var cr2w = _red4ParserService.ReadRed4File(meshStream);
 
             if (cr2w == null || cr2w.RootChunk is not CMesh cMesh || cMesh.RenderResourceBlob.Chunk is not rendRenderMeshBlob rendblob)
             {
@@ -203,7 +203,7 @@ namespace CP77.CR2W
             UpdateSkinningParamCloth(ref expMeshes, meshStream, cr2w);
 
             var meshRig = GetOrphanRig(rendblob, cr2w);
-            var Rig = RIG.ProcessRig(_red4ParserService.TryReadRed4File(rigStream));
+            var Rig = RIG.ProcessRig(_red4ParserService.ReadRed4File(rigStream));
 
             UpdateMeshJoints(ref expMeshes, Rig, meshRig);
 
@@ -237,7 +237,7 @@ namespace CP77.CR2W
             var Rigs = new List<RawArmature>();
             foreach (var rigStream in rigStreamS)
             {
-                var Rig = RIG.ProcessRig(_red4ParserService.TryReadRed4File(rigStream));
+                var Rig = RIG.ProcessRig(_red4ParserService.ReadRed4File(rigStream));
                 Rigs.Add(Rig);
 
                 rigStream.Dispose();
@@ -249,7 +249,7 @@ namespace CP77.CR2W
 
             foreach (var meshStream in meshStreamS)
             {
-                var cr2w = _red4ParserService.TryReadRed4File(meshStream);
+                var cr2w = _red4ParserService.ReadRed4File(meshStream);
                 if (cr2w == null || cr2w.RootChunk is not CMesh cMesh || cMesh.RenderResourceBlob.Chunk is not rendRenderMeshBlob rendblob)
                 {
                     continue;

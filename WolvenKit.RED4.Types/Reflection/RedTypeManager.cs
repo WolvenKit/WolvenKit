@@ -45,9 +45,9 @@ namespace WolvenKit.RED4.Types
             return Create(type);
         }
 
-        public static IRedType CreateRedType(Type type)
+        public static IRedType CreateRedType(Type type, params object[] args)
         {
-            var instance = (IRedType)System.Activator.CreateInstance(type);
+            var instance = (IRedType)System.Activator.CreateInstance(type, args);
             if (instance is IRedOverload tCls)
             {
                 tCls.ConstructorOverload();

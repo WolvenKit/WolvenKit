@@ -30,7 +30,7 @@ namespace WolvenKit.Modkit.RED4
         /// <returns></returns>
         private bool Rebuild(Stream redfileStream, IEnumerable<byte[]> buffersenumerable)
         {
-            var isResource = _wolvenkitFileService.IsCr2wFile(redfileStream);
+            var isResource = _wolvenkitFileService.IsCR2WFile(redfileStream);
             if (!isResource)
             {
                 return false;

@@ -143,6 +143,17 @@ namespace WolvenKit.RED4.Types
                     {
                         ((RedBaseClass)_properties[propertyInfo.RedName]).InternalInitClass();
                     }
+
+                    if (typeof(IRedArray).IsAssignableFrom(propertyInfo.Type))
+                    {
+                        foreach (var entry in (IRedArray)_properties[propertyInfo.RedName])
+                        {
+                            if (entry is RedBaseClass cls)
+                            {
+                                cls.InternalInitClass();
+                            }
+                        }
+                    }
                 }
             }
         }
@@ -382,13 +393,17 @@ namespace WolvenKit.RED4.Types
 
         public object DeepCopy()
         {
-            var other = (RedBaseClass)MemberwiseClone();
+            var other = RedTypeManager.Create(GetType());
 
             foreach (var property in _properties)
             {
                 if (property.Value is IRedCloneable cl)
                 {
                     other._properties[property.Key] = (IRedType)cl.DeepCopy();
+                }
+                else
+                {
+                    other._properties[property.Key] = property.Value;
                 }
             }
 

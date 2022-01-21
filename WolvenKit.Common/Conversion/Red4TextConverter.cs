@@ -203,8 +203,38 @@ namespace WolvenKit.Common.Conversion
         {
             switch (data)
             {
+                case CBool b:
+                    return (bool)b;
+                case IRedString s:
+                    return s.GetValue();
+                case IRedRef r:
+                    return r.DepotPath?.GetValue() ?? null;
+                case IRedEnum e:
+                    return e.ToEnumString();
+                case IRedBitField e:
+                    return e.ToBitFieldString();
                 case CDateTime d:
                     return d.ToUInt64();
+                case CRUID c:
+                    return (ulong)c;
+                case CUInt64 c:
+                    return (ulong)c;
+                case CUInt8 uint64:
+                    return (byte)uint64;
+                case CInt8 uint64:
+                    return (sbyte)uint64;
+                case CInt16 uint64:
+                    return (short)uint64;
+                case CUInt16 uint64:
+                    return (ushort)uint64;
+                case CInt32 uint64:
+                    return (int)uint64;
+                case CUInt32 uint64:
+                    return (uint)uint64;
+                case CInt64 uint64:
+                    return (long)uint64;
+                case IRedPrimitive<float> i:
+                    return ((float)(CFloat)i);
                 // special cases of primitive types
                 case CVariant var:
                     throw new NotImplementedException();

@@ -17,7 +17,7 @@ namespace WolvenKit.Modkit.RED4
     {
         public bool ExportAnim(Stream animStream, List<Archive> archives, FileInfo outfile, bool isGLBinary = true)
         {
-            var cr2w = _wolvenkitFileService.TryReadRed4File(animStream);
+            var cr2w = _wolvenkitFileService.ReadRed4File(animStream);
 
             if (cr2w == null || cr2w.RootChunk is not animAnimSet blob)
             {
@@ -41,7 +41,7 @@ namespace WolvenKit.Modkit.RED4
                 {
                     var ms = new MemoryStream();
                     ModTools.ExtractSingleToStream(ar, hash, ms);
-                    Rig = RIG.ProcessRig(_wolvenkitFileService.TryReadRed4File(ms));
+                    Rig = RIG.ProcessRig(_wolvenkitFileService.ReadRed4File(ms));
                     break;
                 }
             }

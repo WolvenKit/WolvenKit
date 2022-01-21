@@ -1,6 +1,6 @@
 namespace WolvenKit.RED4.Types
 {
-    public partial class animLookAtPartsDependency
+    public partial class animLookAtPartsDependency : IRedOverload
     {
         [Ordinal(998)]
         [RED("innerSquareColor")]
@@ -16,6 +16,12 @@ namespace WolvenKit.RED4.Types
         {
             get => GetPropertyValue<CColor>();
             set => SetPropertyValue<CColor>(value);
+        }
+
+        void IRedOverload.ConstructorOverload()
+        {
+            InnerSquareColor = new();
+            OuterSquareColor = new();
         }
     }
 }

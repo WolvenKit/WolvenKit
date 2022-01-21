@@ -22,7 +22,7 @@ namespace WolvenKit.Modkit.RED4
     {
         public bool ExportMorphTargets(Stream targetStream, FileInfo outfile, List<Archive> archives, string modFolder, bool isGLBinary = true)
         {
-            var cr2w = _wolvenkitFileService.TryReadRed4File(targetStream);
+            var cr2w = _wolvenkitFileService.ReadRed4File(targetStream);
             if (cr2w == null || cr2w.RootChunk is not MorphTargetMesh morphBlob || morphBlob.Blob.Chunk is not rendRenderMorphTargetMeshBlob blob || blob.BaseBlob.Chunk is not rendRenderMeshBlob rendblob)
             {
                 return false;
@@ -40,7 +40,7 @@ namespace WolvenKit.Modkit.RED4
                         break;
                     }
                 }
-                var meshCr2w = _wolvenkitFileService.TryReadRed4File(meshStream);
+                var meshCr2w = _wolvenkitFileService.ReadRed4File(meshStream);
                 if (meshCr2w != null && meshCr2w.RootChunk is MorphTargetMesh tBlob1 && tBlob1.Blob.Chunk is rendRenderMorphTargetMeshBlob tBlob2 && tBlob2.BaseBlob.Chunk is rendRenderMeshBlob tBlob3)
                 {
                     Rig = MeshTools.GetOrphanRig(tBlob3, meshCr2w);

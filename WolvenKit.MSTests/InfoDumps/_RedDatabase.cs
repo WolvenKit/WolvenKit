@@ -150,9 +150,8 @@ namespace WolvenKit.MSTests
                             ModTools.ExtractSingleToStream(archive, hash, originalMemoryStream);
 
                             using var reader = new CR2WReader(originalMemoryStream);
-
-                            var cr2w = parser.TryReadRed4FileHeaders(originalMemoryStream);
-                            if (cr2w != null)
+                            
+                            if (parser.TryReadRed4FileHeaders(originalMemoryStream, out var cr2w))
                             {
                                 var rawImports = cr2w.GetImports();
                                 if (rawImports.Any())
