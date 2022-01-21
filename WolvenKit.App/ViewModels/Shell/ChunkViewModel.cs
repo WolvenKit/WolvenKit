@@ -32,6 +32,7 @@ namespace WolvenKit.ViewModels.Shell
         [ObservableAsProperty] public string Descriptor { get; }
         [ObservableAsProperty] public bool IsDefault { get; }
         [ObservableAsProperty] public ObservableCollection<ChunkViewModel> Properties { get; }
+        [ObservableAsProperty] public ObservableCollection<ISelectableTreeViewItemModel> TVProperties { get; }
         [ObservableAsProperty] public ObservableCollection<ChunkViewModel> DisplayProperties { get; }
         [ObservableAsProperty] public IRedType PropertyGridData { get; }
 
@@ -71,13 +72,32 @@ namespace WolvenKit.ViewModels.Shell
             this.WhenAnyValue(x => x.Properties)
                 .Select((_) =>
                 {
+                    if (Properties == null)
+                    {
+                        return null;
+                    }
+
+                    if (Data is not IRedArray && Data is not IRedBufferWrapper)
+                    {
+                        return new ObservableCollection<ISelectableTreeViewItemModel>(Properties);
+                    }
+                    return SplitProperties(Properties);
+                }).ToPropertyEx(this, x => x.TVProperties, deferSubscription: true);
+
+            this.WhenAnyValue(x => x.Properties)
+                .Select((_) =>
+                {
                     if (Properties == null || Properties.Count == 0)
                     {
                         return SelfList;
                     }
                     else
                     {
-                        return Properties;
+                        if (Data is not IRedArray && Data is not DataBuffer)
+                        {
+                            return Properties;
+                        }
+                        return SelfList;
                     }
                 }).ToPropertyEx(this, x => x.DisplayProperties, deferSubscription: true);
 
@@ -156,6 +176,29 @@ namespace WolvenKit.ViewModels.Shell
             {
                 Parent.NotifyChain(property);
             }
+        }
+
+        private ObservableCollection<ISelectableTreeViewItemModel> SplitProperties(ObservableCollection<ChunkViewModel> locations, int nSize = 100)
+        {
+            if (locations == null)
+            {
+                return null;
+            }
+
+            if (locations.Count < nSize)
+            {
+                return new ObservableCollection<ISelectableTreeViewItemModel>(locations);
+            }
+
+            var list = new ObservableCollection<ISelectableTreeViewItemModel>();
+
+            for (int i = 0; i < locations.Count; i += nSize)
+            {
+                var size = Math.Min(nSize, locations.Count - i);
+                list.Add(new GroupedChunkViewModel($"[{i}-{i+size-1}]", locations.Skip(i).Take(size)));
+            }
+
+            return list;
         }
 
         #region Properties

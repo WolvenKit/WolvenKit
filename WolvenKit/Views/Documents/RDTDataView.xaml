@@ -100,6 +100,15 @@
                     </Grid>
                 </DataTemplate>
 
+                <DataTemplate x:Key="GroupedPropertyNameTemplate" DataType="{x:Type shell:GroupedChunkViewModel}">
+                    <Grid>
+                        <TextBlock
+                            Width="Auto"
+                            Margin="0,0,0,2"
+                            Text="{Binding Name, Mode=OneTime}" />
+                    </Grid>
+                </DataTemplate>
+
                 <DataTemplate x:Key="PropertyValueTemplate" DataType="{x:Type shell:ChunkViewModel}">
                     <Grid>
                         <Grid.Resources>
@@ -261,6 +270,19 @@
                 </ContextMenu>
 
                 <converters:TreeViewItemTemplateSelector x:Key="itemTemplateSelector" x:Name="itemTemplateSelector">
+                    <converters:TreeViewItemTemplateSelector.GroupedTemplate>
+                        <DataTemplate>
+                            <Grid
+                                Background="Transparent"
+                                Tag="{Binding}">
+                                <ContentPresenter
+                                    Width="Auto"
+                                    HorizontalAlignment="Stretch"
+                                    VerticalAlignment="Center"
+                                    ContentTemplate="{StaticResource GroupedPropertyNameTemplate}" />
+                            </Grid>
+                        </DataTemplate>
+                    </converters:TreeViewItemTemplateSelector.GroupedTemplate>
                     <converters:TreeViewItemTemplateSelector.PropertyTemplate>
                         <DataTemplate DataType="{x:Type shell:ChunkViewModel}">
                             <Grid
@@ -425,7 +447,7 @@
             AllowEditing="False"
             Background="{StaticResource ContentBackground}"
             BorderThickness="0"
-            ChildPropertyName="Properties"
+            ChildPropertyName="TVProperties"
             ItemDragOver="SfTreeView_ItemDragOver"
             ItemDragStarting="SfTreeView_ItemDragStarting"
             ItemDropped="SfTreeView_ItemDropped"
@@ -436,10 +458,15 @@
             Visibility="Visible">
             <syncfusion:SfTreeView.HierarchyPropertyDescriptors>
                 <treeViewEngine:HierarchyPropertyDescriptor
-                    ChildPropertyName="Properties"
+                    ChildPropertyName="TVProperties"
                     IsExpandedPropertyName="IsExpanded"
                     IsSelectedPropertyName="IsSelected"
                     TargetType="{x:Type shell:ChunkViewModel}" />
+                <treeViewEngine:HierarchyPropertyDescriptor
+                    ChildPropertyName="TVProperties"
+                    IsExpandedPropertyName="IsExpanded"
+                    IsSelectedPropertyName="IsSelected"
+                    TargetType="{x:Type shell:GroupedChunkViewModel}" />
             </syncfusion:SfTreeView.HierarchyPropertyDescriptors>
         </syncfusion:SfTreeView>
 
