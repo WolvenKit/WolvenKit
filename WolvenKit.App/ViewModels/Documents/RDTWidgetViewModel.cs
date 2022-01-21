@@ -45,7 +45,7 @@ namespace WolvenKit.ViewModels.Documents
 
             var animPath = _library.AnimationLibraryResRef?.DepotPath?.GetValue() ?? "";
             var animHash = FNV1A64HashAlgorithm.HashString(animPath);
-            var animFile = File.GetFileFromHash(animHash);
+            var animFile = File.GetFileFromDepotPath(animHash);
 
             if (animFile != null && animFile.RootChunk is inkanimAnimationLibraryResource alr)
             {
@@ -61,14 +61,14 @@ namespace WolvenKit.ViewModels.Documents
                 if (Path.GetExtension(itemPath) == ".inkatlas")
                 {
                     var atlasHash = FNV1A64HashAlgorithm.HashString(itemPath);
-                    var atlasFile = File.GetFileFromHash(atlasHash);
+                    var atlasFile = File.GetFileFromDepotPath(atlasHash);
                     if (atlasFile == null || atlasFile.RootChunk is not inkTextureAtlas atlas)
                     {
                         continue;
                     }
 
                     var xbmHash = FNV1A64HashAlgorithm.HashString(atlas?.Slots[0]?.Texture?.DepotPath?.ToString() ?? "");
-                    var xbmFile = File.GetFileFromHash(xbmHash);
+                    var xbmFile = File.GetFileFromDepotPath(xbmHash);
                     if (xbmFile == null || xbmFile.RootChunk is not CBitmapTexture xbm)
                     {
                         continue;
@@ -116,7 +116,7 @@ namespace WolvenKit.ViewModels.Documents
                 else if (Path.GetExtension(itemPath) == ".inkfontfamily")
                 {
                     var ffHash = FNV1A64HashAlgorithm.HashString(itemPath);
-                    var ffFile = File.GetFileFromHash(ffHash);
+                    var ffFile = File.GetFileFromDepotPath(ffHash);
                     if (ffFile == null || ffFile.RootChunk is not inkFontFamilyResource ffr)
                     {
                         continue;
@@ -128,7 +128,7 @@ namespace WolvenKit.ViewModels.Documents
                         if (!Application.Current.Resources.Contains(key))
                         {
                             var fontHash = FNV1A64HashAlgorithm.HashString(fs.Font.DepotPath.ToString());
-                            var fontFile = File.GetFileFromHash(fontHash);
+                            var fontFile = File.GetFileFromDepotPath(fontHash);
                             if (fontFile == null || fontFile.RootChunk is not rendFont rf)
                             {
                                 continue;
@@ -148,7 +148,7 @@ namespace WolvenKit.ViewModels.Documents
                 else if (Path.GetExtension(itemPath) == ".inkstyle")
                 {
                     var styleHash = FNV1A64HashAlgorithm.HashString(itemPath);
-                    var styleFile = File.GetFileFromHash(styleHash);
+                    var styleFile = File.GetFileFromDepotPath(styleHash);
 
                     if (styleFile == null || styleFile.RootChunk is not inkStyleResource sr)
                     {
@@ -183,7 +183,7 @@ namespace WolvenKit.ViewModels.Documents
                     foreach (var theme in sr.Themes)
                     {
                         var themeHash = FNV1A64HashAlgorithm.HashString(theme.StyleResource.DepotPath.ToString());
-                        var themeFile = File.GetFileFromHash(themeHash);
+                        var themeFile = File.GetFileFromDepotPath(themeHash);
                         if (themeFile == null || themeFile.RootChunk is not inkStyleResource isr)
                         {
                             continue;

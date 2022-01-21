@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
@@ -12,6 +13,7 @@ using WolvenKit.Common.FNV1A;
 using WolvenKit.Common.Services;
 using WolvenKit.Functionality.Services;
 using WolvenKit.Modkit.RED4;
+using WolvenKit.RED4.Archive.Buffer;
 using WolvenKit.RED4.Archive.CR2W;
 using WolvenKit.RED4.Archive.IO;
 using WolvenKit.RED4.CR2W;
@@ -189,8 +191,7 @@ namespace WolvenKit.ViewModels.Documents
             }
             if (Cr2wFile.RootChunk is inkTextureAtlas atlas)
             {
-                var xbmHash = FNV1A64HashAlgorithm.HashString(atlas.Slots[0].Texture.DepotPath.ToString());
-                var file = GetFileFromHash(xbmHash);
+                var file = GetFileFromDepotPath(atlas.Slots[0].Texture.DepotPath);
                 if (file != null)
                 {
                     TabItemViewModels.Add(new RDTInkTextureAtlasViewModel(atlas, (CBitmapTexture)file.RootChunk, this));
@@ -199,6 +200,18 @@ namespace WolvenKit.ViewModels.Documents
             if (Cr2wFile.RootChunk is inkWidgetLibraryResource library)
             {
                 TabItemViewModels.Add(new RDTWidgetViewModel(library, this));
+            }
+            if (Cr2wFile.RootChunk is CMesh mesh2)
+            {
+                TabItemViewModels.Add(new RDTMeshViewModel(mesh2, this));
+            }
+            if (Cr2wFile.RootChunk is entEntityTemplate ent)
+            {
+                TabItemViewModels.Add(new RDTMeshViewModel(ent, this));
+            }
+            if (Cr2wFile.RootChunk is appearanceAppearanceResource app)
+            {
+                TabItemViewModels.Add(new RDTMeshViewModel(app, this));
             }
 
             foreach (var file in Cr2wFile.EmbeddedFiles)
@@ -214,11 +227,11 @@ namespace WolvenKit.ViewModels.Documents
             SelectedTabItemViewModel = TabItemViewModels.FirstOrDefault();
         }
 
-        public CR2WFile GetFileFromHash(ulong hash)
+        public CR2WFile GetFileFromDepotPath(CName depotPath)
         {
             // TODO: need to look locally first
             var _archiveManager = Locator.Current.GetService<IArchiveManager>();
-            var file = _archiveManager.Lookup(hash);
+            var file = _archiveManager.Lookup(depotPath.GetRedHash());
             if (file.HasValue && file.Value is FileEntry fe)
             {
                 CR2WFile cr2wFile = null;
@@ -227,6 +240,8 @@ namespace WolvenKit.ViewModels.Documents
                     fe.Extract(stream);
                     using var reader = new BinaryReader(stream);
                     cr2wFile = _parser.ReadRed4File(reader);
+                    if (depotPath.GetValue() != null)
+                        cr2wFile.MetaData.FileName = depotPath.GetValue();
                 }
 
                 return cr2wFile;
@@ -244,7 +259,7 @@ namespace WolvenKit.ViewModels.Documents
 
         public RedDocumentTabViewModel OpenRefAsTab(ulong hash)
         {
-            var file = GetFileFromHash(hash);
+            var file = GetFileFromDepotPath(hash);
             if (file != null)
             {
                 var tab = new RDTDataViewModel(hash.ToString(), file.RootChunk, this);

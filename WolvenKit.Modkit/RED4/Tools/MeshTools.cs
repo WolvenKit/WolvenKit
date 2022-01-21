@@ -29,29 +29,34 @@ namespace CP77.CR2W
         {
             _red4ParserService = red4ParserService;
         }
+
         public bool ExportMeshPreviewer(Stream meshStream, FileInfo outFile)
         {
             var cr2w = _red4ParserService.ReadRed4File(meshStream);
+            return ExportMeshPreviewer(cr2w, outFile);
+        }
 
+        public static bool ExportMeshPreviewer(CR2WFile cr2w, FileInfo outFile)
+        {
             if (cr2w == null || cr2w.RootChunk is not CMesh cMesh || cMesh.RenderResourceBlob.Chunk is not rendRenderMeshBlob rendblob)
             {
                 return false;
             }
 
-            var cachedFiles = Directory.GetFiles(outFile.DirectoryName);
-            if (cachedFiles.Length > 5)
-            {
-                foreach (var f in cachedFiles)
-                {
-                    try
-                    {
-                        File.Delete(f);
-                    }
-                    catch
-                    {
-                    }
-                }
-            }
+            //var cachedFiles = Directory.GetFiles(outFile.DirectoryName);
+            //if (cachedFiles.Length > 5)
+            //{
+            //    foreach (var f in cachedFiles)
+            //    {
+            //        try
+            //        {
+            //            File.Delete(f);
+            //        }
+            //        catch
+            //        {
+            //        }
+            //    }
+            //}
 
             using var ms = new MemoryStream(rendblob.RenderBuffer.Buffer.GetBytes());
 

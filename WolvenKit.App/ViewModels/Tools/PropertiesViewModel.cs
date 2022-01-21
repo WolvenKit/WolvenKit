@@ -192,19 +192,28 @@ namespace WolvenKit.ViewModels.Tools
                         string.Equals(PE_SelectedItem.GetExtension(), ERedExtension.ent.ToString(), StringComparison.OrdinalIgnoreCase) ||
                         string.Equals(PE_SelectedItem.GetExtension(), ERedExtension.physicalscene.ToString(), StringComparison.OrdinalIgnoreCase))
                     {
-                        using (var meshStream = new FileStream(PE_SelectedItem.FullName, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
+                        var outPath = Path.Combine(ISettingsManager.GetTemp_OBJPath(), Path.GetFileName(PE_SelectedItem.FullName));
+                        outPath = Path.ChangeExtension(outPath, ".glb");
+                        if (File.Exists(outPath))
                         {
-                            meshStream.Seek(0, SeekOrigin.Begin);
-                            var outPath = Path.Combine(ISettingsManager.GetTemp_OBJPath(), Path.GetFileName(PE_SelectedItem.FullName));
-                            outPath = Path.ChangeExtension(outPath, ".glb");
-                            if (_meshTools.ExportMeshPreviewer(meshStream, new FileInfo(outPath)))
+                            LoadModel(outPath);
+                            PE_MeshPreviewVisible = true;
+                            SelectedIndex = 1;
+                        }
+                        else
+                        {
+                            using (var meshStream = new FileStream(PE_SelectedItem.FullName, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
                             {
-                                LoadModel(outPath);
-                                PE_MeshPreviewVisible = true;
-                                SelectedIndex = 1;
+                                meshStream.Seek(0, SeekOrigin.Begin);
+                                if (_meshTools.ExportMeshPreviewer(meshStream, new FileInfo(outPath)))
+                                {
+                                    LoadModel(outPath);
+                                    PE_MeshPreviewVisible = true;
+                                    SelectedIndex = 1;
+                                }
+                                meshStream.Dispose();
+                                meshStream.Close();
                             }
-                            meshStream.Dispose();
-                            meshStream.Close();
                         }
                     }
 

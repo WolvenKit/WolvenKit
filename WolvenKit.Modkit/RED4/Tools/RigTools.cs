@@ -32,15 +32,15 @@ namespace WolvenKit.Modkit.RED4.RigFile
             }
 
             Rig.Parent = new Int16[Rig.BoneCount];
-            for (int i = 0; i < animrig.Unk1.Count; i++)
+            for (int i = 0; i < animrig.BoneParentIndexes.Count; i++)
             {
-                Rig.Parent[i] = animrig.Unk1[i];
+                Rig.Parent[i] = animrig.BoneParentIndexes[i];
             }
 
             Rig.LocalPosn = new Vec3[Rig.BoneCount];
             for (int i = 0; i < Rig.BoneCount; i++)
             {
-                Vec3 v = new Vec3(animrig.Unk2[i][0].X, animrig.Unk2[i][0].Y, animrig.Unk2[i][0].Z);
+                Vector4 v = animrig.BoneTransforms[i].Translation;
                 Rig.LocalPosn[i] = new Vec3(v.X, v.Z, -v.Y);
             }
 
@@ -48,14 +48,14 @@ namespace WolvenKit.Modkit.RED4.RigFile
 
             for (int i = 0; i < Rig.BoneCount; i++)
             {
-                Quat q = new Quat(animrig.Unk2[i][1].X, animrig.Unk2[i][1].Y, animrig.Unk2[i][1].Z, animrig.Unk2[i][1].W);
-                Rig.LocalRot[i] = new Quat(q.X, q.Z, -q.Y, q.W);
+                Quaternion q = animrig.BoneTransforms[i].Rotation;
+                Rig.LocalRot[i] = new Quat(q.I, q.J, -q.K, q.R);
             }
 
             Rig.LocalScale = new Vec3[Rig.BoneCount];
             for (int i = 0; i < Rig.BoneCount; i++)
             {
-                Vec3 v = new Vec3(animrig.Unk2[i][2].X, animrig.Unk2[i][2].Y, animrig.Unk2[i][2].Z);
+                Vector4 v = animrig.BoneTransforms[i].Scale;
                 Rig.LocalScale[i] = new Vec3(v.X, v.Y, v.Z);
             }
 
