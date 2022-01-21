@@ -88,11 +88,45 @@ namespace WolvenKit.RED4.Types
 
     public class gameDeviceResourceData_Cls1 : RedBaseClass
     {
-        public CUInt64 Hash { get; set; }
-        public CName ClassName { get; set; }
-        public CArray<CUInt64> Children { get; set; }
-        public CArray<CUInt64> Parents { get; set; }
-        public Vector3 NodePosition { get; set; }
+        [RED("hash")]
+        [REDProperty(IsIgnored = true)]
+        public CUInt64 Hash
+        {
+            get => GetPropertyValue<CUInt64>();
+            set => SetPropertyValue<CUInt64>(value);
+        }
+
+        [RED("className")]
+        [REDProperty(IsIgnored = true)]
+        public CName ClassName
+        {
+            get => GetPropertyValue<CName>();
+            set => SetPropertyValue<CName>(value);
+        }
+
+        [RED("children")]
+        [REDProperty(IsIgnored = true)]
+        public CArray<CUInt64> Children
+        {
+            get => GetPropertyValue<CArray<CUInt64>>();
+            set => SetPropertyValue<CArray<CUInt64>>(value);
+        }
+
+        [RED("parents")]
+        [REDProperty(IsIgnored = true)]
+        public CArray<CUInt64> Parents
+        {
+            get => GetPropertyValue<CArray<CUInt64>>();
+            set => SetPropertyValue<CArray<CUInt64>>(value);
+        }
+
+        [RED("nodePosition")]
+        [REDProperty(IsIgnored = true)]
+        public Vector3 NodePosition
+        {
+            get => GetPropertyValue<Vector3>();
+            set => SetPropertyValue<Vector3>(value);
+        }
 
         public gameDeviceResourceData_Cls1()
         {

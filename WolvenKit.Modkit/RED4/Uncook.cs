@@ -464,8 +464,7 @@ namespace WolvenKit.Modkit.RED4
 
         private bool UncookFont(Stream redstream, Stream outstream)
         {
-            var cr2w = _wolvenkitFileService.TryReadRed4File(redstream);
-            if (cr2w == null)
+            if (!_wolvenkitFileService.TryReadRed4File(redstream, out var cr2w))
             {
                 return false;
             }
@@ -572,28 +571,24 @@ namespace WolvenKit.Modkit.RED4
         public IEnumerable<Stream> GenerateBuffers(Stream cr2wStream)
         {
             // read the cr2wfile
-            var cr2w = _wolvenkitFileService.TryReadRed4FileHeaders(cr2wStream);
-            if (cr2w == null)
+            if (!_wolvenkitFileService.TryReadRed4File(cr2wStream, out var cr2w))
             {
                 yield break;
             }
 
-            throw new TodoException("get all buffers");
-
-            /*var buffers = cr2w.Buffers;
-            foreach (var buffer in buffers)
+            foreach (var buffer in cr2w.GetBuffers())
             {
                 var ms = new MemoryStream();
                 ms.Write(buffer.GetBytes());
 
                 yield return ms;
-            }*/
+            }
         }
 
         private bool UncookTexarray(Stream cr2wStream, Stream outstream)
         {
             // read the cr2wfile
-            var cr2w = _wolvenkitFileService.TryReadRed4File(cr2wStream);
+            var cr2w = _wolvenkitFileService.ReadRed4File(cr2wStream);
             if (cr2w == null || cr2w.RootChunk is not CTextureArray texa || texa.RenderTextureResource.RenderResourceBlobPC.Chunk is not rendRenderTextureBlobPC blob)
             {
                 return false;
@@ -632,7 +627,7 @@ namespace WolvenKit.Modkit.RED4
         private bool UncookEnvprobe(Stream cr2wStream, Stream outstream)
         {
             // read the cr2wfile
-            var cr2w = _wolvenkitFileService.TryReadRed4File(cr2wStream);
+            var cr2w = _wolvenkitFileService.ReadRed4File(cr2wStream);
             if (cr2w == null || cr2w.RootChunk is not CReflectionProbeDataResource refl || refl.TextureData.RenderResourceBlobPC.Chunk is not rendRenderTextureBlobPC blob)
             {
                 return false;
@@ -659,7 +654,7 @@ namespace WolvenKit.Modkit.RED4
         private bool UncookCubeMap(Stream cr2wStream, Stream outstream)
         {
             // read the cr2wfile
-            var cr2w = _wolvenkitFileService.TryReadRed4File(cr2wStream);
+            var cr2w = _wolvenkitFileService.ReadRed4File(cr2wStream);
             if (cr2w == null || cr2w.RootChunk is not CCubeTexture ctex || ctex.RenderTextureResource.RenderResourceBlobPC.Chunk is not rendRenderTextureBlobPC blob)
             {
                 return false;
@@ -699,8 +694,7 @@ namespace WolvenKit.Modkit.RED4
         private bool UncookCsv(Stream cr2wStream, Stream outstream)
         {
             // read the cr2wfile
-            var cr2w = _wolvenkitFileService.TryReadRed4File(cr2wStream);
-            if (cr2w == null)
+            if (!_wolvenkitFileService.TryReadRed4File(cr2wStream, out var cr2w))
             {
                 return false;
             }
@@ -720,8 +714,7 @@ namespace WolvenKit.Modkit.RED4
             texformat = DXGI_FORMAT.DXGI_FORMAT_R8G8B8A8_UNORM;
 
             // read the cr2wfile
-            var cr2w = _wolvenkitFileService.TryReadRed4File(redInFile);
-            if (cr2w == null)
+            if (!_wolvenkitFileService.TryReadRed4File(redInFile, out var cr2w))
             {
                 return false;
             }

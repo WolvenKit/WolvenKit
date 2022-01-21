@@ -38,5 +38,7 @@ namespace WolvenKit.RED4.Types
         }
 
         public bool Equals(CUInt32 other) => Equals(_value, other._value);
+
+        public override string ToString() => _value.ToString();
     }
 }

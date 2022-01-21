@@ -1,4 +1,4 @@
-namespace RED.CRC64
+namespace WolvenKit.Core.CRC
 {
     public class Crc64
     {

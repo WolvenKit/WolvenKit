@@ -108,15 +108,39 @@ namespace WolvenKit.RED4.Archive.IO
                 value = Read(prop.Type, size - 4, prop.Flags.Clone());
 
                 var typeInfo = RedReflection.GetTypeInfo(cls.GetType());
+
+#if DEBUG
                 if (!typeInfo.SerializeDefault && RedReflection.IsDefault(cls.GetType(), varname, value))
                 {
                     throw new TodoException($"Invalid default val for: \"{RedReflection.GetRedTypeFromCSType(cls.GetType())}.{varname}\"");
                 }
+#endif
 
                 prop.SetValue(cls, value);
             }
 
+            PostProcess();
+
             return true;
+
+            void PostProcess()
+            {
+                if (value is IRedBufferPointer buf)
+                {
+                    buf.GetValue().ParentTypes.Add($"{cls.GetType().Name}.{varname}");
+                }
+
+                if (value is IRedArray arr)
+                {
+                    if (typeof(IRedBufferPointer).IsAssignableFrom(arr.InnerType))
+                    {
+                        foreach (IRedBufferPointer entry in arr)
+                        {
+                            entry.GetValue().ParentTypes.Add($"{cls.GetType().Name}.{varname}");
+                        }
+                    }
+                }
+            }
         }
 
         public override SharedDataBuffer ReadSharedDataBuffer(uint size)

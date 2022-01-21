@@ -26,5 +26,7 @@ namespace WolvenKit.RED4.Types
         public override bool Equals(object obj) => obj is CBool other && Equals(other);
 
         public override int GetHashCode() => _value.GetHashCode();
+
+        public override string ToString() => _value != 0 ? "True" : "False";
     }
 }

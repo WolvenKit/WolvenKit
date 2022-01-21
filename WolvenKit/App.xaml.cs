@@ -1,4 +1,5 @@
 using System;
+using System.IO;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
 using System.Windows;
@@ -34,6 +35,8 @@ namespace WolvenKit
         // Constructor #2
         public App()
         {
+            Directory.SetCurrentDirectory(AppContext.BaseDirectory);
+
             Init();
 
             SetupExceptionHandling();

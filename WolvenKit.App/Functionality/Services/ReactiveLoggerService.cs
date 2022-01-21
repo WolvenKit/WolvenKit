@@ -1,8 +1,8 @@
 using System;
 using System.IO;
 using DynamicData;
-using WolvenKit.Common.Services;
 using WolvenKit.Common;
+using WolvenKit.Common.Services;
 
 namespace WolvenKit.Functionality.Services
 {

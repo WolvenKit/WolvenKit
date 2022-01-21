@@ -1,11 +1,14 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 
 namespace WolvenKit.RED4.Types
 {
-    public class CArrayBase<T> : IRedArray<T>, IRedNotifyObjectChanged, IEquatable<CArrayBase<T>>
+    [DebuggerTypeProxy(typeof(ICollectionDebugView<>))]
+    [DebuggerDisplay("Count = {Count}")]
+    public class CArrayBase<T> : IRedArray<T>, IRedCloneable, IRedNotifyObjectChanged, IEquatable<CArrayBase<T>>
     {
         public int MaxSize { get; set; } = -1;
 
@@ -35,6 +38,30 @@ namespace WolvenKit.RED4.Types
         }
         public Type InnerType => typeof(T);
 
+        public object ShallowCopy()
+        {
+            return MemberwiseClone();
+        }
+
+        public object DeepCopy()
+        {
+            var other = (IList<T>)RedTypeManager.CreateRedType(GetType());
+
+            foreach (var element in _internalList)
+            {
+                if (element is IRedCloneable cl)
+                {
+                    other.Add((T)cl.DeepCopy());
+                }
+                else
+                {
+                    other.Add(element);
+                }
+            }
+
+            return other;
+        }
+
         #region Event
 
         private readonly Dictionary<object, ObjectChangedEventHandler> _delegateCache = new();
@@ -47,15 +74,24 @@ namespace WolvenKit.RED4.Types
                 {
                     _delegateCache.Add(item, delegate (object sender, ObjectChangedEventArgs args)
                     {
+                        if (args._callStack.Contains(this))
+                        {
+                            return;
+                        }
+                        args._callStack.Add(this);
+
                         var index = ((IList)_internalList).IndexOf(item);
                         if (sender != null)
                         {
-                            var path = $":{index}.{args.RedPath}";
-                            ObjectChanged?.Invoke(sender, new ObjectChangedEventArgs(args.ChangeType, path, args.RedName, args.OldValue, args.NewValue));
+                            args.RedPath = $":{index}.{args.RedPath}";
+
+                            ObjectChanged?.Invoke(sender, args);
                         }
                         else
                         {
-                            OnObjectChanged(args.ChangeType, index, args.OldValue, args.NewValue);
+                            args.RedPath = $":{index}";
+
+                            ObjectChanged?.Invoke(this, args);
                         }
                     });
                 }
@@ -79,7 +115,13 @@ namespace WolvenKit.RED4.Types
 
         private void OnObjectChanged(ObjectChangedType type, int index, object oldValue, object newValue)
         {
-            ObjectChanged?.Invoke(this, new ObjectChangedEventArgs(type, $":{index}", null, oldValue, newValue));
+            if (ObjectChanged != null)
+            {
+                var args = new ObjectChangedEventArgs(type, $":{index}", null, oldValue, newValue);
+                args._callStack.Add(this);
+
+                ObjectChanged.Invoke(this, args);
+            }
         }
 
         #endregion
@@ -94,7 +136,7 @@ namespace WolvenKit.RED4.Types
 
         private int AddItem(object value)
         {
-            if (value is not T castedValue)
+            if (value != null && value is not T)
             {
                 return -1;
             }
@@ -109,12 +151,16 @@ namespace WolvenKit.RED4.Types
                 throw new NotSupportedException();
             }
 
+            var castedValue = (T)value;
+
             _internalList.Add(castedValue);
-
-            AddEventHandler(castedValue);
-
             var index = _internalList.Count - 1;
-            OnObjectChanged(ObjectChangedType.Added, index, null, castedValue);
+
+            if (castedValue != null)
+            {
+                AddEventHandler(castedValue);
+                OnObjectChanged(ObjectChangedType.Added, index, null, castedValue);
+            }
 
             return index;
         }
@@ -185,7 +231,7 @@ namespace WolvenKit.RED4.Types
 
         public bool Contains(T item) => _internalList.Contains(item);
 
-        public void CopyTo(T[] array, int arrayIndex) => throw new NotImplementedException();
+        public void CopyTo(T[] array, int arrayIndex) => ((IList)_internalList).CopyTo(array, arrayIndex);
 
         public bool Contains(object value) => ((IList)_internalList).Contains(value);
 

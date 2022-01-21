@@ -8,7 +8,6 @@ using System.Reactive;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
-using DotNetHelper.FastMember.Extension.Helpers;
 using DynamicData;
 using Microsoft.WindowsAPICodePack.Dialogs;
 using ReactiveUI;
@@ -215,17 +214,27 @@ namespace WolvenKit.ViewModels.Shared
             });
 
             var sorted = _recentlyUsedItems.ToList();
-            sorted.Sort(delegate(RecentlyUsedItemModel a, RecentlyUsedItemModel b)
+            sorted.Sort(delegate (RecentlyUsedItemModel a, RecentlyUsedItemModel b)
             {
                 DateTime ad, bd;
                 if (a.Modified != default(DateTime))
+                {
                     ad = a.Modified;
+                }
                 else
+                {
                     ad = a.DateTime;
+                }
+
                 if (b.Modified != default(DateTime))
+                {
                     bd = b.Modified;
+                }
                 else
+                {
                     bd = b.DateTime;
+                }
+
                 return bd.CompareTo(ad);
             });
 
@@ -267,10 +276,7 @@ namespace WolvenKit.ViewModels.Shared
                 }
             }
         }
-        private void OnPinItemExecute(string parameter)
-        {
-            _recentlyUsedItemsService.PinItem(parameter);
-        }
+        private void OnPinItemExecute(string parameter) => _recentlyUsedItemsService.PinItem(parameter);
 
         private bool CanHome() => true;
 

@@ -1,23 +1,14 @@
 using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Collections.Specialized;
 using System.IO;
 using System.Linq;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
-using DynamicData;
 using DynamicData.Kernel;
-using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using Splat;
 using WolvenKit.Common;
-using WolvenKit.Common.Extensions;
 using WolvenKit.Common.FNV1A;
-using WolvenKit.Common.Interfaces;
-using WolvenKit.Common.Model;
-using WolvenKit.Common.Oodle;
-using WolvenKit.Common.RED4.Compiled;
 using WolvenKit.Common.Services;
 using WolvenKit.Functionality.Services;
 using WolvenKit.Modkit.RED4;
@@ -51,7 +42,10 @@ namespace WolvenKit.ViewModels.Documents
             _hashService = Locator.Current.GetService<IHashService>();
             var projectManager = Locator.Current.GetService<IProjectManager>();
             if (projectManager.ActiveProject != null)
+            {
                 RelativePath = Path.GetRelativePath(projectManager.ActiveProject.ModDirectory, path);
+            }
+
             Extension = Path.GetExtension(path) != "" ? Path.GetExtension(path).Substring(1) : "";
         }
 
@@ -98,8 +92,7 @@ namespace WolvenKit.ViewModels.Documents
         {
             using var reader = new BinaryReader(stream);
 
-            Cr2wFile = _parser.TryReadRed4File(reader);
-            if (Cr2wFile == null)
+            if (!_parser.TryReadRed4File(reader, out Cr2wFile))
             {
                 _loggerService.Error($"Failed to read cr2w file {path}");
                 return false;
@@ -184,11 +177,13 @@ namespace WolvenKit.ViewModels.Documents
             if (Cr2wFile.RootChunk is Multilayer_Mask mlmask)
             {
                 // maybe it makes more sense to put these all into one tab?
-                ModTools.ConvertMultilayerMaskToDdsStreams(mlmask, out List<Stream> streams);
+                ModTools.ConvertMultilayerMaskToDdsStreams(mlmask, out var streams);
                 for (var i = 0; i < streams.Count; i++)
                 {
-                    var tab = new RDTTextureViewModel(streams[i], this);
-                    tab.Header = $"Layer {i}";
+                    var tab = new RDTTextureViewModel(streams[i], this)
+                    {
+                        Header = $"Layer {i}"
+                    };
                     TabItemViewModels.Add(tab);
                 }
             }
@@ -201,11 +196,17 @@ namespace WolvenKit.ViewModels.Documents
                     TabItemViewModels.Add(new RDTInkTextureAtlasViewModel(atlas, (CBitmapTexture)file.RootChunk, this));
                 }
             }
+            if (Cr2wFile.RootChunk is inkWidgetLibraryResource library)
+            {
+                TabItemViewModels.Add(new RDTWidgetViewModel(library, this));
+            }
 
             foreach (var file in Cr2wFile.EmbeddedFiles)
             {
                 if (file.Content != null)
+                {
                     TabItemViewModels.Add(new RDTDataViewModel(file.Content, this));
+                }
             }
 
             SelectedIndex = 0;
@@ -213,7 +214,7 @@ namespace WolvenKit.ViewModels.Documents
             SelectedTabItemViewModel = TabItemViewModels.FirstOrDefault();
         }
 
-        private CR2WFile GetFileFromHash(ulong hash)
+        public CR2WFile GetFileFromHash(ulong hash)
         {
             // TODO: need to look locally first
             var _archiveManager = Locator.Current.GetService<IArchiveManager>();
@@ -225,7 +226,7 @@ namespace WolvenKit.ViewModels.Documents
                 {
                     fe.Extract(stream);
                     using var reader = new BinaryReader(stream);
-                    cr2wFile = _parser.TryReadRed4File(reader);
+                    cr2wFile = _parser.ReadRed4File(reader);
                 }
 
                 return cr2wFile;

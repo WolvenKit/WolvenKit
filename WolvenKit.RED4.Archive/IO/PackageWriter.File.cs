@@ -16,13 +16,15 @@ namespace WolvenKit.RED4.Archive.IO
 {
     public partial class PackageWriter
     {
+        public static bool IsDebug = false;
+
         private Package04 _file;
 
         private Package04Header _header;
+        private short _cruidIndex = -1;
         private List<CRUID> _cruids = new();
-        private ushort refsAreStrings = 0;
 
-        public void WritePackage(Package04 file)
+        public void WritePackage(Package04 file, Type fileRootType)
         {
             _file = file;
 
@@ -35,43 +37,61 @@ namespace WolvenKit.RED4.Archive.IO
                 numComponents = (uint)_file.Chunks.Count
             };
 
-            if (file.RootChunk is entEntity)
-            {
-                refsAreStrings = 0x0000;
-            }
-            else if (file.RootChunk is entIComponent)
-            {
-                refsAreStrings = 0xffff;
-            }
-
-            refsAreStrings = file.RefsAreStrings;
-
-            //else
-            //{
-            //    throw new ArgumentOutOfRangeException();
-            //}
-
             var headerStart = BaseStream.Position;
-            //BaseStream.WriteStruct(_header);
 
             WriteHeader();
-            _writer.Write(refsAreStrings);
 
             var (strings, imports, chunkDesc, chunkData) = GenerateChunkData();
 
-            var unique_cruids = file.Cruids;
-            /*var unique_cruids = _cruids;
-            if (refsAreStrings == 0 && (unique_cruids.Count == 0 || unique_cruids[0] != 0))
+            short cuidsIndex = -1;
+            var cruids = new List<CRUID>();
+            for (short i = 0; i < file.Chunks.Count; i++)
             {
-                unique_cruids.Insert(0, 0);
-            }*/
+                if (file.Chunks[i] is entIComponent comp)
+                {
+                    if (comp.Id != 0)
+                    {
+                        cruids.Add(comp.Id);
+                    }
+                    else
+                    {
+                        if (i < file.RootCruids.Count)
+                        {
+                            cruids.Add(file.RootCruids[i]);
+                        }
+                        else
+                        {
+                            // TODO: ...
+                            cruids.Add((ulong)Random.Shared.NextInt64());
+                        }
+                    }
+                }
+                else
+                {
+                    if (cuidsIndex == -1)
+                    {
+                        cuidsIndex = i;
+                    }
+                    cruids.Add(0);
+                }
+            }
 
-            _writer.Write((ushort)unique_cruids.Count);
-
-            // write cruids
-            foreach (var cruid in unique_cruids)
+            if (fileRootType == typeof(gamePersistentStateDataResource))
             {
-                Write(cruid);
+                BaseWriter.Write(cruids.Count);
+                foreach (var cruid in cruids)
+                {
+                    Write(cruid);
+                }
+            }
+            else if (fileRootType != typeof(inkWidgetLibraryResource))
+            {
+                BaseWriter.Write(cuidsIndex);
+                BaseWriter.Write((ushort)cruids.Count);
+                foreach (var cruid in cruids)
+                {
+                    _writer.Write(cruid);
+                }
             }
 
             var headerEnd = BaseStream.Position;
@@ -80,8 +100,10 @@ namespace WolvenKit.RED4.Archive.IO
 
             if (_header.numSections == 7)
             {
+                var writeRefAsHash = fileRootType == typeof(appearanceAppearanceResource);
+
                 _header.refPoolDescOffset = Convert.ToUInt32(BaseStream.Position - headerEnd);
-                var (refData, refDesc) = GenerateRefBuffer(imports, (uint)(_header.refPoolDescOffset + imports.Count * 4));
+                var (refData, refDesc) = GenerateRefBuffer(imports, (uint)(_header.refPoolDescOffset + imports.Count * 4), writeRefAsHash);
                 BaseStream.WriteStructs(refDesc.ToArray());
 
                 _header.refPoolDataOffset = Convert.ToUInt32(BaseStream.Position - headerEnd);
@@ -154,14 +176,24 @@ namespace WolvenKit.RED4.Archive.IO
             return result;
         }
 
-        private (byte[], IList<Package04ImportHeader>) GenerateRefBuffer(IList<(string, CName, ushort)> refs, uint position)
+        private (byte[], IList<Package04ImportHeader>) GenerateRefBuffer(IList<(string, CName, ushort)> refs, uint position, bool writeRefAsHash)
         {
 
             var refDesc = new List<Package04ImportHeader>();
             var refData = new List<byte>();
             foreach (var reff in refs)
             {
-                if (refsAreStrings == 0)
+                if (writeRefAsHash)
+                {
+                    refDesc.Add(new Package04ImportHeader
+                    {
+                        offset = (uint)refData.Count + position,
+                        size = 8,
+                        unk1 = (reff.Item3 & 0b10) > 0
+                    });
+                    refData.AddRange(BitConverter.GetBytes(reff.Item2.GetRedHash()));
+                }
+                else
                 {
                     refDesc.Add(new Package04ImportHeader
                     {
@@ -175,16 +207,6 @@ namespace WolvenKit.RED4.Archive.IO
                         refData.AddRange(Encoding.UTF8.GetBytes(reff.Item2));
                     }
                 }
-                else
-                {
-                    refDesc.Add(new Package04ImportHeader
-                    {
-                        offset = (uint)refData.Count + position,
-                        size = 8,
-                        unk1 = (reff.Item3 & 0b10) > 0
-                    });
-                    refData.AddRange(BitConverter.GetBytes(reff.Item2.GetRedHash()));
-                }
             }
             return (refData.ToArray(), refDesc);
         }
@@ -196,12 +218,13 @@ namespace WolvenKit.RED4.Archive.IO
             var nameData = new List<byte>();
             foreach (var str in strings)
             {
+                var strBytes = Encoding.UTF8.GetBytes(str);
                 nameDesc.Add(new Package04NameHeader
                 {
                     offset = (uint)nameData.Count + position,
-                    size = (byte)(str.Length + 1)
+                    size = (byte)(strBytes.Length + 1)
                 });
-                nameData.AddRange(Encoding.UTF8.GetBytes(str));
+                nameData.AddRange(strBytes);
                 nameData.Add(0);
             }
             return (nameData.ToArray(), nameDesc);
@@ -236,6 +259,7 @@ namespace WolvenKit.RED4.Archive.IO
             using var ms = new MemoryStream();
             using var file = new PackageWriter(ms);
 
+            file._header = _header;
             file._chunkInfos = _chunkInfos;
 
             var chunkDesc = new List<Package04ChunkHeader>();
@@ -244,7 +268,7 @@ namespace WolvenKit.RED4.Archive.IO
 
             foreach (var chunk in _file.Chunks)
             {
-                file.ChunkQueue.AddLast((RedBaseClass)chunk);
+                file.ChunkQueue.AddLast(chunk);
             }
 
             while (file.ChunkQueue.Count > 0)
@@ -262,6 +286,16 @@ namespace WolvenKit.RED4.Archive.IO
                     continue;
                 }
 
+                if (chunk is entEntity)
+                {
+                    if (_cruidIndex == -1)
+                    {
+                        _cruidIndex = (short)chunkCounter;
+                    }
+
+                    _cruids.Add(1);
+                }
+
                 chunkClassNames.Add(RedReflection.GetTypeRedName(chunk.GetType()));
 
                 _chunkInfos[chunk].Id = chunkCounter;
@@ -272,10 +306,21 @@ namespace WolvenKit.RED4.Archive.IO
                 if (guid != Guid.Empty && file.ChunkReferences.ContainsKey(guid))
                 {
                     var startPos = file.BaseStream.Position;
-                    foreach (var (position, offset) in file.ChunkReferences[guid])
+                    foreach (var (position, offset, indexType) in file.ChunkReferences[guid])
                     {
                         file.BaseStream.Position = position;
-                        file.BaseWriter.Write(_chunkInfos[chunk].Id + offset);
+                        if (indexType == typeof(int))
+                        {
+                            file.BaseWriter.Write(_chunkInfos[chunk].Id + offset);
+                        }
+                        else if (indexType == typeof(short))
+                        {
+                            file.BaseWriter.Write((short)(_chunkInfos[chunk].Id + offset));
+                        }
+                        else
+                        {
+                            throw new NotSupportedException(nameof(InternalHandleWriter));
+                        }
                     }
                     file.BaseStream.Position = startPos;
                 }

@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using CP77Tools.Model;
-using RED.CRC64;
+using WolvenKit.Core.CRC;
 using WolvenKit.Interfaces.Extensions;
 using WolvenKit.RED4.CR2W.Archive;
 using Index = CP77Tools.Model.Index;

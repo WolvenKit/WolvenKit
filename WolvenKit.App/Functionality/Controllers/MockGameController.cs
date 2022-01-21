@@ -1,12 +1,9 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using DynamicData;
 using WolvenKit.Common;
 using WolvenKit.Common.Model;
-using WolvenKit.Functionality.Controllers;
 
 namespace WolvenKit.Functionality.Controllers
 {

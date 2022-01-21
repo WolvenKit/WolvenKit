@@ -1,19 +1,14 @@
 using System;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.IO;
 using System.Text.Json;
-using System.Text.Json.Serialization;
 using System.Windows.Media;
 using DynamicData.Binding;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using WolvenKit.Common;
 using WolvenKit.Core;
-using WolvenKit.Functionality.Controllers;
-using WolvenKit.Functionality.WKitGlobal;
-using WolvenKit.Functionality.WKitGlobal.Helpers;
 
 namespace WolvenKit.Functionality.Services
 {
@@ -268,16 +263,16 @@ namespace WolvenKit.Functionality.Services
         {
             var config = new SettingsManager()
             {
-                CheckForUpdates = this.CheckForUpdates,
-                UpdateChannel = this.UpdateChannel,
-                ShowGuidedTour = this.ShowGuidedTour,
-                ThemeAccentString = this.ThemeAccentString,
-                CP77ExecutablePath = this.CP77ExecutablePath,
-                ShowFilePreview = this.ShowFilePreview,
-                ReddbHash = this.ReddbHash,
-                MaterialRepositoryPath = this.MaterialRepositoryPath,
-                W3ExecutablePath = this.W3ExecutablePath,
-                WccLitePath = this.WccLitePath,
+                CheckForUpdates = CheckForUpdates,
+                UpdateChannel = UpdateChannel,
+                ShowGuidedTour = ShowGuidedTour,
+                ThemeAccentString = ThemeAccentString,
+                CP77ExecutablePath = CP77ExecutablePath,
+                ShowFilePreview = ShowFilePreview,
+                ReddbHash = ReddbHash,
+                MaterialRepositoryPath = MaterialRepositoryPath,
+                W3ExecutablePath = W3ExecutablePath,
+                WccLitePath = WccLitePath,
             };
             return config;
         }

@@ -92,10 +92,6 @@ namespace WolvenKit.Converters
                 {
                     return EnumTemplateView;
                 }
-                if (vm.PropertyType.IsAssignableTo(typeof(IRedBaseHandle)) && vm.Properties != null && (vm.Properties.Count < 5 || vm.ForceLoadProperties))
-                {
-                    return RedArrayEditor;
-                }
                 if (vm.PropertyType.IsAssignableTo(typeof(IRedRef)))
                 {
                     return RedRefEditor;
@@ -112,7 +108,13 @@ namespace WolvenKit.Converters
                 {
                     return RedArrayEditor;
                 }
-                if (vm.PropertyType.IsAssignableTo(typeof(RedBaseClass)) && vm.Properties != null && (vm.Properties.Count < 5 || vm.ForceLoadProperties))
+                if (vm.PropertyType.IsAssignableTo(typeof(IRedBufferPointer)))
+                {
+                    return RedArrayEditor;
+                }
+                if (vm.ResolvedData is RedBaseClass && (
+                    ((vm.Properties == null || vm.Properties.Count < 5) && vm.DetailsLevel <= 0) ||
+                    (vm.ForceLoadProperties && vm.DetailsLevel <= 2)) && (vm.Properties == null || vm.Properties.Count < 500))
                 {
                     return RedArrayEditor;
                 }

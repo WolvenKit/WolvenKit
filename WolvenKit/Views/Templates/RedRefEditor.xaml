@@ -28,6 +28,7 @@
             PreviewTextInput="NumberValidationTextBox" 
             IsReadOnly="True"
             Foreground="#666666"
+            Background="{StaticResource ContentBackgroundAlt}"
             BorderBrush="{StaticResource BorderAlt}"
             BorderThickness="1,0,0,0"/>
     </Grid>

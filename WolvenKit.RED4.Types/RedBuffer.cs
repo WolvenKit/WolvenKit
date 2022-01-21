@@ -7,6 +7,8 @@ namespace WolvenKit.RED4
 {
     public class RedBuffer : IRedBuffer
     {
+        public HashSet<string> ParentTypes { get; } = new();
+
         private byte[] _bytes = Array.Empty<byte>();
 
 

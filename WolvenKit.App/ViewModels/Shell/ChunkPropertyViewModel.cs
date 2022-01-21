@@ -1,14 +1,8 @@
-using System;
-using System.Collections.ObjectModel;
-using System.ComponentModel;
 using System.Reactive;
-using System.Reactive.Linq;
 using System.Windows.Input;
 using System.Windows.Media;
-using DynamicData;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
-using WolvenKit.RED4.TweakDB.Types;
 using WolvenKit.RED4.Types;
 using WolvenKit.RED4.Types.Exceptions;
 
@@ -113,7 +107,7 @@ namespace WolvenKit.ViewModels.Shell
 
         [Reactive] public Color DisplayColor { get; set; }
 
-        public ReactiveCommand<object, Unit> SelectedColorCommand { get; set; } 
+        public ReactiveCommand<object, Unit> SelectedColorCommand { get; set; }
 
         private void OnColorPicked(object e)
         {
@@ -129,7 +123,7 @@ namespace WolvenKit.ViewModels.Shell
     // We can probably make this with generic types
     public class RedBoolViewModel : ChunkPropertyViewModel
     {
-        public RedBoolViewModel(IRedPrimitive<bool> prop) :base(prop) { }
+        public RedBoolViewModel(IRedPrimitive<bool> prop) : base(prop) { }
     }
 
     public class RedStringViewModel : ChunkPropertyViewModel

@@ -5,7 +5,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using DynamicData;
 using ReactiveUI;
-using WolvenKit.Common.FNV1A;
 using WolvenKit.Models;
 using WolvenKit.MVVM.Model.ProjectManagement.Project;
 
@@ -186,7 +185,7 @@ namespace WolvenKit.Functionality.Services
                     _files.AddOrUpdate(new FileModel(e.FullPath, _projectManager.ActiveProject));
                     break;
                 }
-                    
+
             }
 
         }

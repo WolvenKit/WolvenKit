@@ -11,7 +11,7 @@ namespace WolvenKit.ViewModels.Dialogs
             CloseCommand = ReactiveCommand.Create(() => { });
             OkCommand = ReactiveCommand.Create(() =>
             {
-                
+
             });
             CancelCommand = ReactiveCommand.Create(() =>
             {

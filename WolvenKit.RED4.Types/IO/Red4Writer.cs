@@ -299,7 +299,7 @@ namespace WolvenKit.RED4.IO
         }
 
         public virtual void Write(SharedDataBuffer val) => _writer.Write(val.Buffer.GetBytes());
-        public virtual void Write(TweakDBID val) => _writer.Write(val.Value);
+        public virtual void Write(TweakDBID val) => _writer.Write((ulong)val);
 
         #endregion Simple
 
@@ -477,13 +477,29 @@ namespace WolvenKit.RED4.IO
         }
 
         public LinkedList<RedBaseClass> ChunkQueue = new();
-        public Dictionary<Guid,List<(long, int)>> ChunkReferences = new();
+        public Dictionary<Guid,List<(long, int, Type)>> ChunkReferences = new();
 
         protected void InternalHandleWriter(RedBaseClass classRef, int pointerOffset)
         {
+            InternalHandleWriter(classRef, pointerOffset, typeof(int));
+        }
+
+        protected void InternalHandleWriter(RedBaseClass classRef, int pointerOffset, Type indexType)
+        {
             if (classRef == null)
             {
-                _writer.Write(0);
+                if (indexType == typeof(int))
+                {
+                    _writer.Write(0);
+                }
+                else if (indexType == typeof(short))
+                {
+                    _writer.Write((short)0);
+                }
+                else
+                {
+                    throw new NotSupportedException(nameof(InternalHandleWriter));
+                }
                 return;
             }
 
@@ -495,7 +511,19 @@ namespace WolvenKit.RED4.IO
             var chunkIndex = _chunkInfos[classRef].Id;
             if (chunkIndex != -1)
             {
-                _writer.Write(chunkIndex + pointerOffset);
+                if (indexType == typeof(int))
+                {
+                    _writer.Write(chunkIndex + pointerOffset);
+                }
+                else if (indexType == typeof(short))
+                {
+                    _writer.Write((short)(chunkIndex + pointerOffset));
+                }
+                else
+                {
+                    throw new NotSupportedException(nameof(InternalHandleWriter));
+                }
+                
                 return;
             }
 
@@ -503,7 +531,7 @@ namespace WolvenKit.RED4.IO
             {
                 _chunkInfos[classRef].Guid = Guid.NewGuid();
 
-                ChunkReferences.Add(_chunkInfos[classRef].Guid, new List<(long, int)>());
+                ChunkReferences.Add(_chunkInfos[classRef].Guid, new List<(long, int, Type)>());
             }
 
             ChunkQueue.AddLast(classRef);
@@ -511,13 +539,24 @@ namespace WolvenKit.RED4.IO
             _targetList.Add((CurrentChunk, _chunkInfos[classRef].Guid, StringCacheList.Count, ImportCacheList.Count, BufferCacheList.Count));
             ChildChunks[CurrentChunk].Add(_chunkInfos[classRef].Guid);
 
-            ChunkReferences[_chunkInfos[classRef].Guid].Add((BaseStream.Position, pointerOffset));
-            _writer.Write(0);
+            ChunkReferences[_chunkInfos[classRef].Guid].Add((BaseStream.Position, pointerOffset, indexType));
+            if (indexType == typeof(int))
+            {
+                _writer.Write(0);
+            }
+            else if (indexType == typeof(short))
+            {
+                _writer.Write((short)0);
+            }
+            else
+            {
+                throw new NotSupportedException(nameof(InternalHandleWriter));
+            }
         }
 
-        public virtual void Write(IRedHandle instance) => InternalHandleWriter((RedBaseClass)instance.GetValue(), 1);
+        public virtual void Write(IRedHandle instance) => InternalHandleWriter(instance.GetValue(), 1);
 
-        public virtual void Write(IRedWeakHandle instance) => InternalHandleWriter((RedBaseClass)instance.GetValue(), 1);
+        public virtual void Write(IRedWeakHandle instance) => InternalHandleWriter(instance.GetValue(), 1);
 
         // TODO
         public virtual void Write(IRedLegacySingleChannelCurve instance)
@@ -537,7 +576,8 @@ namespace WolvenKit.RED4.IO
 
                 _writer.Write(curvePoint.GetPoint());
             }
-            _writer.Write(instance.Tail);
+            _writer.Write((byte)instance.InterpolationType);
+            _writer.Write((byte)instance.LinkType);
         }
 
         public virtual void Write(IRedMultiChannelCurve instance)
@@ -554,7 +594,7 @@ namespace WolvenKit.RED4.IO
         public virtual void Write<T>(MultiChannelCurve<T> instance) where T : IRedType
         {
             _writer.Write(instance.NumChannels);
-            _writer.Write((byte)instance.InterPolationType);
+            _writer.Write((byte)instance.InterpolationType);
             _writer.Write((byte)instance.LinkType);
             _writer.Write(instance.Alignment);
 

@@ -1,8 +1,4 @@
-using System.Diagnostics;
 using System.Reactive;
-using System.Threading.Tasks;
-using Discord;
-using Discord.WebSocket;
 using ReactiveUI;
 using WolvenKit.ViewModels.Dialogs;
 

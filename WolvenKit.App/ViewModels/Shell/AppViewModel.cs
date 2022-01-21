@@ -1,16 +1,18 @@
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
+using System.Reactive;
+using System.Reactive.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 using Microsoft.Win32;
-using System.Linq;
-using System.Reactive;
-using System.Reactive.Linq;
 using Microsoft.WindowsAPICodePack.Dialogs;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
@@ -18,34 +20,30 @@ using Splat;
 using WolvenKit.Common;
 using WolvenKit.Common.Exceptions;
 using WolvenKit.Common.Extensions;
+using WolvenKit.Common.FNV1A;
 using WolvenKit.Common.Services;
+using WolvenKit.Core.Services;
 using WolvenKit.Functionality;
 using WolvenKit.Functionality.Commands;
 using WolvenKit.Functionality.Controllers;
+using WolvenKit.Functionality.Helpers;
 using WolvenKit.Functionality.ProjectManagement;
 using WolvenKit.Functionality.Services;
 using WolvenKit.Interaction;
 using WolvenKit.Models;
 using WolvenKit.Models.Docking;
 using WolvenKit.MVVM.Model.ProjectManagement.Project;
-using NativeMethods = WolvenKit.Functionality.NativeWin.NativeMethods;
-using WolvenKit.Common.Model;
-using WolvenKit.ViewModels.Tools;
-using WolvenKit.ViewModels.Documents;
-using System.Collections.Generic;
-using WolvenKit.Core.Services;
-using System.Reflection;
-using System.Windows.Threading;
-using WolvenKit.Functionality.Helpers;
-using WolvenKit.RED4.CR2W.Archive;
-using WolvenKit.ViewModels.Dialogs;
-using WolvenKit.ViewModels.HomePage;
-using System.Windows.Controls;
-using WolvenKit.ViewModels.Wizards;
-using WolvenKit.Common.FNV1A;
 using WolvenKit.RED4.Archive.CR2W;
-using WolvenKit.RED4.Types;
 using WolvenKit.RED4.Archive.IO;
+using WolvenKit.RED4.CR2W.Archive;
+using WolvenKit.RED4.Types;
+using WolvenKit.ViewModels.Dialogs;
+using WolvenKit.ViewModels.Documents;
+using WolvenKit.ViewModels.HomePage;
+using WolvenKit.ViewModels.Tools;
+using WolvenKit.ViewModels.Wizards;
+using WolvenManager.Installer.Services;
+using NativeMethods = WolvenKit.Functionality.NativeWin.NativeMethods;
 
 namespace WolvenKit.ViewModels.Shell
 {
@@ -139,7 +137,10 @@ namespace WolvenKit.ViewModels.Shell
 
             UpdateTitle();
 
-            SetActiveOverlay(_homePageViewModel);
+            if (!TryLoadingArguments())
+            {
+                SetActiveOverlay(_homePageViewModel);
+            }
 
             OnStartup();
 
@@ -163,6 +164,41 @@ namespace WolvenKit.ViewModels.Shell
         #endregion constructors
 
         #region init
+
+        private bool TryLoadingArguments()
+        {
+            var args = Environment.GetCommandLineArgs();
+
+            if (args.Length != 2)
+            {
+                return false;
+            }
+
+            if (!File.Exists(args[1]))
+            {
+                var message = $"Sorry, '{args[1]}' could not be found";
+                _loggerService.Error(message);
+                MessageBox.Show(message);
+                return false;
+            }
+
+            if (Path.GetExtension(args[1]) == ".cpmodproj")
+            {
+                _ = OpenProjectAsync(args[1]);
+                return true;
+            }
+
+            if (Enum.TryParse<ERedExtension>(Path.GetExtension(args[1]).Substring(1), out var _))
+            {
+                _ = OpenFileAsync(new FileModel(args[1], null));
+                return true;
+            }
+
+            var message2 = $"Sorry, {Path.GetExtension(args[1])} files aren't supported by WolvenKit";
+            _loggerService.Error(message2);
+            MessageBox.Show(message2);
+            return false;
+        }
 
         private void OnStartup()
         {
@@ -283,7 +319,7 @@ namespace WolvenKit.ViewModels.Shell
                 {
                     UpdateTitle();
                     _notificationService.Success($"Project {Path.GetFileNameWithoutExtension(location)} loaded!");
-                } , TaskContinuationOptions.OnlyOnRanToCompletion);
+                }, TaskContinuationOptions.OnlyOnRanToCompletion);
             }
             catch (Exception)
             {
@@ -295,14 +331,12 @@ namespace WolvenKit.ViewModels.Shell
         }
 
         public ReactiveCommand<Unit, Unit> NewProjectCommand { get; }
-        private void ExecuteNewProject()
-        {
+        private void ExecuteNewProject() =>
             //IsOverlayShown = false;
             SetActiveDialog(new ProjectWizardViewModel
             {
                 FileHandler = NewProject
             });
-        }
         private async Task NewProject(ProjectWizardViewModel project)
         {
 
@@ -401,19 +435,19 @@ namespace WolvenKit.ViewModels.Shell
 
         public ICommand NewFileCommand { get; private set; }
         private bool CanNewFile(string inputDir) => ActiveProject != null && !IsDialogShown;
-        private void ExecuteNewFile(string inputDir)
+        private void ExecuteNewFile(string inputDir) => SetActiveDialog(new NewFileViewModel
         {
-            SetActiveDialog(new NewFileViewModel
-            {
-                FileHandler = OpenFromNewFile
-            });
-        }
+            FileHandler = OpenFromNewFile
+        });
 
         public async Task OpenFromNewFile(NewFileViewModel file)
         {
             CloseModalCommand.Execute(null);
             if (file == null)
+            {
                 return;
+            }
+
             _watcherService.IsSuspended = true;
             await Task.Run(() => OpenFromNewFileTask(file)).ContinueWith(async (result) =>
             {
@@ -498,7 +532,7 @@ namespace WolvenKit.ViewModels.Shell
 
         public ICommand OpenFileCommand { get; private set; }
         private bool CanOpenFile(FileModel model) => true;
-        private  void ExecuteOpenFile(FileModel model)
+        private void ExecuteOpenFile(FileModel model)
         {
             if (model == null)
             {
@@ -583,7 +617,10 @@ namespace WolvenKit.ViewModels.Shell
                     }
 
                     if (!DockedViews.Contains(fileViewModel))
+                    {
                         DockedViews.Add(fileViewModel);
+                    }
+
                     ActiveDocument = fileViewModel;
                     UpdateTitle();
                 }
@@ -620,7 +657,10 @@ namespace WolvenKit.ViewModels.Shell
                             fileViewModel.OpenStream(stream, null);
                         }
                         if (!DockedViews.Contains(fileViewModel))
+                        {
                             DockedViews.Add(fileViewModel);
+                        }
+
                         ActiveDocument = fileViewModel;
                         UpdateTitle();
                     }
@@ -723,29 +763,33 @@ namespace WolvenKit.ViewModels.Shell
         private void ExecuteCloseModal()
         {
             if (IsDialogShown)
+            {
                 ShouldDialogShow = false;
+            }
+
             if (IsOverlayShown)
+            {
                 ShouldOverlayShow = false;
+            }
         }
         public void FinishedClosingModal()
         {
             if (!ShouldDialogShow)
+            {
                 IsDialogShown = false;
+            }
+
             if (!ShouldOverlayShow)
+            {
                 IsOverlayShown = false;
+            }
         }
         public ICommand CloseOverlayCommand { get; private set; }
         private bool CanCloseOverlay() => IsOverlayShown;
-        private void ExecuteCloseOverlay()
-        {
-            ShouldOverlayShow = false;
-        }
+        private void ExecuteCloseOverlay() => ShouldOverlayShow = false;
         public ICommand CloseDialogCommand { get; private set; }
         private bool CanCloseDialog() => IsDialogShown;
-        private void ExecuteCloseDialog()
-        {
-            ShouldDialogShow = false;
-        }
+        private void ExecuteCloseDialog() => ShouldDialogShow = false;
 
         #endregion commands
 
@@ -878,9 +922,15 @@ namespace WolvenKit.ViewModels.Shell
         {
             var title = "";
             if (ActiveDocument != null)
+            {
                 title += ActiveDocument.Header + " - ";
+            }
+
             if (_projectManager.ActiveProject != null)
+            {
                 title += _projectManager.ActiveProject.Name + " - ";
+            }
+
             title += "WolvenKit";
             Title = title;
         }
@@ -958,9 +1008,13 @@ namespace WolvenKit.ViewModels.Shell
             {
                 var dlg = new SaveFileDialog();
                 if (fileToSave.FilePath != null)
+                {
                     dlg.FileName = Path.GetFileName(fileToSave.FilePath);
+                }
                 else
+                {
                     dlg.FileName = Path.GetFileName(fileToSave.ContentId);
+                }
                 //dlg.RestoreDirectory = true;
                 dlg.InitialDirectory = Path.GetDirectoryName(fileToSave.FilePath);
                 if (dlg.ShowDialog().GetValueOrDefault())
@@ -972,7 +1026,7 @@ namespace WolvenKit.ViewModels.Shell
             else
             {
                 ActiveDocument.SaveCommand.SafeExecute();
-            } 
+            }
 
         }
 
@@ -1092,7 +1146,10 @@ namespace WolvenKit.ViewModels.Shell
                         if (document != null)
                         {
                             if (!DockedViews.Contains(document))
+                            {
                                 DockedViews.Add(document);
+                            }
+
                             ActiveDocument = document;
                             UpdateTitle();
                         }

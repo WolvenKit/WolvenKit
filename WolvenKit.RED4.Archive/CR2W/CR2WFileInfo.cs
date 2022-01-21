@@ -15,5 +15,16 @@ namespace WolvenKit.RED4.Archive.CR2W
         public CR2WExportInfo[] ExportInfo { get; internal set; }
         public CR2WBufferInfo[] BufferInfo { get; internal set; }
         public CR2WEmbeddedInfo[] EmbeddedInfo { get; internal set; }
+
+        public List<CName> GetImports()
+        {
+            var result = new List<CName>();
+            foreach (var importInfo in ImportInfo)
+            {
+                result.Add(StringDict[importInfo.offset]);
+            }
+
+            return result;
+        }
     }
 }

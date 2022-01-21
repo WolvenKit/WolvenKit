@@ -162,7 +162,7 @@ namespace WolvenKit.Modkit.RED4
                 uint lastoffsetidx;
                 var flags = 0;
 
-                var isResource = _wolvenkitFileService.IsCr2wFile(fileBinaryReader.BaseStream);
+                var isResource = _wolvenkitFileService.IsCR2WFile(fileBinaryReader.BaseStream);
                 if (isResource)
                 {
                     // read the file

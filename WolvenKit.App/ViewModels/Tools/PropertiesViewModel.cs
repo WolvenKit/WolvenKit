@@ -1,22 +1,15 @@
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Diagnostics;
 using System.IO;
-using System.Reactive;
 using System.Threading.Tasks;
 using System.Windows.Controls;
 using System.Windows.Input;
-using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Threading;
 using CP77.CR2W;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using WolvenKit.Common;
-using WolvenKit.Common.Extensions;
 using WolvenKit.Common.Interfaces;
-using WolvenKit.Common.Model;
 using WolvenKit.Common.Services;
 using WolvenKit.Functionality.Ab4d;
 using WolvenKit.Functionality.Commands;
@@ -66,7 +59,7 @@ namespace WolvenKit.ViewModels.Tools
 
             SetToNullAndResetVisibility();
 
-            PreviewAudioCommand = ReactiveCommand.Create<string,string>(str => str);
+            PreviewAudioCommand = ReactiveCommand.Create<string, string>(str => str);
         }
 
         #region properties
@@ -202,7 +195,7 @@ namespace WolvenKit.ViewModels.Tools
                         using (var meshStream = new FileStream(PE_SelectedItem.FullName, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
                         {
                             meshStream.Seek(0, SeekOrigin.Begin);
-                            string outPath = Path.Combine(ISettingsManager.GetTemp_OBJPath(), Path.GetFileName(PE_SelectedItem.FullName));
+                            var outPath = Path.Combine(ISettingsManager.GetTemp_OBJPath(), Path.GetFileName(PE_SelectedItem.FullName));
                             outPath = Path.ChangeExtension(outPath, ".glb");
                             if (_meshTools.ExportMeshPreviewer(meshStream, new FileInfo(outPath)))
                             {
@@ -311,7 +304,7 @@ namespace WolvenKit.ViewModels.Tools
             { IsMeshPreviewVisible = false; }
         }
 
-        
+
 
         /// <summary>
         /// Initialize Syncfusion specific defaults that are specific to this tool window.

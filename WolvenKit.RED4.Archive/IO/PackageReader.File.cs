@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -12,13 +13,13 @@ using WolvenKit.RED4.Archive.Buffer;
 
 namespace WolvenKit.RED4.Archive.IO
 {
-    public partial class PackageReader
+    public partial class PackageReader : IBufferReader
     {
         private Package04Header header;
         private IHashService _hashService;
         private ushort refsAreStrings = 0;
 
-        public EFileReadErrorCodes ReadPackage(RedBuffer buffer)
+        public EFileReadErrorCodes ReadBuffer(RedBuffer buffer, Type fileRootType)
         {
             _hashService = Locator.Current.GetService<IHashService>();
 
@@ -28,7 +29,7 @@ namespace WolvenKit.RED4.Archive.IO
             _outputFile = result;
 
             header.version = BaseReader.ReadUInt16();
-            if (header.version != 4)
+            if (header.version < 2 || header.version > 4)
             {
                 return EFileReadErrorCodes.UnsupportedVersion;
             }
@@ -66,14 +67,23 @@ namespace WolvenKit.RED4.Archive.IO
                 return EFileReadErrorCodes.NoCr2w;
             }
 
-            refsAreStrings = _reader.ReadUInt16();
-            result.RefsAreStrings = refsAreStrings;
-
-            var numCruids = _reader.ReadUInt16();
-
-            for (var i = 0; i < numCruids; i++)
+            if (fileRootType == typeof(gamePersistentStateDataResource))
             {
-                result.Cruids.Add(_reader.ReadUInt64());
+                var numCruids = _reader.ReadUInt32();
+                for (var i = 0; i < numCruids; i++)
+                {
+                    result.RootCruids.Add(_reader.ReadUInt64());
+                }
+            }
+            else if (fileRootType != typeof(inkWidgetLibraryResource))
+            {
+                result.CruidIndex = _reader.ReadInt16();
+                var numCruids = _reader.ReadUInt16();
+
+                for (var i = 0; i < numCruids; i++)
+                {
+                    result.RootCruids.Add(_reader.ReadUInt64());
+                }
             }
 
             var baseOff = BaseStream.Position;
@@ -83,18 +93,17 @@ namespace WolvenKit.RED4.Archive.IO
             BaseStream.Position = baseOff + header.refPoolDescOffset;
             var refDesc = BaseStream.ReadStructs<Package04ImportHeader>(refCount);
 
+            var readAsHash = fileRootType == typeof(appearanceAppearanceResource);
             foreach (var r in refDesc)
             {
                 BaseStream.Position = baseOff + r.offset;
-                importsList.Add(ReadImport(r));
+                importsList.Add(ReadImport(r, readAsHash));
             }
 
             // read strings
             var nameCount = (header.namePoolDataOffset - header.namePoolDescOffset) / 4;
             BaseStream.Position = baseOff + header.namePoolDescOffset;
             var nameDesc = BaseStream.ReadStructs<Package04NameHeader>(nameCount);
-
-            //File.WriteAllBytes(@"C:\Users\seber\RiderProjects\WolvenKit\WolvenKit.MSTests\bin\x64\Debug\net5.0\_CR2WTestResults\OldBuffer.bin", buffer.GetBytes());
 
             foreach (var s in nameDesc)
             {
@@ -134,7 +143,7 @@ namespace WolvenKit.RED4.Archive.IO
             return EFileReadErrorCodes.NoError;
         }
 
-        private PackageImport ReadImport(Package04ImportHeader r)
+        private PackageImport ReadImport(Package04ImportHeader r, bool readAsHash)
         {
             // needs header offset
             //Debug.Assert(BaseStream.Position == r.offset);
@@ -143,16 +152,16 @@ namespace WolvenKit.RED4.Archive.IO
             {
                 Flags = (InternalEnums.EImportFlags)(r.unk1 ? 0b10 : 0b00)
             };
-            if (refsAreStrings == 0)
+            if (readAsHash)
+            {
+                import.Hash = _reader.ReadUInt64();
+                import.DepotPath = _hashService.Get(import.Hash);
+            }
+            else
             {
                 var bytes = _reader.ReadBytes(r.size);
                 import.DepotPath = Encoding.UTF8.GetString(bytes.ToArray());
                 import.Hash = FNV1A64HashAlgorithm.HashString(import.DepotPath);
-            }
-            else
-            {
-                import.Hash = _reader.ReadUInt64();
-                import.DepotPath = _hashService.Get(import.Hash);
             }
             return import;
         }
@@ -169,7 +178,7 @@ namespace WolvenKit.RED4.Archive.IO
             //Debug.Assert(BaseStream.Position == c.offset);
             var redTypeName = GetStringValue((ushort)c.typeID);
             var (type, _) = RedReflection.GetCSTypeFromRedType(redTypeName);
-            if (type == null)
+            if (type == typeof(RedBaseClass))
             {
                 throw new TypeNotFoundException(redTypeName);
             }

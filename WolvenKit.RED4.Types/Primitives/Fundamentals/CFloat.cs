@@ -38,5 +38,7 @@ namespace WolvenKit.RED4.Types
         }
 
         public bool Equals(CFloat other) => Equals(BitConverter.SingleToInt32Bits(_value), BitConverter.SingleToInt32Bits(other._value));
+
+        public override string ToString() => _value.ToString();
     }
 }

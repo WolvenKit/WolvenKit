@@ -2,21 +2,18 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Numerics;
 using SharpGLTF.Geometry;
 using SharpGLTF.Geometry.VertexTypes;
 using SharpGLTF.Materials;
 using SharpGLTF.Scenes;
 using SharpGLTF.Schema2;
 using SharpGLTF.Validation;
-using WolvenKit.Common.Oodle;
 using WolvenKit.Common.Services;
 using WolvenKit.Modkit.RED4.GeneralStructs;
 using WolvenKit.Modkit.RED4.RigFile;
 using WolvenKit.RED4.Archive.CR2W;
 using WolvenKit.RED4.CR2W;
 using WolvenKit.RED4.Types;
-using WolvenKit.RED4.Types.Exceptions;
 using static WolvenKit.RED4.Types.Enums;
 using Vec2 = System.Numerics.Vector2;
 using Vec3 = System.Numerics.Vector3;
@@ -34,7 +31,7 @@ namespace CP77.CR2W
         }
         public bool ExportMeshPreviewer(Stream meshStream, FileInfo outFile)
         {
-            var cr2w = _red4ParserService.TryReadRed4File(meshStream);
+            var cr2w = _red4ParserService.ReadRed4File(meshStream);
 
             if (cr2w == null || cr2w.RootChunk is not CMesh cMesh || cMesh.RenderResourceBlob.Chunk is not rendRenderMeshBlob rendblob)
             {
@@ -71,7 +68,7 @@ namespace CP77.CR2W
 
         public bool ExportMesh(Stream meshStream, FileInfo outfile, bool lodFilter = true, bool isGLBinary = true, ValidationMode vmode = ValidationMode.TryFix)
         {
-            var cr2w = _red4ParserService.TryReadRed4File(meshStream);
+            var cr2w = _red4ParserService.ReadRed4File(meshStream);
 
             if (cr2w == null || cr2w.RootChunk is not CMesh cMesh || cMesh.RenderResourceBlob.Chunk is not rendRenderMeshBlob rendblob)
             {
@@ -112,7 +109,7 @@ namespace CP77.CR2W
         }
         public bool ExportMeshWithoutRig(Stream meshStream, FileInfo outfile, bool lodFilter = true, bool isGLBinary = true, ValidationMode vmode = ValidationMode.TryFix)
         {
-            var cr2w = _red4ParserService.TryReadRed4File(meshStream);
+            var cr2w = _red4ParserService.ReadRed4File(meshStream);
 
             if (cr2w == null || cr2w.RootChunk is not CMesh cMesh || cMesh.RenderResourceBlob.Chunk is not rendRenderMeshBlob rendblob)
             {
@@ -151,7 +148,7 @@ namespace CP77.CR2W
 
             foreach (var meshStream in meshStreamS)
             {
-                var cr2w = _red4ParserService.TryReadRed4File(meshStream);
+                var cr2w = _red4ParserService.ReadRed4File(meshStream);
 
                 if (cr2w == null || cr2w.RootChunk is not CMesh cMesh || cMesh.RenderResourceBlob.Chunk is not rendRenderMeshBlob rendblob)
                 {
@@ -191,7 +188,7 @@ namespace CP77.CR2W
         }
         public bool ExportMeshWithRig(Stream meshStream, Stream rigStream, FileInfo outfile, bool lodFilter = true, bool isGLBinary = true, ValidationMode vmode = ValidationMode.TryFix)
         {
-            var cr2w = _red4ParserService.TryReadRed4File(meshStream);
+            var cr2w = _red4ParserService.ReadRed4File(meshStream);
 
             if (cr2w == null || cr2w.RootChunk is not CMesh cMesh || cMesh.RenderResourceBlob.Chunk is not rendRenderMeshBlob rendblob)
             {
@@ -206,7 +203,7 @@ namespace CP77.CR2W
             UpdateSkinningParamCloth(ref expMeshes, meshStream, cr2w);
 
             var meshRig = GetOrphanRig(rendblob, cr2w);
-            var Rig = RIG.ProcessRig(_red4ParserService.TryReadRed4File(rigStream));
+            var Rig = RIG.ProcessRig(_red4ParserService.ReadRed4File(rigStream));
 
             UpdateMeshJoints(ref expMeshes, Rig, meshRig);
 
@@ -240,7 +237,7 @@ namespace CP77.CR2W
             var Rigs = new List<RawArmature>();
             foreach (var rigStream in rigStreamS)
             {
-                var Rig = RIG.ProcessRig(_red4ParserService.TryReadRed4File(rigStream));
+                var Rig = RIG.ProcessRig(_red4ParserService.ReadRed4File(rigStream));
                 Rigs.Add(Rig);
 
                 rigStream.Dispose();
@@ -252,7 +249,7 @@ namespace CP77.CR2W
 
             foreach (var meshStream in meshStreamS)
             {
-                var cr2w = _red4ParserService.TryReadRed4File(meshStream);
+                var cr2w = _red4ParserService.ReadRed4File(meshStream);
                 if (cr2w == null || cr2w.RootChunk is not CMesh cMesh || cMesh.RenderResourceBlob.Chunk is not rendRenderMeshBlob rendblob)
                 {
                     continue;
@@ -397,24 +394,30 @@ namespace CP77.CR2W
                     }
                 }
 
-                var garmentBlob = ((CMesh)cr2w.RootChunk).Parameters.FirstOrDefault(x => x.Chunk is meshMeshParamGarmentSupport);
-                if (garmentBlob == null)
+                if (cr2w.RootChunk is CMesh cmesh1)
                 {
-                    meshesInfo.garmentSupportExists[i] = false;
+                    if (!cmesh1.Parameters.Select(x => x.Chunk).OfType<meshMeshParamGarmentSupport>().Any())
+                    {
+                        meshesInfo.garmentSupportExists[i] = false;
+                    }
                 }
             }
 
             meshesInfo.appearances = new Dictionary<string, string[]>();
 
-            var apps = ((CMesh)cr2w.RootChunk).Appearances;
-            for (var i = 0; i < apps.Count; i++)
+            if (cr2w.RootChunk is CMesh cmesh2)
             {
-                var materialNames = new string[apps[i].Chunk.ChunkMaterials.Count];
-                for (var e = 0; e < apps[i].Chunk.ChunkMaterials.Count; e++)
+                for (int i = 0; i < cmesh2.Appearances.Count; i++)
                 {
-                    materialNames[e] = apps[i].Chunk.ChunkMaterials[e];
+                    var app = cmesh2.Appearances[i].Chunk;
+
+                    var materialNames = new string[app.ChunkMaterials.Count];
+                    for (var e = 0; e < app.ChunkMaterials.Count; e++)
+                    {
+                        materialNames[e] = app.ChunkMaterials[e];
+                    }
+                    meshesInfo.appearances.Add(app.Name + $"{i}", materialNames);
                 }
-                meshesInfo.appearances.Add(apps[i].Chunk.Name + $"{i}", materialNames);
             }
 
             return meshesInfo;
@@ -983,16 +986,15 @@ namespace CP77.CR2W
                     Rig.Parent[i] = -1;
                 }
 
-                throw new TodoException("");
-                /*if (cr2w.Chunks.OfType<CMesh>().Any())
+                if (cr2w.RootChunk is CMesh meshBlob)
                 {
-                    var meshBlob = cr2w.Chunks.OfType<CMesh>().First();
                     for (var i = 0; i < Rig.BoneCount; i++)
                     {
                         Rig.Names[i] = meshBlob.BoneNames[i];
                     }
                 }
-                return Rig;*/
+
+                return Rig;
             }
             return null;
         }

@@ -1,7 +1,7 @@
 using System;
 using System.Security.Cryptography;
 
-namespace RED.CRC32
+namespace WolvenKit.Core.CRC
 {
     /// <summary>
     /// Implementation of CRC-32C (Castagnoli).

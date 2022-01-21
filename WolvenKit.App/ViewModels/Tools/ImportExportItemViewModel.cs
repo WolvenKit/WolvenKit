@@ -1,5 +1,4 @@
 using System;
-using System.ComponentModel;
 using DynamicData.Binding;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
@@ -17,7 +16,7 @@ namespace WolvenKit.ViewModels.Tools
     {
         public ImportExportItemViewModel()
         {
-            
+
         }
 
 
@@ -93,11 +92,7 @@ namespace WolvenKit.ViewModels.Tools
             });
         }
 
-        private ConvertArgs DecideConverOptions(FileModel model)
-        {
-            return new CommonConvertArgs();
-
-        }
+        private ConvertArgs DecideConverOptions(FileModel model) => new CommonConvertArgs();
     }
 
     public class ExportableItemViewModel : ImportExportItemViewModel

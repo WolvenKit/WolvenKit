@@ -71,6 +71,21 @@ namespace WolvenKit.RED4.Archive.IO
             return base.Read(type, size, flags);
         }
 
+        public override TweakDBID ReadTweakDBID()
+        {
+            if (header.version == 2 || header.version == 3)
+            {
+                var length = _reader.ReadInt16();
+                return Encoding.UTF8.GetString(_reader.ReadBytes(length));
+            }
+            else if (header.version == 04)
+            {
+                return base.ReadTweakDBID();
+            }
+
+            throw new NotImplementedException(nameof(ReadTweakDBID));
+        }
+
         public override CBitField<T> ReadCBitField<T>()
         {
             var cnt = _reader.ReadByte();
@@ -104,7 +119,20 @@ namespace WolvenKit.RED4.Archive.IO
         {
             var handle = new CHandle<T>();
 
-            var pointer = _reader.ReadInt32();
+            int pointer;
+            if (header.version == 2)
+            {
+                pointer = _reader.ReadInt16();
+            }
+            else if (header.version == 3 || header.version == 04)
+            {
+                pointer = _reader.ReadInt32();
+            }
+            else
+            {
+                throw new NotImplementedException(nameof(ReadCHandle));
+            }
+
             if (!HandleQueue.ContainsKey(pointer))
             {
                 HandleQueue.Add(pointer, new List<IRedBaseHandle>());
