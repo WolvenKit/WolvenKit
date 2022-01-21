@@ -220,6 +220,16 @@
                 </Style>
 
                 <ContextMenu x:Key="TreeViewContextMenu" DataContext="{Binding Path=PlacementTarget, RelativeSource={RelativeSource Self}}">
+                    <ContextMenu.Resources>
+                        <Style TargetType="MenuItem">
+                            <Style.Triggers>
+                                <Trigger Property="IsEnabled" Value="False">
+                                    <Setter Property="Visibility" Value="Collapsed"/>
+                                </Trigger>
+                            </Style.Triggers>
+                        </Style>
+                    </ContextMenu.Resources>
+                    
                     <MenuItem
                         Command="{Binding Path=PlacementTarget.Tag.OpenChunkCommand, RelativeSource={RelativeSource AncestorType=ContextMenu}}"
                         Header="Open in New Tab"
@@ -265,6 +275,21 @@
                                 HorizontalAlignment="Center"
                                 VerticalAlignment="Center"
                                 Kind="Json" />
+                        </MenuItem.Icon>
+                    </MenuItem>
+                    <MenuItem
+                        Command="{Binding Path=PlacementTarget.Tag.DeleteItemCommand, RelativeSource={RelativeSource AncestorType=ContextMenu}}"
+                        Header="Delete"
+                        IsCheckable="False"
+                        Style="{StaticResource SyncfusionMenuItemStyle}">
+                        <MenuItem.Icon>
+                            <iconPacks:PackIconCodicons
+                                Width="13"
+                                Height="13"
+                                Padding="0,0,0,0"
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Center"
+                                Kind="Remove" />
                         </MenuItem.Icon>
                     </MenuItem>
                 </ContextMenu>

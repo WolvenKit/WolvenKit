@@ -8,6 +8,8 @@ using System.Reactive.Linq;
 using System.Runtime.Serialization;
 using System.Windows.Forms;
 using System.Windows.Input;
+using DynamicData;
+using DynamicData.Binding;
 using Newtonsoft.Json;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
@@ -28,12 +30,14 @@ namespace WolvenKit.ViewModels.Shell
 {
     public class ChunkViewModel : ReactiveObject, ISelectableTreeViewItemModel
     {
+        public ObservableCollectionExtended<ChunkViewModel> Properties { get; } = new();
+
+        public ObservableCollection<ISelectableTreeViewItemModel> TVProperties { get; } = new();
+        public ObservableCollection<ChunkViewModel> DisplayProperties { get; } = new();
+
         [ObservableAsProperty] public string Value { get; }
-        [ObservableAsProperty] public string Descriptor { get; }
+        [Reactive] public string Descriptor { get; private set; }
         [ObservableAsProperty] public bool IsDefault { get; }
-        [ObservableAsProperty] public ObservableCollection<ChunkViewModel> Properties { get; }
-        [ObservableAsProperty] public ObservableCollection<ISelectableTreeViewItemModel> TVProperties { get; }
-        [ObservableAsProperty] public ObservableCollection<ChunkViewModel> DisplayProperties { get; }
         [ObservableAsProperty] public IRedType PropertyGridData { get; }
 
         #region Constructors
@@ -46,13 +50,38 @@ namespace WolvenKit.ViewModels.Shell
 
             SelfList = new ObservableCollection<ChunkViewModel>(new[] { this });
 
+            Properties.ToObservableChangeSet()
+                .Subscribe(x =>
+                {
+                    DisplayProperties.Clear();
+                    if (Properties == null || Properties.Count == 0)
+                    {
+                        DisplayProperties.AddRange(SelfList);
+                    }
+                    else
+                    {
+                        TVProperties.Clear();
+                        if (Data is not IRedArray && Data is not IRedBufferWrapper)
+                        {
+                            DisplayProperties.AddRange(Properties);
+                            TVProperties.AddRange(new ObservableCollection<ISelectableTreeViewItemModel>(Properties));
+                        }
+                        else
+                        {
+                            DisplayProperties.AddRange(SelfList);
+                            TVProperties.AddRange(SplitProperties(Properties));
+
+                            CalculateDescriptor();
+                        }
+                    }
+                });
+
             var dataObserver = this.WhenAnyValue(x => x.Data);
             dataObserver
                 .Select(_ => CalculateValue())
                 .ToPropertyEx(this, x => x.Value, deferSubscription: true);
             dataObserver
-                .Select(_ => CalculateDescriptor())
-                .ToPropertyEx(this, x => x.Descriptor, deferSubscription: true);
+                .Subscribe(_ => CalculateDescriptor());
             dataObserver
                 .Select(_ => CalculateIsDefault())
                 .ToPropertyEx(this, x => x.IsDefault, deferSubscription: true);
@@ -60,16 +89,14 @@ namespace WolvenKit.ViewModels.Shell
             {
                 this.WhenAnyValue(x => x.Data, x => x.Parent.IsExpanded, x => x.ForceLoadProperties)
                     .Where(_ => Parent.IsExpanded || ForceLoadProperties)
-                    .Select(_ => CalculateProperties())
-                    .ToPropertyEx(this, x => x.Properties, deferSubscription: true);
+                    .Subscribe(_ => CalculateProperties());
             }
             else
             {
                 this.WhenAnyValue(x => x.Data, x => x.ForceLoadProperties)
-                    .Select(_ => CalculateProperties())
-                    .ToPropertyEx(this, x => x.Properties, deferSubscription: true);
+                    .Subscribe(_ => CalculateProperties());
             }
-            this.WhenAnyValue(x => x.Properties)
+            /*this.WhenAnyValue(x => x.Properties)
                 .Select((_) =>
                 {
                     if (Properties == null)
@@ -99,7 +126,7 @@ namespace WolvenKit.ViewModels.Shell
                         }
                         return SelfList;
                     }
-                }).ToPropertyEx(this, x => x.DisplayProperties, deferSubscription: true);
+                }).ToPropertyEx(this, x => x.DisplayProperties, deferSubscription: true);*/
 
             //dataObserver
             //    .Select(x => CalculatePropertyGridData())
@@ -386,9 +413,11 @@ namespace WolvenKit.ViewModels.Shell
 
         //private ObservableCollection<ChunkViewModel> _properties;
 
-        private ObservableCollection<ChunkViewModel> CalculateProperties()
+        private void CalculateProperties()
         {
-            var properties = new ObservableCollection<ChunkViewModel>();
+            var disposable = Properties.SuspendNotifications();
+
+            Properties.Clear();
             try
             {
                 var obj = Data;
@@ -405,13 +434,13 @@ namespace WolvenKit.ViewModels.Shell
                 {
                     for (var i = 0; i < ary.Count; i++)
                     {
-                        properties.Add(new ChunkViewModel((IRedType)ary[i], this));
+                        Properties.Add(new ChunkViewModel((IRedType)ary[i], this));
                     }
                 }
                 else if (obj is inkWidgetReference iwr)
                 {
                     // need to add XPath somewhere in the data structure
-                    properties.Add(new ChunkViewModel((CString)"TODO", this));
+                    Properties.Add(new ChunkViewModel((CString)"TODO", this));
                 }
                 else if (obj is RedBaseClass redClass)
                 {
@@ -428,7 +457,7 @@ namespace WolvenKit.ViewModels.Shell
                         {
                             value = (IRedType)pi.GetValue(redClass);
                         }
-                        properties.Add(new ChunkViewModel(value, this, pi.RedName));
+                        Properties.Add(new ChunkViewModel(value, this, pi.RedName));
                     });
                 }
                 else if (obj is SerializationDeferredDataBuffer sddb && sddb.Data is Package04 p4)
@@ -436,7 +465,7 @@ namespace WolvenKit.ViewModels.Shell
                     var chunks = p4.Chunks;
                     for (var i = 0; i < chunks.Count; i++)
                     {
-                        properties.Add(new ChunkViewModel(chunks[i], this));
+                        Properties.Add(new ChunkViewModel(chunks[i], this));
                     }
                 }
                 else if (obj is SharedDataBuffer sdb)
@@ -446,7 +475,7 @@ namespace WolvenKit.ViewModels.Shell
                         var chunks = p42.Chunks;
                         for (var i = 0; i < chunks.Count; i++)
                         {
-                            properties.Add(new ChunkViewModel(chunks[i], this));
+                            Properties.Add(new ChunkViewModel(chunks[i], this));
                         }
                     }
                     if (sdb.File is CR2WFile cr2)
@@ -456,7 +485,7 @@ namespace WolvenKit.ViewModels.Shell
                         //{
                         //    properties.Add(new ChunkViewModel(i, chunks[i], this));
                         //}
-                        properties.Add(new ChunkViewModel(cr2.RootChunk, this));
+                        Properties.Add(new ChunkViewModel(cr2.RootChunk, this));
 
                     }
                 }
@@ -465,7 +494,7 @@ namespace WolvenKit.ViewModels.Shell
                     var chunks = p43.Chunks;
                     for (var i = 0; i < chunks.Count; i++)
                     {
-                        properties.Add(new ChunkViewModel(chunks[i], this));
+                        Properties.Add(new ChunkViewModel(chunks[i], this));
                     }
                 }
             }
@@ -474,7 +503,8 @@ namespace WolvenKit.ViewModels.Shell
                 Console.WriteLine(e);
                 //throw;
             }
-            return properties;
+
+            disposable.Dispose();
         }
 
         [Reactive] public bool IsSelected { get; set; }
@@ -751,20 +781,21 @@ namespace WolvenKit.ViewModels.Shell
             return "";
         }
 
-        public string CalculateDescriptor()
+        public void CalculateDescriptor()
         {
+            Descriptor = "";
             if (PropertyType == null)
             {
-                return "";
+                return;
             }
 
             if (ResolvedData is IRedArray ary)
             {
-                return $"[{ary.Count}]";
+                Descriptor = $"[{ary.Count}]";
             }
             if (ResolvedData is IRedBufferPointer rbp && rbp.GetValue().Data is Package04 pkg)
             {
-                return $"[{pkg.Chunks.Count}]";
+                Descriptor = $"[{pkg.Chunks.Count}]";
             }
             if (ResolvedData is RedBaseClass irc)
             {
@@ -783,11 +814,10 @@ namespace WolvenKit.ViewModels.Shell
                     var prop = GetPropertyByRedName(irc.GetType(), propName);
                     if (prop != null)
                     {
-                        return prop.GetValue(irc).ToString();
+                        Descriptor = prop.GetValue(irc).ToString();
                     }
                 }
             }
-            return "";
         }
 
         public string Extension
