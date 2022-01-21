@@ -30,6 +30,8 @@ namespace WolvenKit.ViewModels.Shell
 {
     public class ChunkViewModel : ReactiveObject, ISelectableTreeViewItemModel
     {
+        private bool _dataSubscriptionDone;
+
         public ObservableCollectionExtended<ChunkViewModel> Properties { get; } = new();
 
         public ObservableCollection<ISelectableTreeViewItemModel> TVProperties { get; } = new();
@@ -42,7 +44,7 @@ namespace WolvenKit.ViewModels.Shell
 
         #region Constructors
 
-        public ChunkViewModel(IRedType export, ChunkViewModel parent = null, string name = null)
+        public ChunkViewModel(IRedType export, ChunkViewModel parent = null, string name = null, bool lazy = false)
         {
             Data = export;
             Parent = parent;
@@ -85,17 +87,12 @@ namespace WolvenKit.ViewModels.Shell
             dataObserver
                 .Select(_ => CalculateIsDefault())
                 .ToPropertyEx(this, x => x.IsDefault, deferSubscription: true);
-            if (Parent != null)
+
+            if (!lazy)
             {
-                this.WhenAnyValue(x => x.Data, x => x.Parent.IsExpanded, x => x.ForceLoadProperties)
-                    .Where(_ => Parent.IsExpanded || ForceLoadProperties)
-                    .Subscribe(_ => CalculateProperties());
+                DoSubscribe();
             }
-            else
-            {
-                this.WhenAnyValue(x => x.Data, x => x.ForceLoadProperties)
-                    .Subscribe(_ => CalculateProperties());
-            }
+
             /*this.WhenAnyValue(x => x.Properties)
                 .Select((_) =>
                 {
@@ -180,6 +177,28 @@ namespace WolvenKit.ViewModels.Shell
             DeleteItemCommand = new DelegateCommand((p) => ExecuteDeleteItem(), (p) => CanDeleteItem());
             DeleteAllCommand = new DelegateCommand((p) => ExecuteDeleteAll(), (p) => CanDeleteAll());
             OpenChunkCommand = new DelegateCommand((p) => ExecuteOpenChunk(), (p) => CanOpenChunk());
+        }
+
+        public void DoSubscribe()
+        {
+            if (_dataSubscriptionDone)
+            {
+                return;
+            }
+
+            if (Parent != null)
+            {
+                this.WhenAnyValue(x => x.Data, x => x.Parent.IsExpanded, x => x.ForceLoadProperties)
+                    .Where(_ => Parent.IsExpanded || ForceLoadProperties)
+                    .Subscribe(_ => CalculateProperties());
+            }
+            else
+            {
+                this.WhenAnyValue(x => x.Data, x => x.ForceLoadProperties)
+                    .Subscribe(_ => CalculateProperties());
+            }
+
+            _dataSubscriptionDone = true;
         }
 
         public ChunkViewModel(IRedType export, RDTDataViewModel tab) : this(export)
@@ -432,9 +451,10 @@ namespace WolvenKit.ViewModels.Shell
                 }
                 if (obj is IRedArray ary)
                 {
+                    var lazy = ary.Count > 100;
                     for (var i = 0; i < ary.Count; i++)
                     {
-                        Properties.Add(new ChunkViewModel((IRedType)ary[i], this));
+                        Properties.Add(new ChunkViewModel((IRedType)ary[i], this, null, lazy));
                     }
                 }
                 else if (obj is inkWidgetReference iwr)
@@ -463,9 +483,11 @@ namespace WolvenKit.ViewModels.Shell
                 else if (obj is SerializationDeferredDataBuffer sddb && sddb.Data is Package04 p4)
                 {
                     var chunks = p4.Chunks;
+
+                    var lazy = chunks.Count > 100;
                     for (var i = 0; i < chunks.Count; i++)
                     {
-                        Properties.Add(new ChunkViewModel(chunks[i], this));
+                        Properties.Add(new ChunkViewModel(chunks[i], this, null, lazy));
                     }
                 }
                 else if (obj is SharedDataBuffer sdb)
@@ -473,9 +495,11 @@ namespace WolvenKit.ViewModels.Shell
                     if (sdb.Data is Package04 p42)
                     {
                         var chunks = p42.Chunks;
+
+                        var lazy = chunks.Count > 100;
                         for (var i = 0; i < chunks.Count; i++)
                         {
-                            Properties.Add(new ChunkViewModel(chunks[i], this));
+                            Properties.Add(new ChunkViewModel(chunks[i], this, null, lazy));
                         }
                     }
                     if (sdb.File is CR2WFile cr2)
@@ -492,9 +516,11 @@ namespace WolvenKit.ViewModels.Shell
                 else if (obj is DataBuffer db && db.Data is Package04 p43)
                 {
                     var chunks = p43.Chunks;
+
+                    var lazy = chunks.Count > 100;
                     for (var i = 0; i < chunks.Count; i++)
                     {
-                        Properties.Add(new ChunkViewModel(chunks[i], this));
+                        Properties.Add(new ChunkViewModel(chunks[i], this, null, lazy));
                     }
                 }
             }
