@@ -225,7 +225,7 @@ namespace WolvenKit.ViewModels.Documents
 
                 foreach (var rig in Rigs.Values)
                 {
-                    if (rig.BindName != null)
+                    if (rig.BindName != null && Rigs.ContainsKey(rig.BindName))
                     {
                         Rigs[rig.BindName].AddChild(rig);
                     }
@@ -319,36 +319,43 @@ namespace WolvenKit.ViewModels.Documents
 
                     matrix.Scale(ToScaleVector3D(scale));
 
-                    var materials = new List<Material>(mesh.MaterialEntries.Count);
+                    var materials = new List<Material>();
 
-                    var localList = (CR2WList)mesh.LocalMaterialBuffer.RawData.Buffer.Data;
+                    var localList = (CR2WList)mesh.LocalMaterialBuffer.RawData?.Buffer.Data ?? null;
 
-                    foreach (var me in mesh.MaterialEntries)
+                    if (localList != null)
                     {
-                        if (!me.IsLocalInstance)
+                        foreach (var me in mesh.MaterialEntries)
                         {
-                            continue;
+                            if (!me.IsLocalInstance)
+                            {
+                                materials.Add(new Material()
+                                {
+                                    Name = me.Name
+                                });
+                                continue;
+                            }
+
+                            var inst = (CMaterialInstance)localList.Files[me.Index].RootChunk;
+
+                            //CMaterialInstance bm = null;
+                            //if (File.GetFileFromDepotPath(inst.BaseMaterial.DepotPath) is var file)
+                            //{
+                            //    bm = (CMaterialInstance)file.RootChunk;
+                            //}
+
+                            materials.Add(new Material()
+                            {
+                                Instance = inst,
+                                Name = me.Name
+                            });
+
+                            foreach (var value in inst.Values)
+                            {
+                                materials[me.Index].Values.Add(value.Key, value.Value);
+                            }
+
                         }
-
-                        var inst = (CMaterialInstance)localList.Files[me.Index].RootChunk;
-
-                        //CMaterialInstance bm = null;
-                        //if (File.GetFileFromDepotPath(inst.BaseMaterial.DepotPath) is var file)
-                        //{
-                        //    bm = (CMaterialInstance)file.RootChunk;
-                        //}
-
-                        materials[me.Index] = new Material()
-                        {
-                            Instance = inst,
-                            Name = me.Name
-                        };
-
-                        foreach (var value in inst.Values)
-                        {
-                            materials[me.Index].Values.Add(value.Key, value.Value);
-                        }
-
                     }
 
                     var outPath = Path.Combine(ISettingsManager.GetTemp_OBJPath(), Path.GetFileNameWithoutExtension(depotPath) + "_" + depotPath.GetRedHash().ToString() + "_full.glb");
@@ -379,7 +386,7 @@ namespace WolvenKit.ViewModels.Documents
                 var matrix = new Matrix3D();
                 GetResolvedMatrix(model, ref matrix, appModels);
                 model.Transform = new MatrixTransform3D(matrix);
-                if (model.Name.Contains("shadow") || model.Name.Contains("AppearanceProxyMesh") || model.Name.Contains("sticker"))
+                if (model.Name.Contains("shadow") || model.Name.Contains("AppearanceProxyMesh") || model.Name.Contains("sticker") || model.Name.Contains("cutout"))
                 {
                     model.IsEnabled = false;
                 }
