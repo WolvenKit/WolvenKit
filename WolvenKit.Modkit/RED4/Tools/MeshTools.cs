@@ -74,7 +74,11 @@ namespace CP77.CR2W
         public bool ExportMesh(Stream meshStream, FileInfo outfile, bool lodFilter = true, bool isGLBinary = true, ValidationMode vmode = ValidationMode.TryFix)
         {
             var cr2w = _red4ParserService.ReadRed4File(meshStream);
+            return ExportMesh(cr2w, outfile, lodFilter, isGLBinary, vmode);
+        }
 
+        public static bool ExportMesh(CR2WFile cr2w, FileInfo outfile, bool lodFilter = true, bool isGLBinary = true, ValidationMode vmode = ValidationMode.TryFix)
+        {
             if (cr2w == null || cr2w.RootChunk is not CMesh cMesh || cMesh.RenderResourceBlob.Chunk is not rendRenderMeshBlob rendblob)
             {
                 return false;
@@ -87,7 +91,7 @@ namespace CP77.CR2W
             var meshesinfo = GetMeshesinfo(rendblob, cr2w);
 
             var expMeshes = ContainRawMesh(ms, meshesinfo, lodFilter);
-            UpdateSkinningParamCloth(ref expMeshes, meshStream, cr2w);
+            UpdateSkinningParamCloth(ref expMeshes, cr2w);
 
             var model = RawMeshesToGLTF(expMeshes, Rig);
 
@@ -107,11 +111,12 @@ namespace CP77.CR2W
                 model.SaveGLTF(outfile.FullName, new WriteSettings(vmode));
             }
 
-            meshStream.Dispose();
-            meshStream.Close();
+            //meshStream.Dispose();
+            //meshStream.Close();
 
             return true;
         }
+
         public bool ExportMeshWithoutRig(Stream meshStream, FileInfo outfile, bool lodFilter = true, bool isGLBinary = true, ValidationMode vmode = ValidationMode.TryFix)
         {
             var cr2w = _red4ParserService.ReadRed4File(meshStream);
@@ -1051,7 +1056,13 @@ namespace CP77.CR2W
                 }
             }
         }
+
         public static void UpdateSkinningParamCloth(ref List<RawMeshContainer> meshes, Stream ms, CR2WFile cr2w)
+        {
+            UpdateSkinningParamCloth(ref meshes, cr2w);
+        }
+
+        public static void UpdateSkinningParamCloth(ref List<RawMeshContainer> meshes, CR2WFile cr2w)
         {
             var clothBLob = ((CMesh)cr2w.RootChunk).Parameters.FirstOrDefault(x => x.Chunk is meshMeshParamCloth);
             if (clothBLob != null)

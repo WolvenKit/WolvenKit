@@ -229,12 +229,40 @@ namespace WolvenKit.ViewModels.Documents
 
         public CR2WFile GetFileFromDepotPath(CName depotPath)
         {
-            // TODO: need to look locally first
+            CR2WFile cr2wFile = null;
+
+            var projectManager = Locator.Current.GetService<IProjectManager>();
+            if (projectManager.ActiveProject != null)
+            {
+                string path = null;
+                if (depotPath.GetValue() != null)
+                {
+                    path = Path.Combine(projectManager.ActiveProject.ModDirectory, depotPath.GetValue());
+                }
+                else
+                {
+                    var fm = Locator.Current.GetService<IWatcherService>().GetFileModelFromHash(depotPath.GetRedHash());
+                    if (fm != null)
+                        path = fm.FullName;
+                }
+
+                if (path != null && File.Exists(path))
+                {
+                    using (var stream = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
+                    {
+                        using var reader = new BinaryReader(stream);
+                        cr2wFile = _parser.ReadRed4File(reader);
+                        cr2wFile.MetaData.FileName = depotPath.GetValue();
+                    }
+
+                    return cr2wFile;
+                }
+            }
+
             var _archiveManager = Locator.Current.GetService<IArchiveManager>();
             var file = _archiveManager.Lookup(depotPath.GetRedHash());
             if (file.HasValue && file.Value is FileEntry fe)
             {
-                CR2WFile cr2wFile = null;
                 using (var stream = new MemoryStream())
                 {
                     fe.Extract(stream);

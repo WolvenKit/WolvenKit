@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using WolvenKit.Core.Extensions;
+using WolvenKit.RED4.Archive.Buffer;
 using WolvenKit.RED4.Archive.CR2W;
 using WolvenKit.RED4.Types;
 using WolvenKit.RED4.Types.Exceptions;
@@ -27,6 +28,7 @@ namespace WolvenKit.RED4.Archive.IO
             _bufferReaders.Add("inkWidgetLibraryItem.packageData", typeof(PackageReader));
             _bufferReaders.Add("entEntityInstanceData.buffer", typeof(PackageReader));
             _bufferReaders.Add("gamePersistentStateDataResource.buffer", typeof(PackageReader));
+            _bufferReaders.Add("meshMeshMaterialBuffer.rawData", typeof(CR2WListReader));
         }
 
         public EFileReadErrorCodes ReadFileInfo(out CR2WFileInfo info)
@@ -166,10 +168,10 @@ namespace WolvenKit.RED4.Archive.IO
 
             #endregion Read Data
 
-            if (BaseStream.Position != BaseStream.Length)
-            {
-                throw new TodoException();
-            }
+            //if (BaseStream.Position != BaseStream.Length)
+            //{
+            //    throw new TodoException();
+            //}
 
             /*if (_chunks.Count > 1)
             {

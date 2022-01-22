@@ -113,6 +113,13 @@ namespace WolvenKit.Functionality.Services
             return x;
         }
 
+        public FileModel GetFileModelFromHash(ulong hash)
+        {
+            var lookup = _files.Items.ToLookup(x => x.Hash);
+
+            return lookup[hash].FirstOrDefault();
+        }
+
         private void OnChanged(object sender, FileSystemEventArgs e)
         {
             if (IsSuspended)

@@ -365,6 +365,11 @@ namespace WolvenKit.ViewModels.Shell
                         properties.Add(new ChunkViewModel((IRedType)ary[i], this));
                     }
                 }
+                else if (obj is CKeyValuePair kvp)
+                {
+                    properties.Add(new ChunkViewModel(kvp.Key, this, "key"));
+                    properties.Add(new ChunkViewModel(kvp.Value, this, "value"));
+                }
                 else if (obj is inkWidgetReference iwr)
                 {
                     // need to add XPath somewhere in the data structure
@@ -417,12 +422,23 @@ namespace WolvenKit.ViewModels.Shell
 
                     }
                 }
-                else if (obj is DataBuffer db && db.Data is Package04 p43)
+                else if (obj is DataBuffer db)
                 {
-                    var chunks = p43.Chunks;
-                    for (var i = 0; i < chunks.Count; i++)
+                    if (db.Data is Package04 p43)
                     {
-                        properties.Add(new ChunkViewModel(chunks[i], this));
+                        var chunks = p43.Chunks;
+                        for (var i = 0; i < chunks.Count; i++)
+                        {
+                            properties.Add(new ChunkViewModel(chunks[i], this));
+                        }
+                    }
+
+                    if (db.Data is CR2WList cl)
+                    {
+                        foreach (var file in cl.Files)
+                        {
+                            properties.Add(new ChunkViewModel(file.RootChunk, this));
+                        }
                     }
                 }
             }
@@ -626,6 +642,11 @@ namespace WolvenKit.ViewModels.Shell
                     return value.GetValue();
                 }
             }
+            //else if (PropertyType.IsAssignableTo(typeof(CByteArray)))
+            //{
+            //    var ba = (byte[])(CByteArray)Data;
+            //    return string.Join(" ", ba.Select(x => $"{x}"));
+            //}
             else if (PropertyType.IsAssignableTo(typeof(LocalizationString)))
             {
                 var value = (LocalizationString)Data;
@@ -722,6 +743,10 @@ namespace WolvenKit.ViewModels.Shell
             if (ResolvedData is IRedBufferPointer rbp && rbp.GetValue().Data is Package04 pkg)
             {
                 return $"[{pkg.Chunks.Count}]";
+            }
+            if (ResolvedData is CKeyValuePair kvp)
+            {
+                return kvp.Key;
             }
             if (ResolvedData is RedBaseClass irc)
             {

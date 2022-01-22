@@ -197,32 +197,43 @@
                 </StackPanel>
             </Border>
         </syncfusion:DropDownButton>
-        <ScrollViewer Grid.Column="2">
-            <ItemsControl ItemsSource="{Binding Models}">
-                <ItemsControl.ItemsPanel>
-                    <ItemsPanelTemplate>
-                        <StackPanel Orientation="Vertical" />
-                    </ItemsPanelTemplate>
-                </ItemsControl.ItemsPanel>
-                <ItemsControl.Template>
-                    <ControlTemplate>
-                        <ItemsPresenter />
-                    </ControlTemplate>
-                </ItemsControl.Template>
-                <ItemsControl.ItemTemplate>
-                    <DataTemplate>
-                        <StackPanel Orientation="Horizontal">
-                            <CheckBox
-                                Margin="5,2"
-                                Checked="ReloadModels"
-                                IsChecked="{Binding IsEnabled, Mode=TwoWay}"
-                                Unchecked="ReloadModels">
-                                <TextBlock VerticalAlignment="Center" Text="{Binding Name}" />
-                            </CheckBox>
-                        </StackPanel>
-                    </DataTemplate>
-                </ItemsControl.ItemTemplate>
-            </ItemsControl>
-        </ScrollViewer>
+        <Grid Grid.Column="2">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+            <ComboBox
+                DisplayMemberPath="Name"
+                ItemsSource="{Binding Appearances, Mode=OneWay}"
+                SelectedItem="{Binding SelectedAppearance, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                SelectionChanged="ReloadModels" />
+            <ScrollViewer Grid.Row="1">
+                <ItemsControl ItemsSource="{Binding SelectedAppearance.Models, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <StackPanel Orientation="Vertical" />
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                    <ItemsControl.Template>
+                        <ControlTemplate>
+                            <ItemsPresenter />
+                        </ControlTemplate>
+                    </ItemsControl.Template>
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <StackPanel Orientation="Horizontal">
+                                <CheckBox
+                                    Margin="5,2"
+                                    Checked="ReloadModels"
+                                    IsChecked="{Binding IsEnabled, Mode=TwoWay}"
+                                    Unchecked="ReloadModels">
+                                    <TextBlock VerticalAlignment="Center" Text="{Binding Name}" />
+                                </CheckBox>
+                            </StackPanel>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </ScrollViewer>
+        </Grid>
     </Grid>
 </reactiveUi:ReactiveUserControl>

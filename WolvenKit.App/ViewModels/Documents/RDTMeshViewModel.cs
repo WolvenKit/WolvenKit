@@ -6,8 +6,10 @@ using System.Windows.Media.Media3D;
 using CP77.CR2W;
 using ReactiveUI.Fody.Helpers;
 using Splat;
+using WolvenKit.Common.Services;
 using WolvenKit.Functionality.Services;
 using WolvenKit.RED4.Archive.Buffer;
+using WolvenKit.RED4.Archive.CR2W;
 using WolvenKit.RED4.Types;
 
 namespace WolvenKit.ViewModels.Documents
@@ -20,6 +22,14 @@ namespace WolvenKit.ViewModels.Documents
         public string SlotName { get; set; }
     }
 
+    public class Appearance
+    {
+        public string AppearanceName { get; set; }
+        public string Name { get; set; }
+        public List<LoadableModel> Models { get; set; }
+        public CName Resource { get; set; }
+    }
+
     public class LoadableModel : IBindable
     {
         public string FilePath { get; set; }
@@ -27,6 +37,7 @@ namespace WolvenKit.ViewModels.Documents
         public Transform3D Transform { get; set; }
         public bool IsEnabled { get; set; }
         public string Name { get; set; }
+        public List<Material> Materials { get; set; } = new();
 
         public Matrix3D Matrix { get; set; }
         public string BindName { get; set; }
@@ -75,6 +86,13 @@ namespace WolvenKit.ViewModels.Documents
         public string SlotName { get; set; }
     }
 
+    public class Material
+    {
+        public string Name { get; set; }
+        public CMaterialInstance Instance { get; set; }
+        public Dictionary<string, object> Values { get; set; } = new();
+        public Material Base { get; set; }
+    }
 
     public class RDTMeshViewModel : RedDocumentTabViewModel
     {
@@ -95,9 +113,8 @@ namespace WolvenKit.ViewModels.Documents
 
             var list = new List<LoadableModel>();
 
-            var outPath = Path.Combine(ISettingsManager.GetTemp_OBJPath(), Path.GetFileName(file.FilePath));
-            outPath = Path.ChangeExtension(outPath, ".glb");
-            if (System.IO.File.Exists(outPath) || MeshTools.ExportMeshPreviewer(file.Cr2wFile, new FileInfo(outPath)))
+            var outPath = Path.Combine(ISettingsManager.GetTemp_OBJPath(), Path.GetFileNameWithoutExtension(file.FilePath) + "_full.glb");
+            if (System.IO.File.Exists(outPath) || MeshTools.ExportMesh(file.Cr2wFile, new FileInfo(outPath)))
             {
                 list.Add(new LoadableModel()
                 {
@@ -107,11 +124,13 @@ namespace WolvenKit.ViewModels.Documents
                 });
             }
 
-            if (list.Count != 0)
+            Appearances.Add(new Appearance()
             {
-                Models.AddRange(list);
-            }
+                Name = "Default",
+                Models = list
+            });
 
+            SelectedAppearance = Appearances[0];
         }
 
         public RDTMeshViewModel(entEntityTemplate ent, RedDocumentViewModel file) : this(file)
@@ -124,14 +143,16 @@ namespace WolvenKit.ViewModels.Documents
             if (ent.Appearances.Count > 0)
             {
                 var appPaths = new List<CName>();
-                //foreach(var app in ent.Appearances)
-                //{
-                //if (!appPaths.Contains(app.AppearanceResource.DepotPath))
-                //{
-                //appPaths.Add(app.AppearanceResource.DepotPath);
-                //}
-                //}
-                appPaths.Add(ent.Appearances[0].AppearanceResource.DepotPath);
+                foreach (var app in ent.Appearances)
+                {
+                    var a = new Appearance()
+                    {
+                        AppearanceName = app.AppearanceName,
+                        Name = app.Name,
+                        Resource = app.AppearanceResource.DepotPath
+                    };
+                    Appearances.Add(a);
+                }
 
                 foreach (var component in pkg.Chunks)
                 {
@@ -210,37 +231,55 @@ namespace WolvenKit.ViewModels.Documents
                     }
                 }
 
-                foreach (var appPath in appPaths)
+                foreach (var a in Appearances)
                 {
-                    var appFile = File.GetFileFromDepotPath(appPath);
+                    var appFile = File.GetFileFromDepotPath(a.Resource);
 
-                    if (appFile.RootChunk is appearanceAppearanceResource app && app.Appearances.Count > 0 && app.Appearances[0].GetValue() is appearanceAppearanceDefinition appDef && appDef.CompiledData.Data is Package04 appPkg)
+                    if (appFile != null && appFile.RootChunk is appearanceAppearanceResource app && app.Appearances.Count > 0 && app.Appearances[0].GetValue() is appearanceAppearanceDefinition appDef && appDef.CompiledData.Data is Package04 appPkg)
                     {
-                        LoadMeshs(appPkg.Chunks);
+                        a.Models = LoadMeshs(appPkg.Chunks);
                     }
                 }
+
+                SelectedAppearance = Appearances[0];
             }
             else
             {
-                LoadMeshs(pkg.Chunks);
+                Appearances.Add(new Appearance()
+                {
+                    Name = "Default",
+                    Models = LoadMeshs(pkg.Chunks)
+                });
+
+                SelectedAppearance = Appearances[0];
             }
         }
 
         public RDTMeshViewModel(appearanceAppearanceResource app, RedDocumentViewModel file) : this(file)
         {
             _data = app;
-            if (app.Appearances.Count > 0 && app.Appearances[0].GetValue() is appearanceAppearanceDefinition appDef && appDef.CompiledData.Data is Package04 pkg)
+            foreach (var a in app.Appearances)
             {
-                LoadMeshs(pkg.Chunks);
+                if (a.GetValue() is appearanceAppearanceDefinition appDef && appDef.CompiledData.Data is Package04 pkg)
+                {
+                    Appearances.Add(new Appearance()
+                    {
+                        Name = appDef.Name,
+                        Models = LoadMeshs(pkg.Chunks)
+                    });
+
+                }
             }
+
+            SelectedAppearance = Appearances[0];
         }
 
-        private void LoadMeshs(IList<RedBaseClass> chunks)
+        private List<LoadableModel> LoadMeshs(IList<RedBaseClass> chunks)
         {
-
             if (chunks == null)
-                return;
+                return null;
 
+            var appModels = new Dictionary<string, LoadableModel>();
 
             foreach (var component in chunks)
             {
@@ -263,8 +302,9 @@ namespace WolvenKit.ViewModels.Documents
 
                     var meshFile = File.GetFileFromDepotPath(depotPath);
 
-                    if (meshFile == null)
+                    if (meshFile == null || meshFile.RootChunk is not CMesh mesh)
                     {
+                        Locator.Current.GetService<ILoggerService>().Warning($"Couldn't find mesh file: {depotPath} / {depotPath.GetRedHash()}");
                         continue;
                     }
 
@@ -279,19 +319,53 @@ namespace WolvenKit.ViewModels.Documents
 
                     matrix.Scale(ToScaleVector3D(scale));
 
-                    var outPath = Path.Combine(ISettingsManager.GetTemp_OBJPath(), Path.GetFileName(depotPath) + "_" + depotPath.GetRedHash().ToString()) + ".glb";
-                    if (System.IO.File.Exists(outPath) || MeshTools.ExportMeshPreviewer(meshFile, new FileInfo(outPath)))
+                    var materials = new List<Material>(mesh.MaterialEntries.Count);
+
+                    var localList = (CR2WList)mesh.LocalMaterialBuffer.RawData.Buffer.Data;
+
+                    foreach (var me in mesh.MaterialEntries)
                     {
-                        if (!_modelList.ContainsKey(epc.Name))
+                        if (!me.IsLocalInstance)
                         {
-                            _modelList.Add(epc.Name, new LoadableModel()
+                            continue;
+                        }
+
+                        var inst = (CMaterialInstance)localList.Files[me.Index].RootChunk;
+
+                        //CMaterialInstance bm = null;
+                        //if (File.GetFileFromDepotPath(inst.BaseMaterial.DepotPath) is var file)
+                        //{
+                        //    bm = (CMaterialInstance)file.RootChunk;
+                        //}
+
+                        materials[me.Index] = new Material()
+                        {
+                            Instance = inst,
+                            Name = me.Name
+                        };
+
+                        foreach (var value in inst.Values)
+                        {
+                            materials[me.Index].Values.Add(value.Key, value.Value);
+                        }
+
+                    }
+
+                    var outPath = Path.Combine(ISettingsManager.GetTemp_OBJPath(), Path.GetFileNameWithoutExtension(depotPath) + "_" + depotPath.GetRedHash().ToString() + "_full.glb");
+                    //var outPath = Path.Combine(ISettingsManager.GetTemp_OBJPath(), Path.GetFileName(depotPath) + "_" + depotPath.GetRedHash().ToString()) + "_full.glb";
+                    if (System.IO.File.Exists(outPath) || MeshTools.ExportMesh(meshFile, new FileInfo(outPath)))
+                    {
+                        if (!appModels.ContainsKey(epc.Name))
+                        {
+                            appModels.Add(epc.Name, new LoadableModel()
                             {
                                 FilePath = outPath,
                                 Matrix = matrix,
                                 IsEnabled = enabled,
                                 Name = epc.Name,
                                 BindName = bindName,
-                                SlotName = slotName
+                                SlotName = slotName,
+                                Materials = materials
                             });
                         }
                     }
@@ -300,10 +374,10 @@ namespace WolvenKit.ViewModels.Documents
 
             var list = new List<LoadableModel>();
 
-            foreach (var model in _modelList.Values)
+            foreach (var model in appModels.Values)
             {
                 var matrix = new Matrix3D();
-                GetResolvedMatrix(model, ref matrix);
+                GetResolvedMatrix(model, ref matrix, appModels);
                 model.Transform = new MatrixTransform3D(matrix);
                 if (model.Name.Contains("shadow") || model.Name.Contains("AppearanceProxyMesh") || model.Name.Contains("sticker"))
                 {
@@ -315,11 +389,13 @@ namespace WolvenKit.ViewModels.Documents
             if (list.Count != 0)
             {
                 list.Sort((a, b) => a.Name.CompareTo(b.Name));
-                Models.AddRange(list);
+                return list;
             }
+
+            return null;
         }
 
-        public void GetResolvedMatrix(IBindable bindable, ref Matrix3D matrix)
+        public void GetResolvedMatrix(IBindable bindable, ref Matrix3D matrix, Dictionary<string, LoadableModel> models)
         {
             matrix.Append(bindable.Matrix);
 
@@ -327,38 +403,36 @@ namespace WolvenKit.ViewModels.Documents
             {
                 if (bindable is LoadableModel)
                 {
-                    if (_modelList.ContainsKey(bindable.BindName))
+                    if (models.ContainsKey(bindable.BindName))
                     {
-                        GetResolvedMatrix(_modelList[bindable.BindName], ref matrix);
+                        GetResolvedMatrix(models[bindable.BindName], ref matrix, models);
                     }
-                    else if (_slotSets.ContainsKey(bindable.BindName) && _slotSets[bindable.BindName].Slots.ContainsKey(bindable.SlotName))
+                    else if (_slotSets.ContainsKey(bindable.BindName))
                     {
-                        var slot = _slotSets[bindable.BindName].Slots[bindable.SlotName];
-
-                        if (Rigs.ContainsKey(_slotSets[bindable.BindName].BindName))
+                        if (bindable.SlotName != null && _slotSets[bindable.BindName].Slots.ContainsKey(bindable.SlotName))
                         {
-                            var rigBone = Rigs[_slotSets[bindable.BindName].BindName].Bones.Where(x => x.Name == slot).FirstOrDefault(defaultValue: null);
+                            var slot = _slotSets[bindable.BindName].Slots[bindable.SlotName];
 
-                            if (rigBone != null)
+                            if (Rigs.ContainsKey(_slotSets[bindable.BindName].BindName))
                             {
+                                var rigBone = Rigs[_slotSets[bindable.BindName].BindName].Bones.Where(x => x.Name == slot).FirstOrDefault(defaultValue: null);
+
                                 while (rigBone != null)
                                 {
                                     matrix.Append(rigBone.Matrix);
                                     rigBone = rigBone.Parent;
                                 }
                             }
-
-                            //GetResolvedMatrix(Rigs[_slotSets[bindable.BindName].BindName], ref matrix);
                         }
 
                         // not sure this does anything anywhere
-                        GetResolvedMatrix(_slotSets[bindable.BindName], ref matrix);
+                        GetResolvedMatrix(_slotSets[bindable.BindName], ref matrix, models);
                     }
                 }
 
                 if (Rigs.ContainsKey(bindable.BindName))
                 {
-                    GetResolvedMatrix(Rigs[bindable.BindName], ref matrix);
+                    GetResolvedMatrix(Rigs[bindable.BindName], ref matrix, models);
                 }
             }
         }
@@ -374,6 +448,10 @@ namespace WolvenKit.ViewModels.Documents
         [Reactive] public List<LoadableModel> Models { get; set; } = new();
 
         [Reactive] public Dictionary<string, Rig> Rigs { get; set; } = new();
+
+        [Reactive] public List<Appearance> Appearances { get; set; } = new();
+
+        [Reactive] public Appearance SelectedAppearance { get; set; }
 
         public static Matrix3D ToMatrix3D(QsTransform qs)
         {
@@ -408,8 +486,8 @@ namespace WolvenKit.ViewModels.Documents
 
         public static Vector3D ToVector3D(Vector3 v) => new Vector3D(v.X, v.Z, -v.Y);
 
-        public static Vector3D ToScaleVector3D(Vector4 v) => new Vector3D(v.X, v.Y, v.Z);
+        public static Vector3D ToScaleVector3D(Vector4 v) => new Vector3D(v.X, v.Z, v.Y);
 
-        public static Vector3D ToScaleVector3D(Vector3 v) => new Vector3D(v.X, v.Y, v.Z);
+        public static Vector3D ToScaleVector3D(Vector3 v) => new Vector3D(v.X, v.Z, v.Y);
     }
 }

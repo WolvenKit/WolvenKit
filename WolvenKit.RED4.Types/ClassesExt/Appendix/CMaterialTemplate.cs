@@ -6,6 +6,7 @@ namespace WolvenKit.RED4.Types
     [REDClass(ChildLevel = 1)]
     public partial class CMaterialTemplate : IRedAppendix
     {
+        // appear to just be the parameterNames
         [RED("buffer")]
         [REDProperty(IsIgnored = true)]
         public CByteArray Buffer

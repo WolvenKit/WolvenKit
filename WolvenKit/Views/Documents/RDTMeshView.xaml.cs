@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -17,6 +18,7 @@ using Ab3d;
 using Ab3d.Assimp;
 using Ab3d.Common.Cameras;
 using Ab3d.DirectX;
+using Ab3d.DirectX.Materials;
 using Ab3d.Utilities;
 using Ab3d.Visuals;
 using Assimp;
@@ -24,6 +26,7 @@ using ReactiveUI;
 using Splat;
 using WolvenKit.Common.Services;
 using WolvenKit.Functionality.Ab4d;
+using WolvenKit.Functionality.Services;
 using WolvenKit.ViewModels.Documents;
 
 namespace WolvenKit.Views.Documents
@@ -38,32 +41,35 @@ namespace WolvenKit.Views.Documents
             InitializeComponent();
             this.WhenActivated(disposables =>
             {
-                ViewModel.WhenAnyValue(x => x.Models).Subscribe(source =>
+                ViewModel.WhenAnyValue(x => x.SelectedAppearance).Subscribe(source =>
                 {
-                    if (source is { })
+                    if (source is { } app)
                     {
-                        LoadModels();
+                        LoadModels(app);
                     }
                 });
             });
         }
 
-        public void LoadModels()
+        public void LoadModels(Appearance app)
         {
-            foreach (var model in ViewModel.Models)
+            foreach (var model in app.Models)
             {
                 LoadModel(model);
             }
             GC.Collect();
             //GC.WaitForPendingFinalizers();
             //GC.Collect();
-            ShowModel(true);
+            ShowAppearance(app, true);
         }
 
         public void LoadModel(LoadableModel model)
         {
             if (model.Model != null)
+            {
+                model.Model.SetCurrentValue(Model3D.TransformProperty, model.Transform);
                 return;
+            }
 
             //bool isNewFile = false;
 
@@ -98,6 +104,12 @@ namespace WolvenKit.Views.Documents
 
                 try
                 {
+                    var assimpScene = assimpWpfImporter.ReadFileToAssimpScene(model.FilePath);
+
+                    //var assimpWpfConverter = new AssimpWpfConverter();
+                    //model3D = assimpWpfConverter.ConvertAssimpModel(assimpScene);
+
+
                     model3D = assimpWpfImporter.ReadModel3D(model.FilePath, texturesPath: null); // we can also define a textures path if the textures are located in some other directory (this is parameter can be skipped, but is defined here so you will know that you can use it)
                     //isNewFile = (_fileName != model.FilePath);
                     //_fileName = model.FilePath;
@@ -118,8 +130,22 @@ namespace WolvenKit.Views.Documents
                 // Show the model
                 if (model3D != null)
                 {
-                    //ShowModel(isNewFile); // If we just reloaded the previous file, we preserve the current camera TargetPosition and Distance
+                    //ShowAppearance(isNewFile); // If we just reloaded the previous file, we preserve the current camera TargetPosition and Distance
                     model3D.Transform = model.Transform;
+
+                    Random r = new Random();
+                    Brush brush = new SolidColorBrush(Color.FromRgb((byte)r.Next(1, 255),
+                                      (byte)r.Next(1, 255), (byte)r.Next(1, 233)));
+                    var material = new DiffuseMaterial(brush);
+
+                    var pbm = new PhysicallyBasedMaterial()
+                    {
+                        BaseColor = new SharpDX.Color4((float)(r.Next(1, 255) / 256.0), (float)(r.Next(1, 255) / 256.0), (float)(r.Next(1, 233) / 256.0), 1)
+                    };
+                    //pbm.SetTextureMap(TextureMapTypes.NormalMap, new SharpDX.Direct3D11.ShaderResourceView());
+
+                    material.SetUsedDXMaterial(pbm);
+                    ModelUtils.ChangeMaterial(model3D, material, material);
                     model.Model = model3D;
                 }
 
@@ -140,17 +166,22 @@ namespace WolvenKit.Views.Documents
             }
         }
 
-        public void ShowModel(bool updateCamera)
+        public void ShowAppearance(Appearance app, bool updateCamera)
         {
             try
             {
                 //ContentVisual.SetCurrentValue(ModelVisual3D.ContentProperty, model3D);
 
-                var collection = new Model3DCollection(ViewModel.Models.Where(x => x.Model != null && x.IsEnabled).Select(x => x.Model));
+                var collection = new Model3DCollection(app.Models.Where(x => x.Model != null && x.IsEnabled).Select(x => x.Model));
                 var group = new Model3DGroup()
                 {
                     Children = collection
                 };
+
+                // export the whole group/collection
+                var assimpWpfExporter = new AssimpWpfExporter();
+                assimpWpfExporter.AddModel(group);
+                assimpWpfExporter.Export(System.IO.Path.Combine(ISettingsManager.GetTemp_OBJPath(), System.IO.Path.GetFileNameWithoutExtension(ViewModel.File.ContentId) + "_" + app.Name + ".glb"), "glb2");
 
                 ContentVisual.SetCurrentValue(ModelVisual3D.ContentProperty, group);
 
@@ -303,7 +334,8 @@ namespace WolvenKit.Views.Documents
 
         private void ReloadModels(object sender, RoutedEventArgs e)
         {
-            LoadModels();
+            if (ViewModel != null)
+                LoadModels(ViewModel.SelectedAppearance);
         }
     }
 }

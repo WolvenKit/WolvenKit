@@ -13,5 +13,7 @@ namespace WolvenKit.Functionality.Services
 
         public FileModel LastSelect { get; set; }
         public Task RefreshAsync(EditorProject proj);
+
+        public FileModel GetFileModelFromHash(ulong hash);
     }
 }
