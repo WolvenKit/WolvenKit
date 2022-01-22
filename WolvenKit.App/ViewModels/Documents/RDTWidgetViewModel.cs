@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Runtime.Serialization;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Forms;
 using System.Windows.Input;
@@ -53,73 +54,153 @@ namespace WolvenKit.ViewModels.Documents
             Header = "Widget Preview";
             File = file;
             _data = data;
-            var _library = data as inkWidgetLibraryResource;
+            library = _data as inkWidgetLibraryResource;
+        }
 
-            var animPath = _library.AnimationLibraryResRef?.DepotPath?.GetValue() ?? "";
-            var animHash = FNV1A64HashAlgorithm.HashString(animPath);
-            var animFile = File.GetFileFromHash(animHash);
-
-            if (animFile != null && animFile.RootChunk is inkanimAnimationLibraryResource alr)
+        public async Task LoadResources()
+        {
+            await Task.Run(async () =>
             {
-                foreach (var seq in alr.Sequences)
-                {
-                    inkAnimations.Add((inkanimSequence)seq.GetValue());
-                }
-            }
+                var tasks = new List<Task>();
 
-            foreach (var f in _library.ExternalDependenciesForInternalItems)
-            {
-                var itemPath = f.DepotPath.GetValue();
-                if (Path.GetExtension(itemPath) == ".inkatlas")
+                tasks.Add(LoadAnimations());
+
+                foreach (var f in library.ExternalDependenciesForInternalItems)
                 {
-                    LoadInkAtlas(itemPath);
-                }
-                else if (Path.GetExtension(itemPath) == ".inkfontfamily")
-                {
-                    var ffHash = FNV1A64HashAlgorithm.HashString(itemPath);
-                    var ffFile = File.GetFileFromHash(ffHash);
-                    if (ffFile == null || ffFile.RootChunk is not inkFontFamilyResource ffr)
+                    var itemPath = f.DepotPath.GetValue();
+                    if (Path.GetExtension(itemPath) == ".inkatlas")
                     {
-                        continue;
+                        tasks.Add(LoadInkAtlasAsync(itemPath));
+                    }
+                    else if (Path.GetExtension(itemPath) == ".inkfontfamily")
+                    {
+                        tasks.Add(LoadFont(itemPath));
+                    }
+                    else if (Path.GetExtension(itemPath) == ".inkstyle")
+                    {
+                        tasks.Add(LoadStyle(itemPath));
+                    }
+                }
+
+                await Task.WhenAll(tasks);
+            });
+        }
+
+        public Task LoadAnimations()
+        {
+            return Task.Run(() =>
+            {
+                inkAnimations = new();
+
+                var animPath = library.AnimationLibraryResRef?.DepotPath?.GetValue() ?? "";
+                var animHash = FNV1A64HashAlgorithm.HashString(animPath);
+                var animFile = File.GetFileFromHash(animHash);
+
+                if (animFile != null && animFile.RootChunk is inkanimAnimationLibraryResource alr)
+                {
+                    foreach (var seq in alr.Sequences)
+                    {
+                        inkAnimations.Add((inkanimSequence)seq.GetValue());
+                    }
+                }
+            });
+        }
+
+        public Task LoadFont(string path)
+        {
+            return Task.Run(() =>
+            {
+                if (Application.Current.Resources.Contains(path))
+                {
+                    return;
+                }
+
+                Application.Current.Resources.Add(path, false);
+
+                var ffHash = FNV1A64HashAlgorithm.HashString(path);
+                var ffFile = File.GetFileFromHash(ffHash);
+                if (ffFile == null || ffFile.RootChunk is not inkFontFamilyResource ffr)
+                {
+                    return;
+                }
+
+                foreach (var fs in ffr.FontStyles)
+                {
+                    var key = "FontCollection/" + path + "#" + fs.StyleName;
+                    if (!Application.Current.Resources.Contains(key))
+                    {
+                        var fontHash = FNV1A64HashAlgorithm.HashString(fs.Font.DepotPath.ToString());
+                        var fontFile = File.GetFileFromHash(fontHash);
+                        if (fontFile == null || fontFile.RootChunk is not rendFont rf)
+                        {
+                            continue;
+                        }
+
+                        PrivateFontCollection pfc = new();
+                        var fontBytes = rf.FontBuffer.Buffer.GetBytes();
+                        var ptrData = Marshal.AllocCoTaskMem(fontBytes.Length);
+                        Marshal.Copy(fontBytes, 0, ptrData, fontBytes.Length);
+                        pfc.AddMemoryFont(ptrData, fontBytes.Length);
+                        Marshal.FreeCoTaskMem(ptrData);
+
+                        Application.Current.Resources.Add(key, pfc);
+                    }
+                }
+
+                Application.Current.Resources[path] = true;
+            });
+        }
+
+        public Task LoadStyle(string path)
+        {
+            return Task.Run(() =>
+            {
+                var styleHash = FNV1A64HashAlgorithm.HashString(path);
+                var styleFile = File.GetFileFromHash(styleHash);
+
+                if (styleFile == null || styleFile.RootChunk is not inkStyleResource sr)
+                {
+                    return;
+                }
+
+                if (!Themes.Contains("Default"))
+                {
+                    Themes.Add("Default");
+                }
+                CurrentTheme = "Default";
+
+                foreach (var style in sr.Styles)
+                {
+                    if (!StyleStates.Contains(style.State))
+                    {
+                        StyleStates.Add(style.State);
                     }
 
-                    foreach (var fs in ffr.FontStyles)
+                    foreach (var prop in style.Properties)
                     {
-                        var key = "FontCollection/" + itemPath + "#" + fs.StyleName;
+                        var key = "CVariant/Default/" + prop.PropertyPath + "#" + style.State;
                         if (!Application.Current.Resources.Contains(key))
                         {
-                            var fontHash = FNV1A64HashAlgorithm.HashString(fs.Font.DepotPath.ToString());
-                            var fontFile = File.GetFileFromHash(fontHash);
-                            if (fontFile == null || fontFile.RootChunk is not rendFont rf)
-                            {
-                                continue;
-                            }
-
-                            PrivateFontCollection pfc = new();
-                            var fontBytes = rf.FontBuffer.Buffer.GetBytes();
-                            var ptrData = Marshal.AllocCoTaskMem(fontBytes.Length);
-                            Marshal.Copy(fontBytes, 0, ptrData, fontBytes.Length);
-                            pfc.AddMemoryFont(ptrData, fontBytes.Length);
-                            Marshal.FreeCoTaskMem(ptrData);
-
-                            Application.Current.Resources.Add(key, pfc);
+                            Application.Current.Resources.Add(key, prop.Value);
                         }
                     }
                 }
-                else if (Path.GetExtension(itemPath) == ".inkstyle")
-                {
-                    var styleHash = FNV1A64HashAlgorithm.HashString(itemPath);
-                    var styleFile = File.GetFileFromHash(styleHash);
 
-                    if (styleFile == null || styleFile.RootChunk is not inkStyleResource sr)
+                if (StyleStates.Count > 0)
+                {
+                    CurrentStyleState = StyleStates[0];
+                }
+
+                foreach (var theme in sr.Themes)
+                {
+                    var themeHash = FNV1A64HashAlgorithm.HashString(theme.StyleResource.DepotPath.ToString());
+                    var themeFile = File.GetFileFromHash(themeHash);
+                    if (themeFile == null || themeFile.RootChunk is not inkStyleResource isr)
                     {
                         continue;
                     }
 
-                    Themes.Add("Default");
-                    CurrentTheme = "Default";
-
-                    foreach (var style in sr.Styles)
+                    foreach (var style in isr.Styles)
                     {
                         if (!StyleStates.Contains(style.State))
                         {
@@ -128,7 +209,7 @@ namespace WolvenKit.ViewModels.Documents
 
                         foreach (var prop in style.Properties)
                         {
-                            var key = "CVariant/Default/" + prop.PropertyPath + "#" + style.State;
+                            var key = "CVariant/" + theme.ThemeID + "/" + prop.PropertyPath + "#" + style.State;
                             if (!Application.Current.Resources.Contains(key))
                             {
                                 Application.Current.Resources.Add(key, prop.Value);
@@ -136,45 +217,20 @@ namespace WolvenKit.ViewModels.Documents
                         }
                     }
 
-                    if (StyleStates.Count > 0)
+                    if (!Themes.Contains(theme.ThemeID))
                     {
-                        CurrentStyleState = StyleStates[0];
-                    }
-
-                    foreach (var theme in sr.Themes)
-                    {
-                        var themeHash = FNV1A64HashAlgorithm.HashString(theme.StyleResource.DepotPath.ToString());
-                        var themeFile = File.GetFileFromHash(themeHash);
-                        if (themeFile == null || themeFile.RootChunk is not inkStyleResource isr)
-                        {
-                            continue;
-                        }
-
-                        foreach (var style in isr.Styles)
-                        {
-                            if (!StyleStates.Contains(style.State))
-                            {
-                                StyleStates.Add(style.State);
-                            }
-
-                            foreach (var prop in style.Properties)
-                            {
-                                var key = "CVariant/" + theme.ThemeID + "/" + prop.PropertyPath + "#" + style.State;
-                                if (!Application.Current.Resources.Contains(key))
-                                {
-                                    Application.Current.Resources.Add(key, prop.Value);
-                                }
-                            }
-                        }
-
-                        if (!Themes.Contains(theme.ThemeID))
-                        {
-                            Themes.Add(theme.ThemeID);
-                        }
+                        Themes.Add(theme.ThemeID);
                     }
                 }
-            }
-            library = _library;
+            });
+        }
+
+        public Task LoadInkAtlasAsync(string path)
+        {
+            return Task.Run(() =>
+            {
+                LoadInkAtlas(path);
+            });
         }
 
         public void LoadInkAtlas(string path)

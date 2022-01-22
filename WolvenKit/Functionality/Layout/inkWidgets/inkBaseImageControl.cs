@@ -262,57 +262,57 @@ namespace WolvenKit.Functionality.Layout.inkWidgets
                 else
                 {
                     int x = 0, y = 0, width = OriginalImageSize.Width, height = OriginalImageSize.Height;
-                    if (Widget.FitToContent)
-                    {
-                        if (TileType == Enums.inkBrushTileType.Horizontal || TileType == Enums.inkBrushTileType.Both)
-                        {
-                            x = 0;
-                        }
-                        else
-                        {
-                            switch (Widget.Layout.HAlign.Value)
-                            {
-                                case Enums.inkEHorizontalAlign.Right:
-                                    x = destBitmap.Width - OriginalImageSize.Width;
-                                    break;
-                                case Enums.inkEHorizontalAlign.Center:
-                                    x = (destBitmap.Width - OriginalImageSize.Width) / 2;
-                                    break;
-                                case Enums.inkEHorizontalAlign.Fill:
-                                    width = destBitmap.Width;
-                                    break;
-                                default:
-                                    break;
-                            }
-                        }
+                    //if (Widget.FitToContent)
+                    //{
+                    //    if (TileType == Enums.inkBrushTileType.Horizontal || TileType == Enums.inkBrushTileType.Both)
+                    //    {
+                    //        x = 0;
+                    //    }
+                    //    else
+                    //    {
+                    //        switch (Widget.Layout.HAlign.Value)
+                    //        {
+                    //            case Enums.inkEHorizontalAlign.Right:
+                    //                x = destBitmap.Width - OriginalImageSize.Width;
+                    //                break;
+                    //            case Enums.inkEHorizontalAlign.Center:
+                    //                x = (destBitmap.Width - OriginalImageSize.Width) / 2;
+                    //                break;
+                    //            case Enums.inkEHorizontalAlign.Fill:
+                    //                width = destBitmap.Width;
+                    //                break;
+                    //            default:
+                    //                break;
+                    //        }
+                    //    }
 
-                        if (TileType == Enums.inkBrushTileType.Vertical || TileType == Enums.inkBrushTileType.Both)
-                        {
-                            y = 0;
-                        }
-                        else
-                        {
-                            switch (Widget.Layout.VAlign.Value)
-                            {
-                                case Enums.inkEVerticalAlign.Bottom:
-                                    y = destBitmap.Height - OriginalImageSize.Height;
-                                    break;
-                                case Enums.inkEVerticalAlign.Center:
-                                    y = (destBitmap.Height - OriginalImageSize.Height) / 2;
-                                    break;
-                                case Enums.inkEVerticalAlign.Fill:
-                                    height = destBitmap.Height;
-                                    break;
-                                default:
-                                    break;
-                            }
-                        }
-                    }
-                    else
-                    {
-                        width = destBitmap.Width;
-                        height = destBitmap.Height;
-                    }
+                    //    if (TileType == Enums.inkBrushTileType.Vertical || TileType == Enums.inkBrushTileType.Both)
+                    //    {
+                    //        y = 0;
+                    //    }
+                    //    else
+                    //    {
+                    //        switch (Widget.Layout.VAlign.Value)
+                    //        {
+                    //            case Enums.inkEVerticalAlign.Bottom:
+                    //                y = destBitmap.Height - OriginalImageSize.Height;
+                    //                break;
+                    //            case Enums.inkEVerticalAlign.Center:
+                    //                y = (destBitmap.Height - OriginalImageSize.Height) / 2;
+                    //                break;
+                    //            case Enums.inkEVerticalAlign.Fill:
+                    //                height = destBitmap.Height;
+                    //                break;
+                    //            default:
+                    //                break;
+                    //        }
+                    //    }
+                    //}
+                    //else
+                    //{
+                    width = destBitmap.Width;
+                    height = destBitmap.Height;
+                    //}
 
                     switch (TileType)
                     {

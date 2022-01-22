@@ -199,6 +199,7 @@ namespace WolvenKit.Functionality.Layout.inkWidgets
                     var effect = (inkIEffect)handle.GetValue();
                     if (!WidgetView.ViewModel.inkEffects.Contains(effect))
                         WidgetView.ViewModel.inkEffects.Add(effect);
+
                     if (effect is inkMaskEffect me)
                     {
                         if (me.IsEnabled)

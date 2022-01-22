@@ -28,6 +28,8 @@ namespace WolvenKit.Views.Documents
 
         public List<inkControlAnimation> Animations = new();
 
+        public bool ResourcesLoaded = false;
+
         public RDTWidgetView()
         {
             InitializeComponent();
@@ -35,72 +37,80 @@ namespace WolvenKit.Views.Documents
 
             this.WhenActivated(disposables =>
             {
-                this.ViewModel.WhenAnyValue(x => x.library).Subscribe(library =>
-                {
-                    var stack = new StackPanel();
-                    Widgets.Clear();
-                    WidgetPreview.Children.Clear();
-                    WidgetPreview.Children.Add(stack);
+                //this.ViewModel.WhenAnyValue(x => x.library).Subscribe(library =>
+                //{
 
-                    if (ViewModel.TextWidgets == null)
-                        ViewModel.TextWidgets = new();
-                    ViewModel.TextWidgets.Clear();
-
-                    foreach (var item in library.LibraryItems)
-                    {
-                        if (item.PackageData == null || item.PackageData.Data is not Package04 pkg)
-                        {
-                            item.Package.Buffer.Decompress();
-                            if (item.Package.Data is not Package04 pkg2)
-                                return;
-                            pkg = pkg2;
-                        }
-
-                        if (pkg.Chunks[0] is not inkWidgetLibraryItemInstance inst)
-                            return;
-
-                        if (inst.RootWidget.GetValue() is not inkWidget root)
-                            return;
-
-                        stack.Children.Add(new TextBlock()
-                        {
-                            Text = item.Name,
-                            Margin = new Thickness(0,5,0,5),
-                            Foreground = new SolidColorBrush(Color.FromArgb(30, 255, 255, 255))
-                        });
-
-                        var widget = root.CreateControl(this);
-                        Widgets.Add(widget);
-                        stack.Children.Add(widget);
-                    }
-
-                    foreach (var animation in ViewModel.inkAnimations)
-                    {
-                        Animations.Add(new inkControlAnimation(animation, this));
-                    }
-                }).DisposeWith(disposables);
+                //}).DisposeWith(disposables);
 
                 this.OneWayBind(ViewModel,
                         x => x.TextWidgets.Values,
                         x => x.TextWidgetList.ItemsSource)
                     .DisposeWith(disposables);
 
-                //this.OneWayBind(this,
-                //        x => x.Animations,
-                //        x => x.AnimationList.ItemsSource)
-                //    .DisposeWith(disposables);
+                ExportWidgetCommand = new DelegateCommand((w) => ViewModel.ExportWidget((inkWidget)w));
 
-                AnimationList.SetCurrentValue(ItemsControl.ItemsSourceProperty, Animations);
+                if (!ResourcesLoaded)
+                {
+                    ResourcesLoaded = true;
+                    Load();
+                }
+            });
+        }
+
+        private void Load()
+        {
+            Mouse.OverrideCursor = Cursors.Wait;
+
+            ViewModel.LoadResources().ContinueWith(task =>
+            {
+                var stack = new StackPanel();
+                Widgets.Clear();
+                WidgetPreview.Children.Clear();
+                WidgetPreview.Children.Add(stack);
+
+                if (ViewModel.TextWidgets == null)
+                    ViewModel.TextWidgets = new();
+                ViewModel.TextWidgets.Clear();
+
+                foreach (var item in ViewModel.library.LibraryItems)
+                {
+                    if (item.PackageData == null || item.PackageData.Data is not Package04 pkg)
+                    {
+                        item.Package.Buffer.Decompress();
+                        if (item.Package.Data is not Package04 pkg2)
+                            return;
+                        pkg = pkg2;
+                    }
+
+                    if (pkg.Chunks[0] is not inkWidgetLibraryItemInstance inst)
+                        return;
+
+                    if (inst.RootWidget.GetValue() is not inkWidget root)
+                        return;
+
+                    stack.Children.Add(new TextBlock()
+                    {
+                        Text = item.Name,
+                        Margin = new Thickness(0, 5, 0, 5),
+                        Foreground = new SolidColorBrush(Color.FromArgb(30, 255, 255, 255))
+                    });
+
+                    var widget = root.CreateControl(this);
+                    Widgets.Add(widget);
+                    stack.Children.Add(widget);
+                }
 
                 WidgetExportButtons.SetCurrentValue(ItemsControl.ItemsSourceProperty, Widgets.Select(x => x.Widget));
 
-                ExportWidgetCommand = new DelegateCommand((w) => ViewModel.ExportWidget((inkWidget)w));
+                foreach (var animation in ViewModel.inkAnimations)
+                {
+                    Animations.Add(new inkControlAnimation(animation, this));
+                }
 
-                //this.Bind(ViewModel,
-                //        x => x.WidgetBackground,
-                //        x => x.WidgetBackgroundColorEditor.Color)
-                //    .DisposeWith(disposables);
-            });
+                AnimationList.SetCurrentValue(ItemsControl.ItemsSourceProperty, Animations);
+
+                Mouse.OverrideCursor = null;
+            }, TaskScheduler.FromCurrentSynchronizationContext());
         }
 
         // Image Preview
