@@ -150,19 +150,6 @@ namespace WolvenKit.ViewModels.Shell
             OpenChunkCommand = new DelegateCommand(_ => ExecuteOpenChunk(), _ => CanOpenChunk());
         }
 
-        public void DoSubscribe()
-        {
-            if (_propertiesLoaded)
-            {
-                return;
-            }
-
-            this.WhenAnyValue(x => x.Data, x => x.ForceLoadProperties)
-                .Subscribe(_ => CalculateProperties());
-
-            _propertiesLoaded = true;
-        }
-
         public ChunkViewModel(IRedType export, RDTDataViewModel tab) : this(export)
         {
             _tab = tab;
@@ -426,6 +413,11 @@ namespace WolvenKit.ViewModels.Shell
 
         public void CalculateProperties()
         {
+            if (_propertiesLoaded)
+            {
+                return;
+            }
+
             var disposable = Properties.SuspendNotifications();
 
             Properties.Clear();
