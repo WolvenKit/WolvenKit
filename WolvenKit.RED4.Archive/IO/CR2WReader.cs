@@ -108,10 +108,13 @@ namespace WolvenKit.RED4.Archive.IO
                 value = Read(prop.Type, size - 4, prop.Flags.Clone());
 
                 var typeInfo = RedReflection.GetTypeInfo(cls.GetType());
+
+#if DEBUG
                 if (!typeInfo.SerializeDefault && RedReflection.IsDefault(cls.GetType(), varname, value))
                 {
                     throw new TodoException($"Invalid default val for: \"{RedReflection.GetRedTypeFromCSType(cls.GetType())}.{varname}\"");
                 }
+#endif
 
                 prop.SetValue(cls, value);
             }

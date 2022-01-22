@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Newtonsoft.Json;
 using WolvenKit.RED4.Archive.CR2W;
 using WolvenKit.RED4.Types;
 
@@ -8,47 +9,57 @@ namespace WolvenKit.Common.Conversion
 {
     public class RedFileDto
     {
+        internal List<int> _handles = new();
+
         public const string Magic = "w2rc";
 
-        public Dictionary<int,RedExportDto> Chunks { get; set; } = new();
+        public string WolvenKitVersion = "8.5.0";
+        public string WKitJsonVersion = "0.0.1";
+        public string ExportedDateTime => DateTime.UtcNow.ToString("o");
+        public string ArchiveFileName;
 
-        public List<RedBufferDto> Buffers { get; set; } = new();
+        [JsonProperty(Order = 1)]
+        public RedClassDto Root;
 
-        public bool ShouldSerializeBuffers() => Buffers is { Count: > 0 };
 
         public RedFileDto()
         {
 
         }
 
-        public RedFileDto(Red4File cr2w)
+        public RedFileDto(CR2WFile cr2w)
         {
-            throw new NotImplementedException();
+            Root = new RedClassDto(cr2w.RootChunk, this);
+            ArchiveFileName = cr2w.MetaData.FileName;
+            // not sure if we should be referencing the project here
+            var archiveLocation = "source\\archive\\";
+            if (ArchiveFileName != null && ArchiveFileName.IndexOf(archiveLocation) is var index && index != -1)
+            {
+                ArchiveFileName = ArchiveFileName.Substring(index + archiveLocation.Length);
+            }
+            // never assigned i guess :/
+            //WolvenKitVersion = cr2w.MetaData.BuildVersion.ToString();
+        }
 
-            //Chunks = cr2w.Chunks.ToDictionary(_ => _.ChunkIndex, _ => new RedExportDto(_));
-            //Buffers = cr2w.Buffers.Select(_ => new RedBufferDto(_)).ToList();
+        public bool RegisterHandle(int handleHash)
+        {
+            if (_handles.Contains(handleHash))
+            {
+                return false;
+            }
+            else
+            {
+                _handles.Add(handleHash);
+                return true;
+            }
         }
 
         public CR2WFile ToW2rc()
         {
-            var cr2w = new CR2WFile
+            var cr2w = new CR2WFile()
             {
-                //Buffers = Buffers
-                //    .OrderBy(_ => _.Index)
-                //    .Select(_ => _.ToRedBuffer())
-                //    .ToList()
+                RootChunk = Root.ToRedBaseClass()
             };
-
-            // chunks
-            // order so that parent chunks get created first
-            var groupedChunks = Chunks.GroupBy(_ => _.Value.ParentIndex);
-            foreach (IGrouping<int, KeyValuePair<int, RedExportDto>> groupedChunk in groupedChunks)
-            {
-                foreach (var (chunkIndex, chunk) in groupedChunk.OrderBy(_ => _.Key))
-                {
-                    chunk.CreateChunkInFile(cr2w, chunkIndex);
-                }
-            }
 
             return cr2w;
         }

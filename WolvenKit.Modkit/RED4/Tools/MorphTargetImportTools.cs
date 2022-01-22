@@ -19,7 +19,7 @@ namespace WolvenKit.Modkit.RED4
     {
         public bool ImportMorphTargets(FileInfo inGltfFile, Stream intargetStream, List<Archive> archives, ValidationMode vmode = ValidationMode.Strict, Stream outStream = null)
         {
-            var cr2w = _wolvenkitFileService.TryReadRed4File(intargetStream);
+            var cr2w = _wolvenkitFileService.ReadRed4File(intargetStream);
             if (cr2w == null || cr2w.RootChunk is not MorphTargetMesh blob || blob.Blob.Chunk is not rendRenderMorphTargetMeshBlob renderblob || renderblob.BaseBlob.Chunk is not rendRenderMeshBlob rendblob)
             {
                 return false;
@@ -37,7 +37,7 @@ namespace WolvenKit.Modkit.RED4
                         break;
                     }
                 }
-                var meshCr2w = _wolvenkitFileService.TryReadRed4File(meshStream);
+                var meshCr2w = _wolvenkitFileService.ReadRed4File(meshStream);
                 if (meshCr2w != null && meshCr2w.RootChunk is CMesh mesh && mesh.RenderResourceBlob.Chunk is rendRenderMeshBlob rendBlob)
                 {
                     newRig = MeshTools.GetOrphanRig(rendBlob, meshCr2w);

@@ -8,7 +8,7 @@ namespace WolvenKit.RED4.Types
 {
     [DebuggerTypeProxy(typeof(ICollectionDebugView<>))]
     [DebuggerDisplay("Count = {Count}")]
-    public class CArrayBase<T> : IRedArray<T>, IRedNotifyObjectChanged, IEquatable<CArrayBase<T>>
+    public class CArrayBase<T> : IRedArray<T>, IRedCloneable, IRedNotifyObjectChanged, IEquatable<CArrayBase<T>>
     {
         public int MaxSize { get; set; } = -1;
 
@@ -37,6 +37,30 @@ namespace WolvenKit.RED4.Types
             }
         }
         public Type InnerType => typeof(T);
+
+        public object ShallowCopy()
+        {
+            return MemberwiseClone();
+        }
+
+        public object DeepCopy()
+        {
+            var other = (IList<T>)RedTypeManager.CreateRedType(GetType());
+
+            foreach (var element in _internalList)
+            {
+                if (element is IRedCloneable cl)
+                {
+                    other.Add((T)cl.DeepCopy());
+                }
+                else
+                {
+                    other.Add(element);
+                }
+            }
+
+            return other;
+        }
 
         #region Event
 

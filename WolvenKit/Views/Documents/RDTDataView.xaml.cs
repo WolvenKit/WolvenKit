@@ -145,7 +145,7 @@ namespace WolvenKit.Views.Documents
                         //{
                         //    e.DropPosition = DropPosition.DropAsChild;
                         //}
-                        else if (source.Data is RedBaseClass rbc && target.Parent.Data is DataBuffer db)
+                        else if (source.Data is RedBaseClass rbc && target.Parent.Data is DataBuffer or SerializationDeferredDataBuffer)
                         {
                             e.DropPosition = DropPosition.DropBelow;
                         }
@@ -188,7 +188,7 @@ namespace WolvenKit.Views.Documents
             {
                 if (e.TargetNode.Content is ChunkViewModel target)
                 {
-                    if (source.Data is RedBaseClass rbc && target.Parent.Data is DataBuffer)
+                    if (source.Data is RedBaseClass rbc && target.Parent.Data is DataBuffer or SerializationDeferredDataBuffer)
                     {
                         target.Parent.AddChunkToDataBuffer((RedBaseClass)rbc.DeepCopy(), target.Parent.Properties.IndexOf(target) + 1);
                     }

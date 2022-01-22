@@ -2,7 +2,7 @@ using System;
 using System.Security.Cryptography;
 using System.Text;
 
-namespace WolvenKit.RED4.Archive
+namespace WolvenKit.Core.CRC
 {
     /// <summary>
     /// Implementation of CRC-32.

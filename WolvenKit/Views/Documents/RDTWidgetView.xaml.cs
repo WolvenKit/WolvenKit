@@ -56,7 +56,7 @@ namespace WolvenKit.Views.Documents
                             pkg = pkg2;
                         }
 
-                        if (pkg.RootChunk is not inkWidgetLibraryItemInstance inst)
+                        if (pkg.Chunks[0] is not inkWidgetLibraryItemInstance inst)
                             return;
 
                         if (inst.RootWidget.GetValue() is not inkWidget root)
