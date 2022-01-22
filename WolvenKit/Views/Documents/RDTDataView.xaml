@@ -472,24 +472,20 @@
             AllowEditing="False"
             Background="{StaticResource ContentBackground}"
             BorderThickness="0"
-            ChildPropertyName="TVProperties"
             ItemDragOver="SfTreeView_ItemDragOver"
             ItemDragStarting="SfTreeView_ItemDragStarting"
             ItemDropped="SfTreeView_ItemDropped"
             ItemDropping="SfTreeView_ItemDropping"
             ItemTemplateSelector="{StaticResource itemTemplateSelector}"
+            LoadOnDemandCommand="{Binding OnDemandLoadingCommand}"
             SelectionMode="Single"
             ShowLines="True"
             Visibility="Visible">
             <syncfusion:SfTreeView.HierarchyPropertyDescriptors>
                 <treeViewEngine:HierarchyPropertyDescriptor
-                    ChildPropertyName="TVProperties"
-                    IsExpandedPropertyName="IsExpanded"
                     IsSelectedPropertyName="IsSelected"
                     TargetType="{x:Type shell:ChunkViewModel}" />
                 <treeViewEngine:HierarchyPropertyDescriptor
-                    ChildPropertyName="TVProperties"
-                    IsExpandedPropertyName="IsExpanded"
                     IsSelectedPropertyName="IsSelected"
                     TargetType="{x:Type shell:GroupedChunkViewModel}" />
             </syncfusion:SfTreeView.HierarchyPropertyDescriptors>
