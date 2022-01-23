@@ -1,13 +1,20 @@
+using System;
 using System.Collections.Generic;
+using System.Drawing;
+using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows.Media;
+using System.Windows.Media.Imaging;
 using System.Windows.Media.Media3D;
 using CP77.CR2W;
 using ReactiveUI.Fody.Helpers;
 using Splat;
 using WolvenKit.Common.Services;
+using WolvenKit.Functionality.Ab4d;
 using WolvenKit.Functionality.Services;
+using WolvenKit.Modkit.RED4;
 using WolvenKit.RED4.Archive.Buffer;
 using WolvenKit.RED4.Archive.CR2W;
 using WolvenKit.RED4.Types;
@@ -92,6 +99,8 @@ namespace WolvenKit.ViewModels.Documents
         public CMaterialInstance Instance { get; set; }
         public Dictionary<string, object> Values { get; set; } = new();
         public Material Base { get; set; }
+        public Bitmap ColorTexture { get; set; }
+        public string ColorTexturePath { get; set; }
     }
 
     public class RDTMeshViewModel : RedDocumentTabViewModel
@@ -111,26 +120,99 @@ namespace WolvenKit.ViewModels.Documents
         {
             _data = data;
 
-            var list = new List<LoadableModel>();
+            var materials = new Dictionary<string, Material>();
+
+            var localList = (CR2WList)data.LocalMaterialBuffer.RawData?.Buffer.Data ?? null;
+
+            foreach (var me in data.MaterialEntries)
+            {
+                if (!me.IsLocalInstance)
+                {
+                    materials.Add(me.Name, new Material()
+                    {
+                        Name = me.Name
+                    });
+                    continue;
+                }
+                CMaterialInstance inst = null;
+
+                if (localList != null)
+                {
+                    inst = (CMaterialInstance)localList.Files[me.Index].RootChunk;
+                }
+                else
+                {
+                    //foreach (var pme in data.PreloadLocalMaterialInstances)
+                    //{
+                        //inst = (CMaterialInstance)pme.GetValue();
+                    //}
+                   inst = (CMaterialInstance)data.PreloadLocalMaterialInstances[me.Index].GetValue();
+                }
+
+                //CMaterialInstance bm = null;
+                //if (File.GetFileFromDepotPath(inst.BaseMaterial.DepotPath) is var file)
+                //{
+                //    bm = (CMaterialInstance)file.RootChunk;
+                //}
+                var material = new Material()
+                {
+                    Instance = inst,
+                    Name = me.Name
+                };
+
+                foreach (var pair in inst.Values)
+                {
+                    material.Values.Add(pair.Key, pair.Value);
+                }
+
+                materials.Add(me.Name, material);
+            }
 
             var outPath = Path.Combine(ISettingsManager.GetTemp_OBJPath(), Path.GetFileNameWithoutExtension(file.FilePath) + "_full.glb");
             if (System.IO.File.Exists(outPath) || MeshTools.ExportMesh(file.Cr2wFile, new FileInfo(outPath)))
             {
-                list.Add(new LoadableModel()
+                foreach (var handle in data.Appearances)
                 {
-                    FilePath = outPath,
-                    IsEnabled = true,
-                    Name = file.RelativePath
-                });
+                    var app = handle.GetValue();
+                    if (app is meshMeshAppearance mmapp)
+                    {
+                        var appMaterials = new List<Material>();
+
+                        foreach (var m in mmapp.ChunkMaterials)
+                        {
+                            if (materials.ContainsKey(m))
+                            {
+                                appMaterials.Add(materials[m]);
+                            }
+                            else
+                            {
+                                appMaterials.Add(new Material()
+                                {
+                                    Name = m
+                                });
+                            }
+                        }
+
+                        var list = new List<LoadableModel>();
+
+                        list.Add(new LoadableModel()
+                        {
+                            FilePath = outPath,
+                            IsEnabled = true,
+                            Name = file.RelativePath,
+                            Materials = appMaterials
+                        });
+
+                        var a = new Appearance()
+                        {
+                            Name = mmapp.Name,
+                            Models = list
+                        };
+                        Appearances.Add(a);
+                    }
+                }
+                SelectedAppearance = Appearances[0];
             }
-
-            Appearances.Add(new Appearance()
-            {
-                Name = "Default",
-                Models = list
-            });
-
-            SelectedAppearance = Appearances[0];
         }
 
         public RDTMeshViewModel(entEntityTemplate ent, RedDocumentViewModel file) : this(file)
@@ -142,17 +224,6 @@ namespace WolvenKit.ViewModels.Documents
 
             if (ent.Appearances.Count > 0)
             {
-                var appPaths = new List<CName>();
-                foreach (var app in ent.Appearances)
-                {
-                    var a = new Appearance()
-                    {
-                        AppearanceName = app.AppearanceName,
-                        Name = app.Name,
-                        Resource = app.AppearanceResource.DepotPath
-                    };
-                    Appearances.Add(a);
-                }
 
                 foreach (var component in pkg.Chunks)
                 {
@@ -231,17 +302,48 @@ namespace WolvenKit.ViewModels.Documents
                     }
                 }
 
-                foreach (var a in Appearances)
+                foreach (var app in ent.Appearances)
                 {
-                    var appFile = File.GetFileFromDepotPath(a.Resource);
+                    var appFile = File.GetFileFromDepotPath(app.AppearanceResource.DepotPath);
 
-                    if (appFile != null && appFile.RootChunk is appearanceAppearanceResource app && app.Appearances.Count > 0 && app.Appearances[0].GetValue() is appearanceAppearanceDefinition appDef && appDef.CompiledData.Data is Package04 appPkg)
+                    if (appFile == null || appFile.RootChunk is not appearanceAppearanceResource aar)
                     {
-                        a.Models = LoadMeshs(appPkg.Chunks);
+                        continue;
+                    }
+
+                    foreach (var handle in aar.Appearances)
+                    {
+                        var appDef = (appearanceAppearanceDefinition)handle.GetValue();
+
+                        if (appDef.Name.ToString() != app.AppearanceName.ToString() || appDef.CompiledData.Data is not Package04 appPkg)
+                        {
+                            continue;
+                        }
+
+                        Appearances.Add(new Appearance()
+                        {
+                            AppearanceName = app.AppearanceName,
+                            Name = app.Name,
+                            Resource = app.AppearanceResource.DepotPath,
+                            Models = LoadMeshs(appPkg.Chunks)
+                        });
+
+                        break;
                     }
                 }
+                //var j = 0;
+                //foreach (var a in Appearances)
+                //{
+                //    var appFile = File.GetFileFromDepotPath(a.Resource);
 
-                SelectedAppearance = Appearances[0];
+                //    if (appFile != null && appFile.RootChunk is appearanceAppearanceResource app && app.Appearances.Count > (j + 1) && app.Appearances[j].GetValue() is appearanceAppearanceDefinition appDef && appDef.CompiledData.Data is Package04 appPkg)
+                //    {
+                //    }
+                //    j++;
+                //}
+
+                if (Appearances.Count > 0)
+                    SelectedAppearance = Appearances[0];
             }
             else
             {
@@ -286,15 +388,19 @@ namespace WolvenKit.ViewModels.Documents
                 Vector3 scale = new Vector3() { X = 1, Y = 1, Z = 1 };
                 CName depotPath = null;
                 bool enabled = true;
+                string meshApp = "";
+
                 if (component is entMeshComponent emc)
                 {
                     depotPath = emc.Mesh.DepotPath;
                     scale = emc.VisualScale;
                     enabled = emc.IsEnabled;
+                    meshApp = emc.MeshAppearance;
                 }
                 else if (component is entSkinnedMeshComponent esmc)
                 {
                     depotPath = esmc.Mesh.DepotPath;
+                    meshApp = esmc.MeshAppearance;
                 }
 
                 if (component is entIPlacedComponent epc && depotPath != null)
@@ -319,7 +425,7 @@ namespace WolvenKit.ViewModels.Documents
 
                     matrix.Scale(ToScaleVector3D(scale));
 
-                    var materials = new List<Material>();
+                    var materials = new Dictionary<string, Material>();
 
                     var localList = (CR2WList)mesh.LocalMaterialBuffer.RawData?.Buffer.Data ?? null;
 
@@ -329,7 +435,7 @@ namespace WolvenKit.ViewModels.Documents
                         {
                             if (!me.IsLocalInstance)
                             {
-                                materials.Add(new Material()
+                                materials.Add(me.Name, new Material()
                                 {
                                     Name = me.Name
                                 });
@@ -344,17 +450,18 @@ namespace WolvenKit.ViewModels.Documents
                             //    bm = (CMaterialInstance)file.RootChunk;
                             //}
 
-                            materials.Add(new Material()
+                            var material = new Material()
                             {
                                 Instance = inst,
                                 Name = me.Name
-                            });
+                            };
 
-                            foreach (var value in inst.Values)
+                            foreach (var pair in inst.Values)
                             {
-                                materials[me.Index].Values.Add(value.Key, value.Value);
+                                material.Values.Add(pair.Key, pair.Value);
                             }
 
+                            materials.Add(me.Name, material);
                         }
                     }
 
@@ -362,20 +469,59 @@ namespace WolvenKit.ViewModels.Documents
                     //var outPath = Path.Combine(ISettingsManager.GetTemp_OBJPath(), Path.GetFileName(depotPath) + "_" + depotPath.GetRedHash().ToString()) + "_full.glb";
                     if (System.IO.File.Exists(outPath) || MeshTools.ExportMesh(meshFile, new FileInfo(outPath)))
                     {
-                        if (!appModels.ContainsKey(epc.Name))
+                        foreach (var handle in mesh.Appearances)
                         {
-                            appModels.Add(epc.Name, new LoadableModel()
+                            var app = handle.GetValue();
+                            if (app is meshMeshAppearance mmapp && mmapp.Name == meshApp)
                             {
-                                FilePath = outPath,
-                                Matrix = matrix,
-                                IsEnabled = enabled,
-                                Name = epc.Name,
-                                BindName = bindName,
-                                SlotName = slotName,
-                                Materials = materials
-                            });
+                                var appMaterials = new List<Material>();
+
+                                foreach (var m in mmapp.ChunkMaterials)
+                                {
+                                    if (materials.ContainsKey(m))
+                                    {
+                                        appMaterials.Add(materials[m]);
+                                    }
+                                    else
+                                    {
+                                        appMaterials.Add(new Material()
+                                        {
+                                            Name = m
+                                        });
+                                    }
+                                }
+
+                                appModels.Add(epc.Name, new LoadableModel()
+                                {
+                                    FilePath = outPath,
+                                    Matrix = matrix,
+                                    IsEnabled = enabled,
+                                    Name = epc.Name,
+                                    BindName = bindName,
+                                    SlotName = slotName,
+                                    Materials = appMaterials
+                                });
+                                break;
+                            }
                         }
+
+                        //if (!appModels.ContainsKey(epc.Name))
+                        //{
+                        //    appModels.Add(epc.Name, new LoadableModel()
+                        //    {
+                        //        FilePath = outPath,
+                        //        Matrix = matrix,
+                        //        IsEnabled = enabled,
+                        //        Name = epc.Name,
+                        //        BindName = bindName,
+                        //        SlotName = slotName,
+                        //        Materials = materials
+                        //    });
+                        //}
                     }
+
+
+
                 }
             }
 
@@ -400,6 +546,204 @@ namespace WolvenKit.ViewModels.Documents
             }
 
             return null;
+        }
+
+        public async Task LoadMaterial(Material material)
+        {
+            //if (material.ColorTexturePath != null)
+            //    return;
+
+            if (System.IO.File.Exists(Path.Combine(ISettingsManager.GetTemp_OBJPath(), material.Name + ".png")))
+                return;
+
+            var dictionary = material.Values;
+
+            var mat = material.Instance;
+            while (mat != null && mat.BaseMaterial != null)
+            {
+                var baseMaterialFile = File.GetFileFromDepotPath(mat.BaseMaterial.DepotPath);
+                if (baseMaterialFile.RootChunk is CMaterialInstance cmi)
+                {
+                    foreach (var pair in cmi.Values)
+                    {
+                        if (!dictionary.ContainsKey(pair.Key))
+                            dictionary.Add(pair.Key, pair.Value);
+                    }
+                    mat = cmi;
+                }
+                else
+                {
+                    mat = null;
+                }
+            }
+
+            if (dictionary.ContainsKey("MultilayerSetup") && dictionary.ContainsKey("MultilayerMask"))
+            {
+                if (dictionary["MultilayerSetup"] is not CResourceReference<Multilayer_Setup> mlsRef)
+                {
+                    return;
+                }
+
+                if (dictionary["MultilayerMask"] is not CResourceReference<Multilayer_Mask> mlmRef)
+                {
+                    return;
+                }
+
+                var setupFile = File.GetFileFromDepotPath(mlsRef.DepotPath);
+
+                if (setupFile.RootChunk is not Multilayer_Setup mls)
+                {
+                    return;
+                }
+
+                var maskFile = File.GetFileFromDepotPath(mlmRef.DepotPath);
+
+                if (maskFile.RootChunk is not Multilayer_Mask mlm)
+                {
+                    return;
+                }
+
+                ModTools.ConvertMultilayerMaskToDdsStreams(mlm, out var streams);
+
+                Bitmap destBitmap = new Bitmap(1024, 1024);
+
+                using (Graphics gfx = Graphics.FromImage(destBitmap))
+                {
+                    var i = 0;
+                    foreach (var layer in mls.Layers)
+                    {
+                        if (layer.ColorScale == "null_null" || layer.Opacity == 0 || layer.Material == null)
+                        {
+                            goto SkipLayer;
+                        }
+
+                        var templateFile = File.GetFileFromDepotPath(layer.Material.DepotPath);
+
+                        if (templateFile.RootChunk is not Multilayer_LayerTemplate mllt)
+                        {
+                            goto SkipLayer;
+                        }
+
+                        foreach (var color in mllt.Overrides.ColorScale)
+                        {
+                            if (color.N.ToString() == layer.ColorScale.ToString())
+                            {
+                                var bitmap = await ImageDecoder.RenderToBitmapSourceDds(streams[i]);
+                                bitmap = new TransformedBitmap(bitmap, new ScaleTransform(1, -1));
+
+                                Bitmap sourceBitmap;
+                                using (var outStream = new MemoryStream())
+                                {
+                                    BitmapEncoder enc = new PngBitmapEncoder();
+                                    enc.Frames.Add(BitmapFrame.Create(bitmap));
+                                    enc.Save(outStream);
+                                    sourceBitmap = new Bitmap(outStream);
+                                }
+
+                                var colorMatrix = new ColorMatrix(new float[][]
+                                {
+                                    new float[] { 0, 0, 0, 0, 0},
+                                    new float[] { 0, 0, 0, 0, 0},
+                                    new float[] { 0, 0, 0, 0, 0},
+                                    new float[] { 0, 0, 0, 0, 0},
+                                    new float[] { 0, 0, 0, 0, 0},
+                                });
+                                colorMatrix.Matrix03 = layer.Opacity;
+                                colorMatrix.Matrix40 = color.V[0];
+                                colorMatrix.Matrix41 = color.V[1];
+                                colorMatrix.Matrix42 = color.V[2];
+
+                                ImageAttributes attributes = new ImageAttributes();
+
+                                attributes.SetColorMatrix(colorMatrix, ColorMatrixFlag.Default, ColorAdjustType.Bitmap);
+
+                                gfx.DrawImage(sourceBitmap, new Rectangle(0, 0, 1024, 1024), 0, 0, sourceBitmap.Width, sourceBitmap.Height, GraphicsUnit.Pixel, attributes);
+                            }
+                        }
+
+                    SkipLayer:
+                        i++;
+                    }
+                }
+
+                try
+                {
+                    destBitmap.Save(Path.Combine(ISettingsManager.GetTemp_OBJPath(), material.Name + ".png"), ImageFormat.Png);
+                    destBitmap.Dispose();
+                }
+                catch (Exception e)
+                {
+                    Locator.Current.GetService<ILoggerService>().Error(e.Message);
+                }
+            }
+            else if (dictionary.ContainsKey("DiffuseTexture") && dictionary["DiffuseTexture"] is CResourceReference<ITexture> crr)
+            {
+                var xbm = File.GetFileFromDepotPath(crr.DepotPath);
+
+                if (xbm.RootChunk is not ITexture it)
+                {
+                    return;
+                }
+
+                //var opacity = dictionary.ContainsKey("DiffuseAlpha") ? (float)(CFloat)dictionary["DiffuseAlpha"] : 1F;
+
+                //if (opacity == 0)
+                //{
+                //    return;
+                //}
+
+                //var color = dictionary.ContainsKey("DiffuseColor") ? (CColor)dictionary["DiffuseColor"] : new CColor() { Red = 255, Green = 255, Blue = 255, Alpha = 255};
+
+                var stream = new MemoryStream();
+                ModTools.ConvertRedClassToDdsStream(it, stream, out var format);
+
+
+                var bitmap = await ImageDecoder.RenderToBitmapSourceDds(stream);
+
+                Bitmap sourceBitmap;
+                using (var outStream = new MemoryStream())
+                {
+                    BitmapEncoder enc = new PngBitmapEncoder();
+                    enc.Frames.Add(BitmapFrame.Create(bitmap));
+                    enc.Save(outStream);
+                    sourceBitmap = new Bitmap(outStream);
+                }
+                //bitmap = new TransformedBitmap(bitmap, new ScaleTransform(1, -1));
+
+                Bitmap destBitmap = new Bitmap((int)sourceBitmap.Width, (int)sourceBitmap.Height);
+                using (Graphics gfx = Graphics.FromImage(destBitmap))
+                {
+                    //var colorMatrix = new ColorMatrix(new float[][]
+                    //{
+                    //    new float[] { 0, 0, 0, 0, 0},
+                    //    new float[] { 0, 0, 0, 0, 0},
+                    //    new float[] { 0, 0, 0, 0, 0},
+                    //    new float[] { 0, 0, 0, 0, 0},
+                    //    new float[] { 0, 0, 0, 0, 0},
+                    //});
+                    //colorMatrix.Matrix03 = opacity;
+                    //colorMatrix.Matrix40 = color.Red / 256F;
+                    //colorMatrix.Matrix41 = color.Green / 256F;
+                    //colorMatrix.Matrix42 = color.Blue / 256F;
+
+                    ImageAttributes attributes = new ImageAttributes();
+
+                    //attributes.SetColorMatrix(colorMatrix, ColorMatrixFlag.Default, ColorAdjustType.Bitmap);
+
+                    gfx.DrawImage(sourceBitmap, new Rectangle(0, 0, sourceBitmap.Width, sourceBitmap.Height), 0, 0, sourceBitmap.Width, sourceBitmap.Height, GraphicsUnit.Pixel, attributes);
+                }
+
+                try
+                {
+                    //sourceBitmap.MakeTransparent(System.Drawing.Color.Black);
+                    sourceBitmap.Save(Path.Combine(ISettingsManager.GetTemp_OBJPath(), material.Name + ".png"), ImageFormat.Png);
+                    sourceBitmap.Dispose();
+                }
+                catch (Exception e)
+                {
+                    Locator.Current.GetService<ILoggerService>().Error(e.Message);
+                }
+            }
         }
 
         public void GetResolvedMatrix(IBindable bindable, ref Matrix3D matrix, Dictionary<string, LoadableModel> models)

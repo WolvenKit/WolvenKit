@@ -79,6 +79,7 @@
             CameraType="OrthographicCamera"
             Distance="200"
             Heading="230"
+            ShowCameraLight="Always"
             TargetPosition="0 0 0"
             TargetViewport3D="{Binding ElementName=MainViewport}" />
 

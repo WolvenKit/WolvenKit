@@ -36,6 +36,9 @@ namespace WolvenKit.Views.Documents
     /// </summary>
     public partial class RDTMeshView : ReactiveUserControl<RDTMeshViewModel>
     {
+
+        private Dictionary<string, DiffuseMaterial> _materials = new();
+
         public RDTMeshView()
         {
             InitializeComponent();
@@ -49,23 +52,40 @@ namespace WolvenKit.Views.Documents
                     }
                 });
             });
+
+            MainDXViewportView.DXSceneInitialized += delegate (object sender, EventArgs args)
+            {
+                if (MainDXViewportView.DXScene == null) // Probably WPF 3D rendering
+                    return;
+
+                LoadModels(ViewModel.SelectedAppearance);
+            };
+
+            if (DataContext != null)
+                ViewModel = DataContext as RDTMeshViewModel;
         }
 
         public void LoadModels(Appearance app)
         {
-            foreach (var model in app.Models)
+            if (app != null && app.Models != null)
             {
-                LoadModel(model);
+                foreach (var model in app.Models)
+                {
+                    LoadModel(model);
+                }
+                GC.Collect();
+                //GC.WaitForPendingFinalizers();
+                //GC.Collect();
+                ShowAppearance(app, true);
             }
-            GC.Collect();
-            //GC.WaitForPendingFinalizers();
-            //GC.Collect();
-            ShowAppearance(app, true);
         }
 
         public void LoadModel(LoadableModel model)
         {
-            if (model.Model != null)
+            if (MainDXViewportView.DXScene == null) // Probably WPF 3D rendering
+                return;
+
+            if (model.Model != null || ViewModel == null)
             {
                 model.Model.SetCurrentValue(Model3D.TransformProperty, model.Transform);
                 return;
@@ -132,20 +152,110 @@ namespace WolvenKit.Views.Documents
                 {
                     //ShowAppearance(isNewFile); // If we just reloaded the previous file, we preserve the current camera TargetPosition and Distance
                     model3D.Transform = model.Transform;
+                    model3D.SetName(model.Name);
 
-                    Random r = new Random();
-                    Brush brush = new SolidColorBrush(Color.FromRgb((byte)r.Next(1, 255),
-                                      (byte)r.Next(1, 255), (byte)r.Next(1, 233)));
-                    var material = new DiffuseMaterial(brush);
-
-                    var pbm = new PhysicallyBasedMaterial()
+                    if (model3D is Model3DGroup mg)
                     {
-                        BaseColor = new SharpDX.Color4((float)(r.Next(1, 255) / 256.0), (float)(r.Next(1, 255) / 256.0), (float)(r.Next(1, 233) / 256.0), 1)
-                    };
+                        var i = 0;
+                        foreach (var submesh in mg.Children)
+                        {
+                            Random r = new Random();
+                            //var color = Color.FromRgb((byte)r.Next(1, 255), (byte)r.Next(1, 255), (byte)r.Next(1, 233));
+                            var color = Colors.White;
+                            Brush brush = new SolidColorBrush(color);
+
+                            var material = new DiffuseMaterial(brush);
+                            material.SetUsedDXMaterial(new StandardMaterial()
+                            {
+                                DiffuseColor = color.ToColor3()
+                            });
+
+                            if (i < model.Materials.Count)
+                            {
+                                submesh.SetName($"{model.Name}_{i:D2}_{model.Materials[i].Name}");
+
+                                ViewModel.LoadMaterial(model.Materials[i]).Wait();
+
+                                if (_materials.ContainsKey(model.Materials[i].Name))
+                                {
+                                    material = _materials[model.Materials[i].Name];
+                                }
+                                else
+                                {
+                                    material.SetName($"{model.Materials[i].Name}");
+
+                                    if (File.Exists(System.IO.Path.Combine(ISettingsManager.GetTemp_OBJPath(), model.Materials[i].Name + ".png")))
+                                    {
+                                        material.SetUsedDXMaterial(TextureLoader.CreateStandardTextureMaterial(MainDXViewportView.DXScene.DXDevice, System.IO.Path.Combine(ISettingsManager.GetTemp_OBJPath(), model.Materials[i].Name + ".png")));
+                                    }
+
+                                    _materials[model.Materials[i].Name] = material;
+
+                                }
+                                    //submesh.SetName($"{model.Name}_{i:D2}_{model.Materials[i].Name}");
+                                    //material.SetName($"{model.Name}_{model.Materials[i].Name}");
+
+                                //if (model.Materials[i].ColorTexturePath != null)
+                                //{
+                                //    dxMaterial = TextureLoader.CreateStandardTextureMaterial(MainDXViewportView.DXScene.DXDevice, model.Materials[i].ColorTexturePath);
+                                //}
+                            }
+                            else
+                            {
+                                submesh.SetName($"{model.Name}_{i:D2}");
+                            }
+
+                            ModelUtils.ChangeMaterial(submesh, material, material);
+
+                            i++;
+                        }
+                    }
+                    else
+                    {
+                        Random r = new Random();
+                        //var color = Color.FromRgb((byte)r.Next(1, 255), (byte)r.Next(1, 255), (byte)r.Next(1, 233));
+                        var color = Colors.White;
+                        Brush brush = new SolidColorBrush(color);
+
+                        var material = new DiffuseMaterial(brush);
+                        StandardMaterial dxMaterial = null;
+
+                        if (0 < model.Materials.Count)
+                        {
+                            material.SetName($"{model.Materials[0].Name}");
+
+                            if (File.Exists(System.IO.Path.Combine(ISettingsManager.GetTemp_OBJPath(), model.Materials[0].Name + ".png")))
+                            {
+                                dxMaterial = TextureLoader.CreateStandardTextureMaterial(MainDXViewportView.DXScene.DXDevice, System.IO.Path.Combine(ISettingsManager.GetTemp_OBJPath(), model.Materials[0].Name + ".png"));
+                            }
+                        }
+                        else
+                        {
+                            material.SetName($"{model.Name}");
+                        }
+
+                        if (dxMaterial == null)
+                        {
+                            dxMaterial = new StandardMaterial()
+                            {
+                                DiffuseColor = color.ToColor3()
+                            };
+                        }
+
+                        material.SetUsedDXMaterial(dxMaterial);
+
+                        ModelUtils.ChangeMaterial(model3D, material, material);
+
+                    }
+
+                    //var pbm = new PhysicallyBasedMaterial()
+                    //{
+                    //    BaseColor = new SharpDX.Color4((float)(r.Next(1, 255) / 256.0), (float)(r.Next(1, 255) / 256.0), (float)(r.Next(1, 233) / 256.0), 1)
+                    //};
                     //pbm.SetTextureMap(TextureMapTypes.NormalMap, new SharpDX.Direct3D11.ShaderResourceView());
 
-                    material.SetUsedDXMaterial(pbm);
-                    ModelUtils.ChangeMaterial(model3D, material, material);
+                    //material.SetUsedDXMaterial(pbm);
+                    //ModelUtils.ChangeMaterial(model3D, material, material);
                     model.Model = model3D;
                 }
 
@@ -168,6 +278,8 @@ namespace WolvenKit.Views.Documents
 
         public void ShowAppearance(Appearance app, bool updateCamera)
         {
+            if (ViewModel == null)
+                return;
             try
             {
                 //ContentVisual.SetCurrentValue(ModelVisual3D.ContentProperty, model3D);

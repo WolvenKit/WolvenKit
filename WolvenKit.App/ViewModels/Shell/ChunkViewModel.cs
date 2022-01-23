@@ -757,7 +757,8 @@ namespace WolvenKit.ViewModels.Shell
                     "partName",
                     "slotName",
                     "hudEntryName",
-                    "stateName"
+                    "stateName",
+                    "n"
                 };
 
                 foreach (var propName in propNames)
