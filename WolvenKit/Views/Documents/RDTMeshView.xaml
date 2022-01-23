@@ -45,10 +45,10 @@
                         WireframeType="WireframeWithOriginalSolidModel" />
                     <visuals:LightingRigVisual3D
                         x:Name="ContentLight"
-                        AmbientLightColor="#333333"
+                        AmbientLightColor="#666666"
                         BackLightColor="Black"
                         FillLightColor="Black"
-                        KeyLightColor="#cccccc"
+                        KeyLightColor="#ffffff"
                         KeyLightDirection="0,-1,0" />
                 </Viewport3D>
             </dxControls:DXViewportView>

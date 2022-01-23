@@ -28,6 +28,7 @@ using WolvenKit.Common.Services;
 using WolvenKit.Functionality.Ab4d;
 using WolvenKit.Functionality.Services;
 using WolvenKit.ViewModels.Documents;
+using Material = WolvenKit.ViewModels.Documents.Material;
 
 namespace WolvenKit.Views.Documents
 {
@@ -77,6 +78,74 @@ namespace WolvenKit.Views.Documents
                 //GC.WaitForPendingFinalizers();
                 //GC.Collect();
                 ShowAppearance(app, true);
+            }
+        }
+
+        public void SetupMaterial(Material material, out DiffuseMaterial diffuseMaterial)
+        {
+            if (_materials.ContainsKey(material.Name))
+            {
+                diffuseMaterial = _materials[material.Name];
+            }
+            else
+            { 
+                ViewModel.LoadMaterial(material).Wait();
+
+                diffuseMaterial = new DiffuseMaterial();
+                diffuseMaterial.SetName($"{material.Name}");
+
+                var physicallyBasedMaterial = new PhysicallyBasedMaterial();
+
+                var filename_b = System.IO.Path.Combine(ISettingsManager.GetTemp_OBJPath(), material.Name + ".png");
+                var filename_d = System.IO.Path.Combine(ISettingsManager.GetTemp_OBJPath(), material.Name + "_d.dds");
+                var filename_n = System.IO.Path.Combine(ISettingsManager.GetTemp_OBJPath(), material.Name + "_n.dds");
+                if (File.Exists(filename_b))
+                {
+                    var shaderResourceView = TextureLoader.LoadShaderResourceView(MainDXViewportView.DXScene.Device,
+                                                                                           filename_b,
+                                                                                           loadDdsIfPresent: true,
+                                                                                           convertTo32bppPRGBA: true,
+                                                                                           generateMipMaps: true,
+                                                                                           textureInfo: out var textureInfo);
+
+                    physicallyBasedMaterial.TextureMaps.Add(new TextureMapInfo(TextureMapTypes.BaseColor, shaderResourceView, null, filename_b));
+                }
+
+                if (File.Exists(filename_d))
+                {
+                    var shaderResourceView = TextureLoader.LoadShaderResourceView(MainDXViewportView.DXScene.Device,
+                                                                                           filename_d,
+                                                                                           loadDdsIfPresent: true,
+                                                                                           convertTo32bppPRGBA: true,
+                                                                                           generateMipMaps: true,
+                                                                                           textureInfo: out var textureInfo);
+
+                    physicallyBasedMaterial.TextureMaps.Add(new TextureMapInfo(TextureMapTypes.DiffuseColor, shaderResourceView, null, filename_d));
+
+                    // Get recommended BlendState based on HasTransparency and HasPreMultipliedAlpha values.
+                    // Possible values are: CommonStates.Opaque, CommonStates.PremultipliedAlphaBlend or CommonStates.NonPremultipliedAlphaBlend.
+                    var recommendedBlendState = MainDXViewportView.DXScene.DXDevice.CommonStates.GetRecommendedBlendState(textureInfo.HasTransparency, textureInfo.HasPremultipliedAlpha);
+
+                    physicallyBasedMaterial.BlendState = recommendedBlendState;
+                    physicallyBasedMaterial.HasTransparency = textureInfo.HasTransparency;
+                }
+
+                if (File.Exists(filename_n))
+                {
+                    var shaderResourceView = TextureLoader.LoadShaderResourceView(MainDXViewportView.DXScene.Device,
+                                                                                           filename_n,
+                                                                                           loadDdsIfPresent: true,
+                                                                                           convertTo32bppPRGBA: false,
+                                                                                           generateMipMaps: true,
+                                                                                           textureInfo: out var textureInfo);
+
+                    physicallyBasedMaterial.TextureMaps.Add(new TextureMapInfo(TextureMapTypes.NormalMap, shaderResourceView, null, filename_n));
+                }
+
+                diffuseMaterial.SetUsedDXMaterial(physicallyBasedMaterial);
+
+                _materials[material.Name] = diffuseMaterial;
+
             }
         }
 
@@ -161,47 +230,19 @@ namespace WolvenKit.Views.Documents
                         {
                             Random r = new Random();
                             //var color = Color.FromRgb((byte)r.Next(1, 255), (byte)r.Next(1, 255), (byte)r.Next(1, 233));
-                            var color = Colors.White;
+                            var color = Colors.Gray;
                             Brush brush = new SolidColorBrush(color);
 
                             var material = new DiffuseMaterial(brush);
-                            material.SetUsedDXMaterial(new StandardMaterial()
-                            {
-                                DiffuseColor = color.ToColor3()
-                            });
 
                             if (i < model.Materials.Count)
                             {
                                 submesh.SetName($"{model.Name}_{i:D2}_{model.Materials[i].Name}");
-
-                                ViewModel.LoadMaterial(model.Materials[i]).Wait();
-
-                                if (_materials.ContainsKey(model.Materials[i].Name))
-                                {
-                                    material = _materials[model.Materials[i].Name];
-                                }
-                                else
-                                {
-                                    material.SetName($"{model.Materials[i].Name}");
-
-                                    if (File.Exists(System.IO.Path.Combine(ISettingsManager.GetTemp_OBJPath(), model.Materials[i].Name + ".png")))
-                                    {
-                                        material.SetUsedDXMaterial(TextureLoader.CreateStandardTextureMaterial(MainDXViewportView.DXScene.DXDevice, System.IO.Path.Combine(ISettingsManager.GetTemp_OBJPath(), model.Materials[i].Name + ".png")));
-                                    }
-
-                                    _materials[model.Materials[i].Name] = material;
-
-                                }
-                                    //submesh.SetName($"{model.Name}_{i:D2}_{model.Materials[i].Name}");
-                                    //material.SetName($"{model.Name}_{model.Materials[i].Name}");
-
-                                //if (model.Materials[i].ColorTexturePath != null)
-                                //{
-                                //    dxMaterial = TextureLoader.CreateStandardTextureMaterial(MainDXViewportView.DXScene.DXDevice, model.Materials[i].ColorTexturePath);
-                                //}
+                                SetupMaterial(model.Materials[i], out material);
                             }
                             else
                             {
+                                material.SetName($"{model.Name}_{i:D2}");
                                 submesh.SetName($"{model.Name}_{i:D2}");
                             }
 
@@ -214,35 +255,19 @@ namespace WolvenKit.Views.Documents
                     {
                         Random r = new Random();
                         //var color = Color.FromRgb((byte)r.Next(1, 255), (byte)r.Next(1, 255), (byte)r.Next(1, 233));
-                        var color = Colors.White;
+                        var color = Colors.Gray;
                         Brush brush = new SolidColorBrush(color);
 
                         var material = new DiffuseMaterial(brush);
-                        StandardMaterial dxMaterial = null;
 
                         if (0 < model.Materials.Count)
                         {
-                            material.SetName($"{model.Materials[0].Name}");
-
-                            if (File.Exists(System.IO.Path.Combine(ISettingsManager.GetTemp_OBJPath(), model.Materials[0].Name + ".png")))
-                            {
-                                dxMaterial = TextureLoader.CreateStandardTextureMaterial(MainDXViewportView.DXScene.DXDevice, System.IO.Path.Combine(ISettingsManager.GetTemp_OBJPath(), model.Materials[0].Name + ".png"));
-                            }
+                            SetupMaterial(model.Materials[0], out material);
                         }
                         else
                         {
                             material.SetName($"{model.Name}");
                         }
-
-                        if (dxMaterial == null)
-                        {
-                            dxMaterial = new StandardMaterial()
-                            {
-                                DiffuseColor = color.ToColor3()
-                            };
-                        }
-
-                        material.SetUsedDXMaterial(dxMaterial);
 
                         ModelUtils.ChangeMaterial(model3D, material, material);
 
@@ -285,7 +310,8 @@ namespace WolvenKit.Views.Documents
                 //ContentVisual.SetCurrentValue(ModelVisual3D.ContentProperty, model3D);
 
                 var collection = new Model3DCollection(app.Models.Where(x => x.Model != null && x.IsEnabled).Select(x => x.Model));
-                var group = new Model3DGroup()
+
+                 var group = new Model3DGroup()
                 {
                     Children = collection
                 };
@@ -294,6 +320,7 @@ namespace WolvenKit.Views.Documents
                 var assimpWpfExporter = new AssimpWpfExporter();
                 assimpWpfExporter.AddModel(group);
                 assimpWpfExporter.Export(System.IO.Path.Combine(ISettingsManager.GetTemp_OBJPath(), System.IO.Path.GetFileNameWithoutExtension(ViewModel.File.ContentId) + "_" + app.Name + ".glb"), "glb2");
+
 
                 ContentVisual.SetCurrentValue(ModelVisual3D.ContentProperty, group);
 

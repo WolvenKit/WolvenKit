@@ -11,6 +11,7 @@ using System.Windows.Media.Media3D;
 using CP77.CR2W;
 using ReactiveUI.Fody.Helpers;
 using Splat;
+using WolvenKit.Common.DDS;
 using WolvenKit.Common.Services;
 using WolvenKit.Functionality.Ab4d;
 using WolvenKit.Functionality.Services;
@@ -315,7 +316,7 @@ namespace WolvenKit.ViewModels.Documents
                     {
                         var appDef = (appearanceAppearanceDefinition)handle.GetValue();
 
-                        if (appDef.Name.ToString() != app.AppearanceName.ToString() || appDef.CompiledData.Data is not Package04 appPkg)
+                        if (appDef.Name != app.AppearanceName || appDef.CompiledData.Data is not Package04 appPkg)
                         {
                             continue;
                         }
@@ -553,8 +554,6 @@ namespace WolvenKit.ViewModels.Documents
             //if (material.ColorTexturePath != null)
             //    return;
 
-            if (System.IO.File.Exists(Path.Combine(ISettingsManager.GetTemp_OBJPath(), material.Name + ".png")))
-                return;
 
             var dictionary = material.Values;
 
@@ -577,30 +576,37 @@ namespace WolvenKit.ViewModels.Documents
                 }
             }
 
+            var filename_b = Path.Combine(ISettingsManager.GetTemp_OBJPath(), material.Name + ".png");
+            var filename_d = Path.Combine(ISettingsManager.GetTemp_OBJPath(), material.Name + "_d.dds");
+            var filename_n = Path.Combine(ISettingsManager.GetTemp_OBJPath(), material.Name + "_n.dds");
+
+            if (System.IO.File.Exists(filename_b))
+                return;
+
             if (dictionary.ContainsKey("MultilayerSetup") && dictionary.ContainsKey("MultilayerMask"))
             {
                 if (dictionary["MultilayerSetup"] is not CResourceReference<Multilayer_Setup> mlsRef)
                 {
-                    return;
+                    goto NormalMaps;
                 }
 
                 if (dictionary["MultilayerMask"] is not CResourceReference<Multilayer_Mask> mlmRef)
                 {
-                    return;
+                    goto NormalMaps;
                 }
 
                 var setupFile = File.GetFileFromDepotPath(mlsRef.DepotPath);
 
-                if (setupFile.RootChunk is not Multilayer_Setup mls)
+                if (setupFile == null || setupFile.RootChunk is not Multilayer_Setup mls)
                 {
-                    return;
+                    goto NormalMaps;
                 }
 
                 var maskFile = File.GetFileFromDepotPath(mlmRef.DepotPath);
 
-                if (maskFile.RootChunk is not Multilayer_Mask mlm)
+                if (maskFile == null || maskFile.RootChunk is not Multilayer_Mask mlm)
                 {
-                    return;
+                    goto NormalMaps;
                 }
 
                 ModTools.ConvertMultilayerMaskToDdsStreams(mlm, out var streams);
@@ -626,7 +632,7 @@ namespace WolvenKit.ViewModels.Documents
 
                         foreach (var color in mllt.Overrides.ColorScale)
                         {
-                            if (color.N.ToString() == layer.ColorScale.ToString())
+                            if (color.N == layer.ColorScale)
                             {
                                 var bitmap = await ImageDecoder.RenderToBitmapSourceDds(streams[i]);
                                 bitmap = new TransformedBitmap(bitmap, new ScaleTransform(1, -1));
@@ -668,21 +674,35 @@ namespace WolvenKit.ViewModels.Documents
 
                 try
                 {
+                    //var ms = new MemoryStream();
                     destBitmap.Save(Path.Combine(ISettingsManager.GetTemp_OBJPath(), material.Name + ".png"), ImageFormat.Png);
+                    //var ddsbuffer = DDSUtils.ConvertToDdsMemory(ms, Common.EUncookExtension.tiff, DXGI_FORMAT.DXGI_FORMAT_BC7_UNORM);
+                    //var stream = new FileStream(filename_d, FileMode.Create);
+                    //ms.Dispose();
+                    //stream.Write(ddsbuffer);
+                    //stream.Dispose();
+
+                    //destBitmap.Save(Path.Combine(ISettingsManager.GetTemp_OBJPath(), material.Name + ".png"), ImageFormat.Png);
                     destBitmap.Dispose();
                 }
                 catch (Exception e)
                 {
                     Locator.Current.GetService<ILoggerService>().Error(e.Message);
                 }
+                return;
             }
-            else if (dictionary.ContainsKey("DiffuseTexture") && dictionary["DiffuseTexture"] is CResourceReference<ITexture> crr)
+
+        //DiffuseMaps:
+            if (System.IO.File.Exists(filename_d))
+                goto NormalMaps;
+
+            if (dictionary.ContainsKey("DiffuseTexture") && dictionary["DiffuseTexture"] is CResourceReference<ITexture> crrd)
             {
-                var xbm = File.GetFileFromDepotPath(crr.DepotPath);
+                var xbm = File.GetFileFromDepotPath(crrd.DepotPath);
 
                 if (xbm.RootChunk is not ITexture it)
                 {
-                    return;
+                    goto NormalMaps;
                 }
 
                 //var opacity = dictionary.ContainsKey("DiffuseAlpha") ? (float)(CFloat)dictionary["DiffuseAlpha"] : 1F;
@@ -694,56 +714,105 @@ namespace WolvenKit.ViewModels.Documents
 
                 //var color = dictionary.ContainsKey("DiffuseColor") ? (CColor)dictionary["DiffuseColor"] : new CColor() { Red = 255, Green = 255, Blue = 255, Alpha = 255};
 
-                var stream = new MemoryStream();
+                //var stream = new MemoryStream();
+                //var filename = Path.Combine(ISettingsManager.GetTemp_OBJPath(), material.Name + ".dds");
+                var stream = new FileStream(filename_d, FileMode.Create);
                 ModTools.ConvertRedClassToDdsStream(it, stream, out var format);
+                stream.Dispose();
 
 
-                var bitmap = await ImageDecoder.RenderToBitmapSourceDds(stream);
+                //var bitmap = await ImageDecoder.RenderToBitmapSourceDds(stream);
 
-                Bitmap sourceBitmap;
-                using (var outStream = new MemoryStream())
-                {
-                    BitmapEncoder enc = new PngBitmapEncoder();
-                    enc.Frames.Add(BitmapFrame.Create(bitmap));
-                    enc.Save(outStream);
-                    sourceBitmap = new Bitmap(outStream);
-                }
-                //bitmap = new TransformedBitmap(bitmap, new ScaleTransform(1, -1));
+                //Bitmap sourceBitmap;
+                //using (var outStream = new MemoryStream())
+                //{
+                //    BitmapEncoder enc = new PngBitmapEncoder();
+                //    enc.Frames.Add(BitmapFrame.Create(bitmap));
+                //    enc.Save(outStream);
+                //    sourceBitmap = new Bitmap(outStream);
+                //}
+                ////bitmap = new TransformedBitmap(bitmap, new ScaleTransform(1, -1));
 
-                Bitmap destBitmap = new Bitmap((int)sourceBitmap.Width, (int)sourceBitmap.Height);
-                using (Graphics gfx = Graphics.FromImage(destBitmap))
-                {
-                    //var colorMatrix = new ColorMatrix(new float[][]
-                    //{
-                    //    new float[] { 0, 0, 0, 0, 0},
-                    //    new float[] { 0, 0, 0, 0, 0},
-                    //    new float[] { 0, 0, 0, 0, 0},
-                    //    new float[] { 0, 0, 0, 0, 0},
-                    //    new float[] { 0, 0, 0, 0, 0},
-                    //});
-                    //colorMatrix.Matrix03 = opacity;
-                    //colorMatrix.Matrix40 = color.Red / 256F;
-                    //colorMatrix.Matrix41 = color.Green / 256F;
-                    //colorMatrix.Matrix42 = color.Blue / 256F;
+                ////Bitmap destBitmap = new Bitmap((int)sourceBitmap.Width, (int)sourceBitmap.Height);
+                ////using (Graphics gfx = Graphics.FromImage(destBitmap))
+                ////{
+                ////    //var colorMatrix = new ColorMatrix(new float[][]
+                ////    //{
+                ////    //    new float[] { 0, 0, 0, 0, 0},
+                ////    //    new float[] { 0, 0, 0, 0, 0},
+                ////    //    new float[] { 0, 0, 0, 0, 0},
+                ////    //    new float[] { 0, 0, 0, 0, 0},
+                ////    //    new float[] { 0, 0, 0, 0, 0},
+                ////    //});
+                ////    //colorMatrix.Matrix03 = opacity;
+                ////    //colorMatrix.Matrix40 = color.Red / 256F;
+                ////    //colorMatrix.Matrix41 = color.Green / 256F;
+                ////    //colorMatrix.Matrix42 = color.Blue / 256F;
 
-                    ImageAttributes attributes = new ImageAttributes();
+                ////    ImageAttributes attributes = new ImageAttributes();
 
-                    //attributes.SetColorMatrix(colorMatrix, ColorMatrixFlag.Default, ColorAdjustType.Bitmap);
+                ////    //attributes.SetColorMatrix(colorMatrix, ColorMatrixFlag.Default, ColorAdjustType.Bitmap);
 
-                    gfx.DrawImage(sourceBitmap, new Rectangle(0, 0, sourceBitmap.Width, sourceBitmap.Height), 0, 0, sourceBitmap.Width, sourceBitmap.Height, GraphicsUnit.Pixel, attributes);
-                }
+                ////    gfx.DrawImage(sourceBitmap, new Rectangle(0, 0, sourceBitmap.Width, sourceBitmap.Height), 0, 0, sourceBitmap.Width, sourceBitmap.Height, GraphicsUnit.Pixel, attributes);
+                ////}
 
-                try
-                {
-                    //sourceBitmap.MakeTransparent(System.Drawing.Color.Black);
-                    sourceBitmap.Save(Path.Combine(ISettingsManager.GetTemp_OBJPath(), material.Name + ".png"), ImageFormat.Png);
-                    sourceBitmap.Dispose();
-                }
-                catch (Exception e)
-                {
-                    Locator.Current.GetService<ILoggerService>().Error(e.Message);
-                }
+                //try
+                //{
+                //    //sourceBitmap.MakeTransparent(System.Drawing.Color.Black);
+                //    sourceBitmap.Save(Path.Combine(ISettingsManager.GetTemp_OBJPath(), material.Name + ".png"), ImageFormat.Png);
+                //    sourceBitmap.Dispose();
+                //}
+                //catch (Exception e)
+                //{
+                //    Locator.Current.GetService<ILoggerService>().Error(e.Message);
+                //}
             }
+
+        NormalMaps:
+
+            // normals
+
+            if (System.IO.File.Exists(filename_n))
+                return;
+
+            if (dictionary.ContainsKey("NormalTexture") && dictionary["NormalTexture"] is CResourceReference<ITexture> crrn)
+            {
+                var xbm = File.GetFileFromDepotPath(crrn.DepotPath);
+
+                if (xbm.RootChunk is not ITexture it)
+                {
+                    return;
+                }
+
+                //var stream = new MemoryStream();
+
+                var stream = new FileStream(filename_n, FileMode.Create);
+                ModTools.ConvertRedClassToDdsStream(it, stream, out var format);
+                stream.Dispose();
+
+                //var bitmap = await ImageDecoder.RenderToBitmapSourceDds(stream);
+
+                //Bitmap sourceBitmap;
+                //using (var outStream = new MemoryStream())
+                //{
+                //    BitmapEncoder enc = new PngBitmapEncoder();
+                //    enc.Frames.Add(BitmapFrame.Create(bitmap));
+                //    enc.Save(outStream);
+                //    sourceBitmap = new Bitmap(outStream);
+                //}
+
+                //try
+                //{
+                //    //sourceBitmap.MakeTransparent(System.Drawing.Color.Black);
+                //    sourceBitmap.Save(Path.Combine(ISettingsManager.GetTemp_OBJPath(), material.Name + "_n.png"), ImageFormat.Png);
+                //    sourceBitmap.Dispose();
+                //}
+                //catch (Exception e)
+                //{
+                //    Locator.Current.GetService<ILoggerService>().Error(e.Message);
+                //}
+            }
+
         }
 
         public void GetResolvedMatrix(IBindable bindable, ref Matrix3D matrix, Dictionary<string, LoadableModel> models)
