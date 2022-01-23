@@ -57,6 +57,9 @@ namespace WolvenKit.RED4.Types
         public static implicit operator CName(ulong value) => new(value);
         public static implicit operator ulong(CName value) => value?._hash ?? 0;
 
+        public static bool operator ==(CName a, CName b) => Equals(a, b);
+        public static bool operator !=(CName a, CName b) => !(a == b);
+
         public override int GetHashCode() => _hash.GetHashCode();
 
         public override bool Equals(object obj)

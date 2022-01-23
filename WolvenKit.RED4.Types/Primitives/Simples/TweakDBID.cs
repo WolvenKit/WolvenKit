@@ -51,6 +51,9 @@ namespace WolvenKit.RED4.Types
         public static implicit operator TweakDBID(ulong value) => new(value);
         public static implicit operator ulong(TweakDBID value) => value._hash;
 
+        public static bool operator ==(TweakDBID a, TweakDBID b) => Equals(a, b);
+        public static bool operator !=(TweakDBID a, TweakDBID b) => !(a == b);
+
         public bool Equals(TweakDBID other)
         {
             if (ReferenceEquals(null, other))

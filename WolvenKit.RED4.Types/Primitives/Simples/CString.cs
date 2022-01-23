@@ -22,6 +22,8 @@ namespace WolvenKit.RED4.Types
         public static implicit operator CString(string value) => new(value);
         public static implicit operator string(CString value) => value._value;
 
+        public static bool operator ==(CString a, CString b) => Equals(a, b);
+        public static bool operator !=(CString a, CString b) => !(a == b);
 
         public override int GetHashCode() => _value.GetHashCode();
 
