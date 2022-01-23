@@ -1,11 +1,15 @@
 using System;
 using System.Collections.Generic;
+using System.Windows;
 using System.Windows.Input;
+using System.Windows.Threading;
 using ReactiveUI.Fody.Helpers;
 using Splat;
+using Syncfusion.UI.Xaml.TreeView;
+using Syncfusion.UI.Xaml.TreeView.Engine;
+using Syncfusion.Windows.Shared;
 using WolvenKit.Common;
 using WolvenKit.Common.FNV1A;
-using WolvenKit.Functionality.Commands;
 using WolvenKit.Functionality.Controllers;
 using WolvenKit.RED4.Archive;
 using WolvenKit.RED4.Types;
@@ -21,8 +25,8 @@ namespace WolvenKit.ViewModels.Documents
 
         public RDTDataViewModel(RedBaseClass data, RedDocumentViewModel file)
         {
-
-            OpenImportCommand = new DelegateCommand<ICR2WImport>(ExecuteOpenImport);
+            OnDemandLoadingCommand = new DelegateCommand<TreeViewNode>(ExecuteOnDemandLoading, CanExecuteOnDemandLoading);
+            OpenImportCommand = new Functionality.Commands.DelegateCommand<ICR2WImport>(ExecuteOpenImport);
             //ExportChunkCommand = new DelegateCommand<ChunkViewModel>((p) => ExecuteExportChunk(p), (p) => CanExportChunk(p));
 
             File = file;
@@ -86,6 +90,65 @@ namespace WolvenKit.ViewModels.Documents
         #endregion
 
         #region commands
+
+        public ICommand OnDemandLoadingCommand { get; private set; }
+
+        private bool CanExecuteOnDemandLoading(TreeViewNode node)
+        {
+            if (node.Content is GroupedChunkViewModel)
+            {
+                return true;
+            }
+
+            if (node.Content is ChunkViewModel cvm && cvm.HasChildren())
+            {
+                return true;
+            }
+
+            return false;
+        }
+
+        private void ExecuteOnDemandLoading(TreeViewNode node)
+        {
+            if (node.ChildNodes.Count > 0)
+            {
+                node.IsExpanded = true;
+                return;
+            }
+
+            node.ShowExpanderAnimation = true;
+
+            if (node.Content is GroupedChunkViewModel gcvm)
+            {
+                Application.Current.MainWindow.Dispatcher.BeginInvoke(DispatcherPriority.Background,
+                    new Action(() =>
+                    {
+                        node.PopulateChildNodes(gcvm.TVProperties);
+                        if (gcvm.TVProperties.Count > 0)
+                        {
+                            node.IsExpanded = true;
+                        }
+
+                        node.ShowExpanderAnimation = false;
+                    }));
+            }
+
+            if (node.Content is ChunkViewModel cvm)
+            {
+                Application.Current.MainWindow.Dispatcher.BeginInvoke(DispatcherPriority.Background,
+                    new Action(() =>
+                    {
+                        cvm.CalculateProperties();
+                        node.PopulateChildNodes(cvm.TVProperties);
+                        if (cvm.TVProperties.Count > 0)
+                        {
+                            node.IsExpanded = true;
+                        }
+
+                        node.ShowExpanderAnimation = false;
+                    }));
+            }
+        }
 
         public ICommand OpenImportCommand { get; private set; }
         private void ExecuteOpenImport(ICR2WImport input)

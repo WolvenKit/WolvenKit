@@ -501,7 +501,7 @@
                                     <ContentPresenter ContentTemplate="{StaticResource DeleteAllButton}" />
                                 </StackPanel>
                             </Border>
-                            <ItemsControl
+                            <!-- <ItemsControl
                                 Grid.Row="1"
                                 AlternationCount="{Binding RelativeSource={RelativeSource Self}, Path=Items.Count}"
                                 ItemTemplate="{StaticResource ItemTemplate}"
@@ -511,7 +511,7 @@
                                         <StackPanel Orientation="Vertical" />
                                     </ItemsPanelTemplate>
                                 </ItemsControl.ItemsPanel>
-                            </ItemsControl>
+                            </ItemsControl> -->
                         </Grid>
                     </DataTemplate>
                 </converters:RedEditorTemplateSelector.RedArrayEditor>

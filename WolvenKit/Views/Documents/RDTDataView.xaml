@@ -100,6 +100,15 @@
                     </Grid>
                 </DataTemplate>
 
+                <DataTemplate x:Key="GroupedPropertyNameTemplate" DataType="{x:Type shell:GroupedChunkViewModel}">
+                    <Grid>
+                        <TextBlock
+                            Width="Auto"
+                            Margin="0,0,0,2"
+                            Text="{Binding Name, Mode=OneTime}" />
+                    </Grid>
+                </DataTemplate>
+
                 <DataTemplate x:Key="PropertyValueTemplate" DataType="{x:Type shell:ChunkViewModel}">
                     <Grid>
                         <Grid.Resources>
@@ -211,6 +220,16 @@
                 </Style>
 
                 <ContextMenu x:Key="TreeViewContextMenu" DataContext="{Binding Path=PlacementTarget, RelativeSource={RelativeSource Self}}">
+                    <ContextMenu.Resources>
+                        <Style TargetType="MenuItem">
+                            <Style.Triggers>
+                                <Trigger Property="IsEnabled" Value="False">
+                                    <Setter Property="Visibility" Value="Collapsed"/>
+                                </Trigger>
+                            </Style.Triggers>
+                        </Style>
+                    </ContextMenu.Resources>
+                    
                     <MenuItem
                         Command="{Binding Path=PlacementTarget.Tag.OpenChunkCommand, RelativeSource={RelativeSource AncestorType=ContextMenu}}"
                         Header="Open in New Tab"
@@ -258,9 +277,37 @@
                                 Kind="Json" />
                         </MenuItem.Icon>
                     </MenuItem>
+                    <MenuItem
+                        Command="{Binding Path=PlacementTarget.Tag.DeleteItemCommand, RelativeSource={RelativeSource AncestorType=ContextMenu}}"
+                        Header="Delete"
+                        IsCheckable="False"
+                        Style="{StaticResource SyncfusionMenuItemStyle}">
+                        <MenuItem.Icon>
+                            <iconPacks:PackIconCodicons
+                                Width="13"
+                                Height="13"
+                                Padding="0,0,0,0"
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Center"
+                                Kind="Remove" />
+                        </MenuItem.Icon>
+                    </MenuItem>
                 </ContextMenu>
 
                 <converters:TreeViewItemTemplateSelector x:Key="itemTemplateSelector" x:Name="itemTemplateSelector">
+                    <converters:TreeViewItemTemplateSelector.GroupedTemplate>
+                        <DataTemplate>
+                            <Grid
+                                Background="Transparent"
+                                Tag="{Binding}">
+                                <ContentPresenter
+                                    Width="Auto"
+                                    HorizontalAlignment="Stretch"
+                                    VerticalAlignment="Center"
+                                    ContentTemplate="{StaticResource GroupedPropertyNameTemplate}" />
+                            </Grid>
+                        </DataTemplate>
+                    </converters:TreeViewItemTemplateSelector.GroupedTemplate>
                     <converters:TreeViewItemTemplateSelector.PropertyTemplate>
                         <DataTemplate DataType="{x:Type shell:ChunkViewModel}">
                             <Grid
@@ -425,21 +472,22 @@
             AllowEditing="False"
             Background="{StaticResource ContentBackground}"
             BorderThickness="0"
-            ChildPropertyName="Properties"
             ItemDragOver="SfTreeView_ItemDragOver"
             ItemDragStarting="SfTreeView_ItemDragStarting"
             ItemDropped="SfTreeView_ItemDropped"
             ItemDropping="SfTreeView_ItemDropping"
             ItemTemplateSelector="{StaticResource itemTemplateSelector}"
+            LoadOnDemandCommand="{Binding OnDemandLoadingCommand}"
             SelectionMode="Single"
             ShowLines="True"
             Visibility="Visible">
             <syncfusion:SfTreeView.HierarchyPropertyDescriptors>
                 <treeViewEngine:HierarchyPropertyDescriptor
-                    ChildPropertyName="Properties"
-                    IsExpandedPropertyName="IsExpanded"
                     IsSelectedPropertyName="IsSelected"
                     TargetType="{x:Type shell:ChunkViewModel}" />
+                <treeViewEngine:HierarchyPropertyDescriptor
+                    IsSelectedPropertyName="IsSelected"
+                    TargetType="{x:Type shell:GroupedChunkViewModel}" />
             </syncfusion:SfTreeView.HierarchyPropertyDescriptors>
         </syncfusion:SfTreeView>
 

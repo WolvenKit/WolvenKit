@@ -42,7 +42,9 @@ namespace WolvenKit.Functionality.Services
                 nameof(CheckForUpdates),
                 nameof(CP77ExecutablePath),
                 nameof(ShowFilePreview),
-                nameof(ReddbHash)
+                nameof(ReddbHash),
+                nameof(TreeViewGroups),
+                nameof(TreeViewGroupSize)
               )
               .Subscribe(_ =>
               {
@@ -118,6 +120,20 @@ namespace WolvenKit.Functionality.Services
         public string WccLitePath { get; set; }
 
         #endregion red3
+
+        #region TreeView
+
+        [Category("TreeView")]
+        [Display(Name = "Group large collections?")]
+        [Reactive]
+        public bool TreeViewGroups { get; set; } = false;
+
+        [Category("TreeView")]
+        [Display(Name = "Group size")]
+        [Reactive]
+        public uint TreeViewGroupSize { get; set; } = 100;
+
+        #endregion
 
         #endregion properties
 
@@ -246,6 +262,9 @@ namespace WolvenKit.Functionality.Services
             MaterialRepositoryPath = settings.MaterialRepositoryPath;
             W3ExecutablePath = settings.W3ExecutablePath;
             WccLitePath = settings.WccLitePath;
+
+            TreeViewGroups = settings.TreeViewGroups;
+            TreeViewGroupSize = settings.TreeViewGroupSize;
         }
 
         public bool CheckForUpdates { get; set; }
@@ -258,6 +277,9 @@ namespace WolvenKit.Functionality.Services
         public string MaterialRepositoryPath { get; set; }
         public string W3ExecutablePath { get; set; }
         public string WccLitePath { get; set; }
+
+        public bool TreeViewGroups { get; set; }
+        public uint TreeViewGroupSize { get; set; }
 
         public SettingsManager FromDto()
         {
@@ -273,6 +295,9 @@ namespace WolvenKit.Functionality.Services
                 MaterialRepositoryPath = MaterialRepositoryPath,
                 W3ExecutablePath = W3ExecutablePath,
                 WccLitePath = WccLitePath,
+
+                TreeViewGroups = TreeViewGroups,
+                TreeViewGroupSize = TreeViewGroupSize,
             };
             return config;
         }
