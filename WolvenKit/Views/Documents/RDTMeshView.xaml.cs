@@ -97,6 +97,7 @@ namespace WolvenKit.Views.Documents
                 var physicallyBasedMaterial = new PhysicallyBasedMaterial();
 
                 var filename_b = System.IO.Path.Combine(ISettingsManager.GetTemp_OBJPath(), material.Name + ".png");
+                var filename_bn = System.IO.Path.Combine(ISettingsManager.GetTemp_OBJPath(), material.Name + "_n.png");
                 var filename_d = System.IO.Path.Combine(ISettingsManager.GetTemp_OBJPath(), material.Name + "_d.dds");
                 var filename_n = System.IO.Path.Combine(ISettingsManager.GetTemp_OBJPath(), material.Name + "_n.dds");
                 if (File.Exists(filename_b))
@@ -109,6 +110,18 @@ namespace WolvenKit.Views.Documents
                                                                                            textureInfo: out var textureInfo);
 
                     physicallyBasedMaterial.TextureMaps.Add(new TextureMapInfo(TextureMapTypes.BaseColor, shaderResourceView, null, filename_b));
+                }
+
+                if (File.Exists(filename_bn))
+                {
+                    var shaderResourceView = TextureLoader.LoadShaderResourceView(MainDXViewportView.DXScene.Device,
+                                                                                           filename_bn,
+                                                                                           loadDdsIfPresent: true,
+                                                                                           convertTo32bppPRGBA: false,
+                                                                                           generateMipMaps: true,
+                                                                                           textureInfo: out var textureInfo);
+
+                    physicallyBasedMaterial.TextureMaps.Add(new TextureMapInfo(TextureMapTypes.NormalMap, shaderResourceView, null, filename_bn));
                 }
 
                 if (File.Exists(filename_d))
@@ -177,13 +190,13 @@ namespace WolvenKit.Views.Documents
                 Mouse.OverrideCursor = Cursors.Wait;
 
                 // Before readin the file we can set the default material (used when no other materila is defined - here we set the default value again)
-                assimpWpfImporter.DefaultMaterial = new DiffuseMaterial(Brushes.Silver);
+                assimpWpfImporter.DefaultMaterial = new DiffuseMaterial(Brushes.Gray);
 
                 // After assimp importer reads the file, it can execute many post processing steps to transform the geometry.
                 // See the possible enum values to see what post processes are available.
                 // Here we just set the AssimpPostProcessSteps to its default value - execute the Triangulate step to convert all polygons to triangles that are needed for WPF 3D.
                 // Note that if ReadPolygonIndices is set to true in the next line, then the assimpWpfImporter will not use assimp's triangulation because it needs original polygon data.
-                assimpWpfImporter.AssimpPostProcessSteps = PostProcessSteps.Triangulate;
+                assimpWpfImporter.AssimpPostProcessSteps = PostProcessSteps.Triangulate | PostProcessSteps.CalculateTangentSpace;
 
                 // When ReadPolygonIndices is true, assimpWpfImporter will read PolygonIndices collection that can be used to show polygons instead of triangles.
                 assimpWpfImporter.ReadPolygonIndices = ReadPolygonIndicesCheckBox.IsChecked ?? false;
@@ -193,13 +206,27 @@ namespace WolvenKit.Views.Documents
 
                 try
                 {
+    
                     var assimpScene = assimpWpfImporter.ReadFileToAssimpScene(model.FilePath);
 
                     //var assimpWpfConverter = new AssimpWpfConverter();
-                    //model3D = assimpWpfConverter.ConvertAssimpModel(assimpScene);
+                    //var readModel3D = assimpWpfConverter.ConvertAssimpModel(assimpScene);
+
+                    model3D = assimpWpfImporter.ReadModel3D(model.FilePath); // we can also define a textures path if the textures are located in some other directory (this is parameter can be skipped, but is defined here so you will know that you can use it)
+
+                    foreach (var assimpMesh in assimpScene.Meshes)
+                    {
+                        var geometryModel3D = assimpWpfImporter.GetGeometryModel3DForAssimpMesh(assimpMesh);
+                        if (geometryModel3D == null)
+                            continue;
+
+                        //var geometryModel3D = assimpWpfConverter.GetGeometryModel3DForAssimpMesh(assimpMesh);
+                        SetMeshTangentData(assimpMesh, geometryModel3D);
+                    }
+                        //var assimpWpfConverter = new AssimpWpfConverter();
+                        //model3D = assimpWpfConverter.ConvertAssimpModel(assimpScene);
 
 
-                    model3D = assimpWpfImporter.ReadModel3D(model.FilePath, texturesPath: null); // we can also define a textures path if the textures are located in some other directory (this is parameter can be skipped, but is defined here so you will know that you can use it)
                     //isNewFile = (_fileName != model.FilePath);
                     //_fileName = model.FilePath;
                 }
@@ -298,6 +325,24 @@ namespace WolvenKit.Views.Documents
                 assimpWpfImporter.Dispose();
 
                 Mouse.OverrideCursor = null;
+            }
+        }
+
+        private static void SetMeshTangentData(Mesh assimpMesh, GeometryModel3D geometryModel3D)
+        {
+            var assimpTangents = assimpMesh.Tangents;
+
+            if (assimpTangents != null && assimpTangents.Count > 0)
+            {
+                var count = assimpTangents.Count;
+                var dxTangents = new SharpDX.Vector3[count];
+
+                for (int i = 0; i < count; i++)
+                    dxTangents[i] = new SharpDX.Vector3(assimpTangents[i].X, assimpTangents[i].Y, assimpTangents[i].Z);
+
+                // Tangent values are stored with the MeshGeometry3D object.
+                // This is done with using DXAttributeType.MeshTangentArray:
+                geometryModel3D.Geometry.SetDXAttribute(DXAttributeType.MeshTangentArray, dxTangents);
             }
         }
 

@@ -561,7 +561,7 @@ namespace WolvenKit.ViewModels.Documents
             while (mat != null && mat.BaseMaterial != null)
             {
                 var baseMaterialFile = File.GetFileFromDepotPath(mat.BaseMaterial.DepotPath);
-                if (baseMaterialFile.RootChunk is CMaterialInstance cmi)
+                if (baseMaterialFile != null && baseMaterialFile.RootChunk is CMaterialInstance cmi)
                 {
                     foreach (var pair in cmi.Values)
                     {
@@ -577,11 +577,12 @@ namespace WolvenKit.ViewModels.Documents
             }
 
             var filename_b = Path.Combine(ISettingsManager.GetTemp_OBJPath(), material.Name + ".png");
+            var filename_bn = Path.Combine(ISettingsManager.GetTemp_OBJPath(), material.Name + "_n.png");
             var filename_d = Path.Combine(ISettingsManager.GetTemp_OBJPath(), material.Name + "_d.dds");
             var filename_n = Path.Combine(ISettingsManager.GetTemp_OBJPath(), material.Name + "_n.dds");
 
-            if (System.IO.File.Exists(filename_b))
-                return;
+            //if (System.IO.File.Exists(filename_b))
+            //    return;
 
             if (dictionary.ContainsKey("MultilayerSetup") && dictionary.ContainsKey("MultilayerMask"))
             {
@@ -611,84 +612,166 @@ namespace WolvenKit.ViewModels.Documents
 
                 ModTools.ConvertMultilayerMaskToDdsStreams(mlm, out var streams);
 
-                Bitmap destBitmap = new Bitmap(1024, 1024);
 
-                using (Graphics gfx = Graphics.FromImage(destBitmap))
+                var firstStream = await ImageDecoder.RenderToBitmapSourceDds(streams[0]);
+
+                Bitmap destBitmap = new Bitmap((int)firstStream.Width, (int)firstStream.Height);
+                Bitmap normalBitmap = new Bitmap((int)firstStream.Width, (int)firstStream.Height);
+                using (Graphics gfx_n = Graphics.FromImage(normalBitmap))
+                using (SolidBrush brush = new SolidBrush(System.Drawing.Color.FromArgb(128, 128, 255)))
                 {
-                    var i = 0;
-                    foreach (var layer in mls.Layers)
+                    gfx_n.FillRectangle(brush, 0, 0, (int)firstStream.Width, (int)firstStream.Height);
+                }
+
+                Graphics gfx = Graphics.FromImage(destBitmap);
+                //Graphics gfx_n = Graphics.FromImage(destBitmap);
+
+                var i = 0;
+                foreach (var layer in mls.Layers)
+                {
+                    if (layer.ColorScale == "null_null" || layer.Opacity == 0 || layer.Material == null)
                     {
-                        if (layer.ColorScale == "null_null" || layer.Opacity == 0 || layer.Material == null)
-                        {
-                            goto SkipLayer;
-                        }
+                        goto SkipLayer;
+                    }
 
-                        var templateFile = File.GetFileFromDepotPath(layer.Material.DepotPath);
+                    var templateFile = File.GetFileFromDepotPath(layer.Material.DepotPath);
 
-                        if (templateFile.RootChunk is not Multilayer_LayerTemplate mllt)
-                        {
-                            goto SkipLayer;
-                        }
+                    if (templateFile.RootChunk is not Multilayer_LayerTemplate mllt)
+                    {
+                        goto SkipLayer;
+                    }
 
-                        foreach (var color in mllt.Overrides.ColorScale)
+                    BitmapSource mask;
+                    if (i == 0)
+                    {
+                        mask = firstStream;
+                    }
+                    else
+                    {
+                        mask = await ImageDecoder.RenderToBitmapSourceDds(streams[i]);
+                    }
+                    mask = new TransformedBitmap(mask, new ScaleTransform(1, -1));
+
+                    Bitmap maskBitmap;
+                    using (var outStream = new MemoryStream())
+                    {
+                        BitmapEncoder enc = new PngBitmapEncoder();
+                        enc.Frames.Add(BitmapFrame.Create(mask));
+                        enc.Save(outStream);
+                        maskBitmap = new Bitmap(outStream);
+                    }
+
+                    foreach (var color in mllt.Overrides.ColorScale)
+                    {
+                        if (color.N == layer.ColorScale)
                         {
-                            if (color.N == layer.ColorScale)
+                            var colorMatrix = new ColorMatrix(new float[][]
                             {
-                                var bitmap = await ImageDecoder.RenderToBitmapSourceDds(streams[i]);
-                                bitmap = new TransformedBitmap(bitmap, new ScaleTransform(1, -1));
+                                new float[] { 0, 0, 0, 0, 0},
+                                new float[] { 0, 0, 0, 0, 0},
+                                new float[] { 0, 0, 0, 0, 0},
+                                new float[] { 0, 0, 0, 0, 0},
+                                new float[] { 0, 0, 0, 0, 0},
+                            });
+                            colorMatrix.Matrix03 = layer.Opacity;
+                            colorMatrix.Matrix40 = color.V[0];
+                            colorMatrix.Matrix41 = color.V[1];
+                            colorMatrix.Matrix42 = color.V[2];
 
-                                Bitmap sourceBitmap;
-                                using (var outStream = new MemoryStream())
+                            ImageAttributes attributes = new ImageAttributes();
+
+                            attributes.SetColorMatrix(colorMatrix, ColorMatrixFlag.Default, ColorAdjustType.Bitmap);
+
+                            gfx.DrawImage(maskBitmap, new Rectangle(0, 0, 1024, 1024), 0, 0, maskBitmap.Width, maskBitmap.Height, GraphicsUnit.Pixel, attributes);
+
+                            break;
+                        }
+                    }
+
+                    var normalFile = File.GetFileFromDepotPath(mllt.NormalTexture.DepotPath);
+
+                    if (normalFile != null && normalFile.RootChunk is ITexture it)
+                    {
+                        var stream = new MemoryStream();
+                        ModTools.ConvertRedClassToDdsStream(it, stream, out var format);
+
+                        var normal = await ImageDecoder.RenderToBitmapSourceDds(stream);
+
+                        Bitmap normalLayer;
+                        using (var outStream = new MemoryStream())
+                        {
+                            BitmapEncoder enc = new PngBitmapEncoder();
+                            enc.Frames.Add(BitmapFrame.Create(normal));
+                            enc.Save(outStream);
+                            normalLayer = new Bitmap(outStream);
+                        }
+
+                        foreach (var strength in mllt.Overrides.NormalStrength)
+                        {
+                            if (strength.N == layer.NormalStrength)
+                            {
+                                for (int y = 0; y < maskBitmap.Height; y++)
                                 {
-                                    BitmapEncoder enc = new PngBitmapEncoder();
-                                    enc.Frames.Add(BitmapFrame.Create(bitmap));
-                                    enc.Save(outStream);
-                                    sourceBitmap = new Bitmap(outStream);
+                                    for (int x = 0; x < maskBitmap.Width; x++)
+                                    {
+                                        var oc = normalBitmap.GetPixel(x, y);
+                                        var n = normalLayer.GetPixel(x % normalLayer.Width, y % normalLayer.Height);
+                                        var alpha = maskBitmap.GetPixel(x, y).R / 255F * (float)strength.V;
+                                        var r = (int)((oc.R - 127) * (1F - alpha) + (n.R - 127) * alpha) + 127;
+                                        var g = (int)((oc.G - 127) * (1F - alpha) + (n.G - 127) * alpha) + 127;
+                                        var b = (int)((oc.B - 127) * (1F - alpha)) + 127;
+                                        if (n.B == 0)
+                                        {
+                                            b += (int)(Math.Sqrt(2 * (r * 2 - 1) * (g * 2 - 1) - 1.02) * alpha);
+                                        }
+                                        else
+                                        {
+                                            b += (int)((n.B - 127) * alpha);
+                                        }
+                                        var color = System.Drawing.Color.FromArgb(Math.Clamp(r, 0, 255), Math.Clamp(g, 0, 255), Math.Clamp(b, 0, 255));
+                                        normalBitmap.SetPixel(x, y, color);
+                                    }
                                 }
-
-                                var colorMatrix = new ColorMatrix(new float[][]
-                                {
-                                    new float[] { 0, 0, 0, 0, 0},
-                                    new float[] { 0, 0, 0, 0, 0},
-                                    new float[] { 0, 0, 0, 0, 0},
-                                    new float[] { 0, 0, 0, 0, 0},
-                                    new float[] { 0, 0, 0, 0, 0},
-                                });
-                                colorMatrix.Matrix03 = layer.Opacity;
-                                colorMatrix.Matrix40 = color.V[0];
-                                colorMatrix.Matrix41 = color.V[1];
-                                colorMatrix.Matrix42 = color.V[2];
-
-                                ImageAttributes attributes = new ImageAttributes();
-
-                                attributes.SetColorMatrix(colorMatrix, ColorMatrixFlag.Default, ColorAdjustType.Bitmap);
-
-                                gfx.DrawImage(sourceBitmap, new Rectangle(0, 0, 1024, 1024), 0, 0, sourceBitmap.Width, sourceBitmap.Height, GraphicsUnit.Pixel, attributes);
+                                break;
                             }
                         }
-
-                    SkipLayer:
-                        i++;
+                        stream.Dispose();
                     }
+
+
+                SkipLayer:
+                    i++;
                 }
+
+                gfx.Dispose();
+                //gfx_n.Dispose();
 
                 try
                 {
-                    //var ms = new MemoryStream();
-                    destBitmap.Save(Path.Combine(ISettingsManager.GetTemp_OBJPath(), material.Name + ".png"), ImageFormat.Png);
-                    //var ddsbuffer = DDSUtils.ConvertToDdsMemory(ms, Common.EUncookExtension.tiff, DXGI_FORMAT.DXGI_FORMAT_BC7_UNORM);
-                    //var stream = new FileStream(filename_d, FileMode.Create);
-                    //ms.Dispose();
-                    //stream.Write(ddsbuffer);
-                    //stream.Dispose();
-
-                    //destBitmap.Save(Path.Combine(ISettingsManager.GetTemp_OBJPath(), material.Name + ".png"), ImageFormat.Png);
-                    destBitmap.Dispose();
+                    destBitmap.Save(filename_b, ImageFormat.Png);
                 }
                 catch (Exception e)
                 {
                     Locator.Current.GetService<ILoggerService>().Error(e.Message);
                 }
+                finally
+                {
+                    destBitmap.Dispose();
+                }
+
+                try
+                {
+                    normalBitmap.Save(filename_bn, ImageFormat.Png);
+                }
+                catch (Exception e)
+                {
+                    Locator.Current.GetService<ILoggerService>().Error(e.Message);
+                }
+                finally
+                {
+                    normalBitmap.Dispose();
+                }
+
                 return;
             }
 
