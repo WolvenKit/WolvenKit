@@ -85,7 +85,6 @@ namespace WolvenKit.ViewModels.Shell
                             DisplayProperties.AddRange(SelfList);
                         }
                     }
-
                     CalculateDescriptor();
                 });
 

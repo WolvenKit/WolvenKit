@@ -6,6 +6,7 @@
     xmlns:documents="clr-namespace:WolvenKit.ViewModels.Documents;assembly=WolvenKit.App"
     xmlns:editors="clr-namespace:WolvenKit.Views.Editors"
     xmlns:inkControls="clr-namespace:WolvenKit.Functionality.Layout.inkWidgets"
+    xmlns:local="clr-namespace:WolvenKit.Views.Documents"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:reactiveUi="http://reactiveui.net"
     xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
@@ -27,10 +28,10 @@
                     <hc:Theme />
                 </ResourceDictionary.MergedDictionaries>-->
 
-                <ResourceDictionary.MergedDictionaries>
+                <!--ResourceDictionary.MergedDictionaries>
                     <ResourceDictionary Source="pack://application:,,,/AdonisUI;component/ColorSchemes/Dark.xaml" />
                     <ResourceDictionary Source="pack://application:,,,/AdonisUI.ClassicTheme;component/Resources.xaml" />
-                </ResourceDictionary.MergedDictionaries>
+                </ResourceDictionary.MergedDictionaries-->
             </ResourceDictionary>
         </Grid.Resources>
         <Grid.ColumnDefinitions>
@@ -75,6 +76,7 @@
                     <TextBlock
                         Margin="5,5"
                         VerticalAlignment="Center"
+                        FontWeight="Bold"
                         Text="Style" />
                     <ComboBox
                         Grid.Column="1"
@@ -91,6 +93,7 @@
                     <TextBlock
                         Margin="5,5"
                         VerticalAlignment="Center"
+                        FontWeight="Bold"
                         Text="Theme" />
                     <ComboBox
                         Grid.Column="1"
@@ -114,6 +117,7 @@
                 <TextBlock
                     Margin="5,5"
                     VerticalAlignment="Center"
+                    FontWeight="Bold"
                     Text="Animations" />
                 <Border BorderBrush="{StaticResource BorderAlt}" BorderThickness="0,1,0,0" />
                 <ItemsControl x:Name="AnimationList">
@@ -136,7 +140,7 @@
                                     <ColumnDefinition Width="2*" />
                                 </Grid.ColumnDefinitions>
                                 <TextBlock
-                                    Margin="5,0"
+                                    Margin="15,0,5,0"
                                     VerticalAlignment="Center"
                                     Text="{Binding Name}" />
                                 <GridSplitter
@@ -147,8 +151,16 @@
                                     Grid.Column="2"
                                     Margin="3"
                                     Orientation="Horizontal">
-                                    <Button Command="{Binding PlayCommand}" Content="Play" />
-                                    <Button Command="{Binding StopCommand}" Content="Stop" />
+                                    <Button
+                                        Margin="5,0,0,0"
+                                        Padding="5,2"
+                                        Command="{Binding PlayCommand}"
+                                        Content="Play" />
+                                    <Button
+                                        Margin="5,0,0,0"
+                                        Padding="5,2"
+                                        Command="{Binding StopCommand}"
+                                        Content="Stop" />
                                 </StackPanel>
                             </Grid>
                         </DataTemplate>
@@ -159,6 +171,7 @@
                     <TextBlock
                         Margin="5,5"
                         VerticalAlignment="Center"
+                        FontWeight="Bold"
                         Text="inkTextWidgets" />
                 </StackPanel>
                 <Border BorderBrush="{StaticResource BorderAlt}" BorderThickness="0,1,0,0" />
@@ -183,24 +196,111 @@
                                 </Grid.ColumnDefinitions>
                                 <StackPanel>
                                     <TextBlock
-                                        Margin="5,0"
+                                        Margin="15,2,5,2"
                                         VerticalAlignment="Center"
-                                        Text="{Binding Name}"
-                                        ToolTip="{Binding Path}" />
+                                        Text="{Binding Name}" />
                                 </StackPanel>
                                 <GridSplitter
                                     Grid.Column="1"
                                     HorizontalAlignment="Stretch"
                                     Background="{StaticResource WolvenKitCyan}" />
                                 <editors:RedStringEditor Grid.Column="2" RedString="{Binding Text, Mode=TwoWay}" />
+                                <Border
+                                    Grid.ColumnSpan="3"
+                                    BorderBrush="{StaticResource BorderAlt}"
+                                    BorderThickness="0,0,0,1" />
                             </Grid>
                         </DataTemplate>
                     </ItemsControl.ItemTemplate>
                 </ItemsControl>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock
+                        Margin="5,5"
+                        VerticalAlignment="Center"
+                        FontWeight="Bold"
+                        Text="Style Bindings" />
+                </StackPanel>
+                <Border BorderBrush="{StaticResource BorderAlt}" BorderThickness="0,1,0,0" />
                 <ItemsControl ItemsSource="{Binding Bindings}">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <StackPanel Orientation="Vertical" />
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                    <ItemsControl.Template>
+                        <ControlTemplate>
+                            <ItemsPresenter />
+                        </ControlTemplate>
+                    </ItemsControl.Template>
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
-                            <TextBlock Text="{Binding}" />
+                            <StackPanel Orientation="Vertical">
+                                <TextBlock Margin="15,2,5,2" Text="{Binding}" />
+                                <Border BorderBrush="{StaticResource BorderAlt}" BorderThickness="0,0,0,1" />
+                            </StackPanel>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock
+                        Margin="5,5"
+                        VerticalAlignment="Center"
+                        FontWeight="Bold"
+                        Text="Effects" />
+                </StackPanel>
+                <Border BorderBrush="{StaticResource BorderAlt}" BorderThickness="0,1,0,0" />
+                <ItemsControl ItemsSource="{Binding inkEffects}">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <StackPanel Orientation="Vertical" />
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                    <ItemsControl.Template>
+                        <ControlTemplate>
+                            <ItemsPresenter />
+                        </ControlTemplate>
+                    </ItemsControl.Template>
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <StackPanel Orientation="Vertical">
+                                <TextBlock Margin="15,2,5,2" Text="{Binding EffectName}" />
+                                <Border BorderBrush="{StaticResource BorderAlt}" BorderThickness="0,0,0,1" />
+                            </StackPanel>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock
+                        Margin="5,5"
+                        VerticalAlignment="Center"
+                        FontWeight="Bold"
+                        Text="Export inkWidget as XML" />
+                </StackPanel>
+                <Border BorderBrush="{StaticResource BorderAlt}" BorderThickness="0,1,0,0" />
+                <ItemsControl x:Name="WidgetExportButtons">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <StackPanel Orientation="Vertical" />
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                    <ItemsControl.Template>
+                        <ControlTemplate>
+                            <ItemsPresenter />
+                        </ControlTemplate>
+                    </ItemsControl.Template>
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <StackPanel Margin="5" Orientation="Horizontal">
+                                <TextBlock
+                                    Margin="10,0,5,0"
+                                    VerticalAlignment="Center"
+                                    Text="{Binding Name}" />
+                                <Button
+                                    Padding="5,2"
+                                    Command="{Binding ExportWidgetCommand, RelativeSource={RelativeSource AncestorType={x:Type local:RDTWidgetView}}}"
+                                    CommandParameter="{Binding}"
+                                    Content="Export" />
+                            </StackPanel>
                         </DataTemplate>
                     </ItemsControl.ItemTemplate>
                 </ItemsControl>
@@ -208,11 +308,13 @@
         </ScrollViewer>
         <StackPanel HorizontalAlignment="Right" VerticalAlignment="Top">
             <Button
-                Margin="5"
+                Margin="5,5,5,0"
+                Padding="7,2"
                 Click="Button_Click"
                 Content="Regenerate inkTextWidgets" />
             <Button
-                Margin="5"
+                Margin="5,5,5,0"
+                Padding="7,2"
                 Click="SaveAsImage"
                 Content="Save as Images" />
 
