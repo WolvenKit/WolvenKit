@@ -155,6 +155,9 @@ namespace WolvenKit.Views.Documents
                     physicallyBasedMaterial.TextureMaps.Add(new TextureMapInfo(TextureMapTypes.NormalMap, shaderResourceView, null, filename_n));
                 }
 
+                physicallyBasedMaterial.Roughness = 1f;
+                physicallyBasedMaterial.Metalness = 0f;
+
                 diffuseMaterial.SetUsedDXMaterial(physicallyBasedMaterial);
 
                 _materials[material.Name] = diffuseMaterial;
@@ -212,11 +215,14 @@ namespace WolvenKit.Views.Documents
                     //var assimpWpfConverter = new AssimpWpfConverter();
                     //var readModel3D = assimpWpfConverter.ConvertAssimpModel(assimpScene);
 
-                    model3D = assimpWpfImporter.ReadModel3D(model.FilePath); // we can also define a textures path if the textures are located in some other directory (this is parameter can be skipped, but is defined here so you will know that you can use it)
+                    //model3D = assimpWpfImporter.ReadModel3D(model.FilePath); // we can also define a textures path if the textures are located in some other directory (this is parameter can be skipped, but is defined here so you will know that you can use it)
+
+                    var assimpWpfConverter = new AssimpWpfConverter();
+                    model3D = assimpWpfConverter.ConvertAssimpModel(assimpScene);
 
                     foreach (var assimpMesh in assimpScene.Meshes)
                     {
-                        var geometryModel3D = assimpWpfImporter.GetGeometryModel3DForAssimpMesh(assimpMesh);
+                        var geometryModel3D = assimpWpfConverter.GetGeometryModel3DForAssimpMesh(assimpMesh);
                         if (geometryModel3D == null)
                             continue;
 

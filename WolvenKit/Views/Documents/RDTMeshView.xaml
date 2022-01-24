@@ -28,6 +28,44 @@
             <ColumnDefinition Width="1*" />
         </Grid.ColumnDefinitions>
         <syncfusion:SfGridSplitter Grid.Column="1" HorizontalAlignment="Stretch" />
+
+        <Viewport3D
+            Name="SkyboxViewport"
+            Grid.Row="0"
+            Grid.Column="0"
+            Visibility="Visible">
+            <visuals:MultiMaterialBoxVisual3D
+                BackMaterial="Resources/SkyboxTextures/CloudyLightRaysBack512.png"
+                BottomMaterial="Resources/SkyboxTextures/CloudyLightRaysDown512.png"
+                CenterPosition="0 0 0"
+                FrontMaterial="Resources/SkyboxTextures/CloudyLightRaysFront512.png"
+                IsTwoSidedMaterial="True"
+                LeftMaterial="Resources/SkyboxTextures/CloudyLightRaysLeft512.png"
+                RightMaterial="Resources/SkyboxTextures/CloudyLightRaysRight512.png"
+                Size="500 500 500"
+                TopMaterial="Resources/SkyboxTextures/CloudyLightRaysUp512.png" />
+
+            <ModelVisual3D>
+                <ModelVisual3D.Content>
+                    <Model3DGroup>
+                        <AmbientLight Color="White" />
+                    </Model3DGroup>
+                </ModelVisual3D.Content>
+            </ModelVisual3D>
+        </Viewport3D>
+
+        <cameras:TargetPositionCamera
+            Name="SkyBoxCamera"
+            Grid.Row="0"
+            Grid.Column="0"
+            Attitude="{Binding ElementName=Camera1, Path=Attitude}"
+            Bank="{Binding ElementName=Camera1, Path=Bank}"
+            Distance="200"
+            Heading="{Binding ElementName=Camera1, Path=Heading}"
+            ShowCameraLight="Never"
+            TargetPosition="0 0 0"
+            TargetViewport3D="{Binding ElementName=SkyboxViewport}" />
+
         <Border Name="ViewportBorder" Background="Transparent">
             <dxControls:DXViewportView
                 Name="MainDXViewportView"
@@ -36,6 +74,18 @@
 
                 <Viewport3D Name="MainViewport">
                     <ModelVisual3D x:Name="ContentVisual" />
+                    <ModelVisual3D>
+                        <ModelVisual3D.Content>
+                            <Model3DGroup x:Name="LightsModel3DGroup">
+                                <DirectionalLight
+                                    x:Name="TopDirectionalLight"
+                                    Direction="0 -1 0"
+                                    Color="White" />
+                                <!--<DirectionalLight Direction="1 0 0" Color="White" />-->
+                                <AmbientLight x:Name="AmbientLight1" Color="#555555" />
+                            </Model3DGroup>
+                        </ModelVisual3D.Content>
+                    </ModelVisual3D>
                     <visuals:WireframeVisual3D
                         x:Name="ContentWireframeVisual"
                         LineColor="Black"
@@ -43,13 +93,15 @@
                         ShowPolygonLines="True"
                         UseModelColor="False"
                         WireframeType="WireframeWithOriginalSolidModel" />
-                    <visuals:LightingRigVisual3D
+                    <!--
+                        visuals:LightingRigVisual3D
                         x:Name="ContentLight"
                         AmbientLightColor="#666666"
                         BackLightColor="Black"
                         FillLightColor="Black"
                         KeyLightColor="#ffffff"
-                        KeyLightDirection="0,-1,0" />
+                        KeyLightDirection="0,-1,0" /
+                    -->
                 </Viewport3D>
             </dxControls:DXViewportView>
         </Border>
@@ -77,9 +129,8 @@
             Attitude="-20"
             Bank="0"
             CameraType="OrthographicCamera"
-            Distance="200"
+            Distance="50"
             Heading="230"
-            ShowCameraLight="Always"
             TargetPosition="0 0 0"
             TargetViewport3D="{Binding ElementName=MainViewport}" />
 
