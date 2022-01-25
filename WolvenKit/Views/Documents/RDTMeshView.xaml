@@ -293,6 +293,7 @@
                 CheckBoxMappingName="IsEnabled"
                 ChildPropertyName="BindName"
                 ItemsSource="{Binding SelectedAppearance.Models, Mode=TwoWay}"
+                NodeCheckStateChanged="SfTreeGrid_NodeCheckStateChanged"
                 ParentPropertyName="Name"
                 RowHeaderWidth="300"
                 ShowCheckBox="True">
@@ -301,6 +302,7 @@
                         HeaderText="Component Name"
                         MappingName="Name"
                         MinimumWidth="300" />
+                    <syncfusion:TreeGridTextColumn HeaderText="Chunk Mask" MappingName="ChunkMask" />
                     <syncfusion:TreeGridTextColumn HeaderText="Bind Name" MappingName="BindName" />
                     <syncfusion:TreeGridTextColumn HeaderText="Slot Name" MappingName="SlotName" />
                 </syncfusion:SfTreeGrid.Columns>

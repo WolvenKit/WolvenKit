@@ -526,5 +526,11 @@ namespace WolvenKit.Views.Documents
             if (ViewModel != null)
                 LoadModels(ViewModel.SelectedAppearance);
         }
+
+        private void SfTreeGrid_NodeCheckStateChanged(object sender, Syncfusion.UI.Xaml.TreeGrid.NodeCheckStateChangedEventArgs e)
+        {
+            if (ViewModel != null)
+                LoadModels(ViewModel.SelectedAppearance);
+        }
     }
 }

@@ -50,6 +50,8 @@ namespace WolvenKit.ViewModels.Documents
         public Matrix3D Matrix { get; set; }
         public string BindName { get; set; }
         public string SlotName { get; set; }
+
+        public UInt64 ChunkMask { get; set; }
     }
 
     public class Rig : IBindable
@@ -390,6 +392,7 @@ namespace WolvenKit.ViewModels.Documents
                 CName depotPath = null;
                 bool enabled = true;
                 string meshApp = "";
+                UInt64 chunkMask = 0;
 
                 if (component is entMeshComponent emc)
                 {
@@ -397,11 +400,13 @@ namespace WolvenKit.ViewModels.Documents
                     scale = emc.VisualScale;
                     enabled = emc.IsEnabled;
                     meshApp = emc.MeshAppearance;
+                    chunkMask = emc.ChunkMask;
                 }
                 else if (component is entSkinnedMeshComponent esmc)
                 {
                     depotPath = esmc.Mesh.DepotPath;
                     meshApp = esmc.MeshAppearance;
+                    chunkMask = esmc.ChunkMask;
                 }
 
                 if (component is entIPlacedComponent epc && depotPath != null)
@@ -500,7 +505,8 @@ namespace WolvenKit.ViewModels.Documents
                                     Name = epc.Name,
                                     BindName = bindName,
                                     SlotName = slotName,
-                                    Materials = appMaterials
+                                    Materials = appMaterials,
+                                    ChunkMask = chunkMask
                                 });
                                 break;
                             }
