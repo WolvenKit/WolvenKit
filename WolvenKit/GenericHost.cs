@@ -1,5 +1,6 @@
 using System;
 using CP77.CR2W;
+using gpm.Installer;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using ReactiveUI;
@@ -79,6 +80,8 @@ namespace WolvenKit
 
                     services.AddSingleton<AppViewModel>();
                     services.AddSingleton<IViewFor<AppViewModel>, MainView>();
+
+                    services.AddGpmInstaller();
 
                     // register views
                     #region shell

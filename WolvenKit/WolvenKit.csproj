@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <Platforms>x64</Platforms>
     <TargetFramework>net6.0-windows</TargetFramework>
@@ -51,6 +51,7 @@
     <PackageReference Include="DrawStringLineHeight" Version="1.0.0" />
     <PackageReference Include="Feather.Controls" Version="1.0.3" />
     <PackageReference Include="Feather.Core" Version="1.0.0" />
+    <PackageReference Include="gpm.Installer" Version="0.2.0" />
 
     <PackageReference Include="ReactiveUI" Version="17.1.17" />
     <PackageReference Include="ReactiveUI.Events.WPF" Version="15.1.1" />

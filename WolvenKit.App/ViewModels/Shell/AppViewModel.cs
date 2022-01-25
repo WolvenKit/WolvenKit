@@ -12,6 +12,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
+using gpm.Installer;
 using Microsoft.Win32;
 using Microsoft.WindowsAPICodePack.Dialogs;
 using ReactiveUI;
@@ -59,7 +60,7 @@ namespace WolvenKit.ViewModels.Shell
         private readonly IRecentlyUsedItemsService _recentlyUsedItemsService;
         private readonly IProgressService<double> _progressService;
         private readonly IWatcherService _watcherService;
-
+        private readonly AutoInstallerService _autoInstallerService;
         private readonly HomePageViewModel _homePageViewModel;
 
         #endregion fields
@@ -77,7 +78,8 @@ namespace WolvenKit.ViewModels.Shell
             INotificationService notificationService,
             IRecentlyUsedItemsService recentlyUsedItemsService,
             IProgressService<double> progressService,
-            IWatcherService watcherService
+            IWatcherService watcherService,
+            AutoInstallerService autoInstallerService
         )
         {
             _projectManager = projectManager;
@@ -88,6 +90,7 @@ namespace WolvenKit.ViewModels.Shell
             _recentlyUsedItemsService = recentlyUsedItemsService;
             _progressService = progressService;
             _watcherService = watcherService;
+            _autoInstallerService = autoInstallerService;
 
             _homePageViewModel = Locator.Current.GetService<HomePageViewModel>();
 
@@ -209,7 +212,15 @@ namespace WolvenKit.ViewModels.Shell
 
         private void InitUpdateService()
         {
-            
+            // INSTALLER INIT
+            _autoInstallerService
+               .UseWPF()
+               //.AddLockFile()
+               .AddVersion("8.4.2")
+               //.AddChannel("Nightly", "wolvenkit/wolvenkit")
+               .AddChannel("Stable", "wolvenkit/wolvenkit")
+               .UseChannel("Stable")
+               .Build();
         }
 
 
