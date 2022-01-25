@@ -5,6 +5,7 @@ using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Media.Media3D;
@@ -14,10 +15,12 @@ using Splat;
 using WolvenKit.Common.DDS;
 using WolvenKit.Common.Services;
 using WolvenKit.Functionality.Ab4d;
+using WolvenKit.Functionality.Commands;
 using WolvenKit.Functionality.Services;
 using WolvenKit.Modkit.RED4;
 using WolvenKit.RED4.Archive.Buffer;
 using WolvenKit.RED4.Archive.CR2W;
+using WolvenKit.RED4.Archive.IO;
 using WolvenKit.RED4.Types;
 
 namespace WolvenKit.ViewModels.Documents
@@ -117,6 +120,8 @@ namespace WolvenKit.ViewModels.Documents
         {
             Header = "Preview";
             File = file;
+
+            ExtractShadersCommand = new RelayCommand(ExtractShaders);
         }
 
         public RDTMeshViewModel(CMesh data, RedDocumentViewModel file) : this(file)
@@ -1034,6 +1039,13 @@ namespace WolvenKit.ViewModels.Documents
                     GetResolvedMatrix(Rigs[bindable.BindName], ref matrix, models);
                 }
             }
+        }
+
+        public ICommand ExtractShadersCommand { get; set; }
+        public void ExtractShaders()
+        {
+            var _settingsManager = Locator.Current.GetService<ISettingsManager>();
+            ShaderCacheReader.ExtractShaders(new FileInfo(_settingsManager.CP77ExecutablePath), ISettingsManager.GetTemp_OBJPath());
         }
 
         public override ERedDocumentItemType DocumentItemType => ERedDocumentItemType.W2rcBuffer;

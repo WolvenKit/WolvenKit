@@ -267,25 +267,28 @@
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="*" />
             </Grid.RowDefinitions>
-            <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="Auto" />
-                    <ColumnDefinition />
+            <StackPanel Orientation="Vertical">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition />
 
-                </Grid.ColumnDefinitions>
-                <TextBlock
-                    Margin="5,0,0,0"
-                    VerticalAlignment="Center"
-                    Text="Appearance: " />
-                <ComboBox
-                    Grid.Column="1"
-                    Height="30"
-                    Padding="10,0"
-                    DisplayMemberPath="Name"
-                    ItemsSource="{Binding Appearances, Mode=OneWay}"
-                    SelectedItem="{Binding SelectedAppearance, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                    SelectionChanged="ReloadModels" />
-            </Grid>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock
+                        Margin="5,0,0,0"
+                        VerticalAlignment="Center"
+                        Text="Appearance: " />
+                    <ComboBox
+                        Grid.Column="1"
+                        Height="30"
+                        Padding="10,0"
+                        DisplayMemberPath="Name"
+                        ItemsSource="{Binding Appearances, Mode=OneWay}"
+                        SelectedItem="{Binding SelectedAppearance, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                        SelectionChanged="ReloadModels" />
+                </Grid>
+                <Button Command="{Binding ExtractShadersCommand}" Content="Export Shaders" />
+            </StackPanel>
             <syncfusion:SfTreeGrid
                 Grid.Row="1"
                 AutoExpandMode="AllNodesExpanded"
