@@ -584,8 +584,8 @@ namespace WolvenKit.ViewModels.Documents
             var createMLDiffuse = !System.IO.File.Exists(filename_b);
             var createMLNormal = !System.IO.File.Exists(filename_bn);
 
-            //if (!createMLDiffuse && !createMLNormal)
-            //    return;
+            if (!createMLDiffuse && !createMLNormal)
+                return;
 
             if (dictionary.ContainsKey("MultilayerSetup") && dictionary.ContainsKey("MultilayerMask"))
             {
@@ -632,6 +632,9 @@ namespace WolvenKit.ViewModels.Documents
                 var i = 0;
                 foreach (var layer in mls.Layers)
                 {
+                    if (i >= streams.Count)
+                        break;
+
                     if (layer.ColorScale == "null_null" || layer.Opacity == 0 || layer.Material == null)
                     {
                         goto SkipLayer;
@@ -721,6 +724,7 @@ namespace WolvenKit.ViewModels.Documents
                                         var n = normalLayer.GetPixel(x % normalLayer.Width, y % normalLayer.Height);
                                         var alpha = maskBitmap.GetPixel(x, y).R / 255F * (float)strength.V;
                                         var r = (int)((oc.R - 127) * (1F - alpha) + (n.R - 127) * alpha) + 127;
+                                        //var g = 255 - ((int)((oc.G - 127) * (1F - alpha) + (n.G - 127) * alpha) + 127);
                                         var g = (int)((oc.G - 127) * (1F - alpha) + (n.G - 127) * alpha) + 127;
                                         var b = (int)((oc.B - 127) * (1F - alpha)) + 127;
                                         if (n.B == 0)
@@ -858,8 +862,8 @@ namespace WolvenKit.ViewModels.Documents
 
             // normals
 
-            //if (System.IO.File.Exists(filename_n))
-            //    return;
+            if (System.IO.File.Exists(filename_bn))
+                return;
 
             if (dictionary.ContainsKey("NormalTexture") && dictionary["NormalTexture"] is CResourceReference<ITexture> crrn)
             {
@@ -896,6 +900,7 @@ namespace WolvenKit.ViewModels.Documents
                     {
                         var oc = normalLayer.GetPixel(x, y);
                         var r = oc.R;
+                        //var g = (byte)(255 - oc.G);
                         var g = oc.G;
                         var b = ToBlue(r, g);
                         normalLayer.SetPixel(x, y, System.Drawing.Color.FromArgb(r, g, b));
@@ -916,6 +921,10 @@ namespace WolvenKit.ViewModels.Documents
                 }
 
             }
+
+            if (System.IO.File.Exists(filename_bn))
+                return;
+
             else if (dictionary.ContainsKey("Normal") && dictionary["Normal"] is CResourceReference<ITexture> crrn2)
             {
                 var xbm = File.GetFileFromDepotPath(crrn2.DepotPath);
@@ -925,16 +934,58 @@ namespace WolvenKit.ViewModels.Documents
                     return;
                 }
 
-                var stream = new FileStream(filename_n, FileMode.Create);
+                //var stream = new FileStream(filename_n, FileMode.Create);
+                //ModTools.ConvertRedClassToDdsStream(it, stream, out var format);
+                //stream.Dispose();
+
+                var stream = new MemoryStream();
                 ModTools.ConvertRedClassToDdsStream(it, stream, out var format);
+
+                var normal = await ImageDecoder.RenderToBitmapSourceDds(stream);
+
                 stream.Dispose();
+
+                Bitmap normalLayer;
+                using (var outStream = new MemoryStream())
+                {
+                    BitmapEncoder enc = new PngBitmapEncoder();
+                    enc.Frames.Add(BitmapFrame.Create(normal));
+                    enc.Save(outStream);
+                    normalLayer = new Bitmap(outStream);
+                }
+
+                for (int y = 0; y < normalLayer.Height; y++)
+                {
+                    for (int x = 0; x < normalLayer.Width; x++)
+                    {
+                        var oc = normalLayer.GetPixel(x, y);
+                        var r = oc.R;
+                        //var g = (byte)(255 - oc.G);
+                        var g = oc.G;
+                        var b = ToBlue(r, g);
+                        normalLayer.SetPixel(x, y, System.Drawing.Color.FromArgb(r, g, b));
+                    }
+                }
+
+                try
+                {
+                    normalLayer.Save(filename_bn, ImageFormat.Png);
+                }
+                catch (Exception e)
+                {
+                    Locator.Current.GetService<ILoggerService>().Error(e.Message);
+                }
+                finally
+                {
+                    normalLayer.Dispose();
+                }
             }
 
         }
 
         public byte ToBlue(byte r, byte g)
         {
-            return (byte)Math.Clamp(Math.Round(Math.Sqrt(1.02 - 2 * ((r / 255F) * 2 - 1) * ((g / 255F) * 2 - 1)) * 255), 0, 255);
+            return (byte)Math.Clamp(Math.Round((Math.Sqrt(1.02 - 2 * ((r / 255F) * 2 - 1) * ((g / 255F) * 2 - 1)) + 1) / 2 * 255), 0, 255);
         }
 
         public void GetResolvedMatrix(IBindable bindable, ref Matrix3D matrix, Dictionary<string, LoadableModel> models)

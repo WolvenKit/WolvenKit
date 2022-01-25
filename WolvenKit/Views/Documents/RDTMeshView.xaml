@@ -74,15 +74,27 @@
 
                 <Viewport3D Name="MainViewport">
                     <ModelVisual3D x:Name="ContentVisual" />
+                    <!--
+                        visuals:SphereVisual3D
+                        CenterPosition="5,5,5"
+                        Material="White"
+                        Radius="5" /
+                    -->
                     <ModelVisual3D>
                         <ModelVisual3D.Content>
                             <Model3DGroup x:Name="LightsModel3DGroup">
                                 <DirectionalLight
                                     x:Name="TopDirectionalLight"
                                     Direction="0 -1 0"
-                                    Color="White" />
-                                <!--<DirectionalLight Direction="1 0 0" Color="White" />-->
-                                <AmbientLight x:Name="AmbientLight1" Color="#555555" />
+                                    Color="#afafaf" />
+                                <DirectionalLight Direction="-1 0 0" Color="#4f4f4f" />
+                                <DirectionalLight Direction="1 0 0" Color="#4f4f4f" />
+                                <DirectionalLight Direction="0 0 1" Color="#4f4f4f" />
+                                <DirectionalLight Direction="0 0 -1" Color="#4f4f4f" />
+                                <DirectionalLight Direction="-1 0 1" Color="#4f4f4f" />
+                                <DirectionalLight Direction="1 0 -1" Color="#4f4f4f" />
+                                <DirectionalLight Direction="1 0 1" Color="#4f4f4f" />
+                                <DirectionalLight Direction="-1 0 -1" Color="#4f4f4f" />
                             </Model3DGroup>
                         </ModelVisual3D.Content>
                     </ModelVisual3D>
@@ -131,6 +143,7 @@
             CameraType="OrthographicCamera"
             Distance="50"
             Heading="230"
+            ShowCameraLight="Never"
             TargetPosition="0 0 0"
             TargetViewport3D="{Binding ElementName=MainViewport}" />
 
@@ -254,38 +267,77 @@
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="*" />
             </Grid.RowDefinitions>
-            <ComboBox
-                DisplayMemberPath="Name"
-                ItemsSource="{Binding Appearances, Mode=OneWay}"
-                SelectedItem="{Binding SelectedAppearance, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                SelectionChanged="ReloadModels" />
-            <ScrollViewer Grid.Row="1">
-                <ItemsControl ItemsSource="{Binding SelectedAppearance.Models, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}">
-                    <ItemsControl.ItemsPanel>
-                        <ItemsPanelTemplate>
-                            <StackPanel Orientation="Vertical" />
-                        </ItemsPanelTemplate>
-                    </ItemsControl.ItemsPanel>
-                    <ItemsControl.Template>
-                        <ControlTemplate>
-                            <ItemsPresenter />
-                        </ControlTemplate>
-                    </ItemsControl.Template>
-                    <ItemsControl.ItemTemplate>
-                        <DataTemplate>
-                            <StackPanel Orientation="Horizontal">
-                                <CheckBox
-                                    Margin="5,2"
-                                    Checked="ReloadModels"
-                                    IsChecked="{Binding IsEnabled, Mode=TwoWay}"
-                                    Unchecked="ReloadModels">
-                                    <TextBlock VerticalAlignment="Center" Text="{Binding Name}" />
-                                </CheckBox>
-                            </StackPanel>
-                        </DataTemplate>
-                    </ItemsControl.ItemTemplate>
-                </ItemsControl>
-            </ScrollViewer>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition />
+
+                </Grid.ColumnDefinitions>
+                <TextBlock
+                    Margin="5,0,0,0"
+                    VerticalAlignment="Center"
+                    Text="Appearance: " />
+                <ComboBox
+                    Grid.Column="1"
+                    Height="30"
+                    Padding="10,0"
+                    DisplayMemberPath="Name"
+                    ItemsSource="{Binding Appearances, Mode=OneWay}"
+                    SelectedItem="{Binding SelectedAppearance, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                    SelectionChanged="ReloadModels" />
+            </Grid>
+            <syncfusion:SfTreeGrid
+                Grid.Row="1"
+                AutoExpandMode="AllNodesExpanded"
+                AutoGenerateColumns="False"
+                CheckBoxMappingName="IsEnabled"
+                ChildPropertyName="BindName"
+                ItemsSource="{Binding SelectedAppearance.Models, Mode=TwoWay}"
+                ParentPropertyName="Name"
+                RowHeaderWidth="300"
+                ShowCheckBox="True">
+                <syncfusion:SfTreeGrid.Columns>
+                    <syncfusion:TreeGridTextColumn
+                        HeaderText="Component Name"
+                        MappingName="Name"
+                        MinimumWidth="300" />
+                    <syncfusion:TreeGridTextColumn HeaderText="Bind Name" MappingName="BindName" />
+                    <syncfusion:TreeGridTextColumn HeaderText="Slot Name" MappingName="SlotName" />
+                </syncfusion:SfTreeGrid.Columns>
+            </syncfusion:SfTreeGrid>
+            <!--ItemsControl ItemsSource="{Binding SelectedAppearance.Models, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}">
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <StackPanel Orientation="Vertical" />
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                        <ItemsControl.Template>
+                            <ControlTemplate>
+                                <ItemsPresenter />
+                            </ControlTemplate>
+                        </ItemsControl.Template>
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <StackPanel Margin="5,0,0,0" Orientation="Vertical">
+                                    <CheckBox
+                                        Margin="0,2"
+                                        Checked="ReloadModels"
+                                        IsChecked="{Binding IsEnabled, Mode=TwoWay}"
+                                        Unchecked="ReloadModels">
+                                        <TextBlock VerticalAlignment="Center" Text="{Binding Name}" />
+                                    </CheckBox>
+                                    <TextBlock
+                                        Margin="20,0,0,0"
+                                        VerticalAlignment="Center"
+                                        Text="{Binding BindName, StringFormat='bind: {0}'}" />
+                                    <TextBlock
+                                        Margin="20,0,0,0"
+                                        VerticalAlignment="Center"
+                                        Text="{Binding SlotName, StringFormat='slot: {0}'}" />
+                                </StackPanel>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl-->
         </Grid>
     </Grid>
 </reactiveUi:ReactiveUserControl>

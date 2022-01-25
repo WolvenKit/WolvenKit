@@ -117,7 +117,7 @@ namespace WolvenKit.Views.Documents
                     var shaderResourceView = TextureLoader.LoadShaderResourceView(MainDXViewportView.DXScene.Device,
                                                                                            filename_bn,
                                                                                            loadDdsIfPresent: true,
-                                                                                           convertTo32bppPRGBA: false,
+                                                                                           convertTo32bppPRGBA: true,
                                                                                            generateMipMaps: true,
                                                                                            textureInfo: out var textureInfo);
 
@@ -148,14 +148,14 @@ namespace WolvenKit.Views.Documents
                     var shaderResourceView = TextureLoader.LoadShaderResourceView(MainDXViewportView.DXScene.Device,
                                                                                            filename_n,
                                                                                            loadDdsIfPresent: true,
-                                                                                           convertTo32bppPRGBA: false,
+                                                                                           convertTo32bppPRGBA: true,
                                                                                            generateMipMaps: true,
                                                                                            textureInfo: out var textureInfo);
 
                     physicallyBasedMaterial.TextureMaps.Add(new TextureMapInfo(TextureMapTypes.NormalMap, shaderResourceView, null, filename_n));
                 }
 
-                physicallyBasedMaterial.Roughness = 1f;
+                physicallyBasedMaterial.Roughness = 0.75f;
                 physicallyBasedMaterial.Metalness = 0f;
 
                 diffuseMaterial.SetUsedDXMaterial(physicallyBasedMaterial);
@@ -172,7 +172,6 @@ namespace WolvenKit.Views.Documents
 
             if (model.Model != null || ViewModel == null)
             {
-                model.Model.SetCurrentValue(Model3D.TransformProperty, model.Transform);
                 return;
             }
 
@@ -199,7 +198,7 @@ namespace WolvenKit.Views.Documents
                 // See the possible enum values to see what post processes are available.
                 // Here we just set the AssimpPostProcessSteps to its default value - execute the Triangulate step to convert all polygons to triangles that are needed for WPF 3D.
                 // Note that if ReadPolygonIndices is set to true in the next line, then the assimpWpfImporter will not use assimp's triangulation because it needs original polygon data.
-                assimpWpfImporter.AssimpPostProcessSteps = PostProcessSteps.Triangulate | PostProcessSteps.CalculateTangentSpace;
+                assimpWpfImporter.AssimpPostProcessSteps = PostProcessSteps.Triangulate;
 
                 // When ReadPolygonIndices is true, assimpWpfImporter will read PolygonIndices collection that can be used to show polygons instead of triangles.
                 assimpWpfImporter.ReadPolygonIndices = ReadPolygonIndicesCheckBox.IsChecked ?? false;
@@ -410,7 +409,7 @@ namespace WolvenKit.Views.Documents
                                               bounds.SizeZ * bounds.SizeZ);
 
                     Camera1.TargetPosition = modelCenter;
-                    Camera1.SetCurrentValue(Ab3d.Cameras.BaseTargetPositionCamera.DistanceProperty, modelSize * 2);
+                    Camera1.SetCurrentValue(Ab3d.Cameras.BaseTargetPositionCamera.DistanceProperty, modelSize / 2);
                 }
 
                 // If the read model already define some lights, then do not show the Camera's light
