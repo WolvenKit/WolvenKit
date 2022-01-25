@@ -2,15 +2,26 @@ using System;
 using System.Collections.Generic;
 using System.Drawing.Text;
 using System.IO;
+using System.Linq;
 using System.Runtime.InteropServices;
+using System.Runtime.Serialization;
+using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Forms;
+using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using System.Xml;
+using System.Xml.Serialization;
+using Newtonsoft.Json;
 using ReactiveUI.Fody.Helpers;
+using WolvenKit.Common.Conversion;
 using WolvenKit.Common.FNV1A;
 using WolvenKit.Functionality.Ab4d;
+using WolvenKit.Functionality.Commands;
 using WolvenKit.Modkit.RED4;
 using WolvenKit.RED4.Types;
+using Application = System.Windows.Application;
 
 namespace WolvenKit.ViewModels.Documents
 {
@@ -36,129 +47,160 @@ namespace WolvenKit.ViewModels.Documents
 
         [Reactive] public List<inkanimSequence> inkAnimations { get; set; } = new();
 
+        [Reactive] public List<inkIEffect> inkEffects { get; set; } = new();
+
         public RDTWidgetViewModel(RedBaseClass data, RedDocumentViewModel file)
         {
             Header = "Widget Preview";
             File = file;
             _data = data;
-            var _library = data as inkWidgetLibraryResource;
+            library = _data as inkWidgetLibraryResource;
+        }
 
-            var animPath = _library.AnimationLibraryResRef?.DepotPath?.GetValue() ?? "";
-            var animHash = FNV1A64HashAlgorithm.HashString(animPath);
-            var animFile = File.GetFileFromHash(animHash);
-
-            if (animFile != null && animFile.RootChunk is inkanimAnimationLibraryResource alr)
+        public async Task LoadResources()
+        {
+            await Task.Run(async () =>
             {
-                foreach (var seq in alr.Sequences)
-                {
-                    inkAnimations.Add((inkanimSequence)seq.GetValue());
-                }
-            }
+                var tasks = new List<Task>();
 
-            foreach (var f in _library.ExternalDependenciesForInternalItems)
+                tasks.Add(LoadAnimations());
+
+                foreach (var f in library.ExternalDependenciesForInternalItems)
+                {
+                    var itemPath = f.DepotPath.GetValue();
+                    if (Path.GetExtension(itemPath) == ".inkatlas")
+                    {
+                        tasks.Add(LoadInkAtlasAsync(itemPath));
+                    }
+                    else if (Path.GetExtension(itemPath) == ".inkfontfamily")
+                    {
+                        tasks.Add(LoadFont(itemPath));
+                    }
+                    else if (Path.GetExtension(itemPath) == ".inkstyle")
+                    {
+                        tasks.Add(LoadStyle(itemPath));
+                    }
+                }
+
+                await Task.WhenAll(tasks);
+            });
+        }
+
+        public Task LoadAnimations()
+        {
+            return Task.Run(() =>
             {
-                var itemPath = f.DepotPath.GetValue();
-                if (Path.GetExtension(itemPath) == ".inkatlas")
+                inkAnimations = new();
+
+                var animPath = library.AnimationLibraryResRef?.DepotPath?.GetValue() ?? "";
+                var animHash = FNV1A64HashAlgorithm.HashString(animPath);
+                var animFile = File.GetFileFromHash(animHash);
+
+                if (animFile != null && animFile.RootChunk is inkanimAnimationLibraryResource alr)
                 {
-                    var atlasHash = FNV1A64HashAlgorithm.HashString(itemPath);
-                    var atlasFile = File.GetFileFromHash(atlasHash);
-                    if (atlasFile == null || atlasFile.RootChunk is not inkTextureAtlas atlas)
+                    foreach (var seq in alr.Sequences)
                     {
-                        continue;
-                    }
-
-                    var xbmHash = FNV1A64HashAlgorithm.HashString(atlas?.Slots[0]?.Texture?.DepotPath?.ToString() ?? "");
-                    var xbmFile = File.GetFileFromHash(xbmHash);
-                    if (xbmFile == null || xbmFile.RootChunk is not CBitmapTexture xbm)
-                    {
-                        continue;
-                    }
-
-                    using var ddsstream = new MemoryStream();
-                    if (!ModTools.ConvertRedClassToDdsStream(xbm, ddsstream, out _))
-                    {
-                        continue;
-                    }
-
-                    var qa = ImageDecoder.RenderToBitmapSourceDds(ddsstream);
-                    if (qa.Result == null)
-                    {
-                        continue;
-                    }
-
-                    var image = new TransformedBitmap(qa.Result, new ScaleTransform(1, -1));
-
-                    foreach (var part in atlas.Slots[0].Parts)
-                    {
-                        var key = "ImageSource/" + itemPath + "#" + part.PartName;
-                        if (!Application.Current.Resources.Contains(key))
-                        {
-                            var Left = part.ClippingRectInUVCoords.Left * xbm.Width;
-                            var Top = part.ClippingRectInUVCoords.Top * xbm.Height;
-                            var Width = part.ClippingRectInUVCoords.Right * xbm.Width - Left;
-                            var Height = part.ClippingRectInUVCoords.Bottom * xbm.Height - Top;
-                            var partImage = new CroppedBitmap(image, new Int32Rect((int)Math.Round(Left), (int)Math.Round(Top), (int)Math.Round(Width), (int)Math.Round(Height)));
-                            partImage.Freeze();
-
-                            Application.Current.Resources.Add(key, partImage);
-                        }
-                    }
-
-                    foreach (var slice in atlas.Slots[0].Slices)
-                    {
-                        var key = "RectF/" + itemPath + "#" + slice.PartName;
-                        if (!Application.Current.Resources.Contains(key))
-                        {
-                            Application.Current.Resources.Add(key, slice.NineSliceScaleRect);
-                        }
+                        inkAnimations.Add((inkanimSequence)seq.GetValue());
                     }
                 }
-                else if (Path.GetExtension(itemPath) == ".inkfontfamily")
+            });
+        }
+
+        public Task LoadFont(string path)
+        {
+            return Task.Run(() =>
+            {
+                if (Application.Current.Resources.Contains(path))
                 {
-                    var ffHash = FNV1A64HashAlgorithm.HashString(itemPath);
-                    var ffFile = File.GetFileFromHash(ffHash);
-                    if (ffFile == null || ffFile.RootChunk is not inkFontFamilyResource ffr)
-                    {
-                        continue;
-                    }
+                    return;
+                }
 
-                    foreach (var fs in ffr.FontStyles)
+                Application.Current.Resources.Add(path, false);
+
+                var ffHash = FNV1A64HashAlgorithm.HashString(path);
+                var ffFile = File.GetFileFromHash(ffHash);
+                if (ffFile == null || ffFile.RootChunk is not inkFontFamilyResource ffr)
+                {
+                    return;
+                }
+
+                foreach (var fs in ffr.FontStyles)
+                {
+                    var key = "FontCollection/" + path + "#" + fs.StyleName;
+                    if (!Application.Current.Resources.Contains(key))
                     {
-                        var key = "FontCollection/" + itemPath + "#" + fs.StyleName;
-                        if (!Application.Current.Resources.Contains(key))
+                        var fontHash = FNV1A64HashAlgorithm.HashString(fs.Font.DepotPath.ToString());
+                        var fontFile = File.GetFileFromHash(fontHash);
+                        if (fontFile == null || fontFile.RootChunk is not rendFont rf)
                         {
-                            var fontHash = FNV1A64HashAlgorithm.HashString(fs.Font.DepotPath.ToString());
-                            var fontFile = File.GetFileFromHash(fontHash);
-                            if (fontFile == null || fontFile.RootChunk is not rendFont rf)
-                            {
-                                continue;
-                            }
-
-                            PrivateFontCollection pfc = new();
-                            var fontBytes = rf.FontBuffer.Buffer.GetBytes();
-                            var ptrData = Marshal.AllocCoTaskMem(fontBytes.Length);
-                            Marshal.Copy(fontBytes, 0, ptrData, fontBytes.Length);
-                            pfc.AddMemoryFont(ptrData, fontBytes.Length);
-                            Marshal.FreeCoTaskMem(ptrData);
-
-                            Application.Current.Resources.Add(key, pfc);
+                            continue;
                         }
+
+                        PrivateFontCollection pfc = new();
+                        var fontBytes = rf.FontBuffer.Buffer.GetBytes();
+                        var ptrData = Marshal.AllocCoTaskMem(fontBytes.Length);
+                        Marshal.Copy(fontBytes, 0, ptrData, fontBytes.Length);
+                        pfc.AddMemoryFont(ptrData, fontBytes.Length);
+                        Marshal.FreeCoTaskMem(ptrData);
+
+                        Application.Current.Resources.Add(key, pfc);
                     }
                 }
-                else if (Path.GetExtension(itemPath) == ".inkstyle")
+
+                Application.Current.Resources[path] = true;
+            });
+        }
+
+        public Task LoadStyle(string path)
+        {
+            return Task.Run(() =>
+            {
+                var styleHash = FNV1A64HashAlgorithm.HashString(path);
+                var styleFile = File.GetFileFromHash(styleHash);
+
+                if (styleFile == null || styleFile.RootChunk is not inkStyleResource sr)
                 {
-                    var styleHash = FNV1A64HashAlgorithm.HashString(itemPath);
-                    var styleFile = File.GetFileFromHash(styleHash);
+                    return;
+                }
 
-                    if (styleFile == null || styleFile.RootChunk is not inkStyleResource sr)
-                    {
-                        continue;
-                    }
-
+                if (!Themes.Contains("Default"))
+                {
                     Themes.Add("Default");
-                    CurrentTheme = "Default";
+                }
+                CurrentTheme = "Default";
 
-                    foreach (var style in sr.Styles)
+                foreach (var style in sr.Styles)
+                {
+                    if (!StyleStates.Contains(style.State))
+                    {
+                        StyleStates.Add(style.State);
+                    }
+
+                    foreach (var prop in style.Properties)
+                    {
+                        var key = "CVariant/Default/" + prop.PropertyPath + "#" + style.State;
+                        if (!Application.Current.Resources.Contains(key))
+                        {
+                            Application.Current.Resources.Add(key, prop.Value);
+                        }
+                    }
+                }
+
+                if (StyleStates.Count > 0)
+                {
+                    CurrentStyleState = StyleStates[0];
+                }
+
+                foreach (var theme in sr.Themes)
+                {
+                    var themeHash = FNV1A64HashAlgorithm.HashString(theme.StyleResource.DepotPath.ToString());
+                    var themeFile = File.GetFileFromHash(themeHash);
+                    if (themeFile == null || themeFile.RootChunk is not inkStyleResource isr)
+                    {
+                        continue;
+                    }
+
+                    foreach (var style in isr.Styles)
                     {
                         if (!StyleStates.Contains(style.State))
                         {
@@ -167,7 +209,7 @@ namespace WolvenKit.ViewModels.Documents
 
                         foreach (var prop in style.Properties)
                         {
-                            var key = "CVariant/Default/" + prop.PropertyPath + "#" + style.State;
+                            var key = "CVariant/" + theme.ThemeID + "/" + prop.PropertyPath + "#" + style.State;
                             if (!Application.Current.Resources.Contains(key))
                             {
                                 Application.Current.Resources.Add(key, prop.Value);
@@ -175,45 +217,85 @@ namespace WolvenKit.ViewModels.Documents
                         }
                     }
 
-                    if (StyleStates.Count > 0)
+                    if (!Themes.Contains(theme.ThemeID))
                     {
-                        CurrentStyleState = StyleStates[0];
-                    }
-
-                    foreach (var theme in sr.Themes)
-                    {
-                        var themeHash = FNV1A64HashAlgorithm.HashString(theme.StyleResource.DepotPath.ToString());
-                        var themeFile = File.GetFileFromHash(themeHash);
-                        if (themeFile == null || themeFile.RootChunk is not inkStyleResource isr)
-                        {
-                            continue;
-                        }
-
-                        foreach (var style in isr.Styles)
-                        {
-                            if (!StyleStates.Contains(style.State))
-                            {
-                                StyleStates.Add(style.State);
-                            }
-
-                            foreach (var prop in style.Properties)
-                            {
-                                var key = "CVariant/" + theme.ThemeID + "/" + prop.PropertyPath + "#" + style.State;
-                                if (!Application.Current.Resources.Contains(key))
-                                {
-                                    Application.Current.Resources.Add(key, prop.Value);
-                                }
-                            }
-                        }
-
-                        if (!Themes.Contains(theme.ThemeID))
-                        {
-                            Themes.Add(theme.ThemeID);
-                        }
+                        Themes.Add(theme.ThemeID);
                     }
                 }
+            });
+        }
+
+        public Task LoadInkAtlasAsync(string path)
+        {
+            return Task.Run(() =>
+            {
+                LoadInkAtlas(path);
+            });
+        }
+
+        public void LoadInkAtlas(string path)
+        {
+            if (Application.Current.Resources.Contains(path))
+            {
+                return;
             }
-            library = _library;
+
+            Application.Current.Resources.Add(path, false);
+
+            var atlasHash = FNV1A64HashAlgorithm.HashString(path);
+            var atlasFile = File.GetFileFromHash(atlasHash);
+            if (atlasFile == null || atlasFile.RootChunk is not inkTextureAtlas atlas)
+            {
+                return;
+            }
+
+            var xbmHash = FNV1A64HashAlgorithm.HashString(atlas?.Slots[0]?.Texture?.DepotPath?.ToString() ?? "");
+            var xbmFile = File.GetFileFromHash(xbmHash);
+            if (xbmFile == null || xbmFile.RootChunk is not CBitmapTexture xbm)
+            {
+                return;
+            }
+
+            using var ddsstream = new MemoryStream();
+            if (!ModTools.ConvertRedClassToDdsStream(xbm, ddsstream, out _))
+            {
+                return;
+            }
+
+            var qa = ImageDecoder.RenderToBitmapSourceDds(ddsstream);
+            if (qa.Result == null)
+            {
+                return;
+            }
+
+            var image = new TransformedBitmap(qa.Result, new ScaleTransform(1, -1));
+
+            foreach (var part in atlas.Slots[0].Parts)
+            {
+                var key = "ImageSource/" + path + "#" + part.PartName;
+                if (!Application.Current.Resources.Contains(key))
+                {
+                    var Left = part.ClippingRectInUVCoords.Left * xbm.Width;
+                    var Top = part.ClippingRectInUVCoords.Top * xbm.Height;
+                    var Width = part.ClippingRectInUVCoords.Right * xbm.Width - Left;
+                    var Height = part.ClippingRectInUVCoords.Bottom * xbm.Height - Top;
+                    var partImage = new CroppedBitmap(image, new Int32Rect((int)Math.Round(Left), (int)Math.Round(Top), (int)Math.Round(Width), (int)Math.Round(Height)));
+                    partImage.Freeze();
+
+                    Application.Current.Resources.Add(key, partImage);
+                }
+            }
+
+            foreach (var slice in atlas.Slots[0].Slices)
+            {
+                var key = "RectF/" + path + "#" + slice.PartName;
+                if (!Application.Current.Resources.Contains(key))
+                {
+                    Application.Current.Resources.Add(key, slice.NineSliceScaleRect);
+                }
+            }
+
+            Application.Current.Resources[path] = true;
         }
 
         public override ERedDocumentItemType DocumentItemType => ERedDocumentItemType.W2rcBuffer;
@@ -223,6 +305,41 @@ namespace WolvenKit.ViewModels.Documents
         [Reactive] public object SelectedItem { get; set; }
 
         [Reactive] public bool IsDragging { get; set; }
+
+        public void ExportWidget(inkWidget widget)
+        {
+            Stream myStream;
+            var saveFileDialog = new SaveFileDialog
+            {
+                Filter = "XML files (*.xml)|*.xml|All files (*.*)|*.*",
+                FilterIndex = 2,
+                FileName = widget.Name + ".xml",
+                RestoreDirectory = true
+            };
+
+            if (saveFileDialog.ShowDialog() == DialogResult.OK)
+            {
+                if ((myStream = saveFileDialog.OpenFile()) != null)
+                {
+                    var dto = new inkWidgetSerializer(widget);
+                    var x = new XmlSerializer(typeof(inkWidgetSerializer));
+
+                    using (var xmlWriter = XmlWriter.Create(myStream, new XmlWriterSettings { Indent = true }))
+                    {
+                        x.Serialize(xmlWriter, dto);
+                    }
+                    //var json = JsonConvert.SerializeObject(dto, Formatting.Indented);
+
+                    //if (string.IsNullOrEmpty(xml))
+                    //{
+                    //    throw new SerializationException();
+                    //}
+
+                    //myStream.Write(xml.ToCharArray().Select(c => (byte)c).ToArray());
+                    //myStream.Close();
+                }
+            }
+        }
 
     }
 }

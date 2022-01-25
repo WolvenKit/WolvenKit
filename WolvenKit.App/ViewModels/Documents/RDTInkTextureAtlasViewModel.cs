@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Drawing;
+using System.Drawing.Imaging;
 using System.IO;
 using System.Windows;
 using System.Windows.Input;
@@ -23,6 +25,51 @@ namespace WolvenKit.ViewModels.Documents
             Header = "Part Mapping";
             Width = xbm.Width;
             Height = xbm.Height;
+
+            Bitmap sourceBitmap;
+            using (var outStream = new MemoryStream())
+            {
+                BitmapEncoder enc = new TiffBitmapEncoder();
+                enc.Frames.Add(BitmapFrame.Create((BitmapSource)Image));
+                enc.Save(outStream);
+                sourceBitmap = new Bitmap(outStream);
+            }
+
+            Bitmap destBitmap = new Bitmap((int)Math.Round(Width), (int)Math.Round(Height), System.Drawing.Imaging.PixelFormat.Format64bppArgb);
+
+            using (Graphics gfx = Graphics.FromImage(destBitmap))
+            {
+                // this is doesn't account for premultipied alpha, so the opacity mask is still needed
+                var matrix = new ColorMatrix(new float[][]
+                {
+                        new float[] { 1, 0, 0, 0, 0},
+                        new float[] { 0, 1, 0, 0, 0},
+                        new float[] { 0, 0, 1, 0, 0},
+                        new float[] { 0, 0, 0, 1, 0},
+                        new float[] { 0, 0, 0, 0, 0},
+                });
+                //matrix.Matrix03 = 1F;
+                //matrix.Matrix13 = TintColor.Alpha / 3F;
+                //matrix.Matrix23 = TintColor.Alpha / 3F;
+                //matrix.Matrix40 = TintColor.R / 255F;
+                //matrix.Matrix41 = TintColor.G / 255F;
+                //matrix.Matrix42 = TintColor.B / 255F;
+
+                ImageAttributes attributes = new ImageAttributes();
+
+                attributes.SetColorMatrix(matrix, ColorMatrixFlag.Default, ColorAdjustType.Bitmap);
+
+                gfx.DrawImage(sourceBitmap, new Rectangle(0, 0, (int)Width, (int)Height), 0, 0, Width, Height, GraphicsUnit.Pixel, attributes);
+            }
+
+            sourceBitmap.Dispose();
+
+            Image = System.Windows.Interop.Imaging.CreateBitmapSourceFromHBitmap(
+                destBitmap.GetHbitmap(),
+                IntPtr.Zero,
+                Int32Rect.Empty,
+                BitmapSizeOptions.FromEmptyOptions());
+
             foreach (var part in atlas.Slots[0].Parts)
             {
                 OverlayItems.Add(new InkTextureAtlasMapperViewModel(part, xbm, atlas.Slots[0].Texture.DepotPath.ToString(), file.RelativePath, (BitmapSource)Image));
