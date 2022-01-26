@@ -107,6 +107,7 @@ namespace WolvenKit.ViewModels.Documents
         public Material Base { get; set; }
         public Bitmap ColorTexture { get; set; }
         public string ColorTexturePath { get; set; }
+        public string TemplateName { get; set; }
     }
 
     public class RDTMeshViewModel : RedDocumentTabViewModel
@@ -581,6 +582,11 @@ namespace WolvenKit.ViewModels.Documents
                     }
                     mat = cmi;
                 }
+                else if (baseMaterialFile != null && baseMaterialFile.RootChunk is CMaterialTemplate cmt)
+                {
+                    material.TemplateName = cmt.Name;
+                    mat = null;
+                }
                 else
                 {
                     mat = null;
@@ -595,8 +601,8 @@ namespace WolvenKit.ViewModels.Documents
             var createMLDiffuse = !System.IO.File.Exists(filename_b);
             var createMLNormal = !System.IO.File.Exists(filename_bn);
 
-            if (!createMLDiffuse && !createMLNormal)
-                return;
+            //if (!createMLDiffuse && !createMLNormal)
+            //    return;
 
             if (dictionary.ContainsKey("MultilayerSetup") && dictionary.ContainsKey("MultilayerMask"))
             {
@@ -723,6 +729,16 @@ namespace WolvenKit.ViewModels.Documents
                             normalLayer = new Bitmap(outStream);
                         }
 
+                        var layerWidth = (int)(normalLayer.Width * layer.MatTile);
+                        var layerHeight = (int)(normalLayer.Height * layer.MatTile);
+
+                        Bitmap tempNormalBitmap = new Bitmap((layerWidth < maskBitmap.Width) ? layerWidth : maskBitmap.Width, (layerHeight < maskBitmap.Height) ? layerHeight : maskBitmap.Height);
+
+                        Graphics gfx_n = Graphics.FromImage(tempNormalBitmap);
+                        gfx_n.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.HighQualityBilinear;
+                        gfx_n.DrawImage(normalLayer, new Rectangle(0, 0, layerWidth, layerHeight), 0, 0, normalLayer.Width, normalLayer.Height, GraphicsUnit.Pixel, null);
+                        gfx_n.Dispose();
+
                         foreach (var strength in mllt.Overrides.NormalStrength)
                         {
                             if (strength.N == layer.NormalStrength)
@@ -732,7 +748,7 @@ namespace WolvenKit.ViewModels.Documents
                                     for (int x = 0; x < maskBitmap.Width; x++)
                                     {
                                         var oc = normalBitmap.GetPixel(x, y);
-                                        var n = normalLayer.GetPixel(x % normalLayer.Width, y % normalLayer.Height);
+                                        var n = tempNormalBitmap.GetPixel(x % tempNormalBitmap.Width, y % tempNormalBitmap.Height);
                                         var alpha = maskBitmap.GetPixel(x, y).R / 255F * (float)strength.V;
                                         var r = (int)((oc.R - 127) * (1F - alpha) + (n.R - 127) * alpha) + 127;
                                         //var g = 255 - ((int)((oc.G - 127) * (1F - alpha) + (n.G - 127) * alpha) + 127);

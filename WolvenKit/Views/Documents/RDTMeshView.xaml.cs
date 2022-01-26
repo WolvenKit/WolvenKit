@@ -18,6 +18,7 @@ using Ab3d;
 using Ab3d.Assimp;
 using Ab3d.Common.Cameras;
 using Ab3d.DirectX;
+using Ab3d.DirectX.Effects;
 using Ab3d.DirectX.Materials;
 using Ab3d.Utilities;
 using Ab3d.Visuals;
@@ -74,6 +75,7 @@ namespace WolvenKit.Views.Documents
                 {
                     LoadModel(model);
                 }
+                //Parallel.For(0, app.Models.Count, (i) => LoadModel(app.Models[i]));
                 GC.Collect();
                 //GC.WaitForPendingFinalizers();
                 //GC.Collect();
@@ -100,40 +102,53 @@ namespace WolvenKit.Views.Documents
                 var filename_bn = System.IO.Path.Combine(ISettingsManager.GetTemp_OBJPath(), material.Name + "_n.png");
                 var filename_d = System.IO.Path.Combine(ISettingsManager.GetTemp_OBJPath(), material.Name + "_d.dds");
                 var filename_n = System.IO.Path.Combine(ISettingsManager.GetTemp_OBJPath(), material.Name + "_n.dds");
-                if (File.Exists(filename_b))
-                {
-                    var shaderResourceView = TextureLoader.LoadShaderResourceView(MainDXViewportView.DXScene.Device,
-                                                                                           filename_b,
-                                                                                           loadDdsIfPresent: true,
-                                                                                           convertTo32bppPRGBA: true,
-                                                                                           generateMipMaps: true,
-                                                                                           textureInfo: out var textureInfo);
-
-                    physicallyBasedMaterial.TextureMaps.Add(new TextureMapInfo(TextureMapTypes.BaseColor, shaderResourceView, null, filename_b));
-                }
-
-                if (File.Exists(filename_bn))
-                {
-                    var shaderResourceView = TextureLoader.LoadShaderResourceView(MainDXViewportView.DXScene.Device,
-                                                                                           filename_bn,
-                                                                                           loadDdsIfPresent: true,
-                                                                                           convertTo32bppPRGBA: true,
-                                                                                           generateMipMaps: true,
-                                                                                           textureInfo: out var textureInfo);
-
-                    physicallyBasedMaterial.TextureMaps.Add(new TextureMapInfo(TextureMapTypes.NormalMap, shaderResourceView, null, filename_bn));
-                }
 
                 if (File.Exists(filename_d))
                 {
                     var shaderResourceView = TextureLoader.LoadShaderResourceView(MainDXViewportView.DXScene.Device,
                                                                                            filename_d,
-                                                                                           loadDdsIfPresent: true,
+                                                                                           loadDdsIfPresent: false,
                                                                                            convertTo32bppPRGBA: true,
                                                                                            generateMipMaps: true,
                                                                                            textureInfo: out var textureInfo);
 
-                    physicallyBasedMaterial.TextureMaps.Add(new TextureMapInfo(TextureMapTypes.DiffuseColor, shaderResourceView, null, filename_d));
+                    physicallyBasedMaterial.TextureMaps.Add(new TextureMapInfo(TextureMapTypes.BaseColor, shaderResourceView, null, filename_d));
+
+                    // Get recommended BlendState based on HasTransparency and HasPreMultipliedAlpha values.
+                    // Possible values are: CommonStates.Opaque, CommonStates.PremultipliedAlphaBlend or CommonStates.NonPremultipliedAlphaBlend.
+                    var recommendedBlendState = MainDXViewportView.DXScene.DXDevice.CommonStates.GetRecommendedBlendState(textureInfo.HasTransparency, textureInfo.HasPremultipliedAlpha);
+
+                    physicallyBasedMaterial.BlendState = recommendedBlendState;
+                    physicallyBasedMaterial.HasTransparency = textureInfo.HasTransparency;
+
+                    //    var effect = new RedEffect();
+
+                    //    MainDXViewportView.DXScene.DXDevice.EffectsManager.RegisterEffect(effect);
+
+                    //    // test with "vehicle_mesh_decal CompiledTechnique [Index: 0, Pass 'renderstage_post_gbuffer', PassIndex: 0, Fallback: 0, RenderStageContext: [ID: 184, VF: MeshStaticVehicle]" 
+                    //    byte[] vertexShaderBytecode = File.ReadAllBytes(System.IO.Path.Combine(ISettingsManager.GetTemp_OBJPath(), "shaders", "17053951590085590000.compiled_hlsl"));
+                    //    byte[] pixelShaderBytecode = File.ReadAllBytes(System.IO.Path.Combine(ISettingsManager.GetTemp_OBJPath(), "shaders", "8347648445514612362.compiled_hlsl"));
+                    //    // "MatMod_MaterialParam3IDSlot"        2 1
+                    //    // "MatMod_MaterialParam4IDSlot"        1 1
+                    //    // "MatMod_VehicleGridCorners"          4 1
+                    //    // "MatMod_VehicleMeshPivotInGridSpace" 3 1
+
+                    //    // 0 POSITION U16
+                    //    // 0
+
+                    //    effect.SetShaders(vertexShaderBytecode, pixelShaderBytecode);
+                }
+
+                else if (File.Exists(filename_b))
+                {
+                    var shaderResourceView = TextureLoader.LoadShaderResourceView(MainDXViewportView.DXScene.Device,
+                                                                                           filename_b,
+                                                                                           loadDdsIfPresent: false,
+                                                                                           convertTo32bppPRGBA: true,
+                                                                                           generateMipMaps: true,
+                                                                                           textureInfo: out var textureInfo);
+
+                    physicallyBasedMaterial.TextureMaps.Add(new TextureMapInfo(TextureMapTypes.BaseColor, shaderResourceView, null, filename_b));
 
                     // Get recommended BlendState based on HasTransparency and HasPreMultipliedAlpha values.
                     // Possible values are: CommonStates.Opaque, CommonStates.PremultipliedAlphaBlend or CommonStates.NonPremultipliedAlphaBlend.
@@ -143,20 +158,41 @@ namespace WolvenKit.Views.Documents
                     physicallyBasedMaterial.HasTransparency = textureInfo.HasTransparency;
                 }
 
+
                 if (File.Exists(filename_n))
                 {
                     var shaderResourceView = TextureLoader.LoadShaderResourceView(MainDXViewportView.DXScene.Device,
                                                                                            filename_n,
-                                                                                           loadDdsIfPresent: true,
+                                                                                           loadDdsIfPresent: false,
                                                                                            convertTo32bppPRGBA: true,
                                                                                            generateMipMaps: true,
                                                                                            textureInfo: out var textureInfo);
 
                     physicallyBasedMaterial.TextureMaps.Add(new TextureMapInfo(TextureMapTypes.NormalMap, shaderResourceView, null, filename_n));
                 }
+                else if (File.Exists(filename_bn))
+                {
+                    var shaderResourceView = TextureLoader.LoadShaderResourceView(MainDXViewportView.DXScene.Device,
+                                                                                           filename_bn,
+                                                                                           loadDdsIfPresent: false,
+                                                                                           convertTo32bppPRGBA: true,
+                                                                                           generateMipMaps: true,
+                                                                                           textureInfo: out var textureInfo);
+
+                    physicallyBasedMaterial.TextureMaps.Add(new TextureMapInfo(TextureMapTypes.NormalMap, shaderResourceView, null, filename_bn));
+                }
 
                 physicallyBasedMaterial.Roughness = 0.75f;
                 physicallyBasedMaterial.Metalness = 0f;
+                if (material.TemplateName == "vehicle_lights")
+                {
+                    physicallyBasedMaterial.EmissiveColor = Colors.Red.ToColor3();
+                    physicallyBasedMaterial.HasTransparency = true;
+                }
+
+                //physicallyBasedMaterial.SetTextureMap(TextureMapTypes.EnvironmentCubeMap)
+
+
 
                 diffuseMaterial.SetUsedDXMaterial(physicallyBasedMaterial);
 

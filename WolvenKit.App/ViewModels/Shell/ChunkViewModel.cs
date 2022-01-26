@@ -759,7 +759,8 @@ namespace WolvenKit.ViewModels.Shell
                     "hudEntryName",
                     "stateName",
                     "n",
-                    "componentName"
+                    "componentName",
+                    "parameterName"
                 };
 
                 foreach (var propName in propNames)

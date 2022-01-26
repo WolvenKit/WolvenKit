@@ -20,8 +20,10 @@ namespace WolvenKit.RED4.Archive.Shaders
         public uint StartThing;
         public uint EndThing;
         public string ShaderInfo;
-        public List<Shader> Shaders;
-        public List<ulong> ShaderTypes;
+        public string TemplateName;
+        public Shader PixelShader;
+        public Shader VertexShader;
+        public ulong MaterialGUID;
         public ulong uk1;
         public List<ulong> Flags1;
         public List<ulong> Flags2;

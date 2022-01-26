@@ -70,7 +70,7 @@
             <dxControls:DXViewportView
                 Name="MainDXViewportView"
                 BackgroundColor="Transparent"
-                PresentationType="DirectXImage">
+                PresentationType="DirectXOverlay">
 
                 <Viewport3D Name="MainViewport">
                     <ModelVisual3D x:Name="ContentVisual" />

@@ -51,6 +51,7 @@ namespace WolvenKit.RED4.Archive.IO
             var extras = new List<Extra>();
             var shaderMappings = new List<ShaderMapping>();
             var effects = new Dictionary<ulong, string>();
+            var materialTemplates = new Dictionary<string, List<Extra>>();
 
             // Parameter Sets
             br.BaseStream.Seek((long)footer.notherOffset, SeekOrigin.Begin);
@@ -126,26 +127,29 @@ namespace WolvenKit.RED4.Archive.IO
                 // probably additional flags stored in these variables
                 var strLength1 = br.ReadByte();
                 var strLength2 = br.ReadByte();
-                var shaderInfo = br.ReadChars((strLength1 & 0b10111111) | ((strLength2 & 0b00000001) << 6));
+                var shaderInfo = new string(br.ReadChars((strLength1 & 0b10111111) | ((strLength2 & 0b00000001) << 6)));
+                var templateName = shaderInfo.Split(" ")[0];
 
                 var startThing2 = br.ReadUInt32();
                 Debug.Assert(startThing == startThing2);
 
-                var shaderList = new List<Shader>();
-                for (int j = 0; j < 2; j++)
+                var shaderGUID = br.ReadUInt64();
+                Shader pixelShader = null;
+                if (shaders.ContainsKey(shaderGUID))
                 {
-                    var shaderGUID = br.ReadUInt64();
-                    if (shaders.ContainsKey(shaderGUID))
-                    {
-                        shaderList.Add(shaders[shaderGUID]);
-                    }
+                    pixelShader = shaders[shaderGUID];
                 }
 
-                var typeList = new List<ulong>();
-                for (int j = 0; j < 2; j++)
+                shaderGUID = br.ReadUInt64();
+                Shader vertexShader = null;
+                if (shaders.ContainsKey(shaderGUID))
                 {
-                    typeList.Add(br.ReadUInt64());
+                    vertexShader = shaders[shaderGUID];
                 }
+
+                var materialGUID1 = br.ReadUInt64();
+                var materialGUID2 = br.ReadUInt64();
+                Debug.Assert(materialGUID1 == materialGUID2);
 
                 var uk1 = br.ReadUInt64();
 
@@ -166,17 +170,27 @@ namespace WolvenKit.RED4.Archive.IO
                     flag2List.Add(br.ReadUInt64());
                 }
 
-                extras.Add(new Extra()
+                var extra = new Extra()
                 {
+                    TemplateName = templateName,
                     StartThing = startThing,
                     EndThing = endThing,
-                    ShaderInfo = new string(shaderInfo),
-                    Shaders = shaderList,
-                    ShaderTypes = typeList,
+                    ShaderInfo = shaderInfo,
+                    PixelShader = pixelShader,
+                    VertexShader = vertexShader,
+                    MaterialGUID = materialGUID1,
                     uk1 = uk1,
                     Flags1 = flag1List,
                     Flags2 = flag2List
-                });
+                };
+
+                if (!materialTemplates.ContainsKey(templateName))
+                {
+                    materialTemplates[templateName] = new List<Extra>();
+                }
+                materialTemplates[templateName].Add(extra);
+
+                extras.Add(extra);
             }
 
             // Shader mapping of some sort
