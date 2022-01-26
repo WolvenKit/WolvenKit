@@ -33,21 +33,11 @@ namespace WolvenKit.RED4.Types
 
                     if (sender != null)
                     {
-                        var path = $"{redPropertyName}.{args.RedPath}";
-                        if (args.RedPath.StartsWith(':'))
-                        {
-                            path = $"{redPropertyName}{args.RedPath}";
-                        }
-
-                        args.RedPath = path;
-
                         ObjectChanged?.Invoke(sender, args);
                     }
                     else
                     {
                         args.RedName = redPropertyName;
-                        args.RedPath = redPropertyName;
-
                         ObjectChanged?.Invoke(this, args);
                     }
                 });
@@ -76,7 +66,7 @@ namespace WolvenKit.RED4.Types
         {
             if (ObjectChanged != null)
             {
-                var args = new ObjectChangedEventArgs(ObjectChangedType.Modified, redPropertyName, redPropertyName, oldValue, newValue);
+                var args = new ObjectChangedEventArgs(ObjectChangedType.Modified, redPropertyName, oldValue, newValue);
                 args._callStack.Add(this);
 
                 ObjectChanged.Invoke(this, args);

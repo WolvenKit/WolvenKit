@@ -17,10 +17,9 @@ namespace WolvenKit.RED4.Types
         public object OldValue { get; }
         public object NewValue { get; }
 
-        public ObjectChangedEventArgs(ObjectChangedType changeType, string redPath, string redName, object oldValue, object newValue)
+        public ObjectChangedEventArgs(ObjectChangedType changeType, string redName, object oldValue, object newValue)
         {
             ChangeType = changeType;
-            RedPath = redPath;
             RedName = redName;
             OldValue = oldValue;
             NewValue = newValue;

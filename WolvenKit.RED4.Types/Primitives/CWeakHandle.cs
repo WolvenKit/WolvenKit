@@ -32,7 +32,7 @@ namespace WolvenKit.RED4.Types
                         _chunk.ObjectChanged += OnObjectChanged;
                     }
 
-                    var args = new ObjectChangedEventArgs(ObjectChangedType.Modified, null, null, oldChunk, _chunk);
+                    var args = new ObjectChangedEventArgs(ObjectChangedType.Modified, null, oldChunk, _chunk);
                     args._callStack.Add(this);
 
                     ObjectChanged?.Invoke(null, args);
