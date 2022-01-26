@@ -155,19 +155,35 @@ namespace WolvenKit.ViewModels.Shell
 
             _settingsManager
                 .WhenAnyValue(x => x.UpdateChannel)
-                .Subscribe(x =>
+                .Subscribe(async x =>
                 {
                     _autoInstallerService.UseChannel(x.ToString());
 
                     // 1 API call
-                    //if (!(await _autoInstallerService.CheckForUpdate())
-                    //    .Out(out var release))
+                    if (!(await _autoInstallerService.CheckForUpdate())
+                        .Out(out var release))
+                    {
+                        _loggerService.Info($"Is update available: {release != null}");
+                        return;
+                    }
+
+                    _loggerService.Success($"Update available: {release.TagName}");
+                    //if (!await _autoInstallerService.DownloadUpdate(release))
                     //{
-
-
-
                     //    return;
                     //}
+
+                    var result = await Interactions.ShowMessageBoxAsync("An update is available for WolvenKit. Exit the app and install it?", "Update available");
+                    switch (result)
+                    {
+                        case WMessageBoxResult.OK:
+                        case WMessageBoxResult.Yes:
+                            if (await _autoInstallerService.Update()) // 1 API call
+                            {
+
+                            }
+                            break;
+                    }
                 });
         }
 
@@ -219,10 +235,11 @@ namespace WolvenKit.ViewModels.Shell
 
         private void InitUpdateService() => _autoInstallerService
                .UseWPF()
-               .AddVersion(_settingsManager.GetVersionNumber())
-               .AddVersion("8.4.2") //DBG
-               .AddChannel(EUpdateChannel.Nightly.ToString(), "wolvenkit/wolvenkit-nightly-releases")
-               .AddChannel(EUpdateChannel.Stable.ToString(), "wolvenkit/wolvenkit")
+               .WithVersion(_settingsManager.GetVersionNumber())
+               //.WithVersion("8.4.2") //DBG
+               .WithRestart("WolvenKit.exe")
+               .WithChannel(EUpdateChannel.Nightly.ToString(), "wolvenkit/wolvenkit-nightly-releases")
+               .WithChannel(EUpdateChannel.Stable.ToString(), "wolvenkit/wolvenkit")
                .UseChannel(_settingsManager.UpdateChannel.ToString())
                .Build();
 
