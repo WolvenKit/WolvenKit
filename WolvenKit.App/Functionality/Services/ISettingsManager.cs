@@ -28,6 +28,12 @@ namespace WolvenKit.Functionality.Services
 
         string WccLitePath { get; set; }
 
+        // TreeView
+
+        bool TreeViewGroups { get; set; }
+
+        uint TreeViewGroupSize { get; set; }
+
         #endregion Properties
     }
 

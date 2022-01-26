@@ -16,6 +16,7 @@ namespace WolvenKit.Converters
 {
     class TreeViewItemTemplateSelector : DataTemplateSelector
     {
+        public DataTemplate GroupedTemplate { get; set; }
         public DataTemplate PropertyTemplate { get; set; }
         public DataTemplate ArrayTemplate { get; set; }
         public DataTemplate HandleTemplate { get; set; }
@@ -25,6 +26,11 @@ namespace WolvenKit.Converters
         {
             if (item is TreeViewNode tvn)
             {
+                if (tvn.Content is GroupedChunkViewModel gvm)
+                {
+                    return GroupedTemplate;
+                }
+
                 if (tvn.Content is ChunkViewModel vm)
                 {
                     if (vm.PropertyType == null)
