@@ -24,7 +24,6 @@ using WolvenKit.Common.Extensions;
 using WolvenKit.Common.FNV1A;
 using WolvenKit.Common.Services;
 using WolvenKit.Core.Services;
-using WolvenKit.Functionality;
 using WolvenKit.Functionality.Commands;
 using WolvenKit.Functionality.Controllers;
 using WolvenKit.Functionality.Helpers;
@@ -43,7 +42,6 @@ using WolvenKit.ViewModels.Documents;
 using WolvenKit.ViewModels.HomePage;
 using WolvenKit.ViewModels.Tools;
 using WolvenKit.ViewModels.Wizards;
-using WolvenManager.Installer.Services;
 using NativeMethods = WolvenKit.Functionality.NativeWin.NativeMethods;
 
 namespace WolvenKit.ViewModels.Shell
@@ -154,14 +152,23 @@ namespace WolvenKit.ViewModels.Shell
                 AssetBrowserVM,
                 ImportExportToolVM,
             };
-                
-            //_settingsManager
-            //    .WhenAnyValue(x => x.UpdateChannel)
-            //    .Subscribe(_ =>
-            //    {
+
+            _settingsManager
+                .WhenAnyValue(x => x.UpdateChannel)
+                .Subscribe(x =>
+                {
+                    _autoInstallerService.UseChannel(x.ToString());
+
+                    // 1 API call
+                    //if (!(await _autoInstallerService.CheckForUpdate())
+                    //    .Out(out var release))
+                    //{
 
 
-            //    });
+
+                    //    return;
+                    //}
+                });
         }
 
         #endregion constructors
@@ -210,18 +217,14 @@ namespace WolvenKit.ViewModels.Shell
             ShowFirstTimeSetup();
         }
 
-        private void InitUpdateService()
-        {
-            // INSTALLER INIT
-            _autoInstallerService
+        private void InitUpdateService() => _autoInstallerService
                .UseWPF()
-               //.AddLockFile()
-               .AddVersion("8.4.2")
-               //.AddChannel("Nightly", "wolvenkit/wolvenkit")
-               .AddChannel("Stable", "wolvenkit/wolvenkit")
-               .UseChannel("Stable")
+               .AddVersion(_settingsManager.GetVersionNumber())
+               .AddVersion("8.4.2") //DBG
+               .AddChannel(EUpdateChannel.Nightly.ToString(), "wolvenkit/wolvenkit-nightly-releases")
+               .AddChannel(EUpdateChannel.Stable.ToString(), "wolvenkit/wolvenkit")
+               .UseChannel(_settingsManager.UpdateChannel.ToString())
                .Build();
-        }
 
 
         private async void ShowFirstTimeSetup()
