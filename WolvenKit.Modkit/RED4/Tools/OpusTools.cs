@@ -3,7 +3,7 @@ using System.IO;
 using System.Collections.Generic;
 using System.Linq;
 using System.Diagnostics;
-using Newtonsoft.Json;
+using System.Text.Json;
 using WolvenKit.RED4.CR2W.Archive;
 using WolvenKit.Common.FNV1A;
 
@@ -119,7 +119,7 @@ namespace WolvenKit.Modkit.RED4.Opus
 
         public bool DumpAllOpusInfo()
         {
-            string s = JsonConvert.SerializeObject(Info, Formatting.Indented);
+            string s = JsonSerializer.Serialize(Info, new JsonSerializerOptions { WriteIndented = true });
             File.WriteAllText(Path.Combine(_rawFolder.FullName, "sfx_container.opusinfo.json"), s);
             return true;
         }

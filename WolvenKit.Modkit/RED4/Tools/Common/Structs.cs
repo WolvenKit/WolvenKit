@@ -1,8 +1,8 @@
 using System;
 using System.Numerics;
 using System.Collections.Generic;
-using Newtonsoft.Json;
 using System.Runtime.CompilerServices;
+using System.Text.Json.Serialization;
 
 namespace WolvenKit.Modkit.RED4.GeneralStructs
 {
@@ -171,13 +171,13 @@ namespace WolvenKit.Modkit.RED4.GeneralStructs
     }
     public class RawMaterial
     {
-        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
         public string Name { get; set; }
-        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
         public string BaseMaterial { get; set; }
-        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
         public string MaterialTemplate { get; set; }
-        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
         public Dictionary<string, object> Data { get; set; }
     }
 }

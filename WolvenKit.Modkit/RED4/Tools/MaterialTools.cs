@@ -13,10 +13,9 @@ using WolvenKit.RED4.CR2W.Archive;
 using WolvenKit.Common.FNV1A;
 using SharpGLTF.IO;
 using System.Diagnostics;
+using System.Text.Json;
 using WolvenKit.Common.Model.Arguments;
 using WolvenKit.Common.Tools;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 using WolvenKit.Modkit.RED4.RigFile;
 using WolvenKit.Common;
 using WolvenKit.Common.Conversion;
@@ -25,6 +24,8 @@ using WolvenKit.RED4.Types.Exceptions;
 using WolvenKit.RED4.Archive.IO;
 using WolvenKit.Interfaces.Extensions;
 using WolvenKit.RED4;
+using WolvenKit.RED4.CR2W.JSON;
+using JsonSerializer = System.Text.Json.JsonSerializer;
 
 namespace WolvenKit.Modkit.RED4
 {
@@ -290,8 +291,6 @@ namespace WolvenKit.Modkit.RED4
         }
         private void ParseMaterials(CR2WFile cr2w ,Stream meshStream, FileInfo outfile, List<Archive> archives,string matRepo, EUncookExtension eUncookExtension = EUncookExtension.dds)
         {
-            var settings = new JsonSerializerSettings() { Formatting = Formatting.Indented };
-
             List<string> primaryDependencies = new List<string>();
 
             List<string> materialEntryNames = new List<string>();
@@ -380,7 +379,7 @@ namespace WolvenKit.Modkit.RED4
                                     var hp = _wolvenkitFileService.ReadRed4File(ms);
                                     //hp.FileName = primaryDependencies[i];
                                     var dto = new RedFileDto(hp);
-                                    var doc = JsonConvert.SerializeObject(dto, settings);
+                                    var doc = JsonSerializer.Serialize(dto, RedJsonOptions.Get());
                                     File.WriteAllText(path, doc);
                                 }
                                 break;
@@ -421,7 +420,7 @@ namespace WolvenKit.Modkit.RED4
                                     }
                                     //mls.FileName = primaryDependencies[i];
                                     var dto = new RedFileDto(mls);
-                                    var doc = JsonConvert.SerializeObject(dto, settings);
+                                    var doc = JsonSerializer.Serialize(dto, RedJsonOptions.Get());
                                     File.WriteAllText(path, doc);
                                 }
 
@@ -471,7 +470,7 @@ namespace WolvenKit.Modkit.RED4
                                                         }
                                                         //mlt.FileName = mls.Imports[e].DepotPath;
                                                         var dto1 = new RedFileDto(mlt);
-                                                        var doc1 = JsonConvert.SerializeObject(dto1, settings);
+                                                        var doc1 = JsonSerializer.Serialize(dto1, RedJsonOptions.Get());
                                                         File.WriteAllText(path1, doc1);
                                                     }
 
@@ -544,67 +543,67 @@ namespace WolvenKit.Modkit.RED4
             matData.TexturesList = TexturesList;
             matData.MaterialTemplates = matTemplates;
 
-            string str = JsonConvert.SerializeObject(matData, settings);
+            string str = JsonSerializer.Serialize(matData, RedJsonOptions.Get());
 
             File.WriteAllText(Path.ChangeExtension(outfile.FullName,".Material.json"), str);
 
         }
 
-        private void SetMaterialParameter(CMaterialParameter materialParameter, object value)
+        private void SetMaterialParameter(CMaterialParameter materialParameter, JsonElement value)
         {
             if (materialParameter is CMaterialParameterColor col)
             {
-                var cVal = ((JObject)value).ToObject<Dictionary<string, byte>>();
+                var dict = value.Deserialize<Dictionary<string, byte>>();
 
-                col.Color.Red = cVal["Red"];
-                col.Color.Green = cVal["Green"];
-                col.Color.Blue = cVal["Blue"];
-                col.Color.Alpha = cVal["Alpha"];
+                col.Color.Red = dict["Red"];
+                col.Color.Green = dict["Green"];
+                col.Color.Blue = dict["Blue"];
+                col.Color.Alpha = dict["Alpha"];
             }
 
             if (materialParameter is CMaterialParameterCpuNameU64 cpu)
             {
-                cpu.Name = (string)value;
+                cpu.Name = value.GetString();
             }
 
             if (materialParameter is CMaterialParameterCube cub)
             {
-                cub.Texture.DepotPath = (string)value;
+                cub.Texture.DepotPath = value.GetString();
             }
 
             if (materialParameter is CMaterialParameterFoliageParameters fol)
             {
-                fol.FoliageProfile.DepotPath = (string)value;
+                fol.FoliageProfile.DepotPath = value.GetString();
             }
 
             if (materialParameter is CMaterialParameterGradient gra)
             {
-                gra.Gradient.DepotPath = (string)value;
+                gra.Gradient.DepotPath = value.GetString();
             }
 
             if (materialParameter is CMaterialParameterHairParameters hai)
             {
-                hai.HairProfile.DepotPath = (string)value;
+                hai.HairProfile.DepotPath = value.GetString();
             }
 
             if (materialParameter is CMaterialParameterMultilayerMask mulm)
             {
-                mulm.Mask.DepotPath = (string)value;
+                mulm.Mask.DepotPath = value.GetString();
             }
 
             if (materialParameter is CMaterialParameterMultilayerSetup muls)
             {
-                muls.Setup.DepotPath = (string)value;
+                muls.Setup.DepotPath = value.GetString();
             }
 
             if (materialParameter is CMaterialParameterScalar sca)
             {
-                sca.Scalar = Convert.ToSingle(value);
+                sca.Scalar = value.GetSingle();
             }
 
             if (materialParameter is CMaterialParameterSkinParameters ski)
             {
-                ski.SkinProfile.DepotPath = (string)value;
+                ski.SkinProfile.DepotPath = value.GetString();
             }
 
             if (materialParameter is CMaterialParameterStructBuffer str)
@@ -614,27 +613,27 @@ namespace WolvenKit.Modkit.RED4
 
             if (materialParameter is CMaterialParameterTerrainSetup ter)
             {
-                ter.Setup.DepotPath = (string)value;
+                ter.Setup.DepotPath = value.GetString();
             }
 
             if (materialParameter is CMaterialParameterTexture tex)
             {
-                tex.Texture.DepotPath = (string)value;
+                tex.Texture.DepotPath = value.GetString();
             }
 
             if (materialParameter is CMaterialParameterTextureArray texa)
             {
-                texa.Texture.DepotPath = (string)value;
+                texa.Texture.DepotPath = value.GetString();
             }
 
             if (materialParameter is CMaterialParameterVector vec)
             {
-                var cVal = ((JObject)value).ToObject<Dictionary<string, float>>();
+                var dict = value.Deserialize<Dictionary<string, float>>();
 
-                vec.Vector.X = cVal["X"];
-                vec.Vector.Y = cVal["Y"];
-                vec.Vector.Z = cVal["Z"];
-                vec.Vector.W = cVal["W"];
+                vec.Vector.X = dict["X"];
+                vec.Vector.Y = dict["Y"];
+                vec.Vector.Z = dict["Z"];
+                vec.Vector.W = dict["W"];
             }
         }
 
@@ -644,10 +643,10 @@ namespace WolvenKit.Modkit.RED4
             {
                 return new Dictionary<string, byte>
                 {
-                    {"Red", col.Color.Red},
-                    {"Green", col.Color.Green},
-                    {"Blue", col.Color.Blue},
-                    {"Alpha", col.Color.Alpha},
+                    {nameof(col.Color.Red), col.Color.Red},
+                    {nameof(col.Color.Green), col.Color.Green},
+                    {nameof(col.Color.Blue), col.Color.Blue},
+                    {nameof(col.Color.Alpha), col.Color.Alpha},
                 };
             }
 
@@ -720,10 +719,10 @@ namespace WolvenKit.Modkit.RED4
             {
                 return new Dictionary<string, float>
                 {
-                    {"X", vec.Vector.X},
-                    {"Y", vec.Vector.Y},
-                    {"Z", vec.Vector.Z},
-                    {"W", vec.Vector.W},
+                    {nameof(vec.Vector.X), vec.Vector.X},
+                    {nameof(vec.Vector.Y), vec.Vector.Y},
+                    {nameof(vec.Vector.Z), vec.Vector.Z},
+                    {nameof(vec.Vector.W), vec.Vector.W},
                 };
             }
 
@@ -803,33 +802,25 @@ namespace WolvenKit.Modkit.RED4
             {
                 foreach (var kvp in mi.Values)
                 {
-                    if (kvp.Value is CColor col)
+                    object val = kvp.Value;
+                    if (val is CColor col)
                     {
-                        var col_ = new CColor();
-                        col_.Red = col.Red;
-                        col_.Green = col.Green;
-                        col_.Blue = col.Blue;
-                        col_.Alpha = col.Alpha;
+                        val = new Dictionary<string, byte>
+                        {
+                            {nameof(col.Red), col.Red},
+                            {nameof(col.Green), col.Green},
+                            {nameof(col.Blue), col.Blue},
+                            {nameof(col.Alpha), col.Alpha},
+                        };
+                    }
 
-                        if (rawMaterial.Data.ContainsKey(kvp.Key))
-                        {
-                            rawMaterial.Data[kvp.Key] = col_.ToObject();
-                        }
-                        else
-                        {
-                            rawMaterial.Data.Add(kvp.Key, col_.ToObject());
-                        }
+                    if (rawMaterial.Data.ContainsKey(kvp.Key))
+                    {
+                        rawMaterial.Data[kvp.Key] = val;
                     }
                     else
                     {
-                        if (rawMaterial.Data.ContainsKey(kvp.Key))
-                        {
-                            rawMaterial.Data[kvp.Key] = kvp.Value.ToObject();
-                        }
-                        else
-                        {
-                            rawMaterial.Data.Add(kvp.Key, kvp.Value.ToObject());
-                        }
+                        rawMaterial.Data.Add(kvp.Key, val);
                     }
                 }
             }
@@ -852,7 +843,8 @@ namespace WolvenKit.Modkit.RED4
             {
                 return false;
             }
-            var matData = JsonConvert.DeserializeObject<MatData>(_matData);
+
+            var matData = JsonSerializer.Deserialize<MatData>(_matData, RedJsonOptions.Get());
 
             var materialbuffer = new MemoryStream();
             List<UInt32> offsets = new List<UInt32>();
@@ -910,7 +902,7 @@ namespace WolvenKit.Modkit.RED4
                                 var refer = mt.Parameters[2][k].Chunk;
                                 if(refer.ParameterName == keys[j])
                                 {
-                                    SetMaterialParameter(refer, matData.Materials[i].Data[keys[j]]);
+                                    SetMaterialParameter(refer, (JsonElement)matData.Materials[i].Data[keys[j]]);
                                 }
                             }
                         }

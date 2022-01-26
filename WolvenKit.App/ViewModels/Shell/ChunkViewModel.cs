@@ -6,11 +6,11 @@ using System.IO;
 using System.Linq;
 using System.Reactive.Linq;
 using System.Runtime.Serialization;
+using System.Text.Json;
 using System.Windows.Forms;
 using System.Windows.Input;
 using DynamicData;
 using DynamicData.Binding;
-using Newtonsoft.Json;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using Splat;
@@ -22,6 +22,7 @@ using WolvenKit.Functionality.Controllers;
 using WolvenKit.Functionality.Services;
 using WolvenKit.RED4.Archive.Buffer;
 using WolvenKit.RED4.Archive.CR2W;
+using WolvenKit.RED4.CR2W.JSON;
 using WolvenKit.RED4.Types;
 using WolvenKit.ViewModels.Dialogs;
 using WolvenKit.ViewModels.Documents;
@@ -1127,8 +1128,8 @@ namespace WolvenKit.ViewModels.Shell
             {
                 if ((myStream = saveFileDialog.OpenFile()) != null)
                 {
-                    var dto = new RedClassDto(ResolvedData, null);
-                    var json = JsonConvert.SerializeObject(dto, Formatting.Indented);
+                    var dto = new RedTypeDto(ResolvedData);
+                    var json = JsonSerializer.Serialize(dto, RedJsonOptions.Get());
 
                     if (string.IsNullOrEmpty(json))
                     {

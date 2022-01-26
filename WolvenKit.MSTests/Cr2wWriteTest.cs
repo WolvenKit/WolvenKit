@@ -8,16 +8,26 @@ using System.Diagnostics;
 using System.IO;
 using System.IO.MemoryMappedFiles;
 using System.Linq;
+using System.Reflection;
 using System.Runtime.ExceptionServices;
 using System.Text;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Newtonsoft.Json;
 using WolvenKit.Common;
+using WolvenKit.Common.Conversion;
+using WolvenKit.Common.FNV1A;
 using WolvenKit.RED4.Archive;
 using WolvenKit.RED4.Archive.IO;
 using WolvenKit.MSTests.Model;
+using WolvenKit.RED4;
+using WolvenKit.RED4.Archive.Buffer;
+using WolvenKit.RED4.Archive.CR2W;
 using WolvenKit.RED4.CR2W;
 using WolvenKit.RED4.CR2W.Archive;
+using WolvenKit.RED4.CR2W.JSON;
+using WolvenKit.RED4.Types;
 using EFileReadErrorCodes = WolvenKit.RED4.Archive.IO.EFileReadErrorCodes;
+using JsonSerializer = System.Text.Json.JsonSerializer;
 
 #if IS_PARALLEL
 using System.Threading.Tasks;
@@ -46,30 +56,119 @@ namespace WolvenKit.MSTests
         [TestMethod]
         public void Debug()
         {
-            /*var files = s_groupedFiles[".ent"].ToList();
+            var psTypes = new Dictionary<string, ulong>();
 
-            //var sorted = files.OrderByDescending(x => x.Size).ToList();
+            ScanGroup(s_groupedFiles[".psrep"].ToList());
+            //foreach (var groupedFile in s_groupedFiles)
+            //{
+            //    ScanGroup(groupedFile.Value.ToList());
+            //}
 
-            foreach (var file in files)
+            void ScanGroup(List<FileEntry> groupFiles)
             {
-                if (!file.Name.Contains("base\\gameplay\\devices\\ventilation_system\\activators\\ventilation_activator_vent.ent"))
+                var filesGroups = groupFiles.Select((f, i) => new { Value = f, Index = i })
+                .GroupBy(item => item.Value.Archive.ArchiveAbsolutePath);
+
+                foreach (var fileGroup in filesGroups)
+                {
+                    var fileList = fileGroup.ToList();
+
+                    var ar = s_bm.Archives.Lookup(fileGroup.Key).Value as Archive;
+
+                    using var fs = new FileStream(fileGroup.Key, FileMode.Open, FileAccess.Read, FileShare.Read);
+                    using var mmf = MemoryMappedFile.CreateFromFile(fs, null, 0, MemoryMappedFileAccess.Read,
+                        HandleInheritability.None, false);
+
+                    Parallel.ForEach(fileList, tmpFile =>
+                    {
+                        var file = tmpFile.Value;
+
+                        if (!file.NameOrHash.Contains("03_night_city.psrep"))
+                        {
+                            return;
+                        }
+
+                        using var originalStream = new MemoryStream();
+                        ar.CopyFileToStream(originalStream, file.NameHash64, false, mmf);
+                        originalStream.Seek(0, SeekOrigin.Begin);
+
+                        using var originalReader = new CR2WReader(originalStream, Encoding.UTF8, true);
+                        var readResult = originalReader.ReadFile(out var cr2w);
+
+                        switch (readResult)
+                        {
+                            case EFileReadErrorCodes.NoError:
+                            {
+                                cr2w.MetaData.FileName = file.NameOrHash;
+
+                                if (cr2w.RootChunk is gamePersistentStateDataResource psr && psr.Buffer.Data is Package04 p4)
+                                {
+                                    p4.RootCruids.Clear();
+                                    p4.Chunks.Clear();
+
+                                    var baseType = typeof(gamePersistentState);
+
+                                    foreach (var type in Assembly.GetAssembly(typeof(gamePersistentState)).GetTypes())
+                                    {
+                                        if (!type.IsSubclassOf(baseType))
+                                        {
+                                            continue;
+                                        }
+
+                                        p4.Chunks.Add(RedTypeManager.Create(type));
+                                    }
+                                }
+
+                                using (var ms2 = new MemoryStream())
+                                using (var wr = new CR2WWriter(ms2))
+                                {
+                                    wr.WriteFile(cr2w);
+
+                                    File.WriteAllBytes(@"C:\Dev\C77\03_night_city.psrep", ms2.ToArray());
+                                }
+
+                                break;
+                            }
+                        }
+                    });
+                }
+            }
+        }
+
+        [TestMethod]
+        public void Debug2()
+        {
+            /*var psClasses = new Dictionary<ulong, string>();
+
+            var baseType = typeof(gamePersistentState);
+
+            foreach (var type in Assembly.GetAssembly(typeof(gamePersistentState)).GetTypes())
+            {
+                if (!type.IsSubclassOf(baseType))
                 {
                     continue;
                 }
 
-                var list = new List<FileEntry>();
-                list.Add(file);
-                Write_Archive_Items(list);
+                var redAttr = type.GetCustomAttribute<REDAttribute>();
+                if (redAttr != null)
+                {
+                    psClasses.Add(FNV1A64HashAlgorithm.HashString(redAttr.Name), redAttr.Name);
+                }
+                else
+                {
+                    psClasses.Add(FNV1A64HashAlgorithm.HashString(type.Name), type.Name);
+                }
+            }
 
-                return;
-            }*/
+            var lines = new List<string>();
+            foreach (var (hash, className) in psClasses)
+            {
+                lines.Add($"{{ {hash},\"{className}\" }},");
+            }
 
-            using var fs = File.OpenRead(@"C:\Dev\C77\arroyo_warehouse_v16_mproxy.mesh");
-            using var cr = new CR2WReader(fs);
+            File.WriteAllLines(@"C:\Dev\C77\clshash2.txt", lines);*/
 
-            var r = cr.ReadFile(out var c, true);
-
-            c.GetFromXPath("preloadLocalMaterialInstances:0");
+            var tmp = RedTypeManager.Create<SecurityAreaControllerPS>();
         }
 
         [TestMethod]
