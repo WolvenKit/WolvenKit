@@ -1,5 +1,6 @@
 using System;
 using CP77.CR2W;
+using gpm.Installer;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using ReactiveUI;
@@ -52,8 +53,10 @@ namespace WolvenKit
                 {
                     services.AddSingleton<INotificationService, NotificationService>();
                     services.AddSingleton(typeof(ISettingsManager), SettingsManager.Load());
-                    services.AddSingleton<IProgressService<double>, ProgressService<double>>();
-                    services.AddSingleton<ILoggerService, ReactiveLoggerService>();
+                    services.AddSingleton<Core.Services.IProgressService<double>, System.ProgressService<double>>();
+
+                    services.AddSingleton<MySink>();
+                    services.AddSingleton<ILoggerService, SerilogWrapper>();
 
                     // singletons
                     services.AddSingleton<IHashService, HashService>();
@@ -79,6 +82,9 @@ namespace WolvenKit
 
                     services.AddSingleton<AppViewModel>();
                     services.AddSingleton<IViewFor<AppViewModel>, MainView>();
+
+                    // TODO replace with this once gpm.Installer updates
+                    services.AddGpmInstaller();
 
                     // register views
                     #region shell
