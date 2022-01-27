@@ -365,7 +365,7 @@ namespace WolvenKit.Common.Oodle
         /// <param name="count"></param>
         /// <returns></returns>
         /// <exception cref="NotImplementedException"></exception>
-        private static int GetCompressedBufferSizeNeeded(int count)
+        public static int GetCompressedBufferSizeNeeded(int count)
         {
             if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
             {
