@@ -1,5 +1,4 @@
-using DirectXTexSharp;
-using WolvenKit.RED4.Types;
+using static WolvenKit.Common.Tools.DDS.TexconvNative;
 
 namespace WolvenKit.Common.DDS
 {
@@ -51,8 +50,8 @@ namespace WolvenKit.Common.DDS
             Depth = (uint)metadata.depth;
             Slicecount = (uint)metadata.arraySize;
             Mipscount = (uint)metadata.mipLevels;
-            MiscFlags = metadata.miscFlags;
-            MiscFlags2 = metadata.miscFlags2;
+            MiscFlags = (uint)metadata.miscFlags;
+            MiscFlags2 = (uint)metadata.miscFlags2;
             Format = (DXGI_FORMAT)metadata.format;
             Dimensions = (TEX_DIMENSION)metadata.dimension;
 
@@ -88,6 +87,6 @@ namespace WolvenKit.Common.DDS
 
         #endregion Constructors
 
-        
+
     }
 }

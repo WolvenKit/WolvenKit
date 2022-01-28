@@ -1,32 +1,28 @@
 using System;
-using System.IO;
-using System.Linq;
-using WolvenKit.Common.Extensions;
-using WolvenKit.Interfaces.Core;
-using WolvenKit.Common.Model.Arguments;
-using WolvenKit.Common.Services;
 using System.Buffers;
-using DirectXTexSharp;
-using WolvenKit.RED4.Archive;
+using System.IO;
+using WolvenKit.Common.Model.Arguments;
+using WolvenKit.Common.Tools.DDS;
 using WolvenKit.Core.Extensions;
+using static WolvenKit.Common.Tools.DDS.TexconvNative;
 
 namespace WolvenKit.Common.DDS
 {
     public enum TEX_MISC_FLAG
-        // Subset here matches D3D10_RESOURCE_MISC_FLAG and D3D11_RESOURCE_MISC_FLAG
+    // Subset here matches D3D10_RESOURCE_MISC_FLAG and D3D11_RESOURCE_MISC_FLAG
     {
         TEX_MISC_TEXTURECUBE = 0x4,
     };
 
     public enum TEX_DIMENSION
-        // Subset here matches D3D10_RESOURCE_DIMENSION and D3D11_RESOURCE_DIMENSION
+    // Subset here matches D3D10_RESOURCE_DIMENSION and D3D11_RESOURCE_DIMENSION
     {
         TEX_DIMENSION_TEXTURE1D = 2,
         TEX_DIMENSION_TEXTURE2D = 3,
         TEX_DIMENSION_TEXTURE3D = 4,
     };
 
-   public static class DDSUtils
+    public static class DDSUtils
     {
         #region Fields
 
@@ -118,7 +114,7 @@ namespace WolvenKit.Common.DDS
 
         private static void SetPixelmask(Func<uint[]> pfmtfactory, ref DDS_PIXELFORMAT pfmt)
         {
-            uint[] masks = pfmtfactory.Invoke();
+            var masks = pfmtfactory.Invoke();
             pfmt.dwRGBBitCount = masks[0];
             pfmt.dwRBitMask = masks[1];
             pfmt.dwGBitMask = masks[2];
@@ -190,7 +186,7 @@ namespace WolvenKit.Common.DDS
             var mipscount = metadata.Mipscount;
             var iscubemap = metadata.IsCubeMap();
             var format = metadata.Format;
-            bool dxt10 = metadata.Dx10;
+            var dxt10 = metadata.Dx10;
 
             var ddspf = new DDS_PIXELFORMAT()
             {
@@ -242,7 +238,9 @@ namespace WolvenKit.Common.DDS
             };
 
             if (mipscount > 0)
+            {
                 header.dwMipMapCount = mipscount;
+            }
 
             // pixelformat
             {
@@ -319,15 +317,25 @@ namespace WolvenKit.Common.DDS
 
                 // dwflags
                 if (ddspf.dwABitMask != 0) // check this
+                {
                     ddspf.dwFlags |= DDPF_ALPHAPIXELS;
+                }
                 /*if (ddspf.dwABitMask != 0)
-                    ddspf.dwFlags |= DDPF_ALPHA;*/ //old
+   ddspf.dwFlags |= DDPF_ALPHA;*/ //old
                 if (ddspf.dwFourCC != 0)
+                {
                     ddspf.dwFlags |= DDPF_FOURCC;
+                }
+
                 if (ddspf.dwRGBBitCount != 0 && ddspf.dwRBitMask != 0 && ddspf.dwGBitMask != 0 && ddspf.dwBBitMask != 0)
+                {
                     ddspf.dwFlags |= DDPF_RGB;
+                }
+
                 if (ddspf.dwRBitMask != 0 && ddspf.dwGBitMask == 0 && ddspf.dwBBitMask == 0 && ddspf.dwABitMask == 0)
+                {
                     ddspf.dwFlags |= DDPF_LUMINANCE;
+                }
 
                 header.ddspf = ddspf;
             }
@@ -357,7 +365,7 @@ namespace WolvenKit.Common.DDS
                 case DXGI_FORMAT.DXGI_FORMAT_BC1_UNORM:
                 case DXGI_FORMAT.DXGI_FORMAT_BC4_UNORM:
                     p = width * height / 2; //max(1,width ?4)x max(1,height ?4)x 8 (DXT1)
-                    header.dwPitchOrLinearSize = (uint)(p);
+                    header.dwPitchOrLinearSize = p;
                     header.dwFlags |= DDSD_LINEARSIZE;
                     break;
 
@@ -366,7 +374,7 @@ namespace WolvenKit.Common.DDS
                 case DXGI_FORMAT.DXGI_FORMAT_BC5_UNORM:
                 case DXGI_FORMAT.DXGI_FORMAT_BC7_UNORM:
                     p = width * height;     //max(1,width ?4)x max(1,height ?4)x 16 (DXT2-5)
-                    header.dwPitchOrLinearSize = (uint)(p);
+                    header.dwPitchOrLinearSize = p;
                     header.dwFlags |= DDSD_LINEARSIZE;
                     break;
 
@@ -382,13 +390,20 @@ namespace WolvenKit.Common.DDS
 
             // caps
             if (iscubemap || mipscount > 0)
+            {
                 header.dwCaps |= DDSCAPS_COMPLEX;
+            }
+
             if (mipscount > 0)
+            {
                 header.dwCaps |= DDSCAPS_MIPMAP;
+            }
 
             // caps2
             if (iscubemap)
+            {
                 header.dwCaps2 |= DDSCAPS2_CUBEMAP_ALL_FACES | DDSCAPS2_CUBEMAP;
+            }
             //if (slicecount > 0)
             //    header.dwCaps2 |= DDSCAPS2_VOLUME;
 
@@ -396,7 +411,9 @@ namespace WolvenKit.Common.DDS
             //if (slicecount > 0)
             //    header.dwFlags |= DDSD_DEPTH;
             if (mipscount > 0)
+            {
                 header.dwFlags |= DDSD_MIPMAPCOUNT;
+            }
 
             // DXT10
             if (dxt10)
@@ -506,18 +523,18 @@ namespace WolvenKit.Common.DDS
 
         public static DDSMetadata GetMetadataFromTGAFile(string path)
         {
-            var md = DirectXTexSharp.Metadata.GetMetadataFromTGAFile(path, DirectXTexSharp.TGA_FLAGS.TGA_FLAGS_NONE);
-            var bpp = DirectXTexSharp.Format.BitsPerPixel(md.format);
-            var iscube = md.is_cubemap();
+            var md = TexconvNative.GetMetadataFromTGAFile(path, TGA_FLAGS.TGA_FLAGS_NONE);
+            var bpp = TexconvNative.BitsPerPixel(md.format);
+            //var iscube = md.is_cubemap(); //TODO
 
             return new DDSMetadata(md, (uint)bpp, true);
         }
 
         public static DDSMetadata GetMetadataFromDDSFile(string path)
         {
-            var md = DirectXTexSharp.Metadata.GetMetadataFromDDSFile(path, DirectXTexSharp.DDSFLAGS.DDS_FLAGS_NONE);
-            var bpp = DirectXTexSharp.Format.BitsPerPixel(md.format);
-            var iscube = md.is_cubemap();
+            var md = TexconvNative.GetMetadataFromDDSFile(path, DDSFLAGS.DDS_FLAGS_NONE);
+            var bpp = TexconvNative.BitsPerPixel(md.format);
+            //var iscube = md.is_cubemap(); //TODO
 
             return new DDSMetadata(md, (uint)bpp, true);
         }
@@ -527,12 +544,11 @@ namespace WolvenKit.Common.DDS
             try
             {
                 var len = span.Length;
-                fixed (byte* ptr = span)
+                //fixed (byte* ptr = span)
                 {
-                    var md = DirectXTexSharp.Metadata.
-                        GetMetadataFromDDSMemory(ptr, len, DirectXTexSharp.DDSFLAGS.DDS_FLAGS_NONE);
-                    var bpp = DirectXTexSharp.Format.BitsPerPixel(md.format);
-                    var iscube = md.is_cubemap();
+                    var md = TexconvNative.GetMetadataFromDDSMemory(span.ToArray(), len, DDSFLAGS.DDS_FLAGS_NONE);
+                    var bpp = TexconvNative.BitsPerPixel(md.format);
+                    //var iscube = md.is_cubemap(); //TODO
 
                     metadata = new DDSMetadata(md, (uint)bpp, true);
                 }
@@ -547,8 +563,8 @@ namespace WolvenKit.Common.DDS
             return true;
         }
 
-        public static int ComputeRowPitch(int width, int height, DXGI_FORMAT format) => DirectXTexSharp.Format.ComputeRowPitch((DXGI_FORMAT_WRAPPED)format, width, height);
-        public static int ComputeSlicePitch(int width, int height, DXGI_FORMAT format) => DirectXTexSharp.Format.ComputeSlicePitch((DXGI_FORMAT_WRAPPED)format, width, height);
+        public static int ComputeRowPitch(int width, int height, DXGI_FORMAT format) => (int)TexconvNative.ComputeRowPitch((DXGI_FORMAT)format, width, height);
+        public static int ComputeSlicePitch(int width, int height, DXGI_FORMAT format) => (int)TexconvNative.ComputeSlicePitch((DXGI_FORMAT)format, width, height);
 
         public static bool TryReadDdsHeader(Stream stream, out DDS_HEADER header)
         {
@@ -630,7 +646,7 @@ namespace WolvenKit.Common.DDS
         /// <param name="vflip"></param>
         /// <param name="hflip"></param>
         /// <returns></returns>
-        private static unsafe bool ConvertFromDdsAndSave(Stream ms, string outfilename, DirectXTexSharp.ESaveFileTypes filetype, bool vflip = false, bool hflip = false)
+        private static /*unsafe*/ bool ConvertFromDdsAndSave(Stream ms, string outfilename, ESaveFileTypes filetype, bool vflip = false, bool hflip = false)
         {
             byte[] rentedBuffer = null;
             try
@@ -649,7 +665,7 @@ namespace WolvenKit.Common.DDS
 
                 var span = new ReadOnlySpan<byte>(rentedBuffer, 0, len);
 
-                fixed (byte* ptr = span)
+                //fixed (byte* ptr = span)
                 {
                     var outDir = new FileInfo(outfilename).Directory.FullName;
                     Directory.CreateDirectory(outDir);
@@ -657,7 +673,7 @@ namespace WolvenKit.Common.DDS
                     var extension = filetype.ToString().ToLower();
                     var newpath = Path.Combine(outDir, $"{fileName}.{extension}");
 
-                    DirectXTexSharp.Texconv.ConvertAndSaveDdsImage(ptr, span.Length, newpath, filetype, vflip, hflip);
+                    TexconvNative.ConvertAndSaveDdsImage(span.ToArray(), span.Length, newpath, filetype, vflip, hflip);
                 }
             }
             finally
@@ -676,7 +692,7 @@ namespace WolvenKit.Common.DDS
         /// <summary>
         /// Converts a dds stream to another texture file type and returns an image byte array
         /// </summary>
-        public static unsafe byte[] ConvertToDdsMemory(
+        public static /*unsafe*/ byte[] ConvertToDdsMemory(
             Stream ms,
             EUncookExtension filetype,
             DXGI_FORMAT? format = null,
@@ -700,14 +716,14 @@ namespace WolvenKit.Common.DDS
 
                 var span = new ReadOnlySpan<byte>(rentedBuffer, 0, len);
 
-                fixed (byte* ptr = span)
+                //fixed (byte* ptr = span)
                 {
                     var fmt = format != null
-                        ? (DirectXTexSharp.DXGI_FORMAT_WRAPPED)format
-                        : DirectXTexSharp.DXGI_FORMAT_WRAPPED.DXGI_FORMAT_UNKNOWN;
+                        ? (DXGI_FORMAT)format
+                        : DXGI_FORMAT.DXGI_FORMAT_UNKNOWN;
 
 
-                    var buffer = DirectXTexSharp.Texconv.ConvertToDdsArray(ptr, span.Length,
+                    var buffer = TexconvNative.ConvertToDdsArray(span.ToArray(), span.Length,
                         filetype.ToSaveFormat(),
                         fmt, vflip, hflip);
                     return buffer;
@@ -725,7 +741,7 @@ namespace WolvenKit.Common.DDS
         /// <summary>
         /// Converts an image stream to a dds byte array
         /// </summary>
-        public static unsafe byte[] ConvertFromDdsMemory(Stream ms, EUncookExtension filetype, bool vflip = false, bool hflip = false)
+        public static /*unsafe*/ byte[] ConvertFromDdsMemory(Stream ms, EUncookExtension filetype, bool vflip = false, bool hflip = false)
         {
             byte[] rentedBuffer = null;
             try
@@ -744,12 +760,13 @@ namespace WolvenKit.Common.DDS
 
                 var span = new ReadOnlySpan<byte>(rentedBuffer, 0, len);
 
-                fixed (byte* ptr = span)
+                //fixed (byte* ptr = span)
                 {
-                    var buffer = DirectXTexSharp.Texconv.ConvertFromDdsArray(ptr, span.Length,
+                    var buffer = TexconvNative.ConvertFromDdsArray(span.ToArray(), span.Length,
                         filetype.ToSaveFormat(),
                         vflip, hflip);
-                    return buffer;
+                    throw new NotImplementedException();
+                    //return buffer;
                 }
             }
             finally

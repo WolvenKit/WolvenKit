@@ -48,6 +48,7 @@
     <None Remove="Extensions\PropertyGridEditors\**" />
     <None Remove="Model\Cr2w\**" />
     <None Remove="RED3\**" />
+    <None Remove="lib\texconv.dll" />
     <None Remove="lib\vgmstream\avcodec-vgmstream-58.dll" />
     <None Remove="lib\vgmstream\avformat-vgmstream-58.dll" />
     <None Remove="lib\vgmstream\avutil-vgmstream-56.dll" />
@@ -71,6 +72,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Content Include="lib\texconv.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="lib\vgmstream\avcodec-vgmstream-58.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -136,7 +140,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\DirectXTexSharp\DirectXTexSharp\DirectXTexSharp_2022.vcxproj" />
     <ProjectReference Include="..\WolvenKit.Core\WolvenKit.Core.csproj" />
     <ProjectReference Include="..\WolvenKit.RED4.Archive\WolvenKit.RED4.Archive.csproj" />
     <ProjectReference Include="..\WolvenKit.RED4.Types\WolvenKit.RED4.Types.csproj" />

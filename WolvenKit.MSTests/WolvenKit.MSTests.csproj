@@ -27,6 +27,7 @@
     <None Remove="appsettings.json" />
     <None Remove="Resources\oodle.kark" />
     <None Remove="Resources\oodle.txt" />
+    <None Remove="Resources\q204_columbarium_1080p.dds" />
     <None Remove="Resources\resourceUses_131.zip" />
     <Content Include="appsettings.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -35,6 +36,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Resources\oodle.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\q204_columbarium_1080p.dds">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Resources\resourceuses_131.zip">
