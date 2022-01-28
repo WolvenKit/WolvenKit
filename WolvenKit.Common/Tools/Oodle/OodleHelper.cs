@@ -186,10 +186,6 @@ namespace WolvenKit.Common.Oodle
 
                 }
             }
-
-
-
-
         }
 
 
@@ -202,32 +198,10 @@ namespace WolvenKit.Common.Oodle
         /// <exception cref="NotImplementedException"></exception>
         public static unsafe int Decompress(byte[] inputBuffer, byte[] outputBuffer)
         {
-            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows) || RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
             {
 #pragma warning disable 162
-
-                if (true)
-                {
-                    var inputHandle = GCHandle.Alloc(inputBuffer, GCHandleType.Pinned);
-                    var inputAddress = inputHandle.AddrOfPinnedObject();
-                    var outputHandle = GCHandle.Alloc(outputBuffer, GCHandleType.Pinned);
-                    var outputAddress = outputHandle.AddrOfPinnedObject();
-
-
-
-                    var r= OodleLoadLib.OodleLZ_Decompress(inputAddress,
-                        outputAddress,
-                        inputBuffer.Length,
-                        outputBuffer.Length
-                        );
-
-                    inputHandle.Free();
-                    outputHandle.Free();
-
-                    return r;
-                }
-
-                return OodleNative.OodleLZ_Decompress(
+                return OodleNative.Decompress(
                     inputBuffer,
                     inputBuffer.Length,
                     outputBuffer,

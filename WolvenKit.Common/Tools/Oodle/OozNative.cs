@@ -30,7 +30,7 @@ namespace WolvenKit.Common.Oodle
 
         #region Win
 
-        [DllImport("lib/kraken.dll", CallingConvention = CallingConvention.StdCall)]
+        [DllImport("ooz", EntryPoint = "_Z17Kraken_DecompressPKhmPhm")]
         public static extern int Kraken_Decompress(
             byte[] buffer,
             long bufferSize,
