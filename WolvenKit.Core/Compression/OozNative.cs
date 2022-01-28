@@ -28,10 +28,13 @@ namespace WolvenKit.Core.Compression
         //
         // #endregion osx
 
-        #region Win
-
-        
-
+        #region Linux
+        [DllImport("ooz", EntryPoint = "_Z17Kraken_DecompressPKhmPhm")]
+        public static extern int Kraken_Decompress(
+            byte[] buffer,
+            long bufferSize,
+            byte[] outputBuffer,
+            long outputBufferSize);
         #endregion
     }
 
