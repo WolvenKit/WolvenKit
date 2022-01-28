@@ -9,13 +9,21 @@ using WolvenKit.RED4.Types;
 
 namespace WolvenKit.ViewModels.Dialogs
 {
-    public class AddChunkDialogViewModel : DialogViewModel
+    public class CreateClassDialogViewModel : DialogViewModel
     {
-        public AddChunkDialogViewModel()
+        public CreateClassDialogViewModel(ObservableCollection<string> existingClasses, bool allowOthers = true)
         {
-            Classes = new ObservableCollection<string>(Assembly.GetAssembly(typeof(RedBaseClass)).GetTypes()
-                .Where(t => t.IsSubclassOf(typeof(RedBaseClass)) && !t.IsAbstract)
-                .Select(t => t.Name));
+            ExistingClasses = existingClasses;
+            if (allowOthers)
+            {
+                Classes = new ObservableCollection<string>(Assembly.GetAssembly(typeof(RedBaseClass)).GetTypes()
+                    .Where(t => t.IsSubclassOf(typeof(RedBaseClass)) && !t.IsAbstract)
+                    .Select(t => t.Name));
+            }
+            else
+            {
+                Classes = ExistingClasses;
+            }
             CreateCommand = ReactiveCommand.Create(() => DialogHandler(this), CanCreate);
             CancelCommand = ReactiveCommand.Create(() => DialogHandler(null));
         }

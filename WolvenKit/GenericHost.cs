@@ -102,8 +102,8 @@ namespace WolvenKit
                     services.AddTransient<DialogHostViewModel>();
                     services.AddTransient<IViewFor<DialogHostViewModel>, DialogHostView>();
 
-                    services.AddTransient<AddChunkDialogViewModel>();
-                    services.AddTransient<IViewFor<AddChunkDialogViewModel>, AddChunkDialog>();
+                    //services.AddTransient<CreateClassDialogViewModel>();
+                    //services.AddTransient<IViewFor<CreateClassDialogViewModel>, CreateClassDialog>();
 
                     services.AddTransient<InputDialogViewModel>();
                     services.AddTransient<IViewFor<InputDialogViewModel>, InputDialogView>();
