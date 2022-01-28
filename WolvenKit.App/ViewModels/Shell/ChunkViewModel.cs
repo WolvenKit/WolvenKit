@@ -966,13 +966,33 @@ namespace WolvenKit.ViewModels.Shell
         private bool CanAddHandle() => (PropertyType?.IsAssignableTo(typeof(IRedBaseHandle)) ?? false) && Properties != null;
         private void ExecuteAddHandle()
         {
-            var newItem = RedTypeManager.CreateRedType(PropertyType);
-            if (newItem is IRedBaseHandle handle)
+            Data = RedTypeManager.CreateRedType(PropertyType);
+            if (Data is IRedBaseHandle handle)
             {
-                var pointee = RedTypeManager.CreateRedType(handle.InnerType);
-                handle.SetValue((RedBaseClass)pointee);
+                ObservableCollection<string> existing = new ObservableCollection<string>(AppDomain.CurrentDomain.GetAssemblies().SelectMany(s => s.GetTypes()).Where(p => handle.InnerType.IsAssignableFrom(p) && p.IsClass).Select(x => x.Name));
+                var app = Locator.Current.GetService<AppViewModel>();
+                app.SetActiveDialog(new CreateClassDialogViewModel(existing, false)
+                {
+                    DialogHandler = HandlePointer
+                });
             }
-            Data = newItem;
+        }
+
+        public void HandlePointer(DialogViewModel sender)
+        {
+            var app = Locator.Current.GetService<AppViewModel>();
+            app.CloseDialogCommand.Execute(null);
+            if (sender != null)
+            {
+                var vm = sender as CreateClassDialogViewModel;
+                var instance = RedTypeManager.Create(vm.SelectedClass);
+                if (Data is IRedBaseHandle handle)
+                {
+                    handle.SetValue(instance);
+                    this.RaisePropertyChanged("Data");
+                    Tab.File.SetIsDirty(true);
+                }
+            }
         }
 
         public ICommand AddItemToArrayCommand { get; private set; }
@@ -1019,10 +1039,9 @@ namespace WolvenKit.ViewModels.Shell
                 existing = new ObservableCollection<string>(pkg.Chunks.Select(t => t.GetType().Name).Distinct());
             }
             var app = Locator.Current.GetService<AppViewModel>();
-            app.SetActiveDialog(new AddChunkDialogViewModel()
+            app.SetActiveDialog(new CreateClassDialogViewModel(existing, true)
             {
-                DialogHandler = HandleChunk,
-                ExistingClasses = existing
+                DialogHandler = HandleChunk
             });
         }
         public void HandleChunk(DialogViewModel sender)
@@ -1031,7 +1050,7 @@ namespace WolvenKit.ViewModels.Shell
             app.CloseDialogCommand.Execute(null);
             if (sender != null && Data is IRedBufferPointer db && db.GetValue().Data is Package04 pkg)
             {
-                var vm = sender as AddChunkDialogViewModel;
+                var vm = sender as CreateClassDialogViewModel;
                 var instance = RedTypeManager.Create(vm.SelectedClass);
                 AddChunkToDataBuffer(instance, Properties.Count);
             }

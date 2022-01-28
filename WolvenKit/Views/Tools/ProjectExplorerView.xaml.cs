@@ -439,7 +439,7 @@ namespace WolvenKit.Views.Tools
             if (e.Data.GetDataPresent("Nodes"))
             {
                 var treeNodes = e.Data.GetData("Nodes") as ObservableCollection<TreeNode>;
-                if (treeNodes[0].Item is FileModel sourceFile)
+                if (treeNodes != null && treeNodes[0].Item is FileModel sourceFile)
                 {
                     if (e.TargetNode.Item is FileModel targetFile)
                     {
