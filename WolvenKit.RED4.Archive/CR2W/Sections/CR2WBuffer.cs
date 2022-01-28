@@ -5,7 +5,7 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using WolvenKit.RED4.Archive.IO;
 using WolvenKit.RED4.Types;
-using WolvenKit.RED4.Types.Compression;
+using WolvenKit.Core.Compression;
 
 namespace WolvenKit.RED4.Archive.CR2W
 {

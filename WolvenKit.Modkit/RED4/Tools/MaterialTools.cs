@@ -2,29 +2,20 @@ using System;
 using System.IO;
 using CP77.CR2W;
 using WolvenKit.Modkit.RED4.GeneralStructs;
-using WolvenKit.RED4.CR2W;
 using WolvenKit.RED4.Types;
-using WolvenKit.Common.Oodle;
 using System.Collections.Generic;
 using System.Linq;
 using SharpGLTF.Schema2;
-using WolvenKit.Common.DDS;
 using WolvenKit.RED4.CR2W.Archive;
 using WolvenKit.Common.FNV1A;
-using SharpGLTF.IO;
-using System.Diagnostics;
 using WolvenKit.Common.Model.Arguments;
-using WolvenKit.Common.Tools;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using WolvenKit.Modkit.RED4.RigFile;
 using WolvenKit.Common;
 using WolvenKit.Common.Conversion;
 using WolvenKit.RED4.Archive.CR2W;
 using WolvenKit.RED4.Types.Exceptions;
 using WolvenKit.RED4.Archive.IO;
-using WolvenKit.Interfaces.Extensions;
-using WolvenKit.RED4;
 
 namespace WolvenKit.Modkit.RED4
 {

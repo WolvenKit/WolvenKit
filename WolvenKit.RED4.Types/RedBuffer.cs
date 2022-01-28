@@ -1,6 +1,6 @@
 using System;
 using WolvenKit.RED4.Types;
-using WolvenKit.RED4.Types.Compression;
+using WolvenKit.Core.Compression;
 using System.Collections.Generic;
 
 namespace WolvenKit.RED4

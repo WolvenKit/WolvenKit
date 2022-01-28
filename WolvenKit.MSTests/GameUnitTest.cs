@@ -11,7 +11,7 @@ using ProtoBuf.Meta;
 using Splat;
 using WolvenKit.Common;
 using WolvenKit.Common.Services;
-using WolvenKit.Common.Tools.Oodle;
+using WolvenKit.Core.Compression;
 using WolvenKit.Core.Services;
 using WolvenKit.Modkit.RED4.RigFile;
 using WolvenKit.RED4.CR2W;
@@ -90,7 +90,7 @@ namespace WolvenKit.MSTests
             {
                 oodleInfo.CopyTo(appOodleFileName);
             }
-            if (!OodleLoadLib.Load(appOodleFileName))
+            if (!OodleLib.Load(appOodleFileName))
             {
                 Assert.Fail("Could not load oo2ext_7_win64.dll.");
             }

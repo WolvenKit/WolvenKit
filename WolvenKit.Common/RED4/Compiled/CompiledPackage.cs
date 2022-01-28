@@ -13,9 +13,9 @@ using WolvenKit.Common;
 using Newtonsoft.Json;
 using WolvenKit.Common.Conversion;
 using WolvenKit.Core.Exceptions;
-using WolvenKit.Common.Tools;
 using WolvenKit.RED4.Archive;
 using WolvenKit.RED4.Types.Exceptions;
+using WolvenKit.Core.Extensions;
 
 namespace WolvenKit.Common.RED4.Compiled
 {

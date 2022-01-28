@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using WolvenKit.Core.CRC;
-using WolvenKit.Common.Oodle;
+using WolvenKit.Core.Compression;
 
 namespace WolvenKit.Modkit.RED4
 {
@@ -30,7 +30,7 @@ namespace WolvenKit.Modkit.RED4
             else
             {
                 IEnumerable<byte> outBuffer = new List<byte>();
-                var r = OodleHelper.Compress(
+                var r = Oodle.Compress(
                     inbuffer,
                     inbuffer.Length,
                     ref outBuffer,

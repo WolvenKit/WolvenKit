@@ -8,7 +8,7 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using CP77Tools.Commands;
-using WolvenKit.Common.Tools.Oodle;
+using WolvenKit.Core.Compression;
 
 namespace WolvenKit.CLI
 {
@@ -28,7 +28,7 @@ namespace WolvenKit.CLI
             }
 
             var oodlePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "oo2ext_7_win64.dll");
-            OodleLoadLib.Load(oodlePath);
+            OodleLib.Load(oodlePath);
 
 
             var rootCommand = new RootCommand

@@ -19,8 +19,21 @@
       <DebugType>embedded</DebugType>
       <Platforms>x64</Platforms>
       <SatelliteResourceLanguages>en</SatelliteResourceLanguages>
+      <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
 
   </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="lib\kraken.dll" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="lib\kraken.dll">
+      <PackagePath>lib\net5.0</PackagePath>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <Pack>true</Pack>
+    </Content>
+  </ItemGroup>
 
     <ItemGroup>
         <PackageReference Include="DynamicData" Version="7.4.9" />

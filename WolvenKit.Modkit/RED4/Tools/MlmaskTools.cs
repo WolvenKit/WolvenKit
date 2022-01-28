@@ -7,7 +7,7 @@ using CP77.Common.Image;
 using WolvenKit.RED4.Types;
 using WolvenKit.Common.DDS;
 using WolvenKit.Common.Model.Arguments;
-using WolvenKit.Common.Oodle;
+using WolvenKit.Core.Compression;
 using WolvenKit.Common.Services;
 using WolvenKit.Common;
 using System.Collections.Generic;

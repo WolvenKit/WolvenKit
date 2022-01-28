@@ -6,7 +6,8 @@ using System.Reflection;
 using WolvenKit.Common.Extensions;
 using WolvenKit.Common.FNV1A;
 using WolvenKit.Common.Model;
-using WolvenKit.Common.Oodle;
+using WolvenKit.Core.Compression;
+using WolvenKit.Core.Extensions;
 using WolvenKit.Interfaces.Extensions;
 using WolvenKit.RED4.Archive;
 
@@ -158,7 +159,7 @@ namespace WolvenKit.Common.Services
 
             // read KARK header
             var oodleCompression = stream.ReadStruct<uint>();
-            if (oodleCompression != OodleHelper.KARK)
+            if (oodleCompression != Oodle.KARK)
             {
                 throw new DecompressionException($"Incorrect hash file.");
             }
@@ -170,7 +171,7 @@ namespace WolvenKit.Common.Services
 
             var inbuffer = stream.ToByteArray(true);
 
-            OozNative.Kraken_Decompress(inbuffer, inbuffer.Length, outputbuffer, outputbuffer.Length);
+            KrakenNative.Decompress(inbuffer, outputbuffer);
 
             hashDictionary.EnsureCapacity(1_100_000);
 

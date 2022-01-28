@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using WolvenKit.Common.Oodle;
+using WolvenKit.Core.Compression;
 
 namespace CP77Tools.Tasks
 {
@@ -39,7 +39,7 @@ namespace CP77Tools.Tasks
                 var buffer = br.ReadBytes(file.Length - 8);
 
                 byte[] unpacked = new byte[size];
-                long unpackedSize = OodleHelper.Decompress(buffer, unpacked);
+                long unpackedSize = Oodle.Decompress(buffer, unpacked);
 
                 using var msout = new MemoryStream();
                 using var bw = new BinaryWriter(msout);
@@ -55,7 +55,7 @@ namespace CP77Tools.Tasks
                 var inbuffer = File.ReadAllBytes(path);
                 IEnumerable<byte> outBuffer = new List<byte>();
 
-                var r = OodleHelper.Compress(
+                var r = Oodle.Compress(
                     inbuffer,
                     inbuffer.Length,
                     ref outBuffer,

@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 using Newtonsoft.Json;
 using WolvenKit.Common;
 using WolvenKit.Common.Extensions;
-using WolvenKit.Common.Tools;
+using WolvenKit.Core.Compression;
 using WolvenKit.Interfaces.Core;
 using Formatting = Newtonsoft.Json.Formatting;
 

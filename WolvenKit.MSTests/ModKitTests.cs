@@ -11,6 +11,7 @@ using WolvenKit.Common;
 using WolvenKit.Common.Interfaces;
 using WolvenKit.Common.Model;
 using WolvenKit.Common.Model.Arguments;
+using WolvenKit.Core.Extensions;
 using WolvenKit.Interfaces.Extensions;
 using WolvenKit.Modkit.RED4;
 using WolvenKit.MSTests.Model;

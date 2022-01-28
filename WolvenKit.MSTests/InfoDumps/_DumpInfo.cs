@@ -6,7 +6,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Catel.IoC;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using WolvenKit.Common.Oodle;
+using WolvenKit.Core.Compression;
 using WolvenKit.Common.Services;
 using WolvenKit.Modkit.RED4;
 using WolvenKit.RED4.CR2W;
@@ -161,7 +161,7 @@ namespace WolvenKit.MSTests
             var inbuffer = File.ReadAllBytes(path);
             IEnumerable<byte> outBuffer = new List<byte>();
 
-            var r = OodleHelper.Compress(
+            var r = Oodle.Compress(
                 inbuffer,
                 inbuffer.Length,
                 ref outBuffer,

@@ -14,7 +14,7 @@ using Microsoft.Extensions.Logging;
 using WolvenKit.CLI.Services;
 using WolvenKit.Common;
 using WolvenKit.Common.Services;
-using WolvenKit.Common.Tools.Oodle;
+using WolvenKit.Core.Compression;
 using WolvenKit.Core;
 using WolvenKit.Interfaces.Core;
 using WolvenKit.Modkit.RED4.RigFile;
@@ -34,7 +34,7 @@ namespace WolvenKit.CLI
             var oodlePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "oo2ext_7_win64.dll");
             if (File.Exists(oodlePath))
             {
-                OodleLoadLib.Load(oodlePath);
+                OodleLib.Load(oodlePath);
             }
 
             var host = GenericHost.CreateHostBuilder(args);

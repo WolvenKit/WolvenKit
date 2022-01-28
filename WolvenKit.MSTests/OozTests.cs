@@ -4,8 +4,7 @@ using System.IO;
 using System.Linq;
 using Microsoft.Extensions.Configuration;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using WolvenKit.Common.Oodle;
-using WolvenKit.Common.Tools.Oodle;
+using WolvenKit.Core.Compression;
 
 namespace WolvenKit.MSTests
 {
@@ -15,7 +14,7 @@ namespace WolvenKit.MSTests
         private const string s_gameDirectorySetting = "GameDirectory";
 
         [ClassInitialize]
-        public static void SetupClass(TestContext context)
+        public static void SetupClass(TestContext _)
         {
             #region oodle
             var s_config = new ConfigurationBuilder()
@@ -45,9 +44,16 @@ namespace WolvenKit.MSTests
             {
                 oodleInfo.CopyTo(appOodleFileName);
             }
-            if (!OodleLoadLib.Load(appOodleFileName))
+
+            if (!OodleLib.Load(appOodleFileName))
             {
                 Assert.Fail("Could not load oo2ext_7_win64.dll.");
+            }
+
+            var kraken = Path.Combine(ass,"lib", "kraken.dll");
+            if (!KrakenLib.Load(kraken))
+            {
+                Assert.Fail("Could not load kraken.dll.");
             }
 
             #endregion
@@ -64,7 +70,7 @@ namespace WolvenKit.MSTests
             using var br = new BinaryReader(fs);
 
             var oodleCompression = br.ReadBytes(4);
-            if (!(oodleCompression.SequenceEqual(new byte[] { 0x4b, 0x41, 0x52, 0x4b })))
+            if (!oodleCompression.SequenceEqual(new byte[] { 0x4b, 0x41, 0x52, 0x4b }))
             {
                 throw new NotImplementedException();
             }
@@ -74,52 +80,60 @@ namespace WolvenKit.MSTests
             // oodle
             var outBuffer1 = new byte[size];
             {
-                long unpackedSize = OodleHelper.Decompress(buffer, outBuffer1);
-               
+                long unpackedSize = Oodle.Decompress(buffer, outBuffer1);
+
                 var outpath = Path.Combine(outdir, "oodle.txt");
                 File.WriteAllBytes(outpath, outBuffer1);
             }
 
-            // ooz
+            // kraken
             var outBuffer2 = new byte[size];
             {
-                long unpackedSize2 = OozNative.Kraken_Decompress(buffer, buffer.Length, outBuffer2, outBuffer2.Length);
-                var outpath2 = Path.Combine(outdir, "ooz.txt");
+                long unpackedSize2 = KrakenLib.Decompress(buffer, outBuffer2);
+                var outpath2 = Path.Combine(outdir, "kraken.txt");
                 File.WriteAllBytes(outpath2, outBuffer2);
             }
             Assert.IsTrue(Enumerable.SequenceEqual(outBuffer1, outBuffer2));
         }
 
         [TestMethod]
-        public void Kraken_Compress()
+        [DataRow(1)]
+        [DataRow(2)]
+        [DataRow(3)]
+        [DataRow(4)]
+        [DataRow(5)]
+        [DataRow(6)]
+        public void Kraken_Compress(int level)
         {
             var path = Path.GetFullPath("Resources/oodle.txt");
             var inbuffer = File.ReadAllBytes(path);
             var outdir = Path.Combine(Environment.CurrentDirectory, "ooz");
             Directory.CreateDirectory(outdir);
 
-            //oodle
+            // oodle
             IEnumerable<byte> outBuffer1 = new List<byte>();
-            {
-                var r = OodleHelper.Compress(
+            
+                var r = Oodle.Compress(
                     inbuffer,
                     inbuffer.Length,
                     ref outBuffer1,
                     OodleNative.OodleLZ_Compressor.Kraken,
                     OodleNative.OodleLZ_Compression.Normal,
                     true);
-                var outpath = Path.Combine(outdir, "oodle.kark");
-                File.WriteAllBytes(outpath, outBuffer1.ToArray());
-            }
+                var outpath1 = Path.Combine(outdir, "oodle.kark");
+                var final1 = outBuffer1.Skip(8).ToArray();
+                File.WriteAllBytes(outpath1, final1);
+            
 
-            //ooz
-            IEnumerable<byte> outBuffer2 = new List<byte>();
-            {
-                var r2 = OozNative.Kraken_Compress(inbuffer, inbuffer.Length, outBuffer2.ToArray());
-                var outpath = Path.Combine(outdir, "ooz.kark");
-                File.WriteAllBytes(outpath, outBuffer2.ToArray());
-            }
-            Assert.IsTrue(Enumerable.SequenceEqual(outBuffer1, outBuffer2));
+            // kraken
+            var outBuffer2 = new byte[inbuffer.Length + 65536];
+            
+                var r2 = KrakenLib.Compress(inbuffer, outBuffer2, level);
+                var outpath2 = Path.Combine(outdir, "kraken.kark");
+                var final2 = outBuffer2.Take(r2).ToArray();
+                File.WriteAllBytes(outpath2, final2);
+            
+            Assert.IsTrue(Enumerable.SequenceEqual(final1, final2));
         }
     }
 }

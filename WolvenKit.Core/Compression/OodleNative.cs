@@ -1,7 +1,7 @@
 using System;
 using System.Runtime.InteropServices;
 
-namespace WolvenKit.Common.Oodle
+namespace WolvenKit.Core.Compression
 {
     public static class OodleNative
     {

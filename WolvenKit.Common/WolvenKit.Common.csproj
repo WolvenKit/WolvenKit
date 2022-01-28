@@ -71,11 +71,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Content Include="lib\kraken.dll">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-        <Pack>true</Pack>
-        <PackagePath>lib\net5.0</PackagePath>
-    </Content>
     <Content Include="lib\vgmstream\avcodec-vgmstream-58.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
