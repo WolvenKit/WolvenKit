@@ -115,15 +115,15 @@ public static class Oodle
         }
         else if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
         {
-            throw new NotImplementedException();
+          throw new NotImplementedException();
         }
         else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
         {
-            throw new NotImplementedException();
+          throw new NotImplementedException();
         }
         else 
         {
-            throw new NotImplementedException();
+          throw new NotImplementedException();
         }
 
 
@@ -158,14 +158,14 @@ public static class Oodle
     private static long Decompress(Span<byte> inputBufferSpan, Span<byte> outputBufferSpan)
     {
         var result = 0;
+        var compressedData = inputBufferSpan.ToArray();
+        var rawBuf = outputBufferSpan.ToArray();
 
         if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
         {
 #if !USE_NATIVE
-            result = OodleLib.OodleLZ_Decompress(inputBufferSpan.ToArray(), outputBufferSpan.ToArray());
+          result = OodleLib.OodleLZ_Decompress(compressedData, rawBuf);
 #else
-            var compressedData = inputBufferSpan.ToArray();
-            var rawBuf = outputBufferSpan.ToArray();
             result = OodleLZNative.Decompress(compressedData, compressedData.Length, rawBuf, rawBuf.Length, OodleLZNative.FuzzSafe.No);
 #endif
         }
@@ -175,7 +175,8 @@ public static class Oodle
         }
         else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
         {
-            throw new NotImplementedException();
+          result = OozNative.Kraken_Decompress(
+              compressedData, compressedData.Length, rawBuf, rawBuf.Length);
         }
         else
         {
