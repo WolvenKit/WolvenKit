@@ -27,27 +27,27 @@ namespace WolvenKit.RED4.Types
                 return true;
             }
 
-            return DepotPath == other.DepotPath && Flags == other.Flags;
+            if (!Equals(DepotPath, other.DepotPath))
+            {
+                return false;
+            }
+
+            if (!Equals(Flags, other.Flags))
+            {
+                return false;
+            }
+
+            return true;
         }
 
         public override bool Equals(object obj)
         {
-            if (ReferenceEquals(null, obj))
+            if (obj is CResourceAsyncReference<T> cObj)
             {
-                return false;
+                return Equals(cObj);
             }
 
-            if (ReferenceEquals(this, obj))
-            {
-                return true;
-            }
-
-            if (obj.GetType() != this.GetType())
-            {
-                return false;
-            }
-
-            return Equals((CResourceAsyncReference<T>)obj);
+            return false;
         }
 
         public override int GetHashCode() => HashCode.Combine(DepotPath, (int)Flags);

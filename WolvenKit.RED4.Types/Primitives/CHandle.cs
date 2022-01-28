@@ -99,27 +99,22 @@ namespace WolvenKit.RED4.Types
                 return true;
             }
 
-            return ReferenceEquals(Chunk, other.Chunk);
+            if (!Equals(Chunk, other.Chunk))
+            {
+                return false;
+            }
+
+            return true;
         }
 
         public override bool Equals(object obj)
         {
-            if (ReferenceEquals(null, obj))
+            if (obj is CHandle<T> cObj)
             {
-                return false;
+                return Equals(cObj);
             }
 
-            if (ReferenceEquals(this, obj))
-            {
-                return true;
-            }
-
-            if (obj.GetType() != this.GetType())
-            {
-                return false;
-            }
-
-            return Equals((CHandle<T>)obj);
+            return false;
         }
 
         public override int GetHashCode() => EqualityComparer<T>.Default.GetHashCode((T)Chunk);

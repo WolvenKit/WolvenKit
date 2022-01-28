@@ -14,7 +14,7 @@ namespace WolvenKit.RED4.Archive.CR2W
         public uint ObjectsEnd { get; set; }
     }
 
-    public class CR2WFile : Red4File, IDisposable
+    public class CR2WFile : Red4File, IDisposable, IEquatable<CR2WFile>
     {
         public const uint MAGIC = 0x57325243; // "W2RC"
         public const uint DEADBEEF = 0xDEADBEEF;
@@ -154,5 +154,60 @@ namespace WolvenKit.RED4.Archive.CR2W
         }
 
         #endregion
+
+        public bool Equals(CR2WFile other)
+        {
+            if (ReferenceEquals(null, other))
+            {
+                return false;
+            }
+
+            if (ReferenceEquals(this, other))
+            {
+                return true;
+            }
+
+            if (!Equals(RootChunk, other.RootChunk))
+            {
+                return false;
+            }
+
+            if (!Equals(EmbeddedFiles.Count, other.EmbeddedFiles.Count))
+            {
+                return false;
+            }
+
+            for (int i = 0; i < EmbeddedFiles.Count; i++)
+            {
+                if (!Equals(EmbeddedFiles[i], other.EmbeddedFiles[i]))
+                {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (ReferenceEquals(null, obj))
+            {
+                return false;
+            }
+
+            if (ReferenceEquals(this, obj))
+            {
+                return true;
+            }
+
+            if (obj.GetType() != this.GetType())
+            {
+                return false;
+            }
+
+            return Equals((CR2WFile)obj);
+        }
+
+        public override int GetHashCode() => HashCode.Combine(RootChunk, EmbeddedFiles);
     }
 }

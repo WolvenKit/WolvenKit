@@ -10,7 +10,24 @@ namespace WolvenKit.RED4.Types
     [DebuggerDisplay("Count = {Count}")]
     public class CArrayBase<T> : IRedArray<T>, IRedCloneable, IRedNotifyObjectChanged, IEquatable<CArrayBase<T>>
     {
-        public int MaxSize { get; set; } = -1;
+        private int _maxSize = -1;
+
+        public int MaxSize
+        {
+            get
+            {
+                return _maxSize;
+            }
+            set
+            {
+                if (value < Count)
+                {
+                    throw new ArgumentException(nameof(MaxSize));
+                }
+
+                _maxSize = value;
+            }
+        }
 
         public event ObjectChangedEventHandler ObjectChanged;
 
@@ -314,12 +331,30 @@ namespace WolvenKit.RED4.Types
 
         public bool Equals(CArrayBase<T> other)
         {
-            if (other == null)
+            if (ReferenceEquals(null, other))
             {
                 return false;
             }
 
-            return this.SequenceEqual(other);
+            if (ReferenceEquals(this, other))
+            {
+                return true;
+            }
+
+            if (!Equals(Count, other.Count))
+            {
+                return false;
+            }
+
+            for (int i = 0; i < Count; i++)
+            {
+                if (!Equals(this[i], other[i]))
+                {
+                    return false;
+                }
+            }
+
+            return true;
         }
 
         public override int GetHashCode() => base.GetHashCode();

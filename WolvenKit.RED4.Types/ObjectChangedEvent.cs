@@ -7,7 +7,7 @@ namespace WolvenKit.RED4.Types
 
     public class ObjectChangedEventArgs : EventArgs
     {
-        internal List<IRedType> _callStack = new();
+        internal CallStack _callStack = new();
 
         public ObjectChangedType ChangeType { get; set; }
 
@@ -23,6 +23,24 @@ namespace WolvenKit.RED4.Types
             RedName = redName;
             OldValue = oldValue;
             NewValue = newValue;
+        }
+    }
+
+    public class CallStack : List<IRedType>
+    {
+        public new bool Contains(IRedType value)
+        {
+            var comparer = ReferenceEqualityComparer.Instance;
+
+            for (int i = 0; i < Count; i++)
+            {
+                if (comparer.Equals(this[i], value))
+                {
+                    return true;
+                }
+            }
+
+            return false;
         }
     }
 

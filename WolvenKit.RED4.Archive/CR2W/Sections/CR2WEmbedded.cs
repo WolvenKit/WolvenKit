@@ -18,9 +18,46 @@ namespace WolvenKit.RED4.Archive.CR2W
         public ulong pathHash;
     }
 
-    public class CR2WEmbedded : ICR2WEmbeddedFile
+    public class CR2WEmbedded : ICR2WEmbeddedFile, IEquatable<CR2WEmbedded>
     {
         public string FileName { get; set; }
         public RedBaseClass Content { get; set; }
+
+        public bool Equals(CR2WEmbedded other)
+        {
+            if (ReferenceEquals(null, other))
+            {
+                return false;
+            }
+
+            if (ReferenceEquals(this, other))
+            {
+                return true;
+            }
+
+            if (!Equals(FileName, other.FileName))
+            {
+                return false;
+            }
+
+            if (!Equals(Content, other.Content))
+            {
+                return false;
+            }
+
+            return true;
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (obj is CR2WEmbedded cObj)
+            {
+                return Equals(cObj);
+            }
+
+            return false;
+        }
+
+        public override int GetHashCode() => HashCode.Combine(FileName, Content);
     }
 }

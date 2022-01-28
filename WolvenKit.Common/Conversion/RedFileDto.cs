@@ -13,16 +13,12 @@ public class RedFileDto
 
     }
 
-    public RedFileDto(Red4File red4File)
+    public RedFileDto(CR2WFile cr2w)
     {
-        Data = red4File;
-
-        if (Data is CR2WFile cr2w)
-        {
-            Header.ArchiveFileName = cr2w.MetaData.FileName;
-        }
+        Data = cr2w;
+        Header.ArchiveFileName = cr2w.MetaData.FileName;
     }
 
     public JsonHeader Header { get; set; } = new();
-    public Red4File Data { get; set; }
+    public CR2WFile Data { get; set; }
 }

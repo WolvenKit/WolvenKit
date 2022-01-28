@@ -171,13 +171,9 @@ public class CNameConverter : JsonConverter<CName>
         {
             writer.WriteStringValue(value);
         }
-        else if (value != 0)
-        {
-            writer.WriteNumberValue(value);
-        }
         else
         {
-            writer.WriteStringValue("");
+            writer.WriteNumberValue(value);
         }
     }
 }
@@ -271,7 +267,7 @@ public class CVariantConverter : JsonConverter<CVariant>
         writer.WriteString("Type", redTypeName);
 
         writer.WritePropertyName("Value");
-        JsonSerializer.Serialize(writer, value.Value, options);
+        JsonSerializer.Serialize(writer, (object)value.Value, options);
 
         writer.WriteEndObject();
     }
@@ -1178,13 +1174,9 @@ public class TweakDBIDConverter : JsonConverter<TweakDBID>
         {
             writer.WriteStringValue(value);
         }
-        else if (value != 0)
-        {
-            writer.WriteNumberValue(value);
-        }
         else
         {
-            writer.WriteStringValue("");
+            writer.WriteNumberValue(value);
         }
     }
 }
@@ -1636,6 +1628,8 @@ public class HandleConverterFactory : JsonConverterFactory
 
     private class HandleConverter : JsonConverter<IRedBaseHandle>
     {
+        public override bool HandleNull => true;
+
         public override IRedBaseHandle? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
         {
             if (reader.TokenType == JsonTokenType.Null)
@@ -1643,12 +1637,21 @@ public class HandleConverterFactory : JsonConverterFactory
                 return null;
             }
 
+            var handle = (IRedBaseHandle)RedTypeManager.CreateRedType(typeToConvert);
+            if (reader.TokenType == JsonTokenType.Number)
+            {
+                if (reader.GetInt32() == -1)
+                {
+                    return handle;
+                }
+                throw new JsonException();
+            }
+
             if (reader.TokenType != JsonTokenType.StartObject)
             {
                 throw new JsonException();
             }
-
-            var handle = (IRedBaseHandle)RedTypeManager.CreateRedType(typeToConvert);
+            
             handle.SetValue(JsonSerializer.Deserialize<RedBaseClass>(ref reader, options));
 
             reader.Read();
@@ -1660,16 +1663,23 @@ public class HandleConverterFactory : JsonConverterFactory
             return handle;
         }
 
-        public override void Write(Utf8JsonWriter writer, IRedBaseHandle value, JsonSerializerOptions options)
+        public override void Write(Utf8JsonWriter writer, IRedBaseHandle? value, JsonSerializerOptions options)
         {
-            var cls = value.GetValue();
-            if (cls != null)
+            if (value == null)
             {
-                JsonSerializer.Serialize(writer, cls, options);
+                writer.WriteNullValue();
             }
             else
             {
-                writer.WriteNullValue();
+                var cls = value.GetValue();
+                if (cls != null)
+                {
+                    JsonSerializer.Serialize(writer, cls, options);
+                }
+                else
+                {
+                    writer.WriteNumberValue(-1);
+                }
             }
         }
     }
@@ -1916,6 +1926,14 @@ public class ClassConverterFactory : JsonConverterFactory
                             }
 
                             var val = JsonSerializer.Deserialize(ref reader, valInfo.Type, options);
+                            if (val == null)
+                            {
+                                var propTypeInfo = RedReflection.GetTypeInfo(valInfo.Type);
+                                if (propTypeInfo.IsValueType)
+                                {
+                                    val = RedTypeManager.CreateRedType(valInfo.Type);
+                                }
+                            }
 
                             valInfo.SetValue(cls, (IRedType?)val);
                         }
@@ -1963,6 +1981,29 @@ public class ClassConverterFactory : JsonConverterFactory
 
             writer.WriteEndObject();
         }
+    }
+}
+
+public class Red4FileConverterFactory : JsonConverterFactory
+{
+    public override bool CanConvert(Type typeToConvert)
+    {
+        return typeToConvert.IsSubclassOf(typeof(Red4File)) || typeToConvert == typeof(Red4File);
+    }
+
+    public override JsonConverter? CreateConverter(Type typeToConvert, JsonSerializerOptions options)
+    {
+        if (typeToConvert == typeof(CR2WFile))
+        {
+            return new CR2WFileConverter();
+        }
+
+        if (typeToConvert == typeof(Package04))
+        {
+            return new Package04Converter();
+        }
+
+        throw new NotSupportedException("CreateConverter got called on a type that this converter factory doesn't support");
     }
 }
 
@@ -2238,7 +2279,7 @@ public static class RedJsonOptions
         new()
         {
             WriteIndented = true,
-            MaxDepth = 128,
+            MaxDepth = 256,
             Converters =
             {
                 new CBoolConverter(),
@@ -2271,8 +2312,7 @@ public static class RedJsonOptions
                 new HandleConverterFactory(),
                 new ResourceConverterFactory(),
                 new ClassConverterFactory(),
-                new CR2WFileConverter(),
-                new Package04Converter(),
+                new Red4FileConverterFactory()
             }
         };
 }

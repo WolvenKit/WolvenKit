@@ -271,7 +271,7 @@ namespace WolvenKit.RED4.IO
 
         public virtual void Write(DataBuffer val)
         {
-            if (val.Buffer.Bytes == Array.Empty<byte>())
+            if (val.Buffer.IsEmpty)
             {
                 _writer.Write(0x80000000);
             }

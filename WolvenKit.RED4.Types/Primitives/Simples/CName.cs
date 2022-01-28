@@ -14,7 +14,6 @@ namespace WolvenKit.RED4.Types
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         private string _value;
 
-        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         private ulong _hash;
 
         public CName() { }
@@ -31,6 +30,7 @@ namespace WolvenKit.RED4.Types
             _hash = value;
         }
 
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         public int Length => _value?.Length ?? 0;
 
         private ulong CalculateHash()
