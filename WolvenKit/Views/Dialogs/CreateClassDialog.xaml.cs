@@ -5,11 +5,11 @@ using WolvenKit.ViewModels.Dialogs;
 
 namespace WolvenKit.Views.Dialogs
 {
-    public partial class AddChunkDialog : ReactiveUserControl<AddChunkDialogViewModel>
+    public partial class CreateClassDialog : ReactiveUserControl<CreateClassDialogViewModel>
     {
         #region Constructors
 
-        public AddChunkDialog()
+        public CreateClassDialog()
         {
             InitializeComponent();
         }

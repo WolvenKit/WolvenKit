@@ -85,15 +85,14 @@ jobs:
     - run: echo "VERSIONC=${{steps.get-version-cli.outputs.assembly-version}}-nightly.${{env.ISODATE}}" >> $env:GITHUB_ENV
     
     # Publish app
-    - run: msbuild ${{env.PROJ}} -t:restore -t:Build -t:Publish /p:PublishDir=".${{env.OUT}}" /p:InformationalVersion="${{env.VERSION}}" /p:Configuration=Release /p:Platform=x64 /p:SelfContained=False /p:PublishReadyToRun=False /p:PublishSingleFile=False /p:PublishTrimmed=False
+    - run: msbuild ${{env.PROJ}} -t:restore -t:Build -t:Publish /p:PublishDir=".${{env.OUT}}" /p:InformationalVersion="${{env.VERSION}}" /p:Configuration=Release /p:Platform=x64 /p:PublishReadyToRun=False /p:PublishSingleFile=False /p:PublishTrimmed=False
     
     # Publish console
-    - run: msbuild ${{env.PROJC}} -t:restore -t:Build -t:Publish /p:PublishDir=".${{env.OUTC}}" /p:Configuration=Release /p:Platform=x64 /p:SelfContained=False /p:PublishReadyToRun=False /p:PublishTrimmed=False
+    - run: msbuild ${{env.PROJC}} -t:restore -t:Build -t:Publish /p:PublishDir=".${{env.OUTC}}" /p:Configuration=Release /p:Platform=x64 /p:PublishReadyToRun=False /p:PublishTrimmed=False
 
     - run: echo "PORTABLE=${{env.NAME}}-${{env.VERSION}}.zip" >> $env:GITHUB_ENV
     - run: echo "CONSOLE=${{env.NAME}}.Console-${{env.VERSIONC}}.zip" >> $env:GITHUB_ENV
     - run: echo "INSTALLER=${{env.NAME}}-installer-${{env.VERSION}}.exe" >> $env:GITHUB_ENV
-    - run: echo "MANIFEST=manifest.json" >> $env:GITHUB_ENV
 
     # Create assets
     # create zip
@@ -112,11 +111,6 @@ jobs:
     #  with:
     #    name: ${{env.NAME}}-installer-${{env.VERSION}}
     #    path: ${{env.FINALOUT}}/${{env.INSTALLER}}
-    # MANIFEST
-    #- uses: actions/upload-artifact@v2
-    #  with:
-    #    name: ${{env.MANIFEST}}
-    #    path: ${{env.FINALOUT}}/${{env.MANIFEST}}
     # CONSOLE
     #- uses: actions/upload-artifact@v2
     #  with:
@@ -129,7 +123,7 @@ jobs:
           gh release create ${{ env.VERSION }} -n "${{ env.MESSAGE }}" -t "${{ env.VERSION }}" -R ${{ env.REPO }} ${{ env.FILES }}
       env:
         MESSAGE: "This is a beta release so you may encounter bugs. Please report them. The latest commit this release is based on is: [#${{env.SHA}}](https://github.com/${{env.MREPO}}/commit/${{env.SHA}})"
-        FILES: ${{env.FINALOUT}}/${{env.PORTABLE}} ${{env.FINALOUT}}/${{env.CONSOLE}} ${{env.FINALOUT}}/${{env.INSTALLER}} ${{env.FINALOUT}}/${{env.MANIFEST}}
+        FILES: ${{env.FINALOUT}}/${{env.PORTABLE}} ${{env.FINALOUT}}/${{env.CONSOLE}} ${{env.FINALOUT}}/${{env.INSTALLER}}
         REPO: WolvenKit/WolvenKit-nightly-releases
         GITHUB_TOKEN: ${{ secrets.RELEASE_TOKEN }}
     

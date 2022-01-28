@@ -8,6 +8,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using ProtoBuf.Meta;
 using ReactiveUI;
+using Serilog;
 using Splat;
 using Splat.Microsoft.Extensions.DependencyInjection;
 using WolvenKit.Common;
@@ -29,7 +30,7 @@ namespace WolvenKit
         // Constructor #1
         static App()
         {
-
+           
         }
 
         // Constructor #2
@@ -64,22 +65,22 @@ namespace WolvenKit
             // Startup speed boosting (HC)
             //ApplicationHelper.StartProfileOptimization();
 
-            loggerService.Log("Starting application");
+            loggerService.Info("Starting application");
             await Initializations.InitializeWebview2(loggerService);
 
-            loggerService.Log("Initializing red database");
+            loggerService.Info("Initializing red database");
             Initializations.InitializeThemeHelper();
 
 
             // main app viewmodel
-            loggerService.Log("Initializing Shell");
+            loggerService.Info("Initializing Shell");
             Initializations.InitializeShell(settings);
 
 
-            loggerService.Log("Initializing Discord RPC API");
+            loggerService.Info("Initializing Discord RPC API");
             DiscordHelper.InitializeDiscordRPC();
 
-            loggerService.Log("Initializing Github API");
+            loggerService.Info("Initializing Github API");
             Initializations.InitializeGitHub();
 
             // Some things can only be initialized after base.OnStartup(e);
@@ -106,6 +107,16 @@ namespace WolvenKit
             // we need to re-register the built container with Splat again
             Container = _host.Services;
             Container.UseMicrosoftDependencyResolver();
+
+            var path = Path.Combine(ISettingsManager.GetAppData(), "applog.txt");
+            var outputTemplate = "{Timestamp:yyyy-MM-dd HH:mm:ss.fff} [{Level:u3}] {Message:lj}{NewLine}{Exception}";
+
+            Log.Logger = new LoggerConfiguration()
+              .MinimumLevel.Debug()
+              .WriteTo.Console()
+              .WriteTo.MySink(_host.Services.GetService<MySink>())
+              .WriteTo.File(path, outputTemplate: outputTemplate, rollingInterval: RollingInterval.Day)
+              .CreateLogger();
         }
 
         //https://stackoverflow.com/a/46804709/16407587
