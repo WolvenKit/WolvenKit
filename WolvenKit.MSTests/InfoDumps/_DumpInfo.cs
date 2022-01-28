@@ -163,11 +163,7 @@ namespace WolvenKit.MSTests
 
             var r = Oodle.Compress(
                 inbuffer,
-                inbuffer.Length,
-                ref outBuffer,
-                OodleNative.OodleLZ_Compressor.Kraken,
-                OodleNative.OodleLZ_Compression.Normal,
-                true);
+                ref outBuffer);
 
             var filename = $"{Path.GetFileNameWithoutExtension(path)}.kark";
             File.WriteAllBytes(Path.Combine(resultDir, filename), outBuffer.ToArray());

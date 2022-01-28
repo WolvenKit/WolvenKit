@@ -57,11 +57,7 @@ namespace CP77Tools.Tasks
 
                 var r = Oodle.Compress(
                     inbuffer,
-                    inbuffer.Length,
-                    ref outBuffer,
-                    OodleNative.OodleLZ_Compressor.Kraken,
-                    OodleNative.OodleLZ_Compression.Normal,
-                    true);
+                    ref outBuffer);
 
                 File.WriteAllBytes(outpath, outBuffer.ToArray());
 

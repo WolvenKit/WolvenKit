@@ -97,13 +97,13 @@ namespace WolvenKit.MSTests
         }
 
         [TestMethod]
-        [DataRow(1)]
-        [DataRow(2)]
-        [DataRow(3)]
-        [DataRow(4)]
-        [DataRow(5)]
-        [DataRow(6)]
-        public void Kraken_Compress(int level)
+        [DataRow(OodleLZNative.CompressionLevel.SuperFast)]
+        [DataRow(OodleLZNative.CompressionLevel.VeryFast)]
+        [DataRow(OodleLZNative.CompressionLevel.Fast)]
+        [DataRow(OodleLZNative.CompressionLevel.Normal)]
+        [DataRow(OodleLZNative.CompressionLevel.Optimal1)]
+        [DataRow(OodleLZNative.CompressionLevel.Optimal2)]
+        public void Kraken_Compress(OodleLZNative.CompressionLevel level)
         {
             var path = Path.GetFullPath("Resources/oodle.txt");
             var inbuffer = File.ReadAllBytes(path);
@@ -113,23 +113,17 @@ namespace WolvenKit.MSTests
             // oodle
             IEnumerable<byte> outBuffer1 = new List<byte>();
             
-                var r = Oodle.Compress(
-                    inbuffer,
-                    inbuffer.Length,
-                    ref outBuffer1,
-                    OodleNative.OodleLZ_Compressor.Kraken,
-                    OodleNative.OodleLZ_Compression.Normal,
-                    true);
-                var outpath1 = Path.Combine(outdir, "oodle.kark");
-                var final1 = outBuffer1.Skip(8).ToArray();
+                var r = Oodle.Compress(inbuffer,ref outBuffer1, false, level);
+                var outpath1 = Path.Combine(outdir, $"oodle_{(int)level}.kark");
+                var final1 = outBuffer1.ToArray();
                 File.WriteAllBytes(outpath1, final1);
             
 
             // kraken
             var outBuffer2 = new byte[inbuffer.Length + 65536];
             
-                var r2 = KrakenLib.Compress(inbuffer, outBuffer2, level);
-                var outpath2 = Path.Combine(outdir, "kraken.kark");
+                var r2 = KrakenLib.Compress(inbuffer, outBuffer2, (int)level);
+                var outpath2 = Path.Combine(outdir, $"kraken_{(int)level}.kark");
                 var final2 = outBuffer2.Take(r2).ToArray();
                 File.WriteAllBytes(outpath2, final2);
             

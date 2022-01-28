@@ -1,3 +1,5 @@
+#define USE_LIB
+
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -10,242 +12,224 @@ namespace WolvenKit.Core.Compression;
 
 public static class Oodle
 {
-
-    public const uint KARK = 1263681867;
-
-    // 0x4b, 0x41, 0x52, 0x4b
-
-
-    /// <summary>
-    ///
-    /// </summary>
-    /// <param name="inputBytes"></param>
-    /// <param name="inputCount"></param>
-    /// <param name="outputBuffer"></param>
-    /// <param name="algo"></param>
-    /// <param name="level"></param>
-    /// <returns></returns>
-    /// <exception cref="ArgumentNullException"></exception>
-    /// <exception cref="ArgumentOutOfRangeException"></exception>
-    /// <exception cref="NotImplementedException"></exception>
-    public static int Compress(
-        byte[] inputBytes,
-        // int inputOffset,
-        int inputCount,
-        ref IEnumerable<byte> outputBuffer,
-        // int outputOffset,
-        // int outputCount,
-        OodleNative.OodleLZ_Compressor algo = OodleNative.OodleLZ_Compressor.Kraken,
-        OodleNative.OodleLZ_Compression level = OodleNative.OodleLZ_Compression.Normal,
-        bool useREDHeader = true)
+    public enum Status
     {
-        if (inputBytes == null)
+        Uncompressed,
+        Compressed
+    }
+    
+    public const uint KARK = 1263681867; // 0x4b, 0x41, 0x52, 0x4b
+
+    public static bool IsCompressed(byte[] buf) => buf.Length >= 4 && buf[0] == 0x4B && buf[1] == 0x41 && buf[2] == 0x52 && buf[3] == 0x4B;
+
+    public static Status CompressBuffer(byte[] rawBuf, out byte[] compBuf)
+    {
+        if (rawBuf.Length > 256)
         {
-            throw new ArgumentNullException(nameof(inputBytes));
+#if USE_LIB
+            var compressedBufferSizeNeeded = GetCompressedBufferSizeNeeded(rawBuf.Length);
+#else
+            var compressedBufferSizeNeeded = OodleLZNative.GetCompressedBufferSizeNeeded(rawBuf.Length);
+#endif
+
+            var compressedBuffer = new byte[compressedBufferSizeNeeded];
+
+#if USE_LIB
+            var compressedSize = OodleLib.OodleLZ_Compress(rawBuf, compressedBuffer, OodleLZNative.Compressor.Kraken, OodleLZNative.CompressionLevel.Optimal2);
+#else
+            var compressedSize = OodleLZNative.Compress(OodleLZNative.Compressor.Kraken, rawBuf, rawBuf.Length, compressedBuffer, OodleLZNative.CompressionLevel.Optimal2);
+#endif
+
+            var outArray = new byte[compressedSize + 8];
+
+            Array.Copy(BitConverter.GetBytes(KARK), 0, outArray, 0, 4);
+            Array.Copy(BitConverter.GetBytes(rawBuf.Length), 0, outArray, 4, 4);
+            Array.Copy(compressedBuffer, 0, outArray, 8, compressedSize);
+
+            if (rawBuf.Length > outArray.Length)
+            {
+                compBuf = outArray;
+                return Status.Compressed;
+            }
         }
 
-        if (inputCount <= 0 || inputCount > inputBytes.Length)
+        compBuf = rawBuf;
+        return Status.Uncompressed;
+    }
+
+    public static void DecompressBuffer(byte[] compBuf, out byte[] rawBuf)
+    {
+        using var ms = new MemoryStream(compBuf);
+        using var br = new BinaryReader(ms);
+
+        var header = br.ReadUInt32();
+        if (header == KARK)
+        {
+            var size = br.ReadUInt32();
+
+            var compressedData = br.ReadBytes(compBuf.Length - 8);
+            rawBuf = new byte[size];
+
+#if USE_LIB
+            OodleLib.OodleLZ_Decompress(compBuf, rawBuf);
+#else
+            OodleLZNative.Decompress(compressedData, compressedData.Length, rawBuf, rawBuf.Length, OodleLZNative.FuzzSafe.No);
+#endif
+        }
+        else
+        {
+            throw new Exception();
+        }
+    }
+
+    public static int Compress( byte[] inputBuffer, ref IEnumerable<byte> outputBuffer,
+        bool useREDHeader = true,
+        OodleLZNative.CompressionLevel level = OodleLZNative.CompressionLevel.Normal,
+        OodleLZNative.Compressor compressor = OodleLZNative.Compressor.Kraken)
+    {
+        if (inputBuffer == null)
+        {
+            throw new ArgumentNullException(nameof(inputBuffer));
+        }
+        var inputCount = inputBuffer.Length;
+        if (inputCount <= 0 || inputCount > inputBuffer.Length)
         {
             throw new ArgumentOutOfRangeException(nameof(inputCount));
         }
-
         if (outputBuffer == null)
         {
             throw new ArgumentNullException(nameof(outputBuffer));
         }
 
-
-
-
+        var result = 0;
+        var compressedBufferSizeNeeded = Oodle.GetCompressedBufferSizeNeeded(inputCount);
+        var compressedBuffer = new byte[compressedBufferSizeNeeded];
 
         if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
         {
-            var compressedBufferSizeNeeded = Oodle.GetCompressedBufferSizeNeeded(inputCount);
-            var compressedBuffer = new byte[compressedBufferSizeNeeded];
-
-            var inputHandle = GCHandle.Alloc(inputBytes, GCHandleType.Pinned);
-            var inputAddress = inputHandle.AddrOfPinnedObject();
-            var outputHandle = GCHandle.Alloc(compressedBuffer, GCHandleType.Pinned);
-            var outputAddress = outputHandle.AddrOfPinnedObject();
-
-            var result = 0;
-            if (true)
-            {
-                result = (int)OodleLib.OodleLZ_Compress(
-                    inputAddress,
-                    outputAddress,
-                    inputCount,
-                    algo,
-                    level
-                );
-            }
-            else
-#pragma warning disable 162
-            {
-                result = (int)OodleNative.Compress(
-                    (int)algo,
-                    inputAddress,
-                    inputCount,
-                    outputAddress,
-                    (int)level,
-                    IntPtr.Zero,
-                    IntPtr.Zero,
-                    IntPtr.Zero,
-                    IntPtr.Zero,
-                    0
-                );
-            }
-#pragma warning restore 162
-
-
-
-            inputHandle.Free();
-            outputHandle.Free();
-
-            if (result == 0 || inputCount <= (result + 8))
-            {
-                outputBuffer = inputBytes;
-                return outputBuffer.Count();
-            }
-
-
-            if (useREDHeader)
-            {
-                //resize buffer
-                var writelist = new List<byte>()
-                    {
-                        0x4B, 0x41, 0x52, 0x4B  //KARK, TODO: make this dependent on the compression algo
-                    };
-                writelist.AddRange(BitConverter.GetBytes(inputCount));
-                writelist.AddRange(compressedBuffer.Take(result));
-
-                outputBuffer = writelist;
-            }
-            else
-            {
-                outputBuffer = compressedBuffer.Take(result);
-            }
-
-            return outputBuffer.Count();
+#if USE_LIB
+            result = OodleLib.OodleLZ_Compress(inputBuffer, compressedBuffer, compressor, level);
+#else
+            result = OodleLZNative.Compress(OodleLZNative.Compressor.Kraken, inputBuffer, inputBuffer.Length, compressedBuffer, level);
+#endif
         }
         else if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
         {
-            //TODO: use ooz to compress
-            outputBuffer = inputBytes;
-            return outputBuffer.Count();
-
-            // try
-            // {
-            //     var result = OozNative.Compress(
-            //         (int)algo,
-            //         inputAddress,
-            //         outputAddress,
-            //         inputCount,
-            //         IntPtr.Zero,
-            //         IntPtr.Zero
-            //     );
-            //     inputHandle.Free();
-            //     outputHandle.Free();
-            //     return result;
-            // }
-            // catch (Exception e)
-            // {
-            //     Console.WriteLine(e);
-            //     throw;
-            // }
+            throw new NotImplementedException();
         }
-        else
+        else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
         {
             throw new NotImplementedException();
         }
+        else 
+        {
+            throw new NotImplementedException();
+        }
+
+
+        if (result == 0 || inputCount <= (result + 8))
+        {
+            outputBuffer = inputBuffer;
+            return outputBuffer.Count();
+        }
+
+        if (useREDHeader)
+        {
+            // write KARK header
+            var writelist = new List<byte>()
+                    {
+                        0x4B, 0x41, 0x52, 0x4B  //KARK, TODO: make this dependent on the compression algo
+                    };
+            // write size
+            writelist.AddRange(BitConverter.GetBytes(inputCount));
+            // write compressed data
+            writelist.AddRange(compressedBuffer.Take(result));
+
+            outputBuffer = writelist;
+        }
+        else
+        {
+            outputBuffer = compressedBuffer.Take(result);
+        }
+
+        return outputBuffer.Count();
     }
 
     private static long Decompress(Span<byte> inputBufferSpan, Span<byte> outputBufferSpan)
     {
-        unsafe
-        {
-            fixed (byte* bpi = &inputBufferSpan.GetPinnableReference())
-            fixed (byte* bpo = &outputBufferSpan.GetPinnableReference())
-            {
-                var pInputBufferSpan = (IntPtr)bpi;
-                var pOutputBufferSpan = (IntPtr)bpo;
+        var result = 0;
 
-                var r = OodleLib.OodleLZ_Decompress(pInputBufferSpan,
-                    pOutputBufferSpan,
-                    inputBufferSpan.Length,
-                    outputBufferSpan.Length
-                );
-
-                return r;
-
-            }
-        }
-
-
-
-
-    }
-
-
-    /// <summary>
-    /// Wrapper around Oodle Kraken Decompress. Decompresses an inputBuffer to an outputBuffer of correct size
-    /// </summary>
-    /// <param name="inputBuffer"></param>
-    /// <param name="outputBuffer"></param>
-    /// <returns></returns>
-    /// <exception cref="NotImplementedException"></exception>
-    public static unsafe int Decompress(byte[] inputBuffer, byte[] outputBuffer)
-    {
         if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
         {
-#pragma warning disable 162
-
-            if (true)
-            {
-                var inputHandle = GCHandle.Alloc(inputBuffer, GCHandleType.Pinned);
-                var inputAddress = inputHandle.AddrOfPinnedObject();
-                var outputHandle = GCHandle.Alloc(outputBuffer, GCHandleType.Pinned);
-                var outputAddress = outputHandle.AddrOfPinnedObject();
-
-
-
-                var r = OodleLib.OodleLZ_Decompress(inputAddress,
-                    outputAddress,
-                    inputBuffer.Length,
-                    outputBuffer.Length
-                    );
-
-                inputHandle.Free();
-                outputHandle.Free();
-
-                return r;
-            }
-
-            return OodleNative.OodleLZ_Decompress(
-                inputBuffer,
-                inputBuffer.Length,
-                outputBuffer,
-                outputBuffer.Length,
-                OodleNative.OodleLZ_FuzzSafe.No, OodleNative.OodleLZ_CheckCRC.No,
-                OodleNative.OodleLZ_Verbosity.None,
-                0,
-                0,
-                0,
-                0,
-                0,
-                0,
-                OodleNative.OodleLZ_Decode.Unthreaded);
-#pragma warning restore 162
-
+#if USE_LIB
+            result = OodleLib.OodleLZ_Decompress(inputBufferSpan.ToArray(), outputBufferSpan.ToArray());
+#else
+            var compressedData = inputBufferSpan.ToArray();
+            var rawBuf = outputBufferSpan.ToArray();
+            result = OodleLZNative.Decompress(compressedData, compressedData.Length, rawBuf, rawBuf.Length, OodleLZNative.FuzzSafe.No);
+#endif
         }
         else if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
         {
-            return KrakenNative.Decompress(inputBuffer, outputBuffer);
+            throw new NotImplementedException();
+        }
+        else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
+        {
+            throw new NotImplementedException();
         }
         else
         {
             throw new NotImplementedException();
         }
+
+        return result;
+
+        //unsafe
+        //{
+        //    fixed (byte* bpi = &inputBufferSpan.GetPinnableReference())
+        //    fixed (byte* bpo = &outputBufferSpan.GetPinnableReference())
+        //    {
+        //        var pInputBufferSpan = (IntPtr)bpi;
+        //        var pOutputBufferSpan = (IntPtr)bpo;
+
+        //        var r = OodleLib.OodleLZ_Decompress(pInputBufferSpan,
+        //            pOutputBufferSpan,
+        //            inputBufferSpan.Length,
+        //            outputBufferSpan.Length
+        //        );
+
+        //        return r;
+
+        //    }
+        //}
+    }
+
+    public static unsafe int Decompress(byte[] inputBuffer, byte[] outputBuffer)
+    {
+        var result = 0;
+
+        if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+        {
+#if USE_LIB
+            result = OodleLib.OodleLZ_Decompress(inputBuffer, outputBuffer);
+#else
+            
+#endif
+        }
+        else if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
+        {
+            throw new NotImplementedException();
+        }
+        else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
+        {
+            throw new NotImplementedException();
+        }
+        else
+        {
+            throw new NotImplementedException();
+        }
+
+        return result;
     }
 
     /// <summary>

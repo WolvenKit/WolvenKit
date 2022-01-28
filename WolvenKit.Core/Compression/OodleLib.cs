@@ -1,36 +1,11 @@
 using System;
 using System.Runtime.InteropServices;
+using static OodleLZNative;
 
 namespace WolvenKit.Core.Compression
 {
-
-
     public static class OodleLib
     {
-        [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-        private delegate int DecompressDelegate(IntPtr buffer, long bufferSize, IntPtr outputBuffer, long outputBufferSize,
-            OodleNative.OodleLZ_FuzzSafe fuzzSafetyFlag,
-            OodleNative.OodleLZ_CheckCRC crcCheckFlag,
-            OodleNative.OodleLZ_Verbosity logVerbosityFlag,
-            uint d, uint e, uint f, uint g, uint h, uint i, OodleNative.OodleLZ_Decode threadModule);
-
-        [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-        private delegate long GetCompressedBufferSizeNeededDelegate(long size);
-
-        [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-        private delegate long CompressDelegate(
-            int algorithm,
-            IntPtr inputBuffer,
-            long inputSize,
-            IntPtr outputBuffer,
-            int level,
-            IntPtr a6,
-            IntPtr a7,
-            IntPtr a8,
-            IntPtr a9,
-            long a10);
-
-
         private static IntPtr s_pDll = IntPtr.Zero;
 
         private static IntPtr s_pOodleLzCompress = IntPtr.Zero;
@@ -82,45 +57,59 @@ namespace WolvenKit.Core.Compression
 
         public static bool Free() => NativeMethods.FreeLibrary(s_pDll);
 
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)]
+        private delegate int DecompressDelegate(
+            byte[] compBuf,
+            long compBufSize,
+            byte[] rawBuf,
+            long rawLen,
+            FuzzSafe fuzzSafe = FuzzSafe.Yes,
+            CheckCRC checkCRC = CheckCRC.No,
+            Verbosity verbosity = Verbosity.None,
+            IntPtr decBufBase = new(),
+            long decBufSize = 0,
+            IntPtr fpCallback = new(),
+            IntPtr callbackUserData = new(),
+            IntPtr decoderMemory = new(),
+            long decoderMemorySize = 0,
+            ThreadPhase threadModule = ThreadPhase.Unthreaded);
+
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)]
+        private delegate long GetCompressedBufferSizeNeededDelegate(long size);
+
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)]
+        private delegate int CompressDelegate(
+            Compressor compressor,
+            byte[] rawBuf,
+            long rawLen,
+            byte[] compBuf,
+            CompressionLevel level,
+            IntPtr pOptions = new(),
+            IntPtr dictionaryBase = new(),
+            IntPtr lrm = new(),
+            IntPtr scratchMem = new(),
+            long scratchSize = 0);
+
         public static int OodleLZ_Decompress(
-            IntPtr inputBuffer,
-            IntPtr outputBuffer,
-            long inputBufferSize,
-            long outputBufferSize) =>
+            byte[] inputBuffer,
+            byte[] outputBuffer) =>
             s_decompress(
                 inputBuffer,
-                inputBufferSize,
+                inputBuffer.Length,
                 outputBuffer,
-                outputBufferSize,
-                OodleNative.OodleLZ_FuzzSafe.No,
-                OodleNative.OodleLZ_CheckCRC.No,
-                OodleNative.OodleLZ_Verbosity.None,
-                0,
-                0,
-                0,
-                0,
-                0,
-                0,
-                OodleNative.OodleLZ_Decode.Unthreaded);
+                outputBuffer.Length);
 
-        public static long OodleLZ_Compress(
-            IntPtr inputAddress,
-            IntPtr outputAddress,
-            int inputCount,
-            OodleNative.OodleLZ_Compressor algo = OodleNative.OodleLZ_Compressor.Kraken,
-            OodleNative.OodleLZ_Compression level = OodleNative.OodleLZ_Compression.Normal) =>
+        public static int OodleLZ_Compress(
+            byte[] inputBuffer,
+            byte[] outputBuffer,
+            Compressor compressor = Compressor.Kraken,
+            CompressionLevel level = CompressionLevel.Normal) =>
             s_compress(
-                (int)algo,
-                inputAddress,
-                inputCount,
-                outputAddress,
-                (int)level,
-                IntPtr.Zero,
-                IntPtr.Zero,
-                IntPtr.Zero,
-                IntPtr.Zero,
-                0
-            );
+                compressor,
+                inputBuffer,
+                inputBuffer.Length,
+                outputBuffer,
+                level);
 
 
     }

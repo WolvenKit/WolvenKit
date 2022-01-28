@@ -48,11 +48,9 @@ namespace WolvenKit.Common.RED4.Archive
             IEnumerable<byte> outBuffer = new List<byte>();
             var r = Oodle.Compress(
                 inbuffer,
-                inbuffer.Length,
                 ref outBuffer,
-                OodleNative.OodleLZ_Compressor.Kraken,
-                OodleNative.OodleLZ_Compression.Normal,
-                false);
+                false,
+                OodleLZNative.CompressionLevel.Normal);
 
             bw.Write(inbuffer.Length);      //size
             bw.Write(outBuffer.Count());    //zsize

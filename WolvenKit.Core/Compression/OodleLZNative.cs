@@ -1,7 +1,10 @@
+//using System;
+//using System.Runtime.InteropServices;
+
+//namespace WolvenKit.Core.Compression;
+
 using System;
 using System.Runtime.InteropServices;
-
-namespace WolvenKit.Core.Compression;
 
 public static class OodleLZNative
 {

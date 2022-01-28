@@ -32,10 +32,7 @@ namespace WolvenKit.Modkit.RED4
                 IEnumerable<byte> outBuffer = new List<byte>();
                 var r = Oodle.Compress(
                     inbuffer,
-                    inbuffer.Length,
-                    ref outBuffer,
-                    OodleNative.OodleLZ_Compressor.Kraken,
-                    OodleNative.OodleLZ_Compression.Normal);
+                    ref outBuffer);
 
                 var b = outBuffer.ToArray();
 
