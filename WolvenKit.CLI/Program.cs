@@ -19,16 +19,19 @@ namespace WolvenKit.CLI
         public static void Main(string[] args)
         {
             // try get oodle dll from game
-            if ((RuntimeInformation.IsOSPlatform(OSPlatform.Windows)) && !TryCopyOodleLib())
+            if(RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
             {
-                Console.WriteLine("Could not automatically find oo2ext_7_win64.dll. " +
-                           "Please manually copy and paste the DLL found in <gamedir>\\Cyberpunk 2077\\bin\\x64\\oo2ext_7_win64.dll into this folder: " +
-                           $"{AppDomain.CurrentDomain.BaseDirectory}.");
-                return;
-            }
+                if (!TryCopyOodleLib())
+                {
+                    Console.WriteLine("Could not automatically find oo2ext_7_win64.dll. " +
+                               "Please manually copy and paste the DLL found in <gamedir>\\Cyberpunk 2077\\bin\\x64\\oo2ext_7_win64.dll into this folder: " +
+                               $"{AppDomain.CurrentDomain.BaseDirectory}.");
+                    return;
+                }
 
-            var oodlePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "oo2ext_7_win64.dll");
-            OodleLib.Load(oodlePath);
+                var oodlePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "oo2ext_7_win64.dll");
+                OodleLib.Load(oodlePath);
+            }
 
 
             var rootCommand = new RootCommand
