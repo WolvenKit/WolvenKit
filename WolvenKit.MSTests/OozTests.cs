@@ -97,37 +97,45 @@ namespace WolvenKit.MSTests
         }
 
         [TestMethod]
-        [DataRow(OodleLZNative.CompressionLevel.SuperFast)]
-        [DataRow(OodleLZNative.CompressionLevel.VeryFast)]
-        [DataRow(OodleLZNative.CompressionLevel.Fast)]
-        [DataRow(OodleLZNative.CompressionLevel.Normal)]
-        [DataRow(OodleLZNative.CompressionLevel.Optimal1)]
-        [DataRow(OodleLZNative.CompressionLevel.Optimal2)]
-        public void Kraken_Compress(OodleLZNative.CompressionLevel level)
+        [DataRow(1)]
+        [DataRow(2)]
+        [DataRow(3)]
+        [DataRow(4)]
+        [DataRow(5)]
+        [DataRow(6)]
+        public void Kraken_Compress(int level)
         {
             var path = Path.GetFullPath("Resources/oodle.txt");
             var inbuffer = File.ReadAllBytes(path);
+            var compressedBufferSizeNeeded = Oodle.GetCompressedBufferSizeNeeded(inbuffer.Length);
             var outdir = Path.Combine(Environment.CurrentDirectory, "ooz");
             Directory.CreateDirectory(outdir);
 
             // oodle
-            IEnumerable<byte> outBuffer1 = new List<byte>();
-            
-                var r = Oodle.Compress(inbuffer,ref outBuffer1, false, level);
-                var outpath1 = Path.Combine(outdir, $"oodle_{(int)level}.kark");
-                var final1 = outBuffer1.ToArray();
-                File.WriteAllBytes(outpath1, final1);
-            
+            IEnumerable<byte> outBuffer = new List<byte>();
+            var r = Oodle.Compress(inbuffer,ref outBuffer, false, (OodleLZNative.CompressionLevel)level);
+            var outpath = Path.Combine(outdir, $"{(int)level}_oodle.kark");
+            var final = outBuffer.ToArray();
+            File.WriteAllBytes(outpath, final);
+
+            //// oodle native
+            //var outBuffer1 = new byte[compressedBufferSizeNeeded];
+            //var r1 = OodleLZNative.Compress(OodleLZNative.Compressor.Kraken, inbuffer, inbuffer.Length, outBuffer1, (OodleLZNative.CompressionLevel)level);
+            //var outpath1 = Path.Combine(outdir, $"{(int)level}_noodle.kark");
+            //var final1 = outBuffer.ToArray();
+            //File.WriteAllBytes(outpath1, final1);
 
             // kraken
-            var outBuffer2 = new byte[inbuffer.Length + 65536];
+            var outBuffer2 = new byte[compressedBufferSizeNeeded];
+            //var outBuffer2 = new byte[inbuffer.Length + 65536];
+            var r2 = KrakenLib.Compress(inbuffer, outBuffer2, (int)level);
+            var outpath2 = Path.Combine(outdir, $"{(int)level}_kraken.kark");
+            var final2 = outBuffer2.Take(r2).ToArray();
+            File.WriteAllBytes(outpath2, final2);
             
-                var r2 = KrakenLib.Compress(inbuffer, outBuffer2, (int)level);
-                var outpath2 = Path.Combine(outdir, $"kraken_{(int)level}.kark");
-                var final2 = outBuffer2.Take(r2).ToArray();
-                File.WriteAllBytes(outpath2, final2);
-            
-            Assert.IsTrue(Enumerable.SequenceEqual(final1, final2));
+            //Assert.IsTrue(Enumerable.SequenceEqual(final, final1));
+            //Assert.IsTrue(Enumerable.SequenceEqual(final1, final2));
+            Assert.IsTrue(Enumerable.SequenceEqual(final, final2));
         }
     }
 }

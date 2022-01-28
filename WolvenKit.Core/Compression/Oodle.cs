@@ -1,4 +1,4 @@
-#define USE_LIB
+//#define USE_NATIVE
 
 using System;
 using System.Collections.Generic;
@@ -26,7 +26,7 @@ public static class Oodle
     {
         if (rawBuf.Length > 256)
         {
-#if USE_LIB
+#if !USE_NATIVE
             var compressedBufferSizeNeeded = GetCompressedBufferSizeNeeded(rawBuf.Length);
 #else
             var compressedBufferSizeNeeded = OodleLZNative.GetCompressedBufferSizeNeeded(rawBuf.Length);
@@ -34,7 +34,7 @@ public static class Oodle
 
             var compressedBuffer = new byte[compressedBufferSizeNeeded];
 
-#if USE_LIB
+#if !USE_NATIVE
             var compressedSize = OodleLib.OodleLZ_Compress(rawBuf, compressedBuffer, OodleLZNative.Compressor.Kraken, OodleLZNative.CompressionLevel.Optimal2);
 #else
             var compressedSize = OodleLZNative.Compress(OodleLZNative.Compressor.Kraken, rawBuf, rawBuf.Length, compressedBuffer, OodleLZNative.CompressionLevel.Optimal2);
@@ -70,7 +70,7 @@ public static class Oodle
             var compressedData = br.ReadBytes(compBuf.Length - 8);
             rawBuf = new byte[size];
 
-#if USE_LIB
+#if !USE_NATIVE
             OodleLib.OodleLZ_Decompress(compBuf, rawBuf);
 #else
             OodleLZNative.Decompress(compressedData, compressedData.Length, rawBuf, rawBuf.Length, OodleLZNative.FuzzSafe.No);
@@ -107,7 +107,7 @@ public static class Oodle
 
         if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
         {
-#if USE_LIB
+#if !USE_NATIVE
             result = OodleLib.OodleLZ_Compress(inputBuffer, compressedBuffer, compressor, level);
 #else
             result = OodleLZNative.Compress(OodleLZNative.Compressor.Kraken, inputBuffer, inputBuffer.Length, compressedBuffer, level);
@@ -161,7 +161,7 @@ public static class Oodle
 
         if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
         {
-#if USE_LIB
+#if !USE_NATIVE
             result = OodleLib.OodleLZ_Decompress(inputBufferSpan.ToArray(), outputBufferSpan.ToArray());
 #else
             var compressedData = inputBufferSpan.ToArray();
@@ -210,10 +210,10 @@ public static class Oodle
 
         if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
         {
-#if USE_LIB
+#if !USE_NATIVE
             result = OodleLib.OodleLZ_Decompress(inputBuffer, outputBuffer);
 #else
-            
+            result = OodleLZNative.Decompress(inputBuffer, inputBuffer.Length, outputBuffer, outputBuffer.Length, OodleLZNative.FuzzSafe.No);
 #endif
         }
         else if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))

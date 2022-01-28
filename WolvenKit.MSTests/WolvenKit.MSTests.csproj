@@ -28,7 +28,6 @@
     <None Remove="Resources\oodle.kark" />
     <None Remove="Resources\oodle.txt" />
     <None Remove="Resources\resourceUses_131.zip" />
-    <None Remove="Resources\unusedhashes.kark" />
     <Content Include="appsettings.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -39,9 +38,6 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Resources\resourceuses_131.zip">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Resources\unusedhashes.kark">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
