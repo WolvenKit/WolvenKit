@@ -83,12 +83,22 @@ namespace WolvenKit.RED4.Types
 
         public override bool Equals(object obj)
         {
-            if (obj is CWeakHandle<T> cObj)
+            if (ReferenceEquals(null, obj))
             {
-                return Equals(cObj);
+                return false;
             }
 
-            return false;
+            if (ReferenceEquals(this, obj))
+            {
+                return true;
+            }
+
+            if (obj.GetType() != this.GetType())
+            {
+                return false;
+            }
+
+            return Equals((CWeakHandle<T>)obj);
         }
 
         public override int GetHashCode() => EqualityComparer<T>.Default.GetHashCode((T)Chunk);

@@ -379,7 +379,7 @@ namespace WolvenKit.RED4.Archive.IO
         private CR2WExportInfo WriteChunk(CR2WWriter file, RedBaseClass chunkData)
         {
             var tmpQueue = file.ChunkQueue;
-            file.ChunkQueue = new LinkedList<RedBaseClass>();
+            file.ChunkQueue = new List<RedBaseClass>();
 
             var redTypeName = RedReflection.GetTypeRedName(chunkData.GetType());
             var typeIndex = file.GetStringIndex(redTypeName);
@@ -394,10 +394,7 @@ namespace WolvenKit.RED4.Archive.IO
 
             result.dataSize = (uint)(file.BaseStream.Position - result.dataOffset);
 
-            foreach (var redClass in tmpQueue)
-            {
-                file.ChunkQueue.AddLast(redClass);
-            }
+            file.ChunkQueue.AddRange(tmpQueue);
 
             return result;
         }
@@ -441,11 +438,11 @@ namespace WolvenKit.RED4.Archive.IO
 
             void InternalWriteChunks(RedBaseClass rootChunk)
             {
-                file.ChunkQueue.AddFirst(rootChunk);
+                file.ChunkQueue.Insert(0, rootChunk);
                 while (file.ChunkQueue.Count > 0)
                 {
-                    var chunk = file.ChunkQueue.First.Value;
-                    file.ChunkQueue.RemoveFirst();
+                    var chunk = file.ChunkQueue[0];
+                    file.ChunkQueue.RemoveAt(0);
 
                     if (!_chunkInfos.ContainsKey(chunk))
                     {

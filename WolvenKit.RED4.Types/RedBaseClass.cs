@@ -114,12 +114,12 @@ namespace WolvenKit.RED4.Types
                 {
                     if (propertyInfo.Flags.Equals(Flags.Empty))
                     {
-                        _properties[propertyInfo.RedName] = (IRedType)System.Activator.CreateInstance(propertyInfo.Type);
+                        SetDictValue(propertyInfo.RedName, (IRedType)System.Activator.CreateInstance(propertyInfo.Type));
                     }
                     else
                     {
                         var flags = propertyInfo.Flags;
-                        _properties[propertyInfo.RedName] = (IRedType)System.Activator.CreateInstance(propertyInfo.Type, flags.MoveNext() ? flags.Current : 0);
+                        SetDictValue(propertyInfo.RedName, (IRedType)System.Activator.CreateInstance(propertyInfo.Type, flags.MoveNext() ? flags.Current : 0));
                     }
                 }
             }
@@ -129,41 +129,45 @@ namespace WolvenKit.RED4.Types
         {
             if (!_properties.ContainsKey(redPropertyName))
             {
-                _properties[redPropertyName] = null;
+                return null;
             }
 
             return _properties[redPropertyName];
         }
 
-        internal void PrepareValue(string redPropertyName, ref IRedType value)
+        private void SetDictValue(string key, IRedType value)
         {
             if (value == null)
             {
-                return;
+                _properties.Remove(key);
             }
-
-            if (value.GetType().IsGenericType)
+            else
             {
-                if (value.GetType().GetGenericTypeDefinition() == typeof(CArrayFixedSize<>))
+                if (value.GetType().IsGenericType)
                 {
-                    var propertyInfo = RedReflection.GetPropertyByRedName(GetType(), redPropertyName);
-                    var flags = propertyInfo.Flags;
-                    var size = flags.MoveNext() ? flags.Current : 0;
-
-                    if (((IRedArray)value).Count > size)
+                    if (value.GetType().GetGenericTypeDefinition() == typeof(CArrayFixedSize<>))
                     {
-                        throw new ArgumentException();
+                        var propertyInfo = RedReflection.GetPropertyByRedName(GetType(), key);
+                        var flags = propertyInfo.Flags;
+                        var size = flags.MoveNext() ? flags.Current : 0;
+
+                        if (((IRedArray)value).Count > size)
+                        {
+                            throw new ArgumentException();
+                        }
+                    }
+
+                    if (value.GetType().GetGenericTypeDefinition() == typeof(CStatic<>))
+                    {
+                        var propertyInfo = RedReflection.GetPropertyByRedName(GetType(), key);
+                        var flags = propertyInfo.Flags;
+                        var maxSize = flags.MoveNext() ? flags.Current : 0;
+
+                        ((IRedArray)value).MaxSize = maxSize;
                     }
                 }
 
-                if (value.GetType().GetGenericTypeDefinition() == typeof(CStatic<>))
-                {
-                    var propertyInfo = RedReflection.GetPropertyByRedName(GetType(), redPropertyName);
-                    var flags = propertyInfo.Flags;
-                    var maxSize = flags.MoveNext() ? flags.Current : 0;
-
-                    ((IRedArray)value).MaxSize = maxSize;
-                }
+                _properties[key] = value;
             }
         }
 
@@ -177,18 +181,22 @@ namespace WolvenKit.RED4.Types
 
             if (!Equals(oldValue, value))
             {
-                RemoveEventHandler(redPropertyName);
+                if (oldValue != null)
+                {
+                    RemoveEventHandler(redPropertyName);
+                }
 
-                PrepareValue(redPropertyName, ref value);
-
-                _properties[redPropertyName] = value;
+                SetDictValue(redPropertyName, value);
                 if (!native)
                 {
                     _dynamicProperties.Add(redPropertyName);
                 }
 
-                AddEventHandler(redPropertyName);
-
+                if (value != null)
+                {
+                    AddEventHandler(redPropertyName);
+                }
+                
                 OnObjectChanged(redPropertyName, oldValue, value);
             }
         }
@@ -199,19 +207,20 @@ namespace WolvenKit.RED4.Types
             if (_properties.ContainsKey(redPropertyName))
             {
                 oldValue = _properties[redPropertyName];
+
+                RemoveEventHandler(redPropertyName);
             }
 
-            RemoveEventHandler(redPropertyName);
-
-            PrepareValue(redPropertyName, ref value);
-
-            _properties[redPropertyName] = value;
+            SetDictValue(redPropertyName, value);
             if (!native)
             {
                 _dynamicProperties.Add(redPropertyName);
             }
 
-            AddEventHandler(redPropertyName);
+            if (value != null)
+            {
+                AddEventHandler(redPropertyName);
+            }
 
             OnObjectChanged(redPropertyName, oldValue, value);
         }
@@ -448,12 +457,22 @@ namespace WolvenKit.RED4.Types
 
         public override bool Equals(object obj)
         {
-            if (obj is RedBaseClass cObj)
+            if (ReferenceEquals(null, obj))
             {
-                return Equals(cObj);
+                return false;
             }
 
-            return false;
+            if (ReferenceEquals(this, obj))
+            {
+                return true;
+            }
+
+            if (obj.GetType() != this.GetType())
+            {
+                return false;
+            }
+
+            return Equals((RedBaseClass)obj);
         }
 
         public bool Equals(RedBaseClass other)
@@ -472,17 +491,14 @@ namespace WolvenKit.RED4.Types
             {
                 return false;
             }
-            if (_properties.Keys.Except(other._properties.Keys).Any())
-            {
-                return false;
-            }
-            if (other._properties.Keys.Except(_properties.Keys).Any())
-            {
-                return false;
-            }
 
             foreach (var property in _properties)
             {
+                if (!other._properties.ContainsKey(property.Key))
+                {
+                    return false;
+                }
+
                 if (!Equals(property.Value, other._properties[property.Key]))
                 {
                     return false;

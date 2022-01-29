@@ -11,7 +11,7 @@ namespace WolvenKit.RED4.Types
     [REDType(IsValueType = true)]
     public class CResourceAsyncReference<T> : IRedResourceAsyncReference<T>, IEquatable<CResourceAsyncReference<T>> where T : IRedType
     {
-        public CName DepotPath { get; set; }
+        public CName DepotPath { get; set; } = new();
         public InternalEnums.EImportFlags Flags { get; set; }
 
 
@@ -42,12 +42,22 @@ namespace WolvenKit.RED4.Types
 
         public override bool Equals(object obj)
         {
-            if (obj is CResourceAsyncReference<T> cObj)
+            if (ReferenceEquals(null, obj))
             {
-                return Equals(cObj);
+                return false;
             }
 
-            return false;
+            if (ReferenceEquals(this, obj))
+            {
+                return true;
+            }
+
+            if (obj.GetType() != this.GetType())
+            {
+                return false;
+            }
+
+            return Equals((CResourceAsyncReference<T>)obj);
         }
 
         public override int GetHashCode() => HashCode.Combine(DepotPath, (int)Flags);

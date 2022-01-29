@@ -40,12 +40,22 @@ public sealed class CKeyValuePair : IRedType, IEquatable<CKeyValuePair>
 
     public override bool Equals(object obj)
     {
-        if (obj is CKeyValuePair cObj)
+        if (ReferenceEquals(null, obj))
         {
-            return Equals(cObj);
+            return false;
         }
 
-        return false;
+        if (ReferenceEquals(this, obj))
+        {
+            return true;
+        }
+
+        if (obj.GetType() != this.GetType())
+        {
+            return false;
+        }
+
+        return Equals((CKeyValuePair)obj);
     }
 
     public override int GetHashCode() => HashCode.Combine(Key, Value);

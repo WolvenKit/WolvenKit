@@ -103,12 +103,22 @@ namespace WolvenKit.RED4
 
         public override bool Equals(object obj)
         {
-            if (obj is RedBuffer cObj)
+            if (ReferenceEquals(null, obj))
             {
-                return Equals(cObj);
+                return false;
             }
 
-            return false;
+            if (ReferenceEquals(this, obj))
+            {
+                return true;
+            }
+
+            if (obj.GetType() != this.GetType())
+            {
+                return false;
+            }
+
+            return Equals((RedBuffer)obj);
         }
 
         public override int GetHashCode() => HashCode.Combine(_bytes, Flags);

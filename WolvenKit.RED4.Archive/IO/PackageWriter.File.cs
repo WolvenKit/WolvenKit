@@ -268,13 +268,13 @@ namespace WolvenKit.RED4.Archive.IO
 
             foreach (var chunk in _file.Chunks)
             {
-                file.ChunkQueue.AddLast(chunk);
+                file.ChunkQueue.Add(chunk);
             }
 
             while (file.ChunkQueue.Count > 0)
             {
-                var chunk = file.ChunkQueue.First.Value;
-                file.ChunkQueue.RemoveFirst();
+                var chunk = file.ChunkQueue[0];
+                file.ChunkQueue.RemoveAt(0);
 
                 if (!_chunkInfos.ContainsKey(chunk))
                 {

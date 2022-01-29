@@ -61,15 +61,33 @@ namespace WolvenKit.RED4.Types
 
         public override bool Equals(object obj)
         {
-            if (obj is CName cObj)
+            if (ReferenceEquals(null, obj))
             {
-                return Equals(cObj);
+                return false;
             }
 
-            return false;
+            if (ReferenceEquals(this, obj))
+            {
+                return true;
+            }
+
+            if (obj.GetType() != this.GetType())
+            {
+                return false;
+            }
+
+            return Equals((CName)obj);
         }
 
-        public bool Equals(CName other) => Equals(GetRedHash(), other.GetRedHash());
+        public bool Equals(CName other)
+        {
+            if (!Equals(GetRedHash(), other.GetRedHash()))
+            {
+                return false;
+            }
+
+            return true;
+        }
 
         public string GetValue() => (string)this;
 
