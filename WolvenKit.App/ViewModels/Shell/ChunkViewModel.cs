@@ -1129,7 +1129,7 @@ namespace WolvenKit.ViewModels.Shell
                 if ((myStream = saveFileDialog.OpenFile()) != null)
                 {
                     var dto = new RedTypeDto(ResolvedData);
-                    var json = JsonSerializer.Serialize(dto, RedJsonOptions.Get());
+                    var json = RedJsonSerializer.Serialize(dto);
 
                     if (string.IsNullOrEmpty(json))
                     {

@@ -39,7 +39,7 @@ namespace WolvenKit.Modkit.RED4
             cr2w.MetaData.FileName = infile;
 
             var dto = new RedFileDto(cr2w);
-            var json = JsonSerializer.Serialize(dto, RedJsonOptions.Get());
+            var json = RedJsonSerializer.Serialize(dto);
 
             if (string.IsNullOrEmpty(json))
             {
@@ -102,7 +102,7 @@ namespace WolvenKit.Modkit.RED4
         /// <exception cref="InvalidParsingException"></exception>
         public static CR2WFile ConvertFromJson(string json)
         {
-            var dto = JsonSerializer.Deserialize<RedFileDto>(json, RedJsonOptions.Get());
+            var dto = RedJsonSerializer.Deserialize<RedFileDto>(json);
             return (CR2WFile)dto.Data;
         }
 

@@ -379,7 +379,7 @@ namespace WolvenKit.Modkit.RED4
                                     var hp = _wolvenkitFileService.ReadRed4File(ms);
                                     //hp.FileName = primaryDependencies[i];
                                     var dto = new RedFileDto(hp);
-                                    var doc = JsonSerializer.Serialize(dto, RedJsonOptions.Get());
+                                    var doc = RedJsonSerializer.Serialize(dto);
                                     File.WriteAllText(path, doc);
                                 }
                                 break;
@@ -420,7 +420,7 @@ namespace WolvenKit.Modkit.RED4
                                     }
                                     //mls.FileName = primaryDependencies[i];
                                     var dto = new RedFileDto(mls);
-                                    var doc = JsonSerializer.Serialize(dto, RedJsonOptions.Get());
+                                    var doc = RedJsonSerializer.Serialize(dto);
                                     File.WriteAllText(path, doc);
                                 }
 
@@ -470,7 +470,7 @@ namespace WolvenKit.Modkit.RED4
                                                         }
                                                         //mlt.FileName = mls.Imports[e].DepotPath;
                                                         var dto1 = new RedFileDto(mlt);
-                                                        var doc1 = JsonSerializer.Serialize(dto1, RedJsonOptions.Get());
+                                                        var doc1 = RedJsonSerializer.Serialize(dto1);
                                                         File.WriteAllText(path1, doc1);
                                                     }
 
@@ -543,7 +543,7 @@ namespace WolvenKit.Modkit.RED4
             matData.TexturesList = TexturesList;
             matData.MaterialTemplates = matTemplates;
 
-            string str = JsonSerializer.Serialize(matData, RedJsonOptions.Get());
+            string str = RedJsonSerializer.Serialize(matData);
 
             File.WriteAllText(Path.ChangeExtension(outfile.FullName,".Material.json"), str);
 
@@ -844,7 +844,7 @@ namespace WolvenKit.Modkit.RED4
                 return false;
             }
 
-            var matData = JsonSerializer.Deserialize<MatData>(_matData, RedJsonOptions.Get());
+            var matData = RedJsonSerializer.Deserialize<MatData>(_matData);
 
             var materialbuffer = new MemoryStream();
             List<UInt32> offsets = new List<UInt32>();

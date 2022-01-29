@@ -481,7 +481,7 @@ namespace WolvenKit.MSTests
                     }
 
                     var dto = new RedFileDto(originalFile);
-                    var json = JsonSerializer.Serialize(dto, RedJsonOptions.Get());
+                    var json = RedJsonSerializer.Serialize(dto);
                     if (string.IsNullOrEmpty(json))
                     {
                         throw new SerializationException();
@@ -491,7 +491,7 @@ namespace WolvenKit.MSTests
 
                     #region convert back from json
 
-                    var newdto = JsonSerializer.Deserialize<RedFileDto>(json, RedJsonOptions.Get());
+                    var newdto = RedJsonSerializer.Deserialize<RedFileDto>(json);
                     if (newdto == null)
                     {
                         throw new SerializationException();

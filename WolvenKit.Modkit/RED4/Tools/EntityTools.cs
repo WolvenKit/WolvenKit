@@ -42,7 +42,7 @@ namespace WolvenKit.Modkit.RED4
                 CompiledPackage package = new CompiledPackage(_hashService);
                 packageStream.Seek(0, SeekOrigin.Begin);
                 package.Read(new BinaryReader(packageStream));
-                string data = JsonSerializer.Serialize(new RedFileDto(cr2w), RedJsonOptions.Get());
+                string data = RedJsonSerializer.Serialize(new RedFileDto(cr2w));
                 File.WriteAllText(outfile, data);
                 return true;
             }
@@ -68,7 +68,7 @@ namespace WolvenKit.Modkit.RED4
             }
             if (datas.Count > 1)
             {
-                var data = JsonSerializer.Serialize(datas, RedJsonOptions.Get());
+                var data = RedJsonSerializer.Serialize(datas);
                 File.WriteAllText(outfile, data);
                 return true;
             }
