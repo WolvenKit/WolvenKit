@@ -172,7 +172,7 @@ namespace WolvenKit.Common.Services
 
             var inbuffer = stream.ToByteArray(true);
 
-            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows)
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
             {
                 KrakenNative.Decompress(inbuffer, outputbuffer);
             }
