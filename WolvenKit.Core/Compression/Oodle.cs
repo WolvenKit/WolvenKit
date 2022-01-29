@@ -223,7 +223,7 @@ public static class Oodle
         }
         else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
         {
-            throw new NotImplementedException();
+            result = OozNative.Kraken_Decompress(inputBuffer, inputBuffer.Length, outputBuffer, outputBuffer.Length);
         }
         else
         {
