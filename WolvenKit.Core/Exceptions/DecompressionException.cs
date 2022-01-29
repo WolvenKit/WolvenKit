@@ -1,6 +1,6 @@
 using System;
 
-namespace WolvenKit.Core.Compression;
+namespace WolvenKit.Core.Exceptions;
 
 public class DecompressionException : Exception
 {

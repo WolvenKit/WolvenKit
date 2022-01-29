@@ -30,9 +30,7 @@ namespace WolvenKit.Modkit.RED4
             else
             {
                 IEnumerable<byte> outBuffer = new List<byte>();
-                var r = Oodle.Compress(
-                    inbuffer,
-                    ref outBuffer);
+                var r = Oodle.Compress(inbuffer, ref outBuffer, true);
 
                 var b = outBuffer.ToArray();
 

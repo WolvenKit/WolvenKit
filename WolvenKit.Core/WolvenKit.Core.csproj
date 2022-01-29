@@ -23,6 +23,16 @@
 
   </PropertyGroup>
 
+    <PropertyGroup Condition="$([MSBuild]::IsOSPlatform('Windows'))">
+        <DefineConstants>_WINDOWS</DefineConstants>
+    </PropertyGroup>
+    <PropertyGroup Condition="$([MSBuild]::IsOSPlatform('Linux'))">
+        <DefineConstants>_LINUX</DefineConstants>
+    </PropertyGroup>
+    <PropertyGroup Condition="$([MSBuild]::IsOSPlatform('OSX'))">
+        <DefineConstants>_OSX</DefineConstants>
+    </PropertyGroup>
+    
   <ItemGroup>
     <None Remove="lib\kraken.dll" />
   </ItemGroup>
@@ -32,6 +42,10 @@
       <PackagePath>lib\net5.0</PackagePath>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <Pack>true</Pack>
+    </Content>
+    <None Remove="lib\libkraken.dylib" />
+    <Content Include="lib\libkraken.dylib">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
 

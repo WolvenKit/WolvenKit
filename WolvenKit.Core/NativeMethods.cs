@@ -1,7 +1,7 @@
 using System;
 using System.Runtime.InteropServices;
 
-namespace WolvenKit.Core.Compression;
+namespace WolvenKit.Core;
 
 //https://stackoverflow.com/a/23623244
 internal static class NativeMethods

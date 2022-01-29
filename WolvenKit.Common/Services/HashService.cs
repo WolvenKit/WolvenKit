@@ -7,6 +7,7 @@ using WolvenKit.Common.Extensions;
 using WolvenKit.Common.FNV1A;
 using WolvenKit.Common.Model;
 using WolvenKit.Core.Compression;
+using WolvenKit.Core.Exceptions;
 using WolvenKit.Core.Extensions;
 using WolvenKit.Interfaces.Extensions;
 using WolvenKit.RED4.Archive;
@@ -171,7 +172,7 @@ namespace WolvenKit.Common.Services
 
             var inbuffer = stream.ToByteArray(true);
 
-            KrakenNative.Decompress(inbuffer, outputbuffer);
+            Oodle.Decompress(inbuffer, outputbuffer);
 
             hashDictionary.EnsureCapacity(1_100_000);
 
@@ -221,7 +222,7 @@ namespace WolvenKit.Common.Services
                 {
                     continue;
                 }
-                
+
                 if (!hashDict.ContainsKey(hash))
                 {
                     hashDict.Add(hash, new SAsciiString(line));

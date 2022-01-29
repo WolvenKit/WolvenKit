@@ -12,6 +12,7 @@ using WolvenKit.Common.FNV1A;
 using WolvenKit.Common.Model;
 using WolvenKit.Core.Compression;
 using WolvenKit.Core;
+using WolvenKit.Core.Exceptions;
 using WolvenKit.Interfaces.Extensions;
 using WolvenKit.RED4.Archive;
 using WolvenKit.Core.Extensions;
@@ -42,7 +43,7 @@ namespace WolvenKit.MSTests
             {
                 assembly = mlc.LoadFromAssemblyPath("WolvenKit.Common.dll");
                 using var stream = assembly.GetManifestResourceStream(s_used);
-            
+
                 // read KARK header
                 var oodleCompression = stream.ReadStruct<uint>();
                 if (oodleCompression != Oodle.KARK)
@@ -55,8 +56,8 @@ namespace WolvenKit.MSTests
                 // read the rest of the stream
                 var outputbuffer = new byte[outputsize];
                 var inbuffer = stream.ToByteArray(true);
-                KrakenNative.Decompress(inbuffer, outputbuffer);
-            
+                Oodle.Decompress(inbuffer, outputbuffer);
+
 
                 using (var ms = new MemoryStream(outputbuffer))
                 using (var sr = new StreamReader(ms))
@@ -138,7 +139,7 @@ namespace WolvenKit.MSTests
                 // read the rest of the stream
                 var outputbuffer = new byte[outputsize];
                 var inbuffer = stream.ToByteArray(true);
-                KrakenNative.Decompress(inbuffer, outputbuffer);
+                Oodle.Decompress(inbuffer, outputbuffer);
 
 
                 using (var ms = new MemoryStream(outputbuffer))
@@ -179,7 +180,7 @@ namespace WolvenKit.MSTests
 
 
 
-            
+
 
         }
 
@@ -224,13 +225,13 @@ namespace WolvenKit.MSTests
                 // read the rest of the stream
                 var outputbuffer = new byte[outputsize];
                 var inbuffer = stream.ToByteArray(true);
-                KrakenNative.Decompress(inbuffer, outputbuffer);
+                Oodle.Decompress(inbuffer, outputbuffer);
 
 
                 using (var ms = new MemoryStream(outputbuffer))
                 using (var sr = new StreamReader(ms))
                 {
-                    
+
                     string line;
                     while ((line = sr.ReadLine()) != null)
                     {
@@ -262,7 +263,7 @@ namespace WolvenKit.MSTests
                             hashDictionary[hash][i] = idx;
                         }
                     }
-                    
+
                 }
             }
 

@@ -161,9 +161,7 @@ namespace WolvenKit.MSTests
             var inbuffer = File.ReadAllBytes(path);
             IEnumerable<byte> outBuffer = new List<byte>();
 
-            var r = Oodle.Compress(
-                inbuffer,
-                ref outBuffer);
+            var r = Oodle.Compress(inbuffer, ref outBuffer, true);
 
             var filename = $"{Path.GetFileNameWithoutExtension(path)}.kark";
             File.WriteAllBytes(Path.Combine(resultDir, filename), outBuffer.ToArray());

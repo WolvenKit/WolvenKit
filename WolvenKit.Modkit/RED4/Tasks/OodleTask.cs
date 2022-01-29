@@ -55,9 +55,7 @@ namespace CP77Tools.Tasks
                 var inbuffer = File.ReadAllBytes(path);
                 IEnumerable<byte> outBuffer = new List<byte>();
 
-                var r = Oodle.Compress(
-                    inbuffer,
-                    ref outBuffer);
+                var r = Oodle.Compress(inbuffer, ref outBuffer, true);
 
                 File.WriteAllBytes(outpath, outBuffer.ToArray());
 

@@ -49,8 +49,7 @@ namespace WolvenKit.Common.RED4.Archive
             var r = Oodle.Compress(
                 inbuffer,
                 ref outBuffer,
-                false,
-                OodleLZNative.CompressionLevel.Normal);
+                false);
 
             bw.Write(inbuffer.Length);      //size
             bw.Write(outBuffer.Count());    //zsize

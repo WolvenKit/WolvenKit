@@ -3,8 +3,7 @@ using System.Runtime.InteropServices;
 
 namespace WolvenKit.Core.Compression;
 
-
-public static class KrakenLib
+internal static class KrakenLib
 {
     [UnmanagedFunctionPointer(CallingConvention.StdCall)]
     private delegate int DecompressDelegate(
@@ -29,9 +28,9 @@ public static class KrakenLib
     private static DecompressDelegate s_decompress;
     private static CompressDelegate s_compress;
 
-    public static bool Load(string oodlepath)
+    public static bool Load(string dllPath)
     {
-        s_pDll = NativeMethods.LoadLibrary(oodlepath);
+        s_pDll = NativeMethods.LoadLibrary(dllPath);
         if (s_pDll == IntPtr.Zero)
         {
             return false;

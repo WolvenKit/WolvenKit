@@ -1,10 +1,10 @@
 using System;
 using System.Runtime.InteropServices;
-using static OodleLZNative;
+using static WolvenKit.Core.Compression.Oodle;
 
 namespace WolvenKit.Core.Compression
 {
-    public static class OodleLib
+    internal static class OodleLib
     {
         private static IntPtr s_pDll = IntPtr.Zero;
 
@@ -63,23 +63,23 @@ namespace WolvenKit.Core.Compression
             long compBufSize,
             byte[] rawBuf,
             long rawLen,
-            FuzzSafe fuzzSafe = FuzzSafe.Yes,
-            CheckCRC checkCRC = CheckCRC.No,
-            Verbosity verbosity = Verbosity.None,
+            Oodle.FuzzSafe fuzzSafe = Oodle.FuzzSafe.Yes,
+            Oodle.CheckCRC checkCRC = Oodle.CheckCRC.No,
+            Oodle.Verbosity verbosity = Oodle.Verbosity.None,
             IntPtr decBufBase = new(),
             long decBufSize = 0,
             IntPtr fpCallback = new(),
             IntPtr callbackUserData = new(),
             IntPtr decoderMemory = new(),
             long decoderMemorySize = 0,
-            ThreadPhase threadModule = ThreadPhase.Unthreaded);
+            Oodle.ThreadPhase threadModule = Oodle.ThreadPhase.Unthreaded);
 
         [UnmanagedFunctionPointer(CallingConvention.StdCall)]
         private delegate long GetCompressedBufferSizeNeededDelegate(long size);
 
         [UnmanagedFunctionPointer(CallingConvention.StdCall)]
         private delegate int CompressDelegate(
-            Compressor compressor,
+            Oodle.Compressor compressor,
             byte[] rawBuf,
             long rawLen,
             byte[] compBuf,
