@@ -13,10 +13,64 @@ public class RedFileDto
 
     }
 
-    public RedFileDto(CR2WFile cr2w)
+    public RedFileDto(CR2WFile cr2w, bool writeFlat = false)
     {
         Data = cr2w;
         Header.ArchiveFileName = cr2w.MetaData.FileName;
+
+        Header.DataType = DataTypes.CR2W;
+        if (writeFlat)
+        {
+            Header.DataType = DataTypes.CR2WFlat;
+        }
+    }
+
+    public List<RedBaseClass> GetChunkList()
+    {
+        var list = new List<RedBaseClass>();
+        var comp = ReferenceEqualityComparer.Instance;
+
+        foreach (var propTuple in Data.RootChunk.GetEnumerator())
+        {
+            if (propTuple.value is IRedBaseHandle handle)
+            {
+                var subCls = handle.GetValue();
+                if (!Contains(subCls))
+                {
+                    list.Add(subCls);
+                }
+            }
+        }
+
+        foreach (var embeddedFile in Data.EmbeddedFiles)
+        {
+            foreach (var propTuple in embeddedFile.Content.GetEnumerator())
+            {
+                if (propTuple.value is IRedBaseHandle handle)
+                {
+                    var subCls = handle.GetValue();
+                    if (!Contains(subCls))
+                    {
+                        list.Add(subCls);
+                    }
+                }
+            }
+        }
+
+        return list;
+
+        bool Contains(RedBaseClass cls)
+        {
+            foreach (var chunk in list)
+            {
+                if (comp.Equals(chunk, cls))
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
     }
 
     public JsonHeader Header { get; set; } = new();

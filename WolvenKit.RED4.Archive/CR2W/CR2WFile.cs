@@ -21,7 +21,7 @@ namespace WolvenKit.RED4.Archive.CR2W
 
 
         public CR2WFileInfo Info { get; internal set; }
-        public CR2WMetaData MetaData { get; } = new();
+        public CR2WMetaData MetaData { get; set; } = new();
 
 
         public IList<ICR2WProperty> Properties { get; }
@@ -38,7 +38,9 @@ namespace WolvenKit.RED4.Archive.CR2W
 
         #region Events
 
+#pragma warning disable CS0067
         public event ObjectChangedEventHandler ObjectChanged;
+#pragma warning restore CS0067
 
         public void AttachEventHandler()
         {
