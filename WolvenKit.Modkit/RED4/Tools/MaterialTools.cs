@@ -802,25 +802,13 @@ namespace WolvenKit.Modkit.RED4
             {
                 foreach (var kvp in mi.Values)
                 {
-                    object val = kvp.Value;
-                    if (val is CColor col)
-                    {
-                        val = new Dictionary<string, byte>
-                        {
-                            {nameof(col.Red), col.Red},
-                            {nameof(col.Green), col.Green},
-                            {nameof(col.Blue), col.Blue},
-                            {nameof(col.Alpha), col.Alpha},
-                        };
-                    }
-
                     if (rawMaterial.Data.ContainsKey(kvp.Key))
                     {
-                        rawMaterial.Data[kvp.Key] = val;
+                        rawMaterial.Data[kvp.Key] = GetMaterialParameter((CMaterialParameter)kvp.Value);
                     }
                     else
                     {
-                        rawMaterial.Data.Add(kvp.Key, val);
+                        rawMaterial.Data.Add(kvp.Key, GetMaterialParameter((CMaterialParameter)kvp.Value));
                     }
                 }
             }
@@ -868,7 +856,7 @@ namespace WolvenKit.Modkit.RED4
                     chunk.EnableMask = true ;
                     chunk.ResourceVersion = 4;
                     chunk.BaseMaterial = new CResourceReference<IMaterial>() {DepotPath = mat.BaseMaterial };
-                    //chunk.CMaterialInstanceData = new CArray<CVariantSizeNameType>();
+                    chunk.Values = new CArray<CKeyValuePair>();
 
                     CMaterialTemplate mt = null;
                     if (mts.ContainsKey(mat.MaterialTemplate))
@@ -900,9 +888,15 @@ namespace WolvenKit.Modkit.RED4
                             for (int k = 0; k < mt.Parameters[2].Count; k++)
                             {
                                 var refer = mt.Parameters[2][k].Chunk;
+                                var referCopy = (CMaterialParameter)refer.DeepCopy();
+
                                 if(refer.ParameterName == keys[j])
                                 {
-                                    SetMaterialParameter(refer, (JsonElement)matData.Materials[i].Data[keys[j]]);
+                                    SetMaterialParameter(referCopy, (JsonElement)matData.Materials[i].Data[keys[j]]);
+                                    if (!Equals(refer, referCopy))
+                                    {
+                                        chunk.Values.Add(new CKeyValuePair(referCopy.ParameterName, referCopy));
+                                    }
                                 }
                             }
                         }
