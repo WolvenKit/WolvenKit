@@ -202,6 +202,11 @@ namespace WolvenKit.ViewModels.Shell
                 return true;
             }
 
+            if (Data is DataBuffer db2 && db2.Data is CR2WList cl && cl.Files.Count > 0)
+            {
+                return true;
+            }
+
             if (Data is SerializationDeferredDataBuffer sddb && sddb.Data is Package04 pkg2 && pkg2.Chunks.Count > 0)
             {
                 return true;
@@ -518,7 +523,7 @@ namespace WolvenKit.ViewModels.Shell
                     {
                         foreach (var file in cl.Files)
                         {
-                            Properties.Add(new ChunkViewModel(file.RootChunk, this));
+                            Properties.Add(new ChunkViewModel(file.RootChunk, this, null, cl.Files.Count > 100));
                         }
                     }
                 }
@@ -825,6 +830,10 @@ namespace WolvenKit.ViewModels.Shell
             {
                 Descriptor = $"[{pkg.Chunks.Count}]";
             }
+            if (ResolvedData is IRedBufferPointer rbp2 && rbp2.GetValue().Data is CR2WList cl)
+            {
+                Descriptor = $"[{cl.Files.Count}]";
+            }
             if (ResolvedData is CKeyValuePair kvp)
             {
                 Descriptor = kvp.Key;
@@ -1084,11 +1093,32 @@ namespace WolvenKit.ViewModels.Shell
             }
         }
         public void AddChunkToDataBuffer(RedBaseClass instance, int index)
-        {
+        {//engine\materials\metal_base.remt
             if (Data is IRedBufferPointer db && db.GetValue().Data is Package04 pkg)
             {
                 //pkg.Chunks.Add(instance);
                 pkg.Chunks.Insert(index, instance);
+                //_properties.Add(new ChunkViewModel(instance, this));
+                var cvm = new ChunkViewModel(instance, this);
+                Properties.Insert(index, cvm);
+                foreach (var prop in Properties)
+                {
+                    prop.RaisePropertyChanged("Name");
+                }
+
+                this.RaisePropertyChanged("Data");
+                IsExpanded = true;
+                cvm.IsExpanded = true;
+                Tab.SelectedChunk = cvm;
+                Tab.File.SetIsDirty(true);
+            }
+            if (Data is IRedBufferPointer db2 && db2.GetValue().Data is CR2WList list)
+            {
+                //pkg.Chunks.Add(instance);
+                list.Files.Insert(index, new CR2WFile()
+                {
+                    RootChunk = instance
+                });
                 //_properties.Add(new ChunkViewModel(instance, this));
                 var cvm = new ChunkViewModel(instance, this);
                 Properties.Insert(index, cvm);
@@ -1133,6 +1163,18 @@ namespace WolvenKit.ViewModels.Shell
 
                 Tab.File.SetIsDirty(true);
             }
+            if (Parent.Data is IRedBufferPointer db2 && db2.GetValue().Data is CR2WList list)
+            {
+                Tab.SelectedChunk = Parent;
+                list.Files.RemoveAll(x => x.RootChunk == Data);
+                Parent.Properties.Remove(this);
+                foreach (var prop in Parent.Properties)
+                {
+                    prop.RaisePropertyChanged("Name");
+                }
+
+                Tab.File.SetIsDirty(true);
+            }
         }
 
         public ICommand DeleteAllCommand { get; private set; }
@@ -1150,6 +1192,14 @@ namespace WolvenKit.ViewModels.Shell
             if (ResolvedData is IRedBufferPointer db && db.GetValue().Data is Package04 pkg)
             {
                 pkg.Chunks.Clear();
+                Properties.Clear();
+                this.RaisePropertyChanged("Data");
+                IsDeleteReady = false;
+                Tab.File.SetIsDirty(true);
+            }
+            if (ResolvedData is IRedBufferPointer db2 && db2.GetValue().Data is CR2WList list)
+            {
+                list.Files.Clear();
                 Properties.Clear();
                 this.RaisePropertyChanged("Data");
                 IsDeleteReady = false;
