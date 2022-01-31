@@ -8,7 +8,7 @@ namespace WolvenKit.Functionality.WKitGlobal.Helpers
 
         public static DiscordRPC.DiscordRpcClient client;
         public static string DiscordAppID = "897813293480169532";
-        public static bool DiscordRPCEnabled = false;
+        public static bool DiscordRPCEnabled = true;
         public static bool DiscordRPCInitizialized = false;
 
         #endregion Fields
