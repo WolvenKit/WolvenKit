@@ -10,6 +10,16 @@
     <SatelliteResourceLanguages>en</SatelliteResourceLanguages>
   </PropertyGroup>
 
+    <PropertyGroup Condition="$([MSBuild]::IsOSPlatform('Windows'))">
+        <DefineConstants>_WINDOWS</DefineConstants>
+    </PropertyGroup>
+    <PropertyGroup Condition="$([MSBuild]::IsOSPlatform('Linux'))">
+        <DefineConstants>_LINUX</DefineConstants>
+    </PropertyGroup>
+    <PropertyGroup Condition="$([MSBuild]::IsOSPlatform('OSX'))">
+        <DefineConstants>_OSX</DefineConstants>
+    </PropertyGroup>
+    
   <ItemGroup>
       <PackageReference Include="Catel.Core" Version="5.12.22" />
       <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="6.0.0" />
@@ -25,6 +35,12 @@
 
   <ItemGroup>
     <None Remove="appsettings.json" />
+    <None Remove="Resources\1_oodle.kark" />
+    <None Remove="Resources\2_oodle.kark" />
+    <None Remove="Resources\3_oodle.kark" />
+    <None Remove="Resources\4_oodle.kark" />
+    <None Remove="Resources\5_oodle.kark" />
+    <None Remove="Resources\6_oodle.kark" />
     <None Remove="Resources\oodle.kark" />
     <None Remove="Resources\oodle.txt" />
     <None Remove="Resources\q204_columbarium_1080p.dds" />
@@ -32,7 +48,22 @@
     <Content Include="appsettings.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Resources\oodle.kark">
+    <Content Include="Resources\1_oodle.kark">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\2_oodle.kark">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\3_oodle.kark">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\4_oodle.kark">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\5_oodle.kark">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\6_oodle.kark">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Resources\oodle.txt">
@@ -53,5 +84,7 @@
     <ProjectReference Include="..\WolvenKit.RED4.Archive\WolvenKit.RED4.Archive.csproj" />
     <ProjectReference Include="..\WolvenKit.RED4.TweakDB\WolvenKit.RED4.TweakDB.csproj" />
   </ItemGroup>
+
+   
 
 </Project>

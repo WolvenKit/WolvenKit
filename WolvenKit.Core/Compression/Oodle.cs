@@ -97,12 +97,12 @@ public static class Oodle
 
         if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
         {
-            return KrakenLib.Load(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "lib", "kraken.dylib"));
+            return KrakenLib.Load();
         }
 
         if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
         {
-            //return KrakenLib.Load(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "lib", "kraken.so"));
+            //return KrakenLib.Load();
             throw new NotImplementedException();
         }
         throw new NotImplementedException();
@@ -170,10 +170,8 @@ public static class Oodle
         }
     }
 
-    public static int Compress( byte[] inputBuffer, ref IEnumerable<byte> outputBuffer,
-        bool useRedHeader,
-        CompressionLevel level = CompressionLevel.Normal,
-        Compressor compressor = Compressor.Kraken)
+    public static int Compress( byte[] inputBuffer, ref IEnumerable<byte> outputBuffer, bool useRedHeader,
+        CompressionLevel level = CompressionLevel.Normal, Compressor compressor = Compressor.Kraken)
     {
         if (inputBuffer == null)
         {
@@ -484,6 +482,8 @@ public static class Oodle
 
         return true;
     }
+
+    private delegate void StrDelegate(string value);
 
     private static string TryGetGameInstallDir()
         {
