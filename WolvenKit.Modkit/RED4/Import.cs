@@ -93,10 +93,9 @@ namespace WolvenKit.Modkit.RED4
 
                 // create redfile
                 var red = new CR2WFile();
-                var c2dArray = new C2dArray
-                {
-                    CookingPlatform = Enums.ECookingPlatform.PLATFORM_PC
-                };
+
+                var c2dArray = RedTypeManager.Create<C2dArray>();
+                c2dArray.CookingPlatform = Enums.ECookingPlatform.PLATFORM_PC;
 
                 // from csv
                 using (var infs = new FileStream(rawRelative.FullPath, FileMode.Open))
