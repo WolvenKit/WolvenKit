@@ -1,3 +1,4 @@
+using SixLabors.ImageSharp;
 using static WolvenKit.Common.Tools.DDS.TexconvNative;
 
 namespace WolvenKit.Common.DDS
@@ -41,12 +42,12 @@ namespace WolvenKit.Common.DDS
 
         #region Constructors
 
-        public DDSMetadata(TexMetadata metadata,
+        public DDSMetadata(Image metadata,
             uint bpp,
             bool dx10)
         {
-            Width = (uint)metadata.width;
-            Height = (uint)metadata.height;
+            Width = (uint)metadata.Width;
+            Height = (uint)metadata.Height;
             Depth = (uint)metadata.depth;
             Slicecount = (uint)metadata.arraySize;
             Mipscount = (uint)metadata.mipLevels;
@@ -58,6 +59,24 @@ namespace WolvenKit.Common.DDS
             Bpp = bpp;
             Dx10 = dx10;
         }
+
+        // public DDSMetadata(TexMetadata metadata,
+        //     uint bpp,
+        //     bool dx10)
+        // {
+        //     Width = (uint)metadata.width;
+        //     Height = (uint)metadata.height;
+        //     Depth = (uint)metadata.depth;
+        //     Slicecount = (uint)metadata.arraySize;
+        //     Mipscount = (uint)metadata.mipLevels;
+        //     MiscFlags = (uint)metadata.miscFlags;
+        //     MiscFlags2 = (uint)metadata.miscFlags2;
+        //     Format = (DXGI_FORMAT)metadata.format;
+        //     Dimensions = (TEX_DIMENSION)metadata.dimension;
+        //
+        //     Bpp = bpp;
+        //     Dx10 = dx10;
+        // }
 
         public DDSMetadata(
             uint width,

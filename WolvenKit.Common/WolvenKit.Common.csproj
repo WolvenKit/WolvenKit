@@ -120,6 +120,8 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="BCnEncoder.Net" Version="2.1.0" />
+    <PackageReference Include="BCnEncoder.Net.ImageSharp" Version="1.0.4" />
     <PackageReference Include="FastMember" Version="1.5.0" />
     <PackageReference Include="FmodAudio" Version="2.2.2" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
@@ -130,6 +132,7 @@
     <PackageReference Include="SharpGLTF.Core" Version="1.0.0-alpha0023" />
     <PackageReference Include="SharpZipLib" Version="1.3.3" />
     <PackageReference Include="DotNetHelper.FastMember.Extension" Version="2.0.0" />
+    <PackageReference Include="SixLabors.ImageSharp" Version="1.0.4" />
     <PackageReference Include="System.Collections.Concurrent" Version="4.3.0" />
     <PackageReference Include="System.Reflection.MetadataLoadContext" Version="6.0.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="6.0.1" />

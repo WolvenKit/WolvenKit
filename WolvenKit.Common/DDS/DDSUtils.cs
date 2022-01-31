@@ -1,10 +1,16 @@
 using System;
 using System.Buffers;
 using System.IO;
+using SixLabors.ImageSharp;
 using WolvenKit.Common.Model.Arguments;
-using WolvenKit.Common.Tools.DDS;
+//using WolvenKit.Common.Tools.DDS;
 using WolvenKit.Core.Extensions;
 using static WolvenKit.Common.Tools.DDS.TexconvNative;
+using BCnEncoder.ImageSharp;
+using BCnEncoder;
+using BCnEncoder.Decoder;
+using BCnEncoder.Shared;
+using Microsoft.Toolkit.HighPerformance;
 
 namespace WolvenKit.Common.DDS
 {
@@ -523,8 +529,13 @@ namespace WolvenKit.Common.DDS
 
         public static DDSMetadata GetMetadataFromTGAFile(string path)
         {
-            var md = TexconvNative.GetMetadataFromTGAFile(path, TGA_FLAGS.TGA_FLAGS_NONE);
-            var bpp = TexconvNative.BitsPerPixel(md.format);
+            using (var image = Image.Load(path))
+            {
+
+            }
+
+            //var md = TexconvNative.GetMetadataFromTGAFile(path, TGA_FLAGS.TGA_FLAGS_NONE);
+            //var bpp = TexconvNative.BitsPerPixel(md.format);
             //var iscube = md.is_cubemap(); //TODO
 
             return new DDSMetadata(md, (uint)bpp, true);
@@ -532,6 +543,9 @@ namespace WolvenKit.Common.DDS
 
         public static DDSMetadata GetMetadataFromDDSFile(string path)
         {
+
+
+
             var md = TexconvNative.GetMetadataFromDDSFile(path, DDSFLAGS.DDS_FLAGS_NONE);
             var bpp = TexconvNative.BitsPerPixel(md.format);
             //var iscube = md.is_cubemap(); //TODO
