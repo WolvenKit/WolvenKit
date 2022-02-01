@@ -80,12 +80,12 @@ public static class TexconvNative
 
 
 
-    [DllImport("lib/texconv.dll", EntryPoint = "ConvertAndSaveDdsImage", CallingConvention = CallingConvention.StdCall)]
-    private static extern long _ConvertAndSaveDdsImage(byte[] bytePtr, int len, [MarshalAs(UnmanagedType.LPWStr)] string szFile, ESaveFileTypes filetype,
-        bool vflip = false, bool hflip = false);
-    public static long ConvertAndSaveDdsImage(byte[] bytePtr, [MarshalAs(UnmanagedType.LPWStr)] string szFile, ESaveFileTypes filetype,
-        bool vflip = false, bool hflip = false)
-        => _ConvertAndSaveDdsImage(bytePtr, bytePtr.Length, szFile, filetype, vflip, hflip);
+    //[DllImport("lib/texconv.dll", EntryPoint = "ConvertAndSaveDdsImage", CallingConvention = CallingConvention.StdCall)]
+    //private static extern long _ConvertAndSaveDdsImage(byte[] bytePtr, int len, [MarshalAs(UnmanagedType.LPWStr)] string szFile, ESaveFileTypes filetype,
+    //    bool vflip = false, bool hflip = false);
+    //public static long ConvertAndSaveDdsImage(byte[] bytePtr, [MarshalAs(UnmanagedType.LPWStr)] string szFile, ESaveFileTypes filetype,
+    //    bool vflip = false, bool hflip = false)
+    //    => _ConvertAndSaveDdsImage(bytePtr, bytePtr.Length, szFile, filetype, vflip, hflip);
 
 
     [DllImport("lib/texconv.dll", EntryPoint = "ConvertFromDds", CallingConvention = CallingConvention.StdCall)]

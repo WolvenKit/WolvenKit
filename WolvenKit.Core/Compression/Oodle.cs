@@ -114,19 +114,11 @@ public static class Oodle
     {
         if (rawBuf.Length > 256)
         {
-#if !USE_NATIVE
             var compressedBufferSizeNeeded = GetCompressedBufferSizeNeeded(rawBuf.Length);
-#else
-            var compressedBufferSizeNeeded = OodleLZNative.GetCompressedBufferSizeNeeded(rawBuf.Length);
-#endif
 
             var compressedBuffer = new byte[compressedBufferSizeNeeded];
 
-#if !USE_NATIVE
             var compressedSize = OodleLib.OodleLZ_Compress(rawBuf, compressedBuffer, Oodle.Compressor.Kraken, CompressionLevel.Optimal2);
-#else
-            var compressedSize = OodleLZNative.Compress(Oodle.Compressor.Kraken, rawBuf, rawBuf.Length, compressedBuffer, Oodle.CompressionLevel.Optimal2);
-#endif
 
             var outArray = new byte[compressedSize + 8];
 
@@ -158,11 +150,8 @@ public static class Oodle
             var compressedData = br.ReadBytes(compBuf.Length - 8);
             rawBuf = new byte[size];
 
-#if !USE_NATIVE
             var r = OodleLib.OodleLZ_Decompress(compressedData, rawBuf);
-#else
-            OodleLZNative.Decompress(compressedData, compressedData.Length, rawBuf, rawBuf.Length, Oodle.FuzzSafe.No);
-#endif
+
         }
         else
         {

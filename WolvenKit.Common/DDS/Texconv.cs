@@ -3,7 +3,6 @@ using System.Buffers;
 using System.IO;
 using System.Runtime.InteropServices;
 using WolvenKit.Common.Model.Arguments;
-using WolvenKit.RED4.Types;
 using static WolvenKit.Common.DDS.TexconvNative;
 
 namespace WolvenKit.Common.DDS
@@ -80,6 +79,16 @@ namespace WolvenKit.Common.DDS
             }
         }
 
+        public static ESaveFileTypes ToSaveFormat(EUncookExtension extension) =>
+            extension switch
+            {
+                EUncookExtension.bmp => ESaveFileTypes.BMP,
+                EUncookExtension.jpg => ESaveFileTypes.JPEG,
+                EUncookExtension.png => ESaveFileTypes.PNG,
+                EUncookExtension.tga => ESaveFileTypes.TGA,
+                EUncookExtension.tiff => ESaveFileTypes.TIFF,
+                _ => throw new ArgumentOutOfRangeException(nameof(extension), extension, null)
+            };
 
 
         /// <summary>
@@ -118,18 +127,7 @@ namespace WolvenKit.Common.DDS
 
             return uext != EUncookExtension.dds && ConvertFromDdsAndSave(ms, outfilename, ToSaveFormat(uext), vflip);
         }
-        public static ESaveFileTypes ToSaveFormat(EUncookExtension extension) =>
-        extension switch
-        {
-            EUncookExtension.bmp => ESaveFileTypes.BMP,
-            EUncookExtension.jpg => ESaveFileTypes.JPEG,
-            EUncookExtension.png => ESaveFileTypes.PNG,
-            EUncookExtension.tga => ESaveFileTypes.TGA,
-            EUncookExtension.tiff => ESaveFileTypes.TIFF,
-            _ => throw new ArgumentOutOfRangeException(nameof(extension), extension, null)
-        };
-        public static bool ConvertFromDdsAndSave(Stream ms, string outfilename, ESaveFileTypes filetype,
-            bool vflip = false, bool hflip = false)
+        public static bool ConvertFromDdsAndSave(Stream ms, string outfilename, ESaveFileTypes filetype, bool vflip = false, bool hflip = false)
         {
             byte[] rentedBuffer = null;
             try
@@ -146,16 +144,22 @@ namespace WolvenKit.Common.DDS
                     offset += readBytes;
                 }
 
-                //var span = new ReadOnlySpan<byte>(rentedBuffer, 0, len);
-                //fixed (byte* ptr = span)
-                {
-                    var outDir = new FileInfo(outfilename).Directory.FullName;
-                    Directory.CreateDirectory(outDir);
-                    var fileName = Path.GetFileNameWithoutExtension(outfilename);
-                    var extension = filetype.ToString().ToLower();
-                    var newpath = Path.Combine(outDir, $"{fileName}.{extension}");
+                var outDir = new FileInfo(outfilename).Directory.FullName;
+                Directory.CreateDirectory(outDir);
+                var fileName = Path.GetFileNameWithoutExtension(outfilename);
+                var extension = filetype.ToString().ToLower();
+                var newpath = Path.Combine(outDir, $"{fileName}.{extension}");
 
-                    TexconvNative.ConvertAndSaveDdsImage(rentedBuffer, newpath, filetype, vflip, hflip);
+                //TexconvNative.ConvertAndSaveDdsImage(rentedBuffer, newpath, filetype, vflip, hflip);
+                if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+                {
+                    var blob = new Blob();
+                    var l = TexconvNative.ConvertFromDds(rentedBuffer, ref blob, filetype, vflip, hflip);
+                    File.WriteAllBytes(newpath, blob.GetBytes());
+                }
+                else
+                {
+                    throw new NotImplementedException();
                 }
             }
             finally
@@ -170,50 +174,9 @@ namespace WolvenKit.Common.DDS
         }
 
         /// <summary>
-        /// Converts texture stream with given extension stream to dds
-        /// </summary>
-        public static byte[] ConvertToDds(Stream stream, EUncookExtension inExtension,
-            DXGI_FORMAT? outFormat = null, bool vflip = false, bool hflip = false)
-        {
-            if (inExtension == EUncookExtension.dds)
-            {
-                throw new NotSupportedException("texture to convert to dds must not be dds iteslf");
-            }
-
-            byte[] rentedBuffer = null;
-            try
-            {
-                var offset = 0;
-
-                var len = checked((int)stream.Length);
-                rentedBuffer = ArrayPool<byte>.Shared.Rent(len);
-
-                int readBytes;
-                while (offset < len &&
-                       (readBytes = stream.Read(rentedBuffer, offset, len - offset)) > 0)
-                {
-                    offset += readBytes;
-                }
-
-                var blob = new Blob();
-                var l = TexconvNative.ConvertToDds(rentedBuffer, ref blob,  ToSaveFormat(inExtension),
-                    outFormat ?? DXGI_FORMAT.DXGI_FORMAT_UNKNOWN, vflip, hflip);
-                return blob.GetBytes();
-            }
-            finally
-            {
-                if (rentedBuffer is object)
-                {
-                    ArrayPool<byte>.Shared.Return(rentedBuffer);
-                }
-            }
-        }
-
-        /// <summary>
         /// Converts a dds image to another texture format
         /// </summary>
-        public static byte[] ConvertFromDds(Stream stream, EUncookExtension textureType,
-            bool vflip = false, bool hflip = false)
+        public static byte[] ConvertFromDds(Stream stream, EUncookExtension textureType, bool vflip = false, bool hflip = false)
         {
             if (textureType == EUncookExtension.dds)
             {
@@ -235,9 +198,16 @@ namespace WolvenKit.Common.DDS
                     offset += readBytes;
                 }
 
-                var blob = new Blob();
-                var l = TexconvNative.ConvertFromDds(rentedBuffer, ref blob, ToSaveFormat(textureType), vflip, hflip);
-                return blob.GetBytes();
+                if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+                {
+                    var blob = new Blob();
+                    var l = TexconvNative.ConvertFromDds(rentedBuffer, ref blob, ToSaveFormat(textureType), vflip, hflip);
+                    return blob.GetBytes();
+                }
+                else
+                {
+                    throw new NotImplementedException();
+                }
             }
             finally
             {
@@ -248,6 +218,52 @@ namespace WolvenKit.Common.DDS
             }
         }
 
+        /// <summary>
+        /// Converts texture stream with given extension stream to dds
+        /// </summary>
+        public static byte[] ConvertToDds(Stream stream, EUncookExtension inExtension, DXGI_FORMAT? outFormat = null, bool vflip = false, bool hflip = false)
+        {
+            if (inExtension == EUncookExtension.dds)
+            {
+                throw new NotSupportedException("texture to convert to dds must not be dds iteslf");
+            }
 
+            byte[] rentedBuffer = null;
+            try
+            {
+                var offset = 0;
+
+                var len = checked((int)stream.Length);
+                rentedBuffer = ArrayPool<byte>.Shared.Rent(len);
+
+                int readBytes;
+                while (offset < len &&
+                       (readBytes = stream.Read(rentedBuffer, offset, len - offset)) > 0)
+                {
+                    offset += readBytes;
+                }
+
+                var format = outFormat ?? DXGI_FORMAT.DXGI_FORMAT_UNKNOWN;
+
+                if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+                {
+                    var blob = new Blob();
+                    var l = TexconvNative.ConvertToDds(rentedBuffer, ref blob, ToSaveFormat(inExtension),
+                        format, vflip, hflip);
+                    return blob.GetBytes();
+                }
+                else
+                {
+                    throw new NotImplementedException();
+                }
+            }
+            finally
+            {
+                if (rentedBuffer is object)
+                {
+                    ArrayPool<byte>.Shared.Return(rentedBuffer);
+                }
+            }
+        }
     }
 }
