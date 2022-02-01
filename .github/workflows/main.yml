@@ -21,10 +21,8 @@ jobs:
       with:
         dotnet-version: 6.x
 
-    - name: Restore dependencies
-      run: dotnet restore All.sln
-    - name: Build
-      run: dotnet publish .\WolvenKit\WolvenKit.csproj --no-restore -o .\publish -c Release
+    - name: publish
+      run: dotnet publish .\WolvenKit\WolvenKit.csproj -o .\publish -c Release
 
     - uses: actions/upload-artifact@v2
       with:
@@ -43,10 +41,8 @@ jobs:
       with:
         dotnet-version: 6.x
 
-    - name: Restore dependencies
-      run: dotnet restore All.sln
-    - name: Build
-      run: dotnet publish .\WolvenKit.CLI\WolvenKit.CLI.csproj --no-restore -o .\publish_cli -c Release
+    - name: publish
+      run: dotnet publish .\WolvenKit.CLI\WolvenKit.CLI.csproj -o .\publish_cli -c Release
 
     - uses: actions/upload-artifact@v2
       with:

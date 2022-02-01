@@ -80,10 +80,10 @@ jobs:
     - run: echo "VERSIONC=${{steps.get-version-cli.outputs.assembly-version}}-nightly.${{env.ISODATE}}" >> $env:GITHUB_ENV
     
     # Publish app
-    - run: dotnet publish ${{env.PROJ}} --no-restore -o ${{env.OUT}} -c Release -p:InformationalVersion="${{env.VERSION}}"
+    - run: dotnet publish ${{env.PROJ}} -o ${{env.OUT}} -c Release -p:InformationalVersion="${{env.VERSION}}"
     
     # Publish console
-    - run: dotnet publish ${{env.PROJC}} --no-restore -o ${{env.OUTC}} -c Release
+    - run: dotnet publish ${{env.PROJC}} -o ${{env.OUTC}} -c Release
 
     - run: echo "PORTABLE=${{env.NAME}}-${{env.VERSION}}.zip" >> $env:GITHUB_ENV
     - run: echo "CONSOLE=${{env.NAME}}.Console-${{env.VERSIONC}}.zip" >> $env:GITHUB_ENV
