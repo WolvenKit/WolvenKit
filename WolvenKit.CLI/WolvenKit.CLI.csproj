@@ -49,9 +49,7 @@
 
   </ItemGroup>
 
-    <PropertyGroup Condition=" '$(OS)' == 'Windows_NT' ">
-        <DefineConstants>_WINDOWS</DefineConstants>
-    </PropertyGroup>
+
 
   <ItemGroup>
     <ProjectReference Include="..\WolvenKit.Common\WolvenKit.Common.csproj" />

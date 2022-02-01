@@ -1,11 +1,20 @@
 using System;
+using System.IO;
 using System.Runtime.InteropServices;
 
 namespace WolvenKit.Core.Compression;
 
-
 public static class KrakenLib
 {
+#if _WINDOWS
+    private const string dllName = "kraken.dll";
+#elif _OSX
+    private const string dllName = "libkraken.dylib";
+#elif _LINUX
+    private const string dllName = "libkraken.so";
+#endif
+
+
     [UnmanagedFunctionPointer(CallingConvention.StdCall)]
     private delegate int DecompressDelegate(
         byte[] buffer,
@@ -29,9 +38,9 @@ public static class KrakenLib
     private static DecompressDelegate s_decompress;
     private static CompressDelegate s_compress;
 
-    public static bool Load(string oodlepath)
+    public static bool Load()
     {
-        s_pDll = NativeMethods.LoadLibrary(oodlepath);
+        s_pDll = NativeMethods.LoadLibrary(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "lib", dllName));
         if (s_pDll == IntPtr.Zero)
         {
             return false;

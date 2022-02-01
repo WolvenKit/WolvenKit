@@ -90,7 +90,7 @@ namespace WolvenKit.MSTests
             {
                 oodleInfo.CopyTo(appOodleFileName);
             }
-            if (!OodleLib.Load(appOodleFileName))
+            if (!Oodle.Load())
             {
                 Assert.Fail("Could not load oo2ext_7_win64.dll.");
             }

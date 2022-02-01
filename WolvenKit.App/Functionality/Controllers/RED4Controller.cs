@@ -64,11 +64,6 @@ namespace WolvenKit.Functionality.Controllers
             if (!_initialized)
             {
                 _initialized = true;
-                // load oodle
-                if (!OodleLib.Load(_settingsManager.GetRED4OodleDll()))
-                {
-                    throw new FileNotFoundException($"oo2ext_7_win64.dll not found.");
-                }
 
                 // load archives
                 var todo = new List<Func<IArchiveManager>>()
@@ -215,9 +210,7 @@ namespace WolvenKit.Functionality.Controllers
                 var inbuffer = File.ReadAllBytes(path);
                 IEnumerable<byte> outBuffer = new List<byte>();
 
-                var r = Oodle.Compress(
-                    inbuffer,
-                    ref outBuffer);
+                var r = Oodle.Compress( inbuffer, ref outBuffer, true);
 
                 File.WriteAllBytes(outpath, outBuffer.ToArray());
             }
