@@ -1,6 +1,6 @@
 using System;
 
-namespace RED.CRC32
+namespace WolvenKit.Core.CRC
 {
     public class MismatchCRC32Exception : Exception
     {

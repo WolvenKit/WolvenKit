@@ -23,7 +23,7 @@ namespace WolvenKit.Modkit.RED4
     {
         public bool ImportMesh(FileInfo inGltfFile, Stream inmeshStream, List<Archive> archives = null, ValidationMode vmode = ValidationMode.Strict, bool importMaterialOnly = false, Stream outStream = null)
         {
-            var cr2w = _wolvenkitFileService.TryReadRed4File(inmeshStream);
+            var cr2w = _wolvenkitFileService.ReadRed4File(inmeshStream);
 
             if (cr2w == null || cr2w.RootChunk is not CMesh meshBlob || meshBlob.RenderResourceBlob.Chunk is not rendRenderMeshBlob rendblob)
             {

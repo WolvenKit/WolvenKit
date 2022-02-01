@@ -64,6 +64,8 @@ namespace WolvenKit.Functionality.Layout.inkWidgets
 
         public FontFamily FontFamily { get; set; }
 
+        public Brush Mask { get; set; } = new ImageBrush();
+
         //public override double Width => Widget.FitToContent ? TextWidth : Widget.Size.X;
         //public override double Height => Widget.FitToContent ? TextHeight : Widget.Size.Y;
 
@@ -111,11 +113,16 @@ namespace WolvenKit.Functionality.Layout.inkWidgets
             }
         }
 
+        public inkTextControl() : base()
+        {
+
+        }
+
         public inkTextControl(inkTextWidget widget, RDTWidgetView widgetView) : base(widget, widgetView)
         {
             SetupFont();
 
-            RenderOptions.SetBitmapScalingMode(this, BitmapScalingMode.NearestNeighbor);
+            //RenderOptions.SetBitmapScalingMode(this, BitmapScalingMode.NearestNeighbor);
 
             WidgetView.AddTextWidget(this, TextWidget);
         }
@@ -263,18 +270,23 @@ namespace WolvenKit.Functionality.Layout.inkWidgets
 
             ImageSource.Freeze();
 
-            // not sure stretch & alignment will ever be relevant
-            SetCurrentValue(OpacityMaskProperty, new ImageBrush()
+            Mask = new ImageBrush(ImageSource)
             {
-                ImageSource = ImageSource,
                 Stretch = Stretch.None,
                 AlignmentY = AlignmentY.Center,
                 AlignmentX = AlignmentX.Center
-            });
+            };
+
+            // not sure stretch & alignment will ever be relevant
+            //SetCurrentValue(OpacityMaskProperty, Mask);
         }
 
         protected override Size MeasureCore(Size availableSize)
         {
+            if (RenderedFontSize != FontSize || RenderedFontStyle != _fontStyle)
+            {
+                SetupFont();
+            }
             MeasureText(availableSize);
             var size = new Size(Width, Height);
             //if (Widget.FitToContent)
@@ -293,18 +305,16 @@ namespace WolvenKit.Functionality.Layout.inkWidgets
 
         protected override void Render(DrawingContext dc)
         {
-            base.Render(dc);
             var size = new Size(RenderSize.Width, RenderSize.Height);
-            if (RenderedFontSize != FontSize || RenderedFontStyle != _fontStyle)
-            {
-                SetupFont();
-                InvalidateMeasure();
-            }
-            if (RenderedSize != size)
-            {
+            //if (RenderedSize != size)
+            //{
                 DrawText(size);
-            }
+            //}
+            dc.PushOpacityMask(Mask);
             dc.DrawRectangle(TintBrush, null, new Rect(0, 0, size.Width, size.Height));
+            dc.Pop();
+
+            base.Render(dc);
 
             // this is supposed to be faster, but i couldn't get it working with custom fonts
             //FormattedText formattedText = new FormattedText("Different Test", CultureInfo.GetCultureInfo("en-us"),

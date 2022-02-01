@@ -4,7 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using RED.CRC32;
+using WolvenKit.Core.CRC;
 using WolvenKit.Common.Oodle;
 
 namespace WolvenKit.Modkit.RED4

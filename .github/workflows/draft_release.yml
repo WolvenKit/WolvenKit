@@ -1,14 +1,14 @@
 name: WolvenKit-Draft-release
 on:
   workflow_dispatch:
- 
+
 jobs:
 
   draft-wkit-win:
     runs-on: windows-2022
 
     steps:
-    # setup  
+    # setup
     - name: checkout
       uses: actions/checkout@v2
       with:
@@ -32,7 +32,7 @@ jobs:
     - run: echo "REF=${{github.ref}}" >> $env:GITHUB_ENV
     - run: echo "SHA=${{github.sha}}" >> $env:GITHUB_ENV
     - run: echo "MREPO=${{github.repository}}" >> $env:GITHUB_ENV
-    
+
     - name: Get version
       uses: naminodarie/get-net-sdk-project-versions-action@v1
       id: get-version
@@ -43,15 +43,15 @@ jobs:
       id: get-version-cli
       with:
         proj-path: ${{env.PROJC}}
-        
+
     - run: echo "VERSION=${{steps.get-version.outputs.assembly-version}}" >> $env:GITHUB_ENV
     - run: echo "VERSIONC=${{steps.get-version-cli.outputs.assembly-version}}" >> $env:GITHUB_ENV
     
    # Publish app
-    - run: msbuild ${{env.PROJ}} -t:restore -t:Build -t:Publish /p:PublishDir=".${{env.OUT}}" /p:InformationalVersion="${{env.VERSION}}" /p:Configuration=Release /p:Platform=x64 /p:SelfContained=False /p:PublishReadyToRun=False /p:PublishSingleFile=False /p:PublishTrimmed=False
-    
+    - run: msbuild ${{env.PROJ}} -t:restore -t:Build -t:Publish /p:PublishDir=".${{env.OUT}}" /p:InformationalVersion="${{env.VERSION}}" /p:Configuration=Release /p:Platform=x64 /p:PublishReadyToRun=False /p:PublishSingleFile=False /p:PublishTrimmed=False
+
     # Publish console
-    - run: msbuild ${{env.PROJC}} -t:restore -t:Build -t:Publish /p:PublishDir=".${{env.OUTC}}" /p:Configuration=Release /p:Platform=x64 /p:SelfContained=False /p:PublishReadyToRun=False /p:PublishTrimmed=False
+    - run: msbuild ${{env.PROJC}} -t:restore -t:Build -t:Publish /p:PublishDir=".${{env.OUTC}}" /p:Configuration=Release /p:Platform=x64 /p:PublishReadyToRun=False /p:PublishTrimmed=False
 
     - run: echo "PORTABLE=${{env.NAME}}-${{env.VERSION}}.zip" >> $env:GITHUB_ENV
     - run: echo "CONSOLE=${{env.NAME}}.Console-${{env.VERSIONC}}.zip" >> $env:GITHUB_ENV

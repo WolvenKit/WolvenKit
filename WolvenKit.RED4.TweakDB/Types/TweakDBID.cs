@@ -1,6 +1,6 @@
 using System;
 using System.IO;
-using RED.CRC32;
+using WolvenKit.Core.CRC;
 using System.Text.RegularExpressions;
 using System.Buffers.Binary;
 using WolvenKit.RED4.Types;

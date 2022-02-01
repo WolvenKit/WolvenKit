@@ -1,11 +1,11 @@
 using System;
-using System.Collections.ObjectModel;
 using System.Reactive.Linq;
 using System.Windows;
 using System.Windows.Documents;
 using System.Windows.Media;
 using DynamicData;
 using ReactiveUI;
+using Serilog.Events;
 using Splat;
 using WolvenKit.Common;
 using WolvenKit.Common.Services;
@@ -28,12 +28,19 @@ namespace WolvenKit.Views.Tools
             ViewModel = Locator.Current.GetService<LogViewModel>();
             DataContext = ViewModel;
 
-            ReadOnlyObservableCollection<LogEntry> _logEntries;
-            var logger = Locator.Current.GetService<ILoggerService>();
-            logger.Connect()
-                .ObserveOn(RxApp.MainThreadScheduler)
-                .Bind(out _logEntries)
-                .Subscribe(OnNext);
+            //var logger = Locator.Current.GetService<ILoggerService>();
+            //logger.Connect()
+            //    .ObserveOn(RxApp.MainThreadScheduler)
+            //    .Bind(out var _logEntries)
+            //    .Subscribe(OnNext);
+
+            var _sink = Locator.Current.GetService<MySink>();
+            var myOperation = _sink.Connect()
+            //.Transform(x => x.RenderMessage())
+            .ObserveOn(RxApp.MainThreadScheduler)
+            .Bind(out var _logEntries)
+            .DisposeMany()
+            .Subscribe(OnNext);
 
             var firaCode = new FontFamily("Fira Code");
             if (firaCode != null)
@@ -43,7 +50,7 @@ namespace WolvenKit.Views.Tools
             }
         }
 
-        private void OnNext(IChangeSet<LogEntry> obj)
+        private void OnNext(IChangeSet<LogEvent> obj)
         {
             foreach (var change in obj)
             {
@@ -60,34 +67,54 @@ namespace WolvenKit.Views.Tools
                         }
                         break;
                     case ListChangeReason.Replace:
-                        break;
                     case ListChangeReason.Remove:
-                        break;
                     case ListChangeReason.RemoveRange:
-                        break;
                     case ListChangeReason.Refresh:
-                        break;
                     case ListChangeReason.Moved:
-                        break;
                     case ListChangeReason.Clear:
                         break;
                     default:
                         throw new ArgumentOutOfRangeException();
                 }
             }
-
-
-
         }
+        //private void OnNext(IChangeSet<LogEntry> obj)
+        //{
+        //    foreach (var change in obj)
+        //    {
+        //        switch (change.Reason)
+        //        {
+        //            case ListChangeReason.Add:
+        //                var item = change.Item.Current;
+        //                AddLog(item);
+        //                break;
+        //            case ListChangeReason.AddRange:
+        //                foreach (var logEntry in change.Range)
+        //                {
+        //                    AddLog(logEntry);
+        //                }
+        //                break;
+        //            case ListChangeReason.Replace:
+        //            case ListChangeReason.Remove:
+        //            case ListChangeReason.RemoveRange:
+        //            case ListChangeReason.Refresh:
+        //            case ListChangeReason.Moved:
+        //            case ListChangeReason.Clear:
+        //                break;
+        //            default:
+        //                throw new ArgumentOutOfRangeException();
+        //        }
+        //    }
+        //}
 
-        private void AddLog(LogEntry item)
+        private void AddLog(LogEvent item)
         {
             var level = item.Level;
             var paragraph = new Paragraph()
             {
                 LineHeight = 1
             };
-            var run = new Run(item.ToString())
+            var run = new Run(item.RenderMessage())
             {
                 Foreground = GetBrushForLevel(level)
             };
@@ -96,25 +123,41 @@ namespace WolvenKit.Views.Tools
             LogRichTextBox.ScrollToEnd();
         }
 
-        private Brush GetBrushForLevel(Logtype level)
+        //private void AddLog(LogEntry item)
+        //{
+        //    var level = item.Level;
+        //    var paragraph = new Paragraph()
+        //    {
+        //        LineHeight = 1
+        //    };
+        //    var run = new Run(item.ToString())
+        //    {
+        //        Foreground = GetBrushForLevel(level)
+        //    };
+        //    paragraph.Inlines.Add(run);
+        //    LogRichTextBox.Document.Blocks.Add(paragraph);
+        //    LogRichTextBox.ScrollToEnd();
+        //}
+
+        private Brush GetBrushForLevel(LogEventLevel level) => level switch
         {
-            switch (level)
-            {
-                case Logtype.Normal:
-                case Logtype.Wcc:
-                    return Brushes.White;
-                case Logtype.Error:
-                    return (Brush)Application.Current.FindResource("WolvenKitRed");
-                case Logtype.Important:
-                    return (Brush)Application.Current.FindResource("WolvenKitYellow");
-                case Logtype.Success:
-                    return (Brush)Application.Current.FindResource("WolvenKitCyan");
-                case Logtype.Warning:
-                    return (Brush)Application.Current.FindResource("WolvenKitPurple");
-                default:
-                    throw new ArgumentOutOfRangeException(nameof(level), level, null);
-            }
-        }
+            //Logtype.Normal or Logtype.Wcc => Brushes.White,
+            LogEventLevel.Error => (Brush)Application.Current.FindResource("WolvenKitRed"),
+            LogEventLevel.Information => (Brush)Application.Current.FindResource("WolvenKitYellow"),
+            LogEventLevel.Debug => (Brush)Application.Current.FindResource("WolvenKitCyan"),
+            LogEventLevel.Warning => (Brush)Application.Current.FindResource("WolvenKitPurple"),
+            _ => throw new ArgumentOutOfRangeException(nameof(level), level, null),
+        };
+
+        //private Brush GetBrushForLevel(Logtype level) => level switch
+        //{
+        //    Logtype.Normal or Logtype.Wcc => Brushes.White,
+        //    Logtype.Error => (Brush)Application.Current.FindResource("WolvenKitRed"),
+        //    Logtype.Important => (Brush)Application.Current.FindResource("WolvenKitYellow"),
+        //    Logtype.Success => (Brush)Application.Current.FindResource("WolvenKitCyan"),
+        //    Logtype.Warning => (Brush)Application.Current.FindResource("WolvenKitPurple"),
+        //    _ => throw new ArgumentOutOfRangeException(nameof(level), level, null),
+        //};
 
         #endregion Constructors
 

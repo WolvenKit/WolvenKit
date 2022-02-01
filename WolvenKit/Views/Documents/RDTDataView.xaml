@@ -74,9 +74,6 @@
                             </Style>
                             <Style TargetType="TextBlock">
                                 <Style.Triggers>
-                                    <DataTrigger Binding="{Binding IsHandled}" Value="True">
-                                        <Setter Property="Foreground" Value="{StaticResource Border}" />
-                                    </DataTrigger>
                                     <DataTrigger Binding="{Binding IsDefault}" Value="True">
                                         <Setter Property="Foreground" Value="{StaticResource BorderAlt2}" />
                                         <Setter Property="FontStyle" Value="Italic" />
@@ -92,14 +89,23 @@
                             Grid.Column="1"
                             Width="Auto"
                             Margin="0,0,0,2"
-                            Text="{Binding Name}" />
+                            Text="{Binding Name, Mode=OneTime}" />
                         <TextBlock
                             Grid.Column="2"
                             Width="Auto"
                             Margin="0,0,0,2"
                             Foreground="{StaticResource Border}"
                             Style="{StaticResource ExpanderHider}"
-                            Text="{Binding Type, StringFormat=' {0}'}" />
+                            Text="{Binding Type, StringFormat=' {0}', Mode=OneTime}" />
+                    </Grid>
+                </DataTemplate>
+
+                <DataTemplate x:Key="GroupedPropertyNameTemplate" DataType="{x:Type shell:GroupedChunkViewModel}">
+                    <Grid>
+                        <TextBlock
+                            Width="Auto"
+                            Margin="0,0,0,2"
+                            Text="{Binding Name, Mode=OneTime}" />
                     </Grid>
                 </DataTemplate>
 
@@ -108,9 +114,6 @@
                         <Grid.Resources>
                             <Style TargetType="{x:Type TextBlock}">
                                 <Style.Triggers>
-                                    <DataTrigger Binding="{Binding IsHandled}" Value="True">
-                                        <Setter Property="Foreground" Value="{StaticResource Border}" />
-                                    </DataTrigger>
                                     <DataTrigger Binding="{Binding IsDefault}" Value="True">
                                         <Setter Property="Foreground" Value="{StaticResource BorderAlt2}" />
                                         <Setter Property="FontStyle" Value="Italic" />
@@ -119,9 +122,6 @@
                             </Style>
                             <Style TargetType="{x:Type iconPacks:PackIconCodicons}">
                                 <Style.Triggers>
-                                    <DataTrigger Binding="{Binding IsHandled}" Value="True">
-                                        <Setter Property="Foreground" Value="{StaticResource Border}" />
-                                    </DataTrigger>
                                     <DataTrigger Binding="{Binding IsDefault}" Value="True">
                                         <Setter Property="Foreground" Value="{StaticResource BorderAlt2}" />
                                     </DataTrigger>
@@ -139,7 +139,7 @@
                             Margin="0,0,6,0"
                             HorizontalAlignment="Center"
                             VerticalAlignment="Center"
-                            Kind="{Binding Extension}" />
+                            Kind="{Binding Extension, Mode=OneTime}" />
                         <StackPanel
                             Grid.Column="1"
                             Margin="0,0,4,0"
@@ -157,7 +157,7 @@
                             <TextBlock
                                 Name="PropertyType"
                                 Foreground="{StaticResource WolvenKitTan}"
-                                Text="{Binding Type}" />
+                                Text="{Binding Type, Mode=OneTime}" />
                             <StackPanel Orientation="Horizontal">
                                 <StackPanel.Style>
                                     <Style TargetType="StackPanel">
@@ -195,31 +195,41 @@
                 <Style x:Key="ArrayNameColumnWidth" TargetType="ColumnDefinition">
                     <Setter Property="Width" Value="218" />
                     <Style.Triggers>
-                        <DataTrigger Binding="{Binding Level}" Value="1">
+                        <DataTrigger Binding="{Binding Level, Mode=OneTime}" Value="1">
                             <Setter Property="Width" Value="200" />
                         </DataTrigger>
-                        <DataTrigger Binding="{Binding Level}" Value="2">
+                        <DataTrigger Binding="{Binding Level, Mode=OneTime}" Value="2">
                             <Setter Property="Width" Value="180" />
                         </DataTrigger>
-                        <DataTrigger Binding="{Binding Level}" Value="3">
+                        <DataTrigger Binding="{Binding Level, Mode=OneTime}" Value="3">
                             <Setter Property="Width" Value="160" />
                         </DataTrigger>
-                        <DataTrigger Binding="{Binding Level}" Value="4">
+                        <DataTrigger Binding="{Binding Level, Mode=OneTime}" Value="4">
                             <Setter Property="Width" Value="140" />
                         </DataTrigger>
-                        <DataTrigger Binding="{Binding Level}" Value="5">
+                        <DataTrigger Binding="{Binding Level, Mode=OneTime}" Value="5">
                             <Setter Property="Width" Value="120" />
                         </DataTrigger>
-                        <DataTrigger Binding="{Binding IsInArray}" Value="True">
+                        <DataTrigger Binding="{Binding IsInArray, Mode=OneTime}" Value="True">
                             <Setter Property="Width" Value="{Binding ArrayIndexWidth}" />
                         </DataTrigger>
-                        <DataTrigger Binding="{Binding Name}" Value="{x:Null}">
+                        <DataTrigger Binding="{Binding Name, Mode=OneTime}" Value="{x:Null}">
                             <Setter Property="Width" Value="0" />
                         </DataTrigger>
                     </Style.Triggers>
                 </Style>
 
                 <ContextMenu x:Key="TreeViewContextMenu" DataContext="{Binding Path=PlacementTarget, RelativeSource={RelativeSource Self}}">
+                    <ContextMenu.Resources>
+                        <Style TargetType="MenuItem">
+                            <Style.Triggers>
+                                <Trigger Property="IsEnabled" Value="False">
+                                    <Setter Property="Visibility" Value="Collapsed"/>
+                                </Trigger>
+                            </Style.Triggers>
+                        </Style>
+                    </ContextMenu.Resources>
+                    
                     <MenuItem
                         Command="{Binding Path=PlacementTarget.Tag.OpenChunkCommand, RelativeSource={RelativeSource AncestorType=ContextMenu}}"
                         Header="Open in New Tab"
@@ -267,16 +277,44 @@
                                 Kind="Json" />
                         </MenuItem.Icon>
                     </MenuItem>
+                    <MenuItem
+                        Command="{Binding Path=PlacementTarget.Tag.DeleteItemCommand, RelativeSource={RelativeSource AncestorType=ContextMenu}}"
+                        Header="Delete"
+                        IsCheckable="False"
+                        Style="{StaticResource SyncfusionMenuItemStyle}">
+                        <MenuItem.Icon>
+                            <iconPacks:PackIconCodicons
+                                Width="13"
+                                Height="13"
+                                Padding="0,0,0,0"
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Center"
+                                Kind="Remove" />
+                        </MenuItem.Icon>
+                    </MenuItem>
                 </ContextMenu>
 
                 <converters:TreeViewItemTemplateSelector x:Key="itemTemplateSelector" x:Name="itemTemplateSelector">
+                    <converters:TreeViewItemTemplateSelector.GroupedTemplate>
+                        <DataTemplate>
+                            <Grid
+                                Background="Transparent"
+                                Tag="{Binding}">
+                                <ContentPresenter
+                                    Width="Auto"
+                                    HorizontalAlignment="Stretch"
+                                    VerticalAlignment="Center"
+                                    ContentTemplate="{StaticResource GroupedPropertyNameTemplate}" />
+                            </Grid>
+                        </DataTemplate>
+                    </converters:TreeViewItemTemplateSelector.GroupedTemplate>
                     <converters:TreeViewItemTemplateSelector.PropertyTemplate>
                         <DataTemplate DataType="{x:Type shell:ChunkViewModel}">
                             <Grid
                                 Background="Transparent"
                                 ContextMenu="{StaticResource TreeViewContextMenu}"
                                 Tag="{Binding}"
-                                ToolTip="{Binding Type}">
+                                ToolTip="{Binding Type, Mode=OneTime}">
                                 <Grid.CommandBindings>
                                     <CommandBinding
                                         CanExecute="Copy_CanExecute"
@@ -309,7 +347,7 @@
                                 Background="Transparent"
                                 ContextMenu="{StaticResource TreeViewContextMenu}"
                                 Tag="{Binding}"
-                                ToolTip="{Binding Type}">
+                                ToolTip="{Binding Type, Mode=OneTime}">
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Style="{StaticResource ArrayNameColumnWidth}" />
                                     <ColumnDefinition Width="Auto" />
@@ -336,7 +374,7 @@
                                 Background="Transparent"
                                 ContextMenu="{StaticResource TreeViewContextMenu}"
                                 Tag="{Binding}"
-                                ToolTip="{Binding Type}">
+                                ToolTip="{Binding Type, Mode=OneTime}">
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Style="{StaticResource ArrayNameColumnWidth}" />
                                     <ColumnDefinition Width="Auto" />
@@ -364,10 +402,11 @@
                                 Background="Transparent"
                                 ContextMenu="{StaticResource TreeViewContextMenu}"
                                 Tag="{Binding}"
-                                ToolTip="{Binding Type}">
+                                ToolTip="{Binding Type, Mode=OneTime}">
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Style="{StaticResource ArrayNameColumnWidth}" />
                                     <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition Width="Auto" MinWidth="20" />
                                     <ColumnDefinition Width="Auto" MinWidth="20" />
                                 </Grid.ColumnDefinitions>
                                 <ContentPresenter
@@ -397,6 +436,19 @@
                                         Kind="ArrowCircleUp"
                                         RotationAngle="45" />
                                 </Button>
+                                <Button
+                                    Grid.Column="3"
+                                    Margin="5,0,0,0"
+                                    Background="Transparent"
+                                    Command="{Binding AddRefCommand}"
+                                    Style="{StaticResource ButtonCustom}"
+                                    ToolTip="Add File to Mod">
+                                    <iconPacks:PackIconVaadinIcons
+                                        Padding="2"
+                                        VerticalAlignment="Center"
+                                        Foreground="{StaticResource WolvenKitYellow}"
+                                        Kind="ArrowCircleLeft" />
+                                </Button>
                             </Grid>
                         </DataTemplate>
                     </converters:TreeViewItemTemplateSelector.RefTemplate>
@@ -420,21 +472,22 @@
             AllowEditing="False"
             Background="{StaticResource ContentBackground}"
             BorderThickness="0"
-            ChildPropertyName="Properties"
             ItemDragOver="SfTreeView_ItemDragOver"
             ItemDragStarting="SfTreeView_ItemDragStarting"
             ItemDropped="SfTreeView_ItemDropped"
             ItemDropping="SfTreeView_ItemDropping"
             ItemTemplateSelector="{StaticResource itemTemplateSelector}"
+            LoadOnDemandCommand="{Binding OnDemandLoadingCommand}"
             SelectionMode="Single"
             ShowLines="True"
             Visibility="Visible">
             <syncfusion:SfTreeView.HierarchyPropertyDescriptors>
                 <treeViewEngine:HierarchyPropertyDescriptor
-                    ChildPropertyName="Properties"
-                    IsExpandedPropertyName="IsExpanded"
                     IsSelectedPropertyName="IsSelected"
                     TargetType="{x:Type shell:ChunkViewModel}" />
+                <treeViewEngine:HierarchyPropertyDescriptor
+                    IsSelectedPropertyName="IsSelected"
+                    TargetType="{x:Type shell:GroupedChunkViewModel}" />
             </syncfusion:SfTreeView.HierarchyPropertyDescriptors>
         </syncfusion:SfTreeView>
 

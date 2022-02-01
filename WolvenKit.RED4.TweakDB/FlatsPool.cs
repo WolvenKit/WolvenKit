@@ -3,7 +3,7 @@ using System.Buffers;
 using System.Collections.Generic;
 using System.IO;
 using Microsoft.IO;
-using RED.CRC32;
+using WolvenKit.Core.CRC;
 using WolvenKit.Common.FNV1A;
 using WolvenKit.RED4.TweakDB.Types;
 

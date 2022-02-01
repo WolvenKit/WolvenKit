@@ -23,6 +23,7 @@ using WolvenKit.Core.Services;
 using WolvenKit.Functionality.Commands;
 using WolvenKit.Functionality.Controllers;
 using WolvenKit.Functionality.Services;
+using WolvenKit.Models;
 using WolvenKit.Models.Docking;
 using WolvenKit.ViewModels.Shell;
 
@@ -366,6 +367,25 @@ namespace WolvenKit.ViewModels.Tools
             {
                 AddFile(file);
             }
+        }
+
+        /// <summary>
+        /// Navigates the right-side of the browser to the existing file
+        /// </summary>
+        /// <param name="file"></param>
+        public void ShowFile(FileModel file)
+        {
+            _archiveManager.Archives
+                .Connect()
+                .TransformMany(x => x.Files.Values, y => y.Key)
+                .Filter(x => x.Key == file.Hash)
+                .Transform(x => new RedFileViewModel(x))
+                .Bind(out var list)
+                .Subscribe()
+                .Dispose();
+
+            RightItems.Clear();
+            RightItems.AddRange(list);
         }
 
         /// <summary>

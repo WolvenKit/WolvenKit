@@ -1,5 +1,6 @@
 using System.IO;
 using System.Runtime.InteropServices;
+using WolvenKit.Core.CRC;
 
 namespace WolvenKit.RED4.Archive
 {

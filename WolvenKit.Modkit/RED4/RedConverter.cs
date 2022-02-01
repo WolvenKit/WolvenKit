@@ -2,14 +2,18 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Runtime.Serialization;
-using System.Threading.Tasks;
+using System.Text;
 using Newtonsoft.Json;
 using WolvenKit.Common;
 using WolvenKit.Common.Conversion;
+using WolvenKit.Interfaces.Core;
 using WolvenKit.RED4.Archive.CR2W;
 using WolvenKit.RED4.Archive.IO;
+using WolvenKit.RED4.CR2W;
+using WolvenKit.RED4.CR2W.JSON;
 using WolvenKit.RED4.Types;
 using WolvenKit.RED4.Types.Exceptions;
+using JsonSerializer = System.Text.Json.JsonSerializer;
 
 namespace WolvenKit.Modkit.RED4
 {
@@ -24,30 +28,19 @@ namespace WolvenKit.Modkit.RED4
         /// <exception cref="InvalidParsingException"></exception>
         /// <exception cref="SerializationException"></exception>
         /// <exception cref="ArgumentOutOfRangeException"></exception>
-        public string ConvertToText(ETextConvertFormat format, Stream instream)
+        public string ConvertToText(ETextConvertFormat format, string infile)
         {
-            var cr2w = _wolvenkitFileService.TryReadRed4File(instream);
-            if (cr2w == null)
+            using var instream = new FileStream(infile, FileMode.Open, FileAccess.Read);
+
+            if (!_wolvenkitFileService.TryReadRed4File(instream, out var cr2w))
             {
                 throw new InvalidParsingException("ConvertToText");
             }
 
-            var json = "";
-            var list = new List<object>
-            {
-                new Dictionary<string, object>() {
-                { ":" + RedReflection.GetRedTypeFromCSType(cr2w.RootChunk.GetType()), new RedClassDto(cr2w.RootChunk) }
-            }
-            };
+            cr2w.MetaData.FileName = infile;
 
-            var dto = new
-            {
-                WolvenKitVersion = "8.4.0",
-                WKitJsonVersion = "0.0.1",
-                Exported = DateTime.UtcNow.ToString("o"),
-                Chunks = list
-            };
-            json = JsonConvert.SerializeObject(dto, Formatting.Indented);
+            var dto = new CR2WFileDto(cr2w);
+            var json = JsonSerializer.Serialize(dto, RedJsonOptions.Get());
 
             if (string.IsNullOrEmpty(json))
             {
@@ -78,26 +71,14 @@ namespace WolvenKit.Modkit.RED4
         /// <param name="outputDirInfo"></param>
         /// <returns></returns>
         /// <exception cref="ArgumentOutOfRangeException"></exception>
-        public async Task<bool> ConvertToAndWriteAsync(ETextConvertFormat format, string infile, DirectoryInfo outputDirInfo)
+        public bool ConvertToAndWrite(ETextConvertFormat format, string infile, DirectoryInfo outputDirInfo)
         {
-            using var fs = new FileStream(infile, FileMode.Open, FileAccess.Read);
             try
             {
-                var json = ConvertToText(format, fs);
+                var text = ConvertToText(format, infile);
                 var outpath = Path.Combine(outputDirInfo.FullName, $"{Path.GetFileName(infile)}.{format}");
 
-                switch (format)
-                {
-                    case ETextConvertFormat.json:
-                        await File.WriteAllTextAsync(outpath, json);
-                        break;
-                    case ETextConvertFormat.xml:
-                        var doc = JsonConvert.DeserializeXmlNode(json, RedFileDto.Magic);
-                        doc?.Save(outpath);
-                        break;
-                    default:
-                        throw new ArgumentOutOfRangeException(nameof(format), format, null);
-                }
+                File.WriteAllText(outpath, text);
 
                 _loggerService.Success($"Exported {infile} to {outpath}");
 
@@ -127,8 +108,8 @@ namespace WolvenKit.Modkit.RED4
         /// <exception cref="InvalidParsingException"></exception>
         public static CR2WFile ConvertFromJson(string json)
         {
-            var newdto = JsonConvert.DeserializeObject<RedClassDto>(json);
-            return newdto != null ? newdto.ToW2rc() : throw new InvalidParsingException("ConvertFromJson");
+            var dto = JsonSerializer.Deserialize<CR2WFileDto>(json, RedJsonOptions.Get());
+            return dto.Data;
         }
 
         /// <summary>

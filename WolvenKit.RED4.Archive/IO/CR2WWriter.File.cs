@@ -5,10 +5,10 @@ using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
+using WolvenKit.Core.CRC;
 using WolvenKit.RED4.Archive.Buffer;
 using WolvenKit.RED4.Archive.CR2W;
 using WolvenKit.RED4.Types;
-using WolvenKit.RED4.Types.Compression;
 using WolvenKit.RED4.Types.Exceptions;
 
 namespace WolvenKit.RED4.Archive.IO

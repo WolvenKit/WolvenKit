@@ -12,6 +12,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
+using gpm.Installer;
 using Microsoft.Win32;
 using Microsoft.WindowsAPICodePack.Dialogs;
 using ReactiveUI;
@@ -57,7 +58,7 @@ namespace WolvenKit.ViewModels.Shell
         private readonly IRecentlyUsedItemsService _recentlyUsedItemsService;
         private readonly IProgressService<double> _progressService;
         private readonly IWatcherService _watcherService;
-
+        private readonly AutoInstallerService _autoInstallerService;
         private readonly HomePageViewModel _homePageViewModel;
 
         #endregion fields
@@ -75,7 +76,8 @@ namespace WolvenKit.ViewModels.Shell
             INotificationService notificationService,
             IRecentlyUsedItemsService recentlyUsedItemsService,
             IProgressService<double> progressService,
-            IWatcherService watcherService
+            IWatcherService watcherService,
+            AutoInstallerService autoInstallerService
         )
         {
             _projectManager = projectManager;
@@ -86,6 +88,7 @@ namespace WolvenKit.ViewModels.Shell
             _recentlyUsedItemsService = recentlyUsedItemsService;
             _progressService = progressService;
             _watcherService = watcherService;
+            _autoInstallerService = autoInstallerService;
 
             _homePageViewModel = Locator.Current.GetService<HomePageViewModel>();
 
@@ -150,13 +153,38 @@ namespace WolvenKit.ViewModels.Shell
                 ImportExportToolVM,
             };
 
-            //_settingsManager
-            //    .WhenAnyValue(x => x.UpdateChannel)
-            //    .Subscribe(_ =>
-            //    {
+            _settingsManager
+                .WhenAnyValue(x => x.UpdateChannel)
+                .Subscribe(async x =>
+                {
+                    _autoInstallerService.UseChannel(x.ToString());
 
+                    // 1 API call
+                    if (!(await _autoInstallerService.CheckForUpdate())
+                        .Out(out var release))
+                    {
+                        _loggerService.Info($"Is update available: {release != null}");
+                        return;
+                    }
 
-            //    });
+                    _loggerService.Success($"Update available: {release.TagName}");
+                    //if (!await _autoInstallerService.DownloadUpdate(release))
+                    //{
+                    //    return;
+                    //}
+
+                    var result = await Interactions.ShowMessageBoxAsync("An update is available for WolvenKit. Exit the app and install it?", "Update available");
+                    switch (result)
+                    {
+                        case WMessageBoxResult.OK:
+                        case WMessageBoxResult.Yes:
+                            if (await _autoInstallerService.Update()) // 1 API call
+                            {
+
+                            }
+                            break;
+                    }
+                });
         }
 
         #endregion constructors
@@ -205,10 +233,16 @@ namespace WolvenKit.ViewModels.Shell
             ShowFirstTimeSetup();
         }
 
-        private void InitUpdateService()
-        {
 
-        }
+        private void InitUpdateService() => _autoInstallerService
+               .UseWPF()
+               .WithVersion(_settingsManager.GetVersionNumber())
+               //.WithVersion("8.4.2") //DBG
+               .WithRestart("WolvenKit.exe")
+               .WithChannel(EUpdateChannel.Nightly.ToString(), "wolvenkit/wolvenkit-nightly-releases")
+               .WithChannel(EUpdateChannel.Stable.ToString(), "wolvenkit/wolvenkit")
+               .UseChannel(_settingsManager.UpdateChannel.ToString())
+               .Build();
 
 
         private async void ShowFirstTimeSetup()

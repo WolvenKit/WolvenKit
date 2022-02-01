@@ -14,6 +14,11 @@ namespace WolvenKit.Functionality.Layout.inkWidgets
     {
         public inkFlexWidget FlexWidget => Widget as inkFlexWidget;
 
+        public inkFlexControl() : base()
+        {
+
+        }
+
         public inkFlexControl(inkFlexWidget widget, RDTWidgetView widgetView) : base(widget, widgetView)
         {
 

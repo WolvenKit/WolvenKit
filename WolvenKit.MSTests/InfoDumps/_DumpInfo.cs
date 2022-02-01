@@ -48,11 +48,9 @@ namespace WolvenKit.MSTests
                     {
                         using var originalMemoryStream = new MemoryStream();
                         ModTools.ExtractSingleToStream(archive, hash, originalMemoryStream);
-                        var originalFile = parser.TryReadRed4FileHeaders(originalMemoryStream);
-                        if (originalFile != null)
+                        if (parser.TryReadRed4FileHeaders(originalMemoryStream, out var originalFile))
                         {
-                            var c = originalFile.RootChunk.GetType().Name;
-                            results[ext].TryAdd(c, 0);
+                            results[ext].TryAdd(originalFile.StringDict[1], 0);
                         }
                         else
                         {

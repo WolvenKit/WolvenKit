@@ -15,8 +15,7 @@ namespace WolvenKit.Modkit.RED4
         public bool DumpEntityPackageAsJson(Stream entStream, FileInfo outfile)
         {
             string outpath = Path.ChangeExtension(outfile.FullName, ".json");
-            var cr2w = _wolvenkitFileService.TryReadRed4File(entStream);
-            if (cr2w == null)
+            if (!_wolvenkitFileService.TryReadRed4File(entStream, out var cr2w))
             {
                 return false;
             }
@@ -42,7 +41,7 @@ namespace WolvenKit.Modkit.RED4
                 CompiledPackage package = new CompiledPackage(_hashService);
                 packageStream.Seek(0, SeekOrigin.Begin);
                 package.Read(new BinaryReader(packageStream));
-                string data = JsonConvert.SerializeObject(new RedFileDto(package), Formatting.Indented);
+                string data = JsonConvert.SerializeObject(new RedFileDto(cr2w), Formatting.Indented);
                 File.WriteAllText(outfile, data);
                 return true;
             }
@@ -63,7 +62,7 @@ namespace WolvenKit.Modkit.RED4
                     CompiledPackage package = new CompiledPackage(_hashService);
                     packageStream.Seek(0, SeekOrigin.Begin);
                     package.Read(new BinaryReader(packageStream));
-                    datas.Add(new RedFileDto(package));
+                    datas.Add(new RedFileDto(cr2w));
                 }
             }
             if (datas.Count > 1)

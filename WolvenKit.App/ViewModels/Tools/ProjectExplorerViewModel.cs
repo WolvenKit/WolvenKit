@@ -20,6 +20,7 @@ using WolvenKit.Common.Interfaces;
 using WolvenKit.Common.Services;
 using WolvenKit.Core.Services;
 using WolvenKit.Functionality.Commands;
+using WolvenKit.Functionality.Controllers;
 using WolvenKit.Functionality.Services;
 using WolvenKit.Interaction;
 using WolvenKit.Models;
@@ -48,6 +49,8 @@ namespace WolvenKit.ViewModels.Tools
         private readonly IWatcherService _watcherService;
         private readonly IModTools _modTools;
         private readonly IProgressService<double> _progressService;
+        private readonly IGameControllerFactory _gameController;
+
 
         private EditorProject ActiveMod => _projectManager.ActiveProject;
         private readonly IObservableList<FileModel> _observableList;
@@ -62,6 +65,7 @@ namespace WolvenKit.ViewModels.Tools
             IWatcherService watcherService,
             IProgressService<double> progressService,
             IModTools modTools
+            IGameControllerFactory gameController
         ) : base(ToolTitle)
         {
             _projectManager = projectManager;
@@ -69,6 +73,7 @@ namespace WolvenKit.ViewModels.Tools
             _watcherService = watcherService;
             _modTools = modTools;
             _progressService = progressService;
+            _gameController = gameController;
 
             SideInDockedMode = DockSide.Left;
 
@@ -143,6 +148,13 @@ namespace WolvenKit.ViewModels.Tools
         public ICommand CopyRelPathCommand { get; private set; }
         private bool CanCopyRelPath() => _projectManager.ActiveProject != null && SelectedItem != null;
         private void ExecuteCopyRelPath() => Clipboard.SetText(FileModel.GetRelativeName(SelectedItem.FullName, ActiveMod));
+
+        /// <summary>
+        /// Reimports the game file to replace the current one
+        /// </summary>
+        public ICommand ReimportFileCommand { get; private set; }
+        private bool CanReimportFile() => _projectManager.ActiveProject != null && SelectedItem != null && !SelectedItem.IsDirectory;
+        private void ExecuteReimportFile() => Task.Run(() => _gameController.GetController().AddToMod(SelectedItem.Hash));
 
         /// <summary>
         /// Cuts selected node to the clipboard.
@@ -445,6 +457,19 @@ namespace WolvenKit.ViewModels.Tools
             }
         }
 
+        /// <summary>
+        /// Opens selected node in asset browser.
+        /// </summary>
+        public ICommand OpenInAssetBrowserCommand { get; private set; }
+
+        private bool CanOpenInAssetBrowser() => _projectManager.ActiveProject != null && SelectedItem != null && !SelectedItem.IsDirectory;
+
+        private void ExecuteOpenInAssetBrowser()
+        {
+            Locator.Current.GetService<AppViewModel>().AssetBrowserVM.IsVisible = true;
+            Locator.Current.GetService<AssetBrowserViewModel>().ShowFile(SelectedItem);
+        }
+
         #endregion
 
         #region Tw3 Commands
@@ -471,10 +496,6 @@ namespace WolvenKit.ViewModels.Tools
         ///// </summary>
         //public ICommand FastRenderCommand { get; private set; }
 
-        ///// <summary>
-        ///// Opens selected node in asset browser.
-        ///// </summary>
-        //public ICommand OpenInAssetBrowserCommand { get; private set; }
 
         //private async void AddAllImports() => await _tw3Controller.AddAllImportsAsync(SelectedItem.FullName, true);
 
@@ -492,7 +513,6 @@ namespace WolvenKit.ViewModels.Tools
         //private bool CanFastRender() => _projectManager.ActiveProject is Tw3Project && SelectedItem != null
         //    && !SelectedItem.IsDirectory && SelectedItem.GetExtension() == ERedExtension.w2mesh.ToString();
 
-        //private bool CanOpenInAssetBrowser() => _projectManager.ActiveProject is Tw3Project && SelectedItem != null;
 
         //private void Cook() => RequestFileCook(this, new RequestFileOpenArgs { File = SelectedItem.FullName });
 
@@ -506,10 +526,6 @@ namespace WolvenKit.ViewModels.Tools
         //    // TODO: Handle command logic here
         //}
 
-        //private void ExecuteOpenInAssetBrowser()
-        //{
-        //    // TODO: Handle command logic here
-        //}
 
         //public ICommand PESearchStartedCommand { get; private set; }
 
@@ -551,6 +567,7 @@ namespace WolvenKit.ViewModels.Tools
             DeleteFileCommand = new RelayCommand(ExecuteDeleteFile, CanDeleteFile);
             RenameFileCommand = new RelayCommand(ExecuteRenameFile, CanRenameFile);
             CopyRelPathCommand = new RelayCommand(ExecuteCopyRelPath, CanCopyRelPath);
+            ReimportFileCommand = new RelayCommand(ExecuteReimportFile, CanReimportFile);
             OpenInFileExplorerCommand = new RelayCommand(ExecuteOpenInFileExplorer, CanOpenInFileExplorer);
 
             Bk2ImportCommand = new RelayCommand(ExecuteBk2Import, CanBk2Import);
@@ -571,7 +588,7 @@ namespace WolvenKit.ViewModels.Tools
             //ExportMeshCommand = new RelayCommand(ExportMesh, CanExportMesh);
             //AddAllImportsCommand = new RelayCommand(AddAllImports, CanAddAllImports);
             //ExportJsonCommand = new RelayCommand(ExecuteExportJson, CanExportJson);
-            //OpenInAssetBrowserCommand = new RelayCommand(ExecuteOpenInAssetBrowser, CanOpenInAssetBrowser);
+            OpenInAssetBrowserCommand = new RelayCommand(ExecuteOpenInAssetBrowser, CanOpenInAssetBrowser);
         }
 
         /// <summary>

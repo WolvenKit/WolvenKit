@@ -226,6 +226,19 @@ namespace WolvenKit.Models
             }
             else
             {
+                if (fullname.StartsWith(project.ModDirectory))
+                {
+                    var tmpName = Path.GetRelativePath(project.ModDirectory, fullname);
+                    if (tmpName != ".")
+                    {
+                        if (ulong.TryParse(tmpName, out var hash))
+                        {
+                            return hash;
+                        }
+                        return FNV1A64HashAlgorithm.HashString(tmpName);
+                    }
+                }
+
                 return FNV1A64HashAlgorithm.HashString(fullname);
             }
         }
