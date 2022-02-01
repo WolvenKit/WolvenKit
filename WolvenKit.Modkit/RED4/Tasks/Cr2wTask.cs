@@ -116,7 +116,7 @@ namespace CP77Tools.Tasks
                 if (serialize)
                 {
                     var infile = fileInfo.FullName;
-                    if (await _modTools.ConvertToAndWriteAsync(format, infile, outputDirInfo))
+                    if (await Task.Run(() => _modTools.ConvertToAndWrite(format, infile, outputDirInfo)))
                     {
                         _loggerService.Success($"Saved {infile} to {format.ToString()}.");
                     }

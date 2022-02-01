@@ -37,7 +37,7 @@ namespace WolvenKit.Common.Interfaces
             ECookedFileFormat[] forcebuffers = null);
         void UncookAll(Archive ar, DirectoryInfo outDir, GlobalExportArgs args, bool unbundle = false, string pattern = "", string regex = "", DirectoryInfo rawOutDir = null, ECookedFileFormat[] forcebuffers = null);
 
-        public Task<bool> ConvertToAndWriteAsync(ETextConvertFormat format, string infile, DirectoryInfo outputDirInfo);
+        public bool ConvertToAndWrite(ETextConvertFormat format, string infile, DirectoryInfo outputDirInfo);
 
         public bool ConvertFromAndWrite(FileInfo fileInfo, DirectoryInfo outputDirInfo);
     }

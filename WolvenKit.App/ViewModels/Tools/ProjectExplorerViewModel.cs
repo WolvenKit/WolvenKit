@@ -64,7 +64,7 @@ namespace WolvenKit.ViewModels.Tools
             ILoggerService loggerService,
             IWatcherService watcherService,
             IProgressService<double> progressService,
-            IModTools modTools
+            IModTools modTools,
             IGameControllerFactory gameController
         ) : base(ToolTitle)
         {
@@ -435,7 +435,7 @@ namespace WolvenKit.ViewModels.Tools
             {
                 Directory.CreateDirectory(outDirectoryPath);
 
-                await _modTools.ConvertToAndWriteAsync(fmt, file, new DirectoryInfo(outDirectoryPath));
+                await Task.Run(() => _modTools.ConvertToAndWrite(fmt, file, new DirectoryInfo(outDirectoryPath)));
             }
         }
 
