@@ -9,7 +9,7 @@ namespace WolvenKit.Core.Compression
             => Kraken_Decompress_Raw(buffer, buffer.Length, outputBuffer, outputBuffer.Length);
 
         public static int Kraken_Compress(byte[] buffer, byte[] outputBuffer, long level)
-            => Kraken_Compress_Raw(buffer, buffer.Length, outputBuffer, level)
+            => Kraken_Compress_Raw(buffer, buffer.Length, outputBuffer, level);
 
         #region Linux
         [DllImport("lib/ooz", EntryPoint = "_Z17Kraken_DecompressPKhmPhm")]

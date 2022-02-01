@@ -102,8 +102,7 @@ public static class Oodle
 
         if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
         {
-            //return KrakenLib.Load();
-            throw new NotImplementedException();
+
         }
         throw new NotImplementedException();
     }
@@ -114,17 +113,17 @@ public static class Oodle
     {
         if (rawBuf.Length > 256)
         {
-            var compressedBufferSizeNeeded = GetCompressedBufferSizeNeeded(rawBuf.Length);
+            //var compressedBufferSizeNeeded = GetCompressedBufferSizeNeeded(rawBuf.Length);
+            //var compressedBuffer = new byte[compressedBufferSizeNeeded];
+            IEnumerable<byte> compressedBuffer = new List<byte>();
 
-            var compressedBuffer = new byte[compressedBufferSizeNeeded];
-
-            var compressedSize = OodleLib.OodleLZ_Compress(rawBuf, compressedBuffer, Oodle.Compressor.Kraken, CompressionLevel.Optimal2);
+            var compressedSize = Oodle.Compress(rawBuf, ref compressedBuffer, false, CompressionLevel.Optimal2);
 
             var outArray = new byte[compressedSize + 8];
 
             Array.Copy(BitConverter.GetBytes(KARK), 0, outArray, 0, 4);
             Array.Copy(BitConverter.GetBytes(rawBuf.Length), 0, outArray, 4, 4);
-            Array.Copy(compressedBuffer, 0, outArray, 8, compressedSize);
+            Array.Copy(compressedBuffer.ToArray(), 0, outArray, 8, compressedSize);
 
             if (rawBuf.Length > outArray.Length)
             {
@@ -150,7 +149,7 @@ public static class Oodle
             var compressedData = br.ReadBytes(compBuf.Length - 8);
             rawBuf = new byte[size];
 
-            var r = OodleLib.OodleLZ_Decompress(compressedData, rawBuf);
+            var r = Oodle.Decompress(compressedData, rawBuf);
 
         }
         else
@@ -194,7 +193,7 @@ public static class Oodle
         }
         else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
         {
-            result = OozNative.Kraken_Compress(inputBuffer, compressedBuffer, level);
+            result = OozNative.Kraken_Compress(inputBuffer, compressedBuffer, (int)level);
         }
         else
         {
@@ -249,7 +248,7 @@ public static class Oodle
         }
         else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
         {
-            result = OozNative.Kraken_Decompress(inputBuffer, inputBuffer.Length, outputBuffer, outputBuffer.Length);
+            result = OozNative.Kraken_Decompress(inputBuffer, outputBuffer);
         }
         else
         {
@@ -372,32 +371,12 @@ public static class Oodle
     /// </summary>
     /// <param name="count"></param>
     /// <returns></returns>
-    /// <exception cref="NotImplementedException"></exception>
     public static int GetCompressedBufferSizeNeeded(int count)
     {
-        if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
-        {
-            var n = ((count + 0x3ffff + ((uint)(count + 0x3ffff >> 0x3f) & 0x3ffff))
-                    >> 0x12) * 0x112 + count;
-            //var n  = OodleNative.GetCompressedBufferSizeNeeded((long)count);
-            return (int)n;
-        }
-        // else if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
-        // {
-        //     try
-        //     {
-        //         return OozNative.GetCompressedBufferSizeNeeded(count);
-        //     }
-        //     catch (Exception e)
-        //     {
-        //         Console.WriteLine(e);
-        //         throw;
-        //     }
-        // }
-        else
-        {
-            throw new NotImplementedException();
-        }
+        var n = ((count + 0x3ffff + ((uint)(count + 0x3ffff >> 0x3f) & 0x3ffff))
+                 >> 0x12) * 0x112 + count;
+        //var n  = OodleNative.GetCompressedBufferSizeNeeded((long)count);
+        return (int)n;
     }
 
     private static bool TryCopyOodleLib()
