@@ -178,7 +178,7 @@ namespace WolvenKit.Common.Services
             }
             else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
             {
-                OozNative.Kraken_Decompress(inbuffer, inbuffer.Length, outputbuffer, outputbuffer.Length);
+                OozNative.Kraken_Decompress(inbuffer, outputbuffer);
             }
 
             hashDictionary.EnsureCapacity(1_100_000);
@@ -229,7 +229,7 @@ namespace WolvenKit.Common.Services
                 {
                     continue;
                 }
-                
+
                 if (!hashDict.ContainsKey(hash))
                 {
                     hashDict.Add(hash, new SAsciiString(line));

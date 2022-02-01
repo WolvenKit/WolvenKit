@@ -17,7 +17,7 @@ public static class Oodle
         Uncompressed,
         Compressed
     }
-    
+
     public const uint KARK = 1263681867; // 0x4b, 0x41, 0x52, 0x4b
 
     public static bool IsCompressed(byte[] buf) => buf.Length >= 4 && buf[0] == 0x4B && buf[1] == 0x41 && buf[2] == 0x52 && buf[3] == 0x4B;
@@ -119,9 +119,9 @@ public static class Oodle
         }
         else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
         {
-          throw new NotImplementedException();
+            result = OozNative.Kraken_Compress(inputBuffer, compressedBuffer, level);
         }
-        else 
+        else
         {
           throw new NotImplementedException();
         }
@@ -176,7 +176,7 @@ public static class Oodle
         else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
         {
           result = OozNative.Kraken_Decompress(
-              compressedData, compressedData.Length, rawBuf, rawBuf.Length);
+              compressedData, rawBuf);
         }
         else
         {
