@@ -151,11 +151,7 @@ namespace WolvenKit.Modkit.RED4
 
             List<CMaterialInstance> LocalMaterial = new List<CMaterialInstance>();
 
-            bool isbuffered = true;
-            if (cmesh.LocalMaterialBuffer.RawDataHeaders.Count == 0)
-                isbuffered = false;
-
-            if (isbuffered)
+            if (cmesh.LocalMaterialBuffer.RawDataHeaders.Count != 0)
             {
                 MemoryStream materialStream = GetMaterialStream(meshStream, cr2w);
                 byte[] bytes = materialStream.ToArray();
@@ -525,12 +521,9 @@ namespace WolvenKit.Modkit.RED4
                     rawMat.Name = keys[i];
                     rawMat.Data = new Dictionary<string, object>();
 
-                    foreach (CHandle<CMaterialParameter> item in usedMts[keys[i]].Parameters[2])
+                    foreach (var item in usedMts[keys[i]].Parameters[2])
                     {
-                        var refer = item.Chunk;
-                        var inst = (CMaterialParameter)RedTypeManager.Create(refer.GetType());
-
-                        rawMat.Data.Add(refer.ParameterName, GetMaterialParameter(inst));
+                        rawMat.Data.Add(item.Chunk.ParameterName, GetSerializableValue(item.Chunk));
                     }
 
                     matTemplates.Add(rawMat);
@@ -546,184 +539,264 @@ namespace WolvenKit.Modkit.RED4
             string str = RedJsonSerializer.Serialize(matData);
 
             File.WriteAllText(Path.ChangeExtension(outfile.FullName,".Material.json"), str);
-
         }
 
-        private void SetMaterialParameter(CMaterialParameter materialParameter, JsonElement value)
+        
+
+        private IRedType GetMaterialParameterValue(Type materialParameterType, JsonElement value)
         {
-            if (materialParameter is CMaterialParameterColor col)
+            if (materialParameterType == typeof(CMaterialParameterColor))
             {
                 var dict = value.Deserialize<Dictionary<string, byte>>();
 
-                col.Color.Red = dict["Red"];
-                col.Color.Green = dict["Green"];
-                col.Color.Blue = dict["Blue"];
-                col.Color.Alpha = dict["Alpha"];
+                return new CColor
+                {
+                    Red = dict["Red"],
+                    Green = dict["Green"],
+                    Blue = dict["Blue"],
+                    Alpha = dict["Alpha"],
+                };
             }
 
-            if (materialParameter is CMaterialParameterCpuNameU64 cpu)
+            if (materialParameterType == typeof(CMaterialParameterCpuNameU64))
             {
-                cpu.Name = value.GetString();
+                return (CName)value.GetString();
             }
 
-            if (materialParameter is CMaterialParameterCube cub)
+            if (materialParameterType == typeof(CMaterialParameterCube))
             {
-                cub.Texture.DepotPath = value.GetString();
+                return new CResourceReference<ITexture>
+                {
+                    DepotPath = value.GetString(),
+                    Flags = InternalEnums.EImportFlags.Default
+                };
             }
 
-            if (materialParameter is CMaterialParameterFoliageParameters fol)
+            if (materialParameterType == typeof(CMaterialParameterFoliageParameters))
             {
-                fol.FoliageProfile.DepotPath = value.GetString();
+                return new CResourceReference<CFoliageProfile>
+                {
+                    DepotPath = value.GetString(),
+                    Flags = InternalEnums.EImportFlags.Default
+                };
             }
 
-            if (materialParameter is CMaterialParameterGradient gra)
+            if (materialParameterType == typeof(CMaterialParameterGradient))
             {
-                gra.Gradient.DepotPath = value.GetString();
+                return new CResourceReference<CGradient>
+                {
+                    DepotPath = value.GetString(),
+                    Flags = InternalEnums.EImportFlags.Default
+                };
             }
 
-            if (materialParameter is CMaterialParameterHairParameters hai)
+            if (materialParameterType == typeof(CMaterialParameterHairParameters))
             {
-                hai.HairProfile.DepotPath = value.GetString();
+                return new CResourceReference<CHairProfile>
+                {
+                    DepotPath = value.GetString(),
+                    Flags = InternalEnums.EImportFlags.Default
+                };
             }
 
-            if (materialParameter is CMaterialParameterMultilayerMask mulm)
+            if (materialParameterType == typeof(CMaterialParameterMultilayerMask))
             {
-                mulm.Mask.DepotPath = value.GetString();
+                return new CResourceReference<Multilayer_Mask>
+                {
+                    DepotPath = value.GetString(),
+                    Flags = InternalEnums.EImportFlags.Default
+                };
             }
 
-            if (materialParameter is CMaterialParameterMultilayerSetup muls)
+            if (materialParameterType == typeof(CMaterialParameterMultilayerSetup))
             {
-                muls.Setup.DepotPath = value.GetString();
+                return new CResourceReference<Multilayer_Setup>
+                {
+                    DepotPath = value.GetString(),
+                    Flags = InternalEnums.EImportFlags.Default
+                };
             }
 
-            if (materialParameter is CMaterialParameterScalar sca)
+            if (materialParameterType == typeof(CMaterialParameterScalar))
             {
-                sca.Scalar = value.GetSingle();
+                return (CFloat)value.GetSingle();
             }
 
-            if (materialParameter is CMaterialParameterSkinParameters ski)
+            if (materialParameterType == typeof(CMaterialParameterSkinParameters))
             {
-                ski.SkinProfile.DepotPath = value.GetString();
+                return new CResourceReference<CSkinProfile>
+                {
+                    DepotPath = value.GetString(),
+                    Flags = InternalEnums.EImportFlags.Default
+                };
             }
 
-            if (materialParameter is CMaterialParameterStructBuffer str)
+            if (materialParameterType == typeof(CMaterialParameterStructBuffer))
             {
-                // TODO: Is there something I'm missing here?
+                return null;
             }
 
-            if (materialParameter is CMaterialParameterTerrainSetup ter)
+            if (materialParameterType == typeof(CMaterialParameterTerrainSetup))
             {
-                ter.Setup.DepotPath = value.GetString();
+                return new CResourceReference<CTerrainSetup>
+                {
+                    DepotPath = value.GetString(),
+                    Flags = InternalEnums.EImportFlags.Default
+                };
             }
 
-            if (materialParameter is CMaterialParameterTexture tex)
+            if (materialParameterType == typeof(CMaterialParameterTexture))
             {
-                tex.Texture.DepotPath = value.GetString();
+                return new CResourceReference<ITexture>
+                {
+                    DepotPath = value.GetString(),
+                    Flags = InternalEnums.EImportFlags.Default
+                };
             }
 
-            if (materialParameter is CMaterialParameterTextureArray texa)
+            if (materialParameterType == typeof(CMaterialParameterTextureArray))
             {
-                texa.Texture.DepotPath = value.GetString();
+                return new CResourceReference<ITexture>
+                {
+                    DepotPath = value.GetString(),
+                    Flags = InternalEnums.EImportFlags.Default
+                };
             }
 
-            if (materialParameter is CMaterialParameterVector vec)
+            if (materialParameterType == typeof(CMaterialParameterVector))
             {
                 var dict = value.Deserialize<Dictionary<string, float>>();
 
-                vec.Vector.X = dict["X"];
-                vec.Vector.Y = dict["Y"];
-                vec.Vector.Z = dict["Z"];
-                vec.Vector.W = dict["W"];
+                return new Vector4
+                {
+                    X = dict["X"],
+                    Y = dict["Y"],
+                    Z = dict["Z"],
+                    W = dict["W"]
+                };
             }
+
+            throw new NotImplementedException(materialParameterType.Name);
         }
 
-        public object GetMaterialParameter(CMaterialParameter materialParameter)
+        private object GetSerializableValue(IRedType value)
         {
-            if (materialParameter is CMaterialParameterColor col)
+            if (value is CColor col)
             {
                 return new Dictionary<string, byte>
                 {
-                    {nameof(col.Color.Red), col.Color.Red},
-                    {nameof(col.Color.Green), col.Color.Green},
-                    {nameof(col.Color.Blue), col.Color.Blue},
-                    {nameof(col.Color.Alpha), col.Color.Alpha},
+                    {nameof(col.Red), col.Red},
+                    {nameof(col.Green), col.Green},
+                    {nameof(col.Blue), col.Blue},
+                    {nameof(col.Alpha), col.Alpha},
                 };
+            }
+
+            if (value is CName cName)
+            {
+                return (string)cName;
+            }
+
+            if (value is CFloat cFloat)
+            {
+                return (float)cFloat;
+            }
+
+            if (value is Vector4 vec)
+            {
+                return new Dictionary<string, float>
+                {
+                    {nameof(vec.X), vec.X},
+                    {nameof(vec.Y), vec.Y},
+                    {nameof(vec.Z), vec.Z},
+                    {nameof(vec.W), vec.W},
+                };
+            }
+
+            if (value is IRedResourceReference rRef)
+            {
+                return (string)rRef.DepotPath;
+            }
+
+            throw new NotImplementedException(value.GetType().Name);
+        }
+
+        private object GetSerializableValue(CMaterialParameter materialParameter)
+        {
+            if (materialParameter is CMaterialParameterColor col)
+            {
+                return GetSerializableValue(col.Color);
             }
 
             if (materialParameter is CMaterialParameterCpuNameU64 cpu)
             {
-                return (string)cpu.Name ?? "";
+                return GetSerializableValue(cpu.Name);
             }
 
             if (materialParameter is CMaterialParameterCube cub)
             {
-                return (string)cub.Texture.DepotPath ?? "";
+                return GetSerializableValue(cub.Texture);
             }
 
             if (materialParameter is CMaterialParameterFoliageParameters fol)
             {
-                return (string)fol.FoliageProfile.DepotPath ?? "";
+                return GetSerializableValue(fol.FoliageProfile);
             }
 
             if (materialParameter is CMaterialParameterGradient gra)
             {
-                return (string)gra.Gradient.DepotPath ?? "";
+                return GetSerializableValue(gra.Gradient);
             }
 
             if (materialParameter is CMaterialParameterHairParameters hai)
             {
-                return (string)hai.HairProfile.DepotPath ?? "";
+                return GetSerializableValue(hai.HairProfile);
             }
 
             if (materialParameter is CMaterialParameterMultilayerMask mulm)
             {
-                return (string)mulm.Mask.DepotPath ?? "";
+                return GetSerializableValue(mulm.Mask);
             }
 
             if (materialParameter is CMaterialParameterMultilayerSetup muls)
             {
-                return (string)muls.Setup.DepotPath ?? "";
+                return GetSerializableValue(muls.Setup);
             }
 
             if (materialParameter is CMaterialParameterScalar sca)
             {
-                return (float)sca.Scalar;
+                return GetSerializableValue(sca.Scalar);
             }
 
             if (materialParameter is CMaterialParameterSkinParameters ski)
             {
-                return (string)ski.SkinProfile.DepotPath ?? "";
+                return GetSerializableValue(ski.SkinProfile);
             }
 
             if (materialParameter is CMaterialParameterStructBuffer str)
             {
                 // TODO: Is there something I'm missing here?
+                return null;
             }
 
             if (materialParameter is CMaterialParameterTerrainSetup ter)
             {
-                return (string)ter.Setup.DepotPath ?? "";
+                return GetSerializableValue(ter.Setup);
             }
 
             if (materialParameter is CMaterialParameterTexture tex)
             {
-                return (string)tex.Texture.DepotPath ?? "";
+                return GetSerializableValue(tex.Texture);
             }
 
             if (materialParameter is CMaterialParameterTextureArray texa)
             {
-                return (string)texa.Texture.DepotPath ?? "";
+                return GetSerializableValue(texa.Texture);
             }
 
             if (materialParameter is CMaterialParameterVector vec)
             {
-                return new Dictionary<string, float>
-                {
-                    {nameof(vec.Vector.X), vec.Vector.X},
-                    {nameof(vec.Vector.Y), vec.Vector.Y},
-                    {nameof(vec.Vector.Z), vec.Vector.Z},
-                    {nameof(vec.Vector.W), vec.Vector.W},
-                };
+                return GetSerializableValue(vec.Vector);
             }
 
             throw new NotImplementedException(materialParameter.GetType().Name);
@@ -792,7 +865,7 @@ namespace WolvenKit.Modkit.RED4
                     var refer = mt.Parameters[2][e].Chunk;
                     if(refer.ParameterName == mt.UsedParameters[2][i].Name)
                     {
-                        rawMaterial.Data.Add(mt.UsedParameters[2][i].Name, GetMaterialParameter(refer));
+                        rawMaterial.Data.Add(refer.ParameterName, GetSerializableValue(refer));
                     }
                 }
             }
@@ -802,13 +875,27 @@ namespace WolvenKit.Modkit.RED4
             {
                 foreach (var kvp in mi.Values)
                 {
+                    object value = null;
+                    foreach (var handle in mt.Parameters[2])
+                    {
+                        if (Equals(handle.Chunk.ParameterName, kvp.Key))
+                        {
+                            value = GetSerializableValue(kvp.Value);
+                        }
+                    }
+
+                    if (value == null)
+                    {
+                        value = new MaterialValueWrapper { Type = kvp.Value.RedType, Value = kvp.Value };
+                    }
+
                     if (rawMaterial.Data.ContainsKey(kvp.Key))
                     {
-                        rawMaterial.Data[kvp.Key] = GetMaterialParameter((CMaterialParameter)kvp.Value);
+                        rawMaterial.Data[kvp.Key] = value;
                     }
                     else
                     {
-                        rawMaterial.Data.Add(kvp.Key, GetMaterialParameter((CMaterialParameter)kvp.Value));
+                        rawMaterial.Data.Add(kvp.Key, value);
                     }
                 }
             }
@@ -883,21 +970,29 @@ namespace WolvenKit.Modkit.RED4
                     var keys = matData.Materials[i].Data.Keys.ToList();
                     if (mt != null)
                     {
-                        for (int j = 0; j < keys.Count; j++)
+                        foreach (var (key, value) in matData.Materials[i].Data)
                         {
+                            var found = false;
+
                             for (int k = 0; k < mt.Parameters[2].Count; k++)
                             {
                                 var refer = mt.Parameters[2][k].Chunk;
-                                var referCopy = (CMaterialParameter)refer.DeepCopy();
 
-                                if(refer.ParameterName == keys[j])
+                                if (refer.ParameterName == key)
                                 {
-                                    SetMaterialParameter(referCopy, (JsonElement)matData.Materials[i].Data[keys[j]]);
-                                    if (!Equals(refer, referCopy))
-                                    {
-                                        chunk.Values.Add(new CKeyValuePair(referCopy.ParameterName, referCopy));
-                                    }
+                                    found = true;
+
+                                    chunk.Values.Add(new CKeyValuePair(refer.ParameterName, GetMaterialParameterValue(refer.GetType(), (JsonElement)value)));
                                 }
+                            }
+
+                            if (!found)
+                            {
+                                var wrapper = ((JsonElement)value).Deserialize<MaterialValueWrapper>();
+                                var (type, _) = RedReflection.GetCSTypeFromRedType(wrapper.Type);
+
+                                var nValue = ((JsonElement)wrapper.Value).Deserialize(type, RedJsonSerializer.Options);
+                                chunk.Values.Add(new CKeyValuePair(key, (IRedType)nValue));
                             }
                         }
                     }

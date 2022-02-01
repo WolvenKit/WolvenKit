@@ -180,4 +180,10 @@ namespace WolvenKit.Modkit.RED4.GeneralStructs
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
         public Dictionary<string, object> Data { get; set; }
     }
+
+    public class MaterialValueWrapper
+    {
+        public string Type { get; set; }
+        public object Value { get; set; }
+    }
 }

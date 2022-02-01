@@ -3044,8 +3044,6 @@ public class RedFileDtoConverter : JsonConverter<RedFileDto>
 
 public static class RedJsonSerializer
 {
-    private static JsonSerializerOptions s_settings;
-
     private static readonly ReferenceResolver<RedBuffer> s_bufferResolver;
     private static readonly ReferenceResolver<RedBaseClass> s_classResolver;
 
@@ -3054,7 +3052,7 @@ public static class RedJsonSerializer
         s_bufferResolver = new();
         s_classResolver = new();
 
-        s_settings = new()
+        Options = new()
         {
             WriteIndented = true,
             MaxDepth = 2048,
@@ -3097,12 +3095,14 @@ public static class RedJsonSerializer
         };
     }
 
+    public static JsonSerializerOptions Options { get; }
+
     public static string Serialize(object value)
     {
         s_bufferResolver.Begin();
         s_classResolver.Begin();
 
-        var result = JsonSerializer.Serialize(value, s_settings);
+        var result = JsonSerializer.Serialize(value, Options);
 
         s_bufferResolver.End();
         s_classResolver.End();
@@ -3115,7 +3115,7 @@ public static class RedJsonSerializer
         s_bufferResolver.Begin();
         s_classResolver.Begin();
 
-        var result = JsonSerializer.Deserialize<T>(json, s_settings);
+        var result = JsonSerializer.Deserialize<T>(json, Options);
 
         s_bufferResolver.End();
         s_classResolver.End();
