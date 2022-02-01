@@ -7,8 +7,8 @@
     <Description>Core functionality for the WolvenKit Mod Editor.</Description>
     <Authors>Hambalkó Bence, Moritz Baron</Authors>
     <Company>WolvenKit</Company>
-    <PackageProjectUrl>https://github.com/WolvenKit/Wolven-kit</PackageProjectUrl>
-    <RepositoryUrl>https://github.com/WolvenKit/Wolven-kit</RepositoryUrl>
+    <PackageProjectUrl>https://github.com/WolvenKit/WolvenKit</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/WolvenKit/WolvenKit</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
     <PackageTags>wolvenkit</PackageTags>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>

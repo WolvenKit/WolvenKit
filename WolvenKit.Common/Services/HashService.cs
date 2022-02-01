@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Runtime.InteropServices;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -171,7 +172,14 @@ namespace WolvenKit.Common.Services
 
             var inbuffer = stream.ToByteArray(true);
 
-            KrakenNative.Decompress(inbuffer, outputbuffer);
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+            {
+                KrakenNative.Decompress(inbuffer, outputbuffer);
+            }
+            else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
+            {
+                OozNative.Kraken_Decompress(inbuffer, outputbuffer);
+            }
 
             hashDictionary.EnsureCapacity(1_100_000);
 
@@ -221,7 +229,7 @@ namespace WolvenKit.Common.Services
                 {
                     continue;
                 }
-                
+
                 if (!hashDict.ContainsKey(hash))
                 {
                     hashDict.Add(hash, new SAsciiString(line));
