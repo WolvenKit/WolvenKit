@@ -49,6 +49,7 @@
     <None Remove="Model\Cr2w\**" />
     <None Remove="RED3\**" />
     <None Remove="lib\texconv.dll" />
+    <None Remove="lib\texconv.pdb" />
     <None Remove="lib\vgmstream\avcodec-vgmstream-58.dll" />
     <None Remove="lib\vgmstream\avformat-vgmstream-58.dll" />
     <None Remove="lib\vgmstream\avutil-vgmstream-56.dll" />

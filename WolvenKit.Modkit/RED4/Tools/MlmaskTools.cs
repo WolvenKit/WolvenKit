@@ -148,7 +148,7 @@ namespace WolvenKit.Modkit.RED4
                 {
                     // convert
                     ms.Seek(0, SeekOrigin.Begin);
-                    if (!DDSUtils.ConvertFromDdsAndSave(ms, newpath, args))
+                    if (!Texconv.ConvertFromDdsAndSave(ms, newpath, args))
                     {
                         return false;
                     }
@@ -232,7 +232,10 @@ namespace WolvenKit.Modkit.RED4
                 ms.Write(maskData);
                 ms.Seek(0, SeekOrigin.Begin);
                 //var stream = new MemoryStream(DDSUtils.ConvertToDdsMemory(ms, EUncookExtension.tga, DXGI_FORMAT.DXGI_FORMAT_BC4_UNORM, false, false));
-                ms = new MemoryStream(DDSUtils.ConvertToDdsMemory(new MemoryStream(DDSUtils.ConvertFromDdsMemory(ms, EUncookExtension.tga)), EUncookExtension.tga, DXGI_FORMAT.DXGI_FORMAT_BC4_UNORM));
+                ms = new MemoryStream(
+                    Texconv.ConvertToDds(
+                        new MemoryStream(Texconv.ConvertFromDds(ms, EUncookExtension.tga)),
+                        EUncookExtension.tga, DXGI_FORMAT.DXGI_FORMAT_BC4_UNORM));
                 streams.Add(ms);
             }
             return true;

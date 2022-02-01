@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using BigGustave;
+using SixLabors.ImageSharp;
 using WolvenKit.Common;
 using WolvenKit.Common.DDS;
 using WolvenKit.Common.Extensions;
@@ -382,7 +382,7 @@ namespace WolvenKit.Modkit.RED4
                     // TODO
                     if (rawExt == EUncookExtension.tga.ToString())
                     {
-                        var md = DDSUtils.GetMetadataFromTGAFile(infile);
+                        var md = Texconv.GetMetadataFromTGAFile(infile);
                         format = md.Format;
                     }
                     else if (rawExt == EUncookExtension.png.ToString())
@@ -406,7 +406,7 @@ namespace WolvenKit.Modkit.RED4
                 }
 
                 using var fs = new FileStream(infile, FileMode.Open);
-                var ddsbuffer = DDSUtils.ConvertToDdsMemory(fs, extAsEnum, format);
+                var ddsbuffer = Texconv.ConvertToDds(fs, extAsEnum, format);
                 ms.Write(ddsbuffer);
             }
             else
@@ -422,10 +422,7 @@ namespace WolvenKit.Modkit.RED4
             var span = new Span<byte>(new byte[148]);
             ms.Read(span);
 
-            if (!DDSUtils.TryGetMetadataFromDDSMemory(span, out var metadata))
-            {
-                return false;
-            }
+            var metadata = Texconv.GetMetadataFromDDSMemory(span.ToArray());
 
             // create xbm
             if (args.Keep)
@@ -505,10 +502,10 @@ namespace WolvenKit.Modkit.RED4
                     for (var i = 0; i < metadata.Mipscount; i++)
                     {
                         // slicepitch
-                        var slicepitch = DDSUtils.ComputeSlicePitch((int)mipsizeW, (int)mipsizeH, fmt);
+                        var slicepitch = Texconv.ComputeSlicePitch((int)mipsizeW, (int)mipsizeH, fmt);
 
                         //rowpitch
-                        var rowpitch = DDSUtils.ComputeRowPitch((int)mipsizeW, (int)mipsizeH, fmt);
+                        var rowpitch = Texconv.ComputeRowPitch((int)mipsizeW, (int)mipsizeH, fmt);
 
                         var info = RedTypeManager.Create<rendRenderTextureBlobMipMapInfo>();
                         info.Layout = new rendRenderTextureBlobMemoryLayout()

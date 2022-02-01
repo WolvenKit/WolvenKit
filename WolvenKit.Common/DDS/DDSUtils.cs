@@ -1,33 +1,10 @@
 using System;
-using System.Buffers;
 using System.IO;
-using SixLabors.ImageSharp;
-using WolvenKit.Common.Model.Arguments;
-//using WolvenKit.Common.Tools.DDS;
-using WolvenKit.Core.Extensions;
-using static WolvenKit.Common.Tools.DDS.TexconvNative;
-using BCnEncoder.ImageSharp;
-using BCnEncoder;
-using BCnEncoder.Decoder;
 using BCnEncoder.Shared;
-using Microsoft.Toolkit.HighPerformance;
+using WolvenKit.Core.Extensions;
 
 namespace WolvenKit.Common.DDS
 {
-    public enum TEX_MISC_FLAG
-    // Subset here matches D3D10_RESOURCE_MISC_FLAG and D3D11_RESOURCE_MISC_FLAG
-    {
-        TEX_MISC_TEXTURECUBE = 0x4,
-    };
-
-    public enum TEX_DIMENSION
-    // Subset here matches D3D10_RESOURCE_DIMENSION and D3D11_RESOURCE_DIMENSION
-    {
-        TEX_DIMENSION_TEXTURE1D = 2,
-        TEX_DIMENSION_TEXTURE2D = 3,
-        TEX_DIMENSION_TEXTURE3D = 4,
-    };
-
     public static class DDSUtils
     {
         #region Fields
@@ -527,59 +504,6 @@ namespace WolvenKit.Common.DDS
 
         #region Reading
 
-        public static DDSMetadata GetMetadataFromTGAFile(string path)
-        {
-            using (var image = Image.Load(path))
-            {
-
-            }
-
-            //var md = TexconvNative.GetMetadataFromTGAFile(path, TGA_FLAGS.TGA_FLAGS_NONE);
-            //var bpp = TexconvNative.BitsPerPixel(md.format);
-            //var iscube = md.is_cubemap(); //TODO
-
-            return new DDSMetadata(md, (uint)bpp, true);
-        }
-
-        public static DDSMetadata GetMetadataFromDDSFile(string path)
-        {
-
-
-
-            var md = TexconvNative.GetMetadataFromDDSFile(path, DDSFLAGS.DDS_FLAGS_NONE);
-            var bpp = TexconvNative.BitsPerPixel(md.format);
-            //var iscube = md.is_cubemap(); //TODO
-
-            return new DDSMetadata(md, (uint)bpp, true);
-        }
-
-        public static unsafe bool TryGetMetadataFromDDSMemory(Span<byte> span, out DDSMetadata metadata)
-        {
-            try
-            {
-                var len = span.Length;
-                //fixed (byte* ptr = span)
-                {
-                    var md = TexconvNative.GetMetadataFromDDSMemory(span.ToArray(), len, DDSFLAGS.DDS_FLAGS_NONE);
-                    var bpp = TexconvNative.BitsPerPixel(md.format);
-                    //var iscube = md.is_cubemap(); //TODO
-
-                    metadata = new DDSMetadata(md, (uint)bpp, true);
-                }
-
-            }
-            catch (Exception)
-            {
-                metadata = default;
-                return false;
-            }
-
-            return true;
-        }
-
-        public static int ComputeRowPitch(int width, int height, DXGI_FORMAT format) => (int)TexconvNative.ComputeRowPitch((DXGI_FORMAT)format, width, height);
-        public static int ComputeSlicePitch(int width, int height, DXGI_FORMAT format) => (int)TexconvNative.ComputeSlicePitch((DXGI_FORMAT)format, width, height);
-
         public static bool TryReadDdsHeader(Stream stream, out DDS_HEADER header)
         {
             header = default;
@@ -604,7 +528,7 @@ namespace WolvenKit.Common.DDS
         /// </summary>
         /// <param name="stream"></param>
         /// <returns></returns>
-        private static bool IsDdsFile(Stream stream)
+        public static bool IsDdsFile(Stream stream)
         {
             var pos = stream.Position;
             var result = TryReadDdsHeader(stream, out _);
@@ -614,193 +538,5 @@ namespace WolvenKit.Common.DDS
 
         #endregion Reading
 
-        /// <summary>
-        /// Converts a dds stream to another texture file type and writes it to file
-        /// </summary>
-        /// <param name="ms">The input dds stream</param>
-        /// <param name="outfilename">The output filename. Extension will be overwritten with the correct filetype</param>
-        /// <param name="args"></param>
-        /// <returns></returns>
-        public static bool ConvertFromDdsAndSave(Stream ms, string outfilename, ExportArgs args)
-        {
-            // check if stream is dds
-            if (!DDSUtils.IsDdsFile(ms))
-            {
-                throw new ArgumentException("Input stream not a dds file", nameof(ms));
-            }
-
-            // get arguments
-            var uext = EUncookExtension.dds;
-            var vflip = false;
-            if (args is not XbmExportArgs and not MlmaskExportArgs)
-            {
-                return false;
-
-            }
-            switch (args)
-            {
-                case XbmExportArgs xbm:
-                    uext = xbm.UncookExtension;
-                    vflip = xbm.Flip;
-                    break;
-                case MlmaskExportArgs ml:
-                    uext = ml.UncookExtension;
-                    break;
-            }
-
-            return uext != EUncookExtension.dds && ConvertFromDdsAndSave(ms, outfilename, uext.ToSaveFormat(), vflip);
-        }
-
-        /// <summary>
-        /// Converts a dds stream to another texture file type and writes it to file
-        /// </summary>
-        /// <param name="ms"></param>
-        /// <param name="outfilename"></param>
-        /// <param name="filetype"></param>
-        /// <param name="vflip"></param>
-        /// <param name="hflip"></param>
-        /// <returns></returns>
-        private static /*unsafe*/ bool ConvertFromDdsAndSave(Stream ms, string outfilename, ESaveFileTypes filetype, bool vflip = false, bool hflip = false)
-        {
-            byte[] rentedBuffer = null;
-            try
-            {
-                var offset = 0;
-
-                var len = checked((int)ms.Length);
-                rentedBuffer = ArrayPool<byte>.Shared.Rent(len);
-
-                int readBytes;
-                while (offset < len &&
-                       (readBytes = ms.Read(rentedBuffer, offset, len - offset)) > 0)
-                {
-                    offset += readBytes;
-                }
-
-                var span = new ReadOnlySpan<byte>(rentedBuffer, 0, len);
-
-                //fixed (byte* ptr = span)
-                {
-                    var outDir = new FileInfo(outfilename).Directory.FullName;
-                    Directory.CreateDirectory(outDir);
-                    var fileName = Path.GetFileNameWithoutExtension(outfilename);
-                    var extension = filetype.ToString().ToLower();
-                    var newpath = Path.Combine(outDir, $"{fileName}.{extension}");
-
-                    TexconvNative.ConvertAndSaveDdsImage(span.ToArray(), span.Length, newpath, filetype, vflip, hflip);
-                }
-            }
-            finally
-            {
-                if (rentedBuffer is object)
-                {
-                    ArrayPool<byte>.Shared.Return(rentedBuffer);
-                }
-            }
-
-            return true;
-
-
-        }
-
-        /// <summary>
-        /// Converts a dds stream to another texture file type and returns an image byte array
-        /// </summary>
-        public static /*unsafe*/ byte[] ConvertToDdsMemory(
-            Stream ms,
-            EUncookExtension filetype,
-            DXGI_FORMAT? format = null,
-            bool vflip = false,
-            bool hflip = false)
-        {
-            byte[] rentedBuffer = null;
-            try
-            {
-                var offset = 0;
-
-                var len = checked((int)ms.Length);
-                rentedBuffer = ArrayPool<byte>.Shared.Rent(len);
-
-                int readBytes;
-                while (offset < len &&
-                       (readBytes = ms.Read(rentedBuffer, offset, len - offset)) > 0)
-                {
-                    offset += readBytes;
-                }
-
-                var span = new ReadOnlySpan<byte>(rentedBuffer, 0, len);
-
-                //fixed (byte* ptr = span)
-                {
-                    var fmt = format != null
-                        ? (DXGI_FORMAT)format
-                        : DXGI_FORMAT.DXGI_FORMAT_UNKNOWN;
-
-
-                    var buffer = TexconvNative.ConvertToDdsArray(span.ToArray(), span.Length,
-                        filetype.ToSaveFormat(),
-                        fmt, vflip, hflip);
-                    return buffer;
-                }
-            }
-            finally
-            {
-                if (rentedBuffer is object)
-                {
-                    ArrayPool<byte>.Shared.Return(rentedBuffer);
-                }
-            }
-        }
-
-        /// <summary>
-        /// Converts an image stream to a dds byte array
-        /// </summary>
-        public static /*unsafe*/ byte[] ConvertFromDdsMemory(Stream ms, EUncookExtension filetype, bool vflip = false, bool hflip = false)
-        {
-            byte[] rentedBuffer = null;
-            try
-            {
-                var offset = 0;
-
-                var len = checked((int)ms.Length);
-                rentedBuffer = ArrayPool<byte>.Shared.Rent(len);
-
-                int readBytes;
-                while (offset < len &&
-                       (readBytes = ms.Read(rentedBuffer, offset, len - offset)) > 0)
-                {
-                    offset += readBytes;
-                }
-
-                var span = new ReadOnlySpan<byte>(rentedBuffer, 0, len);
-
-                //fixed (byte* ptr = span)
-                {
-                    var buffer = TexconvNative.ConvertFromDdsArray(span.ToArray(), span.Length,
-                        filetype.ToSaveFormat(),
-                        vflip, hflip);
-                    throw new NotImplementedException();
-                    //return buffer;
-                }
-            }
-            finally
-            {
-                if (rentedBuffer is object)
-                {
-                    ArrayPool<byte>.Shared.Return(rentedBuffer);
-                }
-            }
-        }
-
-        private static ESaveFileTypes ToSaveFormat(this EUncookExtension extension) =>
-            extension switch
-            {
-                EUncookExtension.bmp => ESaveFileTypes.BMP,
-                EUncookExtension.jpg => ESaveFileTypes.JPEG,
-                EUncookExtension.png => ESaveFileTypes.PNG,
-                EUncookExtension.tga => ESaveFileTypes.TGA,
-                EUncookExtension.tiff => ESaveFileTypes.TIFF,
-                _ => throw new ArgumentOutOfRangeException(nameof(extension), extension, null)
-            };
     }
 }
