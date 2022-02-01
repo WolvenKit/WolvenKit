@@ -159,7 +159,7 @@ public static class Oodle
             rawBuf = new byte[size];
 
 #if !USE_NATIVE
-            OodleLib.OodleLZ_Decompress(compBuf, rawBuf);
+            var r = OodleLib.OodleLZ_Decompress(compressedData, rawBuf);
 #else
             OodleLZNative.Decompress(compressedData, compressedData.Length, rawBuf, rawBuf.Length, Oodle.FuzzSafe.No);
 #endif
@@ -240,56 +240,6 @@ public static class Oodle
 
         return outputBuffer.Count();
     }
-
-//    private static long Decompress(Span<byte> inputBufferSpan, Span<byte> outputBufferSpan)
-//    {
-//        var result = 0;
-
-//        if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
-//        {
-//#if !USE_NATIVE
-
-//            result = OodleLib.OodleLZ_Decompress(inputBufferSpan, outputBufferSpan);
-//#else
-//            var compressedData = inputBufferSpan.ToArray();
-//            var rawBuf = outputBufferSpan.ToArray();
-//            result = OodleLZNative.Decompress(compressedData, compressedData.Length, rawBuf, rawBuf.Length, Oodle.FuzzSafe.No);
-//#endif
-//        }
-//        else if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
-//        {
-//            result = KrakenLib.Decompress(inputBufferSpan.ToArray(), outputBufferSpan.ToArray());
-//        }
-//        else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
-//        {
-//            throw new NotImplementedException();
-//        }
-//        else
-//        {
-//            throw new NotImplementedException();
-//        }
-
-//        return result;
-
-//        //unsafe
-//        //{
-//        //    fixed (byte* bpi = &inputBufferSpan.GetPinnableReference())
-//        //    fixed (byte* bpo = &outputBufferSpan.GetPinnableReference())
-//        //    {
-//        //        var pInputBufferSpan = (IntPtr)bpi;
-//        //        var pOutputBufferSpan = (IntPtr)bpo;
-
-//        //        var r = OodleLib.OodleLZ_Decompress(pInputBufferSpan,
-//        //            pOutputBufferSpan,
-//        //            inputBufferSpan.Length,
-//        //            outputBufferSpan.Length
-//        //        );
-
-//        //        return r;
-
-//        //    }
-//        //}
-//    }
 
     public static long Decompress(byte[] inputBuffer, byte[] outputBuffer)
     {

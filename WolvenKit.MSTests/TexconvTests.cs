@@ -36,6 +36,11 @@ namespace WolvenKit.MSTests
         };
         private const int s_tgaBpp = 32;
 
+        private const string testFile1 = "q204_columbarium_1080p";
+        private const string testFile2 = "h0_001_wa_c__judy_d02";
+
+        public string GetTestFile() => testFile2;
+
         [ClassInitialize]
         public static void SetupClass(TestContext _)
         {
@@ -45,7 +50,7 @@ namespace WolvenKit.MSTests
         [TestMethod]
         public void GetMetadataFromDDSFile()
         {
-            var testFile = Path.GetFullPath("Resources/q204_columbarium_1080p.dds");
+            var testFile = Path.GetFullPath($"Resources/{GetTestFile()}.dds");
             //var md = TexconvNative.GetMetadataFromDDSFile(testFile);
 
             //Assert.AreEqual(md, s_dds_md);
@@ -60,7 +65,7 @@ namespace WolvenKit.MSTests
         [TestMethod]
         public void GetMetadataFromDDSMemory()
         {
-            var testFile = Path.GetFullPath("Resources/q204_columbarium_1080p.dds");
+            var testFile = Path.GetFullPath($"Resources/{GetTestFile()}.dds");
             var bytes = File.ReadAllBytes(testFile);
 
             //var md = TexconvNative.GetMetadataFromDDSMemory(bytes, bytes.Length);
@@ -76,7 +81,7 @@ namespace WolvenKit.MSTests
         [TestMethod]
         public void GetMetadataFromTGAFile()
         {
-            var testFile = Path.GetFullPath("Resources/q204_columbarium_1080p.tga");
+            var testFile = Path.GetFullPath($"Resources/{GetTestFile()}.tga");
 
             //var md = TexconvNative.GetMetadataFromTGAFile(testFile);
             //Assert.AreEqual(md, s_tga_md);
@@ -91,7 +96,7 @@ namespace WolvenKit.MSTests
         [TestMethod]
         public void ComputePitch()
         {
-            var testFile = Path.GetFullPath("Resources/q204_columbarium_1080p.dds");
+            var testFile = Path.GetFullPath($"Resources/{GetTestFile()}.dds");
             var md = Texconv.GetMetadataFromDDSFile(testFile);
 
             // slicepitch
@@ -106,14 +111,14 @@ namespace WolvenKit.MSTests
         [TestMethod]
         public void ConvertAndSaveDdsImage()
         {
-            var testFile = Path.GetFullPath("Resources/q204_columbarium_1080p.dds");
+            var testFile = Path.GetFullPath($"Resources/{GetTestFile()}.dds");
             Directory.CreateDirectory(Path.GetFullPath("texc"));
             var bytes = File.ReadAllBytes(testFile);
 
-            var outFile = Path.GetFullPath(Path.Combine("texc", "q204_columbarium_1080p_1.tga"));
-            var result = TexconvNative.ConvertAndSaveDdsImage(bytes, outFile, TexconvNative.ESaveFileTypes.TGA);
+            //var outFile = Path.GetFullPath(Path.Combine("texc", $"q204_columbarium_1080p_1.tga"));
+            //var result = TexconvNative.ConvertAndSaveDdsImage(bytes, outFile, TexconvNative.ESaveFileTypes.TGA);
 
-            var outFile2 = Path.GetFullPath(Path.Combine("texc", "q204_columbarium_1080p_2.tga"));
+            var outFile2 = Path.GetFullPath(Path.Combine("texc", $"{GetTestFile()}.tga"));
             using var ms = new MemoryStream(bytes);
             ms.Seek(0, SeekOrigin.Begin);
             Assert.IsTrue(Texconv.ConvertFromDdsAndSave(ms, outFile2, TexconvNative.ESaveFileTypes.TGA));
@@ -132,8 +137,8 @@ namespace WolvenKit.MSTests
                 dimension = TEX_DIMENSION.TEX_DIMENSION_TEXTURE2D
             };
 
-            var md = Texconv.GetMetadataFromTGAFile(outFile);
-            Assert.AreEqual(md, new DDSMetadata(metadata, 32, true));
+            //var md = Texconv.GetMetadataFromTGAFile(outFile);
+            //Assert.AreEqual(md, new DDSMetadata(metadata, 32, true));
 
             var md2 = Texconv.GetMetadataFromTGAFile(outFile2);
             Assert.AreEqual(md2, new DDSMetadata(metadata, 32, true));
@@ -147,12 +152,12 @@ namespace WolvenKit.MSTests
         [DataRow(EUncookExtension.tiff)]
         public void ConvertFromDds(EUncookExtension type)
         {
-            var testFile = Path.GetFullPath("Resources/q204_columbarium_1080p.dds");
+            var testFile = Path.GetFullPath($"Resources/{GetTestFile()}.dds");
             var bytes = File.ReadAllBytes(testFile);
             
             //foreach (var type in Enum.GetValues<EUncookExtension>())
             {
-                var outFile = Path.GetFullPath(Path.Combine("texc", $"q204_columbarium_1080p.{type.ToString()}"));
+                var outFile = Path.GetFullPath(Path.Combine("texc", $"{GetTestFile()}.{type.ToString()}"));
 
                 //var blob = new TexconvNative.Blob();
                 //var len = TexconvNative.ConvertFromDds(bytes, ref blob, Texconv.ToSaveFormat(type));
@@ -173,7 +178,7 @@ namespace WolvenKit.MSTests
         [DataRow(EUncookExtension.tiff)]
         public void ConvertToDds(EUncookExtension type)
         {
-            var testFile = Path.GetFullPath($"Resources/q204_columbarium_1080p_1.{type.ToString()}");
+            var testFile = Path.GetFullPath($"Resources/{GetTestFile()}.{type.ToString()}");
             Directory.CreateDirectory(Path.GetFullPath("texc"));
             var bytes = File.ReadAllBytes(testFile);
 
@@ -186,17 +191,17 @@ namespace WolvenKit.MSTests
 
             ms.Seek(0, SeekOrigin.Begin);
             var r1 = Texconv.ConvertToDds(ms, type, DXGI_FORMAT.DXGI_FORMAT_BC1_UNORM);
-            var outFile1 = Path.GetFullPath(Path.Combine("texc", $"q204_columbarium_1080p_1.{type}.dds"));
+            var outFile1 = Path.GetFullPath(Path.Combine("texc", $"{GetTestFile()}_1.{type}.dds"));
             File.WriteAllBytes(outFile1, r1);
 
             ms.Seek(0, SeekOrigin.Begin);
             var r3 = Texconv.ConvertToDds(ms, type, DXGI_FORMAT.DXGI_FORMAT_BC3_UNORM);
-            var outFile3 = Path.GetFullPath(Path.Combine("texc", $"q204_columbarium_1080p_3.{type}.dds"));
+            var outFile3 = Path.GetFullPath(Path.Combine("texc", $"{GetTestFile()}_3.{type}.dds"));
             File.WriteAllBytes(outFile3, r3);
 
             ms.Seek(0, SeekOrigin.Begin);
             var r7 = Texconv.ConvertToDds(ms, type, DXGI_FORMAT.DXGI_FORMAT_BC7_UNORM);
-            var outFile7 = Path.GetFullPath(Path.Combine("texc", $"q204_columbarium_1080p_7.{type}.dds"));
+            var outFile7 = Path.GetFullPath(Path.Combine("texc", $"{GetTestFile()}_7.{type}.dds"));
             File.WriteAllBytes(outFile7, r7);
         }
 
