@@ -13,6 +13,7 @@ using Splat;
 using Splat.Microsoft.Extensions.DependencyInjection;
 using WolvenKit.Common;
 using WolvenKit.Common.Services;
+using WolvenKit.Core.Compression;
 using WolvenKit.Functionality.Services;
 using WolvenKit.Functionality.WKitGlobal.Helpers;
 using WolvenKit.Interaction;
@@ -41,6 +42,12 @@ namespace WolvenKit
             Init();
 
             SetupExceptionHandling();
+
+            // load oodle
+            if (!Oodle.Load())
+            {
+                throw new FileNotFoundException($"oo2ext_7_win64.dll not found.");
+            }
         }
 
         // Application OnStartup Override.

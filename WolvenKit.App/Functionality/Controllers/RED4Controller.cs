@@ -64,11 +64,6 @@ namespace WolvenKit.Functionality.Controllers
             if (!_initialized)
             {
                 _initialized = true;
-                // load oodle
-                if (!Oodle.Load())
-                {
-                    throw new FileNotFoundException($"oo2ext_7_win64.dll not found.");
-                }
 
                 // load archives
                 var todo = new List<Func<IArchiveManager>>()

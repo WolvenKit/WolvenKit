@@ -1,4 +1,4 @@
-#define USE_NATIVE
+//#define USE_NATIVE
 
 using System;
 using System.Collections.Generic;
@@ -241,54 +241,55 @@ public static class Oodle
         return outputBuffer.Count();
     }
 
-    private static long Decompress(Span<byte> inputBufferSpan, Span<byte> outputBufferSpan)
-    {
-        var result = 0;
+//    private static long Decompress(Span<byte> inputBufferSpan, Span<byte> outputBufferSpan)
+//    {
+//        var result = 0;
 
-        if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
-        {
-#if !USE_NATIVE
-            result = OodleLib.OodleLZ_Decompress(inputBufferSpan.ToArray(), outputBufferSpan.ToArray());
-#else
-            var compressedData = inputBufferSpan.ToArray();
-            var rawBuf = outputBufferSpan.ToArray();
-            result = OodleLZNative.Decompress(compressedData, compressedData.Length, rawBuf, rawBuf.Length, Oodle.FuzzSafe.No);
-#endif
-        }
-        else if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
-        {
-            result = KrakenLib.Decompress(inputBufferSpan.ToArray(), outputBufferSpan.ToArray());
-        }
-        else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
-        {
-            throw new NotImplementedException();
-        }
-        else
-        {
-            throw new NotImplementedException();
-        }
+//        if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+//        {
+//#if !USE_NATIVE
 
-        return result;
+//            result = OodleLib.OodleLZ_Decompress(inputBufferSpan, outputBufferSpan);
+//#else
+//            var compressedData = inputBufferSpan.ToArray();
+//            var rawBuf = outputBufferSpan.ToArray();
+//            result = OodleLZNative.Decompress(compressedData, compressedData.Length, rawBuf, rawBuf.Length, Oodle.FuzzSafe.No);
+//#endif
+//        }
+//        else if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
+//        {
+//            result = KrakenLib.Decompress(inputBufferSpan.ToArray(), outputBufferSpan.ToArray());
+//        }
+//        else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
+//        {
+//            throw new NotImplementedException();
+//        }
+//        else
+//        {
+//            throw new NotImplementedException();
+//        }
 
-        //unsafe
-        //{
-        //    fixed (byte* bpi = &inputBufferSpan.GetPinnableReference())
-        //    fixed (byte* bpo = &outputBufferSpan.GetPinnableReference())
-        //    {
-        //        var pInputBufferSpan = (IntPtr)bpi;
-        //        var pOutputBufferSpan = (IntPtr)bpo;
+//        return result;
 
-        //        var r = OodleLib.OodleLZ_Decompress(pInputBufferSpan,
-        //            pOutputBufferSpan,
-        //            inputBufferSpan.Length,
-        //            outputBufferSpan.Length
-        //        );
+//        //unsafe
+//        //{
+//        //    fixed (byte* bpi = &inputBufferSpan.GetPinnableReference())
+//        //    fixed (byte* bpo = &outputBufferSpan.GetPinnableReference())
+//        //    {
+//        //        var pInputBufferSpan = (IntPtr)bpi;
+//        //        var pOutputBufferSpan = (IntPtr)bpo;
 
-        //        return r;
+//        //        var r = OodleLib.OodleLZ_Decompress(pInputBufferSpan,
+//        //            pOutputBufferSpan,
+//        //            inputBufferSpan.Length,
+//        //            outputBufferSpan.Length
+//        //        );
 
-        //    }
-        //}
-    }
+//        //        return r;
+
+//        //    }
+//        //}
+//    }
 
     public static long Decompress(byte[] inputBuffer, byte[] outputBuffer)
     {
@@ -344,24 +345,30 @@ public static class Oodle
                     throw new DecompressionException($"Buffer size doesn't match size in info table. {headerSize} vs {size}");
                 }
 
-                const int SPAN_LEN = 5333;//32768;
+                //const int SPAN_LEN = 5333;//32768;
                 var length = (int)zSize - 8;
 
-                var inputBufferSpan = length <= SPAN_LEN
-                    ? stackalloc byte[length]
-                    : new byte[length];
-                var outputBufferSpan = size <= SPAN_LEN ? stackalloc byte[(int)size] : new byte[size];
+                var inputBuffer = new byte[length];
+                stream.Read(inputBuffer);
+                var outBuffer =  new byte[size];
+                var unpackedSize = Oodle.Decompress(inputBuffer, outBuffer);
 
-                stream.Read(inputBufferSpan);
+                //var inputBufferSpan = length <= SPAN_LEN
+                //    ? stackalloc byte[length]
+                //    : new byte[length];
+                //var outputBufferSpan = size <= SPAN_LEN ? stackalloc byte[(int)size] : new byte[size];
 
-                var unpackedSize = Oodle.Decompress(inputBufferSpan, outputBufferSpan);
+                //stream.Read(inputBufferSpan);
+
+                //var unpackedSize = Oodle.Decompress(inputBufferSpan, outputBufferSpan);
                 if (unpackedSize != size)
                 {
                     throw new DecompressionException(
                         $"Unpacked size {unpackedSize} doesn't match real size {size}.");
                 }
 
-                outStream.Write(outputBufferSpan);
+                //outStream.Write(outputBufferSpan);
+                outStream.Write(outBuffer);
             }
             else
             {
