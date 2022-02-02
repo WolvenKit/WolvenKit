@@ -5,21 +5,63 @@ namespace WolvenKit.Common.DDS;
 
 public static class TexconvNative
 {
-    [StructLayout(LayoutKind.Sequential)]
-    public struct Blob
+    public class ManagedBlob : IDisposable
     {
-        public IntPtr Buffer;
-        public long Length;
+        private Blob _blob;
+
+        private bool disposed = false;
+
+        public ManagedBlob()
+        {
+            this._blob = new Blob();
+        }
+
+        public Blob GetBlob() => _blob;
+        public byte[] GetBytes() => _blob.GetBytes();
+
+        public void Dispose()
+        {
+            Dispose(disposing: true);
+            GC.SuppressFinalize(this);
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (this.disposed)
+                return;
+            FreeBlob(_blob);
+            _blob = new Blob();
+
+            disposed = true;
+        }
+
+        ~ManagedBlob()
+        {
+            Dispose(disposing: false);
+        }
     }
 
-    public static byte[] GetBytes(this Blob blob)
+    [StructLayout(LayoutKind.Sequential)]
+    public class Blob
     {
-        var length = blob.Length;
-        var buffer = blob.Buffer;
-        var managedArray = new byte[length];
-        Marshal.Copy(buffer, managedArray, 0, (int)length);
-        return managedArray;
+        public Blob()
+        {
+            Handle = IntPtr.Zero;
+            Length = 0;
+        }
+        public IntPtr Handle;
+        public long Length;
+
+        public byte[] GetBytes()
+        {
+            var length = Length;
+            var managedArray = new byte[length];
+            Marshal.Copy(Handle, managedArray, 0, (int)length);
+            return managedArray;
+        }
     }
+
+
 
     [StructLayout(LayoutKind.Sequential)]
     public struct TexMetadata
@@ -89,15 +131,19 @@ public static class TexconvNative
 
 
     [DllImport("lib/texconv.dll", EntryPoint = "ConvertFromDds", CallingConvention = CallingConvention.StdCall)]
-    private static extern long _ConvertFromDds(byte[] inBuffer, int inBufferLength, ref Blob blob, ESaveFileTypes filetype, bool vflip = false, bool hflip = false);
-    public static long ConvertFromDds(byte[] inBuffer, ref Blob blob, ESaveFileTypes filetype, bool vflip = false, bool hflip = false)
-        => _ConvertFromDds(inBuffer, inBuffer.Length, ref blob, filetype, vflip, hflip);
+    private static extern long _ConvertFromDds(byte[] inBuffer, int inBufferLength, Blob blob, ESaveFileTypes filetype, bool vflip = false, bool hflip = false);
+    public static long ConvertFromDds(byte[] inBuffer, Blob blob, ESaveFileTypes filetype, bool vflip = false, bool hflip = false)
+        => _ConvertFromDds(inBuffer, inBuffer.Length, blob, filetype, vflip, hflip);
 
 
     [DllImport("lib/texconv.dll", EntryPoint = "ConvertToDds", CallingConvention = CallingConvention.StdCall)]
-    private static extern long _ConvertToDds(byte[] inBuff, int inBufferLength, ref Blob blob, ESaveFileTypes filetype, DXGI_FORMAT format, bool vflip, bool hflip);
-    public static long ConvertToDds(byte[] inBuff, ref Blob blob, ESaveFileTypes filetype, DXGI_FORMAT format, bool vflip = false, bool hflip = false)
-        => _ConvertToDds(inBuff, inBuff.Length, ref blob, filetype, format, vflip, hflip);
+    private static extern long _ConvertToDds(byte[] inBuff, int inBufferLength, Blob blob, ESaveFileTypes filetype, DXGI_FORMAT format, bool vflip, bool hflip);
+    public static long ConvertToDds(byte[] inBuff, Blob blob, ESaveFileTypes filetype, DXGI_FORMAT format, bool vflip = false, bool hflip = false)
+        => _ConvertToDds(inBuff, inBuff.Length, blob, filetype, format, vflip, hflip);
+
+
+    [DllImport("lib/texconv.dll", EntryPoint = "FreeBlob", CallingConvention = CallingConvention.StdCall)]
+    public static extern long FreeBlob(Blob blob);
 
 
 }

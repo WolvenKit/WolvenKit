@@ -30,7 +30,7 @@ namespace WolvenKit.MSTests
             arraySize = 1,
             mipLevels = 1,
             miscFlags = 0,
-            miscFlags2 = 1,
+            miscFlags2 = 0,
             format = DXGI_FORMAT.DXGI_FORMAT_R8G8B8A8_UNORM,
             dimension = TEX_DIMENSION.TEX_DIMENSION_TEXTURE2D
         };
@@ -50,7 +50,7 @@ namespace WolvenKit.MSTests
         [TestMethod]
         public void GetMetadataFromDDSFile()
         {
-            var testFile = Path.GetFullPath($"Resources/{GetTestFile()}.dds");
+            var testFile = Path.GetFullPath($"Resources/{testFile1}.dds");
             //var md = TexconvNative.GetMetadataFromDDSFile(testFile);
 
             //Assert.AreEqual(md, s_dds_md);
@@ -65,7 +65,7 @@ namespace WolvenKit.MSTests
         [TestMethod]
         public void GetMetadataFromDDSMemory()
         {
-            var testFile = Path.GetFullPath($"Resources/{GetTestFile()}.dds");
+            var testFile = Path.GetFullPath($"Resources/{testFile1}.dds");
             var bytes = File.ReadAllBytes(testFile);
 
             //var md = TexconvNative.GetMetadataFromDDSMemory(bytes, bytes.Length);
@@ -81,7 +81,7 @@ namespace WolvenKit.MSTests
         [TestMethod]
         public void GetMetadataFromTGAFile()
         {
-            var testFile = Path.GetFullPath($"Resources/{GetTestFile()}.tga");
+            var testFile = Path.GetFullPath($"Resources/{testFile1}.tga");
 
             //var md = TexconvNative.GetMetadataFromTGAFile(testFile);
             //Assert.AreEqual(md, s_tga_md);
@@ -96,10 +96,10 @@ namespace WolvenKit.MSTests
         [TestMethod]
         public void ComputePitch()
         {
-            var testFile = Path.GetFullPath($"Resources/{GetTestFile()}.dds");
+            var testFile = Path.GetFullPath($"Resources/{testFile1}.dds");
             var md = Texconv.GetMetadataFromDDSFile(testFile);
 
-            // slicepitch
+            // slicepitch 1048576
             var slicepitch = Texconv.ComputeSlicePitch((int)md.Width, (int)md.Height, md.Format);
             Assert.AreEqual(238800, slicepitch);
 
@@ -111,7 +111,7 @@ namespace WolvenKit.MSTests
         [TestMethod]
         public void ConvertAndSaveDdsImage()
         {
-            var testFile = Path.GetFullPath($"Resources/{GetTestFile()}.dds");
+            var testFile = Path.GetFullPath($"Resources/{testFile1}.dds");
             Directory.CreateDirectory(Path.GetFullPath("texc"));
             var bytes = File.ReadAllBytes(testFile);
 

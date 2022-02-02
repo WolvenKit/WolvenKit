@@ -153,9 +153,13 @@ namespace WolvenKit.Common.DDS
                 //TexconvNative.ConvertAndSaveDdsImage(rentedBuffer, newpath, filetype, vflip, hflip);
                 if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
                 {
-                    var blob = new Blob();
-                    var l = TexconvNative.ConvertFromDds(rentedBuffer, ref blob, filetype, vflip, hflip);
-                    File.WriteAllBytes(newpath, blob.GetBytes());
+                    var buffer = Array.Empty<byte>();
+                    using (var blob = new ManagedBlob())
+                    {
+                        var l = TexconvNative.ConvertFromDds(rentedBuffer, blob.GetBlob(), filetype, vflip, hflip);
+                        buffer = blob.GetBytes();
+                    }
+                    File.WriteAllBytes(newpath, buffer);
                 }
                 else
                 {
@@ -200,9 +204,13 @@ namespace WolvenKit.Common.DDS
 
                 if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
                 {
-                    var blob = new Blob();
-                    var l = TexconvNative.ConvertFromDds(rentedBuffer, ref blob, ToSaveFormat(textureType), vflip, hflip);
-                    return blob.GetBytes();
+                    var buffer = Array.Empty<byte>();
+                    using (var blob = new ManagedBlob())
+                    {
+                        var l = TexconvNative.ConvertFromDds(rentedBuffer, blob.GetBlob(), ToSaveFormat(textureType), vflip, hflip);
+                        buffer = blob.GetBytes();
+                    }
+                    return buffer;
                 }
                 else
                 {
@@ -247,10 +255,14 @@ namespace WolvenKit.Common.DDS
 
                 if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
                 {
-                    var blob = new Blob();
-                    var l = TexconvNative.ConvertToDds(rentedBuffer, ref blob, ToSaveFormat(inExtension),
+                    var buffer = Array.Empty<byte>();
+                    using (var blob = new ManagedBlob())
+                    {
+                        var l = TexconvNative.ConvertToDds(rentedBuffer, blob.GetBlob(), ToSaveFormat(inExtension),
                         format, vflip, hflip);
-                    return blob.GetBytes();
+                        buffer = blob.GetBytes();
+                    }
+                    return buffer;
                 }
                 else
                 {
