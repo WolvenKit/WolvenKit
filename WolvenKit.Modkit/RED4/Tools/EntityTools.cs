@@ -1,11 +1,12 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using Newtonsoft.Json;
+using System.Text.Json;
 using WolvenKit.Common.Conversion;
 using WolvenKit.Common.Oodle;
 using WolvenKit.Common.RED4.Compiled;
 using WolvenKit.RED4.Archive.CR2W;
+using WolvenKit.RED4.CR2W.JSON;
 using WolvenKit.RED4.Types;
 
 namespace WolvenKit.Modkit.RED4
@@ -41,7 +42,7 @@ namespace WolvenKit.Modkit.RED4
                 CompiledPackage package = new CompiledPackage(_hashService);
                 packageStream.Seek(0, SeekOrigin.Begin);
                 package.Read(new BinaryReader(packageStream));
-                string data = JsonConvert.SerializeObject(new RedFileDto(cr2w), Formatting.Indented);
+                string data = RedJsonSerializer.Serialize(new RedFileDto(cr2w));
                 File.WriteAllText(outfile, data);
                 return true;
             }
@@ -67,7 +68,7 @@ namespace WolvenKit.Modkit.RED4
             }
             if (datas.Count > 1)
             {
-                var data = JsonConvert.SerializeObject(datas, Formatting.Indented);
+                var data = RedJsonSerializer.Serialize(datas);
                 File.WriteAllText(outfile, data);
                 return true;
             }

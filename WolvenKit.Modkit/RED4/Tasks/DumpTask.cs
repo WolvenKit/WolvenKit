@@ -2,9 +2,10 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 using System.Threading;
 using System.Threading.Tasks;
-using Newtonsoft.Json;
 using WolvenKit.Common.FNV1A;
 using WolvenKit.Common.Services;
 using WolvenKit.RED4.Archive;
@@ -317,13 +318,11 @@ namespace CP77Tools.Tasks
                 // post
                 if (dump)
                 {
-                    var json = JsonConvert.SerializeObject(ar, Formatting.Indented,
-                        new JsonSerializerSettings()
-                        {
-                            ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
-                            PreserveReferencesHandling = PreserveReferencesHandling.None,
-                            TypeNameHandling = TypeNameHandling.None
-                        });
+                    var json = JsonSerializer.Serialize(ar, new JsonSerializerOptions
+                    {
+                        WriteIndented = true,
+                        ReferenceHandler = ReferenceHandler.IgnoreCycles
+                    });
 
                     File.WriteAllText($"{ar.ArchiveAbsolutePath}.json", json);
 

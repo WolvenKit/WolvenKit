@@ -195,10 +195,11 @@ namespace WolvenKit.RED4.Archive.IO
             {
                 BaseStream.Position = beforeBufferTablePos;
                 crc = new Crc32Algorithm(false);
-                foreach (var buffer in dataCollection.BufferInfoList)
+                for (int i = 0; i < dataCollection.BufferInfoList.Count; i++)
                 {
-                    var entry = buffer;
+                    var entry = dataCollection.BufferInfoList[i];
                     entry.offset += fileHeader.objectsEnd;
+                    dataCollection.BufferInfoList[i] = entry;
 
                     BaseStream.WriteStruct(entry, crc);
                 }
@@ -214,43 +215,77 @@ namespace WolvenKit.RED4.Archive.IO
             BaseStream.WriteStruct(fileHeader);
             BaseStream.WriteStructs(tableHeaders);
 
-            /*for (int i = 0; i < dataCollection.ChunkInfoList.Count; i++)
-            {
-                var newInfo = dataCollection.ChunkInfoList[i];
-                var oldInfo = _file.Debug.ChunkInfos[i];
-
-                if ((newInfo.dataOffset + afterHeaderPosition) != oldInfo.dataOffset)
-                {
-
-                }
-
-                if (newInfo.dataSize != oldInfo.dataSize)
-                {
-
-                }
-
-                if (newInfo.parentID != oldInfo.parentID)
-                {
-                    throw new TodoException("Invalid parent id");
-                }
-
-                if (newInfo.className != oldInfo.className)
-                {
-
-                }
-
-                if (newInfo.objectFlags != oldInfo.objectFlags)
-                {
-
-                }
-
-                if (newInfo.template != oldInfo.template)
-                {
-
-                }
-
-                dataCollection.ChunkInfoList[i] = oldInfo;
-            }*/
+            //for (int i = 0; i < dataCollection.ChunkInfoList.Count; i++)
+            //{
+            //    var newInfo = dataCollection.ChunkInfoList[i];
+            //    var oldInfo = _file.Info.ExportInfo[i];
+            //
+            //    if ((newInfo.dataOffset + afterHeaderPosition) != oldInfo.dataOffset)
+            //    {
+            //
+            //    }
+            //
+            //    if (newInfo.dataSize != oldInfo.dataSize)
+            //    {
+            //
+            //    }
+            //
+            //    if (newInfo.parentID != oldInfo.parentID)
+            //    {
+            //        throw new TodoException("Invalid parent id");
+            //    }
+            //
+            //    if (newInfo.className != oldInfo.className)
+            //    {
+            //
+            //    }
+            //
+            //    if (newInfo.objectFlags != oldInfo.objectFlags)
+            //    {
+            //
+            //    }
+            //
+            //    if (newInfo.template != oldInfo.template)
+            //    {
+            //
+            //    }
+            //}
+            //
+            //for (int i = 0; i < dataCollection.BufferInfoList.Count; i++)
+            //{
+            //    var newInfo = dataCollection.BufferInfoList[i];
+            //    var oldInfo = _file.Info.BufferInfo[i];
+            //
+            //    if (newInfo.index != oldInfo.index)
+            //    {
+            //
+            //    }
+            //
+            //    if (newInfo.crc32 != oldInfo.crc32)
+            //    {
+            //
+            //    }
+            //
+            //    if (newInfo.diskSize != oldInfo.diskSize)
+            //    {
+            //
+            //    }
+            //
+            //    if (newInfo.flags != oldInfo.flags)
+            //    {
+            //
+            //    }
+            //
+            //    if (newInfo.memSize != oldInfo.memSize)
+            //    {
+            //
+            //    }
+            //
+            //    if (newInfo.offset != oldInfo.offset)
+            //    {
+            //
+            //    }
+            //}
         }
 
         #region Write Sections
@@ -285,10 +320,11 @@ namespace WolvenKit.RED4.Archive.IO
                 memSize = buffer.MemSize
             };
 
-            writer.Write(buffer.Bytes);
+            var compBuf = buffer.GetCompressedBytes();
+            writer.Write(compBuf);
 
-            result.diskSize = (uint)buffer.Bytes.Length;
-            result.crc32 = Crc32Algorithm.Compute(buffer.Bytes);
+            result.diskSize = (uint)compBuf.Length;
+            result.crc32 = Crc32Algorithm.Compute(compBuf);
 
             return result;
         }
@@ -343,7 +379,7 @@ namespace WolvenKit.RED4.Archive.IO
         private CR2WExportInfo WriteChunk(CR2WWriter file, RedBaseClass chunkData)
         {
             var tmpQueue = file.ChunkQueue;
-            file.ChunkQueue = new LinkedList<RedBaseClass>();
+            file.ChunkQueue = new List<RedBaseClass>();
 
             var redTypeName = RedReflection.GetTypeRedName(chunkData.GetType());
             var typeIndex = file.GetStringIndex(redTypeName);
@@ -358,10 +394,7 @@ namespace WolvenKit.RED4.Archive.IO
 
             result.dataSize = (uint)(file.BaseStream.Position - result.dataOffset);
 
-            foreach (var redClass in tmpQueue)
-            {
-                file.ChunkQueue.AddLast(redClass);
-            }
+            file.ChunkQueue.AddRange(tmpQueue);
 
             return result;
         }
@@ -405,11 +438,11 @@ namespace WolvenKit.RED4.Archive.IO
 
             void InternalWriteChunks(RedBaseClass rootChunk)
             {
-                file.ChunkQueue.AddFirst(rootChunk);
+                file.ChunkQueue.Insert(0, rootChunk);
                 while (file.ChunkQueue.Count > 0)
                 {
-                    var chunk = file.ChunkQueue.First.Value;
-                    file.ChunkQueue.RemoveFirst();
+                    var chunk = file.ChunkQueue[0];
+                    file.ChunkQueue.RemoveAt(0);
 
                     if (!_chunkInfos.ContainsKey(chunk))
                     {
@@ -503,7 +536,7 @@ namespace WolvenKit.RED4.Archive.IO
                 file.BaseWriter.Write(index);
             }
 
-            var bufferDict = file.BufferCacheList.ToDictionary();
+            var bufferDict = file.BufferCacheList.ToDictionary(ReferenceEqualityComparer.Instance);
             foreach (var kvp in file.BufferRef)
             {
                 file.BaseStream.Position = kvp.Key;

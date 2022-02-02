@@ -11,10 +11,10 @@ using System.IO;
 using System.Linq;
 using System.Runtime.Serialization;
 using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
 using Catel.IoC;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Newtonsoft.Json;
 using WolvenKit.Common.Conversion;
 using WolvenKit.Common.Tools;
 using WolvenKit.Interfaces.Extensions;
@@ -24,6 +24,7 @@ using WolvenKit.RED4.Archive.CR2W;
 using WolvenKit.RED4.Archive.IO;
 using WolvenKit.RED4.CR2W;
 using WolvenKit.RED4.CR2W.Archive;
+using WolvenKit.RED4.CR2W.JSON;
 
 namespace WolvenKit.MSTests
 {
@@ -480,7 +481,7 @@ namespace WolvenKit.MSTests
                     }
 
                     var dto = new RedFileDto(originalFile);
-                    var json = JsonConvert.SerializeObject(dto, Formatting.Indented);
+                    var json = RedJsonSerializer.Serialize(dto);
                     if (string.IsNullOrEmpty(json))
                     {
                         throw new SerializationException();
@@ -490,13 +491,13 @@ namespace WolvenKit.MSTests
 
                     #region convert back from json
 
-                    var newdto = JsonConvert.DeserializeObject<RedFileDto>(json);
+                    var newdto = RedJsonSerializer.Deserialize<RedFileDto>(json);
                     if (newdto == null)
                     {
                         throw new SerializationException();
                     }
 
-                    var newFile = newdto.ToW2rc();
+                    var newFile = (CR2WFile)newdto.Data;
 
                     #endregion
 

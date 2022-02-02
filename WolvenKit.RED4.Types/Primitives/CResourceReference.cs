@@ -10,7 +10,7 @@ namespace WolvenKit.RED4.Types
     [REDType(IsValueType = true)]
     public class CResourceReference<T> : IRedResourceReference<T>, IEquatable<CResourceReference<T>> where T : IRedType
     {
-        public CName DepotPath { get; set; }
+        public CName DepotPath { get; set; } = new();
         public InternalEnums.EImportFlags Flags { get; set; }
 
 
@@ -26,7 +26,17 @@ namespace WolvenKit.RED4.Types
                 return true;
             }
 
-            return DepotPath == other.DepotPath && Flags == other.Flags;
+            if (!Equals(DepotPath, other.DepotPath))
+            {
+                return false;
+            }
+
+            if (!Equals(Flags, other.Flags))
+            {
+                return false;
+            }
+
+            return true;
         }
 
         public override bool Equals(object obj)

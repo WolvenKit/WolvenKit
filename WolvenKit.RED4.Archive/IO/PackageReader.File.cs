@@ -17,7 +17,6 @@ namespace WolvenKit.RED4.Archive.IO
     {
         private Package04Header header;
         private IHashService _hashService;
-        private ushort refsAreStrings = 0;
 
         public EFileReadErrorCodes ReadBuffer(RedBuffer buffer, Type fileRootType)
         {

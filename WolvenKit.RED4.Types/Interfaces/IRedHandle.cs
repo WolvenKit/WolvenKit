@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace WolvenKit.RED4.Types
 {
-    public interface IRedBaseHandle
+    public interface IRedBaseHandle : IRedType
     {
         public Type InnerType { get; }
 
@@ -17,7 +17,7 @@ namespace WolvenKit.RED4.Types
         //Red4File File { get; }
     }
 
-    public interface IRedHandle : IRedBaseHandle, IRedType
+    public interface IRedHandle : IRedBaseHandle
     {
     }
 

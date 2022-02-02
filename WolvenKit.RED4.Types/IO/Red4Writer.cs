@@ -271,7 +271,7 @@ namespace WolvenKit.RED4.IO
 
         public virtual void Write(DataBuffer val)
         {
-            if (val.Buffer.Bytes == Array.Empty<byte>())
+            if (val.Buffer.IsEmpty)
             {
                 _writer.Write(0x80000000);
             }
@@ -476,7 +476,7 @@ namespace WolvenKit.RED4.IO
             _writer.Write(GetStringIndex(instance.ToEnumString()));
         }
 
-        public LinkedList<RedBaseClass> ChunkQueue = new();
+        public List<RedBaseClass> ChunkQueue = new();
         public Dictionary<Guid,List<(long, int, Type)>> ChunkReferences = new();
 
         protected void InternalHandleWriter(RedBaseClass classRef, int pointerOffset)
@@ -534,7 +534,7 @@ namespace WolvenKit.RED4.IO
                 ChunkReferences.Add(_chunkInfos[classRef].Guid, new List<(long, int, Type)>());
             }
 
-            ChunkQueue.AddLast(classRef);
+            ChunkQueue.Add(classRef);
 
             _targetList.Add((CurrentChunk, _chunkInfos[classRef].Guid, StringCacheList.Count, ImportCacheList.Count, BufferCacheList.Count));
             ChildChunks[CurrentChunk].Add(_chunkInfos[classRef].Guid);

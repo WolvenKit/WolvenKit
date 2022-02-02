@@ -232,7 +232,7 @@ namespace WolvenKit.RED4.Archive.IO
             Debug.Assert(BaseStream.Position == info.offset);
 
             var buffer = BaseReader.ReadBytes((int)info.diskSize);
-            return RedBuffer.CreateBuffer(info.flags, buffer, (int)info.memSize);
+            return RedBuffer.CreateBuffer(info.flags, buffer);
         }
 
         private void ParseBuffer(RedBuffer buffer)
