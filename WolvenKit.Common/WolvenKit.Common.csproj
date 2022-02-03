@@ -125,7 +125,6 @@
     <PackageReference Include="BCnEncoder.Net.ImageSharp" Version="1.0.4" />
     <PackageReference Include="FastMember" Version="1.5.0" />
     <PackageReference Include="FmodAudio" Version="2.2.2" />
-    <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
     <PackageReference Include="PropertyChanged.Fody" Version="3.4.0">
         <PrivateAssets>all</PrivateAssets>
     </PackageReference>

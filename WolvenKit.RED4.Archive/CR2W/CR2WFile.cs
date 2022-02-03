@@ -14,14 +14,14 @@ namespace WolvenKit.RED4.Archive.CR2W
         public uint ObjectsEnd { get; set; }
     }
 
-    public class CR2WFile : Red4File, IDisposable
+    public class CR2WFile : Red4File, IDisposable, IEquatable<CR2WFile>
     {
         public const uint MAGIC = 0x57325243; // "W2RC"
         public const uint DEADBEEF = 0xDEADBEEF;
 
 
         public CR2WFileInfo Info { get; internal set; }
-        public CR2WMetaData MetaData { get; } = new();
+        public CR2WMetaData MetaData { get; set; } = new();
 
 
         public IList<ICR2WProperty> Properties { get; }
@@ -38,7 +38,9 @@ namespace WolvenKit.RED4.Archive.CR2W
 
         #region Events
 
+#pragma warning disable CS0067
         public event ObjectChangedEventHandler ObjectChanged;
+#pragma warning restore CS0067
 
         public void AttachEventHandler()
         {
@@ -154,5 +156,60 @@ namespace WolvenKit.RED4.Archive.CR2W
         }
 
         #endregion
+
+        public bool Equals(CR2WFile other)
+        {
+            if (ReferenceEquals(null, other))
+            {
+                return false;
+            }
+
+            if (ReferenceEquals(this, other))
+            {
+                return true;
+            }
+
+            if (!Equals(RootChunk, other.RootChunk))
+            {
+                return false;
+            }
+
+            if (!Equals(EmbeddedFiles.Count, other.EmbeddedFiles.Count))
+            {
+                return false;
+            }
+
+            for (int i = 0; i < EmbeddedFiles.Count; i++)
+            {
+                if (!Equals(EmbeddedFiles[i], other.EmbeddedFiles[i]))
+                {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (ReferenceEquals(null, obj))
+            {
+                return false;
+            }
+
+            if (ReferenceEquals(this, obj))
+            {
+                return true;
+            }
+
+            if (obj.GetType() != this.GetType())
+            {
+                return false;
+            }
+
+            return Equals((CR2WFile)obj);
+        }
+
+        public override int GetHashCode() => HashCode.Combine(RootChunk, EmbeddedFiles);
     }
 }

@@ -45,9 +45,9 @@ namespace WolvenKit.RED4.Types
             _index = 0;
         }
 
-        public Dictionary<T, ushort> ToDictionary()
+        public Dictionary<T, ushort> ToDictionary(IEqualityComparer<T> comparer = null)
         {
-            return new Dictionary<T, ushort>(_keyValueList);
+            return new Dictionary<T, ushort>(_keyValueList, comparer);
         }
 
         public List<T> ToList()

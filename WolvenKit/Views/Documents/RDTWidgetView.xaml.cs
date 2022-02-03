@@ -76,7 +76,6 @@ namespace WolvenKit.Views.Documents
                 {
                     if (item.PackageData == null || item.PackageData.Data is not Package04 pkg)
                     {
-                        item.Package.Buffer.Decompress();
                         if (item.Package.Data is not Package04 pkg2)
                             return;
                         pkg = pkg2;

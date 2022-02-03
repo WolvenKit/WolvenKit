@@ -5,12 +5,10 @@ using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using Newtonsoft.Json;
 using WolvenKit.Common;
 using WolvenKit.Common.Extensions;
 using WolvenKit.Core.Compression;
 using WolvenKit.Interfaces.Core;
-using Formatting = Newtonsoft.Json.Formatting;
 
 namespace CP77Tools.Tasks
 {

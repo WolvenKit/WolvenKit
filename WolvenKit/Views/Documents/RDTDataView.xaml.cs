@@ -119,7 +119,7 @@ namespace WolvenKit.Views.Documents
         // Drag & Drop Functionality
 
         private string dropFileLocation;
-        private RedClassDto dropFile;
+        private RedTypeDto dropFile;
 
         private void SfTreeView_ItemDragStarting(object sender, TreeViewItemDragStartingEventArgs e)
         {
@@ -165,7 +165,7 @@ namespace WolvenKit.Views.Documents
                             {
                                 dropFileLocation = files[0];
                                 var json = File.ReadAllText(files[0]);
-                                dropFile = JsonConvert.DeserializeObject<RedClassDto>(json);
+                                dropFile = JsonConvert.DeserializeObject<RedTypeDto>(json);
                             }
                             catch (Exception)
                             {

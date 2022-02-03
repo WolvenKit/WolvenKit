@@ -4,19 +4,19 @@ using WolvenKit.RED4.IO;
 
 namespace WolvenKit.RED4.Types
 {
-    public partial class C2dArray : IRedAppendix
+    public partial class C2dArray : IRedAppendix, IRedOverload
     {
-        [RED("customHeaders")]
+        [RED("compiledHeaders")]
         [REDProperty(IsIgnored = true)]
-        public CArray<CString> CustomHeaders
+        public CArray<CString> CompiledHeaders
         {
             get => GetPropertyValue<CArray<CString>>();
             set => SetPropertyValue<CArray<CString>>(value);
         }
 
-        [RED("customRows")]
+        [RED("compiledData")]
         [REDProperty(IsIgnored = true)]
-        public CArray<CArray<CString>> CustomRows
+        public CArray<CArray<CString>> CompiledData
         {
             get => GetPropertyValue<CArray<CArray<CString>>>();
             set => SetPropertyValue<CArray<CArray<CString>>>(value);
@@ -24,13 +24,10 @@ namespace WolvenKit.RED4.Types
 
         public void Read(Red4Reader reader, uint size)
         {
-            CustomHeaders = new CArray<CString>();
-            CustomRows = new CArray<CArray<CString>>();
-            
             var cnt1 = reader.BaseReader.ReadVLQInt32();
             for (int i = 0; i < cnt1; i++)
             {
-                CustomHeaders.Add(reader.ReadCString());
+                CompiledHeaders.Add(reader.ReadCString());
             }
 
             cnt1 = reader.BaseReader.ReadVLQInt32();
@@ -44,20 +41,20 @@ namespace WolvenKit.RED4.Types
                     row.Add(reader.ReadCString());
                 }
 
-                CustomRows.Add(row);
+                CompiledData.Add(row);
             }
         }
 
         public void Write(Red4Writer writer)
         {
-            writer.WriteVLQ(CustomHeaders.Count);
-            foreach (var entry in CustomHeaders)
+            writer.WriteVLQ(CompiledHeaders.Count);
+            foreach (var entry in CompiledHeaders)
             {
                 writer.Write(entry);
             }
 
-            writer.WriteVLQ(CustomRows.Count);
-            foreach (var row in CustomRows)
+            writer.WriteVLQ(CompiledData.Count);
+            foreach (var row in CompiledData)
             {
                 writer.WriteVLQ(row.Count);
                 foreach (var entry in row)
@@ -65,6 +62,12 @@ namespace WolvenKit.RED4.Types
                     writer.Write(entry);
                 }
             }
+        }
+
+        void IRedOverload.ConstructorOverload()
+        {
+            CompiledHeaders = new CArray<CString>();
+            CompiledData = new CArray<CArray<CString>>();
         }
     }
 }

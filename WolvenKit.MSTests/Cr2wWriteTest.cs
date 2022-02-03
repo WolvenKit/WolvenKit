@@ -8,16 +8,26 @@ using System.Diagnostics;
 using System.IO;
 using System.IO.MemoryMappedFiles;
 using System.Linq;
+using System.Reflection;
 using System.Runtime.ExceptionServices;
 using System.Text;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Newtonsoft.Json;
 using WolvenKit.Common;
+using WolvenKit.Common.Conversion;
+using WolvenKit.Common.FNV1A;
 using WolvenKit.RED4.Archive;
 using WolvenKit.RED4.Archive.IO;
 using WolvenKit.MSTests.Model;
+using WolvenKit.RED4;
+using WolvenKit.RED4.Archive.Buffer;
+using WolvenKit.RED4.Archive.CR2W;
 using WolvenKit.RED4.CR2W;
 using WolvenKit.RED4.CR2W.Archive;
+using WolvenKit.RED4.CR2W.JSON;
+using WolvenKit.RED4.Types;
 using EFileReadErrorCodes = WolvenKit.RED4.Archive.IO.EFileReadErrorCodes;
+using JsonSerializer = System.Text.Json.JsonSerializer;
 
 #if IS_PARALLEL
 using System.Threading.Tasks;
@@ -43,34 +53,6 @@ namespace WolvenKit.MSTests
         //    Test_Extension();
         //}
 
-        [TestMethod]
-        public void Debug()
-        {
-            /*var files = s_groupedFiles[".ent"].ToList();
-
-            //var sorted = files.OrderByDescending(x => x.Size).ToList();
-
-            foreach (var file in files)
-            {
-                if (!file.Name.Contains("base\\gameplay\\devices\\ventilation_system\\activators\\ventilation_activator_vent.ent"))
-                {
-                    continue;
-                }
-
-                var list = new List<FileEntry>();
-                list.Add(file);
-                Write_Archive_Items(list);
-
-                return;
-            }*/
-
-            using var fs = File.OpenRead(@"C:\Dev\C77\arroyo_warehouse_v16_mproxy.mesh");
-            using var cr = new CR2WReader(fs);
-
-            var r = cr.ReadFile(out var c, true);
-
-            c.GetFromXPath("preloadLocalMaterialInstances:0");
-        }
 
         [TestMethod]
         public void Write_acousticdata()
