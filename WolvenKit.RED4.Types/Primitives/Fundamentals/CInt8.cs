@@ -29,12 +29,17 @@ namespace WolvenKit.RED4.Types
 
         public override bool Equals(object obj)
         {
-            if (obj is CInt8 cObj)
+            if (ReferenceEquals(null, obj))
             {
-                return Equals(cObj);
+                return false;
             }
 
-            return false;
+            if (obj.GetType() != this.GetType())
+            {
+                return false;
+            }
+
+            return Equals((CInt8)obj);
         }
 
         public bool Equals(CInt8 other) => Equals(_value, other._value);

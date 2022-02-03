@@ -38,7 +38,6 @@ jobs:
       uses: actions/checkout@v2
       with:
         ref: develop
-        submodules: recursive
     
     - name: Get commit
       run: |
@@ -50,10 +49,6 @@ jobs:
       uses: actions/setup-dotnet@v1
       with:
         dotnet-version: 6.0.x
-    - uses: microsoft/setup-msbuild@v1.1
-      with:
-        vs-version: '17.0'
-        msbuild-architecture: x64
 
      # environmental variables
     - run: echo "PROJ=./WolvenKit/WolvenKit.csproj" >> $env:GITHUB_ENV
@@ -85,10 +80,10 @@ jobs:
     - run: echo "VERSIONC=${{steps.get-version-cli.outputs.assembly-version}}-nightly.${{env.ISODATE}}" >> $env:GITHUB_ENV
     
     # Publish app
-    - run: msbuild ${{env.PROJ}} -t:restore -t:Build -t:Publish /p:PublishDir=".${{env.OUT}}" /p:InformationalVersion="${{env.VERSION}}" /p:Configuration=Release /p:Platform=x64 /p:PublishReadyToRun=False /p:PublishSingleFile=False /p:PublishTrimmed=False
+    - run: dotnet publish ${{env.PROJ}} -o ${{env.OUT}} -c Release -p:InformationalVersion="${{env.VERSION}}"
     
     # Publish console
-    - run: msbuild ${{env.PROJC}} -t:restore -t:Build -t:Publish /p:PublishDir=".${{env.OUTC}}" /p:Configuration=Release /p:Platform=x64 /p:PublishReadyToRun=False /p:PublishTrimmed=False
+    - run: dotnet publish ${{env.PROJC}} -o ${{env.OUTC}} -c Release
 
     - run: echo "PORTABLE=${{env.NAME}}-${{env.VERSION}}.zip" >> $env:GITHUB_ENV
     - run: echo "CONSOLE=${{env.NAME}}.Console-${{env.VERSIONC}}.zip" >> $env:GITHUB_ENV

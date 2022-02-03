@@ -23,7 +23,20 @@ namespace WolvenKit.RED4.Types
 
         public bool Equals(CBool other) => _value == other._value;
 
-        public override bool Equals(object obj) => obj is CBool other && Equals(other);
+        public override bool Equals(object obj)
+        {
+            if (ReferenceEquals(null, obj))
+            {
+                return false;
+            }
+
+            if (obj.GetType() != this.GetType())
+            {
+                return false;
+            }
+
+            return Equals((CBool)obj);
+        }
 
         public override int GetHashCode() => _value.GetHashCode();
 

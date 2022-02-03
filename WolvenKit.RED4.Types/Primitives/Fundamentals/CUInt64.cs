@@ -29,12 +29,17 @@ namespace WolvenKit.RED4.Types
 
         public override bool Equals(object obj)
         {
-            if (obj is CUInt64 cObj)
+            if (ReferenceEquals(null, obj))
             {
-                return Equals(cObj);
+                return false;
             }
 
-            return false;
+            if (obj.GetType() != this.GetType())
+            {
+                return false;
+            }
+
+            return Equals((CUInt64)obj);
         }
 
         public bool Equals(CUInt64 other) => Equals(_value, other._value);

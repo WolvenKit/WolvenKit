@@ -8,8 +8,8 @@ using System.Threading.Tasks;
 using CP77Tools.Model;
 using ProtoBuf;
 using WolvenKit.Common;
-using WolvenKit.Common.Oodle;
 using WolvenKit.Common.Services;
+using WolvenKit.Core.Compression;
 
 namespace WolvenKit.RED4.CR2W.Archive
 {

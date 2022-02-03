@@ -252,7 +252,7 @@ namespace WolvenKit.RED4.Archive.IO
 
         public override void Write(DataBuffer val)
         {
-            if (val.Buffer.Bytes == Array.Empty<byte>())
+            if (val.Buffer.IsEmpty)
             {
                 _writer.Write(0x80000000);
             }

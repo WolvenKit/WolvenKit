@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Runtime.InteropServices;
 using System.Text;
+using WolvenKit.Core.Extensions;
 using WolvenKit.RED4.Archive.Buffer;
 using WolvenKit.RED4.Archive.CR2W;
 using WolvenKit.RED4.IO;
@@ -45,15 +46,24 @@ namespace WolvenKit.RED4.Archive.IO
                 var (fieldType, flags) = RedReflection.GetCSTypeFromRedType(typeName);
 
                 var prop = RedReflection.GetPropertyByRedName(type, varName);
+
+                IRedType value;
+
                 BaseStream.Position = baseOff + f.offset;
                 if (prop == null)
                 {
-                    var value = Read(fieldType, 0, Flags.Empty);
+                    value = Read(fieldType, 0, Flags.Empty);
                     RedReflection.AddDynamicProperty(instance, varName, value);
                 }
                 else
                 {
-                    var value = Read(fieldType, 0, flags);
+                    if (fieldType != prop.Type)
+                    {
+                        var propName = $"{RedReflection.GetRedTypeFromCSType(instance.GetType())}.{varName}";
+                        throw new InvalidRTTIException(propName, prop.Type, fieldType);
+                    }
+
+                    value = Read(prop.Type, 0, flags);
                     prop.SetValue(instance, value);
                 }
             }

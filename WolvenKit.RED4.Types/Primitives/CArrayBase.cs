@@ -10,7 +10,24 @@ namespace WolvenKit.RED4.Types
     [DebuggerDisplay("Count = {Count}")]
     public class CArrayBase<T> : IRedArray<T>, IRedCloneable, IRedNotifyObjectChanged, IEquatable<CArrayBase<T>>
     {
-        public int MaxSize { get; set; } = -1;
+        private int _maxSize = -1;
+
+        public int MaxSize
+        {
+            get
+            {
+                return _maxSize;
+            }
+            set
+            {
+                if (value < Count)
+                {
+                    throw new ArgumentException(nameof(MaxSize));
+                }
+
+                _maxSize = value;
+            }
+        }
 
         public event ObjectChangedEventHandler ObjectChanged;
 
@@ -80,17 +97,12 @@ namespace WolvenKit.RED4.Types
                         }
                         args._callStack.Add(this);
 
-                        var index = ((IList)_internalList).IndexOf(item);
                         if (sender != null)
                         {
-                            args.RedPath = $":{index}.{args.RedPath}";
-
                             ObjectChanged?.Invoke(sender, args);
                         }
                         else
                         {
-                            args.RedPath = $":{index}";
-
                             ObjectChanged?.Invoke(this, args);
                         }
                     });
@@ -113,11 +125,11 @@ namespace WolvenKit.RED4.Types
             }
         }
 
-        private void OnObjectChanged(ObjectChangedType type, int index, object oldValue, object newValue)
+        private void OnObjectChanged(ObjectChangedType type, object oldValue, object newValue)
         {
             if (ObjectChanged != null)
             {
-                var args = new ObjectChangedEventArgs(type, $":{index}", null, oldValue, newValue);
+                var args = new ObjectChangedEventArgs(type, null, oldValue, newValue);
                 args._callStack.Add(this);
 
                 ObjectChanged.Invoke(this, args);
@@ -154,15 +166,14 @@ namespace WolvenKit.RED4.Types
             var castedValue = (T)value;
 
             _internalList.Add(castedValue);
-            var index = _internalList.Count - 1;
 
             if (castedValue != null)
             {
                 AddEventHandler(castedValue);
-                OnObjectChanged(ObjectChangedType.Added, index, null, castedValue);
+                OnObjectChanged(ObjectChangedType.Added, null, castedValue);
             }
 
-            return index;
+            return _internalList.Count - 1;
         }
 
         private void SetItem(int index, object value)
@@ -186,7 +197,7 @@ namespace WolvenKit.RED4.Types
                 var typeInfo = RedReflection.GetTypeInfo(_internalList[index].GetType());
                 if (_internalList[index].GetType().IsValueType || typeInfo.IsValueType)
                 {
-                    OnObjectChanged(ObjectChangedType.Modified, index, oldValue, _internalList[index]);
+                    OnObjectChanged(ObjectChangedType.Modified, oldValue, _internalList[index]);
                 }
             }
         }
@@ -216,14 +227,14 @@ namespace WolvenKit.RED4.Types
                 throw new NotSupportedException();
             }
 
-            for (int i = 0; i < _internalList.Count; i++)
+            foreach (var element in _internalList)
             {
-                if (_internalList[i] != null)
+                if (element != null)
                 {
-                    RemoveEventHandler(_internalList[i]);
+                    RemoveEventHandler(element);
                 }
 
-                OnObjectChanged(ObjectChangedType.Deleted, i, _internalList[i], null);
+                OnObjectChanged(ObjectChangedType.Deleted, element, null);
             }
 
             _internalList.Clear();
@@ -239,7 +250,7 @@ namespace WolvenKit.RED4.Types
 
         public void Insert(int index, object value)
         {
-            OnObjectChanged(ObjectChangedType.Added, index, null, value);
+            OnObjectChanged(ObjectChangedType.Added, null, value);
 
             ((IList)_internalList).Insert(index, value);
         }
@@ -252,7 +263,7 @@ namespace WolvenKit.RED4.Types
             }
 
             var index = ((IList)_internalList).IndexOf(value);
-            OnObjectChanged(ObjectChangedType.Deleted, index, value, null);
+            OnObjectChanged(ObjectChangedType.Deleted, value, null);
 
             ((IList)_internalList).Remove(value);
         }
@@ -265,7 +276,7 @@ namespace WolvenKit.RED4.Types
             }
 
             var index = _internalList.IndexOf(item);
-            OnObjectChanged(ObjectChangedType.Deleted, index, item, null);
+            OnObjectChanged(ObjectChangedType.Deleted, item, null);
 
             return _internalList.Remove(item);
         }
@@ -284,7 +295,7 @@ namespace WolvenKit.RED4.Types
                 throw new NotSupportedException();
             }
 
-            OnObjectChanged(ObjectChangedType.Added, index, null, item);
+            OnObjectChanged(ObjectChangedType.Added, null, item);
 
             _internalList.Insert(index, item);
         }
@@ -296,7 +307,7 @@ namespace WolvenKit.RED4.Types
                 throw new NotSupportedException();
             }
 
-            OnObjectChanged(ObjectChangedType.Deleted, index, _internalList[index], null);
+            OnObjectChanged(ObjectChangedType.Deleted, _internalList[index], null);
 
             _internalList.RemoveAt(index);
         }
@@ -310,22 +321,50 @@ namespace WolvenKit.RED4.Types
 
         public override bool Equals(object obj)
         {
-            if (obj is CArrayBase<T> cObj)
-            {
-                return Equals(cObj);
-            }
-
-            return false;
-        }
-
-        public bool Equals(CArrayBase<T> other)
-        {
-            if (other == null)
+            if (ReferenceEquals(null, obj))
             {
                 return false;
             }
 
-            return this.SequenceEqual(other);
+            if (ReferenceEquals(this, obj))
+            {
+                return true;
+            }
+
+            if (obj.GetType() != this.GetType())
+            {
+                return false;
+            }
+
+            return Equals((CArrayBase<T>)obj);
+        }
+
+        public bool Equals(CArrayBase<T> other)
+        {
+            if (ReferenceEquals(null, other))
+            {
+                return false;
+            }
+
+            if (ReferenceEquals(this, other))
+            {
+                return true;
+            }
+
+            if (!Equals(Count, other.Count))
+            {
+                return false;
+            }
+
+            for (int i = 0; i < Count; i++)
+            {
+                if (!Equals(this[i], other[i]))
+                {
+                    return false;
+                }
+            }
+
+            return true;
         }
 
         public override int GetHashCode() => base.GetHashCode();

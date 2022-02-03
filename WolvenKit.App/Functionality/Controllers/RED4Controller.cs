@@ -9,9 +9,8 @@ using System.Xml.Linq;
 using ReactiveUI;
 using WolvenKit.Common;
 using WolvenKit.Common.Interfaces;
-using WolvenKit.Common.Oodle;
+using WolvenKit.Core.Compression;
 using WolvenKit.Common.Services;
-using WolvenKit.Common.Tools.Oodle;
 using WolvenKit.Core;
 using WolvenKit.Functionality.Services;
 using WolvenKit.Models;
@@ -65,11 +64,6 @@ namespace WolvenKit.Functionality.Controllers
             if (!_initialized)
             {
                 _initialized = true;
-                // load oodle
-                if (!OodleLoadLib.Load(_settingsManager.GetRED4OodleDll()))
-                {
-                    throw new FileNotFoundException($"oo2ext_7_win64.dll not found.");
-                }
 
                 // load archives
                 var todo = new List<Func<IArchiveManager>>()
@@ -202,7 +196,7 @@ namespace WolvenKit.Functionality.Controllers
                 var buffer = br.ReadBytes(file.Length - 8);
 
                 var unpacked = new byte[size];
-                long unpackedSize = OodleHelper.Decompress(buffer, unpacked);
+                long unpackedSize = Oodle.Decompress(buffer, unpacked);
 
                 using var msout = new MemoryStream();
                 using var bw = new BinaryWriter(msout);
@@ -216,13 +210,7 @@ namespace WolvenKit.Functionality.Controllers
                 var inbuffer = File.ReadAllBytes(path);
                 IEnumerable<byte> outBuffer = new List<byte>();
 
-                var r = OodleHelper.Compress(
-                    inbuffer,
-                    inbuffer.Length,
-                    ref outBuffer,
-                    OodleNative.OodleLZ_Compressor.Kraken,
-                    OodleNative.OodleLZ_Compression.Normal,
-                    true);
+                var r = Oodle.Compress( inbuffer, ref outBuffer, true);
 
                 File.WriteAllBytes(outpath, outBuffer.ToArray());
             }

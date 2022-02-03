@@ -6,7 +6,7 @@ using CP77.CR2W;
 using SharpGLTF.Schema2;
 using WolvenKit.Common.DDS;
 using WolvenKit.Common.FNV1A;
-using WolvenKit.Common.Oodle;
+using WolvenKit.Core.Compression;
 using WolvenKit.Common.Services;
 using WolvenKit.Modkit.RED4.GeneralStructs;
 using WolvenKit.Modkit.RED4.RigFile;

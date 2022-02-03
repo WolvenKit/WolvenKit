@@ -5,11 +5,12 @@ using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
+using WolvenKit.Core.Extensions;
 using WolvenKit.Common.FNV1A;
 using WolvenKit.RED4.Archive.Buffer;
 using WolvenKit.RED4.Archive.CR2W;
 using WolvenKit.RED4.Types;
-using WolvenKit.RED4.Types.Compression;
+using WolvenKit.Core.Compression;
 using WolvenKit.RED4.Types.Exceptions;
 
 namespace WolvenKit.RED4.Archive.IO
@@ -268,13 +269,13 @@ namespace WolvenKit.RED4.Archive.IO
 
             foreach (var chunk in _file.Chunks)
             {
-                file.ChunkQueue.AddLast(chunk);
+                file.ChunkQueue.Add(chunk);
             }
 
             while (file.ChunkQueue.Count > 0)
             {
-                var chunk = file.ChunkQueue.First.Value;
-                file.ChunkQueue.RemoveFirst();
+                var chunk = file.ChunkQueue[0];
+                file.ChunkQueue.RemoveAt(0);
 
                 if (!_chunkInfos.ContainsKey(chunk))
                 {

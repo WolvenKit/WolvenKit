@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 
 namespace WolvenKit.RED4.Types
 {
@@ -23,7 +24,7 @@ namespace WolvenKit.RED4.Types
                 return true;
             }
 
-            return NumChannels == other.NumChannels && InterpolationType == other.InterpolationType && LinkType == other.LinkType && Alignment == other.Alignment && Equals(Data, other.Data);
+            return NumChannels == other.NumChannels && InterpolationType == other.InterpolationType && LinkType == other.LinkType && Alignment == other.Alignment && Data.SequenceEqual(other.Data);
         }
 
         public override bool Equals(object obj)

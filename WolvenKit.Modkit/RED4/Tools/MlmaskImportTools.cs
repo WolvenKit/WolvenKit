@@ -52,12 +52,12 @@ namespace WolvenKit.Modkit.RED4.MLMask
                 var euncook = Enum.Parse<EUncookExtension>(Path.GetExtension(f).ToLower().TrimStart('.'));
                 if (euncook != EUncookExtension.dds)
                 {
-                    ms = new MemoryStream(DDSUtils.ConvertToDdsMemory(ms, euncook, DXGI_FORMAT.DXGI_FORMAT_R8_UNORM));
+                    ms = new MemoryStream(Texconv.ConvertToDds(ms, euncook, DXGI_FORMAT.DXGI_FORMAT_R8_UNORM));
                 }
                 else
                 {
                     // why dds to dds?, to make sure format is r8_unorm
-                    ms = new MemoryStream(DDSUtils.ConvertToDdsMemory(new MemoryStream(DDSUtils.ConvertFromDdsMemory(ms, EUncookExtension.tga)), EUncookExtension.tga, DXGI_FORMAT.DXGI_FORMAT_R8_UNORM));
+                    ms = new MemoryStream(Texconv.ConvertToDds(new MemoryStream(Texconv.ConvertFromDds(ms, EUncookExtension.tga)), EUncookExtension.tga, DXGI_FORMAT.DXGI_FORMAT_R8_UNORM));
                 }
                 ms.Seek(0, SeekOrigin.Begin);
                 DDSUtils.TryReadDdsHeader(ms, out var header);

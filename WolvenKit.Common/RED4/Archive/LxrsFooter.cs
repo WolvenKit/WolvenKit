@@ -4,7 +4,8 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using WolvenKit.Common.Oodle;
+using WolvenKit.Core.Compression;
+using WolvenKit.Core.Extensions;
 using WolvenKit.Interfaces.Core;
 using WolvenKit.Interfaces.Extensions;
 using WolvenKit.RED4.CR2W;
@@ -45,12 +46,9 @@ namespace WolvenKit.Common.RED4.Archive
             var inbuffer = ms.ToByteArray();
 
             IEnumerable<byte> outBuffer = new List<byte>();
-            var r = OodleHelper.Compress(
+            var r = Oodle.Compress(
                 inbuffer,
-                inbuffer.Length,
                 ref outBuffer,
-                OodleNative.OodleLZ_Compressor.Kraken,
-                OodleNative.OodleLZ_Compression.Normal,
                 false);
 
             bw.Write(inbuffer.Length);      //size
@@ -78,7 +76,7 @@ namespace WolvenKit.Common.RED4.Archive
             {
                 // buffer is compressed
                 var outBuffer = new byte[size];
-                var r = OodleHelper.Decompress(inbuffer, outBuffer);
+                var r = Oodle.Decompress(inbuffer, outBuffer);
                 using var ms = new MemoryStream(outBuffer);
                 using var tempbr = new BinaryReader(ms);
                 for (var i = 0; i < count; i++)

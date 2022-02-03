@@ -70,12 +70,22 @@ namespace WolvenKit.RED4.Types
 
         public override bool Equals(object obj)
         {
-            if (obj is CLegacySingleChannelCurve<T> cObj)
+            if (ReferenceEquals(null, obj))
             {
-                return Equals(cObj);
+                return false;
             }
 
-            return false;
+            if (ReferenceEquals(this, obj))
+            {
+                return true;
+            }
+
+            if (obj.GetType() != this.GetType())
+            {
+                return false;
+            }
+
+            return Equals((CLegacySingleChannelCurve<T>)obj);
         }
 
         public bool Equals(CLegacySingleChannelCurve<T> other)
