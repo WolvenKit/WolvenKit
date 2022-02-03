@@ -7,7 +7,8 @@ on:
       - develop
   push:
     branches:
-      - master      
+      - master
+      - develop  
 
 jobs:   
   check-wkit-win:
@@ -22,16 +23,11 @@ jobs:
         dotnet-version: 6.x
 
     - name: publish
-      run: dotnet publish .\WolvenKit\WolvenKit.csproj -o .\publish -c Release
-
-    - uses: actions/upload-artifact@v2
-      with:
-        name: wolvenkit
-        path: .\publish
+      run: dotnet build .\WolvenKit\WolvenKit.csproj
 
 
   check-console-win:
-    runs-on: windows-2022
+    runs-on: ubuntu-latest
 
     steps:
     - name: checkout
@@ -42,9 +38,4 @@ jobs:
         dotnet-version: 6.x
 
     - name: publish
-      run: dotnet publish .\WolvenKit.CLI\WolvenKit.CLI.csproj -o .\publish_cli -c Release
-
-    - uses: actions/upload-artifact@v2
-      with:
-        name: wolvenkit_cli
-        path: .\publish_cli
+      run: dotnet build .\WolvenKit.CLI\WolvenKit.CLI.csproj
