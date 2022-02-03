@@ -19,8 +19,35 @@
       <DebugType>embedded</DebugType>
       <Platforms>x64</Platforms>
       <SatelliteResourceLanguages>en</SatelliteResourceLanguages>
+      <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
 
   </PropertyGroup>
+
+    <PropertyGroup Condition="$([MSBuild]::IsOSPlatform('Windows'))">
+        <DefineConstants>_WINDOWS</DefineConstants>
+    </PropertyGroup>
+    <PropertyGroup Condition="$([MSBuild]::IsOSPlatform('Linux'))">
+        <DefineConstants>_LINUX</DefineConstants>
+    </PropertyGroup>
+    <PropertyGroup Condition="$([MSBuild]::IsOSPlatform('OSX'))">
+        <DefineConstants>_OSX</DefineConstants>
+    </PropertyGroup>
+    
+  <ItemGroup>
+    <None Remove="lib\kraken.dll" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="lib\kraken.dll">
+      <PackagePath>lib\net5.0</PackagePath>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <Pack>true</Pack>
+    </Content>
+    <None Remove="lib\libkraken.dylib" />
+    <Content Include="lib\libkraken.dylib">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
 
     <ItemGroup>
         <PackageReference Include="DynamicData" Version="7.4.9" />

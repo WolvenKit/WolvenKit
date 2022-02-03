@@ -3,7 +3,7 @@ using System.IO;
 using System.Linq;
 using System.Text.Json;
 using WolvenKit.Common.Conversion;
-using WolvenKit.Common.Oodle;
+using WolvenKit.Core.Compression;
 using WolvenKit.Common.RED4.Compiled;
 using WolvenKit.RED4.Archive.CR2W;
 using WolvenKit.RED4.CR2W.JSON;

@@ -36,7 +36,6 @@
   <ItemGroup>
     <ProjectReference Include="..\WolvenKit.App\WolvenKit.App.csproj" />
     <ProjectReference Include="..\WolvenKit.Common\WolvenKit.Common.csproj" />
-    <ProjectReference Include="..\WolvenKit.CLI\WolvenKit.CLI.csproj" />
   </ItemGroup>
 
   <ItemGroup>

@@ -34,11 +34,6 @@ namespace WolvenKit.RED4.Types
                 return false;
             }
 
-            if (ReferenceEquals(this, obj))
-            {
-                return true;
-            }
-
             if (obj.GetType() != this.GetType())
             {
                 return false;

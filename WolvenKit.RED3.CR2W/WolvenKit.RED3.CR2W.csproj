@@ -9,8 +9,8 @@
     <Product>WolvenKit.RED3.CR2W</Product>
     <Description>File formats (The Witcher 3) for the WolvenKit Mod Editor.</Description>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
-    <PackageProjectUrl>https://github.com/WolvenKit/Wolven-kit</PackageProjectUrl>
-    <RepositoryUrl>https://github.com/WolvenKit/Wolven-kit</RepositoryUrl>
+    <PackageProjectUrl>https://github.com/WolvenKit/WolvenKit</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/WolvenKit/WolvenKit</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
     <PackageTags>wolvenkit, witcher3</PackageTags>
     <GeneratePackageOnBuild>false</GeneratePackageOnBuild>

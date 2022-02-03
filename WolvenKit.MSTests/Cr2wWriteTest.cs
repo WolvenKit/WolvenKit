@@ -891,7 +891,7 @@ namespace WolvenKit.MSTests
 
             var filesGroups = files.Select((f, i) => new { Value = f, Index = i })
                 .GroupBy(item => item.Value.Archive.ArchiveAbsolutePath);
-            
+
             foreach (var fileGroup in filesGroups)
             {
                 var fileList = fileGroup.ToList();
@@ -967,6 +967,7 @@ namespace WolvenKit.MSTests
                                 }
 
                                 if (!isBinaryEqual && WRITE_FAILED)
+#pragma warning disable CS0162
                                 {
                                     var resultDir = Path.Combine(Environment.CurrentDirectory, s_testResultsDirectory);
                                     var filename = Path.Combine(resultDir, Path.GetFileName(cr2wFile.MetaData.FileName));
@@ -981,6 +982,7 @@ namespace WolvenKit.MSTests
                                     writeStream.CopyTo(nFile);
                                     nFile.Flush();
                                 }
+#pragma warning restore CS0162
 
                                 // test reading again
                                 //bw.Seek(0, SeekOrigin.Begin);

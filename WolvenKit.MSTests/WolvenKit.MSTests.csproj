@@ -8,8 +8,19 @@
     <RootNamespace>WolvenKit.MSTests</RootNamespace>
     <Platforms>x64</Platforms>
     <SatelliteResourceLanguages>en</SatelliteResourceLanguages>
+      <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
 
+    <PropertyGroup Condition="$([MSBuild]::IsOSPlatform('Windows'))">
+        <DefineConstants>_WINDOWS</DefineConstants>
+    </PropertyGroup>
+    <PropertyGroup Condition="$([MSBuild]::IsOSPlatform('Linux'))">
+        <DefineConstants>_LINUX</DefineConstants>
+    </PropertyGroup>
+    <PropertyGroup Condition="$([MSBuild]::IsOSPlatform('OSX'))">
+        <DefineConstants>_OSX</DefineConstants>
+    </PropertyGroup>
+    
   <ItemGroup>
       <PackageReference Include="Catel.Core" Version="5.12.22" />
       <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="6.0.0" />
@@ -25,9 +36,91 @@
 
   <ItemGroup>
     <None Remove="appsettings.json" />
+    <None Remove="Resources\1_oodle.kark" />
+    <None Remove="Resources\2_oodle.kark" />
+    <None Remove="Resources\3_oodle.kark" />
+    <None Remove="Resources\4_oodle.kark" />
+    <None Remove="Resources\5_oodle.kark" />
+    <None Remove="Resources\6_oodle.kark" />
+    <None Remove="Resources\h0_001_wa_c__judy_d02.bmp" />
+    <None Remove="Resources\h0_001_wa_c__judy_d02.dds" />
+    <None Remove="Resources\h0_001_wa_c__judy_d02.jpg" />
+    <None Remove="Resources\h0_001_wa_c__judy_d02.png" />
+    <None Remove="Resources\h0_001_wa_c__judy_d02.tga" />
+    <None Remove="Resources\h0_001_wa_c__judy_d02.tiff" />
+    <None Remove="Resources\oodle.kark" />
+    <None Remove="Resources\oodle.txt" />
+    <None Remove="Resources\q204_columbarium_1080p.bmp" />
+    <None Remove="Resources\q204_columbarium_1080p.dds" />
+    <None Remove="Resources\q204_columbarium_1080p.jpg" />
+    <None Remove="Resources\q204_columbarium_1080p.png" />
+    <None Remove="Resources\q204_columbarium_1080p.tga" />
+    <None Remove="Resources\q204_columbarium_1080p.tiff" />
+    <None Remove="Resources\q204_columbarium_1080p_1.bmp" />
+    <None Remove="Resources\q204_columbarium_1080p_1.jpg" />
+    <None Remove="Resources\q204_columbarium_1080p_1.png" />
+    <None Remove="Resources\q204_columbarium_1080p_1.tga" />
+    <None Remove="Resources\q204_columbarium_1080p_1.tiff" />
     <None Remove="Resources\resourceUses_131.zip" />
     <Content Include="appsettings.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\1_oodle.kark">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\2_oodle.kark">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\3_oodle.kark">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\4_oodle.kark">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\5_oodle.kark">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\6_oodle.kark">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\h0_001_wa_c__judy_d02.bmp">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\h0_001_wa_c__judy_d02.dds">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\h0_001_wa_c__judy_d02.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\h0_001_wa_c__judy_d02.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\h0_001_wa_c__judy_d02.tga">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\h0_001_wa_c__judy_d02.tiff">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\oodle.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\q204_columbarium_1080p.bmp">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\q204_columbarium_1080p.dds">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\q204_columbarium_1080p.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\q204_columbarium_1080p.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\q204_columbarium_1080p.tga">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\q204_columbarium_1080p.tiff">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Resources\resourceuses_131.zip">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
@@ -41,5 +134,7 @@
     <ProjectReference Include="..\WolvenKit.RED4.Archive\WolvenKit.RED4.Archive.csproj" />
     <ProjectReference Include="..\WolvenKit.RED4.TweakDB\WolvenKit.RED4.TweakDB.csproj" />
   </ItemGroup>
+
+   
 
 </Project>

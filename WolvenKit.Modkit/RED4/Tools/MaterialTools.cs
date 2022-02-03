@@ -1,31 +1,20 @@
 using System;
-using System.IO;
-using CP77.CR2W;
-using WolvenKit.Modkit.RED4.GeneralStructs;
-using WolvenKit.RED4.CR2W;
-using WolvenKit.RED4.Types;
-using WolvenKit.Common.Oodle;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
-using SharpGLTF.Schema2;
-using WolvenKit.Common.DDS;
-using WolvenKit.RED4.CR2W.Archive;
-using WolvenKit.Common.FNV1A;
-using SharpGLTF.IO;
-using System.Diagnostics;
 using System.Text.Json;
-using WolvenKit.Common.Model.Arguments;
-using WolvenKit.Common.Tools;
-using WolvenKit.Modkit.RED4.RigFile;
+using CP77.CR2W;
 using WolvenKit.Common;
 using WolvenKit.Common.Conversion;
+using WolvenKit.Common.FNV1A;
+using WolvenKit.Common.Model.Arguments;
+using WolvenKit.Modkit.RED4.GeneralStructs;
 using WolvenKit.RED4.Archive.CR2W;
-using WolvenKit.RED4.Types.Exceptions;
 using WolvenKit.RED4.Archive.IO;
-using WolvenKit.Interfaces.Extensions;
-using WolvenKit.RED4;
+using WolvenKit.RED4.CR2W.Archive;
 using WolvenKit.RED4.CR2W.JSON;
-using JsonSerializer = System.Text.Json.JsonSerializer;
+using WolvenKit.RED4.Types;
+using WolvenKit.RED4.Types.Exceptions;
 
 namespace WolvenKit.Modkit.RED4
 {
@@ -34,7 +23,7 @@ namespace WolvenKit.Modkit.RED4
     /// </summary>
     public partial class ModTools
     {
-        public bool ExportMeshWithMaterials(Stream meshStream, FileInfo outfile, List<Archive> archives,string matRepo, EUncookExtension eUncookExtension = EUncookExtension.dds, bool isGLBinary = true, bool LodFilter = true)
+        public bool ExportMeshWithMaterials(Stream meshStream, FileInfo outfile, List<Archive> archives, string matRepo, EUncookExtension eUncookExtension = EUncookExtension.dds, bool isGLBinary = true, bool LodFilter = true)
         {
             if (matRepo == null)
             {
@@ -51,39 +40,43 @@ namespace WolvenKit.Modkit.RED4
 
             var meshesinfo = MeshTools.GetMeshesinfo(rendblob, cr2w);
 
-            List<RawMeshContainer> expMeshes = MeshTools.ContainRawMesh(ms, meshesinfo, LodFilter);
+            var expMeshes = MeshTools.ContainRawMesh(ms, meshesinfo, LodFilter);
             MeshTools.UpdateSkinningParamCloth(ref expMeshes, meshStream, cr2w);
 
-            RawArmature Rig = MeshTools.GetOrphanRig(rendblob, cr2w);
+            var Rig = MeshTools.GetOrphanRig(rendblob, cr2w);
 
-            ModelRoot model = MeshTools.RawMeshesToGLTF(expMeshes, Rig);
+            var model = MeshTools.RawMeshesToGLTF(expMeshes, Rig);
 
             ParseMaterials(cr2w, meshStream, outfile, archives, matRepo, eUncookExtension);
 
             if (isGLBinary)
+            {
                 model.SaveGLB(outfile.FullName);
+            }
             else
+            {
                 model.SaveGLTF(outfile.FullName);
+            }
 
             meshStream.Dispose();
             meshStream.Close();
 
             return true;
         }
-        private void GetMateriaEntries(CR2WFile cr2w, Stream meshStream, ref List<string> primaryDependencies,ref List<string> materialEntryNames, ref List<CMaterialInstance> materialEntries, List<Archive> archives)
+        private void GetMateriaEntries(CR2WFile cr2w, Stream meshStream, ref List<string> primaryDependencies, ref List<string> materialEntryNames, ref List<CMaterialInstance> materialEntries, List<Archive> archives)
         {
             var cmesh = cr2w.RootChunk as CMesh;
 
-            List<CMaterialInstance> ExternalMaterial = new List<CMaterialInstance>();
+            var ExternalMaterial = new List<CMaterialInstance>();
 
-            for (int i = 0; i < cmesh.ExternalMaterials.Count; i++)
+            for (var i = 0; i < cmesh.ExternalMaterials.Count; i++)
             {
                 string path = cmesh.ExternalMaterials[i].DepotPath;
 
-                ulong hash = FNV1A64HashAlgorithm.HashString(path);
-                foreach (Archive ar in archives)
+                var hash = FNV1A64HashAlgorithm.HashString(path);
+                foreach (var ar in archives)
                 {
-                    if(ar.Files.ContainsKey(hash))
+                    if (ar.Files.ContainsKey(hash))
                     {
                         var ms = new MemoryStream();
                         ExtractSingleToStream(ar, hash, ms);
@@ -112,12 +105,12 @@ namespace WolvenKit.Modkit.RED4
                     }
                 }
             }
-            for (int i = 0; i < cmesh.PreloadExternalMaterials.Count; i++)
+            for (var i = 0; i < cmesh.PreloadExternalMaterials.Count; i++)
             {
                 string path = cmesh.PreloadExternalMaterials[i].DepotPath;
 
-                ulong hash = FNV1A64HashAlgorithm.HashString(path);
-                foreach (Archive ar in archives)
+                var hash = FNV1A64HashAlgorithm.HashString(path);
+                foreach (var ar in archives)
                 {
                     if (ar.Files.ContainsKey(hash))
                     {
@@ -149,16 +142,16 @@ namespace WolvenKit.Modkit.RED4
                 }
             }
 
-            List<CMaterialInstance> LocalMaterial = new List<CMaterialInstance>();
+            var LocalMaterial = new List<CMaterialInstance>();
 
             if (cmesh.LocalMaterialBuffer.RawDataHeaders.Count != 0)
             {
-                MemoryStream materialStream = GetMaterialStream(meshStream, cr2w);
-                byte[] bytes = materialStream.ToArray();
-                for (int i = 0; i < cmesh.LocalMaterialBuffer.RawDataHeaders.Count; i++)
+                var materialStream = GetMaterialStream(meshStream, cr2w);
+                var bytes = materialStream.ToArray();
+                for (var i = 0; i < cmesh.LocalMaterialBuffer.RawDataHeaders.Count; i++)
                 {
-                    UInt32 offset = cmesh.LocalMaterialBuffer.RawDataHeaders[i].Offset;
-                    UInt32 size = cmesh.LocalMaterialBuffer.RawDataHeaders[i].Size;
+                    uint offset = cmesh.LocalMaterialBuffer.RawDataHeaders[i].Offset;
+                    uint size = cmesh.LocalMaterialBuffer.RawDataHeaders[i].Size;
 
                     var ms = new MemoryStream(bytes, (int)offset, (int)size);
 
@@ -187,7 +180,7 @@ namespace WolvenKit.Modkit.RED4
             }
             else
             {
-                
+
 
                 foreach (var handle in cmesh.PreloadLocalMaterialInstances)
                 {
@@ -209,23 +202,27 @@ namespace WolvenKit.Modkit.RED4
                 }*/
             }
 
-            int Count = cmesh.MaterialEntries.Count;
-            for (int i = 0; i < Count; i++)
+            var Count = cmesh.MaterialEntries.Count;
+            for (var i = 0; i < Count; i++)
             {
                 var Entry = cmesh.MaterialEntries[i];
                 materialEntryNames.Add(Entry.Name);
                 if (Entry.IsLocalInstance)
+                {
                     materialEntries.Add(LocalMaterial[Entry.Index]);
+                }
                 else
+                {
                     materialEntries.Add(ExternalMaterial[Entry.Index]);
+                }
             }
-            foreach(var m in materialEntries)
+            foreach (var m in materialEntries)
             {
                 string path = m.BaseMaterial.DepotPath;
-                while(!Path.GetExtension(path).Contains("mt"))
+                while (!Path.GetExtension(path).Contains("mt"))
                 {
-                    ulong hash = FNV1A64HashAlgorithm.HashString(path);
-                    foreach (Archive ar in archives)
+                    var hash = FNV1A64HashAlgorithm.HashString(path);
+                    foreach (var ar in archives)
                     {
                         if (ar.Files.ContainsKey(hash))
                         {
@@ -255,8 +252,8 @@ namespace WolvenKit.Modkit.RED4
                         }
                     }
                 }
-                ulong mt = FNV1A64HashAlgorithm.HashString(path);
-                foreach (Archive ar in archives)
+                var mt = FNV1A64HashAlgorithm.HashString(path);
+                foreach (var ar in archives)
                 {
                     if (ar.Files.ContainsKey(mt))
                     {
@@ -285,22 +282,22 @@ namespace WolvenKit.Modkit.RED4
                 }
             }
         }
-        private void ParseMaterials(CR2WFile cr2w ,Stream meshStream, FileInfo outfile, List<Archive> archives,string matRepo, EUncookExtension eUncookExtension = EUncookExtension.dds)
+        private void ParseMaterials(CR2WFile cr2w, Stream meshStream, FileInfo outfile, List<Archive> archives, string matRepo, EUncookExtension eUncookExtension = EUncookExtension.dds)
         {
-            List<string> primaryDependencies = new List<string>();
+            var primaryDependencies = new List<string>();
 
-            List<string> materialEntryNames = new List<string>();
-            List<CMaterialInstance> materialEntries = new List<CMaterialInstance>();
+            var materialEntryNames = new List<string>();
+            var materialEntries = new List<CMaterialInstance>();
 
             GetMateriaEntries(cr2w, meshStream, ref primaryDependencies, ref materialEntryNames, ref materialEntries, archives);
 
-            List<string> mlSetupNames = new List<string>();
+            var mlSetupNames = new List<string>();
 
-            List<string> mlTemplateNames = new List<string>();
+            var mlTemplateNames = new List<string>();
 
-            List<string> HairProfileNames = new List<string>();
+            var HairProfileNames = new List<string>();
 
-            List<string> TexturesList = new List<string>();
+            var TexturesList = new List<string>();
 
             var exportArgs =
                 new GlobalExportArgs().Register(
@@ -308,23 +305,27 @@ namespace WolvenKit.Modkit.RED4
                     new MlmaskExportArgs() { UncookExtension = eUncookExtension }
                 );
 
-            for (int i = 0; i < primaryDependencies.Count; i++)
+            for (var i = 0; i < primaryDependencies.Count; i++)
             {
 
                 if (Path.GetExtension(primaryDependencies[i]) == ".xbm")
                 {
-                    if(!TexturesList.Contains(primaryDependencies[i]))
+                    if (!TexturesList.Contains(primaryDependencies[i]))
+                    {
                         TexturesList.Add(primaryDependencies[i]);
+                    }
 
-                    ulong hash = FNV1A64HashAlgorithm.HashString(primaryDependencies[i]);
-                    foreach (Archive ar in archives)
+                    var hash = FNV1A64HashAlgorithm.HashString(primaryDependencies[i]);
+                    foreach (var ar in archives)
                     {
                         if (ar.Files.ContainsKey(hash))
                         {
-                            if (!File.Exists(Path.Combine(matRepo, Path.ChangeExtension(primaryDependencies[i],"." + exportArgs.Get<XbmExportArgs>().UncookExtension.ToString()))))
+                            if (!File.Exists(Path.Combine(matRepo, Path.ChangeExtension(primaryDependencies[i], "." + exportArgs.Get<XbmExportArgs>().UncookExtension.ToString()))))
                             {
                                 if (Directory.Exists(matRepo))
+                                {
                                     UncookSingle(ar, hash, new DirectoryInfo(matRepo), exportArgs);
+                                }
                             }
                             break;
                         }
@@ -334,16 +335,21 @@ namespace WolvenKit.Modkit.RED4
                 if (Path.GetExtension(primaryDependencies[i]) == ".mlmask")
                 {
                     if (!TexturesList.Contains(primaryDependencies[i]))
+                    {
                         TexturesList.Add(primaryDependencies[i]);
-                    ulong hash = FNV1A64HashAlgorithm.HashString(primaryDependencies[i]);
-                    foreach (Archive ar in archives)
+                    }
+
+                    var hash = FNV1A64HashAlgorithm.HashString(primaryDependencies[i]);
+                    foreach (var ar in archives)
                     {
                         if (ar.Files.ContainsKey(hash))
                         {
-                            if(!File.Exists(Path.Combine(matRepo, primaryDependencies[i].Replace(".mlmask",$"_0.{exportArgs.Get<XbmExportArgs>().UncookExtension.ToString()}"))))
+                            if (!File.Exists(Path.Combine(matRepo, primaryDependencies[i].Replace(".mlmask", $"_0.{exportArgs.Get<XbmExportArgs>().UncookExtension.ToString()}"))))
                             {
                                 if (Directory.Exists(matRepo))
+                                {
                                     UncookSingle(ar, hash, new DirectoryInfo(matRepo), exportArgs);
+                                }
                             }
                             break;
                         }
@@ -355,8 +361,8 @@ namespace WolvenKit.Modkit.RED4
                 {
                     if (!HairProfileNames.Contains(primaryDependencies[i]))
                     {
-                        ulong hash = FNV1A64HashAlgorithm.HashString(primaryDependencies[i]);
-                        foreach (Archive ar in archives)
+                        var hash = FNV1A64HashAlgorithm.HashString(primaryDependencies[i]);
+                        foreach (var ar in archives)
                         {
                             if (ar.Files.ContainsKey(hash))
                             {
@@ -365,7 +371,7 @@ namespace WolvenKit.Modkit.RED4
                                 ms.Seek(0, SeekOrigin.Begin);
 
                                 HairProfileNames.Add(primaryDependencies[i]);
-                                string path = Path.Combine(matRepo, Path.ChangeExtension(primaryDependencies[i], ".hp.json"));
+                                var path = Path.Combine(matRepo, Path.ChangeExtension(primaryDependencies[i], ".hp.json"));
                                 if (!File.Exists(path))
                                 {
                                     if (!new FileInfo(path).Directory.Exists)
@@ -386,10 +392,10 @@ namespace WolvenKit.Modkit.RED4
 
                 if (Path.GetExtension(primaryDependencies[i]) == ".mlsetup")
                 {
-                    if(!mlSetupNames.Contains(primaryDependencies[i]))
+                    if (!mlSetupNames.Contains(primaryDependencies[i]))
                     {
-                        ulong hash = FNV1A64HashAlgorithm.HashString(primaryDependencies[i]);
-                        foreach (Archive ar in archives)
+                        var hash = FNV1A64HashAlgorithm.HashString(primaryDependencies[i]);
+                        foreach (var ar in archives)
                         {
                             if (ar.Files.ContainsKey(hash))
                             {
@@ -407,7 +413,7 @@ namespace WolvenKit.Modkit.RED4
 
                                 mlSetupNames.Add(primaryDependencies[i]);
 
-                                string path = Path.Combine(matRepo, Path.ChangeExtension(primaryDependencies[i], ".mlsetup.json"));
+                                var path = Path.Combine(matRepo, Path.ChangeExtension(primaryDependencies[i], ".mlsetup.json"));
                                 if (!File.Exists(path))
                                 {
                                     if (!new FileInfo(path).Directory.Exists)
@@ -420,22 +426,26 @@ namespace WolvenKit.Modkit.RED4
                                     File.WriteAllText(path, doc);
                                 }
 
-                                for (int e = 0; e < reader.ImportsList.Count; e++)
+                                for (var e = 0; e < reader.ImportsList.Count; e++)
                                 {
                                     if (Path.GetExtension(reader.ImportsList[e].DepotPath) == ".xbm")
                                     {
                                         if (!TexturesList.Contains(reader.ImportsList[e].DepotPath))
+                                        {
                                             TexturesList.Add(reader.ImportsList[e].DepotPath);
+                                        }
 
-                                        ulong hash1 = FNV1A64HashAlgorithm.HashString(reader.ImportsList[e].DepotPath);
-                                        foreach (Archive arr in archives)
+                                        var hash1 = FNV1A64HashAlgorithm.HashString(reader.ImportsList[e].DepotPath);
+                                        foreach (var arr in archives)
                                         {
                                             if (arr.Files.ContainsKey(hash1))
                                             {
                                                 if (!File.Exists(Path.Combine(matRepo, Path.ChangeExtension(reader.ImportsList[e].DepotPath, "." + exportArgs.Get<XbmExportArgs>().UncookExtension.ToString()))))
                                                 {
                                                     if (Directory.Exists(matRepo))
+                                                    {
                                                         UncookSingle(arr, hash1, new DirectoryInfo(matRepo), exportArgs);
+                                                    }
                                                 }
                                                 break;
                                             }
@@ -445,8 +455,8 @@ namespace WolvenKit.Modkit.RED4
                                     {
                                         if (!mlTemplateNames.Contains(reader.ImportsList[e].DepotPath))
                                         {
-                                            ulong hash2 = FNV1A64HashAlgorithm.HashString(reader.ImportsList[e].DepotPath);
-                                            foreach (Archive arr in archives)
+                                            var hash2 = FNV1A64HashAlgorithm.HashString(reader.ImportsList[e].DepotPath);
+                                            foreach (var arr in archives)
                                             {
                                                 if (arr.Files.ContainsKey(hash2))
                                                 {
@@ -457,7 +467,7 @@ namespace WolvenKit.Modkit.RED4
                                                     var mlt = _wolvenkitFileService.ReadRed4File(mss);
                                                     mlTemplateNames.Add(reader.ImportsList[e].DepotPath);
 
-                                                    string path1 = Path.Combine(matRepo, Path.ChangeExtension(reader.ImportsList[e].DepotPath, ".mltemplate.json"));
+                                                    var path1 = Path.Combine(matRepo, Path.ChangeExtension(reader.ImportsList[e].DepotPath, ".mltemplate.json"));
                                                     if (!File.Exists(path1))
                                                     {
                                                         if (!new FileInfo(path1).Directory.Exists)
@@ -470,20 +480,24 @@ namespace WolvenKit.Modkit.RED4
                                                         File.WriteAllText(path1, doc1);
                                                     }
 
-                                                    for (int eye = 0; eye < reader.ImportsList.Count; eye++)
+                                                    for (var eye = 0; eye < reader.ImportsList.Count; eye++)
                                                     {
                                                         if (!TexturesList.Contains(reader.ImportsList[eye].DepotPath))
+                                                        {
                                                             TexturesList.Add(reader.ImportsList[eye].DepotPath);
+                                                        }
 
-                                                        ulong hash3 = FNV1A64HashAlgorithm.HashString(reader.ImportsList[eye].DepotPath);
-                                                        foreach (Archive arrr in archives)
+                                                        var hash3 = FNV1A64HashAlgorithm.HashString(reader.ImportsList[eye].DepotPath);
+                                                        foreach (var arrr in archives)
                                                         {
                                                             if (arrr.Files.ContainsKey(hash3))
                                                             {
                                                                 if (!File.Exists(Path.Combine(matRepo, Path.ChangeExtension(reader.ImportsList[eye].DepotPath, "." + exportArgs.Get<XbmExportArgs>().UncookExtension.ToString()))))
                                                                 {
                                                                     if (Directory.Exists(matRepo))
+                                                                    {
                                                                         UncookSingle(arrr, hash3, new DirectoryInfo(matRepo), exportArgs);
+                                                                    }
                                                                 }
                                                                 break;
                                                             }
@@ -505,21 +519,23 @@ namespace WolvenKit.Modkit.RED4
 
 
 
-            List<RawMaterial> RawMaterials = new List<RawMaterial>();
-            Dictionary<string, CMaterialTemplate> usedMts = new Dictionary<string, CMaterialTemplate>();
-            for (int i = 0; i < materialEntries.Count; i++)
+            var RawMaterials = new List<RawMaterial>();
+            var usedMts = new Dictionary<string, CMaterialTemplate>();
+            for (var i = 0; i < materialEntries.Count; i++)
             {
-                RawMaterials.Add(ContainRawMaterial(materialEntries[i], materialEntryNames[i],archives, ref usedMts));
+                RawMaterials.Add(ContainRawMaterial(materialEntries[i], materialEntryNames[i], archives, ref usedMts));
             }
 
-            List<RawMaterial> matTemplates = new List<RawMaterial>();
+            var matTemplates = new List<RawMaterial>();
             {
                 var keys = usedMts.Keys.ToList();
-                for (int i = 0; i < keys.Count; i++)
+                for (var i = 0; i < keys.Count; i++)
                 {
-                    var rawMat = new RawMaterial();
-                    rawMat.Name = keys[i];
-                    rawMat.Data = new Dictionary<string, object>();
+                    var rawMat = new RawMaterial
+                    {
+                        Name = keys[i],
+                        Data = new Dictionary<string, object>()
+                    };
 
                     foreach (var item in usedMts[keys[i]].Parameters[2])
                     {
@@ -530,18 +546,20 @@ namespace WolvenKit.Modkit.RED4
                 }
             }
 
-            var matData = new MatData();
-            matData.MaterialRepo = matRepo;
-            matData.Materials = RawMaterials;
-            matData.TexturesList = TexturesList;
-            matData.MaterialTemplates = matTemplates;
+            var matData = new MatData
+            {
+                MaterialRepo = matRepo,
+                Materials = RawMaterials,
+                TexturesList = TexturesList,
+                MaterialTemplates = matTemplates
+            };
 
-            string str = RedJsonSerializer.Serialize(matData);
+            var str = RedJsonSerializer.Serialize(matData);
 
-            File.WriteAllText(Path.ChangeExtension(outfile.FullName,".Material.json"), str);
+            File.WriteAllText(Path.ChangeExtension(outfile.FullName, ".Material.json"), str);
         }
 
-        
+
 
         private IRedType GetMaterialParameterValue(Type materialParameterType, object obj)
         {
@@ -1108,27 +1126,27 @@ namespace WolvenKit.Modkit.RED4
             var matData = RedJsonSerializer.Deserialize<MatData>(_matData);
 
             var materialbuffer = new MemoryStream();
-            List<UInt32> offsets = new List<UInt32>();
-            List<UInt32> sizes = new List<UInt32>();
-            List<string> names = new List<string>();
+            var offsets = new List<uint>();
+            var sizes = new List<uint>();
+            var names = new List<string>();
 
             if (matData.Materials.Count < 1)
             {
                 return false;
             }
 
-            Dictionary<string, CMaterialTemplate> mts = new Dictionary<string, CMaterialTemplate>();
-            for (int i = 0; i < matData.Materials.Count; i++)
+            var mts = new Dictionary<string, CMaterialTemplate>();
+            for (var i = 0; i < matData.Materials.Count; i++)
             {
                 var mat = matData.Materials[i];
                 names.Add(mat.Name);
-                CR2WFile mi = new CR2WFile();
+                var mi = new CR2WFile();
                 {
                     var chunk = RedTypeManager.Create<CMaterialInstance>();
                     chunk.CookingPlatform = Enums.ECookingPlatform.PLATFORM_PC;
-                    chunk.EnableMask = true ;
+                    chunk.EnableMask = true;
                     chunk.ResourceVersion = 4;
-                    chunk.BaseMaterial = new CResourceReference<IMaterial>() {DepotPath = mat.BaseMaterial };
+                    chunk.BaseMaterial = new CResourceReference<IMaterial>() { DepotPath = mat.BaseMaterial };
                     chunk.Values = new CArray<CKeyValuePair>();
 
                     CMaterialTemplate mt = null;
@@ -1138,8 +1156,8 @@ namespace WolvenKit.Modkit.RED4
                     }
                     else
                     {
-                        ulong hash = FNV1A64HashAlgorithm.HashString(mat.MaterialTemplate);
-                        foreach (Archive ar in archives)
+                        var hash = FNV1A64HashAlgorithm.HashString(mat.MaterialTemplate);
+                        foreach (var ar in archives)
                         {
                             if (ar.Files.ContainsKey(hash))
                             {
@@ -1156,18 +1174,18 @@ namespace WolvenKit.Modkit.RED4
 
                     var fakeMaterialInstance = new CMaterialInstance()
                     {
-                        BaseMaterial = new CResourceReference<IMaterial>{ DepotPath = mat.BaseMaterial },
+                        BaseMaterial = new CResourceReference<IMaterial> { DepotPath = mat.BaseMaterial },
                         Values = new CArray<CKeyValuePair>()
                     };
                     var orgChain = GetMaterialChain(fakeMaterialInstance, archives, ref mts);
-                    
+
                     if (mt != null)
                     {
                         foreach (var (key, value) in matData.Materials[i].Data)
                         {
                             var found = false;
 
-                            for (int k = 0; k < mt.Parameters[2].Count; k++)
+                            for (var k = 0; k < mt.Parameters[2].Count; k++)
                             {
                                 var refer = mt.Parameters[2][k].Chunk;
 

@@ -1,6 +1,6 @@
 using System;
 using WolvenKit.RED4.Types;
-using WolvenKit.RED4.Types.Compression;
+using WolvenKit.Core.Compression;
 using System.Collections.Generic;
 
 namespace WolvenKit.RED4
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4
         /// The length of the uncompressed data
         /// </summary>
         public uint MemSize => (uint)_bytes.Length;
-        public bool IsCompressed => OodleLZHelper.IsCompressed(_bytes);
+        public bool IsCompressed => Oodle.IsCompressed(_bytes);
 
         
         /// <summary>
@@ -35,7 +35,7 @@ namespace WolvenKit.RED4
         {
             if (!IsCompressed)
             {
-                OodleLZHelper.CompressBuffer(_bytes, out var result);
+                Oodle.DecompressBuffer(_bytes, out var result);
                 return result;
             }
 
@@ -44,9 +44,9 @@ namespace WolvenKit.RED4
 
         public void SetBytes(byte[] data)
         {
-            if (OodleLZHelper.IsCompressed(data))
+            if (Oodle.IsCompressed(data))
             {
-                OodleLZHelper.DecompressBuffer(data, out var raw);
+                Oodle.DecompressBuffer(data, out var raw);
 
                 _bytes = raw;
             }
@@ -59,9 +59,9 @@ namespace WolvenKit.RED4
 
         public static RedBuffer CreateBuffer(uint flags, byte[] data)
         {
-            if (OodleLZHelper.IsCompressed(data))
+            if (Oodle.IsCompressed(data))
             {
-                OodleLZHelper.DecompressBuffer(data, out var raw);
+                Oodle.DecompressBuffer(data, out var raw);
                 return new RedBuffer { Flags = flags, _bytes = raw };
             }
 

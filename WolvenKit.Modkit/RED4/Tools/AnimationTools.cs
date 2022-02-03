@@ -4,7 +4,7 @@ using System.IO;
 using System.Linq;
 using SharpGLTF.Schema2;
 using WolvenKit.Common.FNV1A;
-using WolvenKit.Common.Oodle;
+using WolvenKit.Core.Compression;
 using WolvenKit.Modkit.RED4.Animation;
 using WolvenKit.Modkit.RED4.GeneralStructs;
 using WolvenKit.Modkit.RED4.RigFile;

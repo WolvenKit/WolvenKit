@@ -6,7 +6,7 @@ using System.Text.RegularExpressions;
 using System.Threading;
 using WolvenKit.Common.Extensions;
 using WolvenKit.Common.Model;
-using WolvenKit.Common.Oodle;
+using WolvenKit.Core.Compression;
 using WolvenKit.Interfaces.Extensions;
 using WolvenKit.RED4;
 using WolvenKit.RED4.Archive.CR2W;
