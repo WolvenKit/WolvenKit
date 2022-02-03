@@ -18,7 +18,7 @@ namespace WolvenKit.RED4.Archive
     {
 
     }
-    
+
     public interface ICR2WExport
     {
 

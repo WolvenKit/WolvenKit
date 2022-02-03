@@ -9,7 +9,6 @@ using WolvenKit.Common.Extensions;
 using WolvenKit.Common.Model;
 using WolvenKit.Common.Model.Arguments;
 using WolvenKit.Core.Extensions;
-using WolvenKit.Interfaces.Extensions;
 using WolvenKit.Modkit.Extensions;
 using WolvenKit.Modkit.RED4.MLMask;
 using WolvenKit.RED4;

@@ -1,10 +1,8 @@
 using System;
 using System.IO;
 using ProtoBuf;
-using WolvenKit.RED4.Types;
 using WolvenKit.Common;
 using WolvenKit.Common.Services;
-using WolvenKit.Interfaces.Core;
 using WolvenKit.RED4.Types.Exceptions;
 
 namespace WolvenKit.RED4.CR2W.Archive
@@ -56,7 +54,7 @@ namespace WolvenKit.RED4.CR2W.Archive
         [ProtoAfterDeserialization]
         public void AfterDeserializationCallback()
         {
-           
+
         }
 
         #endregion Constructors

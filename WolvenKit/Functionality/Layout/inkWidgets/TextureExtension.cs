@@ -1,12 +1,7 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Markup;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
 
 namespace WolvenKit.Functionality.Layout.inkWidgets
 {
@@ -19,13 +14,10 @@ namespace WolvenKit.Functionality.Layout.inkWidgets
             Part = part;
         }
 
-        string Atlas { get; set; }
+        private string Atlas { get; set; }
 
-        string Part { get; set; }
+        private string Part { get; set; }
 
-        public override object ProvideValue(IServiceProvider serviceProvider)
-        {
-            return (ImageSource)Application.Current.TryFindResource("ImageSource/" + Atlas + "#" + Part);
-        }
+        public override object ProvideValue(IServiceProvider serviceProvider) => (ImageSource)Application.Current.TryFindResource("ImageSource/" + Atlas + "#" + Part);
     }
 }

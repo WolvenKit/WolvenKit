@@ -1,4 +1,3 @@
-using SixLabors.ImageSharp;
 using static WolvenKit.Common.DDS.TexconvNative;
 
 namespace WolvenKit.Common.DDS
@@ -71,8 +70,8 @@ namespace WolvenKit.Common.DDS
             Mipscount = (uint)metadata.mipLevels;
             MiscFlags = (uint)metadata.miscFlags;
             MiscFlags2 = (uint)metadata.miscFlags2;
-            Format = (DXGI_FORMAT)metadata.format;
-            Dimensions = (TEX_DIMENSION)metadata.dimension;
+            Format = metadata.format;
+            Dimensions = metadata.dimension;
 
             Bpp = bpp;
             Dx10 = dx10;

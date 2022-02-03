@@ -1,4 +1,3 @@
-using System;
 using WolvenKit.RED4.TweakDB.Attributes;
 
 namespace WolvenKit.RED4.TweakDB.Types
@@ -19,6 +18,6 @@ namespace WolvenKit.RED4.TweakDB.Types
 
         public override string Name => "Quaternion";
         public override string ToString() => $"Quaternion, i = {I.Value}, j = {J.Value}, k = {K.Value}, r = {R.Value}";
-        
+
     }
 }

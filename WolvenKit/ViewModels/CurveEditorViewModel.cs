@@ -6,7 +6,6 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Media;
-using WolvenKit.Common;
 using WolvenKit.Common.Annotations;
 using WolvenKit.RED4.Types;
 using WolvenKit.Views.Editors;

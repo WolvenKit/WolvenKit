@@ -10,14 +10,14 @@ namespace WolvenKit.Functionality.Layout
 {
     public class NineSlicePanel : ContentControl
     {
-        ImageSource[] patchs;
+        private ImageSource[] patchs;
 
         [Category("Background")]
         [Description("Set nine patch background image")]
         public ImageSource BackgroundImage
         {
-            get { return (ImageSource)GetValue(BackgroundImageProperty); }
-            set { SetValue(BackgroundImageProperty, value); }
+            get => (ImageSource)GetValue(BackgroundImageProperty);
+            set => SetValue(BackgroundImageProperty, value);
         }
         public static readonly DependencyProperty BackgroundImageProperty =
             DependencyProperty.Register(nameof(BackgroundImage), typeof(ImageSource), typeof(NineSlicePanel), new PropertyMetadata(null, OnBackgroundImageChanged));
@@ -26,11 +26,11 @@ namespace WolvenKit.Functionality.Layout
         [Description("Set the center split area")]
         public Thickness NineSlice
         {
-            get { return (Thickness)GetValue(NineSliceProperty); }
-            set { SetValue(NineSliceProperty, value); }
+            get => (Thickness)GetValue(NineSliceProperty);
+            set => SetValue(NineSliceProperty, value);
         }
         public static readonly DependencyProperty NineSliceProperty =
-            DependencyProperty.Register(nameof(NineSlice), typeof(Thickness), typeof(NineSlicePanel), new PropertyMetadata(new Thickness(0,0,0,0), OnNineSliceChanged));
+            DependencyProperty.Register(nameof(NineSlice), typeof(Thickness), typeof(NineSlicePanel), new PropertyMetadata(new Thickness(0, 0, 0, 0), OnNineSliceChanged));
 
         protected override void OnRender(DrawingContext dc)
         {
@@ -52,7 +52,7 @@ namespace WolvenKit.Functionality.Layout
                 new Rect(x1, y2, w2, h3),
                 new Rect(x2, y2, w3, h3)
             };
-                for (int i = 0; i < 9; i++)
+                for (var i = 0; i < 9; i++)
                 {
                     dc.DrawImage(patchs[i], rects[i]);
                 }
@@ -64,18 +64,26 @@ namespace WolvenKit.Functionality.Layout
         {
             var np = d as NineSlicePanel;
             if (np == null)
+            {
                 return;
+            }
+
             var bm = np.BackgroundImage as BitmapSource;
             if (bm != null)
+            {
                 SetPatchs(np, bm);
+            }
         }
         private static void OnBackgroundImageChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             var np = d as NineSlicePanel;
             if (np == null)
+            {
                 return;
+            }
+
             var bm = np.BackgroundImage as BitmapSource;
-            if (np.NineSlice == new Thickness(0,0,0,0))
+            if (np.NineSlice == new Thickness(0, 0, 0, 0))
             {
                 var w1_3 = bm.PixelWidth / 3;
                 var h1_3 = bm.PixelHeight / 3;

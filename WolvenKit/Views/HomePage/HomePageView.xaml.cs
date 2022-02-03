@@ -1,12 +1,7 @@
 using System.Reactive.Disposables;
 using System.Windows;
-using System.Windows.Input;
-using Feather.Controls;
-using HandyControl.Controls;
-using HandyControl.Data;
 using ReactiveUI;
 using Splat;
-using WolvenKit.Functionality.Commands;
 using WolvenKit.Functionality.Services;
 using WolvenKit.ViewModels.HomePage;
 using WolvenKit.ViewModels.Shell;

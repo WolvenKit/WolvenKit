@@ -1,17 +1,10 @@
-using System;
-using System.Collections.Generic;
-using System.Globalization;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Markup;
 using System.Windows.Media;
-using System.Windows.Media.Effects;
-using System.Windows.Media.Imaging;
-using ReactiveUI;
 using WolvenKit.RED4.Types;
 using WolvenKit.Views.Documents;
-using Point = System.Windows.Point;
 using Rect = System.Windows.Rect;
 
 namespace WolvenKit.Functionality.Layout.inkWidgets
@@ -75,28 +68,40 @@ namespace WolvenKit.Functionality.Layout.inkWidgets
         public override void MouseEnterControl(object sender, MouseEventArgs e)
         {
             foreach (inkControl child in Children)
+            {
                 child.MouseEnterControl(sender, e);
+            }
+
             base.MouseEnterControl(sender, e);
         }
 
         public override void MouseLeaveControl(object sender, MouseEventArgs e)
         {
             foreach (inkControl child in Children)
+            {
                 child.MouseLeaveControl(sender, e);
+            }
+
             base.MouseLeaveControl(sender, e);
         }
 
         public override void MouseDownControl(object sender, MouseButtonEventArgs e)
         {
             foreach (inkControl child in Children)
+            {
                 child.MouseDownControl(sender, e);
+            }
+
             base.MouseDownControl(sender, e);
         }
 
         public override void MouseUpControl(object sender, MouseButtonEventArgs e)
         {
             foreach (inkControl child in Children)
+            {
                 child.MouseUpControl(sender, e);
+            }
+
             base.MouseUpControl(sender, e);
         }
 
@@ -116,22 +121,23 @@ namespace WolvenKit.Functionality.Layout.inkWidgets
         public inkControl GetChild(int index)
         {
             if (Children.Count <= index)
+            {
                 return null;
+            }
+
             if (CompoundWidget.ChildOrder.Value == Enums.inkEChildOrder.Forward)
+            {
                 return (inkControl)Children[index];
+            }
             else
+            {
                 return (inkControl)Children[Children.Count - index - 1];
-        } 
-
-        protected override int VisualChildrenCount
-        {
-            get { return Children?.Count ?? 0; }
+            }
         }
 
-        protected override Visual GetVisualChild(int index)
-        {
-            return Children[index];
-        }
+        protected override int VisualChildrenCount => Children?.Count ?? 0;
+
+        protected override Visual GetVisualChild(int index) => Children[index];
 
         protected override void Render(DrawingContext dc)
         {

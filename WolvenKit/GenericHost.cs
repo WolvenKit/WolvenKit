@@ -1,4 +1,3 @@
-using System;
 using CP77.CR2W;
 using gpm.Installer;
 using Microsoft.Extensions.DependencyInjection;
@@ -9,7 +8,6 @@ using Splat.Microsoft.Extensions.DependencyInjection;
 using WolvenKit.Common;
 using WolvenKit.Common.Interfaces;
 using WolvenKit.Common.Services;
-using WolvenKit.Core.Services;
 using WolvenKit.Functionality.Controllers;
 using WolvenKit.Functionality.ProjectManagement;
 using WolvenKit.Functionality.Services;

@@ -2,23 +2,22 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using SharpGLTF.Schema2;
 using WolvenKit.RED4.Types;
 
 namespace WolvenKit.Modkit.RED4.Animation
 {
-    using Vec4 = System.Numerics.Vector4;
-    using Vec3 = System.Numerics.Vector3;
     using Quat = System.Numerics.Quaternion;
-    class ROOT_MOTION
+    using Vec3 = System.Numerics.Vector3;
+
+    internal class ROOT_MOTION
     {
-        const UInt16 wSignMask = 0x8000;
-        const UInt16 componentTypeMask = 0x6000;
-        const UInt16 boneIdxMask = 0x1FFF;
-        const int wSignRightShift = 15;
-        const int componentRightShift = 13;
-        const int boneIdxRightShift = 0;
-        public static void AddRootMotion(ref Dictionary<UInt16, Dictionary<float, Vec3>> positions, ref Dictionary<UInt16, Dictionary<float, Quat>> rotations, animAnimation animAnimDes)
+        private const ushort wSignMask = 0x8000;
+        private const ushort componentTypeMask = 0x6000;
+        private const ushort boneIdxMask = 0x1FFF;
+        private const int wSignRightShift = 15;
+        private const int componentRightShift = 13;
+        private const int boneIdxRightShift = 0;
+        public static void AddRootMotion(ref Dictionary<ushort, Dictionary<float, Vec3>> positions, ref Dictionary<ushort, Dictionary<float, Quat>> rotations, animAnimation animAnimDes)
         {
             var motionEx = animAnimDes.MotionExtraction.Chunk;
             var duration = animAnimDes.Duration;
@@ -56,12 +55,12 @@ namespace WolvenKit.Modkit.RED4.Animation
                         rotations.Add(0, new Dictionary<float, Quat>());
                     }
                 }
-                for (int i = 0; i < numPositions; i++)
+                for (var i = 0; i < numPositions; i++)
                 {
                     var v = lc.PosFrames[i];
                     positions[0].Add(posTime[i], new Vec3(v.X, v.Z, -v.Y));
                 }
-                for (int i = 0; i < numRotations; i++)
+                for (var i = 0; i < numRotations; i++)
                 {
                     var q = lc.RotFrames[i];
                     rotations[0].Add(rotTime[i], new Quat(q.I, q.K, -q.J, q.R));
@@ -82,7 +81,7 @@ namespace WolvenKit.Modkit.RED4.Animation
                         positions.Add(0, new Dictionary<float, Vec3>());
                     }
                 }
-                for (int i = 0; i < numFrames; i++)
+                for (var i = 0; i < numFrames; i++)
                 {
                     var v = pc.Frames[i];
                     positions[0].Add(ft * i, new Vec3(v.X, v.Z, -v.Y));
@@ -94,7 +93,7 @@ namespace WolvenKit.Modkit.RED4.Animation
                 duration = sc.Duration;
 
                 #region rotations
-                if (sc.RotKeysData!= null)
+                if (sc.RotKeysData != null)
                 {
                     rotBuffer = sc.RotKeysData.Cast<byte>().ToArray();
                     numRotations = rotBuffer.Length / 16;
@@ -109,17 +108,17 @@ namespace WolvenKit.Modkit.RED4.Animation
                     using (br = new BinaryReader(ms))
                     {
                         br.BaseStream.Seek(0, SeekOrigin.Begin);
-                        for (int i = 0; i < numRotations; i++)
+                        for (var i = 0; i < numRotations; i++)
                         {
-                            float timeNormalized = br.ReadUInt16() / (float)UInt16.MaxValue;
-                            UInt16 bitWiseData = br.ReadUInt16();
-                            UInt16 wSign = Convert.ToUInt16((bitWiseData & wSignMask) >> wSignRightShift);
-                            UInt16 component = Convert.ToUInt16((bitWiseData & componentTypeMask) >> componentRightShift);
-                            UInt16 boneIdx = Convert.ToUInt16((bitWiseData & boneIdxMask) >> boneIdxRightShift);
+                            var timeNormalized = br.ReadUInt16() / (float)ushort.MaxValue;
+                            var bitWiseData = br.ReadUInt16();
+                            var wSign = Convert.ToUInt16((bitWiseData & wSignMask) >> wSignRightShift);
+                            var component = Convert.ToUInt16((bitWiseData & componentTypeMask) >> componentRightShift);
+                            var boneIdx = Convert.ToUInt16((bitWiseData & boneIdxMask) >> boneIdxRightShift);
 
-                            float x = br.ReadSingle();
-                            float y = br.ReadSingle();
-                            float z = br.ReadSingle();
+                            var x = br.ReadSingle();
+                            var y = br.ReadSingle();
+                            var z = br.ReadSingle();
 
                             switch (component)
                             {
@@ -130,28 +129,35 @@ namespace WolvenKit.Modkit.RED4.Animation
                                     }
                                     else
                                     {
-                                        var dic = new Dictionary<float, Vec3>();
-                                        dic.Add(timeNormalized * duration, new Vec3(x, z, -y));
+                                        var dic = new Dictionary<float, Vec3>
+                                        {
+                                            { timeNormalized * duration, new Vec3(x, z, -y) }
+                                        };
                                         positions.Add(boneIdx, dic);
                                     }
                                     break;
                                 case 1:
-                                    float dotPr = (x * x + y * y + z * z);
+                                    var dotPr = (x * x + y * y + z * z);
                                     x = x * Convert.ToSingle(Math.Sqrt(2f - dotPr));
                                     y = y * Convert.ToSingle(Math.Sqrt(2f - dotPr));
                                     z = z * Convert.ToSingle(Math.Sqrt(2f - dotPr));
-                                    float w = 1f - dotPr;
+                                    var w = 1f - dotPr;
                                     if (wSign == 1)
+                                    {
                                         w = -w;
-                                    Quat q = new Quat(x, z, -y, w);
+                                    }
+
+                                    var q = new Quat(x, z, -y, w);
                                     if (rotations.ContainsKey(boneIdx))
                                     {
                                         rotations[boneIdx].Add(timeNormalized * duration, Quat.Normalize(q));
                                     }
                                     else
                                     {
-                                        var dic = new Dictionary<float, Quat>();
-                                        dic.Add(timeNormalized * duration, Quat.Normalize(q));
+                                        var dic = new Dictionary<float, Quat>
+                                        {
+                                            { timeNormalized * duration, Quat.Normalize(q) }
+                                        };
                                         rotations.Add(boneIdx, dic);
                                     }
                                     break;
@@ -177,17 +183,17 @@ namespace WolvenKit.Modkit.RED4.Animation
                     using (br = new BinaryReader(ms))
                     {
                         br.BaseStream.Seek(0, SeekOrigin.Begin);
-                        for (int i = 0; i < numPositions; i++)
+                        for (var i = 0; i < numPositions; i++)
                         {
-                            float timeNormalized = br.ReadUInt16() / (float)UInt16.MaxValue;
-                            UInt16 bitWiseData = br.ReadUInt16();
-                            UInt16 wSign = Convert.ToUInt16((bitWiseData & wSignMask) >> wSignRightShift);
-                            UInt16 component = Convert.ToUInt16((bitWiseData & componentTypeMask) >> componentRightShift);
-                            UInt16 boneIdx = Convert.ToUInt16((bitWiseData & boneIdxMask) >> boneIdxRightShift);
+                            var timeNormalized = br.ReadUInt16() / (float)ushort.MaxValue;
+                            var bitWiseData = br.ReadUInt16();
+                            var wSign = Convert.ToUInt16((bitWiseData & wSignMask) >> wSignRightShift);
+                            var component = Convert.ToUInt16((bitWiseData & componentTypeMask) >> componentRightShift);
+                            var boneIdx = Convert.ToUInt16((bitWiseData & boneIdxMask) >> boneIdxRightShift);
 
-                            float x = br.ReadSingle();
-                            float y = br.ReadSingle();
-                            float z = br.ReadSingle();
+                            var x = br.ReadSingle();
+                            var y = br.ReadSingle();
+                            var z = br.ReadSingle();
 
                             switch (component)
                             {
@@ -198,28 +204,35 @@ namespace WolvenKit.Modkit.RED4.Animation
                                     }
                                     else
                                     {
-                                        var dic = new Dictionary<float, Vec3>();
-                                        dic.Add(timeNormalized * duration, new Vec3(x, z, -y));
+                                        var dic = new Dictionary<float, Vec3>
+                                        {
+                                            { timeNormalized * duration, new Vec3(x, z, -y) }
+                                        };
                                         positions.Add(boneIdx, dic);
                                     }
                                     break;
                                 case 1:
-                                    float dotPr = (x * x + y * y + z * z);
+                                    var dotPr = (x * x + y * y + z * z);
                                     x = x * Convert.ToSingle(Math.Sqrt(2f - dotPr));
                                     y = y * Convert.ToSingle(Math.Sqrt(2f - dotPr));
                                     z = z * Convert.ToSingle(Math.Sqrt(2f - dotPr));
-                                    float w = 1f - dotPr;
+                                    var w = 1f - dotPr;
                                     if (wSign == 1)
+                                    {
                                         w = -w;
-                                    Quat q = new Quat(x, z, -y, w);
+                                    }
+
+                                    var q = new Quat(x, z, -y, w);
                                     if (rotations.ContainsKey(boneIdx))
                                     {
                                         rotations[boneIdx].Add(timeNormalized * duration, Quat.Normalize(q));
                                     }
                                     else
                                     {
-                                        var dic = new Dictionary<float, Quat>();
-                                        dic.Add(timeNormalized * duration, Quat.Normalize(q));
+                                        var dic = new Dictionary<float, Quat>
+                                        {
+                                            { timeNormalized * duration, Quat.Normalize(q) }
+                                        };
                                         rotations.Add(boneIdx, dic);
                                     }
                                     break;
@@ -248,7 +261,7 @@ namespace WolvenKit.Modkit.RED4.Animation
                         rotations.Add(0, new Dictionary<float, Quat>());
                     }
                 }
-                for (int i = 0; i < numFrames; i++)
+                for (var i = 0; i < numFrames; i++)
                 {
                     var v = aa.Frames[i].Position;
                     var q = aa.Frames[i].Orientation;
@@ -271,7 +284,7 @@ namespace WolvenKit.Modkit.RED4.Animation
                         positions.Add(0, new Dictionary<float, Vec3>());
                     }
                 }
-                for (int i = 0; i < numFrames; i++)
+                for (var i = 0; i < numFrames; i++)
                 {
                     var v = uc.Frames[i];
                     if (v.W != 0f || v.W != 1f)

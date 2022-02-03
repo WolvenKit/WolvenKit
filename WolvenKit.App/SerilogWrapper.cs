@@ -1,12 +1,7 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using DynamicData;
 using WolvenKit.Common;
 using WolvenKit.Common.Services;
-using Serilog;
 
 namespace WolvenKit
 {

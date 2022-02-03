@@ -158,7 +158,7 @@ public static class Oodle
         }
     }
 
-    public static int Compress( byte[] inputBuffer, ref IEnumerable<byte> outputBuffer, bool useRedHeader,
+    public static int Compress(byte[] inputBuffer, ref IEnumerable<byte> outputBuffer, bool useRedHeader,
         CompressionLevel level = CompressionLevel.Normal, Compressor compressor = Compressor.Kraken)
     {
         if (inputBuffer == null)
@@ -197,7 +197,7 @@ public static class Oodle
         }
         else
         {
-          throw new NotImplementedException();
+            throw new NotImplementedException();
         }
 
 
@@ -289,7 +289,7 @@ public static class Oodle
 
                 var inputBuffer = new byte[length];
                 stream.Read(inputBuffer);
-                var outBuffer =  new byte[size];
+                var outBuffer = new byte[size];
                 var unpackedSize = Oodle.Decompress(inputBuffer, outBuffer);
 
                 //var inputBufferSpan = length <= SPAN_LEN
@@ -348,7 +348,7 @@ public static class Oodle
                 stream.Read(inputBuffer);
                 var outputBuffer = new byte[size];
 
-                long unpackedSize = await Task.Run(() => Oodle.Decompress(inputBuffer, outputBuffer));
+                var unpackedSize = await Task.Run(() => Oodle.Decompress(inputBuffer, outputBuffer));
 
                 if (unpackedSize != size)
                 {
@@ -412,96 +412,96 @@ public static class Oodle
     private delegate void StrDelegate(string value);
 
     private static string TryGetGameInstallDir()
-        {
-            var cp77BinDir = "";
+    {
+        var cp77BinDir = "";
 
 #pragma warning disable CA1416
 #if _WINDOWS
-            var cp77exe = "";
-            // check for CP77_DIR environment variable first
-            var CP77_DIR = System.Environment.GetEnvironmentVariable("CP77_DIR", EnvironmentVariableTarget.User);
-            if (!string.IsNullOrEmpty(CP77_DIR) && new DirectoryInfo(CP77_DIR).Exists)
-            {
-                cp77BinDir = Path.Combine(CP77_DIR, "bin", "x64");
-            }
+        var cp77exe = "";
+        // check for CP77_DIR environment variable first
+        var CP77_DIR = System.Environment.GetEnvironmentVariable("CP77_DIR", EnvironmentVariableTarget.User);
+        if (!string.IsNullOrEmpty(CP77_DIR) && new DirectoryInfo(CP77_DIR).Exists)
+        {
+            cp77BinDir = Path.Combine(CP77_DIR, "bin", "x64");
+        }
 
-            if (File.Exists(Path.Combine(cp77BinDir, "Cyberpunk2077.exe")))
-            {
-                return cp77BinDir;
-            }
+        if (File.Exists(Path.Combine(cp77BinDir, "Cyberpunk2077.exe")))
+        {
+            return cp77BinDir;
+        }
 
-            // else: look for install location
-            const string uninstallkey = "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\";
-            const string uninstallkey2 = "SOFTWARE\\Wow6432Node\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\";
-            const string gameName = "Cyberpunk 2077";
-            const string exeName = "Cyberpunk2077.exe";
-            var exePath = "";
-            StrDelegate strDelegate = msg => cp77exe = msg;
+        // else: look for install location
+        const string uninstallkey = "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\";
+        const string uninstallkey2 = "SOFTWARE\\Wow6432Node\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\";
+        const string gameName = "Cyberpunk 2077";
+        const string exeName = "Cyberpunk2077.exe";
+        var exePath = "";
+        StrDelegate strDelegate = msg => cp77exe = msg;
 
-            try
+        try
+        {
+            Parallel.ForEach(Microsoft.Win32.Registry.LocalMachine.OpenSubKey(uninstallkey)?.GetSubKeyNames(), item =>
             {
-                Parallel.ForEach(Microsoft.Win32.Registry.LocalMachine.OpenSubKey(uninstallkey)?.GetSubKeyNames(), item =>
+                var programName = Microsoft.Win32.Registry.LocalMachine.OpenSubKey(uninstallkey + item)
+                    ?.GetValue("DisplayName");
+                var installLocation = Microsoft.Win32.Registry.LocalMachine.OpenSubKey(uninstallkey + item)
+                    ?.GetValue("InstallLocation");
+                if (programName != null && installLocation != null)
                 {
-                    var programName = Microsoft.Win32.Registry.LocalMachine.OpenSubKey(uninstallkey + item)
-                        ?.GetValue("DisplayName");
-                    var installLocation = Microsoft.Win32.Registry.LocalMachine.OpenSubKey(uninstallkey + item)
-                        ?.GetValue("InstallLocation");
-                    if (programName != null && installLocation != null)
+                    if (programName.ToString().Contains(gameName) ||
+                        programName.ToString().Contains(gameName))
                     {
-                        if (programName.ToString().Contains(gameName) ||
-                            programName.ToString().Contains(gameName))
+                        exePath = Directory.GetFiles(installLocation.ToString(), exeName,
+                            SearchOption.AllDirectories).First();
+                    }
+                }
+
+                strDelegate.Invoke(exePath);
+            });
+            Parallel.ForEach(Microsoft.Win32.Registry.LocalMachine.OpenSubKey(uninstallkey2)?.GetSubKeyNames(), item =>
+            {
+                var programName = Microsoft.Win32.Registry.LocalMachine.OpenSubKey(uninstallkey2 + item)
+                    ?.GetValue("DisplayName");
+                var installLocation = Microsoft.Win32.Registry.LocalMachine.OpenSubKey(uninstallkey2 + item)
+                    ?.GetValue("InstallLocation");
+                if (programName != null && installLocation != null)
+                {
+                    if (programName.ToString().Contains(gameName) ||
+                        programName.ToString().Contains(gameName))
+                    {
+                        if (Directory.Exists(installLocation.ToString()))
                         {
                             exePath = Directory.GetFiles(installLocation.ToString(), exeName,
                                 SearchOption.AllDirectories).First();
                         }
                     }
-
-                    strDelegate.Invoke(exePath);
-                });
-                Parallel.ForEach(Microsoft.Win32.Registry.LocalMachine.OpenSubKey(uninstallkey2)?.GetSubKeyNames(), item =>
-                {
-                    var programName = Microsoft.Win32.Registry.LocalMachine.OpenSubKey(uninstallkey2 + item)
-                        ?.GetValue("DisplayName");
-                    var installLocation = Microsoft.Win32.Registry.LocalMachine.OpenSubKey(uninstallkey2 + item)
-                        ?.GetValue("InstallLocation");
-                    if (programName != null && installLocation != null)
-                    {
-                        if (programName.ToString().Contains(gameName) ||
-                            programName.ToString().Contains(gameName))
-                        {
-                            if (Directory.Exists(installLocation.ToString()))
-                            {
-                                exePath = Directory.GetFiles(installLocation.ToString(), exeName,
-                                    SearchOption.AllDirectories).First();
-                            }
-                        }
-                    }
-
-                    strDelegate.Invoke(exePath);
-                });
-
-                if (File.Exists(cp77exe))
-                {
-                    cp77BinDir = new FileInfo(cp77exe).Directory.FullName;
                 }
-            }
-            catch (Exception)
-            {
-                return null;
-            }
 
-            if (string.IsNullOrEmpty(cp77BinDir))
-            {
-                return null;
-            }
+                strDelegate.Invoke(exePath);
+            });
 
-            if (!File.Exists(Path.Combine(cp77BinDir, "Cyberpunk2077.exe")))
+            if (File.Exists(cp77exe))
             {
-                return null;
+                cp77BinDir = new FileInfo(cp77exe).Directory.FullName;
             }
+        }
+        catch (Exception)
+        {
+            return null;
+        }
+
+        if (string.IsNullOrEmpty(cp77BinDir))
+        {
+            return null;
+        }
+
+        if (!File.Exists(Path.Combine(cp77BinDir, "Cyberpunk2077.exe")))
+        {
+            return null;
+        }
 #endif
 #pragma warning restore CA1416
 
-            return cp77BinDir;
-        }
+        return cp77BinDir;
+    }
 }

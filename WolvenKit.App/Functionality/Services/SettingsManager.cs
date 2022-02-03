@@ -21,7 +21,7 @@ namespace WolvenKit.Functionality.Services
 
         private bool _isLoaded;
 
-        private string _assemblyVersion;
+        private readonly string _assemblyVersion;
 
         #endregion fields
 

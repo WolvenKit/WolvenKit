@@ -4,9 +4,7 @@ namespace WolvenKit.Common.Migrations
 {
     public partial class InitialCreate : Migration
     {
-        protected override void Up(MigrationBuilder migrationBuilder)
-        {
-            migrationBuilder.CreateTable(
+        protected override void Up(MigrationBuilder migrationBuilder) => migrationBuilder.CreateTable(
                 name: "Files",
                 columns: table => new
                 {
@@ -21,12 +19,8 @@ namespace WolvenKit.Common.Migrations
                 {
                     table.PrimaryKey("PK_Files", x => x.RedFileId);
                 });
-        }
 
-        protected override void Down(MigrationBuilder migrationBuilder)
-        {
-            migrationBuilder.DropTable(
+        protected override void Down(MigrationBuilder migrationBuilder) => migrationBuilder.DropTable(
                 name: "Files");
-        }
     }
 }

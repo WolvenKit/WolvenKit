@@ -5,7 +5,6 @@ using System.Diagnostics;
 using System.IO;
 using System.Runtime.CompilerServices;
 using System.Threading;
-using System.Windows;
 using System.Windows.Threading;
 using NAudio.Wave;
 using WolvenKit.Functionality.Helpers;
@@ -33,45 +32,27 @@ namespace WolvenKit.Views.Editor.AudioTool
         private string _currentFilePath;
 
         private bool _disposed;
-        private static Lazy<NAudioSimpleEngine> _instance = new Lazy<NAudioSimpleEngine>(() => new NAudioSimpleEngine(), LazyThreadSafetyMode.ExecutionAndPublication);
+        private static readonly Lazy<NAudioSimpleEngine> _instance = new Lazy<NAudioSimpleEngine>(() => new NAudioSimpleEngine(), LazyThreadSafetyMode.ExecutionAndPublication);
 
-        public static NAudioSimpleEngine Instance
-        {
-            get { return _instance.Value; }
-        }
+        public static NAudioSimpleEngine Instance => _instance.Value;
 
         /// <summary>
         /// 是否允许播放
         /// </summary>
-        public bool CanPlay
-        {
-            get
-            {
-                return !string.IsNullOrEmpty(_currentFilePath) && File.Exists(_currentFilePath) &&
+        public bool CanPlay => !string.IsNullOrEmpty(_currentFilePath) && File.Exists(_currentFilePath) &&
                        WaveOutDevice != null && _activeStream != null && _inputStream != null;
-            }
-        }
 
         /// <summary>
         /// 是否允许暂停
         /// </summary>
-        public bool CanPause
-        {
-            get { return WaveOutDevice != null && WaveOutDevice.PlaybackState == PlaybackState.Playing; }
-        }
+        public bool CanPause => WaveOutDevice != null && WaveOutDevice.PlaybackState == PlaybackState.Playing;
 
         /// <summary>
         /// 是否允许停止
         /// </summary>
-        public bool CanStop
-        {
-            get
-            {
-                return WaveOutDevice != null &&
+        public bool CanStop => WaveOutDevice != null &&
                        (WaveOutDevice.PlaybackState == PlaybackState.Playing ||
                         WaveOutDevice.PlaybackState == PlaybackState.Paused);
-            }
-        }
 
         /// <summary>
         /// 当前文件流的长度，即总秒数
@@ -99,7 +80,7 @@ namespace WolvenKit.Views.Editor.AudioTool
             {
                 if (_activeStream != null)
                 {
-                    return ((double)_activeStream.Position / (double)_activeStream.Length) * _activeStream.TotalTime.TotalSeconds;
+                    return (_activeStream.Position / (double)_activeStream.Length) * _activeStream.TotalTime.TotalSeconds;
                 }
 
                 return 0d;
@@ -110,9 +91,9 @@ namespace WolvenKit.Views.Editor.AudioTool
                 {
                     lock (_lockChannelSet)
                     {
-                        double oldValue = ((double)_activeStream.Position / (double)_activeStream.Length) *
+                        var oldValue = (_activeStream.Position / (double)_activeStream.Length) *
                                           _activeStream.TotalTime.TotalSeconds;
-                        double position = Math.Max(0, Math.Min(value, ChannelLength));
+                        var position = Math.Max(0, Math.Min(value, ChannelLength));
 
                         if (oldValue != position)
                         {
@@ -128,10 +109,7 @@ namespace WolvenKit.Views.Editor.AudioTool
         /// <summary>
         /// 是否正在播放
         /// </summary>
-        public bool IsPlaying
-        {
-            get { return WaveOutDevice != null && WaveOutDevice.PlaybackState == PlaybackState.Playing; }
-        }
+        public bool IsPlaying => WaveOutDevice != null && WaveOutDevice.PlaybackState == PlaybackState.Playing;
 
         private TimeSpan repeatStart;
         private TimeSpan repeatStop;
@@ -203,7 +181,7 @@ namespace WolvenKit.Views.Editor.AudioTool
             waveformInputStream.Sample += waveStream_Sample;
 
             var frameLength = fftDataSize;
-            var frameCount = (int)((double)waveformInputStream.Length / (double)frameLength);
+            var frameCount = (int)(waveformInputStream.Length / (double)frameLength);
             var waveformLength = frameCount * 2;
             var readBuffer = new byte[frameLength];
             waveformAggregator = new SampleAggregator(frameLength);
@@ -217,7 +195,7 @@ namespace WolvenKit.Views.Editor.AudioTool
 
             for (var i = 1; i <= waveformParams.Points; i++)
             {
-                waveMaxPointIndexes.Add((int)Math.Round(waveformLength * ((double)i / (double)waveformParams.Points), 0));
+                waveMaxPointIndexes.Add((int)Math.Round(waveformLength * (i / (double)waveformParams.Points), 0));
             }
             var readCount = 0;
             while (currentPointIndex * 2 < waveformParams.Points)
@@ -331,8 +309,10 @@ namespace WolvenKit.Views.Editor.AudioTool
 
         private NAudioSimpleEngine()
         {
-            _updateChannelPositionTimer = new DispatcherTimer(DispatcherPriority.SystemIdle);
-            _updateChannelPositionTimer.Interval = TimeSpan.FromMilliseconds(50);
+            _updateChannelPositionTimer = new DispatcherTimer(DispatcherPriority.SystemIdle)
+            {
+                Interval = TimeSpan.FromMilliseconds(50)
+            };
             _updateChannelPositionTimer.Tick += ChangeChannelPosition;
 
             waveformGenerateWorker.DoWork += waveformGenerateWorker_DoWork;
@@ -440,10 +420,7 @@ namespace WolvenKit.Views.Editor.AudioTool
         /// <summary>
         /// 停止并关闭文件
         /// </summary>
-        public void CloseFile()
-        {
-            StopAndCloseStream();
-        }
+        public void CloseFile() => StopAndCloseStream();
 
         /// <summary>
         /// 停止
@@ -542,7 +519,7 @@ namespace WolvenKit.Views.Editor.AudioTool
             {
                 WaveOutDevice.Stop();
             }
-            _currentFilePath = String.Empty;
+            _currentFilePath = string.Empty;
 
             if (_inputStream != null)
             {
@@ -586,10 +563,7 @@ namespace WolvenKit.Views.Editor.AudioTool
             return result;
         }
 
-        private void InputStreamOnSampleChanged(object sender, SampleEventArgs sampleEventArgs)
-        {
-            _sampleAggregator.Add(sampleEventArgs.Left, sampleEventArgs.Right);
-        }
+        private void InputStreamOnSampleChanged(object sender, SampleEventArgs sampleEventArgs) => _sampleAggregator.Add(sampleEventArgs.Left, sampleEventArgs.Right);
 
         /// <summary>
         /// 改变流位置
@@ -640,7 +614,9 @@ namespace WolvenKit.Views.Editor.AudioTool
         {
             var handler = PropertyChanged;
             if (handler != null)
+            {
                 handler(this, new PropertyChangedEventArgs(propertyName));
+            }
         }
 
         private enum AudioFileType

@@ -48,9 +48,15 @@ namespace WolvenKit.Core.CRC
         public static uint Append(uint initial, byte[] input, int offset, int length)
         {
             if (input == null)
+            {
                 throw new ArgumentNullException("input");
+            }
+
             if (offset < 0 || length < 0 || offset + length > input.Length)
+            {
                 throw new ArgumentOutOfRangeException("length");
+            }
+
             return AppendInternal(initial, input, offset, length);
         }
 
@@ -67,7 +73,10 @@ namespace WolvenKit.Core.CRC
         public static uint Append(uint initial, byte[] input)
         {
             if (input == null)
+            {
                 throw new ArgumentNullException("input");
+            }
+
             return AppendInternal(initial, input, 0, input.Length);
         }
 
@@ -78,20 +87,14 @@ namespace WolvenKit.Core.CRC
         /// <param name="offset">Offset of the input data within the buffer.</param>
         /// <param name="length">Length of the input data in the buffer.</param>
         /// <returns>CRC-32C of the data in the buffer.</returns>
-        public static uint Compute(byte[] input, int offset, int length)
-        {
-            return Append(0, input, offset, length);
-        }
+        public static uint Compute(byte[] input, int offset, int length) => Append(0, input, offset, length);
 
         /// <summary>
         /// Computes CRC-32C from input buffer.
         /// </summary>
         /// <param name="input">Input buffer containing data to be checksummed.</param>
         /// <returns>CRC-32C of the buffer.</returns>
-        public static uint Compute(byte[] input)
-        {
-            return Append(0, input);
-        }
+        public static uint Compute(byte[] input) => Append(0, input);
 
         /// <summary>
         /// Computes CRC-32C from input buffer and writes it after end of data (buffer should have 4 bytes reserved space for it). Can be used in conjunction with <see cref="IsValidWithCrcAtEnd(byte[],int,int)"/>
@@ -103,7 +106,10 @@ namespace WolvenKit.Core.CRC
         public static uint ComputeAndWriteToEnd(byte[] input, int offset, int length)
         {
             if (length + 4 > input.Length)
+            {
                 throw new ArgumentOutOfRangeException("length", "Length of data should be less than array length - 4 bytes of CRC data");
+            }
+
             var crc = Append(0, input, offset, length);
             var r = offset + length;
             input[r] = (byte)crc;
@@ -121,7 +127,10 @@ namespace WolvenKit.Core.CRC
         public static uint ComputeAndWriteToEnd(byte[] input)
         {
             if (input.Length < 4)
+            {
                 throw new ArgumentOutOfRangeException("input", "Input array should be 4 bytes at least");
+            }
+
             return ComputeAndWriteToEnd(input, 0, input.Length - 4);
         }
 
@@ -132,10 +141,7 @@ namespace WolvenKit.Core.CRC
         /// <param name="offset">Offset of the input data within the buffer.</param>
         /// <param name="lengthWithCrc">Length of the input data in the buffer with CRC-32C bytes.</param>
         /// <returns>Is checksum valid.</returns>
-        public static bool IsValidWithCrcAtEnd(byte[] input, int offset, int lengthWithCrc)
-        {
-            return Append(0, input, offset, lengthWithCrc) == 0x48674BC7;
-        }
+        public static bool IsValidWithCrcAtEnd(byte[] input, int offset, int lengthWithCrc) => Append(0, input, offset, lengthWithCrc) == 0x48674BC7;
 
         /// <summary>
         /// Validates correctness of CRC-32C data in source buffer with assumption that CRC-32C data located at end of buffer in reverse bytes order. Can be used in conjunction with <see cref="ComputeAndWriteToEnd(byte[],int,int)"/>
@@ -145,25 +151,22 @@ namespace WolvenKit.Core.CRC
         public static bool IsValidWithCrcAtEnd(byte[] input)
         {
             if (input.Length < 4)
+            {
                 throw new ArgumentOutOfRangeException("input", "Input array should be 4 bytes at least");
+            }
+
             return Append(0, input, 0, input.Length) == 0x48674BC7;
         }
 
         /// <summary>
         /// Resets internal state of the algorithm. Used internally.
         /// </summary>
-        public override void Initialize()
-        {
-            _currentCrc = 0;
-        }
+        public override void Initialize() => _currentCrc = 0;
 
         /// <summary>
         /// Appends CRC-32C from given buffer
         /// </summary>
-        protected override void HashCore(byte[] input, int offset, int length)
-        {
-            _currentCrc = AppendInternal(_currentCrc, input, offset, length);
-        }
+        protected override void HashCore(byte[] input, int offset, int length) => _currentCrc = AppendInternal(_currentCrc, input, offset, length);
 
         /// <summary>
         /// Computes CRC-32C from <see cref="HashCore"/>
@@ -171,9 +174,13 @@ namespace WolvenKit.Core.CRC
         protected override byte[] HashFinal()
         {
             if (_isBigEndian)
+            {
                 return new[] { (byte)(_currentCrc >> 24), (byte)(_currentCrc >> 16), (byte)(_currentCrc >> 8), (byte)_currentCrc };
+            }
             else
+            {
                 return new[] { (byte)_currentCrc, (byte)(_currentCrc >> 8), (byte)(_currentCrc >> 16), (byte)(_currentCrc >> 24) };
+            }
         }
 
         private static readonly SafeProxyC _proxy = new SafeProxyC();
@@ -185,7 +192,9 @@ namespace WolvenKit.Core.CRC
                 return _proxy.Append(initial, input, offset, length);
             }
             else
+            {
                 return initial;
+            }
         }
     }
 }

@@ -5,7 +5,6 @@ using CP77.Common.Image;
 using WolvenKit.Common;
 using WolvenKit.Common.DDS;
 using WolvenKit.Common.Model.Arguments;
-using WolvenKit.Core.Compression;
 using WolvenKit.Common.Services;
 using WolvenKit.RED4.Types;
 

@@ -1,6 +1,5 @@
 using System.Windows.Controls;
 using ReactiveUI;
-using Splat;
 using WolvenKit.ViewModels.Dialogs;
 
 namespace WolvenKit.Views.Dialogs
@@ -16,9 +15,6 @@ namespace WolvenKit.Views.Dialogs
 
         #endregion Constructors
 
-        private void SetSelectedClass(object sender, System.Windows.RoutedEventArgs e)
-        {
-            ViewModel.SelectedClass = (sender as Button).Content.ToString();
-        }
+        private void SetSelectedClass(object sender, System.Windows.RoutedEventArgs e) => ViewModel.SelectedClass = (sender as Button).Content.ToString();
     }
 }

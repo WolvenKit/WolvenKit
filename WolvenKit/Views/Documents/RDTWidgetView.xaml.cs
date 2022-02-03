@@ -69,7 +69,10 @@ namespace WolvenKit.Views.Documents
                 WidgetPreview.Children.Add(stack);
 
                 if (ViewModel.TextWidgets == null)
+                {
                     ViewModel.TextWidgets = new();
+                }
+
                 ViewModel.TextWidgets.Clear();
 
                 foreach (var item in ViewModel.library.LibraryItems)
@@ -77,15 +80,22 @@ namespace WolvenKit.Views.Documents
                     if (item.PackageData == null || item.PackageData.Data is not Package04 pkg)
                     {
                         if (item.Package.Data is not Package04 pkg2)
+                        {
                             return;
+                        }
+
                         pkg = pkg2;
                     }
 
                     if (pkg.Chunks[0] is not inkWidgetLibraryItemInstance inst)
+                    {
                         return;
+                    }
 
                     if (inst.RootWidget.GetValue() is not inkWidget root)
+                    {
                         return;
+                    }
 
                     stack.Children.Add(new TextBlock()
                     {
@@ -120,21 +130,18 @@ namespace WolvenKit.Views.Documents
         private System.Windows.Point start;
         private System.Windows.Point end;
 
-        public void AddTextWidget(inkTextControl control, inkTextWidget widget)
-        {
-            ViewModel.TextWidgets.Add(control, widget);
-        }
+        public void AddTextWidget(inkTextControl control, inkTextWidget widget) => ViewModel.TextWidgets.Add(control, widget);
 
         private void SetupWidgetPreview()
         {
-            TransformGroup group = new TransformGroup();
+            var group = new TransformGroup();
 
 
-            ScaleTransform xform = new ScaleTransform();
+            var xform = new ScaleTransform();
             //xform.ScaleY = -1;
             group.Children.Add(xform);
 
-            TranslateTransform tt = new TranslateTransform();
+            var tt = new TranslateTransform();
             group.Children.Add(tt);
 
             //TranslateTransform zoomCenter = new TranslateTransform();
@@ -154,7 +161,7 @@ namespace WolvenKit.Views.Documents
             {
                 WidgetPreviewCanvas.ReleaseMouseCapture();
                 WidgetPreviewCanvas.SetCurrentValue(CursorProperty, Cursors.Arrow);
-                TranslateTransform tt = (TranslateTransform)((TransformGroup)WidgetPreview.RenderTransform).Children[1];
+                var tt = (TranslateTransform)((TransformGroup)WidgetPreview.RenderTransform).Children[1];
                 end = new System.Windows.Point(Math.Round(tt.X), Math.Round(tt.Y));
             }
         }
@@ -162,10 +169,12 @@ namespace WolvenKit.Views.Documents
         private void WidgetPreview_MouseMove(object sender, MouseEventArgs e)
         {
             if (!WidgetPreviewCanvas.IsMouseCaptured)
+            {
                 return;
+            }
 
-            TranslateTransform tt = (TranslateTransform)((TransformGroup)WidgetPreview.RenderTransform).Children[1];
-            Vector v = start - Mouse.GetPosition(WidgetPreviewCanvas);
+            var tt = (TranslateTransform)((TransformGroup)WidgetPreview.RenderTransform).Children[1];
+            var v = start - Mouse.GetPosition(WidgetPreviewCanvas);
             tt.X = Math.Round(origin.X - v.X);
             tt.Y = Math.Round(origin.Y - v.Y);
         }
@@ -178,7 +187,7 @@ namespace WolvenKit.Views.Documents
             {
                 WidgetPreviewCanvas.CaptureMouse();
                 // resets when children are hittble? idk
-                TranslateTransform tt = (TranslateTransform)((TransformGroup)WidgetPreview.RenderTransform).Children[1];
+                var tt = (TranslateTransform)((TransformGroup)WidgetPreview.RenderTransform).Children[1];
                 origin = end;
                 tt.X = Math.Round(origin.X);
                 tt.Y = Math.Round(origin.Y);
@@ -188,11 +197,11 @@ namespace WolvenKit.Views.Documents
 
         private void WidgetPreview_MouseWheel(object sender, MouseWheelEventArgs e)
         {
-            TransformGroup transformGroup = (TransformGroup)WidgetPreview.RenderTransform;
-            ScaleTransform transform = (ScaleTransform)transformGroup.Children[0];
-            TranslateTransform pan = (TranslateTransform)transformGroup.Children[1];
+            var transformGroup = (TransformGroup)WidgetPreview.RenderTransform;
+            var transform = (ScaleTransform)transformGroup.Children[0];
+            var pan = (TranslateTransform)transformGroup.Children[1];
 
-            double zoom = e.Delta > 0 ? 1.189207115 : (1 / 1.189207115);
+            var zoom = e.Delta > 0 ? 1.189207115 : (1 / 1.189207115);
 
             var CursorPosCanvas = e.GetPosition(WidgetPreviewCanvas);
             pan.X += Math.Round(-(CursorPosCanvas.X - WidgetPreviewCanvas.RenderSize.Width / 2.0 - pan.X) * (zoom - 1.0));
@@ -215,14 +224,14 @@ namespace WolvenKit.Views.Documents
             {
                 RenderOptions.SetBitmapScalingMode(this, BitmapScalingMode.HighQuality);
             }
-            ZoomText.SetCurrentValue(TextBlock.TextProperty, $"{(scale*100).ToString("F1")}%");
+            ZoomText.SetCurrentValue(TextBlock.TextProperty, $"{(scale * 100).ToString("F1")}%");
         }
 
         public void SetRealPixelZoom(object sender, RoutedEventArgs e)
         {
-            TransformGroup transformGroup = (TransformGroup)WidgetPreview.RenderTransform;
-            ScaleTransform transform = (ScaleTransform)transformGroup.Children[0];
-            TranslateTransform pan = (TranslateTransform)transformGroup.Children[1];
+            var transformGroup = (TransformGroup)WidgetPreview.RenderTransform;
+            var transform = (ScaleTransform)transformGroup.Children[0];
+            var pan = (TranslateTransform)transformGroup.Children[1];
 
             //double zoom = ViewModel.Image.Width / WidgetPreview.RenderSize.Width;
             //double zoomQuot = zoom / transform.ScaleX;
@@ -245,9 +254,9 @@ namespace WolvenKit.Views.Documents
 
         public void ResetZoomPan(object sender, RoutedEventArgs e)
         {
-            TransformGroup transformGroup = (TransformGroup)WidgetPreview.RenderTransform;
-            ScaleTransform transform = (ScaleTransform)transformGroup.Children[0];
-            TranslateTransform pan = (TranslateTransform)transformGroup.Children[1];
+            var transformGroup = (TransformGroup)WidgetPreview.RenderTransform;
+            var transform = (ScaleTransform)transformGroup.Children[0];
+            var pan = (TranslateTransform)transformGroup.Children[1];
 
             transform.ScaleX = 1;
             transform.ScaleY = 1;
@@ -276,10 +285,12 @@ namespace WolvenKit.Views.Documents
                 var bitmap = new RenderTargetBitmap((int)widget.RenderSize.Width, (int)widget.RenderSize.Height, 96D, 96D, PixelFormats.Pbgra32);
                 bitmap.Render(widget);
 
-                SaveFileDialog saveFileDialog1 = new SaveFileDialog();
-                saveFileDialog1.Filter = "TIFF Image|*.tiff";
-                saveFileDialog1.Title = "Save an Image As";
-                saveFileDialog1.FileName = widget.Name + ".tiff";
+                var saveFileDialog1 = new SaveFileDialog
+                {
+                    Filter = "TIFF Image|*.tiff",
+                    Title = "Save an Image As",
+                    FileName = widget.Name + ".tiff"
+                };
                 saveFileDialog1.ShowDialog();
 
                 if (saveFileDialog1.FileName != "")
@@ -300,7 +311,9 @@ namespace WolvenKit.Views.Documents
         private void ComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             foreach (var widget in Widgets)
+            {
                 widget.RenderRecursive();
+            }
         }
     }
 }

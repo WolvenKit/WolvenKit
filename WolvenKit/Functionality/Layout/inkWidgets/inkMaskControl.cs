@@ -1,14 +1,8 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Drawing.Imaging;
+using System.Windows;
 using System.Windows.Media;
 using WolvenKit.RED4.Types;
-using Rect = System.Windows.Rect;
 using WolvenKit.Views.Documents;
-using System.Windows;
-using System.Drawing.Imaging;
 
 namespace WolvenKit.Functionality.Layout.inkWidgets
 {
@@ -41,8 +35,10 @@ namespace WolvenKit.Functionality.Layout.inkWidgets
                         new float[] { 0, 0, 0, 0, 0},
                         new float[] { 0, 0, 0, 0, 0},
                         new float[] { 0, 0, 0, 0, 0},
-            });
-            matrix.Matrix03 = (float)Opacity;
+            })
+            {
+                Matrix03 = (float)Opacity
+            };
             //matrix.Matrix13 = TintColor.A / 3F;
             //matrix.Matrix23 = TintColor.A / 3F;
             //matrix.Matrix40 = TintColor.R / 255F;
@@ -52,17 +48,6 @@ namespace WolvenKit.Functionality.Layout.inkWidgets
         }
 
 
-        protected override void DrawImage(Size size)
-        {
-            base.DrawImage(size);
-
-            //if (ImageSource != null)
-            //{
-            //    SetCurrentValue(OpacityMaskProperty, new ImageBrush(ImageSource)
-            //    {
-            //        Stretch = Stretch.None
-            //    });
-            //}
-        }
+        protected override void DrawImage(Size size) => base.DrawImage(size);//if (ImageSource != null)//{//    SetCurrentValue(OpacityMaskProperty, new ImageBrush(ImageSource)//    {//        Stretch = Stretch.None//    });//}
     }
 }

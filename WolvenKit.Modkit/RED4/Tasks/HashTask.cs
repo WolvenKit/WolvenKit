@@ -2,7 +2,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using WolvenKit.Common.FNV1A;
-using WolvenKit.RED4.CR2W.Archive;
 
 namespace CP77Tools.Tasks
 {
@@ -13,7 +12,7 @@ namespace CP77Tools.Tasks
         public int HashTask(string[] input, DirectoryInfo inputDir)
         {
 
-            if (input is {Length: > 0})
+            if (input is { Length: > 0 })
             {
                 foreach (var s in input)
                 {
@@ -51,7 +50,7 @@ namespace CP77Tools.Tasks
 
             }
 
-            
+
 
 
 

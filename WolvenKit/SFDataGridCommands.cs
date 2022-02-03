@@ -1,12 +1,6 @@
-using Syncfusion.UI.Xaml.Grid;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Controls;
 using System.Windows.Input;
-using Splat;
+using Syncfusion.UI.Xaml.Grid;
 using WolvenKit.Common.Interfaces;
 
 namespace WolvenKit
@@ -20,10 +14,7 @@ namespace WolvenKit
             CommandManager.RegisterClassCommandBinding(typeof(CheckBox), new CommandBinding(CheckAndUnCheck, OnCheckUnCheckCommand, OnCanExecuteCheckAndUnCheck));
         }
 
-        private static void OnCanExecuteCheckAndUnCheck(object sender, CanExecuteRoutedEventArgs args)
-        {
-            args.CanExecute = true;
-        }
+        private static void OnCanExecuteCheckAndUnCheck(object sender, CanExecuteRoutedEventArgs args) => args.CanExecute = true;
 
         private static void OnCheckUnCheckCommand(object sender, ExecutedRoutedEventArgs args)
         {
@@ -40,7 +31,9 @@ namespace WolvenKit
                 {
                     var selectablevm = (ISelectableViewModel)item;
                     if (selectablevm.IsChecked == false)
+                    {
                         selectablevm.IsChecked = true;
+                    }
                 }
             }
             else if (checkbox == false)
@@ -49,7 +42,9 @@ namespace WolvenKit
                 {
                     var selectablevm = (ISelectableViewModel)item;
                     if (selectablevm.IsChecked == true)
+                    {
                         selectablevm.IsChecked = false;
+                    }
                 }
                 sfdatagrid.ClearSelections(false);
             }

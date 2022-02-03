@@ -40,14 +40,14 @@ namespace WolvenKit.Views.Templates
 
         private void CloseButton_Click(object sender, RoutedEventArgs e)
         {
-            this.DialogResult = false;
-            this.Close();
+            DialogResult = false;
+            Close();
         }
 
         private void SaveButton_Click(object sender, RoutedEventArgs e)
         {
-            this.DialogResult = true;
-            this.Close();
+            DialogResult = true;
+            Close();
         }
 
         private void PropertyGrid_AutoGeneratingPropertyGridItem(object sender, Syncfusion.Windows.PropertyGrid.AutoGeneratingPropertyGridItemEventArgs e)
@@ -110,13 +110,15 @@ namespace WolvenKit.Views.Templates
         }
         private void PropertyGrid_Loaded(object sender, RoutedEventArgs e)
         {
-            PropertyView item1 = VisualUtils.FindDescendant(this, typeof(PropertyView)) as PropertyView;
+            var item1 = VisualUtils.FindDescendant(this, typeof(PropertyView)) as PropertyView;
 
             if (item1 != null)
+            {
                 item1.ItemContainerGenerator.StatusChanged += ItemContainerGenerator_StatusChanged;
+            }
         }
 
-        void ItemContainerGenerator_StatusChanged(object sender, EventArgs e)
+        private void ItemContainerGenerator_StatusChanged(object sender, EventArgs e)
         {
             foreach (PropertyCatagoryViewItem item in VisualUtils.EnumChildrenOfType(this, typeof(PropertyCatagoryViewItem)))
             {
@@ -124,7 +126,7 @@ namespace WolvenKit.Views.Templates
                 {
                     foreach (PropertyViewItem propertyViewItem in VisualUtils.EnumChildrenOfType(this, typeof(PropertyViewItem)))
                     {
-                        ToggleButton button = (ToggleButton)propertyViewItem.Template.FindName("ToggleButton", propertyViewItem);
+                        var button = (ToggleButton)propertyViewItem.Template.FindName("ToggleButton", propertyViewItem);
                         if (button.Visibility == System.Windows.Visibility.Visible && !button.IsMouseOver)
                         {
                             button.IsChecked = true;

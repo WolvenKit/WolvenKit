@@ -7,8 +7,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using WolvenKit.Common;
 using WolvenKit.Common.Extensions;
-using WolvenKit.Core.Compression;
-using WolvenKit.Interfaces.Core;
 
 namespace CP77Tools.Tasks
 {

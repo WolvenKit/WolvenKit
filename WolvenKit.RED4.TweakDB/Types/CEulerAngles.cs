@@ -1,4 +1,3 @@
-using System;
 using WolvenKit.RED4.TweakDB.Attributes;
 
 namespace WolvenKit.RED4.TweakDB.Types
@@ -16,6 +15,6 @@ namespace WolvenKit.RED4.TweakDB.Types
 
         public override string Name => "EulerAngles";
         public override string ToString() => $"EulerAngles, Pitch = {Pitch.Value}, Yaw = {Yaw.Value}, Roll = {Roll.Value}";
-        
+
     }
 }

@@ -1,4 +1,3 @@
-using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -18,24 +17,24 @@ namespace WolvenKit.Views.Editors
 
         public CFloat X
         {
-            get => (CFloat)this.GetValue(XProperty);
-            set => this.SetValue(XProperty, value);
+            get => (CFloat)GetValue(XProperty);
+            set => SetValue(XProperty, value);
         }
         public static readonly DependencyProperty XProperty = DependencyProperty.Register(
             nameof(X), typeof(CFloat), typeof(RedVector3Editor), new PropertyMetadata(default(CFloat)));
 
         public CFloat Y
         {
-            get => (CFloat)this.GetValue(YProperty);
-            set => this.SetValue(YProperty, value);
+            get => (CFloat)GetValue(YProperty);
+            set => SetValue(YProperty, value);
         }
         public static readonly DependencyProperty YProperty = DependencyProperty.Register(
             nameof(Y), typeof(CFloat), typeof(RedVector3Editor), new PropertyMetadata(default(CFloat)));
 
         public CFloat Z
         {
-            get => (CFloat)this.GetValue(ZProperty);
-            set => this.SetValue(ZProperty, value);
+            get => (CFloat)GetValue(ZProperty);
+            set => SetValue(ZProperty, value);
         }
         public static readonly DependencyProperty ZProperty = DependencyProperty.Register(
             nameof(Z), typeof(CFloat), typeof(RedVector3Editor), new PropertyMetadata(default(CFloat)));
@@ -67,10 +66,7 @@ namespace WolvenKit.Views.Editors
         private string GetValueFromZValue() => ((float)Z).ToString("R");
 
 
-        private void NumberValidationTextBox(object sender, TextCompositionEventArgs e)
-        {
-            e.Handled = float.TryParse(e.Text, out var _);
-        }
+        private void NumberValidationTextBox(object sender, TextCompositionEventArgs e) => e.Handled = float.TryParse(e.Text, out var _);
 
     }
 }

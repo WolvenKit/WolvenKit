@@ -5,12 +5,9 @@ using System.Linq;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
-using CP77.CR2W;
-using WolvenKit.Common;
-using WolvenKit.RED4.CR2W.Archive;
-using WolvenKit.Common.DDS;
 using WolvenKit.Common.Extensions;
 using WolvenKit.Common.Services;
+using WolvenKit.RED4.CR2W.Archive;
 
 namespace CP77Tools.Tasks
 {

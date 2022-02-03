@@ -17,7 +17,7 @@ namespace WolvenKit.Common.Services
         Fatal,
     }
 
-    public interface INotificationService 
+    public interface INotificationService
     {
         bool IsShowNotificationsEnabled { get; set; }
         ENotificationCategory NotificationCategory { get; set; }

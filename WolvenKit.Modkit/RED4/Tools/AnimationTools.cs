@@ -1,10 +1,8 @@
-using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using SharpGLTF.Schema2;
 using WolvenKit.Common.FNV1A;
-using WolvenKit.Core.Compression;
 using WolvenKit.Modkit.RED4.Animation;
 using WolvenKit.Modkit.RED4.GeneralStructs;
 using WolvenKit.Modkit.RED4.RigFile;
@@ -24,7 +22,7 @@ namespace WolvenKit.Modkit.RED4
                 return false;
             }
 
-            List<MemoryStream> animDataBuffers = new List<MemoryStream>();
+            var animDataBuffers = new List<MemoryStream>();
             foreach (var chk in blob.AnimationDataChunks)
             {
                 var ms = new MemoryStream();
@@ -60,10 +58,10 @@ namespace WolvenKit.Modkit.RED4
             var skin = model.CreateSkin();
             skin.BindJoints(RIG.ExportNodes(ref model, Rig).Values.ToArray());
 
-            for (int i = 0; i < blob.Animations.Count; i++)
+            for (var i = 0; i < blob.Animations.Count; i++)
             {
-                var setEntry = (blob.Animations[i].Chunk as animAnimSetEntry);
-                var animAnimDes = (setEntry.Animation.Chunk as animAnimation);
+                var setEntry = blob.Animations[i].Chunk;
+                var animAnimDes = setEntry.Animation.Chunk;
                 if (animAnimDes.AnimationType.Value != Enums.animAnimationType.Normal)
                 {
                     continue;
@@ -88,14 +86,14 @@ namespace WolvenKit.Modkit.RED4
                 {
                     var animBuff = (animAnimDes.AnimBuffer.Chunk as animAnimationBufferCompressed);
                     var defferedBuffer = new MemoryStream();
-                    if (animBuff.InplaceCompressedBuffer != null )
+                    if (animBuff.InplaceCompressedBuffer != null)
                     {
                         defferedBuffer = new MemoryStream(animBuff.InplaceCompressedBuffer.Buffer.GetBytes());
                     }
                     else if (animBuff.DataAddress != null)
                     {
                         var dataAddr = animBuff.DataAddress;
-                        Byte[] bytes = new Byte[dataAddr.ZeInBytes];
+                        var bytes = new byte[dataAddr.ZeInBytes];
                         animDataBuffers[(int)((uint)dataAddr.UnkIndex)].Seek(dataAddr.FsetInBytes, SeekOrigin.Begin);
                         animDataBuffers[(int)((uint)dataAddr.UnkIndex)].Read(bytes, 0, (int)((uint)dataAddr.ZeInBytes));
                         defferedBuffer = new MemoryStream(bytes);

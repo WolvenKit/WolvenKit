@@ -1,12 +1,8 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using WolvenKit.RED4.Types;
-using Rect = System.Windows.Rect;
 using WolvenKit.Views.Documents;
+using Rect = System.Windows.Rect;
 
 namespace WolvenKit.Functionality.Layout.inkWidgets
 {
@@ -32,9 +28,11 @@ namespace WolvenKit.Functionality.Layout.inkWidgets
             foreach (inkControl child in Children)
             {
                 if (child.Visibility == Visibility.Collapsed)
+                {
                     continue;
+                }
 
-                child.Measure(new Size(Double.PositiveInfinity, Double.PositiveInfinity));
+                child.Measure(new Size(double.PositiveInfinity, double.PositiveInfinity));
 
                 //var width = child.DesiredSize.Width;
                 //var height = child.DesiredSize.Height;
@@ -73,15 +71,22 @@ namespace WolvenKit.Functionality.Layout.inkWidgets
             foreach (inkControl child in Children)
             {
                 if (child.Visibility == Visibility.Collapsed)
+                {
                     continue;
+                }
 
                 var width = child.DesiredSize.Width;
                 var height = child.DesiredSize.Height;
 
                 if (AnchorToFillH(child))
+                {
                     width = Math.Max(internalSize.Width - child.Margin.Left - child.Margin.Right, 0);
+                }
+
                 if (AnchorToFillV(child))
+                {
                     height = Math.Max(internalSize.Height - child.Margin.Top - child.Margin.Bottom, 0);
+                }
 
                 child.Measure(new Size(width, height));
             }
@@ -98,7 +103,9 @@ namespace WolvenKit.Functionality.Layout.inkWidgets
             foreach (inkControl child in Children)
             {
                 if (child.Visibility == Visibility.Collapsed)
+                {
                     continue;
+                }
 
                 var width = child.DesiredSize.Width;
                 var height = child.DesiredSize.Height;
@@ -112,27 +119,48 @@ namespace WolvenKit.Functionality.Layout.inkWidgets
                 var y = AnchorToY(child) * finalRect.Size.Height;
 
                 if (!AnchorToFillH(child))
+                {
                     x -= child.Widget.Layout.AnchorPoint.X * width;
+                }
+
                 if (!AnchorToFillV(child))
+                {
                     y -= child.Widget.Layout.AnchorPoint.Y * height;
+                }
 
                 if (AnchorLeft(child))
+                {
                     x += child.Margin.Left;
+                }
                 else if (AnchorRight(child))
+                {
                     x -= child.Margin.Right;
+                }
                 else if (AnchorCenterH(child))
+                {
                     x += child.Margin.Left - child.Margin.Right;
+                }
                 else
+                {
                     x += child.Margin.Left;
+                }
 
                 if (AnchorTop(child))
+                {
                     y += child.Margin.Top;
+                }
                 else if (AnchorBottom(child))
+                {
                     y -= child.Margin.Bottom;
+                }
                 else if (AnchorCenterV(child))
+                {
                     y += child.Margin.Top - child.Margin.Bottom;
+                }
                 else
+                {
                     y += child.Margin.Top;
+                }
 
                 //x -= InternalMargin.Left;
                 //y -= InternalMargin.Top;

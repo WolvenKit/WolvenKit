@@ -1,12 +1,6 @@
-using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Collections.ObjectModel;
-using System.ComponentModel;
-using System.Windows.Controls;
 using System.Windows;
+using System.Windows.Controls;
 using WolvenKit.ViewModels.Documents;
-using WolvenKit.Views.Documents;
 
 namespace WolvenKit.Converters
 {

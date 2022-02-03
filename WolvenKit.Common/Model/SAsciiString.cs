@@ -1,4 +1,3 @@
-using System;
 using System.Linq;
 using System.Text;
 
@@ -39,10 +38,7 @@ namespace WolvenKit.Common.Model
         //    return !(left == right);
         //}
 
-        public override int GetHashCode()
-        {
-            return _strBytes.GetHashCode();
-        }
+        public override int GetHashCode() => _strBytes.GetHashCode();
 
 
     }

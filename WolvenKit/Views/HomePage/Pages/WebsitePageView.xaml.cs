@@ -1,5 +1,4 @@
 using System;
-using Microsoft.Web.WebView2.Core;
 using ReactiveUI;
 using Splat;
 using WolvenKit.Functionality.Helpers;
@@ -31,7 +30,7 @@ namespace WolvenKit.Views.HomePage.Pages
             try
             {
                 await cal.EnsureCoreWebView2Async(Helpers.objCoreWebView2Environment);
-                cal.SetCurrentValue(Microsoft.Web.WebView2.Wpf.WebView2.SourceProperty, (System.Uri)new Uri("https://redmodding.org/"));
+                cal.SetCurrentValue(Microsoft.Web.WebView2.Wpf.WebView2.SourceProperty, new Uri("https://redmodding.org/"));
             }
             catch (Exception)
             {

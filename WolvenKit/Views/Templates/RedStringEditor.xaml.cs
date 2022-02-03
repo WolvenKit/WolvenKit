@@ -1,12 +1,9 @@
 using System;
-using System.Reactive;
 using System.Reactive.Linq;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Input;
-using WolvenKit.RED4.Types;
-using System.Windows.Threading;
 using ReactiveUI;
+using WolvenKit.RED4.Types;
 
 namespace WolvenKit.Views.Editors
 {
@@ -35,8 +32,8 @@ namespace WolvenKit.Views.Editors
 
         public IRedString RedString
         {
-            get => (IRedString)this.GetValue(RedStringProperty);
-            set => this.SetValue(RedStringProperty, value);
+            get => (IRedString)GetValue(RedStringProperty);
+            set => SetValue(RedStringProperty, value);
         }
         public static readonly DependencyProperty RedStringProperty = DependencyProperty.Register(
             nameof(RedString), typeof(IRedString), typeof(RedStringEditor), new PropertyMetadata(default(IRedString)));
@@ -48,18 +45,19 @@ namespace WolvenKit.Views.Editors
             set => SetRedValue(value);
         }
 
-        private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
-        {
-            SetRedValue(TextBox.Text);
-        }
+        private void TextBox_TextChanged(object sender, TextChangedEventArgs e) => SetRedValue(TextBox.Text);
 
         private void SetRedValue(string value)
         {
             //RedString.SetValue(value);
             if (RedString is CName)
+            {
                 SetCurrentValue(RedStringProperty, (CName)value);
+            }
             else if (RedString is CString)
+            {
                 SetCurrentValue(RedStringProperty, (CString)value);
+            }
         }
 
         private string GetValueFromRedValue()
@@ -68,7 +66,7 @@ namespace WolvenKit.Views.Editors
             if (RedString is null)
             {
                 return "";
-            } 
+            }
             var redvalue = RedString.GetValue();
             if (redvalue is string redstring)
             {

@@ -1,8 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Xml;
 using System.Xml.Schema;
 using System.Xml.Serialization;
@@ -41,7 +38,7 @@ namespace WolvenKit.Common.Conversion
             writer.WriteStartElement(widget.GetType().Name);
 
             WriteWidgetAttributes(writer, widget);
-            
+
             if (widget is inkCompoundWidget compoundWidget)
             {
                 var imc = (inkMultiChildren)compoundWidget.Children.GetValue();
@@ -58,7 +55,9 @@ namespace WolvenKit.Common.Conversion
         public void WriteWidgetAttributes(XmlWriter writer, IRedType value, string property = "")
         {
             if (property != "")
+            {
                 property += ".";
+            }
 
             var childSets = new List<IRedType>();
 
@@ -106,7 +105,7 @@ namespace WolvenKit.Common.Conversion
                             if (inkRef.Widget != null && inkRef.Widget.GetValue() is inkWidget widgetRef)
                             {
                                 writer.WriteAttributeString(property + propertyName, widgetRef.GetPath());
-                            }     
+                            }
                             break;
                         case CArray<CHandle<inkIEffect>>:
                         case CArray<CHandle<inkWidgetLogicController>>:
@@ -115,7 +114,7 @@ namespace WolvenKit.Common.Conversion
                             break;
                         case CArray<inkPropertyBinding> ary:
                             //writer.WriteStartElement("bindings");
-                            foreach (inkPropertyBinding ipb in ary)
+                            foreach (var ipb in ary)
                             {
                                 //writer.WriteStartElement("propertyBinding");
                                 writer.WriteAttributeString(ipb.PropertyName + ".binding", ipb.StylePath);

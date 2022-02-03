@@ -17,8 +17,8 @@ namespace WolvenKit.Views.Editors
 
         public IRedPrimitive<ulong> RedNumber
         {
-            get => (IRedPrimitive<ulong>)this.GetValue(RedNumberProperty);
-            set => this.SetValue(RedNumberProperty, value);
+            get => (IRedPrimitive<ulong>)GetValue(RedNumberProperty);
+            set => SetValue(RedNumberProperty, value);
         }
         public static readonly DependencyProperty RedNumberProperty = DependencyProperty.Register(
             nameof(RedNumber), typeof(IRedPrimitive<ulong>), typeof(RedUlongEditor), new PropertyMetadata(default(IRedPrimitive<ulong>)));
