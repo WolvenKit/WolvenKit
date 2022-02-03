@@ -6,7 +6,7 @@ namespace WolvenKit.Functionality.Commands
     /// <summary>
     /// Base abstract class for all commands
     /// </summary>
-    public abstract class Command : ICommand
+    public abstract class CommandBase : ICommand
     {
         #region Events
 

@@ -6,7 +6,7 @@ namespace WolvenKit.Functionality.Commands
     /// Defines an ICommand that delegates implementation to an <see cref="Action{T}"/> and <see cref="Predicate{T}"/>.
     /// </summary>
     /// <typeparam name="T">The command parameter type.</typeparam>
-    public class DelegateCommand<T> : Command
+    public class DelegateCommand<T> : CommandBase
     {
         #region Fields
 

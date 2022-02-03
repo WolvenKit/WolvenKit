@@ -6,16 +6,11 @@ namespace WolvenKit.Functionality.Commands
     /// Defines an ICommand that delegates implementation to an <see cref="Action"/> and <see cref="Func{TResult}(bool)"/>.
     /// Implementation is parametless.
     /// </summary>
-    public class RelayCommand : Command
+    public class RelayCommand : CommandBase
     {
-        #region Fields
-
         private readonly Func<bool> _canExecute;
+
         private readonly Action _execute;
-
-        #endregion Fields
-
-        #region Constructors
 
         /// <summary>
         /// Initializes a new instance of the <see cref="RelayCommand"/> class.
@@ -37,10 +32,6 @@ namespace WolvenKit.Functionality.Commands
             _canExecute = canExecute;
         }
 
-        #endregion Constructors
-
-        #region Methods
-
         /// <summary>
         /// Check if the command can be executed.
         /// </summary>
@@ -60,7 +51,5 @@ namespace WolvenKit.Functionality.Commands
         /// </summary>
         /// <param name="parameter">The command parameter</param>
         public override void Execute(object parameter) => _execute();
-
-        #endregion Methods
     }
 }

@@ -8,5 +8,5 @@
 
 ❗  MAKE SURE TO INSTALL THE PREREQUISITES : 
 
-Install .NET 5​
-https://dotnet.microsoft.com/download/dotnet/5.0
+Install the .NET 6 runtime
+https://dotnet.microsoft.com/en-us/download/dotnet/thank-you/runtime-6.0.1-windows-x64-installer

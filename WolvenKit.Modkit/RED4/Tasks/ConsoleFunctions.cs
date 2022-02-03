@@ -1,12 +1,6 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
-using CP77.CR2W;
 using Microsoft.Extensions.Options;
 using WolvenKit.Common;
-using WolvenKit.Common.DDS;
 using WolvenKit.Common.Interfaces;
 using WolvenKit.Common.Model.Arguments;
 using WolvenKit.Common.Services;
@@ -20,7 +14,7 @@ namespace CP77Tools.Tasks
         public void ArchiveTask(string[] path, string pattern, string regex, bool diff, bool list);
         public void UnbundleTask(string[] path, string outpath, string hash, string pattern, string regex,
             bool DEBUG_decompress = false);
-        public void Cr2wTask(string[] path, string outpath, bool deserialize, bool serialize, string pattern,
+        public Task Cr2wTask(string[] path, string outpath, bool deserialize, bool serialize, string pattern,
             string regex, ETextConvertFormat format);
         public void ExportTask(string[] path, string outDir, EUncookExtension? uncookext, bool? flip,
             ECookedFileFormat[] forcebuffers);

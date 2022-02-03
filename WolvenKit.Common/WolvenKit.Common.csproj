@@ -75,6 +75,8 @@
   <ItemGroup>
     <Content Include="lib\texconv.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        <Pack>true</Pack>
+        <PackagePath>lib\net6.0</PackagePath>
     </Content>
     <Content Include="lib\vgmstream\avcodec-vgmstream-58.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>

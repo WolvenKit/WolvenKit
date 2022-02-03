@@ -9,6 +9,7 @@ using System.Reactive.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
+using AsyncAwaitBestPractices.MVVM;
 using DynamicData;
 using DynamicData.Binding;
 using ReactiveUI;
@@ -17,6 +18,7 @@ using Splat;
 using WolvenKit.Common;
 using WolvenKit.Common.Interfaces;
 using WolvenKit.Common.Services;
+using WolvenKit.Core.Services;
 using WolvenKit.Functionality.Commands;
 using WolvenKit.Functionality.Controllers;
 using WolvenKit.Functionality.Services;
@@ -46,6 +48,7 @@ namespace WolvenKit.ViewModels.Tools
         private readonly IProjectManager _projectManager;
         private readonly IWatcherService _watcherService;
         private readonly IModTools _modTools;
+        private readonly IProgressService<double> _progressService;
         private readonly IGameControllerFactory _gameController;
 
 
@@ -60,6 +63,7 @@ namespace WolvenKit.ViewModels.Tools
             IProjectManager projectManager,
             ILoggerService loggerService,
             IWatcherService watcherService,
+            IProgressService<double> progressService,
             IModTools modTools,
             IGameControllerFactory gameController
         ) : base(ToolTitle)
@@ -68,6 +72,7 @@ namespace WolvenKit.ViewModels.Tools
             _loggerService = loggerService;
             _watcherService = watcherService;
             _modTools = modTools;
+            _progressService = progressService;
             _gameController = gameController;
 
             SideInDockedMode = DockSide.Left;
@@ -142,7 +147,7 @@ namespace WolvenKit.ViewModels.Tools
         /// </summary>
         public ICommand CopyRelPathCommand { get; private set; }
         private bool CanCopyRelPath() => _projectManager.ActiveProject != null && SelectedItem != null;
-        private void ExecuteCopyRelPath() => Clipboard.SetText(SelectedItem.GetRelativeName(ActiveMod));
+        private void ExecuteCopyRelPath() => Clipboard.SetText(FileModel.GetRelativeName(SelectedItem.FullName, ActiveMod));
 
         /// <summary>
         /// Reimports the game file to replace the current one
@@ -341,7 +346,7 @@ namespace WolvenKit.ViewModels.Tools
         private bool CanBk2Import() => SelectedItem != null && IsInRawFolder(SelectedItem) && SelectedItem.Extension.ToLower().Contains("avi");
         private void ExecuteBk2Import()
         {
-            var modpath = Path.Combine(ActiveMod.ModDirectory, SelectedItem.GetRelativeName(ActiveMod));
+            var modpath = Path.Combine(ActiveMod.ModDirectory, FileModel.GetRelativeName(SelectedItem.FullName, ActiveMod));
             modpath = Path.ChangeExtension(modpath, ".bk2");
             var directoryName = Path.GetDirectoryName(modpath);
             Directory.CreateDirectory(directoryName);
@@ -361,7 +366,7 @@ namespace WolvenKit.ViewModels.Tools
         private bool CanBk2Export() => SelectedItem != null && !IsInRawFolder(SelectedItem) && SelectedItem.Extension.ToLower().Contains("bk2");
         private void ExecuteBk2Export()
         {
-            var rawpath = Path.Combine(ActiveMod.RawDirectory, SelectedItem.GetRelativeName(ActiveMod));
+            var rawpath = Path.Combine(ActiveMod.RawDirectory, FileModel.GetRelativeName(SelectedItem.FullName, ActiveMod));
             rawpath = Path.ChangeExtension(rawpath, ".avi");
             var directoryName = Path.GetDirectoryName(rawpath);
             Directory.CreateDirectory(directoryName);
@@ -379,23 +384,58 @@ namespace WolvenKit.ViewModels.Tools
             process?.WaitForInputIdle();
         }
 
-        public ICommand ConvertToJsonCommand { get; private set; }
-        public ICommand ConvertToXmlCommand { get; private set; }
+        public AsyncAwaitBestPractices.MVVM.IAsyncCommand ConvertToJsonCommand { get; private set; }
+        public AsyncAwaitBestPractices.MVVM.IAsyncCommand ConvertToXmlCommand { get; private set; }
 
-        private bool CanConvertTo() => SelectedItem != null && !IsInRawFolder(SelectedItem) &&
-                                       Enum.GetNames<ERedExtension>().Contains(SelectedItem.Extension.ToLower());
-        private void ExecuteConvertToJson() => ExecuteConvertTo(ETextConvertFormat.json);
-        private void ExecuteConvertToXml() => ExecuteConvertTo(ETextConvertFormat.xml);
-        private void ExecuteConvertTo(ETextConvertFormat fmt)
+        private bool CanConvertTo(object arg) => SelectedItem != null
+                && !IsInRawFolder(SelectedItem)
+                //&& Enum.GetNames<ERedExtension>().Contains(SelectedItem.Extension.ToLower())
+                ;
+
+        private async Task ExecuteConvertToJsonAsync() => await ExecuteConvertToAsync(ETextConvertFormat.json);
+        private async Task ExecuteConvertToXmlAsync() => await ExecuteConvertToAsync(ETextConvertFormat.xml);
+        private async Task ExecuteConvertToAsync(ETextConvertFormat fmt)
         {
-            var inpath = SelectedItem.FullName;
-            var rawOutPath = Path.Combine(ActiveMod.RawDirectory, SelectedItem.GetRelativeName(ActiveMod));
+            if (SelectedItem.IsDirectory)
+            {
+                var progress = 0;
+                _progressService.Report(0);
+
+                var files = Directory.GetFiles(SelectedItem.FullName, "*", SearchOption.AllDirectories)
+                    .ToList();
+                foreach (var file in files)
+                {
+                    await ConvertTo(file, fmt);
+
+                    progress++;
+                    _progressService.Report(progress / (float)files.Count);
+                }
+            }
+            else
+            {
+                var inpath = SelectedItem.FullName;
+                await ConvertTo(inpath, fmt);
+            }
+        }
+
+        private async Task ConvertTo(string file, ETextConvertFormat fmt)
+        {
+            if (!File.Exists(file))
+            {
+                return;
+            }
+            if (!Enum.GetNames<ERedExtension>().Contains(Path.GetExtension(file).TrimStart('.').ToLower()))
+            {
+                return;
+            }
+
+            var rawOutPath = Path.Combine(ActiveMod.RawDirectory, FileModel.GetRelativeName(file, ActiveMod));
             var outDirectoryPath = Path.GetDirectoryName(rawOutPath);
             if (outDirectoryPath != null)
             {
                 Directory.CreateDirectory(outDirectoryPath);
 
-                _modTools.ConvertToAndWrite(fmt, inpath, new DirectoryInfo(outDirectoryPath));
+                await Task.Run(() => _modTools.ConvertToAndWrite(fmt, file, new DirectoryInfo(outDirectoryPath)));
             }
         }
 
@@ -407,7 +447,7 @@ namespace WolvenKit.ViewModels.Tools
         private void ExecuteConvertFromJson()
         {
             var inpath = SelectedItem.FullName;
-            var modPath = Path.Combine(ActiveMod.ModDirectory, SelectedItem.GetRelativeName(ActiveMod));
+            var modPath = Path.Combine(ActiveMod.ModDirectory, FileModel.GetRelativeName(SelectedItem.FullName, ActiveMod));
             var outDirectoryPath = Path.GetDirectoryName(modPath);
             if (outDirectoryPath != null)
             {
@@ -533,8 +573,12 @@ namespace WolvenKit.ViewModels.Tools
             Bk2ImportCommand = new RelayCommand(ExecuteBk2Import, CanBk2Import);
             Bk2ExportCommand = new RelayCommand(ExecuteBk2Export, CanBk2Export);
 
-            ConvertToJsonCommand = new RelayCommand(ExecuteConvertToJson, CanConvertTo);
-            ConvertToXmlCommand = new RelayCommand(ExecuteConvertToXml, CanConvertTo);
+            //CountUrlBytesCommand = new AsyncCommand(async () =>
+            //{
+            //    ByteCount = await MyService.DownloadAndCountBytesAsync(Url);
+            //});
+            ConvertToJsonCommand = new AsyncCommand(ExecuteConvertToJsonAsync, CanConvertTo);
+            ConvertToXmlCommand = new AsyncCommand(ExecuteConvertToXmlAsync, CanConvertTo);
             ConvertFromJsonCommand = new RelayCommand(ExecuteConvertFromJson, CanConvertFromJson);
 
             //PESearchStartedCommand = new DelegateCommand<object>(ExecutePESearchStartedCommand, CanPESearchStartedCommand);
