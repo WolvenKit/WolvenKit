@@ -1,11 +1,8 @@
-using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using WolvenKit.Core.CRC;
 using WolvenKit.Core.Compression;
+using WolvenKit.Core.CRC;
 
 namespace WolvenKit.Modkit.RED4
 {

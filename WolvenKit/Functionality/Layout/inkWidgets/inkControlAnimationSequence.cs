@@ -1,8 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
@@ -40,7 +38,9 @@ namespace WolvenKit.Functionality.Layout.inkWidgets
             StopCommand = new RelayCommand(Stop);
 
             if (Sequence.Targets.Count != Sequence.Definitions.Count)
+            {
                 return;
+            }
 
             Storyboard = new();
             if (Name.Contains("loop"))
@@ -66,11 +66,15 @@ namespace WolvenKit.Functionality.Layout.inkWidgets
                     foreach (var index in info.Path)
                     {
                         if (element is inkCompoundControl cc)
+                        {
                             element = cc.GetChild(Convert.ToInt32(index));
+                        }
                     }
 
                     if (element == null)
+                    {
                         continue;
+                    }
 
                     Targets.Add(element);
 
@@ -96,7 +100,8 @@ namespace WolvenKit.Functionality.Layout.inkWidgets
                                     Paths = new List<PropertyPath>(new[] { new PropertyPath(UIElement.OpacityProperty) }),
                                     Target = "element" + element.GetHashCode()
                                 });
-                            } else
+                            }
+                            else
                             {
                                 timeline = (DoubleAnimationUsingKeyFrames)definition.Timelines[0];
                             }
@@ -120,7 +125,7 @@ namespace WolvenKit.Functionality.Layout.inkWidgets
                                 definitions.Add(new inkControlAnimationDefiniton()
                                 {
                                     Interpolator = animMargin,
-                                    Timelines = new List<AnimationTimeline>(new [] { timeline }),
+                                    Timelines = new List<AnimationTimeline>(new[] { timeline }),
                                     Paths = new List<PropertyPath>(new[] { new PropertyPath(inkControl.MarginProperty) }),
                                     Target = "element" + element.GetHashCode()
                                 });
@@ -151,8 +156,8 @@ namespace WolvenKit.Functionality.Layout.inkWidgets
                                 definitions.Add(new inkControlAnimationDefiniton()
                                 {
                                     Interpolator = animSize,
-                                    Timelines = new List<AnimationTimeline>(new [] { widthTimeline, heightTimeline }),
-                                    Paths = new List<PropertyPath>(new [] { new PropertyPath(inkControl.WidthProperty), new PropertyPath(inkControl.HeightProperty) }),
+                                    Timelines = new List<AnimationTimeline>(new[] { widthTimeline, heightTimeline }),
+                                    Paths = new List<PropertyPath>(new[] { new PropertyPath(inkControl.WidthProperty), new PropertyPath(inkControl.HeightProperty) }),
                                     Target = "element" + element.GetHashCode()
                                 });
                             }
@@ -284,7 +289,7 @@ namespace WolvenKit.Functionality.Layout.inkWidgets
                             yTimeline.KeyFrames.Add(ToDoubleKeyframe(animI.InterpolationType.Value, animI.InterpolationMode.Value, animScale.StartValue.Y, animScale.StartDelay));
                             yTimeline.KeyFrames.Add(ToDoubleKeyframe(animI.InterpolationType.Value, animI.InterpolationMode.Value, animScale.EndValue.Y, animScale.StartDelay + animScale.Duration));
 
-   
+
                         }
                     }
 

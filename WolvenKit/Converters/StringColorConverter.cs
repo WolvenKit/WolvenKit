@@ -1,12 +1,12 @@
+using System;
+using System.Globalization;
 using System.Windows;
 using System.Windows.Data;
 using System.Windows.Media;
-using System;
-using System.Globalization;
 
 namespace WolvenKit.Converters
 {
-    [ValueConversion(typeof(Color), typeof(String))]
+    [ValueConversion(typeof(Color), typeof(string))]
     public sealed class StringColorConverter : IValueConverter
     {
         public static readonly StringColorConverter Default = new StringColorConverter();

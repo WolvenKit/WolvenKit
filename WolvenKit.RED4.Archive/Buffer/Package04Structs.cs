@@ -55,10 +55,7 @@ namespace WolvenKit.RED4.Archive.Buffer
 
         public uint offset
         {
-            get
-            {
-                return bitfield & offsetMask;
-            }
+            get => bitfield & offsetMask;
             set
             {
                 bitfield &= ~offsetMask;
@@ -68,10 +65,7 @@ namespace WolvenKit.RED4.Archive.Buffer
 
         public byte size
         {
-            get
-            {
-                return (byte)((bitfield & sizeMask) >> sizeShift);
-            }
+            get => (byte)((bitfield & sizeMask) >> sizeShift);
             set
             {
                 bitfield &= ~sizeMask;
@@ -81,10 +75,7 @@ namespace WolvenKit.RED4.Archive.Buffer
 
         public bool unk1
         {
-            get
-            {
-                return Convert.ToBoolean(bitfield >> unkShift);
-            }
+            get => Convert.ToBoolean(bitfield >> unkShift);
             set
             {
                 bitfield &= ~(1U << unkShift);
@@ -105,10 +96,7 @@ namespace WolvenKit.RED4.Archive.Buffer
 
         public uint offset
         {
-            get
-            {
-                return bitfield & offsetMask;
-            }
+            get => bitfield & offsetMask;
             set
             {
                 bitfield &= ~offsetMask;
@@ -118,10 +106,7 @@ namespace WolvenKit.RED4.Archive.Buffer
 
         public byte size
         {
-            get
-            {
-                return (byte)((bitfield & sizeMask) >> sizeShift);
-            }
+            get => (byte)((bitfield & sizeMask) >> sizeShift);
             set
             {
                 bitfield &= ~sizeMask;

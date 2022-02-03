@@ -1,7 +1,6 @@
 using System;
 using System.Reactive;
 using System.Threading.Tasks;
-using gpm.Core.Services;
 using gpm.Installer;
 using ReactiveUI;
 using Splat;

@@ -24,7 +24,7 @@ namespace WolvenKit.Modkit.RED4
             {
                 return false;
             }
-            
+
             RawArmature newRig = null;
             {
                 var hash = FNV1A64HashAlgorithm.HashString(blob.BaseMesh.DepotPath);

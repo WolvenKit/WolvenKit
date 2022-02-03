@@ -1,6 +1,5 @@
 using System;
 using System.Reactive.Linq;
-using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -34,8 +33,8 @@ namespace WolvenKit.Views.Editors
 
         public CFloat RedNumber
         {
-            get => (CFloat)this.GetValue(RedNumberProperty);
-            set => this.SetValue(RedNumberProperty, value);
+            get => (CFloat)GetValue(RedNumberProperty);
+            set => SetValue(RedNumberProperty, value);
         }
         public static readonly DependencyProperty RedNumberProperty = DependencyProperty.Register(
             nameof(RedNumber), typeof(CFloat), typeof(RedFloatEditor), new PropertyMetadata(default(CFloat)));
@@ -52,9 +51,13 @@ namespace WolvenKit.Views.Editors
             try
             {
                 if (cvm != null)
+                {
                     cvm.Data = (CFloat)float.Parse(value);
+                }
                 else
+                {
                     SetCurrentValue(RedNumberProperty, (CFloat)float.Parse(value));
+                }
             }
             catch (FormatException)
             {

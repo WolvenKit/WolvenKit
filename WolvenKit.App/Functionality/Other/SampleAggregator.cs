@@ -12,9 +12,9 @@ namespace WolvenKit.MVVM.Views.Components.Tools.AudioTool
     {
         #region Fields
 
-        private int binaryExponentitation;
-        private int bufferSize;
-        private Complex[] channelData;
+        private readonly int binaryExponentitation;
+        private readonly int bufferSize;
+        private readonly Complex[] channelData;
         private int channelDataPosition;
         private float volumeLeftMaxValue;
         private float volumeLeftMinValue;

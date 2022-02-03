@@ -1,18 +1,12 @@
 using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Runtime.Serialization;
-using System.Text;
 using WolvenKit.Common;
 using WolvenKit.Common.Conversion;
-using WolvenKit.Interfaces.Core;
 using WolvenKit.RED4.Archive.CR2W;
 using WolvenKit.RED4.Archive.IO;
-using WolvenKit.RED4.CR2W;
 using WolvenKit.RED4.CR2W.JSON;
-using WolvenKit.RED4.Types;
 using WolvenKit.RED4.Types.Exceptions;
-using JsonSerializer = System.Text.Json.JsonSerializer;
 
 namespace WolvenKit.Modkit.RED4
 {
@@ -103,7 +97,7 @@ namespace WolvenKit.Modkit.RED4
         public static CR2WFile ConvertFromJson(string json)
         {
             var dto = RedJsonSerializer.Deserialize<RedFileDto>(json);
-            return (CR2WFile)dto.Data;
+            return dto.Data;
         }
 
         /// <summary>

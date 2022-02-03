@@ -4,8 +4,6 @@ using System.Text;
 using WolvenKit.RED4.IO;
 using WolvenKit.RED4.Types;
 using WolvenKit.RED4.Types.Exceptions;
-using WolvenKit.RED4.CR2W;
-using WolvenKit.RED4.Archive.CR2W;
 
 namespace WolvenKit.RED4.Archive.IO
 {
@@ -53,7 +51,9 @@ namespace WolvenKit.RED4.Archive.IO
             {
                 var cvar = ReadVariable(cls);
                 if (!cvar)
+                {
                     break;
+                }
             }
             #endregion
 

@@ -5,12 +5,11 @@
 // Modified by rfuzzo
 
 
-using System.Threading;
-using System.Diagnostics;
-using WolvenKit.Common.Services;
-using WolvenKit.Core.Services;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Runtime.CompilerServices;
+using System.Threading;
+using WolvenKit.Core.Services;
 
 namespace System
 {
@@ -69,10 +68,7 @@ namespace System
         public event EventHandler<T>? ProgressChanged;
 
         public event PropertyChangedEventHandler PropertyChanged;
-        private void NotifyPropertyChanged([CallerMemberName] String propertyName = "")
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
+        private void NotifyPropertyChanged([CallerMemberName] string propertyName = "") => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
 
         /// <summary>Reports a progress change.</summary>
         /// <param name="value">The value of the updated progress.</param>
@@ -81,8 +77,8 @@ namespace System
             // If there's no handler, don't bother going through the sync context.
             // Inside the callback, we'll need to check again, in case
             // an event handler is removed between now and then.
-            Action<T>? handler = _handler;
-            EventHandler<T>? changedEvent = ProgressChanged;
+            var handler = _handler;
+            var changedEvent = ProgressChanged;
             if (handler != null || changedEvent != null)
             {
                 // Post the processing to the sync context.
@@ -93,16 +89,16 @@ namespace System
 
         /// <summary>Reports a progress change.</summary>
         /// <param name="value">The value of the updated progress.</param>
-        void IProgress<T>.Report(T value) { OnReport(value); }
+        void IProgress<T>.Report(T value) => OnReport(value);
 
         /// <summary>Invokes the action and event callbacks.</summary>
         /// <param name="state">The progress value.</param>
         private void InvokeHandlers(object? state)
         {
-            T value = (T)state!;
+            var value = (T)state!;
 
-            Action<T>? handler = _handler;
-            EventHandler<T>? changedEvent = ProgressChanged;
+            var handler = _handler;
+            var changedEvent = ProgressChanged;
 
             handler?.Invoke(value);
             changedEvent?.Invoke(this, value);

@@ -9,9 +9,9 @@ using System.Xml.Linq;
 using ReactiveUI;
 using WolvenKit.Common;
 using WolvenKit.Common.Interfaces;
-using WolvenKit.Core.Compression;
 using WolvenKit.Common.Services;
 using WolvenKit.Core;
+using WolvenKit.Core.Compression;
 using WolvenKit.Functionality.Services;
 using WolvenKit.Models;
 using WolvenKit.Modkit.RED4.Serialization;
@@ -196,7 +196,7 @@ namespace WolvenKit.Functionality.Controllers
                 var buffer = br.ReadBytes(file.Length - 8);
 
                 var unpacked = new byte[size];
-                long unpackedSize = Oodle.Decompress(buffer, unpacked);
+                var unpackedSize = Oodle.Decompress(buffer, unpacked);
 
                 using var msout = new MemoryStream();
                 using var bw = new BinaryWriter(msout);
@@ -210,7 +210,7 @@ namespace WolvenKit.Functionality.Controllers
                 var inbuffer = File.ReadAllBytes(path);
                 IEnumerable<byte> outBuffer = new List<byte>();
 
-                var r = Oodle.Compress( inbuffer, ref outBuffer, true);
+                var r = Oodle.Compress(inbuffer, ref outBuffer, true);
 
                 File.WriteAllBytes(outpath, outBuffer.ToArray());
             }

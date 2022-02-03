@@ -214,7 +214,7 @@ namespace CP77Tools.Tasks
                             if (!string.IsNullOrEmpty(fileEntry.FileName) && fileEntry.FileName.Contains(".xbm"))
                             {
                                 using var ms = new MemoryStream();
-                                ar.CopyFileToStream(ms, (fileEntry as FileEntry).NameHash64, false);
+                                ar.CopyFileToStream(ms, fileEntry.NameHash64, false);
                                 var cr2w = _wolvenkitFileService.ReadRed4File(ms);
                                 if (cr2w == null || cr2w.RootChunk is not CBitmapTexture xbm || xbm.RenderTextureResource.RenderResourceBlobPC.Chunk is not rendIRenderTextureBlob blob)
                                 {

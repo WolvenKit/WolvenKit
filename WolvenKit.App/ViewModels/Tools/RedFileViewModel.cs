@@ -45,7 +45,7 @@ namespace WolvenKit.ViewModels.Tools
 
         public string GetParentPath() => Path.GetDirectoryName(_fileEntry.Name);
 
-        string FormatSize(uint size)
+        private string FormatSize(uint size)
         {
             string[] suffixes = { "Bytes", "KB", "MB", "GB", "TB", "PB" };
 

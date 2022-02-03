@@ -3,7 +3,6 @@ using System.IO;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
 using System.Windows;
-using HandyControl.Tools;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using ProtoBuf.Meta;
@@ -31,7 +30,7 @@ namespace WolvenKit
         // Constructor #1
         static App()
         {
-           
+
         }
 
         // Constructor #2
@@ -156,7 +155,7 @@ namespace WolvenKit
             var message = $"Unhandled exception ({source})";
             try
             {
-                System.Reflection.AssemblyName assemblyName = System.Reflection.Assembly.GetExecutingAssembly().GetName();
+                var assemblyName = System.Reflection.Assembly.GetExecutingAssembly().GetName();
                 message = string.Format("Unhandled exception in {0} v{1}", assemblyName.Name, assemblyName.Version);
             }
             catch (Exception ex)

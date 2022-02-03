@@ -20,13 +20,18 @@ namespace WolvenKit.RED3.CR2W
         {
             var b = br.ReadByte();
             if (b == 0x80)
+            {
                 return null;
+            }
+
             if (b == 0x00)
+            {
                 throw new NotImplementedException();//return "";
+            }
 
             var nxt = (b & (1 << 6)) != 0;
             var widechar = (b & (1 << 7)) == 0;
-            int len = b & ((1 << 6) - 1); // null terminated?
+            var len = b & ((1 << 6) - 1); // null terminated?
             if (nxt)
             {
                 len += 64 * br.ReadByte();
@@ -34,7 +39,9 @@ namespace WolvenKit.RED3.CR2W
 
             string readstring;
             if (widechar)
+            {
                 readstring = Encoding.Unicode.GetString(br.ReadBytes(len * 2));
+            }
             else
             {
                 readstring = Encoding.GetEncoding("ISO-8859-1").GetString(br.ReadBytes(len));

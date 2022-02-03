@@ -2,14 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text.RegularExpressions;
 using System.Threading;
 using WolvenKit.Common.Extensions;
 using WolvenKit.Common.Model;
-using WolvenKit.Core.Compression;
-using WolvenKit.Interfaces.Extensions;
-using WolvenKit.RED4;
-using WolvenKit.RED4.Archive.CR2W;
 using WolvenKit.RED4.Archive.IO;
 using WolvenKit.RED4.Types.Exceptions;
 
@@ -67,11 +62,7 @@ namespace WolvenKit.Modkit.RED4
         /// <param name="buffers"></param>
         /// <returns></returns>
         /// <exception cref="FileNotFoundException"></exception>
-        private bool Rebuild(Stream redfileStream, IEnumerable<FileInfo> buffers)
-        {
-            throw new TodoException();
-
-            /*AppendBuffersToFile(redfileStream);
+        private bool Rebuild(Stream redfileStream, IEnumerable<FileInfo> buffers) => throw new TodoException();/*AppendBuffersToFile(redfileStream);
 
             return true;
 
@@ -169,7 +160,6 @@ namespace WolvenKit.Modkit.RED4
 
                 return Array.Empty<byte>();
             }*/
-        }
 
         /// <summary>
         /// Rebuilds a single raw buffer into its redfile

@@ -13,7 +13,7 @@ public static class TexconvNative
 
         public ManagedBlob()
         {
-            this._blob = new Blob();
+            _blob = new Blob();
         }
 
         public Blob GetBlob() => _blob;
@@ -27,8 +27,11 @@ public static class TexconvNative
 
         protected virtual void Dispose(bool disposing)
         {
-            if (this.disposed)
+            if (disposed)
+            {
                 return;
+            }
+
             FreeBlob(_blob);
             _blob = new Blob();
 

@@ -1,19 +1,7 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using WolvenKit.RED4.Types;
-using WolvenKit.RED4.Types.Exceptions;
 
 namespace WolvenKit.Views.Editors
 {
@@ -31,8 +19,8 @@ namespace WolvenKit.Views.Editors
 
         public IRedInteger RedInteger
         {
-            get => (IRedInteger)this.GetValue(RedIntegerProperty);
-            set => this.SetValue(RedIntegerProperty, value);
+            get => (IRedInteger)GetValue(RedIntegerProperty);
+            set => SetValue(RedIntegerProperty, value);
         }
         public static readonly DependencyProperty RedIntegerProperty = DependencyProperty.Register(
             nameof(RedInteger), typeof(IRedInteger), typeof(RedIntegerEditor), new PropertyMetadata(default(IRedInteger)));
@@ -132,13 +120,13 @@ namespace WolvenKit.Views.Editors
         private double GetValueFromRedValue() => RedInteger switch
         {
             CDouble cruid => (double)cruid,
-            CUInt8 uint64 => (double)uint64,
-            CInt8 uint64 => (double)uint64,
-            CInt16 uint64 => (double)uint64,
-            CUInt16 uint64 => (double)uint64,
-            CInt32 uint64 => (double)uint64,
-            CUInt32 uint64 => (double)uint64,
-            CInt64 uint64 => (double)uint64,
+            CUInt8 uint64 => uint64,
+            CInt8 uint64 => uint64,
+            CInt16 uint64 => uint64,
+            CUInt16 uint64 => uint64,
+            CInt32 uint64 => uint64,
+            CUInt32 uint64 => uint64,
+            CInt64 uint64 => uint64,
             _ => throw new ArgumentOutOfRangeException(nameof(RedInteger)),
         };
 

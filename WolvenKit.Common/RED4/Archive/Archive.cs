@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using System.IO.MemoryMappedFiles;
 using System.Linq;
@@ -8,7 +7,6 @@ using System.Threading.Tasks;
 using CP77Tools.Model;
 using ProtoBuf;
 using WolvenKit.Common;
-using WolvenKit.Common.Services;
 using WolvenKit.Core.Compression;
 
 namespace WolvenKit.RED4.CR2W.Archive
@@ -82,7 +80,7 @@ namespace WolvenKit.RED4.CR2W.Archive
             var nextIndex = (int)entry.SegmentsEnd;
 
             // decompress main file
-            CopyFileSegmentToStream(stream, this.Index.FileSegments[startIndex], true, mmf);
+            CopyFileSegmentToStream(stream, Index.FileSegments[startIndex], true, mmf);
         }
 
         /// <summary>
@@ -103,12 +101,12 @@ namespace WolvenKit.RED4.CR2W.Archive
             var nextIndex = (int)entry.SegmentsEnd;
 
             // decompress main file
-            CopyFileSegmentToStream(stream, this.Index.FileSegments[startIndex], true, mmf);
+            CopyFileSegmentToStream(stream, Index.FileSegments[startIndex], true, mmf);
 
             //var bufferSegments = new List<FileSegment>();
             for (var j = startIndex + 1; j < nextIndex; j++)
             {
-                var offsetEntry = this.Index.FileSegments[j];
+                var offsetEntry = Index.FileSegments[j];
                 CopyFileSegmentToStream(stream, offsetEntry, decompressBuffers, mmf);
             }
             //for (var j = startIndex + 1; j < nextIndex; j++)
@@ -172,7 +170,7 @@ namespace WolvenKit.RED4.CR2W.Archive
             var nextIndex = (int)entry.SegmentsEnd;
 
             // decompress main file
-            await CopyFileSegmentToStreamAsync(stream, this.Index.FileSegments[startIndex], true, mmf);
+            await CopyFileSegmentToStreamAsync(stream, Index.FileSegments[startIndex], true, mmf);
 
             var bufferSegments = new List<FileSegment>();
             for (var j = startIndex + 1; j < nextIndex; j++)

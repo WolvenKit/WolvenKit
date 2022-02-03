@@ -1,18 +1,6 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Reactive.Disposables;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using ReactiveUI;
 using WolvenKit.ViewModels.Documents;
 
@@ -27,7 +15,7 @@ namespace WolvenKit.Views.Documents
         {
             InitializeComponent();
 
-           
+
             this.WhenActivated(disposables =>
             {
                 if (DataContext is TweakDocumentViewModel vm)
@@ -99,22 +87,19 @@ namespace WolvenKit.Views.Documents
                     .DisposeWith(disposables);
 
 
-               
+
             });
         }
 
-        private void EditButton_OnClick(object sender, RoutedEventArgs e)
-        {
-            ViewModel?.EditFlatCommand.Execute().Subscribe();
-        }
+        private void EditButton_OnClick(object sender, RoutedEventArgs e) => ViewModel?.EditFlatCommand.Execute().Subscribe();
 
         private void DeleteButton_OnClick(object sender, RoutedEventArgs e)
         {
             ViewModel?.DeleteFlatCommand.Execute().Subscribe();
 
-            this.FlatsTree.ExpandAll();
+            FlatsTree.ExpandAll();
         }
 
-        private void AddButton_Click(object sender, RoutedEventArgs e) => this.FlatsTree.ExpandAll();
+        private void AddButton_Click(object sender, RoutedEventArgs e) => FlatsTree.ExpandAll();
     }
 }

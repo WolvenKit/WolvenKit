@@ -54,7 +54,7 @@ namespace WolvenKit.RED4.Archive.CR2W
 
         private void OnObjectChanged(object sender, ObjectChangedEventArgs e)
         {
-            
+
         }
 
         #endregion
@@ -98,7 +98,7 @@ namespace WolvenKit.RED4.Archive.CR2W
 
             result.AddRange(RootChunk.FindType(targetTypes));
 
-            for (int i = 0; i < EmbeddedFiles.Count; i++)
+            for (var i = 0; i < EmbeddedFiles.Count; i++)
             {
                 result.AddRange(EmbeddedFiles[i].Content.FindType(targetTypes, $"emb{i}"));
             }
@@ -179,7 +179,7 @@ namespace WolvenKit.RED4.Archive.CR2W
                 return false;
             }
 
-            for (int i = 0; i < EmbeddedFiles.Count; i++)
+            for (var i = 0; i < EmbeddedFiles.Count; i++)
             {
                 if (!Equals(EmbeddedFiles[i], other.EmbeddedFiles[i]))
                 {
@@ -202,7 +202,7 @@ namespace WolvenKit.RED4.Archive.CR2W
                 return true;
             }
 
-            if (obj.GetType() != this.GetType())
+            if (obj.GetType() != GetType())
             {
                 return false;
             }

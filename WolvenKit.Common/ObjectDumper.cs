@@ -30,10 +30,7 @@ namespace WolvenKit.Common
 
         #region Methods
 
-        public static string Dump(object element)
-        {
-            return Dump(element, 2);
-        }
+        public static string Dump(object element) => Dump(element, 2);
 
         public static string Dump(object element, int indentSize)
         {
@@ -44,13 +41,17 @@ namespace WolvenKit.Common
         private bool AlreadyTouched(object value)
         {
             if (value == null)
+            {
                 return false;
+            }
 
             var hash = value.GetHashCode();
             for (var i = 0; i < _hashListOfFoundElements.Count; i++)
             {
                 if (_hashListOfFoundElements[i] == hash)
+                {
                     return true;
+                }
             }
             return false;
         }
@@ -74,7 +75,7 @@ namespace WolvenKit.Common
                 var enumerableElement = element as IEnumerable;
                 if (enumerableElement != null)
                 {
-                    foreach (object item in enumerableElement)
+                    foreach (var item in enumerableElement)
                     {
                         if (item is IEnumerable && !(item is string))
                         {
@@ -85,25 +86,31 @@ namespace WolvenKit.Common
                         else
                         {
                             if (!AlreadyTouched(item))
+                            {
                                 DumpElement(item);
+                            }
                             else
+                            {
                                 Write("{{{0}}} <-- bidirectional reference found", item.GetType().FullName);
+                            }
                         }
                     }
                 }
                 else
                 {
-                    MemberInfo[] members = element.GetType().GetMembers(BindingFlags.Public | BindingFlags.Instance);
+                    var members = element.GetType().GetMembers(BindingFlags.Public | BindingFlags.Instance);
                     foreach (var memberInfo in members)
                     {
                         var fieldInfo = memberInfo as FieldInfo;
                         var propertyInfo = memberInfo as PropertyInfo;
 
                         if (fieldInfo == null && propertyInfo == null)
+                        {
                             continue;
+                        }
 
                         var type = fieldInfo != null ? fieldInfo.FieldType : propertyInfo.PropertyType;
-                        object value = fieldInfo != null
+                        var value = fieldInfo != null
                                            ? fieldInfo.GetValue(element)
                                            : propertyInfo.GetValue(element, null);
 
@@ -119,9 +126,14 @@ namespace WolvenKit.Common
                             var alreadyTouched = !isEnumerable && AlreadyTouched(value);
                             _level++;
                             if (!alreadyTouched)
+                            {
                                 DumpElement(value);
+                            }
                             else
+                            {
                                 Write("{{{0}}} <-- bidirectional reference found", value.GetType().FullName);
+                            }
+
                             _level--;
                         }
                     }
@@ -139,22 +151,34 @@ namespace WolvenKit.Common
         private string FormatValue(object o)
         {
             if (o == null)
+            {
                 return ("null");
+            }
 
             if (o is DateTime)
+            {
                 return (((DateTime)o).ToShortDateString());
+            }
 
             if (o is string)
+            {
                 return string.Format("\"{0}\"", o);
+            }
 
             if (o is char && (char)o == '\0')
+            {
                 return string.Empty;
+            }
 
             if (o is ValueType)
+            {
                 return (o.ToString());
+            }
 
             if (o is IEnumerable)
+            {
                 return ("...");
+            }
 
             return ("{ }");
         }
@@ -164,7 +188,9 @@ namespace WolvenKit.Common
             var space = new string(' ', _level * _indentSize);
 
             if (args != null)
+            {
                 value = string.Format(value, args);
+            }
 
             _stringBuilder.AppendLine(space + value);
         }

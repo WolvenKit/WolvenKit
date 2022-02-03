@@ -12,8 +12,8 @@ namespace WolvenKit.Models
         #region Fields
 
         public string RootFolder;
-        private XDocument Assembly;
-        private string Icon;
+        private readonly XDocument Assembly;
+        private readonly string Icon;
 
         #endregion Fields
 

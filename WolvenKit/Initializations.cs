@@ -1,9 +1,11 @@
 using System;
 using System.Diagnostics;
 using System.IO;
-using System.Net;
+using System.Net.Http;
 using System.Net.NetworkInformation;
 using System.Reactive.Linq;
+using System.Runtime.InteropServices;
+using System.Threading.Tasks;
 using System.Windows.Media;
 using Microsoft.Web.WebView2.Core;
 using Octokit;
@@ -16,16 +18,13 @@ using WolvenKit.Functionality.Helpers;
 using WolvenKit.Functionality.Services;
 using WolvenKit.ViewModels.Shell;
 using WolvenKit.Views.Shell;
-using System.Runtime.InteropServices;
-using System.Threading.Tasks;
-using System.Net.Http;
 
 namespace WolvenKit
 {
     public static class Initializations
     {
         [DllImport("WebView2Loader.dll", CallingConvention = CallingConvention.StdCall)]
-        static extern int GetAvailableCoreWebView2BrowserVersionString(string browserExecutableFolder, out string version);
+        private static extern int GetAvailableCoreWebView2BrowserVersionString(string browserExecutableFolder, out string version);
 
         public static bool IsMissingWebView2() => GetAvailableCoreWebView2BrowserVersionString(null, out var edgeVersion) != 0 || edgeVersion == null;
 

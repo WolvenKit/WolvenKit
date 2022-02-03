@@ -1,23 +1,17 @@
 using System;
-using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Text;
-using System.Globalization;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using WolvenKit.RED4.Types;
 using NarcityMedia.DrawStringLineHeight;
-using Size = System.Windows.Size;
-using Rect = System.Windows.Rect;
-using FontFamily = System.Drawing.FontFamily;
+using WolvenKit.RED4.Types;
 using WolvenKit.Views.Documents;
-using ReactiveUI;
-using Color = System.Windows.Media.Color;
 using Brush = System.Windows.Media.Brush;
+using FontFamily = System.Drawing.FontFamily;
+using Rect = System.Windows.Rect;
+using Size = System.Windows.Size;
 
 namespace WolvenKit.Functionality.Layout.inkWidgets
 {
@@ -27,20 +21,27 @@ namespace WolvenKit.Functionality.Layout.inkWidgets
 
         public string Text
         {
-            get {
+            get
+            {
                 string text = TextWidget.Text;
                 if (text == "" || text == null)
+                {
                     text = "Test";
+                }
+
                 if (TextWidget.LetterCase.Value == Enums.textLetterCase.UpperCase)
+                {
                     text = text.ToUpper();
+                }
                 else if (TextWidget.LetterCase.Value == Enums.textLetterCase.LowerCase)
+                {
                     text = text.ToLower();
+                }
+
                 text = text.Replace("\n", System.Environment.NewLine);
                 return text;
             }
-            set {
-                TextWidget.Text = value;
-            }
+            set => TextWidget.Text = value;
         }
 
         public ImageSource ImageSource;
@@ -76,17 +77,23 @@ namespace WolvenKit.Functionality.Layout.inkWidgets
             get
             {
                 if (!PropertyBindings.ContainsKey("fontSize"))
+                {
                     goto NoOverride;
+                }
 
                 var variant = GetProperty(PropertyBindings["fontSize"]);
 
                 if (variant == null)
+                {
                     goto NoOverride;
+                }
 
                 if (variant.Value is CUInt32 fontSize)
+                {
                     return fontSize;
+                }
 
-                NoOverride:
+            NoOverride:
                 return TextWidget.FontSize;
             }
         }
@@ -98,17 +105,23 @@ namespace WolvenKit.Functionality.Layout.inkWidgets
             get
             {
                 if (!PropertyBindings.ContainsKey("fontStyle"))
+                {
                     goto NoOverride;
+                }
 
                 var variant = GetProperty(PropertyBindings["fontStyle"]);
 
                 if (variant == null)
+                {
                     goto NoOverride;
+                }
 
                 if (variant.Value is CName fontStyle)
+                {
                     return fontStyle;
+                }
 
-                NoOverride:
+            NoOverride:
                 return TextWidget.FontStyle;
             }
         }
@@ -133,14 +146,18 @@ namespace WolvenKit.Functionality.Layout.inkWidgets
             RenderedFontStyle = _fontStyle;
 
             if (FontSize == 0)
+            {
                 return;
+            }
 
             var fontPath = TextWidget.FontFamily.DepotPath?.ToString() ?? "";
 
             var fontCollection = (FontCollection)Application.Current.TryFindResource("FontCollection/" + fontPath + "#" + _fontStyle);
 
             if (fontCollection == null)
+            {
                 return;
+            }
 
             FontFamily = fontCollection.Families.First();
 
@@ -150,7 +167,7 @@ namespace WolvenKit.Functionality.Layout.inkWidgets
         private double GetWrapLength(Size size)
         {
             var width = 10000D;
-            if (TextWidget.WrappingInfo.AutoWrappingEnabled && !Double.IsPositiveInfinity(size.Width) && !Widget.FitToContent)
+            if (TextWidget.WrappingInfo.AutoWrappingEnabled && !double.IsPositiveInfinity(size.Width) && !Widget.FitToContent)
             {
                 width = size.Width;
             }
@@ -164,13 +181,15 @@ namespace WolvenKit.Functionality.Layout.inkWidgets
         private void MeasureText(Size size)
         {
             if (size.Width == 0 || size.Height == 0 || FontSize == 0)
+            {
                 return;
+            }
 
             using (var tempbmp = new Bitmap(1, 1))
             {
                 using (var g = Graphics.FromImage(tempbmp))
                 {
-                    SizeF textSize = g.MeasureStringLineHeight(Text, Font, (int)Math.Round(GetWrapLength(size)), LineHeight);
+                    var textSize = g.MeasureStringLineHeight(Text, Font, (int)Math.Round(GetWrapLength(size)), LineHeight);
                     TextWidth = textSize.Width;
                     TextHeight = Math.Max(textSize.Height - CorrectionY * 2, 0);
                 }
@@ -212,7 +231,9 @@ namespace WolvenKit.Functionality.Layout.inkWidgets
             RenderedSize = size;
 
             if (size.Width == 0 || size.Height == 0 || FontSize == 0)
+            {
                 return;
+            }
 
             double x = 0, y = 0;
             switch (TextWidget.TextHorizontalAlignment.Value)
@@ -288,27 +309,27 @@ namespace WolvenKit.Functionality.Layout.inkWidgets
                 SetupFont();
             }
             MeasureText(availableSize);
-            var size = new Size(Width, Height);
-            //if (Widget.FitToContent)
-            //{
-            size.Width = Math.Max(TextWidth, 0);
-            size.Height = Math.Max(TextHeight, 0);
+            var size = new Size(Width, Height)
+            {
+                //if (Widget.FitToContent)
+                //{
+                Width = Math.Max(TextWidth, 0),
+                Height = Math.Max(TextHeight, 0)
+            };
             //}
             return MeasureForDimensions(size, availableSize);
         }
 
-        protected override void ArrangeCore(Rect finalRect)
-        {
+        protected override void ArrangeCore(Rect finalRect) =>
             //MeasureText(finalRect.Size);
             base.ArrangeCore(finalRect);
-        }
 
         protected override void Render(DrawingContext dc)
         {
             var size = new Size(RenderSize.Width, RenderSize.Height);
             //if (RenderedSize != size)
             //{
-                DrawText(size);
+            DrawText(size);
             //}
             dc.PushOpacityMask(Mask);
             dc.DrawRectangle(TintBrush, null, new Rect(0, 0, size.Width, size.Height));

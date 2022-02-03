@@ -17,8 +17,8 @@ namespace WolvenKit.Views.Editors
 
         public IRedType RedType
         {
-            get => (IRedType)this.GetValue(RedTypeProperty);
-            set => this.SetValue(RedTypeProperty, value);
+            get => (IRedType)GetValue(RedTypeProperty);
+            set => SetValue(RedTypeProperty, value);
         }
         public static readonly DependencyProperty RedTypeProperty = DependencyProperty.Register(
             nameof(RedType), typeof(IRedType), typeof(RedBaseTypeEditor), new PropertyMetadata(default(IRedType)));
@@ -101,12 +101,12 @@ namespace WolvenKit.Views.Editors
                 var value = (IRedInteger)RedType;
                 return (value switch
                 {
-                    CUInt8 uint64 => (float)uint64,
-                    CInt8 uint64 => (float)uint64,
-                    CInt16 uint64 => (float)uint64,
-                    CUInt16 uint64 => (float)uint64,
-                    CInt32 uint64 => (float)uint64,
-                    CUInt32 uint64 => (float)uint64,
+                    CUInt8 uint64 => uint64,
+                    CInt8 uint64 => uint64,
+                    CInt16 uint64 => uint64,
+                    CUInt16 uint64 => uint64,
+                    CInt32 uint64 => uint64,
+                    CUInt32 uint64 => uint64,
                     CInt64 uint64 => (float)uint64,
                     _ => throw new ArgumentOutOfRangeException(nameof(value)),
                 }).ToString();

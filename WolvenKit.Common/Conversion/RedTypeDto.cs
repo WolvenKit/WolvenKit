@@ -1,4 +1,3 @@
-using System;
 using WolvenKit.RED4.Types;
 
 namespace WolvenKit.Common.Conversion;

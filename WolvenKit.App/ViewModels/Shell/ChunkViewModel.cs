@@ -6,7 +6,6 @@ using System.IO;
 using System.Linq;
 using System.Reactive.Linq;
 using System.Runtime.Serialization;
-using System.Text.Json;
 using System.Windows.Forms;
 using System.Windows.Input;
 using DynamicData;
@@ -82,7 +81,7 @@ namespace WolvenKit.ViewModels.Shell
                                 TVProperties.AddRange(Properties);
                             }
 
-                            
+
                             DisplayProperties.AddRange(SelfList);
                         }
                     }
@@ -187,10 +186,10 @@ namespace WolvenKit.ViewModels.Shell
 
             var list = new ObservableCollection<ISelectableTreeViewItemModel>();
 
-            for (int i = 0; i < locations.Count; i += nSize)
+            for (var i = 0; i < locations.Count; i += nSize)
             {
                 var size = Math.Min(nSize, locations.Count - i);
-                list.Add(new GroupedChunkViewModel($"[{i}-{i+size-1}]", locations.Skip(i).Take(size)));
+                list.Add(new GroupedChunkViewModel($"[{i}-{i + size - 1}]", locations.Skip(i).Take(size)));
             }
 
             return list;
@@ -228,7 +227,7 @@ namespace WolvenKit.ViewModels.Shell
 
         #region Properties
 
-        private RDTDataViewModel _tab;
+        private readonly RDTDataViewModel _tab;
 
         public RDTDataViewModel Tab
         {
@@ -285,7 +284,7 @@ namespace WolvenKit.ViewModels.Shell
 
         public class RedArrayWrapper : IRedType
         {
-            private IRedArray list;
+            private readonly IRedArray list;
 
             [TypeConverter(typeof(ExpandableObjectConverter))]
             public Dictionary<string, object> Properties { get; set; }
@@ -311,8 +310,8 @@ namespace WolvenKit.ViewModels.Shell
 
         public class RedArrayItem<T> : IRedType
         {
-            private IRedArray list;
-            private int index;
+            private readonly IRedArray list;
+            private readonly int index;
             public T Value
             {
                 get => (T)list[index];
@@ -328,8 +327,8 @@ namespace WolvenKit.ViewModels.Shell
 
         public class RedClassProperty<T> : IRedType where T : IRedType
         {
-            private RedBaseClass obj;
-            private string propertyName;
+            private readonly RedBaseClass obj;
+            private readonly string propertyName;
             public T Value
             {
                 get
@@ -755,12 +754,12 @@ namespace WolvenKit.ViewModels.Shell
                 var value = (IRedInteger)Data;
                 Value = (value switch
                 {
-                    CUInt8 uint64 => (float)uint64,
-                    CInt8 uint64 => (float)uint64,
-                    CInt16 uint64 => (float)uint64,
-                    CUInt16 uint64 => (float)uint64,
-                    CInt32 uint64 => (float)uint64,
-                    CUInt32 uint64 => (float)uint64,
+                    CUInt8 uint64 => uint64,
+                    CInt8 uint64 => uint64,
+                    CInt16 uint64 => uint64,
+                    CUInt16 uint64 => uint64,
+                    CInt32 uint64 => uint64,
+                    CUInt32 uint64 => uint64,
                     CInt64 uint64 => (float)uint64,
                     _ => throw new ArgumentOutOfRangeException(nameof(value)),
                 }).ToString();
@@ -970,7 +969,7 @@ namespace WolvenKit.ViewModels.Shell
             Data = RedTypeManager.CreateRedType(PropertyType);
             if (Data is IRedBaseHandle handle)
             {
-                ObservableCollection<string> existing = new ObservableCollection<string>(AppDomain.CurrentDomain.GetAssemblies().SelectMany(s => s.GetTypes()).Where(p => handle.InnerType.IsAssignableFrom(p) && p.IsClass).Select(x => x.Name));
+                var existing = new ObservableCollection<string>(AppDomain.CurrentDomain.GetAssemblies().SelectMany(s => s.GetTypes()).Where(p => handle.InnerType.IsAssignableFrom(p) && p.IsClass).Select(x => x.Name));
                 var app = Locator.Current.GetService<AppViewModel>();
                 app.SetActiveDialog(new CreateClassDialogViewModel(existing, false)
                 {

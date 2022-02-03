@@ -9,7 +9,7 @@ namespace WolvenKit.RED4.TweakDB.Types
     {
         public void SetItems(object o);
         public IList GetItems();
-    } 
+    }
 
     public class CArray<T> : IType, IArray
         where T : IType
@@ -46,7 +46,7 @@ namespace WolvenKit.RED4.TweakDB.Types
         public void Serialize(BinaryWriter writer)
         {
             writer.Write(Items.Count);
-            foreach(var item in Items)
+            foreach (var item in Items)
             {
                 item.Serialize(writer);
             }

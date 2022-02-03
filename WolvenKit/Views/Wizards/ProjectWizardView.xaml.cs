@@ -1,13 +1,5 @@
-using System;
 using System.Reactive.Disposables;
-using System.Reactive.Linq;
-using System.Windows;
 using ReactiveUI;
-using Splat;
-using Syncfusion.UI.Xaml.TreeGrid;
-using Syncfusion.Windows.Tools.Controls;
-using WolvenKit.Functionality.WKitGlobal.Helpers;
-using WolvenKit.Models.Wizards;
 using WolvenKit.ViewModels.Wizards;
 
 namespace WolvenKit.Views.Wizards

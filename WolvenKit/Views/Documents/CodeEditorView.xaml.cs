@@ -1,9 +1,6 @@
-using System.Windows;
-using System.Windows.Media;
 using ReactiveUI;
 using Splat;
 //using Syncfusion.Windows.Edit;
-using WolvenKit.Functionality.WKitGlobal.Helpers;
 using WolvenKit.ViewModels.Tools;
 
 namespace WolvenKit.Views.Documents

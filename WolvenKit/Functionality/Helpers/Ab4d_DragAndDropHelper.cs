@@ -78,13 +78,17 @@ namespace WolvenKit.Functionality.Helpers
                     else
                     {
                         if (_allowedFileExtensions.Any(e => e.Equals(fileExtension, StringComparison.OrdinalIgnoreCase)))
+                        {
                             args.Effects = DragDropEffects.Move;
+                        }
                     }
                 }
             }
 
             if (args.Effects != DragDropEffects.None)
+            {
                 args.Handled = true;
+            }
         }
 
         public void pageToAddDragAndDrop_Drop(object sender, DragEventArgs args)

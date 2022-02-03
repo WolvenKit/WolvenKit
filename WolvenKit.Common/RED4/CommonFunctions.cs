@@ -1,9 +1,9 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using WolvenKit.Common;
 using WolvenKit.Common.DDS;
 using WolvenKit.Common.Services;
-using System.Collections.Generic;
 using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.CR2W
@@ -280,7 +280,7 @@ namespace WolvenKit.RED4.CR2W
             { "CIESDataResource", "ies" },
 
         };
-        
+
 
         #region Methods
 
@@ -346,7 +346,7 @@ namespace WolvenKit.RED4.CR2W
                             return DXGI_FORMAT.DXGI_FORMAT_A8_UNORM;
 
                         case ETextureRawFormat.TRF_Grayscale_Font:
-                            //throw new NotImplementedException($"{nameof(GetDXGIFormat)}: TRF_Grayscale_Font");
+                        //throw new NotImplementedException($"{nameof(GetDXGIFormat)}: TRF_Grayscale_Font");
                         case ETextureRawFormat.TRF_R32UI:
                             //return DXGI_FORMAT.R32_UINT;
                             //throw new NotImplementedException($"{nameof(GetDXGIFormat)}: TRF_R32UI");

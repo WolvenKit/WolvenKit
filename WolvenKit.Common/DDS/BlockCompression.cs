@@ -1,8 +1,6 @@
 using System.IO;
 using System.Runtime.InteropServices;
-using WolvenKit.Common;
 using WolvenKit.Core.Extensions;
-using WolvenKit.RED4.Archive;
 
 namespace CP77.Common.Image
 {
@@ -47,14 +45,14 @@ namespace CP77.Common.Image
         private static void DecodeBC4Inner(byte[] data, ref byte[] dataRaw, uint width, uint height)
         {
             dataRaw = new byte[width * height];
-            MemoryStream ms = new MemoryStream(data);
-            BinaryReader br = new BinaryReader(ms);
+            var ms = new MemoryStream(data);
+            var br = new BinaryReader(ms);
 
-            uint blocksPerLine = width / 4;
-            BC4_UNORM[] blocks = br.BaseStream.ReadStructs<BC4_UNORM>((uint)data.Length / 8U);
+            var blocksPerLine = width / 4;
+            var blocks = br.BaseStream.ReadStructs<BC4_UNORM>((uint)data.Length / 8U);
             uint xOffset = 0;
             uint yOffset = 0;
-            for (int i = 0; i < blocks.Length; i++)
+            for (var i = 0; i < blocks.Length; i++)
             {
                 //This could be a lot neater
                 dataRaw[xOffset + 0 + (yOffset + 0) * width] = (byte)(blocks[i].R(0) * 255.0f);
@@ -95,18 +93,24 @@ namespace CP77.Common.Image
         {
             public float R(int offset)
             {
-                uint index = GetIndex(offset);
+                var index = GetIndex(offset);
                 return DecodeFromIndex(index);
             }
 
             private float DecodeFromIndex(uint index)
             {
                 if (index == 0)
+                {
                     return red_0 / 255.0f;
+                }
+
                 if (index == 1)
+                {
                     return red_1 / 255.0f;
-                float fred_0 = red_0 / 255.0f;
-                float fred_1 = red_1 / 255.0f;
+                }
+
+                var fred_0 = red_0 / 255.0f;
+                var fred_1 = red_1 / 255.0f;
 
                 if (red_0 > red_1)
                 {
@@ -116,30 +120,33 @@ namespace CP77.Common.Image
                 else
                 {
                     if (index == 6)
+                    {
                         return 0.0f;
+                    }
+
                     if (index == 7)
+                    {
                         return 1.0f;
+                    }
+
                     index--;
                     return (fred_0 * ((float)5 - index) + fred_1 * index) / 5.0f;
                 }
             }
 
-            private uint GetIndex(int offset)
-            {
-                return (uint)(data >> (3 * offset + 16)) & 0x07;
-            }
+            private uint GetIndex(int offset) => (uint)(data >> (3 * offset + 16)) & 0x07;
 
-            [FieldOffset(0)] private ulong data;
+            [FieldOffset(0)] private readonly ulong data;
 
-            [FieldOffset(0)] private byte red_0;
-            [FieldOffset(1)] private byte red_1;
+            [FieldOffset(0)] private readonly byte red_0;
+            [FieldOffset(1)] private readonly byte red_1;
 
-            [FieldOffset(2)] private byte index0;
-            [FieldOffset(3)] private byte index1;
-            [FieldOffset(4)] private byte index2;
-            [FieldOffset(5)] private byte index3;
-            [FieldOffset(6)] private byte index4;
-            [FieldOffset(7)] private byte index5;
+            [FieldOffset(2)] private readonly byte index0;
+            [FieldOffset(3)] private readonly byte index1;
+            [FieldOffset(4)] private readonly byte index2;
+            [FieldOffset(5)] private readonly byte index3;
+            [FieldOffset(6)] private readonly byte index4;
+            [FieldOffset(7)] private readonly byte index5;
         }
 
         #endregion Structs

@@ -1,6 +1,5 @@
 using System;
 using System.Runtime.InteropServices;
-using WolvenKit.RED4.Archive.IO;
 using WolvenKit.RED4.Types;
 
 namespace WolvenKit.RED4.Archive.CR2W

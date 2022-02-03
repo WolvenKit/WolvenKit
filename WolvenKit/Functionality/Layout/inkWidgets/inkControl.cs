@@ -1,17 +1,14 @@
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 using WolvenKit.RED4.Types;
 using WolvenKit.Views.Documents;
-using Rect = System.Windows.Rect;
 using Point = System.Windows.Point;
-using System.Globalization;
+using Rect = System.Windows.Rect;
 
 namespace WolvenKit.Functionality.Layout.inkWidgets
 {
@@ -32,7 +29,7 @@ namespace WolvenKit.Functionality.Layout.inkWidgets
 
         public Dictionary<string, string> PropertyBindings = new();
 
-        private List<string> _stateStack = new();
+        private readonly List<string> _stateStack = new();
 
         public string LocalState => _stateStack.FirstOrDefault(defaultValue: null);
 
@@ -48,15 +45,19 @@ namespace WolvenKit.Functionality.Layout.inkWidgets
                     SetCurrentValue(OpacityProperty, (double)opacity);
                 }
                 if (!PropertyBindings.ContainsKey("tintColor"))
+                {
                     goto NoOverride;
+                }
 
                 var variant = GetProperty(PropertyBindings["tintColor"]);
 
                 if (variant?.Value is HDRColor color)
+                {
                     return ToColor(color);
+                }
 
-                NoOverride:
-                return ToColor(Widget?.TintColor ?? new HDRColor() { Alpha = 1, Blue = 1, Green = 1, Red = 1});
+            NoOverride:
+                return ToColor(Widget?.TintColor ?? new HDRColor() { Alpha = 1, Blue = 1, Green = 1, Red = 1 });
             }
         }
 
@@ -66,7 +67,7 @@ namespace WolvenKit.Functionality.Layout.inkWidgets
 
         public string WidgetPath => Widget?.GetPath() ?? "";
 
-        DrawingGroup backingStore = new DrawingGroup();
+        private readonly DrawingGroup backingStore = new DrawingGroup();
 
         public RotateTransform Rotation { get; set; } = new();
 
@@ -92,11 +93,7 @@ namespace WolvenKit.Functionality.Layout.inkWidgets
         public static readonly DependencyProperty MarginProperty = DependencyProperty.Register(nameof(Margin), typeof(Thickness), typeof(inkControl),
             new FrameworkPropertyMetadata(new Thickness(), FrameworkPropertyMetadataOptions.AffectsMeasure, OnMarginChanged));
 
-        private static void OnMarginChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
-        {
-            ((inkControl)d).InvalidateMeasure();
-            //((inkControl)d).Render();
-        }
+        private static void OnMarginChanged(DependencyObject d, DependencyPropertyChangedEventArgs e) => ((inkControl)d).InvalidateMeasure();//((inkControl)d).Render();
 
         public Thickness Margin
         {
@@ -110,11 +107,7 @@ namespace WolvenKit.Functionality.Layout.inkWidgets
         public static readonly DependencyProperty WidthProperty = DependencyProperty.Register(nameof(Width), typeof(double), typeof(inkControl),
             new FrameworkPropertyMetadata(0D, FrameworkPropertyMetadataOptions.AffectsMeasure, OnWidthChanged));
 
-        private static void OnWidthChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
-        {
-            ((inkControl)d).InvalidateMeasure();
-            //((inkControl)d).Render();
-        }
+        private static void OnWidthChanged(DependencyObject d, DependencyPropertyChangedEventArgs e) => ((inkControl)d).InvalidateMeasure();//((inkControl)d).Render();
 
         public double Width
         {
@@ -128,11 +121,7 @@ namespace WolvenKit.Functionality.Layout.inkWidgets
         public static readonly DependencyProperty HeightProperty = DependencyProperty.Register(nameof(Height), typeof(double), typeof(inkControl),
             new FrameworkPropertyMetadata(0D, FrameworkPropertyMetadataOptions.AffectsMeasure, OnHeightChanged));
 
-        private static void OnHeightChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
-        {
-            ((inkControl)d).InvalidateMeasure();
-            //((inkControl)d).Render();
-        }
+        private static void OnHeightChanged(DependencyObject d, DependencyPropertyChangedEventArgs e) => ((inkControl)d).InvalidateMeasure();//((inkControl)d).Render();
 
         public double Height
         {
@@ -145,14 +134,18 @@ namespace WolvenKit.Functionality.Layout.inkWidgets
             get
             {
                 if (!PropertyBindings.ContainsKey("opacity"))
+                {
                     goto NoOverride;
+                }
 
                 var variant = GetProperty(PropertyBindings["opacity"]);
 
                 if (variant?.Value is CFloat opacity)
+                {
                     return opacity;
+                }
 
-                NoOverride:
+            NoOverride:
                 return -1;
             }
         }
@@ -184,11 +177,13 @@ namespace WolvenKit.Functionality.Layout.inkWidgets
 
             if (Widget.PropertyManager != null && Widget.PropertyManager.GetValue() is inkPropertyManager ipm)
             {
-                foreach (inkPropertyBinding ipb in ipm.Bindings)
+                foreach (var ipb in ipm.Bindings)
                 {
                     PropertyBindings.Add(ipb.PropertyName, ipb.StylePath);
                     if (!WidgetView.ViewModel.Bindings.Contains(ipb.PropertyName))
+                    {
                         WidgetView.ViewModel.Bindings.Add(ipb.PropertyName);
+                    }
                 }
             }
 
@@ -198,12 +193,16 @@ namespace WolvenKit.Functionality.Layout.inkWidgets
                 {
                     var effect = (inkIEffect)handle.GetValue();
                     if (!WidgetView.ViewModel.inkEffects.Contains(effect))
+                    {
                         WidgetView.ViewModel.inkEffects.Add(effect);
+                    }
 
                     if (effect is inkMaskEffect me)
                     {
                         if (me.IsEnabled)
+                        {
                             ClipToBounds = true;
+                        }
                     }
                 }
             }
@@ -267,25 +266,13 @@ namespace WolvenKit.Functionality.Layout.inkWidgets
         }
 
 
-        public void MouseEnterCore(object sender, MouseEventArgs e)
-        {
-            Render();
-        }
+        public void MouseEnterCore(object sender, MouseEventArgs e) => Render();
 
-        public void MouseLeaveCore(object sender, MouseEventArgs e)
-        {
-            Render();
-        }
+        public void MouseLeaveCore(object sender, MouseEventArgs e) => Render();
 
-        public void MouseDownCore(object sender, MouseButtonEventArgs e)
-        {
-            Render();
-        }
+        public void MouseDownCore(object sender, MouseButtonEventArgs e) => Render();
 
-        public void MouseUpCore(object sender, MouseButtonEventArgs e)
-        {
-            Render();
-        }
+        public void MouseUpCore(object sender, MouseButtonEventArgs e) => Render();
 
 
         public virtual void MouseEnterControl(object sender, MouseEventArgs e)
@@ -304,9 +291,14 @@ namespace WolvenKit.Functionality.Layout.inkWidgets
         {
             _stateStack.Insert(0, "Press");
             if (_stateStack.Contains("Active"))
+            {
                 _stateStack.Remove("Active");
+            }
             else
+            {
                 _stateStack.Insert(0, "Active");
+            }
+
             Render();
         }
 
@@ -319,16 +311,24 @@ namespace WolvenKit.Functionality.Layout.inkWidgets
         public CVariant GetProperty(string propertyPath)
         {
             if (WidgetView == null)
+            {
                 return null;
+            }
 
             if (WidgetView.ViewModel == null)
+            {
                 return null;
+            }
 
             if (WidgetView.ViewModel.CurrentStyleState == null)
+            {
                 return null;
+            }
 
             if (WidgetView.ViewModel.CurrentTheme == null)
+            {
                 return null;
+            }
 
             CVariant variant;
             foreach (var state in _stateStack)
@@ -336,15 +336,19 @@ namespace WolvenKit.Functionality.Layout.inkWidgets
                 variant = (CVariant)Application.Current.TryFindResource("CVariant/" + WidgetView.ViewModel.CurrentTheme + "/" + propertyPath + "#" + state);
 
                 if (variant != null)
+                {
                     goto ValidVariant;
+                }
             }
 
             variant = (CVariant)Application.Current.TryFindResource("CVariant/" + WidgetView.ViewModel.CurrentTheme + "/" + propertyPath + "#" + WidgetView.ViewModel.CurrentStyleState);
 
             if (variant == null)
+            {
                 return null;
+            }
 
-            ValidVariant:
+        ValidVariant:
 
             if (variant.Value is inkStylePropertyReference ispr)
             {
@@ -376,7 +380,7 @@ namespace WolvenKit.Functionality.Layout.inkWidgets
             {
                 var lineThickness = 0.1;
                 drawOpacity = IsMouseOver ? 1.0 : 0.1;
-                byte debugOpacity = (byte)(IsMouseOver ? 255 : 100);
+                var debugOpacity = (byte)(IsMouseOver ? 255 : 100);
 
                 dc.DrawText(new FormattedText(Name, CultureInfo.CurrentCulture, FlowDirection.LeftToRight, new Typeface("Arial"), 4D, new SolidColorBrush(Color.FromArgb(debugOpacity, 255, 255, 255)), 96D), new Point(0, -6));
                 dc.DrawRectangle(new SolidColorBrush(Color.FromArgb(10, 0, 0, 0)), new Pen(new SolidColorBrush(Color.FromArgb(debugOpacity, 0, 255, 255)), lineThickness), new Rect(0, 0, RenderSize.Width, RenderSize.Height));
@@ -462,18 +466,21 @@ namespace WolvenKit.Functionality.Layout.inkWidgets
 
         public virtual void RenderRecursive() => Render();
 
-        protected override Size MeasureCore(Size availableSize)
-        {
-            return MeasureForDimensions(new Size(Width, Height), availableSize);
-        }
+        protected override Size MeasureCore(Size availableSize) => MeasureForDimensions(new Size(Width, Height), availableSize);
 
         protected Size MeasureForDimensions(Size dimensions, Size availableSize)
         {
             var size = dimensions;
-            if (!Double.IsPositiveInfinity(availableSize.Width) && FillH(this))
+            if (!double.IsPositiveInfinity(availableSize.Width) && FillH(this))
+            {
                 size.Width = availableSize.Width;
-            if (!Double.IsPositiveInfinity(availableSize.Height) && FillV(this))
+            }
+
+            if (!double.IsPositiveInfinity(availableSize.Height) && FillV(this))
+            {
                 size.Height = availableSize.Height;
+            }
+
             return size;
         }
 
@@ -489,10 +496,7 @@ namespace WolvenKit.Functionality.Layout.inkWidgets
 
         // conversion functions
 
-        public static Point ToPoint(Vector2 v)
-        {
-            return new Point(v.X, v.Y);
-        }
+        public static Point ToPoint(Vector2 v) => new Point(v.X, v.Y);
 
         // i'm pretty sure this isn't the right way to convert these
         public static Color ToColor(HDRColor hdr, float alpha = 1)
@@ -513,10 +517,7 @@ namespace WolvenKit.Functionality.Layout.inkWidgets
             return Color.FromArgb((byte)(hdr.Alpha * 255 * alpha), (byte)(r * 255), (byte)(g * 255), (byte)(b * 255));
         }
 
-        public static Brush ToBrush(HDRColor hdr)
-        {
-            return new SolidColorBrush(ToColor(hdr));
-        }
+        public static Brush ToBrush(HDRColor hdr) => new SolidColorBrush(ToColor(hdr));
 
         public static System.Drawing.Color ToDrawingColor(HDRColor hdr, float alpha = 1)
         {
@@ -533,15 +534,9 @@ namespace WolvenKit.Functionality.Layout.inkWidgets
             return System.Drawing.Color.FromArgb((byte)(hdr.Alpha * 255 * alpha), (byte)(r * 255), (byte)(g * 255), (byte)(b * 255));
         }
 
-        public static System.Drawing.Brush ToDrawingBrush(HDRColor hdr)
-        {
-            return new System.Drawing.SolidBrush(ToDrawingColor(hdr));
-        }
+        public static System.Drawing.Brush ToDrawingBrush(HDRColor hdr) => new System.Drawing.SolidBrush(ToDrawingColor(hdr));
 
-        public static Thickness AddToThickness(inkMargin m, Thickness t)
-        {
-            return new Thickness(m.Left + t.Left, m.Top + t.Top, m.Right + t.Right, m.Bottom + t.Bottom);
-        }
+        public static Thickness AddToThickness(inkMargin m, Thickness t) => new Thickness(m.Left + t.Left, m.Top + t.Top, m.Right + t.Right, m.Bottom + t.Bottom);
 
         public static HorizontalAlignment ToHorizontalAlignment(CEnum<Enums.inkEHorizontalAlign> hAlign)
         {
@@ -577,15 +572,9 @@ namespace WolvenKit.Functionality.Layout.inkWidgets
             }
         }
 
-        public static Thickness ToThickness(inkMargin value)
-        {
-            return new Thickness(value.Left, value.Top, value.Right, value.Bottom);
-        }
+        public static Thickness ToThickness(inkMargin value) => new Thickness(value.Left, value.Top, value.Right, value.Bottom);
 
-        public static Thickness ToThickness(RectF value)
-        {
-            return new Thickness(value.Left, value.Top, value.Right, value.Bottom);
-        }
+        public static Thickness ToThickness(RectF value) => new Thickness(value.Left, value.Top, value.Right, value.Bottom);
 
         public static bool FillH(inkControl control)
         {
@@ -915,14 +904,8 @@ namespace WolvenKit.Functionality.Layout.inkWidgets
             }
         }
 
-        public static bool HAlignToFill(inkControl control)
-        {
-            return control.Widget.Layout.HAlign.Value == Enums.inkEHorizontalAlign.Fill;
-        }
+        public static bool HAlignToFill(inkControl control) => control.Widget.Layout.HAlign.Value == Enums.inkEHorizontalAlign.Fill;
 
-        public static bool VAlignToFill(inkControl control)
-        {
-            return control.Widget.Layout.VAlign.Value == Enums.inkEVerticalAlign.Fill;
-        }
+        public static bool VAlignToFill(inkControl control) => control.Widget.Layout.VAlign.Value == Enums.inkEVerticalAlign.Fill;
     }
 }

@@ -3,14 +3,11 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using WolvenKit.Common.Extensions;
 using WolvenKit.Common.FNV1A;
 using WolvenKit.Common.Model;
 using WolvenKit.Core.Compression;
 using WolvenKit.Core.Exceptions;
 using WolvenKit.Core.Extensions;
-using WolvenKit.Interfaces.Extensions;
-using WolvenKit.RED4.Archive;
 
 namespace WolvenKit.Common.Services
 {
@@ -27,7 +24,7 @@ namespace WolvenKit.Common.Services
         private readonly Dictionary<ulong, SAsciiString> _additionalhashes = new();
         private readonly Dictionary<ulong, SAsciiString> _userHashes = new();
 
-        private List<ulong> _missing = new();
+        private readonly List<ulong> _missing = new();
 
         #endregion Fields
 

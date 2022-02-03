@@ -7,8 +7,6 @@ using DynamicData;
 using ReactiveUI;
 using Serilog.Events;
 using Splat;
-using WolvenKit.Common;
-using WolvenKit.Common.Services;
 using WolvenKit.ViewModels.Tools;
 
 namespace WolvenKit.Views.Tools

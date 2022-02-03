@@ -15,8 +15,8 @@ namespace WolvenKit.Common.Model
 
         public RedRelativePath(RedRelativePath redRelative)
         {
-            this.BaseDirectory = redRelative.BaseDirectory;
-            this.RelativePath = redRelative.RelativePath;
+            BaseDirectory = redRelative.BaseDirectory;
+            RelativePath = redRelative.RelativePath;
         }
 
         public string FullPath => Path.Combine(BaseDirectory.FullName, RelativePath);

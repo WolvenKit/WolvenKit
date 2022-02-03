@@ -357,10 +357,7 @@ public class BufferConverterFactory : JsonConverterFactory
         _serializationDeferredDataBufferConverter = new(bufferResolver);
     }
 
-    public override bool CanConvert(Type typeToConvert)
-    {
-        return typeof(IRedBufferWrapper).IsAssignableFrom(typeToConvert);
-    }
+    public override bool CanConvert(Type typeToConvert) => typeof(IRedBufferWrapper).IsAssignableFrom(typeToConvert);
 
     public override JsonConverter CreateConverter(Type typeToConvert, JsonSerializerOptions options)
     {
@@ -946,10 +943,7 @@ public class CLegacySingleChannelCurveConverterFactory : JsonConverterFactory
 {
     private readonly CLegacySingleChannelCurveConverter _cLegacySingleChannelCurveConverter = new();
 
-    public override bool CanConvert(Type typeToConvert)
-    {
-        return typeof(IRedLegacySingleChannelCurve).IsAssignableFrom(typeToConvert) || typeof(IRedCurvePoint).IsAssignableFrom(typeToConvert);
-    }
+    public override bool CanConvert(Type typeToConvert) => typeof(IRedLegacySingleChannelCurve).IsAssignableFrom(typeToConvert) || typeof(IRedCurvePoint).IsAssignableFrom(typeToConvert);
 
     public override JsonConverter CreateConverter(Type typeToConvert, JsonSerializerOptions options)
     {
@@ -1177,10 +1171,7 @@ public class MultiChannelCurveConverterFactory : JsonConverterFactory
 {
     private readonly MultiChannelCurveConverter _multiChannelCurveConverter = new();
 
-    public override bool CanConvert(Type typeToConvert)
-    {
-        return typeof(IRedMultiChannelCurve).IsAssignableFrom(typeToConvert);
-    }
+    public override bool CanConvert(Type typeToConvert) => typeof(IRedMultiChannelCurve).IsAssignableFrom(typeToConvert);
 
     public override JsonConverter CreateConverter(Type typeToConvert, JsonSerializerOptions options)
     {
@@ -1464,7 +1455,7 @@ public class CKeyValuePairConverter : JsonConverter<CKeyValuePair>, ICustomRedCo
         {
             result = JsonSerializer.Deserialize(ref reader, valType, options);
         }
-        
+
         if (result is not IRedType val)
         {
             throw new JsonException();
@@ -1503,10 +1494,7 @@ public class ArrayConverterFactory : JsonConverterFactory
     private readonly CArrayFixedSizeConverter _cArrayFixedSizeConverter = new();
     private readonly CStaticConverter _cStaticConverter = new();
 
-    public override bool CanConvert(Type typeToConvert)
-    {
-        return typeof(IRedArray).IsAssignableFrom(typeToConvert);
-    }
+    public override bool CanConvert(Type typeToConvert) => typeof(IRedArray).IsAssignableFrom(typeToConvert);
 
     public override JsonConverter CreateConverter(Type typeToConvert, JsonSerializerOptions options)
     {
@@ -1838,10 +1826,7 @@ public class EnumConverterFactory : JsonConverterFactory
     private readonly CBitFieldConverter _cBitFieldConverter = new();
     private readonly CEnumConverter _cEnumConverter = new();
 
-    public override bool CanConvert(Type typeToConvert)
-    {
-        return typeof(IRedBitField).IsAssignableFrom(typeToConvert) || typeof(IRedEnum).IsAssignableFrom(typeToConvert);
-    }
+    public override bool CanConvert(Type typeToConvert) => typeof(IRedBitField).IsAssignableFrom(typeToConvert) || typeof(IRedEnum).IsAssignableFrom(typeToConvert);
 
     public override JsonConverter CreateConverter(Type typeToConvert, JsonSerializerOptions options)
     {
@@ -1880,10 +1865,7 @@ public class CBitFieldConverter : JsonConverter<IRedBitField>, ICustomRedConvert
         return CBitField.Parse(enumType, str);
     }
 
-    public override void Write(Utf8JsonWriter writer, IRedBitField value, JsonSerializerOptions options)
-    {
-        writer.WriteStringValue(value.ToBitFieldString());
-    }
+    public override void Write(Utf8JsonWriter writer, IRedBitField value, JsonSerializerOptions options) => writer.WriteStringValue(value.ToBitFieldString());
 }
 
 public class CEnumConverter : JsonConverter<IRedEnum>, ICustomRedConverter
@@ -1907,10 +1889,7 @@ public class CEnumConverter : JsonConverter<IRedEnum>, ICustomRedConverter
         return CEnum.Parse(enumType, str);
     }
 
-    public override void Write(Utf8JsonWriter writer, IRedEnum value, JsonSerializerOptions options)
-    {
-        writer.WriteStringValue(value.ToEnumString());
-    }
+    public override void Write(Utf8JsonWriter writer, IRedEnum value, JsonSerializerOptions options) => writer.WriteStringValue(value.ToEnumString());
 }
 
 #endregion EnumConverter
@@ -1926,10 +1905,7 @@ public class HandleConverterFactory : JsonConverterFactory
         _handleConverter = new(referenceResolver);
     }
 
-    public override bool CanConvert(Type typeToConvert)
-    {
-        return typeof(IRedBaseHandle).IsAssignableFrom(typeToConvert);
-    }
+    public override bool CanConvert(Type typeToConvert) => typeof(IRedBaseHandle).IsAssignableFrom(typeToConvert);
 
     public override JsonConverter CreateConverter(Type typeToConvert, JsonSerializerOptions options)
     {
@@ -2097,10 +2073,7 @@ public class ResourceConverterFactory : JsonConverterFactory
 {
     private readonly ResourceReferenceConverter _resourceReferenceConverter = new();
 
-    public override bool CanConvert(Type typeToConvert)
-    {
-        return typeof(IRedResourceReference).IsAssignableFrom(typeToConvert) || typeof(IRedResourceAsyncReference).IsAssignableFrom(typeToConvert);
-    }
+    public override bool CanConvert(Type typeToConvert) => typeof(IRedResourceReference).IsAssignableFrom(typeToConvert) || typeof(IRedResourceAsyncReference).IsAssignableFrom(typeToConvert);
 
     public override JsonConverter CreateConverter(Type typeToConvert, JsonSerializerOptions options)
     {
@@ -2220,10 +2193,7 @@ public class ClassConverterFactory : JsonConverterFactory
         _redBaseClassConverter = new(classResolver);
     }
 
-    public override bool CanConvert(Type typeToConvert)
-    {
-        return typeToConvert.IsSubclassOf(typeof(RedBaseClass)) || typeToConvert == typeof(RedBaseClass);
-    }
+    public override bool CanConvert(Type typeToConvert) => typeToConvert.IsSubclassOf(typeof(RedBaseClass)) || typeToConvert == typeof(RedBaseClass);
 
     public override JsonConverter CreateConverter(Type typeToConvert, JsonSerializerOptions options)
     {
@@ -2374,10 +2344,7 @@ public class RedClassConverter : JsonConverter<RedBaseClass>, ICustomRedConverte
         throw new JsonException();
     }
 
-    public override RedBaseClass? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
-    {
-        return CustomRead(ref reader, typeToConvert, options, null);
-    }
+    public override RedBaseClass? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options) => CustomRead(ref reader, typeToConvert, options, null);
 
     public override void Write(Utf8JsonWriter writer, RedBaseClass value, JsonSerializerOptions options)
     {
@@ -2409,10 +2376,7 @@ public class Red4FileConverterFactory : JsonConverterFactory
 {
     private readonly Package04Converter _package04Converter = new();
 
-    public override bool CanConvert(Type typeToConvert)
-    {
-        return typeToConvert.IsSubclassOf(typeof(Red4File));
-    }
+    public override bool CanConvert(Type typeToConvert) => typeToConvert.IsSubclassOf(typeof(Red4File));
 
     public override JsonConverter CreateConverter(Type typeToConvert, JsonSerializerOptions options)
     {
@@ -2585,9 +2549,9 @@ public class Package04Converter : JsonConverter<Package04>, ICustomRedConverter
 
 #endregion Red4FileConverter
 
-public class ReferenceResolver<T>  where T : class
+public class ReferenceResolver<T> where T : class
 {
-    private ConcurrentDictionary<int, uint> _threadedReferenceCount = new();
+    private readonly ConcurrentDictionary<int, uint> _threadedReferenceCount = new();
 
     private readonly ConcurrentDictionary<int, Dictionary<string, T>> _threadedReferenceIdToObjectMap = new();
     private readonly ConcurrentDictionary<int, Dictionary<T, string>> _threadedObjectToReferenceIdMap = new();
@@ -2635,10 +2599,7 @@ public class ReferenceResolver<T>  where T : class
         return referenceId;
     }
 
-    public bool HasReference(string referenceId)
-    {
-        return ReferenceIdToObjectMap.ContainsKey(referenceId);
-    }
+    public bool HasReference(string referenceId) => ReferenceIdToObjectMap.ContainsKey(referenceId);
 
     public T ResolveReference(string referenceId)
     {
@@ -2938,7 +2899,10 @@ public class RedFileDtoConverter : JsonConverter<RedFileDto>
                     {
                         var bufferWriter = new ArrayBufferWriter<byte>();
                         using (var writer = new Utf8JsonWriter(bufferWriter))
+                        {
                             chunkList[i].WriteTo(writer);
+                        }
+
                         var subReader = new Utf8JsonReader(bufferWriter.WrittenSpan, reader.CurrentState.Options);
                         subReader.Read();
 

@@ -1,9 +1,6 @@
 using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Windows;
-using System.Windows.Controls;
-using WolvenKit.RED4.CR2W.Reflection;
 using WolvenKit.RED4.Types;
 using UserControl = System.Windows.Controls.UserControl;
 

@@ -1,4 +1,3 @@
-using System;
 using System.Reactive;
 using System.Windows;
 using System.Windows.Controls;
@@ -22,8 +21,8 @@ namespace WolvenKit.Views.Editors
 
         public CColor RedColor
         {
-            get => (CColor)this.GetValue(RedColorProperty);
-            set => this.SetValue(RedColorProperty, value);
+            get => (CColor)GetValue(RedColorProperty);
+            set => SetValue(RedColorProperty, value);
         }
         public static readonly DependencyProperty RedColorProperty = DependencyProperty.Register(
             nameof(RedColor), typeof(CColor), typeof(RedColorEditor), new PropertyMetadata(default(CColor)));

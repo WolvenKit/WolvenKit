@@ -1,9 +1,4 @@
-using System;
-using System.Diagnostics;
 using System.Runtime.InteropServices;
-using System.Runtime.Serialization;
-using WolvenKit.RED4.Archive.IO;
-using WolvenKit.RED4.Types;
 
 namespace WolvenKit.RED4.Archive.CR2W
 {
