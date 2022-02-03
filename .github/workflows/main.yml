@@ -12,7 +12,7 @@ on:
 
 jobs:   
   check-wkit-win:
-    runs-on: windows-2022
+    runs-on: windows-latest
 
     steps:
     - name: checkout
@@ -27,7 +27,7 @@ jobs:
 
 
   check-console-win:
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
 
     steps:
     - name: checkout
