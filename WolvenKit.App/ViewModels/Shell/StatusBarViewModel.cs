@@ -1,9 +1,14 @@
 using System;
+using System.Reactive;
 using System.Reactive.Linq;
+using System.Threading.Tasks;
+using gpm.Installer;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
+using WolvenKit.Common.Services;
 using WolvenKit.Core.Services;
 using WolvenKit.Functionality.Services;
+using WolvenKit.Interaction;
 
 namespace WolvenKit.ViewModels.Shell
 {
@@ -14,7 +19,10 @@ namespace WolvenKit.ViewModels.Shell
         private const string s_noProjectLoaded =
             "NO PROJECT LOADED | Create a New Project or Open an existing Project to get started with WolvenKit";
 
-        private readonly ISettingsManager _settingsManager;
+        public ISettingsManager _settingsManager { get; set; }
+        private readonly ILoggerService _loggerService;
+
+        private readonly AutoInstallerService _autoInstallerService;
         private readonly IProjectManager _projectManager;
         private readonly IProgressService<double> _progressService;
 
@@ -31,15 +39,22 @@ namespace WolvenKit.ViewModels.Shell
         public StatusBarViewModel(
             ISettingsManager settingsManager,
             IProjectManager projectManager,
-            IProgressService<double> progressService
+            ILoggerService loggerService,
+            IProgressService<double> progressService,
+
+            AutoInstallerService autoInstallerService
             )
         {
+            _autoInstallerService = autoInstallerService;
             _settingsManager = settingsManager;
             _projectManager = projectManager;
             _progressService = progressService;
+            _loggerService = loggerService;
 
             IsLoading = false;
             LoadingString = "";
+
+            CheckForUpdatesCommand = ReactiveCommand.CreateFromTask(CheckForUpdates);
 
             _projectManager
                 .WhenAnyValue(
@@ -89,5 +104,33 @@ namespace WolvenKit.ViewModels.Shell
         public object VersionNumber => _settingsManager.GetVersionNumber();
 
         #endregion Properties
+
+        public ReactiveCommand<Unit, Unit> CheckForUpdatesCommand { get; }
+        private async Task CheckForUpdates()
+        {
+            // 1 API call
+            if (!(await _autoInstallerService.CheckForUpdate())
+                .Out(out var release))
+            {
+                _loggerService.Info($"Is update available: {release != null}");
+                return;
+            }
+
+            _loggerService.Success($"Update available: {release.TagName}");
+            _settingsManager.IsUpdateAvailable = true;
+
+            var result = await Interactions.ShowMessageBoxAsync("An update is ready to install for WolvenKit. Exit the app and install it?", "Update available");
+            switch (result)
+            {
+                case WMessageBoxResult.OK:
+                case WMessageBoxResult.Yes:
+                    if (await _autoInstallerService.Update()) // 1 API call
+                    {
+
+                    }
+                    break;
+            }
+        }
+
     }
 }

@@ -20,7 +20,6 @@ namespace WolvenKit.RED4
         /// The length of the uncompressed data
         /// </summary>
         public uint MemSize => (uint)_bytes.Length;
-        public bool IsCompressed => Oodle.IsCompressed(_bytes);
 
         
         /// <summary>
@@ -33,13 +32,8 @@ namespace WolvenKit.RED4
         /// <returns>The compressed byte[]</returns>
         public byte[] GetCompressedBytes()
         {
-            if (!IsCompressed)
-            {
-                Oodle.DecompressBuffer(_bytes, out var result);
-                return result;
-            }
-
-            return _bytes;
+            Oodle.CompressBuffer(_bytes, out var result);
+            return result;
         }
 
         public void SetBytes(byte[] data)

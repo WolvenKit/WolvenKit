@@ -27,6 +27,15 @@ namespace WolvenKit.Views.Shell
                         x => x.IsIndeterminate,
                         x => x.StatusBarProgressBar.IsIndeterminate)
                     .DisposeWith(disposables);
+
+                this.OneWayBind(ViewModel,
+                        viewModel => viewModel._settingsManager.IsUpdateAvailable,
+                        view => view.StatusBarItemUpdate.IsEnabled)
+                    .DisposeWith(disposables);
+                this.BindCommand(ViewModel,
+                        viewModel => viewModel.CheckForUpdatesCommand,
+                        view => view.UpdateButton)
+                    .DisposeWith(disposables);
             });
 
         }

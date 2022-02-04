@@ -4,7 +4,6 @@ namespace WolvenKit.RED4.Types
     {
         public uint Flags { get; }
         public uint MemSize { get; }
-        public bool IsCompressed { get; }
 
         public IParseableBuffer Data { get; set; }
     }

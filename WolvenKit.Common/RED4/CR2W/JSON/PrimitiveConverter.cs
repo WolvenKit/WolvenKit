@@ -635,7 +635,6 @@ public class SerializationDeferredDataBufferConverter : JsonConverter<Serializat
                     var converter = options.GetConverter(typeof(Package04));
                     if (converter is ICustomRedConverter conv)
                     {
-                        reader.Read();
                         val.Data = (IParseableBuffer?)conv.ReadRedType(ref reader, typeof(Package04), options);
                     }
                     else
@@ -2497,7 +2496,6 @@ public class Package04Converter : JsonConverter<Package04>, ICustomRedConverter
                         var converter = options.GetConverter(typeof(RedBaseClass));
                         if (converter is ICustomRedConverter conv)
                         {
-                            reader.Read();
                             result.Chunks.Add((RedBaseClass?)conv.ReadRedType(ref reader, typeof(RedBaseClass), options));
                         }
                         else

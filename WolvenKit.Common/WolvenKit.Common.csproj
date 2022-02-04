@@ -5,7 +5,6 @@
     <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <Description>Core functionality for the WolvenKit Mod Editor.</Description>
-    <Authors>Hambalkó Bence, Moritz Baron</Authors>
     <Company>WolvenKit</Company>
     <PackageProjectUrl>https://github.com/WolvenKit/WolvenKit</PackageProjectUrl>
     <RepositoryUrl>https://github.com/WolvenKit/WolvenKit</RepositoryUrl>

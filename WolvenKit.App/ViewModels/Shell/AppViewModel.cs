@@ -167,23 +167,20 @@ namespace WolvenKit.ViewModels.Shell
                         return;
                     }
 
+                    _settingsManager.IsUpdateAvailable = true;
                     _loggerService.Success($"Update available: {release.TagName}");
-                    //if (!await _autoInstallerService.DownloadUpdate(release))
+
+                    //var result = await Interactions.ShowMessageBoxAsync("An update is available for WolvenKit. Exit the app and install it?", "Update available");
+                    //switch (result)
                     //{
-                    //    return;
+                    //    case WMessageBoxResult.OK:
+                    //    case WMessageBoxResult.Yes:
+                    //        if (await _autoInstallerService.Update()) // 1 API call
+                    //        {
+
+                    //        }
+                    //        break;
                     //}
-
-                    var result = await Interactions.ShowMessageBoxAsync("An update is available for WolvenKit. Exit the app and install it?", "Update available");
-                    switch (result)
-                    {
-                        case WMessageBoxResult.OK:
-                        case WMessageBoxResult.Yes:
-                            if (await _autoInstallerService.Update()) // 1 API call
-                            {
-
-                            }
-                            break;
-                    }
                 });
         }
 

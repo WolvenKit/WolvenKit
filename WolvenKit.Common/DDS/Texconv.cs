@@ -2,6 +2,7 @@ using System;
 using System.Buffers;
 using System.IO;
 using System.Runtime.InteropServices;
+using WolvenKit.Common.Extensions;
 using WolvenKit.Common.Model.Arguments;
 using static WolvenKit.Common.DDS.TexconvNative;
 
@@ -121,7 +122,7 @@ namespace WolvenKit.Common.DDS
                     vflip = xbm.Flip;
                     break;
                 case MlmaskExportArgs ml:
-                    uext = ml.UncookExtension;
+                    uext = ml.UncookExtension.FromMlMaskExtension();
                     break;
             }
 
