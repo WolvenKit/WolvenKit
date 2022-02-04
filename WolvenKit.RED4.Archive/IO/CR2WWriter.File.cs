@@ -293,7 +293,7 @@ namespace WolvenKit.RED4.Archive.IO
 
         #region Buffers
 
-        private CR2WBufferInfo WriteBuffer(BinaryWriter writer, RedBuffer buffer)
+        private void WriteBufferData(RedBuffer buffer)
         {
             if (buffer.Data is Package04 p4)
             {
@@ -313,7 +313,10 @@ namespace WolvenKit.RED4.Archive.IO
 
                 buffer.SetBytes(newData);
             }
+        }
 
+        private CR2WBufferInfo WriteBuffer(BinaryWriter writer, RedBuffer buffer)
+        {
             var result = new CR2WBufferInfo
             {
                 flags = buffer.Flags,
@@ -487,6 +490,11 @@ namespace WolvenKit.RED4.Archive.IO
 
                     chunkCounter++;
                 }
+            }
+
+            foreach (var kvp in file.BufferRef)
+            {
+                WriteBufferData(kvp.Value);
             }
 
             var (stringDict, importDict) = file.GenerateStringDictionary();
