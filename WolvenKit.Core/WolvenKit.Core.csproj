@@ -4,7 +4,6 @@
     <TargetFramework>net6.0</TargetFramework>
       <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
       <PackageId>WolvenKit.Core</PackageId>
-      <Authors>Hambalkó Bence, Moritz Baron</Authors>
       <Company>WolvenKit</Company>
       <Product>WolvenKit.Core</Product>
       <Description>Core file formats for the WolvenKit Mod Editor.</Description>
@@ -35,6 +34,7 @@
     
   <ItemGroup>
     <None Remove="lib\kraken.dll" />
+    <None Remove="lib\libooz.so" />
   </ItemGroup>
 
   <ItemGroup>
@@ -45,6 +45,9 @@
     </Content>
     <None Remove="lib\libkraken.dylib" />
     <Content Include="lib\libkraken.dylib">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="lib\libooz.so">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
