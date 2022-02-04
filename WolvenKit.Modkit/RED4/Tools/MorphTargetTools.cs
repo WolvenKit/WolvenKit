@@ -58,7 +58,7 @@ namespace WolvenKit.Modkit.RED4
 
             if (blob.DiffsBuffer is not null)
             {
-                mappingbuffer = new MemoryStream(blob.DiffsBuffer.Buffer.GetBytes());
+                diffsbuffer = new MemoryStream(blob.DiffsBuffer.Buffer.GetBytes());
 
                 //targetStream.Seek(cr2w.Buffers[blob.DiffsBuffer.Buffer - 1].Offset, SeekOrigin.Begin);
                 //targetStream.DecompressAndCopySegment(diffsbuffer, cr2w.Buffers[blob.DiffsBuffer.Buffer - 1].DiskSize, cr2w.Buffers[blob.DiffsBuffer.Buffer - 1].MemSize);
@@ -74,7 +74,7 @@ namespace WolvenKit.Modkit.RED4
 
             if (blob.TextureDiffsBuffer is not null)
             {
-                mappingbuffer = new MemoryStream(blob.TextureDiffsBuffer.Buffer.GetBytes());
+                texbuffer = new MemoryStream(blob.TextureDiffsBuffer.Buffer.GetBytes());
 
                 //targetStream.Seek(cr2w.Buffers[blob.TextureDiffsBuffer.Buffer - 1].Offset, SeekOrigin.Begin);
                 //targetStream.DecompressAndCopySegment(texbuffer, cr2w.Buffers[blob.TextureDiffsBuffer.Buffer - 1].DiskSize, cr2w.Buffers[blob.TextureDiffsBuffer.Buffer - 1].MemSize);
