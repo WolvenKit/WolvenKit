@@ -41,6 +41,7 @@ namespace WolvenKit.Functionality.Services
     {
 
         public EUpdateChannel UpdateChannel { get; set; }
+        public bool IsUpdateAvailable { get; set; }
 
         bool ShowGuidedTour { get; set; }
 

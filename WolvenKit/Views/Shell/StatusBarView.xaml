@@ -17,14 +17,14 @@
 
 
     <Grid MouseLeftButtonDown="StatusBar_MouseLeftButtonDown">
-        <Grid.Resources>
+        <!--<Grid.Resources>
             <ResourceDictionary>
                 <ResourceDictionary.MergedDictionaries>
                     <hc:ThemeResources RequestedTheme="Dark" />
                     <hc:Theme />
                 </ResourceDictionary.MergedDictionaries>
             </ResourceDictionary>
-        </Grid.Resources>
+        </Grid.Resources>-->
         <Grid.RowDefinitions>
             <RowDefinition Height="1" />
             <RowDefinition Height="25" />
@@ -47,7 +47,7 @@
                 ToolTip="Current Project and Version Number"
                 Value="Displays Current Project and Version Number">
                 <StackPanel Orientation="Horizontal">
-                    <TextBlock Margin="0,0,-10,4">
+                    <TextBlock Margin="0,0,-10,0">
                         <TextBlock.Text>
                             <MultiBinding StringFormat="{}{0} | WolvenKit {1}">
                                 <Binding Path="CurrentProject" />
@@ -57,6 +57,20 @@
                     </TextBlock>
                 </StackPanel>
             </Fluent:StatusBarItem>
+
+            <Fluent:StatusBarItem  HorizontalAlignment="Right"
+                                   x:Name="StatusBarItemUpdate" ToolTip="Update available">
+               
+                <Button Margin="20,0,0,0" x:Name="UpdateButton">
+                    <Button.Content>
+                        <iconPacks:PackIconCodicons
+                            Foreground="DarkOrange"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Stretch"
+                            Kind="ArrowUp" />
+                    </Button.Content>
+                </Button>
+            </Fluent:StatusBarItem >
 
         </Fluent:StatusBar>
     </Grid>

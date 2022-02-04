@@ -84,6 +84,10 @@ namespace WolvenKit.Functionality.Services
         [Browsable(false)]
         public bool CheckForUpdates { get; set; }
 
+        [Reactive]
+        [Browsable(false)]
+        public bool IsUpdateAvailable { get; set; }
+
         #endregion
 
         #region red4
