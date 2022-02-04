@@ -154,6 +154,11 @@ namespace WolvenKit.Modkit.RED4
                     {
                         return false;
                     }
+
+                    {
+                        masks.Add($"{subdir.Name}/{i}.png");
+                    }
+
                 }
             }
 

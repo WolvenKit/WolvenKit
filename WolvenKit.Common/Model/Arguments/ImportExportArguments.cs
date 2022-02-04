@@ -379,7 +379,7 @@ namespace WolvenKit.Common.Model.Arguments
         /// </summary>
         [Category("Export Type")]
         [Display(Name = "MLmask Export Type")]
-        public EUncookExtension UncookExtension { get; set; }
+        public EUncookExtension UncookExtension { get; set; } = EUncookExtension.png;
 
         /// <summary>
         /// String Override to display info in datagrid.
