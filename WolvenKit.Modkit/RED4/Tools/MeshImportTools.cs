@@ -870,7 +870,7 @@ namespace WolvenKit.Modkit.RED4
                 {
                     chunk.ChunkVertices.VertexLayout.Elements.Add(RedTypeManager.Create<GpuWrapApiVertexPackingPackingElement>());
                     // fishy
-                    //chunk.ChunkVertices.VertexLayout.Elements[elementCount].StreamType = new Enums.GpuWrapApiVertexPackingEStreamType.;
+                    chunk.ChunkVertices.VertexLayout.Elements[elementCount].StreamType = Enums.GpuWrapApiVertexPackingEStreamType.ST_PerInstance;
                     chunk.ChunkVertices.VertexLayout.Elements[elementCount].StreamIndex = Convert.ToByte(7);
                     chunk.ChunkVertices.VertexLayout.Elements[elementCount].UsageIndex = Convert.ToByte(e);
                     chunk.ChunkVertices.VertexLayout.Elements[elementCount].Usage = Enums.GpuWrapApiVertexPackingePackingUsage.PS_InstanceTransform;
@@ -932,7 +932,6 @@ namespace WolvenKit.Modkit.RED4
             blob.Header.VertexBufferSize = info.vertBufferSize;
             blob.Header.IndexBufferSize = info.indexBufferSize;
             blob.Header.IndexBufferOffset = info.indexBufferOffset;
-
 
             blob.RenderBuffer.Buffer.SetBytes(buffer.ToArray());
 
