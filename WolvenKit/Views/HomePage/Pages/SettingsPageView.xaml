@@ -9,7 +9,6 @@
     xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
     xmlns:sp="clr-namespace:WolvenKit.Views.HomePage.Pages"
     xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
-    xmlns:propertygrid="clr-namespace:Syncfusion.Windows.PropertyGrid;assembly=Syncfusion.PropertyGrid.WPF"
     xmlns:viewmodels="clr-namespace:WolvenKit.ViewModels">
    
     <Grid MinWidth="300" MinHeight="300">

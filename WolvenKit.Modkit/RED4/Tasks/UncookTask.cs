@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using WolvenKit.Common;
+using WolvenKit.Common.Extensions;
 using WolvenKit.Common.Model.Arguments;
 using WolvenKit.Common.Services;
 using WolvenKit.RED4.CR2W.Archive;
@@ -79,7 +80,7 @@ namespace CP77Tools.Tasks
             if (uext != null)
             {
                 exportArgs.Get<XbmExportArgs>().UncookExtension = uext.Value;
-                exportArgs.Get<MlmaskExportArgs>().UncookExtension = uext.Value;
+                exportArgs.Get<MlmaskExportArgs>().UncookExtension = uext.Value.ToMlmaskUncookExtension();
             }
 
             var archiveDepot = exportArgs.Get<MeshExportArgs>().ArchiveDepot;

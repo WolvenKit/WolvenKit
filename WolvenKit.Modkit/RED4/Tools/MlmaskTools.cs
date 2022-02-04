@@ -111,7 +111,7 @@ namespace WolvenKit.Modkit.RED4
 
 
                 var newpath = Path.Combine(subdir.FullName, $"{i}.dds");
-                if (args.UncookExtension == EUncookExtension.dds)
+                if (args.UncookExtension == EMlmaskUncookExtension.dds)
                 {
                     using var ddsStream = new FileStream($"{newpath}", FileMode.Create, FileAccess.Write);
                     ms.Seek(0, SeekOrigin.Begin);

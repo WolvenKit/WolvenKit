@@ -6,6 +6,7 @@ using System.Text.Json;
 using CP77.CR2W;
 using WolvenKit.Common;
 using WolvenKit.Common.Conversion;
+using WolvenKit.Common.Extensions;
 using WolvenKit.Common.FNV1A;
 using WolvenKit.Common.Model.Arguments;
 using WolvenKit.Modkit.RED4.GeneralStructs;
@@ -302,7 +303,7 @@ namespace WolvenKit.Modkit.RED4
             var exportArgs =
                 new GlobalExportArgs().Register(
                     new XbmExportArgs() { UncookExtension = eUncookExtension },
-                    new MlmaskExportArgs() { UncookExtension = eUncookExtension }
+                    new MlmaskExportArgs() { UncookExtension = eUncookExtension.ToMlmaskUncookExtension() }
                 );
 
             for (var i = 0; i < primaryDependencies.Count; i++)

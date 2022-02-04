@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Microsoft.WindowsAPICodePack.Dialogs;
 using Splat;
 using WolvenKit.Common;
+using WolvenKit.Common.Extensions;
 using WolvenKit.Common.Interfaces;
 using WolvenKit.Common.Model.Arguments;
 using WolvenKit.Common.Services;
@@ -115,7 +116,7 @@ namespace WolvenKit.Views.Dialogs
             var exportArgs =
                 new GlobalExportArgs().Register(
                     new XbmExportArgs() { UncookExtension = texturesExtension },
-                    new MlmaskExportArgs() { UncookExtension = texturesExtension }
+                    new MlmaskExportArgs() { UncookExtension = texturesExtension.ToMlmaskUncookExtension() }
                 );
 
             foreach (var (key, fileEntries) in groupedFiles)
