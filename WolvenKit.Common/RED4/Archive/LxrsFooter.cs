@@ -40,10 +40,7 @@ namespace WolvenKit.Common.RED4.Archive
             var inbuffer = ms.ToByteArray();
 
             IEnumerable<byte> outBuffer = new List<byte>();
-            var r = Oodle.Compress(
-                inbuffer,
-                ref outBuffer,
-                false);
+            var r = Oodle.Compress(inbuffer, ref outBuffer, false);
 
             bw.Write(inbuffer.Length);      //size
             bw.Write(outBuffer.Count());    //zsize
