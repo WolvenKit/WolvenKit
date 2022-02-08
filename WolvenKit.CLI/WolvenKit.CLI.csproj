@@ -11,7 +11,7 @@
 
     <PropertyGroup>
         <Title>gpm</Title>
-        <Version>1.6</Version>
+        <Version>1.6.1</Version>
         <PackAsTool>true</PackAsTool>
         <ToolCommandName>cp77tools</ToolCommandName>
         <PackageOutputPath>./nupkg</PackageOutputPath>
