@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using WolvenKit.Core.Extensions;
 using WolvenKit.RED4.Archive.Shaders;
 
 namespace WolvenKit.RED4.Archive.IO
