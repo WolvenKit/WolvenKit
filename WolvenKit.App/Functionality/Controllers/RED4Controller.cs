@@ -4,22 +4,18 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Xml.Linq;
-using DynamicData;
 using ReactiveUI;
-using ReactiveUI.Fody.Helpers;
 using WolvenKit.Common;
 using WolvenKit.Common.Interfaces;
-using WolvenKit.Common.Model;
-using WolvenKit.Common.Oodle;
 using WolvenKit.Common.Services;
-using WolvenKit.Common.Tools.Oodle;
 using WolvenKit.Core;
+using WolvenKit.Core.Compression;
 using WolvenKit.Functionality.Services;
 using WolvenKit.Models;
 using WolvenKit.Modkit.RED4.Serialization;
 using WolvenKit.MVVM.Model.ProjectManagement.Project;
-using WolvenKit.RED4.CR2W.Types;
 using WolvenKit.RED4.TweakDB;
 
 namespace WolvenKit.Functionality.Controllers
@@ -37,6 +33,7 @@ namespace WolvenKit.Functionality.Controllers
         private readonly IHashService _hashService;
         private readonly IModTools _modTools;
         private readonly IArchiveManager _archiveManager;
+        private bool _initialized = false;
 
         #endregion
 
@@ -64,22 +61,21 @@ namespace WolvenKit.Functionality.Controllers
 
         public Task HandleStartup()
         {
-            // load oodle
-            if (!OodleLoadLib.Load(_settingsManager.GetRED4OodleDll()))
+            if (!_initialized)
             {
-                throw new FileNotFoundException($"oo2ext_7_win64.dll not found.");
+                _initialized = true;
+
+                // load archives
+                var todo = new List<Func<IArchiveManager>>()
+                {
+                    LoadArchiveManager,
+                };
+                Parallel.ForEach(todo, _ => Task.Run(_));
+
+                // requires oodle
+                InitializeBk();
+                InitializeRedDB();
             }
-
-            // load archives
-            var todo = new List<Func<IArchiveManager>>()
-            {
-                LoadArchiveManager,
-            };
-            Parallel.ForEach(todo, _ => Task.Run(_));
-
-            // requires oodle
-            InitializeBk();
-            InitializeRedDB();
 
             return Task.CompletedTask;
         }
@@ -199,8 +195,8 @@ namespace WolvenKit.Functionality.Controllers
 
                 var buffer = br.ReadBytes(file.Length - 8);
 
-                byte[] unpacked = new byte[size];
-                long unpackedSize = OodleHelper.Decompress(buffer, unpacked);
+                var unpacked = new byte[size];
+                var unpackedSize = Oodle.Decompress(buffer, unpacked);
 
                 using var msout = new MemoryStream();
                 using var bw = new BinaryWriter(msout);
@@ -214,13 +210,7 @@ namespace WolvenKit.Functionality.Controllers
                 var inbuffer = File.ReadAllBytes(path);
                 IEnumerable<byte> outBuffer = new List<byte>();
 
-                var r = OodleHelper.Compress(
-                    inbuffer,
-                    inbuffer.Length,
-                    ref outBuffer,
-                    OodleNative.OodleLZ_Compressor.Kraken,
-                    OodleNative.OodleLZ_Compression.Normal,
-                    true);
+                var r = Oodle.Compress(inbuffer, ref outBuffer, true);
 
                 File.WriteAllBytes(outpath, outBuffer.ToArray());
             }
@@ -235,7 +225,7 @@ namespace WolvenKit.Functionality.Controllers
                 return _archiveManager;
             }
 
-            _loggerService.Info("Loading archive Manager ... ");
+            _loggerService.Info("Loading Archive Manager ... ");
             //var chachePath = Path.Combine(ISettingsManager.GetAppData(), "archive_cache.bin");
             try
             {
@@ -289,7 +279,7 @@ namespace WolvenKit.Functionality.Controllers
             }
             finally
             {
-                _loggerService.Success("Finished loading archive manager.");
+                _loggerService.Success("Finished loading Archive Manager.");
             }
 
 #pragma warning disable 162
@@ -297,12 +287,47 @@ namespace WolvenKit.Functionality.Controllers
 #pragma warning restore 162
         }
 
-        public List<string> GetAvaliableClasses() => CR2WTypeManager.AvailableTypes.ToList();
+        //public List<string> GetAvaliableClasses() => CR2WTypeManager.AvailableTypes.ToList();
 
         public Task<bool> PackageMod()
         {
-            throw new NotImplementedException();
 
+            if (_projectManager.ActiveProject is not Cp77Project cp77Proj)
+            {
+                _loggerService.Error("Can't pack project (no project/not cyberpunk project)!");
+                return Task.FromResult(false);
+            }
+
+            try
+            {
+                var archives = Directory.GetFiles(cp77Proj.PackedModDirectory, "*.archive");
+                foreach (var archive in archives)
+                {
+                    File.Delete(archive);
+                }
+            }
+            catch (Exception e)
+            {
+                _loggerService.Error(e);
+            }
+
+            // pack mod
+            var modfiles = Directory.GetFiles(cp77Proj.ModDirectory, "*", SearchOption.AllDirectories);
+            if (modfiles.Any())
+            {
+                _modTools.Pack(
+                    new DirectoryInfo(cp77Proj.ModDirectory),
+                    new DirectoryInfo(cp77Proj.PackedModDirectory),
+                    cp77Proj.Name);
+                _loggerService.Info("Packing archives complete!");
+            }
+
+            // compile tweak files
+            CompileTweakFiles(cp77Proj);
+
+            _loggerService.Success($"{cp77Proj.Name} packed into {cp77Proj.PackedModDirectory}!");
+
+            return Task.FromResult(true);
 
             //var pwm = ServiceLocator.Default.ResolveType<Models.Wizards.PublishWizardModel>();
             //var headerBackground = System.Drawing.Color.FromArgb(
@@ -340,38 +365,11 @@ namespace WolvenKit.Functionality.Controllers
         /// <returns></returns>
         public Task<bool> PackAndInstallProject()
         {
-            if (_projectManager.ActiveProject is not Cp77Project cp77Proj)
+            var packTask = PackageMod();
+            if (!packTask.Result)
             {
-                _loggerService.Error("Can't pack nor install project (no project/not cyberpunk project)!");
                 return Task.FromResult(false);
             }
-
-            try
-            {
-                var archives = Directory.GetFiles(cp77Proj.PackedModDirectory, "*.archive");
-                foreach (var archive in archives)
-                {
-                    File.Delete(archive);
-                }
-            }
-            catch (Exception e)
-            {
-                _loggerService.Error(e);
-            }
-
-            // pack mod
-            var modfiles = Directory.GetFiles(cp77Proj.ModDirectory, "*", SearchOption.AllDirectories);
-            if (modfiles.Any())
-            {
-                _modTools.Pack(
-                    new DirectoryInfo(cp77Proj.ModDirectory),
-                    new DirectoryInfo(cp77Proj.PackedModDirectory),
-                    cp77Proj.Name);
-                _loggerService.Info("Packing archives complete!");
-            }
-
-            // compile tweak files
-            CompileTweakFiles(cp77Proj);
 
             InstallMod();
 
@@ -498,13 +496,13 @@ namespace WolvenKit.Functionality.Controllers
 
                 installlog.Root.Add(fileroot);
                 installlog.Save(logPath);
-                _loggerService.Success($"{activeMod.Name} installed!\n");
+                _loggerService.Success($"{activeMod.Name} installed!");
                 _notificationService.Success($"{activeMod.Name} installed!");
             }
             catch (Exception ex)
             {
                 //If we screwed up something. Log it.
-                _loggerService.Error(ex + "\n");
+                _loggerService.Error(ex);
             }
         }
 
@@ -548,9 +546,26 @@ namespace WolvenKit.Functionality.Controllers
                             break;
                         }
 
-                        Directory.CreateDirectory(diskPathInfo.Directory.FullName);
-                        using var fs = new FileStream(diskPathInfo.FullName, FileMode.Create);
-                        file.Extract(fs);
+                        if (File.Exists(diskPathInfo.FullName))
+                        {
+                            if (MessageBox.Show($"The file {file.Name} already exists in project - overwrite it with game file?", $"Confirm overwrite: {file.Name}", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
+                            {
+                                using var fs = new FileStream(diskPathInfo.FullName, FileMode.Create);
+                                file.Extract(fs);
+                                _loggerService.Success($"Overwrote existing file with game file: {file.Name}");
+                            }
+                            else
+                            {
+                                _loggerService.Info($"Declined to overwrite existing file: {file.Name}");
+                            }
+                        }
+                        else
+                        {
+                            Directory.CreateDirectory(diskPathInfo.Directory.FullName);
+                            using var fs = new FileStream(diskPathInfo.FullName, FileMode.Create);
+                            file.Extract(fs);
+                            _loggerService.Success($"Added game file to project: {file.Name}");
+                        }
                     }
 
                     break;

@@ -1,12 +1,8 @@
 using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Diagnostics;
 using System.IO;
-using System.Reflection;
 using System.Windows.Media;
 using WolvenKit.Common;
-using WolvenKit.Functionality.WKitGlobal.Helpers;
 
 namespace WolvenKit.Functionality.Services
 {
@@ -20,7 +16,7 @@ namespace WolvenKit.Functionality.Services
 
         // red 4
 
-        string ReddbHash { get;set; }
+        string ReddbHash { get; set; }
 
         string CP77ExecutablePath { get; set; }
 
@@ -32,13 +28,20 @@ namespace WolvenKit.Functionality.Services
 
         string WccLitePath { get; set; }
 
+        // TreeView
+
+        bool TreeViewGroups { get; set; }
+
+        uint TreeViewGroupSize { get; set; }
+
         #endregion Properties
     }
 
     public interface ISettingsManager : ISettingsDto, INotifyPropertyChanged
     {
-       
+
         public EUpdateChannel UpdateChannel { get; set; }
+        public bool IsUpdateAvailable { get; set; }
 
         bool ShowGuidedTour { get; set; }
 
@@ -94,10 +97,7 @@ namespace WolvenKit.Functionality.Services
             return dir;
         }
 
-        public static string GetXBMDumpPath()
-        {
-            return Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Config", "__xbmdump_3768555366.csv");
-        }
+        public static string GetXBMDumpPath() => Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Config", "__xbmdump_3768555366.csv");
 
         public static string GetTemp_AudioPath()
         {

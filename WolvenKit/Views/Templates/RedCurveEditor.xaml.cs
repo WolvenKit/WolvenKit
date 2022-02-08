@@ -1,8 +1,6 @@
-using System;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Media;
-using WolvenKit.Common.Model.Cr2w;
+using WolvenKit.RED4.Types;
 
 namespace WolvenKit.Views.Editors
 {
@@ -16,13 +14,13 @@ namespace WolvenKit.Views.Editors
             InitializeComponent();
         }
 
-        public ICurveDataAccessor RedCurve
+        public IRedLegacySingleChannelCurve RedCurve
         {
-            get => (ICurveDataAccessor)this.GetValue(RedCurveProperty);
-            set => this.SetValue(RedCurveProperty, value);
+            get => (IRedLegacySingleChannelCurve)GetValue(RedCurveProperty);
+            set => SetValue(RedCurveProperty, value);
         }
         public static readonly DependencyProperty RedCurveProperty = DependencyProperty.Register(
-            nameof(RedCurve), typeof(ICurveDataAccessor), typeof(RedCurveEditor), new PropertyMetadata(default(ICurveDataAccessor)));
+            nameof(RedCurve), typeof(IRedLegacySingleChannelCurve), typeof(RedCurveEditor), new PropertyMetadata(default(IRedLegacySingleChannelCurve)));
 
 
         private void CurveEditorButton_OnClick(object sender, RoutedEventArgs e)
@@ -34,9 +32,13 @@ namespace WolvenKit.Views.Editors
                 var c = curveEditorWindow.GetCurve();
                 if (c is not null)
                 {
-                    // set tag data
-                    RedCurve.SetInterpolationType(c.Type);
-                    RedCurve.SetCurvePoints(c.Points);
+                    RedCurve.InterpolationType = c.Type;
+
+                    RedCurve.Clear();
+                    foreach (var point in c.Points)
+                    {
+                        RedCurve.Add((float)point.Item1, point.Item2);
+                    }
                 }
             }
         }

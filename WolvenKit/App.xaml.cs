@@ -1,16 +1,18 @@
 using System;
+using System.IO;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
 using System.Windows;
-using HandyControl.Tools;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using ProtoBuf.Meta;
 using ReactiveUI;
+using Serilog;
 using Splat;
 using Splat.Microsoft.Extensions.DependencyInjection;
 using WolvenKit.Common;
 using WolvenKit.Common.Services;
+using WolvenKit.Core.Compression;
 using WolvenKit.Functionality.Services;
 using WolvenKit.Functionality.WKitGlobal.Helpers;
 using WolvenKit.Interaction;
@@ -34,9 +36,17 @@ namespace WolvenKit
         // Constructor #2
         public App()
         {
+            Directory.SetCurrentDirectory(AppContext.BaseDirectory);
+
             Init();
 
             SetupExceptionHandling();
+
+            // load oodle
+            if (!Oodle.Load())
+            {
+                throw new FileNotFoundException($"oo2ext_7_win64.dll not found.");
+            }
         }
 
         // Application OnStartup Override.
@@ -59,24 +69,24 @@ namespace WolvenKit
 
 
             // Startup speed boosting (HC)
-            ApplicationHelper.StartProfileOptimization();
+            //ApplicationHelper.StartProfileOptimization();
 
-            loggerService.Log("Starting application");
+            loggerService.Info("Starting application");
             await Initializations.InitializeWebview2(loggerService);
 
-            loggerService.Log("Initializing red database");
+            loggerService.Info("Initializing red database");
             Initializations.InitializeThemeHelper();
 
 
             // main app viewmodel
-            loggerService.Log("Initializing Shell");
+            loggerService.Info("Initializing Shell");
             Initializations.InitializeShell(settings);
 
 
-            loggerService.Log("Initializing Discord RPC API");
+            loggerService.Info("Initializing Discord RPC API");
             DiscordHelper.InitializeDiscordRPC();
 
-            loggerService.Log("Initializing Github API");
+            loggerService.Info("Initializing Github API");
             Initializations.InitializeGitHub();
 
             // Some things can only be initialized after base.OnStartup(e);
@@ -103,6 +113,16 @@ namespace WolvenKit
             // we need to re-register the built container with Splat again
             Container = _host.Services;
             Container.UseMicrosoftDependencyResolver();
+
+            var path = Path.Combine(ISettingsManager.GetAppData(), "applog.txt");
+            var outputTemplate = "{Timestamp:yyyy-MM-dd HH:mm:ss.fff} [{Level:u3}] {Message:lj}{NewLine}{Exception}";
+
+            Log.Logger = new LoggerConfiguration()
+              .MinimumLevel.Debug()
+              .WriteTo.Console()
+              .WriteTo.MySink(_host.Services.GetService<MySink>())
+              .WriteTo.File(path, outputTemplate: outputTemplate, rollingInterval: RollingInterval.Day)
+              .CreateLogger();
         }
 
         //https://stackoverflow.com/a/46804709/16407587
@@ -135,7 +155,7 @@ namespace WolvenKit
             var message = $"Unhandled exception ({source})";
             try
             {
-                System.Reflection.AssemblyName assemblyName = System.Reflection.Assembly.GetExecutingAssembly().GetName();
+                var assemblyName = System.Reflection.Assembly.GetExecutingAssembly().GetName();
                 message = string.Format("Unhandled exception in {0} v{1}", assemblyName.Name, assemblyName.Version);
             }
             catch (Exception ex)

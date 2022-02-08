@@ -8,9 +8,10 @@ using CP77.CR2W;
 using Microsoft.Extensions.Configuration;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using ProtoBuf.Meta;
+using Splat;
 using WolvenKit.Common;
 using WolvenKit.Common.Services;
-using WolvenKit.Common.Tools.Oodle;
+using WolvenKit.Core.Compression;
 using WolvenKit.Core.Services;
 using WolvenKit.Modkit.RED4.RigFile;
 using WolvenKit.RED4.CR2W;
@@ -89,7 +90,7 @@ namespace WolvenKit.MSTests
             {
                 oodleInfo.CopyTo(appOodleFileName);
             }
-            if (!OodleLoadLib.Load(appOodleFileName))
+            if (!Oodle.Load())
             {
                 Assert.Fail("Could not load oo2ext_7_win64.dll.");
             }
@@ -108,6 +109,7 @@ namespace WolvenKit.MSTests
             ServiceLocator.Default.RegisterType<IArchiveManager, ArchiveManager>();
             ServiceLocator.Default.RegisterType<IModTools, ModTools>();         //Cp77FileService, ILoggerService, IProgress, IHashService, Mesh, Target
 
+            Locator.CurrentMutable.RegisterConstant(new HashService(), typeof(IHashService));
 
 
             var hashService = ServiceLocator.Default.ResolveType<IHashService>();

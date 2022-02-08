@@ -1,10 +1,10 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using WolvenKit.Common;
 using WolvenKit.Common.DDS;
 using WolvenKit.Common.Services;
-using System.Collections.Generic;
-using static WolvenKit.RED4.CR2W.Types.Enums;
+using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.CR2W
 {
@@ -12,22 +12,26 @@ namespace WolvenKit.RED4.CR2W
     {
         public static string[] GetResourceClassesFromExtension(ERedExtension extension)
         {
-            var result = s_extensionsToClass[extension];
-            if (string.IsNullOrEmpty(result))
+            try
+            {
+                return s_extensionsToClass[extension].Split(',');
+            }
+            catch (KeyNotFoundException)
             {
                 return null;
             }
-            return result.Split(',');
         }
 
         public static ERedExtension[] GetExtensionFromResourceClass(string resourceClass)
         {
-            var result = s_classToExtensions[resourceClass];
-            if (string.IsNullOrEmpty(result))
+            try
+            {
+                return s_classToExtensions[resourceClass].Split(',').Select(x => Enum.Parse<ERedExtension>(x)).ToArray();
+            }
+            catch (KeyNotFoundException)
             {
                 return null;
             }
-            return result.Split(',').Select(x => Enum.Parse<ERedExtension>(x)).ToArray();
         }
 
         private static readonly Dictionary<ERedExtension, string> s_extensionsToClass = new()
@@ -276,7 +280,7 @@ namespace WolvenKit.RED4.CR2W
             { "CIESDataResource", "ies" },
 
         };
-        
+
 
         #region Methods
 
@@ -342,7 +346,7 @@ namespace WolvenKit.RED4.CR2W
                             return DXGI_FORMAT.DXGI_FORMAT_A8_UNORM;
 
                         case ETextureRawFormat.TRF_Grayscale_Font:
-                            //throw new NotImplementedException($"{nameof(GetDXGIFormat)}: TRF_Grayscale_Font");
+                        //throw new NotImplementedException($"{nameof(GetDXGIFormat)}: TRF_Grayscale_Font");
                         case ETextureRawFormat.TRF_R32UI:
                             //return DXGI_FORMAT.R32_UINT;
                             //throw new NotImplementedException($"{nameof(GetDXGIFormat)}: TRF_R32UI");

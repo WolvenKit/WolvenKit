@@ -1,13 +1,10 @@
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Security.Cryptography;
-using System.Text;
-using System.Threading.Tasks;
 using Semver;
 
 namespace WolvenKit.Core
@@ -41,7 +38,7 @@ namespace WolvenKit.Core
                 var productVersion = "1.0.0";
 
                 var attributes = assembly.CustomAttributes.ToList();
-                for (int i = 0; i < attributes.Count; i++)
+                for (var i = 0; i < attributes.Count; i++)
                 {
                     var a = attributes[i];
 
@@ -68,13 +65,17 @@ namespace WolvenKit.Core
             }
         }
 
-        
+        //public static string GetDepotPathFromHash(UInt64 hash)
+        //{
+        //    var hashService = Locator.Current.GetService<IHashService>();
+        //    return hashService.Get(hash);
+        //}
 
         public static (string, long) HashFileSHA512(string filepath)
         {
-            using (SHA512 shaM = new SHA512Managed())
+            using (var shaM = SHA512.Create())
             {
-                using FileStream fileStream = File.OpenRead(filepath);
+                using var fileStream = File.OpenRead(filepath);
                 var hash1 = shaM.ComputeHash(fileStream);
                 var hashStr = BitConverter.ToString(hash1).Replace("-", "").ToLowerInvariant();
                 return (hashStr, fileStream.Length);

@@ -100,6 +100,19 @@ namespace WolvenKit.Views.Tools
                       viewModel => viewModel.FindUsingCommand,
                       view => view.RightContextMenuFindUsingMenuItem)
                   .DisposeWith(disposables);
+                this.BindCommand(ViewModel,
+                      viewModel => viewModel.CopyRelPathCommand,
+                      view => view.RightContextMenuCopyPathMenuItem)
+                  .DisposeWith(disposables);
+
+                this.BindCommand(ViewModel,
+                      viewModel => viewModel.OpenFileOnlyCommand,
+                      view => view.OpenFileOnly)
+                  .DisposeWith(disposables);
+                this.BindCommand(ViewModel,
+                      viewModel => viewModel.AddSelectedCommand,
+                      view => view.AddSelected)
+                  .DisposeWith(disposables);
             });
 
         }
@@ -109,6 +122,7 @@ namespace WolvenKit.Views.Tools
         private static void PreviewMesh(PropertiesViewModel propertiesViewModel, RedFileViewModel selectedItem, IGameFile selectedGameFile)
         {
             propertiesViewModel.AB_MeshPreviewVisible = true;
+            propertiesViewModel.SelectedIndex = 1;
 
             var managerCacheDir = ISettingsManager.GetTemp_MeshPath();
             _ = Directory.CreateDirectory(managerCacheDir);
@@ -128,7 +142,7 @@ namespace WolvenKit.Views.Tools
             {
                 selectedGameFile.Extract(meshStream);
                 meshStream.Seek(0, SeekOrigin.Begin);
-                string outPath = Path.Combine(ISettingsManager.GetTemp_OBJPath(), Path.GetFileName(selectedItem.Name) ?? throw new InvalidOperationException());
+                var outPath = Path.Combine(ISettingsManager.GetTemp_OBJPath(), Path.GetFileName(selectedItem.Name) ?? throw new InvalidOperationException());
                 outPath = Path.ChangeExtension(outPath, ".glb");
                 if (Locator.Current.GetService<MeshTools>().ExportMeshPreviewer(meshStream, new FileInfo(outPath)))
                 {
@@ -142,6 +156,7 @@ namespace WolvenKit.Views.Tools
         private static void PreviewWem(PropertiesViewModel propertiesViewModel, IFileSystemViewModel selectedItem, IGameFile selectedGameFile)
         {
             propertiesViewModel.IsAudioPreviewVisible = true;
+            propertiesViewModel.SelectedIndex = 2;
 
             var managerCacheDir = ISettingsManager.GetTemp_Audio_importPath();
             _ = Directory.CreateDirectory(managerCacheDir);
@@ -173,6 +188,7 @@ namespace WolvenKit.Views.Tools
         private async void PreviewTexture(PropertiesViewModel propertiesViewModel, RedFileViewModel selectedItem, IGameFile selectedGameFile)
         {
             propertiesViewModel.IsImagePreviewVisible = true;
+            propertiesViewModel.SelectedIndex = 3;
 
             var man = Locator.Current.GetService<IModTools>();
 
@@ -298,11 +314,10 @@ namespace WolvenKit.Views.Tools
             }
 
             var settings = Locator.Current.GetService<ISettingsManager>();
-            if (settings.ShowFilePreview)
-            {
-                propertiesViewModel.AB_SelectedItem = vm.RightSelectedItem;
-            }
-            else
+
+            propertiesViewModel.AB_SelectedItem = vm.RightSelectedItem;
+
+            if (!settings.ShowFilePreview)
             {
                 return;
             }
@@ -310,6 +325,7 @@ namespace WolvenKit.Views.Tools
             propertiesViewModel.AB_MeshPreviewVisible = false;
             propertiesViewModel.IsAudioPreviewVisible = false;
             propertiesViewModel.IsImagePreviewVisible = false;
+            propertiesViewModel.SelectedIndex = 0;
 
             if (propertiesViewModel.AB_SelectedItem is RedFileViewModel selectedItem)
             {
@@ -337,14 +353,6 @@ namespace WolvenKit.Views.Tools
         {
             var selectedIndex = LeftNavigation.SelectedIndex;
             LeftNavigation.ExpandNode(selectedIndex + 1);
-        }
-
-        private void RightContextMenuAddAll_OnClick(object sender, RoutedEventArgs e)
-        {
-            if (ViewModel is { } vm)
-            {
-                vm.AddSelectedCommand.SafeExecute();
-            }
         }
 
         private void VidPreviewMenuItem_Click(object sender, RoutedEventArgs e)

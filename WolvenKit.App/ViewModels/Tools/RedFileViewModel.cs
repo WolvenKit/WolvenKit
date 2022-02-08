@@ -35,7 +35,9 @@ namespace WolvenKit.ViewModels.Tools
 
         [Display(Name = "Hash")] public string DisplayHash => _fileEntry.Key.ToString();
 
-        public override string Size => FormatSize(_fileEntry.Size);
+        public override uint Size => _fileEntry.Size;
+
+        public override string SizeString => FormatSize(_fileEntry.Size);
 
         [Display(Name = "Archive")] public string ArchiveName => _fileEntry.Archive.Name;
 
@@ -43,7 +45,7 @@ namespace WolvenKit.ViewModels.Tools
 
         public string GetParentPath() => Path.GetDirectoryName(_fileEntry.Name);
 
-        string FormatSize(uint size)
+        private string FormatSize(uint size)
         {
             string[] suffixes = { "Bytes", "KB", "MB", "GB", "TB", "PB" };
 

@@ -4,7 +4,6 @@ using System.Linq;
 using System.Reactive;
 using System.Threading.Tasks;
 using System.Xml.Serialization;
-using Microsoft.WindowsAPICodePack.Dialogs;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using WolvenKit.Common.Services;
@@ -83,7 +82,7 @@ namespace WolvenKit.Functionality.Services
 
                         if (_recentlyUsedItemsService.Items.Items.All(item => item.Name != location))
                         {
-                            _recentlyUsedItemsService.AddItem(new RecentlyUsedItemModel(location, DateTime.Now));
+                            _recentlyUsedItemsService.AddItem(new RecentlyUsedItemModel(location, DateTime.Now, DateTime.Now));
                         }
                     }
                 }
@@ -145,7 +144,8 @@ namespace WolvenKit.Functionality.Services
                 //        Version = obj.Version,
                 //    };
                 //}
-                /*else*/ if (typeof(T) == typeof(Cp77Project))
+                /*else*/
+                if (typeof(T) == typeof(Cp77Project))
                 {
                     return new Cp77Project(path)
                     {
@@ -169,6 +169,11 @@ namespace WolvenKit.Functionality.Services
         {
             try
             {
+                if (!Directory.Exists(ActiveProject.ProjectDirectory))
+                {
+                    Directory.CreateDirectory(ActiveProject.ProjectDirectory);
+                }
+
                 await using var fs = new FileStream(ActiveProject.Location, FileMode.Create, FileAccess.Write);
                 var ser = new XmlSerializer(typeof(CP77Mod));
                 ser.Serialize(fs, new CP77Mod(ActiveProject));

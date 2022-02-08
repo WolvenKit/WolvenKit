@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
 
@@ -22,7 +21,7 @@ namespace WolvenKit.Core.Extensions
             var diff = ((mod + 1) * 4096) - pos;
 
             var buffer = new byte[diff];
-            for (int i = 0; i < buffer.Length; i++)
+            for (var i = 0; i < buffer.Length; i++)
             {
                 buffer[i] = paddingbyte;
             }
@@ -123,10 +122,10 @@ namespace WolvenKit.Core.Extensions
             // Sign is stored in the 7th bit instead of two's-compliment
             // so we save the absolute of the value and the sign separately
             var isNegative = value < 0;
-            uint absVal = (uint)Math.Abs(value);
+            var absVal = (uint)Math.Abs(value);
 
             // Initial value from the lower 6 bits
-            byte b = (byte)(absVal & 0b00111111);
+            var b = (byte)(absVal & 0b00111111);
 
             if (isNegative)
             {
@@ -162,7 +161,7 @@ namespace WolvenKit.Core.Extensions
             do
             {
                 // Get the value from the lower 7 bits
-                byte b = (byte)(value & 0b01111111);
+                var b = (byte)(value & 0b01111111);
                 // Shift the value down to the next 7 bits
                 value >>= 7;
                 // Is there any data remaining?
@@ -200,6 +199,14 @@ namespace WolvenKit.Core.Extensions
             {
                 Marshal.FreeHGlobal(ptr);
             }
+        }
+
+        public static void WriteNullTerminatedString(this BinaryWriter bw, string text, Encoding encoding = null)
+        {
+            encoding ??= Encoding.UTF8;
+
+            bw.Write(encoding.GetBytes(text));
+            bw.Write((byte)0);
         }
     }
 }

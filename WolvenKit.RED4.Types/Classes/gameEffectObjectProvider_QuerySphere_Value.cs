@@ -1,0 +1,24 @@
+using static WolvenKit.RED4.Types.Enums;
+
+namespace WolvenKit.RED4.Types
+{
+	[REDMeta]
+	public partial class gameEffectObjectProvider_QuerySphere_Value : gameEffectObjectProvider
+	{
+		[Ordinal(0)] 
+		[RED("radius")] 
+		public CFloat Radius
+		{
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
+		}
+
+		[Ordinal(1)] 
+		[RED("filterData")] 
+		public CHandle<physicsFilterData> FilterData
+		{
+			get => GetPropertyValue<CHandle<physicsFilterData>>();
+			set => SetPropertyValue<CHandle<physicsFilterData>>(value);
+		}
+	}
+}

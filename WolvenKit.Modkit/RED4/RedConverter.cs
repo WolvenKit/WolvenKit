@@ -1,11 +1,12 @@
 using System;
 using System.IO;
 using System.Runtime.Serialization;
-using Newtonsoft.Json;
 using WolvenKit.Common;
 using WolvenKit.Common.Conversion;
-using WolvenKit.Interfaces.Core;
-using WolvenKit.RED4.CR2W;
+using WolvenKit.RED4.Archive.CR2W;
+using WolvenKit.RED4.Archive.IO;
+using WolvenKit.RED4.CR2W.JSON;
+using WolvenKit.RED4.Types.Exceptions;
 
 namespace WolvenKit.Modkit.RED4
 {
@@ -20,17 +21,19 @@ namespace WolvenKit.Modkit.RED4
         /// <exception cref="InvalidParsingException"></exception>
         /// <exception cref="SerializationException"></exception>
         /// <exception cref="ArgumentOutOfRangeException"></exception>
-        public string ConvertToText(ETextConvertFormat format, Stream instream)
+        public string ConvertToText(ETextConvertFormat format, string infile)
         {
-            var cr2w = _wolvenkitFileService.TryReadCr2WFile(instream);
-            if (cr2w == null)
+            using var instream = new FileStream(infile, FileMode.Open, FileAccess.Read);
+
+            if (!_wolvenkitFileService.TryReadRed4File(instream, out var cr2w))
             {
-                throw new InvalidParsingException();
+                throw new InvalidParsingException("ConvertToText");
             }
 
-            var json = "";
+            cr2w.MetaData.FileName = infile;
+
             var dto = new RedFileDto(cr2w);
-            json = JsonConvert.SerializeObject(dto, Formatting.Indented);
+            var json = RedJsonSerializer.Serialize(dto);
 
             if (string.IsNullOrEmpty(json))
             {
@@ -42,12 +45,7 @@ namespace WolvenKit.Modkit.RED4
                 case ETextConvertFormat.json:
                     return json;
                 case ETextConvertFormat.xml:
-                {
-                    var doc = JsonConvert.DeserializeXmlNode(json, RedFileDto.Magic);
-                    using var tw = new StringWriter();
-                    doc?.Save(tw);
-                    return tw.ToString();
-                }
+                    throw new NotSupportedException(nameof(format));
                 default:
                     throw new ArgumentOutOfRangeException(nameof(format), format, null);
             }
@@ -63,24 +61,14 @@ namespace WolvenKit.Modkit.RED4
         /// <exception cref="ArgumentOutOfRangeException"></exception>
         public bool ConvertToAndWrite(ETextConvertFormat format, string infile, DirectoryInfo outputDirInfo)
         {
-            using var fs = new FileStream(infile, FileMode.Open, FileAccess.Read);
             try
             {
-                var json = ConvertToText(format, fs);
-                var outpath = Path.Combine(outputDirInfo.FullName, $"{Path.GetFileName(infile)}.{format.ToString()}");
+                var text = ConvertToText(format, infile);
+                var outpath = Path.Combine(outputDirInfo.FullName, $"{Path.GetFileName(infile)}.{format}");
 
-                switch (format)
-                {
-                    case ETextConvertFormat.json:
-                        File.WriteAllText(outpath, json);
-                        break;
-                    case ETextConvertFormat.xml:
-                        var doc = JsonConvert.DeserializeXmlNode(json, RedFileDto.Magic);
-                        doc?.Save(outpath);
-                        break;
-                    default:
-                        throw new ArgumentOutOfRangeException(nameof(format), format, null);
-                }
+                File.WriteAllText(outpath, text);
+
+                _loggerService.Success($"Exported {infile} to {outpath}");
 
                 return true;
             }
@@ -106,14 +94,14 @@ namespace WolvenKit.Modkit.RED4
         /// <param name="json"></param>
         /// <returns></returns>
         /// <exception cref="InvalidParsingException"></exception>
-        public CR2WFile ConvertFromJson(string json)
+        public static CR2WFile ConvertFromJson(string json)
         {
-            var newdto = JsonConvert.DeserializeObject<RedFileDto>(json);
-            return newdto != null ? newdto.ToW2rc() : throw new InvalidParsingException();
+            var dto = RedJsonSerializer.Deserialize<RedFileDto>(json);
+            return dto.Data;
         }
 
         /// <summary>
-        /// Cerates a redengine file from a given textual representation and saves it to a given outputdirectory
+        /// Creates a redengine file from a given textual representation and saves it to a given outputdirectory
         /// </summary>
         /// <param name="fileInfo"></param>
         /// <param name="outputDirInfo"></param>
@@ -129,26 +117,19 @@ namespace WolvenKit.Modkit.RED4
             var text = File.ReadAllText(fileInfo.FullName);
 
             // get extension from filename //TODO pass?
-            var filenameWithoutConvertExtension = fileInfo.Name.Substring(0, fileInfo.Name.Length - convertExtension.Length);
+            var filenameWithoutConvertExtension = fileInfo.Name[..^convertExtension.Length];
             var ext = Path.GetExtension(filenameWithoutConvertExtension);
-
-            CR2WFile w2rc;
-            switch (textConvertFormat)
+            var w2rc = textConvertFormat switch
             {
-                case ETextConvertFormat.json:
-                    w2rc = ConvertFromJson(text);
-                    break;
-                case ETextConvertFormat.xml:
-                default:
-                    throw new ArgumentOutOfRangeException();
-            }
-
+                ETextConvertFormat.json => ConvertFromJson(text),
+                _ => throw new NotSupportedException(),
+            };
             var outpath = Path.ChangeExtension(Path.Combine(outputDirInfo.FullName, fileInfo.Name), ext);
 
             using var fs2 = new FileStream(outpath, FileMode.Create, FileAccess.ReadWrite);
-            using var bw = new BinaryWriter(fs2);
+            using var writer = new CR2WWriter(fs2);
+            writer.WriteFile(w2rc);
 
-            w2rc.Write(bw);
             return true;
         }
     }

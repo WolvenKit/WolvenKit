@@ -12,16 +12,16 @@
      MinWidth="300"
      MinHeight="300"
      hc:ThemeManager.RequestedAccentColor="{DynamicResource MahApps.Brushes.Accent3}"
-     Background="{DynamicResource MahApps.Brushes.ThemeBackground}"
      >
-        <Grid Margin="3,75,3,0">
+        <Grid Margin="0,85,0,0">
 
                 <wv2:WebView2 x:Name="cal" />
         </Grid>
 
         <StackPanel
-            Margin="0,0,5,0"
-            HorizontalAlignment="Right"
+            Margin="25,0,0,0"
+            Height="85"
+            HorizontalAlignment="Left"
             VerticalAlignment="Top"
             Orientation="Horizontal"
             >

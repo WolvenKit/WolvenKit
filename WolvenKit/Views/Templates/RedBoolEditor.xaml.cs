@@ -1,7 +1,7 @@
 using System;
 using System.Windows;
 using System.Windows.Controls;
-using WolvenKit.Common.Model.Cr2w;
+using WolvenKit.RED4.Types;
 
 namespace WolvenKit.Views.Editors
 {
@@ -15,13 +15,13 @@ namespace WolvenKit.Views.Editors
             InitializeComponent();
         }
 
-        public IREDBool RedBool
+        public CBool RedBool
         {
-            get => (IREDBool)this.GetValue(RedBoolProperty);
-            set => this.SetValue(RedBoolProperty, value);
+            get => (CBool)GetValue(RedBoolProperty);
+            set => SetValue(RedBoolProperty, value);
         }
         public static readonly DependencyProperty RedBoolProperty = DependencyProperty.Register(
-            nameof(RedBool), typeof(IREDBool), typeof(RedBoolEditor), new PropertyMetadata(default(IREDBool)));
+            nameof(RedBool), typeof(CBool), typeof(RedBoolEditor), new PropertyMetadata(default(CBool)));
 
 
         public bool IsChecked
@@ -30,11 +30,11 @@ namespace WolvenKit.Views.Editors
             set => SetRedValue(value);
         }
 
-        private void SetRedValue(bool value) => RedBool.SetValue(value);
+        private void SetRedValue(bool value) => SetCurrentValue(RedBoolProperty, (CBool)value);
 
         private bool GetValueFromRedValue()
         {
-            var redvalue = RedBool.GetValue();
+            var redvalue = (bool)RedBool;
             return redvalue is bool redbool ? redbool : throw new ArgumentException(nameof(redvalue));
         }
 

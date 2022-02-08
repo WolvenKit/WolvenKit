@@ -1,0 +1,39 @@
+using static WolvenKit.RED4.Types.Enums;
+
+namespace WolvenKit.RED4.Types
+{
+	[REDMeta]
+	public partial class animImportFacialTransform : RedBaseClass
+	{
+		[Ordinal(0)] 
+		[RED("rotation")] 
+		public Quaternion Rotation
+		{
+			get => GetPropertyValue<Quaternion>();
+			set => SetPropertyValue<Quaternion>(value);
+		}
+
+		[Ordinal(1)] 
+		[RED("translation")] 
+		public Vector3 Translation
+		{
+			get => GetPropertyValue<Vector3>();
+			set => SetPropertyValue<Vector3>(value);
+		}
+
+		[Ordinal(2)] 
+		[RED("scale")] 
+		public Vector3 Scale
+		{
+			get => GetPropertyValue<Vector3>();
+			set => SetPropertyValue<Vector3>(value);
+		}
+
+		public animImportFacialTransform()
+		{
+			Rotation = new() { R = 1.000000F };
+			Translation = new();
+			Scale = new() { X = 1.000000F, Y = 1.000000F, Z = 1.000000F };
+		}
+	}
+}

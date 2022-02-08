@@ -1,10 +1,9 @@
-using System;
 using System.Reactive;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using ReactiveUI;
-using WolvenKit.Common.Model.Cr2w;
+using WolvenKit.RED4.Types;
 
 namespace WolvenKit.Views.Editors
 {
@@ -20,13 +19,13 @@ namespace WolvenKit.Views.Editors
             SelectedColorCommand = ReactiveCommand.Create<object>(OnColorPicked);
         }
 
-        public IREDColor RedColor
+        public CColor RedColor
         {
-            get => (IREDColor)this.GetValue(RedColorProperty);
-            set => this.SetValue(RedColorProperty, value);
+            get => (CColor)GetValue(RedColorProperty);
+            set => SetValue(RedColorProperty, value);
         }
         public static readonly DependencyProperty RedColorProperty = DependencyProperty.Register(
-            nameof(RedColor), typeof(IREDColor), typeof(RedColorEditor), new PropertyMetadata(default(IREDColor)));
+            nameof(RedColor), typeof(CColor), typeof(RedColorEditor), new PropertyMetadata(default(CColor)));
 
         public ReactiveCommand<object, Unit> SelectedColorCommand { get; set; }
 
@@ -40,28 +39,31 @@ namespace WolvenKit.Views.Editors
         {
             dynamic d = e;
             var mediaColor = d.Brush.Color;
-            var c = System.Drawing.Color.FromArgb(mediaColor.A, mediaColor.R, mediaColor.G, mediaColor.B);
-            RedColor?.SetValue(c);
+            RedColor.Alpha = mediaColor.A;
+            RedColor.Red = mediaColor.R;
+            RedColor.Green = mediaColor.G;
+            RedColor.Blue = mediaColor.B;
         }
 
         private void SetRedValue(Color value)
         {
             dynamic d = value;
             var mediaColor = d.Brush.Color;
-            var c = System.Drawing.Color.FromArgb(mediaColor.A, mediaColor.R, mediaColor.G, mediaColor.B);
-            RedColor?.SetValue(c);
 
-            //RedColor.SetValue(value);
+            RedColor.Alpha = mediaColor.A;
+            RedColor.Red = mediaColor.R;
+            RedColor.Green = mediaColor.G;
+            RedColor.Blue = mediaColor.B;
         }
 
         private Color GetValueFromRedValue()
         {
             var redvalue = new Color()
             {
-                A = RedColor.Value.A,
-                R = RedColor.Value.R,
-                G = RedColor.Value.G,
-                B = RedColor.Value.B
+                A = RedColor.Alpha,
+                R = RedColor.Red,
+                G = RedColor.Green,
+                B = RedColor.Blue
             };
             return redvalue;
         }

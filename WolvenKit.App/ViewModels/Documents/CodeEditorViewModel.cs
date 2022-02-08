@@ -1,4 +1,3 @@
-using System.Threading.Tasks;
 using System.Windows.Input;
 using System.Windows.Media;
 using ReactiveUI.Fody.Helpers;
@@ -49,7 +48,7 @@ namespace WolvenKit.ViewModels.Tools
 
         #region Properties
 
-        private EditorProject ActiveMod => _projectManager.ActiveProject as EditorProject;
+        private EditorProject ActiveMod => _projectManager.ActiveProject;
 
         #endregion Properties
 
@@ -62,23 +61,17 @@ namespace WolvenKit.ViewModels.Tools
         /// <summary>
         /// Maintains the command for code samples
         /// </summary>
-        private ICommand sampleCommand;
+        private readonly ICommand sampleCommand;
 
         /// <summary>
         /// Initializes the instance of the <see cref="SyntaxHighlightingViewModel"/> class
         /// </summary>
-      
+
 
         /// <summary>
         /// Gets or sets the command for code sample 1 in menu items
         /// </summary>
-        public ICommand SampleCommand
-        {
-            get
-            {
-                return sampleCommand;
-            }
-        }
+        public ICommand SampleCommand => sampleCommand;
 
         /// <summary>
         /// Gets or sets the command for code sample for checked property.

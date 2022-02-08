@@ -13,6 +13,7 @@ using DynamicData;
 using Microsoft.Extensions.FileSystemGlobbing;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
+using Splat;
 using WolvenKit.Common;
 using WolvenKit.Common.Interfaces;
 using WolvenKit.Common.Model;
@@ -22,6 +23,9 @@ using WolvenKit.Core.Services;
 using WolvenKit.Functionality.Commands;
 using WolvenKit.Functionality.Controllers;
 using WolvenKit.Functionality.Services;
+using WolvenKit.Models;
+using WolvenKit.Models.Docking;
+using WolvenKit.ViewModels.Shell;
 
 namespace WolvenKit.ViewModels.Tools
 {
@@ -49,6 +53,7 @@ namespace WolvenKit.ViewModels.Tools
 
         public const int SEARCH_LIMIT = 1000;
 
+
         #endregion constants
 
         #region fields
@@ -61,6 +66,8 @@ namespace WolvenKit.ViewModels.Tools
         private readonly IProgressService<double> _progressService;
 
         private readonly ReadOnlyObservableCollection<RedFileSystemModel> _boundRootNodes;
+        private bool _manuallyLoading = false;
+        private bool _projectLoaded = false;
 
         #endregion fields
 
@@ -84,11 +91,17 @@ namespace WolvenKit.ViewModels.Tools
 
             ContentId = ToolContentId;
 
+            State = DockState.Dock;
+            SideInDockedMode = DockSide.Tabbed;
+
             TogglePreviewCommand = new RelayCommand(ExecuteTogglePreview, CanTogglePreview);
             OpenFileSystemItemCommand = new RelayCommand(ExecuteOpenFile, CanOpenFile);
-            AddSelectedCommand = new RelayCommand(ExecuteAddSelected, CanAddSelected);
             ToggleModBrowserCommand = new RelayCommand(ExecuteToggleModBrowser, CanToggleModBrowser);
             OpenFileLocationCommand = new RelayCommand(ExecuteOpenFileLocationCommand, CanOpenFileLocationCommand);
+            CopyRelPathCommand = new RelayCommand(ExecuteCopyRelPath, CanCopyRelPath);
+
+            OpenFileOnlyCommand = new RelayCommand(ExecuteOpenFileOnly, CanOpenFileOnly);
+            AddSelectedCommand = new RelayCommand(ExecuteAddSelected, CanAddSelected);
 
             ExpandAll = ReactiveCommand.Create(() => { });
             CollapseAll = ReactiveCommand.Create(() => { });
@@ -97,6 +110,7 @@ namespace WolvenKit.ViewModels.Tools
 
             AddSearchKeyCommand = ReactiveCommand.Create<string>(x => SearchBarText += $" {x}:");
             FindUsingCommand = ReactiveCommand.CreateFromTask(FindUsing);
+            LoadAssetBrowserCommand = ReactiveCommand.CreateFromTask(LoadAssetBrowser);
 
             archiveManager.ConnectGameRoot()
                 .ObserveOn(RxApp.MainThreadScheduler)
@@ -123,24 +137,29 @@ namespace WolvenKit.ViewModels.Tools
                 .WhenAnyValue(_ => _.IsProjectLoaded)
                 .Subscribe(loaded =>
                 {
-                    NoProjectBorderVisibility = loaded ? Visibility.Collapsed : Visibility.Visible;
+                    _projectLoaded = loaded;
+                    ShouldShowLoadButton = !_manuallyLoading && !_projectLoaded;
                 });
 
 
-            Classes = _gameController
-                .GetController()
-                .GetAvaliableClasses();
+            //Classes = _gameController
+            //    .GetController()
+            //    .GetAvaliableClasses();
         }
 
         #endregion ctor
 
         #region properties
 
+        [Reactive] public string Extension { get; set; } = "reds";
+
         [Reactive] public GridLength PreviewWidth { get; set; } = new(0, GridUnitType.Pixel);
 
         [Reactive] public Visibility LoadVisibility { get; set; } = Visibility.Visible;
 
         [Reactive] public Visibility NoProjectBorderVisibility { get; set; } = Visibility.Visible;
+
+        [Reactive] public bool ShouldShowLoadButton { get; set; }
 
         [Reactive] public ObservableCollection<RedFileSystemModel> LeftItems { get; set; } = new();
 
@@ -152,7 +171,7 @@ namespace WolvenKit.ViewModels.Tools
 
         [Reactive] public ObservableCollection<object> RightSelectedItems { get; set; } = new();
 
-        [Reactive] public List<string> Classes { get; set; }
+        //[Reactive] public List<string> Classes { get; set; }
 
         [Reactive] public string SelectedClass { get; set; }
 
@@ -168,8 +187,16 @@ namespace WolvenKit.ViewModels.Tools
 
         #region commands
 
-        public ReactiveCommand<string, Unit> AddSearchKeyCommand { get; set; }
+        public ReactiveCommand<Unit, Unit> LoadAssetBrowserCommand { get; }
+        private async Task<Unit> LoadAssetBrowser()
+        {
+            _manuallyLoading = true;
+            ShouldShowLoadButton = !_manuallyLoading && !_projectLoaded;
+            await _gameController.GetRed4Controller().HandleStartup();
+            return Unit.Default;
+        }
 
+        public ReactiveCommand<string, Unit> AddSearchKeyCommand { get; set; }
         public ReactiveCommand<Unit, Unit> FindUsingCommand { get; }
         private async Task FindUsing()
         {
@@ -217,7 +244,7 @@ namespace WolvenKit.ViewModels.Tools
         }
 
         public ICommand AddSelectedCommand { get; private set; }
-        private bool CanAddSelected() => RightSelectedItems != null && RightSelectedItems.Any();
+        private bool CanAddSelected() => RightSelectedItems != null && RightSelectedItems.Any() && _projectLoaded;
         private void ExecuteAddSelected()
         {
             foreach (var o in RightSelectedItems)
@@ -234,6 +261,15 @@ namespace WolvenKit.ViewModels.Tools
             }
         }
 
+        public ICommand OpenFileOnlyCommand { get; private set; }
+        private bool CanOpenFileOnly() => RightSelectedItems != null && RightSelectedItem is RedFileViewModel;
+        private void ExecuteOpenFileOnly()
+        {
+            if (RightSelectedItem is RedFileViewModel rfvm)
+            {
+                Locator.Current.GetService<AppViewModel>().OpenRedFileAsyncCommand.SafeExecute(rfvm.GetGameFile());
+            }
+        }
 
         public ICommand ToggleModBrowserCommand { get; private set; }
         private bool CanToggleModBrowser() => true;//_archiveManager.IsManagerLoaded;
@@ -281,17 +317,29 @@ namespace WolvenKit.ViewModels.Tools
         private bool CanOpenFile() => true;
         private void ExecuteOpenFile()
         {
-            switch (RightSelectedItem)
+            if (CanAddSelected())
             {
-                case RedFileViewModel fileVm:
-                    AddFile(fileVm);
-                    break;
-                case RedDirectoryViewModel dirVm:
-                    MoveToFolder(dirVm);
-                    break;
+                switch (RightSelectedItem)
+                {
+                    case RedFileViewModel fileVm:
+                        AddFile(fileVm);
+                        break;
+                    case RedDirectoryViewModel dirVm:
+                        MoveToFolder(dirVm);
+                        break;
+                }
+            }
+            else if (CanOpenFileOnly())
+            {
+                ExecuteOpenFileOnly();
             }
         }
-
+        /// <summary>
+        /// Copies relative path of node.
+        /// </summary>
+        public ICommand CopyRelPathCommand { get; private set; }
+        private bool CanCopyRelPath() => RightSelectedItem != null; // _projectManager.ActiveProject != null && RightSelectedItem != null;
+        private void ExecuteCopyRelPath() => Clipboard.SetText(RightSelectedItem.FullName);
         public ReactiveCommand<Unit, Unit> ExpandAll { get; set; }
         public ReactiveCommand<Unit, Unit> CollapseAll { get; set; }
         public ReactiveCommand<Unit, Unit> Expand { get; set; }
@@ -319,6 +367,25 @@ namespace WolvenKit.ViewModels.Tools
             {
                 AddFile(file);
             }
+        }
+
+        /// <summary>
+        /// Navigates the right-side of the browser to the existing file
+        /// </summary>
+        /// <param name="file"></param>
+        public void ShowFile(FileModel file)
+        {
+            _archiveManager.Archives
+                .Connect()
+                .TransformMany(x => x.Files.Values, y => y.Key)
+                .Filter(x => x.Key == file.Hash)
+                .Transform(x => new RedFileViewModel(x))
+                .Bind(out var list)
+                .Subscribe()
+                .Dispose();
+
+            RightItems.Clear();
+            RightItems.AddRange(list);
         }
 
         /// <summary>

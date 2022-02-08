@@ -1,15 +1,10 @@
-using System;
-using System.Collections.ObjectModel;
-using System.ComponentModel;
 using System.Reactive;
-using System.Reactive.Linq;
 using System.Windows.Input;
 using System.Windows.Media;
-using DynamicData;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
-using WolvenKit.Common.Model.Cr2w;
-using WolvenKit.RED4.CR2W.Types;
+using WolvenKit.RED4.Types;
+using WolvenKit.RED4.Types.Exceptions;
 
 namespace WolvenKit.ViewModels.Shell
 {
@@ -17,49 +12,49 @@ namespace WolvenKit.ViewModels.Shell
     {
         #region Constructors
 
-        public ChunkPropertyViewModel(IEditableVariable prop)
+        public ChunkPropertyViewModel(IRedType prop)
         {
             Property = prop;
-            IsSerialized = prop.IsSerialized;
+            //IsSerialized = prop.IsSerialized;
 
 
-            _ = Property.ChildrEditableVariables
-                .AsObservableChangeSet()
-                .Transform(GetViewModel)
-                .ObserveOn(RxApp.MainThreadScheduler)
-                .Bind(out _children)
-                .Subscribe();
+            //_ = Property.ChildrEditableVariables
+            //    .AsObservableChangeSet()
+            //    .Transform(GetViewModel)
+            //    .ObserveOn(RxApp.MainThreadScheduler)
+            //    .Bind(out _children)
+            //    .Subscribe();
 
             PreviewTextInputCommand = ReactiveCommand.Create(
                 () =>
                 {
-                    if (!Property.IsSerialized)
-                    {
-                        Property.IsSerialized = true;
-                        IsSerialized = true;
-                        this.RaisePropertyChanged(nameof(IsSerialized));
-                    }
+                    //if (!Property.IsSerialized)
+                    //{
+                    //    Property.IsSerialized = true;
+                    //    IsSerialized = true;
+                    //    this.RaisePropertyChanged(nameof(IsSerialized));
+                    //}
                 });
 
-            this.WhenAnyValue(x => x.IsSerialized).Subscribe(b =>
-            {
-                if (prop.IsSerialized != b)
-                {
-                    prop.IsSerialized = b;
-                    IsSerialized = b;
-                    this.RaisePropertyChanged(nameof(IsSerialized));
-                }
-            });
+            //this.WhenAnyValue(x => x.IsSerialized).Subscribe(b =>
+            //{
+            //    if (prop.IsSerialized != b)
+            //    {
+            //        prop.IsSerialized = b;
+            //        IsSerialized = b;
+            //        this.RaisePropertyChanged(nameof(IsSerialized));
+            //    }
+            //});
 
-            Property.PropertyChanged += OnPropertyChanged;
+            //Property.PropertyChanged += OnPropertyChanged;
         }
 
-        private void OnPropertyChanged(object sender, PropertyChangedEventArgs e) =>
-            IsSerialized = e.PropertyName switch
-            {
-                nameof(IEditableVariable.IsSerialized) => ((IEditableVariable)sender).IsSerialized,
-                _ => IsSerialized
-            };
+        //private void OnPropertyChanged(object sender, PropertyChangedEventArgs e) =>
+        //    IsSerialized = e.PropertyName switch
+        //    {
+        //        nameof(IRedType.IsSerialized) => ((IEditableVariable)sender).IsSerialized,
+        //        _ => IsSerialized
+        //    };
 
         #endregion Constructors
 
@@ -67,19 +62,19 @@ namespace WolvenKit.ViewModels.Shell
 
         #region Properties
 
-        public IEditableVariable Property { get; }
+        public IRedType Property { get; }
 
 
         [Reactive] public bool IsSelected { get; set; }
         [Reactive] public bool IsExpanded { get; set; }
 
-        public string Name => Property.REDName;
-        public string Type => Property.REDType;
-        public string Value => Property.REDValue;
-        [Reactive] public bool IsSerialized { get; set; }
+        //public string Name => Property.REDName;
+        //public string Type => Property.REDType;
+        //public string Value => Property.REDValue;
+        //[Reactive] public bool IsSerialized { get; set; }
 
-        private readonly ReadOnlyObservableCollection<ChunkPropertyViewModel> _children;
-        public ReadOnlyObservableCollection<ChunkPropertyViewModel> Children => _children;
+        //private readonly ReadOnlyObservableCollection<ChunkPropertyViewModel> _children;
+        //public ReadOnlyObservableCollection<ChunkPropertyViewModel> Children => _children;
 
 
         //public System.Windows.Media.Brush ForegroundColor => Property.IsSerialized
@@ -89,21 +84,21 @@ namespace WolvenKit.ViewModels.Shell
 
         #endregion Properties
 
-        private static ChunkPropertyViewModel GetViewModel(IEditableVariable editableVariable) =>
+        private static ChunkPropertyViewModel GetViewModel(IRedType editableVariable) =>
             editableVariable switch
             {
-                IREDBool redBool => new RedBoolViewModel(redBool),
-                IREDString redString => new RedStringViewModel(redString),
-                IREDColor redcolor => new RedColorViewModel(redcolor),
+                IRedPrimitive<bool> redBool => new RedBoolViewModel(redBool),
+                IRedPrimitive<string> redString => new RedStringViewModel(redString),
+                RED4.Types.CColor redcolor => new RedColorViewModel(redcolor),
                 _ => new ChunkPropertyViewModel(editableVariable)
             };
     }
 
     public class RedColorViewModel : ChunkPropertyViewModel
     {
-        public RedColorViewModel(IREDColor prop) : base(prop)
+        public RedColorViewModel(RED4.Types.CColor prop) : base(prop)
         {
-            DisplayColor = new Color() { A = prop.Value.A, R = prop.Value.R, G = prop.Value.G, B = prop.Value.B };
+            DisplayColor = new Color() { A = prop.Alpha, R = prop.Red, G = prop.Green, B = prop.Blue };
             SelectedColorCommand =
                 ReactiveCommand.Create<object>(
                     OnColorPicked);
@@ -112,7 +107,7 @@ namespace WolvenKit.ViewModels.Shell
 
         [Reactive] public Color DisplayColor { get; set; }
 
-        public ReactiveCommand<object, Unit> SelectedColorCommand { get; set; } 
+        public ReactiveCommand<object, Unit> SelectedColorCommand { get; set; }
 
         private void OnColorPicked(object e)
         {
@@ -120,18 +115,19 @@ namespace WolvenKit.ViewModels.Shell
             var mediaColor = d.Brush.Color;
             DisplayColor = mediaColor;
             var c = System.Drawing.Color.FromArgb(mediaColor.A, mediaColor.R, mediaColor.G, mediaColor.B);
-            (Property as IREDColor)?.SetValue(c);
+            throw new TodoException("Color conversion");
+            //(Property as RED4.Types.CColor)?.SetValue(c);
         }
     }
 
     // We can probably make this with generic types
     public class RedBoolViewModel : ChunkPropertyViewModel
     {
-        public RedBoolViewModel(IREDBool prop) :base(prop) { }
+        public RedBoolViewModel(IRedPrimitive<bool> prop) : base(prop) { }
     }
 
     public class RedStringViewModel : ChunkPropertyViewModel
     {
-        public RedStringViewModel(IREDString prop) : base(prop) { }
+        public RedStringViewModel(IRedPrimitive<string> prop) : base(prop) { }
     }
 }

@@ -2,8 +2,10 @@
 
 using System;
 using System.Collections;
+using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Reactive.Linq;
 using System.Windows;
@@ -15,6 +17,7 @@ using Syncfusion.Windows.Tools.Controls;
 using WolvenKit.Functionality.Layout;
 using WolvenKit.Functionality.Services;
 using WolvenKit.Functionality.WKitGlobal.Helpers;
+using WolvenKit.Models;
 using WolvenKit.Models.Docking;
 using WolvenKit.ViewModels.Documents;
 using WolvenKit.ViewModels.Shell;
@@ -28,16 +31,15 @@ namespace WolvenKit.Views.Shell
     /// </summary>
     public partial class DockingAdapter : UserControl
     {
-        private readonly AppViewModel viewModel;
+        private AppViewModel viewModel;
         public static DockingAdapter G_Dock;
+        private bool UsingProjectLayout = false;
+        private bool _hadLoadedProject = false;
 
         public DockingAdapter()
         {
             InitializeComponent();
             G_Dock = this;
-
-           
-
 
             viewModel = DataContext as AppViewModel;
         }
@@ -57,22 +59,27 @@ namespace WolvenKit.Views.Shell
         /// <param name="e"></param>
         private void PART_DockingManagerOnCloseButtonClick(object sender, CloseButtonEventArgs e)
         {
-            if (e.TargetItem is ContentControl { Content: IDocumentViewModel vm })
+            if (e.TargetItem is ContentControl { Content: DocumentViewModel vm })
             {
+                if (vm.IsDirty && MessageBox.Show("Unsaved changes will be lost - are you sure you want to close this file?", "Confirm", MessageBoxButton.YesNo) == MessageBoxResult.No)
+                {
+                    e.Cancel = true;
+                    return;
+                }
                 vm.Close.Execute().Subscribe();
 
                 (ItemsSource as IList).Remove(vm);
-
+                viewModel.UpdateTitle();
             }
         }
 
-        private bool DebuggingLayouts = false;
+        private readonly bool DebuggingLayouts = false;
 
         public void SetLayoutToDefault()
         {
             try
             {
-                var reader = XmlReader.Create("Config\\Layout\\DockStatesCR2W.xml");
+                var reader = XmlReader.Create("DockStatesDefault.xml");
                 var Debugging_A = PART_DockingManager.LoadDockState(reader);
                 Trace.WriteLine(Debugging_A);
                 reader.Close();
@@ -110,7 +117,7 @@ namespace WolvenKit.Views.Shell
 
             if (DebuggingLayouts)
             {
-                XmlWriter writer = XmlWriter.Create("DockStatesDefault.xml");
+                var writer = XmlWriter.Create("DockStates.xml");
 
                 PART_DockingManager.SaveDockState(writer);
 
@@ -127,6 +134,21 @@ namespace WolvenKit.Views.Shell
                     }
                 }
             }
+
+            if (viewModel is null)
+            {
+                viewModel = DataContext as AppViewModel;
+            }
+
+            SizeChanged += Window_SizeChanged;
+        }
+
+        private void Window_SizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            if (!UsingProjectLayout)
+            {
+                PART_DockingManager.SaveDockState();
+            }
         }
 
         public IDocumentViewModel ActiveDocument
@@ -141,7 +163,7 @@ namespace WolvenKit.Views.Shell
 
         public object ItemsSource
         {
-            get => (object)GetValue(ItemsSourceProperty);
+            get => GetValue(ItemsSourceProperty);
             set => SetValue(ItemsSourceProperty, value);
         }
 
@@ -170,8 +192,59 @@ namespace WolvenKit.Views.Shell
                 }
 
                 adapter.PART_DockingManager.SetCurrentValue(DockingManager.ActiveWindowProperty, control);
+
+                if (adapter.viewModel != null)
+                {
+                    adapter.viewModel.UpdateTitle();
+                }
+
                 break;
             }
+        }
+        public void OnActiveProjectChanged()
+        {
+            if (viewModel is null || viewModel.ActiveProject is null)
+            {
+                return;
+            }
+
+            try
+            {
+                // need to also handle if files have been modified (probably elsewhere, though)
+                if (!_hadLoadedProject && ItemsSource is ObservableCollection<IDockElement> oc)
+                {
+                    _hadLoadedProject = true;
+                    oc.Clear();
+                }
+                var layoutPath = Path.Combine(viewModel.ActiveProject.ProjectDirectory, "layout.xml");
+                if (File.Exists(layoutPath))
+                {
+                    var reader = XmlReader.Create(layoutPath);
+                    var Debugging_A = PART_DockingManager.LoadDockState(reader);
+                    Trace.WriteLine(Debugging_A);
+                    reader.Close();
+                    UsingProjectLayout = true;
+                    //PART_DockingManager.SetCurrentValue(DockingManager.PersistStateProperty, false);
+                }
+            }
+            catch (Exception)
+            {
+                //viewModel.Log(e.Message);
+                throw;
+            }
+        }
+
+        public void SaveLayoutToProject()
+        {
+            if (viewModel is null || viewModel.ActiveProject is null)
+            {
+                return;
+            }
+
+            var layoutPath = Path.Combine(viewModel.ActiveProject.ProjectDirectory, "layout.xml");
+            var writer = XmlWriter.Create(layoutPath);
+            PART_DockingManager.SaveDockState(writer);
+            writer.Close();
         }
 
         protected override void OnPropertyChanged(DependencyPropertyChangedEventArgs e)
@@ -200,18 +273,14 @@ namespace WolvenKit.Views.Shell
 
                             var control = new ContentControl() { Content = item };
                             DockingManager.SetHeader(control, dockElement.Header);
-                            if (dockElement.State == DockState.Document)
-                            {
-                                DockingManager.SetState(control, Syncfusion.Windows.Tools.Controls.DockState.Document);
-                            }
-                            else
+                            DockingManager.SetSideInDockedMode(control, (Syncfusion.Windows.Tools.Controls.DockSide)(int)dockElement.SideInDockedMode);
+                            DockingManager.SetState(control, (Syncfusion.Windows.Tools.Controls.DockState)(int)dockElement.State);
+                            if (dockElement.State != DockState.Document)
                             {
                                 if (count != 0)
                                 {
-                                    DockingManager.SetTargetNameInDockedMode(control, "item" + (count - 1).ToString());
-                                    DockingManager.SetSideInDockedMode(control, DockSide.Bottom);
+                                    //DockingManager.SetTargetNameInDockedMode(control, "item" + (count - 1).ToString());
                                 }
-                                DockingManager.SetDesiredWidthInDockedMode(control, 220);
                                 control.Name = "item" + (count++).ToString();
                             }
                             PART_DockingManager.Children.Add(control);
@@ -268,7 +337,7 @@ namespace WolvenKit.Views.Shell
                     PART_DockingManager.Children.Remove(control);
                     if (control.Content is IDocumentViewModel document)
                     {
-                      
+
                         if (ActiveDocument == document)
                         {
                             SetCurrentValue(ActiveDocumentProperty, null);
@@ -347,40 +416,25 @@ namespace WolvenKit.Views.Shell
                     dockElement.IsActive = true;
                 }
 
-
-                var header = DockingManager.GetHeader(content);
                 var propertiesViewModel = Locator.Current.GetService<PropertiesViewModel>();
-                if (!string.IsNullOrEmpty(header as string))
+                if (content.Content is ProjectExplorerViewModel pevm)
                 {
-                    DiscordHelper.SetDiscordRPCStatus(header as string);
+                    propertiesViewModel.SetToNullAndResetVisibility();
+                    propertiesViewModel.PE_FileInfoVisible = true;
+                    propertiesViewModel.PE_SelectedItem = pevm.SelectedItem;
+                    _ = propertiesViewModel.ExecuteSelectFile(pevm.SelectedItem);
+                }
+                else if (content.Content is AssetBrowserViewModel abvm)
+                {
+                    propertiesViewModel.SetToNullAndResetVisibility();
+                    propertiesViewModel.AB_FileInfoVisible = true;
+                    propertiesViewModel.AB_SelectedItem = abvm.RightSelectedItem;
+                    _ = propertiesViewModel.ExecuteSelectFile(abvm.RightSelectedItem as FileModel);
                 }
 
-                switch (header)
+                if (content.Content != null)
                 {
-                    case "Project Explorer":
-                        propertiesViewModel.SetToNullAndResetVisibility();
-                        propertiesViewModel.PE_FileInfoVisible = true;
-                        break;
-
-                    case "Asset Browser":
-                        propertiesViewModel.SetToNullAndResetVisibility();
-                        propertiesViewModel.AB_FileInfoVisible = true;
-                        break;
-
-                    case "CR2W Editor":
-                        // This never happens as CR2W editor is always named after its active document.
-                        break;
-                    case "Properties":
-                        break;
-                    case "Log":
-                        break;
-                    case "Import Export Tool":
-                        break;
-
-
-                    default:
-
-                        break;
+                    DiscordHelper.SetDiscordRPCStatus(content.Content as string);
                 }
 
                 //if (((IDockElement)content.Content).State == DockState.Document)
@@ -395,6 +449,11 @@ namespace WolvenKit.Views.Shell
                 {
                 }
 
+            }
+
+            if (viewModel != null)
+            {
+                viewModel.UpdateTitle();
             }
         }
     }

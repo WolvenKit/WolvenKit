@@ -1,4 +1,3 @@
-using System;
 using WolvenKit.RED4.TweakDB.Attributes;
 
 namespace WolvenKit.RED4.TweakDB.Types
@@ -19,6 +18,6 @@ namespace WolvenKit.RED4.TweakDB.Types
 
         public override string Name => "Color";
         public override string ToString() => $"Color, Red = {Red.Value}, Green = {Green.Value}, Blue = {Blue.Value}, Blue = {Alpha.Value}";
-        
+
     }
 }

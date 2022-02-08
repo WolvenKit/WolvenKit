@@ -1,0 +1,29 @@
+using static WolvenKit.RED4.Types.Enums;
+
+namespace WolvenKit.RED4.Types
+{
+	[REDMeta]
+	public partial class worldCompiledCommunityAreaNode : worldNode
+	{
+		[Ordinal(4)] 
+		[RED("area")] 
+		public CHandle<communityArea> Area
+		{
+			get => GetPropertyValue<CHandle<communityArea>>();
+			set => SetPropertyValue<CHandle<communityArea>>(value);
+		}
+
+		[Ordinal(5)] 
+		[RED("sourceObjectId")] 
+		public entEntityID SourceObjectId
+		{
+			get => GetPropertyValue<entEntityID>();
+			set => SetPropertyValue<entEntityID>(value);
+		}
+
+		public worldCompiledCommunityAreaNode()
+		{
+			SourceObjectId = new();
+		}
+	}
+}

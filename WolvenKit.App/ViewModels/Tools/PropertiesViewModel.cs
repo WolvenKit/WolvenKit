@@ -1,22 +1,15 @@
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Diagnostics;
 using System.IO;
-using System.Reactive;
 using System.Threading.Tasks;
 using System.Windows.Controls;
 using System.Windows.Input;
-using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Threading;
 using CP77.CR2W;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using WolvenKit.Common;
-using WolvenKit.Common.Extensions;
 using WolvenKit.Common.Interfaces;
-using WolvenKit.Common.Model;
 using WolvenKit.Common.Services;
 using WolvenKit.Functionality.Ab4d;
 using WolvenKit.Functionality.Commands;
@@ -62,13 +55,15 @@ namespace WolvenKit.ViewModels.Tools
             _modTools = modTools;
 
             SetupToolDefaults();
+            SideInDockedMode = DockSide.Left;
 
             SetToNullAndResetVisibility();
 
-            PreviewAudioCommand = ReactiveCommand.Create<string,string>(str => str);
+            PreviewAudioCommand = ReactiveCommand.Create<string, string>(str => str);
         }
 
         #region properties
+        [Reactive] public int SelectedIndex { get; set; }
 
         [Reactive] public FileModel PE_SelectedItem { get; set; }
 
@@ -124,6 +119,7 @@ namespace WolvenKit.ViewModels.Tools
 
         public async Task ExecuteSelectFile(FileModel model)
         {
+            SelectedIndex = 0;
             if (model == null)
             {
                 return;
@@ -134,11 +130,8 @@ namespace WolvenKit.ViewModels.Tools
                 return;
             }
 
-            if (_settingsManager.ShowFilePreview)
-            {
-                PE_SelectedItem = model;
-            }
-            else
+            PE_SelectedItem = model;
+            if (!_settingsManager.ShowFilePreview)
             {
                 return;
             }
@@ -159,13 +152,17 @@ namespace WolvenKit.ViewModels.Tools
                 return;
             }
             // string.Equals(model.GetExtension(), ERedExtension.bk2.ToString(), StringComparison.OrdinalIgnoreCase) ||
-            if (!(string.Equals(model.GetExtension(), ERedExtension.mesh.ToString(), StringComparison.OrdinalIgnoreCase) ||
+            if (!(
+              string.Equals(model.GetExtension(), ERedExtension.ent.ToString(), StringComparison.OrdinalIgnoreCase) ||
+              string.Equals(model.GetExtension(), ERedExtension.physicalscene.ToString(), StringComparison.OrdinalIgnoreCase) ||
+              string.Equals(model.GetExtension(), ERedExtension.w2mesh.ToString(), StringComparison.OrdinalIgnoreCase) ||
+              string.Equals(model.GetExtension(), ERedExtension.mesh.ToString(), StringComparison.OrdinalIgnoreCase) ||
               string.Equals(model.GetExtension(), ERedExtension.wem.ToString(), StringComparison.OrdinalIgnoreCase) ||
-              string.Equals(model.GetExtension(), ERedExtension.xbm.ToString(), StringComparison.OrdinalIgnoreCase)
+              string.Equals(model.GetExtension(), ERedExtension.xbm.ToString(), StringComparison.OrdinalIgnoreCase) ||
+              string.Equals(model.GetExtension(), ERedExtension.envprobe.ToString(), StringComparison.OrdinalIgnoreCase)
               || Enum.TryParse<EConvertableOutput>(PE_SelectedItem.GetExtension(), out _)
               || Enum.TryParse<EUncookExtension>(PE_SelectedItem.GetExtension(), out _)
-            )
-        )
+            ))
             {
                 return;
             }
@@ -185,24 +182,26 @@ namespace WolvenKit.ViewModels.Tools
                     if (Enum.IsDefined(typeof(EConvertableOutput), PE_SelectedItem.GetExtension()))
                     {
                         PE_MeshPreviewVisible = true;
+                        SelectedIndex = 1;
 
                         LoadModel(PE_SelectedItem.FullName);
                     }
 
-
-
-                    if (string.Equals(PE_SelectedItem.GetExtension(), ERedExtension.mesh.ToString(),
-                        System.StringComparison.OrdinalIgnoreCase))
+                    if (string.Equals(PE_SelectedItem.GetExtension(), ERedExtension.mesh.ToString(), StringComparison.OrdinalIgnoreCase) ||
+                        string.Equals(PE_SelectedItem.GetExtension(), ERedExtension.w2mesh.ToString(), StringComparison.OrdinalIgnoreCase) ||
+                        string.Equals(PE_SelectedItem.GetExtension(), ERedExtension.ent.ToString(), StringComparison.OrdinalIgnoreCase) ||
+                        string.Equals(PE_SelectedItem.GetExtension(), ERedExtension.physicalscene.ToString(), StringComparison.OrdinalIgnoreCase))
                     {
-                        PE_MeshPreviewVisible = true;
                         using (var meshStream = new FileStream(PE_SelectedItem.FullName, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
                         {
                             meshStream.Seek(0, SeekOrigin.Begin);
-                            string outPath = Path.Combine(ISettingsManager.GetManagerCacheDir(), "Temp_OBJ",Path.GetFileName(PE_SelectedItem.FullName));
+                            var outPath = Path.Combine(ISettingsManager.GetTemp_OBJPath(), Path.GetFileName(PE_SelectedItem.FullName));
                             outPath = Path.ChangeExtension(outPath, ".glb");
                             if (_meshTools.ExportMeshPreviewer(meshStream, new FileInfo(outPath)))
                             {
                                 LoadModel(outPath);
+                                PE_MeshPreviewVisible = true;
+                                SelectedIndex = 1;
                             }
                             meshStream.Dispose();
                             meshStream.Close();
@@ -213,6 +212,7 @@ namespace WolvenKit.ViewModels.Tools
                         System.StringComparison.OrdinalIgnoreCase))
                     {
                         IsAudioPreviewVisible = true;
+                        SelectedIndex = 2;
 
                         PreviewAudioCommand.SafeExecute(PE_SelectedItem.FullName);
                     }
@@ -221,39 +221,43 @@ namespace WolvenKit.ViewModels.Tools
                     if (Enum.TryParse<EUncookExtension>(PE_SelectedItem.GetExtension(),
                             out _))
                     {
-                        IsImagePreviewVisible = true;
-
                         var q = await ImageDecoder.RenderToBitmapSource(PE_SelectedItem.FullName);
                         if (q != null)
                         {
                             var g = BitmapFrame.Create(q);
                             LoadImage(g);
+                            IsImagePreviewVisible = true;
+                            SelectedIndex = 3;
                         }
                     }
 
                     // xbm
-                    if (string.Equals(PE_SelectedItem.GetExtension(), ERedExtension.xbm.ToString(),
-                            System.StringComparison.OrdinalIgnoreCase))
+                    if (string.Equals(PE_SelectedItem.GetExtension(), ERedExtension.xbm.ToString(), StringComparison.OrdinalIgnoreCase) ||
+                        string.Equals(PE_SelectedItem.GetExtension(), ERedExtension.mesh.ToString(), StringComparison.OrdinalIgnoreCase) ||
+                        string.Equals(PE_SelectedItem.GetExtension(), ERedExtension.envprobe.ToString(), StringComparison.OrdinalIgnoreCase))
                     {
-                        IsImagePreviewVisible = true;
 
                         // convert xbm to dds stream
                         await using var ddsstream = new MemoryStream();
                         await using var filestream = new FileStream(PE_SelectedItem.FullName,
                             FileMode.Open, FileAccess.Read, FileShare.ReadWrite, 4096, FileOptions.SequentialScan);
-                        _modTools.ConvertXbmToDdsStream(filestream, ddsstream, out _);
-
-                        // try loading it in pfim
-                        try
+                        if (_modTools.ConvertXbmToDdsStream(filestream, ddsstream, out _))
                         {
-                            var qa = await ImageDecoder.RenderToBitmapSourceDds(ddsstream);
-                            if (qa != null)
+                            // try loading it in pfim
+                            try
                             {
-                                LoadImage(qa);
+                                var qa = await ImageDecoder.RenderToBitmapSourceDds(ddsstream);
+                                if (qa != null)
+                                {
+                                    LoadImage(qa);
+                                    IsImagePreviewVisible = true;
+                                    SelectedIndex = 3;
+                                }
                             }
-                        }
-                        catch (Exception)
-                        {
+                            catch (Exception)
+                            {
+                                throw;
+                            }
                         }
                     }
                 }
@@ -300,7 +304,7 @@ namespace WolvenKit.ViewModels.Tools
             { IsMeshPreviewVisible = false; }
         }
 
-        
+
 
         /// <summary>
         /// Initialize Syncfusion specific defaults that are specific to this tool window.

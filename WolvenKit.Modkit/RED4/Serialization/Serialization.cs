@@ -185,14 +185,13 @@ namespace WolvenKit.Modkit.RED4.Serialization
         /// </summary>
         /// <param name="doc"></param>
         /// <returns></returns>
-        public static string Serialize(TweakDocument doc)
-        {
+        public static string Serialize(TweakDocument doc) =>
 #if USEYAML
-            return Yaml.SerializeYaml(doc);
+            Yaml.SerializeYaml(doc);
 #else
             return SerializeJson(doc);
 #endif
-        }
+
 
 
         /// <summary>

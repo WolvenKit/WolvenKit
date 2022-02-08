@@ -44,7 +44,7 @@
 
                     <DataTemplate DataType="{x:Type docvm:RedDocumentViewModel}">
                         <Grid>
-                            <documents:DocumentView />
+                            <documents:RedDocumentView />
                         </Grid>
                     </DataTemplate>
                     <DataTemplate DataType="{x:Type docvm:TweakDocumentViewModel}">
@@ -54,7 +54,7 @@
                     </DataTemplate>
                     <DataTemplate DataType="{x:Type docvm:ScriptDocumentViewModel}">
                         <Grid>
-                            <documents:TweakDocumentView />
+                            <documents:ScriptDocumentView />
                         </Grid>
                     </DataTemplate>
 

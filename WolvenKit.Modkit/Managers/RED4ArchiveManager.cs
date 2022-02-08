@@ -1,6 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using ProtoBuf;
 using WolvenKit.Common.Model;
 
@@ -13,6 +10,8 @@ namespace WolvenKit.Common
     [ProtoContract]
     public abstract class RED4ArchiveManager : WolvenKitArchiveManager
     {
-        
+        public RED4ArchiveManager()
+        {
+        }
     }
 }

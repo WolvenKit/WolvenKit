@@ -7,9 +7,7 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Shapes;
-using WolvenKit.Common;
-using WolvenKit.Common.Model.Cr2w;
-using WolvenKit.RED4.CR2W.Types;
+using WolvenKit.RED4.Types;
 using WolvenKit.ViewModels;
 using Point = System.Windows.Point;
 
@@ -26,38 +24,37 @@ namespace WolvenKit.Views.Editors
 
         private readonly string _elementType;
 
-        private readonly ICurveDataAccessor _model;
+        private readonly IRedLegacySingleChannelCurve _model;
 
-        public CurveEditorWindow(IEditableVariable property)
+        public CurveEditorWindow(IRedType property)
         {
             InitializeComponent();
 
-            if (property is not ICurveDataAccessor model)
+            if (property is not IRedLegacySingleChannelCurve model)
             {
                 return;
             }
 
             _model = model;
 
+            _elementType = model.ElementType;
+
             var points = model.GetCurvePoints().ToArray();
-            var times = points.Select(x => (double)x.GetTime()).ToArray();
-            var values = points
-                .Select(x => x.GetValue())
-                .OfType<Tuple<IEditableVariable, IEditableVariable>>()
-                .Select(x => x.Item1);
-            var type = model.GetInterpolationType();
+            var times = points.Select(x => (double)x.GetPoint()).ToArray();
+            var values = points.Select(x => x.GetValue()).ToArray();
+            var type = model.InterpolationType;
 
-            _elementType = model.Elementtype;
 
-            switch (model.Elementtype)
+
+            switch (_elementType)
             {
                 case "HDRColor":
                 {
                     var colors = values.OfType<HDRColor>().ToList();
-                    var blue = colors.Select(x => (double)x.Blue.Value).ToArray();
-                    var red = colors.Select(x => (double)x.Red.Value).ToArray();
-                    var green = colors.Select(x => (double)x.Green.Value).ToArray();
-                    var alpha = colors.Select(x => (double)x.Alpha.Value).ToArray();
+                    var blue = colors.Select(x => (double)x.Blue).ToArray();
+                    var red = colors.Select(x => (double)x.Red).ToArray();
+                    var green = colors.Select(x => (double)x.Green).ToArray();
+                    var alpha = colors.Select(x => (double)x.Alpha).ToArray();
 
                     if (DataContext is CurveEditorViewModel vm)
                     {
@@ -69,7 +66,7 @@ namespace WolvenKit.Views.Editors
                 case "Float":
                 {
                     var floats = values.OfType<CFloat>().ToList();
-                    var ys = floats.Select(x => (double)x.Value).ToArray();
+                    var ys = floats.Select(x => (double)x).ToArray();
 
                     if (DataContext is CurveEditorViewModel vm)
                     {
@@ -78,35 +75,39 @@ namespace WolvenKit.Views.Editors
 
                     break;
                 }
-                case "Vector2":
+                //case "Vector2":
+                //{
+                //    var floats = values.OfType<Vector2>().ToList();
+                //    var xs = floats.Select(x => (double)x.X).ToArray();
+                //    var ys = floats.Select(x => (double)x.Y).ToArray();
+                //
+                //
+                //    break;
+                //}
+                //case "Vector3":
+                //{
+                //    var floats = values.OfType<Vector3>().ToList();
+                //    var xs = floats.Select(x => (double)x.X).ToArray();
+                //    var ys = floats.Select(x => (double)x.Y).ToArray();
+                //    var zs = floats.Select(x => (double)x.Z).ToArray();
+                //
+                //
+                //    break;
+                //}
+                //case "Vector4":
+                //{
+                //    var floats = values.OfType<Vector4>().ToList();
+                //    var xs = floats.Select(x => (double)x.X).ToArray();
+                //    var ys = floats.Select(x => (double)x.Y).ToArray();
+                //    var zs = floats.Select(x => (double)x.Z).ToArray();
+                //    var ws = floats.Select(x => (double)x.W).ToArray();
+                //
+                //
+                //    break;
+                //}
+                default:
                 {
-                    var floats = values.OfType<Vector2>().ToList();
-                    var xs = floats.Select(x => (double)x.X.Value).ToArray();
-                    var ys = floats.Select(x => (double)x.Y.Value).ToArray();
-
-
-                    break;
-                }
-                case "Vector3":
-                {
-                    var floats = values.OfType<Vector3>().ToList();
-                    var xs = floats.Select(x => (double)x.X.Value).ToArray();
-                    var ys = floats.Select(x => (double)x.Y.Value).ToArray();
-                    var zs = floats.Select(x => (double)x.Z.Value).ToArray();
-
-
-                    break;
-                }
-                case "Vector4":
-                {
-                    var floats = values.OfType<Vector4>().ToList();
-                    var xs = floats.Select(x => (double)x.X.Value).ToArray();
-                    var ys = floats.Select(x => (double)x.Y.Value).ToArray();
-                    var zs = floats.Select(x => (double)x.Z.Value).ToArray();
-                    var ws = floats.Select(x => (double)x.W.Value).ToArray();
-
-
-                    break;
+                    throw new NotImplementedException($"CurveEditor: {_elementType}");
                 }
             }
         }
@@ -189,8 +190,8 @@ namespace WolvenKit.Views.Editors
 
         private void MainWindow1_OnLoaded(object sender, RoutedEventArgs e)
         {
-            this.KeyDown += OnKeyDown;
-            this.KeyUp += OnKeyUp;
+            KeyDown += OnKeyDown;
+            KeyUp += OnKeyUp;
 
             if (DataContext is CurveEditorViewModel vm)
             {
@@ -283,14 +284,14 @@ namespace WolvenKit.Views.Editors
 
         private void SaveButton_OnClick(object sender, RoutedEventArgs e)
         {
-            this.DialogResult = true;
-            this.Close();
+            DialogResult = true;
+            Close();
         }
 
         private void CloseButton_OnClick(object sender, RoutedEventArgs e)
         {
-            this.DialogResult = false;
-            this.Close();
+            DialogResult = false;
+            Close();
         }
 
         #endregion
@@ -316,23 +317,23 @@ namespace WolvenKit.Views.Editors
             // handle visibility
             switch (vm.GetInterpolationTypeEnum())
             {
-                case EInterpolationType.EIT_Constant:
-                case EInterpolationType.EIT_Linear:
+                case Enums.EInterpolationType.Constant:
+                case Enums.EInterpolationType.Linear:
                     CanvasLinearCurve.SetCurrentValue(VisibilityProperty, Visibility.Visible);
                     CanvasQuadraticCurve.SetCurrentValue(VisibilityProperty, Visibility.Collapsed);
                     CanvasCubicCurve.SetCurrentValue(VisibilityProperty, Visibility.Collapsed);
                     break;
-                case EInterpolationType.EIT_BezierQuadratic:
+                case Enums.EInterpolationType.BezierQuadratic:
                     CanvasLinearCurve.SetCurrentValue(VisibilityProperty, Visibility.Collapsed);
                     CanvasQuadraticCurve.SetCurrentValue(VisibilityProperty, Visibility.Visible);
                     CanvasCubicCurve.SetCurrentValue(VisibilityProperty, Visibility.Collapsed);
                     break;
-                case EInterpolationType.EIT_BezierCubic:
+                case Enums.EInterpolationType.BezierCubic:
                     CanvasLinearCurve.SetCurrentValue(VisibilityProperty, Visibility.Collapsed);
                     CanvasQuadraticCurve.SetCurrentValue(VisibilityProperty, Visibility.Collapsed);
                     CanvasCubicCurve.SetCurrentValue(VisibilityProperty, Visibility.Visible);
                     break;
-                case EInterpolationType.EIT_Hermite:
+                case Enums.EInterpolationType.Hermite:
                 default:
                     throw new ArgumentOutOfRangeException();
             }
@@ -513,7 +514,7 @@ namespace WolvenKit.Views.Editors
             }
             Canvas.SetLeft(label, x);
 
-            double y = location.Y;
+            var y = location.Y;
             switch (valign)
             {
                 case VerticalAlignment.Center:
@@ -535,62 +536,38 @@ namespace WolvenKit.Views.Editors
                 {
                     case "HDRColor":
                     {
-                        // TODO
                         var alpha = vm.Curve.Select(_ => new Tuple<double, object>(_.T, (float)_.V)).ToList();
                         var type = vm.GetInterpolationTypeEnum();
 
                         var values = _model.GetCurvePoints()
                             .Select(x => x.GetValue())
-                            .OfType<Tuple<IEditableVariable, IEditableVariable>>()
+                            .OfType<Tuple<IRedType, IRedType>>()
                             .Select(x => x.Item1)
                             .OfType<HDRColor>()
                             .ToList();
 
-                        if (alpha.Count != values.Count)
-                        {
 
-                        }
-
-
-                        var vec = new List<Tuple<double, object>>();
+                        var vec = new List<Tuple<double, IRedType>>();
                         for (var i = 0; i < values.Count; i++)
                         {
                             var item = values[i];
-                            item.Alpha.SetValue(alpha[i].Item2);
-                            vec.Add(new Tuple<double, object>(alpha[i].Item1, item));
+                            item.Alpha = (CFloat)alpha[i].Item2;
+                            vec.Add(new Tuple<double, IRedType>(alpha[i].Item1, item));
                         }
 
                         return new CurveDto(vec, type);
                     }
                     case "Float":
                     {
-                        var vec = vm.Curve.Select(_ => new Tuple<double, object>(_.T, (float)_.V));
+                        var vec = vm.Curve.Select(_ => new Tuple<double, IRedType>(_.T, (CFloat)_.V));
                         var type = vm.GetInterpolationTypeEnum();
                         return new CurveDto(vec, type);
                     }
-                    case "Vector2":
-                    {// TODO
-
-                        break;
-                    }
-                    case "Vector3":
+                    default:
                     {
-                        // TODO
-
-                        break;
-                    }
-                    case "Vector4":
-                    {
-                        // TODO
-
-                        break;
+                        throw new NotImplementedException($"CurveEditor: {_elementType}");
                     }
                 }
-
-
-
-
-
             }
 
             return null;

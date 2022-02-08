@@ -1,0 +1,21 @@
+using static WolvenKit.RED4.Types.Enums;
+
+namespace WolvenKit.RED4.Types
+{
+	[REDMeta]
+	public partial class toolsMessageLocation_EditorObject : toolsIMessageLocation
+	{
+		[Ordinal(0)] 
+		[RED("path")] 
+		public toolsEditorObjectIDPath Path
+		{
+			get => GetPropertyValue<toolsEditorObjectIDPath>();
+			set => SetPropertyValue<toolsEditorObjectIDPath>(value);
+		}
+
+		public toolsMessageLocation_EditorObject()
+		{
+			Path = new() { Elements = new() };
+		}
+	}
+}

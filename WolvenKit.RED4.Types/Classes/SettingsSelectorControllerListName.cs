@@ -1,0 +1,24 @@
+using static WolvenKit.RED4.Types.Enums;
+
+namespace WolvenKit.RED4.Types
+{
+	[REDMeta]
+	public partial class SettingsSelectorControllerListName : SettingsSelectorControllerList
+	{
+		[Ordinal(20)] 
+		[RED("realValue")] 
+		public CWeakHandle<userSettingsVarListName> RealValue
+		{
+			get => GetPropertyValue<CWeakHandle<userSettingsVarListName>>();
+			set => SetPropertyValue<CWeakHandle<userSettingsVarListName>>(value);
+		}
+
+		[Ordinal(21)] 
+		[RED("currentIndex")] 
+		public CInt32 CurrentIndex
+		{
+			get => GetPropertyValue<CInt32>();
+			set => SetPropertyValue<CInt32>(value);
+		}
+	}
+}

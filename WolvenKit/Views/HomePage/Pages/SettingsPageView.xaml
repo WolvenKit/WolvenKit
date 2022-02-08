@@ -11,66 +11,58 @@
     xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
     xmlns:viewmodels="clr-namespace:WolvenKit.ViewModels">
    
-    <Grid MinWidth="300" MinHeight="300" Background="{DynamicResource MahApps.Brushes.ThemeBackground}">
+    <Grid MinWidth="300" MinHeight="300">
 
         <Grid.Resources>
-            <Style TargetType="CheckBox">
-                <Setter Property="HorizontalAlignment" Value="Left" />
-            </Style>
+            <ResourceDictionary>
+                <!--<ResourceDictionary.MergedDictionaries>
+                    <hc:ThemeResources RequestedTheme="Dark" />
+                    <hc:Theme />
+                </ResourceDictionary.MergedDictionaries>-->
+
+                <ResourceDictionary.MergedDictionaries>
+                    <ResourceDictionary Source="pack://application:,,,/AdonisUI;component/ColorSchemes/Dark.xaml"/>
+                    <ResourceDictionary Source="pack://application:,,,/AdonisUI.ClassicTheme;component/Resources.xaml"/>
+                </ResourceDictionary.MergedDictionaries>
+            </ResourceDictionary>
         </Grid.Resources>
 
         <Grid.RowDefinitions>
             <RowDefinition Height="*"/>
-            <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
-        <syncfusion:PropertyGrid x:Name="SettingsPropertygrid" Grid.Row="0"  Margin="3,75,3,0"
-                            AutoGeneratingPropertyGridItem="SettingsPropertygrid_OnAutoGeneratingPropertyGridItem"
-                            CategoryForeground="{DynamicResource MahApps.Brushes.Accent}"
-                            EnableGrouping="True"/>
-
-        <Grid Grid.Row="1">
-
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto"/>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="Auto"/>
-            </Grid.ColumnDefinitions>
-
-            <StackPanel Grid.Column="0" Margin="5" HorizontalAlignment="Right" Orientation="Horizontal" >
-                <Button x:Name="CheckForUpdatesButton" Content="Check for updates" />
-            </StackPanel>
-
-            <StackPanel Grid.Column="2" Margin="5" HorizontalAlignment="Right" Orientation="Horizontal" >
-                <TextBlock Margin="5" HorizontalAlignment="Center" VerticalAlignment="Center"
-                        Foreground="{DynamicResource MahApps.Brushes.AccentBase}"
-                        Text="Theme changes will take affect after restart." />
-                <Button x:Name="ExitRestart" Click="ExitRestart_Click" Content="Exit and restart" />
-
-            </StackPanel>
-        </Grid>
+        <syncfusion:PropertyGrid
+            x:Name="SettingsPropertygrid" Grid.Row="0"  Margin="0,85,0,0"
+            AutoGeneratingPropertyGridItem="SettingsPropertygrid_OnAutoGeneratingPropertyGridItem"
+            CategoryForeground="{StaticResource WolvenKitRed}"
+            EnableGrouping="True"
+            BorderThickness="0"
+            SearchBoxVisibility="Collapsed"
+            ButtonPanelVisibility="Collapsed"
+            PropertyNameColumnDefinition="200">
+            <!--syncfusion:PropertyGrid.Resources>
+                <Style TargetType="{x:Type propertygrid:PropertyViewItem}" BasedOn="{StaticResource SyncfusionPropertyViewItemStyle}">
+                    <Setter Property="IsCategoryEditorEnabled" Value="False" />
+                </Style>
+            </syncfusion:PropertyGrid.Resources-->
+        </syncfusion:PropertyGrid>
 
 
         <StackPanel
-            Margin="0,0,5,0"
-            HorizontalAlignment="Right"
+            Margin="25,0,5,0"
+            Height="85"
+            HorizontalAlignment="Left"
             VerticalAlignment="Top"
             Orientation="Horizontal"
             >
+            <StackPanel.Resources>
+                <Style TargetType="Button" BasedOn="{StaticResource ButtonDefault}">
+                    <Setter Property="BorderThickness" Value="0" />
+                    <Setter Property="Background" Value="{StaticResource ContentBackgroundAlt}" />
+                    <Setter Property="Padding" Value="15,0" />
+                </Style>
+            </StackPanel.Resources>
 
-            <TextBlock
-                HorizontalAlignment="Center"
-                VerticalAlignment="Center "
-                FontSize="20"
-                Text="Settings"
-                />
-            <hc:Divider
-                Height="45"
-                Margin="15"
-                HorizontalAlignment="Center"
-                VerticalAlignment="Center"
-                Orientation="Vertical"
-                />
             <hc:AnimationPath
                 Width="45"
                 Height="45"
@@ -91,6 +83,37 @@
                     </TransformGroup>
                 </hc:AnimationPath.RenderTransform>
             </hc:AnimationPath>
+            <hc:Divider
+                Height="50"
+                Margin="15"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                Orientation="Vertical"
+                />
+            <TextBlock
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                FontSize="20"
+                Text="Settings"
+                Foreground="White"
+                />
+
+            <Button x:Name="CheckForUpdatesButton" Margin="15" Height="40">
+                <TextBlock Text="Check for updates" FontSize="14"/>
+            </Button>
+            
+            <Button x:Name="SaveCloseButton" Margin="0" Height="40">
+                <TextBlock Text="Save &amp; Close" FontSize="14"/>
+            </Button>
+
+            <!--TextBlock Margin="15" HorizontalAlignment="Center" VerticalAlignment="Center"
+                        Foreground="{StaticResource WolvenKitRed}"
+                        Text="Theme changes will take affect after restart." /-->
+            
+            <!--Button x:Name="ExitRestart" Click="ExitRestart_Click" Margin="15" Height="40">
+                <TextBlock Text="Exit and restart" FontSize="14"/>
+            </Button-->
+
         </StackPanel>
 
     </Grid>

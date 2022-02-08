@@ -1,13 +1,5 @@
-using System;
 using System.Reactive.Disposables;
-using System.Reactive.Linq;
-using System.Windows;
 using ReactiveUI;
-using Splat;
-using Syncfusion.UI.Xaml.TreeGrid;
-using Syncfusion.Windows.Tools.Controls;
-using WolvenKit.Functionality.WKitGlobal.Helpers;
-using WolvenKit.Models.Wizards;
 using WolvenKit.ViewModels.Wizards;
 
 namespace WolvenKit.Views.Wizards
@@ -19,8 +11,8 @@ namespace WolvenKit.Views.Wizards
         {
             InitializeComponent();
 
-            this.WhenAnyValue(x => x.ViewModel)
-                .BindTo(this, x => x.DataContext);
+            //this.WhenAnyValue(x => x.ViewModel)
+            //    .BindTo(this, x => x.DataContext);
 
 
             this.WhenActivated(disposables =>
@@ -29,15 +21,15 @@ namespace WolvenKit.Views.Wizards
                 //    vm => vm,
                 //    v => v.DataContext).DisposeWith(disposables);
 
-                Observable
-                    .FromEventPattern(wizardControl, nameof(WizardControl.Finish))
-                    .Subscribe(_ => ViewModel.OkCommand.Execute().Subscribe())
-                    .DisposeWith(disposables);
+                //Observable
+                //    .FromEventPattern(wizardControl, nameof(WizardControl.Finish))
+                //    .Subscribe(_ => ViewModel.OkCommand.Execute().Subscribe())
+                //    .DisposeWith(disposables);
 
-                Observable
-                    .FromEventPattern(wizardControl, nameof(WizardControl.Cancel))
-                    .Subscribe(_ => ViewModel.CancelCommand.Execute().Subscribe())
-                    .DisposeWith(disposables);
+                //Observable
+                //    .FromEventPattern(wizardControl, nameof(WizardControl.Cancel))
+                //    .Subscribe(_ => ViewModel.CancelCommand.Execute().Subscribe())
+                //    .DisposeWith(disposables);
 
                 this.Bind(ViewModel,
                         vm => vm.ProjectName,
@@ -45,14 +37,24 @@ namespace WolvenKit.Views.Wizards
                 this.Bind(ViewModel,
                         vm => vm.ProjectPath,
                         v => v.projectPathTxtbx.Text).DisposeWith(disposables);
+                this.Bind(ViewModel,
+                        vm => vm.Author,
+                        v => v.projectAuthorTxtbx.Text).DisposeWith(disposables);
+                this.Bind(ViewModel,
+                        vm => vm.Email,
+                        v => v.projectEmailTxtbx.Text).DisposeWith(disposables);
+                this.Bind(ViewModel,
+                        vm => vm.Version,
+                        v => v.projectVersionTxtbx.Text).DisposeWith(disposables);
                 //this.OneWayBind(ViewModel,
                 //        vm => vm.ProjectType,
                 //        v => v.ProjectypeTextBox.ItemsSource)
                 //    .DisposeWith(disposables);
-                this.Bind(ViewModel,
-                        vm => vm.AllFieldsValid,
-                        v => v.wizardControl.FinishEnabled)
-                    .DisposeWith(disposables);
+                //this.Bind(ViewModel,
+                //        vm => vm.AllFieldsValid,
+                //        v => v.wizardControl.FinishEnabled)
+                //    .DisposeWith(disposables);
+
 
                 this.BindCommand(ViewModel,
                     vm => vm.OpenProjectPathCommand,

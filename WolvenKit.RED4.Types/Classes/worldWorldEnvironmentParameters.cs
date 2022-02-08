@@ -1,0 +1,21 @@
+using static WolvenKit.RED4.Types.Enums;
+
+namespace WolvenKit.RED4.Types
+{
+	[REDMeta]
+	public partial class worldWorldEnvironmentParameters : RedBaseClass
+	{
+		[Ordinal(0)] 
+		[RED("globalLightingTrajectory")] 
+		public GlobalLightingTrajectory GlobalLightingTrajectory
+		{
+			get => GetPropertyValue<GlobalLightingTrajectory>();
+			set => SetPropertyValue<GlobalLightingTrajectory>(value);
+		}
+
+		public worldWorldEnvironmentParameters()
+		{
+			GlobalLightingTrajectory = new() { TimeOfYearSeason = Enums.ETimeOfYearSeason.ETOYS_Summer };
+		}
+	}
+}

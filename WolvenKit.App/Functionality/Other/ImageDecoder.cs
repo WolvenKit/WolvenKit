@@ -16,7 +16,7 @@ namespace WolvenKit.Functionality.Ab4d
 {
     public static class ImageDecoder
     {
-        public static async Task<BitmapSource>  RenderToBitmapSourceDds(Stream stream)
+        public static async Task<BitmapSource> RenderToBitmapSourceDds(Stream stream)
         {
             stream.Seek(0, SeekOrigin.Begin);
             var image = Pfim.Pfim.FromStream(stream);
@@ -27,6 +27,8 @@ namespace WolvenKit.Functionality.Ab4d
                 PixelFormat(image), null, addr, image.DataLen, image.Stride);
             image.Dispose();
             pfimPic.Freeze();
+            // yes
+            //return new TransformedBitmap(pfimPic, new ScaleTransform(1, -1));
             return pfimPic;
         }
 
@@ -149,11 +151,7 @@ namespace WolvenKit.Functionality.Ab4d
         }
 
 
-        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
-        {
-            throw new NotImplementedException();
-
-        }
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture) => throw new NotImplementedException();
 
     }
 }

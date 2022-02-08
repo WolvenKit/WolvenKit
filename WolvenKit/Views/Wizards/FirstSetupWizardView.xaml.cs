@@ -2,14 +2,9 @@ using System;
 using System.IO;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
-using System.Threading;
 using System.Windows;
-using System.Windows.Input;
-using System.Windows.Media;
 using ReactiveUI;
-using Splat;
 using WolvenKit.Core;
-using WolvenKit.Functionality.Services;
 using WolvenKit.ViewModels.Wizards;
 
 namespace WolvenKit.Views.Wizards

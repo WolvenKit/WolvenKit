@@ -1,10 +1,5 @@
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 using CP77.CR2W;
 using CP77Tools.Tasks;
 using Microsoft.Extensions.Configuration;
@@ -18,7 +13,6 @@ using WolvenKit.Common.Model.Arguments;
 using WolvenKit.Common.Services;
 using WolvenKit.Core.Services;
 using WolvenKit.Modkit.RED4;
-using WolvenKit.Modkit.RED4.RigFile;
 using WolvenKit.RED4.CR2W;
 using WolvenKit.RED4.CR2W.Archive;
 

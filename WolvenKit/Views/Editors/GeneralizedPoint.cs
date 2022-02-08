@@ -1,20 +1,17 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using WolvenKit.Common;
+using WolvenKit.RED4.Types;
 using Point = System.Windows.Point;
 
 namespace WolvenKit.Views.Editors
 {
     public class CurveDto
     {
-        public EInterpolationType Type { get; set; }
-        public IEnumerable<Tuple<double,object>> Points { get; set; }
+        public Enums.EInterpolationType Type { get; set; }
+        public IEnumerable<Tuple<double, IRedType>> Points { get; set; }
 
-        public CurveDto(IEnumerable<Tuple<double, object>> points, EInterpolationType type)
+        public CurveDto(IEnumerable<Tuple<double, IRedType>> points, Enums.EInterpolationType type)
         {
             Points = points;
             Type = type;

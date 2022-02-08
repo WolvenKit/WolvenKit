@@ -1,0 +1,62 @@
+using static WolvenKit.RED4.Types.Enums;
+
+namespace WolvenKit.RED4.Types
+{
+	[REDMeta]
+	public partial class SDocumentThumbnailWidgetPackage : SWidgetPackage
+	{
+		[Ordinal(17)] 
+		[RED("folderName")] 
+		public CString FolderName
+		{
+			get => GetPropertyValue<CString>();
+			set => SetPropertyValue<CString>(value);
+		}
+
+		[Ordinal(18)] 
+		[RED("documentAdress")] 
+		public SDocumentAdress DocumentAdress
+		{
+			get => GetPropertyValue<SDocumentAdress>();
+			set => SetPropertyValue<SDocumentAdress>(value);
+		}
+
+		[Ordinal(19)] 
+		[RED("documentType")] 
+		public CEnum<EDocumentType> DocumentType
+		{
+			get => GetPropertyValue<CEnum<EDocumentType>>();
+			set => SetPropertyValue<CEnum<EDocumentType>>(value);
+		}
+
+		[Ordinal(20)] 
+		[RED("questInfo")] 
+		public gamedeviceQuestInfo QuestInfo
+		{
+			get => GetPropertyValue<gamedeviceQuestInfo>();
+			set => SetPropertyValue<gamedeviceQuestInfo>(value);
+		}
+
+		[Ordinal(21)] 
+		[RED("wasRead")] 
+		public CBool WasRead
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(22)] 
+		[RED("isOpened")] 
+		public CBool IsOpened
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		public SDocumentThumbnailWidgetPackage()
+		{
+			DocumentAdress = new() { FolderID = -1, DocumentID = -1 };
+			QuestInfo = new();
+		}
+	}
+}

@@ -1,3 +1,49 @@
+WolvenKit 8.5
+-----------------
+
+Implemented: 
+- open files & browse assets without loading a project
+- cr2w editor UI overhaul
+- project explorer UI overhaul
+- buffer reading and writing
+- cr2w reading/writing overhaul
+- working inkatlas preview
+- working inkwidget preview
+- adds mlmask previews
+- basic redscript highlighting
+- make texture view separate, add inkatlas parts & PG
+- make i/e process more responsive
+- early cr2w file creation support
+- adds file association and ability to open from command line
+- update to VS22 and net6
+- import/export tweaks
+- property copying
+- #602 mlmask import/export tweaks
+- add folder-json convert
+- working inkwidget xml serializer
+- Added JsonSerializer for CR2WFile/Package04
+- add oodle compression for non-windows systems
+- add texconv as library instad of submodule
+
+Fixed:
+- Lots of bug fixes
+- default value handling
+- Added/Updated some non RTTI types
+- Changed mesh preview temp directorty, fixes #622
+- log & prompt updates
+- adds sort by size to AB
+- Asset Browser fixes
+- Fix tga/dds import while using an exsiting file
+- Ribbon view updated
+- Allow drag and drop for both buffer types
+- Changed default materials export to png 
+- add open in AB & replace with original context menu options
+- Set new JsonSerializer for Import/Export
+- replace auto-installer 
+- Fixed csv import
+- Fixed masklist writing for PNG exports
+- Changed default export format for mlmask from DDS to PNG
+
 WolvenKit 8.4.3
 -----------------
 

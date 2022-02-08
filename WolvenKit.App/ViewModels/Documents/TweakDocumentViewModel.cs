@@ -1,5 +1,4 @@
 using System;
-using System.Collections;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
@@ -26,11 +25,11 @@ namespace WolvenKit.ViewModels.Documents
     {
         private readonly ILoggerService _loggerService;
 
-
         public TweakDocumentViewModel(string path) : base(path)
         {
             Document = new TextDocument();
             TweakDocument = new TweakDocument();
+            Extension = "tweak";
 
             Types = new(Enum.GetNames<ETweakType>());
 
@@ -41,7 +40,7 @@ namespace WolvenKit.ViewModels.Documents
             EditFlatCommand = ReactiveCommand.Create(EditFlat);
 
             var hlManager = HighlightingManager.Instance;
-            HighlightingDefinition = hlManager.GetDefinitionByExtension(".json");
+            HighlightingDefinition = hlManager.GetDefinitionByExtension("C#");
 
             _loggerService = Locator.Current.GetService<ILoggerService>();
         }
@@ -49,6 +48,8 @@ namespace WolvenKit.ViewModels.Documents
         #region properties
 
         [Reactive] public TextDocument Document { get; set; }
+
+        [Reactive] public string Extension { get; set; }
 
         [Reactive] public IHighlightingDefinition HighlightingDefinition { get; set; }
 
@@ -131,7 +132,7 @@ namespace WolvenKit.ViewModels.Documents
                 }
                 group.GetValue().Members.Add(FlatName, ivalue);
             }
-            else if (SelectedItem is FlatViewModel { IsArray:true } arrayVm && arrayVm.GetValue() is IArray array)
+            else if (SelectedItem is FlatViewModel { IsArray: true } arrayVm && arrayVm.GetValue() is IArray array)
             {
                 var x = array.GetItems();
 
@@ -237,7 +238,7 @@ namespace WolvenKit.ViewModels.Documents
                     }
                     else if (!string.IsNullOrEmpty(fvm.ArrayName))
                     {
-                        
+
                     }
                     else
                     {
@@ -308,7 +309,7 @@ namespace WolvenKit.ViewModels.Documents
                 _loggerService.Error(e);
             }
 
-            _loggerService.Success($"{this.FilePath} saved.");
+            _loggerService.Success($"{FilePath} saved.");
             SetIsDirty(false);
 
             //dbg

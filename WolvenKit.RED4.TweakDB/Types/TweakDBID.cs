@@ -1,9 +1,7 @@
 using System;
 using System.IO;
-using RED.CRC32;
 using System.Text.RegularExpressions;
-using System.Buffers.Binary;
-using WolvenKit.RED4.CR2W.Types;
+using WolvenKit.Core.CRC;
 
 namespace WolvenKit.RED4.TweakDB.Types
 {
@@ -33,14 +31,14 @@ namespace WolvenKit.RED4.TweakDB.Types
             return t;
         }
 
-        public override string ToString() => $"{Text} <TweakDBID 0x{String.Format("{0:X8}", Key)}:0x{Length:X2} / {Key}:{Length}>";
+        public override string ToString() => $"{Text} <TweakDBID 0x{string.Format("{0:X8}", Key)}:0x{Length:X2} / {Key}:{Length}>";
 
         public void Serialize(BinaryWriter writer)
         {
             writer.Write(Key);
             writer.Write((byte)Length);
             writer.Write((byte)0);
-            writer.Write((byte)0); 
+            writer.Write((byte)0);
             writer.Write((byte)0);
         }
     }

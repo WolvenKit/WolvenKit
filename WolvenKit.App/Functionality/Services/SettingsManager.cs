@@ -1,19 +1,14 @@
 using System;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.IO;
 using System.Text.Json;
-using System.Text.Json.Serialization;
 using System.Windows.Media;
 using DynamicData.Binding;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using WolvenKit.Common;
 using WolvenKit.Core;
-using WolvenKit.Functionality.Controllers;
-using WolvenKit.Functionality.WKitGlobal;
-using WolvenKit.Functionality.WKitGlobal.Helpers;
 
 namespace WolvenKit.Functionality.Services
 {
@@ -26,7 +21,7 @@ namespace WolvenKit.Functionality.Services
 
         private bool _isLoaded;
 
-        private string _assemblyVersion;
+        private readonly string _assemblyVersion;
 
         #endregion fields
 
@@ -47,7 +42,9 @@ namespace WolvenKit.Functionality.Services
                 nameof(CheckForUpdates),
                 nameof(CP77ExecutablePath),
                 nameof(ShowFilePreview),
-                nameof(ReddbHash)
+                nameof(ReddbHash),
+                nameof(TreeViewGroups),
+                nameof(TreeViewGroupSize)
               )
               .Subscribe(_ =>
               {
@@ -87,6 +84,10 @@ namespace WolvenKit.Functionality.Services
         [Browsable(false)]
         public bool CheckForUpdates { get; set; }
 
+        [Reactive]
+        [Browsable(false)]
+        public bool IsUpdateAvailable { get; set; }
+
         #endregion
 
         #region red4
@@ -123,6 +124,20 @@ namespace WolvenKit.Functionality.Services
         public string WccLitePath { get; set; }
 
         #endregion red3
+
+        #region TreeView
+
+        [Category("TreeView")]
+        [Display(Name = "Group large collections?")]
+        [Reactive]
+        public bool TreeViewGroups { get; set; } = false;
+
+        [Category("TreeView")]
+        [Display(Name = "Group size")]
+        [Reactive]
+        public uint TreeViewGroupSize { get; set; } = 100;
+
+        #endregion
 
         #endregion properties
 
@@ -251,6 +266,9 @@ namespace WolvenKit.Functionality.Services
             MaterialRepositoryPath = settings.MaterialRepositoryPath;
             W3ExecutablePath = settings.W3ExecutablePath;
             WccLitePath = settings.WccLitePath;
+
+            TreeViewGroups = settings.TreeViewGroups;
+            TreeViewGroupSize = settings.TreeViewGroupSize;
         }
 
         public bool CheckForUpdates { get; set; }
@@ -264,20 +282,26 @@ namespace WolvenKit.Functionality.Services
         public string W3ExecutablePath { get; set; }
         public string WccLitePath { get; set; }
 
+        public bool TreeViewGroups { get; set; }
+        public uint TreeViewGroupSize { get; set; }
+
         public SettingsManager FromDto()
         {
             var config = new SettingsManager()
             {
-                CheckForUpdates = this.CheckForUpdates,
-                UpdateChannel = this.UpdateChannel,
-                ShowGuidedTour = this.ShowGuidedTour,
-                ThemeAccentString = this.ThemeAccentString,
-                CP77ExecutablePath = this.CP77ExecutablePath,
-                ShowFilePreview = this.ShowFilePreview,
-                ReddbHash = this.ReddbHash,
-                MaterialRepositoryPath = this.MaterialRepositoryPath,
-                W3ExecutablePath = this.W3ExecutablePath,
-                WccLitePath = this.WccLitePath,
+                CheckForUpdates = CheckForUpdates,
+                UpdateChannel = UpdateChannel,
+                ShowGuidedTour = ShowGuidedTour,
+                ThemeAccentString = ThemeAccentString,
+                CP77ExecutablePath = CP77ExecutablePath,
+                ShowFilePreview = ShowFilePreview,
+                ReddbHash = ReddbHash,
+                MaterialRepositoryPath = MaterialRepositoryPath,
+                W3ExecutablePath = W3ExecutablePath,
+                WccLitePath = WccLitePath,
+
+                TreeViewGroups = TreeViewGroups,
+                TreeViewGroupSize = TreeViewGroupSize,
             };
             return config;
         }

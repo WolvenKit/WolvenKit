@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations;
 using ReactiveUI;
 using SharpGLTF.Validation;
 using WolvenKit.RED4.CR2W.Archive;
-using WolvenKit.RED4.CR2W.Types;
+using WolvenKit.RED4.Types;
 
 namespace WolvenKit.Common.Model.Arguments
 {
@@ -233,6 +233,13 @@ namespace WolvenKit.Common.Model.Arguments
         public Enums.GpuWrapApieTextureGroup TextureGroup { get; internal set; } =
             Enums.GpuWrapApieTextureGroup.TEXG_Generic_Color;
 
+        public bool IsGamma { get; set; }
+
+        public XbmImportArgs()
+        {
+            Keep = false;
+        }
+
         /// <summary>
         /// String Override to display info in datagrid.
         /// </summary>
@@ -377,7 +384,7 @@ namespace WolvenKit.Common.Model.Arguments
         /// </summary>
         [Category("Export Type")]
         [Display(Name = "MLmask Export Type")]
-        public EUncookExtension UncookExtension { get; set; }
+        public EMlmaskUncookExtension UncookExtension { get; set; } = EMlmaskUncookExtension.png;
 
         /// <summary>
         /// String Override to display info in datagrid.
@@ -396,7 +403,7 @@ namespace WolvenKit.Common.Model.Arguments
         /// </summary>
         [Category("Export Type")]
         [Display(Name = "XBM Export Type")]
-        public EUncookExtension UncookExtension { get; set; }
+        public EUncookExtension UncookExtension { get; set; } = EUncookExtension.tga;
 
         /// <summary>
         /// Flip Image argument
@@ -497,7 +504,7 @@ namespace WolvenKit.Common.Model.Arguments
         [Category("WithMaterials Settings")]
         [Display(Name = "Select Texture Format")]
         [Description("Select the preferred texture format to be exported within the Material Repository.")]
-        public EUncookExtension MaterialUncookExtension { get; set; } = EUncookExtension.dds;
+        public EUncookExtension MaterialUncookExtension { get; set; } = EUncookExtension.png;
 
         /// <summary>
         /// List of Archives for WithMaterials Mesh Export.

@@ -1,20 +1,10 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
+using System.Windows.Controls.Primitives;
 using Syncfusion.Windows.PropertyGrid;
-using WolvenKit.Common.Model.Cr2w;
+using Syncfusion.Windows.Shared;
 using WolvenKit.Converters;
+using WolvenKit.RED4.Types;
 using WolvenKit.ViewModels;
 
 namespace WolvenKit.Views.Templates
@@ -24,9 +14,9 @@ namespace WolvenKit.Views.Templates
     /// </summary>
     public partial class RedCollectionEditor
     {
-        private readonly IREDArray _redarray;
+        private readonly IRedArray _redarray;
 
-        public RedCollectionEditor(IREDArray redarray)
+        public RedCollectionEditor(IRedArray redarray)
         {
             InitializeComponent();
 
@@ -34,20 +24,30 @@ namespace WolvenKit.Views.Templates
 
             if (DataContext is RedCollectionEditorViewModel vm)
             {
-                vm.SetElements(_redarray);
+                var type = _redarray.GetType();
+                var innerType = type.GetGenericArguments()[0];
+
+                var method = typeof(RedCollectionEditorViewModel)
+                    .GetMethod(nameof(RedCollectionEditorViewModel.SetElements), new[] { typeof(IRedArray) });
+                var generic = method.MakeGenericMethod(innerType);
+
+                generic.Invoke(vm, new object[] { _redarray });
+
+
+                //vm.SetElements(_redarray);
             }
         }
 
         private void CloseButton_Click(object sender, RoutedEventArgs e)
         {
-            this.DialogResult = false;
-            this.Close();
+            DialogResult = false;
+            Close();
         }
 
         private void SaveButton_Click(object sender, RoutedEventArgs e)
         {
-            this.DialogResult = true;
-            this.Close();
+            DialogResult = true;
+            Close();
         }
 
         private void PropertyGrid_AutoGeneratingPropertyGridItem(object sender, Syncfusion.Windows.PropertyGrid.AutoGeneratingPropertyGridItemEventArgs e)
@@ -79,7 +79,6 @@ namespace WolvenKit.Views.Templates
 
                 }
 
-               
             }
         }
 
@@ -93,7 +92,7 @@ namespace WolvenKit.Views.Templates
                 var selectedProperty = pg.SelectedPropertyItem;
                 var prop = selectedProperty.Value;
 
-                if (prop is IREDArray editableVariable)
+                if (prop is IRedArray editableVariable)
                 {
                     // open custom collection editor
                     var collectionEditor = new RedCollectionEditor(editableVariable);
@@ -106,6 +105,33 @@ namespace WolvenKit.Views.Templates
                 else
                 {
                     throw new ArgumentException(nameof(editableVariable));
+                }
+            }
+        }
+        private void PropertyGrid_Loaded(object sender, RoutedEventArgs e)
+        {
+            var item1 = VisualUtils.FindDescendant(this, typeof(PropertyView)) as PropertyView;
+
+            if (item1 != null)
+            {
+                item1.ItemContainerGenerator.StatusChanged += ItemContainerGenerator_StatusChanged;
+            }
+        }
+
+        private void ItemContainerGenerator_StatusChanged(object sender, EventArgs e)
+        {
+            foreach (PropertyCatagoryViewItem item in VisualUtils.EnumChildrenOfType(this, typeof(PropertyCatagoryViewItem)))
+            {
+                foreach (var items in item.Items)
+                {
+                    foreach (PropertyViewItem propertyViewItem in VisualUtils.EnumChildrenOfType(this, typeof(PropertyViewItem)))
+                    {
+                        var button = (ToggleButton)propertyViewItem.Template.FindName("ToggleButton", propertyViewItem);
+                        if (button.Visibility == System.Windows.Visibility.Visible && !button.IsMouseOver)
+                        {
+                            button.IsChecked = true;
+                        }
+                    }
                 }
             }
         }

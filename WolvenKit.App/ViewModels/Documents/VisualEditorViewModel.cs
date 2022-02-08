@@ -1,6 +1,5 @@
-using System.Threading.Tasks;
-using WolvenKit.Functionality.Services;
 using WolvenKit.Common.Services;
+using WolvenKit.Functionality.Services;
 using WolvenKit.MVVM.Model.ProjectManagement.Project;
 
 namespace WolvenKit.ViewModels.Tools
@@ -39,7 +38,7 @@ namespace WolvenKit.ViewModels.Tools
 
         #region Properties
 
-        private EditorProject ActiveMod => _projectManager.ActiveProject as EditorProject;
+        private EditorProject ActiveMod => _projectManager.ActiveProject;
 
         #endregion Properties
 
@@ -51,7 +50,7 @@ namespace WolvenKit.ViewModels.Tools
         //bi.UriSource = new Uri("pack://application:,,/Resources/Media/Images/property-blue.png");
         //bi.EndInit();
         //IconSource = bi;
-        private void SetupToolDefaults() => ContentId = ToolContentId;           
+        private void SetupToolDefaults() => ContentId = ToolContentId;
 
         #endregion Methods
     }

@@ -1,16 +1,12 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Reactive;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Windows;
-using System.Windows.Input;
 using AdonisUI.Controls;
-using HandyControl.Tools.Extension;
 using ReactiveUI;
 using Splat;
 using WolvenKit.Interaction;
@@ -18,7 +14,6 @@ using WolvenKit.ViewModels.Dialogs;
 using WolvenKit.ViewModels.Shell;
 using WolvenKit.ViewModels.Wizards;
 using WolvenKit.Views.Dialogs;
-using WolvenKit.Views.Wizards;
 
 namespace WolvenKit.Views.Shell
 {
@@ -39,7 +34,6 @@ namespace WolvenKit.Views.Shell
 
             InitializeComponent();
 
-
             this.WhenActivated(disposables =>
             {
                 // interactions
@@ -48,8 +42,8 @@ namespace WolvenKit.Views.Shell
                 {
                     var dialog = new DialogHostView();
                     dialog.ViewModel.HostedViewModel = Locator.Current.GetService<NewFileViewModel>();
-                    dialog.Height = 600;
-                    dialog.Width = 700;
+                    //dialog.Height = 600;
+                    //dialog.Width = 700;
 
                     return Observable.Start(() =>
                     {
@@ -80,19 +74,20 @@ namespace WolvenKit.Views.Shell
                         if (dialog.ShowDialog() == true)
                         {
                             var innerVm = (ProjectWizardViewModel)dialog.ViewModel.HostedViewModel;
-                            var location = Path.Combine(innerVm.ProjectPath, innerVm.ProjectName);
+                            var projectLocation = Path.Combine(innerVm.ProjectPath, innerVm.ProjectName);
+                            var projectFile = Path.Combine(projectLocation, innerVm.ProjectName);
                             var type = innerVm.ProjectType.First();
                             switch (type)
                             {
                                 case ProjectWizardViewModel.WitcherGameName:
-                                    location += ".w3modproj";
+                                    projectFile += ".w3modproj";
                                     break;
                                 case ProjectWizardViewModel.CyberpunkGameName:
-                                    location += ".cpmodproj";
+                                    projectFile += ".cpmodproj";
                                     break;
                             }
 
-                            result = location;
+                            result = projectFile;
                         }
 
                         interaction.SetOutput(result);
@@ -115,9 +110,12 @@ namespace WolvenKit.Views.Shell
                     vm => vm.DockedViews,
                     v => v.dockingAdapter.ItemsSource)
                     .DisposeWith(disposables);
+
+                this.WhenAnyValue(x => x.ViewModel.ActiveProject).Subscribe(_ => dockingAdapter.OnActiveProjectChanged());
             });
         }
 
+        private void FadeOut_Completed(object sender, EventArgs e) => ViewModel.FinishedClosingModal();
 
         #region interactions
 
@@ -158,6 +156,15 @@ namespace WolvenKit.Views.Shell
 
         #endregion
 
+        private void Overlay_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            base.OnMouseLeftButtonDown(e);
+            var mainWindow = (MainView)Locator.Current.GetService<IViewFor<AppViewModel>>();
+            if (e.LeftButton == System.Windows.Input.MouseButtonState.Pressed)
+            {
+                mainWindow?.DragMove();
+            }
+        }
 
         protected override void OnClosing(CancelEventArgs e) => Application.Current.Shutdown();
     }

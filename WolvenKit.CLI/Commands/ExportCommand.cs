@@ -4,7 +4,6 @@ using CP77Tools.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using WolvenKit.Common;
-using WolvenKit.Common.DDS;
 
 namespace CP77Tools.Commands
 {

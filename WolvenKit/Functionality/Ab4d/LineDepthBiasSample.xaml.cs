@@ -100,9 +100,8 @@ This shows that different object sizes require different bias values.";
             AddNewDXViewportView(RootGrid, rowIndex: 2, columnIndex: 1, sphereRadius: 10, depthBias: 2.0, createDXEngine: true, title: "DXEngine - too big bias\r\nRadius 10; Bias: 2.0");
             AddNewDXViewportView(RootGrid, rowIndex: 2, columnIndex: 2, sphereRadius: 1000, depthBias: 0.1, createDXEngine: true, title: "DXEngine - too small bias\r\nRadius 1000; Bias: 0.1");
 
-            Border createdBorder;
             AddNewDXViewportView(RootGrid, rowIndex: 0, columnIndex: 0, sphereRadius: 100, depthBias: 0.1, createDXEngine: true, title: null,
-                                 createdBorder: out createdBorder, createdViewport3D: out _customViewport3D, createdDXViewportView: out _customDXViewportView, createdTargetPositionCamera: out _customCamera);
+                                 createdBorder: out var createdBorder, createdViewport3D: out _customViewport3D, createdDXViewportView: out _customDXViewportView, createdTargetPositionCamera: out _customCamera);
 
             Grid.SetRowSpan(createdBorder, 3);
 
@@ -128,7 +127,9 @@ This shows that different object sizes require different bias values.";
                 var oneChild = RootGrid.Children[i];
 
                 if (!ReferenceEquals(oneChild, SettingsBorder) && !ReferenceEquals(oneChild, TitleTextBlock))
+                {
                     RootGrid.Children.Remove(oneChild);
+                }
             }
 
             RootGrid.EndInit();
@@ -140,13 +141,9 @@ This shows that different object sizes require different bias values.";
 
         private void AddNewDXViewportView(Grid parentGrid, int rowIndex, int columnIndex, double sphereRadius, double depthBias, bool createDXEngine, string title)
         {
-            Border createdBorder;
-            Viewport3D createdViewport3D;
-            DXViewportView createdDXViewportView;
-            TargetPositionCamera createdTargetPositionCamera;
 
             AddNewDXViewportView(parentGrid, rowIndex, columnIndex, sphereRadius, depthBias, createDXEngine, title,
-                                 out createdBorder, out createdViewport3D, out createdDXViewportView, out createdTargetPositionCamera);
+                                 out var createdBorder, out var createdViewport3D, out var createdDXViewportView, out var createdTargetPositionCamera);
         }
 
         private void AddNewDXViewportView(Grid parentGrid, int rowIndex, int columnIndex, double sphereRadius, double depthBias, bool createDXEngine, string title,
@@ -172,7 +169,7 @@ This shows that different object sizes require different bias values.";
                 TargetViewport3D = createdViewport3D
             };
 
-            bool showSphere = ShowSphereRadioButton.IsChecked ?? false;
+            var showSphere = ShowSphereRadioButton.IsChecked ?? false;
             CreateScene(createdViewport3D, sphereRadius, depthBias, createdTargetPositionCamera, showSphere);
 
             if (createDXEngine)
@@ -271,8 +268,8 @@ This shows that different object sizes require different bias values.";
                     _sampleModel.Freeze();
                 }
 
-                double readObjectRadius = Math.Sqrt(_sampleModel.Bounds.SizeX * _sampleModel.Bounds.SizeX + _sampleModel.Bounds.SizeZ + _sampleModel.Bounds.SizeZ) / 2;
-                double scaleFactor = sphereRadius / readObjectRadius;
+                var readObjectRadius = Math.Sqrt(_sampleModel.Bounds.SizeX * _sampleModel.Bounds.SizeX + _sampleModel.Bounds.SizeZ + _sampleModel.Bounds.SizeZ) / 2;
+                var scaleFactor = sphereRadius / readObjectRadius;
 
                 var finalModel = new Model3DGroup();
                 finalModel.Children.Add(_sampleModel);
@@ -318,7 +315,7 @@ This shows that different object sizes require different bias values.";
 
             var linePositions = new Point3DCollection(triangleIndicesCount * 2);
 
-            for (int i = 0; i < triangleIndicesCount; i += 3)
+            for (var i = 0; i < triangleIndicesCount; i += 3)
             {
                 p1 = meshPositions[meshIndices[i]];
                 p2 = meshPositions[meshIndices[i + 1]];
@@ -339,13 +336,15 @@ This shows that different object sizes require different bias values.";
 
         private void SphereRadiusComboBox_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if (!this.IsLoaded)
+            if (!IsLoaded)
+            {
                 return;
+            }
 
-            double selectedRadius = (double)SphereRadiusComboBox.SelectedItem;
-            double selectedDepthBias = (double)DepthBiasComboBox.SelectedItem;
+            var selectedRadius = (double)SphereRadiusComboBox.SelectedItem;
+            var selectedDepthBias = (double)DepthBiasComboBox.SelectedItem;
 
-            bool showSphere = ShowSphereRadioButton.IsChecked ?? false;
+            var showSphere = ShowSphereRadioButton.IsChecked ?? false;
             CreateScene(_customViewport3D, selectedRadius, selectedDepthBias, _customCamera, showSphere);
 
             // With DXEngine v2.0 and newer we can also change the LineDepthBias DXAttribute after the _shownLineVisual3D was already shown
@@ -360,10 +359,12 @@ This shows that different object sizes require different bias values.";
 
         private void DepthBiasComboBox_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if (!this.IsLoaded)
+            if (!IsLoaded)
+            {
                 return;
+            }
 
-            double selectedDepthBias = (double)DepthBiasComboBox.SelectedItem;
+            var selectedDepthBias = (double)DepthBiasComboBox.SelectedItem;
 
             // With DXEngine v2.0 and newer we can also change the LineDepthBias DXAttribute after the _shownLineVisual3D was already shown
             _shownLineVisual3D.SetDXAttribute(DXAttributeType.LineDepthBias, selectedDepthBias);
@@ -375,9 +376,9 @@ This shows that different object sizes require different bias values.";
 
         private void CustomCamera_OnCameraChanged(object sender, CameraChangedRoutedEventArgs e)
         {
-            double newCameraDistance = _customCamera.Distance;
+            var newCameraDistance = _customCamera.Distance;
 
-            double distanceChangeFactor = newCameraDistance / _previousCameraDistance;
+            var distanceChangeFactor = newCameraDistance / _previousCameraDistance;
             _previousCameraDistance = newCameraDistance;
 
             // When custom camera (controller by user) is changed, we also change other cameras
@@ -385,7 +386,9 @@ This shows that different object sizes require different bias values.";
             foreach (var targetPositionCamera in RootGrid.Children.OfType<TargetPositionCamera>())
             {
                 if (ReferenceEquals(_customCamera, targetPositionCamera))
+                {
                     continue;
+                }
 
                 targetPositionCamera.Heading = _customCamera.Heading;
                 targetPositionCamera.Attitude = _customCamera.Attitude;
@@ -395,8 +398,10 @@ This shows that different object sizes require different bias values.";
 
         private void ShowSphereRadioButton_OnChecked(object sender, RoutedEventArgs e)
         {
-            if (!this.IsLoaded)
+            if (!IsLoaded)
+            {
                 return;
+            }
 
             ClearAllScenes();
             CreateAllScenes();
@@ -404,8 +409,10 @@ This shows that different object sizes require different bias values.";
 
         private void ShowTeapotRadioButton_OnChecked(object sender, RoutedEventArgs e)
         {
-            if (!this.IsLoaded)
+            if (!IsLoaded)
+            {
                 return;
+            }
 
             ClearAllScenes();
             CreateAllScenes();
@@ -421,7 +428,9 @@ This shows that different object sizes require different bias values.";
             var lineSceneNode = parentDXViewportView.GetSceneNodeForWpfObject(lineVisual3D);
 
             if (lineSceneNode == null)
+            {
                 return;
+            }
 
 
             // First check if we got WpfWireframeVisual3DNode that is created from WireframeVisual3D
@@ -445,8 +454,9 @@ This shows that different object sizes require different bias values.";
             var screenSpaceLineNode = lineSceneNode as ScreenSpaceLineNode;
 
             if (screenSpaceLineNode == null && lineSceneNode.ChildNodesCount == 1)
+            {
                 screenSpaceLineNode = lineSceneNode.ChildNodes[0] as ScreenSpaceLineNode;
-
+            }
 
             if (screenSpaceLineNode != null)
             {

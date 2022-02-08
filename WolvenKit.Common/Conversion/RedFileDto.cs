@@ -1,54 +1,76 @@
 using System.Collections.Generic;
-using System.Linq;
-using WolvenKit.Common.Model;
-using WolvenKit.Common.Tools;
-using WolvenKit.RED4.CR2W;
+using WolvenKit.RED4.Archive.CR2W;
+using WolvenKit.RED4.Types;
 
-namespace WolvenKit.Common.Conversion
+namespace WolvenKit.Common.Conversion;
+
+public class RedFileDto
 {
-    public class RedFileDto
+    public RedFileDto()
     {
-        public const string Magic = "w2rc";
 
-        public Dictionary<int,RedExportDto> Chunks { get; set; } = new();
+    }
 
-        public List<RedBufferDto> Buffers { get; set; } = new();
+    public RedFileDto(CR2WFile cr2w, bool writeFlat = false)
+    {
+        Data = cr2w;
+        Header.ArchiveFileName = cr2w.MetaData.FileName;
 
-        public bool ShouldSerializeBuffers() => Buffers is { Count: > 0 };
-
-        public RedFileDto()
+        Header.DataType = DataTypes.CR2W;
+        if (writeFlat)
         {
-
+            Header.DataType = DataTypes.CR2WFlat;
         }
+    }
 
-        public RedFileDto(IWolvenkitFile cr2w)
+    public List<RedBaseClass> GetChunkList()
+    {
+        var list = new List<RedBaseClass>();
+        var comp = ReferenceEqualityComparer.Instance;
+
+        foreach (var propTuple in Data.RootChunk.GetEnumerator())
         {
-            Chunks = cr2w.Chunks.ToDictionary(_ => _.ChunkIndex, _ => new RedExportDto(_));
-            Buffers = cr2w.Buffers.Select(_ => new RedBufferDto(_)).ToList();
-        }
-
-        public CR2WFile ToW2rc()
-        {
-            var cr2w = new CR2WFile
+            if (propTuple.value is IRedBaseHandle handle)
             {
-                Buffers = Buffers
-                    .OrderBy(_ => _.Index)
-                    .Select(_ => _.ToRedBuffer())
-                    .ToList()
-            };
-
-            // chunks
-            // order so that parent chunks get created first
-            var groupedChunks = Chunks.GroupBy(_ => _.Value.ParentIndex);
-            foreach (IGrouping<int, KeyValuePair<int, RedExportDto>> groupedChunk in groupedChunks)
-            {
-                foreach (var (chunkIndex, chunk) in groupedChunk.OrderBy(_ => _.Key))
+                var subCls = handle.GetValue();
+                if (!Contains(subCls))
                 {
-                    chunk.CreateChunkInFile(cr2w, chunkIndex);
+                    list.Add(subCls);
+                }
+            }
+        }
+
+        foreach (var embeddedFile in Data.EmbeddedFiles)
+        {
+            foreach (var propTuple in embeddedFile.Content.GetEnumerator())
+            {
+                if (propTuple.value is IRedBaseHandle handle)
+                {
+                    var subCls = handle.GetValue();
+                    if (!Contains(subCls))
+                    {
+                        list.Add(subCls);
+                    }
+                }
+            }
+        }
+
+        return list;
+
+        bool Contains(RedBaseClass cls)
+        {
+            foreach (var chunk in list)
+            {
+                if (comp.Equals(chunk, cls))
+                {
+                    return true;
                 }
             }
 
-            return cr2w;
+            return false;
         }
     }
+
+    public JsonHeader Header { get; set; } = new();
+    public CR2WFile Data { get; set; }
 }

@@ -2,8 +2,6 @@ using System;
 using System.Reactive.Disposables;
 using ReactiveUI;
 using Splat;
-using WolvenKit.Common.Services;
-using WolvenKit.Functionality.Services;
 using WolvenKit.ViewModels.Shell;
 
 namespace WolvenKit.Views.Shell
@@ -29,11 +27,29 @@ namespace WolvenKit.Views.Shell
                         x => x.IsIndeterminate,
                         x => x.StatusBarProgressBar.IsIndeterminate)
                     .DisposeWith(disposables);
+
+                this.OneWayBind(ViewModel,
+                        viewModel => viewModel._settingsManager.IsUpdateAvailable,
+                        view => view.StatusBarItemUpdate.IsEnabled)
+                    .DisposeWith(disposables);
+                this.BindCommand(ViewModel,
+                        viewModel => viewModel.CheckForUpdatesCommand,
+                        view => view.UpdateButton)
+                    .DisposeWith(disposables);
             });
 
         }
 
         #endregion Constructors
 
+        private void StatusBar_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            base.OnMouseLeftButtonDown(e);
+            if (!e.Handled)
+            {
+                var mainWindow = (MainView)Locator.Current.GetService<IViewFor<AppViewModel>>();
+                mainWindow?.DragMove();
+            }
+        }
     }
 }

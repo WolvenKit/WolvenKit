@@ -1,0 +1,30 @@
+using static WolvenKit.RED4.Types.Enums;
+
+namespace WolvenKit.RED4.Types
+{
+	[REDMeta]
+	public partial class buffListItemLogicController : inkWidgetLogicController
+	{
+		[Ordinal(1)] 
+		[RED("icon")] 
+		public inkImageWidgetReference Icon
+		{
+			get => GetPropertyValue<inkImageWidgetReference>();
+			set => SetPropertyValue<inkImageWidgetReference>(value);
+		}
+
+		[Ordinal(2)] 
+		[RED("label")] 
+		public inkTextWidgetReference Label
+		{
+			get => GetPropertyValue<inkTextWidgetReference>();
+			set => SetPropertyValue<inkTextWidgetReference>(value);
+		}
+
+		public buffListItemLogicController()
+		{
+			Icon = new();
+			Label = new();
+		}
+	}
+}

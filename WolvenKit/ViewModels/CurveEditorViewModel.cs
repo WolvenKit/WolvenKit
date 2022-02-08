@@ -6,11 +6,11 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Media;
-using WinCopies.Util;
-using WolvenKit.Common;
 using WolvenKit.Common.Annotations;
+using WolvenKit.RED4.Types;
 using WolvenKit.Views.Editors;
 using Math = System.Math;
+using Point = System.Windows.Point;
 
 namespace WolvenKit.ViewModels
 {
@@ -45,15 +45,15 @@ namespace WolvenKit.ViewModels
         private double _maxY;
         private double[] _times;
         private double[] _values;
-        private EInterpolationType _type;
+        private Enums.EInterpolationType _type;
 
         #endregion
 
         public CurveEditorViewModel()
         {
-            InterpolationTypes = Enumerable.ToList(Enum.GetNames<EInterpolationType>());
+            InterpolationTypes = Enumerable.ToList(Enum.GetNames<Enums.EInterpolationType>());
             RenderedPoints = new PointCollection();
-            InterpolationType = EInterpolationType.EIT_Linear.ToString();
+            InterpolationType = Enums.EInterpolationType.Linear.ToString();
         }
 
         #region properties
@@ -266,13 +266,13 @@ namespace WolvenKit.ViewModels
         /// </summary>
         /// <exception cref="NotImplementedException"></exception>
         /// <exception cref="ArgumentOutOfRangeException"></exception>
-        public void LoadCurve(double[] times, double[] values, EInterpolationType type)
+        public void LoadCurve(double[] times, double[] values, Enums.EInterpolationType type)
         {
             if (times.Length < 1 || values.Length < 1)
             {
                 times = new double[] { 0 };
                 values = new double[] { 0 };
-                type = EInterpolationType.EIT_Linear;
+                type = Enums.EInterpolationType.Linear;
             }
 
             _times = times;
@@ -327,8 +327,8 @@ namespace WolvenKit.ViewModels
         {
             switch (GetInterpolationTypeEnum())
             {
-                case EInterpolationType.EIT_Constant:
-                case EInterpolationType.EIT_Linear:
+                case Enums.EInterpolationType.Constant:
+                case Enums.EInterpolationType.Linear:
                     // no control points
                     foreach (var p in Curve)
                     {
@@ -336,7 +336,7 @@ namespace WolvenKit.ViewModels
                     }
 
                     break;
-                case EInterpolationType.EIT_BezierQuadratic:
+                case Enums.EInterpolationType.BezierQuadratic:
                     // every second point is a control point
                     for (var i = 0; i < Curve.Count; i++)
                     {
@@ -344,7 +344,7 @@ namespace WolvenKit.ViewModels
                     }
 
                     break;
-                case EInterpolationType.EIT_BezierCubic:
+                case Enums.EInterpolationType.BezierCubic:
                     // every second and third point is a control point
                     for (var i = 0; i < Curve.Count; i++)
                     {
@@ -353,7 +353,7 @@ namespace WolvenKit.ViewModels
                     }
 
                     break;
-                case EInterpolationType.EIT_Hermite:
+                case Enums.EInterpolationType.Hermite:
                 default:
                     throw new ArgumentOutOfRangeException();
             }
@@ -365,7 +365,7 @@ namespace WolvenKit.ViewModels
         ///     Get the interpolation type as enum
         /// </summary>
         /// <returns></returns>
-        public EInterpolationType GetInterpolationTypeEnum() => Enum.Parse<EInterpolationType>(InterpolationType);
+        public Enums.EInterpolationType GetInterpolationTypeEnum() => Enum.Parse<Enums.EInterpolationType>(InterpolationType);
 
         private bool VerifyCurve() => _curve.All(x => x.Verify());
 
@@ -394,18 +394,18 @@ namespace WolvenKit.ViewModels
             // render bezier segments
             switch (GetInterpolationTypeEnum())
             {
-                case EInterpolationType.EIT_Constant:
-                case EInterpolationType.EIT_Linear:
+                case Enums.EInterpolationType.Constant:
+                case Enums.EInterpolationType.Linear:
                     // only take proper points (depending on first loaded curve)
                     var linearCurve = _curve.Where(x => !x.IsControlPoint).Select(x => x.RenderPoint.Value);
                     points = linearCurve.ToList();
                     break;
-                case EInterpolationType.EIT_BezierQuadratic:
-                case EInterpolationType.EIT_BezierCubic:
+                case Enums.EInterpolationType.BezierQuadratic:
+                case Enums.EInterpolationType.BezierCubic:
                     // take all
                     points = _curve.Select(x => x.RenderPoint.Value).ToList();
                     break;
-                case EInterpolationType.EIT_Hermite:
+                case Enums.EInterpolationType.Hermite:
                 default:
                     throw new ArgumentOutOfRangeException();
             }
@@ -448,11 +448,11 @@ namespace WolvenKit.ViewModels
 
             switch (GetInterpolationTypeEnum())
             {
-                case EInterpolationType.EIT_Constant:
-                case EInterpolationType.EIT_Linear:
+                case Enums.EInterpolationType.Constant:
+                case Enums.EInterpolationType.Linear:
                     // do nothing
                     break;
-                case EInterpolationType.EIT_BezierQuadratic:
+                case Enums.EInterpolationType.BezierQuadratic:
                 {
                     if (Curve.Count <= idx + 1 || idx < 1)
                     {
@@ -483,7 +483,7 @@ namespace WolvenKit.ViewModels
 
                     break;
                 }
-                case EInterpolationType.EIT_BezierCubic:
+                case Enums.EInterpolationType.BezierCubic:
                 {
                     if (Curve.Count <= idx + 1 || idx < 1)
                     {
@@ -536,7 +536,7 @@ namespace WolvenKit.ViewModels
 
                     break;
                 }
-                case EInterpolationType.EIT_Hermite:
+                case Enums.EInterpolationType.Hermite:
                 default:
                     throw new ArgumentOutOfRangeException();
             }

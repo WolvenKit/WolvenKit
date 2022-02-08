@@ -9,7 +9,7 @@ namespace WolvenKit.ViewModels.Shell
     {
         public PaneViewModel()
         {
-            
+
         }
 
         #region Properties
@@ -17,6 +17,8 @@ namespace WolvenKit.ViewModels.Shell
         [Reactive] public virtual string Header { get; set; }
 
         [Reactive] public DockState State { get; set; }
+
+        [Reactive] public DockSide SideInDockedMode { get; set; }
 
         [Reactive] public string ContentId { get; set; }
 
@@ -30,6 +32,6 @@ namespace WolvenKit.ViewModels.Shell
 
         #endregion Properties
 
-        
+
     }
 }

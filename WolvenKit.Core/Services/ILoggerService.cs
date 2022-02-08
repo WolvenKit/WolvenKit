@@ -17,7 +17,7 @@ namespace WolvenKit.Common.Services
         public DateTime TimeStamp { get; set; }
         public Logtype Level { get; set; }
 
-        public override string ToString() => $"[{Level}] [{TimeStamp}] {Message}";
+        public override string ToString() => $"[{TimeStamp}] [{Level}] {Message}";
     }
 
 

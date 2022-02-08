@@ -8,12 +8,13 @@
                              xmlns:controls="clr-namespace:AdonisUI.Controls;assembly=AdonisUI"
                              xmlns:reactiveUi="http://reactiveui.net"
                              mc:Ignorable="d"
-                             SizeToContent="WidthAndHeight"
                              xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
                              xmlns:syncfusionskin="clr-namespace:Syncfusion.SfSkinManager;assembly=Syncfusion.SfSkinManager.WPF"
                              syncfusionskin:SfSkinManager.Theme="{syncfusionskin:SkinManagerExtension ThemeName=MaterialDark}"
 
                              WindowStartupLocation="CenterOwner"
+                             Width="800"
+                             Height="600"
 >
     <Grid>
         <reactiveUi:ViewModelViewHost x:Name="ViewModelViewHost"

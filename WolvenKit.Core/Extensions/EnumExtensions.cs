@@ -1,7 +1,3 @@
-using System;
-using System.Collections.Generic;
-using WolvenKit.Common.Model.Cr2w;
-
 namespace WolvenKit.Core.Extensions
 {
     public static class EnumExtensions
@@ -31,22 +27,22 @@ namespace WolvenKit.Core.Extensions
         /// <param name="enumType">The enum type to convert to.</param>
         /// <param name="names">The collection of CNames</param>
         /// <returns>The Enum value</returns>
-        public static object ConvertToEnum(Type enumType, IEnumerable<IREDString> names)
-        {
-            if (!enumType.IsEnum)
-            {
-                throw new ArgumentException();
-            }
-            try
-            {
-                var enumString = String.Join<IREDString>(", ", names);
-                return Enum.Parse(enumType, enumString);
-            }
-            catch
-            {
-                return Enum.ToObject(enumType, 0);
-            }
-        }
+        //public static object ConvertToEnum(Type enumType, IEnumerable<IREDString> names)
+        //{
+        //    if (!enumType.IsEnum)
+        //    {
+        //        throw new ArgumentException();
+        //    }
+        //    try
+        //    {
+        //        var enumString = String.Join<IREDString>(", ", names);
+        //        return Enum.Parse(enumType, enumString);
+        //    }
+        //    catch
+        //    {
+        //        return Enum.ToObject(enumType, 0);
+        //    }
+        //}
 
         #endregion Methods
     }

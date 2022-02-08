@@ -1,5 +1,5 @@
-using System;
 using CP77.CR2W;
+using gpm.Installer;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using ReactiveUI;
@@ -8,7 +8,6 @@ using Splat.Microsoft.Extensions.DependencyInjection;
 using WolvenKit.Common;
 using WolvenKit.Common.Interfaces;
 using WolvenKit.Common.Services;
-using WolvenKit.Core.Services;
 using WolvenKit.Functionality.Controllers;
 using WolvenKit.Functionality.ProjectManagement;
 using WolvenKit.Functionality.Services;
@@ -30,7 +29,6 @@ using WolvenKit.Views.HomePage.Pages;
 using WolvenKit.Views.Shell;
 using WolvenKit.Views.Tools;
 using WolvenKit.Views.Wizards;
-using WolvenManager.Installer.Services;
 
 namespace WolvenKit
 {
@@ -53,9 +51,10 @@ namespace WolvenKit
                 {
                     services.AddSingleton<INotificationService, NotificationService>();
                     services.AddSingleton(typeof(ISettingsManager), SettingsManager.Load());
-                    services.AddSingleton<IProgressService<double>, ProgressService<double>>();
-                    services.AddSingleton<ILoggerService, ReactiveLoggerService>();
-                    services.AddSingleton<IUpdateService, UpdateService>();
+                    services.AddSingleton<Core.Services.IProgressService<double>, System.ProgressService<double>>();
+
+                    services.AddSingleton<MySink>();
+                    services.AddSingleton<ILoggerService, SerilogWrapper>();
 
                     // singletons
                     services.AddSingleton<IHashService, HashService>();
@@ -82,6 +81,9 @@ namespace WolvenKit
                     services.AddSingleton<AppViewModel>();
                     services.AddSingleton<IViewFor<AppViewModel>, MainView>();
 
+                    // TODO replace with this once gpm.Installer updates
+                    services.AddGpmInstaller();
+
                     // register views
                     #region shell
 
@@ -98,8 +100,8 @@ namespace WolvenKit
                     services.AddTransient<DialogHostViewModel>();
                     services.AddTransient<IViewFor<DialogHostViewModel>, DialogHostView>();
 
-                    services.AddTransient<AddChunkDialogViewModel>();
-                    services.AddTransient<IViewFor<AddChunkDialogViewModel>, AddChunkDialog>();
+                    //services.AddTransient<CreateClassDialogViewModel>();
+                    //services.AddTransient<IViewFor<CreateClassDialogViewModel>, CreateClassDialog>();
 
                     services.AddTransient<InputDialogViewModel>();
                     services.AddTransient<IViewFor<InputDialogViewModel>, InputDialogView>();

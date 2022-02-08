@@ -6,7 +6,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Catel.IoC;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using WolvenKit.Common.Oodle;
+using WolvenKit.Core.Compression;
 using WolvenKit.Common.Services;
 using WolvenKit.Modkit.RED4;
 using WolvenKit.RED4.CR2W;
@@ -48,11 +48,9 @@ namespace WolvenKit.MSTests
                     {
                         using var originalMemoryStream = new MemoryStream();
                         ModTools.ExtractSingleToStream(archive, hash, originalMemoryStream);
-                        var originalFile = parser.TryReadRED4FileHeaders(originalMemoryStream);
-                        if (originalFile != null)
+                        if (parser.TryReadRed4FileHeaders(originalMemoryStream, out var originalFile))
                         {
-                            var c = originalFile.StringDictionary[1];
-                            results[ext].TryAdd(c, 0);
+                            results[ext].TryAdd(originalFile.StringDict[1], 0);
                         }
                         else
                         {
@@ -163,13 +161,7 @@ namespace WolvenKit.MSTests
             var inbuffer = File.ReadAllBytes(path);
             IEnumerable<byte> outBuffer = new List<byte>();
 
-            var r = OodleHelper.Compress(
-                inbuffer,
-                inbuffer.Length,
-                ref outBuffer,
-                OodleNative.OodleLZ_Compressor.Kraken,
-                OodleNative.OodleLZ_Compression.Normal,
-                true);
+            var r = Oodle.Compress(inbuffer, ref outBuffer, true);
 
             var filename = $"{Path.GetFileNameWithoutExtension(path)}.kark";
             File.WriteAllBytes(Path.Combine(resultDir, filename), outBuffer.ToArray());

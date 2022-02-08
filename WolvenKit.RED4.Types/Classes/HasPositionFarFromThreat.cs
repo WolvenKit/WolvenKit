@@ -1,0 +1,40 @@
+using static WolvenKit.RED4.Types.Enums;
+
+namespace WolvenKit.RED4.Types
+{
+	[REDMeta]
+	public partial class HasPositionFarFromThreat : AIbehaviorconditionScript
+	{
+		[Ordinal(0)] 
+		[RED("desiredDistance")] 
+		public CFloat DesiredDistance
+		{
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
+		}
+
+		[Ordinal(1)] 
+		[RED("minDistance")] 
+		public CFloat MinDistance
+		{
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
+		}
+
+		[Ordinal(2)] 
+		[RED("minPathLength")] 
+		public CFloat MinPathLength
+		{
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
+		}
+
+		[Ordinal(3)] 
+		[RED("distanceFromTraffic")] 
+		public CFloat DistanceFromTraffic
+		{
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
+		}
+	}
+}

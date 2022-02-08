@@ -4,14 +4,17 @@ using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
+using System.IO.MemoryMappedFiles;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using WolvenKit.Common;
+using WolvenKit.RED4.Archive.IO;
 using WolvenKit.MSTests.Model;
-using WolvenKit.RED4.CR2W;
 using WolvenKit.RED4.CR2W.Archive;
+
+#if IS_PARALLEL
+using System.Threading.Tasks;
+#endif
 
 namespace WolvenKit.MSTests
 {
@@ -23,6 +26,8 @@ namespace WolvenKit.MSTests
         [ClassInitialize]
         public static void SetupClass(TestContext context) => Setup(context);
 
+        private const bool DECOMPRESS_BUFFERS = false;
+
         #endregion Methods
 
         #region test methods
@@ -33,6 +38,27 @@ namespace WolvenKit.MSTests
         //    Test_Extension();
         //}
 
+        //[TestMethod]
+        public void Debug()
+        {
+            var files = s_groupedFiles[".smartobjects"].ToList();
+
+            foreach (var file in files)
+            {
+                if (!file.Name.Contains("so_-008_0005_-001.smartobjects"))
+                {
+                    continue;
+                }
+
+                var ar = s_bm.Archives.Lookup(file.Archive.ArchiveAbsolutePath).Value as Archive;
+                using var ms = new MemoryStream();
+                ar?.CopyFileToStream(ms, file.NameHash64, false);
+                ms.Seek(0, SeekOrigin.Begin);
+
+                var reader = new CR2WReader(ms);
+                var readResult = reader.ReadFile(out var c);
+            }
+        }
 
         [TestMethod]
         public void Read_bin() => Test_Extension(".bin");
@@ -434,95 +460,100 @@ namespace WolvenKit.MSTests
         {
             var results = new ConcurrentBag<ReadTestResult>();
 
-#if IS_PARALLEL
-            Parallel.ForEach(files, file =>
-#else
-            foreach (var file in files)
-#endif                
+            var filesGroups = files.Select((f, i) => new { Value = f, Index = i })
+                .GroupBy(item => item.Value.Archive.ArchiveAbsolutePath);
+
+            foreach (var fileGroup in filesGroups)
             {
-                try
-                {
-                    var ar = s_bm.Archives.Lookup(file.Archive.ArchiveAbsolutePath).Value as Archive;
-                    using var ms = new MemoryStream();
-                    ar?.CopyFileToStreamWithoutBuffers(ms, file.NameHash64);
+                var fileList = fileGroup.ToList();
 
-                    var c = new CR2WFile {FileName = file.NameOrHash};
-                    ms.Seek(0, SeekOrigin.Begin);
-                    var readResult = c.Read(ms);
+                var ar = s_bm.Archives.Lookup(fileGroup.Key).Value as Archive;
 
-                    switch (readResult)
-                    {
-                        case EFileReadErrorCodes.NoCr2w:
-                            results.Add(new ReadTestResult
-                            {
-                                FileEntry = file, Success = true, ReadResult = ReadTestResult.ReadResultType.NoCr2W
-                            });
-                            break;
+                using var fs = new FileStream(fileGroup.Key, FileMode.Open, FileAccess.Read, FileShare.Read);
+                using var mmf = MemoryMappedFile.CreateFromFile(fs, null, 0, MemoryMappedFileAccess.Read, HandleInheritability.None, false);
 
-                        case EFileReadErrorCodes.UnsupportedVersion:
-                            results.Add(new ReadTestResult
-                            {
-                                FileEntry = file,
-                                Success = false,
-                                ReadResult = ReadTestResult.ReadResultType.UnsupportedVersion,
-                                Message = $"Unsupported Version ({c.GetFileHeader().version})"
-                            });
-                            break;
-
-                        case EFileReadErrorCodes.NoError:
-                            var hasAdditionalBytes =
-                                c.AdditionalCr2WFileBytes != null && c.AdditionalCr2WFileBytes.Any();
-
-                            var (unknownTypes, unknownBytes) = c.GetUnknownBytes();
-                            var hasUnknownBytes = unknownBytes > 0;
-
-                            var res = ReadTestResult.ReadResultType.NoError;
-                            var msg = "";
-                            if (hasAdditionalBytes)
-                            {
-                                res |= ReadTestResult.ReadResultType.HasAdditionalBytes;
-                                msg += $"Additional Bytes: {c.AdditionalCr2WFileBytes.Length}";
-                            }
-
-                            if (hasUnknownBytes)
-                            {
-                                res |= ReadTestResult.ReadResultType.HasUnknownBytes;
-                                msg += $"UnknownBytes Bytes: {unknownBytes}";
-                            }
-
-                            results.Add(new ReadTestResult
-                            {
-                                FileEntry = file,
-                                Success = true /*!hasAdditionalBytes && !hasUnknownBytes*/,
-                                ReadResult = res,
-                                Message = msg,
-                                AdditionalBytes = hasAdditionalBytes ? c.AdditionalCr2WFileBytes.Length : 0,
-                                UnknownBytes = hasUnknownBytes ? unknownBytes : 0,
-                                UnknownTypes = hasUnknownBytes ? unknownTypes : null,
-                            });
-
-                            break;
-
-                        default:
-                            throw new ArgumentOutOfRangeException();
-                    }
-                }
-                catch (Exception e)
-                {
-                    results.Add(new ReadTestResult
-                    {
-                        FileEntry = file,
-                        Success = false,
-                        ReadResult = ReadTestResult.ReadResultType.RuntimeException,
-                        ExceptionType = e.GetType(),
-                        Message = $"{e.Message}"
-                    });
-                }
 #if IS_PARALLEL
-            });
+                Parallel.ForEach(fileList, tmpFile =>
 #else
-            }
+                foreach (var tmpFile in fileList)
 #endif
+                {
+                    var file = tmpFile.Value;
+                    try
+                    {
+                        using var ms = new MemoryStream();
+                        ar?.CopyFileToStream(ms, file.NameHash64, false, mmf);
+                        ms.Seek(0, SeekOrigin.Begin);
+
+                        using var reader = new CR2WReader(ms);
+                        var readResult = reader.ReadFile(out var c, DECOMPRESS_BUFFERS);
+
+                        switch (readResult)
+                        {
+                            case RED4.Archive.IO.EFileReadErrorCodes.NoCr2w:
+                                results.Add(new ReadTestResult
+                                {
+                                    FileEntry = file,
+                                    Success = true,
+                                    ReadResult = ReadTestResult.ReadResultType.NoCr2W
+                                });
+                                break;
+
+                            case RED4.Archive.IO.EFileReadErrorCodes.UnsupportedVersion:
+                                results.Add(new ReadTestResult
+                                {
+                                    FileEntry = file,
+                                    Success = false,
+                                    ReadResult = ReadTestResult.ReadResultType.UnsupportedVersion,
+                                    Message = $"Unsupported Version ({c.MetaData.Version})"
+                                });
+                                break;
+
+                            case RED4.Archive.IO.EFileReadErrorCodes.NoError:
+                                c.MetaData.FileName = file.NameOrHash;
+
+                                var res = ReadTestResult.ReadResultType.NoError;
+                                var msg = "";
+
+                                var additionalCr2WFileBytes =
+                                    (int)(reader.BaseStream.Length - reader.BaseStream.Position);
+                                if (additionalCr2WFileBytes > 0)
+                                {
+                                    res |= ReadTestResult.ReadResultType.HasAdditionalBytes;
+                                    msg += $"Additional Bytes: {additionalCr2WFileBytes}";
+                                }
+
+                                results.Add(new ReadTestResult
+                                {
+                                    FileEntry = file,
+                                    Success = true /*!hasAdditionalBytes && !hasUnknownBytes*/,
+                                    ReadResult = res,
+                                    Message = msg,
+                                    AdditionalBytes = additionalCr2WFileBytes
+                                });
+                                break;
+
+                            default:
+                                throw new Exception();
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        results.Add(new ReadTestResult
+                        {
+                            FileEntry = file,
+                            Success = false,
+                            ReadResult = ReadTestResult.ReadResultType.RuntimeException,
+                            ExceptionType = e.GetType(),
+                            Message = $"{e.Message}"
+                        });
+                    }
+#if IS_PARALLEL
+                });
+#else
+                }
+#endif
+            }
 
             return results;
         }

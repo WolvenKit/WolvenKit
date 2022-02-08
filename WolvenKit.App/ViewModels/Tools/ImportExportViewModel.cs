@@ -7,7 +7,6 @@ using System.Linq;
 using System.Reactive;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
-using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Media3D;
@@ -24,10 +23,13 @@ using WolvenKit.Common.Interfaces;
 using WolvenKit.Common.Model;
 using WolvenKit.Common.Model.Arguments;
 using WolvenKit.Common.Services;
+using WolvenKit.Core.Services;
 using WolvenKit.Functionality.Commands;
 using WolvenKit.Functionality.Controllers;
 using WolvenKit.Functionality.Services;
 using WolvenKit.Interaction;
+using WolvenKit.Models;
+using WolvenKit.Models.Docking;
 using WolvenKit.Modkit.RED4.Opus;
 using WolvenKit.RED4.CR2W.Archive;
 
@@ -57,6 +59,7 @@ namespace WolvenKit.ViewModels.Tools
         private readonly ILoggerService _loggerService;
         private readonly INotificationService _notificationService;
         private readonly IProjectManager _projectManager;
+        private readonly IProgressService<double> _progressService;
         private readonly IWatcherService _watcherService;
         private readonly IGameControllerFactory _gameController;
         private readonly MeshTools _meshTools;
@@ -66,12 +69,12 @@ namespace WolvenKit.ViewModels.Tools
         /// <summary>
         /// Private NameOf Selected Item in Grid.
         /// </summary>
-        private string _CurrentSelectionInGridName;
+        private string _currentSelectionInGridName;
 
         /// <summary>
         /// Private Last Selected Item, Used for Selection Lock.
         /// </summary>
-        private ImportExportItemViewModel lastselected;
+        private ImportExportItemViewModel _lastselected;
 
         private readonly ReadOnlyObservableCollection<ConvertableItemViewModel> _convertableItems;
 
@@ -93,6 +96,7 @@ namespace WolvenKit.ViewModels.Tools
         public ImportExportViewModel(
            IProjectManager projectManager,
            ILoggerService loggerService,
+           IProgressService<double> progressService,
            IWatcherService watcherService,
            INotificationService notificationService,
            IGameControllerFactory gameController,
@@ -104,6 +108,7 @@ namespace WolvenKit.ViewModels.Tools
         {
             _projectManager = projectManager;
             _loggerService = loggerService;
+            _progressService = progressService;
             _watcherService = watcherService;
             _modTools = modTools;
             _gameController = gameController;
@@ -113,6 +118,7 @@ namespace WolvenKit.ViewModels.Tools
             _archiveManager = archiveManager;
 
             SetupToolDefaults();
+            SideInDockedMode = DockSide.Tabbed;
 
             ProcessAllCommand = ReactiveCommand.CreateFromTask(ExecuteProcessAll);
             ProcessSelectedCommand = ReactiveCommand.CreateFromTask(ExecuteProcessSelected);
@@ -127,6 +133,7 @@ namespace WolvenKit.ViewModels.Tools
                 .Connect()
                 .Filter(_ => _.IsImportable)
                 .Filter(_ => _.FullName.Contains(_projectManager.ActiveProject.RawDirectory))
+                .Filter(x => CheckForMultiImport(x))
                 .Transform(_ => new ImportableItemViewModel(_))
                 .ObserveOn(RxApp.MainThreadScheduler)
                 .Bind(out _importableItems)
@@ -167,6 +174,20 @@ namespace WolvenKit.ViewModels.Tools
 
                     SelectedObject = IsImportsSelected ? SelectedImport : IsExportsSelected ? SelectedExport : SelectedConvert;
                 });
+        }
+
+        private static bool CheckForMultiImport(Models.FileModel file)
+        {
+            // add more raw extensions here
+            // example: if a masklist exists in the filelist, ignore all files in the subdirectory
+            // named the same as masklist but with extension mlmask
+            var directory = new FileInfo(file.FullName).Directory;
+            if (directory.Name.Contains($".{ERedExtension.mlmask}"))
+            {
+                return false;
+            }
+
+            return true;
         }
 
         #region properties
@@ -219,23 +240,23 @@ namespace WolvenKit.ViewModels.Tools
                 {
                     if (!SelectionLocked)
                     {
-                        lastselected = SelectedObject;
+                        _lastselected = SelectedObject;
                         return SelectedObject.Name;
                     }
                     else
                     {
-                        if (lastselected == null)
+                        if (_lastselected == null)
                         { return ""; }
                         else
                         {
-                            return lastselected.Name;
+                            return _lastselected.Name;
                         }
                     }
                 }
                 else
                 { return ""; }
             }
-            set => _CurrentSelectionInGridName = value;
+            set => _currentSelectionInGridName = value;
         }
 
         /// <summary>
@@ -564,7 +585,7 @@ namespace WolvenKit.ViewModels.Tools
                 {
                     await Task.Run(() => ConvertSingle(itemViewModel));
                 }
-                
+
             }
             IsProcessing = false;
             _notificationService.Success($"Files have been processed and are available in the Project Explorer");
@@ -633,7 +654,7 @@ namespace WolvenKit.ViewModels.Tools
                     }
                     meshExportArgs.MaterialRepo = _settingsManager.MaterialRepositoryPath;
                 }
-                if(item.Properties is MorphTargetExportArgs morphTargetExportArgs)
+                if (item.Properties is MorphTargetExportArgs morphTargetExportArgs)
                 {
                     if (_gameController.GetController() is RED4Controller cp77Controller)
                     {
@@ -686,43 +707,57 @@ namespace WolvenKit.ViewModels.Tools
         private async Task ExecuteProcessSelected()
         {
             IsProcessing = true;
-            if (IsImportsSelected)
+            _progressService.IsIndeterminate = true;
+            try
             {
-                var wavs = new List<string>();
-                // split up wavs
-                var toBeConverted = ImportableItems.Where(_ => _.IsChecked).ToList();
-                foreach (var item in toBeConverted)
+                if (IsImportsSelected)
                 {
-                    if (item.Extension.Equals(ERawFileFormat.wav.ToString()))
+                    var wavs = new List<string>();
+                    // split up wavs
+                    var toBeConverted = ImportableItems.Where(_ => _.IsChecked).ToList();
+                    foreach (var item in toBeConverted)
                     {
-                        wavs.Add(item.FullName);
+                        if (item.Extension.Equals(ERawFileFormat.wav.ToString()))
+                        {
+                            wavs.Add(item.FullName);
+                        }
+                        else
+                        {
+                            await ImportSingle(item);
+                        }
                     }
-                    else
+                    await ImportWavs(wavs);
+                }
+                if (IsExportsSelected)
+                {
+                    var toBeConverted = ExportableItems.Where(_ => _.IsChecked).ToList();
+                    foreach (var item in toBeConverted)
                     {
-                        await ImportSingle(item);
+                        await ExportSingle(item);
                     }
                 }
-                await ImportWavs(wavs);
-            }
-            if (IsExportsSelected)
-            {
-                var toBeConverted = ExportableItems.Where(_ => _.IsChecked).ToList();
-                foreach (var item in toBeConverted)
+                if (IsConvertsSelected)
                 {
-                    await ExportSingle(item);
-                }
-            }
-            if (IsConvertsSelected)
-            {
 
-                var toBeConverted = ConvertableItems.Where(_ => _.IsChecked).ToList();
-                foreach (var itemViewModel in toBeConverted)
-                {
-                    await Task.Run(() => ConvertSingle(itemViewModel));
+                    var toBeConverted = ConvertableItems.Where(_ => _.IsChecked).ToList();
+                    foreach (var itemViewModel in toBeConverted)
+                    {
+                        await Task.Run(() => ConvertSingle(itemViewModel));
+                    }
                 }
+                _notificationService.Success($"Files have been processed and are available in the Project Explorer");
+                _loggerService.Success("Files have been processed and are available in the Project Explorer");
             }
-            IsProcessing = false;
-            _notificationService.Success($"Files have been processed and are available in the Project Explorer");
+            catch (Exception e)
+            {
+                _notificationService.Error(e.Message);
+                _loggerService.Error(e.Message);
+            }
+            finally
+            {
+                IsProcessing = false;
+                _progressService.IsIndeterminate = false;
+            }
         }
         private Dictionary<string, object> _namedObjects;
 
@@ -771,9 +806,9 @@ namespace WolvenKit.ViewModels.Tools
 
                 var qx = item.GetBaseFile();
                 var proj = _projectManager.ActiveProject;
-                var relativename = qx.GetRelativeName(proj);
+                var relativename = FileModel.GetRelativeName(qx.FullName, proj);
                 var newname = Path.ChangeExtension(relativename, ".mesh");
-                ulong hash = FNV1A64HashAlgorithm.HashString(newname);
+                var hash = FNV1A64HashAlgorithm.HashString(newname);
                 var cp77Controller = _gameController.GetController() as RED4Controller;
 
                 string outfile;
@@ -787,10 +822,10 @@ namespace WolvenKit.ViewModels.Tools
                         file.Extract(meshStream);
                         meshStream.Seek(0, SeekOrigin.Begin);
 
-                        outfile = Path.Combine(ISettingsManager.GetManagerCacheDir(), "Temp_OBJ", qx.Name);
+                        outfile = Path.Combine(ISettingsManager.GetTemp_OBJPath(), qx.Name);
                         outfile = Path.ChangeExtension(outfile, ".glb");
 
-                        if(!_meshTools.ExportMeshPreviewer(meshStream, new FileInfo(outfile)))
+                        if (!_meshTools.ExportMeshPreviewer(meshStream, new FileInfo(outfile)))
                         {
                             outfile = "";
                         }
@@ -835,8 +870,10 @@ namespace WolvenKit.ViewModels.Tools
                 if (readModel3D != null)
                 {
                     // First create an instance of AssimpWpfExporter
-                    var assimpWpfExporter = new AssimpWpfExporter();
-                    assimpWpfExporter.NamedObjects = _namedObjects;
+                    var assimpWpfExporter = new AssimpWpfExporter
+                    {
+                        NamedObjects = _namedObjects
+                    };
 
                     // We can export Model3D, Visual3D or entire Viewport3D:
                     //assimpWpfExporter.AddModel(model3D);
@@ -901,29 +938,5 @@ namespace WolvenKit.ViewModels.Tools
         /// Setup Tool defaults for tool window.
         /// </summary>
         private void SetupToolDefaults() => ContentId = ToolContentId;
-    }
-
-    public class CollectionItemViewModel : ObservableObject
-    {
-        public string Info =>
-            Model switch
-            {
-                FileEntry fe => fe.Name,
-                _ => ""
-            };
-
-        public string Name =>
-            Model switch
-            {
-                FileEntry fe => fe.ShortName,
-                _ => Model.ToString()
-            };
-
-        public CollectionItemViewModel(object model)
-        {
-            Model = model;
-        }
-
-        public object Model { get; set; }
     }
 }

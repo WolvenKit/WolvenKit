@@ -1,9 +1,7 @@
 using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reactive;
-using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
@@ -11,7 +9,6 @@ using Microsoft.Win32;
 using Microsoft.WindowsAPICodePack.Dialogs;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
-using WolvenKit.Common.Services;
 using WolvenKit.Functionality.Commands;
 using WolvenKit.Functionality.Services;
 using WolvenKit.ViewModels.Dialogs;
@@ -67,7 +64,7 @@ namespace WolvenKit.ViewModels.Wizards
 
 
             CheckForUpdates = _settingsManager.CheckForUpdates;
-           // W3ExePath = _settingsManager.W3ExecutablePath;
+            // W3ExePath = _settingsManager.W3ExecutablePath;
             CP77ExePath = _settingsManager.CP77ExecutablePath;
             //WccLitePath = _settingsManager.WccLitePath;
 
@@ -94,7 +91,7 @@ namespace WolvenKit.ViewModels.Wizards
 
         #region Properties
 
-        public sealed override string Title { get; set; }
+        public string Title { get; set; }
 
         //public string Author { get; set; }
         //public string Email { get; set; }
@@ -149,16 +146,16 @@ namespace WolvenKit.ViewModels.Wizards
 
         #region Commands
 
-        public sealed override ReactiveCommand<Unit, Unit> CloseCommand { get; set; }
-        public sealed override ReactiveCommand<Unit, Unit> CancelCommand { get; set; }
-        public sealed override ReactiveCommand<Unit, Unit> OkCommand { get; set; }
+        public ReactiveCommand<Unit, Unit> CloseCommand { get; set; }
+        public ReactiveCommand<Unit, Unit> CancelCommand { get; set; }
+        public ReactiveCommand<Unit, Unit> OkCommand { get; set; }
 
 
         private void ExecuteFinish()
         {
 
             _settingsManager.CheckForUpdates = CheckForUpdates;
-           // _settingsManager.W3ExecutablePath = W3ExePath;
+            // _settingsManager.W3ExecutablePath = W3ExePath;
             _settingsManager.CP77ExecutablePath = CP77ExePath;
             //_settingsManager.WccLitePath = WccLitePath;
             _settingsManager.MaterialRepositoryPath = MaterialDepotPath;
@@ -168,7 +165,7 @@ namespace WolvenKit.ViewModels.Wizards
 
         }
 
-        
+
 
 
 

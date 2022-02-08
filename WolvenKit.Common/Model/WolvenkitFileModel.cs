@@ -1,8 +1,4 @@
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace WolvenKit.Common.Model
 {
@@ -29,7 +25,10 @@ namespace WolvenKit.Common.Model
         public string Extension { get; set; }
 
         public EWolvenKitFile Type { get; set; }
+
+        public string Template { get; set; }
+
     }
 
-    
+
 }

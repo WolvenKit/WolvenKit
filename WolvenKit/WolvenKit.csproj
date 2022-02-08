@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <Platforms>x64</Platforms>
-    <TargetFramework>net5.0-windows</TargetFramework>
+    <TargetFramework>net6.0-windows</TargetFramework>
     <AssemblyName>WolvenKit</AssemblyName>
     <RootNamespace>WolvenKit</RootNamespace>
     <DefaultLanguage>en-US</DefaultLanguage>
@@ -11,131 +11,129 @@
     <OutputType>WinExe</OutputType>
       <ApplicationIcon>Resources\Media\Images\Icons\Application\TaskBarIcon.ico</ApplicationIcon>
     <RuntimeIdentifier>win-x64</RuntimeIdentifier>
-    <PublishSingleFile>true</PublishSingleFile>
+    <PublishSingleFile>false</PublishSingleFile>
     <SelfContained>true</SelfContained>
     <DebugType>embedded</DebugType>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <NoWarn>$(NoWarn);SA1652</NoWarn>
     <NoWarn>$(NoWarn);CA1416</NoWarn>
     <NoWarn>$(NoWarn);SYSLIB0001</NoWarn>
-    <AssemblyVersion>8.4.4</AssemblyVersion>
-    <InformationalVersion>8.4.4</InformationalVersion>
+    <AssemblyVersion>8.5.0</AssemblyVersion>
+    <InformationalVersion>8.5.0</InformationalVersion>
     <Description>WPF</Description>
-    <NoWin32Manifest>true</NoWin32Manifest>
     <SatelliteResourceLanguages>en</SatelliteResourceLanguages>
       <Product>WolvenKit</Product>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net5.0-windows|AnyCPU'">
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net5.0-windows|AnyCPU'">
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+      <ApplicationManifest>app.manifest</ApplicationManifest>
   </PropertyGroup>
 
 
   <ItemGroup>
     <ProjectReference Include="..\WolvenKit.App\WolvenKit.App.csproj" />
     <ProjectReference Include="..\WolvenKit.Common\WolvenKit.Common.csproj" />
-    <ProjectReference Include="..\WolvenKit.CLI\WolvenKit.CLI.csproj" />
   </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="ControlzEx" Version="5.0.1" />
     <PackageReference Include="AdonisUI" Version="1.17.1" />
     <PackageReference Include="AdonisUI.ClassicTheme" Version="1.17.1" />
-    <PackageReference Include="Fluent.Ribbon" Version="8.0.3" />
-    <PackageReference Include="Ab3d.DXEngine.Wpf" Version="4.4.7874" />
-    <PackageReference Include="Ab3d.DXEngine" Version="4.4.7874" />
-    <PackageReference Include="Ab3d.PowerToys" Version="9.6.7848" />
-    <PackageReference Include="Discord.Net" Version="2.4.0" />
+    <PackageReference Include="Fluent.Ribbon" Version="9.0.1" />
+    <PackageReference Include="Ab3d.DXEngine.Wpf" Version="5.0.8000" />
+    <PackageReference Include="Ab3d.DXEngine" Version="5.0.8000" />
+    <PackageReference Include="Ab3d.PowerToys" Version="10.0.8000" />
+    <PackageReference Include="Discord.Net" Version="3.1.0" />
+    <PackageReference Include="DrawStringLineHeight" Version="1.0.0" />
     <PackageReference Include="Feather.Controls" Version="1.0.3" />
     <PackageReference Include="Feather.Core" Version="1.0.0" />
 
-    <PackageReference Include="ReactiveUI" Version="16.2.6" />
+    <PackageReference Include="ReactiveUI" Version="17.1.17" />
     <PackageReference Include="ReactiveUI.Events.WPF" Version="15.1.1" />
-    <PackageReference Include="ReactiveUI.Fody" Version="16.2.6" />
-    <PackageReference Include="ReactiveUI.WPF" Version="16.2.6" />
-    <PackageReference Include="ScottPlot.WPF" Version="4.1.26" />
-    <PackageReference Include="Splat" Version="13.1.22" />
-    <PackageReference Include="Microsoft.Extensions.Hosting" Version="5.0.0" />
-    <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="5.0.0" />
-    <PackageReference Include="Splat.Microsoft.Extensions.DependencyInjection" Version="13.1.22" />
-    <PackageReference Include="Splat.Microsoft.Extensions.Logging" Version="13.1.22" />
+    <PackageReference Include="ReactiveUI.Fody" Version="17.1.17" />
+    <PackageReference Include="ReactiveUI.WPF" Version="17.1.17" />
+    <PackageReference Include="ScottPlot.WPF" Version="4.1.29" />
+    <PackageReference Include="Splat" Version="14.1.17" />
+    <PackageReference Include="Microsoft.Extensions.Hosting" Version="6.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="6.0.0" />
+    <PackageReference Include="Splat.Microsoft.Extensions.DependencyInjection" Version="14.1.17" />
+    <PackageReference Include="Splat.Microsoft.Extensions.Logging" Version="14.1.17" />
 
     <PackageReference Include="MahApps.Metro" Version="2.4.9" />
-    <PackageReference Include="MahApps.Metro.IconPacks" Version="4.10.0" />
-    <PackageReference Include="Microsoft.Web.WebView2" Version="1.0.992.28" />
-    <PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.37" />
-    <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+    <PackageReference Include="MahApps.Metro.IconPacks" Version="4.11.0" />
+    <PackageReference Include="Microsoft.Web.WebView2" Version="1.0.1054.31" />
+    <PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.39" />
     <PackageReference Include="NodeNetwork" Version="6.0.0" />
     <PackageReference Include="NodeNetworkToolkit" Version="6.0.0" />
     <PackageReference Include="Octokit" Version="0.50.0" />
+    <PackageReference Include="Syncfusion.Edit.WPF" Version="19.4.0.38" />
 
-    <PackageReference Include="Syncfusion.Tools.WPF" Version="19.3.0.45" />
-    <PackageReference Include="Syncfusion.PropertyGrid.WPF" Version="19.3.0.45" />
-    <PackageReference Include="Syncfusion.SfInput.WPF" Version="19.3.0.45" />
-    <PackageReference Include="Syncfusion.SfImageEditor.WPF" Version="19.3.0.45" />
+    <PackageReference Include="Syncfusion.Tools.WPF" Version="19.4.0.38" />
+    <PackageReference Include="Syncfusion.PropertyGrid.WPF" Version="19.4.0.38" />
+    <PackageReference Include="Syncfusion.SfInput.WPF" Version="19.4.0.38" />
+    <PackageReference Include="Syncfusion.SfImageEditor.WPF" Version="19.4.0.38" />
 
-    <PackageReference Include="Syncfusion.SfProgressBar.WPF" Version="19.3.0.45" />
+    <PackageReference Include="Syncfusion.SfProgressBar.WPF" Version="19.4.0.38" />
 
-    <PackageReference Include="Syncfusion.SfAccordion.WPF" Version="19.3.0.45" />
+    <PackageReference Include="Syncfusion.SfAccordion.WPF" Version="19.4.0.38" />
 
-    <PackageReference Include="Syncfusion.SfBarcode.WPF" Version="19.3.0.45" />
-    <PackageReference Include="Syncfusion.SfBusyIndicator.WPF" Version="19.3.0.45" />
-    <PackageReference Include="Syncfusion.SfGrid.WPF" Version="19.3.0.45" />
-    <PackageReference Include="Syncfusion.SfHubTile.WPF" Version="19.3.0.45" />
-    <PackageReference Include="Syncfusion.SfKanban.WPF" Version="19.3.0.45" />
-    <PackageReference Include="Syncfusion.SfNavigationDrawer.WPF" Version="19.3.0.45" />
-    <PackageReference Include="Syncfusion.SfRadialMenu.WPF" Version="19.3.0.45" />
-    <PackageReference Include="Syncfusion.SfRichTextBoxAdv.WPF" Version="19.3.0.45" />
-    <PackageReference Include="Syncfusion.SfTextInputLayout.WPF" Version="19.3.0.45" />
-    <PackageReference Include="Syncfusion.SfTreeNavigator.WPF" Version="19.3.0.45" />
-    <PackageReference Include="Syncfusion.SfTreeView.WPF" Version="19.3.0.45" />
+    <PackageReference Include="Syncfusion.SfBarcode.WPF" Version="19.4.0.38" />
+    <PackageReference Include="Syncfusion.SfBusyIndicator.WPF" Version="19.4.0.38" />
+    <PackageReference Include="Syncfusion.SfGrid.WPF" Version="19.4.0.38" />
+    <PackageReference Include="Syncfusion.SfHubTile.WPF" Version="19.4.0.38" />
+    <PackageReference Include="Syncfusion.SfKanban.WPF" Version="19.4.0.38" />
+    <PackageReference Include="Syncfusion.SfNavigationDrawer.WPF" Version="19.4.0.38" />
+    <PackageReference Include="Syncfusion.SfRadialMenu.WPF" Version="19.4.0.38" />
+    <PackageReference Include="Syncfusion.SfRichTextBoxAdv.WPF" Version="19.4.0.38" />
+    <PackageReference Include="Syncfusion.SfTextInputLayout.WPF" Version="19.4.0.38" />
+    <PackageReference Include="Syncfusion.SfTreeNavigator.WPF" Version="19.4.0.38" />
+    <PackageReference Include="Syncfusion.SfTreeView.WPF" Version="19.4.0.38" />
 
-    <PackageReference Include="Syncfusion.SfSkinManager.WPF" Version="19.3.0.45" />
-    <PackageReference Include="Syncfusion.Themes.MaterialDark.WPF" Version="19.3.0.45" />
+    <PackageReference Include="Syncfusion.SfSkinManager.WPF" Version="19.4.0.38" />
+    <PackageReference Include="Syncfusion.Themes.MaterialDark.WPF" Version="19.4.0.38" />
 
 
 
-    <PackageReference Include="AvalonEdit" Version="6.1.2.30" />
-    <PackageReference Include="System.Drawing.Common" Version="5.0.2" />
-    <PackageReference Include="SharpVectors.Reloaded" Version="1.7.6" />
-    <PackageReference Include="System.Security.Permissions" Version="5.0.0" />
+    <PackageReference Include="AvalonEdit" Version="6.1.3.50" />
+    <PackageReference Include="System.Drawing.Common" Version="6.0.0" />
+    <PackageReference Include="SharpVectors.Reloaded" Version="1.7.7" />
+    <PackageReference Include="System.Security.Permissions" Version="6.0.0" />
     <PackageReference Include="System.Windows.Interactivity.WPF" Version="2.0.20525" NoWarn="NU1701" />
-    <PackageReference Include="HandyControls" Version="3.3.8.1" />
+    <PackageReference Include="HandyControls" Version="3.3.10" />
     
     <PackageReference Include="WolvenKit.WPFSoundVisualizationLibNet5" Version="1.0.1" />
     
-    <PackageReference Include="WpfAnalyzers" Version="3.5.4" PrivateAssets="all">
+    <PackageReference Include="WpfAnalyzers" Version="4.0.1" PrivateAssets="all">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
     </PackageReference>
-    <!--<PackageReference Update="NETStandard.Library" Version="2.0.1" />-->
   </ItemGroup>
 
 
   <ItemGroup>
     <Compile Remove="Functionality\Behavior\**" />
+    <Compile Remove="lib\**" />
     <Compile Remove="NewFolder1\**" />
     <Compile Remove="Resources\Styles\CustomBase\**" />
     <Compile Remove="Resources\Styles\Custom\**" />
     <Compile Remove="Views\Wizards\PublishWizard\**" />
     <EmbeddedResource Remove="Functionality\Behavior\**" />
+    <EmbeddedResource Remove="lib\**" />
     <EmbeddedResource Remove="NewFolder1\**" />
     <EmbeddedResource Remove="Resources\Styles\CustomBase\**" />
     <EmbeddedResource Remove="Resources\Styles\Custom\**" />
     <EmbeddedResource Remove="Views\Wizards\PublishWizard\**" />
     <None Remove="Functionality\Behavior\**" />
+    <None Remove="lib\**" />
     <None Remove="NewFolder1\**" />
     <None Remove="Resources\Styles\CustomBase\**" />
     <None Remove="Resources\Styles\Custom\**" />
     <None Remove="Views\Wizards\PublishWizard\**" />
     <Page Remove="Functionality\Behavior\**" />
+    <Page Remove="lib\**" />
     <Page Remove="NewFolder1\**" />
     <Page Remove="Resources\Styles\CustomBase\**" />
     <Page Remove="Resources\Styles\Custom\**" />
     <Page Remove="Views\Wizards\PublishWizard\**" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Remove="Views\Templates\RedFixedPointEditor.cs" />
     <Compile Remove="Views\Wizards\PublishWizardView.xaml.cs" />
   </ItemGroup>
     <ItemGroup>
@@ -152,9 +150,6 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="AssimpNet.dll">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="lib\WolvenManager.Installer.exe">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Obsolete.dll">
@@ -205,6 +200,12 @@
     <Content Include="Resources\Media\Images\Icons\Files\bnk.bmp">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="Resources\Media\Images\Icons\Files\reds.svg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\Media\Images\Icons\Files\tweak.svg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Resources\Media\t1.kark">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -224,6 +225,8 @@
     <Resource Include="Resources\Media\Images\Application\Sammy_Grayscale.png" />
     <Resource Include="Resources\Media\Images\Application\Sammy_Home.png" />
     <Resource Include="Resources\Media\Images\Application\wkit_logo_text_singlestack_white.png" />
+    <Resource Include="Resources\Media\Images\Icons\Files\archive-closed.svg" />
+    <Resource Include="Resources\Media\Images\Icons\Files\archive-opened.svg" />
     <Resource Include="Views\Shell\TaskBarIcon.ico">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Resource>
@@ -1055,6 +1058,9 @@
     <Compile Update="Views\Templates\RedBoolEditor.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Update="Views\Templates\RedUlongEditor.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Update="Views\Templates\RedFloatEditor.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -1605,7 +1611,6 @@
     <None Remove="Assimp64.dll" />
     <None Remove="AssimpNet.dll" />
     <None Remove="distraction_generic.bk2" />
-    <None Remove="lib\WolvenManager.Installer.exe" />
     <None Remove="Obsolete.dll" />
     <None Remove="Resources\Media\bkmk.kark" />
     <None Remove="Resources\Media\Images\Application\.cpmodproj.png" />
@@ -1637,6 +1642,8 @@
     <None Remove="Resources\Media\Images\Icons\Files\app.bmp" />
     <None Remove="Resources\Media\Images\Icons\Files\archetypes.bmp" />
     <None Remove="Resources\Media\Images\Icons\Files\archetypes.svg" />
+    <None Remove="Resources\Media\Images\Icons\Files\archive-closed.svg" />
+    <None Remove="Resources\Media\Images\Icons\Files\archive-opened.svg" />
     <None Remove="Resources\Media\Images\Icons\Files\areas.bmp" />
     <None Remove="Resources\Media\Images\Icons\Files\areas.svg" />
     <None Remove="Resources\Media\Images\Icons\Files\audiovehcurveset.bmp" />
@@ -1711,6 +1718,7 @@
     <None Remove="Resources\Media\Images\Icons\Files\redfur.svg" />
     <None Remove="Resources\Media\Images\Icons\Files\redgame.svg" />
     <None Remove="Resources\Media\Images\Icons\Files\redicsv.svg" />
+    <None Remove="Resources\Media\Images\Icons\Files\reds.svg" />
     <None Remove="Resources\Media\Images\Icons\Files\redswf.svg" />
     <None Remove="Resources\Media\Images\Icons\Files\redwpset.svg" />
     <None Remove="Resources\Media\Images\Icons\Files\regionset.svg" />
@@ -1728,6 +1736,7 @@
     <None Remove="Resources\Media\Images\Icons\Files\streamingworld.svg" />
     <None Remove="Resources\Media\Images\Icons\Files\subs.svg" />
     <None Remove="Resources\Media\Images\Icons\Files\terrainsetup.svg" />
+    <None Remove="Resources\Media\Images\Icons\Files\tweak.svg" />
     <None Remove="Resources\Media\Images\Icons\Files\Usm.svg" />
     <None Remove="Resources\Media\Images\Icons\Files\w2animev.svg" />
     <None Remove="Resources\Media\Images\Icons\Files\w2em.svg" />
@@ -1805,6 +1814,10 @@
       <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
     </Page>
     <Page Update="Views\Templates\RedBoolEditor.xaml">
+      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Views\Templates\RedUlongEditor.xaml">
       <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
       <SubType>Designer</SubType>
     </Page>

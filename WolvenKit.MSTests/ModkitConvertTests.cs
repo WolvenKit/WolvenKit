@@ -1,4 +1,4 @@
-#define WRITE
+//#define WRITE
 #define IS_PARALLEL
 
 #if WRITE
@@ -11,17 +11,20 @@ using System.IO;
 using System.Linq;
 using System.Runtime.Serialization;
 using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
 using Catel.IoC;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Newtonsoft.Json;
 using WolvenKit.Common.Conversion;
-using WolvenKit.Common.Tools;
-using WolvenKit.Interfaces.Extensions;
+using WolvenKit.Core.Compression;
+using WolvenKit.Core.Extensions;
 using WolvenKit.Modkit.RED4;
 using WolvenKit.MSTests.Model;
+using WolvenKit.RED4.Archive.CR2W;
+using WolvenKit.RED4.Archive.IO;
 using WolvenKit.RED4.CR2W;
 using WolvenKit.RED4.CR2W.Archive;
+using WolvenKit.RED4.CR2W.JSON;
 
 namespace WolvenKit.MSTests
 {
@@ -468,8 +471,7 @@ namespace WolvenKit.MSTests
                     #region convert to json
                     using var originalMemoryStream = new MemoryStream();
                     ModTools.ExtractSingleToStream(archive, hash, originalMemoryStream);
-                    var originalFile = parsers.TryReadCr2WFile(originalMemoryStream);
-                    if (originalFile == null)
+                    if (!parsers.TryReadRed4File(originalMemoryStream, out var originalFile))
                     {
 #if IS_PARALLEL
                         return;
@@ -479,7 +481,7 @@ namespace WolvenKit.MSTests
                     }
 
                     var dto = new RedFileDto(originalFile);
-                    var json = JsonConvert.SerializeObject(dto, Formatting.Indented);
+                    var json = RedJsonSerializer.Serialize(dto);
                     if (string.IsNullOrEmpty(json))
                     {
                         throw new SerializationException();
@@ -489,74 +491,73 @@ namespace WolvenKit.MSTests
 
                     #region convert back from json
 
-                    var newdto = JsonConvert.DeserializeObject<RedFileDto>(json);
+                    var newdto = RedJsonSerializer.Deserialize<RedFileDto>(json);
                     if (newdto == null)
                     {
                         throw new SerializationException();
                     }
 
-                    var newFile = newdto.ToW2rc();
+                    var newFile = (CR2WFile)newdto.Data;
 
                     #endregion
 
                     #region compare
 
                     // old file
-                    var header = (originalFile as CR2WFile).Header;
-                    var objectsend = (int)header.objectsEnd;
+                    var header = (originalFile as CR2WFile).MetaData;
+                    var objectsend = (int)header.ObjectsEnd;
                     var originalBytes = originalMemoryStream.ToByteArray().Take(objectsend);
-                    var originalExportStartOffset = (int)originalFile.Chunks.FirstOrDefault().GetOffset();
 
                     // write the new file
                     using var newMemoryStream = new MemoryStream();
-                    using var bw = new BinaryWriter(newMemoryStream);
-                    newFile.Write(bw);
+                    using var writer = new CR2WWriter(newMemoryStream);
+                    writer.WriteFile(newFile);
 
                     // hack to compare buffers
                     var newBytes = newMemoryStream.ToByteArray();
 
                     newMemoryStream.Seek(0, SeekOrigin.Begin);
-                    var dbg = parsers.TryReadCr2WFileHeaders(newMemoryStream);
-                    var newExportStartOffset = (int)dbg.Chunks.FirstOrDefault().GetOffset();
+                    var dbg = parsers.ReadRed4File(newMemoryStream);
+                    //var newExportStartOffset = (int)dbg.Chunks.FirstOrDefault().GetOffset();
 
 
 
 
+//                    var originalExportStartOffset = (int)originalFile.Chunks.FirstOrDefault().GetOffset();
+//                    if (!originalBytes.Skip(160).SequenceEqual(newBytes.Skip(160)))
+//                    {
+//                        // check again skipping the tables
+//                        if (originalExportStartOffset == newExportStartOffset)
+//                        {
+//                            if (!originalBytes.Skip(originalExportStartOffset).SequenceEqual(newBytes.Skip(newExportStartOffset)))
+//                            {
+//#if WRITE
+//                                File.WriteAllBytes(Path.Combine(resultDir, $"{file.Key}.o.bin"), originalBytes.ToArray());
+//                                File.WriteAllBytes(Path.Combine(resultDir, $"{file.Key}.bin"), newBytes.ToArray());
+//#endif
+//                                throw new SerializationException("Exports not equal");
+//                            }
+//                            else
+//                            {
 
-                    if (!originalBytes.Skip(160).SequenceEqual(newBytes.Skip(160)))
-                    {
-                        // check again skipping the tables
-                        if (originalExportStartOffset == newExportStartOffset)
-                        {
-                            if (!originalBytes.Skip(originalExportStartOffset).SequenceEqual(newBytes.Skip(newExportStartOffset)))
-                            {
-#if WRITE
-                                File.WriteAllBytes(Path.Combine(resultDir, $"{file.Key}.o.bin"), originalBytes.ToArray());
-                                File.WriteAllBytes(Path.Combine(resultDir, $"{file.Key}.bin"), newBytes.ToArray());
-#endif
-                                throw new SerializationException("Exports not equal");
-                            }
-                            else
-                            {
-
-                            }
-                        }
-                        else
-                        {
-#if WRITE
-                            File.WriteAllBytes(Path.Combine(resultDir, $"{file.Key}.o.bin"), originalBytes.ToArray());
-                            File.WriteAllBytes(Path.Combine(resultDir, $"{file.Key}.bin"), newBytes.ToArray());
-#endif
-                            throw new SerializationException("Header not equal");
-                        }
+//                            }
+//                        }
+//                        else
+//                        {
+//#if WRITE
+//                            File.WriteAllBytes(Path.Combine(resultDir, $"{file.Key}.o.bin"), originalBytes.ToArray());
+//                            File.WriteAllBytes(Path.Combine(resultDir, $"{file.Key}.bin"), newBytes.ToArray());
+//#endif
+//                            throw new SerializationException("Header not equal");
+//                        }
 
 
 
-                    }
-                    else
-                    {
+//                    }
+//                    else
+//                    {
 
-                    }
+//                    }
 
                     #endregion
 

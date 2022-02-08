@@ -1,8 +1,4 @@
-using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using WolvenKit.Common.DDS;
 using WolvenKit.Common.Model;
@@ -16,6 +12,8 @@ namespace WolvenKit.Common.Interfaces
         public Archive Pack(DirectoryInfo infolder, DirectoryInfo outpath, string modname = null);
 
         public bool ConvertXbmToDdsStream(Stream redInFile, Stream outstream, out DXGI_FORMAT texformat);
+
+        //public bool ConvertCR2WToDdsStream(CR2WFile cr2w, Stream outstream, out DXGI_FORMAT texformat);
 
 
         public bool Import(RedRelativePath rawRelative, GlobalImportArgs args, DirectoryInfo outDir = null);
@@ -40,6 +38,7 @@ namespace WolvenKit.Common.Interfaces
         void UncookAll(Archive ar, DirectoryInfo outDir, GlobalExportArgs args, bool unbundle = false, string pattern = "", string regex = "", DirectoryInfo rawOutDir = null, ECookedFileFormat[] forcebuffers = null);
 
         public bool ConvertToAndWrite(ETextConvertFormat format, string infile, DirectoryInfo outputDirInfo);
+
         public bool ConvertFromAndWrite(FileInfo fileInfo, DirectoryInfo outputDirInfo);
     }
 

@@ -27,12 +27,14 @@ namespace WolvenKit.Common
 
     public enum ERedScriptExtension
     {
-        SWIFT
+        swift,
+        reds,
+        redscript
     }
 
     public enum ETweakExtension
     {
-        TWEAK
+        tweak
     }
 
     public enum EUpdateChannel
@@ -332,6 +334,16 @@ namespace WolvenKit.Common
         png,
         tiff
     }
+
+    /// <summary>
+    /// Possible extensions to uncook textures
+    /// </summary>
+    public enum EMlmaskUncookExtension
+    {
+        dds,
+        png
+    }
+
 
     /// <summary>
     /// Possible file extensions of raw files

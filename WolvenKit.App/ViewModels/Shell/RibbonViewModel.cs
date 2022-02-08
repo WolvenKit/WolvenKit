@@ -4,10 +4,7 @@ using System.Linq;
 using System.Reactive;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
-using System.Windows.Input;
 using ReactiveUI;
-using ReactiveUI.Fody.Helpers;
-using Splat;
 using WolvenKit.Common;
 using WolvenKit.Common.Interfaces;
 using WolvenKit.Common.Services;
@@ -56,9 +53,6 @@ namespace WolvenKit.ViewModels.Shell
             _loggerService = loggerService;
             _settingsManager = settingsManager;
 
-            StartScreenShown = false;
-            BackstageIsOpen = true;
-
             //ViewSelectedCommand = new DelegateCommand<object>(ExecuteViewSelected, CanViewSelected);
             //AssetBrowserAddCommand = new RelayCommand(ExecuteAssetBrowserAdd, CanAssetBrowserAdd);
             //AssetBrowserOpenFileLocation = new RelayCommand(ExecuteAssetBrowserOpenFileLocation, CanAssetBrowserOpenFileLocation);
@@ -66,9 +60,11 @@ namespace WolvenKit.ViewModels.Shell
             OpenProjectCommand = ReactiveCommand.Create<string>(s => _mainViewModel.OpenProjectCommand.Execute(s).Subscribe());
             //NewProjectCommand = ReactiveCommand.Create(() => _mainViewModel.NewProjectCommand.Execute().Subscribe());
             PackProjectCommand = ReactiveCommand.Create(() => _mainViewModel.PackModCommand.SafeExecute());
+            PackInstallProjectCommand = ReactiveCommand.Create(() => _mainViewModel.PackInstallModCommand.SafeExecute());
 
             NewFileCommand = ReactiveCommand.Create(() => _mainViewModel.NewFileCommand.SafeExecute(null));
             SaveFileCommand = ReactiveCommand.Create(() => _mainViewModel.SaveFileCommand.SafeExecute());
+            SaveAsCommand = ReactiveCommand.Create(() => _mainViewModel.SaveAsCommand.SafeExecute());
             SaveAllCommand = ReactiveCommand.Create(() => _mainViewModel.SaveAllCommand.SafeExecute());
 
             ViewProjectExplorerCommand = ReactiveCommand.Create(() => _mainViewModel.ShowProjectExplorerCommand.SafeExecute());
@@ -78,15 +74,11 @@ namespace WolvenKit.ViewModels.Shell
             //ViewCodeEditorCommand = ReactiveCommand.Create(() => _mainViewModel.ShowCodeEditorCommand.SafeExecute());
             ShowImportExportToolCommand = ReactiveCommand.Create(() => _mainViewModel.ShowImportExportToolCommand.SafeExecute());
 
-            ShowSettingsCommand = ReactiveCommand.Create(() =>
-            {
-                BackstageIsOpen = true;
-            });
             ShowBugReportCommand = ReactiveCommand.CreateFromTask(async () =>
             {
                 var result = await Interactions.ShowBugReport.Handle(Unit.Default);
             });
-            ShowFeedbackCommand = ReactiveCommand.CreateFromTask(async  () =>
+            ShowFeedbackCommand = ReactiveCommand.CreateFromTask(async () =>
             {
                 var result = await Interactions.ShowFeedback.Handle(Unit.Default);
             });
@@ -114,7 +106,7 @@ namespace WolvenKit.ViewModels.Shell
                     var progress = 0;
                     _progressService.Report(0);
 
-                    for (int i = 0; i < archives.Count; i++)
+                    for (var i = 0; i < archives.Count; i++)
                     {
                         var archive = archives[i];
                         _modTools.ExtractAll(archive as Archive, depotPath);
@@ -134,9 +126,11 @@ namespace WolvenKit.ViewModels.Shell
         public ReactiveCommand<string, Unit> OpenProjectCommand { get; }
         //public ReactiveCommand<Unit, Unit> NewProjectCommand { get; }
         public ReactiveCommand<Unit, Unit> PackProjectCommand { get; }
+        public ReactiveCommand<Unit, Unit> PackInstallProjectCommand { get; }
 
         public ReactiveCommand<Unit, Unit> NewFileCommand { get; }
         public ReactiveCommand<Unit, Unit> SaveFileCommand { get; }
+        public ReactiveCommand<Unit, Unit> SaveAsCommand { get; }
         public ReactiveCommand<Unit, Unit> SaveAllCommand { get; }
 
         public ReactiveCommand<Unit, Unit> ViewProjectExplorerCommand { get; }
@@ -146,7 +140,6 @@ namespace WolvenKit.ViewModels.Shell
         public ReactiveCommand<Unit, Unit> ViewCodeEditorCommand { get; }
         public ReactiveCommand<Unit, Unit> ShowImportExportToolCommand { get; }
 
-        public ReactiveCommand<Unit, Unit> ShowSettingsCommand { get; }
         public ReactiveCommand<Unit, Unit> ShowBugReportCommand { get; }
         public ReactiveCommand<Unit, Unit> ShowFeedbackCommand { get; }
 
@@ -156,10 +149,6 @@ namespace WolvenKit.ViewModels.Shell
         #endregion
 
         #region properties
-
-        [Reactive] public bool StartScreenShown { get; set; }
-
-        [Reactive] public bool BackstageIsOpen { get; set; }
 
         #endregion properties
 

@@ -5,7 +5,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using DynamicData;
 using ReactiveUI;
-using WolvenKit.Common.FNV1A;
 using WolvenKit.Models;
 using WolvenKit.MVVM.Model.ProjectManagement.Project;
 
@@ -37,7 +36,7 @@ namespace WolvenKit.Functionality.Services
             {
                 if (loaded)
                 {
-                    WatchLocation(_projectManager.ActiveProject.FileDirectory);
+                    WatchLocation(_projectManager.ActiveProject.ProjectDirectory);
                     await RefreshAsync(_projectManager.ActiveProject);
                 }
                 else
@@ -91,7 +90,7 @@ namespace WolvenKit.Functionality.Services
         private void DetectProjectFiles(EditorProject proj)
         {
             var allFiles = Directory
-                    .GetFileSystemEntries(proj.FileDirectory, "*", SearchOption.AllDirectories)
+                    .GetFileSystemEntries(proj.ProjectDirectory, "*", SearchOption.AllDirectories)
                 ;
 
             _files.Edit(innerList =>
@@ -186,7 +185,7 @@ namespace WolvenKit.Functionality.Services
                     _files.AddOrUpdate(new FileModel(e.FullPath, _projectManager.ActiveProject));
                     break;
                 }
-                    
+
             }
 
         }

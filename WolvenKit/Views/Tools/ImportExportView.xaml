@@ -73,6 +73,7 @@
             <syncfusion:SfDataGrid
                 x:Name="ConvertGrid"
                 Grid.Row="1"
+                BorderThickness="0,1,0,1"
                 AllowEditing="True"
                 AllowFiltering="True"
                 CellDoubleTapped="SfDataGrid_CellDoubleTapped"
@@ -87,6 +88,7 @@
                     <syncfusion:GridCheckBoxColumn
                         AllowEditing="True"
                         HeaderText="#"
+                        Width="50"
                         MappingName="IsChecked">
                         <syncfusion:GridCheckBoxColumn.HeaderTemplate>
                             <DataTemplate>
@@ -119,6 +121,7 @@
             <syncfusion:SfDataGrid
                 x:Name="ExportGrid"
                 Grid.Row="1"
+                BorderThickness="0,1,0,1"
                 AllowEditing="True"
                 AllowFiltering="True"
                 AllowResizingColumns="True"
@@ -130,8 +133,11 @@
                 Visibility="{Binding IsExportsSelected, Converter={StaticResource boolToVisibilityConverter}}">
 
                 <syncfusion:SfDataGrid.Columns>
-                    
-                    <syncfusion:GridCheckBoxColumn HeaderText="#" MappingName="IsChecked">
+
+                    <syncfusion:GridCheckBoxColumn
+                        HeaderText="#"
+                        MappingName="IsChecked"
+                        Width="50">
                         <syncfusion:GridCheckBoxColumn.HeaderTemplate>
                             <DataTemplate>
                                 <CheckBox
@@ -168,6 +174,7 @@
             <syncfusion:SfDataGrid
                 x:Name="ImportGrid"
                 Grid.Row="1"
+                BorderThickness="0,1,0,1"
                 AllowEditing="True"
                 AllowFiltering="True"
                 AllowResizingColumns="True"
@@ -182,6 +189,7 @@
                     <syncfusion:GridCheckBoxColumn
                         AllowEditing="True"
                         HeaderText="#"
+                        Width="50"
                         MappingName="IsChecked">
                         <syncfusion:GridCheckBoxColumn.HeaderTemplate>
                             <DataTemplate>
@@ -234,14 +242,14 @@
                         Style="{DynamicResource ButtonCustom}">
                         <StackPanel Orientation="Horizontal">
                             <iconPacks:PackIconCodicons
-                                    Width="16"
-                                    Height="16"
+                                    Width="13"
+                                    Height="13"
                                     HorizontalAlignment="Center"
                                     VerticalAlignment="Center"
                                     Margin="2"
                                     Kind="DebugStart" />
 
-                            <TextBlock Text="Process Selected" />
+                            <TextBlock Text="Process Selected" Margin="1"/>
                         </StackPanel>
                     </Button>
 
@@ -257,14 +265,14 @@
                         Style="{DynamicResource ButtonCustom}">
                         <StackPanel Orientation="Horizontal">
                             <iconPacks:PackIconCodicons
-                                Width="16"
-                                Height="16"
+                                Width="13"
+                                Height="13"
                                 HorizontalAlignment="Center"
                                 VerticalAlignment="Center"
                                 Margin="2"
                                 Kind="RunAll" />
 
-                            <TextBlock Text="Process All" />
+                            <TextBlock Text="Process All" Margin="1"/>
                         </StackPanel>
                     </Button>
 
@@ -324,20 +332,21 @@
                             Style="{DynamicResource ButtonCustom}">
                             <StackPanel Orientation="Horizontal">
                                 <iconPacks:PackIconForkAwesome
-                                    Width="16"
-                                    Height="16"
+                                    Width="13"
+                                    Height="13"
                                     HorizontalAlignment="Center"
                                     VerticalAlignment="Center"
                                     Margin="2"
                                     Kind="FilesOutline" />
-                                <TextBlock Text="Copy Settings" />
+                                <TextBlock Text="Copy Settings" Margin="1" />
                             </StackPanel>
                         </Button>
                         <syncfusion:ComboBoxAdv
                             x:Name="ToThese"
-                            Margin="6,0,0,0"
+                            Margin="0,0,0,0"
                             VerticalAlignment="Center"
                             FontSize="12"
+                            Padding="6,6,0,6"
                             ToolTip="Destination for copied settings"
                             SelectedIndex="0"
                             Text="apply">

@@ -7,7 +7,6 @@ using Discord.WebSocket;
 using ReactiveUI;
 using Splat;
 using WolvenKit.Functionality.Services;
-using WolvenKit.ViewModels.HomePage.Pages;
 using WolvenKit.ViewModels.Wizards;
 
 namespace WolvenKit.Views.Wizards
@@ -85,10 +84,7 @@ namespace WolvenKit.Views.Wizards
             await ms_hashChannel.SendMessageAsync(embed: embed.Build());
         }
 
-        public async void TestConnect()
-        {
-            await Connect();
-        }
+        public async void TestConnect() => await Connect();
 
         public async Task Connect()
         {
@@ -100,7 +96,7 @@ namespace WolvenKit.Views.Wizards
 
         public static string Reverse(string s)
         {
-            char[] charArray = s.ToCharArray();
+            var charArray = s.ToCharArray();
             Array.Reverse(charArray);
             return new string(charArray);
         }

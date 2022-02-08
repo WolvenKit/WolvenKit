@@ -2,10 +2,10 @@ using System;
 using System.Reflection;
 using System.Windows;
 using System.Windows.Data;
+using System.Windows.Media;
 using Syncfusion.Windows.PropertyGrid;
 using Syncfusion.Windows.Tools.Controls;
-using WolvenKit.Common.Model.Cr2w;
-using WolvenKit.RED4.CR2W.Types;
+using WolvenKit.RED4.Types;
 using WolvenKit.Views.Editors;
 using WolvenKit.Views.Templates;
 
@@ -15,59 +15,78 @@ namespace WolvenKit.Converters
     {
         public static ITypeEditor GetPropertyEditor(Type PropertyType)
         {
-            if (PropertyType.IsAssignableTo(typeof(IREDString)))
+            if (PropertyType.IsAssignableTo(typeof(IRedString)))
             {
                 return new TextEditor();
-
             }
-            else if (PropertyType.IsAssignableTo(typeof(IREDIntegerType)))
+            if (PropertyType.IsAssignableTo(typeof(IRedPrimitive<ulong>)))
             {
-                if (PropertyType == typeof(CFloat))
-                {
-                    return new FloatEditor();
-                }
-                if (PropertyType == typeof(CUInt64))
-                {
-                    return new FloatEditor();
-                }
-                if (PropertyType == typeof(CRUID))
-                {
-                    return new FloatEditor();
-                }
+                return new UlongEditor();
+            }
+            if (PropertyType.IsAssignableTo(typeof(IRedInteger)))
+            {
                 return new IntegerEditor();
             }
-            else if (PropertyType.IsAssignableTo(typeof(IREDBool)))
+            if (PropertyType.IsAssignableTo(typeof(FixedPoint)))
+            {
+                return new FixedPointEditor();
+            }
+            if (PropertyType.IsAssignableTo(typeof(IRedPrimitive<float>)))
+            {
+                return new FloatEditor();
+            }
+            if (PropertyType.IsAssignableTo(typeof(IRedPrimitive<bool>)))
             {
                 return new BoolEditor();
-
             }
-            else if (PropertyType.IsAssignableTo(typeof(IREDEnum)))
+            if (PropertyType.IsAssignableTo(typeof(IRedEnum)))
             {
                 return new EnumEditor();
-
             }
-            else if (PropertyType.IsAssignableTo(typeof(IREDChunkPtr)))
+            if (PropertyType.IsAssignableTo(typeof(IRedBaseHandle)))
             {
                 return new ChunkPtrEditor();
-
             }
-            else if (PropertyType.IsAssignableTo(typeof(IREDRef)))
+            if (PropertyType.IsAssignableTo(typeof(IRedRef)))
             {
                 return new RefEditor();
-
             }
-            else if (PropertyType.IsAssignableTo(typeof(ICurveDataAccessor)))
+            if (PropertyType.IsAssignableTo(typeof(IRedLegacySingleChannelCurve)))
             {
                 return new CurveEditor();
-
             }
-            else if (PropertyType.IsAssignableTo(typeof(IREDColor)))
+            if (PropertyType.IsAssignableTo(typeof(CColor)))
             {
                 return new ColorEditor();
-
             }
 
             return null;
+        }
+        public class BaseTypeEditor : ITypeEditor
+        {
+            private RedBaseTypeEditor _editor;
+
+            public void Attach(PropertyViewItem property, PropertyItem info)
+            {
+                _editor.SetCurrentValue(UIElement.IsEnabledProperty, false);
+                var binding = new Binding("Value")
+                {
+                    Source = info,
+                    ValidatesOnExceptions = true,
+                    ValidatesOnDataErrors = true
+                };
+                BindingOperations.SetBinding(_editor, RedBaseTypeEditor.RedTypeProperty, binding);
+            }
+            public object Create(PropertyInfo propertyInfo)
+            {
+                _editor = new RedBaseTypeEditor();
+
+                return _editor;
+            }
+            public void Detach(PropertyViewItem property)
+            {
+
+            }
         }
 
         public class ColorEditor : ITypeEditor
@@ -357,6 +376,47 @@ namespace WolvenKit.Converters
             }
         }
 
+        public class UlongEditor : ITypeEditor
+        {
+            private RedUlongEditor _editor;
+
+            public void Attach(PropertyViewItem property, PropertyItem info)
+            {
+                if (info.CanWrite)
+                {
+                    var binding = new Binding("Value")
+                    {
+                        Mode = BindingMode.TwoWay,
+                        Source = info,
+                        ValidatesOnExceptions = true,
+                        ValidatesOnDataErrors = true,
+                    };
+                    BindingOperations.SetBinding(_editor, RedUlongEditor.RedNumberProperty, binding);
+                }
+                else
+                {
+                    _editor.SetCurrentValue(UIElement.IsEnabledProperty, false);
+                    var binding = new Binding("Value")
+                    {
+                        Source = info,
+                        ValidatesOnExceptions = true,
+                        ValidatesOnDataErrors = true
+                    };
+                    BindingOperations.SetBinding(_editor, RedUlongEditor.RedNumberProperty, binding);
+                }
+            }
+            public object Create(PropertyInfo propertyInfo)
+            {
+                _editor = new RedUlongEditor();
+
+                return _editor;
+            }
+            public void Detach(PropertyViewItem property)
+            {
+
+            }
+        }
+
         public class FloatEditor : ITypeEditor
         {
             private RedFloatEditor _editor;
@@ -389,6 +449,47 @@ namespace WolvenKit.Converters
             public object Create(PropertyInfo propertyInfo)
             {
                 _editor = new RedFloatEditor();
+
+                return _editor;
+            }
+            public void Detach(PropertyViewItem property)
+            {
+
+            }
+        }
+
+        public class FixedPointEditor : ITypeEditor
+        {
+            private RedFixedPointEditor _editor;
+
+            public void Attach(PropertyViewItem property, PropertyItem info)
+            {
+                if (info.CanWrite)
+                {
+                    var binding = new Binding("Value")
+                    {
+                        Mode = BindingMode.TwoWay,
+                        Source = info,
+                        ValidatesOnExceptions = true,
+                        ValidatesOnDataErrors = true,
+                    };
+                    BindingOperations.SetBinding(_editor, RedFixedPointEditor.RedNumberProperty, binding);
+                }
+                else
+                {
+                    _editor.SetCurrentValue(UIElement.IsEnabledProperty, false);
+                    var binding = new Binding("Value")
+                    {
+                        Source = info,
+                        ValidatesOnExceptions = true,
+                        ValidatesOnDataErrors = true
+                    };
+                    BindingOperations.SetBinding(_editor, RedFixedPointEditor.RedNumberProperty, binding);
+                }
+            }
+            public object Create(PropertyInfo propertyInfo)
+            {
+                _editor = new RedFixedPointEditor();
 
                 return _editor;
             }
@@ -472,6 +573,7 @@ namespace WolvenKit.Converters
             public object Create(PropertyInfo propertyInfo)
             {
                 _editor = new ColorPickerPalette();
+                _editor.SetCurrentValue(ColorPickerPalette.AutomaticColorProperty, new SolidColorBrush((Color)ColorConverter.ConvertFromString("#DF2935")));
 
                 return _editor;
             }

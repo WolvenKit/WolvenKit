@@ -1,15 +1,12 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
-//using System.IO;
-using System.Linq;
-using System.Runtime.InteropServices;
 using CP77.Common.Image;
-using WolvenKit.RED4.CR2W.Types;
+using WolvenKit.Common;
 using WolvenKit.Common.DDS;
 using WolvenKit.Common.Model.Arguments;
-using WolvenKit.Common.Oodle;
 using WolvenKit.Common.Services;
-using WolvenKit.Common;
+using WolvenKit.RED4.Types;
 
 namespace WolvenKit.Modkit.RED4
 {
@@ -21,46 +18,30 @@ namespace WolvenKit.Modkit.RED4
         public bool UncookMlmask(Stream cr2wStream, FileInfo outfile, MlmaskExportArgs args)
         {
             // read the cr2wfile
-            var cr2w = _wolvenkitFileService.TryReadCr2WFile(cr2wStream);
-            if (cr2w == null)
+            var cr2w = _wolvenkitFileService.ReadRed4File(cr2wStream);
+            if (cr2w == null || cr2w.RootChunk is not Multilayer_Mask mlmask || mlmask.RenderResourceBlob.RenderResourceBlobPC.Chunk is not rendRenderMultilayerMaskBlobPC blob)
             {
                 return false;
             }
 
-            //We need 2 buffers one for atlas one for tile data
+            uint atlasWidth = blob.Header.AtlasWidth;
+            uint atlasHeight = blob.Header.AtlasHeight;
 
-            if (!(cr2w.Chunks.FirstOrDefault()?.Data is Multilayer_Mask mlmask) ||
-                !(cr2w.Chunks[1]?.Data is rendRenderMultilayerMaskBlobPC blob))
-            {
-                return false;
-            }
+            uint maskWidth = blob.Header.MaskWidth;
+            uint maskHeight = blob.Header.MaskHeight;
 
-            uint atlasWidth = blob.Header.AtlasWidth.Value;
-            uint atlasHeight = blob.Header.AtlasHeight.Value;
+            uint maskWidthLow = blob.Header.MaskWidthLow;
+            uint maskHeightLow = blob.Header.MaskHeightLow;
 
-            uint maskWidth = blob.Header.MaskWidth.Value;
-            uint maskHeight = blob.Header.MaskHeight.Value;
+            uint maskTileSize = blob.Header.MaskTileSize;
 
-            uint maskWidthLow = blob.Header.MaskWidthLow.Value;
-            uint maskHeightLow = blob.Header.MaskHeightLow.Value;
+            uint maskCount = blob.Header.NumLayers;
 
-            uint maskTileSize = blob.Header.MaskTileSize.Value;
-
-            uint maskCount = blob.Header.NumLayers.Value;
-
-            byte[] atlas;
             var atlasRaw = new byte[atlasWidth * atlasHeight];
-            var atlasBuffer = cr2w.Buffers[0];
-            cr2wStream.Seek(atlasBuffer.Offset, SeekOrigin.Begin);
-            using (var ms = new MemoryStream())
-            {
-                cr2wStream.DecompressAndCopySegment(ms, atlasBuffer.DiskSize, atlasBuffer.MemSize);
-                atlas = ms.ToArray();
-            }
 
             //Decode compressed data into single channel uncompressed
             //Mlmask always BC4?
-            if (!BlockCompression.DecodeBC(atlas, ref atlasRaw, atlasWidth, atlasHeight, BlockCompression.BlockCompressionType.BC4))
+            if (!BlockCompression.DecodeBC(blob.AtlasData.Buffer.GetBytes(), ref atlasRaw, atlasWidth, atlasHeight, BlockCompression.BlockCompressionType.BC4))
             {
                 return false;
             }
@@ -77,13 +58,12 @@ namespace WolvenKit.Modkit.RED4
             //}
 
             //Read tilesdata buffer into appropriate variable type
-            var tileBuffer = cr2w.Buffers[1];
+            var tileBuffer = blob.TilesData.Buffer;
             var tiles = new uint[tileBuffer.MemSize / 4];
-            cr2wStream.Seek(tileBuffer.Offset, SeekOrigin.Begin);
-            using (var ms = new MemoryStream())
+
+            using (var ms = new MemoryStream(tileBuffer.GetBytes()))
             using (var br = new BinaryReader(ms))
             {
-                cr2wStream.DecompressAndCopySegment(ms, tileBuffer.DiskSize, tileBuffer.MemSize);
                 ms.Seek(0, SeekOrigin.Begin);
 
                 for (var i = 0; i < tiles.Length; i++)
@@ -92,13 +72,17 @@ namespace WolvenKit.Modkit.RED4
                 }
             }
 
-            byte[] maskData = new byte[maskWidth * maskHeight];
-
-            for (int i = 0; i < maskCount; i++)
+            // write texture to file
+            var subdir = new DirectoryInfo(Path.GetFullPath(outfile.FullName));
+            if (!subdir.Exists)
             {
-                var mFilename = Path.GetFileNameWithoutExtension(outfile.FullName) + $"_{i}.dds";
-                //var mFilename = Path.GetFileName(outfile.FullName) + $".{i}.dds"; // TODO:we should use this at some point
-                var newpath = Path.Combine(outfile.Directory.FullName, mFilename);
+                Directory.CreateDirectory(subdir.FullName);
+            }
+
+            var maskData = new byte[maskWidth * maskHeight];
+            var masks = new List<string>();
+            for (var i = 0; i < maskCount; i++)
+            {
 
                 //Clear instead of allocate new is faster?
                 //Mandatory cause decode does not always write to every pixel
@@ -118,33 +102,153 @@ namespace WolvenKit.Modkit.RED4
                     continue;
                 }
 
-                // write texture to file
-                using (var ms = new MemoryStream())
-                {
-                    // create dds stream
-                    DDSUtils.GenerateAndWriteHeader(ms, new DDSMetadata(
-                        maskWidth, maskHeight,
-                        1, 1, 0, 0, 0, DXGI_FORMAT.DXGI_FORMAT_R8_UNORM, TEX_DIMENSION.TEX_DIMENSION_TEXTURE2D, 8,  true));
-                    ms.Write(maskData);
+                // create dds stream
+                using var ms = new MemoryStream();
+                DDSUtils.GenerateAndWriteHeader(ms, new DDSMetadata(
+                    maskWidth, maskHeight,
+                    1, 1, 0, 0, 0, DXGI_FORMAT.DXGI_FORMAT_R8_UNORM, TEX_DIMENSION.TEX_DIMENSION_TEXTURE2D, 8, true));
+                ms.Write(maskData);
 
-                    if (args.UncookExtension == EUncookExtension.dds)
-                    {
-                        using (var ddsStream = new FileStream($"{newpath}", FileMode.Create, FileAccess.Write))
-                        {
-                            ms.Seek(0, SeekOrigin.Begin);
-                            ms.CopyTo(ddsStream);
-                        }
-                    }
-                    else
-                    {
-                        // convert
-                        ms.Seek(0, SeekOrigin.Begin);
-                        if (!DDSUtils.ConvertFromDdsAndSave(ms, newpath, args))
-                        {
-                            return false;
-                        }
-                    }
+
+                var newpath = Path.Combine(subdir.FullName, $"{i}.dds");
+                if (args.UncookExtension == EMlmaskUncookExtension.dds)
+                {
+                    using var ddsStream = new FileStream($"{newpath}", FileMode.Create, FileAccess.Write);
+                    ms.Seek(0, SeekOrigin.Begin);
+                    ms.CopyTo(ddsStream);
+
+                    masks.Add($"{subdir.Name}/{i}.dds");
                 }
+                //else if (args.UncookExtension == EUncookExtension.tga)
+                //{
+                //    using (var ddsStream = new FileStream($"{newpath}.tga", FileMode.Create, FileAccess.Write))
+                //    {
+                //        ms.Seek(0, SeekOrigin.Begin);
+                //        using (var ms2 = new MemoryStream(DDSUtils.ConvertFromDdsMemory(ms, EUncookExtension.tga)))
+                //        {
+                //            var br = new BinaryReader(ms2);
+                //            br.BaseStream.Seek(14, SeekOrigin.Begin);
+                //            ushort height = br.ReadUInt16();
+                //            br.BaseStream.Seek(17, SeekOrigin.Begin);
+                //            byte descriptor = br.ReadByte();
+
+                //            var bw = new BinaryWriter(ms2);
+                //            bw.BaseStream.Seek(10, SeekOrigin.Begin);
+                //            bw.Write(height);
+
+                //            bw.BaseStream.Seek(17, SeekOrigin.Begin);
+                //            bw.Write(descriptor ^ 0b00001000);
+
+                //            bw.Flush();
+
+                //            ms2.Position = 0;
+                //            ms2.CopyTo(ddsStream);
+                //        }
+                //    }
+                //}
+                else
+                {
+                    // convert
+                    ms.Seek(0, SeekOrigin.Begin);
+                    if (!Texconv.ConvertFromDdsAndSave(ms, newpath, args))
+                    {
+                        return false;
+                    }
+
+                    {
+                        masks.Add($"{subdir.Name}/{i}.png");
+                    }
+
+                }
+            }
+
+            // write metadata
+            var masklist = Path.ChangeExtension(outfile.FullName, "masklist");
+            File.WriteAllLines(masklist, masks.ToArray());
+
+            return true;
+        }
+
+        public static bool ConvertMultilayerMaskToDdsStreams(Multilayer_Mask mask, out List<Stream> streams)
+        {
+            streams = new List<Stream>();
+            if (mask.RenderResourceBlob.RenderResourceBlobPC.GetValue() is not rendRenderMultilayerMaskBlobPC blob)
+            {
+                return false;
+            }
+
+            uint atlasWidth = blob.Header.AtlasWidth;
+            uint atlasHeight = blob.Header.AtlasHeight;
+
+            uint maskWidth = blob.Header.MaskWidth;
+            uint maskHeight = blob.Header.MaskHeight;
+
+            uint maskWidthLow = blob.Header.MaskWidthLow;
+            uint maskHeightLow = blob.Header.MaskHeightLow;
+
+            uint maskTileSize = blob.Header.MaskTileSize;
+
+            uint maskCount = blob.Header.NumLayers;
+
+            var atlasRaw = new byte[atlasWidth * atlasHeight];
+
+            //Decode compressed data into single channel uncompressed
+            //Mlmask always BC4?
+            if (!BlockCompression.DecodeBC(blob.AtlasData.Buffer.GetBytes(), ref atlasRaw, atlasWidth, atlasHeight, BlockCompression.BlockCompressionType.BC4))
+            {
+                return false;
+            }
+
+            //atlasRaw = blob.AtlasData.Buffer.GetBytes();
+
+            //Read tilesdata buffer into appropriate variable type
+            var tileBuffer = blob.TilesData.Buffer;
+            var tiles = new uint[tileBuffer.MemSize / 4];
+
+            using (var ms = new MemoryStream(tileBuffer.GetBytes()))
+            using (var br = new BinaryReader(ms))
+            {
+                ms.Seek(0, SeekOrigin.Begin);
+
+                for (var i = 0; i < tiles.Length; i++)
+                {
+                    tiles[i] = br.ReadUInt32();
+                }
+            }
+
+            var maskData = new byte[maskWidth * maskHeight];
+
+            for (var i = 0; i < maskCount; i++)
+            {
+                //Clear instead of allocate new is faster?
+                //Mandatory cause decode does not always write to every pixel
+                Array.Clear(maskData, 0, maskData.Length);
+                try
+                {
+                    Decode(ref maskData, maskWidth, maskHeight, maskWidthLow, maskHeightLow, atlasRaw, atlasWidth,
+                        atlasHeight, tiles, maskTileSize, i);
+                }
+                catch
+                {
+                    throw;
+                }
+
+                if (WolvenTesting.IsTesting)
+                {
+                    continue;
+                }
+
+                var ms = new MemoryStream();
+                DDSUtils.GenerateAndWriteHeader(ms, new DDSMetadata(maskWidth, maskHeight,
+                    1, 1, 0, 0, 0, DXGI_FORMAT.DXGI_FORMAT_R8_UNORM, TEX_DIMENSION.TEX_DIMENSION_TEXTURE2D, 8, true));
+                ms.Write(maskData);
+                ms.Seek(0, SeekOrigin.Begin);
+                //var stream = new MemoryStream(DDSUtils.ConvertToDdsMemory(ms, EUncookExtension.tga, DXGI_FORMAT.DXGI_FORMAT_BC4_UNORM, false, false));
+                ms = new MemoryStream(
+                    Texconv.ConvertToDds(
+                        new MemoryStream(Texconv.ConvertFromDds(ms, EUncookExtension.tga)),
+                        EUncookExtension.tga, DXGI_FORMAT.DXGI_FORMAT_BC4_UNORM));
+                streams.Add(ms);
             }
             return true;
         }
@@ -154,28 +258,33 @@ namespace WolvenKit.Modkit.RED4
             const int sc = 256;
 
             if (x1 == 0 || y1 == 0)
+            {
                 return q00;
+            }
 
-            int q00s = q00 * sc;
-            int q10s = q10 * sc;
-            int q01s = q01 * sc;
-            int q11s = q11 * sc;
+            var q00s = q00 * sc;
+            var q10s = q10 * sc;
+            var q01s = q01 * sc;
+            var q11s = q11 * sc;
 
-            int a0 = q00s;
-            int a1 = (q10s - q00s) * x / x1;
-            int a2 = (q01s - q00s) * y / y1;
-            int a3 = (q00s - q01s - q10s + q11s) * x * y / x1 / y1;
+            var a0 = q00s;
+            var a1 = (q10s - q00s) * x / x1;
+            var a2 = (q01s - q00s) * y / y1;
+            var a3 = (q00s - q01s - q10s + q11s) * x * y / x1 / y1;
 
-            int a = a0 + a1 + a2 + a3;
-            int r = a / sc;
+            var a = a0 + a1 + a2 + a3;
+            var r = a / sc;
             if (r > 255)
+            {
                 r = 255;
+            }
+
             return (byte)r;
         }
 
         private static uint CountBits(uint v)
         {
-            uint t = v;
+            var t = v;
             uint count = 0;
             for (uint i = 0; i < 32; i++)
             {
@@ -190,11 +299,11 @@ namespace WolvenKit.Modkit.RED4
 
         private static void Decode(ref byte[] maskData, uint maskWidth, uint maskHeight, uint mWidthLow, uint mHeightLow, byte[] atlasData, uint atlasWidth, uint atlasHeight, uint[] tileData, uint maskTileSize, int maskIndex)
         {
-            uint widthInTiles0 = DivCeil(maskWidth, maskTileSize);
-            uint heightInTiles0 = DivCeil(maskHeight, maskTileSize);
-            uint smallOffset = (widthInTiles0 * heightInTiles0);
+            var widthInTiles0 = DivCeil(maskWidth, maskTileSize);
+            var heightInTiles0 = DivCeil(maskHeight, maskTileSize);
+            var smallOffset = widthInTiles0 * heightInTiles0;
 
-            uint smallScale = maskWidth / mWidthLow;
+            var smallScale = maskWidth / mWidthLow;
 
             for (uint x = 0; x < maskWidth; x++)
             {
@@ -208,24 +317,28 @@ namespace WolvenKit.Modkit.RED4
 
         private static void DecodeSingle(ref byte[] maskData, uint maskWidth, uint maskHeight, byte[] atlasData, uint atlasWidth, uint atlasHeight, uint x, uint y, uint[] tilesData, uint maskTileSize, int maskIndex, uint tilesOffset, uint smallScale)
         {
-            uint widthInTiles = DivCeil(maskWidth / smallScale, maskTileSize);
+            var widthInTiles = DivCeil(maskWidth / smallScale, maskTileSize);
 
             var xTile = x / maskTileSize / smallScale;
             var yTile = y / maskTileSize / smallScale;
 
-            var tileIndex = widthInTiles * yTile + xTile + tilesOffset;
+            var tileIndex = (widthInTiles * yTile) + xTile + tilesOffset;
 
             var paramOffset = tilesData[tileIndex * 2];
-            var paramBits = tilesData[tileIndex * 2 + 1];
+            var paramBits = tilesData[(tileIndex * 2) + 1];
 
             if ((uint)(paramBits & (1 << maskIndex)) == 0U)
+            {
                 return;
+            }
 
             var extraAdd = CountBits((uint)(paramBits & ((1 << maskIndex) - 1)));
 
             uint tileDecl = 0;
             if (paramOffset + extraAdd < tilesData.Length)
+            {
                 tileDecl = tilesData[paramOffset + extraAdd];
+            }
 
             var dx = tileDecl & 0x3ff;
             var dy = (tileDecl >> 10) & 0x3ff;
@@ -239,23 +352,20 @@ namespace WolvenKit.Modkit.RED4
             var y1 = (1 << (int)sy) - 1;
             var yi = (int)(y & y1);
 
-            uint ux = (x >> (int)sx) % maskTileSize + 1 + dx * atlasTileSize;
-            uint uy = (y >> (int)sy) % maskTileSize + 1 + dy * atlasTileSize;
+            var ux = ((x >> (int)sx) % maskTileSize) + 1 + (dx * atlasTileSize);
+            var uy = ((y >> (int)sy) % maskTileSize) + 1 + (dy * atlasTileSize);
 
-            byte q00 = atlasData[(ux + 0) + (uy + 0) * atlasWidth];
-            byte q10 = atlasData[(ux + 1) + (uy + 0) * atlasWidth];
-            byte q01 = atlasData[(ux + 0) + (uy + 1) * atlasWidth];
-            byte q11 = atlasData[(ux + 1) + (uy + 1) * atlasWidth];
+            var q00 = atlasData[ux + 0 + ((uy + 0) * atlasWidth)];
+            var q10 = atlasData[ux + 1 + ((uy + 0) * atlasWidth)];
+            var q01 = atlasData[ux + 0 + ((uy + 1) * atlasWidth)];
+            var q11 = atlasData[ux + 1 + ((uy + 1) * atlasWidth)];
 
-            byte p = BilinearInterpolation(q00, q10, q01, q11, xi, x1, yi, y1);
+            var p = BilinearInterpolation(q00, q10, q01, q11, xi, x1, yi, y1);
 
-            maskData[x + y * maskWidth] = p;
+            maskData[x + (y * maskWidth)] = p;
         }
 
-        private static uint DivCeil(uint l, uint r)
-        {
-            return (l + r - 1) / r;
-        }
+        private static uint DivCeil(uint l, uint r) => (l + r - 1) / r;
 
         #endregion Methods
     }

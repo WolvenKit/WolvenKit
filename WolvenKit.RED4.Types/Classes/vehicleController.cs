@@ -1,0 +1,30 @@
+using static WolvenKit.RED4.Types.Enums;
+
+namespace WolvenKit.RED4.Types
+{
+	[REDMeta]
+	public partial class vehicleController : gameComponent
+	{
+		[Ordinal(4)] 
+		[RED("alarmCurve")] 
+		public CName AlarmCurve
+		{
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
+		}
+
+		[Ordinal(5)] 
+		[RED("alarmTime")] 
+		public CFloat AlarmTime
+		{
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
+		}
+
+		public vehicleController()
+		{
+			AlarmCurve = "default_alarm";
+			AlarmTime = 0.500000F;
+		}
+	}
+}

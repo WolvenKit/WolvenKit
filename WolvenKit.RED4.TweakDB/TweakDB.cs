@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Runtime.InteropServices;
-using RED.CRC32;
 using WolvenKit.Core.Extensions;
 using WolvenKit.Core.Murmur3;
 using WolvenKit.RED4.TweakDB.Types;

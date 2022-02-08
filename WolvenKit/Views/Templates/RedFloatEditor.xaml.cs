@@ -1,9 +1,11 @@
 using System;
+using System.Reactive.Linq;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Media;
-using WolvenKit.Common.Model.Cr2w;
-using WolvenKit.RED4.CR2W.Types;
+using System.Windows.Input;
+using ReactiveUI;
+using WolvenKit.RED4.Types;
+using WolvenKit.ViewModels.Shell;
 
 namespace WolvenKit.Views.Editors
 {
@@ -12,18 +14,30 @@ namespace WolvenKit.Views.Editors
     /// </summary>
     public partial class RedFloatEditor : UserControl
     {
+        public ChunkViewModel cvm => DataContext as ChunkViewModel;
+
         public RedFloatEditor()
         {
             InitializeComponent();
+
+            Observable.FromEventPattern<TextChangedEventHandler, TextChangedEventArgs>(
+                handler => TextBox.TextChanged += handler,
+                handler => TextBox.TextChanged -= handler)
+                .Throttle(TimeSpan.FromSeconds(.5))
+                .ObserveOn(RxApp.MainThreadScheduler)
+                .Subscribe(x =>
+                {
+                    SetRedValue(TextBox.Text);
+                });
         }
 
-        public IREDIntegerType RedNumber
+        public CFloat RedNumber
         {
-            get => (IREDIntegerType)this.GetValue(RedNumberProperty);
-            set => this.SetValue(RedNumberProperty, value);
+            get => (CFloat)GetValue(RedNumberProperty);
+            set => SetValue(RedNumberProperty, value);
         }
         public static readonly DependencyProperty RedNumberProperty = DependencyProperty.Register(
-            nameof(RedNumber), typeof(IREDIntegerType), typeof(RedFloatEditor), new PropertyMetadata(default(IREDIntegerType)));
+            nameof(RedNumber), typeof(CFloat), typeof(RedFloatEditor), new PropertyMetadata(default(CFloat)));
 
 
         public string Text
@@ -32,19 +46,31 @@ namespace WolvenKit.Views.Editors
             set => SetRedValue(value);
         }
 
-        private void SetRedValue(string value) => RedNumber.SetValue(value);
-
-        private string GetValueFromRedValue()
+        private void SetRedValue(string value)
         {
-            var redvalue = RedNumber.GetValue();
-            return redvalue switch
+            try
             {
-                float redfloat => redfloat.ToString("R"),
-                ulong redulong => redulong.ToString(),
-                _ => throw new ArgumentException(nameof(redvalue))
-            };
+                if (cvm != null)
+                {
+                    cvm.Data = (CFloat)float.Parse(value);
+                }
+                else
+                {
+                    SetCurrentValue(RedNumberProperty, (CFloat)float.Parse(value));
+                }
+            }
+            catch (FormatException)
+            {
+
+            }
         }
 
+        private string GetValueFromRedValue() => cvm != null ? ((float)(CFloat)cvm.Data).ToString("R") : ((float)RedNumber).ToString("R");
+        private void NumberValidationTextBox(object sender, TextCompositionEventArgs e)
+        {
+            var tb = (TextBox)e.Source;
+            e.Handled = !float.TryParse(tb.Text.Insert(tb.CaretIndex, e.Text), out _);
+        }
 
     }
 }

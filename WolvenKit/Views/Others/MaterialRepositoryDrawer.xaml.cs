@@ -1,9 +1,6 @@
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Threading.Tasks;
 using System.Windows.Controls;
 using System.Windows.Media.Imaging;
 using Splat;
@@ -45,19 +42,21 @@ namespace WolvenKit.Views.Others
             var allfiles = Directory.GetFiles(dir, "*.dds", SearchOption.TopDirectoryOnly);
             var alltgafiles = Directory.GetFiles(dir, "*.tga", SearchOption.TopDirectoryOnly);
 
-            string[] combined = allfiles.Concat(alltgafiles).ToArray();
+            var combined = allfiles.Concat(alltgafiles).ToArray();
 
             foreach (var z in combined)
             {
                 if (z.Contains(".dds"))
                 {
-                    ListBoxItem listBoxItem = new ListBoxItem();
+                    var listBoxItem = new ListBoxItem();
 
-                    StackPanel stackPanel = new StackPanel();
-                    Image image = new Image();
-                    TextBlock textBlock = new TextBlock();
-                    textBlock.Text = Path.GetFileNameWithoutExtension(z);
-                    textBlock.VerticalAlignment = System.Windows.VerticalAlignment.Center;
+                    var stackPanel = new StackPanel();
+                    var image = new Image();
+                    var textBlock = new TextBlock
+                    {
+                        Text = Path.GetFileNameWithoutExtension(z),
+                        VerticalAlignment = System.Windows.VerticalAlignment.Center
+                    };
                     var q = await ImageDecoder.RenderToBitmapSource(z);
                     image.Width = 50;
                     image.Height = 50;
@@ -94,11 +93,11 @@ namespace WolvenKit.Views.Others
 
             Folders.Clear();
             var dirs = Directory.GetDirectories(dir, "*", SearchOption.TopDirectoryOnly);
-            MatDepoItem newitem = new MatDepoItem(PreviousFolder);
+            var newitem = new MatDepoItem(PreviousFolder);
             MaterialRepositoryDrawer.Folders.Add(newitem);
             foreach (var z in dirs)
             {
-                MatDepoItem newitem2 = new MatDepoItem(z);
+                var newitem2 = new MatDepoItem(z);
                 MaterialRepositoryDrawer.Folders.Add(newitem2);
             }
 
@@ -146,7 +145,7 @@ namespace WolvenKit.Views.Others
             return bmp;
         }
 
-        public void LoadImage(BitmapSource qa) => bold.SetCurrentValue(Syncfusion.UI.Xaml.ImageEditor.SfImageEditor.ImageProperty, (System.IO.Stream)StreamFromBitmapSource(qa));
+        public void LoadImage(BitmapSource qa) => bold.SetCurrentValue(Syncfusion.UI.Xaml.ImageEditor.SfImageEditor.ImageProperty, StreamFromBitmapSource(qa));
 
         public class MatDepoItem
         {
@@ -158,21 +157,9 @@ namespace WolvenKit.Views.Others
 
             public string FullName { get; set; }
 
-            public string SafeName
-            {
-                get
-                {
-                    return Path.GetFileName(FullName);
-                }
-            }
+            public string SafeName => Path.GetFileName(FullName);
 
-            public string Extension
-            {
-                get
-                {
-                    return Path.GetExtension(FullName);
-                }
-            }
+            public string Extension => Path.GetExtension(FullName);
         }
     }
 }

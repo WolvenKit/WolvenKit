@@ -11,7 +11,7 @@ namespace WolvenKit.ViewModels.Dialogs
             CloseCommand = ReactiveCommand.Create(() => { });
             OkCommand = ReactiveCommand.Create(() =>
             {
-                
+
             });
             CancelCommand = ReactiveCommand.Create(() =>
             {
@@ -22,10 +22,10 @@ namespace WolvenKit.ViewModels.Dialogs
         }
         [Reactive] public string Text { get; set; }
 
-        public sealed override string Title { get; set; }
+        public string Title { get; set; }
 
-        public sealed override ReactiveCommand<Unit, Unit> CloseCommand { get; set; }
-        public sealed override ReactiveCommand<Unit, Unit> CancelCommand { get; set; }
-        public sealed override ReactiveCommand<Unit, Unit> OkCommand { get; set; }
+        public ReactiveCommand<Unit, Unit> CloseCommand { get; set; }
+        public ReactiveCommand<Unit, Unit> CancelCommand { get; set; }
+        public ReactiveCommand<Unit, Unit> OkCommand { get; set; }
     }
 }

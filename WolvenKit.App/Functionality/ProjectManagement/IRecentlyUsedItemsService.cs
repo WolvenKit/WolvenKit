@@ -87,7 +87,7 @@ namespace WolvenKit.Functionality.ProjectManagement
 
     public class RecentlyUsedItemModel
     {
-        public RecentlyUsedItemModel(string name, DateTime dateTime)
+        public RecentlyUsedItemModel(string name, DateTime dateTime, DateTime modified)
         {
             Name = name;
             DateTime = dateTime;
@@ -95,6 +95,7 @@ namespace WolvenKit.Functionality.ProjectManagement
 
         public string Name { get; set; }
         public DateTime DateTime { get; set; }
+        public DateTime Modified { get; set; }
         public bool IsPinned { get; set; }
     }
 

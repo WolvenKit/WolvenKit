@@ -1,0 +1,63 @@
+using static WolvenKit.RED4.Types.Enums;
+
+namespace WolvenKit.RED4.Types
+{
+	[REDMeta]
+	public partial class scnFindEntityInEntityParams : RedBaseClass
+	{
+		[Ordinal(0)] 
+		[RED("actorId")] 
+		public scnActorId ActorId
+		{
+			get => GetPropertyValue<scnActorId>();
+			set => SetPropertyValue<scnActorId>(value);
+		}
+
+		[Ordinal(1)] 
+		[RED("performerId")] 
+		public scnPerformerId PerformerId
+		{
+			get => GetPropertyValue<scnPerformerId>();
+			set => SetPropertyValue<scnPerformerId>(value);
+		}
+
+		[Ordinal(2)] 
+		[RED("itemID")] 
+		public TweakDBID ItemID
+		{
+			get => GetPropertyValue<TweakDBID>();
+			set => SetPropertyValue<TweakDBID>(value);
+		}
+
+		[Ordinal(3)] 
+		[RED("slotID")] 
+		public TweakDBID SlotID
+		{
+			get => GetPropertyValue<TweakDBID>();
+			set => SetPropertyValue<TweakDBID>(value);
+		}
+
+		[Ordinal(4)] 
+		[RED("forceMaxVisibility")] 
+		public CBool ForceMaxVisibility
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(5)] 
+		[RED("ownershipTransferOptions")] 
+		public scnPropOwnershipTransferOptions OwnershipTransferOptions
+		{
+			get => GetPropertyValue<scnPropOwnershipTransferOptions>();
+			set => SetPropertyValue<scnPropOwnershipTransferOptions>(value);
+		}
+
+		public scnFindEntityInEntityParams()
+		{
+			ActorId = new() { Id = 4294967295 };
+			PerformerId = new() { Id = 4294967040 };
+			OwnershipTransferOptions = new() { DettachFromSlot = true, RemoveFromInventory = true };
+		}
+	}
+}

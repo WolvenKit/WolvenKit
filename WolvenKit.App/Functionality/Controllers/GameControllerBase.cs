@@ -1,14 +1,8 @@
 using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
-using WolvenKit.RED4.CR2W.Archive;
-using WolvenKit.Common;
-using WolvenKit.Functionality.WKitGlobal;
-
-using DynamicData;
 using WolvenKit.Functionality.Services;
-using WolvenKit.Common.Model;
+using WolvenKit.Functionality.WKitGlobal;
 
 namespace WolvenKit.Functionality.Controllers
 {
@@ -50,7 +44,7 @@ namespace WolvenKit.Functionality.Controllers
         //        _ => throw new ArgumentOutOfRangeException(nameof(type), type, null)
         //    };
 
-        public List<string> GetAvaliableClasses();
+        //public List<string> GetAvaliableClasses();
 
         public Task HandleStartup();
 

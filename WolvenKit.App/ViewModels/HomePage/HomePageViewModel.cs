@@ -6,7 +6,6 @@ using ReactiveUI.Fody.Helpers;
 using Splat;
 using WolvenKit.Functionality.Commands;
 using WolvenKit.Functionality.Services;
-using WolvenKit.Functionality.WKitGlobal.Helpers;
 using WolvenKit.ViewModels.Shell;
 
 namespace WolvenKit.ViewModels.HomePage
@@ -28,28 +27,21 @@ namespace WolvenKit.ViewModels.HomePage
             _settingsManager = settingsManager;
 
             CloseHomePage = new RelayCommand(ExecuteHome, CanHome);
-            ClosePage = new RelayCommand(ExecPage, CanPage);
-
             RestoreWindow = new RelayCommand(ExecuteRestoreWindow);
             MinimizeWindow = new RelayCommand(ExecuteMinimizeWindow);
 
-            SwitchItemCmd = new DelegateCommand<string>(SwitchItem);
-
-            SetCurrentPage("Welcome");
-            CurrentWindowState = WindowState.Maximized;
+            CurrentWindowState = WindowState.Normal;
         }
 
         #endregion Constructors
 
         #region Properties
 
-
+        [Reactive] public int SelectedIndex { get; set; }
 
         // Close HomePage (Navigates to Project Editor
         public ICommand CloseHomePage { get; private set; }
 
-        // Closes any open page on the homepage and returns to the welcome page.
-        public ICommand ClosePage { get; private set; }
 
         // Restore Shell Window.
         public ICommand RestoreWindow { get; set; }
@@ -60,37 +52,6 @@ namespace WolvenKit.ViewModels.HomePage
 
         // Minimize Shell Window
         public ICommand MinimizeWindow { get; set; }
-
-        // Static Reference of self for page switching.
-        [Reactive] public bool AboutPV { get; set; }
-
-        [Reactive] public bool DebugPV { get; set; }
-
-        [Reactive] public bool FirstSWV { get; set; }
-
-        [Reactive] public bool GithubPV { get; set; }
-
-        [Reactive] public bool IntegratedTPV { get; set; }
-
-        [Reactive] public bool ProjectWV { get; set; }
-
-        [Reactive] public bool RecentPV { get; set; }
-
-        [Reactive] public bool ReturnButtonVisibile { get; set; }
-
-        [Reactive] public bool SettingsPV { get; set; }
-
-        // Helps with switching pages , Listens to the selectionchanged on a sidemenu.  , SetCurrentPage deals with the actual "Decision" of what page needs to be shown.
-        //public Command<FunctionEventArgs<object>> SwitchItemCmd => new Lazy<Command<FunctionEventArgs<object>>>(() =>
-        //    new Command<FunctionEventArgs<object>>(SwitchItem)).Value;
-
-        [Reactive] public bool UserPV { get; set; }
-
-        [Reactive] public bool WebsitePV { get; set; }
-
-        [Reactive] public bool WelcomePV { get; set; }
-
-        [Reactive] public bool WikitPV { get; set; }
 
         public string VersionNumber => _settingsManager.GetVersionNumber();
 
@@ -118,113 +79,13 @@ namespace WolvenKit.ViewModels.HomePage
             }
         }
 
-        public void SetCurrentPage(string page)
-        {
-            AboutPV = false;
-            DebugPV = false;
-            FirstSWV = false;
-            GithubPV = false;
-            IntegratedTPV = false;
-            ProjectWV = false;
-            RecentPV = false;
-            SettingsPV = false;
-            UserPV = false;
-            WebsitePV = false;
-            WelcomePV = false;
-            WikitPV = false;
-            switch (page)
-            {
-                case "Get Started":
-                case "Welcome":
-                    WelcomePV = true;
-                    ReturnButtonVisibile = false;
-                    DiscordHelper.SetDiscordRPCStatus("Home");
-                    break;
-
-                case "Project":
-                case "Open Recent Project":
-                    RecentPV = true;
-                    ReturnButtonVisibile = true;
-
-                    DiscordHelper.SetDiscordRPCStatus("Recent projects.");
-                    break;
-
-                case "Integrated Tools":
-                    IntegratedTPV = true;
-                    ReturnButtonVisibile = true;
-
-                    DiscordHelper.SetDiscordRPCStatus("Integrated tools.");
-                    break;
-
-                case "Settings":
-                    SettingsPV = true;
-                    ReturnButtonVisibile = true;
-
-                    DiscordHelper.SetDiscordRPCStatus("Adjusting settings.");
-                    break;
-
-                case "Account":
-                    UserPV = true;
-                    ReturnButtonVisibile = true;
-
-                    DiscordHelper.SetDiscordRPCStatus("Profile.");
-                    break;
-
-                case "Information":
-                case "Wiki":
-                    WikitPV = true;
-                    ReturnButtonVisibile = true;
-
-                    DiscordHelper.SetDiscordRPCStatus("Integrated Wiki.");
-                    break;
-
-                case "Github":
-                    GithubPV = true;
-                    ReturnButtonVisibile = true;
-
-                    DiscordHelper.SetDiscordRPCStatus("Github page.");
-                    break;
-
-                case "SDK":
-                    break;
-
-                case "About":
-                    AboutPV = true;
-                    ReturnButtonVisibile = true;
-
-                    DiscordHelper.SetDiscordRPCStatus("About section.");
-                    break;
-
-                case "Website":
-                    WebsitePV = true;
-                    ReturnButtonVisibile = true;
-
-                    DiscordHelper.SetDiscordRPCStatus("Integrated website.");
-                    break;
-
-                case "DEBUG":
-                    //DiscordHelper.SetDiscordRPCStatus("DEBUG");
-                    break;
-            }
-        }
-
         private bool CanHome() => true;
-
-        private bool CanPage() => true;
-
-        private void ExecPage()
-        {
-            SetCurrentPage("Welcome");
-        }
 
         private void ExecuteHome()
         {
-            var ribbon = Locator.Current.GetService<RibbonViewModel>();
-            ribbon.StartScreenShown = false;
-            ribbon.BackstageIsOpen = false;
+            var main = Locator.Current.GetService<AppViewModel>();
+            main.CloseModalCommand.Execute(null);
         }
-
-        private void SwitchItem(string info) => SetCurrentPage(info);
 
         #endregion Methods
     }

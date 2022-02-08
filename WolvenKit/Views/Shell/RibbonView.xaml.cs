@@ -2,15 +2,12 @@ using System;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Windows;
-using System.Windows.Media;
-using Ab3d.DirectX;
 using Ab3d.DirectX.Client.Settings;
 using ReactiveUI;
 using Splat;
 using Syncfusion.Windows.Tools.Controls;
 using WolvenKit.Functionality.Ab4d;
 using WolvenKit.Interaction;
-using WolvenKit.Models;
 using WolvenKit.ViewModels.Shell;
 using WolvenKit.ViewModels.Tools;
 using WolvenKit.ViewModels.Wizards;
@@ -32,7 +29,7 @@ namespace WolvenKit.Views.Shell
 
             var dxEngineSettingsStorage = new DXEngineSettingsStorage();
             DXEngineSettings.Initialize(dxEngineSettingsStorage);
-            this.MaxBackgroundThreadsCount = Environment.ProcessorCount - 1;
+            MaxBackgroundThreadsCount = Environment.ProcessorCount - 1;
 
             this.WhenActivated(disposables =>
             {
@@ -82,6 +79,11 @@ namespace WolvenKit.Views.Shell
 
                 #region commands
 
+                this.BindCommand(ViewModel,
+                        viewModel => viewModel._mainViewModel.ShowHomePageCommand,
+                        view => view.HomePageButton)
+                    .DisposeWith(disposables);
+
                 // App Menu
                 this.BindCommand(ViewModel,
                         viewModel => viewModel.OpenProjectCommand,
@@ -96,12 +98,20 @@ namespace WolvenKit.Views.Shell
                         view => view.AppMenuPackProjectButton)
                     .DisposeWith(disposables);
                 this.BindCommand(ViewModel,
+                        viewModel => viewModel._mainViewModel.PackInstallModCommand,
+                        view => view.AppMenuPackInstallButton)
+                    .DisposeWith(disposables);
+                this.BindCommand(ViewModel,
                         viewModel => viewModel.NewFileCommand,
                         view => view.AppMenuNewFileButton)
                     .DisposeWith(disposables);
                 this.BindCommand(ViewModel,
                         viewModel => viewModel.SaveFileCommand,
                         view => view.AppMenuSaveFileButton)
+                    .DisposeWith(disposables);
+                this.BindCommand(ViewModel,
+                        viewModel => viewModel.SaveAsCommand,
+                        view => view.AppMenuSaveAsFileButton)
                     .DisposeWith(disposables);
                 this.BindCommand(ViewModel,
                         viewModel => viewModel.SaveAllCommand,
@@ -122,12 +132,20 @@ namespace WolvenKit.Views.Shell
                         view => view.GeneralPackProjectButton)
                     .DisposeWith(disposables);
                 this.BindCommand(ViewModel,
+                        viewModel => viewModel._mainViewModel.PackInstallModCommand,
+                        view => view.GeneralPackInstallButton)
+                    .DisposeWith(disposables);
+                this.BindCommand(ViewModel,
                         viewModel => viewModel.NewFileCommand,
                         view => view.GeneralNewFileButton)
                     .DisposeWith(disposables);
                 this.BindCommand(ViewModel,
                         viewModel => viewModel.SaveFileCommand,
                         view => view.GeneralSaveFileButton)
+                    .DisposeWith(disposables);
+                this.BindCommand(ViewModel,
+                        viewModel => viewModel.SaveAsCommand,
+                        view => view.GeneralSaveAsButton)
                     .DisposeWith(disposables);
                 this.BindCommand(ViewModel,
                         viewModel => viewModel.SaveAllCommand,
@@ -158,7 +176,7 @@ namespace WolvenKit.Views.Shell
 
                 //Options
                 this.BindCommand(ViewModel,
-                        viewModel => viewModel.ShowSettingsCommand,
+                        viewModel => viewModel._mainViewModel.ShowSettingsCommand,
                         view => view.OptionsShowSettingsButton)
                     .DisposeWith(disposables);
                 this.BindCommand(ViewModel,
@@ -174,6 +192,40 @@ namespace WolvenKit.Views.Shell
                 this.BindCommand(ViewModel,
                         viewModel => viewModel.ShowImportExportToolCommand,
                         view => view.UtilitiesShowImportExportToolButton)
+                    .DisposeWith(disposables);
+
+                // toolbar
+                this.BindCommand(ViewModel,
+                        viewModel => viewModel._mainViewModel.NewFileCommand,
+                        view => view.ToolbarNewButton)
+                    .DisposeWith(disposables);
+                this.BindCommand(ViewModel,
+                        viewModel => viewModel._mainViewModel.SaveFileCommand,
+                        view => view.ToolbarSaveButton)
+                    .DisposeWith(disposables);
+                this.BindCommand(ViewModel,
+                        viewModel => viewModel._mainViewModel.SaveAsCommand,
+                        view => view.ToolbarSaveAsButton)
+                    .DisposeWith(disposables);
+                this.BindCommand(ViewModel,
+                        viewModel => viewModel._mainViewModel.SaveAllCommand,
+                        view => view.ToolbarSaveAllButton)
+                    .DisposeWith(disposables);
+                this.BindCommand(ViewModel,
+                        viewModel => viewModel._mainViewModel.NewProjectCommand,
+                        view => view.ToolbarNewProjectButton)
+                    .DisposeWith(disposables);
+                this.BindCommand(ViewModel,
+                        viewModel => viewModel._mainViewModel.PackModCommand,
+                        view => view.ToolbarPackProjectButton)
+                    .DisposeWith(disposables);
+                this.BindCommand(ViewModel,
+                        viewModel => viewModel._mainViewModel.PackInstallModCommand,
+                        view => view.ToolbarPackInstallButton)
+                    .DisposeWith(disposables);
+                this.BindCommand(ViewModel,
+                        viewModel => viewModel._mainViewModel.ShowSettingsCommand,
+                        view => view.ToolbarSettingsButton)
                     .DisposeWith(disposables);
 
                 #endregion
@@ -213,8 +265,6 @@ namespace WolvenKit.Views.Shell
 
         #endregion
 
-
-
         //private void SetRibbonUI()
         //{
         //    while (_ribbon.BackStageButton.IsVisible)
@@ -223,28 +273,6 @@ namespace WolvenKit.Views.Shell
         //    }
         //    Trace.WriteLine("Disabled File Button");
         //}
-
-        private void Border_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
-        {
-            //_ribbon.SetCurrentValue(Syncfusion.Windows.Tools.Controls.Ribbon.IsBackStageVisibleProperty, true);
-
-            ViewModel.StartScreenShown = false;
-            ViewModel.BackstageIsOpen = true;
-        }
-
-        private void Border_MouseEnter(object sender, System.Windows.Input.MouseEventArgs e)
-        {
-            var brush = (Brush)Application.Current.FindResource("MahApps.Brushes.Accent3");
-
-            HomeHighLighter.SetCurrentValue(System.Windows.Controls.Panel.BackgroundProperty, brush);
-        }
-
-        private void Border_MouseLeave(object sender, System.Windows.Input.MouseEventArgs e)
-        {
-            var brush = (Brush)Application.Current.FindResource("MahApps.Brushes.AccentBase");
-
-            HomeHighLighter.SetCurrentValue(System.Windows.Controls.Panel.BackgroundProperty, brush);
-        }
 
         private double _selectedDpiScale = double.NaN;
 
@@ -269,7 +297,7 @@ namespace WolvenKit.Views.Shell
 
             dxEngineSettingsWindow.ShowDialog();
 
-            GraphicsProfile selectedGraphicsProfile = dxEngineSettingsWindow.SelectedGraphicsProfile;
+            var selectedGraphicsProfile = dxEngineSettingsWindow.SelectedGraphicsProfile;
 
             // Save the selected GraphicsProfile to application settings
             DXEngineSettings.Current.SaveGraphicsProfile(selectedGraphicsProfile);
@@ -294,7 +322,8 @@ namespace WolvenKit.Views.Shell
             }
         }
 
-        private void RibbonButton_Click(object sender, RoutedEventArgs e) => DockingAdapter.G_Dock.SetLayoutToDefault();
+        private void SetLayoutToDefault(object sender, RoutedEventArgs e) => DockingAdapter.G_Dock.SetLayoutToDefault();
+        private void SaveLayoutToProject(object sender, RoutedEventArgs e) => DockingAdapter.G_Dock.SaveLayoutToProject();
 
         private void ExandAllNodesContext_Click(object sender, RoutedEventArgs e) =>
             _mainViewModel.ProjectExplorer.ExpandAll.Execute().Subscribe();
@@ -318,7 +347,15 @@ namespace WolvenKit.Views.Shell
 
         private void collapseSingleAB_Click(object sender, RoutedEventArgs e) => _mainViewModel.AssetBrowserVM.Collapse.Execute().Subscribe();
 
-        
+        private void Ribbon_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            base.OnMouseLeftButtonDown(e);
+            var mainWindow = (MainView)Locator.Current.GetService<IViewFor<AppViewModel>>();
+            if (e.LeftButton == System.Windows.Input.MouseButtonState.Pressed)
+            {
+                mainWindow?.DragMove();
+            }
+        }
 
         ///// <summary>
         ///// Closes material drawer
