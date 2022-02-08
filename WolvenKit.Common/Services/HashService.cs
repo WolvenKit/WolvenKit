@@ -140,7 +140,7 @@ namespace WolvenKit.Common.Services
             LoadAdditional();
 
             // user hashes
-            var assemblyPath = Path.GetDirectoryName(System.AppContext.BaseDirectory);
+            var assemblyPath = Path.GetDirectoryName(AppContext.BaseDirectory);
             var userHashesPath = Path.Combine(assemblyPath ?? throw new InvalidOperationException(), s_userHashes);
             if (File.Exists(userHashesPath))
             {
