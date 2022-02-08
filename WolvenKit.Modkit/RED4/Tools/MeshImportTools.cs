@@ -7,12 +7,10 @@ using CP77.CR2W;
 using SharpGLTF.Schema2;
 using SharpGLTF.Validation;
 using WolvenKit.Modkit.RED4.GeneralStructs;
-using WolvenKit.RED4;
 using WolvenKit.RED4.Archive.CR2W;
 using WolvenKit.RED4.Archive.IO;
 using WolvenKit.RED4.CR2W.Archive;
 using WolvenKit.RED4.Types;
-using WolvenKit.RED4.Types.Exceptions;
 using Vec2 = System.Numerics.Vector2;
 using Vec3 = System.Numerics.Vector3;
 using Vec4 = System.Numerics.Vector4;
@@ -703,7 +701,7 @@ namespace WolvenKit.Modkit.RED4
                 chunk.ChunkVertices.VertexLayout = RedTypeManager.Create<GpuWrapApiVertexLayoutDesc>();
 
                 // fishy hash and slotmask, subject to change
-                chunk.ChunkVertices.VertexLayout.Hash =  0;
+                chunk.ChunkVertices.VertexLayout.Hash = 0;
                 chunk.ChunkVertices.VertexLayout.SlotMask = 0;
 
                 chunk.ChunkVertices.VertexLayout.SlotStrides.Add(Convert.ToByte(info.vpStrides[i]));
@@ -722,7 +720,7 @@ namespace WolvenKit.Modkit.RED4
                 chunk.ChunkVertices.VertexLayout.SlotStrides.Add(Convert.ToByte(0));
                 if (info.weightCounts[i] == 0)
                 {
-                    chunk.ChunkVertices.VertexLayout.SlotStrides.Add( Convert.ToByte(48));
+                    chunk.ChunkVertices.VertexLayout.SlotStrides.Add(Convert.ToByte(48));
                 }
                 else
                 {
@@ -872,7 +870,7 @@ namespace WolvenKit.Modkit.RED4
                 {
                     chunk.ChunkVertices.VertexLayout.Elements.Add(RedTypeManager.Create<GpuWrapApiVertexPackingPackingElement>());
                     // fishy
-                    //chunk.ChunkVertices.VertexLayout.Elements[elementCount].StreamType = new Enums.GpuWrapApiVertexPackingEStreamType.;
+                    chunk.ChunkVertices.VertexLayout.Elements[elementCount].StreamType = Enums.GpuWrapApiVertexPackingEStreamType.ST_PerInstance;
                     chunk.ChunkVertices.VertexLayout.Elements[elementCount].StreamIndex = Convert.ToByte(7);
                     chunk.ChunkVertices.VertexLayout.Elements[elementCount].UsageIndex = Convert.ToByte(e);
                     chunk.ChunkVertices.VertexLayout.Elements[elementCount].Usage = Enums.GpuWrapApiVertexPackingePackingUsage.PS_InstanceTransform;
@@ -934,7 +932,6 @@ namespace WolvenKit.Modkit.RED4
             blob.Header.VertexBufferSize = info.vertBufferSize;
             blob.Header.IndexBufferSize = info.indexBufferSize;
             blob.Header.IndexBufferOffset = info.indexBufferOffset;
-
 
             blob.RenderBuffer.Buffer.SetBytes(buffer.ToArray());
 
@@ -1297,7 +1294,7 @@ namespace WolvenKit.Modkit.RED4
                         {
                             if (meshes[i].colors1[e].X > 0.01f)
                             {
-                                var val =  e ;
+                                var val = e;
                                 chunk.Simulation.Add(val);
                                 z++;
                             }

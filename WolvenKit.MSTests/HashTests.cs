@@ -10,10 +10,12 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using WolvenKit.Common.Extensions;
 using WolvenKit.Common.FNV1A;
 using WolvenKit.Common.Model;
-using WolvenKit.Common.Oodle;
+using WolvenKit.Core.Compression;
 using WolvenKit.Core;
+using WolvenKit.Core.Exceptions;
 using WolvenKit.Interfaces.Extensions;
 using WolvenKit.RED4.Archive;
+using WolvenKit.Core.Extensions;
 
 namespace WolvenKit.MSTests
 {
@@ -41,10 +43,10 @@ namespace WolvenKit.MSTests
             {
                 assembly = mlc.LoadFromAssemblyPath("WolvenKit.Common.dll");
                 using var stream = assembly.GetManifestResourceStream(s_used);
-            
+
                 // read KARK header
                 var oodleCompression = stream.ReadStruct<uint>();
-                if (oodleCompression != OodleHelper.KARK)
+                if (oodleCompression != Oodle.KARK)
                 {
                     throw new DecompressionException($"Incorrect hash file.");
                 }
@@ -54,8 +56,8 @@ namespace WolvenKit.MSTests
                 // read the rest of the stream
                 var outputbuffer = new byte[outputsize];
                 var inbuffer = stream.ToByteArray(true);
-                OozNative.Kraken_Decompress(inbuffer, inbuffer.Length, outputbuffer, outputbuffer.Length);
-            
+                Oodle.Decompress(inbuffer, outputbuffer);
+
 
                 using (var ms = new MemoryStream(outputbuffer))
                 using (var sr = new StreamReader(ms))
@@ -127,7 +129,7 @@ namespace WolvenKit.MSTests
 
                 // read KARK header
                 var oodleCompression = stream.ReadStruct<uint>();
-                if (oodleCompression != OodleHelper.KARK)
+                if (oodleCompression != Oodle.KARK)
                 {
                     throw new DecompressionException($"Incorrect hash file.");
                 }
@@ -137,7 +139,7 @@ namespace WolvenKit.MSTests
                 // read the rest of the stream
                 var outputbuffer = new byte[outputsize];
                 var inbuffer = stream.ToByteArray(true);
-                OozNative.Kraken_Decompress(inbuffer, inbuffer.Length, outputbuffer, outputbuffer.Length);
+                Oodle.Decompress(inbuffer, outputbuffer);
 
 
                 using (var ms = new MemoryStream(outputbuffer))
@@ -178,7 +180,7 @@ namespace WolvenKit.MSTests
 
 
 
-            
+
 
         }
 
@@ -213,7 +215,7 @@ namespace WolvenKit.MSTests
 
                 // read KARK header
                 var oodleCompression = stream.ReadStruct<uint>();
-                if (oodleCompression != OodleHelper.KARK)
+                if (oodleCompression != Oodle.KARK)
                 {
                     throw new DecompressionException($"Incorrect hash file.");
                 }
@@ -223,13 +225,13 @@ namespace WolvenKit.MSTests
                 // read the rest of the stream
                 var outputbuffer = new byte[outputsize];
                 var inbuffer = stream.ToByteArray(true);
-                OozNative.Kraken_Decompress(inbuffer, inbuffer.Length, outputbuffer, outputbuffer.Length);
+                Oodle.Decompress(inbuffer, outputbuffer);
 
 
                 using (var ms = new MemoryStream(outputbuffer))
                 using (var sr = new StreamReader(ms))
                 {
-                    
+
                     string line;
                     while ((line = sr.ReadLine()) != null)
                     {
@@ -261,7 +263,7 @@ namespace WolvenKit.MSTests
                             hashDictionary[hash][i] = idx;
                         }
                     }
-                    
+
                 }
             }
 

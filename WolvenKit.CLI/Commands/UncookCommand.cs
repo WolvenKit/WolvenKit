@@ -4,7 +4,6 @@ using CP77Tools.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using WolvenKit.Common;
-using WolvenKit.Common.DDS;
 
 namespace CP77Tools.Commands
 {
@@ -30,7 +29,7 @@ namespace CP77Tools.Commands
             AddOption(new Option<bool?>(new[] { "--flip", "-f" }, "Flip textures vertically (can help with legibility if there's text)."));
             AddOption(new Option<ulong>(new[] { "--hash" }, "Extract single file with a given hash."));
             AddOption(new Option<bool>(new[] { "--unbundle", "-u" }, "Also unbundle files."));
-            AddOption(new Option<ECookedFileFormat[]>(new[] { "--forcebuffers", "-fb"}, "Force uncooking to buffers for given extension. e.g. mesh"));
+            AddOption(new Option<ECookedFileFormat[]>(new[] { "--forcebuffers", "-fb" }, "Force uncooking to buffers for given extension. e.g. mesh"));
 
             Handler = CommandHandler
                 .Create<string[], string, string, EUncookExtension?, bool?, ulong, string, string, bool, ECookedFileFormat[]

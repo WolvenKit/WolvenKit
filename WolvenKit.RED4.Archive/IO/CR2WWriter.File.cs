@@ -6,6 +6,7 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
 using WolvenKit.Core.CRC;
+using WolvenKit.Core.Extensions;
 using WolvenKit.RED4.Archive.Buffer;
 using WolvenKit.RED4.Archive.CR2W;
 using WolvenKit.RED4.Types;
@@ -195,10 +196,11 @@ namespace WolvenKit.RED4.Archive.IO
             {
                 BaseStream.Position = beforeBufferTablePos;
                 crc = new Crc32Algorithm(false);
-                foreach (var buffer in dataCollection.BufferInfoList)
+                for (var i = 0; i < dataCollection.BufferInfoList.Count; i++)
                 {
-                    var entry = buffer;
+                    var entry = dataCollection.BufferInfoList[i];
                     entry.offset += fileHeader.objectsEnd;
+                    dataCollection.BufferInfoList[i] = entry;
 
                     BaseStream.WriteStruct(entry, crc);
                 }
@@ -214,50 +216,84 @@ namespace WolvenKit.RED4.Archive.IO
             BaseStream.WriteStruct(fileHeader);
             BaseStream.WriteStructs(tableHeaders);
 
-            /*for (int i = 0; i < dataCollection.ChunkInfoList.Count; i++)
-            {
-                var newInfo = dataCollection.ChunkInfoList[i];
-                var oldInfo = _file.Debug.ChunkInfos[i];
-
-                if ((newInfo.dataOffset + afterHeaderPosition) != oldInfo.dataOffset)
-                {
-
-                }
-
-                if (newInfo.dataSize != oldInfo.dataSize)
-                {
-
-                }
-
-                if (newInfo.parentID != oldInfo.parentID)
-                {
-                    throw new TodoException("Invalid parent id");
-                }
-
-                if (newInfo.className != oldInfo.className)
-                {
-
-                }
-
-                if (newInfo.objectFlags != oldInfo.objectFlags)
-                {
-
-                }
-
-                if (newInfo.template != oldInfo.template)
-                {
-
-                }
-
-                dataCollection.ChunkInfoList[i] = oldInfo;
-            }*/
+            //for (int i = 0; i < dataCollection.ChunkInfoList.Count; i++)
+            //{
+            //    var newInfo = dataCollection.ChunkInfoList[i];
+            //    var oldInfo = _file.Info.ExportInfo[i];
+            //
+            //    if ((newInfo.dataOffset + afterHeaderPosition) != oldInfo.dataOffset)
+            //    {
+            //
+            //    }
+            //
+            //    if (newInfo.dataSize != oldInfo.dataSize)
+            //    {
+            //
+            //    }
+            //
+            //    if (newInfo.parentID != oldInfo.parentID)
+            //    {
+            //        throw new TodoException("Invalid parent id");
+            //    }
+            //
+            //    if (newInfo.className != oldInfo.className)
+            //    {
+            //
+            //    }
+            //
+            //    if (newInfo.objectFlags != oldInfo.objectFlags)
+            //    {
+            //
+            //    }
+            //
+            //    if (newInfo.template != oldInfo.template)
+            //    {
+            //
+            //    }
+            //}
+            //
+            //for (int i = 0; i < dataCollection.BufferInfoList.Count; i++)
+            //{
+            //    var newInfo = dataCollection.BufferInfoList[i];
+            //    var oldInfo = _file.Info.BufferInfo[i];
+            //
+            //    if (newInfo.index != oldInfo.index)
+            //    {
+            //
+            //    }
+            //
+            //    if (newInfo.crc32 != oldInfo.crc32)
+            //    {
+            //
+            //    }
+            //
+            //    if (newInfo.diskSize != oldInfo.diskSize)
+            //    {
+            //
+            //    }
+            //
+            //    if (newInfo.flags != oldInfo.flags)
+            //    {
+            //
+            //    }
+            //
+            //    if (newInfo.memSize != oldInfo.memSize)
+            //    {
+            //
+            //    }
+            //
+            //    if (newInfo.offset != oldInfo.offset)
+            //    {
+            //
+            //    }
+            //}
         }
 
         #region Write Sections
 
         #region Buffers
 
-        private CR2WBufferInfo WriteBuffer(BinaryWriter writer, RedBuffer buffer)
+        private void WriteBufferData(RedBuffer buffer)
         {
             if (buffer.Data is Package04 p4)
             {
@@ -277,7 +313,10 @@ namespace WolvenKit.RED4.Archive.IO
 
                 buffer.SetBytes(newData);
             }
+        }
 
+        private CR2WBufferInfo WriteBuffer(BinaryWriter writer, RedBuffer buffer)
+        {
             var result = new CR2WBufferInfo
             {
                 flags = buffer.Flags,
@@ -285,10 +324,11 @@ namespace WolvenKit.RED4.Archive.IO
                 memSize = buffer.MemSize
             };
 
-            writer.Write(buffer.Bytes);
+            var compBuf = buffer.GetCompressedBytes();
+            writer.Write(compBuf);
 
-            result.diskSize = (uint)buffer.Bytes.Length;
-            result.crc32 = Crc32Algorithm.Compute(buffer.Bytes);
+            result.diskSize = (uint)compBuf.Length;
+            result.crc32 = Crc32Algorithm.Compute(compBuf);
 
             return result;
         }
@@ -300,7 +340,7 @@ namespace WolvenKit.RED4.Archive.IO
         private CR2WEmbeddedInfo WriteEmbedded(CR2WWriter writer, ICR2WEmbeddedFile embeddedData, IList<(string, CName, ushort)> importsList)
         {
             var importIndex = -1;
-            for (int i = 0; i < importsList.Count; i++)
+            for (var i = 0; i < importsList.Count; i++)
             {
                 if (importsList[i].Item2 == embeddedData.FileName)
                 {
@@ -316,7 +356,7 @@ namespace WolvenKit.RED4.Archive.IO
 
             return new CR2WEmbeddedInfo
             {
-                chunkIndex = (uint)_chunkInfos[(RedBaseClass)embeddedData.Content].Id,
+                chunkIndex = (uint)_chunkInfos[embeddedData.Content].Id,
                 importIndex = (uint)importIndex,
                 pathHash = 0
             };
@@ -338,12 +378,12 @@ namespace WolvenKit.RED4.Archive.IO
 
         #endregion Embedded
 
-        private List<RedBaseClass> _chunks = new();
+        private readonly List<RedBaseClass> _chunks = new();
 
         private CR2WExportInfo WriteChunk(CR2WWriter file, RedBaseClass chunkData)
         {
             var tmpQueue = file.ChunkQueue;
-            file.ChunkQueue = new LinkedList<RedBaseClass>();
+            file.ChunkQueue = new List<RedBaseClass>();
 
             var redTypeName = RedReflection.GetTypeRedName(chunkData.GetType());
             var typeIndex = file.GetStringIndex(redTypeName);
@@ -358,10 +398,7 @@ namespace WolvenKit.RED4.Archive.IO
 
             result.dataSize = (uint)(file.BaseStream.Position - result.dataOffset);
 
-            foreach (var redClass in tmpQueue)
-            {
-                file.ChunkQueue.AddLast(redClass);
-            }
+            file.ChunkQueue.AddRange(tmpQueue);
 
             return result;
         }
@@ -397,19 +434,19 @@ namespace WolvenKit.RED4.Archive.IO
 
             var bufferInfoList = new List<CR2WBufferInfo>();
 
-            InternalWriteChunks((RedBaseClass)_file.RootChunk);
+            InternalWriteChunks(_file.RootChunk);
             foreach (var embeddedFile in _file.EmbeddedFiles)
             {
-                InternalWriteChunks((RedBaseClass)embeddedFile.Content);
+                InternalWriteChunks(embeddedFile.Content);
             }
 
             void InternalWriteChunks(RedBaseClass rootChunk)
             {
-                file.ChunkQueue.AddFirst(rootChunk);
+                file.ChunkQueue.Insert(0, rootChunk);
                 while (file.ChunkQueue.Count > 0)
                 {
-                    var chunk = file.ChunkQueue.First.Value;
-                    file.ChunkQueue.RemoveFirst();
+                    var chunk = file.ChunkQueue[0];
+                    file.ChunkQueue.RemoveAt(0);
 
                     if (!_chunkInfos.ContainsKey(chunk))
                     {
@@ -455,11 +492,16 @@ namespace WolvenKit.RED4.Archive.IO
                 }
             }
 
+            foreach (var kvp in file.BufferRef)
+            {
+                WriteBufferData(kvp.Value);
+            }
+
             var (stringDict, importDict) = file.GenerateStringDictionary();
             result.StringList = file.StringCacheList.ToList();
             result.ImportList = file.ImportCacheList.ToList();
-            
-            for (int i = 0; i < chunkInfoList.Count; i++)
+
+            for (var i = 0; i < chunkInfoList.Count; i++)
             {
                 var chunkInfo = chunkInfoList[i];
                 chunkInfo.className = stringDict[chunkClassNames[i]];
@@ -473,15 +515,15 @@ namespace WolvenKit.RED4.Archive.IO
 
             foreach (var embeddedFile in _file.EmbeddedFiles)
             {
-                var typeInfo = RedReflection.GetTypeInfo(((RedBaseClass)embeddedFile.Content).GetType());
-                SetParent(_chunkInfos[(RedBaseClass)embeddedFile.Content].Id, maxDepth: typeInfo.ChildLevel);
+                var typeInfo = RedReflection.GetTypeInfo(embeddedFile.Content.GetType());
+                SetParent(_chunkInfos[embeddedFile.Content].Id, maxDepth: typeInfo.ChildLevel);
             }
 
             var ms2 = new MemoryStream();
             var bw = new BinaryWriter(ms2);
 
             var bufferList = file.BufferCacheList.ToList();
-            for (int i = 0; i < bufferList.Count; i++)
+            for (var i = 0; i < bufferList.Count; i++)
             {
                 bufferInfoList.Add(WriteBuffer(bw, bufferList[i]));
             }
@@ -503,7 +545,7 @@ namespace WolvenKit.RED4.Archive.IO
                 file.BaseWriter.Write(index);
             }
 
-            var bufferDict = file.BufferCacheList.ToDictionary();
+            var bufferDict = file.BufferCacheList.ToDictionary(ReferenceEqualityComparer.Instance);
             foreach (var kvp in file.BufferRef)
             {
                 file.BaseStream.Position = kvp.Key;

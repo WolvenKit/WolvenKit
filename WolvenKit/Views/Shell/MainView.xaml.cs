@@ -1,16 +1,12 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Reactive;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Windows;
-using System.Windows.Input;
 using AdonisUI.Controls;
-using HandyControl.Tools.Extension;
 using ReactiveUI;
 using Splat;
 using WolvenKit.Interaction;
@@ -18,7 +14,6 @@ using WolvenKit.ViewModels.Dialogs;
 using WolvenKit.ViewModels.Shell;
 using WolvenKit.ViewModels.Wizards;
 using WolvenKit.Views.Dialogs;
-using WolvenKit.Views.Wizards;
 
 namespace WolvenKit.Views.Shell
 {
@@ -120,10 +115,7 @@ namespace WolvenKit.Views.Shell
             });
         }
 
-        private void FadeOut_Completed(object sender, EventArgs e)
-        {
-            ViewModel.FinishedClosingModal();
-        }
+        private void FadeOut_Completed(object sender, EventArgs e) => ViewModel.FinishedClosingModal();
 
         #region interactions
 
@@ -169,7 +161,9 @@ namespace WolvenKit.Views.Shell
             base.OnMouseLeftButtonDown(e);
             var mainWindow = (MainView)Locator.Current.GetService<IViewFor<AppViewModel>>();
             if (e.LeftButton == System.Windows.Input.MouseButtonState.Pressed)
+            {
                 mainWindow?.DragMove();
+            }
         }
 
         protected override void OnClosing(CancelEventArgs e) => Application.Current.Shutdown();

@@ -13,7 +13,7 @@ namespace WolvenKit.Common.FNV1A
 
         private const uint FnvHashInitial = 0x811C9DC5;
         private const uint FnvHashPrime = 0x01000193;
-        private Encoding encoding;
+        private readonly Encoding encoding;
         private uint fnvhash;
 
         #endregion Fields
@@ -35,8 +35,8 @@ namespace WolvenKit.Common.FNV1A
         /// <param name="encoding">The encoding class to use for characters and strings.</param>
         public FNV1A32HashAlgorithm(Encoding encoding)
         {
-            this.Initialize();
-            this.HashSizeValue = 32;
+            Initialize();
+            HashSizeValue = 32;
             this.encoding = encoding ?? Encoding.ASCII;
         }
 
@@ -68,10 +68,7 @@ namespace WolvenKit.Common.FNV1A
         /// </summary>
         /// <param name="value">The string to hash.</param>
         /// <returns>The 32 bit hash value.</returns>
-        public static uint HashString(string value)
-        {
-            return HashString(value, Encoding.ASCII, false);
-        }
+        public static uint HashString(string value) => HashString(value, Encoding.ASCII, false);
 
         /// <summary>
         /// Hash a string using a custom encoding class.
@@ -79,10 +76,7 @@ namespace WolvenKit.Common.FNV1A
         /// <param name="value">The string to hash.</param>
         /// <param name="encoding">The encoding to use.</param>
         /// <returns>The 32 bit hash value.</returns>
-        public static uint HashString(string value, Encoding encoding)
-        {
-            return HashString(value, encoding, false);
-        }
+        public static uint HashString(string value, Encoding encoding) => HashString(value, encoding, false);
 
         /// <summary>
         /// Hash a string using a custom encoding class, and specify if a null character should be appended before hashing.
@@ -93,8 +87,10 @@ namespace WolvenKit.Common.FNV1A
         /// <returns>The 32 bit hash value.</returns>
         public static uint HashString(string value, Encoding encoding, bool nullEnded)
         {
-            if (String.IsNullOrEmpty(value))
+            if (string.IsNullOrEmpty(value))
+            {
                 return 0;
+            }
 
             var buffer = nullEnded ? new char[value.Length + 1] : new char[value.Length];
             value.CopyTo(0, buffer, 0, value.Length);
@@ -110,10 +106,7 @@ namespace WolvenKit.Common.FNV1A
         /// Append a string to the current hash value using the encoding for this instance.
         /// </summary>
         /// <param name="value">The string to append to the current hash value.</param>
-        public void AppendString(string value)
-        {
-            AppendString(value, false);
-        }
+        public void AppendString(string value) => AppendString(value, false);
 
         /// <summary>
         /// Append a string to the current hash value using the encoding for this instance,
@@ -123,8 +116,10 @@ namespace WolvenKit.Common.FNV1A
         /// <param name="nullEnded">Append a null character to the end of the string.</param>
         public void AppendString(string value, bool nullEnded)
         {
-            if (String.IsNullOrEmpty(value))
+            if (string.IsNullOrEmpty(value))
+            {
                 return;
+            }
 
             var buffer = nullEnded ? new char[value.Length + 1] : new char[value.Length];
             value.CopyTo(0, buffer, 0, value.Length);
@@ -136,10 +131,7 @@ namespace WolvenKit.Common.FNV1A
         /// <summary>
         /// Initialise this instance and reset the current hash value.
         /// </summary>
-        public override void Initialize()
-        {
-            this.fnvhash = FnvHashInitial;
-        }
+        public override void Initialize() => fnvhash = FnvHashInitial;
 
         protected override void HashCore(byte[] array, int ibStart, int cbSize)
         {
@@ -156,10 +148,10 @@ namespace WolvenKit.Common.FNV1A
 
             unchecked
             {
-                for (int i = ibStart; i < ibEnd; i++)
+                for (var i = ibStart; i < ibEnd; i++)
                 {
-                    this.fnvhash ^= array[i];
-                    this.fnvhash *= FnvHashPrime;
+                    fnvhash ^= array[i];
+                    fnvhash *= FnvHashPrime;
                 }
             }
         }
@@ -168,10 +160,7 @@ namespace WolvenKit.Common.FNV1A
         /// Get the current 32 bit hash as a 4 byte array.
         /// </summary>
         /// <returns>The computed hash.</returns>
-        protected override byte[] HashFinal()
-        {
-            return BitConverter.GetBytes(this.HashUInt32);
-        }
+        protected override byte[] HashFinal() => BitConverter.GetBytes(HashUInt32);
 
         #endregion Methods
     }

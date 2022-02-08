@@ -3,12 +3,11 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using WolvenKit.Common.Extensions;
 using WolvenKit.Common.FNV1A;
 using WolvenKit.Common.Model;
-using WolvenKit.Common.Oodle;
-using WolvenKit.Interfaces.Extensions;
-using WolvenKit.RED4.Archive;
+using WolvenKit.Core.Compression;
+using WolvenKit.Core.Exceptions;
+using WolvenKit.Core.Extensions;
 
 namespace WolvenKit.Common.Services
 {
@@ -25,7 +24,7 @@ namespace WolvenKit.Common.Services
         private readonly Dictionary<ulong, SAsciiString> _additionalhashes = new();
         private readonly Dictionary<ulong, SAsciiString> _userHashes = new();
 
-        private List<ulong> _missing = new();
+        private readonly List<ulong> _missing = new();
 
         #endregion Fields
 
@@ -141,7 +140,7 @@ namespace WolvenKit.Common.Services
             LoadAdditional();
 
             // user hashes
-            var assemblyPath = Path.GetDirectoryName(System.AppContext.BaseDirectory);
+            var assemblyPath = Path.GetDirectoryName(AppContext.BaseDirectory);
             var userHashesPath = Path.Combine(assemblyPath ?? throw new InvalidOperationException(), s_userHashes);
             if (File.Exists(userHashesPath))
             {
@@ -158,7 +157,7 @@ namespace WolvenKit.Common.Services
 
             // read KARK header
             var oodleCompression = stream.ReadStruct<uint>();
-            if (oodleCompression != OodleHelper.KARK)
+            if (oodleCompression != Oodle.KARK)
             {
                 throw new DecompressionException($"Incorrect hash file.");
             }
@@ -170,7 +169,7 @@ namespace WolvenKit.Common.Services
 
             var inbuffer = stream.ToByteArray(true);
 
-            OozNative.Kraken_Decompress(inbuffer, inbuffer.Length, outputbuffer, outputbuffer.Length);
+            Oodle.Decompress(inbuffer, outputbuffer);
 
             hashDictionary.EnsureCapacity(1_100_000);
 
@@ -220,7 +219,7 @@ namespace WolvenKit.Common.Services
                 {
                     continue;
                 }
-                
+
                 if (!hashDict.ContainsKey(hash))
                 {
                     hashDict.Add(hash, new SAsciiString(line));

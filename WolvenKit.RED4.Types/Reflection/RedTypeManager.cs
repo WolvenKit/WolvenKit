@@ -16,8 +16,6 @@ namespace WolvenKit.RED4.Types
                 tCls.ConstructorOverload();
             }
 
-            instance?.InternalInitClass();
-
             return (T)instance;
         }
 
@@ -28,8 +26,6 @@ namespace WolvenKit.RED4.Types
             {
                 tCls.ConstructorOverload();
             }
-
-            instance?.InternalInitClass();
 
             return instance;
         }
@@ -51,11 +47,6 @@ namespace WolvenKit.RED4.Types
             if (instance is IRedOverload tCls)
             {
                 tCls.ConstructorOverload();
-            }
-
-            if (instance is RedBaseClass irc)
-            {
-                irc.InternalInitClass();
             }
 
             return instance;

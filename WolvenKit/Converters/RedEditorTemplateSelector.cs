@@ -1,20 +1,11 @@
-
-using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Collections.ObjectModel;
-using System.ComponentModel;
-using System.Windows.Controls;
 using System.Windows;
-using WolvenKit.ViewModels.Documents;
-using WolvenKit.Views.Documents;
-using WolvenKit.ViewModels.Shell;
+using System.Windows.Controls;
 using WolvenKit.RED4.Types;
-using Syncfusion.UI.Xaml.TreeView.Engine;
+using WolvenKit.ViewModels.Shell;
 
 namespace WolvenKit.Converters
 {
-    class RedEditorTemplateSelector : DataTemplateSelector
+    internal class RedEditorTemplateSelector : DataTemplateSelector
     {
         public DataTemplate RedStringEditor { get; set; }
         public DataTemplate RedUlongEditor { get; set; }

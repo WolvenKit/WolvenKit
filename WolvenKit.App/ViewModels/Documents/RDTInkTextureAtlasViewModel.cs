@@ -17,7 +17,7 @@ namespace WolvenKit.ViewModels.Documents
 {
     public class RDTInkTextureAtlasViewModel : RDTTextureViewModel
     {
-        private inkTextureAtlas _atlas;
+        private readonly inkTextureAtlas _atlas;
 
         public RDTInkTextureAtlasViewModel(inkTextureAtlas atlas, CBitmapTexture xbm, RedDocumentViewModel file) : base(xbm, file)
         {
@@ -35,9 +35,9 @@ namespace WolvenKit.ViewModels.Documents
                 sourceBitmap = new Bitmap(outStream);
             }
 
-            Bitmap destBitmap = new Bitmap((int)Math.Round(Width), (int)Math.Round(Height), System.Drawing.Imaging.PixelFormat.Format64bppArgb);
+            var destBitmap = new Bitmap((int)Math.Round(Width), (int)Math.Round(Height), System.Drawing.Imaging.PixelFormat.Format64bppArgb);
 
-            using (Graphics gfx = Graphics.FromImage(destBitmap))
+            using (var gfx = Graphics.FromImage(destBitmap))
             {
                 // this is doesn't account for premultipied alpha, so the opacity mask is still needed
                 var matrix = new ColorMatrix(new float[][]
@@ -55,7 +55,7 @@ namespace WolvenKit.ViewModels.Documents
                 //matrix.Matrix41 = TintColor.G / 255F;
                 //matrix.Matrix42 = TintColor.B / 255F;
 
-                ImageAttributes attributes = new ImageAttributes();
+                var attributes = new ImageAttributes();
 
                 attributes.SetColorMatrix(matrix, ColorMatrixFlag.Default, ColorAdjustType.Bitmap);
 

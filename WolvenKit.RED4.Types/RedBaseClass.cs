@@ -12,6 +12,11 @@ namespace WolvenKit.RED4.Types
     [REDMeta]
     public class RedBaseClass : DynamicObject, IRedType, IRedNotifyObjectChanged, IRedCloneable, IEquatable<RedBaseClass>
     {
+        public RedBaseClass()
+        {
+            InternalInitClass();
+        }
+
         #region Events
 
         public event ObjectChangedEventHandler ObjectChanged;
@@ -33,21 +38,11 @@ namespace WolvenKit.RED4.Types
 
                     if (sender != null)
                     {
-                        var path = $"{redPropertyName}.{args.RedPath}";
-                        if (args.RedPath.StartsWith(':'))
-                        {
-                            path = $"{redPropertyName}{args.RedPath}";
-                        }
-
-                        args.RedPath = path;
-
                         ObjectChanged?.Invoke(sender, args);
                     }
                     else
                     {
                         args.RedName = redPropertyName;
-                        args.RedPath = redPropertyName;
-
                         ObjectChanged?.Invoke(this, args);
                     }
                 });
@@ -76,7 +71,7 @@ namespace WolvenKit.RED4.Types
         {
             if (ObjectChanged != null)
             {
-                var args = new ObjectChangedEventArgs(ObjectChangedType.Modified, redPropertyName, redPropertyName, oldValue, newValue);
+                var args = new ObjectChangedEventArgs(ObjectChangedType.Modified, redPropertyName, oldValue, newValue);
                 args._callStack.Add(this);
 
                 ObjectChanged.Invoke(this, args);
@@ -114,45 +109,17 @@ namespace WolvenKit.RED4.Types
                     continue;
                 }
 
-                if (!_properties.ContainsKey(propertyInfo.RedName))
+                var propTypeInfo = RedReflection.GetTypeInfo(propertyInfo.Type);
+                if (propertyInfo.Type.IsValueType || propTypeInfo.IsValueType)
                 {
-                    var propTypeInfo = RedReflection.GetTypeInfo(propertyInfo.Type);
-                    if (propertyInfo.Type.IsValueType || propTypeInfo.IsValueType)
+                    if (propertyInfo.Flags.Equals(Flags.Empty))
                     {
-                        if (propertyInfo.Flags.Equals(Flags.Empty))
-                        {
-                            _properties[propertyInfo.RedName] = (IRedType)System.Activator.CreateInstance(propertyInfo.Type);
-                        }
-                        else
-                        {
-                            var size = propertyInfo.Flags.MoveNext() ? propertyInfo.Flags.Current : 0;
-                            _properties[propertyInfo.RedName] = (IRedType)System.Activator.CreateInstance(propertyInfo.Type, size);
-                        }
+                        SetDictValue(propertyInfo.RedName, (IRedType)System.Activator.CreateInstance(propertyInfo.Type));
                     }
-                }
-
-                if (_properties.ContainsKey(propertyInfo.RedName))
-                {
-                    if (propertyInfo.Type.IsGenericType && propertyInfo.Type.GetGenericTypeDefinition() == typeof(CStatic<>))
+                    else
                     {
-                        var flags = propertyInfo.Flags.Clone();
-                        ((IRedArray)_properties[propertyInfo.RedName]).MaxSize = flags.MoveNext() ? flags.Current : 0;
-                    }
-
-                    if (typeof(RedBaseClass).IsAssignableFrom(propertyInfo.Type))
-                    {
-                        ((RedBaseClass)_properties[propertyInfo.RedName]).InternalInitClass();
-                    }
-
-                    if (typeof(IRedArray).IsAssignableFrom(propertyInfo.Type))
-                    {
-                        foreach (var entry in (IRedArray)_properties[propertyInfo.RedName])
-                        {
-                            if (entry is RedBaseClass cls)
-                            {
-                                cls.InternalInitClass();
-                            }
-                        }
+                        var flags = propertyInfo.Flags;
+                        SetDictValue(propertyInfo.RedName, (IRedType)System.Activator.CreateInstance(propertyInfo.Type, flags.MoveNext() ? flags.Current : 0));
                     }
                 }
             }
@@ -162,10 +129,46 @@ namespace WolvenKit.RED4.Types
         {
             if (!_properties.ContainsKey(redPropertyName))
             {
-                _properties[redPropertyName] = null;
+                return null;
             }
 
             return _properties[redPropertyName];
+        }
+
+        private void SetDictValue(string key, IRedType value)
+        {
+            if (value == null)
+            {
+                _properties.Remove(key);
+            }
+            else
+            {
+                if (value.GetType().IsGenericType)
+                {
+                    if (value.GetType().GetGenericTypeDefinition() == typeof(CArrayFixedSize<>))
+                    {
+                        var propertyInfo = RedReflection.GetPropertyByRedName(GetType(), key);
+                        var flags = propertyInfo.Flags;
+                        var size = flags.MoveNext() ? flags.Current : 0;
+
+                        if (((IRedArray)value).Count > size)
+                        {
+                            throw new ArgumentException();
+                        }
+                    }
+
+                    if (value.GetType().GetGenericTypeDefinition() == typeof(CStatic<>))
+                    {
+                        var propertyInfo = RedReflection.GetPropertyByRedName(GetType(), key);
+                        var flags = propertyInfo.Flags;
+                        var maxSize = flags.MoveNext() ? flags.Current : 0;
+
+                        ((IRedArray)value).MaxSize = maxSize;
+                    }
+                }
+
+                _properties[key] = value;
+            }
         }
 
         internal void InternalSetPropertyValue(string redPropertyName, IRedType value, bool native)
@@ -178,16 +181,22 @@ namespace WolvenKit.RED4.Types
 
             if (!Equals(oldValue, value))
             {
-                RemoveEventHandler(redPropertyName);
+                if (oldValue != null)
+                {
+                    RemoveEventHandler(redPropertyName);
+                }
 
-                _properties[redPropertyName] = value;
+                SetDictValue(redPropertyName, value);
                 if (!native)
                 {
                     _dynamicProperties.Add(redPropertyName);
                 }
 
-                AddEventHandler(redPropertyName);
-
+                if (value != null)
+                {
+                    AddEventHandler(redPropertyName);
+                }
+                
                 OnObjectChanged(redPropertyName, oldValue, value);
             }
         }
@@ -198,17 +207,20 @@ namespace WolvenKit.RED4.Types
             if (_properties.ContainsKey(redPropertyName))
             {
                 oldValue = _properties[redPropertyName];
+
+                RemoveEventHandler(redPropertyName);
             }
 
-            RemoveEventHandler(redPropertyName);
-
-            _properties[redPropertyName] = value;
+            SetDictValue(redPropertyName, value);
             if (!native)
             {
                 _dynamicProperties.Add(redPropertyName);
             }
 
-            AddEventHandler(redPropertyName);
+            if (value != null)
+            {
+                AddEventHandler(redPropertyName);
+            }
 
             OnObjectChanged(redPropertyName, oldValue, value);
         }
@@ -445,34 +457,48 @@ namespace WolvenKit.RED4.Types
 
         public override bool Equals(object obj)
         {
-            if (obj is RedBaseClass cObj)
+            if (ReferenceEquals(null, obj))
             {
-                return Equals(cObj);
+                return false;
             }
 
-            return false;
+            if (ReferenceEquals(this, obj))
+            {
+                return true;
+            }
+
+            if (obj.GetType() != this.GetType())
+            {
+                return false;
+            }
+
+            return Equals((RedBaseClass)obj);
         }
 
         public bool Equals(RedBaseClass other)
         {
-            var tmp1 = _properties.Count;
-            var tmp2 = other._properties.Count;
+            if (ReferenceEquals(null, other))
+            {
+                return false;
+            }
+
+            if (ReferenceEquals(this, other))
+            {
+                return true;
+            }
 
             if (_properties.Count != other._properties.Count)
-            {
-                return false;
-            }
-            if (_properties.Keys.Except(other._properties.Keys).Any())
-            {
-                return false;
-            }
-            if (other._properties.Keys.Except(_properties.Keys).Any())
             {
                 return false;
             }
 
             foreach (var property in _properties)
             {
+                if (!other._properties.ContainsKey(property.Key))
+                {
+                    return false;
+                }
+
                 if (!Equals(property.Value, other._properties[property.Key]))
                 {
                     return false;

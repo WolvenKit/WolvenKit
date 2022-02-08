@@ -1,8 +1,6 @@
 using System;
 using System.Linq;
 using System.Reactive.Linq;
-using System.Text.RegularExpressions;
-using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using ReactiveUI;
@@ -102,7 +100,9 @@ namespace WolvenKit.Views.Editors
             ((Quaternion)cvm.Data).I = float.Parse(value);
             var x = cvm.Properties?.FirstOrDefault(prop => prop.Name == "i") ?? null;
             if (x != null)
+            {
                 x.Data = (CFloat)float.Parse(value);
+            }
         }
 
         private void SetJValue(string value)
@@ -110,7 +110,9 @@ namespace WolvenKit.Views.Editors
             ((Quaternion)cvm.Data).J = float.Parse(value);
             var x = cvm.Properties?.FirstOrDefault(prop => prop.Name == "j") ?? null;
             if (x != null)
+            {
                 x.Data = (CFloat)float.Parse(value);
+            }
         }
 
         private void SetKValue(string value)
@@ -118,7 +120,9 @@ namespace WolvenKit.Views.Editors
             ((Quaternion)cvm.Data).K = float.Parse(value);
             var x = cvm.Properties?.FirstOrDefault(prop => prop.Name == "k") ?? null;
             if (x != null)
+            {
                 x.Data = (CFloat)float.Parse(value);
+            }
         }
 
         private void SetRValue(string value)
@@ -126,28 +130,18 @@ namespace WolvenKit.Views.Editors
             ((Quaternion)cvm.Data).R = float.Parse(value);
             var x = cvm.Properties?.FirstOrDefault(prop => prop.Name == "r") ?? null;
             if (x != null)
+            {
                 x.Data = (CFloat)float.Parse(value);
+            }
         }
 
-        private string GetValueFromIValue()
-        {
-            return ((float)((Quaternion)cvm.Data).I).ToString("R");
-        }
+        private string GetValueFromIValue() => ((float)((Quaternion)cvm.Data).I).ToString("R");
 
-        private string GetValueFromJValue()
-        {
-            return ((float)((Quaternion)cvm.Data).J).ToString("R");
-        }
+        private string GetValueFromJValue() => ((float)((Quaternion)cvm.Data).J).ToString("R");
 
-        private string GetValueFromKValue()
-        {
-            return ((float)((Quaternion)cvm.Data).K).ToString("R");
-        }
+        private string GetValueFromKValue() => ((float)((Quaternion)cvm.Data).K).ToString("R");
 
-        private string GetValueFromRValue()
-        {
-            return ((float)((Quaternion)cvm.Data).R).ToString("R");
-        }
+        private string GetValueFromRValue() => ((float)((Quaternion)cvm.Data).R).ToString("R");
 
 
         private void NumberValidationTextBox(object sender, TextCompositionEventArgs e)

@@ -1,6 +1,4 @@
 using System.IO;
-using WolvenKit.Common.Model;
-using WolvenKit.Common.RED4.Compiled;
 using WolvenKit.RED4.Archive.CR2W;
 
 namespace WolvenKit.Common.Services

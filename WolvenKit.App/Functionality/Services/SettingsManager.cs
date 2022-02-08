@@ -21,7 +21,7 @@ namespace WolvenKit.Functionality.Services
 
         private bool _isLoaded;
 
-        private string _assemblyVersion;
+        private readonly string _assemblyVersion;
 
         #endregion fields
 
@@ -83,6 +83,10 @@ namespace WolvenKit.Functionality.Services
         [Reactive]
         [Browsable(false)]
         public bool CheckForUpdates { get; set; }
+
+        [Reactive]
+        [Browsable(false)]
+        public bool IsUpdateAvailable { get; set; }
 
         #endregion
 

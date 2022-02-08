@@ -1,7 +1,6 @@
 using System;
 using System.Reactive;
 using System.Threading.Tasks;
-using gpm.Core.Services;
 using gpm.Installer;
 using ReactiveUI;
 using Splat;
@@ -53,10 +52,7 @@ namespace WolvenKit.ViewModels
             }
 
             _loggerService.Success($"Update available: {release.TagName}");
-            //if (!await _autoInstallerService.DownloadUpdate(release))
-            //{
-            //    return;
-            //}
+            Settings.IsUpdateAvailable = true;
 
             var result = await Interactions.ShowMessageBoxAsync("An update is ready to install for WolvenKit. Exit the app and install it?", "Update available");
             switch (result)
@@ -65,7 +61,7 @@ namespace WolvenKit.ViewModels
                 case WMessageBoxResult.Yes:
                     if (await _autoInstallerService.Update()) // 1 API call
                     {
-
+                        
                     }
                     break;
             }

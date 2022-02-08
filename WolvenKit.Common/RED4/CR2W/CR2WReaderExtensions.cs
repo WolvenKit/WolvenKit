@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using System.IO;
 using System.Text;
 
@@ -17,7 +16,7 @@ namespace WolvenKit.RED4.CR2W
 
         #region Methods
 
-        
+
         /// <summary>
         ///     Read null terminated string
         /// </summary>
@@ -38,7 +37,10 @@ namespace WolvenKit.RED4.CR2W
                 {
                     var c = (char)file.ReadByte();
                     if (c == 0)
+                    {
                         break;
+                    }
+
                     sb.Append(c);
                 }
                 str = sb.ToString();
@@ -46,10 +48,7 @@ namespace WolvenKit.RED4.CR2W
             return str;
         }
 
-        public static byte[] ReadRemainingData(this BinaryReader br)
-        {
-            return br.ReadBytes((int)(br.BaseStream.Length - br.BaseStream.Position));
-        }
+        public static byte[] ReadRemainingData(this BinaryReader br) => br.ReadBytes((int)(br.BaseStream.Length - br.BaseStream.Position));
 
         public static void WriteCR2WString(this BinaryWriter file, string str)
         {

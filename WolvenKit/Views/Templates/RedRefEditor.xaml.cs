@@ -1,13 +1,10 @@
 using System;
-using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-using System.Windows.Media;
 using ReactiveUI;
-using ReactiveUI.Fody.Helpers;
 using WolvenKit.RED4.Types;
 
 namespace WolvenKit.Views.Editors
@@ -53,16 +50,16 @@ namespace WolvenKit.Views.Editors
                     SetRedValue(PathBox.Text);
                 });
 
-                //this.WhenAnyValue(x => x.Path)
-                //    .Select(x => x != "")
-                //    .ToPropertyEx(this, x => x.IsHashEditable);
+            //this.WhenAnyValue(x => x.Path)
+            //    .Select(x => x != "")
+            //    .ToPropertyEx(this, x => x.IsHashEditable);
             //});
         }
 
         public IRedRef RedRef
         {
-            get => (IRedRef)this.GetValue(RedRefProperty);
-            set => this.SetValue(RedRefProperty, value);
+            get => (IRedRef)GetValue(RedRefProperty);
+            set => SetValue(RedRefProperty, value);
         }
         public static readonly DependencyProperty RedRefProperty = DependencyProperty.Register(
             nameof(RedRef), typeof(IRedRef), typeof(RedRefEditor), new PropertyMetadata(default(IRedRef)));
@@ -83,7 +80,7 @@ namespace WolvenKit.Views.Editors
         private void SetRedValue(string value)
         {
             CName cn = null;
-            if (ulong.TryParse(value, out ulong number))
+            if (ulong.TryParse(value, out var number))
             {
                 cn = number;
             }
@@ -117,7 +114,7 @@ namespace WolvenKit.Views.Editors
         }
 
         private ulong GetHashFromRedValue()
-        { 
+        {
             // this might need to be handled at the class level like enums
             if (RedRef is null)
             {

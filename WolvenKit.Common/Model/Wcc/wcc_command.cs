@@ -50,9 +50,9 @@ namespace WolvenKit.Common.Wcc
         private string ConstructArgs()
         {
             var strVariables = GetVariables();
-            string procArgs = ToString() + " ";
+            var procArgs = ToString() + " ";
 
-            foreach (KeyValuePair<string, string> str in strVariables)
+            foreach (var str in strVariables)
             {
                 if (str.Key.Equals("HIDDEN") || string.IsNullOrEmpty(str.Key))
                 {
@@ -73,13 +73,15 @@ namespace WolvenKit.Common.Wcc
         private string GetOutfile()
         {
             var bindingFlags = BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic;
-            string ret = "";
+            var ret = "";
 
-            foreach (PropertyInfo prop in this.GetType().GetProperties(bindingFlags).Where(x => x.Name.Equals("outfile")))
+            foreach (var prop in GetType().GetProperties(bindingFlags).Where(x => x.Name.Equals("outfile")))
             {
                 var val = Convert.ToString(prop.GetValue(this));
                 if (prop.PropertyType == typeof(string) && !string.IsNullOrEmpty(val))
+                {
                     ret = val;
+                }
             }
             return ret;
         }
@@ -94,29 +96,29 @@ namespace WolvenKit.Common.Wcc
             var dict = new Dictionary<string, string>();
 
             //get all properties with a RADName
-            IEnumerable<PropertyInfo> REDarguments = this.GetType().GetProperties(bindingFlags);
+            IEnumerable<PropertyInfo> REDarguments = GetType().GetProperties(bindingFlags);
             foreach (var pi in REDarguments)
             {
                 // initial check
                 //check RADName attribute
-                REDName REDatt = (REDName)Attribute.GetCustomAttribute(pi, typeof(REDName));
+                var REDatt = (REDName)Attribute.GetCustomAttribute(pi, typeof(REDName));
                 if (REDatt == null || string.IsNullOrEmpty(REDatt.name))
                 {
                     continue;
                 }
                 //check values
                 var val = Convert.ToString(pi.GetValue(this));
-                if (string.IsNullOrEmpty(val) || (pi.PropertyType == typeof(bool) && !bool.Parse((string)val)))
+                if (string.IsNullOrEmpty(val) || (pi.PropertyType == typeof(bool) && !bool.Parse(val)))
                 {
                     continue;
                 }
 
-                string nam = REDatt.name;
+                var nam = REDatt.name;
 
                 //Strings
                 if (pi.PropertyType == typeof(string))
                 {
-                    REDTags tag = (REDTags)Attribute.GetCustomAttribute(pi, typeof(REDTags));
+                    var tag = (REDTags)Attribute.GetCustomAttribute(pi, typeof(REDTags));
 
                     // Paths
                     if (Attribute.GetCustomAttributes(pi).Any(x => (x is REDTags))
@@ -131,7 +133,9 @@ namespace WolvenKit.Common.Wcc
                         val = $"=\"{val}\"";
                         //The end of the atomic dumpfile horror :
                         if (val == "=\"\\\\\\\\?\\\\\\\\\"")
+                        {
                             val = "=" + @"\\?\";
+                        }
                     }
                     // other strings
                     else
@@ -151,7 +155,7 @@ namespace WolvenKit.Common.Wcc
                     }
                     else
                     {
-                        REDTags tag = (REDTags)Attribute.GetCustomAttribute(pi, typeof(REDTags));
+                        var tag = (REDTags)Attribute.GetCustomAttribute(pi, typeof(REDTags));
 
                         // keywords only have values (e.g. analyze r4gui -out=)
                         if (tag != null && tag.tag.Contains("Keyword"))

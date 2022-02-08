@@ -2,8 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Data;
 
 namespace WolvenKit.Converters
@@ -29,13 +27,12 @@ namespace WolvenKit.Converters
 
             // Validate values and get list of numbers in equation
             var numbers = new List<double>();
-            double tmp;
 
-            foreach (string s in mathEquation.Split(_allOperators))
+            foreach (var s in mathEquation.Split(_allOperators))
             {
                 if (s != string.Empty)
                 {
-                    if (double.TryParse(s, out tmp))
+                    if (double.TryParse(s, out var tmp))
                     {
                         numbers.Add(tmp);
                     }
@@ -54,10 +51,7 @@ namespace WolvenKit.Converters
             return numbers[0];
         }
 
-        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
-        {
-            throw new NotImplementedException();
-        }
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture) => throw new NotImplementedException();
 
         #endregion
 
@@ -65,7 +59,7 @@ namespace WolvenKit.Converters
         private void EvaluateMathString(ref string mathEquation, ref List<double> numbers, int index)
         {
             // Loop through each mathemtaical token in the equation
-            string token = GetNextToken(mathEquation);
+            var token = GetNextToken(mathEquation);
 
             while (token != string.Empty)
             {
@@ -90,7 +84,7 @@ namespace WolvenKit.Converters
                 if (_operators.Contains(token))
                 {
                     // If next token after operator is a parenthesis, call method recursively
-                    string nextToken = GetNextToken(mathEquation);
+                    var nextToken = GetNextToken(mathEquation);
                     if (nextToken == "(")
                     {
                         EvaluateMathString(ref mathEquation, ref numbers, index + 1);
@@ -143,8 +137,8 @@ namespace WolvenKit.Converters
             }
 
             // Get next operator or numeric value in equation and return it
-            string tmp = "";
-            foreach (char c in mathEquation)
+            var tmp = "";
+            foreach (var c in mathEquation)
             {
                 if (_allOperators.Contains(c))
                 {

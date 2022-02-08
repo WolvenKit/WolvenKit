@@ -167,23 +167,20 @@ namespace WolvenKit.ViewModels.Shell
                         return;
                     }
 
+                    _settingsManager.IsUpdateAvailable = true;
                     _loggerService.Success($"Update available: {release.TagName}");
-                    //if (!await _autoInstallerService.DownloadUpdate(release))
+
+                    //var result = await Interactions.ShowMessageBoxAsync("An update is available for WolvenKit. Exit the app and install it?", "Update available");
+                    //switch (result)
                     //{
-                    //    return;
+                    //    case WMessageBoxResult.OK:
+                    //    case WMessageBoxResult.Yes:
+                    //        if (await _autoInstallerService.Update()) // 1 API call
+                    //        {
+
+                    //        }
+                    //        break;
                     //}
-
-                    var result = await Interactions.ShowMessageBoxAsync("An update is available for WolvenKit. Exit the app and install it?", "Update available");
-                    switch (result)
-                    {
-                        case WMessageBoxResult.OK:
-                        case WMessageBoxResult.Yes:
-                            if (await _autoInstallerService.Update()) // 1 API call
-                            {
-
-                            }
-                            break;
-                    }
                 });
         }
 
@@ -232,6 +229,7 @@ namespace WolvenKit.ViewModels.Shell
 
             ShowFirstTimeSetup();
         }
+
 
         private void InitUpdateService() => _autoInstallerService
                .UseWPF()
@@ -1068,47 +1066,51 @@ namespace WolvenKit.ViewModels.Shell
 
         public Task RequestFileOpen(string fullpath)
         {
-            var ext = Path.GetExtension(fullpath).ToUpper();
+            var ext = Path.GetExtension(fullpath).ToLower();
 
             // double click
             switch (ext)
             {
-                // images
-                case ".PNG":
-                case ".JPG":
-                case ".TGA":
-                case ".BMP":
-                case ".JPEG":
-                case ".DDS":
-                //text
+                // custom raw file extensions
+                case $".{nameof(ERawFileFormat.masklist)}":
 
-                case ".XML":
-                case ".TXT":
-                case ".WS":
+                // images
+                case ".png":
+                case ".jpg":
+                case ".tga":
+                case ".bmp":
+                case ".jpeg":
+                case ".dds":
+
+                //text
+                case ".xml":
+                case ".txt":
+                case ".ws":
+
                 // other
-                case ".MP3":
-                case ".WAV":
-                case ".GLB":
-                case ".GLTF":
-                case ".FBX":
-                case ".XCF":
-                case ".PSD":
-                case ".APB":
-                case ".APX":
-                case ".CTW":
-                case ".BLEND":
-                case ".ZIP":
-                case ".RAR":
-                case ".BAT":
-                case ".YML":
-                case ".LOG":
-                case ".INI":
+                case ".mp3":
+                case ".wav":
+                case ".glb":
+                case ".gltf":
+                case ".fbx":
+                case ".xcf":
+                case ".psd":
+                case ".apb":
+                case ".apx":
+                case ".ctw":
+                case ".blend":
+                case ".zip":
+                case ".rar":
+                case ".bat":
+                case ".yml":
+                case ".log":
+                case ".ini":
                     ShellExecute();
                     break;
 
                 // double file formats
-                case ".CSV":
-                case ".JSON":
+                case ".csv":
+                case ".json":
                     if (IsInRawFolder(fullpath))
                     {
                         return Task.Run(() => ShellExecute());
@@ -1119,18 +1121,18 @@ namespace WolvenKit.ViewModels.Shell
                     }
 
                 // VIDEO
-                case ".BK2":
+                case ".bk2":
                     break;
 
                 // AUDIO
 
-                case ".WEM":
+                case ".wem":
                     return Task.Run(() => OpenAudioFile());
 
-                case ".SUBS":
+                case ".subs":
                     return Task.Run(() => PolymorphExecute(fullpath, ".txt"));
 
-                case ".USM":
+                case ".usm":
                 {
                     // TODO: port winforms
                     //if (!File.Exists(fullpath) || Path.GetExtension(fullpath) != ".usm")

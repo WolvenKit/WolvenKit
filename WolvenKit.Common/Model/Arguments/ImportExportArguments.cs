@@ -235,6 +235,11 @@ namespace WolvenKit.Common.Model.Arguments
 
         public bool IsGamma { get; set; }
 
+        public XbmImportArgs()
+        {
+            Keep = false;
+        }
+
         /// <summary>
         /// String Override to display info in datagrid.
         /// </summary>
@@ -379,7 +384,7 @@ namespace WolvenKit.Common.Model.Arguments
         /// </summary>
         [Category("Export Type")]
         [Display(Name = "MLmask Export Type")]
-        public EUncookExtension UncookExtension { get; set; }
+        public EMlmaskUncookExtension UncookExtension { get; set; } = EMlmaskUncookExtension.png;
 
         /// <summary>
         /// String Override to display info in datagrid.

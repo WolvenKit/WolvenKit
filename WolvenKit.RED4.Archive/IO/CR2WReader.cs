@@ -4,8 +4,6 @@ using System.Text;
 using WolvenKit.RED4.IO;
 using WolvenKit.RED4.Types;
 using WolvenKit.RED4.Types.Exceptions;
-using WolvenKit.RED4.CR2W;
-using WolvenKit.RED4.Archive.CR2W;
 
 namespace WolvenKit.RED4.Archive.IO
 {
@@ -53,7 +51,9 @@ namespace WolvenKit.RED4.Archive.IO
             {
                 var cvar = ReadVariable(cls);
                 if (!cvar)
+                {
                     break;
+                }
             }
             #endregion
 
@@ -78,7 +78,7 @@ namespace WolvenKit.RED4.Archive.IO
             {
                 return false;
             }
-            var varname = GetStringValue(nameId);
+            var varName = GetStringValue(nameId);
 
             // Read Type
             var typeId = _reader.ReadUInt16();
@@ -88,20 +88,15 @@ namespace WolvenKit.RED4.Archive.IO
             var sizepos = _reader.BaseStream.Position;
             var size = _reader.ReadUInt32();
 
+            var (type, flags) = RedReflection.GetCSTypeFromRedType(typename);
+
             IRedType value;
-
-            var prop = RedReflection.GetPropertyByRedName(cls.GetType(), varname);
-            if (cls.GetType() == typeof(audioPlayerWeaponSettings) && varname == "animEventOverrides")
-            {
-                var i = prop.Ordinal;
-            }
-
+            var prop = RedReflection.GetPropertyByRedName(cls.GetType(), varName);
             if (prop == null)
             {
-                var (type, flags) = RedReflection.GetCSTypeFromRedType(typename);
                 value = Read(type, size - 4, flags);
 
-                RedReflection.AddDynamicProperty(cls, varname, value);
+                RedReflection.AddDynamicProperty(cls, varName, value);
             }
             else
             {
@@ -109,10 +104,16 @@ namespace WolvenKit.RED4.Archive.IO
 
                 var typeInfo = RedReflection.GetTypeInfo(cls.GetType());
 
-#if DEBUG
-                if (!typeInfo.SerializeDefault && RedReflection.IsDefault(cls.GetType(), varname, value))
+                var propName = $"{RedReflection.GetRedTypeFromCSType(cls.GetType())}.{varName}";
+                if (type != prop.Type)
                 {
-                    throw new TodoException($"Invalid default val for: \"{RedReflection.GetRedTypeFromCSType(cls.GetType())}.{varname}\"");
+                    throw new InvalidRTTIException(propName, prop.Type, type);
+                }
+
+#if DEBUG
+                if (!typeInfo.SerializeDefault && !prop.SerializeDefault && RedReflection.IsDefault(cls.GetType(), varName, value))
+                {
+                    throw new InvalidParsingException($"Invalid default val for: \"{propName}\"");
                 }
 #endif
 
@@ -127,7 +128,7 @@ namespace WolvenKit.RED4.Archive.IO
             {
                 if (value is IRedBufferPointer buf)
                 {
-                    buf.GetValue().ParentTypes.Add($"{cls.GetType().Name}.{varname}");
+                    buf.GetValue().ParentTypes.Add($"{cls.GetType().Name}.{varName}");
                 }
 
                 if (value is IRedArray arr)
@@ -136,7 +137,7 @@ namespace WolvenKit.RED4.Archive.IO
                     {
                         foreach (IRedBufferPointer entry in arr)
                         {
-                            entry.GetValue().ParentTypes.Add($"{cls.GetType().Name}.{varname}");
+                            entry.GetValue().ParentTypes.Add($"{cls.GetType().Name}.{varName}");
                         }
                     }
                 }

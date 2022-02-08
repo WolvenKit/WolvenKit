@@ -417,7 +417,7 @@ namespace CP77.CR2W
 
             if (cr2w.RootChunk is CMesh cmesh2)
             {
-                for (int i = 0; i < cmesh2.Appearances.Count; i++)
+                for (var i = 0; i < cmesh2.Appearances.Count; i++)
                 {
                     var app = cmesh2.Appearances[i].Chunk;
 
@@ -445,7 +445,8 @@ namespace CP77.CR2W
                     continue;
                 }
 
-                var meshContainer = new RawMeshContainer {
+                var meshContainer = new RawMeshContainer
+                {
                     positions = new Vec3[info.vertCounts[index]]
                 };
 

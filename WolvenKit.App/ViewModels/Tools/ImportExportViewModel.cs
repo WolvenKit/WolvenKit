@@ -28,6 +28,7 @@ using WolvenKit.Functionality.Commands;
 using WolvenKit.Functionality.Controllers;
 using WolvenKit.Functionality.Services;
 using WolvenKit.Interaction;
+using WolvenKit.Models;
 using WolvenKit.Models.Docking;
 using WolvenKit.Modkit.RED4.Opus;
 using WolvenKit.RED4.CR2W.Archive;
@@ -132,6 +133,7 @@ namespace WolvenKit.ViewModels.Tools
                 .Connect()
                 .Filter(_ => _.IsImportable)
                 .Filter(_ => _.FullName.Contains(_projectManager.ActiveProject.RawDirectory))
+                .Filter(x => CheckForMultiImport(x))
                 .Transform(_ => new ImportableItemViewModel(_))
                 .ObserveOn(RxApp.MainThreadScheduler)
                 .Bind(out _importableItems)
@@ -172,6 +174,20 @@ namespace WolvenKit.ViewModels.Tools
 
                     SelectedObject = IsImportsSelected ? SelectedImport : IsExportsSelected ? SelectedExport : SelectedConvert;
                 });
+        }
+
+        private static bool CheckForMultiImport(Models.FileModel file)
+        {
+            // add more raw extensions here
+            // example: if a masklist exists in the filelist, ignore all files in the subdirectory
+            // named the same as masklist but with extension mlmask
+            var directory = new FileInfo(file.FullName).Directory;
+            if (directory.Name.Contains($".{ERedExtension.mlmask}"))
+            {
+                return false;
+            }
+
+            return true;
         }
 
         #region properties
@@ -790,7 +806,7 @@ namespace WolvenKit.ViewModels.Tools
 
                 var qx = item.GetBaseFile();
                 var proj = _projectManager.ActiveProject;
-                var relativename = qx.GetRelativeName(proj);
+                var relativename = FileModel.GetRelativeName(qx.FullName, proj);
                 var newname = Path.ChangeExtension(relativename, ".mesh");
                 var hash = FNV1A64HashAlgorithm.HashString(newname);
                 var cp77Controller = _gameController.GetController() as RED4Controller;
@@ -922,29 +938,5 @@ namespace WolvenKit.ViewModels.Tools
         /// Setup Tool defaults for tool window.
         /// </summary>
         private void SetupToolDefaults() => ContentId = ToolContentId;
-    }
-
-    public class CollectionItemViewModel : ObservableObject
-    {
-        public string Info =>
-            Model switch
-            {
-                FileEntry fe => fe.Name,
-                _ => ""
-            };
-
-        public string Name =>
-            Model switch
-            {
-                FileEntry fe => fe.ShortName,
-                _ => Model.ToString()
-            };
-
-        public CollectionItemViewModel(object model)
-        {
-            Model = model;
-        }
-
-        public object Model { get; set; }
     }
 }

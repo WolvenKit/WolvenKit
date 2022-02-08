@@ -1,10 +1,8 @@
 using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
-using System.Threading.Tasks;
 using WolvenKit.Common;
 
 namespace WolvenKit.Interfaces.Extensions
@@ -24,20 +22,17 @@ namespace WolvenKit.Interfaces.Extensions
             }
         }
 
-        public static string FirstCharToUpper(this string input)
+        public static string FirstCharToUpper(this string input) => input switch
         {
-            return input switch
-            {
-                null => throw new ArgumentNullException(nameof(input)),
-                "" => throw new ArgumentException($"{nameof(input)} cannot be empty", nameof(input)),
-                _ => input.First().ToString().ToUpper() + input.Substring(1)
-            };
-        }
+            null => throw new ArgumentNullException(nameof(input)),
+            "" => throw new ArgumentException($"{nameof(input)} cannot be empty", nameof(input)),
+            _ => input.First().ToString().ToUpper() + input.Substring(1)
+        };
 
         // https://stackoverflow.com/a/3695190
         public static void EnsureFolderExists(this string path)
         {
-            string directoryName = Path.GetDirectoryName(path);
+            var directoryName = Path.GetDirectoryName(path);
             // If path is a file name only, directory name will be an empty string
             if (!string.IsNullOrEmpty(directoryName))
             {
@@ -48,9 +43,9 @@ namespace WolvenKit.Interfaces.Extensions
 
         public static string GetHashMD5(this string input)
         {
-            byte[] encodedPassword = new UTF8Encoding().GetBytes(input);
-            byte[] hash = ((HashAlgorithm)CryptoConfig.CreateFromName("MD5")).ComputeHash(encodedPassword);
-            string encoded = BitConverter.ToString(hash)
+            var encodedPassword = new UTF8Encoding().GetBytes(input);
+            var hash = ((HashAlgorithm)CryptoConfig.CreateFromName("MD5")).ComputeHash(encodedPassword);
+            var encoded = BitConverter.ToString(hash)
                .Replace("-", string.Empty)
                .ToLower();
             return encoded;
@@ -60,12 +55,16 @@ namespace WolvenKit.Interfaces.Extensions
         {
             var relativePath = fullpath.Substring(activeModFileDirectory.Length + 1);
             bool isDLC;
-            EProjectFolders projectfolder = EProjectFolders.Cooked;
+            var projectfolder = EProjectFolders.Cooked;
 
             if (relativePath.StartsWith("DLC\\"))
+            {
                 isDLC = true;
+            }
             else if (relativePath.StartsWith("Mod\\"))
+            {
                 isDLC = false;
+            }
             else
             {
                 throw new NotImplementedException();
@@ -85,21 +84,25 @@ namespace WolvenKit.Interfaces.Extensions
                 projectfolder = EProjectFolders.Uncooked;
             }
             else if (relativePath.StartsWith(EArchiveType.SoundCache.ToString()))
+            {
                 relativePath = relativePath.Substring(EArchiveType.SoundCache.ToString().Length + 1);
+            }
             else if (relativePath.StartsWith(EArchiveType.Speech.ToString()))
+            {
                 relativePath = relativePath.Substring(EArchiveType.Speech.ToString().Length + 1);
+            }
 
             return (relativePath, isDLC, projectfolder);
         }
 
         public static uint HashStringKey(this string key)
         {
-            char[] keyConverted = key.ToCharArray();
+            var keyConverted = key.ToCharArray();
             uint hash = 0;
-            foreach (char c in keyConverted)
+            foreach (var c in keyConverted)
             {
                 hash *= 31;
-                hash += (uint)c;
+                hash += c;
             }
             return hash;
         }
@@ -107,9 +110,11 @@ namespace WolvenKit.Interfaces.Extensions
         public static string TrimStart(this string target, string trimString)
         {
             if (string.IsNullOrEmpty(trimString))
+            {
                 return target;
+            }
 
-            string result = target;
+            var result = target;
             while (result.StartsWith(trimString))
             {
                 result = result.Substring(trimString.Length);

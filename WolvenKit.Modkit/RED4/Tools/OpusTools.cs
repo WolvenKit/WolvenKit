@@ -1,11 +1,10 @@
 using System;
-using System.IO;
 using System.Collections.Generic;
-using System.Linq;
 using System.Diagnostics;
-using Newtonsoft.Json;
-using WolvenKit.RED4.CR2W.Archive;
+using System.IO;
+using System.Text.Json;
 using WolvenKit.Common.FNV1A;
+using WolvenKit.RED4.CR2W.Archive;
 
 namespace WolvenKit.Modkit.RED4.Opus
 {
@@ -35,7 +34,7 @@ namespace WolvenKit.Modkit.RED4.Opus
 
             if (_isModded)
             {
-                string infoFile = Path.Combine(_modFolder.FullName, "base\\sound\\soundbanks\\sfx_container.opusinfo");
+                var infoFile = Path.Combine(_modFolder.FullName, "base\\sound\\soundbanks\\sfx_container.opusinfo");
                 if (File.Exists(infoFile))
                 {
                     var ms = new MemoryStream(File.ReadAllBytes(infoFile));
@@ -52,11 +51,13 @@ namespace WolvenKit.Modkit.RED4.Opus
                     }
                 }
                 else
+                {
                     _isModded = false;
+                }
             }
             if (!_isModded)
             {
-                ulong hash = FNV1A64HashAlgorithm.HashString("base\\sound\\soundbanks\\sfx_container.opusinfo");
+                var hash = FNV1A64HashAlgorithm.HashString("base\\sound\\soundbanks\\sfx_container.opusinfo");
                 var ms = new MemoryStream();
                 if (_soundBanks.Files.ContainsKey(hash))
                 {
@@ -70,7 +71,7 @@ namespace WolvenKit.Modkit.RED4.Opus
             }
         }
 
-        public bool ExportOpusUsingHash(UInt32 opusHash)
+        public bool ExportOpusUsingHash(uint opusHash)
         {
             if (!_isModded)
             {
@@ -78,7 +79,7 @@ namespace WolvenKit.Modkit.RED4.Opus
                 {
                     if (Info.OpusHashes[i] == opusHash)
                     {
-                        ulong containerHash = FNV1A64HashAlgorithm.HashString("base\\sound\\soundbanks\\sfx_container_" + Info.PackIndices[i] + ".opuspak");
+                        var containerHash = FNV1A64HashAlgorithm.HashString("base\\sound\\soundbanks\\sfx_container_" + Info.PackIndices[i] + ".opuspak");
                         var ms = new MemoryStream();
                         ModTools.ExtractSingleToStream(_soundBanks, containerHash, ms);
                         Info.WriteOpusFromPak(ms, _rawFolder, i);
@@ -96,7 +97,7 @@ namespace WolvenKit.Modkit.RED4.Opus
                 {
                     if (Info.OpusHashes[i] == opusHash)
                     {
-                        string pakFile = Path.Combine(_modFolder.FullName, "base\\sound\\soundbanks\\sfx_container_" + Info.PackIndices[i] + ".opuspak");
+                        var pakFile = Path.Combine(_modFolder.FullName, "base\\sound\\soundbanks\\sfx_container_" + Info.PackIndices[i] + ".opuspak");
                         if (File.Exists(pakFile))
                         {
                             var ms = new MemoryStream(File.ReadAllBytes(pakFile));
@@ -119,7 +120,7 @@ namespace WolvenKit.Modkit.RED4.Opus
 
         public bool DumpAllOpusInfo()
         {
-            string s = JsonConvert.SerializeObject(Info, Formatting.Indented);
+            var s = JsonSerializer.Serialize(Info, new JsonSerializerOptions { WriteIndented = true });
             File.WriteAllText(Path.Combine(_rawFolder.FullName, "sfx_container.opusinfo.json"), s);
             return true;
         }
@@ -131,21 +132,21 @@ namespace WolvenKit.Modkit.RED4.Opus
                 return false;
             }
 
-            List<UInt32> foundids = new List<UInt32>();
-            foreach (string wav in wavFiles)
+            var foundids = new List<uint>();
+            foreach (var wav in wavFiles)
             {
                 try
                 {
-                    UInt32 idddd = Convert.ToUInt32(Path.GetFileNameWithoutExtension(wav));
+                    var idddd = Convert.ToUInt32(Path.GetFileNameWithoutExtension(wav));
                     foundids.Add(idddd);
                 }
                 catch { }
             }
 
-            List<UInt32> validids = new List<UInt32>();
-            for (int i = 0; i < foundids.Count; i++)
+            var validids = new List<uint>();
+            for (var i = 0; i < foundids.Count; i++)
             {
-                for (int e = 0; e < Info.OpusCount; e++)
+                for (var e = 0; e < Info.OpusCount; e++)
                 {
                     if (Info.OpusHashes[e] == foundids[i])
                     {
@@ -155,13 +156,15 @@ namespace WolvenKit.Modkit.RED4.Opus
                 }
             }
             if (validids.Count < 1)
-                return false;
-
-            Stream[] modStreams = new Stream[Info.PackIndices[Info.OpusCount - 1] + 1];
-
-            for (int i = 0; i < validids.Count; i++)
             {
-                string name = Path.Combine(_rawFolder.FullName, Convert.ToString(validids[i]) + ".opus");
+                return false;
+            }
+
+            var modStreams = new Stream[Info.PackIndices[Info.OpusCount - 1] + 1];
+
+            for (var i = 0; i < validids.Count; i++)
+            {
+                var name = Path.Combine(_rawFolder.FullName, Convert.ToString(validids[i]) + ".opus");
                 var proc = new ProcessStartInfo(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "opus-tools\\opusenc.exe"))
                 {
                     WorkingDirectory = AppDomain.CurrentDomain.BaseDirectory,
@@ -203,19 +206,21 @@ namespace WolvenKit.Modkit.RED4.Opus
 
                 if (File.Exists(name))
                 {
-                    for (int e = 0; e < Info.OpusCount; e++)
+                    for (var e = 0; e < Info.OpusCount; e++)
                     {
                         if (validids[i] == Info.OpusHashes[e])
                         {
                             int pakIdx = Info.PackIndices[e];
                             if (modStreams[pakIdx] == null)
                             {
-                                string pakName = "base\\sound\\soundbanks\\sfx_container_" + pakIdx + ".opuspak";
+                                var pakName = "base\\sound\\soundbanks\\sfx_container_" + pakIdx + ".opuspak";
                                 if (_isModded && File.Exists(Path.Combine(_modFolder.FullName, pakName)))
+                                {
                                     modStreams[pakIdx] = new MemoryStream(File.ReadAllBytes(Path.Combine(_modFolder.FullName, pakName)));
+                                }
                                 else
                                 {
-                                    ulong containerHash = FNV1A64HashAlgorithm.HashString(pakName);
+                                    var containerHash = FNV1A64HashAlgorithm.HashString(pakName);
                                     modStreams[pakIdx] = new MemoryStream();
                                     ModTools.ExtractSingleToStream(_soundBanks, containerHash, modStreams[pakIdx]);
                                 }
@@ -226,15 +231,15 @@ namespace WolvenKit.Modkit.RED4.Opus
                 }
             }
 
-            bool writeinfo = false;
-            for (int i = 0; i < modStreams.Length; i++)
+            var writeinfo = false;
+            for (var i = 0; i < modStreams.Length; i++)
             {
                 if (modStreams[i] != null)
                 {
-                    string pakName = "base\\sound\\soundbanks\\sfx_container_" + i + ".opuspak";
+                    var pakName = "base\\sound\\soundbanks\\sfx_container_" + i + ".opuspak";
                     var temp = modStreams[i];
                     temp.Position = 0;
-                    byte[] bytes = new byte[temp.Length];
+                    var bytes = new byte[temp.Length];
                     temp.Read(bytes, 0, Convert.ToInt32(temp.Length));
                     File.WriteAllBytes(Path.Combine(_modFolder.FullName, pakName), bytes);
                     writeinfo = true;
@@ -256,76 +261,78 @@ namespace WolvenKit.Modkit.RED4.Opus
         //  S       N       D   ?....
         public byte[] Header { get; } = { 0x53, 0x4E, 0x44, 0x20, 0x02, 0x00, 0x00, 0xF0, 0x00, 0x00, 0x00, 0x00 };
 
-        public UInt32 OpusCount { get; set; }
-        public UInt32 GroupingObjSize4x { get; set; }
-        public UInt32[] OpusHashes { get; set; }
-        public UInt16[] PackIndices { get; set; }
-        public UInt32[] OpusOffsets { get; set; }
-        public UInt16[] RiffOpusOffsets { get; set; }
-        public UInt32[] OpusStreamLengths { get; set; }
-        public UInt32[] WavStreamLengths { get; set; }
+        public uint OpusCount { get; set; }
+        public uint GroupingObjSize4x { get; set; }
+        public uint[] OpusHashes { get; set; }
+        public ushort[] PackIndices { get; set; }
+        public uint[] OpusOffsets { get; set; }
+        public ushort[] RiffOpusOffsets { get; set; }
+        public uint[] OpusStreamLengths { get; set; }
+        public uint[] WavStreamLengths { get; set; }
         public List<Group> GroupObjs { get; set; }
 
         public class Group
         {
-            public UInt32 Hash { get; set; }
-            public UInt32 MemberCount { get; set; }
-            public UInt32[] MemberHashes { get; set; }
+            public uint Hash { get; set; }
+            public uint MemberCount { get; set; }
+            public uint[] MemberHashes { get; set; }
         }
 
         public OpusInfo(Stream ms)
         {
             ms.Position = 0;
-            BinaryReader br = new BinaryReader(ms);
+            var br = new BinaryReader(ms);
             Header = br.ReadBytes(12);
 
             ms.Position = 0xc;
             OpusCount = br.ReadUInt32();
             GroupingObjSize4x = br.ReadUInt32();
 
-            OpusHashes = new UInt32[OpusCount];
-            for (int i = 0; i < OpusCount; i++)
+            OpusHashes = new uint[OpusCount];
+            for (var i = 0; i < OpusCount; i++)
             {
                 OpusHashes[i] = br.ReadUInt32();
             }
 
-            PackIndices = new UInt16[OpusCount];
-            for (int i = 0; i < OpusCount; i++)
+            PackIndices = new ushort[OpusCount];
+            for (var i = 0; i < OpusCount; i++)
             {
                 PackIndices[i] = br.ReadUInt16();
             }
 
-            OpusOffsets = new UInt32[OpusCount];
-            for (int i = 0; i < OpusCount; i++)
+            OpusOffsets = new uint[OpusCount];
+            for (var i = 0; i < OpusCount; i++)
             {
                 OpusOffsets[i] = br.ReadUInt32();
             }
 
-            RiffOpusOffsets = new UInt16[OpusCount];
-            for (int i = 0; i < OpusCount; i++)
+            RiffOpusOffsets = new ushort[OpusCount];
+            for (var i = 0; i < OpusCount; i++)
             {
                 RiffOpusOffsets[i] = br.ReadUInt16();
             }
 
-            OpusStreamLengths = new UInt32[OpusCount];
-            for (int i = 0; i < OpusCount; i++)
+            OpusStreamLengths = new uint[OpusCount];
+            for (var i = 0; i < OpusCount; i++)
             {
                 OpusStreamLengths[i] = br.ReadUInt32();
             }
 
-            WavStreamLengths = new UInt32[OpusCount];
-            for (int i = 0; i < OpusCount; i++)
+            WavStreamLengths = new uint[OpusCount];
+            for (var i = 0; i < OpusCount; i++)
             {
                 WavStreamLengths[i] = br.ReadUInt32();
             }
             GroupObjs = new List<Group>();
             while (ms.Position < ms.Length)
             {
-                Group group = new Group();
-                group.Hash = br.ReadUInt32();
-                group.MemberCount = br.ReadUInt32();
-                group.MemberHashes = new UInt32[group.MemberCount];
-                for (UInt32 i = 0; i < group.MemberCount; i++)
+                var group = new Group
+                {
+                    Hash = br.ReadUInt32(),
+                    MemberCount = br.ReadUInt32()
+                };
+                group.MemberHashes = new uint[group.MemberCount];
+                for (uint i = 0; i < group.MemberCount; i++)
                 {
                     group.MemberHashes[i] = br.ReadUInt32();
                 }
@@ -340,27 +347,27 @@ namespace WolvenKit.Modkit.RED4.Opus
 
         public void WriteAllOpusFromPaks(Stream[] opuspaks, DirectoryInfo outdir) // thou shall not be used
         {
-            BinaryReader[] brs = new BinaryReader[opuspaks.Length];
-            for (int i = 0; i < opuspaks.Length; i++)
+            var brs = new BinaryReader[opuspaks.Length];
+            for (var i = 0; i < opuspaks.Length; i++)
             {
                 brs[i] = new BinaryReader(opuspaks[i]);
             }
-            for (UInt32 i = 0; i < OpusCount; i++)
+            for (uint i = 0; i < OpusCount; i++)
             {
                 opuspaks[PackIndices[i]].Position = OpusOffsets[i] + RiffOpusOffsets[i];
-                byte[] bytes = brs[PackIndices[i]].ReadBytes(Convert.ToInt32(OpusStreamLengths[i] - RiffOpusOffsets[i]));
-                string name = OpusHashes[i] + ".opus";
+                var bytes = brs[PackIndices[i]].ReadBytes(Convert.ToInt32(OpusStreamLengths[i] - RiffOpusOffsets[i]));
+                var name = OpusHashes[i] + ".opus";
                 File.WriteAllBytes(Path.Combine(outdir.FullName, name), bytes);
             }
         }
 
-        public void WriteOpusFromPak(Stream opuspak, DirectoryInfo outdir, UInt32 index)
+        public void WriteOpusFromPak(Stream opuspak, DirectoryInfo outdir, uint index)
         {
-            BinaryReader br = new BinaryReader(opuspak);
+            var br = new BinaryReader(opuspak);
             opuspak.Position = OpusOffsets[index] + RiffOpusOffsets[index];
-            byte[] bytes = br.ReadBytes(Convert.ToInt32(OpusStreamLengths[index] - RiffOpusOffsets[index]));
-            string name = OpusHashes[index] + ".opus";
-            string path = Path.Combine(outdir.FullName, name);
+            var bytes = br.ReadBytes(Convert.ToInt32(OpusStreamLengths[index] - RiffOpusOffsets[index]));
+            var name = OpusHashes[index] + ".opus";
+            var path = Path.Combine(outdir.FullName, name);
             File.WriteAllBytes(path, bytes);
 
             var proc = new ProcessStartInfo(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "opus-tools\\opusdec.exe"))
@@ -377,30 +384,34 @@ namespace WolvenKit.Modkit.RED4.Opus
             }
         }
 
-        public void WriteOpusToPak(MemoryStream opus, ref Stream pak, UInt32 hash, MemoryStream wav)
+        public void WriteOpusToPak(MemoryStream opus, ref Stream pak, uint hash, MemoryStream wav)
         {
-            BinaryReader br = new BinaryReader(pak);
+            var br = new BinaryReader(pak);
             pak.Position = 0;
-            int index = 0;
-            for (int i = 0; i < OpusCount; i++)
+            var index = 0;
+            for (var i = 0; i < OpusCount; i++)
             {
                 if (hash == OpusHashes[i])
+                {
                     index = i;
+                }
             }
             int pakIdx = PackIndices[index];
-            List<int> indices = new List<int>();
-            for (int i = 0; i < OpusCount; i++)
+            var indices = new List<int>();
+            for (var i = 0; i < OpusCount; i++)
             {
                 if (pakIdx == PackIndices[i])
+                {
                     indices.Add(i);
+                }
             }
 
-            MemoryStream ms = new MemoryStream();
-            BinaryWriter bw = new BinaryWriter(ms);
+            var ms = new MemoryStream();
+            var bw = new BinaryWriter(ms);
             ms.Position = 0;
-            for (int i = 0; i < indices.Count; i++)
+            for (var i = 0; i < indices.Count; i++)
             {
-                UInt32 temp = Convert.ToUInt32(ms.Position);
+                var temp = Convert.ToUInt32(ms.Position);
                 if (hash == OpusHashes[indices[i]])
                 {
                     pak.Position = OpusOffsets[indices[i]] + 8;
@@ -430,42 +441,42 @@ namespace WolvenKit.Modkit.RED4.Opus
 
         public void WriteOpusInfo(DirectoryInfo dir)
         {
-            MemoryStream ms = new MemoryStream();
-            BinaryWriter bw = new BinaryWriter(ms);
+            var ms = new MemoryStream();
+            var bw = new BinaryWriter(ms);
 
             bw.Write(Header);
             bw.Write(OpusCount);
             bw.Write(GroupingObjSize4x);
-            for (int i = 0; i < OpusCount; i++)
+            for (var i = 0; i < OpusCount; i++)
             {
                 bw.Write(OpusHashes[i]);
             }
-            for (int i = 0; i < OpusCount; i++)
+            for (var i = 0; i < OpusCount; i++)
             {
                 bw.Write(PackIndices[i]);
             }
-            for (int i = 0; i < OpusCount; i++)
+            for (var i = 0; i < OpusCount; i++)
             {
                 bw.Write(OpusOffsets[i]);
             }
-            for (int i = 0; i < OpusCount; i++)
+            for (var i = 0; i < OpusCount; i++)
             {
                 bw.Write(RiffOpusOffsets[i]);
             }
-            for (int i = 0; i < OpusCount; i++)
+            for (var i = 0; i < OpusCount; i++)
             {
                 bw.Write(OpusStreamLengths[i]);
             }
-            for (int i = 0; i < OpusCount; i++)
+            for (var i = 0; i < OpusCount; i++)
             {
                 bw.Write(WavStreamLengths[i]);
             }
 
-            for (int i = 0; i < GroupObjs.Count; i++)
+            for (var i = 0; i < GroupObjs.Count; i++)
             {
                 bw.Write(GroupObjs[i].Hash);
                 bw.Write(GroupObjs[i].MemberCount);
-                for (int e = 0; e < GroupObjs[i].MemberCount; e++)
+                for (var e = 0; e < GroupObjs[i].MemberCount; e++)
                 {
                     bw.Write(GroupObjs[i].MemberHashes[e]);
                 }

@@ -7,98 +7,35 @@ on:
       - develop
   push:
     branches:
-      - master      
+      - master
+      - develop  
 
 jobs:   
   check-wkit-win:
-    runs-on: windows-2022
+    runs-on: windows-latest
 
     steps:
-    # setup  
     - name: checkout
       uses: actions/checkout@v2
-    - name: Checkout submodules
-      run: git submodule update --init --recursive
     - name: Setup .NET Core
       uses: actions/setup-dotnet@v1
       with:
-        dotnet-version: 6.0.x
-    - uses: microsoft/setup-msbuild@v1.1
-      with:
-        vs-version: '17.0'
-        msbuild-architecture: x64
+        dotnet-version: 6.x
 
-     # environmental variables
-    - run: echo "PROJ=./WolvenKit/WolvenKit.csproj" >> $env:GITHUB_ENV
-    - run: echo "OUT=./publish/app/" >> $env:GITHUB_ENV
-    #- run: echo "FINALOUT=./publish" >> $env:GITHUB_ENV
-    - run: echo "NAME=WolvenKit" >> $env:GITHUB_ENV
-
-    - name: Get version
-      uses: naminodarie/get-net-sdk-project-versions-action@v1
-      id: get-version
-      with:
-        proj-path:  ${{env.PROJ}}
-
-    - run: echo "VERSION=${{steps.get-version.outputs.assembly-version}}" >> $env:GITHUB_ENV
-    #- run: echo "PORTABLE=${{env.NAME}}-${{env.VERSION}}" >> $env:GITHUB_ENV
-    #- run: echo "INSTALLER=${{env.NAME}}-installer-${{env.VERSION}}.exe" >> $env:GITHUB_ENV
-    #- run: echo "MANIFEST=manifest.json" >> $env:GITHUB_ENV
-
-    # Publish app
-    - run: msbuild ${{env.PROJ}} -t:restore -t:Build -t:Publish /p:PublishDir=".${{env.OUT}}" /p:Configuration=Release /p:Platform=x64 /p:PublishReadyToRun=False /p:PublishSingleFile=False /p:PublishTrimmed=False
-
-    - run: Compress-Archive -Path ${{env.OUT}}* -DestinationPath ${{env.NAME}}-${{env.VERSION}}.zip
-
-    # Create assets
-    #- run: .\Installers\ISCC\ISCC.exe /O"${{env.FINALOUT}}" /dMyAppBaseDir=".${{env.OUT}}\" .\Installers\installer.iss
-
-    # PORTABLE
-    - uses: actions/upload-artifact@v2
-      with:
-        name: ${{env.NAME}}-${{env.VERSION}}
-        path: ${{env.OUT}}
-    # INSTALLER
-    #- uses: actions/upload-artifact@v2
-    #  with:
-    #    name: ${{env.INSTALLER}}
-    #    path: ${{env.FINALOUT}}/${{env.INSTALLER}}
-    # MANIFEST
-    #- uses: actions/upload-artifact@v2
-    #  with:
-    #    name: ${{env.MANIFEST}}
-    #    path: ${{env.FINALOUT}}/${{env.MANIFEST}}
+    - name: publish
+      run: dotnet build .\WolvenKit\WolvenKit.csproj
 
 
   check-console-win:
-    runs-on: windows-2022
-    
+    runs-on: windows-latest
+
     steps:
-    # setup  
     - name: checkout
       uses: actions/checkout@v2
-    - name: Checkout submodules
-      run: git submodule update --init --recursive
     - name: Setup .NET Core
       uses: actions/setup-dotnet@v1
       with:
-        dotnet-version: 6.0.x
-    - uses: microsoft/setup-msbuild@v1.1
-      with:
-        vs-version: '17.0'
-        msbuild-architecture: x64
+        dotnet-version: 6.x
 
-    - name: Get version
-      uses: naminodarie/get-net-sdk-project-versions-action@v1
-      id: get-version
-      with:
-        proj-path: ./WolvenKit.CLI/WolvenKit.CLI.csproj
-
-    - name: publish WolvenKit.Console
-      run: msbuild .\WolvenKit.CLI\WolvenKit.CLI.csproj -t:restore -t:Build -t:Publish /p:PublishDir="../publish/console/" /p:Configuration=Release /p:Platform=x64 /p:PublishReadyToRun=False /p:PublishTrimmed=False
-
-    - name: Upload a Build Artifact
-      uses: actions/upload-artifact@v2
-      with:
-        name: console-${{steps.get-version.outputs.assembly-version}}
-        path: ./publish/console
+    - name: publish
+      run: dotnet build .\WolvenKit.CLI\WolvenKit.CLI.csproj

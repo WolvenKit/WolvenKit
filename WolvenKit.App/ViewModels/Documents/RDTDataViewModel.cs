@@ -5,7 +5,6 @@ using System.Windows.Input;
 using System.Windows.Threading;
 using ReactiveUI.Fody.Helpers;
 using Splat;
-using Syncfusion.UI.Xaml.TreeView;
 using Syncfusion.UI.Xaml.TreeView.Engine;
 using Syncfusion.Windows.Shared;
 using WolvenKit.Common;

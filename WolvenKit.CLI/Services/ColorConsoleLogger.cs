@@ -3,9 +3,6 @@
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Logging;
@@ -84,8 +81,10 @@ namespace WolvenKit.CLI.Services
 
         public ColorConsoleLogger(
             string name,
-            ColorConsoleLoggerConfiguration config) =>
+            ColorConsoleLoggerConfiguration config)
+        {
             (_name, _config) = (name, config);
+        }
 
         public IDisposable BeginScope<TState>(TState state) => default;
 
@@ -139,7 +138,7 @@ namespace WolvenKit.CLI.Services
 
             if (_config.EventId == 0 || _config.EventId == eventId.Id)
             {
-                ConsoleColor originalColor = Console.ForegroundColor;
+                var originalColor = Console.ForegroundColor;
 
                 Console.ForegroundColor = _config.LogLevels[logLevel];
 

@@ -38,6 +38,7 @@
                         Text="Move file(s) here - hold control to copy" />
                 </Border>
             </DataTemplate>
+
             <ContextMenu
                 x:Key="TreeGridContextMenu"
                 FontSize="11"
@@ -85,6 +86,7 @@
                         </Grid>
                     </MenuItem.Icon>
                 </MenuItem>
+
                 <MenuItem
                     x:Name="ConvertToXmlMenuItem"
                     Command="{Binding ConvertToXmlCommand}"
@@ -103,8 +105,8 @@
                     </MenuItem.Icon>
                 </MenuItem>
                 <!--<MenuItem x:Name="ConvertFromXmlMenuItem"
-                                      Command="{Binding ConvertFromXmlCommand}"
-                                      Header="Convert from JSON" />-->
+                                        Command="{Binding ConvertFromXmlCommand}"
+                                        Header="Convert from JSON" />-->
 
                 <MenuItem
                     x:Name="BKImport"
@@ -116,7 +118,6 @@
                     Command="{Binding Bk2ExportCommand}"
                     Header="Export BK2 to Avi"
                     Visibility="{Binding Path=IsEnabled, RelativeSource={RelativeSource Self}, Mode=OneWay, Converter={StaticResource Boolean2VisibilityConverter}}" />
-
 
                 <Separator />
                 <MenuItem Command="{Binding DeleteFileCommand}" Header="Delete">
@@ -197,6 +198,7 @@
                     <MenuItem Click="ExpandAll_OnClick" Header="Expand all" />
                     <MenuItem Click="CollapseAll_OnClick" Header="Collapse all" />-->
             </ContextMenu>
+
             <DataTemplate x:Key="TreeGridCellTemplate">
                 <Grid>
                     <Grid.Resources>
@@ -324,6 +326,7 @@
                     </StackPanel>
                 </Grid>
             </DataTemplate>
+
             <DataTemplate x:Key="TreeGridCellTemplateSimple">
                 <Grid>
                     <Grid.Resources>
@@ -401,6 +404,7 @@
                     </Setter.Value>
                 </Setter>
             </Style>
+
         </ResourceDictionary>
     </UserControl.Resources>
 

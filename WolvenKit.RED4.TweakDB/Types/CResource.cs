@@ -1,4 +1,3 @@
-using System;
 using System.IO;
 using WolvenKit.Common.FNV1A;
 
@@ -17,7 +16,7 @@ namespace WolvenKit.RED4.TweakDB.Types
             {
                 cres.Text = value;
                 cres.Key = key;
-            } 
+            }
             else
             {
                 cres.Text = value;

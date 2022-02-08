@@ -2,7 +2,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using WolvenKit.RED4.CR2W.Archive;
 using WolvenKit.Common.Services;
 using WolvenKit.Modkit.RED4;
 
@@ -105,7 +104,7 @@ namespace CP77Tools.Tasks
                 // read archive
                 var ar = Red4ParserServiceExtensions.ReadArchive(fileInfo.FullName, _hashService);
 
-                var isHash = ulong.TryParse(hash, out ulong hashNumber);
+                var isHash = ulong.TryParse(hash, out var hashNumber);
 
                 // run
                 if (!isHash && File.Exists(hash))

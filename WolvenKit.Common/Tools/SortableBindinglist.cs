@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Reflection;
 
 namespace VanWassenhove.Util
 {
@@ -17,9 +16,9 @@ namespace VanWassenhove.Util
 
         #region Properties
 
-        protected override bool IsSortedCore => this.isSorted;
-        protected override ListSortDirection SortDirectionCore => this.listSortDirection;
-        protected override PropertyDescriptor SortPropertyCore => this.propertyDescriptor;
+        protected override bool IsSortedCore => isSorted;
+        protected override ListSortDirection SortDirectionCore => listSortDirection;
+        protected override PropertyDescriptor SortPropertyCore => propertyDescriptor;
         protected override bool SupportsSortingCore => true;
 
         #endregion Properties
@@ -28,20 +27,20 @@ namespace VanWassenhove.Util
 
         protected override void ApplySortCore(PropertyDescriptor prop, ListSortDirection direction)
         {
-            List<T> itemsList = this.Items as List<T>;
+            var itemsList = Items as List<T>;
             itemsList.Sort(delegate (T t1, T t2)
             {
-                this.propertyDescriptor = prop;
-                this.listSortDirection = direction;
-                this.isSorted = true;
+                propertyDescriptor = prop;
+                listSortDirection = direction;
+                isSorted = true;
 
-                int reverse = direction == ListSortDirection.Ascending ? 1 : -1;
+                var reverse = direction == ListSortDirection.Ascending ? 1 : -1;
 
-                PropertyInfo propertyInfo = typeof(T).GetProperty(prop.Name);
-                object value1 = propertyInfo.GetValue(t1, null);
-                object value2 = propertyInfo.GetValue(t2, null);
+                var propertyInfo = typeof(T).GetProperty(prop.Name);
+                var value1 = propertyInfo.GetValue(t1, null);
+                var value2 = propertyInfo.GetValue(t2, null);
 
-                IComparable comparable = value1 as IComparable;
+                var comparable = value1 as IComparable;
                 if (comparable != null)
                 {
                     return reverse * comparable.CompareTo(value2);
@@ -60,14 +59,14 @@ namespace VanWassenhove.Util
                 }
             });
 
-            this.OnListChanged(new ListChangedEventArgs(ListChangedType.Reset, -1));
+            OnListChanged(new ListChangedEventArgs(ListChangedType.Reset, -1));
         }
 
         protected override void RemoveSortCore()
         {
-            this.isSorted = false;
-            this.propertyDescriptor = base.SortPropertyCore;
-            this.listSortDirection = base.SortDirectionCore;
+            isSorted = false;
+            propertyDescriptor = base.SortPropertyCore;
+            listSortDirection = base.SortDirectionCore;
         }
 
         #endregion Methods

@@ -1,18 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reactive.Disposables;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using ReactiveUI;
 using Syncfusion.Windows.Edit;
 using WolvenKit.ViewModels.Documents;
@@ -22,7 +7,7 @@ namespace WolvenKit.Views.Documents
     /// <summary>
     /// Interaction logic for TextEditorView.xaml
     /// </summary>
-    public partial class ScriptDocumentView : ReactiveUserControl <ScriptDocumentViewModel>
+    public partial class ScriptDocumentView : ReactiveUserControl<ScriptDocumentViewModel>
     {
         public ScriptDocumentView()
         {
@@ -31,9 +16,11 @@ namespace WolvenKit.Views.Documents
             //var redscriptResourceDictionary = new ResourceDictionary();
             //redscriptResourceDictionary.Source = new Uri(";component/Functionality/RedscriptLanguage.xaml",UriKind.RelativeOrAbsolute);
 
-            RedscriptLanguage redscriptLanguage = new RedscriptLanguage(editControl1);
-            redscriptLanguage.Lexem = editControl1.Resources["redscriptLanguageLexems"] as LexemCollection;
-            redscriptLanguage.Formats = editControl1.Resources["redscriptLanguageFormats"] as FormatsCollection;
+            var redscriptLanguage = new RedscriptLanguage(editControl1)
+            {
+                Lexem = editControl1.Resources["redscriptLanguageLexems"] as LexemCollection,
+                Formats = editControl1.Resources["redscriptLanguageFormats"] as FormatsCollection
+            };
             editControl1.CustomLanguage = redscriptLanguage;
 
             this.WhenActivated(disposables =>

@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -28,17 +27,17 @@ namespace WolvenKit.RED3.CR2W
                 return;
             }
 
-            int len = value.Length;
-            bool requiresWideChar = value.Any(c => c > 255);
+            var len = value.Length;
+            var requiresWideChar = value.Any(c => c > 255);
 
             var div = Math.DivRem(len, 0x40, out var mod);
             len -= (div * 0x40);
 
             // mask the value
-            byte b = (byte)(len & 0x3F); // 00xxxxxx
+            var b = (byte)(len & 0x3F); // 00xxxxxx
             // check for continuation
             //bool cont = len >> 6 != 0;
-            bool cont = div != 0;
+            var cont = div != 0;
 
             // set the two last bits
             // reserved utf bit 7
@@ -59,7 +58,9 @@ namespace WolvenKit.RED3.CR2W
 
             // continue
             if (cont)
+            {
                 bw.Write((byte)div);
+            }
             //while (cont)
             //{
             //    b = (byte)(len & 0x7F);
@@ -73,9 +74,13 @@ namespace WolvenKit.RED3.CR2W
             //}
 
             if (requiresWideChar)
+            {
                 bw.Write(Encoding.Unicode.GetBytes(value));
+            }
             else
+            {
                 bw.Write(Encoding.GetEncoding("ISO-8859-1").GetBytes(value));
+            }
         }
 
         #endregion Methods

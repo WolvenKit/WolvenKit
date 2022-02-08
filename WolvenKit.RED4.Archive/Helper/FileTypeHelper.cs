@@ -174,9 +174,6 @@ namespace WolvenKit.RED4.Archive
             return extensions.ToArray();
         }
 
-        public static Type[] GetRootNodeType(string fileType)
-        {
-            return _fileTypes[fileType];
-        }
+        public static Type[] GetRootNodeType(string fileType) => _fileTypes[fileType];
     }
 }

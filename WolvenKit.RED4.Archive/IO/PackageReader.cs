@@ -1,10 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Runtime.InteropServices;
 using System.Text;
+using WolvenKit.Core.Extensions;
 using WolvenKit.RED4.Archive.Buffer;
-using WolvenKit.RED4.Archive.CR2W;
 using WolvenKit.RED4.IO;
 using WolvenKit.RED4.Types;
 using WolvenKit.RED4.Types.Exceptions;
@@ -45,15 +44,24 @@ namespace WolvenKit.RED4.Archive.IO
                 var (fieldType, flags) = RedReflection.GetCSTypeFromRedType(typeName);
 
                 var prop = RedReflection.GetPropertyByRedName(type, varName);
+
+                IRedType value;
+
                 BaseStream.Position = baseOff + f.offset;
                 if (prop == null)
                 {
-                    var value = Read(fieldType, 0, Flags.Empty);
+                    value = Read(fieldType, 0, Flags.Empty);
                     RedReflection.AddDynamicProperty(instance, varName, value);
                 }
                 else
                 {
-                    var value = Read(fieldType, 0, flags);
+                    if (fieldType != prop.Type)
+                    {
+                        var propName = $"{RedReflection.GetRedTypeFromCSType(instance.GetType())}.{varName}";
+                        throw new InvalidRTTIException(propName, prop.Type, fieldType);
+                    }
+
+                    value = Read(prop.Type, 0, flags);
                     prop.SetValue(instance, value);
                 }
             }
@@ -67,7 +75,7 @@ namespace WolvenKit.RED4.Archive.IO
             {
                 return ReadClass(type);
             }
-            
+
             return base.Read(type, size, flags);
         }
 
@@ -91,7 +99,7 @@ namespace WolvenKit.RED4.Archive.IO
             var cnt = _reader.ReadByte();
 
             var enumString = "";
-            for (int i = 0; i < cnt; i++)
+            for (var i = 0; i < cnt; i++)
             {
                 var index = _reader.ReadUInt16();
                 if (index == 0)

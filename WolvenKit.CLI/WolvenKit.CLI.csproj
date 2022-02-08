@@ -1,32 +1,31 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <Platforms>x64</Platforms>
-    <OutputType>Exe</OutputType>
-    <TargetFramework>net6.0</TargetFramework>
-    <AssemblyVersion>1.5.2</AssemblyVersion>
-    <InformationalVersion>1.5.2</InformationalVersion>
-    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-      <PackAsTool>true</PackAsTool>
-      <ToolCommandName>cp77tools</ToolCommandName>
-      <PackageOutputPath>./nupkg</PackageOutputPath>
-      <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
-      <PackageId>WolvenKit.CLI</PackageId>
-      <Company>WolvenKit</Company>
-      <Product>WolvenKit.CLI</Product>
-      <Description>Command line modding tool for Cyberpunk 2077.</Description>
-      <PackageLicenseExpression>MIT</PackageLicenseExpression>
-      <PackageProjectUrl>https://github.com/WolvenKit/Wolven-kit</PackageProjectUrl>
-      <RepositoryUrl>https://github.com/WolvenKit/Wolven-kit</RepositoryUrl>
-      <RepositoryType>git</RepositoryType>
-      <PackageTags>wolvenkit, cyberpunk2077</PackageTags>
+      <OutputType>Exe</OutputType>
+      <TargetFramework>net6.0</TargetFramework>
+      <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
       <StartupObject>WolvenKit.CLI.Program</StartupObject>
-      <SatelliteResourceLanguages>en</SatelliteResourceLanguages>
-      <DebugType>embedded</DebugType>
-    <PublishSingleFile>false</PublishSingleFile>
-    <RuntimeIdentifier>win-x64</RuntimeIdentifier>
-    <SelfContained>true</SelfContained>
+    <SatelliteResourceLanguages>en</SatelliteResourceLanguages>
+    <DebugType>embedded</DebugType>
   </PropertyGroup>
+
+    <PropertyGroup>
+        <Title>gpm</Title>
+        <Version>1.6</Version>
+        <PackAsTool>true</PackAsTool>
+        <ToolCommandName>cp77tools</ToolCommandName>
+        <PackageOutputPath>./nupkg</PackageOutputPath>
+        <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+        <PackageId>WolvenKit.CLI</PackageId>
+        <Company>WolvenKit</Company>
+        <Product>WolvenKit.CLI</Product>
+        <Description>Command line modding tool for Cyberpunk 2077.</Description>
+        <PackageLicenseExpression>MIT</PackageLicenseExpression>
+        <PackageProjectUrl>https://github.com/WolvenKit/WolvenKit</PackageProjectUrl>
+        <RepositoryUrl>https://github.com/WolvenKit/WolvenKit</RepositoryUrl>
+        <RepositoryType>git</RepositoryType>
+        <PackageTags>wolvenkit, cyberpunk2077</PackageTags>
+    </PropertyGroup>
 
   <ItemGroup>
     <None Remove="appsettings.json" />
@@ -43,15 +42,12 @@
     <PackageReference Include="Microsoft.Extensions.Hosting" Version="6.0.0" />
     <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="6.0.0" />
     <PackageReference Include="Microsoft.Win32.Registry" Version="5.0.0" />
-    <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
     <PackageReference Include="System.CommandLine" Version="2.0.0-beta1.21216.1" />
     <PackageReference Include="System.CommandLine.Hosting" Version="0.3.0-alpha.21216.1" />
 
   </ItemGroup>
 
-    <PropertyGroup Condition=" '$(OS)' == 'Windows_NT' ">
-        <DefineConstants>_WINDOWS</DefineConstants>
-    </PropertyGroup>
+
 
   <ItemGroup>
     <ProjectReference Include="..\WolvenKit.Common\WolvenKit.Common.csproj" />

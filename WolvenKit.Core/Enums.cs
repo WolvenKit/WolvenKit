@@ -336,6 +336,16 @@ namespace WolvenKit.Common
     }
 
     /// <summary>
+    /// Possible extensions to uncook textures
+    /// </summary>
+    public enum EMlmaskUncookExtension
+    {
+        dds,
+        png
+    }
+
+
+    /// <summary>
     /// Possible file extensions of raw files
     /// </summary>
     public enum EExportState

@@ -12,7 +12,6 @@ using WolvenKit.Common.FNV1A;
 using WolvenKit.Common.RED4.Archive;
 using WolvenKit.Common.Services;
 using WolvenKit.Core.Extensions;
-using WolvenKit.Interfaces.Extensions;
 using WolvenKit.RED4.Archive.IO;
 using WolvenKit.RED4.CR2W.Archive;
 
@@ -83,11 +82,11 @@ namespace WolvenKit.Modkit.RED4
             _loggerService.Info($"Found {fileInfos.Count} bundle entries to pack.");
 
             var customPaths = (from fileInfo in fileInfos
-                select fileInfo.FullName.RelativePath(infolder)
+                               select fileInfo.FullName.RelativePath(infolder)
                 into relpath
-                let hash = FNV1A64HashAlgorithm.HashString(relpath)
-                where !_hashService.Contains(hash)
-                select relpath).ToList();
+                               let hash = FNV1A64HashAlgorithm.HashString(relpath)
+                               where !_hashService.Contains(hash)
+                               select relpath).ToList();
 
 
             var outfile = Path.Combine(outpath.FullName, $"{infolder.Name}.archive");
@@ -195,7 +194,7 @@ namespace WolvenKit.Modkit.RED4
                         bw.Write(bufferBuffer);
                         ar.Index.FileSegments.Add(new FileSegment(
                             (ulong)boffset,
-                            (uint)bzsize,
+                            bzsize,
                             bsize));
                     }
 
@@ -240,7 +239,7 @@ namespace WolvenKit.Modkit.RED4
                 }
 
                 // save table data
-                using SHA1 sha1 = SHA1.Create();
+                using var sha1 = SHA1.Create();
                 var sha1hash =
                     sha1.ComputeHash(fileBinaryReader.BaseStream
                         .ToByteArray()); //TODO: this is only correct for files with no buffer

@@ -58,6 +58,7 @@ namespace WolvenKit.Modkit.Extensions
             for (var i = 0; i < array.Length; i++)
             {
                 c2DArray.Headers.Add(array[i]);
+                c2DArray.CompiledHeaders.Add(array[i]);
             }
 
             // read elements
@@ -79,6 +80,7 @@ namespace WolvenKit.Modkit.Extensions
                 }
 
                 c2DArray.Data.Add(row);
+                c2DArray.CompiledData.Add(row);
                 cnt++;
             }
         }

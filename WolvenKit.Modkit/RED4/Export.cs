@@ -1,9 +1,7 @@
 using System.IO;
 using WolvenKit.Common;
-using WolvenKit.Common.DDS;
 using WolvenKit.Common.Extensions;
 using WolvenKit.Common.Model.Arguments;
-using WolvenKit.Common.Services;
 
 namespace WolvenKit.Modkit.RED4
 {
@@ -30,13 +28,13 @@ namespace WolvenKit.Modkit.RED4
             {
                 return false;
             }
-            if (cr2wfile.Directory is {Exists: false})
+            if (cr2wfile.Directory is { Exists: false })
             {
                 return false;
             }
 
             // if no basedir is supplied use the file directory
-            if (basedir is not {Exists: true})
+            if (basedir is not { Exists: true })
             {
                 basedir = cr2wfile.Directory;
             }

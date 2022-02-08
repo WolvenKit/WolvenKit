@@ -1,16 +1,11 @@
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Runtime.InteropServices;
 using System.Text;
-using WolvenKit.Common.FNV1A;
+using WolvenKit.Core.Extensions;
 using WolvenKit.RED4.Archive.Buffer;
-using WolvenKit.RED4.Archive.CR2W;
 using WolvenKit.RED4.Types;
-using WolvenKit.RED4.Types.Compression;
-using WolvenKit.RED4.Types.Exceptions;
 
 namespace WolvenKit.RED4.Archive.IO
 {
@@ -22,7 +17,7 @@ namespace WolvenKit.RED4.Archive.IO
 
         private Package04Header _header;
         private short _cruidIndex = -1;
-        private List<CRUID> _cruids = new();
+        private readonly List<CRUID> _cruids = new();
 
         public void WritePackage(Package04 file, Type fileRootType)
         {
@@ -268,13 +263,13 @@ namespace WolvenKit.RED4.Archive.IO
 
             foreach (var chunk in _file.Chunks)
             {
-                file.ChunkQueue.AddLast(chunk);
+                file.ChunkQueue.Add(chunk);
             }
 
             while (file.ChunkQueue.Count > 0)
             {
-                var chunk = file.ChunkQueue.First.Value;
-                file.ChunkQueue.RemoveFirst();
+                var chunk = file.ChunkQueue[0];
+                file.ChunkQueue.RemoveAt(0);
 
                 if (!_chunkInfos.ContainsKey(chunk))
                 {
@@ -301,7 +296,7 @@ namespace WolvenKit.RED4.Archive.IO
                 _chunkInfos[chunk].Id = chunkCounter;
                 file.StartChunk(chunk);
                 chunkDesc.Add(WriteChunk(file, chunk));
-                
+
                 var guid = _chunkInfos[chunk].Guid;
                 if (guid != Guid.Empty && file.ChunkReferences.ContainsKey(guid))
                 {
@@ -334,7 +329,7 @@ namespace WolvenKit.RED4.Archive.IO
 
             stringDict.Remove("");
 
-            for (int i = 0; i < chunkDesc.Count; i++)
+            for (var i = 0; i < chunkDesc.Count; i++)
             {
                 var chunkInfo = chunkDesc[i];
                 chunkInfo.typeID = stringDict[chunkClassNames[i]];

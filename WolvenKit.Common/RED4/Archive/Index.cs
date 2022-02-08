@@ -1,10 +1,6 @@
 using System.Collections.Generic;
-using System.IO;
 using ProtoBuf;
 using WolvenKit.RED4.CR2W.Archive;
-using WolvenKit.Common;
-using WolvenKit.Common.Services;
-using System;
 
 namespace CP77Tools.Model
 {
@@ -60,7 +56,7 @@ namespace CP77Tools.Model
 
         //public FileSegment()
         //{
-            
+
         //}
 
         public FileSegment(ulong offset, uint zsize, uint size)

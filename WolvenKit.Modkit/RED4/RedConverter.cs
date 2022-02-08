@@ -1,19 +1,12 @@
 using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Runtime.Serialization;
-using System.Text;
-using Newtonsoft.Json;
 using WolvenKit.Common;
 using WolvenKit.Common.Conversion;
-using WolvenKit.Interfaces.Core;
 using WolvenKit.RED4.Archive.CR2W;
 using WolvenKit.RED4.Archive.IO;
-using WolvenKit.RED4.CR2W;
 using WolvenKit.RED4.CR2W.JSON;
-using WolvenKit.RED4.Types;
 using WolvenKit.RED4.Types.Exceptions;
-using JsonSerializer = System.Text.Json.JsonSerializer;
 
 namespace WolvenKit.Modkit.RED4
 {
@@ -39,8 +32,8 @@ namespace WolvenKit.Modkit.RED4
 
             cr2w.MetaData.FileName = infile;
 
-            var dto = new CR2WFileDto(cr2w);
-            var json = JsonSerializer.Serialize(dto, RedJsonOptions.Get());
+            var dto = new RedFileDto(cr2w);
+            var json = RedJsonSerializer.Serialize(dto);
 
             if (string.IsNullOrEmpty(json))
             {
@@ -52,12 +45,7 @@ namespace WolvenKit.Modkit.RED4
                 case ETextConvertFormat.json:
                     return json;
                 case ETextConvertFormat.xml:
-                {
-                    var doc = JsonConvert.DeserializeXmlNode(json, RedFileDto.Magic);
-                    using var tw = new StringWriter();
-                    doc?.Save(tw);
-                    return tw.ToString();
-                }
+                    throw new NotSupportedException(nameof(format));
                 default:
                     throw new ArgumentOutOfRangeException(nameof(format), format, null);
             }
@@ -108,7 +96,7 @@ namespace WolvenKit.Modkit.RED4
         /// <exception cref="InvalidParsingException"></exception>
         public static CR2WFile ConvertFromJson(string json)
         {
-            var dto = JsonSerializer.Deserialize<CR2WFileDto>(json, RedJsonOptions.Get());
+            var dto = RedJsonSerializer.Deserialize<RedFileDto>(json);
             return dto.Data;
         }
 

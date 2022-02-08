@@ -1,27 +1,17 @@
 using System;
+using System.Collections.Generic;
+using System.IO;
 using System.Reactive.Disposables;
 using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Input;
+using Newtonsoft.Json;
 using ReactiveUI;
-using Syncfusion.Windows.PropertyGrid;
-using WolvenKit.Converters;
+using Syncfusion.UI.Xaml.TreeView;
+using WolvenKit.Common.Conversion;
 using WolvenKit.RED4.Types;
 using WolvenKit.ViewModels.Documents;
-using WolvenKit.Views.Templates;
-using Syncfusion.UI.Xaml.TreeView;
 using WolvenKit.ViewModels.Shell;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Linq;
-using System.Collections.ObjectModel;
-using System.Collections.Generic;
-using Newtonsoft.Json;
-using System.IO;
-using WolvenKit.Common.Conversion;
-using static WolvenKit.ViewModels.Shell.ChunkViewModel;
-using Syncfusion.Windows.Shared;
-using System.Windows.Controls.Primitives;
-using System.Windows.Controls;
-using System.Reactive.Linq;
 
 namespace WolvenKit.Views.Documents
 {
@@ -119,7 +109,7 @@ namespace WolvenKit.Views.Documents
         // Drag & Drop Functionality
 
         private string dropFileLocation;
-        private RedClassDto dropFile;
+        private RedTypeDto dropFile;
 
         private void SfTreeView_ItemDragStarting(object sender, TreeViewItemDragStartingEventArgs e)
         {
@@ -155,7 +145,7 @@ namespace WolvenKit.Views.Documents
             if (e.Data.GetDataPresent(DataFormats.FileDrop))
             {
                 if (e.TargetNode != null && e.TargetNode.Content is ChunkViewModel target)
-                { 
+                {
                     var files = new List<string>((string[])e.Data.GetData(DataFormats.FileDrop));
                     if (files.Count == 1)
                     {
@@ -165,7 +155,7 @@ namespace WolvenKit.Views.Documents
                             {
                                 dropFileLocation = files[0];
                                 var json = File.ReadAllText(files[0]);
-                                dropFile = JsonConvert.DeserializeObject<RedClassDto>(json);
+                                dropFile = JsonConvert.DeserializeObject<RedTypeDto>(json);
                             }
                             catch (Exception)
                             {
@@ -174,7 +164,7 @@ namespace WolvenKit.Views.Documents
                         }
                         //if (dropFile != null && dropFile.Type == target.Type)
                         //{
-                            e.DropPosition = DropPosition.DropAsChild;
+                        e.DropPosition = DropPosition.DropAsChild;
                         //}
                     }
                 }

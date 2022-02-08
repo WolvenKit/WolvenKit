@@ -17,8 +17,8 @@ namespace WolvenKit.Views.Editors
 
         public CBool RedBool
         {
-            get => (CBool)this.GetValue(RedBoolProperty);
-            set => this.SetValue(RedBoolProperty, value);
+            get => (CBool)GetValue(RedBoolProperty);
+            set => SetValue(RedBoolProperty, value);
         }
         public static readonly DependencyProperty RedBoolProperty = DependencyProperty.Register(
             nameof(RedBool), typeof(CBool), typeof(RedBoolEditor), new PropertyMetadata(default(CBool)));

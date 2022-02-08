@@ -1,7 +1,5 @@
-using System;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Media;
 using WolvenKit.RED4.Types;
 
 namespace WolvenKit.Views.Editors
@@ -18,8 +16,8 @@ namespace WolvenKit.Views.Editors
 
         public IRedLegacySingleChannelCurve RedCurve
         {
-            get => (IRedLegacySingleChannelCurve)this.GetValue(RedCurveProperty);
-            set => this.SetValue(RedCurveProperty, value);
+            get => (IRedLegacySingleChannelCurve)GetValue(RedCurveProperty);
+            set => SetValue(RedCurveProperty, value);
         }
         public static readonly DependencyProperty RedCurveProperty = DependencyProperty.Register(
             nameof(RedCurve), typeof(IRedLegacySingleChannelCurve), typeof(RedCurveEditor), new PropertyMetadata(default(IRedLegacySingleChannelCurve)));

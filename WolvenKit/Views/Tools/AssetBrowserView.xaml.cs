@@ -142,7 +142,7 @@ namespace WolvenKit.Views.Tools
             {
                 selectedGameFile.Extract(meshStream);
                 meshStream.Seek(0, SeekOrigin.Begin);
-                string outPath = Path.Combine(ISettingsManager.GetTemp_OBJPath(), Path.GetFileName(selectedItem.Name) ?? throw new InvalidOperationException());
+                var outPath = Path.Combine(ISettingsManager.GetTemp_OBJPath(), Path.GetFileName(selectedItem.Name) ?? throw new InvalidOperationException());
                 outPath = Path.ChangeExtension(outPath, ".glb");
                 if (Locator.Current.GetService<MeshTools>().ExportMeshPreviewer(meshStream, new FileInfo(outPath)))
                 {

@@ -1,11 +1,6 @@
 using System;
 using System.IO;
-using System.Linq;
-using WolvenKit.RED4.CR2W;
-using WolvenKit.RED4.CR2W.Archive;
-using WolvenKit.Common;
 using WolvenKit.Core;
-using WolvenKit.Interfaces.Extensions;
 
 namespace CP77Tools.Tasks
 {
