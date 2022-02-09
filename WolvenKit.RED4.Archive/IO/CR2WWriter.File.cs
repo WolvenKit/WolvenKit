@@ -313,6 +313,19 @@ namespace WolvenKit.RED4.Archive.IO
 
                 buffer.SetBytes(newData);
             }
+
+            if (buffer.Data is CR2WList list)
+            {
+                using var ms = new MemoryStream();
+                using var listWriter = new CR2WListWriter(ms);
+
+                listWriter.WriteList(list, _file.RootChunk);
+                //listWriter.WriteList(list);
+
+                var newData = ms.ToArray();
+
+                buffer.SetBytes(newData);
+            }
         }
 
         private CR2WBufferInfo WriteBuffer(BinaryWriter writer, RedBuffer buffer)

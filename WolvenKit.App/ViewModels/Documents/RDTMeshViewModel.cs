@@ -135,7 +135,7 @@ namespace WolvenKit.ViewModels.Documents
 
             foreach (var me in data.MaterialEntries)
             {
-                if (!me.IsLocalInstance)
+                if (localList == null || !me.IsLocalInstance || localList.Files.Count <= me.Index)
                 {
                     materials.Add(me.Name, new Material()
                     {
@@ -445,7 +445,7 @@ namespace WolvenKit.ViewModels.Documents
                     {
                         foreach (var me in mesh.MaterialEntries)
                         {
-                            if (!me.IsLocalInstance)
+                            if (localList == null || !me.IsLocalInstance || localList.Files.Count <= me.Index)
                             {
                                 materials.Add(me.Name, new Material()
                                 {

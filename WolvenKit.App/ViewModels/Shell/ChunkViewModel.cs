@@ -19,6 +19,7 @@ using WolvenKit.Common.Services;
 using WolvenKit.Functionality.Commands;
 using WolvenKit.Functionality.Controllers;
 using WolvenKit.Functionality.Services;
+using WolvenKit.RED4;
 using WolvenKit.RED4.Archive.Buffer;
 using WolvenKit.RED4.Archive.CR2W;
 using WolvenKit.RED4.CR2W.JSON;
@@ -1069,6 +1070,14 @@ namespace WolvenKit.ViewModels.Shell
                     }
                 });
             }
+            if (Data is DataBuffer db2)
+            {
+                if (Name == "rawData" && db2.Data is null)
+                {
+                    db2.Buffer = RedBuffer.CreateBuffer(0, new byte[] { 0 });
+                    db2.Data = new CR2WList();
+                }
+            }
             var db = Data as IRedBufferPointer;
             ObservableCollection<string> existing = null;
             if (db.GetValue().Data is Package04 pkg)
@@ -1085,7 +1094,7 @@ namespace WolvenKit.ViewModels.Shell
         {
             var app = Locator.Current.GetService<AppViewModel>();
             app.CloseDialogCommand.Execute(null);
-            if (sender != null && Data is IRedBufferPointer db && db.GetValue().Data is Package04 pkg)
+            if (sender != null)
             {
                 var vm = sender as CreateClassDialogViewModel;
                 var instance = RedTypeManager.Create(vm.SelectedClass);
@@ -1112,7 +1121,7 @@ namespace WolvenKit.ViewModels.Shell
                 Tab.SelectedChunk = cvm;
                 Tab.File.SetIsDirty(true);
             }
-            if (Data is IRedBufferPointer db2 && db2.GetValue().Data is CR2WList list)
+            else if (Data is IRedBufferPointer db2 && db2.GetValue().Data is CR2WList list)
             {
                 //pkg.Chunks.Add(instance);
                 list.Files.Insert(index, new CR2WFile()
