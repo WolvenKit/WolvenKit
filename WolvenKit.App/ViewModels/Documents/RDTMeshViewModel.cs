@@ -119,7 +119,7 @@ namespace WolvenKit.ViewModels.Documents
 
         public RDTMeshViewModel(RedDocumentViewModel file)
         {
-            Header = "Preview";
+            Header = "Mesh Preview";
             File = file;
 
             ExtractShadersCommand = new RelayCommand(ExtractShaders);

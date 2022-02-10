@@ -161,22 +161,21 @@ namespace WolvenKit.ViewModels.Documents
             .Where(x => x.DocumentItemType == ERedDocumentItemType.MainFile)
             .FirstOrDefault());
 
-        private void PopulateItems()
+        private void AddTabForRedType(RedBaseClass cls)
         {
-            TabItemViewModels.Add(new RDTDataViewModel(Cr2wFile.RootChunk, this));
-            if (Cr2wFile.RootChunk is CBitmapTexture xbm)
+            if (cls is CBitmapTexture xbm)
             {
                 TabItemViewModels.Add(new RDTTextureViewModel(xbm, this));
             }
-            if (Cr2wFile.RootChunk is CMesh mesh && mesh.RenderResourceBlob.GetValue() is rendRenderTextureBlobPC)
+            if (cls is CMesh mesh && mesh.RenderResourceBlob.GetValue() is rendRenderTextureBlobPC)
             {
                 TabItemViewModels.Add(new RDTTextureViewModel(mesh, this));
             }
-            if (Cr2wFile.RootChunk is CReflectionProbeDataResource probe && probe.TextureData.RenderResourceBlobPC.GetValue() is rendRenderTextureBlobPC)
+            if (cls is CReflectionProbeDataResource probe && probe.TextureData.RenderResourceBlobPC.GetValue() is rendRenderTextureBlobPC)
             {
                 TabItemViewModels.Add(new RDTTextureViewModel(probe, this));
             }
-            if (Cr2wFile.RootChunk is Multilayer_Mask mlmask)
+            if (cls is Multilayer_Mask mlmask)
             {
                 // maybe it makes more sense to put these all into one tab?
                 ModTools.ConvertMultilayerMaskToDdsStreams(mlmask, out var streams);
@@ -184,12 +183,12 @@ namespace WolvenKit.ViewModels.Documents
                 {
                     var tab = new RDTTextureViewModel(streams[i], this)
                     {
-                        Header = $"Layer {i}"
+                        Header = $"MultiLayer {i}"
                     };
                     TabItemViewModels.Add(tab);
                 }
             }
-            if (Cr2wFile.RootChunk is inkTextureAtlas atlas)
+            if (cls is inkTextureAtlas atlas)
             {
                 var file = GetFileFromDepotPath(atlas.Slots[0].Texture.DepotPath);
                 if (file != null)
@@ -197,28 +196,35 @@ namespace WolvenKit.ViewModels.Documents
                     TabItemViewModels.Add(new RDTInkTextureAtlasViewModel(atlas, (CBitmapTexture)file.RootChunk, this));
                 }
             }
-            if (Cr2wFile.RootChunk is inkWidgetLibraryResource library)
+            if (cls is inkWidgetLibraryResource library)
             {
                 TabItemViewModels.Add(new RDTWidgetViewModel(library, this));
             }
-            if (Cr2wFile.RootChunk is CMesh mesh2)
+            if (cls is CMesh mesh2)
             {
                 TabItemViewModels.Add(new RDTMeshViewModel(mesh2, this));
             }
-            if (Cr2wFile.RootChunk is entEntityTemplate ent)
+            if (cls is entEntityTemplate ent)
             {
                 TabItemViewModels.Add(new RDTMeshViewModel(ent, this));
             }
-            if (Cr2wFile.RootChunk is appearanceAppearanceResource app)
+            if (cls is appearanceAppearanceResource app)
             {
                 TabItemViewModels.Add(new RDTMeshViewModel(app, this));
             }
+        }
+
+        private void PopulateItems()
+        {
+            TabItemViewModels.Add(new RDTDataViewModel(Cr2wFile.RootChunk, this));
+            AddTabForRedType(Cr2wFile.RootChunk);
 
             foreach (var file in Cr2wFile.EmbeddedFiles)
             {
                 if (file.Content != null)
                 {
                     TabItemViewModels.Add(new RDTDataViewModel(file.Content, this));
+                    AddTabForRedType(file.Content);
                 }
             }
 

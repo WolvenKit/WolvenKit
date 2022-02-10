@@ -29,7 +29,7 @@ namespace WolvenKit.ViewModels.Documents
 
         public RDTTextureViewModel(Stream stream, RedDocumentViewModel file)
         {
-            Header = "Preview";
+            Header = "Texture Preview";
             File = file;
             //_data = data;
             //ImageStream = stream;
