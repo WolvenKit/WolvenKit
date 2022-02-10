@@ -37,6 +37,7 @@ namespace WolvenKit.ViewModels.Dialogs
                     file != null &&
                     !string.IsNullOrEmpty(file) &&
                     !File.Exists(path)));
+
             CancelCommand = ReactiveCommand.Create(() => FileHandler(null));
 
             Title = "Create new file";

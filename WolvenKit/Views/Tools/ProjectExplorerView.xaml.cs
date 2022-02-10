@@ -126,9 +126,9 @@ namespace WolvenKit.Views.Tools
 
                 //ViewModel.WhenAnyValue(x => x.IsFlatModeEnabled).Subscribe(x => UpdateTreeGrid());
 
-                //this.BindCommand(ViewModel,
-                //    viewModel => viewModel.ConvertToJsonCommand,
-                //    view => view.ConvertToJsonMenuItem);
+                this.BindCommand(ViewModel,
+                    viewModel => viewModel.OpenRootFolderCommand,
+                    view => view.OpenFolderButton);
 
             });
 

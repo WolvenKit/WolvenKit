@@ -107,6 +107,9 @@ namespace WolvenKit.ViewModels.Shell
             ShowImportExportToolCommand = new RelayCommand(ExecuteImportExportTool, CanShowImportExportTool);
             //ShowPackageInstallerCommand = new RelayCommand(ExecuteShowInstaller, CanShowInstaller);
 
+            ShowPluginCommand = new RelayCommand(ExecuteShowPlugin, CanShowPlugin);
+            ShowSoundModdingToolCommand = new RelayCommand(ExecuteShowSoundModdingTool, CanShowSoundModdingTool);
+
             OpenFileCommand = new DelegateCommand<FileModel>(p => ExecuteOpenFile(p), CanOpenFile);
             OpenFileAsyncCommand = ReactiveCommand.CreateFromTask<FileModel, Unit>(OpenFileAsync);
             OpenRedFileAsyncCommand = ReactiveCommand.CreateFromTask<FileEntry, Unit>(OpenRedFileAsync);
@@ -462,6 +465,20 @@ namespace WolvenKit.ViewModels.Shell
             SetActiveOverlay(_homePageViewModel);
         }
 
+        public ICommand ShowPluginCommand { get; private set; }
+        private bool CanShowPlugin() => !IsDialogShown;
+        private void ExecuteShowPlugin() => SetActiveDialog(new PluginViewModel
+        {
+            
+        });
+
+        public ICommand ShowSoundModdingToolCommand { get; private set; }
+        private bool CanShowSoundModdingTool() => !IsDialogShown;
+        private void ExecuteShowSoundModdingTool() => SetActiveDialog(new SoundModdingViewModel
+        {
+            
+        });
+
         public ICommand NewFileCommand { get; private set; }
         private bool CanNewFile(string inputDir) => ActiveProject != null && !IsDialogShown;
         private void ExecuteNewFile(string inputDir) => SetActiveDialog(new NewFileViewModel
@@ -707,7 +724,7 @@ namespace WolvenKit.ViewModels.Shell
 
         public ICommand PackModCommand { get; private set; }
         private bool CanPackMod() => _projectManager.ActiveProject != null;
-        private void ExecutePackMod() => _gameControllerFactory.GetController().PackageMod();
+        private void ExecutePackMod() => _gameControllerFactory.GetController().PackProject();
 
         public ICommand PackInstallModCommand { get; private set; }
         private bool CanPackInstallMod() => CanPackMod();

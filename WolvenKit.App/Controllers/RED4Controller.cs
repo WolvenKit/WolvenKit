@@ -2,7 +2,10 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.IO.Compression;
 using System.Linq;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Xml.Linq;
@@ -13,6 +16,7 @@ using WolvenKit.Common.Services;
 using WolvenKit.Core;
 using WolvenKit.Core.Compression;
 using WolvenKit.Functionality.Services;
+using WolvenKit.Helpers;
 using WolvenKit.Models;
 using WolvenKit.Modkit.RED4.Serialization;
 using WolvenKit.MVVM.Model.ProjectManagement.Project;
@@ -75,6 +79,9 @@ namespace WolvenKit.Functionality.Controllers
                 // requires oodle
                 InitializeBk();
                 InitializeRedDB();
+
+                // export soundbanksinfo
+
             }
 
             return Task.CompletedTask;
@@ -226,56 +233,20 @@ namespace WolvenKit.Functionality.Controllers
             }
 
             _loggerService.Info("Loading Archive Manager ... ");
-            //var chachePath = Path.Combine(ISettingsManager.GetAppData(), "archive_cache.bin");
             try
             {
-                //if (File.Exists(chachePath))
-                //{
-                //    var sw = new Stopwatch();
-                //    sw.Start();
+                var sw = new Stopwatch();
+                sw.Start();
 
-                //    using var file = File.OpenRead(chachePath);
-                //    ArchiveManager = Serializer.Deserialize<ArchiveManager>(file);
+                _archiveManager.LoadGameArchives(new FileInfo(_settingsManager.CP77ExecutablePath));
 
-                //    sw.Stop();
-                //    var ms = sw.ElapsedMilliseconds;
-
-                //    if (!ArchiveManager.GameVersion.Equals(GameVersion))
-                //    {
-                //        throw new NotSupportedException(ArchiveManager.GameVersion.ToString());
-                //    }
-                //}
-                //else
-                {
-                    var sw = new Stopwatch();
-                    sw.Start();
-
-                    _archiveManager.LoadGameArchives(new FileInfo(_settingsManager.CP77ExecutablePath));
-
-                    sw.Stop();
-                    var ms = sw.ElapsedMilliseconds;
-
-                    //using var file = File.Create(chachePath);
-                    //Serializer.Serialize(file, ArchiveManager);
-
-                    //_settingsManager.ManagerVersions[(int)EManagerType.ArchiveManager] =
-                    //    ArchiveManager.SerializationVersion;
-                }
+                sw.Stop();
+                var ms = sw.ElapsedMilliseconds;
             }
             catch (Exception e)
             {
                 _loggerService.Error(e);
                 throw;
-
-
-                //ArchiveManager = new ArchiveManager(_hashService) /*{ GameVersion = GameVersion }*/;
-                //ArchiveManager.LoadAll(new FileInfo(_settingsManager.CP77ExecutablePath));
-
-                //using var file = File.Create(chachePath);
-                //Serializer.Serialize(file, ArchiveManager);
-
-                //_settingsManager.ManagerVersions[(int)EManagerType.ArchiveManager] =
-                //    ArchiveManager.SerializationVersion;
             }
             finally
             {
@@ -287,17 +258,46 @@ namespace WolvenKit.Functionality.Controllers
 #pragma warning restore 162
         }
 
-        //public List<string> GetAvaliableClasses() => CR2WTypeManager.AvailableTypes.ToList();
+        /// <summary>
+        /// packs redengine files in the mod project and installs it into the game mod directory
+        /// </summary>
+        /// <returns></returns>
+        public async Task<bool> PackAndInstallProject()
+        {
+            var packTask = PackProject();
+            if (!packTask.Result)
+            {
+                return await Task.FromResult(false);
+            }
 
-        public Task<bool> PackageMod()
+            InstallMod();
+
+            // compile with redmod
+            var redmodPath = Path.Combine(_settingsManager.GetRED4GameModDir(), "tools", "redmod", "redmod.exe");
+            if (File.Exists(redmodPath))
+            {
+                return await ProcessUtil.RunProcessAsync(redmodPath, "deploy");
+            }
+            else
+            {
+                return await Task.FromResult(true);
+            }
+        }
+
+        /// <summary>
+        /// pack mod to mod workspace folder
+        /// </summary>
+        /// <returns></returns>
+        public async Task<bool> PackProject()
         {
 
             if (_projectManager.ActiveProject is not Cp77Project cp77Proj)
             {
                 _loggerService.Error("Can't pack project (no project/not cyberpunk project)!");
-                return Task.FromResult(false);
+                return await Task.FromResult(false);
             }
 
+            // cleanup
             try
             {
                 var archives = Directory.GetFiles(cp77Proj.PackedModDirectory, "*.archive");
@@ -317,63 +317,50 @@ namespace WolvenKit.Functionality.Controllers
             {
                 _modTools.Pack(
                     new DirectoryInfo(cp77Proj.ModDirectory),
-                    new DirectoryInfo(cp77Proj.PackedModDirectory),
+                    new DirectoryInfo(cp77Proj.PackedArchiveDirectory),
                     cp77Proj.Name);
                 _loggerService.Info("Packing archives complete!");
             }
+            _loggerService.Success($"{cp77Proj.Name} packed into {cp77Proj.PackedArchiveDirectory}");
+
 
             // compile tweak files
             CompileTweakFiles(cp77Proj);
 
-            _loggerService.Success($"{cp77Proj.Name} packed into {cp77Proj.PackedModDirectory}!");
+            var activeMod = _projectManager.ActiveProject;
 
-            return Task.FromResult(true);
-
-            //var pwm = ServiceLocator.Default.ResolveType<Models.Wizards.PublishWizardModel>();
-            //var headerBackground = System.Drawing.Color.FromArgb(
-            //    pwm.HeaderBackground.A,
-            //    pwm.HeaderBackground.R,
-            //    pwm.HeaderBackground.G,
-            //    pwm.HeaderBackground.B
-            //);
-            //var iconBackground = System.Drawing.Color.FromArgb(
-            //    pwm.IconBackground.A,
-            //    pwm.IconBackground.R,
-            //    pwm.IconBackground.G,
-            //    pwm.IconBackground.B
-            //);
-            //var author = Tuple.Create<string, string, string, string, string, string>(
-            //    _projectManager.ActiveProject.Author, null, pwm.WebsiteLink, pwm.FacebookLink, pwm.TwitterLink, pwm.YoutubeLink
-            //);
-            //var package = Common.Model.Packaging.WKPackage.CreateModAssembly(
-            //    _projectManager.ActiveProject.Version,
-            //    _projectManager.ActiveProject.Name,
-            //    author,
-            //    pwm.Description,
-            //    pwm.LargeDescription,
-            //    pwm.License,
-            //    (headerBackground, pwm.UseBlackText, iconBackground).ToTuple(),
-            //    new List<System.Xml.Linq.XElement> { }
-            //);
-
-            //return Task.FromResult(true);
-        }
-
-        /// <summary>
-        /// packs redengine files in the mod project and installs it into the game mod directory
-        /// </summary>
-        /// <returns></returns>
-        public Task<bool> PackAndInstallProject()
-        {
-            var packTask = PackageMod();
-            if (!packTask.Result)
+            // write info.json file if it not exists
+            var modInfoJsonPath = Path.Combine(activeMod.PackedModDirectory, "info.json");
+            if (!File.Exists(modInfoJsonPath))
             {
-                return Task.FromResult(false);
+                var options = new JsonSerializerOptions
+                {
+                    WriteIndented = true,
+                    DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,
+                    PropertyNamingPolicy = JsonNamingPolicy.CamelCase
+                };
+                var jsonString = JsonSerializer.Serialize(activeMod.GetInfo(), options);
+                File.WriteAllText(modInfoJsonPath, jsonString);
             }
 
-            InstallMod();
+            // create mod zip file
+            var zipPathRoot = new DirectoryInfo(activeMod.PackedRootDirectory).Parent.FullName;
+            var zipPath = Path.Combine(zipPathRoot, $"{activeMod.Name}.zip");
+            try
+            {
+                if (File.Exists(zipPath))
+                {
+                    File.Delete(zipPath);
+                }
+                ZipFile.CreateFromDirectory(activeMod.PackedRootDirectory, zipPath);
+            }
+            catch (Exception e)
+            {
+                _loggerService.Error(e);
+            }
+            _loggerService.Success($"{cp77Proj.Name} zip available at {zipPath}");
 
-            return Task.FromResult(true);
+            return await Task.FromResult(true);
         }
 
         private void CompileTweakFiles(Cp77Project cp77Proj)

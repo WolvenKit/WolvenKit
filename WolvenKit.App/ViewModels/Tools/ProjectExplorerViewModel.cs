@@ -120,6 +120,7 @@ namespace WolvenKit.ViewModels.Tools
 
         [Reactive] public bool IsFlatModeEnabled { get; set; }
 
+        [Reactive] public int SelectedTabIndex { get;set; }
 
         public FileModel LastSelected => _watcherService.LastSelect;
 
@@ -128,6 +129,38 @@ namespace WolvenKit.ViewModels.Tools
         #region commands
 
         #region general commands
+
+        public ICommand OpenRootFolderCommand { get; private set; }
+        private bool CanOpenRootFolder() => _projectManager.ActiveProject != null;
+        private void ExecuteOpenRootFolder()
+        {
+            if (_projectManager.ActiveProject is Cp77Project project)
+            {
+                switch (SelectedTabIndex)
+                {
+                    case 0:
+                        Commonfunctions.ShowFolderInExplorer(project.FileDirectory);
+                        break;
+                    case 1:
+                        Commonfunctions.ShowFolderInExplorer(project.ModDirectory);
+                        break;
+                    case 2:
+                        Commonfunctions.ShowFolderInExplorer(project.RawDirectory);
+                        break;
+                    case 3:
+                        Commonfunctions.ShowFolderInExplorer(project.ScriptDirectory);
+                        break;
+                    case 4:
+                        Commonfunctions.ShowFolderInExplorer(project.TweakDirectory);
+                        break;
+                    case 5:
+                        Commonfunctions.ShowFolderInExplorer(project.PackedRootDirectory);
+                        break;
+                    default:
+                        break;
+                }
+            }
+        }
 
         public ICommand OpenFileCommand { get; private set; }
         private bool CanOpenFile() => true;
@@ -569,6 +602,8 @@ namespace WolvenKit.ViewModels.Tools
             CopyRelPathCommand = new RelayCommand(ExecuteCopyRelPath, CanCopyRelPath);
             ReimportFileCommand = new RelayCommand(ExecuteReimportFile, CanReimportFile);
             OpenInFileExplorerCommand = new RelayCommand(ExecuteOpenInFileExplorer, CanOpenInFileExplorer);
+
+            OpenRootFolderCommand = new RelayCommand(ExecuteOpenRootFolder, CanOpenRootFolder);
 
             Bk2ImportCommand = new RelayCommand(ExecuteBk2Import, CanBk2Import);
             Bk2ExportCommand = new RelayCommand(ExecuteBk2Export, CanBk2Export);

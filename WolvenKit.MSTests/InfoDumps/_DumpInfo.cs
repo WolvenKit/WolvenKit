@@ -11,6 +11,9 @@ using WolvenKit.Common.Services;
 using WolvenKit.Modkit.RED4;
 using WolvenKit.RED4.CR2W;
 using WolvenKit.RED4.CR2W.Archive;
+using WolvenKit.RED4.Types;
+using WolvenKit.Modkit.RED4.Sounds;
+using System.Text.Json;
 
 namespace WolvenKit.MSTests
 {
@@ -19,6 +22,64 @@ namespace WolvenKit.MSTests
     {
         [ClassInitialize]
         public static void SetupClass(TestContext context) => Setup(context);
+
+        [TestMethod]
+        public void DumpSoundEvents()
+        {
+            var parser = ServiceLocator.Default.ResolveType<Red4ParserService>();
+            var eventsInfo = s_groupedFiles[".json"].FirstOrDefault(x => x.Name.Contains("eventsmetadata.json"));
+            if (eventsInfo != null)
+            {
+                var hash = eventsInfo.Key;
+                var archive = eventsInfo.Archive as Archive;
+
+                using var originalMemoryStream = new MemoryStream();
+                ModTools.ExtractSingleToStream(archive, hash, originalMemoryStream);
+                if (!parser.TryReadRed4File(originalMemoryStream, out var originalFile))
+                {
+                    Assert.Fail("failed to find the file");
+                    return;
+                }
+                if (originalFile.RootChunk is not JsonResource jsonRes)
+                {
+                    Assert.Fail("not a JsonResource");
+                    return;
+                }
+                if (jsonRes.Root.GetValue() is not audioAudioEventArray eventArray)
+                {
+                    Assert.Fail("not an audioAudioEventArray");
+                    return;
+                }
+
+                var md = new SoundEventMetadata();
+                var events = eventArray.Events;
+                foreach (var e in events)
+                {
+                    var item = new SoundEvent()
+                    {
+                        Name = e.RedId.ToString(),
+                        Tags = e.Tags.Select(x => x.ToString()).ToList(),
+                    };
+                    md.Events.Add(item);
+                }
+
+                var resultDir = Path.Combine(Environment.CurrentDirectory, s_testResultsDirectory);
+                Directory.CreateDirectory(resultDir);
+                var path = Path.Combine(resultDir, "soundEvents.json");
+
+                var options = new JsonSerializerOptions
+                {
+                    WriteIndented = true,
+                    DefaultIgnoreCondition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull,
+                    PropertyNamingPolicy = JsonNamingPolicy.CamelCase
+                };
+                var jsonString = JsonSerializer.Serialize(md, options);
+                File.WriteAllText(path, jsonString);
+
+                // test
+                var _metadata = JsonSerializer.Deserialize<SoundEventMetadata>(File.ReadAllText(path), options);
+            }
+        }
 
         [TestMethod]
         public void DumpExtensionInfo()

@@ -11,6 +11,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Resources\soundEvents.json" />
+  </ItemGroup>
+
+  <ItemGroup>
       <PackageReference Include="BigGustave" Version="1.0.6" />
       <PackageReference Include="Microsoft.Extensions.Options" Version="6.0.0" />
       <PackageReference Include="AsyncEnumerator" Version="4.0.2" />
@@ -27,6 +31,9 @@
         </Content>
         <Content Include="opus-tools\opusinfo.exe">
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Resources\soundEvents.json">
+          <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </Content>
     </ItemGroup>
   <ItemGroup>

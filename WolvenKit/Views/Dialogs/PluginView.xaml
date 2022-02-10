@@ -1,0 +1,63 @@
+<reactiveUi:ReactiveUserControl
+    x:TypeArguments="dialogs:PluginViewModel"
+    x:Class="WolvenKit.Views.Dialogs.PluginView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+    xmlns:local="clr-namespace:WolvenKit.Views.Dialogs"
+    xmlns:others="clr-namespace:WolvenKit.Views.Others"
+    xmlns:reactiveUi="http://reactiveui.net"
+    xmlns:hc="https://handyorg.github.io/handycontrol"
+    xmlns:dialogs="clr-namespace:WolvenKit.ViewModels.Dialogs;assembly=WolvenKit.App"
+    xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
+    mc:Ignorable="d" 
+    d:DesignHeight="600" d:DesignWidth="800"
+    Width="800"
+    Height="600"
+    Background="{StaticResource ContentBackgroundAlt3}"
+    d:DataContext="{d:DesignInstance Type=dialogs:PluginViewModel}"
+    >
+
+    <Grid Margin="20">
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <TextBlock Text="WolvenKit Plugins" FontSize="42" Grid.Row="0"/>
+        <Separator Grid.Row="1"/>
+
+        <ListBox Grid.Row="2" x:Name="PluginList" HorizontalContentAlignment="Stretch" Margin="25"
+                 ItemsSource="{Binding Plugins}"
+                 SelectedItem="{Binding SelectedPlugin}">
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <Grid Height="75">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="2*"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+
+
+                        <StackPanel Grid.Column="0">
+                            <TextBlock Text="{Binding Name}" FontSize="20"/>
+                            <TextBlock Text="{Binding Version}" FontSize="14"/>
+                            <TextBlock Text="{Binding Description}" FontSize="14"/>
+                        </StackPanel>
+
+                        <StackPanel Grid.Column="1">
+                            <Button Content="Install" Margin="4" Command="{Binding InstallCommand}"/>
+                            <Button Content="???" Margin="4"/>
+                        </StackPanel>
+                    </Grid>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+           
+        </ListBox>
+
+    </Grid>
+</reactiveUi:ReactiveUserControl>

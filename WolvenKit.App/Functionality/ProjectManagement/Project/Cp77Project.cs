@@ -69,7 +69,22 @@ namespace WolvenKit.MVVM.Model.ProjectManagement.Project
         {
             get
             {
-                var dir = Path.Combine(PackedRootDirectory, "archive", "pc", "mod"/*, $"mod{Name}"*/);
+                var dir = Path.Combine(PackedRootDirectory, "mods", Name);
+                if (!Directory.Exists(dir))
+                {
+                    Directory.CreateDirectory(dir);
+                }
+
+                return dir;
+            }
+        }
+
+        public override string PackedArchiveDirectory
+        {
+            get
+            {
+                //var dir = Path.Combine(PackedRootDirectory, "archive", "pc", "mod"/*, $"mod{Name}"*/);
+                var dir = Path.Combine(PackedModDirectory, "archives");
                 if (!Directory.Exists(dir))
                 {
                     Directory.CreateDirectory(dir);

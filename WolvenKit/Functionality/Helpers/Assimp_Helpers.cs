@@ -5,7 +5,7 @@ using Assimp;
 
 namespace WolvenKit.Functionality.Helpers
 {
-    public static partial class Helpers
+    public static class AssimpHelper
     {
         // load assimp libraries.
         public static void LoadAssimpNativeLibrary()

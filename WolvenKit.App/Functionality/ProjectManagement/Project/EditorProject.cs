@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using WolvenKit.Common;
+using WolvenKit.Models;
 
 namespace WolvenKit.MVVM.Model.ProjectManagement.Project
 {
@@ -27,6 +28,8 @@ namespace WolvenKit.MVVM.Model.ProjectManagement.Project
 
         public string Name { get; set; }
 
+        public string Description { get; set; }
+
         public string Version { get; set; }
 
 
@@ -37,6 +40,7 @@ namespace WolvenKit.MVVM.Model.ProjectManagement.Project
 
         public abstract string PackedModDirectory { get; }
         public abstract string PackedRootDirectory { get; }
+        public abstract string PackedArchiveDirectory { get; }
 
 
         public bool IsDirty { get; set; }
@@ -225,6 +229,16 @@ namespace WolvenKit.MVVM.Model.ProjectManagement.Project
         }
 
         public override int GetHashCode() => Location != null ? Location.GetHashCode() : 0;
+        public ModInfo GetInfo()
+        {
+            var modInfo = new ModInfo()
+            {
+                Name = Name,
+                Description = Description,
+                Version = Version
+            };
+            return modInfo;
+        }
 
         #endregion implements IEquatable
 
