@@ -29,6 +29,7 @@ namespace WolvenKit.RED4.Archive.IO
             _bufferReaders.Add("entEntityInstanceData.buffer", typeof(PackageReader));
             _bufferReaders.Add("gamePersistentStateDataResource.buffer", typeof(PackageReader));
             _bufferReaders.Add("meshMeshMaterialBuffer.rawData", typeof(CR2WListReader));
+            _bufferReaders.Add("entEntityParametersBuffer.parameterBuffers", typeof(CR2WListReader));
         }
 
         public EFileReadErrorCodes ReadFileInfo(out CR2WFileInfo info)
