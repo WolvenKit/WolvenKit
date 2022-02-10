@@ -1,6 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
+      <Platforms>x64</Platforms>
       <OutputType>Exe</OutputType>
       <TargetFramework>net6.0</TargetFramework>
       <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
@@ -10,8 +11,8 @@
   </PropertyGroup>
 
     <PropertyGroup>
-        <Title>gpm</Title>
-        <Version>1.6</Version>
+        <Title>WolvenKit.CLI</Title>
+        <Version>1.6.1</Version>
         <PackAsTool>true</PackAsTool>
         <ToolCommandName>cp77tools</ToolCommandName>
         <PackageOutputPath>./nupkg</PackageOutputPath>

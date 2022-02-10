@@ -117,7 +117,7 @@ public static class Oodle
 
         if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
         {
-
+            return true;
         }
         throw new NotImplementedException();
     }
