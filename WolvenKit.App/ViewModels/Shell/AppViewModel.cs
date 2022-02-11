@@ -32,7 +32,7 @@ using WolvenKit.Functionality.Services;
 using WolvenKit.Interaction;
 using WolvenKit.Models;
 using WolvenKit.Models.Docking;
-using WolvenKit.MVVM.Model.ProjectManagement.Project;
+using WolvenKit.ProjectManagement.Project;
 using WolvenKit.RED4.Archive.CR2W;
 using WolvenKit.RED4.Archive.IO;
 using WolvenKit.RED4.CR2W.Archive;
@@ -476,7 +476,7 @@ namespace WolvenKit.ViewModels.Shell
         private bool CanShowSoundModdingTool() => !IsDialogShown;
         private void ExecuteShowSoundModdingTool() => SetActiveDialog(new SoundModdingViewModel
         {
-            
+            FileHandler = OpenFromNewFile
         });
 
         public ICommand NewFileCommand { get; private set; }

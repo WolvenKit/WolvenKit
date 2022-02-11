@@ -19,7 +19,7 @@ using WolvenKit.Functionality.Services;
 using WolvenKit.Helpers;
 using WolvenKit.Models;
 using WolvenKit.Modkit.RED4.Serialization;
-using WolvenKit.MVVM.Model.ProjectManagement.Project;
+using WolvenKit.ProjectManagement.Project;
 using WolvenKit.RED4.TweakDB;
 
 namespace WolvenKit.Functionality.Controllers

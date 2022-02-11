@@ -3,7 +3,7 @@ using System.IO;
 using WolvenKit.Common;
 
 
-namespace WolvenKit.MVVM.Model.ProjectManagement.Project
+namespace WolvenKit.ProjectManagement.Project
 {
     public sealed class Cp77Project : EditorProject, ICloneable
     {
@@ -18,6 +18,19 @@ namespace WolvenKit.MVVM.Model.ProjectManagement.Project
 
         public override GameType GameType => GameType.Cyberpunk2077;
 
+        public string SoundDirectory
+        {
+            get
+            {
+                var dir = Path.Combine(FileDirectory, "customSounds");
+                if (!Directory.Exists(dir))
+                {
+                    Directory.CreateDirectory(dir);
+                }
+
+                return dir;
+            }
+        }
         public string ScriptDirectory
         {
             get

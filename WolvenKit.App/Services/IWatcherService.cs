@@ -1,7 +1,7 @@
 using System.Threading.Tasks;
 using DynamicData;
 using WolvenKit.Models;
-using WolvenKit.MVVM.Model.ProjectManagement.Project;
+using WolvenKit.ProjectManagement.Project;
 
 namespace WolvenKit.Functionality.Services
 {

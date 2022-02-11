@@ -19,7 +19,7 @@ using WolvenKit.Functionality.Helpers;
 using WolvenKit.Functionality.Services;
 using WolvenKit.Interaction;
 using WolvenKit.Models;
-using WolvenKit.MVVM.Model.ProjectManagement.Project;
+using WolvenKit.ProjectManagement.Project;
 using WolvenKit.ViewModels.Dialogs;
 using WolvenKit.ViewModels.Tools;
 using WolvenKit.Views.Dialogs;

@@ -22,9 +22,9 @@ namespace WolvenKit.Modkit.RED4.Sounds
     {
         public string Name { get;set;}
         public string File { get;set;}
-        public ECustomSoundType Type { get;set;}
-        public float Gain { get;set;}
-        public float Pitch { get;set;}
+        public string Type { get; set; } = "mod_sfx_2d";
+        public decimal Gain { get;set;}
+        public decimal Pitch { get;set;}
     }
 
     public class SoundEventMetadata

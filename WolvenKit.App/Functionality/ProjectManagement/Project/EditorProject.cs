@@ -5,7 +5,7 @@ using System.Linq;
 using WolvenKit.Common;
 using WolvenKit.Models;
 
-namespace WolvenKit.MVVM.Model.ProjectManagement.Project
+namespace WolvenKit.ProjectManagement.Project
 {
     public abstract class EditorProject : ObservableObject, IEquatable<EditorProject>
     {

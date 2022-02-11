@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
-using System.Reactive;
 using System.Reactive.Linq;
 using System.Text.Json;
+using System.Threading.Tasks;
 using System.Windows.Input;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
@@ -14,6 +14,7 @@ using WolvenKit.Common.Services;
 using WolvenKit.Functionality.Services;
 using WolvenKit.Models;
 using WolvenKit.Modkit.RED4.Sounds;
+using WolvenKit.ProjectManagement.Project;
 
 namespace WolvenKit.ViewModels.Dialogs
 {
@@ -23,10 +24,10 @@ namespace WolvenKit.ViewModels.Dialogs
         private readonly ILoggerService _logger;
         private readonly IProjectManager _projectManager;
 
-        private SoundEventMetadata _metadata;
-        private ModInfo _info;
+        private readonly SoundEventMetadata _metadata;
+        private readonly ModInfo _info;
 
-        private JsonSerializerOptions _options = new JsonSerializerOptions
+        private readonly JsonSerializerOptions _options = new JsonSerializerOptions
         {
             WriteIndented = true,
             DefaultIgnoreCondition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull,
@@ -42,32 +43,33 @@ namespace WolvenKit.ViewModels.Dialogs
             _metadata = new SoundEventMetadata();
 
             SaveCommand = ReactiveCommand.Create(() => Save());
-            CancelCommand = ReactiveCommand.Create(() =>
-            {
-
-            });
+            CancelCommand = ReactiveCommand.Create(() => FileHandler(null));
 
             AddCommand = new WolvenKit.Functionality.Commands.RelayCommand(AddEvents, CanAddEvents);
 
-
             // load events
             var path = Path.Combine(Environment.CurrentDirectory, "Resources", "soundEvents.json");
-
             if (File.Exists(path))
             {
                 try
                 {
                     _metadata = JsonSerializer.Deserialize<SoundEventMetadata>(File.ReadAllText(path), _options);
-                    EventNames = _metadata.Events.OrderBy(x => x.Name);
                 }
                 catch (Exception e)
                 {
                     _logger.Error(e);
                 }
+
+                
+                foreach (var item in _metadata.Events.OrderBy(x => x.Name))
+                {
+                    SoundEvents.Add(item);
+                }
+                Tags = _metadata.Events.SelectMany(x => x.Tags).Distinct().OrderBy(x => x).ToList();
             }
 
             // load info.json
-            var modInfoJsonPath = Path.Combine(_projectManager.ActiveProject.PackedModDirectory, "info.json");
+            path = Path.Combine(_projectManager.ActiveProject.PackedModDirectory, "info.json");
             if (File.Exists(path))
             {
                 try
@@ -75,9 +77,12 @@ namespace WolvenKit.ViewModels.Dialogs
                     _info = JsonSerializer.Deserialize<ModInfo>(File.ReadAllText(path), _options);
                     foreach (var e in _info.CustomSounds)
                     {
-                        Events.Add(e);
+                        CustomEvents.Add(e);
                     }
-
+                    if (CustomEvents.Count > 0)
+                    {
+                        SelectedObject = CustomEvents.First();
+                    }
                 }
                 catch (Exception e)
                 {
@@ -86,29 +91,36 @@ namespace WolvenKit.ViewModels.Dialogs
             }
 
             // populate Files
-            var modfiles = Directory.GetFiles(_projectManager.ActiveProject.RawDirectory, "*.wav", SearchOption.AllDirectories);
+            var modProj = _projectManager.ActiveProject as Cp77Project;
+            var modfiles = Directory.GetFiles(modProj.SoundDirectory, "*.wav", SearchOption.AllDirectories);
             foreach (var modfile in modfiles)
             {
-                Files.Add(modfile);
+                var relPath = modfile.Substring(modProj.SoundDirectory.Length + 1);
+                Files.Add(relPath);
             }
         }
 
-        private bool CanAddEvents() => true;
-        private void AddEvents()
-        {
-            foreach (var item in SelectedEvents)
-            {
-                if (!Events.Any(x => x.Name == item.Name))
-                {
-                    Events.Add(new CustomSoundsModel()
-                    {
-                        File = SelectedFile,
-                        Name = item.Name
-                    });
-                }
-            }
-        }
 
+        public delegate Task ReturnHandler(NewFileViewModel file);
+        public ReturnHandler FileHandler;
+
+        public List<string> Files { get; set; } = new();
+        public List<string> Types { get; set; } = Enum.GetNames<ECustomSoundType>().ToList();
+
+        public List<SoundEvent> SelectedEvents { get; set; } = new();
+
+        public IEnumerable<string> Tags { get; set; }
+
+        [Reactive] public CustomSoundsModel SelectedObject { get; set; }
+        [Reactive] public ObservableCollection<CustomSoundsModel> CustomEvents { get; set; } = new();
+        [Reactive] public ObservableCollection<SoundEvent> SoundEvents { get; set; } = new();
+
+
+        #region commands
+
+        public ICommand CancelCommand { get; private set; }
+
+        public ICommand SaveCommand { get; private set; }
         private void Save()
         {
             var modInfoJsonPath = Path.Combine(_projectManager.ActiveProject.PackedModDirectory, "info.json");
@@ -120,7 +132,7 @@ namespace WolvenKit.ViewModels.Dialogs
             else
             {
                 var info = _projectManager.ActiveProject.GetInfo();
-                foreach (var e in Events)
+                foreach (var e in CustomEvents)
                 {
                     if (info.CustomSounds.Any(x => x.Name.Equals(e.Name)))
                     {
@@ -133,32 +145,37 @@ namespace WolvenKit.ViewModels.Dialogs
                         continue;
                     }
                     info.CustomSounds.Add(e);
+
+                    _logger.Success($"Added custom sound {e.File} for sound event {e.Name}");
                 }
+
+                var jsonString = JsonSerializer.Serialize(info, _options);
+                File.WriteAllText(modInfoJsonPath, jsonString);
             }
         }
 
-
-        [Reactive]
-        public ObservableCollection<CustomSoundsModel> Events { get; set; } = new();
-        [Reactive]
-        public CustomSoundsModel SelectedEvent { get; set; }
-
-
-        public List<string> Files { get; set; } = new();
-        [Reactive]
-        public string SelectedFile { get; set; }
-
-
-        public IEnumerable<SoundEvent> EventNames { get; set; }
-
-        public List<SoundEvent> SelectedEvents { get; set; } = new();
-
-
-        public ICommand SaveCommand { get; private set; }
-
-        public ReactiveCommand<Unit, Unit> CancelCommand { get; set; }
-
         public ICommand AddCommand { get; private set; }
-        public ICommand RemoveCommand { get; private set; }
+        private bool CanAddEvents() => true;
+        private void AddEvents()
+        {
+            foreach (var item in SelectedEvents)
+            {
+                if (!CustomEvents.Any(x => x.Name == item.Name))
+                {
+                    CustomEvents.Add(new CustomSoundsModel()
+                    {
+                        Name = item.Name
+                    });
+                }
+            }
+            if (CustomEvents.Count > 0)
+            {
+                SelectedObject = CustomEvents.First();
+            }
+        }
+
+        #endregion
+
+
     }
 }
