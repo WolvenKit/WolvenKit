@@ -424,7 +424,7 @@
                 </converters:RedEditorTemplateSelector.RedIntegerEditor>
                 <converters:RedEditorTemplateSelector.RedFixedPointEditor>
                     <DataTemplate>
-                        <editors:RedFixedPointEditor RedNumber="{Binding Data, Mode=TwoWay}" />
+                        <editors:RedFixedPointEditor DataContext="{Binding}" />
                     </DataTemplate>
                 </converters:RedEditorTemplateSelector.RedFixedPointEditor>
                 <converters:RedEditorTemplateSelector.RedFloatEditor>
@@ -511,7 +511,7 @@
                                         <StackPanel Orientation="Vertical" />
                                     </ItemsPanelTemplate>
                                 </ItemsControl.ItemsPanel>
-                            </ItemsControl> -->
+                            </ItemsControl>-->
                         </Grid>
                     </DataTemplate>
                 </converters:RedEditorTemplateSelector.RedArrayEditor>
