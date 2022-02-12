@@ -503,7 +503,7 @@ namespace WolvenKit.ViewModels.Documents
                         foreach (var handle in mesh.Appearances)
                         {
                             var app = handle.GetValue();
-                            if (app is meshMeshAppearance mmapp && mmapp.Name == meshApp)
+                            if (app is meshMeshAppearance mmapp && (mmapp.Name == meshApp || meshApp == "default" && mesh.Appearances.IndexOf(handle) == 0))
                             {
                                 var appMaterials = new List<Material>();
 
