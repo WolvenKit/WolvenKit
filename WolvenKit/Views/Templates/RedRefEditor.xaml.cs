@@ -79,6 +79,8 @@ namespace WolvenKit.Views.Editors
 
         private void SetRedValue(string value)
         {
+            if (RedRef == null)
+                return;
             CName cn = null;
             if (ulong.TryParse(value, out var number))
             {
