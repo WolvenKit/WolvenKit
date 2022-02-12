@@ -60,7 +60,7 @@
             Grid.Column="0"
             Attitude="{Binding ElementName=Camera1, Path=Attitude}"
             Bank="{Binding ElementName=Camera1, Path=Bank}"
-            Distance="200"
+            Distance="50"
             Heading="{Binding ElementName=Camera1, Path=Heading}"
             ShowCameraLight="Never"
             TargetPosition="0 0 0"
@@ -70,7 +70,7 @@
             <dxControls:DXViewportView
                 Name="MainDXViewportView"
                 BackgroundColor="Transparent"
-                PresentationType="DirectXOverlay">
+                PresentationType="DirectXImage">
 
                 <Viewport3D Name="MainViewport">
                     <ModelVisual3D x:Name="ContentVisual" />
@@ -308,6 +308,7 @@
                     <syncfusion:TreeGridTextColumn HeaderText="Chunk Mask" MappingName="ChunkMask" />
                     <syncfusion:TreeGridTextColumn HeaderText="Bind Name" MappingName="BindName" />
                     <syncfusion:TreeGridTextColumn HeaderText="Slot Name" MappingName="SlotName" />
+                    <syncfusion:TreeGridTextColumn HeaderText="Material" MappingName="Materials[0].Name" />
                 </syncfusion:SfTreeGrid.Columns>
             </syncfusion:SfTreeGrid>
             <!--ItemsControl ItemsSource="{Binding SelectedAppearance.Models, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}">

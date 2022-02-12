@@ -28,7 +28,7 @@ namespace WolvenKit.ViewModels.Documents
 
     public interface IBindable
     {
-        public Matrix3D Matrix { get; set; }
+        public SeparateMatrix Matrix { get; set; }
         public string BindName { get; set; }
         public string SlotName { get; set; }
     }
@@ -50,7 +50,7 @@ namespace WolvenKit.ViewModels.Documents
         public string Name { get; set; }
         public List<Material> Materials { get; set; } = new();
 
-        public Matrix3D Matrix { get; set; }
+        public SeparateMatrix Matrix { get; set; }
         public string BindName { get; set; }
         public string SlotName { get; set; }
 
@@ -64,7 +64,7 @@ namespace WolvenKit.ViewModels.Documents
         public Rig Parent { get; set; }
         public List<Rig> Children { get; set; } = new();
 
-        public Matrix3D Matrix { get; set; }
+        public SeparateMatrix Matrix { get; set; }
         public string BindName { get; set; }
         public string SlotName { get; set; }
 
@@ -80,7 +80,7 @@ namespace WolvenKit.ViewModels.Documents
         public string Name { get; set; }
         public RigBone Parent { get; set; }
         public List<RigBone> Children { get; set; } = new();
-        public Matrix3D Matrix { get; set; }
+        public SeparateMatrix Matrix { get; set; }
 
         public void AddChild(RigBone child)
         {
@@ -94,7 +94,7 @@ namespace WolvenKit.ViewModels.Documents
         public string Name { get; set; }
         public Dictionary<string, string> Slots { get; set; }
 
-        public Matrix3D Matrix { get; set; }
+        public SeparateMatrix Matrix { get; set; }
         public string BindName { get; set; }
         public string SlotName { get; set; }
     }
@@ -108,6 +108,8 @@ namespace WolvenKit.ViewModels.Documents
         public Bitmap ColorTexture { get; set; }
         public string ColorTexturePath { get; set; }
         public string TemplateName { get; set; }
+        public float Metalness { get; set; } = 0.0f;
+        public float Roughness { get; set; } = 0.75f;
     }
 
     public class RDTMeshViewModel : RedDocumentTabViewModel
@@ -135,7 +137,7 @@ namespace WolvenKit.ViewModels.Documents
 
             foreach (var me in data.MaterialEntries)
             {
-                if (localList == null || !me.IsLocalInstance || localList.Files.Count <= me.Index)
+                if (!me.IsLocalInstance)
                 {
                     materials.Add(me.Name, new Material()
                     {
@@ -145,7 +147,7 @@ namespace WolvenKit.ViewModels.Documents
                 }
                 CMaterialInstance inst = null;
 
-                if (localList != null)
+                if (localList != null && localList.Files.Count > me.Index)
                 {
                     inst = (CMaterialInstance)localList.Files[me.Index].RootChunk;
                 }
@@ -178,7 +180,8 @@ namespace WolvenKit.ViewModels.Documents
             }
 
             var outPath = Path.Combine(ISettingsManager.GetTemp_OBJPath(), Path.GetFileNameWithoutExtension(file.FilePath) + "_full.glb");
-            if (System.IO.File.Exists(outPath) || MeshTools.ExportMesh(file.Cr2wFile, new FileInfo(outPath)))
+            //if (System.IO.File.Exists(outPath) || MeshTools.ExportMesh(file.Cr2wFile, new FileInfo(outPath)))
+            if (MeshTools.ExportMesh(file.Cr2wFile, new FileInfo(outPath)))
             {
                 foreach (var handle in data.Appearances)
                 {
@@ -255,7 +258,7 @@ namespace WolvenKit.ViewModels.Documents
                         _slotSets.Add(slotset.Name, new SlotSet()
                         {
                             Name = slotset.Name,
-                            Matrix = ToMatrix3D(slotset.LocalTransform),
+                            Matrix = ToSeparateMatrix(slotset.LocalTransform),
                             Slots = slots,
                             BindName = bindName,
                             SlotName = slotName
@@ -274,7 +277,7 @@ namespace WolvenKit.ViewModels.Documents
                                 var rigBone = new RigBone()
                                 {
                                     Name = rig.BoneNames[i],
-                                    Matrix = ToMatrix3D(rig.BoneTransforms[i])
+                                    Matrix = ToSeparateMatrix(rig.BoneTransforms[i])
                                 };
 
                                 if (rig.BoneParentIndexes[i] != -1)
@@ -413,6 +416,8 @@ namespace WolvenKit.ViewModels.Documents
                     depotPath = esmc.Mesh.DepotPath;
                     meshApp = esmc.MeshAppearance;
                     chunkMask = esmc.ChunkMask;
+                    //enabled = esmc.VisibilityAnimationParam != "invisible_in_fpp";
+                    //enabled = esmc.CastShadows == false;
                 }
 
                 if (component is entIPlacedComponent epc && depotPath != null)
@@ -426,7 +431,7 @@ namespace WolvenKit.ViewModels.Documents
                         continue;
                     }
 
-                    var matrix = ToMatrix3D(epc.LocalTransform);
+                    var matrix = ToSeparateMatrix(epc.LocalTransform);
 
                     string bindName = null, slotName = null;
                     if ((epc.ParentTransform?.GetValue() ?? null) is entHardTransformBinding ehtb)
@@ -445,7 +450,7 @@ namespace WolvenKit.ViewModels.Documents
                     {
                         foreach (var me in mesh.MaterialEntries)
                         {
-                            if (localList == null || !me.IsLocalInstance || localList.Files.Count <= me.Index)
+                            if (!me.IsLocalInstance)
                             {
                                 materials.Add(me.Name, new Material()
                                 {
@@ -454,7 +459,20 @@ namespace WolvenKit.ViewModels.Documents
                                 continue;
                             }
 
-                            var inst = (CMaterialInstance)localList.Files[me.Index].RootChunk;
+                            CMaterialInstance inst = null;
+
+                            if (localList != null && localList.Files.Count > me.Index)
+                            {
+                                inst = (CMaterialInstance)localList.Files[me.Index].RootChunk;
+                            }
+                            else
+                            {
+                                //foreach (var pme in data.PreloadLocalMaterialInstances)
+                                //{
+                                //inst = (CMaterialInstance)pme.GetValue();
+                                //}
+                                inst = (CMaterialInstance)mesh.PreloadLocalMaterialInstances[me.Index].GetValue();
+                            }
 
                             //CMaterialInstance bm = null;
                             //if (File.GetFileFromDepotPath(inst.BaseMaterial.DepotPath) is var file)
@@ -479,7 +497,8 @@ namespace WolvenKit.ViewModels.Documents
 
                     var outPath = Path.Combine(ISettingsManager.GetTemp_OBJPath(), Path.GetFileNameWithoutExtension(depotPath) + "_" + depotPath.GetRedHash().ToString() + "_full.glb");
                     //var outPath = Path.Combine(ISettingsManager.GetTemp_OBJPath(), Path.GetFileName(depotPath) + "_" + depotPath.GetRedHash().ToString()) + "_full.glb";
-                    if (System.IO.File.Exists(outPath) || MeshTools.ExportMesh(meshFile, new FileInfo(outPath)))
+                    //if (System.IO.File.Exists(outPath) || MeshTools.ExportMesh(meshFile, new FileInfo(outPath)))
+                    if (MeshTools.ExportMesh(meshFile, new FileInfo(outPath)))
                     {
                         foreach (var handle in mesh.Appearances)
                         {
@@ -542,9 +561,9 @@ namespace WolvenKit.ViewModels.Documents
 
             foreach (var model in appModels.Values)
             {
-                var matrix = new Matrix3D();
+                var matrix = new SeparateMatrix();
                 GetResolvedMatrix(model, ref matrix, appModels);
-                model.Transform = new MatrixTransform3D(matrix);
+                model.Transform = new MatrixTransform3D(matrix.ToMatrix3D());
                 if (model.Name.Contains("shadow") || model.Name.Contains("AppearanceProxyMesh") || model.Name.Contains("sticker") || model.Name.Contains("cutout"))
                 {
                     model.IsEnabled = false;
@@ -593,6 +612,12 @@ namespace WolvenKit.ViewModels.Documents
                 }
             }
 
+            if (dictionary.ContainsKey("MetalnessScale"))
+                material.Metalness = (CFloat)dictionary["MetalnessScale"];
+
+            if (dictionary.ContainsKey("RoughnessScale"))
+                material.Roughness = (CFloat)dictionary["RoughnessScale"];
+
             var filename_b = Path.Combine(ISettingsManager.GetTemp_OBJPath(), material.Name + ".png");
             var filename_bn = Path.Combine(ISettingsManager.GetTemp_OBJPath(), material.Name + "_n.png");
             var filename_d = Path.Combine(ISettingsManager.GetTemp_OBJPath(), material.Name + "_d.dds");
@@ -601,8 +626,8 @@ namespace WolvenKit.ViewModels.Documents
             var createMLDiffuse = !System.IO.File.Exists(filename_b);
             var createMLNormal = !System.IO.File.Exists(filename_bn);
 
-            //if (!createMLDiffuse && !createMLNormal)
-            //    return;
+            if (!createMLDiffuse && !createMLNormal)
+                return;
 
             if (dictionary.ContainsKey("MultilayerSetup") && dictionary.ContainsKey("MultilayerMask"))
             {
@@ -732,7 +757,16 @@ namespace WolvenKit.ViewModels.Documents
                         var layerWidth = (int)(normalLayer.Width * layer.MatTile);
                         var layerHeight = (int)(normalLayer.Height * layer.MatTile);
 
-                        Bitmap tempNormalBitmap = new Bitmap((layerWidth < maskBitmap.Width) ? layerWidth : maskBitmap.Width, (layerHeight < maskBitmap.Height) ? layerHeight : maskBitmap.Height);
+                        Bitmap tempNormalBitmap = new Bitmap(maskBitmap.Width, maskBitmap.Height);
+
+                        try
+                        {
+                            tempNormalBitmap = new Bitmap((layerWidth < maskBitmap.Width) ? layerWidth : maskBitmap.Width, (layerHeight < maskBitmap.Height) ? layerHeight : maskBitmap.Height);
+                        }
+                        catch (Exception)
+                        {
+                            ;
+                        }
 
                         Graphics gfx_n = Graphics.FromImage(tempNormalBitmap);
                         gfx_n.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.HighQualityBilinear;
@@ -822,67 +856,23 @@ namespace WolvenKit.ViewModels.Documents
                     goto NormalMaps;
                 }
 
-                //var opacity = dictionary.ContainsKey("DiffuseAlpha") ? (float)(CFloat)dictionary["DiffuseAlpha"] : 1F;
-
-                //if (opacity == 0)
-                //{
-                //    return;
-                //}
-
-                //var color = dictionary.ContainsKey("DiffuseColor") ? (CColor)dictionary["DiffuseColor"] : new CColor() { Red = 255, Green = 255, Blue = 255, Alpha = 255};
-
-                //var stream = new MemoryStream();
-                //var filename = Path.Combine(ISettingsManager.GetTemp_OBJPath(), material.Name + ".dds");
                 var stream = new FileStream(filename_d, FileMode.Create);
                 ModTools.ConvertRedClassToDdsStream(it, stream, out var format);
                 stream.Dispose();
+            }
 
+            if (dictionary.ContainsKey("BaseColor") && dictionary["BaseColor"] is CResourceReference<ITexture> crrbc)
+            {
+                var xbm = File.GetFileFromDepotPath(crrbc.DepotPath);
 
-                //var bitmap = await ImageDecoder.RenderToBitmapSourceDds(stream);
+                if (xbm.RootChunk is not ITexture it)
+                {
+                    goto NormalMaps;
+                }
 
-                //Bitmap sourceBitmap;
-                //using (var outStream = new MemoryStream())
-                //{
-                //    BitmapEncoder enc = new PngBitmapEncoder();
-                //    enc.Frames.Add(BitmapFrame.Create(bitmap));
-                //    enc.Save(outStream);
-                //    sourceBitmap = new Bitmap(outStream);
-                //}
-                ////bitmap = new TransformedBitmap(bitmap, new ScaleTransform(1, -1));
-
-                ////Bitmap destBitmap = new Bitmap((int)sourceBitmap.Width, (int)sourceBitmap.Height);
-                ////using (Graphics gfx = Graphics.FromImage(destBitmap))
-                ////{
-                ////    //var colorMatrix = new ColorMatrix(new float[][]
-                ////    //{
-                ////    //    new float[] { 0, 0, 0, 0, 0},
-                ////    //    new float[] { 0, 0, 0, 0, 0},
-                ////    //    new float[] { 0, 0, 0, 0, 0},
-                ////    //    new float[] { 0, 0, 0, 0, 0},
-                ////    //    new float[] { 0, 0, 0, 0, 0},
-                ////    //});
-                ////    //colorMatrix.Matrix03 = opacity;
-                ////    //colorMatrix.Matrix40 = color.Red / 256F;
-                ////    //colorMatrix.Matrix41 = color.Green / 256F;
-                ////    //colorMatrix.Matrix42 = color.Blue / 256F;
-
-                ////    ImageAttributes attributes = new ImageAttributes();
-
-                ////    //attributes.SetColorMatrix(colorMatrix, ColorMatrixFlag.Default, ColorAdjustType.Bitmap);
-
-                ////    gfx.DrawImage(sourceBitmap, new Rectangle(0, 0, sourceBitmap.Width, sourceBitmap.Height), 0, 0, sourceBitmap.Width, sourceBitmap.Height, GraphicsUnit.Pixel, attributes);
-                ////}
-
-                //try
-                //{
-                //    //sourceBitmap.MakeTransparent(System.Drawing.Color.Black);
-                //    sourceBitmap.Save(Path.Combine(ISettingsManager.GetTemp_OBJPath(), material.Name + ".png"), ImageFormat.Png);
-                //    sourceBitmap.Dispose();
-                //}
-                //catch (Exception e)
-                //{
-                //    Locator.Current.GetService<ILoggerService>().Error(e.Message);
-                //}
+                var stream = new FileStream(filename_d, FileMode.Create);
+                ModTools.ConvertRedClassToDdsStream(it, stream, out var format);
+                stream.Dispose();
             }
 
         NormalMaps:
@@ -952,7 +942,7 @@ namespace WolvenKit.ViewModels.Documents
             if (System.IO.File.Exists(filename_bn))
                 return;
 
-            else if (dictionary.ContainsKey("Normal") && dictionary["Normal"] is CResourceReference<ITexture> crrn2)
+            if (dictionary.ContainsKey("Normal") && dictionary["Normal"] is CResourceReference<ITexture> crrn2)
             {
                 var xbm = File.GetFileFromDepotPath(crrn2.DepotPath);
 
@@ -1015,7 +1005,7 @@ namespace WolvenKit.ViewModels.Documents
             return (byte)Math.Clamp(Math.Round((Math.Sqrt(1.02 - 2 * ((r / 255F) * 2 - 1) * ((g / 255F) * 2 - 1)) + 1) / 2 * 255), 0, 255);
         }
 
-        public void GetResolvedMatrix(IBindable bindable, ref Matrix3D matrix, Dictionary<string, LoadableModel> models)
+        public void GetResolvedMatrix(IBindable bindable, ref SeparateMatrix matrix, Dictionary<string, LoadableModel> models)
         {
             matrix.Append(bindable.Matrix);
 
@@ -1097,6 +1087,23 @@ namespace WolvenKit.ViewModels.Documents
             return matrix;
         }
 
+        public static SeparateMatrix ToSeparateMatrix(QsTransform qs)
+        {
+            var matrix = new SeparateMatrix();
+            matrix.Rotate(ToQuaternion(qs.Rotation));
+            matrix.Translate(ToVector3D(qs.Translation));
+            matrix.Scale(ToScaleVector3D(qs.Scale));
+            return matrix;
+        }
+
+        public static SeparateMatrix ToSeparateMatrix(WorldTransform wt)
+        {
+            var matrix = new SeparateMatrix();
+            matrix.Rotate(ToQuaternion(wt.Orientation));
+            matrix.Translate(ToVector3D(wt.Position));
+            return matrix;
+        }
+
         //public static System.Windows.Media.Media3D.Quaternion ToQuaternion(RED4.Types.Quaternion q) => new System.Windows.Media.Media3D.Quaternion(q.I, q.J, q.K, q.R);
 
         public static System.Windows.Media.Media3D.Quaternion ToQuaternion(RED4.Types.Quaternion q) => new System.Windows.Media.Media3D.Quaternion(q.I, q.K, -q.J, q.R);
@@ -1116,5 +1123,50 @@ namespace WolvenKit.ViewModels.Documents
         public static Vector3D ToScaleVector3D(Vector4 v) => new Vector3D(v.X, v.Z, v.Y);
 
         public static Vector3D ToScaleVector3D(Vector3 v) => new Vector3D(v.X, v.Z, v.Y);
+    }
+
+    public class SeparateMatrix
+    {
+        public Matrix3D rotation = new();
+        public Matrix3D translation = new();
+        public Matrix3D scale = new();
+
+        public SeparateMatrix() {
+
+        }
+
+        public void Append(SeparateMatrix matrix)
+        {
+            if (matrix != null)
+            {
+                rotation.Append(matrix.rotation);
+                translation.Append(matrix.translation);
+                scale.Append(matrix.scale);
+            }
+        }
+
+        public void Rotate(System.Windows.Media.Media3D.Quaternion q)
+        {
+            rotation.Rotate(q);
+        }
+
+        public void Translate(Vector3D v)
+        {
+            translation.Translate(v);
+        }
+
+        public void Scale(Vector3D v)
+        {
+            scale.Scale(v);
+        }
+
+        public Matrix3D ToMatrix3D()
+        {
+            var matrix = new Matrix3D();
+            matrix.Append(scale);
+            matrix.Append(rotation);
+            matrix.Append(translation);
+            return matrix;
+        }
     }
 }

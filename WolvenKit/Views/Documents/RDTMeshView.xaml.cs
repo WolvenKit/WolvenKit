@@ -182,8 +182,8 @@ namespace WolvenKit.Views.Documents
                     physicallyBasedMaterial.TextureMaps.Add(new TextureMapInfo(TextureMapTypes.NormalMap, shaderResourceView, null, filename_bn));
                 }
 
-                physicallyBasedMaterial.Roughness = 0.75f;
-                physicallyBasedMaterial.Metalness = 0f;
+                physicallyBasedMaterial.Roughness = material.Roughness;
+                physicallyBasedMaterial.Metalness = material.Metalness;
                 if (material.TemplateName == "vehicle_lights")
                 {
                     physicallyBasedMaterial.EmissiveColor = Colors.Red.ToColor3();
