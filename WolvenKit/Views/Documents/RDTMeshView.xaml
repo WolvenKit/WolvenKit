@@ -217,20 +217,26 @@
                         Visibility="Collapsed" />
 
                     <TextBlock
-                        Margin="0,10,0,0"
+                        Margin="0,4,0,0"
                         VerticalAlignment="Center"
                         FontWeight="Bold"
                         Text="(or drag and drop 3D model file)"
                         Visibility="Collapsed" />
-
+                    <CheckBox
+                        Name="CameraTypeCheckBox"
+                        Margin="0,4,0,0"
+                        HorizontalAlignment="Left"
+                        Checked="CameraTypeCheckBox_Checked"
+                        Content="Orthographic Camera"
+                        IsChecked="True"
+                        Unchecked="CameraTypeCheckBox_Checked" />
                     <CheckBox
                         Name="ShowWireframeCheckBox"
-                        Margin="0,10,0,0"
+                        Margin="0,4,0,0"
                         HorizontalAlignment="Left"
                         Checked="OnShowWireframeCheckBoxCheckedChanged"
                         Content="Show wireframe"
                         IsChecked="True"
-                        Style="{DynamicResource MahApps.Styles.CheckBox.DataGrid.Win10}"
                         Unchecked="OnShowWireframeCheckBoxCheckedChanged" />
                     <CheckBox
                         Name="AddLineDepthBiasCheckBox"
@@ -240,7 +246,6 @@
                         Content="Add line depth bias (DXEngine only)"
                         IsChecked="True"
                         IsEnabled="{Binding ElementName=ShowWireframeCheckBox, Path=IsChecked}"
-                        Style="{DynamicResource MahApps.Styles.CheckBox.DataGrid.Win10}"
                         Unchecked="OnAddLineDepthBiasCheckBoxCheckedChanged" />
                     <CheckBox
                         Name="ReadPolygonIndicesCheckBox"
@@ -249,7 +254,6 @@
                         Checked="OnReadPolygonIndicesCheckBoxCheckedChanged"
                         Content="Read PolygonIndices"
                         IsChecked="True"
-                        Style="{DynamicResource MahApps.Styles.CheckBox.DataGrid.Win10}"
                         ToolTip="When checked ReaderObj will read PolygonIndices collection that can be used to show polygons instead of triangles. Object need to be shown with wireframe to see the difference."
                         Unchecked="OnReadPolygonIndicesCheckBoxCheckedChanged" />
 

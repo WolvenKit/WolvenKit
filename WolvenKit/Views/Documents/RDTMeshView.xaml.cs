@@ -568,5 +568,17 @@ namespace WolvenKit.Views.Documents
             if (ViewModel != null)
                 LoadModels(ViewModel.SelectedAppearance);
         }
+
+        private void CameraTypeCheckBox_Checked(object sender, RoutedEventArgs e)
+        {
+            if (CameraTypeCheckBox.IsChecked.Value)
+            {
+                Camera1.SetCurrentValue(Ab3d.Cameras.BaseCamera.CameraTypeProperty, Ab3d.Cameras.BaseCamera.CameraTypes.OrthographicCamera);
+            }
+            else
+            {
+                Camera1.SetCurrentValue(Ab3d.Cameras.BaseCamera.CameraTypeProperty, Ab3d.Cameras.BaseCamera.CameraTypes.PerspectiveCamera);
+            }
+        }
     }
 }
