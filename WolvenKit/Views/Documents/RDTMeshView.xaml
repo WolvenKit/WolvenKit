@@ -311,12 +311,37 @@
                         HeaderText="Component Name"
                         MappingName="Name"
                         MinimumWidth="300" />
-                    <syncfusion:TreeGridTextColumn HeaderText="Chunk Mask" MappingName="ChunkMask" />
+                    <!--  syncfusion:TreeGridTextColumn HeaderText="Chunk Mask" MappingName="ChunkMask" /  -->
+                    <syncfusion:TreeGridTemplateColumn HeaderText="Chunk Mask">
+                        <syncfusion:TreeGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <syncfusion:ComboBoxAdv
+                                    AllowMultiSelect="True"
+                                    Background="#252525"
+                                    BorderThickness="0"
+                                    ItemsSource="{Binding AllChunks, Mode=OneTime}"
+                                    SelectedItems="{Binding EnabledChunks, Mode=TwoWay}"
+                                    SelectedValueDelimiter=", "
+                                    SelectionChanged="ComboBoxAdv_SelectionChanged" />
+                            </DataTemplate>
+                        </syncfusion:TreeGridTemplateColumn.CellTemplate>
+                    </syncfusion:TreeGridTemplateColumn>
                     <syncfusion:TreeGridTextColumn HeaderText="Bind Name" MappingName="BindName" />
                     <syncfusion:TreeGridTextColumn HeaderText="Slot Name" MappingName="SlotName" />
                     <syncfusion:TreeGridTextColumn HeaderText="Material" MappingName="Materials[0].Name" />
                 </syncfusion:SfTreeGrid.Columns>
             </syncfusion:SfTreeGrid>
+            <!--
+                syncfusion:SfTreeGrid
+                Grid.Row="1"
+                AllowResizingColumns="True"
+                AutoExpandMode="AllNodesExpanded"
+                CheckBoxMappingName="IsEnabled"
+                ItemsSource="{Binding SelectedAppearance.Nodes, Mode=OneWay}"
+                NodeCheckStateChanged="SfTreeGrid_NodeCheckStateChanged"
+                RowHeaderWidth="300"
+                ShowCheckBox="True" /
+            -->
             <!--ItemsControl ItemsSource="{Binding SelectedAppearance.Models, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}">
                         <ItemsControl.ItemsPanel>
                             <ItemsPanelTemplate>

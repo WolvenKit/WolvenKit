@@ -120,7 +120,11 @@ namespace CP77.CR2W
         public bool ExportMeshWithoutRig(Stream meshStream, FileInfo outfile, bool lodFilter = true, bool isGLBinary = true, ValidationMode vmode = ValidationMode.TryFix)
         {
             var cr2w = _red4ParserService.ReadRed4File(meshStream);
+            return ExportMeshWithoutRig(cr2w, outfile, lodFilter, isGLBinary, vmode);
+        }
 
+        public static bool ExportMeshWithoutRig(CR2WFile cr2w, FileInfo outfile, bool lodFilter = true, bool isGLBinary = true, ValidationMode vmode = ValidationMode.TryFix)
+        {
             if (cr2w == null || cr2w.RootChunk is not CMesh cMesh || cMesh.RenderResourceBlob.Chunk is not rendRenderMeshBlob rendblob)
             {
                 return false;
@@ -148,10 +152,11 @@ namespace CP77.CR2W
                 model.SaveGLTF(outfile.FullName, new WriteSettings(vmode));
             }
 
-            meshStream.Dispose();
-            meshStream.Close();
+            //meshStream.Dispose();
+            //meshStream.Close();
             return true;
         }
+
         public bool ExportMultiMeshWithoutRig(List<Stream> meshStreamS, FileInfo outfile, bool lodFilter = true, bool isGLBinary = true, ValidationMode vmode = ValidationMode.TryFix)
         {
             var expMeshes = new List<RawMeshContainer>();
@@ -601,19 +606,19 @@ namespace CP77.CR2W
                 }
 
                 // getting garment morphs
-                meshContainer.garmentMorph = Array.Empty<Vec3>();
-                if (info.garmentSupportExists[index])
-                {
-                    meshContainer.garmentMorph = new Vec3[info.vertCounts[index]];
-                    for (var i = 0; i < info.vertCounts[index]; i++)
-                    {
-                        gfs.Position = info.posnOffsets[index] + (i * info.vpStrides[index]) + 8 + (2 * meshContainer.weightCount);
-                        var x = Converters.hfconvert(gbr.ReadUInt16());
-                        var y = Converters.hfconvert(gbr.ReadUInt16());
-                        var z = Converters.hfconvert(gbr.ReadUInt16());
-                        meshContainer.garmentMorph[i] = new Vec3(x, z, -y);
-                    }
-                }
+                //meshContainer.garmentMorph = Array.Empty<Vec3>();
+                //if (info.garmentSupportExists[index])
+                //{
+                //    meshContainer.garmentMorph = new Vec3[info.vertCounts[index]];
+                //    for (var i = 0; i < info.vertCounts[index]; i++)
+                //    {
+                //        gfs.Position = info.posnOffsets[index] + (i * info.vpStrides[index]) + 8 + (2 * meshContainer.weightCount);
+                //        var x = Converters.hfconvert(gbr.ReadUInt16());
+                //        var y = Converters.hfconvert(gbr.ReadUInt16());
+                //        var z = Converters.hfconvert(gbr.ReadUInt16());
+                //        meshContainer.garmentMorph[i] = new Vec3(x, z, -y);
+                //    }
+                //}
 
                 // getting uint16 face indices
                 meshContainer.indices = new uint[info.indCounts[index]];
@@ -787,15 +792,15 @@ namespace CP77.CR2W
                     bw.Write(Convert.ToUInt16(mesh.indices[i + 0]));
                     bw.Write(Convert.ToUInt16(mesh.indices[i + 2]));
                 }
-                if (mesh.garmentMorph.Length > 0)
-                {
-                    for (var i = 0; i < mesh.positions.Length; i++)
-                    {
-                        bw.Write(mesh.garmentMorph[i].X);
-                        bw.Write(mesh.garmentMorph[i].Y);
-                        bw.Write(mesh.garmentMorph[i].Z);
-                    }
-                }
+                //if (mesh.garmentMorph.Length > 0)
+                //{
+                //    for (var i = 0; i < mesh.positions.Length; i++)
+                //    {
+                //        bw.Write(mesh.garmentMorph[i].X);
+                //        bw.Write(mesh.garmentMorph[i].Y);
+                //        bw.Write(mesh.garmentMorph[i].Z);
+                //    }
+                //}
             }
             var buffer = model.UseBuffer(ms.ToArray());
             var BuffViewoffset = 0;
@@ -911,29 +916,29 @@ namespace CP77.CR2W
                     nod.Skin = skins[0];
                 }
 
-                if (mesh.garmentMorph.Length > 0)
-                {
-                    string[] arr = { "GarmentSupport" };
-                    var obj = new { mesh.materialNames, targetNames = arr };
-                    mes.Extras = SharpGLTF.IO.JsonContent.Serialize(obj);
-                }
-                else
-                {
-                    var obj = new { mesh.materialNames };
-                    mes.Extras = SharpGLTF.IO.JsonContent.Serialize(obj);
-                }
-                if (mesh.garmentMorph.Length > 0)
-                {
-                    var acc = model.CreateAccessor();
-                    var buff = model.UseBufferView(buffer, BuffViewoffset, mesh.garmentMorph.Length * 12);
-                    acc.SetData(buff, 0, mesh.garmentMorph.Length, DimensionType.VEC3, EncodingType.FLOAT, false);
-                    var dict = new Dictionary<string, Accessor>
-                    {
-                        { "POSITION", acc }
-                    };
-                    prim.SetMorphTargetAccessors(0, dict);
-                    BuffViewoffset += mesh.garmentMorph.Length * 12;
-                }
+                //if (mesh.garmentMorph.Length > 0)
+                //{
+                //    string[] arr = { "GarmentSupport" };
+                //    var obj = new { mesh.materialNames, targetNames = arr };
+                //    mes.Extras = SharpGLTF.IO.JsonContent.Serialize(obj);
+                //}
+                //else
+                //{
+                //    var obj = new { mesh.materialNames };
+                //    mes.Extras = SharpGLTF.IO.JsonContent.Serialize(obj);
+                //}
+                //if (mesh.garmentMorph.Length > 0)
+                //{
+                //    var acc = model.CreateAccessor();
+                //    var buff = model.UseBufferView(buffer, BuffViewoffset, mesh.garmentMorph.Length * 12);
+                //    acc.SetData(buff, 0, mesh.garmentMorph.Length, DimensionType.VEC3, EncodingType.FLOAT, false);
+                //    var dict = new Dictionary<string, Accessor>
+                //    {
+                //        { "POSITION", acc }
+                //    };
+                //    prim.SetMorphTargetAccessors(0, dict);
+                //    BuffViewoffset += mesh.garmentMorph.Length * 12;
+                //}
             }
             model.UseScene(0).Name = "Scene";
             model.DefaultScene = model.UseScene(0);

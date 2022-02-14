@@ -31,6 +31,7 @@ using WolvenKit.Functionality.Ab4d;
 using WolvenKit.Functionality.Services;
 using WolvenKit.ViewModels.Documents;
 using Material = WolvenKit.ViewModels.Documents.Material;
+using Node = WolvenKit.ViewModels.Documents.Node;
 
 namespace WolvenKit.Views.Documents
 {
@@ -128,6 +129,7 @@ namespace WolvenKit.Views.Documents
                     var recommendedBlendState = MainDXViewportView.DXScene.DXDevice.CommonStates.GetRecommendedBlendState(textureInfo.HasTransparency, textureInfo.HasPremultipliedAlpha);
 
                     physicallyBasedMaterial.BlendState = recommendedBlendState;
+                    //physicallyBasedMaterial.BlendState = MainDXViewportView.DXScene.DXDevice.CommonStates.PremultipliedAlphaBlend;
                     physicallyBasedMaterial.HasTransparency = textureInfo.HasTransparency;
 
                     //    var effect = new RedEffect();
@@ -229,6 +231,12 @@ namespace WolvenKit.Views.Documents
                 //    physicallyBasedMaterial.HasTransparency = true;
                 //}
 
+                if (material.Name == "shadowmesh")
+                {
+                    physicallyBasedMaterial.BaseColor = new Color4(0,0,0,0);
+                    physicallyBasedMaterial.HasTransparency = true;
+                }
+
                 //physicallyBasedMaterial.SetTextureMap(TextureMapTypes.EnvironmentCubeMap)
 
                 mediaMaterial.SetUsedDXMaterial(physicallyBasedMaterial);
@@ -281,14 +289,9 @@ namespace WolvenKit.Views.Documents
 
                 try
                 {
-    
+                    //model3D = assimpWpfImporter.ReadModel3D(model.FilePath);
+
                     var assimpScene = assimpWpfImporter.ReadFileToAssimpScene(model.FilePath);
-
-                    //var assimpWpfConverter = new AssimpWpfConverter();
-                    //var readModel3D = assimpWpfConverter.ConvertAssimpModel(assimpScene);
-
-                    //model3D = assimpWpfImporter.ReadModel3D(model.FilePath); // we can also define a textures path if the textures are located in some other directory (this is parameter can be skipped, but is defined here so you will know that you can use it)
-
                     var assimpWpfConverter = new AssimpWpfConverter();
                     model3D = assimpWpfConverter.ConvertAssimpModel(assimpScene);
 
@@ -298,12 +301,8 @@ namespace WolvenKit.Views.Documents
                         if (geometryModel3D == null)
                             continue;
 
-                        //var geometryModel3D = assimpWpfConverter.GetGeometryModel3DForAssimpMesh(assimpMesh);
                         SetMeshTangentData(assimpMesh, geometryModel3D);
                     }
-                        //var assimpWpfConverter = new AssimpWpfConverter();
-                        //model3D = assimpWpfConverter.ConvertAssimpModel(assimpScene);
-
 
                     //isNewFile = (_fileName != model.FilePath);
                     //_fileName = model.FilePath;
@@ -325,73 +324,62 @@ namespace WolvenKit.Views.Documents
                 if (model3D != null)
                 {
                     //ShowAppearance(isNewFile); // If we just reloaded the previous file, we preserve the current camera TargetPosition and Distance
-                    model3D.Transform = model.Transform;
+                    model3D.Transform = new MatrixTransform3D(model.Matrix.ToMatrix3D());
                     model3D.SetName(model.Name);
 
                     if (model3D is Model3DGroup mg)
                     {
+                        model.AllChunks.Clear();
                         for (var i = 0; i < mg.Children.Count; i++)
                         {
+                            model.AllChunks.Add(i);
                             var submesh = mg.Children[i];
-                            if ((model.ChunkMask & 1UL << i) > 0)
-                            {
-                                //Random r = new Random();
-                                //var color = Color.FromRgb((byte)r.Next(1, 255), (byte)r.Next(1, 255), (byte)r.Next(1, 233));
-                                var color = Colors.Gray;
-                                Brush brush = new SolidColorBrush(color);
-
-                                //var material = new DiffuseMaterial(brush);
-                                System.Windows.Media.Media3D.Material material = new EmissiveMaterial(Brushes.Transparent);
-
-                                if (i < model.Materials.Count)
-                                {
-                                    submesh.SetName($"{model.Name}_{i:D2}_{model.Materials[i].Name}");
-                                    SetupMaterial(model.Materials[i], out material);
-                                }
-                                else
-                                {
-                                    material.SetName($"{model.Name}_{i:D2}");
-                                    submesh.SetName($"{model.Name}_{i:D2}");
-                                }
-
-                                ModelUtils.ChangeMaterial(submesh, material, null);
-                            }
-                        }
-                        
-                        for (var i = mg.Children.Count - 1; i >= 0; i--)
-                        { 
-                            if ((model.ChunkMask & 1UL << i) == 0)
-                            {
-                                mg.Children.Remove(mg.Children[i]);
-                                //ModelUtils.ChangeMaterial(submesh, new EmissiveMaterial(Brushes.Transparent), new EmissiveMaterial(Brushes.Transparent));
-                            }
-                        }
-                        model.Model = model3D;
-                    }
-                    else
-                    {
-                        if ((model.ChunkMask & 1UL) > 0)
-                        {
                             //Random r = new Random();
                             //var color = Color.FromRgb((byte)r.Next(1, 255), (byte)r.Next(1, 255), (byte)r.Next(1, 233));
                             var color = Colors.Gray;
                             Brush brush = new SolidColorBrush(color);
 
-                            //System.Windows.Media.Media3D.Material material = new DiffuseMaterial(brush);
+                            //var material = new DiffuseMaterial(brush);
                             System.Windows.Media.Media3D.Material material = new EmissiveMaterial(Brushes.Transparent);
 
-                            if (0 < model.Materials.Count)
+                            if (i < model.Materials.Count)
                             {
-                                SetupMaterial(model.Materials[0], out material);
+                                submesh.SetName($"{model.Name}_{i:D2}_{model.Materials[i].Name}");
+                                SetupMaterial(model.Materials[i], out material);
                             }
                             else
                             {
-                                material.SetName($"{model.Name}");
+                                material.SetName($"{model.Name}_{i:D2}");
+                                submesh.SetName($"{model.Name}_{i:D2}");
                             }
 
-                            ModelUtils.ChangeMaterial(model3D, material, null);
-                            model.Model = model3D;
+                            ModelUtils.ChangeMaterial(submesh, material, null);
                         }
+                        model.OriginalModel = model3D;
+                    }
+                    else
+                    {
+                        model.AllChunks.Clear();
+                        model.AllChunks.Add(0);
+                        //Random r = new Random();
+                        //var color = Color.FromRgb((byte)r.Next(1, 255), (byte)r.Next(1, 255), (byte)r.Next(1, 233));
+                        var color = Colors.Gray;
+                        Brush brush = new SolidColorBrush(color);
+
+                        //System.Windows.Media.Media3D.Material material = new DiffuseMaterial(brush);
+                        System.Windows.Media.Media3D.Material material = new EmissiveMaterial(Brushes.Transparent);
+
+                        if (0 < model.Materials.Count)
+                        {
+                            SetupMaterial(model.Materials[0], out material);
+                        }
+                        else
+                        {
+                            material.SetName($"{model.Name}");
+                        }
+
+                        ModelUtils.ChangeMaterial(model3D, material, null);
+                        model.OriginalModel = model3D;
                     }
 
                     //var pbm = new PhysicallyBasedMaterial()
@@ -439,26 +427,137 @@ namespace WolvenKit.Views.Documents
             }
         }
 
+        public Model3DGroup CreateGroup(Node node)
+        {
+            var group = new Model3DGroup();
+            group.SetName(node.Name);
+
+            //group.Transform = new MatrixTransform3D(node.Matrix.ToMatrix3D());
+            if (node is Rig r)
+            {
+                group.Transform = new MatrixTransform3D(node.Matrix.ToMatrix3D());
+                //foreach (var c in r.Children)
+                //{
+                //    if (c != null)
+                //        group.Children.Add(CreateGroup(c));
+                //}
+                //foreach (var b in r.Bones)
+                //{
+                //if (b != null)
+                //group.Children.Add(CreateGroup(b));
+                //}
+
+                var root = r.Bones.Find(x => x.Name == "Root");
+                if (root != null)
+                {
+                    group.Children.Add(CreateGroup(root));
+                }
+            }
+
+            if (node is RigBone rb)
+            {
+                group.Transform = new MatrixTransform3D(node.Matrix.ToMatrix3D());
+                foreach (var c in rb.Children)
+                {
+                    if (c != null)
+                        group.Children.Add(CreateGroup(c));
+                }
+            }
+
+            foreach (var child in node.Models)
+            {
+                if (child.Model != null && child.IsEnabled)
+                    group.Children.Add(child.Model);
+                if (child.Models.Count > 0)
+                    group.Children.Add(CreateGroup(child));
+            }
+
+            return group;
+        }
+
+        public void UpdateSubmeshVisibility(ref LoadableModel model)
+        {
+            if (model.OriginalModel == null)
+            {
+                model.Model = null;
+                return;
+            }
+
+            var model3D = model.OriginalModel.Clone();
+            if (model3D is Model3DGroup mg)
+            {
+                for (var i = mg.Children.Count - 1; i >= 0; i--)
+                {
+                    //if ((model.ChunkMask & 1UL << i) == 0)
+                    if (!model.EnabledChunks.Contains(i))
+                    {
+                        mg.Children.Remove(mg.Children[i]);
+                    }
+                    else if (0 < model.Materials.Count)
+                    {
+                        SetupMaterial(model.Materials[i], out var material);
+                        ModelUtils.ChangeMaterial(mg.Children[i], material, null);
+                    }
+
+                }
+                model.Model = mg;
+            }
+            else
+            {
+                if (model.EnabledChunks.Contains(0))
+                {
+                    if (0 < model.Materials.Count)
+                    {
+                        SetupMaterial(model.Materials[0], out var material);
+                        ModelUtils.ChangeMaterial(model3D, material, null);
+                    }
+                    model.Model = model3D;
+                }
+                else
+                {
+                    model.Model = null;
+                }
+            }
+        }
+
         public void ShowAppearance(Appearance app, bool updateCamera)
         {
+            if (MainDXViewportView.DXScene == null) // Probably WPF 3D rendering
+                return;
+
             if (ViewModel == null)
                 return;
             try
             {
                 //ContentVisual.SetCurrentValue(ModelVisual3D.ContentProperty, model3D);
 
-                var collection = new Model3DCollection(app.Models.Where(x => x.Model != null && x.IsEnabled).Select(x => x.Model));
-                var group = new Model3DGroup()
+                //var collection = new Model3DCollection(app.Models.Where(x => x.Model != null && x.IsEnabled).Select(x => x.Model));
+                //var group = new Model3DGroup()
+                //{
+                //    Children = collection
+                //};
+
+                app.Models.ForEach(model =>
                 {
-                    Children = collection
-                };
+                    UpdateSubmeshVisibility(ref model);
+                });
+
+                ViewModel.AddToRigs(app.Models.Where(x => x.Model != null && x.IsEnabled).ToDictionary(x => x.Name, x => x));
+
+                var group = new Model3DGroup();
+                group.SetName(app.Name);
+                foreach (var (name, rig) in ViewModel.Rigs)
+                {
+                    group.Children.Add(CreateGroup(rig));
+                }
 
                 TransparencySorter.SimpleSort(group);
 
                 // export the whole group/collection
-                var assimpWpfExporter = new AssimpWpfExporter();
-                assimpWpfExporter.AddModel(group);
-                assimpWpfExporter.Export(System.IO.Path.Combine(ISettingsManager.GetTemp_OBJPath(), System.IO.Path.GetFileNameWithoutExtension(ViewModel.File.ContentId) + "_" + app.Name + ".glb"), "glb2");
+                // need to put into a button
+                //var assimpWpfExporter = new AssimpWpfExporter();
+                //assimpWpfExporter.AddModel(group);
+                //assimpWpfExporter.Export(System.IO.Path.Combine(ISettingsManager.GetTemp_OBJPath(), System.IO.Path.GetFileNameWithoutExtension(ViewModel.File.ContentId) + "_" + app.Name + ".glb"), "glb2");
 
 
                 ContentVisual.SetCurrentValue(ModelVisual3D.ContentProperty, group);
@@ -619,7 +718,8 @@ namespace WolvenKit.Views.Documents
         private void SfTreeGrid_NodeCheckStateChanged(object sender, Syncfusion.UI.Xaml.TreeGrid.NodeCheckStateChangedEventArgs e)
         {
             if (ViewModel != null)
-                LoadModels(ViewModel.SelectedAppearance);
+                ShowAppearance(ViewModel.SelectedAppearance, true);
+            //LoadModels(ViewModel.SelectedAppearance);
         }
 
         private void CameraTypeCheckBox_Checked(object sender, RoutedEventArgs e)
@@ -632,6 +732,13 @@ namespace WolvenKit.Views.Documents
             {
                 Camera1.SetCurrentValue(Ab3d.Cameras.BaseCamera.CameraTypeProperty, Ab3d.Cameras.BaseCamera.CameraTypes.PerspectiveCamera);
             }
+        }
+
+        private void ComboBoxAdv_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (ViewModel != null)
+                //LoadModels(ViewModel.SelectedAppearance);
+                ShowAppearance(ViewModel.SelectedAppearance, true);
         }
     }
 }

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
@@ -33,38 +34,60 @@ namespace WolvenKit.ViewModels.Documents
         public string SlotName { get; set; }
     }
 
+    public interface Node
+    {
+        public string Name { get; set; }
+        public SeparateMatrix Matrix { get; set; }
+        public Node Parent { get; set; }
+        public List<LoadableModel> Models { get; set; }
+
+        public void AddModel(LoadableModel child);
+    }
+
     public class Appearance
     {
         public string AppearanceName { get; set; }
         public string Name { get; set; }
-        public List<LoadableModel> Models { get; set; }
+        public List<LoadableModel> Models { get; set; } = new();
         public CName Resource { get; set; }
+        public List<Node> Nodes { get; set; } = new();
     }
 
-    public class LoadableModel : IBindable
+    public class LoadableModel : IBindable, Node
     {
         public string FilePath { get; set; }
+        public Model3D OriginalModel { get; set; }
         public Model3D Model { get; set; }
         public Transform3D Transform { get; set; }
         public bool IsEnabled { get; set; }
         public string Name { get; set; }
         public List<Material> Materials { get; set; } = new();
 
-        public SeparateMatrix Matrix { get; set; }
+        public SeparateMatrix Matrix { get; set; } = new();
         public string BindName { get; set; }
         public string SlotName { get; set; }
 
         public UInt64 ChunkMask { get; set; } = 18446744073709551615;
+        public List<bool> ChunkList { get; set; } = new(64);
+        public ObservableCollection<int> AllChunks { get; set; } = new();
+        public ObservableCollection<int> EnabledChunks { get; set; } = new();
+
+        public Node Parent { get; set; }
+        public List<LoadableModel> Models { get; set; } = new();
+        public void AddModel(LoadableModel child)
+        {
+            child.Parent = this;
+            Models.Add(child);
+        }
     }
 
-    public class Rig : IBindable
+    public class Rig : IBindable, Node
     {
         public string Name { get; set; }
-        public List<RigBone> Bones { get; set; }
-        public Rig Parent { get; set; }
+        public List<RigBone> Bones { get; set; } = new();
         public List<Rig> Children { get; set; } = new();
 
-        public SeparateMatrix Matrix { get; set; }
+        public SeparateMatrix Matrix { get; set; } = new();
         public string BindName { get; set; }
         public string SlotName { get; set; }
 
@@ -73,19 +96,34 @@ namespace WolvenKit.ViewModels.Documents
             child.Parent = this;
             Children.Add(child);
         }
+
+        public Node Parent { get; set; }
+        public List<LoadableModel> Models { get; set; } = new();
+        public void AddModel(LoadableModel child)
+        {
+            child.Parent = this;
+            Models.Add(child);
+        }
     }
 
-    public class RigBone
+    public class RigBone : Node
     {
         public string Name { get; set; }
-        public RigBone Parent { get; set; }
         public List<RigBone> Children { get; set; } = new();
-        public SeparateMatrix Matrix { get; set; }
+        public SeparateMatrix Matrix { get; set; } = new();
 
         public void AddChild(RigBone child)
         {
             child.Parent = this;
             Children.Add(child);
+        }
+
+        public Node Parent { get; set; }
+        public List<LoadableModel> Models { get; set; } = new();
+        public void AddModel(LoadableModel child)
+        {
+            child.Parent = this;
+            Models.Add(child);
         }
     }
 
@@ -94,7 +132,7 @@ namespace WolvenKit.ViewModels.Documents
         public string Name { get; set; }
         public Dictionary<string, string> Slots { get; set; }
 
-        public SeparateMatrix Matrix { get; set; }
+        public SeparateMatrix Matrix { get; set; } = new();
         public string BindName { get; set; }
         public string SlotName { get; set; }
     }
@@ -207,12 +245,20 @@ namespace WolvenKit.ViewModels.Documents
 
                         var list = new List<LoadableModel>();
 
+                        var enabledChunks = new ObservableCollection<int>();
+                        for (var i = 0; i < 64; i++)
+                        {
+                            enabledChunks.Add(i);
+                        }
+
                         list.Add(new LoadableModel()
                         {
                             FilePath = outPath,
                             IsEnabled = true,
-                            Name = file.RelativePath,
-                            Materials = appMaterials
+                            Name = Path.GetFileNameWithoutExtension(file.RelativePath),
+                            Materials = appMaterials,
+                            BindName = "Root",
+                            EnabledChunks = enabledChunks
                         });
 
                         var a = new Appearance()
@@ -223,6 +269,7 @@ namespace WolvenKit.ViewModels.Documents
                         Appearances.Add(a);
                     }
                 }
+                Rigs.Add("Root", new Rig());
                 SelectedAppearance = Appearances[0];
             }
         }
@@ -365,6 +412,7 @@ namespace WolvenKit.ViewModels.Documents
                     Models = LoadMeshs(pkg.Chunks)
                 });
 
+                Rigs.Add("Component", new Rig());
                 SelectedAppearance = Appearances[0];
             }
         }
@@ -402,6 +450,7 @@ namespace WolvenKit.ViewModels.Documents
                 bool enabled = true;
                 string meshApp = "";
                 UInt64 chunkMask = 18446744073709551615;
+                var chunkList = new List<bool>(new bool[64]);
 
                 if (component is entMeshComponent emc)
                 {
@@ -420,7 +469,16 @@ namespace WolvenKit.ViewModels.Documents
                     //enabled = esmc.CastShadows == false;
                 }
 
-                if (component is entIPlacedComponent epc && depotPath != null)
+                var enabledChunks = new ObservableCollection<int>();
+
+                for (var i = 0; i < 64; i++)
+                { 
+                    chunkList[i] = (chunkMask & (1UL << i)) > 0;
+                    if (chunkList[i])
+                        enabledChunks.Add(i);
+                }
+
+                if (component is entIPlacedComponent epc && depotPath != null && depotPath.GetRedHash() != 0)
                 {
 
                     var meshFile = File.GetFileFromDepotPath(depotPath);
@@ -528,7 +586,9 @@ namespace WolvenKit.ViewModels.Documents
                                     BindName = bindName,
                                     SlotName = slotName,
                                     Materials = appMaterials,
-                                    ChunkMask = chunkMask
+                                    ChunkMask = chunkMask,
+                                    ChunkList = chunkList,
+                                    EnabledChunks = enabledChunks
                                 });
                                 break;
                             }
@@ -548,9 +608,6 @@ namespace WolvenKit.ViewModels.Documents
                         //    });
                         //}
                     }
-
-
-
                 }
             }
 
@@ -559,8 +616,8 @@ namespace WolvenKit.ViewModels.Documents
             foreach (var model in appModels.Values)
             {
                 var matrix = new SeparateMatrix();
-                GetResolvedMatrix(model, ref matrix, appModels);
-                model.Transform = new MatrixTransform3D(matrix.ToMatrix3D());
+                //GetResolvedMatrix(model, ref matrix, appModels);
+                //model.Transform = new MatrixTransform3D(matrix.ToMatrix3D());
                 if (model.Name.Contains("shadow") || model.Name.Contains("AppearanceProxyMesh") || model.Name.Contains("cutout"))
                 {
                     model.IsEnabled = false;
@@ -575,6 +632,100 @@ namespace WolvenKit.ViewModels.Documents
             }
 
             return null;
+        }
+
+        public void AddToRigs(Dictionary<string, LoadableModel> models)
+        {
+            SelectedAppearance.Nodes.Clear();
+            foreach (var (name, rig) in Rigs)
+            {
+                SelectedAppearance.Nodes.Add(rig);
+                rig.Models.Clear();
+                foreach (var rigbone in rig.Bones)
+                {
+                    rigbone.Models.Clear();
+                    SelectedAppearance.Nodes.Add(rigbone);
+                }
+            }
+
+            foreach (var (name, model) in models)
+            {
+                SelectedAppearance.Nodes.Add(model);
+                if (model.BindName == null)
+                    continue;
+                if (models.ContainsKey(model.BindName))
+                {
+                    models[model.BindName].AddModel(model);
+                }
+                else if (_slotSets.ContainsKey(model.BindName))
+                {
+                    if (model.SlotName != null && _slotSets[model.BindName].Slots.ContainsKey(model.SlotName))
+                    {
+                        var slot = _slotSets[model.BindName].Slots[model.SlotName];
+
+                        if (Rigs.ContainsKey(_slotSets[model.BindName].BindName))
+                        {
+                            var rigBone = Rigs[_slotSets[model.BindName].BindName].Bones.Where(x => x.Name == slot).FirstOrDefault(defaultValue: null);
+
+                            if (rigBone != null)
+                            {
+                                rigBone.AddModel(model);
+                            }
+                        }
+                    }
+                }
+                else if (Rigs.ContainsKey(model.BindName))
+                {
+                    Rigs[model.BindName].AddModel(model);
+                }
+                else
+                {
+                    Rigs.First().Value.AddModel(model);
+                }
+            }
+
+            // return root?
+        }
+
+        public void GetResolvedMatrix(IBindable bindable, ref SeparateMatrix matrix, Dictionary<string, LoadableModel> models)
+        {
+            matrix.Append(bindable.Matrix);
+
+            if (bindable.BindName != null)
+            {
+                if (bindable is LoadableModel)
+                {
+                    if (models.ContainsKey(bindable.BindName))
+                    {
+                        GetResolvedMatrix(models[bindable.BindName], ref matrix, models);
+                    }
+                    else if (_slotSets.ContainsKey(bindable.BindName))
+                    {
+                        if (bindable.SlotName != null && _slotSets[bindable.BindName].Slots.ContainsKey(bindable.SlotName))
+                        {
+                            var slot = _slotSets[bindable.BindName].Slots[bindable.SlotName];
+
+                            if (Rigs.ContainsKey(_slotSets[bindable.BindName].BindName))
+                            {
+                                var rigBone = Rigs[_slotSets[bindable.BindName].BindName].Bones.Where(x => x.Name == slot).FirstOrDefault(defaultValue: null);
+
+                                while (rigBone != null)
+                                {
+                                    matrix.AppendPost(rigBone.Matrix);
+                                    rigBone = (RigBone)rigBone.Parent;
+                                }
+                            }
+                        }
+
+                        // not sure this does anything anywhere
+                        GetResolvedMatrix(_slotSets[bindable.BindName], ref matrix, models);
+                    }
+                }
+                else if (Rigs.ContainsKey(bindable.BindName))
+                {
+                    GetResolvedMatrix(Rigs[bindable.BindName], ref matrix, models);
+                }
+            }
         }
 
         public async Task LoadMaterial(Material material)
@@ -1030,47 +1181,6 @@ namespace WolvenKit.ViewModels.Documents
         public byte ToBlue(byte r, byte g)
         {
             return (byte)Math.Clamp(Math.Round((Math.Sqrt(1.02 - 2 * ((r / 255F) * 2 - 1) * ((g / 255F) * 2 - 1)) + 1) / 2 * 255), 0, 255);
-        }
-
-        public void GetResolvedMatrix(IBindable bindable, ref SeparateMatrix matrix, Dictionary<string, LoadableModel> models)
-        {
-            matrix.Append(bindable.Matrix);
-
-            if (bindable.BindName != null)
-            {
-                if (bindable is LoadableModel)
-                {
-                    if (models.ContainsKey(bindable.BindName))
-                    {
-                        GetResolvedMatrix(models[bindable.BindName], ref matrix, models);
-                    }
-                    else if (_slotSets.ContainsKey(bindable.BindName))
-                    {
-                        if (bindable.SlotName != null && _slotSets[bindable.BindName].Slots.ContainsKey(bindable.SlotName))
-                        {
-                            var slot = _slotSets[bindable.BindName].Slots[bindable.SlotName];
-
-                            if (Rigs.ContainsKey(_slotSets[bindable.BindName].BindName))
-                            {
-                                var rigBone = Rigs[_slotSets[bindable.BindName].BindName].Bones.Where(x => x.Name == slot).FirstOrDefault(defaultValue: null);
-
-                                while (rigBone != null)
-                                {
-                                    matrix.AppendPost(rigBone.Matrix);
-                                    rigBone = rigBone.Parent;
-                                }
-                            }
-                        }
-
-                        // not sure this does anything anywhere
-                        //GetResolvedMatrix(_slotSets[bindable.BindName], ref matrix, models);
-                    }
-                }
-                else if (Rigs.ContainsKey(bindable.BindName))
-                {
-                    GetResolvedMatrix(Rigs[bindable.BindName], ref matrix, models);
-                }
-            }
         }
 
         public ICommand ExtractShadersCommand { get; set; }

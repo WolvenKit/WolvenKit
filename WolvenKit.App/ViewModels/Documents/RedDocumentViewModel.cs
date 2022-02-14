@@ -208,10 +208,6 @@ namespace WolvenKit.ViewModels.Documents
             {
                 TabItemViewModels.Add(new RDTMeshViewModel(ent, this));
             }
-            if (cls is appearanceAppearanceResource app)
-            {
-                TabItemViewModels.Add(new RDTMeshViewModel(app, this));
-            }
         }
 
         private void PopulateItems()
