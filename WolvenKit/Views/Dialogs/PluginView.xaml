@@ -11,6 +11,7 @@
     xmlns:hc="https://handyorg.github.io/handycontrol"
     xmlns:dialogs="clr-namespace:WolvenKit.ViewModels.Dialogs;assembly=WolvenKit.App"
     xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
+    xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
     mc:Ignorable="d" 
     d:DesignHeight="600" d:DesignWidth="800"
     Width="800"
@@ -37,11 +38,12 @@
 
         <!-- Main grid -->
         <ListBox Grid.Row="2" x:Name="PluginList" HorizontalContentAlignment="Stretch" Margin="25"
-                 ItemsSource="{Binding Plugins}"
-                 SelectedItem="{Binding SelectedPlugin}" d:ItemsSource="{d:SampleData ItemCount=5}">
+                 ItemsSource="{Binding Plugins}" d:ItemsSource="{d:SampleData ItemCount=5}"
+                 SelectedItem="{Binding SelectedPlugin}">
+            
             <ListBox.ItemTemplate>
                 <DataTemplate>
-                    <Grid Height="75">
+                    <Grid Height="85" >
                         <Grid.RowDefinitions>
                             <RowDefinition Height="*"/>
                             <RowDefinition Height="Auto"/>
@@ -49,26 +51,45 @@
 
                         <Grid Grid.Row="0">
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="2*"/>
+                                <ColumnDefinition Width="4*"/>
+                                <ColumnDefinition Width="50"/>
                                 <ColumnDefinition Width="*"/>
                             </Grid.ColumnDefinitions>
 
 
                             <StackPanel Grid.Column="0">
                                 <TextBlock Text="{Binding Name}" FontSize="20"/>
-                                <TextBlock Text="{Binding Version}" FontSize="14"/>
+                                <TextBlock Text="{Binding Version}" FontWeight="Bold" FontSize="14"/>
                                 <TextBlock Text="{Binding Description}" FontSize="14"/>
                             </StackPanel>
 
-                            <StackPanel Grid.Column="1">
+                            <Button Grid.Column="1" Command="{Binding InstallCommand}"
+                                    Visibility="{Binding IsNotInstalled, Converter={StaticResource boolToVisibilityConverter}}"
+                                    Background="Transparent" BorderBrush="Transparent"
+                                    syncfusion:FocusManagerHelper.FocusedElement="True">
+                                <iconPacks:PackIconMaterial Kind="Download" Width="30" Height="30"
+                                                            Foreground="CadetBlue" />
+                            </Button>
+                            <Button Grid.Column="1"
+                                    Visibility="{Binding IsOpenEnabled, Converter={StaticResource boolToVisibilityConverter}}"
+                                    Background="Transparent" BorderBrush="Transparent"
+                                    syncfusion:FocusManagerHelper.FocusedElement="True">
+                                <iconPacks:PackIconMaterial Kind="Check" Width="30" Height="30"
+                                                            Foreground="LawnGreen" />
+                            </Button>
+
+                            <StackPanel Grid.Column="2">
                                 <Button Content="{Binding Label}" Margin="4" Command="{Binding InstallCommand}"/>
-                                <Button Content="???" Margin="4"/>
+                                <Button Content="Open" Margin="4" IsEnabled="{Binding IsOpenEnabled}" Command="{Binding OpenCommand}"/>
+                                <Button Content="Remove" Margin="4" IsEnabled="{Binding IsOpenEnabled}" Command="{Binding RemoveCommand}"/>
                             </StackPanel>
                         </Grid>
 
                         <Grid Grid.Row="1">
-                            <syncfusion:SfLinearProgressBar x:Name="StatusBarProgressBar" Height="16" Margin="6,0,0,2" Width="200"
-                                                TrackColor="#131313" ProgressColor="{StaticResource WolvenKitRed}"/>
+                            <ProgressBar x:Name="StatusBarProgressBar"
+                                         Height="10" Margin="0,0,0,0"
+                                         IsIndeterminate="{Binding IsBusy}"
+                                         Visibility="{Binding IsBusy, Converter={StaticResource boolToVisibilityConverter}}"/>
                         </Grid>
                     </Grid>
                 </DataTemplate>

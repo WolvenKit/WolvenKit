@@ -61,7 +61,7 @@
                     <syncfusion:ComboBoxAdv Grid.Column="1" x:Name="ComboBoxTags" AllowMultiSelect="true"
                                         IsEditable="true" EnableToken="true"
                                         SelectionChanged="ComboBoxAdv_SelectionChanged"
-                                        ItemsSource="{Binding Tags, Mode=OneWay}" />
+                                        ItemsSource="{Binding Tags, Mode=OneWay}"/>
                 </Grid>
 
                 <!-- DataGrid -->
@@ -84,8 +84,10 @@
                                         </Grid.ColumnDefinitions>
 
                                         <TextBlock Text="{Binding Name}" VerticalAlignment="Center" Margin="2,0,0,0"/>
-                                        <Button Grid.Column="1" Background="Transparent" BorderBrush="Transparent"
-                                                Click="ButtonAdd_Click" syncfusion:FocusManagerHelper.FocusedElement="True">
+                                        <Button Grid.Column="1"
+                                                Background="Transparent" BorderBrush="Transparent"
+                                                syncfusion:FocusManagerHelper.FocusedElement="True"
+                                                Click="ButtonAdd_Click" >
                                             <iconPacks:PackIconMaterial Kind="Plus" Foreground="Green" Height="13" Width="17" Padding="1" />
                                         </Button>
                                     </Grid>

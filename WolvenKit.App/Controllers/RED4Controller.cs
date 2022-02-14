@@ -15,6 +15,7 @@ using WolvenKit.Common.Interfaces;
 using WolvenKit.Common.Services;
 using WolvenKit.Core;
 using WolvenKit.Core.Compression;
+using WolvenKit.Core.Services;
 using WolvenKit.Functionality.Services;
 using WolvenKit.Helpers;
 using WolvenKit.Models;
@@ -37,6 +38,8 @@ namespace WolvenKit.Functionality.Controllers
         private readonly IHashService _hashService;
         private readonly IModTools _modTools;
         private readonly IArchiveManager _archiveManager;
+        private readonly IProgressService<double> _progressService;
+
         private bool _initialized = false;
 
         #endregion
@@ -48,7 +51,8 @@ namespace WolvenKit.Functionality.Controllers
             ISettingsManager settingsManager,
             IHashService hashService,
             IModTools modTools,
-            IArchiveManager gameArchiveManager
+            IArchiveManager gameArchiveManager,
+            IProgressService<double> progressService
             )
         {
             _notificationService = notificationService;
@@ -58,7 +62,7 @@ namespace WolvenKit.Functionality.Controllers
             _hashService = hashService;
             _modTools = modTools;
             _archiveManager = gameArchiveManager;
-
+            _progressService = progressService;
         }
 
         #region Methods
@@ -264,14 +268,17 @@ namespace WolvenKit.Functionality.Controllers
         /// <returns></returns>
         public async Task<bool> PackAndInstallProject()
         {
+            _progressService.IsIndeterminate = true;
+
             var packTask = PackProject();
             if (!packTask.Result)
             {
+                _progressService.IsIndeterminate = false;
                 return await Task.FromResult(false);
             }
 
             InstallMod();
-
+            var result = false;
             // compile with redmod
             var redmodPath = Path.Combine(_settingsManager.GetRED4GameRootDir(), "tools", "redmod", "redmod.exe");
             if (File.Exists(redmodPath))
@@ -281,12 +288,16 @@ namespace WolvenKit.Functionality.Controllers
                 
                 _loggerService.Info($"WorkDir: {redmodPath}");
                 _loggerService.Info($"Running commandlet: {args}");
-                return await ProcessUtil.RunProcessAsync(redmodPath, args);
+                result = await ProcessUtil.RunProcessAsync(redmodPath, args);
             }
             else
             {
-                return await Task.FromResult(true);
+                result = await Task.FromResult(true);
             }
+
+            _progressService.IsIndeterminate = false;
+            return result;
+
         }
 
         /// <summary>
