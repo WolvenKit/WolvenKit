@@ -54,7 +54,7 @@ namespace WolvenKit.ViewModels.Documents
         public string BindName { get; set; }
         public string SlotName { get; set; }
 
-        public UInt64 ChunkMask { get; set; }
+        public UInt64 ChunkMask { get; set; } = 18446744073709551615;
     }
 
     public class Rig : IBindable
@@ -401,7 +401,7 @@ namespace WolvenKit.ViewModels.Documents
                 CName depotPath = null;
                 bool enabled = true;
                 string meshApp = "";
-                UInt64 chunkMask = 0;
+                UInt64 chunkMask = 18446744073709551615;
 
                 if (component is entMeshComponent emc)
                 {
@@ -446,53 +446,50 @@ namespace WolvenKit.ViewModels.Documents
 
                     var localList = (CR2WList)mesh.LocalMaterialBuffer.RawData?.Buffer.Data ?? null;
 
-                    if (localList != null)
+                    foreach (var me in mesh.MaterialEntries)
                     {
-                        foreach (var me in mesh.MaterialEntries)
+                        if (!me.IsLocalInstance)
                         {
-                            if (!me.IsLocalInstance)
+                            materials.Add(me.Name, new Material()
                             {
-                                materials.Add(me.Name, new Material()
-                                {
-                                    Name = me.Name
-                                });
-                                continue;
-                            }
-
-                            CMaterialInstance inst = null;
-
-                            if (localList != null && localList.Files.Count > me.Index)
-                            {
-                                inst = (CMaterialInstance)localList.Files[me.Index].RootChunk;
-                            }
-                            else
-                            {
-                                //foreach (var pme in data.PreloadLocalMaterialInstances)
-                                //{
-                                //inst = (CMaterialInstance)pme.GetValue();
-                                //}
-                                inst = (CMaterialInstance)mesh.PreloadLocalMaterialInstances[me.Index].GetValue();
-                            }
-
-                            //CMaterialInstance bm = null;
-                            //if (File.GetFileFromDepotPath(inst.BaseMaterial.DepotPath) is var file)
-                            //{
-                            //    bm = (CMaterialInstance)file.RootChunk;
-                            //}
-
-                            var material = new Material()
-                            {
-                                Instance = inst,
                                 Name = me.Name
-                            };
-
-                            foreach (var pair in inst.Values)
-                            {
-                                material.Values.Add(pair.Key, pair.Value);
-                            }
-
-                            materials.Add(me.Name, material);
+                            });
+                            continue;
                         }
+
+                        CMaterialInstance inst = null;
+
+                        if (localList != null && localList.Files.Count > me.Index)
+                        {
+                            inst = (CMaterialInstance)localList.Files[me.Index].RootChunk;
+                        }
+                        else
+                        {
+                            //foreach (var pme in data.PreloadLocalMaterialInstances)
+                            //{
+                            //inst = (CMaterialInstance)pme.GetValue();
+                            //}
+                            inst = (CMaterialInstance)mesh.PreloadLocalMaterialInstances[me.Index].GetValue();
+                        }
+
+                        //CMaterialInstance bm = null;
+                        //if (File.GetFileFromDepotPath(inst.BaseMaterial.DepotPath) is var file)
+                        //{
+                        //    bm = (CMaterialInstance)file.RootChunk;
+                        //}
+
+                        var material = new Material()
+                        {
+                            Instance = inst,
+                            Name = me.Name
+                        };
+
+                        foreach (var pair in inst.Values)
+                        {
+                            material.Values.Add(pair.Key, pair.Value);
+                        }
+
+                        materials.Add(me.Name, material);
                     }
 
                     var outPath = Path.Combine(ISettingsManager.GetTemp_OBJPath(), Path.GetFileNameWithoutExtension(depotPath) + "_" + depotPath.GetRedHash().ToString() + "_full.glb");
@@ -503,7 +500,7 @@ namespace WolvenKit.ViewModels.Documents
                         foreach (var handle in mesh.Appearances)
                         {
                             var app = handle.GetValue();
-                            if (app is meshMeshAppearance mmapp && (mmapp.Name == meshApp || meshApp == "default" && mesh.Appearances.IndexOf(handle) == 0))
+                            if (app is meshMeshAppearance mmapp && (mmapp.Name == meshApp || (meshApp == "default" && mesh.Appearances.IndexOf(handle) == 0)))
                             {
                                 var appMaterials = new List<Material>();
 
@@ -564,7 +561,7 @@ namespace WolvenKit.ViewModels.Documents
                 var matrix = new SeparateMatrix();
                 GetResolvedMatrix(model, ref matrix, appModels);
                 model.Transform = new MatrixTransform3D(matrix.ToMatrix3D());
-                if (model.Name.Contains("shadow") || model.Name.Contains("AppearanceProxyMesh") || model.Name.Contains("sticker") || model.Name.Contains("cutout"))
+                if (model.Name.Contains("shadow") || model.Name.Contains("AppearanceProxyMesh") || model.Name.Contains("cutout"))
                 {
                     model.IsEnabled = false;
                 }
@@ -611,9 +608,26 @@ namespace WolvenKit.ViewModels.Documents
                     mat = null;
                 }
             }
+            material.Values = dictionary;
+
+            if (dictionary.ContainsKey("Metalness") && dictionary["Metalness"] is CResourceReference<ITexture> metalTexture)
+            {
+                if (metalTexture.DepotPath == "base\\materials\\placeholder\\black.xbm")
+                    material.Metalness = 0;
+                else if (metalTexture.DepotPath == "base\\materials\\placeholder\\white.xbm")
+                    material.Metalness = 1;
+            }
 
             if (dictionary.ContainsKey("MetalnessScale"))
                 material.Metalness = (CFloat)dictionary["MetalnessScale"];
+
+            if (dictionary.ContainsKey("Roughness") && dictionary["Roughness"] is CResourceReference<ITexture> roughTexture)
+            {
+                if (roughTexture.DepotPath == "base\\materials\\placeholder\\black.xbm")
+                    material.Roughness = 0;
+                else if (roughTexture.DepotPath == "base\\materials\\placeholder\\white.xbm")
+                    material.Roughness = 1;
+            }
 
             if (dictionary.ContainsKey("RoughnessScale"))
                 material.Roughness = (CFloat)dictionary["RoughnessScale"];
@@ -861,6 +875,20 @@ namespace WolvenKit.ViewModels.Documents
                 stream.Dispose();
             }
 
+            if (dictionary.ContainsKey("ParalaxTexture") && dictionary["ParalaxTexture"] is CResourceReference<ITexture> crrp)
+            {
+                var xbm = File.GetFileFromDepotPath(crrp.DepotPath);
+
+                if (xbm.RootChunk is not ITexture it)
+                {
+                    goto NormalMaps;
+                }
+
+                var stream = new FileStream(filename_d, FileMode.Create);
+                ModTools.ConvertRedClassToDdsStream(it, stream, out var format);
+                stream.Dispose();
+            }
+
             if (dictionary.ContainsKey("BaseColor") && dictionary["BaseColor"] is CResourceReference<ITexture> crrbc)
             {
                 var xbm = File.GetFileFromDepotPath(crrbc.DepotPath);
@@ -880,7 +908,7 @@ namespace WolvenKit.ViewModels.Documents
             // normals
 
             if (System.IO.File.Exists(filename_bn))
-                return;
+                goto SkipNormals;
 
             if (dictionary.ContainsKey("NormalTexture") && dictionary["NormalTexture"] is CResourceReference<ITexture> crrn)
             {
@@ -888,7 +916,7 @@ namespace WolvenKit.ViewModels.Documents
 
                 if (xbm.RootChunk is not ITexture it)
                 {
-                    return;
+                    goto SkipNormals;
                 }
 
                 //var stream = new FileStream(filename_n, FileMode.Create);
@@ -938,17 +966,13 @@ namespace WolvenKit.ViewModels.Documents
                 }
 
             }
-
-            if (System.IO.File.Exists(filename_bn))
-                return;
-
-            if (dictionary.ContainsKey("Normal") && dictionary["Normal"] is CResourceReference<ITexture> crrn2)
+            else if (dictionary.ContainsKey("Normal") && dictionary["Normal"] is CResourceReference<ITexture> crrn2)
             {
                 var xbm = File.GetFileFromDepotPath(crrn2.DepotPath);
 
                 if (xbm.RootChunk is not ITexture it)
                 {
-                    return;
+                    goto SkipNormals;
                 }
 
                 //var stream = new FileStream(filename_n, FileMode.Create);
@@ -997,6 +1021,9 @@ namespace WolvenKit.ViewModels.Documents
                     normalLayer.Dispose();
                 }
             }
+
+        SkipNormals:
+            ;
 
         }
 
@@ -1029,18 +1056,17 @@ namespace WolvenKit.ViewModels.Documents
 
                                 while (rigBone != null)
                                 {
-                                    matrix.Append(rigBone.Matrix);
+                                    matrix.AppendPost(rigBone.Matrix);
                                     rigBone = rigBone.Parent;
                                 }
                             }
                         }
 
                         // not sure this does anything anywhere
-                        GetResolvedMatrix(_slotSets[bindable.BindName], ref matrix, models);
+                        //GetResolvedMatrix(_slotSets[bindable.BindName], ref matrix, models);
                     }
                 }
-
-                if (Rigs.ContainsKey(bindable.BindName))
+                else if (Rigs.ContainsKey(bindable.BindName))
                 {
                     GetResolvedMatrix(Rigs[bindable.BindName], ref matrix, models);
                 }
@@ -1130,6 +1156,7 @@ namespace WolvenKit.ViewModels.Documents
         public Matrix3D rotation = new();
         public Matrix3D translation = new();
         public Matrix3D scale = new();
+        public Matrix3D post = new();
 
         public SeparateMatrix() {
 
@@ -1139,20 +1166,19 @@ namespace WolvenKit.ViewModels.Documents
         {
             if (matrix != null)
             {
+                scale.Append(matrix.scale);
                 rotation.Append(matrix.rotation);
                 translation.Append(matrix.translation);
-                scale.Append(matrix.scale);
+                //scale.Append(matrix.rotation);
+                //scale.Append(matrix.translation);
             }
         }
 
-        public void Rotate(System.Windows.Media.Media3D.Quaternion q)
+        public void AppendPost(SeparateMatrix matrix)
         {
-            rotation.Rotate(q);
-        }
-
-        public void Translate(Vector3D v)
-        {
-            translation.Translate(v);
+            post.Append(matrix.scale);
+            post.Append(matrix.rotation);
+            post.Append(matrix.translation);
         }
 
         public void Scale(Vector3D v)
@@ -1160,12 +1186,26 @@ namespace WolvenKit.ViewModels.Documents
             scale.Scale(v);
         }
 
+        public void Rotate(System.Windows.Media.Media3D.Quaternion q)
+        {
+            rotation.Rotate(q);
+            //scale.Rotate(q);
+        }
+
+        public void Translate(Vector3D v)
+        {
+            translation.Translate(v);
+            //scale.Translate(v);
+        }
+
         public Matrix3D ToMatrix3D()
         {
+            //return scale;
             var matrix = new Matrix3D();
             matrix.Append(scale);
             matrix.Append(rotation);
             matrix.Append(translation);
+            matrix.Append(post);
             return matrix;
         }
     }

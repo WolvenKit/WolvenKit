@@ -24,6 +24,7 @@ using Ab3d.Utilities;
 using Ab3d.Visuals;
 using Assimp;
 using ReactiveUI;
+using SharpDX;
 using Splat;
 using WolvenKit.Common.Services;
 using WolvenKit.Functionality.Ab4d;
@@ -39,7 +40,7 @@ namespace WolvenKit.Views.Documents
     public partial class RDTMeshView : ReactiveUserControl<RDTMeshViewModel>
     {
 
-        private Dictionary<string, DiffuseMaterial> _materials = new();
+        private Dictionary<string, System.Windows.Media.Media3D.Material> _materials = new();
 
         public RDTMeshView()
         {
@@ -75,6 +76,8 @@ namespace WolvenKit.Views.Documents
                 {
                     LoadModel(model);
                 }
+
+
                 //Parallel.For(0, app.Models.Count, (i) => LoadModel(app.Models[i]));
                 GC.Collect();
                 //GC.WaitForPendingFinalizers();
@@ -83,20 +86,26 @@ namespace WolvenKit.Views.Documents
             }
         }
 
-        public void SetupMaterial(Material material, out DiffuseMaterial diffuseMaterial)
+        public void SetupMaterial(Material material, out System.Windows.Media.Media3D.Material mediaMaterial)
         {
             if (_materials.ContainsKey(material.Name))
             {
-                diffuseMaterial = _materials[material.Name];
+                mediaMaterial = _materials[material.Name];
             }
             else
             { 
                 ViewModel.LoadMaterial(material).Wait();
 
-                diffuseMaterial = new DiffuseMaterial();
-                diffuseMaterial.SetName($"{material.Name}");
+                mediaMaterial = new EmissiveMaterial(Brushes.Transparent);
+                //mediaMaterial = new DiffuseMaterial();
+                mediaMaterial.SetName($"{material.Name}");
 
                 var physicallyBasedMaterial = new PhysicallyBasedMaterial();
+
+                if (material.Values.ContainsKey("OpacityBackFace") && material.Values["OpacityBackFace"] is RED4.Types.CFloat f)
+                {
+                    physicallyBasedMaterial.IsTwoSided = f > 0.0;
+                }
 
                 var filename_b = System.IO.Path.Combine(ISettingsManager.GetTemp_OBJPath(), material.Name + ".png");
                 var filename_bn = System.IO.Path.Combine(ISettingsManager.GetTemp_OBJPath(), material.Name + "_n.png");
@@ -106,11 +115,11 @@ namespace WolvenKit.Views.Documents
                 if (File.Exists(filename_d))
                 {
                     var shaderResourceView = TextureLoader.LoadShaderResourceView(MainDXViewportView.DXScene.Device,
-                                                                                           filename_d,
-                                                                                           loadDdsIfPresent: false,
-                                                                                           convertTo32bppPRGBA: true,
-                                                                                           generateMipMaps: true,
-                                                                                           textureInfo: out var textureInfo);
+                                                                                            filename_d,
+                                                                                            loadDdsIfPresent: false,
+                                                                                            convertTo32bppPRGBA: true,
+                                                                                            generateMipMaps: true,
+                                                                                            textureInfo: out var textureInfo);
 
                     physicallyBasedMaterial.TextureMaps.Add(new TextureMapInfo(TextureMapTypes.BaseColor, shaderResourceView, null, filename_d));
 
@@ -138,15 +147,14 @@ namespace WolvenKit.Views.Documents
 
                     //    effect.SetShaders(vertexShaderBytecode, pixelShaderBytecode);
                 }
-
                 else if (File.Exists(filename_b))
                 {
                     var shaderResourceView = TextureLoader.LoadShaderResourceView(MainDXViewportView.DXScene.Device,
-                                                                                           filename_b,
-                                                                                           loadDdsIfPresent: false,
-                                                                                           convertTo32bppPRGBA: true,
-                                                                                           generateMipMaps: true,
-                                                                                           textureInfo: out var textureInfo);
+                                                                                            filename_b,
+                                                                                            loadDdsIfPresent: false,
+                                                                                            convertTo32bppPRGBA: true,
+                                                                                            generateMipMaps: true,
+                                                                                            textureInfo: out var textureInfo);
 
                     physicallyBasedMaterial.TextureMaps.Add(new TextureMapInfo(TextureMapTypes.BaseColor, shaderResourceView, null, filename_b));
 
@@ -157,46 +165,75 @@ namespace WolvenKit.Views.Documents
                     physicallyBasedMaterial.BlendState = recommendedBlendState;
                     physicallyBasedMaterial.HasTransparency = textureInfo.HasTransparency;
                 }
+                else if (material.TemplateName == "glass" ||
+                    material.TemplateName == "vehicle_glass" ||
+                    material.TemplateName == "decal" ||
+                    material.TemplateName == "vehicle_decal" ||
+                    material.TemplateName == "vehicle_mesh_decal" ||
+                    material.TemplateName == "mesh_decal")
+                {
+                    var tintColor = new RED4.Types.CColor()
+                    {
+                        Red = 0,
+                        Blue = 0,
+                        Green = 0
+                    };
+                    if (material.Values.ContainsKey("TintColor"))
+                    {
+                        tintColor = (RED4.Types.CColor)material.Values["TintColor"];
+                        //if (tintColor.Red == 255 && tintColor.Blue == 255 && tintColor.Green == 255)
+                        //{
+                            tintColor = new RED4.Types.CColor()
+                            {
+                                Red = tintColor.Red / 8,
+                                Blue = tintColor.Blue / 8,
+                                Green = tintColor.Green / 8
+                            };
+                        //}
+                    }
+                    //physicallyBasedMaterial.BaseColor = new Color4(tintColor.Red / 255f, tintColor.Green / 255f, tintColor.Blue / 255f, tintColor.Alpha / 255f);
+                    physicallyBasedMaterial.BaseColor = new Color4(tintColor.Red / 255f, tintColor.Green / 255f, tintColor.Blue / 255f, 0f);
+                    physicallyBasedMaterial.HasTransparency = true;
+                    physicallyBasedMaterial.BlendState = MainDXViewportView.DXScene.DXDevice.CommonStates.GetRecommendedBlendState(true, true);
+                }
 
 
                 if (File.Exists(filename_n))
                 {
                     var shaderResourceView = TextureLoader.LoadShaderResourceView(MainDXViewportView.DXScene.Device,
-                                                                                           filename_n,
-                                                                                           loadDdsIfPresent: false,
-                                                                                           convertTo32bppPRGBA: true,
-                                                                                           generateMipMaps: true,
-                                                                                           textureInfo: out var textureInfo);
+                                                                                            filename_n,
+                                                                                            loadDdsIfPresent: false,
+                                                                                            convertTo32bppPRGBA: true,
+                                                                                            generateMipMaps: true,
+                                                                                            textureInfo: out var textureInfo);
 
                     physicallyBasedMaterial.TextureMaps.Add(new TextureMapInfo(TextureMapTypes.NormalMap, shaderResourceView, null, filename_n));
                 }
                 else if (File.Exists(filename_bn))
                 {
                     var shaderResourceView = TextureLoader.LoadShaderResourceView(MainDXViewportView.DXScene.Device,
-                                                                                           filename_bn,
-                                                                                           loadDdsIfPresent: false,
-                                                                                           convertTo32bppPRGBA: true,
-                                                                                           generateMipMaps: true,
-                                                                                           textureInfo: out var textureInfo);
+                                                                                            filename_bn,
+                                                                                            loadDdsIfPresent: false,
+                                                                                            convertTo32bppPRGBA: true,
+                                                                                            generateMipMaps: true,
+                                                                                            textureInfo: out var textureInfo);
 
                     physicallyBasedMaterial.TextureMaps.Add(new TextureMapInfo(TextureMapTypes.NormalMap, shaderResourceView, null, filename_bn));
                 }
 
                 physicallyBasedMaterial.Roughness = material.Roughness;
                 physicallyBasedMaterial.Metalness = material.Metalness;
-                if (material.TemplateName == "vehicle_lights")
-                {
-                    physicallyBasedMaterial.EmissiveColor = Colors.Red.ToColor3();
-                    physicallyBasedMaterial.HasTransparency = true;
-                }
+                //if (material.TemplateName == "vehicle_lights")
+                //{
+                //    physicallyBasedMaterial.EmissiveColor = Colors.Red.ToColor3();
+                //    physicallyBasedMaterial.HasTransparency = true;
+                //}
 
                 //physicallyBasedMaterial.SetTextureMap(TextureMapTypes.EnvironmentCubeMap)
 
+                mediaMaterial.SetUsedDXMaterial(physicallyBasedMaterial);
 
-
-                diffuseMaterial.SetUsedDXMaterial(physicallyBasedMaterial);
-
-                _materials[material.Name] = diffuseMaterial;
+                _materials[material.Name] = mediaMaterial;
 
             }
         }
@@ -293,52 +330,68 @@ namespace WolvenKit.Views.Documents
 
                     if (model3D is Model3DGroup mg)
                     {
-                        var i = 0;
-                        foreach (var submesh in mg.Children)
+                        for (var i = 0; i < mg.Children.Count; i++)
                         {
-                            Random r = new Random();
+                            var submesh = mg.Children[i];
+                            if ((model.ChunkMask & 1UL << i) > 0)
+                            {
+                                //Random r = new Random();
+                                //var color = Color.FromRgb((byte)r.Next(1, 255), (byte)r.Next(1, 255), (byte)r.Next(1, 233));
+                                var color = Colors.Gray;
+                                Brush brush = new SolidColorBrush(color);
+
+                                //var material = new DiffuseMaterial(brush);
+                                System.Windows.Media.Media3D.Material material = new EmissiveMaterial(Brushes.Transparent);
+
+                                if (i < model.Materials.Count)
+                                {
+                                    submesh.SetName($"{model.Name}_{i:D2}_{model.Materials[i].Name}");
+                                    SetupMaterial(model.Materials[i], out material);
+                                }
+                                else
+                                {
+                                    material.SetName($"{model.Name}_{i:D2}");
+                                    submesh.SetName($"{model.Name}_{i:D2}");
+                                }
+
+                                ModelUtils.ChangeMaterial(submesh, material, null);
+                            }
+                        }
+                        
+                        for (var i = mg.Children.Count - 1; i >= 0; i--)
+                        { 
+                            if ((model.ChunkMask & 1UL << i) == 0)
+                            {
+                                mg.Children.Remove(mg.Children[i]);
+                                //ModelUtils.ChangeMaterial(submesh, new EmissiveMaterial(Brushes.Transparent), new EmissiveMaterial(Brushes.Transparent));
+                            }
+                        }
+                        model.Model = model3D;
+                    }
+                    else
+                    {
+                        if ((model.ChunkMask & 1UL) > 0)
+                        {
+                            //Random r = new Random();
                             //var color = Color.FromRgb((byte)r.Next(1, 255), (byte)r.Next(1, 255), (byte)r.Next(1, 233));
                             var color = Colors.Gray;
                             Brush brush = new SolidColorBrush(color);
 
-                            var material = new DiffuseMaterial(brush);
+                            //System.Windows.Media.Media3D.Material material = new DiffuseMaterial(brush);
+                            System.Windows.Media.Media3D.Material material = new EmissiveMaterial(Brushes.Transparent);
 
-                            if (i < model.Materials.Count)
+                            if (0 < model.Materials.Count)
                             {
-                                submesh.SetName($"{model.Name}_{i:D2}_{model.Materials[i].Name}");
-                                SetupMaterial(model.Materials[i], out material);
+                                SetupMaterial(model.Materials[0], out material);
                             }
                             else
                             {
-                                material.SetName($"{model.Name}_{i:D2}");
-                                submesh.SetName($"{model.Name}_{i:D2}");
+                                material.SetName($"{model.Name}");
                             }
 
-                            ModelUtils.ChangeMaterial(submesh, material, material);
-
-                            i++;
+                            ModelUtils.ChangeMaterial(model3D, material, null);
+                            model.Model = model3D;
                         }
-                    }
-                    else
-                    {
-                        Random r = new Random();
-                        //var color = Color.FromRgb((byte)r.Next(1, 255), (byte)r.Next(1, 255), (byte)r.Next(1, 233));
-                        var color = Colors.Gray;
-                        Brush brush = new SolidColorBrush(color);
-
-                        var material = new DiffuseMaterial(brush);
-
-                        if (0 < model.Materials.Count)
-                        {
-                            SetupMaterial(model.Materials[0], out material);
-                        }
-                        else
-                        {
-                            material.SetName($"{model.Name}");
-                        }
-
-                        ModelUtils.ChangeMaterial(model3D, material, material);
-
                     }
 
                     //var pbm = new PhysicallyBasedMaterial()
@@ -349,7 +402,6 @@ namespace WolvenKit.Views.Documents
 
                     //material.SetUsedDXMaterial(pbm);
                     //ModelUtils.ChangeMaterial(model3D, material, material);
-                    model.Model = model3D;
                 }
 
                 // Force garbage collection to clear the previously loaded objects from memory.
@@ -396,11 +448,12 @@ namespace WolvenKit.Views.Documents
                 //ContentVisual.SetCurrentValue(ModelVisual3D.ContentProperty, model3D);
 
                 var collection = new Model3DCollection(app.Models.Where(x => x.Model != null && x.IsEnabled).Select(x => x.Model));
-
-                 var group = new Model3DGroup()
+                var group = new Model3DGroup()
                 {
                     Children = collection
                 };
+
+                TransparencySorter.SimpleSort(group);
 
                 // export the whole group/collection
                 var assimpWpfExporter = new AssimpWpfExporter();

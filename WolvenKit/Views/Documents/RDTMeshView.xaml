@@ -296,6 +296,7 @@
             </StackPanel>
             <syncfusion:SfTreeGrid
                 Grid.Row="1"
+                AllowResizingColumns="True"
                 AutoExpandMode="AllNodesExpanded"
                 AutoGenerateColumns="False"
                 CheckBoxMappingName="IsEnabled"
