@@ -273,10 +273,15 @@ namespace WolvenKit.Functionality.Controllers
             InstallMod();
 
             // compile with redmod
-            var redmodPath = Path.Combine(_settingsManager.GetRED4GameModDir(), "tools", "redmod", "redmod.exe");
+            var redmodPath = Path.Combine(_settingsManager.GetRED4GameRootDir(), "tools", "redmod", "redmod.exe");
             if (File.Exists(redmodPath))
             {
-                return await ProcessUtil.RunProcessAsync(redmodPath, "deploy");
+                var gameRoot = Path.Combine(_settingsManager.GetRED4GameRootDir(), "r6");
+                var args = $"deploy -gameRoot=\"{gameRoot}\"";
+                
+                _loggerService.Info($"WorkDir: {redmodPath}");
+                _loggerService.Info($"Running commandlet: {args}");
+                return await ProcessUtil.RunProcessAsync(redmodPath, args);
             }
             else
             {
@@ -327,6 +332,8 @@ namespace WolvenKit.Functionality.Controllers
             // compile tweak files
             CompileTweakFiles(cp77Proj);
 
+            DeploySoundFiles();     
+
             var activeMod = _projectManager.ActiveProject;
 
             // write info.json file if it not exists
@@ -361,6 +368,60 @@ namespace WolvenKit.Functionality.Controllers
             _loggerService.Success($"{cp77Proj.Name} zip available at {zipPath}");
 
             return await Task.FromResult(true);
+        }
+
+        private void DeploySoundFiles()
+        {
+            var path = Path.Combine(_projectManager.ActiveProject.PackedModDirectory, "info.json");
+            if (!File.Exists(path))
+            {
+                return;
+            }
+
+            // read info
+            var modProj = _projectManager.ActiveProject as Cp77Project;
+            var files = new List<string>();
+            try
+            {
+                var options = new JsonSerializerOptions
+                {
+                    WriteIndented = true,
+                    DefaultIgnoreCondition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull,
+                    PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+                    IgnoreReadOnlyProperties = true,
+                };
+                var info = JsonSerializer.Deserialize<ModInfo>(File.ReadAllText(path), options);
+                foreach (var e in info.CustomSounds)
+                {
+                    if (!string.IsNullOrEmpty(e.File))
+                    {
+                        files.Add(e.File);
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                _loggerService.Error(e);
+            }
+
+
+            foreach (var relFile in files)
+            {
+                var modFile = Path.Combine(modProj.SoundDirectory, relFile);
+                if (File.Exists(modFile))
+                {
+                    try
+                    {
+                        var destFile = Path.Combine(modProj.PackedSoundsDirectory, relFile);
+                        File.Copy(modFile, destFile, true);
+                    }
+                    catch (Exception e)
+                    {
+                        _loggerService.Error(e);
+                    }
+                }
+            }
+            
         }
 
         private void CompileTweakFiles(Cp77Project cp77Proj)
@@ -483,6 +544,7 @@ namespace WolvenKit.Functionality.Controllers
 
                 installlog.Root.Add(fileroot);
                 installlog.Save(logPath);
+
                 _loggerService.Success($"{activeMod.Name} installed!");
                 _notificationService.Success($"{activeMod.Name} installed!");
             }

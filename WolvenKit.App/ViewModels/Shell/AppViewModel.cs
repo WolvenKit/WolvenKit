@@ -469,7 +469,7 @@ namespace WolvenKit.ViewModels.Shell
         private bool CanShowPlugin() => !IsDialogShown;
         private void ExecuteShowPlugin() => SetActiveDialog(new PluginViewModel
         {
-            
+            FileHandler = OpenFromNewFile
         });
 
         public ICommand ShowSoundModdingToolCommand { get; private set; }

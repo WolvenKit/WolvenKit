@@ -17,6 +17,7 @@
     Height="600"
     Background="{StaticResource ContentBackgroundAlt3}"
     d:DataContext="{d:DesignInstance Type=dialogs:PluginViewModel}"
+    Loaded="ReactiveUserControl_Loaded"
     >
 
     <Grid Margin="20">
@@ -28,36 +29,63 @@
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
-        <TextBlock Text="WolvenKit Plugins" FontSize="42" Grid.Row="0"/>
+        <!-- Header -->
+        <TextBlock Text="WolvenKit Plugins" FontSize="24" Grid.Row="0"/>
+
+        <!-- Separator -->
         <Separator Grid.Row="1"/>
 
+        <!-- Main grid -->
         <ListBox Grid.Row="2" x:Name="PluginList" HorizontalContentAlignment="Stretch" Margin="25"
                  ItemsSource="{Binding Plugins}"
-                 SelectedItem="{Binding SelectedPlugin}">
+                 SelectedItem="{Binding SelectedPlugin}" d:ItemsSource="{d:SampleData ItemCount=5}">
             <ListBox.ItemTemplate>
                 <DataTemplate>
                     <Grid Height="75">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="2*"/>
-                            <ColumnDefinition Width="*"/>
-                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+
+                        <Grid Grid.Row="0">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="2*"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
 
 
-                        <StackPanel Grid.Column="0">
-                            <TextBlock Text="{Binding Name}" FontSize="20"/>
-                            <TextBlock Text="{Binding Version}" FontSize="14"/>
-                            <TextBlock Text="{Binding Description}" FontSize="14"/>
-                        </StackPanel>
+                            <StackPanel Grid.Column="0">
+                                <TextBlock Text="{Binding Name}" FontSize="20"/>
+                                <TextBlock Text="{Binding Version}" FontSize="14"/>
+                                <TextBlock Text="{Binding Description}" FontSize="14"/>
+                            </StackPanel>
 
-                        <StackPanel Grid.Column="1">
-                            <Button Content="Install" Margin="4" Command="{Binding InstallCommand}"/>
-                            <Button Content="???" Margin="4"/>
-                        </StackPanel>
+                            <StackPanel Grid.Column="1">
+                                <Button Content="{Binding Label}" Margin="4" Command="{Binding InstallCommand}"/>
+                                <Button Content="???" Margin="4"/>
+                            </StackPanel>
+                        </Grid>
+
+                        <Grid Grid.Row="1">
+                            <syncfusion:SfLinearProgressBar x:Name="StatusBarProgressBar" Height="16" Margin="6,0,0,2" Width="200"
+                                                TrackColor="#131313" ProgressColor="{StaticResource WolvenKitRed}"/>
+                        </Grid>
                     </Grid>
                 </DataTemplate>
             </ListBox.ItemTemplate>
            
         </ListBox>
 
+        <!-- Footer -->
+        <Grid Grid.Row="3"  Height="28" Margin="0,10,0,0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+
+            <Button Grid.Column="2" Content="Cancel" Command="{Binding CancelCommand}" Margin="10,0,0,0" Padding="12,0" HorizontalAlignment="Right"/>
+
+        </Grid>
     </Grid>
 </reactiveUi:ReactiveUserControl>

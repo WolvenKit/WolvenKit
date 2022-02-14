@@ -31,7 +31,8 @@ namespace WolvenKit.ViewModels.Dialogs
         {
             WriteIndented = true,
             DefaultIgnoreCondition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull,
-            PropertyNamingPolicy = JsonNamingPolicy.CamelCase
+            PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+            IgnoreReadOnlyProperties = true,
         };
 
         public SoundModdingViewModel()
@@ -140,19 +141,56 @@ namespace WolvenKit.ViewModels.Dialogs
                         info.CustomSounds.Remove(existing);
                     }
 
-                    if (string.IsNullOrEmpty(e.Name) || string.IsNullOrEmpty(e.File))
+                    if (string.IsNullOrEmpty(e.Name))
                     {
                         continue;
                     }
+                    if (string.IsNullOrEmpty(e.Type))
+                    {
+                        continue;
+                    }
+                    if (e.Type != ECustomSoundType.mod_skip.ToString() && string.IsNullOrEmpty(e.File))
+                    {
+                        continue;
+                    }
+
+                    // use clear names
+                    //e.Type = GetEngineType(e.Type);
+
+                    // do not serialize skipped sounds
+                    if (e.Type == ECustomSoundType.mod_skip.ToString())
+                    {
+                        e.File = null;
+                        e.Pitch = null;
+                        e.Gain = null;
+
+                        _logger.Info($"Skipping sound event {e.Name}");
+                    }
+                    else
+                    {
+                        _logger.Info($"Added custom sound {e.File} for sound event {e.Name}");
+                    }
                     info.CustomSounds.Add(e);
 
-                    _logger.Success($"Added custom sound {e.File} for sound event {e.Name}");
+                    
                 }
 
                 var jsonString = JsonSerializer.Serialize(info, _options);
                 File.WriteAllText(modInfoJsonPath, jsonString);
+                _logger.Success($"Saved sound configuration to {modInfoJsonPath}");
             }
         }
+
+        //private static string GetEngineType(string type)
+        //{
+        //    if (Enum.TryParse<ECustomSoundType>(type, out var en))
+        //    {
+        //        var engineType = (ECustomSoundTypeEngine)en;
+        //        return engineType.ToString();
+        //    }
+        //    // default
+        //    return ECustomSoundTypeEngine.mod_sfx_2d.ToString();
+        //}
 
         public ICommand AddCommand { get; private set; }
         private bool CanAddEvents() => true;
@@ -170,7 +208,7 @@ namespace WolvenKit.ViewModels.Dialogs
             }
             if (CustomEvents.Count > 0)
             {
-                SelectedObject = CustomEvents.First();
+                SelectedObject = CustomEvents.Last();
             }
         }
 

@@ -25,5 +25,9 @@ namespace WolvenKit.Views.Dialogs
 
         }
 
+        private void ReactiveUserControl_Loaded(object sender, System.Windows.RoutedEventArgs e)
+        {
+            //await ViewModel.StartAsync();
+        }
     }
 }

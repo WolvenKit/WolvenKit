@@ -172,16 +172,19 @@
                     <hc:TextBox Grid.Row="0" Text="{Binding SelectedObject.Name}" IsReadOnly="True"
                                 hc:InfoElement.Title="Name: " hc:InfoElement.TitleWidth="60" hc:InfoElement.TitlePlacement="Left"
                                 hc:InfoElement.Necessary="True" />
-                    <hc:ComboBox Grid.Row="1" ItemsSource="{Binding Files, Mode=OneWay}" SelectedValue="{Binding SelectedObject.File}"
-                                 hc:InfoElement.Title="File: " hc:InfoElement.TitleWidth="60" hc:InfoElement.TitlePlacement="Left"
-                                 hc:InfoElement.Necessary="True"/>
-                    <hc:ComboBox Grid.Row="2" ItemsSource="{Binding Types, Mode=OneWay}" SelectedValue="{Binding SelectedObject.Type}"
+                    <hc:ComboBox Grid.Row="1" ItemsSource="{Binding Types, Mode=OneWay}" SelectedValue="{Binding SelectedObject.Type}"
                                  hc:InfoElement.Title="Type: " hc:InfoElement.TitleWidth="60" hc:InfoElement.TitlePlacement="Left"
-                                 hc:InfoElement.Necessary="True"/>
+                                 hc:InfoElement.Necessary="True" />
+                    
+                    <hc:ComboBox Grid.Row="2" ItemsSource="{Binding Files, Mode=OneWay}" SelectedValue="{Binding SelectedObject.File}"
+                                 hc:InfoElement.Title="File: " hc:InfoElement.TitleWidth="60" hc:InfoElement.TitlePlacement="Left"
+                                 IsEnabled="{Binding SelectedObject.IsEnabled}"/>
                     <hc:NumericUpDown Grid.Row="3" DecimalPlaces="2" Value="{Binding SelectedObject.Gain}" Style="{StaticResource NumericUpDownExtend}"
-                                      hc:InfoElement.Title="Gain: " hc:InfoElement.TitleWidth="60" hc:InfoElement.TitlePlacement="Left"/>
+                                      hc:InfoElement.Title="Gain: " hc:InfoElement.TitleWidth="60" hc:InfoElement.TitlePlacement="Left"
+                                      IsEnabled="{Binding SelectedObject.IsEnabled}" />
                     <hc:NumericUpDown Grid.Row="4" DecimalPlaces="2" Value="{Binding SelectedObject.Pitch}" Style="{StaticResource NumericUpDownExtend}"
-                                      hc:InfoElement.Title="Pitch: " hc:InfoElement.TitleWidth="60" hc:InfoElement.TitlePlacement="Left"/>
+                                      hc:InfoElement.Title="Pitch: " hc:InfoElement.TitleWidth="60" hc:InfoElement.TitlePlacement="Left"
+                                      IsEnabled="{Binding SelectedObject.IsEnabled}" />
                 </Grid>
                 
             </Grid>

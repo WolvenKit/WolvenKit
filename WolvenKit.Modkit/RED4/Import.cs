@@ -57,30 +57,31 @@ namespace WolvenKit.Modkit.RED4
             }
 
             // import files
-            switch (extAsEnum)
+            return extAsEnum switch
             {
-                case ERawFileFormat.bmp:
-                case ERawFileFormat.jpg:
-                case ERawFileFormat.png:
-                case ERawFileFormat.tiff:
-                case ERawFileFormat.tga:
-                case ERawFileFormat.dds:
-                    return HandleTextures(rawRelative, outDir, args);
-                case ERawFileFormat.fbx:
-                case ERawFileFormat.gltf:
-                case ERawFileFormat.glb:
-                    return ImportGltf(rawRelative, outDir, args.Get<GltfImportArgs>());
-                case ERawFileFormat.masklist:
-                    return ImportMlmask(rawRelative, outDir);
-                case ERawFileFormat.ttf:
-                    return ImportTtf(rawRelative, outDir, args.Get<CommonImportArgs>());
-                case ERawFileFormat.wav:
-                    return ImportWav(rawRelative, outDir, args.Get<OpusImportArgs>());
-                case ERawFileFormat.csv:
-                    return ImportCsv(rawRelative, outDir, args);
-                default:
-                    throw new ArgumentOutOfRangeException();
+                ERawFileFormat.bmp or ERawFileFormat.jpg or ERawFileFormat.png or ERawFileFormat.tiff or ERawFileFormat.tga or ERawFileFormat.dds => HandleTextures(rawRelative, outDir, args),
+                ERawFileFormat.fbx or ERawFileFormat.gltf or ERawFileFormat.glb => ImportGltf(rawRelative, outDir, args.Get<GltfImportArgs>()),
+                ERawFileFormat.masklist => ImportMlmask(rawRelative, outDir),
+                ERawFileFormat.ttf => ImportTtf(rawRelative, outDir, args.Get<CommonImportArgs>()),
+                ERawFileFormat.wav => ImportWav(rawRelative, outDir, args.Get<OpusImportArgs>()),
+                ERawFileFormat.csv => ImportCsv(rawRelative, outDir, args),
+                ERawFileFormat.re => ImportAnims(rawRelative, outDir, args),
+                _ => throw new ArgumentOutOfRangeException(),
+            };
+        }
+
+        private bool ImportAnims(RedRelativePath rawRelative, DirectoryInfo outDir, GlobalImportArgs args)
+        {
+            var ext = rawRelative.Extension;
+            if (Enum.TryParse(ext, true, out ERawFileFormat extAsEnum))
+            {
+
+                throw new NotImplementedException();
+
+                //return true;
             }
+
+            return false;
         }
 
         private bool ImportCsv(RedRelativePath rawRelative, DirectoryInfo outDir, GlobalImportArgs args)
@@ -112,9 +113,11 @@ namespace WolvenKit.Modkit.RED4
                 using var fs = new FileStream(outpath.FullPath, FileMode.Create, FileAccess.ReadWrite);
                 using var writer = new CR2WWriter(fs);
                 writer.WriteFile(red);
+
+                return true;
             }
 
-            return true;
+            return false;
         }
 
         private bool ImportWav(RedRelativePath rawRelative, DirectoryInfo outDir, OpusImportArgs opusImportArgs)

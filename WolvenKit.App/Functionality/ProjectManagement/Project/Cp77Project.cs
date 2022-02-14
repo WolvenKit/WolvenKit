@@ -107,6 +107,20 @@ namespace WolvenKit.ProjectManagement.Project
             }
         }
 
+        public string PackedSoundsDirectory
+        {
+            get
+            {
+                var dir = Path.Combine(PackedModDirectory, "customSounds");
+                if (!Directory.Exists(dir))
+                {
+                    Directory.CreateDirectory(dir);
+                }
+
+                return dir;
+            }
+        }
+
         public string PackedTweakDirectory
         {
             get
@@ -134,6 +148,8 @@ namespace WolvenKit.ProjectManagement.Project
                 return dir;
             }
         }
+
+        
 
         #region methods
 
