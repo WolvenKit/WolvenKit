@@ -30,6 +30,7 @@ namespace WolvenKit.RED4.Archive.IO
             _bufferReaders.Add("gamePersistentStateDataResource.buffer", typeof(PackageReader));
             _bufferReaders.Add("meshMeshMaterialBuffer.rawData", typeof(CR2WListReader));
             _bufferReaders.Add("entEntityParametersBuffer.parameterBuffers", typeof(CR2WListReader));
+            _bufferReaders.Add("animAnimDataChunk.buffer", typeof(AnimationReader));
         }
 
         public EFileReadErrorCodes ReadFileInfo(out CR2WFileInfo info)
@@ -146,6 +147,8 @@ namespace WolvenKit.RED4.Archive.IO
             for (var i = 0; i < _cr2wFile.Info.BufferInfo.Length; i++)
             {
                 var buffer = ReadBuffer(_cr2wFile.Info.BufferInfo[i]);
+                buffer.RootChunk = _cr2wFile.RootChunk;
+
                 if (!BufferQueue.ContainsKey(i))
                 {
                     throw new TodoException("Unused buffer");

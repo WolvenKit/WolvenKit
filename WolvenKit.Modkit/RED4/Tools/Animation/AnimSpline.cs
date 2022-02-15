@@ -17,6 +17,22 @@ namespace WolvenKit.Modkit.RED4.Animation
         private const int wSignRightShift = 15;
         private const int componentRightShift = 13;
         private const int boneIdxRightShift = 0;
+
+        public static Vec3 TRVector(float x, float y, float z)
+        {
+            return new Vec3(x, z, -y);
+        }
+
+        public static Quat RQuat(float x, float y, float z, float w)
+        {
+            return new Quat(x, z, -y, w);
+        }
+
+        public static Vec3 SVector(float x, float y, float z)
+        {
+            return new Vec3(x, z, y);
+        }
+
         public static void AddAnimationSpline(ref ModelRoot model, animAnimationBufferCompressed blob, string animName, Stream defferedBuffer, animAnimation animAnimDes)
         {
             //boneidx time value
@@ -26,7 +42,7 @@ namespace WolvenKit.Modkit.RED4.Animation
 
             var tracks = new Dictionary<ushort, float>();
 
-            if (animAnimDes.MotionExtraction.Chunk != null)
+            if (animAnimDes.MotionExtraction != null && animAnimDes.MotionExtraction.Chunk != null)
             {
                 ROOT_MOTION.AddRootMotion(ref positions, ref rotations, animAnimDes);
             }
@@ -60,13 +76,13 @@ namespace WolvenKit.Modkit.RED4.Animation
                     case 0:
                         if (positions.ContainsKey(boneIdx))
                         {
-                            positions[boneIdx].Add(timeNormalized * duration, new Vec3(x, z, -y));
+                            positions[boneIdx].Add(timeNormalized * duration, TRVector(x, y, z));
                         }
                         else
                         {
                             var dic = new Dictionary<float, Vec3>
                             {
-                                { timeNormalized * duration, new Vec3(x, z, -y) }
+                                { timeNormalized * duration, TRVector(x, y, z) }
                             };
                             positions.Add(boneIdx, dic);
                         }
@@ -82,7 +98,7 @@ namespace WolvenKit.Modkit.RED4.Animation
                             w = -w;
                         }
 
-                        var q = new Quat(x, z, -y, w);
+                        var q = RQuat(x, y, z, w);
                         if (rotations.ContainsKey(boneIdx))
                         {
                             rotations[boneIdx].Add(timeNormalized * duration, Quat.Normalize(q));
@@ -99,13 +115,13 @@ namespace WolvenKit.Modkit.RED4.Animation
                     case 2:
                         if (scales.ContainsKey(boneIdx))
                         {
-                            scales[boneIdx].Add(timeNormalized * duration, new Vec3(x, z, -y));
+                            scales[boneIdx].Add(timeNormalized * duration, SVector(x, y, z));
                         }
                         else
                         {
                             var dic = new Dictionary<float, Vec3>
                             {
-                                { timeNormalized * duration, new Vec3(x, z, -y) }
+                                { timeNormalized * duration, SVector(x, y, z) }
                             };
                             scales.Add(boneIdx, dic);
                         }
@@ -131,13 +147,13 @@ namespace WolvenKit.Modkit.RED4.Animation
                     case 0:
                         if (positions.ContainsKey(boneIdx))
                         {
-                            positions[boneIdx].Add(timeNormalized * duration, new Vec3(x, z, -y));
+                            positions[boneIdx].Add(timeNormalized * duration, TRVector(x, y, z));
                         }
                         else
                         {
                             var dic = new Dictionary<float, Vec3>
                             {
-                                { timeNormalized * duration, new Vec3(x, z, -y) }
+                                { timeNormalized * duration, TRVector(x, y, z) }
                             };
                             positions.Add(boneIdx, dic);
                         }
@@ -153,7 +169,7 @@ namespace WolvenKit.Modkit.RED4.Animation
                             w = -w;
                         }
 
-                        var q = new Quat(x, z, -y, w);
+                        var q = RQuat(x, y, z, w);
                         if (rotations.ContainsKey(boneIdx))
                         {
                             rotations[boneIdx].Add(timeNormalized * duration, Quat.Normalize(q));
@@ -170,13 +186,13 @@ namespace WolvenKit.Modkit.RED4.Animation
                     case 2:
                         if (scales.ContainsKey(boneIdx))
                         {
-                            scales[boneIdx].Add(timeNormalized * duration, new Vec3(x, z, -y));
+                            scales[boneIdx].Add(timeNormalized * duration, SVector(x, y, z));
                         }
                         else
                         {
                             var dic = new Dictionary<float, Vec3>
                             {
-                                { timeNormalized * duration, new Vec3(x, z, -y) }
+                                { timeNormalized * duration, SVector(x, y, z) }
                             };
                             scales.Add(boneIdx, dic);
                         }
@@ -203,13 +219,14 @@ namespace WolvenKit.Modkit.RED4.Animation
                     case 0:
                         if (positions.ContainsKey(boneIdx))
                         {
-                            positions[boneIdx].Add(0f, new Vec3(x, z, -y));
+                            if (!positions[boneIdx].ContainsKey(0f))
+                                positions[boneIdx].Add(0f, TRVector(x, y, z));
                         }
                         else
                         {
                             var dic = new Dictionary<float, Vec3>
                             {
-                                { 0f, new Vec3(x, z, -y) }
+                                { 0f, TRVector(x, y, z) }
                             };
                             positions.Add(boneIdx, dic);
                         }
@@ -225,10 +242,11 @@ namespace WolvenKit.Modkit.RED4.Animation
                             w = -w;
                         }
 
-                        var q = new Quat(x, z, -y, w);
+                        var q = RQuat(x, y, z, w);
                         if (rotations.ContainsKey(boneIdx))
                         {
-                            rotations[boneIdx].Add(0f, Quat.Normalize(q));
+                            if (!rotations[boneIdx].ContainsKey(0f))
+                                rotations[boneIdx].Add(0f, Quat.Normalize(q));
                         }
                         else
                         {
@@ -242,13 +260,13 @@ namespace WolvenKit.Modkit.RED4.Animation
                     case 2:
                         if (scales.ContainsKey(boneIdx))
                         {
-                            scales[boneIdx].Add(0f, new Vec3(x, z, -y));
+                            scales[boneIdx].Add(0f, SVector(x, y, z));
                         }
                         else
                         {
                             var dic = new Dictionary<float, Vec3>
                             {
-                                { 0f, new Vec3(x, z, -y) }
+                                { 0f, SVector(x, y, z) }
                             };
                             scales.Add(boneIdx, dic);
                         }
@@ -267,20 +285,56 @@ namespace WolvenKit.Modkit.RED4.Animation
             */
             var anim = model.CreateAnimation(animName);
 
-            for (ushort i = 0; i < numJoints - numExtraJoints; i++)
+            if (animAnimDes.AnimationType.Value == Enums.animAnimationType.Additive)
             {
 
-                if (positions.ContainsKey(i))
+                for (ushort i = 0; i < numJoints - numExtraJoints; i++)
                 {
-                    anim.CreateTranslationChannel(model.LogicalNodes[i], positions[i]);
+                    var node = model.LogicalNodes[i + 1];
+                    if (positions.ContainsKey(i))
+                    {
+                        foreach (var (t, position) in positions[i])
+                        {
+                            positions[i][t] = position + node.LocalTransform.Translation;
+                        }
+                        anim.CreateTranslationChannel(node, positions[i]);
+                    }
+                    if (rotations.ContainsKey(i))
+                    {
+                        foreach (var (t, rotation) in rotations[i])
+                        {
+                            rotations[i][t] = rotation + node.LocalTransform.Rotation;
+                        }
+                        anim.CreateRotationChannel(node, rotations[i]);
+                    }
+                    if (scales.ContainsKey(i))
+                    {
+                        foreach (var (t, scale) in scales[i])
+                        {
+                            scales[i][t] = scale + node.LocalTransform.Scale;
+                        }
+                        anim.CreateScaleChannel(node, scales[i]);
+                    }
                 }
-                if (rotations.ContainsKey(i))
+            }
+            else
+            {
+                for (ushort i = 0; i < numJoints - numExtraJoints; i++)
                 {
-                    anim.CreateRotationChannel(model.LogicalNodes[i], rotations[i]);
-                }
-                if (scales.ContainsKey(i))
-                {
-                    anim.CreateScaleChannel(model.LogicalNodes[i], scales[i]);
+                    var node = model.LogicalNodes[i + 1];
+    
+                    if (positions.ContainsKey(i))
+                    {
+                        anim.CreateTranslationChannel(node, positions[i]);
+                    }
+                    if (rotations.ContainsKey(i))
+                    {
+                        anim.CreateRotationChannel(node, rotations[i]);
+                    }
+                    if (scales.ContainsKey(i))
+                    {
+                        anim.CreateScaleChannel(node, scales[i]);
+                    }
                 }
             }
         }

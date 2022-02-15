@@ -43,5 +43,10 @@ namespace WolvenKit.RED4.Types
         }
 
         public bool Equals(CUInt8 other) => Equals(_value, other._value);
+
+        public byte ToByte()
+        {
+            return _value;
+        }
     }
 }

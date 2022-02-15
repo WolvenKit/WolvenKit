@@ -15,6 +15,7 @@ namespace WolvenKit.RED4
         public bool IsEmpty => _bytes == Array.Empty<byte>();
         public IParseableBuffer Data { get; set; }
 
+        public RedBaseClass RootChunk { get; set; }
 
         /// <summary>
         /// The length of the uncompressed data

@@ -6,6 +6,7 @@ using WolvenKit.Common.FNV1A;
 using WolvenKit.Modkit.RED4.Animation;
 using WolvenKit.Modkit.RED4.GeneralStructs;
 using WolvenKit.Modkit.RED4.RigFile;
+using WolvenKit.RED4.Archive.CR2W;
 using WolvenKit.RED4.CR2W.Archive;
 using WolvenKit.RED4.Types;
 
@@ -15,15 +16,23 @@ namespace WolvenKit.Modkit.RED4
     {
         public bool ExportAnim(Stream animStream, List<Archive> archives, FileInfo outfile, bool isGLBinary = true)
         {
-            var cr2w = _wolvenkitFileService.ReadRed4File(animStream);
+            var animsFile = _wolvenkitFileService.ReadRed4File(animStream);
+            if (animsFile == null || animsFile.RootChunk is not animAnimSet anims)
+            {
+                return false;
+            }
+            return ExportAnim(animsFile, archives, outfile, isGLBinary);
+        }
 
-            if (cr2w == null || cr2w.RootChunk is not animAnimSet blob)
+        public bool ExportAnim(CR2WFile animsFile, List<Archive> archives, FileInfo outfile, bool isGLBinary = true)
+        {
+            if (animsFile == null || animsFile.RootChunk is not animAnimSet anims)
             {
                 return false;
             }
 
             var animDataBuffers = new List<MemoryStream>();
-            foreach (var chk in blob.AnimationDataChunks)
+            foreach (var chk in anims.AnimationDataChunks)
             {
                 var ms = new MemoryStream();
                 ms.Write(chk.Buffer.Buffer.GetBytes());
@@ -32,7 +41,7 @@ namespace WolvenKit.Modkit.RED4
             }
 
             var Rig = new RawArmature();
-            var hash = FNV1A64HashAlgorithm.HashString(blob.Rig.DepotPath);
+            var hash = FNV1A64HashAlgorithm.HashString(anims.Rig.DepotPath);
             foreach (var ar in archives)
             {
                 if (ar.Files.ContainsKey(hash))
@@ -58,14 +67,14 @@ namespace WolvenKit.Modkit.RED4
             var skin = model.CreateSkin();
             skin.BindJoints(RIG.ExportNodes(ref model, Rig).Values.ToArray());
 
-            for (var i = 0; i < blob.Animations.Count; i++)
+            for (var i = 0; i < anims.Animations.Count; i++)
             {
-                var setEntry = blob.Animations[i].Chunk;
+                var setEntry = anims.Animations[i].Chunk;
                 var animAnimDes = setEntry.Animation.Chunk;
-                if (animAnimDes.AnimationType.Value != Enums.animAnimationType.Normal)
-                {
-                    continue;
-                }
+                //if (animAnimDes.AnimationType.Value != Enums.animAnimationType.Normal)
+                //{
+                //    continue;
+                //}
 
                 if (animAnimDes.AnimBuffer.Chunk is animAnimationBufferSimd)
                 {
