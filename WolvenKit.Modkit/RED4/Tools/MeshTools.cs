@@ -79,22 +79,12 @@ namespace CP77.CR2W
 
         public static bool ExportMesh(CR2WFile cr2w, FileInfo outfile, bool lodFilter = true, bool isGLBinary = true, ValidationMode vmode = ValidationMode.TryFix)
         {
-            if (cr2w == null || cr2w.RootChunk is not CMesh cMesh || cMesh.RenderResourceBlob.Chunk is not rendRenderMeshBlob rendblob)
+            var model = GetModel(cr2w, lodFilter);
+
+            if (model == null)
             {
                 return false;
             }
-
-            var Rig = GetOrphanRig(rendblob, cr2w);
-
-            using var ms = new MemoryStream(rendblob.RenderBuffer.Buffer.GetBytes());
-
-            var meshesinfo = GetMeshesinfo(rendblob, cr2w);
-
-            var expMeshes = ContainRawMesh(ms, meshesinfo, lodFilter);
-            UpdateSkinningParamCloth(ref expMeshes, cr2w);
-
-            var model = RawMeshesToGLTF(expMeshes, Rig);
-
 
             if (WolvenTesting.IsTesting)
             {
@@ -111,10 +101,37 @@ namespace CP77.CR2W
                 model.SaveGLTF(outfile.FullName, new WriteSettings(vmode));
             }
 
-            //meshStream.Dispose();
-            //meshStream.Close();
-
             return true;
+        }
+
+        public static ModelRoot GetModel(CR2WFile cr2w, bool lodFilter = true, bool includeRig = true, ulong chunkMask = ulong.MaxValue)
+        {
+            if (cr2w == null || cr2w.RootChunk is not CMesh cMesh || cMesh.RenderResourceBlob.Chunk is not rendRenderMeshBlob rendblob)
+            {
+                return null;
+            }
+
+            RawArmature rig = null;
+
+            if (includeRig)
+            {
+                rig = GetOrphanRig(rendblob, cr2w);
+            }
+
+            using var ms = new MemoryStream(rendblob.RenderBuffer.Buffer.GetBytes());
+
+            var meshesinfo = GetMeshesinfo(rendblob, cr2w);
+
+            var expMeshes = ContainRawMesh(ms, meshesinfo, lodFilter, chunkMask);
+
+            if (includeRig)
+            { 
+                UpdateSkinningParamCloth(ref expMeshes, cr2w);
+            }
+
+            var model = RawMeshesToGLTF(expMeshes, rig);
+
+            return model;
         }
 
         public bool ExportMeshWithoutRig(Stream meshStream, FileInfo outfile, bool lodFilter = true, bool isGLBinary = true, ValidationMode vmode = ValidationMode.TryFix)
@@ -125,18 +142,12 @@ namespace CP77.CR2W
 
         public static bool ExportMeshWithoutRig(CR2WFile cr2w, FileInfo outfile, bool lodFilter = true, bool isGLBinary = true, ValidationMode vmode = ValidationMode.TryFix)
         {
-            if (cr2w == null || cr2w.RootChunk is not CMesh cMesh || cMesh.RenderResourceBlob.Chunk is not rendRenderMeshBlob rendblob)
+            var model = GetModel(cr2w, lodFilter, false);
+
+            if (model == null)
             {
                 return false;
             }
-
-            using var ms = new MemoryStream(rendblob.RenderBuffer.Buffer.GetBytes());
-
-            var meshesinfo = GetMeshesinfo(rendblob, cr2w);
-
-            var expMeshes = ContainRawMesh(ms, meshesinfo, lodFilter);
-
-            var model = RawMeshesToGLTF(expMeshes, null);
 
             if (WolvenTesting.IsTesting)
             {
@@ -152,8 +163,6 @@ namespace CP77.CR2W
                 model.SaveGLTF(outfile.FullName, new WriteSettings(vmode));
             }
 
-            //meshStream.Dispose();
-            //meshStream.Close();
             return true;
         }
 
@@ -437,7 +446,7 @@ namespace CP77.CR2W
 
             return meshesInfo;
         }
-        public static List<RawMeshContainer> ContainRawMesh(MemoryStream gfs, MeshesInfo info, bool lodFilter)
+        public static List<RawMeshContainer> ContainRawMesh(MemoryStream gfs, MeshesInfo info, bool lodFilter, ulong chunkMask = ulong.MaxValue)
         {
             var gbr = new BinaryReader(gfs);
 
@@ -445,7 +454,7 @@ namespace CP77.CR2W
 
             for (var index = 0; index < info.meshCount; index++)
             {
-                if (info.LODLvl[index] != 1 && lodFilter)
+                if (info.LODLvl[index] != 1 && lodFilter || ((chunkMask & 1UL << index) == 0))
                 {
                     continue;
                 }
