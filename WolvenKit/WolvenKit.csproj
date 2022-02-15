@@ -1811,7 +1811,7 @@
       <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
       <SubType>Designer</SubType>
     </Page>
-    <Page Update="Views\Dialogs\PluginView.xaml">
+    <Page Update="Views\Dialogs\PluginsToolView.xaml">
       <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
     </Page>
     <Page Update="Views\Templates\PathEditorView.xaml">

@@ -1,142 +1,162 @@
 using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.IO;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using gpm.Core.Models;
 using gpm.Core.Services;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
-using Serilog;
-using Splat;
-using WolvenKit.Common.Services;
-using WolvenKit.Functionality.Commands;
 using WolvenKit.Functionality.Services;
 
 namespace WolvenKit.ViewModels.Dialogs
 {
-    public enum EPluginStatus
+    public class PluginViewModel : ReactiveObject
     {
-        NotInstalled,
-        Outdated,
-        Latest
-    }
-
-    public class PluginViewModel : DialogViewModel
-    {
-        private readonly ILoggerService _logger;
-        private readonly ILibraryService _libraryService;
-        private readonly ISettingsManager _settings;
-        private readonly IDataBaseService _dataBaseService;
-        private readonly IGitHubService _gitHubService;
         private readonly ITaskService _taskService;
 
-        private readonly Dictionary<string, string> _pluginIds = new();
+        public EPlugin Plugin { get; private set; }
+        public string InstallPath { get; private set; }
+        public Package Package { get; private set; }
 
-        public delegate Task ReturnHandler(NewFileViewModel file);
-        public ReturnHandler FileHandler;
-
-        public PluginViewModel()
+        public PluginViewModel(
+            EPlugin plugin,
+            Package package,
+            ReleaseModel releaseModel,
+            ITaskService taskService,
+            string installPath)
         {
-            _logger = Locator.Current.GetService<ILoggerService>();
-            _libraryService = Locator.Current.GetService<ILibraryService>();
-            _dataBaseService = Locator.Current.GetService<IDataBaseService>();
-            _gitHubService = Locator.Current.GetService<IGitHubService>();
-            _settings = Locator.Current.GetService<ISettingsManager>();
-            _taskService = Locator.Current.GetService<ITaskService>();
+            _taskService = taskService;
+            Plugin = plugin;
 
-            CancelCommand = ReactiveCommand.Create(() => FileHandler(null));
-            StartCommand = ReactiveCommand.Create(StartAsync);
+            InstallPath = installPath;
+            ReleaseModel = releaseModel;
+            Package = package;
 
-            // Add plugins
-            _pluginIds.Add( "jac3km4/redscript",
-                Path.Combine(_settings.GetRED4GameRootDir()));
-            _pluginIds.Add("yamashi/cyberenginetweaks",
-                Path.Combine(_settings.GetRED4GameRootDir()));
-            _pluginIds.Add("neurolinked/mlsetupbuilder",
-                Path.Combine(_settings.GetRED4GameRootDir(), "tools", "neurolinked/mlsetupbuilder"));
-            _pluginIds.Add("redmod",
-                Path.Combine(_settings.GetRED4GameRootDir(), "tools", "redmod"));
+            Name = package.Name;
+            Description = package.Description;
+
+            InstallCommand = ReactiveCommand.Create(InstallAsync,
+                this.WhenAnyValue(x => x.IsBusy, x => x.ReleaseModel,
+                (busy, model) => !busy && model != null));
+            OpenCommand = ReactiveCommand.Create(OpenAsync);
+            RemoveCommand = ReactiveCommand.Create(RemoveAsync);
 
 
-            StartCommand.SafeExecute();
-        }
-
-        public async Task StartAsync()
-        {
-            // TODO: needed?
-            _taskService.Upgrade();
-
-            foreach (var (name, installPath) in _pluginIds)
+            this.WhenAnyValue(x => x.Status).Subscribe(status =>
             {
-                var package = _dataBaseService.GetPackageFromName(name);
-                if (package is null)
+                switch (status)
                 {
-                    Log.Warning("[{Package}] Package {Name} not found", package, name);
-                    continue;
+                    case EPluginStatus.NotInstalled:
+                        IsOpenEnabled = false;
+                        IsNotInstalled = true;
+                        Label = "Install";
+                        break;
+                    case EPluginStatus.Outdated:
+                        IsOpenEnabled = true;
+                        IsNotInstalled = false;
+                        Label = "Updated";
+                        break;
+                    case EPluginStatus.Latest:
+                        IsOpenEnabled = true;
+                        IsNotInstalled = false;
+                        Label = "Repair";
+                        break;
+                    default:
+                        break;
                 }
-
-                // get the latest release
-                if (!(await _gitHubService.TryGetRelease(package, ""))
-                .Out(out var release))
-                {
-                    continue;
-                }
-                if (release is null)
-                {
-                    continue;
-                }
-
-                var installedVersion = "";
-                EPluginStatus status;
-
-                // check if installed
-                if (!_libraryService.TryGetValue(package.Id, out var model))
-                {
-                    // not installed
-                    // TODO: display => "Install"
-                    status = EPluginStatus.NotInstalled;
-                }
-                else
-                {
-                    // installed but not in Library => should never happen
-                    if (!_libraryService.IsInstalledAtLocation(package, installPath, out var slotIdx))
-                    {
-                        status = EPluginStatus.NotInstalled;
-                    }
-                    else
-                    {
-                        // check if latest version is installed
-                        installedVersion = model.Slots[slotIdx.Value].Version;
-                        if (release.TagName == installedVersion)
-                        {
-                            Log.Information("[{Package}] Latest release installed", package);
-                            status = EPluginStatus.Latest;
-                        }
-                        else
-                        {
-                            Log.Information("[{Package}] Update available", package);
-                            status = EPluginStatus.Outdated;
-                        }
-                    }
-                }
-
-                Plugins.Add(new PluginModel(package, release, _taskService, installPath)
-                {
-                    Status = status,
-                    Version = installedVersion
-                });
-            }
+            });
         }
 
-        [Reactive] public ObservableCollection<PluginModel> Plugins { get; set; } = new ObservableCollection<PluginModel>();
+        [Reactive] public ReleaseModel ReleaseModel { get; set; }
+        public string Name { get; }
+        public string Description { get; }
+        [Reactive] public string Version { get; set; }
 
-        [Reactive] public PluginModel SelectedPlugin { get; set; }
+        [Reactive] public EPluginStatus Status { get; set; }
+        [Reactive] public string Label { get; set; }
 
-        public ICommand CancelCommand { get; private set; }
+        [Reactive] public bool IsBusy { get; set; }
+        [Reactive] public bool IsNotInstalled { get; set; }
+        [Reactive] public bool IsOpenEnabled { get; set; } // = IsInstalled
 
-        public ICommand StartCommand { get; private set; }
+        
+        public ICommand OpenCommand { get; private set; }
+        private async Task OpenAsync()
+        {
+            // TODO
+            await Task.Delay(1);
+        }
+
+        public ICommand RemoveCommand { get; private set; }
+        private async Task RemoveAsync()
+        {
+            IsBusy = true;
+
+            var result = await _taskService.Remove(Package.Id, false, InstallPath, null);
+            if (result)
+            {
+                Status = EPluginStatus.NotInstalled;
+                Version = "";
+            }
+
+            IsBusy = false;
+        }
+
+        public ICommand InstallCommand { get; private set; }
+        private async Task InstallAsync()
+        {
+            if (ReleaseModel == null)
+            {
+                return;
+            }
+
+            IsBusy = true;
+
+            switch (Status)
+            {
+                case EPluginStatus.NotInstalled:
+                {
+                    if (!Directory.Exists(InstallPath))
+                    {
+                        Directory.CreateDirectory(InstallPath);
+                    }
+                    var result = await _taskService.Install(Package.Id, "", InstallPath, false);
+                    if (result)
+                    {
+                        Status = EPluginStatus.Latest;
+                        Version = ReleaseModel.TagName;
+                    }
+                    break;
+                }
+                case EPluginStatus.Outdated:
+                {
+                    var result = await _taskService.Update(Package.Id, false, InstallPath, null, "");
+                    if (result)
+                    {
+                        Status = EPluginStatus.Latest;
+                        Version = ReleaseModel.TagName;
+                    }
+                    break;
+                }
+                case EPluginStatus.Latest:
+                    // repair
+                    // TODO
+                    break;
+                default:
+                    break;
+            }
+
+            //await Task.Run(async () =>
+            //{
+
+            //    IsBusy = true;
+            //    await Task.Delay(1);
+
+            //});
+
+            IsBusy = false;
+        }
     }
 
 

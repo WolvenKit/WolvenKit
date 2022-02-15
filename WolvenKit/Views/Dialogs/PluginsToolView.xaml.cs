@@ -7,9 +7,9 @@ namespace WolvenKit.Views.Dialogs
     /// <summary>
     /// Interaction logic for NewFileView.xaml
     /// </summary>
-    public partial class PluginView : ReactiveUserControl<PluginViewModel>
+    public partial class PluginsToolView : ReactiveUserControl<PluginsToolViewModel>
     {
-        public PluginView()
+        public PluginsToolView()
         {
             InitializeComponent();
 
@@ -23,11 +23,6 @@ namespace WolvenKit.Views.Dialogs
                 
             });
 
-        }
-
-        private void ReactiveUserControl_Loaded(object sender, System.Windows.RoutedEventArgs e)
-        {
-            //await ViewModel.StartAsync();
         }
     }
 }

@@ -467,7 +467,7 @@ namespace WolvenKit.ViewModels.Shell
 
         public ICommand ShowPluginCommand { get; private set; }
         private bool CanShowPlugin() => !IsDialogShown;
-        private void ExecuteShowPlugin() => SetActiveDialog(new PluginViewModel
+        private void ExecuteShowPlugin() => SetActiveDialog(new PluginsToolViewModel
         {
             FileHandler = OpenFromNewFile
         });

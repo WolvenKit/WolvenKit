@@ -39,6 +39,7 @@ namespace WolvenKit.Functionality.Controllers
         private readonly IModTools _modTools;
         private readonly IArchiveManager _archiveManager;
         private readonly IProgressService<double> _progressService;
+        private readonly IPluginService _pluginService;
 
         private bool _initialized = false;
 
@@ -52,7 +53,8 @@ namespace WolvenKit.Functionality.Controllers
             IHashService hashService,
             IModTools modTools,
             IArchiveManager gameArchiveManager,
-            IProgressService<double> progressService
+            IProgressService<double> progressService,
+            IPluginService pluginService
             )
         {
             _notificationService = notificationService;
@@ -63,6 +65,7 @@ namespace WolvenKit.Functionality.Controllers
             _modTools = modTools;
             _archiveManager = gameArchiveManager;
             _progressService = progressService;
+            _pluginService = pluginService;
         }
 
         #region Methods
@@ -278,6 +281,20 @@ namespace WolvenKit.Functionality.Controllers
             }
 
             InstallMod();
+
+            var r = await CompileRedmod();
+
+            _progressService.IsIndeterminate = false;
+            return r;
+        }
+
+        private async Task<bool> CompileRedmod()
+        {
+            if (!_pluginService.IsInstalled(EPlugin.redmod))
+            {
+                return true;
+            }
+
             var result = false;
             // compile with redmod
             var redmodPath = Path.Combine(_settingsManager.GetRED4GameRootDir(), "tools", "redmod", "redmod.exe");
@@ -285,7 +302,7 @@ namespace WolvenKit.Functionality.Controllers
             {
                 var gameRoot = Path.Combine(_settingsManager.GetRED4GameRootDir(), "r6");
                 var args = $"deploy -gameRoot=\"{gameRoot}\"";
-                
+
                 _loggerService.Info($"WorkDir: {redmodPath}");
                 _loggerService.Info($"Running commandlet: {args}");
                 result = await ProcessUtil.RunProcessAsync(redmodPath, args);
@@ -295,9 +312,7 @@ namespace WolvenKit.Functionality.Controllers
                 result = await Task.FromResult(true);
             }
 
-            _progressService.IsIndeterminate = false;
             return result;
-
         }
 
         /// <summary>
