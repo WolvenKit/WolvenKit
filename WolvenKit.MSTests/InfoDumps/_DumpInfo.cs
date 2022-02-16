@@ -11,6 +11,7 @@ using WolvenKit.Common.Services;
 using WolvenKit.Modkit.RED4;
 using WolvenKit.RED4.CR2W;
 using WolvenKit.RED4.CR2W.Archive;
+using System.Text.Json;
 
 namespace WolvenKit.MSTests
 {
@@ -89,26 +90,44 @@ namespace WolvenKit.MSTests
             {
                 List<ulong> used = new();
                 List<ulong> missing = new();
+                var info_missing = new Dictionary<string, List<ulong>>();
 
                 var archives = s_bm.Archives.KeyValues.Select(_ => _.Value).ToList();
 
                 for (var i = 0; i < archives.Count; i++)
                 {
                     var ar = archives[i];
+                    var hashes = new List<ulong>();
+                    info_missing.Add(ar.Name, new List<ulong>());
+
                     foreach (var (hash, fileInfoEntry) in ar.Files)
                     {
+                        hashes.Add(hash);
                         if (fileInfoEntry is FileEntry fe && fe.NameOrHash == hash.ToString())
                         {
                             missing.Add(hash);
+                            info_missing[ar.Name].Add(hash);
                         }
                         else
                         {
                             used.Add(hash);
+                            //results[ar.Name].Add(hash);
                         }
+                    }
+
+                    using var tw = File.CreateText(Path.Combine(resultDir, $"{ar.Name}_hashes.txt"));
+                    foreach (var h in hashes)
+                    {
+                        tw.WriteLine(h);
                     }
                 }
 
                 // write all used and all missing hashes
+                var info = Path.Combine(resultDir, $"_info_hashes.txt");
+                var info_json = JsonSerializer.Serialize(info_missing, new JsonSerializerOptions() {
+                    WriteIndented = true,
+                });
+                File.WriteAllText(info, info_json);
 
                 var missinghashtxt = Path.Combine(resultDir, "missinghashes.txt");
 
@@ -122,7 +141,7 @@ namespace WolvenKit.MSTests
                 }
 
                 var usedhashtxt = Path.Combine(resultDir, "usedhashes.txt");
-
+                used = used.OrderBy(x => x).ToList();
                 using (var usedWriter = File.CreateText(usedhashtxt))
                 {
                     for (var i = 0; i < used.Count; i++)
@@ -133,7 +152,7 @@ namespace WolvenKit.MSTests
                 }
 
                 var allhashes = _hashService.GetAllHashes().ToList();
-                var unused = allhashes.Except(used).ToList();
+                var unused = allhashes.Except(used).OrderBy(x => x).ToList();
 
                 var unusedhashtxt = Path.Combine(resultDir, "unusedhashes.txt");
 
