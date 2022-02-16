@@ -257,7 +257,8 @@ namespace WolvenKit.Common
         morphtarget,
         fnt,
         opusinfo,
-        anims
+        anims,
+        ent
     }
 
     /// <summary>

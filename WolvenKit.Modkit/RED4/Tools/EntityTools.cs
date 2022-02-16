@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.IO;
+using System.Numerics;
 using CP77.CR2W;
 using SharpGLTF.Schema2;
 using WolvenKit.Common.Conversion;
@@ -14,20 +15,32 @@ namespace WolvenKit.Modkit.RED4
 {
     public partial class ModTools
     {
-        public static bool GetStreamFromCName(CName cname, List<Archive> archives, out Stream stream)
+        public bool GetStreamFromCName(CName cname, List<Archive> archives, out Stream stream)
         {
-            var hash = cname.GetRedHash();
-            foreach (var ar in archives)
+            //var hash = cname.GetRedHash();
+            //foreach (var ar in archives)
+            //{
+            //    if (ar.Files.ContainsKey(hash))
+            //    {
+            //        stream = new MemoryStream();
+            //        ExtractSingleToStream(ar, hash, stream);
+            //        return true;
+            //    }
+            //}
+            //stream = null;
+            //return false;
+
+            var file = _archiveManager.Lookup(cname.GetRedHash());
+            if (file.HasValue && file.Value is FileEntry fe)
             {
-                if (ar.Files.ContainsKey(hash))
-                {
-                    stream = new MemoryStream();
-                    ExtractSingleToStream(ar, hash, stream);
-                    return true;
-                }
+                stream = new MemoryStream();
+                fe.Extract(stream);
+
+                return true;
             }
             stream = null;
             return false;
+
         }
 
         public bool GetFileFromCName(CName cname, List<Archive> archives, out CR2WFile cr2w)
@@ -35,6 +48,12 @@ namespace WolvenKit.Modkit.RED4
             cr2w = null;
             return GetStreamFromCName(cname, archives, out var stream) &&
                 _wolvenkitFileService.TryReadRed4File(stream, out cr2w);
+        }
+
+        public bool ExportEntity(Stream entStream, CName appearance, List<Archive> archives, FileInfo outfile)
+        {
+            _wolvenkitFileService.TryReadRed4File(entStream, out var cr2w);
+            return ExportEntity(cr2w, appearance, archives, outfile);
         }
 
         public bool ExportEntity(CR2WFile entFile, CName appearance, List<Archive> archives, FileInfo outfile)
@@ -50,11 +69,24 @@ namespace WolvenKit.Modkit.RED4
             }
 
             CR2WFile animsFile = null;
+            animAnimSet anims = null;
+            var rigs = new Dictionary<string, List<string>>();
+            var slots = new Dictionary<string, Dictionary<string, string>>();
+            var slotParents = new Dictionary<string, string>();
 
             foreach (var component in entPkg.Chunks)
             {
                 if (component is entAnimatedComponent eac)
                 {
+                    if (GetFileFromCName(eac.Rig.DepotPath, archives, out var rigFile) && rigFile.RootChunk is animRig rig)
+                    {
+                        rigs[eac.Name] = new List<string>();
+                        foreach (var name in rig.BoneNames)
+                        {
+                            rigs[eac.Name].Add(name);
+                        }
+                    }
+                        
                     foreach (var entry in eac.Animations.Gameplay)
                     {
                         if (entry is not animAnimSetupEntry aase)
@@ -68,30 +100,46 @@ namespace WolvenKit.Modkit.RED4
                         }
                     }
                 }
+
+                if (component is entSlotComponent esc)
+                {
+                    if (esc.ParentTransform != null && esc.ParentTransform.GetValue() is entHardTransformBinding ehtb)
+                    {
+                        slotParents[esc.Name] = ehtb.BindName;
+                    }
+                    slots[esc.Name] = new Dictionary<string, string>();
+                    foreach (var slot in esc.Slots)
+                    {
+                        slots[esc.Name][slot.SlotName] = slot.BoneName;
+                    }
+                }
             }
 
-            var anims = animsFile.RootChunk as animAnimSet;
+            if (animsFile != null)
+            {
+                anims = animsFile.RootChunk as animAnimSet;
+            }
 
             foreach (var app in eet.Appearances)
             {
-                if (app.Name != appearance)
+                if (app.AppearanceName != appearance && appearance != "default")
                 {
                     continue;
                 }
 
                 if (!GetFileFromCName(app.AppearanceResource.DepotPath, archives, out var appFile))
                 {
-                    return false;
+                    continue;
                 }
 
                 if (appFile.RootChunk is not appearanceAppearanceResource aar)
                 {
-                    return false;
+                    continue;
                 }
 
                 foreach (var appApp in aar.Appearances)
                 {
-                    if (appApp.GetValue() is not appearanceAppearanceDefinition aad || aad.Name != appearance || aad.CompiledData.Data is not Package04 appPkg)
+                    if (appApp.GetValue() is not appearanceAppearanceDefinition aad || (aad.Name != appearance && appearance != "default") || aad.CompiledData.Data is not Package04 appPkg)
                     {
                         continue;
                     }
@@ -103,33 +151,124 @@ namespace WolvenKit.Modkit.RED4
                         GetAnimation(animsFile, rigFile, ref root, true);
                     }
 
+                    var nodes = new Dictionary<string, Node>();
+
+                    var unhandleChunks = new List<RedBaseClass>();
+
+                    var materials = new Dictionary<string, Material>();
+
                     foreach (var component in appPkg.Chunks)
-                    {
-                        if (component is entPhysicalMeshComponent epmc)
+                    { 
+                        if (component is IRedMeshComponent mc)
                         {
-                            if (!GetFileFromCName(epmc.Mesh.DepotPath, archives, out var meshFile))
+                            var transform = (entHardTransformBinding)mc.ParentTransform.GetValue();
+
+                            Node node = null;
+
+                            if (slots.ContainsKey(transform.BindName))
+                            {
+                                if (slots[transform.BindName].ContainsKey(transform.SlotName))
+                                {
+                                    var boneName = slots[transform.BindName][transform.SlotName];
+                                    if (rigs.ContainsKey(slotParents[transform.BindName]))
+                                    {
+                                        if (rigs[slotParents[transform.BindName]].Contains(boneName))
+                                        {
+                                            node = root.LogicalSkins[0].GetJoint(rigs[slotParents[transform.BindName]].IndexOf(boneName)).Joint.CreateNode(mc.Name);
+                                        }
+                                    }
+                                }
+                            }
+
+                            if (node == null)
+                            {
+                                unhandleChunks.Add((RedBaseClass)mc);
+                                continue;
+                            }
+                            if (component is entMeshComponent emc)
+                            {
+                                node.LocalTransform = new SharpGLTF.Transforms.AffineTransform(ToVector3(emc.VisualScale), ToQuaternion(mc.LocalTransform.Orientation), ToVector3(mc.LocalTransform.Position));
+                            }
+                            else
+                            {
+                                node.LocalTransform = new SharpGLTF.Transforms.AffineTransform(new System.Numerics.Vector3(1f, 1f, 1f), ToQuaternion(mc.LocalTransform.Orientation), ToVector3(mc.LocalTransform.Position));
+                            }
+                            nodes.Add(mc.Name, node);
+
+                            if (!GetFileFromCName(mc.Mesh.DepotPath, archives, out var meshFile))
                             {
                                 continue;
                             }
-                            var model = MeshTools.GetModel(meshFile, true, true, epmc.ChunkMask);
 
-                            foreach (var mesh in model.LogicalMeshes)
+                            MeshTools.AddMeshToModel(meshFile, root, root.LogicalSkins[0], node, true, mc.ChunkMask, materials);
+
+                            foreach (var child in node.VisualChildren)
                             {
-                                var node = root.LogicalNodes[0].CreateNode();
-                                node.Mesh = mesh;
-                                node.Skin = root.LogicalSkins[0];
+                                child.Name = mc.Name + "_" + child.Name;
                             }
-                            // TODO
                         }
                     }
 
-                    // TODO
+                    foreach (var component in unhandleChunks)
+                    {
+                        if (component is IRedMeshComponent mc)
+                        {
+                            if (!GetFileFromCName(mc.Mesh.DepotPath, archives, out var meshFile))
+                            {
+                                continue;
+                            }
+
+                            Node node = null;
+
+                            var transform = (entHardTransformBinding)mc.ParentTransform.GetValue();
+                            if (nodes.ContainsKey(transform.BindName))
+                            {
+                                node = nodes[transform.BindName].CreateNode(mc.Name);
+                            }
+                            else
+                            {
+                                node = root.LogicalSkins[0].GetJoint(0).Joint.CreateNode(mc.Name);
+                            }
+                            
+                            if (component is entMeshComponent emc)
+                            {
+                                node.LocalTransform = new SharpGLTF.Transforms.AffineTransform(ToVector3(emc.VisualScale), ToQuaternion(mc.LocalTransform.Orientation), ToVector3(mc.LocalTransform.Position));
+                            }
+                            else
+                            {
+                                node.LocalTransform = new SharpGLTF.Transforms.AffineTransform(new System.Numerics.Vector3(1f, 1f, 1f), ToQuaternion(mc.LocalTransform.Orientation), ToVector3(mc.LocalTransform.Position));
+                            }
+                            nodes.Add(mc.Name, node);
+
+                            MeshTools.AddMeshToModel(meshFile, root, root.LogicalSkins[0], node, true, mc.ChunkMask, materials);
+
+                            foreach (var child in node.VisualChildren)
+                            {
+                                child.Name = mc.Name + "_" + child.Name;
+                            }
+                        }
+                    }
 
                     root.SaveGLB(outfile.FullName);
                     return true;
                 }
             }
             return false;
+        }
+
+        public static System.Numerics.Vector3 ToVector3(WolvenKit.RED4.Types.Vector3 v)
+        {
+            return new System.Numerics.Vector3(v.X, v.Z, v.Y);
+        }
+
+        public static System.Numerics.Quaternion ToQuaternion(WolvenKit.RED4.Types.Quaternion q)
+        {
+            return new System.Numerics.Quaternion(q.I, q.K, -q.J, q.R);
+        }
+
+        public static System.Numerics.Vector3 ToVector3(WolvenKit.RED4.Types.WorldPosition p)
+        {
+            return new System.Numerics.Vector3(p.X, p.Z, -p.Y);
         }
 
         public bool DumpEntityPackageAsJson(Stream entStream, FileInfo outfile)

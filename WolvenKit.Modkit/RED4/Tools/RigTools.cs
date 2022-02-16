@@ -49,14 +49,14 @@ namespace WolvenKit.Modkit.RED4.RigFile
             for (var i = 0; i < Rig.BoneCount; i++)
             {
                 Quaternion q = animrig.BoneTransforms[i].Rotation;
-                Rig.LocalRot[i] = new Quat(q.I, q.J, -q.K, q.R);
+                Rig.LocalRot[i] = new Quat(q.I, q.K, -q.J, q.R);
             }
 
             Rig.LocalScale = new Vec3[Rig.BoneCount];
             for (var i = 0; i < Rig.BoneCount; i++)
             {
                 Vector4 v = animrig.BoneTransforms[i].Scale;
-                Rig.LocalScale[i] = new Vec3(v.X, v.Y, v.Z);
+                Rig.LocalScale[i] = new Vec3(v.X, v.Z, v.Y);
             }
 
             // if AposeWorld/AposeMS Exists then..... this can be done better i guess...

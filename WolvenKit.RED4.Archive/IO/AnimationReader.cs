@@ -36,7 +36,7 @@ namespace WolvenKit.RED4.Archive.IO
                     {
                         if (animation.AnimBuffer.GetValue() is animAnimationBufferCompressed animBuff)
                         {
-                            if (animBuff.DataAddress != null)
+                            if (animBuff.DataAddress != null && animBuff.InplaceCompressedBuffer == null)
                             {
                                 var defferedBuffer = new MemoryStream();
                                 var dataAddr = animBuff.DataAddress;

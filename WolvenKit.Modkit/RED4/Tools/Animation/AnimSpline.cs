@@ -99,13 +99,14 @@ namespace WolvenKit.Modkit.RED4.Animation
 
             foreach (var key in blob.ConstAnimKeys)
             {
+                // using x.Time here causes some problems - not sure what data it actually is. maybe a hold time?
                 if (key is animKeyPosition p)
                 {
                     if (!positions.ContainsKey(p.Idx))
                     {
                         positions[p.Idx] = new Dictionary<float, Vec3>();
                     }
-                    positions[p.Idx][p.Time] = TRVector(p.Position.X, p.Position.Y, p.Position.Z);
+                    positions[p.Idx][0] = TRVector(p.Position.X, p.Position.Y, p.Position.Z);
                 }
                 else if (key is animKeyRotation r)
                 {
@@ -113,7 +114,7 @@ namespace WolvenKit.Modkit.RED4.Animation
                     {
                         rotations[r.Idx] = new Dictionary<float, Quat>();
                     }
-                    rotations[r.Idx][r.Time] = RQuat(r.Rotation.I, r.Rotation.J, r.Rotation.K, r.Rotation.R);
+                    rotations[r.Idx][0] = RQuat(r.Rotation.I, r.Rotation.J, r.Rotation.K, r.Rotation.R);
                 }
                 else if (key is animKeyScale s)
                 {
@@ -121,7 +122,7 @@ namespace WolvenKit.Modkit.RED4.Animation
                     {
                         scales[s.Idx] = new Dictionary<float, Vec3>();
                     }
-                    scales[s.Idx][s.Time] = SVector(s.Scale.X, s.Scale.Y, s.Scale.Z);
+                    scales[s.Idx][0] = SVector(s.Scale.X, s.Scale.Y, s.Scale.Z);
                 }
             }
 
@@ -137,7 +138,7 @@ namespace WolvenKit.Modkit.RED4.Animation
                     {
                         foreach (var (t, position) in positions[i])
                         {
-                            positions[i][t] = position + node.LocalTransform.Translation;
+                            positions[i][t] = node.LocalTransform.Translation + position;
                         }
                         anim.CreateTranslationChannel(node, positions[i]);
                     }
@@ -145,7 +146,7 @@ namespace WolvenKit.Modkit.RED4.Animation
                     {
                         foreach (var (t, rotation) in rotations[i])
                         {
-                            rotations[i][t] = rotation + node.LocalTransform.Rotation;
+                            rotations[i][t] = node.LocalTransform.Rotation * rotation;
                         }
                         anim.CreateRotationChannel(node, rotations[i]);
                     }
@@ -153,7 +154,7 @@ namespace WolvenKit.Modkit.RED4.Animation
                     {
                         foreach (var (t, scale) in scales[i])
                         {
-                            scales[i][t] = scale + node.LocalTransform.Scale;
+                            scales[i][t] = node.LocalTransform.Scale + scale;
                         }
                         anim.CreateScaleChannel(node, scales[i]);
                     }

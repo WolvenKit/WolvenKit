@@ -270,7 +270,8 @@ namespace WolvenKit.Modkit.RED4
             //args.FileName = outFileInfo.FullName;
             switch (extAsEnum)
             {
-                //case ECookedFileFormat.ent:
+                case ECookedFileFormat.ent:
+                    return ExportEntity(cr2wStream, "default", settings.Get<EntityExportArgs>().Archives, outfile);
                 //case ECookedFileFormat.app:
                 //    return HandleEntity(cr2wStream, outfile, settings.Get<EntityExportArgs>());
                 case ECookedFileFormat.opusinfo:
