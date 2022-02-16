@@ -12,6 +12,7 @@ using WolvenKit.Modkit.RED4;
 using WolvenKit.RED4.CR2W;
 using WolvenKit.RED4.CR2W.Archive;
 using System.Text.Json;
+using WolvenKit.Common.FNV1A;
 
 namespace WolvenKit.MSTests
 {
@@ -87,7 +88,28 @@ namespace WolvenKit.MSTests
             var resultDir = Path.Combine(Environment.CurrentDirectory, s_testResultsDirectory);
             Directory.CreateDirectory(resultDir);
 
+            // load new hashes
+            var newHashesPath = Path.Combine(s_testResultsDirectory, "new_hashes.txt");
+            var newHashes = new Dictionary<ulong, string>();
+            if (File.Exists(newHashesPath))
             {
+                var lines = File.ReadAllLines(newHashesPath);
+                foreach (var line in lines)
+                {
+                    var hash = FNV1A64HashAlgorithm.HashString(line);
+                    if (!_hashService.Contains(hash))
+                    {
+                        if (!newHashes.ContainsKey(hash))
+                        {
+                            newHashes.Add(hash, line);
+                        }
+                    }
+                }
+                Console.WriteLine($"Loaded {newHashes.Count} new hashes from {newHashesPath}");
+            }
+
+            {
+                List<ulong> newAdded = new();
                 List<ulong> used = new();
                 List<ulong> missing = new();
                 var info_missing = new Dictionary<string, List<ulong>>();
@@ -105,13 +127,20 @@ namespace WolvenKit.MSTests
                         hashes.Add(hash);
                         if (fileInfoEntry is FileEntry fe && fe.NameOrHash == hash.ToString())
                         {
-                            missing.Add(hash);
-                            info_missing[ar.Name].Add(hash);
+                            if (newHashes.ContainsKey(hash))
+                            {
+                                used.Add(hash);
+                                newAdded.Add(hash);
+                            }
+                            else
+                            {
+                                missing.Add(hash);
+                                info_missing[ar.Name].Add(hash);
+                            }
                         }
                         else
                         {
                             used.Add(hash);
-                            //results[ar.Name].Add(hash);
                         }
                     }
 
@@ -121,6 +150,8 @@ namespace WolvenKit.MSTests
                         tw.WriteLine(h);
                     }
                 }
+
+                Console.WriteLine($"Added {newAdded.Count} new hashes");
 
                 // write all used and all missing hashes
                 var info = Path.Combine(resultDir, $"_info_hashes.txt");
