@@ -14,19 +14,19 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(1)] 
+		[RED("queryPreset")] 
+		public physicsQueryPreset QueryPreset
+		{
+			get => GetPropertyValue<physicsQueryPreset>();
+			set => SetPropertyValue<physicsQueryPreset>(value);
+		}
+
+		[Ordinal(2)] 
 		[RED("searchQuery")] 
 		public gameTargetSearchQuery SearchQuery
 		{
 			get => GetPropertyValue<gameTargetSearchQuery>();
 			set => SetPropertyValue<gameTargetSearchQuery>(value);
-		}
-
-		[Ordinal(2)] 
-		[RED("searchAngles")] 
-		public EulerAngles SearchAngles
-		{
-			get => GetPropertyValue<EulerAngles>();
-			set => SetPropertyValue<EulerAngles>(value);
 		}
 
 		[Ordinal(3)] 
@@ -47,8 +47,8 @@ namespace WolvenKit.RED4.Types
 
 		public gameEffectObjectProvider_TargetingObjectsInCone()
 		{
+			QueryPreset = new();
 			SearchQuery = new() { SearchFilter = new(), IncludeSecondaryTargets = true, QueryTarget = new() };
-			SearchAngles = new();
 		}
 	}
 }

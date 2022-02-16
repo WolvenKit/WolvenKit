@@ -54,6 +54,22 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(111)] 
+		[RED("alternativeNameForPower")] 
+		public TweakDBID AlternativeNameForPower
+		{
+			get => GetPropertyValue<TweakDBID>();
+			set => SetPropertyValue<TweakDBID>(value);
+		}
+
+		[Ordinal(112)] 
+		[RED("alternativeNameForUnpower")] 
+		public TweakDBID AlternativeNameForUnpower
+		{
+			get => GetPropertyValue<TweakDBID>();
+			set => SetPropertyValue<TweakDBID>(value);
+		}
+
+		[Ordinal(113)] 
 		[RED("isCLSInitialized")] 
 		public CBool IsCLSInitialized
 		{

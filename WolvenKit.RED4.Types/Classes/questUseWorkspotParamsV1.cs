@@ -173,6 +173,14 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
+		[Ordinal(21)] 
+		[RED("meshDissolvingEnabled")] 
+		public CBool MeshDissolvingEnabled
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
 		public questUseWorkspotParamsV1()
 		{
 			Teleport = true;
@@ -184,6 +192,7 @@ namespace WolvenKit.RED4.Types
 			PlayerParams = new() { CameraSettings = new() { YawLeftLimit = 60.000000F, YawRightLimit = 60.000000F, PitchTopLimit = 60.000000F, PitchBottomLimit = 45.000000F, PitchSpeedMultiplier = 1.000000F, YawSpeedMultiplier = 1.000000F }, CameraUseTrajectorySpace = true, VehicleProceduralCameraWeight = 1.000000F, ParallaxWeight = 1.000000F };
 			RepeatCommandOnInterrupt = true;
 			WorkExcludedGestures = new();
+			MeshDissolvingEnabled = true;
 		}
 	}
 }

@@ -5,7 +5,7 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class gameweaponGrenade : gameItemObject
 	{
-		[Ordinal(43)] 
+		[Ordinal(38)] 
 		[RED("lastHitNormal")] 
 		public Vector4 LastHitNormal
 		{
@@ -13,7 +13,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<Vector4>(value);
 		}
 
-		[Ordinal(44)] 
+		[Ordinal(39)] 
 		[RED("deliveryMethod")] 
 		public CEnum<gamedataGrenadeDeliveryMethodType> DeliveryMethod
 		{

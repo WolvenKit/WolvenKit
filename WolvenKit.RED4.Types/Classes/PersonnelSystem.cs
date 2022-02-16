@@ -5,7 +5,7 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class PersonnelSystem : DeviceSystemBase
 	{
-		[Ordinal(97)] 
+		[Ordinal(94)] 
 		[RED("EnableE3QuickHacks")] 
 		public CBool EnableE3QuickHacks
 		{

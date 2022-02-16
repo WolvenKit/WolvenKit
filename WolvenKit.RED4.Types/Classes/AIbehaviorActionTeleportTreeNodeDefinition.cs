@@ -28,5 +28,13 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CHandle<AIArgumentMapping>>();
 			set => SetPropertyValue<CHandle<AIArgumentMapping>>(value);
 		}
+
+		[Ordinal(4)] 
+		[RED("waitForPositionUpdate")] 
+		public CHandle<AIArgumentMapping> WaitForPositionUpdate
+		{
+			get => GetPropertyValue<CHandle<AIArgumentMapping>>();
+			set => SetPropertyValue<CHandle<AIArgumentMapping>>(value);
+		}
 	}
 }

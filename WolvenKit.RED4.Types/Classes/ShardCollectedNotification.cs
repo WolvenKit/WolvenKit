@@ -13,6 +13,14 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
+		[Ordinal(13)] 
+		[RED("bbListenerId")] 
+		public CHandle<redCallbackObject> BbListenerId
+		{
+			get => GetPropertyValue<CHandle<redCallbackObject>>();
+			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
+		}
+
 		public ShardCollectedNotification()
 		{
 			ShardTitle = new();

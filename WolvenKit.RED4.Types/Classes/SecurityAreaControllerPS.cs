@@ -62,6 +62,14 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(112)] 
+		[RED("runtimeTransitions")] 
+		public CArray<AreaTypeTransition> RuntimeTransitions
+		{
+			get => GetPropertyValue<CArray<AreaTypeTransition>>();
+			set => SetPropertyValue<CArray<AreaTypeTransition>>(value);
+		}
+
+		[Ordinal(113)] 
 		[RED("pendingDisableRequest")] 
 		public CBool PendingDisableRequest
 		{
@@ -69,7 +77,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(113)] 
+		[Ordinal(114)] 
 		[RED("lastOutput")] 
 		public OutputPersistentData LastOutput
 		{
@@ -77,7 +85,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<OutputPersistentData>(value);
 		}
 
-		[Ordinal(114)] 
+		[Ordinal(115)] 
 		[RED("questPlayerHasTriggeredCombat")] 
 		public CBool QuestPlayerHasTriggeredCombat
 		{
@@ -85,7 +93,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(115)] 
+		[Ordinal(116)] 
 		[RED("hasThisAreaReceivedCombatNotification")] 
 		public CBool HasThisAreaReceivedCombatNotification
 		{
@@ -93,7 +101,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(116)] 
+		[Ordinal(117)] 
 		[RED("pendingNotifyPlayerAboutTransition")] 
 		public CBool PendingNotifyPlayerAboutTransition
 		{
@@ -110,6 +118,7 @@ namespace WolvenKit.RED4.Types
 			SecurityAreaType = Enums.ESecurityAreaType.DANGEROUS;
 			EventsFilters = new() { IncomingEventsFilter = Enums.EFilterType.ALLOW_ALL, OutgoingEventsFilter = Enums.EFilterType.ALLOW_ALL };
 			AreaTransitions = new();
+			RuntimeTransitions = new();
 			LastOutput = new() { LastKnownPosition = new(), ObjectOfInterest = new(), WhoBreached = new(), Reporter = new() };
 		}
 	}

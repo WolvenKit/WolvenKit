@@ -7,10 +7,10 @@ namespace WolvenKit.RED4.Types
 	{
 		[Ordinal(1)] 
 		[RED("samples", 128)] 
-		public CArrayFixedSize<CUInt8> Samples
+		public CArrayFixedSize<CUInt16> Samples
 		{
-			get => GetPropertyValue<CArrayFixedSize<CUInt8>>();
-			set => SetPropertyValue<CArrayFixedSize<CUInt8>>(value);
+			get => GetPropertyValue<CArrayFixedSize<CUInt16>>();
+			set => SetPropertyValue<CArrayFixedSize<CUInt16>>(value);
 		}
 
 		public CIESDataResource()

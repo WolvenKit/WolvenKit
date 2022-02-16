@@ -13,6 +13,14 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
+		[Ordinal(26)] 
+		[RED("instant")] 
+		public CBool Instant
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
 		public QuestForceCameraZoom()
 		{
 			RequesterID = new();

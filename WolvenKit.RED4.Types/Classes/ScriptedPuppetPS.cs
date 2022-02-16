@@ -181,6 +181,54 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gameItemID>(value);
 		}
 
+		[Ordinal(26)] 
+		[RED("customWeaponLoadout")] 
+		public CachedItemLoadout CustomWeaponLoadout
+		{
+			get => GetPropertyValue<CachedItemLoadout>();
+			set => SetPropertyValue<CachedItemLoadout>(value);
+		}
+
+		[Ordinal(27)] 
+		[RED("genericMeleeLoadout")] 
+		public CachedItemLoadout GenericMeleeLoadout
+		{
+			get => GetPropertyValue<CachedItemLoadout>();
+			set => SetPropertyValue<CachedItemLoadout>(value);
+		}
+
+		[Ordinal(28)] 
+		[RED("genericRangedLoadout")] 
+		public CachedItemLoadout GenericRangedLoadout
+		{
+			get => GetPropertyValue<CachedItemLoadout>();
+			set => SetPropertyValue<CachedItemLoadout>(value);
+		}
+
+		[Ordinal(29)] 
+		[RED("questForceScannerPreset")] 
+		public TweakDBID QuestForceScannerPreset
+		{
+			get => GetPropertyValue<TweakDBID>();
+			set => SetPropertyValue<TweakDBID>(value);
+		}
+
+		[Ordinal(30)] 
+		[RED("bountyID")] 
+		public TweakDBID BountyID
+		{
+			get => GetPropertyValue<TweakDBID>();
+			set => SetPropertyValue<TweakDBID>(value);
+		}
+
+		[Ordinal(31)] 
+		[RED("transgressions")] 
+		public CArray<TweakDBID> Transgressions
+		{
+			get => GetPropertyValue<CArray<TweakDBID>>();
+			set => SetPropertyValue<CArray<TweakDBID>>(value);
+		}
+
 		public ScriptedPuppetPS()
 		{
 			SecuritySystemData = new();
@@ -188,6 +236,10 @@ namespace WolvenKit.RED4.Types
 			IsDefeatMechanicActive = true;
 			LeftHandLoadout = new();
 			RightHandLoadout = new();
+			CustomWeaponLoadout = new() { ItemID = new() };
+			GenericMeleeLoadout = new() { ItemID = new() };
+			GenericRangedLoadout = new() { ItemID = new() };
+			Transgressions = new();
 		}
 	}
 }

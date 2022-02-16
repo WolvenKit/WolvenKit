@@ -38,6 +38,14 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(5)] 
+		[RED("line")] 
+		public inkWidgetReference Line
+		{
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
+		}
+
+		[Ordinal(6)] 
 		[RED("carouselPosition")] 
 		public CInt32 CarouselPosition
 		{
@@ -45,7 +53,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CInt32>(value);
 		}
 
-		[Ordinal(6)] 
+		[Ordinal(7)] 
 		[RED("labelName")] 
 		public CString LabelName
 		{
@@ -53,7 +61,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CString>(value);
 		}
 
-		[Ordinal(7)] 
+		[Ordinal(8)] 
 		[RED("data")] 
 		public MenuData Data
 		{
@@ -67,6 +75,7 @@ namespace WolvenKit.RED4.Types
 			Icon = new();
 			DesiredSizeWrapper = new();
 			Border = new();
+			Line = new();
 			Data = new() { Identifier = -1, SubMenus = new() };
 		}
 	}

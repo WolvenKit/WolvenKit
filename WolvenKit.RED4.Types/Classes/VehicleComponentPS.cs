@@ -102,6 +102,14 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(116)] 
+		[RED("submerged")] 
+		public CBool Submerged
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(117)] 
 		[RED("sirenOn")] 
 		public CBool SirenOn
 		{
@@ -109,7 +117,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(117)] 
+		[Ordinal(118)] 
 		[RED("sirenSoundOn")] 
 		public CBool SirenSoundOn
 		{
@@ -117,7 +125,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(118)] 
+		[Ordinal(119)] 
 		[RED("sirenLightsOn")] 
 		public CBool SirenLightsOn
 		{
@@ -125,7 +133,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(119)] 
+		[Ordinal(120)] 
 		[RED("anyDoorOpen")] 
 		public CBool AnyDoorOpen
 		{
@@ -133,7 +141,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(120)] 
+		[Ordinal(121)] 
 		[RED("previousInteractionState")] 
 		public CArray<TemporaryDoorState> PreviousInteractionState
 		{
@@ -141,7 +149,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<TemporaryDoorState>>(value);
 		}
 
-		[Ordinal(121)] 
+		[Ordinal(122)] 
 		[RED("thrusterState")] 
 		public CBool ThrusterState
 		{
@@ -149,7 +157,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(122)] 
+		[Ordinal(123)] 
 		[RED("uiQuestModified")] 
 		public CBool UiQuestModified
 		{
@@ -157,7 +165,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(123)] 
+		[Ordinal(124)] 
 		[RED("uiState")] 
 		public CBool UiState
 		{
@@ -165,7 +173,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(124)] 
+		[Ordinal(125)] 
 		[RED("vehicleSkillChecks")] 
 		public CHandle<EngDemoContainer> VehicleSkillChecks
 		{
@@ -173,7 +181,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<EngDemoContainer>>(value);
 		}
 
-		[Ordinal(125)] 
+		[Ordinal(126)] 
 		[RED("ready")] 
 		public CBool Ready
 		{
@@ -181,7 +189,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(126)] 
+		[Ordinal(127)] 
 		[RED("isPlayerPerformingBodyDisposal")] 
 		public CBool IsPlayerPerformingBodyDisposal
 		{
@@ -189,7 +197,15 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(127)] 
+		[Ordinal(128)] 
+		[RED("submergedTimestamp")] 
+		public CFloat SubmergedTimestamp
+		{
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
+		}
+
+		[Ordinal(129)] 
 		[RED("vehicleControllerPS")] 
 		public CHandle<vehicleControllerPS> VehicleControllerPS
 		{

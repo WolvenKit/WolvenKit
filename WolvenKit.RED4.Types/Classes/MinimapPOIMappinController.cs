@@ -30,6 +30,14 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(17)] 
+		[RED("questMappin")] 
+		public CWeakHandle<gamemappinsQuestMappin> QuestMappin
+		{
+			get => GetPropertyValue<CWeakHandle<gamemappinsQuestMappin>>();
+			set => SetPropertyValue<CWeakHandle<gamemappinsQuestMappin>>(value);
+		}
+
+		[Ordinal(18)] 
 		[RED("isCompletedPhase")] 
 		public CBool IsCompletedPhase
 		{
@@ -37,7 +45,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(18)] 
+		[Ordinal(19)] 
 		[RED("mappinPhase")] 
 		public CEnum<gamedataMappinPhase> MappinPhase
 		{
@@ -45,7 +53,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CEnum<gamedataMappinPhase>>(value);
 		}
 
-		[Ordinal(19)] 
+		[Ordinal(20)] 
 		[RED("pingAnim")] 
 		public CHandle<inkanimProxy> PingAnim
 		{
@@ -53,7 +61,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<inkanimProxy>>(value);
 		}
 
-		[Ordinal(20)] 
+		[Ordinal(21)] 
 		[RED("c_pingAnimCount")] 
 		public CUInt32 C_pingAnimCount
 		{
@@ -61,7 +69,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CUInt32>(value);
 		}
 
-		[Ordinal(21)] 
+		[Ordinal(22)] 
 		[RED("vehicleMinimapMappinComponent")] 
 		public CHandle<VehicleMinimapMappinComponent> VehicleMinimapMappinComponent
 		{
@@ -69,7 +77,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<VehicleMinimapMappinComponent>>(value);
 		}
 
-		[Ordinal(22)] 
+		[Ordinal(23)] 
 		[RED("keepIconOnClamping")] 
 		public CBool KeepIconOnClamping
 		{

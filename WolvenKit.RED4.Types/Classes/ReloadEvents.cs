@@ -38,14 +38,6 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(7)] 
-		[RED("bbCallbackID")] 
-		public CHandle<redCallbackObject> BbCallbackID
-		{
-			get => GetPropertyValue<CHandle<redCallbackObject>>();
-			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
-		}
-
-		[Ordinal(8)] 
 		[RED("weaponRecord")] 
 		public CHandle<gamedataWeaponItem_Record> WeaponRecord
 		{
@@ -53,7 +45,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<gamedataWeaponItem_Record>>(value);
 		}
 
-		[Ordinal(9)] 
+		[Ordinal(8)] 
 		[RED("animReloadDataDirty")] 
 		public CBool AnimReloadDataDirty
 		{
@@ -61,7 +53,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(10)] 
+		[Ordinal(9)] 
 		[RED("animReloadSpeedDirty")] 
 		public CBool AnimReloadSpeedDirty
 		{
@@ -69,7 +61,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(11)] 
+		[Ordinal(10)] 
 		[RED("uninteruptibleSet")] 
 		public CBool UninteruptibleSet
 		{
@@ -77,7 +69,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(12)] 
+		[Ordinal(11)] 
 		[RED("weaponHasAutoLoader")] 
 		public CBool WeaponHasAutoLoader
 		{
@@ -85,7 +77,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(13)] 
+		[Ordinal(12)] 
 		[RED("canReloadWhileSprinting")] 
 		public CBool CanReloadWhileSprinting
 		{
@@ -93,15 +85,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(14)] 
-		[RED("magazineEmpty")] 
-		public CBool MagazineEmpty
-		{
-			get => GetPropertyValue<CBool>();
-			set => SetPropertyValue<CBool>(value);
-		}
-
-		[Ordinal(15)] 
+		[Ordinal(13)] 
 		[RED("lastReloadWasEmpty")] 
 		public CBool LastReloadWasEmpty
 		{

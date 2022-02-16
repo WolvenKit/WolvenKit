@@ -5,7 +5,7 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class gameEffectObjectProvider_SweepOverTime_Capsule : gameEffectObjectProvider_SweepOverTime
 	{
-		[Ordinal(1)] 
+		[Ordinal(2)] 
 		[RED("radius")] 
 		public CFloat Radius
 		{
@@ -13,12 +13,17 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(2)] 
+		[Ordinal(3)] 
 		[RED("height")] 
 		public CFloat Height
 		{
 			get => GetPropertyValue<CFloat>();
 			set => SetPropertyValue<CFloat>(value);
+		}
+
+		public gameEffectObjectProvider_SweepOverTime_Capsule()
+		{
+			QueryPreset = new();
 		}
 	}
 }

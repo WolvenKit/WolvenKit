@@ -13,6 +13,14 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<redResourceReferenceScriptToken>>(value);
 		}
 
+		[Ordinal(105)] 
+		[RED("DEBUG_enableArcadeMinigames")] 
+		public CBool DEBUG_enableArcadeMinigames
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
 		public ArcadeMachineControllerPS()
 		{
 			DeviceName = "LocKey#1635";

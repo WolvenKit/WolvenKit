@@ -23,7 +23,7 @@ namespace WolvenKit.RED4.Types
 
 		public worldQualitySetting()
 		{
-			QualityLevel = Enums.ConfigGraphicsQualityLevel.Console;
+			QualityLevel = Enums.ConfigGraphicsQualityLevel.PlayStation4;
 			XEntitiesBudget = 50;
 		}
 	}

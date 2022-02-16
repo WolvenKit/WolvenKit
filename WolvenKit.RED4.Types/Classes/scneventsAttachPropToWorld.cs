@@ -61,38 +61,6 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<TweakDBID>(value);
 		}
 
-		[Ordinal(13)] 
-		[RED("fallbackCachedBones", 2)] 
-		public CStatic<scneventsAttachPropToWorldCachedFallbackBone> FallbackCachedBones
-		{
-			get => GetPropertyValue<CStatic<scneventsAttachPropToWorldCachedFallbackBone>>();
-			set => SetPropertyValue<CStatic<scneventsAttachPropToWorldCachedFallbackBone>>(value);
-		}
-
-		[Ordinal(14)] 
-		[RED("fallbackAnimset")] 
-		public CResourceReference<animAnimSet> FallbackAnimset
-		{
-			get => GetPropertyValue<CResourceReference<animAnimSet>>();
-			set => SetPropertyValue<CResourceReference<animAnimSet>>(value);
-		}
-
-		[Ordinal(15)] 
-		[RED("fallbackAnimationName")] 
-		public CName FallbackAnimationName
-		{
-			get => GetPropertyValue<CName>();
-			set => SetPropertyValue<CName>(value);
-		}
-
-		[Ordinal(16)] 
-		[RED("fallbackAnimTime")] 
-		public CFloat FallbackAnimTime
-		{
-			get => GetPropertyValue<CFloat>();
-			set => SetPropertyValue<CFloat>(value);
-		}
-
 		public scneventsAttachPropToWorld()
 		{
 			Id = new() { Id = 18446744073709551615 };
@@ -100,7 +68,6 @@ namespace WolvenKit.RED4.Types
 			CustomOffsetPos = new();
 			CustomOffsetRot = new() { R = 1.000000F };
 			ReferencePerformer = new() { Id = 4294967040 };
-			FallbackCachedBones = new(0);
 		}
 	}
 }

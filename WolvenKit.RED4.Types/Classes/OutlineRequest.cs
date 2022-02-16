@@ -14,14 +14,6 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(1)] 
-		[RED("shouldAdd")] 
-		public CBool ShouldAdd
-		{
-			get => GetPropertyValue<CBool>();
-			set => SetPropertyValue<CBool>(value);
-		}
-
-		[Ordinal(2)] 
 		[RED("outlineDuration")] 
 		public CFloat OutlineDuration
 		{
@@ -29,7 +21,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(3)] 
+		[Ordinal(2)] 
 		[RED("outlineData")] 
 		public OutlineData OutlineData
 		{

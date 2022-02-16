@@ -22,6 +22,14 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(2)] 
+		[RED("queryPresetJson")] 
+		public CResourceReference<JsonResource> QueryPresetJson
+		{
+			get => GetPropertyValue<CResourceReference<JsonResource>>();
+			set => SetPropertyValue<CResourceReference<JsonResource>>(value);
+		}
+
+		[Ordinal(3)] 
 		[RED("collisionGroups", 64)] 
 		public CStatic<CName> CollisionGroups
 		{
@@ -29,7 +37,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CStatic<CName>>(value);
 		}
 
-		[Ordinal(3)] 
+		[Ordinal(4)] 
 		[RED("queryGroups", 64)] 
 		public CStatic<CName> QueryGroups
 		{

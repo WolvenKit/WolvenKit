@@ -5,7 +5,7 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class PatrolSpotAction : TweakAIActionSmartComposite
 	{
-		[Ordinal(38)] 
+		[Ordinal(46)] 
 		[RED("patrolAction")] 
 		public CHandle<AIArgumentMapping> PatrolAction
 		{

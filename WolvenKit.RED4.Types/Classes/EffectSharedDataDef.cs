@@ -254,6 +254,22 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(31)] 
+		[RED("vfxOffset")] 
+		public gamebbScriptID_Vector4 VfxOffset
+		{
+			get => GetPropertyValue<gamebbScriptID_Vector4>();
+			set => SetPropertyValue<gamebbScriptID_Vector4>(value);
+		}
+
+		[Ordinal(32)] 
+		[RED("disableVfx")] 
+		public gamebbScriptID_Bool DisableVfx
+		{
+			get => GetPropertyValue<gamebbScriptID_Bool>();
+			set => SetPropertyValue<gamebbScriptID_Bool>(value);
+		}
+
+		[Ordinal(33)] 
 		[RED("statusEffect")] 
 		public gamebbScriptID_Variant StatusEffect
 		{
@@ -261,7 +277,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gamebbScriptID_Variant>(value);
 		}
 
-		[Ordinal(32)] 
+		[Ordinal(34)] 
 		[RED("angle")] 
 		public gamebbScriptID_Float Angle
 		{
@@ -269,7 +285,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gamebbScriptID_Float>(value);
 		}
 
-		[Ordinal(33)] 
+		[Ordinal(35)] 
 		[RED("fallback_weaponPierce")] 
 		public gamebbScriptID_Bool Fallback_weaponPierce
 		{
@@ -277,7 +293,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gamebbScriptID_Bool>(value);
 		}
 
-		[Ordinal(34)] 
+		[Ordinal(36)] 
 		[RED("fallback_weaponPierceChargeLevel")] 
 		public gamebbScriptID_Float Fallback_weaponPierceChargeLevel
 		{
@@ -285,7 +301,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gamebbScriptID_Float>(value);
 		}
 
-		[Ordinal(35)] 
+		[Ordinal(37)] 
 		[RED("raycastEnd")] 
 		public gamebbScriptID_Vector4 RaycastEnd
 		{
@@ -293,7 +309,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gamebbScriptID_Vector4>(value);
 		}
 
-		[Ordinal(36)] 
+		[Ordinal(38)] 
 		[RED("maxPathLength")] 
 		public gamebbScriptID_Float MaxPathLength
 		{
@@ -301,7 +317,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gamebbScriptID_Float>(value);
 		}
 
-		[Ordinal(37)] 
+		[Ordinal(39)] 
 		[RED("effectorRecordName")] 
 		public gamebbScriptID_String EffectorRecordName
 		{
@@ -309,7 +325,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gamebbScriptID_String>(value);
 		}
 
-		[Ordinal(38)] 
+		[Ordinal(40)] 
 		[RED("targets")] 
 		public gamebbScriptID_Variant Targets
 		{
@@ -317,7 +333,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gamebbScriptID_Variant>(value);
 		}
 
-		[Ordinal(39)] 
+		[Ordinal(41)] 
 		[RED("highlightType")] 
 		public gamebbScriptID_Int32 HighlightType
 		{
@@ -325,7 +341,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gamebbScriptID_Int32>(value);
 		}
 
-		[Ordinal(40)] 
+		[Ordinal(42)] 
 		[RED("outlineType")] 
 		public gamebbScriptID_Int32 OutlineType
 		{
@@ -333,7 +349,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gamebbScriptID_Int32>(value);
 		}
 
-		[Ordinal(41)] 
+		[Ordinal(43)] 
 		[RED("highlightPriority")] 
 		public gamebbScriptID_Int32 HighlightPriority
 		{
@@ -341,7 +357,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gamebbScriptID_Int32>(value);
 		}
 
-		[Ordinal(42)] 
+		[Ordinal(44)] 
 		[RED("fxResource")] 
 		public gamebbScriptID_Variant FxResource
 		{
@@ -349,7 +365,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gamebbScriptID_Variant>(value);
 		}
 
-		[Ordinal(43)] 
+		[Ordinal(45)] 
 		[RED("dotCycleDuration")] 
 		public gamebbScriptID_Float DotCycleDuration
 		{
@@ -357,7 +373,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gamebbScriptID_Float>(value);
 		}
 
-		[Ordinal(44)] 
+		[Ordinal(46)] 
 		[RED("dotLastApplicationTime")] 
 		public gamebbScriptID_Float DotLastApplicationTime
 		{
@@ -365,7 +381,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gamebbScriptID_Float>(value);
 		}
 
-		[Ordinal(45)] 
+		[Ordinal(47)] 
 		[RED("enable")] 
 		public gamebbScriptID_Bool Enable
 		{
@@ -373,7 +389,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gamebbScriptID_Bool>(value);
 		}
 
-		[Ordinal(46)] 
+		[Ordinal(48)] 
 		[RED("slotName")] 
 		public gamebbScriptID_CName SlotName
 		{
@@ -381,7 +397,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gamebbScriptID_CName>(value);
 		}
 
-		[Ordinal(47)] 
+		[Ordinal(49)] 
 		[RED("targetComponent")] 
 		public gamebbScriptID_Variant TargetComponent
 		{
@@ -389,7 +405,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gamebbScriptID_Variant>(value);
 		}
 
-		[Ordinal(48)] 
+		[Ordinal(50)] 
 		[RED("meleeCleave")] 
 		public gamebbScriptID_Bool MeleeCleave
 		{
@@ -397,7 +413,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gamebbScriptID_Bool>(value);
 		}
 
-		[Ordinal(49)] 
+		[Ordinal(51)] 
 		[RED("highlightedTargets")] 
 		public gamebbScriptID_Variant HighlightedTargets
 		{
@@ -405,7 +421,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gamebbScriptID_Variant>(value);
 		}
 
-		[Ordinal(50)] 
+		[Ordinal(52)] 
 		[RED("forceVisionAppearanceData")] 
 		public gamebbScriptID_Variant ForceVisionAppearanceData
 		{
@@ -413,7 +429,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gamebbScriptID_Variant>(value);
 		}
 
-		[Ordinal(51)] 
+		[Ordinal(53)] 
 		[RED("tickRateOverride")] 
 		public gamebbScriptID_Float TickRateOverride
 		{
@@ -421,7 +437,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gamebbScriptID_Float>(value);
 		}
 
-		[Ordinal(52)] 
+		[Ordinal(54)] 
 		[RED("debugBool")] 
 		public gamebbScriptID_Bool DebugBool
 		{
@@ -462,6 +478,8 @@ namespace WolvenKit.RED4.Types
 			AttackId = new();
 			AttackNumber = new();
 			ImpactOrientationSlot = new();
+			VfxOffset = new();
+			DisableVfx = new();
 			StatusEffect = new();
 			Angle = new();
 			Fallback_weaponPierce = new();

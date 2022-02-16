@@ -14,6 +14,14 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(17)] 
+		[RED("ActionsPanel2")] 
+		public inkHorizontalPanelWidgetReference ActionsPanel2
+		{
+			get => GetPropertyValue<inkHorizontalPanelWidgetReference>();
+			set => SetPropertyValue<inkHorizontalPanelWidgetReference>(value);
+		}
+
+		[Ordinal(18)] 
 		[RED("priceText")] 
 		public inkTextWidgetReference PriceText
 		{
@@ -21,7 +29,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
-		[Ordinal(18)] 
+		[Ordinal(19)] 
 		[RED("noMoneyPanel")] 
 		public inkCompoundWidgetReference NoMoneyPanel
 		{
@@ -29,7 +37,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkCompoundWidgetReference>(value);
 		}
 
-		[Ordinal(19)] 
+		[Ordinal(20)] 
 		[RED("soldOutPanel")] 
 		public inkCompoundWidgetReference SoldOutPanel
 		{
@@ -37,7 +45,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkCompoundWidgetReference>(value);
 		}
 
-		[Ordinal(20)] 
+		[Ordinal(21)] 
 		[RED("state")] 
 		public CEnum<PaymentStatus> State
 		{
@@ -45,7 +53,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CEnum<PaymentStatus>>(value);
 		}
 
-		[Ordinal(21)] 
+		[Ordinal(22)] 
 		[RED("soldOut")] 
 		public CBool SoldOut
 		{
@@ -53,7 +61,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(22)] 
+		[Ordinal(23)] 
 		[RED("onUpdateStatusListener")] 
 		public CHandle<redCallbackObject> OnUpdateStatusListener
 		{
@@ -61,7 +69,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
-		[Ordinal(23)] 
+		[Ordinal(24)] 
 		[RED("onGlitchingStateChangedListener")] 
 		public CHandle<redCallbackObject> OnGlitchingStateChangedListener
 		{
@@ -69,7 +77,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
-		[Ordinal(24)] 
+		[Ordinal(25)] 
 		[RED("onSoldOutListener")] 
 		public CHandle<redCallbackObject> OnSoldOutListener
 		{
@@ -80,6 +88,7 @@ namespace WolvenKit.RED4.Types
 		public VendingMachineInkGameController()
 		{
 			ActionsPanel = new();
+			ActionsPanel2 = new();
 			PriceText = new();
 			NoMoneyPanel = new();
 			SoldOutPanel = new();

@@ -6,6 +6,22 @@ namespace WolvenKit.RED4.Types
 	public partial class ItemTooltipRecipeDataModule : ItemTooltipModuleController
 	{
 		[Ordinal(2)] 
+		[RED("randomQualityLabel")] 
+		public inkTextWidgetReference RandomQualityLabel
+		{
+			get => GetPropertyValue<inkTextWidgetReference>();
+			set => SetPropertyValue<inkTextWidgetReference>(value);
+		}
+
+		[Ordinal(3)] 
+		[RED("randomQualityWrapper")] 
+		public inkWidgetReference RandomQualityWrapper
+		{
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
+		}
+
+		[Ordinal(4)] 
 		[RED("statsLabel")] 
 		public inkTextWidgetReference StatsLabel
 		{
@@ -13,7 +29,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
-		[Ordinal(3)] 
+		[Ordinal(5)] 
 		[RED("statsWrapper")] 
 		public inkWidgetReference StatsWrapper
 		{
@@ -21,7 +37,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(4)] 
+		[Ordinal(6)] 
 		[RED("statsContainer")] 
 		public inkCompoundWidgetReference StatsContainer
 		{
@@ -29,7 +45,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkCompoundWidgetReference>(value);
 		}
 
-		[Ordinal(5)] 
+		[Ordinal(7)] 
 		[RED("damageTypesLabel")] 
 		public inkTextWidgetReference DamageTypesLabel
 		{
@@ -37,7 +53,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
-		[Ordinal(6)] 
+		[Ordinal(8)] 
 		[RED("damageTypesWrapper")] 
 		public inkWidgetReference DamageTypesWrapper
 		{
@@ -45,7 +61,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(7)] 
+		[Ordinal(9)] 
 		[RED("damageTypesContainer")] 
 		public inkCompoundWidgetReference DamageTypesContainer
 		{
@@ -55,6 +71,8 @@ namespace WolvenKit.RED4.Types
 
 		public ItemTooltipRecipeDataModule()
 		{
+			RandomQualityLabel = new();
+			RandomQualityWrapper = new();
 			StatsLabel = new();
 			StatsWrapper = new();
 			StatsContainer = new();

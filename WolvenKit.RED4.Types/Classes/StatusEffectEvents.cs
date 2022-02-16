@@ -5,7 +5,7 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class StatusEffectEvents : LocomotionGroundEvents
 	{
-		[Ordinal(3)] 
+		[Ordinal(6)] 
 		[RED("statusEffectRecord")] 
 		public CWeakHandle<gamedataStatusEffect_Record> StatusEffectRecord
 		{
@@ -13,7 +13,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<gamedataStatusEffect_Record>>(value);
 		}
 
-		[Ordinal(4)] 
+		[Ordinal(7)] 
 		[RED("playerStatusEffectRecordData")] 
 		public CWeakHandle<gamedataStatusEffectPlayerData_Record> PlayerStatusEffectRecordData
 		{
@@ -21,12 +21,20 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<gamedataStatusEffectPlayerData_Record>>(value);
 		}
 
-		[Ordinal(5)] 
+		[Ordinal(8)] 
 		[RED("animFeatureStatusEffect")] 
 		public CHandle<AnimFeature_StatusEffect> AnimFeatureStatusEffect
 		{
 			get => GetPropertyValue<CHandle<AnimFeature_StatusEffect>>();
 			set => SetPropertyValue<CHandle<AnimFeature_StatusEffect>>(value);
+		}
+
+		[Ordinal(9)] 
+		[RED("statusEffectEnumName")] 
+		public CString StatusEffectEnumName
+		{
+			get => GetPropertyValue<CString>();
+			set => SetPropertyValue<CString>(value);
 		}
 	}
 }

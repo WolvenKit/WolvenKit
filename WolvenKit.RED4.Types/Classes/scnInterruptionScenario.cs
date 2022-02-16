@@ -22,6 +22,14 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(2)] 
+		[RED("queueName")] 
+		public CName QueueName
+		{
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
+		}
+
+		[Ordinal(3)] 
 		[RED("enabled")] 
 		public CBool Enabled
 		{
@@ -29,7 +37,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(3)] 
+		[Ordinal(4)] 
 		[RED("talkOnReturn")] 
 		public CBool TalkOnReturn
 		{
@@ -37,7 +45,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(4)] 
+		[Ordinal(5)] 
 		[RED("playInterruptLine")] 
 		public CBool PlayInterruptLine
 		{
@@ -45,7 +53,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(5)] 
+		[Ordinal(6)] 
 		[RED("forcePlayReturnLine")] 
 		public CBool ForcePlayReturnLine
 		{
@@ -53,7 +61,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(6)] 
+		[Ordinal(7)] 
 		[RED("interruptionSpammingSafeguard")] 
 		public CBool InterruptionSpammingSafeguard
 		{
@@ -61,7 +69,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(7)] 
+		[Ordinal(8)] 
 		[RED("playingLinesBehavior")] 
 		public CEnum<scnInterruptReturnLinesBehavior> PlayingLinesBehavior
 		{
@@ -69,7 +77,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CEnum<scnInterruptReturnLinesBehavior>>(value);
 		}
 
-		[Ordinal(8)] 
+		[Ordinal(9)] 
 		[RED("postInterruptSignalTimeDelay")] 
 		public CFloat PostInterruptSignalTimeDelay
 		{
@@ -77,7 +85,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(9)] 
+		[Ordinal(10)] 
 		[RED("postReturnSignalTimeDelay")] 
 		public CFloat PostReturnSignalTimeDelay
 		{
@@ -85,7 +93,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(10)] 
+		[Ordinal(11)] 
 		[RED("postInterruptSignalFactCondition")] 
 		public CHandle<scnInterruptFactConditionType> PostInterruptSignalFactCondition
 		{
@@ -93,7 +101,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<scnInterruptFactConditionType>>(value);
 		}
 
-		[Ordinal(11)] 
+		[Ordinal(12)] 
 		[RED("postReturnSignalFactCondition")] 
 		public CHandle<scnInterruptFactConditionType> PostReturnSignalFactCondition
 		{
@@ -101,7 +109,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<scnInterruptFactConditionType>>(value);
 		}
 
-		[Ordinal(12)] 
+		[Ordinal(13)] 
 		[RED("interruptConditions")] 
 		public CArray<CHandle<scnIInterruptCondition>> InterruptConditions
 		{
@@ -109,7 +117,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<CHandle<scnIInterruptCondition>>>(value);
 		}
 
-		[Ordinal(13)] 
+		[Ordinal(14)] 
 		[RED("returnConditions")] 
 		public CArray<CHandle<scnIReturnCondition>> ReturnConditions
 		{

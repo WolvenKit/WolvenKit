@@ -38,6 +38,14 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(5)] 
+		[RED("fastForwardAfterTeleport")] 
+		public CHandle<AIArgumentMapping> FastForwardAfterTeleport
+		{
+			get => GetPropertyValue<CHandle<AIArgumentMapping>>();
+			set => SetPropertyValue<CHandle<AIArgumentMapping>>(value);
+		}
+
+		[Ordinal(6)] 
 		[RED("workspotData")] 
 		public CHandle<AIArgumentMapping> WorkspotData
 		{
@@ -45,7 +53,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<AIArgumentMapping>>(value);
 		}
 
-		[Ordinal(6)] 
+		[Ordinal(7)] 
 		[RED("dependentWorkspotData")] 
 		public CHandle<AIArgumentMapping> DependentWorkspotData
 		{
@@ -53,7 +61,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<AIArgumentMapping>>(value);
 		}
 
-		[Ordinal(7)] 
+		[Ordinal(8)] 
 		[RED("lookAtTarget")] 
 		public CHandle<AIArgumentMapping> LookAtTarget
 		{

@@ -68,5 +68,13 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CHandle<redCallbackObject>>();
 			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
+
+		[Ordinal(8)] 
+		[RED("isBriefingActive")] 
+		public CHandle<redCallbackObject> IsBriefingActive
+		{
+			get => GetPropertyValue<CHandle<redCallbackObject>>();
+			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
+		}
 	}
 }

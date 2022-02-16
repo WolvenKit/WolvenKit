@@ -30,6 +30,14 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(3)] 
+		[RED("includeCyberPsycho")] 
+		public CBool IncludeCyberPsycho
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(4)] 
 		[RED("includeContracts")] 
 		public CBool IncludeContracts
 		{

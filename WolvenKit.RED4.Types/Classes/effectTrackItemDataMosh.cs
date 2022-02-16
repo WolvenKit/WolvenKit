@@ -37,11 +37,52 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<effectEffectParameterEvaluatorVector>(value);
 		}
 
+		[Ordinal(7)] 
+		[RED("usePixelsort")] 
+		public CBool UsePixelsort
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(8)] 
+		[RED("pixelsortOverride")] 
+		public CBool PixelsortOverride
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(9)] 
+		[RED("pixelsortIntensity")] 
+		public effectEffectParameterEvaluatorFloat PixelsortIntensity
+		{
+			get => GetPropertyValue<effectEffectParameterEvaluatorFloat>();
+			set => SetPropertyValue<effectEffectParameterEvaluatorFloat>(value);
+		}
+
+		[Ordinal(10)] 
+		[RED("pixelsortStencil")] 
+		public CBool PixelsortStencil
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(11)] 
+		[RED("pixelsortVfx")] 
+		public CBool PixelsortVfx
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
 		public effectTrackItemDataMosh()
 		{
 			TimeDuration = 1.000000F;
 			Intensity = new();
 			GlitchColor = new();
+			PixelsortIntensity = new();
 		}
 	}
 }

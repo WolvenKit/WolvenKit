@@ -20,13 +20,5 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CHandle<senseStimuliEvent>>();
 			set => SetPropertyValue<CHandle<senseStimuliEvent>>(value);
 		}
-
-		[Ordinal(2)] 
-		[RED("eventResent")] 
-		public CBool EventResent
-		{
-			get => GetPropertyValue<CBool>();
-			set => SetPropertyValue<CBool>(value);
-		}
 	}
 }

@@ -13,6 +13,14 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gameItemID>(value);
 		}
 
+		[Ordinal(1)] 
+		[RED("isGarment")] 
+		public CBool IsGarment
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
 		public CraftingItemPreviewEvent()
 		{
 			ItemID = new();

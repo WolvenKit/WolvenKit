@@ -5,7 +5,7 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class PlayerPuppetPS : ScriptedPuppetPS
 	{
-		[Ordinal(26)] 
+		[Ordinal(32)] 
 		[RED("keybindigs")] 
 		public KeyBindings Keybindigs
 		{
@@ -13,7 +13,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<KeyBindings>(value);
 		}
 
-		[Ordinal(27)] 
+		[Ordinal(33)] 
 		[RED("availablePrograms")] 
 		public CArray<gameuiMinigameProgramData> AvailablePrograms
 		{
@@ -21,7 +21,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<gameuiMinigameProgramData>>(value);
 		}
 
-		[Ordinal(28)] 
+		[Ordinal(34)] 
 		[RED("hasAutoReveal")] 
 		public CBool HasAutoReveal
 		{
@@ -29,7 +29,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(29)] 
+		[Ordinal(35)] 
 		[RED("combatExitTimestamp")] 
 		public CFloat CombatExitTimestamp
 		{
@@ -37,7 +37,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(30)] 
+		[Ordinal(36)] 
 		[RED("minigameBB")] 
 		public CWeakHandle<gameIBlackboard> MinigameBB
 		{

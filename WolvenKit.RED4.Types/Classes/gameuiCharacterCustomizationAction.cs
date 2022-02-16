@@ -20,5 +20,13 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CString>();
 			set => SetPropertyValue<CString>(value);
 		}
+
+		[Ordinal(2)] 
+		[RED("applyImmediately")] 
+		public CBool ApplyImmediately
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
 	}
 }

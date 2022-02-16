@@ -68,5 +68,13 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CHandle<gamebbScriptDefinition>>();
 			set => SetPropertyValue<CHandle<gamebbScriptDefinition>>(value);
 		}
+
+		[Ordinal(8)] 
+		[RED("isBriefingActive")] 
+		public CHandle<gamebbScriptDefinition> IsBriefingActive
+		{
+			get => GetPropertyValue<CHandle<gamebbScriptDefinition>>();
+			set => SetPropertyValue<CHandle<gamebbScriptDefinition>>(value);
+		}
 	}
 }

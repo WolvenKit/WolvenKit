@@ -2,7 +2,7 @@
 namespace WolvenKit.RED4.Types
 {
 	[REDMeta]
-	public partial class JukeboxController : ScriptableDC
+	public partial class JukeboxController : ScriptableDeviceComponent
 	{
 	}
 }

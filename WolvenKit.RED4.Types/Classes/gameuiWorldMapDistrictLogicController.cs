@@ -53,6 +53,14 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<inkanimProxy>>(value);
 		}
 
+		[Ordinal(7)] 
+		[RED("rootWidget")] 
+		public CWeakHandle<inkWidget> RootWidget
+		{
+			get => GetPropertyValue<CWeakHandle<inkWidget>>();
+			set => SetPropertyValue<CWeakHandle<inkWidget>>(value);
+		}
+
 		public gameuiWorldMapDistrictLogicController()
 		{
 			OutlineWidget = new();

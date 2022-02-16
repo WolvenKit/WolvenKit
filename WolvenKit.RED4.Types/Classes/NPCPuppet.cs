@@ -5,7 +5,7 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class NPCPuppet : ScriptedPuppet
 	{
-		[Ordinal(96)] 
+		[Ordinal(92)] 
 		[RED("lastHitEvent")] 
 		public CHandle<gameeventsHitEvent> LastHitEvent
 		{
@@ -13,7 +13,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<gameeventsHitEvent>>(value);
 		}
 
-		[Ordinal(97)] 
+		[Ordinal(93)] 
 		[RED("totalFrameReactionDamageReceived")] 
 		public CFloat TotalFrameReactionDamageReceived
 		{
@@ -21,7 +21,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(98)] 
+		[Ordinal(94)] 
 		[RED("totalFrameWoundsDamageReceived")] 
 		public CFloat TotalFrameWoundsDamageReceived
 		{
@@ -29,7 +29,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(99)] 
+		[Ordinal(95)] 
 		[RED("totalFrameDismembermentDamageReceived")] 
 		public CFloat TotalFrameDismembermentDamageReceived
 		{
@@ -37,7 +37,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(100)] 
+		[Ordinal(96)] 
 		[RED("hitEventLock")] 
 		public ScriptReentrantRWLock HitEventLock
 		{
@@ -45,7 +45,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<ScriptReentrantRWLock>(value);
 		}
 
-		[Ordinal(101)] 
+		[Ordinal(97)] 
 		[RED("NPCManager")] 
 		public CHandle<NPCManager> NPCManager
 		{
@@ -53,7 +53,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<NPCManager>>(value);
 		}
 
-		[Ordinal(102)] 
+		[Ordinal(98)] 
 		[RED("customDeathDirection")] 
 		public CInt32 CustomDeathDirection
 		{
@@ -61,7 +61,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CInt32>(value);
 		}
 
-		[Ordinal(103)] 
+		[Ordinal(99)] 
 		[RED("deathOverrideState")] 
 		public CBool DeathOverrideState
 		{
@@ -69,7 +69,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(104)] 
+		[Ordinal(100)] 
 		[RED("agonyState")] 
 		public CBool AgonyState
 		{
@@ -77,7 +77,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(105)] 
+		[Ordinal(101)] 
 		[RED("defensiveState")] 
 		public CBool DefensiveState
 		{
@@ -85,7 +85,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(106)] 
+		[Ordinal(102)] 
 		[RED("lastSetupWorkspotActionEvent")] 
 		public CHandle<gameSetupWorkspotActionEvent> LastSetupWorkspotActionEvent
 		{
@@ -93,7 +93,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<gameSetupWorkspotActionEvent>>(value);
 		}
 
-		[Ordinal(107)] 
+		[Ordinal(103)] 
 		[RED("wasJustKilledOrDefeated")] 
 		public CBool WasJustKilledOrDefeated
 		{
@@ -101,7 +101,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(108)] 
+		[Ordinal(104)] 
 		[RED("shouldDie")] 
 		public CBool ShouldDie
 		{
@@ -109,7 +109,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(109)] 
+		[Ordinal(105)] 
 		[RED("shouldBeDefeated")] 
 		public CBool ShouldBeDefeated
 		{
@@ -117,7 +117,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(110)] 
+		[Ordinal(106)] 
 		[RED("sentDownedEvent")] 
 		public CBool SentDownedEvent
 		{
@@ -125,7 +125,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(111)] 
+		[Ordinal(107)] 
 		[RED("isRagdolling")] 
 		public CBool IsRagdolling
 		{
@@ -133,7 +133,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(112)] 
+		[Ordinal(108)] 
 		[RED("hasAnimatedRagdoll")] 
 		public CBool HasAnimatedRagdoll
 		{
@@ -141,7 +141,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(113)] 
+		[Ordinal(109)] 
 		[RED("disableCollisionRequested")] 
 		public CBool DisableCollisionRequested
 		{
@@ -149,7 +149,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(114)] 
+		[Ordinal(110)] 
 		[RED("ragdollInstigator")] 
 		public CWeakHandle<gameObject> RagdollInstigator
 		{
@@ -157,7 +157,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<gameObject>>(value);
 		}
 
-		[Ordinal(115)] 
+		[Ordinal(111)] 
 		[RED("ragdollSplattersSpawned")] 
 		public CInt32 RagdollSplattersSpawned
 		{
@@ -165,7 +165,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CInt32>(value);
 		}
 
-		[Ordinal(116)] 
+		[Ordinal(112)] 
 		[RED("ragdollFloorSplashSpawned")] 
 		public CBool RagdollFloorSplashSpawned
 		{
@@ -173,7 +173,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(117)] 
+		[Ordinal(113)] 
 		[RED("ragdollImpactData")] 
 		public entRagdollImpactPointData RagdollImpactData
 		{
@@ -181,7 +181,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<entRagdollImpactPointData>(value);
 		}
 
-		[Ordinal(118)] 
+		[Ordinal(114)] 
 		[RED("ragdollDamageData")] 
 		public RagdollDamagePollData RagdollDamageData
 		{
@@ -189,7 +189,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<RagdollDamagePollData>(value);
 		}
 
-		[Ordinal(119)] 
+		[Ordinal(115)] 
 		[RED("ragdollInitialPosition")] 
 		public Vector4 RagdollInitialPosition
 		{
@@ -197,7 +197,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<Vector4>(value);
 		}
 
-		[Ordinal(120)] 
+		[Ordinal(116)] 
 		[RED("ragdollActivationTimestamp")] 
 		public CFloat RagdollActivationTimestamp
 		{
@@ -205,7 +205,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(121)] 
+		[Ordinal(117)] 
 		[RED("ragdolledEntities")] 
 		public CArray<CWeakHandle<entEntity>> RagdolledEntities
 		{
@@ -213,7 +213,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<CWeakHandle<entEntity>>>(value);
 		}
 
-		[Ordinal(122)] 
+		[Ordinal(118)] 
 		[RED("disableRagdollAfterRecovery")] 
 		public CBool DisableRagdollAfterRecovery
 		{
@@ -221,7 +221,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(123)] 
+		[Ordinal(119)] 
 		[RED("isNotVisible")] 
 		public CBool IsNotVisible
 		{
@@ -229,7 +229,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(124)] 
+		[Ordinal(120)] 
 		[RED("deathListener")] 
 		public CHandle<NPCDeathListener> DeathListener
 		{
@@ -237,7 +237,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<NPCDeathListener>>(value);
 		}
 
-		[Ordinal(125)] 
+		[Ordinal(121)] 
 		[RED("godModeStatListener")] 
 		public CHandle<NPCGodModeListener> GodModeStatListener
 		{
@@ -245,7 +245,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<NPCGodModeListener>>(value);
 		}
 
-		[Ordinal(126)] 
+		[Ordinal(122)] 
 		[RED("npcCollisionComponent")] 
 		public CHandle<entSimpleColliderComponent> NpcCollisionComponent
 		{
@@ -253,7 +253,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<entSimpleColliderComponent>>(value);
 		}
 
-		[Ordinal(127)] 
+		[Ordinal(123)] 
 		[RED("npcRagdollComponent")] 
 		public CHandle<entIComponent> NpcRagdollComponent
 		{
@@ -261,7 +261,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<entIComponent>>(value);
 		}
 
-		[Ordinal(128)] 
+		[Ordinal(124)] 
 		[RED("npcTraceObstacleComponent")] 
 		public CHandle<entSimpleColliderComponent> NpcTraceObstacleComponent
 		{
@@ -269,7 +269,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<entSimpleColliderComponent>>(value);
 		}
 
-		[Ordinal(129)] 
+		[Ordinal(125)] 
 		[RED("npcMountedToPlayerComponents")] 
 		public CArray<CHandle<entIComponent>> NpcMountedToPlayerComponents
 		{
@@ -277,7 +277,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<CHandle<entIComponent>>>(value);
 		}
 
-		[Ordinal(130)] 
+		[Ordinal(126)] 
 		[RED("scavengeComponent")] 
 		public CHandle<ScavengeComponent> ScavengeComponent
 		{
@@ -285,7 +285,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<ScavengeComponent>>(value);
 		}
 
-		[Ordinal(131)] 
+		[Ordinal(127)] 
 		[RED("influenceComponent")] 
 		public CHandle<gameinfluenceComponent> InfluenceComponent
 		{
@@ -293,7 +293,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<gameinfluenceComponent>>(value);
 		}
 
-		[Ordinal(132)] 
+		[Ordinal(128)] 
 		[RED("comfortZoneComponent")] 
 		public CHandle<entIComponent> ComfortZoneComponent
 		{
@@ -301,7 +301,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<entIComponent>>(value);
 		}
 
-		[Ordinal(133)] 
+		[Ordinal(129)] 
 		[RED("isTargetingPlayer")] 
 		public CBool IsTargetingPlayer
 		{
@@ -309,7 +309,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(134)] 
+		[Ordinal(130)] 
 		[RED("playerStatsListener")] 
 		public CHandle<gameScriptStatsListener> PlayerStatsListener
 		{
@@ -317,7 +317,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<gameScriptStatsListener>>(value);
 		}
 
-		[Ordinal(135)] 
+		[Ordinal(131)] 
 		[RED("upperBodyStateCallbackID")] 
 		public CHandle<redCallbackObject> UpperBodyStateCallbackID
 		{
@@ -325,7 +325,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
-		[Ordinal(136)] 
+		[Ordinal(132)] 
 		[RED("leftCyberwareStateCallbackID")] 
 		public CHandle<redCallbackObject> LeftCyberwareStateCallbackID
 		{
@@ -333,7 +333,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
-		[Ordinal(137)] 
+		[Ordinal(133)] 
 		[RED("meleeStateCallbackID")] 
 		public CHandle<redCallbackObject> MeleeStateCallbackID
 		{
@@ -341,7 +341,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
-		[Ordinal(138)] 
+		[Ordinal(134)] 
 		[RED("combatGadgetStateCallbackID")] 
 		public CHandle<redCallbackObject> CombatGadgetStateCallbackID
 		{
@@ -349,7 +349,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
-		[Ordinal(139)] 
+		[Ordinal(135)] 
 		[RED("wasAimedAtLast")] 
 		public CBool WasAimedAtLast
 		{
@@ -357,7 +357,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(140)] 
+		[Ordinal(136)] 
 		[RED("wasCWChargedAtLast")] 
 		public CBool WasCWChargedAtLast
 		{
@@ -365,7 +365,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(141)] 
+		[Ordinal(137)] 
 		[RED("wasMeleeChargedAtLast")] 
 		public CBool WasMeleeChargedAtLast
 		{
@@ -373,7 +373,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(142)] 
+		[Ordinal(138)] 
 		[RED("wasChargingGadgetAtLast")] 
 		public CBool WasChargingGadgetAtLast
 		{
@@ -381,7 +381,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(143)] 
+		[Ordinal(139)] 
 		[RED("isLookedAt")] 
 		public CBool IsLookedAt
 		{
@@ -389,7 +389,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(144)] 
+		[Ordinal(140)] 
 		[RED("cachedPlayerID")] 
 		public entEntityID CachedPlayerID
 		{
@@ -397,7 +397,15 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<entEntityID>(value);
 		}
 
-		[Ordinal(145)] 
+		[Ordinal(141)] 
+		[RED("wasAggressiveCrowd")] 
+		public CBool WasAggressiveCrowd
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(142)] 
 		[RED("canGoThroughDoors")] 
 		public CBool CanGoThroughDoors
 		{
@@ -405,7 +413,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(146)] 
+		[Ordinal(143)] 
 		[RED("lastStatusEffectSignalSent")] 
 		public CWeakHandle<gamedataStatusEffect_Record> LastStatusEffectSignalSent
 		{
@@ -413,7 +421,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<gamedataStatusEffect_Record>>(value);
 		}
 
-		[Ordinal(147)] 
+		[Ordinal(144)] 
 		[RED("cachedStatusEffectAnim")] 
 		public CWeakHandle<gamedataStatusEffect_Record> CachedStatusEffectAnim
 		{
@@ -421,7 +429,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<gamedataStatusEffect_Record>>(value);
 		}
 
-		[Ordinal(148)] 
+		[Ordinal(145)] 
 		[RED("resendStatusEffectSignalDelayID")] 
 		public gameDelayID ResendStatusEffectSignalDelayID
 		{
@@ -429,7 +437,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gameDelayID>(value);
 		}
 
-		[Ordinal(149)] 
+		[Ordinal(146)] 
 		[RED("lastSEAppliedByPlayer")] 
 		public CHandle<gameStatusEffect> LastSEAppliedByPlayer
 		{
@@ -437,7 +445,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<gameStatusEffect>>(value);
 		}
 
-		[Ordinal(150)] 
+		[Ordinal(147)] 
 		[RED("pendingSEEvent")] 
 		public CHandle<gameeventsApplyStatusEffectEvent> PendingSEEvent
 		{
@@ -445,7 +453,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<gameeventsApplyStatusEffectEvent>>(value);
 		}
 
-		[Ordinal(151)] 
+		[Ordinal(148)] 
 		[RED("bounty")] 
 		public Bounty Bounty
 		{
@@ -453,7 +461,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<Bounty>(value);
 		}
 
-		[Ordinal(152)] 
+		[Ordinal(149)] 
 		[RED("cachedVFXList")] 
 		public CArray<CWeakHandle<gamedataStatusEffectFX_Record>> CachedVFXList
 		{
@@ -461,7 +469,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<CWeakHandle<gamedataStatusEffectFX_Record>>>(value);
 		}
 
-		[Ordinal(153)] 
+		[Ordinal(150)] 
 		[RED("cachedSFXList")] 
 		public CArray<CWeakHandle<gamedataStatusEffectFX_Record>> CachedSFXList
 		{
@@ -469,7 +477,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<CWeakHandle<gamedataStatusEffectFX_Record>>>(value);
 		}
 
-		[Ordinal(154)] 
+		[Ordinal(151)] 
 		[RED("isThrowingGrenadeToPlayer")] 
 		public CBool IsThrowingGrenadeToPlayer
 		{
@@ -477,7 +485,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(155)] 
+		[Ordinal(152)] 
 		[RED("throwingGrenadeDelayEventID")] 
 		public gameDelayID ThrowingGrenadeDelayEventID
 		{
@@ -485,7 +493,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gameDelayID>(value);
 		}
 
-		[Ordinal(156)] 
+		[Ordinal(153)] 
 		[RED("myKiller")] 
 		public CWeakHandle<gameObject> MyKiller
 		{
@@ -493,7 +501,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<gameObject>>(value);
 		}
 
-		[Ordinal(157)] 
+		[Ordinal(154)] 
 		[RED("primaryThreatCalculationType")] 
 		public CEnum<EAIThreatCalculationType> PrimaryThreatCalculationType
 		{
@@ -501,7 +509,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CEnum<EAIThreatCalculationType>>(value);
 		}
 
-		[Ordinal(158)] 
+		[Ordinal(155)] 
 		[RED("temporaryThreatCalculationType")] 
 		public CEnum<EAIThreatCalculationType> TemporaryThreatCalculationType
 		{
@@ -509,7 +517,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CEnum<EAIThreatCalculationType>>(value);
 		}
 
-		[Ordinal(159)] 
+		[Ordinal(156)] 
 		[RED("isPlayerCompanionCached")] 
 		public CBool IsPlayerCompanionCached
 		{
@@ -517,7 +525,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(160)] 
+		[Ordinal(157)] 
 		[RED("isPlayerCompanionCachedTimeStamp")] 
 		public CFloat IsPlayerCompanionCachedTimeStamp
 		{
@@ -525,7 +533,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(161)] 
+		[Ordinal(158)] 
 		[RED("quickHackEffectsApplied")] 
 		public CUInt32 QuickHackEffectsApplied
 		{
@@ -533,7 +541,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CUInt32>(value);
 		}
 
-		[Ordinal(162)] 
+		[Ordinal(159)] 
 		[RED("hackingResistanceMod")] 
 		public CHandle<gameConstantStatModifierData_Deprecated> HackingResistanceMod
 		{
@@ -541,7 +549,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<gameConstantStatModifierData_Deprecated>>(value);
 		}
 
-		[Ordinal(163)] 
+		[Ordinal(160)] 
 		[RED("delayNonStealthQuickHackVictimEventID")] 
 		public gameDelayID DelayNonStealthQuickHackVictimEventID
 		{
@@ -549,7 +557,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gameDelayID>(value);
 		}
 
-		[Ordinal(164)] 
+		[Ordinal(161)] 
 		[RED("cachedIsPaperdoll")] 
 		public CInt32 CachedIsPaperdoll
 		{
@@ -557,7 +565,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CInt32>(value);
 		}
 
-		[Ordinal(165)] 
+		[Ordinal(162)] 
 		[RED("smartDespawnDelayID")] 
 		public gameDelayID SmartDespawnDelayID
 		{
@@ -565,7 +573,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gameDelayID>(value);
 		}
 
-		[Ordinal(166)] 
+		[Ordinal(163)] 
 		[RED("despawnTicks")] 
 		public CUInt32 DespawnTicks
 		{

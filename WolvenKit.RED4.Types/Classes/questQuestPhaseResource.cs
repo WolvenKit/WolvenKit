@@ -13,9 +13,18 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<questQuestPrefabEntry>>(value);
 		}
 
+		[Ordinal(3)] 
+		[RED("inplacePhases")] 
+		public CArray<CResourceReference<CResource>> InplacePhases
+		{
+			get => GetPropertyValue<CArray<CResourceReference<CResource>>>();
+			set => SetPropertyValue<CArray<CResourceReference<CResource>>>(value);
+		}
+
 		public questQuestPhaseResource()
 		{
 			PhasePrefabs = new();
+			InplacePhases = new();
 		}
 	}
 }

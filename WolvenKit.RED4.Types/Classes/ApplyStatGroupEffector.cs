@@ -23,10 +23,10 @@ namespace WolvenKit.RED4.Types
 
 		[Ordinal(2)] 
 		[RED("applicationTarget")] 
-		public CString ApplicationTarget
+		public CName ApplicationTarget
 		{
-			get => GetPropertyValue<CString>();
-			set => SetPropertyValue<CString>(value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(3)] 

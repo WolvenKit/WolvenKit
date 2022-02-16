@@ -5,7 +5,7 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class gameSceneTier3Data : gameSceneTierDataMotionConstrained
 	{
-		[Ordinal(3)] 
+		[Ordinal(4)] 
 		[RED("cameraSettings")] 
 		public gameTier3CameraSettings CameraSettings
 		{

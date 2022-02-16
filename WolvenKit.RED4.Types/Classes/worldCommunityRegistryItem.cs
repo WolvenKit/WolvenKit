@@ -30,17 +30,18 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(3)] 
-		[RED("communityIsBackground")] 
-		public CBool CommunityIsBackground
+		[RED("communityAreaType")] 
+		public CEnum<worldCommunityRegistryItemAreaNodeType> CommunityAreaType
 		{
-			get => GetPropertyValue<CBool>();
-			set => SetPropertyValue<CBool>(value);
+			get => GetPropertyValue<CEnum<worldCommunityRegistryItemAreaNodeType>>();
+			set => SetPropertyValue<CEnum<worldCommunityRegistryItemAreaNodeType>>(value);
 		}
 
 		public worldCommunityRegistryItem()
 		{
 			EntriesInitialState = new();
 			CommunityId = new() { EntityId = new() };
+			CommunityAreaType = Enums.worldCommunityRegistryItemAreaNodeType.Count;
 		}
 	}
 }

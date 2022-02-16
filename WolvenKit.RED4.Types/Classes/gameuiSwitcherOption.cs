@@ -14,11 +14,11 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(1)] 
-		[RED("name")] 
-		public CName Name
+		[RED("names")] 
+		public CArray<CName> Names
 		{
-			get => GetPropertyValue<CName>();
-			set => SetPropertyValue<CName>(value);
+			get => GetPropertyValue<CArray<CName>>();
+			set => SetPropertyValue<CArray<CName>>(value);
 		}
 
 		[Ordinal(2)] 
@@ -47,6 +47,7 @@ namespace WolvenKit.RED4.Types
 
 		public gameuiSwitcherOption()
 		{
+			Names = new();
 			Actions = new();
 			Tags = new() { Tags = new() };
 		}

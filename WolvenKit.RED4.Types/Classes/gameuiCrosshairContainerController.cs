@@ -14,14 +14,6 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(10)] 
-		[RED("sprintWidget")] 
-		public inkWidgetReference SprintWidget
-		{
-			get => GetPropertyValue<inkWidgetReference>();
-			set => SetPropertyValue<inkWidgetReference>(value);
-		}
-
-		[Ordinal(11)] 
 		[RED("bbUIData")] 
 		public CWeakHandle<gameIBlackboard> BbUIData
 		{
@@ -29,7 +21,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<gameIBlackboard>>(value);
 		}
 
-		[Ordinal(12)] 
+		[Ordinal(11)] 
 		[RED("bbWeaponInfo")] 
 		public CWeakHandle<gameIBlackboard> BbWeaponInfo
 		{
@@ -37,7 +29,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<gameIBlackboard>>(value);
 		}
 
-		[Ordinal(13)] 
+		[Ordinal(12)] 
 		[RED("bbPlayerTierEventId")] 
 		public CHandle<redCallbackObject> BbPlayerTierEventId
 		{
@@ -45,7 +37,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
-		[Ordinal(14)] 
+		[Ordinal(13)] 
 		[RED("bbWeaponEventId")] 
 		public CHandle<redCallbackObject> BbWeaponEventId
 		{
@@ -53,7 +45,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
-		[Ordinal(15)] 
+		[Ordinal(14)] 
 		[RED("interactionBlackboardId")] 
 		public CHandle<redCallbackObject> InteractionBlackboardId
 		{
@@ -61,9 +53,17 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
-		[Ordinal(16)] 
+		[Ordinal(15)] 
 		[RED("crosshairStateBlackboardId")] 
 		public CHandle<redCallbackObject> CrosshairStateBlackboardId
+		{
+			get => GetPropertyValue<CHandle<redCallbackObject>>();
+			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
+		}
+
+		[Ordinal(16)] 
+		[RED("visionStateBlackboardId")] 
+		public CHandle<redCallbackObject> VisionStateBlackboardId
 		{
 			get => GetPropertyValue<CHandle<redCallbackObject>>();
 			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
@@ -110,6 +110,14 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(22)] 
+		[RED("isScanning")] 
+		public CBool IsScanning
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(23)] 
 		[RED("isUnarmed")] 
 		public CBool IsUnarmed
 		{
@@ -117,7 +125,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(23)] 
+		[Ordinal(24)] 
 		[RED("isMounted")] 
 		public CBool IsMounted
 		{
@@ -125,7 +133,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(24)] 
+		[Ordinal(25)] 
 		[RED("fadeOutValue")] 
 		public CFloat FadeOutValue
 		{
@@ -133,7 +141,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(25)] 
+		[Ordinal(26)] 
 		[RED("wasLastInteractionWithDevice")] 
 		public CBool WasLastInteractionWithDevice
 		{
@@ -141,7 +149,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(26)] 
+		[Ordinal(27)] 
 		[RED("CombatStateBlackboardId")] 
 		public CHandle<redCallbackObject> CombatStateBlackboardId
 		{
@@ -149,7 +157,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
-		[Ordinal(27)] 
+		[Ordinal(28)] 
 		[RED("hiddenAnimProxy")] 
 		public CHandle<inkanimProxy> HiddenAnimProxy
 		{
@@ -157,7 +165,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<inkanimProxy>>(value);
 		}
 
-		[Ordinal(28)] 
+		[Ordinal(29)] 
 		[RED("Player")] 
 		public CWeakHandle<PlayerPuppet> Player
 		{
@@ -165,7 +173,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<PlayerPuppet>>(value);
 		}
 
-		[Ordinal(29)] 
+		[Ordinal(30)] 
 		[RED("HiddenTextCanvas")] 
 		public inkWidgetReference HiddenTextCanvas
 		{
@@ -175,7 +183,6 @@ namespace WolvenKit.RED4.Types
 
 		public gameuiCrosshairContainerController()
 		{
-			SprintWidget = new();
 			HiddenTextCanvas = new();
 		}
 	}

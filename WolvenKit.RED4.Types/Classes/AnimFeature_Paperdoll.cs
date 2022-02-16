@@ -46,6 +46,46 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(5)] 
+		[RED("characterCreation_Eyes")] 
+		public CBool CharacterCreation_Eyes
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(6)] 
+		[RED("characterCreation_Nose")] 
+		public CBool CharacterCreation_Nose
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(7)] 
+		[RED("characterCreation_Lips")] 
+		public CBool CharacterCreation_Lips
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(8)] 
+		[RED("characterCreation_Hair")] 
+		public CBool CharacterCreation_Hair
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(9)] 
+		[RED("characterCreation_Jaw")] 
+		public CBool CharacterCreation_Jaw
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(10)] 
 		[RED("characterCreation_Summary")] 
 		public CBool CharacterCreation_Summary
 		{
@@ -53,7 +93,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(6)] 
+		[Ordinal(11)] 
 		[RED("inventoryScreen")] 
 		public CBool InventoryScreen
 		{
@@ -61,7 +101,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(7)] 
+		[Ordinal(12)] 
 		[RED("inventoryScreen_Weapon")] 
 		public CBool InventoryScreen_Weapon
 		{
@@ -69,7 +109,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(8)] 
+		[Ordinal(13)] 
 		[RED("inventoryScreen_Legs")] 
 		public CBool InventoryScreen_Legs
 		{
@@ -77,7 +117,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(9)] 
+		[Ordinal(14)] 
 		[RED("inventoryScreen_Feet")] 
 		public CBool InventoryScreen_Feet
 		{
@@ -85,7 +125,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(10)] 
+		[Ordinal(15)] 
 		[RED("inventoryScreen_Cyberware")] 
 		public CBool InventoryScreen_Cyberware
 		{
@@ -93,7 +133,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(11)] 
+		[Ordinal(16)] 
 		[RED("inventoryScreen_QuickSlot")] 
 		public CBool InventoryScreen_QuickSlot
 		{
@@ -101,7 +141,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(12)] 
+		[Ordinal(17)] 
 		[RED("inventoryScreen_Consumable")] 
 		public CBool InventoryScreen_Consumable
 		{
@@ -109,7 +149,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(13)] 
+		[Ordinal(18)] 
 		[RED("inventoryScreen_Outfit")] 
 		public CBool InventoryScreen_Outfit
 		{
@@ -117,7 +157,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(14)] 
+		[Ordinal(19)] 
 		[RED("inventoryScreen_Head")] 
 		public CBool InventoryScreen_Head
 		{
@@ -125,7 +165,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(15)] 
+		[Ordinal(20)] 
 		[RED("inventoryScreen_Face")] 
 		public CBool InventoryScreen_Face
 		{
@@ -133,7 +173,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(16)] 
+		[Ordinal(21)] 
 		[RED("inventoryScreen_InnerChest")] 
 		public CBool InventoryScreen_InnerChest
 		{
@@ -141,7 +181,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(17)] 
+		[Ordinal(22)] 
 		[RED("inventoryScreen_OuterChest")] 
 		public CBool InventoryScreen_OuterChest
 		{

@@ -38,6 +38,14 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(109)] 
+		[RED("moneyAwarded")] 
+		public CBool MoneyAwarded
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(110)] 
 		[RED("isVirtual")] 
 		public CBool IsVirtual
 		{
@@ -45,7 +53,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(110)] 
+		[Ordinal(111)] 
 		[RED("pingedSquads")] 
 		public CArray<CName> PingedSquads
 		{

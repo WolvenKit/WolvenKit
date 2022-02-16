@@ -334,6 +334,14 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(41)] 
+		[RED("IsVisualsEquipped")] 
+		public CBool IsVisualsEquipped
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(42)] 
 		[RED("Requirement")] 
 		public gameSItemStackRequirementData Requirement
 		{
@@ -341,7 +349,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gameSItemStackRequirementData>(value);
 		}
 
-		[Ordinal(42)] 
+		[Ordinal(43)] 
 		[RED("EquipRequirement")] 
 		public gameSItemStackRequirementData EquipRequirement
 		{
@@ -349,7 +357,15 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gameSItemStackRequirementData>(value);
 		}
 
-		[Ordinal(43)] 
+		[Ordinal(44)] 
+		[RED("EquipRequirements")] 
+		public CArray<gameSItemStackRequirementData> EquipRequirements
+		{
+			get => GetPropertyValue<CArray<gameSItemStackRequirementData>>();
+			set => SetPropertyValue<CArray<gameSItemStackRequirementData>>(value);
+		}
+
+		[Ordinal(45)] 
 		[RED("LootItemType")] 
 		public CEnum<gameLootItemType> LootItemType
 		{
@@ -357,7 +373,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CEnum<gameLootItemType>>(value);
 		}
 
-		[Ordinal(44)] 
+		[Ordinal(46)] 
 		[RED("Attachments")] 
 		public CArray<InventoryItemAttachments> Attachments
 		{
@@ -365,7 +381,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<InventoryItemAttachments>>(value);
 		}
 
-		[Ordinal(45)] 
+		[Ordinal(47)] 
 		[RED("Abilities")] 
 		public CArray<gameInventoryItemAbility> Abilities
 		{
@@ -373,7 +389,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<gameInventoryItemAbility>>(value);
 		}
 
-		[Ordinal(46)] 
+		[Ordinal(48)] 
 		[RED("PlacementSlots")] 
 		public CArray<TweakDBID> PlacementSlots
 		{
@@ -381,7 +397,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<TweakDBID>>(value);
 		}
 
-		[Ordinal(47)] 
+		[Ordinal(49)] 
 		[RED("PrimaryStats")] 
 		public CArray<gameStatViewData> PrimaryStats
 		{
@@ -389,7 +405,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<gameStatViewData>>(value);
 		}
 
-		[Ordinal(48)] 
+		[Ordinal(50)] 
 		[RED("SecondaryStats")] 
 		public CArray<gameStatViewData> SecondaryStats
 		{
@@ -397,7 +413,31 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<gameStatViewData>>(value);
 		}
 
-		[Ordinal(49)] 
+		[Ordinal(51)] 
+		[RED("IsPerkRequired")] 
+		public CBool IsPerkRequired
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(52)] 
+		[RED("PerkRequiredName")] 
+		public CString PerkRequiredName
+		{
+			get => GetPropertyValue<CString>();
+			set => SetPropertyValue<CString>(value);
+		}
+
+		[Ordinal(53)] 
+		[RED("IsCrafted")] 
+		public CBool IsCrafted
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(54)] 
 		[RED("SortData")] 
 		public InventoryItemSortData SortData
 		{
@@ -418,6 +458,7 @@ namespace WolvenKit.RED4.Types
 			IsEquippable = true;
 			Requirement = new() { StatType = Enums.gamedataStatType.Invalid };
 			EquipRequirement = new() { StatType = Enums.gamedataStatType.Invalid };
+			EquipRequirements = new();
 			Attachments = new();
 			Abilities = new();
 			PlacementSlots = new();

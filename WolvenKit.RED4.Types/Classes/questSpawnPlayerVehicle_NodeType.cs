@@ -54,8 +54,8 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(6)] 
-		[RED("despawnAllVehicles")] 
-		public CBool DespawnAllVehicles
+		[RED("despawnAllEnabledVehicles")] 
+		public CBool DespawnAllEnabledVehicles
 		{
 			get => GetPropertyValue<CBool>();
 			set => SetPropertyValue<CBool>(value);

@@ -14,6 +14,38 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(1)] 
+		[RED("uiWantedBarBB")] 
+		public CWeakHandle<gameIBlackboard> UiWantedBarBB
+		{
+			get => GetPropertyValue<CWeakHandle<gameIBlackboard>>();
+			set => SetPropertyValue<CWeakHandle<gameIBlackboard>>(value);
+		}
+
+		[Ordinal(2)] 
+		[RED("UIWantedBarDef")] 
+		public CHandle<UI_WantedBarDef> UIWantedBarDef
+		{
+			get => GetPropertyValue<CHandle<UI_WantedBarDef>>();
+			set => SetPropertyValue<CHandle<UI_WantedBarDef>>(value);
+		}
+
+		[Ordinal(3)] 
+		[RED("currentWantedLevelCallback")] 
+		public CHandle<redCallbackObject> CurrentWantedLevelCallback
+		{
+			get => GetPropertyValue<CHandle<redCallbackObject>>();
+			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
+		}
+
+		[Ordinal(4)] 
+		[RED("playerWanted")] 
+		public CBool PlayerWanted
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(5)] 
 		[RED("vehicleIsLatestSummoned")] 
 		public CBool VehicleIsLatestSummoned
 		{
@@ -21,7 +53,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(2)] 
+		[Ordinal(6)] 
 		[RED("vehicleEntityID")] 
 		public entEntityID VehicleEntityID
 		{
@@ -29,7 +61,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<entEntityID>(value);
 		}
 
-		[Ordinal(3)] 
+		[Ordinal(7)] 
 		[RED("vehicleSummonDataDef")] 
 		public CHandle<VehicleSummonDataDef> VehicleSummonDataDef
 		{
@@ -37,7 +69,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<VehicleSummonDataDef>>(value);
 		}
 
-		[Ordinal(4)] 
+		[Ordinal(8)] 
 		[RED("vehicleSummonDataBB")] 
 		public CWeakHandle<gameIBlackboard> VehicleSummonDataBB
 		{
@@ -45,7 +77,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<gameIBlackboard>>(value);
 		}
 
-		[Ordinal(5)] 
+		[Ordinal(9)] 
 		[RED("vehicleSummonStateCallback")] 
 		public CHandle<redCallbackObject> VehicleSummonStateCallback
 		{

@@ -5,7 +5,7 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class PickerChoosenQuantityChangedEvent : inkGameNotificationData
 	{
-		[Ordinal(6)] 
+		[Ordinal(7)] 
 		[RED("choosenQuantity")] 
 		public CInt32 ChoosenQuantity
 		{

@@ -62,6 +62,14 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(7)] 
+		[RED("saveStatus")] 
+		public CEnum<inkSaveStatus> SaveStatus
+		{
+			get => GetPropertyValue<CEnum<inkSaveStatus>>();
+			set => SetPropertyValue<CEnum<inkSaveStatus>>(value);
+		}
+
+		[Ordinal(8)] 
 		[RED("timestamp")] 
 		public CUInt64 Timestamp
 		{
@@ -69,7 +77,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CUInt64>(value);
 		}
 
-		[Ordinal(8)] 
+		[Ordinal(9)] 
 		[RED("playTime")] 
 		public CDouble PlayTime
 		{
@@ -77,7 +85,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CDouble>(value);
 		}
 
-		[Ordinal(9)] 
+		[Ordinal(10)] 
 		[RED("playthroughTime")] 
 		public CDouble PlaythroughTime
 		{
@@ -85,7 +93,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CDouble>(value);
 		}
 
-		[Ordinal(10)] 
+		[Ordinal(11)] 
 		[RED("initialLoadingScreenID")] 
 		public CUInt64 InitialLoadingScreenID
 		{
@@ -93,7 +101,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CUInt64>(value);
 		}
 
-		[Ordinal(11)] 
+		[Ordinal(12)] 
 		[RED("level")] 
 		public CDouble Level
 		{
@@ -101,7 +109,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CDouble>(value);
 		}
 
-		[Ordinal(12)] 
+		[Ordinal(13)] 
 		[RED("gameVersion")] 
 		public CString GameVersion
 		{
@@ -109,7 +117,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CString>(value);
 		}
 
-		[Ordinal(13)] 
+		[Ordinal(14)] 
 		[RED("isValid")] 
 		public CBool IsValid
 		{

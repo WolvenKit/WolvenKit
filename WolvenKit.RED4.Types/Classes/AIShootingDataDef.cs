@@ -94,6 +94,14 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(11)] 
+		[RED("pauseConditionCheckTimeStamp")] 
+		public gamebbScriptID_Float PauseConditionCheckTimeStamp
+		{
+			get => GetPropertyValue<gamebbScriptID_Float>();
+			set => SetPropertyValue<gamebbScriptID_Float>(value);
+		}
+
+		[Ordinal(12)] 
 		[RED("fullyCharged")] 
 		public gamebbScriptID_Bool FullyCharged
 		{
@@ -101,7 +109,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gamebbScriptID_Bool>(value);
 		}
 
-		[Ordinal(12)] 
+		[Ordinal(13)] 
 		[RED("weaponOverheated")] 
 		public gamebbScriptID_Bool WeaponOverheated
 		{
@@ -109,7 +117,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gamebbScriptID_Bool>(value);
 		}
 
-		[Ordinal(13)] 
+		[Ordinal(14)] 
 		[RED("requestedTriggerMode")] 
 		public gamebbScriptID_Int32 RequestedTriggerMode
 		{
@@ -130,6 +138,7 @@ namespace WolvenKit.RED4.Types
 			ShotTimeStamp = new();
 			MaxChargedTimeStamp = new();
 			ChargeStartTimeStamp = new();
+			PauseConditionCheckTimeStamp = new();
 			FullyCharged = new();
 			WeaponOverheated = new();
 			RequestedTriggerMode = new();

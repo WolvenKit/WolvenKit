@@ -2,7 +2,7 @@
 namespace WolvenKit.RED4.Types
 {
 	[REDMeta]
-	public partial class gameAttachmentSlotEventsItemAddedToSlot : redEvent
+	public partial class gameAttachmentSlotEventsItemAddedToSlot : gameAttachmentSlotEventsItemAddedToSlotBase
 	{
 	}
 }

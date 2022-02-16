@@ -29,6 +29,14 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
+		[Ordinal(28)] 
+		[RED("isforced")] 
+		public CBool Isforced
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
 		public AuthorizeUser()
 		{
 			RequesterID = new();

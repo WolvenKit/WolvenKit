@@ -5,7 +5,7 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class SThumbnailWidgetPackage : SWidgetPackage
 	{
-		[Ordinal(17)] 
+		[Ordinal(18)] 
 		[RED("thumbnailAction")] 
 		public CHandle<ThumbnailUI> ThumbnailAction
 		{
@@ -13,7 +13,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<ThumbnailUI>>(value);
 		}
 
-		[Ordinal(18)] 
+		[Ordinal(19)] 
 		[RED("deviceStatus")] 
 		public CString DeviceStatus
 		{

@@ -5,7 +5,7 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class ForceWalkEvents : LocomotionGroundEvents
 	{
-		[Ordinal(3)] 
+		[Ordinal(6)] 
 		[RED("storedSpeedValue")] 
 		public CFloat StoredSpeedValue
 		{

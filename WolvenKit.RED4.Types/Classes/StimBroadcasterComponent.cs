@@ -38,6 +38,14 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(9)] 
+		[RED("blockedStims")] 
+		public CArray<StimIdentificationData> BlockedStims
+		{
+			get => GetPropertyValue<CArray<StimIdentificationData>>();
+			set => SetPropertyValue<CArray<StimIdentificationData>>(value);
+		}
+
+		[Ordinal(10)] 
 		[RED("fallbackInterval")] 
 		public CFloat FallbackInterval
 		{
@@ -49,6 +57,7 @@ namespace WolvenKit.RED4.Types
 		{
 			ActiveRequests = new();
 			Targets = new();
+			BlockedStims = new();
 			FallbackInterval = 1.000000F;
 		}
 	}

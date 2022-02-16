@@ -22,14 +22,30 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(3)] 
-		[RED("addBtn")] 
-		public inkWidgetReference AddBtn
+		[RED("icon")] 
+		public inkImageWidgetReference Icon
 		{
-			get => GetPropertyValue<inkWidgetReference>();
-			set => SetPropertyValue<inkWidgetReference>(value);
+			get => GetPropertyValue<inkImageWidgetReference>();
+			set => SetPropertyValue<inkImageWidgetReference>(value);
 		}
 
 		[Ordinal(4)] 
+		[RED("buttons")] 
+		public inkImageWidgetReference Buttons
+		{
+			get => GetPropertyValue<inkImageWidgetReference>();
+			set => SetPropertyValue<inkImageWidgetReference>(value);
+		}
+
+		[Ordinal(5)] 
+		[RED("selector")] 
+		public inkImageWidgetReference Selector
+		{
+			get => GetPropertyValue<inkImageWidgetReference>();
+			set => SetPropertyValue<inkImageWidgetReference>(value);
+		}
+
+		[Ordinal(6)] 
 		[RED("addBtnhitArea")] 
 		public inkWidgetReference AddBtnhitArea
 		{
@@ -37,15 +53,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(5)] 
-		[RED("minusBtn")] 
-		public inkWidgetReference MinusBtn
-		{
-			get => GetPropertyValue<inkWidgetReference>();
-			set => SetPropertyValue<inkWidgetReference>(value);
-		}
-
-		[Ordinal(6)] 
+		[Ordinal(7)] 
 		[RED("minusBtnhitArea")] 
 		public inkWidgetReference MinusBtnhitArea
 		{
@@ -53,7 +61,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(7)] 
+		[Ordinal(8)] 
 		[RED("minMaxLabel")] 
 		public inkWidgetReference MinMaxLabel
 		{
@@ -61,7 +69,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(8)] 
+		[Ordinal(9)] 
 		[RED("minMaxLabelText")] 
 		public inkTextWidgetReference MinMaxLabelText
 		{
@@ -69,23 +77,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
-		[Ordinal(9)] 
-		[RED("minusBtnNONE")] 
-		public inkWidgetReference MinusBtnNONE
-		{
-			get => GetPropertyValue<inkWidgetReference>();
-			set => SetPropertyValue<inkWidgetReference>(value);
-		}
-
 		[Ordinal(10)] 
-		[RED("addBtnNONE")] 
-		public inkWidgetReference AddBtnNONE
-		{
-			get => GetPropertyValue<inkWidgetReference>();
-			set => SetPropertyValue<inkWidgetReference>(value);
-		}
-
-		[Ordinal(11)] 
 		[RED("data")] 
 		public CHandle<CharacterCreationAttributeData> Data
 		{
@@ -93,7 +85,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<CharacterCreationAttributeData>>(value);
 		}
 
-		[Ordinal(12)] 
+		[Ordinal(11)] 
 		[RED("animating")] 
 		public CBool Animating
 		{
@@ -101,7 +93,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(13)] 
+		[Ordinal(12)] 
 		[RED("minusEnabled")] 
 		public CBool MinusEnabled
 		{
@@ -109,7 +101,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(14)] 
+		[Ordinal(13)] 
 		[RED("addEnabled")] 
 		public CBool AddEnabled
 		{
@@ -117,7 +109,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(15)] 
+		[Ordinal(14)] 
 		[RED("maxed")] 
 		public CBool Maxed
 		{
@@ -125,42 +117,17 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(16)] 
-		[RED("addBtnState")] 
-		public CEnum<AttributeButtonState> AddBtnState
-		{
-			get => GetPropertyValue<CEnum<AttributeButtonState>>();
-			set => SetPropertyValue<CEnum<AttributeButtonState>>(value);
-		}
-
-		[Ordinal(17)] 
-		[RED("minusBtnState")] 
-		public CEnum<AttributeButtonState> MinusBtnState
-		{
-			get => GetPropertyValue<CEnum<AttributeButtonState>>();
-			set => SetPropertyValue<CEnum<AttributeButtonState>>(value);
-		}
-
-		[Ordinal(18)] 
-		[RED("state")] 
-		public CEnum<AttributeButtonState> State
-		{
-			get => GetPropertyValue<CEnum<AttributeButtonState>>();
-			set => SetPropertyValue<CEnum<AttributeButtonState>>(value);
-		}
-
 		public characterCreationStatsAttributeBtn()
 		{
 			Value = new();
 			Label = new();
-			AddBtn = new();
+			Icon = new();
+			Buttons = new();
+			Selector = new();
 			AddBtnhitArea = new();
-			MinusBtn = new();
 			MinusBtnhitArea = new();
 			MinMaxLabel = new();
 			MinMaxLabelText = new();
-			MinusBtnNONE = new();
-			AddBtnNONE = new();
 		}
 	}
 }

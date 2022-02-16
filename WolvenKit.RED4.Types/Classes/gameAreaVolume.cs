@@ -5,7 +5,7 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class gameAreaVolume : gameObject
 	{
-		[Ordinal(40)] 
+		[Ordinal(35)] 
 		[RED("areaData")] 
 		public gameAreaData AreaData
 		{

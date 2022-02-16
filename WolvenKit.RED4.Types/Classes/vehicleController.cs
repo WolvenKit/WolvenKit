@@ -21,6 +21,14 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
+		[Ordinal(6)] 
+		[RED("overrideHeadlightsSettingsForPlayer")] 
+		public CBool OverrideHeadlightsSettingsForPlayer
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
 		public vehicleController()
 		{
 			AlarmCurve = "default_alarm";

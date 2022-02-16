@@ -142,6 +142,14 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(19)] 
+		[RED("attachmentState")] 
+		public CEnum<gameJournalEntryState> AttachmentState
+		{
+			get => GetPropertyValue<CEnum<gameJournalEntryState>>();
+			set => SetPropertyValue<CEnum<gameJournalEntryState>>(value);
+		}
+
+		[Ordinal(20)] 
 		[RED("attachmentHash")] 
 		public CUInt32 AttachmentHash
 		{
@@ -149,7 +157,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CUInt32>(value);
 		}
 
-		[Ordinal(20)] 
+		[Ordinal(21)] 
 		[RED("activeEntry")] 
 		public CWeakHandle<gameJournalEntry> ActiveEntry
 		{
@@ -157,7 +165,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<gameJournalEntry>>(value);
 		}
 
-		[Ordinal(21)] 
+		[Ordinal(22)] 
 		[RED("dialogViewController")] 
 		public CWeakHandle<MessengerDialogViewController> DialogViewController
 		{
@@ -165,7 +173,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<MessengerDialogViewController>>(value);
 		}
 
-		[Ordinal(22)] 
+		[Ordinal(23)] 
 		[RED("proxy")] 
 		public CHandle<inkanimProxy> Proxy
 		{

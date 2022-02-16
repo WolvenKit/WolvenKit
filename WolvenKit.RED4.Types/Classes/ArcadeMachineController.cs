@@ -2,7 +2,7 @@
 namespace WolvenKit.RED4.Types
 {
 	[REDMeta]
-	public partial class ArcadeMachineController : ScriptableDC
+	public partial class ArcadeMachineController : ScriptableDeviceComponent
 	{
 	}
 }

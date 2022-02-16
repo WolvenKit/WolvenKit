@@ -189,6 +189,22 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gamebbScriptID_Int32>(value);
 		}
 
+		[Ordinal(23)] 
+		[RED("IsBriefingActive")] 
+		public gamebbScriptID_Bool IsBriefingActive
+		{
+			get => GetPropertyValue<gamebbScriptID_Bool>();
+			set => SetPropertyValue<gamebbScriptID_Bool>(value);
+		}
+
+		[Ordinal(24)] 
+		[RED("MuppetStats")] 
+		public gamebbScriptID_Variant MuppetStats
+		{
+			get => GetPropertyValue<gamebbScriptID_Variant>();
+			set => SetPropertyValue<gamebbScriptID_Variant>(value);
+		}
+
 		public UIGameDataDef()
 		{
 			InteractionData = new();
@@ -214,6 +230,8 @@ namespace WolvenKit.RED4.Types
 			Tutorial_EntityRefToHighlight = new();
 			WeaponSway = new();
 			NotificationJournalHash = new();
+			IsBriefingActive = new();
+			MuppetStats = new();
 		}
 	}
 }

@@ -3,9 +3,9 @@ using static WolvenKit.RED4.Types.Enums;
 namespace WolvenKit.RED4.Types
 {
 	[REDMeta]
-	public partial class GarmentItemPreviewGameController : gameuiInventoryPuppetPreviewGameController
+	public partial class GarmentItemPreviewGameController : gameuiBaseGarmentItemPreviewGameController
 	{
-		[Ordinal(14)] 
+		[Ordinal(18)] 
 		[RED("data")] 
 		public CHandle<InventoryItemPreviewData> Data
 		{
@@ -13,31 +13,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<InventoryItemPreviewData>>(value);
 		}
 
-		[Ordinal(15)] 
-		[RED("placementSlot")] 
-		public TweakDBID PlacementSlot
-		{
-			get => GetPropertyValue<TweakDBID>();
-			set => SetPropertyValue<TweakDBID>(value);
-		}
-
-		[Ordinal(16)] 
-		[RED("initialItem")] 
-		public gameItemID InitialItem
-		{
-			get => GetPropertyValue<gameItemID>();
-			set => SetPropertyValue<gameItemID>(value);
-		}
-
-		[Ordinal(17)] 
-		[RED("givenItem")] 
-		public gameItemID GivenItem
-		{
-			get => GetPropertyValue<gameItemID>();
-			set => SetPropertyValue<gameItemID>(value);
-		}
-
-		[Ordinal(18)] 
+		[Ordinal(19)] 
 		[RED("isMouseDown")] 
 		public CBool IsMouseDown
 		{
@@ -45,10 +21,17 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
+		[Ordinal(20)] 
+		[RED("c_GARMENT_ROTATION_SPEED")] 
+		public CFloat C_GARMENT_ROTATION_SPEED
+		{
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
+		}
+
 		public GarmentItemPreviewGameController()
 		{
-			InitialItem = new();
-			GivenItem = new();
+			C_GARMENT_ROTATION_SPEED = 100.000000F;
 		}
 	}
 }

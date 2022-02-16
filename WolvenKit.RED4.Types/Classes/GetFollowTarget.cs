@@ -20,35 +20,5 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CWeakHandle<vehicleBaseObject>>();
 			set => SetPropertyValue<CWeakHandle<vehicleBaseObject>>(value);
 		}
-
-		[Ordinal(2)] 
-		[RED("lastTime")] 
-		public CFloat LastTime
-		{
-			get => GetPropertyValue<CFloat>();
-			set => SetPropertyValue<CFloat>(value);
-		}
-
-		[Ordinal(3)] 
-		[RED("timeout")] 
-		public CFloat Timeout
-		{
-			get => GetPropertyValue<CFloat>();
-			set => SetPropertyValue<CFloat>(value);
-		}
-
-		[Ordinal(4)] 
-		[RED("timeoutDuration")] 
-		public CFloat TimeoutDuration
-		{
-			get => GetPropertyValue<CFloat>();
-			set => SetPropertyValue<CFloat>(value);
-		}
-
-		public GetFollowTarget()
-		{
-			LastTime = -1.000000F;
-			TimeoutDuration = 0.100000F;
-		}
 	}
 }

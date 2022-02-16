@@ -5,7 +5,7 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class TweakAIAction : TweakAIActionAbstract
 	{
-		[Ordinal(27)] 
+		[Ordinal(36)] 
 		[RED("record")] 
 		public TweakDBID Record
 		{

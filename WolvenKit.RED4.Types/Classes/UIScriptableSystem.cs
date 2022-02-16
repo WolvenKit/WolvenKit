@@ -54,6 +54,14 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(6)] 
+		[RED("DLCAddedItems")] 
+		public CArray<TweakDBID> DLCAddedItems
+		{
+			get => GetPropertyValue<CArray<TweakDBID>>();
+			set => SetPropertyValue<CArray<TweakDBID>>(value);
+		}
+
+		[Ordinal(7)] 
 		[RED("comparisionTooltipDisabled")] 
 		public CBool ComparisionTooltipDisabled
 		{
@@ -61,7 +69,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(7)] 
+		[Ordinal(8)] 
 		[RED("attachedPlayer")] 
 		public CWeakHandle<PlayerPuppet> AttachedPlayer
 		{
@@ -69,7 +77,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<PlayerPuppet>>(value);
 		}
 
-		[Ordinal(8)] 
+		[Ordinal(9)] 
 		[RED("inventoryListenerCallback")] 
 		public CHandle<UIScriptableInventoryListenerCallback> InventoryListenerCallback
 		{
@@ -77,7 +85,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<UIScriptableInventoryListenerCallback>>(value);
 		}
 
-		[Ordinal(9)] 
+		[Ordinal(10)] 
 		[RED("inventoryListener")] 
 		public CHandle<gameInventoryScriptListener> InventoryListener
 		{
@@ -88,6 +96,7 @@ namespace WolvenKit.RED4.Types
 		public UIScriptableSystem()
 		{
 			NewItems = new();
+			DLCAddedItems = new();
 		}
 	}
 }

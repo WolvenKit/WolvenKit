@@ -86,14 +86,6 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(21)] 
-		[RED("isNewContainer")] 
-		public inkWidgetReference IsNewContainer
-		{
-			get => GetPropertyValue<inkWidgetReference>();
-			set => SetPropertyValue<inkWidgetReference>(value);
-		}
-
-		[Ordinal(22)] 
 		[RED("mappin")] 
 		public CWeakHandle<gamemappinsIMappin> Mappin
 		{
@@ -101,7 +93,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<gamemappinsIMappin>>(value);
 		}
 
-		[Ordinal(23)] 
+		[Ordinal(22)] 
 		[RED("isCompletedPhase")] 
 		public CBool IsCompletedPhase
 		{
@@ -109,7 +101,23 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
+		[Ordinal(23)] 
+		[RED("resetStateWhenUntracked")] 
+		public CBool ResetStateWhenUntracked
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
 		[Ordinal(24)] 
+		[RED("isNewAnim")] 
+		public CHandle<inkanimProxy> IsNewAnim
+		{
+			get => GetPropertyValue<CHandle<inkanimProxy>>();
+			set => SetPropertyValue<CHandle<inkanimProxy>>(value);
+		}
+
+		[Ordinal(25)] 
 		[RED("fadeAnim")] 
 		public CHandle<inkanimProxy> FadeAnim
 		{
@@ -117,7 +125,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<inkanimProxy>>(value);
 		}
 
-		[Ordinal(25)] 
+		[Ordinal(26)] 
 		[RED("selectAnim")] 
 		public CHandle<inkanimProxy> SelectAnim
 		{
@@ -125,12 +133,19 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<inkanimProxy>>(value);
 		}
 
+		[Ordinal(27)] 
+		[RED("fadeInOutDelay")] 
+		public CFloat FadeInOutDelay
+		{
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
+		}
+
 		public gameuiBaseWorldMapMappinController()
 		{
 			CollectionCount = 1;
 			GroupContainerWidget = new();
 			GroupCountTextWidget = new();
-			IsNewContainer = new();
 		}
 	}
 }

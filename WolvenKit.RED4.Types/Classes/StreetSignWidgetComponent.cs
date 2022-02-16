@@ -5,7 +5,7 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class StreetSignWidgetComponent : IWorldWidgetComponent
 	{
-		[Ordinal(10)] 
+		[Ordinal(12)] 
 		[RED("streetSignTDBID")] 
 		public TweakDBID StreetSignTDBID
 		{
@@ -13,7 +13,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<TweakDBID>(value);
 		}
 
-		[Ordinal(11)] 
+		[Ordinal(13)] 
 		[RED("isAStreetName")] 
 		public CBool IsAStreetName
 		{
@@ -21,7 +21,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(12)] 
+		[Ordinal(14)] 
 		[RED("streetNameSignTDBID")] 
 		public TweakDBID StreetNameSignTDBID
 		{
@@ -29,7 +29,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<TweakDBID>(value);
 		}
 
-		[Ordinal(13)] 
+		[Ordinal(15)] 
 		[RED("signSelector")] 
 		public CHandle<inkTweakDBIDSelector> SignSelector
 		{
@@ -37,7 +37,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<inkTweakDBIDSelector>>(value);
 		}
 
-		[Ordinal(14)] 
+		[Ordinal(16)] 
 		[RED("signVersion")] 
 		public CUInt32 SignVersion
 		{

@@ -5,7 +5,7 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class drillMachine : gameweaponObject
 	{
-		[Ordinal(62)] 
+		[Ordinal(59)] 
 		[RED("rewireComponent")] 
 		public CHandle<RewireComponent> RewireComponent
 		{
@@ -13,7 +13,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<RewireComponent>>(value);
 		}
 
-		[Ordinal(63)] 
+		[Ordinal(60)] 
 		[RED("player")] 
 		public CWeakHandle<gameObject> Player
 		{
@@ -21,7 +21,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<gameObject>>(value);
 		}
 
-		[Ordinal(64)] 
+		[Ordinal(61)] 
 		[RED("scanManager")] 
 		public CHandle<DrillMachineScanManager> ScanManager
 		{
@@ -29,7 +29,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<DrillMachineScanManager>>(value);
 		}
 
-		[Ordinal(65)] 
+		[Ordinal(62)] 
 		[RED("screen_postprocess")] 
 		public CHandle<entIVisualComponent> Screen_postprocess
 		{
@@ -37,7 +37,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<entIVisualComponent>>(value);
 		}
 
-		[Ordinal(66)] 
+		[Ordinal(63)] 
 		[RED("screen_backside")] 
 		public CHandle<entIVisualComponent> Screen_backside
 		{
@@ -45,7 +45,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<entIVisualComponent>>(value);
 		}
 
-		[Ordinal(67)] 
+		[Ordinal(64)] 
 		[RED("isScanning")] 
 		public CBool IsScanning
 		{
@@ -53,7 +53,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(68)] 
+		[Ordinal(65)] 
 		[RED("isActive")] 
 		public CBool IsActive
 		{
@@ -61,7 +61,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(69)] 
+		[Ordinal(66)] 
 		[RED("targetDevice")] 
 		public CWeakHandle<gameObject> TargetDevice
 		{

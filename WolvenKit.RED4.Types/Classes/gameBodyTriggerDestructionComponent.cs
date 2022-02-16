@@ -3,9 +3,9 @@ using static WolvenKit.RED4.Types.Enums;
 namespace WolvenKit.RED4.Types
 {
 	[REDMeta]
-	public partial class gameBodyTriggerDestructionComponent : entIComponent
+	public partial class gameBodyTriggerDestructionComponent : gameITriggerDestructionComponent
 	{
-		[Ordinal(3)] 
+		[Ordinal(4)] 
 		[RED("colliderComponentName")] 
 		public CName ColliderComponentName
 		{
@@ -13,7 +13,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(4)] 
+		[Ordinal(5)] 
 		[RED("filterData")] 
 		public CHandle<physicsFilterData> FilterData
 		{
@@ -21,7 +21,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<physicsFilterData>>(value);
 		}
 
-		[Ordinal(5)] 
+		[Ordinal(6)] 
 		[RED("impulseForce")] 
 		public CFloat ImpulseForce
 		{
@@ -29,7 +29,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(6)] 
+		[Ordinal(7)] 
 		[RED("impulseRadius")] 
 		public CFloat ImpulseRadius
 		{
@@ -40,6 +40,7 @@ namespace WolvenKit.RED4.Types
 		public gameBodyTriggerDestructionComponent()
 		{
 			Name = "Component";
+			StartActive = true;
 			ImpulseForce = 10.000000F;
 			ImpulseRadius = 5.000000F;
 		}

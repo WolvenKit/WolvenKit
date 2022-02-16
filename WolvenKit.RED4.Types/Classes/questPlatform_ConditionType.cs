@@ -12,5 +12,13 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CEnum<questPlatform>>();
 			set => SetPropertyValue<CEnum<questPlatform>>(value);
 		}
+
+		[Ordinal(1)] 
+		[RED("inverted")] 
+		public CBool Inverted
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
 	}
 }

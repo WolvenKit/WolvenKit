@@ -14,6 +14,14 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(1)] 
+		[RED("takeControlSourceID")] 
+		public entEntityID TakeControlSourceID
+		{
+			get => GetPropertyValue<entEntityID>();
+			set => SetPropertyValue<entEntityID>(value);
+		}
+
+		[Ordinal(2)] 
 		[RED("isInputRegistered")] 
 		public CBool IsInputRegistered
 		{
@@ -21,7 +29,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(2)] 
+		[Ordinal(3)] 
 		[RED("isInputLockedFromQuest")] 
 		public CBool IsInputLockedFromQuest
 		{
@@ -29,7 +37,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(3)] 
+		[Ordinal(4)] 
 		[RED("isChainForcedFromQuest")] 
 		public CBool IsChainForcedFromQuest
 		{
@@ -37,7 +45,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(4)] 
+		[Ordinal(5)] 
 		[RED("isActionButtonLocked")] 
 		public CBool IsActionButtonLocked
 		{
@@ -45,7 +53,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(5)] 
+		[Ordinal(6)] 
 		[RED("isDeviceChainCreationLocked")] 
 		public CBool IsDeviceChainCreationLocked
 		{
@@ -53,7 +61,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(6)] 
+		[Ordinal(7)] 
 		[RED("chainLockSources")] 
 		public CArray<CName> ChainLockSources
 		{
@@ -61,7 +69,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<CName>>(value);
 		}
 
-		[Ordinal(7)] 
+		[Ordinal(8)] 
 		[RED("TCDUpdateDelayID")] 
 		public gameDelayID TCDUpdateDelayID
 		{
@@ -69,7 +77,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gameDelayID>(value);
 		}
 
-		[Ordinal(8)] 
+		[Ordinal(9)] 
 		[RED("TCSupdateRate")] 
 		public CFloat TCSupdateRate
 		{
@@ -77,7 +85,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(9)] 
+		[Ordinal(10)] 
 		[RED("lastInputSimTime")] 
 		public CFloat LastInputSimTime
 		{
@@ -87,6 +95,7 @@ namespace WolvenKit.RED4.Types
 
 		public TakeOverControlSystem()
 		{
+			TakeControlSourceID = new();
 			ChainLockSources = new();
 			TCDUpdateDelayID = new();
 			TCSupdateRate = 0.100000F;

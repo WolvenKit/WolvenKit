@@ -12,5 +12,13 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<gameIMovingPlatformMovementInitData>();
 			set => SetPropertyValue<gameIMovingPlatformMovementInitData>(value);
 		}
+
+		[Ordinal(1)] 
+		[RED("endNode")] 
+		public NodeRef EndNode
+		{
+			get => GetPropertyValue<NodeRef>();
+			set => SetPropertyValue<NodeRef>(value);
+		}
 	}
 }

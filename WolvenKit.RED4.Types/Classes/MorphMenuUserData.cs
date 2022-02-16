@@ -12,5 +12,21 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CBool>();
 			set => SetPropertyValue<CBool>(value);
 		}
+
+		[Ordinal(1)] 
+		[RED("updatingFinalizedState")] 
+		public CBool UpdatingFinalizedState
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(2)] 
+		[RED("editMode")] 
+		public CEnum<gameuiCharacterCustomizationEditTag> EditMode
+		{
+			get => GetPropertyValue<CEnum<gameuiCharacterCustomizationEditTag>>();
+			set => SetPropertyValue<CEnum<gameuiCharacterCustomizationEditTag>>(value);
+		}
 	}
 }
