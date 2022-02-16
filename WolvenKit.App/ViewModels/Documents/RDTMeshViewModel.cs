@@ -228,38 +228,37 @@ namespace WolvenKit.ViewModels.Documents
                     {
                         var appMaterials = new List<Material>();
 
-                        foreach (var m in mmapp.ChunkMaterials)
+                        foreach (var materialName in mmapp.ChunkMaterials)
                         {
-                            if (materials.ContainsKey(m))
+                            if (materials.ContainsKey(materialName))
                             {
-                                appMaterials.Add(materials[m]);
+                                appMaterials.Add(materials[materialName]);
                             }
                             else
                             {
                                 appMaterials.Add(new Material()
                                 {
-                                    Name = m
+                                    Name = materialName
                                 });
                             }
                         }
 
                         var list = new List<LoadableModel>();
 
-                        var enabledChunks = new ObservableCollection<int>();
-                        for (var i = 0; i < 64; i++)
-                        {
-                            enabledChunks.Add(i);
-                        }
-
-                        list.Add(new LoadableModel()
+                        var m = new LoadableModel()
                         {
                             FilePath = outPath,
                             IsEnabled = true,
                             Name = Path.GetFileNameWithoutExtension(file.RelativePath),
                             Materials = appMaterials,
-                            BindName = "Root",
-                            EnabledChunks = enabledChunks
-                        });
+                            BindName = "Root"
+                        };
+
+                        for (var i = 0; i < 64; i++)
+                        {
+                            m.EnabledChunks.Add(i);
+                        }
+                        list.Add(m);
 
                         var a = new Appearance()
                         {
@@ -454,17 +453,14 @@ namespace WolvenKit.ViewModels.Documents
 
                 if (component is entMeshComponent emc)
                 {
-                    depotPath = emc.Mesh.DepotPath;
                     scale = emc.VisualScale;
                     enabled = emc.IsEnabled;
-                    meshApp = emc.MeshAppearance;
-                    chunkMask = emc.ChunkMask;
                 }
-                else if (component is entSkinnedMeshComponent esmc)
+                if (component is IRedMeshComponent mc)
                 {
-                    depotPath = esmc.Mesh.DepotPath;
-                    meshApp = esmc.MeshAppearance;
-                    chunkMask = esmc.ChunkMask;
+                    depotPath = mc.Mesh.DepotPath;
+                    meshApp = mc.MeshAppearance;
+                    chunkMask = mc.ChunkMask;
                     //enabled = esmc.VisibilityAnimationParam != "invisible_in_fpp";
                     //enabled = esmc.CastShadows == false;
                 }
@@ -618,7 +614,7 @@ namespace WolvenKit.ViewModels.Documents
                 var matrix = new SeparateMatrix();
                 //GetResolvedMatrix(model, ref matrix, appModels);
                 //model.Transform = new MatrixTransform3D(matrix.ToMatrix3D());
-                if (model.Name.Contains("shadow") || model.Name.Contains("AppearanceProxyMesh") || model.Name.Contains("cutout"))
+                if (model.Name.Contains("shadow") || model.Name.Contains("AppearanceProxyMesh") || model.Name.Contains("cutout") || model.Name == "")
                 {
                     model.IsEnabled = false;
                 }
