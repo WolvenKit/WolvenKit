@@ -5,7 +5,7 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class ActivatedDeviceIndustrialArm : ActivatedDeviceTrap
 	{
-		[Ordinal(99)] 
+		[Ordinal(96)] 
 		[RED("loopAnimation")] 
 		public CEnum<EIndustrialArmAnimations> LoopAnimation
 		{

@@ -222,6 +222,14 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(27)] 
+		[RED("IsInteractingViaPersonalLink")] 
+		public gamebbScriptID_Bool IsInteractingViaPersonalLink
+		{
+			get => GetPropertyValue<gamebbScriptID_Bool>();
+			set => SetPropertyValue<gamebbScriptID_Bool>(value);
+		}
+
+		[Ordinal(28)] 
 		[RED("IsForceOpeningDoor")] 
 		public gamebbScriptID_Bool IsForceOpeningDoor
 		{
@@ -229,7 +237,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gamebbScriptID_Bool>(value);
 		}
 
-		[Ordinal(28)] 
+		[Ordinal(29)] 
 		[RED("IsControllingDevice")] 
 		public gamebbScriptID_Bool IsControllingDevice
 		{
@@ -237,7 +245,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gamebbScriptID_Bool>(value);
 		}
 
-		[Ordinal(29)] 
+		[Ordinal(30)] 
 		[RED("IsUIZoomDevice")] 
 		public gamebbScriptID_Bool IsUIZoomDevice
 		{
@@ -245,7 +253,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gamebbScriptID_Bool>(value);
 		}
 
-		[Ordinal(30)] 
+		[Ordinal(31)] 
 		[RED("UseUnarmed")] 
 		public gamebbScriptID_Bool UseUnarmed
 		{
@@ -253,7 +261,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gamebbScriptID_Bool>(value);
 		}
 
-		[Ordinal(31)] 
+		[Ordinal(32)] 
 		[RED("Berserk")] 
 		public gamebbScriptID_Int32 Berserk
 		{
@@ -261,7 +269,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gamebbScriptID_Int32>(value);
 		}
 
-		[Ordinal(32)] 
+		[Ordinal(33)] 
 		[RED("ActiveCyberware")] 
 		public gamebbScriptID_Int32 ActiveCyberware
 		{
@@ -269,7 +277,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gamebbScriptID_Int32>(value);
 		}
 
-		[Ordinal(33)] 
+		[Ordinal(34)] 
 		[RED("Whip")] 
 		public gamebbScriptID_Int32 Whip
 		{
@@ -277,7 +285,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gamebbScriptID_Int32>(value);
 		}
 
-		[Ordinal(34)] 
+		[Ordinal(35)] 
 		[RED("DEBUG_SilencedWeapon")] 
 		public gamebbScriptID_Bool DEBUG_SilencedWeapon
 		{
@@ -285,7 +293,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gamebbScriptID_Bool>(value);
 		}
 
-		[Ordinal(35)] 
+		[Ordinal(36)] 
 		[RED("LeftHandCyberware")] 
 		public gamebbScriptID_Int32 LeftHandCyberware
 		{
@@ -293,7 +301,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gamebbScriptID_Int32>(value);
 		}
 
-		[Ordinal(36)] 
+		[Ordinal(37)] 
 		[RED("UseLeftHand")] 
 		public gamebbScriptID_Bool UseLeftHand
 		{
@@ -301,7 +309,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gamebbScriptID_Bool>(value);
 		}
 
-		[Ordinal(37)] 
+		[Ordinal(38)] 
 		[RED("MeleeWeapon")] 
 		public gamebbScriptID_Int32 MeleeWeapon
 		{
@@ -309,7 +317,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gamebbScriptID_Int32>(value);
 		}
 
-		[Ordinal(38)] 
+		[Ordinal(39)] 
 		[RED("Carrying")] 
 		public gamebbScriptID_Bool Carrying
 		{
@@ -317,7 +325,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gamebbScriptID_Bool>(value);
 		}
 
-		[Ordinal(39)] 
+		[Ordinal(40)] 
 		[RED("CarryingDisposal")] 
 		public gamebbScriptID_Bool CarryingDisposal
 		{
@@ -325,7 +333,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gamebbScriptID_Bool>(value);
 		}
 
-		[Ordinal(40)] 
+		[Ordinal(41)] 
 		[RED("CurrentElevator")] 
 		public gamebbScriptID_Variant CurrentElevator
 		{
@@ -333,7 +341,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gamebbScriptID_Variant>(value);
 		}
 
-		[Ordinal(41)] 
+		[Ordinal(42)] 
 		[RED("IsPlayerInsideElevator")] 
 		public gamebbScriptID_Bool IsPlayerInsideElevator
 		{
@@ -341,7 +349,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gamebbScriptID_Bool>(value);
 		}
 
-		[Ordinal(42)] 
+		[Ordinal(43)] 
 		[RED("IsPlayerInsideMovingElevator")] 
 		public gamebbScriptID_Bool IsPlayerInsideMovingElevator
 		{
@@ -349,7 +357,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gamebbScriptID_Bool>(value);
 		}
 
-		[Ordinal(43)] 
+		[Ordinal(44)] 
 		[RED("Combat")] 
 		public gamebbScriptID_Int32 Combat
 		{
@@ -357,7 +365,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gamebbScriptID_Int32>(value);
 		}
 
-		[Ordinal(44)] 
+		[Ordinal(45)] 
 		[RED("Stamina")] 
 		public gamebbScriptID_Int32 Stamina
 		{
@@ -365,7 +373,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gamebbScriptID_Int32>(value);
 		}
 
-		[Ordinal(45)] 
+		[Ordinal(46)] 
 		[RED("Vitals")] 
 		public gamebbScriptID_Int32 Vitals
 		{
@@ -373,7 +381,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gamebbScriptID_Int32>(value);
 		}
 
-		[Ordinal(46)] 
+		[Ordinal(47)] 
 		[RED("Takedown")] 
 		public gamebbScriptID_Int32 Takedown
 		{
@@ -381,7 +389,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gamebbScriptID_Int32>(value);
 		}
 
-		[Ordinal(47)] 
+		[Ordinal(48)] 
 		[RED("Fall")] 
 		public gamebbScriptID_Int32 Fall
 		{
@@ -389,7 +397,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gamebbScriptID_Int32>(value);
 		}
 
-		[Ordinal(48)] 
+		[Ordinal(49)] 
 		[RED("Landing")] 
 		public gamebbScriptID_Int32 Landing
 		{
@@ -397,7 +405,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gamebbScriptID_Int32>(value);
 		}
 
-		[Ordinal(49)] 
+		[Ordinal(50)] 
 		[RED("UsingCover")] 
 		public gamebbScriptID_Bool UsingCover
 		{
@@ -405,7 +413,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gamebbScriptID_Bool>(value);
 		}
 
-		[Ordinal(50)] 
+		[Ordinal(51)] 
 		[RED("IsInMinigame")] 
 		public gamebbScriptID_Bool IsInMinigame
 		{
@@ -413,7 +421,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gamebbScriptID_Bool>(value);
 		}
 
-		[Ordinal(51)] 
+		[Ordinal(52)] 
 		[RED("IsUploadingQuickHack")] 
 		public gamebbScriptID_Int32 IsUploadingQuickHack
 		{
@@ -421,7 +429,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gamebbScriptID_Int32>(value);
 		}
 
-		[Ordinal(52)] 
+		[Ordinal(53)] 
 		[RED("EntityIDTargetingPlayer")] 
 		public gamebbScriptID_EntityID EntityIDTargetingPlayer
 		{
@@ -429,7 +437,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gamebbScriptID_EntityID>(value);
 		}
 
-		[Ordinal(53)] 
+		[Ordinal(54)] 
 		[RED("Swimming")] 
 		public gamebbScriptID_Int32 Swimming
 		{
@@ -437,7 +445,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gamebbScriptID_Int32>(value);
 		}
 
-		[Ordinal(54)] 
+		[Ordinal(55)] 
 		[RED("BodyCarrying")] 
 		public gamebbScriptID_Int32 BodyCarrying
 		{
@@ -445,7 +453,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gamebbScriptID_Int32>(value);
 		}
 
-		[Ordinal(55)] 
+		[Ordinal(56)] 
 		[RED("BodyCarryingLocomotion")] 
 		public gamebbScriptID_Int32 BodyCarryingLocomotion
 		{
@@ -453,7 +461,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gamebbScriptID_Int32>(value);
 		}
 
-		[Ordinal(56)] 
+		[Ordinal(57)] 
 		[RED("BodyDisposalDetailed")] 
 		public gamebbScriptID_Int32 BodyDisposalDetailed
 		{
@@ -461,7 +469,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gamebbScriptID_Int32>(value);
 		}
 
-		[Ordinal(57)] 
+		[Ordinal(58)] 
 		[RED("DisplayDeathMenu")] 
 		public gamebbScriptID_Bool DisplayDeathMenu
 		{
@@ -469,7 +477,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gamebbScriptID_Bool>(value);
 		}
 
-		[Ordinal(58)] 
+		[Ordinal(59)] 
 		[RED("OverrideQuickHackPanelDilation")] 
 		public gamebbScriptID_Bool OverrideQuickHackPanelDilation
 		{
@@ -477,7 +485,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gamebbScriptID_Bool>(value);
 		}
 
-		[Ordinal(59)] 
+		[Ordinal(60)] 
 		[RED("NanoWireLaunchMode")] 
 		public gamebbScriptID_Int32 NanoWireLaunchMode
 		{
@@ -485,7 +493,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gamebbScriptID_Int32>(value);
 		}
 
-		[Ordinal(60)] 
+		[Ordinal(61)] 
 		[RED("IsMovingHorizontally")] 
 		public gamebbScriptID_Bool IsMovingHorizontally
 		{
@@ -493,7 +501,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gamebbScriptID_Bool>(value);
 		}
 
-		[Ordinal(61)] 
+		[Ordinal(62)] 
 		[RED("IsMovingVertically")] 
 		public gamebbScriptID_Bool IsMovingVertically
 		{
@@ -501,7 +509,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gamebbScriptID_Bool>(value);
 		}
 
-		[Ordinal(62)] 
+		[Ordinal(63)] 
 		[RED("ActionRestriction")] 
 		public gamebbScriptID_Variant ActionRestriction
 		{
@@ -509,7 +517,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gamebbScriptID_Variant>(value);
 		}
 
-		[Ordinal(63)] 
+		[Ordinal(64)] 
 		[RED("MeleeLeap")] 
 		public gamebbScriptID_Bool MeleeLeap
 		{
@@ -517,7 +525,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gamebbScriptID_Bool>(value);
 		}
 
-		[Ordinal(64)] 
+		[Ordinal(65)] 
 		[RED("IsInWorkspot")] 
 		public gamebbScriptID_Int32 IsInWorkspot
 		{
@@ -525,7 +533,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gamebbScriptID_Int32>(value);
 		}
 
-		[Ordinal(65)] 
+		[Ordinal(66)] 
 		[RED("QuestForceShoot")] 
 		public gamebbScriptID_Bool QuestForceShoot
 		{
@@ -533,7 +541,15 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gamebbScriptID_Bool>(value);
 		}
 
-		[Ordinal(66)] 
+		[Ordinal(67)] 
+		[RED("LadderCameraParams")] 
+		public gamebbScriptID_Int32 LadderCameraParams
+		{
+			get => GetPropertyValue<gamebbScriptID_Int32>();
+			set => SetPropertyValue<gamebbScriptID_Int32>(value);
+		}
+
+		[Ordinal(68)] 
 		[RED("SceneAimForced")] 
 		public gamebbScriptID_Bool SceneAimForced
 		{
@@ -541,7 +557,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gamebbScriptID_Bool>(value);
 		}
 
-		[Ordinal(67)] 
+		[Ordinal(69)] 
 		[RED("SceneSafeForced")] 
 		public gamebbScriptID_Bool SceneSafeForced
 		{
@@ -549,12 +565,28 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gamebbScriptID_Bool>(value);
 		}
 
-		[Ordinal(68)] 
+		[Ordinal(70)] 
 		[RED("SceneWeaponLoweringSpeedOverride")] 
 		public gamebbScriptID_Float SceneWeaponLoweringSpeedOverride
 		{
 			get => GetPropertyValue<gamebbScriptID_Float>();
 			set => SetPropertyValue<gamebbScriptID_Float>(value);
+		}
+
+		[Ordinal(71)] 
+		[RED("IgnoreBarbedWireStateEnterTime")] 
+		public gamebbScriptID_Float IgnoreBarbedWireStateEnterTime
+		{
+			get => GetPropertyValue<gamebbScriptID_Float>();
+			set => SetPropertyValue<gamebbScriptID_Float>(value);
+		}
+
+		[Ordinal(72)] 
+		[RED("IsInLoreAnimationScene")] 
+		public gamebbScriptID_Bool IsInLoreAnimationScene
+		{
+			get => GetPropertyValue<gamebbScriptID_Bool>();
+			set => SetPropertyValue<gamebbScriptID_Bool>(value);
 		}
 
 		public PlayerStateMachineDef()
@@ -586,6 +618,7 @@ namespace WolvenKit.RED4.Types
 			SwitchWeapon = new();
 			IsDoorInteractionActive = new();
 			IsInteractingWithDevice = new();
+			IsInteractingViaPersonalLink = new();
 			IsForceOpeningDoor = new();
 			IsControllingDevice = new();
 			IsUIZoomDevice = new();
@@ -625,9 +658,12 @@ namespace WolvenKit.RED4.Types
 			MeleeLeap = new();
 			IsInWorkspot = new();
 			QuestForceShoot = new();
+			LadderCameraParams = new();
 			SceneAimForced = new();
 			SceneSafeForced = new();
 			SceneWeaponLoweringSpeedOverride = new();
+			IgnoreBarbedWireStateEnterTime = new();
+			IsInLoreAnimationScene = new();
 		}
 	}
 }

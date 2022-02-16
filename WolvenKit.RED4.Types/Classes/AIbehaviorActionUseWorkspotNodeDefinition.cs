@@ -52,5 +52,13 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CHandle<AIArgumentMapping>>();
 			set => SetPropertyValue<CHandle<AIArgumentMapping>>(value);
 		}
+
+		[Ordinal(7)] 
+		[RED("fastForwardAfterTeleport")] 
+		public CHandle<AIArgumentMapping> FastForwardAfterTeleport
+		{
+			get => GetPropertyValue<CHandle<AIArgumentMapping>>();
+			set => SetPropertyValue<CHandle<AIArgumentMapping>>(value);
+		}
 	}
 }

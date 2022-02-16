@@ -70,6 +70,14 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(23)] 
+		[RED("enableWorldSpaceSmoothing")] 
+		public CBool EnableWorldSpaceSmoothing
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(24)] 
 		[RED("cameraParallaxWeight")] 
 		public CFloat CameraParallaxWeight
 		{
@@ -77,7 +85,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(24)] 
+		[Ordinal(25)] 
 		[RED("cameraParallaxSpace")] 
 		public CEnum<scnfppParallaxSpace> CameraParallaxSpace
 		{
@@ -85,7 +93,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CEnum<scnfppParallaxSpace>>(value);
 		}
 
-		[Ordinal(25)] 
+		[Ordinal(26)] 
 		[RED("vehicleProceduralCameraWeight")] 
 		public CFloat VehicleProceduralCameraWeight
 		{
@@ -93,7 +101,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(26)] 
+		[Ordinal(27)] 
 		[RED("yawLimitLeft")] 
 		public CFloat YawLimitLeft
 		{
@@ -101,7 +109,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(27)] 
+		[Ordinal(28)] 
 		[RED("yawLimitRight")] 
 		public CFloat YawLimitRight
 		{
@@ -109,7 +117,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(28)] 
+		[Ordinal(29)] 
 		[RED("pitchLimitTop")] 
 		public CFloat PitchLimitTop
 		{
@@ -117,7 +125,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(29)] 
+		[Ordinal(30)] 
 		[RED("pitchLimitBottom")] 
 		public CFloat PitchLimitBottom
 		{
@@ -125,7 +133,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(30)] 
+		[Ordinal(31)] 
 		[RED("genderSpecificParams")] 
 		public CArray<scnfppGenderSpecificParams> GenderSpecificParams
 		{
@@ -147,6 +155,8 @@ namespace WolvenKit.RED4.Types
 			CameraUseTrajectorySpace = true;
 			CameraBlendInDuration = 0.500000F;
 			CameraBlendOutDuration = 0.500000F;
+			EnableWorldSpaceSmoothing = true;
+			CameraParallaxSpace = Enums.scnfppParallaxSpace.Trajectory;
 			GenderSpecificParams = new();
 		}
 	}

@@ -62,6 +62,14 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(11)] 
+		[RED("castRayTracedLocalShadows")] 
+		public CBool CastRayTracedLocalShadows
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(12)] 
 		[RED("windImpulseEnabled")] 
 		public CBool WindImpulseEnabled
 		{
@@ -69,7 +77,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(12)] 
+		[Ordinal(13)] 
 		[RED("removeFromRainMap")] 
 		public CBool RemoveFromRainMap
 		{
@@ -77,7 +85,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(13)] 
+		[Ordinal(14)] 
 		[RED("renderSceneLayerMask")] 
 		public CBitField<RenderSceneLayerMask> RenderSceneLayerMask
 		{
@@ -85,7 +93,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBitField<RenderSceneLayerMask>>(value);
 		}
 
-		[Ordinal(14)] 
+		[Ordinal(15)] 
 		[RED("lodLevelScales")] 
 		public CUInt32 LodLevelScales
 		{
@@ -99,6 +107,7 @@ namespace WolvenKit.RED4.Types
 			OccluderAutohideDistanceScale = 255;
 			CastShadows = true;
 			CastLocalShadows = true;
+			CastRayTracedLocalShadows = true;
 			WindImpulseEnabled = true;
 			RenderSceneLayerMask = Enums.RenderSceneLayerMask.Default;
 			LodLevelScales = 4294967295;

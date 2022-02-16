@@ -2,7 +2,7 @@
 namespace WolvenKit.RED4.Types
 {
 	[REDMeta]
-	public partial class VentilationEffectorController : ScriptableDC
+	public partial class VentilationEffectorController : ScriptableDeviceComponent
 	{
 	}
 }

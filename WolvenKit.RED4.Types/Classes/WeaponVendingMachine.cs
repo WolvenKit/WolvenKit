@@ -5,7 +5,7 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class WeaponVendingMachine : VendingMachine
 	{
-		[Ordinal(101)] 
+		[Ordinal(98)] 
 		[RED("bigAdScreen")] 
 		public CWeakHandle<IWorldWidgetComponent> BigAdScreen
 		{

@@ -30,14 +30,6 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(15)] 
-		[RED("diff_animator")] 
-		public CWeakHandle<inkTextValueProgressAnimationController> Diff_animator
-		{
-			get => GetPropertyValue<CWeakHandle<inkTextValueProgressAnimationController>>();
-			set => SetPropertyValue<CWeakHandle<inkTextValueProgressAnimationController>>(value);
-		}
-
-		[Ordinal(16)] 
 		[RED("total_animator")] 
 		public CWeakHandle<inkTextValueProgressAnimationController> Total_animator
 		{
@@ -45,7 +37,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<inkTextValueProgressAnimationController>>(value);
 		}
 
-		[Ordinal(17)] 
+		[Ordinal(16)] 
 		[RED("currencyData")] 
 		public CHandle<gameuiCurrencyUpdateNotificationViewData> CurrencyData
 		{
@@ -53,12 +45,20 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<gameuiCurrencyUpdateNotificationViewData>>(value);
 		}
 
-		[Ordinal(18)] 
+		[Ordinal(17)] 
 		[RED("animProxy")] 
 		public CHandle<inkanimProxy> AnimProxy
 		{
 			get => GetPropertyValue<CHandle<inkanimProxy>>();
 			set => SetPropertyValue<CHandle<inkanimProxy>>(value);
+		}
+
+		[Ordinal(18)] 
+		[RED("animState")] 
+		public CEnum<CurrencyNotificationAnimState> AnimState
+		{
+			get => GetPropertyValue<CEnum<CurrencyNotificationAnimState>>();
+			set => SetPropertyValue<CEnum<CurrencyNotificationAnimState>>(value);
 		}
 
 		[Ordinal(19)] 

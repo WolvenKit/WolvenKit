@@ -2,7 +2,7 @@
 namespace WolvenKit.RED4.Types
 {
 	[REDMeta]
-	public partial class StashController : ScriptableDC
+	public partial class StashController : ScriptableDeviceComponent
 	{
 	}
 }

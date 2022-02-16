@@ -27,8 +27,9 @@ namespace WolvenKit.RED4.Archive
             _fileTypes.Add("behavior", new[] { typeof(AIbehaviorResource) });
             _fileTypes.Add("bikecurveset", new[] { typeof(vehicleBikeCurveSet) });
             _fileTypes.Add("camcurveset", new[] { typeof(gameCameraCurveSet) });
+            _fileTypes.Add("ccstate", new[] { typeof(gameuiCharacterCustomizationPreset) });
             _fileTypes.Add("cfoliage", new[] { typeof(worldFoliageCompiledResource) });
-            _fileTypes.Add("charcustpreset", new[] { typeof(gameuiCharacterCustomizationUiPreset), typeof(gameuiCharacterCustomizationPreset) }); // gameuiCharacterCustomizationPreset is "guessed", could be other extension
+            _fileTypes.Add("charcustpreset", new[] { typeof(gameuiCharacterCustomizationUiPreset) });
             _fileTypes.Add("cminimap", new[] { typeof(minimapEncodedShapes) });
             _fileTypes.Add("community", new[] { typeof(communityCommunityTemplate) });
             _fileTypes.Add("conversations", new[] { typeof(scnInterestingConversationsResource) });
@@ -121,6 +122,7 @@ namespace WolvenKit.RED4.Archive
             _fileTypes.Add("smartobjects", new[] { typeof(gameSmartObjectsCompiledResource) });
             _fileTypes.Add("sp", new[] { typeof(CSkinProfile) });
             _fileTypes.Add("spatial_representation", new[] { typeof(worldTrafficPersistentSpatialResource) });
+            _fileTypes.Add("streamingblock", new[] { typeof(worldStreamingBlock) });
             _fileTypes.Add("streamingsector", new[] { typeof(worldStreamingSector) });
             _fileTypes.Add("streamingsector_inplace", new[] { typeof(worldStreamingSectorInplaceContent) });
             _fileTypes.Add("streamingworld", new[] { typeof(worldStreamingWorld) });

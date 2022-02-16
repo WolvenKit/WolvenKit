@@ -2,7 +2,7 @@
 namespace WolvenKit.RED4.Types
 {
 	[REDMeta]
-	public partial class StillageController : ScriptableDC
+	public partial class StillageController : ScriptableDeviceComponent
 	{
 	}
 }

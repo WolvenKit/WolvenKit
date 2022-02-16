@@ -86,6 +86,14 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(10)] 
+		[RED("canPlayerRemotelyAuthorize")] 
+		public CBool CanPlayerRemotelyAuthorize
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(11)] 
 		[RED("automaticallyClosesItself")] 
 		public CBool AutomaticallyClosesItself
 		{
@@ -93,7 +101,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(11)] 
+		[Ordinal(12)] 
 		[RED("openingSpeed")] 
 		public CFloat OpeningSpeed
 		{
@@ -101,7 +109,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(12)] 
+		[Ordinal(13)] 
 		[RED("doorOpeningTime")] 
 		public CFloat DoorOpeningTime
 		{
@@ -109,7 +117,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(13)] 
+		[Ordinal(14)] 
 		[RED("doorOpeningStimRange")] 
 		public CFloat DoorOpeningStimRange
 		{
@@ -117,7 +125,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(14)] 
+		[Ordinal(15)] 
 		[RED("canPayToUnlock")] 
 		public CBool CanPayToUnlock
 		{
@@ -125,7 +133,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(15)] 
+		[Ordinal(16)] 
 		[RED("paymentRecordID")] 
 		public TweakDBID PaymentRecordID
 		{
@@ -133,7 +141,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<TweakDBID>(value);
 		}
 
-		[Ordinal(16)] 
+		[Ordinal(17)] 
 		[RED("exposeQuickHacksIfNotConnectedToAP")] 
 		public CBool ExposeQuickHacksIfNotConnectedToAP
 		{

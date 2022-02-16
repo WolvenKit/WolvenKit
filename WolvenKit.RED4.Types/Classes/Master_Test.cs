@@ -5,7 +5,7 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class Master_Test : gameObject
 	{
-		[Ordinal(40)] 
+		[Ordinal(35)] 
 		[RED("deviceComponent")] 
 		public CHandle<gameMasterDeviceComponent> DeviceComponent
 		{

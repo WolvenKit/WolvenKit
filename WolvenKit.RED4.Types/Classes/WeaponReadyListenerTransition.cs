@@ -78,6 +78,14 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(12)] 
+		[RED("isSceneAimForced")] 
+		public CBool IsSceneAimForced
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(13)] 
 		[RED("isInTakedown")] 
 		public CBool IsInTakedown
 		{
@@ -85,7 +93,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(13)] 
+		[Ordinal(14)] 
 		[RED("isUsingCombatGadget")] 
 		public CBool IsUsingCombatGadget
 		{
@@ -93,7 +101,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(14)] 
+		[Ordinal(15)] 
 		[RED("hasStatusEffectNoCombat")] 
 		public CBool HasStatusEffectNoCombat
 		{
@@ -101,7 +109,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(15)] 
+		[Ordinal(16)] 
 		[RED("hasStatusEffectFastForward")] 
 		public CBool HasStatusEffectFastForward
 		{
@@ -109,7 +117,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(16)] 
+		[Ordinal(17)] 
 		[RED("hasStatusEffectVehicleScene")] 
 		public CBool HasStatusEffectVehicleScene
 		{
@@ -117,7 +125,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(17)] 
+		[Ordinal(18)] 
 		[RED("hasStunnedStatusEffect")] 
 		public CBool HasStunnedStatusEffect
 		{
@@ -125,7 +133,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(18)] 
+		[Ordinal(19)] 
 		[RED("hasJamStatusEffect")] 
 		public CBool HasJamStatusEffect
 		{
@@ -133,7 +141,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(19)] 
+		[Ordinal(20)] 
 		[RED("canWeaponShootWhileVaulting")] 
 		public CBool CanWeaponShootWhileVaulting
 		{
@@ -141,7 +149,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(20)] 
+		[Ordinal(21)] 
 		[RED("canShootWhileDodging")] 
 		public CBool CanShootWhileDodging
 		{
@@ -149,7 +157,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(21)] 
+		[Ordinal(22)] 
 		[RED("canWeaponShootWhileSliding")] 
 		public CBool CanWeaponShootWhileSliding
 		{
@@ -157,7 +165,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(22)] 
+		[Ordinal(23)] 
 		[RED("isInSafeSceneTier")] 
 		public CBool IsInSafeSceneTier
 		{
@@ -165,7 +173,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(23)] 
+		[Ordinal(24)] 
 		[RED("weaponReadyListenerReturnValue")] 
 		public CBool WeaponReadyListenerReturnValue
 		{

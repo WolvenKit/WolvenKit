@@ -92,5 +92,13 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CHandle<AIArgumentMapping>>();
 			set => SetPropertyValue<CHandle<AIArgumentMapping>>(value);
 		}
+
+		[Ordinal(12)] 
+		[RED("canUseInconvenientEntries")] 
+		public CHandle<AIArgumentMapping> CanUseInconvenientEntries
+		{
+			get => GetPropertyValue<CHandle<AIArgumentMapping>>();
+			set => SetPropertyValue<CHandle<AIArgumentMapping>>(value);
+		}
 	}
 }

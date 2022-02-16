@@ -213,6 +213,14 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
+		[Ordinal(26)] 
+		[RED("fractureFieldMask")] 
+		public CBitField<physicsFractureFieldType> FractureFieldMask
+		{
+			get => GetPropertyValue<CBitField<physicsFractureFieldType>>();
+			set => SetPropertyValue<CBitField<physicsFractureFieldType>>(value);
+		}
+
 		public physicsDestructionParams()
 		{
 			DamageThreshold = 25.000000F;
@@ -227,6 +235,7 @@ namespace WolvenKit.RED4.Types
 			ImpulseDiminishingFactor = 0.500000F;
 			DebrisMaxSeparation = 50.000000F;
 			MaxAngularVelocity = -1.000000F;
+			FractureFieldMask = Enums.physicsFractureFieldType.FF_Default;
 		}
 	}
 }

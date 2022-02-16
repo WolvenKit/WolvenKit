@@ -39,10 +39,10 @@ namespace WolvenKit.RED4.Types
 
 		[Ordinal(4)] 
 		[RED("iconID")] 
-		public CName IconID
+		public TweakDBID IconID
 		{
-			get => GetPropertyValue<CName>();
-			set => SetPropertyValue<CName>(value);
+			get => GetPropertyValue<TweakDBID>();
+			set => SetPropertyValue<TweakDBID>(value);
 		}
 
 		[Ordinal(5)] 

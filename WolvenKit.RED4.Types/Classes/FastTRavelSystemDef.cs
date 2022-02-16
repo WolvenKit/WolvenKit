@@ -22,6 +22,22 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(2)] 
+		[RED("FastTravelStarted")] 
+		public gamebbScriptID_Bool FastTravelStarted
+		{
+			get => GetPropertyValue<gamebbScriptID_Bool>();
+			set => SetPropertyValue<gamebbScriptID_Bool>(value);
+		}
+
+		[Ordinal(3)] 
+		[RED("FastTravelLoadingScreenStarted")] 
+		public gamebbScriptID_Bool FastTravelLoadingScreenStarted
+		{
+			get => GetPropertyValue<gamebbScriptID_Bool>();
+			set => SetPropertyValue<gamebbScriptID_Bool>(value);
+		}
+
+		[Ordinal(4)] 
 		[RED("FastTravelLoadingScreenFinished")] 
 		public gamebbScriptID_Bool FastTravelLoadingScreenFinished
 		{
@@ -33,6 +49,8 @@ namespace WolvenKit.RED4.Types
 		{
 			DestinationPoint = new();
 			StartingPoint = new();
+			FastTravelStarted = new();
+			FastTravelLoadingScreenStarted = new();
 			FastTravelLoadingScreenFinished = new();
 		}
 	}

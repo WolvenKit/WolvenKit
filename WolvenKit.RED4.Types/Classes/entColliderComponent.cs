@@ -14,14 +14,6 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(6)] 
-		[RED("shapes")] 
-		public CArray<CHandle<entColliderComponentShape>> Shapes
-		{
-			get => GetPropertyValue<CArray<CHandle<entColliderComponentShape>>>();
-			set => SetPropertyValue<CArray<CHandle<entColliderComponentShape>>>(value);
-		}
-
-		[Ordinal(7)] 
 		[RED("simulationType")] 
 		public CEnum<physicsSimulationType> SimulationType
 		{
@@ -29,7 +21,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CEnum<physicsSimulationType>>(value);
 		}
 
-		[Ordinal(8)] 
+		[Ordinal(7)] 
 		[RED("startInactive")] 
 		public CBool StartInactive
 		{
@@ -37,7 +29,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(9)] 
+		[Ordinal(8)] 
 		[RED("useCCD")] 
 		public CBool UseCCD
 		{
@@ -45,15 +37,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(10)] 
-		[RED("sendOnStoppedMovingEvents")] 
-		public CBool SendOnStoppedMovingEvents
-		{
-			get => GetPropertyValue<CBool>();
-			set => SetPropertyValue<CBool>(value);
-		}
-
-		[Ordinal(11)] 
+		[Ordinal(9)] 
 		[RED("massOverride")] 
 		public CFloat MassOverride
 		{
@@ -61,7 +45,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(12)] 
+		[Ordinal(10)] 
 		[RED("volume")] 
 		public CFloat Volume
 		{
@@ -69,7 +53,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(13)] 
+		[Ordinal(11)] 
 		[RED("mass")] 
 		public CFloat Mass
 		{
@@ -77,7 +61,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(14)] 
+		[Ordinal(12)] 
 		[RED("inertia")] 
 		public Vector3 Inertia
 		{
@@ -85,7 +69,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<Vector3>(value);
 		}
 
-		[Ordinal(15)] 
+		[Ordinal(13)] 
 		[RED("comOffset")] 
 		public Transform ComOffset
 		{
@@ -93,7 +77,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<Transform>(value);
 		}
 
-		[Ordinal(16)] 
+		[Ordinal(14)] 
 		[RED("filterData")] 
 		public CHandle<physicsFilterData> FilterData
 		{
@@ -101,7 +85,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<physicsFilterData>>(value);
 		}
 
-		[Ordinal(17)] 
+		[Ordinal(15)] 
 		[RED("isEnabled")] 
 		public CBool IsEnabled
 		{
@@ -109,7 +93,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(18)] 
+		[Ordinal(16)] 
 		[RED("dynamicTrafficSetting")] 
 		public TrafficGenDynamicTrafficSetting DynamicTrafficSetting
 		{
@@ -122,7 +106,6 @@ namespace WolvenKit.RED4.Types
 			Name = "Component";
 			LocalTransform = new() { Position = new() { X = new(), Y = new(), Z = new() }, Orientation = new() { R = 1.000000F } };
 			Colliders = new();
-			Shapes = new();
 			SimulationType = Enums.physicsSimulationType.Kinematic;
 			MassOverride = -1.000000F;
 			Inertia = new() { X = 1.000000F, Y = 1.000000F, Z = 1.000000F };

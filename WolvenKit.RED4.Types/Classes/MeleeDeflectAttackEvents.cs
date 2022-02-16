@@ -5,7 +5,7 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class MeleeDeflectAttackEvents : MeleeAttackGenericEvents
 	{
-		[Ordinal(8)] 
+		[Ordinal(9)] 
 		[RED("slowMoSet")] 
 		public CBool SlowMoSet
 		{

@@ -46,6 +46,14 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(10)] 
+		[RED("forcedMappinVisualState")] 
+		public CEnum<EMappinVisualState> ForcedMappinVisualState
+		{
+			get => GetPropertyValue<CEnum<EMappinVisualState>>();
+			set => SetPropertyValue<CEnum<EMappinVisualState>>(value);
+		}
+
+		[Ordinal(11)] 
 		[RED("mappins")] 
 		public CArray<SDeviceMappinData> Mappins
 		{
@@ -53,7 +61,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<SDeviceMappinData>>(value);
 		}
 
-		[Ordinal(11)] 
+		[Ordinal(12)] 
 		[RED("offsetValue")] 
 		public CFloat OffsetValue
 		{
@@ -61,7 +69,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(12)] 
+		[Ordinal(13)] 
 		[RED("isBeingScanned")] 
 		public CBool IsBeingScanned
 		{
@@ -69,7 +77,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(13)] 
+		[Ordinal(14)] 
 		[RED("isCurrentTarget")] 
 		public CBool IsCurrentTarget
 		{
@@ -77,7 +85,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(14)] 
+		[Ordinal(15)] 
 		[RED("isShowingMappins")] 
 		public CBool IsShowingMappins
 		{
@@ -85,7 +93,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(15)] 
+		[Ordinal(16)] 
 		[RED("canShowMappinsByTask")] 
 		public CBool CanShowMappinsByTask
 		{
@@ -93,7 +101,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(16)] 
+		[Ordinal(17)] 
 		[RED("canHideMappinsByTask")] 
 		public CBool CanHideMappinsByTask
 		{
@@ -101,7 +109,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(17)] 
+		[Ordinal(18)] 
 		[RED("isHighlightedInFocusMode")] 
 		public CBool IsHighlightedInFocusMode
 		{
@@ -109,7 +117,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(18)] 
+		[Ordinal(19)] 
 		[RED("currentGameplayRole")] 
 		public CEnum<EGameplayRole> CurrentGameplayRole
 		{
@@ -117,7 +125,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CEnum<EGameplayRole>>(value);
 		}
 
-		[Ordinal(19)] 
+		[Ordinal(20)] 
 		[RED("isGameplayRoleInitialized")] 
 		public CBool IsGameplayRoleInitialized
 		{
@@ -125,7 +133,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(20)] 
+		[Ordinal(21)] 
 		[RED("isForceHidden")] 
 		public CBool IsForceHidden
 		{
@@ -133,7 +141,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(21)] 
+		[Ordinal(22)] 
 		[RED("isForcedVisibleThroughWalls")] 
 		public CBool IsForcedVisibleThroughWalls
 		{
@@ -146,6 +154,7 @@ namespace WolvenKit.RED4.Types
 			AutoDeterminGameplayRole = true;
 			MappinsDisplayMode = Enums.EMappinDisplayMode.MINIMALISTIC;
 			AlwaysCreateMappinAsDynamic = true;
+			ForcedMappinVisualState = Enums.EMappinVisualState.None;
 			Mappins = new();
 			OffsetValue = 0.040000F;
 		}

@@ -2,7 +2,7 @@
 namespace WolvenKit.RED4.Types
 {
 	[REDMeta]
-	public partial class HoloDeviceController : ScriptableDC
+	public partial class HoloDeviceController : ScriptableDeviceComponent
 	{
 	}
 }

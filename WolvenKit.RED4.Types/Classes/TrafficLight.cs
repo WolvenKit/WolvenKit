@@ -5,7 +5,7 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class TrafficLight : Device
 	{
-		[Ordinal(87)] 
+		[Ordinal(84)] 
 		[RED("lightState")] 
 		public CEnum<worldTrafficLightColor> LightState
 		{
@@ -13,7 +13,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CEnum<worldTrafficLightColor>>(value);
 		}
 
-		[Ordinal(88)] 
+		[Ordinal(85)] 
 		[RED("trafficLightMesh")] 
 		public CHandle<entPhysicalMeshComponent> TrafficLightMesh
 		{
@@ -21,7 +21,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<entPhysicalMeshComponent>>(value);
 		}
 
-		[Ordinal(89)] 
+		[Ordinal(86)] 
 		[RED("destroyedMesh")] 
 		public CHandle<entPhysicalMeshComponent> DestroyedMesh
 		{

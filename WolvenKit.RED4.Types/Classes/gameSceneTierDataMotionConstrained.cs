@@ -5,7 +5,7 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class gameSceneTierDataMotionConstrained : gameSceneTierData
 	{
-		[Ordinal(2)] 
+		[Ordinal(3)] 
 		[RED("params")] 
 		public gameMotionConstrainedTierDataParams Params
 		{

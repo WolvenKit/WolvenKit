@@ -5,7 +5,7 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class MonoDisc : BaseProjectile
 	{
-		[Ordinal(51)] 
+		[Ordinal(46)] 
 		[RED("throwtype")] 
 		public CEnum<ThrowType> Throwtype
 		{
@@ -13,7 +13,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CEnum<ThrowType>>(value);
 		}
 
-		[Ordinal(52)] 
+		[Ordinal(47)] 
 		[RED("targetAcquired")] 
 		public CBool TargetAcquired
 		{
@@ -21,7 +21,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(53)] 
+		[Ordinal(48)] 
 		[RED("player")] 
 		public CWeakHandle<gameObject> Player
 		{
@@ -29,7 +29,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<gameObject>>(value);
 		}
 
-		[Ordinal(54)] 
+		[Ordinal(49)] 
 		[RED("disc")] 
 		public CWeakHandle<gameObject> Disc
 		{
@@ -37,7 +37,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<gameObject>>(value);
 		}
 
-		[Ordinal(55)] 
+		[Ordinal(50)] 
 		[RED("target")] 
 		public CWeakHandle<gameObject> Target
 		{
@@ -45,7 +45,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<gameObject>>(value);
 		}
 
-		[Ordinal(56)] 
+		[Ordinal(51)] 
 		[RED("blackboard")] 
 		public CWeakHandle<gameIBlackboard> Blackboard
 		{
@@ -53,7 +53,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<gameIBlackboard>>(value);
 		}
 
-		[Ordinal(57)] 
+		[Ordinal(52)] 
 		[RED("discSpawnPoint")] 
 		public Vector4 DiscSpawnPoint
 		{
@@ -61,7 +61,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<Vector4>(value);
 		}
 
-		[Ordinal(58)] 
+		[Ordinal(53)] 
 		[RED("discPosition")] 
 		public Vector4 DiscPosition
 		{
@@ -69,7 +69,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<Vector4>(value);
 		}
 
-		[Ordinal(59)] 
+		[Ordinal(54)] 
 		[RED("collisionCount")] 
 		public CInt32 CollisionCount
 		{
@@ -77,7 +77,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CInt32>(value);
 		}
 
-		[Ordinal(60)] 
+		[Ordinal(55)] 
 		[RED("airTime")] 
 		public CFloat AirTime
 		{
@@ -85,7 +85,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(61)] 
+		[Ordinal(56)] 
 		[RED("destroyTimer")] 
 		public CFloat DestroyTimer
 		{
@@ -93,7 +93,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(62)] 
+		[Ordinal(57)] 
 		[RED("returningToPlayer")] 
 		public CBool ReturningToPlayer
 		{
@@ -101,7 +101,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(63)] 
+		[Ordinal(58)] 
 		[RED("catchingPlayer")] 
 		public CBool CatchingPlayer
 		{
@@ -109,7 +109,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(64)] 
+		[Ordinal(59)] 
 		[RED("discCaught")] 
 		public CBool DiscCaught
 		{
@@ -117,7 +117,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(65)] 
+		[Ordinal(60)] 
 		[RED("discLodgedToSurface")] 
 		public CBool DiscLodgedToSurface
 		{
@@ -125,7 +125,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(66)] 
+		[Ordinal(61)] 
 		[RED("OnProjectileCaughtCallback")] 
 		public CHandle<redCallbackObject> OnProjectileCaughtCallback
 		{
@@ -133,7 +133,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
-		[Ordinal(67)] 
+		[Ordinal(62)] 
 		[RED("wasNPCHit")] 
 		public CBool WasNPCHit
 		{
@@ -141,7 +141,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(68)] 
+		[Ordinal(63)] 
 		[RED("animationController")] 
 		public CHandle<entAnimationControllerComponent> AnimationController
 		{

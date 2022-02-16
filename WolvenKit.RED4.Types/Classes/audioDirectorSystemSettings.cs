@@ -6,14 +6,6 @@ namespace WolvenKit.RED4.Types
 	public partial class audioDirectorSystemSettings : audioAudioMetadata
 	{
 		[Ordinal(1)] 
-		[RED("mixSettingsName")] 
-		public CName MixSettingsName
-		{
-			get => GetPropertyValue<CName>();
-			set => SetPropertyValue<CName>(value);
-		}
-
-		[Ordinal(2)] 
 		[RED("combatVoManagerSettingsName")] 
 		public CName CombatVoManagerSettingsName
 		{
@@ -21,7 +13,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(3)] 
+		[Ordinal(2)] 
 		[RED("singleConversationMinRepeatTime")] 
 		public CFloat SingleConversationMinRepeatTime
 		{
@@ -29,7 +21,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(4)] 
+		[Ordinal(3)] 
 		[RED("allConversationsMinRepeatTime")] 
 		public CFloat AllConversationsMinRepeatTime
 		{
@@ -37,7 +29,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(5)] 
+		[Ordinal(4)] 
 		[RED("maxVelocityMagnitudeToConsiderPlayerVehicleInactive")] 
 		public CFloat MaxVelocityMagnitudeToConsiderPlayerVehicleInactive
 		{
@@ -45,7 +37,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(6)] 
+		[Ordinal(5)] 
 		[RED("maxVelocityMagnitudeToConsiderTrafficVehicleIdle")] 
 		public CFloat MaxVelocityMagnitudeToConsiderTrafficVehicleIdle
 		{
@@ -53,7 +45,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(7)] 
+		[Ordinal(6)] 
 		[RED("playerInactiveMinTimeNeededToEngageMovingFaster")] 
 		public CFloat PlayerInactiveMinTimeNeededToEngageMovingFaster
 		{
@@ -61,7 +53,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(8)] 
+		[Ordinal(7)] 
 		[RED("vehEngageMovingFasterInterpolation")] 
 		public audioVehicleEngageMovingFasterInterpolationData VehEngageMovingFasterInterpolation
 		{
@@ -69,7 +61,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<audioVehicleEngageMovingFasterInterpolationData>(value);
 		}
 
-		[Ordinal(9)] 
+		[Ordinal(8)] 
 		[RED("trafficSpeedRC")] 
 		public CFloat TrafficSpeedRC
 		{
@@ -77,7 +69,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(10)] 
+		[Ordinal(9)] 
 		[RED("trafficAccelerationRC")] 
 		public CFloat TrafficAccelerationRC
 		{
@@ -85,7 +77,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(11)] 
+		[Ordinal(10)] 
 		[RED("trafficRpmRC")] 
 		public CFloat TrafficRpmRC
 		{
@@ -93,7 +85,39 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
+		[Ordinal(11)] 
+		[RED("trafficSlipRatioSkidThreshold")] 
+		public CFloat TrafficSlipRatioSkidThreshold
+		{
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
+		}
+
 		[Ordinal(12)] 
+		[RED("trafficHornSingleVehicleCooldown")] 
+		public CFloat TrafficHornSingleVehicleCooldown
+		{
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
+		}
+
+		[Ordinal(13)] 
+		[RED("trafficHornAllVehiclesCooldown")] 
+		public CFloat TrafficHornAllVehiclesCooldown
+		{
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
+		}
+
+		[Ordinal(14)] 
+		[RED("trafficHornMaxDistanceRangeToPlayer")] 
+		public CFloat TrafficHornMaxDistanceRangeToPlayer
+		{
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
+		}
+
+		[Ordinal(15)] 
 		[RED("overHeadVisibilityMaxOcclusion")] 
 		public CFloat OverHeadVisibilityMaxOcclusion
 		{
@@ -101,7 +125,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(13)] 
+		[Ordinal(16)] 
 		[RED("overHeadVisibilityMaxObstruction")] 
 		public CFloat OverHeadVisibilityMaxObstruction
 		{
@@ -109,7 +133,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(14)] 
+		[Ordinal(17)] 
 		[RED("conversationMixCooldown")] 
 		public CFloat ConversationMixCooldown
 		{
@@ -117,7 +141,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(15)] 
+		[Ordinal(18)] 
 		[RED("enemyPingCooldown")] 
 		public CFloat EnemyPingCooldown
 		{
@@ -125,7 +149,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(16)] 
+		[Ordinal(19)] 
 		[RED("idleTimeBeforeAllowingOwMusicChange")] 
 		public CFloat IdleTimeBeforeAllowingOwMusicChange
 		{
@@ -133,7 +157,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(17)] 
+		[Ordinal(20)] 
 		[RED("drivingStreamingAmbientEmittersDistanceRolloff")] 
 		public CFloat DrivingStreamingAmbientEmittersDistanceRolloff
 		{
@@ -141,7 +165,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(18)] 
+		[Ordinal(21)] 
 		[RED("lowHealthStateMaxTime")] 
 		public CFloat LowHealthStateMaxTime
 		{
@@ -149,7 +173,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(19)] 
+		[Ordinal(22)] 
 		[RED("lowGearMaxTrafficSpeed")] 
 		public CFloat LowGearMaxTrafficSpeed
 		{
@@ -157,7 +181,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(20)] 
+		[Ordinal(23)] 
 		[RED("lowGearAccelerationThreshold")] 
 		public CFloat LowGearAccelerationThreshold
 		{
@@ -165,7 +189,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(21)] 
+		[Ordinal(24)] 
 		[RED("mediumGearMaxTrafficSpeed")] 
 		public CFloat MediumGearMaxTrafficSpeed
 		{
@@ -173,7 +197,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(22)] 
+		[Ordinal(25)] 
 		[RED("mediumGearAccelerationThreshold")] 
 		public CFloat MediumGearAccelerationThreshold
 		{
@@ -181,7 +205,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(23)] 
+		[Ordinal(26)] 
 		[RED("highGearAccelerationThreshold")] 
 		public CFloat HighGearAccelerationThreshold
 		{
@@ -200,6 +224,10 @@ namespace WolvenKit.RED4.Types
 			TrafficSpeedRC = 0.050000F;
 			TrafficAccelerationRC = 0.200000F;
 			TrafficRpmRC = 0.200000F;
+			TrafficSlipRatioSkidThreshold = 5.000000F;
+			TrafficHornSingleVehicleCooldown = 5.000000F;
+			TrafficHornAllVehiclesCooldown = 2.000000F;
+			TrafficHornMaxDistanceRangeToPlayer = 60.000000F;
 			OverHeadVisibilityMaxOcclusion = 0.200000F;
 			OverHeadVisibilityMaxObstruction = 0.400000F;
 			ConversationMixCooldown = 5.000000F;

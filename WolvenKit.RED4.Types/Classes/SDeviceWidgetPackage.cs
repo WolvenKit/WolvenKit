@@ -5,7 +5,7 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class SDeviceWidgetPackage : SWidgetPackage
 	{
-		[Ordinal(17)] 
+		[Ordinal(18)] 
 		[RED("deviceStatus")] 
 		public CString DeviceStatus
 		{
@@ -13,7 +13,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CString>(value);
 		}
 
-		[Ordinal(18)] 
+		[Ordinal(19)] 
 		[RED("deviceState")] 
 		public CEnum<EDeviceStatus> DeviceState
 		{
@@ -21,7 +21,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CEnum<EDeviceStatus>>(value);
 		}
 
-		[Ordinal(19)] 
+		[Ordinal(20)] 
 		[RED("actionWidgets")] 
 		public CArray<SActionWidgetPackage> ActionWidgets
 		{

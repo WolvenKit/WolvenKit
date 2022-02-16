@@ -13,9 +13,18 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
+		[Ordinal(17)] 
+		[RED("soldOutText")] 
+		public inkTextWidgetReference SoldOutText
+		{
+			get => GetPropertyValue<inkTextWidgetReference>();
+			set => SetPropertyValue<inkTextWidgetReference>(value);
+		}
+
 		public IceMachineInkGameController()
 		{
 			ButtonContainer = new();
+			SoldOutText = new();
 		}
 	}
 }

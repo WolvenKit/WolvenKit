@@ -118,11 +118,75 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(15)] 
-		[RED("introAnim")] 
-		public CHandle<inkanimProxy> IntroAnim
+		[RED("TooltipStylePath")] 
+		public redResourceReferenceScriptToken TooltipStylePath
+		{
+			get => GetPropertyValue<redResourceReferenceScriptToken>();
+			set => SetPropertyValue<redResourceReferenceScriptToken>(value);
+		}
+
+		[Ordinal(16)] 
+		[RED("enableTransitionAnimation")] 
+		public CBool EnableTransitionAnimation
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(17)] 
+		[RED("tooltipAnimHideDef")] 
+		public CHandle<inkanimDefinition> TooltipAnimHideDef
+		{
+			get => GetPropertyValue<CHandle<inkanimDefinition>>();
+			set => SetPropertyValue<CHandle<inkanimDefinition>>(value);
+		}
+
+		[Ordinal(18)] 
+		[RED("tooltipDelayedShowDef")] 
+		public CHandle<inkanimDefinition> TooltipDelayedShowDef
+		{
+			get => GetPropertyValue<CHandle<inkanimDefinition>>();
+			set => SetPropertyValue<CHandle<inkanimDefinition>>(value);
+		}
+
+		[Ordinal(19)] 
+		[RED("tooltipAnimHide")] 
+		public CHandle<inkanimProxy> TooltipAnimHide
 		{
 			get => GetPropertyValue<CHandle<inkanimProxy>>();
 			set => SetPropertyValue<CHandle<inkanimProxy>>(value);
+		}
+
+		[Ordinal(20)] 
+		[RED("tooltipDelayedShow")] 
+		public CHandle<inkanimProxy> TooltipDelayedShow
+		{
+			get => GetPropertyValue<CHandle<inkanimProxy>>();
+			set => SetPropertyValue<CHandle<inkanimProxy>>(value);
+		}
+
+		[Ordinal(21)] 
+		[RED("axisDataThreshold")] 
+		public CFloat AxisDataThreshold
+		{
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
+		}
+
+		[Ordinal(22)] 
+		[RED("mouseDataThreshold")] 
+		public CFloat MouseDataThreshold
+		{
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
+		}
+
+		[Ordinal(23)] 
+		[RED("isHidden")] 
+		public CBool IsHidden
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		public gameuiTooltipsManager()
@@ -141,6 +205,10 @@ namespace WolvenKit.RED4.Types
 			HudTooltipStylePath = new();
 			IndexedTooltips = new();
 			NamedTooltips = new();
+			TooltipStylePath = new();
+			EnableTransitionAnimation = true;
+			AxisDataThreshold = 0.500000F;
+			MouseDataThreshold = 7.000000F;
 		}
 	}
 }

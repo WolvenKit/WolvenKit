@@ -28,5 +28,13 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CBool>();
 			set => SetPropertyValue<CBool>(value);
 		}
+
+		[Ordinal(8)] 
+		[RED("IsDLCAddedActiveItem")] 
+		public CBool IsDLCAddedActiveItem
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
 	}
 }

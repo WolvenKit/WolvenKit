@@ -5,7 +5,7 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class gameContainerObjectBase : gameLootContainerBase
 	{
-		[Ordinal(50)] 
+		[Ordinal(45)] 
 		[RED("lockedByKey")] 
 		public TweakDBID LockedByKey
 		{

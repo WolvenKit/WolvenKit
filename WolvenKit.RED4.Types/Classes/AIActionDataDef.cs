@@ -46,6 +46,14 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(5)] 
+		[RED("ownerInTumble")] 
+		public gamebbScriptID_Bool OwnerInTumble
+		{
+			get => GetPropertyValue<gamebbScriptID_Bool>();
+			set => SetPropertyValue<gamebbScriptID_Bool>(value);
+		}
+
+		[Ordinal(6)] 
 		[RED("ownerCurrentAnimVariationSet")] 
 		public gamebbScriptID_Bool OwnerCurrentAnimVariationSet
 		{
@@ -53,7 +61,15 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gamebbScriptID_Bool>(value);
 		}
 
-		[Ordinal(6)] 
+		[Ordinal(7)] 
+		[RED("ownerLastAnimVariationAction")] 
+		public gamebbScriptID_CName OwnerLastAnimVariationAction
+		{
+			get => GetPropertyValue<gamebbScriptID_CName>();
+			set => SetPropertyValue<gamebbScriptID_CName>(value);
+		}
+
+		[Ordinal(8)] 
 		[RED("ownerLastAnimVariation")] 
 		public gamebbScriptID_Int32 OwnerLastAnimVariation
 		{
@@ -61,7 +77,15 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gamebbScriptID_Int32>(value);
 		}
 
-		[Ordinal(7)] 
+		[Ordinal(9)] 
+		[RED("ownerLastBlockAnimVariation")] 
+		public gamebbScriptID_Int32 OwnerLastBlockAnimVariation
+		{
+			get => GetPropertyValue<gamebbScriptID_Int32>();
+			set => SetPropertyValue<gamebbScriptID_Int32>(value);
+		}
+
+		[Ordinal(10)] 
 		[RED("ownerItemsToEquip")] 
 		public gamebbScriptID_Variant OwnerItemsToEquip
 		{
@@ -69,7 +93,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gamebbScriptID_Variant>(value);
 		}
 
-		[Ordinal(8)] 
+		[Ordinal(11)] 
 		[RED("ownerItemsUnequipped")] 
 		public gamebbScriptID_Variant OwnerItemsUnequipped
 		{
@@ -77,7 +101,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gamebbScriptID_Variant>(value);
 		}
 
-		[Ordinal(9)] 
+		[Ordinal(12)] 
 		[RED("ownerItemsForceUnequipped")] 
 		public gamebbScriptID_Variant OwnerItemsForceUnequipped
 		{
@@ -85,7 +109,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gamebbScriptID_Variant>(value);
 		}
 
-		[Ordinal(10)] 
+		[Ordinal(13)] 
 		[RED("ownerLastEquippedItems")] 
 		public gamebbScriptID_Variant OwnerLastEquippedItems
 		{
@@ -93,7 +117,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gamebbScriptID_Variant>(value);
 		}
 
-		[Ordinal(11)] 
+		[Ordinal(14)] 
 		[RED("ownerLastUnequipTimestamp")] 
 		public gamebbScriptID_Float OwnerLastUnequipTimestamp
 		{
@@ -101,7 +125,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gamebbScriptID_Float>(value);
 		}
 
-		[Ordinal(12)] 
+		[Ordinal(15)] 
 		[RED("ownerEquipItemTime")] 
 		public gamebbScriptID_Float OwnerEquipItemTime
 		{
@@ -109,7 +133,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gamebbScriptID_Float>(value);
 		}
 
-		[Ordinal(13)] 
+		[Ordinal(16)] 
 		[RED("ownerEquipDuration")] 
 		public gamebbScriptID_Float OwnerEquipDuration
 		{
@@ -117,7 +141,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gamebbScriptID_Float>(value);
 		}
 
-		[Ordinal(14)] 
+		[Ordinal(17)] 
 		[RED("dropItemOnUnequip")] 
 		public gamebbScriptID_Bool DropItemOnUnequip
 		{
@@ -125,7 +149,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gamebbScriptID_Bool>(value);
 		}
 
-		[Ordinal(15)] 
+		[Ordinal(18)] 
 		[RED("archetypeEffectorsApplied")] 
 		public gamebbScriptID_Bool ArchetypeEffectorsApplied
 		{
@@ -133,7 +157,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gamebbScriptID_Bool>(value);
 		}
 
-		[Ordinal(16)] 
+		[Ordinal(19)] 
 		[RED("ownerTimeDilation")] 
 		public gamebbScriptID_Float OwnerTimeDilation
 		{
@@ -141,7 +165,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gamebbScriptID_Float>(value);
 		}
 
-		[Ordinal(17)] 
+		[Ordinal(20)] 
 		[RED("operationHasBeenProcessed")] 
 		public gamebbScriptID_Bool OperationHasBeenProcessed
 		{
@@ -149,7 +173,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gamebbScriptID_Bool>(value);
 		}
 
-		[Ordinal(18)] 
+		[Ordinal(21)] 
 		[RED("weaponTrailInitialised")] 
 		public gamebbScriptID_Bool WeaponTrailInitialised
 		{
@@ -157,7 +181,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gamebbScriptID_Bool>(value);
 		}
 
-		[Ordinal(19)] 
+		[Ordinal(22)] 
 		[RED("weaponTrailAborted")] 
 		public gamebbScriptID_Bool WeaponTrailAborted
 		{
@@ -165,7 +189,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gamebbScriptID_Bool>(value);
 		}
 
-		[Ordinal(20)] 
+		[Ordinal(23)] 
 		[RED("netrunner")] 
 		public gamebbScriptID_Variant Netrunner
 		{
@@ -173,7 +197,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gamebbScriptID_Variant>(value);
 		}
 
-		[Ordinal(21)] 
+		[Ordinal(24)] 
 		[RED("netrunnerProxy")] 
 		public gamebbScriptID_Variant NetrunnerProxy
 		{
@@ -181,12 +205,44 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gamebbScriptID_Variant>(value);
 		}
 
-		[Ordinal(22)] 
+		[Ordinal(25)] 
 		[RED("netrunnerTarget")] 
 		public gamebbScriptID_Variant NetrunnerTarget
 		{
 			get => GetPropertyValue<gamebbScriptID_Variant>();
 			set => SetPropertyValue<gamebbScriptID_Variant>(value);
+		}
+
+		[Ordinal(26)] 
+		[RED("ignoreInCombatMoveCommand")] 
+		public gamebbScriptID_Bool IgnoreInCombatMoveCommand
+		{
+			get => GetPropertyValue<gamebbScriptID_Bool>();
+			set => SetPropertyValue<gamebbScriptID_Bool>(value);
+		}
+
+		[Ordinal(27)] 
+		[RED("avoidLOSTimeStamp")] 
+		public gamebbScriptID_Float AvoidLOSTimeStamp
+		{
+			get => GetPropertyValue<gamebbScriptID_Float>();
+			set => SetPropertyValue<gamebbScriptID_Float>(value);
+		}
+
+		[Ordinal(28)] 
+		[RED("attackBlocked")] 
+		public gamebbScriptID_Bool AttackBlocked
+		{
+			get => GetPropertyValue<gamebbScriptID_Bool>();
+			set => SetPropertyValue<gamebbScriptID_Bool>(value);
+		}
+
+		[Ordinal(29)] 
+		[RED("attackParried")] 
+		public gamebbScriptID_Bool AttackParried
+		{
+			get => GetPropertyValue<gamebbScriptID_Bool>();
+			set => SetPropertyValue<gamebbScriptID_Bool>(value);
 		}
 
 		public AIActionDataDef()
@@ -196,8 +252,11 @@ namespace WolvenKit.RED4.Types
 			OwnerMeleeAttackDodgedCount = new();
 			OwnerLastAttackTimeStamp = new();
 			OwnerLastAttackName = new();
+			OwnerInTumble = new();
 			OwnerCurrentAnimVariationSet = new();
+			OwnerLastAnimVariationAction = new();
 			OwnerLastAnimVariation = new();
+			OwnerLastBlockAnimVariation = new();
 			OwnerItemsToEquip = new();
 			OwnerItemsUnequipped = new();
 			OwnerItemsForceUnequipped = new();
@@ -214,6 +273,10 @@ namespace WolvenKit.RED4.Types
 			Netrunner = new();
 			NetrunnerProxy = new();
 			NetrunnerTarget = new();
+			IgnoreInCombatMoveCommand = new();
+			AvoidLOSTimeStamp = new();
+			AttackBlocked = new();
+			AttackParried = new();
 		}
 	}
 }

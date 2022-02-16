@@ -5,7 +5,7 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class LocomotionTakedownEvents : LocomotionEventsTransition
 	{
-		[Ordinal(3)] 
+		[Ordinal(6)] 
 		[RED("stateMachineInitData")] 
 		public CWeakHandle<LocomotionTakedownInitData> StateMachineInitData
 		{

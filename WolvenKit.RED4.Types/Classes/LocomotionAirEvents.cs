@@ -5,7 +5,7 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class LocomotionAirEvents : LocomotionEventsTransition
 	{
-		[Ordinal(3)] 
+		[Ordinal(6)] 
 		[RED("maxSuperheroFallHeight")] 
 		public CBool MaxSuperheroFallHeight
 		{
@@ -13,9 +13,17 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(4)] 
+		[Ordinal(7)] 
 		[RED("updateInputToggles")] 
 		public CBool UpdateInputToggles
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(8)] 
+		[RED("resetFallingParametersOnExit")] 
+		public CBool ResetFallingParametersOnExit
 		{
 			get => GetPropertyValue<CBool>();
 			set => SetPropertyValue<CBool>(value);

@@ -5,7 +5,7 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class DisplayGlass : InteractiveDevice
 	{
-		[Ordinal(97)] 
+		[Ordinal(94)] 
 		[RED("collider")] 
 		public CHandle<entIPlacedComponent> Collider
 		{
@@ -13,7 +13,15 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<entIPlacedComponent>>(value);
 		}
 
-		[Ordinal(98)] 
+		[Ordinal(95)] 
+		[RED("mesh")] 
+		public CHandle<entIPlacedComponent> Mesh
+		{
+			get => GetPropertyValue<CHandle<entIPlacedComponent>>();
+			set => SetPropertyValue<CHandle<entIPlacedComponent>>(value);
+		}
+
+		[Ordinal(96)] 
 		[RED("isDestroyed")] 
 		public CBool IsDestroyed
 		{

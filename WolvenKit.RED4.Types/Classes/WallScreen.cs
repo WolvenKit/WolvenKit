@@ -5,7 +5,7 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class WallScreen : TV
 	{
-		[Ordinal(106)] 
+		[Ordinal(97)] 
 		[RED("movementPattern")] 
 		public SMovementPattern MovementPattern
 		{
@@ -13,7 +13,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<SMovementPattern>(value);
 		}
 
-		[Ordinal(107)] 
+		[Ordinal(98)] 
 		[RED("factOnFullyOpened")] 
 		public CName FactOnFullyOpened
 		{
@@ -21,7 +21,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(108)] 
+		[Ordinal(99)] 
 		[RED("objectMover")] 
 		public CHandle<ObjectMoverComponent> ObjectMover
 		{

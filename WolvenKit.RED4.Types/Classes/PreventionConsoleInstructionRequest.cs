@@ -12,5 +12,18 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CEnum<EPreventionSystemInstruction>>();
 			set => SetPropertyValue<CEnum<EPreventionSystemInstruction>>(value);
 		}
+
+		[Ordinal(1)] 
+		[RED("heatStage")] 
+		public CEnum<EPreventionHeatStage> HeatStage
+		{
+			get => GetPropertyValue<CEnum<EPreventionHeatStage>>();
+			set => SetPropertyValue<CEnum<EPreventionHeatStage>>(value);
+		}
+
+		public PreventionConsoleInstructionRequest()
+		{
+			HeatStage = Enums.EPreventionHeatStage.Invalid;
+		}
 	}
 }

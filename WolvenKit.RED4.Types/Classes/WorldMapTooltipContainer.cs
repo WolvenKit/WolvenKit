@@ -22,14 +22,6 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(3)] 
-		[RED("districtTooltip")] 
-		public inkWidgetReference DistrictTooltip
-		{
-			get => GetPropertyValue<inkWidgetReference>();
-			set => SetPropertyValue<inkWidgetReference>(value);
-		}
-
-		[Ordinal(4)] 
 		[RED("defaultTooltipController")] 
 		public CWeakHandle<WorldMapTooltipBaseController> DefaultTooltipController
 		{
@@ -37,7 +29,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<WorldMapTooltipBaseController>>(value);
 		}
 
-		[Ordinal(5)] 
+		[Ordinal(4)] 
 		[RED("policeTooltipController")] 
 		public CWeakHandle<WorldMapTooltipBaseController> PoliceTooltipController
 		{
@@ -45,15 +37,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<WorldMapTooltipBaseController>>(value);
 		}
 
-		[Ordinal(6)] 
-		[RED("districtTooltipController")] 
-		public CWeakHandle<WorldMapTooltipBaseController> DistrictTooltipController
-		{
-			get => GetPropertyValue<CWeakHandle<WorldMapTooltipBaseController>>();
-			set => SetPropertyValue<CWeakHandle<WorldMapTooltipBaseController>>(value);
-		}
-
-		[Ordinal(7)] 
+		[Ordinal(5)] 
 		[RED("tooltips", 3)] 
 		public CArrayFixedSize<CWeakHandle<WorldMapTooltipBaseController>> Tooltips
 		{
@@ -61,7 +45,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArrayFixedSize<CWeakHandle<WorldMapTooltipBaseController>>>(value);
 		}
 
-		[Ordinal(8)] 
+		[Ordinal(6)] 
 		[RED("currentVisibleIndex")] 
 		public CInt32 CurrentVisibleIndex
 		{
@@ -73,7 +57,6 @@ namespace WolvenKit.RED4.Types
 		{
 			DefaultTooltip = new();
 			PoliceTooltip = new();
-			DistrictTooltip = new();
 			Tooltips = new(3);
 			CurrentVisibleIndex = -1;
 		}

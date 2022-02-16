@@ -28,5 +28,37 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CHandle<AIArgumentMapping>>();
 			set => SetPropertyValue<CHandle<AIArgumentMapping>>(value);
 		}
+
+		[Ordinal(4)] 
+		[RED("teleportPositionAfterTimeSkipping")] 
+		public CHandle<AIArgumentMapping> TeleportPositionAfterTimeSkipping
+		{
+			get => GetPropertyValue<CHandle<AIArgumentMapping>>();
+			set => SetPropertyValue<CHandle<AIArgumentMapping>>(value);
+		}
+
+		[Ordinal(5)] 
+		[RED("teleportRotationAfterTimeSkipping")] 
+		public CHandle<AIArgumentMapping> TeleportRotationAfterTimeSkipping
+		{
+			get => GetPropertyValue<CHandle<AIArgumentMapping>>();
+			set => SetPropertyValue<CHandle<AIArgumentMapping>>(value);
+		}
+
+		[Ordinal(6)] 
+		[RED("handleTeleportRequest")] 
+		public CHandle<AIArgumentMapping> HandleTeleportRequest
+		{
+			get => GetPropertyValue<CHandle<AIArgumentMapping>>();
+			set => SetPropertyValue<CHandle<AIArgumentMapping>>(value);
+		}
+
+		[Ordinal(7)] 
+		[RED("fastForwardAfterTeleport")] 
+		public CHandle<AIArgumentMapping> FastForwardAfterTeleport
+		{
+			get => GetPropertyValue<CHandle<AIArgumentMapping>>();
+			set => SetPropertyValue<CHandle<AIArgumentMapping>>(value);
+		}
 	}
 }

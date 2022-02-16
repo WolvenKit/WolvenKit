@@ -6,11 +6,11 @@ namespace WolvenKit.RED4.Types
 	public partial class ApplyShaderOnObjectEffector : gameEffector
 	{
 		[Ordinal(0)] 
-		[RED("applicationTargetString")] 
-		public CString ApplicationTargetString
+		[RED("applicationTargetName")] 
+		public CName ApplicationTargetName
 		{
-			get => GetPropertyValue<CString>();
-			set => SetPropertyValue<CString>(value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 
 		[Ordinal(1)] 

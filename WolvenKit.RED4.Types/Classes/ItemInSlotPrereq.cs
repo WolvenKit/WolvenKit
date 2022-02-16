@@ -15,10 +15,10 @@ namespace WolvenKit.RED4.Types
 
 		[Ordinal(1)] 
 		[RED("slotCheckType")] 
-		public CEnum<EItemSlotCheckType> SlotCheckType
+		public CEnum<gamedataCheckType> SlotCheckType
 		{
-			get => GetPropertyValue<CEnum<EItemSlotCheckType>>();
-			set => SetPropertyValue<CEnum<EItemSlotCheckType>>(value);
+			get => GetPropertyValue<CEnum<gamedataCheckType>>();
+			set => SetPropertyValue<CEnum<gamedataCheckType>>(value);
 		}
 
 		[Ordinal(2)] 
@@ -64,6 +64,14 @@ namespace WolvenKit.RED4.Types
 		[Ordinal(7)] 
 		[RED("skipOnApply")] 
 		public CBool SkipOnApply
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(8)] 
+		[RED("waitForVisuals")] 
+		public CBool WaitForVisuals
 		{
 			get => GetPropertyValue<CBool>();
 			set => SetPropertyValue<CBool>(value);

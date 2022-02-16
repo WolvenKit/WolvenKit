@@ -5,7 +5,7 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class gameLootSlotSingleItem : gameLootSlot
 	{
-		[Ordinal(53)] 
+		[Ordinal(48)] 
 		[RED("itemTDBID")] 
 		public TweakDBID ItemTDBID
 		{

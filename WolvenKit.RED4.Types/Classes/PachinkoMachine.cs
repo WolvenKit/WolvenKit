@@ -5,7 +5,7 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class PachinkoMachine : ArcadeMachine
 	{
-		[Ordinal(104)] 
+		[Ordinal(101)] 
 		[RED("distractionFXName")] 
 		public CName DistractionFXName
 		{

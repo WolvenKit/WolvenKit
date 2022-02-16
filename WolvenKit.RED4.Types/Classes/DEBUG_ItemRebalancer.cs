@@ -5,7 +5,7 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class DEBUG_ItemRebalancer : gameObject
 	{
-		[Ordinal(40)] 
+		[Ordinal(35)] 
 		[RED("nodeRef")] 
 		public NodeRef NodeRef
 		{

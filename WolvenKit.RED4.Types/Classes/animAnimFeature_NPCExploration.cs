@@ -37,6 +37,14 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
+		[Ordinal(4)] 
+		[RED("playbackTime")] 
+		public CFloat PlaybackTime
+		{
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
+		}
+
 		public animAnimFeature_NPCExploration()
 		{
 			IsEvenLoop = true;

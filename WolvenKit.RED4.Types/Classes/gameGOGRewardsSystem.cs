@@ -2,7 +2,7 @@
 namespace WolvenKit.RED4.Types
 {
 	[REDMeta]
-	public partial class gameGOGRewardsSystem : IScriptable
+	public partial class gameGOGRewardsSystem : gameIOnlineSystem
 	{
 	}
 }

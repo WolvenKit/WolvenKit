@@ -70,6 +70,14 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(8)] 
+		[RED("EquipmentAreaInventoryItemsData")] 
+		public CArray<CArray<InventoryItemData>> EquipmentAreaInventoryItemsData
+		{
+			get => GetPropertyValue<CArray<CArray<InventoryItemData>>>();
+			set => SetPropertyValue<CArray<CArray<InventoryItemData>>>(value);
+		}
+
+		[Ordinal(9)] 
 		[RED("InventoryItemsDataWithoutEquipment")] 
 		public CArray<InventoryItemData> InventoryItemsDataWithoutEquipment
 		{
@@ -77,7 +85,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<InventoryItemData>>(value);
 		}
 
-		[Ordinal(9)] 
+		[Ordinal(10)] 
 		[RED("EquipmentItemsData")] 
 		public CArray<InventoryItemData> EquipmentItemsData
 		{
@@ -85,7 +93,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<InventoryItemData>>(value);
 		}
 
-		[Ordinal(10)] 
+		[Ordinal(11)] 
 		[RED("WeaponItemsData")] 
 		public CArray<InventoryItemData> WeaponItemsData
 		{
@@ -93,7 +101,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<InventoryItemData>>(value);
 		}
 
-		[Ordinal(11)] 
+		[Ordinal(12)] 
 		[RED("QuickSlotsData")] 
 		public CArray<InventoryItemData> QuickSlotsData
 		{
@@ -101,7 +109,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<InventoryItemData>>(value);
 		}
 
-		[Ordinal(12)] 
+		[Ordinal(13)] 
 		[RED("ConsumablesSlotsData")] 
 		public CArray<InventoryItemData> ConsumablesSlotsData
 		{
@@ -109,7 +117,15 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<InventoryItemData>>(value);
 		}
 
-		[Ordinal(13)] 
+		[Ordinal(14)] 
+		[RED("PartsData")] 
+		public CArray<InventoryItemData> PartsData
+		{
+			get => GetPropertyValue<CArray<InventoryItemData>>();
+			set => SetPropertyValue<CArray<InventoryItemData>>(value);
+		}
+
+		[Ordinal(15)] 
 		[RED("ToRebuild")] 
 		public CBool ToRebuild
 		{
@@ -117,7 +133,15 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(14)] 
+		[Ordinal(16)] 
+		[RED("ToRebuildEquipmentArea")] 
+		public CArray<CBool> ToRebuildEquipmentArea
+		{
+			get => GetPropertyValue<CArray<CBool>>();
+			set => SetPropertyValue<CArray<CBool>>(value);
+		}
+
+		[Ordinal(17)] 
 		[RED("ToRebuildItemsWithEquipped")] 
 		public CBool ToRebuildItemsWithEquipped
 		{
@@ -125,7 +149,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(15)] 
+		[Ordinal(18)] 
 		[RED("ToRebuildWeapons")] 
 		public CBool ToRebuildWeapons
 		{
@@ -133,7 +157,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(16)] 
+		[Ordinal(19)] 
 		[RED("ToRebuildEquipment")] 
 		public CBool ToRebuildEquipment
 		{
@@ -141,7 +165,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(17)] 
+		[Ordinal(20)] 
 		[RED("ToRebuildQuickSlots")] 
 		public CBool ToRebuildQuickSlots
 		{
@@ -149,7 +173,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(18)] 
+		[Ordinal(21)] 
 		[RED("ToRebuildConsumables")] 
 		public CBool ToRebuildConsumables
 		{
@@ -157,7 +181,15 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(19)] 
+		[Ordinal(22)] 
+		[RED("ToRebuildParts")] 
+		public CBool ToRebuildParts
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(23)] 
 		[RED("ActiveWeapon")] 
 		public gameItemID ActiveWeapon
 		{
@@ -165,7 +197,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gameItemID>(value);
 		}
 
-		[Ordinal(20)] 
+		[Ordinal(24)] 
 		[RED("EquipRecords")] 
 		public CArray<CHandle<gamedataEquipmentArea_Record>> EquipRecords
 		{
@@ -173,7 +205,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<CHandle<gamedataEquipmentArea_Record>>>(value);
 		}
 
-		[Ordinal(21)] 
+		[Ordinal(25)] 
 		[RED("ItemIconGender")] 
 		public CEnum<gameItemIconGender> ItemIconGender
 		{
@@ -181,7 +213,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CEnum<gameItemIconGender>>(value);
 		}
 
-		[Ordinal(22)] 
+		[Ordinal(26)] 
 		[RED("WeaponUIBlackboard")] 
 		public CWeakHandle<gameIBlackboard> WeaponUIBlackboard
 		{
@@ -189,7 +221,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<gameIBlackboard>>(value);
 		}
 
-		[Ordinal(23)] 
+		[Ordinal(27)] 
 		[RED("UIBBEquipmentBlackboard")] 
 		public CWeakHandle<gameIBlackboard> UIBBEquipmentBlackboard
 		{
@@ -197,7 +229,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<gameIBlackboard>>(value);
 		}
 
-		[Ordinal(24)] 
+		[Ordinal(28)] 
 		[RED("UIBBItemModBlackbord")] 
 		public CWeakHandle<gameIBlackboard> UIBBItemModBlackbord
 		{
@@ -205,7 +237,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<gameIBlackboard>>(value);
 		}
 
-		[Ordinal(25)] 
+		[Ordinal(29)] 
 		[RED("UIBBEquipment")] 
 		public CHandle<UI_EquipmentDef> UIBBEquipment
 		{
@@ -213,7 +245,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<UI_EquipmentDef>>(value);
 		}
 
-		[Ordinal(26)] 
+		[Ordinal(30)] 
 		[RED("UIBBItemMod")] 
 		public CHandle<UI_ItemModSystemDef> UIBBItemMod
 		{
@@ -221,7 +253,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<UI_ItemModSystemDef>>(value);
 		}
 
-		[Ordinal(27)] 
+		[Ordinal(31)] 
 		[RED("InventoryBBID")] 
 		public CHandle<redCallbackObject> InventoryBBID
 		{
@@ -229,7 +261,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
-		[Ordinal(28)] 
+		[Ordinal(32)] 
 		[RED("EquipmentBBID")] 
 		public CHandle<redCallbackObject> EquipmentBBID
 		{
@@ -237,7 +269,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
-		[Ordinal(29)] 
+		[Ordinal(33)] 
 		[RED("SubEquipmentBBID")] 
 		public CHandle<redCallbackObject> SubEquipmentBBID
 		{
@@ -245,7 +277,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
-		[Ordinal(30)] 
+		[Ordinal(34)] 
 		[RED("ItemModBBID")] 
 		public CHandle<redCallbackObject> ItemModBBID
 		{
@@ -253,7 +285,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
-		[Ordinal(31)] 
+		[Ordinal(35)] 
 		[RED("BBWeaponList")] 
 		public CHandle<redCallbackObject> BBWeaponList
 		{
@@ -261,7 +293,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
-		[Ordinal(32)] 
+		[Ordinal(36)] 
 		[RED("InventoryItemDataWrappers")] 
 		public CArray<CHandle<InventoryItemDataWrapper>> InventoryItemDataWrappers
 		{
@@ -269,7 +301,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<CHandle<InventoryItemDataWrapper>>>(value);
 		}
 
-		[Ordinal(33)] 
+		[Ordinal(37)] 
 		[RED("HashMapCache")] 
 		public CHandle<inkScriptWeakHashMap> HashMapCache
 		{
@@ -280,17 +312,21 @@ namespace WolvenKit.RED4.Types
 		public InventoryDataManagerV2()
 		{
 			InventoryItemsData = new();
+			EquipmentAreaInventoryItemsData = new();
 			InventoryItemsDataWithoutEquipment = new();
 			EquipmentItemsData = new();
 			WeaponItemsData = new();
 			QuickSlotsData = new();
 			ConsumablesSlotsData = new();
+			PartsData = new();
 			ToRebuild = true;
+			ToRebuildEquipmentArea = new();
 			ToRebuildItemsWithEquipped = true;
 			ToRebuildWeapons = true;
 			ToRebuildEquipment = true;
 			ToRebuildQuickSlots = true;
 			ToRebuildConsumables = true;
+			ToRebuildParts = true;
 			ActiveWeapon = new();
 			EquipRecords = new();
 			InventoryItemDataWrappers = new();

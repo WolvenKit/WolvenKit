@@ -14,6 +14,22 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(2)] 
+		[RED("backgroundMenuTextureUHDRes")] 
+		public CResourceAsyncReference<CBitmapTexture> BackgroundMenuTextureUHDRes
+		{
+			get => GetPropertyValue<CResourceAsyncReference<CBitmapTexture>>();
+			set => SetPropertyValue<CResourceAsyncReference<CBitmapTexture>>(value);
+		}
+
+		[Ordinal(3)] 
+		[RED("backgroundMenuTextureFHDRes")] 
+		public CResourceAsyncReference<CBitmapTexture> BackgroundMenuTextureFHDRes
+		{
+			get => GetPropertyValue<CResourceAsyncReference<CBitmapTexture>>();
+			set => SetPropertyValue<CResourceAsyncReference<CBitmapTexture>>(value);
+		}
+
+		[Ordinal(4)] 
 		[RED("previewSettings")] 
 		public CHandle<inkCompositionPreviewSettings> PreviewSettings
 		{

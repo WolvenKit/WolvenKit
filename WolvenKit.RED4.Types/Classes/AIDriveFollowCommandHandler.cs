@@ -84,13 +84,5 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CHandle<AIArgumentMapping>>();
 			set => SetPropertyValue<CHandle<AIArgumentMapping>>(value);
 		}
-
-		[Ordinal(11)] 
-		[RED("outAllowStubMovement")] 
-		public CHandle<AIArgumentMapping> OutAllowStubMovement
-		{
-			get => GetPropertyValue<CHandle<AIArgumentMapping>>();
-			set => SetPropertyValue<CHandle<AIArgumentMapping>>(value);
-		}
 	}
 }

@@ -318,6 +318,22 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(47)] 
+		[RED("rayTracingLightSourceRadius")] 
+		public CFloat RayTracingLightSourceRadius
+		{
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
+		}
+
+		[Ordinal(48)] 
+		[RED("rayTracingContactShadowRange")] 
+		public CFloat RayTracingContactShadowRange
+		{
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
+		}
+
+		[Ordinal(49)] 
 		[RED("iesProfile")] 
 		public CResourceAsyncReference<CIESDataResource> IesProfile
 		{
@@ -325,7 +341,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CResourceAsyncReference<CIESDataResource>>(value);
 		}
 
-		[Ordinal(48)] 
+		[Ordinal(50)] 
 		[RED("flicker")] 
 		public rendSLightFlickering Flicker
 		{
@@ -333,7 +349,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<rendSLightFlickering>(value);
 		}
 
-		[Ordinal(49)] 
+		[Ordinal(51)] 
 		[RED("envColorGroup")] 
 		public CEnum<EEnvColorGroup> EnvColorGroup
 		{
@@ -341,7 +357,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CEnum<EEnvColorGroup>>(value);
 		}
 
-		[Ordinal(50)] 
+		[Ordinal(52)] 
 		[RED("colorGroupSaturation")] 
 		public CUInt8 ColorGroupSaturation
 		{
@@ -349,7 +365,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CUInt8>(value);
 		}
 
-		[Ordinal(51)] 
+		[Ordinal(53)] 
 		[RED("portalAngleCutoff")] 
 		public CUInt8 PortalAngleCutoff
 		{
@@ -357,7 +373,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CUInt8>(value);
 		}
 
-		[Ordinal(52)] 
+		[Ordinal(54)] 
 		[RED("allowDistantLight")] 
 		public CBool AllowDistantLight
 		{
@@ -365,7 +381,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(53)] 
+		[Ordinal(55)] 
 		[RED("isEnabled")] 
 		public CBool IsEnabled
 		{
@@ -406,6 +422,8 @@ namespace WolvenKit.RED4.Types
 			ShadowFadeDistance = 10.000000F;
 			ShadowFadeRange = 5.000000F;
 			ShadowSoftnessMode = Enums.ELightShadowSoftnessMode.LSSM_Default;
+			RayTracingLightSourceRadius = -1.000000F;
+			RayTracingContactShadowRange = -1.000000F;
 			Flicker = new() { FlickerPeriod = 0.200000F };
 			ColorGroupSaturation = 100;
 			AllowDistantLight = true;

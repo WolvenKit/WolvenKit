@@ -36,14 +36,6 @@ namespace WolvenKit.RED4.Types
     public class scnbExternalLayerEventData : RedBaseClass
     {
         [Ordinal(0)]
-        [RED("trackName")]
-        public CString TrackName
-        {
-            get => GetPropertyValue<CString>();
-            set => SetPropertyValue<CString>(value);
-        }
-
-        [Ordinal(1)]
         [RED("nodeId")]
         public scnNodeId NodeId
         {
@@ -51,12 +43,20 @@ namespace WolvenKit.RED4.Types
             set => SetPropertyValue<scnNodeId>(value);
         }
 
-        [Ordinal(2)]
+        [Ordinal(1)]
         [RED("parentTrackId")]
         public toolsSceneTrackID ParentTrackId
         {
             get => GetPropertyValue<toolsSceneTrackID>();
             set => SetPropertyValue<toolsSceneTrackID>(value);
+        }
+
+        [Ordinal(2)]
+        [RED("trackName")]
+        public CString TrackName
+        {
+            get => GetPropertyValue<CString>();
+            set => SetPropertyValue<CString>(value);
         }
 
         [Ordinal(3)]

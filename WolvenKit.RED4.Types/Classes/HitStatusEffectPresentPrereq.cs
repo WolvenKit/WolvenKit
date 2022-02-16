@@ -7,10 +7,10 @@ namespace WolvenKit.RED4.Types
 	{
 		[Ordinal(5)] 
 		[RED("checkType")] 
-		public CString CheckType
+		public CEnum<gamedataCheckType> CheckType
 		{
-			get => GetPropertyValue<CString>();
-			set => SetPropertyValue<CString>(value);
+			get => GetPropertyValue<CEnum<gamedataCheckType>>();
+			set => SetPropertyValue<CEnum<gamedataCheckType>>(value);
 		}
 
 		[Ordinal(6)] 

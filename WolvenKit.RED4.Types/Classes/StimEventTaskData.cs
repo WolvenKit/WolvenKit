@@ -12,5 +12,13 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CHandle<senseStimuliEvent>>();
 			set => SetPropertyValue<CHandle<senseStimuliEvent>>(value);
 		}
+
+		[Ordinal(1)] 
+		[RED("id")] 
+		public CUInt32 Id
+		{
+			get => GetPropertyValue<CUInt32>();
+			set => SetPropertyValue<CUInt32>(value);
+		}
 	}
 }

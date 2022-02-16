@@ -5,7 +5,7 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class DoorProximityDetector : ProximityDetector
 	{
-		[Ordinal(93)] 
+		[Ordinal(90)] 
 		[RED("debugIsBlinkOn")] 
 		public CBool DebugIsBlinkOn
 		{
@@ -13,7 +13,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(94)] 
+		[Ordinal(91)] 
 		[RED("triggeredAlarmID")] 
 		public gameDelayID TriggeredAlarmID
 		{
@@ -21,7 +21,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gameDelayID>(value);
 		}
 
-		[Ordinal(95)] 
+		[Ordinal(92)] 
 		[RED("blinkInterval")] 
 		public CFloat BlinkInterval
 		{

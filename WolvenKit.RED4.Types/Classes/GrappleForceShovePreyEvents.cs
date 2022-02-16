@@ -5,7 +5,7 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class GrappleForceShovePreyEvents : LocomotionTakedownEvents
 	{
-		[Ordinal(4)] 
+		[Ordinal(7)] 
 		[RED("unmountCalled")] 
 		public CBool UnmountCalled
 		{

@@ -14,6 +14,14 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(1)] 
+		[RED("queryPreset")] 
+		public physicsQueryPreset QueryPreset
+		{
+			get => GetPropertyValue<physicsQueryPreset>();
+			set => SetPropertyValue<physicsQueryPreset>(value);
+		}
+
+		[Ordinal(2)] 
 		[RED("inputPosition")] 
 		public gameEffectInputParameter_Vector InputPosition
 		{
@@ -23,6 +31,7 @@ namespace WolvenKit.RED4.Types
 
 		public gameEffectObjectProvider_QueryBox()
 		{
+			QueryPreset = new();
 			InputPosition = new();
 		}
 	}

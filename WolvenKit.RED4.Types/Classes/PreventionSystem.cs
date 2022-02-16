@@ -70,6 +70,14 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(8)] 
+		[RED("tempForcedheatStage")] 
+		public CEnum<EPreventionHeatStage> TempForcedheatStage
+		{
+			get => GetPropertyValue<CEnum<EPreventionHeatStage>>();
+			set => SetPropertyValue<CEnum<EPreventionHeatStage>>(value);
+		}
+
+		[Ordinal(9)] 
 		[RED("playerIsInSecurityArea")] 
 		public CArray<gamePersistentID> PlayerIsInSecurityArea
 		{
@@ -77,7 +85,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<gamePersistentID>>(value);
 		}
 
-		[Ordinal(9)] 
+		[Ordinal(10)] 
 		[RED("policeSecuritySystems")] 
 		public CArray<gamePersistentID> PoliceSecuritySystems
 		{
@@ -85,7 +93,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<gamePersistentID>>(value);
 		}
 
-		[Ordinal(10)] 
+		[Ordinal(11)] 
 		[RED("policeman100SpawnHits")] 
 		public CInt32 Policeman100SpawnHits
 		{
@@ -93,7 +101,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CInt32>(value);
 		}
 
-		[Ordinal(11)] 
+		[Ordinal(12)] 
 		[RED("agentGroupsList")] 
 		public CArray<CHandle<PreventionAgents>> AgentGroupsList
 		{
@@ -101,7 +109,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<CHandle<PreventionAgents>>>(value);
 		}
 
-		[Ordinal(12)] 
+		[Ordinal(13)] 
 		[RED("agentsWhoSeePlayer")] 
 		public CArray<entEntityID> AgentsWhoSeePlayer
 		{
@@ -109,7 +117,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<entEntityID>>(value);
 		}
 
-		[Ordinal(13)] 
+		[Ordinal(14)] 
 		[RED("hitNPC")] 
 		public CArray<SHitNPC> HitNPC
 		{
@@ -117,7 +125,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<SHitNPC>>(value);
 		}
 
-		[Ordinal(14)] 
+		[Ordinal(15)] 
 		[RED("spawnedAgents")] 
 		public CArray<CWeakHandle<ScriptedPuppet>> SpawnedAgents
 		{
@@ -125,7 +133,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<CWeakHandle<ScriptedPuppet>>>(value);
 		}
 
-		[Ordinal(15)] 
+		[Ordinal(16)] 
 		[RED("lastCrimePoint")] 
 		public Vector4 LastCrimePoint
 		{
@@ -133,7 +141,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<Vector4>(value);
 		}
 
-		[Ordinal(16)] 
+		[Ordinal(17)] 
 		[RED("lastBodyPosition")] 
 		public Vector4 LastBodyPosition
 		{
@@ -141,7 +149,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<Vector4>(value);
 		}
 
-		[Ordinal(17)] 
+		[Ordinal(18)] 
 		[RED("DEBUG_lastCrimeDistance")] 
 		public CFloat DEBUG_lastCrimeDistance
 		{
@@ -149,7 +157,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(18)] 
+		[Ordinal(19)] 
 		[RED("policemanRandPercent")] 
 		public CInt32 PolicemanRandPercent
 		{
@@ -157,7 +165,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CInt32>(value);
 		}
 
-		[Ordinal(19)] 
+		[Ordinal(20)] 
 		[RED("policemabProbabilityPercent")] 
 		public CInt32 PolicemabProbabilityPercent
 		{
@@ -165,7 +173,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CInt32>(value);
 		}
 
-		[Ordinal(20)] 
+		[Ordinal(21)] 
 		[RED("generalPercent")] 
 		public CFloat GeneralPercent
 		{
@@ -173,7 +181,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(21)] 
+		[Ordinal(22)] 
 		[RED("partGeneralPercent")] 
 		public CFloat PartGeneralPercent
 		{
@@ -181,7 +189,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(22)] 
+		[Ordinal(23)] 
 		[RED("newDamageValue")] 
 		public CFloat NewDamageValue
 		{
@@ -189,7 +197,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(23)] 
+		[Ordinal(24)] 
 		[RED("gameTimeStampPrevious")] 
 		public CFloat GameTimeStampPrevious
 		{
@@ -197,7 +205,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(24)] 
+		[Ordinal(25)] 
 		[RED("gameTimeStampLastPoliceRise")] 
 		public CFloat GameTimeStampLastPoliceRise
 		{
@@ -205,7 +213,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(25)] 
+		[Ordinal(26)] 
 		[RED("gameTimeStampDeescalationZero")] 
 		public CFloat GameTimeStampDeescalationZero
 		{
@@ -213,7 +221,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(26)] 
+		[Ordinal(27)] 
 		[RED("deescalationZeroDelayID")] 
 		public gameDelayID DeescalationZeroDelayID
 		{
@@ -221,7 +229,15 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gameDelayID>(value);
 		}
 
-		[Ordinal(27)] 
+		[Ordinal(28)] 
+		[RED("blinkingStatusDelayID")] 
+		public gameDelayID BlinkingStatusDelayID
+		{
+			get => GetPropertyValue<gameDelayID>();
+			set => SetPropertyValue<gameDelayID>(value);
+		}
+
+		[Ordinal(29)] 
 		[RED("deescalationZeroCheck")] 
 		public CBool DeescalationZeroCheck
 		{
@@ -229,7 +245,23 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(28)] 
+		[Ordinal(30)] 
+		[RED("blinkingStatusDeescalationCheck")] 
+		public CBool BlinkingStatusDeescalationCheck
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(31)] 
+		[RED("vehicleSpawnDelayID")] 
+		public gameDelayID VehicleSpawnDelayID
+		{
+			get => GetPropertyValue<gameDelayID>();
+			set => SetPropertyValue<gameDelayID>(value);
+		}
+
+		[Ordinal(32)] 
 		[RED("policemenSpawnDelayID")] 
 		public gameDelayID PolicemenSpawnDelayID
 		{
@@ -237,7 +269,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gameDelayID>(value);
 		}
 
-		[Ordinal(29)] 
+		[Ordinal(33)] 
 		[RED("preventionTickDelayID")] 
 		public gameDelayID PreventionTickDelayID
 		{
@@ -245,7 +277,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gameDelayID>(value);
 		}
 
-		[Ordinal(30)] 
+		[Ordinal(34)] 
 		[RED("preventionTickCheck")] 
 		public CBool PreventionTickCheck
 		{
@@ -253,7 +285,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(31)] 
+		[Ordinal(35)] 
 		[RED("securityAreaResetDelayID")] 
 		public gameDelayID SecurityAreaResetDelayID
 		{
@@ -261,7 +293,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gameDelayID>(value);
 		}
 
-		[Ordinal(32)] 
+		[Ordinal(36)] 
 		[RED("securityAreaResetCheck")] 
 		public CBool SecurityAreaResetCheck
 		{
@@ -269,7 +301,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(33)] 
+		[Ordinal(37)] 
 		[RED("hadOngoingSpawnRequest")] 
 		public CBool HadOngoingSpawnRequest
 		{
@@ -277,7 +309,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(34)] 
+		[Ordinal(38)] 
 		[RED("Debug_PorcessReason")] 
 		public CEnum<EPreventionDebugProcessReason> Debug_PorcessReason
 		{
@@ -285,7 +317,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CEnum<EPreventionDebugProcessReason>>(value);
 		}
 
-		[Ordinal(35)] 
+		[Ordinal(39)] 
 		[RED("Debug_PsychoLogicType")] 
 		public CEnum<EPreventionPsychoLogicType> Debug_PsychoLogicType
 		{
@@ -293,7 +325,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CEnum<EPreventionPsychoLogicType>>(value);
 		}
 
-		[Ordinal(36)] 
+		[Ordinal(40)] 
 		[RED("currentPreventionPreset")] 
 		public TweakDBID CurrentPreventionPreset
 		{
@@ -301,7 +333,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<TweakDBID>(value);
 		}
 
-		[Ordinal(37)] 
+		[Ordinal(41)] 
 		[RED("failsafePoliceRecordT1")] 
 		public TweakDBID FailsafePoliceRecordT1
 		{
@@ -309,7 +341,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<TweakDBID>(value);
 		}
 
-		[Ordinal(38)] 
+		[Ordinal(42)] 
 		[RED("failsafePoliceRecordT2")] 
 		public TweakDBID FailsafePoliceRecordT2
 		{
@@ -317,7 +349,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<TweakDBID>(value);
 		}
 
-		[Ordinal(39)] 
+		[Ordinal(43)] 
 		[RED("failsafePoliceRecordT3")] 
 		public TweakDBID FailsafePoliceRecordT3
 		{
@@ -325,7 +357,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<TweakDBID>(value);
 		}
 
-		[Ordinal(40)] 
+		[Ordinal(44)] 
 		[RED("blinkReasonsStack")] 
 		public CArray<CName> BlinkReasonsStack
 		{
@@ -333,7 +365,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<CName>>(value);
 		}
 
-		[Ordinal(41)] 
+		[Ordinal(45)] 
 		[RED("wantedBarBlackboard")] 
 		public CWeakHandle<gameIBlackboard> WantedBarBlackboard
 		{
@@ -341,7 +373,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<gameIBlackboard>>(value);
 		}
 
-		[Ordinal(42)] 
+		[Ordinal(46)] 
 		[RED("onPlayerChoiceCallID")] 
 		public CHandle<redCallbackObject> OnPlayerChoiceCallID
 		{
@@ -349,7 +381,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
-		[Ordinal(43)] 
+		[Ordinal(47)] 
 		[RED("playerAttachedCallbackID")] 
 		public CUInt32 PlayerAttachedCallbackID
 		{
@@ -357,7 +389,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CUInt32>(value);
 		}
 
-		[Ordinal(44)] 
+		[Ordinal(48)] 
 		[RED("playerDetachedCallbackID")] 
 		public CUInt32 PlayerDetachedCallbackID
 		{
@@ -365,7 +397,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CUInt32>(value);
 		}
 
-		[Ordinal(45)] 
+		[Ordinal(49)] 
 		[RED("playerHLSID")] 
 		public CHandle<redCallbackObject> PlayerHLSID
 		{
@@ -373,7 +405,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
-		[Ordinal(46)] 
+		[Ordinal(50)] 
 		[RED("playerVehicleStateID")] 
 		public CHandle<redCallbackObject> PlayerVehicleStateID
 		{
@@ -381,7 +413,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
-		[Ordinal(47)] 
+		[Ordinal(51)] 
 		[RED("playerHLS")] 
 		public CEnum<gamePSMHighLevel> PlayerHLS
 		{
@@ -389,7 +421,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CEnum<gamePSMHighLevel>>(value);
 		}
 
-		[Ordinal(48)] 
+		[Ordinal(52)] 
 		[RED("playerVehicleState")] 
 		public CEnum<gamePSMVehicle> PlayerVehicleState
 		{
@@ -397,7 +429,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CEnum<gamePSMVehicle>>(value);
 		}
 
-		[Ordinal(49)] 
+		[Ordinal(53)] 
 		[RED("currentStageFallbackUnitSpawned")] 
 		public CBool CurrentStageFallbackUnitSpawned
 		{
@@ -405,7 +437,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(50)] 
+		[Ordinal(54)] 
 		[RED("unhandledInputsReceived")] 
 		public CInt32 UnhandledInputsReceived
 		{
@@ -413,7 +445,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CInt32>(value);
 		}
 
-		[Ordinal(51)] 
+		[Ordinal(55)] 
 		[RED("inputlockDelayID")] 
 		public gameDelayID InputlockDelayID
 		{
@@ -421,7 +453,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gameDelayID>(value);
 		}
 
-		[Ordinal(52)] 
+		[Ordinal(56)] 
 		[RED("preventionUnitKilledDuringLock")] 
 		public CBool PreventionUnitKilledDuringLock
 		{
@@ -429,7 +461,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(53)] 
+		[Ordinal(57)] 
 		[RED("reconDeployed")] 
 		public CBool ReconDeployed
 		{
@@ -437,7 +469,23 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(54)] 
+		[Ordinal(58)] 
+		[RED("reconDestroyed")] 
+		public CBool ReconDestroyed
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(59)] 
+		[RED("isHidingFromPolice")] 
+		public CBool IsHidingFromPolice
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(60)] 
 		[RED("vehicles")] 
 		public CArray<CWeakHandle<vehicleBaseObject>> Vehicles
 		{
@@ -445,7 +493,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<CWeakHandle<vehicleBaseObject>>>(value);
 		}
 
-		[Ordinal(55)] 
+		[Ordinal(61)] 
 		[RED("viewers")] 
 		public CArray<CWeakHandle<gameObject>> Viewers
 		{
@@ -453,7 +501,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<CWeakHandle<gameObject>>>(value);
 		}
 
-		[Ordinal(56)] 
+		[Ordinal(62)] 
 		[RED("hasViewers")] 
 		public CBool HasViewers
 		{
@@ -464,6 +512,7 @@ namespace WolvenKit.RED4.Types
 		public PreventionSystem()
 		{
 			SystemLockSources = new();
+			TempForcedheatStage = Enums.EPreventionHeatStage.Invalid;
 			PlayerIsInSecurityArea = new();
 			PoliceSecuritySystems = new();
 			AgentGroupsList = new();
@@ -473,6 +522,8 @@ namespace WolvenKit.RED4.Types
 			LastCrimePoint = new();
 			LastBodyPosition = new();
 			DeescalationZeroDelayID = new();
+			BlinkingStatusDelayID = new();
+			VehicleSpawnDelayID = new();
 			PolicemenSpawnDelayID = new();
 			PreventionTickDelayID = new();
 			SecurityAreaResetDelayID = new();

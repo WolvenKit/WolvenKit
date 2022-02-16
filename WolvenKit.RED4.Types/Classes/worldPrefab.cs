@@ -38,6 +38,14 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(5)] 
+		[RED("streamingImportance")] 
+		public CEnum<worldPrefabStreamingImportance> StreamingImportance
+		{
+			get => GetPropertyValue<CEnum<worldPrefabStreamingImportance>>();
+			set => SetPropertyValue<CEnum<worldPrefabStreamingImportance>>(value);
+		}
+
+		[Ordinal(6)] 
 		[RED("defaultVariants")] 
 		public CHandle<worldPrefabVariantsList> DefaultVariants
 		{
@@ -45,7 +53,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<worldPrefabVariantsList>>(value);
 		}
 
-		[Ordinal(6)] 
+		[Ordinal(7)] 
 		[RED("isLocked")] 
 		public CBool IsLocked
 		{
@@ -53,7 +61,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(7)] 
+		[Ordinal(8)] 
 		[RED("maxBounds")] 
 		public Box MaxBounds
 		{
@@ -61,7 +69,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<Box>(value);
 		}
 
-		[Ordinal(8)] 
+		[Ordinal(9)] 
 		[RED("environmentDefinition")] 
 		public CResourceAsyncReference<worldEnvironmentDefinition> EnvironmentDefinition
 		{
@@ -69,7 +77,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CResourceAsyncReference<worldEnvironmentDefinition>>(value);
 		}
 
-		[Ordinal(9)] 
+		[Ordinal(10)] 
 		[RED("terrainMultilayerSetup")] 
 		public CResourceAsyncReference<Multilayer_Setup> TerrainMultilayerSetup
 		{
@@ -77,7 +85,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CResourceAsyncReference<Multilayer_Setup>>(value);
 		}
 
-		[Ordinal(10)] 
+		[Ordinal(11)] 
 		[RED("foliageBrushToTerrainLayerMapping")] 
 		public CResourceAsyncReference<worldAutoFoliageMapping> FoliageBrushToTerrainLayerMapping
 		{
@@ -85,7 +93,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CResourceAsyncReference<worldAutoFoliageMapping>>(value);
 		}
 
-		[Ordinal(11)] 
+		[Ordinal(12)] 
 		[RED("prefabUniqueId")] 
 		public CRUID PrefabUniqueId
 		{
@@ -93,7 +101,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CRUID>(value);
 		}
 
-		[Ordinal(12)] 
+		[Ordinal(13)] 
 		[RED("metadataArray")] 
 		public CArray<CHandle<worldPrefabMetadata>> MetadataArray
 		{
@@ -101,7 +109,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<CHandle<worldPrefabMetadata>>>(value);
 		}
 
-		[Ordinal(13)] 
+		[Ordinal(14)] 
 		[RED("isMerged")] 
 		public CBool IsMerged
 		{
@@ -109,7 +117,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(14)] 
+		[Ordinal(15)] 
 		[RED("proxyMeshBuildParams")] 
 		public worldProxyMeshBuildParams ProxyMeshBuildParams
 		{
@@ -117,7 +125,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<worldProxyMeshBuildParams>(value);
 		}
 
-		[Ordinal(15)] 
+		[Ordinal(16)] 
 		[RED("isProxyMeshOnly")] 
 		public CBool IsProxyMeshOnly
 		{
@@ -125,7 +133,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(16)] 
+		[Ordinal(17)] 
 		[RED("proxyMesh")] 
 		public CResourceAsyncReference<CMesh> ProxyMesh
 		{
@@ -133,7 +141,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CResourceAsyncReference<CMesh>>(value);
 		}
 
-		[Ordinal(17)] 
+		[Ordinal(18)] 
 		[RED("proxyScale")] 
 		public Vector3 ProxyScale
 		{
@@ -141,7 +149,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<Vector3>(value);
 		}
 
-		[Ordinal(18)] 
+		[Ordinal(19)] 
 		[RED("proxyDistanceFactor")] 
 		public CFloat ProxyDistanceFactor
 		{
@@ -149,7 +157,15 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(19)] 
+		[Ordinal(20)] 
+		[RED("averageNodeDiagonal")] 
+		public CFloat AverageNodeDiagonal
+		{
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
+		}
+
+		[Ordinal(21)] 
 		[RED("boostInnerNodesToProxyDistance")] 
 		public CBool BoostInnerNodesToProxyDistance
 		{
@@ -157,7 +173,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(20)] 
+		[Ordinal(22)] 
 		[RED("ignoreMeshEmbeddedOccluders")] 
 		public CBool IgnoreMeshEmbeddedOccluders
 		{
@@ -165,7 +181,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(21)] 
+		[Ordinal(23)] 
 		[RED("ignoreAllOccluders")] 
 		public CBool IgnoreAllOccluders
 		{
@@ -173,7 +189,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(22)] 
+		[Ordinal(24)] 
 		[RED("excludeOnConsole")] 
 		public CBool ExcludeOnConsole
 		{
@@ -181,7 +197,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(23)] 
+		[Ordinal(25)] 
 		[RED("isTerrainPrefab")] 
 		public CBool IsTerrainPrefab
 		{
@@ -189,7 +205,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(24)] 
+		[Ordinal(26)] 
 		[RED("minimapContribution")] 
 		public CEnum<worldPrefabMinimapContribution> MinimapContribution
 		{
@@ -197,7 +213,15 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CEnum<worldPrefabMinimapContribution>>(value);
 		}
 
-		[Ordinal(25)] 
+		[Ordinal(27)] 
+		[RED("interiorMapContribution")] 
+		public CEnum<worldPrefabInteriorMapContribution> InteriorMapContribution
+		{
+			get => GetPropertyValue<CEnum<worldPrefabInteriorMapContribution>>();
+			set => SetPropertyValue<CEnum<worldPrefabInteriorMapContribution>>(value);
+		}
+
+		[Ordinal(28)] 
 		[RED("booleanProxyHelper")] 
 		public CResourceAsyncReference<worldPrefab> BooleanProxyHelper
 		{
@@ -205,7 +229,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CResourceAsyncReference<worldPrefab>>(value);
 		}
 
-		[Ordinal(26)] 
+		[Ordinal(29)] 
 		[RED("proxyLimiterHelper")] 
 		public CResourceAsyncReference<worldPrefab> ProxyLimiterHelper
 		{
@@ -213,7 +237,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CResourceAsyncReference<worldPrefab>>(value);
 		}
 
-		[Ordinal(27)] 
+		[Ordinal(30)] 
 		[RED("customProxyMeshHelper")] 
 		public CResourceAsyncReference<CMesh> CustomProxyMeshHelper
 		{

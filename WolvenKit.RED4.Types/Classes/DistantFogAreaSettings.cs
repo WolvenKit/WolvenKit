@@ -125,6 +125,30 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CLegacySingleChannelCurve<CFloat>>(value);
 		}
 
+		[Ordinal(17)] 
+		[RED("skyAltitudeBegin")] 
+		public CLegacySingleChannelCurve<CFloat> SkyAltitudeBegin
+		{
+			get => GetPropertyValue<CLegacySingleChannelCurve<CFloat>>();
+			set => SetPropertyValue<CLegacySingleChannelCurve<CFloat>>(value);
+		}
+
+		[Ordinal(18)] 
+		[RED("skyAltitudeEnd")] 
+		public CLegacySingleChannelCurve<CFloat> SkyAltitudeEnd
+		{
+			get => GetPropertyValue<CLegacySingleChannelCurve<CFloat>>();
+			set => SetPropertyValue<CLegacySingleChannelCurve<CFloat>>(value);
+		}
+
+		[Ordinal(19)] 
+		[RED("skyOpacity")] 
+		public CLegacySingleChannelCurve<CFloat> SkyOpacity
+		{
+			get => GetPropertyValue<CLegacySingleChannelCurve<CFloat>>();
+			set => SetPropertyValue<CLegacySingleChannelCurve<CFloat>>(value);
+		}
+
 		public DistantFogAreaSettings()
 		{
 			Enable = true;

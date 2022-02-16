@@ -151,10 +151,10 @@ namespace WolvenKit.RED4.Types
 
 		[Ordinal(19)] 
 		[RED("menuSelectorCtrl")] 
-		public CWeakHandle<hubSelectorSingleCarouselController> MenuSelectorCtrl
+		public CWeakHandle<hubStaticSelectorController> MenuSelectorCtrl
 		{
-			get => GetPropertyValue<CWeakHandle<hubSelectorSingleCarouselController>>();
-			set => SetPropertyValue<CWeakHandle<hubSelectorSingleCarouselController>>(value);
+			get => GetPropertyValue<CWeakHandle<hubStaticSelectorController>>();
+			set => SetPropertyValue<CWeakHandle<hubStaticSelectorController>>(value);
 		}
 
 		[Ordinal(20)] 

@@ -46,6 +46,14 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(113)] 
+		[RED("showOverdueValue")] 
+		public CBool ShowOverdueValue
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(114)] 
 		[RED("randomizeInitialOverdue")] 
 		public CBool RandomizeInitialOverdue
 		{
@@ -53,7 +61,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(114)] 
+		[Ordinal(115)] 
 		[RED("initialOverdue")] 
 		public CInt32 InitialOverdue
 		{
@@ -61,7 +69,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CInt32>(value);
 		}
 
-		[Ordinal(115)] 
+		[Ordinal(116)] 
 		[RED("allowAutomaticRentStatusChange")] 
 		public CBool AllowAutomaticRentStatusChange
 		{
@@ -69,7 +77,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(116)] 
+		[Ordinal(117)] 
 		[RED("maxDays")] 
 		public CInt32 MaxDays
 		{
@@ -77,7 +85,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CInt32>(value);
 		}
 
-		[Ordinal(117)] 
+		[Ordinal(118)] 
 		[RED("currentOverdue")] 
 		public CInt32 CurrentOverdue
 		{
@@ -85,7 +93,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CInt32>(value);
 		}
 
-		[Ordinal(118)] 
+		[Ordinal(119)] 
 		[RED("isInitialRentStateSet")] 
 		public CBool IsInitialRentStateSet
 		{
@@ -93,7 +101,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(119)] 
+		[Ordinal(120)] 
 		[RED("currentRentStatus")] 
 		public CEnum<ERentStatus> CurrentRentStatus
 		{
@@ -101,7 +109,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CEnum<ERentStatus>>(value);
 		}
 
-		[Ordinal(120)] 
+		[Ordinal(121)] 
 		[RED("lastStatusChangeDay")] 
 		public CInt32 LastStatusChangeDay
 		{
@@ -111,6 +119,7 @@ namespace WolvenKit.RED4.Types
 
 		public ApartmentScreenControllerPS()
 		{
+			ShowOverdueValue = true;
 			RandomizeInitialOverdue = true;
 			AllowAutomaticRentStatusChange = true;
 			MaxDays = 90;

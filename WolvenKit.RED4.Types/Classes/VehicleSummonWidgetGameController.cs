@@ -22,6 +22,14 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(11)] 
+		[RED("vehicleManufactorHolder")] 
+		public inkWidgetReference VehicleManufactorHolder
+		{
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
+		}
+
+		[Ordinal(12)] 
 		[RED("vehicleManufactorIcon")] 
 		public inkImageWidgetReference VehicleManufactorIcon
 		{
@@ -29,17 +37,9 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkImageWidgetReference>(value);
 		}
 
-		[Ordinal(12)] 
+		[Ordinal(13)] 
 		[RED("distanceLabel")] 
 		public inkTextWidgetReference DistanceLabel
-		{
-			get => GetPropertyValue<inkTextWidgetReference>();
-			set => SetPropertyValue<inkTextWidgetReference>(value);
-		}
-
-		[Ordinal(13)] 
-		[RED("isWaiting")] 
-		public inkTextWidgetReference IsWaiting
 		{
 			get => GetPropertyValue<inkTextWidgetReference>();
 			set => SetPropertyValue<inkTextWidgetReference>(value);
@@ -54,14 +54,30 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(15)] 
-		[RED("unitText")] 
-		public inkTextWidgetReference UnitText
+		[RED("subText")] 
+		public inkTextWidgetReference SubText
 		{
 			get => GetPropertyValue<inkTextWidgetReference>();
 			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
 		[Ordinal(16)] 
+		[RED("radioStationName")] 
+		public inkTextWidgetReference RadioStationName
+		{
+			get => GetPropertyValue<inkTextWidgetReference>();
+			set => SetPropertyValue<inkTextWidgetReference>(value);
+		}
+
+		[Ordinal(17)] 
+		[RED("rootWidget")] 
+		public CWeakHandle<inkWidget> RootWidget
+		{
+			get => GetPropertyValue<CWeakHandle<inkWidget>>();
+			set => SetPropertyValue<CWeakHandle<inkWidget>>(value);
+		}
+
+		[Ordinal(18)] 
 		[RED("animationProxy")] 
 		public CHandle<inkanimProxy> AnimationProxy
 		{
@@ -69,7 +85,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<inkanimProxy>>(value);
 		}
 
-		[Ordinal(17)] 
+		[Ordinal(19)] 
 		[RED("animationCounterProxy")] 
 		public CHandle<inkanimProxy> AnimationCounterProxy
 		{
@@ -77,7 +93,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<inkanimProxy>>(value);
 		}
 
-		[Ordinal(18)] 
+		[Ordinal(20)] 
 		[RED("optionIntro")] 
 		public inkanimPlaybackOptions OptionIntro
 		{
@@ -85,7 +101,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkanimPlaybackOptions>(value);
 		}
 
-		[Ordinal(19)] 
+		[Ordinal(21)] 
 		[RED("optionCounter")] 
 		public inkanimPlaybackOptions OptionCounter
 		{
@@ -93,7 +109,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkanimPlaybackOptions>(value);
 		}
 
-		[Ordinal(20)] 
+		[Ordinal(22)] 
 		[RED("vehicleSummonDataDef")] 
 		public CHandle<VehicleSummonDataDef> VehicleSummonDataDef
 		{
@@ -101,7 +117,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<VehicleSummonDataDef>>(value);
 		}
 
-		[Ordinal(21)] 
+		[Ordinal(23)] 
 		[RED("vehicleSummonDataBB")] 
 		public CWeakHandle<gameIBlackboard> VehicleSummonDataBB
 		{
@@ -109,7 +125,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<gameIBlackboard>>(value);
 		}
 
-		[Ordinal(22)] 
+		[Ordinal(24)] 
 		[RED("vehicleSummonStateCallback")] 
 		public CHandle<redCallbackObject> VehicleSummonStateCallback
 		{
@@ -117,7 +133,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
-		[Ordinal(23)] 
+		[Ordinal(25)] 
 		[RED("vehicleSummonState")] 
 		public CUInt32 VehicleSummonState
 		{
@@ -125,7 +141,71 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CUInt32>(value);
 		}
 
-		[Ordinal(24)] 
+		[Ordinal(26)] 
+		[RED("vehiclePurchaseDataDef")] 
+		public CHandle<VehiclePurchaseDataDef> VehiclePurchaseDataDef
+		{
+			get => GetPropertyValue<CHandle<VehiclePurchaseDataDef>>();
+			set => SetPropertyValue<CHandle<VehiclePurchaseDataDef>>(value);
+		}
+
+		[Ordinal(27)] 
+		[RED("vehiclePurchaseDataBB")] 
+		public CWeakHandle<gameIBlackboard> VehiclePurchaseDataBB
+		{
+			get => GetPropertyValue<CWeakHandle<gameIBlackboard>>();
+			set => SetPropertyValue<CWeakHandle<gameIBlackboard>>(value);
+		}
+
+		[Ordinal(28)] 
+		[RED("vehiclePurchaseStateCallback")] 
+		public CHandle<redCallbackObject> VehiclePurchaseStateCallback
+		{
+			get => GetPropertyValue<CHandle<redCallbackObject>>();
+			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
+		}
+
+		[Ordinal(29)] 
+		[RED("purchasedVehicleID")] 
+		public TweakDBID PurchasedVehicleID
+		{
+			get => GetPropertyValue<TweakDBID>();
+			set => SetPropertyValue<TweakDBID>(value);
+		}
+
+		[Ordinal(30)] 
+		[RED("stateChangesCallback")] 
+		public CHandle<redCallbackObject> StateChangesCallback
+		{
+			get => GetPropertyValue<CHandle<redCallbackObject>>();
+			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
+		}
+
+		[Ordinal(31)] 
+		[RED("songNameChangeCallback")] 
+		public CHandle<redCallbackObject> SongNameChangeCallback
+		{
+			get => GetPropertyValue<CHandle<redCallbackObject>>();
+			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
+		}
+
+		[Ordinal(32)] 
+		[RED("activeVehicleBlackboard")] 
+		public CWeakHandle<gameIBlackboard> ActiveVehicleBlackboard
+		{
+			get => GetPropertyValue<CWeakHandle<gameIBlackboard>>();
+			set => SetPropertyValue<CWeakHandle<gameIBlackboard>>(value);
+		}
+
+		[Ordinal(33)] 
+		[RED("mountCallback")] 
+		public CHandle<redCallbackObject> MountCallback
+		{
+			get => GetPropertyValue<CHandle<redCallbackObject>>();
+			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
+		}
+
+		[Ordinal(34)] 
 		[RED("vehiclePos")] 
 		public Vector4 VehiclePos
 		{
@@ -133,7 +213,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<Vector4>(value);
 		}
 
-		[Ordinal(25)] 
+		[Ordinal(35)] 
 		[RED("playerPos")] 
 		public Vector4 PlayerPos
 		{
@@ -141,7 +221,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<Vector4>(value);
 		}
 
-		[Ordinal(26)] 
+		[Ordinal(36)] 
 		[RED("distanceVector")] 
 		public Vector4 DistanceVector
 		{
@@ -149,7 +229,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<Vector4>(value);
 		}
 
-		[Ordinal(27)] 
+		[Ordinal(37)] 
 		[RED("gameInstance")] 
 		public ScriptGameInstance GameInstance
 		{
@@ -157,7 +237,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<ScriptGameInstance>(value);
 		}
 
-		[Ordinal(28)] 
+		[Ordinal(38)] 
 		[RED("distance")] 
 		public CInt32 Distance
 		{
@@ -165,7 +245,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CInt32>(value);
 		}
 
-		[Ordinal(29)] 
+		[Ordinal(39)] 
 		[RED("vehicleID")] 
 		public entEntityID VehicleID
 		{
@@ -173,7 +253,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<entEntityID>(value);
 		}
 
-		[Ordinal(30)] 
+		[Ordinal(40)] 
 		[RED("vehicleEntity")] 
 		public CWeakHandle<entEntity> VehicleEntity
 		{
@@ -181,7 +261,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<entEntity>>(value);
 		}
 
-		[Ordinal(31)] 
+		[Ordinal(41)] 
 		[RED("vehicle")] 
 		public CWeakHandle<vehicleBaseObject> Vehicle
 		{
@@ -189,7 +269,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<vehicleBaseObject>>(value);
 		}
 
-		[Ordinal(32)] 
+		[Ordinal(42)] 
 		[RED("vehicleRecord")] 
 		public CHandle<gamedataVehicle_Record> VehicleRecord
 		{
@@ -197,7 +277,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<gamedataVehicle_Record>>(value);
 		}
 
-		[Ordinal(33)] 
+		[Ordinal(43)] 
 		[RED("textParams")] 
 		public CHandle<textTextParameterSet> TextParams
 		{
@@ -205,7 +285,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<textTextParameterSet>>(value);
 		}
 
-		[Ordinal(34)] 
+		[Ordinal(44)] 
 		[RED("iconRecord")] 
 		public CHandle<gamedataUIIcon_Record> IconRecord
 		{
@@ -213,14 +293,31 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<gamedataUIIcon_Record>>(value);
 		}
 
+		[Ordinal(45)] 
+		[RED("playerVehicle")] 
+		public CWeakHandle<vehicleBaseObject> PlayerVehicle
+		{
+			get => GetPropertyValue<CWeakHandle<vehicleBaseObject>>();
+			set => SetPropertyValue<CWeakHandle<vehicleBaseObject>>(value);
+		}
+
+		[Ordinal(46)] 
+		[RED("player")] 
+		public CWeakHandle<PlayerPuppet> Player
+		{
+			get => GetPropertyValue<CWeakHandle<PlayerPuppet>>();
+			set => SetPropertyValue<CWeakHandle<PlayerPuppet>>(value);
+		}
+
 		public VehicleSummonWidgetGameController()
 		{
 			VehicleNameLabel = new();
 			VehicleTypeIcon = new();
+			VehicleManufactorHolder = new();
 			VehicleManufactorIcon = new();
 			DistanceLabel = new();
-			IsWaiting = new();
-			UnitText = new();
+			SubText = new();
+			RadioStationName = new();
 			OptionIntro = new();
 			OptionCounter = new();
 			VehiclePos = new();

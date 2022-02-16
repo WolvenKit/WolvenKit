@@ -30,6 +30,14 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(9)] 
+		[RED("savesCount")] 
+		public CInt32 SavesCount
+		{
+			get => GetPropertyValue<CInt32>();
+			set => SetPropertyValue<CInt32>(value);
+		}
+
+		[Ordinal(10)] 
 		[RED("quickSaveInProgress")] 
 		public CBool QuickSaveInProgress
 		{

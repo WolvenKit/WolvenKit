@@ -7,10 +7,10 @@ namespace WolvenKit.RED4.Types
 	{
 		[Ordinal(0)] 
 		[RED("presets")] 
-		public CArray<physicsCollisionPreset> Presets
+		public CArray<physicsCollisionPresetDefinition> Presets
 		{
-			get => GetPropertyValue<CArray<physicsCollisionPreset>>();
-			set => SetPropertyValue<CArray<physicsCollisionPreset>>(value);
+			get => GetPropertyValue<CArray<physicsCollisionPresetDefinition>>();
+			set => SetPropertyValue<CArray<physicsCollisionPresetDefinition>>(value);
 		}
 
 		public physicsCollisionPresetsResource()

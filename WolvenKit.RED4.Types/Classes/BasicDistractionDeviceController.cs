@@ -2,7 +2,7 @@
 namespace WolvenKit.RED4.Types
 {
 	[REDMeta]
-	public partial class BasicDistractionDeviceController : ScriptableDC
+	public partial class BasicDistractionDeviceController : ScriptableDeviceComponent
 	{
 	}
 }

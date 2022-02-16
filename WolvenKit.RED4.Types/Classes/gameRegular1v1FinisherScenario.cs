@@ -22,11 +22,11 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(2)] 
-		[RED("syncAnimSlotName")] 
-		public CName SyncAnimSlotName
+		[RED("syncData")] 
+		public CArray<gameFinisherSyncData> SyncData
 		{
-			get => GetPropertyValue<CName>();
-			set => SetPropertyValue<CName>(value);
+			get => GetPropertyValue<CArray<gameFinisherSyncData>>();
+			set => SetPropertyValue<CArray<gameFinisherSyncData>>(value);
 		}
 
 		[Ordinal(3)] 
@@ -79,6 +79,7 @@ namespace WolvenKit.RED4.Types
 
 		public gameRegular1v1FinisherScenario()
 		{
+			SyncData = new();
 			TargetBlendTime = 0.500000F;
 			AttackerBlendTime = 0.500000F;
 			AttackerIsMaster = true;

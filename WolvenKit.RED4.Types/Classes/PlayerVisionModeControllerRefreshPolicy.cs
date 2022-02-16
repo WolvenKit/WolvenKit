@@ -92,5 +92,13 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CEnum<PlayerVisionModeControllerRefreshPolicyEnum>>();
 			set => SetPropertyValue<CEnum<PlayerVisionModeControllerRefreshPolicyEnum>>(value);
 		}
+
+		[Ordinal(11)] 
+		[RED("isBriefingActive")] 
+		public CEnum<PlayerVisionModeControllerRefreshPolicyEnum> IsBriefingActive
+		{
+			get => GetPropertyValue<CEnum<PlayerVisionModeControllerRefreshPolicyEnum>>();
+			set => SetPropertyValue<CEnum<PlayerVisionModeControllerRefreshPolicyEnum>>(value);
+		}
 	}
 }

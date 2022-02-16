@@ -5,7 +5,7 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class cpTimerTest : gameObject
 	{
-		[Ordinal(40)] 
+		[Ordinal(35)] 
 		[RED("counter")] 
 		public CInt32 Counter
 		{

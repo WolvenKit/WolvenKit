@@ -21,6 +21,14 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CEnum<EGameplayChallengeLevel>>(value);
 		}
 
+		[Ordinal(3)] 
+		[RED("skillBonus")] 
+		public TweakDBID SkillBonus
+		{
+			get => GetPropertyValue<TweakDBID>();
+			set => SetPropertyValue<TweakDBID>(value);
+		}
+
 		public GameplaySkillCondition()
 		{
 			EntityID = new();

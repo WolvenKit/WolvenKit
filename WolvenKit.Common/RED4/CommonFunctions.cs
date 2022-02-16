@@ -158,6 +158,8 @@ namespace WolvenKit.RED4.CR2W
             { ERedExtension.mt, "CMaterialTemplate" },
             { ERedExtension.ies, "CIESDataResource" },
             { ERedExtension.remt, "CMaterialTemplate" },
+            { ERedExtension.ccstate, "gameuiCharacterCustomizationPreset" },
+            { ERedExtension.streamingblock, "worldStreamingBlock" },
 
         };
 
@@ -278,6 +280,8 @@ namespace WolvenKit.RED4.CR2W
             { "animLipsyncMapping", "lipmap" },
             { "CMaterialTemplate", "mt,remt" },
             { "CIESDataResource", "ies" },
+            { "gameuiCharacterCustomizationPreset", "ccstate" },
+            { "worldStreamingBlock", "streamingblock" },
 
         };
 

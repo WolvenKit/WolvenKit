@@ -5,7 +5,7 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class MeleePublicSafeEvents : MeleeEventsTransition
 	{
-		[Ordinal(0)] 
+		[Ordinal(1)] 
 		[RED("unequipTime")] 
 		public CFloat UnequipTime
 		{

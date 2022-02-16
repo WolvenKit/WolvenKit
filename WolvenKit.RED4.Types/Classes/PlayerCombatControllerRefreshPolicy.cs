@@ -22,8 +22,8 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(2)] 
-		[RED("squadInCombat")] 
-		public CEnum<PlayerCombatControllerRefreshPolicyEnum> SquadInCombat
+		[RED("isTracked")] 
+		public CEnum<PlayerCombatControllerRefreshPolicyEnum> IsTracked
 		{
 			get => GetPropertyValue<CEnum<PlayerCombatControllerRefreshPolicyEnum>>();
 			set => SetPropertyValue<CEnum<PlayerCombatControllerRefreshPolicyEnum>>(value);

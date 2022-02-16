@@ -5,15 +5,15 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class StatusEffectPresentHitPrereqCondition : BaseHitPrereqCondition
 	{
-		[Ordinal(1)] 
+		[Ordinal(3)] 
 		[RED("checkType")] 
-		public CName CheckType
+		public CEnum<gamedataCheckType> CheckType
 		{
-			get => GetPropertyValue<CName>();
-			set => SetPropertyValue<CName>(value);
+			get => GetPropertyValue<CEnum<gamedataCheckType>>();
+			set => SetPropertyValue<CEnum<gamedataCheckType>>(value);
 		}
 
-		[Ordinal(2)] 
+		[Ordinal(4)] 
 		[RED("statusEffectParam")] 
 		public CName StatusEffectParam
 		{
@@ -21,7 +21,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(3)] 
+		[Ordinal(5)] 
 		[RED("tag")] 
 		public CName Tag
 		{
@@ -29,7 +29,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(4)] 
+		[Ordinal(6)] 
 		[RED("objectToCheck")] 
 		public CName ObjectToCheck
 		{

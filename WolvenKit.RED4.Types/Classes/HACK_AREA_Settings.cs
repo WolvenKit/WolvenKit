@@ -77,6 +77,14 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
+		[Ordinal(11)] 
+		[RED("albedoMetalness")] 
+		public CFloat AlbedoMetalness
+		{
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
+		}
+
 		public HACK_AREA_Settings()
 		{
 			Enable = true;
@@ -86,6 +94,7 @@ namespace WolvenKit.RED4.Types
 			SurfAlbedoOverride = new() { Red = 1.000000F, Green = 1.000000F, Blue = 1.000000F, Alpha = 1.000000F };
 			SkyScale = 1.000000F;
 			EmissiveScale = 1.000000F;
+			AlbedoMetalness = 1.000000F;
 		}
 	}
 }

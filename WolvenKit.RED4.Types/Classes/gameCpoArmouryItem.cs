@@ -5,7 +5,7 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class gameCpoArmouryItem : gameObject
 	{
-		[Ordinal(40)] 
+		[Ordinal(35)] 
 		[RED("armouryItemID")] 
 		public TweakDBID ArmouryItemID
 		{

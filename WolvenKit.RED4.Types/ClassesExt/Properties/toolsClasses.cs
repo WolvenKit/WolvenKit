@@ -721,18 +721,6 @@ namespace WolvenKit.RED4.Types
     }
 
     [REDMeta]
-    public class toolsVisualTagsRoot : ISerializable
-    {
-        [Ordinal(0)]
-        [RED("schemas")]
-        public CArray<toolsVisualTagsSchema> Schemas
-        {
-            get => GetPropertyValue<CArray<toolsVisualTagsSchema>>();
-            set => SetPropertyValue<CArray<toolsVisualTagsSchema>>(value);
-        }
-    }
-
-    [REDMeta]
     public class toolsPartsCategories : ISerializable
     {
         [Ordinal(0)]
@@ -833,34 +821,6 @@ namespace WolvenKit.RED4.Types
     }
 
     [REDMeta]
-    public class toolsVisualTagsSchema : RedBaseClass
-    {
-        [Ordinal(0)]
-        [RED("name")]
-        public CName Name
-        {
-            get => GetPropertyValue<CName>();
-            set => SetPropertyValue<CName>(value);
-        }
-
-        [Ordinal(1)]
-        [RED("categories")]
-        public CArray<toolsVisualTagsGroup> Categories
-        {
-            get => GetPropertyValue<CArray<toolsVisualTagsGroup>>();
-            set => SetPropertyValue<CArray<toolsVisualTagsGroup>>(value);
-        }
-
-        [Ordinal(2)]
-        [RED("presets")]
-        public CArray<toolsVisualTagsGroup> Presets
-        {
-            get => GetPropertyValue<CArray<toolsVisualTagsGroup>>();
-            set => SetPropertyValue<CArray<toolsVisualTagsGroup>>(value);
-        }
-    }
-
-    [REDMeta]
     public class toolsAppearancesConfig : ISerializable
     {
         [Ordinal(0)]
@@ -869,18 +829,6 @@ namespace WolvenKit.RED4.Types
         {
             get => GetPropertyValue<CArray<toolsAppearanceConfigMapping>>();
             set => SetPropertyValue<CArray<toolsAppearanceConfigMapping>>(value);
-        }
-    }
-
-    [REDMeta]
-    public class toolsVisualTagsDefinition : RedBaseClass
-    {
-        [Ordinal(0)]
-        [RED("name")]
-        public CName Name
-        {
-            get => GetPropertyValue<CName>();
-            set => SetPropertyValue<CName>(value);
         }
     }
 
@@ -921,26 +869,6 @@ namespace WolvenKit.RED4.Types
         {
             get => GetPropertyValue<CArray<toolsPresetSectionData>>();
             set => SetPropertyValue<CArray<toolsPresetSectionData>>(value);
-        }
-    }
-
-    [REDMeta]
-    public class toolsVisualTagsGroup : RedBaseClass
-    {
-        [Ordinal(0)]
-        [RED("name")]
-        public CName Name
-        {
-            get => GetPropertyValue<CName>();
-            set => SetPropertyValue<CName>(value);
-        }
-
-        [Ordinal(1)]
-        [RED("tags")]
-        public CArray<toolsVisualTagsDefinition> Tags
-        {
-            get => GetPropertyValue<CArray<toolsVisualTagsDefinition>>();
-            set => SetPropertyValue<CArray<toolsVisualTagsDefinition>>(value);
         }
     }
 

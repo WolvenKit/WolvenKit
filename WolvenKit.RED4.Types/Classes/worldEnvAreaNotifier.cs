@@ -77,6 +77,14 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<CBool>>(value);
 		}
 
+		[Ordinal(12)] 
+		[RED("resourceVersion")] 
+		public CUInt8 ResourceVersion
+		{
+			get => GetPropertyValue<CUInt8>();
+			set => SetPropertyValue<CUInt8>(value);
+		}
+
 		public worldEnvAreaNotifier()
 		{
 			IsEnabled = true;

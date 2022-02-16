@@ -20,21 +20,5 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CFloat>();
 			set => SetPropertyValue<CFloat>(value);
 		}
-
-		[Ordinal(2)] 
-		[RED("startNode")] 
-		public NodeRef StartNode
-		{
-			get => GetPropertyValue<NodeRef>();
-			set => SetPropertyValue<NodeRef>(value);
-		}
-
-		[Ordinal(3)] 
-		[RED("endNode")] 
-		public NodeRef EndNode
-		{
-			get => GetPropertyValue<NodeRef>();
-			set => SetPropertyValue<NodeRef>(value);
-		}
 	}
 }
