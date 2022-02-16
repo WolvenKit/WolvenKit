@@ -12,5 +12,18 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CBool>();
 			set => SetPropertyValue<CBool>(value);
 		}
+
+		[Ordinal(1)] 
+		[RED("reason")] 
+		public CName Reason
+		{
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
+		}
+
+		public ToggleDropPointSystemRequest()
+		{
+			Reason = "quest";
+		}
 	}
 }

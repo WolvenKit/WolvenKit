@@ -165,6 +165,14 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CEnum<worldgeometryDescriptionQueryStatus>>(value);
 		}
 
+		[Ordinal(20)] 
+		[RED("climbedEntity")] 
+		public CWeakHandle<entEntity> ClimbedEntity
+		{
+			get => GetPropertyValue<CWeakHandle<entEntity>>();
+			set => SetPropertyValue<CWeakHandle<entEntity>>(value);
+		}
+
 		public worldgeometryDescriptionResult()
 		{
 			LeftHandData = new() { GrabPointStart = new(), GrabPointEnd = new() };

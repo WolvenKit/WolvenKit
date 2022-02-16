@@ -5,7 +5,7 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class CrossingLight : TrafficLight
 	{
-		[Ordinal(90)] 
+		[Ordinal(87)] 
 		[RED("audioLightIsGreen")] 
 		public CBool AudioLightIsGreen
 		{

@@ -2,7 +2,7 @@
 namespace WolvenKit.RED4.Types
 {
 	[REDMeta]
-	public partial class DataTermController : ScriptableDC
+	public partial class DataTermController : ScriptableDeviceComponent
 	{
 	}
 }

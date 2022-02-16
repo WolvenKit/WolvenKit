@@ -5,7 +5,7 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class BodyPartHitPrereqCondition : BaseHitPrereqCondition
 	{
-		[Ordinal(1)] 
+		[Ordinal(3)] 
 		[RED("bodyPart")] 
 		public CName BodyPart
 		{
@@ -13,7 +13,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(2)] 
+		[Ordinal(4)] 
 		[RED("attackSubtype")] 
 		public CEnum<gamedataAttackSubtype> AttackSubtype
 		{

@@ -5,15 +5,15 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class Device : gameDeviceBase
 	{
-		[Ordinal(41)] 
+		[Ordinal(36)] 
 		[RED("controller")] 
-		public CHandle<ScriptableDC> Controller
+		public CHandle<ScriptableDeviceComponent> Controller
 		{
-			get => GetPropertyValue<CHandle<ScriptableDC>>();
-			set => SetPropertyValue<CHandle<ScriptableDC>>(value);
+			get => GetPropertyValue<CHandle<ScriptableDeviceComponent>>();
+			set => SetPropertyValue<CHandle<ScriptableDeviceComponent>>(value);
 		}
 
-		[Ordinal(42)] 
+		[Ordinal(37)] 
 		[RED("wasVisible")] 
 		public CBool WasVisible
 		{
@@ -21,7 +21,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(43)] 
+		[Ordinal(38)] 
 		[RED("isVisible")] 
 		public CBool IsVisible
 		{
@@ -29,7 +29,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(44)] 
+		[Ordinal(39)] 
 		[RED("controllerTypeName")] 
 		public CName ControllerTypeName
 		{
@@ -37,7 +37,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(45)] 
+		[Ordinal(40)] 
 		[RED("deviceState")] 
 		public CEnum<EDeviceStatus> DeviceState
 		{
@@ -45,7 +45,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CEnum<EDeviceStatus>>(value);
 		}
 
-		[Ordinal(46)] 
+		[Ordinal(41)] 
 		[RED("uiComponent")] 
 		public CWeakHandle<IWorldWidgetComponent> UiComponent
 		{
@@ -53,7 +53,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<IWorldWidgetComponent>>(value);
 		}
 
-		[Ordinal(47)] 
+		[Ordinal(42)] 
 		[RED("screenDefinition")] 
 		public SUIScreenDefinition ScreenDefinition
 		{
@@ -61,7 +61,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<SUIScreenDefinition>(value);
 		}
 
-		[Ordinal(48)] 
+		[Ordinal(43)] 
 		[RED("isUIdirty")] 
 		public CBool IsUIdirty
 		{
@@ -69,7 +69,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(49)] 
+		[Ordinal(44)] 
 		[RED("personalLinkComponent")] 
 		public CHandle<workWorkspotResourceComponent> PersonalLinkComponent
 		{
@@ -77,7 +77,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<workWorkspotResourceComponent>>(value);
 		}
 
-		[Ordinal(50)] 
+		[Ordinal(45)] 
 		[RED("durabilityType")] 
 		public CEnum<EDeviceDurabilityType> DurabilityType
 		{
@@ -85,7 +85,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CEnum<EDeviceDurabilityType>>(value);
 		}
 
-		[Ordinal(51)] 
+		[Ordinal(46)] 
 		[RED("disassemblableComponent")] 
 		public CHandle<DisassemblableComponent> DisassemblableComponent
 		{
@@ -93,7 +93,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<DisassemblableComponent>>(value);
 		}
 
-		[Ordinal(52)] 
+		[Ordinal(47)] 
 		[RED("localization")] 
 		public CHandle<entLocalizationStringComponent> Localization
 		{
@@ -101,7 +101,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<entLocalizationStringComponent>>(value);
 		}
 
-		[Ordinal(53)] 
+		[Ordinal(48)] 
 		[RED("IKslotComponent")] 
 		public CHandle<entSlotComponent> IKslotComponent
 		{
@@ -109,23 +109,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<entSlotComponent>>(value);
 		}
 
-		[Ordinal(54)] 
-		[RED("ToggleZoomInteractionWorkspot")] 
-		public CHandle<workWorkspotResourceComponent> ToggleZoomInteractionWorkspot
-		{
-			get => GetPropertyValue<CHandle<workWorkspotResourceComponent>>();
-			set => SetPropertyValue<CHandle<workWorkspotResourceComponent>>(value);
-		}
-
-		[Ordinal(55)] 
-		[RED("cameraZoomComponent")] 
-		public CHandle<gameCameraComponent> CameraZoomComponent
-		{
-			get => GetPropertyValue<CHandle<gameCameraComponent>>();
-			set => SetPropertyValue<CHandle<gameCameraComponent>>(value);
-		}
-
-		[Ordinal(56)] 
+		[Ordinal(49)] 
 		[RED("slotComponent")] 
 		public CHandle<entSlotComponent> SlotComponent
 		{
@@ -133,7 +117,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<entSlotComponent>>(value);
 		}
 
-		[Ordinal(57)] 
+		[Ordinal(50)] 
 		[RED("isInitialized")] 
 		public CBool IsInitialized
 		{
@@ -141,7 +125,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(58)] 
+		[Ordinal(51)] 
 		[RED("isInsideLogicArea")] 
 		public CBool IsInsideLogicArea
 		{
@@ -149,7 +133,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(59)] 
+		[Ordinal(52)] 
 		[RED("cameraComponent")] 
 		public CHandle<gameCameraComponent> CameraComponent
 		{
@@ -157,7 +141,31 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<gameCameraComponent>>(value);
 		}
 
-		[Ordinal(60)] 
+		[Ordinal(53)] 
+		[RED("cameraZoomComponent")] 
+		public CHandle<gameCameraComponent> CameraZoomComponent
+		{
+			get => GetPropertyValue<CHandle<gameCameraComponent>>();
+			set => SetPropertyValue<CHandle<gameCameraComponent>>(value);
+		}
+
+		[Ordinal(54)] 
+		[RED("cameraZoomActive")] 
+		public CBool CameraZoomActive
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(55)] 
+		[RED("ToggleZoomInteractionWorkspot")] 
+		public CHandle<workWorkspotResourceComponent> ToggleZoomInteractionWorkspot
+		{
+			get => GetPropertyValue<CHandle<workWorkspotResourceComponent>>();
+			set => SetPropertyValue<CHandle<workWorkspotResourceComponent>>(value);
+		}
+
+		[Ordinal(56)] 
 		[RED("ZoomUIListenerID")] 
 		public CHandle<redCallbackObject> ZoomUIListenerID
 		{
@@ -165,7 +173,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
-		[Ordinal(61)] 
+		[Ordinal(57)] 
 		[RED("ZoomStateMachineListenerID")] 
 		public CHandle<redCallbackObject> ZoomStateMachineListenerID
 		{
@@ -173,7 +181,15 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
-		[Ordinal(62)] 
+		[Ordinal(58)] 
+		[RED("advanceInteractionStateResolveDelayID")] 
+		public gameDelayID AdvanceInteractionStateResolveDelayID
+		{
+			get => GetPropertyValue<gameDelayID>();
+			set => SetPropertyValue<gameDelayID>(value);
+		}
+
+		[Ordinal(59)] 
 		[RED("activeStatusEffect")] 
 		public TweakDBID ActiveStatusEffect
 		{
@@ -181,7 +197,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<TweakDBID>(value);
 		}
 
-		[Ordinal(63)] 
+		[Ordinal(60)] 
 		[RED("activeProgramToUploadOnNPC")] 
 		public TweakDBID ActiveProgramToUploadOnNPC
 		{
@@ -189,7 +205,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<TweakDBID>(value);
 		}
 
-		[Ordinal(64)] 
+		[Ordinal(61)] 
 		[RED("isQhackUploadInProgerss")] 
 		public CBool IsQhackUploadInProgerss
 		{
@@ -197,7 +213,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(65)] 
+		[Ordinal(62)] 
 		[RED("scanningTweakDBRecord")] 
 		public TweakDBID ScanningTweakDBRecord
 		{
@@ -205,7 +221,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<TweakDBID>(value);
 		}
 
-		[Ordinal(66)] 
+		[Ordinal(63)] 
 		[RED("updateRunning")] 
 		public CBool UpdateRunning
 		{
@@ -213,7 +229,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(67)] 
+		[Ordinal(64)] 
 		[RED("updateID")] 
 		public gameDelayID UpdateID
 		{
@@ -221,7 +237,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gameDelayID>(value);
 		}
 
-		[Ordinal(68)] 
+		[Ordinal(65)] 
 		[RED("delayedUpdateDeviceStateID")] 
 		public gameDelayID DelayedUpdateDeviceStateID
 		{
@@ -229,7 +245,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gameDelayID>(value);
 		}
 
-		[Ordinal(69)] 
+		[Ordinal(66)] 
 		[RED("blackboard")] 
 		public CHandle<gameIBlackboard> Blackboard
 		{
@@ -237,7 +253,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<gameIBlackboard>>(value);
 		}
 
-		[Ordinal(70)] 
+		[Ordinal(67)] 
 		[RED("currentPlayerTargetCallbackID")] 
 		public CHandle<redCallbackObject> CurrentPlayerTargetCallbackID
 		{
@@ -245,7 +261,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
-		[Ordinal(71)] 
+		[Ordinal(68)] 
 		[RED("wasLookedAtLast")] 
 		public CBool WasLookedAtLast
 		{
@@ -253,7 +269,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(72)] 
+		[Ordinal(69)] 
 		[RED("lastPingSourceID")] 
 		public entEntityID LastPingSourceID
 		{
@@ -261,7 +277,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<entEntityID>(value);
 		}
 
-		[Ordinal(73)] 
+		[Ordinal(70)] 
 		[RED("networkGridBeamFX")] 
 		public gameFxResource NetworkGridBeamFX
 		{
@@ -269,7 +285,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gameFxResource>(value);
 		}
 
-		[Ordinal(74)] 
+		[Ordinal(71)] 
 		[RED("fxResourceMapper")] 
 		public CHandle<FxResourceMapperComponent> FxResourceMapper
 		{
@@ -277,7 +293,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<FxResourceMapperComponent>>(value);
 		}
 
-		[Ordinal(75)] 
+		[Ordinal(72)] 
 		[RED("effectVisualization")] 
 		public CHandle<AreaEffectVisualizationComponent> EffectVisualization
 		{
@@ -285,7 +301,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<AreaEffectVisualizationComponent>>(value);
 		}
 
-		[Ordinal(76)] 
+		[Ordinal(73)] 
 		[RED("resourceLibraryComponent")] 
 		public CHandle<ResourceLibraryComponent> ResourceLibraryComponent
 		{
@@ -293,7 +309,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<ResourceLibraryComponent>>(value);
 		}
 
-		[Ordinal(77)] 
+		[Ordinal(74)] 
 		[RED("gameplayRoleComponent")] 
 		public CHandle<GameplayRoleComponent> GameplayRoleComponent
 		{
@@ -301,7 +317,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<GameplayRoleComponent>>(value);
 		}
 
-		[Ordinal(78)] 
+		[Ordinal(75)] 
 		[RED("personalLinkHackSend")] 
 		public CBool PersonalLinkHackSend
 		{
@@ -309,7 +325,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(79)] 
+		[Ordinal(76)] 
 		[RED("personalLinkFailsafeID")] 
 		public gameDelayID PersonalLinkFailsafeID
 		{
@@ -317,7 +333,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gameDelayID>(value);
 		}
 
-		[Ordinal(80)] 
+		[Ordinal(77)] 
 		[RED("wasAnimationFastForwarded")] 
 		public CBool WasAnimationFastForwarded
 		{
@@ -325,7 +341,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(81)] 
+		[Ordinal(78)] 
 		[RED("contentScale")] 
 		public TweakDBID ContentScale
 		{
@@ -333,7 +349,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<TweakDBID>(value);
 		}
 
-		[Ordinal(82)] 
+		[Ordinal(79)] 
 		[RED("networkGridBeamOffset")] 
 		public Vector4 NetworkGridBeamOffset
 		{
@@ -341,7 +357,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<Vector4>(value);
 		}
 
-		[Ordinal(83)] 
+		[Ordinal(80)] 
 		[RED("areaEffectsData")] 
 		public CArray<SAreaEffectData> AreaEffectsData
 		{
@@ -349,7 +365,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<SAreaEffectData>>(value);
 		}
 
-		[Ordinal(84)] 
+		[Ordinal(81)] 
 		[RED("areaEffectsInFocusMode")] 
 		public CArray<SAreaEffectTargetData> AreaEffectsInFocusMode
 		{
@@ -357,7 +373,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<SAreaEffectTargetData>>(value);
 		}
 
-		[Ordinal(85)] 
+		[Ordinal(82)] 
 		[RED("debugOptions")] 
 		public DebuggerProperties DebugOptions
 		{
@@ -365,7 +381,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<DebuggerProperties>(value);
 		}
 
-		[Ordinal(86)] 
+		[Ordinal(83)] 
 		[RED("workspotActivator")] 
 		public CWeakHandle<gameObject> WorkspotActivator
 		{
@@ -375,9 +391,10 @@ namespace WolvenKit.RED4.Types
 
 		public Device()
 		{
-			ControllerTypeName = "ScriptableDC";
+			ControllerTypeName = "ScriptableDeviceComponent";
 			ScreenDefinition = new();
 			IsUIdirty = true;
+			AdvanceInteractionStateResolveDelayID = new();
 			UpdateID = new();
 			DelayedUpdateDeviceStateID = new();
 			LastPingSourceID = new();

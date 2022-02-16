@@ -2,7 +2,7 @@
 namespace WolvenKit.RED4.Types
 {
 	[REDMeta]
-	public partial class LadderController : ScriptableDC
+	public partial class LadderController : ScriptableDeviceComponent
 	{
 	}
 }

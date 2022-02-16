@@ -5,7 +5,7 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class AbstractLandEvents : LocomotionGroundEvents
 	{
-		[Ordinal(3)] 
+		[Ordinal(6)] 
 		[RED("blockLandingStimBroadcasting")] 
 		public CBool BlockLandingStimBroadcasting
 		{

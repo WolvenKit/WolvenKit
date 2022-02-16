@@ -5,7 +5,7 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class VendorConfirmationPopupData : inkGameNotificationData
 	{
-		[Ordinal(6)] 
+		[Ordinal(7)] 
 		[RED("itemData")] 
 		public InventoryItemData ItemData
 		{
@@ -13,7 +13,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<InventoryItemData>(value);
 		}
 
-		[Ordinal(7)] 
+		[Ordinal(8)] 
 		[RED("quantity")] 
 		public CInt32 Quantity
 		{
@@ -21,7 +21,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CInt32>(value);
 		}
 
-		[Ordinal(8)] 
+		[Ordinal(9)] 
 		[RED("type")] 
 		public CEnum<VendorConfirmationPopupType> Type
 		{
@@ -29,7 +29,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CEnum<VendorConfirmationPopupType>>(value);
 		}
 
-		[Ordinal(9)] 
+		[Ordinal(10)] 
 		[RED("price")] 
 		public CInt32 Price
 		{
@@ -39,7 +39,7 @@ namespace WolvenKit.RED4.Types
 
 		public VendorConfirmationPopupData()
 		{
-			ItemData = new() { Empty = true, ID = new(), DamageType = Enums.gamedataDamageType.Invalid, EquipmentArea = Enums.gamedataEquipmentArea.Invalid, ComparedQuality = Enums.gamedataQuality.Invalid, IsAvailable = true, PositionInBackpack = 4294967295, IsRequirementMet = true, IsEquippable = true, Requirement = new() { StatType = Enums.gamedataStatType.Invalid }, EquipRequirement = new() { StatType = Enums.gamedataStatType.Invalid }, Attachments = new(), Abilities = new(), PlacementSlots = new(), PrimaryStats = new(), SecondaryStats = new(), SortData = new() };
+			ItemData = new() { Empty = true, ID = new(), DamageType = Enums.gamedataDamageType.Invalid, EquipmentArea = Enums.gamedataEquipmentArea.Invalid, ComparedQuality = Enums.gamedataQuality.Invalid, IsAvailable = true, PositionInBackpack = 4294967295, IsRequirementMet = true, IsEquippable = true, Requirement = new() { StatType = Enums.gamedataStatType.Invalid }, EquipRequirement = new() { StatType = Enums.gamedataStatType.Invalid }, EquipRequirements = new(), Attachments = new(), Abilities = new(), PlacementSlots = new(), PrimaryStats = new(), SecondaryStats = new(), SortData = new() };
 		}
 	}
 }

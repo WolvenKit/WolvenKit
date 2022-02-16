@@ -6,14 +6,6 @@ namespace WolvenKit.RED4.Types
 	public partial class gameVisionModeComponent : gameComponent
 	{
 		[Ordinal(4)] 
-		[RED("availableVisionModes")] 
-		public CArray<gameVisionModuleParams> AvailableVisionModes
-		{
-			get => GetPropertyValue<CArray<gameVisionModuleParams>>();
-			set => SetPropertyValue<CArray<gameVisionModuleParams>>(value);
-		}
-
-		[Ordinal(5)] 
 		[RED("defaultHighlightData")] 
 		public CHandle<HighlightEditableData> DefaultHighlightData
 		{
@@ -21,7 +13,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<HighlightEditableData>>(value);
 		}
 
-		[Ordinal(6)] 
+		[Ordinal(5)] 
 		[RED("forcedHighlights")] 
 		public CArray<CHandle<FocusForcedHighlightData>> ForcedHighlights
 		{
@@ -29,7 +21,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<CHandle<FocusForcedHighlightData>>>(value);
 		}
 
-		[Ordinal(7)] 
+		[Ordinal(6)] 
 		[RED("activeForcedHighlight")] 
 		public CHandle<FocusForcedHighlightData> ActiveForcedHighlight
 		{
@@ -37,7 +29,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<FocusForcedHighlightData>>(value);
 		}
 
-		[Ordinal(8)] 
+		[Ordinal(7)] 
 		[RED("currentDefaultHighlight")] 
 		public CHandle<FocusForcedHighlightData> CurrentDefaultHighlight
 		{
@@ -45,7 +37,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<FocusForcedHighlightData>>(value);
 		}
 
-		[Ordinal(9)] 
+		[Ordinal(8)] 
 		[RED("activeRevealRequests")] 
 		public CArray<gameVisionModeSystemRevealIdentifier> ActiveRevealRequests
 		{
@@ -53,7 +45,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<gameVisionModeSystemRevealIdentifier>>(value);
 		}
 
-		[Ordinal(10)] 
+		[Ordinal(9)] 
 		[RED("isFocusModeActive")] 
 		public CBool IsFocusModeActive
 		{
@@ -61,7 +53,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(11)] 
+		[Ordinal(10)] 
 		[RED("wasCleanedUp")] 
 		public CBool WasCleanedUp
 		{
@@ -69,12 +61,20 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
+		[Ordinal(11)] 
+		[RED("slaveObjectsToHighlight")] 
+		public CArray<entEntityID> SlaveObjectsToHighlight
+		{
+			get => GetPropertyValue<CArray<entEntityID>>();
+			set => SetPropertyValue<CArray<entEntityID>>(value);
+		}
+
 		public gameVisionModeComponent()
 		{
 			Name = "vision";
-			AvailableVisionModes = new();
 			ForcedHighlights = new();
 			ActiveRevealRequests = new();
+			SlaveObjectsToHighlight = new();
 		}
 	}
 }

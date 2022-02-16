@@ -38,6 +38,14 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(13)] 
+		[RED("questsSystem")] 
+		public CWeakHandle<questQuestsSystem> QuestsSystem
+		{
+			get => GetPropertyValue<CWeakHandle<questQuestsSystem>>();
+			set => SetPropertyValue<CWeakHandle<questQuestsSystem>>(value);
+		}
+
+		[Ordinal(14)] 
 		[RED("fact1ListenerId")] 
 		public CUInt32 Fact1ListenerId
 		{
@@ -45,7 +53,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CUInt32>(value);
 		}
 
-		[Ordinal(14)] 
+		[Ordinal(15)] 
 		[RED("fact2ListenerId")] 
 		public CUInt32 Fact2ListenerId
 		{
@@ -53,7 +61,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CUInt32>(value);
 		}
 
-		[Ordinal(15)] 
+		[Ordinal(16)] 
 		[RED("fact3ListenerId")] 
 		public CUInt32 Fact3ListenerId
 		{
@@ -61,7 +69,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CUInt32>(value);
 		}
 
-		[Ordinal(16)] 
+		[Ordinal(17)] 
 		[RED("fact4ListenerId")] 
 		public CUInt32 Fact4ListenerId
 		{
@@ -69,7 +77,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CUInt32>(value);
 		}
 
-		[Ordinal(17)] 
+		[Ordinal(18)] 
 		[RED("fact5ListenerId")] 
 		public CUInt32 Fact5ListenerId
 		{

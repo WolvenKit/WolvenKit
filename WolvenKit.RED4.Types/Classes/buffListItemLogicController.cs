@@ -21,10 +21,19 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
+		[Ordinal(3)] 
+		[RED("stackCounter")] 
+		public inkTextWidgetReference StackCounter
+		{
+			get => GetPropertyValue<inkTextWidgetReference>();
+			set => SetPropertyValue<inkTextWidgetReference>(value);
+		}
+
 		public buffListItemLogicController()
 		{
 			Icon = new();
 			Label = new();
+			StackCounter = new();
 		}
 	}
 }

@@ -5,7 +5,7 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class SecurityAlarm : InteractiveMasterDevice
 	{
-		[Ordinal(97)] 
+		[Ordinal(94)] 
 		[RED("workingAlarm")] 
 		public CHandle<entMeshComponent> WorkingAlarm
 		{
@@ -13,7 +13,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<entMeshComponent>>(value);
 		}
 
-		[Ordinal(98)] 
+		[Ordinal(95)] 
 		[RED("destroyedAlarm")] 
 		public CHandle<entMeshComponent> DestroyedAlarm
 		{
@@ -21,7 +21,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<entMeshComponent>>(value);
 		}
 
-		[Ordinal(99)] 
+		[Ordinal(96)] 
 		[RED("isGlitching")] 
 		public CBool IsGlitching
 		{

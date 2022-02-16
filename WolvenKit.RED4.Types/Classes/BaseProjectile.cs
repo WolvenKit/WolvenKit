@@ -5,7 +5,7 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class BaseProjectile : gameItemObject
 	{
-		[Ordinal(43)] 
+		[Ordinal(38)] 
 		[RED("projectileComponent")] 
 		public CHandle<gameprojectileComponent> ProjectileComponent
 		{
@@ -13,7 +13,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<gameprojectileComponent>>(value);
 		}
 
-		[Ordinal(44)] 
+		[Ordinal(39)] 
 		[RED("user")] 
 		public CWeakHandle<gameObject> User
 		{
@@ -21,7 +21,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<gameObject>>(value);
 		}
 
-		[Ordinal(45)] 
+		[Ordinal(40)] 
 		[RED("projectile")] 
 		public CWeakHandle<gameObject> Projectile
 		{
@@ -29,7 +29,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<gameObject>>(value);
 		}
 
-		[Ordinal(46)] 
+		[Ordinal(41)] 
 		[RED("projectileSpawnPoint")] 
 		public Vector4 ProjectileSpawnPoint
 		{
@@ -37,7 +37,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<Vector4>(value);
 		}
 
-		[Ordinal(47)] 
+		[Ordinal(42)] 
 		[RED("projectilePosition")] 
 		public Vector4 ProjectilePosition
 		{
@@ -45,7 +45,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<Vector4>(value);
 		}
 
-		[Ordinal(48)] 
+		[Ordinal(43)] 
 		[RED("initialLaunchVelocity")] 
 		public CFloat InitialLaunchVelocity
 		{
@@ -53,7 +53,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(49)] 
+		[Ordinal(44)] 
 		[RED("lifeTime")] 
 		public CFloat LifeTime
 		{
@@ -61,7 +61,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(50)] 
+		[Ordinal(45)] 
 		[RED("tweakDBPath")] 
 		public CString TweakDBPath
 		{

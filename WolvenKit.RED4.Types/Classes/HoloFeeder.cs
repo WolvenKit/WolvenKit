@@ -5,7 +5,7 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class HoloFeeder : Device
 	{
-		[Ordinal(87)] 
+		[Ordinal(84)] 
 		[RED("feederMesh")] 
 		public CHandle<entIPlacedComponent> FeederMesh
 		{

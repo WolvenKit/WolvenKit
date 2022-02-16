@@ -5,7 +5,7 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class AccessPoint : InteractiveMasterDevice
 	{
-		[Ordinal(97)] 
+		[Ordinal(94)] 
 		[RED("networkName")] 
 		public CString NetworkName
 		{
@@ -13,7 +13,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CString>(value);
 		}
 
-		[Ordinal(98)] 
+		[Ordinal(95)] 
 		[RED("isPlayerInBreachView")] 
 		public CBool IsPlayerInBreachView
 		{
@@ -21,7 +21,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(99)] 
+		[Ordinal(96)] 
 		[RED("isRevealed")] 
 		public CBool IsRevealed
 		{
@@ -29,7 +29,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(100)] 
+		[Ordinal(97)] 
 		[RED("breachViewTimeListener")] 
 		public CHandle<BreachViewTimeListener> BreachViewTimeListener
 		{
@@ -37,7 +37,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<BreachViewTimeListener>>(value);
 		}
 
-		[Ordinal(101)] 
+		[Ordinal(98)] 
 		[RED("upload_program_listener_id")] 
 		public CUInt32 Upload_program_listener_id
 		{

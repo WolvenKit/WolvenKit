@@ -30,6 +30,14 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(3)] 
+		[RED("forceScene")] 
+		public CBool ForceScene
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(4)] 
 		[RED("toOpen")] 
 		public CBool ToOpen
 		{
@@ -37,7 +45,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(4)] 
+		[Ordinal(5)] 
 		[RED("doorID")] 
 		public CName DoorID
 		{

@@ -140,5 +140,21 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CBool>();
 			set => SetPropertyValue<CBool>(value);
 		}
+
+		[Ordinal(17)] 
+		[RED("isThrowReloading")] 
+		public CBool IsThrowReloading
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(18)] 
+		[RED("throwReloadTime")] 
+		public CFloat ThrowReloadTime
+		{
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
+		}
 	}
 }

@@ -14,14 +14,6 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(2)] 
-		[RED("compileAllTechniques")] 
-		public CBool CompileAllTechniques
-		{
-			get => GetPropertyValue<CBool>();
-			set => SetPropertyValue<CBool>(value);
-		}
-
-		[Ordinal(3)] 
 		[RED("canHaveTangentUpdate")] 
 		public CBool CanHaveTangentUpdate
 		{
@@ -29,7 +21,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(4)] 
+		[Ordinal(3)] 
 		[RED("canHaveDismemberment")] 
 		public CBool CanHaveDismemberment
 		{
@@ -37,7 +29,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(5)] 
+		[Ordinal(4)] 
 		[RED("hasDPL")] 
 		public CBool HasDPL
 		{
@@ -45,7 +37,23 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
+		[Ordinal(5)] 
+		[RED("canBeMasked")] 
+		public CBool CanBeMasked
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
 		[Ordinal(6)] 
+		[RED("allowVariableRateShading")] 
+		public CBool AllowVariableRateShading
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(7)] 
 		[RED("materialVersion")] 
 		public CUInt8 MaterialVersion
 		{
@@ -53,7 +61,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CUInt8>(value);
 		}
 
-		[Ordinal(7)] 
+		[Ordinal(8)] 
 		[RED("vertexFactories")] 
 		public CArray<CEnum<EMaterialVertexFactory>> VertexFactories
 		{

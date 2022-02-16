@@ -31,7 +31,7 @@ namespace WolvenKit.RED4.Types
 
 		public gameTelemetryDamageDealt()
 		{
-			Damage = new() { AttackType = Enums.gamedataAttackType.Invalid, Weapon = new() { ItemID = new(), Quality = -1, ItemType = Enums.gamedataItemType.Invalid, ItemLevel = -1 }, HitCount = 1, Distance = -1.000000F };
+			Damage = new() { AttackType = Enums.gamedataAttackType.Invalid, Weapon = new() { ItemID = new(), Quality = Enums.gamedataQuality.Invalid, ItemType = Enums.gamedataItemType.Invalid, ItemLevel = -1 }, SourceEntity = new(), HitCount = 1, Distance = -1.000000F };
 			Enemy = new() { EnemyEntityID = new(), Archetype = Enums.gamedataArchetypeType.Invalid, Level = -1 };
 		}
 	}

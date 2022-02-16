@@ -5,7 +5,7 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class TimeSkipPopupCloseData : inkGameNotificationData
 	{
-		[Ordinal(6)] 
+		[Ordinal(7)] 
 		[RED("timeChanged")] 
 		public CBool TimeChanged
 		{

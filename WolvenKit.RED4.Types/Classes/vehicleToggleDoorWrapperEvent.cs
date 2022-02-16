@@ -20,5 +20,13 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CEnum<vehicleEVehicleDoor>>();
 			set => SetPropertyValue<CEnum<vehicleEVehicleDoor>>(value);
 		}
+
+		[Ordinal(2)] 
+		[RED("forceScene")] 
+		public CBool ForceScene
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
 	}
 }

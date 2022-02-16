@@ -30,6 +30,14 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(3)] 
+		[RED("allowRemoteAuthorization")] 
+		public CBool AllowRemoteAuthorization
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(4)] 
 		[RED("shouldForceVirtualSystem")] 
 		public CBool ShouldForceVirtualSystem
 		{

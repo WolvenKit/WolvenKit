@@ -5,7 +5,7 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class CraftingPopupData : inkGameNotificationData
 	{
-		[Ordinal(6)] 
+		[Ordinal(7)] 
 		[RED("itemTooltipData")] 
 		public CHandle<InventoryTooltipData> ItemTooltipData
 		{
@@ -13,7 +13,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<InventoryTooltipData>>(value);
 		}
 
-		[Ordinal(7)] 
+		[Ordinal(8)] 
 		[RED("craftingCommand")] 
 		public CEnum<CraftingCommands> CraftingCommand
 		{

@@ -68,5 +68,13 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CName>();
 			set => SetPropertyValue<CName>(value);
 		}
+
+		[Ordinal(8)] 
+		[RED("isBriefingActive")] 
+		public CName IsBriefingActive
+		{
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
+		}
 	}
 }

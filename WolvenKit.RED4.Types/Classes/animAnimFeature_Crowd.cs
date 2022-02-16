@@ -125,9 +125,51 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CInt32>(value);
 		}
 
+		[Ordinal(15)] 
+		[RED("randomVariation")] 
+		public CFloat RandomVariation
+		{
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
+		}
+
+		[Ordinal(16)] 
+		[RED("animScale")] 
+		public CFloat AnimScale
+		{
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
+		}
+
+		[Ordinal(17)] 
+		[RED("slopeRatio")] 
+		public CFloat SlopeRatio
+		{
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
+		}
+
+		[Ordinal(18)] 
+		[RED("distanceToPlayer2D")] 
+		public CFloat DistanceToPlayer2D
+		{
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
+		}
+
+		[Ordinal(19)] 
+		[RED("angleToPlayer")] 
+		public CFloat AngleToPlayer
+		{
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
+		}
+
 		public animAnimFeature_Crowd()
 		{
 			SpeedType = 1;
+			AnimScale = 1.000000F;
+			DistanceToPlayer2D = float.PositiveInfinity;
 		}
 	}
 }

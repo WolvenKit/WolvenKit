@@ -16,7 +16,7 @@ namespace WolvenKit.RED4.Types
 		public scneventsSpawnEntityEvent()
 		{
 			Id = new() { Id = 18446744073709551615 };
-			Params = new() { Performer = new() { Id = 4294967040 }, ReferencePerformer = new() { Id = 4294967040 }, FallbackCachedBones = new(0) };
+			Params = new() { Performer = new() { Id = 4294967040 }, ReferencePerformer = new() { Id = 4294967040 } };
 		}
 	}
 }

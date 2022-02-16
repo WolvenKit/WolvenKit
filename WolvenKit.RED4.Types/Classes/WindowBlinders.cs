@@ -5,7 +5,7 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class WindowBlinders : InteractiveDevice
 	{
-		[Ordinal(97)] 
+		[Ordinal(94)] 
 		[RED("animFeature")] 
 		public CHandle<AnimFeature_SimpleDevice> AnimFeature
 		{
@@ -13,7 +13,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<AnimFeature_SimpleDevice>>(value);
 		}
 
-		[Ordinal(98)] 
+		[Ordinal(95)] 
 		[RED("workspotSideName")] 
 		public CName WorkspotSideName
 		{
@@ -21,9 +21,33 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(99)] 
+		[Ordinal(96)] 
 		[RED("portalLight")] 
 		public CHandle<gameLightComponent> PortalLight
+		{
+			get => GetPropertyValue<CHandle<gameLightComponent>>();
+			set => SetPropertyValue<CHandle<gameLightComponent>>(value);
+		}
+
+		[Ordinal(97)] 
+		[RED("portalLight2")] 
+		public CHandle<gameLightComponent> PortalLight2
+		{
+			get => GetPropertyValue<CHandle<gameLightComponent>>();
+			set => SetPropertyValue<CHandle<gameLightComponent>>(value);
+		}
+
+		[Ordinal(98)] 
+		[RED("portalLight3")] 
+		public CHandle<gameLightComponent> PortalLight3
+		{
+			get => GetPropertyValue<CHandle<gameLightComponent>>();
+			set => SetPropertyValue<CHandle<gameLightComponent>>(value);
+		}
+
+		[Ordinal(99)] 
+		[RED("portalLight4")] 
+		public CHandle<gameLightComponent> PortalLight4
 		{
 			get => GetPropertyValue<CHandle<gameLightComponent>>();
 			set => SetPropertyValue<CHandle<gameLightComponent>>(value);
@@ -43,6 +67,14 @@ namespace WolvenKit.RED4.Types
 		{
 			get => GetPropertyValue<CArray<CHandle<gameStaticTriggerAreaComponent>>>();
 			set => SetPropertyValue<CArray<CHandle<gameStaticTriggerAreaComponent>>>(value);
+		}
+
+		[Ordinal(102)] 
+		[RED("interactionBlockingCollider")] 
+		public CHandle<entIPlacedComponent> InteractionBlockingCollider
+		{
+			get => GetPropertyValue<CHandle<entIPlacedComponent>>();
+			set => SetPropertyValue<CHandle<entIPlacedComponent>>(value);
 		}
 
 		public WindowBlinders()

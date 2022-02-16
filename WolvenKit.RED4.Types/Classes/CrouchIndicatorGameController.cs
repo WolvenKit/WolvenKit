@@ -262,6 +262,14 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(41)] 
+		[RED("PlayerMuppet")] 
+		public CWeakHandle<gameMuppet> PlayerMuppet
+		{
+			get => GetPropertyValue<CWeakHandle<gameMuppet>>();
+			set => SetPropertyValue<CWeakHandle<gameMuppet>>(value);
+		}
+
+		[Ordinal(42)] 
 		[RED("outOfAmmoAnim")] 
 		public CHandle<inkanimProxy> OutOfAmmoAnim
 		{
@@ -269,7 +277,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<inkanimProxy>>(value);
 		}
 
-		[Ordinal(42)] 
+		[Ordinal(43)] 
 		[RED("transitionAnimProxy")] 
 		public CHandle<inkanimProxy> TransitionAnimProxy
 		{
@@ -277,7 +285,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<inkanimProxy>>(value);
 		}
 
-		[Ordinal(43)] 
+		[Ordinal(44)] 
 		[RED("blackboard")] 
 		public CWeakHandle<gameIBlackboard> Blackboard
 		{
@@ -285,7 +293,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<gameIBlackboard>>(value);
 		}
 
-		[Ordinal(44)] 
+		[Ordinal(45)] 
 		[RED("bbDefinition")] 
 		public CHandle<UIInteractionsDef> BbDefinition
 		{
@@ -293,7 +301,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<UIInteractionsDef>>(value);
 		}
 
-		[Ordinal(45)] 
+		[Ordinal(46)] 
 		[RED("onMagazineAmmoCount")] 
 		public CHandle<redCallbackObject> OnMagazineAmmoCount
 		{
@@ -301,7 +309,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
-		[Ordinal(46)] 
+		[Ordinal(47)] 
 		[RED("dataListenerId")] 
 		public CHandle<redCallbackObject> DataListenerId
 		{
@@ -309,7 +317,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
-		[Ordinal(47)] 
+		[Ordinal(48)] 
 		[RED("weaponBlackboard")] 
 		public CWeakHandle<gameIBlackboard> WeaponBlackboard
 		{
@@ -317,7 +325,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<gameIBlackboard>>(value);
 		}
 
-		[Ordinal(48)] 
+		[Ordinal(49)] 
 		[RED("weaponParamsListenerId")] 
 		public CHandle<redCallbackObject> WeaponParamsListenerId
 		{
@@ -325,7 +333,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
-		[Ordinal(49)] 
+		[Ordinal(50)] 
 		[RED("bufferedMaxAmmo")] 
 		public CInt32 BufferedMaxAmmo
 		{
@@ -333,7 +341,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CInt32>(value);
 		}
 
-		[Ordinal(50)] 
+		[Ordinal(51)] 
 		[RED("bufferedAmmoId")] 
 		public CInt32 BufferedAmmoId
 		{
@@ -341,7 +349,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CInt32>(value);
 		}
 
-		[Ordinal(51)] 
+		[Ordinal(52)] 
 		[RED("genderName")] 
 		public CName GenderName
 		{
@@ -365,7 +373,7 @@ namespace WolvenKit.RED4.Types
 			WeaponName = new();
 			DamageTypeRef = new();
 			CrouchIcon = new();
-			WeaponItemData = new() { Empty = true, ID = new(), DamageType = Enums.gamedataDamageType.Invalid, EquipmentArea = Enums.gamedataEquipmentArea.Invalid, ComparedQuality = Enums.gamedataQuality.Invalid, IsAvailable = true, PositionInBackpack = 4294967295, IsRequirementMet = true, IsEquippable = true, Requirement = new() { StatType = Enums.gamedataStatType.Invalid }, EquipRequirement = new() { StatType = Enums.gamedataStatType.Invalid }, Attachments = new(), Abilities = new(), PlacementSlots = new(), PrimaryStats = new(), SecondaryStats = new(), SortData = new() };
+			WeaponItemData = new() { Empty = true, ID = new(), DamageType = Enums.gamedataDamageType.Invalid, EquipmentArea = Enums.gamedataEquipmentArea.Invalid, ComparedQuality = Enums.gamedataQuality.Invalid, IsAvailable = true, PositionInBackpack = 4294967295, IsRequirementMet = true, IsEquippable = true, Requirement = new() { StatType = Enums.gamedataStatType.Invalid }, EquipRequirement = new() { StatType = Enums.gamedataStatType.Invalid }, EquipRequirements = new(), Attachments = new(), Abilities = new(), PlacementSlots = new(), PrimaryStats = new(), SecondaryStats = new(), SortData = new() };
 			WeaponAreas = new();
 			ActiveWeapon = new() { WeaponID = new(), AmmoCurrent = -1, MagazineCap = -1, AmmoId = new(), TriggerModeCurrent = Enums.gamedataTriggerMode.Invalid, TriggerModeList = new(), Evolution = Enums.gamedataWeaponEvolution.Invalid, IsFirstEquip = true };
 		}

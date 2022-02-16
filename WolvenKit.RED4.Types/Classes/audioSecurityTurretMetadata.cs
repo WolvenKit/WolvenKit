@@ -54,6 +54,22 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(7)] 
+		[RED("triggerEffectSingle")] 
+		public CName TriggerEffectSingle
+		{
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
+		}
+
+		[Ordinal(8)] 
+		[RED("triggerEffectAuto")] 
+		public CName TriggerEffectAuto
+		{
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
+		}
+
+		[Ordinal(9)] 
 		[RED("obstructionEnabled")] 
 		public CBool ObstructionEnabled
 		{
@@ -61,7 +77,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(8)] 
+		[Ordinal(10)] 
 		[RED("occlusionEnabled")] 
 		public CBool OcclusionEnabled
 		{

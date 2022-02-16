@@ -158,14 +158,6 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(19)] 
-		[RED("allowStubMovement")] 
-		public CBool AllowStubMovement
-		{
-			get => GetPropertyValue<CBool>();
-			set => SetPropertyValue<CBool>(value);
-		}
-
-		[Ordinal(20)] 
 		[RED("driveOnSplineCommand")] 
 		public CHandle<AIVehicleOnSplineCommand> DriveOnSplineCommand
 		{
@@ -173,7 +165,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<AIVehicleOnSplineCommand>>(value);
 		}
 
-		[Ordinal(21)] 
+		[Ordinal(20)] 
 		[RED("useTraffic")] 
 		public CBool UseTraffic
 		{
@@ -181,7 +173,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(22)] 
+		[Ordinal(21)] 
 		[RED("speedInTraffic")] 
 		public CFloat SpeedInTraffic
 		{
@@ -189,7 +181,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(23)] 
+		[Ordinal(22)] 
 		[RED("target")] 
 		public CWeakHandle<gameObject> Target
 		{
@@ -197,7 +189,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<gameObject>>(value);
 		}
 
-		[Ordinal(24)] 
+		[Ordinal(23)] 
 		[RED("distanceMin")] 
 		public CFloat DistanceMin
 		{
@@ -205,7 +197,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(25)] 
+		[Ordinal(24)] 
 		[RED("distanceMax")] 
 		public CFloat DistanceMax
 		{
@@ -213,7 +205,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(26)] 
+		[Ordinal(25)] 
 		[RED("stopWhenTargetReached")] 
 		public CBool StopWhenTargetReached
 		{
@@ -221,7 +213,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(27)] 
+		[Ordinal(26)] 
 		[RED("trafficTryNeighborsForStart")] 
 		public CBool TrafficTryNeighborsForStart
 		{
@@ -229,7 +221,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(28)] 
+		[Ordinal(27)] 
 		[RED("trafficTryNeighborsForEnd")] 
 		public CBool TrafficTryNeighborsForEnd
 		{
@@ -237,7 +229,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(29)] 
+		[Ordinal(28)] 
 		[RED("driveFollowCommand")] 
 		public CHandle<AIVehicleFollowCommand> DriveFollowCommand
 		{
@@ -245,7 +237,23 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<AIVehicleFollowCommand>>(value);
 		}
 
+		[Ordinal(29)] 
+		[RED("driveChaseCommand")] 
+		public CHandle<AIVehicleChaseCommand> DriveChaseCommand
+		{
+			get => GetPropertyValue<CHandle<AIVehicleChaseCommand>>();
+			set => SetPropertyValue<CHandle<AIVehicleChaseCommand>>(value);
+		}
+
 		[Ordinal(30)] 
+		[RED("drivePanicCommand")] 
+		public CHandle<AIVehiclePanicCommand> DrivePanicCommand
+		{
+			get => GetPropertyValue<CHandle<AIVehiclePanicCommand>>();
+			set => SetPropertyValue<CHandle<AIVehiclePanicCommand>>(value);
+		}
+
+		[Ordinal(31)] 
 		[RED("nodeRef")] 
 		public NodeRef NodeRef
 		{
@@ -253,7 +261,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<NodeRef>(value);
 		}
 
-		[Ordinal(31)] 
+		[Ordinal(32)] 
 		[RED("isPlayer")] 
 		public CBool IsPlayer
 		{
@@ -261,7 +269,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(32)] 
+		[Ordinal(33)] 
 		[RED("forceGreenLights")] 
 		public CBool ForceGreenLights
 		{
@@ -269,7 +277,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(33)] 
+		[Ordinal(34)] 
 		[RED("portals")] 
 		public CHandle<vehiclePortalsList> Portals
 		{
@@ -277,7 +285,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<vehiclePortalsList>>(value);
 		}
 
-		[Ordinal(34)] 
+		[Ordinal(35)] 
 		[RED("driveToNodeCommand")] 
 		public CHandle<AIVehicleToNodeCommand> DriveToNodeCommand
 		{
@@ -285,7 +293,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<AIVehicleToNodeCommand>>(value);
 		}
 
-		[Ordinal(35)] 
+		[Ordinal(36)] 
 		[RED("driveRacingCommand")] 
 		public CHandle<AIVehicleRacingCommand> DriveRacingCommand
 		{
@@ -293,7 +301,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<AIVehicleRacingCommand>>(value);
 		}
 
-		[Ordinal(36)] 
+		[Ordinal(37)] 
 		[RED("driveJoinTrafficCommand")] 
 		public CHandle<AIVehicleJoinTrafficCommand> DriveJoinTrafficCommand
 		{

@@ -52,5 +52,13 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CEnum<questPhoneCallPhase>>();
 			set => SetPropertyValue<CEnum<questPhoneCallPhase>>(value);
 		}
+
+		[Ordinal(6)] 
+		[RED("isRejectable")] 
+		public CBool IsRejectable
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
 	}
 }

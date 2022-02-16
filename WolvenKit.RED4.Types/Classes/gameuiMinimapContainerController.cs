@@ -166,14 +166,6 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(36)] 
-		[RED("messageCounter")] 
-		public inkWidgetReference MessageCounter
-		{
-			get => GetPropertyValue<inkWidgetReference>();
-			set => SetPropertyValue<inkWidgetReference>(value);
-		}
-
-		[Ordinal(37)] 
 		[RED("combatModeHighlight")] 
 		public inkWidgetReference CombatModeHighlight
 		{
@@ -181,7 +173,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(38)] 
+		[Ordinal(37)] 
 		[RED("rootWidget")] 
 		public CWeakHandle<inkWidget> RootWidget
 		{
@@ -189,7 +181,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<inkWidget>>(value);
 		}
 
-		[Ordinal(39)] 
+		[Ordinal(38)] 
 		[RED("zoneVignetteAnimProxy")] 
 		public CHandle<inkanimProxy> ZoneVignetteAnimProxy
 		{
@@ -197,7 +189,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<inkanimProxy>>(value);
 		}
 
-		[Ordinal(40)] 
+		[Ordinal(39)] 
 		[RED("inPublicOrRestrictedZone")] 
 		public CBool InPublicOrRestrictedZone
 		{
@@ -205,7 +197,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(41)] 
+		[Ordinal(40)] 
 		[RED("fluffTextCount")] 
 		public CInt32 FluffTextCount
 		{
@@ -213,7 +205,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CInt32>(value);
 		}
 
-		[Ordinal(42)] 
+		[Ordinal(41)] 
 		[RED("mapBlackboard")] 
 		public CWeakHandle<gameIBlackboard> MapBlackboard
 		{
@@ -221,7 +213,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<gameIBlackboard>>(value);
 		}
 
-		[Ordinal(43)] 
+		[Ordinal(42)] 
 		[RED("mapDefinition")] 
 		public CHandle<UI_MapDef> MapDefinition
 		{
@@ -229,7 +221,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<UI_MapDef>>(value);
 		}
 
-		[Ordinal(44)] 
+		[Ordinal(43)] 
 		[RED("locationDataCallback")] 
 		public CHandle<redCallbackObject> LocationDataCallback
 		{
@@ -237,7 +229,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
-		[Ordinal(45)] 
+		[Ordinal(44)] 
 		[RED("securityBlackBoardID")] 
 		public CHandle<redCallbackObject> SecurityBlackBoardID
 		{
@@ -245,7 +237,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
-		[Ordinal(46)] 
+		[Ordinal(45)] 
 		[RED("combatAnimation")] 
 		public CHandle<inkanimProxy> CombatAnimation
 		{
@@ -253,7 +245,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<inkanimProxy>>(value);
 		}
 
-		[Ordinal(47)] 
+		[Ordinal(46)] 
 		[RED("playerInCombat")] 
 		public CBool PlayerInCombat
 		{
@@ -261,7 +253,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(48)] 
+		[Ordinal(47)] 
 		[RED("zoneNeedsUpdate")] 
 		public CBool ZoneNeedsUpdate
 		{
@@ -269,7 +261,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(49)] 
+		[Ordinal(48)] 
 		[RED("lastZoneType")] 
 		public CEnum<ESecurityAreaType> LastZoneType
 		{
@@ -277,7 +269,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CEnum<ESecurityAreaType>>(value);
 		}
 
-		[Ordinal(50)] 
+		[Ordinal(49)] 
 		[RED("messageCounterController")] 
 		public CWeakHandle<inkCompoundWidget> MessageCounterController
 		{
@@ -305,7 +297,6 @@ namespace WolvenKit.RED4.Types
 			FluffText1 = new();
 			SecurityAreaVignetteWidget = new();
 			SecurityAreaText = new();
-			MessageCounter = new();
 			CombatModeHighlight = new();
 		}
 	}

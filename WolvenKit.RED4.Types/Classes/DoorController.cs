@@ -2,7 +2,7 @@
 namespace WolvenKit.RED4.Types
 {
 	[REDMeta]
-	public partial class DoorController : ScriptableDC
+	public partial class DoorController : ScriptableDeviceComponent
 	{
 	}
 }

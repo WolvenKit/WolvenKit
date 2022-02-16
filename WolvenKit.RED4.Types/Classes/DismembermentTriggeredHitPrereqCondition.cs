@@ -5,7 +5,7 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class DismembermentTriggeredHitPrereqCondition : BaseHitPrereqCondition
 	{
-		[Ordinal(1)] 
+		[Ordinal(3)] 
 		[RED("dotType")] 
 		public CEnum<gamedataStatusEffectType> DotType
 		{

@@ -5,7 +5,7 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class ActivatedDeviceTrap : ActivatedDeviceTransfromAnim
 	{
-		[Ordinal(98)] 
+		[Ordinal(95)] 
 		[RED("areaComponent")] 
 		public CHandle<gameStaticTriggerAreaComponent> AreaComponent
 		{

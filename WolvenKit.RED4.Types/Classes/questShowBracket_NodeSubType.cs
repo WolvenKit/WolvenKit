@@ -22,6 +22,14 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(2)] 
+		[RED("visibleOnUILayer")] 
+		public CEnum<inkELayerType> VisibleOnUILayer
+		{
+			get => GetPropertyValue<CEnum<inkELayerType>>();
+			set => SetPropertyValue<CEnum<inkELayerType>>(value);
+		}
+
+		[Ordinal(3)] 
 		[RED("bracketType")] 
 		public CEnum<gameTutorialBracketType> BracketType
 		{
@@ -29,7 +37,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CEnum<gameTutorialBracketType>>(value);
 		}
 
-		[Ordinal(3)] 
+		[Ordinal(4)] 
 		[RED("anchor")] 
 		public CEnum<inkEAnchor> Anchor
 		{
@@ -37,7 +45,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CEnum<inkEAnchor>>(value);
 		}
 
-		[Ordinal(4)] 
+		[Ordinal(5)] 
 		[RED("offset")] 
 		public Vector2 Offset
 		{
@@ -45,7 +53,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<Vector2>(value);
 		}
 
-		[Ordinal(5)] 
+		[Ordinal(6)] 
 		[RED("size")] 
 		public Vector2 Size
 		{
@@ -53,7 +61,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<Vector2>(value);
 		}
 
-		[Ordinal(6)] 
+		[Ordinal(7)] 
 		[RED("ignoreDisabledTutorials")] 
 		public CBool IgnoreDisabledTutorials
 		{
@@ -64,6 +72,7 @@ namespace WolvenKit.RED4.Types
 		public questShowBracket_NodeSubType()
 		{
 			Visible = true;
+			VisibleOnUILayer = Enums.inkELayerType.MAX;
 			Offset = new();
 			Size = new();
 		}

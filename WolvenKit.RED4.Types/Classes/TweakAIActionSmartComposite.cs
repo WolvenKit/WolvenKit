@@ -5,7 +5,7 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class TweakAIActionSmartComposite : TweakAIActionAbstract
 	{
-		[Ordinal(27)] 
+		[Ordinal(36)] 
 		[RED("smartComposite")] 
 		public TweakDBID SmartComposite
 		{
@@ -13,7 +13,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<TweakDBID>(value);
 		}
 
-		[Ordinal(28)] 
+		[Ordinal(37)] 
 		[RED("smartCompositeRecord")] 
 		public CWeakHandle<gamedataAIActionSmartComposite_Record> SmartCompositeRecord
 		{
@@ -21,7 +21,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<gamedataAIActionSmartComposite_Record>>(value);
 		}
 
-		[Ordinal(29)] 
+		[Ordinal(38)] 
 		[RED("interruptionRequested")] 
 		public CBool InterruptionRequested
 		{
@@ -29,7 +29,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(30)] 
+		[Ordinal(39)] 
 		[RED("conditionSuccessfulCheckTimeStamp")] 
 		public CFloat ConditionSuccessfulCheckTimeStamp
 		{
@@ -37,7 +37,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(31)] 
+		[Ordinal(40)] 
 		[RED("conditionCheckTimeStamp")] 
 		public CFloat ConditionCheckTimeStamp
 		{
@@ -45,15 +45,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(32)] 
-		[RED("conditionCheckRandomizedInterval")] 
-		public CFloat ConditionCheckRandomizedInterval
-		{
-			get => GetPropertyValue<CFloat>();
-			set => SetPropertyValue<CFloat>(value);
-		}
-
-		[Ordinal(33)] 
+		[Ordinal(41)] 
 		[RED("iteration")] 
 		public CUInt32 Iteration
 		{
@@ -61,7 +53,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CUInt32>(value);
 		}
 
-		[Ordinal(34)] 
+		[Ordinal(42)] 
 		[RED("nodeIterator")] 
 		public CInt32 NodeIterator
 		{
@@ -69,7 +61,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CInt32>(value);
 		}
 
-		[Ordinal(35)] 
+		[Ordinal(43)] 
 		[RED("currentNodeIterator")] 
 		public CInt32 CurrentNodeIterator
 		{
@@ -77,7 +69,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CInt32>(value);
 		}
 
-		[Ordinal(36)] 
+		[Ordinal(44)] 
 		[RED("currentNodeType")] 
 		public CEnum<ETweakAINodeType> CurrentNodeType
 		{
@@ -85,7 +77,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CEnum<ETweakAINodeType>>(value);
 		}
 
-		[Ordinal(37)] 
+		[Ordinal(45)] 
 		[RED("currentNode")] 
 		public CWeakHandle<gamedataAINode_Record> CurrentNode
 		{

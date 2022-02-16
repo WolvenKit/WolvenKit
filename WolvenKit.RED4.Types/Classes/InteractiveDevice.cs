@@ -5,7 +5,7 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class InteractiveDevice : Device
 	{
-		[Ordinal(87)] 
+		[Ordinal(84)] 
 		[RED("interaction")] 
 		public CHandle<gameinteractionsComponent> Interaction
 		{
@@ -13,7 +13,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<gameinteractionsComponent>>(value);
 		}
 
-		[Ordinal(88)] 
+		[Ordinal(85)] 
 		[RED("interactionIndicator")] 
 		public CHandle<gameLightComponent> InteractionIndicator
 		{
@@ -21,7 +21,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<gameLightComponent>>(value);
 		}
 
-		[Ordinal(89)] 
+		[Ordinal(86)] 
 		[RED("disableAreaIndicatorID")] 
 		public gameDelayID DisableAreaIndicatorID
 		{
@@ -29,7 +29,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gameDelayID>(value);
 		}
 
-		[Ordinal(90)] 
+		[Ordinal(87)] 
 		[RED("delayedUIRefreshID")] 
 		public gameDelayID DelayedUIRefreshID
 		{
@@ -37,7 +37,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gameDelayID>(value);
 		}
 
-		[Ordinal(91)] 
+		[Ordinal(88)] 
 		[RED("isPlayerAround")] 
 		public CBool IsPlayerAround
 		{
@@ -45,7 +45,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(92)] 
+		[Ordinal(89)] 
 		[RED("disableAreaIndicatorDelayActive")] 
 		public CBool DisableAreaIndicatorDelayActive
 		{
@@ -53,7 +53,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(93)] 
+		[Ordinal(90)] 
 		[RED("objectActionsCallbackCtrl")] 
 		public CHandle<gameObjectActionsCallbackController> ObjectActionsCallbackCtrl
 		{
@@ -61,7 +61,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<gameObjectActionsCallbackController>>(value);
 		}
 
-		[Ordinal(94)] 
+		[Ordinal(91)] 
 		[RED("investigationPositionsArray")] 
 		public CArray<Vector4> InvestigationPositionsArray
 		{
@@ -69,7 +69,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<Vector4>>(value);
 		}
 
-		[Ordinal(95)] 
+		[Ordinal(92)] 
 		[RED("actionRestrictionPlayerBB")] 
 		public CWeakHandle<gameIBlackboard> ActionRestrictionPlayerBB
 		{
@@ -77,7 +77,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<gameIBlackboard>>(value);
 		}
 
-		[Ordinal(96)] 
+		[Ordinal(93)] 
 		[RED("actionRestrictionCallbackID")] 
 		public CHandle<redCallbackObject> ActionRestrictionCallbackID
 		{

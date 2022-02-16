@@ -5,7 +5,7 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class gameuiCharacterCustomizationFeetController : gameuiCharacterCustomizationBodyPartsController
 	{
-		[Ordinal(3)] 
+		[Ordinal(4)] 
 		[RED("liftedFeetGroupName")] 
 		public CName LiftedFeetGroupName
 		{
@@ -13,7 +13,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(4)] 
+		[Ordinal(5)] 
 		[RED("flatFeetGroupName")] 
 		public CName FlatFeetGroupName
 		{

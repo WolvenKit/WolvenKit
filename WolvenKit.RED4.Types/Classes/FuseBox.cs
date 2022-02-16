@@ -5,7 +5,7 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class FuseBox : InteractiveMasterDevice
 	{
-		[Ordinal(97)] 
+		[Ordinal(94)] 
 		[RED("isShortGlitchActive")] 
 		public CBool IsShortGlitchActive
 		{
@@ -13,7 +13,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(98)] 
+		[Ordinal(95)] 
 		[RED("shortGlitchDelayID")] 
 		public gameDelayID ShortGlitchDelayID
 		{
@@ -21,7 +21,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gameDelayID>(value);
 		}
 
-		[Ordinal(99)] 
+		[Ordinal(96)] 
 		[RED("numberOfComponentsToON")] 
 		public CInt32 NumberOfComponentsToON
 		{
@@ -29,7 +29,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CInt32>(value);
 		}
 
-		[Ordinal(100)] 
+		[Ordinal(97)] 
 		[RED("numberOfComponentsToOFF")] 
 		public CInt32 NumberOfComponentsToOFF
 		{
@@ -37,7 +37,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CInt32>(value);
 		}
 
-		[Ordinal(101)] 
+		[Ordinal(98)] 
 		[RED("indexesOfComponentsToOFF")] 
 		public CArray<CInt32> IndexesOfComponentsToOFF
 		{
@@ -45,7 +45,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<CInt32>>(value);
 		}
 
-		[Ordinal(102)] 
+		[Ordinal(99)] 
 		[RED("mesh")] 
 		public CHandle<entMeshComponent> Mesh
 		{
@@ -53,7 +53,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<entMeshComponent>>(value);
 		}
 
-		[Ordinal(103)] 
+		[Ordinal(100)] 
 		[RED("componentsON")] 
 		public CArray<CHandle<entIPlacedComponent>> ComponentsON
 		{
@@ -61,7 +61,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<CHandle<entIPlacedComponent>>>(value);
 		}
 
-		[Ordinal(104)] 
+		[Ordinal(101)] 
 		[RED("componentsOFF")] 
 		public CArray<CHandle<entIPlacedComponent>> ComponentsOFF
 		{

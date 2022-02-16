@@ -85,6 +85,14 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<CName>>(value);
 		}
 
+		[Ordinal(11)] 
+		[RED("versionUpdateInfo")] 
+		public CArray<gameuiCharacterCustomizationVersionUpdateInfo> VersionUpdateInfo
+		{
+			get => GetPropertyValue<CArray<gameuiCharacterCustomizationVersionUpdateInfo>>();
+			set => SetPropertyValue<CArray<gameuiCharacterCustomizationVersionUpdateInfo>>(value);
+		}
+
 		public gameuiCharacterCustomizationInfoResource()
 		{
 			HeadCustomizationOptions = new();
@@ -96,6 +104,7 @@ namespace WolvenKit.RED4.Types
 			PerspectiveInfo = new();
 			UiPresets = new();
 			ExcludedFromRandomize = new();
+			VersionUpdateInfo = new();
 		}
 	}
 }

@@ -151,6 +151,12 @@ namespace WolvenKit.MSTests
         }
 
         [TestMethod]
+        public void Write_ccstate()
+        {
+            Test_Extension(".ccstate");
+        }
+
+        [TestMethod]
         public void Write_cfoliage()
         {
             Test_Extension(".cfoliage");
@@ -724,6 +730,12 @@ namespace WolvenKit.MSTests
         public void Write_spatial_representation()
         {
             Test_Extension(".spatial_representation");
+        }
+
+        [TestMethod]
+        public void Write_streamingblock()
+        {
+            Test_Extension(".streamingblock");
         }
 
         [TestMethod]

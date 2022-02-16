@@ -5,7 +5,7 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class Stillage : InteractiveDevice
 	{
-		[Ordinal(97)] 
+		[Ordinal(94)] 
 		[RED("collider")] 
 		public CHandle<entIPlacedComponent> Collider
 		{

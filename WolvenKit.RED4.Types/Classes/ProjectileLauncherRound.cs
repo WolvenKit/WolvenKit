@@ -5,7 +5,7 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class ProjectileLauncherRound : gameItemObject
 	{
-		[Ordinal(43)] 
+		[Ordinal(38)] 
 		[RED("projectileComponent")] 
 		public CHandle<gameprojectileComponent> ProjectileComponent
 		{
@@ -13,7 +13,15 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<gameprojectileComponent>>(value);
 		}
 
-		[Ordinal(44)] 
+		[Ordinal(39)] 
+		[RED("resourceLibraryComponent")] 
+		public CHandle<ResourceLibraryComponent> ResourceLibraryComponent
+		{
+			get => GetPropertyValue<CHandle<ResourceLibraryComponent>>();
+			set => SetPropertyValue<CHandle<ResourceLibraryComponent>>(value);
+		}
+
+		[Ordinal(40)] 
 		[RED("user")] 
 		public CWeakHandle<gameObject> User
 		{
@@ -21,7 +29,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<gameObject>>(value);
 		}
 
-		[Ordinal(45)] 
+		[Ordinal(41)] 
 		[RED("projectile")] 
 		public CWeakHandle<gameObject> Projectile
 		{
@@ -29,7 +37,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<gameObject>>(value);
 		}
 
-		[Ordinal(46)] 
+		[Ordinal(42)] 
 		[RED("weapon")] 
 		public CWeakHandle<gameweaponObject> Weapon
 		{
@@ -37,7 +45,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<gameweaponObject>>(value);
 		}
 
-		[Ordinal(47)] 
+		[Ordinal(43)] 
 		[RED("projectileSpawnPoint")] 
 		public Vector4 ProjectileSpawnPoint
 		{
@@ -45,15 +53,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<Vector4>(value);
 		}
 
-		[Ordinal(48)] 
-		[RED("projectilePosition")] 
-		public Vector4 ProjectilePosition
-		{
-			get => GetPropertyValue<Vector4>();
-			set => SetPropertyValue<Vector4>(value);
-		}
-
-		[Ordinal(49)] 
+		[Ordinal(44)] 
 		[RED("launchMode")] 
 		public CEnum<gamedataProjectileLaunchMode> LaunchMode
 		{
@@ -61,31 +61,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CEnum<gamedataProjectileLaunchMode>>(value);
 		}
 
-		[Ordinal(50)] 
-		[RED("projectileLauncherRound")] 
-		public CArray<gameSPartSlots> ProjectileLauncherRound_
-		{
-			get => GetPropertyValue<CArray<gameSPartSlots>>();
-			set => SetPropertyValue<CArray<gameSPartSlots>>(value);
-		}
-
-		[Ordinal(51)] 
-		[RED("partSlots")] 
-		public gameSPartSlots PartSlots
-		{
-			get => GetPropertyValue<gameSPartSlots>();
-			set => SetPropertyValue<gameSPartSlots>(value);
-		}
-
-		[Ordinal(52)] 
-		[RED("installedPart")] 
-		public gameItemID InstalledPart
-		{
-			get => GetPropertyValue<gameItemID>();
-			set => SetPropertyValue<gameItemID>(value);
-		}
-
-		[Ordinal(53)] 
+		[Ordinal(45)] 
 		[RED("initialLaunchVelocity")] 
 		public CFloat InitialLaunchVelocity
 		{
@@ -93,15 +69,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(54)] 
-		[RED("projectileLifetime")] 
-		public CFloat ProjectileLifetime
-		{
-			get => GetPropertyValue<CFloat>();
-			set => SetPropertyValue<CFloat>(value);
-		}
-
-		[Ordinal(55)] 
+		[Ordinal(46)] 
 		[RED("installedProjectile")] 
 		public gameItemID InstalledProjectile
 		{
@@ -109,7 +77,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gameItemID>(value);
 		}
 
-		[Ordinal(56)] 
+		[Ordinal(47)] 
 		[RED("actionType")] 
 		public CEnum<ELauncherActionType> ActionType
 		{
@@ -117,7 +85,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CEnum<ELauncherActionType>>(value);
 		}
 
-		[Ordinal(57)] 
+		[Ordinal(48)] 
 		[RED("attackRecord")] 
 		public CHandle<gamedataAttack_Record> AttackRecord
 		{
@@ -125,23 +93,23 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<gamedataAttack_Record>>(value);
 		}
 
-		[Ordinal(58)] 
-		[RED("lifetimeDelayId")] 
-		public gameDelayID LifetimeDelayId
+		[Ordinal(49)] 
+		[RED("releaseRequestDelayID")] 
+		public gameDelayID ReleaseRequestDelayID
 		{
 			get => GetPropertyValue<gameDelayID>();
 			set => SetPropertyValue<gameDelayID>(value);
 		}
 
-		[Ordinal(59)] 
-		[RED("hitEventData")] 
-		public CHandle<gameprojectileHitEvent> HitEventData
+		[Ordinal(50)] 
+		[RED("detonateRequestDelayID")] 
+		public gameDelayID DetonateRequestDelayID
 		{
-			get => GetPropertyValue<CHandle<gameprojectileHitEvent>>();
-			set => SetPropertyValue<CHandle<gameprojectileHitEvent>>(value);
+			get => GetPropertyValue<gameDelayID>();
+			set => SetPropertyValue<gameDelayID>(value);
 		}
 
-		[Ordinal(60)] 
+		[Ordinal(51)] 
 		[RED("projectileTrailName")] 
 		public CName ProjectileTrailName
 		{
@@ -149,7 +117,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(61)] 
+		[Ordinal(52)] 
 		[RED("projectileCollisionEvaluator")] 
 		public CHandle<ProjectileLauncherRoundCollisionEvaluator> ProjectileCollisionEvaluator
 		{
@@ -157,15 +125,84 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<ProjectileLauncherRoundCollisionEvaluator>>(value);
 		}
 
+		[Ordinal(53)] 
+		[RED("isAlive")] 
+		public CBool IsAlive
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(54)] 
+		[RED("isSinking")] 
+		public CBool IsSinking
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(55)] 
+		[RED("waterHeight")] 
+		public CFloat WaterHeight
+		{
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
+		}
+
+		[Ordinal(56)] 
+		[RED("deepWaterDepth")] 
+		public CFloat DeepWaterDepth
+		{
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
+		}
+
+		[Ordinal(57)] 
+		[RED("sinkingDetonationDelay")] 
+		public CFloat SinkingDetonationDelay
+		{
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
+		}
+
+		[Ordinal(58)] 
+		[RED("waterSurfaceImpactImpulseRadius")] 
+		public CFloat WaterSurfaceImpactImpulseRadius
+		{
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
+		}
+
+		[Ordinal(59)] 
+		[RED("waterSurfaceImpactImpulseStrength")] 
+		public CFloat WaterSurfaceImpactImpulseStrength
+		{
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
+		}
+
+		[Ordinal(60)] 
+		[RED("waterDetonationImpulseRadius")] 
+		public CFloat WaterDetonationImpulseRadius
+		{
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
+		}
+
+		[Ordinal(61)] 
+		[RED("waterDetonationImpulseStrength")] 
+		public CFloat WaterDetonationImpulseStrength
+		{
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
+		}
+
 		public ProjectileLauncherRound()
 		{
 			ProjectileSpawnPoint = new();
-			ProjectilePosition = new();
-			ProjectileLauncherRound_ = new();
-			PartSlots = new() { InstalledPart = new(), InnerItemData = new() };
-			InstalledPart = new();
 			InstalledProjectile = new();
-			LifetimeDelayId = new();
+			ReleaseRequestDelayID = new();
+			DetonateRequestDelayID = new();
 		}
 	}
 }

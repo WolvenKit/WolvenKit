@@ -5,7 +5,7 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class SBannerWidgetPackage : SWidgetPackage
 	{
-		[Ordinal(17)] 
+		[Ordinal(18)] 
 		[RED("title")] 
 		public CString Title
 		{
@@ -13,7 +13,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CString>(value);
 		}
 
-		[Ordinal(18)] 
+		[Ordinal(19)] 
 		[RED("description")] 
 		public CString Description
 		{
@@ -21,7 +21,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CString>(value);
 		}
 
-		[Ordinal(19)] 
+		[Ordinal(20)] 
 		[RED("content")] 
 		public redResourceReferenceScriptToken Content
 		{

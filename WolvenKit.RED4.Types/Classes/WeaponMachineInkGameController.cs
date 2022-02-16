@@ -5,7 +5,7 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class WeaponMachineInkGameController : VendingMachineInkGameController
 	{
-		[Ordinal(25)] 
+		[Ordinal(26)] 
 		[RED("buttonRef")] 
 		public CWeakHandle<WeaponVendorActionWidgetController> ButtonRef
 		{

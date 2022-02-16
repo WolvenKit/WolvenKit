@@ -5,7 +5,7 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class GrappleBreakFreeEvents : GrappleStandEvents
 	{
-		[Ordinal(5)] 
+		[Ordinal(8)] 
 		[RED("playerPositionVerified")] 
 		public CBool PlayerPositionVerified
 		{
@@ -13,7 +13,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(6)] 
+		[Ordinal(9)] 
 		[RED("shouldPushPlayerAway")] 
 		public CBool ShouldPushPlayerAway
 		{

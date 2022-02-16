@@ -28,5 +28,13 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CWeakHandle<SecurityAreaControllerPS>>();
 			set => SetPropertyValue<CWeakHandle<SecurityAreaControllerPS>>(value);
 		}
+
+		[Ordinal(3)] 
+		[RED("wasScheduled")] 
+		public CBool WasScheduled
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
 	}
 }

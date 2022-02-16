@@ -29,6 +29,14 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<NodeRef>(value);
 		}
 
+		[Ordinal(3)] 
+		[RED("despawnOnDistanceEnabled")] 
+		public CBool DespawnOnDistanceEnabled
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
 		public vehicleGarageComponentVehicleData()
 		{
 			EntityID = new();

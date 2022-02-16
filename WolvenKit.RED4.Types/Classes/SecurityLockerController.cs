@@ -2,7 +2,7 @@
 namespace WolvenKit.RED4.Types
 {
 	[REDMeta]
-	public partial class SecurityLockerController : ScriptableDC
+	public partial class SecurityLockerController : ScriptableDeviceComponent
 	{
 	}
 }

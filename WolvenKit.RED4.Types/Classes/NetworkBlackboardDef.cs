@@ -93,6 +93,14 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gamebbScriptID_Variant>(value);
 		}
 
+		[Ordinal(11)] 
+		[RED("PersonalLinkStatus")] 
+		public gamebbScriptID_Int32 PersonalLinkStatus
+		{
+			get => GetPropertyValue<gamebbScriptID_Int32>();
+			set => SetPropertyValue<gamebbScriptID_Int32>(value);
+		}
+
 		public NetworkBlackboardDef()
 		{
 			MinigameDef = new();
@@ -106,6 +114,7 @@ namespace WolvenKit.RED4.Types
 			ItemBreach = new();
 			Attempt = new();
 			SelectedMinigameDef = new();
+			PersonalLinkStatus = new();
 		}
 	}
 }

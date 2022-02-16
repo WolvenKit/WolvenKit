@@ -6,15 +6,23 @@ namespace WolvenKit.RED4.Types
 	public partial class RipperdocIdPanel : inkWidgetLogicController
 	{
 		[Ordinal(1)] 
-		[RED("NameLabel")] 
+		[RED("fluffContainer")] 
+		public inkWidgetReference FluffContainer
+		{
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
+		}
+
+		[Ordinal(2)] 
+		[RED("nameLabel")] 
 		public inkTextWidgetReference NameLabel
 		{
 			get => GetPropertyValue<inkTextWidgetReference>();
 			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
-		[Ordinal(2)] 
-		[RED("MoneyLabel")] 
+		[Ordinal(3)] 
+		[RED("moneyLabel")] 
 		public inkTextWidgetReference MoneyLabel
 		{
 			get => GetPropertyValue<inkTextWidgetReference>();
@@ -23,6 +31,7 @@ namespace WolvenKit.RED4.Types
 
 		public RipperdocIdPanel()
 		{
+			FluffContainer = new();
 			NameLabel = new();
 			MoneyLabel = new();
 		}

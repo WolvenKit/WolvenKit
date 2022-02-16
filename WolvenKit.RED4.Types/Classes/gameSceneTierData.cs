@@ -20,5 +20,13 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CBool>();
 			set => SetPropertyValue<CBool>(value);
 		}
+
+		[Ordinal(2)] 
+		[RED("userDebugInfo")] 
+		public CString UserDebugInfo
+		{
+			get => GetPropertyValue<CString>();
+			set => SetPropertyValue<CString>(value);
+		}
 	}
 }

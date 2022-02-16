@@ -21,22 +21,6 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<entEntityID>(value);
 		}
 
-		[Ordinal(7)] 
-		[RED("statPoolSystem")] 
-		public CHandle<gameStatPoolsSystem> StatPoolSystem
-		{
-			get => GetPropertyValue<CHandle<gameStatPoolsSystem>>();
-			set => SetPropertyValue<CHandle<gameStatPoolsSystem>>(value);
-		}
-
-		[Ordinal(8)] 
-		[RED("statPoolType")] 
-		public CEnum<gamedataStatPoolType> StatPoolType
-		{
-			get => GetPropertyValue<CEnum<gamedataStatPoolType>>();
-			set => SetPropertyValue<CEnum<gamedataStatPoolType>>(value);
-		}
-
 		public SasquatchComponent()
 		{
 			Owner_id = new();

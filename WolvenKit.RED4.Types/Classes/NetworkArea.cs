@@ -5,7 +5,7 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class NetworkArea : InteractiveMasterDevice
 	{
-		[Ordinal(97)] 
+		[Ordinal(94)] 
 		[RED("area")] 
 		public CHandle<gameStaticTriggerAreaComponent> Area
 		{

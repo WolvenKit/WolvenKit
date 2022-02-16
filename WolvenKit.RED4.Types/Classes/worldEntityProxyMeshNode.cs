@@ -5,7 +5,7 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class worldEntityProxyMeshNode : worldPrefabProxyMeshNode
 	{
-		[Ordinal(19)] 
+		[Ordinal(18)] 
 		[RED("ownerGlobalId")] 
 		public worldGlobalNodeID OwnerGlobalId
 		{
@@ -13,7 +13,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<worldGlobalNodeID>(value);
 		}
 
-		[Ordinal(20)] 
+		[Ordinal(19)] 
 		[RED("entityAttachDistance")] 
 		public CFloat EntityAttachDistance
 		{
@@ -23,8 +23,6 @@ namespace WolvenKit.RED4.Types
 
 		public worldEntityProxyMeshNode()
 		{
-			AncestorPrefabProxyMeshNodeID = new();
-			OwnerPrefabNodeId = new();
 			OwnerGlobalId = new();
 		}
 	}

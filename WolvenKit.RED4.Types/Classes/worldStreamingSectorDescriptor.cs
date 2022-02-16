@@ -46,8 +46,8 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(5)] 
-		[RED("sectorIndex")] 
-		public CUInt32 SectorIndex
+		[RED("blockIndex")] 
+		public CUInt32 BlockIndex
 		{
 			get => GetPropertyValue<CUInt32>();
 			set => SetPropertyValue<CUInt32>(value);
@@ -55,17 +55,26 @@ namespace WolvenKit.RED4.Types
 
 		[Ordinal(6)] 
 		[RED("level")] 
-		public CUInt32 Level
+		public CUInt8 Level
 		{
-			get => GetPropertyValue<CUInt32>();
-			set => SetPropertyValue<CUInt32>(value);
+			get => GetPropertyValue<CUInt8>();
+			set => SetPropertyValue<CUInt8>(value);
+		}
+
+		[Ordinal(7)] 
+		[RED("category")] 
+		public CEnum<worldStreamingSectorCategory> Category
+		{
+			get => GetPropertyValue<CEnum<worldStreamingSectorCategory>>();
+			set => SetPropertyValue<CEnum<worldStreamingSectorCategory>>(value);
 		}
 
 		public worldStreamingSectorDescriptor()
 		{
 			StreamingBox = new() { Min = new() { X = 340282346638528859811704183484516925440.000000F, Y = 340282346638528859811704183484516925440.000000F, Z = 340282346638528859811704183484516925440.000000F, W = 340282346638528859811704183484516925440.000000F }, Max = new() { X = -340282346638528859811704183484516925440.000000F, Y = -340282346638528859811704183484516925440.000000F, Z = -340282346638528859811704183484516925440.000000F, W = -340282346638528859811704183484516925440.000000F } };
 			Variants = new();
-			SectorIndex = 4294967295;
+			BlockIndex = 4294967295;
+			Category = Enums.worldStreamingSectorCategory.Unknown;
 		}
 	}
 }

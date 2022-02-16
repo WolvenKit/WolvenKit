@@ -5,7 +5,7 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class CPOVotingDevice : CPOMissionDevice
 	{
-		[Ordinal(45)] 
+		[Ordinal(40)] 
 		[RED("deviceName")] 
 		public CName DeviceName
 		{

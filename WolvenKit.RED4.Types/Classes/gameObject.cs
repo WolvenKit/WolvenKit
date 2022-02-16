@@ -94,30 +94,6 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(13)] 
-		[RED("outlineRequestsManager")] 
-		public CHandle<OutlineRequestManager> OutlineRequestsManager
-		{
-			get => GetPropertyValue<CHandle<OutlineRequestManager>>();
-			set => SetPropertyValue<CHandle<OutlineRequestManager>>(value);
-		}
-
-		[Ordinal(14)] 
-		[RED("outlineFadeCounter")] 
-		public CInt32 OutlineFadeCounter
-		{
-			get => GetPropertyValue<CInt32>();
-			set => SetPropertyValue<CInt32>(value);
-		}
-
-		[Ordinal(15)] 
-		[RED("fadeOutStarted")] 
-		public CBool FadeOutStarted
-		{
-			get => GetPropertyValue<CBool>();
-			set => SetPropertyValue<CBool>(value);
-		}
-
-		[Ordinal(16)] 
 		[RED("lastEngineTime")] 
 		public CFloat LastEngineTime
 		{
@@ -125,7 +101,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(17)] 
+		[Ordinal(14)] 
 		[RED("accumulatedTimePasssed")] 
 		public CFloat AccumulatedTimePasssed
 		{
@@ -133,7 +109,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(18)] 
+		[Ordinal(15)] 
 		[RED("scanningComponent")] 
 		public CHandle<gameScanningComponent> ScanningComponent
 		{
@@ -141,7 +117,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<gameScanningComponent>>(value);
 		}
 
-		[Ordinal(19)] 
+		[Ordinal(16)] 
 		[RED("visionComponent")] 
 		public CHandle<gameVisionModeComponent> VisionComponent
 		{
@@ -149,7 +125,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<gameVisionModeComponent>>(value);
 		}
 
-		[Ordinal(20)] 
+		[Ordinal(17)] 
 		[RED("isHighlightedInFocusMode")] 
 		public CBool IsHighlightedInFocusMode
 		{
@@ -157,7 +133,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(21)] 
+		[Ordinal(18)] 
 		[RED("statusEffectComponent")] 
 		public CHandle<gameStatusEffectComponent> StatusEffectComponent
 		{
@@ -165,23 +141,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<gameStatusEffectComponent>>(value);
 		}
 
-		[Ordinal(22)] 
-		[RED("lastFrameGreen")] 
-		public CHandle<OutlineRequest> LastFrameGreen
-		{
-			get => GetPropertyValue<CHandle<OutlineRequest>>();
-			set => SetPropertyValue<CHandle<OutlineRequest>>(value);
-		}
-
-		[Ordinal(23)] 
-		[RED("lastFrameRed")] 
-		public CHandle<OutlineRequest> LastFrameRed
-		{
-			get => GetPropertyValue<CHandle<OutlineRequest>>();
-			set => SetPropertyValue<CHandle<OutlineRequest>>(value);
-		}
-
-		[Ordinal(24)] 
+		[Ordinal(19)] 
 		[RED("markAsQuest")] 
 		public CBool MarkAsQuest
 		{
@@ -189,15 +149,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(25)] 
-		[RED("e3HighlightHackStarted")] 
-		public CBool E3HighlightHackStarted
-		{
-			get => GetPropertyValue<CBool>();
-			set => SetPropertyValue<CBool>(value);
-		}
-
-		[Ordinal(26)] 
+		[Ordinal(20)] 
 		[RED("e3ObjectRevealed")] 
 		public CBool E3ObjectRevealed
 		{
@@ -205,15 +157,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(27)] 
-		[RED("forceHighlightSource")] 
-		public entEntityID ForceHighlightSource
-		{
-			get => GetPropertyValue<entEntityID>();
-			set => SetPropertyValue<entEntityID>(value);
-		}
-
-		[Ordinal(28)] 
+		[Ordinal(21)] 
 		[RED("workspotMapper")] 
 		public CHandle<WorkspotMapperComponent> WorkspotMapper
 		{
@@ -221,7 +165,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<WorkspotMapperComponent>>(value);
 		}
 
-		[Ordinal(29)] 
+		[Ordinal(22)] 
 		[RED("stimBroadcaster")] 
 		public CHandle<StimBroadcasterComponent> StimBroadcaster
 		{
@@ -229,7 +173,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<StimBroadcasterComponent>>(value);
 		}
 
-		[Ordinal(30)] 
+		[Ordinal(23)] 
 		[RED("squadMemberComponent")] 
 		public CHandle<SquadMemberBaseComponent> SquadMemberComponent
 		{
@@ -237,7 +181,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<SquadMemberBaseComponent>>(value);
 		}
 
-		[Ordinal(31)] 
+		[Ordinal(24)] 
 		[RED("sourceShootComponent")] 
 		public CHandle<gameSourceShootComponent> SourceShootComponent
 		{
@@ -245,7 +189,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<gameSourceShootComponent>>(value);
 		}
 
-		[Ordinal(32)] 
+		[Ordinal(25)] 
 		[RED("targetShootComponent")] 
 		public CHandle<gameTargetShootComponent> TargetShootComponent
 		{
@@ -253,7 +197,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<gameTargetShootComponent>>(value);
 		}
 
-		[Ordinal(33)] 
+		[Ordinal(26)] 
 		[RED("receivedDamageHistory")] 
 		public CArray<DamageHistoryEntry> ReceivedDamageHistory
 		{
@@ -261,7 +205,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<DamageHistoryEntry>>(value);
 		}
 
-		[Ordinal(34)] 
+		[Ordinal(27)] 
 		[RED("forceDefeatReward")] 
 		public CBool ForceDefeatReward
 		{
@@ -269,7 +213,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(35)] 
+		[Ordinal(28)] 
 		[RED("killRewardDisabled")] 
 		public CBool KillRewardDisabled
 		{
@@ -277,7 +221,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(36)] 
+		[Ordinal(29)] 
 		[RED("willDieSoon")] 
 		public CBool WillDieSoon
 		{
@@ -285,7 +229,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(37)] 
+		[Ordinal(30)] 
 		[RED("isScannerDataDirty")] 
 		public CBool IsScannerDataDirty
 		{
@@ -293,7 +237,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(38)] 
+		[Ordinal(31)] 
 		[RED("hasVisibilityForcedInAnimSystem")] 
 		public CBool HasVisibilityForcedInAnimSystem
 		{
@@ -301,12 +245,28 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(39)] 
+		[Ordinal(32)] 
 		[RED("isDead")] 
 		public CBool IsDead
 		{
 			get => GetPropertyValue<CBool>();
 			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(33)] 
+		[RED("lastHitInstigatorID")] 
+		public entEntityID LastHitInstigatorID
+		{
+			get => GetPropertyValue<entEntityID>();
+			set => SetPropertyValue<entEntityID>(value);
+		}
+
+		[Ordinal(34)] 
+		[RED("hitInstigatorCooldownID")] 
+		public gameDelayID HitInstigatorCooldownID
+		{
+			get => GetPropertyValue<gameDelayID>();
+			set => SetPropertyValue<gameDelayID>(value);
 		}
 
 		public gameObject()
@@ -318,8 +278,9 @@ namespace WolvenKit.RED4.Types
 			VisibilityCheckDistance = 16000.000000F;
 			PrereqListeners = new();
 			StatusEffectListeners = new();
-			ForceHighlightSource = new();
 			ReceivedDamageHistory = new();
+			LastHitInstigatorID = new();
+			HitInstigatorCooldownID = new();
 		}
 	}
 }

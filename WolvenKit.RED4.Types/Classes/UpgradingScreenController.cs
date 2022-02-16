@@ -39,10 +39,10 @@ namespace WolvenKit.RED4.Types
 
 		[Ordinal(43)] 
 		[RED("newItem")] 
-		public CHandle<gameItemData> NewItem
+		public CWeakHandle<gameItemData> NewItem
 		{
-			get => GetPropertyValue<CHandle<gameItemData>>();
-			set => SetPropertyValue<CHandle<gameItemData>>(value);
+			get => GetPropertyValue<CWeakHandle<gameItemData>>();
+			set => SetPropertyValue<CWeakHandle<gameItemData>>(value);
 		}
 
 		[Ordinal(44)] 

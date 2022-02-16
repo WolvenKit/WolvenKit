@@ -5,7 +5,7 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class cpTestPlatformController : gameObject
 	{
-		[Ordinal(40)] 
+		[Ordinal(35)] 
 		[RED("platform")] 
 		public NodeRef Platform
 		{
@@ -13,7 +13,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<NodeRef>(value);
 		}
 
-		[Ordinal(41)] 
+		[Ordinal(36)] 
 		[RED("pointA")] 
 		public NodeRef PointA
 		{
@@ -21,7 +21,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<NodeRef>(value);
 		}
 
-		[Ordinal(42)] 
+		[Ordinal(37)] 
 		[RED("pointB")] 
 		public NodeRef PointB
 		{
@@ -29,7 +29,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<NodeRef>(value);
 		}
 
-		[Ordinal(43)] 
+		[Ordinal(38)] 
 		[RED("speed")] 
 		public CFloat Speed
 		{

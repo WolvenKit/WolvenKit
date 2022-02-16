@@ -5,7 +5,7 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class Door : InteractiveDevice
 	{
-		[Ordinal(97)] 
+		[Ordinal(94)] 
 		[RED("animationController")] 
 		public CHandle<entAnimationControllerComponent> AnimationController
 		{
@@ -13,7 +13,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<entAnimationControllerComponent>>(value);
 		}
 
-		[Ordinal(98)] 
+		[Ordinal(95)] 
 		[RED("triggerComponent")] 
 		public CHandle<gameStaticTriggerAreaComponent> TriggerComponent
 		{
@@ -21,7 +21,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<gameStaticTriggerAreaComponent>>(value);
 		}
 
-		[Ordinal(99)] 
+		[Ordinal(96)] 
 		[RED("triggerSideOne")] 
 		public CHandle<gameStaticTriggerAreaComponent> TriggerSideOne
 		{
@@ -29,7 +29,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<gameStaticTriggerAreaComponent>>(value);
 		}
 
-		[Ordinal(100)] 
+		[Ordinal(97)] 
 		[RED("triggerSideTwo")] 
 		public CHandle<gameStaticTriggerAreaComponent> TriggerSideTwo
 		{
@@ -37,7 +37,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<gameStaticTriggerAreaComponent>>(value);
 		}
 
-		[Ordinal(101)] 
+		[Ordinal(98)] 
 		[RED("offMeshConnectionComponent")] 
 		public CHandle<AIOffMeshConnectionComponent> OffMeshConnectionComponent
 		{
@@ -45,7 +45,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<AIOffMeshConnectionComponent>>(value);
 		}
 
-		[Ordinal(102)] 
+		[Ordinal(99)] 
 		[RED("strongSoloFrame")] 
 		public CHandle<entMeshComponent> StrongSoloFrame
 		{
@@ -53,7 +53,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<entMeshComponent>>(value);
 		}
 
-		[Ordinal(103)] 
+		[Ordinal(100)] 
 		[RED("terminalNetrunner1")] 
 		public CHandle<entMeshComponent> TerminalNetrunner1
 		{
@@ -61,7 +61,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<entMeshComponent>>(value);
 		}
 
-		[Ordinal(104)] 
+		[Ordinal(101)] 
 		[RED("terminalNetrunner2")] 
 		public CHandle<entMeshComponent> TerminalNetrunner2
 		{
@@ -69,7 +69,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<entMeshComponent>>(value);
 		}
 
-		[Ordinal(105)] 
+		[Ordinal(102)] 
 		[RED("terminalTechie1")] 
 		public CHandle<entMeshComponent> TerminalTechie1
 		{
@@ -77,7 +77,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<entMeshComponent>>(value);
 		}
 
-		[Ordinal(106)] 
+		[Ordinal(103)] 
 		[RED("terminalTechie2")] 
 		public CHandle<entMeshComponent> TerminalTechie2
 		{
@@ -85,7 +85,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<entMeshComponent>>(value);
 		}
 
-		[Ordinal(107)] 
+		[Ordinal(104)] 
 		[RED("ledTechie1")] 
 		public CHandle<gameLightComponent> LedTechie1
 		{
@@ -93,7 +93,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<gameLightComponent>>(value);
 		}
 
-		[Ordinal(108)] 
+		[Ordinal(105)] 
 		[RED("ledTechie2")] 
 		public CHandle<gameLightComponent> LedTechie2
 		{
@@ -101,7 +101,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<gameLightComponent>>(value);
 		}
 
-		[Ordinal(109)] 
+		[Ordinal(106)] 
 		[RED("ledNetrunner1")] 
 		public CHandle<gameLightComponent> LedNetrunner1
 		{
@@ -109,7 +109,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<gameLightComponent>>(value);
 		}
 
-		[Ordinal(110)] 
+		[Ordinal(107)] 
 		[RED("ledNetrunner2")] 
 		public CHandle<gameLightComponent> LedNetrunner2
 		{
@@ -117,7 +117,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<gameLightComponent>>(value);
 		}
 
-		[Ordinal(111)] 
+		[Ordinal(108)] 
 		[RED("led1")] 
 		public CHandle<gameLightComponent> Led1
 		{
@@ -125,7 +125,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<gameLightComponent>>(value);
 		}
 
-		[Ordinal(112)] 
+		[Ordinal(109)] 
 		[RED("led2")] 
 		public CHandle<gameLightComponent> Led2
 		{
@@ -133,7 +133,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<gameLightComponent>>(value);
 		}
 
-		[Ordinal(113)] 
+		[Ordinal(110)] 
 		[RED("ledHandle1")] 
 		public CHandle<gameLightComponent> LedHandle1
 		{
@@ -141,7 +141,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<gameLightComponent>>(value);
 		}
 
-		[Ordinal(114)] 
+		[Ordinal(111)] 
 		[RED("ledHandle2")] 
 		public CHandle<gameLightComponent> LedHandle2
 		{
@@ -149,7 +149,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<gameLightComponent>>(value);
 		}
 
-		[Ordinal(115)] 
+		[Ordinal(112)] 
 		[RED("ledHandle1a")] 
 		public CHandle<gameLightComponent> LedHandle1a
 		{
@@ -157,7 +157,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<gameLightComponent>>(value);
 		}
 
-		[Ordinal(116)] 
+		[Ordinal(113)] 
 		[RED("ledHandle2a")] 
 		public CHandle<gameLightComponent> LedHandle2a
 		{
@@ -165,7 +165,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<gameLightComponent>>(value);
 		}
 
-		[Ordinal(117)] 
+		[Ordinal(114)] 
 		[RED("occluder")] 
 		public CHandle<entIPlacedComponent> Occluder
 		{
@@ -173,7 +173,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<entIPlacedComponent>>(value);
 		}
 
-		[Ordinal(118)] 
+		[Ordinal(115)] 
 		[RED("portalLight1")] 
 		public CHandle<gameLightComponent> PortalLight1
 		{
@@ -181,7 +181,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<gameLightComponent>>(value);
 		}
 
-		[Ordinal(119)] 
+		[Ordinal(116)] 
 		[RED("portalLight2")] 
 		public CHandle<gameLightComponent> PortalLight2
 		{
@@ -189,7 +189,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<gameLightComponent>>(value);
 		}
 
-		[Ordinal(120)] 
+		[Ordinal(117)] 
 		[RED("portalLight3")] 
 		public CHandle<gameLightComponent> PortalLight3
 		{
@@ -197,7 +197,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<gameLightComponent>>(value);
 		}
 
-		[Ordinal(121)] 
+		[Ordinal(118)] 
 		[RED("portalLight4")] 
 		public CHandle<gameLightComponent> PortalLight4
 		{
@@ -205,7 +205,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<gameLightComponent>>(value);
 		}
 
-		[Ordinal(122)] 
+		[Ordinal(119)] 
 		[RED("playerBlocker")] 
 		public CHandle<entColliderComponent> PlayerBlocker
 		{
@@ -213,7 +213,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<entColliderComponent>>(value);
 		}
 
-		[Ordinal(123)] 
+		[Ordinal(120)] 
 		[RED("animFeatureDoor")] 
 		public CHandle<AnimFeatureDoor> AnimFeatureDoor
 		{
@@ -221,7 +221,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<AnimFeatureDoor>>(value);
 		}
 
-		[Ordinal(124)] 
+		[Ordinal(121)] 
 		[RED("isVisuallyOpened")] 
 		public CBool IsVisuallyOpened
 		{
@@ -229,7 +229,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(125)] 
+		[Ordinal(122)] 
 		[RED("lastDoorSide")] 
 		public CInt32 LastDoorSide
 		{
@@ -237,7 +237,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CInt32>(value);
 		}
 
-		[Ordinal(126)] 
+		[Ordinal(123)] 
 		[RED("bankToLoad_TEMP")] 
 		public CString BankToLoad_TEMP
 		{
@@ -245,7 +245,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CString>(value);
 		}
 
-		[Ordinal(127)] 
+		[Ordinal(124)] 
 		[RED("colors")] 
 		public LedColors Colors
 		{
@@ -253,7 +253,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<LedColors>(value);
 		}
 
-		[Ordinal(128)] 
+		[Ordinal(125)] 
 		[RED("activeSkillcheckLights")] 
 		public CArray<CHandle<gameLightComponent>> ActiveSkillcheckLights
 		{
@@ -261,7 +261,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<CHandle<gameLightComponent>>>(value);
 		}
 
-		[Ordinal(129)] 
+		[Ordinal(126)] 
 		[RED("allActiveLights")] 
 		public CArray<CHandle<gameLightComponent>> AllActiveLights
 		{
@@ -269,7 +269,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<CHandle<gameLightComponent>>>(value);
 		}
 
-		[Ordinal(130)] 
+		[Ordinal(127)] 
 		[RED("closingAnimationLength")] 
 		public CFloat ClosingAnimationLength
 		{
@@ -277,7 +277,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(131)] 
+		[Ordinal(128)] 
 		[RED("automaticCloseDelay")] 
 		public CFloat AutomaticCloseDelay
 		{
@@ -285,7 +285,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(132)] 
+		[Ordinal(129)] 
 		[RED("doorOpeningType")] 
 		public CEnum<EDoorOpeningType> DoorOpeningType
 		{
@@ -293,7 +293,23 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CEnum<EDoorOpeningType>>(value);
 		}
 
-		[Ordinal(133)] 
+		[Ordinal(130)] 
+		[RED("forceOpeningAudioStimRange")] 
+		public CFloat ForceOpeningAudioStimRange
+		{
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
+		}
+
+		[Ordinal(131)] 
+		[RED("openingAudioStimRange")] 
+		public CFloat OpeningAudioStimRange
+		{
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
+		}
+
+		[Ordinal(132)] 
 		[RED("animationType")] 
 		public CEnum<EAnimationType> AnimationType
 		{
@@ -301,7 +317,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CEnum<EAnimationType>>(value);
 		}
 
-		[Ordinal(134)] 
+		[Ordinal(133)] 
 		[RED("doorTriggerSide")] 
 		public CEnum<EDoorTriggerSide> DoorTriggerSide
 		{
@@ -309,7 +325,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CEnum<EDoorTriggerSide>>(value);
 		}
 
-		[Ordinal(135)] 
+		[Ordinal(134)] 
 		[RED("whoOpened")] 
 		public CWeakHandle<gameObject> WhoOpened
 		{
@@ -317,7 +333,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<gameObject>>(value);
 		}
 
-		[Ordinal(136)] 
+		[Ordinal(135)] 
 		[RED("openedUsingForce")] 
 		public CBool OpenedUsingForce
 		{
@@ -325,9 +341,17 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(137)] 
+		[Ordinal(136)] 
 		[RED("illegalOpen")] 
 		public CBool IllegalOpen
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(137)] 
+		[RED("audioForceOpen")] 
+		public CBool AudioForceOpen
 		{
 			get => GetPropertyValue<CBool>();
 			set => SetPropertyValue<CBool>(value);
@@ -358,6 +382,7 @@ namespace WolvenKit.RED4.Types
 			AllActiveLights = new();
 			ClosingAnimationLength = 1.100000F;
 			AutomaticCloseDelay = 3.000000F;
+			ForceOpeningAudioStimRange = 6.000000F;
 		}
 	}
 }

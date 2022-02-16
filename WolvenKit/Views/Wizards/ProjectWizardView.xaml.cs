@@ -6,6 +6,7 @@ namespace WolvenKit.Views.Wizards
 {
     public partial class ProjectWizardView : ReactiveUserControl<ProjectWizardViewModel>
     {
+        private System.Windows.Threading.DispatcherTimer timer;
 
         public ProjectWizardView()
         {
@@ -60,10 +61,45 @@ namespace WolvenKit.Views.Wizards
                     vm => vm.OpenProjectPathCommand,
                     v => v.ProjectPathButton).DisposeWith(disposables);
 
+
+
+                Disposable.Create(() => StopTimer()).DisposeWith(disposables);
+
             });
         }
 
         private void TextBox_TextChanged(object sender, System.Windows.Controls.TextChangedEventArgs e)
+        {
+            if(timer == null)
+            {
+                StartTimer();
+            }
+            ValidateAllFields();
+        }
+
+        private void StartTimer()
+        {
+            if (timer == null)
+            {
+                timer = new System.Windows.Threading.DispatcherTimer();
+                timer.Tick += new System.EventHandler(OnTimer);
+                timer.Interval = new System.TimeSpan(0, 0, 1);
+                timer.Start();
+            }
+        }
+
+        private void StopTimer()
+        {
+            if (timer != null)
+            {
+                timer.Stop();
+                timer.Tick -= new System.EventHandler(OnTimer);
+                timer = null;
+            }
+        }
+
+
+        private void OnTimer(object sender, System.EventArgs e)
             => ValidateAllFields();
 
         private void ValidateAllFields()

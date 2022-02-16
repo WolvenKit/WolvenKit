@@ -182,6 +182,14 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(28)] 
+		[RED("weaponHasPerfectAim")] 
+		public CBool WeaponHasPerfectAim
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(29)] 
 		[RED("attachmentSlotListener")] 
 		public CHandle<gameAttachmentSlotsScriptListener> AttachmentSlotListener
 		{

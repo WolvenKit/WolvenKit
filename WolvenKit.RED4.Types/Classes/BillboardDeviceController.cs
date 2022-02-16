@@ -2,7 +2,7 @@
 namespace WolvenKit.RED4.Types
 {
 	[REDMeta]
-	public partial class BillboardDeviceController : ScriptableDC
+	public partial class BillboardDeviceController : ScriptableDeviceComponent
 	{
 	}
 }

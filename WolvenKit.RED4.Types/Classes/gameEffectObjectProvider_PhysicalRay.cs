@@ -45,12 +45,21 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<physicsFilterData>>(value);
 		}
 
+		[Ordinal(5)] 
+		[RED("queryPreset")] 
+		public physicsQueryPreset QueryPreset
+		{
+			get => GetPropertyValue<physicsQueryPreset>();
+			set => SetPropertyValue<physicsQueryPreset>(value);
+		}
+
 		public gameEffectObjectProvider_PhysicalRay()
 		{
 			InputPosition = new();
 			InputForward = new();
 			InputRange = new();
 			OutputRaycastEnd = new() { BlackboardProperty = new() { SerializableID = new(), PropertyPath = new() } };
+			QueryPreset = new();
 		}
 	}
 }

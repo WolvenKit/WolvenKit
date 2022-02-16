@@ -5,7 +5,7 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class ClimbEvents : LocomotionGroundEvents
 	{
-		[Ordinal(3)] 
+		[Ordinal(6)] 
 		[RED("ikHandEvents")] 
 		public CArray<CHandle<entIKTargetAddEvent>> IkHandEvents
 		{
@@ -13,7 +13,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<CHandle<entIKTargetAddEvent>>>(value);
 		}
 
-		[Ordinal(4)] 
+		[Ordinal(7)] 
 		[RED("shouldIkHands")] 
 		public CBool ShouldIkHands
 		{
@@ -21,7 +21,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(5)] 
+		[Ordinal(8)] 
 		[RED("framesDelayingAnimStart")] 
 		public CInt32 FramesDelayingAnimStart
 		{
@@ -29,9 +29,26 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CInt32>(value);
 		}
 
+		[Ordinal(9)] 
+		[RED("climbedEntity")] 
+		public CWeakHandle<entEntity> ClimbedEntity
+		{
+			get => GetPropertyValue<CWeakHandle<entEntity>>();
+			set => SetPropertyValue<CWeakHandle<entEntity>>(value);
+		}
+
+		[Ordinal(10)] 
+		[RED("playerCapsuleDimensions")] 
+		public Vector4 PlayerCapsuleDimensions
+		{
+			get => GetPropertyValue<Vector4>();
+			set => SetPropertyValue<Vector4>(value);
+		}
+
 		public ClimbEvents()
 		{
 			IkHandEvents = new();
+			PlayerCapsuleDimensions = new();
 		}
 	}
 }

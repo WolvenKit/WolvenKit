@@ -22,14 +22,6 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(4)] 
-		[RED("johnnyWrapper")] 
-		public inkWidgetReference JohnnyWrapper
-		{
-			get => GetPropertyValue<inkWidgetReference>();
-			set => SetPropertyValue<inkWidgetReference>(value);
-		}
-
-		[Ordinal(5)] 
 		[RED("attributeName")] 
 		public inkTextWidgetReference AttributeName
 		{
@@ -37,7 +29,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
-		[Ordinal(6)] 
+		[Ordinal(5)] 
 		[RED("attributeIcon")] 
 		public inkImageWidgetReference AttributeIcon
 		{
@@ -45,7 +37,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkImageWidgetReference>(value);
 		}
 
-		[Ordinal(7)] 
+		[Ordinal(6)] 
 		[RED("attributeLevel")] 
 		public inkTextWidgetReference AttributeLevel
 		{
@@ -53,7 +45,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
-		[Ordinal(8)] 
+		[Ordinal(7)] 
 		[RED("frameHovered")] 
 		public inkWidgetReference FrameHovered
 		{
@@ -61,7 +53,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(9)] 
+		[Ordinal(8)] 
 		[RED("accent1Hovered")] 
 		public inkWidgetReference Accent1Hovered
 		{
@@ -69,7 +61,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(10)] 
+		[Ordinal(9)] 
 		[RED("accent1BGHovered")] 
 		public inkWidgetReference Accent1BGHovered
 		{
@@ -77,7 +69,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(11)] 
+		[Ordinal(10)] 
 		[RED("accent2Hovered")] 
 		public inkWidgetReference Accent2Hovered
 		{
@@ -85,7 +77,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(12)] 
+		[Ordinal(11)] 
 		[RED("accent2BGHovered")] 
 		public inkWidgetReference Accent2BGHovered
 		{
@@ -93,7 +85,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(13)] 
+		[Ordinal(12)] 
 		[RED("topConnectionContainer")] 
 		public inkWidgetReference TopConnectionContainer
 		{
@@ -101,7 +93,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(14)] 
+		[Ordinal(13)] 
 		[RED("bottomConnectionContainer")] 
 		public inkWidgetReference BottomConnectionContainer
 		{
@@ -109,7 +101,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(15)] 
+		[Ordinal(14)] 
 		[RED("dataManager")] 
 		public CHandle<PlayerDevelopmentDataManager> DataManager
 		{
@@ -117,7 +109,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<PlayerDevelopmentDataManager>>(value);
 		}
 
-		[Ordinal(16)] 
+		[Ordinal(15)] 
 		[RED("attribute")] 
 		public CEnum<PerkMenuAttribute> Attribute
 		{
@@ -125,7 +117,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CEnum<PerkMenuAttribute>>(value);
 		}
 
-		[Ordinal(17)] 
+		[Ordinal(16)] 
 		[RED("attributeData")] 
 		public CHandle<AttributeData> AttributeData
 		{
@@ -137,7 +129,6 @@ namespace WolvenKit.RED4.Types
 		{
 			WidgetWrapper = new();
 			ForegroundWrapper = new();
-			JohnnyWrapper = new();
 			AttributeName = new();
 			AttributeIcon = new();
 			AttributeLevel = new();

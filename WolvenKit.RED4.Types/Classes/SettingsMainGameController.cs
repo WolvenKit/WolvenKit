@@ -3,7 +3,7 @@ using static WolvenKit.RED4.Types.Enums;
 namespace WolvenKit.RED4.Types
 {
 	[REDMeta]
-	public partial class SettingsMainGameController : gameuiMenuGameController
+	public partial class SettingsMainGameController : gameuiSettingsMenuGameController
 	{
 		[Ordinal(3)] 
 		[RED("scrollPanel")] 
@@ -86,6 +86,14 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(13)] 
+		[RED("benchmarkButton")] 
+		public inkWidgetReference BenchmarkButton
+		{
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
+		}
+
+		[Ordinal(14)] 
 		[RED("descriptionText")] 
 		public inkTextWidgetReference DescriptionText
 		{
@@ -93,7 +101,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
-		[Ordinal(14)] 
+		[Ordinal(15)] 
 		[RED("previousButtonHint")] 
 		public inkWidgetReference PreviousButtonHint
 		{
@@ -101,7 +109,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(15)] 
+		[Ordinal(16)] 
 		[RED("nextButtonHint")] 
 		public inkWidgetReference NextButtonHint
 		{
@@ -109,7 +117,23 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(16)] 
+		[Ordinal(17)] 
+		[RED("languageInstallProgressBarRoot")] 
+		public inkWidgetReference LanguageInstallProgressBarRoot
+		{
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
+		}
+
+		[Ordinal(18)] 
+		[RED("languageInstallProgressBar")] 
+		public CWeakHandle<SettingsLanguageInstallProgressBar> LanguageInstallProgressBar
+		{
+			get => GetPropertyValue<CWeakHandle<SettingsLanguageInstallProgressBar>>();
+			set => SetPropertyValue<CWeakHandle<SettingsLanguageInstallProgressBar>>(value);
+		}
+
+		[Ordinal(19)] 
 		[RED("menuEventDispatcher")] 
 		public CWeakHandle<inkMenuEventDispatcher> MenuEventDispatcher
 		{
@@ -117,7 +141,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<inkMenuEventDispatcher>>(value);
 		}
 
-		[Ordinal(17)] 
+		[Ordinal(20)] 
 		[RED("settingsElements")] 
 		public CArray<CWeakHandle<inkSettingsSelectorController>> SettingsElements
 		{
@@ -125,7 +149,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<CWeakHandle<inkSettingsSelectorController>>>(value);
 		}
 
-		[Ordinal(18)] 
+		[Ordinal(21)] 
 		[RED("buttonHintsController")] 
 		public CWeakHandle<ButtonHints> ButtonHintsController
 		{
@@ -133,7 +157,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<ButtonHints>>(value);
 		}
 
-		[Ordinal(19)] 
+		[Ordinal(22)] 
 		[RED("data")] 
 		public CArray<SettingsCategory> Data
 		{
@@ -141,7 +165,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<SettingsCategory>>(value);
 		}
 
-		[Ordinal(20)] 
+		[Ordinal(23)] 
 		[RED("menusList")] 
 		public CArray<CName> MenusList
 		{
@@ -149,7 +173,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<CName>>(value);
 		}
 
-		[Ordinal(21)] 
+		[Ordinal(24)] 
 		[RED("eventsList")] 
 		public CArray<CName> EventsList
 		{
@@ -157,7 +181,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<CName>>(value);
 		}
 
-		[Ordinal(22)] 
+		[Ordinal(25)] 
 		[RED("settingsListener")] 
 		public CHandle<SettingsVarListener> SettingsListener
 		{
@@ -165,7 +189,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<SettingsVarListener>>(value);
 		}
 
-		[Ordinal(23)] 
+		[Ordinal(26)] 
 		[RED("settingsNotificationListener")] 
 		public CHandle<SettingsNotificationListener> SettingsNotificationListener
 		{
@@ -173,7 +197,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<SettingsNotificationListener>>(value);
 		}
 
-		[Ordinal(24)] 
+		[Ordinal(27)] 
 		[RED("settings")] 
 		public CHandle<userSettingsUserSettings> Settings
 		{
@@ -181,7 +205,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<userSettingsUserSettings>>(value);
 		}
 
-		[Ordinal(25)] 
+		[Ordinal(28)] 
 		[RED("isPreGame")] 
 		public CBool IsPreGame
 		{
@@ -189,7 +213,23 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(26)] 
+		[Ordinal(29)] 
+		[RED("benchmarkNotificationToken")] 
+		public CHandle<inkGameNotificationToken> BenchmarkNotificationToken
+		{
+			get => GetPropertyValue<CHandle<inkGameNotificationToken>>();
+			set => SetPropertyValue<CHandle<inkGameNotificationToken>>(value);
+		}
+
+		[Ordinal(30)] 
+		[RED("isKeybindingAlertEnabled")] 
+		public CBool IsKeybindingAlertEnabled
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(31)] 
 		[RED("applyButtonEnabled")] 
 		public CBool ApplyButtonEnabled
 		{
@@ -197,7 +237,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(27)] 
+		[Ordinal(32)] 
 		[RED("resetButtonEnabled")] 
 		public CBool ResetButtonEnabled
 		{
@@ -205,7 +245,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(28)] 
+		[Ordinal(33)] 
 		[RED("closeSettingsRequest")] 
 		public CBool CloseSettingsRequest
 		{
@@ -213,7 +253,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(29)] 
+		[Ordinal(34)] 
 		[RED("resetSettingsRequest")] 
 		public CBool ResetSettingsRequest
 		{
@@ -221,7 +261,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(30)] 
+		[Ordinal(35)] 
 		[RED("isDlcSettings")] 
 		public CBool IsDlcSettings
 		{
@@ -229,12 +269,20 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(31)] 
+		[Ordinal(36)] 
 		[RED("selectorCtrl")] 
 		public CWeakHandle<inkListController> SelectorCtrl
 		{
 			get => GetPropertyValue<CWeakHandle<inkListController>>();
 			set => SetPropertyValue<CWeakHandle<inkListController>>(value);
+		}
+
+		[Ordinal(37)] 
+		[RED("languageMenuIndex")] 
+		public CInt32 LanguageMenuIndex
+		{
+			get => GetPropertyValue<CInt32>();
+			set => SetPropertyValue<CInt32>(value);
 		}
 
 		public SettingsMainGameController()
@@ -249,13 +297,16 @@ namespace WolvenKit.RED4.Types
 			BrightnessButton = new();
 			HdrButton = new();
 			ControllerButton = new();
+			BenchmarkButton = new();
 			DescriptionText = new();
 			PreviousButtonHint = new();
 			NextButtonHint = new();
+			LanguageInstallProgressBarRoot = new();
 			SettingsElements = new();
 			Data = new();
 			MenusList = new();
 			EventsList = new();
+			LanguageMenuIndex = 5;
 		}
 	}
 }

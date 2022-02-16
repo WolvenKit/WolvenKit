@@ -5,7 +5,7 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class VentilationEffector : ActivatedDeviceTransfromAnim
 	{
-		[Ordinal(98)] 
+		[Ordinal(95)] 
 		[RED("effectComponent")] 
 		public CHandle<entIPlacedComponent> EffectComponent
 		{

@@ -61,6 +61,14 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
+		[Ordinal(8)] 
+		[RED("DataSetByToken")] 
+		public inkEmptyCallback DataSetByToken
+		{
+			get => GetPropertyValue<inkEmptyCallback>();
+			set => SetPropertyValue<inkEmptyCallback>(value);
+		}
+
 		public inkGenericSystemNotificationLogicController()
 		{
 			TitleTextWidget = new();
@@ -68,6 +76,7 @@ namespace WolvenKit.RED4.Types
 			AdditionalDataTextWidget = new();
 			ConfirmButton = new();
 			CancelButton = new();
+			DataSetByToken = new();
 		}
 	}
 }

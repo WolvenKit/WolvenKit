@@ -5,7 +5,7 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class worldWaterPatchNode : worldMeshNode
 	{
-		[Ordinal(15)] 
+		[Ordinal(16)] 
 		[RED("type")] 
 		public worldWaterPatchNodeType Type
 		{
@@ -13,12 +13,20 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<worldWaterPatchNodeType>(value);
 		}
 
-		[Ordinal(16)] 
+		[Ordinal(17)] 
 		[RED("depth")] 
 		public CFloat Depth
 		{
 			get => GetPropertyValue<CFloat>();
 			set => SetPropertyValue<CFloat>(value);
+		}
+
+		[Ordinal(18)] 
+		[RED("generateNavmesh")] 
+		public CBool GenerateNavmesh
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		public worldWaterPatchNode()

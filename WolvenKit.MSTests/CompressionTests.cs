@@ -104,11 +104,12 @@ namespace WolvenKit.MSTests
             var final2 = outBuffer2.Take(r2).ToArray();
             File.WriteAllBytes(outpath2, final2);
 
-#endif
+
 
             var compareFile = Path.GetFullPath(Path.Combine("Resources", $"{level}_oodle.kark"));
             var compareBytes = File.ReadAllBytes(compareFile);
             Assert.IsTrue(Enumerable.SequenceEqual(final2, compareBytes.Skip(8)));
+#endif
         }
     }
 }

@@ -45,6 +45,14 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
+		[Ordinal(5)] 
+		[RED("selectedColorVariantName")] 
+		public CName SelectedColorVariantName
+		{
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
+		}
+
 		public gameEntityStubComponentPS()
 		{
 			EntityLocalPosition = new();

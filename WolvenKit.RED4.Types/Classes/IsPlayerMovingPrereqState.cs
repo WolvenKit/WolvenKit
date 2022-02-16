@@ -12,5 +12,13 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CBool>();
 			set => SetPropertyValue<CBool>(value);
 		}
+
+		[Ordinal(4)] 
+		[RED("listenerVertical")] 
+		public CHandle<redCallbackObject> ListenerVertical
+		{
+			get => GetPropertyValue<CHandle<redCallbackObject>>();
+			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
+		}
 	}
 }

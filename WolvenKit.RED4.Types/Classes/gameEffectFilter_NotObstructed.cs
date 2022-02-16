@@ -20,5 +20,18 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CHandle<physicsFilterData>>();
 			set => SetPropertyValue<CHandle<physicsFilterData>>(value);
 		}
+
+		[Ordinal(2)] 
+		[RED("queryPreset")] 
+		public physicsQueryPreset QueryPreset
+		{
+			get => GetPropertyValue<physicsQueryPreset>();
+			set => SetPropertyValue<physicsQueryPreset>(value);
+		}
+
+		public gameEffectFilter_NotObstructed()
+		{
+			QueryPreset = new();
+		}
 	}
 }

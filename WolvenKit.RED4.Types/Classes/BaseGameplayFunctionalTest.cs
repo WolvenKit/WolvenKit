@@ -20,5 +20,19 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CFloat>();
 			set => SetPropertyValue<CFloat>(value);
 		}
+
+		[Ordinal(2)] 
+		[RED("paramsData")] 
+		public CArray<ParamData> ParamsData
+		{
+			get => GetPropertyValue<CArray<ParamData>>();
+			set => SetPropertyValue<CArray<ParamData>>(value);
+		}
+
+		public BaseGameplayFunctionalTest()
+		{
+			MaxExecutionTimeSec = 250.000000F;
+			ParamsData = new();
+		}
 	}
 }

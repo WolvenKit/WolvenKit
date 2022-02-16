@@ -14,46 +14,14 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(2)] 
-		[RED("exteriorSectors")] 
-		public CArray<worldStreamingSectorDescriptor> ExteriorSectors
+		[RED("blockRefs")] 
+		public CArray<CResourceReference<worldStreamingBlock>> BlockRefs
 		{
-			get => GetPropertyValue<CArray<worldStreamingSectorDescriptor>>();
-			set => SetPropertyValue<CArray<worldStreamingSectorDescriptor>>(value);
+			get => GetPropertyValue<CArray<CResourceReference<worldStreamingBlock>>>();
+			set => SetPropertyValue<CArray<CResourceReference<worldStreamingBlock>>>(value);
 		}
 
 		[Ordinal(3)] 
-		[RED("interiorSectors")] 
-		public CArray<worldStreamingSectorDescriptor> InteriorSectors
-		{
-			get => GetPropertyValue<CArray<worldStreamingSectorDescriptor>>();
-			set => SetPropertyValue<CArray<worldStreamingSectorDescriptor>>(value);
-		}
-
-		[Ordinal(4)] 
-		[RED("questSectors")] 
-		public CArray<worldStreamingSectorDescriptor> QuestSectors
-		{
-			get => GetPropertyValue<CArray<worldStreamingSectorDescriptor>>();
-			set => SetPropertyValue<CArray<worldStreamingSectorDescriptor>>(value);
-		}
-
-		[Ordinal(5)] 
-		[RED("alwaysLoadedSectors")] 
-		public CArray<worldStreamingSectorDescriptor> AlwaysLoadedSectors
-		{
-			get => GetPropertyValue<CArray<worldStreamingSectorDescriptor>>();
-			set => SetPropertyValue<CArray<worldStreamingSectorDescriptor>>(value);
-		}
-
-		[Ordinal(6)] 
-		[RED("navigationSectors")] 
-		public CArray<worldStreamingSectorDescriptor> NavigationSectors
-		{
-			get => GetPropertyValue<CArray<worldStreamingSectorDescriptor>>();
-			set => SetPropertyValue<CArray<worldStreamingSectorDescriptor>>(value);
-		}
-
-		[Ordinal(7)] 
 		[RED("environmentDefinition")] 
 		public CResourceReference<worldEnvironmentDefinition> EnvironmentDefinition
 		{
@@ -61,7 +29,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CResourceReference<worldEnvironmentDefinition>>(value);
 		}
 
-		[Ordinal(8)] 
+		[Ordinal(4)] 
 		[RED("worldBoundingBox")] 
 		public Box WorldBoundingBox
 		{
@@ -69,7 +37,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<Box>(value);
 		}
 
-		[Ordinal(9)] 
+		[Ordinal(5)] 
 		[RED("persistentStateData")] 
 		public CResourceReference<CResource> PersistentStateData
 		{
@@ -77,7 +45,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CResourceReference<CResource>>(value);
 		}
 
-		[Ordinal(10)] 
+		[Ordinal(6)] 
 		[RED("deviceResource")] 
 		public CResourceReference<CResource> DeviceResource
 		{
@@ -85,7 +53,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CResourceReference<CResource>>(value);
 		}
 
-		[Ordinal(11)] 
+		[Ordinal(7)] 
 		[RED("deviceInitResource")] 
 		public CResourceReference<CResource> DeviceInitResource
 		{
@@ -93,7 +61,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CResourceReference<CResource>>(value);
 		}
 
-		[Ordinal(12)] 
+		[Ordinal(8)] 
 		[RED("mappinResource")] 
 		public CResourceReference<CResource> MappinResource
 		{
@@ -101,7 +69,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CResourceReference<CResource>>(value);
 		}
 
-		[Ordinal(13)] 
+		[Ordinal(9)] 
 		[RED("poiMappinResource")] 
 		public CResourceReference<CResource> PoiMappinResource
 		{
@@ -109,7 +77,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CResourceReference<CResource>>(value);
 		}
 
-		[Ordinal(14)] 
+		[Ordinal(10)] 
 		[RED("areaResource")] 
 		public CResourceReference<CResource> AreaResource
 		{
@@ -117,7 +85,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CResourceReference<CResource>>(value);
 		}
 
-		[Ordinal(15)] 
+		[Ordinal(11)] 
 		[RED("lootResource")] 
 		public CResourceReference<CResource> LootResource
 		{
@@ -125,7 +93,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CResourceReference<CResource>>(value);
 		}
 
-		[Ordinal(16)] 
+		[Ordinal(12)] 
 		[RED("locationResource")] 
 		public CResourceReference<CResource> LocationResource
 		{
@@ -133,7 +101,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CResourceReference<CResource>>(value);
 		}
 
-		[Ordinal(17)] 
+		[Ordinal(13)] 
 		[RED("locomotionPathResource")] 
 		public CResourceAsyncReference<CResource> LocomotionPathResource
 		{
@@ -141,7 +109,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CResourceAsyncReference<CResource>>(value);
 		}
 
-		[Ordinal(18)] 
+		[Ordinal(14)] 
 		[RED("autoFoliageMapping")] 
 		public CResourceAsyncReference<worldAutoFoliageMapping> AutoFoliageMapping
 		{
@@ -149,7 +117,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CResourceAsyncReference<worldAutoFoliageMapping>>(value);
 		}
 
-		[Ordinal(19)] 
+		[Ordinal(15)] 
 		[RED("trafficPersistentResource")] 
 		public CResourceAsyncReference<CResource> TrafficPersistentResource
 		{
@@ -157,7 +125,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CResourceAsyncReference<CResource>>(value);
 		}
 
-		[Ordinal(20)] 
+		[Ordinal(16)] 
 		[RED("trafficLaneConnectivityResource")] 
 		public CResourceAsyncReference<CResource> TrafficLaneConnectivityResource
 		{
@@ -165,7 +133,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CResourceAsyncReference<CResource>>(value);
 		}
 
-		[Ordinal(21)] 
+		[Ordinal(17)] 
 		[RED("trafficLanePolygonsResource")] 
 		public CResourceAsyncReference<CResource> TrafficLanePolygonsResource
 		{
@@ -173,7 +141,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CResourceAsyncReference<CResource>>(value);
 		}
 
-		[Ordinal(22)] 
+		[Ordinal(18)] 
 		[RED("trafficLaneSpotsResource")] 
 		public CResourceAsyncReference<CResource> TrafficLaneSpotsResource
 		{
@@ -181,7 +149,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CResourceAsyncReference<CResource>>(value);
 		}
 
-		[Ordinal(23)] 
+		[Ordinal(19)] 
 		[RED("trafficSpatialRepresentationResource")] 
 		public CResourceAsyncReference<CResource> TrafficSpatialRepresentationResource
 		{
@@ -189,7 +157,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CResourceAsyncReference<CResource>>(value);
 		}
 
-		[Ordinal(24)] 
+		[Ordinal(20)] 
 		[RED("trafficCollisionResource")] 
 		public CResourceAsyncReference<CResource> TrafficCollisionResource
 		{
@@ -197,7 +165,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CResourceAsyncReference<CResource>>(value);
 		}
 
-		[Ordinal(25)] 
+		[Ordinal(21)] 
 		[RED("trafficNullAreaCollisionResource")] 
 		public CResourceAsyncReference<CResource> TrafficNullAreaCollisionResource
 		{
@@ -205,7 +173,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CResourceAsyncReference<CResource>>(value);
 		}
 
-		[Ordinal(26)] 
+		[Ordinal(22)] 
 		[RED("smartObjectCompiledRootResource")] 
 		public CResourceAsyncReference<CResource> SmartObjectCompiledRootResource
 		{
@@ -213,7 +181,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CResourceAsyncReference<CResource>>(value);
 		}
 
-		[Ordinal(27)] 
+		[Ordinal(23)] 
 		[RED("geometryCacheResource")] 
 		public CResourceReference<CResource> GeometryCacheResource
 		{
@@ -221,7 +189,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CResourceReference<CResource>>(value);
 		}
 
-		[Ordinal(28)] 
+		[Ordinal(24)] 
 		[RED("wasBuiltForSceneRecording")] 
 		public CBool WasBuiltForSceneRecording
 		{
@@ -229,7 +197,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(29)] 
+		[Ordinal(25)] 
 		[RED("streamingQueryDataResource")] 
 		public CResourceAsyncReference<worldStreamingQueryDataResource> StreamingQueryDataResource
 		{
@@ -239,11 +207,7 @@ namespace WolvenKit.RED4.Types
 
 		public worldStreamingWorld()
 		{
-			ExteriorSectors = new();
-			InteriorSectors = new();
-			QuestSectors = new();
-			AlwaysLoadedSectors = new();
-			NavigationSectors = new();
+			BlockRefs = new();
 			WorldBoundingBox = new() { Min = new(), Max = new() };
 		}
 	}

@@ -5,7 +5,7 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class ProximityDetector : Device
 	{
-		[Ordinal(87)] 
+		[Ordinal(84)] 
 		[RED("scanningAreaName")] 
 		public CName ScanningAreaName
 		{
@@ -13,7 +13,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(88)] 
+		[Ordinal(85)] 
 		[RED("surroundingAreaName")] 
 		public CName SurroundingAreaName
 		{
@@ -21,7 +21,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(89)] 
+		[Ordinal(86)] 
 		[RED("scanningArea")] 
 		public CHandle<gameStaticTriggerAreaComponent> ScanningArea
 		{
@@ -29,7 +29,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<gameStaticTriggerAreaComponent>>(value);
 		}
 
-		[Ordinal(90)] 
+		[Ordinal(87)] 
 		[RED("surroundingArea")] 
 		public CHandle<gameStaticTriggerAreaComponent> SurroundingArea
 		{
@@ -37,7 +37,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<gameStaticTriggerAreaComponent>>(value);
 		}
 
-		[Ordinal(91)] 
+		[Ordinal(88)] 
 		[RED("securityAreaType")] 
 		public CEnum<ESecurityAreaType> SecurityAreaType
 		{
@@ -45,7 +45,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CEnum<ESecurityAreaType>>(value);
 		}
 
-		[Ordinal(92)] 
+		[Ordinal(89)] 
 		[RED("notifiactionType")] 
 		public CEnum<ESecurityNotificationType> NotifiactionType
 		{
@@ -55,9 +55,10 @@ namespace WolvenKit.RED4.Types
 
 		public ProximityDetector()
 		{
-			ControllerTypeName = "ScriptableDC";
+			ControllerTypeName = "ScriptableDeviceComponent";
 			ScreenDefinition = new();
 			IsUIdirty = true;
+			AdvanceInteractionStateResolveDelayID = new();
 			UpdateID = new();
 			DelayedUpdateDeviceStateID = new();
 			LastPingSourceID = new();

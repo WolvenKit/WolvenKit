@@ -62,6 +62,14 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(7)] 
+		[RED("allowsRemoteAuthorization")] 
+		public CBool AllowsRemoteAuthorization
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(8)] 
 		[RED("ignoresRPG")] 
 		public CBool IgnoresRPG
 		{

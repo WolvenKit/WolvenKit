@@ -22,6 +22,14 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(2)] 
+		[RED("isAlwaysVisible")] 
+		public CBool IsAlwaysVisible
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(3)] 
 		[RED("isInteractable")] 
 		public CBool IsInteractable
 		{
@@ -29,7 +37,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(3)] 
+		[Ordinal(4)] 
 		[RED("isInteractableFromBehind")] 
 		public CBool IsInteractableFromBehind
 		{
@@ -37,7 +45,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(4)] 
+		[Ordinal(5)] 
 		[RED("maxInteractionDistance")] 
 		public CFloat MaxInteractionDistance
 		{
@@ -45,7 +53,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(5)] 
+		[Ordinal(6)] 
 		[RED("useCustomFaceVector")] 
 		public CBool UseCustomFaceVector
 		{
@@ -53,7 +61,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(6)] 
+		[Ordinal(7)] 
 		[RED("faceVector")] 
 		public Vector3 FaceVector
 		{

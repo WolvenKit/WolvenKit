@@ -5,7 +5,7 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class ItemPreviewGameController : gameuiItemPreviewGameController
 	{
-		[Ordinal(9)] 
+		[Ordinal(10)] 
 		[RED("itemNameText")] 
 		public inkTextWidgetReference ItemNameText
 		{
@@ -13,7 +13,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
-		[Ordinal(10)] 
+		[Ordinal(11)] 
 		[RED("itemLevelText")] 
 		public inkTextWidgetReference ItemLevelText
 		{
@@ -21,7 +21,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
-		[Ordinal(11)] 
+		[Ordinal(12)] 
 		[RED("itemRarityWidget")] 
 		public inkWidgetReference ItemRarityWidget
 		{
@@ -29,7 +29,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(12)] 
+		[Ordinal(13)] 
 		[RED("data")] 
 		public CHandle<InventoryItemPreviewData> Data
 		{
@@ -37,7 +37,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<InventoryItemPreviewData>>(value);
 		}
 
-		[Ordinal(13)] 
+		[Ordinal(14)] 
 		[RED("isMouseDown")] 
 		public CBool IsMouseDown
 		{
@@ -45,11 +45,20 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
+		[Ordinal(15)] 
+		[RED("c_ITEM_ROTATION_SPEED")] 
+		public CFloat C_ITEM_ROTATION_SPEED
+		{
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
+		}
+
 		public ItemPreviewGameController()
 		{
 			ItemNameText = new();
 			ItemLevelText = new();
 			ItemRarityWidget = new();
+			C_ITEM_ROTATION_SPEED = 4.000000F;
 		}
 	}
 }

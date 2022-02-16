@@ -14,16 +14,11 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(1)] 
-		[RED("sendNearMissEvents")] 
-		public CBool SendNearMissEvents
+		[RED("fillNearlyHitData")] 
+		public CBool FillNearlyHitData
 		{
 			get => GetPropertyValue<CBool>();
 			set => SetPropertyValue<CBool>(value);
-		}
-
-		public gameEffectObjectFilter_HitRepresentation_Raycast()
-		{
-			SendNearMissEvents = true;
 		}
 	}
 }

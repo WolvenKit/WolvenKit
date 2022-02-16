@@ -5,7 +5,7 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class MeleeLeapEvents : MeleeEventsTransition
 	{
-		[Ordinal(0)] 
+		[Ordinal(1)] 
 		[RED("textLayerId")] 
 		public CUInt32 TextLayerId
 		{

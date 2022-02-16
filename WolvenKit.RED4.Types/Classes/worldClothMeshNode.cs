@@ -5,7 +5,7 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class worldClothMeshNode : worldMeshNode
 	{
-		[Ordinal(15)] 
+		[Ordinal(16)] 
 		[RED("affectedByWind")] 
 		public CBool AffectedByWind
 		{
@@ -13,7 +13,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(16)] 
+		[Ordinal(17)] 
 		[RED("collisionMask")] 
 		public CBitField<physicsEClothCollisionMaskEnum> CollisionMask
 		{

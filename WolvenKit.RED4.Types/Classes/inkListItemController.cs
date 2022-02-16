@@ -23,7 +23,7 @@ namespace WolvenKit.RED4.Types
 
 		[Ordinal(12)] 
 		[RED("Selected")] 
-		public inkListItemControllerCallback Selected_656
+		public inkListItemControllerCallback Selected_672
 		{
 			get => GetPropertyValue<inkListItemControllerCallback>();
 			set => SetPropertyValue<inkListItemControllerCallback>(value);
@@ -57,7 +57,7 @@ namespace WolvenKit.RED4.Types
 		{
 			ToggledOff = new();
 			ToggledOn = new();
-			Selected_656 = new();
+			Selected_672 = new();
 			Deselected = new();
 			AddedToList = new();
 			LabelPathRef = new();

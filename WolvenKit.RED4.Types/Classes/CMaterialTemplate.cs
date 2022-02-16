@@ -5,7 +5,7 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class CMaterialTemplate : IMaterialDefinition
 	{
-		[Ordinal(8)] 
+		[Ordinal(9)] 
 		[RED("name")] 
 		public CName Name
 		{
@@ -13,7 +13,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(9)] 
+		[Ordinal(10)] 
 		[RED("parameters", 3)] 
 		public CArrayFixedSize<CArray<CHandle<CMaterialParameter>>> Parameters
 		{
@@ -21,7 +21,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArrayFixedSize<CArray<CHandle<CMaterialParameter>>>>(value);
 		}
 
-		[Ordinal(10)] 
+		[Ordinal(11)] 
 		[RED("techniques")] 
 		public CArray<MaterialTechnique> Techniques
 		{
@@ -29,7 +29,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<MaterialTechnique>>(value);
 		}
 
-		[Ordinal(11)] 
+		[Ordinal(12)] 
 		[RED("samplerStates", 3)] 
 		public CArrayFixedSize<CArray<SamplerStateInfo>> SamplerStates
 		{
@@ -37,7 +37,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArrayFixedSize<CArray<SamplerStateInfo>>>(value);
 		}
 
-		[Ordinal(12)] 
+		[Ordinal(13)] 
 		[RED("usedParameters", 3)] 
 		public CArrayFixedSize<CArray<MaterialUsedParameter>> UsedParameters
 		{
@@ -45,7 +45,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArrayFixedSize<CArray<MaterialUsedParameter>>>(value);
 		}
 
-		[Ordinal(13)] 
+		[Ordinal(14)] 
 		[RED("materialPriority")] 
 		public CEnum<EMaterialPriority> MaterialPriority
 		{
@@ -53,7 +53,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CEnum<EMaterialPriority>>(value);
 		}
 
-		[Ordinal(14)] 
+		[Ordinal(15)] 
 		[RED("materialType")] 
 		public CEnum<ERenderMaterialType> MaterialType
 		{
@@ -61,7 +61,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CEnum<ERenderMaterialType>>(value);
 		}
 
-		[Ordinal(15)] 
+		[Ordinal(16)] 
 		[RED("audioTag")] 
 		public CName AudioTag
 		{
@@ -69,7 +69,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(16)] 
+		[Ordinal(17)] 
 		[RED("resourceVersion")] 
 		public CUInt8 ResourceVersion
 		{
@@ -80,6 +80,8 @@ namespace WolvenKit.RED4.Types
 		public CMaterialTemplate()
 		{
 			ParamBlockSize = new(3);
+			CanBeMasked = true;
+			AllowVariableRateShading = true;
 			VertexFactories = new();
 			Parameters = new(3);
 			Techniques = new();

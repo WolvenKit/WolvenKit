@@ -3,17 +3,9 @@ using static WolvenKit.RED4.Types.Enums;
 namespace WolvenKit.RED4.Types
 {
 	[REDMeta]
-	public partial class worldWeatherState : RedBaseClass
+	public partial class worldWeatherState : ISerializable
 	{
 		[Ordinal(0)] 
-		[RED("probability")] 
-		public CLegacySingleChannelCurve<CFloat> Probability
-		{
-			get => GetPropertyValue<CLegacySingleChannelCurve<CFloat>>();
-			set => SetPropertyValue<CLegacySingleChannelCurve<CFloat>>(value);
-		}
-
-		[Ordinal(1)] 
 		[RED("minDuration")] 
 		public CLegacySingleChannelCurve<CFloat> MinDuration
 		{
@@ -21,7 +13,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CLegacySingleChannelCurve<CFloat>>(value);
 		}
 
-		[Ordinal(2)] 
+		[Ordinal(1)] 
 		[RED("maxDuration")] 
 		public CLegacySingleChannelCurve<CFloat> MaxDuration
 		{
@@ -29,15 +21,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CLegacySingleChannelCurve<CFloat>>(value);
 		}
 
-		[Ordinal(3)] 
-		[RED("transitionDuration")] 
-		public CLegacySingleChannelCurve<CFloat> TransitionDuration
-		{
-			get => GetPropertyValue<CLegacySingleChannelCurve<CFloat>>();
-			set => SetPropertyValue<CLegacySingleChannelCurve<CFloat>>(value);
-		}
-
-		[Ordinal(4)] 
+		[Ordinal(2)] 
 		[RED("environmentAreaParameters")] 
 		public CResourceReference<worldEnvironmentAreaParameters> EnvironmentAreaParameters
 		{
@@ -45,7 +29,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CResourceReference<worldEnvironmentAreaParameters>>(value);
 		}
 
-		[Ordinal(5)] 
+		[Ordinal(3)] 
 		[RED("effect")] 
 		public CResourceAsyncReference<worldEffect> Effect
 		{
@@ -53,12 +37,28 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CResourceAsyncReference<worldEffect>>(value);
 		}
 
-		[Ordinal(6)] 
+		[Ordinal(4)] 
 		[RED("name")] 
 		public CName Name
 		{
 			get => GetPropertyValue<CName>();
 			set => SetPropertyValue<CName>(value);
+		}
+
+		[Ordinal(5)] 
+		[RED("probability")] 
+		public CLegacySingleChannelCurve<CFloat> Probability
+		{
+			get => GetPropertyValue<CLegacySingleChannelCurve<CFloat>>();
+			set => SetPropertyValue<CLegacySingleChannelCurve<CFloat>>(value);
+		}
+
+		[Ordinal(6)] 
+		[RED("transitionDuration")] 
+		public CLegacySingleChannelCurve<CFloat> TransitionDuration
+		{
+			get => GetPropertyValue<CLegacySingleChannelCurve<CFloat>>();
+			set => SetPropertyValue<CLegacySingleChannelCurve<CFloat>>(value);
 		}
 	}
 }
