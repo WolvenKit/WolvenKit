@@ -141,33 +141,30 @@ namespace WolvenKit.MSTests
                 }
 
                 var usedhashtxt = Path.Combine(resultDir, "usedhashes.txt");
-                used = used.OrderBy(x => x).ToList();
+                var usedStrings = used.Select(s => _hashService.Get(s)).OrderBy(x => x);
                 using (var usedWriter = File.CreateText(usedhashtxt))
                 {
-                    for (var i = 0; i < used.Count; i++)
+                    foreach (var s in usedStrings)
                     {
-                        var mh = used[i];
-                        usedWriter.WriteLine(_hashService.Get(mh));
+                        usedWriter.WriteLine(s);
                     }
                 }
 
-                var allhashes = _hashService.GetAllHashes().ToList();
-                var unused = allhashes.Except(used).OrderBy(x => x).ToList();
+                //var allhashes = _hashService.GetAllHashes().ToList();
+                //var unused = allhashes.Except(used).ToList();
 
-                var unusedhashtxt = Path.Combine(resultDir, "unusedhashes.txt");
-
-                using (var unusedWriter = File.CreateText(unusedhashtxt))
-                {
-                    for (var i = 0; i < unused.Count; i++)
-                    {
-                        var h = unused[i];
-
-                        unusedWriter.WriteLine(_hashService.Get(h));
-                    }
-                }
+                //var unusedhashtxt = Path.Combine(resultDir, "unusedhashes.txt");
+                //var unusedStrings = unused.Select(s => _hashService.Get(s)).OrderBy(x => x);
+                //using (var unusedWriter = File.CreateText(usedhashtxt))
+                //{
+                //    foreach (var s in unusedStrings)
+                //    {
+                //        unusedWriter.WriteLine(s);
+                //    }
+                //}
 
                 //compress all used and all missing hashes
-                CompressFile(unusedhashtxt, resultDir);
+                //CompressFile(unusedhashtxt, resultDir);
                 CompressFile(usedhashtxt, resultDir);
 
             }
