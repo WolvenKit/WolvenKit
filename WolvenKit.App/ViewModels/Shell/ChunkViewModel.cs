@@ -851,7 +851,7 @@ namespace WolvenKit.ViewModels.Shell
             //        Descriptor = mesh.MaterialEntries[int.Parse(Name)].Name;
             //    }
             //}
-            if (Data is CMaterialInstance && Tab.File.Cr2wFile.RootChunk is CMesh mesh)
+            if (Data is CMaterialInstance && Parent != null && Tab.File.Cr2wFile.RootChunk is CMesh mesh)
             {
                 if (mesh.LocalMaterialBuffer.RawData.Data is CR2WList list)
                 {
