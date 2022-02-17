@@ -67,10 +67,7 @@
             TargetViewport3D="{Binding ElementName=SkyboxViewport}" />
 
         <Border Name="ViewportBorder" Background="Transparent">
-            <dxControls:DXViewportView
-                Name="MainDXViewportView"
-                BackgroundColor="Transparent"
-                PresentationType="DirectXImage">
+            <dxControls:DXViewportView Name="MainDXViewportView" PresentationType="DirectXImage">
 
                 <Viewport3D Name="MainViewport">
                     <ModelVisual3D x:Name="ContentVisual" />

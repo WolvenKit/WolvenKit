@@ -781,13 +781,17 @@ namespace WolvenKit.ViewModels.Documents
 
             var filename_b = Path.Combine(ISettingsManager.GetTemp_OBJPath(), material.Name + ".png");
             var filename_bn = Path.Combine(ISettingsManager.GetTemp_OBJPath(), material.Name + "_n.png");
+            var filename_m = Path.Combine(ISettingsManager.GetTemp_OBJPath(), material.Name + "_m.png");
+            var filename_r = Path.Combine(ISettingsManager.GetTemp_OBJPath(), material.Name + "_r.png");
             var filename_d = Path.Combine(ISettingsManager.GetTemp_OBJPath(), material.Name + "_d.dds");
             var filename_n = Path.Combine(ISettingsManager.GetTemp_OBJPath(), material.Name + "_n.dds");
 
             var createMLDiffuse = !System.IO.File.Exists(filename_b);
+            var createMLMetalness = !System.IO.File.Exists(filename_m);
+            var createMLRoughness = !System.IO.File.Exists(filename_r);
             var createMLNormal = !System.IO.File.Exists(filename_bn);
 
-            if (!createMLDiffuse && !createMLNormal)
+            if (!createMLDiffuse && !createMLNormal && !createMLMetalness && !createMLRoughness)
                 return;
 
             if (dictionary.ContainsKey("MultilayerSetup") && dictionary.ContainsKey("MultilayerMask"))
@@ -822,6 +826,8 @@ namespace WolvenKit.ViewModels.Documents
                 var firstStream = await ImageDecoder.RenderToBitmapSourceDds(streams[0]);
 
                 Bitmap destBitmap = new Bitmap((int)firstStream.Width, (int)firstStream.Height);
+                Bitmap metalnessBitmap = new Bitmap((int)firstStream.Width, (int)firstStream.Height);
+                Bitmap roughnessBitmap = new Bitmap((int)firstStream.Width, (int)firstStream.Height);
                 Bitmap normalBitmap = new Bitmap((int)firstStream.Width, (int)firstStream.Height);
                 using (Graphics gfx_n = Graphics.FromImage(normalBitmap))
                 using (SolidBrush brush = new SolidBrush(System.Drawing.Color.FromArgb(128, 128, 255)))
@@ -830,6 +836,8 @@ namespace WolvenKit.ViewModels.Documents
                 }
 
                 Graphics gfx = Graphics.FromImage(destBitmap);
+                Graphics gfx_m = Graphics.FromImage(metalnessBitmap);
+                Graphics gfx_r = Graphics.FromImage(roughnessBitmap);
                 //Graphics gfx_n = Graphics.FromImage(destBitmap);
 
                 var i = 0;
@@ -838,7 +846,7 @@ namespace WolvenKit.ViewModels.Documents
                     if (i >= streams.Count)
                         break;
 
-                    if (layer.ColorScale == "null_null" || layer.Opacity == 0 || layer.Material == null)
+                    if (layer.Material == null)
                     {
                         goto SkipLayer;
                     }
@@ -870,32 +878,100 @@ namespace WolvenKit.ViewModels.Documents
                         maskBitmap = new Bitmap(outStream);
                     }
 
-                    foreach (var color in mllt.Overrides.ColorScale)
+                    if (layer.ColorScale == "null_null" || layer.Opacity == 0 || layer.Material == null)
                     {
-                        if (color.N == layer.ColorScale)
-                        {
-                            var colorMatrix = new ColorMatrix(new float[][]
-                            {
-                                new float[] { 0, 0, 0, 0, 0},
-                                new float[] { 0, 0, 0, 0, 0},
-                                new float[] { 0, 0, 0, 0, 0},
-                                new float[] { 0, 0, 0, 0, 0},
-                                new float[] { 0, 0, 0, 0, 0},
-                            });
-                            colorMatrix.Matrix03 = layer.Opacity;
-                            colorMatrix.Matrix40 = color.V[0];
-                            colorMatrix.Matrix41 = color.V[1];
-                            colorMatrix.Matrix42 = color.V[2];
-
-                            ImageAttributes attributes = new ImageAttributes();
-
-                            attributes.SetColorMatrix(colorMatrix, ColorMatrixFlag.Default, ColorAdjustType.Bitmap);
-
-                            gfx.DrawImage(maskBitmap, new Rectangle(0, 0, maskBitmap.Width, maskBitmap.Height), 0, 0, maskBitmap.Width, maskBitmap.Height, GraphicsUnit.Pixel, attributes);
-
-                            break;
-                        }
+                        goto SkipColor;
                     }
+
+                    {
+                        var color = mllt.Overrides.ColorScale.Where(x => x.N == layer.ColorScale).First()?.V ?? null;
+
+                        if (color == null)
+                        {
+                            goto SkipColor;
+                        }
+
+                        var colorMatrix = new ColorMatrix(new float[][]
+                        {
+                            new float[] { 0, 0, 0, 0, 0},
+                            new float[] { 0, 0, 0, 0, 0},
+                            new float[] { 0, 0, 0, 0, 0},
+                            new float[] { 0, 0, 0, 0, 0},
+                            new float[] { 0, 0, 0, 0, 0},
+                        });
+                        colorMatrix.Matrix03 = layer.Opacity;
+                        colorMatrix.Matrix40 = color[0];
+                        colorMatrix.Matrix41 = color[1];
+                        colorMatrix.Matrix42 = color[2];
+
+                        ImageAttributes attributes = new ImageAttributes();
+
+                        attributes.SetColorMatrix(colorMatrix, ColorMatrixFlag.Default, ColorAdjustType.Bitmap);
+
+                        gfx.DrawImage(maskBitmap, new Rectangle(0, 0, maskBitmap.Width, maskBitmap.Height), 0, 0, maskBitmap.Width, maskBitmap.Height, GraphicsUnit.Pixel, attributes);
+                    }
+
+                SkipColor:
+
+                    {
+                        var metalOut = mllt.Overrides.MetalLevelsOut.Where(x => x.N == layer.MetalLevelsOut).First()?.V ?? null;
+
+                        if (metalOut == null)
+                        {
+                            goto SkipMetal;
+                        }
+
+                        var colorMatrix = new ColorMatrix(new float[][]
+                        {
+                            new float[] { 0, 0, 0, 0, 0},
+                            new float[] { 0, 0, 0, 0, 0},
+                            new float[] { 0, 0, 0, 0, 0},
+                            new float[] { 0, 0, 0, 0, 0},
+                            new float[] { 0, 0, 0, 0, 0},
+                        });
+                        colorMatrix.Matrix03 = 1f;
+                        colorMatrix.Matrix40 = (metalOut[0] + metalOut[1]) / 2f;
+                        colorMatrix.Matrix41 = (metalOut[0] + metalOut[1]) / 2f;
+                        colorMatrix.Matrix42 = (metalOut[0] + metalOut[1]) / 2f;
+
+                        ImageAttributes attributes = new ImageAttributes();
+
+                        attributes.SetColorMatrix(colorMatrix, ColorMatrixFlag.Default, ColorAdjustType.Bitmap);
+
+                        gfx_m.DrawImage(maskBitmap, new Rectangle(0, 0, maskBitmap.Width, maskBitmap.Height), 0, 0, maskBitmap.Width, maskBitmap.Height, GraphicsUnit.Pixel, attributes);
+                    }
+
+                SkipMetal:
+
+                    {
+                        var roughOut = mllt.Overrides.RoughLevelsOut.Where(x => x.N == layer.RoughLevelsOut).First()?.V ?? null;
+
+                        if (roughOut == null)
+                        {
+                            goto SkipRough;
+                        }
+
+                        var colorMatrix = new ColorMatrix(new float[][]
+                        {
+                            new float[] { 0, 0, 0, 0, 0},
+                            new float[] { 0, 0, 0, 0, 0},
+                            new float[] { 0, 0, 0, 0, 0},
+                            new float[] { 0, 0, 0, 0, 0},
+                            new float[] { 0, 0, 0, 0, 0},
+                        });
+                        colorMatrix.Matrix03 = 1f;
+                        colorMatrix.Matrix40 = (roughOut[0] + roughOut[1]) / 2f;
+                        colorMatrix.Matrix41 = (roughOut[0] + roughOut[1]) / 2f;
+                        colorMatrix.Matrix42 = (roughOut[0] + roughOut[1]) / 2f;
+
+                        ImageAttributes attributes = new ImageAttributes();
+
+                        attributes.SetColorMatrix(colorMatrix, ColorMatrixFlag.Default, ColorAdjustType.Bitmap);
+
+                        gfx_r.DrawImage(maskBitmap, new Rectangle(0, 0, maskBitmap.Width, maskBitmap.Height), 0, 0, maskBitmap.Width, maskBitmap.Height, GraphicsUnit.Pixel, attributes);
+                    }
+
+                SkipRough:
 
                     var normalFile = File.GetFileFromDepotPath(mllt.NormalTexture.DepotPath);
 
@@ -967,7 +1043,6 @@ namespace WolvenKit.ViewModels.Documents
                         stream.Dispose();
                     }
 
-
                 SkipLayer:
                     i++;
                 }
@@ -986,6 +1061,32 @@ namespace WolvenKit.ViewModels.Documents
                 finally
                 {
                     destBitmap.Dispose();
+                }
+
+                try
+                {
+                    metalnessBitmap.Save(filename_m, ImageFormat.Png);
+                }
+                catch (Exception e)
+                {
+                    Locator.Current.GetService<ILoggerService>().Error(e.Message);
+                }
+                finally
+                {
+                    metalnessBitmap.Dispose();
+                }
+
+                try
+                {
+                    roughnessBitmap.Save(filename_r, ImageFormat.Png);
+                }
+                catch (Exception e)
+                {
+                    Locator.Current.GetService<ILoggerService>().Error(e.Message);
+                }
+                finally
+                {
+                    roughnessBitmap.Dispose();
                 }
 
                 try

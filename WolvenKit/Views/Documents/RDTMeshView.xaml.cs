@@ -46,6 +46,7 @@ namespace WolvenKit.Views.Documents
         public RDTMeshView()
         {
             InitializeComponent();
+
             this.WhenActivated(disposables =>
             {
                 ViewModel.WhenAnyValue(x => x.SelectedAppearance).Subscribe(source =>
@@ -110,6 +111,8 @@ namespace WolvenKit.Views.Documents
 
                 var filename_b = System.IO.Path.Combine(ISettingsManager.GetTemp_OBJPath(), material.Name + ".png");
                 var filename_bn = System.IO.Path.Combine(ISettingsManager.GetTemp_OBJPath(), material.Name + "_n.png");
+                var filename_m = System.IO.Path.Combine(ISettingsManager.GetTemp_OBJPath(), material.Name + "_m.png");
+                var filename_r = System.IO.Path.Combine(ISettingsManager.GetTemp_OBJPath(), material.Name + "_r.png");
                 var filename_d = System.IO.Path.Combine(ISettingsManager.GetTemp_OBJPath(), material.Name + "_d.dds");
                 var filename_n = System.IO.Path.Combine(ISettingsManager.GetTemp_OBJPath(), material.Name + "_n.dds");
 
@@ -223,8 +226,38 @@ namespace WolvenKit.Views.Documents
                     physicallyBasedMaterial.TextureMaps.Add(new TextureMapInfo(TextureMapTypes.NormalMap, shaderResourceView, null, filename_bn));
                 }
 
-                physicallyBasedMaterial.Roughness = material.Roughness;
-                physicallyBasedMaterial.Metalness = material.Metalness;
+                if (File.Exists(filename_m))
+                {
+                    var shaderResourceView = TextureLoader.LoadShaderResourceView(MainDXViewportView.DXScene.Device,
+                                                                                            filename_m,
+                                                                                            loadDdsIfPresent: false,
+                                                                                            convertTo32bppPRGBA: true,
+                                                                                            generateMipMaps: true,
+                                                                                            textureInfo: out var textureInfo);
+
+                    physicallyBasedMaterial.TextureMaps.Add(new TextureMapInfo(TextureMapTypes.Metalness, shaderResourceView, null, filename_m));
+                }
+                else
+                {
+                    physicallyBasedMaterial.Metalness = material.Metalness;
+                }
+
+                if (File.Exists(filename_r))
+                {
+                    var shaderResourceView = TextureLoader.LoadShaderResourceView(MainDXViewportView.DXScene.Device,
+                                                                                            filename_r,
+                                                                                            loadDdsIfPresent: false,
+                                                                                            convertTo32bppPRGBA: true,
+                                                                                            generateMipMaps: true,
+                                                                                            textureInfo: out var textureInfo);
+
+                    physicallyBasedMaterial.TextureMaps.Add(new TextureMapInfo(TextureMapTypes.Roughness, shaderResourceView, null, filename_r));
+                }
+                else
+                {
+                    physicallyBasedMaterial.Roughness = material.Roughness;
+                }
+
                 //if (material.TemplateName == "vehicle_lights")
                 //{
                 //    physicallyBasedMaterial.EmissiveColor = Colors.Red.ToColor3();
@@ -236,8 +269,6 @@ namespace WolvenKit.Views.Documents
                     physicallyBasedMaterial.BaseColor = new Color4(0,0,0,0);
                     physicallyBasedMaterial.HasTransparency = true;
                 }
-
-                //physicallyBasedMaterial.SetTextureMap(TextureMapTypes.EnvironmentCubeMap)
 
                 mediaMaterial.SetUsedDXMaterial(physicallyBasedMaterial);
 
@@ -489,7 +520,7 @@ namespace WolvenKit.Views.Documents
                 for (var i = mg.Children.Count - 1; i >= 0; i--)
                 {
                     //if ((model.ChunkMask & 1UL << i) == 0)
-                    if (!model.EnabledChunks.Contains(i))
+                    if (model.EnabledChunks != null && !model.EnabledChunks.Contains(i))
                     {
                         mg.Children.Remove(mg.Children[i]);
                     }
