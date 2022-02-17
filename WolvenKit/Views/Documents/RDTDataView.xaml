@@ -210,6 +210,21 @@
                         <DataTrigger Binding="{Binding Level, Mode=OneTime}" Value="5">
                             <Setter Property="Width" Value="120" />
                         </DataTrigger>
+                        <DataTrigger Binding="{Binding Level, Mode=OneTime}" Value="6">
+                            <Setter Property="Width" Value="100" />
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding Level, Mode=OneTime}" Value="7">
+                            <Setter Property="Width" Value="100" />
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding Level, Mode=OneTime}" Value="8">
+                            <Setter Property="Width" Value="100" />
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding Level, Mode=OneTime}" Value="9">
+                            <Setter Property="Width" Value="100" />
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding Level, Mode=OneTime}" Value="10">
+                            <Setter Property="Width" Value="100" />
+                        </DataTrigger>
                         <DataTrigger Binding="{Binding IsInArray, Mode=OneTime}" Value="True">
                             <Setter Property="Width" Value="{Binding ArrayIndexWidth}" />
                         </DataTrigger>
@@ -224,12 +239,12 @@
                         <Style TargetType="MenuItem">
                             <Style.Triggers>
                                 <Trigger Property="IsEnabled" Value="False">
-                                    <Setter Property="Visibility" Value="Collapsed"/>
+                                    <Setter Property="Visibility" Value="Collapsed" />
                                 </Trigger>
                             </Style.Triggers>
                         </Style>
                     </ContextMenu.Resources>
-                    
+
                     <MenuItem
                         Command="{Binding Path=PlacementTarget.Tag.OpenChunkCommand, RelativeSource={RelativeSource AncestorType=ContextMenu}}"
                         Header="Open in New Tab"
@@ -297,9 +312,7 @@
                 <converters:TreeViewItemTemplateSelector x:Key="itemTemplateSelector" x:Name="itemTemplateSelector">
                     <converters:TreeViewItemTemplateSelector.GroupedTemplate>
                         <DataTemplate>
-                            <Grid
-                                Background="Transparent"
-                                Tag="{Binding}">
+                            <Grid Background="Transparent" Tag="{Binding}">
                                 <ContentPresenter
                                     Width="Auto"
                                     HorizontalAlignment="Stretch"
@@ -482,12 +495,8 @@
             ShowLines="True"
             Visibility="Visible">
             <syncfusion:SfTreeView.HierarchyPropertyDescriptors>
-                <treeViewEngine:HierarchyPropertyDescriptor
-                    IsSelectedPropertyName="IsSelected"
-                    TargetType="{x:Type shell:ChunkViewModel}" />
-                <treeViewEngine:HierarchyPropertyDescriptor
-                    IsSelectedPropertyName="IsSelected"
-                    TargetType="{x:Type shell:GroupedChunkViewModel}" />
+                <treeViewEngine:HierarchyPropertyDescriptor IsSelectedPropertyName="IsSelected" TargetType="{x:Type shell:ChunkViewModel}" />
+                <treeViewEngine:HierarchyPropertyDescriptor IsSelectedPropertyName="IsSelected" TargetType="{x:Type shell:GroupedChunkViewModel}" />
             </syncfusion:SfTreeView.HierarchyPropertyDescriptors>
         </syncfusion:SfTreeView>
 

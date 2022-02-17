@@ -228,6 +228,11 @@ namespace WolvenKit.ViewModels.Shell
                 return true;
             }
 
+            if (Data is CKeyValuePair)
+            {
+                return true;
+            }
+
             return false;
         }
 
@@ -838,6 +843,30 @@ namespace WolvenKit.ViewModels.Shell
             if (ResolvedData is CKeyValuePair kvp)
             {
                 Descriptor = kvp.Key;
+            }
+            //if (ResolvedData is CMaterialInstance && Parent != null)
+            //{
+            //    if (Parent.Parent != null && Parent.Parent.Parent != null && Parent.Parent.Data is CMesh mesh)
+            //    {
+            //        Descriptor = mesh.MaterialEntries[int.Parse(Name)].Name;
+            //    }
+            //}
+            if (Data is CMaterialInstance && Tab.File.Cr2wFile.RootChunk is CMesh mesh)
+            {
+                if (mesh.LocalMaterialBuffer.RawData.Data is CR2WList list)
+                {
+                    for (var i = 0; i < list.Files.Count; i++)
+                    {
+                        if (list.Files[i].RootChunk == Data)
+                        {
+                            if (mesh.MaterialEntries.Count > i)
+                            {
+                                Descriptor = mesh.MaterialEntries[i].Name;
+                            }
+                            break;
+                        }
+                    }
+                }
             }
             if (ResolvedData is RedBaseClass irc)
             {
