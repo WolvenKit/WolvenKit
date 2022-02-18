@@ -52,8 +52,8 @@ jobs:
 
     # Create assets
     # create zip
-    - run: Compress-Archive -Path ${{env.OUT}}* -DestinationPath ${{env.FINALOUT}}/${{env.PORTABLE}}
-    - run: Compress-Archive -Path ${{env.OUTC}}* -DestinationPath ${{env.FINALOUT}}/${{env.CONSOLE}}
+    - run: Compress-Archive -Path ${{env.OUT}}* -DestinationPath ${{env.PORTABLE}}
+    - run: Compress-Archive -Path ${{env.OUTC}}* -DestinationPath ${{env.CONSOLE}}
     # create installer
     # - run: .\Installers\ISCC\ISCC.exe /O"${{env.FINALOUT}}" /dMyAppBaseDir=".${{env.OUT}}" .\Installers\installer.iss
 
@@ -62,6 +62,6 @@ jobs:
       with:
         draft: true
         generateReleaseNotes: true
-        artifacts: "${{env.FINALOUT}}/${{env.PORTABLE}}", "${{env.FINALOUT}}/${{env.CONSOLE}}"
+        artifacts: "*.zip"
         bodyFile: "RELEASE.md"
         token: ${{ secrets.GITHUB_TOKEN }}
