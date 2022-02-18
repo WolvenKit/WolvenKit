@@ -2,7 +2,7 @@
 namespace WolvenKit.RED4.Types
 {
 	[REDMeta]
-	public partial class DisposalDeviceController : ScriptableDC
+	public partial class DisposalDeviceController : ScriptableDeviceComponent
 	{
 	}
 }

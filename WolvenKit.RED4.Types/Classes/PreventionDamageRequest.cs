@@ -53,10 +53,19 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
+		[Ordinal(6)] 
+		[RED("requestedHeat")] 
+		public CEnum<EPreventionHeatStage> RequestedHeat
+		{
+			get => GetPropertyValue<CEnum<EPreventionHeatStage>>();
+			set => SetPropertyValue<CEnum<EPreventionHeatStage>>(value);
+		}
+
 		public PreventionDamageRequest()
 		{
 			TargetID = new();
 			TargetPosition = new();
+			RequestedHeat = Enums.EPreventionHeatStage.Invalid;
 		}
 	}
 }

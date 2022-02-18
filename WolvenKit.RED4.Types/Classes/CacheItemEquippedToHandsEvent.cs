@@ -15,10 +15,10 @@ namespace WolvenKit.RED4.Types
 
 		[Ordinal(1)] 
 		[RED("slot")] 
-		public CEnum<EHandEquipSlot> Slot
+		public TweakDBID Slot
 		{
-			get => GetPropertyValue<CEnum<EHandEquipSlot>>();
-			set => SetPropertyValue<CEnum<EHandEquipSlot>>(value);
+			get => GetPropertyValue<TweakDBID>();
+			set => SetPropertyValue<TweakDBID>(value);
 		}
 
 		public CacheItemEquippedToHandsEvent()

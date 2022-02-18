@@ -214,6 +214,14 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(29)] 
+		[RED("equipmentSystem")] 
+		public CWeakHandle<EquipmentSystem> EquipmentSystem
+		{
+			get => GetPropertyValue<CWeakHandle<EquipmentSystem>>();
+			set => SetPropertyValue<CWeakHandle<EquipmentSystem>>(value);
+		}
+
+		[Ordinal(30)] 
 		[RED("resetConfirmationToken")] 
 		public CHandle<inkGameNotificationToken> ResetConfirmationToken
 		{
@@ -221,7 +229,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<inkGameNotificationToken>>(value);
 		}
 
-		[Ordinal(30)] 
+		[Ordinal(31)] 
 		[RED("inCombat")] 
 		public CBool InCombat
 		{
@@ -229,7 +237,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(31)] 
+		[Ordinal(32)] 
 		[RED("enoughMoneyForRespec")] 
 		public CBool EnoughMoneyForRespec
 		{
@@ -237,7 +245,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(32)] 
+		[Ordinal(33)] 
 		[RED("cantRespecAnim")] 
 		public CHandle<inkanimProxy> CantRespecAnim
 		{
@@ -245,7 +253,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<inkanimProxy>>(value);
 		}
 
-		[Ordinal(33)] 
+		[Ordinal(34)] 
 		[RED("lastHoveredAttribute")] 
 		public CEnum<PerkMenuAttribute> LastHoveredAttribute
 		{

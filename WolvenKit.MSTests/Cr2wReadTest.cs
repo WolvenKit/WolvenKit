@@ -111,6 +111,9 @@ namespace WolvenKit.MSTests
         public void Read_camcurveset() => Test_Extension(".camcurveset");
 
         [TestMethod]
+        public void Read_ccstate() => Test_Extension(".ccstate");
+
+        [TestMethod]
         public void Read_cfoliage() => Test_Extension(".cfoliage");
 
         [TestMethod]
@@ -405,6 +408,9 @@ namespace WolvenKit.MSTests
         // removed in 1.3
         //[TestMethod]
         //public void Read_streamingquerydata() => Test_Extension(".streamingquerydata");
+
+        [TestMethod]
+        public void Read_streamingblock() => Test_Extension(".streamingblock");
 
         [TestMethod]
         public void Read_streamingsector() => Test_Extension(".streamingsector");

@@ -29,6 +29,14 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CInt32>(value);
 		}
 
+		[Ordinal(3)] 
+		[RED("doApply")] 
+		public CBool DoApply
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
 		public gameuiSetupOptionSelectorForAttributeEvent()
 		{
 			Values = new();

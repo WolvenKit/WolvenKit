@@ -50,7 +50,7 @@ namespace WolvenKit.RED4.Types
 			DeviceName = "LocKey#97";
 			TweakDBRecord = new() { Value = 46674876326 };
 			TweakDBDescriptionRecord = new() { Value = 96486506199 };
-			TvSetup = new() { Channels = new(), MuteInterface = true };
+			TvSetup = new() { Channels = new() };
 			DefaultGlitchVideoPath = new();
 			BroadcastGlitchVideoPath = new();
 			BackupCustomChannels = new();

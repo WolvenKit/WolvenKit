@@ -30,6 +30,22 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(8)] 
+		[RED("textureMinMipBias")] 
+		public CUInt32 TextureMinMipBias
+		{
+			get => GetPropertyValue<CUInt32>();
+			set => SetPropertyValue<CUInt32>(value);
+		}
+
+		[Ordinal(9)] 
+		[RED("textureMaxMipBias")] 
+		public CUInt32 TextureMaxMipBias
+		{
+			get => GetPropertyValue<CUInt32>();
+			set => SetPropertyValue<CUInt32>(value);
+		}
+
+		[Ordinal(10)] 
 		[RED("meshTargetBinding")] 
 		public CHandle<worlduiMeshTargetBinding> MeshTargetBinding
 		{
@@ -37,7 +53,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<worlduiMeshTargetBinding>>(value);
 		}
 
-		[Ordinal(9)] 
+		[Ordinal(11)] 
 		[RED("isEnabled")] 
 		public CBool IsEnabled
 		{

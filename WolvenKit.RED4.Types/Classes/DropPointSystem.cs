@@ -29,11 +29,20 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
+		[Ordinal(3)] 
+		[RED("dropPointSystemLocks")] 
+		public CArray<DropPointSystemLock> DropPointSystemLocks
+		{
+			get => GetPropertyValue<CArray<DropPointSystemLock>>();
+			set => SetPropertyValue<CArray<DropPointSystemLock>>(value);
+		}
+
 		public DropPointSystem()
 		{
 			Packages = new();
 			Mappins = new();
 			IsEnabled = true;
+			DropPointSystemLocks = new();
 		}
 	}
 }

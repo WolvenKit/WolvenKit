@@ -5,7 +5,7 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class gameuiWorldMapGameObject : gameObject
 	{
-		[Ordinal(40)] 
+		[Ordinal(35)] 
 		[RED("districts")] 
 		public CArray<gameuiDistrictTriggerData> Districts
 		{

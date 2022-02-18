@@ -12,5 +12,13 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CWeakHandle<ItemInSlotPrereqState>>();
 			set => SetPropertyValue<CWeakHandle<ItemInSlotPrereqState>>(value);
 		}
+
+		[Ordinal(3)] 
+		[RED("waitForVisuals")] 
+		public CBool WaitForVisuals
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
 	}
 }

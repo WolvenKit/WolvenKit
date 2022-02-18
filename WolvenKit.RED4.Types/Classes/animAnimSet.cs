@@ -94,14 +94,6 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(12)] 
-		[RED("correspondingArchetype")] 
-		public CResourceReference<CResource> CorrespondingArchetype
-		{
-			get => GetPropertyValue<CResourceReference<CResource>>();
-			set => SetPropertyValue<CResourceReference<CResource>>(value);
-		}
-
-		[Ordinal(13)] 
 		[RED("version")] 
 		public CUInt32 Version
 		{

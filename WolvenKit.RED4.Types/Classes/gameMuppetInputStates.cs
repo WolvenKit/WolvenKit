@@ -3,9 +3,9 @@ using static WolvenKit.RED4.Types.Enums;
 namespace WolvenKit.RED4.Types
 {
 	[REDMeta]
-	public partial class gameMuppetInputStates : RedBaseClass
+	public partial class gameMuppetInputStates : gameMuppetComponent
 	{
-		[Ordinal(0)] 
+		[Ordinal(3)] 
 		[RED("replicationTime")] 
 		public netTime ReplicationTime
 		{
@@ -15,6 +15,7 @@ namespace WolvenKit.RED4.Types
 
 		public gameMuppetInputStates()
 		{
+			Name = "Component";
 			ReplicationTime = new();
 		}
 	}

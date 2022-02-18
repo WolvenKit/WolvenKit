@@ -69,6 +69,46 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CResourceReference<CBitmapTexture>>(value);
 		}
 
+		[Ordinal(10)] 
+		[RED("windDir")] 
+		public CLegacySingleChannelCurve<CFloat> WindDir
+		{
+			get => GetPropertyValue<CLegacySingleChannelCurve<CFloat>>();
+			set => SetPropertyValue<CLegacySingleChannelCurve<CFloat>>(value);
+		}
+
+		[Ordinal(11)] 
+		[RED("windSpeed")] 
+		public CLegacySingleChannelCurve<CFloat> WindSpeed
+		{
+			get => GetPropertyValue<CLegacySingleChannelCurve<CFloat>>();
+			set => SetPropertyValue<CLegacySingleChannelCurve<CFloat>>(value);
+		}
+
+		[Ordinal(12)] 
+		[RED("windScale")] 
+		public CLegacySingleChannelCurve<CFloat> WindScale
+		{
+			get => GetPropertyValue<CLegacySingleChannelCurve<CFloat>>();
+			set => SetPropertyValue<CLegacySingleChannelCurve<CFloat>>(value);
+		}
+
+		[Ordinal(13)] 
+		[RED("amplitude")] 
+		public CLegacySingleChannelCurve<CFloat> Amplitude
+		{
+			get => GetPropertyValue<CLegacySingleChannelCurve<CFloat>>();
+			set => SetPropertyValue<CLegacySingleChannelCurve<CFloat>>(value);
+		}
+
+		[Ordinal(14)] 
+		[RED("lambda")] 
+		public CLegacySingleChannelCurve<CFloat> Lambda
+		{
+			get => GetPropertyValue<CLegacySingleChannelCurve<CFloat>>();
+			set => SetPropertyValue<CLegacySingleChannelCurve<CFloat>>(value);
+		}
+
 		public WaterAreaSettings()
 		{
 			Enable = true;

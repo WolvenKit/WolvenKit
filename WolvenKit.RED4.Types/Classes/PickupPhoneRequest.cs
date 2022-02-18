@@ -13,6 +13,14 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<questPhoneCallInformation>(value);
 		}
 
+		[Ordinal(1)] 
+		[RED("shouldBeRejected")] 
+		public CBool ShouldBeRejected
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
 		public PickupPhoneRequest()
 		{
 			CallInformation = new();

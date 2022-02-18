@@ -86,6 +86,14 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(115)] 
+		[RED("isPlayerInsideLift_RealOne")] 
+		public CBool IsPlayerInsideLift_RealOne
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(116)] 
 		[RED("isSpeakerDestroyed")] 
 		public CBool IsSpeakerDestroyed
 		{
@@ -93,7 +101,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(116)] 
+		[Ordinal(117)] 
 		[RED("hasSpeaker")] 
 		public CBool HasSpeaker
 		{
@@ -101,7 +109,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(117)] 
+		[Ordinal(118)] 
 		[RED("stations")] 
 		public CArray<RadioStationsMap> Stations
 		{
@@ -109,7 +117,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<RadioStationsMap>>(value);
 		}
 
-		[Ordinal(118)] 
+		[Ordinal(119)] 
 		[RED("cachedGoToFloorAction")] 
 		public CInt32 CachedGoToFloorAction
 		{
@@ -117,7 +125,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CInt32>(value);
 		}
 
-		[Ordinal(119)] 
+		[Ordinal(120)] 
 		[RED("isAllDoorsClosed")] 
 		public CBool IsAllDoorsClosed
 		{
@@ -125,7 +133,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(120)] 
+		[Ordinal(121)] 
 		[RED("isAdsDisabled")] 
 		public CBool IsAdsDisabled
 		{

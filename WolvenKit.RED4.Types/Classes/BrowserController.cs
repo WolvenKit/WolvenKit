@@ -101,6 +101,14 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<inkWidget>>(value);
 		}
 
+		[Ordinal(13)] 
+		[RED("webPageSpawnRequest")] 
+		public CWeakHandle<inkAsyncSpawnRequest> WebPageSpawnRequest
+		{
+			get => GetPropertyValue<CWeakHandle<inkAsyncSpawnRequest>>();
+			set => SetPropertyValue<CWeakHandle<inkAsyncSpawnRequest>>(value);
+		}
+
 		public BrowserController()
 		{
 			HomeButton = new();

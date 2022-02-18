@@ -5,7 +5,7 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class gameuiEntityPreviewGameObject : gameObject
 	{
-		[Ordinal(40)] 
+		[Ordinal(35)] 
 		[RED("cameraSettings")] 
 		public gameuiEntityPreviewCameraSettings CameraSettings
 		{

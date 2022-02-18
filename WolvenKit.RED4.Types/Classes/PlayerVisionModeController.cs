@@ -97,7 +97,7 @@ namespace WolvenKit.RED4.Types
 		{
 			GameplayActiveFlagsRefreshPolicy = new();
 			BlackboardIds = new();
-			BlackboardValuesIds = new() { Kerenzikov = new(), RestrictedScene = new(), Dead = new(), Takedown = new(), DeviceTakeover = new(), BraindanceFPP = new(), BraindanceActive = new(), VeryHardLanding = new() };
+			BlackboardValuesIds = new() { Kerenzikov = new(), RestrictedScene = new(), Dead = new(), Takedown = new(), DeviceTakeover = new(), BraindanceFPP = new(), BraindanceActive = new(), VeryHardLanding = new(), IsBriefingActive = new() };
 			BlackboardListenersFunctions = new();
 			BlackboardListeners = new();
 			GameplayActiveFlags = new();

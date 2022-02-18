@@ -5,7 +5,7 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class ExplodingBullet : BaseBullet
 	{
-		[Ordinal(56)] 
+		[Ordinal(52)] 
 		[RED("explosionTime")] 
 		public CFloat ExplosionTime
 		{
@@ -13,7 +13,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(57)] 
+		[Ordinal(53)] 
 		[RED("effectReference")] 
 		public gameEffectRef EffectReference
 		{
@@ -21,7 +21,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gameEffectRef>(value);
 		}
 
-		[Ordinal(58)] 
+		[Ordinal(54)] 
 		[RED("hasExploded")] 
 		public CBool HasExploded
 		{
@@ -29,7 +29,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(59)] 
+		[Ordinal(55)] 
 		[RED("initialPosition")] 
 		public Vector4 InitialPosition
 		{
@@ -37,7 +37,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<Vector4>(value);
 		}
 
-		[Ordinal(60)] 
+		[Ordinal(56)] 
 		[RED("trailStarted")] 
 		public CBool TrailStarted
 		{
@@ -45,7 +45,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(61)] 
+		[Ordinal(57)] 
 		[RED("weapon")] 
 		public CWeakHandle<gameweaponObject> Weapon
 		{
@@ -53,7 +53,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<gameweaponObject>>(value);
 		}
 
-		[Ordinal(62)] 
+		[Ordinal(58)] 
 		[RED("attack_record")] 
 		public CHandle<gamedataAttack_Record> Attack_record
 		{
@@ -61,7 +61,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<gamedataAttack_Record>>(value);
 		}
 
-		[Ordinal(63)] 
+		[Ordinal(59)] 
 		[RED("attackID")] 
 		public TweakDBID AttackID
 		{
@@ -69,7 +69,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<TweakDBID>(value);
 		}
 
-		[Ordinal(64)] 
+		[Ordinal(60)] 
 		[RED("colliderBox")] 
 		public Vector4 ColliderBox
 		{
@@ -77,7 +77,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<Vector4>(value);
 		}
 
-		[Ordinal(65)] 
+		[Ordinal(61)] 
 		[RED("rotation")] 
 		public Quaternion Rotation
 		{
@@ -85,7 +85,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<Quaternion>(value);
 		}
 
-		[Ordinal(66)] 
+		[Ordinal(62)] 
 		[RED("range")] 
 		public CFloat Range
 		{
@@ -93,7 +93,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(67)] 
+		[Ordinal(63)] 
 		[RED("explodeAfterRangeTravelled")] 
 		public CBool ExplodeAfterRangeTravelled
 		{
@@ -101,7 +101,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(68)] 
+		[Ordinal(64)] 
 		[RED("attack")] 
 		public CHandle<gameIAttack> Attack
 		{
@@ -109,7 +109,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<gameIAttack>>(value);
 		}
 
-		[Ordinal(69)] 
+		[Ordinal(65)] 
 		[RED("BulletCollisionEvaluator")] 
 		public CHandle<BulletCollisionEvaluator> BulletCollisionEvaluator
 		{

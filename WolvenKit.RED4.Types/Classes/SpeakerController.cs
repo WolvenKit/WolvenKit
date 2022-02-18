@@ -2,7 +2,7 @@
 namespace WolvenKit.RED4.Types
 {
 	[REDMeta]
-	public partial class SpeakerController : ScriptableDC
+	public partial class SpeakerController : ScriptableDeviceComponent
 	{
 	}
 }

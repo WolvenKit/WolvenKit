@@ -1,9 +1,17 @@
+using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
 	[REDMeta]
 	public partial class ActionDemolition : ActionSkillCheck
 	{
+		[Ordinal(31)] 
+		[RED("slotID")] 
+		public gamemountingMountingSlotId SlotID
+		{
+			get => GetPropertyValue<gamemountingMountingSlotId>();
+			set => SetPropertyValue<gamemountingMountingSlotId>(value);
+		}
 
 		public ActionDemolition()
 		{
@@ -14,6 +22,7 @@ namespace WolvenKit.RED4.Types
 			SkillCheckName = Enums.EDeviceChallengeSkill.Athletics;
 			LocalizedName = "LocKey#22271";
 			SkillcheckDescription = new() { AdditionalRequirements = new(), OwnerID = new() };
+			SlotID = new();
 		}
 	}
 }

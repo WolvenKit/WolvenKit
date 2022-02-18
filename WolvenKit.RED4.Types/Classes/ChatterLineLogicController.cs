@@ -158,8 +158,24 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(24)] 
+		[RED("bubbleMinDistance")] 
+		public CFloat BubbleMinDistance
+		{
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
+		}
+
+		[Ordinal(25)] 
 		[RED("limitSubtitlesDistance")] 
 		public CBool LimitSubtitlesDistance
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(26)] 
+		[RED("isOverHead")] 
+		public CBool IsOverHead
 		{
 			get => GetPropertyValue<CBool>();
 			set => SetPropertyValue<CBool>(value);

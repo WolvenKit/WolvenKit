@@ -22,8 +22,8 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(2)] 
-		[RED("squadInCombat")] 
-		public CBool SquadInCombat
+		[RED("isTracked")] 
+		public CBool IsTracked
 		{
 			get => GetPropertyValue<CBool>();
 			set => SetPropertyValue<CBool>(value);

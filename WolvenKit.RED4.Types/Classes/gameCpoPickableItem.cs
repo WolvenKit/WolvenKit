@@ -5,7 +5,7 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class gameCpoPickableItem : gameObject
 	{
-		[Ordinal(40)] 
+		[Ordinal(35)] 
 		[RED("itemIDToEquip")] 
 		public TweakDBID ItemIDToEquip
 		{
@@ -13,7 +13,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<TweakDBID>(value);
 		}
 
-		[Ordinal(41)] 
+		[Ordinal(36)] 
 		[RED("quickSlotID")] 
 		public CInt32 QuickSlotID
 		{

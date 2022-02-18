@@ -98,6 +98,9 @@ namespace WolvenKit.MSTests
         public void Convert_camcurveset() => Test_Extension(".camcurveset");
 
         [TestMethod]
+        public void Convert_ccstate() => Test_Extension(".ccstate");
+
+        [TestMethod]
         public void Convert_cfoliage() => Test_Extension(".cfoliage");
 
         [TestMethod]
@@ -392,6 +395,9 @@ namespace WolvenKit.MSTests
         // removed in 1.3
         //[TestMethod]
         //public void Convert_streamingquerydata() => Test_Extension(".streamingquerydata");
+
+        [TestMethod]
+        public void Convert_streamingblock() => Test_Extension(".streamingblock");
 
         [TestMethod]
         public void Convert_streamingsector() => Test_Extension(".streamingsector");

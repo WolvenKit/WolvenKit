@@ -6,6 +6,54 @@ namespace WolvenKit.RED4.Types
 	public partial class HitReactionComponent : AIMandatoryComponents
 	{
 		[Ordinal(5)] 
+		[RED("ownerNPC")] 
+		public CWeakHandle<NPCPuppet> OwnerNPC
+		{
+			get => GetPropertyValue<CWeakHandle<NPCPuppet>>();
+			set => SetPropertyValue<CWeakHandle<NPCPuppet>>(value);
+		}
+
+		[Ordinal(6)] 
+		[RED("ownerPuppet")] 
+		public CWeakHandle<ScriptedPuppet> OwnerPuppet
+		{
+			get => GetPropertyValue<CWeakHandle<ScriptedPuppet>>();
+			set => SetPropertyValue<CWeakHandle<ScriptedPuppet>>(value);
+		}
+
+		[Ordinal(7)] 
+		[RED("ownerWeapon")] 
+		public CWeakHandle<gameweaponObject> OwnerWeapon
+		{
+			get => GetPropertyValue<CWeakHandle<gameweaponObject>>();
+			set => SetPropertyValue<CWeakHandle<gameweaponObject>>(value);
+		}
+
+		[Ordinal(8)] 
+		[RED("ownerID")] 
+		public entEntityID OwnerID
+		{
+			get => GetPropertyValue<entEntityID>();
+			set => SetPropertyValue<entEntityID>(value);
+		}
+
+		[Ordinal(9)] 
+		[RED("statsSystem")] 
+		public CHandle<gameStatsSystem> StatsSystem
+		{
+			get => GetPropertyValue<CHandle<gameStatsSystem>>();
+			set => SetPropertyValue<CHandle<gameStatsSystem>>(value);
+		}
+
+		[Ordinal(10)] 
+		[RED("ownerIsMassive")] 
+		public CBool OwnerIsMassive
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(11)] 
 		[RED("impactDamageDuration")] 
 		public CFloat ImpactDamageDuration
 		{
@@ -13,7 +61,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(6)] 
+		[Ordinal(12)] 
 		[RED("staggerDamageDuration")] 
 		public CFloat StaggerDamageDuration
 		{
@@ -21,7 +69,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(7)] 
+		[Ordinal(13)] 
 		[RED("impactDamageDurationMelee")] 
 		public CFloat ImpactDamageDurationMelee
 		{
@@ -29,7 +77,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(8)] 
+		[Ordinal(14)] 
 		[RED("staggerDamageDurationMelee")] 
 		public CFloat StaggerDamageDurationMelee
 		{
@@ -37,7 +85,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(9)] 
+		[Ordinal(15)] 
 		[RED("knockdownDamageDuration")] 
 		public CFloat KnockdownDamageDuration
 		{
@@ -45,7 +93,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(10)] 
+		[Ordinal(16)] 
 		[RED("defeatedMinDuration")] 
 		public CFloat DefeatedMinDuration
 		{
@@ -53,7 +101,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(11)] 
+		[Ordinal(17)] 
 		[RED("previousHitTime")] 
 		public CFloat PreviousHitTime
 		{
@@ -61,7 +109,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(12)] 
+		[Ordinal(18)] 
 		[RED("reactionType")] 
 		public CEnum<animHitReactionType> ReactionType
 		{
@@ -69,7 +117,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CEnum<animHitReactionType>>(value);
 		}
 
-		[Ordinal(13)] 
+		[Ordinal(19)] 
 		[RED("animHitReaction")] 
 		public CHandle<animAnimFeature_HitReactionsData> AnimHitReaction
 		{
@@ -77,7 +125,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<animAnimFeature_HitReactionsData>>(value);
 		}
 
-		[Ordinal(14)] 
+		[Ordinal(20)] 
 		[RED("lastAnimHitReaction")] 
 		public CHandle<animAnimFeature_HitReactionsData> LastAnimHitReaction
 		{
@@ -85,7 +133,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<animAnimFeature_HitReactionsData>>(value);
 		}
 
-		[Ordinal(15)] 
+		[Ordinal(21)] 
 		[RED("hitReactionAction")] 
 		public CHandle<ActionHitReactionScriptProxy> HitReactionAction
 		{
@@ -93,7 +141,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<ActionHitReactionScriptProxy>>(value);
 		}
 
-		[Ordinal(16)] 
+		[Ordinal(22)] 
 		[RED("previousAnimHitReactionArray")] 
 		public CArray<ScriptHitData> PreviousAnimHitReactionArray
 		{
@@ -101,7 +149,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<ScriptHitData>>(value);
 		}
 
-		[Ordinal(17)] 
+		[Ordinal(23)] 
 		[RED("lastHitReactionPlayed")] 
 		public CEnum<EAILastHitReactionPlayed> LastHitReactionPlayed
 		{
@@ -109,7 +157,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CEnum<EAILastHitReactionPlayed>>(value);
 		}
 
-		[Ordinal(18)] 
+		[Ordinal(24)] 
 		[RED("hitShapeData")] 
 		public gameShapeData HitShapeData
 		{
@@ -117,7 +165,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gameShapeData>(value);
 		}
 
-		[Ordinal(19)] 
+		[Ordinal(25)] 
 		[RED("animVariation")] 
 		public CInt32 AnimVariation
 		{
@@ -125,7 +173,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CInt32>(value);
 		}
 
-		[Ordinal(20)] 
+		[Ordinal(26)] 
 		[RED("specificHitTimeout")] 
 		public CFloat SpecificHitTimeout
 		{
@@ -133,7 +181,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(21)] 
+		[Ordinal(27)] 
 		[RED("quickMeleeCooldown")] 
 		public CFloat QuickMeleeCooldown
 		{
@@ -141,7 +189,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(22)] 
+		[Ordinal(28)] 
 		[RED("dismembermentBodyPartDamageThreshold")] 
 		public CArray<CFloat> DismembermentBodyPartDamageThreshold
 		{
@@ -149,7 +197,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<CFloat>>(value);
 		}
 
-		[Ordinal(23)] 
+		[Ordinal(29)] 
 		[RED("woundedBodyPartDamageThreshold")] 
 		public CArray<CFloat> WoundedBodyPartDamageThreshold
 		{
@@ -157,7 +205,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<CFloat>>(value);
 		}
 
-		[Ordinal(24)] 
+		[Ordinal(30)] 
 		[RED("defeatedBodyPartDamageThreshold")] 
 		public CArray<CFloat> DefeatedBodyPartDamageThreshold
 		{
@@ -165,7 +213,15 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<CFloat>>(value);
 		}
 
-		[Ordinal(25)] 
+		[Ordinal(31)] 
+		[RED("defeatedDamageThreshold")] 
+		public CFloat DefeatedDamageThreshold
+		{
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
+		}
+
+		[Ordinal(32)] 
 		[RED("impactDamageThreshold")] 
 		public CFloat ImpactDamageThreshold
 		{
@@ -173,7 +229,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(26)] 
+		[Ordinal(33)] 
 		[RED("staggerDamageThreshold")] 
 		public CFloat StaggerDamageThreshold
 		{
@@ -181,7 +237,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(27)] 
+		[Ordinal(34)] 
 		[RED("knockdownDamageThreshold")] 
 		public CFloat KnockdownDamageThreshold
 		{
@@ -189,7 +245,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(28)] 
+		[Ordinal(35)] 
 		[RED("knockdownImpulseThreshold")] 
 		public CFloat KnockdownImpulseThreshold
 		{
@@ -197,7 +253,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(29)] 
+		[Ordinal(36)] 
 		[RED("immuneToKnockDown")] 
 		public CBool ImmuneToKnockDown
 		{
@@ -205,7 +261,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(30)] 
+		[Ordinal(37)] 
 		[RED("hitComboReset")] 
 		public CFloat HitComboReset
 		{
@@ -213,7 +269,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(31)] 
+		[Ordinal(38)] 
 		[RED("physicalImpulseReset")] 
 		public CFloat PhysicalImpulseReset
 		{
@@ -221,7 +277,15 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(32)] 
+		[Ordinal(39)] 
+		[RED("guardBreakImpulseReset")] 
+		public CFloat GuardBreakImpulseReset
+		{
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
+		}
+
+		[Ordinal(40)] 
 		[RED("cumulatedDamages")] 
 		public CFloat CumulatedDamages
 		{
@@ -229,7 +293,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(33)] 
+		[Ordinal(41)] 
 		[RED("bodyPartWoundCumulatedDamages")] 
 		public CArray<CFloat> BodyPartWoundCumulatedDamages
 		{
@@ -237,7 +301,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<CFloat>>(value);
 		}
 
-		[Ordinal(34)] 
+		[Ordinal(42)] 
 		[RED("bodyPartDismemberCumulatedDamages")] 
 		public CArray<CFloat> BodyPartDismemberCumulatedDamages
 		{
@@ -245,15 +309,39 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<CFloat>>(value);
 		}
 
-		[Ordinal(35)] 
-		[RED("overrideHitReactionImpulse")] 
-		public CFloat OverrideHitReactionImpulse
+		[Ordinal(43)] 
+		[RED("attackerWeaponKnockdownImpulse")] 
+		public CFloat AttackerWeaponKnockdownImpulse
 		{
 			get => GetPropertyValue<CFloat>();
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(36)] 
+		[Ordinal(44)] 
+		[RED("attackerWeaponKnockdownImpulseForEvade")] 
+		public CFloat AttackerWeaponKnockdownImpulseForEvade
+		{
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
+		}
+
+		[Ordinal(45)] 
+		[RED("attackerWeaponKnockdownImpulseForEvadeCumulation")] 
+		public CFloat AttackerWeaponKnockdownImpulseForEvadeCumulation
+		{
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
+		}
+
+		[Ordinal(46)] 
+		[RED("ownerWeaponKnockdownImpulseForEvade")] 
+		public CFloat OwnerWeaponKnockdownImpulseForEvade
+		{
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
+		}
+
+		[Ordinal(47)] 
 		[RED("cumulatedPhysicalImpulse")] 
 		public CFloat CumulatedPhysicalImpulse
 		{
@@ -261,15 +349,23 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(37)] 
-		[RED("comboResetTime")] 
-		public CFloat ComboResetTime
+		[Ordinal(48)] 
+		[RED("cumulatedGuardBreakImpulse")] 
+		public CFloat CumulatedGuardBreakImpulse
 		{
 			get => GetPropertyValue<CFloat>();
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(38)] 
+		[Ordinal(49)] 
+		[RED("cumulatedEvadeBreakImpulse")] 
+		public CFloat CumulatedEvadeBreakImpulse
+		{
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
+		}
+
+		[Ordinal(50)] 
 		[RED("ragdollImpulse")] 
 		public CFloat RagdollImpulse
 		{
@@ -277,7 +373,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(39)] 
+		[Ordinal(51)] 
 		[RED("hitIntensity")] 
 		public CEnum<EAIHitIntensity> HitIntensity
 		{
@@ -285,7 +381,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CEnum<EAIHitIntensity>>(value);
 		}
 
-		[Ordinal(40)] 
+		[Ordinal(52)] 
 		[RED("previousMeleeHitTimeStamp")] 
 		public CFloat PreviousMeleeHitTimeStamp
 		{
@@ -293,7 +389,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(41)] 
+		[Ordinal(53)] 
 		[RED("previousRangedHitTimeStamp")] 
 		public CFloat PreviousRangedHitTimeStamp
 		{
@@ -301,7 +397,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(42)] 
+		[Ordinal(54)] 
 		[RED("previousBlockTimeStamp")] 
 		public CFloat PreviousBlockTimeStamp
 		{
@@ -309,7 +405,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(43)] 
+		[Ordinal(55)] 
 		[RED("previousParryTimeStamp")] 
 		public CFloat PreviousParryTimeStamp
 		{
@@ -317,7 +413,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(44)] 
+		[Ordinal(56)] 
 		[RED("previousDodgeTimeStamp")] 
 		public CFloat PreviousDodgeTimeStamp
 		{
@@ -325,7 +421,15 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(45)] 
+		[Ordinal(57)] 
+		[RED("previousRagdollTimeStamp")] 
+		public CFloat PreviousRagdollTimeStamp
+		{
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
+		}
+
+		[Ordinal(58)] 
 		[RED("blockCount")] 
 		public CInt32 BlockCount
 		{
@@ -333,7 +437,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CInt32>(value);
 		}
 
-		[Ordinal(46)] 
+		[Ordinal(59)] 
 		[RED("parryCount")] 
 		public CInt32 ParryCount
 		{
@@ -341,7 +445,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CInt32>(value);
 		}
 
-		[Ordinal(47)] 
+		[Ordinal(60)] 
 		[RED("dodgeCount")] 
 		public CInt32 DodgeCount
 		{
@@ -349,7 +453,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CInt32>(value);
 		}
 
-		[Ordinal(48)] 
+		[Ordinal(61)] 
 		[RED("hitCount")] 
 		public CUInt32 HitCount
 		{
@@ -357,7 +461,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CUInt32>(value);
 		}
 
-		[Ordinal(49)] 
+		[Ordinal(62)] 
 		[RED("defeatedHasBeenPlayed")] 
 		public CBool DefeatedHasBeenPlayed
 		{
@@ -365,7 +469,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(50)] 
+		[Ordinal(63)] 
 		[RED("deathHasBeenPlayed")] 
 		public CBool DeathHasBeenPlayed
 		{
@@ -373,7 +477,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(51)] 
+		[Ordinal(64)] 
 		[RED("deathRegisteredTime")] 
 		public CFloat DeathRegisteredTime
 		{
@@ -381,7 +485,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(52)] 
+		[Ordinal(65)] 
 		[RED("extendedDeathRegisteredTime")] 
 		public CFloat ExtendedDeathRegisteredTime
 		{
@@ -389,7 +493,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(53)] 
+		[Ordinal(66)] 
 		[RED("extendedDeathDelayRegisteredTime")] 
 		public CFloat ExtendedDeathDelayRegisteredTime
 		{
@@ -397,7 +501,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(54)] 
+		[Ordinal(67)] 
 		[RED("disableDismembermentAfterDeathDelay")] 
 		public CFloat DisableDismembermentAfterDeathDelay
 		{
@@ -405,7 +509,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(55)] 
+		[Ordinal(68)] 
 		[RED("extendedHitReactionRegisteredTime")] 
 		public CFloat ExtendedHitReactionRegisteredTime
 		{
@@ -413,7 +517,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(56)] 
+		[Ordinal(69)] 
 		[RED("extendedHitReactionDelayRegisteredTime")] 
 		public CFloat ExtendedHitReactionDelayRegisteredTime
 		{
@@ -421,7 +525,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(57)] 
+		[Ordinal(70)] 
 		[RED("scatteredGuts")] 
 		public CBool ScatteredGuts
 		{
@@ -429,7 +533,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(58)] 
+		[Ordinal(71)] 
 		[RED("cumulativeDamageUpdateInterval")] 
 		public CFloat CumulativeDamageUpdateInterval
 		{
@@ -437,7 +541,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(59)] 
+		[Ordinal(72)] 
 		[RED("cumulativeDamageUpdateRequested")] 
 		public CBool CumulativeDamageUpdateRequested
 		{
@@ -445,7 +549,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(60)] 
+		[Ordinal(73)] 
 		[RED("currentStimId")] 
 		public CUInt32 CurrentStimId
 		{
@@ -453,7 +557,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CUInt32>(value);
 		}
 
-		[Ordinal(61)] 
+		[Ordinal(74)] 
 		[RED("attackData")] 
 		public CHandle<gamedamageAttackData> AttackData
 		{
@@ -461,7 +565,15 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<gamedamageAttackData>>(value);
 		}
 
-		[Ordinal(62)] 
+		[Ordinal(75)] 
+		[RED("attackDirectionToInt")] 
+		public CInt32 AttackDirectionToInt
+		{
+			get => GetPropertyValue<CInt32>();
+			set => SetPropertyValue<CInt32>(value);
+		}
+
+		[Ordinal(76)] 
 		[RED("hitPosition")] 
 		public Vector4 HitPosition
 		{
@@ -469,7 +581,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<Vector4>(value);
 		}
 
-		[Ordinal(63)] 
+		[Ordinal(77)] 
 		[RED("hitDirection")] 
 		public Vector4 HitDirection
 		{
@@ -477,7 +589,23 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<Vector4>(value);
 		}
 
-		[Ordinal(64)] 
+		[Ordinal(78)] 
+		[RED("hitDirectionToInt")] 
+		public CInt32 HitDirectionToInt
+		{
+			get => GetPropertyValue<CInt32>();
+			set => SetPropertyValue<CInt32>(value);
+		}
+
+		[Ordinal(79)] 
+		[RED("overridenHitDirection")] 
+		public CBool OverridenHitDirection
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(80)] 
 		[RED("lastHitReactionBehaviorData")] 
 		public CHandle<HitReactionBehaviorData> LastHitReactionBehaviorData
 		{
@@ -485,7 +613,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<HitReactionBehaviorData>>(value);
 		}
 
-		[Ordinal(65)] 
+		[Ordinal(81)] 
 		[RED("lastStimName")] 
 		public CName LastStimName
 		{
@@ -493,7 +621,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(66)] 
+		[Ordinal(82)] 
 		[RED("deathStimName")] 
 		public CName DeathStimName
 		{
@@ -501,7 +629,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(67)] 
+		[Ordinal(83)] 
 		[RED("meleeHitCount")] 
 		public CInt32 MeleeHitCount
 		{
@@ -509,7 +637,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CInt32>(value);
 		}
 
-		[Ordinal(68)] 
+		[Ordinal(84)] 
 		[RED("strongMeleeHitCount")] 
 		public CInt32 StrongMeleeHitCount
 		{
@@ -517,7 +645,23 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CInt32>(value);
 		}
 
-		[Ordinal(69)] 
+		[Ordinal(85)] 
+		[RED("meleeBaseMaxHitChain")] 
+		public CInt32 MeleeBaseMaxHitChain
+		{
+			get => GetPropertyValue<CInt32>();
+			set => SetPropertyValue<CInt32>(value);
+		}
+
+		[Ordinal(86)] 
+		[RED("rangedBaseMaxHitChain")] 
+		public CInt32 RangedBaseMaxHitChain
+		{
+			get => GetPropertyValue<CInt32>();
+			set => SetPropertyValue<CInt32>(value);
+		}
+
+		[Ordinal(87)] 
 		[RED("maxHitChainForMelee")] 
 		public CInt32 MaxHitChainForMelee
 		{
@@ -525,7 +669,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CInt32>(value);
 		}
 
-		[Ordinal(70)] 
+		[Ordinal(88)] 
 		[RED("maxHitChainForRanged")] 
 		public CInt32 MaxHitChainForRanged
 		{
@@ -533,7 +677,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CInt32>(value);
 		}
 
-		[Ordinal(71)] 
+		[Ordinal(89)] 
 		[RED("isAlive")] 
 		public CBool IsAlive
 		{
@@ -541,7 +685,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(72)] 
+		[Ordinal(90)] 
 		[RED("frameDamageHealthFactor")] 
 		public CFloat FrameDamageHealthFactor
 		{
@@ -549,7 +693,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(73)] 
+		[Ordinal(91)] 
 		[RED("hitCountData", 100)] 
 		public CArrayFixedSize<CFloat> HitCountData
 		{
@@ -557,7 +701,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArrayFixedSize<CFloat>>(value);
 		}
 
-		[Ordinal(74)] 
+		[Ordinal(92)] 
 		[RED("hitCountArrayEnd")] 
 		public CInt32 HitCountArrayEnd
 		{
@@ -565,7 +709,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CInt32>(value);
 		}
 
-		[Ordinal(75)] 
+		[Ordinal(93)] 
 		[RED("hitCountArrayCurrent")] 
 		public CInt32 HitCountArrayCurrent
 		{
@@ -573,7 +717,55 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CInt32>(value);
 		}
 
-		[Ordinal(76)] 
+		[Ordinal(94)] 
+		[RED("allowDefeatedOnCompanion")] 
+		public CBool AllowDefeatedOnCompanion
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(95)] 
+		[RED("baseCumulativeDamagesDecreaser")] 
+		public CFloat BaseCumulativeDamagesDecreaser
+		{
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
+		}
+
+		[Ordinal(96)] 
+		[RED("blockCountInterval")] 
+		public CFloat BlockCountInterval
+		{
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
+		}
+
+		[Ordinal(97)] 
+		[RED("dodgeCountInterval")] 
+		public CFloat DodgeCountInterval
+		{
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
+		}
+
+		[Ordinal(98)] 
+		[RED("globalHitTimer")] 
+		public CFloat GlobalHitTimer
+		{
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
+		}
+
+		[Ordinal(99)] 
+		[RED("hasMantisBladesinRecord")] 
+		public CBool HasMantisBladesinRecord
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(100)] 
 		[RED("indicatorEnabledBlackboardId")] 
 		public CHandle<redCallbackObject> IndicatorEnabledBlackboardId
 		{
@@ -581,7 +773,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
-		[Ordinal(77)] 
+		[Ordinal(101)] 
 		[RED("hitIndicatorEnabled")] 
 		public CBool HitIndicatorEnabled
 		{
@@ -589,7 +781,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(78)] 
+		[Ordinal(102)] 
 		[RED("hasBeenWounded")] 
 		public CBool HasBeenWounded
 		{
@@ -597,7 +789,183 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(79)] 
+		[Ordinal(103)] 
+		[RED("inWorkspot")] 
+		public CBool InWorkspot
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(104)] 
+		[RED("inCover")] 
+		public CBool InCover
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(105)] 
+		[RED("healthListener")] 
+		public CHandle<NPCHealthListener> HealthListener
+		{
+			get => GetPropertyValue<CHandle<NPCHealthListener>>();
+			set => SetPropertyValue<CHandle<NPCHealthListener>>(value);
+		}
+
+		[Ordinal(106)] 
+		[RED("hitReactionComponentStatsListener")] 
+		public CHandle<NPCHitReactionComponentStatsListener> HitReactionComponentStatsListener
+		{
+			get => GetPropertyValue<CHandle<NPCHitReactionComponentStatsListener>>();
+			set => SetPropertyValue<CHandle<NPCHitReactionComponentStatsListener>>(value);
+		}
+
+		[Ordinal(107)] 
+		[RED("currentHealth")] 
+		public CFloat CurrentHealth
+		{
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
+		}
+
+		[Ordinal(108)] 
+		[RED("totalHealth")] 
+		public CFloat TotalHealth
+		{
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
+		}
+
+		[Ordinal(109)] 
+		[RED("totalStamina")] 
+		public CFloat TotalStamina
+		{
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
+		}
+
+		[Ordinal(110)] 
+		[RED("currentCanDropWeapon")] 
+		public CFloat CurrentCanDropWeapon
+		{
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
+		}
+
+		[Ordinal(111)] 
+		[RED("currentExtendedHitReactionImmunity")] 
+		public CFloat CurrentExtendedHitReactionImmunity
+		{
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
+		}
+
+		[Ordinal(112)] 
+		[RED("currentIsInvulnerable")] 
+		public CFloat CurrentIsInvulnerable
+		{
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
+		}
+
+		[Ordinal(113)] 
+		[RED("currentDefeatedDamageThreshold")] 
+		public CFloat CurrentDefeatedDamageThreshold
+		{
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
+		}
+
+		[Ordinal(114)] 
+		[RED("currentImpactDamageThreshold")] 
+		public CFloat CurrentImpactDamageThreshold
+		{
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
+		}
+
+		[Ordinal(115)] 
+		[RED("currentImpactDamageThresholdInCover")] 
+		public CFloat CurrentImpactDamageThresholdInCover
+		{
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
+		}
+
+		[Ordinal(116)] 
+		[RED("currentKnockdownDamageThreshold")] 
+		public CFloat CurrentKnockdownDamageThreshold
+		{
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
+		}
+
+		[Ordinal(117)] 
+		[RED("currentKnockdownDamageThresholdImpulse")] 
+		public CFloat CurrentKnockdownDamageThresholdImpulse
+		{
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
+		}
+
+		[Ordinal(118)] 
+		[RED("currentKnockdownDamageThresholdInCover")] 
+		public CFloat CurrentKnockdownDamageThresholdInCover
+		{
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
+		}
+
+		[Ordinal(119)] 
+		[RED("currentKnockdownImmunity")] 
+		public CFloat CurrentKnockdownImmunity
+		{
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
+		}
+
+		[Ordinal(120)] 
+		[RED("currentMeleeImmunity")] 
+		public CFloat CurrentMeleeImmunity
+		{
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
+		}
+
+		[Ordinal(121)] 
+		[RED("currentStaggerDamageThreshold")] 
+		public CFloat CurrentStaggerDamageThreshold
+		{
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
+		}
+
+		[Ordinal(122)] 
+		[RED("currentStaggerDamageThresholdInCover")] 
+		public CFloat CurrentStaggerDamageThresholdInCover
+		{
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
+		}
+
+		[Ordinal(123)] 
+		[RED("currentCanBlock")] 
+		public CFloat CurrentCanBlock
+		{
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
+		}
+
+		[Ordinal(124)] 
+		[RED("currentHasKerenzikov")] 
+		public CFloat CurrentHasKerenzikov
+		{
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
+		}
+
+		[Ordinal(125)] 
 		[RED("hitReactionData")] 
 		public CHandle<animAnimFeature_HitReactionsData> HitReactionData
 		{
@@ -607,6 +975,7 @@ namespace WolvenKit.RED4.Types
 
 		public HitReactionComponent()
 		{
+			OwnerID = new();
 			ImpactDamageDuration = 0.200000F;
 			StaggerDamageDuration = 0.400000F;
 			ImpactDamageDurationMelee = 0.250000F;
@@ -618,7 +987,8 @@ namespace WolvenKit.RED4.Types
 			WoundedBodyPartDamageThreshold = new();
 			DefeatedBodyPartDamageThreshold = new();
 			HitComboReset = 2.000000F;
-			PhysicalImpulseReset = 0.300000F;
+			PhysicalImpulseReset = 0.500000F;
+			GuardBreakImpulseReset = 5.000000F;
 			BodyPartWoundCumulatedDamages = new();
 			BodyPartDismemberCumulatedDamages = new();
 			PreviousMeleeHitTimeStamp = -1.000000F;

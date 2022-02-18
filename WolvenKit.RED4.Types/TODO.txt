@@ -9,4 +9,4 @@
 - Read_smartobjects
 - Read_streamingsector
 
-- Dumper animFacialSetup, skip 2 after CorrectivePosesData
+- Fix worldStaticCollisionShapeCategories_CollisionNode

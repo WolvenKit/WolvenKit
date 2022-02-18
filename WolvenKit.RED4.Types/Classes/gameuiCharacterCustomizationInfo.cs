@@ -78,6 +78,14 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(9)] 
+		[RED("editTags")] 
+		public CArray<CEnum<gameuiCharacterCustomizationEditTag>> EditTags
+		{
+			get => GetPropertyValue<CArray<CEnum<gameuiCharacterCustomizationEditTag>>>();
+			set => SetPropertyValue<CArray<CEnum<gameuiCharacterCustomizationEditTag>>>(value);
+		}
+
+		[Ordinal(10)] 
 		[RED("censorFlag")] 
 		public CBitField<CensorshipFlags> CensorFlag
 		{
@@ -85,7 +93,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBitField<CensorshipFlags>>(value);
 		}
 
-		[Ordinal(10)] 
+		[Ordinal(11)] 
 		[RED("censorFlagAction")] 
 		public CEnum<gameuiCharacterCustomizationActionType> CensorFlagAction
 		{
@@ -93,7 +101,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CEnum<gameuiCharacterCustomizationActionType>>(value);
 		}
 
-		[Ordinal(11)] 
+		[Ordinal(12)] 
 		[RED("onDeactivateActions")] 
 		public CArray<gameuiCharacterCustomizationAction> OnDeactivateActions
 		{

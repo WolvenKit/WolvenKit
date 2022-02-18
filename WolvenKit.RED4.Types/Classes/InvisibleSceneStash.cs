@@ -5,7 +5,7 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class InvisibleSceneStash : Device
 	{
-		[Ordinal(87)] 
+		[Ordinal(84)] 
 		[RED("itemSlots")] 
 		public CArray<CEnum<gamedataEquipmentArea>> ItemSlots
 		{
@@ -13,7 +13,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<CEnum<gamedataEquipmentArea>>>(value);
 		}
 
-		[Ordinal(88)] 
+		[Ordinal(85)] 
 		[RED("equipmentData")] 
 		public CHandle<EquipmentSystemPlayerData> EquipmentData
 		{

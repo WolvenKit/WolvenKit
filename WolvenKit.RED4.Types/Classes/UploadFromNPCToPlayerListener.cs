@@ -46,6 +46,14 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(7)] 
+		[RED("startUploadTimeStamp")] 
+		public CFloat StartUploadTimeStamp
+		{
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
+		}
+
+		[Ordinal(8)] 
 		[RED("ssAction")] 
 		public CBool SsAction
 		{

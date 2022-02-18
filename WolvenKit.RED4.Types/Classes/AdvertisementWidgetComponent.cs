@@ -5,7 +5,7 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class AdvertisementWidgetComponent : IWorldWidgetComponent
 	{
-		[Ordinal(10)] 
+		[Ordinal(12)] 
 		[RED("format")] 
 		public CEnum<AdvertisementFormat> Format
 		{
@@ -13,7 +13,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CEnum<AdvertisementFormat>>(value);
 		}
 
-		[Ordinal(11)] 
+		[Ordinal(13)] 
 		[RED("adGroupTDBID")] 
 		public TweakDBID AdGroupTDBID
 		{
@@ -21,7 +21,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<TweakDBID>(value);
 		}
 
-		[Ordinal(12)] 
+		[Ordinal(14)] 
 		[RED("enableOverride")] 
 		public CBool EnableOverride
 		{
@@ -29,7 +29,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(13)] 
+		[Ordinal(15)] 
 		[RED("adOverrideTDBID")] 
 		public TweakDBID AdOverrideTDBID
 		{
@@ -37,7 +37,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<TweakDBID>(value);
 		}
 
-		[Ordinal(14)] 
+		[Ordinal(16)] 
 		[RED("adVersion")] 
 		public CUInt32 AdVersion
 		{
@@ -45,7 +45,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CUInt32>(value);
 		}
 
-		[Ordinal(15)] 
+		[Ordinal(17)] 
 		[RED("useOnlyAttachedLights")] 
 		public CBool UseOnlyAttachedLights
 		{

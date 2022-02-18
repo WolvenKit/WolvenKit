@@ -5,7 +5,7 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class DodgeEvents : LocomotionGroundEvents
 	{
-		[Ordinal(3)] 
+		[Ordinal(6)] 
 		[RED("blockStatFlag")] 
 		public CHandle<gameStatModifierData_Deprecated> BlockStatFlag
 		{
@@ -13,7 +13,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<gameStatModifierData_Deprecated>>(value);
 		}
 
-		[Ordinal(4)] 
+		[Ordinal(7)] 
 		[RED("decelerationModifier")] 
 		public CHandle<gameStatModifierData_Deprecated> DecelerationModifier
 		{
@@ -21,7 +21,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<gameStatModifierData_Deprecated>>(value);
 		}
 
-		[Ordinal(5)] 
+		[Ordinal(8)] 
 		[RED("pressureWaveCreated")] 
 		public CBool PressureWaveCreated
 		{

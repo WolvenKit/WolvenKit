@@ -54,6 +54,14 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(15)] 
+		[RED("bountyStarAnimProxy")] 
+		public CArray<CHandle<inkanimProxy>> BountyStarAnimProxy
+		{
+			get => GetPropertyValue<CArray<CHandle<inkanimProxy>>>();
+			set => SetPropertyValue<CArray<CHandle<inkanimProxy>>>(value);
+		}
+
+		[Ordinal(16)] 
 		[RED("bountyAnimProxy")] 
 		public CHandle<inkanimProxy> BountyAnimProxy
 		{
@@ -61,7 +69,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<inkanimProxy>>(value);
 		}
 
-		[Ordinal(16)] 
+		[Ordinal(17)] 
 		[RED("animOptionsLoop")] 
 		public inkanimPlaybackOptions AnimOptionsLoop
 		{
@@ -69,7 +77,15 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkanimPlaybackOptions>(value);
 		}
 
-		[Ordinal(17)] 
+		[Ordinal(18)] 
+		[RED("numOfStar")] 
+		public CInt32 NumOfStar
+		{
+			get => GetPropertyValue<CInt32>();
+			set => SetPropertyValue<CInt32>(value);
+		}
+
+		[Ordinal(19)] 
 		[RED("wantedLevel")] 
 		public CInt32 WantedLevel
 		{
@@ -77,7 +93,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CInt32>(value);
 		}
 
-		[Ordinal(18)] 
+		[Ordinal(20)] 
 		[RED("rootWidget")] 
 		public CWeakHandle<inkWidget> RootWidget
 		{
@@ -85,7 +101,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<inkWidget>>(value);
 		}
 
-		[Ordinal(19)] 
+		[Ordinal(21)] 
 		[RED("WANTED_TIER_1")] 
 		public CFloat WANTED_TIER_1
 		{
@@ -93,7 +109,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(20)] 
+		[Ordinal(22)] 
 		[RED("WANTED_MIN")] 
 		public CFloat WANTED_MIN
 		{
@@ -104,6 +120,7 @@ namespace WolvenKit.RED4.Types
 		public WantedBarGameController()
 		{
 			StarsWidget = new();
+			BountyStarAnimProxy = new();
 			AnimOptionsLoop = new();
 			WANTED_TIER_1 = 1.000000F;
 			WANTED_MIN = 0.100000F;

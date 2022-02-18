@@ -69,14 +69,6 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(14)] 
-		[RED("allowStubMovement")] 
-		public CBool AllowStubMovement
-		{
-			get => GetPropertyValue<CBool>();
-			set => SetPropertyValue<CBool>(value);
-		}
-
 		public AIVehicleFollowCommand()
 		{
 			SecureTimeOut = 2.000000F;

@@ -5,7 +5,7 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class CheckHighLevelState : AINPCHighLevelStateCheck
 	{
-		[Ordinal(0)] 
+		[Ordinal(1)] 
 		[RED("state")] 
 		public CEnum<gamedataNPCHighLevelState> State
 		{

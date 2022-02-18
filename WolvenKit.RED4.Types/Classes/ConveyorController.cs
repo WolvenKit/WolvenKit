@@ -2,7 +2,7 @@
 namespace WolvenKit.RED4.Types
 {
 	[REDMeta]
-	public partial class ConveyorController : ScriptableDC
+	public partial class ConveyorController : ScriptableDeviceComponent
 	{
 	}
 }

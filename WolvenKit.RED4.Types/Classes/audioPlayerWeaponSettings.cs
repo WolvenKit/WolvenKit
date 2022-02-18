@@ -54,6 +54,22 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(16)] 
+		[RED("padVibrationGain")] 
+		public CFloat PadVibrationGain
+		{
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
+		}
+
+		[Ordinal(17)] 
+		[RED("padVibrationReloadGain")] 
+		public CFloat PadVibrationReloadGain
+		{
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
+		}
+
+		[Ordinal(18)] 
 		[RED("tails")] 
 		public CName Tails
 		{
@@ -61,7 +77,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(17)] 
+		[Ordinal(19)] 
 		[RED("shellCasingsSettings")] 
 		public CName ShellCasingsSettings
 		{
@@ -69,15 +85,15 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(18)] 
-		[RED("weaponTailOverrides")] 
-		public CHandle<audioWeaponTailOverrides> WeaponTailOverrides
+		[Ordinal(20)] 
+		[RED("animEventOverrides")] 
+		public CHandle<audioWeaponEventOverrides> AnimEventOverrides
 		{
-			get => GetPropertyValue<CHandle<audioWeaponTailOverrides>>();
-			set => SetPropertyValue<CHandle<audioWeaponTailOverrides>>(value);
+			get => GetPropertyValue<CHandle<audioWeaponEventOverrides>>();
+			set => SetPropertyValue<CHandle<audioWeaponEventOverrides>>(value);
 		}
 
-		[Ordinal(19)] 
+		[Ordinal(21)] 
 		[RED("quickMeleeHitEvent")] 
 		public CName QuickMeleeHitEvent
 		{
@@ -85,7 +101,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(20)] 
+		[Ordinal(22)] 
 		[RED("initEvent")] 
 		public CName InitEvent
 		{
@@ -93,7 +109,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(21)] 
+		[Ordinal(23)] 
 		[RED("shutdownEvent")] 
 		public CName ShutdownEvent
 		{
@@ -101,7 +117,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(22)] 
+		[Ordinal(24)] 
 		[RED("aimEnterSound")] 
 		public CName AimEnterSound
 		{
@@ -109,7 +125,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(23)] 
+		[Ordinal(25)] 
 		[RED("aimExitSound")] 
 		public CName AimExitSound
 		{
@@ -117,9 +133,33 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(24)] 
+		[Ordinal(26)] 
 		[RED("dryFireSound")] 
 		public CName DryFireSound
+		{
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
+		}
+
+		[Ordinal(27)] 
+		[RED("triggerEffectSingle")] 
+		public CName TriggerEffectSingle
+		{
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
+		}
+
+		[Ordinal(28)] 
+		[RED("triggerEffectAiming")] 
+		public CName TriggerEffectAiming
+		{
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
+		}
+
+		[Ordinal(29)] 
+		[RED("triggerEffectAuto")] 
+		public CName TriggerEffectAuto
 		{
 			get => GetPropertyValue<CName>();
 			set => SetPropertyValue<CName>(value);
@@ -130,6 +170,8 @@ namespace WolvenKit.RED4.Types
 			WeaponHandlingSettings = new();
 			FireModeSounds = new();
 			TimeLimitForAutoFireSingleShot = 0.250000F;
+			PadVibrationGain = 1.000000F;
+			PadVibrationReloadGain = 1.000000F;
 		}
 	}
 }

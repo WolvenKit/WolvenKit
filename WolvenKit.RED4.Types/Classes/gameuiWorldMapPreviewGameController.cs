@@ -28,5 +28,18 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CResourceAsyncReference<entEntityTemplate>>();
 			set => SetPropertyValue<CResourceAsyncReference<entEntityTemplate>>(value);
 		}
+
+		[Ordinal(6)] 
+		[RED("canvas")] 
+		public inkImageWidgetReference Canvas
+		{
+			get => GetPropertyValue<inkImageWidgetReference>();
+			set => SetPropertyValue<inkImageWidgetReference>(value);
+		}
+
+		public gameuiWorldMapPreviewGameController()
+		{
+			Canvas = new();
+		}
 	}
 }

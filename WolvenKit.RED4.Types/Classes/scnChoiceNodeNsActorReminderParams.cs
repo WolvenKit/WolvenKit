@@ -53,6 +53,22 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<scnSceneTime>(value);
 		}
 
+		[Ordinal(6)] 
+		[RED("cutReminderEnabled")] 
+		public CBool CutReminderEnabled
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(7)] 
+		[RED("waitTimeToCutReminder")] 
+		public CFloat WaitTimeToCutReminder
+		{
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
+		}
+
 		public scnChoiceNodeNsActorReminderParams()
 		{
 			ReminderActor = new() { Id = 4294967295 };

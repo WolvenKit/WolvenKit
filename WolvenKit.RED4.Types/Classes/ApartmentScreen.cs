@@ -5,7 +5,7 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class ApartmentScreen : LcdScreen
 	{
-		[Ordinal(99)] 
+		[Ordinal(96)] 
 		[RED("timeSystemCallbackID")] 
 		public CUInt32 TimeSystemCallbackID
 		{

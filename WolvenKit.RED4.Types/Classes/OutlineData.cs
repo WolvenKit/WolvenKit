@@ -14,8 +14,8 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(1)] 
-		[RED("outlineStrength")] 
-		public CFloat OutlineStrength
+		[RED("outlineOpacity")] 
+		public CFloat OutlineOpacity
 		{
 			get => GetPropertyValue<CFloat>();
 			set => SetPropertyValue<CFloat>(value);

@@ -5,7 +5,7 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class Katana : gameweaponObject
 	{
-		[Ordinal(62)] 
+		[Ordinal(59)] 
 		[RED("bentBulletTemplateName")] 
 		public CName BentBulletTemplateName
 		{
@@ -13,7 +13,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(63)] 
+		[Ordinal(60)] 
 		[RED("bulletBendingReferenceSlotName")] 
 		public CName BulletBendingReferenceSlotName
 		{
@@ -21,7 +21,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(64)] 
+		[Ordinal(61)] 
 		[RED("colliderComponent")] 
 		public CHandle<entIComponent> ColliderComponent
 		{
@@ -29,7 +29,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<entIComponent>>(value);
 		}
 
-		[Ordinal(65)] 
+		[Ordinal(62)] 
 		[RED("slotComponent")] 
 		public CHandle<entSlotComponent> SlotComponent
 		{

@@ -45,9 +45,26 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
+		[Ordinal(7)] 
+		[RED("cursorType")] 
+		public CName CursorType
+		{
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
+		}
+
+		[Ordinal(8)] 
+		[RED("cursorForDevice")] 
+		public CName CursorForDevice
+		{
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
+		}
+
 		public CursorGameController()
 		{
 			Margin = new();
+			CursorType = "default";
 		}
 	}
 }

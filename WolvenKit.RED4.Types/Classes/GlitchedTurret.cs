@@ -5,7 +5,7 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class GlitchedTurret : Device
 	{
-		[Ordinal(87)] 
+		[Ordinal(84)] 
 		[RED("animFeature")] 
 		public CHandle<AnimFeature_SensorDevice> AnimFeature
 		{

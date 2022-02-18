@@ -5,7 +5,7 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class LootContainerObjectAnimatedByTransform : gameContainerObjectBase
 	{
-		[Ordinal(51)] 
+		[Ordinal(46)] 
 		[RED("wasOpened")] 
 		public CBool WasOpened
 		{

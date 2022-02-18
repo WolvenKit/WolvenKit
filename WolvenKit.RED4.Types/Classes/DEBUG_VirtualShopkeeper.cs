@@ -5,7 +5,7 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class DEBUG_VirtualShopkeeper : gameObject
 	{
-		[Ordinal(40)] 
+		[Ordinal(35)] 
 		[RED("vendorID")] 
 		public CString VendorID
 		{

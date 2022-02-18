@@ -2,7 +2,7 @@
 namespace WolvenKit.RED4.Types
 {
 	[REDMeta]
-	public partial class NetrunnerChairController : ScriptableDC
+	public partial class NetrunnerChairController : ScriptableDeviceComponent
 	{
 	}
 }

@@ -2,7 +2,7 @@
 namespace WolvenKit.RED4.Types
 {
 	[REDMeta]
-	public partial class WeakFenceController : ScriptableDC
+	public partial class WeakFenceController : ScriptableDeviceComponent
 	{
 	}
 }

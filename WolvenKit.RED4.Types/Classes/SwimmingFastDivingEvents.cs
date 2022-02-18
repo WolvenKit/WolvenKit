@@ -5,7 +5,7 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class SwimmingFastDivingEvents : LocomotionSwimmingEvents
 	{
-		[Ordinal(3)] 
+		[Ordinal(6)] 
 		[RED("lapsedTime")] 
 		public CFloat LapsedTime
 		{

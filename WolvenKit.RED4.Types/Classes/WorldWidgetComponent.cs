@@ -5,7 +5,7 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class WorldWidgetComponent : IWorldWidgetComponent
 	{
-		[Ordinal(10)] 
+		[Ordinal(12)] 
 		[RED("cursorResource")] 
 		public CResourceReference<inkWidgetLibraryResource> CursorResource
 		{
@@ -13,7 +13,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CResourceReference<inkWidgetLibraryResource>>(value);
 		}
 
-		[Ordinal(11)] 
+		[Ordinal(13)] 
 		[RED("widgetResource")] 
 		public CResourceAsyncReference<inkWidgetLibraryResource> WidgetResource
 		{
@@ -21,7 +21,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CResourceAsyncReference<inkWidgetLibraryResource>>(value);
 		}
 
-		[Ordinal(12)] 
+		[Ordinal(14)] 
 		[RED("itemNameToSpawn")] 
 		public CName ItemNameToSpawn
 		{
@@ -29,7 +29,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(13)] 
+		[Ordinal(15)] 
 		[RED("staticTextureResource")] 
 		public CResourceAsyncReference<CBitmapTexture> StaticTextureResource
 		{
@@ -37,7 +37,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CResourceAsyncReference<CBitmapTexture>>(value);
 		}
 
-		[Ordinal(14)] 
+		[Ordinal(16)] 
 		[RED("sceneWidgetProperties")] 
 		public worlduiSceneWidgetProperties SceneWidgetProperties
 		{
@@ -45,7 +45,23 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<worlduiSceneWidgetProperties>(value);
 		}
 
-		[Ordinal(15)] 
+		[Ordinal(17)] 
+		[RED("spawnDistanceOverride")] 
+		public CFloat SpawnDistanceOverride
+		{
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
+		}
+
+		[Ordinal(18)] 
+		[RED("limitedSpawnDistanceFromVehicle")] 
+		public CBool LimitedSpawnDistanceFromVehicle
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(19)] 
 		[RED("screenDefinition")] 
 		public SUIScreenDefinition ScreenDefinition
 		{
@@ -61,6 +77,8 @@ namespace WolvenKit.RED4.Types
 			ScreenAreaMultiplier = 1.000000F;
 			IsEnabled = true;
 			SceneWidgetProperties = new() { ProjectionPlaneSize = new() { X = 1.000000F, Y = 1.000000F }, FaceVector = new() };
+			SpawnDistanceOverride = -1.000000F;
+			LimitedSpawnDistanceFromVehicle = true;
 			ScreenDefinition = new();
 		}
 	}

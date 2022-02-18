@@ -5,7 +5,7 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class gameContainerObjectAnimated : gameContainerObjectBase
 	{
-		[Ordinal(51)] 
+		[Ordinal(46)] 
 		[RED("animFeatureName")] 
 		public CName AnimFeatureName
 		{

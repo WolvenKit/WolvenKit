@@ -6,6 +6,14 @@ namespace WolvenKit.RED4.Types
 	public partial class gameuiItemPreviewGameController : gameuiPreviewGameController
 	{
 		[Ordinal(7)] 
+		[RED("image")] 
+		public inkImageWidgetReference Image
+		{
+			get => GetPropertyValue<inkImageWidgetReference>();
+			set => SetPropertyValue<inkImageWidgetReference>(value);
+		}
+
+		[Ordinal(8)] 
 		[RED("sceneName")] 
 		public CName SceneName
 		{
@@ -13,7 +21,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(8)] 
+		[Ordinal(9)] 
 		[RED("cameraRef")] 
 		public NodeRef CameraRef
 		{
@@ -26,6 +34,7 @@ namespace WolvenKit.RED4.Types
 			YawSpeed = 1.250000F;
 			YawDefault = -125.000000F;
 			RotationSpeed = 30.000000F;
+			Image = new();
 		}
 	}
 }

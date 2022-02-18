@@ -166,22 +166,14 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(36)] 
-		[RED("contentWidget")] 
-		public inkWidgetReference ContentWidget
+		[RED("preloaderWidget")] 
+		public inkWidgetReference PreloaderWidget
 		{
 			get => GetPropertyValue<inkWidgetReference>();
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
 		[Ordinal(37)] 
-		[RED("timeSkipBtn")] 
-		public inkWidgetReference TimeSkipBtn
-		{
-			get => GetPropertyValue<inkWidgetReference>();
-			set => SetPropertyValue<inkWidgetReference>(value);
-		}
-
-		[Ordinal(38)] 
 		[RED("gameTimeText")] 
 		public inkTextWidgetReference GameTimeText
 		{
@@ -189,47 +181,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
-		[Ordinal(39)] 
-		[RED("zoomContainer")] 
-		public inkWidgetReference ZoomContainer
-		{
-			get => GetPropertyValue<inkWidgetReference>();
-			set => SetPropertyValue<inkWidgetReference>(value);
-		}
-
-		[Ordinal(40)] 
-		[RED("zoomLevelContainer")] 
-		public inkWidgetReference ZoomLevelContainer
-		{
-			get => GetPropertyValue<inkWidgetReference>();
-			set => SetPropertyValue<inkWidgetReference>(value);
-		}
-
-		[Ordinal(41)] 
-		[RED("zoomLevelText")] 
-		public inkTextWidgetReference ZoomLevelText
-		{
-			get => GetPropertyValue<inkTextWidgetReference>();
-			set => SetPropertyValue<inkTextWidgetReference>(value);
-		}
-
-		[Ordinal(42)] 
-		[RED("filterContainer")] 
-		public inkWidgetReference FilterContainer
-		{
-			get => GetPropertyValue<inkWidgetReference>();
-			set => SetPropertyValue<inkWidgetReference>(value);
-		}
-
-		[Ordinal(43)] 
-		[RED("filterText")] 
-		public inkTextWidgetReference FilterText
-		{
-			get => GetPropertyValue<inkTextWidgetReference>();
-			set => SetPropertyValue<inkTextWidgetReference>(value);
-		}
-
-		[Ordinal(44)] 
+		[Ordinal(38)] 
 		[RED("fastTravelInstructions")] 
 		public inkWidgetReference FastTravelInstructions
 		{
@@ -237,15 +189,31 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(45)] 
-		[RED("legendWrapper")] 
-		public inkWidgetReference LegendWrapper
+		[Ordinal(39)] 
+		[RED("filterSelector")] 
+		public inkWidgetReference FilterSelector
 		{
 			get => GetPropertyValue<inkWidgetReference>();
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(46)] 
+		[Ordinal(40)] 
+		[RED("filterSelectorWarning")] 
+		public inkWidgetReference FilterSelectorWarning
+		{
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
+		}
+
+		[Ordinal(41)] 
+		[RED("filterText")] 
+		public inkTextWidgetReference FilterText
+		{
+			get => GetPropertyValue<inkTextWidgetReference>();
+			set => SetPropertyValue<inkTextWidgetReference>(value);
+		}
+
+		[Ordinal(42)] 
 		[RED("districtIconImage")] 
 		public inkImageWidgetReference DistrictIconImage
 		{
@@ -253,7 +221,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkImageWidgetReference>(value);
 		}
 
-		[Ordinal(47)] 
+		[Ordinal(43)] 
 		[RED("districtNameText")] 
 		public inkTextWidgetReference DistrictNameText
 		{
@@ -261,7 +229,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
-		[Ordinal(48)] 
+		[Ordinal(44)] 
 		[RED("subdistrictNameText")] 
 		public inkTextWidgetReference SubdistrictNameText
 		{
@@ -269,15 +237,31 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
-		[Ordinal(49)] 
-		[RED("questLinkInputHint")] 
-		public inkWidgetReference QuestLinkInputHint
+		[Ordinal(45)] 
+		[RED("locationAndGangsContainer")] 
+		public inkWidgetReference LocationAndGangsContainer
 		{
 			get => GetPropertyValue<inkWidgetReference>();
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(50)] 
+		[Ordinal(46)] 
+		[RED("gangsInfoContainer")] 
+		public inkWidgetReference GangsInfoContainer
+		{
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
+		}
+
+		[Ordinal(47)] 
+		[RED("gangsList")] 
+		public inkCompoundWidgetReference GangsList
+		{
+			get => GetPropertyValue<inkCompoundWidgetReference>();
+			set => SetPropertyValue<inkCompoundWidgetReference>(value);
+		}
+
+		[Ordinal(48)] 
 		[RED("questContainer")] 
 		public inkWidgetReference QuestContainer
 		{
@@ -285,7 +269,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(51)] 
+		[Ordinal(49)] 
 		[RED("questName")] 
 		public inkTextWidgetReference QuestName
 		{
@@ -293,7 +277,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
-		[Ordinal(52)] 
+		[Ordinal(50)] 
 		[RED("objectiveName")] 
 		public inkTextWidgetReference ObjectiveName
 		{
@@ -301,7 +285,31 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
+		[Ordinal(51)] 
+		[RED("objectiveBackground")] 
+		public inkWidgetReference ObjectiveBackground
+		{
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
+		}
+
+		[Ordinal(52)] 
+		[RED("objectiveFrame")] 
+		public inkWidgetReference ObjectiveFrame
+		{
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
+		}
+
 		[Ordinal(53)] 
+		[RED("topShadow")] 
+		public inkWidgetReference TopShadow
+		{
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
+		}
+
+		[Ordinal(54)] 
 		[RED("rightAxisZoomThreshold")] 
 		public CFloat RightAxisZoomThreshold
 		{
@@ -309,15 +317,55 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(54)] 
-		[RED("view")] 
-		public CEnum<EWorldMapView> View
+		[Ordinal(55)] 
+		[RED("customFilters")] 
+		public inkWidgetReference CustomFilters
 		{
-			get => GetPropertyValue<CEnum<EWorldMapView>>();
-			set => SetPropertyValue<CEnum<EWorldMapView>>(value);
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(55)] 
+		[Ordinal(56)] 
+		[RED("filtersList")] 
+		public inkVerticalPanelWidgetReference FiltersList
+		{
+			get => GetPropertyValue<inkVerticalPanelWidgetReference>();
+			set => SetPropertyValue<inkVerticalPanelWidgetReference>(value);
+		}
+
+		[Ordinal(57)] 
+		[RED("filterLeftArrow")] 
+		public inkWidgetReference FilterLeftArrow
+		{
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
+		}
+
+		[Ordinal(58)] 
+		[RED("filterRightArrow")] 
+		public inkWidgetReference FilterRightArrow
+		{
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
+		}
+
+		[Ordinal(59)] 
+		[RED("quickFilterIndicators")] 
+		public CArray<inkWidgetReference> QuickFilterIndicators
+		{
+			get => GetPropertyValue<CArray<inkWidgetReference>>();
+			set => SetPropertyValue<CArray<inkWidgetReference>>(value);
+		}
+
+		[Ordinal(60)] 
+		[RED("customFiltersListAnimationDelay")] 
+		public CFloat CustomFiltersListAnimationDelay
+		{
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
+		}
+
+		[Ordinal(61)] 
 		[RED("cameraMode")] 
 		public CEnum<gameuiEWorldMapCameraMode> CameraMode
 		{
@@ -325,7 +373,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CEnum<gameuiEWorldMapCameraMode>>(value);
 		}
 
-		[Ordinal(56)] 
+		[Ordinal(62)] 
 		[RED("menuEventDispatcher")] 
 		public CWeakHandle<inkMenuEventDispatcher> MenuEventDispatcher
 		{
@@ -333,7 +381,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<inkMenuEventDispatcher>>(value);
 		}
 
-		[Ordinal(57)] 
+		[Ordinal(63)] 
 		[RED("tooltipController")] 
 		public CWeakHandle<WorldMapTooltipContainer> TooltipController
 		{
@@ -341,23 +389,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<WorldMapTooltipContainer>>(value);
 		}
 
-		[Ordinal(58)] 
-		[RED("legendController")] 
-		public CWeakHandle<WorldMapLegendController> LegendController
-		{
-			get => GetPropertyValue<CWeakHandle<WorldMapLegendController>>();
-			set => SetPropertyValue<CWeakHandle<WorldMapLegendController>>(value);
-		}
-
-		[Ordinal(59)] 
-		[RED("timeSkipPopupToken")] 
-		public CHandle<inkGameNotificationToken> TimeSkipPopupToken
-		{
-			get => GetPropertyValue<CHandle<inkGameNotificationToken>>();
-			set => SetPropertyValue<CHandle<inkGameNotificationToken>>(value);
-		}
-
-		[Ordinal(60)] 
+		[Ordinal(64)] 
 		[RED("gameTimeTextParams")] 
 		public CHandle<textTextParameterSet> GameTimeTextParams
 		{
@@ -365,7 +397,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<textTextParameterSet>>(value);
 		}
 
-		[Ordinal(61)] 
+		[Ordinal(65)] 
 		[RED("player")] 
 		public CWeakHandle<gameObject> Player
 		{
@@ -373,7 +405,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<gameObject>>(value);
 		}
 
-		[Ordinal(62)] 
+		[Ordinal(66)] 
 		[RED("journalManager")] 
 		public CWeakHandle<gameJournalManager> JournalManager
 		{
@@ -381,7 +413,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<gameJournalManager>>(value);
 		}
 
-		[Ordinal(63)] 
+		[Ordinal(67)] 
 		[RED("mappinSystem")] 
 		public CWeakHandle<gamemappinsMappinSystem> MappinSystem
 		{
@@ -389,7 +421,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<gamemappinsMappinSystem>>(value);
 		}
 
-		[Ordinal(64)] 
+		[Ordinal(68)] 
 		[RED("mapBlackboard")] 
 		public CWeakHandle<gameIBlackboard> MapBlackboard
 		{
@@ -397,7 +429,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<gameIBlackboard>>(value);
 		}
 
-		[Ordinal(65)] 
+		[Ordinal(69)] 
 		[RED("mapDefinition")] 
 		public CHandle<UI_MapDef> MapDefinition
 		{
@@ -405,7 +437,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<UI_MapDef>>(value);
 		}
 
-		[Ordinal(66)] 
+		[Ordinal(70)] 
 		[RED("trackedObjective")] 
 		public CWeakHandle<gameJournalQuestObjectiveBase> TrackedObjective
 		{
@@ -413,7 +445,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<gameJournalQuestObjectiveBase>>(value);
 		}
 
-		[Ordinal(67)] 
+		[Ordinal(71)] 
 		[RED("trackedQuest")] 
 		public CWeakHandle<gameJournalQuest> TrackedQuest
 		{
@@ -421,7 +453,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<gameJournalQuest>>(value);
 		}
 
-		[Ordinal(68)] 
+		[Ordinal(72)] 
 		[RED("mappinsPositions")] 
 		public CArray<Vector3> MappinsPositions
 		{
@@ -429,7 +461,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<Vector3>>(value);
 		}
 
-		[Ordinal(69)] 
+		[Ordinal(73)] 
 		[RED("lastRightAxisYAmount")] 
 		public CFloat LastRightAxisYAmount
 		{
@@ -437,7 +469,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(70)] 
+		[Ordinal(74)] 
 		[RED("justOpenedQuestJournal")] 
 		public CBool JustOpenedQuestJournal
 		{
@@ -445,12 +477,92 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(71)] 
+		[Ordinal(75)] 
 		[RED("initPosition")] 
 		public Vector3 InitPosition
 		{
 			get => GetPropertyValue<Vector3>();
 			set => SetPropertyValue<Vector3>(value);
+		}
+
+		[Ordinal(76)] 
+		[RED("currentQuickFilterIndex")] 
+		public CInt32 CurrentQuickFilterIndex
+		{
+			get => GetPropertyValue<CInt32>();
+			set => SetPropertyValue<CInt32>(value);
+		}
+
+		[Ordinal(77)] 
+		[RED("currentCustomFilterIndex")] 
+		public CInt32 CurrentCustomFilterIndex
+		{
+			get => GetPropertyValue<CInt32>();
+			set => SetPropertyValue<CInt32>(value);
+		}
+
+		[Ordinal(78)] 
+		[RED("spawnedCustomFilterIndex")] 
+		public CInt32 SpawnedCustomFilterIndex
+		{
+			get => GetPropertyValue<CInt32>();
+			set => SetPropertyValue<CInt32>(value);
+		}
+
+		[Ordinal(79)] 
+		[RED("quickFilterLeftArrow")] 
+		public CWeakHandle<inkButtonController> QuickFilterLeftArrow
+		{
+			get => GetPropertyValue<CWeakHandle<inkButtonController>>();
+			set => SetPropertyValue<CWeakHandle<inkButtonController>>(value);
+		}
+
+		[Ordinal(80)] 
+		[RED("quickFilterRightArrow")] 
+		public CWeakHandle<inkButtonController> QuickFilterRightArrow
+		{
+			get => GetPropertyValue<CWeakHandle<inkButtonController>>();
+			set => SetPropertyValue<CWeakHandle<inkButtonController>>(value);
+		}
+
+		[Ordinal(81)] 
+		[RED("gangsAsyncSpawnRequests")] 
+		public CArray<CWeakHandle<inkAsyncSpawnRequest>> GangsAsyncSpawnRequests
+		{
+			get => GetPropertyValue<CArray<CWeakHandle<inkAsyncSpawnRequest>>>();
+			set => SetPropertyValue<CArray<CWeakHandle<inkAsyncSpawnRequest>>>(value);
+		}
+
+		[Ordinal(82)] 
+		[RED("customFiltersList")] 
+		public CArray<CWeakHandle<WorldMapFiltersListItem>> CustomFiltersList
+		{
+			get => GetPropertyValue<CArray<CWeakHandle<WorldMapFiltersListItem>>>();
+			set => SetPropertyValue<CArray<CWeakHandle<WorldMapFiltersListItem>>>(value);
+		}
+
+		[Ordinal(83)] 
+		[RED("animationProxy")] 
+		public CHandle<inkanimProxy> AnimationProxy
+		{
+			get => GetPropertyValue<CHandle<inkanimProxy>>();
+			set => SetPropertyValue<CHandle<inkanimProxy>>(value);
+		}
+
+		[Ordinal(84)] 
+		[RED("entityAttached")] 
+		public CBool EntityAttached
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(85)] 
+		[RED("readyToZoom")] 
+		public CBool ReadyToZoom
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		public gameuiWorldMapMenuGameController()
@@ -469,26 +581,34 @@ namespace WolvenKit.RED4.Types
 			HoveredSubDistrict = Enums.gamedataDistrict.Invalid;
 			SelectedDistrict = Enums.gamedataDistrict.Invalid;
 			CanChangeCustomFilter = true;
-			ContentWidget = new();
-			TimeSkipBtn = new();
+			PreloaderWidget = new();
 			GameTimeText = new();
-			ZoomContainer = new();
-			ZoomLevelContainer = new();
-			ZoomLevelText = new();
-			FilterContainer = new();
-			FilterText = new();
 			FastTravelInstructions = new();
-			LegendWrapper = new();
+			FilterSelector = new();
+			FilterSelectorWarning = new();
+			FilterText = new();
 			DistrictIconImage = new();
 			DistrictNameText = new();
 			SubdistrictNameText = new();
-			QuestLinkInputHint = new();
+			LocationAndGangsContainer = new();
+			GangsInfoContainer = new();
+			GangsList = new();
 			QuestContainer = new();
 			QuestName = new();
 			ObjectiveName = new();
+			ObjectiveBackground = new();
+			ObjectiveFrame = new();
+			TopShadow = new();
 			RightAxisZoomThreshold = 0.800000F;
+			CustomFilters = new();
+			FiltersList = new();
+			FilterLeftArrow = new();
+			FilterRightArrow = new();
+			QuickFilterIndicators = new();
 			MappinsPositions = new();
 			InitPosition = new();
+			GangsAsyncSpawnRequests = new();
+			CustomFiltersList = new();
 		}
 	}
 }

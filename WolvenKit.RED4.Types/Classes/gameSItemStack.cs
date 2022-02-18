@@ -53,12 +53,21 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gameSItemStackRequirementData>(value);
 		}
 
+		[Ordinal(6)] 
+		[RED("dynamicTags")] 
+		public CArray<CName> DynamicTags
+		{
+			get => GetPropertyValue<CArray<CName>>();
+			set => SetPropertyValue<CArray<CName>>(value);
+		}
+
 		public gameSItemStack()
 		{
 			ItemID = new();
 			Quantity = 1;
 			IsAvailable = true;
 			Requirement = new() { StatType = Enums.gamedataStatType.Invalid };
+			DynamicTags = new();
 		}
 	}
 }

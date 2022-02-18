@@ -62,6 +62,38 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(11)] 
+		[RED("applyMaxStreamingDistance")] 
+		public CBool ApplyMaxStreamingDistance
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(12)] 
+		[RED("streamingImportance")] 
+		public CEnum<worldPrefabStreamingImportance> StreamingImportance
+		{
+			get => GetPropertyValue<CEnum<worldPrefabStreamingImportance>>();
+			set => SetPropertyValue<CEnum<worldPrefabStreamingImportance>>(value);
+		}
+
+		[Ordinal(13)] 
+		[RED("streamingOcclusionOverride")] 
+		public CEnum<worldPrefabStreamingOcclusion> StreamingOcclusionOverride
+		{
+			get => GetPropertyValue<CEnum<worldPrefabStreamingOcclusion>>();
+			set => SetPropertyValue<CEnum<worldPrefabStreamingOcclusion>>(value);
+		}
+
+		[Ordinal(14)] 
+		[RED("interiorMapContribution")] 
+		public CEnum<worldPrefabInteriorMapContribution> InteriorMapContribution
+		{
+			get => GetPropertyValue<CEnum<worldPrefabInteriorMapContribution>>();
+			set => SetPropertyValue<CEnum<worldPrefabInteriorMapContribution>>(value);
+		}
+
+		[Ordinal(15)] 
 		[RED("ignoreMeshEmbeddedOccluders")] 
 		public CBool IgnoreMeshEmbeddedOccluders
 		{
@@ -69,7 +101,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(12)] 
+		[Ordinal(16)] 
 		[RED("ignoreAllOccluders")] 
 		public CBool IgnoreAllOccluders
 		{
@@ -77,7 +109,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(13)] 
+		[Ordinal(17)] 
 		[RED("occluderAutoHideDistanceScale")] 
 		public CUInt8 OccluderAutoHideDistanceScale
 		{
@@ -85,7 +117,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CUInt8>(value);
 		}
 
-		[Ordinal(14)] 
+		[Ordinal(18)] 
 		[RED("proxyMeshOnly")] 
 		public CEnum<worldPrefabProxyMeshOnly> ProxyMeshOnly
 		{
@@ -93,7 +125,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CEnum<worldPrefabProxyMeshOnly>>(value);
 		}
 
-		[Ordinal(15)] 
+		[Ordinal(19)] 
 		[RED("proxyScaleOverride")] 
 		public CBool ProxyScaleOverride
 		{
@@ -101,7 +133,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(16)] 
+		[Ordinal(20)] 
 		[RED("proxyScale")] 
 		public Vector3 ProxyScale
 		{

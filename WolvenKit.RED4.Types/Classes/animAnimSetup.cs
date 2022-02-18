@@ -21,6 +21,14 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<animAnimSetupEntry>>(value);
 		}
 
+		[Ordinal(2)] 
+		[RED("hash")] 
+		public CUInt64 Hash
+		{
+			get => GetPropertyValue<CUInt64>();
+			set => SetPropertyValue<CUInt64>(value);
+		}
+
 		public animAnimSetup()
 		{
 			Cinematics = new();

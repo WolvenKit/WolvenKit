@@ -5,7 +5,7 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class BaseDestructibleDevice : Device
 	{
-		[Ordinal(87)] 
+		[Ordinal(84)] 
 		[RED("minTime")] 
 		public CFloat MinTime
 		{
@@ -13,7 +13,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(88)] 
+		[Ordinal(85)] 
 		[RED("maxTime")] 
 		public CFloat MaxTime
 		{
@@ -21,7 +21,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(89)] 
+		[Ordinal(86)] 
 		[RED("destroyedMesh")] 
 		public CHandle<entPhysicalMeshComponent> DestroyedMesh
 		{

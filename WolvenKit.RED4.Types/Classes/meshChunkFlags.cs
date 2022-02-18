@@ -45,6 +45,14 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
+		[Ordinal(5)] 
+		[RED("skipDynamicDecalGeneration")] 
+		public CBool SkipDynamicDecalGeneration
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
 		public meshChunkFlags()
 		{
 			RenderInScene = true;

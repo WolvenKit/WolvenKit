@@ -5,7 +5,7 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class ScriptedPuppet : gamePuppet
 	{
-		[Ordinal(40)] 
+		[Ordinal(35)] 
 		[RED("aiController")] 
 		public CHandle<AIHumanComponent> AiController
 		{
@@ -13,7 +13,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<AIHumanComponent>>(value);
 		}
 
-		[Ordinal(41)] 
+		[Ordinal(36)] 
 		[RED("movePolicies")] 
 		public CHandle<movePoliciesComponent> MovePolicies
 		{
@@ -21,7 +21,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<movePoliciesComponent>>(value);
 		}
 
-		[Ordinal(42)] 
+		[Ordinal(37)] 
 		[RED("aiStateHandlerComponent")] 
 		public CHandle<AIPhaseStateEventHandlerComponent> AiStateHandlerComponent
 		{
@@ -29,7 +29,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<AIPhaseStateEventHandlerComponent>>(value);
 		}
 
-		[Ordinal(43)] 
+		[Ordinal(38)] 
 		[RED("hitReactionComponent")] 
 		public CHandle<HitReactionComponent> HitReactionComponent
 		{
@@ -37,7 +37,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<HitReactionComponent>>(value);
 		}
 
-		[Ordinal(44)] 
+		[Ordinal(39)] 
 		[RED("signalHandlerComponent")] 
 		public CHandle<AISignalHandlerComponent> SignalHandlerComponent
 		{
@@ -45,7 +45,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<AISignalHandlerComponent>>(value);
 		}
 
-		[Ordinal(45)] 
+		[Ordinal(40)] 
 		[RED("reactionComponent")] 
 		public CHandle<ReactionManagerComponent> ReactionComponent
 		{
@@ -53,7 +53,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<ReactionManagerComponent>>(value);
 		}
 
-		[Ordinal(46)] 
+		[Ordinal(41)] 
 		[RED("dismembermentComponent")] 
 		public CHandle<gameDismembermentComponent> DismembermentComponent
 		{
@@ -61,7 +61,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<gameDismembermentComponent>>(value);
 		}
 
-		[Ordinal(47)] 
+		[Ordinal(42)] 
 		[RED("hitRepresantation")] 
 		public CHandle<entSlotComponent> HitRepresantation
 		{
@@ -69,7 +69,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<entSlotComponent>>(value);
 		}
 
-		[Ordinal(48)] 
+		[Ordinal(43)] 
 		[RED("interactionComponent")] 
 		public CHandle<gameinteractionsComponent> InteractionComponent
 		{
@@ -77,7 +77,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<gameinteractionsComponent>>(value);
 		}
 
-		[Ordinal(49)] 
+		[Ordinal(44)] 
 		[RED("slotComponent")] 
 		public CHandle<entSlotComponent> SlotComponent
 		{
@@ -85,7 +85,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<entSlotComponent>>(value);
 		}
 
-		[Ordinal(50)] 
+		[Ordinal(45)] 
 		[RED("sensesComponent")] 
 		public CHandle<senseComponent> SensesComponent
 		{
@@ -93,7 +93,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<senseComponent>>(value);
 		}
 
-		[Ordinal(51)] 
+		[Ordinal(46)] 
 		[RED("visibleObjectComponent")] 
 		public CHandle<senseVisibleObjectComponent> VisibleObjectComponent
 		{
@@ -101,7 +101,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<senseVisibleObjectComponent>>(value);
 		}
 
-		[Ordinal(52)] 
+		[Ordinal(47)] 
 		[RED("sensorObjectComponent")] 
 		public CHandle<senseSensorObjectComponent> SensorObjectComponent
 		{
@@ -109,7 +109,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<senseSensorObjectComponent>>(value);
 		}
 
-		[Ordinal(53)] 
+		[Ordinal(48)] 
 		[RED("targetTrackerComponent")] 
 		public CHandle<AITargetTrackerComponent> TargetTrackerComponent
 		{
@@ -117,7 +117,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<AITargetTrackerComponent>>(value);
 		}
 
-		[Ordinal(54)] 
+		[Ordinal(49)] 
 		[RED("targetingComponentsArray")] 
 		public CArray<CHandle<gameTargetingComponent>> TargetingComponentsArray
 		{
@@ -125,7 +125,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<CHandle<gameTargetingComponent>>>(value);
 		}
 
-		[Ordinal(55)] 
+		[Ordinal(50)] 
 		[RED("statesComponent")] 
 		public CHandle<NPCStatesComponent> StatesComponent
 		{
@@ -133,7 +133,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<NPCStatesComponent>>(value);
 		}
 
-		[Ordinal(56)] 
+		[Ordinal(51)] 
 		[RED("fxResourceMapper")] 
 		public CHandle<FxResourceMapperComponent> FxResourceMapper
 		{
@@ -141,7 +141,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<FxResourceMapperComponent>>(value);
 		}
 
-		[Ordinal(57)] 
+		[Ordinal(52)] 
 		[RED("linkedStatusEffect")] 
 		public LinkedStatusEffect LinkedStatusEffect
 		{
@@ -149,7 +149,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<LinkedStatusEffect>(value);
 		}
 
-		[Ordinal(58)] 
+		[Ordinal(53)] 
 		[RED("resourceLibraryComponent")] 
 		public CHandle<ResourceLibraryComponent> ResourceLibraryComponent
 		{
@@ -157,7 +157,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<ResourceLibraryComponent>>(value);
 		}
 
-		[Ordinal(59)] 
+		[Ordinal(54)] 
 		[RED("crowdMemberComponent")] 
 		public CHandle<CrowdMemberBaseComponent> CrowdMemberComponent
 		{
@@ -165,7 +165,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<CrowdMemberBaseComponent>>(value);
 		}
 
-		[Ordinal(60)] 
+		[Ordinal(55)] 
 		[RED("inventoryComponent")] 
 		public CHandle<gameInventory> InventoryComponent
 		{
@@ -173,7 +173,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<gameInventory>>(value);
 		}
 
-		[Ordinal(61)] 
+		[Ordinal(56)] 
 		[RED("objectSelectionComponent")] 
 		public CHandle<AIObjectSelectionComponent> ObjectSelectionComponent
 		{
@@ -181,7 +181,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<AIObjectSelectionComponent>>(value);
 		}
 
-		[Ordinal(62)] 
+		[Ordinal(57)] 
 		[RED("transformHistoryComponent")] 
 		public CHandle<entTransformHistoryComponent> TransformHistoryComponent
 		{
@@ -189,7 +189,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<entTransformHistoryComponent>>(value);
 		}
 
-		[Ordinal(63)] 
+		[Ordinal(58)] 
 		[RED("animationControllerComponent")] 
 		public CHandle<entAnimationControllerComponent> AnimationControllerComponent
 		{
@@ -197,7 +197,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<entAnimationControllerComponent>>(value);
 		}
 
-		[Ordinal(64)] 
+		[Ordinal(59)] 
 		[RED("bumpComponent")] 
 		public CHandle<gameinfluenceBumpComponent> BumpComponent
 		{
@@ -205,7 +205,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<gameinfluenceBumpComponent>>(value);
 		}
 
-		[Ordinal(65)] 
+		[Ordinal(60)] 
 		[RED("isCrowd")] 
 		public CBool IsCrowd
 		{
@@ -213,7 +213,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(66)] 
+		[Ordinal(61)] 
 		[RED("incapacitatedOnAttach")] 
 		public CBool IncapacitatedOnAttach
 		{
@@ -221,7 +221,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(67)] 
+		[Ordinal(62)] 
 		[RED("isIconic")] 
 		public CBool IsIconic
 		{
@@ -229,7 +229,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(68)] 
+		[Ordinal(63)] 
 		[RED("combatHUDManager")] 
 		public CHandle<CombatHUDManager> CombatHUDManager
 		{
@@ -237,7 +237,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<CombatHUDManager>>(value);
 		}
 
-		[Ordinal(69)] 
+		[Ordinal(64)] 
 		[RED("exposePosition")] 
 		public CBool ExposePosition
 		{
@@ -245,7 +245,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(70)] 
+		[Ordinal(65)] 
 		[RED("puppetStateBlackboard")] 
 		public CHandle<gameIBlackboard> PuppetStateBlackboard
 		{
@@ -253,7 +253,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<gameIBlackboard>>(value);
 		}
 
-		[Ordinal(71)] 
+		[Ordinal(66)] 
 		[RED("customBlackboard")] 
 		public CHandle<gameIBlackboard> CustomBlackboard
 		{
@@ -261,7 +261,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<gameIBlackboard>>(value);
 		}
 
-		[Ordinal(72)] 
+		[Ordinal(67)] 
 		[RED("securityAreaCallbackID")] 
 		public CUInt32 SecurityAreaCallbackID
 		{
@@ -269,7 +269,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CUInt32>(value);
 		}
 
-		[Ordinal(73)] 
+		[Ordinal(68)] 
 		[RED("customAIComponents")] 
 		public CArray<CHandle<AICustomComponents>> CustomAIComponents
 		{
@@ -277,7 +277,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<CHandle<AICustomComponents>>>(value);
 		}
 
-		[Ordinal(74)] 
+		[Ordinal(69)] 
 		[RED("listeners")] 
 		public CArray<CHandle<PuppetListener>> Listeners
 		{
@@ -285,7 +285,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<CHandle<PuppetListener>>>(value);
 		}
 
-		[Ordinal(75)] 
+		[Ordinal(70)] 
 		[RED("securitySupportListener")] 
 		public CHandle<SecuritySupportListener> SecuritySupportListener
 		{
@@ -293,7 +293,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<SecuritySupportListener>>(value);
 		}
 
-		[Ordinal(76)] 
+		[Ordinal(71)] 
 		[RED("shouldBeRevealedStorage")] 
 		public CHandle<RevealRequestsStorage> ShouldBeRevealedStorage
 		{
@@ -301,7 +301,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<RevealRequestsStorage>>(value);
 		}
 
-		[Ordinal(77)] 
+		[Ordinal(72)] 
 		[RED("inputProcessed")] 
 		public CBool InputProcessed
 		{
@@ -309,7 +309,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(78)] 
+		[Ordinal(73)] 
 		[RED("shouldSpawnBloodPuddle")] 
 		public CBool ShouldSpawnBloodPuddle
 		{
@@ -317,7 +317,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(79)] 
+		[Ordinal(74)] 
 		[RED("bloodPuddleSpawned")] 
 		public CBool BloodPuddleSpawned
 		{
@@ -325,7 +325,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(80)] 
+		[Ordinal(75)] 
 		[RED("skipDeathAnimation")] 
 		public CBool SkipDeathAnimation
 		{
@@ -333,7 +333,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(81)] 
+		[Ordinal(76)] 
 		[RED("hitHistory")] 
 		public CHandle<HitHistory> HitHistory
 		{
@@ -341,7 +341,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<HitHistory>>(value);
 		}
 
-		[Ordinal(82)] 
+		[Ordinal(77)] 
 		[RED("currentWorkspotTags")] 
 		public CArray<CName> CurrentWorkspotTags
 		{
@@ -349,7 +349,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<CName>>(value);
 		}
 
-		[Ordinal(83)] 
+		[Ordinal(78)] 
 		[RED("lootQuality")] 
 		public CEnum<gamedataQuality> LootQuality
 		{
@@ -357,7 +357,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CEnum<gamedataQuality>>(value);
 		}
 
-		[Ordinal(84)] 
+		[Ordinal(79)] 
 		[RED("hasQuestItems")] 
 		public CBool HasQuestItems
 		{
@@ -365,7 +365,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(85)] 
+		[Ordinal(80)] 
 		[RED("activeQualityRangeInteraction")] 
 		public CName ActiveQualityRangeInteraction
 		{
@@ -373,7 +373,15 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(86)] 
+		[Ordinal(81)] 
+		[RED("droppedWeapons")] 
+		public CBool DroppedWeapons
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(82)] 
 		[RED("weakspotComponent")] 
 		public CHandle<gameWeakspotComponent> WeakspotComponent
 		{
@@ -381,7 +389,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<gameWeakspotComponent>>(value);
 		}
 
-		[Ordinal(87)] 
+		[Ordinal(83)] 
 		[RED("highlightData")] 
 		public CHandle<FocusForcedHighlightData> HighlightData
 		{
@@ -389,7 +397,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<FocusForcedHighlightData>>(value);
 		}
 
-		[Ordinal(88)] 
+		[Ordinal(84)] 
 		[RED("killer")] 
 		public CWeakHandle<entEntity> Killer
 		{
@@ -397,7 +405,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<entEntity>>(value);
 		}
 
-		[Ordinal(89)] 
+		[Ordinal(85)] 
 		[RED("objectActionsCallbackCtrl")] 
 		public CHandle<gameObjectActionsCallbackController> ObjectActionsCallbackCtrl
 		{
@@ -405,7 +413,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<gameObjectActionsCallbackController>>(value);
 		}
 
-		[Ordinal(90)] 
+		[Ordinal(86)] 
 		[RED("isActiveCached")] 
 		public AIUtilsCachedBoolValue IsActiveCached
 		{
@@ -413,7 +421,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<AIUtilsCachedBoolValue>(value);
 		}
 
-		[Ordinal(91)] 
+		[Ordinal(87)] 
 		[RED("isCyberpsycho")] 
 		public CBool IsCyberpsycho
 		{
@@ -421,7 +429,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(92)] 
+		[Ordinal(88)] 
 		[RED("isCivilian")] 
 		public CBool IsCivilian
 		{
@@ -429,7 +437,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(93)] 
+		[Ordinal(89)] 
 		[RED("isPolice")] 
 		public CBool IsPolice
 		{
@@ -437,7 +445,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(94)] 
+		[Ordinal(90)] 
 		[RED("isGanger")] 
 		public CBool IsGanger
 		{
@@ -445,7 +453,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(95)] 
+		[Ordinal(91)] 
 		[RED("attemptedShards")] 
 		public CArray<gameItemID> AttemptedShards
 		{

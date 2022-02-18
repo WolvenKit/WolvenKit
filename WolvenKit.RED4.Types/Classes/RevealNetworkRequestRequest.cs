@@ -21,14 +21,6 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(2)] 
-		[RED("nextFrame")] 
-		public CBool NextFrame
-		{
-			get => GetPropertyValue<CBool>();
-			set => SetPropertyValue<CBool>(value);
-		}
-
 		public RevealNetworkRequestRequest()
 		{
 			Target = new();

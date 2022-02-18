@@ -8,8 +8,6 @@ namespace WolvenKit.MSTests
     [TestClass]
     public class FNV1A64Tests
     {
-        #region Methods
-
         [TestMethod]
         [DataRow("", 0xcbf29ce484222325UL)]
         [DataRow("a", 0xaf63dc4c8601ec8cUL)]
@@ -106,7 +104,5 @@ namespace WolvenKit.MSTests
         {
             Assert.AreEqual(FNV1A64HashAlgorithm.HashString(test, Encoding.ASCII, true), result);
         }
-
-        #endregion Methods
     }
 }

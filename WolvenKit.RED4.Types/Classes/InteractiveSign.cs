@@ -5,7 +5,7 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class InteractiveSign : Device
 	{
-		[Ordinal(87)] 
+		[Ordinal(84)] 
 		[RED("signShape")] 
 		public CEnum<SignShape> SignShape
 		{
@@ -13,7 +13,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CEnum<SignShape>>(value);
 		}
 
-		[Ordinal(88)] 
+		[Ordinal(85)] 
 		[RED("type")] 
 		public CEnum<SignType> Type
 		{
@@ -21,7 +21,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CEnum<SignType>>(value);
 		}
 
-		[Ordinal(89)] 
+		[Ordinal(86)] 
 		[RED("message")] 
 		public CString Message
 		{

@@ -29,11 +29,20 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkPermanentLayerDefinitionCollection>(value);
 		}
 
+		[Ordinal(4)] 
+		[RED("layerDefinitionsSet")] 
+		public inkLayerDefinitionsSet LayerDefinitionsSet
+		{
+			get => GetPropertyValue<inkLayerDefinitionsSet>();
+			set => SetPropertyValue<inkLayerDefinitionsSet>(value);
+		}
+
 		public inkLayersResource()
 		{
 			LayerDefinitions = new() { MenuLayer = new(), MenuLayerMP = new(), HudLayer = new(), VideoLayer = new(), OffscreenLayer = new(), GameNotificationsLayer = new(), PhotoModeLayer = new(), DebugLayer = new() { Entries = new() } };
 			PreGameLayerDefinitions = new() { MenuLayer = new(), MenuLayerMP = new(), HudLayer = new(), VideoLayer = new(), OffscreenLayer = new(), GameNotificationsLayer = new(), PhotoModeLayer = new(), DebugLayer = new() { Entries = new() } };
 			PermanentLayerDefinitions = new() { LoadingLayer = new(), WatermarksLayer = new(), SysNotificationsLayer = new(), WaitingSignLayerDefinition = new() };
+			LayerDefinitionsSet = new() { LayersDefinitions = new(), LayersSystemConnections = new() };
 		}
 	}
 }

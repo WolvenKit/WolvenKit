@@ -5,7 +5,7 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class Jukebox : InteractiveDevice
 	{
-		[Ordinal(97)] 
+		[Ordinal(94)] 
 		[RED("uiComponentBig")] 
 		public CWeakHandle<IWorldWidgetComponent> UiComponentBig
 		{

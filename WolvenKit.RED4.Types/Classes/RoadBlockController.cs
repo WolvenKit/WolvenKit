@@ -2,7 +2,7 @@
 namespace WolvenKit.RED4.Types
 {
 	[REDMeta]
-	public partial class RoadBlockController : ScriptableDC
+	public partial class RoadBlockController : ScriptableDeviceComponent
 	{
 	}
 }

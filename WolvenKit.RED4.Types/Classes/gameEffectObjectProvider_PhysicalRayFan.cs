@@ -5,7 +5,7 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class gameEffectObjectProvider_PhysicalRayFan : gameEffectObjectProvider_PhysicalRay
 	{
-		[Ordinal(5)] 
+		[Ordinal(6)] 
 		[RED("inputMinRayAngleDiff")] 
 		public gameEffectInputParameter_Float InputMinRayAngleDiff
 		{

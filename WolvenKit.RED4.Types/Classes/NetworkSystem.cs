@@ -22,6 +22,14 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(2)] 
+		[RED("networkRevealTargetsLastSession")] 
+		public CArray<entEntityID> NetworkRevealTargetsLastSession
+		{
+			get => GetPropertyValue<CArray<entEntityID>>();
+			set => SetPropertyValue<CArray<entEntityID>>(value);
+		}
+
+		[Ordinal(3)] 
 		[RED("sessionStarted")] 
 		public CBool SessionStarted
 		{
@@ -29,7 +37,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(3)] 
+		[Ordinal(4)] 
 		[RED("visionModeChangedCallback")] 
 		public CHandle<redCallbackObject> VisionModeChangedCallback
 		{
@@ -37,7 +45,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
-		[Ordinal(4)] 
+		[Ordinal(5)] 
 		[RED("focusModeToggleCallback")] 
 		public CHandle<redCallbackObject> FocusModeToggleCallback
 		{
@@ -45,7 +53,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
-		[Ordinal(5)] 
+		[Ordinal(6)] 
 		[RED("playerSpawnCallback")] 
 		public CUInt32 PlayerSpawnCallback
 		{
@@ -53,7 +61,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CUInt32>(value);
 		}
 
-		[Ordinal(6)] 
+		[Ordinal(7)] 
 		[RED("currentPlayerTargetCallbackID")] 
 		public CHandle<redCallbackObject> CurrentPlayerTargetCallbackID
 		{
@@ -61,7 +69,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
-		[Ordinal(7)] 
+		[Ordinal(8)] 
 		[RED("lastTargetSlaveID")] 
 		public entEntityID LastTargetSlaveID
 		{
@@ -69,7 +77,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<entEntityID>(value);
 		}
 
-		[Ordinal(8)] 
+		[Ordinal(9)] 
 		[RED("lastTargetMasterID")] 
 		public entEntityID LastTargetMasterID
 		{
@@ -77,7 +85,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<entEntityID>(value);
 		}
 
-		[Ordinal(9)] 
+		[Ordinal(10)] 
 		[RED("unregisterLinksRequestDelay")] 
 		public gameDelayID UnregisterLinksRequestDelay
 		{
@@ -85,7 +93,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gameDelayID>(value);
 		}
 
-		[Ordinal(10)] 
+		[Ordinal(11)] 
 		[RED("focusModeActive")] 
 		public CBool FocusModeActive
 		{
@@ -93,7 +101,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(11)] 
+		[Ordinal(12)] 
 		[RED("lastBeamResource")] 
 		public gameFxResource LastBeamResource
 		{
@@ -101,7 +109,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gameFxResource>(value);
 		}
 
-		[Ordinal(12)] 
+		[Ordinal(13)] 
 		[RED("pingNetworkEffect")] 
 		public CHandle<gameEffectInstance> PingNetworkEffect
 		{
@@ -109,7 +117,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<gameEffectInstance>>(value);
 		}
 
-		[Ordinal(13)] 
+		[Ordinal(14)] 
 		[RED("pingCachedData")] 
 		public CHandle<PingCachedData> PingCachedData
 		{
@@ -117,7 +125,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<PingCachedData>>(value);
 		}
 
-		[Ordinal(14)] 
+		[Ordinal(15)] 
 		[RED("lastPingSourceID")] 
 		public entEntityID LastPingSourceID
 		{
@@ -125,7 +133,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<entEntityID>(value);
 		}
 
-		[Ordinal(15)] 
+		[Ordinal(16)] 
 		[RED("activePings")] 
 		public CArray<CHandle<PingCachedData>> ActivePings
 		{
@@ -133,7 +141,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<CHandle<PingCachedData>>>(value);
 		}
 
-		[Ordinal(16)] 
+		[Ordinal(17)] 
 		[RED("pingedSquads")] 
 		public CArray<CName> PingedSquads
 		{
@@ -141,7 +149,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<CName>>(value);
 		}
 
-		[Ordinal(17)] 
+		[Ordinal(18)] 
 		[RED("pingLinksCounter")] 
 		public CInt32 PingLinksCounter
 		{
@@ -149,7 +157,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CInt32>(value);
 		}
 
-		[Ordinal(18)] 
+		[Ordinal(19)] 
 		[RED("networkPresetTBDID")] 
 		public TweakDBID NetworkPresetTBDID
 		{
@@ -157,7 +165,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<TweakDBID>(value);
 		}
 
-		[Ordinal(19)] 
+		[Ordinal(20)] 
 		[RED("networkPresetRecord")] 
 		public CWeakHandle<gamedataNetworkPingingParameteres_Record> NetworkPresetRecord
 		{
@@ -165,7 +173,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<gamedataNetworkPingingParameteres_Record>>(value);
 		}
 
-		[Ordinal(20)] 
+		[Ordinal(21)] 
 		[RED("backdoors")] 
 		public CArray<gamePersistentID> Backdoors
 		{
@@ -173,7 +181,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<gamePersistentID>>(value);
 		}
 
-		[Ordinal(21)] 
+		[Ordinal(22)] 
 		[RED("revealedBackdoorsCount")] 
 		public CInt32 RevealedBackdoorsCount
 		{
@@ -181,7 +189,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CInt32>(value);
 		}
 
-		[Ordinal(22)] 
+		[Ordinal(23)] 
 		[RED("debugCashedPingFxResource")] 
 		public gameFxResource DebugCashedPingFxResource
 		{
@@ -189,7 +197,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gameFxResource>(value);
 		}
 
-		[Ordinal(23)] 
+		[Ordinal(24)] 
 		[RED("debugQueryNumber")] 
 		public CInt32 DebugQueryNumber
 		{
@@ -197,7 +205,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CInt32>(value);
 		}
 
-		[Ordinal(24)] 
+		[Ordinal(25)] 
 		[RED("activateLinksDelayID")] 
 		public gameDelayID ActivateLinksDelayID
 		{
@@ -205,7 +213,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gameDelayID>(value);
 		}
 
-		[Ordinal(25)] 
+		[Ordinal(26)] 
 		[RED("deactivateLinksDelayID")] 
 		public gameDelayID DeactivateLinksDelayID
 		{
@@ -217,6 +225,7 @@ namespace WolvenKit.RED4.Types
 		{
 			NetworkLinks = new();
 			NetworkRevealTargets = new();
+			NetworkRevealTargetsLastSession = new();
 			LastTargetSlaveID = new();
 			LastTargetMasterID = new();
 			UnregisterLinksRequestDelay = new();

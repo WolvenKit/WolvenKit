@@ -5,7 +5,7 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class gameNetrunnerPrototypeNetworkNode : gameObject
 	{
-		[Ordinal(40)] 
+		[Ordinal(35)] 
 		[RED("colorIndex")] 
 		public CInt8 ColorIndex
 		{

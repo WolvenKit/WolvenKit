@@ -2,7 +2,7 @@
 namespace WolvenKit.RED4.Types
 {
 	[REDMeta]
-	public partial class WeaponVendingMachineController : ScriptableDC
+	public partial class WeaponVendingMachineController : ScriptableDeviceComponent
 	{
 	}
 }

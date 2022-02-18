@@ -22,6 +22,14 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(2)] 
+		[RED("threatPersistenceSource")] 
+		public CHandle<gamedataAIThreatPersistenceSource_Record> ThreatPersistenceSource
+		{
+			get => GetPropertyValue<CHandle<gamedataAIThreatPersistenceSource_Record>>();
+			set => SetPropertyValue<CHandle<gamedataAIThreatPersistenceSource_Record>>(value);
+		}
+
+		[Ordinal(3)] 
 		[RED("activationTimeStamp")] 
 		public CFloat ActivationTimeStamp
 		{
@@ -29,7 +37,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(3)] 
+		[Ordinal(4)] 
 		[RED("commandDuration")] 
 		public CFloat CommandDuration
 		{

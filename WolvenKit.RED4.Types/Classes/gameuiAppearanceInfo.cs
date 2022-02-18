@@ -5,7 +5,7 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class gameuiAppearanceInfo : gameuiCharacterCustomizationInfo
 	{
-		[Ordinal(12)] 
+		[Ordinal(13)] 
 		[RED("resource")] 
 		public CResourceAsyncReference<appearanceAppearanceResource> Resource
 		{
@@ -13,7 +13,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CResourceAsyncReference<appearanceAppearanceResource>>(value);
 		}
 
-		[Ordinal(13)] 
+		[Ordinal(14)] 
 		[RED("definitions")] 
 		public CArray<gameuiIndexedAppearanceDefinition> Definitions
 		{
@@ -21,7 +21,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<gameuiIndexedAppearanceDefinition>>(value);
 		}
 
-		[Ordinal(14)] 
+		[Ordinal(15)] 
 		[RED("useThumbnails")] 
 		public CBool UseThumbnails
 		{
@@ -32,6 +32,7 @@ namespace WolvenKit.RED4.Types
 		public gameuiAppearanceInfo()
 		{
 			Enabled = true;
+			EditTags = new();
 			OnDeactivateActions = new();
 			Definitions = new();
 		}

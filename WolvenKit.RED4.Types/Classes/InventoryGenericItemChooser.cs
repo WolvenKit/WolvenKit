@@ -101,6 +101,30 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<gameuiTooltipsManager>>(value);
 		}
 
+		[Ordinal(13)] 
+		[RED("transmogCtrlsContainer")] 
+		public inkCompoundWidgetReference TransmogCtrlsContainer
+		{
+			get => GetPropertyValue<inkCompoundWidgetReference>();
+			set => SetPropertyValue<inkCompoundWidgetReference>(value);
+		}
+
+		[Ordinal(14)] 
+		[RED("transmogIndicatorCtrl")] 
+		public CWeakHandle<TransmogButtonView> TransmogIndicatorCtrl
+		{
+			get => GetPropertyValue<CWeakHandle<TransmogButtonView>>();
+			set => SetPropertyValue<CWeakHandle<TransmogButtonView>>(value);
+		}
+
+		[Ordinal(15)] 
+		[RED("transmogIndicator")] 
+		public CWeakHandle<inkWidget> TransmogIndicator
+		{
+			get => GetPropertyValue<CWeakHandle<inkWidget>>();
+			set => SetPropertyValue<CWeakHandle<inkWidget>>(value);
+		}
+
 		public InventoryGenericItemChooser()
 		{
 			ItemContainer = new();
@@ -108,6 +132,7 @@ namespace WolvenKit.RED4.Types
 			SlotsRootContainer = new();
 			SlotsRootLabel = new();
 			SlotsContainer = new();
+			TransmogCtrlsContainer = new();
 		}
 	}
 }

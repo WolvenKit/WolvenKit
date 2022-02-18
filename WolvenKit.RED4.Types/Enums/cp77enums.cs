@@ -419,6 +419,23 @@ namespace WolvenKit.RED4.Types
 			Override = 1
 		}
 
+		public enum AimAssistSettingConfig
+		{
+			Default = 0,
+			Scanning = 1,
+			LeftHandCyberwareCharge = 2,
+			LeftHandCyberware = 3,
+			MeleeCombat = 4,
+			MeleeCombatIdle = 5,
+			AimingLimbCyber = 6,
+			Aiming = 7,
+			QuickMelee = 8,
+			VehicleCombat = 9,
+			Sprinting = 10,
+			LimbCyber = 11,
+			Count = 12
+		}
+
 		public enum AttitudeChange
 		{
 			DONT_CHANGE = 0,
@@ -503,20 +520,32 @@ namespace WolvenKit.RED4.Types
 			Medium = 1,
 			High = 2,
 			Ultra = 3,
-			RTXMedium = 4,
-			RTXUltra = 5,
+			RaytracingMedium = 4,
+			RaytracingUltra = 5,
 			Cinematic = 6,
-			Cinematic_RTX = 7,
+			Cinematic_Raytracing = 7,
 			CinematicEXR = 8,
-			CinematicEXR_RTX = 9,
-			SafeMode = 16,
-			Console = 10,
-			ConsolePro = 11,
-			ConsoleEarlyNextGen = 12,
-			ConsoleEarlyNextGenQuality = 13,
-			GeForceNow = 14,
-			IconsGeneration = 15,
-			Auto = 17
+			CinematicEXR_Raytracing = 9,
+			PlayStation4 = 10,
+			XboxOne = 11,
+			PlayStation4Pro = 12,
+			XboxOneX = 13,
+			PlayStation5_Performance = 14,
+			PlayStation5_Quality = 15,
+			PlayStation5_Backcompat_Performance = 16,
+			PlayStation5_Backcompat_Quality = 17,
+			XboxSeriesS = 18,
+			XboxSeriesS_Backcompat = 19,
+			XboxSeriesX_Performance = 20,
+			XboxSeriesX_Quality = 21,
+			XboxSeriesX_Backcompat_Performance = 22,
+			XboxSeriesX_Backcompat_Quality = 23,
+			SafeMode = 26,
+			GeForceNow = 24,
+			IconsGeneration = 25,
+			Auto = 27,
+			GGP_Performance = 30,
+			GGP_Quality = 31
 		}
 
 		public enum ConfigMeshQualityLevel
@@ -562,6 +591,14 @@ namespace WolvenKit.RED4.Types
 		{
 			NoPerks = 0,
 			NotEnoughMaterial = 1
+		}
+
+		public enum CurrencyNotificationAnimState
+		{
+			Inactive = 0,
+			Intro = 1,
+			Active = 2,
+			Outro = 3
 		}
 
 		public enum CustomButtonType
@@ -690,6 +727,14 @@ namespace WolvenKit.RED4.Types
 		{
 			ChangeCover = 0,
 			ChangeTarget = 1
+		}
+
+		public enum EAIBlockDirection
+		{
+			Undefined = 0,
+			Center = 1,
+			Left = 2,
+			Right = 3
 		}
 
 		public enum EAICombatPreset
@@ -1268,8 +1313,11 @@ namespace WolvenKit.RED4.Types
 			PLATFORM_PC = 1,
 			PLATFORM_XboxOne = 2,
 			PLATFORM_PS4 = 3,
-			PLATFORM_WindowsServer = 4,
-			PLATFORM_LinuxServer = 5
+			PLATFORM_PS5 = 4,
+			PLATFORM_XSX = 5,
+			PLATFORM_WindowsServer = 6,
+			PLATFORM_LinuxServer = 7,
+			PLATFORM_GGP = 8
 		}
 
 		public enum ECooldownGameControllerMode
@@ -1312,6 +1360,13 @@ namespace WolvenKit.RED4.Types
 			ECCTV_All = 0,
 			ECCTV_OnlyOffscreen = 1,
 			ECCTV_OnlyOnscreen = 2
+		}
+
+		public enum ECustomFilterDPadNavigationOption
+		{
+			SelectNext = 0,
+			SelectPrev = 1,
+			Toggle = 2
 		}
 
 		public enum ECustomMaterialParam
@@ -1632,7 +1687,10 @@ namespace WolvenKit.RED4.Types
 			EMM_TodvisRuntimePreview = 66,
 			EMM_TodvisBakePreview = 67,
 			EMM_RainMask = 68,
-			EMM_VolFogDensity = 69
+			EMM_VolFogDensity = 69,
+			EMM_PBRValidationBaseColor = 70,
+			EMM_PBRValidationMetalness = 71,
+			EMM_GreyPlayMode = 72
 		}
 
 		public enum EEquipmentSide
@@ -1778,10 +1836,11 @@ namespace WolvenKit.RED4.Types
 		public enum EGameplayChallengeLevel
 		{
 			NONE = 0,
-			EASY = 1,
-			MEDIUM = 2,
-			HARD = 3,
-			IMPOSSIBLE = 4
+			TRIVIAL = 1,
+			EASY = 2,
+			MEDIUM = 3,
+			HARD = 4,
+			IMPOSSIBLE = 5
 		}
 
 		public enum EGameplayRole
@@ -1814,7 +1873,8 @@ namespace WolvenKit.RED4.Types
 			ClearPathAd = 25,
 			DistractVendingMachine = 26,
 			NPC = 27,
-			Clue = 28
+			Clue = 28,
+			PlayerStash = 29
 		}
 
 		public enum EGenericNotificationPriority
@@ -1976,9 +2036,9 @@ namespace WolvenKit.RED4.Types
 
 		public enum EInputCustomKey
 		{
-			ICK_Pad_DigitLeftRight = 264,
-			ICK_Pad_DigitUpDown = 265,
-			ICK_Count = 266
+			ICK_Pad_DigitLeftRight = 268,
+			ICK_Pad_DigitUpDown = 269,
+			ICK_Count = 270
 		}
 
 		public enum EInputKey
@@ -2243,10 +2303,14 @@ namespace WolvenKit.RED4.Types
 			IK_Pad_Fake_LeftAxis = 257,
 			IK_Pad_Fake_RightAxis = 258,
 			IK_Pad_Fake_RelativeLeftAxis = 259,
-			IK_Pad_Fake_DigitLeftRight = 260,
-			IK_Pad_Fake_DigitUpDown = 261,
-			IK_Last = 262,
-			IK_Count = 263,
+			IK_Pad_Fake_RelativeRightAxis = 260,
+			IK_Pad_Fake_DigitLeftRight = 261,
+			IK_Pad_Fake_DigitUpDown = 262,
+			IK_STADIA_CAPTURE = 263,
+			IK_SWITCH_CAPTURE = 264,
+			IK_CAPTURE = 265,
+			IK_Last = 266,
+			IK_Count = 267,
 			IK_Pad_First = 136,
 			IK_Pad_Last = 155
 		}
@@ -2271,16 +2335,6 @@ namespace WolvenKit.RED4.Types
 		{
 			ADD = 0,
 			REMOVE = 1
-		}
-
-		public enum EItemSlotCheckType
-		{
-			NONE = -1,
-			TAG = 0,
-			TYPE = 1,
-			CATEGORY = 2,
-			EVOLUTION = 3,
-			FULLY_MODDED = 4
 		}
 
 		public enum EJuryrigTrapState
@@ -2419,7 +2473,8 @@ namespace WolvenKit.RED4.Types
 			Default = 0,
 			Available = 1,
 			Unavailable = 2,
-			Inactive = 3
+			Inactive = 3,
+			None = 4
 		}
 
 		public enum EMaterialModifier
@@ -2451,7 +2506,9 @@ namespace WolvenKit.RED4.Types
 			EMATMOD_AutoHideDistance = 24,
 			EMATMOD_Rain = 25,
 			EMATMOD_PlanarReflections = 26,
-			EMATMOD_MAX = 27
+			EMATMOD_WaterSim = 27,
+			EMATMOD_TransparencyClipParams = 28,
+			EMATMOD_MAX = 29
 		}
 
 		public enum EMaterialPriority
@@ -2604,7 +2661,8 @@ namespace WolvenKit.RED4.Types
 			MCF_IsTwoSided = 1 << 2,
 			MCF_IsRayTracedEmissive = 1 << 3,
 			MCF_IsPrefabProxy = 1 << 6,
-			MCF_ConsoleLOD0 = 1 << 9
+			MCF_ConsoleLOD0 = 1 << 9,
+			MCF_SkipDynamicDecalGeneration = 1 << 10
 		}
 
 		[Flags]
@@ -2811,7 +2869,8 @@ namespace WolvenKit.RED4.Types
 		{
 			NOT_CONNECTED = 0,
 			CONNECTING = 1,
-			CONNECTED = 2
+			CONNECTED = 2,
+			DISCONNECTING = 3
 		}
 
 		public enum EPersonalLinkSlotSide
@@ -2876,7 +2935,8 @@ namespace WolvenKit.RED4.Types
 			Heat_2 = 2,
 			Heat_3 = 3,
 			Heat_4 = 4,
-			Size = 5
+			Size = 5,
+			Invalid = 6
 		}
 
 		public enum EPreventionPsychoLogicType
@@ -3318,20 +3378,24 @@ namespace WolvenKit.RED4.Types
 			LoadSaveFileInGame = 9,
 			LoadSaveFile = 10,
 			DeleteSaveFile = 11,
-			CorruptedSaveFile = 12,
-			NoPlayerProfile = 13,
-			GameSaved = 14,
-			SaveFailed = 15,
-			UnavailableForGuest = 16,
-			EnableTelemetry = 17,
-			PointOfNoReturn = 18,
-			PointOfNoReturnWithReward = 19,
-			PointOfNoReturnLootAdded = 20,
-			GenericMenuError = 21,
-			ControllerReconnected = 22,
-			ControllerDisconnected = 23,
-			MAX = 24,
-			FirstModalHighPriority = 22
+			TransferSaveFile = 12,
+			CorruptedSaveFile = 13,
+			NoPlayerProfile = 14,
+			GameSaved = 15,
+			SaveFailed = 16,
+			UnavailableForGuest = 17,
+			EnableTelemetry = 18,
+			PointOfNoReturn = 19,
+			PointOfNoReturnWithReward = 20,
+			PointOfNoReturnLootAdded = 21,
+			GenericMenuError = 22,
+			ControllerReconnected = 23,
+			ControllerDisconnected = 24,
+			TrialPeriodEnded = 25,
+			TrialPeriodTimer = 26,
+			FailedToRemoveTransferredSave = 27,
+			MAX = 28,
+			FirstModalHighPriority = 23
 		}
 
 		public enum ESystems
@@ -3693,9 +3757,7 @@ namespace WolvenKit.RED4.Types
 
 		public enum EWorldMapView
 		{
-			Map = 0,
-			FloorPlan = 1,
-			TimeSkip = 2
+			Map = 0
 		}
 
 		public enum EWoundedBodyPart
@@ -4060,7 +4122,8 @@ namespace WolvenKit.RED4.Types
 			BCC_IndirectUAV = 11,
 			BCC_Index16BitUAV = 12,
 			BCC_Raw = 13,
-			BCC_Invalid = 14
+			BCC_ShaderTable = 14,
+			BCC_Invalid = 15
 		}
 
 		public enum GpuWrapApieIndexBufferChunkType
@@ -4080,6 +4143,8 @@ namespace WolvenKit.RED4.Types
 			TEXFMT_R8G8B8A8_Unorm = 5,
 			TEXFMT_R8G8B8A8_Unorm_SRGB = 39,
 			TEXFMT_R8G8B8A8_Snorm = 6,
+			TEXFMT_B8G8R8A8 = 48,
+			TEXFMT_B8G8R8A8_SRGB = 49,
 			TEXFMT_R16_Unorm = 7,
 			TEXFMT_R16_Uint = 8,
 			TEXFMT_R32_Uint = 9,
@@ -4260,22 +4325,23 @@ namespace WolvenKit.RED4.Types
 		public enum HubMenuItems
 		{
 			None = -1,
-			Crafting = 0,
-			Character = 1,
-			Inventory = 2,
-			Map = 3,
-			Journal = 4,
-			Phone = 5,
-			Database = 6,
-			Stats = 7,
-			Backpack = 8,
-			HubMenuItems = 9,
-			Codex = 10,
-			Shards = 11,
-			Tarot = 12,
-			Gear = 13,
-			Cyberware = 14,
-			Count = 15
+			Default = 0,
+			Crafting = 1,
+			Character = 2,
+			Inventory = 3,
+			Map = 4,
+			Journal = 5,
+			Phone = 6,
+			Database = 7,
+			Stats = 8,
+			Backpack = 9,
+			HubMenuItems = 10,
+			Codex = 11,
+			Shards = 12,
+			Tarot = 13,
+			Gear = 14,
+			Cyberware = 15,
+			Count = 16
 		}
 
 		public enum HubVendorMenuItems
@@ -4476,7 +4542,8 @@ namespace WolvenKit.RED4.Types
 			Money = 2,
 			Equipped = 3,
 			Owned = 4,
-			Buyback = 5
+			Buyback = 5,
+			DLCNew = 6
 		}
 
 		public enum ItemSortMode
@@ -4500,6 +4567,15 @@ namespace WolvenKit.RED4.Types
 		{
 			Item = 0,
 			Mod = 1
+		}
+
+		public enum LadderCameraParams
+		{
+			None = 0,
+			Enter = 1,
+			Default = 2,
+			CameraReset = 3,
+			Exit = 4
 		}
 
 		public enum LandingType
@@ -4585,6 +4661,12 @@ namespace WolvenKit.RED4.Types
 			FACE_REGION_JAW = 3,
 			FACE_REGION_EARS = 4,
 			FACE_REGION_NONE = 255
+		}
+
+		public enum MountType
+		{
+			Hijack = 0,
+			Regular = 1
 		}
 
 		public enum NavGenAgentSize
@@ -4760,18 +4842,11 @@ namespace WolvenKit.RED4.Types
 			Intelligence = 5
 		}
 
-		public enum PersistenceSource
+		public enum PlayerChangeCameraAndLeaveVehiclePhase
 		{
-			AddThreat = 0,
-			SetNewCombatTarget = 1,
-			CommandAimWithWeapon = 2,
-			CommandForceShoot = 3,
-			CommandInjectCombatTarget = 4,
-			CommandMeleeAttack = 5,
-			CommandShoot = 6,
-			CommandThrowGrenade = 7,
-			CommandInjectThreat = 8,
-			TrackedBySecuritySystemAgent = 9
+			ToggleCamera = 0,
+			ExitVehicle = 1,
+			Done = 2
 		}
 
 		public enum PlayerCombatControllerRefreshPolicyEnum
@@ -4904,7 +4979,8 @@ namespace WolvenKit.RED4.Types
 		{
 			All = 0,
 			Vendor = 1,
-			Player = 2
+			Player = 2,
+			Buyback = 3
 		}
 
 		public enum RipperdocModes
@@ -5081,6 +5157,13 @@ namespace WolvenKit.RED4.Types
 			NoBuffers_PointList = 4
 		}
 
+		public enum TestCasePhase
+		{
+			Setup = 0,
+			Body = 1,
+			Wrapup = 2
+		}
+
 		public enum ThrowType
 		{
 			Quick = 0,
@@ -5106,6 +5189,25 @@ namespace WolvenKit.RED4.Types
 			UseNavigation = 0,
 			ForceIgnored = 1,
 			ForceBlocking = 2
+		}
+
+		public enum TransferSaveAction
+		{
+			Export = 0,
+			Import = 1
+		}
+
+		public enum TransferSaveState
+		{
+			ExportConfirmation = 0,
+			ExportSpinner = 1,
+			ExportSuccess = 2,
+			ExportFailed = 3,
+			ImportSpinner = 4,
+			ImportLoading = 5,
+			ImportNoSave = 6,
+			ImportFailed = 7,
+			ImportNotEnoughSpace = 8
 		}
 
 		[Flags]
@@ -5212,7 +5314,8 @@ namespace WolvenKit.RED4.Types
 			EquippedItem = 2,
 			BuyAndEquipCyberware = 3,
 			BuyNotEquipableCyberware = 4,
-			DisassembeIconic = 5
+			SellCyberware = 5,
+			DisassembeIconic = 6
 		}
 
 		public enum VisualState
@@ -5250,8 +5353,7 @@ namespace WolvenKit.RED4.Types
 		public enum WorldMapTooltipType
 		{
 			Default = 0,
-			Police = 1,
-			District = 2
+			Police = 1
 		}
 
 		public enum aimTypeEnum
@@ -6189,62 +6291,70 @@ namespace WolvenKit.RED4.Types
 			Light_Robot = 5,
 			Light_Android = 6,
 			Light_Mech = 7,
-			Normal = 8,
-			Normal_Hard = 9,
-			Normal_Soft = 10,
-			Normal_Solid = 11,
-			Normal_Flesh = 12,
-			Normal_Robot = 13,
-			Normal_Android = 14,
-			Normal_Mech = 15,
-			Heavy = 16,
-			Heavy_Hard = 17,
-			Heavy_Soft = 18,
-			Heavy_Solid = 19,
-			Heavy_Flesh = 20,
-			Heavy_Robot = 21,
-			Heavy_Android = 22,
-			Heavy_Mech = 23,
-			Slash = 24,
-			Slash_Hard = 25,
-			Slash_Soft = 26,
-			Slash_Solid = 27,
-			Slash_Flesh = 28,
-			Slash_Robot = 29,
-			Slash_Android = 30,
-			Slash_Mech = 31,
-			Cut = 32,
-			Cut_Hard = 33,
-			Cut_Soft = 34,
-			Cut_Solid = 35,
-			Cut_Flesh = 36,
-			Cut_Robot = 37,
-			Cut_Android = 38,
-			Cut_Mech = 39,
-			Stab = 40,
-			Stab_Hard = 41,
-			Stab_Soft = 42,
-			Stab_Solid = 43,
-			Stab_Flesh = 44,
-			Stab_Robot = 45,
-			Stab_Android = 46,
-			Stab_Mech = 47,
-			Finisher = 48,
-			Finisher_Hard = 49,
-			Finisher_Soft = 50,
-			Finisher_Solid = 51,
-			Finisher_Flesh = 52,
-			Finisher_Robot = 53,
-			Finisher_Android = 54,
-			Finisher_Mech = 55,
-			Weak = 56,
-			Weak_Hard = 57,
-			Weak_Soft = 58,
-			Weak_Solid = 59,
-			Weak_Flesh = 60,
-			Weak_Robot = 61,
-			Weak_Android = 62,
-			Weak_Mech = 63
+			Light_Water = 8,
+			Normal = 9,
+			Normal_Hard = 10,
+			Normal_Soft = 11,
+			Normal_Solid = 12,
+			Normal_Flesh = 13,
+			Normal_Robot = 14,
+			Normal_Android = 15,
+			Normal_Mech = 16,
+			Normal_Water = 17,
+			Heavy = 18,
+			Heavy_Hard = 19,
+			Heavy_Soft = 20,
+			Heavy_Solid = 21,
+			Heavy_Flesh = 22,
+			Heavy_Robot = 23,
+			Heavy_Android = 24,
+			Heavy_Mech = 25,
+			Heavy_Water = 26,
+			Slash = 27,
+			Slash_Hard = 28,
+			Slash_Soft = 29,
+			Slash_Solid = 30,
+			Slash_Flesh = 31,
+			Slash_Robot = 32,
+			Slash_Android = 33,
+			Slash_Mech = 34,
+			Slash_Water = 35,
+			Cut = 36,
+			Cut_Hard = 37,
+			Cut_Soft = 38,
+			Cut_Solid = 39,
+			Cut_Flesh = 40,
+			Cut_Robot = 41,
+			Cut_Android = 42,
+			Cut_Mech = 43,
+			Cut_Water = 44,
+			Stab = 45,
+			Stab_Hard = 46,
+			Stab_Soft = 47,
+			Stab_Solid = 48,
+			Stab_Flesh = 49,
+			Stab_Robot = 50,
+			Stab_Android = 51,
+			Stab_Mech = 52,
+			Stab_Water = 53,
+			Finisher = 54,
+			Finisher_Hard = 55,
+			Finisher_Soft = 56,
+			Finisher_Solid = 57,
+			Finisher_Flesh = 58,
+			Finisher_Robot = 59,
+			Finisher_Android = 60,
+			Finisher_Mech = 61,
+			Finisher_Water = 62,
+			Weak = 63,
+			Weak_Hard = 64,
+			Weak_Soft = 65,
+			Weak_Solid = 66,
+			Weak_Flesh = 67,
+			Weak_Robot = 68,
+			Weak_Android = 69,
+			Weak_Mech = 70,
+			Weak_Water = 71
 		}
 
 		public enum audioMeleeHitType
@@ -6265,7 +6375,10 @@ namespace WolvenKit.RED4.Types
 			Soft = 1,
 			Solid = 2,
 			Flesh = 3,
-			Robot = 4
+			Robot = 4,
+			Android = 5,
+			Mech = 6,
+			Water = 7
 		}
 
 		public enum audioMixParamsAction
@@ -6349,6 +6462,21 @@ namespace WolvenKit.RED4.Types
 			FindingMaximumFaceAlignemnt = 2,
 			LocalSpaceSideDirections = 3,
 			FindingMaximumFaceAligment2Sides = 4
+		}
+
+		public enum audioTriggerEffectMode
+		{
+			Off = 0,
+			Feedback = 1,
+			Weapon = 2,
+			Vibration = 3
+		}
+
+		public enum audioTriggerEffectTarget
+		{
+			L2 = 0,
+			R2 = 1,
+			Both = 2
 		}
 
 		public enum audioVoBarkType
@@ -6621,12 +6749,6 @@ namespace WolvenKit.RED4.Types
 			Arm = 2
 		}
 
-		public enum entColliderComponentSimulationType
-		{
-			Kinematic = 0,
-			Dynamic = 1
-		}
-
 		public enum entDebug_ShapeType
 		{
 			Sphere = 0,
@@ -6692,7 +6814,8 @@ namespace WolvenKit.RED4.Types
 		{
 			Debris = 0,
 			BigObjects = 1,
-			WindImpulse = 2
+			WindImpulse = 2,
+			WaterImpulse = 3
 		}
 
 		public enum entTemplateComponentResolveMode
@@ -7073,7 +7196,8 @@ namespace WolvenKit.RED4.Types
 		public enum gameEItemDynamicTags
 		{
 			Quest = 1 << 0,
-			UnequipBlocked = 1 << 1
+			UnequipBlocked = 1 << 1,
+			DLCAdded = 1 << 2
 		}
 
 		public enum gameELootGenerationType
@@ -7227,26 +7351,6 @@ namespace WolvenKit.RED4.Types
 			Panic = 3
 		}
 
-		public enum gameGOGRewardsSystemErrors
-		{
-			None = 0,
-			RequestFailed = 1,
-			TemporaryFailure = 2,
-			NoInternetConnection = 3,
-			NotSignedInGalaxy = 4,
-			NotSignedInLauncher = 5
-		}
-
-		public enum gameGOGRewardsSystemStatus
-		{
-			Uninitialized = 0,
-			GeneratingCPID = 1,
-			CheckingRegistrationStatus = 2,
-			RegistrationPending = 3,
-			Registered = 4,
-			Error = 5
-		}
-
 		public enum gameGameVersion
 		{
 			CP77_Initial = 0,
@@ -7271,7 +7375,11 @@ namespace WolvenKit.RED4.Types
 			CP77_Patch_1_2_Hotfix3 = 1230,
 			CP77_Patch_1_2_Hotfix4_dlc1 = 1240,
 			CP77_Patch_1_3 = 1300,
-			Current = 1300
+			CP77_Patch_1_3_Hotfix1 = 1301,
+			CP77_Patch_1_3_Development = 1399,
+			CP77_Patch_1_4 = 1310,
+			CP77_Patch_1_5 = 1500,
+			Current = 1500
 		}
 
 		public enum gameGameplayEventFlag
@@ -7292,7 +7400,7 @@ namespace WolvenKit.RED4.Types
 		{
 			Immortal = 1,
 			Invulnerable = 0,
-			Mortal = 3
+			Mortal = 2
 		}
 
 		public enum gameGrenadeThrowStartType
@@ -7445,8 +7553,10 @@ namespace WolvenKit.RED4.Types
 			SideQuest = 1,
 			MinorQuest = 2,
 			StreetStory = 3,
-			Contract = 4,
-			VehicleQuest = 5
+			CyberPsycho = 4,
+			Contract = 5,
+			VehicleQuest = 6,
+			ApartmentQuest = 7
 		}
 
 		public enum gameKillType
@@ -7510,7 +7620,10 @@ namespace WolvenKit.RED4.Types
 		{
 			Invalid = -1,
 			Driver = 0,
-			Passenger = 1
+			Passenger = 1,
+			Passenger_FR = 2,
+			Passenger_BL = 3,
+			Passenger_BR = 4
 		}
 
 		public enum gameMovingPlatformLoopType
@@ -7555,6 +7668,27 @@ namespace WolvenKit.RED4.Types
 			Crouch = 3,
 			WalkAim = 4,
 			GravityOnly = 5
+		}
+
+		public enum gameOnlineSystemErrors
+		{
+			None = 0,
+			RequestFailed = 1,
+			TemporaryFailure = 2,
+			NoInternetConnection = 3,
+			NotSignedInGalaxy = 4,
+			NotSignedInLauncher = 5,
+			NotSignedInGame = 6
+		}
+
+		public enum gameOnlineSystemStatus
+		{
+			Uninitialized = 0,
+			GeneratingCPID = 1,
+			CheckingRegistrationStatus = 2,
+			RegistrationPending = 3,
+			Registered = 4,
+			Error = 5
 		}
 
 		public enum gamePSMBodyCarrying
@@ -8231,7 +8365,14 @@ namespace WolvenKit.RED4.Types
 			EnemyToPlayer = 1,
 			EnemyToCompanion = 2,
 			PlayerToEnemy = 3,
-			CompanionToEnemy = 4
+			CompanionToEnemy = 4,
+			PlayerToPlayer = 5
+		}
+
+		public enum gameTelemetryHitDefenseType
+		{
+			Block = 0,
+			Deflect = 1
 		}
 
 		public enum gameTelemetryMilestoneType
@@ -8242,6 +8383,15 @@ namespace WolvenKit.RED4.Types
 			EndFact = 4,
 			EndReward = 3,
 			Invalid = 5
+		}
+
+		public enum gameTelemetryMovementType
+		{
+			Jump = 0,
+			DoubleJump = 1,
+			ChargedJump = 2,
+			Dodge = 3,
+			AirDodge = 4
 		}
 
 		public enum gameTickableEventState
@@ -8560,45 +8710,46 @@ namespace WolvenKit.RED4.Types
 			CloseRing2ndFilter = 8,
 			Crouch = 9,
 			DefaultRing = 10,
-			Equip = 11,
-			EquipMelee = 12,
-			ExtremeRing = 13,
-			ExtremeRing1stFilter = 14,
-			ExtremeRing2ndFilter = 15,
-			FarRing = 16,
-			FarRing1stFilter = 17,
-			FarRing2ndFilter = 18,
-			GoToCover = 19,
-			GrenadeThrow = 20,
-			GroupReaction = 21,
-			Investigate = 22,
-			MediumRing = 23,
-			MediumRing1stFilter = 24,
-			MediumRing2ndFilter = 25,
-			Melee = 26,
-			MeleeApproach = 27,
-			MeleeRing = 28,
-			MeleeRing1stFilter = 29,
-			MeleeRing2ndFilter = 30,
-			MeleeSupport = 31,
-			Peek = 32,
-			QuickMelee = 33,
-			Quickhack = 34,
-			Reload = 35,
-			Reprimand = 36,
-			Search = 37,
-			Shoot = 38,
-			SimpleCombat = 39,
-			SimpleCombatMovement = 40,
-			Strafe = 41,
-			StrafeEvade = 42,
-			Sync = 43,
-			TakeCover = 44,
-			Takedown = 45,
-			Taunt = 46,
-			TauntBackground = 47,
-			Count = 48,
-			Invalid = 49
+			Dodge = 11,
+			Equip = 12,
+			EquipMelee = 13,
+			ExtremeRing = 14,
+			ExtremeRing1stFilter = 15,
+			ExtremeRing2ndFilter = 16,
+			FarRing = 17,
+			FarRing1stFilter = 18,
+			FarRing2ndFilter = 19,
+			GoToCover = 20,
+			GrenadeThrow = 21,
+			GroupReaction = 22,
+			Investigate = 23,
+			MediumRing = 24,
+			MediumRing1stFilter = 25,
+			MediumRing2ndFilter = 26,
+			Melee = 27,
+			MeleeApproach = 28,
+			MeleeRing = 29,
+			MeleeRing1stFilter = 30,
+			MeleeRing2ndFilter = 31,
+			MeleeSupport = 32,
+			Peek = 33,
+			QuickMelee = 34,
+			Quickhack = 35,
+			Reload = 36,
+			Reprimand = 37,
+			Search = 38,
+			Shoot = 39,
+			SimpleCombat = 40,
+			SimpleCombatMovement = 41,
+			Strafe = 42,
+			StrafeEvade = 43,
+			Sync = 44,
+			TakeCover = 45,
+			Takedown = 46,
+			Taunt = 47,
+			TauntBackground = 48,
+			Count = 49,
+			Invalid = 50
 		}
 
 		public enum gamedataAchievement
@@ -8864,6 +9015,19 @@ namespace WolvenKit.RED4.Types
 			Charged = 2,
 			Overcharging = 3,
 			Discharging = 4
+		}
+
+		public enum gamedataCheckType
+		{
+			Category = 0,
+			Evolution = 1,
+			FullyModded = 2,
+			None = 3,
+			Record = 4,
+			Tag = 5,
+			Type = 6,
+			Count = 7,
+			Invalid = 8
 		}
 
 		public enum gamedataChoiceCaptionPartType
@@ -9156,10 +9320,11 @@ namespace WolvenKit.RED4.Types
 			ExitReload = 11,
 			MeleeBlock = 12,
 			MeleeHit = 13,
-			Shoot = 14,
-			SilencedShoot = 15,
-			Count = 16,
-			Invalid = 17
+			MuzzleBrakeShoot = 14,
+			Shoot = 15,
+			SilencedShoot = 16,
+			Count = 17,
+			Invalid = 18
 		}
 
 		public enum gamedataFxActionType
@@ -9282,53 +9447,64 @@ namespace WolvenKit.RED4.Types
 			Cyb_MantisBlades = 15,
 			Cyb_NanoWires = 16,
 			Cyb_StrongArms = 17,
-			Fla_Launcher = 18,
-			Fla_Rifle = 19,
-			Fla_Shock = 20,
-			Fla_Support = 21,
-			Gad_Grenade = 22,
-			Gen_CraftingMaterial = 23,
-			Gen_DataBank = 24,
-			Gen_Junk = 25,
-			Gen_Keycard = 26,
-			Gen_Misc = 27,
-			Gen_Readable = 28,
-			GrenadeDelivery = 29,
-			Grenade_Core = 30,
-			Prt_Capacitor = 31,
-			Prt_FabricEnhancer = 32,
-			Prt_Fragment = 33,
-			Prt_Magazine = 34,
-			Prt_Mod = 35,
-			Prt_Muzzle = 36,
-			Prt_Program = 37,
-			Prt_Receiver = 38,
-			Prt_Scope = 39,
-			Prt_ScopeRail = 40,
-			Prt_Stock = 41,
-			Prt_TargetingSystem = 42,
-			Wea_AssaultRifle = 43,
-			Wea_Fists = 44,
-			Wea_Hammer = 45,
-			Wea_Handgun = 46,
-			Wea_HeavyMachineGun = 47,
-			Wea_Katana = 48,
-			Wea_Knife = 49,
-			Wea_LightMachineGun = 50,
-			Wea_LongBlade = 51,
-			Wea_Melee = 52,
-			Wea_OneHandedClub = 53,
-			Wea_PrecisionRifle = 54,
-			Wea_Revolver = 55,
-			Wea_Rifle = 56,
-			Wea_ShortBlade = 57,
-			Wea_Shotgun = 58,
-			Wea_ShotgunDual = 59,
-			Wea_SniperRifle = 60,
-			Wea_SubmachineGun = 61,
-			Wea_TwoHandedClub = 62,
-			Count = 63,
-			Invalid = 64
+			Cyberware = 18,
+			Fla_Launcher = 19,
+			Fla_Rifle = 20,
+			Fla_Shock = 21,
+			Fla_Support = 22,
+			Gad_Grenade = 23,
+			Gen_CraftingMaterial = 24,
+			Gen_DataBank = 25,
+			Gen_Jewellery = 26,
+			Gen_Junk = 27,
+			Gen_Keycard = 28,
+			Gen_Misc = 29,
+			Gen_Readable = 30,
+			GrenadeDelivery = 31,
+			Grenade_Core = 32,
+			Prt_BootsFabricEnhancer = 33,
+			Prt_Capacitor = 34,
+			Prt_FabricEnhancer = 35,
+			Prt_FaceFabricEnhancer = 36,
+			Prt_Fragment = 37,
+			Prt_HandgunMuzzle = 38,
+			Prt_HeadFabricEnhancer = 39,
+			Prt_Magazine = 40,
+			Prt_Mod = 41,
+			Prt_Muzzle = 42,
+			Prt_OuterTorsoFabricEnhancer = 43,
+			Prt_PantsFabricEnhancer = 44,
+			Prt_Program = 45,
+			Prt_Receiver = 46,
+			Prt_RifleMuzzle = 47,
+			Prt_Scope = 48,
+			Prt_ScopeRail = 49,
+			Prt_Stock = 50,
+			Prt_TargetingSystem = 51,
+			Prt_TorsoFabricEnhancer = 52,
+			VendorToken = 53,
+			Wea_AssaultRifle = 54,
+			Wea_Fists = 55,
+			Wea_Hammer = 56,
+			Wea_Handgun = 57,
+			Wea_HeavyMachineGun = 58,
+			Wea_Katana = 59,
+			Wea_Knife = 60,
+			Wea_LightMachineGun = 61,
+			Wea_LongBlade = 62,
+			Wea_Melee = 63,
+			Wea_OneHandedClub = 64,
+			Wea_PrecisionRifle = 65,
+			Wea_Revolver = 66,
+			Wea_Rifle = 67,
+			Wea_ShortBlade = 68,
+			Wea_Shotgun = 69,
+			Wea_ShotgunDual = 70,
+			Wea_SniperRifle = 71,
+			Wea_SubmachineGun = 72,
+			Wea_TwoHandedClub = 73,
+			Count = 74,
+			Invalid = 75
 		}
 
 		public enum gamedataLifePath
@@ -9484,12 +9660,16 @@ namespace WolvenKit.RED4.Types
 			Zzz01_CarForPurchaseVariant = 121,
 			Zzz02_MotorcycleForPurchaseVariant = 122,
 			Zzz03_MotorcycleVariant = 123,
-			CPO_PingDoorVariant = 124,
-			CPO_PingGoHereVariant = 125,
-			CPO_PingLootVariant = 126,
-			CPO_RemotePlayerVariant = 127,
-			Count = 128,
-			Invalid = 129
+			Zzz04_PreventionVehicleVariant = 124,
+			Zzz05_ApartmentToPurchaseVariant = 125,
+			Zzz06_NCPDGigVariant = 126,
+			Zzz07_PlayerStashVariant = 127,
+			CPO_PingDoorVariant = 128,
+			CPO_PingGoHereVariant = 129,
+			CPO_PingLootVariant = 130,
+			CPO_RemotePlayerVariant = 131,
+			Count = 132,
+			Invalid = 133
 		}
 
 		public enum gamedataMeleeAttackDirection
@@ -9594,12 +9774,13 @@ namespace WolvenKit.RED4.Types
 		{
 			Android = 0,
 			Any = 1,
-			Drone = 2,
-			Human = 3,
-			Mech = 4,
-			Spiderbot = 5,
-			Count = 6,
-			Invalid = 7
+			Device = 2,
+			Drone = 3,
+			Human = 4,
+			Mech = 5,
+			Spiderbot = 6,
+			Count = 7,
+			Invalid = 8
 		}
 
 		public enum gamedataNPCUpperBodyState
@@ -10192,39 +10373,1120 @@ namespace WolvenKit.RED4.Types
 		{
 			Adrenaline = 0,
 			Aggressiveness = 1,
-			BleedingTrigger = 2,
-			BurningTrigger = 3,
-			CPUPower = 4,
-			CallReinforcementProgress = 5,
-			Durability = 6,
-			E3_BossWeakSpotHealth = 7,
-			ElectrocutedTrigger = 8,
-			Fear = 9,
-			Health = 10,
-			LeftArmHealth = 11,
-			LeftLegHealth = 12,
-			Memory = 13,
-			Oxygen = 14,
-			PhoneCallDuration = 15,
-			PoisonTrigger = 16,
-			QuickHackDuration = 17,
-			QuickHackUpload = 18,
-			ReprimandEscalation = 19,
-			RightLegHealth = 20,
-			Stamina = 21,
-			StunTrigger = 22,
-			UnlockProgress = 23,
-			WeakspotHealth = 24,
-			WeaponCharge = 25,
-			WeaponOverheat = 26,
-			CPOShockedTrigger = 27,
-			CPO_Armor = 28,
-			CPO_NPC_Importance = 29,
-			Count = 30,
-			Invalid = 31
+			Armor = 2,
+			BleedingTrigger = 3,
+			BurningTrigger = 4,
+			CPUPower = 5,
+			CallReinforcementProgress = 6,
+			Durability = 7,
+			E3_BossWeakSpotHealth = 8,
+			ElectrocutedTrigger = 9,
+			Fear = 10,
+			Health = 11,
+			HitShapeArmor = 12,
+			LeftArmHealth = 13,
+			LeftLegHealth = 14,
+			Memory = 15,
+			Oxygen = 16,
+			PhoneCallDuration = 17,
+			PoisonTrigger = 18,
+			QuickHackDuration = 19,
+			QuickHackUpload = 20,
+			ReprimandEscalation = 21,
+			RightLegHealth = 22,
+			Stamina = 23,
+			StunTrigger = 24,
+			UnlockProgress = 25,
+			WeakspotHealth = 26,
+			WeaponCharge = 27,
+			WeaponOverheat = 28,
+			CPOShockedTrigger = 29,
+			CPO_Armor = 30,
+			CPO_NPC_Importance = 31,
+			Count = 32,
+			Invalid = 33
 		}
 
 		public enum gamedataStatType
+		{
+			Acceleration = 0,
+			Accuracy = 1,
+			Adrenaline = 2,
+			AimFOV = 3,
+			AimInTime = 4,
+			AimOffset = 5,
+			AimOutTime = 6,
+			AllowMovementInput = 7,
+			AllowRotation = 8,
+			AmmoPerQuickMelee = 9,
+			Armor = 10,
+			Assault = 11,
+			AssaultMastery = 12,
+			AssaultTrait01Stat = 13,
+			Athletics = 14,
+			AthleticsMastery = 15,
+			AthleticsTrait01Stat = 16,
+			AttackPenetration = 17,
+			AttackSpeed = 18,
+			AttackSpeedPercent = 19,
+			AttacksNumber = 20,
+			AttacksPerSecond = 21,
+			AttacksPerSecondBase = 22,
+			AudioLocomotionStimRangeMultiplier = 23,
+			AudioStimRangeMultiplier = 24,
+			AutoReveal = 25,
+			AutocraftDuration = 26,
+			AutomaticReplenishment = 27,
+			AutomaticUploadPerk = 28,
+			BaseChargeTime = 29,
+			BaseDamage = 30,
+			BaseDamageMax = 31,
+			BaseDamageMin = 32,
+			BaseKnockdownImpulse = 33,
+			BerserkArmorBonus = 34,
+			BerserkCooldownBase = 35,
+			BerserkCooldownReduction = 36,
+			BerserkDurationBase = 37,
+			BerserkHealthRegenBonus = 38,
+			BerserkMeleeDamageBonus = 39,
+			BerserkRecoilReduction = 40,
+			BerserkResistancesBonus = 41,
+			BerserkShockwaveDamage = 42,
+			BerserkShockwaveRangeBonus = 43,
+			BerserkSwayReduction = 44,
+			BleedingApplicationRate = 45,
+			BleedingImmunity = 46,
+			BlindImmunity = 47,
+			BlindResistance = 48,
+			BlockFactor = 49,
+			BlockLocomotionWhenLeaningOutOfCover = 50,
+			BlockReduction = 51,
+			BonusCarryCapacity = 52,
+			BonusChargeDamage = 53,
+			BonusDPS = 54,
+			BonusDamageAgainstBosses = 55,
+			BonusDamageAgainstElites = 56,
+			BonusDamageAgainstMechanicals = 57,
+			BonusDamageAgainstRares = 58,
+			BonusDamagePerHit = 59,
+			BonusDmgVsRaresAndElites = 60,
+			BonusHealth = 61,
+			BonusMemory = 62,
+			BonusQuickHackDamage = 63,
+			BonusRecoilKick = 64,
+			BonusRicochetDamage = 65,
+			BonusSpreadChange = 66,
+			BonusStamina = 67,
+			Brake = 68,
+			BrakeDot = 69,
+			Brawling = 70,
+			BrawlingMastery = 71,
+			BrawlingTrait01Stat = 72,
+			BufferSize = 73,
+			BulletMagnetismDefaultAngle = 74,
+			BulletMagnetismHighVelocityAngle = 75,
+			BulletPseudoPierceHitVFxChance = 76,
+			BulletSurroundingHitVFxChance = 77,
+			BurningApplicationRate = 78,
+			BurningImmunity = 79,
+			BurningRegenStamina = 80,
+			CPUPower = 81,
+			CallReinforcement = 82,
+			CameraShutdownExtension = 83,
+			CanAerialTakedown = 84,
+			CanAimWhileDodging = 85,
+			CanAskToFollowOrder = 86,
+			CanAskToHolsterWeapon = 87,
+			CanAutomaticallyDisassembleJunk = 88,
+			CanAutomaticallyRestoreKnives = 89,
+			CanBleedingCriticallyHit = 90,
+			CanBleedingSlowTarget = 91,
+			CanBlindQuickHack = 92,
+			CanBlock = 93,
+			CanBreatheUnderwater = 94,
+			CanBuffCamoQuickHack = 95,
+			CanBuffMechanicalsOnTakeControl = 96,
+			CanBuffSturdinessQuickHack = 97,
+			CanBurningCriticallyHit = 98,
+			CanCallDrones = 99,
+			CanCallReinforcements = 100,
+			CanCatchUp = 101,
+			CanCatchUpDistance = 102,
+			CanCharge = 103,
+			CanChargedShoot = 104,
+			CanCloseCombat = 105,
+			CanCommsCallInQuickHack = 106,
+			CanCommsCallOutQuickHack = 107,
+			CanCommsNoiseQuickHack = 108,
+			CanControlFullyChargedWeapon = 109,
+			CanCraftEpicItems = 110,
+			CanCraftFromInventory = 111,
+			CanCraftLegendaryItems = 112,
+			CanCraftRareItems = 113,
+			CanCraftTechAmmunition = 114,
+			CanCrouch = 115,
+			CanCyberwareMalfunctionQuickHack = 116,
+			CanDash = 117,
+			CanDataMineQuickHack = 118,
+			CanDealFullDamageToArmored = 119,
+			CanDeathQuickHack = 120,
+			CanDisassemble = 121,
+			CanDisassembleConsumables = 122,
+			CanDisassembleGadgets = 123,
+			CanDropWeapon = 124,
+			CanElectrocuteNullifyStats = 125,
+			CanElectrocuteRoot = 126,
+			CanExitWSOnSoundStimuli = 127,
+			CanExplodeQuickHack = 128,
+			CanFastTravelWhileEncumbered = 129,
+			CanForceDismbember = 130,
+			CanFullyChargeWeapon = 131,
+			CanGrab = 132,
+			CanGrappleAndroids = 133,
+			CanGrappleSilently = 134,
+			CanGrenadeLaunch = 135,
+			CanGrenadeQuickHack = 136,
+			CanGrenadesCriticallyHit = 137,
+			CanGrenadesDealExternalDamage = 138,
+			CanGuardBreak = 139,
+			CanHeartattackQuickHack = 140,
+			CanIgnoreArmorDamageReduction = 141,
+			CanIgnoreStamina = 142,
+			CanInstaKillNPCs = 143,
+			CanInstallTechMods = 144,
+			CanJamWeaponQuickHack = 145,
+			CanJump = 146,
+			CanLandSilently = 147,
+			CanLegendaryCraftedWeaponsBeBoosted = 148,
+			CanLegendaryCraftedWeaponsBeBoosted2 = 149,
+			CanLocomotionMalfunctionQuickHack = 150,
+			CanMadnessQuickHack = 151,
+			CanMalfunctionQuickHack = 152,
+			CanMeleeBerserk = 153,
+			CanMeleeDash = 154,
+			CanMeleeInfinitelyCombo = 155,
+			CanMeleeLeap = 156,
+			CanMeleeLeapTakedown = 157,
+			CanOverchargeWeapon = 158,
+			CanOverheatQuickHack = 159,
+			CanOverloadQuickHack = 160,
+			CanOverrideAttitudeQuickHack = 161,
+			CanOverrideAuthorizationQuickHack = 162,
+			CanParry = 163,
+			CanPickUpBodyAfterTakedown = 164,
+			CanPickUpWeapon = 165,
+			CanPingQuickHack = 166,
+			CanPlayerBoostConsumables = 167,
+			CanPlayerBoostGrenades = 168,
+			CanPlayerPiercePoisonImmunity = 169,
+			CanPoisonLowerArmor = 170,
+			CanPoisonSlow = 171,
+			CanPreciseShoot = 172,
+			CanPushBack = 173,
+			CanPushFromGrapple = 174,
+			CanQuickHackCriticallyHit = 175,
+			CanQuickMeleeStagger = 176,
+			CanQuickhack = 177,
+			CanQuickhackHealPuppet = 178,
+			CanQuickhackTransferBetweenEnemies = 179,
+			CanRegenInCombat = 180,
+			CanRemoveModsFromClothing = 181,
+			CanRemoveModsFromWeapons = 182,
+			CanResurrectAllies = 183,
+			CanRetrieveModsFromDisassemble = 184,
+			CanRunSilently = 185,
+			CanSandevistanSprintHarass = 186,
+			CanScrapPartsFromMechanicals = 187,
+			CanSeeGrenadeRadius = 188,
+			CanSeeRicochetVisuals = 189,
+			CanSeeThroughWalls = 190,
+			CanShareThreatsWithPlayer = 191,
+			CanShootWhileCarryingBody = 192,
+			CanShootWhileDodging = 193,
+			CanShootWhileGrappling = 194,
+			CanShootWhileMoving = 195,
+			CanShootWhileVaulting = 196,
+			CanSilentKill = 197,
+			CanSmartShoot = 198,
+			CanSprint = 199,
+			CanSprintHarass = 200,
+			CanSprintWhileCarryingBody = 201,
+			CanSuicideQuickHack = 202,
+			CanSwitchWeapon = 203,
+			CanTakeControlQuickHack = 204,
+			CanTakedownLethally = 205,
+			CanTakedownSilently = 206,
+			CanTaunt = 207,
+			CanThrowWeapon = 208,
+			CanUpgradeFromInventory = 209,
+			CanUpgradeToLegendaryQuality = 210,
+			CanUseAntiStun = 211,
+			CanUseBiohazardGrenades = 212,
+			CanUseCloseRing = 213,
+			CanUseCombatStims = 214,
+			CanUseConsumables = 215,
+			CanUseCoolingSystem = 216,
+			CanUseCovers = 217,
+			CanUseCuttingGrenades = 218,
+			CanUseEMPGrenades = 219,
+			CanUseExtremeRing = 220,
+			CanUseFarRing = 221,
+			CanUseFlashbangGrenades = 222,
+			CanUseFragGrenades = 223,
+			CanUseGrenades = 224,
+			CanUseHolographicCamo = 225,
+			CanUseIncendiaryGrenades = 226,
+			CanUseLeftHand = 227,
+			CanUseLegs = 228,
+			CanUseMantisBlades = 229,
+			CanUseMediumRing = 230,
+			CanUseMeleeRing = 231,
+			CanUseOpticalCamo = 232,
+			CanUsePainInhibitors = 233,
+			CanUsePersonalSoundSilencer = 234,
+			CanUsePhoneUnderWater = 235,
+			CanUseProjectileLauncher = 236,
+			CanUseReconGrenades = 237,
+			CanUseRetractableShield = 238,
+			CanUseRightHand = 239,
+			CanUseShootingSpots = 240,
+			CanUseStaticCamo = 241,
+			CanUseStrongArms = 242,
+			CanUseTakedowns = 243,
+			CanUseTerrainCamo = 244,
+			CanUseZoom = 245,
+			CanWalkSilently = 246,
+			CanWallStick = 247,
+			CanWeaponBlock = 248,
+			CanWeaponBlockAttack = 249,
+			CanWeaponComboAttack = 250,
+			CanWeaponCriticallyHit = 251,
+			CanWeaponCrouchAttack = 252,
+			CanWeaponDash = 253,
+			CanWeaponDeflect = 254,
+			CanWeaponIgnoreArmor = 255,
+			CanWeaponInfinitlyCombo = 256,
+			CanWeaponJumpAttack = 257,
+			CanWeaponLeap = 258,
+			CanWeaponMalfunctionQuickHack = 259,
+			CanWeaponReduceArmor = 260,
+			CanWeaponReload = 261,
+			CanWeaponReloadWhileInactive = 262,
+			CanWeaponReloadWhileSliding = 263,
+			CanWeaponReloadWhileSprinting = 264,
+			CanWeaponReloadWhileVaulting = 265,
+			CanWeaponSafeAttack = 266,
+			CanWeaponShoot = 267,
+			CanWeaponShootWhileSliding = 268,
+			CanWeaponShootWhileSprinting = 269,
+			CanWeaponShootWhileVaulting = 270,
+			CanWeaponSnapToLimbs = 271,
+			CanWeaponSprintAttack = 272,
+			CanWeaponStrongAttack = 273,
+			CanWeaponTriggerHeadshot = 274,
+			CannotBeDetectedWhileSubmerged = 275,
+			CannotBeHealed = 276,
+			CannotSprintHarass = 277,
+			CarryCapacity = 278,
+			CausingPanicReducesUltimateHacksCost = 279,
+			Charge = 280,
+			ChargeDischargeTime = 281,
+			ChargeFullMultiplier = 282,
+			ChargeMaxTimeInChargedState = 283,
+			ChargeMultiplier = 284,
+			ChargeReadyPercentage = 285,
+			ChargeShouldFireWhenReady = 286,
+			ChargeTime = 287,
+			ChemicalDamage = 288,
+			ChemicalDamageMax = 289,
+			ChemicalDamageMin = 290,
+			ChemicalDamagePercent = 291,
+			ChemicalResistance = 292,
+			ClimbSpeedModifier = 293,
+			ClipTimesCycle = 294,
+			ClipTimesCycleBase = 295,
+			ClipTimesCyclePlusReload = 296,
+			ClipTimesCyclePlusReloadBase = 297,
+			CloudComputingTraps = 298,
+			ColdBlood = 299,
+			ColdBloodBuffBonus = 300,
+			ColdBloodDurationReductor = 301,
+			ColdBloodMastery = 302,
+			ColdBloodMaxDuration = 303,
+			ColdBloodMaxStacks = 304,
+			ColdBloodTrait01 = 305,
+			CombatHacking = 306,
+			CombatHackingMastery = 307,
+			CommsNoiseJamOnQuickhack = 308,
+			ControlledRandomPower = 309,
+			Cool = 310,
+			CoolAlocated = 311,
+			CoolAvailable = 312,
+			Crafting = 313,
+			CraftingBonusArmorValue = 314,
+			CraftingBonusArmorValue2 = 315,
+			CraftingBonusConsumableDuration = 316,
+			CraftingBonusGrenadeDamage = 317,
+			CraftingBonusWeaponDamage = 318,
+			CraftingBonusWeaponDamage2 = 319,
+			CraftingCostReduction = 320,
+			CraftingItemLevelBoost = 321,
+			CraftingMastery = 322,
+			CraftingMaterialDropChance = 323,
+			CraftingMaterialRandomGrantChance = 324,
+			CraftingMaterialRetrieveChance = 325,
+			CraftingTrait01 = 326,
+			CritChance = 327,
+			CritChanceTimeCritDamage = 328,
+			CritDPSBonus = 329,
+			CritDamage = 330,
+			CyberwareCooldownReduction = 331,
+			CycleTime = 332,
+			CycleTimeAimBlockDuration = 333,
+			CycleTimeAimBlockStart = 334,
+			CycleTimeBase = 335,
+			CycleTimeBonus = 336,
+			CycleTimeShootingMult = 337,
+			CycleTimeShootingMultPeriod = 338,
+			CycleTime_Burst = 339,
+			CycleTime_BurstMaxCharge = 340,
+			CycleTime_BurstSecondary = 341,
+			CycleTriggerModeTime = 342,
+			DPS = 343,
+			DamageFalloffDisabled = 344,
+			DamageHackSpread = 345,
+			DamagePerHit = 346,
+			DamageReductionDamageOverTime = 347,
+			DamageReductionExplosion = 348,
+			DamageReductionMelee = 349,
+			DamageReductionQuickhacks = 350,
+			DashAttackStaminaCostReduction = 351,
+			DataLeakTraps = 352,
+			DealsChemicalDamage = 353,
+			DealsElectricDamage = 354,
+			DealsPhysicalDamage = 355,
+			DealsThermalDamage = 356,
+			Deceleration = 357,
+			DefeatedHeadDamageThreshold = 358,
+			DefeatedLArmDamageThreshold = 359,
+			DefeatedLLegDamageThreshold = 360,
+			DefeatedRArmDamageThreshold = 361,
+			DefeatedRLegDamageThreshold = 362,
+			DefeatingEnemiesReduceHacksCost = 363,
+			Demolition = 364,
+			DemolitionMastery = 365,
+			DemolitionTrait01Stat = 366,
+			Detection = 367,
+			DeviceMemoryCostReduction = 368,
+			DisableCyberwareOnBurning = 369,
+			DisassemblingIngredientsDoubleBonus = 370,
+			DisassemblingMaterialQualityObtainChance = 371,
+			DismHeadDamageThreshold = 372,
+			DismLArmDamageThreshold = 373,
+			DismLLegDamageThreshold = 374,
+			DismRArmDamageThreshold = 375,
+			DismRLegDamageThreshold = 376,
+			DoNotCheckFriendlyFireMadnessPassive = 377,
+			DummyResistanceStat = 378,
+			Durability = 379,
+			DurationBonusBleeding = 380,
+			DurationBonusBurning = 381,
+			DurationBonusElectrified = 382,
+			DurationBonusPoisoned = 383,
+			DurationBonusQuickhack = 384,
+			DurationBonusStun = 385,
+			DurationReductionDot = 386,
+			EMPImmunity = 387,
+			EffectiveDPS = 388,
+			EffectiveDamagePerHit = 389,
+			EffectiveDamagePerHitMax = 390,
+			EffectiveDamagePerHitMin = 391,
+			EffectiveDamagePerHitTimesAttacksPerSecond = 392,
+			EffectiveRange = 393,
+			ElectricDamage = 394,
+			ElectricDamageMax = 395,
+			ElectricDamageMin = 396,
+			ElectricDamagePercent = 397,
+			ElectricResistance = 398,
+			ElectrocuteImmunity = 399,
+			ElectrocutedApplicationRate = 400,
+			ElementalDamagePerHit = 401,
+			ElementalResistanceMultiplier = 402,
+			EmptyReloadTime = 403,
+			Engineering = 404,
+			EngineeringMastery = 405,
+			EngineeringTrait01 = 406,
+			EquipActionDuration_Corpo = 407,
+			EquipActionDuration_Gang = 408,
+			EquipAnimationDuration_Corpo = 409,
+			EquipAnimationDuration_Gang = 410,
+			EquipDuration = 411,
+			EquipDuration_First = 412,
+			EquipItemTime_Corpo = 413,
+			EquipItemTime_Gang = 414,
+			EvadeImpulse = 415,
+			Evasion = 416,
+			ExplosionKillsRecudeUltimateHacksCost = 417,
+			FFInputLock = 418,
+			FallDamageReduction = 419,
+			FearOnQuickHackKill = 420,
+			FullAutoOnFullCharge = 421,
+			GenericStatPrereqValue = 422,
+			Gunslinger = 423,
+			GunslingerMastery = 424,
+			GunslingerTrait01Stat = 425,
+			HackedEnemiesGetDamagedByFriendlyFire = 426,
+			HackedEnemyArmorReduction = 427,
+			Hacking = 428,
+			HackingMastery = 429,
+			HackingPenetration = 430,
+			HackingResistance = 431,
+			HackingResistanceUltimate = 432,
+			HasAdditionalSplinterSlot = 433,
+			HasAheadTargeting = 434,
+			HasAirHover = 435,
+			HasAirThrusters = 436,
+			HasAutoReloader = 437,
+			HasAutomaticReplenishment = 438,
+			HasAutomaticTagging = 439,
+			HasBerserk = 440,
+			HasBleedImmunity = 441,
+			HasBlindImmunity = 442,
+			HasBoostedCortex = 443,
+			HasBurningBuffs = 444,
+			HasCameraLinking = 445,
+			HasChargeJump = 446,
+			HasCritImmunity = 447,
+			HasCyberdeck = 448,
+			HasCybereye = 449,
+			HasDodge = 450,
+			HasDodgeAir = 451,
+			HasDoubleJump = 452,
+			HasElectricCoating = 453,
+			HasElectroPlating = 454,
+			HasExtendedHitReactionImmunity = 455,
+			HasFireproofSkin = 456,
+			HasGPS = 457,
+			HasGlowingTattoos = 458,
+			HasGraphiteTissue = 459,
+			HasHackingInteractions = 460,
+			HasHealingReapplication = 461,
+			HasHealthMonitorBomb = 462,
+			HasHostileHackImmunity = 463,
+			HasICELevelBooster = 464,
+			HasInfravision = 465,
+			HasJuiceInjector = 466,
+			HasKerenzikov = 467,
+			HasKerenzikovSlide = 468,
+			HasKers = 469,
+			HasLinkToBountySystem = 470,
+			HasLoweringPerception = 471,
+			HasMadnessLvl4Passive = 472,
+			HasMajorQuickhackResistance = 473,
+			HasMechanicalControl = 474,
+			HasMeleeImmunity = 475,
+			HasMeleeTargeting = 476,
+			HasMetabolicEnhancer = 477,
+			HasMuzzleBrake = 478,
+			HasPoisonHeal = 479,
+			HasPoisonImmunity = 480,
+			HasPowerGrip = 481,
+			HasQuickhackResistance = 482,
+			HasRemoteBotAccessPointBreach = 483,
+			HasSandevistan = 484,
+			HasSandevistanTier1 = 485,
+			HasSandevistanTier2 = 486,
+			HasSandevistanTier3 = 487,
+			HasSecondHeart = 488,
+			HasSelfHealingSkin = 489,
+			HasSmartLink = 490,
+			HasSpiderBotControl = 491,
+			HasStunImmunity = 492,
+			HasSubdermalArmor = 493,
+			HasSuperheroFall = 494,
+			HasThermovision = 495,
+			HasTimedImmunity = 496,
+			HasToxicCleanser = 497,
+			HasWallRunSkill = 498,
+			HeadshotDamageMultiplier = 499,
+			HeadshotImmunity = 500,
+			Health = 501,
+			HealthInCombatRegenDelayOnChange = 502,
+			HealthInCombatRegenEnabled = 503,
+			HealthInCombatRegenEndThreshold = 504,
+			HealthInCombatRegenRate = 505,
+			HealthInCombatRegenRateAdd = 506,
+			HealthInCombatRegenRateBase = 507,
+			HealthInCombatRegenRateMult = 508,
+			HealthInCombatRegenStartThreshold = 509,
+			HealthInCombatStartDelay = 510,
+			HealthMonitorCooldownDuration = 511,
+			HealthOutOfCombatRegenDelayOnChange = 512,
+			HealthOutOfCombatRegenEnabled = 513,
+			HealthOutOfCombatRegenEndThreshold = 514,
+			HealthOutOfCombatRegenRate = 515,
+			HealthOutOfCombatRegenRateAdd = 516,
+			HealthOutOfCombatRegenRateBase = 517,
+			HealthOutOfCombatRegenRateMult = 518,
+			HealthOutOfCombatRegenStartThreshold = 519,
+			Hearing = 520,
+			HeavyAttacksNumber = 521,
+			HighlightAccessPoint = 522,
+			HitDismembermentFactor = 523,
+			HitReactionDamageHealthFactor = 524,
+			HitReactionFactor = 525,
+			HitShapeArmor = 526,
+			HitTimerAfterDefeated = 527,
+			HitTimerAfterImpact = 528,
+			HitTimerAfterImpactMelee = 529,
+			HitTimerAfterKnockdown = 530,
+			HitTimerAfterPain = 531,
+			HitTimerAfterStagger = 532,
+			HitTimerAfterStaggerMelee = 533,
+			HitWoundsFactor = 534,
+			HoldDuration = 535,
+			HoldEnterDuration = 536,
+			HoldTimeoutDuration = 537,
+			HolographicSkinCooldownDuration = 538,
+			HolographicSkinDuration = 539,
+			HousingBuffsDurationBonus = 540,
+			IconicItemUpgraded = 541,
+			ImpactDamageThreshold = 542,
+			ImpactDamageThresholdImpulse = 543,
+			ImpactDamageThresholdInCover = 544,
+			Intelligence = 545,
+			IntelligenceAlocated = 546,
+			IntelligenceAvailable = 547,
+			IntelligenceSkillcheckBonus = 548,
+			IntrinsicQuickHackUploadBonus = 549,
+			IntrinsicReloadTimeBonus = 550,
+			IntrinsicZoomLevelBonus = 551,
+			IsAggressive = 552,
+			IsBalanced = 553,
+			IsBlocking = 554,
+			IsCautious = 555,
+			IsCrowd = 556,
+			IsDefensive = 557,
+			IsDeflecting = 558,
+			IsDodgeStaminaFree = 559,
+			IsDodging = 560,
+			IsFastMeleeArchetype = 561,
+			IsFastRangedArchetype = 562,
+			IsGenericMeleeArchetype = 563,
+			IsGenericRangedArchetype = 564,
+			IsHeavyRangedArchetype = 565,
+			IsInvulnerable = 566,
+			IsItemBroken = 567,
+			IsItemCracked = 568,
+			IsItemCrafted = 569,
+			IsItemIconic = 570,
+			IsItemUpgraded = 571,
+			IsManBig = 572,
+			IsManMassive = 573,
+			IsMechanical = 574,
+			IsNetrunnerArchetype = 575,
+			IsNotSlowedDuringADS = 576,
+			IsNotSlowedDuringBlock = 577,
+			IsNotSlowedDuringReload = 578,
+			IsReckless = 579,
+			IsShotgunnerArchetype = 580,
+			IsSniperArchetype = 581,
+			IsSprintStaminaFree = 582,
+			IsStrongMeleeArchetype = 583,
+			IsTechieArchetype = 584,
+			IsTier1Archetype = 585,
+			IsTier2Archetype = 586,
+			IsTier3Archetype = 587,
+			IsTier4Archetype = 588,
+			IsWeakspot = 589,
+			IsWeaponLethal = 590,
+			ItemArmor = 591,
+			ItemLevel = 592,
+			ItemRequiresElectroPlating = 593,
+			ItemRequiresPowerGrip = 594,
+			ItemRequiresSmartLink = 595,
+			JumpHeight = 596,
+			Kenjutsu = 597,
+			KenjutsuMastery = 598,
+			KenjutsuTrait01Stat = 599,
+			KnockdownDamageThreshold = 600,
+			KnockdownDamageThresholdImpulse = 601,
+			KnockdownDamageThresholdInCover = 602,
+			KnockdownImmunity = 603,
+			KnockdownImpulse = 604,
+			Level = 605,
+			Liberty_Padre_BurningApplicationRate = 606,
+			LimbHealth = 607,
+			LinearDirectionUpdateMax = 608,
+			LinearDirectionUpdateMaxADS = 609,
+			LinearDirectionUpdateMin = 610,
+			LinearDirectionUpdateMinADS = 611,
+			LowerActiveCooldownOnDefeat = 612,
+			LowerHackingResistanceOnHack = 613,
+			MagazineCapacity = 614,
+			MagazineCapacityBase = 615,
+			MagazineCapacityBonus = 616,
+			MaxDuration = 617,
+			MaxPercentDamageTakenPerHit = 618,
+			MaxSpeed = 619,
+			MaxStacks = 620,
+			MaxStacksBonusBleeding = 621,
+			MaxStacksBonusBurning = 622,
+			MaximumRange = 623,
+			MechanicalsBuffDPSBonus = 624,
+			MeleeAttackComboDuration = 625,
+			MeleeAttackDuration = 626,
+			Memory = 627,
+			MemoryCostModifier = 628,
+			MemoryCostReduction = 629,
+			MemoryInCombatRegenDelayOnChange = 630,
+			MemoryInCombatRegenEnabled = 631,
+			MemoryInCombatRegenEndThreshold = 632,
+			MemoryInCombatRegenRate = 633,
+			MemoryInCombatRegenRateAdd = 634,
+			MemoryInCombatRegenRateBase = 635,
+			MemoryInCombatRegenRateMult = 636,
+			MemoryInCombatRegenStartThreshold = 637,
+			MemoryInCombatStartDelay = 638,
+			MemoryOutOfCombatRegenDelayOnChange = 639,
+			MemoryOutOfCombatRegenEnabled = 640,
+			MemoryOutOfCombatRegenEndThreshold = 641,
+			MemoryOutOfCombatRegenRate = 642,
+			MemoryOutOfCombatRegenRateAdd = 643,
+			MemoryOutOfCombatRegenRateBase = 644,
+			MemoryOutOfCombatRegenRateMult = 645,
+			MemoryOutOfCombatRegenStartThreshold = 646,
+			MemoryOutOfCombatStartDelay = 647,
+			MemoryTrackerCooldownDuration = 648,
+			MemoryWipeImmunity = 649,
+			MinSpeed = 650,
+			MinigameBufferExtension = 651,
+			MinigameMaterialsEarned = 652,
+			MinigameMemoryRegenPerk = 653,
+			MinigameMoneyMultiplier = 654,
+			MinigameNextInstanceBufferExtensionPerk = 655,
+			MinigameShardChanceMultiplier = 656,
+			MinigameTimeLimitExtension = 657,
+			MinigameTrapsPossibilityChance = 658,
+			MitigationChance = 659,
+			MitigationStrength = 660,
+			MuzzleBreakRicochetBonus = 661,
+			NPCAnimationTime = 662,
+			NPCCorpoEquipItemDuration = 663,
+			NPCCorpoUnequipItemDuration = 664,
+			NPCDamage = 665,
+			NPCEquipItemDuration = 666,
+			NPCGangEquipItemDuration = 667,
+			NPCGangUnequipItemDuration = 668,
+			NPCLoopDuration = 669,
+			NPCRecoverDuration = 670,
+			NPCStartupDuration = 671,
+			NPCUnequipItemDuration = 672,
+			NPCUploadTime = 673,
+			NoJam = 674,
+			NumShotsInBurst = 675,
+			NumShotsInBurstMaxCharge = 676,
+			NumShotsInBurstSecondary = 677,
+			NumShotsToFire = 678,
+			NumberIgnoredTraps = 679,
+			Overheat = 680,
+			Oxygen = 681,
+			PartArmor = 682,
+			PenetrationHealth = 683,
+			PersonalityAggressive = 684,
+			PersonalityCuriosity = 685,
+			PersonalityDisgust = 686,
+			PersonalityFear = 687,
+			PersonalityFunny = 688,
+			PersonalityJoy = 689,
+			PersonalitySad = 690,
+			PersonalityShock = 691,
+			PersonalitySurprise = 692,
+			PhoneCallDuration = 693,
+			PhysicalDamage = 694,
+			PhysicalDamageMax = 695,
+			PhysicalDamageMin = 696,
+			PhysicalDamagePercent = 697,
+			PhysicalImpulse = 698,
+			PhysicalResistance = 699,
+			PoisonImmunity = 700,
+			PoisonRegenHealth = 701,
+			PoisonedApplicationRate = 702,
+			PostLexWilsonBuyPrice = 703,
+			PostTutorialCyberwarePrice = 704,
+			PowerLevel = 705,
+			PreFireTime = 706,
+			PrefersCovers = 707,
+			PrefersShootingSpots = 708,
+			Price = 709,
+			ProjectilesPerShot = 710,
+			ProjectilesPerShotBase = 711,
+			ProjectilesPerShotBonus = 712,
+			Quality = 713,
+			Quantity = 714,
+			QuickHackDuration = 715,
+			QuickHackDurationExtension = 716,
+			QuickHackImmunity = 717,
+			QuickHackResistancesMod = 718,
+			QuickHackSpreadDistance = 719,
+			QuickHackSpreadNumber = 720,
+			QuickHackSuddenDeathChance = 721,
+			QuickHackUpload = 722,
+			QuickhackExtraDamageMultiplier = 723,
+			QuickhackShield = 724,
+			QuickhacksCooldownReduction = 725,
+			RandomCurveInput = 726,
+			Range = 727,
+			Recoil = 728,
+			RecoilAllowSway = 729,
+			RecoilAlternateDir = 730,
+			RecoilAlternateDirADS = 731,
+			RecoilAngle = 732,
+			RecoilAngleADS = 733,
+			RecoilAnimation = 734,
+			RecoilChargeMult = 735,
+			RecoilChargeMultADS = 736,
+			RecoilCycleSize = 737,
+			RecoilCycleSizeADS = 738,
+			RecoilCycleTime = 739,
+			RecoilCycleTimeADS = 740,
+			RecoilDelay = 741,
+			RecoilDir = 742,
+			RecoilDirADS = 743,
+			RecoilDirPlanCycleRandDir = 744,
+			RecoilDirPlanCycleRandDirADS = 745,
+			RecoilDirPlanCycleRandRangeDir = 746,
+			RecoilDirPlanCycleRandRangeDirADS = 747,
+			RecoilDirPlanSequence = 748,
+			RecoilDirPlanSequenceADS = 749,
+			RecoilDriftRandomRangeMax = 750,
+			RecoilDriftRandomRangeMin = 751,
+			RecoilEnableCycleX = 752,
+			RecoilEnableCycleXADS = 753,
+			RecoilEnableCycleY = 754,
+			RecoilEnableCycleYADS = 755,
+			RecoilEnableLinearX = 756,
+			RecoilEnableLinearXADS = 757,
+			RecoilEnableLinearY = 758,
+			RecoilEnableLinearYADS = 759,
+			RecoilEnableScaleX = 760,
+			RecoilEnableScaleXADS = 761,
+			RecoilEnableScaleY = 762,
+			RecoilEnableScaleYADS = 763,
+			RecoilFullChargeMult = 764,
+			RecoilFullChargeMultADS = 765,
+			RecoilHoldDuration = 766,
+			RecoilHoldDurationADS = 767,
+			RecoilKickMax = 768,
+			RecoilKickMaxADS = 769,
+			RecoilKickMin = 770,
+			RecoilKickMinADS = 771,
+			RecoilMagForFullDrift = 772,
+			RecoilMaxLength = 773,
+			RecoilMaxLengthADS = 774,
+			RecoilRecoveryMinSpeed = 775,
+			RecoilRecoveryMinSpeedADS = 776,
+			RecoilRecoverySpeed = 777,
+			RecoilRecoverySpeedADS = 778,
+			RecoilRecoveryTime = 779,
+			RecoilRecoveryTimeADS = 780,
+			RecoilScaleMax = 781,
+			RecoilScaleMaxADS = 782,
+			RecoilScaleTime = 783,
+			RecoilScaleTimeADS = 784,
+			RecoilSpeed = 785,
+			RecoilSpeedADS = 786,
+			RecoilTime = 787,
+			RecoilTimeADS = 788,
+			RecoilUseDifferentStatsInADS = 789,
+			Reflexes = 790,
+			ReflexesAlocated = 791,
+			ReflexesAvailable = 792,
+			RefreshesPingOnQuickhack = 793,
+			RegenerateHPMinigamePerk = 794,
+			ReloadAmount = 795,
+			ReloadEndTime = 796,
+			ReloadTime = 797,
+			ReloadTimeBase = 798,
+			ReloadTimeBonus = 799,
+			RemoveAllStacksWhenDurationEnds = 800,
+			RemoveColdBloodStacksOneByOne = 801,
+			RemoveSprintOnQuickhack = 802,
+			ReprimandEscalation = 803,
+			RestoreMemoryOnDefeat = 804,
+			RevealNetrunnerWhenHacked = 805,
+			RicochetChance = 806,
+			RicochetCount = 807,
+			RicochetMaxAngle = 808,
+			RicochetMinAngle = 809,
+			RicochetTargetSearchAngle = 810,
+			SandevistanDashShoot = 811,
+			ScanDepth = 812,
+			ScanTimeReduction = 813,
+			ScopeFOV = 814,
+			ScopeOffset = 815,
+			ScrapItemChance = 816,
+			SharedCacheTraps = 817,
+			ShootingOffsetAI = 818,
+			ShortCircuitOnCriticalHit = 819,
+			ShorterChains = 820,
+			ShotDelay = 821,
+			SimpleWeaponMod04 = 822,
+			SlideWhenLeaningOutOfCover = 823,
+			SmartGunAddSpiralTrajectory = 824,
+			SmartGunAdsLockingAnglePitch = 825,
+			SmartGunAdsLockingAngleYaw = 826,
+			SmartGunAdsMaxLockedTargets = 827,
+			SmartGunAdsTagLockAnglePitch = 828,
+			SmartGunAdsTagLockAngleYaw = 829,
+			SmartGunAdsTargetableAnglePitch = 830,
+			SmartGunAdsTargetableAngleYaw = 831,
+			SmartGunAdsTimeToLock = 832,
+			SmartGunAdsTimeToUnlock = 833,
+			SmartGunEvenDistributionPeriod = 834,
+			SmartGunHipLockingAnglePitch = 835,
+			SmartGunHipLockingAngleYaw = 836,
+			SmartGunHipMaxLockedTargets = 837,
+			SmartGunHipTagLockAnglePitch = 838,
+			SmartGunHipTagLockAngleYaw = 839,
+			SmartGunHipTargetableAnglePitch = 840,
+			SmartGunHipTargetableAngleYaw = 841,
+			SmartGunHipTimeToLock = 842,
+			SmartGunHipTimeToUnlock = 843,
+			SmartGunHitProbability = 844,
+			SmartGunHitProbabilityMultiplier = 845,
+			SmartGunMissDelay = 846,
+			SmartGunMissRadius = 847,
+			SmartGunNPCApplySpreadAtHitplane = 848,
+			SmartGunNPCLockOnTime = 849,
+			SmartGunNPCLockTimeout = 850,
+			SmartGunNPCLockingAnglePitch = 851,
+			SmartGunNPCLockingAngleYaw = 852,
+			SmartGunNPCProjectileStartingOrientationAngleOffset = 853,
+			SmartGunNPCProjectileVelocity = 854,
+			SmartGunNPCShootProjectilesOnlyStraight = 855,
+			SmartGunNPCSpreadMultiplier = 856,
+			SmartGunNPCTrajectoryCurvatureMultiplier = 857,
+			SmartGunPlayerProjectileVelocity = 858,
+			SmartGunProjectileVelocityVariance = 859,
+			SmartGunSpiralCycleTimeMax = 860,
+			SmartGunSpiralCycleTimeMin = 861,
+			SmartGunSpiralRadius = 862,
+			SmartGunSpiralRampDistanceEnd = 863,
+			SmartGunSpiralRampDistanceStart = 864,
+			SmartGunSpiralRandomizeDirection = 865,
+			SmartGunSpreadMultiplier = 866,
+			SmartGunStartingAccuracy = 867,
+			SmartGunTargetAcquisitionRange = 868,
+			SmartGunTimeToMaxAccuracy = 869,
+			SmartGunTimeToRemoveOccludedTarget = 870,
+			SmartGunTrackAllBodyparts = 871,
+			SmartGunTrackHeadComponents = 872,
+			SmartGunTrackLegComponents = 873,
+			SmartGunTrackMechanicalComponents = 874,
+			SmartGunTrackMultipleEntitiesInADS = 875,
+			SmartGunUseEvenDistributionTargeting = 876,
+			SmartGunUseTagLockTargeting = 877,
+			SmartGunUseTimeBasedAccuracy = 878,
+			SmartTargetingDisruptionProbability = 879,
+			SpecialDamage = 880,
+			SpeedBoost = 881,
+			SpeedBoostMaxSpeed = 882,
+			Spread = 883,
+			SpreadAdsChangePerShot = 884,
+			SpreadAdsChargeMult = 885,
+			SpreadAdsDefaultX = 886,
+			SpreadAdsDefaultY = 887,
+			SpreadAdsFastSpeedMax = 888,
+			SpreadAdsFastSpeedMaxAdd = 889,
+			SpreadAdsFastSpeedMin = 890,
+			SpreadAdsFastSpeedMinAdd = 891,
+			SpreadAdsFullChargeMult = 892,
+			SpreadAdsMaxX = 893,
+			SpreadAdsMaxY = 894,
+			SpreadAdsMinX = 895,
+			SpreadAdsMinY = 896,
+			SpreadAnimation = 897,
+			SpreadChangePerShot = 898,
+			SpreadChargeMult = 899,
+			SpreadCrouchDefaultMult = 900,
+			SpreadCrouchMaxMult = 901,
+			SpreadDefaultX = 902,
+			SpreadDefaultY = 903,
+			SpreadEvenDistributionJitterSize = 904,
+			SpreadEvenDistributionRowCount = 905,
+			SpreadFastSpeedMax = 906,
+			SpreadFastSpeedMaxAdd = 907,
+			SpreadFastSpeedMin = 908,
+			SpreadFastSpeedMinAdd = 909,
+			SpreadFullChargeMult = 910,
+			SpreadMaxAI = 911,
+			SpreadMaxX = 912,
+			SpreadMaxY = 913,
+			SpreadMinX = 914,
+			SpreadMinY = 915,
+			SpreadRandomizeOriginPoint = 916,
+			SpreadResetSpeed = 917,
+			SpreadResetTimeThreshold = 918,
+			SpreadUseCircularSpread = 919,
+			SpreadUseEvenDistribution = 920,
+			SpreadUseInAds = 921,
+			SpreadZeroOnFirstShot = 922,
+			StaggerDamageThreshold = 923,
+			StaggerDamageThresholdImpulse = 924,
+			StaggerDamageThresholdInCover = 925,
+			Stamina = 926,
+			StaminaCostReduction = 927,
+			StaminaCostToBlock = 928,
+			StaminaDamage = 929,
+			StaminaRegenDelayOnChange = 930,
+			StaminaRegenEnabled = 931,
+			StaminaRegenEndThrehold = 932,
+			StaminaRegenRate = 933,
+			StaminaRegenRateAdd = 934,
+			StaminaRegenRateBase = 935,
+			StaminaRegenRateMult = 936,
+			StaminaRegenStartDelay = 937,
+			StaminaRegenStartThreshold = 938,
+			StaminaSprintDecayRate = 939,
+			StatModifierGroupLimit = 940,
+			Stealth = 941,
+			StealthHacksCostReduction = 942,
+			StealthHitDamageMultiplier = 943,
+			StealthMastery = 944,
+			StealthTrait01Stat = 945,
+			StealthWeakspotDamageMultiplier = 946,
+			StreetCred = 947,
+			StreetCredXPBonusMultiplier = 948,
+			Strength = 949,
+			StrengthAlocated = 950,
+			StrengthAvailable = 951,
+			StrengthSkillcheckBonus = 952,
+			StunImmunity = 953,
+			StyleOverSubstanceCount = 954,
+			Sway = 955,
+			SwayCenterMaximumAngleOffset = 956,
+			SwayCurvatureMaximumFactor = 957,
+			SwayCurvatureMinimumFactor = 958,
+			SwayInitialOffsetRandomFactor = 959,
+			SwayResetOnAimStart = 960,
+			SwaySideBottomAngleLimit = 961,
+			SwaySideMaximumAngleDistance = 962,
+			SwaySideMinimumAngleDistance = 963,
+			SwaySideStepChangeMaximumFactor = 964,
+			SwaySideStepChangeMinimumFactor = 965,
+			SwaySideTopAngleLimit = 966,
+			SwayStartBlendTime = 967,
+			SwayStartDelay = 968,
+			SwayTraversalTime = 969,
+			SystemCollapseImmunity = 970,
+			TBHsBaseCoefficient = 971,
+			TBHsBaseSourceMultiplierCoefficient = 972,
+			TBHsCoverTraceLoSIncreaseSpeed = 973,
+			TBHsMinimumLineOfSightTime = 974,
+			TBHsSensesTraceLoSIncreaseSpeed = 975,
+			TBHsVisibilityCooldown = 976,
+			TechBaseChargeThreshold = 977,
+			TechMaxChargeThreshold = 978,
+			TechOverChargeThreshold = 979,
+			TechPierceChargeLevel = 980,
+			TechPierceDamageFactor = 981,
+			TechPierceEnabled = 982,
+			TechPierceScanAngle = 983,
+			TechnicalAbility = 984,
+			TechnicalAbilityAlocated = 985,
+			TechnicalAbilityAvailable = 986,
+			TechnicalAbilitySkillcheckBonus = 987,
+			ThermalDamage = 988,
+			ThermalDamageMax = 989,
+			ThermalDamageMin = 990,
+			ThermalDamagePercent = 991,
+			ThermalResistance = 992,
+			ThreeOrMoreProgramsCooldownRedPerk = 993,
+			ThreeOrMoreProgramsMemoryRegPerk = 994,
+			TimeDilationGenericDuration = 995,
+			TimeDilationGenericTimeScale = 996,
+			TimeDilationKerenzikovDuration = 997,
+			TimeDilationKerenzikovPlayerTimeScale = 998,
+			TimeDilationKerenzikovTimeScale = 999,
+			TimeDilationOnDodgesCooldownDuration = 1000,
+			TimeDilationOnDodgesDuration = 1001,
+			TimeDilationOnDodgesTimeScale = 1002,
+			TimeDilationOnHealthDropCooldownDuration = 1003,
+			TimeDilationOnHealthDropDuration = 1004,
+			TimeDilationOnHealthDropTimeScale = 1005,
+			TimeDilationSandevistanCooldownBase = 1006,
+			TimeDilationSandevistanCooldownReduction = 1007,
+			TimeDilationSandevistanDuration = 1008,
+			TimeDilationSandevistanTimeScale = 1009,
+			TimeDilationWhenEnteringCombatCooldownDuration = 1010,
+			TimeDilationWhenEnteringCombatDuration = 1011,
+			TimeDilationWhenEnteringCombatTimeScale = 1012,
+			TranquilizerImmunity = 1013,
+			TriggerDismembermentChance = 1014,
+			TriggerWoundedChance = 1015,
+			TurretFriendlyExtension = 1016,
+			TurretShutdownExtension = 1017,
+			UltimateHackSpread = 1018,
+			UltimateHacksCostReduction = 1019,
+			UltimateMemoryCostReduction = 1020,
+			UnconsciousImmunity = 1021,
+			UnequipAnimationDuration_Corpo = 1022,
+			UnequipAnimationDuration_Gang = 1023,
+			UnequipDuration = 1024,
+			UnequipDuration_Corpo = 1025,
+			UnequipDuration_Gang = 1026,
+			UnequipItemTime_Corpo = 1027,
+			UnequipItemTime_Gang = 1028,
+			UnlockProgress = 1029,
+			UpgradeCompensate = 1030,
+			UpgradeCount = 1031,
+			UpgradingCostReduction = 1032,
+			UpgradingMaterialDropChance = 1033,
+			UpgradingMaterialRandomGrantChance = 1034,
+			UpgradingMaterialRetrieveChance = 1035,
+			UploadQuickHackMod = 1036,
+			VendorBuyPriceDiscount = 1037,
+			VendorSellPriceDiscount = 1038,
+			Visibility = 1039,
+			VisualStimRangeMultiplier = 1040,
+			VulnerabilityExtension = 1041,
+			WallRunHorSpeedToEnterMin = 1042,
+			WallRunStrafeAngleMax = 1043,
+			WallRunTimeMax = 1044,
+			WallRunVertSpeedToEnterMax = 1045,
+			WasItemUpgraded = 1046,
+			WasQuickHacked = 1047,
+			WeakspotDamageMultiplier = 1048,
+			WeaponHasAutoloader = 1049,
+			WeaponNoise = 1050,
+			WeaponPosAdsX = 1051,
+			WeaponPosAdsY = 1052,
+			WeaponPosAdsZ = 1053,
+			WeaponPosX = 1054,
+			WeaponPosY = 1055,
+			WeaponPosZ = 1056,
+			WeaponRotAdsX = 1057,
+			WeaponRotAdsY = 1058,
+			WeaponRotAdsZ = 1059,
+			WeaponRotX = 1060,
+			WeaponRotY = 1061,
+			WeaponRotZ = 1062,
+			Weight = 1063,
+			WoundHeadDamageThreshold = 1064,
+			WoundLArmDamageThreshold = 1065,
+			WoundLLegDamageThreshold = 1066,
+			WoundRArmDamageThreshold = 1067,
+			WoundRLegDamageThreshold = 1068,
+			XPbonusMultiplier = 1069,
+			ZoomLevel = 1070,
+			CPO_Armor = 1071,
+			CPO_NPC_Importance = 1072,
+			Count = 1073,
+			Invalid = 1074
+		}
+
+		public enum gamedataStatType_1300DEPRECATED
 		{
 			Acceleration = 0,
 			Accuracy = 1,
@@ -11285,46 +12547,47 @@ namespace WolvenKit.RED4.Types
 			Exhausted = 19,
 			ForceShoot = 20,
 			Grapple = 21,
-			Jam = 22,
-			JamCommuniations = 23,
-			Kill = 24,
-			Knockdown = 25,
-			Madness = 26,
-			MeleeInvulnerability = 27,
-			Misc = 28,
-			MuteAudioStims = 29,
-			NetwatcherHackStage1 = 30,
-			NetwatcherHackStage2 = 31,
-			NetwatcherHackStage3 = 32,
-			Overheat = 33,
-			Overload = 34,
-			Pain = 35,
-			PassiveBuff = 36,
-			PassiveDebuff = 37,
-			PlayerCooldown = 38,
-			Poisoned = 39,
-			QuickHackFreezeLocomotion = 40,
-			QuickHackStaggerCyberware = 41,
-			QuickHackStaggerLocomotion = 42,
-			QuickHackStaggerWeapon = 43,
-			Quickhack = 44,
-			Regeneration = 45,
-			Sandevistan = 46,
-			SetFriendly = 47,
-			Sleep = 48,
-			Stagger = 49,
-			StrongArmsActive = 50,
-			Stunned = 51,
-			SuicideHack = 52,
-			SystemCollapse = 53,
-			Unconscious = 54,
-			UncontrolledMovement = 55,
-			VehicleKnockdown = 56,
-			WeakspotOverload = 57,
-			Wounded = 58,
-			CPOShocked = 59,
-			Count = 60,
-			Invalid = 61
+			Housing = 22,
+			Jam = 23,
+			JamCommuniations = 24,
+			Kill = 25,
+			Knockdown = 26,
+			Madness = 27,
+			MeleeInvulnerability = 28,
+			Misc = 29,
+			MuteAudioStims = 30,
+			NetwatcherHackStage1 = 31,
+			NetwatcherHackStage2 = 32,
+			NetwatcherHackStage3 = 33,
+			Overheat = 34,
+			Overload = 35,
+			Pain = 36,
+			PassiveBuff = 37,
+			PassiveDebuff = 38,
+			PlayerCooldown = 39,
+			Poisoned = 40,
+			QuickHackFreezeLocomotion = 41,
+			QuickHackStaggerCyberware = 42,
+			QuickHackStaggerLocomotion = 43,
+			QuickHackStaggerWeapon = 44,
+			Quickhack = 45,
+			Regeneration = 46,
+			Sandevistan = 47,
+			SetFriendly = 48,
+			Sleep = 49,
+			Stagger = 50,
+			StrongArmsActive = 51,
+			Stunned = 52,
+			SuicideHack = 53,
+			SystemCollapse = 54,
+			Unconscious = 55,
+			UncontrolledMovement = 56,
+			VehicleKnockdown = 57,
+			WeakspotOverload = 58,
+			Wounded = 59,
+			CPOShocked = 60,
+			Count = 61,
+			Invalid = 62
 		}
 
 		public enum gamedataStatusEffectVariation
@@ -11350,6 +12613,15 @@ namespace WolvenKit.RED4.Types
 			Visual = 1,
 			Count = 2,
 			Invalid = 3
+		}
+
+		public enum gamedataStimTargets
+		{
+			All = 0,
+			Puppets = 1,
+			Vehicles = 2,
+			Count = 3,
+			Invalid = 4
 		}
 
 		public enum gamedataStimType
@@ -11559,21 +12831,26 @@ namespace WolvenKit.RED4.Types
 			Colby = 4,
 			Columbus = 5,
 			Cortes = 6,
-			Emperor = 7,
-			Galena = 8,
-			GalenaNomad = 9,
-			Kusanagi = 10,
-			Mackinaw = 11,
-			Maimai = 12,
-			Octant = 13,
-			Shion = 14,
-			Supron = 15,
-			Thrax = 16,
-			Turbo = 17,
-			Type66 = 18,
-			Zeya = 19,
-			Count = 20,
-			Invalid = 21
+			Deleon = 7,
+			Emperor = 8,
+			Galena = 9,
+			GalenaNomad = 10,
+			Hearse = 11,
+			Hozuki = 12,
+			Kusanagi = 13,
+			Mackinaw = 14,
+			Maimai = 15,
+			Merrimac = 16,
+			Octant = 17,
+			Riptide = 18,
+			Shion = 19,
+			Supron = 20,
+			Thrax = 21,
+			Turbo = 22,
+			Type66 = 23,
+			Zeya = 24,
+			Count = 25,
+			Invalid = 26
 		}
 
 		public enum gamedataVehicleType
@@ -11666,16 +12943,25 @@ namespace WolvenKit.RED4.Types
 
 		public enum gamedataWorldMapFilter
 		{
-			All = 0,
-			DropPoint = 1,
-			FastTravel = 2,
-			NoFilter = 3,
-			Quest = 4,
-			ServicePoint = 5,
-			Story = 6,
-			VehiclesForPurchaseFilter = 7,
-			Count = 8,
-			Invalid = 9
+			ApartmentToPurchaseFilter = 0,
+			CommonFilter = 1,
+			CustomFilter = 2,
+			DropPoint = 3,
+			ExplorationFilter = 4,
+			FastTravel = 5,
+			Gigs = 6,
+			NoFilter = 7,
+			PsychoFilter = 8,
+			Quest = 9,
+			RipperdocFilter = 10,
+			ServicePoint = 11,
+			Story = 12,
+			TarotFilter = 13,
+			VehicleForSaleFilter = 14,
+			VehiclesForPurchaseFilter = 15,
+			VendorFilter = 16,
+			Count = 17,
+			Invalid = 18
 		}
 
 		public enum gamedeviceActionPropertyFlags
@@ -12043,6 +13329,12 @@ namespace WolvenKit.RED4.Types
 			UnequipItem = 3
 		}
 
+		public enum gameuiCharacterCustomizationEditTag
+		{
+			NewGame = 0,
+			HairDresser = 1
+		}
+
 		public enum gameuiCharacterCustomizationPart
 		{
 			Head = 0,
@@ -12154,9 +13446,8 @@ namespace WolvenKit.RED4.Types
 		public enum gameuiEWorldMapCameraMode
 		{
 			TopDown = 0,
-			Free = 1,
-			ZoomLevels = 2,
-			COUNT = 3
+			ZoomLevels = 1,
+			COUNT = 2
 		}
 
 		public enum gameuiEWorldMapDistrictView
@@ -12200,6 +13491,18 @@ namespace WolvenKit.RED4.Types
 			Grouped = 1,
 			GroupedCollection = 2,
 			GroupedHidden = 3
+		}
+
+		public enum gameuiPatchIntro
+		{
+			Patch1500_NextGen = 0
+		}
+
+		public enum gameuiTutorialHiddenReason
+		{
+			None = 0,
+			DefaultHiddenReason = 1,
+			InPhotomode = 2
 		}
 
 		public enum gameweaponReloadStatus
@@ -12267,36 +13570,39 @@ namespace WolvenKit.RED4.Types
 			WasBlocked = 9,
 			WasDeflected = 10,
 			WasDodged = 11,
-			Kill = 12,
-			DontShowDamageFloater = 13,
-			DealNoDamage = 14,
-			CannotModifyDamage = 15,
-			Headshot = 16,
-			CriticalHit = 17,
-			FinisherTriggered = 18,
-			DamageNullified = 19,
-			Nonlethal = 20,
-			WasKillingBlow = 21,
-			ProcessDefeated = 22,
-			Defeated = 23,
-			SilentKillModifier = 24,
-			DeterministicDamage = 25,
-			WeakspotHit = 26,
-			StealthHit = 27,
-			DoNotTriggerFinisher = 28,
-			DealtDamage = 29,
-			ImmortalTarget = 30,
-			CanDamageSelf = 31,
-			SuccessfulAttack = 32,
-			WeaponFullyCharged = 33,
-			DisableNPCHitReaction = 34,
-			VehicleDamage = 35,
-			VehicleImpact = 36,
-			RagdollImpact = 37,
-			IgnoreDifficulty = 38,
-			QuickHack = 39,
-			IgnoreVehicles = 40,
-			DamageOverTime = 41,
+			WasEvaded = 12,
+			WasMitigated = 13,
+			Kill = 14,
+			DontShowDamageFloater = 15,
+			DealNoDamage = 16,
+			CannotModifyDamage = 17,
+			Headshot = 18,
+			CriticalHit = 19,
+			FinisherTriggered = 20,
+			DamageNullified = 21,
+			Nonlethal = 22,
+			WasKillingBlow = 23,
+			ProcessDefeated = 24,
+			Defeated = 25,
+			SilentKillModifier = 26,
+			DeterministicDamage = 27,
+			WeakspotHit = 28,
+			StealthHit = 29,
+			DoNotTriggerFinisher = 30,
+			DealtDamage = 31,
+			ImmortalTarget = 32,
+			CanDamageSelf = 33,
+			SuccessfulAttack = 34,
+			WeaponFullyCharged = 35,
+			DisableNPCHitReaction = 36,
+			VehicleDamage = 37,
+			VehicleImpact = 38,
+			RagdollImpact = 39,
+			IgnoreDifficulty = 40,
+			QuickHack = 41,
+			IgnoreVehicles = 42,
+			DamageOverTime = 43,
+			DotApplied = 44,
 			PROJECT_SPECIFIC_FLAGS = 100000,
 			UsedKerenzikov = 100001,
 			FragmentationSplinter = 100002,
@@ -12305,7 +13611,8 @@ namespace WolvenKit.RED4.Types
 			GrenadeQuickhackExplosion = 100005,
 			FriendlyFireIgnored = 100006,
 			ForceNoCrit = 100007,
-			ReduceDamage = 100008
+			ReduceDamage = 100008,
+			ForceDismember = 100009
 		}
 
 		public enum inkBrushDrawType
@@ -12432,6 +13739,12 @@ namespace WolvenKit.RED4.Types
 			MITER = 0,
 			BEVEL = 1,
 			ROUND = 2
+		}
+
+		public enum inkELayerLoadPriority
+		{
+			Normal = 0,
+			High = 1
 		}
 
 		public enum inkELayerType
@@ -12609,6 +13922,12 @@ namespace WolvenKit.RED4.Types
 			Paused = 2
 		}
 
+		public enum inkLayerDrawingPolicy
+		{
+			InOrder = 0,
+			InParallel = 1
+		}
+
 		public enum inkLifePath
 		{
 			Corporate = 0,
@@ -12649,6 +13968,28 @@ namespace WolvenKit.RED4.Types
 		{
 			Enabled = 0,
 			Disabled = 1
+		}
+
+		public enum inkSaveStatus
+		{
+			Invalid = 0,
+			Local = 1,
+			Cloud = 2,
+			InSync = 3,
+			Conflict = 4
+		}
+
+		public enum inkSaveTransferStatus
+		{
+			ExportStarted = 0,
+			ExportSuccess = 1,
+			ExportFailed = 2,
+			ImportChecking = 3,
+			ImportStarted = 4,
+			ImportSuccess = 5,
+			ImportNoSave = 6,
+			ImportFailed = 7,
+			ImportNotEnoughSpace = 8
 		}
 
 		public enum inkSaveType
@@ -12812,7 +14153,7 @@ namespace WolvenKit.RED4.Types
 			XINPUT_PAD = 5,
 			STADIA = 6,
 			NINTENDO_SWITCH = 7,
-			EID_COUNT = 8
+			EID_COUNT = 12
 		}
 
 		public enum locHolocallActorMode
@@ -12900,6 +14241,18 @@ namespace WolvenKit.RED4.Types
 			Avoid = 2
 		}
 
+		public enum moveLocomotionAction
+		{
+			Undefined = 0,
+			Exploration = 1,
+			Idle = 2,
+			IdleTurn = 3,
+			Reposition = 4,
+			Start = 5,
+			Move = 6,
+			Stop = 7
+		}
+
 		public enum moveMovementOrientationType
 		{
 			NotSet = 0,
@@ -12980,6 +14333,13 @@ namespace WolvenKit.RED4.Types
 			Body = 1
 		}
 
+		[Flags]
+		public enum physicsFractureFieldType
+		{
+			FF_Default = 1 << 0,
+			FF_Locomotion = 1 << 1
+		}
+
 		public enum physicsMaterialFriction
 		{
 			Enabled = 0,
@@ -13027,36 +14387,34 @@ namespace WolvenKit.RED4.Types
 		public enum physicsPhysicalSystemOwner
 		{
 			Unknown = 0,
-			StaticMeshNode = 1,
-			StaticCollisionAreaNode = 2,
-			DynamicMeshNode = 3,
-			TerrainMeshNode = 4,
-			TerrainCollisionNode = 5,
-			PhysicalDestructionNode = 6,
-			PhysicalDestructionComponent = 7,
-			PhysicalDecorationNode = 8,
-			PhysicalMeshComponent = 9,
-			PhysicalSkinnedMeshComponent = 10,
-			ColliderComponent = 11,
-			SimpleColliderComponent = 12,
-			RagdollBinder = 13,
-			WaterPatchNode = 14,
-			WorldCollisionNode = 15,
-			AggregateSystemComponent = 16,
-			ClothComponent = 17,
-			SkinnedClothComponent = 18,
-			ClothMeshNodeInstance = 19,
-			PhysicalTriggerComponent = 20,
-			PhysicalTriggerNode = 21,
+			BakedDestructionNode = 1,
+			ClothMeshNode = 2,
+			CollisionAreaNode = 3,
+			DecorationMeshNode = 4,
+			DynamicMeshNode = 5,
+			InstancedDestructibleNode = 6,
+			PhysicalDestructionNode = 7,
+			PhysicalTriggerNode = 8,
+			StaticMeshNode = 9,
+			TerrainCollisionNode = 10,
+			WaterPatchNode = 11,
+			WorldCollisionNode = 12,
+			BakedDestructionComponent = 13,
+			ClothComponent = 14,
+			ColliderComponent = 15,
+			PhysicalDestructionComponent = 16,
+			PhysicalMeshComponent = 17,
+			PhysicalSkinnedMeshComponent = 18,
+			PhysicalTriggerComponent = 19,
+			SimpleColliderComponent = 20,
+			SkinnedClothComponent = 21,
 			StateMachineComponent = 22,
-			PhysicalParticleSystem = 23,
-			BakedDestructionComponent = 24,
-			BakedDestructionNode = 25,
-			InstancedDestructibleNode = 26,
-			PhotoModeSystem = 27,
-			VehicleChassisComponent = 28,
-			FoliageDestruction = 29,
-			EntityProxy = 30
+			VehicleChassisComponent = 23,
+			PhysicalParticleSystem = 24,
+			PhotoModeSystem = 25,
+			RagdollBinder = 26,
+			FoliageDestruction = 27,
+			EntityProxy = 28
 		}
 
 		public enum physicsPhysicsJointAxis
@@ -13096,10 +14454,12 @@ namespace WolvenKit.RED4.Types
 			Trigger = 5,
 			Cloth = 6,
 			WorldCollision = 7,
+			Terrain = 8,
 			SimpleCollider = 9,
 			AggregateSystem = 10,
-			FoliageDestruction = 13,
-			Terrain = 8
+			CharacterObstacle = 11,
+			Ragdoll = 12,
+			FoliageDestruction = 13
 		}
 
 		public enum physicsQueryUseCase
@@ -13194,6 +14554,15 @@ namespace WolvenKit.RED4.Types
 			TimeDeltaOverride = 27,
 			SimulationFilter = 32,
 			Radius = 30
+		}
+
+		public enum physicsStaticCollisionShapeCategory
+		{
+			Interior = 0,
+			Exterior = 1,
+			Architecture = 2,
+			Decoration = 3,
+			Other = 4
 		}
 
 		public enum populationSpawnerObjectCtrlAction
@@ -13412,7 +14781,9 @@ namespace WolvenKit.RED4.Types
 			Undefined = 0,
 			KeyboardMouse = 1,
 			XBoxGamepad = 2,
-			PS4Gamepad = 3
+			PS4Gamepad = 3,
+			StadiaGamepad = 4,
+			NintendoGamepad = 5
 		}
 
 		public enum questJournalAlignmentEventType
@@ -13589,13 +14960,16 @@ namespace WolvenKit.RED4.Types
 		{
 			Ended = 0,
 			Initializing = 1,
-			Talking = 2
+			Talking = 2,
+			Rejected = 3
 		}
 
 		public enum questPlatform
 		{
 			PC = 0,
-			Console = 1
+			Console = 1,
+			LastGenConsole = 2,
+			CurrGenConsole = 3
 		}
 
 		public enum questProximityProgressBarAction
@@ -13919,10 +15293,12 @@ namespace WolvenKit.RED4.Types
 			[RED("3440x1440")] _3440x1440 = 11,
 			[RED("3840x1600")] _3840x1600 = 12,
 			[RED("3840x2160")] _3840x2160 = 13,
+			[RED("688x388")] _688x388 = 14,
+			[RED("776x436")] _776x436 = 15,
 			Console_Base = 7,
 			Console_Pro_Prospero_Lockhart = 9,
 			Console_Scorpio = 13,
-			Console_Anaconda = 10
+			Console_Anaconda = 13
 		}
 
 		public enum renderDevEnvProbeView
@@ -14203,6 +15579,33 @@ namespace WolvenKit.RED4.Types
 			Holocall = 2
 		}
 
+		public enum scnInterruptionPhase
+		{
+			WaitForInterruption = 0,
+			WaitForInterrupted = 1,
+			Interrupted = 2,
+			ClearTier = 3,
+			FadeOutLines = 4,
+			InterruptionVoiceset = 5,
+			WaitForReturn = 6,
+			InstallTalkInteraction = 7,
+			WaitForTalkInteraction = 8,
+			ReturnVoiceset = 9,
+			ReturnAnswerVoiceset = 10,
+			ShowLines = 11,
+			SyncTime = 12,
+			RestoreTier = 13,
+			Returned = 14,
+			FadeOutLookAt = 15,
+			FadeInLookAt = 16,
+			InterruptSignal = 17,
+			PostInterruptSignalTimeDelay = 18,
+			ReturnSignal = 19,
+			PostReturnSignalTimeDelay = 20,
+			ProcessTalkInteraction = 21,
+			ClearCommands = 22
+		}
+
 		public enum scnLookAtTargetType
 		{
 			Actor = 0,
@@ -14297,7 +15700,8 @@ namespace WolvenKit.RED4.Types
 			cityOpenWorld = 9,
 			chatsOpenWorld = 10,
 			otherOpenWorld = 11,
-			other = 12
+			holocalls = 12,
+			other = 13
 		}
 
 		public enum scnSceneVersionCheck
@@ -14541,7 +15945,8 @@ namespace WolvenKit.RED4.Types
 		public enum vehicleBikeCurve
 		{
 			SpeedToTilt = 0,
-			InputToTilt = 1
+			InputToTilt = 1,
+			SpeedToTiltSpeed = 2
 		}
 
 		public enum vehicleCameraPerspective
@@ -14857,6 +16262,14 @@ namespace WolvenKit.RED4.Types
 			Deny = 1
 		}
 
+		public enum worldCommunityRegistryItemAreaNodeType
+		{
+			Regular = 0,
+			Streamable = 1,
+			Background = 2,
+			Count = 3
+		}
+
 		public enum worldEClusteringModel
 		{
 			HierarchicalGrid = 0,
@@ -14951,6 +16364,13 @@ namespace WolvenKit.RED4.Types
 			ClearLookAt = 2
 		}
 
+		public enum worldPrefabInteriorMapContribution
+		{
+			Auto = 0,
+			Include = 1,
+			Discard = 2
+		}
+
 		public enum worldPrefabMinimapContribution
 		{
 			Auto = 0,
@@ -14978,11 +16398,22 @@ namespace WolvenKit.RED4.Types
 			Disabled = 2
 		}
 
+		public enum worldPrefabStreamingImportance
+		{
+			Auto = 0,
+			P1 = 1,
+			P2 = 2,
+			P3 = 3,
+			P4 = 4,
+			P5 = 5
+		}
+
 		public enum worldPrefabStreamingOcclusion
 		{
 			Default = 0,
-			Interior = 1,
-			OpenInterior = 2
+			Exterior = 1,
+			Interior = 2,
+			OpenInterior = 3
 		}
 
 		public enum worldPrefabType
@@ -15035,7 +16466,8 @@ namespace WolvenKit.RED4.Types
 		public enum worldProxyMeshDependencyMode
 		{
 			Auto = 0,
-			Discard = 1
+			Include = 1,
+			Discard = 2
 		}
 
 		public enum worldProxyMeshOutputType
@@ -15127,6 +16559,16 @@ namespace WolvenKit.RED4.Types
 			KeepYaw_WorldSpacePitchRoll = 6,
 			KeepRoll_WorldSpacePitchYaw = 7,
 			KeepPitch_WorldSpaceYawRoll = 8
+		}
+
+		public enum worldStreamingSectorCategory
+		{
+			Exterior = 0,
+			Interior = 1,
+			Quest = 2,
+			Navigation = 3,
+			AlwaysLoaded = 4,
+			Unknown = -1
 		}
 
 		public enum worldStreamingTestCheckpointType

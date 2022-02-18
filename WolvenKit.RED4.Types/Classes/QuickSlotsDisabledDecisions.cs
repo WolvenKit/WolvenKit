@@ -14,14 +14,6 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(1)] 
-		[RED("statusEffectListener")] 
-		public CHandle<DefaultTransitionStatusEffectListener> StatusEffectListener
-		{
-			get => GetPropertyValue<CHandle<DefaultTransitionStatusEffectListener>>();
-			set => SetPropertyValue<CHandle<DefaultTransitionStatusEffectListener>>(value);
-		}
-
-		[Ordinal(2)] 
 		[RED("hasStatusEffect")] 
 		public CBool HasStatusEffect
 		{

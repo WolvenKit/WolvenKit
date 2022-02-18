@@ -14,6 +14,14 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(17)] 
+		[RED("statusText")] 
+		public inkTextWidgetReference StatusText
+		{
+			get => GetPropertyValue<inkTextWidgetReference>();
+			set => SetPropertyValue<inkTextWidgetReference>(value);
+		}
+
+		[Ordinal(18)] 
 		[RED("onGlitchingStateChangedListener")] 
 		public CHandle<redCallbackObject> OnGlitchingStateChangedListener
 		{
@@ -24,6 +32,7 @@ namespace WolvenKit.RED4.Types
 		public DropPointTerminalInkGameController()
 		{
 			SellAction = new();
+			StatusText = new();
 		}
 	}
 }

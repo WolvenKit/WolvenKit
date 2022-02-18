@@ -2,7 +2,7 @@
 namespace WolvenKit.RED4.Types
 {
 	[REDMeta]
-	public partial class AOEEffectorController : ScriptableDC
+	public partial class AOEEffectorController : ScriptableDeviceComponent
 	{
 	}
 }

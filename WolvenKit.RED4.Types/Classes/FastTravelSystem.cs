@@ -62,6 +62,14 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(7)] 
+		[RED("fastTravelSystemRecord")] 
+		public CWeakHandle<gamedataFastTravelSystem_Record> FastTravelSystemRecord
+		{
+			get => GetPropertyValue<CWeakHandle<gamedataFastTravelSystem_Record>>();
+			set => SetPropertyValue<CWeakHandle<gamedataFastTravelSystem_Record>>(value);
+		}
+
+		[Ordinal(8)] 
 		[RED("lockLisenerID")] 
 		public CName LockLisenerID
 		{
@@ -69,7 +77,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(8)] 
+		[Ordinal(9)] 
 		[RED("unlockLisenerID")] 
 		public CName UnlockLisenerID
 		{
@@ -77,7 +85,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(9)] 
+		[Ordinal(10)] 
 		[RED("removeAllLocksLisenerID")] 
 		public CName RemoveAllLocksLisenerID
 		{
@@ -88,7 +96,7 @@ namespace WolvenKit.RED4.Types
 		public FastTravelSystem()
 		{
 			FastTravelNodes = new();
-			FastTravelPointsTotal = 149;
+			FastTravelPointsTotal = 155;
 			LastUpdatedAchievementCount = -1;
 			FastTravelLocks = new();
 		}

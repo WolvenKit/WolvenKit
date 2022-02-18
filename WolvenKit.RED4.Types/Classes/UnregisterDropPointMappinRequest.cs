@@ -14,17 +14,17 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(1)] 
-		[RED("position")] 
-		public Vector4 Position
+		[RED("removeFromSystem")] 
+		public CBool RemoveFromSystem
 		{
-			get => GetPropertyValue<Vector4>();
-			set => SetPropertyValue<Vector4>(value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		public UnregisterDropPointMappinRequest()
 		{
 			OwnerID = new();
-			Position = new();
+			RemoveFromSystem = true;
 		}
 	}
 }

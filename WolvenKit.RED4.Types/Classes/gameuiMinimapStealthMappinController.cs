@@ -318,6 +318,38 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(53)] 
+		[RED("puppetStateBlackboard")] 
+		public CWeakHandle<gameIBlackboard> PuppetStateBlackboard
+		{
+			get => GetPropertyValue<CWeakHandle<gameIBlackboard>>();
+			set => SetPropertyValue<CWeakHandle<gameIBlackboard>>(value);
+		}
+
+		[Ordinal(54)] 
+		[RED("isInVehicleStance")] 
+		public CBool IsInVehicleStance
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(55)] 
+		[RED("stanceStateCb")] 
+		public CHandle<redCallbackObject> StanceStateCb
+		{
+			get => GetPropertyValue<CHandle<redCallbackObject>>();
+			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
+		}
+
+		[Ordinal(56)] 
+		[RED("policeChasePrototypeEnabled")] 
+		public CBool PoliceChasePrototypeEnabled
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(57)] 
 		[RED("showAnim")] 
 		public CHandle<inkanimProxy> ShowAnim
 		{
@@ -325,7 +357,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<inkanimProxy>>(value);
 		}
 
-		[Ordinal(54)] 
+		[Ordinal(58)] 
 		[RED("alertedAnim")] 
 		public CHandle<inkanimProxy> AlertedAnim
 		{
@@ -333,7 +365,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<inkanimProxy>>(value);
 		}
 
-		[Ordinal(55)] 
+		[Ordinal(59)] 
 		[RED("preventionAnimProxy")] 
 		public CHandle<inkanimProxy> PreventionAnimProxy
 		{

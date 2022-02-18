@@ -61,9 +61,18 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
+		[Ordinal(7)] 
+		[RED("affectedByTimeDilation")] 
+		public CBool AffectedByTimeDilation
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
 		public gameRegisterNewCooldownRequest()
 		{
 			OwnerItemId = new();
+			AffectedByTimeDilation = true;
 		}
 	}
 }

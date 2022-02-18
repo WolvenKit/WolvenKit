@@ -61,6 +61,14 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
+		[Ordinal(13)] 
+		[RED("markCamerCut")] 
+		public CBool MarkCamerCut
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
 		public scneventsPlayRidCameraAnimEvent()
 		{
 			Id = new() { Id = 18446744073709551615 };
@@ -68,6 +76,7 @@ namespace WolvenKit.RED4.Types
 			AnimSRRefId = new() { Id = 4294967295 };
 			AnimOriginMarker = new() { Type = Enums.scnMarkerType.Global, EntityRef = new() { Names = new() }, IsMounted = true };
 			ActivateAsGameCamera = true;
+			MarkCamerCut = true;
 		}
 	}
 }
