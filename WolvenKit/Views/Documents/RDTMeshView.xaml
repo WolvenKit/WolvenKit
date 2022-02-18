@@ -37,7 +37,6 @@
             Camera="{Binding Camera}"
             CoordinateSystemLabelForeground="White"
             EffectsManager="{Binding EffectsManager}"
-            EnableSwapChainRendering="True"
             FXAALevel="High"
             ShowCoordinateSystem="True"
             UseDefaultGestures="False">
@@ -227,7 +226,7 @@
             <syncfusion:SfTreeGrid
                 Grid.Row="1"
                 AllowResizingColumns="True"
-                AutoExpandMode="AllNodesExpanded"
+                AutoExpandMode="RootNodesExpanded"
                 AutoGenerateColumns="False"
                 CheckBoxMappingName="IsRendering"
                 ChildPropertyName="Children"
@@ -240,7 +239,7 @@
                         HeaderText="Component Name"
                         MappingName="Name"
                         MinimumWidth="300" />
-                    <syncfusion:TreeGridTemplateColumn HeaderText="Chunk Mask">
+                    <!--syncfusion:TreeGridTemplateColumn HeaderText="Chunk Mask">
                         <syncfusion:TreeGridTemplateColumn.CellTemplate>
                             <DataTemplate>
                                 <syncfusion:ComboBoxAdv
@@ -253,10 +252,8 @@
                                     SelectionChanged="ComboBoxAdv_SelectionChanged" />
                             </DataTemplate>
                         </syncfusion:TreeGridTemplateColumn.CellTemplate>
-                    </syncfusion:TreeGridTemplateColumn>
-                    <syncfusion:TreeGridTextColumn HeaderText="Bind Name" MappingName="BindName" />
-                    <syncfusion:TreeGridTextColumn HeaderText="Slot Name" MappingName="SlotName" />
-                    <syncfusion:TreeGridTextColumn HeaderText="Material" MappingName="Materials[0].Name" />
+                    </syncfusion:TreeGridTemplateColumn-->
+                    <syncfusion:TreeGridTextColumn HeaderText="Material Name" MappingName="Material" />
                 </syncfusion:SfTreeGrid.Columns>
             </syncfusion:SfTreeGrid>
             <!--ItemsControl ItemsSource="{Binding SelectedAppearance.Models, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}">

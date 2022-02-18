@@ -54,6 +54,7 @@ namespace WolvenKit.ViewModels.Documents
         public CName Resource { get; set; }
         public List<Node> Nodes { get; set; } = new();
         public List<Element3D> ModelGroup { get; set; } = new();
+        public List<LoadableModel> BindableModels { get; set; } = new();
     }
 
     public class LoadableModel : IBindable, Node
@@ -61,6 +62,7 @@ namespace WolvenKit.ViewModels.Documents
         public int AppearanceIndex { get; set; }
         public string AppearanceName { get; set; }
         public CR2WFile MeshFile { get; set; }
+        public List<MeshGeometryModel3D> Meshes { get; set; }
         public string FilePath { get; set; }
         public Model3D OriginalModel { get; set; }
         public Model3D Model { get; set; }
@@ -415,23 +417,21 @@ namespace WolvenKit.ViewModels.Documents
 
                         foreach (var model in a.Models)
                         {
-                            var group = new GroupModel3D()
+                            if (a.Models.FirstOrDefault(x => x.Name == model.BindName) is var parentModel && parentModel != null)
                             {
-                                Name = $"{model.Name}_{model.AppearanceName}",
-                                Transform = model.Transform,
-                                IsRendering = model.IsEnabled
-                            };
+                                parentModel.AddModel(model);
+                            }
+                            else
+                            {
+                                a.BindableModels.Add(model);
+                            }
                             foreach (var material in model.Materials)
                             {
                                 RawMaterials[material.Name] = material;
                             }
-                            var meshes = MakeMesh(model.MeshFile, model.ChunkMask, model.AppearanceIndex);
-                            foreach (var mesh3D in meshes)
-                            {
-                                group.Children.Add(mesh3D);
-                            }
-                            a.ModelGroup.Add(group);
+                            model.Meshes = MakeMesh(model.MeshFile, model.ChunkMask, model.AppearanceIndex);
                         }
+                        AddMeshesToRiggedGroups(a);
 
                         Appearances.Add(a);
 
@@ -441,18 +441,6 @@ namespace WolvenKit.ViewModels.Documents
                         break;
                     }
                 }
-                //var j = 0;
-                //foreach (var a in Appearances)
-                //{
-                //    var appFile = File.GetFileFromDepotPathOrCache(a.Resource);
-
-                //    if (appFile != null && appFile.RootChunk is appearanceAppearanceResource app && app.Appearances.Count > (j + 1) && app.Appearances[j].GetValue() is appearanceAppearanceDefinition appDef && appDef.CompiledData.Data is Package04 appPkg)
-                //    {
-                //    }
-                //    j++;
-                //}
-
-
             }
             else
             {
@@ -464,6 +452,87 @@ namespace WolvenKit.ViewModels.Documents
 
                 Rigs.Add("Component", new Rig());
                 SelectedAppearance = Appearances[0];
+            }
+        }
+
+        public GroupModel3D GroupFromRigBone(Rig rig, RigBone bone, Dictionary<string, GroupModel3D> groups)
+        {
+            var group = new GroupModel3D()
+            {
+                Name = bone.Name,
+                Transform = new MatrixTransform3D(bone.Matrix.ToMatrix3D())
+            };
+            foreach (var child in bone.Children)
+            {
+                group.Children.Add(GroupFromRigBone(rig, child, groups));
+            }
+            groups.Add(rig.Name + ":" + bone.Name, group);
+            return group;
+        }
+
+        public GroupModel3D GroupFromModel(LoadableModel model)
+        {
+            var group = new GroupModel3D()
+            {
+                Name = $"{model.Name}_{model.AppearanceName}",
+                Transform = model.Transform,
+                IsRendering = model.IsEnabled
+            };
+
+            foreach (var mesh in model.Meshes)
+            {
+                group.Children.Add(mesh);
+            }
+
+            foreach (var child in model.Models)
+            {
+                group.Children.Add(GroupFromModel(child));
+            }
+            return group;
+        }
+
+        public void AddMeshesToRiggedGroups(Appearance app)
+        {
+            var groups = new Dictionary<string, GroupModel3D>();
+
+            foreach (var (name, rig) in Rigs)
+            {
+                var group = new GroupModel3D()
+                {
+                    Name = $"{rig.Name}",
+                    Transform = new MatrixTransform3D(rig.Matrix.ToMatrix3D())
+                };
+                group.Children.Add(GroupFromRigBone(rig, rig.Bones[0], groups));
+                groups.Add(name, group);
+                app.ModelGroup.Add(group);
+            }
+
+            foreach (var model in app.BindableModels)
+            {
+                var group = GroupFromModel(model);
+
+                if (model.BindName == null)
+                    continue;
+                if (_slotSets.ContainsKey(model.BindName))
+                {
+                    if (model.SlotName != null && _slotSets[model.BindName].Slots.ContainsKey(model.SlotName))
+                    {
+                        var slot = _slotSets[model.BindName].Slots[model.SlotName];
+
+                        if (groups.ContainsKey(_slotSets[model.BindName].BindName + ":" + slot))
+                        {
+                            groups[_slotSets[model.BindName].BindName + ":" + slot].Children.Add(group);
+                        }
+                    }
+                }
+                else if (groups.ContainsKey(model.BindName))
+                {
+                    groups[model.BindName].Children.Add(group);
+                }
+                else
+                {
+                    app.ModelGroup.Add(group);
+                }
             }
         }
 
@@ -687,8 +756,8 @@ namespace WolvenKit.ViewModels.Documents
             foreach (var model in appModels.Values)
             {
                 var matrix = new SeparateMatrix();
-                GetResolvedMatrix(model, ref matrix, appModels);
-                model.Transform = new MatrixTransform3D(matrix.ToMatrix3D());
+                //GetResolvedMatrix(model, ref matrix, appModels);
+                model.Transform = new MatrixTransform3D(model.Matrix.ToMatrix3D());
                 if (model.Name.Contains("shadow") || model.Name.Contains("AppearanceProxyMesh") || model.Name.Contains("cutout") || model.Name == "")
                 {
                     model.IsEnabled = false;

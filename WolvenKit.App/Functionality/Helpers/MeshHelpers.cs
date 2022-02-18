@@ -26,6 +26,7 @@ using WolvenKit.Common.DDS;
 using WolvenKit.Functionality.Commands;
 using WolvenKit.RED4.Archive.Buffer;
 using WolvenKit.RED4.Archive.IO;
+using WolvenKit.Functionality.Helpers;
 
 namespace WolvenKit.ViewModels.Documents
 {
@@ -199,6 +200,11 @@ namespace WolvenKit.ViewModels.Documents
 
         public async ValueTask LoadMaterial(Material material)
         {
+            if (material == null)
+            {
+                return;
+            }
+
             var dictionary = material.Values;
 
             var mat = material.Instance;
@@ -255,15 +261,15 @@ namespace WolvenKit.ViewModels.Documents
             var filename_d = Path.Combine(ISettingsManager.GetTemp_OBJPath(), material.Name + "_d.dds");
             var filename_n = Path.Combine(ISettingsManager.GetTemp_OBJPath(), material.Name + "_n.dds");
 
-            var createMLDiffuse = !System.IO.File.Exists(filename_b);
-            var createMLRoughnessMetallic = !System.IO.File.Exists(filename_rm);
-            var createMLNormal = !System.IO.File.Exists(filename_bn);
-
-            if (!createMLDiffuse && !createMLNormal && !createMLRoughnessMetallic)
-                goto SkipNormals;
-
             if (dictionary.ContainsKey("MultilayerSetup") && dictionary.ContainsKey("MultilayerMask"))
             {
+                var createMLDiffuse = !System.IO.File.Exists(filename_b);
+                var createMLRoughnessMetallic = !System.IO.File.Exists(filename_rm);
+                var createMLNormal = !System.IO.File.Exists(filename_bn);
+
+                if (!createMLDiffuse && !createMLNormal && !createMLRoughnessMetallic)
+                    goto SkipNormals;
+
                 if (dictionary["MultilayerSetup"] is not CResourceReference<Multilayer_Setup> mlsRef)
                 {
                     goto SkipNormals;
@@ -702,7 +708,10 @@ namespace WolvenKit.ViewModels.Documents
 
         SkipNormals:
             Locator.Current.GetService<ILoggerService>().Info($"Loaded material: {material.Name}");
-            SetupPBRMaterial(material.Name);
+            DispatcherHelper.RunOnMainThread(() =>
+            {
+                SetupPBRMaterial(material.Name, true);
+            });
 
             return;
         }
