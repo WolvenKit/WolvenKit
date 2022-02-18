@@ -229,6 +229,17 @@ namespace WolvenKit.ViewModels.Documents
             SelectedTabItemViewModel = TabItemViewModels.FirstOrDefault();
         }
 
+        public Dictionary<CName, CR2WFile> Files { get; set; } = new();
+
+        public CR2WFile GetFileFromDepotPathOrCache(CName depotPath)
+        {
+            if (!Files.ContainsKey(depotPath))
+            {
+                Files[depotPath] = GetFileFromDepotPath(depotPath);   
+            }
+            return Files[depotPath];
+        }
+
         public CR2WFile GetFileFromDepotPath(CName depotPath)
         {
             CR2WFile cr2wFile = null;

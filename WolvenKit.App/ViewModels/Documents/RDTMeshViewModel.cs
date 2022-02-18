@@ -11,6 +11,8 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Media.Media3D;
 using CP77.CR2W;
+using HelixToolkit.SharpDX.Core;
+using HelixToolkit.Wpf.SharpDX;
 using ReactiveUI.Fody.Helpers;
 using Splat;
 using WolvenKit.Common.DDS;
@@ -51,10 +53,14 @@ namespace WolvenKit.ViewModels.Documents
         public List<LoadableModel> Models { get; set; } = new();
         public CName Resource { get; set; }
         public List<Node> Nodes { get; set; } = new();
+        public List<Element3D> ModelGroup { get; set; } = new();
     }
 
     public class LoadableModel : IBindable, Node
     {
+        public int AppearanceIndex { get; set; }
+        public string AppearanceName { get; set; }
+        public CR2WFile MeshFile { get; set; }
         public string FilePath { get; set; }
         public Model3D OriginalModel { get; set; }
         public Model3D Model { get; set; }
@@ -150,26 +156,47 @@ namespace WolvenKit.ViewModels.Documents
         public float Roughness { get; set; } = 0.75f;
     }
 
-    public class RDTMeshViewModel : RedDocumentTabViewModel
+    public partial class RDTMeshViewModel : RedDocumentTabViewModel
     {
         protected readonly RedBaseClass _data;
         public RedDocumentViewModel File;
         private Dictionary<string, LoadableModel> _modelList = new();
         private Dictionary<string, SlotSet> _slotSets = new();
 
+        public EffectsManager EffectsManager { get; }
+
+        public HelixToolkit.Wpf.SharpDX.Camera Camera { get; }
+
+        public SceneNodeGroupModel3D GroupModel { get; set; } = new SceneNodeGroupModel3D();
+
+        public List<Element3D> ModelGroup { get; set; } = new();
+
+        public TextureModel EnvironmentMap { get; set; }
+
         public RDTMeshViewModel(RedDocumentViewModel file)
         {
             Header = "Mesh Preview";
             File = file;
 
+            EffectsManager = new DefaultEffectsManager();
+            //EnvironmentMap = TextureModel.Create("C:\\Users\\Jack\\Documents\\cyberpunk\\Vehicle Tests\\source\\raw\\base\\environment\\terrain\\mesh_terrain_sectors\\nc_mapa40_kwadrat_2k.dds");
+            Camera = new HelixToolkit.Wpf.SharpDX.PerspectiveCamera();
+
             ExtractShadersCommand = new RelayCommand(ExtractShaders);
+            LoadMaterialsCommand = new RelayCommand(LoadMaterials);
         }
 
         public RDTMeshViewModel(CMesh data, RedDocumentViewModel file) : this(file)
         {
             _data = data;
 
+            ModelGroup.AddRange(MakeMesh(file.Cr2wFile));
+
+            return;
+
+#pragma warning disable CS0162 // Unreachable code detected
             var materials = new Dictionary<string, Material>();
+#pragma warning restore CS0162 // Unreachable code detected
 
             var localList = (CR2WList)data.LocalMaterialBuffer.RawData?.Buffer.Data ?? null;
 
@@ -199,7 +226,7 @@ namespace WolvenKit.ViewModels.Documents
                 }
 
                 //CMaterialInstance bm = null;
-                //if (File.GetFileFromDepotPath(inst.BaseMaterial.DepotPath) is var file)
+                //if (File.GetFileFromDepotPathOrCache(inst.BaseMaterial.DepotPath) is var file)
                 //{
                 //    bm = (CMaterialInstance)file.RootChunk;
                 //}
@@ -313,7 +340,7 @@ namespace WolvenKit.ViewModels.Documents
 
                     if (component is entAnimatedComponent enc)
                     {
-                        var rigFile = File.GetFileFromDepotPath(enc.Rig.DepotPath);
+                        var rigFile = File.GetFileFromDepotPathOrCache(enc.Rig.DepotPath);
 
                         if (rigFile.RootChunk is animRig rig)
                         {
@@ -362,7 +389,7 @@ namespace WolvenKit.ViewModels.Documents
 
                 foreach (var app in ent.Appearances)
                 {
-                    var appFile = File.GetFileFromDepotPath(app.AppearanceResource.DepotPath);
+                    var appFile = File.GetFileFromDepotPathOrCache(app.AppearanceResource.DepotPath);
 
                     if (appFile == null || appFile.RootChunk is not appearanceAppearanceResource aar)
                     {
@@ -378,13 +405,38 @@ namespace WolvenKit.ViewModels.Documents
                             continue;
                         }
 
-                        Appearances.Add(new Appearance()
+                        var a = new Appearance()
                         {
                             AppearanceName = app.AppearanceName,
                             Name = app.Name,
                             Resource = app.AppearanceResource.DepotPath,
                             Models = LoadMeshs(appPkg.Chunks)
-                        });
+                        };
+
+                        foreach (var model in a.Models)
+                        {
+                            var group = new GroupModel3D()
+                            {
+                                Name = $"{model.Name}_{model.AppearanceName}",
+                                Transform = model.Transform,
+                                IsRendering = model.IsEnabled
+                            };
+                            foreach (var material in model.Materials)
+                            {
+                                RawMaterials[material.Name] = material;
+                            }
+                            var meshes = MakeMesh(model.MeshFile, model.ChunkMask, model.AppearanceIndex);
+                            foreach (var mesh3D in meshes)
+                            {
+                                group.Children.Add(mesh3D);
+                            }
+                            a.ModelGroup.Add(group);
+                        }
+
+                        Appearances.Add(a);
+
+                        if (Appearances.Count > 0)
+                            SelectedAppearance = Appearances[0];
 
                         break;
                     }
@@ -392,7 +444,7 @@ namespace WolvenKit.ViewModels.Documents
                 //var j = 0;
                 //foreach (var a in Appearances)
                 //{
-                //    var appFile = File.GetFileFromDepotPath(a.Resource);
+                //    var appFile = File.GetFileFromDepotPathOrCache(a.Resource);
 
                 //    if (appFile != null && appFile.RootChunk is appearanceAppearanceResource app && app.Appearances.Count > (j + 1) && app.Appearances[j].GetValue() is appearanceAppearanceDefinition appDef && appDef.CompiledData.Data is Package04 appPkg)
                 //    {
@@ -400,8 +452,7 @@ namespace WolvenKit.ViewModels.Documents
                 //    j++;
                 //}
 
-                if (Appearances.Count > 0)
-                    SelectedAppearance = Appearances[0];
+
             }
             else
             {
@@ -416,25 +467,6 @@ namespace WolvenKit.ViewModels.Documents
             }
         }
 
-        public RDTMeshViewModel(appearanceAppearanceResource app, RedDocumentViewModel file) : this(file)
-        {
-            _data = app;
-            foreach (var a in app.Appearances)
-            {
-                if (a.GetValue() is appearanceAppearanceDefinition appDef && appDef.CompiledData.Data is Package04 pkg)
-                {
-                    Appearances.Add(new Appearance()
-                    {
-                        Name = appDef.Name,
-                        Models = LoadMeshs(pkg.Chunks)
-                    });
-
-                }
-            }
-
-            SelectedAppearance = Appearances[0];
-        }
-
         private List<LoadableModel> LoadMeshs(IList<RedBaseClass> chunks)
         {
             if (chunks == null)
@@ -447,7 +479,7 @@ namespace WolvenKit.ViewModels.Documents
                 Vector3 scale = new Vector3() { X = 1, Y = 1, Z = 1 };
                 CName depotPath = null;
                 bool enabled = true;
-                string meshApp = "";
+                string meshApp = "default";
                 UInt64 chunkMask = 18446744073709551615;
                 var chunkList = new List<bool>(new bool[64]);
 
@@ -456,13 +488,12 @@ namespace WolvenKit.ViewModels.Documents
                     scale = emc.VisualScale;
                     enabled = emc.IsEnabled;
                 }
+
                 if (component is IRedMeshComponent mc)
                 {
                     depotPath = mc.Mesh.DepotPath;
                     meshApp = mc.MeshAppearance;
                     chunkMask = mc.ChunkMask;
-                    //enabled = esmc.VisibilityAnimationParam != "invisible_in_fpp";
-                    //enabled = esmc.CastShadows == false;
                 }
 
                 var enabledChunks = new ObservableCollection<int>();
@@ -476,8 +507,7 @@ namespace WolvenKit.ViewModels.Documents
 
                 if (component is entIPlacedComponent epc && depotPath != null && depotPath.GetRedHash() != 0)
                 {
-
-                    var meshFile = File.GetFileFromDepotPath(depotPath);
+                    var meshFile = File.GetFileFromDepotPathOrCache(depotPath);
 
                     if (meshFile == null || meshFile.RootChunk is not CMesh mesh)
                     {
@@ -527,7 +557,7 @@ namespace WolvenKit.ViewModels.Documents
                         }
 
                         //CMaterialInstance bm = null;
-                        //if (File.GetFileFromDepotPath(inst.BaseMaterial.DepotPath) is var file)
+                        //if (File.GetFileFromDepotPathOrCache(inst.BaseMaterial.DepotPath) is var file)
                         //{
                         //    bm = (CMaterialInstance)file.RootChunk;
                         //}
@@ -545,65 +575,110 @@ namespace WolvenKit.ViewModels.Documents
 
                         materials.Add(me.Name, material);
                     }
-
-                    var outPath = Path.Combine(ISettingsManager.GetTemp_OBJPath(), Path.GetFileNameWithoutExtension(depotPath) + "_" + depotPath.GetRedHash().ToString() + "_full.glb");
-                    //var outPath = Path.Combine(ISettingsManager.GetTemp_OBJPath(), Path.GetFileName(depotPath) + "_" + depotPath.GetRedHash().ToString()) + "_full.glb";
-                    //if (System.IO.File.Exists(outPath) || MeshTools.ExportMesh(meshFile, new FileInfo(outPath)))
-                    if (MeshTools.ExportMesh(meshFile, new FileInfo(outPath)))
+                    var apps = new List<string>();
+                    foreach (var handle in mesh.Appearances)
                     {
-                        foreach (var handle in mesh.Appearances)
+                        var app = handle.GetValue();
+                        if (app is meshMeshAppearance mmapp)
                         {
-                            var app = handle.GetValue();
-                            if (app is meshMeshAppearance mmapp && (mmapp.Name == meshApp || (meshApp == "default" && mesh.Appearances.IndexOf(handle) == 0)))
+                            apps.Add(mmapp.Name);
+                        }
+                    }
+
+                    var appIndex = 0;
+
+                    if (meshApp != "default" && apps.IndexOf(meshApp) is var index && index != -1)
+                    {
+                        appIndex = index;
+                    }
+
+                    var appMaterials = new List<Material>();
+
+                    foreach (var handle in mesh.Appearances)
+                    {
+                        var app = handle.GetValue();
+                        if (app is meshMeshAppearance mmapp && (mmapp.Name == meshApp || (meshApp == "default" && mesh.Appearances.IndexOf(handle) == 0)))
+                        {
+                            foreach (var m in mmapp.ChunkMaterials)
                             {
-                                var appMaterials = new List<Material>();
-
-                                foreach (var m in mmapp.ChunkMaterials)
+                                if (materials.ContainsKey(m))
                                 {
-                                    if (materials.ContainsKey(m))
-                                    {
-                                        appMaterials.Add(materials[m]);
-                                    }
-                                    else
-                                    {
-                                        appMaterials.Add(new Material()
-                                        {
-                                            Name = m
-                                        });
-                                    }
+                                    appMaterials.Add(materials[m]);
                                 }
-
-                                appModels.Add(epc.Name, new LoadableModel()
+                                else
                                 {
-                                    FilePath = outPath,
-                                    Matrix = matrix,
-                                    IsEnabled = enabled,
-                                    Name = epc.Name,
-                                    BindName = bindName,
-                                    SlotName = slotName,
-                                    Materials = appMaterials,
-                                    ChunkMask = chunkMask,
-                                    ChunkList = chunkList,
-                                    EnabledChunks = enabledChunks
-                                });
-                                break;
+                                    appMaterials.Add(new Material()
+                                    {
+                                        Name = m
+                                    });
+                                }
                             }
                         }
-
-                        //if (!appModels.ContainsKey(epc.Name))
-                        //{
-                        //    appModels.Add(epc.Name, new LoadableModel()
-                        //    {
-                        //        FilePath = outPath,
-                        //        Matrix = matrix,
-                        //        IsEnabled = enabled,
-                        //        Name = epc.Name,
-                        //        BindName = bindName,
-                        //        SlotName = slotName,
-                        //        Materials = materials
-                        //    });
-                        //}
+                        break;
                     }
+
+                    var model = new LoadableModel()
+                    {
+                        MeshFile = meshFile,
+                        AppearanceIndex = appIndex,
+                        AppearanceName = meshApp,
+                        Matrix = matrix,
+                        Materials = appMaterials,
+                        IsEnabled = enabled,
+                        Name = epc.Name,
+                        BindName = bindName,
+                        SlotName = slotName,
+                        ChunkMask = chunkMask,
+                        ChunkList = chunkList,
+                        EnabledChunks = enabledChunks
+                    };
+                    appModels.Add(epc.Name, model);
+
+
+                    //var outPath = Path.Combine(ISettingsManager.GetTemp_OBJPath(), Path.GetFileNameWithoutExtension(depotPath) + "_" + depotPath.GetRedHash().ToString() + "_full.glb");
+                    //var outPath = Path.Combine(ISettingsManager.GetTemp_OBJPath(), Path.GetFileName(depotPath) + "_" + depotPath.GetRedHash().ToString()) + "_full.glb";
+                    //if (System.IO.File.Exists(outPath) || MeshTools.ExportMesh(meshFile, new FileInfo(outPath)))
+                    //if (MeshTools.ExportMesh(meshFile, new FileInfo(outPath)))
+                    //{
+                    //    foreach (var handle in mesh.Appearances)
+                    //    {
+                    //        var app = handle.GetValue();
+                    //        if (app is meshMeshAppearance mmapp && (mmapp.Name == meshApp || (meshApp == "default" && mesh.Appearances.IndexOf(handle) == 0)))
+                    //        {
+                    //            var appMaterials = new List<Material>();
+
+                    //            foreach (var m in mmapp.ChunkMaterials)
+                    //            {
+                    //                if (materials.ContainsKey(m))
+                    //                {
+                    //                    appMaterials.Add(materials[m]);
+                    //                }
+                    //                else
+                    //                {
+                    //                    appMaterials.Add(new Material()
+                    //                    {
+                    //                        Name = m
+                    //                    });
+                    //                }
+                    //            }
+
+                    //            appModels.Add(epc.Name, new LoadableModel()
+                    //            {
+                    //                FilePath = outPath,
+                    //                Matrix = matrix,
+                    //                IsEnabled = enabled,
+                    //                Name = epc.Name,
+                    //                BindName = bindName,
+                    //                SlotName = slotName,
+                    //                Materials = appMaterials,
+                    //                ChunkMask = chunkMask,
+                    //                ChunkList = chunkList,
+                    //                EnabledChunks = enabledChunks
+                    //            });
+                    //            break;
+                    //        }
+                    //    }
+                    //}
                 }
             }
 
@@ -612,8 +687,8 @@ namespace WolvenKit.ViewModels.Documents
             foreach (var model in appModels.Values)
             {
                 var matrix = new SeparateMatrix();
-                //GetResolvedMatrix(model, ref matrix, appModels);
-                //model.Transform = new MatrixTransform3D(matrix.ToMatrix3D());
+                GetResolvedMatrix(model, ref matrix, appModels);
+                model.Transform = new MatrixTransform3D(matrix.ToMatrix3D());
                 if (model.Name.Contains("shadow") || model.Name.Contains("AppearanceProxyMesh") || model.Name.Contains("cutout") || model.Name == "")
                 {
                     model.IsEnabled = false;
@@ -724,561 +799,6 @@ namespace WolvenKit.ViewModels.Documents
             }
         }
 
-        public async Task LoadMaterial(Material material)
-        {
-            //if (material.ColorTexturePath != null)
-            //    return;
-
-
-            var dictionary = material.Values;
-
-            var mat = material.Instance;
-            while (mat != null && mat.BaseMaterial != null)
-            {
-                var baseMaterialFile = File.GetFileFromDepotPath(mat.BaseMaterial.DepotPath);
-                if (baseMaterialFile != null && baseMaterialFile.RootChunk is CMaterialInstance cmi)
-                {
-                    foreach (var pair in cmi.Values)
-                    {
-                        if (!dictionary.ContainsKey(pair.Key))
-                            dictionary.Add(pair.Key, pair.Value);
-                    }
-                    mat = cmi;
-                }
-                else if (baseMaterialFile != null && baseMaterialFile.RootChunk is CMaterialTemplate cmt)
-                {
-                    material.TemplateName = cmt.Name;
-                    mat = null;
-                }
-                else
-                {
-                    mat = null;
-                }
-            }
-            material.Values = dictionary;
-
-            if (dictionary.ContainsKey("Metalness") && dictionary["Metalness"] is CResourceReference<ITexture> metalTexture)
-            {
-                if (metalTexture.DepotPath == "base\\materials\\placeholder\\black.xbm")
-                    material.Metalness = 0;
-                else if (metalTexture.DepotPath == "base\\materials\\placeholder\\white.xbm")
-                    material.Metalness = 1;
-            }
-
-            if (dictionary.ContainsKey("MetalnessScale"))
-                material.Metalness = (CFloat)dictionary["MetalnessScale"];
-
-            if (dictionary.ContainsKey("Roughness") && dictionary["Roughness"] is CResourceReference<ITexture> roughTexture)
-            {
-                if (roughTexture.DepotPath == "base\\materials\\placeholder\\black.xbm")
-                    material.Roughness = 0;
-                else if (roughTexture.DepotPath == "base\\materials\\placeholder\\white.xbm")
-                    material.Roughness = 1;
-            }
-
-            if (dictionary.ContainsKey("RoughnessScale"))
-                material.Roughness = (CFloat)dictionary["RoughnessScale"];
-
-            var filename_b = Path.Combine(ISettingsManager.GetTemp_OBJPath(), material.Name + ".png");
-            var filename_bn = Path.Combine(ISettingsManager.GetTemp_OBJPath(), material.Name + "_n.png");
-            var filename_m = Path.Combine(ISettingsManager.GetTemp_OBJPath(), material.Name + "_m.png");
-            var filename_r = Path.Combine(ISettingsManager.GetTemp_OBJPath(), material.Name + "_r.png");
-            var filename_d = Path.Combine(ISettingsManager.GetTemp_OBJPath(), material.Name + "_d.dds");
-            var filename_n = Path.Combine(ISettingsManager.GetTemp_OBJPath(), material.Name + "_n.dds");
-
-            var createMLDiffuse = !System.IO.File.Exists(filename_b);
-            var createMLMetalness = !System.IO.File.Exists(filename_m);
-            var createMLRoughness = !System.IO.File.Exists(filename_r);
-            var createMLNormal = !System.IO.File.Exists(filename_bn);
-
-            if (!createMLDiffuse && !createMLNormal && !createMLMetalness && !createMLRoughness)
-                return;
-
-            if (dictionary.ContainsKey("MultilayerSetup") && dictionary.ContainsKey("MultilayerMask"))
-            {
-                if (dictionary["MultilayerSetup"] is not CResourceReference<Multilayer_Setup> mlsRef)
-                {
-                    return;
-                }
-
-                if (dictionary["MultilayerMask"] is not CResourceReference<Multilayer_Mask> mlmRef)
-                {
-                    return;
-                }
-
-                var setupFile = File.GetFileFromDepotPath(mlsRef.DepotPath);
-
-                if (setupFile == null || setupFile.RootChunk is not Multilayer_Setup mls)
-                {
-                    return;
-                }
-
-                var maskFile = File.GetFileFromDepotPath(mlmRef.DepotPath);
-
-                if (maskFile == null || maskFile.RootChunk is not Multilayer_Mask mlm)
-                {
-                    return;
-                }
-
-                ModTools.ConvertMultilayerMaskToDdsStreams(mlm, out var streams);
-
-
-                var firstStream = await ImageDecoder.RenderToBitmapSourceDds(streams[0]);
-
-                Bitmap destBitmap = new Bitmap((int)firstStream.Width, (int)firstStream.Height);
-                Bitmap metalnessBitmap = new Bitmap((int)firstStream.Width, (int)firstStream.Height);
-                Bitmap roughnessBitmap = new Bitmap((int)firstStream.Width, (int)firstStream.Height);
-                Bitmap normalBitmap = new Bitmap((int)firstStream.Width, (int)firstStream.Height);
-                using (Graphics gfx_n = Graphics.FromImage(normalBitmap))
-                using (SolidBrush brush = new SolidBrush(System.Drawing.Color.FromArgb(128, 128, 255)))
-                {
-                    gfx_n.FillRectangle(brush, 0, 0, (int)firstStream.Width, (int)firstStream.Height);
-                }
-
-                Graphics gfx = Graphics.FromImage(destBitmap);
-                Graphics gfx_m = Graphics.FromImage(metalnessBitmap);
-                Graphics gfx_r = Graphics.FromImage(roughnessBitmap);
-                //Graphics gfx_n = Graphics.FromImage(destBitmap);
-
-                var i = 0;
-                foreach (var layer in mls.Layers)
-                {
-                    if (i >= streams.Count)
-                        break;
-
-                    if (layer.Material == null)
-                    {
-                        goto SkipLayer;
-                    }
-
-                    var templateFile = File.GetFileFromDepotPath(layer.Material.DepotPath);
-
-                    if (templateFile.RootChunk is not Multilayer_LayerTemplate mllt)
-                    {
-                        goto SkipLayer;
-                    }
-
-                    BitmapSource mask;
-                    if (i == 0)
-                    {
-                        mask = firstStream;
-                    }
-                    else
-                    {
-                        mask = await ImageDecoder.RenderToBitmapSourceDds(streams[i]);
-                    }
-                    mask = new TransformedBitmap(mask, new ScaleTransform(1, -1));
-
-                    Bitmap maskBitmap;
-                    using (var outStream = new MemoryStream())
-                    {
-                        BitmapEncoder enc = new PngBitmapEncoder();
-                        enc.Frames.Add(BitmapFrame.Create(mask));
-                        enc.Save(outStream);
-                        maskBitmap = new Bitmap(outStream);
-                    }
-
-                    if (layer.ColorScale == "null_null" || layer.Opacity == 0 || layer.Material == null)
-                    {
-                        goto SkipColor;
-                    }
-
-                    {
-                        var color = mllt.Overrides.ColorScale.Where(x => x.N == layer.ColorScale).First()?.V ?? null;
-
-                        if (color == null)
-                        {
-                            goto SkipColor;
-                        }
-
-                        var colorMatrix = new ColorMatrix(new float[][]
-                        {
-                            new float[] { 0, 0, 0, 0, 0},
-                            new float[] { 0, 0, 0, 0, 0},
-                            new float[] { 0, 0, 0, 0, 0},
-                            new float[] { 0, 0, 0, 0, 0},
-                            new float[] { 0, 0, 0, 0, 0},
-                        });
-                        colorMatrix.Matrix03 = layer.Opacity;
-                        colorMatrix.Matrix40 = color[0];
-                        colorMatrix.Matrix41 = color[1];
-                        colorMatrix.Matrix42 = color[2];
-
-                        ImageAttributes attributes = new ImageAttributes();
-
-                        attributes.SetColorMatrix(colorMatrix, ColorMatrixFlag.Default, ColorAdjustType.Bitmap);
-
-                        gfx.DrawImage(maskBitmap, new Rectangle(0, 0, maskBitmap.Width, maskBitmap.Height), 0, 0, maskBitmap.Width, maskBitmap.Height, GraphicsUnit.Pixel, attributes);
-                    }
-
-                SkipColor:
-
-                    {
-                        var metalOut = mllt.Overrides.MetalLevelsOut.Where(x => x.N == layer.MetalLevelsOut).First()?.V ?? null;
-
-                        if (metalOut == null)
-                        {
-                            goto SkipMetal;
-                        }
-
-                        var colorMatrix = new ColorMatrix(new float[][]
-                        {
-                            new float[] { 0, 0, 0, 0, 0},
-                            new float[] { 0, 0, 0, 0, 0},
-                            new float[] { 0, 0, 0, 0, 0},
-                            new float[] { 0, 0, 0, 0, 0},
-                            new float[] { 0, 0, 0, 0, 0},
-                        });
-                        colorMatrix.Matrix03 = 1f;
-                        colorMatrix.Matrix40 = (metalOut[0] + metalOut[1]) / 2f;
-                        colorMatrix.Matrix41 = (metalOut[0] + metalOut[1]) / 2f;
-                        colorMatrix.Matrix42 = (metalOut[0] + metalOut[1]) / 2f;
-
-                        ImageAttributes attributes = new ImageAttributes();
-
-                        attributes.SetColorMatrix(colorMatrix, ColorMatrixFlag.Default, ColorAdjustType.Bitmap);
-
-                        gfx_m.DrawImage(maskBitmap, new Rectangle(0, 0, maskBitmap.Width, maskBitmap.Height), 0, 0, maskBitmap.Width, maskBitmap.Height, GraphicsUnit.Pixel, attributes);
-                    }
-
-                SkipMetal:
-
-                    {
-                        var roughOut = mllt.Overrides.RoughLevelsOut.Where(x => x.N == layer.RoughLevelsOut).First()?.V ?? null;
-
-                        if (roughOut == null)
-                        {
-                            goto SkipRough;
-                        }
-
-                        var colorMatrix = new ColorMatrix(new float[][]
-                        {
-                            new float[] { 0, 0, 0, 0, 0},
-                            new float[] { 0, 0, 0, 0, 0},
-                            new float[] { 0, 0, 0, 0, 0},
-                            new float[] { 0, 0, 0, 0, 0},
-                            new float[] { 0, 0, 0, 0, 0},
-                        });
-                        colorMatrix.Matrix03 = 1f;
-                        colorMatrix.Matrix40 = (roughOut[0] + roughOut[1]) / 2f;
-                        colorMatrix.Matrix41 = (roughOut[0] + roughOut[1]) / 2f;
-                        colorMatrix.Matrix42 = (roughOut[0] + roughOut[1]) / 2f;
-
-                        ImageAttributes attributes = new ImageAttributes();
-
-                        attributes.SetColorMatrix(colorMatrix, ColorMatrixFlag.Default, ColorAdjustType.Bitmap);
-
-                        gfx_r.DrawImage(maskBitmap, new Rectangle(0, 0, maskBitmap.Width, maskBitmap.Height), 0, 0, maskBitmap.Width, maskBitmap.Height, GraphicsUnit.Pixel, attributes);
-                    }
-
-                SkipRough:
-
-                    var normalFile = File.GetFileFromDepotPath(mllt.NormalTexture.DepotPath);
-
-                    if (normalFile != null && normalFile.RootChunk is ITexture it)
-                    {
-                        var stream = new MemoryStream();
-                        ModTools.ConvertRedClassToDdsStream(it, stream, out var format);
-
-                        var normal = await ImageDecoder.RenderToBitmapSourceDds(stream);
-
-                        Bitmap normalLayer;
-                        using (var outStream = new MemoryStream())
-                        {
-                            BitmapEncoder enc = new PngBitmapEncoder();
-                            enc.Frames.Add(BitmapFrame.Create(normal));
-                            enc.Save(outStream);
-                            normalLayer = new Bitmap(outStream);
-                        }
-
-                        var layerWidth = (int)(normalLayer.Width * layer.MatTile);
-                        var layerHeight = (int)(normalLayer.Height * layer.MatTile);
-
-                        Bitmap tempNormalBitmap = new Bitmap(maskBitmap.Width, maskBitmap.Height);
-
-                        try
-                        {
-                            tempNormalBitmap = new Bitmap((layerWidth < maskBitmap.Width) ? layerWidth : maskBitmap.Width, (layerHeight < maskBitmap.Height) ? layerHeight : maskBitmap.Height);
-                        }
-                        catch (Exception)
-                        {
-                            ;
-                        }
-
-                        Graphics gfx_n = Graphics.FromImage(tempNormalBitmap);
-                        gfx_n.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.HighQualityBilinear;
-                        gfx_n.DrawImage(normalLayer, new Rectangle(0, 0, layerWidth, layerHeight), 0, 0, normalLayer.Width, normalLayer.Height, GraphicsUnit.Pixel, null);
-                        gfx_n.Dispose();
-
-                        foreach (var strength in mllt.Overrides.NormalStrength)
-                        {
-                            if (strength.N == layer.NormalStrength)
-                            {
-                                for (int y = 0; y < maskBitmap.Height; y++)
-                                {
-                                    for (int x = 0; x < maskBitmap.Width; x++)
-                                    {
-                                        var oc = normalBitmap.GetPixel(x, y);
-                                        var n = tempNormalBitmap.GetPixel(x % tempNormalBitmap.Width, y % tempNormalBitmap.Height);
-                                        var alpha = maskBitmap.GetPixel(x, y).R / 255F * (float)strength.V;
-                                        var r = (int)((oc.R - 127) * (1F - alpha) + (n.R - 127) * alpha) + 127;
-                                        //var g = 255 - ((int)((oc.G - 127) * (1F - alpha) + (n.G - 127) * alpha) + 127);
-                                        var g = (int)((oc.G - 127) * (1F - alpha) + (n.G - 127) * alpha) + 127;
-                                        var b = (int)((oc.B - 127) * (1F - alpha)) + 127;
-                                        if (n.B == 0)
-                                        {
-                                            b += (int)((ToBlue((byte)r, (byte)g) - 127) * alpha);
-                                        }
-                                        else
-                                        {
-                                            b += (int)((n.B - 127) * alpha);
-                                        }
-                                        var color = System.Drawing.Color.FromArgb(Math.Clamp(r, 0, 255), Math.Clamp(g, 0, 255), Math.Clamp(b, 0, 255));
-                                        normalBitmap.SetPixel(x, y, color);
-                                    }
-                                }
-                                break;
-                            }
-                        }
-                        stream.Dispose();
-                    }
-
-                SkipLayer:
-                    i++;
-                }
-
-                gfx.Dispose();
-                //gfx_n.Dispose();
-
-                try
-                {
-                    destBitmap.Save(filename_b, ImageFormat.Png);
-                }
-                catch (Exception e)
-                {
-                    Locator.Current.GetService<ILoggerService>().Error(e.Message);
-                }
-                finally
-                {
-                    destBitmap.Dispose();
-                }
-
-                try
-                {
-                    metalnessBitmap.Save(filename_m, ImageFormat.Png);
-                }
-                catch (Exception e)
-                {
-                    Locator.Current.GetService<ILoggerService>().Error(e.Message);
-                }
-                finally
-                {
-                    metalnessBitmap.Dispose();
-                }
-
-                try
-                {
-                    roughnessBitmap.Save(filename_r, ImageFormat.Png);
-                }
-                catch (Exception e)
-                {
-                    Locator.Current.GetService<ILoggerService>().Error(e.Message);
-                }
-                finally
-                {
-                    roughnessBitmap.Dispose();
-                }
-
-                try
-                {
-                    normalBitmap.Save(filename_bn, ImageFormat.Png);
-                }
-                catch (Exception e)
-                {
-                    Locator.Current.GetService<ILoggerService>().Error(e.Message);
-                }
-                finally
-                {
-                    normalBitmap.Dispose();
-                }
-
-                return;
-            }
-
-        //DiffuseMaps:
-            if (System.IO.File.Exists(filename_d))
-                goto NormalMaps;
-
-            if (dictionary.ContainsKey("DiffuseTexture") && dictionary["DiffuseTexture"] is CResourceReference<ITexture> crrd)
-            {
-                var xbm = File.GetFileFromDepotPath(crrd.DepotPath);
-
-                if (xbm.RootChunk is not ITexture it)
-                {
-                    goto NormalMaps;
-                }
-
-                var stream = new FileStream(filename_d, FileMode.Create);
-                ModTools.ConvertRedClassToDdsStream(it, stream, out var format);
-                stream.Dispose();
-            }
-
-            if (dictionary.ContainsKey("ParalaxTexture") && dictionary["ParalaxTexture"] is CResourceReference<ITexture> crrp)
-            {
-                var xbm = File.GetFileFromDepotPath(crrp.DepotPath);
-
-                if (xbm.RootChunk is not ITexture it)
-                {
-                    goto NormalMaps;
-                }
-
-                var stream = new FileStream(filename_d, FileMode.Create);
-                ModTools.ConvertRedClassToDdsStream(it, stream, out var format);
-                stream.Dispose();
-            }
-
-            if (dictionary.ContainsKey("BaseColor") && dictionary["BaseColor"] is CResourceReference<ITexture> crrbc)
-            {
-                var xbm = File.GetFileFromDepotPath(crrbc.DepotPath);
-
-                if (xbm.RootChunk is not ITexture it)
-                {
-                    goto NormalMaps;
-                }
-
-                var stream = new FileStream(filename_d, FileMode.Create);
-                ModTools.ConvertRedClassToDdsStream(it, stream, out var format);
-                stream.Dispose();
-            }
-
-        NormalMaps:
-
-            // normals
-
-            if (System.IO.File.Exists(filename_bn))
-                goto SkipNormals;
-
-            if (dictionary.ContainsKey("NormalTexture") && dictionary["NormalTexture"] is CResourceReference<ITexture> crrn)
-            {
-                var xbm = File.GetFileFromDepotPath(crrn.DepotPath);
-
-                if (xbm.RootChunk is not ITexture it)
-                {
-                    goto SkipNormals;
-                }
-
-                //var stream = new FileStream(filename_n, FileMode.Create);
-                //ModTools.ConvertRedClassToDdsStream(it, stream, out var format);
-                //stream.Dispose();
-
-                var stream = new MemoryStream();
-                ModTools.ConvertRedClassToDdsStream(it, stream, out var format);
-
-                var normal = await ImageDecoder.RenderToBitmapSourceDds(stream);
-
-                stream.Dispose();
-
-                Bitmap normalLayer;
-                using (var outStream = new MemoryStream())
-                {
-                    BitmapEncoder enc = new PngBitmapEncoder();
-                    enc.Frames.Add(BitmapFrame.Create(normal));
-                    enc.Save(outStream);
-                    normalLayer = new Bitmap(outStream);
-                }
-
-                for (int y = 0; y < normalLayer.Height; y++)
-                {
-                    for (int x = 0; x < normalLayer.Width; x++)
-                    {
-                        var oc = normalLayer.GetPixel(x, y);
-                        var r = oc.R;
-                        //var g = (byte)(255 - oc.G);
-                        var g = oc.G;
-                        var b = ToBlue(r, g);
-                        normalLayer.SetPixel(x, y, System.Drawing.Color.FromArgb(r, g, b));
-                    }
-                }
-
-                try
-                {
-                    normalLayer.Save(filename_bn, ImageFormat.Png);
-                }
-                catch (Exception e)
-                {
-                    Locator.Current.GetService<ILoggerService>().Error(e.Message);
-                }
-                finally
-                {
-                    normalLayer.Dispose();
-                }
-
-            }
-            else if (dictionary.ContainsKey("Normal") && dictionary["Normal"] is CResourceReference<ITexture> crrn2)
-            {
-                var xbm = File.GetFileFromDepotPath(crrn2.DepotPath);
-
-                if (xbm.RootChunk is not ITexture it)
-                {
-                    goto SkipNormals;
-                }
-
-                //var stream = new FileStream(filename_n, FileMode.Create);
-                //ModTools.ConvertRedClassToDdsStream(it, stream, out var format);
-                //stream.Dispose();
-
-                var stream = new MemoryStream();
-                ModTools.ConvertRedClassToDdsStream(it, stream, out var format);
-
-                var normal = await ImageDecoder.RenderToBitmapSourceDds(stream);
-
-                stream.Dispose();
-
-                Bitmap normalLayer;
-                using (var outStream = new MemoryStream())
-                {
-                    BitmapEncoder enc = new PngBitmapEncoder();
-                    enc.Frames.Add(BitmapFrame.Create(normal));
-                    enc.Save(outStream);
-                    normalLayer = new Bitmap(outStream);
-                }
-
-                for (int y = 0; y < normalLayer.Height; y++)
-                {
-                    for (int x = 0; x < normalLayer.Width; x++)
-                    {
-                        var oc = normalLayer.GetPixel(x, y);
-                        var r = oc.R;
-                        //var g = (byte)(255 - oc.G);
-                        var g = oc.G;
-                        var b = ToBlue(r, g);
-                        normalLayer.SetPixel(x, y, System.Drawing.Color.FromArgb(r, g, b));
-                    }
-                }
-
-                try
-                {
-                    normalLayer.Save(filename_bn, ImageFormat.Png);
-                }
-                catch (Exception e)
-                {
-                    Locator.Current.GetService<ILoggerService>().Error(e.Message);
-                }
-                finally
-                {
-                    normalLayer.Dispose();
-                }
-            }
-
-        SkipNormals:
-            ;
-
-        }
-
-        public byte ToBlue(byte r, byte g)
-        {
-            return (byte)Math.Clamp(Math.Round((Math.Sqrt(1.02 - 2 * ((r / 255F) * 2 - 1) * ((g / 255F) * 2 - 1)) + 1) / 2 * 255), 0, 255);
-        }
 
         public ICommand ExtractShadersCommand { get; set; }
         public void ExtractShaders()

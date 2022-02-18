@@ -32,6 +32,10 @@ using WolvenKit.Functionality.Services;
 using WolvenKit.ViewModels.Documents;
 using Material = WolvenKit.ViewModels.Documents.Material;
 using Node = WolvenKit.ViewModels.Documents.Node;
+using HelixToolkit.Wpf.SharpDX;
+using HelixToolkit.SharpDX.Core.Assimp;
+using HelixToolkit.SharpDX.Core;
+using HelixToolkit.SharpDX.Core.Model.Scene;
 
 namespace WolvenKit.Views.Documents
 {
@@ -47,29 +51,30 @@ namespace WolvenKit.Views.Documents
         {
             InitializeComponent();
 
-            this.WhenActivated(disposables =>
-            {
-                ViewModel.WhenAnyValue(x => x.SelectedAppearance).Subscribe(source =>
-                {
-                    if (source is { } app)
-                    {
-                        LoadModels(app);
-                    }
-                });
-            });
+            //this.WhenActivated(disposables =>
+            //{
+            //    ViewModel.WhenAnyValue(x => x.SelectedAppearance).Subscribe(source =>
+            //    {
+            //        if (source is { } app)
+            //        {
+            //            LoadModels(app);
+            //        }
+            //    });
+            //});
 
-            MainDXViewportView.DXSceneInitialized += delegate (object sender, EventArgs args)
-            {
-                if (MainDXViewportView.DXScene == null) // Probably WPF 3D rendering
-                    return;
+            //MainDXViewportView.DXSceneInitialized += delegate (object sender, EventArgs args)
+            //{
+            //    if (MainDXViewportView.DXScene == null) // Probably WPF 3D rendering
+            //        return;
 
-                LoadModels(ViewModel.SelectedAppearance);
-            };
+            //    LoadModels(ViewModel.SelectedAppearance);
+            //};
 
             if (DataContext != null)
                 ViewModel = DataContext as RDTMeshViewModel;
         }
 
+        /*
         public void LoadModels(Appearance app)
         {
             if (app != null && app.Models != null)
@@ -87,7 +92,6 @@ namespace WolvenKit.Views.Documents
                 ShowAppearance(app, true);
             }
         }
-
         public void SetupMaterial(Material material, out System.Windows.Media.Media3D.Material mediaMaterial)
         {
             if (_materials.ContainsKey(material.Name))
@@ -276,9 +280,45 @@ namespace WolvenKit.Views.Documents
 
             }
         }
+        */
 
+        public void LoadHx(LoadableModel model)
+        {
+            // HX
+            //if (ViewModel == null)
+            //{
+            //    return;
+            //}
+
+            //Task.Run(() =>
+            //{
+            //    var loader = new Importer();
+            //    return loader.Load(model.FilePath);
+            //}).ContinueWith((result) =>
+            //{
+            //    if (result.IsCompleted && result.Result != null)
+            //    {
+            //        foreach (var node in result.Result.Root.Traverse())
+            //        {
+            //            if (node is MeshNode m)
+            //            {
+            //                ViewModel.GroupModel.AddNode(m);
+            //            }
+            //        }
+            //    }
+            //    else if (result.IsFaulted && result.Exception != null)
+            //    {
+            //        MessageBox.Show(result.Exception.Message);
+            //    }
+            //}, TaskScheduler.FromCurrentSynchronizationContext());
+
+        }
+        /*
         public void LoadModel(LoadableModel model)
         {
+            LoadHx(model);
+
+
             if (MainDXViewportView.DXScene == null) // Probably WPF 3D rendering
                 return;
 
@@ -304,7 +344,7 @@ namespace WolvenKit.Views.Documents
                 Mouse.OverrideCursor = Cursors.Wait;
 
                 // Before readin the file we can set the default material (used when no other materila is defined - here we set the default value again)
-                assimpWpfImporter.DefaultMaterial = new DiffuseMaterial(Brushes.Gray);
+                assimpWpfImporter.DefaultMaterial = new System.Windows.Media.Media3D.DiffuseMaterial(Brushes.Gray);
 
                 // After assimp importer reads the file, it can execute many post processing steps to transform the geometry.
                 // See the possible enum values to see what post processes are available.
@@ -344,6 +384,7 @@ namespace WolvenKit.Views.Documents
                     Locator.Current.GetService<ILoggerService>().Error(ex.Message);
                     //MessageBox.Show("Error importing file:\r\n" + ex.Message);
                 }
+
 
                 // After the model is read and if the object names are defined in the file,
                 // you can get the model names by assimpWpfImporter.ObjectNames
@@ -440,7 +481,7 @@ namespace WolvenKit.Views.Documents
             }
         }
 
-        private static void SetMeshTangentData(Mesh assimpMesh, GeometryModel3D geometryModel3D)
+        private static void SetMeshTangentData(Mesh assimpMesh, System.Windows.Media.Media3D.GeometryModel3D geometryModel3D)
         {
             var assimpTangents = assimpMesh.Tangents;
 
@@ -457,6 +498,7 @@ namespace WolvenKit.Views.Documents
                 geometryModel3D.Geometry.SetDXAttribute(DXAttributeType.MeshTangentArray, dxTangents);
             }
         }
+        */
 
         public Model3DGroup CreateGroup(Node node)
         {
@@ -505,6 +547,7 @@ namespace WolvenKit.Views.Documents
 
             return group;
         }
+        /*
 
         public void UpdateSubmeshVisibility(ref LoadableModel model)
         {
@@ -550,7 +593,6 @@ namespace WolvenKit.Views.Documents
                 }
             }
         }
-
         public void ShowAppearance(Appearance app, bool updateCamera)
         {
             if (MainDXViewportView.DXScene == null) // Probably WPF 3D rendering
@@ -644,7 +686,7 @@ namespace WolvenKit.Views.Documents
                 Locator.Current.GetService<ILoggerService>().Error(e.Message);
             }
         }
-
+        
 
         public void LoadButton_OnClick(object sender, RoutedEventArgs e)
         {
@@ -746,13 +788,6 @@ namespace WolvenKit.Views.Documents
                 LoadModels(ViewModel.SelectedAppearance);
         }
 
-        private void SfTreeGrid_NodeCheckStateChanged(object sender, Syncfusion.UI.Xaml.TreeGrid.NodeCheckStateChangedEventArgs e)
-        {
-            if (ViewModel != null)
-                ShowAppearance(ViewModel.SelectedAppearance, true);
-            //LoadModels(ViewModel.SelectedAppearance);
-        }
-
         private void CameraTypeCheckBox_Checked(object sender, RoutedEventArgs e)
         {
             if (CameraTypeCheckBox.IsChecked.Value)
@@ -770,6 +805,25 @@ namespace WolvenKit.Views.Documents
             if (ViewModel != null)
                 //LoadModels(ViewModel.SelectedAppearance);
                 ShowAppearance(ViewModel.SelectedAppearance, true);
+        }
+        */
+        private void ReloadModels(object sender, RoutedEventArgs e)
+        {
+            //if (ViewModel != null)
+            //    LoadModels(ViewModel.SelectedAppearance);
+        }
+        private void ComboBoxAdv_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            //if (ViewModel != null)
+            //    //LoadModels(ViewModel.SelectedAppearance);
+            //    ShowAppearance(ViewModel.SelectedAppearance, true);
+        }
+
+        private void SfTreeGrid_NodeCheckStateChanged(object sender, Syncfusion.UI.Xaml.TreeGrid.NodeCheckStateChangedEventArgs e)
+        {
+            //if (ViewModel != null)
+            //    ShowAppearance(ViewModel.SelectedAppearance, true);
+            ////LoadModels(ViewModel.SelectedAppearance);
         }
     }
 }

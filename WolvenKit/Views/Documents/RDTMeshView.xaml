@@ -7,6 +7,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:documents="clr-namespace:WolvenKit.ViewModels.Documents;assembly=WolvenKit.App"
     xmlns:dxControls="clr-namespace:Ab3d.DirectX.Controls;assembly=Ab3d.DXEngine.Wpf"
+    xmlns:hx="http://helix-toolkit.org/wpf/SharpDX"
     xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:reactiveUi="http://reactiveui.net"
@@ -29,139 +30,31 @@
         </Grid.ColumnDefinitions>
         <syncfusion:SfGridSplitter Grid.Column="1" HorizontalAlignment="Stretch" />
 
-        <Viewport3D
-            Name="SkyboxViewport"
-            Grid.Row="0"
-            Grid.Column="0"
-            Visibility="Visible">
-            <visuals:MultiMaterialBoxVisual3D
-                BackMaterial="Resources/SkyboxTextures/CloudyLightRaysBack512.png"
-                BottomMaterial="Resources/SkyboxTextures/CloudyLightRaysDown512.png"
-                CenterPosition="0 0 0"
-                FrontMaterial="Resources/SkyboxTextures/CloudyLightRaysFront512.png"
-                IsTwoSidedMaterial="True"
-                LeftMaterial="Resources/SkyboxTextures/CloudyLightRaysLeft512.png"
-                RightMaterial="Resources/SkyboxTextures/CloudyLightRaysRight512.png"
-                Size="500 500 500"
-                TopMaterial="Resources/SkyboxTextures/CloudyLightRaysUp512.png" />
 
-            <ModelVisual3D>
-                <ModelVisual3D.Content>
-                    <Model3DGroup>
-                        <AmbientLight Color="White" />
-                    </Model3DGroup>
-                </ModelVisual3D.Content>
-            </ModelVisual3D>
-        </Viewport3D>
-
-        <cameras:TargetPositionCamera
-            Name="SkyBoxCamera"
-            Grid.Row="0"
-            Grid.Column="0"
-            Attitude="{Binding ElementName=Camera1, Path=Attitude}"
-            Bank="{Binding ElementName=Camera1, Path=Bank}"
-            Distance="200"
-            Heading="{Binding ElementName=Camera1, Path=Heading}"
-            ShowCameraLight="Never"
-            TargetPosition="0 0 0"
-            TargetViewport3D="{Binding ElementName=SkyboxViewport}" />
-
-        <Border Name="ViewportBorder" Background="Transparent">
-            <dxControls:DXViewportView Name="MainDXViewportView" PresentationType="DirectXImage">
-
-                <Viewport3D Name="MainViewport">
-                    <ModelVisual3D x:Name="ContentVisual" />
-                    <!--
-                        visuals:SphereVisual3D
-                        CenterPosition="5,5,5"
-                        Material="White"
-                        Radius="5" /
-                    -->
-                    <ModelVisual3D>
-                        <ModelVisual3D.Content>
-                            <Model3DGroup x:Name="LightsModel3DGroup">
-                                <DirectionalLight
-                                    x:Name="TopDirectionalLight"
-                                    Direction="0 -1 0"
-                                    Color="#afafaf" />
-                                <DirectionalLight Direction="-1 0 0" Color="#4f4f4f" />
-                                <DirectionalLight Direction="1 0 0" Color="#4f4f4f" />
-                                <DirectionalLight Direction="0 0 1" Color="#4f4f4f" />
-                                <DirectionalLight Direction="0 0 -1" Color="#4f4f4f" />
-                                <DirectionalLight Direction="-1 0 1" Color="#4f4f4f" />
-                                <DirectionalLight Direction="1 0 -1" Color="#4f4f4f" />
-                                <DirectionalLight Direction="1 0 1" Color="#4f4f4f" />
-                                <DirectionalLight Direction="-1 0 -1" Color="#4f4f4f" />
-                            </Model3DGroup>
-                        </ModelVisual3D.Content>
-                    </ModelVisual3D>
-                    <visuals:WireframeVisual3D
-                        x:Name="ContentWireframeVisual"
-                        LineColor="Black"
-                        LineThickness="0.8"
-                        ShowPolygonLines="True"
-                        UseModelColor="False"
-                        WireframeType="WireframeWithOriginalSolidModel" />
-                    <!--
-                        visuals:LightingRigVisual3D
-                        x:Name="ContentLight"
-                        AmbientLightColor="#666666"
-                        BackLightColor="Black"
-                        FillLightColor="Black"
-                        KeyLightColor="#ffffff"
-                        KeyLightDirection="0,-1,0" /
-                    -->
-                </Viewport3D>
-            </dxControls:DXViewportView>
-        </Border>
-        <ab3d:ViewCubeCameraController
-            x:Name="ViewCubeCameraController1"
-            Width="100"
-            Height="100"
-            HorizontalAlignment="Right"
-            VerticalAlignment="Bottom"
-            AmbientLightColor="{DynamicResource MahApps.Colors.AccentBase}"
-            Foreground="{DynamicResource MahApps.Brushes.AccentBase}"
-            IsEdgeSelectionEnabled="True"
-            IsRotationCircleShown="True"
-            SelectionBrush="{DynamicResource MahApps.Brushes.Accent3}"
-            TargetCamera="{Binding ElementName=Camera1}" />
-        <TextBlock
-            Grid.Row="1"
-            Grid.Column="1"
-            HorizontalAlignment="Right"
-            VerticalAlignment="Bottom"
-            FontSize="7"
-            Text="Powered by Ab4d" />
-        <cameras:TargetPositionCamera
-            Name="Camera1"
-            Attitude="-20"
-            Bank="0"
-            CameraType="OrthographicCamera"
-            CameraWidth="8"
-            Distance="200"
-            Heading="230"
-            ShowCameraLight="Never"
-            TargetPosition="0 0 0"
-            TargetViewport3D="{Binding ElementName=MainViewport}" />
-
-        <ab3d:MouseCameraController
-            Name="MouseCameraController1"
-            EventsSourceElement="{Binding ElementName=ViewportBorder}"
-            MoveCameraConditions="MiddleMouseButtonPressed"
-            MoveOnlyHorizontally="True"
-            QuickZoomConditions="RightMouseButtonPressed"
-            RotateCameraConditions="LeftMouseButtonPressed"
-            TargetCamera="{Binding ElementName=Camera1}"
-            ZoomMode="Viewport3DCenter" />
-
-        <ab3d:CameraAxisPanel
-            Width="50"
-            Height="50"
-            HorizontalAlignment="Left"
-            VerticalAlignment="Bottom"
-            Is3DAxesShown="True"
-            TargetCamera="{Binding ElementName=Camera1}" />
+        <hx:Viewport3DX
+            Name="hxViewport"
+            BackgroundColor="#121212"
+            Camera="{Binding Camera}"
+            CoordinateSystemLabelForeground="White"
+            EffectsManager="{Binding EffectsManager}"
+            EnableSwapChainRendering="True"
+            FXAALevel="High"
+            ShowCoordinateSystem="True"
+            UseDefaultGestures="False">
+            <hx:Viewport3DX.InputBindings>
+                <MouseBinding Command="hx:ViewportCommands.Rotate" Gesture="LeftClick" />
+                <MouseBinding Command="hx:ViewportCommands.Pan" Gesture="MiddleClick" />
+            </hx:Viewport3DX.InputBindings>
+            <hx:DirectionalLight3D Direction="0, -1, 0" Color="White" />
+            <hx:DirectionalLight3D Direction="0, 0, 1" Color="White" />
+            <hx:DirectionalLight3D Direction="0, 0, -1" Color="White" />
+            <hx:DirectionalLight3D Direction="1, 0, 0" Color="White" />
+            <hx:DirectionalLight3D Direction="-1, 0, 0" Color="White" />
+            <!--  hx:EnvironmentMap3D Texture="{Binding EnvironmentMap}" /  -->
+            <!--  hx:ShadowMap3D /  -->
+            <hx:ItemsModel3D x:Name="hxContentVisual" ItemsSource="{Binding SelectedAppearance.ModelGroup}" />
+            <!--  hx:Element3DPresenter Content="{Binding GroupModel}" /  -->
+        </hx:Viewport3DX>
 
         <StackPanel
             HorizontalAlignment="Stretch"
@@ -181,7 +74,7 @@
             </Expander>
         </StackPanel>
 
-        <syncfusion:DropDownButton
+        <!--syncfusion:DropDownButton
             HorizontalAlignment="Right"
             VerticalAlignment="Top"
             Label="Options">
@@ -263,7 +156,7 @@
                         IsEnabled="False" />
                 </StackPanel>
             </Border>
-        </syncfusion:DropDownButton>
+        </syncfusion:DropDownButton-->
         <Grid Grid.Column="2">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto" />
@@ -289,9 +182,13 @@
                         SelectedItem="{Binding SelectedAppearance, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                         SelectionChanged="ReloadModels" />
                 </Grid>
+                <Button
+                    Command="{Binding LoadMaterialsCommand}"
+                    Content="Load Materials"
+                    IsEnabled="{Binding IsLoadingMaterials, Converter={StaticResource InvertBooleanConverter}}" />
                 <Button Command="{Binding ExtractShadersCommand}" Content="Export Shaders" />
             </StackPanel>
-            <syncfusion:SfTreeGrid
+            <!--syncfusion:SfTreeGrid
                 Grid.Row="1"
                 AllowResizingColumns="True"
                 AutoExpandMode="AllNodesExpanded"
@@ -308,7 +205,41 @@
                         HeaderText="Component Name"
                         MappingName="Name"
                         MinimumWidth="300" />
-                    <!--  syncfusion:TreeGridTextColumn HeaderText="Chunk Mask" MappingName="ChunkMask" /  -->
+                    <syncfusion:TreeGridTemplateColumn HeaderText="Chunk Mask">
+                        <syncfusion:TreeGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <syncfusion:ComboBoxAdv
+                                    AllowMultiSelect="True"
+                                    Background="#252525"
+                                    BorderThickness="0"
+                                    ItemsSource="{Binding AllChunks, Mode=OneTime}"
+                                    SelectedItems="{Binding EnabledChunks, Mode=TwoWay}"
+                                    SelectedValueDelimiter=", "
+                                    SelectionChanged="ComboBoxAdv_SelectionChanged" />
+                            </DataTemplate>
+                        </syncfusion:TreeGridTemplateColumn.CellTemplate>
+                    </syncfusion:TreeGridTemplateColumn>
+                    <syncfusion:TreeGridTextColumn HeaderText="Bind Name" MappingName="BindName" />
+                    <syncfusion:TreeGridTextColumn HeaderText="Slot Name" MappingName="SlotName" />
+                    <syncfusion:TreeGridTextColumn HeaderText="Material" MappingName="Materials[0].Name" />
+                </syncfusion:SfTreeGrid.Columns>
+            </syncfusion:SfTreeGrid-->
+            <syncfusion:SfTreeGrid
+                Grid.Row="1"
+                AllowResizingColumns="True"
+                AutoExpandMode="AllNodesExpanded"
+                AutoGenerateColumns="False"
+                CheckBoxMappingName="IsRendering"
+                ChildPropertyName="Children"
+                ItemsSource="{Binding SelectedAppearance.ModelGroup, Mode=TwoWay}"
+                NodeCheckStateChanged="SfTreeGrid_NodeCheckStateChanged"
+                RowHeaderWidth="300"
+                ShowCheckBox="True">
+                <syncfusion:SfTreeGrid.Columns>
+                    <syncfusion:TreeGridTextColumn
+                        HeaderText="Component Name"
+                        MappingName="Name"
+                        MinimumWidth="300" />
                     <syncfusion:TreeGridTemplateColumn HeaderText="Chunk Mask">
                         <syncfusion:TreeGridTemplateColumn.CellTemplate>
                             <DataTemplate>
@@ -328,17 +259,6 @@
                     <syncfusion:TreeGridTextColumn HeaderText="Material" MappingName="Materials[0].Name" />
                 </syncfusion:SfTreeGrid.Columns>
             </syncfusion:SfTreeGrid>
-            <!--
-                syncfusion:SfTreeGrid
-                Grid.Row="1"
-                AllowResizingColumns="True"
-                AutoExpandMode="AllNodesExpanded"
-                CheckBoxMappingName="IsEnabled"
-                ItemsSource="{Binding SelectedAppearance.Nodes, Mode=OneWay}"
-                NodeCheckStateChanged="SfTreeGrid_NodeCheckStateChanged"
-                RowHeaderWidth="300"
-                ShowCheckBox="True" /
-            -->
             <!--ItemsControl ItemsSource="{Binding SelectedAppearance.Models, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}">
                         <ItemsControl.ItemsPanel>
                             <ItemsPanelTemplate>

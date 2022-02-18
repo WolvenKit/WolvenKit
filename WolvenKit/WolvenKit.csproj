@@ -44,6 +44,8 @@
     <PackageReference Include="DrawStringLineHeight" Version="1.0.0" />
     <PackageReference Include="Feather.Controls" Version="1.0.3" />
     <PackageReference Include="Feather.Core" Version="1.0.0" />
+    <PackageReference Include="HelixToolkit.SharpDX.Assimp" Version="2.20.2" />
+    <PackageReference Include="HelixToolkit.SharpDX.Core.Wpf" Version="2.20.2" />
 
     <PackageReference Include="ReactiveUI" Version="17.1.17" />
     <PackageReference Include="ReactiveUI.Events.WPF" Version="15.1.1" />
