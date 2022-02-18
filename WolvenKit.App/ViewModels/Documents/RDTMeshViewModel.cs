@@ -48,6 +48,30 @@ namespace WolvenKit.ViewModels.Documents
 
     public class Appearance
     {
+        public Dictionary<uint, List<SubmeshComponent>> LODLUT { get; set; } = new();
+
+        private uint _selectedLOD = 1;
+        public uint SelectedLOD {
+            get => _selectedLOD;
+            set
+            {
+                _selectedLOD = value;
+                foreach (var lod in LODLUT.Keys)
+                {
+                    foreach (var submesh in LODLUT[lod])
+                    {
+                        if (lod == _selectedLOD)
+                        {
+                            submesh.IsRendering = submesh.EnabledWithMask;
+                        }
+                        else
+                        {
+                            submesh.IsRendering = false;
+                        }
+                    }
+                }
+            }
+        }
         public string AppearanceName { get; set; }
         public string Name { get; set; }
         public List<LoadableModel> Models { get; set; } = new();
@@ -55,6 +79,7 @@ namespace WolvenKit.ViewModels.Documents
         public List<Node> Nodes { get; set; } = new();
         public List<Element3D> ModelGroup { get; set; } = new();
         public List<LoadableModel> BindableModels { get; set; } = new();
+        public Dictionary<string, Material> RawMaterials { get; set; } = new();
     }
 
     public class LoadableModel : IBindable, Node
@@ -62,7 +87,7 @@ namespace WolvenKit.ViewModels.Documents
         public int AppearanceIndex { get; set; }
         public string AppearanceName { get; set; }
         public CR2WFile MeshFile { get; set; }
-        public List<MeshGeometryModel3D> Meshes { get; set; }
+        public List<SubmeshComponent> Meshes { get; set; }
         public string FilePath { get; set; }
         public Model3D OriginalModel { get; set; }
         public Model3D Model { get; set; }
@@ -412,7 +437,7 @@ namespace WolvenKit.ViewModels.Documents
                             AppearanceName = app.AppearanceName,
                             Name = app.Name,
                             Resource = app.AppearanceResource.DepotPath,
-                            Models = LoadMeshs(appPkg.Chunks)
+                            Models = LoadMeshs(appPkg.Chunks),
                         };
 
                         foreach (var model in a.Models)
@@ -427,9 +452,18 @@ namespace WolvenKit.ViewModels.Documents
                             }
                             foreach (var material in model.Materials)
                             {
-                                RawMaterials[material.Name] = material;
+                                a.RawMaterials[material.Name] = material;
                             }
                             model.Meshes = MakeMesh(model.MeshFile, model.ChunkMask, model.AppearanceIndex);
+
+                            foreach (var m in model.Meshes)
+                            {
+                                if (!a.LODLUT.ContainsKey(m.LOD))
+                                {
+                                    a.LODLUT[m.LOD] = new List<SubmeshComponent>();
+                                }
+                                a.LODLUT[m.LOD].Add(m);
+                            }
                         }
                         AddMeshesToRiggedGroups(a);
 
@@ -470,11 +504,17 @@ namespace WolvenKit.ViewModels.Documents
             return group;
         }
 
+        public class MeshComponent : GroupModel3D
+        {
+            public string AppearanceName { get; set; }
+        }
+
         public GroupModel3D GroupFromModel(LoadableModel model)
         {
-            var group = new GroupModel3D()
+            var group = new MeshComponent()
             {
-                Name = $"{model.Name}_{model.AppearanceName}",
+                Name = $"{model.Name}",
+                AppearanceName = model.AppearanceName,
                 Transform = model.Transform,
                 IsRendering = model.IsEnabled
             };
@@ -682,8 +722,8 @@ namespace WolvenKit.ViewModels.Documents
                                     });
                                 }
                             }
+                            break;
                         }
-                        break;
                     }
 
                     var model = new LoadableModel()

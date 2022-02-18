@@ -30,13 +30,19 @@ using WolvenKit.Functionality.Helpers;
 
 namespace WolvenKit.ViewModels.Documents
 {
+    public class SubmeshComponent : MeshGeometryModel3D
+    {
+        public bool EnabledWithMask { get; set; }
+        public string MaterialName { get; set; }
+        public uint LOD { get; set; }
+    }
+
     public partial class RDTMeshViewModel
     {
         public Dictionary<string, PBRMaterial> Materials { get; set; } = new();
-        public Dictionary<string, Material> RawMaterials { get; set; } = new();
         public Dictionary<string, CR2WFile> Files { get; set; } = new();
 
-        public List<MeshGeometryModel3D> MakeMesh(CR2WFile cr2w, ulong chunkMask = ulong.MaxValue, int appearanceIndex = 0)
+        public List<SubmeshComponent> MakeMesh(CR2WFile cr2w, ulong chunkMask = ulong.MaxValue, int appearanceIndex = 0)
         {
             if (cr2w == null || cr2w.RootChunk is not CMesh cMesh || cMesh.RenderResourceBlob.Chunk is not rendRenderMeshBlob rendblob)
             {
@@ -47,9 +53,9 @@ namespace WolvenKit.ViewModels.Documents
 
             var meshesinfo = MeshTools.GetMeshesinfo(rendblob, cr2w);
 
-            var expMeshes = MeshTools.ContainRawMesh(ms, meshesinfo, true, ulong.MaxValue);
+            var expMeshes = MeshTools.ContainRawMesh(ms, meshesinfo, false, ulong.MaxValue);
 
-            var list = new List<MeshGeometryModel3D>();
+            var list = new List<SubmeshComponent>();
 
             var index = 0;
             foreach (var mesh in expMeshes)
@@ -87,10 +93,13 @@ namespace WolvenKit.ViewModels.Documents
 
                 var material = SetupPBRMaterial(mesh.materialNames[appearanceIndex]);
                 
-                list.Add(new MeshGeometryModel3D()
+                var sm = new SubmeshComponent()
                 {
-                    Name = $"submesh_{index:D2}_{mesh.materialNames[appearanceIndex]}",
-                    IsRendering = (chunkMask & 1UL << index) > 0,
+                    Name = $"submesh_{index:D2}_LOD_{meshesinfo.LODLvl[index]:D2}",
+                    MaterialName = mesh.materialNames[appearanceIndex],
+                    LOD = meshesinfo.LODLvl[index],
+                    IsRendering = (chunkMask & 1UL << index) > 0 && meshesinfo.LODLvl[index] == 1,
+                    EnabledWithMask = (chunkMask & 1UL << index) > 0,
                     //CullMode = SharpDX.Direct3D11.CullMode.Front,
                     Geometry = new MeshGeometry3D()
                     {
@@ -101,7 +110,8 @@ namespace WolvenKit.ViewModels.Documents
                         Tangents = tangents
                     },
                     Material = material
-                });
+                };
+                list.Add(sm);
                 index++;
             }
 
@@ -137,14 +147,16 @@ namespace WolvenKit.ViewModels.Documents
                 if (System.IO.File.Exists(filename_d))
                 {
                     material.AlbedoMap = TextureModel.Create(filename_d);
+                    material.AlbedoColor = new SharpDX.Color4(1.0f, 1.0f, 1.0f, 1.0f);
                 }
                 else if (System.IO.File.Exists(filename_b))
                 {
                     material.AlbedoMap = TextureModel.Create(filename_b);
+                    material.AlbedoColor = new SharpDX.Color4(1.0f, 1.0f, 1.0f, 1.0f);
                 }
                 else
                 {
-                    material.AlbedoColor = new SharpDX.Color4(0.5f, 0.5f, 0.5f, 1f);
+                    material.AlbedoColor = new SharpDX.Color4(0.5f, 0.5f, 0.5f, 0.1f);
                 }
 
                 if (System.IO.File.Exists(filename_n))
@@ -159,7 +171,7 @@ namespace WolvenKit.ViewModels.Documents
                 if (System.IO.File.Exists(filename_rm))
                 {
                     material.RoughnessMetallicMap = TextureModel.Create(filename_rm);
-                    //material.RenderRoughnessMetallicMap = true;
+                    material.RenderRoughnessMetallicMap = true;
                 }
 
                 if (name == "decals")
@@ -177,7 +189,7 @@ namespace WolvenKit.ViewModels.Documents
         public void LoadMaterials()
         {
             IsLoadingMaterials = true;
-            Parallel.ForEachAsync(from entry in RawMaterials orderby entry.Key ascending select entry, (material, cancellationToken) => LoadMaterial(material.Value)).ContinueWith((result) =>
+            Parallel.ForEachAsync(from entry in SelectedAppearance.RawMaterials orderby entry.Key ascending select entry, (material, cancellationToken) => LoadMaterial(material.Value)).ContinueWith((result) =>
             {
                 Locator.Current.GetService<ILoggerService>().Info($"All materials loaded!");
                 IsLoadingMaterials = false;
@@ -204,6 +216,8 @@ namespace WolvenKit.ViewModels.Documents
             {
                 return;
             }
+
+            Locator.Current.GetService<ILoggerService>().Info($"Loading material: {material.Name}");
 
             var dictionary = material.Values;
 
@@ -263,11 +277,11 @@ namespace WolvenKit.ViewModels.Documents
 
             if (dictionary.ContainsKey("MultilayerSetup") && dictionary.ContainsKey("MultilayerMask"))
             {
-                var createMLDiffuse = !System.IO.File.Exists(filename_b);
-                var createMLRoughnessMetallic = !System.IO.File.Exists(filename_rm);
-                var createMLNormal = !System.IO.File.Exists(filename_bn);
+                var albedoExists = System.IO.File.Exists(filename_b);
+                var roughMetallicExists = System.IO.File.Exists(filename_rm);
+                var normalExists = System.IO.File.Exists(filename_bn);
 
-                if (!createMLDiffuse && !createMLNormal && !createMLRoughnessMetallic)
+                if (albedoExists && normalExists && roughMetallicExists)
                     goto SkipNormals;
 
                 if (dictionary["MultilayerSetup"] is not CResourceReference<Multilayer_Setup> mlsRef)
@@ -388,17 +402,7 @@ namespace WolvenKit.ViewModels.Documents
                     {
                         var roughOut = mllt.Overrides.RoughLevelsOut.Where(x => x.N == layer.RoughLevelsOut).First()?.V ?? null;
 
-                        if (roughOut == null)
-                        {
-                            goto SkipRoughMetal;
-                        }
-
                         var metalOut = mllt.Overrides.MetalLevelsOut.Where(x => x.N == layer.MetalLevelsOut).First()?.V ?? null;
-
-                        if (metalOut == null)
-                        {
-                            goto SkipRoughMetal;
-                        }
 
                         var colorMatrix = new ColorMatrix(new float[][]
                         {
@@ -410,8 +414,22 @@ namespace WolvenKit.ViewModels.Documents
                         });
                         colorMatrix.Matrix03 = 1f;
                         colorMatrix.Matrix40 = 0;
-                        colorMatrix.Matrix41 = (roughOut[0] + roughOut[1]) / 2f;
-                        colorMatrix.Matrix42 = (metalOut[0] + metalOut[1]) / 2f;
+                        if (roughOut != null)
+                        {
+                            colorMatrix.Matrix41 = (roughOut[0] + roughOut[1]) / 2f;
+                        }
+                        else
+                        {
+                            colorMatrix.Matrix41 = 0.5f;
+                        }
+                        if (metalOut != null)
+                        {
+                            colorMatrix.Matrix42 = (metalOut[0] + metalOut[1]) / 2f;
+                        }
+                        else
+                        {
+                            colorMatrix.Matrix42 = 0.0f;
+                        }
 
                         ImageAttributes attributes = new ImageAttributes();
 
@@ -420,7 +438,7 @@ namespace WolvenKit.ViewModels.Documents
                         gfx_rm.DrawImage(maskBitmap, new Rectangle(0, 0, maskBitmap.Width, maskBitmap.Height), 0, 0, maskBitmap.Width, maskBitmap.Height, GraphicsUnit.Pixel, attributes);
                     }
 
-                SkipRoughMetal:
+                //SkipRoughMetal:
 
                     var normalFile = File.GetFileFromDepotPathOrCache(mllt.NormalTexture.DepotPath);
 
@@ -707,7 +725,6 @@ namespace WolvenKit.ViewModels.Documents
             }
 
         SkipNormals:
-            Locator.Current.GetService<ILoggerService>().Info($"Loaded material: {material.Name}");
             DispatcherHelper.RunOnMainThread(() =>
             {
                 SetupPBRMaterial(material.Name, true);

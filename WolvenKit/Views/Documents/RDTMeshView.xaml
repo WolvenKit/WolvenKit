@@ -181,9 +181,27 @@
                         SelectedItem="{Binding SelectedAppearance, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                         SelectionChanged="ReloadModels" />
                 </Grid>
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition />
+
+                    </Grid.ColumnDefinitions>
+                    <TextBlock
+                        Margin="5,0,0,0"
+                        VerticalAlignment="Center"
+                        Text="LOD: " />
+                    <ComboBox
+                        Grid.Column="1"
+                        Height="30"
+                        Padding="10,0"
+                        ItemsSource="{Binding SelectedAppearance.LODLUT.Keys, Mode=OneWay}"
+                        SelectedItem="{Binding SelectedAppearance.SelectedLOD, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                        SelectionChanged="ReloadModels" />
+                </Grid>
                 <Button
                     Command="{Binding LoadMaterialsCommand}"
-                    Content="Load Materials"
+                    Content="Load Materials for Appearance"
                     IsEnabled="{Binding IsLoadingMaterials, Converter={StaticResource InvertBooleanConverter}}" />
                 <Button Command="{Binding ExtractShadersCommand}" Content="Export Shaders" />
             </StackPanel>
@@ -226,7 +244,7 @@
             <syncfusion:SfTreeGrid
                 Grid.Row="1"
                 AllowResizingColumns="True"
-                AutoExpandMode="RootNodesExpanded"
+                AutoExpandMode="AllNodesExpanded"
                 AutoGenerateColumns="False"
                 CheckBoxMappingName="IsRendering"
                 ChildPropertyName="Children"
@@ -238,7 +256,7 @@
                     <syncfusion:TreeGridTextColumn
                         HeaderText="Component Name"
                         MappingName="Name"
-                        MinimumWidth="300" />
+                        MinimumWidth="100" />
                     <!--syncfusion:TreeGridTemplateColumn HeaderText="Chunk Mask">
                         <syncfusion:TreeGridTemplateColumn.CellTemplate>
                             <DataTemplate>
@@ -253,7 +271,11 @@
                             </DataTemplate>
                         </syncfusion:TreeGridTemplateColumn.CellTemplate>
                     </syncfusion:TreeGridTemplateColumn-->
-                    <syncfusion:TreeGridTextColumn HeaderText="Material Name" MappingName="Material" />
+                    <syncfusion:TreeGridTextColumn HeaderText="Appearance" MappingName="AppearanceName" />
+                    <syncfusion:TreeGridTextColumn
+                        HeaderText="Material"
+                        MappingName="MaterialName"
+                        MinimumWidth="100" />
                 </syncfusion:SfTreeGrid.Columns>
             </syncfusion:SfTreeGrid>
             <!--ItemsControl ItemsSource="{Binding SelectedAppearance.Models, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}">
