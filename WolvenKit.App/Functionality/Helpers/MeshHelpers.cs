@@ -141,6 +141,10 @@ namespace WolvenKit.ViewModels.Documents
                 {
                     material.AlbedoMap = TextureModel.Create(filename_b);
                 }
+                else
+                {
+                    material.AlbedoColor = new SharpDX.Color4(0.5f, 0.5f, 0.5f, 1f);
+                }
 
                 if (System.IO.File.Exists(filename_n))
                 {
