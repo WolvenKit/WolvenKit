@@ -307,7 +307,6 @@ public class CVariantConverter : JsonConverter<CVariant>, ICustomRedConverter
                     var converter = options.GetConverter(type);
                     if (converter is ICustomRedConverter conv)
                     {
-                        reader.Read();
                         result = (IRedType?)conv.ReadRedType(ref reader, type, options);
                     }
                     else
@@ -463,7 +462,6 @@ public class DataBufferConverter : JsonConverter<DataBuffer>, ICustomRedConverte
                     var converter = options.GetConverter(typeof(Package04));
                     if (converter is ICustomRedConverter conv)
                     {
-                        reader.Read();
                         val.Data = (IParseableBuffer?)conv.ReadRedType(ref reader, typeof(Package04), options);
                     }
                     else
@@ -757,7 +755,6 @@ public class SharedDataBufferConverter : JsonConverter<SharedDataBuffer>, ICusto
                 var converter = options.GetConverter(typeof(CR2WFile));
                 if (converter is ICustomRedConverter conv)
                 {
-                    reader.Read();
                     val.File = (CR2WFile?)conv.ReadRedType(ref reader, typeof(CR2WFile), options);
                 }
                 else
@@ -773,7 +770,6 @@ public class SharedDataBufferConverter : JsonConverter<SharedDataBuffer>, ICusto
                 var converter = options.GetConverter(typeof(Package04));
                 if (converter is ICustomRedConverter conv)
                 {
-                    reader.Read();
                     val.Data = (IParseableBuffer?)conv.ReadRedType(ref reader, typeof(Package04), options);
                 }
                 else

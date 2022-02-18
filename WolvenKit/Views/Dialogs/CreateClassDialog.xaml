@@ -8,7 +8,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:reactiveUi="http://reactiveui.net"
     Width="600"
-    Height="Auto"
+    Height="800"
     d:DesignHeight="600"
     d:DesignWidth="800"
     x:TypeArguments="dialogs:CreateClassDialogViewModel"
@@ -21,7 +21,7 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
             <RowDefinition Height="50" />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
@@ -39,25 +39,29 @@
             VerticalAlignment="Center"
             Text="You'll be able to adjust parameters once the class is created. Below are some available classes:"
             TextWrapping="Wrap" />
-        <ItemsControl
-            Grid.Row="2"
-            Margin="-2,5,-2,5"
-            ItemsSource="{Binding ExistingClasses, Mode=OneWay}">
-            <ItemsControl.ItemsPanel>
-                <ItemsPanelTemplate>
-                    <WrapPanel />
-                </ItemsPanelTemplate>
-            </ItemsControl.ItemsPanel>
-            <ItemsControl.ItemTemplate>
-                <DataTemplate>
-                    <Button
-                        Margin="2"
-                        Padding="5,3"
-                        Click="SetSelectedClass"
-                        Content="{Binding}" />
-                </DataTemplate>
-            </ItemsControl.ItemTemplate>
-        </ItemsControl>
+        <ScrollViewer Grid.Row="2">
+            <ItemsControl
+                Margin="-2,5,-2,5"
+                ItemsSource="{Binding ExistingClasses, Mode=OneWay}">
+                
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <WrapPanel />
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <Button
+                                Margin="2"
+                                Padding="5,3"
+                                Click="SetSelectedClass"
+                                Content="{Binding}" />
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                
+            </ItemsControl>
+        </ScrollViewer>
+
         <hc:ComboBox
             Grid.Row="3"
             VerticalAlignment="Center"

@@ -2,8 +2,6 @@
 - 
 ------------------
 
-💡 Contributors:  @
-
 :question: Wiki: https://wiki.redmodding.org/wolvenkit
 
 ❗  MAKE SURE TO INSTALL THE PREREQUISITES : 

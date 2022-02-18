@@ -1,6 +1,9 @@
 WolvenKit 8.5
 -----------------
 
+WolvenKit 8.5-rc1
+-----------------
+
 Implemented: 
 - open files & browse assets without loading a project
 - cr2w editor UI overhaul
@@ -24,6 +27,9 @@ Implemented:
 - Added JsonSerializer for CR2WFile/Package04
 - add oodle compression for non-windows systems
 - add texconv as library instad of submodule
+- Updated RTTI classes
+- More filepaths
+- 1.5 game patch support
 
 Fixed:
 - Lots of bug fixes
