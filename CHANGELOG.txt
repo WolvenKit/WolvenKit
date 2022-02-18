@@ -1,6 +1,9 @@
 WolvenKit 8.5
 -----------------
 
+WolvenKit 8.5-rc1
+-----------------
+
 Implemented: 
 - open files & browse assets without loading a project
 - cr2w editor UI overhaul
@@ -46,7 +49,6 @@ Fixed:
 - Fixed csv import
 - Fixed masklist writing for PNG exports
 - Changed default export format for mlmask from DDS to PNG
-
 
 WolvenKit 8.4.3
 -----------------

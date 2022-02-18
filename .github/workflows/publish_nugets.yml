@@ -23,4 +23,5 @@ jobs:
       uses: rohith/publish-nuget@v2
       with:
         PROJECT_FILE_PATH: .\WolvenKit.CLI\WolvenKit.CLI.csproj
+        TAG_COMMIT: false
         NUGET_KEY: ${{secrets.NUGET_KEY}}
