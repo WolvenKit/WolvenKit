@@ -62,6 +62,6 @@ jobs:
       with:
         draft: true
         generateReleaseNotes: true
-        artifacts: "*.zip"
+        artifacts: "${{env.FINALOUT}}/${{env.PORTABLE}}", "${{env.FINALOUT}}/${{env.CONSOLE}}"
         bodyFile: "RELEASE.md"
         token: ${{ secrets.GITHUB_TOKEN }}
