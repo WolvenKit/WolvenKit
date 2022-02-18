@@ -100,7 +100,7 @@ namespace WolvenKit.ViewModels.Documents
                     LOD = meshesinfo.LODLvl[index],
                     IsRendering = (chunkMask & 1UL << index) > 0 && meshesinfo.LODLvl[index] == 1,
                     EnabledWithMask = (chunkMask & 1UL << index) > 0,
-                    //CullMode = SharpDX.Direct3D11.CullMode.Front,
+                    CullMode = SharpDX.Direct3D11.CullMode.Front,
                     Geometry = new MeshGeometry3D()
                     {
                         Positions = positions,
@@ -133,7 +133,11 @@ namespace WolvenKit.ViewModels.Documents
                     material = new PBRMaterial()
                     {
                         EnableAutoTangent = true,
-                        RenderShadowMap = true
+                        RenderShadowMap = true,
+                        RenderEnvironmentMap = true,
+                        EnableTessellation = true,
+                        MaxDistanceTessellationFactor = 2,
+                        MinDistanceTessellationFactor = 4
                     };
                     Materials[name] = material;
                 }
@@ -162,22 +166,26 @@ namespace WolvenKit.ViewModels.Documents
                 if (System.IO.File.Exists(filename_n))
                 {
                     material.NormalMap = TextureModel.Create(filename_n);
+                    material.RenderNormalMap = true;
                 }
                 else if (System.IO.File.Exists(filename_bn))
                 {
                     material.NormalMap = TextureModel.Create(filename_bn);
+                    material.RenderNormalMap = true;
                 }
 
                 if (System.IO.File.Exists(filename_rm))
                 {
                     material.RoughnessMetallicMap = TextureModel.Create(filename_rm);
                     material.RenderRoughnessMetallicMap = true;
+                    material.RoughnessFactor = 1f;
+                    material.MetallicFactor = 1f;
                 }
 
                 if (name == "decals")
                 {
                     //material.AlbedoColor = new SharpDX.Color4(0, 0, 0, 0.1f);
-                    material.DisplacementMap = material.AlbedoMap;
+                    //material.DisplacementMap = material.AlbedoMap;
                 }
             }
             return Materials[name];

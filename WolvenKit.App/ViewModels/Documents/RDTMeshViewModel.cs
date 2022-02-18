@@ -206,7 +206,7 @@ namespace WolvenKit.ViewModels.Documents
             File = file;
 
             EffectsManager = new DefaultEffectsManager();
-            //EnvironmentMap = TextureModel.Create("C:\\Users\\Jack\\Documents\\cyberpunk\\Vehicle Tests\\source\\raw\\base\\environment\\terrain\\mesh_terrain_sectors\\nc_mapa40_kwadrat_2k.dds");
+            EnvironmentMap = TextureModel.Create(Path.Combine(ISettingsManager.GetTemp_OBJPath(), "Cubemap_Grandcanyon.dds"));
             Camera = new HelixToolkit.Wpf.SharpDX.PerspectiveCamera();
 
             ExtractShadersCommand = new RelayCommand(ExtractShaders);
@@ -217,13 +217,7 @@ namespace WolvenKit.ViewModels.Documents
         {
             _data = data;
 
-            ModelGroup.AddRange(MakeMesh(file.Cr2wFile));
-
-            return;
-
-#pragma warning disable CS0162 // Unreachable code detected
             var materials = new Dictionary<string, Material>();
-#pragma warning restore CS0162 // Unreachable code detected
 
             var localList = (CR2WList)data.LocalMaterialBuffer.RawData?.Buffer.Data ?? null;
 
@@ -247,9 +241,9 @@ namespace WolvenKit.ViewModels.Documents
                 {
                     //foreach (var pme in data.PreloadLocalMaterialInstances)
                     //{
-                        //inst = (CMaterialInstance)pme.GetValue();
+                    //inst = (CMaterialInstance)pme.GetValue();
                     //}
-                   inst = (CMaterialInstance)data.PreloadLocalMaterialInstances[me.Index].GetValue();
+                    inst = (CMaterialInstance)data.PreloadLocalMaterialInstances[me.Index].GetValue();
                 }
 
                 //CMaterialInstance bm = null;
@@ -271,60 +265,66 @@ namespace WolvenKit.ViewModels.Documents
                 materials.Add(me.Name, material);
             }
 
-            var outPath = Path.Combine(ISettingsManager.GetTemp_OBJPath(), Path.GetFileNameWithoutExtension(file.FilePath) + "_full.glb");
-            //if (System.IO.File.Exists(outPath) || MeshTools.ExportMesh(file.Cr2wFile, new FileInfo(outPath)))
-            if (MeshTools.ExportMesh(file.Cr2wFile, new FileInfo(outPath)))
+            var appIndex = 0;
+            foreach (var handle in data.Appearances)
             {
-                foreach (var handle in data.Appearances)
+                var app = handle.GetValue();
+                if (app is meshMeshAppearance mmapp)
                 {
-                    var app = handle.GetValue();
-                    if (app is meshMeshAppearance mmapp)
+                    var appMaterials = new List<Material>();
+
+                    foreach (var materialName in mmapp.ChunkMaterials)
                     {
-                        var appMaterials = new List<Material>();
-
-                        foreach (var materialName in mmapp.ChunkMaterials)
+                        if (materials.ContainsKey(materialName))
                         {
-                            if (materials.ContainsKey(materialName))
-                            {
-                                appMaterials.Add(materials[materialName]);
-                            }
-                            else
-                            {
-                                appMaterials.Add(new Material()
-                                {
-                                    Name = materialName
-                                });
-                            }
+                            appMaterials.Add(materials[materialName]);
                         }
-
-                        var list = new List<LoadableModel>();
-
-                        var m = new LoadableModel()
+                        else
                         {
-                            FilePath = outPath,
-                            IsEnabled = true,
-                            Name = Path.GetFileNameWithoutExtension(file.RelativePath),
-                            Materials = appMaterials,
-                            BindName = "Root"
-                        };
-
-                        for (var i = 0; i < 64; i++)
-                        {
-                            m.EnabledChunks.Add(i);
+                            appMaterials.Add(new Material()
+                            {
+                                Name = materialName
+                            });
                         }
-                        list.Add(m);
-
-                        var a = new Appearance()
-                        {
-                            Name = mmapp.Name,
-                            Models = list
-                        };
-                        Appearances.Add(a);
                     }
+
+                    var a = new Appearance()
+                    {
+                        Name = mmapp.Name
+                    };
+
+                    var model = new LoadableModel()
+                    {
+                        MeshFile = File.Cr2wFile,
+                        AppearanceIndex = appIndex,
+                        AppearanceName = mmapp.Name,
+                        Materials = appMaterials,
+                        Name = Path.GetFileNameWithoutExtension(File.ContentId),
+                        IsEnabled = true
+                    };
+                    a.Models.Add(model);
+                    a.BindableModels.Add(model);
+                    foreach (var material in model.Materials)
+                    {
+                        a.RawMaterials[material.Name] = material;
+                    }
+                    model.Meshes = MakeMesh(model.MeshFile, ulong.MaxValue, model.AppearanceIndex);
+
+                    foreach (var m in model.Meshes)
+                    {
+                        if (!a.LODLUT.ContainsKey(m.LOD))
+                        {
+                            a.LODLUT[m.LOD] = new List<SubmeshComponent>();
+                        }
+                        a.LODLUT[m.LOD].Add(m);
+                    }
+                    AddMeshesToRiggedGroups(a);
+
+                    Appearances.Add(a);
                 }
-                Rigs.Add("Root", new Rig());
-                SelectedAppearance = Appearances[0];
+                appIndex++;
             }
+            SelectedAppearance = Appearances[0];
         }
 
         public RDTMeshViewModel(entEntityTemplate ent, RedDocumentViewModel file) : this(file)
@@ -336,7 +336,6 @@ namespace WolvenKit.ViewModels.Documents
 
             if (ent.Appearances.Count > 0)
             {
-
                 foreach (var component in pkg.Chunks)
                 {
                     if (component is entSlotComponent slotset)
@@ -552,7 +551,10 @@ namespace WolvenKit.ViewModels.Documents
                 var group = GroupFromModel(model);
 
                 if (model.BindName == null)
-                    continue;
+                {
+                    app.ModelGroup.Add(group);
+                    return;
+                }
                 if (_slotSets.ContainsKey(model.BindName))
                 {
                     if (model.SlotName != null && _slotSets[model.BindName].Slots.ContainsKey(model.SlotName))
@@ -742,52 +744,6 @@ namespace WolvenKit.ViewModels.Documents
                         EnabledChunks = enabledChunks
                     };
                     appModels.Add(epc.Name, model);
-
-
-                    //var outPath = Path.Combine(ISettingsManager.GetTemp_OBJPath(), Path.GetFileNameWithoutExtension(depotPath) + "_" + depotPath.GetRedHash().ToString() + "_full.glb");
-                    //var outPath = Path.Combine(ISettingsManager.GetTemp_OBJPath(), Path.GetFileName(depotPath) + "_" + depotPath.GetRedHash().ToString()) + "_full.glb";
-                    //if (System.IO.File.Exists(outPath) || MeshTools.ExportMesh(meshFile, new FileInfo(outPath)))
-                    //if (MeshTools.ExportMesh(meshFile, new FileInfo(outPath)))
-                    //{
-                    //    foreach (var handle in mesh.Appearances)
-                    //    {
-                    //        var app = handle.GetValue();
-                    //        if (app is meshMeshAppearance mmapp && (mmapp.Name == meshApp || (meshApp == "default" && mesh.Appearances.IndexOf(handle) == 0)))
-                    //        {
-                    //            var appMaterials = new List<Material>();
-
-                    //            foreach (var m in mmapp.ChunkMaterials)
-                    //            {
-                    //                if (materials.ContainsKey(m))
-                    //                {
-                    //                    appMaterials.Add(materials[m]);
-                    //                }
-                    //                else
-                    //                {
-                    //                    appMaterials.Add(new Material()
-                    //                    {
-                    //                        Name = m
-                    //                    });
-                    //                }
-                    //            }
-
-                    //            appModels.Add(epc.Name, new LoadableModel()
-                    //            {
-                    //                FilePath = outPath,
-                    //                Matrix = matrix,
-                    //                IsEnabled = enabled,
-                    //                Name = epc.Name,
-                    //                BindName = bindName,
-                    //                SlotName = slotName,
-                    //                Materials = appMaterials,
-                    //                ChunkMask = chunkMask,
-                    //                ChunkList = chunkList,
-                    //                EnabledChunks = enabledChunks
-                    //            });
-                    //            break;
-                    //        }
-                    //    }
-                    //}
                 }
             }
 
