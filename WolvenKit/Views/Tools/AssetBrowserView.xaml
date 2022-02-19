@@ -38,6 +38,10 @@
                             </MultiDataTrigger>
                         </Style.Triggers>
                     </Style>
+
+                    <iconPacks:PackIconCodicons x:Key="AB_ToggleModButtonIcon_ToMods" Kind="Package" />
+                    <iconPacks:PackIconCodicons x:Key="AB_ToggleModButtonIcon_ToBase" Kind="Archive" />
+
                 </Grid.Resources>
 
                 <Grid.RowDefinitions>
@@ -62,6 +66,7 @@
 
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="Auto" />
                         <ColumnDefinition Width="*" />
                         <ColumnDefinition Width="Auto" />
                         <ColumnDefinition Width="*" />
@@ -76,9 +81,37 @@
                         <iconPacks:PackIconCodicons Kind="Home" />
                     </Button>
 
+                    <ToggleButton
+                        Grid.Column="1"
+                        Margin="5,0,0,0"
+                        VerticalAlignment="Center"
+
+                        IsChecked="{Binding IsModBrowserActive}"
+
+                        Command="{Binding ToggleModBrowserCommand}">
+
+                        <ToggleButton.Style>
+                            <Style BasedOn="{StaticResource {x:Type ToggleButton}}" TargetType="ToggleButton">
+
+                                <Setter Property="ToolTip" Value="Switch to installed mod archives" />
+                                <Setter Property="Content" Value="{StaticResource AB_ToggleModButtonIcon_ToMods}" />
+
+                                <Style.Triggers>
+                                    <Trigger Property="IsChecked" Value="True">
+                                        <Setter Property="ToolTip" Value="Switch to game base archives" />
+                                        <Setter Property="Content" Value="{StaticResource AB_ToggleModButtonIcon_ToBase}" />
+                                        <Setter Property="Foreground" Value="DarkViolet" />
+                                        <Setter Property="BorderBrush" Value="DarkViolet" />
+                                    </Trigger>
+                                </Style.Triggers>
+                            </Style>
+                        </ToggleButton.Style>
+
+                    </ToggleButton>
+
                     <hc:SearchBar
                         x:Name="FileSearchBar"
-                        Grid.Column="1"
+                        Grid.Column="2"
                         Margin="5,0,0,0"
                         VerticalAlignment="Top"
                         hc:InfoElement.Placeholder="Search all game files: (e.g. judy kind:mesh,ent)"
@@ -88,7 +121,7 @@
                         Style="{StaticResource SearchBarPlus}" />
 
                     <Viewbox
-                        Grid.Column="2"
+                        Grid.Column="3"
                         Width="30"
                         Height="30"
                         Margin="-35,0,0,0">
@@ -111,7 +144,7 @@
 
                     <hc:SearchBar
                         x:Name="OptionsSearchBar"
-                        Grid.Column="3"
+                        Grid.Column="4"
                         Margin="10,0,0,0"
                         VerticalAlignment="Top"
                         hc:InfoElement.Placeholder="(e.g. *.ent, base/**/judy)"

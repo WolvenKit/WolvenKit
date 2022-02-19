@@ -272,6 +272,7 @@ namespace WolvenKit.ViewModels.Tools
         }
 
         public ICommand ToggleModBrowserCommand { get; private set; }
+        public bool IsModBrowserActive() => _archiveManager.IsModBrowserActive;
         private bool CanToggleModBrowser() => true;//_archiveManager.IsManagerLoaded;
         private void ExecuteToggleModBrowser()
         {
