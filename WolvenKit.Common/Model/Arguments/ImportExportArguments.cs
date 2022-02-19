@@ -386,6 +386,9 @@ namespace WolvenKit.Common.Model.Arguments
         [Display(Name = "MLmask Export Type")]
         public EMlmaskUncookExtension UncookExtension { get; set; } = EMlmaskUncookExtension.png;
 
+        [Browsable(false)]
+        public bool AsList { get; set; } = true;
+
         /// <summary>
         /// String Override to display info in datagrid.
         /// </summary>

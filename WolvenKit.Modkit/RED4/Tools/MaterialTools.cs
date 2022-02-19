@@ -191,16 +191,13 @@ namespace WolvenKit.Modkit.RED4
                     }
                 }
 
-                //throw new TodoException("get import info from cr2w file?");
-
-                /*foreach (var import in cr2w.Debug.ImportInfos)
+                foreach (var import in cr2w.Info.GetImports())
                 {
-
-                    if (!primaryDependencies.Contains(import.DepotPath))
+                    if (!primaryDependencies.Contains(import))
                     {
-                        primaryDependencies.Add(import.DepotPath);
+                        primaryDependencies.Add(import);
                     }
-                }*/
+                }
             }
 
             var Count = cmesh.MaterialEntries.Count;
@@ -349,6 +346,7 @@ namespace WolvenKit.Modkit.RED4
                             {
                                 if (Directory.Exists(matRepo))
                                 {
+                                    exportArgs.Get<MlmaskExportArgs>().AsList = false;
                                     UncookSingle(ar, hash, new DirectoryInfo(matRepo), exportArgs);
                                 }
                             }
