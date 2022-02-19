@@ -114,14 +114,15 @@ namespace WolvenKit.Modkit.RED4
                 ms.Write(maskData);
 
                 string newpath;
+
+                var mFilename = Path.GetFileNameWithoutExtension(outfile.FullName) + $"_{i}";
                 if (args.AsList)
                 {
-                    newpath = Path.Combine(subdir.FullName, $"{i}.dds");
+                    newpath = Path.Combine(subdir.FullName, $"{mFilename}.dds");
                 }
                 else
                 {
-                    var mFilename = Path.GetFileNameWithoutExtension(outfile.FullName) + $"_{i}.dds";
-                    newpath = Path.Combine(outfile.Directory.FullName, mFilename);
+                    newpath = Path.Combine(outfile.Directory.FullName, $"{mFilename}.dds");
                 }
 
                 if (args.UncookExtension == EMlmaskUncookExtension.dds)
@@ -132,7 +133,7 @@ namespace WolvenKit.Modkit.RED4
 
                     if (args.AsList)
                     {
-                        masks.Add($"{subdir.Name}/{i}.dds");
+                        masks.Add($"{subdir.Name}/{mFilename}.dds");
                     }
                 }
                 //else if (args.UncookExtension == EUncookExtension.tga)
@@ -173,7 +174,7 @@ namespace WolvenKit.Modkit.RED4
 
                     if (args.AsList)
                     {
-                        masks.Add($"{subdir.Name}/{i}.png");
+                        masks.Add($"{subdir.Name}/{mFilename}.png");
                     }
                 }
             }
