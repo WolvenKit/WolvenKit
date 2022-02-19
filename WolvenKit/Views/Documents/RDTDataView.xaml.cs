@@ -135,9 +135,29 @@ namespace WolvenKit.Views.Documents
                         //{
                         //    e.DropPosition = DropPosition.DropAsChild;
                         //}
-                        else if (source.Data is RedBaseClass rbc && target.Parent.Data is DataBuffer or SerializationDeferredDataBuffer)
+                        else if (source.Data is RedBaseClass)
                         {
-                            e.DropPosition = DropPosition.DropBelow;
+                            
+
+                            if (target.Parent.Data is DataBuffer or SerializationDeferredDataBuffer)
+                            {
+                                e.DropPosition = DropPosition.DropBelow;
+                            }
+
+                            if (target.Parent.Data is IRedArray arr)
+                            {
+                                var arrayType = target.Parent.Data.GetType().GetGenericTypeDefinition();
+
+                                if (arrayType == typeof(CArray<>))
+                                {
+                                    e.DropPosition = DropPosition.DropBelow;
+                                }
+
+                                if (arrayType == typeof(CStatic<>) && arr.Count < arr.MaxSize)
+                                {
+                                    e.DropPosition = DropPosition.DropBelow;
+                                }
+                            }
                         }
                     }
                 }
@@ -178,9 +198,27 @@ namespace WolvenKit.Views.Documents
             {
                 if (e.TargetNode.Content is ChunkViewModel target)
                 {
-                    if (source.Data is RedBaseClass rbc && target.Parent.Data is DataBuffer or SerializationDeferredDataBuffer)
+                    if (source.Data is RedBaseClass rbc)
                     {
-                        target.Parent.AddChunkToDataBuffer((RedBaseClass)rbc.DeepCopy(), target.Parent.Properties.IndexOf(target) + 1);
+                        if (target.Parent.Data is DataBuffer or SerializationDeferredDataBuffer)
+                        {
+                            target.Parent.AddChunkToDataBuffer((RedBaseClass)rbc.DeepCopy(), target.Parent.Properties.IndexOf(target) + 1);
+                        }
+
+                        if (target.Parent.Data is IRedArray arr)
+                        {
+                            var arrayType = target.Parent.Data.GetType().GetGenericTypeDefinition();
+
+                            if (arrayType == typeof(CArray<>))
+                            {
+                                target.Parent.AddClassToArray((RedBaseClass)rbc.DeepCopy(), target.Parent.Properties.IndexOf(target) + 1);
+                            }
+
+                            if (arrayType == typeof(CStatic<>) && arr.Count < arr.MaxSize)
+                            {
+                                target.Parent.AddClassToArray((RedBaseClass)rbc.DeepCopy(), target.Parent.Properties.IndexOf(target) + 1);
+                            }
+                        }
                     }
                 }
             }
