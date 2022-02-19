@@ -7,7 +7,7 @@ namespace WolvenKit.RED4.Types
     [RED("TweakDBID")]
     [REDType(IsValueType = true)]
     [DebuggerDisplay("{_value}", Type = "TweakDBID")]
-    public sealed class TweakDBID : IRedPrimitive, IEquatable<TweakDBID>
+    public sealed class TweakDBID : IRedPrimitive<ulong>, IEquatable<TweakDBID>
     {
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         private string _value;
