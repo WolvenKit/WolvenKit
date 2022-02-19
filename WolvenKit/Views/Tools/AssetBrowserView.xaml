@@ -76,9 +76,10 @@
                         Grid.Column="0"
                         VerticalAlignment="Center"
                         Click="LeftNavigationHomeButton_OnClick"
+                        ToolTip="Back to top level"
                         Style="{StaticResource ButtonDefault}"
                         Visibility="Visible">
-                        <iconPacks:PackIconCodicons Kind="Home" />
+                        <iconPacks:PackIconCodicons Kind="FoldUp" />
                     </Button>
 
                     <ToggleButton
