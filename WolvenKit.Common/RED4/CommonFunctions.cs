@@ -65,6 +65,7 @@ namespace WolvenKit.RED4.CR2W
             { ERedExtension.env, "worldEnvironmentDefinition" },
             { ERedExtension.dtex, "DynamicTexture" },
             { ERedExtension.inkcharcustomization, "gameuiCharacterCustomizationInfoResource" },
+            { ERedExtension.inkenginesettings, "inkEngineSettingsResource" },
             { ERedExtension.w2mi, "CMaterialInstance" },
             { ERedExtension.inkshapecollection, "inkShapeCollectionResource" },
             { ERedExtension.inkfullscreencomposition, "inkFullscreenCompositionResource" },
@@ -282,6 +283,7 @@ namespace WolvenKit.RED4.CR2W
             { "CIESDataResource", "ies" },
             { "gameuiCharacterCustomizationPreset", "ccstate" },
             { "worldStreamingBlock", "streamingblock" },
+            { "inkEngineSettingsResource", "inkenginesettings" },
 
         };
 

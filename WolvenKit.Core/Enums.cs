@@ -145,6 +145,7 @@ namespace WolvenKit.Common
         inkanim,
         inkatlas,
         inkcharcustomization,
+        inkenginesettings,
         inkfontfamily,
         inkfullscreencomposition,
         inkgamesettings,

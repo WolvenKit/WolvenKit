@@ -409,6 +409,12 @@ namespace WolvenKit.MSTests
         }
 
         [TestMethod]
+        public void Write_inkenginesettings()
+        {
+            Test_Extension(".inkenginesettings");
+        }
+
+        [TestMethod]
         public void Write_inkfontfamily()
         {
             Test_Extension(".inkfontfamily");

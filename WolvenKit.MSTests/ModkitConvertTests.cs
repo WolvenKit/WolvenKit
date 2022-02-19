@@ -227,6 +227,9 @@ namespace WolvenKit.MSTests
         public void Convert_inkcharcustomization() => Test_Extension(".inkcharcustomization");
 
         [TestMethod]
+        public void Convert_inkenginesettings() => Test_Extension(".inkenginesettings");
+
+        [TestMethod]
         public void Convert_inkfontfamily() => Test_Extension(".inkfontfamily");
 
         [TestMethod]

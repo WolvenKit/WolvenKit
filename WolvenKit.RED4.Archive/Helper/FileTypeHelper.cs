@@ -70,6 +70,7 @@ namespace WolvenKit.RED4.Archive
             _fileTypes.Add("inkanim", new[] { typeof(inkanimAnimationLibraryResource) });
             _fileTypes.Add("inkatlas", new[] { typeof(inkTextureAtlas) });
             _fileTypes.Add("inkcharcustomization", new[] { typeof(gameuiCharacterCustomizationInfoResource) });
+            _fileTypes.Add("inkenginesettings", new[] { typeof(inkEngineSettingsResource) });
             _fileTypes.Add("inkfontfamily", new[] { typeof(inkFontFamilyResource) });
             _fileTypes.Add("inkfullscreencomposition", new[] { typeof(inkFullscreenCompositionResource) });
             _fileTypes.Add("inkgamesettings", new[] { typeof(inkGameSettingsResource) });
