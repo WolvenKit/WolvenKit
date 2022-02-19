@@ -58,6 +58,10 @@ namespace WolvenKit.Views.Editors
             {
                 SetCurrentValue(RedStringProperty, (CString)value);
             }
+            else if (RedString is NodeRef)
+            {
+                SetCurrentValue(RedStringProperty, (NodeRef)value);
+            }
         }
 
         private string GetValueFromRedValue()

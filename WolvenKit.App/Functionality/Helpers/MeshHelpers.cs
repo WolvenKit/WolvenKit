@@ -42,16 +42,16 @@ namespace WolvenKit.ViewModels.Documents
         public Dictionary<string, PBRMaterial> Materials { get; set; } = new();
         public Dictionary<string, CR2WFile> Files { get; set; } = new();
 
-        public List<SubmeshComponent> MakeMesh(CR2WFile cr2w, ulong chunkMask = ulong.MaxValue, int appearanceIndex = 0)
+        public List<SubmeshComponent> MakeMesh(CMesh cMesh, CR2WFile cr2w, ulong chunkMask = ulong.MaxValue, int appearanceIndex = 0)
         {
-            if (cr2w == null || cr2w.RootChunk is not CMesh cMesh || cMesh.RenderResourceBlob.Chunk is not rendRenderMeshBlob rendblob)
+            if (cMesh.RenderResourceBlob == null || cMesh.RenderResourceBlob.Chunk is not rendRenderMeshBlob rendblob)
             {
-                return null;
+                return new List<SubmeshComponent>();
             }
 
             using var ms = new MemoryStream(rendblob.RenderBuffer.Buffer.GetBytes());
 
-            var meshesinfo = MeshTools.GetMeshesinfo(rendblob, cr2w);
+            var meshesinfo = MeshTools.GetMeshesinfo(rendblob, cMesh);
 
             var expMeshes = MeshTools.ContainRawMesh(ms, meshesinfo, false, ulong.MaxValue);
 
@@ -90,13 +90,10 @@ namespace WolvenKit.ViewModels.Documents
                 {
                     tangents.Add(ToVector3(mesh.tangents[i]));
                 }
-
-                var material = SetupPBRMaterial(mesh.materialNames[appearanceIndex]);
                 
                 var sm = new SubmeshComponent()
                 {
                     Name = $"submesh_{index:D2}_LOD_{meshesinfo.LODLvl[index]:D2}",
-                    MaterialName = mesh.materialNames[appearanceIndex],
                     LOD = meshesinfo.LODLvl[index],
                     IsRendering = (chunkMask & 1UL << index) > 0 && meshesinfo.LODLvl[index] == 1,
                     EnabledWithMask = (chunkMask & 1UL << index) > 0,
@@ -108,9 +105,17 @@ namespace WolvenKit.ViewModels.Documents
                         Normals = normals,
                         TextureCoordinates = textureCoordinates,
                         Tangents = tangents
-                    },
-                    Material = material
+                    }
                 };
+                if (mesh.materialNames.Length > appearanceIndex)
+                {
+                    sm.MaterialName = mesh.materialNames[appearanceIndex];
+                    sm.Material = SetupPBRMaterial(mesh.materialNames[appearanceIndex]);
+                }
+                else
+                {
+                    sm.Material = SetupPBRMaterial("DefaultMaterial");
+                }
                 list.Add(sm);
                 index++;
             }
@@ -160,7 +165,7 @@ namespace WolvenKit.ViewModels.Documents
                 }
                 else
                 {
-                    material.AlbedoColor = new SharpDX.Color4(0.5f, 0.5f, 0.5f, 0.1f);
+                    material.AlbedoColor = new SharpDX.Color4(0.5f, 0.5f, 0.5f, 1f);
                 }
 
                 if (System.IO.File.Exists(filename_n))
@@ -181,7 +186,10 @@ namespace WolvenKit.ViewModels.Documents
                     material.RoughnessFactor = 1f;
                     material.MetallicFactor = 1f;
                 }
-
+                if (name == "glass" || name == "vehicle_glass")
+                {
+                    material.AlbedoColor = new SharpDX.Color4(1f, 1f, 1f, 0.1f);
+                }
                 if (name == "decals")
                 {
                     //material.AlbedoColor = new SharpDX.Color4(0, 0, 0, 0.1f);

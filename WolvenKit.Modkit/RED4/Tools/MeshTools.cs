@@ -60,7 +60,7 @@ namespace CP77.CR2W
 
             using var ms = new MemoryStream(rendblob.RenderBuffer.Buffer.GetBytes());
 
-            var meshesinfo = GetMeshesinfo(rendblob, cr2w);
+            var meshesinfo = GetMeshesinfo(rendblob, cr2w.RootChunk as CMesh);
 
             var expMeshes = ContainRawMesh(ms, meshesinfo, true);
 
@@ -120,7 +120,7 @@ namespace CP77.CR2W
 
             using var ms = new MemoryStream(rendblob.RenderBuffer.Buffer.GetBytes());
 
-            var meshesinfo = GetMeshesinfo(rendblob, cr2w);
+            var meshesinfo = GetMeshesinfo(rendblob, cr2w.RootChunk as CMesh);
 
             var expMeshes = ContainRawMesh(ms, meshesinfo, lodFilter, chunkMask);
 
@@ -143,7 +143,7 @@ namespace CP77.CR2W
 
             using var ms = new MemoryStream(rendblob.RenderBuffer.Buffer.GetBytes());
 
-            var meshesinfo = GetMeshesinfo(rendblob, cr2w);
+            var meshesinfo = GetMeshesinfo(rendblob, cr2w.RootChunk as CMesh);
 
             var expMeshes = ContainRawMesh(ms, meshesinfo, lodFilter, chunkMask);
 
@@ -225,7 +225,7 @@ namespace CP77.CR2W
 
                 using var ms = new MemoryStream(rendblob.RenderBuffer.Buffer.GetBytes());
 
-                var meshesinfo = GetMeshesinfo(rendblob, cr2w);
+                var meshesinfo = GetMeshesinfo(rendblob, cr2w.RootChunk as CMesh);
 
                 var Meshes = ContainRawMesh(ms, meshesinfo, lodFilter);
 
@@ -265,7 +265,7 @@ namespace CP77.CR2W
 
             using var ms = new MemoryStream(rendblob.RenderBuffer.Buffer.GetBytes());
 
-            var meshesinfo = GetMeshesinfo(rendblob, cr2w);
+            var meshesinfo = GetMeshesinfo(rendblob, cr2w.RootChunk as CMesh);
 
             var expMeshes = ContainRawMesh(ms, meshesinfo, lodFilter);
             UpdateSkinningParamCloth(ref expMeshes, meshStream, cr2w);
@@ -325,7 +325,7 @@ namespace CP77.CR2W
 
                 using var ms = new MemoryStream(rendblob.RenderBuffer.Buffer.GetBytes());
 
-                var meshesinfo = GetMeshesinfo(rendblob, cr2w);
+                var meshesinfo = GetMeshesinfo(rendblob, cr2w.RootChunk as CMesh);
 
                 var Meshes = ContainRawMesh(ms, meshesinfo, lodFilter);
                 UpdateSkinningParamCloth(ref Meshes, meshStream, cr2w);
@@ -358,7 +358,7 @@ namespace CP77.CR2W
 
             return true;
         }
-        public static MeshesInfo GetMeshesinfo(rendRenderMeshBlob rendmeshblob, CR2WFile cr2w)
+        public static MeshesInfo GetMeshesinfo(rendRenderMeshBlob rendmeshblob, CMesh cMesh = null)
         {
             var meshesInfo = new MeshesInfo(rendmeshblob.Header.RenderChunkInfos.Count);
             var redquantScale = rendmeshblob.Header.QuantizationScale;
@@ -462,9 +462,9 @@ namespace CP77.CR2W
                     }
                 }
 
-                if (cr2w.RootChunk is CMesh cmesh1)
+                if (cMesh != null)
                 {
-                    if (!cmesh1.Parameters.Select(x => x.Chunk).OfType<meshMeshParamGarmentSupport>().Any())
+                    if (!cMesh.Parameters.Select(x => x.Chunk).OfType<meshMeshParamGarmentSupport>().Any())
                     {
                         meshesInfo.garmentSupportExists[i] = false;
                     }
@@ -473,11 +473,11 @@ namespace CP77.CR2W
 
             meshesInfo.appearances = new Dictionary<string, string[]>();
 
-            if (cr2w.RootChunk is CMesh cmesh2)
+            if (cMesh != null)
             {
-                for (var i = 0; i < cmesh2.Appearances.Count; i++)
+                for (var i = 0; i < cMesh.Appearances.Count; i++)
                 {
-                    var app = cmesh2.Appearances[i].Chunk;
+                    var app = cMesh.Appearances[i].Chunk;
 
                     var materialNames = new string[app.ChunkMaterials.Count];
                     for (var e = 0; e < app.ChunkMaterials.Count; e++)

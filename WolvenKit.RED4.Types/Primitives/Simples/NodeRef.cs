@@ -2,7 +2,7 @@ using System;
 
 namespace WolvenKit.RED4.Types
 {
-    public class NodeRef : IRedPrimitive, IEquatable<NodeRef>
+    public class NodeRef : IRedPrimitive, IEquatable<NodeRef>, IRedString
     {
         public string Text { get; set; }
 
@@ -47,5 +47,16 @@ namespace WolvenKit.RED4.Types
         }
 
         public override int GetHashCode() => (Text != null ? Text.GetHashCode() : 0);
+
+
+        public string GetValue()
+        {
+            return Text;
+        }
+
+        public void SetValue(string value)
+        {
+            Text = value;
+        }
     }
 }

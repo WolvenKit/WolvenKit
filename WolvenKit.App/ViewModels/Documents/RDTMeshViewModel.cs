@@ -87,7 +87,7 @@ namespace WolvenKit.ViewModels.Documents
         public int AppearanceIndex { get; set; }
         public string AppearanceName { get; set; }
         public CR2WFile MeshFile { get; set; }
-        public List<SubmeshComponent> Meshes { get; set; }
+        public List<SubmeshComponent> Meshes { get; set; } = new();
         public string FilePath { get; set; }
         public Model3D OriginalModel { get; set; }
         public Model3D Model { get; set; }
@@ -299,7 +299,7 @@ namespace WolvenKit.ViewModels.Documents
                         AppearanceIndex = appIndex,
                         AppearanceName = mmapp.Name,
                         Materials = appMaterials,
-                        Name = Path.GetFileNameWithoutExtension(File.ContentId),
+                        Name = Path.GetFileNameWithoutExtension(File.ContentId).Replace("-", "_"),
                         IsEnabled = true
                     };
                     a.Models.Add(model);
@@ -308,7 +308,8 @@ namespace WolvenKit.ViewModels.Documents
                     {
                         a.RawMaterials[material.Name] = material;
                     }
-                    model.Meshes = MakeMesh(model.MeshFile, ulong.MaxValue, model.AppearanceIndex);
+
+                    model.Meshes = MakeMesh(data, model.MeshFile, ulong.MaxValue, model.AppearanceIndex);
 
                     foreach (var m in model.Meshes)
                     {
@@ -453,7 +454,7 @@ namespace WolvenKit.ViewModels.Documents
                             {
                                 a.RawMaterials[material.Name] = material;
                             }
-                            model.Meshes = MakeMesh(model.MeshFile, model.ChunkMask, model.AppearanceIndex);
+                            model.Meshes = MakeMesh((CMesh)model.MeshFile.RootChunk, model.MeshFile, model.ChunkMask, model.AppearanceIndex);
 
                             foreach (var m in model.Meshes)
                             {

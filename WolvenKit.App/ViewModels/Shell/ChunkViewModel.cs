@@ -764,7 +764,7 @@ namespace WolvenKit.ViewModels.Shell
             else if (PropertyType.IsAssignableTo(typeof(TweakDBID)))
             {
                 var value = (TweakDBID)Data;
-                Value = value;
+                Value = $"{(ulong)value}";
             }
             else if (PropertyType.IsAssignableTo(typeof(CBool)))
             {
@@ -805,6 +805,11 @@ namespace WolvenKit.ViewModels.Shell
             {
                 var value = (IRedPrimitive)Data;
                 Value = ((float)(CFloat)value).ToString("R");
+            }
+            else if (PropertyType.IsAssignableTo(typeof(NodeRef)))
+            {
+                var value = (NodeRef)Data;
+                Value = value.Text;
             }
             else if (PropertyType.IsAssignableTo(typeof(IRedRef)))
             {

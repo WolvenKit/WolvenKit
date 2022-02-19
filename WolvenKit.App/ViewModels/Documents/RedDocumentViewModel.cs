@@ -167,7 +167,7 @@ namespace WolvenKit.ViewModels.Documents
             {
                 TabItemViewModels.Add(new RDTTextureViewModel(xbm, this));
             }
-            if (cls is CMesh mesh && mesh.RenderResourceBlob.GetValue() is rendRenderTextureBlobPC)
+            if (cls is CMesh mesh && mesh.RenderResourceBlob != null && mesh.RenderResourceBlob.GetValue() is rendRenderTextureBlobPC)
             {
                 TabItemViewModels.Add(new RDTTextureViewModel(mesh, this));
             }
@@ -233,9 +233,12 @@ namespace WolvenKit.ViewModels.Documents
 
         public CR2WFile GetFileFromDepotPathOrCache(CName depotPath)
         {
-            if (!Files.ContainsKey(depotPath))
+            lock (Files)
             {
-                Files[depotPath] = GetFileFromDepotPath(depotPath);   
+                if (!Files.ContainsKey(depotPath))
+                {
+                    Files[depotPath] = GetFileFromDepotPath(depotPath);
+                }
             }
             return Files[depotPath];
         }
