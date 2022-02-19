@@ -200,6 +200,7 @@ namespace WolvenKit.Common
         sp,
         spatial_representation,
         streamingblock,
+        streamingquerydata,
         streamingsector,
         streamingsector_inplace,
         streamingworld,

@@ -739,6 +739,12 @@ namespace WolvenKit.MSTests
         }
 
         [TestMethod]
+        public void Write_streamingquerydata()
+        {
+            Test_Extension(".streamingquerydata");
+        }
+
+        [TestMethod]
         public void Write_streamingsector()
         {
             Test_Extension(".streamingsector");

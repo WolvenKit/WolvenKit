@@ -392,9 +392,8 @@ namespace WolvenKit.MSTests
         [TestMethod]
         public void Convert_spatial_representation() => Test_Extension(".spatial_representation");
 
-        // removed in 1.3
-        //[TestMethod]
-        //public void Convert_streamingquerydata() => Test_Extension(".streamingquerydata");
+        [TestMethod]
+        public void Convert_streamingquerydata() => Test_Extension(".streamingquerydata");
 
         [TestMethod]
         public void Convert_streamingblock() => Test_Extension(".streamingblock");

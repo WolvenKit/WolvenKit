@@ -123,6 +123,7 @@ namespace WolvenKit.RED4.Archive
             _fileTypes.Add("sp", new[] { typeof(CSkinProfile) });
             _fileTypes.Add("spatial_representation", new[] { typeof(worldTrafficPersistentSpatialResource) });
             _fileTypes.Add("streamingblock", new[] { typeof(worldStreamingBlock) });
+            _fileTypes.Add("streamingquerydata", new[] { typeof(worldStreamingQueryDataResource) });
             _fileTypes.Add("streamingsector", new[] { typeof(worldStreamingSector) });
             _fileTypes.Add("streamingsector_inplace", new[] { typeof(worldStreamingSectorInplaceContent) });
             _fileTypes.Add("streamingworld", new[] { typeof(worldStreamingWorld) });
