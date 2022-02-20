@@ -31,6 +31,9 @@ namespace WolvenKit.RED4.Archive.IO
             _bufferReaders.Add("meshMeshMaterialBuffer.rawData", typeof(CR2WListReader));
             _bufferReaders.Add("entEntityParametersBuffer.parameterBuffers", typeof(CR2WListReader));
             _bufferReaders.Add("animAnimDataChunk.buffer", typeof(AnimationReader));
+            _bufferReaders.Add("worldNavigationTileData.tilesBuffer", typeof(TilesReader));
+            _bufferReaders.Add("worldSharedDataBuffer.buffer", typeof(WorldTransformsReader));
+            _bufferReaders.Add("worldStreamingSector.transforms", typeof(StreamingSectorTransformReader));
         }
 
         public EFileReadErrorCodes ReadFileInfo(out CR2WFileInfo info)

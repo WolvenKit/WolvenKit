@@ -208,12 +208,22 @@ namespace WolvenKit.ViewModels.Shell
                 return true;
             }
 
+            if (Data is DataBuffer db3 && db3.Data is TilesBuffer)
+            {
+                return true;
+            }
+
             if (Data is SerializationDeferredDataBuffer sddb && sddb.Data is Package04 pkg2 && pkg2.Chunks.Count > 0)
             {
                 return true;
             }
 
             if (Data is SharedDataBuffer sdb && ((sdb.Data is Package04 pkg3 && pkg3.Chunks.Count > 0) || (sdb.File is CR2WFile crw && crw.RootChunk != null)))
+            {
+                return true;
+            }
+
+            if (Data is DataBuffer db4 && db4.Data is IParseableBuffer ipb)
             {
                 return true;
             }
@@ -509,7 +519,10 @@ namespace WolvenKit.ViewModels.Shell
                         //    properties.Add(new ChunkViewModel(i, chunks[i], this));
                         //}
                         Properties.Add(new ChunkViewModel(cr2.RootChunk, this));
-
+                    }
+                    if (sdb.Data is IParseableBuffer ipb)
+                    {
+                        Properties.Add(new ChunkViewModel(ipb.Data, this));
                     }
                 }
                 else if (obj is DataBuffer db)
@@ -531,6 +544,10 @@ namespace WolvenKit.ViewModels.Shell
                         {
                             Properties.Add(new ChunkViewModel(file.RootChunk, this, null, cl.Files.Count > 100));
                         }
+                    }
+                    else if (db.Data is IParseableBuffer ipb)
+                    {
+                        Properties.Add(new ChunkViewModel(ipb.Data, this));
                     }
                 }
             }

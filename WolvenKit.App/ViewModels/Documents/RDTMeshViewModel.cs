@@ -202,7 +202,10 @@ namespace WolvenKit.ViewModels.Documents
 
         public RDTMeshViewModel(RedDocumentViewModel file)
         {
-            Header = "Mesh Preview";
+            if (Header == null)
+            {
+                Header = "Mesh Preview";
+            }
             File = file;
 
             EffectsManager = new DefaultEffectsManager();
@@ -309,7 +312,7 @@ namespace WolvenKit.ViewModels.Documents
                         a.RawMaterials[material.Name] = material;
                     }
 
-                    model.Meshes = MakeMesh(data, model.MeshFile, ulong.MaxValue, model.AppearanceIndex);
+                    model.Meshes = MakeMesh(data, ulong.MaxValue, model.AppearanceIndex);
 
                     foreach (var m in model.Meshes)
                     {
@@ -330,6 +333,7 @@ namespace WolvenKit.ViewModels.Documents
 
         public RDTMeshViewModel(entEntityTemplate ent, RedDocumentViewModel file) : this(file)
         {
+            Header = "Entity Preview";
             _data = ent;
 
             if (ent.CompiledData.Data is not Package04 pkg)
@@ -454,7 +458,7 @@ namespace WolvenKit.ViewModels.Documents
                             {
                                 a.RawMaterials[material.Name] = material;
                             }
-                            model.Meshes = MakeMesh((CMesh)model.MeshFile.RootChunk, model.MeshFile, model.ChunkMask, model.AppearanceIndex);
+                            model.Meshes = MakeMesh((CMesh)model.MeshFile.RootChunk, model.ChunkMask, model.AppearanceIndex);
 
                             foreach (var m in model.Meshes)
                             {
@@ -933,7 +937,7 @@ namespace WolvenKit.ViewModels.Documents
 
         //public static Vector3D ToVector3D(Vector3 v) => new Vector3D(v.X, v.Y, v.Z);
 
-        public static Vector3D ToVector3D(WorldPosition v) => new Vector3D(v.X, v.Z, -v.Y);
+        public static Vector3D ToVector3D(WorldPosition v) => new Vector3D((float)v.X, (float)v.Z, -(float)v.Y);
 
         public static Vector3D ToVector3D(Vector4 v) => new Vector3D(v.X, v.Z, -v.Y);
 
@@ -942,6 +946,19 @@ namespace WolvenKit.ViewModels.Documents
         public static Vector3D ToScaleVector3D(Vector4 v) => new Vector3D(v.X, v.Z, v.Y);
 
         public static Vector3D ToScaleVector3D(Vector3 v) => new Vector3D(v.X, v.Z, v.Y);
+
+        public static Matrix3D ToMatrix3D(CMatrix matrix) => new Matrix3D(matrix.X.X, matrix.Y.X, matrix.Z.X, matrix.W.X,
+                                                                          matrix.X.Y, matrix.Y.Y, matrix.Z.Y, matrix.W.Y,
+                                                                          matrix.X.Z, matrix.Y.Z, matrix.Z.Z, matrix.W.Z,
+                                                                          matrix.X.W, matrix.Y.W, matrix.Z.W, matrix.W.W);
+        //public static Matrix3D ToMatrix3D(CMatrix matrix) => new Matrix3D(matrix.W.W, matrix.X.W, matrix.Y.W, matrix.Z.W,
+        //                                                                  matrix.W.X, matrix.X.X, matrix.Y.X, matrix.Z.X,
+        //                                                                  matrix.W.Y, matrix.X.Y, matrix.Y.Y, matrix.Z.Y,
+        //                                                                  matrix.W.Z, matrix.X.Z, matrix.Y.Z, matrix.Z.Z);
+        //public static Matrix3D ToMatrix3D(CMatrix matrix) => new Matrix3D(matrix.X.X, matrix.X.Y, matrix.X.Z, matrix.X.W,
+        //                                                                  matrix.Y.X, matrix.Y.Y, matrix.Y.Z, matrix.Y.W,
+        //                                                                  matrix.Z.X, matrix.Z.Y, matrix.Z.Z, matrix.Z.W,
+        //                                                                  matrix.W.X, matrix.W.Y, matrix.W.Z, matrix.W.W);
     }
 
     public class SeparateMatrix

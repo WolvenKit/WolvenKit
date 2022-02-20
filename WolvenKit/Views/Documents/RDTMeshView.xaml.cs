@@ -809,6 +809,7 @@ namespace WolvenKit.Views.Documents
         */
         private void ReloadModels(object sender, RoutedEventArgs e)
         {
+            hxViewport.ZoomExtents();
             //if (ViewModel != null)
             //    LoadModels(ViewModel.SelectedAppearance);
         }

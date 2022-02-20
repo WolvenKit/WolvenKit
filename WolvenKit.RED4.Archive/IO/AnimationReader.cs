@@ -38,7 +38,7 @@ namespace WolvenKit.RED4.Archive.IO
                         {
                             if (animBuff.DataAddress != null && animBuff.InplaceCompressedBuffer == null)
                             {
-                                var defferedBuffer = new MemoryStream();
+                                //var defferedBuffer = new MemoryStream();
                                 var dataAddr = animBuff.DataAddress;
                                 var bytes = new byte[dataAddr.ZeInBytes];
                                 animDataBuffers[(int)((uint)dataAddr.UnkIndex)].Seek(dataAddr.FsetInBytes, SeekOrigin.Begin);

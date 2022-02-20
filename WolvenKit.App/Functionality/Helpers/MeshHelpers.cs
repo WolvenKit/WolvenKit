@@ -42,7 +42,7 @@ namespace WolvenKit.ViewModels.Documents
         public Dictionary<string, PBRMaterial> Materials { get; set; } = new();
         public Dictionary<string, CR2WFile> Files { get; set; } = new();
 
-        public List<SubmeshComponent> MakeMesh(CMesh cMesh, CR2WFile cr2w, ulong chunkMask = ulong.MaxValue, int appearanceIndex = 0)
+        public List<SubmeshComponent> MakeMesh(CMesh cMesh, ulong chunkMask = ulong.MaxValue, int appearanceIndex = 0)
         {
             if (cMesh.RenderResourceBlob == null || cMesh.RenderResourceBlob.Chunk is not rendRenderMeshBlob rendblob)
             {
@@ -97,7 +97,7 @@ namespace WolvenKit.ViewModels.Documents
                     LOD = meshesinfo.LODLvl[index],
                     IsRendering = (chunkMask & 1UL << index) > 0 && meshesinfo.LODLvl[index] == 1,
                     EnabledWithMask = (chunkMask & 1UL << index) > 0,
-                    CullMode = SharpDX.Direct3D11.CullMode.Front,
+                    //CullMode = SharpDX.Direct3D11.CullMode.Front,
                     Geometry = new MeshGeometry3D()
                     {
                         Positions = positions,
@@ -198,6 +198,84 @@ namespace WolvenKit.ViewModels.Documents
             }
             return Materials[name];
         }
+
+        public List<Material> GetMaterialsForAppearance(CMesh mesh, CName appearance)
+        {
+            var materials = GetMaterialsFromMesh(mesh);
+
+            var appMaterials = new List<Material>();
+
+            foreach (var materialName in mesh.Appearances.FirstOrDefault(x => x.Chunk.Name == appearance, mesh.Appearances[0]).Chunk.ChunkMaterials)
+            {
+                if (materials.ContainsKey(materialName))
+                {
+                    appMaterials.Add(materials[materialName]);
+                }
+                else
+                {
+                    appMaterials.Add(new Material()
+                    {
+                        Name = materialName
+                    });
+                }
+            }
+
+            return appMaterials;
+        }
+
+        public Dictionary<string, Material> GetMaterialsFromMesh(CMesh mesh)
+        {
+            var materials = new Dictionary<string, Material>();
+
+            var localList = (CR2WList)mesh.LocalMaterialBuffer.RawData?.Buffer.Data ?? null;
+
+            foreach (var me in mesh.MaterialEntries)
+            {
+                if (!me.IsLocalInstance)
+                {
+                    if (!materials.ContainsKey(me.Name))
+                    {
+                        materials.Add(me.Name, new Material()
+                        {
+                            Name = me.Name
+                        });
+                    }
+                    continue;
+                }
+                CMaterialInstance inst = null;
+
+                if (localList != null && localList.Files.Count > me.Index)
+                {
+                    inst = (CMaterialInstance)localList.Files[me.Index].RootChunk;
+                }
+                else
+                {
+                    inst = (CMaterialInstance)mesh.PreloadLocalMaterialInstances[me.Index].GetValue();
+                }
+
+                var material = new Material()
+                {
+                    Instance = inst,
+                    Name = me.Name
+                };
+
+                foreach (var pair in inst.Values)
+                {
+                    if (!material.Values.ContainsKey(pair.Key))
+                    {
+                        material.Values.Add(pair.Key, pair.Value);
+                    }
+                }
+
+                if (!materials.ContainsKey(me.Name))
+                {
+                    materials.Add(me.Name, material);
+                }
+            }
+
+            return materials;
+        }
+
 
         public bool IsLoadingMaterials { get; set; }
 

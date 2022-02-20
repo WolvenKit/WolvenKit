@@ -43,6 +43,7 @@
             <hx:Viewport3DX.InputBindings>
                 <MouseBinding Command="hx:ViewportCommands.Rotate" Gesture="LeftClick" />
                 <MouseBinding Command="hx:ViewportCommands.Pan" Gesture="MiddleClick" />
+                <MouseBinding Command="hx:ViewportCommands.Rotate" Gesture="Shift+MiddleClick" />
             </hx:Viewport3DX.InputBindings>
             <hx:DirectionalLight3D Direction="0, -1, 0" Color="White" />
             <hx:DirectionalLight3D Direction="0, 0, 1" Color="White" />
@@ -178,8 +179,7 @@
                         Padding="10,0"
                         DisplayMemberPath="Name"
                         ItemsSource="{Binding Appearances, Mode=OneWay}"
-                        SelectedItem="{Binding SelectedAppearance, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                        SelectionChanged="ReloadModels" />
+                        SelectedItem="{Binding SelectedAppearance, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                 </Grid>
                 <Grid>
                     <Grid.ColumnDefinitions>
@@ -196,9 +196,9 @@
                         Height="30"
                         Padding="10,0"
                         ItemsSource="{Binding SelectedAppearance.LODLUT.Keys, Mode=OneWay}"
-                        SelectedItem="{Binding SelectedAppearance.SelectedLOD, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                        SelectionChanged="ReloadModels" />
+                        SelectedItem="{Binding SelectedAppearance.SelectedLOD, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                 </Grid>
+                <Button Click="ReloadModels" Content="Zoom to Extents" />
                 <Button
                     Command="{Binding LoadMaterialsCommand}"
                     Content="Load Materials for Appearance"

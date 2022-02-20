@@ -208,6 +208,10 @@ namespace WolvenKit.ViewModels.Documents
             {
                 TabItemViewModels.Add(new RDTMeshViewModel(ent, this));
             }
+            if (cls is worldStreamingSector wss)
+            {
+                TabItemViewModels.Add(new RDTMeshViewModel(wss, this));
+            }
         }
 
         private void PopulateItems()

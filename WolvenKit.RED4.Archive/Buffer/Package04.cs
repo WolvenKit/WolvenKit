@@ -11,6 +11,7 @@ namespace WolvenKit.RED4.Archive.Buffer
         public short CruidIndex;
         public IList<CRUID> RootCruids;
 
+        public IRedType Data => RootChunk;
 
         public IList<RedBaseClass> Chunks { get; set; }
         public RedBaseClass RootChunk => Chunks[0];
