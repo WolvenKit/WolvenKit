@@ -70,6 +70,7 @@ namespace WolvenKit.RED4.Archive
             _fileTypes.Add("inkanim", new[] { typeof(inkanimAnimationLibraryResource) });
             _fileTypes.Add("inkatlas", new[] { typeof(inkTextureAtlas) });
             _fileTypes.Add("inkcharcustomization", new[] { typeof(gameuiCharacterCustomizationInfoResource) });
+            _fileTypes.Add("inkenginesettings", new[] { typeof(inkEngineSettingsResource) });
             _fileTypes.Add("inkfontfamily", new[] { typeof(inkFontFamilyResource) });
             _fileTypes.Add("inkfullscreencomposition", new[] { typeof(inkFullscreenCompositionResource) });
             _fileTypes.Add("inkgamesettings", new[] { typeof(inkGameSettingsResource) });
@@ -123,6 +124,7 @@ namespace WolvenKit.RED4.Archive
             _fileTypes.Add("sp", new[] { typeof(CSkinProfile) });
             _fileTypes.Add("spatial_representation", new[] { typeof(worldTrafficPersistentSpatialResource) });
             _fileTypes.Add("streamingblock", new[] { typeof(worldStreamingBlock) });
+            _fileTypes.Add("streamingquerydata", new[] { typeof(worldStreamingQueryDataResource) });
             _fileTypes.Add("streamingsector", new[] { typeof(worldStreamingSector) });
             _fileTypes.Add("streamingsector_inplace", new[] { typeof(worldStreamingSectorInplaceContent) });
             _fileTypes.Add("streamingworld", new[] { typeof(worldStreamingWorld) });
