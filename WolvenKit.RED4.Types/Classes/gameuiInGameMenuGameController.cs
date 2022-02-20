@@ -85,10 +85,19 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<gameAttachmentSlotsScriptListener>>(value);
 		}
 
+		[Ordinal(13)] 
+		[RED("loadSaveDelayID")] 
+		public gameDelayID LoadSaveDelayID
+		{
+			get => GetPropertyValue<gameDelayID>();
+			set => SetPropertyValue<gameDelayID>(value);
+		}
+
 		public gameuiInGameMenuGameController()
 		{
 			ItemSceneInfos = new();
 			GarmentSwitchEffectControllers = new();
+			LoadSaveDelayID = new();
 		}
 	}
 }
