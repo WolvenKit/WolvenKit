@@ -160,6 +160,11 @@ namespace WolvenKit.RED4.Archive.IO
                 var bytes = _reader.ReadBytes(r.size);
                 import.DepotPath = Encoding.UTF8.GetString(bytes.ToArray());
                 import.Hash = FNV1A64HashAlgorithm.HashString(import.DepotPath);
+
+                if (CollectData)
+                {
+                    DataCollection.RawImportList.Add(import.DepotPath);
+                }
             }
             return import;
         }
@@ -167,6 +172,11 @@ namespace WolvenKit.RED4.Archive.IO
         {
             var s = _reader.ReadNullTerminatedString();
             //Debug.Assert(s.Length == n.size);
+            if (CollectData)
+            {
+                DataCollection.RawStringList.Add(s);
+            }
+
             return s;
         }
 
