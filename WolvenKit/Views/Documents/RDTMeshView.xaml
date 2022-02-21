@@ -37,7 +37,7 @@
             Camera="{Binding Camera}"
             CoordinateSystemLabelForeground="White"
             EffectsManager="{Binding EffectsManager}"
-            FXAALevel="High"
+            FXAALevel="Ultra"
             ShowCoordinateSystem="True"
             UseDefaultGestures="False">
             <hx:Viewport3DX.InputBindings>

@@ -105,12 +105,22 @@ namespace WolvenKit.ViewModels.Documents
                         Normals = normals,
                         TextureCoordinates = textureCoordinates,
                         Tangents = tangents
-                    }
+                    },
+                    DepthBias = -index * 2
+                    //IsTransparent = true
                 };
                 if (mesh.materialNames.Length > appearanceIndex)
                 {
                     sm.MaterialName = mesh.materialNames[appearanceIndex];
                     sm.Material = SetupPBRMaterial(mesh.materialNames[appearanceIndex]);
+                    if (sm.MaterialName.Contains("glass"))
+                    {
+                        sm.DepthBias -= 10;
+                    }
+                    if (sm.MaterialName.Contains("sticker") || sm.MaterialName.Contains("decal"))
+                    {
+                        sm.DepthBias -= 15;
+                    }
                 }
                 else
                 {
@@ -140,9 +150,9 @@ namespace WolvenKit.ViewModels.Documents
                         EnableAutoTangent = true,
                         RenderShadowMap = true,
                         RenderEnvironmentMap = true,
-                        EnableTessellation = true,
-                        MaxDistanceTessellationFactor = 2,
-                        MinDistanceTessellationFactor = 4
+                        //EnableTessellation = true,
+                        //MaxDistanceTessellationFactor = 2,
+                        //MinDistanceTessellationFactor = 4
                     };
                     Materials[name] = material;
                 }
@@ -464,7 +474,7 @@ namespace WolvenKit.ViewModels.Documents
                     }
 
                     {
-                        var color = mllt.Overrides.ColorScale.Where(x => x.N == layer.ColorScale).First()?.V ?? null;
+                        var color = mllt.Overrides.ColorScale.Where(x => x.N == layer.ColorScale).FirstOrDefault()?.V ?? null;
 
                         if (color == null)
                         {
@@ -494,9 +504,9 @@ namespace WolvenKit.ViewModels.Documents
                 SkipColor:
 
                     {
-                        var roughOut = mllt.Overrides.RoughLevelsOut.Where(x => x.N == layer.RoughLevelsOut).First()?.V ?? null;
+                        var roughOut = mllt.Overrides.RoughLevelsOut.Where(x => x.N == layer.RoughLevelsOut).FirstOrDefault()?.V ?? null;
 
-                        var metalOut = mllt.Overrides.MetalLevelsOut.Where(x => x.N == layer.MetalLevelsOut).First()?.V ?? null;
+                        var metalOut = mllt.Overrides.MetalLevelsOut.Where(x => x.N == layer.MetalLevelsOut).FirstOrDefault()?.V ?? null;
 
                         var colorMatrix = new ColorMatrix(new float[][]
                         {
@@ -557,13 +567,16 @@ namespace WolvenKit.ViewModels.Documents
 
                         Bitmap tempNormalBitmap = new Bitmap(maskBitmap.Width, maskBitmap.Height);
 
-                        try
+                        if (layerWidth != 0 && layerHeight != 0)
                         {
-                            tempNormalBitmap = new Bitmap((layerWidth < maskBitmap.Width) ? layerWidth : maskBitmap.Width, (layerHeight < maskBitmap.Height) ? layerHeight : maskBitmap.Height);
-                        }
-                        catch (Exception)
-                        {
-                            ;
+                            try
+                            {
+                                tempNormalBitmap = new Bitmap((layerWidth < maskBitmap.Width) ? layerWidth : maskBitmap.Width, (layerHeight < maskBitmap.Height) ? layerHeight : maskBitmap.Height);
+                            }
+                            catch (Exception)
+                            {
+                                ;
+                            }
                         }
 
                         Graphics gfx_n = Graphics.FromImage(tempNormalBitmap);

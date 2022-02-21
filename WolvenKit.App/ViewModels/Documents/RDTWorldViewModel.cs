@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Media.Media3D;
+using HelixToolkit.SharpDX.Core;
 using HelixToolkit.Wpf.SharpDX;
 using WolvenKit.RED4.Archive.Buffer;
 using WolvenKit.RED4.Archive.CR2W;
@@ -38,13 +39,13 @@ namespace WolvenKit.ViewModels.Documents
             {
                 var handle = data.Handles[handleIndex];
                 var name = (string)handle.Chunk.DebugName;
-                name = name?.Replace("{", "").Replace("}", "") ?? "none";
+                name = name?.Replace("{", "").Replace("}", "").Replace("\\", "_").Replace(".", "_") ?? "none";
 
                 if (handle.Chunk is IRedMeshNode irmn)
                 {
                     var meshFile = File.GetFileFromDepotPathOrCache(irmn.Mesh.DepotPath);
 
-                    if (meshFile.RootChunk is not CMesh mesh)
+                    if (meshFile == null || meshFile.RootChunk is not CMesh mesh)
                     {
                         continue;
                     }
@@ -106,7 +107,10 @@ namespace WolvenKit.ViewModels.Documents
                             matrix.Translate(ToVector3D(transforms[0].Position));
 
                             var wtbMatrix = new Matrix3D();
-                            wtbMatrix.Scale(ToVector3D(wtbTransforms[(int)(wimn.WorldTransformsBuffer.StartIndex + i)].Scale));
+                            if (wtbTransforms[(int)(wimn.WorldTransformsBuffer.StartIndex + i)] is WorldTransformExt wte)
+                            {
+                                wtbMatrix.Scale(ToVector3D(wte.Scale));
+                            }
                             wtbMatrix.Rotate(ToQuaternion(wtbTransforms[(int)(wimn.WorldTransformsBuffer.StartIndex + i)].Orientation));
                             wtbMatrix.Translate(ToVector3D(wtbTransforms[(int)(wimn.WorldTransformsBuffer.StartIndex + i)].Position));
 
@@ -145,10 +149,10 @@ namespace WolvenKit.ViewModels.Documents
                             matrix.Rotate(ToQuaternion(transform.Orientation));
                             matrix.Translate(ToVector3D(transform.Position));
 
-                            if (irmn is worldBendedMeshNode wbmn)
-                            {
-                                matrix.Append(ToMatrix3D(wbmn.DeformationData[i]));
-                            }
+                            //if (irmn is worldBendedMeshNode wbmn)
+                            //{
+                            //    matrix.Append(ToMatrix3D(wbmn.DeformationData[i]));
+                            //}
 
                             subgroup.Transform = new MatrixTransform3D(matrix);
 
@@ -159,10 +163,103 @@ namespace WolvenKit.ViewModels.Documents
 
                     app.ModelGroup.Add(group);
                 }
+                else if (handle.Chunk is worldNavigationNode wnm)
+                {
+                    var navmeshFile = File.GetFileFromDepotPathOrCache(wnm.NavigationTileResource.DepotPath);
+
+                    if (navmeshFile.RootChunk is not worldNavigationTileResource wntr)
+                    {
+                        continue;
+                    }
+
+                    foreach (var tile in wntr.TilesData)
+                    {
+                        if (tile.TilesBuffer.Data is not TilesBuffer tb)
+                        {
+                            continue;
+                        }
+
+                        var positions = new Vector3Collection();
+
+                        foreach(var v in tb.Vertices)
+                        {
+                            positions.Add(ToVector3(v));
+                        }
+
+                        var mb = new MeshBuilder();
+
+                        foreach (var f in tb.FaceInfo)
+                        {
+                            mb.AddTriangle(positions[f.Indices[0]], positions[f.Indices[1]], positions[f.Indices[2]]); 
+                        }
+
+                        mb.ComputeNormalsAndTangents(MeshFaces.Default);
+
+                        var mesh = new MeshGeometryModel3D()
+                        {
+                            Geometry = mb.ToMeshGeometry3D(),
+                            Material = SetupPBRMaterial("DefaultMaterial")
+                        };
+
+                        var group = new MeshComponent()
+                        {
+                            Name = name
+                        };
+
+                        group.Children.Add(mesh);
+
+                        app.ModelGroup.Add(group);
+                    }
+                }
+                else if (handle.Chunk is worldAreaShapeNode wasn)
+                {
+                    var shape = wasn.Outline.Chunk;
+                    var mb = new MeshBuilder();
+
+                    var center = new SharpDX.Vector3();
+
+                    foreach (var point in shape.Points)
+                    {
+                        center.X += (point.X / shape.Points.Count);
+                        center.Y += (point.Z / shape.Points.Count);
+                        center.Z += (-point.Y / shape.Points.Count);
+                    }
+
+                    mb.AddBox(center, Math.Abs(shape.Points[0].X) * 2, shape.Height, Math.Abs(shape.Points[0].Y) * 2);
+                    mb.ComputeNormalsAndTangents(MeshFaces.Default);
+
+                    var mesh = new MeshGeometryModel3D()
+                    {
+                        Geometry = mb.ToMeshGeometry3D(),
+                        Material = SetupPBRMaterial("DefaultMaterial"),
+                        IsTransparent = true
+                    };
+
+                    var matrix = new Matrix3D();
+                    matrix.Scale(ToVector3D(transforms[0].Scale));
+                    matrix.Rotate(ToQuaternion(transforms[0].Orientation));
+                    matrix.Translate(ToVector3D(transforms[0].Position));
+
+                    var group = new MeshComponent()
+                    {
+                        Name = name,
+                        Transform = new MatrixTransform3D(matrix)
+                    };
+
+                    group.Children.Add(mesh);
+
+                    app.ModelGroup.Add(group);
+
+                }
             }
 
             Appearances.Add(app);
             SelectedAppearance = app;
+        }
+
+        public static SharpDX.Vector3 ToVector3(Vector3 v)
+        {
+            return new SharpDX.Vector3(v.X, v.Y, v.Z);
         }
     }
 }

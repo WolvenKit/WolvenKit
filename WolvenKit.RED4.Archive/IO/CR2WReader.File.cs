@@ -34,6 +34,7 @@ namespace WolvenKit.RED4.Archive.IO
             _bufferReaders.Add("worldNavigationTileData.tilesBuffer", typeof(TilesReader));
             _bufferReaders.Add("worldSharedDataBuffer.buffer", typeof(WorldTransformsReader));
             _bufferReaders.Add("worldStreamingSector.transforms", typeof(StreamingSectorTransformReader));
+            _bufferReaders.Add("worldCollisionNode.compiledData", typeof(CollisionReader));
         }
 
         public EFileReadErrorCodes ReadFileInfo(out CR2WFileInfo info)

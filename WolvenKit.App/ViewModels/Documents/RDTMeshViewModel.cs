@@ -488,7 +488,6 @@ namespace WolvenKit.ViewModels.Documents
                     Models = LoadMeshs(pkg.Chunks)
                 });
 
-                Rigs.Add("Component", new Rig());
                 SelectedAppearance = Appearances[0];
             }
         }

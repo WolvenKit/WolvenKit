@@ -129,6 +129,7 @@ namespace WolvenKit.RED4.Archive.IO
                 if (value is IRedBufferPointer buf)
                 {
                     buf.GetValue().ParentTypes.Add($"{cls.GetType().Name}.{varName}");
+                    buf.GetValue().Parent = cls;
                 }
 
                 if (value is IRedArray arr)

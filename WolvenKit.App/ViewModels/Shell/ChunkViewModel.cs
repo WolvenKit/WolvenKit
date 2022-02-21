@@ -902,7 +902,9 @@ namespace WolvenKit.ViewModels.Shell
                     "stateName",
                     "n",
                     "componentName",
-                    "parameterName"
+                    "parameterName",
+                    "debugName",
+                    "category"
                 };
 
                 foreach (var propName in propNames)
