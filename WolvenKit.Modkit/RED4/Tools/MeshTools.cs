@@ -659,19 +659,19 @@ namespace CP77.CR2W
                 }
 
                 // getting garment morphs
-                //meshContainer.garmentMorph = Array.Empty<Vec3>();
-                //if (info.garmentSupportExists[index])
-                //{
-                //    meshContainer.garmentMorph = new Vec3[info.vertCounts[index]];
-                //    for (var i = 0; i < info.vertCounts[index]; i++)
-                //    {
-                //        gfs.Position = info.posnOffsets[index] + (i * info.vpStrides[index]) + 8 + (2 * meshContainer.weightCount);
-                //        var x = Converters.hfconvert(gbr.ReadUInt16());
-                //        var y = Converters.hfconvert(gbr.ReadUInt16());
-                //        var z = Converters.hfconvert(gbr.ReadUInt16());
-                //        meshContainer.garmentMorph[i] = new Vec3(x, z, -y);
-                //    }
-                //}
+                meshContainer.garmentMorph = Array.Empty<Vec3>();
+                if (info.garmentSupportExists[index])
+                {
+                    meshContainer.garmentMorph = new Vec3[info.vertCounts[index]];
+                    for (var i = 0; i < info.vertCounts[index]; i++)
+                    {
+                        gfs.Position = info.posnOffsets[index] + (i * info.vpStrides[index]) + 8 + (2 * meshContainer.weightCount);
+                        var x = Converters.hfconvert(gbr.ReadUInt16());
+                        var y = Converters.hfconvert(gbr.ReadUInt16());
+                        var z = Converters.hfconvert(gbr.ReadUInt16());
+                        meshContainer.garmentMorph[i] = new Vec3(x, z, -y);
+                    }
+                }
 
                 // getting uint16 face indices
                 meshContainer.indices = new uint[info.indCounts[index]];
@@ -838,15 +838,15 @@ namespace CP77.CR2W
                     bw.Write(Convert.ToUInt16(mesh.indices[i + 0]));
                     bw.Write(Convert.ToUInt16(mesh.indices[i + 2]));
                 }
-                //if (mesh.garmentMorph.Length > 0)
-                //{
-                //    for (var i = 0; i < mesh.positions.Length; i++)
-                //    {
-                //        bw.Write(mesh.garmentMorph[i].X);
-                //        bw.Write(mesh.garmentMorph[i].Y);
-                //        bw.Write(mesh.garmentMorph[i].Z);
-                //    }
-                //}
+                if (mesh.garmentMorph.Length > 0)
+                {
+                    for (var i = 0; i < mesh.positions.Length; i++)
+                    {
+                        bw.Write(mesh.garmentMorph[i].X);
+                        bw.Write(mesh.garmentMorph[i].Y);
+                        bw.Write(mesh.garmentMorph[i].Z);
+                    }
+                }
             }
             var buffer = model.UseBuffer(ms.ToArray());
             var BuffViewoffset = 0;

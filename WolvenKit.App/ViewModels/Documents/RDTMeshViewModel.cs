@@ -223,10 +223,11 @@ namespace WolvenKit.ViewModels.Documents
             }
 
             EffectsManager = new DefaultEffectsManager();
-            EnvironmentMap = TextureModel.Create(Path.Combine(ISettingsManager.GetTemp_OBJPath(), "Cubemap_Grandcanyon.dds"));
+            //EnvironmentMap = TextureModel.Create(Path.Combine(ISettingsManager.GetTemp_OBJPath(), "Cubemap_Grandcanyon.dds"));
             Camera = new HelixToolkit.Wpf.SharpDX.PerspectiveCamera()
             {
-                FarPlaneDistance = 1E+8
+                FarPlaneDistance = 1E+8,
+                LookDirection = new System.Windows.Media.Media3D.Vector3D(1f, -1f, -1f)
             };
 
             ExtractShadersCommand = new RelayCommand(ExtractShaders);

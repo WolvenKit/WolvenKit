@@ -29,6 +29,7 @@ using WolvenKit.RED4.Archive.IO;
 using WolvenKit.Functionality.Helpers;
 using System.ComponentModel;
 using System.Collections.Specialized;
+using WolvenKit.Functionality.Extensions;
 
 namespace WolvenKit.ViewModels.Documents
 {
@@ -92,7 +93,7 @@ namespace WolvenKit.ViewModels.Documents
                 var positions = new Vector3Collection(mesh.positions.Length);
                 for (var i = 0; i < mesh.positions.Length; i++)
                 {
-                    positions.Add(ToVector3(mesh.positions[i]));
+                    positions.Add(mesh.positions[i].ToVector3());
                 }
 
                 var indices = new IntCollection(mesh.indices.Length);
@@ -107,7 +108,7 @@ namespace WolvenKit.ViewModels.Documents
                     normals = new Vector3Collection(mesh.normals.Length);
                     for (var i = 0; i < mesh.normals.Length; i++)
                     {
-                        normals.Add(ToVector3(mesh.normals[i]));
+                        normals.Add(mesh.normals[i].ToVector3());
                     }
                 }
                 else
@@ -126,7 +127,7 @@ namespace WolvenKit.ViewModels.Documents
                     textureCoordinates = new Vector2Collection(mesh.texCoords0.Length);
                     for (var i = 0; i < mesh.texCoords0.Length; i++)
                     {
-                        textureCoordinates.Add(ToVector2(mesh.texCoords0[i]));
+                        textureCoordinates.Add(mesh.texCoords0[i].ToVector2());
                     }
                 }
                 else
@@ -193,7 +194,7 @@ namespace WolvenKit.ViewModels.Documents
                     tangents = new Vector3Collection(mesh.tangents.Length);
                     for (var i = 0; i < mesh.tangents.Length; i++)
                     {
-                        tangents.Add(ToVector3(mesh.tangents[i]));
+                        tangents.Add(mesh.tangents[i].ToVector3());
                     }
                 }
                 else
@@ -1010,21 +1011,6 @@ namespace WolvenKit.ViewModels.Documents
         public byte ToBlue(byte r, byte g)
         {
             return (byte)Math.Clamp(Math.Round((Math.Sqrt(1.02 - 2 * ((r / 255F) * 2 - 1) * ((g / 255F) * 2 - 1)) + 1) / 2 * 255), 0, 255);
-        }
-
-        public static SharpDX.Vector2 ToVector2(System.Numerics.Vector2 v)
-        {
-            return new SharpDX.Vector2(v.X, v.Y);
-        }
-
-        public static SharpDX.Vector3 ToVector3(System.Numerics.Vector3 v)
-        {
-            return new SharpDX.Vector3(v.X, v.Y, v.Z);
-        }
-
-        public static SharpDX.Vector3 ToVector3(System.Numerics.Vector4 v)
-        {
-            return new SharpDX.Vector3(v.X / v.W, v.Y / v.W, v.Z / v.W);
         }
     }
 }
