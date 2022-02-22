@@ -8,7 +8,9 @@
     xmlns:documents="clr-namespace:WolvenKit.ViewModels.Documents;assembly=WolvenKit.App"
     xmlns:dxControls="clr-namespace:Ab3d.DirectX.Controls;assembly=Ab3d.DXEngine.Wpf"
     xmlns:hx="http://helix-toolkit.org/wpf/SharpDX"
+    xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
     xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
+    xmlns:ie="http://schemas.microsoft.com/expression/2010/interactions"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:reactiveUi="http://reactiveui.net"
     xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
@@ -37,7 +39,9 @@
             Camera="{Binding Camera}"
             CoordinateSystemLabelForeground="White"
             EffectsManager="{Binding EffectsManager}"
-            FXAALevel="Ultra"
+            EnableRenderFrustum="True"
+            EnableRenderOrder="True"
+            FXAALevel="High"
             ShowCoordinateSystem="True"
             UseDefaultGestures="False">
             <hx:Viewport3DX.InputBindings>
@@ -45,6 +49,11 @@
                 <MouseBinding Command="hx:ViewportCommands.Pan" Gesture="MiddleClick" />
                 <MouseBinding Command="hx:ViewportCommands.Rotate" Gesture="Shift+MiddleClick" />
             </hx:Viewport3DX.InputBindings>
+            <i:Interaction.Triggers>
+                <i:EventTrigger EventName="MouseDown3D">
+                    <ie:CallMethodAction MethodName="OnMouseDown3DHandler" TargetObject="{Binding}" />
+                </i:EventTrigger>
+            </i:Interaction.Triggers>
             <hx:DirectionalLight3D Direction="0, -1, 0" Color="White" />
             <hx:DirectionalLight3D Direction="0, 0, 1" Color="White" />
             <hx:DirectionalLight3D Direction="0, 0, -1" Color="White" />
@@ -204,6 +213,40 @@
                     Content="Load Materials for Appearance"
                     IsEnabled="{Binding IsLoadingMaterials, Converter={StaticResource InvertBooleanConverter}}" />
                 <Button Command="{Binding ExtractShadersCommand}" Content="Export Shaders" />
+
+                <!--ItemsControl ItemsSource="{Binding Sectors, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <VirtualizingStackPanel
+                                IsVirtualizing="True"
+                                Orientation="Vertical"
+                                VirtualizationMode="Recycling" />
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                    <ItemsControl.Template>
+                        <ControlTemplate TargetType="ItemsControl">
+                            <ScrollViewer
+                                MaxHeight="500"
+                                CanContentScroll="True"
+                                Focusable="False">
+                                <ItemsPresenter />
+                            </ScrollViewer>
+                        </ControlTemplate>
+                    </ItemsControl.Template>
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <StackPanel Orientation="Horizontal">
+                                <CheckBox IsChecked="{Binding ShowElements, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding IsLoaded, UpdateSourceTrigger=PropertyChanged}" />
+                                <TextBlock Text="{Binding NumberOfHandles}" />
+                                <Button
+                                    Command="{Binding DataContext.LoadSectorCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}"
+                                    CommandParameter="{Binding}"
+                                    Content="{Binding Name}"
+                                    IsEnabled="{Binding IsLoaded, Converter={StaticResource InvertBooleanConverter}, UpdateSourceTrigger=PropertyChanged}" />
+                            </StackPanel>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </I-->
             </StackPanel>
             <!--syncfusion:SfTreeGrid
                 Grid.Row="1"
@@ -251,6 +294,7 @@
                 ItemsSource="{Binding SelectedAppearance.ModelGroup, Mode=TwoWay}"
                 NodeCheckStateChanged="SfTreeGrid_NodeCheckStateChanged"
                 RowHeaderWidth="300"
+                SelectedItem="{Binding SelectedItem}"
                 ShowCheckBox="True">
                 <syncfusion:SfTreeGrid.Columns>
                     <syncfusion:TreeGridTextColumn
@@ -275,6 +319,10 @@
                     <syncfusion:TreeGridTextColumn
                         HeaderText="Material"
                         MappingName="MaterialName"
+                        MinimumWidth="100" />
+                    <syncfusion:TreeGridTextColumn
+                        HeaderText="DepotPath"
+                        MappingName="DepotPath"
                         MinimumWidth="100" />
                 </syncfusion:SfTreeGrid.Columns>
             </syncfusion:SfTreeGrid>

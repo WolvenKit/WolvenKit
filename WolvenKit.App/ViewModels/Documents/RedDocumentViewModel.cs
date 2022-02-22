@@ -212,6 +212,10 @@ namespace WolvenKit.ViewModels.Documents
             {
                 TabItemViewModels.Add(new RDTMeshViewModel(wss, this));
             }
+            if (cls is worldStreamingBlock wsb)
+            {
+                TabItemViewModels.Add(new RDTMeshViewModel(wsb, this));
+            }
         }
 
         private void PopulateItems()
@@ -242,6 +246,20 @@ namespace WolvenKit.ViewModels.Documents
                 if (!Files.ContainsKey(depotPath))
                 {
                     Files[depotPath] = GetFileFromDepotPath(depotPath);
+                }
+
+                if (Files[depotPath] != null)
+                {
+                    foreach (var res in Files[depotPath].EmbeddedFiles)
+                    {
+                        if (!Files.ContainsKey(res.FileName))
+                        {
+                            Files.Add(res.FileName, new CR2WFile()
+                            {
+                                RootChunk = res.Content
+                            });
+                        }
+                    }
                 }
             }
             return Files[depotPath];
@@ -274,6 +292,19 @@ namespace WolvenKit.ViewModels.Documents
                         cr2wFile = _parser.ReadRed4File(reader);
                         cr2wFile.MetaData.FileName = depotPath.GetValue();
                     }
+                    lock (Files)
+                    {
+                        foreach (var res in cr2wFile.EmbeddedFiles)
+                        {
+                            if (!Files.ContainsKey(res.FileName))
+                            {
+                                Files.Add(res.FileName, new CR2WFile()
+                                {
+                                    RootChunk = res.Content
+                                });
+                            }
+                        }
+                    }
 
                     return cr2wFile;
                 }
@@ -290,6 +321,20 @@ namespace WolvenKit.ViewModels.Documents
                     cr2wFile = _parser.ReadRed4File(reader);
                     if (depotPath.GetValue() != null)
                         cr2wFile.MetaData.FileName = depotPath.GetValue();
+                }
+
+                lock (Files)
+                {
+                    foreach (var res in cr2wFile.EmbeddedFiles)
+                    {
+                        if (!Files.ContainsKey(res.FileName))
+                        {
+                            Files.Add(res.FileName, new CR2WFile()
+                            {
+                                RootChunk = res.Content
+                            });
+                        }
+                    }
                 }
 
                 return cr2wFile;

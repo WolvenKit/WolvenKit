@@ -17,29 +17,30 @@ namespace WolvenKit.ViewModels.Documents
     {
         public RDTMeshViewModel(worldStreamingSector data, RedDocumentViewModel file) : this(file)
         {
-            Header = "Streaming Sector Preview";
+            Header = "Sector Preview";
             _data = data;
-
-            foreach (var res in file.Cr2wFile.EmbeddedFiles)
-            {
-                file.Files.Add(res.FileName, new CR2WFile()
-                {
-                    RootChunk = res.Content
-                });
-            }
 
             var app = new Appearance()
             {
                 Name = Path.GetFileNameWithoutExtension(File.ContentId).Replace("-", "_"),
             };
 
+            RenderSector(data, app);
+
+            Appearances.Add(app);
+            SelectedAppearance = app;
+        }
+
+        public Element3D RenderSector(worldStreamingSector data, Appearance app)
+        { 
             var ssTransforms = ((StreamingSectorBuffer)data.Transforms.Data).Transforms;
 
+            var groups = new List<Element3D>();
             foreach (var (handleIndex, transforms) in ssTransforms)
             {
                 var handle = data.Handles[handleIndex];
                 var name = (string)handle.Chunk.DebugName;
-                name = name?.Replace("{", "").Replace("}", "").Replace("\\", "_").Replace(".", "_") ?? "none";
+                name = "_"+name?.Replace("{", "").Replace("}", "").Replace("\\", "_").Replace(".", "_").Replace("!", "").Replace("-", "_") ?? "none";
 
                 if (handle.Chunk is IRedMeshNode irmn)
                 {
@@ -55,7 +56,8 @@ namespace WolvenKit.ViewModels.Documents
                     var group = new MeshComponent()
                     {
                         Name = name,
-                        AppearanceName = irmn.MeshAppearance
+                        AppearanceName = irmn.MeshAppearance,
+                        DepotPath = irmn.Mesh.DepotPath
                     };
 
                     var model = new LoadableModel()
@@ -88,7 +90,8 @@ namespace WolvenKit.ViewModels.Documents
                             var subgroup = new MeshComponent()
                             {
                                 Name = name + $"_instance_{i:D2}",
-                                AppearanceName = wimn.MeshAppearance
+                                AppearanceName = wimn.MeshAppearance,
+                                DepotPath = irmn.Mesh.DepotPath
                             };
 
                             foreach (var submesh in meshes)
@@ -102,14 +105,14 @@ namespace WolvenKit.ViewModels.Documents
                             }
 
                             var matrix = new Matrix3D();
-                            matrix.Scale(ToVector3D(transforms[0].Scale));
+                            matrix.Scale(ToScaleVector3D(transforms[0].Scale));
                             matrix.Rotate(ToQuaternion(transforms[0].Orientation));
                             matrix.Translate(ToVector3D(transforms[0].Position));
 
                             var wtbMatrix = new Matrix3D();
                             if (wtbTransforms[(int)(wimn.WorldTransformsBuffer.StartIndex + i)] is WorldTransformExt wte)
                             {
-                                wtbMatrix.Scale(ToVector3D(wte.Scale));
+                                wtbMatrix.Scale(ToScaleVector3D(wte.Scale));
                             }
                             wtbMatrix.Rotate(ToQuaternion(wtbTransforms[(int)(wimn.WorldTransformsBuffer.StartIndex + i)].Orientation));
                             wtbMatrix.Translate(ToVector3D(wtbTransforms[(int)(wimn.WorldTransformsBuffer.StartIndex + i)].Position));
@@ -131,7 +134,8 @@ namespace WolvenKit.ViewModels.Documents
                             var subgroup = new MeshComponent()
                             {
                                 Name = name + $"_instance_{i:D2}",
-                                AppearanceName = irmn.MeshAppearance
+                                AppearanceName = irmn.MeshAppearance,
+                                DepotPath = irmn.Mesh.DepotPath
                             };
 
                             foreach (var submesh in meshes)
@@ -145,14 +149,14 @@ namespace WolvenKit.ViewModels.Documents
                             }
 
                             var matrix = new Matrix3D();
-                            matrix.Scale(ToVector3D(transform.Scale));
+                            matrix.Scale(ToScaleVector3D(transform.Scale));
                             matrix.Rotate(ToQuaternion(transform.Orientation));
                             matrix.Translate(ToVector3D(transform.Position));
 
-                            //if (irmn is worldBendedMeshNode wbmn)
-                            //{
-                            //    matrix.Append(ToMatrix3D(wbmn.DeformationData[i]));
-                            //}
+                            if (irmn is worldBendedMeshNode wbmn)
+                            {
+                                //matrix.Append(ToMatrix3D(wbmn.DeformationData[i]));
+                            }
 
                             subgroup.Transform = new MatrixTransform3D(matrix);
 
@@ -161,7 +165,7 @@ namespace WolvenKit.ViewModels.Documents
                         }
                     }
 
-                    app.ModelGroup.Add(group);
+                    groups.Add(group);
                 }
                 else if (handle.Chunk is worldNavigationNode wnm)
                 {
@@ -195,10 +199,13 @@ namespace WolvenKit.ViewModels.Documents
 
                         mb.ComputeNormalsAndTangents(MeshFaces.Default);
 
+                        var material = SetupPBRMaterial("DefaultMaterial");
+                        material.AlbedoColor = new SharpDX.Color4(1f, 1f, 1f, 0.1f);
+
                         var mesh = new MeshGeometryModel3D()
                         {
                             Geometry = mb.ToMeshGeometry3D(),
-                            Material = SetupPBRMaterial("DefaultMaterial")
+                            Material = material
                         };
 
                         var group = new MeshComponent()
@@ -208,8 +215,31 @@ namespace WolvenKit.ViewModels.Documents
 
                         group.Children.Add(mesh);
 
-                        app.ModelGroup.Add(group);
+                        groups.Add(group);
                     }
+                }
+                else if (handle.Chunk is worldEntityNode wen)
+                {
+                    // a little slow for what we want to do
+                    //var entFile = File.GetFileFromDepotPathOrCache(wen.EntityTemplate.DepotPath);
+
+                    //if (entFile != null && entFile.RootChunk is entEntityTemplate eet)
+                    //{
+                    //    var entity = RenderEntity(eet, app);
+                    //    if (entity != null)
+                    //    {
+                    //        entity.Name = "Entity";
+
+                    //        var matrix = new Matrix3D();
+                    //        matrix.Scale(ToScaleVector3D(transforms[0].Scale));
+                    //        matrix.Rotate(ToQuaternion(transforms[0].Orientation));
+                    //        matrix.Translate(ToVector3D(transforms[0].Position));
+
+                    //        entity.Transform = new MatrixTransform3D(matrix);
+
+                    //        groups.Add(entity);
+                    //    }
+                    //}
                 }
                 else if (handle.Chunk is worldAreaShapeNode wasn)
                 {
@@ -228,15 +258,18 @@ namespace WolvenKit.ViewModels.Documents
                     mb.AddBox(center, Math.Abs(shape.Points[0].X) * 2, shape.Height, Math.Abs(shape.Points[0].Y) * 2);
                     mb.ComputeNormalsAndTangents(MeshFaces.Default);
 
+                    var material = SetupPBRMaterial("DefaultMaterial");
+                    material.AlbedoColor = new SharpDX.Color4(1f, 1f, 1f, 0.1f);
+
                     var mesh = new MeshGeometryModel3D()
                     {
                         Geometry = mb.ToMeshGeometry3D(),
-                        Material = SetupPBRMaterial("DefaultMaterial"),
+                        Material = material,
                         IsTransparent = true
                     };
 
                     var matrix = new Matrix3D();
-                    matrix.Scale(ToVector3D(transforms[0].Scale));
+                    matrix.Scale(ToScaleVector3D(transforms[0].Scale));
                     matrix.Rotate(ToQuaternion(transforms[0].Orientation));
                     matrix.Translate(ToVector3D(transforms[0].Position));
 
@@ -248,13 +281,21 @@ namespace WolvenKit.ViewModels.Documents
 
                     group.Children.Add(mesh);
 
-                    app.ModelGroup.Add(group);
+                    groups.Add(group);
 
                 }
             }
 
-            Appearances.Add(app);
-            SelectedAppearance = app;
+            var element = new SectorGroup()
+            {
+
+            };
+            foreach (var group in groups)
+            {
+                element.Children.Add(group);
+            }
+            app.ModelGroup.Add(element);
+            return element;
         }
 
         public static SharpDX.Vector3 ToVector3(Vector3 v)
@@ -262,4 +303,11 @@ namespace WolvenKit.ViewModels.Documents
             return new SharpDX.Vector3(v.X, v.Y, v.Z);
         }
     }
+
+    public class SectorGroup : GroupModel3D
+    {
+        public string MaterialName { get; set; }
+        public string AppearanceName { get; set; }
+    }
+
 }

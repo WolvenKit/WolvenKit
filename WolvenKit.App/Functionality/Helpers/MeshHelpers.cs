@@ -27,6 +27,8 @@ using WolvenKit.Functionality.Commands;
 using WolvenKit.RED4.Archive.Buffer;
 using WolvenKit.RED4.Archive.IO;
 using WolvenKit.Functionality.Helpers;
+using System.ComponentModel;
+using System.Collections.Specialized;
 
 namespace WolvenKit.ViewModels.Documents
 {
@@ -35,12 +37,38 @@ namespace WolvenKit.ViewModels.Documents
         public bool EnabledWithMask { get; set; }
         public string MaterialName { get; set; }
         public uint LOD { get; set; }
+        public string AppearanceName { get; set; }
+    }
+
+    public class SmartElement3DCollection : ObservableElement3DCollection
+    {
+        public SmartElement3DCollection() : base()
+        {
+        }
+
+        public void AddRange(IEnumerable<Element3D> range)
+        {
+            foreach (var item in range)
+            {
+                Items.Add(item);
+            }
+
+            this.OnPropertyChanged(new PropertyChangedEventArgs("Count"));
+            this.OnPropertyChanged(new PropertyChangedEventArgs("Item[]"));
+            this.OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
+        }
+
+        public void Reset(IEnumerable<Element3D> range)
+        {
+            this.Items.Clear();
+
+            AddRange(range);
+        }
     }
 
     public partial class RDTMeshViewModel
     {
         public Dictionary<string, PBRMaterial> Materials { get; set; } = new();
-        public Dictionary<string, CR2WFile> Files { get; set; } = new();
 
         public List<SubmeshComponent> MakeMesh(CMesh cMesh, ulong chunkMask = ulong.MaxValue, int appearanceIndex = 0)
         {
@@ -73,29 +101,111 @@ namespace WolvenKit.ViewModels.Documents
                     indices.Add((int)mesh.indices[i]);
                 }
 
-                var normals = new Vector3Collection(mesh.normals.Length);
-                for (var i = 0; i < mesh.normals.Length; i++)
+                Vector3Collection normals;
+                if (mesh.normals.Length > 0)
                 {
-                    normals.Add(ToVector3(mesh.normals[i]));
+                    normals = new Vector3Collection(mesh.normals.Length);
+                    for (var i = 0; i < mesh.normals.Length; i++)
+                    {
+                        normals.Add(ToVector3(mesh.normals[i]));
+                    }
+                }
+                else
+                {
+                    normals = new Vector3Collection(mesh.positions.Length);
+                    for (var i = 0; i < mesh.positions.Length; i++)
+                    {
+                        normals.Add(new SharpDX.Vector3(0f, 1f, 0f));
+                    }
+                    //ComputeNormals(positions, indices, out normals);
                 }
 
-                var textureCoordinates = new Vector2Collection(mesh.texCoords0.Length);
-                for (var i = 0; i < mesh.texCoords0.Length; i++)
+                Vector2Collection textureCoordinates;
+                if (mesh.texCoords0.Length > 0)
                 {
-                    textureCoordinates.Add(ToVector2(mesh.texCoords0[i]));
+                    textureCoordinates = new Vector2Collection(mesh.texCoords0.Length);
+                    for (var i = 0; i < mesh.texCoords0.Length; i++)
+                    {
+                        textureCoordinates.Add(ToVector2(mesh.texCoords0[i]));
+                    }
+                }
+                else
+                {
+                    textureCoordinates = new Vector2Collection(mesh.positions.Length);
+                    if (cMesh.Parameters[0].Chunk is meshMeshParamTerrain mmpt)
+                    {
+                        float xMax = 0, xMin = 0, yMin = 0, yMax = 0;
+                        foreach (var chunk in mmpt.ChunkBoundingBoxes)
+                        {
+                            xMax = Math.Max(xMax, chunk.Max.X);
+                            yMax = Math.Max(yMax, chunk.Max.Y);
+                            xMin = Math.Min(xMin, chunk.Min.X);
+                            yMin = Math.Min(yMin, chunk.Min.Y);
+                        }
+                        if (xMax > 1024f || xMin < -1024f)
+                        {
+                            xMax = 2048;
+                            xMin = -2048;
+                            yMax = 2048;
+                            yMin = -2048;
+                        }
+                        if (xMax > 512f || xMin < -512f)
+                        {
+                            xMax = 1024;
+                            xMin = -1024;
+                            yMax = 1024;
+                            yMin = -1024;
+                        }
+                        if (xMax > 256f || xMin < -256f)
+                        {
+                            xMax = 512;
+                            xMin = -512;
+                            yMax = 512;
+                            yMin = -512;
+                        }
+                        else if (xMax > 128 || xMin < -128)
+                        {
+                            xMax = 256;
+                            xMin = -256;
+                            yMax = 256;
+                            yMin = -256;
+                        }
+                        else
+                        {
+                            xMax = 128;
+                            xMin = -128;
+                            yMax = 128;
+                            yMin = -128;
+                        }
+                        for (var i = 0; i < mesh.positions.Length; i++)
+                        {
+                            textureCoordinates.Add(new SharpDX.Vector2(
+                                (mesh.positions[i].X - xMin) / (xMax - xMin),
+                                1f - (mesh.positions[i].Z - yMin) / (yMax - yMin)
+                            ));
+                        }
+                    }
                 }
 
-                var tangents = new Vector3Collection(mesh.tangents.Length);
-                for (var i = 0; i < mesh.tangents.Length; i++)
+                Vector3Collection tangents;
+                if (mesh.tangents.Length > 0)
                 {
-                    tangents.Add(ToVector3(mesh.tangents[i]));
+                    tangents = new Vector3Collection(mesh.tangents.Length);
+                    for (var i = 0; i < mesh.tangents.Length; i++)
+                    {
+                        tangents.Add(ToVector3(mesh.tangents[i]));
+                    }
+                }
+                else
+                {
+                    MeshBuilder.ComputeTangents(positions, normals, textureCoordinates, indices, out tangents, out var bitangents);
                 }
                 
                 var sm = new SubmeshComponent()
                 {
                     Name = $"submesh_{index:D2}_LOD_{meshesinfo.LODLvl[index]:D2}",
                     LOD = meshesinfo.LODLvl[index],
-                    IsRendering = (chunkMask & 1UL << index) > 0 && meshesinfo.LODLvl[index] == 1,
+                    IsRendering = (chunkMask & 1UL << index) > 0 && meshesinfo.LODLvl[index] == (SelectedAppearance?.SelectedLOD ?? 1),
                     EnabledWithMask = (chunkMask & 1UL << index) > 0,
                     //CullMode = SharpDX.Direct3D11.CullMode.Front,
                     Geometry = new MeshGeometry3D()
@@ -109,10 +219,11 @@ namespace WolvenKit.ViewModels.Documents
                     DepthBias = -index * 2
                     //IsTransparent = true
                 };
+
                 if (mesh.materialNames.Length > appearanceIndex)
                 {
-                    sm.MaterialName = mesh.materialNames[appearanceIndex];
-                    sm.Material = SetupPBRMaterial(mesh.materialNames[appearanceIndex]);
+                    sm.MaterialName = GetUniqueMaterialName(mesh.materialNames[appearanceIndex], cMesh);
+                    sm.Material = SetupPBRMaterial(sm.MaterialName);
                     if (sm.MaterialName.Contains("glass"))
                     {
                         sm.DepthBias -= 10;
@@ -133,6 +244,53 @@ namespace WolvenKit.ViewModels.Documents
             return list;
 
         }
+
+        public static void ComputeNormals(Vector3Collection positions, IntCollection triangleIndices, out Vector3Collection normals)
+        {
+            normals = new Vector3Collection(positions.Count);
+            for (int i = 0; i < positions.Count; i++)
+            {
+                normals.Add(new SharpDX.Vector3(0f, 0f, 0f));
+            }
+
+            for (int j = 0; j < triangleIndices.Count; j += 3)
+            {
+                int index = triangleIndices[j + 2];
+                int index2 = triangleIndices[j + 1];
+                int index3 = triangleIndices[j];
+                SharpDX.Vector3 right = positions[index];
+                SharpDX.Vector3 left = positions[index2];
+                SharpDX.Vector3 left2 = positions[index3];
+                SharpDX.Vector3 first = left - right;
+                SharpDX.Vector3 second = left2 - right;
+                SharpDX.Vector3 value = CrossProduct(ref first, ref second);
+                first.Normalize();
+                second.Normalize();
+                float scale = (float)Math.Acos(DotProduct(ref first, ref second));
+                value.Normalize();
+                normals[index] += scale * value;
+                normals[index2] += scale * value;
+                normals[index3] += scale * value;
+            }
+
+            for (int k = 0; k < normals.Count; k++)
+            {
+                SharpDX.Vector3 value2 = normals[k];
+                value2.Normalize();
+                normals[k] = value2;
+            }
+        }
+
+        public static SharpDX.Vector3 CrossProduct(ref SharpDX.Vector3 first, ref SharpDX.Vector3 second)
+        {
+            return SharpDX.Vector3.Cross(first, second);
+        }
+
+        public static float DotProduct(ref SharpDX.Vector3 first, ref SharpDX.Vector3 second)
+        {
+            return first.X * second.X + first.Y * second.Y + first.Z * second.Z;
+        }
+
 
         public PBRMaterial SetupPBRMaterial(string name, bool force = false)
         {
@@ -217,20 +375,30 @@ namespace WolvenKit.ViewModels.Documents
 
             foreach (var materialName in mesh.Appearances.FirstOrDefault(x => x.Chunk.Name == appearance, mesh.Appearances[0]).Chunk.ChunkMaterials)
             {
-                if (materials.ContainsKey(materialName))
+                var name = GetUniqueMaterialName(materialName, mesh);
+                if (materials.ContainsKey(name))
                 {
-                    appMaterials.Add(materials[materialName]);
+                    appMaterials.Add(materials[name]);
                 }
                 else
                 {
                     appMaterials.Add(new Material()
                     {
-                        Name = materialName
+                        Name = name
                     });
                 }
             }
 
             return appMaterials;
+        }
+
+        public string GetUniqueMaterialName(string name, CMesh mesh)
+        {
+            if (mesh.InplaceResources.Count > 0)
+            {
+                return Path.GetFileNameWithoutExtension(mesh.InplaceResources[0].DepotPath.ToString());
+            }
+            return name;
         }
 
         public Dictionary<string, Material> GetMaterialsFromMesh(CMesh mesh)
@@ -241,13 +409,14 @@ namespace WolvenKit.ViewModels.Documents
 
             foreach (var me in mesh.MaterialEntries)
             {
+                var name = GetUniqueMaterialName(me.Name, mesh);
                 if (!me.IsLocalInstance)
                 {
                     if (!materials.ContainsKey(me.Name))
                     {
                         materials.Add(me.Name, new Material()
                         {
-                            Name = me.Name
+                            Name = name
                         });
                     }
                     continue;
@@ -266,7 +435,7 @@ namespace WolvenKit.ViewModels.Documents
                 var material = new Material()
                 {
                     Instance = inst,
-                    Name = me.Name
+                    Name = name
                 };
 
                 foreach (var pair in inst.Values)
@@ -277,9 +446,9 @@ namespace WolvenKit.ViewModels.Documents
                     }
                 }
 
-                if (!materials.ContainsKey(me.Name))
+                if (!materials.ContainsKey(name))
                 {
-                    materials.Add(me.Name, material);
+                    materials.Add(name, material);
                 }
             }
 
@@ -386,30 +555,30 @@ namespace WolvenKit.ViewModels.Documents
                 var normalExists = System.IO.File.Exists(filename_bn);
 
                 if (albedoExists && normalExists && roughMetallicExists)
-                    goto SkipNormals;
+                    goto DiffuseMaps;
 
                 if (dictionary["MultilayerSetup"] is not CResourceReference<Multilayer_Setup> mlsRef)
                 {
-                    goto SkipNormals;
+                    goto DiffuseMaps;
                 }
 
                 if (dictionary["MultilayerMask"] is not CResourceReference<Multilayer_Mask> mlmRef)
                 {
-                    goto SkipNormals;
+                    goto DiffuseMaps;
                 }
 
                 var setupFile = File.GetFileFromDepotPathOrCache(mlsRef.DepotPath);
 
                 if (setupFile == null || setupFile.RootChunk is not Multilayer_Setup mls)
                 {
-                    goto SkipNormals;
+                    goto DiffuseMaps;
                 }
 
                 var maskFile = File.GetFileFromDepotPathOrCache(mlmRef.DepotPath);
 
                 if (maskFile == null || maskFile.RootChunk is not Multilayer_Mask mlm)
                 {
-                    goto SkipNormals;
+                    goto DiffuseMaps;
                 }
 
                 ModTools.ConvertMultilayerMaskToDdsStreams(mlm, out var streams);
@@ -662,11 +831,9 @@ namespace WolvenKit.ViewModels.Documents
                 {
                     normalBitmap.Dispose();
                 }
-
-                goto SkipNormals;
             }
 
-            //DiffuseMaps:
+            DiffuseMaps:
             if (System.IO.File.Exists(filename_d))
                 goto NormalMaps;
 
@@ -702,7 +869,7 @@ namespace WolvenKit.ViewModels.Documents
             {
                 var xbm = File.GetFileFromDepotPathOrCache(crrbc.DepotPath);
 
-                if (xbm.RootChunk is not ITexture it)
+                if (xbm == null || xbm.RootChunk is not ITexture it)
                 {
                     goto NormalMaps;
                 }

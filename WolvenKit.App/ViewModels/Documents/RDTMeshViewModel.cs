@@ -77,7 +77,7 @@ namespace WolvenKit.ViewModels.Documents
         public List<LoadableModel> Models { get; set; } = new();
         public CName Resource { get; set; }
         public List<Node> Nodes { get; set; } = new();
-        public List<Element3D> ModelGroup { get; set; } = new();
+        public SmartElement3DCollection ModelGroup { get; set; } = new();
         public List<LoadableModel> BindableModels { get; set; } = new();
         public Dictionary<string, Material> RawMaterials { get; set; } = new();
     }
@@ -87,6 +87,7 @@ namespace WolvenKit.ViewModels.Documents
         public int AppearanceIndex { get; set; }
         public string AppearanceName { get; set; }
         public CR2WFile MeshFile { get; set; }
+        public CName DepotPath { get; set; }
         public List<SubmeshComponent> Meshes { get; set; } = new();
         public string FilePath { get; set; }
         public Model3D OriginalModel { get; set; }
@@ -196,7 +197,8 @@ namespace WolvenKit.ViewModels.Documents
 
         public SceneNodeGroupModel3D GroupModel { get; set; } = new SceneNodeGroupModel3D();
 
-        public List<Element3D> ModelGroup { get; set; } = new();
+        //public List<Element3D> ModelGroup { get; set; } = new();
+        public SmartElement3DCollection ModelGroup { get; set; } = new();
 
         public TextureModel EnvironmentMap { get; set; }
 
@@ -206,11 +208,26 @@ namespace WolvenKit.ViewModels.Documents
             {
                 Header = "Mesh Preview";
             }
+
             File = file;
+
+            foreach (var res in File.Cr2wFile.EmbeddedFiles)
+            {
+                if (!File.Files.ContainsKey(res.FileName))
+                {
+                    File.Files.Add(res.FileName, new CR2WFile()
+                    {
+                        RootChunk = res.Content
+                    });
+                }
+            }
 
             EffectsManager = new DefaultEffectsManager();
             EnvironmentMap = TextureModel.Create(Path.Combine(ISettingsManager.GetTemp_OBJPath(), "Cubemap_Grandcanyon.dds"));
-            Camera = new HelixToolkit.Wpf.SharpDX.PerspectiveCamera();
+            Camera = new HelixToolkit.Wpf.SharpDX.PerspectiveCamera()
+            {
+                FarPlaneDistance = 1E+8
+            };
 
             ExtractShadersCommand = new RelayCommand(ExtractShaders);
             LoadMaterialsCommand = new RelayCommand(LoadMaterials);
@@ -226,11 +243,12 @@ namespace WolvenKit.ViewModels.Documents
 
             foreach (var me in data.MaterialEntries)
             {
+                var name = GetUniqueMaterialName(me.Name, data);
                 if (!me.IsLocalInstance)
                 {
-                    materials.Add(me.Name, new Material()
+                    materials.Add(name, new Material()
                     {
-                        Name = me.Name
+                        Name = name
                     });
                     continue;
                 }
@@ -257,7 +275,7 @@ namespace WolvenKit.ViewModels.Documents
                 var material = new Material()
                 {
                     Instance = inst,
-                    Name = me.Name
+                    Name = name
                 };
 
                 foreach (var pair in inst.Values)
@@ -265,7 +283,7 @@ namespace WolvenKit.ViewModels.Documents
                     material.Values.Add(pair.Key, pair.Value);
                 }
 
-                materials.Add(me.Name, material);
+                materials.Add(name, material);
             }
 
             var appIndex = 0;
@@ -278,15 +296,16 @@ namespace WolvenKit.ViewModels.Documents
 
                     foreach (var materialName in mmapp.ChunkMaterials)
                     {
-                        if (materials.ContainsKey(materialName))
+                        var name = GetUniqueMaterialName(materialName, data);
+                        if (materials.ContainsKey(name))
                         {
-                            appMaterials.Add(materials[materialName]);
+                            appMaterials.Add(materials[name]);
                         }
                         else
                         {
                             appMaterials.Add(new Material()
                             {
-                                Name = materialName
+                                Name = name
                             });
                         }
                     }
@@ -302,7 +321,7 @@ namespace WolvenKit.ViewModels.Documents
                         AppearanceIndex = appIndex,
                         AppearanceName = mmapp.Name,
                         Materials = appMaterials,
-                        Name = Path.GetFileNameWithoutExtension(File.ContentId).Replace("-", "_"),
+                        Name = Path.GetFileNameWithoutExtension(File.ContentId).Replace("-", "_").Replace(".", "_"),
                         IsEnabled = true
                     };
                     a.Models.Add(model);
@@ -322,7 +341,7 @@ namespace WolvenKit.ViewModels.Documents
                         }
                         a.LODLUT[m.LOD].Add(m);
                     }
-                    AddMeshesToRiggedGroups(a);
+                    a.ModelGroup.AddRange(AddMeshesToRiggedGroups(a));
 
                     Appearances.Add(a);
                 }
@@ -331,166 +350,6 @@ namespace WolvenKit.ViewModels.Documents
             SelectedAppearance = Appearances[0];
         }
 
-        public RDTMeshViewModel(entEntityTemplate ent, RedDocumentViewModel file) : this(file)
-        {
-            Header = "Entity Preview";
-            _data = ent;
-
-            if (ent.CompiledData.Data is not Package04 pkg)
-                return;
-
-            if (ent.Appearances.Count > 0)
-            {
-                foreach (var component in pkg.Chunks)
-                {
-                    if (component is entSlotComponent slotset)
-                    {
-                        var slots = new Dictionary<string, string>();
-                        foreach (var slot in slotset.Slots)
-                        {
-                            if (!slots.ContainsKey(slot.SlotName))
-                                slots.Add(slot.SlotName, slot.BoneName);
-                        }
-
-                        string bindName = null, slotName = null;
-                        if ((slotset.ParentTransform?.GetValue() ?? null) is entHardTransformBinding ehtb)
-                        {
-                            bindName = ehtb.BindName;
-                            slotName = ehtb.SlotName;
-                        }
-
-                        _slotSets.Add(slotset.Name, new SlotSet()
-                        {
-                            Name = slotset.Name,
-                            Matrix = ToSeparateMatrix(slotset.LocalTransform),
-                            Slots = slots,
-                            BindName = bindName,
-                            SlotName = slotName
-                        });
-                    }
-
-                    if (component is entAnimatedComponent enc)
-                    {
-                        var rigFile = File.GetFileFromDepotPathOrCache(enc.Rig.DepotPath);
-
-                        if (rigFile.RootChunk is animRig rig)
-                        {
-                            var rigBones = new List<RigBone>();
-                            for (int i = 0; i < rig.BoneNames.Count; i++)
-                            {
-                                var rigBone = new RigBone()
-                                {
-                                    Name = rig.BoneNames[i],
-                                    Matrix = ToSeparateMatrix(rig.BoneTransforms[i])
-                                };
-
-                                if (rig.BoneParentIndexes[i] != -1)
-                                {
-                                    rigBones[rig.BoneParentIndexes[i]].AddChild(rigBone);
-                                }
-
-                                rigBones.Add(rigBone);
-                            }
-
-                            string bindName = null, slotName = null;
-                            if ((enc.ParentTransform?.GetValue() ?? null) is entHardTransformBinding ehtb)
-                            {
-                                bindName = ehtb.BindName;
-                                slotName = ehtb.SlotName;
-                            }
-
-                            Rigs.Add(enc.Name, new Rig()
-                            {
-                                Name = enc.Name,
-                                Bones = rigBones,
-                                BindName = bindName,
-                                SlotName = slotName
-                            });
-                        }
-                    }
-                }
-
-                foreach (var rig in Rigs.Values)
-                {
-                    if (rig.BindName != null && Rigs.ContainsKey(rig.BindName))
-                    {
-                        Rigs[rig.BindName].AddChild(rig);
-                    }
-                }
-
-                foreach (var app in ent.Appearances)
-                {
-                    var appFile = File.GetFileFromDepotPathOrCache(app.AppearanceResource.DepotPath);
-
-                    if (appFile == null || appFile.RootChunk is not appearanceAppearanceResource aar)
-                    {
-                        continue;
-                    }
-
-                    foreach (var handle in aar.Appearances)
-                    {
-                        var appDef = (appearanceAppearanceDefinition)handle.GetValue();
-
-                        if (appDef.Name != app.AppearanceName || appDef.CompiledData.Data is not Package04 appPkg)
-                        {
-                            continue;
-                        }
-
-                        var a = new Appearance()
-                        {
-                            AppearanceName = app.AppearanceName,
-                            Name = app.Name,
-                            Resource = app.AppearanceResource.DepotPath,
-                            Models = LoadMeshs(appPkg.Chunks),
-                        };
-
-                        foreach (var model in a.Models)
-                        {
-                            if (a.Models.FirstOrDefault(x => x.Name == model.BindName) is var parentModel && parentModel != null)
-                            {
-                                parentModel.AddModel(model);
-                            }
-                            else
-                            {
-                                a.BindableModels.Add(model);
-                            }
-                            foreach (var material in model.Materials)
-                            {
-                                a.RawMaterials[material.Name] = material;
-                            }
-                            model.Meshes = MakeMesh((CMesh)model.MeshFile.RootChunk, model.ChunkMask, model.AppearanceIndex);
-
-                            foreach (var m in model.Meshes)
-                            {
-                                if (!a.LODLUT.ContainsKey(m.LOD))
-                                {
-                                    a.LODLUT[m.LOD] = new List<SubmeshComponent>();
-                                }
-                                a.LODLUT[m.LOD].Add(m);
-                            }
-                        }
-                        AddMeshesToRiggedGroups(a);
-
-                        Appearances.Add(a);
-
-                        if (Appearances.Count > 0)
-                            SelectedAppearance = Appearances[0];
-
-                        break;
-                    }
-                }
-            }
-            else
-            {
-                Appearances.Add(new Appearance()
-                {
-                    Name = "Default",
-                    Models = LoadMeshs(pkg.Chunks)
-                });
-
-                SelectedAppearance = Appearances[0];
-            }
-        }
 
         public GroupModel3D GroupFromRigBone(Rig rig, RigBone bone, Dictionary<string, GroupModel3D> groups)
         {
@@ -510,6 +369,7 @@ namespace WolvenKit.ViewModels.Documents
         public class MeshComponent : GroupModel3D
         {
             public string AppearanceName { get; set; }
+            public CName DepotPath { get; set; }
         }
 
         public GroupModel3D GroupFromModel(LoadableModel model)
@@ -519,7 +379,8 @@ namespace WolvenKit.ViewModels.Documents
                 Name = $"{model.Name}",
                 AppearanceName = model.AppearanceName,
                 Transform = model.Transform,
-                IsRendering = model.IsEnabled
+                IsRendering = model.IsEnabled,
+                DepotPath = model.DepotPath
             };
 
             foreach (var mesh in model.Meshes)
@@ -534,10 +395,10 @@ namespace WolvenKit.ViewModels.Documents
             return group;
         }
 
-        public void AddMeshesToRiggedGroups(Appearance app)
+        public List<Element3D> AddMeshesToRiggedGroups(Appearance app)
         {
             var groups = new Dictionary<string, GroupModel3D>();
-
+            var modelGroups = new List<Element3D>();
             foreach (var (name, rig) in Rigs)
             {
                 var group = new GroupModel3D()
@@ -547,7 +408,7 @@ namespace WolvenKit.ViewModels.Documents
                 };
                 group.Children.Add(GroupFromRigBone(rig, rig.Bones[0], groups));
                 groups.Add(name, group);
-                app.ModelGroup.Add(group);
+               modelGroups.Add(group);
             }
 
             foreach (var model in app.BindableModels)
@@ -556,8 +417,8 @@ namespace WolvenKit.ViewModels.Documents
 
                 if (model.BindName == null)
                 {
-                    app.ModelGroup.Add(group);
-                    return;
+                    modelGroups.Add(group);
+                    continue;
                 }
                 if (_slotSets.ContainsKey(model.BindName))
                 {
@@ -577,9 +438,10 @@ namespace WolvenKit.ViewModels.Documents
                 }
                 else
                 {
-                    app.ModelGroup.Add(group);
+                   modelGroups.Add(group);
                 }
             }
+            return modelGroups;
         }
 
         private List<LoadableModel> LoadMeshs(IList<RedBaseClass> chunks)
@@ -647,11 +509,12 @@ namespace WolvenKit.ViewModels.Documents
 
                     foreach (var me in mesh.MaterialEntries)
                     {
+                        var name = GetUniqueMaterialName(me.Name, mesh);
                         if (!me.IsLocalInstance)
                         {
-                            materials.Add(me.Name, new Material()
+                            materials.Add(name, new Material()
                             {
-                                Name = me.Name
+                                Name = name
                             });
                             continue;
                         }
@@ -680,15 +543,15 @@ namespace WolvenKit.ViewModels.Documents
                         var material = new Material()
                         {
                             Instance = inst,
-                            Name = me.Name
+                            Name = name
                         };
 
                         foreach (var pair in inst.Values)
                         {
-                            material.Values.Add(pair.Key, pair.Value);
+                            material.Values[pair.Key] = pair.Value;
                         }
-
-                        materials.Add(me.Name, material);
+                        
+                        materials[name] = material;
                     }
                     var apps = new List<string>();
                     foreach (var handle in mesh.Appearances)
@@ -716,15 +579,16 @@ namespace WolvenKit.ViewModels.Documents
                         {
                             foreach (var m in mmapp.ChunkMaterials)
                             {
-                                if (materials.ContainsKey(m))
+                                var name = GetUniqueMaterialName(m, mesh);
+                                if (materials.ContainsKey(name))
                                 {
-                                    appMaterials.Add(materials[m]);
+                                    appMaterials.Add(materials[name]);
                                 }
                                 else
                                 {
                                     appMaterials.Add(new Material()
                                     {
-                                        Name = m
+                                        Name = name
                                     });
                                 }
                             }
@@ -740,12 +604,13 @@ namespace WolvenKit.ViewModels.Documents
                         Matrix = matrix,
                         Materials = appMaterials,
                         IsEnabled = enabled,
-                        Name = epc.Name,
+                        Name = epc.Name.ToString().Replace(".", ""),
                         BindName = bindName,
                         SlotName = slotName,
                         ChunkMask = chunkMask,
                         ChunkList = chunkList,
-                        EnabledChunks = enabledChunks
+                        EnabledChunks = enabledChunks,
+                        DepotPath = depotPath
                     };
                     appModels.Add(epc.Name, model);
                 }
@@ -929,6 +794,7 @@ namespace WolvenKit.ViewModels.Documents
         //public static System.Windows.Media.Media3D.Quaternion ToQuaternion(RED4.Types.Quaternion q) => new System.Windows.Media.Media3D.Quaternion(q.I, q.J, q.K, q.R);
 
         public static System.Windows.Media.Media3D.Quaternion ToQuaternion(RED4.Types.Quaternion q) => new System.Windows.Media.Media3D.Quaternion(q.I, q.K, -q.J, q.R);
+        public static System.Windows.Media.Media3D.Quaternion ToQuaternionOG(RED4.Types.Quaternion q) => new System.Windows.Media.Media3D.Quaternion(q.I, q.J, q.K, q.R);
 
         //public static Vector3D ToVector3D(WorldPosition v) => new Vector3D(v.X, v.Y, v.Z);
 
@@ -950,6 +816,10 @@ namespace WolvenKit.ViewModels.Documents
                                                                           matrix.X.Y, matrix.Y.Y, matrix.Z.Y, matrix.W.Y,
                                                                           matrix.X.Z, matrix.Y.Z, matrix.Z.Z, matrix.W.Z,
                                                                           matrix.X.W, matrix.Y.W, matrix.Z.W, matrix.W.W);
+        //public static Matrix3D ToMatrix3D(CMatrix matrix) => new Matrix3D(matrix.X.X, matrix.Z.X, -matrix.Y.X, matrix.W.X,
+        //                                                                  matrix.X.Z, matrix.Z.Z, -matrix.Y.Z, matrix.W.Z,
+        //                                                                  -matrix.X.Y, -matrix.Z.Y, matrix.Y.Y, -matrix.W.Y,
+        //                                                                  matrix.X.W, matrix.Z.W, -matrix.Y.W, matrix.W.W);
         //public static Matrix3D ToMatrix3D(CMatrix matrix) => new Matrix3D(matrix.W.W, matrix.X.W, matrix.Y.W, matrix.Z.W,
         //                                                                  matrix.W.X, matrix.X.X, matrix.Y.X, matrix.Z.X,
         //                                                                  matrix.W.Y, matrix.X.Y, matrix.Y.Y, matrix.Z.Y,
