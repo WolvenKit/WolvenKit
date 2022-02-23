@@ -196,7 +196,7 @@ namespace WolvenKit.Views.Documents
             e.Handled = true;
             if (e.DraggingNodes != null && e.DraggingNodes[0].Content is ChunkViewModel source)
             {
-                if (e.TargetNode.Content is ChunkViewModel target)
+                if (e.TargetNode.Content is ChunkViewModel target && target.Parent != null)
                 {
                     if (source.Data is RedBaseClass rbc)
                     {

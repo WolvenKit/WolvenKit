@@ -751,11 +751,11 @@ namespace WolvenKit.ViewModels.Shell
                     Value = value.GetValue();
                 }
             }
-            //else if (PropertyType.IsAssignableTo(typeof(CByteArray)))
-            //{
-            //    var ba = (byte[])(CByteArray)Data;
-            //    return string.Join(" ", ba.Select(x => $"{x}"));
-            //}
+            else if (PropertyType.IsAssignableTo(typeof(CByteArray)))
+            {
+                var ba = (byte[])(CByteArray)Data;
+                Value = string.Join(" ", ba.Select(x => $"{x:X2}"));
+            }
             else if (PropertyType.IsAssignableTo(typeof(LocalizationString)))
             {
                 var value = (LocalizationString)Data;

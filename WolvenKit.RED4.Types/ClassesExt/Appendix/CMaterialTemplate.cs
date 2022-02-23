@@ -6,20 +6,71 @@ namespace WolvenKit.RED4.Types
     [REDClass(ChildLevel = 1)]
     public partial class CMaterialTemplate : IRedAppendix
     {
-        // appear to just be the parameterNames
-        [RED("buffer")]
+        [RED("parameterInfo")]
         [REDProperty(IsIgnored = true)]
-        public CByteArray Buffer
+        public CArray<CArray<CMaterialParameterInfo>> ParameterInfo
         {
-            get => GetPropertyValue<CByteArray>();
-            set => SetPropertyValue<CByteArray>(value);
+            get => GetPropertyValue<CArray<CArray<CMaterialParameterInfo>>>();
+            set => SetPropertyValue<CArray<CArray<CMaterialParameterInfo>>>(value);
         }
 
         public void Read(Red4Reader reader, uint size)
         {
-            Buffer = reader.BaseReader.ReadBytes((int)size);
+            ParameterInfo = new();
+            var start = reader.BaseStream.Position;
+            while (reader.BaseStream.Position < (start + size))
+            {
+                CArray<CMaterialParameterInfo> s = new();
+                var count = reader.BaseReader.ReadByte();
+                for (int i = 0; i < count; i++)
+                {
+                    var p = new CMaterialParameterInfo();
+                    p.Type = reader.BaseReader.ReadByte();
+                    p.Offset = reader.BaseReader.ReadUInt16();
+                    p.Name = reader.ReadCName();
+                    s.Add(p);
+                }
+                ParameterInfo.Add(s);
+            }
         }
 
-        public void Write(Red4Writer writer) => writer.BaseWriter.Write(Buffer);
+        public void Write(Red4Writer writer)
+        {
+            //writer.BaseWriter.Write(Buffer);
+        }
+    }
+
+    [REDMeta]
+    public class CMaterialParameterInfo : RedBaseClass
+    {
+        // enum for type
+        // 1 texture
+        // 2 colort = 
+        // 4 vector
+        // 5 scalar
+        [RED("type")]
+        [REDProperty(IsIgnored = true)]
+        public CUInt8 Type
+        {
+            get => GetPropertyValue<CUInt8>();
+            set => SetPropertyValue<CUInt8>(value);
+        }
+
+        [RED("offset")]
+        [REDProperty(IsIgnored = true)]
+        public CUInt16 Offset
+        {
+            get => GetPropertyValue<CUInt16>();
+            set => SetPropertyValue<CUInt16>(value);
+        }
+
+        [RED("name")]
+        [REDProperty(IsIgnored = true)]
+        public CName Name
+        {
+            get => GetPropertyValue<CName>();
+            set => SetPropertyValue<CName>(value);
+        }
+
     }
 }

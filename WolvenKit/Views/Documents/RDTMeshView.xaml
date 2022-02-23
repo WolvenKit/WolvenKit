@@ -60,9 +60,11 @@
             <hx:DirectionalLight3D Direction="0, 0, -1" Color="White" />
             <hx:DirectionalLight3D Direction="1, 0, 0" Color="White" />
             <hx:DirectionalLight3D Direction="-1, 0, 0" Color="White" />
-            <!--  hx:EnvironmentMap3D Texture="{Binding EnvironmentMap}" /  -->
             <!--  hx:ShadowMap3D /  -->
-            <hx:ItemsModel3D x:Name="hxContentVisual" ItemsSource="{Binding SelectedAppearance.ModelGroup}" />
+            <hx:DynamicReflectionMap3D IsDynamicScene="True">
+                <!--  hx:EnvironmentMap3D Texture="{Binding EnvironmentMap}" /  -->
+                <hx:ItemsModel3D x:Name="hxContentVisual" ItemsSource="{Binding SelectedAppearance.ModelGroup}" />
+            </hx:DynamicReflectionMap3D>
             <!--  hx:Element3DPresenter Content="{Binding GroupModel}" /  -->
         </hx:Viewport3DX>
 

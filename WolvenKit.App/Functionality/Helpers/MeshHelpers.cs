@@ -228,10 +228,12 @@ namespace WolvenKit.ViewModels.Documents
                     if (sm.MaterialName.Contains("glass"))
                     {
                         sm.DepthBias -= 10;
+                        sm.IsTransparent = true;
                     }
                     if (sm.MaterialName.Contains("sticker") || sm.MaterialName.Contains("decal"))
                     {
                         sm.DepthBias -= 15;
+                        sm.IsTransparent = true;
                     }
                 }
                 else
