@@ -322,7 +322,6 @@
                 <!--  endregion  -->
             </ResourceDictionary>
         </Grid.Resources>
-
         <syncfusion:TabControlExt
             Margin="0"
             Padding="0"
@@ -356,7 +355,7 @@
                         PropertyNameColumnDefinition="150"
                         SearchBoxVisibility="Collapsed"
                         SelectedObject="{Binding PE_SelectedItem, Mode=OneWay}"
-                        Visibility="{Binding PE_FileInfoVisible, Converter={StaticResource boolToVisibilityConverter}}">
+                        Visibility="{Binding PE_FileInfoVisible, Converter={StaticResource ToggleVisibilityConverter}}">
 
                         <syncfusion:PropertyGrid.ContextMenu>
                             <ContextMenu>
@@ -442,7 +441,7 @@
                         PropertyNameColumnDefinition="150"
                         SearchBoxVisibility="Collapsed"
                         SelectedObject="{Binding AB_SelectedItem, Mode=OneWay}"
-                        Visibility="{Binding AB_FileInfoVisible, Converter={StaticResource boolToVisibilityConverter}}">
+                        Visibility="{Binding AB_FileInfoVisible, Converter={StaticResource ToggleVisibilityConverter}}">
                         <syncfusion:PropertyGrid.ContextMenu>
                             <ContextMenu>
                                 <MenuItem Click="CopyMenuItem_Click" Header="Copy Relative Path" />
@@ -451,7 +450,7 @@
                     </syncfusion:PropertyGrid>
                 </Grid>
             </syncfusion:TabItemExt>
-            <syncfusion:TabItemExt Header="Mesh Preview" Visibility="{Binding IsMeshPreviewVisible, Converter={StaticResource boolToVisibilityConverter}}">
+            <syncfusion:TabItemExt Header="Mesh Preview" Visibility="{Binding IsMeshPreviewVisible, Converter={StaticResource ToggleVisibilityConverter}}">
                 <Grid Name="RootGrid" Height="auto">
                     <Border Name="ViewportBorder" Background="{StaticResource ContentBackground}">
                         <hx:Viewport3DX
@@ -467,8 +466,7 @@
                             SSAOSamplingRadius="1"
                             ShowCoordinateSystem="True"
                             ShowViewCube="False"
-                            UseDefaultGestures="False"
-                            Visibility="Visible">
+                            UseDefaultGestures="False">
                             <hx:Viewport3DX.InputBindings>
                                 <MouseBinding Command="hx:ViewportCommands.Rotate" Gesture="LeftClick" />
                                 <MouseBinding Command="hx:ViewportCommands.Pan" Gesture="MiddleClick" />
@@ -526,44 +524,14 @@
                             BorderThickness="2"
                             Visibility="Visible">
                             <StackPanel Margin="10,5" Orientation="Vertical">
-
-                                <Button
-                                    Name="LoadButton"
-                                    Height="26"
-                                    Margin="0,10,0,0"
-                                    HorizontalAlignment="Left"
-                                    Click="LoadButton_OnClick"
-                                    Content="Load file"
-                                    IsDefault="True"
-                                    Visibility="Collapsed" />
-
-                                <TextBlock
-                                    Margin="0,10,0,0"
-                                    VerticalAlignment="Center"
-                                    FontWeight="Bold"
-                                    Text="(or drag and drop 3D model file)"
-                                    Visibility="Collapsed" />
-
                                 <CheckBox
                                     Name="ShowWireframeCheckBox"
-                                    Margin="0,10,0,0"
+                                    Margin="0,0,0,0"
                                     HorizontalAlignment="Left"
-                                    Checked="OnShowWireframeCheckBoxCheckedChanged"
-                                    Content="Show wireframe"
-                                    IsChecked="True"
-                                    Style="{DynamicResource MahApps.Styles.CheckBox.DataGrid.Win10}"
-                                    Unchecked="OnShowWireframeCheckBoxCheckedChanged" />
-                                <CheckBox
-                                    Name="AddLineDepthBiasCheckBox"
-                                    Margin="0,4,0,0"
-                                    HorizontalAlignment="Left"
-                                    Checked="OnAddLineDepthBiasCheckBoxCheckedChanged"
-                                    Content="Add line depth bias (DXEngine only)"
-                                    IsChecked="True"
-                                    IsEnabled="{Binding ElementName=ShowWireframeCheckBox, Path=IsChecked}"
-                                    Style="{DynamicResource MahApps.Styles.CheckBox.DataGrid.Win10}"
-                                    Unchecked="OnAddLineDepthBiasCheckBoxCheckedChanged" />
-                                <CheckBox
+                                    Content=" Show wireframe"
+                                    IsChecked="{Binding ShowWireFrame}" />
+                                <!--
+                                    CheckBox
                                     Name="ReadPolygonIndicesCheckBox"
                                     Margin="0,4,0,0"
                                     HorizontalAlignment="Left"
@@ -572,21 +540,24 @@
                                     IsChecked="True"
                                     Style="{DynamicResource MahApps.Styles.CheckBox.DataGrid.Win10}"
                                     ToolTip="When checked ReaderObj will read PolygonIndices collection that can be used to show polygons instead of triangles. Object need to be shown with wireframe to see the difference."
-                                    Unchecked="OnReadPolygonIndicesCheckBoxCheckedChanged" />
+                                    Unchecked="OnReadPolygonIndicesCheckBoxCheckedChanged" /
+                                -->
 
-                                <Button
+                                <!--
+                                    Button
                                     Name="ShowInfoButton"
                                     Margin="0,20,0,0"
                                     Click="ShowInfoButton_OnClick"
                                     Content="Show objects info"
-                                    IsEnabled="False" />
+                                    IsEnabled="False" /
+                                -->
                             </StackPanel>
                         </Border>
                     </syncfusion:DropDownButton>
                 </Grid>
             </syncfusion:TabItemExt>
 
-            <syncfusion:TabItemExt Header="Audio Preview" Visibility="{Binding IsAudioPreviewVisible, Converter={StaticResource boolToVisibilityConverter}}">
+            <syncfusion:TabItemExt Header="Audio Preview" Visibility="{Binding IsAudioPreviewVisible, Converter={StaticResource ToggleVisibilityConverter}}">
 
                 <Border
                     Width="auto"
@@ -763,17 +734,36 @@
                 </Border>
             </syncfusion:TabItemExt>
 
-            <syncfusion:TabItemExt Header="Image Preview" Visibility="{Binding IsImagePreviewVisible, Converter={StaticResource boolToVisibilityConverter}}">
-                <syncfusion:SfImageEditor
+            <syncfusion:TabItemExt Header="Image Preview" Visibility="{Binding IsImagePreviewVisible, Converter={StaticResource ToggleVisibilityConverter}}">
+                <!--
+                    syncfusion:SfImageEditor
                     x:Name="bold"
                     Margin="0,0.5,0,0"
-                    BorderThickness="0" />
+                    BorderThickness="0" /
+                -->
+                <Border
+                    x:Name="ImagePreviewCanvas"
+                    Background="{StaticResource ContentBackground}"
+                    BorderThickness="1"
+                    ClipToBounds="True">
+                    <Canvas x:Name="ImagePreview" RenderTransformOrigin="0.5,0.5">
+                        <Image
+                            x:Name="ActualImage"
+                            HorizontalAlignment="Stretch"
+                            VerticalAlignment="Stretch"
+                            ClipToBounds="False"
+                            Opacity="1"
+                            RenderOptions.BitmapScalingMode="NearestNeighbor"
+                            RenderTransformOrigin="0.5,0.5"
+                            Source="{Binding LoadedBitmapFrame}" />
+                    </Canvas>
+                </Border>
             </syncfusion:TabItemExt>
 
             <syncfusion:TabItemExt
                 x:Name="testme"
                 Header="Video Preview"
-                Visibility="{Binding IsVideoPreviewVisible, Converter={StaticResource boolToVisibilityConverter}}" />
+                Visibility="{Binding IsVideoPreviewVisible, Converter={StaticResource ToggleVisibilityConverter}}" />
         </syncfusion:TabControlExt>
     </Grid>
 </reactiveUi:ReactiveUserControl>

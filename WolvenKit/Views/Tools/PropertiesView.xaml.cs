@@ -98,13 +98,13 @@ namespace WolvenKit.Views.Tools
 
             this.WhenActivated(disposables =>
             {
-                ViewModel.WhenAnyValue(x => x.LoadedBitmapFrame).Subscribe(source =>
-                {
-                    if (source is { } frame)
-                    {
-                        LoadImage(frame);
-                    }
-                });
+                //ViewModel.WhenAnyValue(x => x.LoadedBitmapFrame).Subscribe(source =>
+                //{
+                //    if (source is { } frame)
+                //    {
+                //        LoadImage(frame);
+                //    }
+                //});
 
                 ViewModel.PreviewAudioCommand.Subscribe(path =>
                 {
@@ -151,7 +151,7 @@ namespace WolvenKit.Views.Tools
             return bmp;
         }
 
-        public void LoadImage(BitmapSource qa) => bold.SetCurrentValue(Syncfusion.UI.Xaml.ImageEditor.SfImageEditor.ImageProperty, StreamFromBitmapSource(qa));
+        //public void LoadImage(BitmapSource qa) => bold.SetCurrentValue(Syncfusion.UI.Xaml.ImageEditor.SfImageEditor.ImageProperty, StreamFromBitmapSource(qa));
 
         public void LoadModel(string fileName)
         {

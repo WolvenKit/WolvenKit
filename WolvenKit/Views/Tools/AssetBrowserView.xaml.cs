@@ -127,11 +127,11 @@ namespace WolvenKit.Views.Tools
             //propertiesViewModel.SelectedIndex = 1;
 
 
-            using (var meshStream = new MemoryStream())
-            {
-                selectedGameFile.Extract(meshStream);
-                propertiesViewModel.LoadModel(meshStream);
-            }
+            //using (var meshStream = new MemoryStream())
+            //{
+            //    selectedGameFile.Extract(meshStream);
+            //    propertiesViewModel.LoadModel(meshStream);
+            //}
 
             //var managerCacheDir = ISettingsManager.GetTemp_MeshPath();
             //_ = Directory.CreateDirectory(managerCacheDir);

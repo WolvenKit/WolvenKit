@@ -4,6 +4,7 @@ using System.IO;
 using System.Threading.Tasks;
 using System.Windows.Controls;
 using System.Windows.Input;
+using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Media.Media3D;
 using CP77.CR2W;
@@ -17,9 +18,11 @@ using WolvenKit.Common.Services;
 using WolvenKit.Functionality.Ab4d;
 using WolvenKit.Functionality.Commands;
 using WolvenKit.Functionality.Extensions;
+using WolvenKit.Functionality.Helpers;
 using WolvenKit.Functionality.Services;
 using WolvenKit.Models;
 using WolvenKit.Models.Docking;
+using WolvenKit.Modkit.RED4;
 using WolvenKit.RED4.Archive.CR2W;
 using WolvenKit.RED4.CR2W;
 using WolvenKit.RED4.Types;
@@ -41,6 +44,10 @@ namespace WolvenKit.ViewModels.Tools
 
         public const string ToolContentId = "Properties_Tool";
         public const string ToolTitle = "Properties";
+
+        public enum TexturePreviewExtensions { xbm, envprobe, mesh };
+        public enum MeshPreviewExtensions { mesh, ent, w2mesh, physicalscene };
+        public enum AudioPreviewExtensions { wem };
 
         public EffectsManager EffectsManager { get; }
 
@@ -75,7 +82,6 @@ namespace WolvenKit.ViewModels.Tools
             _meshTools = meshTools;
             _modTools = modTools;
             _parser = parserService;
-            //_parser = Locator.Current.GetService<Red4ParserService>();
 
             SetupToolDefaults();
             SideInDockedMode = DockSide.Left;
@@ -144,16 +150,48 @@ namespace WolvenKit.ViewModels.Tools
                 return;
             }
 
+            if (State is DockState.AutoHidden or DockState.Hidden)
+            {
+                return;
+            }
+
+            AB_SelectedItem = model;
+            AB_FileInfoVisible = true;
+            PE_FileInfoVisible = false;
+
+            SelectedIndex = 0;
+            IsMeshPreviewVisible = false;
+            IsAudioPreviewVisible = false;
+            IsImagePreviewVisible = false;
+            IsVideoPreviewVisible = false;
+
+            if (!_settingsManager.ShowFilePreview)
+            {
+                return;
+            }
+
             if (model is not RedFileViewModel selectedItem)
             {
                 return;
             }
 
-            using (var stream = new MemoryStream())
+            var extension = Path.GetExtension(model.FullName).TrimStart('.');
+
+            if (Enum.TryParse<TexturePreviewExtensions>(extension, true, out _) ||
+                Enum.TryParse<MeshPreviewExtensions>(extension, true, out _) ||
+                Enum.TryParse<AudioPreviewExtensions>(extension, true, out _))
             {
-                var selectedGameFile = selectedItem.GetGameFile();
-                selectedGameFile.Extract(stream);
-                await ExecuteSelectFile(stream, model.FullName);
+                CR2WFile cr2w = null;
+                using (var stream = new MemoryStream())
+                {
+                    var selectedGameFile = selectedItem.GetGameFile();
+                    selectedGameFile.Extract(stream);
+                    _parser.TryReadRed4File(stream, out cr2w);
+                }
+                if (cr2w != null)
+                {
+                    await ExecuteSelectFile(cr2w, model.FullName);
+                }
             }
         }
 
@@ -170,28 +208,8 @@ namespace WolvenKit.ViewModels.Tools
             }
 
             PE_SelectedItem = model;
-            if (!_settingsManager.ShowFilePreview)
-            {
-                return;
-            }
-
-            var filename = model.FullName;
-
-            // check additional changes
-            if (model.IsDirectory)
-            {
-                return;
-            }
-
-            using (var stream = new FileStream(filename, FileMode.Open, FileAccess.Read, FileShare.ReadWrite, 4096, FileOptions.SequentialScan))
-            {
-                await ExecuteSelectFile(stream, filename);
-            }
-        }
-
-        public async Task ExecuteSelectFile(Stream stream, string filename)
-        {
-            var extension = Path.GetExtension(filename).TrimStart('.');
+            PE_FileInfoVisible = true;
+            AB_FileInfoVisible = false;
 
             SelectedIndex = 0;
             IsMeshPreviewVisible = false;
@@ -199,131 +217,149 @@ namespace WolvenKit.ViewModels.Tools
             IsImagePreviewVisible = false;
             IsVideoPreviewVisible = false;
 
-            if (extension.Length > 0)
+            if (!_settingsManager.ShowFilePreview)
             {
-                //if (string.Equals(extension, ERedExtension.bk2.ToString(),
-                //   System.StringComparison.OrdinalIgnoreCase))
-                //{
-                //    IsVideoPreviewVisible = true;
-                //    SetExeCommand?.Invoke("test.exe | test2.bk2 /J /I2 /P");
-                //}
+                return;
+            }
 
-                if (Enum.IsDefined(typeof(EConvertableOutput), extension) ||
-                    string.Equals(extension, ERedExtension.mesh.ToString(), StringComparison.OrdinalIgnoreCase) ||
-                    string.Equals(extension, ERedExtension.w2mesh.ToString(), StringComparison.OrdinalIgnoreCase) ||
-                    string.Equals(extension, ERedExtension.ent.ToString(), StringComparison.OrdinalIgnoreCase) ||
-                    string.Equals(extension, ERedExtension.physicalscene.ToString(), StringComparison.OrdinalIgnoreCase))
+            if (model.IsDirectory)
+            {
+                return;
+            }
+
+            var extension = Path.GetExtension(model.FullName).TrimStart('.');
+
+            if (Enum.TryParse<TexturePreviewExtensions>(extension, true, out _) ||
+                Enum.TryParse<MeshPreviewExtensions>(extension, true, out _) ||
+                Enum.TryParse<AudioPreviewExtensions>(extension, true, out _))
+            {
+                CR2WFile cr2w = null;
+                using (var stream = new FileStream(model.FullName, FileMode.Open, FileAccess.Read, FileShare.ReadWrite, 4096, FileOptions.SequentialScan))
                 {
-                    IsMeshPreviewVisible = true;
-                    SelectedIndex = 1;
-
-                    LoadModel(stream);
-
-                    //var outPath = Path.Combine(ISettingsManager.GetTemp_OBJPath(), Path.GetFileName(filename));
-                    //outPath = Path.ChangeExtension(outPath, ".glb");
-                    //if (File.Exists(outPath))
-                    //{
-                    //    LoadModel(outPath);
-                    //    PE_MeshPreviewVisible = true;
-                    //    SelectedIndex = 1;
-                    //}
-                    //else
-                    //{
-                    //    using (var meshStream = new FileStream(filename, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
-                    //    {
-                    //        meshStream.Seek(0, SeekOrigin.Begin);
-                    //        if (_meshTools.ExportMeshPreviewer(meshStream, new FileInfo(outPath)))
-                    //        {
-                    //            LoadModel(outPath);
-                    //            PE_MeshPreviewVisible = true;
-                    //            SelectedIndex = 1;
-                    //        }
-                    //        meshStream.Dispose();
-                    //        meshStream.Close();
-                    //    }
-                    //}
-                }
-
-                if (string.Equals(extension, ERedExtension.wem.ToString(),
-                    System.StringComparison.OrdinalIgnoreCase))
-                {
-                    IsAudioPreviewVisible = true;
-                    SelectedIndex = 2;
-
-                    PreviewAudioCommand.SafeExecute(filename);
-                }
-
-                // textures
-                if (Enum.TryParse<EUncookExtension>(extension,
-                        out _))
-                {
-                    var q = await ImageDecoder.RenderToBitmapSource(filename);
-                    if (q != null)
+                    if (!_parser.TryReadRed4File(stream, out cr2w))
                     {
-                        var g = BitmapFrame.Create(q);
-                        LoadImage(g);
-                        IsImagePreviewVisible = true;
-                        SelectedIndex = 3;
+                        await ExecuteSelectFile(stream, model.FullName);
                     }
                 }
-
-                // xbm
-                if (string.Equals(extension, ERedExtension.xbm.ToString(), StringComparison.OrdinalIgnoreCase) ||
-                    //string.Equals(extension, ERedExtension.mesh.ToString(), StringComparison.OrdinalIgnoreCase) ||
-                    string.Equals(extension, ERedExtension.envprobe.ToString(), StringComparison.OrdinalIgnoreCase))
+                if (cr2w != null)
                 {
-
-                    // convert xbm to dds stream
-                    await using var ddsstream = new MemoryStream();
-                    //await using var filestream = new FileStream(filename,
-                    //    FileMode.Open, FileAccess.Read, FileShare.ReadWrite, 4096, FileOptions.SequentialScan);
-                    if (_modTools.ConvertXbmToDdsStream(stream, ddsstream, out _))
-                    {
-                        // try loading it in pfim
-                        try
-                        {
-                            var qa = await ImageDecoder.RenderToBitmapSourceDds(ddsstream);
-                            if (qa != null)
-                            {
-                                LoadImage(qa);
-                                IsImagePreviewVisible = true;
-                                SelectedIndex = 3;
-                            }
-                        }
-                        catch (Exception)
-                        {
-                            throw;
-                        }
-                    }
+                    await ExecuteSelectFile(cr2w, model.FullName);
                 }
             }
         }
 
-        public void LoadModel(string s)
+        public async Task ExecuteSelectFile(Stream stream, string filename)
         {
-            using (var stream = new FileStream(s, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
+            var extension = Path.GetExtension(filename).TrimStart('.');
+
+            if (Enum.IsDefined(typeof(EConvertableOutput), extension))
             {
-                LoadModel(stream);
+
+            }
+
+            if (Enum.TryParse<AudioPreviewExtensions>(extension, true, out _))
+            {
+                IsAudioPreviewVisible = true;
+                SelectedIndex = 2;
+
+                PreviewAudioCommand.SafeExecute(filename);
+            }
+
+            // textures
+            if (Enum.TryParse<EUncookExtension>(extension, true, out _))
+            {
+                var q = await ImageDecoder.RenderToBitmapSource(filename);
+                if (q != null)
+                {
+                    var g = BitmapFrame.Create(q);
+                    LoadImage(g);
+                    IsImagePreviewVisible = true;
+                    SelectedIndex = 3;
+                }
             }
         }
 
-        public void LoadModel(Stream stream)
+        public Task ExecuteSelectFile(CR2WFile cr2w, string filename)
         {
-            using var reader = new BinaryReader(stream);
-            var cr2wFile = _parser.ReadRed4File(reader);
-            var meshes = MakePreviewMesh(cr2wFile.RootChunk);
+            //if (string.Equals(extension, ERedExtension.bk2.ToString(),
+            //   System.StringComparison.OrdinalIgnoreCase))
+            //{
+            //    IsVideoPreviewVisible = true;
+            //    SetExeCommand?.Invoke("test.exe | test2.bk2 /J /I2 /P");
+            //}
 
-            ModelGroupBounds = new SharpDX.BoundingBox();
+            if (cr2w.RootChunk is CMesh cmesh)
+            {
+                LoadModel(cmesh);
+            }
+
+            if (cr2w.RootChunk is CBitmapTexture cbt &&
+                cbt.RenderTextureResource.RenderResourceBlobPC != null &&
+                cbt.RenderTextureResource.RenderResourceBlobPC.GetValue() is rendRenderTextureBlobPC)
+            {
+                SetupImage(cbt);
+            }
+
+            if (cr2w.RootChunk is CMesh cm &&
+                cm.RenderResourceBlob.GetValue() is rendRenderTextureBlobPC)
+            {
+                SetupImage(cm);
+            }
+
+            if (cr2w.RootChunk is CReflectionProbeDataResource crpdr &&
+                crpdr.TextureData.RenderResourceBlobPC.GetValue() is rendRenderTextureBlobPC)
+            {
+                SetupImage(crpdr);
+            }
+
+            return Task.CompletedTask;
+        }
+
+        public void SetupImage(RedBaseClass cls)
+        {
+            using var ddsstream = new MemoryStream();
+            try
+            {
+                if (ModTools.ConvertRedClassToDdsStream(cls, ddsstream, out _))
+                {
+                    _ = LoadImageFromStream(ddsstream);
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+                //throw;
+            }
+        }
+
+        public async Task LoadImageFromStream(Stream stream)
+        {
+            var qa = await ImageDecoder.RenderToBitmapSourceDds(stream);
+            if (qa != null)
+            {
+                //Image = qa;
+                LoadedBitmapFrame = new TransformedBitmap(qa, new ScaleTransform(1, -1));
+
+                IsImagePreviewVisible = true;
+                SelectedIndex = 3;
+            }
+        }
+
+        public void LoadModel(RedBaseClass cls)
+        {
+            var meshes = MakePreviewMesh(cls);
+
+            IsMeshPreviewVisible = true;
+            SelectedIndex = 1;
+
+            var bounds = new SharpDX.BoundingBox();
             foreach (var mesh in meshes)
             {
-                ModelGroupBounds = SharpDX.BoundingBox.Merge(ModelGroupBounds, mesh.BoundsWithTransform);
+                bounds = SharpDX.BoundingBox.Merge(bounds, mesh.BoundsWithTransform);
             }
 
+            ModelGroupBounds = bounds;
             ModelGroup.Reset(meshes);
-
-            //Camera.view(ModelGroupBounds, 0);
-            ////Camera.Position = ModelGroupBounds.Center.ToPoint3D();
-            //Camera.LookAt(ModelGroupBounds.Center.ToPoint3D(), 0);
         }
 
         public void LoadImage(BitmapSource p0) => LoadedBitmapFrame = p0;
@@ -331,6 +367,27 @@ namespace WolvenKit.ViewModels.Tools
         #endregion commands
 
         #region methods
+
+        private bool _showWireFrame;
+
+        public bool ShowWireFrame
+        {
+            get
+            {
+                return _showWireFrame;
+            }
+            set
+            {
+                _showWireFrame = value;
+                foreach (var model in ModelGroup)
+                {
+                    if (model is SubmeshComponent mesh)
+                    {
+                        mesh.FillMode = _showWireFrame ? SharpDX.Direct3D11.FillMode.Wireframe : SharpDX.Direct3D11.FillMode.Solid;
+                    }
+                }
+            }
+        }
 
         public List<SubmeshComponent> MakePreviewMesh(RedBaseClass cls, ulong chunkMask = ulong.MaxValue)
         {
@@ -359,8 +416,8 @@ namespace WolvenKit.ViewModels.Tools
             {
                 EnableAutoTangent = true,
                 RenderShadowMap = true,
-                RenderEnvironmentMap = true,
-                AlbedoColor = new SharpDX.Color4(0.5f, 0.5f, 0.5f, 1f)
+                AlbedoColor = new SharpDX.Color4(0.5f, 0.5f, 0.5f, 1f),
+                //EnableTessellation = true
             };
             foreach (var mesh in expMeshes)
             {
@@ -404,7 +461,8 @@ namespace WolvenKit.ViewModels.Tools
                         Normals = normals
                     },
                     DepthBias = -index * 2,
-                    Material = material
+                    Material = material,
+                    FillMode = ShowWireFrame ? SharpDX.Direct3D11.FillMode.Wireframe : SharpDX.Direct3D11.FillMode.Solid
                 };
 
                 list.Add(sm);
