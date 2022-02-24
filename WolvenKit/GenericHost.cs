@@ -58,7 +58,7 @@ namespace WolvenKit
 
                     // singletons
                     services.AddSingleton<IHashService, HashService>();
-                    services.AddSingleton<ITweakDBService, TweakDBService>();
+                    //services.AddSingleton<ITweakDBService, TweakDBService>();
                     services.AddSingleton<IRecentlyUsedItemsService, RecentlyUsedItemsService>();
                     services.AddSingleton<IProjectManager, ProjectManager>();
                     services.AddSingleton<IWatcherService, WatcherService>();
@@ -67,6 +67,7 @@ namespace WolvenKit
                     services.AddSingleton<MockGameController>();
 
                     // red4 modding tools
+                    services.AddSingleton<TweakDBService>();
                     services.AddSingleton<Red4ParserService>();
                     services.AddSingleton<MeshTools>();
 

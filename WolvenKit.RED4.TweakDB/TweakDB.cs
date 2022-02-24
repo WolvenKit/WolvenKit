@@ -117,7 +117,7 @@ namespace WolvenKit.RED4.TweakDB
                 TweakDBID tdbid = name;
                 tdbid.Serialize(writer);
 
-                writer.Write(Murmur32.Hash(type, s_recordsSeed));
+                writer.Write(Murmur32.HashBytes(type, s_recordsSeed));
             }
         }
     }

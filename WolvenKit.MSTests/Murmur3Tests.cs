@@ -20,8 +20,9 @@ namespace WolvenKit.MSTests
         {
             var hash = Murmur32.Hash(source, s_seed);
             var expectedBytes = BitConverter.GetBytes(expected);
+            var hashBytes = BitConverter.GetBytes(hash);
 
-            Assert.IsTrue(hash.SequenceEqual(expectedBytes), $"{BitConverter.ToUInt32(hash)} != {expected}");
+            Assert.IsTrue(hashBytes.SequenceEqual(expectedBytes), $"{hash} != {expected}");
         }
     }
 }

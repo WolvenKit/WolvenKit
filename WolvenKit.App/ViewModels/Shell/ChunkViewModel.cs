@@ -243,6 +243,11 @@ namespace WolvenKit.ViewModels.Shell
                 return true;
             }
 
+            if (Data is TweakDBID tdb)
+            {
+                return true;
+            }
+
             return false;
         }
 
@@ -453,6 +458,10 @@ namespace WolvenKit.ViewModels.Shell
                 {
                     obj = v.Value;
                 }
+                if (obj is TweakDBID tdb)
+                {
+                    obj = Locator.Current.GetService<TweakDBService>().GetRecord(tdb);
+                }
                 if (obj is IRedArray ary)
                 {
                     var lazy = ary.Count > 100;
@@ -488,6 +497,11 @@ namespace WolvenKit.ViewModels.Shell
                         }
                         Properties.Add(new ChunkViewModel(value, this, pi.RedName));
                     });
+                    var dps = redClass.GetDynamicPropertyNames();
+                    foreach (var dp in dps)
+                    {
+                        Properties.Add(new ChunkViewModel(redClass.GetObjectByRedName(dp), this, dp));
+                    }
                 }
                 else if (obj is SerializationDeferredDataBuffer sddb && sddb.Data is Package04 p4)
                 {
@@ -781,7 +795,7 @@ namespace WolvenKit.ViewModels.Shell
             else if (PropertyType.IsAssignableTo(typeof(TweakDBID)))
             {
                 var value = (TweakDBID)Data;
-                Value = Locator.Current.GetService<ITweakDBService>().Get(value);
+                Value = Locator.Current.GetService<TweakDBService>().GetString(value);
             }
             else if (PropertyType.IsAssignableTo(typeof(CBool)))
             {
