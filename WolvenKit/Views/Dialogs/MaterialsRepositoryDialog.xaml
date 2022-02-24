@@ -6,7 +6,7 @@
     xmlns:hc="https://handyorg.github.io/handycontrol"
     xmlns:local="clr-namespace:WolvenKit.Views.Dialogs"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    Title="Materials Repository Generator"
+    Title="Materials Generator"
     Width="650"
     Height="450"
     Closed="Window_Closed"
@@ -40,7 +40,7 @@
                 <TextBlock
                     Width="150"
                     HorizontalAlignment="Stretch"
-                    Text="Game archives path" />
+                    Text="Game Executable Path" />
                 <TextBox
                     x:Name="ArchivesTextBox"
                     Width="390"
@@ -60,7 +60,7 @@
                 <TextBlock
                     Width="150"
                     HorizontalAlignment="Stretch"
-                    Text="Materials Repository Path" />
+                    Text="Depot Path" />
                 <TextBox
                     x:Name="MaterialsTextBox"
                     Width="390"

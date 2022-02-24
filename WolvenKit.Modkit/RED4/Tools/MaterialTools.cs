@@ -28,7 +28,7 @@ namespace WolvenKit.Modkit.RED4
         {
             if (matRepo == null)
             {
-                throw new Exception("Material Repository Path is not set, Please select a folder in the Material Repository Settings where your textures will output, Generating the complete dump is not required.");
+                throw new Exception("Depot path is not set: Choose a Depot location within Settings for generating materials.");
             }
 
             var cr2w = _wolvenkitFileService.ReadRed4File(meshStream);
