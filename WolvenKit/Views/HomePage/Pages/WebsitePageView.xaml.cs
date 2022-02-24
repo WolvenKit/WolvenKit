@@ -29,7 +29,7 @@ namespace WolvenKit.Views.HomePage.Pages
 
             try
             {
-                await cal.EnsureCoreWebView2Async(Helpers.objCoreWebView2Environment);
+                await cal.EnsureCoreWebView2Async(WebView2Helper.objCoreWebView2Environment);
                 cal.SetCurrentValue(Microsoft.Web.WebView2.Wpf.WebView2.SourceProperty, new Uri("https://redmodding.org/"));
             }
             catch (Exception)

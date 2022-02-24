@@ -471,6 +471,8 @@
                             <MenuItem Command="{Binding ViewLogCommand}" IsCheckable="True" Header="Log"/>
                             <MenuItem Command="{Binding ShowImportExportToolCommand}" IsCheckable="True" Header="Import / Export"/>
                             <Separator Background="{StaticResource BorderAlt}" Margin="0,5,0,3"/>
+                            <MenuItem Command="{Binding ShowPluginToolCommand}" IsCheckable="False" Header="Plugins"/>
+                            <Separator Background="{StaticResource BorderAlt}" Margin="0,5,0,3"/>
                             <MenuItem Click="SaveLayoutToProject" Header="Save Layout to Project">
                                 <MenuItem.Icon>
                                     <iconPacks:PackIconMaterialDesign Padding="7,1,-2,0"

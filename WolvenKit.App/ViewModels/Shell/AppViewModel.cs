@@ -32,7 +32,7 @@ using WolvenKit.Functionality.Services;
 using WolvenKit.Interaction;
 using WolvenKit.Models;
 using WolvenKit.Models.Docking;
-using WolvenKit.MVVM.Model.ProjectManagement.Project;
+using WolvenKit.ProjectManagement.Project;
 using WolvenKit.RED4.Archive.CR2W;
 using WolvenKit.RED4.Archive.IO;
 using WolvenKit.RED4.CR2W.Archive;
@@ -106,6 +106,8 @@ namespace WolvenKit.ViewModels.Shell
 
             ShowImportExportToolCommand = new RelayCommand(ExecuteImportExportTool, CanShowImportExportTool);
             //ShowPackageInstallerCommand = new RelayCommand(ExecuteShowInstaller, CanShowInstaller);
+
+            ShowPluginCommand = new RelayCommand(ExecuteShowPlugin, CanShowPlugin);
 
             OpenFileCommand = new DelegateCommand<FileModel>(p => ExecuteOpenFile(p), CanOpenFile);
             OpenFileAsyncCommand = ReactiveCommand.CreateFromTask<FileModel, Unit>(OpenFileAsync);
@@ -462,6 +464,13 @@ namespace WolvenKit.ViewModels.Shell
             SetActiveOverlay(_homePageViewModel);
         }
 
+        public ICommand ShowPluginCommand { get; private set; }
+        private bool CanShowPlugin() => !IsDialogShown;
+        private void ExecuteShowPlugin() => SetActiveDialog(new PluginsToolViewModel
+        {
+            FileHandler = OpenFromNewFile
+        });
+
         public ICommand NewFileCommand { get; private set; }
         private bool CanNewFile(string inputDir) => ActiveProject != null && !IsDialogShown;
         private void ExecuteNewFile(string inputDir) => SetActiveDialog(new NewFileViewModel
@@ -707,7 +716,7 @@ namespace WolvenKit.ViewModels.Shell
 
         public ICommand PackModCommand { get; private set; }
         private bool CanPackMod() => _projectManager.ActiveProject != null;
-        private void ExecutePackMod() => _gameControllerFactory.GetController().PackageMod();
+        private void ExecutePackMod() => _gameControllerFactory.GetController().PackProject();
 
         public ICommand PackInstallModCommand { get; private set; }
         private bool CanPackInstallMod() => CanPackMod();

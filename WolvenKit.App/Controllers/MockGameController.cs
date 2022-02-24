@@ -32,7 +32,7 @@ namespace WolvenKit.Functionality.Controllers
 
         public async Task HandleStartup() => await Task.CompletedTask;//Nothing to do here :)
 
-        public Task<bool> PackageMod() =>
+        public Task<bool> PackProject() =>
             //Nothing to do here :)
             Task.FromResult(true);
 
