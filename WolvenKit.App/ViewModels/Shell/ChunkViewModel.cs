@@ -781,7 +781,7 @@ namespace WolvenKit.ViewModels.Shell
             else if (PropertyType.IsAssignableTo(typeof(TweakDBID)))
             {
                 var value = (TweakDBID)Data;
-                Value = $"{(ulong)value}";
+                Value = Locator.Current.GetService<ITweakDBService>().Get(value);
             }
             else if (PropertyType.IsAssignableTo(typeof(CBool)))
             {

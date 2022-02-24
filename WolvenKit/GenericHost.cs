@@ -58,6 +58,7 @@ namespace WolvenKit
 
                     // singletons
                     services.AddSingleton<IHashService, HashService>();
+                    services.AddSingleton<ITweakDBService, TweakDBService>();
                     services.AddSingleton<IRecentlyUsedItemsService, RecentlyUsedItemsService>();
                     services.AddSingleton<IProjectManager, ProjectManager>();
                     services.AddSingleton<IWatcherService, WatcherService>();

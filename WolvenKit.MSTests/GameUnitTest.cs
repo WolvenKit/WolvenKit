@@ -103,6 +103,7 @@ namespace WolvenKit.MSTests
             // IoC
             ServiceLocator.Default.RegisterInstance<ILoggerService>(new CatelLoggerService(false));
             ServiceLocator.Default.RegisterType<IHashService, HashService>();
+            ServiceLocator.Default.RegisterType<ITweakDBService, TweakDBService>();
             ServiceLocator.Default.RegisterType<IProgressService<double>, ProgressService<double>>();
             ServiceLocator.Default.RegisterType<Red4ParserService>();
             ServiceLocator.Default.RegisterType<MeshTools>();        //RIG, Cp77FileService
@@ -110,7 +111,7 @@ namespace WolvenKit.MSTests
             ServiceLocator.Default.RegisterType<IModTools, ModTools>();         //Cp77FileService, ILoggerService, IProgress, IHashService, Mesh, Target
 
             Locator.CurrentMutable.RegisterConstant(new HashService(), typeof(IHashService));
-
+            Locator.CurrentMutable.RegisterConstant(new TweakDBService(), typeof(ITweakDBService));
 
             var hashService = ServiceLocator.Default.ResolveType<IHashService>();
             s_bm = ServiceLocator.Default.ResolveType<IArchiveManager>();
