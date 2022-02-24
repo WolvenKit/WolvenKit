@@ -26,9 +26,14 @@ namespace WolvenKit.Converters
         public DataTemplate RedWorldPositionEditor { get; set; }
         public DataTemplate RedArrayEditor { get; set; }
         public DataTemplate RedTypeViewer { get; set; }
+        public DataTemplate NullTemplate { get; set; }
 
         public override DataTemplate SelectTemplate(object item, DependencyObject container)
         {
+            if (item == null)
+            {
+                return NullTemplate;
+            }
             if (item is ChunkViewModel vm)
             {
                 if (vm.PropertyType == null)

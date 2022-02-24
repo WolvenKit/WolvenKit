@@ -493,6 +493,9 @@
             LoadOnDemandCommand="{Binding OnDemandLoadingCommand}"
             SelectionMode="Single"
             ShowLines="True"
+            VirtualizingPanel.IsVirtualizing="True"
+            VirtualizingPanel.ScrollUnit="Pixel"
+            VirtualizingPanel.VirtualizationMode="Recycling"
             Visibility="Visible">
             <syncfusion:SfTreeView.HierarchyPropertyDescriptors>
                 <treeViewEngine:HierarchyPropertyDescriptor IsSelectedPropertyName="IsSelected" TargetType="{x:Type shell:ChunkViewModel}" />

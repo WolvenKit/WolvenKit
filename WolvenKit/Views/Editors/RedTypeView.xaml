@@ -282,62 +282,8 @@
                     </DataTrigger>
                 </Style.Triggers>
             </Style>
-            <DataTemplate x:Key="ItemTemplate">
-                <Border
-                    x:Name="TopLine"
-                    MinHeight="27"
-                    BorderBrush="{StaticResource BorderAlt}"
-                    BorderThickness="0,1,0,0">
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition>
-                                <ColumnDefinition.Style>
-                                    <Style TargetType="ColumnDefinition">
-                                        <Setter Property="Width" Value="160" />
-                                        <Style.Triggers>
-                                            <DataTrigger Binding="{Binding IsInArray}" Value="True">
-                                                <Setter Property="Width" Value="{Binding ArrayIndexWidth}" />
-                                            </DataTrigger>
-                                        </Style.Triggers>
-                                    </Style>
-                                </ColumnDefinition.Style>
-                            </ColumnDefinition>
-                            <ColumnDefinition Width="Auto" />
-                            <ColumnDefinition Width="1" />
-                            <ColumnDefinition Width="*" />
-                        </Grid.ColumnDefinitions>
-                        <TextBlock
-                            Margin="6,5,0,0"
-                            VerticalAlignment="Top"
-                            Style="{StaticResource PGNameStyle}"
-                            Text="{Binding Name, Mode=OneTime}"
-                            TextTrimming="CharacterEllipsis"
-                            ToolTip="{Binding XPath, Mode=OneTime}" />
-                        <ContentPresenter
-                            x:Name="DeleteButtonWrapper"
-                            Grid.Column="1"
-                            Margin="0,6,0,0"
-                            VerticalAlignment="Top"
-                            ContentTemplate="{StaticResource DeleteButton}"
-                            DataContext="{Binding}" />
-                        <GridSplitter
-                            Grid.Column="2"
-                            HorizontalAlignment="Stretch"
-                            Background="{StaticResource BorderAlt}" />
-                        <ContentControl
-                            Grid.Column="3"
-                            Content="{Binding}"
-                            ContentTemplateSelector="{DynamicResource redEditorTemplates}"
-                            ToolTip="{Binding Type, Mode=OneTime}" />
-                    </Grid>
-                </Border>
-                <!--DataTemplate.Triggers>
-                                        <Trigger Property="ItemsControl.AlternationIndex" Value="0">
-                                            <Setter TargetName="TopLine" Property="BorderThickness" Value="0"/>
-                                        </Trigger>
-                                    </DataTemplate.Triggers-->
-            </DataTemplate>
             <converters:MathConverter x:Key="MathConverter" />
+            <converters:IsLastItemInContainerConverter x:Key="IsLastItemInContainerConverter" />
             <converters:RedEditorTemplateSelector x:Key="redEditorTemplates">
                 <converters:RedEditorTemplateSelector.RedStringEditor>
                     <DataTemplate>
@@ -432,6 +378,9 @@
                         <editors:RedFloatEditor DataContext="{Binding}" />
                     </DataTemplate>
                 </converters:RedEditorTemplateSelector.RedFloatEditor>
+                <converters:RedEditorTemplateSelector.NullTemplate>
+                    <DataTemplate />
+                </converters:RedEditorTemplateSelector.NullTemplate>
                 <converters:RedEditorTemplateSelector.RedTypeViewer>
                     <DataTemplate>
                         <StackPanel Orientation="Horizontal">
@@ -501,21 +450,133 @@
                                     <ContentPresenter ContentTemplate="{StaticResource DeleteAllButton}" />
                                 </StackPanel>
                             </Border>
-                            <!-- <ItemsControl
+                            <!--ListView
                                 Grid.Row="1"
                                 AlternationCount="{Binding RelativeSource={RelativeSource Self}, Path=Items.Count}"
                                 ItemTemplate="{StaticResource ItemTemplate}"
-                                ItemsSource="{Binding Properties}">
-                                <ItemsControl.ItemsPanel>
+                                ItemsSource="{Binding Properties}"
+                                ScrollViewer.CanContentScroll="False">
+                                <ListView.ItemsPanel>
                                     <ItemsPanelTemplate>
-                                        <StackPanel Orientation="Vertical" />
+                                        <VirtualizingStackPanel
+                                            IsVirtualizing="True"
+                                            Orientation="Vertical"
+                                            VirtualizationMode="Recycling" />
                                     </ItemsPanelTemplate>
-                                </ItemsControl.ItemsPanel>
-                            </ItemsControl>-->
+                                </ListView.ItemsPanel>
+                            </ListView-->
                         </Grid>
                     </DataTemplate>
                 </converters:RedEditorTemplateSelector.RedArrayEditor>
             </converters:RedEditorTemplateSelector>
+            <HierarchicalDataTemplate x:Key="ItemTemplate" ItemsSource="{Binding Properties}">
+                <Border
+                    x:Name="TopLine"
+                    MinHeight="27"
+                    BorderBrush="{StaticResource BorderAlt}"
+                    BorderThickness="0,1,0,0">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition>
+                                <ColumnDefinition.Style>
+                                    <Style TargetType="ColumnDefinition">
+                                        <Setter Property="Width" Value="160" />
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding IsInArray}" Value="True">
+                                                <Setter Property="Width" Value="{Binding ArrayIndexWidth}" />
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </ColumnDefinition.Style>
+                            </ColumnDefinition>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="1" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+                        <TextBlock
+                            Margin="6,5,0,0"
+                            VerticalAlignment="Top"
+                            Style="{StaticResource PGNameStyle}"
+                            Text="{Binding Name, Mode=OneTime}"
+                            TextTrimming="CharacterEllipsis"
+                            ToolTip="{Binding XPath, Mode=OneTime}" />
+                        <ContentPresenter
+                            x:Name="DeleteButtonWrapper"
+                            Grid.Column="1"
+                            Margin="0,6,0,0"
+                            VerticalAlignment="Top"
+                            ContentTemplate="{StaticResource DeleteButton}"
+                            DataContext="{Binding}" />
+                        <GridSplitter
+                            Grid.Column="2"
+                            HorizontalAlignment="Stretch"
+                            Background="{StaticResource BorderAlt}" />
+                        <ContentControl
+                            Grid.Column="3"
+                            Content="{Binding}"
+                            ContentTemplateSelector="{DynamicResource redEditorTemplates}"
+                            ToolTip="{Binding Type, Mode=OneTime}" />
+                    </Grid>
+                </Border>
+                <DataTemplate.Triggers>
+                    <DataTrigger Binding="{Binding RelativeSource={RelativeSource AncestorType=TreeViewItem}, Converter={StaticResource IsLastItemInContainerConverter}}" Value="True">
+                        <Setter TargetName="TopLine" Property="BorderThickness" Value="0,1,0,1" />
+                    </DataTrigger>
+                </DataTemplate.Triggers>
+                <HierarchicalDataTemplate.ItemTemplate>
+                    <DataTemplate>
+                        <Border
+                            x:Name="TopLine"
+                            MinHeight="27"
+                            Margin="160,0,0,0"
+                            BorderBrush="{StaticResource BorderAlt}"
+                            BorderThickness="1,1,0,0">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition>
+                                        <ColumnDefinition.Style>
+                                            <Style TargetType="ColumnDefinition">
+                                                <Setter Property="Width" Value="160" />
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding IsInArray}" Value="True">
+                                                        <Setter Property="Width" Value="{Binding ArrayIndexWidth}" />
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </ColumnDefinition.Style>
+                                    </ColumnDefinition>
+                                    <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition Width="1" />
+                                    <ColumnDefinition Width="*" />
+                                </Grid.ColumnDefinitions>
+                                <TextBlock
+                                    Margin="6,5,0,0"
+                                    VerticalAlignment="Top"
+                                    Style="{StaticResource PGNameStyle}"
+                                    Text="{Binding Name, Mode=OneTime}"
+                                    TextTrimming="CharacterEllipsis"
+                                    ToolTip="{Binding XPath, Mode=OneTime}" />
+                                <ContentPresenter
+                                    x:Name="DeleteButtonWrapper"
+                                    Grid.Column="1"
+                                    Margin="0,6,0,0"
+                                    VerticalAlignment="Top"
+                                    ContentTemplate="{StaticResource DeleteButton}"
+                                    DataContext="{Binding}" />
+                                <GridSplitter
+                                    Grid.Column="2"
+                                    HorizontalAlignment="Stretch"
+                                    Background="{StaticResource BorderAlt}" />
+                                <ContentControl
+                                    Grid.Column="3"
+                                    Content="{Binding}"
+                                    ContentTemplateSelector="{DynamicResource redEditorTemplates}"
+                                    ToolTip="{Binding Type, Mode=OneTime}" />
+                            </Grid>
+                        </Border>
+                    </DataTemplate>
+                </HierarchicalDataTemplate.ItemTemplate>
+            </HierarchicalDataTemplate>
             <Style TargetType="TextBox">
                 <Setter Property="Padding" Value="5,0" />
                 <Setter Property="VerticalContentAlignment" Value="Center" />
@@ -582,23 +643,76 @@
             </Grid>
         </Border>
         <!--  main editor list  -->
-        <ScrollViewer
+        <!--
+            ScrollViewer
             Grid.Row="1"
             Margin="0,-1,0,0"
             Padding="0"
             Tag="{Binding Level}"
-            VerticalScrollBarVisibility="Auto">
-            <ItemsControl
-                Grid.Column="2"
-                AlternationCount="{Binding RelativeSource={RelativeSource Self}, Path=Items.Count}"
-                ItemTemplate="{StaticResource ItemTemplate}"
-                ItemsSource="{Binding DisplayProperties}">
-                <ItemsControl.ItemsPanel>
-                    <ItemsPanelTemplate>
-                        <StackPanel Orientation="Vertical" />
-                    </ItemsPanelTemplate>
-                </ItemsControl.ItemsPanel>
-                <ItemsControl.Template>
+            VerticalScrollBarVisibility="Auto"
+        -->
+        <TreeView
+            Grid.Row="1"
+            Margin="0,-1,0,0"
+            Padding="0,-1,0,0"
+            AlternationCount="{Binding RelativeSource={RelativeSource Self}, Path=Items.Count}"
+            Background="{StaticResource ContentBackground}"
+            BorderBrush="{StaticResource BorderAlt}"
+            BorderThickness="0,1,0,0"
+            IsManipulationEnabled="False"
+            ItemTemplate="{StaticResource ItemTemplate}"
+            ItemsSource="{Binding DisplayProperties}"
+            ScrollViewer.CanContentScroll="True"
+            ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+            VirtualizingPanel.IsVirtualizing="True"
+            VirtualizingPanel.ScrollUnit="Pixel"
+            VirtualizingPanel.VirtualizationMode="Recycling">
+            <TreeView.ItemContainerStyle>
+                <Style TargetType="TreeViewItem">
+                    <Setter Property="Focusable" Value="False" />
+                    <Setter Property="IsExpanded" Value="True" />
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="TreeViewItem">
+                                <Grid>
+                                    <ContentPresenter ContentSource="Header" />
+                                    <Grid Margin="0,28,0,0">
+                                        <ItemsPresenter Name="ItemsHost" />
+                                    </Grid>
+                                </Grid>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </Style>
+            </TreeView.ItemContainerStyle>
+            <!--TreeView.Template>
+                <ControlTemplate>
+                    <Border
+                        Height="Auto"
+                        VerticalAlignment="Top"
+                        BorderBrush="{StaticResource BorderAlt}"
+                        BorderThickness="0,0,0,1">
+                        <ItemsPresenter />
+                    </Border>
+                </ControlTemplate>
+            </TreeView.Template-->
+            <!--ItemsControl.Template>
+                <ControlTemplate TargetType="ItemsControl">
+                    <ScrollViewer
+                        CanContentScroll="True"
+                        Focusable="False"
+                        Tag="{Binding Level}">
+                        <Border
+                            Height="Auto"
+                            VerticalAlignment="Top"
+                            BorderBrush="{StaticResource BorderAlt}"
+                            BorderThickness="0,0,0,1">
+                            <ItemsPresenter />
+                        </Border>
+                    </ScrollViewer>
+                </ControlTemplate>
+            </ItemsControl.Template-->
+            <!--ItemsControl.Template>
                     <ControlTemplate>
                         <Border
                             Height="Auto"
@@ -608,8 +722,8 @@
                             <ItemsPresenter />
                         </Border>
                     </ControlTemplate>
-                </ItemsControl.Template>
-                <!--ItemsControl.ItemTemplate>
+                </ItemsControl.Template-->
+            <!--ItemsControl.ItemTemplate>
                     <DataTemplate>
                         <Border x:Name="TopLine" BorderThickness="0,1,0,0" BorderBrush="{StaticResource BorderAlt}" MinHeight="{DynamicResource RowHeight}">
                             <Grid>
@@ -643,7 +757,7 @@
                         </DataTemplate.Triggers>
                     </DataTemplate>
                 </ItemsControl.ItemTemplate-->
-            </ItemsControl>
-        </ScrollViewer>
+        </TreeView>
+        <!--  /ScrollViewer  -->
     </Grid>
 </reactiveUi:ReactiveUserControl>
