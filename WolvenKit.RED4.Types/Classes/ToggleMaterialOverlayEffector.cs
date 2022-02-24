@@ -22,14 +22,6 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(2)] 
-		[RED("effectInstance")] 
-		public CHandle<gameEffectInstance> EffectInstance
-		{
-			get => GetPropertyValue<CHandle<gameEffectInstance>>();
-			set => SetPropertyValue<CHandle<gameEffectInstance>>(value);
-		}
-
-		[Ordinal(3)] 
 		[RED("owner")] 
 		public CWeakHandle<gameObject> Owner
 		{

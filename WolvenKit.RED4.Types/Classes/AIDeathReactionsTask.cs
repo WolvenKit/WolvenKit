@@ -28,5 +28,29 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CHandle<ActionHitReactionScriptProxy>>();
 			set => SetPropertyValue<CHandle<ActionHitReactionScriptProxy>>(value);
 		}
+
+		[Ordinal(3)] 
+		[RED("previousRagdollTimeStamp")] 
+		public CFloat PreviousRagdollTimeStamp
+		{
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
+		}
+
+		[Ordinal(4)] 
+		[RED("deathHasBeenPlayed")] 
+		public CBool DeathHasBeenPlayed
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(5)] 
+		[RED("updateFrame")] 
+		public CInt32 UpdateFrame
+		{
+			get => GetPropertyValue<CInt32>();
+			set => SetPropertyValue<CInt32>(value);
+		}
 	}
 }

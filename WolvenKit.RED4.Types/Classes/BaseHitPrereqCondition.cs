@@ -12,5 +12,21 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CBool>();
 			set => SetPropertyValue<CBool>(value);
 		}
+
+		[Ordinal(1)] 
+		[RED("onlyOncePerShot")] 
+		public CBool OnlyOncePerShot
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(2)] 
+		[RED("lastAttackTime")] 
+		public CFloat LastAttackTime
+		{
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
+		}
 	}
 }

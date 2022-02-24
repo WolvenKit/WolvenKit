@@ -54,6 +54,14 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(6)] 
+		[RED("sourceRadius")] 
+		public CFloat SourceRadius
+		{
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
+		}
+
+		[Ordinal(7)] 
 		[RED("isMounted")] 
 		public CBool IsMounted
 		{
@@ -61,12 +69,12 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(7)] 
-		[RED("sourceRadius")] 
-		public CFloat SourceRadius
+		[Ordinal(8)] 
+		[RED("vehicleEntityID")] 
+		public entEntityID VehicleEntityID
 		{
-			get => GetPropertyValue<CFloat>();
-			set => SetPropertyValue<CFloat>(value);
+			get => GetPropertyValue<entEntityID>();
+			set => SetPropertyValue<entEntityID>(value);
 		}
 
 		public gameinteractionsBumpEvent()
@@ -75,6 +83,7 @@ namespace WolvenKit.RED4.Types
 			SourcePosition = new();
 			SourceSquaredDistance = float.PositiveInfinity;
 			SourceRadius = 0.400000F;
+			VehicleEntityID = new();
 		}
 	}
 }

@@ -30,6 +30,14 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(5)] 
+		[RED("transmogged")] 
+		public inkImageWidgetReference Transmogged
+		{
+			get => GetPropertyValue<inkImageWidgetReference>();
+			set => SetPropertyValue<inkImageWidgetReference>(value);
+		}
+
+		[Ordinal(6)] 
 		[RED("iconsNameResolver")] 
 		public CHandle<gameuiIconsNameResolver> IconsNameResolver
 		{
@@ -42,6 +50,7 @@ namespace WolvenKit.RED4.Types
 			Container = new();
 			Icon = new();
 			IconicLines = new();
+			Transmogged = new();
 		}
 	}
 }

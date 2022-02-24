@@ -22,11 +22,11 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(4)] 
-		[RED("chromaticAberrationOffset")] 
-		public CFloat ChromaticAberrationOffset
+		[RED("chromaticAberrationSize")] 
+		public Vector2 ChromaticAberrationSize
 		{
-			get => GetPropertyValue<CFloat>();
-			set => SetPropertyValue<CFloat>(value);
+			get => GetPropertyValue<Vector2>();
+			set => SetPropertyValue<Vector2>(value);
 		}
 
 		[Ordinal(5)] 
@@ -48,7 +48,7 @@ namespace WolvenKit.RED4.Types
 		public ChromaticAberrationAreaSettings()
 		{
 			Enable = true;
-			ChromaticAberrationOffset = 1.400000F;
+			ChromaticAberrationSize = new() { X = 1.400000F, Y = 1.400000F };
 			ChromaticAberrationExp = 0.800000F;
 		}
 	}

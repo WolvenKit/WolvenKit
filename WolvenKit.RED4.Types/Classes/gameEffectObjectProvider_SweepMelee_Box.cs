@@ -5,7 +5,7 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class gameEffectObjectProvider_SweepMelee_Box : gameEffectObjectProvider_SweepOverTime
 	{
-		[Ordinal(1)] 
+		[Ordinal(2)] 
 		[RED("playerStaticDetectionConeDistance")] 
 		public CFloat PlayerStaticDetectionConeDistance
 		{
@@ -13,7 +13,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(2)] 
+		[Ordinal(3)] 
 		[RED("playerStaticDetectionConeStartAngle")] 
 		public CFloat PlayerStaticDetectionConeStartAngle
 		{
@@ -21,7 +21,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(3)] 
+		[Ordinal(4)] 
 		[RED("playerStaticDetectionConeEndAngle")] 
 		public CFloat PlayerStaticDetectionConeEndAngle
 		{
@@ -29,7 +29,15 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(4)] 
+		[Ordinal(5)] 
+		[RED("playerUseCameraForObstructionChecks")] 
+		public CBool PlayerUseCameraForObstructionChecks
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(6)] 
 		[RED("checkMeleeInvulnerability")] 
 		public CBool CheckMeleeInvulnerability
 		{
@@ -39,6 +47,7 @@ namespace WolvenKit.RED4.Types
 
 		public gameEffectObjectProvider_SweepMelee_Box()
 		{
+			QueryPreset = new();
 			PlayerStaticDetectionConeDistance = 2.000000F;
 			PlayerStaticDetectionConeStartAngle = 5.000000F;
 			PlayerStaticDetectionConeEndAngle = 18.000000F;

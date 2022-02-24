@@ -5,7 +5,7 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class QuestUpdateUserData : inkGameNotificationData
 	{
-		[Ordinal(6)] 
+		[Ordinal(7)] 
 		[RED("data")] 
 		public CWeakHandle<gameJournalQuest> Data
 		{

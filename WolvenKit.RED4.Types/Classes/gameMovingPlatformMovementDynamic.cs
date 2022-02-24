@@ -5,7 +5,7 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class gameMovingPlatformMovementDynamic : gameIMovingPlatformMovementPointToPoint
 	{
-		[Ordinal(1)] 
+		[Ordinal(2)] 
 		[RED("curveName")] 
 		public CName CurveName
 		{

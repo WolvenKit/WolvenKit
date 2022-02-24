@@ -14,8 +14,9 @@ namespace WolvenKit.RED4.Types
 			VisibilityCheckDistance = 16000.000000F;
 			PrereqListeners = new();
 			StatusEffectListeners = new();
-			ForceHighlightSource = new();
 			ReceivedDamageHistory = new();
+			LastHitInstigatorID = new();
+			HitInstigatorCooldownID = new();
 		}
 	}
 }

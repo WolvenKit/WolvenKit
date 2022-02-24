@@ -5,7 +5,7 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class SecurityTurret : SensorDevice
 	{
-		[Ordinal(192)] 
+		[Ordinal(189)] 
 		[RED("animFeature")] 
 		public CHandle<AnimFeature_SecurityTurretData> AnimFeature
 		{
@@ -13,7 +13,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<AnimFeature_SecurityTurretData>>(value);
 		}
 
-		[Ordinal(193)] 
+		[Ordinal(190)] 
 		[RED("animFeatureName")] 
 		public CName AnimFeatureName
 		{
@@ -21,7 +21,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(194)] 
+		[Ordinal(191)] 
 		[RED("lookAtSlot")] 
 		public CHandle<entSlotComponent> LookAtSlot
 		{
@@ -29,7 +29,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<entSlotComponent>>(value);
 		}
 
-		[Ordinal(195)] 
+		[Ordinal(192)] 
 		[RED("laserMesh")] 
 		public CHandle<entMeshComponent> LaserMesh
 		{
@@ -37,7 +37,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<entMeshComponent>>(value);
 		}
 
-		[Ordinal(196)] 
+		[Ordinal(193)] 
 		[RED("targetingComp")] 
 		public CHandle<gameTargetingComponent> TargetingComp
 		{
@@ -45,7 +45,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<gameTargetingComponent>>(value);
 		}
 
-		[Ordinal(197)] 
+		[Ordinal(194)] 
 		[RED("triggerSideOne")] 
 		public CHandle<gameStaticTriggerAreaComponent> TriggerSideOne
 		{
@@ -53,7 +53,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<gameStaticTriggerAreaComponent>>(value);
 		}
 
-		[Ordinal(198)] 
+		[Ordinal(195)] 
 		[RED("triggerSideTwo")] 
 		public CHandle<gameStaticTriggerAreaComponent> TriggerSideTwo
 		{
@@ -61,7 +61,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<gameStaticTriggerAreaComponent>>(value);
 		}
 
-		[Ordinal(199)] 
+		[Ordinal(196)] 
 		[RED("weapon")] 
 		public CWeakHandle<gameweaponObject> Weapon
 		{
@@ -69,7 +69,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<gameweaponObject>>(value);
 		}
 
-		[Ordinal(200)] 
+		[Ordinal(197)] 
 		[RED("itemID")] 
 		public gameItemID ItemID
 		{
@@ -77,7 +77,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gameItemID>(value);
 		}
 
-		[Ordinal(201)] 
+		[Ordinal(198)] 
 		[RED("laserGameEffect")] 
 		public CHandle<gameEffectInstance> LaserGameEffect
 		{
@@ -85,7 +85,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<gameEffectInstance>>(value);
 		}
 
-		[Ordinal(202)] 
+		[Ordinal(199)] 
 		[RED("laserFXSlotName")] 
 		public CName LaserFXSlotName
 		{
@@ -93,7 +93,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(203)] 
+		[Ordinal(200)] 
 		[RED("burstDelayEvtID")] 
 		public gameDelayID BurstDelayEvtID
 		{
@@ -101,7 +101,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gameDelayID>(value);
 		}
 
-		[Ordinal(204)] 
+		[Ordinal(201)] 
 		[RED("isBurstDelayOngoing")] 
 		public CBool IsBurstDelayOngoing
 		{
@@ -109,7 +109,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(205)] 
+		[Ordinal(202)] 
 		[RED("nextShootCycleDelayEvtID")] 
 		public gameDelayID NextShootCycleDelayEvtID
 		{
@@ -117,7 +117,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gameDelayID>(value);
 		}
 
-		[Ordinal(206)] 
+		[Ordinal(203)] 
 		[RED("isShootingOngoing")] 
 		public CBool IsShootingOngoing
 		{
@@ -125,7 +125,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(207)] 
+		[Ordinal(204)] 
 		[RED("timeToNextShot")] 
 		public CFloat TimeToNextShot
 		{
@@ -133,7 +133,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(208)] 
+		[Ordinal(205)] 
 		[RED("optim_CheckTargetParametersShots")] 
 		public CInt32 Optim_CheckTargetParametersShots
 		{
@@ -141,7 +141,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CInt32>(value);
 		}
 
-		[Ordinal(209)] 
+		[Ordinal(206)] 
 		[RED("netClientCurrentlyAppliedState")] 
 		public CHandle<SecurityTurretReplicatedState> NetClientCurrentlyAppliedState
 		{

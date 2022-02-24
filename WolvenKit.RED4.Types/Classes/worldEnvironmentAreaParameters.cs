@@ -14,11 +14,11 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(2)] 
-		[RED("resaved")] 
-		public CBool Resaved
+		[RED("resourceVersion")] 
+		public CUInt8 ResourceVersion
 		{
-			get => GetPropertyValue<CBool>();
-			set => SetPropertyValue<CBool>(value);
+			get => GetPropertyValue<CUInt8>();
+			set => SetPropertyValue<CUInt8>(value);
 		}
 
 		public worldEnvironmentAreaParameters()

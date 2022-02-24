@@ -5,7 +5,7 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class cpPlayerDetector_PseudoDevice : gameObject
 	{
-		[Ordinal(40)] 
+		[Ordinal(35)] 
 		[RED("playerDetector")] 
 		public NodeRef PlayerDetector
 		{

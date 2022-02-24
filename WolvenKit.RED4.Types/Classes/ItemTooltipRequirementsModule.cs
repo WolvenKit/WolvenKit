@@ -31,10 +31,10 @@ namespace WolvenKit.RED4.Types
 
 		[Ordinal(5)] 
 		[RED("anyAttributeWrapper")] 
-		public inkWidgetReference AnyAttributeWrapper
+		public inkCompoundWidgetReference AnyAttributeWrapper
 		{
-			get => GetPropertyValue<inkWidgetReference>();
-			set => SetPropertyValue<inkWidgetReference>(value);
+			get => GetPropertyValue<inkCompoundWidgetReference>();
+			set => SetPropertyValue<inkCompoundWidgetReference>(value);
 		}
 
 		[Ordinal(6)] 
@@ -54,8 +54,8 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(8)] 
-		[RED("anyAttributeText")] 
-		public inkTextWidgetReference AnyAttributeText
+		[RED("perkText")] 
+		public inkTextWidgetReference PerkText
 		{
 			get => GetPropertyValue<inkTextWidgetReference>();
 			set => SetPropertyValue<inkTextWidgetReference>(value);
@@ -69,7 +69,7 @@ namespace WolvenKit.RED4.Types
 			AnyAttributeWrapper = new();
 			LevelRequirementsText = new();
 			StrenghtOrReflexText = new();
-			AnyAttributeText = new();
+			PerkText = new();
 		}
 	}
 }

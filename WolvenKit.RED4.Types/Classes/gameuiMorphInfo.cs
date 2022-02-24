@@ -5,7 +5,7 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class gameuiMorphInfo : gameuiCharacterCustomizationInfo
 	{
-		[Ordinal(12)] 
+		[Ordinal(13)] 
 		[RED("morphNames")] 
 		public CArray<gameuiIndexedMorphName> MorphNames
 		{
@@ -16,6 +16,7 @@ namespace WolvenKit.RED4.Types
 		public gameuiMorphInfo()
 		{
 			Enabled = true;
+			EditTags = new();
 			OnDeactivateActions = new();
 			MorphNames = new();
 		}

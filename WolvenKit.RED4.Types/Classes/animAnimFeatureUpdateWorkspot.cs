@@ -177,7 +177,7 @@ namespace WolvenKit.RED4.Types
 		{
 			TimeScale = 1.000000F;
 			AnimationStartTime = -1.000000;
-			FacialKeyWeight = 0.750000F;
+			FacialKeyWeight = 1.000000F;
 		}
 	}
 }

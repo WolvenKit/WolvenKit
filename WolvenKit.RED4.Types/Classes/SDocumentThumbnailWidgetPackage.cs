@@ -5,7 +5,7 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class SDocumentThumbnailWidgetPackage : SWidgetPackage
 	{
-		[Ordinal(17)] 
+		[Ordinal(18)] 
 		[RED("folderName")] 
 		public CString FolderName
 		{
@@ -13,7 +13,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CString>(value);
 		}
 
-		[Ordinal(18)] 
+		[Ordinal(19)] 
 		[RED("documentAdress")] 
 		public SDocumentAdress DocumentAdress
 		{
@@ -21,7 +21,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<SDocumentAdress>(value);
 		}
 
-		[Ordinal(19)] 
+		[Ordinal(20)] 
 		[RED("documentType")] 
 		public CEnum<EDocumentType> DocumentType
 		{
@@ -29,7 +29,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CEnum<EDocumentType>>(value);
 		}
 
-		[Ordinal(20)] 
+		[Ordinal(21)] 
 		[RED("questInfo")] 
 		public gamedeviceQuestInfo QuestInfo
 		{
@@ -37,7 +37,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gamedeviceQuestInfo>(value);
 		}
 
-		[Ordinal(21)] 
+		[Ordinal(22)] 
 		[RED("wasRead")] 
 		public CBool WasRead
 		{
@@ -45,7 +45,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(22)] 
+		[Ordinal(23)] 
 		[RED("isOpened")] 
 		public CBool IsOpened
 		{

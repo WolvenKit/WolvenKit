@@ -5,7 +5,7 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class gameweaponObject : gameItemObject
 	{
-		[Ordinal(43)] 
+		[Ordinal(38)] 
 		[RED("effect")] 
 		public CResourceReference<gameEffectSet> Effect
 		{
@@ -13,7 +13,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CResourceReference<gameEffectSet>>(value);
 		}
 
-		[Ordinal(44)] 
+		[Ordinal(39)] 
 		[RED("hasOverheat")] 
 		public CBool HasOverheat
 		{
@@ -21,7 +21,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(45)] 
+		[Ordinal(40)] 
 		[RED("overheatEffectBlackboard")] 
 		public CHandle<worldEffectBlackboard> OverheatEffectBlackboard
 		{
@@ -29,7 +29,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<worldEffectBlackboard>>(value);
 		}
 
-		[Ordinal(46)] 
+		[Ordinal(41)] 
 		[RED("overheatListener")] 
 		public CHandle<OverheatStatListener> OverheatListener
 		{
@@ -37,7 +37,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<OverheatStatListener>>(value);
 		}
 
-		[Ordinal(47)] 
+		[Ordinal(42)] 
 		[RED("overheatDelaySent")] 
 		public CBool OverheatDelaySent
 		{
@@ -45,7 +45,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(48)] 
+		[Ordinal(43)] 
 		[RED("chargeEffectBlackboard")] 
 		public CHandle<worldEffectBlackboard> ChargeEffectBlackboard
 		{
@@ -53,7 +53,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<worldEffectBlackboard>>(value);
 		}
 
-		[Ordinal(49)] 
+		[Ordinal(44)] 
 		[RED("chargeStatListener")] 
 		public CHandle<WeaponChargeStatListener> ChargeStatListener
 		{
@@ -61,7 +61,15 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<WeaponChargeStatListener>>(value);
 		}
 
-		[Ordinal(50)] 
+		[Ordinal(45)] 
+		[RED("triggerEffectName")] 
+		public CName TriggerEffectName
+		{
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
+		}
+
+		[Ordinal(46)] 
 		[RED("meleeHitEffectBlackboard")] 
 		public CHandle<worldEffectBlackboard> MeleeHitEffectBlackboard
 		{
@@ -69,7 +77,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<worldEffectBlackboard>>(value);
 		}
 
-		[Ordinal(51)] 
+		[Ordinal(47)] 
 		[RED("meleeHitEffectValue")] 
 		public CFloat MeleeHitEffectValue
 		{
@@ -77,7 +85,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(52)] 
+		[Ordinal(48)] 
 		[RED("damageTypeListener")] 
 		public CHandle<DamageStatListener> DamageTypeListener
 		{
@@ -85,7 +93,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<DamageStatListener>>(value);
 		}
 
-		[Ordinal(53)] 
+		[Ordinal(49)] 
 		[RED("trailName")] 
 		public CString TrailName
 		{
@@ -93,7 +101,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CString>(value);
 		}
 
-		[Ordinal(54)] 
+		[Ordinal(50)] 
 		[RED("maxChargeThreshold")] 
 		public CFloat MaxChargeThreshold
 		{
@@ -101,7 +109,15 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(55)] 
+		[Ordinal(51)] 
+		[RED("animOwner")] 
+		public CInt32 AnimOwner
+		{
+			get => GetPropertyValue<CInt32>();
+			set => SetPropertyValue<CInt32>(value);
+		}
+
+		[Ordinal(52)] 
 		[RED("lowAmmoEffectActive")] 
 		public CBool LowAmmoEffectActive
 		{
@@ -109,7 +125,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(56)] 
+		[Ordinal(53)] 
 		[RED("hasSecondaryTriggerMode")] 
 		public CBool HasSecondaryTriggerMode
 		{
@@ -117,7 +133,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(57)] 
+		[Ordinal(54)] 
 		[RED("weaponRecord")] 
 		public CHandle<gamedataWeaponItem_Record> WeaponRecord
 		{
@@ -125,7 +141,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<gamedataWeaponItem_Record>>(value);
 		}
 
-		[Ordinal(58)] 
+		[Ordinal(55)] 
 		[RED("isHeavyWeapon")] 
 		public CBool IsHeavyWeapon
 		{
@@ -133,7 +149,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(59)] 
+		[Ordinal(56)] 
 		[RED("isMeleeWeapon")] 
 		public CBool IsMeleeWeapon
 		{
@@ -141,7 +157,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(60)] 
+		[Ordinal(57)] 
 		[RED("isRangedWeapon")] 
 		public CBool IsRangedWeapon
 		{
@@ -149,7 +165,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(61)] 
+		[Ordinal(58)] 
 		[RED("AIBlackboard")] 
 		public CHandle<gameIBlackboard> AIBlackboard
 		{

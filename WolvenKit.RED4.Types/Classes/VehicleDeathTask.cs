@@ -5,7 +5,7 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class VehicleDeathTask : AIDeathReactionsTask
 	{
-		[Ordinal(3)] 
+		[Ordinal(6)] 
 		[RED("vehNPCDeathData")] 
 		public CHandle<AnimFeature_VehicleNPCDeathData> VehNPCDeathData
 		{
@@ -13,7 +13,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<AnimFeature_VehicleNPCDeathData>>(value);
 		}
 
-		[Ordinal(4)] 
+		[Ordinal(7)] 
 		[RED("previousState")] 
 		public CEnum<gamedataNPCHighLevelState> PreviousState
 		{
@@ -21,7 +21,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CEnum<gamedataNPCHighLevelState>>(value);
 		}
 
-		[Ordinal(5)] 
+		[Ordinal(8)] 
 		[RED("timeToRagdoll")] 
 		public CFloat TimeToRagdoll
 		{
@@ -29,7 +29,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(6)] 
+		[Ordinal(9)] 
 		[RED("hasRagdolled")] 
 		public CBool HasRagdolled
 		{
@@ -37,7 +37,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(7)] 
+		[Ordinal(10)] 
 		[RED("activationTimeStamp")] 
 		public CFloat ActivationTimeStamp
 		{
@@ -45,7 +45,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(8)] 
+		[Ordinal(11)] 
 		[RED("readyToUnmount")] 
 		public CBool ReadyToUnmount
 		{

@@ -142,6 +142,14 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(19)] 
+		[RED("waterRainIntensity")] 
+		public CFloat WaterRainIntensity
+		{
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
+		}
+
+		[Ordinal(20)] 
 		[RED("rainleaksMask")] 
 		public CResourceReference<CBitmapTexture> RainleaksMask
 		{
@@ -149,7 +157,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CResourceReference<CBitmapTexture>>(value);
 		}
 
-		[Ordinal(20)] 
+		[Ordinal(21)] 
 		[RED("raindropsMask")] 
 		public CResourceReference<CBitmapTexture> RaindropsMask
 		{
@@ -157,7 +165,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CResourceReference<CBitmapTexture>>(value);
 		}
 
-		[Ordinal(21)] 
+		[Ordinal(22)] 
 		[RED("rainRipplesMask")] 
 		public CResourceReference<CBitmapTexture> RainRipplesMask
 		{

@@ -5,7 +5,7 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class ThrowableWeaponObject : gameweaponObject
 	{
-		[Ordinal(62)] 
+		[Ordinal(59)] 
 		[RED("projectileComponent")] 
 		public CHandle<gameprojectileComponent> ProjectileComponent
 		{
@@ -13,7 +13,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<gameprojectileComponent>>(value);
 		}
 
-		[Ordinal(63)] 
+		[Ordinal(60)] 
 		[RED("weaponOwner")] 
 		public CWeakHandle<gameObject> WeaponOwner
 		{

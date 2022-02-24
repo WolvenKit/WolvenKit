@@ -68,13 +68,5 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CFloat>();
 			set => SetPropertyValue<CFloat>(value);
 		}
-
-		[Ordinal(16)] 
-		[RED("layerInitTime")] 
-		public CFloat LayerInitTime
-		{
-			get => GetPropertyValue<CFloat>();
-			set => SetPropertyValue<CFloat>(value);
-		}
 	}
 }

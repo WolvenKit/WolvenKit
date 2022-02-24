@@ -94,6 +94,14 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(13)] 
+		[RED("photomodeActiveId")] 
+		public CHandle<redCallbackObject> PhotomodeActiveId
+		{
+			get => GetPropertyValue<CHandle<redCallbackObject>>();
+			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
+		}
+
+		[Ordinal(14)] 
 		[RED("tutorialOnHold")] 
 		public CBool TutorialOnHold
 		{
@@ -101,7 +109,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(14)] 
+		[Ordinal(15)] 
 		[RED("tutorialData")] 
 		public gamePopupData TutorialData
 		{
@@ -109,7 +117,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gamePopupData>(value);
 		}
 
-		[Ordinal(15)] 
+		[Ordinal(16)] 
 		[RED("tutorialSettings")] 
 		public gamePopupSettings TutorialSettings
 		{
@@ -117,7 +125,23 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gamePopupSettings>(value);
 		}
 
-		[Ordinal(16)] 
+		[Ordinal(17)] 
+		[RED("phoneMessageOnHold")] 
+		public CBool PhoneMessageOnHold
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(18)] 
+		[RED("phoneMessageData")] 
+		public CHandle<JournalNotificationData> PhoneMessageData
+		{
+			get => GetPropertyValue<CHandle<JournalNotificationData>>();
+			set => SetPropertyValue<CHandle<JournalNotificationData>>(value);
+		}
+
+		[Ordinal(19)] 
 		[RED("tutorialToken")] 
 		public CHandle<inkGameNotificationToken> TutorialToken
 		{
@@ -125,7 +149,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<inkGameNotificationToken>>(value);
 		}
 
-		[Ordinal(17)] 
+		[Ordinal(20)] 
 		[RED("phoneMessageToken")] 
 		public CHandle<inkGameNotificationToken> PhoneMessageToken
 		{
@@ -133,7 +157,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<inkGameNotificationToken>>(value);
 		}
 
-		[Ordinal(18)] 
+		[Ordinal(21)] 
 		[RED("shardToken")] 
 		public CHandle<inkGameNotificationToken> ShardToken
 		{
@@ -141,7 +165,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<inkGameNotificationToken>>(value);
 		}
 
-		[Ordinal(19)] 
+		[Ordinal(22)] 
 		[RED("vehiclesManagerToken")] 
 		public CHandle<inkGameNotificationToken> VehiclesManagerToken
 		{
@@ -149,7 +173,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<inkGameNotificationToken>>(value);
 		}
 
-		[Ordinal(20)] 
+		[Ordinal(23)] 
 		[RED("vehicleRadioToken")] 
 		public CHandle<inkGameNotificationToken> VehicleRadioToken
 		{
@@ -157,7 +181,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<inkGameNotificationToken>>(value);
 		}
 
-		[Ordinal(21)] 
+		[Ordinal(24)] 
 		[RED("codexToken")] 
 		public CHandle<inkGameNotificationToken> CodexToken
 		{
@@ -165,7 +189,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<inkGameNotificationToken>>(value);
 		}
 
-		[Ordinal(22)] 
+		[Ordinal(25)] 
 		[RED("ponrToken")] 
 		public CHandle<inkGameNotificationToken> PonrToken
 		{

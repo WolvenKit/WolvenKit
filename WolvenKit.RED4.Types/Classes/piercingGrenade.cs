@@ -5,7 +5,7 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class piercingGrenade : BaseProjectile
 	{
-		[Ordinal(51)] 
+		[Ordinal(46)] 
 		[RED("piercingEffect")] 
 		public gameEffectRef PiercingEffect
 		{
@@ -13,7 +13,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gameEffectRef>(value);
 		}
 
-		[Ordinal(52)] 
+		[Ordinal(47)] 
 		[RED("pierceTime")] 
 		public CFloat PierceTime
 		{
@@ -21,7 +21,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(53)] 
+		[Ordinal(48)] 
 		[RED("energyLossFactor")] 
 		public CFloat EnergyLossFactor
 		{
@@ -29,7 +29,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(54)] 
+		[Ordinal(49)] 
 		[RED("startVelocity")] 
 		public CFloat StartVelocity
 		{
@@ -37,7 +37,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(55)] 
+		[Ordinal(50)] 
 		[RED("grenadeLifetime")] 
 		public CFloat GrenadeLifetime
 		{
@@ -45,7 +45,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(56)] 
+		[Ordinal(51)] 
 		[RED("gravitySimulation")] 
 		public CFloat GravitySimulation
 		{
@@ -53,7 +53,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(57)] 
+		[Ordinal(52)] 
 		[RED("trailEffectName")] 
 		public CName TrailEffectName
 		{
@@ -61,7 +61,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(58)] 
+		[Ordinal(53)] 
 		[RED("alive")] 
 		public CBool Alive
 		{

@@ -20,18 +20,5 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CUInt32>();
 			set => SetPropertyValue<CUInt32>(value);
 		}
-
-		[Ordinal(2)] 
-		[RED("taggedListenerCallbacks")] 
-		public CArray<CHandle<redCallbackObject>> TaggedListenerCallbacks
-		{
-			get => GetPropertyValue<CArray<CHandle<redCallbackObject>>>();
-			set => SetPropertyValue<CArray<CHandle<redCallbackObject>>>(value);
-		}
-
-		public FocusModeTaggingSystem()
-		{
-			TaggedListenerCallbacks = new();
-		}
 	}
 }

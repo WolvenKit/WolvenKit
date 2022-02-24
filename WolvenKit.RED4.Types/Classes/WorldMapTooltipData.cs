@@ -46,14 +46,6 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(5)] 
-		[RED("district")] 
-		public CEnum<gamedataDistrict> District
-		{
-			get => GetPropertyValue<CEnum<gamedataDistrict>>();
-			set => SetPropertyValue<CEnum<gamedataDistrict>>(value);
-		}
-
-		[Ordinal(6)] 
 		[RED("isCollection")] 
 		public CBool IsCollection
 		{
@@ -61,7 +53,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(7)] 
+		[Ordinal(6)] 
 		[RED("collectionCount")] 
 		public CInt32 CollectionCount
 		{

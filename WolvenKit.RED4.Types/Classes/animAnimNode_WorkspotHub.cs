@@ -106,7 +106,7 @@ namespace WolvenKit.RED4.Types
 			Id = 4294967295;
 			AdditionalLinkIds = new();
 			AdditionalLinks = new();
-			FacialKeyWeight = 0.750000F;
+			FacialKeyWeight = 1.000000F;
 			FacialIdleMaleAnimation = "idle__neutral__male";
 			FacialIdleFemaleAnimation = "idle__neutral__female";
 		}

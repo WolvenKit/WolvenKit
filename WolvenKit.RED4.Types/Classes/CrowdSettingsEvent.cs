@@ -12,13 +12,5 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CName>();
 			set => SetPropertyValue<CName>(value);
 		}
-
-		[Ordinal(1)] 
-		[RED("resetFear")] 
-		public CBool ResetFear
-		{
-			get => GetPropertyValue<CBool>();
-			set => SetPropertyValue<CBool>(value);
-		}
 	}
 }

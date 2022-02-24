@@ -5,7 +5,7 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class gameFreeCamera : gameObject
 	{
-		[Ordinal(40)] 
+		[Ordinal(35)] 
 		[RED("baseSpeed")] 
 		public CFloat BaseSpeed
 		{
@@ -13,7 +13,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(41)] 
+		[Ordinal(36)] 
 		[RED("analogTurnRate")] 
 		public CFloat AnalogTurnRate
 		{
@@ -21,7 +21,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(42)] 
+		[Ordinal(37)] 
 		[RED("mouseTurnRate")] 
 		public CFloat MouseTurnRate
 		{
@@ -29,7 +29,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(43)] 
+		[Ordinal(38)] 
 		[RED("activationBlendTime")] 
 		public CFloat ActivationBlendTime
 		{
@@ -37,7 +37,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(44)] 
+		[Ordinal(39)] 
 		[RED("deactivationBlendTime")] 
 		public CFloat DeactivationBlendTime
 		{
@@ -45,7 +45,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(45)] 
+		[Ordinal(40)] 
 		[RED("usePhysicalCollision")] 
 		public CBool UsePhysicalCollision
 		{

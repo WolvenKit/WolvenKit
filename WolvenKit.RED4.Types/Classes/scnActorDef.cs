@@ -150,6 +150,14 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(18)] 
+		[RED("holocallInitScn")] 
+		public CResourceAsyncReference<CResource> HolocallInitScn
+		{
+			get => GetPropertyValue<CResourceAsyncReference<CResource>>();
+			set => SetPropertyValue<CResourceAsyncReference<CResource>>(value);
+		}
+
+		[Ordinal(19)] 
 		[RED("actorName")] 
 		public CString ActorName
 		{
@@ -157,7 +165,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CString>(value);
 		}
 
-		[Ordinal(19)] 
+		[Ordinal(20)] 
 		[RED("specCharacterRecordId")] 
 		public TweakDBID SpecCharacterRecordId
 		{
@@ -165,7 +173,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<TweakDBID>(value);
 		}
 
-		[Ordinal(20)] 
+		[Ordinal(21)] 
 		[RED("specAppearance")] 
 		public CName SpecAppearance
 		{

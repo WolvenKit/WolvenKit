@@ -12,5 +12,13 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CFloat>();
 			set => SetPropertyValue<CFloat>(value);
 		}
+
+		[Ordinal(1)] 
+		[RED("acceleration")] 
+		public CFloat Acceleration
+		{
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
+		}
 	}
 }

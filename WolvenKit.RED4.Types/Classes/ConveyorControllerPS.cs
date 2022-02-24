@@ -7,6 +7,7 @@ namespace WolvenKit.RED4.Types
 
 		public ConveyorControllerPS()
 		{
+			DeviceState = Enums.EDeviceStatus.OFF;
 			DeviceName = "LocKey#45661";
 		}
 	}

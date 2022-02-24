@@ -6,22 +6,30 @@ namespace WolvenKit.RED4.Types
 	public partial class TooltipAnimationController : inkWidgetLogicController
 	{
 		[Ordinal(1)] 
-		[RED("showAnimationName")] 
-		public CName ShowAnimationName
+		[RED("tooltipContainer")] 
+		public inkWidgetReference TooltipContainer
 		{
-			get => GetPropertyValue<CName>();
-			set => SetPropertyValue<CName>(value);
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
 		[Ordinal(2)] 
-		[RED("hideAnimationName")] 
-		public CName HideAnimationName
+		[RED("tooltipAnimHideDef")] 
+		public CHandle<inkanimDefinition> TooltipAnimHideDef
 		{
-			get => GetPropertyValue<CName>();
-			set => SetPropertyValue<CName>(value);
+			get => GetPropertyValue<CHandle<inkanimDefinition>>();
+			set => SetPropertyValue<CHandle<inkanimDefinition>>(value);
 		}
 
 		[Ordinal(3)] 
+		[RED("tooltipDelayedShowDef")] 
+		public CHandle<inkanimDefinition> TooltipDelayedShowDef
+		{
+			get => GetPropertyValue<CHandle<inkanimDefinition>>();
+			set => SetPropertyValue<CHandle<inkanimDefinition>>(value);
+		}
+
+		[Ordinal(4)] 
 		[RED("tooltipAnimHide")] 
 		public CHandle<inkanimProxy> TooltipAnimHide
 		{
@@ -29,7 +37,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<inkanimProxy>>(value);
 		}
 
-		[Ordinal(4)] 
+		[Ordinal(5)] 
 		[RED("tooltipDelayedShow")] 
 		public CHandle<inkanimProxy> TooltipDelayedShow
 		{
@@ -37,7 +45,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<inkanimProxy>>(value);
 		}
 
-		[Ordinal(5)] 
+		[Ordinal(6)] 
 		[RED("axisDataThreshold")] 
 		public CFloat AxisDataThreshold
 		{
@@ -45,7 +53,15 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(6)] 
+		[Ordinal(7)] 
+		[RED("mouseDataThreshold")] 
+		public CFloat MouseDataThreshold
+		{
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
+		}
+
+		[Ordinal(8)] 
 		[RED("isHidden")] 
 		public CBool IsHidden
 		{
@@ -55,9 +71,9 @@ namespace WolvenKit.RED4.Types
 
 		public TooltipAnimationController()
 		{
-			ShowAnimationName = "show_tooltip";
-			HideAnimationName = "hide_tooltip";
+			TooltipContainer = new();
 			AxisDataThreshold = 0.400000F;
+			MouseDataThreshold = 0.900000F;
 		}
 	}
 }

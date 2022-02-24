@@ -29,6 +29,14 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<entEntityID>(value);
 		}
 
+		[Ordinal(3)] 
+		[RED("duration")] 
+		public CFloat Duration
+		{
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
+		}
+
 		public DebugOutlineEvent()
 		{
 			Requester = new();

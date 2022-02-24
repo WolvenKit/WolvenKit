@@ -6,14 +6,6 @@ namespace WolvenKit.RED4.Types
 	public partial class TypeComparableItemsCache : IScriptable
 	{
 		[Ordinal(0)] 
-		[RED("itemType")] 
-		public CEnum<gamedataItemType> ItemType
-		{
-			get => GetPropertyValue<CEnum<gamedataItemType>>();
-			set => SetPropertyValue<CEnum<gamedataItemType>>(value);
-		}
-
-		[Ordinal(1)] 
 		[RED("cache")] 
 		public CHandle<ItemComparableTypesCache> Cache
 		{
@@ -21,7 +13,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<ItemComparableTypesCache>>(value);
 		}
 
-		[Ordinal(2)] 
+		[Ordinal(1)] 
 		[RED("items")] 
 		public CArray<InventoryItemData> Items
 		{

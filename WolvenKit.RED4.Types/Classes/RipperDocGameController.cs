@@ -22,246 +22,30 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(5)] 
-		[RED("defaultTab")] 
-		public inkWidgetReference DefaultTab
+		[RED("animationControllerContainer")] 
+		public inkWidgetReference AnimationControllerContainer
 		{
 			get => GetPropertyValue<inkWidgetReference>();
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
 		[Ordinal(6)] 
-		[RED("itemTab")] 
-		public inkWidgetReference ItemTab
+		[RED("ripperdocIdContainerV1")] 
+		public inkWidgetReference RipperdocIdContainerV1
 		{
 			get => GetPropertyValue<inkWidgetReference>();
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
 		[Ordinal(7)] 
-		[RED("femaleHovers")] 
-		public inkWidgetReference FemaleHovers
+		[RED("ripperdocIdContainerV2")] 
+		public inkWidgetReference RipperdocIdContainerV2
 		{
 			get => GetPropertyValue<inkWidgetReference>();
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
 		[Ordinal(8)] 
-		[RED("maleHovers")] 
-		public inkWidgetReference MaleHovers
-		{
-			get => GetPropertyValue<inkWidgetReference>();
-			set => SetPropertyValue<inkWidgetReference>(value);
-		}
-
-		[Ordinal(9)] 
-		[RED("defaultAnimationTab")] 
-		public inkWidgetReference DefaultAnimationTab
-		{
-			get => GetPropertyValue<inkWidgetReference>();
-			set => SetPropertyValue<inkWidgetReference>(value);
-		}
-
-		[Ordinal(10)] 
-		[RED("itemAnimationTab")] 
-		public inkWidgetReference ItemAnimationTab
-		{
-			get => GetPropertyValue<inkWidgetReference>();
-			set => SetPropertyValue<inkWidgetReference>(value);
-		}
-
-		[Ordinal(11)] 
-		[RED("F_frontalCortexHoverTexture")] 
-		public inkWidgetReference F_frontalCortexHoverTexture
-		{
-			get => GetPropertyValue<inkWidgetReference>();
-			set => SetPropertyValue<inkWidgetReference>(value);
-		}
-
-		[Ordinal(12)] 
-		[RED("F_eyesHoverTexture")] 
-		public inkWidgetReference F_eyesHoverTexture
-		{
-			get => GetPropertyValue<inkWidgetReference>();
-			set => SetPropertyValue<inkWidgetReference>(value);
-		}
-
-		[Ordinal(13)] 
-		[RED("F_cardiovascularHoverTexture")] 
-		public inkWidgetReference F_cardiovascularHoverTexture
-		{
-			get => GetPropertyValue<inkWidgetReference>();
-			set => SetPropertyValue<inkWidgetReference>(value);
-		}
-
-		[Ordinal(14)] 
-		[RED("F_immuneHoverTexture")] 
-		public inkWidgetReference F_immuneHoverTexture
-		{
-			get => GetPropertyValue<inkWidgetReference>();
-			set => SetPropertyValue<inkWidgetReference>(value);
-		}
-
-		[Ordinal(15)] 
-		[RED("F_nervousHoverTexture")] 
-		public inkWidgetReference F_nervousHoverTexture
-		{
-			get => GetPropertyValue<inkWidgetReference>();
-			set => SetPropertyValue<inkWidgetReference>(value);
-		}
-
-		[Ordinal(16)] 
-		[RED("F_integumentaryHoverTexture")] 
-		public inkWidgetReference F_integumentaryHoverTexture
-		{
-			get => GetPropertyValue<inkWidgetReference>();
-			set => SetPropertyValue<inkWidgetReference>(value);
-		}
-
-		[Ordinal(17)] 
-		[RED("F_systemReplacementHoverTexture")] 
-		public inkWidgetReference F_systemReplacementHoverTexture
-		{
-			get => GetPropertyValue<inkWidgetReference>();
-			set => SetPropertyValue<inkWidgetReference>(value);
-		}
-
-		[Ordinal(18)] 
-		[RED("F_musculoskeletalHoverTexture")] 
-		public inkWidgetReference F_musculoskeletalHoverTexture
-		{
-			get => GetPropertyValue<inkWidgetReference>();
-			set => SetPropertyValue<inkWidgetReference>(value);
-		}
-
-		[Ordinal(19)] 
-		[RED("F_handsHoverTexture")] 
-		public inkWidgetReference F_handsHoverTexture
-		{
-			get => GetPropertyValue<inkWidgetReference>();
-			set => SetPropertyValue<inkWidgetReference>(value);
-		}
-
-		[Ordinal(20)] 
-		[RED("F_armsHoverTexture")] 
-		public inkWidgetReference F_armsHoverTexture
-		{
-			get => GetPropertyValue<inkWidgetReference>();
-			set => SetPropertyValue<inkWidgetReference>(value);
-		}
-
-		[Ordinal(21)] 
-		[RED("F_legsHoverTexture")] 
-		public inkWidgetReference F_legsHoverTexture
-		{
-			get => GetPropertyValue<inkWidgetReference>();
-			set => SetPropertyValue<inkWidgetReference>(value);
-		}
-
-		[Ordinal(22)] 
-		[RED("M_frontalCortexHoverTexture")] 
-		public inkWidgetReference M_frontalCortexHoverTexture
-		{
-			get => GetPropertyValue<inkWidgetReference>();
-			set => SetPropertyValue<inkWidgetReference>(value);
-		}
-
-		[Ordinal(23)] 
-		[RED("M_eyesHoverTexture")] 
-		public inkWidgetReference M_eyesHoverTexture
-		{
-			get => GetPropertyValue<inkWidgetReference>();
-			set => SetPropertyValue<inkWidgetReference>(value);
-		}
-
-		[Ordinal(24)] 
-		[RED("M_cardiovascularHoverTexture")] 
-		public inkWidgetReference M_cardiovascularHoverTexture
-		{
-			get => GetPropertyValue<inkWidgetReference>();
-			set => SetPropertyValue<inkWidgetReference>(value);
-		}
-
-		[Ordinal(25)] 
-		[RED("M_immuneHoverTexture")] 
-		public inkWidgetReference M_immuneHoverTexture
-		{
-			get => GetPropertyValue<inkWidgetReference>();
-			set => SetPropertyValue<inkWidgetReference>(value);
-		}
-
-		[Ordinal(26)] 
-		[RED("M_nervousHoverTexture")] 
-		public inkWidgetReference M_nervousHoverTexture
-		{
-			get => GetPropertyValue<inkWidgetReference>();
-			set => SetPropertyValue<inkWidgetReference>(value);
-		}
-
-		[Ordinal(27)] 
-		[RED("M_integumentaryHoverTexture")] 
-		public inkWidgetReference M_integumentaryHoverTexture
-		{
-			get => GetPropertyValue<inkWidgetReference>();
-			set => SetPropertyValue<inkWidgetReference>(value);
-		}
-
-		[Ordinal(28)] 
-		[RED("M_systemReplacementHoverTexture")] 
-		public inkWidgetReference M_systemReplacementHoverTexture
-		{
-			get => GetPropertyValue<inkWidgetReference>();
-			set => SetPropertyValue<inkWidgetReference>(value);
-		}
-
-		[Ordinal(29)] 
-		[RED("M_musculoskeletalHoverTexture")] 
-		public inkWidgetReference M_musculoskeletalHoverTexture
-		{
-			get => GetPropertyValue<inkWidgetReference>();
-			set => SetPropertyValue<inkWidgetReference>(value);
-		}
-
-		[Ordinal(30)] 
-		[RED("M_handsHoverTexture")] 
-		public inkWidgetReference M_handsHoverTexture
-		{
-			get => GetPropertyValue<inkWidgetReference>();
-			set => SetPropertyValue<inkWidgetReference>(value);
-		}
-
-		[Ordinal(31)] 
-		[RED("M_armsHoverTexture")] 
-		public inkWidgetReference M_armsHoverTexture
-		{
-			get => GetPropertyValue<inkWidgetReference>();
-			set => SetPropertyValue<inkWidgetReference>(value);
-		}
-
-		[Ordinal(32)] 
-		[RED("M_legsHoverTexture")] 
-		public inkWidgetReference M_legsHoverTexture
-		{
-			get => GetPropertyValue<inkWidgetReference>();
-			set => SetPropertyValue<inkWidgetReference>(value);
-		}
-
-		[Ordinal(33)] 
-		[RED("man_wiresTexture")] 
-		public inkWidgetReference Man_wiresTexture
-		{
-			get => GetPropertyValue<inkWidgetReference>();
-			set => SetPropertyValue<inkWidgetReference>(value);
-		}
-
-		[Ordinal(34)] 
-		[RED("woman_wiresTexture")] 
-		public inkWidgetReference Woman_wiresTexture
-		{
-			get => GetPropertyValue<inkWidgetReference>();
-			set => SetPropertyValue<inkWidgetReference>(value);
-		}
-
-		[Ordinal(35)] 
 		[RED("frontalCortexAnchor")] 
 		public inkCompoundWidgetReference FrontalCortexAnchor
 		{
@@ -269,7 +53,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkCompoundWidgetReference>(value);
 		}
 
-		[Ordinal(36)] 
+		[Ordinal(9)] 
 		[RED("ocularCortexAnchor")] 
 		public inkCompoundWidgetReference OcularCortexAnchor
 		{
@@ -277,7 +61,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkCompoundWidgetReference>(value);
 		}
 
-		[Ordinal(37)] 
+		[Ordinal(10)] 
 		[RED("leftMiddleGridAnchor")] 
 		public inkCompoundWidgetReference LeftMiddleGridAnchor
 		{
@@ -285,7 +69,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkCompoundWidgetReference>(value);
 		}
 
-		[Ordinal(38)] 
+		[Ordinal(11)] 
 		[RED("leftButtomGridAnchor")] 
 		public inkCompoundWidgetReference LeftButtomGridAnchor
 		{
@@ -293,7 +77,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkCompoundWidgetReference>(value);
 		}
 
-		[Ordinal(39)] 
+		[Ordinal(12)] 
 		[RED("rightTopGridAnchor")] 
 		public inkCompoundWidgetReference RightTopGridAnchor
 		{
@@ -301,7 +85,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkCompoundWidgetReference>(value);
 		}
 
-		[Ordinal(40)] 
+		[Ordinal(13)] 
 		[RED("rightButtomGridAnchor")] 
 		public inkCompoundWidgetReference RightButtomGridAnchor
 		{
@@ -309,7 +93,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkCompoundWidgetReference>(value);
 		}
 
-		[Ordinal(41)] 
+		[Ordinal(14)] 
 		[RED("skeletonAnchor")] 
 		public inkCompoundWidgetReference SkeletonAnchor
 		{
@@ -317,7 +101,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkCompoundWidgetReference>(value);
 		}
 
-		[Ordinal(42)] 
+		[Ordinal(15)] 
 		[RED("handsAnchor")] 
 		public inkCompoundWidgetReference HandsAnchor
 		{
@@ -325,15 +109,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkCompoundWidgetReference>(value);
 		}
 
-		[Ordinal(43)] 
-		[RED("ripperdocIdRoot")] 
-		public inkWidgetReference RipperdocIdRoot
-		{
-			get => GetPropertyValue<inkWidgetReference>();
-			set => SetPropertyValue<inkWidgetReference>(value);
-		}
-
-		[Ordinal(44)] 
+		[Ordinal(16)] 
 		[RED("playerMoney")] 
 		public inkTextWidgetReference PlayerMoney
 		{
@@ -341,7 +117,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
-		[Ordinal(45)] 
+		[Ordinal(17)] 
 		[RED("playerMoneyHolder")] 
 		public inkWidgetReference PlayerMoneyHolder
 		{
@@ -349,7 +125,15 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(46)] 
+		[Ordinal(18)] 
+		[RED("allocationPointContainerDefault")] 
+		public inkCompoundWidgetReference AllocationPointContainerDefault
+		{
+			get => GetPropertyValue<inkCompoundWidgetReference>();
+			set => SetPropertyValue<inkCompoundWidgetReference>(value);
+		}
+
+		[Ordinal(19)] 
 		[RED("cyberwareSlotsList")] 
 		public inkCompoundWidgetReference CyberwareSlotsList
 		{
@@ -357,7 +141,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkCompoundWidgetReference>(value);
 		}
 
-		[Ordinal(47)] 
+		[Ordinal(20)] 
 		[RED("cyberwareVirtualGrid")] 
 		public inkVirtualCompoundWidgetReference CyberwareVirtualGrid
 		{
@@ -365,7 +149,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkVirtualCompoundWidgetReference>(value);
 		}
 
-		[Ordinal(48)] 
+		[Ordinal(21)] 
 		[RED("radioGroupRef")] 
 		public inkWidgetReference RadioGroupRef
 		{
@@ -373,7 +157,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(49)] 
+		[Ordinal(22)] 
 		[RED("cyberwareInfoContainer")] 
 		public inkCompoundWidgetReference CyberwareInfoContainer
 		{
@@ -381,7 +165,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkCompoundWidgetReference>(value);
 		}
 
-		[Ordinal(50)] 
+		[Ordinal(23)] 
 		[RED("itemsListScrollAreaContainer")] 
 		public inkWidgetReference ItemsListScrollAreaContainer
 		{
@@ -389,7 +173,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(51)] 
+		[Ordinal(24)] 
 		[RED("sortingButton")] 
 		public inkWidgetReference SortingButton
 		{
@@ -397,7 +181,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(52)] 
+		[Ordinal(25)] 
 		[RED("sortingDropdown")] 
 		public inkWidgetReference SortingDropdown
 		{
@@ -405,7 +189,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(53)] 
+		[Ordinal(26)] 
 		[RED("mode")] 
 		public CEnum<RipperdocModes> Mode
 		{
@@ -413,7 +197,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CEnum<RipperdocModes>>(value);
 		}
 
-		[Ordinal(54)] 
+		[Ordinal(27)] 
 		[RED("screen")] 
 		public CEnum<CyberwareScreenType> Screen
 		{
@@ -421,47 +205,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CEnum<CyberwareScreenType>>(value);
 		}
 
-		[Ordinal(55)] 
-		[RED("buttonHintsController")] 
-		public CWeakHandle<ButtonHints> ButtonHintsController
-		{
-			get => GetPropertyValue<CWeakHandle<ButtonHints>>();
-			set => SetPropertyValue<CWeakHandle<ButtonHints>>(value);
-		}
-
-		[Ordinal(56)] 
-		[RED("TooltipsManager")] 
-		public CWeakHandle<gameuiTooltipsManager> TooltipsManager
-		{
-			get => GetPropertyValue<CWeakHandle<gameuiTooltipsManager>>();
-			set => SetPropertyValue<CWeakHandle<gameuiTooltipsManager>>(value);
-		}
-
-		[Ordinal(57)] 
-		[RED("InventoryManager")] 
-		public CHandle<InventoryDataManagerV2> InventoryManager
-		{
-			get => GetPropertyValue<CHandle<InventoryDataManagerV2>>();
-			set => SetPropertyValue<CHandle<InventoryDataManagerV2>>(value);
-		}
-
-		[Ordinal(58)] 
-		[RED("uiScriptableSystem")] 
-		public CWeakHandle<UIScriptableSystem> UiScriptableSystem
-		{
-			get => GetPropertyValue<CWeakHandle<UIScriptableSystem>>();
-			set => SetPropertyValue<CWeakHandle<UIScriptableSystem>>(value);
-		}
-
-		[Ordinal(59)] 
-		[RED("menuEventDispatcher")] 
-		public CWeakHandle<inkMenuEventDispatcher> MenuEventDispatcher
-		{
-			get => GetPropertyValue<CWeakHandle<inkMenuEventDispatcher>>();
-			set => SetPropertyValue<CWeakHandle<inkMenuEventDispatcher>>(value);
-		}
-
-		[Ordinal(60)] 
+		[Ordinal(28)] 
 		[RED("player")] 
 		public CWeakHandle<PlayerPuppet> Player
 		{
@@ -469,7 +213,55 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<PlayerPuppet>>(value);
 		}
 
-		[Ordinal(61)] 
+		[Ordinal(29)] 
+		[RED("buttonHintsController")] 
+		public CWeakHandle<ButtonHints> ButtonHintsController
+		{
+			get => GetPropertyValue<CWeakHandle<ButtonHints>>();
+			set => SetPropertyValue<CWeakHandle<ButtonHints>>(value);
+		}
+
+		[Ordinal(30)] 
+		[RED("TooltipsManager")] 
+		public CWeakHandle<gameuiTooltipsManager> TooltipsManager
+		{
+			get => GetPropertyValue<CWeakHandle<gameuiTooltipsManager>>();
+			set => SetPropertyValue<CWeakHandle<gameuiTooltipsManager>>(value);
+		}
+
+		[Ordinal(31)] 
+		[RED("InventoryManager")] 
+		public CHandle<InventoryDataManagerV2> InventoryManager
+		{
+			get => GetPropertyValue<CHandle<InventoryDataManagerV2>>();
+			set => SetPropertyValue<CHandle<InventoryDataManagerV2>>(value);
+		}
+
+		[Ordinal(32)] 
+		[RED("uiScriptableSystem")] 
+		public CWeakHandle<UIScriptableSystem> UiScriptableSystem
+		{
+			get => GetPropertyValue<CWeakHandle<UIScriptableSystem>>();
+			set => SetPropertyValue<CWeakHandle<UIScriptableSystem>>(value);
+		}
+
+		[Ordinal(33)] 
+		[RED("menuEventDispatcher")] 
+		public CWeakHandle<inkMenuEventDispatcher> MenuEventDispatcher
+		{
+			get => GetPropertyValue<CWeakHandle<inkMenuEventDispatcher>>();
+			set => SetPropertyValue<CWeakHandle<inkMenuEventDispatcher>>(value);
+		}
+
+		[Ordinal(34)] 
+		[RED("ripperdocTokenManager")] 
+		public CHandle<RipperdocTokenManager> RipperdocTokenManager
+		{
+			get => GetPropertyValue<CHandle<RipperdocTokenManager>>();
+			set => SetPropertyValue<CHandle<RipperdocTokenManager>>(value);
+		}
+
+		[Ordinal(35)] 
 		[RED("vendorUserData")] 
 		public CHandle<VendorUserData> VendorUserData
 		{
@@ -477,7 +269,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<VendorUserData>>(value);
 		}
 
-		[Ordinal(62)] 
+		[Ordinal(36)] 
 		[RED("VendorDataManager")] 
 		public CHandle<VendorDataManager> VendorDataManager
 		{
@@ -485,23 +277,15 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<VendorDataManager>>(value);
 		}
 
-		[Ordinal(63)] 
-		[RED("selectedArea")] 
-		public CEnum<gamedataEquipmentArea> SelectedArea
+		[Ordinal(37)] 
+		[RED("soldItems")] 
+		public CHandle<SoldItemsCache> SoldItems
 		{
-			get => GetPropertyValue<CEnum<gamedataEquipmentArea>>();
-			set => SetPropertyValue<CEnum<gamedataEquipmentArea>>(value);
+			get => GetPropertyValue<CHandle<SoldItemsCache>>();
+			set => SetPropertyValue<CHandle<SoldItemsCache>>(value);
 		}
 
-		[Ordinal(64)] 
-		[RED("equipmentGrid")] 
-		public CWeakHandle<CyberwareInventoryMiniGrid> EquipmentGrid
-		{
-			get => GetPropertyValue<CWeakHandle<CyberwareInventoryMiniGrid>>();
-			set => SetPropertyValue<CWeakHandle<CyberwareInventoryMiniGrid>>(value);
-		}
-
-		[Ordinal(65)] 
+		[Ordinal(38)] 
 		[RED("VendorBlackboard")] 
 		public CWeakHandle<gameIBlackboard> VendorBlackboard
 		{
@@ -509,7 +293,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<gameIBlackboard>>(value);
 		}
 
-		[Ordinal(66)] 
+		[Ordinal(39)] 
 		[RED("equipmentBlackboard")] 
 		public CWeakHandle<gameIBlackboard> EquipmentBlackboard
 		{
@@ -517,7 +301,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<gameIBlackboard>>(value);
 		}
 
-		[Ordinal(67)] 
+		[Ordinal(40)] 
 		[RED("equipmentBlackboardCallback")] 
 		public CHandle<redCallbackObject> EquipmentBlackboardCallback
 		{
@@ -525,7 +309,23 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
-		[Ordinal(68)] 
+		[Ordinal(41)] 
+		[RED("tokenBlackboard")] 
+		public CWeakHandle<gameIBlackboard> TokenBlackboard
+		{
+			get => GetPropertyValue<CWeakHandle<gameIBlackboard>>();
+			set => SetPropertyValue<CWeakHandle<gameIBlackboard>>(value);
+		}
+
+		[Ordinal(42)] 
+		[RED("tokenBlackboardCallback")] 
+		public CHandle<redCallbackObject> TokenBlackboardCallback
+		{
+			get => GetPropertyValue<CHandle<redCallbackObject>>();
+			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
+		}
+
+		[Ordinal(43)] 
 		[RED("cyberwareInfo")] 
 		public CWeakHandle<AGenericTooltipController> CyberwareInfo
 		{
@@ -533,7 +333,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<AGenericTooltipController>>(value);
 		}
 
-		[Ordinal(69)] 
+		[Ordinal(44)] 
 		[RED("cyberwareInfoType")] 
 		public CEnum<CyberwareInfoType> CyberwareInfoType
 		{
@@ -541,15 +341,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CEnum<CyberwareInfoType>>(value);
 		}
 
-		[Ordinal(70)] 
-		[RED("animationProxy")] 
-		public CHandle<inkanimProxy> AnimationProxy
-		{
-			get => GetPropertyValue<CHandle<inkanimProxy>>();
-			set => SetPropertyValue<CHandle<inkanimProxy>>(value);
-		}
-
-		[Ordinal(71)] 
+		[Ordinal(45)] 
 		[RED("virtualCyberwareListController")] 
 		public CWeakHandle<inkVirtualGridController> VirtualCyberwareListController
 		{
@@ -557,7 +349,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<inkVirtualGridController>>(value);
 		}
 
-		[Ordinal(72)] 
+		[Ordinal(46)] 
 		[RED("cyberwareClassifier")] 
 		public CHandle<CyberwareTemplateClassifier> CyberwareClassifier
 		{
@@ -565,7 +357,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<CyberwareTemplateClassifier>>(value);
 		}
 
-		[Ordinal(73)] 
+		[Ordinal(47)] 
 		[RED("cyberwareDataSource")] 
 		public CHandle<inkScriptableDataSourceWrapper> CyberwareDataSource
 		{
@@ -573,7 +365,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<inkScriptableDataSourceWrapper>>(value);
 		}
 
-		[Ordinal(74)] 
+		[Ordinal(48)] 
 		[RED("cyberwaregDataView")] 
 		public CHandle<CyberwareDataView> CyberwaregDataView
 		{
@@ -581,7 +373,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<CyberwareDataView>>(value);
 		}
 
-		[Ordinal(75)] 
+		[Ordinal(49)] 
 		[RED("currentFilter")] 
 		public CEnum<RipperdocFilter> CurrentFilter
 		{
@@ -589,7 +381,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CEnum<RipperdocFilter>>(value);
 		}
 
-		[Ordinal(76)] 
+		[Ordinal(50)] 
 		[RED("radioGroup")] 
 		public CWeakHandle<FilterRadioGroup> RadioGroup
 		{
@@ -597,7 +389,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<FilterRadioGroup>>(value);
 		}
 
-		[Ordinal(77)] 
+		[Ordinal(51)] 
 		[RED("ripperId")] 
 		public CWeakHandle<RipperdocIdPanel> RipperId
 		{
@@ -605,55 +397,23 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<RipperdocIdPanel>>(value);
 		}
 
-		[Ordinal(78)] 
-		[RED("hoverAnimation")] 
-		public CHandle<inkanimProxy> HoverAnimation
+		[Ordinal(52)] 
+		[RED("selectedArea")] 
+		public CEnum<gamedataEquipmentArea> SelectedArea
 		{
-			get => GetPropertyValue<CHandle<inkanimProxy>>();
-			set => SetPropertyValue<CHandle<inkanimProxy>>(value);
+			get => GetPropertyValue<CEnum<gamedataEquipmentArea>>();
+			set => SetPropertyValue<CEnum<gamedataEquipmentArea>>(value);
 		}
 
-		[Ordinal(79)] 
-		[RED("hoverOverAnimation")] 
-		public CHandle<inkanimProxy> HoverOverAnimation
+		[Ordinal(53)] 
+		[RED("equipmentGrid")] 
+		public CWeakHandle<CyberwareInventoryMiniGrid> EquipmentGrid
 		{
-			get => GetPropertyValue<CHandle<inkanimProxy>>();
-			set => SetPropertyValue<CHandle<inkanimProxy>>(value);
+			get => GetPropertyValue<CWeakHandle<CyberwareInventoryMiniGrid>>();
+			set => SetPropertyValue<CWeakHandle<CyberwareInventoryMiniGrid>>(value);
 		}
 
-		[Ordinal(80)] 
-		[RED("introDefaultAnimation")] 
-		public CHandle<inkanimProxy> IntroDefaultAnimation
-		{
-			get => GetPropertyValue<CHandle<inkanimProxy>>();
-			set => SetPropertyValue<CHandle<inkanimProxy>>(value);
-		}
-
-		[Ordinal(81)] 
-		[RED("outroDefaultAnimation")] 
-		public CHandle<inkanimProxy> OutroDefaultAnimation
-		{
-			get => GetPropertyValue<CHandle<inkanimProxy>>();
-			set => SetPropertyValue<CHandle<inkanimProxy>>(value);
-		}
-
-		[Ordinal(82)] 
-		[RED("introPaperdollAnimation")] 
-		public CHandle<inkanimProxy> IntroPaperdollAnimation
-		{
-			get => GetPropertyValue<CHandle<inkanimProxy>>();
-			set => SetPropertyValue<CHandle<inkanimProxy>>(value);
-		}
-
-		[Ordinal(83)] 
-		[RED("outroPaperdollAnimation")] 
-		public CHandle<inkanimProxy> OutroPaperdollAnimation
-		{
-			get => GetPropertyValue<CHandle<inkanimProxy>>();
-			set => SetPropertyValue<CHandle<inkanimProxy>>(value);
-		}
-
-		[Ordinal(84)] 
+		[Ordinal(54)] 
 		[RED("inventoryListener")] 
 		public CHandle<gameInventoryScriptListener> InventoryListener
 		{
@@ -661,15 +421,15 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<gameInventoryScriptListener>>(value);
 		}
 
-		[Ordinal(85)] 
-		[RED("cyberareGrids")] 
-		public CArray<CWeakHandle<CyberwareInventoryMiniGrid>> CyberareGrids
+		[Ordinal(55)] 
+		[RED("cybewareGrids")] 
+		public CArray<CWeakHandle<CyberwareInventoryMiniGrid>> CybewareGrids
 		{
 			get => GetPropertyValue<CArray<CWeakHandle<CyberwareInventoryMiniGrid>>>();
 			set => SetPropertyValue<CArray<CWeakHandle<CyberwareInventoryMiniGrid>>>(value);
 		}
 
-		[Ordinal(86)] 
+		[Ordinal(56)] 
 		[RED("isActivePanel")] 
 		public CBool IsActivePanel
 		{
@@ -677,7 +437,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(87)] 
+		[Ordinal(57)] 
 		[RED("equiped")] 
 		public CBool Equiped
 		{
@@ -685,7 +445,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(88)] 
+		[Ordinal(58)] 
 		[RED("activeSlotIndex")] 
 		public CInt32 ActiveSlotIndex
 		{
@@ -693,48 +453,37 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CInt32>(value);
 		}
 
-		[Ordinal(89)] 
-		[RED("confirmationPopupToken")] 
-		public CHandle<inkGameNotificationToken> ConfirmationPopupToken
+		[Ordinal(59)] 
+		[RED("animationController")] 
+		public CWeakHandle<RipperdocScreenAnimationController> AnimationController
+		{
+			get => GetPropertyValue<CWeakHandle<RipperdocScreenAnimationController>>();
+			set => SetPropertyValue<CWeakHandle<RipperdocScreenAnimationController>>(value);
+		}
+
+		[Ordinal(60)] 
+		[RED("tokenPopup")] 
+		public CHandle<inkGameNotificationToken> TokenPopup
 		{
 			get => GetPropertyValue<CHandle<inkGameNotificationToken>>();
 			set => SetPropertyValue<CHandle<inkGameNotificationToken>>(value);
+		}
+
+		[Ordinal(61)] 
+		[RED("useAlternativeSwitch")] 
+		public CBool UseAlternativeSwitch
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		public RipperDocGameController()
 		{
 			TooltipsManagerRef = new();
 			ButtonHintsManagerRef = new();
-			DefaultTab = new();
-			ItemTab = new();
-			FemaleHovers = new();
-			MaleHovers = new();
-			DefaultAnimationTab = new();
-			ItemAnimationTab = new();
-			F_frontalCortexHoverTexture = new();
-			F_eyesHoverTexture = new();
-			F_cardiovascularHoverTexture = new();
-			F_immuneHoverTexture = new();
-			F_nervousHoverTexture = new();
-			F_integumentaryHoverTexture = new();
-			F_systemReplacementHoverTexture = new();
-			F_musculoskeletalHoverTexture = new();
-			F_handsHoverTexture = new();
-			F_armsHoverTexture = new();
-			F_legsHoverTexture = new();
-			M_frontalCortexHoverTexture = new();
-			M_eyesHoverTexture = new();
-			M_cardiovascularHoverTexture = new();
-			M_immuneHoverTexture = new();
-			M_nervousHoverTexture = new();
-			M_integumentaryHoverTexture = new();
-			M_systemReplacementHoverTexture = new();
-			M_musculoskeletalHoverTexture = new();
-			M_handsHoverTexture = new();
-			M_armsHoverTexture = new();
-			M_legsHoverTexture = new();
-			Man_wiresTexture = new();
-			Woman_wiresTexture = new();
+			AnimationControllerContainer = new();
+			RipperdocIdContainerV1 = new();
+			RipperdocIdContainerV2 = new();
 			FrontalCortexAnchor = new();
 			OcularCortexAnchor = new();
 			LeftMiddleGridAnchor = new();
@@ -743,9 +492,9 @@ namespace WolvenKit.RED4.Types
 			RightButtomGridAnchor = new();
 			SkeletonAnchor = new();
 			HandsAnchor = new();
-			RipperdocIdRoot = new();
 			PlayerMoney = new();
 			PlayerMoneyHolder = new();
+			AllocationPointContainerDefault = new();
 			CyberwareSlotsList = new();
 			CyberwareVirtualGrid = new();
 			RadioGroupRef = new();
@@ -753,7 +502,7 @@ namespace WolvenKit.RED4.Types
 			ItemsListScrollAreaContainer = new();
 			SortingButton = new();
 			SortingDropdown = new();
-			CyberareGrids = new();
+			CybewareGrids = new();
 		}
 	}
 }

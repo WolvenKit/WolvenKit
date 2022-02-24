@@ -38,32 +38,8 @@ namespace WolvenKit.MSTests
         //    Test_Extension();
         //}
 
-        //[TestMethod]
-        public void Debug()
-        {
-            var files = s_groupedFiles[".smartobjects"].ToList();
-
-            foreach (var file in files)
-            {
-                if (!file.Name.Contains("so_-008_0005_-001.smartobjects"))
-                {
-                    continue;
-                }
-
-                var ar = s_bm.Archives.Lookup(file.Archive.ArchiveAbsolutePath).Value as Archive;
-                using var ms = new MemoryStream();
-                ar?.CopyFileToStream(ms, file.NameHash64, false);
-                ms.Seek(0, SeekOrigin.Begin);
-
-                var reader = new CR2WReader(ms);
-                var readResult = reader.ReadFile(out var c);
-            }
-        }
-
         [TestMethod]
         public void Read_bin() => Test_Extension(".bin");
-
-
 
         [TestMethod]
         public void Read_acousticdata() => Test_Extension(".acousticdata");
@@ -109,6 +85,9 @@ namespace WolvenKit.MSTests
 
         [TestMethod]
         public void Read_camcurveset() => Test_Extension(".camcurveset");
+
+        [TestMethod]
+        public void Read_ccstate() => Test_Extension(".ccstate");
 
         [TestMethod]
         public void Read_cfoliage() => Test_Extension(".cfoliage");
@@ -235,6 +214,9 @@ namespace WolvenKit.MSTests
 
         [TestMethod]
         public void Read_inkcharcustomization() => Test_Extension(".inkcharcustomization");
+
+        [TestMethod]
+        public void Read_inkenginesettings() => Test_Extension(".inkenginesettings");
 
         [TestMethod]
         public void Read_inkfontfamily() => Test_Extension(".inkfontfamily");
@@ -402,9 +384,11 @@ namespace WolvenKit.MSTests
         [TestMethod]
         public void Read_spatial_representation() => Test_Extension(".spatial_representation");
 
-        // removed in 1.3
-        //[TestMethod]
-        //public void Read_streamingquerydata() => Test_Extension(".streamingquerydata");
+        [TestMethod]
+        public void Read_streamingquerydata() => Test_Extension(".streamingquerydata");
+
+        [TestMethod]
+        public void Read_streamingblock() => Test_Extension(".streamingblock");
 
         [TestMethod]
         public void Read_streamingsector() => Test_Extension(".streamingsector");

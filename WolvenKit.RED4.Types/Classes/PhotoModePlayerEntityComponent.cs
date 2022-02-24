@@ -22,24 +22,24 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(7)] 
-		[RED("availableItemTypesList")] 
-		public CArray<CEnum<gamedataItemType>> AvailableItemTypesList
+		[RED("availableCurrentItemTypesList")] 
+		public CArray<CEnum<gamedataItemType>> AvailableCurrentItemTypesList
 		{
 			get => GetPropertyValue<CArray<CEnum<gamedataItemType>>>();
 			set => SetPropertyValue<CArray<CEnum<gamedataItemType>>>(value);
 		}
 
 		[Ordinal(8)] 
-		[RED("availableItemsList")] 
-		public CArray<CWeakHandle<gameItemData>> AvailableItemsList
+		[RED("availableCurrentItemsList")] 
+		public CArray<CWeakHandle<gameItemData>> AvailableCurrentItemsList
 		{
 			get => GetPropertyValue<CArray<CWeakHandle<gameItemData>>>();
 			set => SetPropertyValue<CArray<CWeakHandle<gameItemData>>>(value);
 		}
 
 		[Ordinal(9)] 
-		[RED("swapMeeleWeaponItemId")] 
-		public gameItemID SwapMeeleWeaponItemId
+		[RED("swapMeleeWeaponItemId")] 
+		public gameItemID SwapMeleeWeaponItemId
 		{
 			get => GetPropertyValue<gameItemID>();
 			set => SetPropertyValue<gameItemID>(value);
@@ -78,14 +78,22 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(14)] 
-		[RED("playerPuppet")] 
-		public CWeakHandle<PlayerPuppet> PlayerPuppet
+		[RED("mainPuppet")] 
+		public CWeakHandle<PlayerPuppet> MainPuppet
 		{
 			get => GetPropertyValue<CWeakHandle<PlayerPuppet>>();
 			set => SetPropertyValue<CWeakHandle<PlayerPuppet>>(value);
 		}
 
 		[Ordinal(15)] 
+		[RED("currentPuppet")] 
+		public CWeakHandle<PlayerPuppet> CurrentPuppet
+		{
+			get => GetPropertyValue<CWeakHandle<PlayerPuppet>>();
+			set => SetPropertyValue<CWeakHandle<PlayerPuppet>>(value);
+		}
+
+		[Ordinal(16)] 
 		[RED("TS")] 
 		public CHandle<gameTransactionSystem> TS
 		{
@@ -93,7 +101,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<gameTransactionSystem>>(value);
 		}
 
-		[Ordinal(16)] 
+		[Ordinal(17)] 
 		[RED("loadingItems")] 
 		public CArray<gameItemID> LoadingItems
 		{
@@ -101,17 +109,25 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<gameItemID>>(value);
 		}
 
-		[Ordinal(17)] 
-		[RED("itemsLoadingTimeout")] 
-		public CFloat ItemsLoadingTimeout
+		[Ordinal(18)] 
+		[RED("itemsLoadingTime")] 
+		public CFloat ItemsLoadingTime
 		{
 			get => GetPropertyValue<CFloat>();
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(18)] 
+		[Ordinal(19)] 
 		[RED("muzzleEffectEnabled")] 
 		public CBool MuzzleEffectEnabled
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(20)] 
+		[RED("customizable")] 
+		public CBool Customizable
 		{
 			get => GetPropertyValue<CBool>();
 			set => SetPropertyValue<CBool>(value);
@@ -121,9 +137,9 @@ namespace WolvenKit.RED4.Types
 		{
 			UsedWeaponItemId = new();
 			CurrentWeaponInSlot = new();
-			AvailableItemTypesList = new();
-			AvailableItemsList = new();
-			SwapMeeleWeaponItemId = new();
+			AvailableCurrentItemTypesList = new();
+			AvailableCurrentItemsList = new();
+			SwapMeleeWeaponItemId = new();
 			SwapHangunWeaponItemId = new();
 			SwapRifleWeaponItemId = new();
 			SwapShootgunWeaponItemId = new();

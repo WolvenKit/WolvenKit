@@ -5,7 +5,7 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class SceneScreen : gameObject
 	{
-		[Ordinal(40)] 
+		[Ordinal(35)] 
 		[RED("uiAnimationsData")] 
 		public CHandle<SceneScreenUIAnimationsData> UiAnimationsData
 		{
@@ -13,7 +13,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<SceneScreenUIAnimationsData>>(value);
 		}
 
-		[Ordinal(41)] 
+		[Ordinal(36)] 
 		[RED("blackboard")] 
 		public CHandle<gameIBlackboard> Blackboard
 		{

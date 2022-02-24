@@ -5,7 +5,7 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class gameuiCharacterCustomizationGenitalsController : gameuiCharacterCustomizationBodyPartsController
 	{
-		[Ordinal(3)] 
+		[Ordinal(4)] 
 		[RED("upperBodyGroupName")] 
 		public CName UpperBodyGroupName
 		{
@@ -13,7 +13,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(4)] 
+		[Ordinal(5)] 
 		[RED("bottomBodyGroupName")] 
 		public CName BottomBodyGroupName
 		{
@@ -21,7 +21,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(5)] 
+		[Ordinal(6)] 
 		[RED("forceHideGenitals")] 
 		public CBool ForceHideGenitals
 		{

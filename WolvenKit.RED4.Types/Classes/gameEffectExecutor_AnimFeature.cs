@@ -28,5 +28,13 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CEnum<gameEffectExecutor_AnimFeatureApplyTo>>();
 			set => SetPropertyValue<CEnum<gameEffectExecutor_AnimFeatureApplyTo>>(value);
 		}
+
+		[Ordinal(4)] 
+		[RED("ignoreWaterImpacts")] 
+		public CBool IgnoreWaterImpacts
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
 	}
 }

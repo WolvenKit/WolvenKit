@@ -46,19 +46,32 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(5)] 
-		[RED("currentConfigString")] 
-		public CString CurrentConfigString
+		[RED("aimAssistSnapEnabled")] 
+		public CBool AimAssistSnapEnabled
 		{
-			get => GetPropertyValue<CString>();
-			set => SetPropertyValue<CString>(value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(6)] 
-		[RED("settingsRecord")] 
-		public CHandle<gamedataAimAssistSettings_Record> SettingsRecord
+		[RED("currentConfig")] 
+		public CEnum<AimAssistSettingConfig> CurrentConfig
 		{
-			get => GetPropertyValue<CHandle<gamedataAimAssistSettings_Record>>();
-			set => SetPropertyValue<CHandle<gamedataAimAssistSettings_Record>>(value);
+			get => GetPropertyValue<CEnum<AimAssistSettingConfig>>();
+			set => SetPropertyValue<CEnum<AimAssistSettingConfig>>(value);
+		}
+
+		[Ordinal(7)] 
+		[RED("settingsRecords")] 
+		public CArray<CWeakHandle<gamedataAimAssistSettings_Record>> SettingsRecords
+		{
+			get => GetPropertyValue<CArray<CWeakHandle<gamedataAimAssistSettings_Record>>>();
+			set => SetPropertyValue<CArray<CWeakHandle<gamedataAimAssistSettings_Record>>>(value);
+		}
+
+		public AimAssistSettingsListener()
+		{
+			SettingsRecords = new();
 		}
 	}
 }

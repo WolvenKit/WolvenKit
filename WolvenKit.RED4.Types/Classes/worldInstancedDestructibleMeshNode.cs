@@ -181,6 +181,14 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
+		[Ordinal(1022)] 
+		[RED("systemsToNotifyFlags")] 
+		public CUInt16 SystemsToNotifyFlags
+		{
+			get => GetPropertyValue<CUInt16>();
+			set => SetPropertyValue<CUInt16>(value);
+		}
+
 		public worldInstancedDestructibleMeshNode()
 		{
 			SimulationType = Enums.physicsSimulationType.Dynamic;

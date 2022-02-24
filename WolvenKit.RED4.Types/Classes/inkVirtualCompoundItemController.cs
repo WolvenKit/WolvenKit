@@ -23,7 +23,7 @@ namespace WolvenKit.RED4.Types
 
 		[Ordinal(12)] 
 		[RED("Selected")] 
-		public inkVirtualCompoundItemSelectControllerCallback Selected_656
+		public inkVirtualCompoundItemSelectControllerCallback Selected_672
 		{
 			get => GetPropertyValue<inkVirtualCompoundItemSelectControllerCallback>();
 			set => SetPropertyValue<inkVirtualCompoundItemSelectControllerCallback>(value);
@@ -49,7 +49,7 @@ namespace WolvenKit.RED4.Types
 		{
 			ToggledOff = new();
 			ToggledOn = new();
-			Selected_656 = new();
+			Selected_672 = new();
 			Deselected = new();
 			Added = new();
 		}

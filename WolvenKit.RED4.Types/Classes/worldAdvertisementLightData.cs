@@ -358,6 +358,22 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(44)] 
+		[RED("rayTracingLightSourceRadius")] 
+		public CFloat RayTracingLightSourceRadius
+		{
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
+		}
+
+		[Ordinal(45)] 
+		[RED("rayTracingContactShadowRange")] 
+		public CFloat RayTracingContactShadowRange
+		{
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
+		}
+
+		[Ordinal(46)] 
 		[RED("iesProfile")] 
 		public CResourceAsyncReference<CIESDataResource> IesProfile
 		{
@@ -365,7 +381,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CResourceAsyncReference<CIESDataResource>>(value);
 		}
 
-		[Ordinal(45)] 
+		[Ordinal(47)] 
 		[RED("flicker")] 
 		public rendSLightFlickering Flicker
 		{
@@ -373,7 +389,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<rendSLightFlickering>(value);
 		}
 
-		[Ordinal(46)] 
+		[Ordinal(48)] 
 		[RED("envColorGroup")] 
 		public CEnum<EEnvColorGroup> EnvColorGroup
 		{
@@ -381,7 +397,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CEnum<EEnvColorGroup>>(value);
 		}
 
-		[Ordinal(47)] 
+		[Ordinal(49)] 
 		[RED("colorGroupSaturation")] 
 		public CUInt8 ColorGroupSaturation
 		{
@@ -389,7 +405,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CUInt8>(value);
 		}
 
-		[Ordinal(48)] 
+		[Ordinal(50)] 
 		[RED("portalAngleCutoff")] 
 		public CUInt8 PortalAngleCutoff
 		{
@@ -397,7 +413,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CUInt8>(value);
 		}
 
-		[Ordinal(49)] 
+		[Ordinal(51)] 
 		[RED("allowDistantLight")] 
 		public CBool AllowDistantLight
 		{
@@ -433,6 +449,8 @@ namespace WolvenKit.RED4.Types
 			ShadowFadeDistance = 10.000000F;
 			ShadowFadeRange = 5.000000F;
 			ShadowSoftnessMode = Enums.ELightShadowSoftnessMode.LSSM_Default;
+			RayTracingLightSourceRadius = -1.000000F;
+			RayTracingContactShadowRange = -1.000000F;
 			Flicker = new() { FlickerPeriod = 0.200000F };
 			ColorGroupSaturation = 100;
 			AllowDistantLight = true;

@@ -5,7 +5,7 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class gameLootSlot : gameLootContainerBase
 	{
-		[Ordinal(50)] 
+		[Ordinal(45)] 
 		[RED("immovableAfterDrop")] 
 		public CBool ImmovableAfterDrop
 		{
@@ -13,7 +13,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(51)] 
+		[Ordinal(46)] 
 		[RED("dropChance")] 
 		public CFloat DropChance
 		{
@@ -21,7 +21,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(52)] 
+		[Ordinal(47)] 
 		[RED("lootState")] 
 		public CBitField<gameLootSlotState> LootState
 		{

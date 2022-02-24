@@ -5,7 +5,7 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class SlideEvents : CrouchEvents
 	{
-		[Ordinal(3)] 
+		[Ordinal(6)] 
 		[RED("rumblePlayed")] 
 		public CBool RumblePlayed
 		{
@@ -13,7 +13,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(4)] 
+		[Ordinal(7)] 
 		[RED("addDecelerationModifier")] 
 		public CHandle<gameStatModifierData_Deprecated> AddDecelerationModifier
 		{

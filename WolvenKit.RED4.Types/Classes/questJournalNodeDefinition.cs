@@ -3,7 +3,7 @@ using static WolvenKit.RED4.Types.Enums;
 namespace WolvenKit.RED4.Types
 {
 	[REDMeta]
-	public partial class questJournalNodeDefinition : questDisableableNodeDefinition
+	public partial class questJournalNodeDefinition : questSignalStoppingNodeDefinition
 	{
 		[Ordinal(2)] 
 		[RED("type")] 

@@ -56,7 +56,6 @@ namespace WolvenKit.RED4.Types
 		public TVSetup()
 		{
 			Channels = new();
-			MuteInterface = true;
 		}
 	}
 }

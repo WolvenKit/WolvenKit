@@ -5,7 +5,7 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class gameLootSlotSingleAppearance : gameLootSlotSingleItem
 	{
-		[Ordinal(54)] 
+		[Ordinal(49)] 
 		[RED("lootAppearance")] 
 		public CName LootAppearance
 		{

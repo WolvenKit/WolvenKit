@@ -5,7 +5,7 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class sampleBulletGeneric : BaseProjectile
 	{
-		[Ordinal(51)] 
+		[Ordinal(46)] 
 		[RED("meshComponent")] 
 		public CHandle<entIComponent> MeshComponent
 		{
@@ -13,7 +13,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<entIComponent>>(value);
 		}
 
-		[Ordinal(52)] 
+		[Ordinal(47)] 
 		[RED("damage")] 
 		public CHandle<gameEffectInstance> Damage
 		{
@@ -21,7 +21,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<gameEffectInstance>>(value);
 		}
 
-		[Ordinal(53)] 
+		[Ordinal(48)] 
 		[RED("countTime")] 
 		public CFloat CountTime
 		{
@@ -29,7 +29,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(54)] 
+		[Ordinal(49)] 
 		[RED("startVelocity")] 
 		public CFloat StartVelocity
 		{
@@ -37,15 +37,15 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(55)] 
+		[Ordinal(50)] 
 		[RED("lifetime")] 
-		public CFloat Lifetime_456
+		public CFloat Lifetime_408
 		{
 			get => GetPropertyValue<CFloat>();
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(56)] 
+		[Ordinal(51)] 
 		[RED("alive")] 
 		public CBool Alive
 		{

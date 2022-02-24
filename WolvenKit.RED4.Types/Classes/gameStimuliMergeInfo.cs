@@ -45,6 +45,14 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CEnum<gamedataStimPropagation>>(value);
 		}
 
+		[Ordinal(5)] 
+		[RED("targets")] 
+		public CEnum<gamedataStimTargets> Targets
+		{
+			get => GetPropertyValue<CEnum<gamedataStimTargets>>();
+			set => SetPropertyValue<CEnum<gamedataStimTargets>>(value);
+		}
+
 		public gameStimuliMergeInfo()
 		{
 			Position = new();

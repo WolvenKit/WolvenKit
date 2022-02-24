@@ -2,7 +2,7 @@
 namespace WolvenKit.RED4.Types
 {
 	[REDMeta]
-	public partial class ActivatedDeviceController : ScriptableDC
+	public partial class ActivatedDeviceController : ScriptableDeviceComponent
 	{
 	}
 }

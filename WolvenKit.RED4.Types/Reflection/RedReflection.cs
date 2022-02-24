@@ -98,7 +98,7 @@ namespace WolvenKit.RED4.Types
                 }
 
                 var isFixedArray = subType[0] == '[';
-                if (isFixedArray)
+                while (subType[0] == '[')
                 {
                     var strVal = subType.Substring(1, subType.IndexOf(']') - 1);
                     flagValues.Add(int.Parse(strVal));
@@ -118,7 +118,10 @@ namespace WolvenKit.RED4.Types
 
                     if (isFixedArray)
                     {
-                        type = typeof(CArrayFixedSize<>).MakeGenericType(type);
+                        for (int j = 0; j < flagValues.Count; j++)
+                        {
+                            type = typeof(CArrayFixedSize<>).MakeGenericType(type);
+                        }
                     }
 
                     continue;
@@ -144,7 +147,10 @@ namespace WolvenKit.RED4.Types
 
                     if (isFixedArray)
                     {
-                        type = typeof(CArrayFixedSize<>).MakeGenericType(type);
+                        for (int j = 0; j < flagValues.Count; j++)
+                        {
+                            type = typeof(CArrayFixedSize<>).MakeGenericType(type);
+                        }
                     }
 
                     continue;
@@ -161,7 +167,10 @@ namespace WolvenKit.RED4.Types
 
                 if (isFixedArray)
                 {
-                    type = typeof(CArrayFixedSize<>).MakeGenericType(type);
+                    for (int j = 0; j < flagValues.Count; j++)
+                    {
+                        type = typeof(CArrayFixedSize<>).MakeGenericType(type);
+                    }
                 }
             }
 

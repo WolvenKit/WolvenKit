@@ -5,7 +5,7 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class WeaponTypeHitPrereqCondition : BaseHitPrereqCondition
 	{
-		[Ordinal(1)] 
+		[Ordinal(3)] 
 		[RED("type")] 
 		public CName Type
 		{

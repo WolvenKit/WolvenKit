@@ -45,6 +45,14 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<TarotCardPreviewData>>(value);
 		}
 
+		[Ordinal(7)] 
+		[RED("isClosing")] 
+		public CBool IsClosing
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
 		public TarotPreviewGameController()
 		{
 			Background = new();

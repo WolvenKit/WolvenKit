@@ -5,7 +5,7 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class AmmoStateHitPrereqCondition : BaseHitPrereqCondition
 	{
-		[Ordinal(1)] 
+		[Ordinal(3)] 
 		[RED("valueToListen")] 
 		public CEnum<EMagazineAmmoState> ValueToListen
 		{

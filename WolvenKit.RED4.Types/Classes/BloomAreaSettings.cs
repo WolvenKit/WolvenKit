@@ -6,6 +6,38 @@ namespace WolvenKit.RED4.Types
 	public partial class BloomAreaSettings : IAreaSettings
 	{
 		[Ordinal(2)] 
+		[RED("blurSizeX")] 
+		public CFloat BlurSizeX
+		{
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
+		}
+
+		[Ordinal(3)] 
+		[RED("blurSizeY")] 
+		public CFloat BlurSizeY
+		{
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
+		}
+
+		[Ordinal(4)] 
+		[RED("mipColors", 5)] 
+		public CArrayFixedSize<CColor> MipColors
+		{
+			get => GetPropertyValue<CArrayFixedSize<CColor>>();
+			set => SetPropertyValue<CArrayFixedSize<CColor>>(value);
+		}
+
+		[Ordinal(5)] 
+		[RED("mipLuminanceClamp", 3)] 
+		public CArrayFixedSize<CFloat> MipLuminanceClamp
+		{
+			get => GetPropertyValue<CArrayFixedSize<CFloat>>();
+			set => SetPropertyValue<CArrayFixedSize<CFloat>>(value);
+		}
+
+		[Ordinal(6)] 
 		[RED("luminanceThresholdMin")] 
 		public CFloat LuminanceThresholdMin
 		{
@@ -13,7 +45,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(3)] 
+		[Ordinal(7)] 
 		[RED("luminanceThresholdMax")] 
 		public CFloat LuminanceThresholdMax
 		{
@@ -21,7 +53,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(4)] 
+		[Ordinal(8)] 
 		[RED("sceneColorScale")] 
 		public CFloat SceneColorScale
 		{
@@ -29,7 +61,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(5)] 
+		[Ordinal(9)] 
 		[RED("bloomColorScale")] 
 		public CFloat BloomColorScale
 		{
@@ -37,7 +69,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(6)] 
+		[Ordinal(10)] 
 		[RED("numDownsamplePasses")] 
 		public CUInt8 NumDownsamplePasses
 		{
@@ -45,7 +77,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CUInt8>(value);
 		}
 
-		[Ordinal(7)] 
+		[Ordinal(11)] 
 		[RED("shaftsAreaSettings")] 
 		public ShaftsAreaSettings ShaftsAreaSettings
 		{
@@ -56,6 +88,10 @@ namespace WolvenKit.RED4.Types
 		public BloomAreaSettings()
 		{
 			Enable = true;
+			BlurSizeX = 1.000000F;
+			BlurSizeY = 1.000000F;
+			MipColors = new(5);
+			MipLuminanceClamp = new(3);
 			LuminanceThresholdMax = 2.000000F;
 			SceneColorScale = 0.800000F;
 			BloomColorScale = 0.200000F;

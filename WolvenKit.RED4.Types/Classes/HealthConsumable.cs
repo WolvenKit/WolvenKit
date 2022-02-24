@@ -5,7 +5,7 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class HealthConsumable : gameCpoPickableItem
 	{
-		[Ordinal(42)] 
+		[Ordinal(37)] 
 		[RED("interactionComponent")] 
 		public CHandle<gameinteractionsComponent> InteractionComponent
 		{
@@ -13,7 +13,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<gameinteractionsComponent>>(value);
 		}
 
-		[Ordinal(43)] 
+		[Ordinal(38)] 
 		[RED("meshComponent")] 
 		public CHandle<entMeshComponent> MeshComponent
 		{
@@ -21,7 +21,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<entMeshComponent>>(value);
 		}
 
-		[Ordinal(44)] 
+		[Ordinal(39)] 
 		[RED("disappearAfterEquip")] 
 		public CBool DisappearAfterEquip
 		{
@@ -29,7 +29,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(45)] 
+		[Ordinal(40)] 
 		[RED("respawnTime")] 
 		public CFloat RespawnTime
 		{

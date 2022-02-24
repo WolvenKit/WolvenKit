@@ -12,5 +12,13 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CHandle<StatPrereqListener>>();
 			set => SetPropertyValue<CHandle<StatPrereqListener>>(value);
 		}
+
+		[Ordinal(1)] 
+		[RED("modifiersValueToCheck")] 
+		public CFloat ModifiersValueToCheck
+		{
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
+		}
 	}
 }

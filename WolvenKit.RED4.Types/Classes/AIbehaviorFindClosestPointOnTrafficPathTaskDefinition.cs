@@ -22,6 +22,14 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(3)] 
+		[RED("useThreatPosAsAvoidedPos")] 
+		public CHandle<AIArgumentMapping> UseThreatPosAsAvoidedPos
+		{
+			get => GetPropertyValue<CHandle<AIArgumentMapping>>();
+			set => SetPropertyValue<CHandle<AIArgumentMapping>>(value);
+		}
+
+		[Ordinal(4)] 
 		[RED("avoidedPositionDistance")] 
 		public CHandle<AIArgumentMapping> AvoidedPositionDistance
 		{
@@ -29,7 +37,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<AIArgumentMapping>>(value);
 		}
 
-		[Ordinal(4)] 
+		[Ordinal(5)] 
 		[RED("usePreviousPosition")] 
 		public CHandle<AIArgumentMapping> UsePreviousPosition
 		{
@@ -37,7 +45,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<AIArgumentMapping>>(value);
 		}
 
-		[Ordinal(5)] 
+		[Ordinal(6)] 
 		[RED("checkRoadIntersection")] 
 		public CHandle<AIArgumentMapping> CheckRoadIntersection
 		{
@@ -45,7 +53,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<AIArgumentMapping>>(value);
 		}
 
-		[Ordinal(6)] 
+		[Ordinal(7)] 
 		[RED("workspotData")] 
 		public CHandle<AIArgumentMapping> WorkspotData
 		{
@@ -53,7 +61,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<AIArgumentMapping>>(value);
 		}
 
-		[Ordinal(7)] 
+		[Ordinal(8)] 
 		[RED("positionOnPath")] 
 		public CHandle<AIArgumentMapping> PositionOnPath
 		{
@@ -61,7 +69,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<AIArgumentMapping>>(value);
 		}
 
-		[Ordinal(8)] 
+		[Ordinal(9)] 
 		[RED("pathDirection")] 
 		public CHandle<AIArgumentMapping> PathDirection
 		{
@@ -69,7 +77,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<AIArgumentMapping>>(value);
 		}
 
-		[Ordinal(9)] 
+		[Ordinal(10)] 
 		[RED("joinTrafficSettings")] 
 		public CHandle<AIArgumentMapping> JoinTrafficSettings
 		{

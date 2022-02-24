@@ -53,6 +53,14 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
+		[Ordinal(6)] 
+		[RED("calculateEarlyPositionGroundHeight")] 
+		public CBool CalculateEarlyPositionGroundHeight
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
 		public entragdollActivationRequestData()
 		{
 			ActivateOnCollision = true;

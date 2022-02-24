@@ -5,7 +5,7 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class BasicDistractionDevice : InteractiveDevice
 	{
-		[Ordinal(97)] 
+		[Ordinal(94)] 
 		[RED("animFeatureDataDistractor")] 
 		public CHandle<AnimFeature_DistractionState> AnimFeatureDataDistractor
 		{
@@ -13,7 +13,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<AnimFeature_DistractionState>>(value);
 		}
 
-		[Ordinal(98)] 
+		[Ordinal(95)] 
 		[RED("animFeatureDataNameDistractor")] 
 		public CName AnimFeatureDataNameDistractor
 		{
@@ -21,7 +21,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(99)] 
+		[Ordinal(96)] 
 		[RED("distractionComponentSwapNamesToON")] 
 		public CArray<CName> DistractionComponentSwapNamesToON
 		{
@@ -29,7 +29,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<CName>>(value);
 		}
 
-		[Ordinal(100)] 
+		[Ordinal(97)] 
 		[RED("distractionComponentSwapNamesToOFF")] 
 		public CArray<CName> DistractionComponentSwapNamesToOFF
 		{
@@ -37,7 +37,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<CName>>(value);
 		}
 
-		[Ordinal(101)] 
+		[Ordinal(98)] 
 		[RED("distractionComponentON")] 
 		public CArray<CHandle<entIPlacedComponent>> DistractionComponentON
 		{
@@ -45,7 +45,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<CHandle<entIPlacedComponent>>>(value);
 		}
 
-		[Ordinal(102)] 
+		[Ordinal(99)] 
 		[RED("cdistractionComponentOFF")] 
 		public CArray<CHandle<entIPlacedComponent>> CdistractionComponentOFF
 		{

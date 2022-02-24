@@ -5,7 +5,7 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class SmartHouse : InteractiveMasterDevice
 	{
-		[Ordinal(97)] 
+		[Ordinal(94)] 
 		[RED("timetableActive")] 
 		public CBool TimetableActive
 		{

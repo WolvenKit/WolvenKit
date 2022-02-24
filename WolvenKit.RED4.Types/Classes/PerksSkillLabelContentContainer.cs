@@ -5,7 +5,7 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class PerksSkillLabelContentContainer : HubMenuLabelContentContainer
 	{
-		[Ordinal(8)] 
+		[Ordinal(9)] 
 		[RED("levelLabel")] 
 		public inkTextWidgetReference LevelLabel
 		{
@@ -13,7 +13,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
-		[Ordinal(9)] 
+		[Ordinal(10)] 
 		[RED("levelBar")] 
 		public inkWidgetReference LevelBar
 		{
@@ -21,7 +21,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(10)] 
+		[Ordinal(11)] 
 		[RED("skillData")] 
 		public CHandle<ProficiencyDisplayData> SkillData
 		{

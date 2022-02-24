@@ -22,8 +22,24 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(3)] 
+		[RED("textLocKey_Prospero")] 
+		public CName TextLocKey_Prospero
+		{
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
+		}
+
+		[Ordinal(4)] 
 		[RED("textLocKey_XB1")] 
 		public CName TextLocKey_XB1
+		{
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
+		}
+
+		[Ordinal(5)] 
+		[RED("textLocKey_Scarlett")] 
+		public CName TextLocKey_Scarlett
 		{
 			get => GetPropertyValue<CName>();
 			set => SetPropertyValue<CName>(value);

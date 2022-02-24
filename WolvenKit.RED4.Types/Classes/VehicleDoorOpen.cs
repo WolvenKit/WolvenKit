@@ -29,6 +29,14 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
+		[Ordinal(28)] 
+		[RED("forceScene")] 
+		public CBool ForceScene
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
 		public VehicleDoorOpen()
 		{
 			RequesterID = new();

@@ -21,6 +21,14 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<Quaternion>(value);
 		}
 
+		[Ordinal(2)] 
+		[RED("cameraTargetWeight")] 
+		public CFloat CameraTargetWeight
+		{
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
+		}
+
 		public vehicleAnimFeature_VehicleProceduralCamera()
 		{
 			CameraTranslationVS = new();

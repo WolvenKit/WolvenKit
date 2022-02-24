@@ -46,6 +46,22 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(5)] 
+		[RED("isPerkRequirementNotMet")] 
+		public CBool IsPerkRequirementNotMet
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(6)] 
+		[RED("isRarityRequirementNotMet")] 
+		public CBool IsRarityRequirementNotMet
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(7)] 
 		[RED("strengthOrReflexStatName")] 
 		public CString StrengthOrReflexStatName
 		{
@@ -53,25 +69,9 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CString>(value);
 		}
 
-		[Ordinal(6)] 
-		[RED("anyStatName")] 
-		public CString AnyStatName
-		{
-			get => GetPropertyValue<CString>();
-			set => SetPropertyValue<CString>(value);
-		}
-
-		[Ordinal(7)] 
-		[RED("anyStatColor")] 
-		public CString AnyStatColor
-		{
-			get => GetPropertyValue<CString>();
-			set => SetPropertyValue<CString>(value);
-		}
-
 		[Ordinal(8)] 
-		[RED("anyStatLocKey")] 
-		public CString AnyStatLocKey
+		[RED("perkLocKey")] 
+		public CString PerkLocKey
 		{
 			get => GetPropertyValue<CString>();
 			set => SetPropertyValue<CString>(value);
@@ -86,19 +86,24 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(10)] 
-		[RED("anyStatValue")] 
-		public CInt32 AnyStatValue
+		[RED("requiredLevel")] 
+		public CInt32 RequiredLevel
 		{
 			get => GetPropertyValue<CInt32>();
 			set => SetPropertyValue<CInt32>(value);
 		}
 
 		[Ordinal(11)] 
-		[RED("requiredLevel")] 
-		public CInt32 RequiredLevel
+		[RED("anyStatRequirements")] 
+		public CArray<CHandle<MinimalItemTooltipDataStatRequirement>> AnyStatRequirements
 		{
-			get => GetPropertyValue<CInt32>();
-			set => SetPropertyValue<CInt32>(value);
+			get => GetPropertyValue<CArray<CHandle<MinimalItemTooltipDataStatRequirement>>>();
+			set => SetPropertyValue<CArray<CHandle<MinimalItemTooltipDataStatRequirement>>>(value);
+		}
+
+		public MinimalItemTooltipDataRequirements()
+		{
+			AnyStatRequirements = new();
 		}
 	}
 }

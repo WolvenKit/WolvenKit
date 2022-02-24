@@ -54,6 +54,14 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(6)] 
+		[RED("orientation")] 
+		public CEnum<inkEOrientation> Orientation
+		{
+			get => GetPropertyValue<CEnum<inkEOrientation>>();
+			set => SetPropertyValue<CEnum<inkEOrientation>>(value);
+		}
+
+		[Ordinal(7)] 
 		[RED("isValid")] 
 		public CBool IsValid
 		{

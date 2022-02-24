@@ -28,13 +28,5 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CFloat>();
 			set => SetPropertyValue<CFloat>(value);
 		}
-
-		[Ordinal(3)] 
-		[RED("distanceFromTraffic")] 
-		public CFloat DistanceFromTraffic
-		{
-			get => GetPropertyValue<CFloat>();
-			set => SetPropertyValue<CFloat>(value);
-		}
 	}
 }

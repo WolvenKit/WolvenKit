@@ -414,16 +414,16 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(60)] 
-		[RED("currentMemoryCellsActive")] 
-		public CInt32 CurrentMemoryCellsActive
+		[RED("memorySpendCounter")] 
+		public CInt32 MemorySpendCounter
 		{
 			get => GetPropertyValue<CInt32>();
 			set => SetPropertyValue<CInt32>(value);
 		}
 
 		[Ordinal(61)] 
-		[RED("desiredMemoryCellsActive")] 
-		public CInt32 DesiredMemoryCellsActive
+		[RED("memorySpendIndex")] 
+		public CInt32 MemorySpendIndex
 		{
 			get => GetPropertyValue<CInt32>();
 			set => SetPropertyValue<CInt32>(value);
@@ -616,8 +616,7 @@ namespace WolvenKit.RED4.Types
 			GameInstance = new();
 			QuickhackBarArray = new();
 			Data = new();
-			CurrentMemoryCellsActive = -1;
-			DesiredMemoryCellsActive = -1;
+			MemorySpendIndex = -1;
 			SelectedMemoryLoop = new();
 			LastCompiledTarget = new();
 			StatPoolListenersIndexes = new();

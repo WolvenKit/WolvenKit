@@ -7,18 +7,18 @@ namespace WolvenKit.RED4.Types
 	{
 		[Ordinal(0)] 
 		[RED("status")] 
-		public CEnum<gameGOGRewardsSystemStatus> Status
+		public CEnum<gameOnlineSystemStatus> Status
 		{
-			get => GetPropertyValue<CEnum<gameGOGRewardsSystemStatus>>();
-			set => SetPropertyValue<CEnum<gameGOGRewardsSystemStatus>>(value);
+			get => GetPropertyValue<CEnum<gameOnlineSystemStatus>>();
+			set => SetPropertyValue<CEnum<gameOnlineSystemStatus>>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("error")] 
-		public CEnum<gameGOGRewardsSystemErrors> Error
+		public CEnum<gameOnlineSystemErrors> Error
 		{
-			get => GetPropertyValue<CEnum<gameGOGRewardsSystemErrors>>();
-			set => SetPropertyValue<CEnum<gameGOGRewardsSystemErrors>>(value);
+			get => GetPropertyValue<CEnum<gameOnlineSystemErrors>>();
+			set => SetPropertyValue<CEnum<gameOnlineSystemErrors>>(value);
 		}
 
 		[Ordinal(2)] 

@@ -45,9 +45,26 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
+		[Ordinal(6)] 
+		[RED("defaultFootwearVfxMetadata")] 
+		public CName DefaultFootwearVfxMetadata
+		{
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
+		}
+
+		[Ordinal(7)] 
+		[RED("footwearVfxMetadataArray")] 
+		public CArray<CName> FootwearVfxMetadataArray
+		{
+			get => GetPropertyValue<CArray<CName>>();
+			set => SetPropertyValue<CArray<CName>>(value);
+		}
+
 		public audioFootstepsMetadata()
 		{
 			FootwearMetadataArray = new();
+			FootwearVfxMetadataArray = new();
 		}
 	}
 }

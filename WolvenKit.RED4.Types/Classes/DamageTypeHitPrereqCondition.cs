@@ -5,7 +5,7 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class DamageTypeHitPrereqCondition : BaseHitPrereqCondition
 	{
-		[Ordinal(1)] 
+		[Ordinal(3)] 
 		[RED("damageType")] 
 		public CEnum<gamedataDamageType> DamageType
 		{

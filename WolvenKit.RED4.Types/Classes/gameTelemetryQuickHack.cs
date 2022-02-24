@@ -39,15 +39,15 @@ namespace WolvenKit.RED4.Types
 
 		[Ordinal(4)] 
 		[RED("quality")] 
-		public CInt32 Quality
+		public CEnum<gamedataQuality> Quality
 		{
-			get => GetPropertyValue<CInt32>();
-			set => SetPropertyValue<CInt32>(value);
+			get => GetPropertyValue<CEnum<gamedataQuality>>();
+			set => SetPropertyValue<CEnum<gamedataQuality>>(value);
 		}
 
 		public gameTelemetryQuickHack()
 		{
-			Quality = -1;
+			Quality = Enums.gamedataQuality.Invalid;
 		}
 	}
 }

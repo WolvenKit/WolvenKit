@@ -15,10 +15,10 @@ namespace WolvenKit.RED4.Types
 
 		[Ordinal(4)] 
 		[RED("garmentSwitchEffectControllers")] 
-		public CArray<gameuiInGameMenuGameControllerGarmentSwitchEffectController> GarmentSwitchEffectControllers
+		public CArray<gameuiGarmentSwitchEffectController> GarmentSwitchEffectControllers
 		{
-			get => GetPropertyValue<CArray<gameuiInGameMenuGameControllerGarmentSwitchEffectController>>();
-			set => SetPropertyValue<CArray<gameuiInGameMenuGameControllerGarmentSwitchEffectController>>(value);
+			get => GetPropertyValue<CArray<gameuiGarmentSwitchEffectController>>();
+			set => SetPropertyValue<CArray<gameuiGarmentSwitchEffectController>>(value);
 		}
 
 		[Ordinal(5)] 
@@ -30,6 +30,14 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(6)] 
+		[RED("wasHoldingMapHotKey")] 
+		public CBool WasHoldingMapHotKey
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(7)] 
 		[RED("showDeathScreenBBID")] 
 		public CHandle<redCallbackObject> ShowDeathScreenBBID
 		{
@@ -37,7 +45,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
-		[Ordinal(7)] 
+		[Ordinal(8)] 
 		[RED("breachingNetworkBBID")] 
 		public CHandle<redCallbackObject> BreachingNetworkBBID
 		{
@@ -45,7 +53,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
-		[Ordinal(8)] 
+		[Ordinal(9)] 
 		[RED("triggerMenuEventBBID")] 
 		public CHandle<redCallbackObject> TriggerMenuEventBBID
 		{
@@ -53,7 +61,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
-		[Ordinal(9)] 
+		[Ordinal(10)] 
 		[RED("openStorageBBID")] 
 		public CHandle<redCallbackObject> OpenStorageBBID
 		{
@@ -61,7 +69,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
-		[Ordinal(10)] 
+		[Ordinal(11)] 
 		[RED("bbOnEquipmentChangedID")] 
 		public CHandle<redCallbackObject> BbOnEquipmentChangedID
 		{
@@ -69,7 +77,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
-		[Ordinal(11)] 
+		[Ordinal(12)] 
 		[RED("inventoryListener")] 
 		public CHandle<gameAttachmentSlotsScriptListener> InventoryListener
 		{
@@ -77,10 +85,19 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<gameAttachmentSlotsScriptListener>>(value);
 		}
 
+		[Ordinal(13)] 
+		[RED("loadSaveDelayID")] 
+		public gameDelayID LoadSaveDelayID
+		{
+			get => GetPropertyValue<gameDelayID>();
+			set => SetPropertyValue<gameDelayID>(value);
+		}
+
 		public gameuiInGameMenuGameController()
 		{
 			ItemSceneInfos = new();
 			GarmentSwitchEffectControllers = new();
+			LoadSaveDelayID = new();
 		}
 	}
 }

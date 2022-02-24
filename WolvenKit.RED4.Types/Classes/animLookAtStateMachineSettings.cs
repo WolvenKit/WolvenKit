@@ -93,6 +93,14 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
+		[Ordinal(11)] 
+		[RED("allowToBlendBehindBack")] 
+		public CBool AllowToBlendBehindBack
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
 		public animLookAtStateMachineSettings()
 		{
 			FollowingSpeedFactor = 1.000000F;

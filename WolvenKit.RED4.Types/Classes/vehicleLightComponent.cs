@@ -5,7 +5,7 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class vehicleLightComponent : gameLightComponent
 	{
-		[Ordinal(69)] 
+		[Ordinal(71)] 
 		[RED("allowSeparateEmissiveColor")] 
 		public CBool AllowSeparateEmissiveColor
 		{
@@ -13,7 +13,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(70)] 
+		[Ordinal(72)] 
 		[RED("emissiveColor")] 
 		public CColor EmissiveColor
 		{
@@ -21,7 +21,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CColor>(value);
 		}
 
-		[Ordinal(71)] 
+		[Ordinal(73)] 
 		[RED("lightType")] 
 		public CEnum<vehicleELightType> LightType
 		{
@@ -29,7 +29,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CEnum<vehicleELightType>>(value);
 		}
 
-		[Ordinal(72)] 
+		[Ordinal(74)] 
 		[RED("highBeamPitchAngle")] 
 		public CFloat HighBeamPitchAngle
 		{
@@ -37,7 +37,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(73)] 
+		[Ordinal(75)] 
 		[RED("highBeamRadiusMultiplier")] 
 		public CFloat HighBeamRadiusMultiplier
 		{
@@ -45,7 +45,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(74)] 
+		[Ordinal(76)] 
 		[RED("highBeamConeMultiplier")] 
 		public CFloat HighBeamConeMultiplier
 		{

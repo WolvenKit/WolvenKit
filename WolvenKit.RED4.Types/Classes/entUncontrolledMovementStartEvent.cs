@@ -21,6 +21,14 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
+		[Ordinal(2)] 
+		[RED("calculateEarlyPositionGroundHeight")] 
+		public CBool CalculateEarlyPositionGroundHeight
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
 		public entUncontrolledMovementStartEvent()
 		{
 			RagdollOnCollision = true;

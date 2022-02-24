@@ -1055,6 +1055,23 @@ namespace WolvenKit.ViewModels.Shell
                 AddChunkToDataBuffer(instance, Properties.Count);
             }
         }
+
+        private void UpdateProperties(RedBaseClass instance, int index)
+        {
+            var cvm = new ChunkViewModel(instance, this);
+            Properties.Insert(index, cvm);
+            foreach (var prop in Properties)
+            {
+                prop.RaisePropertyChanged("Name");
+            }
+
+            this.RaisePropertyChanged("Data");
+            IsExpanded = true;
+            cvm.IsExpanded = true;
+            Tab.SelectedChunk = cvm;
+            Tab.File.SetIsDirty(true);
+        }
+
         public void AddChunkToDataBuffer(RedBaseClass instance, int index)
         {
             if (Data is IRedBufferPointer db && db.GetValue().Data is Package04 pkg)
@@ -1062,18 +1079,29 @@ namespace WolvenKit.ViewModels.Shell
                 //pkg.Chunks.Add(instance);
                 pkg.Chunks.Insert(index, instance);
                 //_properties.Add(new ChunkViewModel(instance, this));
-                var cvm = new ChunkViewModel(instance, this);
-                Properties.Insert(index, cvm);
-                foreach (var prop in Properties)
-                {
-                    prop.RaisePropertyChanged("Name");
-                }
+                UpdateProperties(instance, index);
+            }
+        }
 
-                this.RaisePropertyChanged("Data");
-                IsExpanded = true;
-                cvm.IsExpanded = true;
-                Tab.SelectedChunk = cvm;
-                Tab.File.SetIsDirty(true);
+        public void AddClassToArray(RedBaseClass instance, int index)
+        {
+            if (Data is not IRedArray arr)
+            {
+                return;
+            }
+
+            var arrayType = Data.GetType().GetGenericTypeDefinition();
+
+            if (arrayType == typeof(CArray<>))
+            {
+                arr.Insert(index, instance);
+                UpdateProperties(instance, index);
+            }
+
+            if (arrayType == typeof(CStatic<>) && arr.Count < arr.MaxSize)
+            {
+                ((IRedArray)Data).Insert(index, instance);
+                UpdateProperties(instance, index);
             }
         }
 

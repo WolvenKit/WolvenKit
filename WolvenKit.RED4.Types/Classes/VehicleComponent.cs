@@ -3,7 +3,7 @@ using static WolvenKit.RED4.Types.Enums;
 namespace WolvenKit.RED4.Types
 {
 	[REDMeta]
-	public partial class VehicleComponent : ScriptableDC
+	public partial class VehicleComponent : ScriptableDeviceComponent
 	{
 		[Ordinal(4)] 
 		[RED("interaction")] 
@@ -38,14 +38,6 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(8)] 
-		[RED("submerged")] 
-		public CBool Submerged
-		{
-			get => GetPropertyValue<CBool>();
-			set => SetPropertyValue<CBool>(value);
-		}
-
-		[Ordinal(9)] 
 		[RED("bumperFrontState")] 
 		public CInt32 BumperFrontState
 		{
@@ -53,7 +45,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CInt32>(value);
 		}
 
-		[Ordinal(10)] 
+		[Ordinal(9)] 
 		[RED("bumperBackState")] 
 		public CInt32 BumperBackState
 		{
@@ -61,7 +53,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CInt32>(value);
 		}
 
-		[Ordinal(11)] 
+		[Ordinal(10)] 
 		[RED("visualDestructionSet")] 
 		public CBool VisualDestructionSet
 		{
@@ -69,7 +61,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(12)] 
+		[Ordinal(11)] 
 		[RED("healthStatPoolListener")] 
 		public CHandle<VehicleHealthStatPoolListener> HealthStatPoolListener
 		{
@@ -77,7 +69,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<VehicleHealthStatPoolListener>>(value);
 		}
 
-		[Ordinal(13)] 
+		[Ordinal(12)] 
 		[RED("vehicleBlackboard")] 
 		public CWeakHandle<gameIBlackboard> VehicleBlackboard
 		{
@@ -85,7 +77,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<gameIBlackboard>>(value);
 		}
 
-		[Ordinal(14)] 
+		[Ordinal(13)] 
 		[RED("radioState")] 
 		public CBool RadioState
 		{
@@ -93,7 +85,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(15)] 
+		[Ordinal(14)] 
 		[RED("mounted")] 
 		public CBool Mounted
 		{
@@ -101,7 +93,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(16)] 
+		[Ordinal(15)] 
 		[RED("enterTime")] 
 		public CFloat EnterTime
 		{
@@ -109,7 +101,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(17)] 
+		[Ordinal(16)] 
 		[RED("mappinID")] 
 		public gameNewMappinID MappinID
 		{
@@ -117,7 +109,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gameNewMappinID>(value);
 		}
 
-		[Ordinal(18)] 
+		[Ordinal(17)] 
 		[RED("ignoreAutoDoorClose")] 
 		public CBool IgnoreAutoDoorClose
 		{
@@ -125,7 +117,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(19)] 
+		[Ordinal(18)] 
 		[RED("timeSystemCallbackID")] 
 		public CUInt32 TimeSystemCallbackID
 		{
@@ -133,7 +125,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CUInt32>(value);
 		}
 
-		[Ordinal(20)] 
+		[Ordinal(19)] 
 		[RED("vehicleTPPCallbackID")] 
 		public CHandle<redCallbackObject> VehicleTPPCallbackID
 		{
@@ -141,7 +133,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
-		[Ordinal(21)] 
+		[Ordinal(20)] 
 		[RED("vehicleSpeedCallbackID")] 
 		public CHandle<redCallbackObject> VehicleSpeedCallbackID
 		{
@@ -149,7 +141,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
-		[Ordinal(22)] 
+		[Ordinal(21)] 
 		[RED("vehicleRPMCallbackID")] 
 		public CHandle<redCallbackObject> VehicleRPMCallbackID
 		{
@@ -157,7 +149,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
-		[Ordinal(23)] 
+		[Ordinal(22)] 
 		[RED("broadcasting")] 
 		public CBool Broadcasting
 		{
@@ -165,7 +157,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(24)] 
+		[Ordinal(23)] 
 		[RED("hasSpoiler")] 
 		public CBool HasSpoiler
 		{
@@ -173,7 +165,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(25)] 
+		[Ordinal(24)] 
 		[RED("spoilerUp")] 
 		public CFloat SpoilerUp
 		{
@@ -181,7 +173,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(26)] 
+		[Ordinal(25)] 
 		[RED("spoilerDown")] 
 		public CFloat SpoilerDown
 		{
@@ -189,7 +181,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(27)] 
+		[Ordinal(26)] 
 		[RED("spoilerDeployed")] 
 		public CBool SpoilerDeployed
 		{
@@ -197,7 +189,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(28)] 
+		[Ordinal(27)] 
 		[RED("hasTurboCharger")] 
 		public CBool HasTurboCharger
 		{
@@ -205,7 +197,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(29)] 
+		[Ordinal(28)] 
 		[RED("overheatEffectBlackboard")] 
 		public CHandle<worldEffectBlackboard> OverheatEffectBlackboard
 		{
@@ -213,7 +205,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<worldEffectBlackboard>>(value);
 		}
 
-		[Ordinal(30)] 
+		[Ordinal(29)] 
 		[RED("overheatActive")] 
 		public CBool OverheatActive
 		{
@@ -221,7 +213,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(31)] 
+		[Ordinal(30)] 
 		[RED("hornOn")] 
 		public CBool HornOn
 		{
@@ -229,7 +221,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(32)] 
+		[Ordinal(31)] 
 		[RED("hasSiren")] 
 		public CBool HasSiren
 		{
@@ -237,7 +229,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(33)] 
+		[Ordinal(32)] 
 		[RED("hornPressTime")] 
 		public CFloat HornPressTime
 		{
@@ -245,7 +237,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(34)] 
+		[Ordinal(33)] 
 		[RED("radioPressTime")] 
 		public CFloat RadioPressTime
 		{
@@ -253,7 +245,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(35)] 
+		[Ordinal(34)] 
 		[RED("raceClockTickID")] 
 		public gameDelayID RaceClockTickID
 		{
@@ -261,7 +253,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gameDelayID>(value);
 		}
 
-		[Ordinal(36)] 
+		[Ordinal(35)] 
 		[RED("objectActionsCallbackCtrl")] 
 		public CHandle<gameObjectActionsCallbackController> ObjectActionsCallbackCtrl
 		{
@@ -269,7 +261,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<gameObjectActionsCallbackController>>(value);
 		}
 
-		[Ordinal(37)] 
+		[Ordinal(36)] 
 		[RED("trunkNpcBody")] 
 		public CWeakHandle<gameObject> TrunkNpcBody
 		{
@@ -277,7 +269,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<gameObject>>(value);
 		}
 
-		[Ordinal(38)] 
+		[Ordinal(37)] 
 		[RED("mountedPlayer")] 
 		public CWeakHandle<PlayerPuppet> MountedPlayer
 		{
@@ -285,7 +277,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<PlayerPuppet>>(value);
 		}
 
-		[Ordinal(39)] 
+		[Ordinal(38)] 
 		[RED("isIgnoredInTargetingSystem")] 
 		public CBool IsIgnoredInTargetingSystem
 		{
@@ -293,7 +285,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(40)] 
+		[Ordinal(39)] 
 		[RED("arePlayerHitShapesEnabled")] 
 		public CBool ArePlayerHitShapesEnabled
 		{
@@ -301,7 +293,23 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
+		[Ordinal(40)] 
+		[RED("uiWantedBarBB")] 
+		public CWeakHandle<gameIBlackboard> UiWantedBarBB
+		{
+			get => GetPropertyValue<CWeakHandle<gameIBlackboard>>();
+			set => SetPropertyValue<CWeakHandle<gameIBlackboard>>(value);
+		}
+
 		[Ordinal(41)] 
+		[RED("currentWantedLevelCallback")] 
+		public CHandle<redCallbackObject> CurrentWantedLevelCallback
+		{
+			get => GetPropertyValue<CHandle<redCallbackObject>>();
+			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
+		}
+
+		[Ordinal(42)] 
 		[RED("vehicleController")] 
 		public CHandle<vehicleController> VehicleController
 		{

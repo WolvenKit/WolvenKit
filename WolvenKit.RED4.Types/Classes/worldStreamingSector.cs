@@ -31,17 +31,17 @@ namespace WolvenKit.RED4.Types
 
 		[Ordinal(4)] 
 		[RED("category")] 
-		public CInt8 Category
+		public CEnum<worldStreamingSectorCategory> Category
 		{
-			get => GetPropertyValue<CInt8>();
-			set => SetPropertyValue<CInt8>(value);
+			get => GetPropertyValue<CEnum<worldStreamingSectorCategory>>();
+			set => SetPropertyValue<CEnum<worldStreamingSectorCategory>>(value);
 		}
 
 		public worldStreamingSector()
 		{
 			LocalInplaceResource = new();
 			Level = 255;
-			Category = -1;
+			Category = Enums.worldStreamingSectorCategory.Unknown;
 		}
 	}
 }

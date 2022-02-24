@@ -69,6 +69,14 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gamebbScriptID_Int32>(value);
 		}
 
+		[Ordinal(8)] 
+		[RED("isBriefingActive")] 
+		public gamebbScriptID_Bool IsBriefingActive
+		{
+			get => GetPropertyValue<gamebbScriptID_Bool>();
+			set => SetPropertyValue<gamebbScriptID_Bool>(value);
+		}
+
 		public PlayerVisionModeControllerBBValuesIds()
 		{
 			Kerenzikov = new();
@@ -79,6 +87,7 @@ namespace WolvenKit.RED4.Types
 			BraindanceFPP = new();
 			BraindanceActive = new();
 			VeryHardLanding = new();
+			IsBriefingActive = new();
 		}
 	}
 }

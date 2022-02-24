@@ -110,6 +110,22 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(13)] 
+		[RED("WorkspotAnimationInProgress")] 
+		public gamebbScriptID_Bool WorkspotAnimationInProgress
+		{
+			get => GetPropertyValue<gamebbScriptID_Bool>();
+			set => SetPropertyValue<gamebbScriptID_Bool>(value);
+		}
+
+		[Ordinal(14)] 
+		[RED("InAirAnimation")] 
+		public gamebbScriptID_Bool InAirAnimation
+		{
+			get => GetPropertyValue<gamebbScriptID_Bool>();
+			set => SetPropertyValue<gamebbScriptID_Bool>(value);
+		}
+
+		[Ordinal(15)] 
 		[RED("InPendingBehavior")] 
 		public gamebbScriptID_Bool InPendingBehavior
 		{
@@ -117,7 +133,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gamebbScriptID_Bool>(value);
 		}
 
-		[Ordinal(14)] 
+		[Ordinal(16)] 
 		[RED("HasCalledReinforcements")] 
 		public gamebbScriptID_Bool HasCalledReinforcements
 		{
@@ -125,7 +141,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gamebbScriptID_Bool>(value);
 		}
 
-		[Ordinal(15)] 
+		[Ordinal(17)] 
 		[RED("IsBodyDisposed")] 
 		public gamebbScriptID_Bool IsBodyDisposed
 		{
@@ -133,7 +149,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gamebbScriptID_Bool>(value);
 		}
 
-		[Ordinal(16)] 
+		[Ordinal(18)] 
 		[RED("DetectionPercentage")] 
 		public gamebbScriptID_Float DetectionPercentage
 		{
@@ -156,6 +172,8 @@ namespace WolvenKit.RED4.Types
 			ForceRagdollOnDeath = new();
 			InExclusiveAction = new();
 			SlotAnimationInProgress = new();
+			WorkspotAnimationInProgress = new();
+			InAirAnimation = new();
 			InPendingBehavior = new();
 			HasCalledReinforcements = new();
 			IsBodyDisposed = new();

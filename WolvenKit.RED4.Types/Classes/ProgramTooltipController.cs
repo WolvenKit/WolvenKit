@@ -142,6 +142,22 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(19)] 
+		[RED("perkContainer")] 
+		public inkWidgetReference PerkContainer
+		{
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
+		}
+
+		[Ordinal(20)] 
+		[RED("perkText")] 
+		public inkTextWidgetReference PerkText
+		{
+			get => GetPropertyValue<inkTextWidgetReference>();
+			set => SetPropertyValue<inkTextWidgetReference>(value);
+		}
+
+		[Ordinal(21)] 
 		[RED("effectsList")] 
 		public inkCompoundWidgetReference EffectsList
 		{
@@ -149,7 +165,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkCompoundWidgetReference>(value);
 		}
 
-		[Ordinal(20)] 
+		[Ordinal(22)] 
 		[RED("DEBUG_iconErrorWrapper")] 
 		public inkWidgetReference DEBUG_iconErrorWrapper
 		{
@@ -157,7 +173,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(21)] 
+		[Ordinal(23)] 
 		[RED("DEBUG_iconErrorText")] 
 		public inkTextWidgetReference DEBUG_iconErrorText
 		{
@@ -165,7 +181,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
-		[Ordinal(22)] 
+		[Ordinal(24)] 
 		[RED("DEBUG_showAdditionalInfo")] 
 		public CBool DEBUG_showAdditionalInfo
 		{
@@ -173,7 +189,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(23)] 
+		[Ordinal(25)] 
 		[RED("data")] 
 		public CHandle<InventoryTooltipData> Data
 		{
@@ -181,7 +197,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<InventoryTooltipData>>(value);
 		}
 
-		[Ordinal(24)] 
+		[Ordinal(26)] 
 		[RED("quickHackData")] 
 		public InventoryTooltipData_QuickhackData QuickHackData
 		{
@@ -208,6 +224,8 @@ namespace WolvenKit.RED4.Types
 			DescriptionText = new();
 			HackTypeWrapper = new();
 			HackTypeText = new();
+			PerkContainer = new();
+			PerkText = new();
 			EffectsList = new();
 			DEBUG_iconErrorWrapper = new();
 			DEBUG_iconErrorText = new();

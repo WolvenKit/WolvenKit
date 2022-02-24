@@ -5,7 +5,7 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class gameDestructibleObject : gameObject
 	{
-		[Ordinal(40)] 
+		[Ordinal(35)] 
 		[RED("recordID")] 
 		public TweakDBID RecordID
 		{

@@ -1,11 +1,13 @@
 name: WolvenKit-Draft-release
 on:
-  workflow_dispatch:
+  push:
+    tags:
+    - '*'
 
 jobs:
 
   draft-wkit-win:
-    runs-on: windows-2022
+    runs-on: windows-latest
 
     steps:
     # setup
@@ -26,19 +28,14 @@ jobs:
     - run: echo "REF=${{github.ref}}" >> $env:GITHUB_ENV
     - run: echo "SHA=${{github.sha}}" >> $env:GITHUB_ENV
     - run: echo "MREPO=${{github.repository}}" >> $env:GITHUB_ENV
+    - run: echo "VERSION=${{github.ref_name}}" >> $env:GITHUB_ENV
 
-    - name: Get version
-      uses: naminodarie/get-net-sdk-project-versions-action@v1
-      id: get-version
-      with:
-        proj-path:  ${{env.PROJ}}
     - name: Get console version
       uses: naminodarie/get-net-sdk-project-versions-action@v1
       id: get-version-cli
       with:
         proj-path: ${{env.PROJC}}
 
-    - run: echo "VERSION=${{steps.get-version.outputs.assembly-version}}" >> $env:GITHUB_ENV
     - run: echo "VERSIONC=${{steps.get-version-cli.outputs.assembly-version}}" >> $env:GITHUB_ENV
     
     # Publish app
@@ -53,15 +50,16 @@ jobs:
 
     # Create assets
     # create zip
-    - run: Compress-Archive -Path ${{env.OUT}}* -DestinationPath ${{env.FINALOUT}}/${{env.PORTABLE}}
-    - run: Compress-Archive -Path ${{env.OUTC}}* -DestinationPath ${{env.FINALOUT}}/${{env.CONSOLE}}
+    - run: Compress-Archive -Path ${{env.OUT}}* -DestinationPath ${{env.PORTABLE}}
+    - run: Compress-Archive -Path ${{env.OUTC}}* -DestinationPath ${{env.CONSOLE}}
     # create installer
     # - run: .\Installers\ISCC\ISCC.exe /O"${{env.FINALOUT}}" /dMyAppBaseDir=".${{env.OUT}}" .\Installers\installer.iss
 
     # RELEASE
-    - name: Release
-      run: |
-          gh release create ${{ env.VERSION }} -t "${{env.NAME}} v${{env.VERSION}}" -F ./RELEASE.md -d -p ${{ env.FILES }}
-      env:
-        FILES: ${{env.FINALOUT}}/${{env.PORTABLE}} ${{env.FINALOUT}}/${{env.CONSOLE}}
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    - uses: ncipollo/release-action@v1
+      with:
+        draft: true
+        generateReleaseNotes: true
+        artifacts: "*.zip"
+        bodyFile: "RELEASE.md"
+        token: ${{ secrets.GITHUB_TOKEN }}

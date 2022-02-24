@@ -5,15 +5,7 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class HoloTable : InteractiveDevice
 	{
-		[Ordinal(97)] 
-		[RED("meshTable")] 
-		public CArray<CHandle<entMeshComponent>> MeshTable
-		{
-			get => GetPropertyValue<CArray<CHandle<entMeshComponent>>>();
-			set => SetPropertyValue<CArray<CHandle<entMeshComponent>>>(value);
-		}
-
-		[Ordinal(98)] 
+		[Ordinal(94)] 
 		[RED("componentCounter")] 
 		public CInt32 ComponentCounter
 		{
@@ -21,7 +13,15 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CInt32>(value);
 		}
 
-		[Ordinal(99)] 
+		[Ordinal(95)] 
+		[RED("meshTable")] 
+		public CArray<CHandle<entMeshComponent>> MeshTable
+		{
+			get => GetPropertyValue<CArray<CHandle<entMeshComponent>>>();
+			set => SetPropertyValue<CArray<CHandle<entMeshComponent>>>(value);
+		}
+
+		[Ordinal(96)] 
 		[RED("currentMesh")] 
 		public CInt32 CurrentMesh
 		{
@@ -29,7 +29,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CInt32>(value);
 		}
 
-		[Ordinal(100)] 
+		[Ordinal(97)] 
 		[RED("glitchMesh")] 
 		public CHandle<entMeshComponent> GlitchMesh
 		{
@@ -39,6 +39,7 @@ namespace WolvenKit.RED4.Types
 
 		public HoloTable()
 		{
+			ControllerTypeName = "HoloTableController";
 			MeshTable = new();
 		}
 	}

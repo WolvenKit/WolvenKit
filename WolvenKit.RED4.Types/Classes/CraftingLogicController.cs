@@ -30,6 +30,14 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(42)] 
+		[RED("garmentPreviewContainer")] 
+		public inkWidgetReference GarmentPreviewContainer
+		{
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
+		}
+
+		[Ordinal(43)] 
 		[RED("perkNotificationContainer")] 
 		public inkWidgetReference PerkNotificationContainer
 		{
@@ -37,7 +45,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(43)] 
+		[Ordinal(44)] 
 		[RED("perkNotificationText")] 
 		public inkTextWidgetReference PerkNotificationText
 		{
@@ -45,7 +53,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
-		[Ordinal(44)] 
+		[Ordinal(45)] 
 		[RED("perkIcon")] 
 		public inkImageWidgetReference PerkIcon
 		{
@@ -53,7 +61,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkImageWidgetReference>(value);
 		}
 
-		[Ordinal(45)] 
+		[Ordinal(46)] 
 		[RED("itemTooltipController")] 
 		public CWeakHandle<AGenericTooltipController> ItemTooltipController
 		{
@@ -61,7 +69,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<AGenericTooltipController>>(value);
 		}
 
-		[Ordinal(46)] 
+		[Ordinal(47)] 
 		[RED("quickHackTooltipController")] 
 		public CWeakHandle<AGenericTooltipController> QuickHackTooltipController
 		{
@@ -69,7 +77,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<AGenericTooltipController>>(value);
 		}
 
-		[Ordinal(47)] 
+		[Ordinal(48)] 
 		[RED("tooltipData")] 
 		public CHandle<InventoryTooltipData> TooltipData
 		{
@@ -77,7 +85,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<InventoryTooltipData>>(value);
 		}
 
-		[Ordinal(48)] 
+		[Ordinal(49)] 
 		[RED("ingredientWeaponController")] 
 		public CWeakHandle<InventoryWeaponDisplayController> IngredientWeaponController
 		{
@@ -85,7 +93,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<InventoryWeaponDisplayController>>(value);
 		}
 
-		[Ordinal(49)] 
+		[Ordinal(50)] 
 		[RED("ingredientClothingController")] 
 		public CWeakHandle<InventoryWeaponDisplayController> IngredientClothingController
 		{
@@ -93,7 +101,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<InventoryWeaponDisplayController>>(value);
 		}
 
-		[Ordinal(50)] 
+		[Ordinal(51)] 
 		[RED("selectedItemGameData")] 
 		public CHandle<gameItemData> SelectedItemGameData
 		{
@@ -101,7 +109,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<gameItemData>>(value);
 		}
 
-		[Ordinal(51)] 
+		[Ordinal(52)] 
 		[RED("quantityPickerPopupToken")] 
 		public CHandle<inkGameNotificationToken> QuantityPickerPopupToken
 		{
@@ -109,7 +117,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<inkGameNotificationToken>>(value);
 		}
 
-		[Ordinal(52)] 
+		[Ordinal(53)] 
 		[RED("playerCraftBook")] 
 		public CWeakHandle<CraftBook> PlayerCraftBook
 		{
@@ -123,6 +131,7 @@ namespace WolvenKit.RED4.Types
 			IngredientsWeaponContainer = new();
 			ItemPreviewContainer = new();
 			WeaponPreviewContainer = new();
+			GarmentPreviewContainer = new();
 			PerkNotificationContainer = new();
 			PerkNotificationText = new();
 			PerkIcon = new();

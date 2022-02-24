@@ -14,6 +14,14 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(1)] 
+		[RED("attackRecord")] 
+		public TweakDBID AttackRecord
+		{
+			get => GetPropertyValue<TweakDBID>();
+			set => SetPropertyValue<TweakDBID>(value);
+		}
+
+		[Ordinal(2)] 
 		[RED("damageAmount")] 
 		public CFloat DamageAmount
 		{
@@ -21,7 +29,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(2)] 
+		[Ordinal(3)] 
 		[RED("weapon")] 
 		public gameTelemetryInventoryItem Weapon
 		{
@@ -29,7 +37,15 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gameTelemetryInventoryItem>(value);
 		}
 
-		[Ordinal(3)] 
+		[Ordinal(4)] 
+		[RED("sourceEntity")] 
+		public gameTelemetrySourceEntity SourceEntity
+		{
+			get => GetPropertyValue<gameTelemetrySourceEntity>();
+			set => SetPropertyValue<gameTelemetrySourceEntity>(value);
+		}
+
+		[Ordinal(5)] 
 		[RED("hitCount")] 
 		public CUInt32 HitCount
 		{
@@ -37,7 +53,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CUInt32>(value);
 		}
 
-		[Ordinal(4)] 
+		[Ordinal(6)] 
 		[RED("distance")] 
 		public CFloat Distance
 		{
@@ -45,7 +61,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(5)] 
+		[Ordinal(7)] 
 		[RED("time")] 
 		public CFloat Time
 		{
@@ -56,7 +72,8 @@ namespace WolvenKit.RED4.Types
 		public gameTelemetryDamage()
 		{
 			AttackType = Enums.gamedataAttackType.Invalid;
-			Weapon = new() { ItemID = new(), Quality = -1, ItemType = Enums.gamedataItemType.Invalid, ItemLevel = -1 };
+			Weapon = new() { ItemID = new(), Quality = Enums.gamedataQuality.Invalid, ItemType = Enums.gamedataItemType.Invalid, ItemLevel = -1 };
+			SourceEntity = new();
 			HitCount = 1;
 			Distance = -1.000000F;
 		}

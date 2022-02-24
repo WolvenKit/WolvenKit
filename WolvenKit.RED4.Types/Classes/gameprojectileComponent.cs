@@ -70,6 +70,14 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(13)] 
+		[RED("queryPreset")] 
+		public physicsQueryPreset QueryPreset
+		{
+			get => GetPropertyValue<physicsQueryPreset>();
+			set => SetPropertyValue<physicsQueryPreset>(value);
+		}
+
+		[Ordinal(14)] 
 		[RED("previewEffect")] 
 		public CResourceAsyncReference<worldEffect> PreviewEffect
 		{
@@ -77,7 +85,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CResourceAsyncReference<worldEffect>>(value);
 		}
 
-		[Ordinal(14)] 
+		[Ordinal(15)] 
 		[RED("bouncePreviewEffect")] 
 		public CResourceAsyncReference<worldEffect> BouncePreviewEffect
 		{
@@ -85,7 +93,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CResourceAsyncReference<worldEffect>>(value);
 		}
 
-		[Ordinal(15)] 
+		[Ordinal(16)] 
 		[RED("explosionPreviewEffect")] 
 		public CResourceAsyncReference<worldEffect> ExplosionPreviewEffect
 		{
@@ -93,7 +101,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CResourceAsyncReference<worldEffect>>(value);
 		}
 
-		[Ordinal(16)] 
+		[Ordinal(17)] 
 		[RED("explosionPreviewTime")] 
 		public CFloat ExplosionPreviewTime
 		{
@@ -101,7 +109,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(17)] 
+		[Ordinal(18)] 
 		[RED("gameEffectRef")] 
 		public gameEffectRef GameEffectRef
 		{
@@ -118,6 +126,7 @@ namespace WolvenKit.RED4.Types
 			RotationOffset = new() { R = 1.000000F };
 			DeriveOwnerVelocity = true;
 			DerivedVelocityParams = new() { XFactor = 1.000000F, YFactor = 1.000000F, ZFactor = 1.000000F };
+			QueryPreset = new();
 			GameEffectRef = new();
 		}
 	}

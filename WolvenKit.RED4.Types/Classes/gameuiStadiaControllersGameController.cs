@@ -37,12 +37,38 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
+		[Ordinal(7)] 
+		[RED("disclaimerText")] 
+		public inkWidgetReference DisclaimerText
+		{
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
+		}
+
+		[Ordinal(8)] 
+		[RED("buttonHintsManagerRef")] 
+		public inkWidgetReference ButtonHintsManagerRef
+		{
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
+		}
+
+		[Ordinal(9)] 
+		[RED("buttonHintsController")] 
+		public CWeakHandle<ButtonHints> ButtonHintsController
+		{
+			get => GetPropertyValue<CWeakHandle<ButtonHints>>();
+			set => SetPropertyValue<CWeakHandle<ButtonHints>>(value);
+		}
+
 		public gameuiStadiaControllersGameController()
 		{
 			StadiaControllerPage = new();
 			NintendoControllerPage = new();
 			DurangoControllerPage = new();
 			OrbisControllerPage = new();
+			DisclaimerText = new();
+			ButtonHintsManagerRef = new();
 		}
 	}
 }

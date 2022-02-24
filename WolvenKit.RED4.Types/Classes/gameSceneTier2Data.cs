@@ -5,7 +5,7 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class gameSceneTier2Data : gameSceneTierData
 	{
-		[Ordinal(2)] 
+		[Ordinal(3)] 
 		[RED("walkType")] 
 		public CEnum<Tier2WalkType> WalkType
 		{

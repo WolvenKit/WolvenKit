@@ -20,5 +20,13 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CHandle<gameJournalPath>>();
 			set => SetPropertyValue<CHandle<gameJournalPath>>(value);
 		}
+
+		[Ordinal(2)] 
+		[RED("releaseOnRejection")] 
+		public CBool ReleaseOnRejection
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
 	}
 }

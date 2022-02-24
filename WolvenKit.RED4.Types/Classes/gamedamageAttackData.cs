@@ -70,6 +70,14 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(8)] 
+		[RED("attackTime")] 
+		public CFloat AttackTime
+		{
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
+		}
+
+		[Ordinal(9)] 
 		[RED("flags")] 
 		public CArray<SHitFlag> Flags
 		{
@@ -77,7 +85,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<SHitFlag>>(value);
 		}
 
-		[Ordinal(9)] 
+		[Ordinal(10)] 
 		[RED("statusEffects")] 
 		public CArray<SHitStatusEffect> StatusEffects
 		{
@@ -85,7 +93,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<SHitStatusEffect>>(value);
 		}
 
-		[Ordinal(10)] 
+		[Ordinal(11)] 
 		[RED("hitType")] 
 		public CEnum<gameuiHitType> HitType
 		{
@@ -93,7 +101,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CEnum<gameuiHitType>>(value);
 		}
 
-		[Ordinal(11)] 
+		[Ordinal(12)] 
 		[RED("vehicleImpactForce")] 
 		public CFloat VehicleImpactForce
 		{
@@ -101,7 +109,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(12)] 
+		[Ordinal(13)] 
 		[RED("additionalCritChance")] 
 		public CFloat AdditionalCritChance
 		{

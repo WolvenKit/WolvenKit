@@ -2,7 +2,7 @@
 namespace WolvenKit.RED4.Types
 {
 	[REDMeta]
-	public partial class IntercomController : ScriptableDC
+	public partial class IntercomController : ScriptableDeviceComponent
 	{
 	}
 }

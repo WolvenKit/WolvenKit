@@ -5,7 +5,7 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class GrappleFallEvents : FallEvents
 	{
-		[Ordinal(5)] 
+		[Ordinal(9)] 
 		[RED("stateMachineInitData")] 
 		public CWeakHandle<LocomotionTakedownInitData> StateMachineInitData
 		{
