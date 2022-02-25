@@ -17,10 +17,10 @@ using System.Collections.Concurrent;
 
 namespace WolvenKit.Common.Services
 {
-    public class TweakDBService // : ITweakDBService
+    public class TweakDBService : ITweakDBService
     {
-        private const string tweakdbstr = "WolvenKit.Common.Resources.tweakdb.str";
-        private const string tweakdbbin = "WolvenKit.Common.Resources.tweakdb.bin";
+        private const string tweakdbstr = "WolvenKit.Common.Resources.tweakdbstr.kark";
+        //private const string tweakdbbin = "WolvenKit.Common.Resources.tweakdb.bin";
 
         private const uint s_recordSeed = 0x5EEDBA5E;
         private readonly Dictionary<uint, Type> _typeHashes = new();
@@ -41,7 +41,6 @@ namespace WolvenKit.Common.Services
         {
             LoadTypes();
             LoadStrings();
-            LoadDB();
         }
 
         public void LoadTypes()
@@ -58,27 +57,13 @@ namespace WolvenKit.Common.Services
             }
         }
 
-        // new FileInfo(_settingsManager.CP77ExecutablePath)
-        public void LoadDB() //FileInfo executable)
+        public void LoadDB(string path)
         {
-            //var di = executable.Directory;
-            //if (di?.Parent?.Parent is null)
-            //{
-            //    return;
-            //}
+            using var fh = File.OpenRead(path);
+            using var br = new BinaryReader(fh);
 
-            //if (!di.Exists)
-            //{
-            //    return;
-            //}
-
-            //var tweakdbbin = Path.Combine(di.Parent.Parent.FullName, "r6", "cache", "tweakdb.bin");
-
-            //using var fh = File.OpenRead(tweakdbbin);
-            //using var br = new BinaryReader(fh);
-
-            using var stream = Assembly.GetExecutingAssembly().GetManifestResourceStream(tweakdbbin);
-            using var br = new BinaryReader(stream);
+            //using var stream = Assembly.GetExecutingAssembly().GetManifestResourceStream(tweakdbbin);
+            //using var br = new BinaryReader(stream);
 
             var magic = br.ReadInt32();
 
@@ -107,7 +92,6 @@ namespace WolvenKit.Common.Services
             }
 
             var flatTypeValues = new Dictionary<ulong, List<object>>();
-            //var flatTypeKeys = new Dictionary<ulong, object>();
             foreach (var (typeHash, typeCount) in flatTypeCounts)
             {
                 flatTypeValues[typeHash] = new List<object>();
@@ -123,7 +107,7 @@ namespace WolvenKit.Common.Services
                     }
                     else
                     {
-                        
+                        // should probably keep track of these
                     }
                 }
 
@@ -139,8 +123,6 @@ namespace WolvenKit.Common.Services
                     }
                 }
             }
-
-            //ReadRecords:
 
             br.BaseStream.Seek(recordsOffset, SeekOrigin.Begin);
 
@@ -192,7 +174,26 @@ namespace WolvenKit.Common.Services
         public void LoadStrings()
         {
             using var stream = Assembly.GetExecutingAssembly().GetManifestResourceStream(tweakdbstr);
-            using var br = new BinaryReader(stream);
+
+            // read KARK header
+            var oodleCompression = stream.ReadStruct<uint>();
+            if (oodleCompression != Oodle.KARK)
+            {
+                throw new DecompressionException($"Incorrect hash file.");
+            }
+
+            var outputsize = stream.ReadStruct<uint>();
+
+            // read the rest of the stream
+            var outputbuffer = new byte[outputsize];
+
+            var inbuffer = stream.ToByteArray(true);
+
+            Oodle.Decompress(inbuffer, outputbuffer);
+
+            using var ms = new MemoryStream(outputbuffer);
+
+            using var br = new BinaryReader(ms);
 
             var magic = br.ReadInt32();
 
@@ -259,7 +260,7 @@ namespace WolvenKit.Common.Services
                 return _queryHashes[key].ToString();
             }
 
-            return "";
+            return null;
         }
 
         public RedBaseClass GetRecord(TweakDBID tdb)
@@ -466,7 +467,16 @@ namespace WolvenKit.Common.Services
                 var ary = new CArray<TweakDBID>();
                 for (int i = 0; i < num; i++)
                 {
-                    ary.Add((TweakDBID)br.ReadUInt64());
+                    var id = br.ReadUInt64();
+                    var str = Locator.Current.GetService<ITweakDBService>().GetString(id);
+                    if (str != null)
+                    {
+                        ary.Add((TweakDBID)str);
+                    }
+                    else
+                    {
+                        ary.Add((TweakDBID)id);
+                    }
                 }
                 return ary;
             }
@@ -536,7 +546,16 @@ namespace WolvenKit.Common.Services
             }
             if (hash == 4643797392751916988) // TweakDBID
             {
-                return (TweakDBID)br.ReadUInt64();
+                var id = br.ReadUInt64();
+                var str = Locator.Current.GetService<ITweakDBService>().GetString(id);
+                if (str != null)
+                {
+                   return (TweakDBID)str;
+                }
+                else
+                {
+                    return (TweakDBID)id;
+                }
             }
             if (hash == 14218562033234752749) // gamedataLocKeyWrapper
             {

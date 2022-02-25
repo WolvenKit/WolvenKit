@@ -46,9 +46,9 @@ namespace WolvenKit.CLI
                     //services.AddScoped<IProgress<double>, ProgressBar>();
 
                     services.AddSingleton<IHashService, HashService>();
-                    //services.AddSingleton<ITweakDBService, TweakDBService>();
+                    services.AddSingleton<ITweakDBService, TweakDBService>();
 
-                    services.AddScoped<TweakDBService>();
+                    //services.AddScoped<TweakDBService>();
                     services.AddScoped<Red4ParserService>();
                     services.AddScoped<MeshTools>();        //RIG, Cp77FileService
                     services.AddSingleton<IArchiveManager, ArchiveManager>();

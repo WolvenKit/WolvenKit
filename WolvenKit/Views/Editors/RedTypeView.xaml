@@ -290,6 +290,11 @@
                         <editors:RedStringEditor RedString="{Binding Data, Mode=TwoWay}" />
                     </DataTemplate>
                 </converters:RedEditorTemplateSelector.RedStringEditor>
+                <converters:RedEditorTemplateSelector.RedTweakEditor>
+                    <DataTemplate>
+                        <editors:RedTweakEditor RedTweak="{Binding Data, Mode=TwoWay}" />
+                    </DataTemplate>
+                </converters:RedEditorTemplateSelector.RedTweakEditor>
                 <converters:RedEditorTemplateSelector.RedUlongEditor>
                     <DataTemplate>
                         <editors:RedUlongEditor RedNumber="{Binding Data, Mode=TwoWay}" />
@@ -667,7 +672,7 @@
             ScrollViewer.CanContentScroll="True"
             ScrollViewer.HorizontalScrollBarVisibility="Disabled"
             VirtualizingPanel.IsVirtualizing="True"
-            VirtualizingPanel.ScrollUnit="Pixel"
+            VirtualizingPanel.ScrollUnit="Item"
             VirtualizingPanel.VirtualizationMode="Recycling">
             <TreeView.ItemContainerStyle>
                 <Style TargetType="TreeViewItem">

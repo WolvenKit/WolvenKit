@@ -9,6 +9,7 @@ namespace WolvenKit.Converters
     {
         public DataTemplate RedStringEditor { get; set; }
         public DataTemplate RedUlongEditor { get; set; }
+        public DataTemplate RedTweakEditor { get; set; }
         public DataTemplate RedFloatEditor { get; set; }
         public DataTemplate RedFixedPointEditor { get; set; }
         public DataTemplate RedIntegerEditor { get; set; }
@@ -43,6 +44,10 @@ namespace WolvenKit.Converters
                 if (vm.PropertyType.IsAssignableTo(typeof(IRedString)))
                 {
                     return RedStringEditor;
+                }
+                if (vm.PropertyType.IsAssignableTo(typeof(TweakDBID)))
+                {
+                    return RedTweakEditor;
                 }
                 if (vm.PropertyType.IsAssignableTo(typeof(IRedPrimitive<ulong>)))
                 {
@@ -111,10 +116,6 @@ namespace WolvenKit.Converters
                 if (vm.PropertyType.IsAssignableTo(typeof(NodeRef)))
                 {
                     return RedStringEditor;
-                }
-                if (vm.PropertyType.IsAssignableTo(typeof(TweakDBID)))
-                {
-                    return RedUlongEditor;
                 }
                 if (vm.ResolvedData is RedBaseClass && (
                     ((vm.Properties == null || vm.Properties.Count < 5) && vm.DetailsLevel <= 0) ||

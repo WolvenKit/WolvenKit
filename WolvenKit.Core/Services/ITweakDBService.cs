@@ -1,11 +1,10 @@
-//using System.Collections.Generic;
-//using WolvenKit.RED4.Types;
+using System.Collections.Generic;
 
-//namespace WolvenKit.Common.Services
-//{
-//    public interface ITweakDBService
-//    {
-//        public string GetString(ulong hash);
-//        public RedBaseClass GetRecord(TweakDBID tdb);
-//    }
-//}
+namespace WolvenKit.Common.Services
+{
+    public interface ITweakDBService
+    {
+        public string GetString(ulong hash);
+        public void LoadDB(string path);
+    }
+}

@@ -1,3 +1,4 @@
+using System.IO;
 using CP77.CR2W;
 using gpm.Installer;
 using Microsoft.Extensions.DependencyInjection;
@@ -66,8 +67,10 @@ namespace WolvenKit
                     services.AddSingleton<IArchiveManager, ArchiveManager>();
                     services.AddSingleton<MockGameController>();
 
-                    // red4 modding tools
                     services.AddSingleton<TweakDBService>();
+                    services.AddSingleton<ITweakDBService>(x => x.GetRequiredService<TweakDBService>());
+
+                    // red4 modding tools
                     services.AddSingleton<Red4ParserService>();
                     services.AddSingleton<MeshTools>();
 

@@ -39,6 +39,8 @@ namespace WolvenKit.ViewModels.Shell
         public ObservableCollection<ISelectableTreeViewItemModel> TVProperties { get; } = new();
         public ObservableCollection<ChunkViewModel> DisplayProperties { get; } = new();
 
+        //public VirtualizingCollection<ChunkViewModel> VirtualizedProperties { get; } = new();
+
         [Reactive] public string Value { get; private set; }
         [Reactive] public string Descriptor { get; private set; }
         [Reactive] public bool IsDefault { get; private set; }
@@ -892,7 +894,8 @@ namespace WolvenKit.ViewModels.Shell
             }
             if (Data is TweakDBID tdb)
             {
-                Descriptor = Locator.Current.GetService<TweakDBService>().GetString(tdb);
+                //Descriptor = Locator.Current.GetService<TweakDBService>().GetString(tdb);
+                Descriptor = (string)tdb;
                 return;
             }
             //if (ResolvedData is CMaterialInstance && Parent != null)

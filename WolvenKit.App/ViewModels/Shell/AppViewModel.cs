@@ -92,6 +92,11 @@ namespace WolvenKit.ViewModels.Shell
 
             _homePageViewModel = Locator.Current.GetService<HomePageViewModel>();
 
+            // load TweakDB
+            var settings = Locator.Current.GetService<ISettingsManager>();
+            var tweakdbService = Locator.Current.GetService<TweakDBService>();
+            tweakdbService.LoadDB(Path.Combine(settings.GetRED4GameRootDir(), "r6", "cache", "tweakdb.bin"));
+
             #region commands
 
             ShowLogCommand = new RelayCommand(ExecuteShowLog, CanShowLog);

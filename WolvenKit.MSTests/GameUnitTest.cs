@@ -114,6 +114,8 @@ namespace WolvenKit.MSTests
             Locator.CurrentMutable.RegisterConstant(new TweakDBService(), typeof(ITweakDBService));
 
             var hashService = ServiceLocator.Default.ResolveType<IHashService>();
+            var tweakService = ServiceLocator.Default.ResolveType<ITweakDBService>();
+            tweakService.LoadDB(Path.Combine(gameDirectory.FullName, "r6", "cache", "tweakdb.bin"));
             s_bm = ServiceLocator.Default.ResolveType<IArchiveManager>();
 
             var archivedir = new DirectoryInfo(Path.Combine(gameDirectory.FullName, "archive", "pc", "content"));
