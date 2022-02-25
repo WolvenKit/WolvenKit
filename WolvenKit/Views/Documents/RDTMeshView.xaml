@@ -63,7 +63,7 @@
             <!--  hx:ShadowMap3D /  -->
             <hx:DynamicReflectionMap3D IsDynamicScene="True">
                 <!--  hx:EnvironmentMap3D Texture="{Binding EnvironmentMap}" /  -->
-                <hx:ItemsModel3D x:Name="hxContentVisual" ItemsSource="{Binding SelectedAppearance.ModelGroup}" />
+                <hx:ItemsModel3D x:Name="hxContentVisual" />
             </hx:DynamicReflectionMap3D>
             <!--  hx:Element3DPresenter Content="{Binding GroupModel}" /  -->
         </hx:Viewport3DX>

@@ -202,6 +202,11 @@ namespace WolvenKit.ViewModels.Documents
 
         public TextureModel EnvironmentMap { get; set; }
 
+        public delegate void RenderDelegate();
+
+        public RenderDelegate Render;
+        public bool IsRendered;
+
         public RDTMeshViewModel(RedDocumentViewModel file)
         {
             if (Header == null)
@@ -237,7 +242,17 @@ namespace WolvenKit.ViewModels.Documents
         public RDTMeshViewModel(CMesh data, RedDocumentViewModel file) : this(file)
         {
             _data = data;
+            Render = RenderMesh;
+        }
 
+        public void RenderMesh()
+        {
+            if (IsRendered)
+            {
+                return;
+            }
+            IsRendered = true;
+            var data = (CMesh)_data;
             var materials = new Dictionary<string, Material>();
 
             var localList = (CR2WList)data.LocalMaterialBuffer.RawData?.Buffer.Data ?? null;
@@ -281,10 +296,10 @@ namespace WolvenKit.ViewModels.Documents
 
                 foreach (var pair in inst.Values)
                 {
-                    material.Values.Add(pair.Key, pair.Value);
+                    material.Values[pair.Key] = pair.Value;
                 }
 
-                materials.Add(name, material);
+                materials[name] = material;
             }
 
             var appIndex = 0;

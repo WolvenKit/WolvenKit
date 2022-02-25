@@ -429,13 +429,43 @@
                                 BorderBrush="{StaticResource BorderAlt}"
                                 BorderThickness="0,0,0,1">
                                 <StackPanel Orientation="Horizontal">
-                                    <TextBlock
-                                        Margin="6,0,4,1"
+                                    <iconPacks:PackIconCodicons
+                                        Width="15"
+                                        Height="15"
+                                        Margin="6,0,0,2"
+                                        HorizontalAlignment="Center"
                                         VerticalAlignment="Center"
-                                        Foreground="{StaticResource RedTypeColor}"
-                                        Text="{Binding Type}" />
+                                        Kind="SymbolClass" />
                                     <TextBlock
-                                        Margin="0,0,4,1"
+                                        Name="PropertyType"
+                                        Margin="6,0,4,2"
+                                        VerticalAlignment="Center"
+                                        Foreground="{StaticResource WolvenKitTan}"
+                                        Text="{Binding Type, Mode=OneTime}" />
+                                    <StackPanel
+                                        Margin="-4,0,4,0"
+                                        VerticalAlignment="Center"
+                                        Orientation="Horizontal">
+                                        <StackPanel.Style>
+                                            <Style TargetType="StackPanel">
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding TypesDiffer, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" Value="False">
+                                                        <Setter Property="Visibility" Value="Collapsed" />
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </StackPanel.Style>
+                                        <iconPacks:PackIconCodicons
+                                            Height="7"
+                                            VerticalAlignment="Center"
+                                            Kind="ArrowRight" />
+                                        <TextBlock
+                                            Margin="0,0,0,2"
+                                            Foreground="{StaticResource WolvenKitTan}"
+                                            Text="{Binding ResolvedType, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" />
+                                    </StackPanel>
+                                    <TextBlock
+                                        Margin="0,0,4,3"
                                         VerticalAlignment="Center"
                                         Text="{Binding Descriptor}">
                                         <TextBlock.Style>
@@ -474,7 +504,8 @@
                     </DataTemplate>
                 </converters:RedEditorTemplateSelector.RedArrayEditor>
             </converters:RedEditorTemplateSelector>
-            <HierarchicalDataTemplate x:Key="ItemTemplate" ItemsSource="{Binding Properties}">
+            <HierarchicalDataTemplate x:Key="ItemTemplate">
+                <!--  ="{Binding Properties}"  -->
                 <Border
                     x:Name="TopLine"
                     MinHeight="27"
@@ -530,7 +561,7 @@
                         <Setter TargetName="TopLine" Property="BorderThickness" Value="0,1,0,1" />
                     </DataTrigger>
                 </DataTemplate.Triggers>
-                <HierarchicalDataTemplate.ItemTemplate>
+                <!--HierarchicalDataTemplate.ItemTemplate>
                     <DataTemplate>
                         <Border
                             x:Name="TopLine"
@@ -582,7 +613,7 @@
                             </Grid>
                         </Border>
                     </DataTemplate>
-                </HierarchicalDataTemplate.ItemTemplate>
+                </HierarchicalDataTemplate.ItemTemplate-->
             </HierarchicalDataTemplate>
             <Style TargetType="TextBox">
                 <Setter Property="Padding" Value="5,0" />
@@ -638,11 +669,29 @@
                     Text="{Binding XPath}" />
                 <StackPanel Grid.Row="2" Orientation="Horizontal">
                     <TextBlock
-                        Margin="0,0,4,0"
-                        VerticalAlignment="Center"
-                        Foreground="{StaticResource RedTypeColor}"
-                        Text="{Binding ResolvedType}" />
-                    <ContentPresenter Content="{Binding}" ContentTemplate="{StaticResource AddToCompiledDataButton}" />
+                        Name="PropertyType"
+                        Foreground="{StaticResource WolvenKitTan}"
+                        Text="{Binding Type, Mode=OneTime}" />
+                    <StackPanel Orientation="Horizontal">
+                        <StackPanel.Style>
+                            <Style TargetType="StackPanel">
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding TypesDiffer, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" Value="False">
+                                        <Setter Property="Visibility" Value="Collapsed" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </StackPanel.Style>
+                        <iconPacks:PackIconCodicons
+                            Height="7"
+                            VerticalAlignment="Center"
+                            Kind="ArrowRight" />
+                        <TextBlock Foreground="{StaticResource WolvenKitTan}" Text="{Binding ResolvedType, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" />
+                    </StackPanel>
+                    <ContentPresenter
+                        Margin="5,0,0,0"
+                        Content="{Binding}"
+                        ContentTemplate="{StaticResource AddToCompiledDataButton}" />
                     <ContentPresenter Content="{Binding}" ContentTemplate="{StaticResource AddToArrayButton}" />
                     <ContentPresenter Content="{Binding}" ContentTemplate="{StaticResource AddHandleButton}" />
                     <ContentPresenter Content="{Binding}" ContentTemplate="{StaticResource DeleteAllButton}" />
@@ -672,7 +721,7 @@
             ScrollViewer.CanContentScroll="True"
             ScrollViewer.HorizontalScrollBarVisibility="Disabled"
             VirtualizingPanel.IsVirtualizing="True"
-            VirtualizingPanel.ScrollUnit="Item"
+            VirtualizingPanel.ScrollUnit="Pixel"
             VirtualizingPanel.VirtualizationMode="Recycling">
             <TreeView.ItemContainerStyle>
                 <Style TargetType="TreeViewItem">

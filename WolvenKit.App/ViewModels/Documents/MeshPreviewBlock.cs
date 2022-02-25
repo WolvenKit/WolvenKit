@@ -70,6 +70,21 @@ namespace WolvenKit.ViewModels.Documents
             _data = data;
             Header = "Sector Previews";
 
+            Render = RenderBlockSolo;
+        }
+
+        public void RenderBlockSolo()
+        {
+            if (IsRendered)
+            {
+                return;
+            }
+            IsRendered = true;
+            RenderBlock((worldStreamingBlock)_data);
+        }
+
+        public void RenderBlock(worldStreamingBlock data)
+        { 
             var app = new Appearance()
             {
                 Name = "All_Sectors",

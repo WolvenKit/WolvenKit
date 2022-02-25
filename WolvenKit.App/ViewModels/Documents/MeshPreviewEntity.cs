@@ -20,7 +20,17 @@ namespace WolvenKit.ViewModels.Documents
             Header = "Entity Preview";
             _data = ent;
 
-            RenderEntity(ent);
+            Render = RenderEntitySolo;
+        }
+
+        public void RenderEntitySolo()
+        {
+            if (IsRendered)
+            {
+                return;
+            }
+            IsRendered = true;
+            RenderEntity((entEntityTemplate)_data);
         }
 
         public Element3D RenderEntity(entEntityTemplate ent, Appearance appearance = null, string appearanceName = null)

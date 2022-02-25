@@ -32,6 +32,11 @@ namespace WolvenKit.Views.Documents
             //    }
             //});
 
+            //if (ViewModel != null && ViewModel.SelectedChunk == null)
+            //{
+            //    ViewModel.SelectedChunk = ViewModel.Chunks[0];
+            //}
+
             this.WhenActivated(disposables =>
             {
 
@@ -43,8 +48,16 @@ namespace WolvenKit.Views.Documents
                       viewmodel => viewmodel.SelectedChunk,
                       view => view.TreeView.SelectedItem)
                   .DisposeWith(disposables);
+                this.OneWayBind(ViewModel,
+                      viewmodel => viewmodel.SelectedChunk,
+                      view => view.CustomPG.DataContext)
+                  .DisposeWith(disposables);
+                this.OneWayBind(ViewModel,
+                      viewmodel => viewmodel.SelectedChunk,
+                      view => view.CustomPG.ViewModel)
+                  .DisposeWith(disposables);
 
-                ViewModel.SelectedChunk = ViewModel.Chunks[0];
+                //ViewModel.SelectedChunk.IsExpanded = true;
 
                 //this.OneWayBind(ViewModel,
                 //       viewmodel => viewmodel.SelectedChunk.PropertyGridData,

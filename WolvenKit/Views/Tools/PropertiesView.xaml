@@ -334,7 +334,7 @@
             ShowTabItemContextMenu="False"
             ShowTabListContextMenu="False"
             Style="{StaticResource WolvenKitTabControl}">
-            <syncfusion:TabItemExt Header="File Properties">
+            <syncfusion:TabItemExt Header="Properties">
 
                 <Grid>
                     <Grid.Resources>
@@ -450,7 +450,7 @@
                     </syncfusion:PropertyGrid>
                 </Grid>
             </syncfusion:TabItemExt>
-            <syncfusion:TabItemExt Header="Mesh Preview" Visibility="{Binding IsMeshPreviewVisible, Converter={StaticResource ToggleVisibilityConverter}}">
+            <syncfusion:TabItemExt Header="Mesh" IsEnabled="{Binding IsMeshPreviewVisible}">
                 <Grid Name="RootGrid" Height="auto">
                     <Border Name="ViewportBorder" Background="{StaticResource ContentBackground}">
                         <hx:Viewport3DX
@@ -557,7 +557,7 @@
                 </Grid>
             </syncfusion:TabItemExt>
 
-            <syncfusion:TabItemExt Header="Audio Preview" Visibility="{Binding IsAudioPreviewVisible, Converter={StaticResource ToggleVisibilityConverter}}">
+            <syncfusion:TabItemExt Header="Audio" IsEnabled="{Binding IsAudioPreviewVisible}">
 
                 <Border
                     Width="auto"
@@ -734,7 +734,7 @@
                 </Border>
             </syncfusion:TabItemExt>
 
-            <syncfusion:TabItemExt Header="Image Preview" Visibility="{Binding IsImagePreviewVisible, Converter={StaticResource ToggleVisibilityConverter}}">
+            <syncfusion:TabItemExt Header="Image" IsEnabled="{Binding IsImagePreviewVisible}">
                 <!--
                     syncfusion:SfImageEditor
                     x:Name="bold"

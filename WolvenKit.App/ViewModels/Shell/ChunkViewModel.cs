@@ -55,6 +55,11 @@ namespace WolvenKit.ViewModels.Shell
 
             SelfList = new ObservableCollection<ChunkViewModel>(new[] { this });
 
+            if (HasChildren() && Properties.Count == 0)
+            {
+                Properties.Add(new ChunkViewModel(new CBool(), parent: this));
+            }
+
             Properties.ToObservableChangeSet()
                 .Subscribe(x =>
                 {
@@ -85,7 +90,7 @@ namespace WolvenKit.ViewModels.Shell
                             }
 
 
-                            DisplayProperties.AddRange(SelfList);
+                            DisplayProperties.AddRange(Properties);
                         }
                     }
                     CalculateDescriptor();
@@ -93,6 +98,10 @@ namespace WolvenKit.ViewModels.Shell
 
             this.WhenAnyValue(x => x.IsSelected)
                 .Where(x => IsSelected && !_propertiesLoaded)
+                .Subscribe(x => CalculateProperties());
+
+            this.WhenAnyValue(x => x.IsExpanded)
+                .Where(x => IsExpanded && !_propertiesLoaded)
                 .Subscribe(x => CalculateProperties());
 
             this.WhenAnyValue(x => x.Data)
@@ -157,6 +166,11 @@ namespace WolvenKit.ViewModels.Shell
             _tab = tab;
             IsExpanded = true;
             Data = export;
+            if (!_propertiesLoaded)
+            {
+                CalculateProperties();
+            }
+            //TVProperties.AddRange(Properties);
             //this.RaisePropertyChanged("Data");
             this.WhenAnyValue(x => x.Data).Skip(1).Subscribe((x) =>
             {
@@ -197,6 +211,8 @@ namespace WolvenKit.ViewModels.Shell
 
             return list;
         }
+
+        //[Reactive] public bool HasChildrenProp { get => HasChildren(); }
 
         public bool HasChildren()
         {

@@ -25,14 +25,24 @@ namespace WolvenKit.ViewModels.Documents
                 Name = Path.GetFileNameWithoutExtension(File.ContentId).Replace("-", "_"),
             };
 
-            RenderSector(data, app);
+            Render = RenderSectorSolo;
 
             Appearances.Add(app);
             SelectedAppearance = app;
         }
 
+        public void RenderSectorSolo()
+        {
+            if (IsRendered)
+            {
+                return;
+            }
+            IsRendered = true;
+            RenderSector((worldStreamingSector)_data, Appearances[0]);
+        }
+
         public Element3D RenderSector(worldStreamingSector data, Appearance app)
-        { 
+        {
             var ssTransforms = ((StreamingSectorBuffer)data.Transforms.Data).Transforms;
 
             var groups = new List<Element3D>();

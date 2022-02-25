@@ -483,6 +483,7 @@
             Margin="-1"
             AllowDragging="True"
             AllowEditing="False"
+            AutoExpandMode="RootNodes"
             Background="{StaticResource ContentBackground}"
             BorderThickness="0"
             ItemDragOver="SfTreeView_ItemDragOver"
@@ -490,16 +491,26 @@
             ItemDropped="SfTreeView_ItemDropped"
             ItemDropping="SfTreeView_ItemDropping"
             ItemTemplateSelector="{StaticResource itemTemplateSelector}"
-            LoadOnDemandCommand="{Binding OnDemandLoadingCommand}"
             SelectionMode="Single"
             ShowLines="True"
             VirtualizingPanel.IsVirtualizing="True"
             VirtualizingPanel.ScrollUnit="Pixel"
             VirtualizingPanel.VirtualizationMode="Recycling"
             Visibility="Visible">
+            <!--
+                LoadOnDemandCommand="{Binding OnDemandLoadingCommand}"
+            -->
             <syncfusion:SfTreeView.HierarchyPropertyDescriptors>
-                <treeViewEngine:HierarchyPropertyDescriptor IsSelectedPropertyName="IsSelected" TargetType="{x:Type shell:ChunkViewModel}" />
-                <treeViewEngine:HierarchyPropertyDescriptor IsSelectedPropertyName="IsSelected" TargetType="{x:Type shell:GroupedChunkViewModel}" />
+                <treeViewEngine:HierarchyPropertyDescriptor
+                    ChildPropertyName="TVProperties"
+                    IsExpandedPropertyName="IsExpanded"
+                    IsSelectedPropertyName="IsSelected"
+                    TargetType="{x:Type shell:ChunkViewModel}" />
+                <treeViewEngine:HierarchyPropertyDescriptor
+                    ChildPropertyName="TVProperties"
+                    IsExpandedPropertyName="IsExpanded"
+                    IsSelectedPropertyName="IsSelected"
+                    TargetType="{x:Type shell:GroupedChunkViewModel}" />
             </syncfusion:SfTreeView.HierarchyPropertyDescriptors>
         </syncfusion:SfTreeView>
 
@@ -507,11 +518,11 @@
         <!--  Grid Splitter  -->
         <syncfusion:SfGridSplitter Grid.Column="1" HorizontalAlignment="Stretch" />
 
-        <editors:RedTypeView
-            x:Name="CustomPG"
-            Grid.Column="2"
+        <editors:RedTypeView x:Name="CustomPG" Grid.Column="2" />
+        <!--
             DataContext="{Binding SelectedChunk, IsAsync=True}"
-            ViewModel="{Binding}" />
+            ViewModel="{Binding}"
+        -->
 
     </Grid>
 

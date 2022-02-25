@@ -43,7 +43,7 @@ namespace WolvenKit.ViewModels.Tools
         private readonly Red4ParserService _parser;
 
         public const string ToolContentId = "Properties_Tool";
-        public const string ToolTitle = "Properties";
+        public const string ToolTitle = "File Information";
 
         public enum TexturePreviewExtensions { xbm, envprobe, mesh };
         public enum MeshPreviewExtensions { mesh, ent, w2mesh, physicalscene };
