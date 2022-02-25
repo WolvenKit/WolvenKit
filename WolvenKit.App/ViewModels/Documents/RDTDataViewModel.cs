@@ -18,11 +18,11 @@ namespace WolvenKit.ViewModels.Documents
 {
     public class RDTDataViewModel : RedDocumentTabViewModel
     {
-        protected readonly RedBaseClass _data;
+        protected readonly IRedType _data;
 
         [Reactive] public RedDocumentViewModel File { get; set; }
 
-        public RDTDataViewModel(RedBaseClass data, RedDocumentViewModel file)
+        public RDTDataViewModel(IRedType data, RedDocumentViewModel file)
         {
             OnDemandLoadingCommand = new DelegateCommand<TreeViewNode>(ExecuteOnDemandLoading, CanExecuteOnDemandLoading);
             OpenImportCommand = new Functionality.Commands.DelegateCommand<ICR2WImport>(ExecuteOpenImport);
@@ -44,7 +44,7 @@ namespace WolvenKit.ViewModels.Documents
             //_file.WhenAnyValue(x => x).Subscribe(x => IsDirty |= true);
         }
 
-        public RDTDataViewModel(string header, RedBaseClass data, RedDocumentViewModel file) : this(data, file)
+        public RDTDataViewModel(string header, IRedType data, RedDocumentViewModel file) : this(data, file)
         {
             Header = header;
         }

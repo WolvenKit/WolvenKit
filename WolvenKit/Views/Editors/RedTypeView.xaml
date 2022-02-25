@@ -513,6 +513,8 @@
                             Background="{StaticResource BorderAlt}" />
                         <ContentControl
                             Grid.Column="3"
+                            Height="27"
+                            VerticalAlignment="Top"
                             Content="{Binding}"
                             ContentTemplateSelector="{DynamicResource redEditorTemplates}"
                             ToolTip="{Binding Type, Mode=OneTime}" />
@@ -675,7 +677,9 @@
                         <Setter.Value>
                             <ControlTemplate TargetType="TreeViewItem">
                                 <Grid>
-                                    <ContentPresenter ContentSource="Header" />
+                                    <Grid>
+                                        <ContentPresenter ContentSource="Header" />
+                                    </Grid>
                                     <Grid Margin="0,28,0,0">
                                         <ItemsPresenter Name="ItemsHost" />
                                     </Grid>

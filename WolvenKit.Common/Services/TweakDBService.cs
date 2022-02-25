@@ -13,6 +13,7 @@ using WolvenKit.Core.Exceptions;
 using WolvenKit.Core.Extensions;
 using WolvenKit.RED4.Types;
 using System.Text.RegularExpressions;
+using System.Collections.Concurrent;
 
 namespace WolvenKit.Common.Services
 {
@@ -33,6 +34,8 @@ namespace WolvenKit.Common.Services
         private readonly Dictionary<ulong, uint> _unknownRecordHashes = new();
 
         private readonly Dictionary<SAsciiString, object> _flatValues = new();
+
+        private static readonly ConcurrentDictionary<SAsciiString, Lazy<RedBaseClass>> _recordCache = new();
 
         public TweakDBService()
         {
@@ -271,25 +274,40 @@ namespace WolvenKit.Common.Services
             }
         }
 
+        public Type GetType(TweakDBID tdb)
+        {
+            if (_recordHashes.ContainsKey((ulong)tdb))
+            {
+                return _recordTypes[_recordHashes[(ulong)tdb]];
+            }
+            else
+            {
+                return null;
+            }
+        }
+
         public RedBaseClass GetRecord(SAsciiString path)
         {
             if (_recordTypes.ContainsKey(path))
             {
-                var type = _recordTypes[path];
-                var cls = RedTypeManager.Create(type);
-
-                var keys = new Dictionary<string, object>();
-                foreach (var (flat, value) in _flatValues)
+                return _recordCache.GetOrAdd(path, (path) =>
                 {
-                    var match = Regex.Match(flat.ToString(), path.ToString() + "\\.(.+)");
-                    if (match.Success)
-                    {
-                        var name = match.Groups[1].Value;
-                        RedReflection.AddDynamicProperty(cls, name, (IRedType)value);
-                    }
-                }
+                    var type = _recordTypes[path];
+                    var cls = RedTypeManager.Create(type);
 
-                return cls;
+                    var keys = new Dictionary<string, object>();
+                    foreach (var (flat, value) in _flatValues)
+                    {
+                        var match = Regex.Match(flat.ToString(), path.ToString() + "\\.(.+)");
+                        if (match.Success)
+                        {
+                            var name = match.Groups[1].Value;
+                            RedReflection.AddDynamicProperty(cls, name, (IRedType)value);
+                        }
+                    }
+
+                    return new Lazy<RedBaseClass>(cls);
+                }).Value;
             }
             else
             {
@@ -369,7 +387,7 @@ namespace WolvenKit.Common.Services
                 for (int i = 0; i < num; i++)
                 {
                     var v = new CResourceReference<RedBaseClass>();
-                    v.DepotPath = br.ReadUInt64();
+                    v.DepotPath = Locator.Current.GetService<IHashService>().Get(br.ReadUInt64());
                     ary.Add(v);
                 }
                 return ary;
@@ -493,7 +511,8 @@ namespace WolvenKit.Common.Services
             if (hash == 12644094645938822750) // raRef:CResource
             {
                 var v = new CResourceReference<RedBaseClass>();
-                v.DepotPath = br.ReadUInt64();
+                //v.DepotPath = br.ReadUInt64();
+                v.DepotPath = Locator.Current.GetService<IHashService>().Get(br.ReadUInt64());
                 return v;
             }
             if (hash == 7466804955052523504) // Vector2

@@ -461,6 +461,11 @@ namespace WolvenKit.ViewModels.Shell
                 if (obj is TweakDBID tdb)
                 {
                     obj = Locator.Current.GetService<TweakDBService>().GetRecord(tdb);
+                    //var record = Locator.Current.GetService<TweakDBService>().GetRecord(tdb);
+                    //if (record != null)
+                    //{
+                    //    Properties.Add(new ChunkViewModel(record, this, "record"));
+                    //}
                 }
                 if (obj is IRedArray ary)
                 {
@@ -498,6 +503,7 @@ namespace WolvenKit.ViewModels.Shell
                         Properties.Add(new ChunkViewModel(value, this, pi.RedName));
                     });
                     var dps = redClass.GetDynamicPropertyNames();
+                    dps.Sort();
                     foreach (var dp in dps)
                     {
                         Properties.Add(new ChunkViewModel(redClass.GetObjectByRedName(dp), this, dp));
@@ -674,6 +680,10 @@ namespace WolvenKit.ViewModels.Shell
                 {
                     return v?.Value.GetType() ?? null;
                 }
+                if (Data is TweakDBID tdb)
+                {
+                    return Locator.Current.GetService<TweakDBService>().GetType(tdb);
+                }
                 return PropertyType;
             }
         }
@@ -792,11 +802,11 @@ namespace WolvenKit.ViewModels.Shell
                 var value = (IRedBitField)Data;
                 Value = value.ToBitFieldString();
             }
-            else if (PropertyType.IsAssignableTo(typeof(TweakDBID)))
-            {
-                var value = (TweakDBID)Data;
-                Value = Locator.Current.GetService<TweakDBService>().GetString(value);
-            }
+            //else if (PropertyType.IsAssignableTo(typeof(TweakDBID)))
+            //{
+            //    var value = (TweakDBID)Data;
+            //    Value = Locator.Current.GetService<TweakDBService>().GetString(value);
+            //}
             else if (PropertyType.IsAssignableTo(typeof(CBool)))
             {
                 var value = (CBool)Data;
@@ -879,6 +889,11 @@ namespace WolvenKit.ViewModels.Shell
             if (ResolvedData is CKeyValuePair kvp)
             {
                 Descriptor = kvp.Key;
+            }
+            if (Data is TweakDBID tdb)
+            {
+                Descriptor = Locator.Current.GetService<TweakDBService>().GetString(tdb);
+                return;
             }
             //if (ResolvedData is CMaterialInstance && Parent != null)
             //{
@@ -983,6 +998,10 @@ namespace WolvenKit.ViewModels.Shell
                 if (PropertyType.IsAssignableTo(typeof(CResourceAsyncReference<>)) || PropertyType.IsAssignableTo(typeof(CResourceReference<>)))
                 {
                     return "RepoPull";
+                }
+                if (PropertyType.IsAssignableTo(typeof(TweakDBID)))
+                {
+                    return "DebugBreakpointConditionalUnverified";
                 }
                 if (PropertyType.IsAssignableTo(typeof(IRedPrimitive)))
                 {

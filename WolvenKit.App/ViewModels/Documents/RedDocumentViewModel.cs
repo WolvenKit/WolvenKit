@@ -32,9 +32,9 @@ namespace WolvenKit.ViewModels.Documents
 
     public class RedDocumentViewModel : DocumentViewModel
     {
-        private readonly ILoggerService _loggerService;
-        private readonly Red4ParserService _parser;
-        private readonly IHashService _hashService;
+        protected readonly ILoggerService _loggerService;
+        protected readonly Red4ParserService _parser;
+        protected readonly IHashService _hashService;
         public CR2WFile Cr2wFile;
 
         public RedDocumentViewModel(string path) : base(path)
@@ -161,7 +161,7 @@ namespace WolvenKit.ViewModels.Documents
             .Where(x => x.DocumentItemType == ERedDocumentItemType.MainFile)
             .FirstOrDefault());
 
-        private void AddTabForRedType(RedBaseClass cls)
+        protected void AddTabForRedType(RedBaseClass cls)
         {
             if (cls is CBitmapTexture xbm)
             {

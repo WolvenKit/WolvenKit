@@ -997,7 +997,14 @@ namespace WolvenKit.ViewModels.Shell
                     fileViewModel = new ScriptDocumentViewModel(fullPath);
                     break;
                 case EWolvenKitFile.Tweak:
-                    fileViewModel = new TweakDocumentViewModel(fullPath);
+                    if (Path.GetExtension(fullPath).ToUpper() == ".YAML")
+                    {
+                        fileViewModel = new TweakYAMLDocumentViewModel(fullPath);
+                    }
+                    else
+                    {
+                        fileViewModel = new TweakDocumentViewModel(fullPath);
+                    }
                     break;
                 default:
                     break;
