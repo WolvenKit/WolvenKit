@@ -12,7 +12,7 @@ using WolvenKit.Common;
 using WolvenKit.Common.FNV1A;
 using WolvenKit.Functionality.Commands;
 using WolvenKit.Interaction;
-using WolvenKit.MVVM.Model.ProjectManagement.Project;
+using WolvenKit.ProjectManagement.Project;
 using WolvenKit.ViewModels.Shell;
 
 namespace WolvenKit.Models

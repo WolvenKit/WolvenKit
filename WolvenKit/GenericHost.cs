@@ -44,10 +44,6 @@ namespace WolvenKit
                     resolver.InitializeSplat();
                     resolver.InitializeReactiveUI();
                 })
-                //.ConfigureLogging(logging =>
-                //{
-                //    logging.AddSplat();
-                //})
                 .ConfigureServices((hostContext, services) =>
                 {
                     services.AddSingleton<INotificationService, NotificationService>();
@@ -86,8 +82,9 @@ namespace WolvenKit
                     services.AddSingleton<AppViewModel>();
                     services.AddSingleton<IViewFor<AppViewModel>, MainView>();
 
-                    // TODO replace with this once gpm.Installer updates
                     services.AddGpmInstaller();
+                    services.AddSingleton<IPluginService, PLuginService>();
+
 
                     // register views
                     #region shell
@@ -119,6 +116,9 @@ namespace WolvenKit
 
                     services.AddTransient<NewFileViewModel>();
                     services.AddTransient<IViewFor<NewFileViewModel>, NewFileView>();
+
+                    services.AddTransient<PluginsToolViewModel>();
+                    services.AddTransient<IViewFor<PluginsToolViewModel>, PluginsToolView>();
 
                     #endregion
 

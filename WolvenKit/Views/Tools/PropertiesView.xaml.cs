@@ -48,7 +48,7 @@ namespace WolvenKit.Views.Tools
             ViewModel = Locator.Current.GetService<PropertiesViewModel>();
             DataContext = ViewModel;
 
-            Helpers.LoadAssimpNativeLibrary();
+            AssimpHelper.LoadAssimpNativeLibrary();
 
             var assimpWpfImporter = new AssimpWpfImporter();
             var supportedImportFormats = assimpWpfImporter.SupportedImportFormats;

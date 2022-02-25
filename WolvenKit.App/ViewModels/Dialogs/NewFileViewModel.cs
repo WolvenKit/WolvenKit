@@ -13,7 +13,7 @@ using Splat;
 using WolvenKit.Common;
 using WolvenKit.Common.Model;
 using WolvenKit.Functionality.Services;
-using WolvenKit.MVVM.Model.ProjectManagement.Project;
+using WolvenKit.ProjectManagement.Project;
 using WolvenKit.RED4.CR2W;
 
 namespace WolvenKit.ViewModels.Dialogs
@@ -37,6 +37,7 @@ namespace WolvenKit.ViewModels.Dialogs
                     file != null &&
                     !string.IsNullOrEmpty(file) &&
                     !File.Exists(path)));
+
             CancelCommand = ReactiveCommand.Create(() => FileHandler(null));
 
             Title = "Create new file";

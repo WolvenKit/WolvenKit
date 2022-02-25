@@ -19,7 +19,7 @@ using WolvenKit.Functionality.Helpers;
 using WolvenKit.Functionality.Services;
 using WolvenKit.Interaction;
 using WolvenKit.Models;
-using WolvenKit.MVVM.Model.ProjectManagement.Project;
+using WolvenKit.ProjectManagement.Project;
 using WolvenKit.ViewModels.Dialogs;
 using WolvenKit.ViewModels.Tools;
 using WolvenKit.Views.Dialogs;
@@ -126,9 +126,9 @@ namespace WolvenKit.Views.Tools
 
                 //ViewModel.WhenAnyValue(x => x.IsFlatModeEnabled).Subscribe(x => UpdateTreeGrid());
 
-                //this.BindCommand(ViewModel,
-                //    viewModel => viewModel.ConvertToJsonCommand,
-                //    view => view.ConvertToJsonMenuItem);
+                this.BindCommand(ViewModel,
+                    viewModel => viewModel.OpenRootFolderCommand,
+                    view => view.OpenFolderButton);
 
             });
 

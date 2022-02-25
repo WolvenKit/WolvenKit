@@ -4,7 +4,7 @@ using ReactiveUI.Fody.Helpers;
 using WolvenKit.Common.Services;
 using WolvenKit.Functionality.Commands;
 using WolvenKit.Functionality.Services;
-using WolvenKit.MVVM.Model.ProjectManagement.Project;
+using WolvenKit.ProjectManagement.Project;
 
 namespace WolvenKit.ViewModels.Tools
 {
