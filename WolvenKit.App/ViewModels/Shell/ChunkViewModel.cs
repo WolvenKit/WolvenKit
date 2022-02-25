@@ -684,7 +684,11 @@ namespace WolvenKit.ViewModels.Shell
                 }
                 if (Data is TweakDBID tdb)
                 {
-                    return Locator.Current.GetService<TweakDBService>().GetType(tdb);
+                    var type = Locator.Current.GetService<TweakDBService>().GetType(tdb);
+                    if (type != null)
+                    {
+                        return type;
+                    }
                 }
                 return PropertyType;
             }
