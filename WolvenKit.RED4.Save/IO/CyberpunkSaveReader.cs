@@ -14,8 +14,13 @@ public class CyberpunkSaveReader
     private static readonly Dictionary<string, Type> _nodeParsers = new();
     static CyberpunkSaveReader()
     {
-        _nodeParsers.Add("game::SessionConfig", typeof(GameSessionConfigParser));
-        _nodeParsers.Add("PersistencySystem2", typeof(PersistencySystem2Parser));
+        _nodeParsers.Add(Constants.NodeNames.PERSISTENCY_SYSTEM_2, typeof(PersistencySystem2Parser));
+        _nodeParsers.Add(Constants.NodeNames.TIER_SYSTEM, typeof(PackageParser));
+        _nodeParsers.Add(Constants.NodeNames.SCANNING_CONTROLLER, typeof(PackageParser));
+        _nodeParsers.Add(Constants.NodeNames.STATS_SYSTEM, typeof(PackageParser));
+        _nodeParsers.Add(Constants.NodeNames.STAT_POOLS_SYSTEM, typeof(PackageParser));
+        _nodeParsers.Add(Constants.NodeNames.RENDER_GAMEPLAY_EFFECTS_MANAGER_SYSTEM, typeof(PackageParser));
+        _nodeParsers.Add(Constants.NodeNames.SCRIPTABLE_SYSTEMS_CONTAINER, typeof(ScriptableSystemsContainerParser));
         _nodeParsers.Add(Constants.NodeNames.GAME_SESSION_CONFIG_NODE, typeof(GameSessionConfigParser));
         _nodeParsers.Add(Constants.NodeNames.C_ATTITUDE_MANAGER, typeof(CAttitudeManagerParser));
         _nodeParsers.Add(Constants.NodeNames.C_COVER_MANAGER, typeof(CCoverManagerParser));
@@ -36,16 +41,13 @@ public class CyberpunkSaveReader
         _nodeParsers.Add(Constants.NodeNames.FACTSDB, typeof(FactsDBParser));
         _nodeParsers.Add(Constants.NodeNames.FACTS_TABLE, typeof(FactsTableParser));
         //_nodeParsers.Add(Constants.NodeNames.GAME_AUDIO, typeof(GameAudioParser));
-        //_nodeParsers.Add(Constants.NodeNames.GOD_MODE_SYSTEM, typeof(GodModeSystemParser));
+        _nodeParsers.Add(Constants.NodeNames.GOD_MODE_SYSTEM, typeof(PackageParser));
         //_nodeParsers.Add(Constants.NodeNames.INVENTORY, typeof(InventoryParser));
         //_nodeParsers.Add(Constants.NodeNames.ITEM_DATA, typeof(ItemDataParser));
         //_nodeParsers.Add(Constants.NodeNames.ITEM_DROP_STORAGE_MANAGER, typeof(ItemDropStorageManager));
         //_nodeParsers.Add(Constants.NodeNames.JOURNAL_MANAGER, typeof(JournalManagerParser));
-        //_nodeParsers.Add(Constants.NodeNames.MOVING_PLATFORM_SYSTEM, typeof(MovingPlatformSystemParser));
+        _nodeParsers.Add(Constants.NodeNames.MOVING_PLATFORM_SYSTEM, typeof(PackageParser));
         _nodeParsers.Add(Constants.NodeNames.MUSIC_SYSTEM, typeof(MusicSystemParser));
-
-
-
     }
 
     public CyberpunkSaveReader(Stream input) : this(input, Encoding.UTF8, false)

@@ -52,6 +52,7 @@ namespace WolvenKit.RED4.Save
             public const string GAME_SESSION_CONFIG_NODE = "game::SessionConfig";
             public const string DYNAMIC_ENTITYID_SYSTEM = "DynamicEntityIDSystem";
             public const string PERSISTENCY_SYSTEM = "PersistencySystem";
+            public const string PERSISTENCY_SYSTEM_2 = "PersistencySystem2";
             public const string C_COVER_MANAGER = "CCoverManager";
             public const string WORKSPOT_INSTANCES_SAVEDATA = "WorkspotInstancesSavedata";
             public const string PLAYER_SYSTEM = "PlayerSystem";
