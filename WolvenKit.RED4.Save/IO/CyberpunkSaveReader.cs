@@ -1,7 +1,6 @@
 using System.Diagnostics;
 using System.Text;
 using WolvenKit.Core.Extensions;
-using WolvenKit.RED4.Save.Helper;
 using WolvenKit.RED4.Types;
 
 namespace WolvenKit.RED4.Save.IO;
@@ -11,6 +10,12 @@ public class CyberpunkSaveReader
     private BinaryReader _reader;
 
     private CyberpunkSaveFile? _csavFile;
+
+    private static readonly Dictionary<string, Type> _nodeParsers = new();
+    static CyberpunkSaveReader()
+    {
+        _nodeParsers.Add("game::SessionConfig", typeof(GameSessionConfigParser));
+    }
 
     public CyberpunkSaveReader(Stream input) : this(input, Encoding.UTF8, false)
     {
@@ -96,9 +101,30 @@ public class CyberpunkSaveReader
         var dataStream = Compression.Decompress(_reader, out var compressionSettings);
 
         _csavFile.Nodes = BuildNodeTree(dataStream, flatNodes);
+
+        foreach (var node in _csavFile.Nodes)
+        {
+            ParseNode(node);
+        }
         
         file = _csavFile;
         return EFileReadErrorCodes.NoError;
+    }
+
+    private void ParseNode(SaveNode node)
+    {
+        if (_nodeParsers.ContainsKey(node.Name))
+        {
+            var parser = (INodeParser)System.Activator.CreateInstance(_nodeParsers[node.Name])!;
+            parser.Read(node);
+        }
+        else
+        {
+            foreach (var childNode in node.Children)
+            {
+                ParseNode(childNode);
+            }
+        }
     }
 
     private List<SaveNode> BuildNodeTree(Stream stream, List<RawSaveNode> flatNodes)
@@ -158,7 +184,8 @@ public class CyberpunkSaveReader
 
             var ret = new SaveNode { Name = node.Name };
 
-            ret.DataBytes = reader.ReadBytes(node.DataSize);
+            reader.ReadBytes(4); // skip nodeId
+            ret.DataBytes = reader.ReadBytes(node.DataSize - 4);
 
             foreach (var child in node.Children)
             {

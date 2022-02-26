@@ -132,6 +132,7 @@
     <ProjectReference Include="..\WolvenKit.Modkit\WolvenKit.Modkit.csproj" />
     <ProjectReference Include="..\WolvenKit.Common\WolvenKit.Common.csproj" />
     <ProjectReference Include="..\WolvenKit.RED4.Archive\WolvenKit.RED4.Archive.csproj" />
+    <ProjectReference Include="..\WolvenKit.RED4.Save\WolvenKit.RED4.Save.csproj" />
     <ProjectReference Include="..\WolvenKit.RED4.TweakDB\WolvenKit.RED4.TweakDB.csproj" />
   </ItemGroup>
 

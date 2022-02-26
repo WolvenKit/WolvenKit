@@ -12,6 +12,7 @@
 
   <ItemGroup>
     <Folder Include="Helper\" />
+    <Folder Include="Parser\" />
   </ItemGroup>
 
   <ItemGroup>

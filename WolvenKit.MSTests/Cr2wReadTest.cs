@@ -11,6 +11,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using WolvenKit.RED4.Archive.IO;
 using WolvenKit.MSTests.Model;
 using WolvenKit.RED4.CR2W.Archive;
+using WolvenKit.RED4.Save.IO;
 
 #if IS_PARALLEL
 using System.Threading.Tasks;
@@ -37,6 +38,15 @@ namespace WolvenKit.MSTests
         //{
         //    Test_Extension();
         //}
+
+        [TestMethod]
+        public void Debug()
+        {
+            var bytes = File.ReadAllBytes(@"C:\Users\seber\Saved Games\CD Projekt Red\Cyberpunk 2077\ManualSave-2091\sav.dat");
+
+            var reader = new CyberpunkSaveReader(new MemoryStream(bytes));
+            reader.ReadFile(out var file);
+        }
 
         [TestMethod]
         public void Read_bin() => Test_Extension(".bin");

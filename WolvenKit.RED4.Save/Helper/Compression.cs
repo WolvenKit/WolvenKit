@@ -2,7 +2,7 @@ using System.Diagnostics;
 using System.Text;
 using K4os.Compression.LZ4;
 
-namespace WolvenKit.RED4.Save.Helper;
+namespace WolvenKit.RED4.Save;
 
 public class Compression
 {
