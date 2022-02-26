@@ -25,6 +25,9 @@ namespace WolvenKit.RED4.Types
         {
             return _typeInfoCache.GetOrAdd(type, new Lazy<ExtendedTypeInfo>(() => new ExtendedTypeInfo(type))).Value;
         }
+
+        public static Dictionary<string, Type> GetRedTypes() => _redTypeCache;
+
         public static IEnumerable<Type> GetSubClassesOf(Type type) => _redTypeCache?.Values.Where(_ => _.IsSubclassOf(type)).ToList();
 
         public static ExtendedPropertyInfo GetPropertyByName(Type type, string propertyName)
@@ -311,6 +314,7 @@ namespace WolvenKit.RED4.Types
 
         public class ExtendedTypeInfo
         {
+            public Type? BaseType { get; }
             public bool SerializeDefault { get; }
             public int ChildLevel { get; }
 
@@ -320,6 +324,8 @@ namespace WolvenKit.RED4.Types
 
             public ExtendedTypeInfo(Type type)
             {
+                BaseType = type.BaseType;
+
                 var attrs = type.GetCustomAttributes(false);
                 foreach (var attribute in attrs)
                 {

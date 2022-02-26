@@ -15,6 +15,7 @@ public class CyberpunkSaveReader
     static CyberpunkSaveReader()
     {
         _nodeParsers.Add("game::SessionConfig", typeof(GameSessionConfigParser));
+        _nodeParsers.Add("PersistencySystem2", typeof(PersistencySystem2Parser));
     }
 
     public CyberpunkSaveReader(Stream input) : this(input, Encoding.UTF8, false)

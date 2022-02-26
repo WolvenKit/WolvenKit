@@ -136,7 +136,7 @@ namespace WolvenKit.RED4.Types
 			SVGlobalNodeRef = 7
 		}
 
-		public enum AIForcedBehaviourPriority
+		public enum AIForcedBehaviourPriority : byte
 		{
 			AboveIdle = 0,
 			AboveCombat = 1,
@@ -144,7 +144,7 @@ namespace WolvenKit.RED4.Types
 			AboveDeath = 3
 		}
 
-		public enum AIIWorkspotManagerSpotUsageState
+		public enum AIIWorkspotManagerSpotUsageState : byte
 		{
 			Reserved = 0,
 			Occupied = 1,
@@ -229,7 +229,7 @@ namespace WolvenKit.RED4.Types
 			Undefined = 3
 		}
 
-		public enum AIbehaviorActivationStatus
+		public enum AIbehaviorActivationStatus : byte
 		{
 			NOT_ACTIVATED = 0,
 			ACTIVATING = 1,
@@ -237,7 +237,7 @@ namespace WolvenKit.RED4.Types
 			DEACTIVATING = 3
 		}
 
-		public enum AIbehaviorCombatModes
+		public enum AIbehaviorCombatModes : byte
 		{
 			Default = 0,
 			LowFPS = 1,
@@ -257,7 +257,7 @@ namespace WolvenKit.RED4.Types
 			Failure = 2
 		}
 
-		public enum AIbehaviorDebugNodeStatus
+		public enum AIbehaviorDebugNodeStatus : byte
 		{
 			Undefined = 0,
 			NotRunning = 1,
@@ -355,7 +355,7 @@ namespace WolvenKit.RED4.Types
 			FAILURE = 2
 		}
 
-		public enum AIinfluenceEBumpPolicy
+		public enum AIinfluenceEBumpPolicy : byte
 		{
 			Static = 0,
 			Lean = 1,
@@ -385,7 +385,7 @@ namespace WolvenKit.RED4.Types
 			LOOKEDAT = 3
 		}
 
-		public enum AdvertisementFormat
+		public enum AdvertisementFormat : byte
 		{
 			Format_0_7x1 = 0,
 			Format_1x1 = 1,
@@ -677,7 +677,7 @@ namespace WolvenKit.RED4.Types
 			Up = 2
 		}
 
-		public enum DynamicTextureDataFormat
+		public enum DynamicTextureDataFormat : byte
 		{
 			R_Uint8 = 0,
 			R_Float16 = 1,
@@ -1218,7 +1218,7 @@ namespace WolvenKit.RED4.Types
 			COLCHANNEL_Alpha = 3
 		}
 
-		public enum EColorMappingFunction
+		public enum EColorMappingFunction : byte
 		{
 			CMF_Linear = 0,
 			CMF_sRGB = 1,
@@ -1308,7 +1308,7 @@ namespace WolvenKit.RED4.Types
 			Shown = 3
 		}
 
-		public enum ECookingPlatform
+		public enum ECookingPlatform : byte
 		{
 			PLATFORM_None = 0,
 			PLATFORM_PC = 1,
@@ -1356,7 +1356,7 @@ namespace WolvenKit.RED4.Types
 			CST_Panorama = 2
 		}
 
-		public enum ECustomCameraTarget
+		public enum ECustomCameraTarget : byte
 		{
 			ECCTV_All = 0,
 			ECCTV_OnlyOffscreen = 1,
@@ -1415,7 +1415,7 @@ namespace WolvenKit.RED4.Types
 			YELLOW = 1
 		}
 
-		public enum EDecalRenderMode
+		public enum EDecalRenderMode : byte
 		{
 			DRM_AllStatic = 0,
 			DRM_ObjectType = 1,
@@ -1566,7 +1566,7 @@ namespace WolvenKit.RED4.Types
 			BRAKE_LOOP = 2
 		}
 
-		public enum EEmitterGroup
+		public enum EEmitterGroup : byte
 		{
 			EG_Default = 0,
 			EG_Group0 = 1,
@@ -1595,7 +1595,7 @@ namespace WolvenKit.RED4.Types
 			EHE_OutlineOnly = 3
 		}
 
-		public enum EEnvColorGroup
+		public enum EEnvColorGroup : byte
 		{
 			ECG_Default = 0,
 			ECG_Sky = 1,
@@ -1733,7 +1733,7 @@ namespace WolvenKit.RED4.Types
 			Auto = 1
 		}
 
-		public enum EFeatureFlag
+		public enum EFeatureFlag : byte
 		{
 			FEATFLAG_Default = 0,
 			FEATFLAG_Shadows = 1,
@@ -2512,13 +2512,13 @@ namespace WolvenKit.RED4.Types
 			EMATMOD_MAX = 29
 		}
 
-		public enum EMaterialPriority
+		public enum EMaterialPriority : byte
 		{
 			EMP_Normal = 0,
 			EMP_Front = 1
 		}
 
-		public enum EMaterialShaderTarget
+		public enum EMaterialShaderTarget : byte
 		{
 			MSH_Invalid = 0,
 			MSH_VertexShader = 1,
@@ -2526,7 +2526,7 @@ namespace WolvenKit.RED4.Types
 			MSH_MAX = 3
 		}
 
-		public enum EMaterialVertexFactory
+		public enum EMaterialVertexFactory : byte
 		{
 			MVF_Terrain = 1,
 			MVF_MeshStatic = 2,
@@ -3030,7 +3030,7 @@ namespace WolvenKit.RED4.Types
 			RDDP_Sphere = 1
 		}
 
-		public enum ERenderMaterialType
+		public enum ERenderMaterialType : byte
 		{
 			RMT_Standard = 0,
 			RMT_Subsurface = 1,
@@ -3050,7 +3050,7 @@ namespace WolvenKit.RED4.Types
 			RMS_BindAll = 255
 		}
 
-		public enum ERenderObjectType
+		public enum ERenderObjectType : byte
 		{
 			ROT_Static = 0,
 			ROT_Terrain = 1,
@@ -3072,7 +3072,7 @@ namespace WolvenKit.RED4.Types
 			ROT_NoTXAA = 18
 		}
 
-		public enum ERenderProxyType
+		public enum ERenderProxyType : byte
 		{
 			RPT_None = 0,
 			RPT_Mesh = 1,
@@ -3475,7 +3475,7 @@ namespace WolvenKit.RED4.Types
 			LegendaryItemsCrafted = 6
 		}
 
-		public enum ETextureAddressing
+		public enum ETextureAddressing : byte
 		{
 			TA_Wrap = 0,
 			TA_Mirror = 1,
@@ -3499,7 +3499,7 @@ namespace WolvenKit.RED4.Types
 			TextureChannel_A = 1 << 3
 		}
 
-		public enum ETextureComparisonFunction
+		public enum ETextureComparisonFunction : byte
 		{
 			TCF_None = 0,
 			TCF_Less = 1,
@@ -3535,13 +3535,13 @@ namespace WolvenKit.RED4.Types
 			TCM_HalfHDR, // = 13
 		}
 
-		public enum ETextureFilteringMag
+		public enum ETextureFilteringMag : byte
 		{
 			TFMag_Point = 0,
 			TFMag_Linear = 1
 		}
 
-		public enum ETextureFilteringMin
+		public enum ETextureFilteringMin : byte
 		{
 			TFMin_Point = 0,
 			TFMin_Linear = 1,
@@ -3549,7 +3549,7 @@ namespace WolvenKit.RED4.Types
 			TFMin_AnisotropicLow = 3
 		}
 
-		public enum ETextureFilteringMip
+		public enum ETextureFilteringMip : byte
 		{
 			TFMip_None = 0,
 			TFMip_Point = 1,
@@ -3935,7 +3935,7 @@ namespace WolvenKit.RED4.Types
 			EmptyContainer = 12
 		}
 
-		public enum GIGIOverrideType
+		public enum GIGIOverrideType : byte
 		{
 			Default = 0,
 			Override_True = 1,
@@ -3982,7 +3982,7 @@ namespace WolvenKit.RED4.Types
 			InventoryNotification = 7
 		}
 
-		public enum GpuApieBufferUsageType
+		public enum GpuApieBufferUsageType : byte
 		{
 			BUT_Default = 0,
 			BUT_Immutable = 1,
@@ -3994,7 +3994,7 @@ namespace WolvenKit.RED4.Types
 			BUT_MAX = 7
 		}
 
-		public enum GpuWrapApiBufferGroup
+		public enum GpuWrapApiBufferGroup : byte
 		{
 			System = 0,
 			MeshResource = 1,
@@ -4032,7 +4032,7 @@ namespace WolvenKit.RED4.Types
 			MAX = 33
 		}
 
-		public enum GpuWrapApiVertexPackingEStreamType
+		public enum GpuWrapApiVertexPackingEStreamType : sbyte
 		{
 			ST_Invalid = -1,
 			ST_PerVertex = 0,
@@ -4040,7 +4040,7 @@ namespace WolvenKit.RED4.Types
 			ST_Max = 2
 		}
 
-		public enum GpuWrapApiVertexPackingePackingType
+		public enum GpuWrapApiVertexPackingePackingType : sbyte
 		{
 			PT_Invalid = -1,
 			PT_Float1 = 0,
@@ -4077,7 +4077,7 @@ namespace WolvenKit.RED4.Types
 			PT_Max = 31
 		}
 
-		public enum GpuWrapApiVertexPackingePackingUsage
+		public enum GpuWrapApiVertexPackingePackingUsage : sbyte
 		{
 			PS_Invalid = -1,
 			PS_SysPosition = 0,
@@ -4107,7 +4107,7 @@ namespace WolvenKit.RED4.Types
 			PS_Max = 24
 		}
 
-		public enum GpuWrapApieBufferChunkCategory
+		public enum GpuWrapApieBufferChunkCategory : byte
 		{
 			BCC_Staging = 0,
 			BCC_Vertex = 1,
@@ -4127,14 +4127,14 @@ namespace WolvenKit.RED4.Types
 			BCC_Invalid = 15
 		}
 
-		public enum GpuWrapApieIndexBufferChunkType
+		public enum GpuWrapApieIndexBufferChunkType : byte
 		{
 			IBCT_IndexUInt = 0,
 			IBCT_IndexUShort = 1,
 			IBCT_Max = 2
 		}
 
-		public enum GpuWrapApieTextureFormat
+		public enum GpuWrapApieTextureFormat : byte
 		{
 			TEXFMT_A8_Unorm = 0,
 			TEXFMT_R8_Unorm = 1,
@@ -4206,7 +4206,7 @@ namespace WolvenKit.RED4.Types
 			TEXFMT_BC6H = 33
 		}
 
-		public enum GpuWrapApieTextureGroup
+		public enum GpuWrapApieTextureGroup : byte
 		{
 			TEXG_Generic_Color = 1,
 			TEXG_Generic_Grayscale = 2,
@@ -4222,7 +4222,7 @@ namespace WolvenKit.RED4.Types
 			TEXG_Multilayer_Microblend = 12
 		}
 
-		public enum GpuWrapApieTextureType
+		public enum GpuWrapApieTextureType : byte
 		{
 			TEXTYPE_2D = 0,
 			TEXTYPE_CUBE = 1,
@@ -4351,7 +4351,7 @@ namespace WolvenKit.RED4.Types
 			Cyberware = 1
 		}
 
-		public enum IMaterialDataProviderDescEParameterType
+		public enum IMaterialDataProviderDescEParameterType : byte
 		{
 			PT_None = 0,
 			PT_Texture = 1,
@@ -4373,7 +4373,7 @@ namespace WolvenKit.RED4.Types
 			PT_MAX = 17
 		}
 
-		public enum InGameConfigChangeReason
+		public enum InGameConfigChangeReason : sbyte
 		{
 			Invalid = -1,
 			Accepted = 0,
@@ -4382,7 +4382,7 @@ namespace WolvenKit.RED4.Types
 			NeedsRestart = 3
 		}
 
-		public enum InGameConfigNotificationType
+		public enum InGameConfigNotificationType : byte
 		{
 			RestartRequiredConfirmed = 0,
 			RestartRequiredRejected = 1,
@@ -4399,7 +4399,7 @@ namespace WolvenKit.RED4.Types
 			LanguagePackInstalled = 12
 		}
 
-		public enum InGameConfigUserSettingsLoadStatus
+		public enum InGameConfigUserSettingsLoadStatus : byte
 		{
 			NotLoaded = 0,
 			InternalError = 1,
@@ -4409,14 +4409,14 @@ namespace WolvenKit.RED4.Types
 			ImportedFromOldVersion = 5
 		}
 
-		public enum InGameConfigUserSettingsSaveStatus
+		public enum InGameConfigUserSettingsSaveStatus : byte
 		{
 			NotSaved = 0,
 			InternalError = 1,
 			Saved = 2
 		}
 
-		public enum InGameConfigVarType
+		public enum InGameConfigVarType : byte
 		{
 			Bool = 0,
 			Int = 1,
@@ -4428,7 +4428,7 @@ namespace WolvenKit.RED4.Types
 			NameList = 7
 		}
 
-		public enum InGameConfigVarUpdatePolicy
+		public enum InGameConfigVarUpdatePolicy : byte
 		{
 			Disabled = 0,
 			Immediately = 1,
@@ -4596,7 +4596,7 @@ namespace WolvenKit.RED4.Types
 			End = 2
 		}
 
-		public enum LibTreeEParameterType
+		public enum LibTreeEParameterType : ushort
 		{
 			PARAM_Bool = 0,
 			PARAM_Int32 = 1,
@@ -4623,7 +4623,7 @@ namespace WolvenKit.RED4.Types
 			Received = 1
 		}
 
-		public enum MessengerContactType
+		public enum MessengerContactType : byte
 		{
 			Contact = 0,
 			Group = 1,
@@ -4647,14 +4647,14 @@ namespace WolvenKit.RED4.Types
 			ON = 4
 		}
 
-		public enum MorphTargetsDiffTextureSize
+		public enum MorphTargetsDiffTextureSize : byte
 		{
 			TEXTURE_SIZE_1024x1024 = 0,
 			TEXTURE_SIZE_512x512 = 1,
 			TEXTURE_SIZE_256x256 = 2
 		}
 
-		public enum MorphTargetsFaceRegion
+		public enum MorphTargetsFaceRegion : byte
 		{
 			FACE_REGION_EYES = 0,
 			FACE_REGION_NOSE = 1,
@@ -4675,7 +4675,7 @@ namespace WolvenKit.RED4.Types
 			Human = 0
 		}
 
-		public enum NavGenNavmeshImpact
+		public enum NavGenNavmeshImpact : ushort
 		{
 			Ignored = 1,
 			Walkable = 0,
@@ -4692,7 +4692,7 @@ namespace WolvenKit.RED4.Types
 			Failure = 1
 		}
 
-		public enum PSODescBlendModeFactor
+		public enum PSODescBlendModeFactor : byte
 		{
 			FAC_Zero = 0,
 			FAC_One = 1,
@@ -4712,7 +4712,7 @@ namespace WolvenKit.RED4.Types
 			FAC_InvSrc1Alpha = 15
 		}
 
-		public enum PSODescBlendModeOp
+		public enum PSODescBlendModeOp : byte
 		{
 			OP_Add = 0,
 			OP_Subtract = 1,
@@ -4726,7 +4726,7 @@ namespace WolvenKit.RED4.Types
 			OP_nAnd = 8
 		}
 
-		public enum PSODescBlendModeWriteMask
+		public enum PSODescBlendModeWriteMask : byte
 		{
 			MASK_None = 0,
 			MASK_R = 1,
@@ -4746,7 +4746,7 @@ namespace WolvenKit.RED4.Types
 			MASK_RGBA = 15
 		}
 
-		public enum PSODescDepthStencilModeComparisonMode
+		public enum PSODescDepthStencilModeComparisonMode : byte
 		{
 			COMPARISON_Never = 0,
 			COMPARISON_Less = 1,
@@ -4758,7 +4758,7 @@ namespace WolvenKit.RED4.Types
 			COMPARISON_Always = 7
 		}
 
-		public enum PSODescDepthStencilModeStencilOpMode
+		public enum PSODescDepthStencilModeStencilOpMode : byte
 		{
 			STENCILOP_Keep = 0,
 			STENCILOP_Zero = 1,
@@ -4779,20 +4779,20 @@ namespace WolvenKit.RED4.Types
 			Patch = 4
 		}
 
-		public enum PSODescRasterizerModeCullMode
+		public enum PSODescRasterizerModeCullMode : byte
 		{
 			CULL_None = 0,
 			CULL_Front = 1,
 			CULL_Back = 2
 		}
 
-		public enum PSODescRasterizerModeFrontFaceWinding
+		public enum PSODescRasterizerModeFrontFaceWinding : byte
 		{
 			FRONTFACE_CCW = 0,
 			FRONTFACE_CW = 1
 		}
 
-		public enum PSODescRasterizerModeOffsetMode
+		public enum PSODescRasterizerModeOffsetMode : byte
 		{
 			OFFSET_None = 0,
 			OFFSET_NormalBias = 1,
@@ -4941,13 +4941,13 @@ namespace WolvenKit.RED4.Types
 			LegRight = 9
 		}
 
-		public enum RenderDecalNormalsBlendingMode
+		public enum RenderDecalNormalsBlendingMode : byte
 		{
 			AlphaBlending = 0,
 			Reorient = 1
 		}
 
-		public enum RenderDecalOrderPriority
+		public enum RenderDecalOrderPriority : byte
 		{
 			Priority0 = 0,
 			Priority1 = 1,
@@ -4955,7 +4955,7 @@ namespace WolvenKit.RED4.Types
 			Priority3 = 3
 		}
 
-		public enum RenderSceneLayer
+		public enum RenderSceneLayer : byte
 		{
 			Default = 0,
 			Cyberspace = 1,
@@ -5158,7 +5158,7 @@ namespace WolvenKit.RED4.Types
 			NoBuffers_PointList = 4
 		}
 
-		public enum TestCasePhase
+		public enum TestCasePhase : byte
 		{
 			Setup = 0,
 			Body = 1,
@@ -5179,13 +5179,13 @@ namespace WolvenKit.RED4.Types
 			Fast = 3
 		}
 
-		public enum TrafficGenDynamicImpact
+		public enum TrafficGenDynamicImpact : ushort
 		{
 			Ignored = 0,
 			Blocking = 1
 		}
 
-		public enum TrafficGenMeshImpact
+		public enum TrafficGenMeshImpact : ushort
 		{
 			UseNavigation = 0,
 			ForceIgnored = 1,
@@ -5301,7 +5301,7 @@ namespace WolvenKit.RED4.Types
 			SubObjective = 3
 		}
 
-		public enum UpdateBucketEnum
+		public enum UpdateBucketEnum : byte
 		{
 			Vehicle = 0,
 			Character = 1,
@@ -5395,7 +5395,7 @@ namespace WolvenKit.RED4.Types
 			RotQuatW = 13
 		}
 
-		public enum animAnimStateInterpolationType
+		public enum animAnimStateInterpolationType : byte
 		{
 			Linear = 0,
 			EaseIn = 1,
@@ -5403,7 +5403,7 @@ namespace WolvenKit.RED4.Types
 			EaseInOut = 3
 		}
 
-		public enum animAnimationType
+		public enum animAnimationType : byte
 		{
 			Normal = 0,
 			AdditiveFromRefPose = 1,
@@ -5573,7 +5573,7 @@ namespace WolvenKit.RED4.Types
 			Roll = 2
 		}
 
-		public enum animEFootPhase
+		public enum animEFootPhase : byte
 		{
 			RightUp = 0,
 			RightForward = 1,
@@ -6086,21 +6086,21 @@ namespace WolvenKit.RED4.Types
 			None = 2
 		}
 
-		public enum animcompressionBufferTypePreset
+		public enum animcompressionBufferTypePreset : byte
 		{
 			Spline = 0,
 			SIMD = 1,
 			TestRaw = 2
 		}
 
-		public enum animcompressionFrameratePreset
+		public enum animcompressionFrameratePreset : byte
 		{
 			USE_30_HZ = 0,
 			USE_15_HZ = 1,
 			USE_10_HZ = 2
 		}
 
-		public enum animcompressionQualityPreset
+		public enum animcompressionQualityPreset : byte
 		{
 			CINEMATIC_HIGH = 3,
 			HIGH = 0,
@@ -6198,7 +6198,7 @@ namespace WolvenKit.RED4.Types
 			Simple = 1
 		}
 
-		public enum audioEnemyState
+		public enum audioEnemyState : byte
 		{
 			InCombat = 0,
 			Alerted = 1,
@@ -6245,7 +6245,7 @@ namespace WolvenKit.RED4.Types
 			Run = 10
 		}
 
-		public enum audioFoleyItemPriority
+		public enum audioFoleyItemPriority : byte
 		{
 			P0 = 0,
 			P1 = 1,
@@ -6256,7 +6256,7 @@ namespace WolvenKit.RED4.Types
 			P6 = 6
 		}
 
-		public enum audioFoleyItemType
+		public enum audioFoleyItemType : byte
 		{
 			Jacket = 0,
 			Top = 1,
@@ -6391,7 +6391,7 @@ namespace WolvenKit.RED4.Types
 			Add = 4
 		}
 
-		public enum audioMixingActionType
+		public enum audioMixingActionType : byte
 		{
 			VoContext = 0,
 			EmitterTag = 1,
@@ -6412,7 +6412,7 @@ namespace WolvenKit.RED4.Types
 			Transition = 4
 		}
 
-		public enum audioNumberComparer
+		public enum audioNumberComparer : byte
 		{
 			Equal = 0,
 			NotEqual = 1,
@@ -6422,7 +6422,7 @@ namespace WolvenKit.RED4.Types
 			LowerOrEqual = 5
 		}
 
-		public enum audioNumberOperation
+		public enum audioNumberOperation : byte
 		{
 			SetEqual = 0,
 			Add = 1,
@@ -6443,7 +6443,7 @@ namespace WolvenKit.RED4.Types
 			Continuous = 1
 		}
 
-		public enum audioRadioSoundType
+		public enum audioRadioSoundType : byte
 		{
 			Song = 0,
 			AnnouncementScene = 1
@@ -6465,7 +6465,7 @@ namespace WolvenKit.RED4.Types
 			FindingMaximumFaceAligment2Sides = 4
 		}
 
-		public enum audioTriggerEffectMode
+		public enum audioTriggerEffectMode : byte
 		{
 			Off = 0,
 			Feedback = 1,
@@ -6473,7 +6473,7 @@ namespace WolvenKit.RED4.Types
 			Vibration = 3
 		}
 
-		public enum audioTriggerEffectTarget
+		public enum audioTriggerEffectTarget : byte
 		{
 			L2 = 0,
 			R2 = 1,
@@ -6584,7 +6584,7 @@ namespace WolvenKit.RED4.Types
 			ExteriorBadlandsCanyon = 9
 		}
 
-		public enum audiobreathingEventTag
+		public enum audiobreathingEventTag : byte
 		{
 			Walk = 0,
 			Jog = 1,
@@ -6605,7 +6605,7 @@ namespace WolvenKit.RED4.Types
 			Standing_Event = 16
 		}
 
-		public enum audiobreathingLoopBehavior
+		public enum audiobreathingLoopBehavior : byte
 		{
 			TimedBreathing = 0,
 			BreathEvery2ndStep = 1,
@@ -6654,7 +6654,7 @@ namespace WolvenKit.RED4.Types
 			Thermal = 2
 		}
 
-		public enum communityECommunitySpawnTime
+		public enum communityECommunitySpawnTime : byte
 		{
 			Morning = 0,
 			Day = 1,
@@ -6686,7 +6686,7 @@ namespace WolvenKit.RED4.Types
 			[RED("23:00")] _23_00 = 27
 		}
 
-		public enum communityESquadType
+		public enum communityESquadType : byte
 		{
 			Global = 0,
 			Community = 1,
@@ -6701,7 +6701,7 @@ namespace WolvenKit.RED4.Types
 			Right = 2
 		}
 
-		public enum curveEInterpolationType
+		public enum curveEInterpolationType : byte
 		{
 			EIT_Constant = 0,
 			EIT_Linear = 1,
@@ -6710,7 +6710,7 @@ namespace WolvenKit.RED4.Types
 			EIT_Hermite = 4
 		}
 
-		public enum curveESegmentsLinkType
+		public enum curveESegmentsLinkType : byte
 		{
 			ESLT_Normal = 0,
 			ESLT_Smooth = 1,
@@ -6730,7 +6730,7 @@ namespace WolvenKit.RED4.Types
 			Visibility = 1
 		}
 
-		public enum entAppearanceStatus
+		public enum entAppearanceStatus : byte
 		{
 			None = 0,
 			Proxy = 1,
@@ -6750,7 +6750,7 @@ namespace WolvenKit.RED4.Types
 			Arm = 2
 		}
 
-		public enum entDebug_ShapeType
+		public enum entDebug_ShapeType : byte
 		{
 			Sphere = 0,
 			Box = 1,
@@ -6758,13 +6758,13 @@ namespace WolvenKit.RED4.Types
 			Cylinder = 3
 		}
 
-		public enum entEBindingDirection
+		public enum entEBindingDirection : byte
 		{
 			BindToSource = 0,
 			BindToDestination = 1
 		}
 
-		public enum entEntitySpawnPriority
+		public enum entEntitySpawnPriority : byte
 		{
 			Background = 0,
 			Normal = 1,
@@ -6773,13 +6773,13 @@ namespace WolvenKit.RED4.Types
 			Critical = 4
 		}
 
-		public enum entEntityUserComponentResolutionMode
+		public enum entEntityUserComponentResolutionMode : byte
 		{
 			Select = 0,
 			Suppress = 1
 		}
 
-		public enum entForcedLodDistance
+		public enum entForcedLodDistance : byte
 		{
 			Default = 0,
 			Background = 1,
@@ -6792,14 +6792,14 @@ namespace WolvenKit.RED4.Types
 			ConsoleLOD = 8
 		}
 
-		public enum entMeshComponentLODMode
+		public enum entMeshComponentLODMode : byte
 		{
 			AlwaysVisible = 0,
 			Appearance = 1,
 			AppearanceProxy = 2
 		}
 
-		public enum entRenderToTextureMode
+		public enum entRenderToTextureMode : byte
 		{
 			Shaded = 0,
 			GBufferOnly = 1
@@ -6811,7 +6811,7 @@ namespace WolvenKit.RED4.Types
 			Capsule = 1
 		}
 
-		public enum entRepellingType
+		public enum entRepellingType : byte
 		{
 			Debris = 0,
 			BigObjects = 1,
@@ -6819,7 +6819,7 @@ namespace WolvenKit.RED4.Types
 			WaterImpulse = 3
 		}
 
-		public enum entTemplateComponentResolveMode
+		public enum entTemplateComponentResolveMode : byte
 		{
 			AutoSelect = 0,
 			Select = 1,
@@ -6838,7 +6838,7 @@ namespace WolvenKit.RED4.Types
 			RotationQuatW = 7
 		}
 
-		public enum entVisibilityParamSource
+		public enum entVisibilityParamSource : byte
 		{
 			PhantomEntitySystem = 7
 		}
@@ -6860,7 +6860,7 @@ namespace WolvenKit.RED4.Types
 			RAGDOLL_SLEEP = 1 << 10
 		}
 
-		public enum entdismembermentResourceSetE
+		public enum entdismembermentResourceSetE : byte
 		{
 			NONE = 16,
 			BARE = 0,
@@ -6902,7 +6902,7 @@ namespace WolvenKit.RED4.Types
 			MIXED3 = 1 << 15
 		}
 
-		public enum entdismembermentSimulationTypeE
+		public enum entdismembermentSimulationTypeE : ushort
 		{
 			NONE = 0,
 			DANGLE = 128
@@ -6923,7 +6923,7 @@ namespace WolvenKit.RED4.Types
 			Forced = 2
 		}
 
-		public enum envUtilsNeighborMode
+		public enum envUtilsNeighborMode : byte
 		{
 			eCLOSEST = 0,
 			eONLY_GLOBAL = 1,
@@ -6931,7 +6931,7 @@ namespace WolvenKit.RED4.Types
 			eFILL_SURROUNDING = 3
 		}
 
-		public enum envUtilsReflectionProbeAmbientContributionMode
+		public enum envUtilsReflectionProbeAmbientContributionMode : byte
 		{
 			eNO_AMBIENT_CONTRIBUTION = 0,
 			eALLOW_AMBIENT_CONTRIBUTION = 1,
@@ -6953,7 +6953,7 @@ namespace WolvenKit.RED4.Types
 			OR = 1
 		}
 
-		public enum gameAlwaysSpawnedState
+		public enum gameAlwaysSpawnedState : byte
 		{
 			[RED("default (false)")] default__false_ = 0,
 			[RED("true")] true_ = 1,
@@ -6971,7 +6971,7 @@ namespace WolvenKit.RED4.Types
 			Invalid = 7
 		}
 
-		public enum gameBinkVideoAction
+		public enum gameBinkVideoAction : byte
 		{
 			Undefined = 0,
 			Start = 1,
@@ -7045,13 +7045,13 @@ namespace WolvenKit.RED4.Types
 			High = 2
 		}
 
-		public enum gameCrowdCreationDataMergeMode
+		public enum gameCrowdCreationDataMergeMode : byte
 		{
 			Average = 0,
 			Override = 1
 		}
 
-		public enum gameCrowdEntryType
+		public enum gameCrowdEntryType : byte
 		{
 			Pedestrian = 0,
 			Vehicle = 1,
@@ -7124,7 +7124,7 @@ namespace WolvenKit.RED4.Types
 			HOLE = 64
 		}
 
-		public enum gameEActionFlags
+		public enum gameEActionFlags : ushort
 		{
 			NONE = 0,
 			USE_ANIMATION = 1,
@@ -7141,7 +7141,7 @@ namespace WolvenKit.RED4.Types
 			STATUS_FAILURE = 5
 		}
 
-		public enum gameEAreaShape
+		public enum gameEAreaShape : ushort
 		{
 			NONE = 0,
 			SPHERE = 1,
@@ -7149,7 +7149,7 @@ namespace WolvenKit.RED4.Types
 			COUNT = 3
 		}
 
-		public enum gameEAreaType
+		public enum gameEAreaType : ushort
 		{
 			NONE = 0,
 			LOCATION = 1,
@@ -7209,7 +7209,7 @@ namespace WolvenKit.RED4.Types
 			Count = 3
 		}
 
-		public enum gameEMaterialZone
+		public enum gameEMaterialZone : byte
 		{
 			Zero = 0,
 			One = 1,
@@ -7269,7 +7269,7 @@ namespace WolvenKit.RED4.Types
 			Instigator = 1
 		}
 
-		public enum gameEffectHitDataType
+		public enum gameEffectHitDataType : byte
 		{
 			Entity = 0,
 			Node = 1,
@@ -7315,7 +7315,7 @@ namespace WolvenKit.RED4.Types
 			Combat = 3
 		}
 
-		public enum gameEntityReferenceType
+		public enum gameEntityReferenceType : byte
 		{
 			EntityRef = 0,
 			Tag = 1,
@@ -7344,7 +7344,7 @@ namespace WolvenKit.RED4.Types
 			Cyberware = 2
 		}
 
-		public enum gameFearStage
+		public enum gameFearStage : byte
 		{
 			Relaxed = 0,
 			Stressed = 1,
@@ -7391,7 +7391,7 @@ namespace WolvenKit.RED4.Types
 			Script = 8
 		}
 
-		public enum gameGlobalTierSubtype
+		public enum gameGlobalTierSubtype : byte
 		{
 			Quest = 0,
 			Supervisor = 1
@@ -7430,7 +7430,7 @@ namespace WolvenKit.RED4.Types
 			Dedicated = 1
 		}
 
-		public enum gameInventoryItemShape
+		public enum gameInventoryItemShape : byte
 		{
 			SingleSlot = 0,
 			DoubleSlot = 1
@@ -7469,7 +7469,7 @@ namespace WolvenKit.RED4.Types
 			Fists = 6
 		}
 
-		public enum gameItemIconGender
+		public enum gameItemIconGender : byte
 		{
 			Female = 0,
 			Male = 1
@@ -7521,7 +7521,7 @@ namespace WolvenKit.RED4.Types
 			Failed = 4
 		}
 
-		public enum gameJournalEntryUserState
+		public enum gameJournalEntryUserState : byte
 		{
 			Undefined = 0,
 			Inactive = 1,
@@ -7573,7 +7573,7 @@ namespace WolvenKit.RED4.Types
 			Avoid = 2
 		}
 
-		public enum gameLootItemType
+		public enum gameLootItemType : byte
 		{
 			Default = 0,
 			Quest = 1,
@@ -8093,7 +8093,7 @@ namespace WolvenKit.RED4.Types
 			Takedown = 11
 		}
 
-		public enum gamePopulationEntityPriority
+		public enum gamePopulationEntityPriority : byte
 		{
 			Quest = 0,
 			Community = 1,
@@ -8127,7 +8127,7 @@ namespace WolvenKit.RED4.Types
 			Traffic = 2
 		}
 
-		public enum gameRegular1v1FinisherScenarioPivotSetting
+		public enum gameRegular1v1FinisherScenarioPivotSetting : byte
 		{
 			AttackerSlidesAndRotates_TargetStandsStill = 0,
 			AttackerStandsStill_TargetSlidesAndRotates = 1
@@ -8257,7 +8257,7 @@ namespace WolvenKit.RED4.Types
 			Climb400cmDown = 23
 		}
 
-		public enum gameSpawnInViewState
+		public enum gameSpawnInViewState : byte
 		{
 			[RED("default (true)")] default__true_ = 0,
 			[RED("true")] true_ = 1,
@@ -8293,21 +8293,21 @@ namespace WolvenKit.RED4.Types
 			Invalid = 9
 		}
 
-		public enum gameStatPoolDataBonusType
+		public enum gameStatPoolDataBonusType : byte
 		{
 			None = 0,
 			Persistent = 1,
 			NonPersistent = 2
 		}
 
-		public enum gameStatPoolDataStatPoolModificationStatus
+		public enum gameStatPoolDataStatPoolModificationStatus : byte
 		{
 			Regeneration = 0,
 			Decay = 1,
 			NoModification = 2
 		}
 
-		public enum gameStatPoolDataValueChangeMode
+		public enum gameStatPoolDataValueChangeMode : byte
 		{
 			Normal = 0,
 			IncreasingOnly = 1,
@@ -8346,7 +8346,7 @@ namespace WolvenKit.RED4.Types
 			Invalid = 9
 		}
 
-		public enum gameStoryTier
+		public enum gameStoryTier : byte
 		{
 			Gameplay = 0,
 			Cinematic = 1
@@ -8440,7 +8440,7 @@ namespace WolvenKit.RED4.Types
 			COUNT = 4
 		}
 
-		public enum gameVideoType
+		public enum gameVideoType : byte
 		{
 			Tutorial_720x405 = 0,
 			Tutorial_1024x576 = 1,
@@ -9355,7 +9355,7 @@ namespace WolvenKit.RED4.Types
 			Invalid = 4
 		}
 
-		public enum gamedataGroupNodeGroupVariableDeriveInfo
+		public enum gamedataGroupNodeGroupVariableDeriveInfo : byte
 		{
 			FullyDerived = 0,
 			TypeDerived = 1,
@@ -12792,7 +12792,7 @@ namespace WolvenKit.RED4.Types
 			Invalid = 5
 		}
 
-		public enum gamedataVariableNodeVariableValueDeriveInfo
+		public enum gamedataVariableNodeVariableValueDeriveInfo : byte
 		{
 			NotDerived = 0,
 			ArrayAddition = 1
@@ -13156,7 +13156,7 @@ namespace WolvenKit.RED4.Types
 			Active = 3
 		}
 
-		public enum gameinteractionsvisEVisualizerDefinitionFlags
+		public enum gameinteractionsvisEVisualizerDefinitionFlags : ushort
 		{
 			None = 0,
 			Fading = 1,
@@ -13165,7 +13165,7 @@ namespace WolvenKit.RED4.Types
 			CPO_Mode = 16
 		}
 
-		public enum gameinteractionsvisEVisualizerRuntimeFlags
+		public enum gameinteractionsvisEVisualizerRuntimeFlags : ushort
 		{
 			None = 0,
 			Locked = 1,
@@ -13181,7 +13181,7 @@ namespace WolvenKit.RED4.Types
 			Invalid = 3
 		}
 
-		public enum gameinteractionsvisInteractionType
+		public enum gameinteractionsvisInteractionType : byte
 		{
 			LookAt = 0,
 			Proximity = 1
@@ -13436,7 +13436,7 @@ namespace WolvenKit.RED4.Types
 			Entity = 1
 		}
 
-		public enum gameuiETooltipPlacement
+		public enum gameuiETooltipPlacement : byte
 		{
 			LeftCenter = 0,
 			RightCenter = 1,
@@ -13444,7 +13444,7 @@ namespace WolvenKit.RED4.Types
 			RightTop = 3
 		}
 
-		public enum gameuiEWorldMapCameraMode
+		public enum gameuiEWorldMapCameraMode : byte
 		{
 			TopDown = 0,
 			ZoomLevels = 1,
@@ -13458,7 +13458,7 @@ namespace WolvenKit.RED4.Types
 			SubDistricts = 2
 		}
 
-		public enum gameuiGenericNotificationType
+		public enum gameuiGenericNotificationType : byte
 		{
 			Generic = 0,
 			QuestUpdate = 1,
@@ -13616,14 +13616,14 @@ namespace WolvenKit.RED4.Types
 			ForceDismember = 100009
 		}
 
-		public enum inkBrushDrawType
+		public enum inkBrushDrawType : byte
 		{
 			NoDraw = 0,
 			Solid = 1,
 			Wire = 2
 		}
 
-		public enum inkBrushMirrorType
+		public enum inkBrushMirrorType : byte
 		{
 			NoMirror = 0,
 			Horizontal = 1,
@@ -13631,7 +13631,7 @@ namespace WolvenKit.RED4.Types
 			Both = 3
 		}
 
-		public enum inkBrushTileType
+		public enum inkBrushTileType : byte
 		{
 			NoTile = 0,
 			Horizontal = 1,
@@ -13639,14 +13639,14 @@ namespace WolvenKit.RED4.Types
 			Both = 3
 		}
 
-		public enum inkCacheMode
+		public enum inkCacheMode : byte
 		{
 			Normal = 0,
 			Minimap = 1,
 			ExternalDynamicTexture = 2
 		}
 
-		public enum inkCharacterEventType
+		public enum inkCharacterEventType : byte
 		{
 			CharInput = 0,
 			MoveCaretForward = 1,
@@ -13655,13 +13655,13 @@ namespace WolvenKit.RED4.Types
 			Backspace = 4
 		}
 
-		public enum inkCompositionParamType
+		public enum inkCompositionParamType : byte
 		{
 			FLOAT = 0,
 			VECTOR2 = 1
 		}
 
-		public enum inkDiscreteNavigationDirection
+		public enum inkDiscreteNavigationDirection : byte
 		{
 			Up = 0,
 			Right = 1,
@@ -13679,7 +13679,7 @@ namespace WolvenKit.RED4.Types
 			Single = 5
 		}
 
-		public enum inkEAnchor
+		public enum inkEAnchor : byte
 		{
 			TopLeft = 0,
 			TopCenter = 1,
@@ -13713,7 +13713,7 @@ namespace WolvenKit.RED4.Types
 			Disabled = 3
 		}
 
-		public enum inkEChildOrder
+		public enum inkEChildOrder : byte
 		{
 			Forward = 0,
 			Backward = 1
@@ -13727,7 +13727,7 @@ namespace WolvenKit.RED4.Types
 			JOINED = 3
 		}
 
-		public enum inkEHorizontalAlign
+		public enum inkEHorizontalAlign : byte
 		{
 			Fill = 0,
 			Left = 1,
@@ -13742,13 +13742,13 @@ namespace WolvenKit.RED4.Types
 			ROUND = 2
 		}
 
-		public enum inkELayerLoadPriority
+		public enum inkELayerLoadPriority : byte
 		{
 			Normal = 0,
 			High = 1
 		}
 
-		public enum inkELayerType
+		public enum inkELayerType : byte
 		{
 			Watermarks = 0,
 			WaitingSign = 1,
@@ -13768,7 +13768,7 @@ namespace WolvenKit.RED4.Types
 			MAX = 15
 		}
 
-		public enum inkEOrientation
+		public enum inkEOrientation : byte
 		{
 			Horizontal = 0,
 			Vertical = 1
@@ -13787,7 +13787,7 @@ namespace WolvenKit.RED4.Types
 			FillAndBorder = 2
 		}
 
-		public enum inkESizeRule
+		public enum inkESizeRule : byte
 		{
 			Fixed = 0,
 			Stretch = 1
@@ -13806,7 +13806,7 @@ namespace WolvenKit.RED4.Types
 			Mixed = 2
 		}
 
-		public enum inkETextureResolution
+		public enum inkETextureResolution : byte
 		{
 			UltraHD_3840_2160 = 0,
 			FullHD_1920_1080 = 1,
@@ -13824,7 +13824,7 @@ namespace WolvenKit.RED4.Types
 			ToggledHover = 6
 		}
 
-		public enum inkEVerticalAlign
+		public enum inkEVerticalAlign : byte
 		{
 			Fill = 0,
 			Top = 1,
@@ -13832,7 +13832,7 @@ namespace WolvenKit.RED4.Types
 			Bottom = 3
 		}
 
-		public enum inkEffectType
+		public enum inkEffectType : byte
 		{
 			ScanlineWipe = 0,
 			LinearWipe = 1,
@@ -13861,7 +13861,7 @@ namespace WolvenKit.RED4.Types
 			Vertical = 1
 		}
 
-		public enum inkFocusCause
+		public enum inkFocusCause : byte
 		{
 			Mouse = 0,
 			Navigation = 1,
@@ -13871,7 +13871,7 @@ namespace WolvenKit.RED4.Types
 			WindowActivate = 5
 		}
 
-		public enum inkGradientMode
+		public enum inkGradientMode : byte
 		{
 			Linear = 0,
 			Rectangular = 1
@@ -13885,7 +13885,7 @@ namespace WolvenKit.RED4.Types
 			PartNotFoundInAtlas = 3
 		}
 
-		public enum inkInputHintHoldIndicationType
+		public enum inkInputHintHoldIndicationType : byte
 		{
 			Press = 0,
 			Hold = 1,
@@ -13929,7 +13929,7 @@ namespace WolvenKit.RED4.Types
 			InParallel = 1
 		}
 
-		public enum inkLifePath
+		public enum inkLifePath : byte
 		{
 			Corporate = 0,
 			StreetKid = 2,
@@ -13937,7 +13937,7 @@ namespace WolvenKit.RED4.Types
 			Invalid = 3
 		}
 
-		public enum inkLineType
+		public enum inkLineType : byte
 		{
 			RegularPatternSpacing = 0,
 			LoosePatternSpacing = 1
@@ -13951,7 +13951,7 @@ namespace WolvenKit.RED4.Types
 			FastTravel = 3
 		}
 
-		public enum inkMaskDataSource
+		public enum inkMaskDataSource : byte
 		{
 			TextureAtlas = 0,
 			DynamicTexture = 1
@@ -13971,7 +13971,7 @@ namespace WolvenKit.RED4.Types
 			Disabled = 1
 		}
 
-		public enum inkSaveStatus
+		public enum inkSaveStatus : byte
 		{
 			Invalid = 0,
 			Local = 1,
@@ -13980,7 +13980,7 @@ namespace WolvenKit.RED4.Types
 			Conflict = 4
 		}
 
-		public enum inkSaveTransferStatus
+		public enum inkSaveTransferStatus : byte
 		{
 			ExportStarted = 0,
 			ExportSuccess = 1,
@@ -13993,7 +13993,7 @@ namespace WolvenKit.RED4.Types
 			ImportNotEnoughSpace = 8
 		}
 
-		public enum inkSaveType
+		public enum inkSaveType : byte
 		{
 			ManualSave = 0,
 			QuickSave = 1,
@@ -14002,7 +14002,7 @@ namespace WolvenKit.RED4.Types
 			EndGameSave = 4
 		}
 
-		public enum inkSelectionRule
+		public enum inkSelectionRule : byte
 		{
 			Single = 0,
 			Parent = 1,
@@ -14025,7 +14025,7 @@ namespace WolvenKit.RED4.Types
 			OnlyMultiplayer = 2
 		}
 
-		public enum inkState
+		public enum inkState : byte
 		{
 			InitEngine = 0,
 			PreGameMenu = 3,
@@ -14040,7 +14040,7 @@ namespace WolvenKit.RED4.Types
 			EditorMode = 12
 		}
 
-		public enum inkTextReplaceAnimationControllerWidgetTextUsage
+		public enum inkTextReplaceAnimationControllerWidgetTextUsage : byte
 		{
 			BaseText = 0,
 			TargetText = 1,
@@ -14054,7 +14054,7 @@ namespace WolvenKit.RED4.Types
 			MultilineNoWrap = 2
 		}
 
-		public enum inkTextureType
+		public enum inkTextureType : byte
 		{
 			StaticTexture = 0,
 			DynamicTexture = 1,
@@ -14075,13 +14075,13 @@ namespace WolvenKit.RED4.Types
 			FullscreenBinkVisible = 2
 		}
 
-		public enum inkWidgetResourceVersion
+		public enum inkWidgetResourceVersion : byte
 		{
 			Default = 0,
 			BrushToAtlas = 1
 		}
 
-		public enum inkanimEventType
+		public enum inkanimEventType : byte
 		{
 			OnLoaded = 0,
 			OnStart = 1,
@@ -14092,14 +14092,14 @@ namespace WolvenKit.RED4.Types
 			OnEndLoop = 6
 		}
 
-		public enum inkanimInterpolationDirection
+		public enum inkanimInterpolationDirection : byte
 		{
 			To = 0,
 			From = 1,
 			FromTo = 2
 		}
 
-		public enum inkanimInterpolationMode
+		public enum inkanimInterpolationMode : byte
 		{
 			EasyIn = 0,
 			EasyOut = 1,
@@ -14107,7 +14107,7 @@ namespace WolvenKit.RED4.Types
 			EasyOutIn = 3
 		}
 
-		public enum inkanimInterpolationType
+		public enum inkanimInterpolationType : byte
 		{
 			Linear = 0,
 			Quadratic = 1,
@@ -14121,14 +14121,14 @@ namespace WolvenKit.RED4.Types
 			Back = 9
 		}
 
-		public enum inkanimLoopType
+		public enum inkanimLoopType : byte
 		{
 			None = 0,
 			Cycle = 1,
 			PingPong = 2
 		}
 
-		public enum inkanimPropertyType
+		public enum inkanimPropertyType : byte
 		{
 			Size = 0,
 			Color = 1,
@@ -14157,7 +14157,7 @@ namespace WolvenKit.RED4.Types
 			EID_COUNT = 12
 		}
 
-		public enum locHolocallActorMode
+		public enum locHolocallActorMode : byte
 		{
 			Default = 0,
 			ActorUsesHolocall = 1,
@@ -14171,7 +14171,7 @@ namespace WolvenKit.RED4.Types
 			Female = 2
 		}
 
-		public enum locVoiceoverContext
+		public enum locVoiceoverContext : byte
 		{
 			Vo_Context_Quest = 0,
 			Vo_Context_Community = 1,
@@ -14180,7 +14180,7 @@ namespace WolvenKit.RED4.Types
 			Default_Vo_Context = 5
 		}
 
-		public enum locVoiceoverExpression
+		public enum locVoiceoverExpression : byte
 		{
 			Vo_Expression_Spoken = 0,
 			Vo_Expression_Phone = 1,
@@ -14287,7 +14287,7 @@ namespace WolvenKit.RED4.Types
 			Slope = 2
 		}
 
-		public enum navLocomotionPathSegmentTypes
+		public enum navLocomotionPathSegmentTypes : byte
 		{
 			Invalid = 0,
 			Spline = 1,
@@ -14326,7 +14326,7 @@ namespace WolvenKit.RED4.Types
 			CAPSULE = 1 << 4
 		}
 
-		public enum physicsFilterDataSource
+		public enum physicsFilterDataSource : byte
 		{
 			Parent = 0,
 			Collider = 1,
@@ -14348,14 +14348,14 @@ namespace WolvenKit.RED4.Types
 			Disabled = 2
 		}
 
-		public enum physicsMaterialTagAIVisibility
+		public enum physicsMaterialTagAIVisibility : byte
 		{
 			None = 0,
 			SemiTransparent = 1,
 			Transparent = 2
 		}
 
-		public enum physicsMaterialTagProjectilePenetration
+		public enum physicsMaterialTagProjectilePenetration : byte
 		{
 			TechOnly = 0,
 			Any = 1,
@@ -14364,7 +14364,7 @@ namespace WolvenKit.RED4.Types
 			Never = 4
 		}
 
-		public enum physicsMaterialTagType
+		public enum physicsMaterialTagType : byte
 		{
 			AIVisibility = 0,
 			PlayerVisibility = 1,
@@ -14372,20 +14372,20 @@ namespace WolvenKit.RED4.Types
 			VehicleTraction = 3
 		}
 
-		public enum physicsMaterialTagVehicleTraction
+		public enum physicsMaterialTagVehicleTraction : byte
 		{
 			Default = 0,
 			Gravel = 1
 		}
 
-		public enum physicsMaterialTagVisibility
+		public enum physicsMaterialTagVisibility : byte
 		{
 			None = 0,
 			SemiTransparent = 1,
 			Transparent = 2
 		}
 
-		public enum physicsPhysicalSystemOwner
+		public enum physicsPhysicalSystemOwner : byte
 		{
 			Unknown = 0,
 			BakedDestructionNode = 1,
@@ -14418,7 +14418,7 @@ namespace WolvenKit.RED4.Types
 			EntityProxy = 28
 		}
 
-		public enum physicsPhysicsJointAxis
+		public enum physicsPhysicsJointAxis : byte
 		{
 			AxisX = 0,
 			AxisY = 1,
@@ -14428,7 +14428,7 @@ namespace WolvenKit.RED4.Types
 			Swing2 = 5
 		}
 
-		public enum physicsPhysicsJointDriveType
+		public enum physicsPhysicsJointDriveType : byte
 		{
 			AxisX = 0,
 			AxisY = 1,
@@ -14438,14 +14438,14 @@ namespace WolvenKit.RED4.Types
 			SLERP = 5
 		}
 
-		public enum physicsPhysicsJointMotion
+		public enum physicsPhysicsJointMotion : byte
 		{
 			Locked = 0,
 			Limited = 1,
 			Free = 2
 		}
 
-		public enum physicsProxyType
+		public enum physicsProxyType : byte
 		{
 			Invalid = 0,
 			PhysicalSystem = 1,
@@ -14463,7 +14463,7 @@ namespace WolvenKit.RED4.Types
 			FoliageDestruction = 13
 		}
 
-		public enum physicsQueryUseCase
+		public enum physicsQueryUseCase : ushort
 		{
 			Default = 0,
 			ActionAnimation = 1,
@@ -14511,14 +14511,14 @@ namespace WolvenKit.RED4.Types
 			BODY = 1 << 13
 		}
 
-		public enum physicsRagdollShapeType
+		public enum physicsRagdollShapeType : byte
 		{
 			CAPSULE = 0,
 			BOX = 1,
 			SPHERE = 2
 		}
 
-		public enum physicsShapeType
+		public enum physicsShapeType : byte
 		{
 			Box = 0,
 			Sphere = 1,
@@ -14528,7 +14528,7 @@ namespace WolvenKit.RED4.Types
 			Invalid = 6
 		}
 
-		public enum physicsSimulationType
+		public enum physicsSimulationType : byte
 		{
 			Static = 0,
 			Dynamic = 1,
@@ -14566,7 +14566,7 @@ namespace WolvenKit.RED4.Types
 			Other = 4
 		}
 
-		public enum populationSpawnerObjectCtrlAction
+		public enum populationSpawnerObjectCtrlAction : byte
 		{
 			Undefined = 0,
 			Activate = 1,
@@ -14578,13 +14578,13 @@ namespace WolvenKit.RED4.Types
 			Respawn = 3
 		}
 
-		public enum questAttachmentOffsetMode
+		public enum questAttachmentOffsetMode : byte
 		{
 			UseRealOffset = 0,
 			UseCustomOffset = 1
 		}
 
-		public enum questAudioEventPrefetchMode
+		public enum questAudioEventPrefetchMode : byte
 		{
 			AddEventPrefetch = 0,
 			RemoveEventPrefetch = 1
@@ -14598,7 +14598,7 @@ namespace WolvenKit.RED4.Types
 			SpecificVehicle = 3
 		}
 
-		public enum questBehindInteractionEventType
+		public enum questBehindInteractionEventType : byte
 		{
 			Undefined = 0,
 			StartedBeingBehind = 1,
@@ -14634,7 +14634,7 @@ namespace WolvenKit.RED4.Types
 			Chest = 2
 		}
 
-		public enum questCameraPlanesPreset
+		public enum questCameraPlanesPreset : byte
 		{
 			Undefined = 0,
 			VeryNear = 1,
@@ -14669,7 +14669,7 @@ namespace WolvenKit.RED4.Types
 			InFront = 1
 		}
 
-		public enum questControlCrowdAction
+		public enum questControlCrowdAction : byte
 		{
 			Disable = 0,
 			Enable = 1
@@ -14750,7 +14750,7 @@ namespace WolvenKit.RED4.Types
 			Detach = 1
 		}
 
-		public enum questExitType
+		public enum questExitType : byte
 		{
 			Terminating = 0,
 			NonTerminating = 1
@@ -14814,7 +14814,7 @@ namespace WolvenKit.RED4.Types
 			Exited = 1
 		}
 
-		public enum questLogicalOperation
+		public enum questLogicalOperation : byte
 		{
 			AND = 0,
 			OR = 1,
@@ -14841,7 +14841,7 @@ namespace WolvenKit.RED4.Types
 			Unsealed = 3
 		}
 
-		public enum questMountConditionType
+		public enum questMountConditionType : byte
 		{
 			OnMount = 0,
 			OnUnmount = 1
@@ -14911,7 +14911,7 @@ namespace WolvenKit.RED4.Types
 			Finished = 2
 		}
 
-		public enum questObjectInteractionEventType
+		public enum questObjectInteractionEventType : byte
 		{
 			Undefined = 0,
 			Entered = 1,
@@ -14919,14 +14919,14 @@ namespace WolvenKit.RED4.Types
 			Executed = 3
 		}
 
-		public enum questObjectScanEventType
+		public enum questObjectScanEventType : byte
 		{
 			Undefined = 0,
 			Started = 1,
 			Finished = 2
 		}
 
-		public enum questPhaseNodeType
+		public enum questPhaseNodeType : byte
 		{
 			Quest = 0,
 			OpenWorld = 1,
@@ -14996,7 +14996,7 @@ namespace WolvenKit.RED4.Types
 			Complete = 3
 		}
 
-		public enum questQuestContentType
+		public enum questQuestContentType : byte
 		{
 			Fixer = 0,
 			MainQuest = 1,
@@ -15012,7 +15012,7 @@ namespace WolvenKit.RED4.Types
 			Q003_All = 1
 		}
 
-		public enum questRandomizerMode
+		public enum questRandomizerMode : byte
 		{
 			Random = 0,
 			IgnoreLastUsed = 1,
@@ -15025,7 +15025,7 @@ namespace WolvenKit.RED4.Types
 			Scanned = 1
 		}
 
-		public enum questSceneConditionType
+		public enum questSceneConditionType : byte
 		{
 			Undefined = 0,
 			IsInside = 1,
@@ -15040,7 +15040,7 @@ namespace WolvenKit.RED4.Types
 			Trigger = 1
 		}
 
-		public enum questSocketType
+		public enum questSocketType : byte
 		{
 			Undefined = 0,
 			Input = 1,
@@ -15069,7 +15069,7 @@ namespace WolvenKit.RED4.Types
 			SecondaryWeapon = 1
 		}
 
-		public enum questTriggerConditionType
+		public enum questTriggerConditionType : byte
 		{
 			Undefined = 0,
 			Entered = 1,
@@ -15080,7 +15080,7 @@ namespace WolvenKit.RED4.Types
 			AllOutsideMP = 6
 		}
 
-		public enum questTutorialScreenMode
+		public enum questTutorialScreenMode : byte
 		{
 			Undefined = 0,
 			Fullscreen = 1,
@@ -15108,13 +15108,13 @@ namespace WolvenKit.RED4.Types
 			Tier4 = 1
 		}
 
-		public enum questVehicleCameraPerspective
+		public enum questVehicleCameraPerspective : byte
 		{
 			FPP = 1,
 			TPP = 0
 		}
 
-		public enum questVehicleCameraType
+		public enum questVehicleCameraType : byte
 		{
 			Undefined = 0,
 			PuppetFPP = 1,
@@ -15123,7 +15123,7 @@ namespace WolvenKit.RED4.Types
 			FPP = 1
 		}
 
-		public enum questVehicleCommandType
+		public enum questVehicleCommandType : byte
 		{
 			[RED("Move On Spline")] Move_On_Spline = 0,
 			Follow = 1,
@@ -15132,7 +15132,7 @@ namespace WolvenKit.RED4.Types
 			[RED("Join Traffic")] Join_Traffic = 4
 		}
 
-		public enum questVehicleWeaponQuestID
+		public enum questVehicleWeaponQuestID : byte
 		{
 			Primary = 0,
 			Secondary = 1,
@@ -15170,7 +15170,7 @@ namespace WolvenKit.RED4.Types
 			AnimViewer = 1
 		}
 
-		public enum rendContactShadowReciever
+		public enum rendContactShadowReciever : byte
 		{
 			CSR_None = 0,
 			CSR_All = 3,
@@ -15184,13 +15184,13 @@ namespace WolvenKit.RED4.Types
 			PSM_Regular = 2
 		}
 
-		public enum rendGIGroup
+		public enum rendGIGroup : byte
 		{
 			GI_Group0 = 0,
 			GI_Group1 = 1
 		}
 
-		public enum rendGIVolume
+		public enum rendGIVolume : byte
 		{
 			GI_Exterior = 0,
 			GI_Interior1 = 1,
@@ -15199,7 +15199,7 @@ namespace WolvenKit.RED4.Types
 			GI_Interior4 = 4
 		}
 
-		public enum rendLightAttenuation
+		public enum rendLightAttenuation : byte
 		{
 			LA_InverseSquare = 0,
 			LA_Linear = 1
@@ -15222,7 +15222,7 @@ namespace WolvenKit.RED4.Types
 			LC_Automated = 1 << 15
 		}
 
-		public enum rendLightGroup
+		public enum rendLightGroup : byte
 		{
 			LG_Group0 = 0,
 			LG_Group1 = 1,
@@ -15234,7 +15234,7 @@ namespace WolvenKit.RED4.Types
 			LG_Group7 = 7
 		}
 
-		public enum rendPostFx_ScanningState
+		public enum rendPostFx_ScanningState : byte
 		{
 			Off = 0,
 			Scanning = 2,
@@ -15370,32 +15370,32 @@ namespace WolvenKit.RED4.Types
 			Cyberware = 2
 		}
 
-		public enum scnAudioFastForwardSupport
+		public enum scnAudioFastForwardSupport : byte
 		{
 			MuteDuringFastForward = 1,
 			DontMuteDuringFastForward = 2
 		}
 
-		public enum scnAudioPlaybackDirectionSupportFlag
+		public enum scnAudioPlaybackDirectionSupportFlag : byte
 		{
 			Forward = 1,
 			Backward = 2
 		}
 
-		public enum scnBraindanceLayer
+		public enum scnBraindanceLayer : byte
 		{
 			Visual = 0,
 			Audio = 1,
 			Thermal = 2
 		}
 
-		public enum scnBraindancePerspective
+		public enum scnBraindancePerspective : byte
 		{
 			FirstPerson = 0,
 			ThirdPerson = 1
 		}
 
-		public enum scnBraindanceSpeed
+		public enum scnBraindanceSpeed : byte
 		{
 			Any = 0,
 			Slow = 1,
@@ -15411,13 +15411,13 @@ namespace WolvenKit.RED4.Types
 			IsValidInteractionFailsafeDisabled = 1 << 1
 		}
 
-		public enum scnChoiceNodeNsChoiceNodeFlags
+		public enum scnChoiceNodeNsChoiceNodeFlags : ushort
 		{
 			IsFocusClue = 1,
 			IsValidInteractionFailsafeDisabled = 2
 		}
 
-		public enum scnChoiceNodeNsMappinLocation
+		public enum scnChoiceNodeNsMappinLocation : byte
 		{
 			None = 0,
 			Interaction = 1,
@@ -15425,7 +15425,7 @@ namespace WolvenKit.RED4.Types
 			ObjectDefault = 4
 		}
 
-		public enum scnChoiceNodeNsOperationMode
+		public enum scnChoiceNodeNsOperationMode : byte
 		{
 			attachToActor = 0,
 			attachToProp = 1,
@@ -15434,7 +15434,7 @@ namespace WolvenKit.RED4.Types
 			attachToWorld = 4
 		}
 
-		public enum scnChoiceNodeNsSizePreset
+		public enum scnChoiceNodeNsSizePreset : byte
 		{
 			small = 0,
 			normal = 1,
@@ -15444,14 +15444,14 @@ namespace WolvenKit.RED4.Types
 			Dialogue360 = 5
 		}
 
-		public enum scnChoiceNodeNsTimedAction
+		public enum scnChoiceNodeNsTimedAction : byte
 		{
 			appear = 0,
 			disappear = 1,
 			disappearFading = 2
 		}
 
-		public enum scnChoiceNodeNsVisualizerStyle
+		public enum scnChoiceNodeNsVisualizerStyle : byte
 		{
 			onScreen = 0,
 			inWorld = 1
@@ -15495,7 +15495,7 @@ namespace WolvenKit.RED4.Types
 			GlobalTVAlwaysVisible = 12
 		}
 
-		public enum scnDialogLineVisualStyle
+		public enum scnDialogLineVisualStyle : byte
 		{
 			regular = 0,
 			overHead = 1,
@@ -15508,14 +15508,14 @@ namespace WolvenKit.RED4.Types
 			globalTVAlwaysVisible = 8
 		}
 
-		public enum scnDistractedConditionTarget
+		public enum scnDistractedConditionTarget : byte
 		{
 			Anyone = 0,
 			Speaker = 1,
 			SpeakerOrAddressee = 2
 		}
 
-		public enum scnEasingType
+		public enum scnEasingType : byte
 		{
 			Linear = 0,
 			SinusoidalEaseInOut = 1,
@@ -15526,7 +15526,7 @@ namespace WolvenKit.RED4.Types
 			CubicEaseOut = 6
 		}
 
-		public enum scnEndNodeNsType
+		public enum scnEndNodeNsType : byte
 		{
 			Terminating = 0,
 			NonTerminating = 1
@@ -15573,14 +15573,14 @@ namespace WolvenKit.RED4.Types
 			NotInterruptable = 2
 		}
 
-		public enum scnInterruptReturnLinesBehavior
+		public enum scnInterruptReturnLinesBehavior : byte
 		{
 			Default = 0,
 			Vehicle = 1,
 			Holocall = 2
 		}
 
-		public enum scnInterruptionPhase
+		public enum scnInterruptionPhase : byte
 		{
 			WaitForInterruption = 0,
 			WaitForInterrupted = 1,
@@ -15620,7 +15620,7 @@ namespace WolvenKit.RED4.Types
 			Entity = 2
 		}
 
-		public enum scnOffsetMode
+		public enum scnOffsetMode : byte
 		{
 			useRealOffset = 0,
 			useCustomOffset = 1
@@ -15648,7 +15648,7 @@ namespace WolvenKit.RED4.Types
 			DisposeAfterScene = 2
 		}
 
-		public enum scnPuppetVehicleState
+		public enum scnPuppetVehicleState : byte
 		{
 			IdleMounted = 0,
 			IdleStand = 1,
@@ -15658,7 +15658,7 @@ namespace WolvenKit.RED4.Types
 			GunnerSlot = 5
 		}
 
-		public enum scnRandomizerMode
+		public enum scnRandomizerMode : byte
 		{
 			Random = 0,
 			IgnoreLastUsed = 1,
@@ -15687,7 +15687,7 @@ namespace WolvenKit.RED4.Types
 			PlayAtActorPosition = 2
 		}
 
-		public enum scnSceneCategoryTag
+		public enum scnSceneCategoryTag : byte
 		{
 			voiceset = 0,
 			mainQuests = 1,
@@ -15705,7 +15705,7 @@ namespace WolvenKit.RED4.Types
 			other = 13
 		}
 
-		public enum scnSceneVersionCheck
+		public enum scnSceneVersionCheck : byte
 		{
 			OlderOrEqual = 0,
 			Equal = 1
@@ -15717,13 +15717,13 @@ namespace WolvenKit.RED4.Types
 			EvenIfDead = 1
 		}
 
-		public enum scnWorldMarkerType
+		public enum scnWorldMarkerType : byte
 		{
 			Tag = 0,
 			NodeRef = 1
 		}
 
-		public enum scnblocLocaleId
+		public enum scnblocLocaleId : byte
 		{
 			db_db = 0,
 			pl_pl = 1,
@@ -15776,14 +15776,14 @@ namespace WolvenKit.RED4.Types
 			Chest = 3
 		}
 
-		public enum scnlocLocaleId
+		public enum scnlocLocaleId : byte
 		{
 			db_db = 0,
 			pl_pl = 1,
 			en_us = 2
 		}
 
-		public enum scnscreenplayItemType
+		public enum scnscreenplayItemType : byte
 		{
 			invalid = 0,
 			dialogLine = 1,
@@ -15825,7 +15825,7 @@ namespace WolvenKit.RED4.Types
 			Abort = 3
 		}
 
-		public enum sharedMenuItemType
+		public enum sharedMenuItemType : byte
 		{
 			Action = 0,
 			Checked = 1,
@@ -15840,35 +15840,35 @@ namespace WolvenKit.RED4.Types
 			IsDebug = 2
 		}
 
-		public enum tempshitMapPinOperation
+		public enum tempshitMapPinOperation : byte
 		{
 			Undefined = 0,
 			Add = 1,
 			Remove = 2
 		}
 
-		public enum textHorizontalAlignment
+		public enum textHorizontalAlignment : byte
 		{
 			Left = 0,
 			Center = 1,
 			Right = 2
 		}
 
-		public enum textJustificationType
+		public enum textJustificationType : byte
 		{
 			Left = 0,
 			Center = 1,
 			Right = 2
 		}
 
-		public enum textLetterCase
+		public enum textLetterCase : byte
 		{
 			OriginalCase = 0,
 			UpperCase = 1,
 			LowerCase = 2
 		}
 
-		public enum textOverflowPolicy
+		public enum textOverflowPolicy : byte
 		{
 			None = 0,
 			DotsEnd = 1,
@@ -15878,35 +15878,35 @@ namespace WolvenKit.RED4.Types
 			AdjustToSize = 5
 		}
 
-		public enum textTextDirection
+		public enum textTextDirection : byte
 		{
 			LeftToRight = 0,
 			RightToLeft = 1,
 			Mixed = 2
 		}
 
-		public enum textTextFlowDirection
+		public enum textTextFlowDirection : byte
 		{
 			Auto = 0,
 			LeftToRight = 1,
 			RightToLeft = 2
 		}
 
-		public enum textTextShapingMethod
+		public enum textTextShapingMethod : byte
 		{
 			Auto = 0,
 			KerningOnly = 1,
 			FullShaping = 2
 		}
 
-		public enum textVerticalAlignment
+		public enum textVerticalAlignment : byte
 		{
 			Top = 0,
 			Center = 1,
 			Bottom = 2
 		}
 
-		public enum textWrappingPolicy
+		public enum textWrappingPolicy : byte
 		{
 			Default = 0,
 			PerCharacter = 1
@@ -15950,7 +15950,7 @@ namespace WolvenKit.RED4.Types
 			SpeedToTiltSpeed = 2
 		}
 
-		public enum vehicleCameraPerspective
+		public enum vehicleCameraPerspective : byte
 		{
 			FPP = 0,
 			TPPClose = 1,
@@ -16069,7 +16069,7 @@ namespace WolvenKit.RED4.Types
 			Top = 4
 		}
 
-		public enum vehicleFormationType
+		public enum vehicleFormationType : byte
 		{
 			FORMATION_TRIANGLE = 0,
 			FORMATION_TURTLE = 1,
@@ -16184,7 +16184,7 @@ namespace WolvenKit.RED4.Types
 			FontSize = 5
 		}
 
-		public enum visWorldOccluderType
+		public enum visWorldOccluderType : byte
 		{
 			Default = 0,
 			None = 1,
@@ -16194,7 +16194,7 @@ namespace WolvenKit.RED4.Types
 			Exterior = 5
 		}
 
-		public enum workLogicalOperation
+		public enum workLogicalOperation : byte
 		{
 			AND = 0,
 			OR = 1
@@ -16263,7 +16263,7 @@ namespace WolvenKit.RED4.Types
 			Deny = 1
 		}
 
-		public enum worldCommunityRegistryItemAreaNodeType
+		public enum worldCommunityRegistryItemAreaNodeType : byte
 		{
 			Regular = 0,
 			Streamable = 1,
@@ -16271,7 +16271,7 @@ namespace WolvenKit.RED4.Types
 			Count = 3
 		}
 
-		public enum worldEClusteringModel
+		public enum worldEClusteringModel : byte
 		{
 			HierarchicalGrid = 0,
 			AlwaysLoaded = 1,
@@ -16284,7 +16284,7 @@ namespace WolvenKit.RED4.Types
 			EDAF_Togglable = 1 << 0
 		}
 
-		public enum worldEditablePrefabType
+		public enum worldEditablePrefabType : byte
 		{
 			Regular = 0,
 			Decoration = 1,
@@ -16309,7 +16309,7 @@ namespace WolvenKit.RED4.Types
 			OtherError = 3
 		}
 
-		public enum worldNodeGroupType
+		public enum worldNodeGroupType : byte
 		{
 			RegularGroup = 0,
 			PrefabVariant = 1,
@@ -16317,7 +16317,7 @@ namespace WolvenKit.RED4.Types
 			ProxyGroup = 3
 		}
 
-		public enum worldNodeSocketType
+		public enum worldNodeSocketType : byte
 		{
 			Bidirectional = 0,
 			Inward = 1,
@@ -16365,21 +16365,21 @@ namespace WolvenKit.RED4.Types
 			ClearLookAt = 2
 		}
 
-		public enum worldPrefabInteriorMapContribution
+		public enum worldPrefabInteriorMapContribution : byte
 		{
 			Auto = 0,
 			Include = 1,
 			Discard = 2
 		}
 
-		public enum worldPrefabMinimapContribution
+		public enum worldPrefabMinimapContribution : byte
 		{
 			Auto = 0,
 			Include = 1,
 			Discard = 2
 		}
 
-		public enum worldPrefabOwnership
+		public enum worldPrefabOwnership : byte
 		{
 			None = 0,
 			Quest = 1,
@@ -16392,14 +16392,14 @@ namespace WolvenKit.RED4.Types
 			Cinematics = 8
 		}
 
-		public enum worldPrefabProxyMeshOnly
+		public enum worldPrefabProxyMeshOnly : byte
 		{
 			SettingFromResource = 0,
 			Enabled = 1,
 			Disabled = 2
 		}
 
-		public enum worldPrefabStreamingImportance
+		public enum worldPrefabStreamingImportance : byte
 		{
 			Auto = 0,
 			P1 = 1,
@@ -16409,7 +16409,7 @@ namespace WolvenKit.RED4.Types
 			P5 = 5
 		}
 
-		public enum worldPrefabStreamingOcclusion
+		public enum worldPrefabStreamingOcclusion : byte
 		{
 			Default = 0,
 			Exterior = 1,
@@ -16417,7 +16417,7 @@ namespace WolvenKit.RED4.Types
 			OpenInterior = 3
 		}
 
-		public enum worldPrefabType
+		public enum worldPrefabType : byte
 		{
 			Regular = 0,
 			Area = 1,
@@ -16429,7 +16429,7 @@ namespace WolvenKit.RED4.Types
 			Terrain = 7
 		}
 
-		public enum worldProxWindowsType
+		public enum worldProxWindowsType : byte
 		{
 			SkipWindows = 0,
 			PropagateWindows = 1,
@@ -16437,41 +16437,41 @@ namespace WolvenKit.RED4.Types
 			BakeWindowsToBuffer = 3
 		}
 
-		public enum worldProxyBBoxSyncOptions
+		public enum worldProxyBBoxSyncOptions : byte
 		{
 			Do_Nothing = 0,
 			Pull = 1,
 			Pull_And_Delete = 2
 		}
 
-		public enum worldProxyCoreAxis
+		public enum worldProxyCoreAxis : byte
 		{
 			X = 0,
 			Y = 1,
 			Z = 2
 		}
 
-		public enum worldProxyGroupingNormals
+		public enum worldProxyGroupingNormals : byte
 		{
 			Around_Core_Axis = 0,
 			Around_All_Axes = 1
 		}
 
-		public enum worldProxyMeshBuildType
+		public enum worldProxyMeshBuildType : byte
 		{
 			ProxyFromScratch = 1,
 			ProxyFromProxy = 0,
 			OnlyFromChildProxies = 2
 		}
 
-		public enum worldProxyMeshDependencyMode
+		public enum worldProxyMeshDependencyMode : byte
 		{
 			Auto = 0,
 			Include = 1,
 			Discard = 2
 		}
 
-		public enum worldProxyMeshOutputType
+		public enum worldProxyMeshOutputType : byte
 		{
 			RayScan = 0,
 			SurfaceReconstruction = 1,
@@ -16485,7 +16485,7 @@ namespace WolvenKit.RED4.Types
 			KeepCurrent = 127
 		}
 
-		public enum worldProxyMeshTexRes
+		public enum worldProxyMeshTexRes : byte
 		{
 			RES_64 = 0,
 			RES_128 = 1,
@@ -16494,13 +16494,13 @@ namespace WolvenKit.RED4.Types
 			RES_1024 = 4
 		}
 
-		public enum worldProxyMeshUVType
+		public enum worldProxyMeshUVType : byte
 		{
 			UvUseExisting = 0,
 			UvGenerateNew = 1
 		}
 
-		public enum worldProxyNormalAngleStepSize
+		public enum worldProxyNormalAngleStepSize : byte
 		{
 			STEP_90 = 0,
 			STEP_45 = 1,
@@ -16508,19 +16508,19 @@ namespace WolvenKit.RED4.Types
 			STEP_5 = 3
 		}
 
-		public enum worldProxySyncNormalSource
+		public enum worldProxySyncNormalSource : byte
 		{
 			From_Groups = 0,
 			From_Face_Average = 1
 		}
 
-		public enum worldQuestPrefabLoadingMode
+		public enum worldQuestPrefabLoadingMode : byte
 		{
 			Disable = 0,
 			ForceLoad = 1
 		}
 
-		public enum worldQuestType
+		public enum worldQuestType : byte
 		{
 			MainQuest = 0,
 			SideQuest = 1,
@@ -16562,7 +16562,7 @@ namespace WolvenKit.RED4.Types
 			KeepPitch_WorldSpaceYawRoll = 8
 		}
 
-		public enum worldStreamingSectorCategory
+		public enum worldStreamingSectorCategory : sbyte
 		{
 			Exterior = 0,
 			Interior = 1,
