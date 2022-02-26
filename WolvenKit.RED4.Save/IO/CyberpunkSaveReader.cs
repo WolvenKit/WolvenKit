@@ -16,6 +16,36 @@ public class CyberpunkSaveReader
     {
         _nodeParsers.Add("game::SessionConfig", typeof(GameSessionConfigParser));
         _nodeParsers.Add("PersistencySystem2", typeof(PersistencySystem2Parser));
+        _nodeParsers.Add(Constants.NodeNames.GAME_SESSION_CONFIG_NODE, typeof(GameSessionConfigParser));
+        _nodeParsers.Add(Constants.NodeNames.C_ATTITUDE_MANAGER, typeof(CAttitudeManagerParser));
+        _nodeParsers.Add(Constants.NodeNames.C_COVER_MANAGER, typeof(CCoverManagerParser));
+        _nodeParsers.Add(Constants.NodeNames.CHARACTER_CUSTOMIZATION_APPEARANCES_NODE, typeof(CharacterCustomizationAppearancesParser));
+        _nodeParsers.Add(Constants.NodeNames.CHOICES, typeof(ChoicesParser));
+        _nodeParsers.Add(Constants.NodeNames.COMMUNITY_SYSTEM, typeof(CommunitySystemParser));
+        //_nodeParsers.Add(Constants.NodeNames.CONTAINER_MANAGER_INJECTED_LOOT, typeof(ContainerManagerInjectedLootParser));
+        _nodeParsers.Add(Constants.NodeNames.CONTAINER_MANAGER_LOOT_SLOT_AVAILABILITY, typeof(ContainerManagerLootSlotAvailabilityParser));
+        //_nodeParsers.Add(Constants.NodeNames.CONTAINER_MANAGER_NPC_LOOT_BAGS_VER2, typeof(ContainerManagerNPCLootBagsVer2Parser));
+        _nodeParsers.Add(Constants.NodeNames.CONTAINER_MANAGER_NPC_LOOT_BAGS_VER3_LOOTED_IDS, typeof(ContainerManagerNPCLootBagsVer3LootedIDsParser));
+        _nodeParsers.Add(Constants.NodeNames.CONTAINER_MANAGER, typeof(ContainerManagerParser));
+        _nodeParsers.Add(Constants.NodeNames.CUSTOM_ARRAY, typeof(CustomArrayParser));
+        //_nodeParsers.Add(Constants.NodeNames.DEVICE_SYSTEM, typeof(DeviceSystemParser));
+        _nodeParsers.Add(Constants.NodeNames.DIRECTOR_SYSTEM, typeof(DirectorSystemParser));
+        _nodeParsers.Add(Constants.NodeNames.DS_DYNAMIC_CONNECTIONS, typeof(DSDynamicConnectionsParser));
+        _nodeParsers.Add(Constants.NodeNames.DYNAMIC_ENTITYID_SYSTEM, typeof(DynamicEntityIDSystemParser));
+        _nodeParsers.Add(Constants.NodeNames.EVENT_MANAGER, typeof(EventManagerParser));
+        _nodeParsers.Add(Constants.NodeNames.FACTSDB, typeof(FactsDBParser));
+        _nodeParsers.Add(Constants.NodeNames.FACTS_TABLE, typeof(FactsTableParser));
+        //_nodeParsers.Add(Constants.NodeNames.GAME_AUDIO, typeof(GameAudioParser));
+        //_nodeParsers.Add(Constants.NodeNames.GOD_MODE_SYSTEM, typeof(GodModeSystemParser));
+        //_nodeParsers.Add(Constants.NodeNames.INVENTORY, typeof(InventoryParser));
+        //_nodeParsers.Add(Constants.NodeNames.ITEM_DATA, typeof(ItemDataParser));
+        //_nodeParsers.Add(Constants.NodeNames.ITEM_DROP_STORAGE_MANAGER, typeof(ItemDropStorageManager));
+        //_nodeParsers.Add(Constants.NodeNames.JOURNAL_MANAGER, typeof(JournalManagerParser));
+        //_nodeParsers.Add(Constants.NodeNames.MOVING_PLATFORM_SYSTEM, typeof(MovingPlatformSystemParser));
+        _nodeParsers.Add(Constants.NodeNames.MUSIC_SYSTEM, typeof(MusicSystemParser));
+
+
+
     }
 
     public CyberpunkSaveReader(Stream input) : this(input, Encoding.UTF8, false)
@@ -192,7 +222,6 @@ public class CyberpunkSaveReader
             {
                 ret.Children.Add(ReadData(child));
             }
-
             ret.TrailingDataBytes = reader.ReadBytes(node.TrailingSize);
 
             return ret;
