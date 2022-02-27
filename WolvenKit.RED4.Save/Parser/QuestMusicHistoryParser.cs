@@ -26,6 +26,8 @@ namespace WolvenKit.RED4.Save
 
     public class QuestMusicHistoryParser : INodeParser
     {
+        // public static string NodeName => Constants.NodeNames.QUEST_MUSIC_HISTORY;
+
         public void Read(SaveNode node)
         {
             throw new NotImplementedException();
@@ -48,6 +50,8 @@ namespace WolvenKit.RED4.Save
             //}
             //node.Data = data;
         }
+
+        public SaveNode Write() => throw new NotImplementedException();
     }
 
 }

@@ -5,7 +5,9 @@ namespace WolvenKit.RED4.Save;
 
 public class PackageParser : INodeParser
 {
-    public void Read(SaveNode node)
+    public virtual void Read(SaveNode node) => Read(node, typeof(inkWidgetLibraryResource));
+
+    protected void Read(SaveNode node, Type dummyType)
     {
         using var ms = new MemoryStream(node.DataBytes[4..]);
         using var br = new BinaryReader(ms);
@@ -13,8 +15,10 @@ public class PackageParser : INodeParser
         var dummyBuffer = new RedBuffer();
 
         var reader = new PackageReader(br);
-        reader.ReadBuffer(dummyBuffer, typeof(inkWidgetLibraryResource));
+        reader.ReadBuffer(dummyBuffer, dummyType);
 
         node.Data = dummyBuffer.Data;
     }
+
+    public virtual SaveNode Write() => throw new NotImplementedException();
 }

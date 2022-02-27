@@ -3,8 +3,8 @@ namespace WolvenKit.RED4.Save;
 public class RawSaveNode
 {
     public string Name { get; set; }
-    public int NextId { get; set; }
-    public int ChildId { get; set; }
+    public int NextId { get; set; } = -1;
+    public int ChildId { get; set; } = -1;
     public int Offset { get; set; }
     public int Size { get; set; }
 

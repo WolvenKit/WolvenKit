@@ -261,6 +261,8 @@ namespace WolvenKit.RED4.Save
 
     public class CharacterCustomizationAppearancesParser : INodeParser
     {
+        public static string NodeName => Constants.NodeNames.CHARACTER_CUSTOMIZATION_APPEARANCES_NODE;
+
         public void Read(SaveNode node)
         {
             using var ms = new MemoryStream(node.DataBytes);
@@ -296,6 +298,9 @@ namespace WolvenKit.RED4.Save
             node.Data = data;
 
         }
+
+        public SaveNode Write() => throw new NotImplementedException();
+
         private static List<string> ExpectedFirstSectionNames = new List<string>
         {
             Constants.Parsing.TPP_SECTION_NAME,

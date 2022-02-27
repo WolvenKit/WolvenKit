@@ -11,6 +11,8 @@ namespace WolvenKit.RED4.Save
 
     public class QuestDebugLogManagerParser : INodeParser
     {
+        public static string NodeName => Constants.NodeNames.QUEST_DEBUG_LOG_MANAGER;
+
         public void Read(SaveNode node)
         {
             using var ms = new MemoryStream(node.DataBytes);
@@ -20,6 +22,8 @@ namespace WolvenKit.RED4.Save
             data.Lines = text.Split('\n');
             node.Data = data;
         }
+
+        public SaveNode Write() => throw new NotImplementedException();
     }
 
 }

@@ -73,6 +73,8 @@ namespace WolvenKit.RED4.Save
 
     public class FactsTableParser : INodeParser
     {
+        public static string NodeName => Constants.NodeNames.FACTS_TABLE;
+
         public void Read(SaveNode node)
         {
             using var ms = new MemoryStream(node.DataBytes);
@@ -98,6 +100,8 @@ namespace WolvenKit.RED4.Save
             //ParserUtils.ParseChildren(node.Children, reader, parsers);
             node.Data = data;
         }
+
+        public SaveNode Write() => throw new NotImplementedException();
     }
 
 }

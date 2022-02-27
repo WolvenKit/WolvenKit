@@ -21,6 +21,8 @@ namespace WolvenKit.RED4.Save
 
     public class DynamicEntityIDSystemParser : INodeParser
     {
+        public static string NodeName => Constants.NodeNames.DYNAMIC_ENTITYID_SYSTEM;
+
         public void Read(SaveNode node)
         {
             using var ms = new MemoryStream(node.DataBytes);
@@ -41,6 +43,8 @@ namespace WolvenKit.RED4.Save
             data.Unk_NextListId = br.ReadUInt32();
             node.Data = data;
         }
+
+        public SaveNode Write() => throw new NotImplementedException();
     }
 
 }

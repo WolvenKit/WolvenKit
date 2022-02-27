@@ -11,6 +11,8 @@ namespace WolvenKit.RED4.Save
 
     public class UniqueItemCounterParser : INodeParser
     {
+        public static string NodeName => Constants.NodeNames.UNIQUE_ITEM_COUNTER;
+
         public void Read(SaveNode node)
         {
             using var ms = new MemoryStream(node.DataBytes);
@@ -19,6 +21,8 @@ namespace WolvenKit.RED4.Save
             data.Count = br.ReadUInt16();
             node.Data = data;
         }
+
+        public SaveNode Write() => throw new NotImplementedException();
     }
 
 }

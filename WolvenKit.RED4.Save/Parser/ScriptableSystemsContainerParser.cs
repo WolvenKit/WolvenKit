@@ -3,20 +3,9 @@ using WolvenKit.RED4.Types;
 
 namespace WolvenKit.RED4.Save;
 
-public class ScriptableSystemsContainerParser : INodeParser
+public class ScriptableSystemsContainerParser : PackageParser
 {
-    public void Read(SaveNode node)
-    {
-        File.WriteAllBytes(@"C:\Dev\C77\lol.bin", node.DataBytes);
+    public static string NodeName => Constants.NodeNames.SCRIPTABLE_SYSTEMS_CONTAINER;
 
-        using var ms = new MemoryStream(node.DataBytes[4..]);
-        using var br = new BinaryReader(ms);
-
-        var dummyBuffer = new RedBuffer();
-
-        var reader = new PackageReader(br);
-        reader.ReadBuffer(dummyBuffer, typeof(gamePersistentStateDataResource));
-
-        node.Data = dummyBuffer.Data;
-    }
+    public override void Read(SaveNode node) => Read(node, typeof(gamePersistentStateDataResource));
 }

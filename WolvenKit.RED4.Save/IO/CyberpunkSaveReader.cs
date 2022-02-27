@@ -11,53 +11,7 @@ public class CyberpunkSaveReader
 
     private CyberpunkSaveFile? _csavFile;
 
-    private static readonly Dictionary<string, Type> _nodeParsers = new();
-    static CyberpunkSaveReader()
-    {
-        _nodeParsers.Add(Constants.NodeNames.C_ATTITUDE_MANAGER, typeof(CAttitudeManagerParser));
-        _nodeParsers.Add(Constants.NodeNames.C_COVER_MANAGER, typeof(CCoverManagerParser));
-        _nodeParsers.Add(Constants.NodeNames.CHARACTER_CUSTOMIZATION_APPEARANCES_NODE, typeof(CharacterCustomizationAppearancesParser));
-        _nodeParsers.Add(Constants.NodeNames.CHOICES, typeof(ChoicesParser));
-        _nodeParsers.Add(Constants.NodeNames.COMMUNITY_SYSTEM, typeof(CommunitySystemParser));
-        _nodeParsers.Add(Constants.NodeNames.CONTAINER_MANAGER, typeof(ContainerManagerParser));
-        //_nodeParsers.Add(Constants.NodeNames.CONTAINER_MANAGER_INJECTED_LOOT, typeof(ContainerManagerInjectedLootParser));
-        _nodeParsers.Add(Constants.NodeNames.CONTAINER_MANAGER_LOOT_SLOT_AVAILABILITY, typeof(ContainerManagerLootSlotAvailabilityParser));
-        //_nodeParsers.Add(Constants.NodeNames.CONTAINER_MANAGER_NPC_LOOT_BAGS_VER2, typeof(ContainerManagerNPCLootBagsVer2Parser));
-        _nodeParsers.Add(Constants.NodeNames.CONTAINER_MANAGER_NPC_LOOT_BAGS_VER3_LOOTED_IDS, typeof(ContainerManagerNPCLootBagsVer3LootedIDsParser));
-        _nodeParsers.Add(Constants.NodeNames.CUSTOM_ARRAY, typeof(CustomArrayParser));
-        //_nodeParsers.Add(Constants.NodeNames.DEVICE_SYSTEM, typeof(DeviceSystemParser));
-        _nodeParsers.Add(Constants.NodeNames.DIRECTOR_SYSTEM, typeof(DirectorSystemParser));
-        _nodeParsers.Add(Constants.NodeNames.DS_DYNAMIC_CONNECTIONS, typeof(DSDynamicConnectionsParser));
-        _nodeParsers.Add(Constants.NodeNames.DYNAMIC_ENTITYID_SYSTEM, typeof(DynamicEntityIDSystemParser));
-        _nodeParsers.Add(Constants.NodeNames.EVENT_MANAGER, typeof(EventManagerParser));
-        _nodeParsers.Add(Constants.NodeNames.FACTS_TABLE, typeof(FactsTableParser));
-        _nodeParsers.Add(Constants.NodeNames.FACTSDB, typeof(FactsDBParser));
-        //_nodeParsers.Add(Constants.NodeNames.GAME_AUDIO, typeof(GameAudioParser));
-        _nodeParsers.Add(Constants.NodeNames.GAME_SESSION_CONFIG_NODE, typeof(GameSessionConfigParser));
-        _nodeParsers.Add(Constants.NodeNames.GOD_MODE_SYSTEM, typeof(PackageParser));
-        //_nodeParsers.Add(Constants.NodeNames.INVENTORY, typeof(InventoryParser));
-        //_nodeParsers.Add(Constants.NodeNames.ITEM_DATA, typeof(ItemDataParser));
-        //_nodeParsers.Add(Constants.NodeNames.ITEM_DROP_STORAGE, typeof(ItemDropStorageParser));
-        //_nodeParsers.Add(Constants.NodeNames.ITEM_DROP_STORAGE_MANAGER, typeof(ItemDropStorageManagerParser));
-        //_nodeParsers.Add(Constants.NodeNames.JOURNAL_MANAGER, typeof(JournalManagerParser));
-        _nodeParsers.Add(Constants.NodeNames.MOVING_PLATFORM_SYSTEM, typeof(PackageParser));
-        _nodeParsers.Add(Constants.NodeNames.MUSIC_SYSTEM, typeof(MusicSystemParser));
-        _nodeParsers.Add(Constants.NodeNames.PERSISTENCY_SYSTEM_2, typeof(PersistencySystem2Parser));
-        //_nodeParsers.Add(Constants.NodeNames.PLAYER_SYSTEM, typeof(PlayerSystemParser));
-        _nodeParsers.Add(Constants.NodeNames.QUEST_DEBUG_LOG_MANAGER, typeof(QuestDebugLogManagerParser));
-        //_nodeParsers.Add(Constants.NodeNames.QUEST_MUSIC_HISTORY, typeof(QuestMusicHistoryParser));
-        _nodeParsers.Add(Constants.NodeNames.RADIO_SYSTEM, typeof(RadioSystemParser));
-        _nodeParsers.Add(Constants.NodeNames.RENDER_GAMEPLAY_EFFECTS_MANAGER_SYSTEM, typeof(PackageParser));
-        _nodeParsers.Add(Constants.NodeNames.SCANNING_CONTROLLER, typeof(PackageParser));
-        _nodeParsers.Add(Constants.NodeNames.SCRIPTABLE_SYSTEMS_CONTAINER, typeof(ScriptableSystemsContainerParser));
-        _nodeParsers.Add(Constants.NodeNames.STAT_POOLS_SYSTEM, typeof(PackageParser));
-        _nodeParsers.Add(Constants.NodeNames.STATS_SYSTEM, typeof(PackageParser));
-        _nodeParsers.Add(Constants.NodeNames.TIER_SYSTEM, typeof(PackageParser));
-        _nodeParsers.Add(Constants.NodeNames.TIME_CORE, typeof(TimeSystemCoreParser));
-        _nodeParsers.Add(Constants.NodeNames.UNIQUE_ITEM_COUNTER, typeof(UniqueItemCounterParser));
-        _nodeParsers.Add(Constants.NodeNames.WORKSPOT_INSTANCES_SAVEDATA, typeof(WorkspotInstancesSavedataParser));
-    }
-
+    
     public CyberpunkSaveReader(Stream input) : this(input, Encoding.UTF8, false)
     {
     }
@@ -97,8 +51,10 @@ public class CyberpunkSaveReader
         return EFileReadErrorCodes.NoError;
     }
 
-    public EFileReadErrorCodes ReadFile(out CyberpunkSaveFile? file)
+    public EFileReadErrorCodes ReadFile(out CyberpunkSaveFile? file, out List<RawSaveNode> flatNodesOut)
     {
+        flatNodesOut = null;
+
         var result = ReadFileInfo(out var info);
         if (result != EFileReadErrorCodes.NoError)
         {
@@ -138,6 +94,8 @@ public class CyberpunkSaveReader
             });
         }
 
+        flatNodesOut = flatNodes;
+
         BaseStream.Position = 0;
         var dataStream = Compression.Decompress(_reader, out var compressionSettings);
 
@@ -145,27 +103,12 @@ public class CyberpunkSaveReader
 
         foreach (var node in _csavFile.Nodes)
         {
-            ParseNode(node);
+            var parser = ParserHelper.GetParser(node.Name);
+            parser?.Read(node);
         }
-        
+
         file = _csavFile;
         return EFileReadErrorCodes.NoError;
-    }
-
-    private void ParseNode(SaveNode node)
-    {
-        if (_nodeParsers.ContainsKey(node.Name))
-        {
-            var parser = (INodeParser)System.Activator.CreateInstance(_nodeParsers[node.Name])!;
-            parser.Read(node);
-        }
-        else
-        {
-            foreach (var childNode in node.Children)
-            {
-                ParseNode(childNode);
-            }
-        }
     }
 
     private List<SaveNode> BuildNodeTree(Stream stream, List<RawSaveNode> flatNodes)
@@ -226,14 +169,22 @@ public class CyberpunkSaveReader
             var ret = new SaveNode { Name = node.Name };
 
             reader.ReadBytes(4); // skip nodeId
-            ret.DataBytes = reader.ReadBytes(node.DataSize - 4);
+
+            if (node.DataSize > 4)
+            {
+                ret.DataBytes = reader.ReadBytes(node.DataSize - 4);
+            }
 
             foreach (var child in node.Children)
             {
                 ret.Children.Add(ReadData(child));
             }
-            ret.TrailingDataBytes = reader.ReadBytes(node.TrailingSize);
 
+            if (node.TrailingSize > 0)
+            {
+                ret.TrailingDataBytes = reader.ReadBytes(node.TrailingSize);
+            }
+            
             return ret;
         }
     }

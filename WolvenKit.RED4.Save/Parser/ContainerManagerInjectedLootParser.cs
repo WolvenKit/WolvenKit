@@ -29,6 +29,8 @@ namespace WolvenKit.RED4.Save
 
     public class ContainerManagerInjectedLootParser : INodeParser
     {
+        // public static string NodeName => Constants.NodeNames.CONTAINER_MANAGER_INJECTED_LOOT;
+
         public void Read(SaveNode node)
         {
             throw new NotImplementedException();
@@ -62,6 +64,8 @@ namespace WolvenKit.RED4.Save
             //node.Data = data;
 
         }
+
+        public SaveNode Write() => throw new NotImplementedException();
     }
 
 }

@@ -17,6 +17,8 @@ namespace WolvenKit.RED4.Save
 
     public class ContainerManagerNPCLootBagsVer3LootedIDsParser : INodeParser
     {
+        public static string NodeName => Constants.NodeNames.CONTAINER_MANAGER_NPC_LOOT_BAGS_VER3_LOOTED_IDS;
+
         public void Read(SaveNode node)
         {
             using var ms = new MemoryStream(node.DataBytes);
@@ -30,6 +32,8 @@ namespace WolvenKit.RED4.Save
             node.Data = data;
 
         }
+
+        public SaveNode Write() => throw new NotImplementedException();
     }
 
 }

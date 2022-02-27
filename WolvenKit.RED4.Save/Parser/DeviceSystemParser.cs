@@ -5,6 +5,8 @@ namespace WolvenKit.RED4.Save
 {
     public class DeviceSystemParser : INodeParser
     {
+        // public static string NodeName => Constants.NodeNames.DEVICE_SYSTEM;
+
         public void Read(SaveNode node)
         {
             throw new NotImplementedException();
@@ -12,6 +14,8 @@ namespace WolvenKit.RED4.Save
             //using var br = new BinaryReader(ms);
             //ParserUtils.ParseChildren(node.Children, reader, parsers);
         }
+
+        public SaveNode Write() => throw new NotImplementedException();
     }
 
 }

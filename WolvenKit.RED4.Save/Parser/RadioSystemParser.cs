@@ -11,6 +11,8 @@ namespace WolvenKit.RED4.Save
 
     public class RadioSystemParser : INodeParser
     {
+        public static string NodeName => Constants.NodeNames.RADIO_SYSTEM;
+
         public void Read(SaveNode node)
         {
             using var ms = new MemoryStream(node.DataBytes);
@@ -19,6 +21,8 @@ namespace WolvenKit.RED4.Save
             data.Unknown = br.ReadLengthPrefixedString();
             node.Data = data;
         }
+
+        public SaveNode Write() => throw new NotImplementedException();
     }
 
 }

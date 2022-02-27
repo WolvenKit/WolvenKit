@@ -39,6 +39,8 @@ namespace WolvenKit.RED4.Save
 
     public class JournalManagerParser : INodeParser
     {
+        // public static string NodeName => Constants.NodeNames.JOURNAL_MANAGER;
+
         public void Read(SaveNode node)
         {
             throw new NotImplementedException();
@@ -80,6 +82,8 @@ namespace WolvenKit.RED4.Save
             //data.TrailingBytes = br.ReadBytes((int)(br.BaseStream.Length - br.BaseStream.Position));
             //node.Data = data;
         }
+
+        public SaveNode Write() => throw new NotImplementedException();
     }
 
 }

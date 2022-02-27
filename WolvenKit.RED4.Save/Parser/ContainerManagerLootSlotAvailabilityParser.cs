@@ -22,6 +22,8 @@ namespace WolvenKit.RED4.Save
 
     public class ContainerManagerLootSlotAvailabilityParser : INodeParser
     {
+        public static string NodeName => Constants.NodeNames.CONTAINER_MANAGER_LOOT_SLOT_AVAILABILITY;
+
         public void Read(SaveNode node)
         {
             using var ms = new MemoryStream(node.DataBytes);
@@ -44,6 +46,8 @@ namespace WolvenKit.RED4.Save
             node.Data = data;
 
         }
+
+        public SaveNode Write() => throw new NotImplementedException();
     }
 
 }

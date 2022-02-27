@@ -12,6 +12,8 @@ namespace WolvenKit.RED4.Save
 
     public class PlayerSystemParser : INodeParser
     {
+        // public static string NodeName => Constants.NodeNames.PLAYER_SYSTEM;
+
         public void Read(SaveNode node)
         {
             throw new NotImplementedException();
@@ -22,6 +24,8 @@ namespace WolvenKit.RED4.Save
             //data.Unk_Id = br.ReadTweakDbId();
             //node.Data = data;
         }
+
+        public SaveNode Write() => throw new NotImplementedException();
     }
 
 }

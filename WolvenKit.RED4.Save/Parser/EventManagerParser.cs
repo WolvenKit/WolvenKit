@@ -24,6 +24,8 @@ namespace WolvenKit.RED4.Save
 
     public class EventManagerParser : INodeParser
     {
+        public static string NodeName => Constants.NodeNames.EVENT_MANAGER;
+
         public void Read(SaveNode node)
         {
             using var ms = new MemoryStream(node.DataBytes);
@@ -42,6 +44,8 @@ namespace WolvenKit.RED4.Save
             node.Data = data;
 
         }
+
+        public SaveNode Write() => throw new NotImplementedException();
     }
 
 }

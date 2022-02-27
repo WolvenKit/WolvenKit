@@ -4,21 +4,19 @@ using System.Diagnostics;
 
 namespace WolvenKit.RED4.Save
 {
-    public class ItemData : IParseableBuffer
-    {
-    }
-
-
     public class ItemDataParser : INodeParser
     {
+        public static string NodeName => Constants.NodeNames.ITEM_DATA;
+
         public void Read(SaveNode node)
         {
-            throw new NotImplementedException();
-            //using var ms = new MemoryStream(node.DataBytes);
-            //using var br = new BinaryReader(ms);
-            //var data = new ItemData();
-            //node.Data = data;
+            using var ms = new MemoryStream(node.DataBytes);
+            using var br = new BinaryReader(ms);
+
+            node.Data = InventoryHelper.ReadItemData(br);
         }
+
+        public SaveNode Write() => throw new NotImplementedException();
     }
 
 }

@@ -9,6 +9,8 @@ namespace WolvenKit.RED4.Save
 
     public class GameAudioParser : INodeParser
     {
+        // public static string NodeName => Constants.NodeNames.GAME_AUDIO;
+
         public void Read(SaveNode node)
         {
             throw new NotImplementedException();
@@ -17,6 +19,8 @@ namespace WolvenKit.RED4.Save
             //var data = new GameAudio();
             //node.Data = data;
         }
+
+        public SaveNode Write() => throw new NotImplementedException();
     }
 
 }

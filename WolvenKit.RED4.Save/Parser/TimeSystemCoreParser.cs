@@ -48,6 +48,8 @@ namespace WolvenKit.RED4.Save
 
     public class TimeSystemCoreParser : INodeParser
     {
+        public static string NodeName => Constants.NodeNames.TIME_CORE;
+
         public void Read(SaveNode node)
         {
             using var ms = new MemoryStream(node.DataBytes);
@@ -58,6 +60,8 @@ namespace WolvenKit.RED4.Save
             data.Unknown2 = br.ReadBytes(12);
             node.Data = data;
         }
+
+        public SaveNode Write() => throw new NotImplementedException();
     }
 
 }

@@ -38,6 +38,8 @@ namespace WolvenKit.RED4.Save
 
     public class ContainerManagerNPCLootBagsVer2Parser : INodeParser
     {
+        // public static string NodeName => Constants.NodeNames.CONTAINER_MANAGER_NPC_LOOT_BAGS_VER2;
+
         public void Read(SaveNode node)
         {
             throw new NotImplementedException();
@@ -71,6 +73,8 @@ namespace WolvenKit.RED4.Save
             //node.Data = data;
 
         }
+
+        public SaveNode Write() => throw new NotImplementedException();
     }
 
 }

@@ -32,6 +32,8 @@ namespace WolvenKit.RED4.Save
 
     public class DSDynamicConnectionsParser : INodeParser
     {
+        public static string NodeName => Constants.NodeNames.DS_DYNAMIC_CONNECTIONS;
+
         public void Read(SaveNode node)
         {
             using var ms = new MemoryStream(node.DataBytes);
@@ -68,6 +70,8 @@ namespace WolvenKit.RED4.Save
             }
             node.Data = data;
         }
+
+        public SaveNode Write() => throw new NotImplementedException();
     }
 
 }

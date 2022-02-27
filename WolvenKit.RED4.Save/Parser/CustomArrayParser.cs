@@ -16,6 +16,8 @@ namespace WolvenKit.RED4.Save
 
     public class CustomArrayParser : INodeParser
     {
+        public static string NodeName => Constants.NodeNames.CUSTOM_ARRAY;
+
         public void Read(SaveNode node)
         {
             using var ms = new MemoryStream(node.DataBytes);
@@ -29,6 +31,8 @@ namespace WolvenKit.RED4.Save
             node.Data = data;
 
         }
+
+        public SaveNode Write() => throw new NotImplementedException();
     }
 
 }

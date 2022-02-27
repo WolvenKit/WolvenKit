@@ -134,6 +134,8 @@ public class PersistencySystem2Reader : Red4Reader
 
 public class PersistencySystem2Parser : INodeParser
 {
+    public static string NodeName => Constants.NodeNames.PERSISTENCY_SYSTEM_2;
+
     public void Read(SaveNode node)
     {
         using var ms = new MemoryStream(node.DataBytes);
@@ -177,4 +179,6 @@ public class PersistencySystem2Parser : INodeParser
 
         node.Data = result;
     }
+
+    public SaveNode Write() => throw new NotImplementedException();
 }

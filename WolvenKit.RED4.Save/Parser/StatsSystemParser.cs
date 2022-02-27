@@ -3,18 +3,7 @@ using WolvenKit.RED4.Types;
 
 namespace WolvenKit.RED4.Save;
 
-public class StatsSystemParser : INodeParser
+public class StatsSystemParser : PackageParser
 {
-    public void Read(SaveNode node)
-    {
-        using var ms = new MemoryStream(node.DataBytes[4..]);
-        using var br = new BinaryReader(ms);
-
-        var dummyBuffer = new RedBuffer();
-
-        var reader = new PackageReader(br);
-        reader.ReadBuffer(dummyBuffer, typeof(inkWidgetLibraryResource));
-
-        node.Data = dummyBuffer.Data;
-    }
+    public static string NodeName => Constants.NodeNames.STATS_SYSTEM;
 }

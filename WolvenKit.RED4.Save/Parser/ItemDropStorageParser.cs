@@ -10,6 +10,8 @@ namespace WolvenKit.RED4.Save
 
     public class ItemDropStorageParser : INodeParser
     {
+        // public static string NodeName => Constants.NodeNames.ITEM_DROP_STORAGE;
+
         public void Read(SaveNode node)
         {
             throw new NotImplementedException();
@@ -18,6 +20,8 @@ namespace WolvenKit.RED4.Save
             //var data = new ItemDropStorage();
             //node.Data = data;
         }
+
+        public SaveNode Write() => throw new NotImplementedException();
     }
 
 }

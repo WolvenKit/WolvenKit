@@ -69,6 +69,7 @@ namespace WolvenKit.RED4.Save
             public const string FACTSDB = "FactsDB";
             public const string GAME_AUDIO = "GameAudio";
             public const string GAME_SESSION_CONFIG_NODE = "game::SessionConfig";
+            public const string GAME_SESSION_DESC = "GameSessionDesc";
             public const string GOD_MODE_SYSTEM = "godModeSystem";
             public const string INVENTORY = "inventory";
             public const string ITEM_DATA = "itemData";
@@ -84,6 +85,8 @@ namespace WolvenKit.RED4.Save
             public const string QUEST_DEBUG_LOG_MANAGER = "questDebugLogManager";
             public const string QUEST_MUSIC_HISTORY = "QuestMusicHistory";
             public const string RADIO_SYSTEM = "RadioSystem";
+            public const string REACTION_SYSTEM = "ReactionSystem";
+            public const string REACTION_SYSTEM_V2 = "ReactionSystem_v2";
             public const string RENDER_GAMEPLAY_EFFECTS_MANAGER_SYSTEM = "RenderGameplayEffectsManagerSystem";
             public const string SCANNING_CONTROLLER = "scanningController";
             public const string SCRIPTABLE_SYSTEMS_CONTAINER = "ScriptableSystemsContainer";
