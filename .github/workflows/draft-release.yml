@@ -1,7 +1,8 @@
 name: wkit-draft-release
 on:
   push:
-  workflow_dispatch:
+    tags:
+    - '*'
 
 jobs:
   desktop-win:
@@ -69,41 +70,38 @@ jobs:
     steps:
     - name: Checkout
       uses: actions/checkout@v2
-     # environmental variables
-    - run: echo "PROJ=./WolvenKit/WolvenKit.csproj" >> $GITHUB_ENV
-    - run: echo "PROJC=./WolvenKit.CLI/WolvenKit.CLI.csproj" >> $GITHUB_ENV
-    - run: echo "OUT=./publish/app/" >> $GITHUB_ENV
-    - run: echo "OUTC=./publish/console/" >> $GITHUB_ENV
-    - run: echo "FINALOUT=./publish" >> $GITHUB_ENV
-    - run: echo "NAME=WolvenKit" >> $GITHUB_ENV
-    - run: echo "REF=${{github.ref}}" >> $GITHUB_ENV
-    - run: echo "SHA=${{github.sha}}" >> $GITHUB_ENV
-    - run: echo "MREPO=${{github.repository}}" >> $GITHUB_ENV
+     
+    # environmental variables
+    - run: echo "PROJ=./WolvenKit/WolvenKit.csproj" >> $env:GITHUB_ENV
+    - run: echo "PROJC=./WolvenKit.CLI/WolvenKit.CLI.csproj" >> $env:GITHUB_ENV
+    - run: echo "OUT=./publish/app/" >> $env:GITHUB_ENV
+    - run: echo "OUTC=./publish/console/" >> $env:GITHUB_ENV
+    - run: echo "FINALOUT=./publish" >> $env:GITHUB_ENV
+    - run: echo "NAME=WolvenKit" >> $env:GITHUB_ENV
+    - run: echo "REF=${{github.ref}}" >> $env:GITHUB_ENV
+    - run: echo "SHA=${{github.sha}}" >> $env:GITHUB_ENV
+    - run: echo "MREPO=${{github.repository}}" >> $env:GITHUB_ENV
+    - run: echo "VERSION=${{github.ref_name}}" >> $env:GITHUB_ENV
 
-    - name: Get version
-      uses: naminodarie/get-net-sdk-project-versions-action@v1
-      id: get-version
-      with:
-        proj-path: ${{ env.PROJ  }}
     - name: Get console version
       uses: naminodarie/get-net-sdk-project-versions-action@v1
       id: get-version-cli
       with:
-        proj-path: ${{ env.PROJC }}
+        proj-path: ${{env.PROJC}}
 
-    - run: echo "VERSION=${{steps.get-version.outputs.assembly-version}}" >> $GITHUB_ENV
-    - run: echo "VERSIONC=${{steps.get-version-cli.outputs.assembly-version}}" >> $GITHUB_ENV
+    - run: echo "VERSIONC=${{steps.get-version-cli.outputs.assembly-version}}" >> $env:GITHUB_ENV
+    
     - run: echo "PORTABLE=${{env.NAME}}-${{env.VERSION}}.zip" >> $GITHUB_ENV
     - run: echo "CONSOLE=${{env.NAME}}.Console-${{env.VERSIONC}}.zip" >> $GITHUB_ENV
     - run: echo "CONSOLELINUX=${{env.NAME}}.ConsoleLinux-${{env.VERSIONC}}.zip" >> $GITHUB_ENV
-    - run: echo "INSTALLER=${{env.NAME}}-installer-${{env.VERSION}}.exe" >> $GITHUB_ENV
+    # - run: echo "INSTALLER=${{env.NAME}}-installer-${{env.VERSION}}.exe" >> $GITHUB_ENV
 
     - name: Download artifacts
       uses: actions/download-artifact@v2
     # Create assets
     # create zip
     - run: sudo apt-get install zip -y
-    - run: mkdir -p ${{ env.FINALOUT}}
+    - run: mkdir -p ${{ env.FINALOUT }}
     - run: ls -R
     - run: zip -r ${{ env.FINALOUT }}/${{ env.PORTABLE }} "WolvenKit Desktop"
     - run: zip -r ${{ env.FINALOUT }}/${{ env.CONSOLE }} "WolvenKit CLI"
