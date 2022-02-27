@@ -91,7 +91,7 @@ namespace WolvenKit
 
             var webViewData = ISettingsManager.GetWebViewDataPath();
             Directory.CreateDirectory(webViewData);
-            Helpers.objCoreWebView2Environment = await CoreWebView2Environment.CreateAsync(null, webViewData, null);
+            WebView2Helper.objCoreWebView2Environment = await CoreWebView2Environment.CreateAsync(null, webViewData, null);
         }
 
         /// <summary>

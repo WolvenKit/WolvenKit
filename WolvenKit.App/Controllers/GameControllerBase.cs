@@ -50,7 +50,7 @@ namespace WolvenKit.Functionality.Controllers
 
         public Task<bool> PackAndInstallProject();
 
-        Task<bool> PackageMod();
+        Task<bool> PackProject();
 
         void InstallMod();
 

@@ -74,6 +74,8 @@ namespace WolvenKit.ViewModels.Shell
             //ViewCodeEditorCommand = ReactiveCommand.Create(() => _mainViewModel.ShowCodeEditorCommand.SafeExecute());
             ShowImportExportToolCommand = ReactiveCommand.Create(() => _mainViewModel.ShowImportExportToolCommand.SafeExecute());
 
+            ShowPluginToolCommand = ReactiveCommand.Create(() => _mainViewModel.ShowPluginCommand.SafeExecute());
+
             ShowBugReportCommand = ReactiveCommand.CreateFromTask(async () =>
             {
                 var result = await Interactions.ShowBugReport.Handle(Unit.Default);
@@ -139,6 +141,8 @@ namespace WolvenKit.ViewModels.Shell
         public ReactiveCommand<Unit, Unit> ViewLogCommand { get; }
         public ReactiveCommand<Unit, Unit> ViewCodeEditorCommand { get; }
         public ReactiveCommand<Unit, Unit> ShowImportExportToolCommand { get; }
+
+        public ReactiveCommand<Unit, Unit> ShowPluginToolCommand { get; }
 
         public ReactiveCommand<Unit, Unit> ShowBugReportCommand { get; }
         public ReactiveCommand<Unit, Unit> ShowFeedbackCommand { get; }
