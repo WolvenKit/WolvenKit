@@ -3,8 +3,9 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using WolvenKit.Common;
+using WolvenKit.Models;
 
-namespace WolvenKit.MVVM.Model.ProjectManagement.Project
+namespace WolvenKit.ProjectManagement.Project
 {
     public abstract class EditorProject : ObservableObject, IEquatable<EditorProject>
     {
@@ -27,6 +28,8 @@ namespace WolvenKit.MVVM.Model.ProjectManagement.Project
 
         public string Name { get; set; }
 
+        public string Description { get; set; }
+
         public string Version { get; set; }
 
 
@@ -35,8 +38,8 @@ namespace WolvenKit.MVVM.Model.ProjectManagement.Project
 
         public abstract GameType GameType { get; }
 
-        public abstract string PackedModDirectory { get; }
         public abstract string PackedRootDirectory { get; }
+        public abstract string PackedArchiveDirectory { get; }
 
 
         public bool IsDirty { get; set; }

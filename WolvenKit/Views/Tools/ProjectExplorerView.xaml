@@ -426,6 +426,7 @@
             CloseButtonType="Hide"
             ShowTabItemContextMenu="False"
             ShowTabListContextMenu="False"
+            SelectedIndex="{Binding SelectedTabIndex}"
             Style="{StaticResource WolvenKitTabControl}">
             <syncfusion:TabItemExt>
                 <syncfusion:TabItemExt.Style>
@@ -572,11 +573,11 @@
                             Height="13"
                             Kind="ArrowsCollapse" />
                     </Button>
-                    <Button Margin="3,0,0,0" ToolTip="New Folder">
+                    <Button Margin="3,0,0,0" ToolTip="Open Root Folder" x:Name="OpenFolderButton">
                         <iconPacks:PackIconCodicons
                             Width="13"
                             Height="13"
-                            Kind="NewFolder" />
+                            Kind="RootFolderOpened" />
                     </Button>
                     <ToggleButton
                         Margin="3,0,0,0"

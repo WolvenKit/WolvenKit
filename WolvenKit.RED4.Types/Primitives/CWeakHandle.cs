@@ -17,39 +17,41 @@ namespace WolvenKit.RED4.Types
             get => _chunk;
             set
             {
-                if (!Equals(_chunk, value))
-                {
-                    if (_chunk != null)
-                    {
-                        _chunk.ObjectChanged -= OnObjectChanged;
-                    }
+                _chunk = value;
 
-                    var oldChunk = _chunk;
-                    _chunk = value;
-
-                    if (_chunk != null)
-                    {
-                        _chunk.ObjectChanged += OnObjectChanged;
-                    }
-
-                    var args = new ObjectChangedEventArgs(ObjectChangedType.Modified, null, oldChunk, _chunk);
-                    args._callStack.Add(this);
-
-                    ObjectChanged?.Invoke(null, args);
-                }
+                //if (!Equals(_chunk, value))
+                //{
+                //    if (_chunk != null)
+                //    {
+                //        _chunk.ObjectChanged -= OnObjectChanged;
+                //    }
+                //
+                //    var oldChunk = _chunk;
+                //    _chunk = value;
+                //
+                //    if (_chunk != null)
+                //    {
+                //        _chunk.ObjectChanged += OnObjectChanged;
+                //    }
+                //
+                //    var args = new ObjectChangedEventArgs(ObjectChangedType.Modified, null, oldChunk, _chunk);
+                //    args._callStack.Add(this);
+                //
+                //    ObjectChanged?.Invoke(null, args);
+                //}
             }
         }
 
-        private void OnObjectChanged(object sender, ObjectChangedEventArgs e)
-        {
-            if (e._callStack.Contains(this))
-            {
-                return;
-            }
-            e._callStack.Add(this);
-
-            ObjectChanged?.Invoke(sender, e);
-        }
+        //private void OnObjectChanged(object sender, ObjectChangedEventArgs e)
+        //{
+        //    if (e._callStack.Contains(this))
+        //    {
+        //        return;
+        //    }
+        //    e._callStack.Add(this);
+        //
+        //    ObjectChanged?.Invoke(sender, e);
+        //}
 
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         public Type InnerType => typeof(T);

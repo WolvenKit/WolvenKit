@@ -2,6 +2,7 @@ using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
+using System.IO.MemoryMappedFiles;
 using System.Linq;
 using System.Threading.Tasks;
 using Catel.IoC;
@@ -13,6 +14,9 @@ using WolvenKit.RED4.CR2W;
 using WolvenKit.RED4.CR2W.Archive;
 using System.Text.Json;
 using WolvenKit.Common.FNV1A;
+using WolvenKit.RED4;
+using WolvenKit.RED4.Archive.IO;
+using WolvenKit.RED4.Types;
 
 namespace WolvenKit.MSTests
 {
@@ -212,6 +216,70 @@ namespace WolvenKit.MSTests
 
             var filename = $"{Path.GetFileNameWithoutExtension(path)}.kark";
             File.WriteAllBytes(Path.Combine(resultDir, filename), outBuffer.ToArray());
+        }
+
+        [TestMethod]
+        public void DumpStrings()
+        {
+            var resultDir = Path.Combine(Environment.CurrentDirectory, s_testResultsDirectory, "infodump");
+            Directory.CreateDirectory(resultDir);
+
+            var existingFiles = new ConcurrentDictionary<string, byte>();
+            foreach (var file in Directory.GetFiles(resultDir))
+            {
+                existingFiles.TryAdd(file, 0);
+            }
+
+            var archives = s_bm.Archives.KeyValues.Select(_ => _.Value).ToList();
+            foreach (var gameArchive in archives)
+            {
+                if (gameArchive is not Archive archive)
+                {
+                    continue;
+                }
+
+                using var fs = new FileStream(archive.ArchiveAbsolutePath, FileMode.Open, FileAccess.Read, FileShare.Read);
+                using var mmf = MemoryMappedFile.CreateFromFile(fs, null, 0, MemoryMappedFileAccess.Read, HandleInheritability.None, false);
+
+                Parallel.ForEach(archive.Files, pair =>
+                {
+                    if (pair.Value is not FileEntry fileEntry)
+                    {
+                        return;
+                    }
+
+                    var resultPath = Path.Combine(resultDir, fileEntry.NameHash64 + ".txt");
+                    if (existingFiles.TryRemove(resultPath, out _))
+                    {
+                        return;
+                    }
+
+                    try
+                    {
+                        using var ms = new MemoryStream();
+                        archive.CopyFileToStream(ms, fileEntry.NameHash64, false, mmf);
+                        ms.Seek(0, SeekOrigin.Begin);
+
+                        using var reader = new CR2WReader(ms);
+                        reader.CollectData = true;
+
+                        if (reader.ReadFile(out _) == EFileReadErrorCodes.NoError)
+                        {
+                            reader.DataCollection.CleanUp();
+
+                            reader.DataCollection.FileName = fileEntry.NameOrHash;
+                            reader.DataCollection.Hash = fileEntry.NameHash64;
+
+                            var json = JsonSerializer.Serialize(reader.DataCollection, new JsonSerializerOptions {WriteIndented = true});
+                            File.WriteAllText(resultPath, json);
+                        }
+                    }
+                    catch (Exception)
+                    {
+                        // ignore
+                    }
+                });
+            }
         }
     }
 }

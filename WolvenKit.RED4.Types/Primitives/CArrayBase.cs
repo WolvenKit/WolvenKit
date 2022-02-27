@@ -80,7 +80,7 @@ namespace WolvenKit.RED4.Types
         }
 
         #region Event
-
+        /*
         private readonly Dictionary<object, ObjectChangedEventHandler> _delegateCache = new();
 
         private void AddEventHandler(object item)
@@ -135,7 +135,7 @@ namespace WolvenKit.RED4.Types
                 ObjectChanged.Invoke(this, args);
             }
         }
-
+        */
         #endregion
 
         #region IList<>, ILits Methods
@@ -167,39 +167,41 @@ namespace WolvenKit.RED4.Types
 
             _internalList.Add(castedValue);
 
-            if (castedValue != null)
-            {
-                AddEventHandler(castedValue);
-                OnObjectChanged(ObjectChangedType.Added, null, castedValue);
-            }
+            //if (castedValue != null)
+            //{
+            //    AddEventHandler(castedValue);
+            //    OnObjectChanged(ObjectChangedType.Added, null, castedValue);
+            //}
 
             return _internalList.Count - 1;
         }
 
         private void SetItem(int index, object value)
         {
-            if (!Equals(_internalList[index], value))
-            {
-                var oldValue = _internalList[index];
+            _internalList[index] = (T)value;
 
-                if (_internalList[index] != null)
-                {
-                    RemoveEventHandler(_internalList[index]);
-                }
-                
-                _internalList[index] = (T)value;
-
-                if (_internalList[index] != null)
-                {
-                    AddEventHandler(_internalList[index]);
-                }
-
-                var typeInfo = RedReflection.GetTypeInfo(_internalList[index].GetType());
-                if (_internalList[index].GetType().IsValueType || typeInfo.IsValueType)
-                {
-                    OnObjectChanged(ObjectChangedType.Modified, oldValue, _internalList[index]);
-                }
-            }
+            //if (!Equals(_internalList[index], value))
+            //{
+            //    var oldValue = _internalList[index];
+            //
+            //    if (_internalList[index] != null)
+            //    {
+            //        RemoveEventHandler(_internalList[index]);
+            //    }
+            //    
+            //    _internalList[index] = (T)value;
+            //
+            //    if (_internalList[index] != null)
+            //    {
+            //        AddEventHandler(_internalList[index]);
+            //    }
+            //
+            //    var typeInfo = RedReflection.GetTypeInfo(_internalList[index].GetType());
+            //    if (_internalList[index].GetType().IsValueType || typeInfo.IsValueType)
+            //    {
+            //        OnObjectChanged(ObjectChangedType.Modified, oldValue, _internalList[index]);
+            //    }
+            //}
         }
         
         public T this[int index]
@@ -227,15 +229,15 @@ namespace WolvenKit.RED4.Types
                 throw new NotSupportedException();
             }
 
-            foreach (var element in _internalList)
-            {
-                if (element != null)
-                {
-                    RemoveEventHandler(element);
-                }
-
-                OnObjectChanged(ObjectChangedType.Deleted, element, null);
-            }
+            //foreach (var element in _internalList)
+            //{
+            //    if (element != null)
+            //    {
+            //        RemoveEventHandler(element);
+            //    }
+            //
+            //    OnObjectChanged(ObjectChangedType.Deleted, element, null);
+            //}
 
             _internalList.Clear();
         }
@@ -250,7 +252,7 @@ namespace WolvenKit.RED4.Types
 
         public void Insert(int index, object value)
         {
-            OnObjectChanged(ObjectChangedType.Added, null, value);
+            //OnObjectChanged(ObjectChangedType.Added, null, value);
 
             ((IList)_internalList).Insert(index, value);
         }
@@ -262,8 +264,8 @@ namespace WolvenKit.RED4.Types
                 throw new NotSupportedException();
             }
 
-            var index = ((IList)_internalList).IndexOf(value);
-            OnObjectChanged(ObjectChangedType.Deleted, value, null);
+            //var index = ((IList)_internalList).IndexOf(value);
+            //OnObjectChanged(ObjectChangedType.Deleted, value, null);
 
             ((IList)_internalList).Remove(value);
         }
@@ -275,8 +277,8 @@ namespace WolvenKit.RED4.Types
                 throw new NotSupportedException();
             }
 
-            var index = _internalList.IndexOf(item);
-            OnObjectChanged(ObjectChangedType.Deleted, item, null);
+            //var index = _internalList.IndexOf(item);
+            //OnObjectChanged(ObjectChangedType.Deleted, item, null);
 
             return _internalList.Remove(item);
         }
@@ -295,7 +297,7 @@ namespace WolvenKit.RED4.Types
                 throw new NotSupportedException();
             }
 
-            OnObjectChanged(ObjectChangedType.Added, null, item);
+            //OnObjectChanged(ObjectChangedType.Added, null, item);
 
             _internalList.Insert(index, item);
         }
@@ -307,7 +309,7 @@ namespace WolvenKit.RED4.Types
                 throw new NotSupportedException();
             }
 
-            OnObjectChanged(ObjectChangedType.Deleted, _internalList[index], null);
+            //OnObjectChanged(ObjectChangedType.Deleted, _internalList[index], null);
 
             _internalList.RemoveAt(index);
         }

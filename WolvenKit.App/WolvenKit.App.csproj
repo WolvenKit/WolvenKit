@@ -39,7 +39,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Remove="Functionality\Controllers\Tw3Controller.cs" />
+    <Compile Remove="Controllers\Tw3Controller.cs" />
     <Compile Remove="Functionality\ProjectManagement\Project\Tw3Project.cs" />
     <Compile Remove="Models\Arguments\RequestEmbeddedFileOpenArgs.cs" />
     <Compile Remove="Models\Arguments\SelectChunkArgs.cs" />

@@ -3,7 +3,7 @@ using System.IO;
 using WolvenKit.Common;
 
 
-namespace WolvenKit.MVVM.Model.ProjectManagement.Project
+namespace WolvenKit.ProjectManagement.Project
 {
     public sealed class Cp77Project : EditorProject, ICloneable
     {
@@ -65,7 +65,7 @@ namespace WolvenKit.MVVM.Model.ProjectManagement.Project
             }
         }
 
-        public override string PackedModDirectory
+        public override string PackedArchiveDirectory
         {
             get
             {
@@ -106,6 +106,8 @@ namespace WolvenKit.MVVM.Model.ProjectManagement.Project
                 return dir;
             }
         }
+
+        
 
         #region methods
 
