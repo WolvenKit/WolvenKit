@@ -7,8 +7,6 @@ public class PackageParser : INodeParser
 {
     public void Read(SaveNode node)
     {
-        File.WriteAllBytes(@"C:\Dev\C77\lol.bin", node.DataBytes);
-
         using var ms = new MemoryStream(node.DataBytes[4..]);
         using var br = new BinaryReader(ms);
 

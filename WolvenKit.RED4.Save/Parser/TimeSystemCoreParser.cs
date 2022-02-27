@@ -1,0 +1,63 @@
+using WolvenKit.RED4.Types;
+using WolvenKit.Core.Extensions;
+
+namespace WolvenKit.RED4.Save
+{
+    public class TimeSystemCore : IParseableBuffer
+    {
+        public uint Unknown1 { get; set; }
+        public RED4.Save.GameTime CurrentGameTime { get; set; }
+        public byte[] Unknown2 { get; set; }
+    }
+    public struct GameTime
+    {
+        public GameTime(uint value)
+        {
+            Value = value;
+        }
+
+        public uint Value { get; }
+
+        public static implicit operator GameTime(uint s)
+        {
+            return new GameTime(s);
+        }
+
+        public static implicit operator uint(GameTime p)
+        {
+            return p.Value;
+        }
+
+        public string ToGameTimeString()
+        {
+            var time = TimeSpan.FromSeconds(Value);
+            return time.ToString(@"d\:hh\:mm\:ss");
+        }
+
+        public string ToRealTimeString()
+        {
+            var time = TimeSpan.FromSeconds(Value / 8);
+            return time.ToString(@"d\:hh\:mm\:ss");
+        }
+
+        public override string ToString()
+        {
+            return ToGameTimeString();
+        }
+    }
+
+    public class TimeSystemCoreParser : INodeParser
+    {
+        public void Read(SaveNode node)
+        {
+            using var ms = new MemoryStream(node.DataBytes);
+            using var br = new BinaryReader(ms);
+            var data = new TimeSystemCore();
+            data.Unknown1 = br.ReadUInt32();
+            data.CurrentGameTime = br.ReadUInt32();
+            data.Unknown2 = br.ReadBytes(12);
+            node.Data = data;
+        }
+    }
+
+}

@@ -3,19 +3,23 @@ using WolvenKit.Core.Extensions;
 
 namespace WolvenKit.RED4.Save
 {
-    public class ItemDropStorage : IParseableBuffer
+    public class PlayerSystem : IParseableBuffer
     {
+        public ulong Unk_Hash { get; set; }
+        public TweakDBID Unk_Id { get; set; }
     }
 
 
-    public class ItemDropStorageParser : INodeParser
+    public class PlayerSystemParser : INodeParser
     {
         public void Read(SaveNode node)
         {
             throw new NotImplementedException();
             //using var ms = new MemoryStream(node.DataBytes);
             //using var br = new BinaryReader(ms);
-            //var data = new ItemDropStorage();
+            //var data = new PlayerSystem();
+            //data.Unk_Hash = br.ReadUInt64();
+            //data.Unk_Id = br.ReadTweakDbId();
             //node.Data = data;
         }
     }
