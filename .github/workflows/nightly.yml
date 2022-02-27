@@ -14,7 +14,7 @@ jobs:
       - uses: actions/checkout@v2
         with:
           ref: develop
-         
+
       - name: Get commit
         run: |
           $commit = git log -1 --format=%H
@@ -33,18 +33,18 @@ jobs:
     runs-on: windows-2022
 
     steps:
-    # setup  
+    # setup
     - name: checkout
       uses: actions/checkout@v2
       with:
         ref: develop
-    
+
     - name: Get commit
       run: |
         $commit = git log -1 --format=%H
         echo "SHA=$commit" >> $env:GITHUB_ENV
     - run: echo ${{ env.SHA }}
-        
+
     - name: Setup .NET Core
       uses: actions/setup-dotnet@v1
       with:
@@ -59,7 +59,7 @@ jobs:
     - run: echo "NAME=WolvenKit" >> $env:GITHUB_ENV
     - run: echo "REF=${{github.ref}}" >> $env:GITHUB_ENV
     - run: echo "MREPO=${{github.repository}}" >> $env:GITHUB_ENV
-    
+
     - name: Get version
       uses: naminodarie/get-net-sdk-project-versions-action@v1
       id: get-version
@@ -74,14 +74,14 @@ jobs:
       run: |
         $date = Get-Date -Format "yyyy-MM-dd"
         echo "ISODATE=$date" >> $env:GITHUB_ENV
-        
-        
+
+
     - run: echo "VERSION=${{steps.get-version.outputs.assembly-version}}-nightly.${{env.ISODATE}}" >> $env:GITHUB_ENV
     - run: echo "VERSIONC=${{steps.get-version-cli.outputs.assembly-version}}-nightly.${{env.ISODATE}}" >> $env:GITHUB_ENV
-    
+
     # Publish app
     - run: dotnet publish ${{env.PROJ}} -o ${{env.OUT}} -c Release -p:InformationalVersion="${{env.VERSION}}"
-    
+
     # Publish console
     - run: dotnet publish ${{env.PROJC}} -o ${{env.OUTC}} -c Release
 
@@ -121,6 +121,3 @@ jobs:
         FILES: ${{env.FINALOUT}}/${{env.PORTABLE}} ${{env.FINALOUT}}/${{env.CONSOLE}}
         REPO: WolvenKit/WolvenKit-nightly-releases
         GITHUB_TOKEN: ${{ secrets.RELEASE_TOKEN }}
-    
-    
-      
