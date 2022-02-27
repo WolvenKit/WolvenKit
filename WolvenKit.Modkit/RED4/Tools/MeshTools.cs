@@ -619,7 +619,7 @@ namespace CP77.CR2W
                 var apps = info.appearances.Keys.ToList();
                 for (var e = 0; e < apps.Count; e++)
                 {
-                    meshContainer.materialNames[e] = info.appearances[apps[e]][0];
+                    meshContainer.materialNames[e] = info.appearances[apps[e]][index];
                 }
 
                 meshContainer.colors1 = Array.Empty<Vec4>();

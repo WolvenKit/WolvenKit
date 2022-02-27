@@ -954,7 +954,7 @@ namespace WolvenKit.Modkit.RED4
         {
             if (model.LogicalMeshes.Count == 0)
             {
-                throw new Exception("Provided GLTF doesn't contain any 3D Geomerty");
+                throw new Exception("Provided glTF doesn't contain any 3D Geomerty");
             }
             if (model.LogicalSkins.Count > 1)
             {
@@ -972,11 +972,11 @@ namespace WolvenKit.Modkit.RED4
                 }
                 if (!accessors.Contains("NORMAL"))
                 {
-                    throw new Exception("One or more Geometry in provided GLTF doesn't contain Normals data");
+                    throw new Exception("One or more Geometry in provided GLTF doesn't contain Normals data. Normals must be included within glTF files.");
                 }
                 if (!accessors.Contains("TANGENT"))
                 {
-                    throw new Exception("One or more Geometry in provided GLTF doesn't contain Tangents data");
+                    throw new Exception("One or more Geometry in provided GLTF doesn't contain Tangents data. Tangents must be included within glTF files.");
                 }
                 if (model.LogicalMeshes[i].Primitives[0].GetIndices().ToList().Count < 3)
                 {
@@ -1012,7 +1012,7 @@ namespace WolvenKit.Modkit.RED4
             }
             if (!LODs.Contains(1))
             {
-                throw new Exception("None of the Geometry/sub meshes are of 1 Level of Detail or (LOD 1) in provided GLTF");
+                throw new Exception("None of the Geometry/submeshes are of 1 Level of Detail or (LOD 1) in provided GLTF");
             }
         }
         private static void UpdateSkinningParamCloth(ref List<RawMeshContainer> meshes, ref CR2WFile cr2w)

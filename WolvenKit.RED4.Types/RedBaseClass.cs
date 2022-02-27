@@ -10,7 +10,7 @@ using System.Threading;
 namespace WolvenKit.RED4.Types
 {
     [REDMeta]
-    public class RedBaseClass : DynamicObject, IRedType, IRedNotifyObjectChanged, IRedCloneable, IEquatable<RedBaseClass>
+    public class RedBaseClass : DynamicObject, IRedType, IRedCloneable, IEquatable<RedBaseClass>
     {
         public RedBaseClass()
         {
@@ -18,7 +18,7 @@ namespace WolvenKit.RED4.Types
         }
 
         #region Events
-
+/*
         public event ObjectChangedEventHandler ObjectChanged;
 
         private readonly Dictionary<string, ObjectChangedEventHandler> _delegateCache = new();
@@ -77,7 +77,7 @@ namespace WolvenKit.RED4.Types
                 ObjectChanged.Invoke(this, args);
             }
         }
-
+*/
         #endregion
 
         private string GetRedName(string propertyName)
@@ -181,10 +181,10 @@ namespace WolvenKit.RED4.Types
 
             if (!Equals(oldValue, value))
             {
-                if (oldValue != null)
-                {
-                    RemoveEventHandler(redPropertyName);
-                }
+                //if (oldValue != null)
+                //{
+                //    RemoveEventHandler(redPropertyName);
+                //}
 
                 SetDictValue(redPropertyName, value);
                 if (!native)
@@ -192,24 +192,24 @@ namespace WolvenKit.RED4.Types
                     _dynamicProperties.Add(redPropertyName);
                 }
 
-                if (value != null)
-                {
-                    AddEventHandler(redPropertyName);
-                }
-                
-                OnObjectChanged(redPropertyName, oldValue, value);
+                //if (value != null)
+                //{
+                //    AddEventHandler(redPropertyName);
+                //}
+                //
+                //OnObjectChanged(redPropertyName, oldValue, value);
             }
         }
 
         internal void InternalForceSetPropertyValue(string redPropertyName, IRedType value, bool native)
         {
-            object oldValue = null;
-            if (_properties.ContainsKey(redPropertyName))
-            {
-                oldValue = _properties[redPropertyName];
-
-                RemoveEventHandler(redPropertyName);
-            }
+            //object oldValue = null;
+            //if (_properties.ContainsKey(redPropertyName))
+            //{
+            //    oldValue = _properties[redPropertyName];
+            //
+            //    RemoveEventHandler(redPropertyName);
+            //}
 
             SetDictValue(redPropertyName, value);
             if (!native)
@@ -217,12 +217,12 @@ namespace WolvenKit.RED4.Types
                 _dynamicProperties.Add(redPropertyName);
             }
 
-            if (value != null)
-            {
-                AddEventHandler(redPropertyName);
-            }
-
-            OnObjectChanged(redPropertyName, oldValue, value);
+            //if (value != null)
+            //{
+            //    AddEventHandler(redPropertyName);
+            //}
+            //
+            //OnObjectChanged(redPropertyName, oldValue, value);
         }
 
         public IRedType GetObjectByRedName(string redName)

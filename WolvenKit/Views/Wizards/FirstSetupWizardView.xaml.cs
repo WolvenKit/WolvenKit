@@ -97,7 +97,7 @@ namespace WolvenKit.Views.Wizards
                 {
                     ValidationText.SetCurrentValue(VisibilityProperty, Visibility.Visible);
                     ValidationText.SetCurrentValue(System.Windows.Controls.TextBlock.TextProperty,
-                        $"Oodle dll was not found with the game. Please make sure you have {Constants.Oodle} next to your game executable.");
+                        $"Oodle dll was not found within the game installation. Please make sure you have {Constants.Oodle} next to your game executable.");
                     return HandyControl.Data.OperationResult.Failed();
                 }
                 ValidationText.SetCurrentValue(VisibilityProperty, Visibility.Collapsed);
@@ -106,7 +106,7 @@ namespace WolvenKit.Views.Wizards
 
             ValidationText.SetCurrentValue(VisibilityProperty, Visibility.Visible);
             ValidationText.SetCurrentValue(System.Windows.Controls.TextBlock.TextProperty,
-                "Game exe location was not found.");
+                "Locate game executable (.exe) for full WolvenKit functionality.");
             return HandyControl.Data.OperationResult.Failed();
         }
 
