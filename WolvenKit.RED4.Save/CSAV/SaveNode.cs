@@ -13,4 +13,6 @@ public class SaveNode
 
     public byte[] TrailingDataBytes { get; set; } = Array.Empty<byte>();
     public IParseableBuffer TrailingData { get; set; }
+
+    public override string ToString() => Name;
 }

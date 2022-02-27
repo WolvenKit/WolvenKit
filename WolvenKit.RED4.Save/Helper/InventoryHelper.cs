@@ -203,7 +203,7 @@ public class InventoryHelper
 
     public static NextItemEntry ReadNextItemEntry(BinaryReader reader) =>
         new() {
-            ItemTdbId = reader.ReadUInt64(),
+            ItemTdbId = reader.ReadTweakDbId(),
             Header = ReadHeaderThing(reader)
         };
 
@@ -211,7 +211,7 @@ public class InventoryHelper
     {
         var result = new ItemData();
 
-        result.ItemTdbId = reader.ReadUInt64();
+        result.ItemTdbId = reader.ReadTweakDbId();
         result.Header = ReadHeaderThing(reader);
         result.Flags = (ItemFlag)reader.ReadByte();
         result.CreationTime = reader.ReadUInt32();
@@ -256,7 +256,7 @@ public class InventoryHelper
     {
         var result = new ModableItemData();
 
-        result.TdbId1 = reader.ReadUInt64();
+        result.TdbId1 = reader.ReadTweakDbId();
         result.Unknown2 = reader.ReadUInt32();
         result.Unknown3 = reader.ReadSingle();
         result.RootNode = ReadKind2DataNode(reader);
@@ -268,10 +268,10 @@ public class InventoryHelper
     {
         var result = new ItemModData();
 
-        result.ItemTdbId = reader.ReadUInt64();
+        result.ItemTdbId = reader.ReadTweakDbId();
         result.Header = ReadHeaderThing(reader);
         result.UnknownString = reader.ReadLengthPrefixedString();
-        result.AttachmentSlotTdbId = reader.ReadUInt64();
+        result.AttachmentSlotTdbId = reader.ReadTweakDbId();
         var count = reader.ReadVLQInt32();
         for (var i = 0; i < count; ++i)
         {
@@ -279,7 +279,7 @@ public class InventoryHelper
         }
 
         result.Unknown2 = reader.ReadUInt32();
-        result.TdbId2 = reader.ReadUInt64();
+        result.TdbId2 = reader.ReadTweakDbId();
         result.Unknown3 = reader.ReadUInt32();
         result.Unknown4 = reader.ReadSingle();
 

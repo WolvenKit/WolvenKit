@@ -1,36 +1,53 @@
+using System.Diagnostics;
+using WolvenKit.Common.FNV1A;
 using WolvenKit.RED4.Types;
 using WolvenKit.Core.Extensions;
 
 namespace WolvenKit.RED4.Save
 {
+    public sealed class Fact
+    {
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        private string _value;
+
+        private uint _hash;
+
+
+        private Fact(string val)
+        {
+            _value = val;
+            _hash = CalculateHash();
+        }
+
+        private Fact(uint value)
+        {
+            _value = null;
+            _hash = value;
+        }
+
+        private uint CalculateHash() => FNV1A32HashAlgorithm.HashString(_value);
+
+
+        public static implicit operator Fact(string value) => new(value);
+        public static implicit operator string(Fact value) => value._value;
+
+        public static implicit operator Fact(uint value) => new(value);
+        public static implicit operator uint(Fact value) => value._hash;
+
+        public override string ToString()
+        {
+            return $"{_value}";
+        }
+    }
+
     public class FactsTable : IParseableBuffer
     {
         private List<FactEntry> _factEntries;
 
         public class FactEntry
         {
-            private uint _hash;
-            private uint _value;
-
-            public uint Hash
-            {
-                get => _hash;
-                set
-                {
-                    _hash = value;
-                }
-            }
-
-            public string FactName => FactResolver.GetName(Hash);
-
-            public uint Value
-            {
-                get => _value;
-                set
-                {
-                    _value = value;
-                }
-            }
+            public Fact FactName { get; set; }
+            public uint Value { get; set; }
 
             public override string ToString()
             {
@@ -82,17 +99,17 @@ namespace WolvenKit.RED4.Save
             var data = new FactsTable();
             var count = br.ReadVLQInt32();
 
-            var tmpFactList = new uint[count];
+            var tmpFactList = new Fact[count];
             for (int i = 0; i < count; i++)
             {
-                tmpFactList[i] = br.ReadUInt32();
+                tmpFactList[i] = br.ReadFact();
             }
 
             for (int i = 0; i < count; i++)
             {
                 data.FactEntries.Add(new FactsTable.FactEntry
                 {
-                    Hash = tmpFactList[i],
+                    FactName = tmpFactList[i],
                     Value = br.ReadUInt32()
                 });
             }

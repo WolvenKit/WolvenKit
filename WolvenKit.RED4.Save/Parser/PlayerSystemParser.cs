@@ -12,17 +12,16 @@ namespace WolvenKit.RED4.Save
 
     public class PlayerSystemParser : INodeParser
     {
-        // public static string NodeName => Constants.NodeNames.PLAYER_SYSTEM;
+        public static string NodeName => Constants.NodeNames.PLAYER_SYSTEM;
 
         public void Read(SaveNode node)
         {
-            throw new NotImplementedException();
-            //using var ms = new MemoryStream(node.DataBytes);
-            //using var br = new BinaryReader(ms);
-            //var data = new PlayerSystem();
-            //data.Unk_Hash = br.ReadUInt64();
-            //data.Unk_Id = br.ReadTweakDbId();
-            //node.Data = data;
+            using var ms = new MemoryStream(node.DataBytes);
+            using var br = new BinaryReader(ms);
+            var data = new PlayerSystem();
+            data.Unk_Hash = br.ReadUInt64();
+            data.Unk_Id = br.ReadTweakDbId();
+            node.Data = data;
         }
 
         public SaveNode Write() => throw new NotImplementedException();

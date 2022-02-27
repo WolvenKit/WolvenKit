@@ -84,6 +84,7 @@ namespace WolvenKit.RED4.Save
             public const string PS_DATA = "PSData";
             public const string QUEST_DEBUG_LOG_MANAGER = "questDebugLogManager";
             public const string QUEST_MUSIC_HISTORY = "QuestMusicHistory";
+            public const string QUEST_SYSTEM = "questSystem";
             public const string RADIO_SYSTEM = "RadioSystem";
             public const string REACTION_SYSTEM = "ReactionSystem";
             public const string REACTION_SYSTEM_V2 = "ReactionSystem_v2";
