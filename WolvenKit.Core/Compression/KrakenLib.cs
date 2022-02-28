@@ -7,11 +7,11 @@ namespace WolvenKit.Core.Compression;
 public static class KrakenLib
 {
 #if _WINDOWS
-    private const string dllName = "kraken.dll";
+    private const string dllName = "lib/kraken.dll";
 #elif _OSX
-    private const string dllName = "libkraken.dylib";
+    private const string dllName = "lib/libkraken.dylib";
 #elif _LINUX
-    private const string dllName = "libkraken.so";
+    private const string dllName = "lib/libkraken.so";
 #endif
 
 
