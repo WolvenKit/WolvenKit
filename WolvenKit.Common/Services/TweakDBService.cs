@@ -20,7 +20,7 @@ namespace WolvenKit.Common.Services
     public class TweakDBService : ITweakDBService
     {
         private const string tweakdbstr = "WolvenKit.Common.Resources.tweakdbstr.kark";
-        //private const string tweakdbbin = "WolvenKit.Common.Resources.tweakdb.bin";
+        private const string tweakdbstr_add = "WolvenKit.Common.Resources.tweakdbstr_add.kark";
 
         private const uint s_recordSeed = 0x5EEDBA5E;
         private readonly Dictionary<uint, Type> _typeHashes = new();
@@ -40,7 +40,8 @@ namespace WolvenKit.Common.Services
         public TweakDBService()
         {
             LoadTypes();
-            LoadStrings();
+            LoadStrings(tweakdbstr);
+            LoadStrings(tweakdbstr_add);
         }
 
         public void LoadTypes()
@@ -61,9 +62,6 @@ namespace WolvenKit.Common.Services
         {
             using var fh = File.OpenRead(path);
             using var br = new BinaryReader(fh);
-
-            //using var stream = Assembly.GetExecutingAssembly().GetManifestResourceStream(tweakdbbin);
-            //using var br = new BinaryReader(stream);
 
             var magic = br.ReadInt32();
 
@@ -171,9 +169,9 @@ namespace WolvenKit.Common.Services
             }
         }
 
-        public void LoadStrings()
+        public void LoadStrings(string path)
         {
-            using var stream = Assembly.GetExecutingAssembly().GetManifestResourceStream(tweakdbstr);
+            using var stream = Assembly.GetExecutingAssembly().GetManifestResourceStream(path);
 
             // read KARK header
             var oodleCompression = stream.ReadStruct<uint>();
@@ -207,9 +205,9 @@ namespace WolvenKit.Common.Services
             var numFlats = br.ReadInt32();
             var numQueries = br.ReadInt32();
 
-            _recordHashes.EnsureCapacity(numRecords);
-            _flatHashes.EnsureCapacity(numFlats);
-            _queryHashes.EnsureCapacity(numQueries);
+            _recordHashes.EnsureCapacity(_recordHashes.Count + numRecords);
+            _flatHashes.EnsureCapacity(_flatHashes.Count + numFlats);
+            _queryHashes.EnsureCapacity(_queryHashes.Count + numQueries);
 
             for (uint i = 0; i < numRecords; i++)
             {
