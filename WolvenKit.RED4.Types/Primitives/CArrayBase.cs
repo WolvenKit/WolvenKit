@@ -53,6 +53,12 @@ namespace WolvenKit.RED4.Types
                 }
             }
         }
+
+        public CArrayBase(List<T> list)
+        {
+            _internalList = list;
+        }
+
         public Type InnerType => typeof(T);
 
         public object ShallowCopy()
