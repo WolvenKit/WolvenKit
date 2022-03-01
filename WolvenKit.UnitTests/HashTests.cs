@@ -4,20 +4,14 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.InteropServices;
-using System.Text;
-using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using WolvenKit.Common.Extensions;
 using WolvenKit.Common.FNV1A;
 using WolvenKit.Common.Model;
 using WolvenKit.Core.Compression;
-using WolvenKit.Core;
 using WolvenKit.Core.Exceptions;
-using WolvenKit.Interfaces.Extensions;
-using WolvenKit.RED4.Archive;
 using WolvenKit.Core.Extensions;
 
-namespace WolvenKit.MSTests
+namespace WolvenKit.UnitTests
 {
     [TestClass]
     public class HashTests
@@ -62,7 +56,7 @@ namespace WolvenKit.MSTests
                 using (var ms = new MemoryStream(outputbuffer))
                 using (var sr = new StreamReader(ms))
                 {
-                    string line;
+                    string? line;
                     while ((line = sr.ReadLine()) != null)
                     {
                         var hash = FNV1A64HashAlgorithm.HashString(line);
@@ -145,7 +139,7 @@ namespace WolvenKit.MSTests
                 using (var ms = new MemoryStream(outputbuffer))
                 using (var sr = new StreamReader(ms))
                 {
-                    string line;
+                    string? line;
                     while ((line = sr.ReadLine()) != null)
                     {
                         var hash = FNV1A64HashAlgorithm.HashString(line);
@@ -232,7 +226,7 @@ namespace WolvenKit.MSTests
                 using (var sr = new StreamReader(ms))
                 {
 
-                    string line;
+                    string? line;
                     while ((line = sr.ReadLine()) != null)
                     {
                         originals.Add(line);

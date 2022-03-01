@@ -3,7 +3,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using WolvenKit.Common;
 using WolvenKit.Common.DDS;
 
-namespace WolvenKit.MSTests
+namespace WolvenKit.UnitTests
 {
     [TestClass]
     public class TexconvTests
@@ -154,7 +154,7 @@ namespace WolvenKit.MSTests
         {
             var testFile = Path.GetFullPath($"Resources/{GetTestFile()}.dds");
             var bytes = File.ReadAllBytes(testFile);
-            
+
             //foreach (var type in Enum.GetValues<EUncookExtension>())
             {
                 var outFile = Path.GetFullPath(Path.Combine("texc", $"{GetTestFile()}.{type.ToString()}"));

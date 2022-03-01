@@ -12,7 +12,6 @@ using System.Windows.Media;
 using System.Windows.Media.Media3D;
 using Ab3d.Assimp;
 using Assimp;
-using CP77.CR2W;
 using DynamicData;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
@@ -31,6 +30,7 @@ using WolvenKit.Interaction;
 using WolvenKit.Models;
 using WolvenKit.Models.Docking;
 using WolvenKit.Modkit.RED4.Opus;
+using WolvenKit.Modkit.RED4.Tools;
 using WolvenKit.RED4.CR2W.Archive;
 
 namespace WolvenKit.ViewModels.Tools

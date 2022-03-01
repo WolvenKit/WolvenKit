@@ -7,7 +7,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using WolvenKit.RED4.TweakDB;
 using WolvenKit.RED4.TweakDB.Types;
 
-namespace WolvenKit.MSTests
+namespace WolvenKit.UnitTests
 {
     [TestClass]
     public class TweakDBTests

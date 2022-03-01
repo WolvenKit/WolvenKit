@@ -18,7 +18,7 @@ using WolvenKit.Modkit.RED4.Tools;
 using WolvenKit.RED4.CR2W;
 using WolvenKit.RED4.CR2W.Archive;
 
-namespace WolvenKit.FunctionalTests
+namespace WolvenKit.Utility
 {
     [TestClass]
     public class GameUnitTest

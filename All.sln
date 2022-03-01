@@ -31,7 +31,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WolvenKit.Modkit", "WolvenK
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WolvenKit.Core", "WolvenKit.Core\WolvenKit.Core.csproj", "{CEF1CF72-B8CF-4CBB-AA11-473438EDE3F3}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WolvenKit.MSTests", "WolvenKit.MSTests\WolvenKit.MSTests.csproj", "{96B50D87-B772-4E1F-BF6C-44AFDC2CA748}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WolvenKit.FunctionalTests", "WolvenKit.MSTests\WolvenKit.FunctionalTests.csproj", "{96B50D87-B772-4E1F-BF6C-44AFDC2CA748}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Installers", "Installers", "{E4ECEE21-F0F1-440F-A356-76BBD57E710E}"
 	ProjectSection(SolutionItems) = preProject
@@ -49,6 +49,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Config", "Config", "{F13486
 	ProjectSection(SolutionItems) = preProject
 		.editorconfig = .editorconfig
 	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WolvenKit.UnitTests", "WolvenKit.UnitTests\WolvenKit.UnitTests.csproj", "{73E5F6DF-7F08-419C-9445-0FBE07D6A9F1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WolvenKit.Utility", "WolvenKit.Utility\WolvenKit.Utility.csproj", "{E9AFD285-C7FB-44FB-96D1-0D2ED4E38AA3}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -123,6 +127,18 @@ Global
 		{1F7EFA8C-0FAC-4F88-BE14-EAB6177AE1B4}.Profile|x64.Build.0 = Release|x64
 		{1F7EFA8C-0FAC-4F88-BE14-EAB6177AE1B4}.Release|x64.ActiveCfg = Release|x64
 		{1F7EFA8C-0FAC-4F88-BE14-EAB6177AE1B4}.Release|x64.Build.0 = Release|x64
+		{73E5F6DF-7F08-419C-9445-0FBE07D6A9F1}.Debug|x64.ActiveCfg = Debug|x64
+		{73E5F6DF-7F08-419C-9445-0FBE07D6A9F1}.Debug|x64.Build.0 = Debug|x64
+		{73E5F6DF-7F08-419C-9445-0FBE07D6A9F1}.Profile|x64.ActiveCfg = Debug|Any CPU
+		{73E5F6DF-7F08-419C-9445-0FBE07D6A9F1}.Profile|x64.Build.0 = Debug|Any CPU
+		{73E5F6DF-7F08-419C-9445-0FBE07D6A9F1}.Release|x64.ActiveCfg = Release|x64
+		{73E5F6DF-7F08-419C-9445-0FBE07D6A9F1}.Release|x64.Build.0 = Release|x64
+		{E9AFD285-C7FB-44FB-96D1-0D2ED4E38AA3}.Debug|x64.ActiveCfg = Debug|x64
+		{E9AFD285-C7FB-44FB-96D1-0D2ED4E38AA3}.Debug|x64.Build.0 = Debug|x64
+		{E9AFD285-C7FB-44FB-96D1-0D2ED4E38AA3}.Profile|x64.ActiveCfg = Debug|Any CPU
+		{E9AFD285-C7FB-44FB-96D1-0D2ED4E38AA3}.Profile|x64.Build.0 = Debug|Any CPU
+		{E9AFD285-C7FB-44FB-96D1-0D2ED4E38AA3}.Release|x64.ActiveCfg = Release|x64
+		{E9AFD285-C7FB-44FB-96D1-0D2ED4E38AA3}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -142,6 +158,8 @@ Global
 		{30FF3602-DA2B-4289-A9C6-7D1E1AA35A81} = {A84C71C3-E7BD-4E88-847B-B743E549429A}
 		{0C939ED1-2DC4-4C87-B628-64BE1FCB71B7} = {A84C71C3-E7BD-4E88-847B-B743E549429A}
 		{1F7EFA8C-0FAC-4F88-BE14-EAB6177AE1B4} = {A84C71C3-E7BD-4E88-847B-B743E549429A}
+		{73E5F6DF-7F08-419C-9445-0FBE07D6A9F1} = {B904A345-E6CF-4D6A-9F10-C04F02340B63}
+		{E9AFD285-C7FB-44FB-96D1-0D2ED4E38AA3} = {B904A345-E6CF-4D6A-9F10-C04F02340B63}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {8DAAF993-E8B7-47A4-AB0E-C159CB499F45}

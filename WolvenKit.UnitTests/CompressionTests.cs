@@ -1,11 +1,10 @@
 using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using WolvenKit.Core.Compression;
 
-namespace WolvenKit.MSTests
+namespace WolvenKit.UnitTests
 {
     [TestClass]
     public class CompressionTests

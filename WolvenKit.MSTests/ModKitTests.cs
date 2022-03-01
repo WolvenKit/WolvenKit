@@ -5,19 +5,18 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Catel.IoC;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using WolvenKit.Common;
 using WolvenKit.Common.Interfaces;
 using WolvenKit.Common.Model;
 using WolvenKit.Common.Model.Arguments;
 using WolvenKit.Core.Extensions;
-using WolvenKit.Interfaces.Extensions;
+using WolvenKit.FunctionalTests.Model;
 using WolvenKit.Modkit.RED4;
-using WolvenKit.MSTests.Model;
 using WolvenKit.RED4.CR2W.Archive;
 
-namespace WolvenKit.MSTests
+namespace WolvenKit.FunctionalTests
 {
     [TestClass]
     public class ModKitTests : GameUnitTest
@@ -44,7 +43,7 @@ namespace WolvenKit.MSTests
             var ext = $".{extension.ToString()}";
             var infiles = s_groupedFiles[ext].ToList();
 
-            var modtools = ServiceLocator.Default.ResolveType<IModTools>();
+            var modtools = _host.Services.GetRequiredService<IModTools>();
             var resultDir = new DirectoryInfo(Path.Combine(Environment.CurrentDirectory, s_testResultsDirectory, "temp"));
             if (!resultDir.Exists)
             {
@@ -56,6 +55,7 @@ namespace WolvenKit.MSTests
                 Directory.CreateDirectory(logDir.FullName);
             }
 
+            ArgumentNullException.ThrowIfNull(s_config);
             var isKeep = bool.Parse(s_config.GetSection(s_KEEP).Value);
             var isettings = new GlobalImportArgs().Register(
                 new XbmImportArgs() { Keep = isKeep },
@@ -84,6 +84,7 @@ namespace WolvenKit.MSTests
                 }
 
                 var ar = fileEntry.Archive as Archive;
+                ArgumentNullException.ThrowIfNull(ar);
                 using var cr2wstream = new MemoryStream();
                 ar.CopyFileToStream(cr2wstream, fileEntry.NameHash64, false);
                 var originalBytes = cr2wstream.ToByteArray();
@@ -235,12 +236,14 @@ namespace WolvenKit.MSTests
         {
             var resultDir = Path.Combine(Environment.CurrentDirectory, s_testResultsDirectory);
             Directory.CreateDirectory(resultDir);
-
+            ArgumentNullException.ThrowIfNull(s_gameDirectoryPath);
+            ArgumentNullException.ThrowIfNull(s_bm);
 
             var results = new ConcurrentBag<ArchiveTestResult>();
             var archiveFullName = Path.Combine(s_gameDirectoryPath, "archive", "pc", "content", archivename);
 
             var archive = s_bm.Archives.Lookup(archiveFullName).Value as Archive;
+            ArgumentNullException.ThrowIfNull(archive);
             Parallel.ForEach(archive.Files, keyvalue =>
             {
                 var (hash, _) = keyvalue;
@@ -299,12 +302,13 @@ namespace WolvenKit.MSTests
         //[DataRow(ECookedFileFormat.xbm)]
         public void Test_Uncook(ECookedFileFormat extension)
         {
+            ArgumentNullException.ThrowIfNull(s_config);
             Environment.SetEnvironmentVariable("WOLVENKIT_ENVIRONMENT", "Testing", EnvironmentVariableTarget.Process);
 
             var ext = $".{extension.ToString()}";
             var infiles = s_groupedFiles[ext].ToList();
 
-            var modtools = ServiceLocator.Default.ResolveType<IModTools>();
+            var modtools = _host.Services.GetRequiredService<ModTools>();
             var resultDir = new DirectoryInfo(Path.Combine(Environment.CurrentDirectory, s_testResultsDirectory, "temp"));
             if (!resultDir.Exists)
             {

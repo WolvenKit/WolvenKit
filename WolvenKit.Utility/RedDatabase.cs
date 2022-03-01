@@ -5,7 +5,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using Catel.IoC;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using WolvenKit.Common.FNV1A;
 using WolvenKit.Common.Model.Database;
@@ -15,10 +15,10 @@ using WolvenKit.RED4.Archive.IO;
 using WolvenKit.RED4.CR2W;
 using WolvenKit.RED4.CR2W.Archive;
 
-namespace WolvenKit.MSTests
+namespace WolvenKit.Utility
 {
     [TestClass]
-    public class _RedDataBase : GameUnitTest
+    public class RedDatabase : GameUnitTest
     {
 
         [ClassInitialize]
@@ -27,11 +27,12 @@ namespace WolvenKit.MSTests
         [TestMethod]
         public void aGenerateDB()
         {
+            ArgumentNullException.ThrowIfNull(s_bm);
             using var db = new RedDBContext();
 
             var sw = new Stopwatch();
-            var parser = ServiceLocator.Default.ResolveType<Red4ParserService>();
-            var hashService = ServiceLocator.Default.ResolveType<IHashService>();
+            var parser = _host.Services.GetRequiredService<Red4ParserService>();
+            var hashService = _host.Services.GetRequiredService<IHashService>();
             var allFiles = s_bm.Archives.Items
                                 .SelectMany(x => x.Files.Values)
                                 .ToList();
@@ -85,9 +86,10 @@ namespace WolvenKit.MSTests
         [TestMethod]
         public void bAddArchiveNames()
         {
+            ArgumentNullException.ThrowIfNull(s_bm);
             using var db = new RedDBContext();
-            var parser = ServiceLocator.Default.ResolveType<Red4ParserService>();
-            var hashService = ServiceLocator.Default.ResolveType<IHashService>();
+            var parser = _host.Services.GetRequiredService<Red4ParserService>();
+            var hashService = _host.Services.GetRequiredService<IHashService>();
 
             foreach (var item in db.Files)
             {
@@ -107,8 +109,8 @@ namespace WolvenKit.MSTests
         public void cSetUses()
         {
             var sw = new Stopwatch();
-            var parser = ServiceLocator.Default.ResolveType<Red4ParserService>();
-            var hashService = ServiceLocator.Default.ResolveType<IHashService>();
+            var parser = _host.Services.GetRequiredService<Red4ParserService>();
+            var hashService = _host.Services.GetRequiredService<IHashService>();
             var resultDir = Path.Combine(Environment.CurrentDirectory, s_testResultsDirectory);
             Directory.CreateDirectory(resultDir);
             using var db = new RedDBContext();
@@ -150,7 +152,7 @@ namespace WolvenKit.MSTests
                             ModTools.ExtractSingleToStream(archive, hash, originalMemoryStream);
 
                             using var reader = new CR2WReader(originalMemoryStream);
-                            
+
                             if (parser.TryReadRed4FileHeaders(originalMemoryStream, out var cr2w))
                             {
                                 var rawImports = cr2w.GetImports();
@@ -200,8 +202,8 @@ namespace WolvenKit.MSTests
         public void dSetusedBy()
         {
             var sw = new Stopwatch();
-            var parser = ServiceLocator.Default.ResolveType<Red4ParserService>();
-            var hashService = ServiceLocator.Default.ResolveType<IHashService>();
+            var parser = _host.Services.GetRequiredService<Red4ParserService>();
+            var hashService = _host.Services.GetRequiredService<IHashService>();
 
             using var db = new RedDBContext();
 
@@ -244,9 +246,9 @@ namespace WolvenKit.MSTests
 
                 var uses = item.Uses != null ? string.Join('-', item.Uses) : "";
                 var usedby = string.Join('-', x.Select(_ => _.RedFileId));
-                Console.WriteLine($"{item.RedFileId}, {item.Archive}, {item.Name}, {uses}, {usedby}");   
+                Console.WriteLine($"{item.RedFileId}, {item.Archive}, {item.Name}, {uses}, {usedby}");
             }
         }
-        
+
     }
 }

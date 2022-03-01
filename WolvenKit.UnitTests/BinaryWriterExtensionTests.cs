@@ -4,10 +4,8 @@ using Microsoft.IO;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using WolvenKit.Core.Extensions;
 
-namespace WolvenKit.MSTests
+namespace WolvenKit.UnitTests
 {
-    using ReadVLQUInt32Test = Tuple<byte[], uint>;
-
     [TestClass]
     public class BinaryWriterExtensionTests
     {
@@ -19,7 +17,7 @@ namespace WolvenKit.MSTests
 
         #region Methods
 
-        
+
         [DataTestMethod]
         [DataRow("", new byte[] { 0x00 }, DisplayName = "00. Empty string")]
         [DataRow("Reset", new byte[] { 0x85, 0x52, 0x65, 0x73, 0x65, 0x74 }, DisplayName = "01. From tweakdb.bin: Reset")]
@@ -79,25 +77,25 @@ namespace WolvenKit.MSTests
 
             CollectionAssert.AreEqual(expected, actual);
         }
-        
+
 
         [TestMethod]
-        [DataRow(  0, new byte[] { 0x00 }, DisplayName = "00. Zero value")]
-        [DataRow( 42, new byte[] { 0x2A }, DisplayName = "01. Positive 1-byte value")]
+        [DataRow(0, new byte[] { 0x00 }, DisplayName = "00. Zero value")]
+        [DataRow(42, new byte[] { 0x2A }, DisplayName = "01. Positive 1-byte value")]
         [DataRow(-42, new byte[] { 0xAA }, DisplayName = "02. Negative 1-byte value")]
-        [DataRow( 63, new byte[] { 0x3F }, DisplayName = "03. Max positive 1-byte value  (2^6 - 1)")]
+        [DataRow(63, new byte[] { 0x3F }, DisplayName = "03. Max positive 1-byte value  (2^6 - 1)")]
         [DataRow(-63, new byte[] { 0xBF }, DisplayName = "04. Min negative 1-byte value -(2^6 - 1)")]
-        [DataRow(   64, new byte[] { 0x40, 0x01 }, DisplayName = "05. Min 2-byte value (2^6)")]
-        [DataRow( 8191, new byte[] { 0x7F, 0x7F }, DisplayName = "06. Max positive 2-byte value  (2^13 - 1)")]
+        [DataRow(64, new byte[] { 0x40, 0x01 }, DisplayName = "05. Min 2-byte value (2^6)")]
+        [DataRow(8191, new byte[] { 0x7F, 0x7F }, DisplayName = "06. Max positive 2-byte value  (2^13 - 1)")]
         [DataRow(-8191, new byte[] { 0xFF, 0x7F }, DisplayName = "07. Max negative 2-byte value -(2^13 - 1)")]
-        [DataRow(    8192, new byte[] { 0x40, 0x80, 0x01 }, DisplayName = "08. Min 3-byte value (2^13)")]
-        [DataRow( 1048575, new byte[] { 0x7F, 0xFF, 0x7F }, DisplayName = "09. Max positive 3-byte value  (2^20 - 1)")]
+        [DataRow(8192, new byte[] { 0x40, 0x80, 0x01 }, DisplayName = "08. Min 3-byte value (2^13)")]
+        [DataRow(1048575, new byte[] { 0x7F, 0xFF, 0x7F }, DisplayName = "09. Max positive 3-byte value  (2^20 - 1)")]
         [DataRow(-1048575, new byte[] { 0xFF, 0xFF, 0x7F }, DisplayName = "10. Max negative 3-byte value -(2^20 - 1)")]
-        [DataRow(   1048576, new byte[] { 0x40, 0x80, 0x80, 0x01 }, DisplayName = "11. Min 4-byte value (2^20)")]
-        [DataRow( 134217727, new byte[] { 0x7F, 0xFF, 0xFF, 0x7F }, DisplayName = "12. Max positive 4-byte value  (2^27 - 1)")]
+        [DataRow(1048576, new byte[] { 0x40, 0x80, 0x80, 0x01 }, DisplayName = "11. Min 4-byte value (2^20)")]
+        [DataRow(134217727, new byte[] { 0x7F, 0xFF, 0xFF, 0x7F }, DisplayName = "12. Max positive 4-byte value  (2^27 - 1)")]
         [DataRow(-134217727, new byte[] { 0xFF, 0xFF, 0xFF, 0x7F }, DisplayName = "13. Max negative 4-byte value -(2^27 - 1)")]
-        [DataRow(  134217728, new byte[] { 0x40, 0x80, 0x80, 0x80, 0x01 }, DisplayName = "14. Min 5-byte value (2^27)")]
-        [DataRow( 2147483647, new byte[] { 0x7F, 0xFF, 0xFF, 0xFF, 0x0F }, DisplayName = "15. Max positive 32-bit value  (2^31 - 1)")]
+        [DataRow(134217728, new byte[] { 0x40, 0x80, 0x80, 0x80, 0x01 }, DisplayName = "14. Min 5-byte value (2^27)")]
+        [DataRow(2147483647, new byte[] { 0x7F, 0xFF, 0xFF, 0xFF, 0x0F }, DisplayName = "15. Max positive 32-bit value  (2^31 - 1)")]
         [DataRow(-2147483647, new byte[] { 0xFF, 0xFF, 0xFF, 0xFF, 0x0F }, DisplayName = "16. Max negative 32-bit value -(2^31 - 1)")]
         public void Test_WriteVLQInt32(int input, byte[] expected)
         {
@@ -110,18 +108,18 @@ namespace WolvenKit.MSTests
             CollectionAssert.AreEqual(expected, actual);
         }
 
-        
+
         [TestMethod]
-        [DataRow(         0u, new byte[] { 0x00 }, DisplayName = "00. Zero value")]
-        [DataRow(        69u, new byte[] { 0x45 }, DisplayName = "01. Random 1-byte value")]
-        [DataRow(       127u, new byte[] { 0x7F }, DisplayName = "02. Max 1-byte value (2^7 - 1)")]
-        [DataRow(       128u, new byte[] { 0x80, 0x01 }, DisplayName = "03. Min 2-byte value (2^7)")]
-        [DataRow(     16383u, new byte[] { 0xFF, 0x7F }, DisplayName = "04. Max 2-byte value (2^14 - 1)")]
-        [DataRow(     16384u, new byte[] { 0x80, 0x80, 0x01 }, DisplayName = "05. Min 3-byte value (2^14)")]
-        [DataRow(   2097151u, new byte[] { 0xFF, 0xFF, 0x7F }, DisplayName = "06. Max 3-byte value (2^21 - 1)")]
-        [DataRow(   2097152u, new byte[] { 0x80, 0x80, 0x80, 0x01 }, DisplayName = "07. Min 4-byte value (2^21)")]
-        [DataRow( 268435455u, new byte[] { 0xFF, 0xFF, 0xFF, 0x7F }, DisplayName = "08. Max 4-byte value (2^28 - 1)")]
-        [DataRow( 268435456u, new byte[] { 0x80, 0x80, 0x80, 0x80, 0x01 }, DisplayName = "09. Min 5-byte value (2^21)")]
+        [DataRow(0u, new byte[] { 0x00 }, DisplayName = "00. Zero value")]
+        [DataRow(69u, new byte[] { 0x45 }, DisplayName = "01. Random 1-byte value")]
+        [DataRow(127u, new byte[] { 0x7F }, DisplayName = "02. Max 1-byte value (2^7 - 1)")]
+        [DataRow(128u, new byte[] { 0x80, 0x01 }, DisplayName = "03. Min 2-byte value (2^7)")]
+        [DataRow(16383u, new byte[] { 0xFF, 0x7F }, DisplayName = "04. Max 2-byte value (2^14 - 1)")]
+        [DataRow(16384u, new byte[] { 0x80, 0x80, 0x01 }, DisplayName = "05. Min 3-byte value (2^14)")]
+        [DataRow(2097151u, new byte[] { 0xFF, 0xFF, 0x7F }, DisplayName = "06. Max 3-byte value (2^21 - 1)")]
+        [DataRow(2097152u, new byte[] { 0x80, 0x80, 0x80, 0x01 }, DisplayName = "07. Min 4-byte value (2^21)")]
+        [DataRow(268435455u, new byte[] { 0xFF, 0xFF, 0xFF, 0x7F }, DisplayName = "08. Max 4-byte value (2^28 - 1)")]
+        [DataRow(268435456u, new byte[] { 0x80, 0x80, 0x80, 0x80, 0x01 }, DisplayName = "09. Min 5-byte value (2^21)")]
         [DataRow(4294967295u, new byte[] { 0xFF, 0xFF, 0xFF, 0xFF, 0x0F }, DisplayName = "10. Max 32-bit value (2^32)")]
         public void Test_WriteVLQUInt32(uint input, byte[] expected)
         {
@@ -132,7 +130,7 @@ namespace WolvenKit.MSTests
             var actual = stream.ToArray();
 
             CollectionAssert.AreEqual(expected, actual);
-        }        
+        }
 
         #endregion
     }
