@@ -5,6 +5,7 @@ using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
+using System.Reactive.Disposables;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using System.Windows.Media;
@@ -13,6 +14,7 @@ using System.Windows.Media.Media3D;
 using CP77.CR2W;
 using HelixToolkit.SharpDX.Core;
 using HelixToolkit.Wpf.SharpDX;
+using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using Splat;
 using WolvenKit.Common.DDS;
@@ -184,8 +186,10 @@ namespace WolvenKit.ViewModels.Documents
         public float Roughness { get; set; } = 0.75f;
     }
 
-    public partial class RDTMeshViewModel : RedDocumentTabViewModel
+    public partial class RDTMeshViewModel : RedDocumentTabViewModel, IActivatableViewModel
     {
+        public ViewModelActivator Activator { get; } = new();
+
         protected readonly RedBaseClass _data;
         public RedDocumentViewModel File;
         private Dictionary<string, LoadableModel> _modelList = new();
@@ -202,9 +206,6 @@ namespace WolvenKit.ViewModels.Documents
 
         public TextureModel EnvironmentMap { get; set; }
 
-        public delegate void RenderDelegate();
-
-        public RenderDelegate Render;
         public bool IsRendered;
 
         public RDTMeshViewModel(RedDocumentViewModel file)
@@ -242,7 +243,12 @@ namespace WolvenKit.ViewModels.Documents
         public RDTMeshViewModel(CMesh data, RedDocumentViewModel file) : this(file)
         {
             _data = data;
-            Render = RenderMesh;
+            //Render = RenderMesh;
+
+            this.WhenActivated((CompositeDisposable disposables) =>
+            {
+                RenderMesh();
+            });
         }
 
         public void RenderMesh()

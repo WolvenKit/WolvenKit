@@ -9,6 +9,8 @@ using System.Windows.Input;
 using System.Windows.Media.Media3D;
 using HelixToolkit.SharpDX.Core;
 using HelixToolkit.Wpf.SharpDX;
+using ReactiveUI;
+using System.Reactive.Disposables;
 using WolvenKit.Functionality.Commands;
 using WolvenKit.RED4.Archive.Buffer;
 using WolvenKit.RED4.Archive.CR2W;
@@ -70,7 +72,10 @@ namespace WolvenKit.ViewModels.Documents
             _data = data;
             Header = "Sector Previews";
 
-            Render = RenderBlockSolo;
+            this.WhenActivated((CompositeDisposable disposables) =>
+            {
+                RenderBlockSolo();
+            });
         }
 
         public void RenderBlockSolo()

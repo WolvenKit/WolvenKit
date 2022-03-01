@@ -7,6 +7,8 @@ using System.Threading.Tasks;
 using System.Windows.Media.Media3D;
 using HelixToolkit.SharpDX.Core;
 using HelixToolkit.Wpf.SharpDX;
+using ReactiveUI;
+using System.Reactive.Disposables;
 using WolvenKit.RED4.Archive.Buffer;
 using WolvenKit.RED4.Archive.CR2W;
 using WolvenKit.RED4.Types;
@@ -20,7 +22,10 @@ namespace WolvenKit.ViewModels.Documents
             Header = "Entity Preview";
             _data = ent;
 
-            Render = RenderEntitySolo;
+            this.WhenActivated((CompositeDisposable disposables) =>
+            {
+                RenderEntitySolo();
+            });
         }
 
         public void RenderEntitySolo()
