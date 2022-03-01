@@ -65,9 +65,8 @@
     <None Remove="Resources\missinghashes.txt" />
     <None Remove="Resources\red.kark" />
     <None Remove="Resources\unusedhashes.kark" />
-    <EmbeddedResource Include="Resources\missinghashes.txt" />
-    <EmbeddedResource Include="Resources\unusedhashes.kark" />
     <None Remove="Resources\usedhashes.kark" />
+    <EmbeddedResource Include="Resources\missinghashes.txt" />
     <EmbeddedResource Include="Resources\usedhashes.kark" />
   </ItemGroup>
 

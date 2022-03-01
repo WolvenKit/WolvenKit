@@ -128,6 +128,11 @@ namespace WolvenKit.MSTests
 
                     foreach (var (hash, fileInfoEntry) in ar.Files)
                     {
+                        if (hash == 6507781686736237035)
+                        {
+
+                        }
+
                         hashes.Add(hash);
                         if (fileInfoEntry is FileEntry fe && fe.NameOrHash == hash.ToString())
                         {
@@ -165,7 +170,7 @@ namespace WolvenKit.MSTests
                 File.WriteAllText(info, info_json);
 
                 var missinghashtxt = Path.Combine(resultDir, "missinghashes.txt");
-
+                missing = missing.OrderBy(x => x).Distinct().ToList();
                 using (var missingWriter = File.CreateText(missinghashtxt))
                 {
                     for (var i = 0; i < missing.Count; i++)
@@ -176,14 +181,26 @@ namespace WolvenKit.MSTests
                 }
 
                 var usedhashtxt = Path.Combine(resultDir, "usedhashes.txt");
-                var usedStrings = used.Select(s => _hashService.Get(s)).OrderBy(x => x);
-                using (var usedWriter = File.CreateText(usedhashtxt))
+                var usedStrings = new List<string>();
+                foreach (var hash in used)
                 {
-                    foreach (var s in usedStrings)
+                    var str = "";
+                    if (_hashService.Contains(hash))
                     {
-                        usedWriter.WriteLine(s);
+                        str = _hashService.Get(hash);
                     }
+                    else if(newHashes.ContainsKey(hash))
+                    {
+                        str = newHashes[hash];
+                    }
+                    else
+                    {
+                        continue;
+                    }
+                    usedStrings.Add(str);
                 }
+                usedStrings = usedStrings.OrderBy(x => x).Distinct().ToList();
+                File.WriteAllLines(usedhashtxt, usedStrings);
 
                 //var allhashes = _hashService.GetAllHashes().ToList();
                 //var unused = allhashes.Except(used).ToList();
