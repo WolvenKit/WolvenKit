@@ -277,7 +277,7 @@ namespace WolvenKit.Common.Services
 
         public Type GetType(TweakDBID tdb)
         {
-            if (_recordHashes.ContainsKey((ulong)tdb))
+            if (_recordHashes.ContainsKey((ulong)tdb) && _recordTypes.ContainsKey(_recordHashes[(ulong)tdb]))
             {
                 return _recordTypes[_recordHashes[(ulong)tdb]];
             }
@@ -285,6 +285,13 @@ namespace WolvenKit.Common.Services
             {
                 return null;
             }
+        }
+
+        public List<TweakDBID> GetRecords()
+        {
+            var r = _recordHashes.Values.Select(x => (TweakDBID)x.ToString()).ToList();
+            r.Sort((a, b) => ((string)a).CompareTo((string)b));
+            return r;
         }
 
         public RedBaseClass GetRecord(SAsciiString path)

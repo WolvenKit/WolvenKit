@@ -2,11 +2,13 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Reactive.Disposables;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Media.Media3D;
 using HelixToolkit.SharpDX.Core;
 using HelixToolkit.Wpf.SharpDX;
+using ReactiveUI;
 using WolvenKit.RED4.Archive.Buffer;
 using WolvenKit.RED4.Archive.CR2W;
 using WolvenKit.RED4.Types;
@@ -25,10 +27,13 @@ namespace WolvenKit.ViewModels.Documents
                 Name = Path.GetFileNameWithoutExtension(File.ContentId).Replace("-", "_"),
             };
 
-            Render = RenderSectorSolo;
-
             Appearances.Add(app);
             SelectedAppearance = app;
+
+            this.WhenActivated((CompositeDisposable disposables) =>
+            {
+                RenderSectorSolo();
+            });
         }
 
         public void RenderSectorSolo()

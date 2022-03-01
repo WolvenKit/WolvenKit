@@ -23,28 +23,6 @@
         <Grid.Resources>
             <sys:Double x:Key="RowHeight">26</sys:Double>
             <SolidColorBrush x:Key="RedTypeColor" Color="{StaticResource WolvenKitTanColor}" />
-            <DataTemplate x:Key="ForceLoadButton" DataType="{x:Type shell:ChunkViewModel}">
-                <Button
-                    Height="12"
-                    Padding="0,0"
-                    BorderThickness="0"
-                    Command="{Binding ForceLoadCommand}"
-                    Style="{DynamicResource ButtonCustom}"
-                    Visibility="{Binding Path=IsEnabled, RelativeSource={RelativeSource Self}, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}">
-                    <StackPanel Orientation="Horizontal">
-                        <iconPacks:PackIconVaadinIcons
-                            Padding="2"
-                            VerticalAlignment="Center"
-                            Foreground="{StaticResource WolvenKitCyan}"
-                            Kind="ArrowCircleDown" />
-                        <TextBlock
-                            Margin="1,0,4,0"
-                            VerticalAlignment="Center"
-                            Foreground="{StaticResource WolvenKitCyan}"
-                            Text="Load" />
-                    </StackPanel>
-                </Button>
-            </DataTemplate>
             <DataTemplate x:Key="AddHandleButton" DataType="{x:Type shell:ChunkViewModel}">
                 <Button
                     Height="12"
@@ -409,7 +387,6 @@
                                     </Style>
                                 </TextBlock.Style>
                             </TextBlock>
-                            <!--  ContentPresenter ContentTemplate="{StaticResource ForceLoadButton}" /  -->
                             <ContentPresenter ContentTemplate="{StaticResource AddToCompiledDataButton}" />
                             <ContentPresenter ContentTemplate="{StaticResource AddHandleButton}" />
                             <ContentPresenter ContentTemplate="{StaticResource DeleteAllButton}" />
@@ -478,7 +455,6 @@
                                             </Style>
                                         </TextBlock.Style>
                                     </TextBlock>
-                                    <ContentPresenter ContentTemplate="{StaticResource ForceLoadButton}" />
                                     <ContentPresenter ContentTemplate="{StaticResource AddToArrayButton}" />
                                     <ContentPresenter ContentTemplate="{StaticResource AddToCompiledDataButton}" />
                                     <ContentPresenter ContentTemplate="{StaticResource AddHandleButton}" />
@@ -504,7 +480,7 @@
                     </DataTemplate>
                 </converters:RedEditorTemplateSelector.RedArrayEditor>
             </converters:RedEditorTemplateSelector>
-            <HierarchicalDataTemplate x:Key="ItemTemplate">
+            <DataTemplate x:Key="ItemTemplate">
                 <!--  ="{Binding Properties}"  -->
                 <Border
                     x:Name="TopLine"
@@ -614,7 +590,7 @@
                         </Border>
                     </DataTemplate>
                 </HierarchicalDataTemplate.ItemTemplate-->
-            </HierarchicalDataTemplate>
+            </DataTemplate>
             <Style TargetType="TextBox">
                 <Setter Property="Padding" Value="5,0" />
                 <Setter Property="VerticalContentAlignment" Value="Center" />
