@@ -172,10 +172,13 @@ namespace WolvenKit.ViewModels.Shell
             }
             //TVProperties.AddRange(Properties);
             //this.RaisePropertyChanged("Data");
-            this.WhenAnyValue(x => x.Data).Skip(1).Subscribe((x) =>
+            if (_tab != null)
             {
-                Tab.File.SetIsDirty(true);
-            });
+                this.WhenAnyValue(x => x.Data).Skip(1).Subscribe((x) =>
+                {
+                    Tab.File.SetIsDirty(true);
+                });
+            }
         }
 
         #endregion Constructors
@@ -282,7 +285,7 @@ namespace WolvenKit.ViewModels.Shell
                     return _tab;
                 }
 
-                return Parent.Tab;
+                return Parent?.Tab ?? null;
             }
         }
 

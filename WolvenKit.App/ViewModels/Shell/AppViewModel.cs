@@ -158,6 +158,7 @@ namespace WolvenKit.ViewModels.Shell
                 PropertiesViewModel,
                 AssetBrowserVM,
                 ImportExportToolVM,
+                TweakBrowserVM
             };
 
             _settingsManager
@@ -887,6 +888,16 @@ namespace WolvenKit.ViewModels.Shell
             {
                 _propertiesViewModel ??= Locator.Current.GetService<PropertiesViewModel>();
                 return _propertiesViewModel;
+            }
+        }
+
+        private TweakBrowserViewModel _tweakBrowserViewModel;
+        public TweakBrowserViewModel TweakBrowserVM
+        {
+            get
+            {
+                _tweakBrowserViewModel ??= Locator.Current.GetService<TweakBrowserViewModel>();
+                return _tweakBrowserViewModel;
             }
         }
 

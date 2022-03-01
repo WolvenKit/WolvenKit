@@ -24,7 +24,7 @@ namespace WolvenKit.RED4.Types
                 _hash = value;
             }
         }
-        
+
         public TweakDBID() { }
 
         private TweakDBID(string val)
@@ -90,5 +90,7 @@ namespace WolvenKit.RED4.Types
         }
 
         public override int GetHashCode() => HashCode.Combine(_value.GetHashCode(), _hash.GetHashCode());
+
+        public override string ToString() => _value != null ? _value : $"{_hash}";
     }
 }

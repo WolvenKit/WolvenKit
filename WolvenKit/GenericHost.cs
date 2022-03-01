@@ -136,6 +136,9 @@ namespace WolvenKit
                     services.AddSingleton<PropertiesViewModel>();
                     services.AddTransient<IViewFor<PropertiesViewModel>, PropertiesView>();
 
+                    services.AddSingleton<TweakBrowserViewModel>();
+                    services.AddTransient<IViewFor<TweakBrowserViewModel>, TweakBrowserView>();
+
                     #endregion
 
                     #region tools

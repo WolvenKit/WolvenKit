@@ -248,6 +248,10 @@ namespace WolvenKit.Views.Shell
                         viewModel => viewModel._mainViewModel.ImportExportToolVM.IsVisible,
                         view => view.ImportExportCheckbox.IsChecked)
                     .DisposeWith(disposables);
+                this.Bind(ViewModel,
+                        viewModel => viewModel._mainViewModel.TweakBrowserVM.IsVisible,
+                        view => view.TweakBrowserCheckbox.IsChecked)
+                    .DisposeWith(disposables);
 
                 #endregion
 
