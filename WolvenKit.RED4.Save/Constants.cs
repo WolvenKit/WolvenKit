@@ -8,6 +8,15 @@ namespace WolvenKit.RED4.Save
 {
     public class Constants
     {
+        public static class Magic
+        {
+            public const string FIRST_FILE_HEADER_MAGIC = "VASC";
+            public const string SECOND_FILE_HEADER_MAGIC = "FZLC";
+            public const string LZ4_CHUNK_MAGIC = "4ZLX";
+            public const string NODE_INFORMATION_START = "EDON";
+            public const string END_OF_FILE = "ENOD";
+        }
+
         public static class Parsing
         {
             public const string TPP_SECTION_NAME = "TPP";

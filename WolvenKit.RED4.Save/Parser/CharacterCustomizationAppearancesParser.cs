@@ -1,6 +1,7 @@
 using WolvenKit.RED4.Types;
 using WolvenKit.Core.Extensions;
 using System.Diagnostics;
+using WolvenKit.RED4.Save.IO;
 
 namespace WolvenKit.RED4.Save
 {
@@ -263,43 +264,106 @@ namespace WolvenKit.RED4.Save
     {
         public static string NodeName => Constants.NodeNames.CHARACTER_CUSTOMIZATION_APPEARANCES_NODE;
 
-        public void Read(SaveNode node)
+        public void Read(BinaryReader reader, NodeEntry node)
         {
-            using var ms = new MemoryStream(node.DataBytes);
-            using var br = new BinaryReader(ms);
             var data = new CharacterCustomizationAppearances();
-            data.DataExists = br.ReadBoolean();
-            data.Unknown1 = br.ReadUInt32();
+            data.DataExists = reader.ReadBoolean();
+            data.Unknown1 = reader.ReadUInt32();
 
             if (!data.DataExists)
             {
-                node.Data = data;
+                node.Value = data;
                 return;
             }
 
-            data.UnknownFirstBytes = br.ReadBytes(6);
+            data.UnknownFirstBytes = reader.ReadBytes(6);
 
-            ReadSection(br, data.FirstSection, ExpectedFirstSectionNames);
-            ReadSection(br, data.SecondSection, ExpectedSecondSectionNames);
-            ReadSection(br, data.ThirdSection, ExpectedThirdSectionNames);
+            ReadSection(reader, data.FirstSection, ExpectedFirstSectionNames);
+            ReadSection(reader, data.SecondSection, ExpectedSecondSectionNames);
+            ReadSection(reader, data.ThirdSection, ExpectedThirdSectionNames);
 
-            var count = br.ReadUInt32();
+            var count = reader.ReadUInt32();
             for (var i = 0; i < count; ++i)
             {
-                data.StringTriples.Add(ReadStringTriple(br));
+                data.StringTriples.Add(ReadStringTriple(reader));
             }
 
             // Only when SaveVersion > 171
-            var scount = br.ReadVLQInt32();
+            var scount = reader.ReadVLQInt32();
             for (var i = 0; i < scount; ++i)
             {
-                data.Strings.Add(br.ReadLengthPrefixedString());
+                data.Strings.Add(reader.ReadLengthPrefixedString());
             }
-            node.Data = data;
 
+            node.Value = data;
         }
 
-        public SaveNode Write() => throw new NotImplementedException();
+        public void Write(NodeWriter writer, NodeEntry node)
+        {
+            var data = (CharacterCustomizationAppearances)node.Value;
+
+            writer.Write(data.DataExists);
+            writer.Write(data.Unknown1);
+            if (data.DataExists)
+            {
+                writer.Write(data.UnknownFirstBytes);
+
+                WriteSection(writer, data.FirstSection);
+                WriteSection(writer, data.SecondSection);
+                WriteSection(writer, data.ThirdSection);
+
+                writer.Write(data.StringTriples.Count);
+                foreach (var st in data.StringTriples)
+                {
+                    WriteStringTriple(writer, st);
+                }
+
+                // Only when SaveVersion > 171
+                writer.WriteVLQInt32(data.Strings.Count);
+                foreach (var s in data.Strings)
+                {
+                    writer.WriteLengthPrefixedString(s);
+                }
+            }
+        }
+
+        private void WriteSection(BinaryWriter writer, CharacterCustomizationAppearances.Section section)
+        {
+            writer.Write(section.AppearanceSections.Count);
+            foreach (var appearanceSection in section.AppearanceSections)
+            {
+                WriteAppearanceSection(writer, appearanceSection);
+            }
+        }
+
+        private void WriteAppearanceSection(BinaryWriter writer, CharacterCustomizationAppearances.AppearanceSection appearanceSection)
+        {
+            writer.WriteLengthPrefixedString(appearanceSection.SectionName);
+
+            writer.Write(appearanceSection.MainList.Count);
+            foreach (var entry in appearanceSection.MainList)
+            {
+                writer.Write(entry.Hash);
+                writer.WriteLengthPrefixedString(entry.FirstString);
+                writer.WriteLengthPrefixedString(entry.SecondString);
+                writer.Write(entry.TrailingBytes);
+            }
+
+            writer.Write(appearanceSection.AdditionalList.Count);
+            foreach (var entry in appearanceSection.AdditionalList)
+            {
+                writer.WriteLengthPrefixedString(entry.FirstString);
+                writer.WriteLengthPrefixedString(entry.SecondString);
+                writer.Write(entry.TrailingBytes);
+            }
+        }
+
+        private void WriteStringTriple(BinaryWriter writer, CharacterCustomizationAppearances.StringTriple st)
+        {
+            writer.WriteLengthPrefixedString(st.FirstString);
+            writer.WriteLengthPrefixedString(st.SecondString);
+            writer.WriteLengthPrefixedString(st.ThirdString);
+        }
 
         private static List<string> ExpectedFirstSectionNames = new List<string>
         {

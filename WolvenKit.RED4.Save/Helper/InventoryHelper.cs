@@ -193,6 +193,13 @@ public class InventoryHelper
             UnknownBytes2 = reader.ReadUInt16()
         };
 
+    private static void WriteHeaderThing(BinaryWriter writer, HeaderThing itemHeader)
+    {
+        writer.Write(itemHeader.Seed);
+        writer.Write(itemHeader.UnknownByte1);
+        writer.Write(itemHeader.UnknownBytes2);
+    }
+
     public static NextItemEntry ReadNextItemEntry(byte[] bytes)
     {
         using var ms = new MemoryStream(bytes);
@@ -206,6 +213,23 @@ public class InventoryHelper
             ItemTdbId = reader.ReadTweakDbId(),
             Header = ReadHeaderThing(reader)
         };
+
+    public static void WriteNextItemEntry(BinaryWriter writer, NextItemEntry item)
+    {
+        writer.Write((ulong)item.ItemTdbId);
+        WriteHeaderThing(writer, item.Header);
+    }
+
+    public static byte[] GetNextItemEntryBytes(NextItemEntry item)
+    {
+        using var ms = new MemoryStream();
+        using var writer = new BinaryWriter(ms);
+
+        writer.Write((ulong)item.ItemTdbId);
+        WriteHeaderThing(writer, item.Header);
+
+        return ms.ToArray();
+    }
 
     public static ItemData ReadItemData(BinaryReader reader)
     {
@@ -232,11 +256,39 @@ public class InventoryHelper
         return result;
     }
 
+    public static void WriteItemData(BinaryWriter writer, ItemData item)
+    {
+        writer.Write((ulong)item.ItemTdbId);
+        WriteHeaderThing(writer, item.Header);
+        writer.Write((byte)item.Flags);
+        writer.Write(item.CreationTime);
+
+        if (item.Data is ModableItemWithQuantityData modq)
+        {
+            WriteModableItemWithQuantityData(writer, modq);
+        }
+
+        if (item.Data is SimpleItemData simp)
+        {
+            WriteSimpleItemData(writer, simp);
+        }
+
+        if (item.Data is ModableItemData mod)
+        {
+            WriteModableItemData(writer, mod);
+        }
+    }
+
     public static SimpleItemData ReadSimpleItemData(BinaryReader reader) =>
         new()
         {
             Quantity = reader.ReadUInt32()
         };
+
+    private static void WriteSimpleItemData(BinaryWriter writer, SimpleItemData simp)
+    {
+        writer.Write(simp.Quantity);
+    }
 
     public static ModableItemWithQuantityData ReadModableItemWithQuantityData(BinaryReader reader)
     {
@@ -252,6 +304,15 @@ public class InventoryHelper
         return result;
     }
 
+    private static void WriteModableItemWithQuantityData(BinaryWriter writer, ModableItemWithQuantityData modq)
+    {
+        writer.Write(modq.Quantity);
+        writer.Write((ulong)modq.TdbId1);
+        writer.Write(modq.Unknown2);
+        writer.Write(modq.Unknown3);
+        WriteKind2DataNode(writer, modq.RootNode);
+    }
+
     public static ModableItemData ReadModableItemData(BinaryReader reader)
     {
         var result = new ModableItemData();
@@ -262,6 +323,14 @@ public class InventoryHelper
         result.RootNode = ReadKind2DataNode(reader);
 
         return result;
+    }
+
+    private static void WriteModableItemData(BinaryWriter writer, ModableItemData mod)
+    {
+        writer.Write((ulong)mod.TdbId1);
+        writer.Write(mod.Unknown2);
+        writer.Write(mod.Unknown3);
+        WriteKind2DataNode(writer, mod.RootNode);
     }
 
     public static ItemModData ReadKind2DataNode(BinaryReader reader)
@@ -284,5 +353,22 @@ public class InventoryHelper
         result.Unknown4 = reader.ReadSingle();
 
         return result;
+    }
+
+    private static void WriteKind2DataNode(BinaryWriter writer, ItemModData mod)
+    {
+        writer.Write((ulong)mod.ItemTdbId);
+        WriteHeaderThing(writer, mod.Header);
+        writer.WriteLengthPrefixedString(mod.UnknownString);
+        writer.Write((ulong)mod.AttachmentSlotTdbId);
+        writer.WriteVLQInt32(mod.Children.Count);
+        foreach (var child in mod.Children)
+        {
+            WriteKind2DataNode(writer, child);
+        }
+        writer.Write(mod.Unknown2);
+        writer.Write((ulong)mod.TdbId2);
+        writer.Write(mod.Unknown3);
+        writer.Write(mod.Unknown4);
     }
 }

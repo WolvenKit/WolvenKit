@@ -1,5 +1,6 @@
 using WolvenKit.RED4.Types;
 using WolvenKit.Core.Extensions;
+using WolvenKit.RED4.Save.IO;
 
 namespace WolvenKit.RED4.Save
 {
@@ -23,28 +24,48 @@ namespace WolvenKit.RED4.Save
     {
         public static string NodeName => Constants.NodeNames.DYNAMIC_ENTITYID_SYSTEM;
 
-        public void Read(SaveNode node)
+        public void Read(BinaryReader reader, NodeEntry node)
         {
-            using var ms = new MemoryStream(node.DataBytes);
-            using var br = new BinaryReader(ms);
             var data = new DynamicEntityIDSystem();
-            data.Unknown1 = br.ReadUInt32();
-            data.Unk_NextEntityHash = br.ReadUInt32();
-            var unkCount = br.ReadUInt32();
+            data.Unknown1 = reader.ReadUInt32();
+            data.Unk_NextEntityHash = reader.ReadUInt32();
+            var unkCount = reader.ReadUInt32();
             for (int i = 0; i < unkCount; i++)
             {
-                data.Unknown3.Add(br.ReadUInt32());
+                data.Unknown3.Add(reader.ReadUInt32());
             }
-            var stringCount = br.ReadUInt32();
+            var stringCount = reader.ReadUInt32();
             for (int i = 0; i < stringCount; i++)
             {
-                data.Unknown4.Add(new KeyValuePair<string, uint>(br.ReadLengthPrefixedString(), br.ReadUInt32()));
+                data.Unknown4.Add(new KeyValuePair<string, uint>(reader.ReadLengthPrefixedString(), reader.ReadUInt32()));
             }
-            data.Unk_NextListId = br.ReadUInt32();
-            node.Data = data;
+            data.Unk_NextListId = reader.ReadUInt32();
+
+            node.Value = data;
         }
 
-        public SaveNode Write() => throw new NotImplementedException();
+        public void Write(NodeWriter writer, NodeEntry node)
+        {
+            var data = (DynamicEntityIDSystem)node.Value;
+
+            writer.Write(data.Unknown1);
+            writer.Write(data.Unk_NextEntityHash);
+
+            writer.Write(data.Unknown3.Count);
+            foreach (var item in data.Unknown3)
+            {
+                writer.Write(item);
+            }
+
+            writer.Write(data.Unknown4.Count);
+            foreach (var pair in data.Unknown4)
+            {
+                writer.WriteLengthPrefixedString(pair.Key);
+                writer.Write(pair.Value);
+            }
+
+            writer.Write(data.Unk_NextListId);
+        }
     }
 
 }

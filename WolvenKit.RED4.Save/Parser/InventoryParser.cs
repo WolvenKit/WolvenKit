@@ -1,5 +1,6 @@
 using WolvenKit.RED4.Types;
 using WolvenKit.Core.Extensions;
+using WolvenKit.RED4.Save.IO;
 
 namespace WolvenKit.RED4.Save
 {
@@ -13,32 +14,28 @@ namespace WolvenKit.RED4.Save
     {
         public static string NodeName => Constants.NodeNames.INVENTORY;
 
-        public void Read(SaveNode node)
+        public void Read(BinaryReader reader, NodeEntry node)
         {
-            using var ms = new MemoryStream(node.DataBytes);
-            using var reader = new BinaryReader(ms);
             var data = new Inventory();
 
             var offset = 0;
             var cnt = reader.ReadInt32();
 
-            var subReader = reader;
             for (int i = 0; i < cnt; i++)
             {
-                var subInventory = ReadSubInventory(subReader, node, offset);
+                var subInventory = ReadSubInventory(reader, node, offset);
                 data.SubInventories.Add(subInventory);
                 offset += subInventory.Items.Count;
-                subReader = new BinaryReader(new MemoryStream(node.Children[offset - 1].TrailingDataBytes));
             }
 
-            node.Data = data;
+            node.Value = data;
         }
 
-        public SaveNode Write() => throw new NotImplementedException();
+        public void Write(NodeWriter writer, NodeEntry node) => throw new NotImplementedException();
 
         #region Reader
 
-        private InventoryHelper.SubInventory ReadSubInventory(BinaryReader reader, SaveNode node, int offset)
+        private InventoryHelper.SubInventory ReadSubInventory(BinaryReader reader, NodeEntry node, int offset)
         {
             var subInventory = new InventoryHelper.SubInventory();
             subInventory.InventoryId = reader.ReadUInt64();
@@ -54,8 +51,8 @@ namespace WolvenKit.RED4.Save
 
             for (int i = 0; i < cnt; i++)
             {
-                parser.Read(node.Children[offset + i]);
-                var item = (InventoryHelper.ItemData)node.Children[offset + i].Data;
+                ParserHelper.ReadNode(reader, node.Children[offset + i]);
+                var item = (InventoryHelper.ItemData)node.Children[offset + i].Value;
 
                 if (!nextItemHeader.Equals(item))
                 {
@@ -66,7 +63,7 @@ namespace WolvenKit.RED4.Save
 
                 if (i < cnt - 1)
                 {
-                    nextItemHeader = InventoryHelper.ReadNextItemEntry(node.Children[offset + i].TrailingDataBytes);
+                    nextItemHeader = InventoryHelper.ReadNextItemEntry(reader);
                 }
             }
 

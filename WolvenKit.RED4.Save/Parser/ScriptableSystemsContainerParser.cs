@@ -7,5 +7,5 @@ public class ScriptableSystemsContainerParser : PackageParser
 {
     public static string NodeName => Constants.NodeNames.SCRIPTABLE_SYSTEMS_CONTAINER;
 
-    public override void Read(SaveNode node) => Read(node, typeof(gamePersistentStateDataResource));
+    public override void Read(BinaryReader reader, NodeEntry node) => Read(reader, node, typeof(gamePersistentStateDataResource));
 }

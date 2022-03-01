@@ -1,5 +1,6 @@
 using WolvenKit.RED4.Types;
 using WolvenKit.Core.Extensions;
+using WolvenKit.RED4.Save.IO;
 
 namespace WolvenKit.RED4.Save
 {
@@ -38,12 +39,10 @@ namespace WolvenKit.RED4.Save
     {
         public static string NodeName => Constants.NodeNames.FACTSDB;
 
-        public void Read(SaveNode node)
+        public void Read(BinaryReader reader, NodeEntry node)
         {
-            using var ms = new MemoryStream(node.DataBytes);
-            using var br = new BinaryReader(ms);
             var data = new FactsDB();
-            var count = br.ReadByte();
+            var count = reader.ReadByte();
 
             // There should be count many children
             if (count != node.Children.Count)
@@ -52,14 +51,14 @@ namespace WolvenKit.RED4.Save
             }
             foreach (var child in node.Children)
             {
-                var FactsTableParser = new FactsTableParser();
-                FactsTableParser.Read(child);
-                data.FactsTables.Add((FactsTable)child.Data);
+                ParserHelper.ReadNode(reader, child);
+                data.FactsTables.Add((FactsTable)child.Value);
             }
-            node.Data = data;
+
+            node.Value = data;
         }
 
-        public SaveNode Write() => throw new NotImplementedException();
+        public void Write(NodeWriter writer, NodeEntry node) => throw new NotImplementedException();
     }
 
 }

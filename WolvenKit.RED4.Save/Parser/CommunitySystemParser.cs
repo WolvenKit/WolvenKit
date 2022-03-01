@@ -1,3 +1,4 @@
+using WolvenKit.RED4.Save.IO;
 using WolvenKit.RED4.Types;
 
 namespace WolvenKit.RED4.Save
@@ -18,22 +19,20 @@ namespace WolvenKit.RED4.Save
     {
         public static string NodeName => Constants.NodeNames.COMMUNITY_SYSTEM;
 
-        public void Read(SaveNode node)
+        public void Read(BinaryReader reader, NodeEntry node)
         {
-            using var ms = new MemoryStream(node.DataBytes);
-            using var br = new BinaryReader(ms);
             var data = new CommunitySystem();
-            var entryCount = br.ReadUInt32();
+            var entryCount = reader.ReadUInt32();
             for (int i = 0; i < entryCount; i++)
             {
-                data.Unk_HashList.Add(br.ReadUInt64());
+                data.Unk_HashList.Add(reader.ReadUInt64());
             }
-            data.TrailingBytes = br.ReadBytes((int)(br.BaseStream.Length - br.BaseStream.Position));
-            node.Data = data;
+            data.TrailingBytes = reader.ReadBytes((int)(reader.BaseStream.Length - reader.BaseStream.Position));
 
+            node.Value = data;
         }
 
-        public SaveNode Write() => throw new NotImplementedException();
+        public void Write(NodeWriter writer, NodeEntry node) => throw new NotImplementedException();
     }
 
 }

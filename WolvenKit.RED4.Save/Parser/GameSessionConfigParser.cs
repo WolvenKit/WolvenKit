@@ -1,4 +1,5 @@
 using WolvenKit.Core.Extensions;
+using WolvenKit.RED4.Save.IO;
 using WolvenKit.RED4.Types;
 
 namespace WolvenKit.RED4.Save;
@@ -17,20 +18,26 @@ public class GameSessionConfigParser : INodeParser
 {
     public static string NodeName => Constants.NodeNames.GAME_SESSION_CONFIG_NODE;
 
-    public void Read(SaveNode node)
+    public void Read(BinaryReader reader, NodeEntry node)
     {
-        using var ms = new MemoryStream(node.DataBytes);
-        using var br = new BinaryReader(ms);
-
-        node.Data = new GameSessionConfig
+        node.Value = new GameSessionConfig
             {
-                Hash1 = br.ReadUInt64(),
-                Hash2 = br.ReadUInt64(),
-                TextValue = br.ReadLengthPrefixedString(),
-                Hash3 = br.ReadUInt64(),
-                TrailingBytes = br.ReadBytes((int)(br.BaseStream.Length - br.BaseStream.Position))
+                Hash1 = reader.ReadUInt64(),
+                Hash2 = reader.ReadUInt64(),
+                TextValue = reader.ReadLengthPrefixedString(),
+                Hash3 = reader.ReadUInt64(),
+                TrailingBytes = reader.ReadBytes((int)(reader.BaseStream.Length - reader.BaseStream.Position))
             };
     }
 
-    public SaveNode Write() => throw new NotImplementedException();
+    public void Write(NodeWriter writer, NodeEntry node)
+    {
+        var value = (GameSessionConfig)node.Value;
+
+        writer.Write(value.Hash1);
+        writer.Write(value.Hash2);
+        writer.WriteLengthPrefixedString(value.TextValue);
+        writer.Write(value.Hash3);
+        writer.Write(value.TrailingBytes);
+    }
 }

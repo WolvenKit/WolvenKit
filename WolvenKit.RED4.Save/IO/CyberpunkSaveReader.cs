@@ -33,7 +33,7 @@ public class CyberpunkSaveReader
     public BinaryReader BaseReader => _reader;
     public Stream BaseStream => _reader.BaseStream;
 
-    public EFileReadErrorCodes ReadFileInfo(out CyberpunkSaveFileInfo? info)
+    public EFileReadErrorCodes ReadFileInfo(out CyberpunkSaveHeaderStruct? info)
     {
         var id = BaseStream.ReadStruct<uint>();
         if (id != CyberpunkSaveFile.MAGIC)
@@ -42,19 +42,12 @@ public class CyberpunkSaveReader
             return EFileReadErrorCodes.NoCSav;
         }
 
-        var result = new CyberpunkSaveFileInfo
-        {
-            FileHeader = BaseStream.ReadStruct<CyberpunkSaveHeaderStruct>()
-        };
-
-        info = result;
+        info = BaseStream.ReadStruct<CyberpunkSaveHeaderStruct>();
         return EFileReadErrorCodes.NoError;
     }
 
-    public EFileReadErrorCodes ReadFile(out CyberpunkSaveFile? file, out List<RawSaveNode> flatNodesOut)
+    public EFileReadErrorCodes ReadFile(out CyberpunkSaveFile? file)
     {
-        flatNodesOut = null;
-
         var result = ReadFileInfo(out var info);
         if (result != EFileReadErrorCodes.NoError)
         {
@@ -78,13 +71,13 @@ public class CyberpunkSaveReader
         }
 
         _csavFile = new CyberpunkSaveFile();
-        _csavFile.FileHeader = info;
+        _csavFile.FileHeader = (CyberpunkSaveHeaderStruct)info!;
 
-        var flatNodes = new List<RawSaveNode>();
+        var flatNodes = new List<NodeEntry>();
         var length = BaseReader.ReadVLQInt32();
         for (int i = 0; i < length; i++)
         {
-            flatNodes.Add(new RawSaveNode
+            flatNodes.Add(new NodeEntry
             {
                 Name = BaseReader.ReadLengthPrefixedString(),
                 NextId = BaseReader.ReadInt32(),
@@ -94,102 +87,52 @@ public class CyberpunkSaveReader
             });
         }
 
-        flatNodesOut = flatNodes;
-
         BaseStream.Position = 0;
         var dataStream = Compression.Decompress(_reader, out var compressionSettings);
+        _csavFile.CompressionSettings = compressionSettings;
 
-        _csavFile.Nodes = BuildNodeTree(dataStream, flatNodes);
-
-        foreach (var node in _csavFile.Nodes)
-        {
-            var parser = ParserHelper.GetParser(node.Name);
-            parser?.Read(node);
-        }
+        _csavFile.Nodes = LoadFromStream(dataStream, flatNodes);
 
         file = _csavFile;
         return EFileReadErrorCodes.NoError;
     }
 
-    private List<SaveNode> BuildNodeTree(Stream stream, List<RawSaveNode> flatNodes)
+    private List<NodeEntry> LoadFromStream(Stream stream, List<NodeEntry> flatNodes)
     {
-        using var reader = new BinaryReader(stream, Encoding.ASCII);
+        var result = new List<NodeEntry>();
 
-        var nodeDict = new Dictionary<int, RawSaveNode>();
-        foreach (var node in flatNodes)
+        using (BinaryReader reader = new BinaryReader(stream, Encoding.ASCII))
         {
-            reader.BaseStream.Position = node.Offset;
-            node.Id = reader.ReadInt32();
-
-            nodeDict.Add(node.Id, node);
-        }
-
-        var nodeTree = new List<RawSaveNode>();
-        BuildChildTree(flatNodes[0]);
-        CalculateTrueSizes(nodeTree, (int)stream.Length);
-
-
-        var saveNodes = new List<SaveNode>();
-        reader.BaseStream.Position = nodeTree[0].Offset;
-        foreach (var node in nodeTree)
-        {
-            saveNodes.Add(ReadData(node));
-        }
-
-        return saveNodes;
-
-        void BuildChildTree(RawSaveNode node, RawSaveNode? parentNode = null)
-        {
-            if (parentNode == null)
+            foreach (var node in flatNodes)
             {
-                nodeTree.Add(node);
+                reader.BaseStream.Position = node.Offset;
+                node.Id = reader.ReadInt32();
             }
-            else
+            foreach (var node in flatNodes)
             {
-                parentNode.Children.Add(node);
-                node.Parent = parentNode;
+                if (!node.IsChild)
+                {
+                    FindChildren(flatNodes, node, flatNodes.Count);
+                }
+                if (node.NextId > -1)
+                {
+                    node.NextNode = flatNodes.FirstOrDefault(n => n.Id == node.NextId);
+                }
             }
 
-            if (node.ChildId != -1)
-            {
-                BuildChildTree(nodeDict[node.ChildId], node);
-            }
+            result.AddRange(flatNodes.Where(n => !n.IsChild));
+            CalculateTrueSizes(result, (int)stream.Length);
 
-            if (node.NextId != -1)
+            foreach (var node in flatNodes)
             {
-                node.NextNode = nodeDict[node.NextId];
-                BuildChildTree(nodeDict[node.NextId], parentNode);
+                ParserHelper.ReadChildren(reader, node);
             }
         }
 
-        SaveNode ReadData(RawSaveNode node)
-        {
-            Debug.Assert(reader.BaseStream.Position == node.Offset);
-
-            var ret = new SaveNode { Name = node.Name };
-
-            reader.ReadBytes(4); // skip nodeId
-
-            if (node.DataSize > 4)
-            {
-                ret.DataBytes = reader.ReadBytes(node.DataSize - 4);
-            }
-
-            foreach (var child in node.Children)
-            {
-                ret.Children.Add(ReadData(child));
-            }
-
-            if (node.TrailingSize > 0)
-            {
-                ret.TrailingDataBytes = reader.ReadBytes(node.TrailingSize);
-            }
-            
-            return ret;
-        }
+        return result;
     }
 
-    private void CalculateTrueSizes(IReadOnlyList<RawSaveNode> nodes, int maxLength)
+    private void CalculateTrueSizes(IReadOnlyList<NodeEntry> nodes, int maxLength)
     {
         for (var i = 0; i < nodes.Count; ++i)
         {
@@ -240,7 +183,7 @@ public class CyberpunkSaveReader
                 {
                     // This is the last child on the last node. The next valid offset would be the end of the data
                     // Create a virtual node for this so the code below can grab the offset
-                    nextNode = new RawSaveNode();
+                    nextNode = new NodeEntry();
                     nextNode.Offset = maxLength;
                 }
                 var parentMax = currentNode.Parent.Offset + currentNode.Parent.Size;
@@ -265,4 +208,38 @@ public class CyberpunkSaveReader
             }
         }
     }
+
+    private void FindChildren(List<NodeEntry> nodes, NodeEntry node, int maxNextId)
+    {
+        if (node.ChildId > -1)
+        {
+            var nextId = node.NextId;
+            if (nextId == -1)
+            {
+                nextId = maxNextId;
+            }
+            for (int i = node.ChildId; i < nextId; i++)
+            {
+                var possibleChild = nodes.FirstOrDefault(n => n.Id == i);
+                if (possibleChild == null)
+                {
+                    throw new Exception();
+                }
+                if (possibleChild.ChildId > -1)//SubChild
+                {
+                    FindChildren(nodes, possibleChild, nextId);
+                    node.AddChild(possibleChild);
+                }
+                else
+                {
+                    if (!possibleChild.IsChild)//was already added
+                    {
+                        node.AddChild(possibleChild);
+                    }
+
+                }
+            }
+        }
+    }
+
 }

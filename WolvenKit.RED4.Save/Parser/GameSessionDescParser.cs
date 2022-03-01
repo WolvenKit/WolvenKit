@@ -1,3 +1,4 @@
+using WolvenKit.RED4.Save.IO;
 using WolvenKit.RED4.Types;
 
 namespace WolvenKit.RED4.Save;
@@ -11,21 +12,26 @@ public class GameSessionDescParser : INodeParser
 {
     public static string NodeName => Constants.NodeNames.GAME_SESSION_DESC;
 
-    public void Read(SaveNode node)
+    public void Read(BinaryReader reader, NodeEntry node)
     {
         if (node.Children.Count != 1 && node.Children[0].Name != "game::SessionConfig")
         {
             throw new InvalidFormatException();
         }
 
-        var parser = ParserHelper.GetParser(node.Children[0].Name);
-        parser?.Read(node.Children[0]);
+        ParserHelper.ReadNode(reader, node.Children[0]);
 
-        node.Data = new GameSessionDesc
+        node.Value = new GameSessionDesc
         {
-            GameSessionConfig = (GameSessionConfig)node.Children[0].Data
+            GameSessionConfig = (GameSessionConfig)node.Children[0].Value
         };
     }
 
-    public SaveNode Write() => throw new NotImplementedException();
+    public void Write(NodeWriter writer, NodeEntry node)
+    {
+        foreach (var child in node.Children)
+        {
+            writer.Write(child);
+        }
+    }
 }

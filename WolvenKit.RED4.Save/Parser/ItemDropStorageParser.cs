@@ -1,5 +1,6 @@
 using WolvenKit.RED4.Types;
 using WolvenKit.Core.Extensions;
+using WolvenKit.RED4.Save.IO;
 
 namespace WolvenKit.RED4.Save
 {
@@ -25,27 +26,25 @@ namespace WolvenKit.RED4.Save
     {
         public static string NodeName => Constants.NodeNames.ITEM_DROP_STORAGE;
 
-        public void Read(SaveNode node)
+        public void Read(BinaryReader reader, NodeEntry node)
         {
-            using var ms = new MemoryStream(node.DataBytes);
-            using var br = new BinaryReader(ms);
             var data = new ItemDropStorage();
 
-            data.Unk1 = br.ReadLengthPrefixedString();
-            data.Unk2 = br.ReadBytes(16);
-            data.Unk3 = br.ReadBoolean();
-            data.Unk4 = br.ReadSingle();
-            data.Unk5 = br.ReadSingle();
-            data.Unk6 = br.ReadSingle();
-            data.Unk7 = br.ReadSingle();
-            data.Unk8 = br.ReadUInt32();
-            data.Unk9 = br.ReadTweakDbId();
-            data.Unk10 = br.ReadBytes(7);
+            data.Unk1 = reader.ReadLengthPrefixedString();
+            data.Unk2 = reader.ReadBytes(16);
+            data.Unk3 = reader.ReadBoolean();
+            data.Unk4 = reader.ReadSingle();
+            data.Unk5 = reader.ReadSingle();
+            data.Unk6 = reader.ReadSingle();
+            data.Unk7 = reader.ReadSingle();
+            data.Unk8 = reader.ReadUInt32();
+            data.Unk9 = reader.ReadTweakDbId();
+            data.Unk10 = reader.ReadBytes(7);
 
-            node.Data = data;
+            node.Value = data;
         }
 
-        public SaveNode Write() => throw new NotImplementedException();
+        public void Write(NodeWriter writer, NodeEntry node) => throw new NotImplementedException();
     }
 
 }

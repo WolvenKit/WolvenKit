@@ -1,5 +1,6 @@
 using WolvenKit.RED4.Types;
 using WolvenKit.Core.Extensions;
+using WolvenKit.RED4.Save.IO;
 
 namespace WolvenKit.RED4.Save
 {
@@ -13,16 +14,15 @@ namespace WolvenKit.RED4.Save
     {
         public static string NodeName => Constants.NodeNames.RADIO_SYSTEM;
 
-        public void Read(SaveNode node)
+        public void Read(BinaryReader reader, NodeEntry node)
         {
-            using var ms = new MemoryStream(node.DataBytes);
-            using var br = new BinaryReader(ms);
             var data = new RadioSystem();
-            data.Unknown = br.ReadLengthPrefixedString();
-            node.Data = data;
+            data.Unknown = reader.ReadLengthPrefixedString();
+
+            node.Value = data;
         }
 
-        public SaveNode Write() => throw new NotImplementedException();
+        public void Write(NodeWriter writer, NodeEntry node) => throw new NotImplementedException();
     }
 
 }

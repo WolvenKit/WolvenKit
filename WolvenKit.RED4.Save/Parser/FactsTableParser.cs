@@ -2,6 +2,7 @@ using System.Diagnostics;
 using WolvenKit.Common.FNV1A;
 using WolvenKit.RED4.Types;
 using WolvenKit.Core.Extensions;
+using WolvenKit.RED4.Save.IO;
 
 namespace WolvenKit.RED4.Save
 {
@@ -92,17 +93,15 @@ namespace WolvenKit.RED4.Save
     {
         public static string NodeName => Constants.NodeNames.FACTS_TABLE;
 
-        public void Read(SaveNode node)
+        public void Read(BinaryReader reader, NodeEntry node)
         {
-            using var ms = new MemoryStream(node.DataBytes);
-            using var br = new BinaryReader(ms);
             var data = new FactsTable();
-            var count = br.ReadVLQInt32();
+            var count = reader.ReadVLQInt32();
 
             var tmpFactList = new Fact[count];
             for (int i = 0; i < count; i++)
             {
-                tmpFactList[i] = br.ReadFact();
+                tmpFactList[i] = reader.ReadFact();
             }
 
             for (int i = 0; i < count; i++)
@@ -110,15 +109,16 @@ namespace WolvenKit.RED4.Save
                 data.FactEntries.Add(new FactsTable.FactEntry
                 {
                     FactName = tmpFactList[i],
-                    Value = br.ReadUInt32()
+                    Value = reader.ReadUInt32()
                 });
             }
             //TODO: check wether FactsTable nodes have children and which type and then parse
             //ParserUtils.ParseChildren(node.Children, reader, parsers);
-            node.Data = data;
+
+            node.Value = data;
         }
 
-        public SaveNode Write() => throw new NotImplementedException();
+        public void Write(NodeWriter writer, NodeEntry node) => throw new NotImplementedException();
     }
 
 }

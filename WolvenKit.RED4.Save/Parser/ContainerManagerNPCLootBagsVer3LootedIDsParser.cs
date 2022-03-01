@@ -1,5 +1,6 @@
 using WolvenKit.RED4.Types;
 using WolvenKit.Core.Extensions;
+using WolvenKit.RED4.Save.IO;
 
 namespace WolvenKit.RED4.Save
 {
@@ -19,21 +20,19 @@ namespace WolvenKit.RED4.Save
     {
         public static string NodeName => Constants.NodeNames.CONTAINER_MANAGER_NPC_LOOT_BAGS_VER3_LOOTED_IDS;
 
-        public void Read(SaveNode node)
+        public void Read(BinaryReader reader, NodeEntry node)
         {
-            using var ms = new MemoryStream(node.DataBytes);
-            using var br = new BinaryReader(ms);
             var data = new ContainerManagerNPCLootBagsVer3LootedIDs();
-            var entryCount = br.ReadVLQInt32();
+            var entryCount = reader.ReadVLQInt32();
             for (int i = 0; i < entryCount; i++)
             {
-                data.EntityIds.Add(br.ReadUInt64());
+                data.EntityIds.Add(reader.ReadUInt64());
             }
-            node.Data = data;
 
+            node.Value = data;
         }
 
-        public SaveNode Write() => throw new NotImplementedException();
+        public void Write(NodeWriter writer, NodeEntry node) => throw new NotImplementedException();
     }
 
 }

@@ -1,4 +1,5 @@
 using System.Reflection;
+using WolvenKit.RED4.Save.IO;
 
 namespace WolvenKit.RED4.Save;
 
@@ -30,24 +31,35 @@ public class ParserHelper
         _isLoaded = true;
     }
 
-    public static INodeParser? GetParser(string nodeName)
+    public static INodeParser GetParser(string nodeName)
     {
         if (!_isLoaded)
         {
             LoadParsers();
         }
 
-        // Just for debugging
-        // var allowed = new List<string> { Constants.NodeNames.INVENTORY, Constants.NodeNames.ITEM_DATA };
-        // if (!allowed.Contains(nodeName))
-        // {
-        //     return null;
-        // }
-
         if (_parsers.ContainsKey(nodeName))
         {
             return (INodeParser)System.Activator.CreateInstance(_parsers[nodeName])!;
         }
-        return null;
+
+        return new DefaultParser();
+    }
+
+    public static void ReadChildren(BinaryReader reader, NodeEntry node)
+    {
+        foreach (var child in node.Children)
+        {
+            ReadNode(reader, child);
+        }
+    }
+
+    public static void ReadNode(BinaryReader reader, NodeEntry node)
+    {
+        reader.BaseStream.Position = node.Offset;
+        reader.ReadInt32(); // nodeId
+
+        var parser = GetParser(node.Name);
+        parser.Read(reader, node);
     }
 }

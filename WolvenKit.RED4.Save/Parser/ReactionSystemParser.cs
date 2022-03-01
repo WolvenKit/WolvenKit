@@ -1,16 +1,18 @@
+using WolvenKit.RED4.Save.IO;
+using WolvenKit.RED4.Types;
+
 namespace WolvenKit.RED4.Save;
 
 public class ReactionSystemParser : INodeParser
 {
     public static string NodeName => Constants.NodeNames.REACTION_SYSTEM;
 
-    public void Read(SaveNode node)
+    public void Read(BinaryReader reader, NodeEntry node)
     {
-        using var ms = new MemoryStream(node.DataBytes);
-        using var br = new BinaryReader(ms);
         var data = new ClassName();
-        node.Data = data;
+
+        node.Value = data;
     }
 
-    public SaveNode Write() => throw new NotImplementedException();
+    public void Write(NodeWriter writer, NodeEntry node) => throw new NotImplementedException();
 }

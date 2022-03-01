@@ -1,5 +1,6 @@
 using WolvenKit.RED4.Types;
 using WolvenKit.Core.Extensions;
+using WolvenKit.RED4.Save.IO;
 
 namespace WolvenKit.RED4.Save
 {
@@ -18,21 +19,19 @@ namespace WolvenKit.RED4.Save
     {
         public static string NodeName => Constants.NodeNames.CUSTOM_ARRAY;
 
-        public void Read(SaveNode node)
+        public void Read(BinaryReader reader, NodeEntry node)
         {
-            using var ms = new MemoryStream(node.DataBytes);
-            using var br = new BinaryReader(ms);
             var data = new CustomArray();
-            var entryCount = br.ReadUInt32();
+            var entryCount = reader.ReadUInt32();
             for (int i = 0; i < entryCount; i++)
             {
-                data.Unknown.Add(br.ReadUInt16());
+                data.Unknown.Add(reader.ReadUInt16());
             }
-            node.Data = data;
 
+            node.Value = data;
         }
 
-        public SaveNode Write() => throw new NotImplementedException();
+        public void Write(NodeWriter writer, NodeEntry node) => throw new NotImplementedException();
     }
 
 }

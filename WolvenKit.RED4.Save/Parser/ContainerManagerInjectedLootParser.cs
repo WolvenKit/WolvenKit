@@ -1,5 +1,7 @@
 using WolvenKit.RED4.Types;
 using WolvenKit.Core.Extensions;
+using WolvenKit.RED4.Save.IO;
+
 namespace WolvenKit.RED4.Save
 {
     public class ContainerManagerInjectedLoot : IParseableBuffer
@@ -31,7 +33,7 @@ namespace WolvenKit.RED4.Save
     {
         // public static string NodeName => Constants.NodeNames.CONTAINER_MANAGER_INJECTED_LOOT;
 
-        public void Read(SaveNode node)
+        public void Read(BinaryReader reader, NodeEntry node)
         {
             throw new NotImplementedException();
             //using var ms = new MemoryStream(node.DataBytes);
@@ -65,7 +67,7 @@ namespace WolvenKit.RED4.Save
 
         }
 
-        public SaveNode Write() => throw new NotImplementedException();
+        public void Write(NodeWriter writer, NodeEntry node) => throw new NotImplementedException();
     }
 
 }

@@ -1,5 +1,6 @@
 using WolvenKit.RED4.Types;
 using WolvenKit.Core.Extensions;
+using WolvenKit.RED4.Save.IO;
 
 namespace WolvenKit.RED4.Save
 {
@@ -7,7 +8,7 @@ namespace WolvenKit.RED4.Save
     {
         // public static string NodeName => Constants.NodeNames.DEVICE_SYSTEM;
 
-        public void Read(SaveNode node)
+        public void Read(BinaryReader reader, NodeEntry node)
         {
             throw new NotImplementedException();
             //using var ms = new MemoryStream(node.DataBytes);
@@ -15,7 +16,7 @@ namespace WolvenKit.RED4.Save
             //ParserUtils.ParseChildren(node.Children, reader, parsers);
         }
 
-        public SaveNode Write() => throw new NotImplementedException();
+        public void Write(NodeWriter writer, NodeEntry node) => throw new NotImplementedException();
     }
 
 }

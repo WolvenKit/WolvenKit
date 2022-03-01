@@ -1,5 +1,6 @@
 using WolvenKit.RED4.Types;
 using WolvenKit.Core.Extensions;
+using WolvenKit.RED4.Save.IO;
 
 namespace WolvenKit.RED4.Save
 {
@@ -34,44 +35,43 @@ namespace WolvenKit.RED4.Save
     {
         public static string NodeName => Constants.NodeNames.DS_DYNAMIC_CONNECTIONS;
 
-        public void Read(SaveNode node)
+        public void Read(BinaryReader reader, NodeEntry node)
         {
-            using var ms = new MemoryStream(node.DataBytes);
-            using var br = new BinaryReader(ms);
             var data = new DSDynamicConnections();
-            var entryCount = br.ReadVLQInt32();
+            var entryCount = reader.ReadVLQInt32();
             for (int i = 0; i < entryCount; i++)
             {
                 var entry = new DSDynamicConnections.Entry();
 
-                entry.Unknown1 = br.ReadUInt64();
+                entry.Unknown1 = reader.ReadUInt64();
 
                 data.Entries.Add(entry);
             }
 
             foreach (var entry in data.Entries)
             {
-                entry.Unknown2 = br.ReadLengthPrefixedString();
+                entry.Unknown2 = reader.ReadLengthPrefixedString();
 
-                var subCount = br.ReadVLQInt32();
+                var subCount = reader.ReadVLQInt32();
                 for (int i = 0; i < subCount; i++)
                 {
-                    entry.Unknown3.Add(br.ReadUInt64());
+                    entry.Unknown3.Add(reader.ReadUInt64());
                 }
 
-                subCount = br.ReadVLQInt32();
+                subCount = reader.ReadVLQInt32();
                 for (int i = 0; i < subCount; i++)
                 {
-                    entry.Unknown4.Add(br.ReadUInt64());
+                    entry.Unknown4.Add(reader.ReadUInt64());
                 }
 
-                entry.Unknown5 = br.ReadBytes(12);
-                entry.Unknown6 = br.ReadLengthPrefixedString();
+                entry.Unknown5 = reader.ReadBytes(12);
+                entry.Unknown6 = reader.ReadLengthPrefixedString();
             }
-            node.Data = data;
+
+            node.Value = data;
         }
 
-        public SaveNode Write() => throw new NotImplementedException();
+        public void Write(NodeWriter writer, NodeEntry node) => throw new NotImplementedException();
     }
 
 }

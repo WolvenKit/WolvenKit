@@ -1,17 +1,16 @@
+using WolvenKit.RED4.Save.IO;
+using WolvenKit.RED4.Types;
+
 namespace WolvenKit.RED4.Save;
 
 public class QuestSystemParser : INodeParser
 {
     public static string NodeName => Constants.NodeNames.QUEST_SYSTEM;
 
-    public void Read(SaveNode node)
+    public void Read(BinaryReader reader, NodeEntry node)
     {
-        foreach (var child in node.Children)
-        {
-            var parser = ParserHelper.GetParser(child.Name);
-            parser?.Read(child);
-        }
+        ParserHelper.ReadChildren(reader, node);
     }
 
-    public SaveNode Write() => throw new NotImplementedException();
+    public void Write(NodeWriter writer, NodeEntry node) => throw new NotImplementedException();
 }

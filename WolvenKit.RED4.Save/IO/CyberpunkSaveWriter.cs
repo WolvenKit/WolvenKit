@@ -8,6 +8,8 @@ public class CyberpunkSaveWriter
     private BinaryWriter _writer;
     private Encoding _encoding;
 
+    private CyberpunkSaveFile _file;
+
     public CyberpunkSaveWriter(Stream output) : this(output, Encoding.UTF8, false)
     {
     }
@@ -22,89 +24,83 @@ public class CyberpunkSaveWriter
         _encoding = encoding;
     }
 
-    public void WriteFile(CyberpunkSaveFile file, List<RawSaveNode> rawSaveNodes)
+    public byte[] WriteFile(CyberpunkSaveFile file, bool compress = true)
     {
-        _writer.BaseStream.WriteStruct(CyberpunkSaveFile.MAGIC);
-        _writer.BaseStream.WriteStruct(file.FileHeader.FileHeader);
+        _file = file;
 
-        var newNodes = FlattenNodeTree(file.Nodes);
+        byte[] result;
 
-        for (int i = 0; i < newNodes.Count; i++)
+        using (var stream = new MemoryStream())
         {
-            var oldNode = rawSaveNodes[i];
-            var newNode = newNodes[i];
-
-            if (oldNode.Name != newNode.Name)
+            using (var writer = new BinaryWriter(stream, Encoding.ASCII))
             {
+                writer.Write(file.FileHeader);
 
-            }
+                var uncompressedData = GetNodeData(out var nodeInfos);
 
-            if (oldNode.NextId != newNode.NextId)
-            {
-
-            }
-
-            if (oldNode.ChildId != newNode.ChildId)
-            {
-
-            }
-
-            if (oldNode.Size != newNode.Size)
-            {
-
-            }
-        }
-    }
-
-    private List<RawSaveNode> FlattenNodeTree(List<SaveNode> nodes)
-    {
-        var id = 0;
-
-        var flatNodes = new List<RawSaveNode>();
-        var rawNodes = WriteNodeInfo(nodes);
-
-        return flatNodes.OrderBy(x => x.Id).ToList();
-
-        List<RawSaveNode> WriteNodeInfo(List<SaveNode> nodes)
-        {
-            var results = new List<RawSaveNode>();
-
-            foreach (var node in nodes)
-            {
-                var entry = new RawSaveNode();
-                entry.Id = id++;
-                entry.Name = node.Name;
-
-                entry.Size = entry.Data.Length + entry.TrailingData.Length;
-                if (node.Children.Count > 0)
+                var dataOffset = (int)(writer.BaseStream.Position + 8 + (_file.CompressionSettings.TableEntriesCount * 12));
+                foreach (var nodeInfo in nodeInfos)
                 {
-                    entry.Children = WriteNodeInfo(node.Children);
-
-                    entry.ChildId = entry.Children[0].Id;
-                    entry.Size += entry.Children[0].Size;
-
-                    for (int i = 1; i < entry.Children.Count; i++)
-                    {
-                        entry.Children[i - 1].NextId = entry.Children[i].Id;
-                        entry.Size += entry.Children[i].Size;
-                    }
+                    nodeInfo.Offset += dataOffset;
                 }
 
-                entry.TrailingData = node.TrailingDataBytes;
+                Compression.Write(writer, uncompressedData, _file.CompressionSettings, compress);
 
-                entry.Data = new byte[node.DataBytes.Length + 4];
-                Array.Copy(BitConverter.GetBytes(entry.Id), 0, entry.Data, 0, 4);
-                Array.Copy(node.DataBytes, 0, entry.Data, 4, node.DataBytes.Length);
+                var lastBlockOffset = (int)writer.BaseStream.Position;
+                var footerWithoutLast8Bytes = BuildFooterWithoutLastEightBytes(nodeInfos);
 
-                entry.NextId = id;
-
-                flatNodes.Add(entry);
-                results.Add(entry);
+                writer.Write(footerWithoutLast8Bytes);
+                writer.Write(lastBlockOffset);
+                writer.Write(Encoding.ASCII.GetBytes(Constants.Magic.END_OF_FILE));
             }
 
-            results[^1].NextId = -1;
-
-            return results;
+            result = stream.ToArray();
         }
+
+        return result;
+    }
+
+    private byte[] GetNodeData(out List<NodeInfo> nodeInfos)
+    {
+        byte[] uncompressedData;
+
+        using (var ms = new MemoryStream())
+        {
+            using (var nw = new NodeWriter(ms))
+            {
+                foreach (var node in _file.Nodes)
+                {
+                    nw.Write(node);
+                }
+
+                nodeInfos = nw.GetFinalizedInfos();
+            }
+            uncompressedData = ms.ToArray();
+        }
+
+        return uncompressedData;
+    }
+
+    private byte[] BuildFooterWithoutLastEightBytes(List<NodeInfo> nodeInfos)
+    {
+        byte[] result;
+        using (var stream = new MemoryStream())
+        {
+            using (var writer = new BinaryWriter(stream, Encoding.ASCII))
+            {
+                writer.Write(Encoding.ASCII.GetBytes(Constants.Magic.NODE_INFORMATION_START));
+                writer.WriteVLQInt32(nodeInfos.Count);
+                foreach (var node in nodeInfos)
+                {
+                    writer.WriteLengthPrefixedString(node.Name);
+                    writer.Write(node.NextId);
+                    writer.Write(node.ChildId);
+                    writer.Write(node.Offset);
+                    writer.Write(node.Size);
+                }
+            }
+            result = stream.ToArray();
+        }
+        return result;
     }
 }

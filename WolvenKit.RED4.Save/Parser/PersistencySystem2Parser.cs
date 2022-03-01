@@ -1,6 +1,7 @@
 using System.Text;
 using WolvenKit.Common.FNV1A;
 using WolvenKit.RED4.IO;
+using WolvenKit.RED4.Save.IO;
 using WolvenKit.RED4.Types;
 
 namespace WolvenKit.RED4.Save;
@@ -136,11 +137,8 @@ public class PersistencySystem2Parser : INodeParser
 {
     public static string NodeName => Constants.NodeNames.PERSISTENCY_SYSTEM_2;
 
-    public void Read(SaveNode node)
+    public void Read(BinaryReader reader, NodeEntry node)
     {
-        using var ms = new MemoryStream(node.DataBytes);
-        using var reader = new BinaryReader(ms);
-
         var result = new PersistencySystem2();
 
         var cnt1 = reader.ReadInt32();
@@ -177,8 +175,8 @@ public class PersistencySystem2Parser : INodeParser
             result.Entries.Add(entry);
         }
 
-        node.Data = result;
+        node.Value = result;
     }
 
-    public SaveNode Write() => throw new NotImplementedException();
+    public void Write(NodeWriter writer, NodeEntry node) => throw new NotImplementedException();
 }

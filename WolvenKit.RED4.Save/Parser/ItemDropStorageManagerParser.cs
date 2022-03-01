@@ -1,5 +1,6 @@
 using WolvenKit.RED4.Types;
 using WolvenKit.Core.Extensions;
+using WolvenKit.RED4.Save.IO;
 
 namespace WolvenKit.RED4.Save
 {
@@ -12,26 +13,22 @@ namespace WolvenKit.RED4.Save
     {
         public static string NodeName => Constants.NodeNames.ITEM_DROP_STORAGE_MANAGER;
 
-        public void Read(SaveNode node)
+        public void Read(BinaryReader reader, NodeEntry node)
         {
-            //
-
-            using var ms = new MemoryStream(node.DataBytes);
-            using var br = new BinaryReader(ms);
             var data = new ItemDropStorageManager();
 
             var parser = new ItemDropStorageParser();
 
-            var cnt = br.ReadInt32();
+            var cnt = reader.ReadInt32();
             for (int i = 0; i < cnt; i++)
             {
-                parser.Read(node.Children[i]);
-                data.ItemDropStorages.Add((ItemDropStorage)node.Children[i].Data);
+                parser.Read(reader, node.Children[i]);
+                data.ItemDropStorages.Add((ItemDropStorage)node.Children[i].Value);
             }
 
-            node.Data = data;
+            node.Value = data;
         }
 
-        public SaveNode Write() => throw new NotImplementedException();
+        public void Write(NodeWriter writer, NodeEntry node) => throw new NotImplementedException();
     }
 }
