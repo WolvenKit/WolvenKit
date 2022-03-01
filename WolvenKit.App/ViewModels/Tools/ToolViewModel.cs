@@ -22,11 +22,10 @@ namespace WolvenKit.ViewModels.Tools
             Name = name;
             Header = name;
 
-            this.WhenAnyValue(x => x.IsVisible).Subscribe(b =>
+            this.WhenAnyValue(x => x.State).Subscribe(b =>
             {
-                State = !b ? DockState.Hidden : DockState.Dock;
+                this.RaisePropertyChanged("IsVisible");
             });
-
         }
 
         /// <summary>
@@ -50,7 +49,15 @@ namespace WolvenKit.ViewModels.Tools
         /// <summary>
         /// Gets/sets whether this tool window is visible or not.
         /// </summary>
-        [Reactive] public bool IsVisible { get; set; }
+        public bool IsVisible
+        {
+            get => State != DockState.Hidden;
+            set
+            {
+                State = value ? DockState.Dock : DockState.Hidden;
+                this.RaisePropertyChanged("IsVisible");
+            }
+        }
 
         #endregion IsVisible
 

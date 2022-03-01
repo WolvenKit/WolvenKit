@@ -424,9 +424,9 @@
             AllowDrop="False"
             BorderThickness="0,0,0,1"
             CloseButtonType="Hide"
+            SelectedIndex="{Binding SelectedTabIndex}"
             ShowTabItemContextMenu="False"
             ShowTabListContextMenu="False"
-            SelectedIndex="{Binding SelectedTabIndex}"
             Style="{StaticResource WolvenKitTabControl}">
             <syncfusion:TabItemExt>
                 <syncfusion:TabItemExt.Style>
@@ -573,7 +573,10 @@
                             Height="13"
                             Kind="ArrowsCollapse" />
                     </Button>
-                    <Button Margin="3,0,0,0" ToolTip="Open Root Folder" x:Name="OpenFolderButton">
+                    <Button
+                        x:Name="OpenFolderButton"
+                        Margin="3,0,0,0"
+                        ToolTip="Open Root Folder">
                         <iconPacks:PackIconCodicons
                             Width="13"
                             Height="13"
@@ -633,6 +636,9 @@
             SelectedItems="{Binding SelectedItems}"
             SelectionMode="Extended"
             SelfRelationRootValue="0"
+            VirtualizingPanel.IsVirtualizing="True"
+            VirtualizingPanel.ScrollUnit="Pixel"
+            VirtualizingPanel.VirtualizationMode="Recycling"
             Visibility="{Binding IsFlatModeEnabled, Converter={StaticResource BoolInvertConverter}}">
 
             <syncfusion:SfTreeGrid.Resources>
@@ -691,6 +697,9 @@
             SelectedItems="{Binding SelectedItems}"
             SelectionMode="Extended"
             SelfRelationRootValue="0"
+            VirtualizingPanel.IsVirtualizing="True"
+            VirtualizingPanel.ScrollUnit="Pixel"
+            VirtualizingPanel.VirtualizationMode="Recycling"
             Visibility="{Binding IsFlatModeEnabled, Converter={StaticResource Boolean2VisibilityConverter}}">
 
             <syncfusion:SfTreeGrid.Resources>

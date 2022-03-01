@@ -228,6 +228,27 @@ namespace WolvenKit.Views.Shell
                         view => view.ToolbarSettingsButton)
                     .DisposeWith(disposables);
 
+                this.Bind(ViewModel,
+                        viewModel => viewModel._mainViewModel.ProjectExplorer.IsVisible,
+                        view => view.ProjectExplorerCheckbox.IsChecked)
+                    .DisposeWith(disposables);
+                this.Bind(ViewModel,
+                        viewModel => viewModel._mainViewModel.AssetBrowserVM.IsVisible,
+                        view => view.AssetBrowserCheckbox.IsChecked)
+                    .DisposeWith(disposables);
+                this.Bind(ViewModel,
+                    viewModel => viewModel._mainViewModel.PropertiesViewModel.IsVisible,
+                        view => view.PropertiesCheckbox.IsChecked)
+                    .DisposeWith(disposables);
+                this.Bind(ViewModel,
+                        viewModel => viewModel._mainViewModel.Log.IsVisible,
+                        view => view.LogCheckbox.IsChecked)
+                    .DisposeWith(disposables);
+                this.Bind(ViewModel,
+                        viewModel => viewModel._mainViewModel.ImportExportToolVM.IsVisible,
+                        view => view.ImportExportCheckbox.IsChecked)
+                    .DisposeWith(disposables);
+
                 #endregion
 
                 Interactions.ShowBugReport.RegisterHandler(interaction =>
