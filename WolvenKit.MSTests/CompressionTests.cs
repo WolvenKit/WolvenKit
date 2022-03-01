@@ -63,8 +63,7 @@ namespace WolvenKit.MSTests
             // kraken
             var outBuffer2 = new byte[size];
             {
-                KrakenLib.Load();
-                long unpackedSize2 = KrakenLib.Decompress(buffer, outBuffer2);
+                long unpackedSize2 = KrakenNative.Decompress(buffer, outBuffer2);
                 var outpath2 = Path.Combine(outdir, "kraken.txt");
                 File.WriteAllBytes(outpath2, outBuffer2);
             }
@@ -98,8 +97,7 @@ namespace WolvenKit.MSTests
             // kraken
             var outBuffer2 = new byte[compressedBufferSizeNeeded];
             //var outBuffer2 = new byte[inbuffer.Length + 65536];
-            KrakenLib.Load();
-            var r2 = KrakenLib.Compress(inbuffer, outBuffer2, (int)level);
+            var r2 = KrakenNative.Compress(inbuffer, outBuffer2, (int)level);
             var outpath2 = Path.Combine(outdir, $"{(int)level}_kraken.kark");
             var final2 = outBuffer2.Take(r2).ToArray();
             File.WriteAllBytes(outpath2, final2);
