@@ -102,7 +102,8 @@ namespace WolvenKit.RED4.Types
         internal void InternalInitClass()
         {
             var info = RedReflection.GetTypeInfo(GetType());
-            foreach (var propertyInfo in info.PropertyInfos)
+            var pis = new List<RedReflection.ExtendedPropertyInfo>(info.PropertyInfos);
+            foreach (var propertyInfo in pis)
             {
                 if (string.IsNullOrEmpty(propertyInfo.RedName))
                 {

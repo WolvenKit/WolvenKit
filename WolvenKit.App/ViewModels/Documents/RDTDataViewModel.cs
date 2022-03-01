@@ -4,6 +4,9 @@ using System.Reactive.Disposables;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Threading;
+using AlphaChiTech.Virtualization.Pageing;
+using AlphaChiTech.VirtualizingCollection;
+using AlphaChiTech.VirtualizingCollection.Interfaces;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using Splat;
@@ -12,6 +15,7 @@ using Syncfusion.Windows.Shared;
 using WolvenKit.Common;
 using WolvenKit.Common.FNV1A;
 using WolvenKit.Functionality.Controllers;
+using WolvenKit.Functionality.Helpers;
 using WolvenKit.RED4.Archive;
 using WolvenKit.RED4.Types;
 using WolvenKit.ViewModels.Shell;
@@ -32,10 +36,24 @@ namespace WolvenKit.ViewModels.Documents
             _data = data;
             Header = _data.GetType().Name;
 
+            OnDemandLoadingCommand = new DelegateCommand<TreeViewNode>(ExecuteOnDemandLoading, CanExecuteOnDemandLoading);
+            OpenImportCommand = new Functionality.Commands.DelegateCommand<ICR2WImport>(ExecuteOpenImport);
+
+            if (!VirtualizationManager.IsInitialized)
+            {
+                VirtualizationManager.Instance.UIThreadExecuteAction = (a) => DispatcherHelper.RunOnMainThread(a);
+                new DispatcherTimer(
+                    TimeSpan.FromSeconds(1),
+                    DispatcherPriority.Background,
+                    delegate (object s, EventArgs a)
+                    {
+                        VirtualizationManager.Instance.ProcessActions();
+                    },
+                    Application.Current.Dispatcher).Start();
+            }
+
             this.WhenActivated((CompositeDisposable disposables) =>
             {
-                OnDemandLoadingCommand = new DelegateCommand<TreeViewNode>(ExecuteOnDemandLoading, CanExecuteOnDemandLoading);
-                OpenImportCommand = new Functionality.Commands.DelegateCommand<ICR2WImport>(ExecuteOpenImport);
                 if (SelectedChunk == null)
                 {
                     SelectedChunk = Chunks[0];
@@ -108,13 +126,32 @@ namespace WolvenKit.ViewModels.Documents
 
         private bool CanExecuteOnDemandLoading(TreeViewNode node)
         {
-            if (node.Content is GroupedChunkViewModel)
+            if (node.Content is ChunkViewModel cvm && cvm.PropertyCount > 0)
             {
-                return true;
-            }
+                if (cvm.IsExpanded && !node.IsExpanded)
+                {
+                    if (node.ChildNodes.Count == 0)
+                    {
+                        node.ShowExpanderAnimation = true;
+                        Application.Current.MainWindow.Dispatcher.BeginInvoke(DispatcherPriority.SystemIdle,
+                        new Action(() =>
+                        {
+                            if (!cvm.PropertiesLoaded)
+                            {
+                                cvm.CalculateProperties();
+                            }
+                            node.PopulateChildNodes(cvm.VirtualizedProperties);
+                            //cvm.IsExpanded = true;
+                            node.IsExpanded = true;
 
-            if (node.Content is ChunkViewModel cvm && cvm.HasChildren())
-            {
+                            node.ShowExpanderAnimation = false;
+                        }));
+                    }
+                    else
+                    {
+                        node.IsExpanded = true;
+                    }
+                }
                 return true;
             }
 
@@ -125,42 +162,32 @@ namespace WolvenKit.ViewModels.Documents
         {
             if (node.ChildNodes.Count > 0)
             {
+                //if (node.Content is ChunkViewModel cvm2)
+                //{
+                //    cvm2.IsExpanded = true;
+                //}
                 node.IsExpanded = true;
                 return;
             }
 
             node.ShowExpanderAnimation = true;
 
-            if (node.Content is GroupedChunkViewModel gcvm)
-            {
-                Application.Current.MainWindow.Dispatcher.BeginInvoke(DispatcherPriority.Background,
-                    new Action(() =>
-                    {
-                        node.PopulateChildNodes(gcvm.TVProperties);
-                        if (gcvm.TVProperties.Count > 0)
-                        {
-                            node.IsExpanded = true;
-                        }
-
-                        node.ShowExpanderAnimation = false;
-                    }));
-            }
-
             if (node.Content is ChunkViewModel cvm)
             {
-                Application.Current.MainWindow.Dispatcher.BeginInvoke(DispatcherPriority.Background,
-                    new Action(() =>
+                Application.Current.MainWindow.Dispatcher.BeginInvoke(DispatcherPriority.SystemIdle,
+                new Action(() =>
+                {
+                    if (!cvm.PropertiesLoaded)
                     {
                         cvm.CalculateProperties();
-                        node.PopulateChildNodes(cvm.TVProperties);
-                        if (cvm.TVProperties.Count > 0)
-                        {
-                            node.IsExpanded = true;
-                        }
+                    }
+                    node.PopulateChildNodes(cvm.VirtualizedProperties);
+                    //cvm.IsExpanded = true;
+                    node.IsExpanded = true;
 
-                        node.ShowExpanderAnimation = false;
-                    }));
-            }
+                    node.ShowExpanderAnimation = false;
+                }));
+        }
         }
 
         public ICommand OpenImportCommand { get; private set; }

@@ -477,6 +477,11 @@
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
 
+        <!--
+            ChildPropertyName="TVProperties"
+            NodePopulationMode="Instant"
+            LoadOnDemandCommand="{Binding OnDemandLoadingCommand}"
+        -->
         <syncfusion:SfTreeView
             x:Name="TreeView"
             Grid.Column="0"
@@ -490,35 +495,55 @@
             ItemDragStarting="SfTreeView_ItemDragStarting"
             ItemDropped="SfTreeView_ItemDropped"
             ItemDropping="SfTreeView_ItemDropping"
+            ItemHeight="22"
             ItemTemplateSelector="{StaticResource itemTemplateSelector}"
+            NotificationSubscriptionMode="CollectionChange"
+            ScrollViewer.IsDeferredScrollingEnabled="False"
             SelectionMode="Single"
             ShowLines="True"
             VirtualizingPanel.IsVirtualizing="True"
             VirtualizingPanel.ScrollUnit="Pixel"
             VirtualizingPanel.VirtualizationMode="Recycling"
             Visibility="Visible">
-            <!--
-                LoadOnDemandCommand="{Binding OnDemandLoadingCommand}"
-            -->
             <syncfusion:SfTreeView.HierarchyPropertyDescriptors>
                 <treeViewEngine:HierarchyPropertyDescriptor
-                    ChildPropertyName="TVProperties"
+                    ChildPropertyName="VirtualizedProperties"
                     IsExpandedPropertyName="IsExpanded"
                     IsSelectedPropertyName="IsSelected"
                     TargetType="{x:Type shell:ChunkViewModel}" />
                 <treeViewEngine:HierarchyPropertyDescriptor
-                    ChildPropertyName="TVProperties"
                     IsExpandedPropertyName="IsExpanded"
                     IsSelectedPropertyName="IsSelected"
                     TargetType="{x:Type shell:GroupedChunkViewModel}" />
             </syncfusion:SfTreeView.HierarchyPropertyDescriptors>
         </syncfusion:SfTreeView>
 
+        <!--
+            ListView
+            x:Name="TreeView"
+            ItemTemplateSelector="{StaticResource itemTemplateSelector}"
+            ScrollViewer.IsDeferredScrollingEnabled="True"
+            VirtualizingPanel.IsVirtualizing="True"
+            VirtualizingPanel.IsVirtualizingWhenGrouping="True"
+            VirtualizingPanel.ScrollUnit="Item"
+            VirtualizingPanel.VirtualizationMode="Recycling" /
+        -->
+
+        <!--
+            TreeView
+            x:Name="TreeView"
+            ItemTemplateSelector="{StaticResource itemTemplateSelector}"
+            VirtualizingStackPanel.IsVirtualizing="True"
+            VirtualizingStackPanel.VirtualizationMode="Recycling" /
+        -->
 
         <!--  Grid Splitter  -->
         <syncfusion:SfGridSplitter Grid.Column="1" HorizontalAlignment="Stretch" />
 
-        <editors:RedTypeView x:Name="CustomPG" Grid.Column="2" />
+        <editors:RedTypeView
+            x:Name="CustomPG"
+            Grid.Column="2"
+            DataContext="{Binding SelectedChunk, IsAsync=False}" />
         <!--
             DataContext="{Binding SelectedChunk, IsAsync=True}"
             ViewModel="{Binding}"

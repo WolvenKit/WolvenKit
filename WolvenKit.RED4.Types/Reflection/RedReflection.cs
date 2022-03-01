@@ -30,15 +30,15 @@ namespace WolvenKit.RED4.Types
         public static ExtendedPropertyInfo GetPropertyByName(Type type, string propertyName)
         {
             var typeInfo = GetTypeInfo(type);
-
-            return typeInfo.PropertyInfos.FirstOrDefault(p => p.Name == propertyName);
+            var pis = new List<ExtendedPropertyInfo>(typeInfo.PropertyInfos);
+            return pis.FirstOrDefault(p => p.Name == propertyName);
         }
 
         public static ExtendedPropertyInfo GetPropertyByRedName(Type type, string redPropertyName)
         {
             var typeInfo = GetTypeInfo(type);
-
-            return typeInfo.PropertyInfos.FirstOrDefault(p => p.RedName == redPropertyName);
+            var pis = new List<ExtendedPropertyInfo>(typeInfo.PropertyInfos);
+            return pis.FirstOrDefault(p => p.RedName == redPropertyName);
         }
 
         public static bool IsDefault(Type clsType, string redPropertyName, object value)

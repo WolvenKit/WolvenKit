@@ -39,7 +39,6 @@ namespace WolvenKit.Views.Documents
 
             this.WhenActivated(disposables =>
             {
-
                 this.OneWayBind(ViewModel,
                        viewmodel => viewmodel.Chunks,
                        view => view.TreeView.ItemsSource)
@@ -48,14 +47,24 @@ namespace WolvenKit.Views.Documents
                       viewmodel => viewmodel.SelectedChunk,
                       view => view.TreeView.SelectedItem)
                   .DisposeWith(disposables);
-                this.OneWayBind(ViewModel,
-                      viewmodel => viewmodel.SelectedChunk,
-                      view => view.CustomPG.DataContext)
-                  .DisposeWith(disposables);
-                this.OneWayBind(ViewModel,
-                      viewmodel => viewmodel.SelectedChunk,
-                      view => view.CustomPG.ViewModel)
-                  .DisposeWith(disposables);
+                //this.OneWayBind(ViewModel,
+                //      viewmodel => viewmodel.SelectedChunk,
+                //      view => view.CustomPG.DataContext)
+                //  .DisposeWith(disposables);
+
+                if (ViewModel != null && ViewModel.SelectedChunk == null)
+                {
+                    ViewModel.SelectedChunk = ViewModel.Chunks[0];
+                }
+
+                //TreeView.Loaded += (a, e) =>
+                //{
+                //    TreeView.ExpandNodes(1);
+                //};
+                //this.OneWayBind(ViewModel,
+                //      viewmodel => viewmodel.SelectedChunk,
+                //      view => view.CustomPG.ViewModel)
+                //  .DisposeWith(disposables);
 
                 //ViewModel.SelectedChunk.IsExpanded = true;
 
@@ -215,7 +224,7 @@ namespace WolvenKit.Views.Documents
                     {
                         if (target.Parent.Data is DataBuffer or SerializationDeferredDataBuffer)
                         {
-                            target.Parent.AddChunkToDataBuffer((RedBaseClass)rbc.DeepCopy(), target.Parent.Properties.IndexOf(target) + 1);
+                            target.Parent.AddChunkToDataBuffer((RedBaseClass)rbc.DeepCopy(), target.Parent.GetIndexOf(target) + 1);
                         }
 
                         if (target.Parent.Data is IRedArray arr)
@@ -224,12 +233,12 @@ namespace WolvenKit.Views.Documents
 
                             if (arrayType == typeof(CArray<>))
                             {
-                                target.Parent.AddClassToArray((RedBaseClass)rbc.DeepCopy(), target.Parent.Properties.IndexOf(target) + 1);
+                                target.Parent.AddClassToArray((RedBaseClass)rbc.DeepCopy(), target.Parent.GetIndexOf(target) + 1);
                             }
 
                             if (arrayType == typeof(CStatic<>) && arr.Count < arr.MaxSize)
                             {
-                                target.Parent.AddClassToArray((RedBaseClass)rbc.DeepCopy(), target.Parent.Properties.IndexOf(target) + 1);
+                                target.Parent.AddClassToArray((RedBaseClass)rbc.DeepCopy(), target.Parent.GetIndexOf(target) + 1);
                             }
                         }
                     }
