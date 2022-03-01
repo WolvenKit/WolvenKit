@@ -22,9 +22,9 @@ namespace WolvenKit.RED4.Types
     }
 
     [RED("handle")]
-    public class CHandle<T> : IRedHandle<T>, IRedNotifyObjectChanged, IEquatable<CHandle<T>> where T : RedBaseClass
+    public class CHandle<T> : IRedHandle<T>, /*IRedNotifyObjectChanged, */IEquatable<CHandle<T>> where T : RedBaseClass
     {
-        public event ObjectChangedEventHandler ObjectChanged;
+        // public event ObjectChangedEventHandler ObjectChanged;
 
         private T _chunk;
 
