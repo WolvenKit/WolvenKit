@@ -59,11 +59,9 @@ namespace WolvenKit.Views.Documents
 
             this.WhenActivated(disposables =>
             {
-
                 if (DataContext is RDTMeshViewModel vm)
                 {
                     SetCurrentValue(ViewModelProperty, vm);
-                    ViewModel.Render();
                 }
 
                 this.OneWayBind(ViewModel,
