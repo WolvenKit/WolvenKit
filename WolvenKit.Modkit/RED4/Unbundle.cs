@@ -179,7 +179,7 @@ namespace WolvenKit.Modkit.RED4
 
             Directory.CreateDirectory(outDir.FullName);
             // get outfile name
-            var outfile = new FileInfo(Path.Combine(outDir.FullName, $"{name}"));
+            var outfile = new FileInfo(Path.Combine(outDir.FullName, $"{name.Replace('\\', Path.DirectorySeparatorChar)}"));
             if (outfile.Directory == null)
             {
                 return -1;
@@ -221,7 +221,7 @@ namespace WolvenKit.Modkit.RED4
             }
 
             // get outfile name
-            var outfile = new FileInfo(Path.Combine(outDir.FullName, $"{name}"));
+            var outfile = new FileInfo(Path.Combine(outDir.FullName, $"{name.Replace('\\', Path.DirectorySeparatorChar)}"));
             if (outfile.Directory == null)
             {
                 return -1;
