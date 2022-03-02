@@ -2,10 +2,10 @@ name: publish-nuget
 on:
   workflow_dispatch:
 
-jobs:   
+jobs:
 
   check-console-win:
-    runs-on: windows-latest
+    runs-on: ubuntu-latest
 
     steps:
     - name: checkout
@@ -16,12 +16,12 @@ jobs:
         dotnet-version: 6.x
 
     - name: build
-      run: dotnet build .\WolvenKit.CLI\WolvenKit.CLI.csproj
+      run: dotnet build WolvenKit.CLI/WolvenKit.CLI.csproj
 
     - name: publish nuget
       id: publish_nuget
       uses: rohith/publish-nuget@v2
       with:
-        PROJECT_FILE_PATH: .\WolvenKit.CLI\WolvenKit.CLI.csproj
+        PROJECT_FILE_PATH: WolvenKit.CLI/WolvenKit.CLI.csproj
         TAG_COMMIT: false
         NUGET_KEY: ${{secrets.NUGET_KEY}}
