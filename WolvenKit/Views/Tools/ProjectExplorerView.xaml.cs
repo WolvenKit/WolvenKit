@@ -58,7 +58,7 @@ namespace WolvenKit.Views.Tools
                         var count = interaction.Input.Count();
 
                         var result = AdonisUI.Controls.MessageBox.Show(
-                        "The selected items will be deleted permanently.",
+                        "The selected item(s) will be moved to the Recycle Bin.",
                         "WolvenKit",
                         AdonisUI.Controls.MessageBoxButton.OKCancel,
                         AdonisUI.Controls.MessageBoxImage.Information,

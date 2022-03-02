@@ -2,7 +2,7 @@ using System.Runtime.InteropServices;
 
 namespace WolvenKit.Core.Compression;
 
-internal static class KrakenNative
+public static class KrakenNative
 {
     public static int Decompress(byte[] buffer, byte[] outputBuffer)
         => Kraken_Decompress(buffer, buffer.Length, outputBuffer, outputBuffer.Length);

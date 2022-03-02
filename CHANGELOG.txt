@@ -30,6 +30,7 @@ Implemented:
 - Updated RTTI classes
 - More filepaths
 - 1.5 game patch support
+- add pluginView
 
 Fixed:
 - Lots of bug fixes
@@ -49,6 +50,8 @@ Fixed:
 - Fixed csv import
 - Fixed masklist writing for PNG exports
 - Changed default export format for mlmask from DDS to PNG
+- Asset Browser: add base/mod files toggle button
+- Asset Browser: change home button to foldup, w/ tooltip
 
 WolvenKit 8.4.3
 -----------------

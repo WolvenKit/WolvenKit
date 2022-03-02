@@ -28,6 +28,7 @@ using WolvenKit.RED4.CR2W;
 using WolvenKit.RED4.Types;
 using WolvenKit.ViewModels.Documents;
 using static WolvenKit.ViewModels.Documents.RDTMeshViewModel;
+using WolvenKit.Modkit.RED4.Tools;
 
 namespace WolvenKit.ViewModels.Tools
 {

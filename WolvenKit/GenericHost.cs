@@ -1,5 +1,3 @@
-using System.IO;
-using CP77.CR2W;
 using gpm.Installer;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -13,6 +11,7 @@ using WolvenKit.Functionality.Controllers;
 using WolvenKit.Functionality.ProjectManagement;
 using WolvenKit.Functionality.Services;
 using WolvenKit.Modkit.RED4;
+using WolvenKit.Modkit.RED4.Tools;
 using WolvenKit.RED4.CR2W;
 using WolvenKit.RED4.CR2W.Archive;
 using WolvenKit.Services;
