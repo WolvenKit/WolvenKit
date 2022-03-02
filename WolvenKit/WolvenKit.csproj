@@ -45,10 +45,10 @@
     <PackageReference Include="Feather.Controls" Version="1.0.3" />
     <PackageReference Include="Feather.Core" Version="1.0.0" />
 
-    <PackageReference Include="ReactiveUI" Version="17.1.50" />
+    <PackageReference Include="ReactiveUI" Version="17.1.17" />
     <PackageReference Include="ReactiveUI.Events.WPF" Version="15.1.1" />
-    <PackageReference Include="ReactiveUI.Fody" Version="17.1.50" />
-    <PackageReference Include="ReactiveUI.WPF" Version="17.1.50" />
+    <PackageReference Include="ReactiveUI.Fody" Version="17.1.17" />
+    <PackageReference Include="ReactiveUI.WPF" Version="17.1.17" />
     <PackageReference Include="ScottPlot.WPF" Version="4.1.33" />
     <PackageReference Include="Splat" Version="14.1.45" />
     <PackageReference Include="Microsoft.Extensions.Hosting" Version="6.0.1" />

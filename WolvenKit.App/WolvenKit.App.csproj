@@ -85,8 +85,8 @@
     <PackageReference Include="Magick.NET.SystemWindowsMedia" Version="4.0.17" />
     <PackageReference Include="DiscordRichPresence" Version="1.0.175" />
     <PackageReference Include="NAudio" Version="2.0.1" />
-    <PackageReference Include="ReactiveUI" Version="17.1.50" />
-    <PackageReference Include="ReactiveUI.Fody" Version="17.1.50" />
+    <PackageReference Include="ReactiveUI" Version="17.1.17" />
+    <PackageReference Include="ReactiveUI.Fody" Version="17.1.17" />
     <PackageReference Include="ReactiveUI.Validation" Version="2.2.1" />
     <PackageReference Include="Pfim" Version="0.10.3" />
     <PackageReference Include="YamlDotNet" Version="11.2.1" />
