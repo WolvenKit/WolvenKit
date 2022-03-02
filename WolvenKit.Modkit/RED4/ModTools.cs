@@ -1,8 +1,8 @@
-using CP77.CR2W;
 using WolvenKit.Common;
 using WolvenKit.Common.Interfaces;
 using WolvenKit.Common.Services;
 using WolvenKit.Core.Services;
+using WolvenKit.Modkit.RED4.Tools;
 using WolvenKit.RED4.CR2W;
 
 namespace WolvenKit.Modkit.RED4

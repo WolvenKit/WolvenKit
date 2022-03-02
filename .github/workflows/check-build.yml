@@ -1,0 +1,65 @@
+name: wkit-check-builds
+on:
+  push:
+    branches: '*'
+  pull_request:
+    branches: '*'
+
+jobs:
+  desktop-win:
+    runs-on: windows-2022
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+    - name: Setup .NET Core
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: 6.x
+
+    - name: Publish with Dotnet
+      run: dotnet publish .\WolvenKit\WolvenKit.csproj -o .\publish -c Release
+
+    - uses: actions/upload-artifact@v2
+      with:
+        name: WolvenKit Desktop
+        path: .\publish
+
+  console-win:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+    - name: Setup .NET Core
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: 6.x
+
+    - name: Publish with Dotnet
+      run: dotnet publish ./WolvenKit.CLI/WolvenKit.CLI.csproj -o ./publish_cli -r win-x64 -c Release --no-self-contained
+
+    - uses: actions/upload-artifact@v2
+      with:
+        name: WolvenKit CLI
+        path: ./publish_cli
+
+
+  console-linux:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+    - name: Setup .NET Core
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: 6.x
+
+    - name: Publish with Dotnet
+      run: dotnet publish ./WolvenKit.CLI/WolvenKit.CLI.csproj -o ./publish_cli_linux -r linux-x64 -c Release --no-self-contained
+
+    - uses: actions/upload-artifact@v2
+      with:
+        name: WolvenKit CLI Linux
+        path: ./publish_cli_linux

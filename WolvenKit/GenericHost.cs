@@ -13,6 +13,7 @@ using WolvenKit.Functionality.Controllers;
 using WolvenKit.Functionality.ProjectManagement;
 using WolvenKit.Functionality.Services;
 using WolvenKit.Modkit.RED4;
+using WolvenKit.Modkit.RED4.Tools;
 using WolvenKit.RED4.CR2W;
 using WolvenKit.RED4.CR2W.Archive;
 using WolvenKit.Services;

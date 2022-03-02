@@ -19,7 +19,7 @@ using Vec2 = System.Numerics.Vector2;
 using Vec3 = System.Numerics.Vector3;
 using Vec4 = System.Numerics.Vector4;
 
-namespace CP77.CR2W
+namespace WolvenKit.Modkit.RED4.Tools
 {
     public class MeshTools
     {
@@ -386,19 +386,19 @@ namespace CP77.CR2W
                         break;
                     }
 
-                    if (cv.VertexLayout.Elements[e].Usage.Value == Enums.GpuWrapApiVertexPackingePackingUsage.PS_Normal)
+                    if (cv.VertexLayout.Elements[e].Usage.Value == GpuWrapApiVertexPackingePackingUsage.PS_Normal)
                     {
                         meshesInfo.normalOffsets[i] = cv.ByteOffsets[cv.VertexLayout.Elements[e].StreamIndex];
                     }
-                    if (cv.VertexLayout.Elements[e].Usage.Value == Enums.GpuWrapApiVertexPackingePackingUsage.PS_Tangent)
+                    if (cv.VertexLayout.Elements[e].Usage.Value == GpuWrapApiVertexPackingePackingUsage.PS_Tangent)
                     {
                         meshesInfo.tangentOffsets[i] = cv.ByteOffsets[cv.VertexLayout.Elements[e].StreamIndex];
                     }
-                    if (cv.VertexLayout.Elements[e].Usage.Value == Enums.GpuWrapApiVertexPackingePackingUsage.PS_Color)
+                    if (cv.VertexLayout.Elements[e].Usage.Value == GpuWrapApiVertexPackingePackingUsage.PS_Color)
                     {
                         meshesInfo.colorOffsets[i] = cv.ByteOffsets[cv.VertexLayout.Elements[e].StreamIndex];
                     }
-                    if (cv.VertexLayout.Elements[e].Usage.Value == Enums.GpuWrapApiVertexPackingePackingUsage.PS_TexCoord)
+                    if (cv.VertexLayout.Elements[e].Usage.Value == GpuWrapApiVertexPackingePackingUsage.PS_TexCoord)
                     {
                         if (meshesInfo.tex0Offsets[i] == 0)
                         {
@@ -511,11 +511,11 @@ namespace CP77.CR2W
                 // getting positions
                 for (var i = 0; i < info.vertCounts[index]; i++)
                 {
-                    gfs.Position = info.posnOffsets[index] + (i * info.vpStrides[index]);
+                    gfs.Position = info.posnOffsets[index] + i * info.vpStrides[index];
 
-                    var x = (gbr.ReadInt16() / 32767f * info.quantScale.X) + info.quantTrans.X;
-                    var y = (gbr.ReadInt16() / 32767f * info.quantScale.Y) + info.quantTrans.Y;
-                    var z = (gbr.ReadInt16() / 32767f * info.quantScale.Z) + info.quantTrans.Z;
+                    var x = gbr.ReadInt16() / 32767f * info.quantScale.X + info.quantTrans.X;
+                    var y = gbr.ReadInt16() / 32767f * info.quantScale.Y + info.quantTrans.Y;
+                    var z = gbr.ReadInt16() / 32767f * info.quantScale.Z + info.quantTrans.Z;
 
                     // Z up to Y up and LHCS to RHCS
                     meshContainer.positions[i] = new Vec3(x, z, -y);
@@ -528,7 +528,7 @@ namespace CP77.CR2W
                     meshContainer.texCoords0 = new Vec2[info.vertCounts[index]];
                     for (var i = 0; i < info.vertCounts[index]; i++)
                     {
-                        gfs.Position = info.tex0Offsets[index] + (i * 4);
+                        gfs.Position = info.tex0Offsets[index] + i * 4;
                         meshContainer.texCoords0[i] = new Vec2(Converters.hfconvert(gbr.ReadUInt16()), Converters.hfconvert(gbr.ReadUInt16()));
                     }
                 }
@@ -547,7 +547,7 @@ namespace CP77.CR2W
 
                     for (var i = 0; i < info.vertCounts[index]; i++)
                     {
-                        gfs.Position = info.normalOffsets[index] + (stride * i);
+                        gfs.Position = info.normalOffsets[index] + stride * i;
                         var read = gbr.ReadUInt32();
                         var vec = Converters.TenBitShifted(read);
 
@@ -572,7 +572,7 @@ namespace CP77.CR2W
                     }
                     for (var i = 0; i < info.vertCounts[index]; i++)
                     {
-                        gfs.Position = info.tangentOffsets[index] + (stride * i) + off;
+                        gfs.Position = info.tangentOffsets[index] + stride * i + off;
                         var read = gbr.ReadUInt32();
                         var vec0 = Converters.TenBitShifted(read);
 
@@ -598,7 +598,7 @@ namespace CP77.CR2W
 
                     for (var i = 0; i < info.vertCounts[index]; i++)
                     {
-                        gfs.Position = info.tex1Offsets[index] + (i * stride) + off;
+                        gfs.Position = info.tex1Offsets[index] + i * stride + off;
 
                         meshContainer.texCoords1[i] = new Vec2(Converters.hfconvert(gbr.ReadUInt16()), Converters.hfconvert(gbr.ReadUInt16()));
                     }
@@ -618,7 +618,7 @@ namespace CP77.CR2W
 
                     for (var i = 0; i < info.vertCounts[index]; i++)
                     {
-                        gfs.Position = info.colorOffsets[index] + (i * stride);
+                        gfs.Position = info.colorOffsets[index] + i * stride;
                         meshContainer.colors0[i] = new Vec4(gbr.ReadByte() / 255f, gbr.ReadByte() / 255f, gbr.ReadByte() / 255f, gbr.ReadByte() / 255f);
                     }
                 }
@@ -627,7 +627,7 @@ namespace CP77.CR2W
                 meshContainer.boneindices = new ushort[info.vertCounts[index], info.weightCounts[index]];
                 for (var i = 0; i < info.vertCounts[index]; i++)
                 {
-                    gfs.Position = info.posnOffsets[index] + (i * info.vpStrides[index]) + 8;
+                    gfs.Position = info.posnOffsets[index] + i * info.vpStrides[index] + 8;
                     for (var e = 0; e < info.weightCounts[index]; e++)
                     {
                         meshContainer.boneindices[i, e] = gbr.ReadByte();
@@ -640,7 +640,7 @@ namespace CP77.CR2W
                 for (var i = 0; i < info.vertCounts[index]; i++)
                 {
                     float sum = 0;
-                    gfs.Position = info.posnOffsets[index] + (i * info.vpStrides[index]) + 8 + meshContainer.weightCount;
+                    gfs.Position = info.posnOffsets[index] + i * info.vpStrides[index] + 8 + meshContainer.weightCount;
                     for (var e = 0; e < meshContainer.weightCount; e++)
                     {
                         meshContainer.weights[i, e] = gbr.ReadByte() / 255f;
@@ -665,7 +665,7 @@ namespace CP77.CR2W
                     meshContainer.garmentMorph = new Vec3[info.vertCounts[index]];
                     for (var i = 0; i < info.vertCounts[index]; i++)
                     {
-                        gfs.Position = info.posnOffsets[index] + (i * info.vpStrides[index]) + 8 + (2 * meshContainer.weightCount);
+                        gfs.Position = info.posnOffsets[index] + i * info.vpStrides[index] + 8 + 2 * meshContainer.weightCount;
                         var x = Converters.hfconvert(gbr.ReadUInt16());
                         var y = Converters.hfconvert(gbr.ReadUInt16());
                         var z = Converters.hfconvert(gbr.ReadUInt16());

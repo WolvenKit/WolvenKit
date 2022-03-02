@@ -268,6 +268,16 @@ namespace WolvenKit.ViewModels
         /// <exception cref="ArgumentOutOfRangeException"></exception>
         public void LoadCurve(double[] times, double[] values, Enums.EInterpolationType type)
         {
+            if (times == null)
+            {
+                times = new double[] { 0 };
+                type = Enums.EInterpolationType.Linear;
+            }
+            if (values == null)
+            {
+                values = new double[] { 0 };
+                type = Enums.EInterpolationType.Linear;
+            }
             if (times.Length < 1 || values.Length < 1)
             {
                 times = new double[] { 0 };

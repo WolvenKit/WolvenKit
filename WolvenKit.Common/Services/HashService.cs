@@ -129,7 +129,7 @@ namespace WolvenKit.Common.Services
                 return;
             }
 
-            LoadEmbeddedHashes(s_unused, _additionalhashes);
+            //LoadEmbeddedHashes(s_unused, _additionalhashes);
             IsAdditionalLoaded = true;
         }
 

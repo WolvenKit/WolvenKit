@@ -6,6 +6,7 @@ using System.Linq;
 using WolvenKit.Core.Extensions;
 using WolvenKit.RED4.Archive.Buffer;
 using WolvenKit.RED4.Archive.CR2W;
+using WolvenKit.RED4.IO;
 using WolvenKit.RED4.Types;
 using WolvenKit.RED4.Types.Exceptions;
 
@@ -62,6 +63,13 @@ namespace WolvenKit.RED4.Archive.IO
 
             // read strings - block 1 (index 0)
             result.StringDict = ReadStringDict(tableHeaders[0]);
+            if (CollectData)
+            {
+                foreach (var pair in result.StringDict)
+                {
+                    DataCollection.RawStringList.Add(pair.Value);
+                }
+            }
 
             // read the other tables
 
@@ -189,7 +197,7 @@ namespace WolvenKit.RED4.Archive.IO
             }*/
 
             file = _cr2wFile;
-            _cr2wFile.AttachEventHandler();
+            //_cr2wFile.AttachEventHandler();
 
             return EFileReadErrorCodes.NoError;
         }
@@ -206,12 +214,23 @@ namespace WolvenKit.RED4.Archive.IO
             return stringDict[info.offset];
         }
 
-        private CR2WImport ReadImport(CR2WImportInfo info, IDictionary<uint, CName> stringDict) => new CR2WImport
+        private CR2WImport ReadImport(CR2WImportInfo info, IDictionary<uint, CName> stringDict)
         {
-            ClassName = _namesList[info.className],
-            DepotPath = stringDict[info.offset],
-            Flags = (InternalEnums.EImportFlags)info.flags
-        };
+            var ret = new CR2WImport
+            {
+                ClassName = _namesList[info.className],
+                DepotPath = stringDict[info.offset],
+                Flags = (InternalEnums.EImportFlags)info.flags
+            };
+
+            if (CollectData)
+            {
+                DataCollection.RawStringList.Remove(ret.DepotPath);
+                DataCollection.RawImportList.Add(ret.DepotPath);
+            }
+
+            return ret;
+        }
 
         private CR2WProperty ReadProperty(CR2WPropertyInfo info) => new CR2WProperty();
 
@@ -258,7 +277,19 @@ namespace WolvenKit.RED4.Archive.IO
             {
                 var ms = new MemoryStream(buffer.GetBytes());
                 var reader = (IBufferReader)System.Activator.CreateInstance(_bufferReaders[parentType], ms);
+                var baseReader = reader as Red4Reader;
+                if (baseReader != null)
+                {
+                    baseReader.CollectData = CollectData;
+                }
+
                 reader.ReadBuffer(buffer, _cr2wFile.RootChunk.GetType());
+
+                if (baseReader is { CollectData: true })
+                {
+                    DataCollection.Buffers ??= new List<DataCollection>();
+                    DataCollection.Buffers.Add(baseReader.DataCollection);
+                }
             }
         }
 

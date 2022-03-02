@@ -5,7 +5,6 @@ using System.Linq;
 using System.Reactive.Disposables;
 using System.Text.RegularExpressions;
 using System.Windows;
-using CP77.CR2W;
 using DynamicData;
 using HandyControl.Data;
 using ReactiveUI;
@@ -21,6 +20,7 @@ using WolvenKit.Functionality.Commands;
 using WolvenKit.Functionality.Helpers;
 using WolvenKit.Functionality.Services;
 using WolvenKit.Models.Docking;
+using WolvenKit.Modkit.RED4.Tools;
 using WolvenKit.ViewModels.Tools;
 
 namespace WolvenKit.Views.Tools

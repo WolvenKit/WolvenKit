@@ -21,15 +21,13 @@ namespace WolvenKit.Common.Services
         /// <returns></returns>
         public static Archive ReadArchive(string path, IHashService hashService)
         {
-            var mapName = "ReadArchive_Map";
-
             var ar = new Archive()
             {
                 ArchiveAbsolutePath = path
             };
 
             using var fs = new FileStream(ar.ArchiveAbsolutePath, FileMode.Open, FileAccess.ReadWrite, FileShare.ReadWrite);
-            using var mmf = MemoryMappedFileExtensions.GetMemoryMappedFile(fs, mapName);
+            using var mmf = MemoryMappedFile.CreateFromFile(fs, null, 0, MemoryMappedFileAccess.ReadWrite, HandleInheritability.None, false);
 
             // read header
             uint customDataLength;

@@ -4,8 +4,6 @@ using System.Diagnostics;
 using System.IO;
 using System.IO.Compression;
 using System.Linq;
-using System.Text.Json;
-using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Xml.Linq;
@@ -17,7 +15,6 @@ using WolvenKit.Core;
 using WolvenKit.Core.Compression;
 using WolvenKit.Core.Services;
 using WolvenKit.Functionality.Services;
-using WolvenKit.Helpers;
 using WolvenKit.Models;
 using WolvenKit.Modkit.RED4.Serialization;
 using WolvenKit.ProjectManagement.Project;
@@ -273,8 +270,7 @@ namespace WolvenKit.Functionality.Controllers
         {
             _progressService.IsIndeterminate = true;
 
-            var packTask = PackProject();
-            if (!packTask.Result)
+            if (!await PackProject())
             {
                 _progressService.IsIndeterminate = false;
                 return await Task.FromResult(false);
