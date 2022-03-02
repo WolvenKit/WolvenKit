@@ -8,7 +8,6 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using CP77.CR2W;
 using HelixToolkit.SharpDX.Core;
 using HelixToolkit.Wpf.SharpDX;
 using SharpDX.Direct3D9;
@@ -30,6 +29,7 @@ using WolvenKit.Functionality.Helpers;
 using System.ComponentModel;
 using System.Collections.Specialized;
 using WolvenKit.Functionality.Extensions;
+using WolvenKit.Modkit.RED4.Tools;
 
 namespace WolvenKit.ViewModels.Documents
 {

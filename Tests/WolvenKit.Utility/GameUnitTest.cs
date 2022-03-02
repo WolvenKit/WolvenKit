@@ -117,7 +117,7 @@ namespace WolvenKit.Utility
             //protobuf
             RuntimeTypeModel.Default[typeof(IGameArchive)].AddSubType(20, typeof(Archive));
 
-            var tweakService = ServiceLocator.Default.ResolveType<ITweakDBService>();
+            var tweakService = _host.Services.GetRequiredService<ITweakDBService>();
             tweakService.LoadDB(Path.Combine(gameDirectory.FullName, "r6", "cache", "tweakdb.bin"));
             s_bm = _host.Services.GetRequiredService<IArchiveManager>();
 
