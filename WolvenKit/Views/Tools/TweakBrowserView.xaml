@@ -31,9 +31,10 @@
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
         <Border
+            Margin="-3,-2,0,0"
             Background="{StaticResource ContentBackgroundAlt2}"
             BorderBrush="{StaticResource BorderAlt}"
-            BorderThickness="0,0,0,1">
+            BorderThickness="1,1,0,1">
             <Grid>
                 <hc:SearchBar
                     Margin="3"
@@ -49,6 +50,8 @@
         <ListBox
             x:Name="DataGrid"
             Grid.Row="1"
+            Margin="-3,0,0,-3"
+            BorderThickness="1,0,0,1"
             ItemsSource="{Binding TweakDBIDs}"
             SelectedItem="{Binding SelectedTweakDBID, Mode=TwoWay}">
             <ListBox.ItemTemplate>
@@ -60,12 +63,13 @@
         <syncfusion:SfGridSplitter
             Grid.RowSpan="2"
             Grid.Column="1"
+            Margin="0,-2,0,-3"
             HorizontalAlignment="Stretch" />
         <local:RedTreeView
             x:Name="redTreeView"
             Grid.RowSpan="2"
             Grid.Column="2"
-            Margin="-1"
+            Margin="-3,-2,-3,-3"
             ItemsSource="{Binding SelectedRecord}" />
     </Grid>
 </reactiveUi:ReactiveUserControl>

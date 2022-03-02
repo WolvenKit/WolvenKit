@@ -269,6 +269,20 @@ namespace WolvenKit.ViewModels.Shell
                 return true;
             }
 
+            if (Data is gamedataLocKeyWrapper)
+            {
+                return true;
+            }
+
+            if (Data is IRedString str)
+            {
+                var s = str.GetValue();
+                if (s != null && s.StartsWith("LocKey#") && ulong.TryParse(s.Substring(7), out var locKey2))
+                {
+                    return true;
+                }
+            }
+
             return false;
         }
 
@@ -479,7 +493,7 @@ namespace WolvenKit.ViewModels.Shell
                 {
                     obj = v.Value;
                 }
-                if (obj is TweakDBID tdb)
+                else if (obj is TweakDBID tdb)
                 {
                     obj = Locator.Current.GetService<TweakDBService>().GetRecord(tdb);
                     //var record = Locator.Current.GetService<TweakDBService>().GetRecord(tdb);
@@ -487,6 +501,18 @@ namespace WolvenKit.ViewModels.Shell
                     //{
                     //    Properties.Add(new ChunkViewModel(record, this, "record"));
                     //}
+                }
+                else if (obj is IRedString str)
+                {
+                    var s = str.GetValue();
+                    if (s.StartsWith("LocKey#") && ulong.TryParse(s.Substring(7), out var locKey))
+                    {
+                        obj = Locator.Current.GetService<LocKeyService>().GetEntry(locKey);
+                    }
+                }
+                else if (obj is gamedataLocKeyWrapper locKey)
+                {
+                    obj = Locator.Current.GetService<LocKeyService>().GetEntry(locKey);
                 }
                 if (obj is IRedArray ary)
                 {
@@ -709,6 +735,18 @@ namespace WolvenKit.ViewModels.Shell
                         return type;
                     }
                 }
+                else if (Data is IRedString str)
+                {
+                    var s = str.GetValue();
+                    if (s != null && s.StartsWith("LocKey#") && ulong.TryParse(s.Substring(7), out var locKey))
+                    {
+                        return typeof(localizationPersistenceOnScreenEntry);
+                    }
+                }
+                else if (Data is gamedataLocKeyWrapper locKey)
+                {
+                    return typeof(localizationPersistenceOnScreenEntry);
+                }
                 return PropertyType;
             }
         }
@@ -791,13 +829,18 @@ namespace WolvenKit.ViewModels.Shell
             else if (PropertyType.IsAssignableTo(typeof(IRedString)))
             {
                 var value = (IRedString)Data;
-                if (value.GetValue() == "")
+                if (value.GetValue() == "" || value.GetValue() == null)
                 {
                     Value = "null";
                 }
                 else
                 {
                     Value = value.GetValue();
+                    if (Value.StartsWith("LocKey#") && ulong.TryParse(Value.Substring(7), out var key))
+                    {
+                        Value = "";
+                        //    Value = Locator.Current.GetService<LocKeyService>().GetFemaleVariant(key);
+                    }
                 }
             }
             else if (PropertyType.IsAssignableTo(typeof(CByteArray)))
@@ -846,6 +889,12 @@ namespace WolvenKit.ViewModels.Shell
             {
                 var value = (CUInt64)Data;
                 Value = ((ulong)value).ToString();
+            }
+            else if (PropertyType.IsAssignableTo(typeof(gamedataLocKeyWrapper)))
+            {
+                //var value = (gamedataLocKeyWrapper)Data;
+                //Value = ((ulong)value).ToString();
+                //Value = Locator.Current.GetService<LocKeyService>().GetFemaleVariant(value);
             }
             else if (PropertyType.IsAssignableTo(typeof(IRedInteger)))
             {
@@ -920,6 +969,19 @@ namespace WolvenKit.ViewModels.Shell
                 //Descriptor = Locator.Current.GetService<TweakDBService>().GetString(tdb);
                 Descriptor = (string)tdb;
                 return;
+            }
+            if (Data is gamedataLocKeyWrapper locKey)
+            {
+                Descriptor = ((ulong)locKey).ToString();
+                //Value = Locator.Current.GetService<LocKeyService>().GetFemaleVariant(value);
+            }
+            if (Data is IRedString str)
+            {
+                var s = str.GetValue();
+                if (s != null && s.StartsWith("LocKey#") && ulong.TryParse(s.Substring(7), out var locKey2))
+                {
+                    Descriptor = ((ulong)locKey2).ToString();
+                }
             }
             //if (ResolvedData is CMaterialInstance && Parent != null)
             //{

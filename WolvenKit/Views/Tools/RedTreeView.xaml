@@ -81,7 +81,7 @@
             </DataTemplate>
 
             <DataTemplate x:Key="PropertyValueTemplate" DataType="{x:Type shell:ChunkViewModel}">
-                <Grid Width="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ContentPresenter}}, Path=ActualWidth}">
+                <Grid>
                     <Grid.Resources>
                         <Style TargetType="{x:Type TextBlock}">
                             <Style.Triggers>

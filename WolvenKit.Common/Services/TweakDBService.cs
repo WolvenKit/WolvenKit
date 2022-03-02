@@ -564,7 +564,7 @@ namespace WolvenKit.Common.Services
             }
             if (hash == 14218562033234752749) // gamedataLocKeyWrapper
             {
-                return (CUInt64)br.ReadUInt64();
+                return (gamedataLocKeyWrapper)br.ReadUInt64();
             }
             if (hash == 13376016304518341055) // Int32
             {
