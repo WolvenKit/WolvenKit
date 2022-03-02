@@ -47,6 +47,7 @@ namespace WolvenKit.CLI
 
                     services.AddSingleton<IHashService, HashService>();
                     services.AddSingleton<ITweakDBService, TweakDBService>();
+                    services.AddSingleton<ILocKeyService, LocKeyService>();
 
                     //services.AddScoped<TweakDBService>();
                     services.AddScoped<Red4ParserService>();

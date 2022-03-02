@@ -542,6 +542,10 @@
                                 x:Name="TweakBrowserCheckbox"
                                 Header="Tweak Browser"
                                 IsCheckable="True" />
+                            <MenuItem
+                                x:Name="LocKeyBrowserCheckbox"
+                                Header="LocKey Browser"
+                                IsCheckable="True" />
                             <Separator Margin="0,5,0,3" Background="{StaticResource BorderAlt}" />
                             <MenuItem
                                 Command="{Binding ShowPluginToolCommand}"

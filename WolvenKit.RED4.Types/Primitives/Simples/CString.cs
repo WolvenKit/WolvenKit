@@ -7,7 +7,7 @@ namespace WolvenKit.RED4.Types
     [RED("String")]
     [REDType(IsValueType = true)]
     [DebuggerDisplay("{_value}", Type = "CString")]
-    public sealed class CString : IRedPrimitive<string>, IEquatable<CString>, IRedString
+    public sealed class CString : IRedPrimitive<string>, IEquatable<CString>, IRedString, IComparable<CString>, IComparable
     {
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         private string _value;
@@ -55,5 +55,18 @@ namespace WolvenKit.RED4.Types
 
         public override string ToString() => GetValue();
 
+        public int CompareTo(object? obj)
+        {
+            if (obj is CString cs)
+            {
+                return CompareTo(cs);
+            }
+            return _value.CompareTo(obj);
+        }
+
+        public int CompareTo(CString? obj)
+        {
+            return _value.CompareTo(obj.ToString());
+        }
     }
 }

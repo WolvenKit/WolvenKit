@@ -68,7 +68,7 @@ namespace WolvenKit.ViewModels.Tools
             _gameController = gameController;
             _tweakDB = Locator.Current.GetService<TweakDBService>();
 
-            SideInDockedMode = DockSide.Right;
+            //State = DockState.Document;
 
             TweakDBIDs = CollectionViewSource.GetDefaultView(_tweakDB.GetRecords());
         }

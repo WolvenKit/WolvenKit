@@ -252,6 +252,10 @@ namespace WolvenKit.Views.Shell
                         viewModel => viewModel._mainViewModel.TweakBrowserVM.IsVisible,
                         view => view.TweakBrowserCheckbox.IsChecked)
                     .DisposeWith(disposables);
+                this.Bind(ViewModel,
+                        viewModel => viewModel._mainViewModel.LocKeyBrowserVM.IsVisible,
+                        view => view.LocKeyBrowserCheckbox.IsChecked)
+                    .DisposeWith(disposables);
 
                 #endregion
 

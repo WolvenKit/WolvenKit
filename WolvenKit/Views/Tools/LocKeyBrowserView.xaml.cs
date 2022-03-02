@@ -8,11 +8,11 @@ using WolvenKit.ViewModels.Tools;
 namespace WolvenKit.Views.Tools
 {
     /// <summary>
-    /// Interaction logic for TweakBrowserView.xaml
+    /// Interaction logic for LocKeyBrowserView.xaml
     /// </summary>
-    public partial class TweakBrowserView : ReactiveUserControl<TweakBrowserViewModel>
+    public partial class LocKeyBrowserView : ReactiveUserControl<LocKeyBrowserViewModel>
     {
-        public TweakBrowserView()
+        public LocKeyBrowserView()
         {
             InitializeComponent();
             //this.WhenActivated(disposables =>

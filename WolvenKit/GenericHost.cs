@@ -66,6 +66,9 @@ namespace WolvenKit
                     services.AddSingleton<TweakDBService>();
                     services.AddSingleton<ITweakDBService>(x => x.GetRequiredService<TweakDBService>());
 
+                    services.AddSingleton<LocKeyService>();
+                    services.AddSingleton<ILocKeyService>(x => x.GetRequiredService<LocKeyService>());
+
                     // red4 modding tools
                     services.AddSingleton<Red4ParserService>();
                     services.AddSingleton<MeshTools>();
@@ -138,6 +141,9 @@ namespace WolvenKit
 
                     services.AddSingleton<TweakBrowserViewModel>();
                     services.AddTransient<IViewFor<TweakBrowserViewModel>, TweakBrowserView>();
+
+                    services.AddSingleton<LocKeyBrowserViewModel>();
+                    services.AddTransient<IViewFor<LocKeyBrowserViewModel>, LocKeyBrowserView>();
 
                     #endregion
 

@@ -81,7 +81,7 @@
             </DataTemplate>
 
             <DataTemplate x:Key="PropertyValueTemplate" DataType="{x:Type shell:ChunkViewModel}">
-                <Grid>
+                <Grid Width="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ContentPresenter}}, Path=ActualWidth}">
                     <Grid.Resources>
                         <Style TargetType="{x:Type TextBlock}">
                             <Style.Triggers>
@@ -463,6 +463,7 @@
         Visibility="Visible">
         <!--
             LoadOnDemandCommand="{Binding OnDemandLoadingCommand}"
+            QueryNodeSize="TreeView_QueryNodeSize"
         -->
         <syncfusion:SfTreeView.HierarchyPropertyDescriptors>
             <treeViewEngine:HierarchyPropertyDescriptor

@@ -216,5 +216,11 @@ namespace WolvenKit.Views.Tools
                 Clipboard.SetText(cvm.Value);
             }
         }
+
+        //private void TreeView_QueryNodeSize(object sender, QueryNodeSizeEventArgs e)
+        //{
+        //    e.Height = e.Node.Content.();
+        //    e.Handled = true;
+        //}
     }
 }

@@ -47,6 +47,12 @@
                         </Grid>
                     </DataTemplate>
 
+                    <DataTemplate DataType="{x:Type toolvm:LocKeyBrowserViewModel}">
+                        <Grid>
+                            <tools:LocKeyBrowserView />
+                        </Grid>
+                    </DataTemplate>
+
 
                     <DataTemplate DataType="{x:Type docvm:RedDocumentViewModel}">
                         <Grid>
