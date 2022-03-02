@@ -1,10 +1,9 @@
 using System.Collections.Generic;
 using System.IO;
-using System.Numerics;
-using CP77.CR2W;
 using SharpGLTF.Schema2;
 using WolvenKit.Common.Conversion;
 using WolvenKit.Common.RED4.Compiled;
+using WolvenKit.Modkit.RED4.Tools;
 using WolvenKit.RED4.Archive.Buffer;
 using WolvenKit.RED4.Archive.CR2W;
 using WolvenKit.RED4.CR2W.Archive;
@@ -86,7 +85,7 @@ namespace WolvenKit.Modkit.RED4
                             rigs[eac.Name].Add(name);
                         }
                     }
-                        
+
                     foreach (var entry in eac.Animations.Gameplay)
                     {
                         if (entry is not animAnimSetupEntry aase)
@@ -158,7 +157,7 @@ namespace WolvenKit.Modkit.RED4
                     var materials = new Dictionary<string, Material>();
 
                     foreach (var component in appPkg.Chunks)
-                    { 
+                    {
                         if (component is IRedMeshComponent mc)
                         {
                             var transform = (entHardTransformBinding)mc.ParentTransform.GetValue();
@@ -229,7 +228,7 @@ namespace WolvenKit.Modkit.RED4
                             {
                                 node = root.LogicalSkins[0].GetJoint(0).Joint.CreateNode(mc.Name);
                             }
-                            
+
                             if (component is entMeshComponent emc)
                             {
                                 node.LocalTransform = new SharpGLTF.Transforms.AffineTransform(ToVector3(emc.VisualScale), ToQuaternion(mc.LocalTransform.Orientation), ToVector3(mc.LocalTransform.Position));
@@ -256,20 +255,11 @@ namespace WolvenKit.Modkit.RED4
             return false;
         }
 
-        public static System.Numerics.Vector3 ToVector3(WolvenKit.RED4.Types.Vector3 v)
-        {
-            return new System.Numerics.Vector3(v.X, v.Z, v.Y);
-        }
+        public static System.Numerics.Vector3 ToVector3(WolvenKit.RED4.Types.Vector3 v) => new System.Numerics.Vector3(v.X, v.Z, v.Y);
 
-        public static System.Numerics.Quaternion ToQuaternion(WolvenKit.RED4.Types.Quaternion q)
-        {
-            return new System.Numerics.Quaternion(q.I, q.K, -q.J, q.R);
-        }
+        public static System.Numerics.Quaternion ToQuaternion(WolvenKit.RED4.Types.Quaternion q) => new System.Numerics.Quaternion(q.I, q.K, -q.J, q.R);
 
-        public static System.Numerics.Vector3 ToVector3(WolvenKit.RED4.Types.WorldPosition p)
-        {
-            return new System.Numerics.Vector3(p.X, p.Z, -p.Y);
-        }
+        public static System.Numerics.Vector3 ToVector3(WolvenKit.RED4.Types.WorldPosition p) => new System.Numerics.Vector3(p.X, p.Z, -p.Y);
 
         public bool DumpEntityPackageAsJson(Stream entStream, FileInfo outfile)
         {

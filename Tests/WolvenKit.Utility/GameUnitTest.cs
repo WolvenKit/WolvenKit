@@ -37,6 +37,7 @@ namespace WolvenKit.Utility
                         .AddScoped<ILoggerService, SerilogWrapper>()
                         .AddScoped<IProgressService<double>, ProgressService<double>>()
                         .AddSingleton<IHashService, HashService>()
+                        .AddSingleton<ITweakDBService, TweakDBService>()
 
                         .AddScoped<Red4ParserService>()
                         .AddScoped<MeshTools>()
@@ -116,23 +117,12 @@ namespace WolvenKit.Utility
             //protobuf
             RuntimeTypeModel.Default[typeof(IGameArchive)].AddSubType(20, typeof(Archive));
 
-            // IoC
-            ServiceLocator.Default.RegisterInstance<ILoggerService>(new CatelLoggerService(false));
-            ServiceLocator.Default.RegisterType<IHashService, HashService>();
+
             ServiceLocator.Default.RegisterType<ITweakDBService, TweakDBService>();
-            ServiceLocator.Default.RegisterType<IProgressService<double>, ProgressService<double>>();
-            ServiceLocator.Default.RegisterType<Red4ParserService>();
-            ServiceLocator.Default.RegisterType<MeshTools>();        //RIG, Cp77FileService
-            ServiceLocator.Default.RegisterType<IArchiveManager, ArchiveManager>();
-            ServiceLocator.Default.RegisterType<IModTools, ModTools>();         //Cp77FileService, ILoggerService, IProgress, IHashService, Mesh, Target
-
-            Locator.CurrentMutable.RegisterConstant(new HashService(), typeof(IHashService));
             Locator.CurrentMutable.RegisterConstant(new TweakDBService(), typeof(ITweakDBService));
-
-            // var hashService = ServiceLocator.Default.ResolveType<IHashService>();
-            var tweakService = ServiceLocator.Default.ResolveType<ITweakDBService>();
+            var tweakService = _host.Services.GetRequiredService<ITweakDBService>();
             tweakService.LoadDB(Path.Combine(gameDirectory.FullName, "r6", "cache", "tweakdb.bin"));
-            s_bm = ServiceLocator.Default.ResolveType<IArchiveManager>();
+            s_bm = _host.Services.GetRequiredService<IArchiveManager>();
 
             var archivedir = new DirectoryInfo(Path.Combine(gameDirectory.FullName, "archive", "pc", "content"));
             s_bm.LoadFromFolder(archivedir);

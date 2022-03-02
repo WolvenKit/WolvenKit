@@ -1,5 +1,3 @@
-using System.IO;
-using CP77.CR2W;
 using gpm.Installer;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
