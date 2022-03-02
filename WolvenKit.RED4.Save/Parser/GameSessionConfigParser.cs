@@ -26,7 +26,7 @@ public class GameSessionConfigParser : INodeParser
                 Hash2 = reader.ReadUInt64(),
                 TextValue = reader.ReadLengthPrefixedString(),
                 Hash3 = reader.ReadUInt64(),
-                TrailingBytes = reader.ReadBytes((int)(reader.BaseStream.Length - reader.BaseStream.Position))
+                TrailingBytes = reader.ReadBytes(node.TrailingSize)
             };
     }
 

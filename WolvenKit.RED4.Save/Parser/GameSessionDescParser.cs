@@ -20,7 +20,7 @@ public class GameSessionDescParser : INodeParser
         }
 
         ParserHelper.ReadNode(reader, node.Children[0]);
-
+        node.Children[0].ReadByParent = true;
         node.Value = new GameSessionDesc
         {
             GameSessionConfig = (GameSessionConfig)node.Children[0].Value
@@ -32,6 +32,7 @@ public class GameSessionDescParser : INodeParser
         foreach (var child in node.Children)
         {
             writer.Write(child);
+
         }
     }
 }

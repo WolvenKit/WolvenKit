@@ -34,6 +34,7 @@ public class CyberpunkSaveWriter
         {
             using (var writer = new BinaryWriter(stream, Encoding.ASCII))
             {
+                writer.Write(CyberpunkSaveFile.MAGIC);
                 writer.Write(file.FileHeader);
 
                 var uncompressedData = GetNodeData(out var nodeInfos);

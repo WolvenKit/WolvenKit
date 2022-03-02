@@ -125,7 +125,10 @@ public class CyberpunkSaveReader
 
             foreach (var node in flatNodes)
             {
-                ParserHelper.ReadChildren(reader, node);
+                if (!node.ReadByParent)
+                {
+                    ParserHelper.ReadNode(reader, node);
+                }
             }
         }
 

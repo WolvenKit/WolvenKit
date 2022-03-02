@@ -6,8 +6,15 @@ namespace WolvenKit.RED4.Save;
 public class ParserHelper
 {
     private static readonly Dictionary<string, Type> _parsers = new();
+    private static List<string> _allowedParserNames = new();
     private static bool _isLoaded;
+    private static bool _isLimited=false;
 
+    public static void LimitParsers(List<string> allowedParserNames)
+    {
+        _isLimited = true;
+        _allowedParserNames = allowedParserNames;
+    }
 
     private static void LoadParsers()
     {
@@ -38,7 +45,7 @@ public class ParserHelper
             LoadParsers();
         }
 
-        if (_parsers.ContainsKey(nodeName))
+        if ((!_isLimited||_allowedParserNames.Contains(nodeName)) && _parsers.ContainsKey(nodeName))
         {
             return (INodeParser)System.Activator.CreateInstance(_parsers[nodeName])!;
         }
@@ -51,6 +58,7 @@ public class ParserHelper
         foreach (var child in node.Children)
         {
             ReadNode(reader, child);
+            child.ReadByParent = true;
         }
     }
 
@@ -58,7 +66,6 @@ public class ParserHelper
     {
         reader.BaseStream.Position = node.Offset;
         reader.ReadInt32(); // nodeId
-
         var parser = GetParser(node.Name);
         parser.Read(reader, node);
     }

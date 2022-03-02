@@ -26,5 +26,14 @@ public class DefaultParser : INodeParser
         node.Value = result;
     }
 
-    public void Write(NodeWriter writer, NodeEntry node) => throw new NotImplementedException();
+    public void Write(NodeWriter writer, NodeEntry node)
+    {
+        var value = (DefaultRepresentation)node.Value;
+        writer.Write(value.HeaderBlob);
+        foreach(var child in node.Children)
+        {
+            writer.Write(child);
+        }
+        writer.Write(value.TrailingBlob);   
+    }
 }

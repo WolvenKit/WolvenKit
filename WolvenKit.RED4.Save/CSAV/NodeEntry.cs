@@ -23,7 +23,7 @@ public class NodeEntry
     public NodeEntry? Parent { get; set; }
     public NodeEntry? PreviousNode { get; set; }
     public NodeEntry? NextNode { get; set; }
-
+    public bool ReadByParent { get; set; } = false;
 
     public NodeEntry()
     {
