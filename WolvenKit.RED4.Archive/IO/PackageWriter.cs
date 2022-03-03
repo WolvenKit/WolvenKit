@@ -200,7 +200,7 @@ namespace WolvenKit.RED4.Archive.IO
                 return;
             }
 
-            var val = ("", instance.DepotPath, (ushort)instance.Flags);
+            var val = ("", instance.DepotPath, (ushort)1);
 
             ImportRef.Add(_writer.BaseStream.Position, val);
             _writer.Write(GetImportIndex(val));
@@ -215,7 +215,7 @@ namespace WolvenKit.RED4.Archive.IO
                 return;
             }
 
-            var val = ("", instance.DepotPath, (ushort)instance.Flags);
+            var val = ("", instance.DepotPath, (ushort)0);
 
             ImportRef.Add(_writer.BaseStream.Position, val);
             _writer.Write(GetImportIndex(val));
