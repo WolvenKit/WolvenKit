@@ -44,7 +44,7 @@ namespace WolvenKit.Modkit.RED4
             var expMeshes = MeshTools.ContainRawMesh(ms, meshesinfo, LodFilter);
             MeshTools.UpdateSkinningParamCloth(ref expMeshes, meshStream, cr2w);
 
-            var Rig = MeshTools.GetOrphanRig(rendblob, cr2w);
+            var Rig = MeshTools.GetOrphanRig(cMesh);
 
             var model = MeshTools.RawMeshesToGLTF(expMeshes, Rig);
 

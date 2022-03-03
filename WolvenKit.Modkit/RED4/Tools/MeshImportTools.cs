@@ -118,7 +118,7 @@ namespace WolvenKit.Modkit.RED4
             var QuantTrans = new Vec4((max.X + min.X) / 2, (max.Y + min.Y) / 2, (max.Z + min.Z) / 2, 1);
 
 
-            var newRig = MeshTools.GetOrphanRig(rendblob, cr2w);
+            var newRig = MeshTools.GetOrphanRig(meshBlob);
             RawArmature oldRig = null;
             if (model.LogicalSkins.Count != 0)
             {

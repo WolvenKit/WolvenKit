@@ -75,7 +75,7 @@ namespace WolvenKit.Modkit.RED4.Tools
                 return false;
             }
 
-            var Rig = GetOrphanRig(rendblob, cr2w);
+            var Rig = GetOrphanRig(cMesh);
 
             using var ms = new MemoryStream(rendblob.RenderBuffer.Buffer.GetBytes());
 
@@ -202,7 +202,8 @@ namespace WolvenKit.Modkit.RED4.Tools
             var expMeshes = ContainRawMesh(ms, meshesinfo, lodFilter);
             UpdateSkinningParamCloth(ref expMeshes, meshStream, cr2w);
 
-            var meshRig = GetOrphanRig(rendblob, cr2w);
+            var meshRig = GetOrphanRig(cMesh);
+
             var Rig = RIG.ProcessRig(_red4ParserService.ReadRed4File(rigStream));
 
             UpdateMeshJoints(ref expMeshes, Rig, meshRig);
@@ -262,7 +263,7 @@ namespace WolvenKit.Modkit.RED4.Tools
                 var Meshes = ContainRawMesh(ms, meshesinfo, lodFilter);
                 UpdateSkinningParamCloth(ref Meshes, meshStream, cr2w);
 
-                var meshRig = GetOrphanRig(rendblob, cr2w);
+                var meshRig = GetOrphanRig(cMesh);
 
                 UpdateMeshJoints(ref Meshes, expRig, meshRig);
 
@@ -963,38 +964,21 @@ namespace WolvenKit.Modkit.RED4.Tools
             var model = scene.ToGltf2();
             return model;
         }
-        public static RawArmature GetOrphanRig(rendRenderMeshBlob rendmeshblob, CR2WFile cr2w)
+        public static RawArmature GetOrphanRig(CMesh meshBlob)
         {
+            var rendmeshblob = meshBlob.RenderResourceBlob.Chunk as rendRenderMeshBlob;
             if (rendmeshblob.Header.BonePositions.Count != 0)
             {
                 var boneCount = rendmeshblob.Header.BonePositions.Count;
                 var Rig = new RawArmature
                 {
                     BoneCount = boneCount,
-                    LocalPosn = new Vec3[boneCount],
-                    LocalRot = new System.Numerics.Quaternion[boneCount],
-                    LocalScale = new Vec3[boneCount],
-                    Parent = new short[boneCount],
-                    Names = new string[boneCount]
-                };
-
-                for (var i = 0; i < Rig.BoneCount; i++)
-                {
-                    var vec = rendmeshblob.Header.BonePositions[i];
-                    Rig.LocalPosn[i] = new Vec3(vec.X, vec.Z, -vec.Y);
-                    Rig.LocalRot[i] = System.Numerics.Quaternion.Identity;
-                    Rig.LocalScale[i] = Vec3.One;
-                    Rig.Parent[i] = -1;
-                }
-
-                if (cr2w.RootChunk is CMesh meshBlob)
-                {
-                    for (var i = 0; i < Rig.BoneCount; i++)
-                    {
-                        Rig.Names[i] = meshBlob.BoneNames[i];
-                    }
-                }
-
+                    LocalPosn = rendmeshblob.Header.BonePositions.Select(x => new Vec3(x.X, x.Z, -x.Y)).ToArray(),
+                    LocalRot = Enumerable.Repeat(System.Numerics.Quaternion.Identity, boneCount).ToArray(),
+                    LocalScale = Enumerable.Repeat(Vec3.One, boneCount).ToArray(),
+                    Parent = Enumerable.Repeat<short>(-1, boneCount).ToArray(),
+                    Names = meshBlob.BoneNames.Select(x => x.GetValue()).ToArray()
+            };
                 return Rig;
             }
             return null;
