@@ -973,7 +973,7 @@ namespace WolvenKit.Modkit.RED4.Tools
                 var Rig = new RawArmature
                 {
                     BoneCount = boneCount,
-                    LocalPosn = rendmeshblob.Header.BonePositions.Select(x => new Vec3(x.X, x.Z, -x.Y)).ToArray(),
+                    LocalPosn = rendmeshblob.Header.BonePositions.Select(p => new Vec3(p.X, p.Z, -p.Y)).ToArray(),
                     LocalRot = Enumerable.Repeat(System.Numerics.Quaternion.Identity, boneCount).ToArray(),
                     LocalScale = Enumerable.Repeat(Vec3.One, boneCount).ToArray(),
                     Parent = Enumerable.Repeat<short>(-1, boneCount).ToArray(),
