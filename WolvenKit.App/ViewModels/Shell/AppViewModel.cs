@@ -1087,21 +1087,36 @@ namespace WolvenKit.ViewModels.Shell
             if (fileToSave.FilePath == null || saveAsFlag)
             {
                 var dlg = new SaveFileDialog();
-                if (fileToSave.FilePath != null)
+                if (fileToSave.FilePath == null && fileToSave is RedDocumentViewModel red)
                 {
-                    dlg.FileName = Path.GetFileName(fileToSave.FilePath);
+                    var directory = Path.GetDirectoryName(Path.Combine(_projectManager.ActiveProject.ModDirectory, red.RelativePath));
+                    if (!Directory.Exists(directory))
+                    {
+                        Directory.CreateDirectory(directory);
+                    }
+                    dlg.FileName = Path.GetFileName(red.RelativePath);
+                    dlg.InitialDirectory = directory;
                 }
                 else
                 {
-                    dlg.FileName = Path.GetFileName(fileToSave.ContentId);
+                    if (fileToSave.FilePath != null)
+                    {
+                        dlg.FileName = Path.GetFileName(fileToSave.FilePath);
+                    }
+                    else
+                    {
+                        dlg.FileName = Path.GetFileName(fileToSave.ContentId);
+                    }
+                    dlg.InitialDirectory = Path.GetDirectoryName(fileToSave.FilePath);
                 }
-                //dlg.RestoreDirectory = true;
-                dlg.InitialDirectory = Path.GetDirectoryName(fileToSave.FilePath);
+                _watcherService.IsSuspended = true;
                 if (dlg.ShowDialog().GetValueOrDefault())
                 {
-                    fileToSave.FilePath = dlg.SafeFileName;
-                    ActiveDocument.SaveAsCommand.SafeExecute();
+                    fileToSave.FilePath = dlg.FileName;
+                    ActiveDocument.SaveCommand.SafeExecute();
                 }
+                _watcherService.IsSuspended = false;
+                _ = _watcherService.RefreshAsync(ActiveProject);
             }
             else
             {

@@ -12,8 +12,7 @@ using WolvenKit.Common;
 using WolvenKit.Common.FNV1A;
 using WolvenKit.Common.Services;
 using WolvenKit.Functionality.Services;
-using WolvenKit.Modkit.RED4;
-using WolvenKit.RED4.Archive.Buffer;
+using WolvenKit.Modkit.RED4
 using WolvenKit.RED4.Archive.CR2W;
 using WolvenKit.RED4.Archive.IO;
 using WolvenKit.RED4.CR2W;
@@ -35,6 +34,7 @@ namespace WolvenKit.ViewModels.Documents
         protected readonly ILoggerService _loggerService;
         protected readonly Red4ParserService _parser;
         protected readonly IHashService _hashService;
+        protected readonly IProjectManager _projectManager;
         public CR2WFile Cr2wFile;
 
         public RedDocumentViewModel(string path) : base(path)
@@ -42,10 +42,18 @@ namespace WolvenKit.ViewModels.Documents
             _loggerService = Locator.Current.GetService<ILoggerService>();
             _parser = Locator.Current.GetService<Red4ParserService>();
             _hashService = Locator.Current.GetService<IHashService>();
-            var projectManager = Locator.Current.GetService<IProjectManager>();
-            if (projectManager.ActiveProject != null)
+            _projectManager = Locator.Current.GetService<IProjectManager>();
+            if (_projectManager.ActiveProject != null)
             {
-                RelativePath = Path.GetRelativePath(projectManager.ActiveProject.ModDirectory, path);
+                // assume files that don't exist are relative paths
+                if (File.Exists(path))
+                {
+                    RelativePath = Path.GetRelativePath(_projectManager.ActiveProject.ModDirectory, path);
+                }
+                else
+                {
+                    RelativePath = path;
+                }
             }
 
             Extension = Path.GetExtension(path) != "" ? Path.GetExtension(path).Substring(1) : "";
@@ -74,7 +82,6 @@ namespace WolvenKit.ViewModels.Documents
             var file = GetMainFile();
             if (file.HasValue)
             {
-                // TODO gather buffers
                 var resource = Cr2wFile;
                 if (resource is CR2WFile cr2w)
                 {
@@ -84,7 +91,6 @@ namespace WolvenKit.ViewModels.Documents
                     SetIsDirty(false);
                     _loggerService.Success($"Saved file {FilePath}");
                 }
-                //throw new ArgumentException();
             }
 
             return Task.CompletedTask;
