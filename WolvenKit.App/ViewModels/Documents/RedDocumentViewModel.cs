@@ -12,7 +12,7 @@ using WolvenKit.Common;
 using WolvenKit.Common.FNV1A;
 using WolvenKit.Common.Services;
 using WolvenKit.Functionality.Services;
-using WolvenKit.Modkit.RED4
+using WolvenKit.Modkit.RED4;
 using WolvenKit.RED4.Archive.CR2W;
 using WolvenKit.RED4.Archive.IO;
 using WolvenKit.RED4.CR2W;
