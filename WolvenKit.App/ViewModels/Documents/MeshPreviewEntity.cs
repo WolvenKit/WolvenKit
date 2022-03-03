@@ -12,15 +12,46 @@ using System.Reactive.Disposables;
 using WolvenKit.RED4.Archive.Buffer;
 using WolvenKit.RED4.Archive.CR2W;
 using WolvenKit.RED4.Types;
+using System.Windows.Input;
+using WolvenKit.Functionality.Commands;
+using WolvenKit.Modkit.RED4;
+using Splat;
+using Microsoft.Win32;
+using WolvenKit.Common.Services;
 
 namespace WolvenKit.ViewModels.Documents
 {
     public partial class RDTMeshViewModel
     {
+        public ICommand ExportEntity { get; set; }
+
+        public bool ShowExportEntity { get; set; }
+
         public RDTMeshViewModel(entEntityTemplate ent, RedDocumentViewModel file) : this(file)
         {
             Header = "Entity Preview";
             _data = ent;
+
+            ShowExportEntity = true;
+            ExportEntity = new DelegateCommand((e) =>
+            {
+                var dlg = new SaveFileDialog();
+                dlg.FileName = Path.GetFileNameWithoutExtension(file.RelativePath) + ".glb";
+                dlg.Filter = "GLB files (*.glb)|*.glb|All files (*.*)|*.*";
+                if (dlg.ShowDialog().GetValueOrDefault())
+                {
+                    var outFile = new FileInfo(dlg.FileName);
+                    // will only use archive files (for now)
+                    if (Locator.Current.GetService<ModTools>().ExportEntity(File.Cr2wFile, SelectedAppearance.AppearanceName, outFile))
+                    {
+                        Locator.Current.GetService<ILoggerService>().Success($"Entity with appearance '{SelectedAppearance.AppearanceName}'exported: {dlg.FileName}");
+                    }
+                    else
+                    {
+                        Locator.Current.GetService<ILoggerService>().Error($"Error exporting entity with appearance '{SelectedAppearance.AppearanceName}'");
+                    }
+                }
+            });
 
             this.WhenActivated((CompositeDisposable disposables) =>
             {

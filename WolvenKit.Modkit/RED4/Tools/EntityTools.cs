@@ -14,21 +14,8 @@ namespace WolvenKit.Modkit.RED4
 {
     public partial class ModTools
     {
-        public bool GetStreamFromCName(CName cname, List<Archive> archives, out Stream stream)
+        public bool GetStreamFromCName(CName cname, out Stream stream)
         {
-            //var hash = cname.GetRedHash();
-            //foreach (var ar in archives)
-            //{
-            //    if (ar.Files.ContainsKey(hash))
-            //    {
-            //        stream = new MemoryStream();
-            //        ExtractSingleToStream(ar, hash, stream);
-            //        return true;
-            //    }
-            //}
-            //stream = null;
-            //return false;
-
             var file = _archiveManager.Lookup(cname.GetRedHash());
             if (file.HasValue && file.Value is FileEntry fe)
             {
@@ -42,20 +29,20 @@ namespace WolvenKit.Modkit.RED4
 
         }
 
-        public bool GetFileFromCName(CName cname, List<Archive> archives, out CR2WFile cr2w)
+        public bool GetFileFromCName(CName cname, out CR2WFile cr2w)
         {
             cr2w = null;
-            return GetStreamFromCName(cname, archives, out var stream) &&
+            return GetStreamFromCName(cname, out var stream) &&
                 _wolvenkitFileService.TryReadRed4File(stream, out cr2w);
         }
 
-        public bool ExportEntity(Stream entStream, CName appearance, List<Archive> archives, FileInfo outfile)
+        public bool ExportEntity(Stream entStream, CName appearance, FileInfo outfile)
         {
             _wolvenkitFileService.TryReadRed4File(entStream, out var cr2w);
-            return ExportEntity(cr2w, appearance, archives, outfile);
+            return ExportEntity(cr2w, appearance, outfile);
         }
 
-        public bool ExportEntity(CR2WFile entFile, CName appearance, List<Archive> archives, FileInfo outfile)
+        public bool ExportEntity(CR2WFile entFile, CName appearance, FileInfo outfile)
         {
             if (entFile.RootChunk is not entEntityTemplate eet)
             {
@@ -77,7 +64,7 @@ namespace WolvenKit.Modkit.RED4
             {
                 if (component is entAnimatedComponent eac)
                 {
-                    if (GetFileFromCName(eac.Rig.DepotPath, archives, out var rigFile) && rigFile.RootChunk is animRig rig)
+                    if (GetFileFromCName(eac.Rig.DepotPath, out var rigFile) && rigFile.RootChunk is animRig rig)
                     {
                         rigs[eac.Name] = new List<string>();
                         foreach (var name in rig.BoneNames)
@@ -93,7 +80,7 @@ namespace WolvenKit.Modkit.RED4
                             continue;
                         }
 
-                        if (!GetFileFromCName(aase.AnimSet.DepotPath, archives, out animsFile))
+                        if (!GetFileFromCName(aase.AnimSet.DepotPath, out animsFile))
                         {
                             continue;
                         }
@@ -126,7 +113,7 @@ namespace WolvenKit.Modkit.RED4
                     continue;
                 }
 
-                if (!GetFileFromCName(app.AppearanceResource.DepotPath, archives, out var appFile))
+                if (!GetFileFromCName(app.AppearanceResource.DepotPath, out var appFile))
                 {
                     continue;
                 }
@@ -145,7 +132,7 @@ namespace WolvenKit.Modkit.RED4
 
                     var root = ModelRoot.CreateModel();
 
-                    if (animsFile is not null && GetFileFromCName(anims.Rig.DepotPath, archives, out var rigFile))
+                    if (animsFile is not null && GetFileFromCName(anims.Rig.DepotPath, out var rigFile))
                     {
                         GetAnimation(animsFile, rigFile, ref root, true);
                     }
@@ -194,7 +181,7 @@ namespace WolvenKit.Modkit.RED4
                             }
                             nodes.Add(mc.Name, node);
 
-                            if (!GetFileFromCName(mc.Mesh.DepotPath, archives, out var meshFile))
+                            if (!GetFileFromCName(mc.Mesh.DepotPath, out var meshFile))
                             {
                                 continue;
                             }
@@ -212,7 +199,7 @@ namespace WolvenKit.Modkit.RED4
                     {
                         if (component is IRedMeshComponent mc)
                         {
-                            if (!GetFileFromCName(mc.Mesh.DepotPath, archives, out var meshFile))
+                            if (!GetFileFromCName(mc.Mesh.DepotPath, out var meshFile))
                             {
                                 continue;
                             }

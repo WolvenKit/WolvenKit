@@ -39,6 +39,7 @@ namespace WolvenKit.ViewModels.Documents
         public string MaterialName { get; set; }
         public uint LOD { get; set; }
         public string AppearanceName { get; set; }
+        public CName DepotPath { get; set; }
     }
 
     public class SmartElement3DCollection : ObservableElement3DCollection
@@ -357,9 +358,9 @@ namespace WolvenKit.ViewModels.Documents
                     material.RoughnessFactor = 1f;
                     material.MetallicFactor = 1f;
                 }
-                if (name == "glass" || name == "vehicle_glass")
+                if (name.Contains("glass"))
                 {
-                    material.AlbedoColor = new SharpDX.Color4(1f, 1f, 1f, 0.1f);
+                    material.AlbedoColor = new SharpDX.Color4(0.5f, 0.5f, 0.5f, 0.1f);
                 }
                 if (name == "decals")
                 {

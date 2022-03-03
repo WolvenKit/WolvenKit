@@ -390,6 +390,7 @@ namespace WolvenKit.ViewModels.Documents
         public class MeshComponent : GroupModel3D
         {
             public string AppearanceName { get; set; }
+            public string MaterialName { get; set; }
             public CName DepotPath { get; set; }
         }
 

@@ -271,7 +271,7 @@ namespace WolvenKit.Modkit.RED4
             switch (extAsEnum)
             {
                 case ECookedFileFormat.ent:
-                    return ExportEntity(cr2wStream, "default", settings.Get<EntityExportArgs>().Archives, outfile);
+                    return ExportEntity(cr2wStream, "default", outfile);
                 //case ECookedFileFormat.app:
                 //    return HandleEntity(cr2wStream, outfile, settings.Get<EntityExportArgs>());
                 case ECookedFileFormat.opusinfo:

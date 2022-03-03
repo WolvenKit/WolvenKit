@@ -72,7 +72,8 @@ namespace WolvenKit
                     services.AddSingleton<Red4ParserService>();
                     services.AddSingleton<MeshTools>();
 
-                    services.AddSingleton<IModTools, ModTools>();
+                    services.AddSingleton<ModTools>();
+                    services.AddSingleton<IModTools>(x => x.GetRequiredService<ModTools>());
                     services.AddSingleton<RED4Controller>();
 
                     // red3 modding tools

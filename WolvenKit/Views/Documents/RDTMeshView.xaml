@@ -66,6 +66,15 @@
                 <hx:ItemsModel3D x:Name="hxContentVisual" />
             </hx:DynamicReflectionMap3D>
             <!--  hx:Element3DPresenter Content="{Binding GroupModel}" /  -->
+            <hx:Viewport3DX.ContextMenu>
+                <ContextMenu>
+                    <MenuItem Click="ReloadModels" Header="Zoom to extents">
+                        <MenuItem.Icon>
+                            <iconPacks:PackIconCodicons Margin="5,0,0,0" Kind="ZoomOut" />
+                        </MenuItem.Icon>
+                    </MenuItem>
+                </ContextMenu>
+            </hx:Viewport3DX.ContextMenu>
         </hx:Viewport3DX>
 
         <StackPanel
@@ -186,9 +195,12 @@
                         VerticalAlignment="Center"
                         Text="Appearance: " />
                     <ComboBox
+                        x:Name="appearanceComboBox"
                         Grid.Column="1"
+                        Width="{Binding ElementName=lodComboBox, Path=ActualWidth}"
                         Height="30"
                         Padding="10,0"
+                        HorizontalAlignment="Right"
                         DisplayMemberPath="Name"
                         ItemsSource="{Binding Appearances, Mode=OneWay}"
                         SelectedItem="{Binding SelectedAppearance, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
@@ -202,54 +214,35 @@
                     <TextBlock
                         Margin="5,0,0,0"
                         VerticalAlignment="Center"
-                        Text="LOD: " />
+                        Text="Level of Detail: " />
                     <ComboBox
+                        x:Name="lodComboBox"
                         Grid.Column="1"
                         Height="30"
                         Padding="10,0"
                         ItemsSource="{Binding SelectedAppearance.LODLUT.Keys, Mode=OneWay}"
                         SelectedItem="{Binding SelectedAppearance.SelectedLOD, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                 </Grid>
-                <Button Click="ReloadModels" Content="Zoom to Extents" />
+                <!--  Button Click="ReloadModels" Content="Zoom to Extents" /  -->
                 <Button
+                    Width="200"
+                    Height="24"
+                    Margin="5"
+                    HorizontalAlignment="Left"
                     Command="{Binding LoadMaterialsCommand}"
-                    Content="Load Materials for Appearance"
-                    IsEnabled="{Binding IsLoadingMaterials, Converter={StaticResource InvertBooleanConverter}}" />
-                <Button Command="{Binding ExtractShadersCommand}" Content="Export Shaders" />
+                    Content="Generate Materials for Appearance"
+                    IsEnabled="{Binding IsLoadingMaterials, Converter={StaticResource InvertBooleanConverter}}"
+                    ToolTip="May take a while - watch log for completion" />
+                <Button
+                    Width="200"
+                    Height="24"
+                    Margin="5,0,5,5"
+                    HorizontalAlignment="Left"
+                    Command="{Binding ExportEntity}"
+                    Content="Export Appearance with Rig"
+                    Visibility="{Binding ShowExportEntity, Converter={StaticResource VisibilityConverter}}" />
+                <!--  Button Command="{Binding ExtractShadersCommand}" Content="Export Shaders" /  -->
 
-                <!--ItemsControl ItemsSource="{Binding Sectors, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}">
-                    <ItemsControl.ItemsPanel>
-                        <ItemsPanelTemplate>
-                            <VirtualizingStackPanel
-                                IsVirtualizing="True"
-                                Orientation="Vertical"
-                                VirtualizationMode="Recycling" />
-                        </ItemsPanelTemplate>
-                    </ItemsControl.ItemsPanel>
-                    <ItemsControl.Template>
-                        <ControlTemplate TargetType="ItemsControl">
-                            <ScrollViewer
-                                MaxHeight="500"
-                                CanContentScroll="True"
-                                Focusable="False">
-                                <ItemsPresenter />
-                            </ScrollViewer>
-                        </ControlTemplate>
-                    </ItemsControl.Template>
-                    <ItemsControl.ItemTemplate>
-                        <DataTemplate>
-                            <StackPanel Orientation="Horizontal">
-                                <CheckBox IsChecked="{Binding ShowElements, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding IsLoaded, UpdateSourceTrigger=PropertyChanged}" />
-                                <TextBlock Text="{Binding NumberOfHandles}" />
-                                <Button
-                                    Command="{Binding DataContext.LoadSectorCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}"
-                                    CommandParameter="{Binding}"
-                                    Content="{Binding Name}"
-                                    IsEnabled="{Binding IsLoaded, Converter={StaticResource InvertBooleanConverter}, UpdateSourceTrigger=PropertyChanged}" />
-                            </StackPanel>
-                        </DataTemplate>
-                    </ItemsControl.ItemTemplate>
-                </I-->
             </StackPanel>
             <!--syncfusion:SfTreeGrid
                 Grid.Row="1"
@@ -295,13 +288,14 @@
                 CheckBoxMappingName="IsRendering"
                 ChildPropertyName="Children"
                 ItemsSource="{Binding SelectedAppearance.ModelGroup, Mode=TwoWay}"
+                LiveNodeUpdateMode="AllowDataShaping"
                 NodeCheckStateChanged="SfTreeGrid_NodeCheckStateChanged"
                 RowHeaderWidth="300"
                 SelectedItem="{Binding SelectedItem}"
                 ShowCheckBox="True">
                 <syncfusion:SfTreeGrid.Columns>
                     <syncfusion:TreeGridTextColumn
-                        HeaderText="Component Name"
+                        HeaderText="Name"
                         MappingName="Name"
                         MinimumWidth="100" />
                     <!--syncfusion:TreeGridTemplateColumn HeaderText="Chunk Mask">
