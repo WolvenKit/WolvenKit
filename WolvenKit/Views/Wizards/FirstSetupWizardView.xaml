@@ -15,7 +15,7 @@
 
    
     <Grid
-        Margin="5,5,2,5"
+        Margin="1"
         HorizontalAlignment="Stretch"
         VerticalAlignment="Stretch">
 
@@ -41,91 +41,95 @@
                 NextVisibility="Collapsed"
                 PageType="Exterior"
                 >
-                <Grid HorizontalAlignment="Stretch">
+                <Grid HorizontalAlignment="Left">
                     <StackPanel>
                         <StackPanel Orientation="Horizontal">
                             <hc:TextBox
-                                                        x:Name="cp77ExeTxtb"
-                                                        Width="600"
-                                                        Margin="0"
-                                                        hc:InfoElement.Necessary="True"
-                                                        hc:InfoElement.Placeholder="Enter full path : Cyberpunk 2077\bin\x64\Cyberpunk2077.exe"
-                                                        hc:InfoElement.Title="Executable Path"
-                                                        hc:InfoElement.TitlePlacement="Left"
-                                                        hc:InfoElement.TitleWidth="150"
-                                                        Style="{StaticResource TextBoxExtendCustom}"
-                                                        TextChanged="Field_TextChanged"
-                                                        VerifyFunc="VerifyFile" />
+                                x:Name="cp77ExeTxtb"
+                                VerticalAlignment="Center"
+                                Width="700"
+                                Margin="0"
+                                hc:InfoElement.Necessary="True"
+                                hc:InfoElement.Placeholder="Enter full path : Cyberpunk 2077\bin\x64\Cyberpunk2077.exe"
+                                hc:InfoElement.Title="Game Executable Path (.exe)"
+                                hc:InfoElement.TitlePlacement="Left"
+                                hc:InfoElement.TitleWidth="150"
+                                Style="{StaticResource TextBoxExtendCustom}"
+                                TextChanged="Field_TextChanged"
+                                VerifyFunc="VerifyFile" />
                             <Button
-                                                        x:Name="cp77ExeButton"
-                                                        Grid.Column="1"
-                                                        Width="50"
-                                                        Height="34"
-                                                        Margin="0,10,0,0"
-                                                        BorderBrush="{DynamicResource BorderBrush}"
-                                                        BorderThickness="1"
-                                                        Style="{DynamicResource WPFFlatButtonStyle}">
+                                x:Name="cp77ExeButton"
+                                Grid.Column="1"
+                                Width="50"
+                                Height="34"
+                                Margin="0,10,0,0"
+                                BorderBrush="{DynamicResource BorderBrush}"
+                                BorderThickness="1"
+                                Style="{DynamicResource WPFFlatButtonStyle}">
 
                                 <iconPacks:PackIconCodicons
-                                                            Grid.Row="0"
-                                                            Width="15"
-                                                            Height="15"
-                                                            Margin="0,0,0,0"
-                                                            HorizontalAlignment="Center"
-                                                            VerticalAlignment="Center"
-                                                            Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}"
-                                                            Kind="FolderOpened"
-                                                            Spin="False"
-                                                            SpinAutoReverse="False" />
+                                    Grid.Row="0"
+                                    Width="15"
+                                    Height="15"
+                                    Margin="0,0,0,0"
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Center"
+                                    Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}"
+                                    Kind="FolderOpened"
+                                    Spin="False"
+                                    SpinAutoReverse="False" />
                             </Button>
                         </StackPanel>
                         <TextBlock
-                                                    x:Name="ValidationText"
-                                                    MaxWidth="{Binding ActualWidth, ElementName=cp77ExeTxtb}"
-                                                    Margin="150,2,65,0"
-                                                    Background="DarkRed"
-                                                    FontSize="14"
-                                                    Text="TEMP"
-                                                    TextAlignment="Center"
-                                                    TextWrapping="Wrap"
-                                                    Visibility="Collapsed" />
+                            x:Name="ValidationText"
+                            MaxWidth="{Binding ActualWidth, ElementName=cp77ExeTxtb}"
+                            Margin="150,0,60,0"
+                            Padding="4"
+                            Background="DarkRed"
+                            FontSize="12"
+                            Text="TEMP"
+                            TextAlignment="Center"
+                            TextWrapping="Wrap"
+                            Visibility="Collapsed" />
 
                         <StackPanel Orientation="Horizontal">
 
                             <hc:TextBox
-                                                        x:Name="matdepotxtb"
-                                                        Width="590"
-                                                        Margin="0,10,10,0"
-                                                        hc:InfoElement.Necessary="False"
-                                                        hc:InfoElement.Placeholder="Enter full path : Material Repository Path (Can be any new folder)"
-                                                        hc:InfoElement.Title="Material Repository Folder"
-                                                        hc:InfoElement.TitlePlacement="Left"
-                                                        hc:InfoElement.TitleWidth="150"
-                                                        TextChanged="Field_TextChanged"
-                                                        Style="{StaticResource TextBoxExtend}"
-                                                        Visibility="Visible"
-                                                        VerifyFunc="VerifyFolder" />
+                                
+                                x:Name="matdepotxtb"
+                                Width="690"
+                                Margin="0,10,10,0"
+                                hc:InfoElement.Necessary="False"
+                                hc:InfoElement.Placeholder="Enter full path : Depot Path (Can be any new folder)"
+                                hc:InfoElement.Title="Depot Path"
+                                hc:InfoElement.TitlePlacement="Left"
+                                hc:InfoElement.TitleWidth="150"
+                                TextChanged="Field_TextChanged"
+                                Style="{StaticResource TextBoxExtend}"
+                                Visibility="Visible"
+                                VerifyFunc="VerifyFolder" />
                             <Button
-                                                        x:Name="matdepotButton"
-                                                        Grid.Column="1"
-                                                        Width="50"
-                                                        Height="34"
-                                                        Margin="0,10,0,0"
-                                                        BorderBrush="{DynamicResource BorderBrush}"
-                                                        BorderThickness="1"
-                                                        Style="{DynamicResource WPFFlatButtonStyle}">
+                                x:Name="matdepotButton"
+                                Grid.Column="1"
+                                Width="50"
+                                Height="34"
+                                Margin="0,10,0,0"
+                                BorderBrush="{DynamicResource BorderBrush}"
+                                BorderThickness="1"
+                                Style="{DynamicResource WPFFlatButtonStyle}">
 
                                 <iconPacks:PackIconCodicons
-                                                            Grid.Row="0"
-                                                            Width="15"
-                                                            Height="15"
-                                                            Margin="0,0,0,0"
-                                                            HorizontalAlignment="Center"
-                                                            VerticalAlignment="Center"
-                                                            Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}"
-                                                            Kind="FolderOpened"
-                                                            Spin="False"
-                                                            SpinAutoReverse="False" />
+                                    
+                                    Grid.Row="0"
+                                    Width="15"
+                                    Height="15"
+                                    Margin="0,0,0,0"
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Center"
+                                    Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}"
+                                    Kind="FolderOpened"
+                                    Spin="False"
+                                    SpinAutoReverse="False" />
                             </Button>
                         </StackPanel>
                     </StackPanel>

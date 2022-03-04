@@ -55,7 +55,7 @@ namespace WolvenKit.ViewModels.Dialogs
                     case EPluginStatus.Outdated:
                         IsOpenEnabled = true;
                         IsNotInstalled = false;
-                        Label = "Updated";
+                        Label = "Update";
                         break;
                     case EPluginStatus.Latest:
                         IsOpenEnabled = true;

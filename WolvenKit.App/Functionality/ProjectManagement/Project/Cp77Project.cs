@@ -78,7 +78,7 @@ namespace WolvenKit.ProjectManagement.Project
             }
         }
 
-        public override string PackedModDirectory
+        public override string PackedArchiveDirectory
         {
             get
             {

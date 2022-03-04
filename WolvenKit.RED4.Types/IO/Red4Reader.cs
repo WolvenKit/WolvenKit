@@ -21,6 +21,9 @@ namespace WolvenKit.RED4.IO
 
         private bool _disposed;
 
+        public bool CollectData { get; set; } = false;
+        public DataCollection DataCollection { get; } = new();
+
         public Red4Reader(Stream input) : this(input, Encoding.UTF8, false)
         {
         }
@@ -45,14 +48,35 @@ namespace WolvenKit.RED4.IO
 
         public List<IRedImport> ImportsList { get => importsList; set => importsList = value; }
 
-        protected CName GetStringValue(ushort index)
+        protected CName GetStringValue(ushort index, bool isTypeInfo = true)
         {
             if (index >= _namesList.Count)
             {
                 throw new Exception();
             }
 
+            if (CollectData)
+            {
+                DataCollection.RawStringList.Remove(_namesList[index]);
+                if (!isTypeInfo)
+                {
+                    DataCollection.RawUsedStrings.Add(_namesList[index]);
+                }
+            }
+
             return _namesList[index];
+        }
+
+        protected string InternalReadLengthPrefixedString()
+        {
+            var ret = _reader.ReadLengthPrefixedString();
+
+            if (CollectData)
+            {
+                DataCollection.RawUsedStrings.Add(ret);
+            }
+
+            return ret;
         }
 
         #region Fundamentals
@@ -76,9 +100,9 @@ namespace WolvenKit.RED4.IO
         public virtual CDateTime ReadCDateTime() => _reader.ReadUInt64();
 
         public virtual CGuid ReadCGuid() => _reader.ReadBytes(16);
-        public virtual CName ReadCName() => GetStringValue(_reader.ReadUInt16());
+        public virtual CName ReadCName() => GetStringValue(_reader.ReadUInt16(), false);
         public virtual CRUID ReadCRUID() => _reader.ReadUInt64();
-        public virtual CString ReadCString() => _reader.ReadLengthPrefixedString();
+        public virtual CString ReadCString() => InternalReadLengthPrefixedString();
 
         public virtual CVariant ReadCVariant()
         {
@@ -129,12 +153,12 @@ namespace WolvenKit.RED4.IO
             new()
             {
                 Unk1 = _reader.ReadUInt64(),
-                Value = _reader.ReadLengthPrefixedString()
+                Value = InternalReadLengthPrefixedString()
             };
 
         public virtual MessageResourcePath ReadMessageResourcePath() => (MessageResourcePath)ThrowNotImplemented();
 
-        public virtual NodeRef ReadNodeRef() => _reader.ReadLengthPrefixedString();
+        public virtual NodeRef ReadNodeRef() => InternalReadLengthPrefixedString();
 
         public virtual SerializationDeferredDataBuffer ReadSerializationDeferredDataBuffer(uint size)
         {

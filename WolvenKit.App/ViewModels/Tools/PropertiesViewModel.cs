@@ -5,7 +5,6 @@ using System.Threading.Tasks;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media.Imaging;
-using CP77.CR2W;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using WolvenKit.Common;
@@ -16,6 +15,7 @@ using WolvenKit.Functionality.Commands;
 using WolvenKit.Functionality.Services;
 using WolvenKit.Models;
 using WolvenKit.Models.Docking;
+using WolvenKit.Modkit.RED4.Tools;
 
 namespace WolvenKit.ViewModels.Tools
 {

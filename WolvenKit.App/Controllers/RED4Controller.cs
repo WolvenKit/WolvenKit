@@ -29,7 +29,7 @@ namespace WolvenKit.Functionality.Controllers
     {
         #region fields
 
-        public const string GameVersion = "1.3.0";
+        public const string GameVersion = "1.5.0";
 
         private readonly ILoggerService _loggerService;
         private readonly INotificationService _notificationService;
@@ -273,8 +273,7 @@ namespace WolvenKit.Functionality.Controllers
         {
             _progressService.IsIndeterminate = true;
 
-            var packTask = PackProject();
-            if (!packTask.Result)
+            if (!await PackProject())
             {
                 _progressService.IsIndeterminate = false;
                 return await Task.FromResult(false);
@@ -282,10 +281,8 @@ namespace WolvenKit.Functionality.Controllers
 
             InstallMod();
 
-            var r = await CompileRedmod();
-
             _progressService.IsIndeterminate = false;
-            return r;
+            return true;
         }
 
         private async Task<bool> CompileRedmod()
@@ -331,7 +328,7 @@ namespace WolvenKit.Functionality.Controllers
             // cleanup
             try
             {
-                var archives = Directory.GetFiles(cp77Proj.PackedModDirectory, "*.archive");
+                var archives = Directory.GetFiles(cp77Proj.PackedArchiveDirectory, "*.archive");
                 foreach (var archive in archives)
                 {
                     File.Delete(archive);
@@ -430,24 +427,7 @@ namespace WolvenKit.Functionality.Controllers
                 _loggerService.Error(e);
             }
 
-
-            foreach (var relFile in files)
-            {
-                var modFile = Path.Combine(modProj.SoundDirectory, relFile);
-                if (File.Exists(modFile))
-                {
-                    try
-                    {
-                        var destFile = Path.Combine(modProj.PackedSoundsDirectory, relFile);
-                        File.Copy(modFile, destFile, true);
-                    }
-                    catch (Exception e)
-                    {
-                        _loggerService.Error(e);
-                    }
-                }
-            }
-            
+            return await Task.FromResult(true);
         }
 
         private void CompileTweakFiles(Cp77Project cp77Proj)

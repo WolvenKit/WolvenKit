@@ -4,8 +4,10 @@ using System.Buffers;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.Encodings.Web;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using System.Text.Unicode;
 using Semver;
 using WolvenKit.Common.Conversion;
 using WolvenKit.RED4.Archive.Buffer;
@@ -3012,6 +3014,7 @@ public static class RedJsonSerializer
 
         Options = new()
         {
+            Encoder = JavaScriptEncoder.Create(UnicodeRanges.All),
             WriteIndented = true,
             MaxDepth = 2048,
             Converters =

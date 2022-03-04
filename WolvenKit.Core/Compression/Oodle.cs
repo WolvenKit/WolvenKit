@@ -80,14 +80,13 @@ public static class Oodle
     public const uint KARK = 1263681867; // 0x4b, 0x41, 0x52, 0x4b
 
     public static bool Load()
-    {
-        // try get oodle dll from game
+    {   
         if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
         {
-            var result = false;
+            // try get oodle dll from game
             if (TryCopyOodleLib())
             {
-                result = OodleLib.Load(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "oo2ext_7_win64.dll"));
+                var result = OodleLib.Load(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "oo2ext_7_win64.dll"));
                 if (result)
                 {
                     CompressionSettings.Get().CompressionLevel = CompressionLevel.Optimal2;
@@ -96,23 +95,12 @@ public static class Oodle
                 }
             }
 
-            // try load Kraken
-            result = KrakenLib.Load();
-            if (result)
-            {
-                return true;
-            }
-
-            Log.Error("Could not automatically find oo2ext_7_win64.dll. " +
-                      "Please manually copy and paste the DLL found in <gamedir>\\Cyberpunk 2077\\bin\\x64\\oo2ext_7_win64.dll into this folder: " +
-                      $"{AppDomain.CurrentDomain.BaseDirectory}.");
-            return false;
-
+            return true;
         }
 
         if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
         {
-            return KrakenLib.Load();
+            return true;
         }
 
         if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
@@ -198,11 +186,11 @@ public static class Oodle
         {
             result = CompressionSettings.Get().UseOodle
                 ? OodleLib.OodleLZ_Compress(inputBuffer, compressedBuffer, compressor, level)
-                : KrakenLib.Compress(inputBuffer, compressedBuffer, (int)level);
+                : KrakenNative.Compress(inputBuffer, compressedBuffer, (int)level);
         }
         else if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
         {
-            result = KrakenLib.Compress(inputBuffer, compressedBuffer, (int)level);
+            result = KrakenNative.Compress(inputBuffer, compressedBuffer, (int)level);
         }
         else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
         {
@@ -251,11 +239,11 @@ public static class Oodle
         {
             result = CompressionSettings.Get().UseOodle
                 ? OodleLib.OodleLZ_Decompress(inputBuffer, outputBuffer)
-                : KrakenLib.Decompress(inputBuffer, outputBuffer);
+                : KrakenNative.Decompress(inputBuffer, outputBuffer);
         }
         else if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
         {
-            result = KrakenLib.Decompress(inputBuffer, outputBuffer);
+            result = KrakenNative.Decompress(inputBuffer, outputBuffer);
         }
         else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
         {

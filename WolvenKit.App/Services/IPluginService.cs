@@ -94,7 +94,6 @@ namespace WolvenKit.Functionality.Services
             _pluginIds.Add(EPlugin.redmod,
                 Path.Combine(_settings.GetRED4GameRootDir(), "tools", "redmod"));
 
-
             Init();
         }
 

@@ -62,20 +62,17 @@ namespace WolvenKit.Functionality.Services
         #region general
 
         [Category("General")]
-        [Display(Name = "Show guided tour")]
+        [Display(Name = "Show Guided Tour")]
         [Reactive]
         public bool ShowGuidedTour { get; set; } = true;
 
         [Category("General")]
-        [Display(Name = "Update channel")]
+        [Display(Name = "Update Channel")]
         [Reactive]
         public EUpdateChannel UpdateChannel { get; set; }
 
         [Category("General")]
-        [Display(Name = "Depot path")]
-        [Reactive]
-        public string MaterialRepositoryPath { get; set; }
-
+        [Display(Name = "Theme Accent")]
         [Reactive]
         public string ThemeAccentString { get; set; }
 
@@ -93,12 +90,17 @@ namespace WolvenKit.Functionality.Services
         #region red4
 
         [Category("Cyberpunk")]
-        [Display(Name = "Game executable path (.exe)")]
+        [Display(Name = "Game Executable Path (.exe)")]
         [Reactive]
         public string CP77ExecutablePath { get; set; }
 
         [Category("Cyberpunk")]
-        [Display(Name = "Show file preview")]
+        [Display(Name = "Depot Path")]
+        [Reactive]
+        public string MaterialRepositoryPath { get; set; }
+
+        [Category("Cyberpunk")]
+        [Display(Name = "Show File Preview")]
         [Reactive]
         public bool ShowFilePreview { get; set; }
 
@@ -127,13 +129,13 @@ namespace WolvenKit.Functionality.Services
 
         #region TreeView
 
-        [Category("TreeView")]
-        [Display(Name = "Group large collections?")]
+        [Category("File Editor")]
+        [Display(Name = "Group Large Collections")]
         [Reactive]
         public bool TreeViewGroups { get; set; } = false;
 
-        [Category("TreeView")]
-        [Display(Name = "Group size")]
+        [Category("File Editor")]
+        [Display(Name = "Group Size")]
         [Reactive]
         public uint TreeViewGroupSize { get; set; } = 100;
 

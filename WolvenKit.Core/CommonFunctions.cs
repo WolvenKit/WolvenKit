@@ -29,6 +29,10 @@ namespace WolvenKit.Core
         {
             var runtimeAssemblies = Directory.GetFiles(RuntimeEnvironment.GetRuntimeDirectory(), "*.dll");
             var paths = new List<string>(runtimeAssemblies);
+            if (paths == null)
+            {
+                return SemVersion.Parse("1.0.0");
+            }
             var resolver = new PathAssemblyResolver(paths);
             var mlc = new MetadataLoadContext(resolver);
 

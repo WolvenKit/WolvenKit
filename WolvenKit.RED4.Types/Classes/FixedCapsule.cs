@@ -3,6 +3,7 @@ using static WolvenKit.RED4.Types.Enums;
 namespace WolvenKit.RED4.Types
 {
 	[REDMeta]
+	[REDClass(SerializeDefault = true)]
 	public partial class FixedCapsule : RedBaseClass
 	{
 		[Ordinal(0)] 
