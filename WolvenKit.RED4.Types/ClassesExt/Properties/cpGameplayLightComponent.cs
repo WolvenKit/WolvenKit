@@ -7,7 +7,7 @@ namespace WolvenKit.RED4.Types
         public new CHandle<entIPlacedComponentEditorData> PlacedEditorData
         {
             get => GetPropertyValue<CHandle<entIPlacedComponentEditorData>>();
-            set => SetPropertyValue(value);
+            set => SetPropertyValue<CHandle<entIPlacedComponentEditorData>>(value);
         }
     }
 }
