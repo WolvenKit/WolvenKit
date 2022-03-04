@@ -13,11 +13,14 @@ using ICSharpCode.AvalonEdit.Utils;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using Splat;
+using WinCopies.Collections.DotNetFix;
 using WolvenKit.Common.Services;
 using WolvenKit.Interaction;
 using WolvenKit.Modkit.RED4.Serialization;
 using WolvenKit.RED4.TweakDB;
 using WolvenKit.RED4.TweakDB.Types;
+using WolvenKit.RED4.Types;
+using Activator = System.Activator;
 
 namespace WolvenKit.ViewModels.Documents
 {
@@ -132,13 +135,9 @@ namespace WolvenKit.ViewModels.Documents
                 }
                 group.GetValue().Members.Add(FlatName, ivalue);
             }
-            else if (SelectedItem is FlatViewModel { IsArray: true } arrayVm && arrayVm.GetValue() is IArray array)
+            else if (SelectedItem is FlatViewModel { IsArray: true } arrayVm && arrayVm.GetValue() is IRedArray array)
             {
-                var x = array.GetItems();
-
-                x.Add(ivalue);
-
-                array.SetItems(x);
+                array.Add(ivalue);
             }
             else
             {
@@ -182,7 +181,7 @@ namespace WolvenKit.ViewModels.Documents
                 args: null,
                 culture: null);
 
-            var iarray = array as IType;
+            var iarray = array as IRedType;
 
             if (SelectedItem is GroupViewModel/* { IsSelected:true }*/ group)
             {

@@ -1,5 +1,6 @@
 using System;
 using System.Diagnostics;
+using System.Globalization;
 using WolvenKit.Core.CRC;
 
 namespace WolvenKit.RED4.Types
@@ -87,5 +88,7 @@ namespace WolvenKit.RED4.Types
         }
 
         public override int GetHashCode() => HashCode.Combine(_value.GetHashCode(), _hash.GetHashCode());
+
+        public override string ToString() => $"{_value} <TweakDBID 0x{_hash:X8}:0x{Length:X2} / {_hash}:{Length}>";
     }
 }

@@ -4,6 +4,8 @@ using System.Reflection;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using WolvenKit.RED4.TweakDB.Types;
+using WolvenKit.RED4.Types;
+using Activator = System.Activator;
 
 namespace WolvenKit.Modkit.RED4.Serialization.json
 {
@@ -45,7 +47,7 @@ namespace WolvenKit.Modkit.RED4.Serialization.json
 
         }
 
-        private class CArrayConverterInner<T> : JsonConverter<CArray<T>> where T : IType
+        private class CArrayConverterInner<T> : JsonConverter<CArray<T>> where T : IRedType
         {
             private readonly JsonConverter<IList<T>> _valueConverter;
             private readonly Type _baseType;
@@ -69,7 +71,7 @@ namespace WolvenKit.Modkit.RED4.Serialization.json
                     throw new JsonException();
                 }
 
-                instance.Items = value;
+                instance.AddRange(value);
                 return instance;
             }
 
@@ -81,7 +83,7 @@ namespace WolvenKit.Modkit.RED4.Serialization.json
 
                 if (_valueConverter != null)
                 {
-                    _valueConverter.Write(writer, fundamental.Items, options);
+                    _valueConverter.Write(writer, fundamental, options);
                 }
                 else
                 {

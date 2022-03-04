@@ -6,6 +6,7 @@ using Microsoft.IO;
 using WolvenKit.Common.FNV1A;
 using WolvenKit.Core.CRC;
 using WolvenKit.RED4.TweakDB.Types;
+using WolvenKit.RED4.Types;
 
 namespace WolvenKit.RED4.TweakDB
 {
@@ -23,7 +24,7 @@ namespace WolvenKit.RED4.TweakDB
             /// <remarks>Stored as <code>(name, value hash)</code></remarks>
             public IReadOnlyDictionary<string, ulong> Flats => _flats;
 
-            private readonly Dictionary<ulong, IType> _values = new();
+            private readonly Dictionary<ulong, IRedType> _values = new();
 
             /// <summary>
             /// Used to store the values.
@@ -32,9 +33,9 @@ namespace WolvenKit.RED4.TweakDB
             /// Each value is present only once, for example adding a value of 1, 2 and 1, will result in 1 being preset only once.
             /// Stored as  <code>(value hash, value)</code>
             /// </remarks>
-            public IReadOnlyDictionary<ulong, IType> Values => _values;
+            public IReadOnlyDictionary<ulong, IRedType> Values => _values;
 
-            public void Add(string flat, IType value)
+            public void Add(string flat, IRedType value)
             {
                 if (_flats.ContainsKey(flat))
                 {
@@ -50,11 +51,11 @@ namespace WolvenKit.RED4.TweakDB
                 _flats.Add(flat, valueHash);
             }
 
-            private static uint GetValueHash(IType value)
+            private static uint GetValueHash(IRedType value)
             {
                 using var stream = s_streamManager.GetStream();
-                using var writer = new BinaryWriter(stream);
-                value.Serialize(writer);
+                using var writer = new TweakDBWriter(stream);
+                writer.Write(value);
 
                 var length = (int)stream.Length;
                 var data = ArrayPool<byte>.Shared.Rent(length);
@@ -84,7 +85,7 @@ namespace WolvenKit.RED4.TweakDB
         /// </summary>
         /// <param name="name">The name used by the value.</param>
         /// <param name="value">The value to be added.</param>
-        public void Add(string name, IType value)
+        public void Add(string name, IRedType value)
         {
             if (name.Length > byte.MaxValue)
             {
@@ -96,11 +97,12 @@ namespace WolvenKit.RED4.TweakDB
                 throw new ArgumentException($"A flat with key '{name}' already exists");
             }
 
-            var type = FNV1A64HashAlgorithm.HashString(value.Name);
-            if (!_types.TryGetValue(type, out var bucket))
+            var typeName = RedReflection.GetRedTypeFromCSType(value.GetType());
+            var typeHash = FNV1A64HashAlgorithm.HashString(typeName);
+            if (!_types.TryGetValue(typeHash, out var bucket))
             {
                 bucket = new TypeBucket();
-                _types.Add(type, bucket);
+                _types.Add(typeHash, bucket);
             }
 
             bucket.Add(name, value);
@@ -111,14 +113,14 @@ namespace WolvenKit.RED4.TweakDB
         /// Serialize the pool.
         /// </summary>
         /// <param name="writer">The writer.</param>
-        public void Serialize(BinaryWriter writer)
+        public void Serialize(TweakDBWriter writer)
         {
             // Write the types.
-            writer.Write(_types.Count);
+            writer.BaseWriter.Write(_types.Count);
             foreach (var (name, bucket) in _types)
             {
-                writer.Write(name);
-                writer.Write(bucket.Values.Count);
+                writer.BaseWriter.Write(name);
+                writer.BaseWriter.Write(bucket.Values.Count);
             }
 
             // Will use it to store value indexes for types.
@@ -129,10 +131,10 @@ namespace WolvenKit.RED4.TweakDB
             {
                 uint currValueIndex = 0;
 
-                writer.Write(bucket.Values.Count);
+                writer.BaseWriter.Write(bucket.Values.Count);
                 foreach (var (hash, value) in bucket.Values)
                 {
-                    value.Serialize(writer);
+                    writer.Write(value);
 
                     if (!indexes.ContainsKey(hash))
                     {
@@ -140,13 +142,11 @@ namespace WolvenKit.RED4.TweakDB
                     }
                 }
 
-                writer.Write(bucket.Flats.Count);
+                writer.BaseWriter.Write(bucket.Flats.Count);
                 foreach (var (name, valueHash) in bucket.Flats)
                 {
-                    TweakDBID tdbid = name;
-                    tdbid.Serialize(writer);
-
-                    writer.Write(indexes[valueHash]);
+                    writer.Write((TweakDBID)name);
+                    writer.BaseWriter.Write(indexes[valueHash]);
                 }
 
                 indexes.Clear();

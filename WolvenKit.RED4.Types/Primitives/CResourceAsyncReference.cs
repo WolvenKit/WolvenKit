@@ -72,6 +72,7 @@ namespace WolvenKit.RED4.Types
                 return fnv.HashUInt32;
             }
         }
-        public override string ToString() => DepotPath;
+
+        public override string ToString() => $"{DepotPath} <{RedReflection.GetRedTypeFromCSType(GetType())} 0x{DepotPath.GetRedHash():X} / {DepotPath.GetRedHash()}>";
     }
 }

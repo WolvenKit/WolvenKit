@@ -3,7 +3,7 @@ using System.IO;
 using System.Runtime.InteropServices;
 using WolvenKit.Core.Extensions;
 using WolvenKit.Core.Murmur3;
-using WolvenKit.RED4.TweakDB.Types;
+using WolvenKit.RED4.Types;
 
 namespace WolvenKit.RED4.TweakDB
 {
@@ -42,7 +42,7 @@ namespace WolvenKit.RED4.TweakDB
         /// </summary>
         /// <param name="name">The flat's name.</param>
         /// <param name="value">The value.</param>
-        public void Add(string name, IType value) => _flats.Add(name, value);
+        public void Add(string name, IRedType value) => _flats.Add(name, value);
 
         /// <summary>
         /// Add a new record to the pool.
@@ -68,7 +68,7 @@ namespace WolvenKit.RED4.TweakDB
         public void Save(string path)
         {
             using var file = File.Open(path, FileMode.Create);
-            using var writer = new BinaryWriter(file);
+            using var writer = new TweakDBWriter(file);
             Save(writer);
         }
 
@@ -76,7 +76,7 @@ namespace WolvenKit.RED4.TweakDB
         /// Save the database to the a stream.
         /// </summary>
         /// <param name="writer">The writer.</param>
-        public void Save(BinaryWriter writer)
+        public void Save(TweakDBWriter writer)
         {
             var header = new FileHeader
             {
@@ -86,7 +86,7 @@ namespace WolvenKit.RED4.TweakDB
             };
 
             // Skip the header for now, it will be written last when we know all offsets.
-            writer.Seek(Marshal.SizeOf(typeof(FileHeader)), SeekOrigin.Begin);
+            writer.BaseWriter.Seek(Marshal.SizeOf(typeof(FileHeader)), SeekOrigin.Begin);
 
             // Save flats.
             header.Offsets.Flats = (uint)writer.BaseStream.Position;
@@ -98,26 +98,24 @@ namespace WolvenKit.RED4.TweakDB
 
             // Save queries.
             header.Offsets.Queries = (uint)writer.BaseStream.Position;
-            writer.Write(0);
+            writer.BaseWriter.Write(0);
 
             // Save group tags.
             header.Offsets.GroupTags = (uint)writer.BaseStream.Position;
-            writer.Write(0);
+            writer.BaseWriter.Write(0);
 
             // Now the header should be written.
-            writer.Seek(0, SeekOrigin.Begin);
-            writer.Write(header);
+            writer.BaseWriter.Seek(0, SeekOrigin.Begin);
+            writer.BaseWriter.Write(header);
         }
 
-        private void SerializeRecords(BinaryWriter writer)
+        private void SerializeRecords(TweakDBWriter writer)
         {
-            writer.Write(_records.Count);
+            writer.BaseWriter.Write(_records.Count);
             foreach (var (name, type) in _records)
             {
-                TweakDBID tdbid = name;
-                tdbid.Serialize(writer);
-
-                writer.Write(Murmur32.Hash(type, s_recordsSeed));
+                writer.Write((TweakDBID)name);
+                writer.BaseWriter.Write(Murmur32.Hash(type, s_recordsSeed));
             }
         }
     }

@@ -1,15 +1,15 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Reflection;
 using System.Text.Json;
 using WolvenKit.RED4.TweakDB;
 using WolvenKit.RED4.TweakDB.Types;
+using WolvenKit.RED4.Types;
 using YamlDotNet.Core;
 using YamlDotNet.Core.Events;
 using YamlDotNet.Serialization;
+using Activator = System.Activator;
 
 namespace WolvenKit.Modkit.RED4.Serialization.yaml
 {
@@ -21,12 +21,12 @@ namespace WolvenKit.Modkit.RED4.Serialization.yaml
         private static readonly Type _sequenceStartType = typeof(SequenceStart);
         private static readonly Type _scalarType = typeof(Scalar);
 
-        public bool Accepts(Type type) => typeof(IType).IsAssignableFrom(type);
+        public bool Accepts(Type type) => typeof(IRedType).IsAssignableFrom(type);
 
 
         public object ReadYaml(IParser parser, Type xtype)
         {
-            IType result;
+            IRedType result;
 
             parser.ReadMappingStart();
 
@@ -41,14 +41,13 @@ namespace WolvenKit.Modkit.RED4.Serialization.yaml
             if (IsArray(type))
             {
                 var innertype = type.GetGenericArguments()[0];
-                var list = (IList)Activator.CreateInstance(
-                    typeof(List<>).MakeGenericType(
-                        new Type[] { innertype }),
+                var array = (IRedArray)Activator.CreateInstance(
+                    typeof(CArray<>).MakeGenericType(innertype),
                     BindingFlags.Instance | BindingFlags.Public,
                     binder: null,
                     args: null,
                     culture: null);
-                if (list is null)
+                if (array is null)
                 {
                     throw new InvalidDataException();
                 }
@@ -67,7 +66,7 @@ namespace WolvenKit.Modkit.RED4.Serialization.yaml
                     do
                     {
                         var x = Parse(parser.ReadScalarValue(), innertype);
-                        list.Add(x);
+                        array.Add(x);
                     } while (parser.Current.GetType() != _sequenceEndType);
                 }
                 else if (parser.Current.GetType() != _sequenceEndType)
@@ -75,30 +74,16 @@ namespace WolvenKit.Modkit.RED4.Serialization.yaml
                     do
                     {
                         var x = ReadYaml(parser, innertype);
-                        list.Add(x);
+                        array.Add(x);
                     } while (parser.Current.GetType() != _sequenceEndType);
                 }
                 parser.MoveNext(); // skip the mapping end (or crash)
 
-                var array = (IArray)Activator.CreateInstance(
-                    typeof(CArray<>).MakeGenericType(
-                        new Type[] { innertype }),
-                    BindingFlags.Instance | BindingFlags.Public,
-                    binder: null,
-                    args: null,
-                    culture: null);
-                if (array is null)
-                {
-                    throw new InvalidDataException();
-                }
-
-                array.SetItems(list);
-
-                result = array is IType o ? o : throw new JsonException();
+                result = array is IRedType o ? o : throw new JsonException();
             }
             else
             {
-                if (typeof(IPrimitive).IsAssignableFrom(type))
+                if (typeof(IRedPrimitive).IsAssignableFrom(type))
                 {
                     result = Parse(parser.SafeReadScalarProperty(s_valueName), type);
                 }
@@ -122,41 +107,49 @@ namespace WolvenKit.Modkit.RED4.Serialization.yaml
                         }
                         case ETweakType.CEulerAngles:
                         {
-                            result = new CEulerAngles
+                            result = new EulerAngles
                             {
-                                Pitch = float.Parse(parser.SafeReadScalarProperty(nameof(CEulerAngles.Pitch))),
-                                Yaw = float.Parse(parser.SafeReadScalarProperty(nameof(CEulerAngles.Yaw))),
-                                Roll = float.Parse(parser.SafeReadScalarProperty(nameof(CEulerAngles.Roll))),
+                                Pitch = float.Parse(parser.SafeReadScalarProperty(nameof(EulerAngles.Pitch))),
+                                Yaw = float.Parse(parser.SafeReadScalarProperty(nameof(EulerAngles.Yaw))),
+                                Roll = float.Parse(parser.SafeReadScalarProperty(nameof(EulerAngles.Roll))),
                             };
                             break;
                         }
                         case ETweakType.CQuaternion:
                         {
-                            result = new CQuaternion
+                            result = new Quaternion
                             {
-                                I = float.Parse(parser.SafeReadScalarProperty(nameof(CQuaternion.I))),
-                                J = float.Parse(parser.SafeReadScalarProperty(nameof(CQuaternion.J))),
-                                K = float.Parse(parser.SafeReadScalarProperty(nameof(CQuaternion.K))),
-                                R = float.Parse(parser.SafeReadScalarProperty(nameof(CQuaternion.R))),
+                                I = float.Parse(parser.SafeReadScalarProperty(nameof(Quaternion.I))),
+                                J = float.Parse(parser.SafeReadScalarProperty(nameof(Quaternion.J))),
+                                K = float.Parse(parser.SafeReadScalarProperty(nameof(Quaternion.K))),
+                                R = float.Parse(parser.SafeReadScalarProperty(nameof(Quaternion.R))),
                             };
                             break;
                         }
                         case ETweakType.CVector2:
                         {
-                            result = new CVector2
+                            result = new Vector2
                             {
-                                X = float.Parse(parser.SafeReadScalarProperty(nameof(CVector2.X))),
-                                Y = float.Parse(parser.SafeReadScalarProperty(nameof(CVector2.Y)))
+                                X = float.Parse(parser.SafeReadScalarProperty(nameof(Vector2.X))),
+                                Y = float.Parse(parser.SafeReadScalarProperty(nameof(Vector2.Y)))
                             };
                             break;
                         }
                         case ETweakType.CVector3:
                         {
-                            result = new CVector3
+                            result = new Vector3
                             {
-                                X = float.Parse(parser.SafeReadScalarProperty(nameof(CVector3.X))),
-                                Y = float.Parse(parser.SafeReadScalarProperty(nameof(CVector3.Y))),
-                                Z = float.Parse(parser.SafeReadScalarProperty(nameof(CVector3.Z)))
+                                X = float.Parse(parser.SafeReadScalarProperty(nameof(Vector3.X))),
+                                Y = float.Parse(parser.SafeReadScalarProperty(nameof(Vector3.Y))),
+                                Z = float.Parse(parser.SafeReadScalarProperty(nameof(Vector3.Z)))
+                            };
+                            break;
+                        }
+                        case ETweakType.CResource:
+                        {
+                            result = new CResourceAsyncReference<CResource>
+                            {
+                                DepotPath = parser.SafeReadScalarProperty(nameof(CResourceAsyncReference<CResource>.DepotPath))
                             };
                             break;
                         }
@@ -175,29 +168,28 @@ namespace WolvenKit.Modkit.RED4.Serialization.yaml
 
         public void WriteYaml(IEmitter emitter, object value, Type type)
         {
-            if (value is not IType itype)
+            if (value is not IRedType itype)
             {
                 throw new YamlException(type.ToString());
             }
 
             emitter.Emit(new MappingStart(null, null, false, MappingStyle.Block));
 
-            emitter.WriteProperty(s_typeName, itype.Name);
+            var redName = RedReflection.GetRedTypeFromCSType(itype.GetType());
+            emitter.WriteProperty(s_typeName, redName);
 
             if (IsArray(type))
             {
-                if (value is not IArray array)
+                if (value is not IRedArray array)
                 {
                     throw new YamlException(type.ToString());
                 }
 
                 emitter.Emit(new Scalar(null, s_valueName));
-
-                var items = array.GetItems();
                 emitter.Emit(new SequenceStart(default, default, false, SequenceStyle.Any));
-                foreach (var item in items)
+                foreach (var item in array)
                 {
-                    if (item is IType i)
+                    if (item is IRedType i)
                     {
                         WriteYaml(emitter, i, i.GetType());
                     }
@@ -210,7 +202,7 @@ namespace WolvenKit.Modkit.RED4.Serialization.yaml
             }
             else
             {
-                if (value is IPrimitive fundamental)
+                if (value is IRedPrimitive fundamental)
                 {
                     emitter.WriteProperty(s_valueName, fundamental.ToString());
                 }
@@ -223,38 +215,43 @@ namespace WolvenKit.Modkit.RED4.Serialization.yaml
                     {
                         case CColor node:
                         {
-                            emitter.WriteProperty(nameof(CColor.Red), node.Red.Value.ToString(CultureInfo.InvariantCulture));
-                            emitter.WriteProperty(nameof(CColor.Green), node.Green.Value.ToString(CultureInfo.InvariantCulture));
-                            emitter.WriteProperty(nameof(CColor.Blue), node.Blue.Value.ToString(CultureInfo.InvariantCulture));
-                            emitter.WriteProperty(nameof(CColor.Alpha), node.Alpha.Value.ToString(CultureInfo.InvariantCulture));
+                            emitter.WriteProperty(nameof(CColor.Red), node.Red.ToString(CultureInfo.InvariantCulture));
+                            emitter.WriteProperty(nameof(CColor.Green), node.Green.ToString(CultureInfo.InvariantCulture));
+                            emitter.WriteProperty(nameof(CColor.Blue), node.Blue.ToString(CultureInfo.InvariantCulture));
+                            emitter.WriteProperty(nameof(CColor.Alpha), node.Alpha.ToString(CultureInfo.InvariantCulture));
                             break;
                         }
-                        case CEulerAngles node:
+                        case EulerAngles node:
                         {
-                            emitter.WriteProperty(nameof(CEulerAngles.Pitch), node.Pitch.Value.ToString(CultureInfo.InvariantCulture));
-                            emitter.WriteProperty(nameof(CEulerAngles.Yaw), node.Yaw.Value.ToString(CultureInfo.InvariantCulture));
-                            emitter.WriteProperty(nameof(CEulerAngles.Roll), node.Roll.Value.ToString(CultureInfo.InvariantCulture));
+                            emitter.WriteProperty(nameof(EulerAngles.Pitch), node.Pitch.ToString(CultureInfo.InvariantCulture));
+                            emitter.WriteProperty(nameof(EulerAngles.Yaw), node.Yaw.ToString(CultureInfo.InvariantCulture));
+                            emitter.WriteProperty(nameof(EulerAngles.Roll), node.Roll.ToString(CultureInfo.InvariantCulture));
                             break;
                         }
-                        case CQuaternion node:
+                        case Quaternion node:
                         {
-                            emitter.WriteProperty(nameof(CQuaternion.I), node.I.Value.ToString(CultureInfo.InvariantCulture));
-                            emitter.WriteProperty(nameof(CQuaternion.J), node.J.Value.ToString(CultureInfo.InvariantCulture));
-                            emitter.WriteProperty(nameof(CQuaternion.K), node.K.Value.ToString(CultureInfo.InvariantCulture));
-                            emitter.WriteProperty(nameof(CQuaternion.R), node.R.Value.ToString(CultureInfo.InvariantCulture));
+                            emitter.WriteProperty(nameof(Quaternion.I), node.I.ToString(CultureInfo.InvariantCulture));
+                            emitter.WriteProperty(nameof(Quaternion.J), node.J.ToString(CultureInfo.InvariantCulture));
+                            emitter.WriteProperty(nameof(Quaternion.K), node.K.ToString(CultureInfo.InvariantCulture));
+                            emitter.WriteProperty(nameof(Quaternion.R), node.R.ToString(CultureInfo.InvariantCulture));
                             break;
                         }
-                        case CVector2 node:
+                        case Vector2 node:
                         {
-                            emitter.WriteProperty(nameof(CVector2.X), node.X.Value.ToString(CultureInfo.InvariantCulture));
-                            emitter.WriteProperty(nameof(CVector2.Y), node.Y.Value.ToString(CultureInfo.InvariantCulture));
+                            emitter.WriteProperty(nameof(Vector2.X), node.X.ToString(CultureInfo.InvariantCulture));
+                            emitter.WriteProperty(nameof(Vector2.Y), node.Y.ToString(CultureInfo.InvariantCulture));
                             break;
                         }
-                        case CVector3 node:
+                        case Vector3 node:
                         {
-                            emitter.WriteProperty(nameof(CVector3.X), node.X.Value.ToString(CultureInfo.InvariantCulture));
-                            emitter.WriteProperty(nameof(CVector3.Y), node.Y.Value.ToString(CultureInfo.InvariantCulture));
-                            emitter.WriteProperty(nameof(CVector3.Z), node.Y.Value.ToString(CultureInfo.InvariantCulture));
+                            emitter.WriteProperty(nameof(Vector3.X), node.X.ToString(CultureInfo.InvariantCulture));
+                            emitter.WriteProperty(nameof(Vector3.Y), node.Y.ToString(CultureInfo.InvariantCulture));
+                            emitter.WriteProperty(nameof(Vector3.Z), node.Y.ToString(CultureInfo.InvariantCulture));
+                            break;
+                        }
+                        case CResourceAsyncReference<CResource> cres:
+                        {
+                            emitter.WriteProperty(nameof(CResourceAsyncReference<CResource>.DepotPath), cres.DepotPath.ToString());
                             break;
                         }
 
@@ -273,22 +270,22 @@ namespace WolvenKit.Modkit.RED4.Serialization.yaml
         private static bool IsArray(Type type) =>
             type is not { IsGenericType: false } and { } && type.GetGenericTypeDefinition() == typeof(CArray<>);
 
-        public IType Parse(string s, Type type)
+        public IRedType Parse(string s, Type type)
         {
-            if (typeof(IPrimitive).IsAssignableFrom(type))
+            if (typeof(IRedPrimitive).IsAssignableFrom(type))
             {
                 return Serialization.GetEnumFromType(type) switch
                 {
                     ETweakType.CName => (CName)s,
                     ETweakType.CString => (CString)s,
                     ETweakType.TweakDBID => (TweakDBID)s,
-                    ETweakType.CResource => (CResource)s,
+                    ETweakType.CResource => ParseCResource(s),
                     ETweakType.CFloat => (CFloat)float.Parse(s),
                     ETweakType.CBool => (CBool)bool.Parse(s),
-                    ETweakType.CUint8 => (CUint8)byte.Parse(s),
-                    ETweakType.CUint16 => (CUint16)ushort.Parse(s),
-                    ETweakType.CUint32 => (CUint32)uint.Parse(s),
-                    ETweakType.CUint64 => (CUint64)ulong.Parse(s),
+                    ETweakType.CUint8 => (CUInt8)byte.Parse(s),
+                    ETweakType.CUint16 => (CUInt16)ushort.Parse(s),
+                    ETweakType.CUint32 => (CUInt32)uint.Parse(s),
+                    ETweakType.CUint64 => (CUInt64)ulong.Parse(s),
                     ETweakType.LocKey => (LocKey)ulong.Parse(s),
                     ETweakType.CInt8 => (CInt8)sbyte.Parse(s),
                     ETweakType.CInt16 => (CInt16)short.Parse(s),
@@ -299,6 +296,20 @@ namespace WolvenKit.Modkit.RED4.Serialization.yaml
             }
 
             throw new ArgumentOutOfRangeException();
+        }
+
+        private CResourceAsyncReference<CResource> ParseCResource(string value)
+        {
+            var cres = new CResourceAsyncReference<CResource>();
+            if (ulong.TryParse(value, out var key))
+            {
+                cres.DepotPath = key;
+            }
+            else
+            {
+                cres.DepotPath = value;
+            }
+            return cres;
         }
     }
 }

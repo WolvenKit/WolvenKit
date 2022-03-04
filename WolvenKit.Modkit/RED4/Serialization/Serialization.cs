@@ -11,8 +11,10 @@ using WolvenKit.Modkit.RED4.Serialization.json;
 using WolvenKit.Modkit.RED4.Serialization.yaml;
 using WolvenKit.RED4.TweakDB;
 using WolvenKit.RED4.TweakDB.Types;
+using WolvenKit.RED4.Types;
 using YamlDotNet.Serialization;
 using YamlDotNet.Serialization.NamingConventions;
+using Activator = System.Activator;
 
 namespace WolvenKit.Modkit.RED4.Serialization
 {
@@ -72,13 +74,14 @@ namespace WolvenKit.Modkit.RED4.Serialization
                     new CVector2JsonConverter(),
                     new CVector3JsonConverter(),
 
+                    new CResourceConverterFactory(),
                 }
 
             };
 
-            private static string SerializeJson(Dictionary<string, IType> dict) => JsonSerializer.Serialize(dict, s_options);
+            private static string SerializeJson(Dictionary<string, IRedType> dict) => JsonSerializer.Serialize(dict, s_options);
 
-            private static Dictionary<string, IType> DeserializeJson(string text) => JsonSerializer.Deserialize<Dictionary<string, IType>>(text, s_options);
+            private static Dictionary<string, IRedType> DeserializeJson(string text) => JsonSerializer.Deserialize<Dictionary<string, IRedType>>(text, s_options);
 
             /// <summary>
             /// Tries to convert the specified string representation to its IType equivalent.
@@ -87,7 +90,7 @@ namespace WolvenKit.Modkit.RED4.Serialization
             /// <param name="value">A json string containing the value to convert.</param>
             /// <param name="flat"></param>
             /// <returns>true if value was converted successfully; otherwise, false.</returns>
-            public static bool TryParseJsonFlat(string type, string value, out IType flat)
+            public static bool TryParseJsonFlat(string type, string value, out IRedType flat)
             {
                 flat = null;
 
@@ -110,6 +113,7 @@ namespace WolvenKit.Modkit.RED4.Serialization
                 {
                     case ETweakType.CName:
                     case ETweakType.CString:
+                    case ETweakType.CResource:
                         if (!jsonvalue.StartsWith('\"'))
                         {
                             jsonvalue = $"\"{jsonvalue}";
@@ -118,6 +122,8 @@ namespace WolvenKit.Modkit.RED4.Serialization
                         {
                             jsonvalue = $"{jsonvalue}\"";
                         }
+
+                        jsonvalue = jsonvalue.Replace("\\", "\\\\");
                         break;
                     case ETweakType.CColor:
                     case ETweakType.CEulerAngles:
@@ -151,7 +157,7 @@ namespace WolvenKit.Modkit.RED4.Serialization
             /// <param name="value">A json string containing the value to convert.</param>
             /// <param name="result"></param>
             /// <returns>true if value was converted successfully; otherwise, false.</returns>
-            private static bool TryParseJsonFlat(Type type, string value, out IType result)
+            private static bool TryParseJsonFlat(Type type, string value, out IRedType result)
             {
                 if (value == null)
                 {
@@ -162,7 +168,7 @@ namespace WolvenKit.Modkit.RED4.Serialization
                 try
                 {
                     var obj = JsonSerializer.Deserialize(value, type, s_options);
-                    if (obj is not IType ivalue)
+                    if (obj is not IRedType ivalue)
                     {
                         result = null;
                         return false;
@@ -213,6 +219,11 @@ namespace WolvenKit.Modkit.RED4.Serialization
         public static ETweakType GetEnumFromType(Type t)
         {
             var typename = t.Name;
+            if (typename == "CResourceAsyncReference`1")
+            {
+                typename = "CResource";
+            }
+
             if (!Enum.TryParse<ETweakType>(typename, out var type))
             {
                 throw new ArgumentOutOfRangeException(nameof(t));
@@ -234,22 +245,22 @@ namespace WolvenKit.Modkit.RED4.Serialization
                 ETweakType.CName => typeof(CName),
                 ETweakType.CString => typeof(CString),
                 ETweakType.TweakDBID => typeof(TweakDBID),
-                ETweakType.CResource => typeof(CResource),
+                ETweakType.CResource => typeof(CResourceAsyncReference<CResource>),
                 ETweakType.CFloat => typeof(CFloat),
                 ETweakType.CBool => typeof(CBool),
-                ETweakType.CUint8 => typeof(CUint8),
-                ETweakType.CUint16 => typeof(CUint16),
-                ETweakType.CUint32 => typeof(CUint32),
-                ETweakType.CUint64 => typeof(CUint64),
+                ETweakType.CUint8 => typeof(CUInt8),
+                ETweakType.CUint16 => typeof(CUInt16),
+                ETweakType.CUint32 => typeof(CUInt32),
+                ETweakType.CUint64 => typeof(CUInt64),
                 ETweakType.CInt8 => typeof(CInt8),
                 ETweakType.CInt16 => typeof(CInt16),
                 ETweakType.CInt32 => typeof(CInt32),
                 ETweakType.CInt64 => typeof(CInt64),
                 ETweakType.CColor => typeof(CColor),
-                ETweakType.CEulerAngles => typeof(CEulerAngles),
-                ETweakType.CQuaternion => typeof(CQuaternion),
-                ETweakType.CVector2 => typeof(CVector2),
-                ETweakType.CVector3 => typeof(CVector3),
+                ETweakType.CEulerAngles => typeof(EulerAngles),
+                ETweakType.CQuaternion => typeof(Quaternion),
+                ETweakType.CVector2 => typeof(Vector2),
+                ETweakType.CVector3 => typeof(Vector3),
                 ETweakType.LocKey => typeof(LocKey),
                 _ => throw new ArgumentOutOfRangeException(nameof(enumType))
             };
@@ -281,6 +292,11 @@ namespace WolvenKit.Modkit.RED4.Serialization
                 var wtype = GetTypeStrFromRedTypeStr(redtype);
                 if (!string.IsNullOrEmpty(wtype))
                 {
+                    if (wtype == "CResource")
+                    {
+                        wtype = "CResourceAsyncReference`1";
+                    }
+
                     type = types.FirstOrDefault(x => x.Name == wtype);
                     return type;
                 }
@@ -291,8 +307,7 @@ namespace WolvenKit.Modkit.RED4.Serialization
                 {
                     var innertype = GetTypeFromRedTypeStr(redtype.Replace("array:", ""));
                     var outer = Activator.CreateInstance(
-                        typeof(CArray<>).MakeGenericType(
-                            new Type[] { innertype }),
+                        typeof(CArray<>).MakeGenericType(innertype),
                         BindingFlags.Instance | BindingFlags.Public,
                         binder: null,
                         args: null,

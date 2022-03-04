@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -6,6 +7,8 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 using WolvenKit.RED4.TweakDB;
 using WolvenKit.RED4.TweakDB.Types;
+using WolvenKit.RED4.Types;
+using Activator = System.Activator;
 
 namespace WolvenKit.Modkit.RED4.Serialization.json
 {
@@ -13,7 +16,7 @@ namespace WolvenKit.Modkit.RED4.Serialization.json
     /// Comverts object implementing the IType interface to a json equivalent
     /// a TypeDiscriminator is used to serialize the type of the object
     /// </summary>
-    public class ITypeConverterWithTypeDiscriminator : JsonConverter<IType>
+    public class ITypeConverterWithTypeDiscriminator : JsonConverter<IRedType>
     {
         private readonly IEnumerable<Type> _types;
 
@@ -35,7 +38,7 @@ namespace WolvenKit.Modkit.RED4.Serialization.json
             return b;
         }
 
-        public override IType Read(
+        public override IRedType Read(
             ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
         {
             if (reader.TokenType != JsonTokenType.StartObject)
@@ -68,8 +71,7 @@ namespace WolvenKit.Modkit.RED4.Serialization.json
                 var innertype = type.GetGenericArguments()[0];
 
                 var list = Activator.CreateInstance(
-                    typeof(List<>).MakeGenericType(
-                        new Type[] { innertype }),
+                    typeof(List<>).MakeGenericType(innertype),
                     BindingFlags.Instance | BindingFlags.Public,
                     binder: null,
                     args: null,
@@ -80,12 +82,11 @@ namespace WolvenKit.Modkit.RED4.Serialization.json
                     throw new JsonException();
                 }
 
-                var items = JsonSerializer.Deserialize(jsonObject, list.GetType(), options);
+                var items = JsonSerializer.Deserialize<IList>(jsonObject, options);
 
 
-                var array = (IArray)Activator.CreateInstance(
-                    typeof(CArray<>).MakeGenericType(
-                        new Type[] { innertype }),
+                var array = (IRedArray)Activator.CreateInstance(
+                    typeof(CArray<>).MakeGenericType(innertype),
                     BindingFlags.Instance | BindingFlags.Public,
                     binder: null,
                     args: null,
@@ -94,13 +95,13 @@ namespace WolvenKit.Modkit.RED4.Serialization.json
                 {
                     throw new JsonException();
                 }
-                array.SetItems(items);
+                array.AddRange(items);
 
-                return array is IType o ? o : throw new JsonException();
+                return array is IRedType o ? o : throw new JsonException();
             }
             else
             {
-                return (IType)JsonSerializer.Deserialize(jsonObject, type, options);
+                return (IRedType)JsonSerializer.Deserialize(jsonObject, type, options);
             }
 
         }
@@ -111,20 +112,19 @@ namespace WolvenKit.Modkit.RED4.Serialization.json
             type is not { IsGenericType: false } and { } && type.GetGenericTypeDefinition() == typeof(CArray<>);
 
 
-        public override void Write(Utf8JsonWriter writer, IType value, JsonSerializerOptions options)
+        public override void Write(Utf8JsonWriter writer, IRedType value, JsonSerializerOptions options)
         {
             writer.WriteStartObject();
-            writer.WriteString("Type", value.Name);
+            writer.WriteString("Type", RedReflection.GetRedTypeFromCSType(value.GetType()));
             writer.WritePropertyName("Value");
             if (IsArray(value.GetType()))
             {
-                if (value is not IArray array)
+                if (value is not IRedArray array)
                 {
                     throw new JsonException();
                 }
 
-                var x = array.GetItems();
-                JsonSerializer.Serialize(writer, (object)array.GetItems(), options);
+                JsonSerializer.Serialize(writer, (object)array, options);
             }
             else
             {

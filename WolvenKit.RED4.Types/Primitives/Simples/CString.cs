@@ -1,5 +1,6 @@
 using System;
 using System.Diagnostics;
+using System.Globalization;
 using System.IO;
 
 namespace WolvenKit.RED4.Types
@@ -47,11 +48,10 @@ namespace WolvenKit.RED4.Types
 
         public bool Equals(CString other) => Equals(_value, other._value);
 
-        public string GetValue() => (string)this;
+        public string GetValue() => this;
 
         public void SetValue(string value) => _value = value;
 
-        public override string ToString() => GetValue();
-
+        public override string ToString() => _value;
     }
 }

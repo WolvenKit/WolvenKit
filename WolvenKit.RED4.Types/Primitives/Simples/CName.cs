@@ -1,5 +1,6 @@
 using System;
 using System.Diagnostics;
+using System.Globalization;
 using System.IO;
 using System.Text;
 using WolvenKit.Common.FNV1A;
@@ -89,7 +90,7 @@ namespace WolvenKit.RED4.Types
             return true;
         }
 
-        public string GetValue() => (string)this;
+        public string GetValue() => this;
 
         public void SetValue(string value)
         {
@@ -97,6 +98,6 @@ namespace WolvenKit.RED4.Types
             _hash = CalculateHash();
         }
 
-        public override string ToString() => GetValue();
+        public override string ToString() => _value;
     }
 }
