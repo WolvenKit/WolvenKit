@@ -34,6 +34,7 @@ namespace WolvenKit.Common.Services
         private readonly Dictionary<ulong, uint> _unknownRecordHashes = new();
 
         private readonly Dictionary<SAsciiString, object> _flatValues = new();
+        private readonly Dictionary<SAsciiString, Type> _flatTypes = new();
 
         private static readonly ConcurrentDictionary<SAsciiString, Lazy<RedBaseClass>> _recordCache = new();
 
@@ -118,6 +119,7 @@ namespace WolvenKit.Common.Services
                     if (flatTypeValues[typeHash].Count > valueIndex && _flatHashes.ContainsKey(keyHash))
                     {
                         _flatValues[_flatHashes[keyHash]] = flatTypeValues[typeHash][valueIndex];
+                        _flatTypes[_flatHashes[keyHash]] = _flatValues[_flatHashes[keyHash]].GetType();
                     }
                 }
             }
@@ -273,16 +275,29 @@ namespace WolvenKit.Common.Services
             }
         }
 
+        public IRedType GetFlat(TweakDBID tdb)
+        {
+            if (_flatHashes.ContainsKey((ulong)tdb))
+            {
+                return GetFlat(_flatHashes[(ulong)tdb]);
+            }
+            else
+            {
+                return null;
+            }
+        }
+
         public Type GetType(TweakDBID tdb)
         {
             if (_recordHashes.ContainsKey((ulong)tdb) && _recordTypes.ContainsKey(_recordHashes[(ulong)tdb]))
             {
                 return _recordTypes[_recordHashes[(ulong)tdb]];
             }
-            else
+            if (_flatHashes.ContainsKey((ulong)tdb) && _flatTypes.ContainsKey(_flatHashes[(ulong)tdb]))
             {
-                return null;
+                return _flatTypes[_flatHashes[(ulong)tdb]];
             }
+            return null;
         }
 
         public List<TweakDBID> GetRecords()
@@ -314,6 +329,18 @@ namespace WolvenKit.Common.Services
 
                     return new Lazy<RedBaseClass>(cls);
                 }).Value;
+            }
+            else
+            {
+                return null;
+            }
+        }
+
+        public IRedType GetFlat(SAsciiString path)
+        {
+            if (_flatValues.ContainsKey(path))
+            {
+                return (IRedType)_flatValues[path];
             }
             else
             {

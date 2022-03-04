@@ -139,8 +139,15 @@ namespace WolvenKit.Functionality.Services
             {
                 case WatcherChangeTypes.Created:
                 {
-                    LastSelect = new FileModel(e.FullPath, _projectManager.ActiveProject);
-                    _files.AddOrUpdate(LastSelect);
+                    try
+                    {
+                        LastSelect = new FileModel(e.FullPath, _projectManager.ActiveProject);
+                        _files.AddOrUpdate(LastSelect);
+                    }
+                    catch (Exception)
+                    {
+                        // reading too fast?
+                    }
                     break;
                 }
                 case WatcherChangeTypes.Deleted:

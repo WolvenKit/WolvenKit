@@ -9,6 +9,7 @@ using WolvenKit.Common.Services;
 using WolvenKit.RED4.Types;
 using WolvenKit.ViewModels.Documents;
 using YamlDotNet.Serialization;
+using WolvenKit.Models;
 
 namespace WolvenKit.ViewModels.Documents
 {
@@ -30,17 +31,18 @@ namespace WolvenKit.ViewModels.Documents
             {
                 using (var stream = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
                 {
-                    //using var reader = new StreamReader(stream);
+                    using var reader = new StreamReader(stream);
 
-                    //var deserializer = new DeserializerBuilder().Build();
+                    var deserializer = new DeserializerBuilder()
+                        .WithTypeConverter(new TweakXLYamlTypeConverter())
+                        .Build();
 
-                    //deserializer.Deserialize(reader);
-
+                    var file = deserializer.Deserialize<TweakXLFile>(reader);
 
                     FilePath = path;
                     _isInitialized = true;
 
-                    TabItemViewModels.Add(new RDTDataViewModel(new CArray<TweakDBID>(_tdbs.GetRecords()), this));
+                    TabItemViewModels.Add(new RDTDataViewModel(file, this));
 
                     SelectedIndex = 0;
 

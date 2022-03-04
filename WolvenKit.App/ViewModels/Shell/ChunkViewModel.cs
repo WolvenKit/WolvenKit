@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
@@ -19,6 +20,7 @@ using WolvenKit.Common.Services;
 using WolvenKit.Functionality.Commands;
 using WolvenKit.Functionality.Controllers;
 using WolvenKit.Functionality.Services;
+using WolvenKit.Models;
 using WolvenKit.RED4;
 using WolvenKit.RED4.Archive.Buffer;
 using WolvenKit.RED4.Archive.CR2W;
@@ -283,6 +285,11 @@ namespace WolvenKit.ViewModels.Shell
                 }
             }
 
+            if (Data != null && Data.GetType().GetProperties().Count() > 0)
+            {
+                return true;
+            }
+
             return false;
         }
 
@@ -495,7 +502,11 @@ namespace WolvenKit.ViewModels.Shell
                 }
                 else if (obj is TweakDBID tdb)
                 {
-                    obj = Locator.Current.GetService<TweakDBService>().GetRecord(tdb);
+                    obj = Locator.Current.GetService<TweakDBService>().GetFlat(tdb);
+                    if (obj == null)
+                    {
+                        obj = Locator.Current.GetService<TweakDBService>().GetRecord(tdb);
+                    }
                     //var record = Locator.Current.GetService<TweakDBService>().GetRecord(tdb);
                     //if (record != null)
                     //{
@@ -617,6 +628,44 @@ namespace WolvenKit.ViewModels.Shell
                         Properties.Add(new ChunkViewModel(ipb.Data, this));
                     }
                 }
+                //else if (Data is TweakXLFile)
+                // fallback for non-RTTI data
+                else if (Data != null)
+                {
+                    if (Data is IBrowsableDictionary ibd)
+                    {
+                        var pns = ibd.GetPropertyNames();
+                        foreach (var name in pns)
+                        {
+                            Properties.Add(new ChunkViewModel((IRedType)ibd.GetPropertyValue(name), this, name));
+                        }
+                    }
+                    else if (Data is IList list)
+                    {
+                        foreach (var thing in list)
+                        {
+                            Properties.Add(new ChunkViewModel((IRedType)thing, this, null));
+                        }
+                    }
+                    else if (Data is Dictionary<string, object> dict)
+                    {
+                        foreach (var (name, thing) in dict)
+                        {
+                            Properties.Add(new ChunkViewModel((IRedType)thing, this, name));
+                        }
+                    }
+                    else
+                    {
+                        var pis = Data.GetType().GetProperties();
+                        foreach (var pi in pis)
+                        {
+                            var value = pi.GetValue(Data);
+                            {
+                                Properties.Add(new ChunkViewModel((IRedType)value, this, pi.Name));
+                            }
+                        }
+                    }
+                }
             }
             catch (Exception e)
             {
@@ -650,6 +699,10 @@ namespace WolvenKit.ViewModels.Shell
                 if (IsInArray)
                 {
                     return Parent.GetIndexOf(this).ToString();
+                }
+                if (Data is IBrowsableType ibt)
+                {
+                    return ibt.GetBrowsableName();
                 }
                 return null;
             }
@@ -751,15 +804,34 @@ namespace WolvenKit.ViewModels.Shell
             }
         }
 
-        public string Type => PropertyType != null ? GetRedTypeFromCSType(PropertyType, _flags) : "null";
+        public string Type
+        {
+            get
+            {
+                if (PropertyType != null)
+                {
+                    return GetRedTypeFromCSType(PropertyType, _flags);
+                }
+                if (Data is IBrowsableType ibt)
+                {
+                    return ibt.GetBrowsableType();
+                }
+                return "null";
+            }
+        }
 
-        public string ResolvedType => GetTypeRedName(ResolvedPropertyType);
+        public string ResolvedType => ResolvedPropertyType != null ? GetTypeRedName(ResolvedPropertyType) : "";
 
         public bool TypesDiffer => PropertyType != ResolvedPropertyType;
 
         public bool IsInArray => Parent != null && Parent.IsArray;
 
-        public bool IsArray => PropertyType != null && (PropertyType.IsAssignableTo(typeof(IRedArray)) || PropertyType.IsAssignableTo(typeof(DataBuffer)) || PropertyType.IsAssignableTo(typeof(SharedDataBuffer)) || PropertyType.IsAssignableTo(typeof(SerializationDeferredDataBuffer)));
+        public bool IsArray => PropertyType != null &&
+            (PropertyType.IsAssignableTo(typeof(IRedArray)) ||
+            PropertyType.IsAssignableTo(typeof(IList)) ||
+            PropertyType.IsAssignableTo(typeof(DataBuffer)) ||
+            PropertyType.IsAssignableTo(typeof(SharedDataBuffer)) ||
+            PropertyType.IsAssignableTo(typeof(SerializationDeferredDataBuffer)));
 
         public int ArrayIndexWidth
         {
@@ -937,6 +1009,10 @@ namespace WolvenKit.ViewModels.Shell
                 {
                     Value = "null";
                 }
+            }
+            else if (Data is IBrowsableType ibt)
+            {
+                Value = ibt.GetBrowsableValue();
             }
         }
 
