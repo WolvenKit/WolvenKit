@@ -426,8 +426,6 @@ namespace WolvenKit.Functionality.Controllers
             {
                 _loggerService.Error(e);
             }
-
-            return await Task.FromResult(true);
         }
 
         private void CompileTweakFiles(Cp77Project cp77Proj)

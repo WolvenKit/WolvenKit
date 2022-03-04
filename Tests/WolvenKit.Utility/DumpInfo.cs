@@ -17,7 +17,6 @@ using WolvenKit.RED4.CR2W;
 using WolvenKit.RED4.CR2W.Archive;
 using WolvenKit.RED4.Types;
 using WolvenKit.Modkit.RED4.Sounds;
-using WolvenKit.Common.FNV1A;
 
 namespace WolvenKit.Utility
 {
@@ -30,7 +29,7 @@ namespace WolvenKit.Utility
         [TestMethod]
         public void DumpSoundEvents()
         {
-            var parser = ServiceLocator.Default.ResolveType<Red4ParserService>();
+            var parser = _host.Services.GetRequiredService<Red4ParserService>();
             var eventsInfo = s_groupedFiles[".json"].FirstOrDefault(x => x.Name.Contains("eventsmetadata.json"));
             if (eventsInfo != null)
             {

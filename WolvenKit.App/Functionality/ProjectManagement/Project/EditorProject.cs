@@ -39,6 +39,7 @@ namespace WolvenKit.ProjectManagement.Project
         public abstract GameType GameType { get; }
 
         public abstract string PackedRootDirectory { get; }
+        public abstract string PackedModDirectory { get; }
         public abstract string PackedArchiveDirectory { get; }
 
 
