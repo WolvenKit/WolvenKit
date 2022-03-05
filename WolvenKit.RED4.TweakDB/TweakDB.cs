@@ -115,7 +115,7 @@ namespace WolvenKit.RED4.TweakDB
             foreach (var (name, type) in _records)
             {
                 writer.Write((TweakDBID)name);
-                writer.BaseWriter.Write(Murmur32.Hash(type, s_recordsSeed));
+                writer.BaseWriter.Write(Murmur32.HashBytes(type, s_recordsSeed));
             }
         }
     }

@@ -8,7 +8,7 @@ namespace WolvenKit.RED4.Types
     [RED("TweakDBID")]
     [REDType(IsValueType = true)]
     [DebuggerDisplay("{_value}", Type = "TweakDBID")]
-    public sealed class TweakDBID : IRedPrimitive, IEquatable<TweakDBID>
+    public sealed class TweakDBID : IRedPrimitive<ulong>, IEquatable<TweakDBID>
     {
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         private string _value;
@@ -25,7 +25,7 @@ namespace WolvenKit.RED4.Types
                 _hash = value;
             }
         }
-        
+
         public TweakDBID() { }
 
         private TweakDBID(string val)
@@ -51,6 +51,9 @@ namespace WolvenKit.RED4.Types
 
         public static implicit operator TweakDBID(ulong value) => new(value);
         public static implicit operator ulong(TweakDBID value) => value._hash;
+
+        public static bool operator ==(TweakDBID a, TweakDBID b) => Equals(a, b);
+        public static bool operator !=(TweakDBID a, TweakDBID b) => !(a == b);
 
         public bool Equals(TweakDBID other)
         {

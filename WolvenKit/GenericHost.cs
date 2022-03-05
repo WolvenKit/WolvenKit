@@ -54,6 +54,7 @@ namespace WolvenKit
 
                     // singletons
                     services.AddSingleton<IHashService, HashService>();
+                    //services.AddSingleton<ITweakDBService, TweakDBService>();
                     services.AddSingleton<IRecentlyUsedItemsService, RecentlyUsedItemsService>();
                     services.AddSingleton<IProjectManager, ProjectManager>();
                     services.AddSingleton<IWatcherService, WatcherService>();
@@ -61,11 +62,18 @@ namespace WolvenKit
                     services.AddSingleton<IArchiveManager, ArchiveManager>();
                     services.AddSingleton<MockGameController>();
 
+                    services.AddSingleton<TweakDBService>();
+                    services.AddSingleton<ITweakDBService>(x => x.GetRequiredService<TweakDBService>());
+
+                    services.AddSingleton<LocKeyService>();
+                    services.AddSingleton<ILocKeyService>(x => x.GetRequiredService<LocKeyService>());
+
                     // red4 modding tools
                     services.AddSingleton<Red4ParserService>();
                     services.AddSingleton<MeshTools>();
 
-                    services.AddSingleton<IModTools, ModTools>();
+                    services.AddSingleton<ModTools>();
+                    services.AddSingleton<IModTools>(x => x.GetRequiredService<ModTools>());
                     services.AddSingleton<RED4Controller>();
 
                     // red3 modding tools
@@ -130,6 +138,12 @@ namespace WolvenKit
 
                     services.AddSingleton<PropertiesViewModel>();
                     services.AddTransient<IViewFor<PropertiesViewModel>, PropertiesView>();
+
+                    services.AddSingleton<TweakBrowserViewModel>();
+                    services.AddTransient<IViewFor<TweakBrowserViewModel>, TweakBrowserView>();
+
+                    services.AddSingleton<LocKeyBrowserViewModel>();
+                    services.AddTransient<IViewFor<LocKeyBrowserViewModel>, LocKeyBrowserView>();
 
                     #endregion
 

@@ -64,10 +64,14 @@
     <None Remove="lib\vgmstream\xmp-vgmstream.dll" />
     <None Remove="Resources\missinghashes.txt" />
     <None Remove="Resources\red.kark" />
+    <None Remove="Resources\tweakdbstr.kark" />
+    <None Remove="Resources\tweakdbstr_add.kark" />
     <None Remove="Resources\unusedhashes.kark" />
     <None Remove="Resources\usedhashes.kark" />
     <EmbeddedResource Include="Resources\missinghashes.txt" />
     <EmbeddedResource Include="Resources\usedhashes.kark" />
+    <EmbeddedResource Include="Resources\tweakdbstr.kark" />
+    <EmbeddedResource Include="Resources\tweakdbstr_add.kark" />
   </ItemGroup>
 
   <ItemGroup>
@@ -154,6 +158,9 @@
     </None>
     <None Update="lib\vgmstream\README.md">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Resources\tweakdb.str">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </None>
   </ItemGroup>
 

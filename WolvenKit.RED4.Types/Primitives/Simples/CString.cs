@@ -8,7 +8,7 @@ namespace WolvenKit.RED4.Types
     [RED("String")]
     [REDType(IsValueType = true)]
     [DebuggerDisplay("{_value}", Type = "CString")]
-    public sealed class CString : IRedPrimitive<string>, IEquatable<CString>, IRedString
+    public sealed class CString : IRedPrimitive<string>, IEquatable<CString>, IRedString, IComparable<CString>, IComparable
     {
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         private string _value;
@@ -23,6 +23,8 @@ namespace WolvenKit.RED4.Types
         public static implicit operator CString(string value) => new(value);
         public static implicit operator string(CString value) => value._value;
 
+        public static bool operator ==(CString a, CString b) => Equals(a, b);
+        public static bool operator !=(CString a, CString b) => !(a == b);
 
         public override int GetHashCode() => _value.GetHashCode();
 
@@ -52,6 +54,20 @@ namespace WolvenKit.RED4.Types
 
         public void SetValue(string value) => _value = value;
 
-        public override string ToString() => _value;
+        public override string ToString() => GetValue();
+
+        public int CompareTo(object? obj)
+        {
+            if (obj is CString cs)
+            {
+                return CompareTo(cs);
+            }
+            return _value.CompareTo(obj);
+        }
+
+        public int CompareTo(CString? obj)
+        {
+            return _value.CompareTo(obj.ToString());
+        }
     }
 }
