@@ -53,7 +53,7 @@ namespace WolvenKit.RED4.Archive.IO
                 if (prop == null)
                 {
                     value = Read(fieldType, 0, Flags.Empty);
-                    RedReflection.AddDynamicProperty(instance, varName, value);
+                    instance.AddDynamic(varName, value);
                 }
                 else
                 {

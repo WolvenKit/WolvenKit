@@ -4,7 +4,6 @@ using System.IO;
 using System.Reflection;
 using System.Text.Json;
 using WolvenKit.RED4.TweakDB;
-using WolvenKit.RED4.TweakDB.Types;
 using WolvenKit.RED4.Types;
 using YamlDotNet.Core;
 using YamlDotNet.Core.Events;
@@ -286,7 +285,7 @@ namespace WolvenKit.Modkit.RED4.Serialization.yaml
                     ETweakType.CUint16 => (CUInt16)ushort.Parse(s),
                     ETweakType.CUint32 => (CUInt32)uint.Parse(s),
                     ETweakType.CUint64 => (CUInt64)ulong.Parse(s),
-                    ETweakType.LocKey => (LocKey)ulong.Parse(s),
+                    ETweakType.LocKey => (gamedataLocKeyWrapper)ulong.Parse(s),
                     ETweakType.CInt8 => (CInt8)sbyte.Parse(s),
                     ETweakType.CInt16 => (CInt16)short.Parse(s),
                     ETweakType.CInt32 => (CInt32)int.Parse(s),

@@ -7,6 +7,6 @@ namespace WolvenKit.Modkit.RED4.Serialization
     public sealed class TweakDocument
     {
         public Dictionary<string, IRedType> Flats { get; set; } = new();
-        public Dictionary<string, Record> Groups { get; set; } = new();
+        public Dictionary<string, gamedataTweakDBRecord> Groups { get; set; } = new();
     }
 }

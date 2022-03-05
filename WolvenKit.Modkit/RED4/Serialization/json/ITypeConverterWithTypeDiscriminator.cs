@@ -6,7 +6,6 @@ using System.Reflection;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using WolvenKit.RED4.TweakDB;
-using WolvenKit.RED4.TweakDB.Types;
 using WolvenKit.RED4.Types;
 using Activator = System.Activator;
 

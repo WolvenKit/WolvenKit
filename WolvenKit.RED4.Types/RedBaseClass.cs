@@ -443,6 +443,36 @@ namespace WolvenKit.RED4.Types
             return success;
         }
 
+        public bool AddDynamic(string propertyName, IRedType value)
+        {
+            var typeInfo = RedReflection.GetTypeInfo(GetType());
+            if (typeInfo.PropertyInfos.Any(x => x.RedName == propertyName))
+            {
+                return false;
+            }
+
+            if (_dynamicProperties.Contains(propertyName))
+            {
+                return false;
+            }
+
+            InternalSetPropertyValue(propertyName, value, false);
+            return true;
+        }
+
+        public bool RemoveDynamic(string propertyName)
+        {
+            if (!_dynamicProperties.Contains(propertyName))
+            {
+                return false;
+            }
+
+            _dynamicProperties.Remove(propertyName);
+            _properties.Remove(propertyName);
+
+            return true;
+        }
+
         public List<string> GetWrittenPropertyNames()
         {
             return new List<string>(_writtenProperties);

@@ -44,7 +44,11 @@ namespace WolvenKit.RED4.IO
         public BinaryReader BaseReader => _reader;
         public Stream BaseStream => _reader.BaseStream;
 
-        public int Position => (int)_reader.BaseStream.Position;
+        public int Position
+        {
+            get => (int)BaseStream.Position;
+            set => BaseStream.Position = value;
+        }
 
         public List<IRedImport> ImportsList { get => importsList; set => importsList = value; }
 
@@ -186,6 +190,8 @@ namespace WolvenKit.RED4.IO
         }
 
         public virtual TweakDBID ReadTweakDBID() => _reader.ReadUInt64();
+
+        public virtual gamedataLocKeyWrapper ReadGamedataLocKeyWrapper() => _reader.ReadUInt64();
 
         #endregion Simples
 
@@ -672,6 +678,9 @@ namespace WolvenKit.RED4.IO
 
                 case { } when type == typeof(TweakDBID):
                     return ReadTweakDBID();
+
+                case { } when type == typeof(gamedataLocKeyWrapper):
+                    return ReadGamedataLocKeyWrapper();
 
                 default:
                     return ThrowNotSupported(type.Name);

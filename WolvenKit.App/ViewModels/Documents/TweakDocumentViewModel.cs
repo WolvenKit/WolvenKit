@@ -18,7 +18,6 @@ using WolvenKit.Common.Services;
 using WolvenKit.Interaction;
 using WolvenKit.Modkit.RED4.Serialization;
 using WolvenKit.RED4.TweakDB;
-using WolvenKit.RED4.TweakDB.Types;
 using WolvenKit.RED4.Types;
 using Activator = System.Activator;
 
@@ -98,10 +97,7 @@ namespace WolvenKit.ViewModels.Documents
                 return;
             }
 
-            var record = new Record()
-            {
-                Type = "TYPE NOT SET",
-            };
+            var record = new gamedataTweakDBRecord();
             TweakDocument.Groups.Add(FlatName, record);
 
             GenerateEntries();
@@ -126,14 +122,15 @@ namespace WolvenKit.ViewModels.Documents
             if (SelectedItem is GroupViewModel/* { IsSelected:true }*/ group)
             {
                 // check name
-                if (group.GetValue().Members.ContainsKey(FlatName))
+                if (group.GetValue().GetDynamicPropertyNames().Contains(FlatName))
                 {
                     await Interactions.ShowMessageBoxAsync(
                     $"A flat with name {FlatName} is already part of this group. Please give a unique name to the item you are adding, or delete the existing item first.",
                     "WolvenKit", WMessageBoxButtons.Ok, WMessageBoxImage.Error);
                     return;
                 }
-                group.GetValue().Members.Add(FlatName, ivalue);
+
+                group.GetValue().AddDynamic(FlatName, ivalue);
             }
             else if (SelectedItem is FlatViewModel { IsArray: true } arrayVm && arrayVm.GetValue() is IRedArray array)
             {
@@ -186,14 +183,15 @@ namespace WolvenKit.ViewModels.Documents
             if (SelectedItem is GroupViewModel/* { IsSelected:true }*/ group)
             {
                 // check name
-                if (group.GetValue().Members.ContainsKey(FlatName))
+                if (group.GetValue().GetDynamicPropertyNames().Contains(FlatName))
                 {
                     await Interactions.ShowMessageBoxAsync(
                     $"A flat with name {FlatName} is already part of this group. Please give a unique name to the item you are adding, or delete the existing item first.",
                     "WolvenKit", WMessageBoxButtons.Ok, WMessageBoxImage.Error);
                     return;
                 }
-                group.GetValue().Members.Add(FlatName, iarray);
+
+                group.GetValue().AddDynamic(FlatName, iarray);
             }
             else
             {
@@ -233,7 +231,7 @@ namespace WolvenKit.ViewModels.Documents
                     // if not in a group
                     if (!string.IsNullOrEmpty(fvm.GroupName))
                     {
-                        TweakDocument.Groups[fvm.GroupName].Members.Remove(fvm.Name);
+                        TweakDocument.Groups[fvm.GroupName].RemoveDynamic(fvm.Name);
                     }
                     else if (!string.IsNullOrEmpty(fvm.ArrayName))
                     {

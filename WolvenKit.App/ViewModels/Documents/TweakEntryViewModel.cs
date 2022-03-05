@@ -3,7 +3,6 @@ using System.Linq;
 using ReactiveUI;
 using WinCopies.Collections.DotNetFix;
 using WolvenKit.RED4.TweakDB;
-using WolvenKit.RED4.TweakDB.Types;
 using WolvenKit.RED4.Types;
 
 namespace WolvenKit.ViewModels.Documents
@@ -20,15 +19,15 @@ namespace WolvenKit.ViewModels.Documents
 
     public sealed class GroupViewModel : TweakEntryViewModel
     {
-        private readonly Record _value;
+        private readonly gamedataTweakDBRecord _value;
 
-        public GroupViewModel(string name, Record value)
+        public GroupViewModel(string name, gamedataTweakDBRecord value)
         {
             Name = name;
             _value = value;
 
-            Members = new ObservableCollection<FlatViewModel>(_value.Members
-                .Select(f => new FlatViewModel(f.Key, f.Value)
+            Members = new ObservableCollection<FlatViewModel>(_value.GetDynamicPropertyNames()
+                .Select(f => new FlatViewModel(f, _value.GetObjectByRedName(f))
                 {
                     GroupName = Name
                 }));
@@ -38,9 +37,9 @@ namespace WolvenKit.ViewModels.Documents
         public ObservableCollection<FlatViewModel> Members { get; set; }
 
         public override string DisplayString => _value.ToString();
-        public override string DisplayType => _value.Type;
+        public override string DisplayType => _value.GetType().Name;
 
-        public Record GetValue() => _value;
+        public gamedataTweakDBRecord GetValue() => _value;
     }
 
     public sealed class FlatViewModel : TweakEntryViewModel

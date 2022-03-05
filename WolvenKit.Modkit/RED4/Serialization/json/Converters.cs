@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Text.Json;
 using System.Text.Json.Serialization;
-using WolvenKit.RED4.TweakDB.Types;
 using WolvenKit.RED4.Types;
 
 namespace WolvenKit.Modkit.RED4.Serialization.json

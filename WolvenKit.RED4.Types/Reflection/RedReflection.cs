@@ -16,15 +16,13 @@ namespace WolvenKit.RED4.Types
         private static readonly Dictionary<string, ExtendedEnumInfo> _redEnumCache = new();
         private static readonly ConcurrentDictionary<Type, Lazy<ExtendedTypeInfo>> _typeInfoCache = new();
 
-        public static void AddDynamicProperty(RedBaseClass cls, string propertyName, IRedType propertyValue)
-        {
-            cls.InternalSetPropertyValue(propertyName, propertyValue, false);
-        }
-
         public static ExtendedTypeInfo GetTypeInfo(Type type)
         {
             return _typeInfoCache.GetOrAdd(type, new Lazy<ExtendedTypeInfo>(() => new ExtendedTypeInfo(type))).Value;
         }
+
+        public static Dictionary<string, Type> GetTypes() => new(_redTypeCache);
+
         public static IEnumerable<Type> GetSubClassesOf(Type type) => _redTypeCache?.Values.Where(_ => _.IsSubclassOf(type)).ToList();
 
         public static ExtendedPropertyInfo GetPropertyByName(Type type, string propertyName)

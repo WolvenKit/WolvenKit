@@ -300,6 +300,7 @@ namespace WolvenKit.RED4.IO
 
         public virtual void Write(SharedDataBuffer val) => _writer.Write(val.Buffer.GetBytes());
         public virtual void Write(TweakDBID val) => _writer.Write((ulong)val);
+        public virtual void Write(gamedataLocKeyWrapper val) => _writer.Write((ulong)val);
 
         #endregion Simple
 
@@ -783,6 +784,10 @@ namespace WolvenKit.RED4.IO
 
                 case { } when type == typeof(TweakDBID):
                     Write((TweakDBID)instance);
+                    return;
+
+                case { } when type == typeof(gamedataLocKeyWrapper):
+                    Write((gamedataLocKeyWrapper)instance);
                     return;
             }
 

@@ -21,4 +21,8 @@
     <ProjectReference Include="..\WolvenKit.RED4.Types\WolvenKit.RED4.Types.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Helper\" />
+  </ItemGroup>
+
 </Project>

@@ -10,7 +10,6 @@ using System.Text.Json.Serialization;
 using WolvenKit.Modkit.RED4.Serialization.json;
 using WolvenKit.Modkit.RED4.Serialization.yaml;
 using WolvenKit.RED4.TweakDB;
-using WolvenKit.RED4.TweakDB.Types;
 using WolvenKit.RED4.Types;
 using YamlDotNet.Serialization;
 using YamlDotNet.Serialization.NamingConventions;
@@ -261,7 +260,7 @@ namespace WolvenKit.Modkit.RED4.Serialization
                 ETweakType.CQuaternion => typeof(Quaternion),
                 ETweakType.CVector2 => typeof(Vector2),
                 ETweakType.CVector3 => typeof(Vector3),
-                ETweakType.LocKey => typeof(LocKey),
+                ETweakType.LocKey => typeof(gamedataLocKeyWrapper),
                 _ => throw new ArgumentOutOfRangeException(nameof(enumType))
             };
 

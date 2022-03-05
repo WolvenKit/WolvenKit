@@ -322,8 +322,7 @@ namespace WolvenKit.Common.Services
                         var match = Regex.Match(flat.ToString(), path.ToString() + "\\.(.+)");
                         if (match.Success)
                         {
-                            var name = match.Groups[1].Value;
-                            RedReflection.AddDynamicProperty(cls, name, (IRedType)value);
+                            cls.AddDynamic(match.Groups[1].Value, (IRedType)value);
                         }
                     }
 

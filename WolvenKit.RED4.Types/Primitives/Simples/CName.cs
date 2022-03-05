@@ -12,6 +12,9 @@ namespace WolvenKit.RED4.Types
     [DebuggerDisplay("{_value}", Type = "CName")]
     public sealed class CName : IRedPrimitive<string>, IEquatable<CName>, IRedString
     {
+        public delegate string ResolveHash(ulong hash);
+        public static ResolveHash ResolveHashHandler;
+
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         private string _value;
 
@@ -34,6 +37,7 @@ namespace WolvenKit.RED4.Types
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         public int Length => _value?.Length ?? 0;
 
+        public string GetResolvedText() => !string.IsNullOrEmpty(_value) ? _value : ResolveHashHandler?.Invoke(_hash);
         private ulong CalculateHash()
         {
             if (string.IsNullOrEmpty(_value))
@@ -101,6 +105,6 @@ namespace WolvenKit.RED4.Types
             _hash = CalculateHash();
         }
 
-        public override string ToString() => _value;
+        public override string ToString() => GetResolvedText();
     }
 }

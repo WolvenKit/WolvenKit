@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Globalization;
 using WolvenKit.Core.CRC;
@@ -7,9 +8,11 @@ namespace WolvenKit.RED4.Types
 {
     [RED("TweakDBID")]
     [REDType(IsValueType = true)]
-    [DebuggerDisplay("{_value}", Type = "TweakDBID")]
     public sealed class TweakDBID : IRedPrimitive<ulong>, IEquatable<TweakDBID>
     {
+        public delegate string ResolveHash(ulong hash);
+        public static ResolveHash ResolveHashHandler;
+
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         private string _value;
 
@@ -41,8 +44,9 @@ namespace WolvenKit.RED4.Types
         }
 
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        public int Length => _value?.Length ?? 0;
+        public int Length => (int)(_hash >> 32);
 
+        public string GetResolvedText() => !string.IsNullOrEmpty(_value) ? _value : ResolveHashHandler?.Invoke(_hash);
         private ulong CalculateHash() => Crc32Algorithm.Compute(_value) + ((ulong)_value.Length << 32);
 
 
@@ -67,7 +71,7 @@ namespace WolvenKit.RED4.Types
                 return true;
             }
 
-            return Equals(_value, other._value) && Equals(_hash, other._hash);
+            return Equals(_hash, other._hash);
         }
 
         public override bool Equals(object obj)
@@ -90,8 +94,8 @@ namespace WolvenKit.RED4.Types
             return Equals((TweakDBID)obj);
         }
 
-        public override int GetHashCode() => HashCode.Combine(_value.GetHashCode(), _hash.GetHashCode());
+        public override int GetHashCode() => HashCode.Combine(_value?.GetHashCode(), _hash.GetHashCode());
 
-        public override string ToString() => $"{_value} <TweakDBID 0x{_hash:X8}:0x{Length:X2} / {_hash}:{Length}>";
+        public override string ToString() => $"{GetResolvedText()} <TweakDBID 0x{_hash:X8}:0x{Length:X2} / {_hash}:{Length}>";
     }
 }

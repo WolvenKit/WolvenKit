@@ -5,7 +5,6 @@ using System.IO;
 using Microsoft.IO;
 using WolvenKit.Common.FNV1A;
 using WolvenKit.Core.CRC;
-using WolvenKit.RED4.TweakDB.Types;
 using WolvenKit.RED4.Types;
 
 namespace WolvenKit.RED4.TweakDB
