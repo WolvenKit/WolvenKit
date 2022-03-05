@@ -8,8 +8,11 @@ namespace WolvenKit.RED4.TweakDB.Helper;
 public class TweakDBStringHelper
 {
     public const uint Magic = 0x0BB1DB57;
+    public const int Version = 1;
 
-    private readonly Dictionary<ulong, string> _hashes = new();
+    private readonly Dictionary<ulong, string> _recordHashes = new();
+    private readonly Dictionary<ulong, string> _flatHashes = new();
+    private readonly Dictionary<ulong, string> _queryHashes = new();
 
     public bool Load(string path)
     {
@@ -20,29 +23,34 @@ public class TweakDBStringHelper
         using var br = new BinaryReader(ms);
 
         var id = br.BaseStream.ReadStruct<uint>();
-        if (id != TweakDBStringHelper.Magic)
+        if (id != Magic)
         {
             return false;
         }
 
         var version = br.ReadInt32();
+        if (version != Version)
+        {
+            return false;
+        }
+
         var numRecords = br.ReadInt32();
         var numFlats = br.ReadInt32();
         var numQueries = br.ReadInt32();
 
         for (uint i = 0; i < numRecords; i++)
         {
-            AddHash(_hashes, br.ReadLengthPrefixedString());
+            AddHash(_recordHashes, br.ReadLengthPrefixedString());
         }
 
         for (uint i = 0; i < numFlats; i++)
         {
-            AddHash(_hashes, br.ReadLengthPrefixedString());
+            AddHash(_flatHashes, br.ReadLengthPrefixedString());
         }
 
         for (uint i = 0; i < numQueries; i++)
         {
-            AddHash(_hashes, br.ReadLengthPrefixedString());
+            AddHash(_queryHashes, br.ReadLengthPrefixedString());
         }
 
         return true;
@@ -57,15 +65,78 @@ public class TweakDBStringHelper
         }
     }
 
+    public void Save(string path)
+    {
+        using var ms = new MemoryStream();
+        using var bw = new BinaryWriter(ms);
+
+        bw.Write(Magic);
+        bw.Write(Version);
+        bw.Write(_recordHashes.Count);
+        bw.Write(_flatHashes.Count);
+        bw.Write(_queryHashes.Count);
+
+        foreach (var (hash, str) in _recordHashes)
+        {
+            bw.WriteLengthPrefixedString(str);
+        }
+
+        foreach (var (hash, str) in _flatHashes)
+        {
+            bw.WriteLengthPrefixedString(str);
+        }
+
+        foreach (var (hash, str) in _queryHashes)
+        {
+            bw.WriteLengthPrefixedString(str);
+        }
+
+        var buffer = RedBuffer.CreateBuffer(0, ms.ToArray());
+        File.WriteAllBytes(path, buffer.GetCompressedBytes());
+    }
+
+    public void AddRecordHash(string str)
+    {
+        var hash = Crc32Algorithm.Compute(str) + ((ulong)str.Length << 32);
+        if (!_recordHashes.ContainsKey(hash))
+        {
+            _recordHashes.Add(hash, str);
+        }
+    }
+
+    public void AddFlatHash(string str)
+    {
+        var hash = Crc32Algorithm.Compute(str) + ((ulong)str.Length << 32);
+        if (!_flatHashes.ContainsKey(hash))
+        {
+            _flatHashes.Add(hash, str);
+        }
+    }
+
+    public void AddQueryHash(string str)
+    {
+        var hash = Crc32Algorithm.Compute(str) + ((ulong)str.Length << 32);
+        if (!_queryHashes.ContainsKey(hash))
+        {
+            _queryHashes.Add(hash, str);
+        }
+    }
+
     public string GetString(ulong key)
     {
-        if (_hashes.ContainsKey(key))
+        if (_recordHashes.ContainsKey(key))
         {
-            return _hashes[key];
+            return _recordHashes[key];
+        }
+        if (_flatHashes.ContainsKey(key))
+        {
+            return _flatHashes[key];
+        }
+        if (_queryHashes.ContainsKey(key))
+        {
+            return _queryHashes[key];
         }
 
         return null;
     }
-
-    public Dictionary<ulong, string> GetDictionary() => new(_hashes);
 }
