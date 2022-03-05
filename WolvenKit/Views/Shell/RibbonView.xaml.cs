@@ -224,6 +224,10 @@ namespace WolvenKit.Views.Shell
                         view => view.ToolbarPackInstallButton)
                     .DisposeWith(disposables);
                 this.BindCommand(ViewModel,
+                        viewModel => viewModel._mainViewModel.LaunchGameCommand,
+                        view => view.ToolbarLaunchGameButton)
+                    .DisposeWith(disposables);
+                this.BindCommand(ViewModel,
                         viewModel => viewModel._mainViewModel.ShowSettingsCommand,
                         view => view.ToolbarSettingsButton)
                     .DisposeWith(disposables);
