@@ -10,18 +10,20 @@ namespace WolvenKit.RED4.Save
 
     public class GameAudioParser : INodeParser
     {
-        // public static string NodeName => Constants.NodeNames.GAME_AUDIO;
+        public static string NodeName => Constants.NodeNames.GAME_AUDIO;
 
         public void Read(BinaryReader reader, NodeEntry node)
         {
-            throw new NotImplementedException();
-            //using var ms = new MemoryStream(node.DataBytes);
-            //using var br = new BinaryReader(ms);
-            //var data = new GameAudio();
-            //node.Data = data;
+            ParserHelper.ReadChildren(reader, node);
         }
 
-        public void Write(NodeWriter writer, NodeEntry node) => throw new NotImplementedException();
+        public void Write(NodeWriter writer, NodeEntry node)
+        {
+            foreach (var child in node.Children)
+            {
+                writer.Write(child);
+            }
+        }
     }
 
 }

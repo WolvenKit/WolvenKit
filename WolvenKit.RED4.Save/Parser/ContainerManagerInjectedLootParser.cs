@@ -7,7 +7,7 @@ namespace WolvenKit.RED4.Save
     public class ContainerManagerInjectedLoot : IParseableBuffer
     {
         public List<Entry> Entries { get; set; }
-
+        public byte[] TrailingBytes { get; set; }
         public ContainerManagerInjectedLoot()
         {
             Entries = new List<Entry>();
@@ -31,43 +31,65 @@ namespace WolvenKit.RED4.Save
 
     public class ContainerManagerInjectedLootParser : INodeParser
     {
-        // public static string NodeName => Constants.NodeNames.CONTAINER_MANAGER_INJECTED_LOOT;
+        public static string NodeName => Constants.NodeNames.CONTAINER_MANAGER_INJECTED_LOOT;
 
         public void Read(BinaryReader reader, NodeEntry node)
         {
-            throw new NotImplementedException();
-            //using var ms = new MemoryStream(node.DataBytes);
-            //using var br = new BinaryReader(ms);
-            //var data = new ContainerManagerInjectedLoot();
-            //var entryCount = br.ReadVLQInt32();
+            var result = new ContainerManagerInjectedLoot();
+            var entryCount = reader.ReadVLQInt32();
 
-            //for (int i = 0; i < entryCount; i++)
-            //{
-            //    data.Entries.Add(new ContainerManagerInjectedLoot.Entry { EntityId = br.ReadUInt64() });
-            //}
+            for (int i = 0; i < entryCount; i++)
+            {
+                result.Entries.Add(new ContainerManagerInjectedLoot.Entry { EntityId = reader.ReadUInt64() });
+            }
 
-            //foreach (var entry in data.Entries)
-            //{
-            //    entry.Entries = new List<ContainerManagerInjectedLoot.SubEntry>();
+            foreach (var entry in result.Entries)
+            {
+                entry.Entries = new List<ContainerManagerInjectedLoot.SubEntry>();
 
-            //    var subEntryCount = br.ReadByte();
-            //    for (int i = 0; i < subEntryCount; i++)
-            //    {
-            //        var subEntry = new ContainerManagerInjectedLoot.SubEntry();
+                var subEntryCount = reader.ReadByte();
+                for (int i = 0; i < subEntryCount; i++)
+                {
+                    var subEntry = new ContainerManagerInjectedLoot.SubEntry();
 
-            //        //subEntry.ItemTbdId = br.ReadTweakDbId();
-            //        subEntry.Unknown2 = br.ReadByte();
-            //        subEntry.Unknown3 = br.ReadUInt32();
-            //        subEntry.Unknown4 = br.ReadByte();
+                    subEntry.ItemTbdId = reader.ReadTweakDbId();
+                    subEntry.Unknown2 = reader.ReadByte();
+                    subEntry.Unknown3 = reader.ReadUInt32();
+                    subEntry.Unknown4 = reader.ReadByte();
 
-            //        entry.Entries.Add(subEntry);
-            //    }
-            //}
-            //node.Data = data;
+                    entry.Entries.Add(subEntry);
+                }
+            }
 
+            int trailingSize = node.Size - ((int)reader.BaseStream.Position - node.Offset);
+            result.TrailingBytes = reader.ReadBytes(trailingSize);
+            node.Value = result;
         }
 
-        public void Write(NodeWriter writer, NodeEntry node) => throw new NotImplementedException();
+        public void Write(NodeWriter writer, NodeEntry node)
+        {
+            var data = (ContainerManagerInjectedLoot)node.Value;
+
+            writer.WriteVLQInt32(data.Entries.Count);
+            foreach (var entry in data.Entries)
+            {
+                writer.Write(entry.EntityId);
+            }
+
+            foreach (var entry in data.Entries)
+            {
+                writer.Write((byte)entry.Entries.Count);
+                foreach (var subEntry in entry.Entries)
+                {
+                    var hash = (ulong)subEntry.ItemTbdId;
+                    writer.Write(hash);
+                    writer.Write(subEntry.Unknown2);
+                    writer.Write(subEntry.Unknown3);
+                    writer.Write(subEntry.Unknown4);
+                }
+            }
+            writer.Write(data.TrailingBytes);
+        }
     }
 
 }

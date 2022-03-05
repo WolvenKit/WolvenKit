@@ -32,7 +32,16 @@ namespace WolvenKit.RED4.Save
             node.Value = data;
         }
 
-        public void Write(NodeWriter writer, NodeEntry node) => throw new NotImplementedException();
+        public void Write(NodeWriter writer, NodeEntry node)
+        {
+            var data = (DirectorSystem)node.Value;
+
+            writer.Write(data.Unknown1);
+            writer.WriteLengthPrefixedString(data.Unknown2);
+            writer.Write(data.Unknown3);
+            writer.WriteLengthPrefixedString(data.Unknown4);
+            writer.Write(data.Unknown5);
+        }
     }
 
 }

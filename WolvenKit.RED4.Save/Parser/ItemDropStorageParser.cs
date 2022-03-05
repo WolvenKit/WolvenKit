@@ -24,7 +24,7 @@ namespace WolvenKit.RED4.Save
 
     public class ItemDropStorageParser : INodeParser
     {
-        public static string NodeName => Constants.NodeNames.ITEM_DROP_STORAGE;
+        //public static string NodeName => Constants.NodeNames.ITEM_DROP_STORAGE;
 
         public void Read(BinaryReader reader, NodeEntry node)
         {

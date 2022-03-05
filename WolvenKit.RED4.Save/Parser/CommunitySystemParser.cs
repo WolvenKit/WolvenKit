@@ -27,12 +27,23 @@ namespace WolvenKit.RED4.Save
             {
                 data.Unk_HashList.Add(reader.ReadUInt64());
             }
-            data.TrailingBytes = reader.ReadBytes((int)(reader.BaseStream.Length - reader.BaseStream.Position));
+            int trailingSize = node.Size - ((int)reader.BaseStream.Position - node.Offset);
+            data.TrailingBytes = reader.ReadBytes(trailingSize);
 
             node.Value = data;
         }
 
-        public void Write(NodeWriter writer, NodeEntry node) => throw new NotImplementedException();
+        public void Write(NodeWriter writer, NodeEntry node)
+        {
+            var data = (CommunitySystem)node.Value;
+
+            writer.Write(data.Unk_HashList.Count);
+            foreach (var entry in data.Unk_HashList)
+            {
+                writer.Write(entry);
+            }
+            writer.Write(data.TrailingBytes);
+        }
     }
 
 }

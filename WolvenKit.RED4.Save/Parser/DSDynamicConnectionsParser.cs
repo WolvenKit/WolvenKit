@@ -71,7 +71,36 @@ namespace WolvenKit.RED4.Save
             node.Value = data;
         }
 
-        public void Write(NodeWriter writer, NodeEntry node) => throw new NotImplementedException();
+        public void Write(NodeWriter writer, NodeEntry node)
+        {
+            var data = (DSDynamicConnections)node.Value;
+
+            writer.WriteVLQInt32(data.Entries.Count);
+            foreach (var entry in data.Entries)
+            {
+                writer.Write(entry.Unknown1);
+            }
+
+            foreach (var entry in data.Entries)
+            {
+                writer.WriteLengthPrefixedString(entry.Unknown2);
+
+                writer.WriteVLQInt32(entry.Unknown3.Count);
+                foreach (var val in entry.Unknown3)
+                {
+                    writer.Write(val);
+                }
+
+                writer.WriteVLQInt32(entry.Unknown4.Count);
+                foreach (var val in entry.Unknown4)
+                {
+                    writer.Write(val);
+                }
+
+                writer.Write(entry.Unknown5);
+                writer.WriteLengthPrefixedString(entry.Unknown6);
+            }
+        }
     }
 
 }

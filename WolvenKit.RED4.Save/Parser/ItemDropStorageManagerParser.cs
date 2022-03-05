@@ -11,7 +11,7 @@ namespace WolvenKit.RED4.Save
 
     public class ItemDropStorageManagerParser : INodeParser
     {
-        public static string NodeName => Constants.NodeNames.ITEM_DROP_STORAGE_MANAGER;
+        //public static string NodeName => Constants.NodeNames.ITEM_DROP_STORAGE_MANAGER;
 
         public void Read(BinaryReader reader, NodeEntry node)
         {

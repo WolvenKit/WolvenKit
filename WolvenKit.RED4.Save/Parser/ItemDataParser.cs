@@ -7,7 +7,7 @@ namespace WolvenKit.RED4.Save
 {
     public class ItemDataParser : INodeParser
     {
-        public static string NodeName => Constants.NodeNames.ITEM_DATA;
+        //public static string NodeName => Constants.NodeNames.ITEM_DATA;
 
         public void Read(BinaryReader reader, NodeEntry node)
         {

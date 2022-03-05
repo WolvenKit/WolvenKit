@@ -40,51 +40,81 @@ namespace WolvenKit.RED4.Save
 
     public class JournalManagerParser : INodeParser
     {
-        // public static string NodeName => Constants.NodeNames.JOURNAL_MANAGER;
+        public static string NodeName => Constants.NodeNames.JOURNAL_MANAGER;
 
         public void Read(BinaryReader reader, NodeEntry node)
         {
-            throw new NotImplementedException();
-            //using var ms = new MemoryStream(node.DataBytes);
-            //using var br = new BinaryReader(ms);
-            //var data = new JournalManager();
-            //var entryCount = br.ReadUInt32();
-            //for (int i = 0; i < entryCount; i++)
-            //{
-            //    var entry = new JournalManager.Entry1();
-            //    entry.Unk1_PathHash = br.ReadUInt32();
-            //    entry.Unk2_State = br.ReadUInt32();
-            //    entry.Unknown3 = br.ReadUInt32();
-            //    entry.Unknown4 = br.ReadUInt32();
+            var result = new JournalManager();
+            var entryCount = reader.ReadUInt32();
+            for (int i = 0; i < entryCount; i++)
+            {
+                var entry = new JournalManager.Entry1();
+                entry.Unk1_PathHash = reader.ReadUInt32();
+                entry.Unk2_State = reader.ReadUInt32();
+                entry.Unknown3 = reader.ReadUInt32();
+                entry.Unknown4 = reader.ReadUInt32();
 
-            //    data.Entries.Add(entry);
-            //}
+                result.Entries.Add(entry);
+            }
 
-            //data.Unk1_TrackedQuestPath = br.ReadUInt32();
+            result.Unk1_TrackedQuestPath = reader.ReadUInt32();
 
-            //entryCount = br.ReadUInt32();
-            //for (int i = 0; i < entryCount; i++)
-            //{
-            //    // could be wrong, strings with length 2?
-            //    data.Unknown2.Add(br.ReadUInt64());
-            //}
+            entryCount = reader.ReadUInt32();
+            for (int i = 0; i < entryCount; i++)
+            {
+                // could be wrong, strings with length 2?
+                result.Unknown2.Add(reader.ReadUInt64());
+            }
 
-            //entryCount = br.ReadUInt32();
-            //for (int i = 0; i < entryCount; i++)
-            //{
-            //    var entry = new JournalManager.Entry2();
-            //    entry.Unknown1 = br.ReadUInt32();
-            //    entry.Unknown2 = br.ReadUInt32();
-            //    entry.Unknown3 = br.ReadUInt32();
-            //    entry.Unknown4 = br.ReadUInt32();
+            entryCount = reader.ReadUInt32();
+            for (int i = 0; i < entryCount; i++)
+            {
+                var entry = new JournalManager.Entry2();
+                entry.Unknown1 = reader.ReadUInt32();
+                entry.Unknown2 = reader.ReadUInt32();
+                entry.Unknown3 = reader.ReadUInt32();
+                entry.Unknown4 = reader.ReadUInt32();
 
-            //    data.Unknown3.Add(entry);
-            //}
-            //data.TrailingBytes = br.ReadBytes((int)(br.BaseStream.Length - br.BaseStream.Position));
-            //node.Data = data;
+                result.Unknown3.Add(entry);
+            }
+
+            int readSize = node.Size - ((int)reader.BaseStream.Position - node.Offset);
+            result.TrailingBytes = reader.ReadBytes(readSize);
+
+            node.Value = result;
         }
 
-        public void Write(NodeWriter writer, NodeEntry node) => throw new NotImplementedException();
+        public void Write(NodeWriter writer, NodeEntry node)
+        {
+            var data = (JournalManager)node.Value;
+
+            writer.Write(data.Entries.Count);
+            foreach (var entry in data.Entries)
+            {
+                writer.Write(entry.Unk1_PathHash);
+                writer.Write(entry.Unk2_State);
+                writer.Write(entry.Unknown3);
+                writer.Write(entry.Unknown4);
+            }
+            writer.Write(data.Unk1_TrackedQuestPath);
+
+            writer.Write(data.Unknown2.Count);
+            foreach (var entry in data.Unknown2)
+            {
+                writer.Write(entry);
+            }
+
+            writer.Write(data.Unknown3.Count);
+            foreach (var entry in data.Unknown3)
+            {
+                writer.Write(entry.Unknown1);
+                writer.Write(entry.Unknown2);
+                writer.Write(entry.Unknown3);
+                writer.Write(entry.Unknown4);
+            }
+
+            writer.Write(data.TrailingBytes);
+        }
     }
 
 }

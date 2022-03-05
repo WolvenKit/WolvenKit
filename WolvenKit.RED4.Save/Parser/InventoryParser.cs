@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Save
 
     public class InventoryParser : INodeParser
     {
-        public static string NodeName => Constants.NodeNames.INVENTORY;
+        //public static string NodeName => Constants.NodeNames.INVENTORY;
 
         public void Read(BinaryReader reader, NodeEntry node)
         {

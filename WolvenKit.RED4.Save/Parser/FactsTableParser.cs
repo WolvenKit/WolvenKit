@@ -118,7 +118,25 @@ namespace WolvenKit.RED4.Save
             node.Value = data;
         }
 
-        public void Write(NodeWriter writer, NodeEntry node) => throw new NotImplementedException();
+        public void Write(NodeWriter writer, NodeEntry node)
+        {
+            var data = (FactsTable)node.Value;
+
+            writer.WriteVLQInt32(data.FactEntries.Count);
+
+            // Sort FactEntries by their hash before writing
+            data.FactEntries = new List<FactsTable.FactEntry>(data.FactEntries.OrderBy(_ => (uint)_.FactName));
+
+            foreach (var fact in data.FactEntries)
+            {
+                writer.Write((uint)fact.FactName);
+            }
+
+            foreach (var fact in data.FactEntries)
+            {
+                writer.Write(fact.Value);
+            }
+        }
     }
 
 }

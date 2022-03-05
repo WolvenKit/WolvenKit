@@ -46,7 +46,21 @@ namespace WolvenKit.RED4.Save
             node.Value = data;
         }
 
-        public void Write(NodeWriter writer, NodeEntry node) => throw new NotImplementedException();
+        public void Write(NodeWriter writer, NodeEntry node)
+        {
+            var data = (ContainerManagerLootSlotAvailability)node.Value;
+
+            writer.WriteVLQInt32(data.Entries.Count);
+            foreach (var entry in data.Entries)
+            {
+                writer.Write(entry.CNameHash);
+            }
+
+            foreach (var entry in data.Entries)
+            {
+                writer.Write(entry.Unknown1);
+            }
+        }
     }
 
 }

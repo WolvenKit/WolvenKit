@@ -6,17 +6,20 @@ namespace WolvenKit.RED4.Save
 {
     public class DeviceSystemParser : INodeParser
     {
-        // public static string NodeName => Constants.NodeNames.DEVICE_SYSTEM;
+        public static string NodeName => Constants.NodeNames.DEVICE_SYSTEM;
 
         public void Read(BinaryReader reader, NodeEntry node)
         {
-            throw new NotImplementedException();
-            //using var ms = new MemoryStream(node.DataBytes);
-            //using var br = new BinaryReader(ms);
-            //ParserUtils.ParseChildren(node.Children, reader, parsers);
+            ParserHelper.ReadChildren(reader, node);
         }
 
-        public void Write(NodeWriter writer, NodeEntry node) => throw new NotImplementedException();
+        public void Write(NodeWriter writer, NodeEntry node)
+        {
+            foreach (var child in node.Children)
+            {
+                writer.Write(child);
+            }
+        }
     }
 
 }
