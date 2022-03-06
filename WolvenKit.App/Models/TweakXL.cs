@@ -17,7 +17,7 @@ namespace WolvenKit.Models
     {
         public string GetBrowsableName();
         public string GetBrowsableValue();
-        public Type GetBrowsableType();
+        public string GetBrowsableType();
     }
 
     public interface IBrowsableDictionary
@@ -32,7 +32,7 @@ namespace WolvenKit.Models
 
         public string GetBrowsableValue() => "TweakXLFile";
 
-        public Type GetBrowsableType() => null;
+        public string GetBrowsableType() => null;
     }
 
     public interface ITweakXLItem : IRedType
@@ -46,7 +46,7 @@ namespace WolvenKit.Models
 
         public TweakDBID Base { get; set; }
 
-        public Type Type { get; set; }
+        public CString Type { get; set; }
 
         // eventually ITweakXLItem
         public RedDictionary<string, IRedType> Properties { get; set; } = new();
@@ -58,12 +58,12 @@ namespace WolvenKit.Models
 
         }
 
-        public virtual string GetBrowsableName() => null;
+        public virtual string GetBrowsableName() => Type;
 
         //public virtual string GetBrowsableValue() => Value != null ? Value.ToString() : ID.GetResolvedText();
         public virtual string GetBrowsableValue() => ID.GetResolvedText();
 
-        public virtual Type GetBrowsableType() => Type;
+        public virtual string GetBrowsableType() => Type;
 
         public virtual IEnumerable<string> GetPropertyNames()
         {
@@ -120,7 +120,7 @@ namespace WolvenKit.Models
     {
         public TweakDBID ID { get; set; } = new();
 
-        public Type Type { get; set; }
+        public CString Type { get; set; }
 
         public CArray<ITweakXLItem> Items { get; set; } = new();
 
@@ -128,7 +128,7 @@ namespace WolvenKit.Models
 
         public string GetBrowsableValue() => ID.GetResolvedText();
 
-        public Type GetBrowsableType() => typeof(CArray<>);
+        public string GetBrowsableType() => null;
 
         public IEnumerable<string> GetPropertyNames()
         {
@@ -259,7 +259,7 @@ namespace WolvenKit.Models
                 }
                 if (type != null)
                 {
-                    tweak.Type = type;
+                    tweak.Type = type.Name;
                 }
                 while (!parser.TryConsume<SequenceEnd>(out var _))
                 {
@@ -279,13 +279,13 @@ namespace WolvenKit.Models
                     if (parser.TryConsume<Scalar>(out var pn))
                     {
                         var propertyName = pn.Value;
-                        string propertyID = propertyName;
-                        if (propertyID != null && id != null)
-                        {
-                            propertyID = id + "." + propertyID;
-                        }
-
+                        //string propertyID = propertyName;
+                        //if (propertyID != null && id != null)
+                        //{
+                        //    propertyID = id + "." + propertyID;
+                        //}
                         // eventually ITweakXLItem
+
                         IRedType propertyValue = null;
 
                         // regular property
@@ -304,7 +304,7 @@ namespace WolvenKit.Models
                             string childID = id;
                             if (childID != null && propertyName != null)
                             {
-                                childID = childID + propertyName;
+                                childID = childID + "." + propertyName;
                             }
                             Type childType = null;
                             if (tweak.Base != null && propertyName != null)
@@ -323,7 +323,7 @@ namespace WolvenKit.Models
                             }
                             if (tweak.Base != null && propertyName != null)
                             {
-                                ((TweakXLSequence)propertyValue).Type = Locator.Current.GetService<TweakDBService>().GetType(tweak.Base + "." + propertyName);
+                                ((TweakXLSequence)propertyValue).Type = Locator.Current.GetService<TweakDBService>().GetType(tweak.Base + "." + propertyName).Name;
                             }
                             //if (type != null)
                             //{
@@ -337,7 +337,7 @@ namespace WolvenKit.Models
 
                         if (propertyName == "$type")
                         {
-                            tweak.Type = typeof(IRedType).Assembly.GetType("gamedata" + propertyValue + "_Record");
+                            tweak.Type = "gamedata" + propertyValue + "_Record";
                         }
                         else if (propertyName == "$base")
                         {

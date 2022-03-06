@@ -706,7 +706,7 @@
                     <Setter Property="Template">
                         <Setter.Value>
                             <ControlTemplate TargetType="TreeViewItem">
-                                <Grid>
+                                <Grid IsEnabled="{Binding IsReadOnly, Converter={StaticResource InvertBooleanConverter}}">
                                     <Grid>
                                         <ContentPresenter ContentSource="Header" />
                                     </Grid>

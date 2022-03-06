@@ -80,11 +80,11 @@ namespace WolvenKit.Views.Editors
             {
                 return "";
             }
-            if (((string)RedTweak) == null && ((ulong)RedTweak) != 0)
+            if (RedTweak.ResolvedText == null)
             {
                 return GetHashFromRedValue().ToString();
             }
-            return (string)RedTweak;
+            return RedTweak.ResolvedText;
         }
 
         private ulong GetHashFromRedValue()

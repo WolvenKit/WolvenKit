@@ -75,6 +75,7 @@ namespace WolvenKit.ViewModels.Shell
         [Reactive] public string Value { get; private set; }
         [Reactive] public string Descriptor { get; private set; }
         [Reactive] public bool IsDefault { get; private set; }
+        [Reactive] public bool IsReadOnly { get; private set; }
 
         #region Constructors
 
@@ -267,7 +268,7 @@ namespace WolvenKit.ViewModels.Shell
                         }
                     }
                     _resolvedDataCache = data;
-                    this.RaisePropertyChanged("ResolvedData");
+                    //this.RaisePropertyChanged("ResolvedData");
                 }
                 return _resolvedDataCache;
             }
@@ -287,9 +288,11 @@ namespace WolvenKit.ViewModels.Shell
             }
 
             PropertiesLoaded = true;
+            this.RaisePropertyChanged("ResolvedData");
 
             Properties.Clear();
 
+            var isreadonly = false;
             var obj = Data;
             if (obj is IRedBaseHandle handle)
             {
@@ -302,10 +305,20 @@ namespace WolvenKit.ViewModels.Shell
             if (obj is TweakDBID tdb)
             {
                 obj = Locator.Current.GetService<TweakDBService>().GetFlat(tdb);
-                if (obj == null)
+                if (obj != null)
+                {
+                    Properties.Add(new ChunkViewModel(obj, this, "Value")
+                    {
+                        IsReadOnly = true
+                    });
+                    this.RaisePropertyChanged("TVProperties");
+                    return;
+                }
+                else
                 {
                     obj = Locator.Current.GetService<TweakDBService>().GetRecord(tdb);
                 }
+                isreadonly = true;
                 //var record = Locator.Current.GetService<TweakDBService>().GetRecord(tdb);
                 //if (record != null)
                 //{
@@ -318,11 +331,13 @@ namespace WolvenKit.ViewModels.Shell
                 if (s.StartsWith("LocKey#") && ulong.TryParse(s.Substring(7), out var locKey))
                 {
                     obj = Locator.Current.GetService<LocKeyService>().GetEntry(locKey);
+                    isreadonly = true;
                 }
             }
             else if (obj is gamedataLocKeyWrapper locKey)
             {
                 obj = Locator.Current.GetService<LocKeyService>().GetEntry(locKey);
+                isreadonly = true;
             }
             if (obj is IRedArray ary)
             {
@@ -364,11 +379,17 @@ namespace WolvenKit.ViewModels.Shell
                     {
                         var name = !string.IsNullOrEmpty(pis[i].RedName) ? pis[i].RedName : pis[i].Name;
 
-                        Properties.Add(new ChunkViewModel(redClass.GetProperty(name), this, pis[i].RedName));
+                        Properties.Add(new ChunkViewModel(redClass.GetProperty(name), this, pis[i].RedName)
+                        {
+                            IsReadOnly = isreadonly
+                        });
                     }
                     else
                     {
-                        Properties.Add(new ChunkViewModel(redClass.GetProperty(dps[i - pis.Count]), this, dps[i - pis.Count]));
+                        Properties.Add(new ChunkViewModel(redClass.GetProperty(dps[i - pis.Count]), this, dps[i - pis.Count])
+                        {
+                            IsReadOnly = isreadonly
+                        });
                     }
                 }
             }
@@ -488,12 +509,12 @@ namespace WolvenKit.ViewModels.Shell
                     {
                         name = Parent.GetIndexOf(this).ToString();
                     }
-                    else if (_name == null && Data is IBrowsableType ibt)
+                    else if (name == null && Data is IBrowsableType ibt)
                     {
                         name = ibt.GetBrowsableName();
                     }
                     _name = name;
-                    this.RaisePropertyChanged("Name");
+                    //this.RaisePropertyChanged("Name");
                 }
                 return _name;
             }
@@ -509,15 +530,11 @@ namespace WolvenKit.ViewModels.Shell
 
             if (Parent != null && propertyName != null && Data is not IRedBaseHandle)
             {
-                var parentType = Parent.PropertyType;
-                if (Parent.Data is IRedBaseHandle handle && handle != null)
-                {
-                    parentType = handle.GetValue().GetType();
-                }
-                var epi = GetPropertyByRedName(parentType, propertyName);
+                var epi = GetPropertyByRedName(Parent.ResolvedPropertyType, propertyName);
                 if (epi != null)
                 {
-                    IsDefault = IsDefault(parentType, epi, Data);
+                    //IsDefault = IsDefault(Parent.ResolvedPropertyType, epi, Data);
+                    IsDefault = IsDefault(Parent.ResolvedPropertyType, epi, ResolvedData);
                 }
             }
         }
@@ -594,6 +611,14 @@ namespace WolvenKit.ViewModels.Shell
                         return type;
                     }
                 }
+                if (Data is ITweakXLItem iti)
+                {
+                    var type = Locator.Current.GetService<TweakDBService>().GetType(iti.ID);
+                    if (type != null)
+                    {
+                        return type;
+                    }
+                }
                 if (Data is IRedString str)
                 {
                     var s = str.GetValue();
@@ -620,7 +645,12 @@ namespace WolvenKit.ViewModels.Shell
             {
                 if (PropertyType != null)
                 {
-                    return GetRedTypeFromCSType(PropertyType, _flags);
+                    var redName = GetRedTypeFromCSType(PropertyType, _flags);
+                    if (redName != "")
+                    {
+                        return redName;
+                    }
+                    return PropertyType.Name;
                 }
                 return "null";
             }
@@ -746,7 +776,7 @@ namespace WolvenKit.ViewModels.Shell
                         //}
                     }
                     _propertyCountCache = count;
-                    this.RaisePropertyChanged("PropertyCount");
+                    //this.RaisePropertyChanged("PropertyCount");
                 }
                 return _propertyCountCache;
             }
@@ -779,9 +809,13 @@ namespace WolvenKit.ViewModels.Shell
                     {
                         width += 26;
                     }
-                    else
+                    else if (PropertyCount <= 10000)
                     {
                         width += 31;
+                    }
+                    else
+                    {
+                        width += 36;
                     }
                 }
                 if (PropertyType?.IsAssignableTo(typeof(IRedArray)) ?? false)
@@ -928,9 +962,9 @@ namespace WolvenKit.ViewModels.Shell
             else if (PropertyType.IsAssignableTo(typeof(IRedRef)))
             {
                 var value = (IRedRef)Data;
-                if (value != null && value.DepotPath != "")
+                if (value != null && value.DepotPath.GetResolvedText() != "")
                 {
-                    Value = value.DepotPath;
+                    Value = value.DepotPath.GetResolvedText();
                 }
                 else
                 {
