@@ -257,10 +257,10 @@ namespace WolvenKit.Models
                 {
                     tweak.ID = id;
                 }
-                if (type != null)
-                {
-                    tweak.Type = type.Name;
-                }
+                //if (type != null)
+                //{
+                //    tweak.Type = type.Name;
+                //}
                 while (!parser.TryConsume<SequenceEnd>(out var _))
                 {
                     tweak.Items.Add(ReadTweakXL(parser));
