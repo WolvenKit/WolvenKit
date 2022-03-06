@@ -39,6 +39,11 @@ public class RecordsPool : IEnumerable<(TweakDBID id, Type type)>
         _records.Add(hash, type);
     }
 
+    public bool Exists(ulong hash)
+    {
+        return _records.ContainsKey(hash);
+    }
+
     public List<TweakDBID> GetResolvableRecords(bool sortByName = false)
     {
         var list = _records.Keys

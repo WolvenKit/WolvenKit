@@ -35,6 +35,11 @@ namespace WolvenKit.Common.Services
             }
         }
 
+        public bool Exists(TweakDBID key)
+        {
+            return s_tweakDb.Flats.Exists(key) || s_tweakDb.Records.Exists(key);
+        }
+
         public string GetString(ulong key) => s_stringHelper.GetString(key);
 
         public IRedType GetFlat(TweakDBID tdb) => s_tweakDb.Flats.GetValue((ulong)tdb);

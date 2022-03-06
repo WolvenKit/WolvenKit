@@ -107,7 +107,6 @@ namespace WolvenKit.ViewModels.Shell
             CalculateValue();
             CalculateDescriptor();
             CalculateIsDefault();
-            var p = PropertyCount;
 
             this.WhenAnyValue(x => x.Data).Skip(1)
                 .Subscribe((_) =>
@@ -261,7 +260,11 @@ namespace WolvenKit.ViewModels.Shell
                     }
                     else if (Data is TweakDBID tdb && PropertiesLoaded)
                     {
-                        data = Locator.Current.GetService<TweakDBService>().GetRecord(tdb);
+                        data = Locator.Current.GetService<TweakDBService>().GetFlat(tdb);
+                        if (data == null)
+                        {
+                            data = Locator.Current.GetService<TweakDBService>().GetRecord(tdb);
+                        }
                     }
                     _resolvedDataCache = data;
                     this.RaisePropertyChanged("ResolvedData");
@@ -273,19 +276,19 @@ namespace WolvenKit.ViewModels.Shell
                 _resolvedDataCache = null;
             }
         }
-                {
+
         public ChunkViewModel Parent { get; set; }
-                if (PropertyType.IsAssignableTo(typeof(RedBaseClass)))
-                {
-                    data = Data;
-                }
-                else
-                {
-                    data = Parent?.Data ?? null;
-                }
 
         public void CalculateProperties()
         {
+            if (PropertiesLoaded)
+            {
+                return;
+            }
+
+            PropertiesLoaded = true;
+
+            Properties.Clear();
 
             var obj = Data;
             if (obj is IRedBaseHandle handle)
@@ -364,16 +367,8 @@ namespace WolvenKit.ViewModels.Shell
                         Properties.Add(new ChunkViewModel(redClass.GetProperty(name), this, pis[i].RedName));
                     }
                     else
-                        {
-                        Properties.Add(new ChunkViewModel(redClass.GetProperty(dps[i - pis.Count]), this, dps[i - pis.Count]));
-                        }
-                        Properties.Add(new ChunkViewModel(value, this, pi.RedName));
-                    });
-                    var dps = redClass.GetDynamicPropertyNames();
-                    dps.Sort();
-                    foreach (var dp in dps)
                     {
-                        Properties.Add(new ChunkViewModel(redClass.GetObjectByRedName(dp), this, dp));
+                        Properties.Add(new ChunkViewModel(redClass.GetProperty(dps[i - pis.Count]), this, dps[i - pis.Count]));
                     }
                 }
             }
@@ -611,10 +606,10 @@ namespace WolvenKit.ViewModels.Shell
                 {
                     return typeof(localizationPersistenceOnScreenEntry);
                 }
-                if (Data is IBrowsableType ibt && ibt.GetBrowsableType() is var browsableType && browsableType != null)
-                {
-                    return browsableType;
-                }
+                //if (Data is IBrowsableType ibt && ibt.GetBrowsableType() is var browsableType && browsableType != null)
+                //{
+                //    return browsableType;
+                //}
                 return PropertyType;
             }
         }
@@ -665,10 +660,13 @@ namespace WolvenKit.ViewModels.Shell
                     {
                         count += 1; // TODO
                     }
-                    else if (ResolvedData is TweakDBID)
+                    else if (Data is TweakDBID tdb)
                     {
                         // not actual
-                        count += 1;
+                        if (Locator.Current.GetService<TweakDBService>().Exists(tdb))
+                        {
+                            count += 1;
+                        }
                     }
                     else if (ResolvedData is IRedString str)
                     {
@@ -873,8 +871,8 @@ namespace WolvenKit.ViewModels.Shell
             }
             //else if (PropertyType.IsAssignableTo(typeof(TweakDBID)))
             //{
-            //    var value = (TweakDBID)Data;
-            //    Value = Locator.Current.GetService<TweakDBService>().GetString(value);
+            //    Value = (TweakDBID)Data.ToString();
+            //    //Value = Locator.Current.GetService<TweakDBService>().GetString(value);
             //}
             else if (PropertyType.IsAssignableTo(typeof(CBool)))
             {

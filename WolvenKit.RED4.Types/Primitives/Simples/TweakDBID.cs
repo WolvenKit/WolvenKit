@@ -34,6 +34,7 @@ namespace WolvenKit.RED4.Types
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         public int Length => (int)(_hash >> 32);
 
+        public string ResolvedText => GetResolvedText();
         public string GetResolvedText() => !string.IsNullOrEmpty(_value) ? _value : ResolveHashHandler?.Invoke(_hash);
         private ulong CalculateHash() => Crc32Algorithm.Compute(_value) + ((ulong)_value.Length << 32);
 

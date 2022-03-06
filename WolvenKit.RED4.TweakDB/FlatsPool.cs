@@ -77,6 +77,11 @@ namespace WolvenKit.RED4.TweakDB
             _recordLookUp[recordName].Add(parts[2]);
         }
 
+        public bool Exists(ulong id)
+        {
+            return _flatDictionary.ContainsKey(id);
+        }
+
         public IRedType GetValue(string name)
         {
             var id = Crc32Algorithm.Compute(name) + ((ulong)name.Length << 32);
