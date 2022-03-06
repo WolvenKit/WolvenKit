@@ -13,12 +13,12 @@ using WolvenKit.Models;
 
 namespace WolvenKit.ViewModels.Documents
 {
-    public class TweakYAMLDocumentViewModel : RedDocumentViewModel
+    public class TweakXLDocumentViewModel : RedDocumentViewModel
     {
 
         private TweakDBService _tdbs;
 
-        public TweakYAMLDocumentViewModel(string path) : base(path)
+        public TweakXLDocumentViewModel(string path) : base(path)
         {
             _tdbs = Locator.Current.GetService<TweakDBService>();
         }
