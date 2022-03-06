@@ -1043,7 +1043,7 @@ namespace WolvenKit.ViewModels.Shell
                 case EWolvenKitFile.Tweak:
                     if (Path.GetExtension(fullPath).ToUpper() == ".YAML")
                     {
-                        fileViewModel = new TweakYAMLDocumentViewModel(fullPath);
+                        fileViewModel = new TweakXLDocumentViewModel(fullPath);
                     }
                     else
                     {

@@ -17,7 +17,7 @@ namespace WolvenKit.Models
     {
         public string GetBrowsableName();
         public string GetBrowsableValue();
-        public string GetBrowsableType();
+        public Type GetBrowsableType();
     }
 
     public interface IBrowsableDictionary
@@ -32,7 +32,7 @@ namespace WolvenKit.Models
 
         public string GetBrowsableValue() => "TweakXLFile";
 
-        public string GetBrowsableType() => null;
+        public Type GetBrowsableType() => null;
     }
 
     public interface ITweakXLItem : IRedType
@@ -58,12 +58,12 @@ namespace WolvenKit.Models
 
         }
 
-        public virtual string GetBrowsableName() => "Tweak";
+        public virtual string GetBrowsableName() => null;
 
         //public virtual string GetBrowsableValue() => Value != null ? Value.ToString() : ID.ToString();
         public virtual string GetBrowsableValue() => ID.ToString();
 
-        public virtual string GetBrowsableType() => "TweakDBID";
+        public virtual Type GetBrowsableType() => Type;
 
         public virtual IEnumerable<string> GetPropertyNames()
         {
@@ -128,7 +128,7 @@ namespace WolvenKit.Models
 
         public string GetBrowsableValue() => ID.ToString();
 
-        public string GetBrowsableType() => "TweakList";
+        public Type GetBrowsableType() => typeof(CArray<>);
     }
 
     public enum TweakXLAppendType
@@ -140,7 +140,7 @@ namespace WolvenKit.Models
 
     public class TweakXLAppend : TweakXL
     {
-        public TweakXLAppendType AppendType { get; set; } = TweakXLAppendType.Regular;
+        public CEnum<TweakXLAppendType> AppendType { get; set; } = new();
 
         public override IEnumerable<string> GetPropertyNames()
         {
