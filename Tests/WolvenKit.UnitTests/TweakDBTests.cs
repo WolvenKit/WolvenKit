@@ -144,16 +144,12 @@ namespace WolvenKit.UnitTests
             db.Add("FirstItem", (CBool)true);
             db.Add("SecondItem", (CInt32)500);
 
-            db.Add("PhotoModeBackgrounds.bg_new_bg", new Record
-            {
-                Type = "PhotoModeBackground",
-                Members = new Dictionary<string, IRedType>
-                {
-                    { "locked", (CBool)true }
-                }
-            });
+            var record = RedTypeManager.Create<gamedataPhotoModeBackground_Record>();
+            record.Locked = true;
 
-            db.Save(writer);
+            db.Add("PhotoModeBackgrounds.bg_new_bg", record);
+
+            writer.WriteFile(db);
 
             var expected = new byte[]
             {
