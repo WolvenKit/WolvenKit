@@ -10,32 +10,24 @@ namespace WolvenKit.RED4.Types
     [RED("CName")]
     [REDType(IsValueType = true)]
     [DebuggerDisplay("{_value}", Type = "CName")]
-    public sealed class CName : IRedPrimitive<string>, IEquatable<CName>, IRedString
+    public sealed class CName : BaseStringType, IEquatable<CName>
     {
         public delegate string ResolveHash(ulong hash);
         public static ResolveHash ResolveHashHandler;
 
-        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        private string _value;
-
-        private ulong _hash;
+        private readonly ulong _hash;
 
         public CName() { }
 
-        private CName(string value)
+        private CName(string value) : base(value)
         {
-            _value = value;
             _hash = CalculateHash();
         }
 
         private CName(ulong value)
         {
-            _value = null;
             _hash = value;
         }
-
-        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        public int Length => _value?.Length ?? 0;
 
         public string GetResolvedText() => !string.IsNullOrEmpty(_value) ? _value : ResolveHashHandler?.Invoke(_hash);
         private ulong CalculateHash()
@@ -89,20 +81,12 @@ namespace WolvenKit.RED4.Types
 
         public bool Equals(CName other)
         {
-            if (!Equals(GetRedHash(), other.GetRedHash()))
+            if (!Equals(GetRedHash(), other?.GetRedHash()))
             {
                 return false;
             }
 
             return true;
-        }
-
-        public string GetValue() => this;
-
-        public void SetValue(string value)
-        {
-            _value = value;
-            _hash = CalculateHash();
         }
 
         public override string ToString() => GetResolvedText();

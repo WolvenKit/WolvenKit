@@ -62,7 +62,7 @@ namespace WolvenKit.ViewModels.Documents
 
                 foreach (var f in library.ExternalDependenciesForInternalItems)
                 {
-                    var itemPath = f.DepotPath.GetValue();
+                    var itemPath = (string)f.DepotPath;
                     if (Path.GetExtension(itemPath) == ".inkatlas")
                     {
                         tasks.Add(LoadInkAtlasAsync(itemPath));

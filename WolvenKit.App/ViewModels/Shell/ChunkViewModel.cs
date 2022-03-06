@@ -325,10 +325,10 @@ namespace WolvenKit.ViewModels.Shell
                 //    Properties.Add(new ChunkViewModel(record, this, "record"));
                 //}
             }
-            else if (obj is IRedString str)
+            else if (obj is BaseStringType str)
             {
-                var s = str.GetValue();
-                if (s.StartsWith("LocKey#") && ulong.TryParse(s.Substring(7), out var locKey))
+                var s = (string)str;
+                if (s != null && s.StartsWith("LocKey#") && ulong.TryParse(s.Substring(7), out var locKey))
                 {
                     obj = Locator.Current.GetService<LocKeyService>().GetEntry(locKey);
                     isreadonly = true;
@@ -619,9 +619,9 @@ namespace WolvenKit.ViewModels.Shell
                         return type;
                     }
                 }
-                if (Data is IRedString str)
+                if (Data is BaseStringType str)
                 {
-                    var s = str.GetValue();
+                    var s = (string)str;
                     if (s != null && s.StartsWith("LocKey#") && ulong.TryParse(s.Substring(7), out var _))
                     {
                         return typeof(localizationPersistenceOnScreenEntry);
@@ -698,9 +698,9 @@ namespace WolvenKit.ViewModels.Shell
                             count += 1;
                         }
                     }
-                    else if (ResolvedData is IRedString str)
+                    else if (ResolvedData is BaseStringType str)
                     {
-                        var s = str.GetValue();
+                        var s = (string)str;
                         if (s != null && s.StartsWith("LocKey#") && ulong.TryParse(s.Substring(7), out var locKey))
                         {
                             // not actual
@@ -859,17 +859,17 @@ namespace WolvenKit.ViewModels.Shell
             {
                 Value = "null";
             }
-            else if (PropertyType.IsAssignableTo(typeof(IRedString)))
+            else if (PropertyType.IsAssignableTo(typeof(BaseStringType)))
             {
-                var value = (IRedString)Data;
-                if (value.GetValue() == "" || value.GetValue() == null)
+                var value = (BaseStringType)Data;
+                if (string.IsNullOrEmpty(value))
                 {
                     Value = "null";
                 }
                 else
                 {
-                    Value = value.GetValue();
-                    if (Value.StartsWith("LocKey#") && ulong.TryParse(Value.Substring(7), out var key))
+                    Value = value;
+                    if (Value != null && Value.StartsWith("LocKey#") && ulong.TryParse(Value.Substring(7), out var key))
                     {
                         Value = "";
                         //    Value = Locator.Current.GetService<LocKeyService>().GetFemaleVariant(key);
@@ -957,7 +957,7 @@ namespace WolvenKit.ViewModels.Shell
             else if (PropertyType.IsAssignableTo(typeof(NodeRef)))
             {
                 var value = (NodeRef)Data;
-                Value = value.Text;
+                Value = value;
             }
             else if (PropertyType.IsAssignableTo(typeof(IRedRef)))
             {
@@ -1012,9 +1012,9 @@ namespace WolvenKit.ViewModels.Shell
                 Descriptor = ((ulong)locKey).ToString();
                 //Value = Locator.Current.GetService<LocKeyService>().GetFemaleVariant(value);
             }
-            if (Data is IRedString str)
+            if (Data is BaseStringType str)
             {
-                var s = str.GetValue();
+                var s = (string)str;
                 if (s != null && s.StartsWith("LocKey#") && ulong.TryParse(s.Substring(7), out var locKey2))
                 {
                     Descriptor = ((ulong)locKey2).ToString();
@@ -1088,7 +1088,7 @@ namespace WolvenKit.ViewModels.Shell
                 {
                     return "SymbolNumeric";
                 }
-                if (PropertyType.IsAssignableTo(typeof(IRedString)))
+                if (PropertyType.IsAssignableTo(typeof(BaseStringType)))
                 {
                     return "SymbolString";
                 }

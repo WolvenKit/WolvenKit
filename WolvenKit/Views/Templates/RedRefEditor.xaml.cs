@@ -104,15 +104,15 @@ namespace WolvenKit.Views.Editors
         private string GetPathFromRedValue()
         {
             // this might need to be handled at the class level like enums
-            if (RedRef is null)
+            if (RedRef is null || RedRef.DepotPath is null)
             {
                 return "";
             }
-            if (RedRef.DepotPath.GetResolvedText() == null && RedRef.DepotPath.GetRedHash() != 0)
+            if ((string)RedRef.DepotPath == null && RedRef.DepotPath.GetRedHash() != 0)
             {
                 return GetHashFromRedValue().ToString();
             }
-            return RedRef.DepotPath.GetResolvedText();
+            return RedRef.DepotPath;
         }
 
         private ulong GetHashFromRedValue()

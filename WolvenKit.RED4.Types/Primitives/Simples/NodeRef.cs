@@ -1,62 +1,19 @@
-using System;
+
+using System.Diagnostics;
 
 namespace WolvenKit.RED4.Types
 {
-    public class NodeRef : IRedPrimitive, IEquatable<NodeRef>, IRedString
+    [RED("NodeRef")]
+    [REDType(IsValueType = true)]
+    [DebuggerDisplay("{_value}", Type = "NodeRef")]
+    public class NodeRef : BaseStringType
     {
-        public string Text { get; set; }
+        public NodeRef() {}
+        private NodeRef(string value) : base(value) {}
 
-        public static implicit operator NodeRef(string value) => new() { Text = value };
-        public static implicit operator string(NodeRef value) => value.Text;
+        public static implicit operator NodeRef(string value) => new(value);
+        public static implicit operator string(NodeRef value) => value._value;
 
-        public override string ToString() => $"String, Text = '{Text}'";
-
-        public bool Equals(NodeRef other)
-        {
-            if (ReferenceEquals(null, other))
-            {
-                return false;
-            }
-
-            if (ReferenceEquals(this, other))
-            {
-                return true;
-            }
-
-            return Text == other.Text;
-        }
-
-        public override bool Equals(object obj)
-        {
-            if (ReferenceEquals(null, obj))
-            {
-                return false;
-            }
-
-            if (ReferenceEquals(this, obj))
-            {
-                return true;
-            }
-
-            if (obj.GetType() != this.GetType())
-            {
-                return false;
-            }
-
-            return Equals((NodeRef)obj);
-        }
-
-        public override int GetHashCode() => (Text != null ? Text.GetHashCode() : 0);
-
-
-        public string GetValue()
-        {
-            return Text;
-        }
-
-        public void SetValue(string value)
-        {
-            Text = value;
-        }
+        public override string ToString() => $"NodeRef, Text = '{_value}'";
     }
 }

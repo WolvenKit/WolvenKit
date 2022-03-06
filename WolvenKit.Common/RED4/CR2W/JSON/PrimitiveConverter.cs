@@ -2356,7 +2356,7 @@ public class RedClassConverter : JsonConverter<RedBaseClass>, ICustomRedConverte
         foreach (var propertyInfo in typeInfo.PropertyInfos.OrderBy(x => x.RedName))
         {
             writer.WritePropertyName(propertyInfo.RedName);
-            JsonSerializer.Serialize(writer, value.GetProperty(propertyInfo.RedName), options);
+            JsonSerializer.Serialize(writer, (object)value.GetProperty(propertyInfo.RedName), options);
         }
 
         writer.WriteEndObject();

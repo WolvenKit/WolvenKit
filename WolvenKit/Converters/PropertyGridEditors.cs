@@ -15,7 +15,7 @@ namespace WolvenKit.Converters
     {
         public static ITypeEditor GetPropertyEditor(Type PropertyType)
         {
-            if (PropertyType.IsAssignableTo(typeof(IRedString)))
+            if (PropertyType.IsAssignableTo(typeof(BaseStringType)))
             {
                 return new TextEditor();
             }
