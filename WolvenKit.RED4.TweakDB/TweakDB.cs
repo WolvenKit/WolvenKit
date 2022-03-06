@@ -32,8 +32,6 @@ namespace WolvenKit.RED4.TweakDB
         public const uint BlobVersion = 5;
         public const uint ParserVersion = 4;
 
-        private Dictionary<string, Dictionary<string, IRedType>> _flatLookupCache;
-
         public FlatsPool Flats { get; set; } = new();
         public RecordsPool Records { get; set; } = new();
         public Dictionary<TweakDBID, List<TweakDBID>> Queries { get; set; } = new();
@@ -65,13 +63,13 @@ namespace WolvenKit.RED4.TweakDB
             var typeInfo = RedReflection.GetTypeInfo(record.GetType());
             foreach (var propertyInfo in typeInfo.PropertyInfos)
             {
-                var value = propertyInfo.GetValue(record);
+                var value = record.GetProperty(propertyInfo.RedName);
                 if (!typeInfo.SerializeDefault && RedReflection.IsDefault(record.GetType(), propertyInfo, value))
                 {
                     continue;
                 }
 
-                Add($"{name}.{propertyInfo.RedName}", (IRedType)propertyInfo.GetValue(record));
+                Add($"{name}.{propertyInfo.RedName}", value);
             }
 
             Records.Add(name, record.GetType());
@@ -127,7 +125,7 @@ namespace WolvenKit.RED4.TweakDB
             {
                 if (values.ContainsKey(propertyInfo.RedName))
                 {
-                    propertyInfo.SetValue(instance, values[propertyInfo.RedName]);
+                    instance.SetProperty(propertyInfo.RedName, values[propertyInfo.RedName]);
                 }
             }
 

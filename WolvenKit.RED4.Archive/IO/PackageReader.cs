@@ -53,7 +53,7 @@ namespace WolvenKit.RED4.Archive.IO
                 if (prop == null)
                 {
                     value = Read(fieldType, 0, Flags.Empty);
-                    instance.AddDynamic(varName, value);
+                    instance.SetProperty(varName, value);
                 }
                 else
                 {
@@ -64,7 +64,7 @@ namespace WolvenKit.RED4.Archive.IO
                     }
 
                     value = Read(prop.Type, 0, flags);
-                    prop.SetValue(instance, value);
+                    instance.SetProperty(prop.RedName, value);
                 }
             }
 

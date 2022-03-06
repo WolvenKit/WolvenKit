@@ -244,7 +244,7 @@ public class TweakDBReader : Red4Reader
             if (propertyInfo == null)
             {
                 value = Read(valueType, 0, Flags.Empty);
-                instance.AddDynamic(varName, value);
+                instance.SetProperty(varName, value);
             }
             else
             {
@@ -255,7 +255,7 @@ public class TweakDBReader : Red4Reader
                 }
 
                 value = Read(propertyInfo.Type, 0, propertyInfo.Flags);
-                propertyInfo.SetValue(instance, value);
+                instance.SetProperty(propertyInfo.RedName, value);
             }
         }
 

@@ -168,7 +168,7 @@ public class TweakDBWriter : Red4Writer
             BaseWriter.Seek(sizeof(uint), SeekOrigin.Current);
 
             // Serialize the type.
-            Write((IRedType)propertyInfo.GetValue(instance));
+            Write(instance.GetProperty(propertyInfo.RedName));
             var endOffset = BaseStream.Position;
 
             // Now let's calculate the next variable offset.

@@ -65,16 +65,9 @@ namespace WolvenKit.Common.Conversion
             pis.Sort((a, b) => a.Name.CompareTo(b.Name));
             pis.ForEach((pi) =>
             {
-                IRedType propertyValue;
-                if (pi.RedName == null)
-                {
-                    propertyValue = (IRedType)value.GetType().GetProperty(pi.Name).GetValue(value, null);
-                }
-                else
-                {
-                    propertyValue = (IRedType)pi.GetValue((RedBaseClass)value);
-                }
-                var redType = RedReflection.GetRedTypeFromCSType(pi.Type);
+                var name = !string.IsNullOrEmpty(pi.RedName) ? pi.RedName : pi.Name;
+                var propertyValue = ((RedBaseClass)value).GetProperty(name);
+
                 if (!RedReflection.IsDefault(value.GetType(), pi, propertyValue))
                 {
                     var propertyName = pi.RedName;

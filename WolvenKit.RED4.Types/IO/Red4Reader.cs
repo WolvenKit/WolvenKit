@@ -579,7 +579,7 @@ namespace WolvenKit.RED4.IO
             foreach (var propertyInfo in typeInfo.GetWritableProperties())
             {
                 var value = Read(propertyInfo.Type, 0, Flags.Empty);
-                instance.InternalSetPropertyValue(propertyInfo.RedName, value, true);
+                instance.SetProperty(propertyInfo.RedName, value);
             }
 
             return instance;

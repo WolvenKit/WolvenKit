@@ -27,7 +27,7 @@ namespace WolvenKit.ViewModels.Documents
             _value = value;
 
             Members = new ObservableCollection<FlatViewModel>(_value.GetDynamicPropertyNames()
-                .Select(f => new FlatViewModel(f, _value.GetObjectByRedName(f))
+                .Select(f => new FlatViewModel(f, _value.GetProperty(f))
                 {
                     GroupName = Name
                 }));

@@ -130,7 +130,7 @@ namespace WolvenKit.ViewModels.Documents
                     return;
                 }
 
-                group.GetValue().AddDynamic(FlatName, ivalue);
+                group.GetValue().SetProperty(FlatName, ivalue);
             }
             else if (SelectedItem is FlatViewModel { IsArray: true } arrayVm && arrayVm.GetValue() is IRedArray array)
             {
@@ -191,7 +191,7 @@ namespace WolvenKit.ViewModels.Documents
                     return;
                 }
 
-                group.GetValue().AddDynamic(FlatName, iarray);
+                group.GetValue().SetProperty(FlatName, iarray);
             }
             else
             {
@@ -231,7 +231,7 @@ namespace WolvenKit.ViewModels.Documents
                     // if not in a group
                     if (!string.IsNullOrEmpty(fvm.GroupName))
                     {
-                        TweakDocument.Groups[fvm.GroupName].RemoveDynamic(fvm.Name);
+                        TweakDocument.Groups[fvm.GroupName].ResetProperty(fvm.Name);
                     }
                     else if (!string.IsNullOrEmpty(fvm.ArrayName))
                     {

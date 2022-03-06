@@ -135,12 +135,12 @@ namespace WolvenKit.ViewModels.Shell
                                 parentData = handle.GetValue();
                                 parentType = handle.GetValue().GetType();
                             }
-                            var epi = GetPropertyByRedName(parentType, propertyName);
-                            if (epi != null)
+
+                            if (parentData is RedBaseClass rbc)
                             {
-                                if (epi.GetValue((RedBaseClass)parentData) != Data)
+                                if (rbc.HasProperty(propertyName) && rbc.GetProperty(propertyName) != Data)
                                 {
-                                    epi.SetValue((RedBaseClass)parentData, Data);
+                                    rbc.SetProperty(propertyName, Data);
                                     Tab.File.SetIsDirty(true);
                                     Parent.NotifyChain("Data");
                                 }
@@ -395,33 +395,25 @@ namespace WolvenKit.ViewModels.Shell
 
         public class RedClassProperty<T> : IRedType where T : IRedType
         {
-            private readonly RedBaseClass obj;
-            private readonly string propertyName;
+            private readonly RedBaseClass _obj;
+            private readonly string _propertyName;
             public T Value
             {
                 get
                 {
-                    var epi = GetPropertyByRedName(obj.GetType(), propertyName);
-                    if (epi != null)
+                    if (_obj.HasProperty(_propertyName))
                     {
-                        return (T)epi.GetValue(obj);
+                        return (T)_obj.GetProperty(_propertyName);
                     }
-                    return default(T);
+                    return (T)GetClassDefaultValue(_obj.GetType(), _propertyName);
                 }
-                set
-                {
-                    var epi = GetPropertyByRedName(obj.GetType(), propertyName);
-                    if (epi != null)
-                    {
-                        epi.SetValue(obj, value);
-                    }
-                }
+                set => _obj.SetProperty(_propertyName, value);
             }
 
             public RedClassProperty(RedBaseClass cls, string i)
             {
-                obj = cls;
-                propertyName = i;
+                _obj = cls;
+                _propertyName = i;
             }
         }
 
@@ -549,22 +541,15 @@ namespace WolvenKit.ViewModels.Shell
                     pis.Sort((a, b) => a.Name.CompareTo(b.Name));
                     pis.ForEach((pi) =>
                     {
-                        IRedType value;
-                        if (pi.RedName == null)
-                        {
-                            value = (IRedType)redClass.GetType().GetProperty(pi.Name).GetValue(redClass, null);
-                        }
-                        else
-                        {
-                            value = (IRedType)pi.GetValue(redClass);
-                        }
-                        Properties.Add(new ChunkViewModel(value, this, pi.RedName));
+                        var name = !string.IsNullOrEmpty(pi.RedName) ? pi.RedName : pi.Name;
+
+                        Properties.Add(new ChunkViewModel(redClass.GetProperty(name), this, pi.RedName));
                     });
                     var dps = redClass.GetDynamicPropertyNames();
                     dps.Sort();
                     foreach (var dp in dps)
                     {
-                        Properties.Add(new ChunkViewModel(redClass.GetObjectByRedName(dp), this, dp));
+                        Properties.Add(new ChunkViewModel(redClass.GetProperty(dp), this, dp));
                     }
                 }
                 else if (obj is SerializationDeferredDataBuffer sddb && sddb.Data is Package04 p4)
@@ -1105,7 +1090,7 @@ namespace WolvenKit.ViewModels.Shell
                     var prop = GetPropertyByRedName(irc.GetType(), propName);
                     if (prop != null)
                     {
-                        Descriptor = prop.GetValue(irc).ToString();
+                        Descriptor = irc.GetProperty(prop.RedName).ToString();
                     }
                 }
             }
