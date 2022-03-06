@@ -1,3 +1,4 @@
+using WolvenKit.RED4.Archive.Buffer;
 using WolvenKit.RED4.Archive.IO;
 using WolvenKit.RED4.Save.IO;
 using WolvenKit.RED4.Types;
@@ -18,5 +19,13 @@ public class PackageParser : INodeParser
         node.Value = dummyBuffer.Data;
     }
 
-    public virtual void Write(NodeWriter writer, NodeEntry node) => throw new NotImplementedException();
+    public virtual void Write(NodeWriter writer, NodeEntry node) => Write(writer, node, typeof(inkWidgetLibraryResource));
+    public virtual void Write(NodeWriter writer, NodeEntry node, Type dummyType)
+    {
+        using var ms = new MemoryStream();
+        using var subWriter = new PackageWriter(ms);
+        subWriter.WritePackage((Package04)node.Value, dummyType);
+
+        writer.Write(ms.ToArray());
+    }
 }

@@ -22,10 +22,7 @@ namespace WolvenKit.RED4.Save
 
         public class Entry1
         {
-            public uint Unk1_PathHash { get; set; }
-            public uint Unk2_State { get; set; }
-            public uint Unknown3 { get; set; }
-            public uint Unknown4 { get; set; }
+            public byte[] UnkownBytes { get; set; }
         }
 
         public class Entry2
@@ -48,13 +45,10 @@ namespace WolvenKit.RED4.Save
             var entryCount = reader.ReadUInt32();
             for (int i = 0; i < entryCount; i++)
             {
-                var entry = new JournalManager.Entry1();
-                entry.Unk1_PathHash = reader.ReadUInt32();
-                entry.Unk2_State = reader.ReadUInt32();
-                entry.Unknown3 = reader.ReadUInt32();
-                entry.Unknown4 = reader.ReadUInt32();
-
-                result.Entries.Add(entry);
+                result.Entries.Add(new JournalManager.Entry1
+                {
+                    UnkownBytes = reader.ReadBytes(15)
+                });
             }
 
             result.Unk1_TrackedQuestPath = reader.ReadUInt32();
@@ -91,10 +85,7 @@ namespace WolvenKit.RED4.Save
             writer.Write(data.Entries.Count);
             foreach (var entry in data.Entries)
             {
-                writer.Write(entry.Unk1_PathHash);
-                writer.Write(entry.Unk2_State);
-                writer.Write(entry.Unknown3);
-                writer.Write(entry.Unknown4);
+                writer.Write(entry.UnkownBytes);
             }
             writer.Write(data.Unk1_TrackedQuestPath);
 

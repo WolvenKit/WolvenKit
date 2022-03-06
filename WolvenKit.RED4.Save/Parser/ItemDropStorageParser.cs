@@ -8,7 +8,7 @@ namespace WolvenKit.RED4.Save
     {
         public string Unk1 { get; set; }
         public byte[] Unk2 { get; set; }
-        public bool Unk3 { get; set; } // Unique?
+        public bool Unk3 { get; set; }
 
         // Vector4?
         public float Unk4 { get; set; }
@@ -16,9 +16,7 @@ namespace WolvenKit.RED4.Save
         public float Unk6 { get; set; }
         public float Unk7 { get; set; }
 
-        public uint Unk8 { get; set; } // Quantity?
-        public TweakDBID Unk9 { get; set; }
-        public byte[] Unk10 { get; set; }
+        public List<InventoryHelper.ItemData> Items { get; set; } = new();
     }
 
 
@@ -30,6 +28,7 @@ namespace WolvenKit.RED4.Save
         {
             var data = new ItemDropStorage();
 
+            reader.ReadUInt32(); // nodeId
             data.Unk1 = reader.ReadLengthPrefixedString();
             data.Unk2 = reader.ReadBytes(16);
             data.Unk3 = reader.ReadBoolean();
@@ -37,9 +36,24 @@ namespace WolvenKit.RED4.Save
             data.Unk5 = reader.ReadSingle();
             data.Unk6 = reader.ReadSingle();
             data.Unk7 = reader.ReadSingle();
-            data.Unk8 = reader.ReadUInt32();
-            data.Unk9 = reader.ReadTweakDbId();
-            data.Unk10 = reader.ReadBytes(7);
+
+            var cnt = reader.ReadUInt32();
+            for (int i = 0; i < cnt; i++)
+            {
+                node.Children[i].ReadByParent = true;
+
+                var nextItemHeader = InventoryHelper.ReadNextItemEntry(reader);
+
+                reader.ReadUInt32(); // nodeId
+                var item = InventoryHelper.ReadItemData(reader);
+
+                if (!nextItemHeader.Equals(item))
+                {
+                    throw new InvalidDataException($"Expected next item to be '{nextItemHeader}' but found '{item}'");
+                }
+
+                data.Items.Add(item);
+            }
 
             node.Value = data;
         }

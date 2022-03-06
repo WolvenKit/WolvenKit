@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Save
 
     public class InventoryParser : INodeParser
     {
-        //public static string NodeName => Constants.NodeNames.INVENTORY;
+        public static string NodeName => Constants.NodeNames.INVENTORY;
 
         public void Read(BinaryReader reader, NodeEntry node)
         {
@@ -51,7 +51,9 @@ namespace WolvenKit.RED4.Save
 
             for (int i = 0; i < cnt; i++)
             {
-                ParserHelper.ReadNode(reader, node.Children[offset + i]);
+                reader.ReadUInt32(); // nodeId
+                parser.Read(reader, node.Children[offset + i]);
+
                 var item = (InventoryHelper.ItemData)node.Children[offset + i].Value;
 
                 if (!nextItemHeader.Equals(item))
