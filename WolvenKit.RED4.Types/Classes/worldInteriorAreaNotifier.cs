@@ -33,7 +33,7 @@ namespace WolvenKit.RED4.Types
 		{
 			IsEnabled = true;
 			IncludeChannels = Enums.TriggerChannel.TC_Player;
-			GameRestrictionIDs = new() { new() { Value = 131161243162 } };
+			GameRestrictionIDs = new() { 131161243162 };
 			TreatAsInterior = true;
 		}
 	}

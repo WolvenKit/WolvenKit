@@ -32,8 +32,8 @@ namespace WolvenKit.RED4.Types
 		public ChestPressControllerPS()
 		{
 			DeviceName = "LocKey#601";
-			TweakDBRecord = new() { Value = 80274358199 };
-			TweakDBDescriptionRecord = new() { Value = 129856552116 };
+			TweakDBRecord = 80274358199;
+			TweakDBDescriptionRecord = 129856552116;
 		}
 	}
 }

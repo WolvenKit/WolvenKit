@@ -64,8 +64,8 @@ namespace WolvenKit.RED4.Types
 		public questCharacterManagerCombat_EquipWeapon()
 		{
 			Equip = true;
-			WeaponID = new() { Value = 71614763877 };
-			SlotID = new() { Value = 118070326407 };
+			WeaponID = 71614763877;
+			SlotID = 118070326407;
 		}
 	}
 }

@@ -4,6 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	[REDMeta]
 	[REDClass(SerializeDefault = true)]
+	[RED("Matrix")]
 	public partial class CMatrix : RedBaseClass
 	{
 		[Ordinal(0)] 

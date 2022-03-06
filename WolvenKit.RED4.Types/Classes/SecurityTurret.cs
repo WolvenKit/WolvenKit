@@ -152,7 +152,7 @@ namespace WolvenKit.RED4.Types
 		public SecurityTurret()
 		{
 			ControllerTypeName = "SecurityTurretController";
-			DefaultSensePreset = new() { Value = 77796192748 };
+			DefaultSensePreset = 77796192748;
 			IdleSound = "idleStart";
 			IdleSoundStop = "idleStop";
 			SoundDeviceON = "activated";

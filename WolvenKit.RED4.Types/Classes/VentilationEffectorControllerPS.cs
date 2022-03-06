@@ -7,8 +7,8 @@ namespace WolvenKit.RED4.Types
 
 		public VentilationEffectorControllerPS()
 		{
-			TweakDBRecord = new() { Value = 119797652611 };
-			TweakDBDescriptionRecord = new() { Value = 169996443522 };
+			TweakDBRecord = 119797652611;
+			TweakDBDescriptionRecord = 169996443522;
 		}
 	}
 }

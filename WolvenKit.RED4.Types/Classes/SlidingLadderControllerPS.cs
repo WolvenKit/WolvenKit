@@ -24,8 +24,8 @@ namespace WolvenKit.RED4.Types
 		public SlidingLadderControllerPS()
 		{
 			DeviceName = "LocKey#2128";
-			TweakDBRecord = new() { Value = 93333720801 };
-			TweakDBDescriptionRecord = new() { Value = 144242295596 };
+			TweakDBRecord = 93333720801;
+			TweakDBDescriptionRecord = 144242295596;
 			ShouldScannerShowStatus = false;
 			IsShootable = true;
 			AnimationTime = 1.000000F;

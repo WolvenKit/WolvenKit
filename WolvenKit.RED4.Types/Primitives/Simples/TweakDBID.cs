@@ -14,20 +14,8 @@ namespace WolvenKit.RED4.Types
         public static ResolveHash ResolveHashHandler;
 
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        private string _value;
-
-        private ulong _hash;
-
-
-        // TODO: Just to support current rtti classes, will be removed in the future
-        internal ulong Value
-        {
-            set
-            {
-                _value = null;
-                _hash = value;
-            }
-        }
+        private readonly string _value;
+        private readonly ulong _hash;
 
         public TweakDBID() { }
 

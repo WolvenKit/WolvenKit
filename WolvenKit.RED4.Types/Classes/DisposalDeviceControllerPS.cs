@@ -64,8 +64,8 @@ namespace WolvenKit.RED4.Types
 		public DisposalDeviceControllerPS()
 		{
 			DeviceName = "LocKey#102";
-			TweakDBRecord = new() { Value = 95792479614 };
-			TweakDBDescriptionRecord = new() { Value = 148853104190 };
+			TweakDBRecord = 95792479614;
+			TweakDBDescriptionRecord = 148853104190;
 			ShouldScannerShowStatus = false;
 			ShouldScannerShowNetwork = false;
 			ShouldScannerShowRole = true;

@@ -24,8 +24,8 @@ namespace WolvenKit.RED4.Types
 		public VentilationAreaControllerPS()
 		{
 			DeviceName = "VentilationArea";
-			TweakDBRecord = new() { Value = 102529162810 };
-			TweakDBDescriptionRecord = new() { Value = 153160213641 };
+			TweakDBRecord = 102529162810;
+			TweakDBDescriptionRecord = 153160213641;
 			VentilationAreaSetup = new() { ActionName = "Activate" };
 		}
 	}
