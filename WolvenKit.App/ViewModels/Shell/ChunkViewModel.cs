@@ -107,7 +107,6 @@ namespace WolvenKit.ViewModels.Shell
             CalculateValue();
             CalculateDescriptor();
             CalculateIsDefault();
-            var p = PropertyCount;
 
             this.WhenAnyValue(x => x.Data).Skip(1)
                 .Subscribe((_) =>
@@ -138,12 +137,12 @@ namespace WolvenKit.ViewModels.Shell
                                 parentData = handle.GetValue();
                                 parentType = handle.GetValue().GetType();
                             }
-                            var epi = GetPropertyByRedName(parentType, propertyName);
-                            if (epi != null)
+
+                            if (parentData is RedBaseClass rbc)
                             {
-                                if (epi.GetValue((RedBaseClass)parentData) != Data)
+                                if (rbc.HasProperty(propertyName) && rbc.GetProperty(propertyName) != Data)
                                 {
-                                    epi.SetValue((RedBaseClass)parentData, Data);
+                                    rbc.SetProperty(propertyName, Data);
                                     Tab.File.SetIsDirty(true);
                                     Parent.NotifyChain("Data");
                                 }
@@ -261,7 +260,11 @@ namespace WolvenKit.ViewModels.Shell
                     }
                     else if (Data is TweakDBID tdb && PropertiesLoaded)
                     {
-                        data = Locator.Current.GetService<TweakDBService>().GetRecord(tdb);
+                        data = Locator.Current.GetService<TweakDBService>().GetFlat(tdb);
+                        if (data == null)
+                        {
+                            data = Locator.Current.GetService<TweakDBService>().GetRecord(tdb);
+                        }
                     }
                     _resolvedDataCache = data;
                     this.RaisePropertyChanged("ResolvedData");
@@ -359,21 +362,13 @@ namespace WolvenKit.ViewModels.Shell
                 {
                     if (pis.Count > i)
                     {
-                        IRedType value;
-                        if (pis[i].RedName == null)
-                        {
-                            value = (IRedType)redClass.GetType().GetProperty(pis[i].Name).GetValue(redClass, null);
-                            Properties.Add(new ChunkViewModel(value, this, pis[i].RedName));
-                        }
-                        else
-                        {
-                            value = (IRedType)pis[i].GetValue(redClass);
-                            Properties.Add(new ChunkViewModel(value, this, pis[i].RedName));
-                        }
+                        var name = !string.IsNullOrEmpty(pis[i].RedName) ? pis[i].RedName : pis[i].Name;
+
+                        Properties.Add(new ChunkViewModel(redClass.GetProperty(name), this, pis[i].RedName));
                     }
                     else
                     {
-                        Properties.Add(new ChunkViewModel(redClass.GetObjectByRedName(dps[i - pis.Count]), this, dps[i - pis.Count]));
+                        Properties.Add(new ChunkViewModel(redClass.GetProperty(dps[i - pis.Count]), this, dps[i - pis.Count]));
                     }
                 }
             }
@@ -611,10 +606,10 @@ namespace WolvenKit.ViewModels.Shell
                 {
                     return typeof(localizationPersistenceOnScreenEntry);
                 }
-                if (Data is IBrowsableType ibt && ibt.GetBrowsableType() is var browsableType && browsableType != null)
-                {
-                    return browsableType;
-                }
+                //if (Data is IBrowsableType ibt && ibt.GetBrowsableType() is var browsableType && browsableType != null)
+                //{
+                //    return browsableType;
+                //}
                 return PropertyType;
             }
         }
@@ -665,10 +660,13 @@ namespace WolvenKit.ViewModels.Shell
                     {
                         count += 1; // TODO
                     }
-                    else if (ResolvedData is TweakDBID)
+                    else if (Data is TweakDBID tdb)
                     {
                         // not actual
-                        count += 1;
+                        if (Locator.Current.GetService<TweakDBService>().Exists(tdb))
+                        {
+                            count += 1;
+                        }
                     }
                     else if (ResolvedData is IRedString str)
                     {
@@ -873,8 +871,8 @@ namespace WolvenKit.ViewModels.Shell
             }
             //else if (PropertyType.IsAssignableTo(typeof(TweakDBID)))
             //{
-            //    var value = (TweakDBID)Data;
-            //    Value = Locator.Current.GetService<TweakDBService>().GetString(value);
+            //    Value = (TweakDBID)Data.ToString();
+            //    //Value = Locator.Current.GetService<TweakDBService>().GetString(value);
             //}
             else if (PropertyType.IsAssignableTo(typeof(CBool)))
             {
@@ -1034,7 +1032,7 @@ namespace WolvenKit.ViewModels.Shell
                     var prop = GetPropertyByRedName(irc.GetType(), propName);
                     if (prop != null)
                     {
-                        Descriptor = prop.GetValue(irc).ToString();
+                        Descriptor = irc.GetProperty(prop.RedName).ToString();
                     }
                 }
             }

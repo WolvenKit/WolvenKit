@@ -8,8 +8,8 @@ namespace WolvenKit.RED4.Types
 		public HoloTableControllerPS()
 		{
 			DeviceName = "LocKey#17851";
-			TweakDBRecord = new() { Value = 76235139184 };
-			TweakDBDescriptionRecord = new() { Value = 128182655022 };
+			TweakDBRecord = 76235139184;
+			TweakDBDescriptionRecord = 128182655022;
 		}
 	}
 }

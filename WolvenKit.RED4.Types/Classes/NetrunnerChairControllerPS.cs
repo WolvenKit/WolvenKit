@@ -16,8 +16,8 @@ namespace WolvenKit.RED4.Types
 		public NetrunnerChairControllerPS()
 		{
 			DeviceName = "LocKey#17884";
-			TweakDBRecord = new() { Value = 95884201829 };
-			TweakDBDescriptionRecord = new() { Value = 149097016357 };
+			TweakDBRecord = 95884201829;
+			TweakDBDescriptionRecord = 149097016357;
 			KillDelay = 1.000000F;
 		}
 	}

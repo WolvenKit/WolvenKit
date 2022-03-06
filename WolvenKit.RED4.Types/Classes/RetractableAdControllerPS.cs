@@ -16,8 +16,8 @@ namespace WolvenKit.RED4.Types
 		public RetractableAdControllerPS()
 		{
 			DeviceName = "LocKey#196";
-			TweakDBRecord = new() { Value = 77179103736 };
-			TweakDBDescriptionRecord = new() { Value = 127230302630 };
+			TweakDBRecord = 77179103736;
+			TweakDBDescriptionRecord = 127230302630;
 		}
 	}
 }

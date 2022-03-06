@@ -1,8 +1,9 @@
 using System.Collections.ObjectModel;
 using System.Linq;
 using ReactiveUI;
+using WinCopies.Collections.DotNetFix;
 using WolvenKit.RED4.TweakDB;
-using WolvenKit.RED4.TweakDB.Types;
+using WolvenKit.RED4.Types;
 
 namespace WolvenKit.ViewModels.Documents
 {
@@ -18,15 +19,15 @@ namespace WolvenKit.ViewModels.Documents
 
     public sealed class GroupViewModel : TweakEntryViewModel
     {
-        private readonly Record _value;
+        private readonly gamedataTweakDBRecord _value;
 
-        public GroupViewModel(string name, Record value)
+        public GroupViewModel(string name, gamedataTweakDBRecord value)
         {
             Name = name;
             _value = value;
 
-            Members = new ObservableCollection<FlatViewModel>(_value.Members
-                .Select(f => new FlatViewModel(f.Key, f.Value)
+            Members = new ObservableCollection<FlatViewModel>(_value.GetPropertyNames()
+                .Select(f => new FlatViewModel(f, _value.GetProperty(f))
                 {
                     GroupName = Name
                 }));
@@ -36,25 +37,25 @@ namespace WolvenKit.ViewModels.Documents
         public ObservableCollection<FlatViewModel> Members { get; set; }
 
         public override string DisplayString => _value.ToString();
-        public override string DisplayType => _value.Type;
+        public override string DisplayType => _value.GetType().Name;
 
-        public Record GetValue() => _value;
+        public gamedataTweakDBRecord GetValue() => _value;
     }
 
     public sealed class FlatViewModel : TweakEntryViewModel
     {
-        private readonly IType _value;
+        private readonly IRedType _value;
 
-        public FlatViewModel(string name, IType value)
+        public FlatViewModel(string name, IRedType value)
         {
             Name = name;
             _value = value;
 
-            if (value is IArray array)
+            if (value is IRedArray array)
             {
-                Members = new ObservableCollection<FlatViewModel>(array.GetItems()
-                    .OfType<IType>()
-                    .Select(f => new FlatViewModel(f.Name, f)
+                Members = new ObservableCollection<FlatViewModel>(array
+                    .OfType<IRedType>()
+                    .Select(f => new FlatViewModel(RedReflection.GetRedTypeFromCSType(f.GetType()), f)
                     {
                         ArrayName = Name
                     }));
@@ -66,11 +67,11 @@ namespace WolvenKit.ViewModels.Documents
 
 
         public override string DisplayString => _value.ToString();
-        public override string DisplayType => _value.Name;
+        public override string DisplayType => RedReflection.GetRedTypeFromCSType(_value.GetType());
 
-        public bool IsArray => _value is IArray array;
+        public bool IsArray => _value is IRedArray array;
 
-        public IType GetValue() => _value;
+        public IRedType GetValue() => _value;
 
         public string GroupName { get; set; }
         public string ArrayName { get; set; }

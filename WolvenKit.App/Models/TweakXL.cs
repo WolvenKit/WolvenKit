@@ -60,8 +60,8 @@ namespace WolvenKit.Models
 
         public virtual string GetBrowsableName() => null;
 
-        //public virtual string GetBrowsableValue() => Value != null ? Value.ToString() : ID.ToString();
-        public virtual string GetBrowsableValue() => ID.ToString();
+        //public virtual string GetBrowsableValue() => Value != null ? Value.ToString() : ID.GetResolvedText();
+        public virtual string GetBrowsableValue() => ID.GetResolvedText();
 
         public virtual Type GetBrowsableType() => Type;
 
@@ -116,7 +116,7 @@ namespace WolvenKit.Models
 
     }
 
-    public class TweakXLSequence : IBrowsableType, ITweakXLItem
+    public class TweakXLSequence : IBrowsableType, ITweakXLItem, IBrowsableDictionary
     {
         public TweakDBID ID { get; set; } = new();
 
@@ -126,9 +126,42 @@ namespace WolvenKit.Models
 
         public string GetBrowsableName() => null;
 
-        public string GetBrowsableValue() => ID.ToString();
+        public string GetBrowsableValue() => ID.GetResolvedText();
 
         public Type GetBrowsableType() => typeof(CArray<>);
+
+        public IEnumerable<string> GetPropertyNames()
+        {
+            if (ID != null)
+            {
+                yield return "ID";
+            }
+            if (Type != null)
+            {
+                yield return "Type";
+            }
+            if (Items != null)
+            {
+                yield return "Items";
+            }
+        }
+
+        public object GetPropertyValue(string name)
+        {
+            if (name == "ID")
+            {
+                return ID;
+            }
+            if (name == "Type")
+            {
+                return Type;
+            }
+            if (name == "Items")
+            {
+                return Items;
+            }
+            return null;
+        }
     }
 
     public enum TweakXLAppendType

@@ -24,8 +24,8 @@ namespace WolvenKit.RED4.Types
 		public ElectricLightControllerPS()
 		{
 			DeviceName = "LocKey#42165";
-			TweakDBRecord = new() { Value = 90241852909 };
-			TweakDBDescriptionRecord = new() { Value = 142476847136 };
+			TweakDBRecord = 90241852909;
+			TweakDBDescriptionRecord = 142476847136;
 		}
 	}
 }

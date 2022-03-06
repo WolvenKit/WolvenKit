@@ -23,7 +23,7 @@ namespace WolvenKit.RED4.Types
 
 		public gamemappinsCommonVariant()
 		{
-			MappinType = new() { Value = 169957907894 };
+			MappinType = 169957907894;
 			Variant = Enums.gamedataMappinVariant.DefaultVariant;
 		}
 	}

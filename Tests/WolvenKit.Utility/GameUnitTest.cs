@@ -8,6 +8,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using ProtoBuf.Meta;
 using Serilog;
+using Splat;
 using WolvenKit.Common;
 using WolvenKit.Common.Interfaces;
 using WolvenKit.Common.Services;
@@ -118,8 +119,7 @@ namespace WolvenKit.Utility
             RuntimeTypeModel.Default[typeof(IGameArchive)].AddSubType(20, typeof(Archive));
 
 
-            //ServiceLocator.Default.RegisterType<ITweakDBService, TweakDBService>();
-            //Locator.CurrentMutable.RegisterConstant(new TweakDBService(), typeof(ITweakDBService));
+            Locator.CurrentMutable.RegisterConstant(new TweakDBService(), typeof(ITweakDBService));
             var tweakService = _host.Services.GetRequiredService<ITweakDBService>();
             tweakService.LoadDB(Path.Combine(gameDirectory.FullName, "r6", "cache", "tweakdb.bin"));
             s_bm = _host.Services.GetRequiredService<IArchiveManager>();

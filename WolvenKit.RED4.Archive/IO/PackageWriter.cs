@@ -45,46 +45,20 @@ namespace WolvenKit.RED4.Archive.IO
 
 
             var nonDefaultProperties = new List<RedReflection.ExtendedPropertyInfo>();
-
-            if (PackageWriter.IsDebug)
+            foreach (var propertyInfo in typeInfo.PropertyInfos)
             {
-                var tmp = cls.GetWrittenPropertyNames();
-                var tmp2 = new RedReflection.ExtendedPropertyInfo[tmp.Count];
-                foreach (var propertyInfo in typeInfo.PropertyInfos)
+                var value = cls.GetProperty(propertyInfo.RedName);
+                if (!typeInfo.SerializeDefault && !propertyInfo.SerializeDefault && RedReflection.IsDefault(cls.GetType(), propertyInfo, value))
                 {
-                    var value = propertyInfo.GetValue(cls);
                     if (propertyInfo.Type == typeof(CRUID) && _doubleHeaderCRUIDS.Contains(cls.GetType()))
                     {
                         _cruids.Add((CRUID)value);
                     }
 
-                    var index = tmp.IndexOf(propertyInfo.RedName);
-                    if (index != -1)
-                    {
-                        tmp2[index] = propertyInfo;
-                    }
+                    continue;
                 }
-
-                nonDefaultProperties = tmp2.ToList();
+                nonDefaultProperties.Add(propertyInfo);
             }
-            else
-            {
-                foreach (var propertyInfo in typeInfo.PropertyInfos)
-                {
-                    var value = propertyInfo.GetValue(cls);
-                    if (!typeInfo.SerializeDefault && !propertyInfo.SerializeDefault && RedReflection.IsDefault(cls.GetType(), propertyInfo, value))
-                    {
-                        if (propertyInfo.Type == typeof(CRUID) && _doubleHeaderCRUIDS.Contains(cls.GetType()))
-                        {
-                            _cruids.Add((CRUID)value);
-                        }
-
-                        continue;
-                    }
-                    nonDefaultProperties.Add(propertyInfo);
-                }
-            }
-
 
             _writer.Write((ushort)nonDefaultProperties.Count);
             var currentDataPosition = BaseStream.Position + nonDefaultProperties.Count * 8;
@@ -92,7 +66,7 @@ namespace WolvenKit.RED4.Archive.IO
 
             foreach (var propertyInfo in nonDefaultProperties)
             {
-                var value = propertyInfo.GetValue(cls);
+                var value = cls.GetProperty(propertyInfo.RedName);
                 var redTypeName = RedReflection.GetRedTypeFromCSType(propertyInfo.Type, propertyInfo.Flags.Clone());
 
                 BaseStream.Position = descStartPosition + nonDefaultProperties.IndexOf(propertyInfo) * 8;

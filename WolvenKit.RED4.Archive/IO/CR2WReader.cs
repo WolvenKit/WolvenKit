@@ -97,8 +97,7 @@ namespace WolvenKit.RED4.Archive.IO
             if (prop == null)
             {
                 value = Read(type, size - 4, flags);
-
-                RedReflection.AddDynamicProperty(cls, varName, value);
+                cls.SetProperty(varName, value);
             }
             else
             {
@@ -119,7 +118,7 @@ namespace WolvenKit.RED4.Archive.IO
                 }
 #endif
 
-                prop.SetValue(cls, value);
+                cls.SetProperty(prop.RedName, value);
             }
 
             PostProcess();

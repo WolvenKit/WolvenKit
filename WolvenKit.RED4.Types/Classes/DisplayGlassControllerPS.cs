@@ -40,8 +40,8 @@ namespace WolvenKit.RED4.Types
 		public DisplayGlassControllerPS()
 		{
 			DeviceName = "LocKey#2069";
-			TweakDBRecord = new() { Value = 86545678090 };
-			TweakDBDescriptionRecord = new() { Value = 137703617399 };
+			TweakDBRecord = 86545678090;
+			TweakDBDescriptionRecord = 137703617399;
 		}
 	}
 }

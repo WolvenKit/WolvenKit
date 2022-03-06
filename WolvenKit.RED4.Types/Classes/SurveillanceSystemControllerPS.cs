@@ -16,8 +16,8 @@ namespace WolvenKit.RED4.Types
 		public SurveillanceSystemControllerPS()
 		{
 			DeviceName = "LocKey#50770";
-			TweakDBRecord = new() { Value = 115663064038 };
-			TweakDBDescriptionRecord = new() { Value = 164957373923 };
+			TweakDBRecord = 115663064038;
+			TweakDBDescriptionRecord = 164957373923;
 		}
 	}
 }

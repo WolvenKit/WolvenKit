@@ -39,6 +39,15 @@ namespace WolvenKit.Core.Extensions
             }
         }
 
+        public static uint PeekFourCC(this Stream m_stream)
+        {
+            var startPos = m_stream.Position;
+            var fourcc = m_stream.ReadStruct<uint>();
+            m_stream.Position = startPos;
+
+            return fourcc;
+        }
+
         public static T ReadStruct<T>(this Stream m_stream, Crc32Algorithm crc32 = null) where T : struct
         {
             var size = Marshal.SizeOf<T>();

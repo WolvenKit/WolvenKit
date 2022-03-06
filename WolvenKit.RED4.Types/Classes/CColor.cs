@@ -4,6 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	[REDMeta]
 	[REDClass(SerializeDefault = true)]
+	[RED("Color")]
 	public partial class CColor : RedBaseClass
 	{
 		[Ordinal(0)] 

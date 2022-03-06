@@ -56,7 +56,7 @@
             SelectedItem="{Binding SelectedTweakDBID, Mode=TwoWay}">
             <ListBox.ItemTemplate>
                 <DataTemplate>
-                    <TextBlock Margin="2,0" Text="{Binding}" />
+                    <TextBlock Margin="2,0" Text="{Binding Path=ResolvedText}" />
                 </DataTemplate>
             </ListBox.ItemTemplate>
         </ListBox>
