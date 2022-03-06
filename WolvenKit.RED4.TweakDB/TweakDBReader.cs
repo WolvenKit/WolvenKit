@@ -76,22 +76,18 @@ public class TweakDBReader : Red4Reader
             return EFileReadErrorCodes.UnsupportedVersion;
         }
 
-        file = new TweakDB
-            {
-                Flats = ReadFlats(fileHeader.flatsOffset),
-                Records = ReadRecords(fileHeader.recordsOffset),
-                Queries = ReadQueries(fileHeader.queriesOffset),
-                GroupTags = ReadGroupTags(fileHeader.groupTagsOffset)
-            };
+        file = new TweakDB();
+
+        ReadFlats(fileHeader.flatsOffset, file.Flats);
+        ReadRecords(fileHeader.recordsOffset, file.Records);
+        file.Queries = ReadQueries(fileHeader.queriesOffset);
+        file.GroupTags = ReadGroupTags(fileHeader.groupTagsOffset);
 
         return EFileReadErrorCodes.NoError;
     }
 
-    private Dictionary<TweakDBID, IRedType> ReadFlats(int offset)
+    private void ReadFlats(int offset, FlatsPool pool)
     {
-        var result = new Dictionary<TweakDBID, IRedType>();
-
-
         Position = offset;
 
         var flatTypeCounts = new Dictionary<ulong, uint>();
@@ -121,27 +117,20 @@ public class TweakDBReader : Red4Reader
                 var keyHash = ReadTweakDBID();
                 var valueIndex = BaseReader.ReadInt32();
 
-                result.Add(keyHash, flatTypeValues[typeHash][valueIndex]);
+                pool.Add(keyHash, flatTypeValues[typeHash][valueIndex]);
             }
         }
-
-        return result;
     }
 
-    private Dictionary<TweakDBID, Type> ReadRecords(int offset)
+    private void ReadRecords(int offset, RecordsPool pool)
     {
-        var result = new Dictionary<TweakDBID, Type>();
-
-
         Position = offset;
 
         var numRecords = BaseReader.ReadInt32();
         for (int i = 0; i < numRecords; i++)
         {
-            result.Add(ReadTweakDBID(), s_recordHashes[BaseReader.ReadUInt32()]);
+            pool.Add(BaseReader.ReadUInt64(), s_recordHashes[BaseReader.ReadUInt32()]);
         }
-
-        return result;
     }
 
     private Dictionary<TweakDBID, List<TweakDBID>> ReadQueries(int offset)

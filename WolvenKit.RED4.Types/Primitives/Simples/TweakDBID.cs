@@ -94,7 +94,7 @@ namespace WolvenKit.RED4.Types
             return Equals((TweakDBID)obj);
         }
 
-        public override int GetHashCode() => HashCode.Combine(_value?.GetHashCode(), _hash.GetHashCode());
+        public override int GetHashCode() => _hash.GetHashCode();
 
         public override string ToString() => $"{GetResolvedText()} <TweakDBID 0x{_hash:X8}:0x{Length:X2} / {_hash}:{Length}>";
     }

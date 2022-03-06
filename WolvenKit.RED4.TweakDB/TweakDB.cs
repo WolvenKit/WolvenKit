@@ -1,9 +1,6 @@
 using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Runtime.InteropServices;
-using WolvenKit.Core.Extensions;
-using WolvenKit.Core.Murmur3;
+using System.Linq;
 using WolvenKit.RED4.Types;
 
 namespace WolvenKit.RED4.TweakDB
@@ -35,10 +32,12 @@ namespace WolvenKit.RED4.TweakDB
         public const uint BlobVersion = 5;
         public const uint ParserVersion = 4;
 
-        public Dictionary<TweakDBID, IRedType> Flats { get; set; }
-        public Dictionary<TweakDBID, Type> Records { get; set; }
-        public Dictionary<TweakDBID, List<TweakDBID>> Queries { get; set; }
-        public Dictionary<TweakDBID, byte> GroupTags { get; set; }
+        private Dictionary<string, Dictionary<string, IRedType>> _flatLookupCache;
+
+        public FlatsPool Flats { get; set; } = new();
+        public RecordsPool Records { get; set; } = new();
+        public Dictionary<TweakDBID, List<TweakDBID>> Queries { get; set; } = new();
+        public Dictionary<TweakDBID, byte> GroupTags { get; set; } = new();
 
 
         /// <summary>
@@ -46,7 +45,15 @@ namespace WolvenKit.RED4.TweakDB
         /// </summary>
         /// <param name="name">The flat's name.</param>
         /// <param name="value">The value.</param>
-        public void Add(string name, IRedType value) => Flats.Add(name, value);
+        public void Add(string name, IRedType value)
+        {
+            if (name.Length > byte.MaxValue)
+            {
+                throw new ArgumentException();
+            }
+
+            Flats.Add(name, value);
+        }
 
         /// <summary>
         /// Add a new record to the pool.
@@ -55,12 +62,76 @@ namespace WolvenKit.RED4.TweakDB
         /// <param name="record">The value.</param>
         public void Add(string name, gamedataTweakDBRecord record)
         {
-            foreach (var propertyName in record.GetDynamicPropertyNames())
+            var typeInfo = RedReflection.GetTypeInfo(record.GetType());
+            foreach (var propertyInfo in typeInfo.PropertyInfos)
             {
-                Flats.Add($"{name}.{propertyName}", record.GetObjectByRedName(propertyName));
+                var value = propertyInfo.GetValue(record);
+                if (!typeInfo.SerializeDefault && RedReflection.IsDefault(record.GetType(), propertyInfo, value))
+                {
+                    continue;
+                }
+
+                Add($"{name}.{propertyInfo.RedName}", (IRedType)propertyInfo.GetValue(record));
             }
 
             Records.Add(name, record.GetType());
+        }
+
+        public IRedType GetFlatValue(string path)
+        {
+            foreach (var (id, value) in Flats)
+            {
+                if (id == path)
+                {
+                    return value;
+                }
+            }
+
+            return null;
+        }
+
+        public List<TweakDBID> GetRecords() => Records.GetResolvableRecords(true);
+
+        public Type GetRecordType(string path)
+        {
+            foreach (var (id, type) in Records)
+            {
+                var resolvedName = id.GetResolvedText();
+                if (resolvedName == null)
+                {
+                    continue;
+                }
+
+                if (resolvedName == path)
+                {
+                    return type;
+                }
+            }
+
+            return null;
+        }
+
+        public gamedataTweakDBRecord GetFullRecord(string path)
+        {
+            var type = GetRecordType(path);
+            if (type == null)
+            {
+                return null;
+            }
+
+            var instance = RedTypeManager.Create(type);
+            var values = Flats.GetRecordValues(path);
+
+            var typeInfo = RedReflection.GetTypeInfo(type);
+            foreach (var propertyInfo in typeInfo.PropertyInfos)
+            {
+                if (values.ContainsKey(propertyInfo.RedName))
+                {
+                    propertyInfo.SetValue(instance, values[propertyInfo.RedName]);
+                }
+            }
+
+            return (gamedataTweakDBRecord)instance;
         }
     }
 }

@@ -59,7 +59,7 @@ public class TweakDBWriter : Red4Writer
         BaseWriter.Write(header);
     }
 
-    private void WriteFlats(Dictionary<TweakDBID, IRedType> flats)
+    private void WriteFlats(FlatsPool flats)
     {
         var flatTypeValues = new Dictionary<Type, FlatValueCache>();
         var flatIndexDict = new Dictionary<Type, Dictionary<TweakDBID, int>> ();
@@ -105,7 +105,7 @@ public class TweakDBWriter : Red4Writer
         }
     }
 
-    private void WriteRecords(Dictionary<TweakDBID, Type> tweakDbRecords)
+    private void WriteRecords(RecordsPool tweakDbRecords)
     {
         var gameDataRegex = new Regex("gamedata(.*)_Record");
 

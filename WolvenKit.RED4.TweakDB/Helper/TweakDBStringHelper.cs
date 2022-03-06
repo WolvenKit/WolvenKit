@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.IO;
+using WolvenKit.Core.Compression;
 using WolvenKit.Core.CRC;
 using WolvenKit.Core.Extensions;
 
@@ -17,10 +18,24 @@ public class TweakDBStringHelper
     public bool Load(string path)
     {
         var bytes = File.ReadAllBytes(path);
-        var buffer = RedBuffer.CreateBuffer(0, bytes);
+        using var ms = new MemoryStream(bytes);
+        return LoadFromStream(ms);
+    }
 
-        using var ms = new MemoryStream(buffer.GetBytes());
-        using var br = new BinaryReader(ms);
+    public bool LoadFromStream(Stream stream)
+    {
+        Stream internalStream;
+        if (Oodle.IsCompressed(stream))
+        {
+            Oodle.DecompressBuffer(stream, out var decompressedBytes);
+            internalStream = new MemoryStream(decompressedBytes);
+        }
+        else
+        {
+            internalStream = stream;
+        }
+
+        using var br = new BinaryReader(internalStream);
 
         var id = br.BaseStream.ReadStruct<uint>();
         if (id != Magic)

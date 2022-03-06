@@ -13,11 +13,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Classes\" />
-    <Folder Include="Enums\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\WolvenKit.Core\WolvenKit.Core.csproj" />
   </ItemGroup>
 
