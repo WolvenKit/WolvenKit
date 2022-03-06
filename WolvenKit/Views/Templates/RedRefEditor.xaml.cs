@@ -108,7 +108,7 @@ namespace WolvenKit.Views.Editors
             {
                 return "";
             }
-            if (RedRef.DepotPath.GetValue() == null && RedRef.DepotPath.GetRedHash() != 0)
+            if ((string)RedRef.DepotPath == null && RedRef.DepotPath.GetRedHash() != 0)
             {
                 return GetHashFromRedValue().ToString();
             }

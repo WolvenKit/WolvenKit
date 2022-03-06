@@ -279,9 +279,9 @@ namespace WolvenKit.ViewModels.Documents
             if (projectManager.ActiveProject != null)
             {
                 string path = null;
-                if (depotPath.GetValue() != null)
+                if ((string)depotPath != null)
                 {
-                    path = Path.Combine(projectManager.ActiveProject.ModDirectory, depotPath.GetValue());
+                    path = Path.Combine(projectManager.ActiveProject.ModDirectory, (string)depotPath);
                 }
                 else
                 {
@@ -296,7 +296,7 @@ namespace WolvenKit.ViewModels.Documents
                     {
                         using var reader = new BinaryReader(stream);
                         cr2wFile = _parser.ReadRed4File(reader);
-                        cr2wFile.MetaData.FileName = depotPath.GetValue();
+                        cr2wFile.MetaData.FileName = depotPath;
                     }
                     lock (Files)
                     {
@@ -325,8 +325,10 @@ namespace WolvenKit.ViewModels.Documents
                     fe.Extract(stream);
                     using var reader = new BinaryReader(stream);
                     cr2wFile = _parser.ReadRed4File(reader);
-                    if (depotPath.GetValue() != null)
-                        cr2wFile.MetaData.FileName = depotPath.GetValue();
+                    if ((string)depotPath != null)
+                    {
+                        cr2wFile.MetaData.FileName = depotPath;
+                    }
                 }
 
                 lock (Files)

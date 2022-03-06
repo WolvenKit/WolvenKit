@@ -12,9 +12,12 @@ public partial class inkWidget
 
     public string GetPath()
     {
-        if (GetParent() is inkWidget parent)
-            return parent.GetPath() + "/" + Name.GetValue();
-        return Name.GetValue();
+        if (GetParent() is { } parent)
+        {
+            return parent.GetPath() + "/" + Name;
+        }
+
+        return Name;
     }
 
     public inkWidget GetParent()
