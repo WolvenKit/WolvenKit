@@ -168,6 +168,7 @@ namespace WolvenKit.RED4.Types
             return false;
         }
 
+        public List<string> GetPropertyNames() => new(_properties.Keys);
         public List<string> GetDynamicPropertyNames() => new(_dynamicProperties);
 
         #endregion Properties

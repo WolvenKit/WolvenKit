@@ -122,7 +122,7 @@ namespace WolvenKit.ViewModels.Documents
             if (SelectedItem is GroupViewModel/* { IsSelected:true }*/ group)
             {
                 // check name
-                if (group.GetValue().GetDynamicPropertyNames().Contains(FlatName))
+                if (group.GetValue().GetPropertyNames().Contains(FlatName))
                 {
                     await Interactions.ShowMessageBoxAsync(
                     $"A flat with name {FlatName} is already part of this group. Please give a unique name to the item you are adding, or delete the existing item first.",
@@ -183,7 +183,7 @@ namespace WolvenKit.ViewModels.Documents
             if (SelectedItem is GroupViewModel/* { IsSelected:true }*/ group)
             {
                 // check name
-                if (group.GetValue().GetDynamicPropertyNames().Contains(FlatName))
+                if (group.GetValue().GetPropertyNames().Contains(FlatName))
                 {
                     await Interactions.ShowMessageBoxAsync(
                     $"A flat with name {FlatName} is already part of this group. Please give a unique name to the item you are adding, or delete the existing item first.",
