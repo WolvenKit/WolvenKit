@@ -293,6 +293,10 @@ namespace WolvenKit.ViewModels.Shell
             Properties.Clear();
 
             var isreadonly = false;
+            if (Parent != null)
+            {
+                isreadonly = Parent.IsReadOnly;
+            }
             var obj = Data;
             if (obj is IRedBaseHandle handle)
             {
@@ -339,11 +343,15 @@ namespace WolvenKit.ViewModels.Shell
                 obj = Locator.Current.GetService<LocKeyService>().GetEntry(locKey);
                 isreadonly = true;
             }
+
             if (obj is IRedArray ary)
             {
                 for (var i = 0; i < PropertyCount; i++)
                 {
-                    Properties.Add(new ChunkViewModel((IRedType)ary[i], this, null));
+                    Properties.Add(new ChunkViewModel((IRedType)ary[i], this, null)
+                    {
+                        IsReadOnly = isreadonly
+                    });
                 }
             }
             else if (obj is CKeyValuePair kvp)
@@ -352,11 +360,17 @@ namespace WolvenKit.ViewModels.Shell
                 {
                     if (i == 0)
                     {
-                        Properties.Add(new ChunkViewModel(kvp.Key, this, "key"));
+                        Properties.Add(new ChunkViewModel(kvp.Key, this, "key")
+                        {
+                            IsReadOnly = isreadonly
+                        });
                     }
                     else
                     {
-                        Properties.Add(new ChunkViewModel(kvp.Value, this, "value"));
+                        Properties.Add(new ChunkViewModel(kvp.Value, this, "value")
+                        {
+                            IsReadOnly = isreadonly
+                        });
                     }
                 }
             }
@@ -397,7 +411,10 @@ namespace WolvenKit.ViewModels.Shell
             {
                 for (var i = 0; i < PropertyCount; i++)
                 {
-                    Properties.Add(new ChunkViewModel(p4.Chunks[i], this, null));
+                    Properties.Add(new ChunkViewModel(p4.Chunks[i], this, null)
+                    {
+                        IsReadOnly = isreadonly
+                    });
                 }
             }
             else if (obj is SharedDataBuffer sdb)
@@ -406,7 +423,10 @@ namespace WolvenKit.ViewModels.Shell
                 {
                     for (var i = 0; i < PropertyCount; i++)
                     {
-                        Properties.Add(new ChunkViewModel(p42.Chunks[i], this, null));
+                        Properties.Add(new ChunkViewModel(p42.Chunks[i], this, null)
+                        {
+                            IsReadOnly = isreadonly
+                        });
                     }
                 }
                 if (sdb.File is CR2WFile cr2)
@@ -416,11 +436,17 @@ namespace WolvenKit.ViewModels.Shell
                     //{
                     //    properties.Add(i, new ChunkViewModel(i, chunks[i], this));
                     //}
-                    Properties.Add(new ChunkViewModel(cr2.RootChunk, this));
+                    Properties.Add(new ChunkViewModel(cr2.RootChunk, this)
+                    {
+                        IsReadOnly = isreadonly
+                    });
                 }
                 if (sdb.Data is IParseableBuffer ipb)
                 {
-                    Properties.Add(new ChunkViewModel(ipb.Data, this));
+                    Properties.Add(new ChunkViewModel(ipb.Data, this)
+                    {
+                        IsReadOnly = isreadonly
+                    });
                 }
             }
             else if (obj is DataBuffer db)
@@ -429,19 +455,28 @@ namespace WolvenKit.ViewModels.Shell
                 {
                     for (var i = 0; i < PropertyCount; i++)
                     {
-                        Properties.Add(new ChunkViewModel(p43.Chunks[i], this, null));
+                        Properties.Add(new ChunkViewModel(p43.Chunks[i], this, null)
+                        {
+                            IsReadOnly = isreadonly
+                        });
                     }
                 }
                 else if (db.Data is CR2WList cl)
                 {
                     for (var i = 0; i < PropertyCount; i++)
                     {
-                        Properties.Add(new ChunkViewModel(cl.Files[i].RootChunk, this, null));
+                        Properties.Add(new ChunkViewModel(cl.Files[i].RootChunk, this, null)
+                        {
+                            IsReadOnly = isreadonly
+                        });
                     }
                 }
                 else if (db.Data is IParseableBuffer ipb)
                 {
-                    Properties.Add(new ChunkViewModel(ipb.Data, this));
+                    Properties.Add(new ChunkViewModel(ipb.Data, this)
+                    {
+                        IsReadOnly = isreadonly
+                    });
                 }
             }
             //else if (Data is TweakXLFile)
@@ -453,21 +488,30 @@ namespace WolvenKit.ViewModels.Shell
                     var pns = ibd.GetPropertyNames();
                     foreach (var name in pns)
                     {
-                        Properties.Add(new ChunkViewModel((IRedType)ibd.GetPropertyValue(name), this, name));
+                        Properties.Add(new ChunkViewModel((IRedType)ibd.GetPropertyValue(name), this, name)
+                        {
+                            IsReadOnly = isreadonly
+                        });
                     }
                 }
                 else if (Data is IList list)
                 {
                     foreach (var thing in list)
                     {
-                        Properties.Add(new ChunkViewModel((IRedType)thing, this, null));
+                        Properties.Add(new ChunkViewModel((IRedType)thing, this, null)
+                        {
+                            IsReadOnly = isreadonly
+                        });
                     }
                 }
                 else if (Data is Dictionary<string, object> dict)
                 {
                     foreach (var (name, thing) in dict)
                     {
-                        Properties.Add(new ChunkViewModel((IRedType)thing, this, name));
+                        Properties.Add(new ChunkViewModel((IRedType)thing, this, name)
+                        {
+                            IsReadOnly = isreadonly
+                        });
                     }
                 }
                 //else
