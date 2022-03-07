@@ -1,6 +1,21 @@
 WolvenKit 8.5
 -----------------
 
+Implemented: 
+- add mlsb support
+
+Fixed:
+- fixed a bug where null curves would crash
+- Fix Linux Ooz library paths
+- fixed a bug where kraken lib would not load
+- fix linux support
+- hooks up sync flag to IResource(Async)References
+- fixed a bug where the updater would not recognize installed versions
+- fix nuget publish action
+- fixed a bug where the installer would not reinstall a plugin
+- Fix warnings on publish
+
+
 WolvenKit 8.5-rc1
 -----------------
 
