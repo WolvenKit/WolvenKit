@@ -5,9 +5,9 @@ using System.Diagnostics;
 namespace WolvenKit.RED4.Types
 {
     [RED("whandle")]
-    public class CWeakHandle<T> : IRedWeakHandle<T>, IRedNotifyObjectChanged, IEquatable<CWeakHandle<T>> where T : RedBaseClass
+    public class CWeakHandle<T> : IRedWeakHandle<T>, /*IRedNotifyObjectChanged,*/ IEquatable<CWeakHandle<T>> where T : RedBaseClass
     {
-        public event ObjectChangedEventHandler ObjectChanged;
+        //public event ObjectChangedEventHandler ObjectChanged;
 
         private T _chunk;
 
@@ -73,7 +73,7 @@ namespace WolvenKit.RED4.Types
                 return true;
             }
 
-            
+
 
             if (!Equals(Chunk, other.Chunk))
             {
