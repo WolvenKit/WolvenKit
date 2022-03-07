@@ -63,8 +63,7 @@
     <EmbeddedResource Include="Resources\WolvenKitFileDefinitions.xml" />
   </ItemGroup>
 
-    <ItemGroup>
-    <!--<ProjectReference Include="..\WolvenKit.Witcher3Formats\WolvenKit.Witcher3Formats.csproj" />-->
+  <ItemGroup>
     <ProjectReference Include="..\WolvenKit.Common\WolvenKit.Common.csproj" />
     <ProjectReference Include="..\WolvenKit.Core\WolvenKit.Core.csproj" />
     <ProjectReference Include="..\WolvenKit.Modkit\WolvenKit.Modkit.csproj" />
@@ -74,7 +73,7 @@
   <ItemGroup>
     <PackageReference Include="AsyncAwaitBestPractices.MVVM" Version="6.0.4" />
     <PackageReference Include="AvalonEdit" Version="6.1.3.50" />
-    <PackageReference Include="gpm.Installer" Version="0.2.3" />
+    <PackageReference Include="gpm.Installer" Version="0.2.4" />
     <PackageReference Include="Microsoft.Extensions.FileSystemGlobbing" Version="6.0.0" />
     <PackageReference Include="SharpZipLib" Version="1.3.3" />
     <PackageReference Include="Syncfusion.SfTreeView.WPF" Version="19.4.0.38" />
