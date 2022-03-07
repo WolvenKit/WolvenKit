@@ -8,7 +8,7 @@ namespace WolvenKit.RED4.Types
 {
     [DebuggerTypeProxy(typeof(ICollectionDebugView<>))]
     [DebuggerDisplay("Count = {Count}")]
-    public class CArrayBase<T> : IRedArray<T>, IRedCloneable, IRedNotifyObjectChanged, IEquatable<CArrayBase<T>>
+    public class CArrayBase<T> : IRedArray<T>, IRedCloneable, /*IRedNotifyObjectChanged, */IEquatable<CArrayBase<T>>
     {
         private int _maxSize = -1;
 
@@ -29,7 +29,7 @@ namespace WolvenKit.RED4.Types
             }
         }
 
-        public event ObjectChangedEventHandler ObjectChanged;
+        // public event ObjectChangedEventHandler ObjectChanged;
 
 
         private readonly List<T> _internalList;
@@ -188,7 +188,7 @@ namespace WolvenKit.RED4.Types
             //    {
             //        RemoveEventHandler(_internalList[index]);
             //    }
-            //    
+            //
             //    _internalList[index] = (T)value;
             //
             //    if (_internalList[index] != null)
@@ -203,7 +203,7 @@ namespace WolvenKit.RED4.Types
             //    }
             //}
         }
-        
+
         public T this[int index]
         {
             get => _internalList[index];

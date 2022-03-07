@@ -4,24 +4,22 @@ using System.Collections.Generic;
 using System.IO;
 using System.IO.MemoryMappedFiles;
 using System.Linq;
+using System.Text.Json;
 using System.Threading.Tasks;
-using Catel.IoC;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using WolvenKit.Core.Compression;
+using WolvenKit.Common.FNV1A;
 using WolvenKit.Common.Services;
+using WolvenKit.Core.Compression;
 using WolvenKit.Modkit.RED4;
+using WolvenKit.RED4.Archive.IO;
 using WolvenKit.RED4.CR2W;
 using WolvenKit.RED4.CR2W.Archive;
-using System.Text.Json;
-using WolvenKit.Common.FNV1A;
-using WolvenKit.RED4;
-using WolvenKit.RED4.Archive.IO;
-using WolvenKit.RED4.Types;
 
-namespace WolvenKit.MSTests
+namespace WolvenKit.Utility
 {
     [TestClass]
-    public class _DumpInfo : GameUnitTest
+    public class DumpInfo : GameUnitTest
     {
         [ClassInitialize]
         public static void SetupClass(TestContext context) => Setup(context);
@@ -29,7 +27,7 @@ namespace WolvenKit.MSTests
         [TestMethod]
         public void DumpExtensionInfo()
         {
-            var parser = ServiceLocator.Default.ResolveType<Red4ParserService>();
+            var parser = _host.Services.GetRequiredService<Red4ParserService>();
 
             var results = new Dictionary<string, ConcurrentDictionary<string, ulong>>();
             foreach (var e in s_groupedFiles)
@@ -86,8 +84,10 @@ namespace WolvenKit.MSTests
         [TestMethod]
         public void DumpMissingHashes()
         {
-            var parsers = ServiceLocator.Default.ResolveType<Red4ParserService>();
-            var _hashService = ServiceLocator.Default.ResolveType<IHashService>();
+            ArgumentNullException.ThrowIfNull(s_bm);
+
+            var parsers = _host.Services.GetRequiredService<Red4ParserService>();
+            var _hashService = _host.Services.GetRequiredService<IHashService>();
 
             var resultDir = Path.Combine(Environment.CurrentDirectory, s_testResultsDirectory);
             Directory.CreateDirectory(resultDir);
@@ -128,6 +128,11 @@ namespace WolvenKit.MSTests
 
                     foreach (var (hash, fileInfoEntry) in ar.Files)
                     {
+                        if (hash == 6507781686736237035)
+                        {
+
+                        }
+
                         hashes.Add(hash);
                         if (fileInfoEntry is FileEntry fe && fe.NameOrHash == hash.ToString())
                         {
@@ -159,13 +164,14 @@ namespace WolvenKit.MSTests
 
                 // write all used and all missing hashes
                 var info = Path.Combine(resultDir, $"_info_hashes.txt");
-                var info_json = JsonSerializer.Serialize(info_missing, new JsonSerializerOptions() {
+                var info_json = JsonSerializer.Serialize(info_missing, new JsonSerializerOptions()
+                {
                     WriteIndented = true,
                 });
                 File.WriteAllText(info, info_json);
 
                 var missinghashtxt = Path.Combine(resultDir, "missinghashes.txt");
-
+                missing = missing.OrderBy(x => x).Distinct().ToList();
                 using (var missingWriter = File.CreateText(missinghashtxt))
                 {
                     for (var i = 0; i < missing.Count; i++)
@@ -176,14 +182,26 @@ namespace WolvenKit.MSTests
                 }
 
                 var usedhashtxt = Path.Combine(resultDir, "usedhashes.txt");
-                var usedStrings = used.Select(s => _hashService.Get(s)).OrderBy(x => x);
-                using (var usedWriter = File.CreateText(usedhashtxt))
+                var usedStrings = new List<string>();
+                foreach (var hash in used)
                 {
-                    foreach (var s in usedStrings)
+                    var str = "";
+                    if (_hashService.Contains(hash))
                     {
-                        usedWriter.WriteLine(s);
+                        str = _hashService.Get(hash);
                     }
+                    else if (newHashes.ContainsKey(hash))
+                    {
+                        str = newHashes[hash];
+                    }
+                    else
+                    {
+                        continue;
+                    }
+                    usedStrings.Add(str);
                 }
+                usedStrings = usedStrings.OrderBy(x => x).Distinct().ToList();
+                File.WriteAllLines(usedhashtxt, usedStrings);
 
                 //var allhashes = _hashService.GetAllHashes().ToList();
                 //var unused = allhashes.Except(used).ToList();
@@ -221,6 +239,7 @@ namespace WolvenKit.MSTests
         [TestMethod]
         public void DumpStrings()
         {
+            ArgumentNullException.ThrowIfNull(s_bm);
             var resultDir = Path.Combine(Environment.CurrentDirectory, s_testResultsDirectory, "infodump");
             Directory.CreateDirectory(resultDir);
 
@@ -270,7 +289,7 @@ namespace WolvenKit.MSTests
                             reader.DataCollection.FileName = fileEntry.NameOrHash;
                             reader.DataCollection.Hash = fileEntry.NameHash64;
 
-                            var json = JsonSerializer.Serialize(reader.DataCollection, new JsonSerializerOptions {WriteIndented = true});
+                            var json = JsonSerializer.Serialize(reader.DataCollection, new JsonSerializerOptions { WriteIndented = true });
                             File.WriteAllText(resultPath, json);
                         }
                     }

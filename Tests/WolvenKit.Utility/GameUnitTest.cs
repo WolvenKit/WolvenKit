@@ -1,45 +1,73 @@
 using System;
-using System.Linq;
 using System.Collections.Generic;
-using System.Configuration;
 using System.IO;
-using Catel.IoC;
-using CP77.CR2W;
+using System.Linq;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using ProtoBuf.Meta;
-using Splat;
+using Serilog;
 using WolvenKit.Common;
+using WolvenKit.Common.Interfaces;
 using WolvenKit.Common.Services;
 using WolvenKit.Core.Compression;
 using WolvenKit.Core.Services;
-using WolvenKit.Modkit.RED4.RigFile;
+using WolvenKit.Modkit.RED4;
+using WolvenKit.Modkit.RED4.Tools;
 using WolvenKit.RED4.CR2W;
 using WolvenKit.RED4.CR2W.Archive;
-using WolvenKit.Common.Interfaces;
-using WolvenKit.Modkit.RED4;
-using WolvenKit.MSTests.Model;
 
-namespace WolvenKit.MSTests
+namespace WolvenKit.Utility
 {
     [TestClass]
     public class GameUnitTest
     {
-        #region Fields
-
         internal const string s_testResultsDirectory = "_CR2WTestResults";
-        internal static Dictionary<string, IEnumerable<FileEntry>> s_groupedFiles;
-        internal static IArchiveManager s_bm;
+        internal static Dictionary<string, IEnumerable<FileEntry>> s_groupedFiles = new();
+        internal static IArchiveManager? s_bm;
         internal static bool s_writeToFile;
         private const string s_gameDirectorySetting = "GameDirectory";
         private const string s_writeToFileSetting = "WriteToFile";
-        protected static IConfigurationRoot s_config;
-        public static string s_gameDirectoryPath;
+        protected static IConfigurationRoot? s_config;
+        public static string? s_gameDirectoryPath;
+        internal static IHost _host = Host.CreateDefaultBuilder()
+                .ConfigureServices((_, services) =>
+                    services
+                        .AddScoped<ILoggerService, SerilogWrapper>()
+                        .AddScoped<IProgressService<double>, ProgressService<double>>()
+                        .AddSingleton<IHashService, HashService>()
 
+                        .AddScoped<Red4ParserService>()
+                        .AddScoped<MeshTools>()
+                        .AddSingleton<IArchiveManager, ArchiveManager>()
+                        .AddSingleton<IModTools, ModTools>()
+                        )
+                .Build();
 
-        #endregion Fields
+        public GameUnitTest()
+        {
+            // logging
+            Log.Logger = new LoggerConfiguration()
+                .Enrich.FromLogContext()
+                .WriteTo.Console()
+                .CreateLogger();
 
-        #region Methods
+            // IoC
+            //_host = Host.CreateDefaultBuilder()
+            //    .ConfigureServices((_, services) =>
+            //        services
+            //            .AddScoped<ILoggerService, SerilogWrapper>()
+            //            .AddScoped<IProgressService<double>, ProgressService<double>>()
+            //            .AddSingleton<IHashService, HashService>()
+
+            //            .AddScoped<Red4ParserService>()
+            //            .AddScoped<MeshTools>()
+            //            .AddSingleton<IArchiveManager, ArchiveManager>()
+            //            .AddSingleton<IModTools, ModTools>()
+            //            )
+            //    .Build();
+        }
 
         protected static void Setup(TestContext context)
         {
@@ -65,31 +93,19 @@ namespace WolvenKit.MSTests
 
             if (string.IsNullOrEmpty(s_gameDirectoryPath))
             {
-                throw new ConfigurationErrorsException($"'{s_gameDirectorySetting}' is not configured");
+                throw new DirectoryNotFoundException($"'{s_gameDirectorySetting}' is not configured");
             }
 
             var gameDirectory = new DirectoryInfo(s_gameDirectoryPath);
             if (!gameDirectory.Exists)
             {
-                throw new ConfigurationErrorsException($"'{s_gameDirectorySetting}' is not a valid directory");
+                throw new DirectoryNotFoundException($"'{s_gameDirectorySetting}' is not a valid directory");
             }
 
             #endregion
 
             #region oodle
 
-            var gameBinDir = new DirectoryInfo(Path.Combine(gameDirectory.FullName, "bin", "x64"));
-            var oodleInfo = new FileInfo(Path.Combine(gameBinDir.FullName, "oo2ext_7_win64.dll"));
-            if (!oodleInfo.Exists)
-            {
-                Assert.Fail("Could not find oo2ext_7_win64.dll.");
-            }
-            var ass = AppDomain.CurrentDomain.BaseDirectory;
-            var appOodleFileName = Path.Combine(ass, "oo2ext_7_win64.dll");
-            if (!File.Exists(appOodleFileName))
-            {
-                oodleInfo.CopyTo(appOodleFileName);
-            }
             if (!Oodle.Load())
             {
                 Assert.Fail("Could not load oo2ext_7_win64.dll.");
@@ -100,20 +116,9 @@ namespace WolvenKit.MSTests
             //protobuf
             RuntimeTypeModel.Default[typeof(IGameArchive)].AddSubType(20, typeof(Archive));
 
-            // IoC
-            ServiceLocator.Default.RegisterInstance<ILoggerService>(new CatelLoggerService(false));
-            ServiceLocator.Default.RegisterType<IHashService, HashService>();
-            ServiceLocator.Default.RegisterType<IProgressService<double>, ProgressService<double>>();
-            ServiceLocator.Default.RegisterType<Red4ParserService>();
-            ServiceLocator.Default.RegisterType<MeshTools>();        //RIG, Cp77FileService
-            ServiceLocator.Default.RegisterType<IArchiveManager, ArchiveManager>();
-            ServiceLocator.Default.RegisterType<IModTools, ModTools>();         //Cp77FileService, ILoggerService, IProgress, IHashService, Mesh, Target
 
-            Locator.CurrentMutable.RegisterConstant(new HashService(), typeof(IHashService));
-
-
-            var hashService = ServiceLocator.Default.ResolveType<IHashService>();
-            s_bm = ServiceLocator.Default.ResolveType<IArchiveManager>();
+            //var hashService = _host.Services.GetRequiredService<IHashService>();
+            s_bm = _host.Services.GetRequiredService<IArchiveManager>();
 
             var archivedir = new DirectoryInfo(Path.Combine(gameDirectory.FullName, "archive", "pc", "content"));
             s_bm.LoadFromFolder(archivedir);
@@ -124,6 +129,5 @@ namespace WolvenKit.MSTests
             //Console.WriteLine(keystring);
         }
 
-        #endregion Methods
     }
 }

@@ -11,22 +11,19 @@ using System.IO;
 using System.Linq;
 using System.Runtime.Serialization;
 using System.Text;
-using System.Text.Json;
 using System.Threading.Tasks;
-using Catel.IoC;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using WolvenKit.Common.Conversion;
-using WolvenKit.Core.Compression;
 using WolvenKit.Core.Extensions;
+using WolvenKit.FunctionalTests.Model;
 using WolvenKit.Modkit.RED4;
-using WolvenKit.MSTests.Model;
-using WolvenKit.RED4.Archive.CR2W;
 using WolvenKit.RED4.Archive.IO;
 using WolvenKit.RED4.CR2W;
 using WolvenKit.RED4.CR2W.Archive;
 using WolvenKit.RED4.CR2W.JSON;
 
-namespace WolvenKit.MSTests
+namespace WolvenKit.FunctionalTests
 {
     [TestClass]
     public class ModkitConvertTests : GameUnitTest
@@ -453,7 +450,7 @@ namespace WolvenKit.MSTests
 
         private static void Test_Extension(string extension)
         {
-            var parsers = ServiceLocator.Default.ResolveType<Red4ParserService>();
+            var parsers = _host.Services.GetRequiredService<Red4ParserService>();
 
             var resultDir = Path.Combine(Environment.CurrentDirectory, s_testResultsDirectory);
             Directory.CreateDirectory(resultDir);
@@ -473,6 +470,7 @@ namespace WolvenKit.MSTests
             {
                 var hash = file.Key;
                 var archive = file.Archive as Archive;
+                ArgumentNullException.ThrowIfNull(archive);
 
                 try
                 {
@@ -505,14 +503,14 @@ namespace WolvenKit.MSTests
                         throw new SerializationException();
                     }
 
-                    var newFile = (CR2WFile)newdto.Data;
+                    var newFile = newdto.Data;
 
                     #endregion
 
                     #region compare
 
                     // old file
-                    var header = (originalFile as CR2WFile).MetaData;
+                    var header = originalFile.MetaData;
                     var objectsend = (int)header.ObjectsEnd;
                     var originalBytes = originalMemoryStream.ToByteArray().Take(objectsend);
 
@@ -531,41 +529,41 @@ namespace WolvenKit.MSTests
 
 
 
-//                    var originalExportStartOffset = (int)originalFile.Chunks.FirstOrDefault().GetOffset();
-//                    if (!originalBytes.Skip(160).SequenceEqual(newBytes.Skip(160)))
-//                    {
-//                        // check again skipping the tables
-//                        if (originalExportStartOffset == newExportStartOffset)
-//                        {
-//                            if (!originalBytes.Skip(originalExportStartOffset).SequenceEqual(newBytes.Skip(newExportStartOffset)))
-//                            {
-//#if WRITE
-//                                File.WriteAllBytes(Path.Combine(resultDir, $"{file.Key}.o.bin"), originalBytes.ToArray());
-//                                File.WriteAllBytes(Path.Combine(resultDir, $"{file.Key}.bin"), newBytes.ToArray());
-//#endif
-//                                throw new SerializationException("Exports not equal");
-//                            }
-//                            else
-//                            {
+                    //                    var originalExportStartOffset = (int)originalFile.Chunks.FirstOrDefault().GetOffset();
+                    //                    if (!originalBytes.Skip(160).SequenceEqual(newBytes.Skip(160)))
+                    //                    {
+                    //                        // check again skipping the tables
+                    //                        if (originalExportStartOffset == newExportStartOffset)
+                    //                        {
+                    //                            if (!originalBytes.Skip(originalExportStartOffset).SequenceEqual(newBytes.Skip(newExportStartOffset)))
+                    //                            {
+                    //#if WRITE
+                    //                                File.WriteAllBytes(Path.Combine(resultDir, $"{file.Key}.o.bin"), originalBytes.ToArray());
+                    //                                File.WriteAllBytes(Path.Combine(resultDir, $"{file.Key}.bin"), newBytes.ToArray());
+                    //#endif
+                    //                                throw new SerializationException("Exports not equal");
+                    //                            }
+                    //                            else
+                    //                            {
 
-//                            }
-//                        }
-//                        else
-//                        {
-//#if WRITE
-//                            File.WriteAllBytes(Path.Combine(resultDir, $"{file.Key}.o.bin"), originalBytes.ToArray());
-//                            File.WriteAllBytes(Path.Combine(resultDir, $"{file.Key}.bin"), newBytes.ToArray());
-//#endif
-//                            throw new SerializationException("Header not equal");
-//                        }
+                    //                            }
+                    //                        }
+                    //                        else
+                    //                        {
+                    //#if WRITE
+                    //                            File.WriteAllBytes(Path.Combine(resultDir, $"{file.Key}.o.bin"), originalBytes.ToArray());
+                    //                            File.WriteAllBytes(Path.Combine(resultDir, $"{file.Key}.bin"), newBytes.ToArray());
+                    //#endif
+                    //                            throw new SerializationException("Header not equal");
+                    //                        }
 
 
 
-//                    }
-//                    else
-//                    {
+                    //                    }
+                    //                    else
+                    //                    {
 
-//                    }
+                    //                    }
 
                     #endregion
 

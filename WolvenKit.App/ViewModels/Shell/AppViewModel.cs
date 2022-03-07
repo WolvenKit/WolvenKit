@@ -113,8 +113,9 @@ namespace WolvenKit.ViewModels.Shell
             OpenFileAsyncCommand = ReactiveCommand.CreateFromTask<FileModel, Unit>(OpenFileAsync);
             OpenRedFileAsyncCommand = ReactiveCommand.CreateFromTask<FileEntry, Unit>(OpenRedFileAsync);
 
-            PackModCommand = new RelayCommand(ExecutePackMod, CanPackMod);
-            PackInstallModCommand = new RelayCommand(ExecutePackInstallMod, CanPackInstallMod);
+            var canExecute = this.WhenAny(x => x._projectManager.ActiveProject, (p) => p != null);
+            PackModCommand = ReactiveCommand.CreateFromTask(ExecutePackMod, canExecute);
+            PackInstallModCommand = ReactiveCommand.CreateFromTask(ExecutePackInstallMod, canExecute);
             //BackupModCommand = new RelayCommand(ExecuteBackupMod, CanBackupMod);
             //PublishModCommand = new RelayCommand(ExecutePublishMod, CanPublishMod);
 
@@ -136,6 +137,13 @@ namespace WolvenKit.ViewModels.Shell
             CloseOverlayCommand = new RelayCommand(ExecuteCloseOverlay, CanCloseOverlay);
             CloseDialogCommand = new RelayCommand(ExecuteCloseDialog, CanCloseDialog);
 
+
+            OpenFileAsyncCommand.ThrownExceptions.Subscribe(ex => LogExtended(ex));
+            OpenRedFileAsyncCommand.ThrownExceptions.Subscribe(ex => LogExtended(ex));
+            PackModCommand.ThrownExceptions.Subscribe(ex => LogExtended(ex));
+            PackInstallModCommand.ThrownExceptions.Subscribe(ex => LogExtended(ex));
+            OpenProjectCommand.ThrownExceptions.Subscribe(ex => LogExtended(ex));
+
             #endregion commands
 
             UpdateTitle();
@@ -155,6 +163,7 @@ namespace WolvenKit.ViewModels.Shell
                 ImportExportToolVM,
             };
 
+
             _settingsManager
                 .WhenAnyValue(x => x.UpdateChannel)
                 .Subscribe(async x =>
@@ -165,7 +174,11 @@ namespace WolvenKit.ViewModels.Shell
                     if (!(await _autoInstallerService.CheckForUpdate())
                         .Out(out var release))
                     {
-                        _loggerService.Info($"Is update available: {release != null}");
+                        return;
+                    }
+
+                    if (release.TagName.Equals(_settingsManager.GetVersionNumber()))
+                    {
                         return;
                     }
 
@@ -714,13 +727,11 @@ namespace WolvenKit.ViewModels.Shell
             }
         }
 
-        public ICommand PackModCommand { get; private set; }
-        private bool CanPackMod() => _projectManager.ActiveProject != null;
-        private void ExecutePackMod() => _gameControllerFactory.GetController().PackProject();
+        public ReactiveCommand<Unit, Unit> PackModCommand { get; private set; }
+        private async Task ExecutePackMod() => await _gameControllerFactory.GetController().PackProject();
 
-        public ICommand PackInstallModCommand { get; private set; }
-        private bool CanPackInstallMod() => CanPackMod();
-        private void ExecutePackInstallMod() => _gameControllerFactory.GetController().PackAndInstallProject();
+        public ReactiveCommand<Unit, Unit> PackInstallModCommand { get; private set; }
+        private async Task ExecutePackInstallMod() => await _gameControllerFactory.GetController().PackAndInstallProject();
 
         //public ICommand PublishModCommand { get; private set; }
         //private bool CanPublishMod() => _projectManager.ActiveProject != null;
@@ -956,6 +967,7 @@ namespace WolvenKit.ViewModels.Shell
 
         #region methods
 
+        private void LogExtended(Exception ex) => _loggerService.Error($"Message: {ex.Message}\nSource: {ex.Source}\nStackTrace: {ex.StackTrace}");
         public void UpdateTitle()
         {
             var title = "";

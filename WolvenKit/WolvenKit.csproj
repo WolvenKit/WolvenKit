@@ -36,11 +36,11 @@
     <PackageReference Include="ControlzEx" Version="5.0.1" />
     <PackageReference Include="AdonisUI" Version="1.17.1" />
     <PackageReference Include="AdonisUI.ClassicTheme" Version="1.17.1" />
-    <PackageReference Include="Fluent.Ribbon" Version="9.0.1" />
+    <PackageReference Include="Fluent.Ribbon" Version="9.0.3" />
     <PackageReference Include="Ab3d.DXEngine.Wpf" Version="5.0.8000" />
     <PackageReference Include="Ab3d.DXEngine" Version="5.0.8000" />
     <PackageReference Include="Ab3d.PowerToys" Version="10.0.8000" />
-    <PackageReference Include="Discord.Net" Version="3.1.0" />
+    <PackageReference Include="Discord.Net" Version="3.3.2" />
     <PackageReference Include="DrawStringLineHeight" Version="1.0.0" />
     <PackageReference Include="Feather.Controls" Version="1.0.3" />
     <PackageReference Include="Feather.Core" Version="1.0.0" />
@@ -49,16 +49,16 @@
     <PackageReference Include="ReactiveUI.Events.WPF" Version="15.1.1" />
     <PackageReference Include="ReactiveUI.Fody" Version="17.1.17" />
     <PackageReference Include="ReactiveUI.WPF" Version="17.1.17" />
-    <PackageReference Include="ScottPlot.WPF" Version="4.1.29" />
-    <PackageReference Include="Splat" Version="14.1.17" />
-    <PackageReference Include="Microsoft.Extensions.Hosting" Version="6.0.0" />
+    <PackageReference Include="ScottPlot.WPF" Version="4.1.33" />
+    <PackageReference Include="Splat" Version="14.1.45" />
+    <PackageReference Include="Microsoft.Extensions.Hosting" Version="6.0.1" />
     <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="6.0.0" />
-    <PackageReference Include="Splat.Microsoft.Extensions.DependencyInjection" Version="14.1.17" />
-    <PackageReference Include="Splat.Microsoft.Extensions.Logging" Version="14.1.17" />
+    <PackageReference Include="Splat.Microsoft.Extensions.DependencyInjection" Version="14.1.45" />
+    <PackageReference Include="Splat.Microsoft.Extensions.Logging" Version="14.1.45" />
 
     <PackageReference Include="MahApps.Metro" Version="2.4.9" />
     <PackageReference Include="MahApps.Metro.IconPacks" Version="4.11.0" />
-    <PackageReference Include="Microsoft.Web.WebView2" Version="1.0.1054.31" />
+    <PackageReference Include="Microsoft.Web.WebView2" Version="1.0.1108.44" />
     <PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.39" />
     <PackageReference Include="NodeNetwork" Version="6.0.0" />
     <PackageReference Include="NodeNetworkToolkit" Version="6.0.0" />
@@ -96,11 +96,11 @@
     <PackageReference Include="SharpVectors.Reloaded" Version="1.7.7" />
     <PackageReference Include="System.Security.Permissions" Version="6.0.0" />
     <PackageReference Include="System.Windows.Interactivity.WPF" Version="2.0.20525" NoWarn="NU1701" />
-    <PackageReference Include="HandyControls" Version="3.3.10" />
+    <PackageReference Include="HandyControls" Version="3.3.11" />
     
     <PackageReference Include="WolvenKit.WPFSoundVisualizationLibNet5" Version="1.0.1" />
     
-    <PackageReference Include="WpfAnalyzers" Version="4.0.1" PrivateAssets="all">
+    <PackageReference Include="WpfAnalyzers" Version="4.0.2" PrivateAssets="all">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
     </PackageReference>
   </ItemGroup>

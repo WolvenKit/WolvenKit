@@ -184,7 +184,7 @@ namespace WolvenKit.RED4.Archive.IO
                     {
                         offset = (uint)refData.Count + position,
                         size = 8,
-                        unk1 = (reff.Item3 & 0b10) > 0
+                        sync = reff.Item3 > 0
                     });
                     refData.AddRange(BitConverter.GetBytes(reff.Item2.GetRedHash()));
                 }
@@ -194,7 +194,7 @@ namespace WolvenKit.RED4.Archive.IO
                     {
                         offset = (uint)refData.Count + position,
                         size = (byte)reff.Item2.Length,
-                        unk1 = (reff.Item3 & 0b10) > 0
+                        sync = reff.Item3 > 0
                     });
 
                     if ((string)reff.Item2 != null)

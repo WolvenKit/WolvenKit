@@ -3,7 +3,7 @@ using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using WolvenKit.Core.Murmur3;
 
-namespace WolvenKit.MSTests
+namespace WolvenKit.UnitTests
 {
     [TestClass]
     public class Murmur3Tests

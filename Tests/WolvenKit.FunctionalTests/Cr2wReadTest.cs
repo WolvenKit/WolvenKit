@@ -9,14 +9,14 @@ using System.Linq;
 using System.Text;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using WolvenKit.RED4.Archive.IO;
-using WolvenKit.MSTests.Model;
+using WolvenKit.FunctionalTests.Model;
 using WolvenKit.RED4.CR2W.Archive;
 
 #if IS_PARALLEL
 using System.Threading.Tasks;
 #endif
 
-namespace WolvenKit.MSTests
+namespace WolvenKit.FunctionalTests
 {
     [TestClass]
     public class Cr2wReadTest : GameUnitTest
@@ -442,6 +442,7 @@ namespace WolvenKit.MSTests
 
         private static IEnumerable<ReadTestResult> Read_Archive_Items(IEnumerable<FileEntry> files)
         {
+            ArgumentNullException.ThrowIfNull(s_bm);
             var results = new ConcurrentBag<ReadTestResult>();
 
             var filesGroups = files.Select((f, i) => new { Value = f, Index = i })
@@ -474,7 +475,7 @@ namespace WolvenKit.MSTests
 
                         switch (readResult)
                         {
-                            case RED4.Archive.IO.EFileReadErrorCodes.NoCr2w:
+                            case EFileReadErrorCodes.NoCr2w:
                                 results.Add(new ReadTestResult
                                 {
                                     FileEntry = file,
@@ -483,7 +484,7 @@ namespace WolvenKit.MSTests
                                 });
                                 break;
 
-                            case RED4.Archive.IO.EFileReadErrorCodes.UnsupportedVersion:
+                            case EFileReadErrorCodes.UnsupportedVersion:
                                 results.Add(new ReadTestResult
                                 {
                                     FileEntry = file,
@@ -493,7 +494,7 @@ namespace WolvenKit.MSTests
                                 });
                                 break;
 
-                            case RED4.Archive.IO.EFileReadErrorCodes.NoError:
+                            case EFileReadErrorCodes.NoError:
                                 c.MetaData.FileName = file.NameOrHash;
 
                                 var res = ReadTestResult.ReadResultType.NoError;
@@ -626,9 +627,9 @@ namespace WolvenKit.MSTests
             foreach (var r in results)
             {
                 sb.AppendLine(
-                    $"{string.Format("0x{0:X}", r.FileEntry.NameHash64)}," +
-                    $"{r.FileEntry.FileName}," +
-                    $"{r.FileEntry.Archive.Name}," +
+                    $"{string.Format("0x{0:X}", r.FileEntry?.NameHash64)}," +
+                    $"{r.FileEntry?.FileName}," +
+                    $"{r.FileEntry?.Archive.Name}," +
                     $"{r.ReadResult}," +
                     $"{r.Success}," +
                     $"{r.AdditionalBytes}," +

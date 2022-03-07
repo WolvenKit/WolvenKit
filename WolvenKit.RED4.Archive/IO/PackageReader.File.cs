@@ -148,7 +148,7 @@ namespace WolvenKit.RED4.Archive.IO
 
             var import = new PackageImport()
             {
-                Flags = (InternalEnums.EImportFlags)(r.unk1 ? 0b10 : 0b00)
+                Flags = (InternalEnums.EImportFlags)(r.sync ? 0b1 : 0b0)
             };
             if (readAsHash)
             {

@@ -11,7 +11,7 @@ namespace WolvenKit.Core.Compression
             => Kraken_Compress_Raw(buffer, buffer.Length, outputBuffer, level);
 
         #region Linux
-        [DllImport("lib/ooz", EntryPoint = "_Z17Kraken_DecompressPKhmPhm")]
+        [DllImport("lib/libooz.so", EntryPoint = "_Z17Kraken_DecompressPKhmPhm")]
         public static extern int Kraken_Decompress_Raw(
             byte[] buffer,
             long bufferSize,
@@ -19,7 +19,7 @@ namespace WolvenKit.Core.Compression
             long outputBufferSize);
 
 
-        [DllImport("lib/ooz", EntryPoint = "_Z15Kraken_CompressPhmS_i")]
+        [DllImport("lib/libooz.so", EntryPoint = "_Z15Kraken_CompressPhmS_i")]
         public static extern int Kraken_Compress_Raw(
             byte[] buffer,
             long bufferSize,
