@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
     {
         [OrdinalOverride(Before = 9)]
         [RED("placedEditorData")]
-        public CHandle<entIPlacedComponentEditorData> PlacedEditorData
+        public new CHandle<entIPlacedComponentEditorData> PlacedEditorData
         {
             get => GetPropertyValue<CHandle<entIPlacedComponentEditorData>>();
             set => SetPropertyValue<CHandle<entIPlacedComponentEditorData>>(value);

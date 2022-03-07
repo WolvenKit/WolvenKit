@@ -15,6 +15,7 @@ namespace WolvenKit.ViewModels
     public class SettingsPageViewModel : PageViewModel
     {
         private readonly AppViewModel _main;
+        private readonly ISettingsManager _settingsManager;
         private readonly ILoggerService _loggerService;
         private readonly AutoInstallerService _autoInstallerService;
 
@@ -27,8 +28,7 @@ namespace WolvenKit.ViewModels
             _autoInstallerService = autoInstallerService;
 
             _main = Locator.Current.GetService<AppViewModel>();
-
-            Settings = settingsManager;
+            _settingsManager = settingsManager;
             _loggerService = loggerService;
 
             CheckForUpdatesCommand = ReactiveCommand.CreateFromTask(CheckForUpdates);
@@ -47,7 +47,11 @@ namespace WolvenKit.ViewModels
             if (!(await _autoInstallerService.CheckForUpdate())
                 .Out(out var release))
             {
-                _loggerService.Info($"Is update available: {release != null}");
+                return;
+            }
+
+            if (release.TagName.Equals(_settingsManager.GetVersionNumber()))
+            {
                 return;
             }
 

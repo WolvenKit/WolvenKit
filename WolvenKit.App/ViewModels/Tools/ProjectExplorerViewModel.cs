@@ -50,7 +50,8 @@ namespace WolvenKit.ViewModels.Tools
         private readonly IModTools _modTools;
         private readonly IProgressService<double> _progressService;
         private readonly IGameControllerFactory _gameController;
-
+        private readonly IPluginService _pluginService;
+        private readonly ISettingsManager _settingsManager;
 
         private EditorProject ActiveMod => _projectManager.ActiveProject;
         private readonly IObservableList<FileModel> _observableList;
@@ -65,7 +66,9 @@ namespace WolvenKit.ViewModels.Tools
             IWatcherService watcherService,
             IProgressService<double> progressService,
             IModTools modTools,
-            IGameControllerFactory gameController
+            IGameControllerFactory gameController,
+            IPluginService pluginService,
+            ISettingsManager settingsManager
         ) : base(ToolTitle)
         {
             _projectManager = projectManager;
@@ -74,6 +77,8 @@ namespace WolvenKit.ViewModels.Tools
             _modTools = modTools;
             _progressService = progressService;
             _gameController = gameController;
+            _pluginService = pluginService;
+            _settingsManager = settingsManager;
 
             SideInDockedMode = DockSide.Left;
 
@@ -474,9 +479,9 @@ namespace WolvenKit.ViewModels.Tools
 
 
         public ICommand ConvertFromJsonCommand { get; private set; }
-        private bool CanConvertFromJson() =>
-            SelectedItem != null && (IsInRawFolder(SelectedItem) && SelectedItem.Extension.ToLower()
-                .Equals(ETextConvertFormat.json.ToString(), StringComparison.Ordinal));
+        private bool CanConvertFromJson() => SelectedItem != null
+            && IsInRawFolder(SelectedItem)
+            && SelectedItem.Extension.ToLower().Equals(ETextConvertFormat.json.ToString(), StringComparison.Ordinal);
         private void ExecuteConvertFromJson()
         {
             var inpath = SelectedItem.FullName;
@@ -494,13 +499,61 @@ namespace WolvenKit.ViewModels.Tools
         /// Opens selected node in asset browser.
         /// </summary>
         public ICommand OpenInAssetBrowserCommand { get; private set; }
-
         private bool CanOpenInAssetBrowser() => _projectManager.ActiveProject != null && SelectedItem != null && !SelectedItem.IsDirectory;
-
         private void ExecuteOpenInAssetBrowser()
         {
             Locator.Current.GetService<AppViewModel>().AssetBrowserVM.IsVisible = true;
             Locator.Current.GetService<AssetBrowserViewModel>().ShowFile(SelectedItem);
+        }
+
+        private static string GetSecondExtension(FileModel model) => Path.GetExtension(Path.ChangeExtension(model.FullName, "").TrimEnd('.')).TrimStart('.');
+
+        public ICommand OpenInMlsbCommand { get; private set; }
+        private bool CanOpenInMlsb() => _projectManager.ActiveProject != null
+            && SelectedItem != null
+            && !SelectedItem.IsDirectory
+            && IsInRawFolder(SelectedItem)
+            && SelectedItem.Extension.ToLower().Equals(ETextConvertFormat.json.ToString(), StringComparison.Ordinal)
+            && GetSecondExtension(SelectedItem).Equals(ERedExtension.mlsetup.ToString(), StringComparison.Ordinal)
+            && _pluginService.IsInstalled(EPlugin.mlsetupbuilder);
+        private void ExecuteOpenInMlsb()
+        {
+            if (_pluginService.TryGetInstallPath(EPlugin.mlsetupbuilder, out var path))
+            {
+                if (!Directory.Exists(path))
+                {
+                    _loggerService.Error($"Mlsetupbuilder not found: {path}");
+                    return;
+                }
+
+                var firstFolder = Directory.GetDirectories(path).FirstOrDefault();
+                if (firstFolder is null)
+                {
+                    _loggerService.Error($"Mlsetupbuilder not found: {path}");
+                    return;
+                }
+
+                var exe = Path.Combine(firstFolder, "MlsetupBuilder.exe");
+                
+                if (!File.Exists(exe))
+                {
+                    _loggerService.Error($"Mlsetupbuilder exe not found: {exe}");
+                    return;
+                }
+
+                var filepath = SelectedItem.FullName;
+                var version = _settingsManager.GetVersionNumber();
+                try
+                {
+                    var args = $"-o=\"{filepath}\" -wkit=\"{version}\"";
+                    _loggerService.Info($"executing: {Path.GetFileName(exe)} {args}");
+                    Process.Start(exe, args);
+                }
+                catch (Exception ex)
+                {
+                    _loggerService.Error(ex);
+                }
+            }
         }
 
         #endregion
@@ -624,6 +677,7 @@ namespace WolvenKit.ViewModels.Tools
             //AddAllImportsCommand = new RelayCommand(AddAllImports, CanAddAllImports);
             //ExportJsonCommand = new RelayCommand(ExecuteExportJson, CanExportJson);
             OpenInAssetBrowserCommand = new RelayCommand(ExecuteOpenInAssetBrowser, CanOpenInAssetBrowser);
+            OpenInMlsbCommand = new RelayCommand(ExecuteOpenInMlsb, CanOpenInMlsb);
         }
 
         /// <summary>
