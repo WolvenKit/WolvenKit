@@ -7,4 +7,4 @@
 ❗  MAKE SURE TO INSTALL THE PREREQUISITES : 
 
 Install the .NET 6 runtime
-https://dotnet.microsoft.com/en-us/download/dotnet/thank-you/runtime-6.0.1-windows-x64-installer
+https://dotnet.microsoft.com/en-us/download/dotnet/thank-you/runtime-desktop-6.0.2-windows-x64-installer
