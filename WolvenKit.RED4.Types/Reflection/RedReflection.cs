@@ -470,16 +470,5 @@ namespace WolvenKit.RED4.Types
                 }
             }
         }
-
-        public class PropertyList : List<ExtendedPropertyInfo>
-        {
-            public PropertyList() {}
-            public PropertyList(IEnumerable<ExtendedPropertyInfo> collection) : base(collection) { }
-
-            public new void Sort()
-            {
-
-            }
-        }
     }
 }
