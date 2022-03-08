@@ -78,7 +78,7 @@ namespace WolvenKit
                     services.AddSingleton<IViewFor<AppViewModel>, MainView>();
 
                     services.AddGpmInstaller();
-                    services.AddSingleton<IPluginService, PLuginService>();
+                    services.AddSingleton<IPluginService, PluginService>();
 
 
                     // register views

@@ -27,7 +27,6 @@ namespace WolvenKit.ViewModels
             _autoInstallerService = autoInstallerService;
 
             _main = Locator.Current.GetService<AppViewModel>();
-
             Settings = settingsManager;
             _loggerService = loggerService;
 
@@ -47,7 +46,11 @@ namespace WolvenKit.ViewModels
             if (!(await _autoInstallerService.CheckForUpdate())
                 .Out(out var release))
             {
-                _loggerService.Info($"Is update available: {release != null}");
+                return;
+            }
+
+            if (release.TagName.Equals(Settings.GetVersionNumber()))
+            {
                 return;
             }
 

@@ -175,7 +175,11 @@ namespace WolvenKit.ViewModels.Shell
                     if (!(await _autoInstallerService.CheckForUpdate())
                         .Out(out var release))
                     {
-                        _loggerService.Info($"Is update available: {release != null}");
+                        return;
+                    }
+
+                    if (release.TagName.Equals(_settingsManager.GetVersionNumber()))
+                    {
                         return;
                     }
 
