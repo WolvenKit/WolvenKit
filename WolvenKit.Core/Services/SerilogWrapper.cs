@@ -13,7 +13,7 @@ namespace WolvenKit
 
 
         public void Error(string msg) => Serilog.Log.Error(msg);
-        public void Error(Exception exception) => Serilog.Log.Error(exception.Message);
+        public void Error(Exception exception) => LogExtended(exception);
 
         public void Important(string msg) => Serilog.Log.Information(msg);
         public void Info(string msg) => Serilog.Log.Information(msg);
@@ -21,5 +21,8 @@ namespace WolvenKit
         public void Success(string msg) => Serilog.Log.Debug(msg); //TODO
 
         public void Warning(string msg) => Serilog.Log.Warning(msg);
+
+        private void LogExtended(Exception ex) => Serilog.Log.Error($"Message: {ex.Message}\nSource: {ex.Source}\nStackTrace: {ex.StackTrace}");
+
     }
 }
