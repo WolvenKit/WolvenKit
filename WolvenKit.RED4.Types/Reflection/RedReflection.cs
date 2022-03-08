@@ -311,12 +311,14 @@ namespace WolvenKit.RED4.Types
 
         public class ExtendedTypeInfo
         {
+            private readonly List<ExtendedPropertyInfo> _propertyInfos = new();
+
             public bool SerializeDefault { get; }
             public int ChildLevel { get; }
 
             public bool IsValueType { get; set; }
 
-            public List<ExtendedPropertyInfo> PropertyInfos { get; } = new();
+            public List<ExtendedPropertyInfo> PropertyInfos => new(_propertyInfos);
 
             public ExtendedTypeInfo(Type type)
             {
@@ -347,7 +349,7 @@ namespace WolvenKit.RED4.Types
 
                     if (extendedInfo.Ordinal != -1)
                     {
-                        PropertyInfos.Add(extendedInfo);
+                        _propertyInfos.Add(extendedInfo);
                     }
                     else
                     {
@@ -355,31 +357,31 @@ namespace WolvenKit.RED4.Types
                     }
                 }
 
-                PropertyInfos = PropertyInfos.OrderBy(p => p.Ordinal).ToList();
+                _propertyInfos = PropertyInfos.OrderBy(p => p.Ordinal).ToList();
                 var clone = new List<ExtendedPropertyInfo>(PropertyInfos);
                 foreach (var extendedInfo in cusProps)
                 {
                     if (extendedInfo.Before != -1)
                     {
-                        var index = PropertyInfos.IndexOf(clone[extendedInfo.Before]);
-                        PropertyInfos.Insert(index, extendedInfo);
+                        var index = _propertyInfos.IndexOf(clone[extendedInfo.Before]);
+                        _propertyInfos.Insert(index, extendedInfo);
                         continue;
                     }
 
                     if (extendedInfo.After != -1)
                     {
-                        var index = PropertyInfos.IndexOf(clone[extendedInfo.After]);
-                        PropertyInfos.Insert(index + 1, extendedInfo);
+                        var index = _propertyInfos.IndexOf(clone[extendedInfo.After]);
+                        _propertyInfos.Insert(index + 1, extendedInfo);
                         continue;
                     }
 
-                    PropertyInfos.Add(extendedInfo);
+                    _propertyInfos.Add(extendedInfo);
                 }
             }
 
             public IEnumerable<ExtendedPropertyInfo> GetWritableProperties()
             {
-                foreach (var propertyInfo in PropertyInfos)
+                foreach (var propertyInfo in _propertyInfos)
                 {
                     if (!propertyInfo.IsIgnored)
                     {
@@ -466,6 +468,17 @@ namespace WolvenKit.RED4.Types
                     SerializeDefault = redPropertyAttribute.SerializeDefault;
                     IsIgnored = redPropertyAttribute.IsIgnored;
                 }
+            }
+        }
+
+        public class PropertyList : List<ExtendedPropertyInfo>
+        {
+            public PropertyList() {}
+            public PropertyList(IEnumerable<ExtendedPropertyInfo> collection) : base(collection) { }
+
+            public new void Sort()
+            {
+
             }
         }
     }

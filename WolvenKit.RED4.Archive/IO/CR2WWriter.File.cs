@@ -497,14 +497,14 @@ namespace WolvenKit.RED4.Archive.IO
                 WriteBufferData(kvp.Value);
             }
 
-            var (stringDict, importDict) = file.GenerateStringDictionary();
+            file.GenerateStringDictionary();
             result.StringList = file.StringCacheList.ToList();
             result.ImportList = file.ImportCacheList.ToList();
 
             for (var i = 0; i < chunkInfoList.Count; i++)
             {
                 var chunkInfo = chunkInfoList[i];
-                chunkInfo.className = stringDict[chunkClassNames[i]];
+                chunkInfo.className = file.StringCacheList.IndexOf(chunkClassNames[i]);
                 chunkInfoList[i] = chunkInfo;
             }
 
@@ -535,21 +535,20 @@ namespace WolvenKit.RED4.Archive.IO
             foreach (var kvp in file.CNameRef)
             {
                 file.BaseStream.Position = kvp.Key;
-                var index = stringDict[kvp.Value];
+                var index = file.StringCacheList.IndexOf(kvp.Value);
                 file.BaseWriter.Write(index);
             }
             foreach (var kvp in file.ImportRef)
             {
                 file.BaseStream.Position = kvp.Key;
-                var index = (ushort)(importDict[kvp.Value] + 1);
+                var index = (short)(file.ImportCacheList.IndexOf(kvp.Value, _importComparer) + 1);
                 file.BaseWriter.Write(index);
             }
 
-            var bufferDict = file.BufferCacheList.ToDictionary(ReferenceEqualityComparer.Instance);
             foreach (var kvp in file.BufferRef)
             {
                 file.BaseStream.Position = kvp.Key;
-                var index = (ushort)(bufferDict[kvp.Value] + 1);
+                var index = (ushort)(file.BufferCacheList.IndexOf(kvp.Value, ReferenceEqualityComparer.Instance) + 1);
                 file.BaseWriter.Write(index);
             }
             file.BaseStream.Position = pos;
