@@ -261,15 +261,25 @@ namespace WolvenKit.Models
                 //{
                 //    tweak.Type = type.Name;
                 //}
+                var i = 0;
                 while (!parser.TryConsume<SequenceEnd>(out var _))
                 {
-                    tweak.Items.Add(ReadTweakXL(parser));
+                    tweak.Items.Add(ReadTweakXL(parser, id + "_inline" + i));
+                    i++;
                 }
                 return tweak;
             }
-            else if (parser.TryConsume<MappingStart>(out var _))
+            else if (parser.TryConsume<MappingStart>(out var ms))
             {
-                var tweak = new TweakXL();
+                TweakXL tweak;
+                if (ms.Tag == "!append")
+                {
+                    tweak = new TweakXLAppend();
+                }
+                else
+                {
+                    tweak = new TweakXL();
+                }
                 if (id != null)
                 {
                     tweak.ID = id;
@@ -329,9 +339,11 @@ namespace WolvenKit.Models
                             //{
                             //    ((TweakXLSequence)propertyValue).Type = type;
                             //}
+                            var i = 0;
                             while (!parser.TryConsume<SequenceEnd>(out var _))
                             {
-                                ((TweakXLSequence)propertyValue).Items.Add(ReadTweakXL(parser));
+                                ((TweakXLSequence)propertyValue).Items.Add(ReadTweakXL(parser, id + "_inline" + i));
+                                i++;
                             }
                         }
 
@@ -375,12 +387,18 @@ namespace WolvenKit.Models
                     //    tweak.Properties.Add(id_split[^1], ReadScalar(s).ToString());
                     //}
                     //return tweak;
+
+                    // need to check for type, and only assign value if !tweakdbid
                     var tweak = new TweakXL();
                     if (id != null)
                     {
                         tweak.ID = id;
+                        tweak.Value = (IRedType)ReadScalar(s);
                     }
-                    tweak.Value = (IRedType)ReadScalar(s);
+                    else
+                    {
+                        tweak.ID = ReadScalar(s).ToString();
+                    }
                     return tweak;
                 }
             }
