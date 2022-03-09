@@ -41,6 +41,8 @@ namespace WolvenKit.ViewModels.Dialogs
 
             CancelCommand = ReactiveCommand.Create(() => FileHandler(null));
             SyncCommand = ReactiveCommand.Create(SyncAsync);
+
+            _pluginService.Init();
         }
 
 
