@@ -25,7 +25,7 @@ jobs:
         path: .\publish
 
   console-win:
-    runs-on: ubuntu-latest
+    runs-on: windows-2022
 
     steps:
     - name: Checkout
@@ -35,8 +35,12 @@ jobs:
       with:
         dotnet-version: 6.x
 
+    - name: build
+      run: dotnet build .\WolvenKit.CLI\WolvenKit.CLI.csproj
+    - name: publish package to NuGet
+      run: dotnet nuget push .\WolvenKit.CLI\nupkg\*.nupkg --api-key ${{secrets.NUGET_KEY}} --source "https://api.nuget.org/v3/index.json" --skip-duplicate
     - name: Publish with Dotnet
-      run: dotnet publish ./WolvenKit.CLI/WolvenKit.CLI.csproj -o ./publish_cli -r win-x64 -c Release --no-self-contained
+      run: dotnet publish .\WolvenKit.CLI\WolvenKit.CLI.csproj -o .\publish_cli -r win-x64 -c Release --no-self-contained
 
     - uses: actions/upload-artifact@v2
       with:
