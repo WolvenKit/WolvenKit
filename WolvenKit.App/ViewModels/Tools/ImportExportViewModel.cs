@@ -65,6 +65,7 @@ namespace WolvenKit.ViewModels.Tools
         private readonly MeshTools _meshTools;
         private readonly ISettingsManager _settingsManager;
         private readonly IArchiveManager _archiveManager;
+        private readonly IPluginService _pluginService;
 
         /// <summary>
         /// Private NameOf Selected Item in Grid.
@@ -103,7 +104,8 @@ namespace WolvenKit.ViewModels.Tools
            ISettingsManager settingsManager,
            IModTools modTools,
            MeshTools meshTools,
-           IArchiveManager archiveManager
+           IArchiveManager archiveManager,
+           IPluginService pluginService
            ) : base(ToolTitle)
         {
             _projectManager = projectManager;
@@ -116,7 +118,7 @@ namespace WolvenKit.ViewModels.Tools
             _settingsManager = settingsManager;
             _meshTools = meshTools;
             _archiveManager = archiveManager;
-
+            _pluginService = pluginService;
             SetupToolDefaults();
             SideInDockedMode = DockSide.Tabbed;
 
@@ -629,10 +631,23 @@ namespace WolvenKit.ViewModels.Tools
                 {
                     gltfImportArgs.Archives = _archiveManager.Archives.Items.Cast<Archive>().ToList();
                 }
+
+                if (item.Properties is ReImportArgs reImportArgs)
+                {
+                    if (!_pluginService.IsInstalled(EPlugin.redmod))
+                    {
+                        _loggerService.Error("Redmod plugin needs to be installed to import animations");
+                        //return;
+                    }
+
+                    reImportArgs.Depot = proj.ModDirectory;
+                    reImportArgs.RedMod = Path.Combine(_settingsManager.GetRED4GameRootDir(), "tools", "redmod", "redmod.exe");
+                }
+
                 var settings = new GlobalImportArgs().Register(item.Properties as ImportArgs);
                 var rawDir = new DirectoryInfo(proj.RawDirectory);
                 var redrelative = new RedRelativePath(rawDir, fi.GetRelativePath(rawDir));
-                await Task.Run(() => _modTools.Import(redrelative, settings, new DirectoryInfo(proj.ModDirectory)));
+                await _modTools.Import(redrelative, settings, new DirectoryInfo(proj.ModDirectory));
             }
         }
 

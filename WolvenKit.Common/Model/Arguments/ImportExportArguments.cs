@@ -122,6 +122,7 @@ namespace WolvenKit.Common.Model.Arguments
             { typeof(GltfImportArgs), new GltfImportArgs() },
             { typeof(OpusImportArgs), new OpusImportArgs() },
             { typeof(MlmaskImportArgs), new MlmaskImportArgs() },
+            { typeof(ReImportArgs), new ReImportArgs() },
         };
 
         /// <summary>
@@ -246,6 +247,39 @@ namespace WolvenKit.Common.Model.Arguments
         /// <returns>String</returns>
         public override string ToString() => TextureGroup.ToString();
     }
+
+    /// <summary>
+    /// Re to Animset import arguments
+    /// </summary>
+    public class ReImportArgs : ImportArgs
+    {
+        [Browsable(false)]
+        public string RedMod { get; set; } = "";
+
+        [Browsable(false)]
+        public string Depot { get; set; } = "";
+
+        [Browsable(false)]
+        public string Input { get; set; } = "";
+
+        [Category("Import Settings")]
+        [Display(Name = "Animset")]
+        [Description("TBD")]
+        public string Animset { get; set; } = "";
+
+
+
+        [Category("Import Settings")]
+        [Display(Name = "Outfile")]
+        [Description("resource .animset file name to write (resource path must start with base//)")]
+        public string Output { get; set; } = "";
+
+        [Category("Import Settings")]
+        [Display(Name = "Animation to rename")]
+        [Description("optional parameter representing the old name of animation to be replaced by the new animation")]
+        public string AnimationToRename { get; set; } = "";
+    }
+
 
     /// <summary>
     /// Mesh Import Arguments

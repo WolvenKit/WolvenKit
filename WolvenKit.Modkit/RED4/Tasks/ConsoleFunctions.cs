@@ -18,7 +18,7 @@ namespace CP77Tools.Tasks
             string regex, ETextConvertFormat format);
         public void ExportTask(string[] path, string outDir, EUncookExtension? uncookext, bool? flip,
             ECookedFileFormat[] forcebuffers);
-        public void ImportTask(string[] path, string outDir, bool keep);
+        public Task ImportTask(string[] path, string outDir, bool keep);
         public int OodleTask(string path, string outpath, bool decompress, bool compress);
         public void PackTask(string[] path, string outpath);
         public void UncookTask(string[] path, string outpath, string rawOutDir,

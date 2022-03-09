@@ -16,8 +16,8 @@ namespace WolvenKit.Common.Interfaces
         //public bool ConvertCR2WToDdsStream(CR2WFile cr2w, Stream outstream, out DXGI_FORMAT texformat);
 
 
-        public bool Import(RedRelativePath rawRelative, GlobalImportArgs args, DirectoryInfo outDir = null);
-        bool ImportFolder(DirectoryInfo inDir, GlobalImportArgs args, DirectoryInfo outDir = null);
+        public Task<bool> Import(RedRelativePath rawRelative, GlobalImportArgs args, DirectoryInfo outDir = null);
+        public Task<bool> ImportFolder(DirectoryInfo inDir, GlobalImportArgs args, DirectoryInfo outDir = null);
 
 
         public bool Export(FileInfo cr2wfile, GlobalExportArgs args, DirectoryInfo basedir = null,

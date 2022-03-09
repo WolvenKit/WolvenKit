@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 using SixLabors.ImageSharp;
 using WolvenKit.Common;
 using WolvenKit.Common.DDS;
@@ -9,6 +10,7 @@ using WolvenKit.Common.Extensions;
 using WolvenKit.Common.Model;
 using WolvenKit.Common.Model.Arguments;
 using WolvenKit.Core.Extensions;
+using WolvenKit.Helpers;
 using WolvenKit.Modkit.Extensions;
 using WolvenKit.Modkit.RED4.MLMask;
 using WolvenKit.RED4;
@@ -32,7 +34,7 @@ namespace WolvenKit.Modkit.RED4
         /// <param name="outDir">can be a depotpath, or if null the parent directory of the rawfile</param>
         /// <returns></returns>
         /// <exception cref="NotImplementedException"></exception>
-        public bool Import(RedRelativePath rawRelative, GlobalImportArgs args, DirectoryInfo outDir = null)
+        public async Task<bool> Import(RedRelativePath rawRelative, GlobalImportArgs args, DirectoryInfo outDir = null)
         {
             #region checks
 
@@ -65,20 +67,34 @@ namespace WolvenKit.Modkit.RED4
                 ERawFileFormat.ttf => ImportTtf(rawRelative, outDir, args.Get<CommonImportArgs>()),
                 ERawFileFormat.wav => ImportWav(rawRelative, outDir, args.Get<OpusImportArgs>()),
                 ERawFileFormat.csv => ImportCsv(rawRelative, outDir, args),
-                ERawFileFormat.re => ImportAnims(rawRelative, outDir, args),
+                ERawFileFormat.re => await ImportAnims(rawRelative, outDir, args.Get<ReImportArgs>()),
                 _ => throw new ArgumentOutOfRangeException(),
             };
         }
 
-        private bool ImportAnims(RedRelativePath rawRelative, DirectoryInfo outDir, GlobalImportArgs args)
+        private async Task<bool> ImportAnims(RedRelativePath rawRelative, DirectoryInfo outDir, ReImportArgs importArgs)
         {
             var ext = rawRelative.Extension;
             if (Enum.TryParse(ext, true, out ERawFileFormat extAsEnum))
             {
+                var result = false;
+                var redModPath = importArgs.RedMod;
+                if (File.Exists(redModPath))
+                {
+                    importArgs.Input = rawRelative.FullPath;
+                    var args = importArgs.GetReImportArgs();
+ 
+                    _loggerService.Info($"WorkDir: {redModPath}");
+                    _loggerService.Info($"Running commandlet: {args}");
+                    result = await ProcessUtil.RunProcessAsync(redModPath, args);
+                }
+                else
+                {
+                    _loggerService.Error("redmod.exe not found");
+                }
 
-                throw new NotImplementedException();
 
-                //return true;
+                return result;
             }
 
             return false;
@@ -219,7 +235,7 @@ namespace WolvenKit.Modkit.RED4
         /// <param name="args"></param>
         /// <param name="outDir">must match the relative paths in indir!</param>
         /// <returns></returns>
-        public bool ImportFolder(DirectoryInfo inDir, GlobalImportArgs args, DirectoryInfo outDir = null)
+        public async Task<bool> ImportFolder(DirectoryInfo inDir, GlobalImportArgs args, DirectoryInfo outDir = null)
         {
             #region checks
 
@@ -257,7 +273,7 @@ namespace WolvenKit.Modkit.RED4
                 }
 
                 var redrelative = new RedRelativePath(inDir, fi.GetRelativePath(inDir));
-                if (!Import(redrelative, args, outDir))
+                if (! (await Import(redrelative, args, outDir)))
                 {
                     failsCount++;
                 }
