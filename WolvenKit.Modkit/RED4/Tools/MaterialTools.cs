@@ -477,6 +477,34 @@ namespace WolvenKit.Modkit.RED4
                                                         var dto1 = new RedFileDto(mlt);
                                                         var doc1 = RedJsonSerializer.Serialize(dto1);
                                                         File.WriteAllText(path1, doc1);
+
+                                                        // import all textures included in the mltemplate
+                                                        var mlTemplateMats = dto1.Data.RootChunk.FindType(typeof(CResourceReference<CBitmapTexture>));
+
+                                                        for (var eye = 0; eye < mlTemplateMats.Count; eye++)
+                                                        {
+                                                            var mat = (CResourceReference<CBitmapTexture>)mlTemplateMats[eye].Value;
+                                                            if (!TexturesList.Contains(mat.DepotPath))
+                                                            {
+                                                                TexturesList.Add(mat.DepotPath);
+                                                            }
+
+                                                            var hash3 = FNV1A64HashAlgorithm.HashString(mat.DepotPath);
+                                                            foreach (var arrr in archives)
+                                                            {
+                                                                if (arrr.Files.ContainsKey(hash3))
+                                                                {
+                                                                    if (!File.Exists(Path.Combine(matRepo, Path.ChangeExtension(mat.DepotPath, "." + exportArgs.Get<XbmExportArgs>().UncookExtension.ToString()))))
+                                                                    {
+                                                                        if (Directory.Exists(matRepo))
+                                                                        {
+                                                                            UncookSingle(arrr, hash3, new DirectoryInfo(matRepo), exportArgs);
+                                                                        }
+                                                                    }
+                                                                    break;
+                                                                }
+                                                            }
+                                                        }
                                                     }
 
                                                     for (var eye = 0; eye < reader.ImportsList.Count; eye++)
