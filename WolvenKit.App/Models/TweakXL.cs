@@ -494,6 +494,8 @@ public class TweakXLYamlTypeConverter : IYamlTypeConverter
     public ITweakXLItem? ReadTweakXL(IParser parser, string? id = null/*, Type? type = null*/)
     {
         var _tdbs = _tweakDBService;
+        var i = 0;
+        
         if (parser.TryConsume<SequenceStart>(out var _))
         {
             var tweak = new TweakXLSequence();
@@ -507,17 +509,26 @@ public class TweakXLYamlTypeConverter : IYamlTypeConverter
             //}
             while (!parser.TryConsume<SequenceEnd>(out var _))
             {
-                var x = ReadTweakXL(parser);
-                if (x is not null)
+                if (ReadTweakXL(parser, id + "_inline" + i) is not {} item)
                 {
-                    tweak.Items.Add(x);
+                    continue;
                 }
+                tweak.Items.Add(item);
+                i++;
             }
             return tweak;
         }
-        else if (parser.TryConsume<MappingStart>(out var _))
+        if (parser.TryConsume<MappingStart>(out var ms))
         {
-            var tweak = new TweakXL();
+            TweakXL tweak;
+            if (ms.Tag == "!append")
+            {
+                tweak = new TweakXLAppend();
+            }
+            else
+            {
+                tweak = new TweakXL();
+            }
             if (id != null)
             {
                 tweak.ID = id;
@@ -582,17 +593,20 @@ public class TweakXLYamlTypeConverter : IYamlTypeConverter
                                 ((TweakXLSequence)propertyValue).Type = type1.Name;
                             }
                         }
+
                         //if (type != null)
                         //{
                         //    ((TweakXLSequence)propertyValue).Type = type;
                         //}
                         while (!parser.TryConsume<SequenceEnd>(out var _))
                         {
-                            var item = ReadTweakXL(parser);
-                            if (item is not null)
+                            if (ReadTweakXL(parser, id + "_inline" + i) is not { } item)
                             {
-                                ((TweakXLSequence)propertyValue).Items.Add(item);
+                                continue;
                             }
+
+                            ((TweakXLSequence)propertyValue).Items.Add(item);
+                            i++;
                         }
                     }
 
