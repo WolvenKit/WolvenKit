@@ -15,7 +15,6 @@ namespace WolvenKit.ViewModels
     public class SettingsPageViewModel : PageViewModel
     {
         private readonly AppViewModel _main;
-        private readonly ISettingsManager _settingsManager;
         private readonly ILoggerService _loggerService;
         private readonly AutoInstallerService _autoInstallerService;
 
@@ -28,7 +27,7 @@ namespace WolvenKit.ViewModels
             _autoInstallerService = autoInstallerService;
 
             _main = Locator.Current.GetService<AppViewModel>();
-            _settingsManager = settingsManager;
+            Settings = settingsManager;
             _loggerService = loggerService;
 
             CheckForUpdatesCommand = ReactiveCommand.CreateFromTask(CheckForUpdates);
@@ -50,7 +49,7 @@ namespace WolvenKit.ViewModels
                 return;
             }
 
-            if (release.TagName.Equals(_settingsManager.GetVersionNumber()))
+            if (release.TagName.Equals(Settings.GetVersionNumber()))
             {
                 return;
             }
