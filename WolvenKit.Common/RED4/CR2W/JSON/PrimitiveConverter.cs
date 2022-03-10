@@ -754,10 +754,13 @@ public class SharedDataBufferConverter : JsonConverter<SharedDataBuffer>, ICusto
         {
             case "File":
             {
-                var converter = options.GetConverter(typeof(CR2WFile));
+                //var dto = RedJsonSerializer.Deserialize<RedFileDto>(json);
+
+                var converter = options.GetConverter(typeof(RedFileDto));
                 if (converter is ICustomRedConverter conv)
                 {
-                    val.File = (CR2WFile?)conv.ReadRedType(ref reader, typeof(CR2WFile), options);
+                    var obj = conv.ReadRedType(ref reader, typeof(RedFileDto), options);
+                    val.File = ((RedFileDto?)obj)?.Data;
                 }
                 else
                 {
@@ -837,7 +840,7 @@ public class SharedDataBufferConverter : JsonConverter<SharedDataBuffer>, ICusto
         if (value.File is CR2WFile file)
         {
             writer.WritePropertyName("File");
-            JsonSerializer.Serialize(writer, file, options);
+            JsonSerializer.Serialize(writer, new RedFileDto(file), options);
         }
         else if (value.Data is Package04 pkg)
         {
@@ -2615,7 +2618,7 @@ public class SemVersionConverter : JsonConverter<SemVersion>
     public override void Write(Utf8JsonWriter writer, SemVersion value, JsonSerializerOptions options) => writer.WriteStringValue(value.ToString());
 }
 
-public class RedFileDtoConverter : JsonConverter<RedFileDto>
+public class RedFileDtoConverter : JsonConverter<RedFileDto>, ICustomRedConverter
 {
     private readonly ReferenceResolver<RedBaseClass> _referenceResolver;
 
@@ -2623,6 +2626,8 @@ public class RedFileDtoConverter : JsonConverter<RedFileDto>
     {
         _referenceResolver = referenceResolver;
     }
+
+    public object? ReadRedType(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options) => Read(ref reader, typeToConvert, options);
 
     public override RedFileDto Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
     {

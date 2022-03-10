@@ -123,6 +123,7 @@
                 IsLocked="True">
                 <ToolBarTray.Style>
                     <Style BasedOn="{StaticResource ToolBarTrayBaseStyle}" TargetType="ToolBarTray">
+                        <Setter Property="Background" Value="Transparent" />
                         <Setter Property="Visibility" Value="Collapsed" />
                         <Style.Triggers>
                             <DataTrigger Binding="{Binding IsChecked, ElementName=ribbonEnabled}" Value="False">
@@ -434,6 +435,18 @@
                                     Style="{StaticResource WolvenKitToolBarButtonIcon}" />
                             </Grid>
                             <TextBlock Padding="5,0,0,0" Text="Pack &amp; Install" />
+                        </StackPanel>
+                    </Button>
+                    <Separator Margin="6" />
+                    <Button x:Name="ToolbarLaunchGameButton" Command="{Binding LaunchGameCommand}" ToolTip="Launch Game - Did You Remember To Pack &amp; Install?">
+                        <StackPanel Orientation="Horizontal">
+                            <Grid>
+                                <iconPacks:PackIconCodicons Style="{StaticResource WolvenKitToolBarButtonIcon}"
+                                Foreground="{StaticResource WolvenKitYellow}"
+                                Padding="0,0,2,2"
+                                Kind="RunAll" />
+                            </Grid>
+                            <TextBlock Text="Launch Game" Padding="5,0,0,0" />
                         </StackPanel>
                     </Button>
                     <Separator Margin="3" />
