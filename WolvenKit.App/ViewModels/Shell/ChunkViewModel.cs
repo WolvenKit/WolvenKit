@@ -75,7 +75,7 @@ namespace WolvenKit.ViewModels.Shell
         [Reactive] public string Value { get; private set; }
         [Reactive] public string Descriptor { get; private set; }
         [Reactive] public bool IsDefault { get; private set; }
-        [Reactive] public bool IsReadOnly { get; private set; }
+        [Reactive] public bool IsReadOnly { get; set; }
 
         #region Constructors
 
@@ -84,8 +84,9 @@ namespace WolvenKit.ViewModels.Shell
             Parent = parent;
         }
 
-        public ChunkViewModel(IRedType export, ChunkViewModel parent = null, string name = null, bool lazy = false)
+        public ChunkViewModel(IRedType export, ChunkViewModel parent = null, string name = null, bool lazy = false, bool isReadOnly = false)
         {
+            IsReadOnly = isReadOnly;
             Data = export;
             Parent = parent;
             propertyName = name;
@@ -165,7 +166,7 @@ namespace WolvenKit.ViewModels.Shell
             OpenChunkCommand = new DelegateCommand(_ => ExecuteOpenChunk(), _ => CanOpenChunk());
         }
 
-        public ChunkViewModel(IRedType export, RDTDataViewModel tab) : this(export)
+        public ChunkViewModel(IRedType export, RDTDataViewModel tab, bool isReadOnly = false) : this(export, isReadOnly: isReadOnly)
         {
             _tab = tab;
             IsExpanded = true;
@@ -292,11 +293,7 @@ namespace WolvenKit.ViewModels.Shell
 
             Properties.Clear();
 
-            var isreadonly = false;
-            if (Parent != null)
-            {
-                isreadonly = Parent.IsReadOnly;
-            }
+            var isreadonly = IsReadOnly;
             var obj = Data;
             if (obj is IRedBaseHandle handle)
             {
@@ -377,7 +374,10 @@ namespace WolvenKit.ViewModels.Shell
             else if (obj is inkWidgetReference iwr)
             {
                 // need to add XPath somewhere in the data structure
-                Properties.Add(new ChunkViewModel((CString)"TODO", this));
+                Properties.Add(new ChunkViewModel((CString)"TODO", this)
+                {
+                    IsReadOnly = isreadonly
+                });
             }
             else if (obj is RedBaseClass redClass)
             {

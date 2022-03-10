@@ -26,7 +26,7 @@
                         <Setter Property="FontStyle" Value="Italic" />
                     </DataTrigger>
                     <DataTrigger Binding="{Binding IsReadOnly}" Value="True">
-                        <Setter Property="Foreground" Value="{StaticResource WolvenKitTan50}" />
+                        <Setter Property="Foreground" Value="{StaticResource BorderAlt2}" />
                     </DataTrigger>
                 </Style.Triggers>
             </Style>
@@ -45,7 +45,7 @@
                                     <Setter Property="FontStyle" Value="Italic" />
                                 </DataTrigger>
                                 <DataTrigger Binding="{Binding IsReadOnly}" Value="True">
-                                    <Setter Property="Foreground" Value="{StaticResource WolvenKitTan50}" />
+                                    <Setter Property="Foreground" Value="{StaticResource BorderAlt2}" />
                                 </DataTrigger>
                             </Style.Triggers>
                         </Style>
@@ -56,7 +56,7 @@
                                     <Setter Property="FontStyle" Value="Italic" />
                                 </DataTrigger>
                                 <DataTrigger Binding="{Binding IsReadOnly}" Value="True">
-                                    <Setter Property="Foreground" Value="{StaticResource WolvenKitTan50}" />
+                                    <Setter Property="Foreground" Value="{StaticResource BorderAlt2}" />
                                 </DataTrigger>
                             </Style.Triggers>
                         </Style>
@@ -97,6 +97,9 @@
                                 <DataTrigger Binding="{Binding IsDefault}" Value="True">
                                     <Setter Property="Foreground" Value="{StaticResource BorderAlt2}" />
                                     <Setter Property="FontStyle" Value="Italic" />
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding IsReadOnly}" Value="True">
+                                    <Setter Property="Foreground" Value="{StaticResource BorderAlt2}" />
                                 </DataTrigger>
                             </Style.Triggers>
                         </Style>
@@ -276,7 +279,8 @@
                     Command="{Binding Path=PlacementTarget.Tag.DeleteItemCommand, RelativeSource={RelativeSource AncestorType=ContextMenu}}"
                     Header="Delete"
                     IsCheckable="False"
-                    Style="{StaticResource SyncfusionMenuItemStyle}">
+                    Style="{StaticResource SyncfusionMenuItemStyle}"
+                    Visibility="{Binding PlacementTarget.Tag.IsReadOnly, RelativeSource={RelativeSource AncestorType=ContextMenu}, Converter={StaticResource InvertBooleanVisibilityConverter}}">
                     <MenuItem.Icon>
                         <iconPacks:PackIconCodicons
                             Width="13"

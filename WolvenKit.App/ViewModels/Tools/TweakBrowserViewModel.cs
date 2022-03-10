@@ -107,7 +107,7 @@ namespace WolvenKit.ViewModels.Tools
                 if (_selectedTweakDBID != null)
                 {
                     SelectedRecord.Clear();
-                    SelectedRecord.Add(new ChunkViewModel(_tweakDB.GetRecord(_selectedTweakDBID), null));
+                    SelectedRecord.Add(new ChunkViewModel(_tweakDB.GetRecord(_selectedTweakDBID), null, true));
                 }
                 else
                 {
