@@ -133,6 +133,8 @@ namespace WolvenKit.ViewModels.Shell
             ShowHomePageCommand = new RelayCommand(ExecuteShowHomePage, CanShowHomePage);
             ShowSettingsCommand = new RelayCommand(ExecuteShowSettings, CanShowSettings);
 
+            LaunchGameCommand = new RelayCommand(ExecuteLaunchGame, CanLaunchGame);
+
             CloseModalCommand = new RelayCommand(ExecuteCloseModal, CanCloseModal);
             CloseOverlayCommand = new RelayCommand(ExecuteCloseOverlay, CanCloseOverlay);
             CloseDialogCommand = new RelayCommand(ExecuteCloseDialog, CanCloseDialog);
@@ -475,6 +477,31 @@ namespace WolvenKit.ViewModels.Shell
 
             _homePageViewModel.SelectedIndex = 1;
             SetActiveOverlay(_homePageViewModel);
+        }
+
+        public ICommand LaunchGameCommand { get; private set; }
+        private bool CanLaunchGame() => true;
+        private void ExecuteLaunchGame()
+        {
+            try
+            {
+                var exe = Path.GetFullPath(_settingsManager.GetRED4GameExecutablePath());
+
+                Process.Start(new ProcessStartInfo
+                {
+                    FileName = exe,
+                    ErrorDialog = true,
+                    UseShellExecute = true,
+                    WorkingDirectory = exe
+                });
+            }
+            catch (Exception ex)
+            {
+                _loggerService.Error("Launch: error launching game! Please check your executable path in Settings.");
+                _loggerService.Info($"Launch: error debug info: {ex.Message}");
+            }
+
+            _loggerService.Success("Game launching.");
         }
 
         public ICommand ShowPluginCommand { get; private set; }
