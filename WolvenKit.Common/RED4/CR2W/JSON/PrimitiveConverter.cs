@@ -2328,7 +2328,7 @@ public class RedClassConverter : JsonConverter<RedBaseClass>, ICustomRedConverte
                             val = JsonSerializer.Deserialize(ref reader, valInfo.Type, options);
                         }
 
-                        valInfo.SetValue(cls, (IRedType?)val);
+                        cls.SetProperty(valInfo.RedName, (IRedType?)val);
                     }
 
                     break;
@@ -2359,7 +2359,7 @@ public class RedClassConverter : JsonConverter<RedBaseClass>, ICustomRedConverte
         foreach (var propertyInfo in typeInfo.PropertyInfos.OrderBy(x => x.RedName))
         {
             writer.WritePropertyName(propertyInfo.RedName);
-            JsonSerializer.Serialize(writer, propertyInfo.GetValue(value), options);
+            JsonSerializer.Serialize(writer, (object)value.GetProperty(propertyInfo.RedName), options);
         }
 
         writer.WriteEndObject();

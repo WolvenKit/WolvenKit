@@ -16,8 +16,8 @@ namespace WolvenKit.RED4.Types
 		public AOEAreaControllerPS()
 		{
 			DeviceName = "LocKey#188";
-			TweakDBRecord = new() { Value = 69554440257 };
-			TweakDBDescriptionRecord = new() { Value = 121659857626 };
+			TweakDBRecord = 69554440257;
+			TweakDBDescriptionRecord = 121659857626;
 			AOEAreaSetup = new() { Duration = -1.000000F };
 		}
 	}

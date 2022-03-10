@@ -595,7 +595,7 @@ namespace WolvenKit.RED4.Types
 			LightInfoRefs = new();
 			LightColors = new() { Off = new() { Color = new() }, Red = new() { Color = new() }, Green = new() { Color = new() }, Blue = new() { Color = new() }, Yellow = new() { Color = new() }, White = new() { Color = new() } };
 			ScanFXSlotName = "laser";
-			DefaultSensePreset = new() { Value = 81335754956 };
+			DefaultSensePreset = 81335754956;
 			ElementsToHideOnTCS = new();
 			ElementsToHideOnTCSRefs = new();
 			PrevioustagKillList = new();

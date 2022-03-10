@@ -1,6 +1,8 @@
 using System;
 using System.IO;
 using System.Text;
+using Splat;
+using WolvenKit.Common.Services;
 using WolvenKit.RED4.IO;
 using WolvenKit.RED4.Types;
 using WolvenKit.RED4.Types.Exceptions;
@@ -95,8 +97,7 @@ namespace WolvenKit.RED4.Archive.IO
             if (prop == null)
             {
                 value = Read(type, size - 4, flags);
-
-                RedReflection.AddDynamicProperty(cls, varName, value);
+                cls.SetProperty(varName, value);
             }
             else
             {
@@ -117,7 +118,7 @@ namespace WolvenKit.RED4.Archive.IO
                 }
 #endif
 
-                prop.SetValue(cls, value);
+                cls.SetProperty(prop.RedName, value);
             }
 
             PostProcess();
@@ -129,6 +130,7 @@ namespace WolvenKit.RED4.Archive.IO
                 if (value is IRedBufferPointer buf)
                 {
                     buf.GetValue().ParentTypes.Add($"{cls.GetType().Name}.{varName}");
+                    buf.GetValue().Parent = cls;
                 }
 
                 if (value is IRedArray arr)
@@ -142,6 +144,17 @@ namespace WolvenKit.RED4.Archive.IO
                     }
                 }
             }
+        }
+
+        public override TweakDBID ReadTweakDBID()
+        {
+            var hash = _reader.ReadUInt64();
+            var str = Locator.Current.GetService<ITweakDBService>().GetString(hash);
+            if (str != null)
+            {
+                return str;
+            }
+            return hash;
         }
 
         public override SharedDataBuffer ReadSharedDataBuffer(uint size)

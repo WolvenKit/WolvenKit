@@ -28,7 +28,7 @@ namespace WolvenKit.ViewModels.Shell
         private readonly IArchiveManager _archiveManager;
         private readonly IModTools _modTools;
         public ISettingsManager _settingsManager { get; }
-        public readonly AppViewModel _mainViewModel;
+        public AppViewModel _mainViewModel { get; }
 
         #endregion fields
 

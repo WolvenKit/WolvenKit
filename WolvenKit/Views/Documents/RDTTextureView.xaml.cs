@@ -20,6 +20,15 @@ namespace WolvenKit.Views.Documents
         {
             InitializeComponent();
             SetupImagePreview();
+
+            this.WhenActivated(disposables =>
+            {
+                if (DataContext is RDTTextureViewModel vm)
+                {
+                    SetCurrentValue(ViewModelProperty, vm);
+                    ViewModel.Render();
+                }
+            });
         }
 
         // Image Preview

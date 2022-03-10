@@ -48,7 +48,7 @@ namespace WolvenKit.Modkit.RED4
 
             using var meshbuffer = new MemoryStream(rendblob.RenderBuffer.Buffer.GetBytes());
 
-            var meshesinfo = MeshTools.GetMeshesinfo(rendblob, cr2w);
+            var meshesinfo = MeshTools.GetMeshesinfo(rendblob, cr2w.RootChunk as CMesh);
 
             var expMeshes = MeshTools.ContainRawMesh(meshbuffer, meshesinfo, true);
 

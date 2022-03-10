@@ -83,7 +83,7 @@ namespace WolvenKit.RED4.Types
 			IsInfinite = true;
 			NumberOfLoops = 1;
 			SortPatrolPoints = true;
-			PatrolAction = new() { Value = 144011363920 };
+			PatrolAction = 144011363920;
 		}
 	}
 }

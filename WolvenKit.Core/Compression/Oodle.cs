@@ -111,6 +111,7 @@ public static class Oodle
     }
 
     public static bool IsCompressed(byte[] buf) => buf.Length >= 4 && buf[0] == 0x4B && buf[1] == 0x41 && buf[2] == 0x52 && buf[3] == 0x4B;
+    public static bool IsCompressed(Stream stream) => stream.PeekFourCC() == 0x4B52414B;
 
     public static Status CompressBuffer(byte[] rawBuf, out byte[] compBuf)
     {
@@ -139,26 +140,34 @@ public static class Oodle
         return Status.Uncompressed;
     }
 
-    public static void DecompressBuffer(byte[] compBuf, out byte[] rawBuf)
+    public static bool DecompressBuffer(byte[] compBuf, out byte[] rawBuf)
     {
         using var ms = new MemoryStream(compBuf);
-        using var br = new BinaryReader(ms);
+        return DecompressBuffer(ms, out rawBuf);
+    }
 
-        var header = br.ReadUInt32();
+    public static bool DecompressBuffer(Stream inStream, out byte[] rawBuf)
+    {
+        if (inStream is not { CanRead: true })
+        {
+            throw new ArgumentException(nameof(inStream));
+        }
+
+        var header = inStream.ReadStruct<uint>();
         if (header == KARK)
         {
-            var size = br.ReadUInt32();
+            var size = inStream.ReadStruct<uint>();
 
-            var compressedData = br.ReadBytes(compBuf.Length - 8);
+            var compressedData = new byte[inStream.Length - 8];
+            inStream.Read(compressedData, 0, compressedData.Length);
             rawBuf = new byte[size];
 
-            var r = Oodle.Decompress(compressedData, rawBuf);
+            Decompress(compressedData, rawBuf);
+            return true;
+        }
 
-        }
-        else
-        {
-            throw new Exception();
-        }
+        rawBuf = Array.Empty<byte>();
+        return false;
     }
 
     public static int Compress(byte[] inputBuffer, ref IEnumerable<byte> outputBuffer, bool useRedHeader,

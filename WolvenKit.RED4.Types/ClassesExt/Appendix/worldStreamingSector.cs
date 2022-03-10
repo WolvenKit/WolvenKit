@@ -15,9 +15,9 @@ namespace WolvenKit.RED4.Types
             set => SetPropertyValue<CInt32>(value);
         }
 
-        [RED("unk2")]
+        [RED("transforms")]
         [REDProperty(IsIgnored = true)]
-        public DataBuffer Unk2
+        public DataBuffer Transforms
         {
             get => GetPropertyValue<DataBuffer>();
             set => SetPropertyValue<DataBuffer>(value);
@@ -65,9 +65,14 @@ namespace WolvenKit.RED4.Types
 
             var innerSize = reader.BaseReader.ReadInt32();
 
-            Unk2 = reader.ReadDataBuffer();
+            Transforms = reader.ReadDataBuffer();
+            Transforms.GetValue().ParentTypes.Add("worldStreamingSector.transforms");
 
-            
+            //var ms = new MemoryStream(Transforms.Buffer.GetBytes());
+            //var bufferReader = new StreamingSectorTransformReader(ms);
+            //bufferReader.ReadBuffer(Transforms.Buffer, typeof(worldStreamingSector));
+
+
             var cnt1 = reader.BaseReader.ReadVLQInt32();
             for (int i = 0; i < cnt1; i++)
             {
@@ -96,7 +101,7 @@ namespace WolvenKit.RED4.Types
             var sizePos = writer.BaseStream.Position;
             writer.BaseWriter.Write(0);
 
-            writer.Write(Unk2);
+            writer.Write(Transforms);
 
             writer.BaseWriter.WriteVLQInt32(Handles.Count);
             foreach (var handle in Handles)

@@ -153,7 +153,7 @@ namespace WolvenKit.RED4.Types
 		{
 			ActionName = "LocKey#233";
 			VfxResource = new();
-			ThumbnailIconRecord = new() { Value = 133181765352 };
+			ThumbnailIconRecord = 133181765352;
 		}
 	}
 }

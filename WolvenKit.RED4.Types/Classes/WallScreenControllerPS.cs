@@ -15,8 +15,8 @@ namespace WolvenKit.RED4.Types
 
 		public WallScreenControllerPS()
 		{
-			TweakDBRecord = new() { Value = 78369534372 };
-			TweakDBDescriptionRecord = new() { Value = 131860853415 };
+			TweakDBRecord = 78369534372;
+			TweakDBDescriptionRecord = 131860853415;
 		}
 	}
 }

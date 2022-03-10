@@ -66,8 +66,8 @@ namespace WolvenKit.RED4.Types
 			RevealDevicesGrid = false;
 			HasNetworkBackdoor = true;
 			DeviceName = "LocKey#138";
-			TweakDBRecord = new() { Value = 84949555524 };
-			TweakDBDescriptionRecord = new() { Value = 134736165949 };
+			TweakDBRecord = 84949555524;
+			TweakDBDescriptionRecord = 134736165949;
 			HasPersonalLinkSlot = true;
 			ShouldScannerShowNetwork = false;
 			RewardNotificationIcons = new();

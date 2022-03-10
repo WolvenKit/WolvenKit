@@ -1,20 +1,20 @@
 <ResourceDictionary
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"           
-    xmlns:syncfusion="http://schemas.syncfusion.com/wpf"  
-    xmlns:shared="clr-namespace:Syncfusion.Windows.Shared;assembly=Syncfusion.Shared.WPF"
-    xmlns:sfskin ="clr-namespace:Syncfusion.SfSkinManager;assembly=Syncfusion.SfSkinManager.WPF"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:helpers="clr-namespace:WolvenKit.Functionality.Helpers"
     xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
-    xmlns:svgc="http://sharpvectors.codeplex.com/svgc/"
     xmlns:o="http://schemas.microsoft.com/winfx/2006/xaml/presentation/options"
-    xmlns:helpers="clr-namespace:WolvenKit.Functionality.Helpers">
+    xmlns:sfskin="clr-namespace:Syncfusion.SfSkinManager;assembly=Syncfusion.SfSkinManager.WPF"
+    xmlns:shared="clr-namespace:Syncfusion.Windows.Shared;assembly=Syncfusion.Shared.WPF"
+    xmlns:svgc="http://sharpvectors.codeplex.com/svgc/"
+    xmlns:syncfusion="http://schemas.syncfusion.com/wpf">
 
     <ResourceDictionary.MergedDictionaries>
         <sfskin:ResourceDictionaryProvider DictionaryName="Common" ThemeName="MaterialDark" />
         <sfskin:ResourceDictionaryProvider DictionaryName="Brushes" ThemeName="MaterialDark" />
         <ResourceDictionary Source="/Syncfusion.Themes.MaterialDark.WPF;component/DockingManager/DockingManager.xaml" />
     </ResourceDictionary.MergedDictionaries>
-    
+
     <SolidColorBrush x:Key="CustomSliderForegroundBrush" Color="#FF1E91EA" />
     <SolidColorBrush x:Key="CustomSliderBackgroundBrush" Color="#55ffffff" />
     <SolidColorBrush x:Key="CustomSliderHighlightBrush" Color="#FFEFEFEF" />
@@ -31,7 +31,7 @@
     <Color x:Key="WolvenKitYellowShadowColor">#ABA108</Color>
     <Color x:Key="WolvenKitPurpleColor">#5760B3</Color>
     <Color x:Key="WolvenKitTanColor">#D0A467</Color>
-    
+
     <SolidColorBrush x:Key="WolvenKitRed" Color="{StaticResource WolvenKitRedColor}" />
     <SolidColorBrush x:Key="WolvenKitRedShadow" Color="{StaticResource WolvenKitRedShadowColor}" />
     <SolidColorBrush x:Key="WolvenKitCyan" Color="{StaticResource WolvenKitCyanColor}" />
@@ -50,7 +50,10 @@
     <SolidColorBrush x:Key="WolvenKitPurple50" Color="#7F5760B3" />
     <SolidColorBrush x:Key="WolvenKitTan50" Color="#7FD0A467" />
 
-    <Style x:Key="WolvenKitTabControl" TargetType="{x:Type syncfusion:TabControlExt}" BasedOn="{StaticResource SyncfusionDocumentTabControlExtStyle}">
+    <Style
+        x:Key="WolvenKitTabControl"
+        BasedOn="{StaticResource SyncfusionDocumentTabControlExtStyle}"
+        TargetType="{x:Type syncfusion:TabControlExt}">
         <Setter Property="TabItemSelectedBackground" Value="{StaticResource WolvenKitRed}" />
         <Setter Property="TabItemSelectedBorderBrush" Value="{StaticResource WolvenKitRedShadow}" />
         <Setter Property="TabItemHoverBackground" Value="{StaticResource WolvenKitRedShadow}" />
@@ -59,29 +62,29 @@
         <Setter Property="TabPanelBackground" Value="{StaticResource ContentBackgroundAlt2}" />
         <Setter Property="BorderThickness" Value="0" />
 
-        <!--Setter Property="TabPanelBackground" Value="#313131" /-->
+        <!--  Setter Property="TabPanelBackground" Value="#313131" /  -->
     </Style>
 
     <Style x:Key="TextBoxTCSA" TargetType="{x:Type TextBox}">
         <Setter Property="helpers:TextBoxBehavior.TripleClickSelectAll" Value="True" />
     </Style>
-    
+
     <DrawingBrush
-            x:Key="CloudDrawingBrushMain"
-            o:Freeze="True"
-            Opacity="0.02"
-            RenderOptions.CacheInvalidationThresholdMaximum="2.0"
-            RenderOptions.CacheInvalidationThresholdMinimum="0.5"
-            RenderOptions.CachingHint="Cache"
-            Stretch="Uniform"
-            TileMode="Tile"
-            Viewport="0,0,90,90"
-            ViewportUnits="Absolute">
+        x:Key="CloudDrawingBrushMain"
+        o:Freeze="True"
+        Opacity="0.02"
+        RenderOptions.CacheInvalidationThresholdMaximum="2.0"
+        RenderOptions.CacheInvalidationThresholdMinimum="0.5"
+        RenderOptions.CachingHint="Cache"
+        Stretch="Uniform"
+        TileMode="Tile"
+        Viewport="0,0,90,90"
+        ViewportUnits="Absolute">
         <DrawingBrush.Drawing>
             <ImageDrawing
-                    o:Freeze="True"
-                    ImageSource="pack://application:,,,/Resources/Media/Images/Application/Sammy_Grayscale.png"
-                    Rect="0,0,70,80" />
+                o:Freeze="True"
+                ImageSource="pack://application:,,,/Resources/Media/Images/Application/Sammy_Grayscale.png"
+                Rect="0,0,70,80" />
         </DrawingBrush.Drawing>
     </DrawingBrush>
 
@@ -492,11 +495,23 @@
             <DataTrigger Binding="{Binding Icon, RelativeSource={RelativeSource AncestorType=UserControl}}" Value="tweak">
                 <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/tweak.svg}" />
             </DataTrigger>
+            <DataTrigger Binding="{Binding Icon, RelativeSource={RelativeSource AncestorType=UserControl}}" Value="yaml">
+                <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/tweak.svg}" />
+            </DataTrigger>
             <DataTrigger Binding="{Binding Icon, RelativeSource={RelativeSource AncestorType=UserControl}}" Value="reds">
                 <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/reds.svg}" />
             </DataTrigger>
             <DataTrigger Binding="{Binding Icon, RelativeSource={RelativeSource AncestorType=UserControl}}" Value="fbx">
                 <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/mesh.svg}" />
+            </DataTrigger>
+            <DataTrigger Binding="{Binding Icon, RelativeSource={RelativeSource AncestorType=UserControl}}" Value="streamingblock">
+                <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/streamingblock.svg}" />
+            </DataTrigger>
+            <DataTrigger Binding="{Binding Icon, RelativeSource={RelativeSource AncestorType=UserControl}}" Value="inkenginesettings">
+                <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/inkenginesettings.svg}" />
+            </DataTrigger>
+            <DataTrigger Binding="{Binding Icon, RelativeSource={RelativeSource AncestorType=UserControl}}" Value="ccstate">
+                <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/ccstate.svg}" />
             </DataTrigger>
             <DataTrigger Binding="{Binding Icon, RelativeSource={RelativeSource AncestorType=UserControl}}" Value="x">
                 <Setter Property="Source" Value="{svgc:SvgImage /Resources/Media/Images/Icons/Files/mesh.svg}" />

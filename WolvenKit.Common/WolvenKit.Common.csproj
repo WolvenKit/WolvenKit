@@ -64,10 +64,14 @@
     <None Remove="lib\vgmstream\xmp-vgmstream.dll" />
     <None Remove="Resources\missinghashes.txt" />
     <None Remove="Resources\red.kark" />
+    <None Remove="Resources\tweakdbstr.kark" />
+    <None Remove="Resources\tweakdbstr_add.kark" />
     <None Remove="Resources\unusedhashes.kark" />
     <None Remove="Resources\usedhashes.kark" />
     <EmbeddedResource Include="Resources\missinghashes.txt" />
     <EmbeddedResource Include="Resources\usedhashes.kark" />
+    <EmbeddedResource Include="Resources\tweakdbstr.kark" />
+    <EmbeddedResource Include="Resources\tweakdbstr_add.kark" />
   </ItemGroup>
 
   <ItemGroup>
@@ -145,6 +149,7 @@
   <ItemGroup>
     <ProjectReference Include="..\WolvenKit.Core\WolvenKit.Core.csproj" />
     <ProjectReference Include="..\WolvenKit.RED4.Archive\WolvenKit.RED4.Archive.csproj" />
+    <ProjectReference Include="..\WolvenKit.RED4.TweakDB\WolvenKit.RED4.TweakDB.csproj" />
     <ProjectReference Include="..\WolvenKit.RED4.Types\WolvenKit.RED4.Types.csproj" />
   </ItemGroup>
 
@@ -154,6 +159,9 @@
     </None>
     <None Update="lib\vgmstream\README.md">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Resources\tweakdb.str">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </None>
   </ItemGroup>
 

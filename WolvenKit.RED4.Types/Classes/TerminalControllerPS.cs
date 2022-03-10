@@ -80,8 +80,8 @@ namespace WolvenKit.RED4.Types
 		public TerminalControllerPS()
 		{
 			DeviceName = "LocKey#112";
-			TweakDBRecord = new() { Value = 72052599123 };
-			TweakDBDescriptionRecord = new() { Value = 123011726280 };
+			TweakDBRecord = 72052599123;
+			TweakDBDescriptionRecord = 123011726280;
 			TerminalSetup = new() { MinClearance = 1, MaxClearance = 10, ShouldForceVirtualSystem = true };
 			SpawnedSystems = new();
 			DefaultGlitchVideoPath = new();

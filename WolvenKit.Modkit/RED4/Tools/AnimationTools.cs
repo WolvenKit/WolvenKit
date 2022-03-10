@@ -6,6 +6,7 @@ using WolvenKit.Common.FNV1A;
 using WolvenKit.Modkit.RED4.Animation;
 using WolvenKit.Modkit.RED4.GeneralStructs;
 using WolvenKit.Modkit.RED4.RigFile;
+using WolvenKit.RED4.Archive.CR2W;
 using WolvenKit.RED4.CR2W.Archive;
 using WolvenKit.RED4.Types;
 
@@ -15,15 +16,23 @@ namespace WolvenKit.Modkit.RED4
     {
         public bool ExportAnim(Stream animStream, List<Archive> archives, FileInfo outfile, bool isGLBinary = true)
         {
-            var cr2w = _wolvenkitFileService.ReadRed4File(animStream);
+            var animsFile = _wolvenkitFileService.ReadRed4File(animStream);
+            if (animsFile == null || animsFile.RootChunk is not animAnimSet anims)
+            {
+                return false;
+            }
+            return ExportAnim(animsFile, archives, outfile, isGLBinary);
+        }
 
-            if (cr2w == null || cr2w.RootChunk is not animAnimSet blob)
+        public bool ExportAnim(CR2WFile animsFile, List<Archive> archives, FileInfo outfile, bool isGLBinary = true)
+        {
+            if (animsFile == null || animsFile.RootChunk is not animAnimSet anims)
             {
                 return false;
             }
 
             var animDataBuffers = new List<MemoryStream>();
-            foreach (var chk in blob.AnimationDataChunks)
+            foreach (var chk in anims.AnimationDataChunks)
             {
                 var ms = new MemoryStream();
                 ms.Write(chk.Buffer.Buffer.GetBytes());
@@ -31,81 +40,22 @@ namespace WolvenKit.Modkit.RED4
                 animDataBuffers.Add(ms);
             }
 
-            var Rig = new RawArmature();
-            var hash = FNV1A64HashAlgorithm.HashString(blob.Rig.DepotPath);
+            CR2WFile rigFile = null;
+            var hash = FNV1A64HashAlgorithm.HashString(anims.Rig.DepotPath);
             foreach (var ar in archives)
             {
                 if (ar.Files.ContainsKey(hash))
                 {
                     var ms = new MemoryStream();
                     ModTools.ExtractSingleToStream(ar, hash, ms);
-                    Rig = RIG.ProcessRig(_wolvenkitFileService.ReadRed4File(ms));
+                    rigFile = _wolvenkitFileService.ReadRed4File(ms);
                     break;
                 }
             }
 
-            if (Rig is null)
-            {
-                return false;
-            }
-
-            if (Rig.BoneCount < 1)
-            {
-                return false;
-            }
-
             var model = ModelRoot.CreateModel();
-            var skin = model.CreateSkin();
-            skin.BindJoints(RIG.ExportNodes(ref model, Rig).Values.ToArray());
+            GetAnimation(animsFile, rigFile, ref model);
 
-            for (var i = 0; i < blob.Animations.Count; i++)
-            {
-                var setEntry = blob.Animations[i].Chunk;
-                var animAnimDes = setEntry.Animation.Chunk;
-                if (animAnimDes.AnimationType.Value != Enums.animAnimationType.Normal)
-                {
-                    continue;
-                }
-
-                if (animAnimDes.AnimBuffer.Chunk is animAnimationBufferSimd)
-                {
-                    var animBuff = (animAnimDes.AnimBuffer.Chunk as animAnimationBufferSimd);
-                    MemoryStream defferedBuffer;
-                    if (animBuff.InplaceCompressedBuffer != null)
-                    {
-                        defferedBuffer = new MemoryStream(animBuff.InplaceCompressedBuffer.Buffer.GetBytes());
-                    }
-                    else
-                    {
-                        defferedBuffer = new MemoryStream(animBuff.DefferedBuffer.Buffer.GetBytes());
-                    }
-                    defferedBuffer.Seek(0, SeekOrigin.Begin);
-                    SIMD.AddAnimationSIMD(ref model, animBuff, animAnimDes.Name, defferedBuffer, animAnimDes);
-                }
-                else if (animAnimDes.AnimBuffer.Chunk is animAnimationBufferCompressed)
-                {
-                    var animBuff = (animAnimDes.AnimBuffer.Chunk as animAnimationBufferCompressed);
-                    var defferedBuffer = new MemoryStream();
-                    if (animBuff.InplaceCompressedBuffer != null)
-                    {
-                        defferedBuffer = new MemoryStream(animBuff.InplaceCompressedBuffer.Buffer.GetBytes());
-                    }
-                    else if (animBuff.DataAddress != null)
-                    {
-                        var dataAddr = animBuff.DataAddress;
-                        var bytes = new byte[dataAddr.ZeInBytes];
-                        animDataBuffers[(int)((uint)dataAddr.UnkIndex)].Seek(dataAddr.FsetInBytes, SeekOrigin.Begin);
-                        animDataBuffers[(int)((uint)dataAddr.UnkIndex)].Read(bytes, 0, (int)((uint)dataAddr.ZeInBytes));
-                        defferedBuffer = new MemoryStream(bytes);
-                    }
-                    else if (animBuff.DefferedBuffer.Buffer.MemSize > 0)
-                    {
-                        defferedBuffer.Write(animBuff.DefferedBuffer.Buffer.GetBytes());
-                    }
-                    defferedBuffer.Seek(0, SeekOrigin.Begin);
-                    SPLINE.AddAnimationSpline(ref model, animBuff, animAnimDes.Name, defferedBuffer, animAnimDes);
-                }
-            }
             if (isGLBinary)
             {
                 model.SaveGLB(outfile.FullName);
@@ -115,6 +65,52 @@ namespace WolvenKit.Modkit.RED4
                 model.SaveGLTF(outfile.FullName);
             }
 
+            return true;
+        }
+
+        public static bool GetAnimation(CR2WFile animsFile, CR2WFile rigFile, ref ModelRoot model, bool includeRig = true)
+        {
+
+            if (animsFile == null || animsFile.RootChunk is not animAnimSet anims)
+            {
+                return false;
+            }
+
+            if (includeRig)
+            {
+                var rig = RIG.ProcessRig(rigFile);
+                if (rig is null || rig.BoneCount < 1)
+                {
+                    return false;
+                }
+                var skin = model.CreateSkin();
+                skin.BindJoints(RIG.ExportNodes(ref model, rig).Values.ToArray());
+            }
+
+            for (var i = 0; i < anims.Animations.Count; i++)
+            {
+                var setEntry = anims.Animations[i].Chunk;
+                var animAnimDes = setEntry.Animation.Chunk;
+
+                if (animAnimDes.AnimBuffer.Chunk is animAnimationBufferSimd animBuffSimd)
+                {
+                    MemoryStream defferedBuffer;
+                    if (animBuffSimd.InplaceCompressedBuffer != null)
+                    {
+                        defferedBuffer = new MemoryStream(animBuffSimd.InplaceCompressedBuffer.Buffer.GetBytes());
+                    }
+                    else
+                    {
+                        defferedBuffer = new MemoryStream(animBuffSimd.DefferedBuffer.Buffer.GetBytes());
+                    }
+                    defferedBuffer.Seek(0, SeekOrigin.Begin);
+                    SIMD.AddAnimationSIMD(ref model, animBuffSimd, animAnimDes.Name, defferedBuffer, animAnimDes);
+                }
+                else if (animAnimDes.AnimBuffer.Chunk is animAnimationBufferCompressed)
+                {
+                    CompressedBuffer.AddAnimation(ref model, animAnimDes);
+                }
+            }
             return true;
         }
     }

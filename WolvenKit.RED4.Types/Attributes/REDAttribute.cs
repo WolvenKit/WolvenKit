@@ -23,7 +23,7 @@ namespace WolvenKit.RED4.Types
         /// <param name="flags">
         /// Values needed for types such as <see cref="TDynArray{T}"/>, <see cref="Static{T}"/>, or <see cref="Array"/>.
         /// </param>
-        internal REDAttribute(params int[] flags)
+        public REDAttribute(params int[] flags)
         {
             Flags = flags;
         }
@@ -37,7 +37,7 @@ namespace WolvenKit.RED4.Types
         /// <param name="flags">
         /// Values needed for types such as <see cref="TDynArray{T}"/>, <see cref="Static{T}"/>, or <see cref="Array"/>.
         /// </param>
-        internal REDAttribute(string name, params int[] flags)
+        public REDAttribute(string name, params int[] flags)
         {
             Name = name;
             Flags = flags;

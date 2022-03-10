@@ -74,7 +74,11 @@ namespace CP77Tools.Tasks
                         db.Add(key, value);
                     }
 
-                    db.Save(outFile);
+                    using var ms = new MemoryStream();
+                    using var writer = new TweakDBWriter(ms);
+                    writer.WriteFile(db);
+                    File.WriteAllBytes(outFile, ms.ToArray());
+
                     _loggerService.Success($"Converted {f} to {outFile}.");
                 }
                 catch (Exception e)

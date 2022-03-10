@@ -11,8 +11,6 @@ namespace WolvenKit.RED4.Archive.IO
 {
     public partial class PackageWriter
     {
-        public static bool IsDebug = false;
-
         private Package04 _file;
 
         private Package04Header _header;

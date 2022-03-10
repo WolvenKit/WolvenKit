@@ -7,8 +7,8 @@ namespace WolvenKit.RED4.Types
 
 		public DoorSystemControllerPS()
 		{
-			TweakDBRecord = new() { Value = 79792717846 };
-			TweakDBDescriptionRecord = new() { Value = 129263239957 };
+			TweakDBRecord = 79792717846;
+			TweakDBDescriptionRecord = 129263239957;
 		}
 	}
 }

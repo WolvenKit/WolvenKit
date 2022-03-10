@@ -389,7 +389,10 @@ namespace WolvenKit.Functionality.Controllers
                         db.Add(key, value);
                     }
 
-                    db.Save(outPath);
+                    using var ms = new MemoryStream();
+                    using var writer = new TweakDBWriter(ms);
+                    writer.WriteFile(db);
+                    File.WriteAllBytes(outPath, ms.ToArray());
                 }
                 catch (Exception e)
                 {

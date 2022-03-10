@@ -241,8 +241,8 @@ namespace WolvenKit.RED4.Types
 		{
 			RevealDevicesGrid = false;
 			DeviceName = "LocKey#50988";
-			TweakDBRecord = new() { Value = 96691730947 };
-			TweakDBDescriptionRecord = new() { Value = 147752589635 };
+			TweakDBRecord = 96691730947;
+			TweakDBDescriptionRecord = 147752589635;
 			Level_0 = new();
 			Level_1 = new();
 			Level_2 = new();

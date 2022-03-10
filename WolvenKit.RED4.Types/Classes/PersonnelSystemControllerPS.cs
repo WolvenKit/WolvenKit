@@ -8,8 +8,8 @@ namespace WolvenKit.RED4.Types
 		public PersonnelSystemControllerPS()
 		{
 			DeviceName = "BaseDeviceSystemControllerPS";
-			TweakDBRecord = new() { Value = 100937546540 };
-			TweakDBDescriptionRecord = new() { Value = 154457407903 };
+			TweakDBRecord = 100937546540;
+			TweakDBDescriptionRecord = 154457407903;
 		}
 	}
 }

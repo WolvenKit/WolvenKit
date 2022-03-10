@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="16"
+   height="16"
+   viewBox="0 0 16 16"
+   version="1.1"
+   id="svg5"
+   inkscape:export-filename="C:\Users\Wally\bitmap.png"
+   inkscape:export-xdpi="96"
+   inkscape:export-ydpi="96"
+   inkscape:version="1.1.1 (3bf5ae0d25, 2021-09-20)"
+   sodipodi:docname="ink engine settings.svg"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview7"
+     pagecolor="#505050"
+     bordercolor="#ffffff"
+     borderopacity="1"
+     inkscape:pageshadow="0"
+     inkscape:pageopacity="0"
+     inkscape:pagecheckerboard="1"
+     inkscape:document-units="px"
+     showgrid="true"
+     inkscape:zoom="64"
+     inkscape:cx="6.8203125"
+     inkscape:cy="7.2109375"
+     inkscape:window-width="1920"
+     inkscape:window-height="1017"
+     inkscape:window-x="-8"
+     inkscape:window-y="-8"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="layer1">
+    <inkscape:grid
+       type="xygrid"
+       id="grid824" />
+  </sodipodi:namedview>
+  <defs
+     id="defs2" />
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1">
+    <rect
+       style="fill:#c1272d;fill-opacity:1;stroke-width:2;stroke-linejoin:round;stroke-dashoffset:0.3"
+       id="rect1091"
+       width="2"
+       height="13"
+       x="0"
+       y="2" />
+    <path
+       sodipodi:type="star"
+       style="fill:#29abe2;fill-opacity:1;stroke-width:1.82711;stroke-linejoin:round;stroke-dashoffset:0.3"
+       id="path1415"
+       inkscape:flatsided="false"
+       sodipodi:sides="6"
+       sodipodi:cx="8"
+       sodipodi:cy="8"
+       sodipodi:r1="5.8309517"
+       sodipodi:r2="4.3732138"
+       sodipodi:arg1="0.5404195"
+       sodipodi:arg2="1.0640183"
+       inkscape:rounded="0.8"
+       inkscape:randomized="0"
+       d="m 13,11 c -1.231885,2.053141 -0.78399,-0.338573 -2.877405,0.823557 -2.0934142,1.16213 0.173344,2.046843 -2.2206712,2.00657 C 5.5079086,13.789854 7.8031416,12.981885 5.75,11.75 3.6968586,10.518115 4.0640541,12.923541 2.901924,10.830127 1.7397937,8.7367125 3.587132,10.320458 3.6274049,7.9264427 3.6676778,5.5324277 1.7681153,7.0531415 3.0000002,5.0000001 4.2318852,2.9468586 3.7839905,5.3385732 5.8774049,4.1764429 7.9708192,3.0143127 5.7040611,2.1296003 8.0980762,2.1698732 10.492091,2.2101461 8.1968584,3.0181152 10.25,4.2500002 12.303141,5.481885 11.935946,3.0764588 13.098076,5.1698731 14.260206,7.2632875 12.412868,5.679542 12.372595,8.0735573 12.332322,10.467572 14.231885,8.9468585 13,11 Z"
+       transform="matrix(1.0946174,0,0,1.0946174,-0.19493903,-0.22373404)"
+       inkscape:export-filename="C:\Users\Wally\path1415.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+  </g>
+</svg>
