@@ -58,6 +58,8 @@ namespace WolvenKit.Functionality.Services
 
         string GetW3GameRootDir();
 
+        public string GetRED4GameExecutablePath();
+
         string GetRED4GameRootDir();
 
         public string GetRED4GameModDir();

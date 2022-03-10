@@ -144,7 +144,7 @@ namespace WolvenKit
             };
         }
 
-        private void LogUnhandledException(Exception exception, string source)
+        private static void LogUnhandledException(Exception exception, string source)
         {
             var _logger = Splat.Locator.Current.GetService<ILoggerService>();
             if (_logger == null)
@@ -157,6 +157,7 @@ namespace WolvenKit
             {
                 var assemblyName = System.Reflection.Assembly.GetExecutingAssembly().GetName();
                 message = string.Format("Unhandled exception in {0} v{1}", assemblyName.Name, assemblyName.Version);
+                _logger.Error(message);
             }
             catch (Exception ex)
             {
@@ -165,6 +166,7 @@ namespace WolvenKit
             finally
             {
                 _logger.Error(exception);
+                Application.Current.Shutdown();
             }
         }
     }
