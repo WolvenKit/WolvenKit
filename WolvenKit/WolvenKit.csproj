@@ -18,8 +18,8 @@
     <NoWarn>$(NoWarn);SA1652</NoWarn>
     <NoWarn>$(NoWarn);CA1416</NoWarn>
     <NoWarn>$(NoWarn);SYSLIB0001</NoWarn>
-    <AssemblyVersion>8.5.2</AssemblyVersion>
-    <InformationalVersion>8.5.2</InformationalVersion>
+    <AssemblyVersion>8.5.3</AssemblyVersion>
+    <InformationalVersion>8.5.3</InformationalVersion>
     <Description>WPF</Description>
     <SatelliteResourceLanguages>en</SatelliteResourceLanguages>
       <Product>WolvenKit</Product>
@@ -97,9 +97,9 @@
     <PackageReference Include="System.Security.Permissions" Version="6.0.0" />
     <PackageReference Include="System.Windows.Interactivity.WPF" Version="2.0.20525" NoWarn="NU1701" />
     <PackageReference Include="HandyControls" Version="3.3.11" />
-    
+
     <PackageReference Include="WolvenKit.WPFSoundVisualizationLibNet5" Version="1.0.1" />
-    
+
     <PackageReference Include="WpfAnalyzers" Version="4.0.2" PrivateAssets="all">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
     </PackageReference>
