@@ -1,13 +1,13 @@
-using System.Linq;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics.CodeAnalysis;
+using System.IO;
+using System.Linq;
+using gpm.Core.Services;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
-using WolvenKit.ViewModels.Dialogs;
-using System.IO;
-using gpm.Core.Services;
 using WolvenKit.Common.Services;
-using System.Diagnostics.CodeAnalysis;
+using WolvenKit.ViewModels.Dialogs;
 
 namespace WolvenKit.Functionality.Services
 {
@@ -33,23 +33,34 @@ namespace WolvenKit.Functionality.Services
             _dataBaseService = dataBaseService;
             _libraryService = libraryService;
             _taskService = taskService;
-
-            // Add plugins
-            _pluginIds.Add(EPlugin.redscript,
-                Path.Combine(_settings.GetRED4GameRootDir()));
-            _pluginIds.Add(EPlugin.cyberenginetweaks,
-                Path.Combine(_settings.GetRED4GameRootDir()));
-            _pluginIds.Add(EPlugin.mlsetupbuilder,
-                Path.Combine(_settings.GetRED4GameRootDir(), "tools", "neurolinked/mlsetupbuilder"));
-
-
-            Init();
         }
 
         [Reactive] public ObservableCollection<PluginViewModel> Plugins { get; set; } = new ObservableCollection<PluginViewModel>();
 
-        private void Init()
+        public void Init()
         {
+            if (!Directory.Exists(_settings.GetRED4GameRootDir()))
+            {
+                _logger.Error("No gamedirectory found. Please select the game in your settings");
+                return;
+            }
+
+            // Add plugins
+            if (!_pluginIds.ContainsKey(EPlugin.redscript))
+            {
+                _pluginIds.Add(EPlugin.redscript, Path.Combine(_settings.GetRED4GameRootDir()));
+            }
+
+            if (!_pluginIds.ContainsKey(EPlugin.cyberenginetweaks))
+            {
+                _pluginIds.Add(EPlugin.cyberenginetweaks, Path.Combine(_settings.GetRED4GameRootDir()));
+            }
+
+            if (!_pluginIds.ContainsKey(EPlugin.mlsetupbuilder))
+            {
+                _pluginIds.Add(EPlugin.mlsetupbuilder, Path.Combine(_settings.GetRED4GameRootDir(), "tools", "neurolinked", "mlsetupbuilder"));
+            }
+
             Plugins.Clear();
 
             foreach (var (id, installPath) in _pluginIds)
