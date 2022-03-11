@@ -166,6 +166,7 @@ namespace WolvenKit
             finally
             {
                 _logger.Error(exception);
+                Application.Current.Shutdown();
             }
         }
     }
