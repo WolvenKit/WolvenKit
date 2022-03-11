@@ -45,25 +45,8 @@ namespace WolvenKit.RED4.Types
             if (propertyInfo != null)
             {
                 propertyName = propertyInfo.RedName;
-            }
-            else
-            {
-                if (onlyNative)
-                {
-                    throw new ArgumentException($"Native prop '{propertyName}' could not be found!");
-                }
 
-                _dynamicProperties.Add(propertyName);
-            }
-
-            var defaultValue = RedReflection.GetDefaultValue(value.GetType());
-            if (Equals(defaultValue, value))
-            {
-                _properties[propertyName] = value;
-            }
-            else
-            {
-                if (propertyInfo != null)
+                if (!Equals(RedReflection.GetDefaultValue(propertyInfo.Type), value))
                 {
                     if (value.GetType().IsGenericType)
                     {
@@ -87,9 +70,18 @@ namespace WolvenKit.RED4.Types
                         }
                     }
                 }
-
-                _properties[propertyName] = value;
             }
+            else
+            {
+                if (onlyNative)
+                {
+                    throw new ArgumentException($"Native prop '{propertyName}' could not be found!");
+                }
+
+                _dynamicProperties.Add(propertyName);
+            }
+
+            _properties[propertyName] = value;
         }
 
         #region Properties
