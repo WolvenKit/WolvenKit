@@ -146,17 +146,6 @@ namespace WolvenKit.RED4.Archive.IO
             }
         }
 
-        public override TweakDBID ReadTweakDBID()
-        {
-            var hash = _reader.ReadUInt64();
-            var str = Locator.Current.GetService<ITweakDBService>().GetString(hash);
-            if (str != null)
-            {
-                return str;
-            }
-            return hash;
-        }
-
         public override SharedDataBuffer ReadSharedDataBuffer(uint size)
         {
             var innerSize = BaseReader.ReadUInt32();

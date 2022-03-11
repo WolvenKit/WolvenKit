@@ -88,15 +88,10 @@ namespace WolvenKit.RED4.Archive.IO
                 var length = _reader.ReadInt16();
                 return Encoding.UTF8.GetString(_reader.ReadBytes(length));
             }
-            else if (header.version == 04)
+
+            if (header.version == 04)
             {
-                var hash = _reader.ReadUInt64();
-                var str = Locator.Current.GetService<ITweakDBService>().GetString(hash);
-                if (str != null)
-                {
-                    return str;
-                }
-                return hash;
+                return base.ReadTweakDBID();
             }
 
             throw new NotImplementedException(nameof(ReadTweakDBID));
