@@ -47,10 +47,7 @@ namespace WolvenKit.RED4.Archive.IO
 
             fileHeader.objectsEnd = (uint)BaseStream.Position;
 
-            var combinedList = new List<CName>(dataCollection.StringList);
-            combinedList.AddRange(dataCollection.ImportList.Select(x => x.Item2).ToList());
-
-            var (stringBuffer, stringOffsets) = GenerateStringBuffer(combinedList);
+            var (stringBuffer, stringOffsets) = GenerateStringBuffer(dataCollection.CombinedStringList);
 
             tableHeaders[0] = new CR2WTable()
             {
@@ -424,6 +421,7 @@ namespace WolvenKit.RED4.Archive.IO
         {
             public List<CName> StringList { get; set; }
             public List<(string, CName, ushort)> ImportList { get; set; }
+            public List<CName> CombinedStringList { get; set; }
 
             public List<CR2WExportInfo> ChunkInfoList { get; set; }
             public byte[] ChunkData { get; set; }
@@ -513,6 +511,15 @@ namespace WolvenKit.RED4.Archive.IO
             file.GenerateStringDictionary();
             result.StringList = file.StringCacheList.ToList();
             result.ImportList = file.ImportCacheList.ToList();
+
+            result.CombinedStringList = new List<CName>(result.StringList);
+            foreach (var (_, name, _) in result.ImportList)
+            {
+                if (!result.CombinedStringList.Contains(name))
+                {
+                    result.CombinedStringList.Add(name);
+                }
+            }
 
             for (var i = 0; i < chunkInfoList.Count; i++)
             {
