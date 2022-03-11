@@ -590,19 +590,26 @@ namespace WolvenKit.ViewModels.Shell
         {
             if (ResolvedData is IList ary)
             {
-                //return ary.IndexOf(child.Data);
-                var index = 0;
-                foreach (var item in ary)
-                {
-                    if (item.GetHashCode() == child.Data.GetHashCode())
+                //if (PropertiesLoaded)
+                //{
+                //    Properties.IndexOf(child);
+                //}
+                //else
+                //{
+                    //return ary.IndexOf(child.Data);
+                    var index = 0;
+                    foreach (var item in ary)
                     {
-                        return index;
-                    }
-                    else
-                    {
+                        if (item.GetHashCode() == child.Data.GetHashCode())
+                        {
+                            if (!PropertiesLoaded || Properties[index].GetHashCode() == child.GetHashCode())
+                            {
+                                return index;
+                            }
+                        }
                         index++;
                     }
-                }
+                //}
             }
             else if (ResolvedData is IRedBufferPointer rbp && rbp.GetValue().Data is Package04 pkg)
             {
@@ -1608,6 +1615,7 @@ namespace WolvenKit.ViewModels.Shell
             if (cvm.ResolvedData is IRedArray ira && ira.InnerType.IsAssignableTo(item.GetType()))
             {
                 ira.Add(item);
+                cvm.CalculateDescriptor();
                 cvm.Name = null;
                 cvm.PropertyCount = -1;
                 cvm.PropertiesLoaded = false;
