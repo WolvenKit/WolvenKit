@@ -23,6 +23,15 @@
         <Grid.Resources>
             <sys:Double x:Key="RowHeight">26</sys:Double>
             <SolidColorBrush x:Key="RedTypeColor" Color="{StaticResource WolvenKitTanColor}" />
+
+            <Style x:Key="ArrayNameColumnWidth" TargetType="ColumnDefinition">
+                <Setter Property="Width" Value="218" />
+                <Style.Triggers>
+                    <DataTrigger Binding="{Binding IsInArray}" Value="True">
+                        <Setter Property="Width" Value="{Binding ArrayIndexWidth}" />
+                    </DataTrigger>
+                </Style.Triggers>
+            </Style>
             <DataTemplate x:Key="AddHandleButton" DataType="{x:Type shell:ChunkViewModel}">
                 <Button
                     Height="12"
@@ -489,24 +498,15 @@
                     BorderThickness="0,1,0,0">
                     <Grid>
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition>
-                                <ColumnDefinition.Style>
-                                    <Style TargetType="ColumnDefinition">
-                                        <Setter Property="Width" Value="160" />
-                                        <Style.Triggers>
-                                            <DataTrigger Binding="{Binding IsInArray}" Value="True">
-                                                <Setter Property="Width" Value="{Binding ArrayIndexWidth}" />
-                                            </DataTrigger>
-                                        </Style.Triggers>
-                                    </Style>
-                                </ColumnDefinition.Style>
-                            </ColumnDefinition>
+                            <ColumnDefinition Width="6" />
+                            <ColumnDefinition Style="{StaticResource ArrayNameColumnWidth}" />
                             <ColumnDefinition Width="Auto" />
                             <ColumnDefinition Width="1" />
                             <ColumnDefinition Width="*" />
                         </Grid.ColumnDefinitions>
                         <TextBlock
-                            Margin="6,5,0,0"
+                            Grid.Column="1"
+                            Margin="0,5,0,0"
                             VerticalAlignment="Top"
                             Style="{StaticResource PGNameStyle}"
                             Text="{Binding Name, Mode=OneTime}"
@@ -514,17 +514,17 @@
                             ToolTip="{Binding XPath, Mode=OneTime}" />
                         <ContentPresenter
                             x:Name="DeleteButtonWrapper"
-                            Grid.Column="1"
+                            Grid.Column="2"
                             Margin="0,6,0,0"
                             VerticalAlignment="Top"
                             ContentTemplate="{StaticResource DeleteButton}"
                             DataContext="{Binding}" />
                         <GridSplitter
-                            Grid.Column="2"
+                            Grid.Column="3"
                             HorizontalAlignment="Stretch"
                             Background="{StaticResource BorderAlt}" />
                         <ContentControl
-                            Grid.Column="3"
+                            Grid.Column="4"
                             Height="27"
                             VerticalAlignment="Top"
                             Content="{Binding}"
