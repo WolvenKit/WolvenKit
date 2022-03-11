@@ -7,6 +7,7 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using WolvenKit.Core.Extensions;
 using WolvenKit.RED4.Types;
+using WolvenKit.RED4.Types.Exceptions;
 
 namespace WolvenKit.RED4.IO
 {
@@ -30,6 +31,8 @@ namespace WolvenKit.RED4.IO
 
         protected readonly List<(int, Guid, int, int, int)> _targetList = new();
         protected readonly Dictionary<int, List<Guid>> ChildChunks = new();
+
+        protected readonly ImportComparer _importComparer = new();
 
         public readonly Dictionary<Guid, int> _chunkGuidToId = new();
 
@@ -88,7 +91,7 @@ namespace WolvenKit.RED4.IO
 
         public ushort GetImportIndex((string, CName, ushort) value, bool add = true)
         {
-            var index = ImportCacheList.IndexOf(value);
+            var index = ImportCacheList.IndexOf(value, _importComparer);
             if (add && index == ushort.MaxValue)
             {
                 index = ImportCacheList.Add(value);
@@ -143,7 +146,7 @@ namespace WolvenKit.RED4.IO
             BufferCacheList.Clear();
         }
 
-        public (Dictionary<CName, ushort>, Dictionary<(string, CName, ushort), ushort>) GenerateStringDictionary()
+        public void GenerateStringDictionary()
         {
             _chunkStringList.Add(CurrentChunk, new() { List = StringCacheList.ToList() });
             StringCacheList.Clear();
@@ -161,8 +164,6 @@ namespace WolvenKit.RED4.IO
             {
                 GenerateFor(i);
             }
-
-            return (StringCacheList.ToDictionary(), ImportCacheList.ToDictionary());
 
             void GenerateFor(int chunk)
             {
@@ -891,6 +892,13 @@ namespace WolvenKit.RED4.IO
         {
             public int Id { get; set; } = -1;
             public Guid Guid { get; set; } = Guid.Empty;
+        }
+
+        protected class ImportComparer : IEqualityComparer<(string, CName, ushort)>
+        {
+            public bool Equals((string, CName, ushort) x, (string, CName, ushort) y) => Equals(x.Item2, y.Item2);
+
+            public int GetHashCode((string, CName, ushort) obj) => obj.Item2.GetHashCode();
         }
     }
 }
