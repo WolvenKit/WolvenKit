@@ -17,7 +17,5 @@ jobs:
 
     - name: build
       run: dotnet build .\WolvenKit.CLI\WolvenKit.CLI.csproj
-    - name: pack
-      run: dotnet pack .\WolvenKit.CLI\WolvenKit.CLI.csproj --no-build --configuration Release --include-symbols -p:SymbolPackageFormat=snupkg -o .
     - name: publish package to NuGet
-      run: dotnet nuget push *.nupkg --api-key ${{secrets.NUGET_KEY}} --source "https://api.nuget.org/v3/index.json" --skip-duplicate
+      run: dotnet nuget push .\WolvenKit.CLI\nupkg\*.nupkg --api-key ${{secrets.NUGET_KEY}} --source "https://api.nuget.org/v3/index.json" --skip-duplicate

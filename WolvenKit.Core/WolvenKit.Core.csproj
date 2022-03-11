@@ -40,7 +40,7 @@
   <ItemGroup>
     <ContentWithTargetPath Include="lib\kraken.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      <TargetPath>libkraken.dll</TargetPath>
+      <TargetPath>kraken.dll</TargetPath>
     </ContentWithTargetPath>
     <ContentWithTargetPath Include="lib\libooz.so">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
