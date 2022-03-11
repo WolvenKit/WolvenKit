@@ -225,7 +225,7 @@ namespace WolvenKit.RED4.Archive.IO
             return (nameData.ToArray(), nameDesc);
         }
 
-        private new (Dictionary<CName, ushort>, Dictionary<(string, CName, ushort), ushort>) GenerateStringDictionary()
+        private new void GenerateStringDictionary()
         {
             _chunkStringList.Add(CurrentChunk, new() { List = StringCacheList.ToList() });
             StringCacheList.Clear();
@@ -245,8 +245,6 @@ namespace WolvenKit.RED4.Archive.IO
             {
                 ImportCacheList.AddRange(stringInfo.Value.List);
             }
-
-            return (StringCacheList.ToDictionary(), ImportCacheList.ToDictionary());
         }
 
         private (IList<CName>, IList<(string, CName, ushort)>, List<Package04ChunkHeader>, byte[]) GenerateChunkData()
@@ -325,14 +323,13 @@ namespace WolvenKit.RED4.Archive.IO
 
             _cruids.AddRange(file._cruids);
 
-            var (stringDict, importDict) = file.GenerateStringDictionary();
-
-            stringDict.Remove("");
+            file.GenerateStringDictionary();
+            file.StringCacheList.Remove("");
 
             for (var i = 0; i < chunkDesc.Count; i++)
             {
                 var chunkInfo = chunkDesc[i];
-                chunkInfo.typeID = stringDict[chunkClassNames[i]];
+                chunkInfo.typeID = file.StringCacheList.IndexOf(chunkClassNames[i]);
                 chunkDesc[i] = chunkInfo;
 
                 // TODO: Find a "better" way to determine that
@@ -350,13 +347,13 @@ namespace WolvenKit.RED4.Archive.IO
             foreach (var kvp in file.CNameRef)
             {
                 file.BaseStream.Position = kvp.Key;
-                var index = stringDict[kvp.Value];
+                var index = file.StringCacheList.IndexOf(kvp.Value);
                 file.BaseWriter.Write(index);
             }
             foreach (var kvp in file.ImportRef)
             {
                 file.BaseStream.Position = kvp.Key;
-                var index = (ushort)(importDict[kvp.Value] + 0);
+                var index = (ushort)(file.ImportCacheList.IndexOf(kvp.Value, _importComparer) + 0);
                 file.BaseWriter.Write(index);
             }
             file.BaseStream.Position = pos;

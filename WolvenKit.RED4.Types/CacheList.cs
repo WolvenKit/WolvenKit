@@ -29,12 +29,23 @@ namespace WolvenKit.RED4.Types
             }
         }
 
-        public ushort IndexOf(T value)
+        public bool Remove(T item)
         {
-            if (_valueList.Contains(value))
+            return _valueList.Remove(item) && _keyValueList.Remove(item);
+        }
+
+        public ushort IndexOf(T value, IEqualityComparer<T> comparer = null)
+        {
+            comparer ??= EqualityComparer<T>.Default;
+
+            foreach (var (element, index) in _keyValueList)
             {
-                return _keyValueList[value];
+                if (comparer.Equals(element, value))
+                {
+                    return index;
+                }
             }
+
             return ushort.MaxValue;
         }
 
