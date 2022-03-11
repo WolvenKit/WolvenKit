@@ -241,6 +241,8 @@ namespace WolvenKit.RED4.IO
         {
             var array = new CArray<T>();
 
+            var startPos = BaseStream.Position;
+
             var elementCount = _reader.ReadUInt32();
 
             uint elementSize = 0;
@@ -249,10 +251,26 @@ namespace WolvenKit.RED4.IO
                 elementSize = (size - 4) / elementCount;
             }
 
-            for (var i = 0; i < elementCount; i++)
+            var i = 0;
+            for (; i < elementCount; i++)
             {
                 var element = ReadArrayItem(i, typeof(T), elementSize, Flags.Empty);
                 array.Add((T)element);
+            }
+
+            var endPos = BaseStream.Position;
+            var remaining = size - (endPos - startPos);
+            while (remaining > 0)
+            {
+                var element = ReadArrayItem(i++, typeof(T), elementSize, Flags.Empty);
+                array.Add((T)element);
+
+                remaining = size - (BaseStream.Position - startPos);
+            }
+
+            if (remaining < 0)
+            {
+                throw new InvalidParsingException("CArray with invalid size");
             }
 
             return array;
