@@ -1,3 +1,8 @@
+WolvenKit 8.5.3
+-----------------
+- fixed a bug that would cause the game to crash on certain inkwidget files
+- fixed a bug where the app would crash when loading kraken
+
 WolvenKit 8.5.2
 -----------------
 - fixed a bug where the app would crash when launching the first time
