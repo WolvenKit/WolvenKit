@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using SharpGLTF.Schema2;
 using WolvenKit.RED4.Types;
 
@@ -127,13 +128,14 @@ namespace WolvenKit.Modkit.RED4.Animation
             }
 
             var anim = model.CreateAnimation(animAnimDes.Name);
+            var skin = model.LogicalSkins.FirstOrDefault(_ => _.Name is "Armature");
 
             if (animAnimDes.AnimationType.Value == Enums.animAnimationType.Additive)
             {
 
                 for (ushort i = 0; i < blob.NumJoints - blob.NumExtraJoints; i++)
                 {
-                    var node = model.LogicalNodes[i + 1];
+                    var node = skin.GetJoint(i).Joint;
                     if (positions.ContainsKey(i))
                     {
                         foreach (var (t, position) in positions[i])
@@ -164,8 +166,7 @@ namespace WolvenKit.Modkit.RED4.Animation
             {
                 for (ushort i = 0; i < blob.NumJoints - blob.NumExtraJoints; i++)
                 {
-                    var node = model.LogicalNodes[i + 1];
-    
+                    var node = skin.GetJoint(i).Joint;
                     if (positions.ContainsKey(i))
                     {
                         anim.CreateTranslationChannel(node, positions[i]);

@@ -76,6 +76,15 @@ namespace WolvenKit.Modkit.RED4
                 return false;
             }
 
+            var animDataBuffers = new List<MemoryStream>();
+            foreach (var chk in anims.AnimationDataChunks)
+            {
+                var ms = new MemoryStream();
+                ms.Write(chk.Buffer.Buffer.GetBytes());
+
+                animDataBuffers.Add(ms);
+            }
+
             if (includeRig)
             {
                 var rig = RIG.ProcessRig(rigFile);
@@ -83,7 +92,7 @@ namespace WolvenKit.Modkit.RED4
                 {
                     return false;
                 }
-                var skin = model.CreateSkin();
+                var skin = model.CreateSkin("Armature");
                 skin.BindJoints(RIG.ExportNodes(ref model, rig).Values.ToArray());
             }
 
@@ -94,10 +103,19 @@ namespace WolvenKit.Modkit.RED4
 
                 if (animAnimDes.AnimBuffer.Chunk is animAnimationBufferSimd animBuffSimd)
                 {
+                    
                     MemoryStream defferedBuffer;
                     if (animBuffSimd.InplaceCompressedBuffer != null)
                     {
                         defferedBuffer = new MemoryStream(animBuffSimd.InplaceCompressedBuffer.Buffer.GetBytes());
+                    }
+                    else if (animBuffSimd.DataAddress != null)
+                    {
+                        var dataAddr = animBuffSimd.DataAddress;
+                        var bytes = new byte[dataAddr.ZeInBytes];
+                        animDataBuffers[(int)((uint)dataAddr.UnkIndex)].Seek(dataAddr.FsetInBytes, SeekOrigin.Begin);
+                        animDataBuffers[(int)((uint)dataAddr.UnkIndex)].Read(bytes, 0, (int)((uint)dataAddr.ZeInBytes));
+                        defferedBuffer = new MemoryStream(bytes);
                     }
                     else
                     {
@@ -105,6 +123,7 @@ namespace WolvenKit.Modkit.RED4
                     }
                     defferedBuffer.Seek(0, SeekOrigin.Begin);
                     SIMD.AddAnimationSIMD(ref model, animBuffSimd, animAnimDes.Name, defferedBuffer, animAnimDes);
+                    
                 }
                 else if (animAnimDes.AnimBuffer.Chunk is animAnimationBufferCompressed)
                 {

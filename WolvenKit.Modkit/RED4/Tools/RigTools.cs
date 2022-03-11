@@ -26,8 +26,8 @@ namespace WolvenKit.Modkit.RED4.RigFile
                 Names = animrig.BoneNames.Select(_ => _.GetResolvedText()).ToArray(),
                 Parent = animrig.BoneParentIndexes.Select(_=>(short)_).ToArray(),
                 LocalPosn = animrig.BoneTransforms.Select(p => new Vec3(p.Translation.X, p.Translation.Z, -p.Translation.Y)).ToArray(),
-                LocalRot = animrig.BoneTransforms.Select(p => new Quat(p.Rotation.I, p.Rotation.J, -p.Rotation.K, p.Rotation.R)).ToArray(),
-                LocalScale = animrig.BoneTransforms.Select(p => new Vec3(p.Scale.X, p.Scale.Z, p.Scale.Y)).ToArray(),
+                LocalRot = animrig.BoneTransforms.Select(p => new Quat(p.Rotation.I, p.Rotation.K, -p.Rotation.J, p.Rotation.R)).ToArray(),
+                LocalScale = animrig.BoneTransforms.Select(p => new Vec3(p.Scale.X, p.Scale.Y, p.Scale.Z)).ToArray(),
             };
 
             // if AposeWorld/AposeMS Exists then..... this can be done better i guess...
@@ -39,7 +39,7 @@ namespace WolvenKit.Modkit.RED4.RigFile
 
                     Rig.AposeMSTrans = aRig.APoseMS.Select(p => new Vec3(p.Translation.X,p.Translation.Z, -p.Translation.Y)).ToArray();
                     Rig.AposeMSRot = aRig.APoseMS.Select(p => new Quat(p.Rotation.I, p.Rotation.K, -p.Rotation.J,p.Rotation.R)).ToArray();
-                    Rig.AposeMSScale = aRig.APoseMS.Select(p => new Vec3(p.Scale.X, p.Translation.Z, p.Scale.Y)).ToArray();
+                    Rig.AposeMSScale = aRig.APoseMS.Select(p => new Vec3(p.Scale.X, p.Scale.Y, p.Scale.Z)).ToArray();
                 }
 
                 // not sure how APose works or how the matrix multiplication will be, maybe its a recursive mul
@@ -49,7 +49,7 @@ namespace WolvenKit.Modkit.RED4.RigFile
 
                     Rig.AposeLSTrans = aRig.APoseLS.Select(p => new Vec3(p.Translation.X, p.Translation.Z, -p.Translation.Y)).ToArray();
                     Rig.AposeLSRot = aRig.APoseLS.Select(p => new Quat(p.Rotation.I, p.Rotation.K, -p.Rotation.J, p.Rotation.R)).ToArray();
-                    Rig.AposeLSScale = aRig.APoseLS.Select(p => new Vec3(p.Scale.X, p.Translation.Z, p.Scale.Y)).ToArray();
+                    Rig.AposeLSScale = aRig.APoseLS.Select(p => new Vec3(p.Scale.X, p.Scale.Y, p.Scale.Z)).ToArray();
                 }
             }
 
