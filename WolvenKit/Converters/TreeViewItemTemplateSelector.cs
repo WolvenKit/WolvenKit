@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Windows;
 using System.Windows.Controls;
 using Syncfusion.UI.Xaml.TreeView.Engine;
@@ -29,7 +30,7 @@ namespace WolvenKit.Converters
                     {
                         return PropertyTemplate;
                     }
-                    else if (vm.PropertyType.IsAssignableTo(typeof(IRedArray)))
+                    else if (vm.PropertyType.IsAssignableTo(typeof(IList)))
                     {
                         return ArrayTemplate;
                     }

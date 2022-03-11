@@ -8,6 +8,7 @@ using WolvenKit.Common.Model;
 using WolvenKit.Core.Compression;
 using WolvenKit.Core.Exceptions;
 using WolvenKit.Core.Extensions;
+using WolvenKit.RED4.Types;
 
 namespace WolvenKit.Common.Services
 {
@@ -33,6 +34,7 @@ namespace WolvenKit.Common.Services
         public HashService()
         {
             Load();
+            CName.ResolveHashHandler = Get;
         }
 
         #endregion Constructors

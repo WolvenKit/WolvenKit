@@ -8,8 +8,8 @@ namespace WolvenKit.RED4.Types
 		public GlitchedTurretControllerPS()
 		{
 			DeviceName = "LocKey#121";
-			TweakDBRecord = new() { Value = 96702420141 };
-			TweakDBDescriptionRecord = new() { Value = 147741407213 };
+			TweakDBRecord = 96702420141;
+			TweakDBDescriptionRecord = 147741407213;
 		}
 	}
 }

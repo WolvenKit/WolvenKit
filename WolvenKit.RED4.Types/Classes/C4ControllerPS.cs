@@ -17,8 +17,8 @@ namespace WolvenKit.RED4.Types
 		{
 			IsScanned = true;
 			ExposeQuickHacks = true;
-			TweakDBRecord = new() { Value = 44966449988 };
-			TweakDBDescriptionRecord = new() { Value = 97999174197 };
+			TweakDBRecord = 44966449988;
+			TweakDBDescriptionRecord = 97999174197;
 			ItemTweakDBString = "C4";
 		}
 	}

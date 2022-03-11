@@ -24,10 +24,10 @@ namespace WolvenKit.Modkit.RED4.RigFile
             {
                 BoneCount = animrig.BoneNames.Count,
                 Names = animrig.BoneNames.Select(_ => _.GetValue()).ToArray(),
-                Parent = animrig.Unk1.Select(_=>(short)_).ToArray(),
-                LocalPosn = animrig.Unk2.Select(p => new Vec3(p[0].X, p[0].Z, -p[0].Y)).ToArray(),
-                LocalRot = animrig.Unk2.Select(p => new Quat(p[1].X, p[1].Z, -p[1].Y, p[1].W)).ToArray(),
-                LocalScale = animrig.Unk2.Select(p => new Vec3(p[2].X, p[2].Z, p[2].Y)).ToArray(),
+                Parent = animrig.BoneParentIndexes.Select(_=>(short)_).ToArray(),
+                LocalPosn = animrig.BoneTransforms.Select(p => new Vec3(p.Translation.X, p.Translation.Z, -p.Translation.Y)).ToArray(),
+                LocalRot = animrig.BoneTransforms.Select(p => new Quat(p.Rotation.X, p.Rotation.Z, -p.Rotation.Y, p.Rotation.W)).ToArray(),
+                LocalScale = animrig.BoneTransforms.Select(p => new Vec3(p.Scale.X, p.Scale.Z, p.Scale.Y)).ToArray(),
             };
 
             // if AposeWorld/AposeMS Exists then..... this can be done better i guess...
@@ -172,7 +172,7 @@ namespace WolvenKit.Modkit.RED4.RigFile
                         var r = new Quat(srcBones.AposeLSRot[i].X, srcBones.AposeLSRot[i].Y, srcBones.AposeLSRot[i].Z, srcBones.AposeLSRot[i].W);
                         var t = new Vec3(srcBones.AposeLSTrans[i].X, srcBones.AposeLSTrans[i].Y, srcBones.AposeLSTrans[i].Z);
 
-                        bone.WithLocalTranslation(t).WithLocalRotation(r).WithLocalScale(s);
+                        bone.WithLocalScale(s).WithLocalRotation(r).WithLocalTranslation(t);
                     }
                     else
                     {
@@ -180,7 +180,7 @@ namespace WolvenKit.Modkit.RED4.RigFile
                         var r = new Quat(srcBones.LocalRot[i].X, srcBones.LocalRot[i].Y, srcBones.LocalRot[i].Z, srcBones.LocalRot[i].W);
                         var t = new Vec3(srcBones.LocalPosn[i].X, srcBones.LocalPosn[i].Y, srcBones.LocalPosn[i].Z);
 
-                        bone.WithLocalTranslation(t).WithLocalRotation(r).WithLocalScale(s);
+                        bone.WithLocalScale(s).WithLocalRotation(r).WithLocalTranslation(t);
                     }
                     bonesMapping[i] = bone;
                 }
@@ -192,7 +192,7 @@ namespace WolvenKit.Modkit.RED4.RigFile
                         var s = new Vec3(srcBones.AposeLSScale[i].X, srcBones.AposeLSScale[i].Y, srcBones.AposeLSScale[i].Z);
                         var r = new Quat(srcBones.AposeLSRot[i].X, srcBones.AposeLSRot[i].Y, srcBones.AposeLSRot[i].Z, srcBones.AposeLSRot[i].W);
                         var t = new Vec3(srcBones.AposeLSTrans[i].X, srcBones.AposeLSTrans[i].Y, srcBones.AposeLSTrans[i].Z);
-                        root.WithLocalTranslation(t).WithLocalRotation(r).WithLocalScale(s);
+                        root.WithLocalScale(s).WithLocalRotation(r).WithLocalTranslation(t);
                     }
                     else
                     {
@@ -200,7 +200,7 @@ namespace WolvenKit.Modkit.RED4.RigFile
                         var r = new Quat(srcBones.LocalRot[i].X, srcBones.LocalRot[i].Y, srcBones.LocalRot[i].Z, srcBones.LocalRot[i].W);
                         var t = new Vec3(srcBones.LocalPosn[i].X, srcBones.LocalPosn[i].Y, srcBones.LocalPosn[i].Z);
 
-                        root.WithLocalTranslation(t).WithLocalRotation(r).WithLocalScale(s);
+                        root.WithLocalScale(s).WithLocalRotation(r).WithLocalTranslation(t);
                     }
                     bonesMapping[i] = root;
                 }

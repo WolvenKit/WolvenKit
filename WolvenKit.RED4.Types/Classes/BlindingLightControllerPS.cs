@@ -16,8 +16,8 @@ namespace WolvenKit.RED4.Types
 		public BlindingLightControllerPS()
 		{
 			DeviceName = "LocKey#168";
-			TweakDBRecord = new() { Value = 83448043739 };
-			TweakDBDescriptionRecord = new() { Value = 137244048802 };
+			TweakDBRecord = 83448043739;
+			TweakDBDescriptionRecord = 137244048802;
 			ReflectorSFX = new() { Distraction = "dev_reflector_distraction", TurnOn = "dev_reflector_turn_on_loop", TurnOff = "dev_reflector_turn_on_loop_stop" };
 		}
 	}

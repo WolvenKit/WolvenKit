@@ -40,8 +40,8 @@ namespace WolvenKit.RED4.Types
 		public WindowBlindersControllerPS()
 		{
 			DeviceName = "LocKey#104";
-			TweakDBRecord = new() { Value = 96252370147 };
-			TweakDBDescriptionRecord = new() { Value = 148393279395 };
+			TweakDBRecord = 96252370147;
+			TweakDBDescriptionRecord = 148393279395;
 			WindowBlindersData = new() { WindowBlindersState = Enums.EWindowBlindersStates.Closed, HasOpenInteraction = true, HasQuickHack = true };
 		}
 	}

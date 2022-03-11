@@ -24,8 +24,8 @@ namespace WolvenKit.RED4.Types
 		public SecurityAlarmControllerPS()
 		{
 			DeviceName = "LocKey#109";
-			TweakDBRecord = new() { Value = 92888207289 };
-			TweakDBDescriptionRecord = new() { Value = 144117121652 };
+			TweakDBRecord = 92888207289;
+			TweakDBDescriptionRecord = 144117121652;
 			SecurityAlarmSetup = new();
 			SecurityAlarmState = Enums.ESecuritySystemState.SAFE;
 		}

@@ -16,7 +16,7 @@ namespace WolvenKit.RED4.Types
 		public WardrobeControllerPS()
 		{
 			DeviceName = "LocKey#2120";
-			TweakDBRecord = new() { Value = 70419249436 };
+			TweakDBRecord = 70419249436;
 			ClothingSets = new();
 		}
 	}

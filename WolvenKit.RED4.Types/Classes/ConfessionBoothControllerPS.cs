@@ -8,8 +8,8 @@ namespace WolvenKit.RED4.Types
 		public ConfessionBoothControllerPS()
 		{
 			DeviceName = "LocKey#1942";
-			TweakDBRecord = new() { Value = 102833522601 };
-			TweakDBDescriptionRecord = new() { Value = 152595250458 };
+			TweakDBRecord = 102833522601;
+			TweakDBDescriptionRecord = 152595250458;
 		}
 	}
 }

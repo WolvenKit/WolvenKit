@@ -16,15 +16,13 @@ namespace WolvenKit.RED4.Types
         private static readonly Dictionary<string, ExtendedEnumInfo> _redEnumCache = new();
         private static readonly ConcurrentDictionary<Type, Lazy<ExtendedTypeInfo>> _typeInfoCache = new();
 
-        public static void AddDynamicProperty(RedBaseClass cls, string propertyName, IRedType propertyValue)
-        {
-            cls.InternalSetPropertyValue(propertyName, propertyValue, false);
-        }
-
         public static ExtendedTypeInfo GetTypeInfo(Type type)
         {
             return _typeInfoCache.GetOrAdd(type, new Lazy<ExtendedTypeInfo>(() => new ExtendedTypeInfo(type))).Value;
         }
+
+        public static Dictionary<string, Type> GetTypes() => new(_redTypeCache);
+
         public static IEnumerable<Type> GetSubClassesOf(Type type) => _redTypeCache?.Values.Where(_ => _.IsSubclassOf(type)).ToList();
 
         public static ExtendedPropertyInfo GetPropertyByName(Type type, string propertyName)
@@ -32,6 +30,51 @@ namespace WolvenKit.RED4.Types
             var typeInfo = GetTypeInfo(type);
 
             return typeInfo.PropertyInfos.FirstOrDefault(p => p.Name == propertyName);
+        }
+
+        public static ExtendedPropertyInfo GetNativePropertyInfo(Type classType, string propertyName)
+        {
+            foreach (var propertyInfo in GetTypeInfo(classType).PropertyInfos)
+            {
+                if (propertyInfo.Name == propertyName || propertyInfo.RedName == propertyName)
+                {
+                    return propertyInfo;
+                }
+            }
+
+            return null;
+        }
+
+        public static object GetClassDefaultValue(Type classType, string propertyName)
+        {
+            var propertyInfo = GetNativePropertyInfo(classType, propertyName);
+            if (propertyInfo == null)
+            {
+                throw new PropertyNotFoundException($"{classType.Name}.{propertyName}");
+            }
+
+            return GetClassDefaultValue(classType, propertyInfo);
+        }
+
+        public static object GetClassDefaultValue(Type classType, ExtendedPropertyInfo propertyInfo)
+        {
+            return RedTypeManager.Create(classType).GetProperty(propertyInfo.RedName);
+        }
+
+        public static object GetDefaultValue(Type type)
+        {
+            if (type.IsValueType)
+            {
+                return System.Activator.CreateInstance(type);
+            }
+
+            var typeInfo = GetTypeInfo(type);
+            if (typeInfo is { IsValueType: true })
+            {
+                return System.Activator.CreateInstance(type);
+            }
+
+            return null;
         }
 
         public static ExtendedPropertyInfo GetPropertyByRedName(Type type, string redPropertyName)
@@ -56,7 +99,7 @@ namespace WolvenKit.RED4.Types
         {
             if (!extendedPropertyInfo._isDefaultSet)
             {
-                extendedPropertyInfo.DefaultValue = extendedPropertyInfo.GetValue(RedTypeManager.Create(clsType));
+                extendedPropertyInfo.DefaultValue = GetClassDefaultValue(clsType, extendedPropertyInfo);
                 extendedPropertyInfo._isDefaultSet = true;
             }
 
@@ -407,13 +450,6 @@ namespace WolvenKit.RED4.Types
 
             public bool SerializeDefault { get; set; }
             public object DefaultValue { get; internal set; }
-
-            public object GetValue(RedBaseClass instance) => instance.InternalGetPropertyValue(Type, RedName, Flags);
-            public void SetValue(RedBaseClass instance, IRedType value)
-            {
-                instance.InternalForceSetPropertyValue(RedName, value, true);
-                instance._writtenProperties.Add(RedName);
-            }
 
 
             public ExtendedPropertyInfo(Type parent, PropertyInfo propertyInfo)

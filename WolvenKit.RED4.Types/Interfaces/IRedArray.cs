@@ -9,6 +9,8 @@ namespace WolvenKit.RED4.Types
         public int MaxSize { get; set; }
 
         public Type InnerType { get; }
+
+        public void AddRange(ICollection collection);
     }
 
     public interface IRedArray<T> : IRedArray, IRedGenericType<T>, IList<T>

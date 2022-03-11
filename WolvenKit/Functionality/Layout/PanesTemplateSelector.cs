@@ -126,6 +126,7 @@ namespace WolvenKit.Functionality.Layout
         /// </summary>
         public DataTemplate PropertiesTemplate { get; set; }
         public DataTemplate ImportExportToolTemplate { get; set; }
+        public DataTemplate TweakBrowserToolTemplate { get; set; }
 
         /// <summary>
         /// Gets/sets the view instance of the RadishTool.
@@ -159,6 +160,7 @@ namespace WolvenKit.Functionality.Layout
             ProjectExplorerViewModel _ => ProjectExplorerTemplate,
             AssetBrowserViewModel _ => AssetBrowserTemplate,
             ImportExportViewModel _ => ImportExportToolTemplate,
+            TweakBrowserViewModel _ => TweakBrowserToolTemplate,
 
             CodeEditorViewModel _ => CodeEditorTemplate,
             VisualEditorViewModel _ => VisualEditorTemplate,

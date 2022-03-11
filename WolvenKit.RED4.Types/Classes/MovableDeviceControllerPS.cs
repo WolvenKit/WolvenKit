@@ -24,8 +24,8 @@ namespace WolvenKit.RED4.Types
 		public MovableDeviceControllerPS()
 		{
 			DeviceName = "MovableDevice";
-			TweakDBRecord = new() { Value = 91003457296 };
-			TweakDBDescriptionRecord = new() { Value = 142248231645 };
+			TweakDBRecord = 91003457296;
+			TweakDBDescriptionRecord = 142248231645;
 			ShouldScannerShowStatus = false;
 			ShouldScannerShowNetwork = false;
 			ShouldScannerShowRole = true;

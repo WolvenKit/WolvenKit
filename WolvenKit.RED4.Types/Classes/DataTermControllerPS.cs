@@ -31,8 +31,8 @@ namespace WolvenKit.RED4.Types
 
 		public DataTermControllerPS()
 		{
-			TweakDBRecord = new() { Value = 69877812462 };
-			TweakDBDescriptionRecord = new() { Value = 120924954229 };
+			TweakDBRecord = 69877812462;
+			TweakDBDescriptionRecord = 120924954229;
 		}
 	}
 }

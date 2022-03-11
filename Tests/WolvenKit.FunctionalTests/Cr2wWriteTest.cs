@@ -27,8 +27,8 @@ namespace WolvenKit.FunctionalTests
         public static void SetupClass(TestContext context) => Setup(context);
 
         private const bool TEST_EXISTING = true;
-        private const bool WRITE_FAILED = false;
-        private const bool DECOMPRESS_BUFFERS = true;
+        private const bool WRITE_FAILED = true;
+        private const bool DECOMPRESS_BUFFERS = false;
 
         #region test methods
 
@@ -38,6 +38,20 @@ namespace WolvenKit.FunctionalTests
         //    Test_Extension();
         //}
 
+        //[TestMethod]
+        public void Debug()
+        {
+            var filesToTest = new List<FileEntry>();
+            foreach (var fileEntry in s_groupedFiles[".mt"])
+            {
+                if (fileEntry.FileName.Contains("3d_map_cubes.mt"))
+                {
+                    filesToTest.Add(fileEntry);
+                }
+            }
+
+            Write_Archive_Items(filesToTest);
+        }
 
         [TestMethod]
         public void Write_acousticdata() => Test_Extension(".acousticdata");
@@ -588,7 +602,12 @@ namespace WolvenKit.FunctionalTests
                                 if (!isBinaryEqual && WRITE_FAILED)
 #pragma warning disable CS0162
                                 {
-                                    var resultDir = Path.Combine(Environment.CurrentDirectory, s_testResultsDirectory);
+                                    var resultDir = Path.Combine(Environment.CurrentDirectory, s_testResultsDirectory, file.Extension[1..]);
+                                    if (!Directory.Exists(resultDir))
+                                    {
+                                        Directory.CreateDirectory(resultDir);
+                                    }
+
                                     var filename = Path.Combine(resultDir, Path.GetFileName(cr2wFile.MetaData.FileName));
 
                                     using var oFile = new FileStream($"{filename}.o.bin", FileMode.OpenOrCreate, FileAccess.Write);

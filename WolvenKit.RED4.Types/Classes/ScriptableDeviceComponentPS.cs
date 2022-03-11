@@ -667,7 +667,7 @@ namespace WolvenKit.RED4.Types
 			RevealDevicesGrid = true;
 			Masters = new();
 			FullDepth = true;
-			TweakDBRecord = new() { Value = 92249324940 };
+			TweakDBRecord = 92249324940;
 			HasAuthorizationModule = true;
 			BackdoorBreachDifficulty = Enums.EGameplayChallengeLevel.EASY;
 			MinigameAttempt = 1;

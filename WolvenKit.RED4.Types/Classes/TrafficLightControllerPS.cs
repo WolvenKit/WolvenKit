@@ -8,8 +8,8 @@ namespace WolvenKit.RED4.Types
 		public TrafficLightControllerPS()
 		{
 			DeviceName = "LocKey#127";
-			TweakDBRecord = new() { Value = 86578523053 };
-			TweakDBDescriptionRecord = new() { Value = 137459607504 };
+			TweakDBRecord = 86578523053;
+			TweakDBDescriptionRecord = 137459607504;
 		}
 	}
 }
