@@ -115,7 +115,7 @@ namespace WolvenKit.Modkit.RED4.Tools
 
             if (includeRig)
             {
-                rig = GetOrphanRig(rendblob, cr2w);
+                rig = GetOrphanRig(cMesh);
             }
 
             using var ms = new MemoryStream(rendblob.RenderBuffer.Buffer.GetBytes());
@@ -1063,7 +1063,7 @@ namespace WolvenKit.Modkit.RED4.Tools
                     LocalRot = Enumerable.Repeat(System.Numerics.Quaternion.Identity, boneCount).ToArray(),
                     LocalScale = Enumerable.Repeat(Vec3.One, boneCount).ToArray(),
                     Parent = Enumerable.Repeat<short>(-1, boneCount).ToArray(),
-                    Names = meshBlob.BoneNames.Select(x => x.GetValue()).ToArray()
+                    Names = meshBlob.BoneNames.Select(x => x.GetResolvedText()).ToArray()
             };
                 return Rig;
             }

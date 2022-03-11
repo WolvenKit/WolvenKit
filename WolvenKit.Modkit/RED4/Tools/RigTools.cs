@@ -23,10 +23,10 @@ namespace WolvenKit.Modkit.RED4.RigFile
             var Rig = new RawArmature
             {
                 BoneCount = animrig.BoneNames.Count,
-                Names = animrig.BoneNames.Select(_ => _.GetValue()).ToArray(),
+                Names = animrig.BoneNames.Select(_ => _.GetResolvedText()).ToArray(),
                 Parent = animrig.BoneParentIndexes.Select(_=>(short)_).ToArray(),
                 LocalPosn = animrig.BoneTransforms.Select(p => new Vec3(p.Translation.X, p.Translation.Z, -p.Translation.Y)).ToArray(),
-                LocalRot = animrig.BoneTransforms.Select(p => new Quat(p.Rotation.X, p.Rotation.Z, -p.Rotation.Y, p.Rotation.W)).ToArray(),
+                LocalRot = animrig.BoneTransforms.Select(p => new Quat(p.Rotation.I, p.Rotation.J, -p.Rotation.K, p.Rotation.R)).ToArray(),
                 LocalScale = animrig.BoneTransforms.Select(p => new Vec3(p.Scale.X, p.Scale.Z, p.Scale.Y)).ToArray(),
             };
 
