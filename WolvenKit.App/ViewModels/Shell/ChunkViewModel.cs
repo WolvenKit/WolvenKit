@@ -163,6 +163,9 @@ namespace WolvenKit.ViewModels.Shell
             DeleteItemCommand = new DelegateCommand(_ => ExecuteDeleteItem(), _ => CanDeleteItem());
             DeleteAllCommand = new DelegateCommand(_ => ExecuteDeleteAll(), _ => CanDeleteAll());
             OpenChunkCommand = new DelegateCommand(_ => ExecuteOpenChunk(), _ => CanOpenChunk());
+            CopyChunkCommand = new DelegateCommand(_ => ExecuteCopyChunk(), _ => CanCopyChunk());
+            DuplicateChunkCommand = new DelegateCommand(_ => ExecuteDuplicateChunk(), _ => CanDuplicateChunk());
+            PasteChunkCommand = new DelegateCommand(_ => ExecutePasteChunk(), _ => CanPasteChunk());
         }
 
         public ChunkViewModel(IRedType export, RDTDataViewModel tab) : this(export)
@@ -587,7 +590,19 @@ namespace WolvenKit.ViewModels.Shell
         {
             if (ResolvedData is IList ary)
             {
-                return ary.IndexOf(child.Data);
+                //return ary.IndexOf(child.Data);
+                var index = 0;
+                foreach (var item in ary)
+                {
+                    if (item.GetHashCode() == child.Data.GetHashCode())
+                    {
+                        return index;
+                    }
+                    else
+                    {
+                        index++;
+                    }
+                }
             }
             else if (ResolvedData is IRedBufferPointer rbp && rbp.GetValue().Data is Package04 pkg)
             {
@@ -1533,6 +1548,76 @@ namespace WolvenKit.ViewModels.Shell
             if (Data is RedBaseClass cls)
             {
                 Tab.File.TabItemViewModels.Add(new RDTDataViewModel(cls, Tab.File));
+            }
+        }
+
+        public ICommand CopyChunkCommand { get; private set; }
+        private bool CanCopyChunk() => IsInArray;
+        private void ExecuteCopyChunk()
+        {
+            if (Data is IRedCloneable irc)
+            {
+                Tab.CopiedChunk = (IRedType)irc.DeepCopy();
+            }
+            else
+            {
+                Tab.CopiedChunk = Data;
+            }
+        }
+
+        public ICommand DuplicateChunkCommand { get; private set; }
+        private bool CanDuplicateChunk() => IsInArray;
+        private void ExecuteDuplicateChunk()
+        {
+            if (Data is IRedCloneable irc)
+            {
+                AddToArray(Parent, (IRedType)irc.DeepCopy());
+            }
+            else
+            {
+                AddToArray(Parent, Data);
+            }
+        }
+
+        public ICommand PasteChunkCommand { get; private set; }
+        private bool CanPasteChunk() => (IsArray || IsInArray) && Tab.CopiedChunk != null;
+        private void ExecutePasteChunk()
+        {
+            if (Tab.CopiedChunk == null)
+            {
+                return;
+            }
+            if (Parent.ResolvedData is IRedArray)
+            {
+                if (AddToArray(Parent, Tab.CopiedChunk))
+                {
+                    Tab.CopiedChunk = null;
+                }
+            }
+            if (ResolvedData is IRedArray)
+            {
+                if (AddToArray(this, Tab.CopiedChunk))
+                {
+                    Tab.CopiedChunk = null;
+                }
+            }
+        }
+
+        private static bool AddToArray(ChunkViewModel cvm, IRedType item)
+        {
+            if (cvm.ResolvedData is IRedArray ira && ira.InnerType.IsAssignableTo(item.GetType()))
+            {
+                ira.Add(item);
+                cvm.Name = null;
+                cvm.PropertyCount = -1;
+                cvm.PropertiesLoaded = false;
+                cvm.CalculateProperties();
+                cvm.Tab.File.SetIsDirty(true);
+                return true;
+            }
+            else
+            {
+                return false;
             }
         }
     }

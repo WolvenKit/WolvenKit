@@ -241,20 +241,48 @@
                     </MenuItem.Icon>
                 </MenuItem>
                 <MenuItem
-                    Command="ApplicationCommands.Copy"
-                    CommandParameter="{Binding}"
-                    CommandTarget="{Binding}"
-                    Header="Copy Value to Clipboard"
+                    Command="{Binding Path=PlacementTarget.Tag.DuplicateChunkCommand, RelativeSource={RelativeSource AncestorType=ContextMenu}}"
+                    Header="Duplicate Item in Array"
                     IsCheckable="False"
                     Style="{StaticResource SyncfusionMenuItemStyle}">
                     <MenuItem.Icon>
-                        <iconPacks:PackIconCodicons
+                        <iconPacks:PackIconMaterial
                             Width="13"
                             Height="13"
                             Padding="0,0,0,0"
                             HorizontalAlignment="Center"
                             VerticalAlignment="Center"
-                            Kind="Copy" />
+                            Kind="ContentDuplicate" />
+                    </MenuItem.Icon>
+                </MenuItem>
+                <MenuItem
+                    Command="{Binding Path=PlacementTarget.Tag.CopyChunkCommand, RelativeSource={RelativeSource AncestorType=ContextMenu}}"
+                    Header="Copy From Array"
+                    IsCheckable="False"
+                    Style="{StaticResource SyncfusionMenuItemStyle}">
+                    <MenuItem.Icon>
+                        <iconPacks:PackIconMaterial
+                            Width="13"
+                            Height="13"
+                            Padding="0,0,0,0"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center"
+                            Kind="ContentCopy" />
+                    </MenuItem.Icon>
+                </MenuItem>
+                <MenuItem
+                    Command="{Binding Path=PlacementTarget.Tag.PasteChunkCommand, RelativeSource={RelativeSource AncestorType=ContextMenu}}"
+                    Header="Paste Into Array"
+                    IsCheckable="False"
+                    Style="{StaticResource SyncfusionMenuItemStyle}">
+                    <MenuItem.Icon>
+                        <iconPacks:PackIconMaterial
+                            Width="13"
+                            Height="13"
+                            Padding="0,0,0,0"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center"
+                            Kind="ContentPaste" />
                     </MenuItem.Icon>
                 </MenuItem>
                 <MenuItem
@@ -270,6 +298,23 @@
                             HorizontalAlignment="Center"
                             VerticalAlignment="Center"
                             Kind="Json" />
+                    </MenuItem.Icon>
+                </MenuItem>
+                <MenuItem
+                    Command="ApplicationCommands.Copy"
+                    CommandParameter="{Binding}"
+                    CommandTarget="{Binding}"
+                    Header="Copy Value to Clipboard"
+                    IsCheckable="False"
+                    Style="{StaticResource SyncfusionMenuItemStyle}">
+                    <MenuItem.Icon>
+                        <iconPacks:PackIconCodicons
+                            Width="13"
+                            Height="13"
+                            Padding="0,0,0,0"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center"
+                            Kind="Copy" />
                     </MenuItem.Icon>
                 </MenuItem>
                 <MenuItem
