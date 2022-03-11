@@ -201,7 +201,10 @@ namespace WolvenKit.Modkit.RED4
                     //register imports
                     foreach (var cr2WImportWrapper in reader.ImportsList)
                     {
-                        importsHashSet.Add(FNV1A64HashAlgorithm.HashString(cr2WImportWrapper.DepotPath));
+                        if (cr2WImportWrapper.Flags != WolvenKit.RED4.Types.InternalEnums.EImportFlags.Soft)
+                        {
+                            importsHashSet.Add(FNV1A64HashAlgorithm.HashString(cr2WImportWrapper.DepotPath));
+                        }
                     }
 
                     lastimportidx = (uint)importsHashSet.Count;
