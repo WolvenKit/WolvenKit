@@ -57,4 +57,6 @@ public class BaseStringType : IRedPrimitive<string>, IEquatable<BaseStringType>,
 
         return Equals((BaseStringType)obj);
     }
+
+    public override int GetHashCode() => _value.GetHashCode();
 }

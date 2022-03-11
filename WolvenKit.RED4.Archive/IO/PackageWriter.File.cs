@@ -351,7 +351,7 @@ namespace WolvenKit.RED4.Archive.IO
             foreach (var kvp in file.ImportRef)
             {
                 file.BaseStream.Position = kvp.Key;
-                var index = (ushort)(file.ImportCacheList.IndexOf(kvp.Value, _importComparer) + 0);
+                var index = (ushort)(file.ImportCacheList.IndexOf(kvp.Value) + 0);
                 file.BaseWriter.Write(index);
             }
             file.BaseStream.Position = pos;

@@ -8,8 +8,16 @@ namespace WolvenKit.RED4.Types
         private readonly HashSet<T> _valueList = new();
         private readonly Dictionary<T, ushort> _keyValueList = new();
         private ushort _index;
+        private IEqualityComparer<T> _comparer;
 
         public ushort Count => _index;
+
+        public CacheList() : this(EqualityComparer<T>.Default) {}
+
+        public CacheList(IEqualityComparer<T> comparer)
+        {
+            _comparer = comparer;
+        }
 
         public ushort Add(T value)
         {
@@ -34,13 +42,11 @@ namespace WolvenKit.RED4.Types
             return _valueList.Remove(item) && _keyValueList.Remove(item);
         }
 
-        public ushort IndexOf(T value, IEqualityComparer<T> comparer = null)
+        public ushort IndexOf(T value)
         {
-            comparer ??= EqualityComparer<T>.Default;
-
             foreach (var (element, index) in _keyValueList)
             {
-                if (comparer.Equals(element, value))
+                if (_comparer.Equals(element, value))
                 {
                     return index;
                 }
@@ -56,9 +62,9 @@ namespace WolvenKit.RED4.Types
             _index = 0;
         }
 
-        public Dictionary<T, ushort> ToDictionary(IEqualityComparer<T> comparer = null)
+        public Dictionary<T, ushort> ToDictionary()
         {
-            return new Dictionary<T, ushort>(_keyValueList, comparer);
+            return new Dictionary<T, ushort>(_keyValueList, _comparer);
         }
 
         public List<T> ToList()

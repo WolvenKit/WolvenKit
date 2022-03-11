@@ -554,14 +554,14 @@ namespace WolvenKit.RED4.Archive.IO
             foreach (var kvp in file.ImportRef)
             {
                 file.BaseStream.Position = kvp.Key;
-                var index = (short)(file.ImportCacheList.IndexOf(kvp.Value, _importComparer) + 1);
+                var index = (short)(file.ImportCacheList.IndexOf(kvp.Value) + 1);
                 file.BaseWriter.Write(index);
             }
 
             foreach (var kvp in file.BufferRef)
             {
                 file.BaseStream.Position = kvp.Key;
-                var index = (ushort)(file.BufferCacheList.IndexOf(kvp.Value, ReferenceEqualityComparer.Instance) + 1);
+                var index = (ushort)(file.BufferCacheList.IndexOf(kvp.Value) + 1);
                 file.BaseWriter.Write(index);
             }
             file.BaseStream.Position = pos;
