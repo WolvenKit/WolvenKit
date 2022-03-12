@@ -971,29 +971,29 @@ namespace WolvenKit.Modkit.RED4.Tools
                     //node.Skin = skin;
                 }
 
-                //if (mesh.garmentMorph.Length > 0)
-                //{
-                //    string[] arr = { "GarmentSupport" };
-                //    var obj = new { mesh.materialNames, targetNames = arr };
-                //    mes.Extras = SharpGLTF.IO.JsonContent.Serialize(obj);
-                //}
-                //else
-                //{
-                //    var obj = new { mesh.materialNames };
-                //    mes.Extras = SharpGLTF.IO.JsonContent.Serialize(obj);
-                //}
-                //if (mesh.garmentMorph.Length > 0)
-                //{
-                //    var acc = model.CreateAccessor();
-                //    var buff = model.UseBufferView(buffer, BuffViewoffset, mesh.garmentMorph.Length * 12);
-                //    acc.SetData(buff, 0, mesh.garmentMorph.Length, DimensionType.VEC3, EncodingType.FLOAT, false);
-                //    var dict = new Dictionary<string, Accessor>
-                //    {
-                //        { "POSITION", acc }
-                //    };
-                //    prim.SetMorphTargetAccessors(0, dict);
-                //    BuffViewoffset += mesh.garmentMorph.Length * 12;
-                //}
+                if (mesh.garmentMorph.Length > 0)
+                {
+                    string[] arr = { "GarmentSupport" };
+                    var obj = new { mesh.materialNames, targetNames = arr };
+                    mes.Extras = SharpGLTF.IO.JsonContent.Serialize(obj);
+                }
+                else
+                {
+                    var obj = new { mesh.materialNames };
+                    mes.Extras = SharpGLTF.IO.JsonContent.Serialize(obj);
+                }
+                if (mesh.garmentMorph.Length > 0)
+                {
+                    var acc = model.CreateAccessor();
+                    var buff = model.UseBufferView(buffer, BuffViewoffset, mesh.garmentMorph.Length * 12);
+                    acc.SetData(buff, 0, mesh.garmentMorph.Length, DimensionType.VEC3, EncodingType.FLOAT, false);
+                    var dict = new Dictionary<string, Accessor>
+                    {
+                        { "POSITION", acc }
+                    };
+                    prim.SetMorphTargetAccessors(0, dict);
+                    BuffViewoffset += mesh.garmentMorph.Length * 12;
+                }
 
             }
         }
