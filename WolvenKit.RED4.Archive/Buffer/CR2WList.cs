@@ -5,7 +5,7 @@ using WolvenKit.RED4.Types;
 
 namespace WolvenKit.RED4.Archive.Buffer
 {
-    public class CR2WList : Red4File, IParseableBuffer
+    public class CR2WList : Red4File, IParseableBuffer, IRedCloneable
     {
         public IRedType Data
         {
@@ -22,6 +22,24 @@ namespace WolvenKit.RED4.Archive.Buffer
         public CR2WList()
         {
             Files = new List<CR2WFile>();
+        }
+
+        public object ShallowCopy()
+        {
+            return MemberwiseClone();
+        }
+
+        public object DeepCopy()
+        {
+            var list = new CR2WList();
+            foreach (var file in Files)
+            {
+                list.Files.Add(new CR2WFile()
+                {
+                    RootChunk = (RedBaseClass)file.RootChunk.DeepCopy()
+                });
+            }
+            return list;
         }
     }
 }

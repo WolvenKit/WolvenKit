@@ -62,6 +62,8 @@ namespace WolvenKit.Views.Tools
             //    e.Cancel = true;
         }
 
+        public bool IsControlBeingHeld => Keyboard.IsKeyDown(Key.LeftCtrl) || Keyboard.IsKeyDown(Key.RightCtrl);
+
         private void SfTreeView_ItemDragOver(object sender, TreeViewItemDragOverEventArgs e)
         {
             e.DropPosition = DropPosition.None;
@@ -73,66 +75,71 @@ namespace WolvenKit.Views.Tools
                     {
                         if (source == target)
                         {
-                            e.DropPosition = DropPosition.DropAsChild;
+                            e.DropPosition = DropPosition.None;
                         }
                         //else if (source.CanBeDroppedOn(target))
                         //{
                         //    e.DropPosition = DropPosition.DropAsChild;
                         //}
-                        else if (source.Data is RedBaseClass)
+                        else if (source.Data is IRedType)
                         {
+                            if (IsControlBeingHeld)
+                            {
+                                if (target.Parent.Data is IRedBufferPointer)
+                                {
+                                    e.DropPosition = DropPosition.DropBelow;
+                                }
 
+                                if (target.Parent.Data is IRedArray arr)
+                                {
+                                    var arrayType = target.Parent.Data.GetType().GetGenericTypeDefinition();
 
-                            if (target.Parent.Data is DataBuffer or SerializationDeferredDataBuffer)
+                                    if (arrayType == typeof(CArray<>))
+                                    {
+                                        e.DropPosition = DropPosition.DropBelow;
+                                    }
+
+                                    if (arrayType == typeof(CStatic<>) && arr.Count < arr.MaxSize)
+                                    {
+                                        e.DropPosition = DropPosition.DropBelow;
+                                    }
+                                }
+                            }
+                            else if (target.IsInArray)
                             {
                                 e.DropPosition = DropPosition.DropBelow;
                             }
-
-                            if (target.Parent.Data is IRedArray arr)
-                            {
-                                var arrayType = target.Parent.Data.GetType().GetGenericTypeDefinition();
-
-                                if (arrayType == typeof(CArray<>))
-                                {
-                                    e.DropPosition = DropPosition.DropBelow;
-                                }
-
-                                if (arrayType == typeof(CStatic<>) && arr.Count < arr.MaxSize)
-                                {
-                                    e.DropPosition = DropPosition.DropBelow;
-                                }
-                            }
                         }
                     }
                 }
             }
-            if (e.Data.GetDataPresent(DataFormats.FileDrop))
-            {
-                if (e.TargetNode != null && e.TargetNode.Content is ChunkViewModel target)
-                {
-                    var files = new List<string>((string[])e.Data.GetData(DataFormats.FileDrop));
-                    if (files.Count == 1)
-                    {
-                        if (dropFileLocation != files[0])
-                        {
-                            try
-                            {
-                                dropFileLocation = files[0];
-                                var json = File.ReadAllText(files[0]);
-                                dropFile = JsonConvert.DeserializeObject<RedTypeDto>(json);
-                            }
-                            catch (Exception)
-                            {
+            //if (e.Data.GetDataPresent(DataFormats.FileDrop))
+            //{
+            //    if (e.TargetNode != null && e.TargetNode.Content is ChunkViewModel target)
+            //    {
+            //        var files = new List<string>((string[])e.Data.GetData(DataFormats.FileDrop));
+            //        if (files.Count == 1)
+            //        {
+            //            if (dropFileLocation != files[0])
+            //            {
+            //                try
+            //                {
+            //                    dropFileLocation = files[0];
+            //                    var json = File.ReadAllText(files[0]);
+            //                    dropFile = JsonConvert.DeserializeObject<RedTypeDto>(json);
+            //                }
+            //                catch (Exception)
+            //                {
 
-                            }
-                        }
-                        //if (dropFile != null && dropFile.Type == target.Type)
-                        //{
-                        e.DropPosition = DropPosition.DropAsChild;
-                        //}
-                    }
-                }
-            }
+            //                }
+            //            }
+            //            //if (dropFile != null && dropFile.Type == target.Type)
+            //            //{
+            //            e.DropPosition = DropPosition.DropAsChild;
+            //            //}
+            //        }
+            //    }
+            //}
         }
 
         private void SfTreeView_ItemDropping(object sender, TreeViewItemDroppingEventArgs e)
@@ -140,30 +147,42 @@ namespace WolvenKit.Views.Tools
             e.Handled = true;
             if (e.DraggingNodes != null && e.DraggingNodes[0].Content is ChunkViewModel source)
             {
-                if (e.TargetNode.Content is ChunkViewModel target && target.Parent != null)
+                if (e.TargetNode.Content is ChunkViewModel target && target.Parent != null && (e.DropPosition == DropPosition.DropBelow || e.DropPosition == DropPosition.DropAbove))
                 {
-                    if (source.Data is RedBaseClass rbc)
+                    if (IsControlBeingHeld)
                     {
-                        if (target.Parent.Data is DataBuffer or SerializationDeferredDataBuffer)
+                        if (source.Data is IRedCloneable irc)
                         {
-                            target.Parent.AddChunkToDataBuffer((RedBaseClass)rbc.DeepCopy(), target.Parent.Properties.IndexOf(target) + 1);
-                        }
-
-                        if (target.Parent.Data is IRedArray arr)
-                        {
-                            var arrayType = target.Parent.Data.GetType().GetGenericTypeDefinition();
-
-                            if (arrayType == typeof(CArray<>))
+                            MessageBoxResult messageBoxResult = MessageBox.Show($"Duplicate {source.Data.GetType().Name} here?", "Duplicate Confirmation", MessageBoxButton.YesNo);
+                            if (messageBoxResult == MessageBoxResult.Yes)
                             {
-                                target.Parent.AddClassToArray((RedBaseClass)rbc.DeepCopy(), target.Parent.Properties.IndexOf(target) + 1);
-                            }
-
-                            if (arrayType == typeof(CStatic<>) && arr.Count < arr.MaxSize)
-                            {
-                                target.Parent.AddClassToArray((RedBaseClass)rbc.DeepCopy(), target.Parent.Properties.IndexOf(target) + 1);
+                                target.Parent.InsertChild(target.Parent.Properties.IndexOf(target) + 1, (IRedType)irc.DeepCopy());
                             }
                         }
                     }
+                    else
+                    {
+                        target.Parent.MoveChild(target.Parent.Properties.IndexOf(target) + 1, source.Data);
+                    }
+                        //if (target.Parent.Data is DataBuffer or SerializationDeferredDataBuffer)
+                        //{
+                        //    target.Parent.AddChunkToDataBuffer((RedBaseClass)rbc.DeepCopy(), target.Parent.Properties.IndexOf(target) + 1);
+                        //}
+
+                        //if (target.Parent.Data is IRedArray arr)
+                        //{
+                        //    var arrayType = target.Parent.Data.GetType().GetGenericTypeDefinition();
+
+                        //    if (arrayType == typeof(CArray<>))
+                        //    {
+                        //        target.Parent.AddClassToArray((RedBaseClass)rbc.DeepCopy(), target.Parent.Properties.IndexOf(target) + 1);
+                        //    }
+
+                        //    if (arrayType == typeof(CStatic<>) && arr.Count < arr.MaxSize)
+                        //    {
+                        //        target.Parent.AddClassToArray((RedBaseClass)rbc.DeepCopy(), target.Parent.Properties.IndexOf(target) + 1);
+                        //    }
+                        //}
                 }
             }
         }

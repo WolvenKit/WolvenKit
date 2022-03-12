@@ -118,6 +118,7 @@ namespace WolvenKit.ViewModels.Shell
 
                     if (Parent != null)
                     {
+
                         if (Parent.Data is IRedArray arr)
                         {
                             var index = int.Parse(Name);
@@ -149,6 +150,8 @@ namespace WolvenKit.ViewModels.Shell
                                 }
                             }
                         }
+
+                        Parent.CalculateDescriptor();
                     }
                 });
 
@@ -590,30 +593,33 @@ namespace WolvenKit.ViewModels.Shell
         {
             if (ResolvedData is IList ary)
             {
-                //if (PropertiesLoaded)
-                //{
-                //    Properties.IndexOf(child);
-                //}
-                //else
-                //{
-                    //return ary.IndexOf(child.Data);
-                    var index = 0;
-                    foreach (var item in ary)
+                var index = 0;
+                foreach (var item in ary)
+                {
+                    if (item.GetHashCode() == child.Data.GetHashCode())
                     {
-                        if (item.GetHashCode() == child.Data.GetHashCode())
+                        if (!PropertiesLoaded || Properties[index].GetHashCode() == child.GetHashCode())
                         {
-                            if (!PropertiesLoaded || Properties[index].GetHashCode() == child.GetHashCode())
-                            {
-                                return index;
-                            }
+                            return index;
                         }
-                        index++;
                     }
-                //}
+                    index++;
+                }
             }
             else if (ResolvedData is IRedBufferPointer rbp && rbp.GetValue().Data is Package04 pkg)
             {
-                return pkg.Chunks.IndexOf(child.Data);
+                var index = 0;
+                foreach (var item in pkg.Chunks)
+                {
+                    if (item.GetHashCode() == child.Data.GetHashCode())
+                    {
+                        if (!PropertiesLoaded || Properties[index].GetHashCode() == child.GetHashCode())
+                        {
+                            return index;
+                        }
+                    }
+                    index++;
+                }
             }
             else if (ResolvedData is IRedBufferPointer rbp2 && rbp2.GetValue().Data is CR2WList cl)
             {
@@ -1308,16 +1314,18 @@ namespace WolvenKit.ViewModels.Shell
                 var pointee = RedTypeManager.CreateRedType(handle.InnerType);
                 handle.SetValue((RedBaseClass)pointee);
             }
-            (Data as IRedArray).Add(newItem);
-            var cvm = new ChunkViewModel(newItem, this);
-            // TODO
+            InsertChild(-1, newItem);
+            //(Data as IRedArray).Add(newItem);
+            //var cvm = new ChunkViewModel(newItem, this);
+            //PropertyCount = -1;
+            //CalculateDescriptor();
             //Properties.Add(cvm);
-            this.RaisePropertyChanged("Data");
-            cvm.IsExpanded = true;
-            IsExpanded = true;
-            Parent.IsExpanded = true;
-            Tab.SelectedChunk = cvm;
-            Tab.File.SetIsDirty(true);
+            //this.RaisePropertyChanged("Data");
+            //cvm.IsExpanded = true;
+            //IsExpanded = true;
+            //Parent.IsExpanded = true;
+            //Tab.SelectedChunk = cvm;
+            //Tab.File.SetIsDirty(true);
         }
 
         public ICommand AddItemToCompiledDataCommand { get; private set; }
@@ -1355,6 +1363,7 @@ namespace WolvenKit.ViewModels.Shell
                 DialogHandler = HandleChunk
             });
         }
+
         public void HandleChunk(DialogViewModel sender)
         {
             var app = Locator.Current.GetService<AppViewModel>();
@@ -1363,158 +1372,99 @@ namespace WolvenKit.ViewModels.Shell
             {
                 var vm = sender as CreateClassDialogViewModel;
                 var instance = RedTypeManager.Create(vm.SelectedClass);
-                AddChunkToDataBuffer(instance, Properties.Count);
+                InsertChild(-1, instance);
             }
         }
 
-        private void UpdateProperties(RedBaseClass instance, int index)
-        {
-            var cvm = new ChunkViewModel(instance, this);
-            // TODO
-            //Properties.Insert(index, cvm);
-            foreach (var prop in Properties)
-            {
-                prop.RaisePropertyChanged("Name");
-            }
+        //private void AddPropertyAtIndex(IRedType instance, int index)
+        //{
+        //    PropertyCount = -1;
+        //    CalculateDescriptor();
+        //    PropertiesLoaded = false;
+        //    CalculateProperties();
 
-            this.RaisePropertyChanged("Data");
-            IsExpanded = true;
-            cvm.IsExpanded = true;
-            Tab.SelectedChunk = cvm;
-            Tab.File.SetIsDirty(true);
-        }
+        //    this.RaisePropertyChanged("Data");
 
-        public void AddChunkToDataBuffer(RedBaseClass instance, int index)
-        {//engine\materials\metal_base.remt
-            if (Data is IRedBufferPointer db && db.GetValue().Data is Package04 pkg)
-            {
-                //pkg.Chunks.Add(instance);
-                pkg.Chunks.Insert(index, instance);
-                //_properties.Add(new ChunkViewModel(instance, this));
-                UpdateProperties(instance, index);
-            }
-        }
+        //    IsExpanded = true;
 
-        public void AddClassToArray(RedBaseClass instance, int index)
-        {
-            if (Data is not IRedArray arr)
-            {
-                return;
-            }
-
-            var arrayType = Data.GetType().GetGenericTypeDefinition();
-
-            if (arrayType == typeof(CArray<>))
-            {
-                arr.Insert(index, instance);
-                UpdateProperties(instance, index);
-            }
-
-            if (arrayType == typeof(CStatic<>) && arr.Count < arr.MaxSize)
-            {
-                ((IRedArray)Data).Insert(index, instance);
-                UpdateProperties(instance, index);
-            }
-            else if (Data is IRedBufferPointer db2 && db2.GetValue().Data is CR2WList list)
-            {
-                //pkg.Chunks.Add(instance);
-                list.Files.Insert(index, new CR2WFile()
-                {
-                    RootChunk = instance
-                });
-                //_properties.Add(new ChunkViewModel(instance, this));
-                var cvm = new ChunkViewModel(instance, this);
-                // TODO
-                //Properties.Insert(index, cvm);
-                foreach (var prop in Properties)
-                {
-                    prop.RaisePropertyChanged("Name");
-                }
-
-                this.RaisePropertyChanged("Data");
-                IsExpanded = true;
-                cvm.IsExpanded = true;
-                Tab.SelectedChunk = cvm;
-                Tab.File.SetIsDirty(true);
-            }
-        }
+        //    foreach (var prop in Properties)
+        //    {
+        //        if (prop.Data.GetHashCode() == instance.GetHashCode())
+        //        {
+        //            prop.IsExpanded = true;
+        //            Tab.SelectedChunk = prop;
+        //            break;
+        //        }
+        //    }
+        //    Tab.File.SetIsDirty(true);
+        //}
 
         public ICommand DeleteItemCommand { get; private set; }
         private bool CanDeleteItem() => IsInArray;
         private void ExecuteDeleteItem()
         {
+            Tab.SelectedChunk = Parent;
             if (Parent.Data is IRedArray ary)
             {
-                Tab.SelectedChunk = Parent;
                 ary.Remove(Data);
-                // TODO
-                Parent.Properties.Remove(this);
-                foreach (var prop in Parent.Properties)
-                {
-                    prop.RaisePropertyChanged("Name");
-                }
-
-                Tab.File.SetIsDirty(true);
             }
-            if (Parent.Data is IRedBufferPointer db && db.GetValue().Data is Package04 pkg)
+            else if (Parent.Data is IRedBufferPointer db && db.GetValue().Data is Package04 pkg)
             {
-                Tab.SelectedChunk = Parent;
-                pkg.Chunks.Remove((RedBaseClass)Data);
-                // TODO
-                Parent.Properties.Remove(this);
-                foreach (var prop in Parent.Properties)
+                if (!pkg.Chunks.Remove((RedBaseClass)Data))
                 {
-                    prop.RaisePropertyChanged("Name");
+                    Locator.Current.GetService<ILoggerService>().Error("Unable to delete chunk");
+                    return;
                 }
-
-                Tab.File.SetIsDirty(true);
             }
-            if (Parent.Data is IRedBufferPointer db2 && db2.GetValue().Data is CR2WList list)
+            else if (Parent.Data is IRedBufferPointer db2 && db2.GetValue().Data is CR2WList list)
             {
-                Tab.SelectedChunk = Parent;
                 list.Files.RemoveAll(x => x.RootChunk == Data);
-                // TODO
-                Parent.Properties.Remove(this);
-                foreach (var prop in Parent.Properties)
-                {
-                    prop.RaisePropertyChanged("Name");
-                }
-
-                Tab.File.SetIsDirty(true);
             }
+            else
+            {
+                Locator.Current.GetService<ILoggerService>().Error("Unknown collection - unable to delete chunk");
+                return;
+            }
+
+            Tab.File.SetIsDirty(true);
+            Parent.RecalulateProperties();
         }
 
         public ICommand DeleteAllCommand { get; private set; }
-        private bool CanDeleteAll() => IsArray && PropertyCount > 0;
+        private bool CanDeleteAll() => (IsArray && PropertyCount > 0) || (IsInArray && Parent.PropertyCount > 0);
         private void ExecuteDeleteAll()
+        {
+            if (IsArray)
+            {
+                ClearChildren();
+            }
+            else if (IsInArray)
+            {
+                Parent.ClearChildren();
+            }
+        }
+
+        public void ClearChildren()
         {
             if (ResolvedData is IRedArray ary)
             {
                 ary.Clear();
-                // TODO
-                Properties.Clear();
-                this.RaisePropertyChanged("Data");
-                IsDeleteReady = false;
-                Tab.File.SetIsDirty(true);
             }
-            if (ResolvedData is IRedBufferPointer db && db.GetValue().Data is Package04 pkg)
+            else if (ResolvedData is IRedBufferPointer db && db.GetValue().Data is Package04 pkg)
             {
                 pkg.Chunks.Clear();
-                // TODO
-                Properties.Clear();
-                this.RaisePropertyChanged("Data");
-                IsDeleteReady = false;
-                Tab.File.SetIsDirty(true);
             }
-            if (ResolvedData is IRedBufferPointer db2 && db2.GetValue().Data is CR2WList list)
+            else if (ResolvedData is IRedBufferPointer db2 && db2.GetValue().Data is CR2WList list)
             {
                 list.Files.Clear();
-                // TODO
-                Properties.Clear();
-                this.RaisePropertyChanged("Data");
-                IsDeleteReady = false;
-                Tab.File.SetIsDirty(true);
             }
+            else
+            {
+                return;
+            }
+            IsDeleteReady = false;
+            Tab.File.SetIsDirty(true);
+            RecalulateProperties();
         }
 
         public ICommand ExportChunkCommand { get; private set; }
@@ -1578,11 +1528,11 @@ namespace WolvenKit.ViewModels.Shell
         {
             if (Data is IRedCloneable irc)
             {
-                AddToArray(Parent, (IRedType)irc.DeepCopy());
+                Parent.InsertChild(-1, (IRedType)irc.DeepCopy());
             }
             else
             {
-                AddToArray(Parent, Data);
+                Parent.InsertChild(-1, Data);
             }
         }
 
@@ -1596,36 +1546,155 @@ namespace WolvenKit.ViewModels.Shell
             }
             if (Parent.ResolvedData is IRedArray)
             {
-                if (AddToArray(Parent, Tab.CopiedChunk))
+                if (Parent.InsertChild(-1, Tab.CopiedChunk))
                 {
                     Tab.CopiedChunk = null;
                 }
             }
             if (ResolvedData is IRedArray)
             {
-                if (AddToArray(this, Tab.CopiedChunk))
+                if (InsertChild(-1, Tab.CopiedChunk))
                 {
                     Tab.CopiedChunk = null;
                 }
             }
         }
 
-        private static bool AddToArray(ChunkViewModel cvm, IRedType item)
+        public void MoveChild(int index, IRedType item)
         {
-            if (cvm.ResolvedData is IRedArray ira && ira.InnerType.IsAssignableTo(item.GetType()))
+            IList list = null;
+            if (ResolvedData is IList il)
             {
-                ira.Add(item);
-                cvm.CalculateDescriptor();
-                cvm.Name = null;
-                cvm.PropertyCount = -1;
-                cvm.PropertiesLoaded = false;
-                cvm.CalculateProperties();
-                cvm.Tab.File.SetIsDirty(true);
-                return true;
+                list = il;
+            }
+            else if (ResolvedData is IRedBufferPointer db)
+            {
+                if (db.GetValue().Data is Package04 pkg)
+                {
+                    list = (IList)pkg.Chunks;
+                }
+                else if (db.GetValue().Data is CR2WList cl)
+                {
+                    list = cl.Files;
+                }
+            }
+
+            if (list != null)
+            { 
+                int oldIndex = -1, i = 0;
+                foreach (var thing in list)
+                {
+                    if (thing.GetHashCode() == item.GetHashCode())
+                    {
+                        oldIndex = i;
+                        break;
+                    }
+                    i++;
+                }
+
+                if (oldIndex > -1)
+                {
+                    list.RemoveAt(oldIndex);
+                    if (oldIndex < index)
+                    {
+                        index--;
+                    }
+                    InsertChild(index, item);
+                    Tab.File.SetIsDirty(true);
+                    RecalulateProperties();
+                }
+            }
+        }
+
+        public bool InsertChild(int index, IRedType item)
+        {
+            // update actual data
+            if (ResolvedData is IRedArray ira && ira.InnerType.IsAssignableTo(item.GetType()))
+            {
+                var arrayType = Data.GetType().GetGenericTypeDefinition();
+                if (arrayType == typeof(CArray<>) || (arrayType == typeof(CStatic<>) && ira.Count < ira.MaxSize))
+                {
+                    if (index == -1 || index > ira.Count)
+                    {
+                        index = ira.Count;
+                    }
+                    ira.Insert(index, item);
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            else if (item is RedBaseClass rbc)
+            {
+                if (ResolvedData is IRedBufferPointer db)
+                {
+                    if (db.GetValue().Data is Package04 pkg)
+                    {
+                        if (index == -1 || index > pkg.Chunks.Count)
+                        {
+                            index = pkg.Chunks.Count;
+                        }
+                        pkg.Chunks.Add(rbc);
+                    }
+                    else if (db.GetValue().Data is CR2WList list)
+                    {
+                        if (index == -1 || index > list.Files.Count)
+                        {
+                            index = list.Files.Count;
+                        }
+                        list.Files.Insert(index, new CR2WFile()
+                        {
+                            RootChunk = rbc
+                        });
+                    }
+                }
+                else
+                {
+                    return false;
+                }
             }
             else
             {
                 return false;
+            }
+
+            //Name = null;
+            //PropertyCount = -1;
+            //CalculateDescriptor();
+            //PropertiesLoaded = false;
+            //CalculateProperties();
+            //Tab.File.SetIsDirty(true);
+
+            Tab.File.SetIsDirty(true);
+            RecalulateProperties(item);
+
+            return true;
+        }
+
+        public void RecalulateProperties(IRedType selectChild = null)
+        {
+            PropertyCount = -1;
+            // might not be needed
+            CalculateDescriptor();
+            PropertiesLoaded = false;
+            CalculateProperties();
+
+            this.RaisePropertyChanged("Data");
+
+            IsExpanded = true;
+
+            if (selectChild != null)
+            {
+                foreach (var prop in Properties)
+                {
+                    if (prop.Data.GetHashCode() == selectChild.GetHashCode())
+                    {
+                        prop.IsExpanded = true;
+                        Tab.SelectedChunk = prop;
+                        break;
+                    }
+                }
             }
         }
     }
