@@ -36,15 +36,6 @@ namespace WolvenKit.RED4.Archive.IO
 
             var dataCollection = GenerateData();
 
-            foreach (var embedded in _file.EmbeddedFiles)
-            {
-                var tuple = ("", (CName)embedded.FileName, (ushort)8);
-                if (!dataCollection.ImportList.Contains(tuple))
-                {
-                    dataCollection.ImportList.Add(tuple);
-                }
-            }
-
             fileHeader.objectsEnd = (uint)BaseStream.Position;
 
             var (stringBuffer, stringOffsets) = GenerateStringBuffer(dataCollection.CombinedStringList);
@@ -512,6 +503,18 @@ namespace WolvenKit.RED4.Archive.IO
             result.StringList = file.StringCacheList.ToList();
             result.ImportList = file.ImportCacheList.ToList();
 
+            foreach (var embeddedFile in _file.EmbeddedFiles)
+            {
+                var typeInfo = RedReflection.GetTypeInfo(embeddedFile.Content.GetType());
+                SetParent(_chunkInfos[embeddedFile.Content].Id, maxDepth: typeInfo.ChildLevel);
+
+                var tuple = ("", (CName)embeddedFile.FileName, (ushort)8);
+                if (!result.ImportList.Contains(tuple))
+                {
+                    result.ImportList.Add(tuple);
+                }
+            }
+
             result.CombinedStringList = new List<CName>(result.StringList);
             foreach (var (_, name, _) in result.ImportList)
             {
@@ -531,12 +534,6 @@ namespace WolvenKit.RED4.Archive.IO
             if (_file.RootChunk is worldFoliageBrush)
             {
                 SetParent(0);
-            }
-
-            foreach (var embeddedFile in _file.EmbeddedFiles)
-            {
-                var typeInfo = RedReflection.GetTypeInfo(embeddedFile.Content.GetType());
-                SetParent(_chunkInfos[embeddedFile.Content].Id, maxDepth: typeInfo.ChildLevel);
             }
 
             var ms2 = new MemoryStream();

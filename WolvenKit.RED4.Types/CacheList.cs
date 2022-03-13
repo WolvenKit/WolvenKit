@@ -6,7 +6,7 @@ namespace WolvenKit.RED4.Types
     public class CacheList<T>
     {
         private readonly HashSet<T> _valueList = new();
-        private readonly Dictionary<T, ushort> _keyValueList = new();
+        private readonly Dictionary<T, ushort> _keyValueList;
         private ushort _index;
         private IEqualityComparer<T> _comparer;
 
@@ -17,6 +17,7 @@ namespace WolvenKit.RED4.Types
         public CacheList(IEqualityComparer<T> comparer)
         {
             _comparer = comparer;
+            _keyValueList = new Dictionary<T, ushort>(_comparer);
         }
 
         public ushort Add(T value)
@@ -44,12 +45,9 @@ namespace WolvenKit.RED4.Types
 
         public ushort IndexOf(T value)
         {
-            foreach (var (element, index) in _keyValueList)
+            if (_keyValueList.TryGetValue(value, out var index))
             {
-                if (_comparer.Equals(element, value))
-                {
-                    return index;
-                }
+                return index;
             }
 
             return ushort.MaxValue;
@@ -61,12 +59,6 @@ namespace WolvenKit.RED4.Types
             _keyValueList.Clear();
             _index = 0;
         }
-
-        public Dictionary<T, ushort> ToDictionary()
-        {
-            return new Dictionary<T, ushort>(_keyValueList, _comparer);
-        }
-
         public List<T> ToList()
         {
             return _keyValueList.Keys.ToList();

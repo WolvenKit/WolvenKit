@@ -46,28 +46,25 @@ namespace WolvenKit.RED4.Types
             {
                 propertyName = propertyInfo.RedName;
 
-                if (!Equals(RedReflection.GetDefaultValue(propertyInfo.Type), value))
+                if (propertyInfo.GenericType != null)
                 {
-                    if (value.GetType().IsGenericType)
+                    if (propertyInfo.GenericType == typeof(CArrayFixedSize<>) && !Equals(RedReflection.GetDefaultValue(propertyInfo.Type), value))
                     {
-                        if (value.GetType().GetGenericTypeDefinition() == typeof(CArrayFixedSize<>))
+                        var flags = propertyInfo.Flags;
+                        var size = flags.MoveNext() ? flags.Current : 0;
+
+                        if (((IRedArray)value).Count > size)
                         {
-                            var flags = propertyInfo.Flags;
-                            var size = flags.MoveNext() ? flags.Current : 0;
-
-                            if (((IRedArray)value).Count > size)
-                            {
-                                throw new ArgumentException();
-                            }
+                            throw new ArgumentException();
                         }
+                    }
 
-                        if (value.GetType().GetGenericTypeDefinition() == typeof(CStatic<>))
-                        {
-                            var flags = propertyInfo.Flags;
-                            var maxSize = flags.MoveNext() ? flags.Current : 0;
+                    if (propertyInfo.GenericType == typeof(CStatic<>) && !Equals(RedReflection.GetDefaultValue(propertyInfo.Type), value))
+                    {
+                        var flags = propertyInfo.Flags;
+                        var maxSize = flags.MoveNext() ? flags.Current : 0;
 
-                            ((IRedArray)value).MaxSize = maxSize;
-                        }
+                        ((IRedArray)value).MaxSize = maxSize;
                     }
                 }
             }

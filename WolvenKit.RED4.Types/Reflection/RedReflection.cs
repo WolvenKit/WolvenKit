@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
-using System.Diagnostics;
+using System.Collections.Immutable;
 using System.Linq;
 using System.Reflection;
 using WolvenKit.RED4.Types.Exceptions;
@@ -10,15 +10,22 @@ namespace WolvenKit.RED4.Types
 {
     public static class RedReflection
     {
+        private static readonly ConcurrentDictionary<Type, object> s_defaultValueCache = new();
         private static readonly Dictionary<string, Type> _redTypeCache = new();
         private static Dictionary<Type, string> _redTypeCacheReverse = new();
 
         private static readonly Dictionary<string, ExtendedEnumInfo> _redEnumCache = new();
-        private static readonly ConcurrentDictionary<Type, Lazy<ExtendedTypeInfo>> _typeInfoCache = new();
+        private static readonly ConcurrentDictionary<Type, ExtendedTypeInfo> s_typeInfoCache = new();
 
         public static ExtendedTypeInfo GetTypeInfo(Type type)
         {
-            return _typeInfoCache.GetOrAdd(type, new Lazy<ExtendedTypeInfo>(() => new ExtendedTypeInfo(type))).Value;
+            if (!s_typeInfoCache.TryGetValue(type, out var result))
+            {
+                result = new ExtendedTypeInfo(type);
+                s_typeInfoCache.TryAdd(type, result);
+            }
+
+            return result;
         }
 
         public static Dictionary<string, Type> GetTypes() => new(_redTypeCache);
@@ -32,18 +39,8 @@ namespace WolvenKit.RED4.Types
             return typeInfo.PropertyInfos.FirstOrDefault(p => p.Name == propertyName);
         }
 
-        public static ExtendedPropertyInfo GetNativePropertyInfo(Type classType, string propertyName)
-        {
-            foreach (var propertyInfo in GetTypeInfo(classType).PropertyInfos)
-            {
-                if (propertyInfo.Name == propertyName || propertyInfo.RedName == propertyName)
-                {
-                    return propertyInfo;
-                }
-            }
-
-            return null;
-        }
+        public static ExtendedPropertyInfo GetNativePropertyInfo(Type classType, string propertyName) =>
+            GetTypeInfo(classType).GetPropertyInfoByName(propertyName);
 
         public static object GetClassDefaultValue(Type classType, string propertyName)
         {
@@ -63,18 +60,26 @@ namespace WolvenKit.RED4.Types
 
         public static object GetDefaultValue(Type type)
         {
+            if (s_defaultValueCache.TryGetValue(type, out var value))
+            {
+                return value;
+            }
+
+            object result = null;
             if (type.IsValueType)
             {
-                return System.Activator.CreateInstance(type);
+                result = System.Activator.CreateInstance(type);
             }
 
             var typeInfo = GetTypeInfo(type);
             if (typeInfo is { IsValueType: true })
             {
-                return System.Activator.CreateInstance(type);
+                result = System.Activator.CreateInstance(type);
             }
 
-            return null;
+            s_defaultValueCache.TryAdd(type, result);
+
+            return result;
         }
 
         public static ExtendedPropertyInfo GetPropertyByRedName(Type type, string redPropertyName)
@@ -302,36 +307,31 @@ namespace WolvenKit.RED4.Types
                 {
                     _redTypeCache.Add(type.Name, type);
                 }
+
+                BuildTypeCache(type);
             }
 
             _redTypeCacheReverse = _redTypeCache.ToDictionary(x => x.Value, x => x.Key);
-
-            /*foreach (var assembly in AppDomain.CurrentDomain.GetAssemblies())
-            {
-                if (assembly == Assembly.GetExecutingAssembly())
-                {
-                    continue;
-                }
-
-                foreach (var type in assembly.GetTypes())
-                {
-                    if (!baseType.IsAssignableFrom(type))
-                    {
-                        continue;
-                    }
-
-                    var redAttr = type.GetCustomAttribute<REDAttribute>();
-                    if (redAttr != null)
-                    {
-                        _redTypeCache[redAttr.Name] = type;
-                    }
-                }
-            }*/
 
             var types = typeof(Enums).GetNestedTypes();
             foreach (var type in types)
             {
                 _redEnumCache.Add(type.Name, new ExtendedEnumInfo(type));
+            }
+
+            void BuildTypeCache(Type type)
+            {
+                if (s_typeInfoCache.ContainsKey(type))
+                {
+                    return;
+                }
+
+                var typeInfo = new ExtendedTypeInfo(type);
+                s_typeInfoCache.TryAdd(type, typeInfo);
+                foreach (var propertyInfo in typeInfo.PropertyInfos)
+                {
+                    BuildTypeCache(propertyInfo.Type);
+                }
             }
         }
 
@@ -354,14 +354,14 @@ namespace WolvenKit.RED4.Types
 
         public class ExtendedTypeInfo
         {
-            private readonly List<ExtendedPropertyInfo> _propertyInfos = new();
+            private readonly Dictionary<string, int> _nameIndex = new();
+            private readonly Dictionary<string, int> _redNameIndex = new();
 
             public bool SerializeDefault { get; }
             public int ChildLevel { get; }
 
-            public bool IsValueType { get; set; }
-
-            public List<ExtendedPropertyInfo> PropertyInfos => new(_propertyInfos);
+            public bool IsValueType { get; }
+            public ImmutableList<ExtendedPropertyInfo> PropertyInfos { get; } = ImmutableList<ExtendedPropertyInfo>.Empty;
 
             public ExtendedTypeInfo(Type type)
             {
@@ -380,6 +380,7 @@ namespace WolvenKit.RED4.Types
                     }
                 }
 
+                var properties = new List<ExtendedPropertyInfo>();
                 var cusProps = new List<ExtendedPropertyInfo>();
                 foreach (var propertyInfo in type.GetProperties())
                 {
@@ -392,7 +393,7 @@ namespace WolvenKit.RED4.Types
 
                     if (extendedInfo.Ordinal != -1)
                     {
-                        _propertyInfos.Add(extendedInfo);
+                        properties.Add(extendedInfo);
                     }
                     else
                     {
@@ -400,31 +401,57 @@ namespace WolvenKit.RED4.Types
                     }
                 }
 
-                _propertyInfos = PropertyInfos.OrderBy(p => p.Ordinal).ToList();
-                var clone = new List<ExtendedPropertyInfo>(PropertyInfos);
+                properties = properties.OrderBy(p => p.Ordinal).ToList();
+                var clone = new List<ExtendedPropertyInfo>(properties);
                 foreach (var extendedInfo in cusProps)
                 {
                     if (extendedInfo.Before != -1)
                     {
-                        var index = _propertyInfos.IndexOf(clone[extendedInfo.Before]);
-                        _propertyInfos.Insert(index, extendedInfo);
+                        var index = properties.IndexOf(clone[extendedInfo.Before]);
+                        properties.Insert(index, extendedInfo);
                         continue;
                     }
 
                     if (extendedInfo.After != -1)
                     {
-                        var index = _propertyInfos.IndexOf(clone[extendedInfo.After]);
-                        _propertyInfos.Insert(index + 1, extendedInfo);
+                        var index = properties.IndexOf(clone[extendedInfo.After]);
+                        properties.Insert(index + 1, extendedInfo);
                         continue;
                     }
 
-                    _propertyInfos.Add(extendedInfo);
+                    properties.Add(extendedInfo);
                 }
+
+                PropertyInfos = PropertyInfos.AddRange(properties);
+                for (var i = 0; i < PropertyInfos.Count; i++)
+                {
+                    _nameIndex.Add(PropertyInfos[i].Name, i);
+
+                    if (!string.IsNullOrEmpty(PropertyInfos[i].RedName))
+                    {
+                        _redNameIndex.Add(PropertyInfos[i].RedName, i);
+                    }
+                }
+            }
+
+            public ExtendedPropertyInfo GetPropertyInfoByName(string name)
+            {
+                if (_redNameIndex.TryGetValue(name, out var i1))
+                {
+                    return PropertyInfos[i1];
+                }
+
+                if (_nameIndex.TryGetValue(name, out var i2))
+                {
+                    return PropertyInfos[i2];
+                }
+
+                return null;
             }
 
             public IEnumerable<ExtendedPropertyInfo> GetWritableProperties()
             {
-                foreach (var propertyInfo in _propertyInfos)
+                foreach (var propertyInfo in PropertyInfos)
                 {
                     if (!propertyInfo.IsIgnored)
                     {
@@ -439,18 +466,19 @@ namespace WolvenKit.RED4.Types
             private Flags _flags;
             internal bool _isDefaultSet;
 
-            public int Ordinal { get; set; } = -1;
-            public int Before { get; set; } = -1;
-            public int After { get; set; } = -1;
+            public int Ordinal { get; private set; } = -1;
+            public int Before { get; private set; } = -1;
+            public int After { get; private set; } = -1;
 
-            public string Name { get; set; }
-            public string RedName { get; set; }
+            public string Name { get; }
+            public string RedName { get; private set; }
             public Flags Flags => _flags != null ? _flags.Clone() : Flags.Empty;
-            public bool IsIgnored { get; set; }
+            public bool IsIgnored { get; internal set; }
 
-            public Type Type { get; set; }
+            public Type Type { get; }
+            public Type GenericType { get; }
 
-            public bool SerializeDefault { get; set; }
+            public bool SerializeDefault { get; private set; }
             public object DefaultValue { get; internal set; }
 
 
@@ -458,6 +486,10 @@ namespace WolvenKit.RED4.Types
             {
                 Name = propertyInfo.Name;
                 Type = propertyInfo.PropertyType;
+                if (Type.IsGenericType)
+                {
+                    GenericType = Type.GetGenericTypeDefinition();
+                }
 
                 var attrs = propertyInfo.GetCustomAttributes();
                 foreach (var attribute in attrs)
