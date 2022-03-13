@@ -12,6 +12,7 @@ using WolvenKit.RED4.CR2W.Archive;
 using WolvenKit.RED4.Types;
 using WolvenKit.RED4.Archive.IO;
 using System.Text;
+using SharpGLTF.Validation;
 
 namespace WolvenKit.Modkit.RED4
 {
@@ -59,16 +60,6 @@ namespace WolvenKit.Modkit.RED4
             var model = ModelRoot.CreateModel();
             GetAnimation(animsFile, rigFile, ref model);
 
-            /*
-            ImportAnim(ref animsFile, model);
-
-            var mms = new MemoryStream();
-            using var writer = new CR2WWriter(mms, Encoding.UTF8, true);
-            writer.WriteFile(animsFile);
-
-            File.WriteAllBytes(@"C:\Users\abhin\OneDrive\Desktop\untitled.gltf", mms.ToArray());
-            */
-
             if (isGLBinary)
             {
                 model.SaveGLB(outfile.FullName);
@@ -80,137 +71,207 @@ namespace WolvenKit.Modkit.RED4
 
             return true;
         }
-        public bool ImportAnim(ref CR2WFile animsFile, ModelRoot model)
+        public bool ImportAnims(FileInfo gltfFile, Stream animStream, List<Archive> archives)
         {
-
+            var animsFile = _wolvenkitFileService.ReadRed4File(animStream);
             if (animsFile == null || animsFile.RootChunk is not animAnimSet anims)
             {
                 return false;
             }
 
-            var setEntry = anims.Animations[0].Chunk;
-            var animAnimDes = setEntry.Animation.Chunk;
-
-            var compressed = animAnimDes.AnimBuffer.Chunk as animAnimationBufferCompressed;
-            compressed.HasRawRotations = true;
-            compressed.Duration = model.LogicalAnimations[1].Duration;
-            compressed.NumAnimKeys = 0;
-            compressed.NumConstAnimKeys = 0;
-            compressed.NumAnimKeysRaw = 0;
-            compressed.NumConstTrackKeys = 0;
-            compressed.NumFrames = Convert.ToUInt32(compressed.Duration * 30.2245898);
-            compressed.NumTrackKeys = 0;
-            compressed.NumTracks = 0;
-
-            var positions = new Dictionary<ushort, Dictionary<float, System.Numerics.Vector3>>();
-            var rotations = new Dictionary<ushort, Dictionary<float, System.Numerics.Quaternion>>();
-            var scales = new Dictionary<ushort, Dictionary<float, System.Numerics.Vector3>>();
-
-            foreach(var chan in model.LogicalAnimations[1].Channels)
+            RawArmature Rig = null;
+            var hash = FNV1A64HashAlgorithm.HashString(anims.Rig.DepotPath);
+            foreach (var ar in archives)
             {
-                switch (chan.TargetNodePath)
+                if (ar.Files.ContainsKey(hash))
                 {
-                    case PropertyPath.translation:
-                        positions.Add((ushort)(chan.TargetNode.LogicalIndex - 1), chan.GetTranslationSampler().GetLinearKeys().ToDictionary(_=>_.Key,_=>_.Value));
-                        break;
-                    case PropertyPath.rotation:
-                        rotations.Add((ushort)(chan.TargetNode.LogicalIndex - 1), chan.GetRotationSampler().GetLinearKeys().ToDictionary(_ => _.Key, _ => _.Value));
-                        break;
-                    case PropertyPath.scale:
-                        scales.Add((ushort)(chan.TargetNode.LogicalIndex - 1), chan.GetScaleSampler().GetLinearKeys().ToDictionary(_ => _.Key, _ => _.Value));
-                        break;
-                    case PropertyPath.weights:
-                        throw new System.Exception("Morph weights channel import not supported!");
-                    default:
-                        break;
-                }
-            }
-
-            var ms = new MemoryStream();
-            var bw = new BinaryWriter(ms);
-
-            foreach(var bone in positions.Keys)
-            {
-                var dict = positions[bone];
-                foreach (var time in dict.Keys)
-                {
-                    var timeNormalized = time / model.LogicalAnimations[1].Duration;
-                    UInt16 t = Convert.ToUInt16(Math.Clamp(timeNormalized, 0, 1.0f) * UInt16.MaxValue);
-                    bw.Write(t);
-                    bw.Write(bone);
-                    var posn = new System.Numerics.Vector3(dict[time].X, -dict[time].Z, dict[time].Y);
-                    bw.Write(posn.X);
-                    bw.Write(posn.Y);
-                    bw.Write(posn.Z);
-                    compressed.NumAnimKeysRaw++;
-                }
-            }
-            foreach (var bone in rotations.Keys)
-            {
-                var dict = rotations[bone];
-                foreach (var time in dict.Keys)
-                {
-                    var timeNormalized = time / model.LogicalAnimations[1].Duration;
-                    UInt16 t = Convert.ToUInt16(Math.Clamp(timeNormalized, 0, 1.0f) * UInt16.MaxValue);
-                    bw.Write(t);
-
-
-                    var rotn = new System.Numerics.Quaternion(dict[time].X, -dict[time].Z, dict[time].Y, dict[time].W);
-
-                    UInt16 bitwise = bone;
-                    bitwise |= (UInt16)1 << 13;
-
-                    if (rotn.W < 0)
+                    var ms = new MemoryStream();
+                    ExtractSingleToStream(ar, hash, ms);
+                    Rig = RIG.ProcessRig(_wolvenkitFileService.ReadRed4File(ms));
+                    if (Rig is null || Rig.BoneCount < 1)
                     {
-                        rotn.W = -rotn.W;
-                        bitwise |= (UInt16)1 << 15;
+                        return false;
                     }
-                    bw.Write(bitwise);
-
-                    float dotPr = 1f - rotn.W;
-
-
-                    rotn.X /= Convert.ToSingle(Math.Sqrt(2f - dotPr));
-                    rotn.Y /= Convert.ToSingle(Math.Sqrt(2f - dotPr));
-                    rotn.Z /= Convert.ToSingle(Math.Sqrt(2f - dotPr));
-
-                    var zzczxc = (rotn.X * rotn.X + rotn.Y * rotn.Y + rotn.Z * rotn.Z);
-
-                    bw.Write(rotn.X);
-                    bw.Write(rotn.Y);
-                    bw.Write(rotn.Z);
-
-                    compressed.NumAnimKeysRaw++;
+                    break;
                 }
             }
-            compressed.DataAddress.ZeInBytes =(UInt32)ms.Length;
-            
-            foreach (var bone in scales.Keys)
+
+            var model = ModelRoot.Load(gltfFile.FullName, new ReadSettings(ValidationMode.TryFix));
+
+            foreach(var srcAnim in model.LogicalAnimations)
             {
-                var dict = scales[bone];
-                foreach (var time in dict.Keys)
+                if (!anims.Animations.Select(_ => _.Chunk.Animation.Chunk.Name.GetResolvedText()).Contains(srcAnim.Name))
+                    continue;
+
+                var setEntry =  anims.Animations.First(_ => _.Chunk.Animation.Chunk.Name.GetResolvedText() == srcAnim.Name).Chunk;
+                var animAnimDes = setEntry.Animation.Chunk;
+
+                var positions = new Dictionary<ushort, Dictionary<float, System.Numerics.Vector3>>();
+                var rotations = new Dictionary<ushort, Dictionary<float, System.Numerics.Quaternion>>();
+                var scales = new Dictionary<ushort, Dictionary<float, System.Numerics.Vector3>>();
+
+
+                foreach (var chan in srcAnim.Channels)
                 {
-                    var timeNormalized = time / model.LogicalAnimations[1].Duration;
-                    UInt16 t = Convert.ToUInt16(Math.Clamp(timeNormalized, 0, 1.0f) * UInt16.MaxValue);
-                    bw.Write(t);
+                    var idx = Array.IndexOf(Rig.Names, chan.TargetNode.Name);
+                    if (idx < 0)
+                    {
+                        throw new Exception($"Invalid Joint Transform, Joint: {chan.TargetNode.Name} not present in the src/original Rig");
+                    }
 
-                    UInt16 bitwise = bone;
-                    bitwise |= (UInt16)2 << 13;
-                    bw.Write(bitwise);
-
-                    var scal = new System.Numerics.Vector3(dict[time].X, dict[time].Y, dict[time].Z);
-
-                    bw.Write(scal.X);
-                    bw.Write(scal.Y);
-                    bw.Write(scal.Z);
-
-                    compressed.NumAnimKeysRaw++;
+                    switch (chan.TargetNodePath)
+                    {
+                        case PropertyPath.translation:
+                            positions.Add((ushort)idx, chan.GetTranslationSampler().GetLinearKeys().ToDictionary(_ => _.Key, _ => _.Value));
+                            break;
+                        case PropertyPath.rotation:
+                            rotations.Add((ushort)idx, chan.GetRotationSampler().GetLinearKeys().ToDictionary(_ => _.Key, _ => _.Value));
+                            break;
+                        case PropertyPath.scale:
+                            scales.Add((ushort)idx, chan.GetScaleSampler().GetLinearKeys().ToDictionary(_ => _.Key, _ => _.Value));
+                            break;
+                        case PropertyPath.weights:
+                            throw new System.Exception("Morph weights channel import not supported!");
+                        default:
+                            break;
+                    }
                 }
-            }
-            
-            anims.AnimationDataChunks[0].Buffer = new SerializationDeferredDataBuffer(ms.ToArray());
 
-            compressed.DefferedBuffer = null;
+                List<ushort> fallbackIndices = null;
+                if (animAnimDes.AnimBuffer.Chunk is animAnimationBufferCompressed)
+                {
+                    fallbackIndices = (animAnimDes.AnimBuffer.Chunk as animAnimationBufferCompressed).FallbackFrameIndices.Select(_ => (ushort)_).ToList();
+                }
+                if (animAnimDes.AnimBuffer.Chunk is animAnimationBufferSimd)
+                {
+                    fallbackIndices = (animAnimDes.AnimBuffer.Chunk as animAnimationBufferSimd).FallbackFrameIndices.Select(_ => (ushort)_).ToList();
+                }
+
+                var compressed = new animAnimationBufferCompressed()
+                {
+                    Duration = srcAnim.Duration,
+                    NumFrames = Convert.ToUInt32(srcAnim.Duration * 30.1846575),
+                    NumExtraJoints = 0,
+                    NumExtraTracks = 0,
+                    NumJoints = Convert.ToUInt16(Rig.BoneCount),
+                    NumTracks = 0,
+                    NumAnimKeys = 0,
+                    NumAnimKeysRaw = 0,
+                    NumConstAnimKeys = 0,
+                    NumTrackKeys = 0,
+                    NumConstTrackKeys = 0,
+                    IsScaleConstant = scales.Count < 1,
+                    HasRawRotations = true
+                };
+                if(fallbackIndices != null)
+                {
+                    foreach(var idx in fallbackIndices)
+                    {
+                        compressed.FallbackFrameIndices.Add(idx);
+
+                    }
+                }
+
+                var buffer = new MemoryStream();
+                var bw = new BinaryWriter(buffer);
+
+                foreach (var bone in positions.Keys)
+                {
+                    var dict = positions[bone];
+                    foreach (var time in dict.Keys)
+                    {
+                        var timeNormalized = time / srcAnim.Duration;
+                        UInt16 t = Convert.ToUInt16(Math.Clamp(timeNormalized, 0, 1.0f) * UInt16.MaxValue);
+                        bw.Write(t);
+                        bw.Write(bone);
+                        var posn = new System.Numerics.Vector3(dict[time].X, -dict[time].Z, dict[time].Y);
+                        bw.Write(posn.X);
+                        bw.Write(posn.Y);
+                        bw.Write(posn.Z);
+                        compressed.NumAnimKeysRaw++;
+                    }
+                }
+                foreach (var bone in rotations.Keys)
+                {
+                    var dict = rotations[bone];
+                    foreach (var time in dict.Keys)
+                    {
+                        var timeNormalized = time / srcAnim.Duration;
+                        UInt16 t = Convert.ToUInt16(Math.Clamp(timeNormalized, 0, 1.0f) * UInt16.MaxValue);
+                        bw.Write(t);
+
+
+                        var rotn = new System.Numerics.Quaternion(dict[time].X, -dict[time].Z, dict[time].Y, dict[time].W);
+
+                        UInt16 bitwise = bone;
+                        bitwise |= (UInt16)1 << 13;
+
+                        if (rotn.W < 0)
+                        {
+                            rotn.W = -rotn.W;
+                            bitwise |= (UInt16)1 << 15;
+                        }
+                        bw.Write(bitwise);
+
+                        float dotPr = 1f - rotn.W;
+
+
+                        rotn.X /= Convert.ToSingle(Math.Sqrt(2f - dotPr));
+                        rotn.Y /= Convert.ToSingle(Math.Sqrt(2f - dotPr));
+                        rotn.Z /= Convert.ToSingle(Math.Sqrt(2f - dotPr));
+
+                        var zzczxc = (rotn.X * rotn.X + rotn.Y * rotn.Y + rotn.Z * rotn.Z);
+
+                        bw.Write(rotn.X);
+                        bw.Write(rotn.Y);
+                        bw.Write(rotn.Z);
+
+                        compressed.NumAnimKeysRaw++;
+                    }
+                }
+
+                foreach (var bone in scales.Keys)
+                {
+                    var dict = scales[bone];
+                    foreach (var time in dict.Keys)
+                    {
+                        var timeNormalized = time / srcAnim.Duration;
+                        UInt16 t = Convert.ToUInt16(Math.Clamp(timeNormalized, 0, 1.0f) * UInt16.MaxValue);
+                        bw.Write(t);
+
+                        UInt16 bitwise = bone;
+                        bitwise |= (UInt16)2 << 13;
+                        bw.Write(bitwise);
+
+                        var scal = new System.Numerics.Vector3(dict[time].X, dict[time].Y, dict[time].Z);
+
+                        bw.Write(scal.X);
+                        bw.Write(scal.Y);
+                        bw.Write(scal.Z);
+
+                        compressed.NumAnimKeysRaw++;
+                    }
+                }
+                var dataChk = new animAnimDataChunk()
+                {
+                    Buffer = new SerializationDeferredDataBuffer(buffer.ToArray())
+                };
+                compressed.DataAddress.UnkIndex = (UInt32)anims.AnimationDataChunks.Count;
+                compressed.DataAddress.FsetInBytes = 0;
+                compressed.DataAddress.ZeInBytes = (UInt32)buffer.Length;
+
+                anims.AnimationDataChunks.Add(dataChk);
+                animAnimDes.AnimBuffer.Chunk = compressed;
+            }
+
+            var outMs = new MemoryStream();
+            using var writer = new CR2WWriter(outMs, Encoding.UTF8, true);
+            writer.WriteFile(animsFile);
+
+            outMs.Seek(0, SeekOrigin.Begin);
+            animStream.SetLength(0);
+            outMs.CopyTo(animStream);
+
             return true;
         }
         public static bool GetAnimation(CR2WFile animsFile, CR2WFile rigFile, ref ModelRoot model, bool includeRig = true)

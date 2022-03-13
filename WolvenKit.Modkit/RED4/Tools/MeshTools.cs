@@ -965,10 +965,9 @@ namespace WolvenKit.Modkit.RED4.Tools
                 }
                 var node = parent.CreateNode(mesh.name);
                 node.Mesh = mes;
-                if (skin != null)
-                //if (skin != null && mesh.weightCount > 0)
+                if (skin != null && mesh.weightCount > 0)
                 {
-                    //node.Skin = skin;
+                    node.Skin = skin;
                 }
 
                 if (mesh.garmentMorph.Length > 0)

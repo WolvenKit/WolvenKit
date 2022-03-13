@@ -285,7 +285,8 @@ namespace WolvenKit.Common.Model.Arguments
     public enum GltfImportAsFormat
     {
         Mesh,
-        Morphtarget
+        Morphtarget,
+        Anims
     }
     public class MlmaskImportArgs : ImportArgs
     {
