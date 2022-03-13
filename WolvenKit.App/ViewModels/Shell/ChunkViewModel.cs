@@ -623,7 +623,18 @@ namespace WolvenKit.ViewModels.Shell
             }
             else if (ResolvedData is IRedBufferPointer rbp2 && rbp2.GetValue().Data is CR2WList cl)
             {
-                return cl.Files.IndexOf(cl.Files.Where(x => x.RootChunk == child.Data).FirstOrDefault());
+                var index = 0;
+                foreach (var file in cl.Files)
+                {
+                    if (file.RootChunk.GetHashCode() == child.Data.GetHashCode())
+                    {
+                        if (!PropertiesLoaded || Properties[index].GetHashCode() == child.GetHashCode())
+                        {
+                            return index;
+                        }
+                    }
+                    index++;
+                }
             }
             return 0;
         }
@@ -869,19 +880,19 @@ namespace WolvenKit.ViewModels.Shell
                     //{
                     //    width += 20;
                     //}
-                    if (PropertyCount <= 10)
+                    if (Parent.PropertyCount <= 10)
                     {
                         width += 16;
                     }
-                    else if (PropertyCount <= 100)
+                    else if (Parent.PropertyCount <= 100)
                     {
                         width += 21;
                     }
-                    else if (PropertyCount <= 1000)
+                    else if (Parent.PropertyCount <= 1000)
                     {
                         width += 26;
                     }
-                    else if (PropertyCount <= 10000)
+                    else if (Parent.PropertyCount <= 10000)
                     {
                         width += 31;
                     }

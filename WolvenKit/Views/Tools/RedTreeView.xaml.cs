@@ -52,8 +52,8 @@ namespace WolvenKit.Views.Tools
 
         // Drag & Drop Functionality
 
-        private string dropFileLocation;
-        private RedTypeDto dropFile;
+        //private string dropFileLocation;
+        //private RedTypeDto dropFile;
 
         private void SfTreeView_ItemDragStarting(object sender, TreeViewItemDragStartingEventArgs e)
         {
