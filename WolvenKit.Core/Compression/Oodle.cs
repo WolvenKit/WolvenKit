@@ -194,7 +194,7 @@ public static class Oodle
         }
         else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
         {
-            result = OozNative.Kraken_Compress(inputBuffer, compressedBuffer, (int)level);
+            result = KrakenNative.Compress(inputBuffer, compressedBuffer, (int)level);
         }
         else
         {
@@ -247,7 +247,7 @@ public static class Oodle
         }
         else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
         {
-            result = OozNative.Kraken_Decompress(inputBuffer, outputBuffer);
+            result = KrakenNative.Decompress(inputBuffer, outputBuffer);
         }
         else
         {

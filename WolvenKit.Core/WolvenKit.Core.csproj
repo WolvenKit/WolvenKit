@@ -33,7 +33,7 @@
 
   <ItemGroup>
     <None Remove="lib\kraken.dll" />
-    <None Remove="lib\libooz.so" />
+    <None Remove="lib\libkraken.so" />
     <None Remove="lib\libkraken.dylib" />
   </ItemGroup>
 
@@ -42,9 +42,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <TargetPath>kraken.dll</TargetPath>
     </ContentWithTargetPath>
-    <ContentWithTargetPath Include="lib\libooz.so">
+    <ContentWithTargetPath Include="lib\libkraken.so">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      <TargetPath>libooz.so</TargetPath>
+      <TargetPath>libkraken.so</TargetPath>
     </ContentWithTargetPath>
     <ContentWithTargetPath Include="lib\libkraken.dylib">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
