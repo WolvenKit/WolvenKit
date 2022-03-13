@@ -542,6 +542,38 @@ namespace WolvenKit.Modkit.RED4
                         }
                     }
                 }
+
+                if (Path.GetExtension(primaryDependencies[i]) == ".gradient")
+                {
+                    if (!TexturesList.Contains(primaryDependencies[i]))
+                    {
+                        var hash = FNV1A64HashAlgorithm.HashString(primaryDependencies[i]);
+                        foreach (var ar in archives)
+                        {
+                            if (ar.Files.ContainsKey(hash))
+                            {
+                                var ms = new MemoryStream();
+                                ExtractSingleToStream(ar, hash, ms);
+                                ms.Seek(0, SeekOrigin.Begin);
+
+                                TexturesList.Add(primaryDependencies[i]);
+                                var path = Path.Combine(matRepo, Path.ChangeExtension(primaryDependencies[i], ".gradient.json"));
+                                if (!File.Exists(path))
+                                {
+                                    if (!new FileInfo(path).Directory.Exists)
+                                    {
+                                        Directory.CreateDirectory(new FileInfo(path).Directory.FullName);
+                                    }
+                                    var hp = _wolvenkitFileService.ReadRed4File(ms);
+                                    var dto = new RedFileDto(hp);
+                                    var doc = RedJsonSerializer.Serialize(dto);
+                                    File.WriteAllText(path, doc);
+                                }
+                                break;
+                            }
+                        }
+                    }
+                }
             }
 
 
