@@ -37,4 +37,26 @@ public class BaseStringType : IRedPrimitive<string>, IEquatable<BaseStringType>,
 
     public int CompareTo(BaseStringType other) => string.Compare(_value, other);
     public bool Equals(BaseStringType other) => string.Equals(_value, other?._value);
+
+    public override bool Equals(object obj)
+    {
+        if (ReferenceEquals(null, obj))
+        {
+            return false;
+        }
+
+        if (ReferenceEquals(this, obj))
+        {
+            return true;
+        }
+
+        if (obj.GetType() != this.GetType())
+        {
+            return false;
+        }
+
+        return Equals((BaseStringType)obj);
+    }
+
+    public override int GetHashCode() => _value.GetHashCode();
 }

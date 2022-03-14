@@ -115,13 +115,18 @@ public static class Oodle
 
     public static Status CompressBuffer(byte[] rawBuf, out byte[] compBuf)
     {
+        return CompressBuffer(rawBuf, out compBuf, CompressionSettings.Get().CompressionLevel);
+    }
+
+    public static Status CompressBuffer(byte[] rawBuf, out byte[] compBuf, CompressionLevel compressionLevel)
+    {
         if (rawBuf.Length > 256)
         {
             //var compressedBufferSizeNeeded = GetCompressedBufferSizeNeeded(rawBuf.Length);
             //var compressedBuffer = new byte[compressedBufferSizeNeeded];
             IEnumerable<byte> compressedBuffer = new List<byte>();
 
-            var compressedSize = Oodle.Compress(rawBuf, ref compressedBuffer, false, CompressionSettings.Get().CompressionLevel);
+            var compressedSize = Oodle.Compress(rawBuf, ref compressedBuffer, false, compressionLevel);
 
             var outArray = new byte[compressedSize + 8];
 

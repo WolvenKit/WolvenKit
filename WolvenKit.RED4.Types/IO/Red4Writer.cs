@@ -7,7 +7,6 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using WolvenKit.Core.Extensions;
 using WolvenKit.RED4.Types;
-using WolvenKit.RED4.Types.Exceptions;
 
 namespace WolvenKit.RED4.IO
 {
@@ -15,9 +14,9 @@ namespace WolvenKit.RED4.IO
     {
         protected readonly BinaryWriter _writer;
 
-        public CacheList<CName> StringCacheList = new();
-        public CacheList<(string, CName, ushort)> ImportCacheList = new();
-        public CacheList<RedBuffer> BufferCacheList = new();
+        public CacheList<CName> StringCacheList = new(new CNameComparer());
+        public CacheList<(string, CName, ushort)> ImportCacheList = new(new ImportComparer());
+        public CacheList<RedBuffer> BufferCacheList = new(ReferenceEqualityComparer.Instance);
 
         public int CurrentChunk { get; private set; }
 
@@ -76,6 +75,7 @@ namespace WolvenKit.RED4.IO
         public ushort GetStringIndex(string value, bool add = true)
         {
             var index = StringCacheList.IndexOf(value);
+
             if (add && index == ushort.MaxValue)
             {
                 index = StringCacheList.Add(value);
@@ -91,7 +91,7 @@ namespace WolvenKit.RED4.IO
 
         public ushort GetImportIndex((string, CName, ushort) value, bool add = true)
         {
-            var index = ImportCacheList.IndexOf(value, _importComparer);
+            var index = ImportCacheList.IndexOf(value);
             if (add && index == ushort.MaxValue)
             {
                 index = ImportCacheList.Add(value);
@@ -894,9 +894,17 @@ namespace WolvenKit.RED4.IO
             public Guid Guid { get; set; } = Guid.Empty;
         }
 
+        protected class CNameComparer : IEqualityComparer<CName>
+        {
+            public bool Equals(CName x, CName y) => string.Equals(x, y);
+            public bool Equals(CName x, string y) => string.Equals(x, y);
+
+            public int GetHashCode(CName obj) => obj.GetHashCode();
+        }
+
         protected class ImportComparer : IEqualityComparer<(string, CName, ushort)>
         {
-            public bool Equals((string, CName, ushort) x, (string, CName, ushort) y) => Equals(x.Item2, y.Item2);
+            public bool Equals((string, CName, ushort) x, (string, CName, ushort) y) => string.Equals(x.Item2, y.Item2);
 
             public int GetHashCode((string, CName, ushort) obj) => obj.Item2.GetHashCode();
         }

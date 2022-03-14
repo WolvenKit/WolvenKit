@@ -1,7 +1,6 @@
 using System;
+using System.Collections.Concurrent;
 using System.Diagnostics;
-using System.Globalization;
-using System.IO;
 using System.Text;
 using WolvenKit.Common.FNV1A;
 
@@ -12,6 +11,8 @@ namespace WolvenKit.RED4.Types
     [DebuggerDisplay("{_value}", Type = "CName")]
     public sealed class CName : BaseStringType, IEquatable<CName>
     {
+        private static readonly ConcurrentDictionary<string, ulong> s_cNameCache = new();
+
         public delegate string ResolveHash(ulong hash);
         public static ResolveHash ResolveHashHandler;
 
@@ -37,9 +38,14 @@ namespace WolvenKit.RED4.Types
                 return 0;
             }
 
-            var buffer = Encoding.UTF8.GetBytes(_value);
-            var sBuffer = Array.ConvertAll(buffer, b => b != 0x80 ? (byte)Math.Abs((sbyte)b) : (byte)0x80);
-            return FNV1A64HashAlgorithm.HashReadOnlySpan(sBuffer);
+            if (!s_cNameCache.ContainsKey(_value))
+            {
+                var buffer = Encoding.UTF8.GetBytes(_value);
+                var sBuffer = Array.ConvertAll(buffer, b => b != 0x80 ? (byte)Math.Abs((sbyte)b) : (byte)0x80);
+                s_cNameCache.TryAdd(_value, FNV1A64HashAlgorithm.HashReadOnlySpan(sBuffer));
+            }
+
+            return s_cNameCache[_value];
         }
 
         public ulong GetRedHash() => _hash;
@@ -49,7 +55,7 @@ namespace WolvenKit.RED4.Types
         public uint GetOldRedHash() => (uint)(_hash & 0xFFFFFFFF);
 
         public static implicit operator CName(string value) => new(value);
-        public static implicit operator string(CName value) => value?._value ?? null; 
+        public static implicit operator string(CName value) => value?._value; 
 
         public static implicit operator CName(ulong value) => new(value);
         public static implicit operator ulong(CName value) => value?._hash ?? 0;

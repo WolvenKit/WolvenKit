@@ -232,27 +232,33 @@ namespace WolvenKit.RED4.IO
             return (IRedArray)generic.Invoke(this, new object[] { size });
         }
 
-        protected virtual IRedType ReadArrayItem(int index, Type type, uint elementSize, Flags flags)
+        protected virtual IRedType ReadArrayItem(int index, Type type, Flags flags)
         {
-            return Read(type, elementSize, flags);
+            return Read(type, 0, flags);
         }
 
         public virtual IRedArray<T> ReadCArray<T>(uint size) where T : IRedType
         {
             var array = new CArray<T>();
 
+            var startPos = BaseStream.Position;
+
             var elementCount = _reader.ReadUInt32();
 
-            uint elementSize = 0;
-            if (elementCount > 0)
+            var i = 0;
+            for (; i < elementCount; i++)
             {
-                elementSize = (size - 4) / elementCount;
+                var element = ReadArrayItem(i, typeof(T), Flags.Empty);
+                array.Add((T)element);
             }
 
-            for (var i = 0; i < elementCount; i++)
+            var remaining = size - (BaseStream.Position - startPos);
+            while (remaining > 0)
             {
-                var element = ReadArrayItem(i, typeof(T), elementSize, Flags.Empty);
+                var element = ReadArrayItem(i++, typeof(T), Flags.Empty);
                 array.Add((T)element);
+
+                remaining = size - (BaseStream.Position - startPos);
             }
 
             return array;
@@ -270,21 +276,17 @@ namespace WolvenKit.RED4.IO
 
         public virtual IRedArrayFixedSize<T> ReadCArrayFixedSize<T>(uint size, Flags flags) where T : IRedType
         {
-            //var array = new CArrayFixedSize<T>(flags.MoveNext() ? flags.Current : 0);
-            flags.MoveNext();
+            if (!flags.MoveNext())
+            {
+                throw new InvalidDataException();
+            }
+
             var array = new CArrayFixedSize<T>(flags.Current);
 
             var elementCount = _reader.ReadUInt32();
-
-            uint elementSize = 0;
-            if (elementCount > 0)
-            {
-                elementSize = (size - 4) / elementCount;
-            }
-
             for (var i = 0; i < elementCount; i++)
             {
-                var element = ReadArrayItem(i, typeof(T), elementSize, flags.Clone());
+                var element = ReadArrayItem(i, typeof(T), flags.Clone());
                 ((IList<T>)array)[i] = (T)element;
             }
 
@@ -495,18 +497,14 @@ namespace WolvenKit.RED4.IO
         {
             var elementCount = _reader.ReadUInt32();
 
-            uint elementSize = 0;
-            if (elementCount > 0)
+            var array = new CStatic<T>((int)elementCount)
             {
-                elementSize = (size - 4) / elementCount;
-            }
-
-            var array = new CStatic<T>((int)elementCount);
-            array.MaxSize = flags.MoveNext() ? flags.Current : 0;
+                MaxSize = flags.MoveNext() ? flags.Current : 0
+            };
 
             for (var i = 0; i < elementCount; i++)
             {
-                var element = ReadArrayItem(i, typeof(T), elementSize, flags.Clone());
+                var element = ReadArrayItem(i, typeof(T), flags.Clone());
                 ((IList<T>)array)[i] = (T)element;
             }
 

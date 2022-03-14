@@ -36,7 +36,16 @@ namespace WolvenKit.RED4.Types
 
         public void Write(Red4Writer writer)
         {
-            //writer.BaseWriter.Write(Buffer);
+            foreach (var cArr1 in ParameterInfo)
+            {
+                writer.BaseWriter.Write((byte)cArr1.Count);
+                foreach (var parameterInfo in cArr1)
+                {
+                    writer.Write(parameterInfo.Type);
+                    writer.Write(parameterInfo.Offset);
+                    writer.Write(parameterInfo.Name);
+                }
+            }
         }
     }
 

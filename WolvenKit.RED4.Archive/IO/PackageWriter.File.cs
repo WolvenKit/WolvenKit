@@ -38,7 +38,7 @@ namespace WolvenKit.RED4.Archive.IO
 
             short cuidsIndex = -1;
             var cruids = new List<CRUID>();
-            for (short i = 0; i < file.Chunks.Count; i++)
+            for (var i = 0; i < file.Chunks.Count; i++)
             {
                 if (file.Chunks[i] is entIComponent comp)
                 {
@@ -63,7 +63,7 @@ namespace WolvenKit.RED4.Archive.IO
                 {
                     if (cuidsIndex == -1)
                     {
-                        cuidsIndex = i;
+                        cuidsIndex = (short)i;
                     }
                     cruids.Add(0);
                 }
@@ -351,7 +351,7 @@ namespace WolvenKit.RED4.Archive.IO
             foreach (var kvp in file.ImportRef)
             {
                 file.BaseStream.Position = kvp.Key;
-                var index = (ushort)(file.ImportCacheList.IndexOf(kvp.Value, _importComparer) + 0);
+                var index = (ushort)(file.ImportCacheList.IndexOf(kvp.Value) + 0);
                 file.BaseWriter.Write(index);
             }
             file.BaseStream.Position = pos;

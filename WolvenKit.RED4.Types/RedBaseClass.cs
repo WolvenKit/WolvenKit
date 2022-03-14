@@ -45,6 +45,28 @@ namespace WolvenKit.RED4.Types
             if (propertyInfo != null)
             {
                 propertyName = propertyInfo.RedName;
+
+                if (propertyInfo.GenericType != null)
+                {
+                    if (propertyInfo.GenericType == typeof(CArrayFixedSize<>) && !Equals(RedReflection.GetDefaultValue(propertyInfo.Type), value))
+                    {
+                        var flags = propertyInfo.Flags;
+                        var size = flags.MoveNext() ? flags.Current : 0;
+
+                        if (((IRedArray)value).Count > size)
+                        {
+                            throw new ArgumentException();
+                        }
+                    }
+
+                    if (propertyInfo.GenericType == typeof(CStatic<>) && !Equals(RedReflection.GetDefaultValue(propertyInfo.Type), value))
+                    {
+                        var flags = propertyInfo.Flags;
+                        var maxSize = flags.MoveNext() ? flags.Current : 0;
+
+                        ((IRedArray)value).MaxSize = maxSize;
+                    }
+                }
             }
             else
             {
@@ -56,40 +78,7 @@ namespace WolvenKit.RED4.Types
                 _dynamicProperties.Add(propertyName);
             }
 
-            var defaultValue = RedReflection.GetDefaultValue(value.GetType());
-            if (Equals(defaultValue, value))
-            {
-                _properties[propertyName] = value;
-            }
-            else
-            {
-                if (propertyInfo != null)
-                {
-                    if (value.GetType().IsGenericType)
-                    {
-                        if (value.GetType().GetGenericTypeDefinition() == typeof(CArrayFixedSize<>))
-                        {
-                            var flags = propertyInfo.Flags;
-                            var size = flags.MoveNext() ? flags.Current : 0;
-
-                            if (((IRedArray)value).Count > size)
-                            {
-                                throw new ArgumentException();
-                            }
-                        }
-
-                        if (value.GetType().GetGenericTypeDefinition() == typeof(CStatic<>))
-                        {
-                            var flags = propertyInfo.Flags;
-                            var maxSize = flags.MoveNext() ? flags.Current : 0;
-
-                            ((IRedArray)value).MaxSize = maxSize;
-                        }
-                    }
-                }
-
-                _properties[propertyName] = value;
-            }
+            _properties[propertyName] = value;
         }
 
         #region Properties
