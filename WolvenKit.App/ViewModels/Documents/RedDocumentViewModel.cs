@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
@@ -30,9 +31,10 @@ namespace WolvenKit.ViewModels.Documents
 
     public class RedDocumentViewModel : DocumentViewModel
     {
-        private readonly ILoggerService _loggerService;
-        private readonly Red4ParserService _parser;
-        private readonly IHashService _hashService;
+        protected readonly ILoggerService _loggerService;
+        protected readonly Red4ParserService _parser;
+        protected readonly IHashService _hashService;
+        protected readonly IProjectManager _projectManager;
         public CR2WFile Cr2wFile;
 
         public RedDocumentViewModel(string path) : base(path)
@@ -40,10 +42,18 @@ namespace WolvenKit.ViewModels.Documents
             _loggerService = Locator.Current.GetService<ILoggerService>();
             _parser = Locator.Current.GetService<Red4ParserService>();
             _hashService = Locator.Current.GetService<IHashService>();
-            var projectManager = Locator.Current.GetService<IProjectManager>();
-            if (projectManager.ActiveProject != null)
+            _projectManager = Locator.Current.GetService<IProjectManager>();
+            if (_projectManager.ActiveProject != null)
             {
-                RelativePath = Path.GetRelativePath(projectManager.ActiveProject.ModDirectory, path);
+                // assume files that don't exist are relative paths
+                if (File.Exists(path))
+                {
+                    RelativePath = Path.GetRelativePath(_projectManager.ActiveProject.ModDirectory, path);
+                }
+                else
+                {
+                    RelativePath = path;
+                }
             }
 
             Extension = Path.GetExtension(path) != "" ? Path.GetExtension(path).Substring(1) : "";
@@ -72,7 +82,6 @@ namespace WolvenKit.ViewModels.Documents
             var file = GetMainFile();
             if (file.HasValue)
             {
-                // TODO gather buffers
                 var resource = Cr2wFile;
                 if (resource is CR2WFile cr2w)
                 {
@@ -82,7 +91,6 @@ namespace WolvenKit.ViewModels.Documents
                     SetIsDirty(false);
                     _loggerService.Success($"Saved file {FilePath}");
                 }
-                //throw new ArgumentException();
             }
 
             return Task.CompletedTask;
@@ -159,22 +167,21 @@ namespace WolvenKit.ViewModels.Documents
             .Where(x => x.DocumentItemType == ERedDocumentItemType.MainFile)
             .FirstOrDefault());
 
-        private void PopulateItems()
+        protected void AddTabForRedType(RedBaseClass cls)
         {
-            TabItemViewModels.Add(new RDTDataViewModel(Cr2wFile.RootChunk, this));
-            if (Cr2wFile.RootChunk is CBitmapTexture xbm)
+            if (cls is CBitmapTexture xbm)
             {
                 TabItemViewModels.Add(new RDTTextureViewModel(xbm, this));
             }
-            if (Cr2wFile.RootChunk is CMesh mesh && mesh.RenderResourceBlob.GetValue() is rendRenderTextureBlobPC)
+            if (cls is CMesh mesh && mesh.RenderResourceBlob != null && mesh.RenderResourceBlob.GetValue() is rendRenderTextureBlobPC)
             {
                 TabItemViewModels.Add(new RDTTextureViewModel(mesh, this));
             }
-            if (Cr2wFile.RootChunk is CReflectionProbeDataResource probe && probe.TextureData.RenderResourceBlobPC.GetValue() is rendRenderTextureBlobPC)
+            if (cls is CReflectionProbeDataResource probe && probe.TextureData.RenderResourceBlobPC.GetValue() is rendRenderTextureBlobPC)
             {
                 TabItemViewModels.Add(new RDTTextureViewModel(probe, this));
             }
-            if (Cr2wFile.RootChunk is Multilayer_Mask mlmask)
+            if (cls is Multilayer_Mask mlmask)
             {
                 // maybe it makes more sense to put these all into one tab?
                 ModTools.ConvertMultilayerMaskToDdsStreams(mlmask, out var streams);
@@ -182,30 +189,52 @@ namespace WolvenKit.ViewModels.Documents
                 {
                     var tab = new RDTTextureViewModel(streams[i], this)
                     {
-                        Header = $"Layer {i}"
+                        Header = $"MultiLayer {i}"
                     };
                     TabItemViewModels.Add(tab);
                 }
             }
-            if (Cr2wFile.RootChunk is inkTextureAtlas atlas)
+            if (cls is inkTextureAtlas atlas)
             {
-                var xbmHash = FNV1A64HashAlgorithm.HashString(atlas.Slots[0].Texture.DepotPath.ToString());
-                var file = GetFileFromHash(xbmHash);
+                var file = GetFileFromDepotPath(atlas.Slots[0].Texture.DepotPath);
                 if (file != null)
                 {
                     TabItemViewModels.Add(new RDTInkTextureAtlasViewModel(atlas, (CBitmapTexture)file.RootChunk, this));
                 }
             }
-            if (Cr2wFile.RootChunk is inkWidgetLibraryResource library)
+            if (cls is inkWidgetLibraryResource library)
             {
                 TabItemViewModels.Add(new RDTWidgetViewModel(library, this));
             }
+            if (cls is CMesh mesh2)
+            {
+                TabItemViewModels.Add(new RDTMeshViewModel(mesh2, this));
+            }
+            if (cls is entEntityTemplate ent)
+            {
+                TabItemViewModels.Add(new RDTMeshViewModel(ent, this));
+            }
+            if (cls is worldStreamingSector wss)
+            {
+                TabItemViewModels.Add(new RDTMeshViewModel(wss, this));
+            }
+            if (cls is worldStreamingBlock wsb)
+            {
+                TabItemViewModels.Add(new RDTMeshViewModel(wsb, this));
+            }
+        }
+
+        private void PopulateItems()
+        {
+            TabItemViewModels.Add(new RDTDataViewModel(Cr2wFile.RootChunk, this));
+            AddTabForRedType(Cr2wFile.RootChunk);
 
             foreach (var file in Cr2wFile.EmbeddedFiles)
             {
                 if (file.Content != null)
                 {
                     TabItemViewModels.Add(new RDTDataViewModel(file.Content, this));
+                    AddTabForRedType(file.Content);
                 }
             }
 
@@ -214,19 +243,106 @@ namespace WolvenKit.ViewModels.Documents
             SelectedTabItemViewModel = TabItemViewModels.FirstOrDefault();
         }
 
-        public CR2WFile GetFileFromHash(ulong hash)
+        public Dictionary<CName, CR2WFile> Files { get; set; } = new();
+
+        public CR2WFile GetFileFromDepotPathOrCache(CName depotPath)
         {
-            // TODO: need to look locally first
+            lock (Files)
+            {
+                if (!Files.ContainsKey(depotPath))
+                {
+                    Files[depotPath] = GetFileFromDepotPath(depotPath);
+                }
+
+                if (Files[depotPath] != null)
+                {
+                    foreach (var res in Files[depotPath].EmbeddedFiles)
+                    {
+                        if (!Files.ContainsKey(res.FileName))
+                        {
+                            Files.Add(res.FileName, new CR2WFile()
+                            {
+                                RootChunk = res.Content
+                            });
+                        }
+                    }
+                }
+            }
+            return Files[depotPath];
+        }
+
+        public CR2WFile GetFileFromDepotPath(CName depotPath)
+        {
+            CR2WFile cr2wFile = null;
+
+            var projectManager = Locator.Current.GetService<IProjectManager>();
+            if (projectManager.ActiveProject != null)
+            {
+                string path = null;
+                if ((string)depotPath != null)
+                {
+                    path = Path.Combine(projectManager.ActiveProject.ModDirectory, (string)depotPath);
+                }
+                else
+                {
+                    var fm = Locator.Current.GetService<IWatcherService>().GetFileModelFromHash(depotPath.GetRedHash());
+                    if (fm != null)
+                        path = fm.FullName;
+                }
+
+                if (path != null && File.Exists(path))
+                {
+                    using (var stream = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
+                    {
+                        using var reader = new BinaryReader(stream);
+                        cr2wFile = _parser.ReadRed4File(reader);
+                        cr2wFile.MetaData.FileName = depotPath;
+                    }
+                    lock (Files)
+                    {
+                        foreach (var res in cr2wFile.EmbeddedFiles)
+                        {
+                            if (!Files.ContainsKey(res.FileName))
+                            {
+                                Files.Add(res.FileName, new CR2WFile()
+                                {
+                                    RootChunk = res.Content
+                                });
+                            }
+                        }
+                    }
+
+                    return cr2wFile;
+                }
+            }
+
             var _archiveManager = Locator.Current.GetService<IArchiveManager>();
-            var file = _archiveManager.Lookup(hash);
+            var file = _archiveManager.Lookup(depotPath.GetRedHash());
             if (file.HasValue && file.Value is FileEntry fe)
             {
-                CR2WFile cr2wFile = null;
                 using (var stream = new MemoryStream())
                 {
                     fe.Extract(stream);
                     using var reader = new BinaryReader(stream);
                     cr2wFile = _parser.ReadRed4File(reader);
+                    if ((string)depotPath != null)
+                    {
+                        cr2wFile.MetaData.FileName = depotPath;
+                    }
+                }
+
+                lock (Files)
+                {
+                    foreach (var res in cr2wFile.EmbeddedFiles)
+                    {
+                        if (!Files.ContainsKey(res.FileName))
+                        {
+                            Files.Add(res.FileName, new CR2WFile()
+                            {
+                                RootChunk = res.Content
+                            });
+                        }
+                    }
                 }
 
                 return cr2wFile;
@@ -244,7 +360,7 @@ namespace WolvenKit.ViewModels.Documents
 
         public RedDocumentTabViewModel OpenRefAsTab(ulong hash)
         {
-            var file = GetFileFromHash(hash);
+            var file = GetFileFromDepotPath(hash);
             if (file != null)
             {
                 var tab = new RDTDataViewModel(hash.ToString(), file.RootChunk, this);

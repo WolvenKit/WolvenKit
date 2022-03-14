@@ -169,6 +169,8 @@ namespace WolvenKit.Functionality.Services
             return fi.Directory is { Parent: { Parent: { } } } ? Path.Combine(fi.Directory.Parent.Parent.FullName) : null;
         }
 
+        public string GetRED4GameExecutablePath() => CP77ExecutablePath;
+
         public string GetRED4GameModDir()
         {
             //var dir = Path.Combine(GetRED4GameRootDir(), "archive", "pc", "mod");

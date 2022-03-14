@@ -39,7 +39,7 @@ namespace WolvenKit.Modkit.RED4
 
             using var ms = new MemoryStream(rendblob.RenderBuffer.Buffer.GetBytes());
 
-            var meshesinfo = MeshTools.GetMeshesinfo(rendblob, cr2w);
+            var meshesinfo = MeshTools.GetMeshesinfo(rendblob, cr2w.RootChunk as CMesh);
 
             var expMeshes = MeshTools.ContainRawMesh(ms, meshesinfo, LodFilter);
             MeshTools.UpdateSkinningParamCloth(ref expMeshes, meshStream, cr2w);
@@ -477,6 +477,34 @@ namespace WolvenKit.Modkit.RED4
                                                         var dto1 = new RedFileDto(mlt);
                                                         var doc1 = RedJsonSerializer.Serialize(dto1);
                                                         File.WriteAllText(path1, doc1);
+
+                                                        // import all textures included in the mltemplate
+                                                        var mlTemplateMats = dto1.Data.RootChunk.FindType(typeof(CResourceReference<CBitmapTexture>));
+
+                                                        for (var eye = 0; eye < mlTemplateMats.Count; eye++)
+                                                        {
+                                                            var mat = (CResourceReference<CBitmapTexture>)mlTemplateMats[eye].Value;
+                                                            if (!TexturesList.Contains(mat.DepotPath))
+                                                            {
+                                                                TexturesList.Add(mat.DepotPath);
+                                                            }
+
+                                                            var hash3 = FNV1A64HashAlgorithm.HashString(mat.DepotPath);
+                                                            foreach (var arrr in archives)
+                                                            {
+                                                                if (arrr.Files.ContainsKey(hash3))
+                                                                {
+                                                                    if (!File.Exists(Path.Combine(matRepo, Path.ChangeExtension(mat.DepotPath, "." + exportArgs.Get<XbmExportArgs>().UncookExtension.ToString()))))
+                                                                    {
+                                                                        if (Directory.Exists(matRepo))
+                                                                        {
+                                                                            UncookSingle(arrr, hash3, new DirectoryInfo(matRepo), exportArgs);
+                                                                        }
+                                                                    }
+                                                                    break;
+                                                                }
+                                                            }
+                                                        }
                                                     }
 
                                                     for (var eye = 0; eye < reader.ImportsList.Count; eye++)
@@ -508,6 +536,38 @@ namespace WolvenKit.Modkit.RED4
                                         }
                                     }
 
+                                }
+                                break;
+                            }
+                        }
+                    }
+                }
+
+                if (Path.GetExtension(primaryDependencies[i]) == ".gradient")
+                {
+                    if (!TexturesList.Contains(primaryDependencies[i]))
+                    {
+                        var hash = FNV1A64HashAlgorithm.HashString(primaryDependencies[i]);
+                        foreach (var ar in archives)
+                        {
+                            if (ar.Files.ContainsKey(hash))
+                            {
+                                var ms = new MemoryStream();
+                                ExtractSingleToStream(ar, hash, ms);
+                                ms.Seek(0, SeekOrigin.Begin);
+
+                                TexturesList.Add(primaryDependencies[i]);
+                                var path = Path.Combine(matRepo, Path.ChangeExtension(primaryDependencies[i], ".gradient.json"));
+                                if (!File.Exists(path))
+                                {
+                                    if (!new FileInfo(path).Directory.Exists)
+                                    {
+                                        Directory.CreateDirectory(new FileInfo(path).Directory.FullName);
+                                    }
+                                    var hp = _wolvenkitFileService.ReadRed4File(ms);
+                                    var dto = new RedFileDto(hp);
+                                    var doc = RedJsonSerializer.Serialize(dto);
+                                    File.WriteAllText(path, doc);
                                 }
                                 break;
                             }

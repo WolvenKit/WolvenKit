@@ -125,6 +125,7 @@ namespace WolvenKit.ViewModels.Tools
                 ECookedFileFormat.cubemap => new CommonExportArgs(),
                 ECookedFileFormat.envprobe => new CommonExportArgs(),
                 ECookedFileFormat.texarray => new CommonExportArgs(),
+                ECookedFileFormat.ent => new EntityExportArgs(),
                 ECookedFileFormat.fnt => new FntExportArgs(),
                 ECookedFileFormat.morphtarget => new MorphTargetExportArgs(),
                 //ECookedFileFormat.ent => new EntityExportArgs(),

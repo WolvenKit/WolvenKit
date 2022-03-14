@@ -79,6 +79,8 @@ namespace WolvenKit.Views.Editors
 
         private void SetRedValue(string value)
         {
+            if (RedRef == null)
+                return;
             CName cn = null;
             if (ulong.TryParse(value, out var number))
             {
@@ -106,7 +108,7 @@ namespace WolvenKit.Views.Editors
             {
                 return "";
             }
-            if (RedRef.DepotPath.GetValue() == null && RedRef.DepotPath.GetRedHash() != 0)
+            if ((string)RedRef.DepotPath == null && RedRef.DepotPath.GetRedHash() != 0)
             {
                 return GetHashFromRedValue().ToString();
             }

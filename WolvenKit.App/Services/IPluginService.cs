@@ -52,6 +52,7 @@ namespace WolvenKit.Functionality.Services
     {
         public ObservableCollection<PluginViewModel> Plugins { get; set; }
 
+        void Init();
         bool IsInstalled(EPlugin pluginName);
 
         bool TryGetInstallPath(EPlugin plugin, [NotNullWhen(true)] out string path);

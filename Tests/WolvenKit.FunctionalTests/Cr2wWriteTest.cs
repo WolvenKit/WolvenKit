@@ -38,7 +38,6 @@ namespace WolvenKit.FunctionalTests
         //    Test_Extension();
         //}
 
-
         [TestMethod]
         public void Write_acousticdata() => Test_Extension(".acousticdata");
 
@@ -588,7 +587,12 @@ namespace WolvenKit.FunctionalTests
                                 if (!isBinaryEqual && WRITE_FAILED)
 #pragma warning disable CS0162
                                 {
-                                    var resultDir = Path.Combine(Environment.CurrentDirectory, s_testResultsDirectory);
+                                    var resultDir = Path.Combine(Environment.CurrentDirectory, s_testResultsDirectory, file.Extension[1..]);
+                                    if (!Directory.Exists(resultDir))
+                                    {
+                                        Directory.CreateDirectory(resultDir);
+                                    }
+
                                     var filename = Path.Combine(resultDir, Path.GetFileName(cr2wFile.MetaData.FileName));
 
                                     using var oFile = new FileStream($"{filename}.o.bin", FileMode.OpenOrCreate, FileAccess.Write);

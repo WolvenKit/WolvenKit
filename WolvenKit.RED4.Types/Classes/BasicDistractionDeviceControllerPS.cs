@@ -48,8 +48,8 @@ namespace WolvenKit.RED4.Types
 		public BasicDistractionDeviceControllerPS()
 		{
 			DeviceName = "LocKey#42164";
-			TweakDBRecord = new() { Value = 97438729774 };
-			TweakDBDescriptionRecord = new() { Value = 147273950574 };
+			TweakDBRecord = 97438729774;
+			TweakDBDescriptionRecord = 147273950574;
 			DistractorType = Enums.EPlaystyleType.NETRUNNER;
 			EffectOnSartNames = new();
 			AnimationType = Enums.EAnimationType.TRANSFORM;

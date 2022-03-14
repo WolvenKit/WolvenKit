@@ -10,11 +10,13 @@ namespace WolvenKit.RED4
         private byte[] _bytes = Array.Empty<byte>();
 
         public HashSet<string> ParentTypes { get; } = new();
+        public RedBaseClass Parent { get; set; }
 
         public uint Flags { get; set; }
         public bool IsEmpty => _bytes == Array.Empty<byte>();
         public IParseableBuffer Data { get; set; }
 
+        public RedBaseClass RootChunk { get; set; }
 
         /// <summary>
         /// The length of the uncompressed data

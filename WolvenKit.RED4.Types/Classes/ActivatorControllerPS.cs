@@ -72,8 +72,8 @@ namespace WolvenKit.RED4.Types
 		public ActivatorControllerPS()
 		{
 			DeviceName = "LocKey#42164";
-			TweakDBRecord = new() { Value = 76466818930 };
-			TweakDBDescriptionRecord = new() { Value = 127414107948 };
+			TweakDBRecord = 76466818930;
+			TweakDBDescriptionRecord = 127414107948;
 			HasSimpleInteraction = true;
 			AlternativeInteractionString = "ToggleActivate";
 		}

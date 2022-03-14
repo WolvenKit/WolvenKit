@@ -95,7 +95,8 @@ namespace WolvenKit.Modkit.RED4.Animation
                 #region rotations
                 if (sc.RotKeysData != null)
                 {
-                    rotBuffer = sc.RotKeysData.Cast<byte>().ToArray();
+                    var b = sc.RotKeysData.Select(x => x.ToByte());
+                    rotBuffer = b.ToArray();
                     numRotations = rotBuffer.Length / 16;
                     if (numRotations > 0)
                     {
@@ -170,7 +171,8 @@ namespace WolvenKit.Modkit.RED4.Animation
                 #endregion
                 if (sc.PosKeysData != null)
                 {
-                    posBuffer = sc.PosKeysData.Cast<byte>().ToArray();
+                    var b = sc.PosKeysData.Select(x => x.ToByte());
+                    posBuffer = b.ToArray();
                     numPositions = posBuffer.Length / 16;
                     if (numPositions > 0)
                     {

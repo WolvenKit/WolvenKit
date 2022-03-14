@@ -53,6 +53,12 @@ namespace WolvenKit.RED4.Types
                 }
             }
         }
+
+        public CArrayBase(List<T> list)
+        {
+            _internalList = list;
+        }
+
         public Type InnerType => typeof(T);
 
         public object ShallowCopy()
@@ -220,6 +226,36 @@ namespace WolvenKit.RED4.Types
 
         public int Add(object item) => AddItem(item);
 
+        public void AddRange(ICollection collection)
+        {
+            if (IsReadOnly)
+            {
+                throw new NotSupportedException();
+            }
+
+            if ((collection.Count + Count) > MaxSize)
+            {
+                throw new NotSupportedException();
+            }
+
+            InsertRange(Count, collection);
+        }
+
+        public void AddRange(ICollection<T> collection)
+        {
+            if (IsReadOnly)
+            {
+                throw new NotSupportedException();
+            }
+
+            if ((collection.Count + Count) > MaxSize)
+            {
+                throw new NotSupportedException();
+            }
+
+            InsertRange(Count, collection);
+        }
+
         public void CopyTo(Array array, int index) => throw new NotImplementedException();
 
         public void Clear()
@@ -255,6 +291,22 @@ namespace WolvenKit.RED4.Types
             //OnObjectChanged(ObjectChangedType.Added, null, value);
 
             ((IList)_internalList).Insert(index, value);
+        }
+
+        public void InsertRange(int index, ICollection collection)
+        {
+            foreach (var item in collection)
+            {
+                Insert(index++, item);
+            }
+        }
+
+        public void InsertRange(int index, ICollection<T> collection)
+        {
+            foreach (var item in collection)
+            {
+                Insert(index++, item);
+            }
         }
 
         public void Remove(object value)

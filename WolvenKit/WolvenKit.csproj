@@ -44,6 +44,8 @@
     <PackageReference Include="DrawStringLineHeight" Version="1.0.0" />
     <PackageReference Include="Feather.Controls" Version="1.0.3" />
     <PackageReference Include="Feather.Core" Version="1.0.0" />
+    <PackageReference Include="HelixToolkit.SharpDX.Assimp" Version="2.20.2" />
+    <PackageReference Include="HelixToolkit.SharpDX.Core.Wpf" Version="2.20.2" />
 
     <PackageReference Include="ReactiveUI" Version="17.1.17" />
     <PackageReference Include="ReactiveUI.Events.WPF" Version="15.1.1" />
@@ -97,9 +99,9 @@
     <PackageReference Include="System.Security.Permissions" Version="6.0.0" />
     <PackageReference Include="System.Windows.Interactivity.WPF" Version="2.0.20525" NoWarn="NU1701" />
     <PackageReference Include="HandyControls" Version="3.3.11" />
-    
+
     <PackageReference Include="WolvenKit.WPFSoundVisualizationLibNet5" Version="1.0.1" />
-    
+
     <PackageReference Include="WpfAnalyzers" Version="4.0.2" PrivateAssets="all">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
     </PackageReference>
@@ -227,6 +229,15 @@
     <Resource Include="Resources\Media\Images\Application\wkit_logo_text_singlestack_white.png" />
     <Resource Include="Resources\Media\Images\Icons\Files\archive-closed.svg" />
     <Resource Include="Resources\Media\Images\Icons\Files\archive-opened.svg" />
+    <Resource Include="Resources\Media\Images\Icons\Files\ccstate.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Media\Images\Icons\Files\inkenginesettings.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Media\Images\Icons\Files\streamingblock.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
     <Resource Include="Views\Shell\TaskBarIcon.ico">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Resource>
@@ -1654,6 +1665,7 @@
     <None Remove="Resources\Media\Images\Icons\Files\bk2.bmp" />
     <None Remove="Resources\Media\Images\Icons\Files\bnk.bmp" />
     <None Remove="Resources\Media\Images\Icons\Files\buffer.svg" />
+    <None Remove="Resources\Media\Images\Icons\Files\ccstate.svg" />
     <None Remove="Resources\Media\Images\Icons\Files\cellmap.svg" />
     <None Remove="Resources\Media\Images\Icons\Files\cminimapedit.svg" />
     <None Remove="Resources\Media\Images\Icons\Files\community.svg" />
@@ -1685,6 +1697,7 @@
     <None Remove="Resources\Media\Images\Icons\Files\hitrepresentation.svg" />
     <None Remove="Resources\Media\Images\Icons\Files\hud.svg" />
     <None Remove="Resources\Media\Images\Icons\Files\ies.svg" />
+    <None Remove="Resources\Media\Images\Icons\Files\inkenginesettings.svg" />
     <None Remove="Resources\Media\Images\Icons\Files\joke.svg" />
     <None Remove="Resources\Media\Images\Icons\Files\json2.svg" />
     <None Remove="Resources\Media\Images\Icons\Files\lane_spots.svg" />
@@ -1730,6 +1743,7 @@
     <None Remove="Resources\Media\Images\Icons\Files\spatial_representation.svg" />
     <None Remove="Resources\Media\Images\Icons\Files\Spawntree.svg" />
     <None Remove="Resources\Media\Images\Icons\Files\srt.svg" />
+    <None Remove="Resources\Media\Images\Icons\Files\streamingblock.svg" />
     <None Remove="Resources\Media\Images\Icons\Files\streamingquerydata.svg" />
     <None Remove="Resources\Media\Images\Icons\Files\streamingsector.svg" />
     <None Remove="Resources\Media\Images\Icons\Files\streamingsector_inplace.svg" />

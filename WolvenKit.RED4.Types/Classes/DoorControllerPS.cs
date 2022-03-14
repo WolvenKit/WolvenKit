@@ -88,8 +88,8 @@ namespace WolvenKit.RED4.Types
 		public DoorControllerPS()
 		{
 			DeviceName = "LocKey#69";
-			TweakDBRecord = new() { Value = 52036287653 };
-			TweakDBDescriptionRecord = new() { Value = 104841659775 };
+			TweakDBRecord = 52036287653;
+			TweakDBDescriptionRecord = 104841659775;
 			DoorProperties = new() { DoorType = Enums.EDoorType.INTERACTIVE, AutomaticallyClosesItself = true, OpeningSpeed = 1.000000F, DoorOpeningTime = 1.000000F, DoorOpeningStimRange = 5.000000F };
 			OpeningTokens = new();
 		}

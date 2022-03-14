@@ -26,7 +26,7 @@ namespace WolvenKit.Converters
             variable switch
             {
                 IRedPrimitive<bool> => RedboolTemplate,        //done in PG
-                IRedString => StringTemplateView,   //done in PG
+                BaseStringType => StringTemplateView,   //done in PG
                 IRedInteger => NumericTemplate, //done in PG
                 IRedEnum => EnumTemplate,           //done in PG
                 IRedBaseHandle => HandleTemplateView, //done in PG

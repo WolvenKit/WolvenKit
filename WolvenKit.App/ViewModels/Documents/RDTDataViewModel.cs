@@ -1,8 +1,10 @@
 using System;
 using System.Collections.Generic;
+using System.Reactive.Disposables;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Threading;
+using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using Splat;
 using Syncfusion.UI.Xaml.TreeView.Engine;
@@ -16,21 +18,34 @@ using WolvenKit.ViewModels.Shell;
 
 namespace WolvenKit.ViewModels.Documents
 {
-    public class RDTDataViewModel : RedDocumentTabViewModel
+    public class RDTDataViewModel : RedDocumentTabViewModel, IActivatableViewModel
     {
-        protected readonly RedBaseClass _data;
+        public ViewModelActivator Activator { get; } = new();
+
+        protected readonly IRedType _data;
 
         [Reactive] public RedDocumentViewModel File { get; set; }
 
-        public RDTDataViewModel(RedBaseClass data, RedDocumentViewModel file)
-        {
-            OnDemandLoadingCommand = new DelegateCommand<TreeViewNode>(ExecuteOnDemandLoading, CanExecuteOnDemandLoading);
-            OpenImportCommand = new Functionality.Commands.DelegateCommand<ICR2WImport>(ExecuteOpenImport);
-            //ExportChunkCommand = new DelegateCommand<ChunkViewModel>((p) => ExecuteExportChunk(p), (p) => CanExportChunk(p));
+        public IRedType CopiedChunk;
 
+        public RDTDataViewModel(IRedType data, RedDocumentViewModel file)
+        {
             File = file;
             _data = data;
             Header = _data.GetType().Name;
+
+            this.WhenActivated((CompositeDisposable disposables) =>
+            {
+                OnDemandLoadingCommand = new DelegateCommand<TreeViewNode>(ExecuteOnDemandLoading, CanExecuteOnDemandLoading);
+                OpenImportCommand = new Functionality.Commands.DelegateCommand<ICR2WImport>(ExecuteOpenImport);
+                if (SelectedChunk == null)
+                {
+                    SelectedChunk = Chunks[0];
+                }
+                //ExportChunkCommand = new DelegateCommand<ChunkViewModel>((p) => ExecuteExportChunk(p), (p) => CanExportChunk(p));
+
+                //this.HandleActivation()
+            });
 
             //RootChunk = Chunks[0];
 
@@ -44,7 +59,7 @@ namespace WolvenKit.ViewModels.Documents
             //_file.WhenAnyValue(x => x).Subscribe(x => IsDirty |= true);
         }
 
-        public RDTDataViewModel(string header, RedBaseClass data, RedDocumentViewModel file) : this(data, file)
+        public RDTDataViewModel(string header, IRedType data, RedDocumentViewModel file) : this(data, file)
         {
             Header = header;
         }
@@ -72,6 +87,7 @@ namespace WolvenKit.ViewModels.Documents
                     {
                         GenerateChunks()
                     };
+                    //SelectedChunk = _chunks[0];
                 }
                 return _chunks;
             }

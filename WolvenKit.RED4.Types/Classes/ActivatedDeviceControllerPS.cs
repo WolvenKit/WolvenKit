@@ -40,11 +40,11 @@ namespace WolvenKit.RED4.Types
 		public ActivatedDeviceControllerPS()
 		{
 			DeviceName = "ActivatedDevice";
-			TweakDBRecord = new() { Value = 118827637830 };
-			TweakDBDescriptionRecord = new() { Value = 171165425479 };
+			TweakDBRecord = 118827637830;
+			TweakDBDescriptionRecord = 171165425479;
 			ShouldScannerShowRole = true;
 			AnimationSetup = new() { AnimationTime = 0.500000F };
-			ActivatedDeviceSetup = new() { ActionName = "LocKey#233", VfxResource = new(), ThumbnailIconRecord = new() { Value = 133181765352 } };
+			ActivatedDeviceSetup = new() { ActionName = "LocKey#233", VfxResource = new(), ThumbnailIconRecord = 133181765352 };
 			IndustrialArmAnimationOverride = -1;
 		}
 	}

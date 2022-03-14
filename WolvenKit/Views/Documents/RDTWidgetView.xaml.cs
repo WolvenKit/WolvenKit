@@ -63,6 +63,10 @@ namespace WolvenKit.Views.Documents
 
             ViewModel.LoadResources().ContinueWith(task =>
             {
+                if (ViewModel == null)
+                {
+                    return;
+                }
                 var stack = new StackPanel();
                 Widgets.Clear();
                 WidgetPreview.Children.Clear();

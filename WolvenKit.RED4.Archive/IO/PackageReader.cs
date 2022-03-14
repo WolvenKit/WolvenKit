@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
+using Splat;
+using WolvenKit.Common.Services;
 using WolvenKit.Core.Extensions;
 using WolvenKit.RED4.Archive.Buffer;
 using WolvenKit.RED4.IO;
@@ -51,7 +53,7 @@ namespace WolvenKit.RED4.Archive.IO
                 if (prop == null)
                 {
                     value = Read(fieldType, 0, Flags.Empty);
-                    RedReflection.AddDynamicProperty(instance, varName, value);
+                    instance.SetProperty(varName, value);
                 }
                 else
                 {
@@ -62,7 +64,7 @@ namespace WolvenKit.RED4.Archive.IO
                     }
 
                     value = Read(prop.Type, 0, flags);
-                    prop.SetValue(instance, value);
+                    instance.SetProperty(prop.RedName, value);
                 }
             }
 
@@ -86,7 +88,8 @@ namespace WolvenKit.RED4.Archive.IO
                 var length = _reader.ReadInt16();
                 return Encoding.UTF8.GetString(_reader.ReadBytes(length));
             }
-            else if (header.version == 04)
+
+            if (header.version == 04)
             {
                 return base.ReadTweakDBID();
             }

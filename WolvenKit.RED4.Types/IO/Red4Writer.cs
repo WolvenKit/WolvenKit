@@ -14,9 +14,9 @@ namespace WolvenKit.RED4.IO
     {
         protected readonly BinaryWriter _writer;
 
-        public CacheList<CName> StringCacheList = new();
-        public CacheList<(string, CName, ushort)> ImportCacheList = new();
-        public CacheList<RedBuffer> BufferCacheList = new();
+        public CacheList<CName> StringCacheList = new(new CNameComparer());
+        public CacheList<(string, CName, ushort)> ImportCacheList = new(new ImportComparer());
+        public CacheList<RedBuffer> BufferCacheList = new(ReferenceEqualityComparer.Instance);
 
         public int CurrentChunk { get; private set; }
 
@@ -30,6 +30,8 @@ namespace WolvenKit.RED4.IO
 
         protected readonly List<(int, Guid, int, int, int)> _targetList = new();
         protected readonly Dictionary<int, List<Guid>> ChildChunks = new();
+
+        protected readonly ImportComparer _importComparer = new();
 
         public readonly Dictionary<Guid, int> _chunkGuidToId = new();
 
@@ -73,6 +75,7 @@ namespace WolvenKit.RED4.IO
         public ushort GetStringIndex(string value, bool add = true)
         {
             var index = StringCacheList.IndexOf(value);
+
             if (add && index == ushort.MaxValue)
             {
                 index = StringCacheList.Add(value);
@@ -143,7 +146,7 @@ namespace WolvenKit.RED4.IO
             BufferCacheList.Clear();
         }
 
-        public (Dictionary<CName, ushort>, Dictionary<(string, CName, ushort), ushort>) GenerateStringDictionary()
+        public void GenerateStringDictionary()
         {
             _chunkStringList.Add(CurrentChunk, new() { List = StringCacheList.ToList() });
             StringCacheList.Clear();
@@ -161,8 +164,6 @@ namespace WolvenKit.RED4.IO
             {
                 GenerateFor(i);
             }
-
-            return (StringCacheList.ToDictionary(), ImportCacheList.ToDictionary());
 
             void GenerateFor(int chunk)
             {
@@ -300,6 +301,7 @@ namespace WolvenKit.RED4.IO
 
         public virtual void Write(SharedDataBuffer val) => _writer.Write(val.Buffer.GetBytes());
         public virtual void Write(TweakDBID val) => _writer.Write((ulong)val);
+        public virtual void Write(gamedataLocKeyWrapper val) => _writer.Write((ulong)val);
 
         #endregion Simple
 
@@ -639,7 +641,7 @@ namespace WolvenKit.RED4.IO
             var typeInfo = RedReflection.GetTypeInfo(instance.GetType());
             foreach (var propertyInfo in typeInfo.GetWritableProperties())
             {
-                var value = (IRedType)instance.InternalGetPropertyValue(instance.GetType(), propertyInfo.RedName, propertyInfo.Flags);
+                var value = instance.GetProperty(propertyInfo.RedName);
                 Write(value);
             }
         }
@@ -784,6 +786,10 @@ namespace WolvenKit.RED4.IO
                 case { } when type == typeof(TweakDBID):
                     Write((TweakDBID)instance);
                     return;
+
+                case { } when type == typeof(gamedataLocKeyWrapper):
+                    Write((gamedataLocKeyWrapper)instance);
+                    return;
             }
 
             ThrowNotSupported(instance.GetType().Name);
@@ -886,6 +892,21 @@ namespace WolvenKit.RED4.IO
         {
             public int Id { get; set; } = -1;
             public Guid Guid { get; set; } = Guid.Empty;
+        }
+
+        protected class CNameComparer : IEqualityComparer<CName>
+        {
+            public bool Equals(CName x, CName y) => string.Equals(x, y);
+            public bool Equals(CName x, string y) => string.Equals(x, y);
+
+            public int GetHashCode(CName obj) => obj.GetHashCode();
+        }
+
+        protected class ImportComparer : IEqualityComparer<(string, CName, ushort)>
+        {
+            public bool Equals((string, CName, ushort) x, (string, CName, ushort) y) => string.Equals(x.Item2, y.Item2);
+
+            public int GetHashCode((string, CName, ushort) obj) => obj.Item2.GetHashCode();
         }
     }
 }

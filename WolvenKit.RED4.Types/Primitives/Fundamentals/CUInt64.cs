@@ -1,5 +1,6 @@
 using System;
 using System.Diagnostics;
+using System.Globalization;
 using System.IO;
 
 namespace WolvenKit.RED4.Types
@@ -43,5 +44,8 @@ namespace WolvenKit.RED4.Types
         }
 
         public bool Equals(CUInt64 other) => Equals(_value, other._value);
+
+        public override string ToString() => _value.ToString();
+        public string ToString(CultureInfo cultureInfo) => _value.ToString(cultureInfo);
     }
 }

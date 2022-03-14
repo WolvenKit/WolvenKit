@@ -34,7 +34,8 @@ namespace WolvenKit.Common
 
     public enum ETweakExtension
     {
-        tweak
+        tweak,
+        yaml
     }
 
     public enum EUpdateChannel
@@ -261,7 +262,8 @@ namespace WolvenKit.Common
         morphtarget,
         fnt,
         opusinfo,
-        anims
+        anims,
+        ent
     }
 
     /// <summary>

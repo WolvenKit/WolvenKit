@@ -32,8 +32,8 @@ namespace WolvenKit.RED4.Types
 		public SimpleSwitchControllerPS()
 		{
 			DeviceName = "LocKey#115";
-			TweakDBRecord = new() { Value = 87940692723 };
-			TweakDBDescriptionRecord = new() { Value = 138796611214 };
+			TweakDBRecord = 87940692723;
+			TweakDBDescriptionRecord = 138796611214;
 		}
 	}
 }

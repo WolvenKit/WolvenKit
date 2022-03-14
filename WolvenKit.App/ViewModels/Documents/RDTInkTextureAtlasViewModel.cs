@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Drawing;
 using System.Drawing.Imaging;
@@ -23,6 +24,19 @@ namespace WolvenKit.ViewModels.Documents
         {
             _atlas = atlas;
             Header = "Part Mapping";
+
+            Render = RenderAtlas;
+        }
+
+        public void RenderAtlas()
+        {
+            if (IsRendered)
+            {
+                return;
+            }
+            SetupImage();
+
+            var xbm = (CBitmapTexture)_data;
             Width = xbm.Width;
             Height = xbm.Height;
 
@@ -70,14 +84,14 @@ namespace WolvenKit.ViewModels.Documents
                 Int32Rect.Empty,
                 BitmapSizeOptions.FromEmptyOptions());
 
-            foreach (var part in atlas.Slots[0].Parts)
+            foreach (var part in _atlas.Slots[0].Parts)
             {
-                OverlayItems.Add(new InkTextureAtlasMapperViewModel(part, xbm, atlas.Slots[0].Texture.DepotPath.ToString(), file.RelativePath, (BitmapSource)Image));
+                OverlayItems.Add(new InkTextureAtlasMapperViewModel(part, xbm, _atlas.Slots[0].Texture.DepotPath.ToString(), File.RelativePath, (BitmapSource)Image));
             }
 
         }
 
-        [Reactive] public List<InkTextureAtlasMapperViewModel> OverlayItems { get; set; } = new List<InkTextureAtlasMapperViewModel>();
+        [Reactive] public ObservableCollection<InkTextureAtlasMapperViewModel> OverlayItems { get; set; } = new();
 
         [Reactive] public float Width { get; set; }
 
