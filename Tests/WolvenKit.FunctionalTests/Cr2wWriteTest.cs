@@ -27,8 +27,8 @@ namespace WolvenKit.FunctionalTests
         public static void SetupClass(TestContext context) => Setup(context);
 
         private const bool TEST_EXISTING = true;
-        private const bool WRITE_FAILED = true;
-        private const bool DECOMPRESS_BUFFERS = false;
+        private const bool WRITE_FAILED = false;
+        private const bool DECOMPRESS_BUFFERS = true;
 
         #region test methods
 
@@ -37,21 +37,6 @@ namespace WolvenKit.FunctionalTests
         //{
         //    Test_Extension();
         //}
-
-        //[TestMethod]
-        public void Debug()
-        {
-            var filesToTest = new List<FileEntry>();
-            foreach (var fileEntry in s_groupedFiles[".mt"])
-            {
-                if (fileEntry.FileName.Contains("3d_map_cubes.mt"))
-                {
-                    filesToTest.Add(fileEntry);
-                }
-            }
-
-            Write_Archive_Items(filesToTest);
-        }
 
         [TestMethod]
         public void Write_acousticdata() => Test_Extension(".acousticdata");
