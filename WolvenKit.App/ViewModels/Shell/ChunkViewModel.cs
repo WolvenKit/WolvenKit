@@ -1645,7 +1645,7 @@ namespace WolvenKit.ViewModels.Shell
                         {
                             index = pkg.Chunks.Count;
                         }
-                        pkg.Chunks.Add(rbc);
+                        pkg.Chunks.Insert(index, rbc);
                     }
                     else if (db.GetValue().Data is CR2WList list)
                     {
@@ -1707,5 +1707,7 @@ namespace WolvenKit.ViewModels.Shell
                 }
             }
         }
+
+        public static bool IsControlBeingHeld => Keyboard.IsKeyDown(Key.LeftCtrl) || Keyboard.IsKeyDown(Key.RightCtrl);
     }
 }
