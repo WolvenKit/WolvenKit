@@ -1524,11 +1524,11 @@ namespace WolvenKit.ViewModels.Shell
         {
             if (Data is IRedCloneable irc)
             {
-                Tab.CopiedChunk = (IRedType)irc.DeepCopy();
+                RDTDataViewModel.CopiedChunk = (IRedType)irc.DeepCopy();
             }
             else
             {
-                Tab.CopiedChunk = Data;
+                RDTDataViewModel.CopiedChunk = Data;
             }
         }
 
@@ -1538,34 +1538,50 @@ namespace WolvenKit.ViewModels.Shell
         {
             if (Data is IRedCloneable irc)
             {
-                Parent.InsertChild(-1, (IRedType)irc.DeepCopy());
+                Parent.InsertChild(Parent.GetIndexOf(this) + 1, (IRedType)irc.DeepCopy());
             }
             else
             {
-                Parent.InsertChild(-1, Data);
+                Parent.InsertChild(Parent.GetIndexOf(this) + 1, Data);
+            }
+        }
+
+        public IRedArray ArraySelfOrParent
+        {
+            get
+            {
+                if (Parent.ResolvedData is IRedArray ira)
+                {
+                    return ira;
+                }
+                if (ResolvedData is IRedArray ira2)
+                {
+                    return ira2;
+                }
+                return null;
             }
         }
 
         public ICommand PasteChunkCommand { get; private set; }
-        private bool CanPasteChunk() => (IsArray || IsInArray) && Tab.CopiedChunk != null;
+        private bool CanPasteChunk() => (IsArray || IsInArray) && RDTDataViewModel.CopiedChunk != null && (ArraySelfOrParent?.InnerType.IsAssignableTo(RDTDataViewModel.CopiedChunk.GetType()) ?? true);
         private void ExecutePasteChunk()
         {
-            if (Tab.CopiedChunk == null)
+            if (RDTDataViewModel.CopiedChunk == null)
             {
                 return;
             }
             if (Parent.ResolvedData is IRedArray)
             {
-                if (Parent.InsertChild(-1, Tab.CopiedChunk))
+                if (Parent.InsertChild(Parent.GetIndexOf(this) + 1, RDTDataViewModel.CopiedChunk))
                 {
-                    Tab.CopiedChunk = null;
+                    RDTDataViewModel.CopiedChunk = null;
                 }
             }
             if (ResolvedData is IRedArray)
             {
-                if (InsertChild(-1, Tab.CopiedChunk))
+                if (InsertChild(-1, RDTDataViewModel.CopiedChunk))
                 {
-                    Tab.CopiedChunk = null;
+                    RDTDataViewModel.CopiedChunk = null;
                 }
             }
         }
