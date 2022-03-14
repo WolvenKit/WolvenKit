@@ -1570,31 +1570,55 @@ namespace WolvenKit.ViewModels.Shell
             }
         }
 
-        public void MoveChild(int index, IRedType item)
+        public void MoveChild(int index, ChunkViewModel item)
         {
-            IList list = null;
-            if (ResolvedData is IList il)
+            if (item.Parent == null)
+            { 
+                return;
+            }
+
+            var oldParent = item.Parent;
+
+            IList sourceList = null;
+            IList destList = null;
+            if (oldParent.ResolvedData is IList il)
             {
-                list = il;
+                sourceList = il;
+            }
+            else if (oldParent.ResolvedData is IRedBufferPointer db)
+            {
+                if (db.GetValue().Data is Package04 pkg)
+                {
+                    sourceList = (IList)pkg.Chunks;
+                }
+                else if (db.GetValue().Data is CR2WList cl)
+                {
+                    sourceList = cl.Files;
+                }
+            }
+
+            if (ResolvedData is IList il2)
+            {
+                destList = il2;
             }
             else if (ResolvedData is IRedBufferPointer db)
             {
                 if (db.GetValue().Data is Package04 pkg)
                 {
-                    list = (IList)pkg.Chunks;
+                    destList = (IList)pkg.Chunks;
                 }
                 else if (db.GetValue().Data is CR2WList cl)
                 {
-                    list = cl.Files;
+                    destList = cl.Files;
                 }
             }
 
-            if (list != null)
+            if (sourceList != null && destList != null)
             { 
                 int oldIndex = -1, i = 0;
-                foreach (var thing in list)
+                foreach (var thing in sourceList)
                 {
-                    if (thing.GetHashCode() == item.GetHashCode())
+                    if (thing.GetHashCode() == item.Data.GetHashCode())
                     {
                         oldIndex = i;
                         break;
@@ -1604,14 +1628,22 @@ namespace WolvenKit.ViewModels.Shell
 
                 if (oldIndex > -1)
                 {
-                    list.RemoveAt(oldIndex);
-                    if (oldIndex < index)
+                    sourceList.RemoveAt(oldIndex);
+                    if (oldIndex < index && sourceList.GetHashCode() == destList.GetHashCode())
                     {
                         index--;
                     }
-                    InsertChild(index, item);
+                    InsertChild(index, item.Data);
                     Tab.File.SetIsDirty(true);
                     RecalulateProperties();
+                    if (sourceList.GetHashCode() != destList.GetHashCode())
+                    {
+                        oldParent.RecalulateProperties();
+                        if (oldParent.Tab.File.GetHashCode() != Tab.File.GetHashCode())
+                        {
+                            oldParent.Tab.File.SetIsDirty(true);
+                        }
+                    }
                 }
             }
         }

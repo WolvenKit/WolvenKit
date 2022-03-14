@@ -167,7 +167,7 @@ namespace WolvenKit.Views.Tools
                     }
                     else
                     {
-                        target.Parent.MoveChild(target.Parent.Properties.IndexOf(target) + (e.DropPosition == DropPosition.DropBelow ? 1 : 0), source.Data);
+                        target.Parent.MoveChild(target.Parent.Properties.IndexOf(target) + (e.DropPosition == DropPosition.DropBelow ? 1 : 0), source);
                     }
                         //if (target.Parent.Data is DataBuffer or SerializationDeferredDataBuffer)
                         //{
