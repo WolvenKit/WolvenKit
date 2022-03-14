@@ -381,8 +381,7 @@ namespace WolvenKit.ViewModels.Shell
             }
             else if (obj is RedBaseClass redClass)
             {
-                var pis = GetTypeInfo(redClass.GetType()).PropertyInfos;
-                pis.Sort((a, b) => a.Name.CompareTo(b.Name));
+                var pis = GetTypeInfo(redClass.GetType()).PropertyInfos.Sort((a, b) => a.Name.CompareTo(b.Name));
 
                 var dps = redClass.GetDynamicPropertyNames();
                 dps.Sort();
