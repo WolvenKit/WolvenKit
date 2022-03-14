@@ -22,7 +22,7 @@ namespace WolvenKit.RED4.Types
     }
 
     [RED("handle")]
-    public class CHandle<T> : IRedHandle<T>, /*IRedNotifyObjectChanged, */IEquatable<CHandle<T>> where T : RedBaseClass
+    public class CHandle<T> : IRedHandle<T>, /*IRedNotifyObjectChanged, */IEquatable<CHandle<T>>, IRedCloneable where T : RedBaseClass
     {
         // public event ObjectChangedEventHandler ObjectChanged;
 
@@ -130,5 +130,15 @@ namespace WolvenKit.RED4.Types
         }
 
         public override int GetHashCode() => EqualityComparer<T>.Default.GetHashCode((T)Chunk);
+
+        public object ShallowCopy()
+        {
+            return MemberwiseClone();
+        }
+
+        public object DeepCopy()
+        {
+            return CHandle.Parse(InnerType, (RedBaseClass)_chunk.DeepCopy());
+        }
     }
 }
