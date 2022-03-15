@@ -169,7 +169,7 @@ namespace WolvenKit.RED4.Archive.IO
             return result;
         }
 
-        private (byte[], IList<Package04ImportHeader>) GenerateRefBuffer(IList<(string, CName, ushort)> refs, uint position, bool writeRefAsHash)
+        private (byte[], IList<Package04ImportHeader>) GenerateRefBuffer(IList<ImportEntry> refs, uint position, bool writeRefAsHash)
         {
 
             var refDesc = new List<Package04ImportHeader>();
@@ -182,22 +182,22 @@ namespace WolvenKit.RED4.Archive.IO
                     {
                         offset = (uint)refData.Count + position,
                         size = 8,
-                        sync = reff.Item3 > 0
+                        sync = reff.Flag > 0
                     });
-                    refData.AddRange(BitConverter.GetBytes(reff.Item2.GetRedHash()));
+                    refData.AddRange(BitConverter.GetBytes(reff.DepotPath.GetRedHash()));
                 }
                 else
                 {
                     refDesc.Add(new Package04ImportHeader
                     {
                         offset = (uint)refData.Count + position,
-                        size = (byte)reff.Item2.Length,
-                        sync = reff.Item3 > 0
+                        size = (byte)reff.DepotPath.Length,
+                        sync = reff.Flag > 0
                     });
 
-                    if ((string)reff.Item2 != null)
+                    if ((string)reff.DepotPath != null)
                     {
-                        refData.AddRange(Encoding.UTF8.GetBytes(reff.Item2));
+                        refData.AddRange(Encoding.UTF8.GetBytes(reff.DepotPath));
                     }
                 }
             }
@@ -245,7 +245,7 @@ namespace WolvenKit.RED4.Archive.IO
             }
         }
 
-        private (IList<CName>, IList<(string, CName, ushort)>, List<Package04ChunkHeader>, byte[]) GenerateChunkData()
+        private (IList<CName>, IList<ImportEntry>, List<Package04ChunkHeader>, byte[]) GenerateChunkData()
         {
             using var ms = new MemoryStream();
             using var file = new PackageWriter(ms);
