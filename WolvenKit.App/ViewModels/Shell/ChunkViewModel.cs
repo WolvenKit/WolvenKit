@@ -1524,11 +1524,11 @@ namespace WolvenKit.ViewModels.Shell
         {
             if (Data is IRedCloneable irc)
             {
-                Tab.CopiedChunk = (IRedType)irc.DeepCopy();
+                RDTDataViewModel.CopiedChunk = (IRedType)irc.DeepCopy();
             }
             else
             {
-                Tab.CopiedChunk = Data;
+                RDTDataViewModel.CopiedChunk = Data;
             }
         }
 
@@ -1538,63 +1538,103 @@ namespace WolvenKit.ViewModels.Shell
         {
             if (Data is IRedCloneable irc)
             {
-                Parent.InsertChild(-1, (IRedType)irc.DeepCopy());
+                Parent.InsertChild(Parent.GetIndexOf(this) + 1, (IRedType)irc.DeepCopy());
             }
             else
             {
-                Parent.InsertChild(-1, Data);
+                Parent.InsertChild(Parent.GetIndexOf(this) + 1, Data);
+            }
+        }
+
+        public IRedArray ArraySelfOrParent
+        {
+            get
+            {
+                if (Parent.ResolvedData is IRedArray ira)
+                {
+                    return ira;
+                }
+                if (ResolvedData is IRedArray ira2)
+                {
+                    return ira2;
+                }
+                return null;
             }
         }
 
         public ICommand PasteChunkCommand { get; private set; }
-        private bool CanPasteChunk() => (IsArray || IsInArray) && Tab.CopiedChunk != null;
+        private bool CanPasteChunk() => (IsArray || IsInArray) && RDTDataViewModel.CopiedChunk != null && (ArraySelfOrParent?.InnerType.IsAssignableTo(RDTDataViewModel.CopiedChunk.GetType()) ?? true);
         private void ExecutePasteChunk()
         {
-            if (Tab.CopiedChunk == null)
+            if (RDTDataViewModel.CopiedChunk == null)
             {
                 return;
             }
             if (Parent.ResolvedData is IRedArray)
             {
-                if (Parent.InsertChild(-1, Tab.CopiedChunk))
+                if (Parent.InsertChild(Parent.GetIndexOf(this) + 1, RDTDataViewModel.CopiedChunk))
                 {
-                    Tab.CopiedChunk = null;
+                    RDTDataViewModel.CopiedChunk = null;
                 }
             }
             if (ResolvedData is IRedArray)
             {
-                if (InsertChild(-1, Tab.CopiedChunk))
+                if (InsertChild(-1, RDTDataViewModel.CopiedChunk))
                 {
-                    Tab.CopiedChunk = null;
+                    RDTDataViewModel.CopiedChunk = null;
                 }
             }
         }
 
-        public void MoveChild(int index, IRedType item)
+        public void MoveChild(int index, ChunkViewModel item)
         {
-            IList list = null;
-            if (ResolvedData is IList il)
+            if (item.Parent == null)
+            { 
+                return;
+            }
+
+            var oldParent = item.Parent;
+
+            IList sourceList = null;
+            IList destList = null;
+            if (oldParent.ResolvedData is IList il)
             {
-                list = il;
+                sourceList = il;
+            }
+            else if (oldParent.ResolvedData is IRedBufferPointer db)
+            {
+                if (db.GetValue().Data is Package04 pkg)
+                {
+                    sourceList = (IList)pkg.Chunks;
+                }
+                else if (db.GetValue().Data is CR2WList cl)
+                {
+                    sourceList = cl.Files;
+                }
+            }
+
+            if (ResolvedData is IList il2)
+            {
+                destList = il2;
             }
             else if (ResolvedData is IRedBufferPointer db)
             {
                 if (db.GetValue().Data is Package04 pkg)
                 {
-                    list = (IList)pkg.Chunks;
+                    destList = (IList)pkg.Chunks;
                 }
                 else if (db.GetValue().Data is CR2WList cl)
                 {
-                    list = cl.Files;
+                    destList = cl.Files;
                 }
             }
 
-            if (list != null)
+            if (sourceList != null && destList != null)
             { 
                 int oldIndex = -1, i = 0;
-                foreach (var thing in list)
+                foreach (var thing in sourceList)
                 {
-                    if (thing.GetHashCode() == item.GetHashCode())
+                    if (thing.GetHashCode() == item.Data.GetHashCode())
                     {
                         oldIndex = i;
                         break;
@@ -1604,14 +1644,22 @@ namespace WolvenKit.ViewModels.Shell
 
                 if (oldIndex > -1)
                 {
-                    list.RemoveAt(oldIndex);
-                    if (oldIndex < index)
+                    sourceList.RemoveAt(oldIndex);
+                    if (oldIndex < index && sourceList.GetHashCode() == destList.GetHashCode())
                     {
                         index--;
                     }
-                    InsertChild(index, item);
+                    InsertChild(index, item.Data);
                     Tab.File.SetIsDirty(true);
                     RecalulateProperties();
+                    if (sourceList.GetHashCode() != destList.GetHashCode())
+                    {
+                        oldParent.RecalulateProperties();
+                        if (oldParent.Tab.File.GetHashCode() != Tab.File.GetHashCode())
+                        {
+                            oldParent.Tab.File.SetIsDirty(true);
+                        }
+                    }
                 }
             }
         }
@@ -1645,7 +1693,7 @@ namespace WolvenKit.ViewModels.Shell
                         {
                             index = pkg.Chunks.Count;
                         }
-                        pkg.Chunks.Add(rbc);
+                        pkg.Chunks.Insert(index, rbc);
                     }
                     else if (db.GetValue().Data is CR2WList list)
                     {
@@ -1707,5 +1755,7 @@ namespace WolvenKit.ViewModels.Shell
                 }
             }
         }
+
+        public static bool IsControlBeingHeld => Keyboard.IsKeyDown(Key.LeftCtrl) || Keyboard.IsKeyDown(Key.RightCtrl);
     }
 }
