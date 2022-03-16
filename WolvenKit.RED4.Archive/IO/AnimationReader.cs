@@ -45,7 +45,7 @@ namespace WolvenKit.RED4.Archive.IO
                                 animDataBuffers[(int)((uint)dataAddr.UnkIndex)].Read(bytes, 0, (int)((uint)dataAddr.ZeInBytes));
                                 animBuff.DefferedBuffer = new SerializationDeferredDataBuffer(bytes);
                             }
-                            animBuff.ReadBuffer();
+                            //animBuff.ReadBuffer();
                         }
                     }
                 }
