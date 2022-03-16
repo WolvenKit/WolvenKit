@@ -12,16 +12,17 @@ namespace WolvenKit.RED4.Archive.IO
     public partial class PackageWriter : Red4Writer
     {
 
-        public PackageWriter(Stream output) : base(output)
+        public PackageWriter(Stream output) : this(output, Encoding.UTF8, false)
         {
         }
 
-        public PackageWriter(Stream output, Encoding encoding) : base(output, encoding)
+        public PackageWriter(Stream output, Encoding encoding) : this(output, encoding, false)
         {
         }
 
         public PackageWriter(Stream output, Encoding encoding, bool leaveOpen) : base(output, encoding, leaveOpen)
         {
+            ImportCacheList = new PackageImportCacheList();
         }
 
         public override void Write(CRUID val) => _writer.Write(val);
@@ -174,7 +175,7 @@ namespace WolvenKit.RED4.Archive.IO
                 return;
             }
 
-            var val = ("", instance.DepotPath, (ushort)1);
+            var val = new ImportEntry("", instance.DepotPath, (ushort)1);
 
             ImportRef.Add(_writer.BaseStream.Position, val);
             _writer.Write(GetImportIndex(val));
@@ -189,7 +190,7 @@ namespace WolvenKit.RED4.Archive.IO
                 return;
             }
 
-            var val = ("", instance.DepotPath, (ushort)0);
+            var val = new ImportEntry("", instance.DepotPath, (ushort)0);
 
             ImportRef.Add(_writer.BaseStream.Position, val);
             _writer.Write(GetImportIndex(val));
