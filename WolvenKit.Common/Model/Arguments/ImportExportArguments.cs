@@ -262,22 +262,17 @@ namespace WolvenKit.Common.Model.Arguments
         [Browsable(false)]
         public string Input { get; set; } = "";
 
-        [Category("Import Settings")]
-        [Display(Name = "Animset")]
-        [Description("TBD")]
+        [Browsable(false)]
         public string Animset { get; set; } = "";
 
-
+        [Browsable(false)]
+        public string AnimationToRename { get; set; } = "";
 
         [Category("Import Settings")]
         [Display(Name = "Outfile")]
         [Description("resource .animset file name to write (resource path must start with base//)")]
         public string Output { get; set; } = "";
 
-        [Category("Import Settings")]
-        [Display(Name = "Animation to rename")]
-        [Description("optional parameter representing the old name of animation to be replaced by the new animation")]
-        public string AnimationToRename { get; set; } = "";
     }
 
 
