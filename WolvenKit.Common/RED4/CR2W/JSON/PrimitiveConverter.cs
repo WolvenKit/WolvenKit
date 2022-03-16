@@ -2328,6 +2328,11 @@ public class RedClassConverter : JsonConverter<RedBaseClass>, ICustomRedConverte
                             val = JsonSerializer.Deserialize(ref reader, valInfo.Type, options);
                         }
 
+                        if (!typeInfo.SerializeDefault && RedReflection.IsDefault(cls.GetType(), valInfo.RedName, val))
+                        {
+                            continue;
+                        }
+
                         cls.SetProperty(valInfo.RedName, (IRedType?)val);
                     }
 

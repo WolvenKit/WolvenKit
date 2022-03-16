@@ -1,11 +1,13 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using WolvenKit.RED4.IO;
 
 namespace WolvenKit.RED4.Types
 {
-    public class CacheList<T>
+    public class CacheList<T> : ICacheList<T>
     {
-        private readonly HashSet<T> _valueList = new();
+        private readonly HashSet<T> _valueList;
         private readonly Dictionary<T, ushort> _keyValueList;
         private ushort _index;
         private IEqualityComparer<T> _comparer;
@@ -17,6 +19,8 @@ namespace WolvenKit.RED4.Types
         public CacheList(IEqualityComparer<T> comparer)
         {
             _comparer = comparer;
+
+            _valueList = new HashSet<T>(_comparer);
             _keyValueList = new Dictionary<T, ushort>(_comparer);
         }
 

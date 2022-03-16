@@ -92,9 +92,9 @@ namespace WolvenKit.RED4.Archive.IO
                 {
                     var entry = new CR2WImportInfo()
                     {
-                        className = (ushort)dataCollection.StringList.IndexOf(import.Item1),
-                        offset = stringOffsets[import.Item2],
-                        flags = import.Item3
+                        className = (ushort)dataCollection.StringList.IndexOf(import.ClassName),
+                        offset = stringOffsets[import.DepotPath],
+                        flags = import.Flag
                     };
 
                     BaseStream.WriteStruct(entry, crc);
@@ -338,12 +338,12 @@ namespace WolvenKit.RED4.Archive.IO
 
         #region Embedded
 
-        private CR2WEmbeddedInfo WriteEmbedded(CR2WWriter writer, ICR2WEmbeddedFile embeddedData, IList<(string, CName, ushort)> importsList)
+        private CR2WEmbeddedInfo WriteEmbedded(CR2WWriter writer, ICR2WEmbeddedFile embeddedData, IList<ImportEntry> importsList)
         {
             var importIndex = -1;
             for (var i = 0; i < importsList.Count; i++)
             {
-                if (importsList[i].Item2 == embeddedData.FileName)
+                if (importsList[i].DepotPath == embeddedData.FileName)
                 {
                     importIndex = i + 1;
                     break;
@@ -363,7 +363,7 @@ namespace WolvenKit.RED4.Archive.IO
             };
         }
 
-        private (List<CR2WEmbeddedInfo>, byte[]) GenerateEmbeddedData(IList<(string, CName, ushort)> importsList)
+        private (List<CR2WEmbeddedInfo>, byte[]) GenerateEmbeddedData(IList<ImportEntry> importsList)
         {
             using var ms = new MemoryStream();
             using var writer = new CR2WWriter(ms);
@@ -411,7 +411,7 @@ namespace WolvenKit.RED4.Archive.IO
         private class DataCollection
         {
             public List<CName> StringList { get; set; }
-            public List<(string, CName, ushort)> ImportList { get; set; }
+            public List<ImportEntry> ImportList { get; set; }
             public List<CName> CombinedStringList { get; set; }
 
             public List<CR2WExportInfo> ChunkInfoList { get; set; }
@@ -508,7 +508,7 @@ namespace WolvenKit.RED4.Archive.IO
                 var typeInfo = RedReflection.GetTypeInfo(embeddedFile.Content.GetType());
                 SetParent(_chunkInfos[embeddedFile.Content].Id, maxDepth: typeInfo.ChildLevel);
 
-                var tuple = ("", (CName)embeddedFile.FileName, (ushort)8);
+                var tuple = new ImportEntry("", (CName)embeddedFile.FileName, (ushort)8);
                 if (!result.ImportList.Contains(tuple))
                 {
                     result.ImportList.Add(tuple);
@@ -516,11 +516,11 @@ namespace WolvenKit.RED4.Archive.IO
             }
 
             result.CombinedStringList = new List<CName>(result.StringList);
-            foreach (var (_, name, _) in result.ImportList)
+            foreach (var importEntry in result.ImportList)
             {
-                if (!result.CombinedStringList.Contains(name))
+                if (!result.CombinedStringList.Contains(importEntry.DepotPath))
                 {
-                    result.CombinedStringList.Add(name);
+                    result.CombinedStringList.Add(importEntry.DepotPath);
                 }
             }
 

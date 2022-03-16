@@ -14,14 +14,14 @@ namespace WolvenKit.RED4.IO
     {
         protected readonly BinaryWriter _writer;
 
-        public CacheList<CName> StringCacheList = new(new CNameComparer());
-        public CacheList<(string, CName, ushort)> ImportCacheList = new(new ImportComparer());
-        public CacheList<RedBuffer> BufferCacheList = new(ReferenceEqualityComparer.Instance);
+        public ICacheList<CName> StringCacheList = new CacheList<CName>(new CNameComparer());
+        public ICacheList<ImportEntry> ImportCacheList = new CacheList<ImportEntry>(new ImportComparer());
+        public ICacheList<RedBuffer> BufferCacheList = new CacheList<RedBuffer>(ReferenceEqualityComparer.Instance);
 
         public int CurrentChunk { get; private set; }
 
         public readonly Dictionary<long, string> CNameRef = new();
-        public readonly Dictionary<long, (string, CName, ushort)> ImportRef = new();
+        public readonly Dictionary<long, ImportEntry> ImportRef = new();
         public readonly Dictionary<long, RedBuffer> BufferRef = new();
 
         protected readonly Dictionary<int, StringInfo> _chunkStringList = new();
@@ -30,8 +30,6 @@ namespace WolvenKit.RED4.IO
 
         protected readonly List<(int, Guid, int, int, int)> _targetList = new();
         protected readonly Dictionary<int, List<Guid>> ChildChunks = new();
-
-        protected readonly ImportComparer _importComparer = new();
 
         public readonly Dictionary<Guid, int> _chunkGuidToId = new();
 
@@ -89,7 +87,7 @@ namespace WolvenKit.RED4.IO
             return index;
         }
 
-        public ushort GetImportIndex((string, CName, ushort) value, bool add = true)
+        public ushort GetImportIndex(ImportEntry value, bool add = true)
         {
             var index = ImportCacheList.IndexOf(value);
             if (add && index == ushort.MaxValue)
@@ -211,7 +209,7 @@ namespace WolvenKit.RED4.IO
 
         protected class ImportInfo
         {
-            public List<(string, CName, ushort)> List { get; set; }
+            public List<ImportEntry> List { get; set; }
             public int LastIndex { get; set; }
         }
 
@@ -612,7 +610,7 @@ namespace WolvenKit.RED4.IO
                 return;
             }
 
-            var val = ("", instance.DepotPath, (ushort)instance.Flags);
+            var val = new ImportEntry("", instance.DepotPath, (ushort)instance.Flags);
 
             ImportRef.Add(_writer.BaseStream.Position, val);
             _writer.Write(GetImportIndex(val));
@@ -626,7 +624,7 @@ namespace WolvenKit.RED4.IO
                 return;
             }
 
-            var val = ("", instance.DepotPath, (ushort)instance.Flags);
+            var val = new ImportEntry("", instance.DepotPath, (ushort)instance.Flags);
 
             ImportRef.Add(_writer.BaseStream.Position, val);
             _writer.Write(GetImportIndex(val));
@@ -902,11 +900,11 @@ namespace WolvenKit.RED4.IO
             public int GetHashCode(CName obj) => obj.GetHashCode();
         }
 
-        protected class ImportComparer : IEqualityComparer<(string, CName, ushort)>
+        protected class ImportComparer : IEqualityComparer<ImportEntry>
         {
-            public bool Equals((string, CName, ushort) x, (string, CName, ushort) y) => string.Equals(x.Item2, y.Item2);
+            public bool Equals(ImportEntry x, ImportEntry y) => string.Equals(x.DepotPath, y.DepotPath);
 
-            public int GetHashCode((string, CName, ushort) obj) => obj.Item2.GetHashCode();
+            public int GetHashCode(ImportEntry obj) => obj.DepotPath.GetHashCode();
         }
     }
 }

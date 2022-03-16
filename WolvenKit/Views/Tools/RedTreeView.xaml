@@ -557,24 +557,31 @@
                         <Grid.RowDefinitions>
                             <RowDefinition />
                             <RowDefinition />
-                            <RowDefinition />
                         </Grid.RowDefinitions>
                         <TextBlock
                             Grid.Row="0"
                             Margin="5,2,5,0"
                             VerticalAlignment="Center"
-                            Text="Duplicate item here:" />
+                            Text="Duplicate item to this index (release control to move)"
+                            Visibility="{Binding Data[0].Content.IsControlBeingHeld, Converter={StaticResource BooleanToVisibilityConverter}}" />
                         <TextBlock
-                            Grid.Row="1"
-                            Margin="5,0,5,2"
+                            Grid.Row="0"
+                            Margin="5,2,5,0"
                             VerticalAlignment="Center"
-                            Foreground="{StaticResource WolvenKitTan}"
-                            Text="{Binding Data[0].Content.Type}" />
-                        <TextBlock
-                            Grid.Row="2"
-                            Margin="5,0,5,2"
-                            VerticalAlignment="Center"
-                            Text="{Binding Data[0].Content.Descriptor}" />
+                            Text="Move item to this index (hold control to duplicate)"
+                            Visibility="{Binding Data[0].Content.IsControlBeingHeld, Converter={StaticResource InvertBooleanVisibilityConverter}}" />
+                        <StackPanel Grid.Row="1" Orientation="Horizontal">
+                            <TextBlock
+                                Margin="5,0,5,2"
+                                VerticalAlignment="Center"
+                                Foreground="{StaticResource WolvenKitTan}"
+                                Text="{Binding Data[0].Content.Type}" />
+                            <TextBlock
+                                Margin="0,0,5,2"
+                                VerticalAlignment="Center"
+                                Text="{Binding Data[0].Content.Descriptor}" />
+
+                        </StackPanel>
                     </Grid>
                 </Border>
             </DataTemplate>

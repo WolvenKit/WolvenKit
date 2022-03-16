@@ -66,7 +66,7 @@ namespace WolvenKit.Views.Tools
 
         private void SfTreeView_ItemDragOver(object sender, TreeViewItemDragOverEventArgs e)
         {
-            e.DropPosition = DropPosition.None;
+            var allowDrop = false;
             if (sender is SfTreeView tv)
             {
                 if (e.DraggingNodes != null && e.DraggingNodes[0].Content is ChunkViewModel source)
@@ -75,7 +75,7 @@ namespace WolvenKit.Views.Tools
                     {
                         if (source == target)
                         {
-                            e.DropPosition = DropPosition.None;
+                            allowDrop = false;
                         }
                         //else if (source.CanBeDroppedOn(target))
                         //{
@@ -83,11 +83,11 @@ namespace WolvenKit.Views.Tools
                         //}
                         else if (source.Data is IRedType)
                         {
-                            if (IsControlBeingHeld)
+                            if (IsControlBeingHeld && !target.Parent.IsReadOnly)
                             {
                                 if (target.Parent.Data is IRedBufferPointer)
                                 {
-                                    e.DropPosition = DropPosition.DropBelow;
+                                    allowDrop = true;
                                 }
 
                                 if (target.Parent.Data is IRedArray arr)
@@ -96,22 +96,27 @@ namespace WolvenKit.Views.Tools
 
                                     if (arrayType == typeof(CArray<>))
                                     {
-                                        e.DropPosition = DropPosition.DropBelow;
+                                        allowDrop = true;
                                     }
 
                                     if (arrayType == typeof(CStatic<>) && arr.Count < arr.MaxSize)
                                     {
-                                        e.DropPosition = DropPosition.DropBelow;
+                                        allowDrop = true;
                                     }
                                 }
                             }
-                            else if (target.IsInArray)
+                            else if (target.IsInArray && !target.Parent.IsReadOnly)
                             {
-                                e.DropPosition = DropPosition.DropBelow;
+                                allowDrop = true;
                             }
                         }
                     }
                 }
+                if (e.DropPosition == DropPosition.DropAsChild || e.DropPosition == DropPosition.DropHere)
+                {
+                    e.DropPosition = DropPosition.DropBelow;
+                }
+                e.DropPosition = allowDrop ? e.DropPosition : DropPosition.None;
             }
             //if (e.Data.GetDataPresent(DataFormats.FileDrop))
             //{
@@ -156,13 +161,13 @@ namespace WolvenKit.Views.Tools
                             MessageBoxResult messageBoxResult = MessageBox.Show($"Duplicate {source.Data.GetType().Name} here?", "Duplicate Confirmation", MessageBoxButton.YesNo);
                             if (messageBoxResult == MessageBoxResult.Yes)
                             {
-                                target.Parent.InsertChild(target.Parent.Properties.IndexOf(target) + 1, (IRedType)irc.DeepCopy());
+                                target.Parent.InsertChild(target.Parent.Properties.IndexOf(target) + (e.DropPosition == DropPosition.DropBelow ? 1 : 0), (IRedType)irc.DeepCopy());
                             }
                         }
                     }
                     else
                     {
-                        target.Parent.MoveChild(target.Parent.Properties.IndexOf(target) + 1, source.Data);
+                        target.Parent.MoveChild(target.Parent.Properties.IndexOf(target) + (e.DropPosition == DropPosition.DropBelow ? 1 : 0), source);
                     }
                         //if (target.Parent.Data is DataBuffer or SerializationDeferredDataBuffer)
                         //{
