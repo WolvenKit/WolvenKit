@@ -139,6 +139,7 @@ namespace WolvenKit.ViewModels.Shell
             ShowSettingsCommand = new RelayCommand(ExecuteShowSettings, CanShowSettings);
 
             LaunchGameCommand = new RelayCommand(ExecuteLaunchGame, CanLaunchGame);
+            LaunchSteamGameCommand = new RelayCommand(ExecuteLaunchSteamGame, CanLaunchSteamGame);
 
             CloseModalCommand = new RelayCommand(ExecuteCloseModal, CanCloseModal);
             CloseOverlayCommand = new RelayCommand(ExecuteCloseOverlay, CanCloseOverlay);
@@ -505,6 +506,29 @@ namespace WolvenKit.ViewModels.Shell
             catch (Exception ex)
             {
                 _loggerService.Error("Launch: error launching game! Please check your executable path in Settings.");
+                _loggerService.Info($"Launch: error debug info: {ex.Message}");
+            }
+
+            _loggerService.Success("Game launching.");
+        }
+        public ICommand LaunchSteamGameCommand { get; private set; }
+        private bool CanLaunchSteamGame() => true;
+        private void ExecuteLaunchSteamGame()
+        {
+            try
+            {
+                var steamrunid = "steam://rungameid/1091500";
+
+                Process.Start(new ProcessStartInfo
+                {
+                    FileName = steamrunid,
+                    ErrorDialog = true,
+                    UseShellExecute = true
+                });
+            }
+            catch (Exception ex)
+            {
+                _loggerService.Error("Launch: Error! Please check if you have Steam installed, and a valid Steam installation of Cyberpunk 2077");
                 _loggerService.Info($"Launch: error debug info: {ex.Message}");
             }
 
