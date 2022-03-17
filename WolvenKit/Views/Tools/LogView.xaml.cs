@@ -112,7 +112,7 @@ namespace WolvenKit.Views.Tools
             {
                 LineHeight = 1
             };
-            var run = new Run(item.RenderMessage())
+            var run = new Run($"[{DateTime.Now.ToString()}] {item.RenderMessage()}")
             {
                 Foreground = GetBrushForLevel(level)
             };
