@@ -263,7 +263,7 @@ namespace WolvenKit.Common.Model.Arguments
         [Category("Import Settings")]
         [Display(Name = "GLTF Validation Checks")]
         [Description("Optional validation check for glb/glTF files")]
-        public ValidationMode validationMode { get; set; } = ValidationMode.Skip;
+        public ValidationMode validationMode { get; set; } = ValidationMode.Strict;
         /// <summary>
         /// RedEngine4 Cooked File type for the selected GLB/GLTF.
         /// </summary>
@@ -285,7 +285,8 @@ namespace WolvenKit.Common.Model.Arguments
     public enum GltfImportAsFormat
     {
         Mesh,
-        Morphtarget
+        Morphtarget,
+        Anims
     }
     public class MlmaskImportArgs : ImportArgs
     {

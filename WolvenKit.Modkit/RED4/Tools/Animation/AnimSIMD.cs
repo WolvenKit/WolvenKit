@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using SharpGLTF.Schema2;
 using WolvenKit.RED4.Types;
+using System.Linq;
 
 namespace WolvenKit.Modkit.RED4.Animation
 {
@@ -188,9 +189,13 @@ namespace WolvenKit.Modkit.RED4.Animation
                     Positions[i, copyIndices[e]] = new Vec3(v.X, v.Z, -v.Y);
                 }
             }
+
             var a = model.CreateAnimation(animName);
+            var skin = model.LogicalSkins.FirstOrDefault(_ => _.Name is "Armature");
+
             for (var e = 0; e < blob.NumJoints - blob.NumExtraJoints; e++)
             {
+                var node = skin.GetJoint(e).Joint;
                 var pos = new Dictionary<float, Vec3>();
                 var rot = new Dictionary<float, Quat>();
                 var sca = new Dictionary<float, Vec3>();
@@ -201,9 +206,9 @@ namespace WolvenKit.Modkit.RED4.Animation
                     rot.Add(i * diff, Rotations[i, e]);
                     sca.Add(i * diff, Scales[i, e]);
                 }
-                a.CreateRotationChannel(model.LogicalNodes[e], rot);
-                a.CreateTranslationChannel(model.LogicalNodes[e], pos);
-                a.CreateScaleChannel(model.LogicalNodes[e], sca);
+                a.CreateRotationChannel(node, rot);
+                a.CreateTranslationChannel(node, pos);
+                a.CreateScaleChannel(node, sca);
             }
         }
     }

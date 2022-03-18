@@ -40,9 +40,9 @@ namespace WolvenKit.Modkit.RED4
                     }
                 }
                 var meshCr2w = _wolvenkitFileService.ReadRed4File(meshStream);
-                if (meshCr2w != null && meshCr2w.RootChunk is MorphTargetMesh tBlob1 && tBlob1.Blob.Chunk is rendRenderMorphTargetMeshBlob tBlob2 && tBlob2.BaseBlob.Chunk is rendRenderMeshBlob tBlob3)
+                if (meshCr2w != null && meshCr2w.RootChunk is CMesh baseMeshBlob && baseMeshBlob.RenderResourceBlob.Chunk is rendRenderMeshBlob)
                 {
-                    Rig = MeshTools.GetOrphanRig(tBlob3, meshCr2w);
+                    Rig = MeshTools.GetOrphanRig(baseMeshBlob);
                 }
             }
 
@@ -52,33 +52,9 @@ namespace WolvenKit.Modkit.RED4
 
             var expMeshes = MeshTools.ContainRawMesh(meshbuffer, meshesinfo, true);
 
-            var diffsbuffer = new MemoryStream();
-            var mappingbuffer = new MemoryStream();
-            var texbuffer = new MemoryStream();
-
-            if (blob.DiffsBuffer is not null)
-            {
-                diffsbuffer = new MemoryStream(blob.DiffsBuffer.Buffer.GetBytes());
-
-                //targetStream.Seek(cr2w.Buffers[blob.DiffsBuffer.Buffer - 1].Offset, SeekOrigin.Begin);
-                //targetStream.DecompressAndCopySegment(diffsbuffer, cr2w.Buffers[blob.DiffsBuffer.Buffer - 1].DiskSize, cr2w.Buffers[blob.DiffsBuffer.Buffer - 1].MemSize);
-            }
-
-            if (blob.MappingBuffer is not null)
-            {
-                mappingbuffer = new MemoryStream(blob.MappingBuffer.Buffer.GetBytes());
-
-                //targetStream.Seek(cr2w.Buffers[blob.MappingBuffer.Buffer - 1].Offset, SeekOrigin.Begin);
-                //targetStream.DecompressAndCopySegment(mappingbuffer, cr2w.Buffers[blob.MappingBuffer.Buffer - 1].DiskSize, cr2w.Buffers[blob.MappingBuffer.Buffer - 1].MemSize);
-            }
-
-            if (blob.TextureDiffsBuffer is not null)
-            {
-                texbuffer = new MemoryStream(blob.TextureDiffsBuffer.Buffer.GetBytes());
-
-                //targetStream.Seek(cr2w.Buffers[blob.TextureDiffsBuffer.Buffer - 1].Offset, SeekOrigin.Begin);
-                //targetStream.DecompressAndCopySegment(texbuffer, cr2w.Buffers[blob.TextureDiffsBuffer.Buffer - 1].DiskSize, cr2w.Buffers[blob.TextureDiffsBuffer.Buffer - 1].MemSize);
-            }
+            var diffsbuffer = (blob.DiffsBuffer is not null) ? new MemoryStream(blob.DiffsBuffer.Buffer.GetBytes()) : new MemoryStream();
+            var mappingbuffer = (blob.MappingBuffer is not null) ? new MemoryStream(blob.MappingBuffer.Buffer.GetBytes()) : new MemoryStream();
+            var texbuffer = (blob.TextureDiffsBuffer is not null) ? new MemoryStream(blob.TextureDiffsBuffer.Buffer.GetBytes()) : new MemoryStream();
 
             var targetsInfo = GetTargetInfos(cr2w, expMeshes.Count);
 
@@ -113,7 +89,7 @@ namespace WolvenKit.Modkit.RED4
                 model.SaveGLTF(outfile.FullName);
             }
 
-            var dir = new DirectoryInfo(outfile.FullName.Replace(Path.GetExtension(outfile.FullName), string.Empty) + "_Textures");
+            var dir = new DirectoryInfo(outfile.FullName.Replace(Path.GetExtension(outfile.FullName), string.Empty) + "_textures");
 
             if (textureStreams.Count > 0)
             {
@@ -122,7 +98,7 @@ namespace WolvenKit.Modkit.RED4
 
             for (var i = 0; i < textureStreams.Count; i++)
             {
-                File.WriteAllBytes(dir.FullName + "\\" + Path.GetFileNameWithoutExtension(outfile.FullName) + i + ".dds", textureStreams[i].ToArray());
+                File.WriteAllBytes(Path.Combine(dir.FullName,$"{Path.GetFileNameWithoutExtension(outfile.FullName)}_{i}.dds"), textureStreams[i].ToArray());
             }
 
             targetStream.Dispose();
