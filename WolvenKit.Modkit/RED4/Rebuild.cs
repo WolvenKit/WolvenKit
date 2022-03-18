@@ -2,9 +2,12 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Threading;
 using WolvenKit.Common.Extensions;
 using WolvenKit.Common.Model;
+using WolvenKit.Core.Extensions;
+using WolvenKit.RED4;
 using WolvenKit.RED4.Archive.IO;
 using WolvenKit.RED4.Types.Exceptions;
 
@@ -62,13 +65,15 @@ namespace WolvenKit.Modkit.RED4
         /// <param name="buffers"></param>
         /// <returns></returns>
         /// <exception cref="FileNotFoundException"></exception>
-        private bool Rebuild(Stream redfileStream, IEnumerable<FileInfo> buffers) => throw new TodoException();/*AppendBuffersToFile(redfileStream);
+        private bool Rebuild(Stream redfileStream, IEnumerable<FileInfo> buffers)
+        {
+            AppendBuffersToFile(redfileStream);
 
             return true;
 
             void AppendBuffersToFile(Stream fileStream)
             {
-                var isResource = _wolvenkitFileService.IsCr2wFile(redfileStream);
+                var isResource = _wolvenkitFileService.IsCR2WFile(redfileStream);
                 if (!isResource)
                 {
                     return;
@@ -77,7 +82,7 @@ namespace WolvenKit.Modkit.RED4
                 using var reader = new CR2WReader(redfileStream);
                 _ = reader.ReadFile(out var cr2w, false);
 
-                var existingBuffers = cr2w.Debug.BufferInfos.ToList();
+                var existingBuffers = cr2w.GetBuffers();
 
                 // sort buffers numerically
                 var bufferlist = buffers.ToList();
@@ -87,6 +92,7 @@ namespace WolvenKit.Modkit.RED4
                         .OrderBy(_ => int.Parse(Path.GetExtension(_.FullName.Remove(_.FullName.Length - 7))[1..]))
                         .ToList();
                 }
+
                 if (bufferlist.All(_ => _.Extension == ".dds"))
                 {
                     // ml_w_knife__combat__grip1_01_masksset_0.dds
@@ -94,6 +100,11 @@ namespace WolvenKit.Modkit.RED4
                         .OrderBy(n => Regex.Replace(n.Name, @"\d+", n => n.Value.PadLeft(4, '0')))
                         //.OrderBy(_ => int.Parse(Path.GetExtension(_.FullName.Remove(_.FullName.Length - 4))[1..]))
                         .ToList();
+                }
+
+                if (bufferlist.Count != existingBuffers.Count)
+                {
+                    throw new NotSupportedException("Rebuild: Adding/Removing buffers is not supported");
                 }
 
                 for (var i = 0; i < bufferlist.Count; i++)
@@ -110,13 +121,7 @@ namespace WolvenKit.Modkit.RED4
                         continue;
                     }
 
-                    uint flags = 0;
-                    if (i < existingBuffers.Count)
-                    {
-                        flags = existingBuffers[i].flags;
-                    }
-
-                    cr2w.Buffers.Add(RedBuffer.CreateBuffer(flags, inbuffer));
+                    existingBuffers[i].SetBytes(inbuffer);
                 }
 
                 // write cr2w
@@ -159,7 +164,8 @@ namespace WolvenKit.Modkit.RED4
                 }
 
                 return Array.Empty<byte>();
-            }*/
+            }
+        }
 
         /// <summary>
         /// Rebuilds a single raw buffer into its redfile
