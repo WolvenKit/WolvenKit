@@ -287,6 +287,11 @@
                         <editors:RedUlongEditor RedNumber="{Binding Data, Mode=TwoWay}" />
                     </DataTemplate>
                 </converters:RedEditorTemplateSelector.RedUlongEditor>
+                <converters:RedEditorTemplateSelector.RedChunkMaskEditor>
+                    <DataTemplate>
+                        <editors:RedChunkMaskEditor RedNumber="{Binding Data, Mode=TwoWay}" />
+                    </DataTemplate>
+                </converters:RedEditorTemplateSelector.RedChunkMaskEditor>
                 <converters:RedEditorTemplateSelector.RedColorEditor>
                     <DataTemplate>
                         <editors:RedColorEditor RedColor="{Binding Data, Mode=TwoWay}" />
