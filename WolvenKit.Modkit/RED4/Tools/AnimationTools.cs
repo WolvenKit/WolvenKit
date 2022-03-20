@@ -18,17 +18,17 @@ namespace WolvenKit.Modkit.RED4
 {
     public partial class ModTools
     {
-        public bool ExportAnim(Stream animStream, List<Archive> archives, FileInfo outfile, bool isGLBinary = true)
+        public bool ExportAnim(Stream animStream, List<Archive> archives, FileInfo outfile, bool isGLBinary = true, bool incRootMotion = true)
         {
             var animsFile = _wolvenkitFileService.ReadRed4File(animStream);
             if (animsFile == null || animsFile.RootChunk is not animAnimSet anims)
             {
                 return false;
             }
-            return ExportAnim(animsFile, archives, outfile, isGLBinary);
+            return ExportAnim(animsFile, archives, outfile, isGLBinary,incRootMotion);
         }
 
-        public bool ExportAnim(CR2WFile animsFile, List<Archive> archives, FileInfo outfile, bool isGLBinary = true)
+        public bool ExportAnim(CR2WFile animsFile, List<Archive> archives, FileInfo outfile, bool isGLBinary = true, bool incRootMotion = true)
         {
             if (animsFile == null || animsFile.RootChunk is not animAnimSet anims)
             {
@@ -58,7 +58,7 @@ namespace WolvenKit.Modkit.RED4
             }
 
             var model = ModelRoot.CreateModel();
-            GetAnimation(animsFile, rigFile, ref model);
+            GetAnimation(animsFile, rigFile, ref model,true,incRootMotion);
 
             if (isGLBinary)
             {
@@ -274,7 +274,7 @@ namespace WolvenKit.Modkit.RED4
 
             return true;
         }
-        public static bool GetAnimation(CR2WFile animsFile, CR2WFile rigFile, ref ModelRoot model, bool includeRig = true)
+        public static bool GetAnimation(CR2WFile animsFile, CR2WFile rigFile, ref ModelRoot model, bool includeRig = true,bool incRootMotion = true)
         {
 
             if (animsFile == null || animsFile.RootChunk is not animAnimSet anims)
@@ -328,12 +328,12 @@ namespace WolvenKit.Modkit.RED4
                         defferedBuffer = new MemoryStream(animBuffSimd.DefferedBuffer.Buffer.GetBytes());
                     }
                     defferedBuffer.Seek(0, SeekOrigin.Begin);
-                    SIMD.AddAnimationSIMD(ref model, animBuffSimd, animAnimDes.Name, defferedBuffer, animAnimDes);
+                    SIMD.AddAnimationSIMD(ref model, animBuffSimd, animAnimDes.Name, defferedBuffer, animAnimDes, incRootMotion);
                     
                 }
                 else if (animAnimDes.AnimBuffer.Chunk is animAnimationBufferCompressed)
                 {
-                    CompressedBuffer.AddAnimation(ref model, animAnimDes);
+                    CompressedBuffer.AddAnimation(ref model, animAnimDes, incRootMotion);
                 }
             }
             return true;

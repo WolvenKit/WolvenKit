@@ -12,12 +12,12 @@ namespace WolvenKit.Modkit.RED4.Animation
 
     internal class SIMD
     {
-        public static void AddAnimationSIMD(ref ModelRoot model, animAnimationBufferSimd blob, string animName, Stream defferedBuffer, animAnimation animAnimDes)
+        public static void AddAnimationSIMD(ref ModelRoot model, animAnimationBufferSimd blob, string animName, Stream defferedBuffer, animAnimation animAnimDes, bool incRootMotion = true)
         {
             var rootPositions = new Dictionary<ushort, Dictionary<float, Vec3>>();
             var rootRotations = new Dictionary<ushort, Dictionary<float, Quat>>();
             var hasRootMotion = animAnimDes.MotionExtraction.Chunk is not null;
-            if (hasRootMotion)
+            if (hasRootMotion && incRootMotion)
             {
                 ROOT_MOTION.AddRootMotion(ref rootPositions, ref rootRotations, animAnimDes);
             }

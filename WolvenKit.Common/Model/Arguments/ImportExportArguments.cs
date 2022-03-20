@@ -565,8 +565,16 @@ namespace WolvenKit.Common.Model.Arguments
         /// </summary>
         [Category("Export Settings")]
         [Display(Name = "Is Binary")]
-        [Description("If checked the mesh will be exported as GLB, if unchecked as GLTF")]
+        [Description("If checked the anims will be exported as GLB, if unchecked as GLTF")]
         public bool IsBinary { get; set; } = true;
+
+        /// <summary>
+        /// Root Motion Export Bool
+        /// </summary>
+        [Category("Export Settings")]
+        [Display(Name = "Include Root Motion")]
+        [Description("If checked the anims will have the root translations")]
+        public bool incRootMotion { get; set; } = false;
 
         /// <summary>
         /// List of Archives for Animations Export.

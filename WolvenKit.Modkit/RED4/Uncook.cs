@@ -306,7 +306,7 @@ namespace WolvenKit.Modkit.RED4
                 case ECookedFileFormat.anims:
                     try
                     {
-                        return ExportAnim(cr2wStream, settings.Get<AnimationExportArgs>().Archives, outfile, settings.Get<AnimationExportArgs>().IsBinary);
+                        return ExportAnim(cr2wStream, settings.Get<AnimationExportArgs>().Archives, outfile, settings.Get<AnimationExportArgs>().IsBinary, settings.Get<AnimationExportArgs>().incRootMotion);
                     }
                     catch (Exception e)
                     {
