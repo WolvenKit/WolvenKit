@@ -493,6 +493,7 @@ namespace WolvenKit.ViewModels.Shell
                 Process.Start(new ProcessStartInfo
                 {
                     FileName = _settingsManager.GetRED4GameLaunchCommand(),
+                    Arguments = _settingsManager.GetRED4GameLaunchOptions() ?? "",
                     ErrorDialog = true,
                     UseShellExecute = true,
                 });
