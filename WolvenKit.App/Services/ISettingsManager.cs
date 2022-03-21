@@ -10,45 +10,46 @@ namespace WolvenKit.Functionality.Services
     {
         #region Properties
 
-        bool CheckForUpdates { get; set; }
+        // I wish there was a better way to inject deps
+        // than creating unnecessary interfaces.
+        public string SettingsVersion { get; }
+        public bool CheckForUpdates { get; set; }
+        public EUpdateChannel UpdateChannel { get; set; }
+        public bool ShowGuidedTour { get; set; }
+        public string ThemeAccentString { get; set; }
+        public string CP77GameDirPath { get; set; }
+        public string CP77ExecutablePath { get; set; }
+        public string CP77LaunchCommand { get; set; }
+        public string CP77LaunchOptions { get; set; }
+        public bool ShowFilePreview { get; set; }
+        public string ReddbHash { get; set; }
+        public string MaterialRepositoryPath { get; set; }
+        public string W3ExecutablePath { get; set; }
+        public string WccLitePath { get; set; }
 
-        string ThemeAccentString { get; set; }
-
-        // red 4
-
-        string ReddbHash { get; set; }
-
-        string CP77ExecutablePath { get; set; }
-
-        bool ShowFilePreview { get; set; }
-
-        // red 3
-
-        string W3ExecutablePath { get; set; }
-
-        string WccLitePath { get; set; }
-
-        // TreeView
-
-        bool TreeViewGroups { get; set; }
-
-        uint TreeViewGroupSize { get; set; }
+        public bool TreeViewGroups { get; set; }
+        public uint TreeViewGroupSize { get; set; }
 
         #endregion Properties
     }
 
     public interface ISettingsManager : ISettingsDto, INotifyPropertyChanged
     {
+        #region lifecyclestuff
 
-        public EUpdateChannel UpdateChannel { get; set; }
+        void Save();
+        void Bounce();
+
+        bool IsHealthy();
+
+
+        #endregion lifecyclestuff
+
+        #region settingspropertystuff
+
         public bool IsUpdateAvailable { get; set; }
 
-        bool ShowGuidedTour { get; set; }
-
-        string MaterialRepositoryPath { get; set; }
-
         string GetRED4OodleDll();
-
 
         string GetW3GameContentDir();
 
@@ -58,9 +59,13 @@ namespace WolvenKit.Functionality.Services
 
         string GetW3GameRootDir();
 
-        public string GetRED4GameExecutablePath();
-
         string GetRED4GameRootDir();
+
+        string GetRED4GameExecutablePath();
+
+        string GetRED4GameLaunchCommand();
+
+        string GetRED4GameLaunchOptions();
 
         public string GetRED4GameModDir();
 
@@ -167,7 +172,6 @@ namespace WolvenKit.Functionality.Services
             return dir;
         }
 
-        void Save();
 
         Color GetThemeAccent();
 
@@ -175,7 +179,6 @@ namespace WolvenKit.Functionality.Services
 
         string GetVersionNumber();
 
-        bool IsHealthy();
-
+        #endregion settingspropertystuff
     }
 }

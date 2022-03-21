@@ -92,11 +92,6 @@ namespace WolvenKit.ViewModels.Shell
 
             _homePageViewModel = Locator.Current.GetService<HomePageViewModel>();
 
-            // load TweakDB
-            var settings = Locator.Current.GetService<ISettingsManager>();
-            var tweakdbService = Locator.Current.GetService<TweakDBService>();
-            tweakdbService.LoadDB(Path.Combine(settings.GetRED4GameRootDir(), "r6", "cache", "tweakdb.bin"));
-
             #region commands
 
             ShowLogCommand = new RelayCommand(ExecuteShowLog, CanShowLog);
@@ -172,6 +167,15 @@ namespace WolvenKit.ViewModels.Shell
                 LocKeyBrowserVM
             };
 
+            // TweakDB when we're good and ready
+            _settingsManager
+                .WhenAnyValue(x => x.CP77GameDirPath)
+                .SkipWhile(x => string.IsNullOrWhiteSpace(x)) // -.-
+                .Take(1)
+                .Subscribe(x =>
+                {
+                    LoadTweakDB(_settingsManager.GetRED4GameRootDir());
+                });
 
             _settingsManager
                 .WhenAnyValue(x => x.UpdateChannel)
@@ -193,18 +197,6 @@ namespace WolvenKit.ViewModels.Shell
 
                     _settingsManager.IsUpdateAvailable = true;
                     _loggerService.Success($"WolvenKit update available: {release.TagName}");
-
-                    //var result = await Interactions.ShowMessageBoxAsync("An update is available for WolvenKit. Exit the app and install it?", "Update available");
-                    //switch (result)
-                    //{
-                    //    case WMessageBoxResult.OK:
-                    //    case WMessageBoxResult.Yes:
-                    //        if (await _autoInstallerService.Update()) // 1 API call
-                    //        {
-
-                    //        }
-                    //        break;
-                    //}
                 });
         }
 
@@ -270,8 +262,14 @@ namespace WolvenKit.ViewModels.Shell
         {
             if (!_settingsManager.IsHealthy())
             {
-                await Interactions.ShowFirstTimeSetup.Handle(Unit.Default);
+                var setupWasOk = await Interactions.ShowFirstTimeSetup.Handle(Unit.Default);
             }
+        }
+
+        private void LoadTweakDB(string gameDir)
+        {
+            var tweakdbService = Locator.Current.GetService<TweakDBService>();
+            tweakdbService.LoadDB(Path.Combine(gameDir, "r6", "cache", "tweakdb.bin"));
         }
 
         #endregion init
