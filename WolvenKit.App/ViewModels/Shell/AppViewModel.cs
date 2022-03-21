@@ -490,14 +490,11 @@ namespace WolvenKit.ViewModels.Shell
         {
             try
             {
-                var exe = Path.GetFullPath(_settingsManager.GetRED4GameExecutablePath());
-
                 Process.Start(new ProcessStartInfo
                 {
-                    FileName = exe,
+                    FileName = _settingsManager.GetRED4GameLaunchCommand(),
                     ErrorDialog = true,
                     UseShellExecute = true,
-                    WorkingDirectory = exe
                 });
             }
             catch (Exception ex)
