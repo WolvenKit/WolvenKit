@@ -1,5 +1,4 @@
-#define IS_PARALLEL
-// #undef IS_PARALLEL
+//#define IS_PARALLEL
 
 using System;
 using System.Collections.Concurrent;
@@ -522,7 +521,7 @@ namespace WolvenKit.FunctionalTests
 #if IS_PARALLEL
                 Parallel.ForEach(fileList, tmpFile =>
 #else
-            foreach (var tmpFile in fileList)
+                foreach (var tmpFile in fileList)
 #endif
                 {
                     var file = tmpFile.Value;

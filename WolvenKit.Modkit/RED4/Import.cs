@@ -670,6 +670,9 @@ namespace WolvenKit.Modkit.RED4
                         case GltfImportAsFormat.Morphtarget:
                             result = ImportMorphTargets(rawRelative.ToFileInfo(), redFs, args.Archives, args.validationMode);
                             break;
+                        case GltfImportAsFormat.Anims:
+                            result = ImportAnims(rawRelative.ToFileInfo(), redFs, args.Archives);
+                            break;
                     }
 
                     if (result)

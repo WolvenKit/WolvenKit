@@ -54,7 +54,7 @@ namespace WolvenKit.ViewModels
                 return;
             }
 
-            _loggerService.Success($"Update available: {release.TagName}");
+            _loggerService.Success($"WolvenKit update available: {release.TagName}");
             Settings.IsUpdateAvailable = true;
 
             var result = await Interactions.ShowMessageBoxAsync("An update is ready to install for WolvenKit. Exit the app and install it?", "Update available");

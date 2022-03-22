@@ -12,6 +12,7 @@ namespace WolvenKit.Converters
         public DataTemplate RedTweakEditor { get; set; }
         public DataTemplate RedFloatEditor { get; set; }
         public DataTemplate RedFixedPointEditor { get; set; }
+        public DataTemplate RedChunkMaskEditor { get; set; }
         public DataTemplate RedIntegerEditor { get; set; }
         public DataTemplate RedColorEditor { get; set; }
         public DataTemplate RedCurveEditor { get; set; }
@@ -51,7 +52,14 @@ namespace WolvenKit.Converters
                 }
                 if (vm.PropertyType.IsAssignableTo(typeof(IRedPrimitive<ulong>)))
                 {
-                    return RedUlongEditor;
+                    if (vm.propertyName == "chunkMask")
+                    {
+                        return RedChunkMaskEditor;
+                    }
+                    else
+                    {
+                        return RedUlongEditor;
+                    }
                 }
                 if (vm.PropertyType.IsAssignableTo(typeof(IRedInteger)))
                 {

@@ -22,95 +22,34 @@ namespace WolvenKit.Modkit.RED4.RigFile
 
             var Rig = new RawArmature
             {
-                BoneCount = animrig.BoneNames.Count
+                BoneCount = animrig.BoneNames.Count,
+                Names = animrig.BoneNames.Select(_ => _.GetResolvedText()).ToArray(),
+                Parent = animrig.BoneParentIndexes.Select(_=>(short)_).ToArray(),
+                LocalPosn = animrig.BoneTransforms.Select(p => new Vec3(p.Translation.X, p.Translation.Z, -p.Translation.Y)).ToArray(),
+                LocalRot = animrig.BoneTransforms.Select(p => new Quat(p.Rotation.I, p.Rotation.K, -p.Rotation.J, p.Rotation.R)).ToArray(),
+                LocalScale = animrig.BoneTransforms.Select(p => new Vec3(p.Scale.X, p.Scale.Y, p.Scale.Z)).ToArray(),
             };
-
-            Rig.Names = new string[Rig.BoneCount];
-            for (var i = 0; i < animrig.BoneNames.Count; i++)
-            {
-                Rig.Names[i] = animrig.BoneNames[i];
-            }
-
-            Rig.Parent = new Int16[Rig.BoneCount];
-            for (int i = 0; i < animrig.BoneParentIndexes.Count; i++)
-            {
-                Rig.Parent[i] = animrig.BoneParentIndexes[i];
-            }
-
-            Rig.LocalPosn = new Vec3[Rig.BoneCount];
-            for (var i = 0; i < Rig.BoneCount; i++)
-            {
-                Vector4 v = animrig.BoneTransforms[i].Translation;
-                Rig.LocalPosn[i] = new Vec3(v.X, v.Z, -v.Y);
-            }
-
-            Rig.LocalRot = new Quat[Rig.BoneCount];
-
-            for (var i = 0; i < Rig.BoneCount; i++)
-            {
-                Quaternion q = animrig.BoneTransforms[i].Rotation;
-                Rig.LocalRot[i] = new Quat(q.I, q.K, -q.J, q.R);
-            }
-
-            Rig.LocalScale = new Vec3[Rig.BoneCount];
-            for (var i = 0; i < Rig.BoneCount; i++)
-            {
-                Vector4 v = animrig.BoneTransforms[i].Scale;
-                Rig.LocalScale[i] = new Vec3(v.X, v.Z, v.Y);
-            }
 
             // if AposeWorld/AposeMS Exists then..... this can be done better i guess...
             if (cr2w.RootChunk is animRig aRig)
             {
-                if (aRig.APoseMS.Count != 0)
+                if (aRig.APoseMS is not null && aRig.APoseMS.Count > 0)
                 {
                     Rig.AposeMSExits = true;
-                    Rig.AposeMSTrans = new Vec3[Rig.BoneCount];
-                    Rig.AposeMSRot = new Quat[Rig.BoneCount];
-                    Rig.AposeMSScale = new Vec3[Rig.BoneCount];
 
-                    for (var i = 0; i < Rig.BoneCount; i++)
-                    {
-                        float x = aRig.APoseMS[i].Translation.X;
-                        float y = aRig.APoseMS[i].Translation.Y;
-                        float z = aRig.APoseMS[i].Translation.Z;
-                        Rig.AposeMSTrans[i] = new Vec3(x, z, -y);
-                        float I = aRig.APoseMS[i].Rotation.I;
-                        float J = aRig.APoseMS[i].Rotation.J;
-                        float K = aRig.APoseMS[i].Rotation.K;
-                        float R = aRig.APoseMS[i].Rotation.R;
-                        Rig.AposeMSRot[i] = new Quat(I, K, -J, R);
-                        float t = aRig.APoseMS[i].Scale.X;
-                        float u = aRig.APoseMS[i].Scale.Y;
-                        float v = aRig.APoseMS[i].Scale.Z;
-                        Rig.AposeMSScale[i] = new Vec3(t, v, u);
-                    }
+                    Rig.AposeMSTrans = aRig.APoseMS.Select(p => new Vec3(p.Translation.X,p.Translation.Z, -p.Translation.Y)).ToArray();
+                    Rig.AposeMSRot = aRig.APoseMS.Select(p => new Quat(p.Rotation.I, p.Rotation.K, -p.Rotation.J,p.Rotation.R)).ToArray();
+                    Rig.AposeMSScale = aRig.APoseMS.Select(p => new Vec3(p.Scale.X, p.Scale.Y, p.Scale.Z)).ToArray();
                 }
 
                 // not sure how APose works or how the matrix multiplication will be, maybe its a recursive mul
-                if (aRig.APoseLS.Count != 0)
+                if (aRig.APoseLS is not null && aRig.APoseLS.Count > 0)
                 {
                     Rig.AposeLSExits = true;
-                    Rig.AposeLSTrans = new Vec3[Rig.BoneCount];
-                    Rig.AposeLSRot = new Quat[Rig.BoneCount];
-                    Rig.AposeLSScale = new Vec3[Rig.BoneCount];
 
-                    for (var i = 0; i < Rig.BoneCount; i++)
-                    {
-                        float x = aRig.APoseLS[i].Translation.X;
-                        float y = aRig.APoseLS[i].Translation.Y;
-                        float z = aRig.APoseLS[i].Translation.Z;
-                        Rig.AposeLSTrans[i] = new Vec3(x, z, -y);
-                        float I = aRig.APoseLS[i].Rotation.I;
-                        float J = aRig.APoseLS[i].Rotation.J;
-                        float K = aRig.APoseLS[i].Rotation.K;
-                        float R = aRig.APoseLS[i].Rotation.R;
-                        Rig.AposeLSRot[i] = new Quat(I, K, -J, R);
-                        float t = aRig.APoseLS[i].Scale.X;
-                        float u = aRig.APoseLS[i].Scale.Y;
-                        float v = aRig.APoseLS[i].Scale.Z;
-                        Rig.AposeLSScale[i] = new Vec3(t, v, u);
-                    }
+                    Rig.AposeLSTrans = aRig.APoseLS.Select(p => new Vec3(p.Translation.X, p.Translation.Z, -p.Translation.Y)).ToArray();
+                    Rig.AposeLSRot = aRig.APoseLS.Select(p => new Quat(p.Rotation.I, p.Rotation.K, -p.Rotation.J, p.Rotation.R)).ToArray();
+                    Rig.AposeLSScale = aRig.APoseLS.Select(p => new Vec3(p.Scale.X, p.Scale.Y, p.Scale.Z)).ToArray();
                 }
             }
 

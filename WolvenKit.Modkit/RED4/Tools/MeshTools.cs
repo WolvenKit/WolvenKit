@@ -115,7 +115,7 @@ namespace WolvenKit.Modkit.RED4.Tools
 
             if (includeRig)
             {
-                rig = GetOrphanRig(rendblob, cr2w);
+                rig = GetOrphanRig(cMesh);
             }
 
             using var ms = new MemoryStream(rendblob.RenderBuffer.Buffer.GetBytes());
@@ -270,7 +270,8 @@ namespace WolvenKit.Modkit.RED4.Tools
             var expMeshes = ContainRawMesh(ms, meshesinfo, lodFilter);
             UpdateSkinningParamCloth(ref expMeshes, meshStream, cr2w);
 
-            var meshRig = GetOrphanRig(rendblob, cr2w);
+            var meshRig = GetOrphanRig(cMesh);
+
             var Rig = RIG.ProcessRig(_red4ParserService.ReadRed4File(rigStream));
 
             UpdateMeshJoints(ref expMeshes, Rig, meshRig);
@@ -330,7 +331,7 @@ namespace WolvenKit.Modkit.RED4.Tools
                 var Meshes = ContainRawMesh(ms, meshesinfo, lodFilter);
                 UpdateSkinningParamCloth(ref Meshes, meshStream, cr2w);
 
-                var meshRig = GetOrphanRig(rendblob, cr2w);
+                var meshRig = GetOrphanRig(cMesh);
 
                 UpdateMeshJoints(ref Meshes, expRig, meshRig);
 
@@ -964,35 +965,34 @@ namespace WolvenKit.Modkit.RED4.Tools
                 }
                 var node = parent.CreateNode(mesh.name);
                 node.Mesh = mes;
-                if (skin != null)
-                //if (skin != null && mesh.weightCount > 0)
+                if (skin != null && mesh.weightCount > 0)
                 {
-                    //node.Skin = skin;
+                    node.Skin = skin;
                 }
 
-                //if (mesh.garmentMorph.Length > 0)
-                //{
-                //    string[] arr = { "GarmentSupport" };
-                //    var obj = new { mesh.materialNames, targetNames = arr };
-                //    mes.Extras = SharpGLTF.IO.JsonContent.Serialize(obj);
-                //}
-                //else
-                //{
-                //    var obj = new { mesh.materialNames };
-                //    mes.Extras = SharpGLTF.IO.JsonContent.Serialize(obj);
-                //}
-                //if (mesh.garmentMorph.Length > 0)
-                //{
-                //    var acc = model.CreateAccessor();
-                //    var buff = model.UseBufferView(buffer, BuffViewoffset, mesh.garmentMorph.Length * 12);
-                //    acc.SetData(buff, 0, mesh.garmentMorph.Length, DimensionType.VEC3, EncodingType.FLOAT, false);
-                //    var dict = new Dictionary<string, Accessor>
-                //    {
-                //        { "POSITION", acc }
-                //    };
-                //    prim.SetMorphTargetAccessors(0, dict);
-                //    BuffViewoffset += mesh.garmentMorph.Length * 12;
-                //}
+                if (mesh.garmentMorph.Length > 0)
+                {
+                    string[] arr = { "GarmentSupport" };
+                    var obj = new { mesh.materialNames, targetNames = arr };
+                    mes.Extras = SharpGLTF.IO.JsonContent.Serialize(obj);
+                }
+                else
+                {
+                    var obj = new { mesh.materialNames };
+                    mes.Extras = SharpGLTF.IO.JsonContent.Serialize(obj);
+                }
+                if (mesh.garmentMorph.Length > 0)
+                {
+                    var acc = model.CreateAccessor();
+                    var buff = model.UseBufferView(buffer, BuffViewoffset, mesh.garmentMorph.Length * 12);
+                    acc.SetData(buff, 0, mesh.garmentMorph.Length, DimensionType.VEC3, EncodingType.FLOAT, false);
+                    var dict = new Dictionary<string, Accessor>
+                    {
+                        { "POSITION", acc }
+                    };
+                    prim.SetMorphTargetAccessors(0, dict);
+                    BuffViewoffset += mesh.garmentMorph.Length * 12;
+                }
 
             }
         }
@@ -1049,38 +1049,21 @@ namespace WolvenKit.Modkit.RED4.Tools
             var model = scene.ToGltf2();
             return model;
         }
-        public static RawArmature GetOrphanRig(rendRenderMeshBlob rendmeshblob, CR2WFile cr2w)
+        public static RawArmature GetOrphanRig(CMesh meshBlob)
         {
+            var rendmeshblob = meshBlob.RenderResourceBlob.Chunk as rendRenderMeshBlob;
             if (rendmeshblob.Header.BonePositions.Count != 0)
             {
                 var boneCount = rendmeshblob.Header.BonePositions.Count;
                 var Rig = new RawArmature
                 {
                     BoneCount = boneCount,
-                    LocalPosn = new Vec3[boneCount],
-                    LocalRot = new System.Numerics.Quaternion[boneCount],
-                    LocalScale = new Vec3[boneCount],
-                    Parent = new short[boneCount],
-                    Names = new string[boneCount]
-                };
-
-                for (var i = 0; i < Rig.BoneCount; i++)
-                {
-                    var vec = rendmeshblob.Header.BonePositions[i];
-                    Rig.LocalPosn[i] = new Vec3(vec.X, vec.Z, -vec.Y);
-                    Rig.LocalRot[i] = System.Numerics.Quaternion.Identity;
-                    Rig.LocalScale[i] = Vec3.One;
-                    Rig.Parent[i] = -1;
-                }
-
-                if (cr2w.RootChunk is CMesh meshBlob)
-                {
-                    for (var i = 0; i < Rig.BoneCount; i++)
-                    {
-                        Rig.Names[i] = meshBlob.BoneNames[i];
-                    }
-                }
-
+                    LocalPosn = rendmeshblob.Header.BonePositions.Select(p => new Vec3(p.X, p.Z, -p.Y)).ToArray(),
+                    LocalRot = Enumerable.Repeat(System.Numerics.Quaternion.Identity, boneCount).ToArray(),
+                    LocalScale = Enumerable.Repeat(Vec3.One, boneCount).ToArray(),
+                    Parent = Enumerable.Repeat<short>(-1, boneCount).ToArray(),
+                    Names = meshBlob.BoneNames.Select(x => x.GetResolvedText()).ToArray()
+            };
                 return Rig;
             }
             return null;
