@@ -9,7 +9,7 @@ public class BaseStringType : IRedPrimitive<string>, IEquatable<BaseStringType>,
     protected readonly string _value;
 
     [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-    public int Length => _value.Length;
+    public int Length => _value?.Length ?? -1;
 
     internal BaseStringType() { }
     protected BaseStringType(string value)

@@ -125,7 +125,7 @@ namespace WolvenKit.ViewModels.Shell
                             if (index != -1)
                             {
                                 arr[index] = Data;
-
+                                Tab.File.SetIsDirty(true);
                                 Parent.NotifyChain("Data");
                             }
                         }
@@ -145,6 +145,16 @@ namespace WolvenKit.ViewModels.Shell
                                 if (rbc.HasProperty(propertyName) && rbc.GetProperty(propertyName) != Data)
                                 {
                                     rbc.SetProperty(propertyName, Data);
+                                    Tab.File.SetIsDirty(true);
+                                    Parent.NotifyChain("Data");
+                                }
+                            }
+                            else
+                            {
+                                var pi = parentData.GetType().GetProperty(propertyName);
+                                if (pi != null)
+                                {
+                                    pi.SetValue(parentData, Data);
                                     Tab.File.SetIsDirty(true);
                                     Parent.NotifyChain("Data");
                                 }
@@ -524,7 +534,7 @@ namespace WolvenKit.ViewModels.Shell
                     var pis = Data.GetType().GetProperties();
                     foreach (var pi in pis)
                     {
-                        var value = pi.GetValue(Data);
+                        var value = Data != null ? pi.GetValue(Data) : null;
                         if (value is IRedType irt)
                         {
                             Properties.Add(new ChunkViewModel(irt, this, pi.Name)
@@ -1145,11 +1155,9 @@ namespace WolvenKit.ViewModels.Shell
                     Descriptor = $"[{dict.Count}]";
                 }
             }
-            if (ResolvedData is RedBaseClass irc)
+            // some common "names" of classes that might be useful to display in the UI
+            var propNames = new string[]
             {
-                // some common "names" of classes that might be useful to display in the UI
-                var propNames = new string[]
-                {
                     "name",
                     "partName",
                     "slotName",
@@ -1159,15 +1167,31 @@ namespace WolvenKit.ViewModels.Shell
                     "componentName",
                     "parameterName",
                     "debugName",
-                    "category"
-                };
-
+                    "category",
+                    "HandleIndex"
+            };
+            if (ResolvedData is RedBaseClass irc)
+            {
                 foreach (var propName in propNames)
                 {
                     var prop = GetPropertyByRedName(irc.GetType(), propName);
                     if (prop != null)
                     {
                         Descriptor = irc.GetProperty(prop.RedName).ToString();
+                    }
+                }
+            }
+            else
+            {
+                foreach (var propName in propNames)
+                {
+                    if (Data != null)
+                    {
+                        var prop = Data.GetType().GetProperty(propName);
+                        if (prop != null)
+                        {
+                            Descriptor = prop.GetValue(Data).ToString();
+                        }
                     }
                 }
             }
@@ -1336,25 +1360,35 @@ namespace WolvenKit.ViewModels.Shell
         private bool CanAddItemToArray() => Data is IRedArray;
         private void ExecuteAddItemToArray()
         {
-            var type = (Data as IRedArray).InnerType;
-            var newItem = RedTypeManager.CreateRedType(type);
-            if (newItem is IRedBaseHandle handle)
+            var innerType = (Data as IRedArray).InnerType;
+            var pointer = false;
+            if (innerType.IsAssignableTo(typeof(IRedBaseHandle)))
             {
-                var pointee = RedTypeManager.CreateRedType(handle.InnerType);
-                handle.SetValue((RedBaseClass)pointee);
+                pointer = true;
+                innerType = innerType.GenericTypeArguments[0];
             }
-            InsertChild(-1, newItem);
-            //(Data as IRedArray).Add(newItem);
-            //var cvm = new ChunkViewModel(newItem, this);
-            //PropertyCount = -1;
-            //CalculateDescriptor();
-            //Properties.Add(cvm);
-            //this.RaisePropertyChanged("Data");
-            //cvm.IsExpanded = true;
-            //IsExpanded = true;
-            //Parent.IsExpanded = true;
-            //Tab.SelectedChunk = cvm;
-            //Tab.File.SetIsDirty(true);
+            var existing = new ObservableCollection<string>(AppDomain.CurrentDomain.GetAssemblies().SelectMany(s => s.GetTypes()).Where(p => innerType.IsAssignableFrom(p) && p.IsClass).Select(x => x.Name));
+
+            // no inheritable
+            if (existing.Count == 1)
+            {
+                var type = (Data as IRedArray).InnerType;
+                var newItem = RedTypeManager.CreateRedType(type);
+                if (newItem is IRedBaseHandle handle)
+                {
+                    var pointee = RedTypeManager.CreateRedType(handle.InnerType);
+                    handle.SetValue((RedBaseClass)pointee);
+                }
+                InsertChild(-1, newItem);
+            }
+            else
+            {
+                var app = Locator.Current.GetService<AppViewModel>();
+                app.SetActiveDialog(new CreateClassDialogViewModel(existing, true)
+                {
+                    DialogHandler = pointer ? HandleChunkPointer : HandleChunk
+                });
+            }
         }
 
         public ICommand AddItemToCompiledDataCommand { get; private set; }
@@ -1402,6 +1436,25 @@ namespace WolvenKit.ViewModels.Shell
                 var vm = sender as CreateClassDialogViewModel;
                 var instance = RedTypeManager.Create(vm.SelectedClass);
                 InsertChild(-1, instance);
+            }
+        }
+
+        public void HandleChunkPointer(DialogViewModel sender)
+        {
+            var app = Locator.Current.GetService<AppViewModel>();
+            app.CloseDialogCommand.Execute(null);
+            if (sender != null)
+            {
+                var vm = sender as CreateClassDialogViewModel;
+                var instance = RedTypeManager.Create(vm.SelectedClass);
+
+                var type = (Data as IRedArray).InnerType;
+                var newItem = RedTypeManager.CreateRedType(type);
+                if (newItem is IRedBaseHandle handle)
+                {
+                    handle.SetValue(instance);
+                    InsertChild(-1, newItem);
+                }
             }
         }
 
