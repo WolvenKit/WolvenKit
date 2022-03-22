@@ -102,10 +102,11 @@ namespace WolvenKit.Views.Tools
                         {
                             var mod = projectManager.ActiveProject;
                             var animsets = Directory.GetFiles(mod.ModDirectory, "*.anims", SearchOption.AllDirectories);
+                            var depotPaths = animsets.Select(x => x.Substring(mod.ModDirectory.Length + 1));
 
                             AddSettingsRe.SetCurrentValue(VisibilityProperty, Visibility.Visible);
 
-                            AnimsetComboBox.SetCurrentValue(System.Windows.Controls.ItemsControl.ItemsSourceProperty, animsets);
+                            AnimsetComboBox.SetCurrentValue(System.Windows.Controls.ItemsControl.ItemsSourceProperty, depotPaths);
 
                         }
                     }
@@ -248,15 +249,20 @@ namespace WolvenKit.Views.Tools
                 }
 
                 args.Animset = selectedItem;
+                args.Output = Path.ChangeExtension(selectedItem, "cooked.anims");
 
                 // parse animset and populate the animnameBox
-                using var fs = new FileStream(selectedItem, FileMode.Open);
-                if (parser.TryReadRed4File(fs, out var originalFile))
+                var path = Path.Combine(projectManager.ActiveProject.ModDirectory, selectedItem);
+                if (File.Exists(path))
                 {
-                    if (originalFile.RootChunk is animAnimSet animset)
+                    using var fs = new FileStream(path, FileMode.Open);
+                    if (parser.TryReadRed4File(fs, out var originalFile))
                     {
-                        var animnames = animset.Animations.Select(x => x.Chunk.Animation.Chunk.Name.ToString());
-                        AnimNameComboBox.SetCurrentValue(System.Windows.Controls.ItemsControl.ItemsSourceProperty, animnames);
+                        if (originalFile.RootChunk is animAnimSet animset)
+                        {
+                            var animnames = animset.Animations.Select(x => x.Chunk.Animation.Chunk.Name.ToString());
+                            AnimNameComboBox.SetCurrentValue(System.Windows.Controls.ItemsControl.ItemsSourceProperty, animnames);
+                        }
                     }
                 }
             }
