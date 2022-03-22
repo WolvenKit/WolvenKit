@@ -314,6 +314,18 @@ namespace WolvenKit.RED4.Archive.IO
 
                 buffer.SetBytes(newData);
             }
+
+            if (buffer.Data is StreamingSectorBuffer ssb)
+            {
+                using var ms = new MemoryStream();
+                using var transformWriter = new StreamingSectorTransformWriter(ms);
+
+                transformWriter.WriteBuffer(ssb);
+
+                var newData = ms.ToArray();
+
+                buffer.SetBytes(newData);
+            }
         }
 
         private CR2WBufferInfo WriteBuffer(BinaryWriter writer, RedBuffer buffer)

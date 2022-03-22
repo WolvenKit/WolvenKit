@@ -68,6 +68,7 @@ namespace WolvenKit.RED4.Archive.IO
                     data.Transforms[t.HandleIndex] = new();
                 }
                 data.Transforms[t.HandleIndex].Add(t);
+                data.AllTransforms.Add(t);
             }
 
             buffer.Data = data;

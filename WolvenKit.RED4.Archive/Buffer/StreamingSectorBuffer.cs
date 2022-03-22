@@ -9,7 +9,9 @@ namespace WolvenKit.RED4.Archive.Buffer
 {
     public class StreamingSectorBuffer : IParseableBuffer
     {
-        public IRedType Data => null;
+        public IRedType Data => AllTransforms;
+
+        public CArray<StreamingSectorTransform> AllTransforms = new();
 
         public Dictionary<int, List<StreamingSectorTransform>> Transforms = new();
 
@@ -17,5 +19,10 @@ namespace WolvenKit.RED4.Archive.Buffer
         {
 
         }
+    }
+
+    public class RedDictionary<TKey, TValue> : Dictionary<TKey, TValue>, IRedType
+    {
+
     }
 }

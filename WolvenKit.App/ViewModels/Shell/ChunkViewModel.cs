@@ -519,18 +519,21 @@ namespace WolvenKit.ViewModels.Shell
                         });
                     }
                 }
-                //else
-                //{
-                //    var pis = Data.GetType().GetProperties();
-                //    foreach (var pi in pis)
-                //    {
-                //        var value = pi.GetValue(Data);
-                //        if (value is IRedType irt)
-                //        {
-                //            Properties.Add(new ChunkViewModel(irt, this, pi.Name));
-                //        }
-                //    }
-                //}
+                else
+                {
+                    var pis = Data.GetType().GetProperties();
+                    foreach (var pi in pis)
+                    {
+                        var value = pi.GetValue(Data);
+                        if (value is IRedType irt)
+                        {
+                            Properties.Add(new ChunkViewModel(irt, this, pi.Name)
+                            {
+                                IsReadOnly = isreadonly
+                            });
+                        }
+                    }
+                }
             }
             this.RaisePropertyChanged("TVProperties");
         }
@@ -851,11 +854,11 @@ namespace WolvenKit.ViewModels.Shell
                         {
                             count += dict.Count;
                         }
-                        //else
-                        //{
-                        //    var pis = Data.GetType().GetProperties();
-                        //    count += pis.Count();
-                        //}
+                        else
+                        {
+                            var pis = Data.GetType().GetProperties();
+                            count += pis.Count();
+                        }
                     }
                     _propertyCountCache = count;
                     //this.RaisePropertyChanged("PropertyCount");
@@ -1086,7 +1089,7 @@ namespace WolvenKit.ViewModels.Shell
             if (Data is TweakDBID tdb)
             {
                 //Descriptor = Locator.Current.GetService<TweakDBService>().GetString(tdb);
-                Descriptor = (string)tdb;
+                Descriptor = tdb.GetResolvedText();
                 return;
             }
             if (Data is gamedataLocKeyWrapper locKey)
@@ -1124,6 +1127,22 @@ namespace WolvenKit.ViewModels.Shell
                             break;
                         }
                     }
+                }
+            }
+            if (ResolvedData != null)
+            {
+                if (Data is IBrowsableDictionary ibd)
+                {
+                    var pns = ibd.GetPropertyNames();
+                    Descriptor = $"[{pns.Count()}]";
+                }
+                else if (Data is IList list)
+                {
+                    Descriptor = $"[{list.Count}]";
+                }
+                else if (Data is Dictionary<string, object> dict)
+                {
+                    Descriptor = $"[{dict.Count}]";
                 }
             }
             if (ResolvedData is RedBaseClass irc)
