@@ -36,5 +36,13 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CBool>();
 			set => SetPropertyValue<CBool>(value);
 		}
+
+		[Ordinal(4)] 
+		[RED("allowVehicleCollisionRagdoll")] 
+		public CBool AllowVehicleCollisionRagdoll
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
 	}
 }
