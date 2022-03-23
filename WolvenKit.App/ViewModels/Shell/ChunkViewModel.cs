@@ -75,7 +75,7 @@ namespace WolvenKit.ViewModels.Shell
         [Reactive] public string Value { get; private set; }
         [Reactive] public string Descriptor { get; private set; }
         [Reactive] public bool IsDefault { get; private set; }
-        [Reactive] public bool IsReadOnly { get; private set; }
+        [Reactive] public bool IsReadOnly { get; set; }
 
         #region Constructors
 

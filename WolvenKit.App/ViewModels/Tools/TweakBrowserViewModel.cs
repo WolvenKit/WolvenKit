@@ -70,7 +70,10 @@ namespace WolvenKit.ViewModels.Tools
 
             //State = DockState.Document;
 
-            TweakDBIDs = CollectionViewSource.GetDefaultView(_tweakDB.GetRecords());
+            _tweakDB.Loaded += new EventHandler((_, args) =>
+            { 
+                TweakDBIDs = CollectionViewSource.GetDefaultView(_tweakDB.GetRecords());
+            });
         }
 
         #endregion constructors
@@ -107,7 +110,10 @@ namespace WolvenKit.ViewModels.Tools
                 if (_selectedTweakDBID != null)
                 {
                     SelectedRecord.Clear();
-                    SelectedRecord.Add(new ChunkViewModel(_tweakDB.GetRecord(_selectedTweakDBID), null));
+                    SelectedRecord.Add(new ChunkViewModel(_tweakDB.GetRecord(_selectedTweakDBID), null)
+                    {
+                        IsReadOnly = true
+                    });
                 }
                 else
                 {
