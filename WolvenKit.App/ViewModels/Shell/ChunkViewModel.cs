@@ -1168,6 +1168,7 @@ namespace WolvenKit.ViewModels.Shell
                     "parameterName",
                     "debugName",
                     "category",
+                    "entryName",
                     "HandleIndex"
             };
             if (ResolvedData is RedBaseClass irc)
