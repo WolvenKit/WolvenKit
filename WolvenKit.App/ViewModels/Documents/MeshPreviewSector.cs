@@ -6,12 +6,14 @@ using System.Reactive.Disposables;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Media.Media3D;
+using Splat;
 using HelixToolkit.SharpDX.Core;
 using HelixToolkit.Wpf.SharpDX;
 using ReactiveUI;
 using WolvenKit.RED4.Archive.Buffer;
 using WolvenKit.RED4.Archive.CR2W;
 using WolvenKit.RED4.Types;
+using WolvenKit.Common.Services;
 
 namespace WolvenKit.ViewModels.Documents
 {
@@ -255,6 +257,34 @@ namespace WolvenKit.ViewModels.Documents
                     //        groups.Add(entity);
                     //    }
                     //}
+                }
+                else if (handle.Chunk is worldPopulationSpawnerNode wpsn)
+                {
+                    var tdb = Locator.Current.GetService<TweakDBService>();
+                    var record = tdb.GetRecord(wpsn.ObjectRecordId);
+
+                    if (record is gamedataVehicle_Record vehicle)
+                    {
+                        var entFile = File.GetFileFromDepotPathOrCache(vehicle.EntityTemplatePath.DepotPath);
+
+                        if (entFile != null && entFile.RootChunk is entEntityTemplate eet)
+                        {
+                            var entity = RenderEntity(eet, app);
+                            if (entity != null)
+                            {
+                                entity.Name = "Entity";
+
+                                var matrix = new Matrix3D();
+                                matrix.Scale(ToScaleVector3D(transforms[0].Scale));
+                                matrix.Rotate(ToQuaternion(transforms[0].Orientation));
+                                matrix.Translate(ToVector3D(transforms[0].Position));
+
+                                entity.Transform = new MatrixTransform3D(matrix);
+
+                                groups.Add(entity);
+                            }
+                        }
+                    }
                 }
                 else if (handle.Chunk is worldAreaShapeNode wasn)
                 {
