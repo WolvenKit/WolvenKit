@@ -17,11 +17,21 @@ namespace WolvenKit.Common.Services
         private static readonly TweakDBStringHelper s_stringHelper = new();
         private static TweakDB s_tweakDb = new();
 
+        public event EventHandler Loaded;
+
         public TweakDBService()
         {
             s_stringHelper.LoadFromStream(Assembly.GetExecutingAssembly().GetManifestResourceStream(tweakdbstr));
             s_stringHelper.LoadFromStream(Assembly.GetExecutingAssembly().GetManifestResourceStream(tweakdbstr_add));
             TweakDBID.ResolveHashHandler = s_stringHelper.GetString;
+        }
+
+        private void OnLoadDB()
+        {
+            if (Loaded != null)
+            {
+                Loaded(this, EventArgs.Empty);
+            }
         }
 
         public void LoadDB(string path)
@@ -32,6 +42,7 @@ namespace WolvenKit.Common.Services
             if (reader.ReadFile(out var tweakDb) == WolvenKit.RED4.TweakDB.EFileReadErrorCodes.NoError)
             {
                 s_tweakDb = tweakDb;
+                OnLoadDB();
             }
         }
 
