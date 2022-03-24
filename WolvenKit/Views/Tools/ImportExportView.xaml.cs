@@ -108,6 +108,33 @@ namespace WolvenKit.Views.Tools
 
                             AnimsetComboBox.SetCurrentValue(System.Windows.Controls.ItemsControl.ItemsSourceProperty, depotPaths);
 
+                            // set defaults if no change in selection
+                            if (selectedImport.Properties is ReImportArgs args)
+                            {
+                                if (AnimsetComboBox.SelectedItem is not string selectedItem)
+                                {
+                                    return;
+                                }
+                                if (string.IsNullOrEmpty(selectedItem))
+                                {
+                                    return;
+                                }
+
+                                args.Animset = selectedItem;
+                                args.Output = Path.ChangeExtension(selectedItem, "cooked.anims");
+
+                                if (AnimNameComboBox.SelectedItem is not string selectedName)
+                                {
+                                    return;
+                                }
+                                if (string.IsNullOrEmpty(selectedName))
+                                {
+                                    return;
+                                }
+
+                                args.AnimationToRename = selectedName;
+                            }
+
                         }
                     }
                     else

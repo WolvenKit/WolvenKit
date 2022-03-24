@@ -452,7 +452,9 @@
 
                 <!-- Additional options -->
                 <StackPanel Orientation="Vertical" Grid.Row="0" Visibility="Collapsed" x:Name="AddSettingsRe">
-                    <hc:ComboBox hc:TitleElement.Title="Animset" x:Name="AnimsetComboBox" SelectionChanged="AnimsetComboBox_SelectionChanged">
+                    <hc:ComboBox hc:TitleElement.Title="Animset" x:Name="AnimsetComboBox"
+                                 SelectionChanged="AnimsetComboBox_SelectionChanged"
+                                 >
                         
                     </hc:ComboBox>
 
