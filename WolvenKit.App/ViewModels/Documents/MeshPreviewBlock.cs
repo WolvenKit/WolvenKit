@@ -109,6 +109,41 @@ namespace WolvenKit.ViewModels.Documents
             {
                 Name = "Exterior"
             };
+            var exterior_0 = new GroupModel3D()
+            {
+                Name = "Exterior_0"
+            };
+            var exterior_1 = new GroupModel3D()
+            {
+                Name = "Exterior_1"
+            };
+            var exterior_2 = new GroupModel3D()
+            {
+                Name = "Exterior_2"
+            };
+            var exterior_3 = new GroupModel3D()
+            {
+                Name = "Exterior_3"
+            };
+            var exterior_4 = new GroupModel3D()
+            {
+                Name = "Exterior_4"
+            };
+            var exterior_5 = new GroupModel3D()
+            {
+                Name = "Exterior_5"
+            };
+            var exterior_6 = new GroupModel3D()
+            {
+                Name = "Exterior_6"
+            };
+            exterior.Children.Add(exterior_0);
+            exterior.Children.Add(exterior_1);
+            exterior.Children.Add(exterior_2);
+            exterior.Children.Add(exterior_3);
+            exterior.Children.Add(exterior_4);
+            exterior.Children.Add(exterior_5);
+            exterior.Children.Add(exterior_6);
             var interior = new GroupModel3D()
             {
                 Name = "Interior"
@@ -144,7 +179,38 @@ namespace WolvenKit.ViewModels.Documents
                 };
                 if (desc.Category.Value == Enums.worldStreamingSectorCategory.Exterior)
                 {
-                    exterior.Children.Add(bbText);
+                    if (bbText.Name.Substring(bbText.Name.Length-1) == "0")
+                    {
+                        exterior_0.Children.Add(bbText);
+                    }
+                    else if (bbText.Name.Substring(bbText.Name.Length - 1) == "1")
+                    {
+                        exterior_1.Children.Add(bbText);
+                    }
+                    else if (bbText.Name.Substring(bbText.Name.Length - 1) == "2")
+                    {
+                        exterior_2.Children.Add(bbText);
+                    }
+                    else if (bbText.Name.Substring(bbText.Name.Length - 1) == "3")
+                    {
+                        exterior_3.Children.Add(bbText);
+                    }
+                    else if (bbText.Name.Substring(bbText.Name.Length - 1) == "4")
+                    {
+                        exterior_4.Children.Add(bbText);
+                    }
+                    else if (bbText.Name.Substring(bbText.Name.Length - 1) == "5")
+                    {
+                        exterior_5.Children.Add(bbText);
+                    }
+                    else if (bbText.Name.Substring(bbText.Name.Length - 1) == "6")
+                    {
+                        exterior_6.Children.Add(bbText);
+                    }
+                    else
+                    {
+                        exterior.Children.Add(bbText);
+                    }
                 }
                 else if (desc.Category.Value == Enums.worldStreamingSectorCategory.Interior)
                 {
