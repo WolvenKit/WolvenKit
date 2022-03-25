@@ -222,6 +222,10 @@ namespace WolvenKit.ViewModels.Documents
             {
                 TabItemViewModels.Add(new RDTMeshViewModel(wsb, this));
             }
+            if (cls is graphGraphResource ggr)
+            {
+                TabItemViewModels.Add(new RDTGraphViewModel(ggr, this));
+            }
         }
 
         private void PopulateItems()
@@ -325,7 +329,7 @@ namespace WolvenKit.ViewModels.Documents
                     fe.Extract(stream);
                     using var reader = new BinaryReader(stream);
                     cr2wFile = _parser.ReadRed4File(reader);
-                    if ((string)depotPath != null)
+                    if (cr2wFile != null && (string)depotPath != null)
                     {
                         cr2wFile.MetaData.FileName = depotPath;
                     }

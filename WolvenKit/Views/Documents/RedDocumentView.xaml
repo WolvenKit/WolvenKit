@@ -37,6 +37,10 @@
                 <docV:RDTWidgetView ViewModel="{Binding}" />
             </DataTemplate>
 
+            <DataTemplate DataType="{x:Type docVM:RDTGraphViewModel}">
+                <docV:RDTGraphView ViewModel="{Binding}" />
+            </DataTemplate>
+
         </Grid.Resources>
 
         <syncfusion:TabControlExt
