@@ -21,21 +21,31 @@ namespace WolvenKit.RED4.Archive.Buffer
 
         public Vector3 Uk3 { get; set; } = new();
 
-        public CInt32 Uk4 { get; set; }
+        public CInt16 Uk4 { get; set; }
 
-        public CInt32 Uk5 { get; set; }
+        public CInt16 Uk5 { get; set; }
 
-        // 24 byte padding?
+        public CInt16 Uk6 { get; set; }
 
-        public CUInt64 Mask { get; set; }
+        public CInt16 Uk7 { get; set; }
+
+        public CUInt64 UkHash1 { get; set; }
+
+        public CUInt64 UkHash2 { get; set; }
+
+        public CUInt64 UkHash3 { get; set; }
+
+        public CFloat Uk8 { get; set; }
+
+        public CFloat Uk9 { get; set; }
 
         public CUInt16 HandleIndex { get; set; }
 
-        public CUInt16 Uk6 { get; set; }
+        public CUInt16 Uk10 { get; set; }
 
-        public CUInt16 Uk7 { get; set; }
+        public CUInt16 Uk11 { get; set; }
 
-        public CUInt16 Uk8 { get; set; }
+        public CUInt16 Uk12 { get; set; }
 
         public StreamingSectorTransform()
         {

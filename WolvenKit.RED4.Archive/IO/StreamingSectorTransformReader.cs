@@ -23,6 +23,7 @@ namespace WolvenKit.RED4.Archive.IO
 
             while (_reader.BaseStream.Position < _reader.BaseStream.Length)
             {
+                // some of this stuff could be worldNodeEditorData
                 var t = new StreamingSectorTransform();
 
                 t.Position.X = _reader.ReadSingle();
@@ -51,17 +52,22 @@ namespace WolvenKit.RED4.Archive.IO
                 t.Uk3.Y = _reader.ReadSingle();
                 t.Uk3.Z = _reader.ReadSingle();
 
-                t.Uk4 = _reader.ReadInt32();
-                t.Uk5 = _reader.ReadInt32();
+                t.Uk4 = _reader.ReadInt16();
+                t.Uk5 = _reader.ReadInt16();
+                t.Uk6 = _reader.ReadInt16();
+                t.Uk7 = _reader.ReadInt16();
 
-                // possible padding?
-                _reader.ReadBytes(24);
+                t.UkHash1 = _reader.ReadUInt64();
+                t.UkHash2 = _reader.ReadUInt64();
+                t.UkHash3 = _reader.ReadUInt64();
 
-                t.Mask = _reader.ReadUInt64();
+                t.Uk8 = _reader.ReadSingle();
+                t.Uk9 = _reader.ReadSingle();
+
                 t.HandleIndex = _reader.ReadUInt16();
-                t.Uk6 = _reader.ReadUInt16();
-                t.Uk7 = _reader.ReadUInt16();
-                t.Uk8 = _reader.ReadUInt16();
+                t.Uk10 = _reader.ReadUInt16();
+                t.Uk11 = _reader.ReadUInt16();
+                t.Uk12 = _reader.ReadUInt16();
 
                 if (!data.Transforms.ContainsKey(t.HandleIndex))
                 {

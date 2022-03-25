@@ -48,16 +48,20 @@ namespace WolvenKit.RED4.Archive.IO
 
                 _writer.Write(t.Uk4);
                 _writer.Write(t.Uk5);
-
-                var array = new byte[24];
-                Array.Clear(array, 0, array.Length);
-                _writer.Write(array);
-
-                _writer.Write(t.Mask);
-                _writer.Write(t.HandleIndex);
                 _writer.Write(t.Uk6);
                 _writer.Write(t.Uk7);
+
+                _writer.Write(t.UkHash1);
+                _writer.Write(t.UkHash2);
+                _writer.Write(t.UkHash3);
+
                 _writer.Write(t.Uk8);
+                _writer.Write(t.Uk9);
+
+                _writer.Write(t.HandleIndex);
+                _writer.Write(t.Uk10);
+                _writer.Write(t.Uk11);
+                _writer.Write(t.Uk12);
             }
         }
     }
