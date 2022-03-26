@@ -24,7 +24,13 @@ namespace WolvenKit.RED4.Save
             node.Value = data;
         }
 
-        public void Write(NodeWriter writer, NodeEntry node) => throw new NotImplementedException();
+        public void Write(NodeWriter writer, NodeEntry node)
+        {
+            var data = (PlayerSystem)node.Value;
+
+            writer.Write(data.Unk_Hash);
+            writer.Write((ulong)data.Unk_Id);
+        }
     }
 
 }

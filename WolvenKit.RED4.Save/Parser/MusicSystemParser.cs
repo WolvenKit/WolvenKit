@@ -39,7 +39,22 @@ namespace WolvenKit.RED4.Save
             node.Value = data;
         }
 
-        public void Write(NodeWriter writer, NodeEntry node) => throw new NotImplementedException();
+        public void Write(NodeWriter writer, NodeEntry node)
+        {
+            var data = (MusicSystem)node.Value;
+
+            writer.WriteLengthPrefixedString(data.Unknown1);
+            if (data.Unknown1 != "None")
+            {
+                writer.WriteLengthPrefixedString(data.Unknown2);
+                writer.Write(data.Unknown3);
+                writer.WriteLengthPrefixedString(data.Unknown4);
+                writer.WriteLengthPrefixedString(data.Unknown5);
+                writer.Write(data.Unknown6);
+                writer.WriteLengthPrefixedString(data.Unknown7);
+                writer.Write(data.Unknown8);
+            }
+        }
     }
 
 }

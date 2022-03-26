@@ -23,7 +23,13 @@ namespace WolvenKit.RED4.Save
             node.Value = data;
         }
 
-        public void Write(NodeWriter writer, NodeEntry node) => throw new NotImplementedException();
+        public void Write(NodeWriter writer, NodeEntry node)
+        {
+            var data = (QuestDebugLogManager)node.Value;
+
+            var text = string.Join("\n", data.Lines);
+            writer.WriteLengthPrefixedString(text);
+        }
     }
 
 }

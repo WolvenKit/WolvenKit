@@ -43,7 +43,18 @@ namespace WolvenKit.RED4.Save
             node.Value = data;
         }
 
-        public void Write(NodeWriter writer, NodeEntry node) => throw new NotImplementedException();
+        public void Write(NodeWriter writer, NodeEntry node)
+        {
+            var data = (WorkspotInstancesSavedata)node.Value;
+
+            writer.Write(data.Entries.Count);
+            foreach (var entry in data.Entries)
+            {
+                writer.Write(entry.Unk_Hash1);
+                writer.Write(entry.Unk_EntityHash);
+                writer.Write(entry.Unknown3);
+            }
+        }
     }
 
 }

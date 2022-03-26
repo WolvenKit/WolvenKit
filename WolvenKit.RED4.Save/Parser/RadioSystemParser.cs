@@ -22,7 +22,12 @@ namespace WolvenKit.RED4.Save
             node.Value = data;
         }
 
-        public void Write(NodeWriter writer, NodeEntry node) => throw new NotImplementedException();
+        public void Write(NodeWriter writer, NodeEntry node)
+        {
+            var data = (RadioSystem)node.Value;
+
+            writer.WriteLengthPrefixedString(data.Unknown);
+        }
     }
 
 }
