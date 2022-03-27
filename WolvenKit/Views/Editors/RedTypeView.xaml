@@ -307,6 +307,11 @@
                         <editors:RedRefEditor RedRef="{Binding Data, Mode=TwoWay}" />
                     </DataTemplate>
                 </converters:RedEditorTemplateSelector.RedRefEditor>
+                <converters:RedEditorTemplateSelector.RedNodeRefEditor>
+                    <DataTemplate>
+                        <editors:RedNodeRefEditor RedNodeRef="{Binding Data, Mode=TwoWay}" />
+                    </DataTemplate>
+                </converters:RedEditorTemplateSelector.RedNodeRefEditor>
                 <converters:RedEditorTemplateSelector.HandleTemplateView>
                     <DataTemplate>
                         <TextBlock
