@@ -204,25 +204,35 @@ namespace WolvenKit.ViewModels.Documents
 
                         foreach(var v in tb.Vertices)
                         {
-                            positions.Add(ToVector3(v));
+                            positions.Add(new SharpDX.Vector3(v.X, v.Y, -v.Z));
                         }
 
                         var mb = new MeshBuilder();
 
                         foreach (var f in tb.FaceInfo)
                         {
-                            mb.AddTriangle(positions[f.Indices[0]], positions[f.Indices[1]], positions[f.Indices[2]]); 
+                            if (f.NumIndices == 3)
+                            {
+                                mb.AddTriangle(positions[f.Indices[0]], positions[f.Indices[2]], positions[f.Indices[1]]);
+                            }
+                            else if (f.NumIndices == 2)
+                            {
+                                mb.AddPipe(positions[f.Indices[0]], positions[f.Indices[1]], 0, 0.1, 16);
+                            }
                         }
 
                         mb.ComputeNormalsAndTangents(MeshFaces.Default);
 
                         var material = SetupPBRMaterial("DefaultMaterial");
-                        material.AlbedoColor = new SharpDX.Color4(1f, 1f, 1f, 0.1f);
+                        material.AlbedoColor = new SharpDX.Color4(1f, 1f, 1f, 0.5f);
+                        //material.AlbedoColor = new SharpDX.Color4(.5f, .5f, .5f, 1.0f);
 
                         var mesh = new MeshGeometryModel3D()
                         {
                             Geometry = mb.ToMeshGeometry3D(),
-                            Material = material
+                            Material = material,
+                            IsTransparent = true
+                            //Transform = new TranslateTransform3D(tile.TileX * 100, 0, tile.TileY * 100)
                         };
 
                         var group = new MeshComponent()

@@ -7,9 +7,9 @@ namespace WolvenKit.RED4.Types
 {
     public partial class worldStreamingSector : IRedAppendix
     {
-        [RED("unk1")]
+        [RED("version")]
         [REDProperty(IsIgnored = true)]
-        public CInt32 Unk1
+        public CInt32 Version
         {
             get => GetPropertyValue<CInt32>();
             set => SetPropertyValue<CInt32>(value);
@@ -39,9 +39,9 @@ namespace WolvenKit.RED4.Types
             set => SetPropertyValue<CArray<NodeRef>>(value);
         }
 
-        [RED("unk3")]
+        [RED("nodeRanges")]
         [REDProperty(IsIgnored = true)]
-        public CArray<CInt32> Unk3
+        public CArray<CInt32> NodeRanges
         {
             get => GetPropertyValue<CArray<CInt32>>();
             set => SetPropertyValue<CArray<CInt32>>(value);
@@ -59,9 +59,9 @@ namespace WolvenKit.RED4.Types
         {
             Handles = new CArray<CHandle<worldNode>>();
             NodeRefs = new CArray<NodeRef>();
-            Unk3 = new CArray<CInt32>();
+            NodeRanges = new CArray<CInt32>();
 
-            Unk1 = reader.ReadCInt32();
+            Version = reader.ReadCInt32();
 
             var innerSize = reader.BaseReader.ReadInt32();
 
@@ -88,7 +88,7 @@ namespace WolvenKit.RED4.Types
             var cnt3 = reader.BaseReader.ReadVLQInt32();
             for (int i = 0; i < cnt3; i++)
             {
-                Unk3.Add(reader.ReadCInt32());
+                NodeRanges.Add(reader.ReadCInt32());
             }
 
             Unk4 = reader.ReadCInt32();
@@ -96,7 +96,7 @@ namespace WolvenKit.RED4.Types
 
         public void Write(Red4Writer writer)
         {
-            writer.Write(Unk1);
+            writer.Write(Version);
 
             var sizePos = writer.BaseStream.Position;
             writer.BaseWriter.Write(0);
@@ -115,8 +115,8 @@ namespace WolvenKit.RED4.Types
                 writer.Write(nodeRef);
             }
 
-            writer.BaseWriter.WriteVLQInt32(Unk3.Count);
-            foreach (var unk in Unk3)
+            writer.BaseWriter.WriteVLQInt32(NodeRanges.Count);
+            foreach (var unk in NodeRanges)
             {
                 writer.Write(unk);
             }

@@ -49,6 +49,8 @@ namespace WolvenKit.ViewModels.Documents
     {
         public List<Sector> Sectors { get; set; } = new();
 
+        public SharpDX.Vector3 SearchPoint = new(0f, 0f, 0f);
+
         public ICommand LoadSectorCommand => new DelegateCommand<Sector>(x => LoadSector(x));
         public void LoadSector(Sector sector)
         {
@@ -163,78 +165,113 @@ namespace WolvenKit.ViewModels.Documents
 
             foreach (var desc in data.Descriptors)
             {
-                var text = new BillboardText3D();
-                text.TextInfo.Add(
-                    new TextInfo(Path.GetFileNameWithoutExtension(desc.Data.DepotPath.ToString()),
-                    new SharpDX.Vector3((desc.StreamingBox.Max.X + desc.StreamingBox.Min.X) / 2, (desc.StreamingBox.Max.Z + desc.StreamingBox.Min.Z) / 2, -(desc.StreamingBox.Max.Y + desc.StreamingBox.Min.Y) / 2))
-                    {
-                        Foreground = SharpDX.Color.Red,
-                        Scale = 1f
-                    }
-                );
-                var bbText = new WKBillboardTextModel3D()
+                if (true || SearchPoint.X < desc.StreamingBox.Max.X && SearchPoint.X > desc.StreamingBox.Min.X &&
+                    SearchPoint.Y < desc.StreamingBox.Max.Y && SearchPoint.Y > desc.StreamingBox.Min.Y &&
+                    SearchPoint.Z < desc.StreamingBox.Max.Z && SearchPoint.Z > desc.StreamingBox.Min.Z)
                 {
-                    Geometry = text,
-                    Name = Path.GetFileNameWithoutExtension(desc.Data.DepotPath.ToString()).Replace("-", "n")
-                };
-                if (desc.Category.Value == Enums.worldStreamingSectorCategory.Exterior)
-                {
-                    if (bbText.Name.Substring(bbText.Name.Length-1) == "0")
+                    var text = new BillboardText3D();
+                    text.TextInfo.Add(
+                        new TextInfo(Path.GetFileNameWithoutExtension(desc.Data.DepotPath.ToString()),
+                        new SharpDX.Vector3((desc.StreamingBox.Max.X + desc.StreamingBox.Min.X) / 2, (desc.StreamingBox.Max.Z + desc.StreamingBox.Min.Z) / 2, -(desc.StreamingBox.Max.Y + desc.StreamingBox.Min.Y) / 2))
+                        {
+                            Foreground = SharpDX.Color.Red,
+                            Scale = 0.5f
+                        }
+                    );
+
+                    var bbText = new WKBillboardTextModel3D()
                     {
-                        exterior_0.Children.Add(bbText);
+                        Geometry = text,
+                        Name = Path.GetFileNameWithoutExtension(desc.Data.DepotPath.ToString()).Replace("-", "n")
+                    };
+
+                    if (desc.Category.Value == Enums.worldStreamingSectorCategory.Exterior)
+                    {
+                        //var mb = new MeshBuilder();
+
+                        //mb.AddBox(text.TextInfo[0].Origin,
+                        //    desc.StreamingBox.Max.X - desc.StreamingBox.Min.X,
+                        //    desc.StreamingBox.Max.Y - desc.StreamingBox.Min.Y,
+                        //    desc.StreamingBox.Max.Z - desc.StreamingBox.Min.Z);
+                        //mb.ComputeNormalsAndTangents(MeshFaces.Default);
+
+                        //var material = SetupPBRMaterial("DefaultMaterial");
+                        //material.AlbedoColor = new SharpDX.Color4(1f, 1f, 1f, 0.01f);
+
+                        //var mesh = new MeshGeometryModel3D()
+                        //{
+                        //    Geometry = mb.ToMeshGeometry3D(),
+                        //    Material = material,
+                        //    IsTransparent = true
+                        //};
+
+                        if (desc.Level == 0)
+                        {
+                            exterior_0.Children.Add(bbText);
+                            //exterior_0.Children.Add(mesh);
+                        }
+                        else if (desc.Level == 1)
+                        {
+                            exterior_1.Children.Add(bbText);
+                            //exterior_1.Children.Add(mesh);
+                        }
+                        else if (desc.Level == 2)
+                        {
+                            exterior_2.Children.Add(bbText);
+                            //exterior_2.Children.Add(mesh);
+                        }
+                        else if (desc.Level == 3)
+                        {
+                            exterior_3.Children.Add(bbText);
+                            //exterior_3.Children.Add(mesh);
+                        }
+                        else if (desc.Level == 4)
+                        {
+                            exterior_4.Children.Add(bbText);
+                            //exterior_4.Children.Add(mesh);
+                        }
+                        else if (desc.Level == 5)
+                        {
+                            exterior_5.Children.Add(bbText);
+                            //exterior_5.Children.Add(mesh);
+                        }
+                        else if (desc.Level == 6)
+                        {
+                            exterior_6.Children.Add(bbText);
+                            //exterior_6.Children.Add(mesh);
+                        }
+                        else
+                        {
+                            exterior.Children.Add(bbText);
+                            //exterior.Children.Add(mesh);
+                        }
+
+
                     }
-                    else if (bbText.Name.Substring(bbText.Name.Length - 1) == "1")
+                    else if (desc.Category.Value == Enums.worldStreamingSectorCategory.Interior)
                     {
-                        exterior_1.Children.Add(bbText);
+                        interior.Children.Add(bbText);
                     }
-                    else if (bbText.Name.Substring(bbText.Name.Length - 1) == "2")
+                    else if (desc.Category.Value == Enums.worldStreamingSectorCategory.Quest)
                     {
-                        exterior_2.Children.Add(bbText);
+                        quest.Children.Add(bbText);
                     }
-                    else if (bbText.Name.Substring(bbText.Name.Length - 1) == "3")
+                    else if (desc.Category.Value == Enums.worldStreamingSectorCategory.Navigation)
                     {
-                        exterior_3.Children.Add(bbText);
-                    }
-                    else if (bbText.Name.Substring(bbText.Name.Length - 1) == "4")
-                    {
-                        exterior_4.Children.Add(bbText);
-                    }
-                    else if (bbText.Name.Substring(bbText.Name.Length - 1) == "5")
-                    {
-                        exterior_5.Children.Add(bbText);
-                    }
-                    else if (bbText.Name.Substring(bbText.Name.Length - 1) == "6")
-                    {
-                        exterior_6.Children.Add(bbText);
+                        navigation.Children.Add(bbText);
                     }
                     else
                     {
-                        exterior.Children.Add(bbText);
+                        other.Children.Add(bbText);
                     }
+                    sectors.Add(new Sector()
+                    {
+                        Name = Path.GetFileNameWithoutExtension(desc.Data.DepotPath.ToString()),
+                        DepotPath = desc.Data.DepotPath,
+                        Text = bbText,
+                        NumberOfHandles = desc.NumNodeRanges
+                    });
                 }
-                else if (desc.Category.Value == Enums.worldStreamingSectorCategory.Interior)
-                {
-                    interior.Children.Add(bbText);
-                }
-                else if (desc.Category.Value == Enums.worldStreamingSectorCategory.Quest)
-                {
-                    quest.Children.Add(bbText);
-                }
-                else if (desc.Category.Value == Enums.worldStreamingSectorCategory.Navigation)
-                {
-                    navigation.Children.Add(bbText);
-                }
-                else
-                {
-                    other.Children.Add(bbText);
-                }
-                sectors.Add(new Sector()
-                {
-                    Name = Path.GetFileNameWithoutExtension(desc.Data.DepotPath.ToString()),
-                    DepotPath = desc.Data.DepotPath,
-                    Text = bbText,
-                    NumberOfHandles = desc.NumNodeRanges
-                });
             }
             Sectors = new List<Sector>(sectors.OrderBy(x => x.Name).ToList());
             texts.Children.Add(exterior);
