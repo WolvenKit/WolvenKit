@@ -46,14 +46,11 @@ namespace WolvenKit.RED4.Archive.IO
                 _writer.Write(t.Uk3.Y);
                 _writer.Write(t.Uk3.Z);
 
-                _writer.Write(t.Uk4);
-                _writer.Write(t.Uk5);
-                _writer.Write(t.Uk6);
-                _writer.Write(t.Uk7);
+                _writer.Write(t.GUID);
 
-                _writer.Write(t.UkHash1);
-                _writer.Write(t.UkHash2);
-                _writer.Write(t.UkHash3);
+                _writer.Write((ulong)t.QuestNodeRef);
+                _writer.Write((ulong)t.UkNodeRef);
+                _writer.Write((ulong)t.ExternalNodeRef);
 
                 _writer.Write(t.Uk8);
                 _writer.Write(t.Uk9);

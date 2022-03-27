@@ -52,14 +52,11 @@ namespace WolvenKit.RED4.Archive.IO
                 t.Uk3.Y = _reader.ReadSingle();
                 t.Uk3.Z = _reader.ReadSingle();
 
-                t.Uk4 = _reader.ReadInt16();
-                t.Uk5 = _reader.ReadInt16();
-                t.Uk6 = _reader.ReadInt16();
-                t.Uk7 = _reader.ReadInt16();
+                t.GUID = _reader.ReadUInt64();
 
-                t.UkHash1 = _reader.ReadUInt64();
-                t.UkHash2 = _reader.ReadUInt64();
-                t.UkHash3 = _reader.ReadUInt64();
+                t.QuestNodeRef = _reader.ReadUInt64();
+                t.UkNodeRef = _reader.ReadUInt64();
+                t.ExternalNodeRef = _reader.ReadUInt64();
 
                 t.Uk8 = _reader.ReadSingle();
                 t.Uk9 = _reader.ReadSingle();
