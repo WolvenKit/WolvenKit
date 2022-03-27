@@ -34,9 +34,9 @@ namespace WolvenKit.RED4.Archive.IO
                 _writer.Write(t.Scale.Y);
                 _writer.Write(t.Scale.Z);
 
-                _writer.Write(t.Uk1.X);
-                _writer.Write(t.Uk1.Y);
-                _writer.Write(t.Uk1.Z);
+                _writer.Write(t.Pivot.X);
+                _writer.Write(t.Pivot.Y);
+                _writer.Write(t.Pivot.Z);
 
                 _writer.Write(t.Uk2.X);
                 _writer.Write(t.Uk2.Y);
@@ -46,14 +46,14 @@ namespace WolvenKit.RED4.Archive.IO
                 _writer.Write(t.Uk3.Y);
                 _writer.Write(t.Uk3.Z);
 
-                _writer.Write(t.GUID);
+                _writer.Write(t.Id);
 
-                _writer.Write((ulong)t.QuestNodeRef);
-                _writer.Write((ulong)t.UkNodeRef);
-                _writer.Write((ulong)t.ExternalNodeRef);
+                _writer.Write((ulong)t.QuestPrefabRefHash);
+                _writer.Write((ulong)t.UkHash1);
+                _writer.Write((ulong)t.UkHash2);
 
-                _writer.Write(t.Uk8);
-                _writer.Write(t.Uk9);
+                _writer.Write(t.MaxStreamingDistance);
+                _writer.Write(t.VariantID);
 
                 _writer.Write(t.HandleIndex);
                 _writer.Write(t.Uk10);

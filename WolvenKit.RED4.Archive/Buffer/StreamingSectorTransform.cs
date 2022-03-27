@@ -7,33 +7,36 @@ using WolvenKit.RED4.Types;
 
 namespace WolvenKit.RED4.Archive.Buffer
 {
+    // this might just be worldNodeEditorData
     public class StreamingSectorTransform : IRedType
     {
+        public CUInt64 Id { get; set; }
+
+        public CUInt16 HandleIndex { get; set; }
+
         public Vector4 Position { get; set; } = new();
 
         public Quaternion Orientation { get; set; } = new();
 
         public Vector3 Scale { get; set; } = new();
 
-        public Vector3 Uk1 { get; set; } = new();
+        public Vector3 Pivot { get; set; } = new();
 
         public Vector3 Uk2 { get; set; } = new();
 
         public Vector3 Uk3 { get; set; } = new();
 
-        public CUInt64 GUID { get; set; }
+        public NodeRef QuestPrefabRefHash { get; set; }
 
-        public NodeRef QuestNodeRef { get; set; }
+        public NodeRef UkHash1 { get; set; }
 
-        public NodeRef UkNodeRef { get; set; }
+        public NodeRef UkHash2 { get; set; }
 
-        public NodeRef ExternalNodeRef { get; set; }
+        public CFloat MaxStreamingDistance { get; set; }
 
-        public CFloat Uk8 { get; set; }
+        public CUInt32 VariantID { get; set; }
 
-        public CFloat Uk9 { get; set; }
-
-        public CUInt16 HandleIndex { get; set; }
+        // likely a bitfield
 
         public CUInt16 Uk10 { get; set; }
 

@@ -40,9 +40,9 @@ namespace WolvenKit.RED4.Archive.IO
                 t.Scale.Y = _reader.ReadSingle();
                 t.Scale.Z = _reader.ReadSingle();
 
-                t.Uk1.X = _reader.ReadSingle();
-                t.Uk1.Y = _reader.ReadSingle();
-                t.Uk1.Z = _reader.ReadSingle();
+                t.Pivot.X = _reader.ReadSingle();
+                t.Pivot.Y = _reader.ReadSingle();
+                t.Pivot.Z = _reader.ReadSingle();
 
                 t.Uk2.X = _reader.ReadSingle();
                 t.Uk2.Y = _reader.ReadSingle();
@@ -52,16 +52,17 @@ namespace WolvenKit.RED4.Archive.IO
                 t.Uk3.Y = _reader.ReadSingle();
                 t.Uk3.Z = _reader.ReadSingle();
 
-                t.GUID = _reader.ReadUInt64();
+                t.Id = _reader.ReadUInt64();
 
-                t.QuestNodeRef = _reader.ReadUInt64();
-                t.UkNodeRef = _reader.ReadUInt64();
-                t.ExternalNodeRef = _reader.ReadUInt64();
+                t.QuestPrefabRefHash = _reader.ReadUInt64();
+                t.UkHash1 = _reader.ReadUInt64();
+                t.UkHash2 = _reader.ReadUInt64();
 
-                t.Uk8 = _reader.ReadSingle();
-                t.Uk9 = _reader.ReadSingle();
+                t.MaxStreamingDistance = _reader.ReadSingle();
+                t.VariantID = _reader.ReadUInt32();
 
                 t.HandleIndex = _reader.ReadUInt16();
+
                 t.Uk10 = _reader.ReadUInt16();
                 t.Uk11 = _reader.ReadUInt16();
                 t.Uk12 = _reader.ReadUInt16();
