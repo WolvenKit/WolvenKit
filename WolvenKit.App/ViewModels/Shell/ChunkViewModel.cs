@@ -1110,6 +1110,19 @@ namespace WolvenKit.ViewModels.Shell
                 return;
             }
 
+
+            if (Data is StreamingSectorTransform sst && Tab.Chunks[0].Data is worldStreamingSector wss)
+            {
+                Descriptor = $"[{sst.HandleIndex}] {wss.Handles[sst.HandleIndex].Chunk.DebugName}";
+                return;
+            }
+
+            if (Data is worldStreamingSectorDescriptor wssd)
+            {
+                Descriptor = wssd.Data.DepotPath.ToString().Replace("base\\worlds\\03_night_city\\_compiled\\default\\", "").Replace(".streamingsector", "");
+                return;
+            }
+
             if (ResolvedData is IRedArray ary)
             {
                 Descriptor = $"[{ary.Count}]";
@@ -1238,10 +1251,6 @@ namespace WolvenKit.ViewModels.Shell
                         }
                     }
                 }
-            }
-            if (Data is StreamingSectorTransform sst && Tab.Chunks[0].Data is worldStreamingSector wss)
-            {
-                Descriptor = $"[{sst.HandleIndex}] {wss.Handles[sst.HandleIndex].Chunk.DebugName}";
             }
         }
 
