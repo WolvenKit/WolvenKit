@@ -398,7 +398,7 @@ namespace WolvenKit.ViewModels.Documents
         {
             var group = new MeshComponent()
             {
-                Name = $"{model.Name}",
+                Name = char.IsDigit(model.Name[0]) ? $"_{model.Name}" : $"{model.Name}",
                 AppearanceName = model.AppearanceName,
                 Transform = model.Transform,
                 IsRendering = model.IsEnabled,
