@@ -600,7 +600,7 @@ namespace WolvenKit.ViewModels.Tools
             {
                 var soundbanksArchive = _archiveManager.Archives.Items
                     .Cast<Archive>()
-                    .FirstOrDefault(_ => _.Name.Equals("audio_2_soundbanks.archive"));
+                    .FirstOrDefault(_ => _.Name.Equals($"{EVanillaArchives.audio_2_soundbanks.ToString()}.archive"));
 
                 OpusTools opusTools = new(
                     soundbanksArchive,

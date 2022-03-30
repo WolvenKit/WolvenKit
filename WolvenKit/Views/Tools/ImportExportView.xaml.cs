@@ -121,7 +121,7 @@ namespace WolvenKit.Views.Tools
                                 }
 
                                 args.Animset = selectedItem;
-                                args.Output = Path.ChangeExtension(selectedItem, "cooked.anims");
+                                //args.Output = Path.ChangeExtension(selectedItem, "cooked.anims");
 
                                 if (AnimNameComboBox.SelectedItem is not string selectedName)
                                 {
@@ -276,7 +276,7 @@ namespace WolvenKit.Views.Tools
                 }
 
                 args.Animset = selectedItem;
-                args.Output = Path.ChangeExtension(selectedItem, "cooked.anims");
+                //args.Output = Path.ChangeExtension(selectedItem, "cooked.anims");
 
                 // parse animset and populate the animnameBox
                 var path = Path.Combine(projectManager.ActiveProject.ModDirectory, selectedItem);
