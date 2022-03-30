@@ -93,7 +93,7 @@ namespace WolvenKit.Utility
             Directory.CreateDirectory(resultDir);
 
             // load new hashes
-            var newHashesPath = Path.Combine(s_testResultsDirectory, "new_hashes.txt");
+            var newHashesPath = Path.Combine(s_testResultsDirectory, "resourcePaths.txt");
             var newHashes = new Dictionary<ulong, string>();
             if (File.Exists(newHashesPath))
             {
