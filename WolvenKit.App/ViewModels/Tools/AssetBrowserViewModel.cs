@@ -340,7 +340,7 @@ namespace WolvenKit.ViewModels.Tools
         /// </summary>
         public ICommand CopyRelPathCommand { get; private set; }
         private bool CanCopyRelPath() => RightSelectedItem != null; // _projectManager.ActiveProject != null && RightSelectedItem != null;
-        private void ExecuteCopyRelPath() => Clipboard.SetText(RightSelectedItem.FullName);
+        private void ExecuteCopyRelPath() => Clipboard.SetDataObject(RightSelectedItem.FullName);
         public ReactiveCommand<Unit, Unit> ExpandAll { get; set; }
         public ReactiveCommand<Unit, Unit> CollapseAll { get; set; }
         public ReactiveCommand<Unit, Unit> Expand { get; set; }
