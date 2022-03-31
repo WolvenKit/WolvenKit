@@ -12,5 +12,13 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CBool>();
 			set => SetPropertyValue<CBool>(value);
 		}
+
+		[Ordinal(1)] 
+		[RED("onlyEnemies")] 
+		public CBool OnlyEnemies
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
 	}
 }

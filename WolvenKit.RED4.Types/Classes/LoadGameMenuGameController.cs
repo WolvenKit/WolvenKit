@@ -70,22 +70,6 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(11)] 
-		[RED("gogButtonWidgetRef")] 
-		public inkWidgetReference GogButtonWidgetRef
-		{
-			get => GetPropertyValue<inkWidgetReference>();
-			set => SetPropertyValue<inkWidgetReference>(value);
-		}
-
-		[Ordinal(12)] 
-		[RED("gogContainer")] 
-		public inkWidgetReference GogContainer
-		{
-			get => GetPropertyValue<inkWidgetReference>();
-			set => SetPropertyValue<inkWidgetReference>(value);
-		}
-
-		[Ordinal(13)] 
 		[RED("eventDispatcher")] 
 		public CWeakHandle<inkMenuEventDispatcher> EventDispatcher
 		{
@@ -93,7 +77,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<inkMenuEventDispatcher>>(value);
 		}
 
-		[Ordinal(14)] 
+		[Ordinal(12)] 
 		[RED("loadComplete")] 
 		public CBool LoadComplete
 		{
@@ -101,7 +85,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(15)] 
+		[Ordinal(13)] 
 		[RED("saveInfo")] 
 		public CHandle<inkSaveMetadataInfo> SaveInfo
 		{
@@ -109,7 +93,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<inkSaveMetadataInfo>>(value);
 		}
 
-		[Ordinal(16)] 
+		[Ordinal(14)] 
 		[RED("buttonHintsController")] 
 		public CWeakHandle<ButtonHints> ButtonHintsController
 		{
@@ -117,7 +101,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<ButtonHints>>(value);
 		}
 
-		[Ordinal(17)] 
+		[Ordinal(15)] 
 		[RED("saveToLoadIndex")] 
 		public CInt32 SaveToLoadIndex
 		{
@@ -125,7 +109,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CInt32>(value);
 		}
 
-		[Ordinal(18)] 
+		[Ordinal(16)] 
 		[RED("isInputDisabled")] 
 		public CBool IsInputDisabled
 		{
@@ -133,7 +117,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(19)] 
+		[Ordinal(17)] 
 		[RED("saveTransferPopupToken")] 
 		public CHandle<inkGameNotificationToken> SaveTransferPopupToken
 		{
@@ -146,8 +130,6 @@ namespace WolvenKit.RED4.Types
 			List = new();
 			NoSavedGamesLabel = new();
 			ButtonHintsManagerRef = new();
-			GogButtonWidgetRef = new();
-			GogContainer = new();
 		}
 	}
 }

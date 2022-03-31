@@ -5,7 +5,7 @@
   <a href="https://github.com/WolvenKit/WolvenKit/issues"><img src="https://img.shields.io/github/issues/WolvenKit/WolvenKit.svg"></a>
   <a href="https://github.com/WolvenKit/WolvenKit/network"><img src="https://img.shields.io/github/forks/WolvenKit/WolvenKit.svg"></a>
   <a href="https://github.com/WolvenKit/WolvenKit/stargazers"><img src="https://img.shields.io/github/stars/WolvenKit/WolvenKit.svg"></a>    
-  <a href="https://raw.githubusercontent.com/WolvenKit/WolvenKit/master/LICENSE"><img src="https://img.shields.io/github/license/WolvenKit/WolvenKit.svg"></a>
+  <a href="https://raw.githubusercontent.com/WolvenKit/WolvenKit/main/LICENSE"><img src="https://img.shields.io/github/license/WolvenKit/WolvenKit.svg"></a>
   <a href="https://discord.gg/cp77modding"><img src="https://img.shields.io/discord/717692382849663036.svg?label=&logo=discord&logoColor=ffffff&color=7389D8&labelColor=6A7EC2"></a>
 </p>
 
@@ -13,7 +13,7 @@
   This repository was created to demonstrate how <a href="https://en.wikipedia.org/wiki/CD_Projekt">CDPR</a>'s proprietary <a href="https://en.wikipedia.org/wiki/CD_Projekt#REDengine"><strong>REDEngine</strong></a> reads and writes file formats.
 And to experiment with the working of games running on this engine i.e. <em>The Witcher 3: The Wild Hunt</em> and <em>Cyberpunk 2077</em>. 
 This toolkit is being made solely for research and educational purposes, and the dev team is in no way responsible for any malfunctions that occur from its use.
-Its completely open source, licensed under the <a href="https://github.com/WolvenKit/WolvenKit/blob/master/LICENSE">GPL v3.0</a>, and in no way is it made to generate revenue.
+Its completely open source, licensed under the <a href="https://github.com/WolvenKit/WolvenKit/blob/main/LICENSE">GPL v3.0</a>, and in no way is it made to generate revenue.
 An ancestor to this tool was <a href="https://drive.google.com/file/d/0B3axqSlhNHOOYmpkWk83TXRkZmM/view">W3Edit</a>, initially developed by <a href="https://forums.cdprojektred.com/forum/en/the-witcher-series/the-witcher-3-wild-hunt/mod-discussions/58758-mod-editor">Sarcen</a> in 2015, around the time The Witcher 3 first came out.
 After Sarcen stopped working on it, a few of us picked it up and continued from there.<br /><br />
 Currently, WolvenKit allows reading and writing nearly every REDEngine file format to some extent. 
@@ -45,7 +45,7 @@ Download either the latest stable version or the current nightly (beta) version 
 | Package | Latest Release | Checks  |
 | ------- | ------------ | ----------------- |
 | [WolvenKit Nightly](https://github.com/WolvenKit/WolvenKit-nightly-releases/) | [![GitHub release (latest by date)](https://img.shields.io/github/v/release/WolvenKit/WolvenKit-nightly-releases)](https://github.com/WolvenKit/WolvenKit-nightly-releases/releases/latest) | ![GitHub Workflow Status](https://img.shields.io/github/workflow/status/WolvenKit/WolvenKit/WolvenKit-Nightly?color=green) |
-| [WolvenKit](https://github.com/WolvenKit/WolvenKit/) | [![GitHub release (latest by date)](https://img.shields.io/github/v/release/WolvenKit/WolvenKit)](https://github.com/WolvenKit/WolvenKit/releases/latest) | ![GitHub branch checks state](https://img.shields.io/github/checks-status/WolvenKit/WolvenKit/master) | 
+| [WolvenKit](https://github.com/WolvenKit/WolvenKit/) | [![GitHub release (latest by date)](https://img.shields.io/github/v/release/WolvenKit/WolvenKit)](https://github.com/WolvenKit/WolvenKit/releases/latest) | ![GitHub branch checks state](https://img.shields.io/github/checks-status/WolvenKit/WolvenKit/main) | 
 
 ### Installer
 1. Install the NET 6 Runtime: https://dotnet.microsoft.com/en-us/download/dotnet/thank-you/runtime-6.0.1-windows-x64-installer

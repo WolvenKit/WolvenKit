@@ -38,6 +38,14 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(7)] 
+		[RED("controllerDisconnected")] 
+		public CBool ControllerDisconnected
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(8)] 
 		[RED("showDeathScreenBBID")] 
 		public CHandle<redCallbackObject> ShowDeathScreenBBID
 		{
@@ -45,7 +53,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
-		[Ordinal(8)] 
+		[Ordinal(9)] 
 		[RED("breachingNetworkBBID")] 
 		public CHandle<redCallbackObject> BreachingNetworkBBID
 		{
@@ -53,7 +61,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
-		[Ordinal(9)] 
+		[Ordinal(10)] 
 		[RED("triggerMenuEventBBID")] 
 		public CHandle<redCallbackObject> TriggerMenuEventBBID
 		{
@@ -61,7 +69,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
-		[Ordinal(10)] 
+		[Ordinal(11)] 
 		[RED("openStorageBBID")] 
 		public CHandle<redCallbackObject> OpenStorageBBID
 		{
@@ -69,7 +77,15 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
-		[Ordinal(11)] 
+		[Ordinal(12)] 
+		[RED("controllerDisconnectedBBID")] 
+		public CHandle<redCallbackObject> ControllerDisconnectedBBID
+		{
+			get => GetPropertyValue<CHandle<redCallbackObject>>();
+			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
+		}
+
+		[Ordinal(13)] 
 		[RED("bbOnEquipmentChangedID")] 
 		public CHandle<redCallbackObject> BbOnEquipmentChangedID
 		{
@@ -77,7 +93,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
-		[Ordinal(12)] 
+		[Ordinal(14)] 
 		[RED("inventoryListener")] 
 		public CHandle<gameAttachmentSlotsScriptListener> InventoryListener
 		{
@@ -85,7 +101,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<gameAttachmentSlotsScriptListener>>(value);
 		}
 
-		[Ordinal(13)] 
+		[Ordinal(15)] 
 		[RED("loadSaveDelayID")] 
 		public gameDelayID LoadSaveDelayID
 		{
