@@ -7,12 +7,20 @@
     xmlns:local="clr-namespace:WolvenKit.Views.Documents"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:reactiveUi="http://reactiveui.net"
+    xmlns:nodify="https://miroiu.github.io/nodify"
     d:DataContext="{d:DesignInstance Type={x:Type documents:RDTGraphViewModel}}"
     d:DesignHeight="450"
     d:DesignWidth="800"
     x:TypeArguments="documents:RDTGraphViewModel"
     mc:Ignorable="d">
-    <Grid>
-        <TextBox x:Name="graphText" Text="{Binding GraphText}" />
-    </Grid>
+
+
+
+
+    <Grid Background="#1E1E1E">
+        <nodify:NodifyEditor x:Name="Editor"
+                             Background="{StaticResource ContentBackgroundAlt2}" />
+    </Grid>    
+
+        
 </reactiveUi:ReactiveUserControl>

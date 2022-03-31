@@ -71,7 +71,7 @@ graph [
                         }
                     }
                 }
-                if (node.Chunk is questPhaseNodeDefinition qpnd)
+                if (node.Chunk is questPhaseNodeDefinition qpnd && qpnd.PhaseGraph !=null)
                 {
                     RenderNodes(qpnd.PhaseGraph.Chunk.Nodes);
                 }
