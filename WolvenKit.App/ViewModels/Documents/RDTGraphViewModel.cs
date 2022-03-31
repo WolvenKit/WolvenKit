@@ -54,6 +54,7 @@ graph [
             var connections = new Dictionary<int, graphGraphConnectionDefinition>();
             foreach (var node in nodes)
             {
+                Nodes.Add(node.Chunk);
                 GraphText += $"subgraph cluster_{node.GetHashCode()} {{\n";
                 GraphText += $"    label = \" {node.Chunk.GetType().Name} [{nodes.IndexOf(node)}] \";\n";
                 //if (node.Chunk is questPhaseNodeDefinition qpnd)
@@ -87,5 +88,7 @@ graph [
         public override ERedDocumentItemType DocumentItemType => ERedDocumentItemType.MainFile;
 
         public string GraphText { get; set; } = "";
+
+        public List<graphGraphNodeDefinition> Nodes { get; set; } = new();
     }
 }
