@@ -145,7 +145,7 @@ namespace WolvenKit.Modkit.RED4
 
                     foreach (var component in appPkg.Chunks)
                     {
-                        if (component is IRedMeshComponent mc)
+                        if (component is IRedMeshComponent mc && mc.ParentTransform != null)
                         {
                             var transform = (entHardTransformBinding)mc.ParentTransform.GetValue();
 

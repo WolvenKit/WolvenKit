@@ -300,7 +300,7 @@ namespace WolvenKit.ViewModels.Tools
                 SetupImage(cbt);
             }
 
-            if (cr2w.RootChunk is CMesh cm &&
+            if (cr2w.RootChunk is CMesh cm && cm.RenderResourceBlob != null &&
                 cm.RenderResourceBlob.GetValue() is rendRenderTextureBlobPC)
             {
                 SetupImage(cm);
