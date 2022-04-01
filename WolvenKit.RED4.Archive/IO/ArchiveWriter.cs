@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Security.Cryptography;
@@ -85,9 +84,6 @@ public class ArchiveWriter
             outfile = Path.Combine(outpath.FullName, $"{modname}.archive");
         }
 
-        var sw = new Stopwatch();
-        sw.Start();
-
         var ar = new Archive { ArchiveAbsolutePath = outfile };
         using var fs = new FileStream(outfile, FileMode.Create);
         using var bw = new BinaryWriter(fs);
@@ -149,10 +145,10 @@ public class ArchiveWriter
             uint lastoffsetidx;
             var flags = 0;
 
-            if (reader.ReadFile(out var cr2w, false) == EFileReadErrorCodes.NoError)
+            if (reader.ReadFileInfo(out var info) == EFileReadErrorCodes.NoError)
             {
                 // kraken the file and write
-                var cr2wfilesize = (int)cr2w.MetaData.ObjectsEnd;
+                var cr2wfilesize = (int)info.FileHeader.objectsEnd;
                 fileBinaryReader.BaseStream.Seek(0, SeekOrigin.Begin);
                 var cr2winbuffer = fileBinaryReader.ReadBytes(cr2wfilesize);
                 var offset = bw.BaseStream.Position;
@@ -167,7 +163,7 @@ public class ArchiveWriter
 
                 // HINT: each cr2w needs to have the buffer already kraken'd
                 // foreach buffer write
-                foreach (var bufferInfo in cr2w.Info.BufferInfo)
+                foreach (var bufferInfo in info.BufferInfo)
                 {
                     var bufferBuffer = fileBinaryReader.ReadBytes((int)bufferInfo.diskSize);
 
@@ -195,7 +191,7 @@ public class ArchiveWriter
 
                 lastoffsetidx = (uint)ar.Index.FileSegments.Count;
 
-                flags = cr2w.Info.BufferInfo.Length > 0 ? cr2w.Info.BufferInfo.Length - 1 : 0;
+                flags = info.BufferInfo.Length > 0 ? info.BufferInfo.Length - 1 : 0;
             }
             else
             {
