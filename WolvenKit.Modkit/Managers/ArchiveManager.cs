@@ -10,6 +10,8 @@ using ReactiveUI.Fody.Helpers;
 using WolvenKit.Common;
 using WolvenKit.Common.Model;
 using WolvenKit.Common.Services;
+using WolvenKit.Core.Interfaces;
+using WolvenKit.RED4.Archive;
 using Path = System.IO.Path;
 
 namespace WolvenKit.RED4.CR2W.Archive
@@ -23,6 +25,8 @@ namespace WolvenKit.RED4.CR2W.Archive
 
         private readonly IHashService _hashService;
 
+        private readonly Red4ParserService _wolvenkitFileService;
+
         private readonly ILoggerService _logger;
 
         private readonly SourceList<RedFileSystemModel> _rootCache;
@@ -33,9 +37,10 @@ namespace WolvenKit.RED4.CR2W.Archive
 
         #region Constructors
 
-        public ArchiveManager(IHashService hashService, ILoggerService logger)
+        public ArchiveManager(IHashService hashService, Red4ParserService wolvenkitFileService, ILoggerService logger)
         {
             _hashService = hashService;
+            _wolvenkitFileService = wolvenkitFileService;
             _logger = logger;
 
             _rootCache = new SourceList<RedFileSystemModel>();
@@ -173,7 +178,7 @@ namespace WolvenKit.RED4.CR2W.Archive
                 return;
             }
 
-            var archive = Red4ParserServiceExtensions.ReadArchive(path, _hashService);
+            var archive = _wolvenkitFileService.ReadRed4Archive(path, _hashService);
             Archives.AddOrUpdate(archive);
         }
 
@@ -190,7 +195,7 @@ namespace WolvenKit.RED4.CR2W.Archive
                 return;
             }
 
-            var archive = Red4ParserServiceExtensions.ReadArchive(filename, _hashService);
+            var archive = _wolvenkitFileService.ReadRed4Archive(filename, _hashService);
             ModArchives.AddOrUpdate(archive);
         }
 

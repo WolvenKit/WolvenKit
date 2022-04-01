@@ -4,12 +4,12 @@ using System.IO;
 using System.IO.MemoryMappedFiles;
 using System.Linq;
 using System.Threading.Tasks;
-using CP77Tools.Model;
 using ProtoBuf;
 using WolvenKit.Common;
 using WolvenKit.Core.Compression;
+using WolvenKit.Core.Interfaces;
 
-namespace WolvenKit.RED4.CR2W.Archive
+namespace WolvenKit.RED4.Archive
 {
     [ProtoContract]
     public class Archive : ICyberGameArchive
@@ -19,7 +19,7 @@ namespace WolvenKit.RED4.CR2W.Archive
         public Archive()
         {
             Header = new Header();
-            Index = new CP77Tools.Model.Index();
+            Index = new Index();
             Files = new Dictionary<ulong, IGameFile>();
         }
 
@@ -31,7 +31,7 @@ namespace WolvenKit.RED4.CR2W.Archive
 
         [ProtoMember(2)] public Header Header { get; set; }
 
-        [ProtoMember(3)] public CP77Tools.Model.Index Index { get; set; }
+        [ProtoMember(3)] public Index Index { get; set; }
 
 
         public Dictionary<ulong, IGameFile> Files { get; }

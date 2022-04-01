@@ -8,11 +8,11 @@ using WolvenKit.Modkit.RED4.Animation;
 using WolvenKit.Modkit.RED4.GeneralStructs;
 using WolvenKit.Modkit.RED4.RigFile;
 using WolvenKit.RED4.Archive.CR2W;
-using WolvenKit.RED4.CR2W.Archive;
 using WolvenKit.RED4.Types;
 using WolvenKit.RED4.Archive.IO;
 using System.Text;
 using SharpGLTF.Validation;
+using WolvenKit.RED4.Archive;
 
 namespace WolvenKit.Modkit.RED4
 {

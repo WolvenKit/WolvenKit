@@ -68,11 +68,11 @@ namespace CP77Tools.Tasks
             {
                 archives.AddRange(inputDirInfo
                     .GetFiles("*.archive", SearchOption.AllDirectories)
-                    .Select(_ => Red4ParserServiceExtensions.ReadArchive(_.FullName, _hashService)));
+                    .Select(_ => _wolvenkitFileService.ReadRed4Archive(_.FullName, _hashService)));
             }
             else
             {
-                archives.Add(Red4ParserServiceExtensions.ReadArchive(inputFileInfo.FullName, _hashService));
+                archives.Add(_wolvenkitFileService.ReadRed4Archive(inputFileInfo.FullName, _hashService));
             }
 
             if (missinghashes)

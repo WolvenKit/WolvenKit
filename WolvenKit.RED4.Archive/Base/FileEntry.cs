@@ -1,11 +1,11 @@
 using System;
 using System.IO;
 using ProtoBuf;
-using WolvenKit.Common;
 using WolvenKit.Common.Services;
+using WolvenKit.Core.Interfaces;
 using WolvenKit.RED4.Types.Exceptions;
 
-namespace WolvenKit.RED4.CR2W.Archive
+namespace WolvenKit.RED4.Archive
 {
     [ProtoContract]
     public class FileEntry : Cp77GameFile

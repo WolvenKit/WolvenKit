@@ -13,6 +13,7 @@ using WolvenKit.Common.Interfaces;
 using WolvenKit.Common.Services;
 using WolvenKit.Core;
 using WolvenKit.Core.Compression;
+using WolvenKit.Core.Interfaces;
 using WolvenKit.Core.Services;
 using WolvenKit.Functionality.Services;
 using WolvenKit.Models;

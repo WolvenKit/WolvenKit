@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
-using System.Reactive.Linq;
 using System.Threading.Tasks;
 using DynamicData.Kernel;
 using ReactiveUI.Fody.Helpers;
@@ -13,10 +12,10 @@ using WolvenKit.Common.FNV1A;
 using WolvenKit.Common.Services;
 using WolvenKit.Functionality.Services;
 using WolvenKit.Modkit.RED4;
+using WolvenKit.RED4.Archive;
 using WolvenKit.RED4.Archive.CR2W;
 using WolvenKit.RED4.Archive.IO;
 using WolvenKit.RED4.CR2W;
-using WolvenKit.RED4.CR2W.Archive;
 using WolvenKit.RED4.Types;
 
 namespace WolvenKit.ViewModels.Documents

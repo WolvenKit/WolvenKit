@@ -10,7 +10,7 @@ using System.Text;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using WolvenKit.RED4.Archive.IO;
 using WolvenKit.FunctionalTests.Model;
-using WolvenKit.RED4.CR2W.Archive;
+using WolvenKit.RED4.Archive;
 
 #if IS_PARALLEL
 using System.Threading.Tasks;

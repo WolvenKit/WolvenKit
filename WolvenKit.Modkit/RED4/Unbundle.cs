@@ -6,7 +6,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Dasync.Collections;
 using WolvenKit.Common.Extensions;
-using WolvenKit.RED4.CR2W.Archive;
+using WolvenKit.RED4.Archive;
 
 namespace WolvenKit.Modkit.RED4
 {
