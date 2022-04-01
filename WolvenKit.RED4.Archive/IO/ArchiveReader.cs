@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using System.IO;
 using System.IO.MemoryMappedFiles;
 using WolvenKit.Common.Services;
+using WolvenKit.Core.Compression;
+using WolvenKit.Core.Extensions;
+using WolvenKit.RED4.Archive.CR2W;
 using WolvenKit.RED4.Types.Exceptions;
 
 namespace WolvenKit.RED4.Archive.IO;
@@ -63,6 +66,61 @@ public class ArchiveReader
         {
             file.Archive = ar;
             ar.Files.Add(file.Key, file);
+
+            if (file.Extension == ".bin")
+            {
+                var segment = ar.Index.FileSegments[(int)file.SegmentsStart];
+
+                using var vs = mmf.CreateViewStream((long)segment.Offset, segment.ZSize, MemoryMappedFileAccess.Read);
+                BinaryReader br;
+
+                if (segment.ZSize != segment.Size)
+                {
+                    var ms = new MemoryStream();
+                    vs.DecompressAndCopySegment(ms, segment.ZSize, segment.Size);
+                    ms.Position = 0;
+                    br = new BinaryReader(ms);
+                }
+                else
+                {
+                    br = new BinaryReader(vs);
+                }
+
+                var id = br.BaseStream.ReadStruct<uint>();
+                switch (id)
+                {
+                    case CR2WFile.MAGIC:
+                    {
+                        br.BaseStream.Position = 0xA1;
+                        var rootClsName = br.ReadNullTerminatedString();
+                        var fileTypes = FileTypeHelper.GetFileExtensionsFromRootName(rootClsName);
+
+                        if (fileTypes.Length > 0)
+                        {
+                            file.GuessedExtension = "." + fileTypes[0];
+                        }
+
+                        break;
+                    }
+                    case 0x44484B42:
+                    {
+                        file.GuessedExtension = ".bnk";
+                        break;
+                    }
+                    case 0x6A32424B:
+                    {
+                        file.GuessedExtension = ".bk2";
+                        break;
+                    }
+                    case 0x46464952:
+                    {
+                        file.GuessedExtension = ".wem";
+                        break;
+                    }
+                }
+
+                br.Dispose();
+            }
         }
 
         return EFileReadErrorCodes.NoError;
@@ -113,7 +171,7 @@ public class ArchiveReader
         {
             index.Dependencies.Add(ReadDependency(br));
         }
-
+        
         foreach (var (_, value) in index.FileEntries)
         {
             var startIndex = (int)value.SegmentsStart;

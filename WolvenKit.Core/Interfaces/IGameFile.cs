@@ -26,6 +26,7 @@ public interface IGameFile
     uint ZSize { get; set; }
 
     public string Extension { get; }
+    public string GuessedExtension { get; }
 
 
     #endregion Properties

@@ -8,7 +8,7 @@ using WolvenKit.RED4.Types.Exceptions;
 namespace WolvenKit.RED4.Archive
 {
     [ProtoContract]
-    public class FileEntry : Cp77GameFile
+    public class FileEntry : ICyberGameFile
     {
         #region Fields
 
@@ -74,19 +74,31 @@ namespace WolvenKit.RED4.Archive
         [ProtoMember(8)] public byte[] SHA1Hash { get; set; }
         [ProtoMember(9)] public uint Size { get; set; }
         [ProtoMember(10)] public uint ZSize { get; set; }
+        [ProtoMember(11)] public string GuessedExtension { get; set; }
 
         public ulong Key => NameHash64;
         public string Name => !string.IsNullOrEmpty(GetNameString()) ? GetNameString() : NameHash64.ToString();
-        public string bytesAsString => BitConverter.ToString(SHA1Hash);
+        public string BytesAsString => BitConverter.ToString(SHA1Hash);
         public string FileName => string.IsNullOrEmpty(GetNameString()) ? $"{NameHash64}.bin" : GetNameString();
         public string NameOrHash => string.IsNullOrEmpty(GetNameString()) ? $"{NameHash64}" : GetNameString();
-        public string Extension => Path.GetExtension(FileName);
+        public string Extension => GetExtension();
 
         public string ShortName => Path.GetFileName(FileName);
 
         #endregion Properties
 
         #region Methods
+
+        public string GetExtension()
+        {
+            var ext = Path.GetExtension(FileName);
+            if (ext == ".bin" && GuessedExtension != null)
+            {
+                ext = GuessedExtension;
+            }
+
+            return ext;
+        }
 
         public void SetHashService(IHashService hashService) => _hashService = hashService;
 

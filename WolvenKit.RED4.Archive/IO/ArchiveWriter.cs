@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Security.Cryptography;
+using System.Text.RegularExpressions;
 using System.Threading;
 using WolvenKit.Common;
 using WolvenKit.Common.FNV1A;
@@ -111,19 +112,25 @@ public class ArchiveWriter
         #region write files
 
         HashSet<ulong> importsHashSet = new();
+        var regex = new Regex("^(\\d+)\\.");
 
         var progress = 0;
         foreach (var fileInfo in fileInfos)
         {
             var relpath = fileInfo.FullName[(infolder.FullName.Length + 1)..];
 
-            var hash = FNV1A64HashAlgorithm.HashString(relpath);
-            if (fileInfo.Extension.ToLower() == ".bin")
+            ulong hash;
+            var match = regex.Match(relpath);
+            if (match.Success)
             {
-                if (!ulong.TryParse(Path.GetFileNameWithoutExtension(relpath), out hash))
+                if (!ulong.TryParse(match.Groups[1].Value, out hash))
                 {
                     continue;
                 }
+            }
+            else
+            {
+                hash = FNV1A64HashAlgorithm.HashString(relpath);
             }
 
             if (!_hashService.Contains(hash))

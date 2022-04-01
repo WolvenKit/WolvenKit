@@ -2,7 +2,7 @@ using WolvenKit.Core.Interfaces;
 
 namespace WolvenKit.RED4.Archive;
 
-public interface Cp77GameFile : IGameFile
+public interface ICyberGameFile : IGameFile
 {
     public uint SegmentsStart { get; set; }
     public uint SegmentsEnd { get; set; }

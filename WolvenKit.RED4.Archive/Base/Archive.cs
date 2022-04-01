@@ -64,7 +64,7 @@ namespace WolvenKit.RED4.Archive
             var hasBuffers = (archiveItem.SegmentsEnd - archiveItem.SegmentsStart) > 1;
 
             var values = Enum.GetNames(typeof(ECookedFileFormat));
-            var b = values.Any(e => e == Path.GetExtension(archiveItem.FileName)?[1..]) || hasBuffers;
+            var b = values.Any(e => e == archiveItem.Extension) || hasBuffers;
             return b;
         }
 
