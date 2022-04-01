@@ -1,5 +1,6 @@
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
+using WolvenKit.RED4.Types;
 
 namespace WolvenKit.ViewModels.Documents
 {
@@ -10,6 +11,10 @@ namespace WolvenKit.ViewModels.Documents
         public string FilePath { get; set; }
 
         [Reactive] public bool CanClose { get; set; }
+
+        [Reactive] public RedDocumentViewModel File { get; set; }
+
+        public static IRedType CopiedChunk;
 
         public RedDocumentTabViewModel()
         {

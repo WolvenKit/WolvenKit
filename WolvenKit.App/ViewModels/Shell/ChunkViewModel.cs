@@ -181,7 +181,7 @@ namespace WolvenKit.ViewModels.Shell
             PasteChunkCommand = new DelegateCommand(_ => ExecutePasteChunk(), _ => CanPasteChunk());
         }
 
-        public ChunkViewModel(IRedType export, RDTDataViewModel tab) : this(export)
+        public ChunkViewModel(IRedType export, RedDocumentTabViewModel tab) : this(export)
         {
             _tab = tab;
             IsExpanded = true;
@@ -241,9 +241,9 @@ namespace WolvenKit.ViewModels.Shell
 
         #region Properties
 
-        private readonly RDTDataViewModel _tab;
+        private readonly RedDocumentTabViewModel _tab;
 
-        public RDTDataViewModel Tab
+        public RedDocumentTabViewModel Tab
         {
             get
             {
@@ -543,7 +543,7 @@ namespace WolvenKit.ViewModels.Shell
                             });
                         }
                     }
-                    if (Data is StreamingSectorTransform sst && Tab.Chunks[0].Data is worldStreamingSector wss)
+                    if (Data is StreamingSectorTransform sst && Tab is RDTDataViewModel dvm && dvm.Chunks[0].Data is worldStreamingSector wss)
                     {
                         Properties.Add(new ChunkViewModel(wss.Handles[sst.HandleIndex], this, "Handle")
                         {
@@ -1111,7 +1111,7 @@ namespace WolvenKit.ViewModels.Shell
             }
 
 
-            if (Data is StreamingSectorTransform sst && Tab.Chunks[0].Data is worldStreamingSector wss)
+            if (Data is StreamingSectorTransform sst && Tab is RDTDataViewModel dvm && dvm.Chunks[0].Data is worldStreamingSector wss)
             {
                 Descriptor = $"[{sst.HandleIndex}] {wss.Handles[sst.HandleIndex].Chunk.DebugName}";
                 return;
@@ -1554,7 +1554,11 @@ namespace WolvenKit.ViewModels.Shell
         private bool CanDeleteItem() => IsInArray;
         private void ExecuteDeleteItem()
         {
-            Tab.SelectedChunk = Parent;
+
+            if (Tab is RDTDataViewModel dvm)
+            {
+                dvm.SelectedChunk = Parent;
+            }
             if (Parent.Data is IRedArray ary)
             {
                 ary.Remove(Data);
@@ -1665,11 +1669,11 @@ namespace WolvenKit.ViewModels.Shell
         {
             if (Data is IRedCloneable irc)
             {
-                RDTDataViewModel.CopiedChunk = (IRedType)irc.DeepCopy();
+                RedDocumentTabViewModel.CopiedChunk = (IRedType)irc.DeepCopy();
             }
             else
             {
-                RDTDataViewModel.CopiedChunk = Data;
+                RedDocumentTabViewModel.CopiedChunk = Data;
             }
         }
 
@@ -1704,25 +1708,25 @@ namespace WolvenKit.ViewModels.Shell
         }
 
         public ICommand PasteChunkCommand { get; private set; }
-        private bool CanPasteChunk() => (IsArray || IsInArray) && RDTDataViewModel.CopiedChunk != null && (ArraySelfOrParent?.InnerType.IsAssignableTo(RDTDataViewModel.CopiedChunk.GetType()) ?? true);
+        private bool CanPasteChunk() => (IsArray || IsInArray) && RedDocumentTabViewModel.CopiedChunk != null && (ArraySelfOrParent?.InnerType.IsAssignableTo(RedDocumentTabViewModel.CopiedChunk.GetType()) ?? true);
         private void ExecutePasteChunk()
         {
-            if (RDTDataViewModel.CopiedChunk == null)
+            if (RedDocumentTabViewModel.CopiedChunk == null)
             {
                 return;
             }
             if (Parent.ResolvedData is IRedArray)
             {
-                if (Parent.InsertChild(Parent.GetIndexOf(this) + 1, RDTDataViewModel.CopiedChunk))
+                if (Parent.InsertChild(Parent.GetIndexOf(this) + 1, RedDocumentTabViewModel.CopiedChunk))
                 {
-                    RDTDataViewModel.CopiedChunk = null;
+                    RedDocumentTabViewModel.CopiedChunk = null;
                 }
             }
             if (ResolvedData is IRedArray)
             {
-                if (InsertChild(-1, RDTDataViewModel.CopiedChunk))
+                if (InsertChild(-1, RedDocumentTabViewModel.CopiedChunk))
                 {
-                    RDTDataViewModel.CopiedChunk = null;
+                    RedDocumentTabViewModel.CopiedChunk = null;
                 }
             }
         }
@@ -1890,7 +1894,10 @@ namespace WolvenKit.ViewModels.Shell
                     if (prop.Data.GetHashCode() == selectChild.GetHashCode())
                     {
                         prop.IsExpanded = true;
-                        Tab.SelectedChunk = prop;
+                        if (Tab is RDTDataViewModel dvm)
+                        {
+                            dvm.SelectedChunk = prop;
+                        }
                         break;
                     }
                 }
