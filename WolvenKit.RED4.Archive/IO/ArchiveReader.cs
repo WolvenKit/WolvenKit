@@ -19,8 +19,8 @@ public class ArchiveReader
             ArchiveAbsolutePath = path
         };
 
-        using var fs = new FileStream(ar.ArchiveAbsolutePath, FileMode.Open, FileAccess.ReadWrite, FileShare.ReadWrite);
-        using var mmf = MemoryMappedFile.CreateFromFile(fs, null, 0, MemoryMappedFileAccess.ReadWrite, HandleInheritability.None, false);
+        using var fs = new FileStream(ar.ArchiveAbsolutePath, FileMode.Open, FileAccess.Read, FileShare.Read);
+        using var mmf = MemoryMappedFile.CreateFromFile(fs, null, 0, MemoryMappedFileAccess.Read, HandleInheritability.None, false);
 
         // read header
         uint customDataLength;
