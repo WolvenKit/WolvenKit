@@ -243,28 +243,20 @@ namespace WolvenKit.RED4.CR2W.Archive
         /// </summary>
         /// <returns></returns>
         public override Dictionary<string, IEnumerable<FileEntry>> GetGroupedFiles() =>
-            IsModBrowserActive
-            ? ModArchives.Items
-              .SelectMany(_ => _.Files.Values)
-              .GroupBy(_ => _.Extension)
-              .ToDictionary(_ => _.Key, _ => _.Select(x => x as FileEntry))
-            : Archives.Items
-              .SelectMany(_ => _.Files.Values)
-              .GroupBy(_ => _.Extension)
-              .ToDictionary(_ => _.Key, _ => _.Select(x => x as FileEntry));
+            GetFiles()
+                .GroupBy(_ => _.Extension)
+                .ToDictionary(_ => _.Key, _ => _.Select(x => x));
 
         /// <summary>
         /// Get all files in all archives
         /// </summary>
         /// <returns></returns>
         public override IEnumerable<FileEntry> GetFiles() =>
-            IsModBrowserActive
-            ? ModArchives.Items
-                .SelectMany(_ => _.Files.Values)
-                .Cast<FileEntry>()
-            : Archives.Items
-                .SelectMany(_ => _.Files.Values)
-                .Cast<FileEntry>();
+            (IsModBrowserActive ? ModArchives.Items : Archives.Items)
+            .SelectMany(_ => _.Files.Values)
+            .GroupBy(x => x.Key)
+            .Select(x => x.OrderBy(p => p.Archive.ArchiveAbsolutePath).Last())
+            .Cast<FileEntry>();
 
         /// <summary>
         /// Checks if a file with the given hash exists in the archivemanager
@@ -278,21 +270,10 @@ namespace WolvenKit.RED4.CR2W.Archive
         /// </summary>
         /// <param name="hash"></param>
         /// <returns></returns>
-        public override Optional<IGameFile> Lookup(ulong hash)
-        {
-            if (IsModBrowserActive)
-            {
-                return Optional<IGameFile>.ToOptional(
-                    (from item in ModArchives.Items where item.Files.ContainsKey(hash) select item.Files[hash])
+        public override Optional<IGameFile> Lookup(ulong hash) =>
+            Optional<IGameFile>.ToOptional(
+                (from item in GetFiles() where item.Key == hash select item)
                 .FirstOrDefault());
-            }
-            else
-            {
-                return Optional<IGameFile>.ToOptional(
-                    (from item in Archives.Items where item.Files.ContainsKey(hash) select item.Files[hash])
-                .FirstOrDefault());
-            }
-        }
 
         /// <summary>
         /// Retrieves a directory with the given fullpath
