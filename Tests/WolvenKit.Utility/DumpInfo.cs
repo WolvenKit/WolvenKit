@@ -257,8 +257,7 @@ namespace WolvenKit.Utility
                     continue;
                 }
 
-                using var fs = new FileStream(archive.ArchiveAbsolutePath, FileMode.Open, FileAccess.Read, FileShare.Read);
-                using var mmf = MemoryMappedFile.CreateFromFile(fs, null, 0, MemoryMappedFileAccess.Read, HandleInheritability.None, false);
+                using var mmf = archive.GetMemoryMappedFile();
 
                 Parallel.ForEach(archive.Files, pair =>
                 {

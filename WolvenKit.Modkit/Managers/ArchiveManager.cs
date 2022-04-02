@@ -243,20 +243,20 @@ namespace WolvenKit.RED4.CR2W.Archive
         /// </summary>
         /// <returns></returns>
         public override Dictionary<string, IEnumerable<FileEntry>> GetGroupedFiles() =>
-            GetFiles()
+            GetItems()
+                .SelectMany(_ => _.Files.Values)
                 .GroupBy(_ => _.Extension)
-                .ToDictionary(_ => _.Key, _ => _.Select(x => x));
+                .ToDictionary(_ => _.Key, _ => _.Select(x => x as FileEntry));
 
         /// <summary>
         /// Get all files in all archives
         /// </summary>
         /// <returns></returns>
         public override IEnumerable<FileEntry> GetFiles() =>
-            (IsModBrowserActive ? ModArchives.Items : Archives.Items)
-            .SelectMany(_ => _.Files.Values)
-            .GroupBy(x => x.Key)
-            .Select(x => x.OrderBy(p => p.Archive.ArchiveAbsolutePath).Last())
-            .Cast<FileEntry>();
+            GetItems()
+                .SelectMany(_ => _.Files.Values)
+                .Cast<FileEntry>();
+
 
         /// <summary>
         /// Checks if a file with the given hash exists in the archivemanager
@@ -265,6 +265,8 @@ namespace WolvenKit.RED4.CR2W.Archive
         /// <returns></returns>
         public bool ContainsFile(ulong hash) => Lookup(hash).HasValue;
 
+        private IEnumerable<IGameArchive> GetItems() => (IsModBrowserActive ? ModArchives.Items : Archives.Items).OrderByDescending(x => x.Name);
+
         /// <summary>
         /// Look up a hash in the ArchiveManager
         /// </summary>
@@ -272,7 +274,7 @@ namespace WolvenKit.RED4.CR2W.Archive
         /// <returns></returns>
         public override Optional<IGameFile> Lookup(ulong hash) =>
             Optional<IGameFile>.ToOptional(
-                (from item in GetFiles() where item.Key == hash select item)
+                (from item in GetItems() where item.Files.ContainsKey(hash) select item.Files[hash])
                 .FirstOrDefault());
 
         /// <summary>
