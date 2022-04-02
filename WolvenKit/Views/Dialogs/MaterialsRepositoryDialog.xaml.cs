@@ -14,7 +14,7 @@ using WolvenKit.Common.Services;
 using WolvenKit.Core.Services;
 using WolvenKit.Functionality.Controllers;
 using WolvenKit.Functionality.Services;
-using WolvenKit.RED4.CR2W.Archive;
+using WolvenKit.RED4.Archive;
 using WolvenKit.Views.Shell;
 
 namespace WolvenKit.Views.Dialogs

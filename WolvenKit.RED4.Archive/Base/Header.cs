@@ -1,6 +1,6 @@
 using ProtoBuf;
 
-namespace CP77Tools.Model
+namespace WolvenKit.RED4.Archive
 {
     [ProtoContract]
     public class Header

@@ -13,8 +13,8 @@ using WolvenKit.Common.Model.Arguments;
 using WolvenKit.Common.Services;
 using WolvenKit.Modkit.Extensions;
 using WolvenKit.Modkit.RED4.Opus;
+using WolvenKit.RED4.Archive;
 using WolvenKit.RED4.CR2W;
-using WolvenKit.RED4.CR2W.Archive;
 using WolvenKit.RED4.Types;
 
 namespace WolvenKit.Modkit.RED4

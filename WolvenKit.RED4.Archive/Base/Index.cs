@@ -1,8 +1,7 @@
 using System.Collections.Generic;
 using ProtoBuf;
-using WolvenKit.RED4.CR2W.Archive;
 
-namespace CP77Tools.Model
+namespace WolvenKit.RED4.Archive
 {
 
     /// <summary>
