@@ -25,6 +25,7 @@ using Microsoft.Msagl.Layout.Layered;
 using Microsoft.Msagl.Core.Routing;
 using Microsoft.Msagl.Core.Geometry.Curves;
 using Microsoft.Msagl.Core.Layout;
+using Point = System.Windows.Point;
 
 namespace WolvenKit.ViewModels.Documents
 {
@@ -34,9 +35,9 @@ namespace WolvenKit.ViewModels.Documents
 
         protected readonly IRedType _data;
 
-        public Dictionary<int, FlowNodeViewModel> NodeLookup = new();
+        public Dictionary<int, NodeViewModel> NodeLookup = new();
 
-        public List<FlowNodeViewModel> Nodes => NodeLookup.Values.ToList();
+        public List<NodeViewModel> Nodes => NodeLookup.Values.ToList();
 
         public Dictionary<int, ConnectionViewModel> ConnectionLookup = new();
 
@@ -66,7 +67,7 @@ namespace WolvenKit.ViewModels.Documents
 
             SelectedNodes.CollectionChanged += (object sender, NotifyCollectionChangedEventArgs e) =>
             {
-                if (e.Action == NotifyCollectionChangedAction.Add && e.NewItems[0] is FlowNodeViewModel fnvm)
+                if (e.Action == NotifyCollectionChangedAction.Add && e.NewItems[0] is NodeViewModel fnvm)
                 {
                     //SelectedChunk = new ChunkViewModel(fnvm.RedNode, (RDTDataViewModel)File.TabItemViewModels[0]);
                 }
@@ -75,7 +76,7 @@ namespace WolvenKit.ViewModels.Documents
             CreateConnectionCommand = new DelegateCommand(x => { });
         }
 
-        public void RenderNodes(CArray<CHandle<graphGraphNodeDefinition>> nodes)
+        public GeometryGraph RenderNodes(CArray<CHandle<graphGraphNodeDefinition>> nodes, graphGraphNodeDefinition parent = null)
         {
             var graph = new GeometryGraph();
             var connections = new Dictionary<int, graphGraphConnectionDefinition>();
@@ -83,29 +84,8 @@ namespace WolvenKit.ViewModels.Documents
             var socketNodeLookup = new Dictionary<int, int>();
             foreach (var node in nodes)
             {
-                byte inputs = 0, outputs = 0;
-                float width = 200, height = 200;
-
                 foreach (var socket in node.Chunk.Sockets)
                 {
-                    var isInput = false;
-                    if (socket.Chunk is questSocketDefinition qsd)
-                    {
-                        isInput = qsd.Type.Value == Enums.questSocketType.Input;
-                    }
-                    else
-                    {
-                        isInput = socket.Chunk.Name.ToString().Contains("In") || socket.Chunk.Name.ToString().Contains("Source");
-                    }
-                    if (isInput)
-                    {
-                        inputs++;
-                    }
-                    else
-                    {
-                        outputs++;
-                    }
-
                     socketNodeLookup.Add(socket.Chunk.GetHashCode(), node.Chunk.GetHashCode());
                     foreach (var connection in socket.Chunk.Connections)
                     {
@@ -115,14 +95,55 @@ namespace WolvenKit.ViewModels.Documents
                         }
                     }
                 }
-                height = Math.Max(inputs, outputs) * 20 + 40;
-                var fnvm = new FlowNodeViewModel(this, node.Chunk)
+
+                NodeViewModel nvm;
+
+                // make input/output knots? or hooked-up to parent graph
+                if (node.Chunk is questPhaseNodeDefinition qpnd && qpnd.PhaseGraph != null)
                 {
-                    Location = new System.Windows.Point(-width /2, -height/2)
-                };
-                NodeLookup.Add(node.Chunk.GetHashCode(), fnvm);
+                    var subgraph = RenderNodes(qpnd.PhaseGraph.Chunk.Nodes, node.Chunk);
+                    nvm = new PhaseNodeViewModel(this, node.Chunk)
+                    {
+                        Width = subgraph.BoundingBox.Size.Width + 40,
+                        Height = subgraph.BoundingBox.Size.Height + 40,
+                        GeoGraph = subgraph
+                    };
+                }
+                else
+                {
+                    nvm = new NodeViewModel(this, node.Chunk);
+                    if (parent != null)
+                    {
+                        if (node.Chunk is questInputNodeDefinition input)
+                        {
+                            foreach (var socket in parent.Sockets)
+                            {
+                                if (socket.Chunk is questSocketDefinition socketDef && socketDef.Name == input.SocketName)
+                                {
+                                    var svm = new SocketViewModel(socketDef);
+                                    nvm.Input.Add(svm);
+                                    SocketLookup.Add(socketDef.GetHashCode(), svm);
+                                }
+                            }
+                        }
+                        if (node.Chunk is questOutputNodeDefinition output)
+                        {
+                            foreach (var socket in parent.Sockets)
+                            {
+                                if (socket.Chunk is questSocketDefinition socketDef && socketDef.Name == output.SocketName)
+                                {
+                                    var svm = new SocketViewModel(socketDef);
+                                    nvm.Output.Add(svm);
+                                    SocketLookup.Add(socketDef.GetHashCode(), svm);
+                                }
+                            }
+                        }
+                    }
+                }
+                NodeLookup.Add(node.Chunk.GetHashCode(), nvm);
+                var size = nvm.GetSize();
                 var msaglNode = new Microsoft.Msagl.Core.Layout.Node(
-                    CurveFactory.CreateRectangle(width, height, new Microsoft.Msagl.Core.Geometry.Point()))
+                    CurveFactory.CreateRectangle(size.Width, size.Height, new Microsoft.Msagl.Core.Geometry.Point()))
                 {
                     //DebugId = node.Chunk.GetHashCode(),
                     UserData = node.Chunk.GetHashCode()
@@ -130,11 +151,6 @@ namespace WolvenKit.ViewModels.Documents
                 };
                 msaglNodes.Add(node.Chunk.GetHashCode(), msaglNode);
                 graph.Nodes.Add(msaglNode);
-
-                //if (node.Chunk is questPhaseNodeDefinition qpnd && qpnd.PhaseGraph != null)
-                //{
-                //    RenderNodes(qpnd.PhaseGraph.Chunk.Nodes);
-                //}
             }
 
             foreach (var (hash, connection) in connections)
@@ -153,22 +169,35 @@ namespace WolvenKit.ViewModels.Documents
             var layout = new LayeredLayout(graph, settings);
             layout.Run();
 
+            ArrangeNodes(graph);
+
+            //Location = new Point(graph.BoundingBox.Center.X, graph.BoundingBox.Center.Y);
+
+            return graph;
+        }
+
+        private void ArrangeNodes(GeometryGraph graph, double xOffset = 0, double yOffset = 0)
+        {
             foreach (var node in graph.Nodes)
             {
-                var oldLocation = NodeLookup[(int)node.UserData].Location;
-                NodeLookup[(int)node.UserData].Location = new System.Windows.Point(oldLocation.X + node.Center.X, oldLocation.Y + node.Center.Y);
-                //((FlowNodeViewModel)node.UserData).Location = new System.Windows.Point(node.Center.X, node.Center.Y);
+                var nvm = NodeLookup[(int)node.UserData];
+                nvm.Location = new Point(
+                    node.Center.X - graph.BoundingBox.Center.X - nvm.GetSize().Width / 2 + xOffset,
+                    node.Center.Y - graph.BoundingBox.Center.Y - nvm.GetSize().Height / 2 + yOffset);
+                if (nvm is PhaseNodeViewModel pnvm)
+                {
+                    ArrangeNodes(pnvm.GeoGraph, node.Center.X - graph.BoundingBox.Center.X + xOffset, node.Center.Y - graph.BoundingBox.Center.Y + yOffset);
+                }
             }
-            Location = new System.Windows.Point(graph.BoundingBox.Center.X, graph.BoundingBox.Center.Y);
         }
 
         public override ERedDocumentItemType DocumentItemType => ERedDocumentItemType.MainFile;
 
         public string GraphText { get; set; } = "";
 
-        public System.Windows.Point Location { get; set; }
+        public Point Location { get; set; }
 
-        public ObservableCollection<FlowNodeViewModel> SelectedNodes { get; set; } = new();
+        public ObservableCollection<NodeViewModel> SelectedNodes { get; set; } = new();
 
         public ChunkViewModel SelectedChunk { get; set; }
 
@@ -227,28 +256,25 @@ namespace WolvenKit.ViewModels.Documents
         //    {
         //        SocketViewModel con when con == Source => $"Can't connect to self",
         //        SocketViewModel con => $"{(canConnect ? "Connect" : "Can't connect")} to {con.Title ?? "pin"}",
-        //        FlowNodeViewModel flow => $"{(canConnect ? "Connect" : "Can't connect")} to {flow.Title ?? "node"}",
+        //        NodeViewModel flow => $"{(canConnect ? "Connect" : "Can't connect")} to {flow.Title ?? "node"}",
         //        _ => $"Drop on connector"
         //    };
         //}
     }
 
-    public abstract class NodeViewModel : ObservableObject
+    public class NodeViewModel : ObservableObject
     {
         [Reactive] public RDTGraphViewModel Graph { get; set; }
 
-        private System.Windows.Point _location;
-        public System.Windows.Point Location
+        private Point _location;
+        public Point Location
         {
             get => _location;
             set => SetProperty(ref _location, value);
         }
 
-    }
-
-    public class FlowNodeViewModel : NodeViewModel
-    {
         public string Header { get; set; }
+        public Dictionary<string, string> Details { get; set; } = new();
         public string Footer { get; set; }
 
         public ObservableCollection<SocketViewModel> Input { get; } = new();
@@ -256,7 +282,7 @@ namespace WolvenKit.ViewModels.Documents
 
         public graphGraphNodeDefinition RedNode { get; set; }
 
-        public FlowNodeViewModel()
+        public NodeViewModel()
         {
             //Input.WhenAdded(c => c.Node = this)
             //     .WhenRemoved(c => c.Disconnect());
@@ -300,15 +326,62 @@ namespace WolvenKit.ViewModels.Documents
             };
         }
 
+        public virtual Size GetSize()
+        {
+            var size = new Size(200, 0);
+            if (Header != null)
+            {
+                size.Height += 23;
+            }
+
+            size.Height += Details.Count * 15;
+
+            size.Height += Math.Max(Input.Count, Output.Count) * 19;
+
+            if (Footer != null)
+            {
+                size.Height += 23;
+            }
+            return size;
+        }
+
         private void SetupNode(graphGraphNodeDefinition node)
         {
             if (node is questInputNodeDefinition qind)
             {
                 Header = qind.SocketName;
             }
-            else if (node is questCheckpointNodeDefinition qcnd)
+            else if (node is questOutputNodeDefinition qond)
             {
-                Header = qcnd.DebugString;
+                Header = qond.SocketName;
+            }
+            else if (node is questEventManagerNodeDefinition qemnd)
+            {
+                Header = qemnd.ManagerName;
+            }
+            else if (node is questCheckpointNodeDefinition qcpnd)
+            {
+                Header = qcpnd.DebugString;
+            }
+            else if (node is questPauseConditionNodeDefinition qpcnd)
+            {
+                Header = "Pause Condition";
+                if (qpcnd.Condition.Chunk is questTriggerCondition qtc)
+                {
+                    Details["Trigger Area"] = qtc.TriggerAreaRef;
+                    Details["Type"] = qtc.Type.ToEnumString();
+                }
+            }
+            else if (node is questConditionNodeDefinition qcnd)
+            {
+                Header = "Condition";
+                if (qcnd.Condition.Chunk is questFactsDBCondition qfc)
+                {
+                    if (qfc.Type.Chunk is questVarComparison_ConditionType qvc)
+                    {
+                        Details[qvc.FactName] = qvc.ComparisonType.ToEnumString() + " " + qvc.Value.ToString();
+                    }
+                }
             }
             else
             {
@@ -316,9 +389,13 @@ namespace WolvenKit.ViewModels.Documents
             }
 
             Footer = node.GetType().Name;
+            if (node is questNodeDefinition qnd)
+            {
+                Footer += $" [{qnd.Id}]";
+            }
         }
 
-        public FlowNodeViewModel(RDTGraphViewModel graph, graphGraphNodeDefinition node) : this()
+        public NodeViewModel(RDTGraphViewModel graph, graphGraphNodeDefinition node) : this()
         {
             Graph = graph;
             RedNode = node;
@@ -327,11 +404,9 @@ namespace WolvenKit.ViewModels.Documents
 
             foreach (var socket in node.Sockets)
             {
-                //if (!Graph.SocketLookup.ContainsKey(socket.Chunk.GetHashCode()))
-                //{
                 var svm = new SocketViewModel(socket.Chunk);
 
-                var isInput = false;
+                bool isInput;
                 if (socket.Chunk is questSocketDefinition qsd)
                 {
                     isInput = qsd.Type.Value == Enums.questSocketType.Input;
@@ -349,7 +424,6 @@ namespace WolvenKit.ViewModels.Documents
                     Output.Add(svm);
                 }
                 Graph.SocketLookup.Add(socket.Chunk.GetHashCode(), svm);
-                //}
             }
         }
 
@@ -357,6 +431,31 @@ namespace WolvenKit.ViewModels.Documents
         {
             Input.Clear();
             Output.Clear();
+        }
+    }
+
+    public class PhaseNodeViewModel : NodeViewModel
+    {
+        public GeometryGraph GeoGraph { get; set; }
+
+        public double Width { get; set; }
+
+        public double Height { get; set; }
+
+        public PhaseNodeViewModel(RDTGraphViewModel graph, graphGraphNodeDefinition node) : base()
+        {
+            Graph = graph;
+            RedNode = node;
+
+            if (node is questNodeDefinition qnd)
+            {
+                Header = $"Phase [{qnd.Id}]";
+            }
+        }
+
+        public override Size GetSize()
+        {
+            return new Size(Width, Height);
         }
     }
 
@@ -379,8 +478,8 @@ namespace WolvenKit.ViewModels.Documents
 
         [Reactive] public bool IsConnected { get; set; }
 
-        private System.Windows.Point _anchor;
-        public System.Windows.Point Anchor
+        private Point _anchor;
+        public Point Anchor
         {
             get => _anchor;
             set => SetProperty(ref _anchor, value);
@@ -456,7 +555,7 @@ namespace WolvenKit.ViewModels.Documents
 
         protected virtual void OnNodeChanged()
         {
-            if (Node is FlowNodeViewModel flow)
+            if (Node is NodeViewModel flow)
             {
                 Flow = flow.Input.Contains(this) ? ConnectorFlow.Input : ConnectorFlow.Output;
             }
@@ -493,7 +592,7 @@ namespace WolvenKit.ViewModels.Documents
             Output.Connections.Add(this);
         }
 
-        public void Split(System.Windows.Point point) { }
+        public void Split(Point point) { }
         //    => Graph.Schema.SplitConnection(this, point);
 
         public void Remove() { }

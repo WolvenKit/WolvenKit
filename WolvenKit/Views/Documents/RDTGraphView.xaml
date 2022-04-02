@@ -15,6 +15,8 @@
     d:DesignHeight="450"
     d:DesignWidth="800"
     x:TypeArguments="documents:RDTGraphViewModel"
+    BorderBrush="{StaticResource BorderAlt}"
+    BorderThickness="1,0,1,1"
     mc:Ignorable="d">
 
 
@@ -27,8 +29,13 @@
             <Style x:Key="ConnectionStyle" TargetType="{x:Type nodify:BaseConnection}">
                 <Setter Property="Cursor" Value="Hand" />
                 <Setter Property="ToolTip" Value="Double click to split" />
-                <Setter Property="Stroke" Value="#7FFFFFFF" />
-                <Setter Property="StrokeThickness" Value="1" />
+                <Setter Property="Stroke" Value="#33FFFFFF" />
+                <Setter Property="StrokeThickness" Value="2" />
+                <Style.Triggers>
+                    <Trigger Property="IsMouseOver" Value="True">
+                        <Setter Property="Stroke" Value="{StaticResource WolvenKitYellow}" />
+                    </Trigger>
+                </Style.Triggers>
             </Style>
             <DataTemplate x:Key="ConnectionTemplate">
                 <nodify:Connection
@@ -53,7 +60,7 @@
             Grid.Column="0"
             Background="{StaticResource ContentBackground}"
             Connections="{Binding Connections}"
-            DisplayConnectionsOnTop="False"
+            DisplayConnectionsOnTop="True"
             EnableRealtimeSelection="True"
             ItemsSource="{Binding Nodes}"
             PendingConnection="{Binding PendingConnection}"
@@ -124,19 +131,72 @@
                     <Setter Property="Margin" Value="0" />
                     <Setter Property="BorderBrush" Value="{StaticResource WolvenKitCyan}" />
                 </Style>
+                <DataTemplate x:Key="HeaderTemplate">
+                    <TextBlock Margin="0" Text="{Binding}" />
+                </DataTemplate>
+                <DataTemplate x:Key="DetailedHeaderTemplate">
+                    <StackPanel Orientation="Vertical">
+                        <TextBlock Margin="0" Text="{Binding Header}" />
+                        <ItemsControl ItemsSource="{Binding Details}">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock
+                                            Grid.Column="0"
+                                            MaxWidth="98"
+                                            Margin="0,0,4,0"
+                                            Foreground="#999999"
+                                            Text="{Binding Key}"
+                                            TextTrimming="CharacterEllipsis"
+                                            ToolTip="{Binding Key}" />
+                                        <TextBlock
+                                            Grid.Column="2"
+                                            MaxWidth="98"
+                                            HorizontalAlignment="Right"
+                                            Text="{Binding Value}"
+                                            TextAlignment="Right"
+                                            TextTrimming="CharacterEllipsis"
+                                            ToolTip="{Binding Value}" />
+                                    </StackPanel>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </StackPanel>
+                </DataTemplate>
                 <DataTemplate x:Key="FooterTemplate">
                     <TextBlock
-                        Margin="5,3"
+                        Margin="5,4"
                         Foreground="{StaticResource WolvenKitTan}"
                         Text="{Binding}" />
                 </DataTemplate>
-                <DataTemplate DataType="{x:Type documents:FlowNodeViewModel}">
+                <DataTemplate DataType="{x:Type documents:NodeViewModel}">
                     <nodify:Node
                         Footer="{Binding Footer}"
                         FooterTemplate="{StaticResource FooterTemplate}"
-                        Header="{Binding Header}"
+                        Header="{Binding}"
+                        HeaderTemplate="{StaticResource DetailedHeaderTemplate}"
                         Input="{Binding Input}"
-                        Output="{Binding Output}" />
+                        Output="{Binding Output}">
+                        <nodify:Node.Style>
+                            <Style BasedOn="{StaticResource {x:Type nodify:Node}}" TargetType="{x:Type nodify:Node}">
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding Details.Count}" Value="0">
+                                        <Setter Property="Header" Value="{Binding Header}" />
+                                        <Setter Property="HeaderTemplate" Value="{StaticResource HeaderTemplate}" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </nodify:Node.Style>
+                    </nodify:Node>
+                </DataTemplate>
+                <DataTemplate DataType="{x:Type documents:PhaseNodeViewModel}">
+                    <nodify:GroupingNode
+                        Width="{Binding Width}"
+                        Height="{Binding Height}"
+                        Background="#33282828"
+                        Header="{Binding Header}"
+                        HeaderBrush="#33282828"
+                        HeaderTemplate="{StaticResource HeaderTemplate}" />
                 </DataTemplate>
                 <!--Style BasedOn="{StaticResource {x:Type nodify:Connection}}" TargetType="{x:Type nodify:Connection}">
                     <Setter Property="Direction" Value="{Binding Output.Flow, Converter={StaticResource FlowToDirectionConverter}}" />
