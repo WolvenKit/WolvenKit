@@ -20,6 +20,11 @@ using WolvenKit.Functionality.Controllers;
 using WolvenKit.RED4.Archive;
 using WolvenKit.RED4.Types;
 using WolvenKit.ViewModels.Shell;
+using Microsoft.Msagl.Core;
+using Microsoft.Msagl.Layout.Layered;
+using Microsoft.Msagl.Core.Routing;
+using Microsoft.Msagl.Core.Geometry.Curves;
+using Microsoft.Msagl.Core.Layout;
 
 namespace WolvenKit.ViewModels.Documents
 {
@@ -72,12 +77,36 @@ namespace WolvenKit.ViewModels.Documents
 
         public void RenderNodes(CArray<CHandle<graphGraphNodeDefinition>> nodes)
         {
+            var graph = new GeometryGraph();
             var connections = new Dictionary<int, graphGraphConnectionDefinition>();
+            var msaglNodes = new Dictionary<int, Microsoft.Msagl.Core.Layout.Node>();
+            var socketNodeLookup = new Dictionary<int, int>();
             foreach (var node in nodes)
             {
-                NodeLookup.Add(node.Chunk.GetHashCode(), new FlowNodeViewModel(this, node.Chunk));
+                byte inputs = 0, outputs = 0;
+                float width = 200, height = 200;
+
                 foreach (var socket in node.Chunk.Sockets)
                 {
+                    var isInput = false;
+                    if (socket.Chunk is questSocketDefinition qsd)
+                    {
+                        isInput = qsd.Type.Value == Enums.questSocketType.Input;
+                    }
+                    else
+                    {
+                        isInput = socket.Chunk.Name.ToString().Contains("In") || socket.Chunk.Name.ToString().Contains("Source");
+                    }
+                    if (isInput)
+                    {
+                        inputs++;
+                    }
+                    else
+                    {
+                        outputs++;
+                    }
+
+                    socketNodeLookup.Add(socket.Chunk.GetHashCode(), node.Chunk.GetHashCode());
                     foreach (var connection in socket.Chunk.Connections)
                     {
                         if (!connections.ContainsKey(connection.Chunk.GetHashCode()))
@@ -86,6 +115,22 @@ namespace WolvenKit.ViewModels.Documents
                         }
                     }
                 }
+                height = Math.Max(inputs, outputs) * 20 + 40;
+                var fnvm = new FlowNodeViewModel(this, node.Chunk)
+                {
+                    Location = new System.Windows.Point(-width /2, -height/2)
+                };
+                NodeLookup.Add(node.Chunk.GetHashCode(), fnvm);
+                var msaglNode = new Microsoft.Msagl.Core.Layout.Node(
+                    CurveFactory.CreateRectangle(width, height, new Microsoft.Msagl.Core.Geometry.Point()))
+                {
+                    //DebugId = node.Chunk.GetHashCode(),
+                    UserData = node.Chunk.GetHashCode()
+                    //UserData = NodeLookup[node.Chunk.GetHashCode()]
+                };
+                msaglNodes.Add(node.Chunk.GetHashCode(), msaglNode);
+                graph.Nodes.Add(msaglNode);
+
                 //if (node.Chunk is questPhaseNodeDefinition qpnd && qpnd.PhaseGraph != null)
                 //{
                 //    RenderNodes(qpnd.PhaseGraph.Chunk.Nodes);
@@ -95,12 +140,33 @@ namespace WolvenKit.ViewModels.Documents
             foreach (var (hash, connection) in connections)
             {
                 ConnectionLookup.Add(hash, new ConnectionViewModel(this, connection));
+                var source = socketNodeLookup[connection.Source.Chunk.GetHashCode()];
+                var dest = socketNodeLookup[connection.Destination.Chunk.GetHashCode()];
+                graph.Edges.Add(new Edge(msaglNodes[source], msaglNodes[dest]));
             }
+
+            var settings = new SugiyamaLayoutSettings
+            {
+                Transformation = PlaneTransformation.Rotation(Math.PI / 2),
+                EdgeRoutingSettings = { EdgeRoutingMode = EdgeRoutingMode.Spline }
+            };
+            var layout = new LayeredLayout(graph, settings);
+            layout.Run();
+
+            foreach (var node in graph.Nodes)
+            {
+                var oldLocation = NodeLookup[(int)node.UserData].Location;
+                NodeLookup[(int)node.UserData].Location = new System.Windows.Point(oldLocation.X + node.Center.X, oldLocation.Y + node.Center.Y);
+                //((FlowNodeViewModel)node.UserData).Location = new System.Windows.Point(node.Center.X, node.Center.Y);
+            }
+            Location = new System.Windows.Point(graph.BoundingBox.Center.X, graph.BoundingBox.Center.Y);
         }
 
         public override ERedDocumentItemType DocumentItemType => ERedDocumentItemType.MainFile;
 
         public string GraphText { get; set; } = "";
+
+        public System.Windows.Point Location { get; set; }
 
         public ObservableCollection<FlowNodeViewModel> SelectedNodes { get; set; } = new();
 
@@ -182,7 +248,8 @@ namespace WolvenKit.ViewModels.Documents
 
     public class FlowNodeViewModel : NodeViewModel
     {
-        public string Title { get; set; }
+        public string Header { get; set; }
+        public string Footer { get; set; }
 
         public ObservableCollection<SocketViewModel> Input { get; } = new();
         public ObservableCollection<SocketViewModel> Output { get; } = new();
@@ -233,19 +300,47 @@ namespace WolvenKit.ViewModels.Documents
             };
         }
 
+        private void SetupNode(graphGraphNodeDefinition node)
+        {
+            if (node is questInputNodeDefinition qind)
+            {
+                Header = qind.SocketName;
+            }
+            else if (node is questCheckpointNodeDefinition qcnd)
+            {
+                Header = qcnd.DebugString;
+            }
+            else
+            {
+                Header = node.GetType().Name.Replace("quest", "").Replace("NodeDefinition", "");
+            }
+
+            Footer = node.GetType().Name;
+        }
+
         public FlowNodeViewModel(RDTGraphViewModel graph, graphGraphNodeDefinition node) : this()
         {
             Graph = graph;
             RedNode = node;
 
-            Title = node.GetType().Name;
+            SetupNode(node);
 
             foreach (var socket in node.Sockets)
             {
                 //if (!Graph.SocketLookup.ContainsKey(socket.Chunk.GetHashCode()))
                 //{
                 var svm = new SocketViewModel(socket.Chunk);
-                if (socket.Chunk.Name.ToString().Contains("In") || socket.Chunk.Name.ToString().Contains("Source"))
+
+                var isInput = false;
+                if (socket.Chunk is questSocketDefinition qsd)
+                {
+                    isInput = qsd.Type.Value == Enums.questSocketType.Input;
+                }
+                else
+                {
+                    isInput = socket.Chunk.Name.ToString().Contains("In") || socket.Chunk.Name.ToString().Contains("Source");
+                }
+                if (isInput)
                 {
                     Input.Add(svm);
                 }

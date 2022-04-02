@@ -27,6 +27,8 @@
             <Style x:Key="ConnectionStyle" TargetType="{x:Type nodify:BaseConnection}">
                 <Setter Property="Cursor" Value="Hand" />
                 <Setter Property="ToolTip" Value="Double click to split" />
+                <Setter Property="Stroke" Value="#7FFFFFFF" />
+                <Setter Property="StrokeThickness" Value="1" />
             </Style>
             <DataTemplate x:Key="ConnectionTemplate">
                 <nodify:Connection
@@ -49,13 +51,14 @@
         <nodify:NodifyEditor
             x:Name="Editor"
             Grid.Column="0"
-            Background="{StaticResource ContentBackgroundAlt}"
+            Background="{StaticResource ContentBackground}"
             Connections="{Binding Connections}"
             DisplayConnectionsOnTop="False"
             EnableRealtimeSelection="True"
             ItemsSource="{Binding Nodes}"
             PendingConnection="{Binding PendingConnection}"
-            SelectedItems="{Binding SelectedNodes}">
+            SelectedItems="{Binding SelectedNodes}"
+            Offset="{Binding Location}">
             <nodify:NodifyEditor.Style>
                 <Style BasedOn="{StaticResource {x:Type nodify:NodifyEditor}}" TargetType="{x:Type nodify:NodifyEditor}">
                     <Setter Property="ConnectionTemplate" Value="{StaticResource ConnectionTemplate}" />
@@ -110,16 +113,28 @@
                     <Setter Property="Header" Value="{Binding Title}" />
                     <Setter Property="Anchor" Value="{Binding Anchor, Mode=OneWayToSource}" />
                     <Setter Property="IsConnected" Value="{Binding IsConnected}" />
+                    <Setter Property="Margin" Value="0" />
+                    <Setter Property="BorderBrush" Value="{StaticResource WolvenKitCyan}" />
                 </Style>
                 <Style BasedOn="{StaticResource {x:Type nodify:NodeOutput}}" TargetType="{x:Type nodify:NodeOutput}">
                     <Setter Property="Header" Value="{Binding Title}" />
                     <Setter Property="Anchor" Value="{Binding Anchor, Mode=OneWayToSource}" />
                     <Setter Property="IsConnected" Value="{Binding IsConnected}" />
                     <Setter Property="HorizontalAlignment" Value="Right" />
+                    <Setter Property="Margin" Value="0" />
+                    <Setter Property="BorderBrush" Value="{StaticResource WolvenKitCyan}" />
                 </Style>
+                <DataTemplate x:Key="FooterTemplate">
+                    <TextBlock
+                        Margin="5,3"
+                        Foreground="{StaticResource WolvenKitTan}"
+                        Text="{Binding}" />
+                </DataTemplate>
                 <DataTemplate DataType="{x:Type documents:FlowNodeViewModel}">
                     <nodify:Node
-                        Header="{Binding Title}"
+                        Footer="{Binding Footer}"
+                        FooterTemplate="{StaticResource FooterTemplate}"
+                        Header="{Binding Header}"
                         Input="{Binding Input}"
                         Output="{Binding Output}" />
                 </DataTemplate>
@@ -136,6 +151,12 @@
             <nodify:NodifyEditor.ItemContainerStyle>
                 <Style BasedOn="{StaticResource {x:Type nodify:ItemContainer}}" TargetType="{x:Type nodify:ItemContainer}">
                     <Setter Property="Location" Value="{Binding Location}" />
+                    <Setter Property="BorderBrush">
+                        <Setter.Value>
+                            <SolidColorBrush Opacity="0.5" Color="Black" />
+                        </Setter.Value>
+                    </Setter>
+                    <Setter Property="SelectedBrush" Value="{StaticResource WolvenKitCyan}" />
                 </Style>
             </nodify:NodifyEditor.ItemContainerStyle>
         </nodify:NodifyEditor>
