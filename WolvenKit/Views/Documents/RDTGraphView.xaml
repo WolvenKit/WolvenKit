@@ -35,6 +35,20 @@
                     <Trigger Property="IsMouseOver" Value="True">
                         <Setter Property="Stroke" Value="{StaticResource WolvenKitYellow}" />
                     </Trigger>
+                    <DataTrigger Binding="{Binding Input.Node.IsSelected, UpdateSourceTrigger=PropertyChanged}" Value="True">
+                        <Setter Property="Stroke" Value="{StaticResource WolvenKitCyan}" />
+                        <!--Setter Property="Stroke">
+                            <Setter.Value>
+                                <LinearGradientBrush StartPoint="0,0.5" EndPoint="1,0.5">
+                                    <GradientStop Offset="0.0" Color="{StaticResource WolvenKitCyanColor}" />
+                                    <GradientStop Offset="1.0" Color="#33FFFFFF" />
+                                </LinearGradientBrush>
+                            </Setter.Value>
+                        </Setter-->
+                    </DataTrigger>
+                    <DataTrigger Binding="{Binding Output.Node.IsSelected, UpdateSourceTrigger=PropertyChanged}" Value="True">
+                        <Setter Property="Stroke" Value="{StaticResource WolvenKitCyan}" />
+                    </DataTrigger>
                 </Style.Triggers>
             </Style>
             <DataTemplate x:Key="ConnectionTemplate">
@@ -42,10 +56,10 @@
                     Direction="{Binding Output.Flow, Converter={StaticResource FlowToDirectionConverter}}"
                     OffsetMode="Edge"
                     Source="{Binding Output.Anchor}"
-                    SourceOffset="10,0"
+                    SourceOffset="12,0"
                     Style="{StaticResource ConnectionStyle}"
                     Target="{Binding Input.Anchor}"
-                    TargetOffset="10,0" />
+                    TargetOffset="12,0" />
             </DataTemplate>
         </Grid.Resources>
 
@@ -140,18 +154,14 @@
                         <ItemsControl ItemsSource="{Binding Details}">
                             <ItemsControl.ItemTemplate>
                                 <DataTemplate>
-                                    <StackPanel Orientation="Horizontal">
+                                    <StackPanel MaxWidth="200" Orientation="Horizontal">
                                         <TextBlock
-                                            Grid.Column="0"
-                                            MaxWidth="98"
                                             Margin="0,0,4,0"
                                             Foreground="#999999"
                                             Text="{Binding Key}"
                                             TextTrimming="CharacterEllipsis"
                                             ToolTip="{Binding Key}" />
                                         <TextBlock
-                                            Grid.Column="2"
-                                            MaxWidth="98"
                                             HorizontalAlignment="Right"
                                             Text="{Binding Value}"
                                             TextAlignment="Right"
@@ -211,6 +221,7 @@
             <nodify:NodifyEditor.ItemContainerStyle>
                 <Style BasedOn="{StaticResource {x:Type nodify:ItemContainer}}" TargetType="{x:Type nodify:ItemContainer}">
                     <Setter Property="Location" Value="{Binding Location}" />
+                    <Setter Property="IsSelected" Value="{Binding IsSelected}" />
                     <Setter Property="BorderBrush">
                         <Setter.Value>
                             <SolidColorBrush Opacity="0.5" Color="Black" />

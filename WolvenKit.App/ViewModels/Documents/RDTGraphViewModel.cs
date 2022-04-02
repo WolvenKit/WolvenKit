@@ -273,6 +273,13 @@ namespace WolvenKit.ViewModels.Documents
             set => SetProperty(ref _location, value);
         }
 
+        private bool _isSelected;
+        public bool IsSelected
+        {
+            get => _isSelected;
+            set => SetProperty(ref _isSelected, value);
+        }
+
         public string Header { get; set; }
         public Dictionary<string, string> Details { get; set; } = new();
         public string Footer { get; set; }
@@ -370,6 +377,15 @@ namespace WolvenKit.ViewModels.Documents
                 {
                     Details["Trigger Area"] = qtc.TriggerAreaRef;
                     Details["Type"] = qtc.Type.ToEnumString();
+                }
+                else if (qpcnd.Condition.Chunk is questObjectCondition qoc)
+                {
+                    if (qoc.Type.Chunk is questDevice_ConditionType qdct)
+                    {
+                        Details["Object"] = qdct.ObjectRef;
+                        Details["Class"] = qdct.DeviceControllerClass;
+                        Details["Function"] = qdct.DeviceConditionFunction;
+                    }
                 }
             }
             else if (node is questConditionNodeDefinition qcnd)
