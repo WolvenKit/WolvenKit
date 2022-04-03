@@ -2,7 +2,6 @@ using System;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
-using System.Reactive.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
 using System.Windows.Input;
@@ -14,6 +13,7 @@ using WolvenKit.Common;
 using WolvenKit.Common.Model;
 using WolvenKit.Functionality.Services;
 using WolvenKit.ProjectManagement.Project;
+using WolvenKit.RED4.Archive;
 using WolvenKit.RED4.CR2W;
 
 namespace WolvenKit.ViewModels.Dialogs
@@ -55,7 +55,7 @@ namespace WolvenKit.ViewModels.Dialogs
                         {
                             newdef.Categories[2].Files.Add(new AddFileModel()
                             {
-                                Name = CommonFunctions.GetResourceClassesFromExtension(ext).FirstOrDefault(),
+                                Name = CommonFunctions.GetResourceClassesFromExtension(ext),
                                 Description = $"A .{ext} File",
                                 Extension = ext.ToString(),
                                 Type = EWolvenKitFile.Cr2w,
