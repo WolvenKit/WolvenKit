@@ -327,7 +327,7 @@ namespace WolvenKit.RED4.Archive.IO
                 buffer.SetBytes(newData);
             }
 
-            if (buffer.Data is WorldTransformsBuffer wsb)
+            if (buffer.Data is worldSharedDataBuffer wsb)
             {
                 using var ms = new MemoryStream();
                 using var transformWriter = new WorldTransformsWriter(ms);
@@ -338,6 +338,7 @@ namespace WolvenKit.RED4.Archive.IO
 
                 buffer.SetBytes(newData);
             }
+
         }
 
         private CR2WBufferInfo WriteBuffer(BinaryWriter writer, RedBuffer buffer)
