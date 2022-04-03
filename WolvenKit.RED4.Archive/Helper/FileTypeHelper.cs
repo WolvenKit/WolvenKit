@@ -156,18 +156,34 @@ namespace WolvenKit.RED4.Archive
 
         static FileTypeHelper()
         {
+            // unused resources:
+            // bink
+            // entdismembermentDebris
+            // gamegraphCGraphResource
+            // gamePrereqsResource
+            // graphGraphResource
+            // LibTreeCTreeResource
+            // locVoResource
+            // minimapEncodedShapes
+            // resResourceSnapshot
+            // TweakDBResource
+            // worldHeatmapResource
+            // worldTrafficCollisionDebugResource
+            // XmlResource
+
             FileTypes.Add(new FileType(ERedExtension.acousticdata, "Acoustic Data Resource", typeof(worldAcousticDataResource)));
             FileTypes.Add(new FileType(ERedExtension.actionanimdb, "Action anim database", typeof(animActionAnimDatabase)));
             FileTypes.Add(new FileType(ERedExtension.aiarch, "AI Archetype template", typeof(AIArchetype)));
             FileTypes.Add(new FileType(ERedExtension.animgraph, "Animation graph", typeof(animAnimGraph)));
             FileTypes.Add(new FileType(ERedExtension.anims, "Animation Set", typeof(animAnimSet)));
-            FileTypes.Add(new FileType(ERedExtension.app, "", typeof(appearanceAppearanceResource)));
+            FileTypes.Add(new FileType(ERedExtension.app, "Appearance Resource", typeof(appearanceAppearanceResource)));
             FileTypes.Add(new FileType(ERedExtension.archetypes, "AI Archetypes Set template", typeof(AIArchetypeSet)));
             FileTypes.Add(new FileType(ERedExtension.areas, "Areas", typeof(gameAreaResource)));
             FileTypes.Add(new FileType(ERedExtension.audiovehcurveset, "Audio Vehicle Curve Set", typeof(vehicleAudioVehicleCurveSet)));
             FileTypes.Add(new FileType(ERedExtension.audio_metadata, "Cooked Audio Metadata", typeof(audioCookedMetadataResource)));
             FileTypes.Add(new FileType(ERedExtension.behavior, "AI Behavior Tree", typeof(AIbehaviorResource)));
             FileTypes.Add(new FileType(ERedExtension.bikecurveset, "Bike Curve Set", typeof(vehicleBikeCurveSet)));
+            // FileTypes.Add(new FileType(ERedExtension.blockout, "World blockout", typeof(worldBlockoutResource))); // not used yet
             FileTypes.Add(new FileType(ERedExtension.camcurveset, "Camera Curve Set", typeof(gameCameraCurveSet)));
             FileTypes.Add(new FileType(ERedExtension.ccstate, "Character Customization State", typeof(gameuiCharacterCustomizationPreset)));
             FileTypes.Add(new FileType(ERedExtension.cfoliage, "Foliage Compiled Resource", typeof(worldFoliageCompiledResource)));
@@ -180,36 +196,39 @@ namespace WolvenKit.RED4.Archive
             FileTypes.Add(new FileType(ERedExtension.cookedprefab, "Cooked Prefab Data", typeof(worldCookedPrefabData)));
             FileTypes.Add(new FileType(ERedExtension.cooked_mlsetup, "Cooked Multilayer Setup", typeof(CookedMultilayer_Setup)));
             FileTypes.Add(new FileType(ERedExtension.credits, "Credits Resource", typeof(inkCreditsResource)));
-            FileTypes.Add(new FileType(ERedExtension.csv, "", typeof(C2dArray)));
-            FileTypes.Add(new FileType(ERedExtension.cubemap, "", typeof(CCubeTexture)));
+            FileTypes.Add(new FileType(ERedExtension.csv, "2D Array", typeof(C2dArray)));
+            FileTypes.Add(new FileType(ERedExtension.cubemap, "Cubemap", typeof(CCubeTexture))); // same as xcube
             FileTypes.Add(new FileType(ERedExtension.curveresset, "Curve Resource Set template", typeof(CurveResourceSet)));
             FileTypes.Add(new FileType(ERedExtension.curveset, "Curve Set", typeof(CurveSet)));
             FileTypes.Add(new FileType(ERedExtension.devices, "Devices", typeof(gameDeviceResource)));
-            FileTypes.Add(new FileType(ERedExtension.dlc_manifest, "DLC Manifest Resource", typeof(resDlcManifest)));
-            FileTypes.Add(new FileType(ERedExtension.dtex, "", typeof(DynamicTexture)));
+            // FileTypes.Add(new FileType(ERedExtension.dlc_manifest, "DLC Manifest Resource", typeof(resDlcManifest))); // not used yet
+            FileTypes.Add(new FileType(ERedExtension.dtex, "2D Dynamic Texture", typeof(DynamicTexture)));
             FileTypes.Add(new FileType(ERedExtension.effect, "", typeof(worldEffect)));
-            FileTypes.Add(new FileType(ERedExtension.ent, "", typeof(entEntityTemplate)));
-            FileTypes.Add(new FileType(ERedExtension.env, "", typeof(worldEnvironmentDefinition)));
+            FileTypes.Add(new FileType(ERedExtension.ent, "Entity Template", typeof(entEntityTemplate)));
+            FileTypes.Add(new FileType(ERedExtension.env, "Environment Definition", typeof(worldEnvironmentDefinition)));
             FileTypes.Add(new FileType(ERedExtension.envparam, "Area Environment Parameters", typeof(worldEnvironmentAreaParameters)));
             FileTypes.Add(new FileType(ERedExtension.envprobe, "Reflection Probe Data Resource", typeof(CReflectionProbeDataResource)));
-            FileTypes.Add(new FileType(ERedExtension.es, "", typeof(gameEffectSet)));
+            FileTypes.Add(new FileType(ERedExtension.es, "Game effect set", typeof(gameEffectSet)));
             FileTypes.Add(new FileType(ERedExtension.facialcustom, "Facial customization set", typeof(animFacialCustomizationSet)));
             FileTypes.Add(new FileType(ERedExtension.facialsetup, "Facial setup", typeof(animFacialSetup)));
             FileTypes.Add(new FileType(ERedExtension.fb2tl, "FoliageBrush to Terrainlayer mapping", typeof(worldAutoFoliageMapping)));
-            FileTypes.Add(new FileType(ERedExtension.fnt, "", typeof(rendFont)));
+            FileTypes.Add(new FileType(ERedExtension.fnt, "Font", typeof(rendFont)));
             FileTypes.Add(new FileType(ERedExtension.folbrush, "Foliage Brush", typeof(worldFoliageBrush)));
             FileTypes.Add(new FileType(ERedExtension.foldest, "Foliage destruction resource", typeof(worldFoliageDestructionResource)));
-            FileTypes.Add(new FileType(ERedExtension.fp, "", typeof(CFoliageProfile)));
+            FileTypes.Add(new FileType(ERedExtension.fp, "Foliage profile", typeof(CFoliageProfile)));
             FileTypes.Add(new FileType(ERedExtension.game, "", typeof(gsmGameDefinition)));
             FileTypes.Add(new FileType(ERedExtension.gamedef, "Game Definition", typeof(gsmGameDefinition)));
             FileTypes.Add(new FileType(ERedExtension.garmentlayerparams, "Garment parameters", typeof(garmentGarmentLayerParams)));
             FileTypes.Add(new FileType(ERedExtension.genericanimdb, "Generic anim database", typeof(animGenericAnimDatabase)));
             FileTypes.Add(new FileType(ERedExtension.geometry_cache, "A collection of all collision mesh geometry", typeof(physicsGeometryCache)));
+            // FileTypes.Add(new FileType(ERedExtension.geometry_cache_artifact, "An intermediate artifact for geometry cache generator", typeof(physicsGeometryCacheArtifact))); // not used yet
             FileTypes.Add(new FileType(ERedExtension.gidata, "GI Data Resource", typeof(CGIDataResource)));
             FileTypes.Add(new FileType(ERedExtension.gradient, "Gradient resource", typeof(CGradient)));
+            // FileTypes.Add(new FileType(ERedExtension.grph, "Base resource class for graphs", ));  // not used yet
+            // FileTypes.Add(new FileType(ERedExtension.graph, "Base resource class for graphs", ));  // not used yet
             FileTypes.Add(new FileType(ERedExtension.hitrepresentation, "Hit Representation data", typeof(gameHitRepresentationResource)));
-            FileTypes.Add(new FileType(ERedExtension.hp, "", typeof(CHairProfile)));
-            FileTypes.Add(new FileType(ERedExtension.ies, "", typeof(CIESDataResource)));
+            FileTypes.Add(new FileType(ERedExtension.hp, "Hair profile", typeof(CHairProfile)));
+            FileTypes.Add(new FileType(ERedExtension.ies, "IES Light Profile Data Resource", typeof(CIESDataResource)));
             FileTypes.Add(new FileType(ERedExtension.inkanim, "Ink animation library", typeof(inkanimAnimationLibraryResource)));
             FileTypes.Add(new FileType(ERedExtension.inkatlas, "Ink texture atlas resource", typeof(inkTextureAtlas)));
             FileTypes.Add(new FileType(ERedExtension.inkcharcustomization, "Ink Character Customization Info", typeof(gameuiCharacterCustomizationInfoResource)));
@@ -232,22 +251,22 @@ namespace WolvenKit.RED4.Archive
             FileTypes.Add(new FileType(ERedExtension.lane_polygons, "", typeof(worldTrafficPersistentLanePolygonResource)));
             FileTypes.Add(new FileType(ERedExtension.lane_spots, "Traffic spots in lanes", typeof(worldTrafficLanesSpotsResource)));
             FileTypes.Add(new FileType(ERedExtension.lights, "Distant Lights Resource", typeof(CDistantLightsResource)));
-            FileTypes.Add(new FileType(ERedExtension.lipmap, "", typeof(animLipsyncMapping)));
+            FileTypes.Add(new FileType(ERedExtension.lipmap, "Lipsync Mapping", typeof(animLipsyncMapping)));
             FileTypes.Add(new FileType(ERedExtension.location, "", typeof(gameLocationResource)));
             FileTypes.Add(new FileType(ERedExtension.locopaths, "Locomotion Paths", typeof(navLocomotionPathResource)));
             FileTypes.Add(new FileType(ERedExtension.loot, "", typeof(gameLootResource)));
             FileTypes.Add(new FileType(ERedExtension.mappins, "", typeof(gameMappinResource)));
             FileTypes.Add(new FileType(ERedExtension.matlib, "Material Layer Library", typeof(CMaterialLayerLibrary)));
-            FileTypes.Add(new FileType(ERedExtension.mesh, "", typeof(CMesh)));
-            FileTypes.Add(new FileType(ERedExtension.mi, "", typeof(CMaterialInstance)));
+            FileTypes.Add(new FileType(ERedExtension.mesh, "", typeof(CMesh))); //same as w2mesh
+            FileTypes.Add(new FileType(ERedExtension.mi, "Material instance", typeof(CMaterialInstance))); //same as w2mi
             FileTypes.Add(new FileType(ERedExtension.mlmask, "Multilayer Mask", typeof(Multilayer_Mask)));
             FileTypes.Add(new FileType(ERedExtension.mlsetup, "Multilayer Setup", typeof(Multilayer_Setup)));
             FileTypes.Add(new FileType(ERedExtension.mltemplate, "Multilayer Layer Template", typeof(Multilayer_LayerTemplate)));
             FileTypes.Add(new FileType(ERedExtension.morphtarget, "Morph Target Mesh Resource", typeof(MorphTargetMesh)));
-            FileTypes.Add(new FileType(ERedExtension.mt, "", typeof(CMaterialTemplate)));
+            FileTypes.Add(new FileType(ERedExtension.mt, "Material template", typeof(CMaterialTemplate)));  // same as remt
             FileTypes.Add(new FileType(ERedExtension.null_areas, "Null areas collision data", typeof(worldTrafficNullAreaCollisionResource)));
-            FileTypes.Add(new FileType(ERedExtension.particle, "Particle System", typeof(CParticleSystem)));
-            FileTypes.Add(new FileType(ERedExtension.phys, "", typeof(physicsSystemResource)));
+            FileTypes.Add(new FileType(ERedExtension.particle, "Particle System", typeof(CParticleSystem))); // same as reps
+            FileTypes.Add(new FileType(ERedExtension.phys, "Physical system", typeof(physicsSystemResource)));
             FileTypes.Add(new FileType(ERedExtension.physicalscene, "Physics decoration resource", typeof(CPhysicsDecorationResource))); // same as redphysics
             FileTypes.Add(new FileType(ERedExtension.physmatlib, "Physics material definition library", typeof(physicsMaterialLibraryResource)));
             FileTypes.Add(new FileType(ERedExtension.poimappins, "POI Mappins", typeof(gamePointOfInterestMappinResource)));
@@ -256,35 +275,40 @@ namespace WolvenKit.RED4.Archive
             FileTypes.Add(new FileType(ERedExtension.questphase, "Quest Phase", typeof(questQuestPhaseResource)));
             FileTypes.Add(new FileType(ERedExtension.redphysics, "Physics decoration resource", typeof(CPhysicsDecorationResource))); // same as physicalscene
             FileTypes.Add(new FileType(ERedExtension.regionset, "Texture Region Set", typeof(CTextureRegionSet)));
-            FileTypes.Add(new FileType(ERedExtension.remt, "", typeof(CMaterialTemplate)));
-            FileTypes.Add(new FileType(ERedExtension.reps, "", typeof(CParticleSystem)));
+            FileTypes.Add(new FileType(ERedExtension.remt, "Material template", typeof(CMaterialTemplate))); // same as mt
+            FileTypes.Add(new FileType(ERedExtension.reps, "Particle System", typeof(CParticleSystem))); // same as particle
             FileTypes.Add(new FileType(ERedExtension.reslist, "List of resource files", typeof(redResourceListResource)));
             FileTypes.Add(new FileType(ERedExtension.rig, "", typeof(animRig)));
+            // FileTypes.Add(new FileType(ERedExtension.rigsd, "Rig Shared Data", typeof(animRigSharedData))); // not used yet
+            // FileTypes.Add(new FileType(ERedExtension.rsvg, "", typeof(SvgResource))); // not used yet, same as svg
             FileTypes.Add(new FileType(ERedExtension.scene, "", typeof(scnSceneResource)));
             FileTypes.Add(new FileType(ERedExtension.scenerid, ".re Import Data", typeof(scnRidResource)));
             FileTypes.Add(new FileType(ERedExtension.scenesversions, "Scenes Versions", typeof(scnScenesVersions)));
-            FileTypes.Add(new FileType(ERedExtension.smartobject, "Smart object setup", typeof(gameSmartObjectResource)));
+            FileTypes.Add(new FileType(ERedExtension.scenesversions, "Scenes Versions", typeof(scnScenesVersions)));
+            // FileTypes.Add(new FileType(ERedExtension.sector_artifact, "An artifact from sector generator, used in Geometry Cache cooking to fill sector preload data", typeof(physicsSectorCacheArtifact))); // not used yet
             FileTypes.Add(new FileType(ERedExtension.smartobjects, "Smart Objects Compiled data", typeof(gameSmartObjectsCompiledResource)));
-            FileTypes.Add(new FileType(ERedExtension.sp, "", typeof(CSkinProfile)));
+            FileTypes.Add(new FileType(ERedExtension.sp, "Skin profile", typeof(CSkinProfile)));
             FileTypes.Add(new FileType(ERedExtension.spatial_representation, "Traffic persistent spatial data", typeof(worldTrafficPersistentSpatialResource)));
             FileTypes.Add(new FileType(ERedExtension.streamingblock, "Streaming Query Data", typeof(worldStreamingBlock)));
             FileTypes.Add(new FileType(ERedExtension.streamingquerydata, "", typeof(worldStreamingQueryDataResource)));
             FileTypes.Add(new FileType(ERedExtension.streamingsector, "Streaming Sector", typeof(worldStreamingSector)));
             FileTypes.Add(new FileType(ERedExtension.streamingsector_inplace, "Streaming Sector Inplace", typeof(worldStreamingSectorInplaceContent)));
             FileTypes.Add(new FileType(ERedExtension.streamingworld, "", typeof(worldStreamingWorld)));
+            // FileTypes.Add(new FileType(ERedExtension.svg, "", typeof(SvgResource))); // not used yet, same as rsvg
             FileTypes.Add(new FileType(ERedExtension.terrainsetup, "Terrain Setup", typeof(CTerrainSetup)));
             FileTypes.Add(new FileType(ERedExtension.texarray, "Texture Array", typeof(CTextureArray)));
+            // FileTypes.Add(new FileType(ERedExtension.todvis, "Time of Day Visibility Resource", typeof(TimeOfDayVisibilityResource))); // not used yet
             FileTypes.Add(new FileType(ERedExtension.traffic_collisions, "Traffic collision data", typeof(worldTrafficCollisionResource)));
             FileTypes.Add(new FileType(ERedExtension.traffic_persistent, "Traffic persistent data", typeof(worldTrafficPersistentResource)));
             FileTypes.Add(new FileType(ERedExtension.vehcommoncurveset, "Vehicle Common Curve Set", typeof(gameVehicleCommonCurveSet)));
             FileTypes.Add(new FileType(ERedExtension.vehcurveset, "Vehicle Curve Set", typeof(gameVehicleCurveSet)));
             FileTypes.Add(new FileType(ERedExtension.voicetags, "Voice Tags", typeof(locVoiceTagListResource)));
-            FileTypes.Add(new FileType(ERedExtension.w2mesh, "", typeof(CMesh)));
-            FileTypes.Add(new FileType(ERedExtension.w2mi, "", typeof(CMaterialInstance)));
+            FileTypes.Add(new FileType(ERedExtension.w2mesh, "", typeof(CMesh))); //same as mesh
+            FileTypes.Add(new FileType(ERedExtension.w2mi, "Material instance", typeof(CMaterialInstance))); //same as mi
             FileTypes.Add(new FileType(ERedExtension.workspot, "Work spot", typeof(workWorkspotResource)));
             FileTypes.Add(new FileType(ERedExtension.worldlist, "List of World IDs", typeof(worldWorldListResource)));
-            FileTypes.Add(new FileType(ERedExtension.xbm, "", typeof(CBitmapTexture)));
-            FileTypes.Add(new FileType(ERedExtension.xcube, "", typeof(CCubeTexture)));
+            FileTypes.Add(new FileType(ERedExtension.xbm, "Bitmap Texture", typeof(CBitmapTexture)));
+            FileTypes.Add(new FileType(ERedExtension.xcube, "Cubemap", typeof(CCubeTexture))); //same as cubemap
         }
 
         public static string[] GetFileExtensions(string filePath)
