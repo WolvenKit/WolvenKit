@@ -370,16 +370,29 @@ namespace WolvenKit.ViewModels.Documents
             {
                 Header = qcpnd.DebugString;
             }
-            else if (node is questPauseConditionNodeDefinition qpcnd)
+            else if (node is questPauseConditionNodeDefinition || node is questConditionNodeDefinition)
             {
-                Header = "Pause Condition";
-                if (qpcnd.Condition.Chunk is questTriggerCondition qtc)
+                questIBaseCondition condition = null;
+                if (node is questPauseConditionNodeDefinition qpcnd)
                 {
+                    Header = "Pause ";
+                    condition = qpcnd.Condition.Chunk;
+                }
+                else if (node is questConditionNodeDefinition qcnd)
+                {
+                    Header = "";
+                    condition = qcnd.Condition.Chunk;
+                }
+
+                if (condition is questTriggerCondition qtc)
+                {
+                    Header += "Trigger Condition";
                     Details["Trigger Area"] = qtc.TriggerAreaRef;
                     Details["Type"] = qtc.Type.ToEnumString();
                 }
-                else if (qpcnd.Condition.Chunk is questObjectCondition qoc)
+                else if (condition is questObjectCondition qoc)
                 {
+                    Header += "Object Condition";
                     if (qoc.Type.Chunk is questDevice_ConditionType qdct)
                     {
                         Details["Object"] = qdct.ObjectRef;
@@ -387,16 +400,56 @@ namespace WolvenKit.ViewModels.Documents
                         Details["Function"] = qdct.DeviceConditionFunction;
                     }
                 }
-            }
-            else if (node is questConditionNodeDefinition qcnd)
-            {
-                Header = "Condition";
-                if (qcnd.Condition.Chunk is questFactsDBCondition qfc)
+                else if (condition is questFactsDBCondition qfc)
                 {
+                    Header += "FactsDB Condition";
                     if (qfc.Type.Chunk is questVarComparison_ConditionType qvc)
                     {
-                        Details[qvc.FactName] = qvc.ComparisonType.ToEnumString() + " " + qvc.Value.ToString();
+                        Header += " - Compare";
+                        Details["Name"] = qvc.FactName;
+                        Details["Comparison"] = qvc.ComparisonType.ToEnumString();
+                        Details["Value"] = qvc.Value.ToString();
                     }
+                }
+                else if (condition is questSpawnerCondition qsc)
+                {
+                    Header += "Spawner Condition";
+                    if (qsc.Type.Chunk is questSpawnerReady_ConditionType qsrct)
+                    {
+                        Header += " - Is Ready";
+                        Details["Reference"] = qsrct.SpawnerReference;
+                    }
+                }
+                else if (condition is questCharacterCondition qcc)
+                {
+                    Header += "Character Condition";
+                    if (qcc.Type.Chunk is questCharacterMount_ConditionType qcmct)
+                    {
+                        Header += " - Is Mounted";
+                        Details["Parent Ref"] = qcmct.ParentRef.Reference;
+                    }
+                }
+                else
+                {
+                    Header += "Condition";
+                }
+            }
+            else if (node is questSpawnManagerNodeDefinition qsmnd)
+            {
+                Header = "Spawn Manager";
+                foreach (var action in qsmnd.Actions)
+                {
+                    Header += " - " + action.Type.Chunk.Action.ToEnumString();
+                }
+            }
+            else if (node is questFactsDBManagerNodeDefinition qfmnd)
+            {
+                Header = "FactsDB Manager";
+                if (qfmnd.Type.Chunk is questSetVar_NodeType qsvnt)
+                {
+                    Header += " - Set";
+                    Details["Name"] = qsvnt.FactName;
+                    Details["Value"] = qsvnt.Value.ToString();
                 }
             }
             else
