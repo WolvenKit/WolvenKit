@@ -19,6 +19,7 @@ using WolvenKit.Common.Conversion;
 using WolvenKit.Common.Services;
 using WolvenKit.Functionality.Commands;
 using WolvenKit.Functionality.Controllers;
+using WolvenKit.Functionality.Interfaces;
 using WolvenKit.Functionality.Services;
 using WolvenKit.Models;
 using WolvenKit.RED4;
@@ -32,7 +33,7 @@ using static WolvenKit.RED4.Types.RedReflection;
 
 namespace WolvenKit.ViewModels.Shell
 {
-    public class ChunkViewModel : ReactiveObject, ISelectableTreeViewItemModel, INodeViewModel
+    public class ChunkViewModel : ReactiveObject, ISelectableTreeViewItemModel, INode<ReferenceSocket>
     {
         public bool PropertiesLoaded;
 
@@ -203,6 +204,7 @@ namespace WolvenKit.ViewModels.Shell
         public ChunkViewModel(IRedType export, ReferenceSocket socket) : this(export)
         {
             Socket = socket;
+            socket.Node = this;
             RelativePath = socket.File;
         }
 
@@ -1920,9 +1922,16 @@ namespace WolvenKit.ViewModels.Shell
 
         [Reactive] public ReferenceSocket Socket { get; set; }
 
-        public List<ReferenceSocket> SelfSocket => new List<ReferenceSocket>( new ReferenceSocket[] { Socket });
+        public IList<ReferenceSocket> Inputs
+        {
+            get => new List<ReferenceSocket>(new ReferenceSocket[] { Socket });
+            set
+            {
+                ;
+            }
+        }
 
-        [Reactive] public ObservableCollection<ReferenceSocket> References { get; set; } = new();
+        [Reactive] public IList<ReferenceSocket> Outputs { get; set; } = new ObservableCollection<ReferenceSocket>();
 
         [Reactive] public System.Windows.Point Location { get; set; }
 
@@ -1931,27 +1940,6 @@ namespace WolvenKit.ViewModels.Shell
         private void ExecuteOpenSelf()
         {
             Locator.Current.GetService<AppViewModel>().OpenFileFromDepotPath(RelativePath);
-        }
-
-        public double Width { get; set; }
-
-        public double Height { get; set; }
-    }
-
-    public class ReferenceSocket : ReactiveObject
-    {
-        [Reactive] public CName File { get; set; }
-
-        [Reactive] public string Property { get; set; } = "";
-
-        [Reactive] public System.Windows.Point Anchor { get; set; }
-
-        [Reactive] public bool IsConnected { get; set; }
-
-        public ReferenceSocket(CName file, string property = "")
-        {
-            File = file;
-            Property = property;
         }
     }
 }

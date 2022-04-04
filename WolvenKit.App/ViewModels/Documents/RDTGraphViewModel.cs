@@ -26,6 +26,8 @@ using Microsoft.Msagl.Core.Routing;
 using Microsoft.Msagl.Core.Geometry.Curves;
 using Microsoft.Msagl.Core.Layout;
 using Point = System.Windows.Point;
+using WolvenKit.Functionality.Interfaces;
+using System.Windows.Media;
 
 namespace WolvenKit.ViewModels.Documents
 {
@@ -121,7 +123,7 @@ namespace WolvenKit.ViewModels.Documents
                                 if (socket.Chunk is questSocketDefinition socketDef && socketDef.Name == input.SocketName)
                                 {
                                     var svm = new SocketViewModel(socketDef);
-                                    nvm.Input.Add(svm);
+                                    nvm.Inputs.Add(svm);
                                     SocketLookup.Add(socketDef.GetHashCode(), svm);
                                 }
                             }
@@ -133,7 +135,7 @@ namespace WolvenKit.ViewModels.Documents
                                 if (socket.Chunk is questSocketDefinition socketDef && socketDef.Name == output.SocketName)
                                 {
                                     var svm = new SocketViewModel(socketDef);
-                                    nvm.Output.Add(svm);
+                                    nvm.Outputs.Add(svm);
                                     SocketLookup.Add(socketDef.GetHashCode(), svm);
                                 }
                             }
@@ -145,9 +147,7 @@ namespace WolvenKit.ViewModels.Documents
                 var msaglNode = new Microsoft.Msagl.Core.Layout.Node(
                     CurveFactory.CreateRectangle(size.Width, size.Height, new Microsoft.Msagl.Core.Geometry.Point()))
                 {
-                    //DebugId = node.Chunk.GetHashCode(),
                     UserData = node.Chunk.GetHashCode()
-                    //UserData = NodeLookup[node.Chunk.GetHashCode()]
                 };
                 msaglNodes.Add(node.Chunk.GetHashCode(), msaglNode);
                 graph.Nodes.Add(msaglNode);
@@ -204,42 +204,7 @@ namespace WolvenKit.ViewModels.Documents
         public ICommand CreateConnectionCommand { get; set; }
     }
 
-    public class ObservableObject : INotifyPropertyChanged
-    {
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        private bool _isDirty;
-        public bool IsDirty
-        {
-            get => _isDirty;
-            protected set
-            {
-                if (_isDirty != value)
-                {
-                    _isDirty = value;
-                    OnPropertyChanged();
-                }
-            }
-        }
-
-        public bool SetProperty<T>(ref T reference, T value, [CallerMemberName] in string propertyName = default!)
-        {
-            if (!Equals(reference, value))
-            {
-                reference = value;
-                IsDirty = true;
-                OnPropertyChanged(propertyName);
-                return true;
-            }
-
-            return false;
-        }
-
-        protected void OnPropertyChanged([CallerMemberName] in string propertyName = default)
-            => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-    }
-
-    public class PendingConnectionViewModel : ObservableObject
+    public class PendingConnectionViewModel : ReactiveObject
     {
         [Reactive] public RDTGraphViewModel Graph { get; set; }
 
@@ -262,42 +227,26 @@ namespace WolvenKit.ViewModels.Documents
         //}
     }
 
-    public class NodeViewModel : ObservableObject
+    public class NodeViewModel : ReactiveObject, INode<SocketViewModel>
     {
         [Reactive] public RDTGraphViewModel Graph { get; set; }
 
-        private Point _location;
-        public Point Location
-        {
-            get => _location;
-            set => SetProperty(ref _location, value);
-        }
+        [Reactive] public Point Location { get; set; }
 
-        private bool _isSelected;
-        public bool IsSelected
-        {
-            get => _isSelected;
-            set => SetProperty(ref _isSelected, value);
-        }
+        [Reactive] public bool IsSelected { get; set; }
 
         public string Header { get; set; }
         public Dictionary<string, string> Details { get; set; } = new();
         public string Footer { get; set; }
 
-        public ObservableCollection<SocketViewModel> Input { get; } = new();
-        public ObservableCollection<SocketViewModel> Output { get; } = new();
+        public IList<SocketViewModel> Inputs { get; set; } = new ObservableCollection<SocketViewModel>();
+        public IList<SocketViewModel> Outputs { get; set; } = new ObservableCollection<SocketViewModel>();
 
         public graphGraphNodeDefinition RedNode { get; set; }
 
         public NodeViewModel()
         {
-            //Input.WhenAdded(c => c.Node = this)
-            //     .WhenRemoved(c => c.Disconnect());
-
-            //Output.WhenAdded(c => c.Node = this)
-            //     .WhenRemoved(c => c.Disconnect());
-
-            Input.CollectionChanged += (object sender, NotifyCollectionChangedEventArgs e) =>
+            ((ObservableCollection<SocketViewModel>)Inputs).CollectionChanged += (object sender, NotifyCollectionChangedEventArgs e) =>
             {
                 if (e.Action == NotifyCollectionChangedAction.Add)
                 {
@@ -314,7 +263,7 @@ namespace WolvenKit.ViewModels.Documents
                     }
                 }
             };
-            Output.CollectionChanged += (object sender, NotifyCollectionChangedEventArgs e) =>
+            ((ObservableCollection<SocketViewModel>)Outputs).CollectionChanged += (object sender, NotifyCollectionChangedEventArgs e) =>
             {
                 if (e.Action == NotifyCollectionChangedAction.Add)
                 {
@@ -343,7 +292,7 @@ namespace WolvenKit.ViewModels.Documents
 
             size.Height += Details.Count * 15;
 
-            size.Height += Math.Max(Input.Count, Output.Count) * 19;
+            size.Height += Math.Max(Inputs.Count, Outputs.Count) * 19;
 
             if (Footer != null)
             {
@@ -478,7 +427,11 @@ namespace WolvenKit.ViewModels.Documents
                 bool isInput;
                 if (socket.Chunk is questSocketDefinition qsd)
                 {
-                    isInput = qsd.Type.Value == Enums.questSocketType.Input;
+                    isInput = qsd.Type.Value == Enums.questSocketType.Input || qsd.Type.Value == Enums.questSocketType.CutDestination;
+                    if (qsd.Type.Value == Enums.questSocketType.CutDestination || qsd.Type.Value == Enums.questSocketType.CutSource)
+                    {
+                        svm.Color = WkitBrushes.Purple;
+                    }
                 }
                 else
                 {
@@ -486,11 +439,11 @@ namespace WolvenKit.ViewModels.Documents
                 }
                 if (isInput)
                 {
-                    Input.Add(svm);
+                    Inputs.Add(svm);
                 }
                 else
                 {
-                    Output.Add(svm);
+                    Outputs.Add(svm);
                 }
                 Graph.SocketLookup.Add(socket.Chunk.GetHashCode(), svm);
             }
@@ -498,8 +451,8 @@ namespace WolvenKit.ViewModels.Documents
 
         public void Disconnect()
         {
-            Input.Clear();
-            Output.Clear();
+            Inputs.Clear();
+            Outputs.Clear();
         }
     }
 
@@ -541,22 +494,19 @@ namespace WolvenKit.ViewModels.Documents
         Square,
     }
 
-    public class SocketViewModel : ObservableObject
+    public class SocketViewModel : ReactiveObject, INodeSocket
     {
         [Reactive] public string Title { get; set; }
 
         [Reactive] public bool IsConnected { get; set; }
 
-        private Point _anchor;
-        public Point Anchor
-        {
-            get => _anchor;
-            set => SetProperty(ref _anchor, value);
-        }
+        [Reactive] public Point Anchor { get; set; }
 
         [Reactive] public NodeViewModel Node { get; set; }
 
         [Reactive] public ConnectorShape Shape { get; set; }
+
+        [Reactive] public Brush Color { get; set; } = WkitBrushes.Cyan;
 
         public ConnectorFlow Flow { get; private set; }
 
@@ -573,13 +523,13 @@ namespace WolvenKit.ViewModels.Documents
                     foreach (ConnectionViewModel item in e.NewItems)
                     {
                         // shouldn't this be conditional?
-                        if (item.Input != null)
+                        if (item.Source != null)
                         {
-                            item.Input.IsConnected = true;
+                            item.Source.IsConnected = true;
                         }
-                        if (item.Output != null)
+                        if (item.Destination != null)
                         {
-                            item.Output.IsConnected = true;
+                            item.Destination.IsConnected = true;
                         }
                     }
                 }
@@ -587,34 +537,17 @@ namespace WolvenKit.ViewModels.Documents
                 {
                     foreach (ConnectionViewModel item in e.OldItems)
                     {
-                        if (item.Input.Connections.Count == 0)
+                        if (item.Source.Connections.Count == 0)
                         {
-                            item.Input.IsConnected = false;
+                            item.Source.IsConnected = false;
                         }
-                        if (item.Output.Connections.Count == 0)
+                        if (item.Destination.Connections.Count == 0)
                         {
-                            item.Output.IsConnected = false;
+                            item.Destination.IsConnected = false;
                         }
                     }
                 }
             };
-
-            //Connections.WhenAdded(c =>
-            //{
-            //    c.Input.IsConnected = true;
-            //    c.Output.IsConnected = true;
-            //}).WhenRemoved(c =>
-            //{
-            //    if (c.Input.Connections.Count == 0)
-            //    {
-            //        c.Input.IsConnected = false;
-            //    }
-
-            //    if (c.Output.Connections.Count == 0)
-            //    {
-            //        c.Output.IsConnected = false;
-            //    }
-            //});
         }
 
         public SocketViewModel(graphGraphSocketDefinition socket) : this()
@@ -626,7 +559,7 @@ namespace WolvenKit.ViewModels.Documents
         {
             if (Node is NodeViewModel flow)
             {
-                Flow = flow.Input.Contains(this) ? ConnectorFlow.Input : ConnectorFlow.Output;
+                Flow = flow.Inputs.Contains(this) ? ConnectorFlow.Input : ConnectorFlow.Output;
             }
             //else if (Node is KnotNodeViewModel knot)
             //{
@@ -635,7 +568,7 @@ namespace WolvenKit.ViewModels.Documents
         }
 
         public bool IsConnectedTo(SocketViewModel con)
-            => Connections.Any(c => c.Input == con || c.Output == con);
+            => Connections.Any(c => c.Source == con || c.Destination == con);
 
         public virtual bool AllowsNewConnections()
             => Connections.Count < MaxConnections;
@@ -644,21 +577,21 @@ namespace WolvenKit.ViewModels.Documents
         //    => Node.Graph.Schema.DisconnectConnector(this);
     }
 
-    public class ConnectionViewModel : ObservableObject
+    public class ConnectionViewModel : ReactiveObject, INodeConnection<SocketViewModel>
     {
         [Reactive] public RDTGraphViewModel Graph { get; set; }
 
-        [Reactive] public SocketViewModel Input { get; set; }
+        [Reactive] public SocketViewModel Destination { get; set; }
 
-        [Reactive] public SocketViewModel Output { get; set; }
+        [Reactive] public SocketViewModel Source { get; set; }
 
         public ConnectionViewModel(RDTGraphViewModel graph, graphGraphConnectionDefinition connection)
         {
             Graph = graph;
-            Input = Graph.SocketLookup[connection.Source.Chunk.GetHashCode()];
-            Input.Connections.Add(this);
-            Output = Graph.SocketLookup[connection.Destination.Chunk.GetHashCode()];
-            Output.Connections.Add(this);
+            Destination = Graph.SocketLookup[connection.Destination.Chunk.GetHashCode()];
+            Destination.Connections.Add(this);
+            Source = Graph.SocketLookup[connection.Source.Chunk.GetHashCode()];
+            Source.Connections.Add(this);
         }
 
         public void Split(Point point) { }

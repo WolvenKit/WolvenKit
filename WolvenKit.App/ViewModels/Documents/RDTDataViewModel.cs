@@ -14,6 +14,7 @@ using Syncfusion.Windows.Shared;
 using WolvenKit.Common;
 using WolvenKit.Common.FNV1A;
 using WolvenKit.Functionality.Controllers;
+using WolvenKit.Functionality.Interfaces;
 using WolvenKit.RED4.Archive;
 using WolvenKit.RED4.Archive.Buffer;
 using WolvenKit.RED4.Archive.CR2W;
@@ -22,16 +23,7 @@ using WolvenKit.ViewModels.Shell;
 
 namespace WolvenKit.ViewModels.Documents
 {
-    public interface INodeViewModel
-    {
-        public System.Windows.Point Location { get; set; }
-
-        public double Width { get; set; }
-
-        public double Height { get; set; }
-    }
-
-    public class CNameWrapper : ReactiveObject, INodeViewModel
+    public class CNameWrapper : ReactiveObject, INode<ReferenceSocket>
     {
         public CName CName => Socket.File;
 
@@ -43,7 +35,16 @@ namespace WolvenKit.ViewModels.Documents
 
         [Reactive] public ReferenceSocket Socket { get; set; }
 
-        public List<ReferenceSocket> SelfSocket => new List<ReferenceSocket>(new ReferenceSocket[] { Socket });
+        public IList<ReferenceSocket> Inputs
+        {
+            get => new List<ReferenceSocket>(new ReferenceSocket[] { Socket });
+            set
+            {
+                ;
+            }
+        }
+
+        public IList<ReferenceSocket> Outputs { get; set; } = new List<ReferenceSocket>();
 
         public RDTDataViewModel DataViewModel { get; set; }
 
@@ -331,12 +332,12 @@ namespace WolvenKit.ViewModels.Documents
 
             foreach (var reference in References)
             {
-                if (!_nodePaths.Contains(reference.Input.File))
+                if (!_nodePaths.Contains(reference.Destination.File))
                 {
-                    if (reference.Input.File != null)
+                    if (reference.Destination.File != null)
                     {
-                        Nodes.Add(new CNameWrapper(this, reference.Input));
-                        _nodePaths.Add(reference.Input.File);
+                        Nodes.Add(new CNameWrapper(this, reference.Destination));
+                        _nodePaths.Add(reference.Destination.File);
                     }
                 }
             }
@@ -354,8 +355,9 @@ namespace WolvenKit.ViewModels.Documents
                 if (pi.Type.IsAssignableTo(typeof(IRedRef)))
                 {
                     var res = (IRedRef)data.GetProperty(pi.RedName);
-                    var sourceSocket = new ReferenceSocket(cvm.RelativePath, xpath + "." + pi.RedName);
-                    cvm.References.Add(sourceSocket);
+                    var innerType = res.GetType().GenericTypeArguments[0];
+                    var sourceSocket = new ReferenceSocket(cvm.RelativePath, xpath + "." + pi.RedName, innerType.Name);
+                    cvm.Outputs.Add(sourceSocket);
 
                     if (res != null && !string.IsNullOrEmpty(res.DepotPath))
                     {
@@ -363,9 +365,9 @@ namespace WolvenKit.ViewModels.Documents
                         ReferenceSocket destSocket = null;
                         foreach (var reference in References)
                         {
-                            if (reference.Input.File == res.DepotPath)
+                            if (reference.Destination.File == res.DepotPath)
                             {
-                                destSocket = reference.Input;
+                                destSocket = reference.Destination;
                             }
                         }
                         if (destSocket == null)
@@ -477,19 +479,19 @@ namespace WolvenKit.ViewModels.Documents
         #endregion
     }
 
-    public class RedReference : ReactiveObject
+    public class RedReference : ReactiveObject, INodeConnection<ReferenceSocket>
     {
         [Reactive] public RDTDataViewModel Graph { get; set; }
 
-        [Reactive] public ReferenceSocket Input { get; set; }
+        [Reactive] public ReferenceSocket Destination { get; set; }
 
-        [Reactive] public ReferenceSocket Output { get; set; }
+        [Reactive] public ReferenceSocket Source { get; set; }
 
-        public RedReference(RDTDataViewModel graph, ReferenceSocket output, ReferenceSocket input)
+        public RedReference(RDTDataViewModel graph, ReferenceSocket source, ReferenceSocket destination)
         {
             Graph = graph;
-            Output = output;
-            Input = input;
+            Source = source;
+            Destination = destination;
         }
 
         //public ConnectionViewModel(RDTGraphViewModel graph, graphGraphConnectionDefinition connection)
@@ -500,5 +502,27 @@ namespace WolvenKit.ViewModels.Documents
         //    Output = Graph.SocketLookup[connection.Destination.Chunk.GetHashCode()];
         //    Output.Connections.Add(this);
         //}
+    }
+
+    public class ReferenceSocket : ReactiveObject, INodeSocket<INode>
+    {
+        public INode Node { get; set; }
+
+        [Reactive] public CName File { get; set; }
+
+        [Reactive] public string Property { get; set; } = "";
+
+        [Reactive] public System.Windows.Point Anchor { get; set; }
+
+        [Reactive] public bool IsConnected { get; set; }
+
+        [Reactive] public string Type { get; set; } = "";
+
+        public ReferenceSocket(CName file, string property = "", string type = "")
+        {
+            File = file;
+            Property = property;
+            Type = type;
+        }
     }
 }

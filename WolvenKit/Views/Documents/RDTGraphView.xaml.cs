@@ -26,6 +26,11 @@ namespace WolvenKit.Views.Documents
             InitializeComponent();
 
             EventManager.RegisterClassHandler(typeof(BaseConnection), MouseLeftButtonDownEvent, new MouseButtonEventHandler(OnConnectionInteraction));
+
+            this.WhenActivated(disposables =>
+            {
+                //Editor.LayoutNodes();
+            });
         }
 
         private void OnConnectionInteraction(object sender, MouseButtonEventArgs e)

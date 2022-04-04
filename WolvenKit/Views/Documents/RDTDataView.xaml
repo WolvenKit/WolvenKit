@@ -119,9 +119,9 @@
                     <nodify:Connection
                         Direction="Forward"
                         OffsetMode="Edge"
-                        Source="{Binding Output.Anchor}"
+                        Source="{Binding Source.Anchor}"
                         SourceOffset="12,0"
-                        Target="{Binding Input.Anchor}"
+                        Target="{Binding Destination.Anchor}"
                         TargetOffset="12,0">
                         <nodify:Connection.Style>
                             <Style TargetType="{x:Type nodify:BaseConnection}">
@@ -164,6 +164,7 @@
                     <Setter Property="HorizontalAlignment" Value="Right" />
                     <Setter Property="Margin" Value="0" />
                     <Setter Property="BorderBrush" Value="{StaticResource WolvenKitCyan}" />
+                    <Setter Property="ToolTip" Value="{Binding Type}" />
                 </Style>
                 <DataTemplate x:Key="DetailedHeaderTemplate">
                     <StackPanel Orientation="Vertical">
@@ -194,8 +195,8 @@
                     <nodify:Node
                         Footer="{Binding}"
                         Header="{Binding}"
-                        Input="{Binding SelfSocket}"
-                        Output="{Binding References}">
+                        Input="{Binding Inputs}"
+                        Output="{Binding Outputs}">
                         <nodify:Node.HeaderTemplate>
                             <DataTemplate>
                                 <StackPanel Orientation="Horizontal">
@@ -241,7 +242,7 @@
                     <nodify:Node
                         Footer="{Binding}"
                         Header="{Binding}"
-                        Input="{Binding SelfSocket}">
+                        Input="{Binding Inputs}">
                         <nodify:Node.HeaderTemplate>
                             <DataTemplate>
                                 <StackPanel Orientation="Horizontal">

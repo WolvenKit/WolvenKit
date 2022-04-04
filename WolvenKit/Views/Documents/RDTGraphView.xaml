@@ -26,41 +26,6 @@
 
         <Grid.Resources>
             <converters:FlowToDirectionConverter x:Key="FlowToDirectionConverter" />
-            <Style x:Key="ConnectionStyle" TargetType="{x:Type nodify:BaseConnection}">
-                <Setter Property="Cursor" Value="Hand" />
-                <Setter Property="ToolTip" Value="Double click to split" />
-                <Setter Property="Stroke" Value="#33FFFFFF" />
-                <Setter Property="StrokeThickness" Value="2" />
-                <Style.Triggers>
-                    <Trigger Property="IsMouseOver" Value="True">
-                        <Setter Property="Stroke" Value="{StaticResource WolvenKitYellow}" />
-                    </Trigger>
-                    <DataTrigger Binding="{Binding Input.Node.IsSelected, UpdateSourceTrigger=PropertyChanged}" Value="True">
-                        <Setter Property="Stroke" Value="{StaticResource WolvenKitCyan}" />
-                        <!--Setter Property="Stroke">
-                            <Setter.Value>
-                                <LinearGradientBrush StartPoint="0,0.5" EndPoint="1,0.5">
-                                    <GradientStop Offset="0.0" Color="{StaticResource WolvenKitCyanColor}" />
-                                    <GradientStop Offset="1.0" Color="#33FFFFFF" />
-                                </LinearGradientBrush>
-                            </Setter.Value>
-                        </Setter-->
-                    </DataTrigger>
-                    <DataTrigger Binding="{Binding Output.Node.IsSelected, UpdateSourceTrigger=PropertyChanged}" Value="True">
-                        <Setter Property="Stroke" Value="{StaticResource WolvenKitCyan}" />
-                    </DataTrigger>
-                </Style.Triggers>
-            </Style>
-            <DataTemplate x:Key="ConnectionTemplate">
-                <nodify:Connection
-                    Direction="{Binding Output.Flow, Converter={StaticResource FlowToDirectionConverter}}"
-                    OffsetMode="Edge"
-                    Source="{Binding Output.Anchor}"
-                    SourceOffset="12,0"
-                    Style="{StaticResource ConnectionStyle}"
-                    Target="{Binding Input.Anchor}"
-                    TargetOffset="12,0" />
-            </DataTemplate>
         </Grid.Resources>
 
         <!--Grid.ColumnDefinitions>
@@ -69,7 +34,7 @@
             <ColumnDefinition />
         </Grid.ColumnDefinitions-->
 
-        <nodify:NodifyEditor
+        <editors:AutomaticNodifyEditor
             x:Name="Editor"
             Grid.Column="0"
             Background="{StaticResource ContentBackground}"
@@ -80,12 +45,45 @@
             PendingConnection="{Binding PendingConnection}"
             SelectedItems="{Binding SelectedNodes}"
             Offset="{Binding Location}">
-            <nodify:NodifyEditor.Style>
-                <Style BasedOn="{StaticResource {x:Type nodify:NodifyEditor}}" TargetType="{x:Type nodify:NodifyEditor}">
-                    <Setter Property="ConnectionTemplate" Value="{StaticResource ConnectionTemplate}" />
-                </Style>
-            </nodify:NodifyEditor.Style>
-            <nodify:NodifyEditor.Resources>
+            <editors:AutomaticNodifyEditor.ConnectionTemplate>
+                <DataTemplate>
+                    <nodify:Connection
+                        OffsetMode="Edge"
+                        Source="{Binding Source.Anchor}"
+                        SourceOffset="7,0"
+                        Target="{Binding Destination.Anchor}"
+                        TargetOffset="7,0">
+                        <nodify:Connection.Style>
+                            <Style TargetType="{x:Type nodify:BaseConnection}">
+                                <Setter Property="Cursor" Value="Hand" />
+                                <Setter Property="Stroke" Value="#33FFFFFF" />
+                                <Setter Property="StrokeThickness" Value="2" />
+                                <Style.Triggers>
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter Property="Stroke" Value="{StaticResource WolvenKitYellow}" />
+                                    </Trigger>
+                                    <DataTrigger Binding="{Binding Source.Node.IsSelected, UpdateSourceTrigger=PropertyChanged}" Value="True">
+                                        <!--  Setter Property="Stroke" Value="{StaticResource WolvenKitCyan}" /  -->
+                                        <Setter Property="Stroke" Value="{Binding Source.Color}" />
+                                        <!--Setter Property="Stroke">
+                            <Setter.Value>
+                                <LinearGradientBrush StartPoint="0,0.5" EndPoint="1,0.5">
+                                    <GradientStop Offset="0.0" Color="{StaticResource WolvenKitCyanColor}" />
+                                    <GradientStop Offset="1.0" Color="#33FFFFFF" />
+                                </LinearGradientBrush>
+                            </Setter.Value>
+                        </Setter-->
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding Destination.Node.IsSelected, UpdateSourceTrigger=PropertyChanged}" Value="True">
+                                        <Setter Property="Stroke" Value="{Binding Destination.Color}" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </nodify:Connection.Style>
+                    </nodify:Connection>
+                </DataTemplate>
+            </editors:AutomaticNodifyEditor.ConnectionTemplate>
+            <editors:AutomaticNodifyEditor.Resources>
                 <Style BasedOn="{StaticResource {x:Type nodify:PendingConnection}}" TargetType="{x:Type nodify:PendingConnection}">
                     <Setter Property="CompletedCommand" Value="{Binding Graph.CreateConnectionCommand}" />
                     <Setter Property="Source" Value="{Binding Source, Mode=OneWayToSource}" />
@@ -135,7 +133,7 @@
                     <Setter Property="Anchor" Value="{Binding Anchor, Mode=OneWayToSource}" />
                     <Setter Property="IsConnected" Value="{Binding IsConnected}" />
                     <Setter Property="Margin" Value="0" />
-                    <Setter Property="BorderBrush" Value="{StaticResource WolvenKitCyan}" />
+                    <Setter Property="BorderBrush" Value="{Binding Color}" />
                 </Style>
                 <Style BasedOn="{StaticResource {x:Type nodify:NodeOutput}}" TargetType="{x:Type nodify:NodeOutput}">
                     <Setter Property="Header" Value="{Binding Title}" />
@@ -143,7 +141,7 @@
                     <Setter Property="IsConnected" Value="{Binding IsConnected}" />
                     <Setter Property="HorizontalAlignment" Value="Right" />
                     <Setter Property="Margin" Value="0" />
-                    <Setter Property="BorderBrush" Value="{StaticResource WolvenKitCyan}" />
+                    <Setter Property="BorderBrush" Value="{Binding Color}" />
                 </Style>
                 <DataTemplate x:Key="HeaderTemplate">
                     <TextBlock Margin="0" Text="{Binding}" />
@@ -185,8 +183,8 @@
                         FooterTemplate="{StaticResource FooterTemplate}"
                         Header="{Binding}"
                         HeaderTemplate="{StaticResource DetailedHeaderTemplate}"
-                        Input="{Binding Input}"
-                        Output="{Binding Output}">
+                        Input="{Binding Inputs}"
+                        Output="{Binding Outputs}">
                         <nodify:Node.Style>
                             <Style BasedOn="{StaticResource {x:Type nodify:Node}}" TargetType="{x:Type nodify:Node}">
                                 <Style.Triggers>
@@ -217,8 +215,8 @@
                     <Setter Property="Target" Value="{Binding Input.Anchor, Mode=TwoWay}" />
                     <Setter Property="TargetOffset" Value="10,0" />
                 </Style-->
-            </nodify:NodifyEditor.Resources>
-            <nodify:NodifyEditor.ItemContainerStyle>
+            </editors:AutomaticNodifyEditor.Resources>
+            <editors:AutomaticNodifyEditor.ItemContainerStyle>
                 <Style BasedOn="{StaticResource {x:Type nodify:ItemContainer}}" TargetType="{x:Type nodify:ItemContainer}">
                     <Setter Property="Location" Value="{Binding Location}" />
                     <Setter Property="IsSelected" Value="{Binding IsSelected}" />
@@ -227,10 +225,10 @@
                             <SolidColorBrush Opacity="0.5" Color="Black" />
                         </Setter.Value>
                     </Setter>
-                    <Setter Property="SelectedBrush" Value="{StaticResource WolvenKitCyan}" />
+                    <Setter Property="SelectedBrush" Value="{StaticResource WolvenKitYellow}" />
                 </Style>
-            </nodify:NodifyEditor.ItemContainerStyle>
-        </nodify:NodifyEditor>
+            </editors:AutomaticNodifyEditor.ItemContainerStyle>
+        </editors:AutomaticNodifyEditor>
 
         <!--  Grid Splitter  -->
         <!--syncfusion:SfGridSplitter Grid.Column="1" HorizontalAlignment="Stretch" />
