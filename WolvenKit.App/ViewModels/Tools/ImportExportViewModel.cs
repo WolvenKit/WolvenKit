@@ -22,6 +22,7 @@ using WolvenKit.Common.Interfaces;
 using WolvenKit.Common.Model;
 using WolvenKit.Common.Model.Arguments;
 using WolvenKit.Common.Services;
+using WolvenKit.Core.Interfaces;
 using WolvenKit.Core.Services;
 using WolvenKit.Functionality.Commands;
 using WolvenKit.Functionality.Controllers;
@@ -31,7 +32,7 @@ using WolvenKit.Models;
 using WolvenKit.Models.Docking;
 using WolvenKit.Modkit.RED4.Opus;
 using WolvenKit.Modkit.RED4.Tools;
-using WolvenKit.RED4.CR2W.Archive;
+using WolvenKit.RED4.Archive;
 
 namespace WolvenKit.ViewModels.Tools
 {

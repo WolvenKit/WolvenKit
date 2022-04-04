@@ -13,6 +13,7 @@ using WolvenKit.Common.Interfaces;
 using WolvenKit.Common.Services;
 using WolvenKit.Core;
 using WolvenKit.Core.Compression;
+using WolvenKit.Core.Interfaces;
 using WolvenKit.Core.Services;
 using WolvenKit.Functionality.Services;
 using WolvenKit.Models;
@@ -515,7 +516,13 @@ namespace WolvenKit.Functionality.Controllers
                 {
                     if (project is Cp77Project cyberpunkProject)
                     {
-                        var diskPathInfo = new FileInfo(Path.Combine(cyberpunkProject.ModDirectory, file.Name));
+                        var fileName = file.Name;
+                        if (file.Name == file.Key.ToString() && file.GuessedExtension != null)
+                        {
+                            fileName += file.GuessedExtension;
+                        }
+
+                        var diskPathInfo = new FileInfo(Path.Combine(cyberpunkProject.ModDirectory, fileName));
                         if (diskPathInfo.Directory == null)
                         {
                             break;

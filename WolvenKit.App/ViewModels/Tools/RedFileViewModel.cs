@@ -2,7 +2,7 @@ using System;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.IO;
-using WolvenKit.Common;
+using WolvenKit.Core.Interfaces;
 
 namespace WolvenKit.ViewModels.Tools
 {

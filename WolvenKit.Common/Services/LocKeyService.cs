@@ -1,22 +1,10 @@
-using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Reflection;
 using Splat;
-using WolvenKit.Common.FNV1A;
-using WolvenKit.Common.Model;
-using WolvenKit.Core.Compression;
-using WolvenKit.Core.CRC;
-using WolvenKit.Core.Exceptions;
-using WolvenKit.Core.Extensions;
+using WolvenKit.Core.Interfaces;
 using WolvenKit.RED4.Types;
-using System.Text.RegularExpressions;
-using System.Collections.Concurrent;
 using WolvenKit.RED4.CR2W;
-using WolvenKit.RED4.CR2W.Archive;
-using ReactiveUI;
 
 namespace WolvenKit.Common.Services
 {

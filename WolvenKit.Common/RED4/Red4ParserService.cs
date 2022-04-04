@@ -22,6 +22,29 @@ namespace WolvenKit.RED4.CR2W
 
         #region Methods
 
+        public bool TryReadRed4Archive(string path, IHashService hashService, [NotNullWhen(true)] out Archive.Archive? archiveFile)
+        {
+            try
+            {
+                var reader = new ArchiveReader();
+                return reader.ReadArchive(path, hashService, out archiveFile) == EFileReadErrorCodes.NoError;
+            }
+            catch (Exception e)
+            {
+                var logger = Locator.Current.GetService<ILoggerService>();
+                logger?.Error(e);
+
+                archiveFile = null;
+                return false;
+            }
+        }
+
+        public Archive.Archive? ReadRed4Archive(string path, IHashService hashService)
+        {
+            TryReadRed4Archive(path, hashService, out var archive);
+            return archive;
+        }
+
         /// <summary>
         /// Try reading a <see cref="CR2WFile">CR2WFile</see> from a <see cref="Stream">Stream</see>
         /// </summary>
@@ -45,7 +68,6 @@ namespace WolvenKit.RED4.CR2W
                 redFile = null;
                 return false;
             }
-            
         }
 
         /// <summary>
