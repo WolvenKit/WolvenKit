@@ -56,14 +56,14 @@ namespace WolvenKit.ViewModels.Documents
         }
 
         public ICommand OpenRefCommand { get; private set; }
-        private bool CanOpenRef() => CName != null;
+        private bool CanOpenRef() => CName != null && DataViewModel.File.RelativePath != CName;
         private void ExecuteOpenRef()
         {
             Locator.Current.GetService<AppViewModel>().OpenFileFromDepotPath(CName);
         }
 
         public ICommand LoadRefCommand { get; private set; }
-        private bool CanLoadRef() => CName != null && DataViewModel.File.RelativePath != CName;
+        private bool CanLoadRef() => CName != null;
         private void ExecuteLoadRef()
         {
             var cr2w = DataViewModel.File.GetFileFromDepotPathOrCache(CName);
@@ -412,60 +412,60 @@ namespace WolvenKit.ViewModels.Documents
                             i++;
                         }
                     }
-                    else if (prop is SerializationDeferredDataBuffer sddb && sddb.Data is Package04 p4)
-                    {
-                        var i = 0;
-                        foreach (var item in p4.Chunks)
-                        {
-                            if (item is RedBaseClass rbc5)
-                            {
-                                LookForReferences(cvm, rbc5, xpath + "." + pi.RedName + $"[{i}]");
-                            }
-                            i++;
-                        }
-                    }
-                    else if (prop is SharedDataBuffer sdb)
-                    {
-                        if (sdb.Data is Package04 p42)
-                        {
-                            var i = 0;
-                            foreach (var item in p42.Chunks)
-                            {
-                                if (item is RedBaseClass rbc5)
-                                {
-                                    LookForReferences(cvm, rbc5, xpath + "." + pi.RedName + $"[{i}]");
-                                }
-                                i++;
-                            }
-                        }
-                    }
-                    else if (prop is DataBuffer db)
-                    {
-                        if (db.Data is Package04 p42)
-                        {
-                            var i = 0;
-                            foreach (var item in p42.Chunks)
-                            {
-                                if (item is RedBaseClass rbc5)
-                                {
-                                    LookForReferences(cvm, rbc5, xpath + "." + pi.RedName + $"[{i}]");
-                                }
-                                i++;
-                            }
-                        }
-                        else if (db.Data is CR2WList cl)
-                        {
-                            var i = 0;
-                            foreach (var item in cl.Files)
-                            {
-                                if (item.RootChunk is RedBaseClass rbc5)
-                                {
-                                    LookForReferences(cvm, rbc5, xpath + "." + pi.RedName + $"[{i}]");
-                                }
-                                i++;
-                            }
-                        }
-                    }
+                    //else if (prop is SerializationDeferredDataBuffer sddb && sddb.Data is Package04 p4)
+                    //{
+                    //    var i = 0;
+                    //    foreach (var item in p4.Chunks)
+                    //    {
+                    //        if (item is RedBaseClass rbc5)
+                    //        {
+                    //            LookForReferences(cvm, rbc5, xpath + "." + pi.RedName + $"[{i}]");
+                    //        }
+                    //        i++;
+                    //    }
+                    //}
+                    //else if (prop is SharedDataBuffer sdb)
+                    //{
+                    //    if (sdb.Data is Package04 p42)
+                    //    {
+                    //        var i = 0;
+                    //        foreach (var item in p42.Chunks)
+                    //        {
+                    //            if (item is RedBaseClass rbc5)
+                    //            {
+                    //                LookForReferences(cvm, rbc5, xpath + "." + pi.RedName + $"[{i}]");
+                    //            }
+                    //            i++;
+                    //        }
+                    //    }
+                    //}
+                    //else if (prop is DataBuffer db)
+                    //{
+                    //    if (db.Data is Package04 p42)
+                    //    {
+                    //        var i = 0;
+                    //        foreach (var item in p42.Chunks)
+                    //        {
+                    //            if (item is RedBaseClass rbc5)
+                    //            {
+                    //                LookForReferences(cvm, rbc5, xpath + "." + pi.RedName + $"[{i}]");
+                    //            }
+                    //            i++;
+                    //        }
+                    //    }
+                    //    else if (db.Data is CR2WList cl)
+                    //    {
+                    //        var i = 0;
+                    //        foreach (var item in cl.Files)
+                    //        {
+                    //            if (item.RootChunk is RedBaseClass rbc5)
+                    //            {
+                    //                LookForReferences(cvm, rbc5, xpath + "." + pi.RedName + $"[{i}]");
+                    //            }
+                    //            i++;
+                    //        }
+                    //    }
+                    //}
                 }
             }
 
