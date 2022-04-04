@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations;
 using System.IO;
 using ReactiveUI;
 using SharpGLTF.Validation;
-using WolvenKit.RED4.CR2W.Archive;
+using WolvenKit.RED4.Archive;
 using WolvenKit.RED4.Types;
 
 namespace WolvenKit.Common.Model.Arguments

@@ -4,7 +4,8 @@ using System.IO;
 using DynamicData;
 using DynamicData.Kernel;
 using WolvenKit.Common.Model;
-using WolvenKit.RED4.CR2W.Archive;
+using WolvenKit.Core.Interfaces;
+using WolvenKit.RED4.Archive;
 
 namespace WolvenKit.Common
 {

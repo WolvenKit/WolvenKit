@@ -10,6 +10,8 @@ using ReactiveUI.Fody.Helpers;
 using WolvenKit.Common;
 using WolvenKit.Common.Model;
 using WolvenKit.Common.Services;
+using WolvenKit.Core.Interfaces;
+using WolvenKit.RED4.Archive;
 using Path = System.IO.Path;
 
 namespace WolvenKit.RED4.CR2W.Archive
@@ -23,6 +25,8 @@ namespace WolvenKit.RED4.CR2W.Archive
 
         private readonly IHashService _hashService;
 
+        private readonly Red4ParserService _wolvenkitFileService;
+
         private readonly ILoggerService _logger;
 
         private readonly SourceList<RedFileSystemModel> _rootCache;
@@ -33,9 +37,10 @@ namespace WolvenKit.RED4.CR2W.Archive
 
         #region Constructors
 
-        public ArchiveManager(IHashService hashService, ILoggerService logger)
+        public ArchiveManager(IHashService hashService, Red4ParserService wolvenkitFileService, ILoggerService logger)
         {
             _hashService = hashService;
+            _wolvenkitFileService = wolvenkitFileService;
             _logger = logger;
 
             _rootCache = new SourceList<RedFileSystemModel>();
@@ -173,7 +178,7 @@ namespace WolvenKit.RED4.CR2W.Archive
                 return;
             }
 
-            var archive = Red4ParserServiceExtensions.ReadArchive(path, _hashService);
+            var archive = _wolvenkitFileService.ReadRed4Archive(path, _hashService);
             Archives.AddOrUpdate(archive);
         }
 
@@ -190,7 +195,7 @@ namespace WolvenKit.RED4.CR2W.Archive
                 return;
             }
 
-            var archive = Red4ParserServiceExtensions.ReadArchive(filename, _hashService);
+            var archive = _wolvenkitFileService.ReadRed4Archive(filename, _hashService);
             ModArchives.AddOrUpdate(archive);
         }
 
@@ -238,28 +243,20 @@ namespace WolvenKit.RED4.CR2W.Archive
         /// </summary>
         /// <returns></returns>
         public override Dictionary<string, IEnumerable<FileEntry>> GetGroupedFiles() =>
-            IsModBrowserActive
-            ? ModArchives.Items
-              .SelectMany(_ => _.Files.Values)
-              .GroupBy(_ => _.Extension)
-              .ToDictionary(_ => _.Key, _ => _.Select(x => x as FileEntry))
-            : Archives.Items
-              .SelectMany(_ => _.Files.Values)
-              .GroupBy(_ => _.Extension)
-              .ToDictionary(_ => _.Key, _ => _.Select(x => x as FileEntry));
+            GetItems()
+                .SelectMany(_ => _.Files.Values)
+                .GroupBy(_ => _.Extension)
+                .ToDictionary(_ => _.Key, _ => _.Select(x => x as FileEntry));
 
         /// <summary>
         /// Get all files in all archives
         /// </summary>
         /// <returns></returns>
         public override IEnumerable<FileEntry> GetFiles() =>
-            IsModBrowserActive
-            ? ModArchives.Items
-                .SelectMany(_ => _.Files.Values)
-                .Cast<FileEntry>()
-            : Archives.Items
+            GetItems()
                 .SelectMany(_ => _.Files.Values)
                 .Cast<FileEntry>();
+
 
         /// <summary>
         /// Checks if a file with the given hash exists in the archivemanager
@@ -268,26 +265,17 @@ namespace WolvenKit.RED4.CR2W.Archive
         /// <returns></returns>
         public bool ContainsFile(ulong hash) => Lookup(hash).HasValue;
 
+        private IEnumerable<IGameArchive> GetItems() => (IsModBrowserActive ? ModArchives.Items : Archives.Items).OrderByDescending(x => x.Name);
+
         /// <summary>
         /// Look up a hash in the ArchiveManager
         /// </summary>
         /// <param name="hash"></param>
         /// <returns></returns>
-        public override Optional<IGameFile> Lookup(ulong hash)
-        {
-            if (IsModBrowserActive)
-            {
-                return Optional<IGameFile>.ToOptional(
-                    (from item in ModArchives.Items where item.Files.ContainsKey(hash) select item.Files[hash])
+        public override Optional<IGameFile> Lookup(ulong hash) =>
+            Optional<IGameFile>.ToOptional(
+                (from item in GetItems() where item.Files.ContainsKey(hash) select item.Files[hash])
                 .FirstOrDefault());
-            }
-            else
-            {
-                return Optional<IGameFile>.ToOptional(
-                    (from item in Archives.Items where item.Files.ContainsKey(hash) select item.Files[hash])
-                .FirstOrDefault());
-            }
-        }
 
         /// <summary>
         /// Retrieves a directory with the given fullpath

@@ -164,6 +164,20 @@ namespace WolvenKit.RED4.Archive
             return extensions.ToArray();
         }
 
+        public static string[] GetFileExtensionsFromRootName(string rootClsName)
+        {
+            var extensions = new List<string>();
+            foreach (var kvp in _fileTypes)
+            {
+                if (kvp.Value.Any(x => x.Name == rootClsName))
+                {
+                    extensions.Add(kvp.Key);
+                }
+            }
+
+            return extensions.ToArray();
+        }
+
         public static string[] GetFileExtensions(CR2WFile file)
         {
             var extensions = new List<string>();

@@ -449,6 +449,18 @@
                             <TextBlock Text="Launch Game" Padding="5,0,0,0" />
                         </StackPanel>
                     </Button>
+                    <Separator Margin="6" />
+                    <Button x:Name="ToolbarLaunchSteamGameButton" Command="{Binding LaunchSteamGameCommand}" ToolTip="Launch Game - Did You Remember To Pack &amp; Install?">
+                        <StackPanel Orientation="Horizontal">
+                            <Grid>
+                                <iconPacks:PackIconCodicons Style="{StaticResource WolvenKitToolBarButtonIcon}"
+                                Foreground="{StaticResource WolvenKitYellow}"
+                                Padding="0,0,2,2"
+                                Kind="RunAll" />
+                            </Grid>
+                            <TextBlock Text="Launch Game (Steam)" Padding="5,0,0,0" />
+                        </StackPanel>
+                    </Button>
                     <Separator Margin="3" />
                     <TextBlock
                         Height="30"

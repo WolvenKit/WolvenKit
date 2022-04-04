@@ -5,7 +5,7 @@ namespace WolvenKit.RED4.Types
 	[REDMeta]
 	public partial class ScriptedPuppetPS : gamePuppetPS
 	{
-		[Ordinal(4)] 
+		[Ordinal(5)] 
 		[RED("deviceLink")] 
 		public CWeakHandle<PuppetDeviceLinkPS> DeviceLink
 		{
@@ -13,7 +13,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<PuppetDeviceLinkPS>>(value);
 		}
 
-		[Ordinal(5)] 
+		[Ordinal(6)] 
 		[RED("cooldownStorage")] 
 		public CHandle<CooldownStorage> CooldownStorage
 		{
@@ -21,7 +21,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<CooldownStorage>>(value);
 		}
 
-		[Ordinal(6)] 
+		[Ordinal(7)] 
 		[RED("isInitialized")] 
 		public CEnum<EBOOL> IsInitialized
 		{
@@ -29,7 +29,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CEnum<EBOOL>>(value);
 		}
 
-		[Ordinal(7)] 
+		[Ordinal(8)] 
 		[RED("wasAttached")] 
 		public CBool WasAttached
 		{
@@ -37,7 +37,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(8)] 
+		[Ordinal(9)] 
 		[RED("wasRevealedInNetworkPing")] 
 		public CBool WasRevealedInNetworkPing
 		{
@@ -45,7 +45,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(9)] 
+		[Ordinal(10)] 
 		[RED("numberActions")] 
 		public CInt32 NumberActions
 		{
@@ -53,7 +53,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CInt32>(value);
 		}
 
-		[Ordinal(10)] 
+		[Ordinal(11)] 
 		[RED("wasQuickHackAttempt")] 
 		public CBool WasQuickHackAttempt
 		{
@@ -61,7 +61,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(11)] 
+		[Ordinal(12)] 
 		[RED("hasDirectInteractionChoicesActive")] 
 		public CBool HasDirectInteractionChoicesActive
 		{
@@ -69,7 +69,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(12)] 
+		[Ordinal(13)] 
 		[RED("wasIncapacitated")] 
 		public CBool WasIncapacitated
 		{
@@ -77,7 +77,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(13)] 
+		[Ordinal(14)] 
 		[RED("isBreached")] 
 		public CBool IsBreached
 		{
@@ -85,7 +85,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(14)] 
+		[Ordinal(15)] 
 		[RED("isDead")] 
 		public CBool IsDead
 		{
@@ -93,7 +93,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(15)] 
+		[Ordinal(16)] 
 		[RED("isIncapacitated")] 
 		public CBool IsIncapacitated
 		{
@@ -101,7 +101,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(16)] 
+		[Ordinal(17)] 
 		[RED("isAndroidTurnedOff")] 
 		public CBool IsAndroidTurnedOff
 		{
@@ -109,7 +109,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(17)] 
+		[Ordinal(18)] 
 		[RED("securitySystemData")] 
 		public SecuritySystemData SecuritySystemData
 		{
@@ -117,7 +117,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<SecuritySystemData>(value);
 		}
 
-		[Ordinal(18)] 
+		[Ordinal(19)] 
 		[RED("activeContexts")] 
 		public CArray<CEnum<gamedeviceRequestType>> ActiveContexts
 		{
@@ -125,7 +125,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<CEnum<gamedeviceRequestType>>>(value);
 		}
 
-		[Ordinal(19)] 
+		[Ordinal(20)] 
 		[RED("lastInteractionLayerTag")] 
 		public CName LastInteractionLayerTag
 		{
@@ -133,7 +133,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
-		[Ordinal(20)] 
+		[Ordinal(21)] 
 		[RED("quickHacksExposed")] 
 		public CBool QuickHacksExposed
 		{
@@ -141,7 +141,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(21)] 
+		[Ordinal(22)] 
 		[RED("currentCooldownID")] 
 		public CUInt32 CurrentCooldownID
 		{
@@ -149,7 +149,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CUInt32>(value);
 		}
 
-		[Ordinal(22)] 
+		[Ordinal(23)] 
 		[RED("reactionPresetID")] 
 		public TweakDBID ReactionPresetID
 		{
@@ -157,7 +157,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<TweakDBID>(value);
 		}
 
-		[Ordinal(23)] 
+		[Ordinal(24)] 
 		[RED("isDefeatMechanicActive")] 
 		public CBool IsDefeatMechanicActive
 		{
@@ -165,7 +165,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(24)] 
+		[Ordinal(25)] 
 		[RED("leftHandLoadout")] 
 		public gameItemID LeftHandLoadout
 		{
@@ -173,7 +173,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gameItemID>(value);
 		}
 
-		[Ordinal(25)] 
+		[Ordinal(26)] 
 		[RED("rightHandLoadout")] 
 		public gameItemID RightHandLoadout
 		{
@@ -181,7 +181,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gameItemID>(value);
 		}
 
-		[Ordinal(26)] 
+		[Ordinal(27)] 
 		[RED("customWeaponLoadout")] 
 		public CachedItemLoadout CustomWeaponLoadout
 		{
@@ -189,7 +189,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CachedItemLoadout>(value);
 		}
 
-		[Ordinal(27)] 
+		[Ordinal(28)] 
 		[RED("genericMeleeLoadout")] 
 		public CachedItemLoadout GenericMeleeLoadout
 		{
@@ -197,7 +197,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CachedItemLoadout>(value);
 		}
 
-		[Ordinal(28)] 
+		[Ordinal(29)] 
 		[RED("genericRangedLoadout")] 
 		public CachedItemLoadout GenericRangedLoadout
 		{
@@ -205,7 +205,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CachedItemLoadout>(value);
 		}
 
-		[Ordinal(29)] 
+		[Ordinal(30)] 
 		[RED("questForceScannerPreset")] 
 		public TweakDBID QuestForceScannerPreset
 		{
@@ -213,7 +213,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<TweakDBID>(value);
 		}
 
-		[Ordinal(30)] 
+		[Ordinal(31)] 
 		[RED("bountyID")] 
 		public TweakDBID BountyID
 		{
@@ -221,7 +221,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<TweakDBID>(value);
 		}
 
-		[Ordinal(31)] 
+		[Ordinal(32)] 
 		[RED("transgressions")] 
 		public CArray<TweakDBID> Transgressions
 		{

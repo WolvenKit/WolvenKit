@@ -102,7 +102,7 @@ namespace CP77Tools.Tasks
                 }
 
                 // read archive
-                var ar = Red4ParserServiceExtensions.ReadArchive(fileInfo.FullName, _hashService);
+                var ar = _wolvenkitFileService.ReadRed4Archive(fileInfo.FullName, _hashService);
 
                 var isHash = ulong.TryParse(hash, out var hashNumber);
 

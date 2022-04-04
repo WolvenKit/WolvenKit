@@ -7,7 +7,7 @@ using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using WolvenKit.Common.Extensions;
 using WolvenKit.Common.Services;
-using WolvenKit.RED4.CR2W.Archive;
+using WolvenKit.RED4.Archive;
 
 namespace CP77Tools.Tasks
 {
@@ -79,7 +79,7 @@ namespace CP77Tools.Tasks
             foreach (var processedarchive in archiveFileInfos)
             {
                 // read archive
-                var ar = Red4ParserServiceExtensions.ReadArchive(processedarchive.FullName, _hashService);
+                var ar = _wolvenkitFileService.ReadRed4Archive(processedarchive.FullName, _hashService);
 
                 // run
 

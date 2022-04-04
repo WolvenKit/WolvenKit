@@ -4,9 +4,9 @@ using SharpGLTF.Schema2;
 using WolvenKit.Common.Conversion;
 using WolvenKit.Common.RED4.Compiled;
 using WolvenKit.Modkit.RED4.Tools;
+using WolvenKit.RED4.Archive;
 using WolvenKit.RED4.Archive.Buffer;
 using WolvenKit.RED4.Archive.CR2W;
-using WolvenKit.RED4.CR2W.Archive;
 using WolvenKit.RED4.CR2W.JSON;
 using WolvenKit.RED4.Types;
 

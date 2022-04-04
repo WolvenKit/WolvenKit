@@ -18,9 +18,9 @@ using WolvenKit.Common.Conversion;
 using WolvenKit.Core.Extensions;
 using WolvenKit.FunctionalTests.Model;
 using WolvenKit.Modkit.RED4;
+using WolvenKit.RED4.Archive;
 using WolvenKit.RED4.Archive.IO;
 using WolvenKit.RED4.CR2W;
-using WolvenKit.RED4.CR2W.Archive;
 using WolvenKit.RED4.CR2W.JSON;
 
 namespace WolvenKit.FunctionalTests

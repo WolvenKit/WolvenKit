@@ -14,7 +14,7 @@ using WolvenKit.Common.Model.Arguments;
 using WolvenKit.Core.Extensions;
 using WolvenKit.FunctionalTests.Model;
 using WolvenKit.Modkit.RED4;
-using WolvenKit.RED4.CR2W.Archive;
+using WolvenKit.RED4.Archive;
 
 namespace WolvenKit.FunctionalTests
 {

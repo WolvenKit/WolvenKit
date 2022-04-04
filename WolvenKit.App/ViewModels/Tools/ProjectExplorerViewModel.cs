@@ -178,14 +178,14 @@ namespace WolvenKit.ViewModels.Tools
         /// </summary>
         public ICommand CopyFileCommand { get; private set; }
         private bool CanCopyFile() => _projectManager.ActiveProject != null && SelectedItem != null;
-        private void CopyFile() => Clipboard.SetText(SelectedItem.FullName);
+        private void CopyFile() => Clipboard.SetDataObject(SelectedItem.FullName);
 
         /// <summary>
         /// Copies relative path of node.
         /// </summary>
         public ICommand CopyRelPathCommand { get; private set; }
         private bool CanCopyRelPath() => _projectManager.ActiveProject != null && SelectedItem != null;
-        private void ExecuteCopyRelPath() => Clipboard.SetText(FileModel.GetRelativeName(SelectedItem.FullName, ActiveMod));
+        private void ExecuteCopyRelPath() => Clipboard.SetDataObject(FileModel.GetRelativeName(SelectedItem.FullName, ActiveMod));
 
         /// <summary>
         /// Reimports the game file to replace the current one
