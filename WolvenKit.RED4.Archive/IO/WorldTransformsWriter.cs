@@ -17,9 +17,9 @@ namespace WolvenKit.RED4.Archive.IO
 
         }
 
-        public void WriteBuffer(worldSharedDataBuffer wsb)
+        public void WriteBuffer(RedBuffer wsb)
         {
-            if (wsb.Buffer.Data is WorldTransformsBuffer swt)
+            if (wsb.Data is WorldTransformsBuffer swt)
             {
                 foreach (var t in swt.Transforms)
                 {
