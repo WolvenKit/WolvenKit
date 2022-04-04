@@ -308,7 +308,7 @@ namespace WolvenKit.ViewModels.Tools
 
         private void ExecuteConfirmCollection(string v)
         {
-            switch (SelectedExport)
+            switch (SelectedObject)
             {
                 case { Properties: MeshExportArgs meshExportArgs }:
                     switch (v)
@@ -335,6 +335,18 @@ namespace WolvenKit.ViewModels.Tools
                     }
                     break;
 
+                case { Properties: GltfImportArgs gltfImportArgs }:
+                    switch (v)
+                    {
+                        case nameof(GltfImportArgs.Rig):
+                            gltfImportArgs.Rig = new List<FileEntry>() { CollectionSelectedItems.Select(_ => _.Model).Cast<FileEntry>().FirstOrDefault() };
+                            _notificationService.Success($"Selected Rigs were added to WithRig arguments.");
+                            gltfImportArgs.importFormat = GltfImportAsFormat.MeshWithRig;
+                            break;
+                    }
+                    break;
+
+
                 case { Properties: OpusExportArgs opusExportArgs }:
                     switch (v)
                     {
@@ -358,11 +370,14 @@ namespace WolvenKit.ViewModels.Tools
 
         private void ExecuteSetCollection(string argType)
         {
-            switch (SelectedExport)
+            switch (SelectedObject)
             {
+                case { Properties: GltfImportArgs gltfImportArgs }:
+                    InitCollectionEditorForMesh(argType, gltfImportArgs);
+                    break;
+
                 case { Properties: MeshExportArgs meshExportArgs }:
                     InitCollectionEditorForMesh(argType, meshExportArgs);
-
                     break;
 
                 case { Properties: OpusExportArgs opusExportArgs }:
@@ -372,7 +387,7 @@ namespace WolvenKit.ViewModels.Tools
             }
         }
 
-        private void InitCollectionEditorForMesh(string argType, MeshExportArgs meshExportArgs)
+        private void InitCollectionEditorForMesh(string argType, ImportExportArgs args)
         {
             if (_gameController.GetController() is not RED4Controller cp77Controller)
             {
@@ -381,23 +396,41 @@ namespace WolvenKit.ViewModels.Tools
 
             var fetchExtension = ERedExtension.rig;
             List<FileEntry> selectedEntries = new();
-            switch (argType)
+            if (args is MeshExportArgs meshExportArgs)
             {
-                case nameof(MeshExportArgs.MultiMeshMeshes):
-                    fetchExtension = ERedExtension.mesh;
-                    selectedEntries = meshExportArgs.MultiMeshMeshes;
-                    break;
+                switch (argType)
+                {
+                    case nameof(MeshExportArgs.MultiMeshMeshes):
+                        fetchExtension = ERedExtension.mesh;
+                        selectedEntries = meshExportArgs.MultiMeshMeshes;
+                        break;
 
-                case nameof(MeshExportArgs.MultiMeshRigs):
-                    selectedEntries = meshExportArgs.MultiMeshRigs;
-                    break;
+                    case nameof(MeshExportArgs.MultiMeshRigs):
+                        selectedEntries = meshExportArgs.MultiMeshRigs;
+                        break;
 
-                case nameof(MeshExportArgs.Rig):
-                    selectedEntries = meshExportArgs.Rig;
-                    break;
+                    case nameof(MeshExportArgs.Rig):
+                        selectedEntries = meshExportArgs.Rig;
+                        fetchExtension = ERedExtension.rig;
+                        break;
 
-                default:
-                    break;
+                    default:
+                        break;
+                }
+            }
+
+            if (args is GltfImportArgs gltfImportArgs)
+            {
+                switch (argType)
+                {
+                    case nameof(GltfImportArgs.Rig):
+                        selectedEntries = gltfImportArgs.Rig;
+                        fetchExtension = ERedExtension.rig;
+                        break;
+
+                    default:
+                        break;
+                }
             }
 
             // set selected types

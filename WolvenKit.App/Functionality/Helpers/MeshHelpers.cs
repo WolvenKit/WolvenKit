@@ -950,7 +950,7 @@ namespace WolvenKit.ViewModels.Documents
             {
                 var xbm = File.GetFileFromDepotPathOrCache(crrn2.DepotPath);
 
-                if (xbm.RootChunk is not ITexture it)
+                if (xbm is null || xbm.RootChunk is not ITexture it)
                 {
                     goto SkipNormals;
                 }

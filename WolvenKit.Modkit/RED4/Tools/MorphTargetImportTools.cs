@@ -4,11 +4,15 @@ using System.IO;
 using System.Linq;
 using SharpGLTF.Schema2;
 using WolvenKit.Common.FNV1A;
-using WolvenKit.Common.Model.Arguments;
+using WolvenKit.RED4.CR2W;
 using WolvenKit.Modkit.RED4.GeneralStructs;
 using WolvenKit.Modkit.RED4.Tools;
+using WolvenKit.Modkit.RED4.RigFile;
+using WolvenKit.RED4.Archive;
 using WolvenKit.RED4.Archive.CR2W;
 using WolvenKit.RED4.Types;
+using WolvenKit.Common.Model.Arguments;
+
 using Vec3 = System.Numerics.Vector3;
 using Vec4 = System.Numerics.Vector4;
 

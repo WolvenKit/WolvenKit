@@ -125,7 +125,7 @@ namespace WolvenKit.Modkit.RED4.Tools
             var expMeshes = ContainRawMesh(ms, meshesinfo, lodFilter, chunkMask);
 
             if (includeRig)
-            { 
+            {
                 UpdateSkinningParamCloth(ref expMeshes, cr2w);
             }
 
@@ -167,13 +167,13 @@ namespace WolvenKit.Modkit.RED4.Tools
                         }
                     }
                 }
-                    //var rig = GetOrphanRig(rendblob, cr2w);
-                    //Skin skin2 = null;
-                    //if (rig != null)
-                    //{
-                    //    skin2 = model.CreateSkin();
-                    //    skin2.BindJoints(RIG.ExportNodes(ref model, rig).Values.ToArray());
-                    //}
+                //var rig = GetOrphanRig(rendblob, cr2w);
+                //Skin skin2 = null;
+                //if (rig != null)
+                //{
+                //    skin2 = model.CreateSkin();
+                //    skin2.BindJoints(RIG.ExportNodes(ref model, rig).Values.ToArray());
+                //}
                 AddSubmeshesToModel(expMeshes, skin, ref model, node, materials);
             }
         }
@@ -708,10 +708,12 @@ namespace WolvenKit.Modkit.RED4.Tools
                     {
                         for (var eye = 0; eye < meshes[i].weightCount; eye++)
                         {
-                            if (meshes[i].boneindices[e, eye] >= oldRig.BoneCount && meshes[i].weights[e, eye] == 0)
+
+                            if (meshes[i].boneindices[e, eye] >= oldRig.BoneCount)// && meshes[i].weights[e, eye] == 0)
                             {
                                 meshes[i].boneindices[e, eye] = 0;
                             }
+
                             var found = false;
                             for (ushort r = 0; r < newRig.BoneCount; r++)
                             {
@@ -800,37 +802,37 @@ namespace WolvenKit.Modkit.RED4.Tools
                 {
                     //if (skin != null)
                     //{
+                    for (var i = 0; i < mesh.positions.Length; i++)
+                    {
+                        bw.Write(mesh.boneindices[i, 0]);
+                        bw.Write(mesh.boneindices[i, 1]);
+                        bw.Write(mesh.boneindices[i, 2]);
+                        bw.Write(mesh.boneindices[i, 3]);
+                    }
+                    for (var i = 0; i < mesh.positions.Length; i++)
+                    {
+                        bw.Write(mesh.weights[i, 0]);
+                        bw.Write(mesh.weights[i, 1]);
+                        bw.Write(mesh.weights[i, 2]);
+                        bw.Write(mesh.weights[i, 3]);
+                    }
+                    if (mesh.weightCount > 4)
+                    {
                         for (var i = 0; i < mesh.positions.Length; i++)
                         {
-                            bw.Write(mesh.boneindices[i, 0]);
-                            bw.Write(mesh.boneindices[i, 1]);
-                            bw.Write(mesh.boneindices[i, 2]);
-                            bw.Write(mesh.boneindices[i, 3]);
+                            bw.Write(mesh.boneindices[i, 4]);
+                            bw.Write(mesh.boneindices[i, 5]);
+                            bw.Write(mesh.boneindices[i, 6]);
+                            bw.Write(mesh.boneindices[i, 7]);
                         }
                         for (var i = 0; i < mesh.positions.Length; i++)
                         {
-                            bw.Write(mesh.weights[i, 0]);
-                            bw.Write(mesh.weights[i, 1]);
-                            bw.Write(mesh.weights[i, 2]);
-                            bw.Write(mesh.weights[i, 3]);
+                            bw.Write(mesh.weights[i, 4]);
+                            bw.Write(mesh.weights[i, 5]);
+                            bw.Write(mesh.weights[i, 6]);
+                            bw.Write(mesh.weights[i, 7]);
                         }
-                        if (mesh.weightCount > 4)
-                        {
-                            for (var i = 0; i < mesh.positions.Length; i++)
-                            {
-                                bw.Write(mesh.boneindices[i, 4]);
-                                bw.Write(mesh.boneindices[i, 5]);
-                                bw.Write(mesh.boneindices[i, 6]);
-                                bw.Write(mesh.boneindices[i, 7]);
-                            }
-                            for (var i = 0; i < mesh.positions.Length; i++)
-                            {
-                                bw.Write(mesh.weights[i, 4]);
-                                bw.Write(mesh.weights[i, 5]);
-                                bw.Write(mesh.weights[i, 6]);
-                                bw.Write(mesh.weights[i, 7]);
-                            }
-                        }
+                    }
                     //}
                 }
                 for (var i = 0; i < mesh.indices.Length; i += 3)
@@ -923,37 +925,37 @@ namespace WolvenKit.Modkit.RED4.Tools
                 {
                     //if (skin != null)
                     //{
+                    {
+                        var acc = model.CreateAccessor();
+                        var buff = model.UseBufferView(buffer, BuffViewoffset, mesh.positions.Length * 8);
+                        acc.SetData(buff, 0, mesh.positions.Length, DimensionType.VEC4, EncodingType.UNSIGNED_SHORT, false);
+                        prim.SetVertexAccessor("JOINTS_0", acc);
+                        BuffViewoffset += mesh.positions.Length * 8;
+                    }
+                    {
+                        var acc = model.CreateAccessor();
+                        var buff = model.UseBufferView(buffer, BuffViewoffset, mesh.positions.Length * 16);
+                        acc.SetData(buff, 0, mesh.positions.Length, DimensionType.VEC4, EncodingType.FLOAT, false);
+                        prim.SetVertexAccessor("WEIGHTS_0", acc);
+                        BuffViewoffset += mesh.positions.Length * 16;
+                    }
+                    if (mesh.weightCount > 4)
+                    {
                         {
                             var acc = model.CreateAccessor();
                             var buff = model.UseBufferView(buffer, BuffViewoffset, mesh.positions.Length * 8);
                             acc.SetData(buff, 0, mesh.positions.Length, DimensionType.VEC4, EncodingType.UNSIGNED_SHORT, false);
-                            prim.SetVertexAccessor("JOINTS_0", acc);
+                            prim.SetVertexAccessor("JOINTS_1", acc);
                             BuffViewoffset += mesh.positions.Length * 8;
                         }
                         {
                             var acc = model.CreateAccessor();
                             var buff = model.UseBufferView(buffer, BuffViewoffset, mesh.positions.Length * 16);
                             acc.SetData(buff, 0, mesh.positions.Length, DimensionType.VEC4, EncodingType.FLOAT, false);
-                            prim.SetVertexAccessor("WEIGHTS_0", acc);
+                            prim.SetVertexAccessor("WEIGHTS_1", acc);
                             BuffViewoffset += mesh.positions.Length * 16;
                         }
-                        if (mesh.weightCount > 4)
-                        {
-                            {
-                                var acc = model.CreateAccessor();
-                                var buff = model.UseBufferView(buffer, BuffViewoffset, mesh.positions.Length * 8);
-                                acc.SetData(buff, 0, mesh.positions.Length, DimensionType.VEC4, EncodingType.UNSIGNED_SHORT, false);
-                                prim.SetVertexAccessor("JOINTS_1", acc);
-                                BuffViewoffset += mesh.positions.Length * 8;
-                            }
-                            {
-                                var acc = model.CreateAccessor();
-                                var buff = model.UseBufferView(buffer, BuffViewoffset, mesh.positions.Length * 16);
-                                acc.SetData(buff, 0, mesh.positions.Length, DimensionType.VEC4, EncodingType.FLOAT, false);
-                                prim.SetVertexAccessor("WEIGHTS_1", acc);
-                                BuffViewoffset += mesh.positions.Length * 16;
-                            }
-                        }
+                    }
                     //}
                 }
                 {
@@ -1063,11 +1065,32 @@ namespace WolvenKit.Modkit.RED4.Tools
                     LocalScale = Enumerable.Repeat(Vec3.One, boneCount).ToArray(),
                     Parent = Enumerable.Repeat<short>(-1, boneCount).ToArray(),
                     Names = meshBlob.BoneNames.Select(x => x.GetResolvedText()).ToArray()
-            };
+                };
                 return Rig;
             }
             return null;
         }
+
+        public static RawArmature GetOrphanRig(ModelRoot model)
+        {
+            if (model.LogicalSkins.Count > 0 && model.LogicalSkins[0].JointsCount > 0)
+            {
+                var boneCount = model.LogicalSkins[0].JointsCount;
+                var Rig = new RawArmature
+                {
+                    BoneCount = boneCount,
+                    LocalPosn = Enumerable.Range(0, boneCount).Select(_ => model.LogicalSkins[0].GetJoint(_).Joint.LocalTransform.Translation).ToArray(),
+                    LocalRot = Enumerable.Range(0, boneCount).Select(_ => model.LogicalSkins[0].GetJoint(_).Joint.LocalTransform.Rotation).ToArray(),
+                    LocalScale = Enumerable.Range(0, boneCount).Select(_ => model.LogicalSkins[0].GetJoint(_).Joint.LocalTransform.Scale).ToArray(),
+                    Parent = Enumerable.Repeat<short>(-1, boneCount).ToArray(),
+                    //Parent       = Enumerable.Range(0, boneCount).Select(_ => (short)model.LogicalSkins[0].GetJoint(_).Joint.VisualParent.LogicalIndex).ToArray(),
+                    Names = Enumerable.Range(0, model.LogicalSkins[0].JointsCount).Select(_ => model.LogicalSkins[0].GetJoint(_).Joint.Name).ToArray()
+                };
+                return Rig;
+            }
+            return null;
+        }
+
         private static void RemoveDoubleFaces(ref List<RawMeshContainer> meshes)
         {
             for (var i = 0; i < meshes.Count; i++)

@@ -635,8 +635,9 @@ namespace WolvenKit.Modkit.RED4
         {
             if (args.Keep)
             {
-                var redfile = FindRedFile(rawRelative, outDir, $".{args.importFormat.ToString().ToLower()}");
 
+                var ext = args.importFormat == GltfImportAsFormat.MeshWithRig ? $".mesh" : $".{args.importFormat.ToString().ToLower()}"; 
+                var redfile = FindRedFile(rawRelative, outDir, ext);
                 if (string.IsNullOrEmpty(redfile))
                 {
                     _loggerService.Warning($"No existing redfile found to rebuild for {rawRelative.Name}");
@@ -658,6 +659,12 @@ namespace WolvenKit.Modkit.RED4
                             break;
                         case GltfImportAsFormat.Anims:
                             result = ImportAnims(rawRelative.ToFileInfo(), redFs, args.Archives);
+                            break;
+                        case GltfImportAsFormat.MeshWithRig:
+                            result = ImportMesh(rawRelative.ToFileInfo(), redFs, args);
+                            break;
+                        case GltfImportAsFormat.Rig:
+                            result = ImportRig(rawRelative.ToFileInfo(), redFs, args);
                             break;
                     }
 

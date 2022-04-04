@@ -313,7 +313,11 @@ namespace WolvenKit.ViewModels.Documents
                     var sector = Sectors.Where(x => x.Text == text).FirstOrDefault();
                     if (sector != null)
                     {
-                        LoadSector(sector);
+                        try
+                        {
+                            LoadSector(sector);
+                        }
+                        catch { }
                     }
                     e.Handled = true;
                 }

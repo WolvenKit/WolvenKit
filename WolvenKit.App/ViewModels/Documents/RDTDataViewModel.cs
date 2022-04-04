@@ -23,6 +23,10 @@ namespace WolvenKit.ViewModels.Documents
         public ViewModelActivator Activator { get; } = new();
 
         protected readonly IRedType _data;
+/*
+        [Reactive] public RedDocumentViewModel File { get; set; }
+
+        public static IRedType CopiedChunk;*/
 
         [Reactive] public RedDocumentViewModel File { get; set; }
 
@@ -97,6 +101,9 @@ namespace WolvenKit.ViewModels.Documents
         public virtual ChunkViewModel GenerateChunks() => new ChunkViewModel(_data, this);
 
         [Reactive] public ChunkViewModel SelectedChunk { get; set; }
+
+        [Reactive] public ChunkViewModel SelectedChunks { get; set; }
+
 
         [Reactive] public ChunkViewModel RootChunk { get; set; }
 

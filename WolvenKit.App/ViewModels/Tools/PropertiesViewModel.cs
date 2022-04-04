@@ -347,19 +347,27 @@ namespace WolvenKit.ViewModels.Tools
 
         public void LoadModel(RedBaseClass cls)
         {
-            var meshes = MakePreviewMesh(cls);
-
-            IsMeshPreviewVisible = true;
-            SelectedIndex = 1;
-
-            var bounds = new SharpDX.BoundingBox();
-            foreach (var mesh in meshes)
+            try
             {
-                bounds = SharpDX.BoundingBox.Merge(bounds, mesh.BoundsWithTransform);
+                var meshes = MakePreviewMesh(cls);
+
+                IsMeshPreviewVisible = true;
+                SelectedIndex = 1;
+
+                var bounds = new SharpDX.BoundingBox();
+                foreach (var mesh in meshes)
+                {
+                    bounds = SharpDX.BoundingBox.Merge(bounds, mesh.BoundsWithTransform);
+                }
+
+                ModelGroupBounds = bounds;
+                ModelGroup.Reset(meshes);
+            }
+            catch
+            {
+
             }
 
-            ModelGroupBounds = bounds;
-            ModelGroup.Reset(meshes);
         }
 
         public void LoadImage(BitmapSource p0) => LoadedBitmapFrame = p0;

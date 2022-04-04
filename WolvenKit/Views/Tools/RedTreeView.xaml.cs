@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -15,10 +16,13 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using Newtonsoft.Json;
+using Splat;
 using Syncfusion.UI.Xaml.TreeView;
 using WolvenKit.Common.Conversion;
+using WolvenKit.Common.Services;
 using WolvenKit.RED4.Types;
 using WolvenKit.ViewModels.Shell;
+using WolvenKit.ViewModels.Documents;
 
 namespace WolvenKit.Views.Tools
 {
@@ -41,6 +45,7 @@ namespace WolvenKit.Views.Tools
             set { SetValue(ItemsSourceProperty, value); }
         }
 
+        /// <summary>Identifies the <see cref="SelectedItem"/> dependency property.</summary>
         public static readonly DependencyProperty SelectedItemProperty =
             DependencyProperty.Register(nameof(SelectedItem), typeof(object), typeof(RedTreeView));
 
@@ -49,6 +54,62 @@ namespace WolvenKit.Views.Tools
             get { return (object)GetValue(SelectedItemProperty); }
             set { SetValue(SelectedItemProperty, value); }
         }
+
+        public object SelectedItems { get; set; }
+
+        /*
+
+                //
+                // Summary:
+                //     Identifies the Syncfusion.UI.Xaml.TreeView.SfTreeView.SelectedItems dependency
+                //     property.
+                public static readonly DependencyProperty SelectedItemsProperty =
+                    DependencyProperty.Register(nameof(SelectedItems), typeof(ObservableCollection<object>), typeof(RedTreeView));
+                //    , new PropertyMetadata(null, delegate (DependencyObject sender, DependencyPropertyChangedEventArgs args) {(sender as RedTreeView).OnPropertyChanged(args); }));
+
+                //
+                // Summary:
+                //     Gets or sets the selected items for selection.
+                //
+                // Value:
+                //     The collection of object that contains data item that are selected.
+                public ObservableCollection<object> SelectedItems
+                {
+                    get { return (ObservableCollection<object>)GetValue(SelectedItemsProperty); }
+                    set { SetValue(SelectedItemsProperty, value); }
+                }
+
+
+        */
+
+        private void OnSelectionChanged(object sender, Syncfusion.UI.Xaml.TreeView.ItemSelectionChangedEventArgs e)
+        {
+            //Locator.Current.GetService<ILoggerService>().Success($"Selected item : {SelectedItems}");
+
+        }
+
+        public void OnCollapsed(object sender, Syncfusion.UI.Xaml.TreeView.NodeExpandedCollapsedEventArgs e)
+        {
+            if (e.Node.Level == 0 &&
+                e.Node.Content is ChunkViewModel cvm &&
+                cvm.ResolvedData is worldStreamingSector)
+            {
+                var test = Locator.Current.GetService<AppViewModel>();
+                var tt = Locator.Current.GetService<AppViewModel>();
+
+                if (tt.ActiveDocument is RedDocumentViewModel rr &&
+                    rr.SelectedTabItemViewModel is RDTDataViewModel rdtd)
+                {
+                    var chunk = rdtd.Chunks.First();
+                    try
+                    {
+                        chunk.Refresh();
+                    }
+                    catch { }
+                }
+            }
+        }
+
 
         // Drag & Drop Functionality
 
@@ -63,6 +124,7 @@ namespace WolvenKit.Views.Tools
         }
 
         public bool IsControlBeingHeld => Keyboard.IsKeyDown(Key.LeftCtrl) || Keyboard.IsKeyDown(Key.RightCtrl);
+
 
         private void SfTreeView_ItemDragOver(object sender, TreeViewItemDragOverEventArgs e)
         {
@@ -169,25 +231,25 @@ namespace WolvenKit.Views.Tools
                     {
                         target.Parent.MoveChild(target.Parent.Properties.IndexOf(target) + (e.DropPosition == DropPosition.DropBelow ? 1 : 0), source);
                     }
-                        //if (target.Parent.Data is DataBuffer or SerializationDeferredDataBuffer)
-                        //{
-                        //    target.Parent.AddChunkToDataBuffer((RedBaseClass)rbc.DeepCopy(), target.Parent.Properties.IndexOf(target) + 1);
-                        //}
+                    //if (target.Parent.Data is DataBuffer or SerializationDeferredDataBuffer)
+                    //{
+                    //    target.Parent.AddChunkToDataBuffer((RedBaseClass)rbc.DeepCopy(), target.Parent.Properties.IndexOf(target) + 1);
+                    //}
 
-                        //if (target.Parent.Data is IRedArray arr)
-                        //{
-                        //    var arrayType = target.Parent.Data.GetType().GetGenericTypeDefinition();
+                    //if (target.Parent.Data is IRedArray arr)
+                    //{
+                    //    var arrayType = target.Parent.Data.GetType().GetGenericTypeDefinition();
 
-                        //    if (arrayType == typeof(CArray<>))
-                        //    {
-                        //        target.Parent.AddClassToArray((RedBaseClass)rbc.DeepCopy(), target.Parent.Properties.IndexOf(target) + 1);
-                        //    }
+                    //    if (arrayType == typeof(CArray<>))
+                    //    {
+                    //        target.Parent.AddClassToArray((RedBaseClass)rbc.DeepCopy(), target.Parent.Properties.IndexOf(target) + 1);
+                    //    }
 
-                        //    if (arrayType == typeof(CStatic<>) && arr.Count < arr.MaxSize)
-                        //    {
-                        //        target.Parent.AddClassToArray((RedBaseClass)rbc.DeepCopy(), target.Parent.Properties.IndexOf(target) + 1);
-                        //    }
-                        //}
+                    //    if (arrayType == typeof(CStatic<>) && arr.Count < arr.MaxSize)
+                    //    {
+                    //        target.Parent.AddClassToArray((RedBaseClass)rbc.DeepCopy(), target.Parent.Properties.IndexOf(target) + 1);
+                    //    }
+                    //}
                 }
             }
         }

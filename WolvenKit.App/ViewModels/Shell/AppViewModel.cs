@@ -444,14 +444,14 @@ namespace WolvenKit.ViewModels.Shell
         private async Task ExecuteSelectFile(FileModel model) => await PropertiesViewModel.ExecuteSelectFile(model);
 
         public ICommand SaveFileCommand { get; private set; }
-        private bool CanSaveFile() => ActiveDocument != null; // _projectManager.ActiveProject != null && 
+        private bool CanSaveFile() => ActiveDocument != null; // _projectManager.ActiveProject != null &&
         private void ExecuteSaveFile() => Save(ActiveDocument);
 
         public ICommand SaveAsCommand { get; private set; }
         private void ExecuteSaveAs() => Save(ActiveDocument, true);
 
         public ICommand SaveAllCommand { get; private set; }
-        private bool CanSaveAll() => OpenDocuments?.Count > 0; //  _projectManager.ActiveProject != null && 
+        private bool CanSaveAll() => OpenDocuments?.Count > 0; //  _projectManager.ActiveProject != null &&
         private void ExecuteSaveAll()
         {
             foreach (var file in OpenDocuments)
