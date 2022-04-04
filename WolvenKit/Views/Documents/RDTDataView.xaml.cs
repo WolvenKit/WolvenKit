@@ -65,15 +65,17 @@ namespace WolvenKit.Views.Documents
 
                 LayoutNodes();
 
-                ViewModel.Nodes.CollectionChanged += (object sender, NotifyCollectionChangedEventArgs e) =>
-                {
-                    LayoutNodes();
-                };
+                //ViewModel.Nodes.CollectionChanged += (object sender, NotifyCollectionChangedEventArgs e) =>
+                //{
+                //    LayoutNodes();
+                //};
 
-                ViewModel.References.CollectionChanged += (object sender, NotifyCollectionChangedEventArgs e) =>
-                {
-                    LayoutNodes();
-                };
+                //ViewModel.References.CollectionChanged += (object sender, NotifyCollectionChangedEventArgs e) =>
+                //{
+                //    LayoutNodes();
+                //};
+
+                ViewModel.LayoutNodes = LayoutNodes;
 
                 //Editor.ItemsUpdated += (object sender, RoutedEventArgs e) =>
                 //{
@@ -142,6 +144,7 @@ namespace WolvenKit.Views.Documents
 
         public void LayoutNodes()
         {
+            Editor.UpdateLayout();
             var graph = new GeometryGraph();
             var msaglNodes = new Dictionary<int, Microsoft.Msagl.Core.Layout.Node>();
             var socketNodeLookup = new Dictionary<int, int>();
@@ -151,8 +154,10 @@ namespace WolvenKit.Views.Documents
                 {
                     if (ic.DataContext is INodeViewModel nvm)
                     {
+                        var width = ic.ActualWidth != 0 ? ic.ActualWidth : 300;
+                        var height = ic.ActualHeight != 0 ? ic.ActualHeight : 40;
                         var msaglNode = new Microsoft.Msagl.Core.Layout.Node(
-                        CurveFactory.CreateRectangle(ic.ActualWidth, ic.ActualHeight, new Microsoft.Msagl.Core.Geometry.Point()))
+                        CurveFactory.CreateRectangle(width, height, new Microsoft.Msagl.Core.Geometry.Point()))
                         {
                             UserData = nvm.GetHashCode()
                         };
@@ -174,6 +179,20 @@ namespace WolvenKit.Views.Documents
                             }
                         }
                     }
+                }
+            }
+
+            foreach (var nvm in ViewModel.Nodes)
+            {
+                if (!msaglNodes.ContainsKey(nvm.GetHashCode()))
+                {
+                    var node = new Microsoft.Msagl.Core.Layout.Node(
+                        CurveFactory.CreateRectangle(300, 40, new Microsoft.Msagl.Core.Geometry.Point()))
+                    {
+                        UserData = nvm.GetHashCode()
+                    };
+                    msaglNodes[nvm.GetHashCode()] = node;
+                    graph.Nodes.Add(node);
                 }
             }
 

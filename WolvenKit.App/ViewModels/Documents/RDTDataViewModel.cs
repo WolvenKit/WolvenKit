@@ -76,6 +76,11 @@ namespace WolvenKit.ViewModels.Documents
                 DataViewModel.Nodes.Remove(this);
                 DataViewModel.Nodes.Add(chunk);
                 DataViewModel.LookForReferences(chunk, cr2w.RootChunk);
+
+                if (DataViewModel.LayoutNodes != null)
+                {
+                    DataViewModel.LayoutNodes();
+                }
             }
         }
     }
@@ -202,7 +207,9 @@ namespace WolvenKit.ViewModels.Documents
 
         [Reactive] public IRedRef SelectedImport { get; set; }
 
-        [Reactive] public bool NeedsLayout { get; set; }
+        public delegate void LayoutNodesDelegate();
+
+        public LayoutNodesDelegate LayoutNodes;
 
         #endregion
 
@@ -450,7 +457,6 @@ namespace WolvenKit.ViewModels.Documents
                 }
             }
 
-            NeedsLayout = true;
         }
 
         //public Red4File GetFile() => _file;
