@@ -63,7 +63,7 @@ namespace WolvenKit.ViewModels.Documents
         }
 
         public ICommand LoadRefCommand { get; private set; }
-        private bool CanLoadRef() => CName != null;
+        private bool CanLoadRef() => CName != null && DataViewModel.File.RelativePath != CName;
         private void ExecuteLoadRef()
         {
             var cr2w = DataViewModel.File.GetFileFromDepotPathOrCache(CName);
@@ -75,12 +75,7 @@ namespace WolvenKit.ViewModels.Documents
                 };
                 DataViewModel.Nodes.Remove(this);
                 DataViewModel.Nodes.Add(chunk);
-                DataViewModel.LookForReferences(chunk, cr2w.RootChunk);
-
-                if (DataViewModel.LayoutNodes != null)
-                {
-                    DataViewModel.LayoutNodes();
-                }
+                DataViewModel.LookForReferences(chunk);
             }
         }
     }
@@ -111,11 +106,16 @@ namespace WolvenKit.ViewModels.Documents
             });
 
 
-            if (!Nodes.Contains(Chunks[0]))
-            {
-                Nodes.Add(Chunks[0]);
-            }
-            LookForReferences(Chunks[0], (RedBaseClass)Chunks[0].Data);
+            //if (!Nodes.Contains(Chunks[0]))
+            //{
+            //    Nodes.Add(Chunks[0]);
+            //    _nodePaths.Add(Chunks[0].RelativePath);
+            //}
+            //LookForReferences(Chunks[0]);
+
+
+            Nodes.Add(new CNameWrapper(this, new ReferenceSocket(Chunks[0].RelativePath)));
+            _nodePaths.Add(Chunks[0].RelativePath);
 
             //var refCopy = References.ToList();
 
@@ -210,6 +210,8 @@ namespace WolvenKit.ViewModels.Documents
         public delegate void LayoutNodesDelegate();
 
         public LayoutNodesDelegate LayoutNodes;
+
+        private List<CName> _nodePaths = new();
 
         #endregion
 
@@ -323,7 +325,29 @@ namespace WolvenKit.ViewModels.Documents
 
         #region methods
 
-        public void LookForReferences(ChunkViewModel cvm, RedBaseClass data, string xpath = "root")
+        public void LookForReferences(ChunkViewModel cvm)
+        {
+            LookForReferences(cvm, (RedBaseClass)cvm.Data, "root");
+
+            foreach (var reference in References)
+            {
+                if (!_nodePaths.Contains(reference.Input.File))
+                {
+                    if (reference.Input.File != null)
+                    {
+                        Nodes.Add(new CNameWrapper(this, reference.Input));
+                        _nodePaths.Add(reference.Input.File);
+                    }
+                }
+            }
+
+            if (LayoutNodes != null)
+            {
+                LayoutNodes();
+            }
+        }
+
+        public void LookForReferences(ChunkViewModel cvm, RedBaseClass data, string xpath)
         {
             foreach (var pi in RedReflection.GetTypeInfo(data.GetType()).PropertyInfos)
             {
@@ -445,17 +469,6 @@ namespace WolvenKit.ViewModels.Documents
                 }
             }
 
-            foreach (var reference in References)
-            {
-                if (Nodes.Where(x => (x is CNameWrapper cw && cw.CName == reference.Input.File) ||
-                    (x is ChunkViewModel cvm && cvm.RelativePath == reference.Input.File)).Count() == 0)
-                {
-                    if (reference.Input.File != null)
-                    {
-                        Nodes.Add(new CNameWrapper(this, reference.Input));
-                    }
-                }
-            }
 
         }
 

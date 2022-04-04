@@ -79,10 +79,13 @@
         -->
 
         <!--  Grid Splitter  -->
-        <syncfusion:SfGridSplitter
+        <GridSplitter
             Grid.Row="1"
             Grid.ColumnSpan="3"
-            VerticalAlignment="Stretch" />
+            Height="5"
+            HorizontalAlignment="Stretch"
+            Background="{StaticResource BorderAlt}" />
+
 
         <!--
             Offset="{Binding Location}"
