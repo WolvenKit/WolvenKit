@@ -32,7 +32,7 @@ using static WolvenKit.RED4.Types.RedReflection;
 
 namespace WolvenKit.ViewModels.Shell
 {
-    public class ChunkViewModel : ReactiveObject, ISelectableTreeViewItemModel
+    public class ChunkViewModel : ReactiveObject, ISelectableTreeViewItemModel, INodeViewModel
     {
         public bool PropertiesLoaded;
 
@@ -179,11 +179,13 @@ namespace WolvenKit.ViewModels.Shell
             CopyChunkCommand = new DelegateCommand(_ => ExecuteCopyChunk(), _ => CanCopyChunk());
             DuplicateChunkCommand = new DelegateCommand(_ => ExecuteDuplicateChunk(), _ => CanDuplicateChunk());
             PasteChunkCommand = new DelegateCommand(_ => ExecutePasteChunk(), _ => CanPasteChunk());
+            OpenSelfCommand = new DelegateCommand(_ => ExecuteOpenSelf(), _ => CanOpenSelf());
         }
 
-        public ChunkViewModel(IRedType export, RDTDataViewModel tab) : this(export)
+        public ChunkViewModel(IRedType export, RedDocumentTabViewModel tab) : this(export)
         {
             _tab = tab;
+            RelativePath = _tab.File.RelativePath;
             IsExpanded = true;
             //Data = export;
             //if (!PropertiesLoaded)
@@ -196,6 +198,12 @@ namespace WolvenKit.ViewModels.Shell
             {
                 Tab.File.SetIsDirty(true);
             });
+        }
+
+        public ChunkViewModel(IRedType export, ReferenceSocket socket) : this(export)
+        {
+            Socket = socket;
+            RelativePath = socket.File;
         }
 
         #endregion Constructors
@@ -241,9 +249,9 @@ namespace WolvenKit.ViewModels.Shell
 
         #region Properties
 
-        private readonly RDTDataViewModel _tab;
+        private readonly RedDocumentTabViewModel _tab;
 
-        public RDTDataViewModel Tab
+        public RedDocumentTabViewModel Tab
         {
             get
             {
@@ -257,6 +265,8 @@ namespace WolvenKit.ViewModels.Shell
         }
 
         [Reactive] public IRedType Data { get; set; }
+
+        [Reactive] public CName RelativePath { get; set; }
 
         private IRedType _resolvedDataCache;
 
@@ -543,7 +553,7 @@ namespace WolvenKit.ViewModels.Shell
                             });
                         }
                     }
-                    if (Data is StreamingSectorTransform sst && Tab.Chunks[0].Data is worldStreamingSector wss)
+                    if (Data is StreamingSectorTransform sst && Tab is RDTDataViewModel dvm && dvm.Chunks[0].Data is worldStreamingSector wss)
                     {
                         Properties.Add(new ChunkViewModel(wss.Handles[sst.HandleIndex], this, "Handle")
                         {
@@ -1111,7 +1121,7 @@ namespace WolvenKit.ViewModels.Shell
             }
 
 
-            if (Data is StreamingSectorTransform sst && Tab.Chunks[0].Data is worldStreamingSector wss)
+            if (Data is StreamingSectorTransform sst && Tab is RDTDataViewModel dvm && dvm.Chunks[0].Data is worldStreamingSector wss)
             {
                 Descriptor = $"[{sst.HandleIndex}] {wss.Handles[sst.HandleIndex].Chunk.DebugName}";
                 return;
@@ -1554,7 +1564,11 @@ namespace WolvenKit.ViewModels.Shell
         private bool CanDeleteItem() => IsInArray;
         private void ExecuteDeleteItem()
         {
-            Tab.SelectedChunk = Parent;
+
+            if (Tab is RDTDataViewModel dvm)
+            {
+                dvm.SelectedChunk = Parent;
+            }
             if (Parent.Data is IRedArray ary)
             {
                 ary.Remove(Data);
@@ -1665,11 +1679,11 @@ namespace WolvenKit.ViewModels.Shell
         {
             if (Data is IRedCloneable irc)
             {
-                RDTDataViewModel.CopiedChunk = (IRedType)irc.DeepCopy();
+                RedDocumentTabViewModel.CopiedChunk = (IRedType)irc.DeepCopy();
             }
             else
             {
-                RDTDataViewModel.CopiedChunk = Data;
+                RedDocumentTabViewModel.CopiedChunk = Data;
             }
         }
 
@@ -1704,25 +1718,25 @@ namespace WolvenKit.ViewModels.Shell
         }
 
         public ICommand PasteChunkCommand { get; private set; }
-        private bool CanPasteChunk() => (IsArray || IsInArray) && RDTDataViewModel.CopiedChunk != null && (ArraySelfOrParent?.InnerType.IsAssignableTo(RDTDataViewModel.CopiedChunk.GetType()) ?? true);
+        private bool CanPasteChunk() => (IsArray || IsInArray) && RedDocumentTabViewModel.CopiedChunk != null && (ArraySelfOrParent?.InnerType.IsAssignableTo(RedDocumentTabViewModel.CopiedChunk.GetType()) ?? true);
         private void ExecutePasteChunk()
         {
-            if (RDTDataViewModel.CopiedChunk == null)
+            if (RedDocumentTabViewModel.CopiedChunk == null)
             {
                 return;
             }
             if (Parent.ResolvedData is IRedArray)
             {
-                if (Parent.InsertChild(Parent.GetIndexOf(this) + 1, RDTDataViewModel.CopiedChunk))
+                if (Parent.InsertChild(Parent.GetIndexOf(this) + 1, RedDocumentTabViewModel.CopiedChunk))
                 {
-                    RDTDataViewModel.CopiedChunk = null;
+                    RedDocumentTabViewModel.CopiedChunk = null;
                 }
             }
             if (ResolvedData is IRedArray)
             {
-                if (InsertChild(-1, RDTDataViewModel.CopiedChunk))
+                if (InsertChild(-1, RedDocumentTabViewModel.CopiedChunk))
                 {
-                    RDTDataViewModel.CopiedChunk = null;
+                    RedDocumentTabViewModel.CopiedChunk = null;
                 }
             }
         }
@@ -1890,7 +1904,10 @@ namespace WolvenKit.ViewModels.Shell
                     if (prop.Data.GetHashCode() == selectChild.GetHashCode())
                     {
                         prop.IsExpanded = true;
-                        Tab.SelectedChunk = prop;
+                        if (Tab is RDTDataViewModel dvm)
+                        {
+                            dvm.SelectedChunk = prop;
+                        }
                         break;
                     }
                 }
@@ -1898,5 +1915,43 @@ namespace WolvenKit.ViewModels.Shell
         }
 
         public static bool IsControlBeingHeld => Keyboard.IsKeyDown(Key.LeftCtrl) || Keyboard.IsKeyDown(Key.RightCtrl);
+
+        // node stuff
+
+        [Reactive] public ReferenceSocket Socket { get; set; }
+
+        public List<ReferenceSocket> SelfSocket => new List<ReferenceSocket>( new ReferenceSocket[] { Socket });
+
+        [Reactive] public ObservableCollection<ReferenceSocket> References { get; set; } = new();
+
+        [Reactive] public System.Windows.Point Location { get; set; }
+
+        public ICommand OpenSelfCommand { get; private set; }
+        private bool CanOpenSelf() => RelativePath != null && _tab == null;
+        private void ExecuteOpenSelf()
+        {
+            Locator.Current.GetService<AppViewModel>().OpenFileFromDepotPath(RelativePath);
+        }
+
+        public double Width { get; set; }
+
+        public double Height { get; set; }
+    }
+
+    public class ReferenceSocket : ReactiveObject
+    {
+        [Reactive] public CName File { get; set; }
+
+        [Reactive] public string Property { get; set; } = "";
+
+        [Reactive] public System.Windows.Point Anchor { get; set; }
+
+        [Reactive] public bool IsConnected { get; set; }
+
+        public ReferenceSocket(CName file, string property = "")
+        {
+            File = file;
+            Property = property;
+        }
     }
 }

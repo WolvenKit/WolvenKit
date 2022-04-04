@@ -110,9 +110,10 @@ namespace WolvenKit.ViewModels.Tools
                 if (_selectedTweakDBID != null)
                 {
                     SelectedRecord.Clear();
-                    SelectedRecord.Add(new ChunkViewModel(_tweakDB.GetRecord(_selectedTweakDBID), null)
+                    SelectedRecord.Add(new ChunkViewModel(_tweakDB.GetRecord(_selectedTweakDBID))
                     {
-                        IsReadOnly = true
+                        IsReadOnly = true,
+                        IsExpanded = true
                     });
                 }
                 else
