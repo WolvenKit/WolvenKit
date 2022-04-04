@@ -32,7 +32,7 @@ using static WolvenKit.RED4.Types.RedReflection;
 
 namespace WolvenKit.ViewModels.Shell
 {
-    public class ChunkViewModel : ReactiveObject, ISelectableTreeViewItemModel
+    public class ChunkViewModel : ReactiveObject, ISelectableTreeViewItemModel, INodeViewModel
     {
         public bool PropertiesLoaded;
 
@@ -179,11 +179,13 @@ namespace WolvenKit.ViewModels.Shell
             CopyChunkCommand = new DelegateCommand(_ => ExecuteCopyChunk(), _ => CanCopyChunk());
             DuplicateChunkCommand = new DelegateCommand(_ => ExecuteDuplicateChunk(), _ => CanDuplicateChunk());
             PasteChunkCommand = new DelegateCommand(_ => ExecutePasteChunk(), _ => CanPasteChunk());
+            OpenSelfCommand = new DelegateCommand(_ => ExecuteOpenSelf(), _ => CanOpenSelf());
         }
 
         public ChunkViewModel(IRedType export, RedDocumentTabViewModel tab) : this(export)
         {
             _tab = tab;
+            RelativePath = _tab.File.RelativePath;
             IsExpanded = true;
             //Data = export;
             //if (!PropertiesLoaded)
@@ -196,6 +198,12 @@ namespace WolvenKit.ViewModels.Shell
             {
                 Tab.File.SetIsDirty(true);
             });
+        }
+
+        public ChunkViewModel(IRedType export, ReferenceSocket socket) : this(export)
+        {
+            Socket = socket;
+            RelativePath = socket.File;
         }
 
         #endregion Constructors
@@ -257,6 +265,8 @@ namespace WolvenKit.ViewModels.Shell
         }
 
         [Reactive] public IRedType Data { get; set; }
+
+        [Reactive] public CName RelativePath { get; set; }
 
         private IRedType _resolvedDataCache;
 
@@ -1905,5 +1915,43 @@ namespace WolvenKit.ViewModels.Shell
         }
 
         public static bool IsControlBeingHeld => Keyboard.IsKeyDown(Key.LeftCtrl) || Keyboard.IsKeyDown(Key.RightCtrl);
+
+        // node stuff
+
+        [Reactive] public ReferenceSocket Socket { get; set; }
+
+        public List<ReferenceSocket> SelfSocket => new List<ReferenceSocket>( new ReferenceSocket[] { Socket });
+
+        [Reactive] public ObservableCollection<ReferenceSocket> References { get; set; } = new();
+
+        [Reactive] public System.Windows.Point Location { get; set; }
+
+        public ICommand OpenSelfCommand { get; private set; }
+        private bool CanOpenSelf() => RelativePath != null && _tab == null;
+        private void ExecuteOpenSelf()
+        {
+            Locator.Current.GetService<AppViewModel>().OpenFileFromDepotPath(RelativePath);
+        }
+
+        public double Width { get; set; }
+
+        public double Height { get; set; }
+    }
+
+    public class ReferenceSocket : ReactiveObject
+    {
+        [Reactive] public CName File { get; set; }
+
+        [Reactive] public string Property { get; set; } = "";
+
+        [Reactive] public System.Windows.Point Anchor { get; set; }
+
+        [Reactive] public bool IsConnected { get; set; }
+
+        public ReferenceSocket(CName file, string property = "")
+        {
+            File = file;
+            Property = property;
+        }
     }
 }
