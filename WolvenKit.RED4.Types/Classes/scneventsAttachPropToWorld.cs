@@ -61,6 +61,14 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<TweakDBID>(value);
 		}
 
+		[Ordinal(13)] 
+		[RED("fallbackData")] 
+		public CArray<scneventsAttachPropToWorldFallbackData> FallbackData
+		{
+			get => GetPropertyValue<CArray<scneventsAttachPropToWorldFallbackData>>();
+			set => SetPropertyValue<CArray<scneventsAttachPropToWorldFallbackData>>(value);
+		}
+
 		public scneventsAttachPropToWorld()
 		{
 			Id = new() { Id = 18446744073709551615 };
@@ -68,6 +76,7 @@ namespace WolvenKit.RED4.Types
 			CustomOffsetPos = new();
 			CustomOffsetRot = new() { R = 1.000000F };
 			ReferencePerformer = new() { Id = 4294967040 };
+			FallbackData = new();
 		}
 	}
 }

@@ -19,12 +19,14 @@ using WolvenKit.Common.Interfaces;
 using WolvenKit.Common.Model;
 using WolvenKit.Common.Model.Database;
 using WolvenKit.Common.Services;
+using WolvenKit.Core.Interfaces;
 using WolvenKit.Core.Services;
 using WolvenKit.Functionality.Commands;
 using WolvenKit.Functionality.Controllers;
 using WolvenKit.Functionality.Services;
 using WolvenKit.Models;
 using WolvenKit.Models.Docking;
+using WolvenKit.RED4.Archive;
 using WolvenKit.ViewModels.Shell;
 
 namespace WolvenKit.ViewModels.Tools
@@ -340,7 +342,7 @@ namespace WolvenKit.ViewModels.Tools
         /// </summary>
         public ICommand CopyRelPathCommand { get; private set; }
         private bool CanCopyRelPath() => RightSelectedItem != null; // _projectManager.ActiveProject != null && RightSelectedItem != null;
-        private void ExecuteCopyRelPath() => Clipboard.SetText(RightSelectedItem.FullName);
+        private void ExecuteCopyRelPath() => Clipboard.SetDataObject(RightSelectedItem.FullName);
         public ReactiveCommand<Unit, Unit> ExpandAll { get; set; }
         public ReactiveCommand<Unit, Unit> CollapseAll { get; set; }
         public ReactiveCommand<Unit, Unit> Expand { get; set; }

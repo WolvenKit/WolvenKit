@@ -5,7 +5,7 @@ using WolvenKit.Common;
 using WolvenKit.Common.Extensions;
 using WolvenKit.Common.Model.Arguments;
 using WolvenKit.Common.Services;
-using WolvenKit.RED4.CR2W.Archive;
+using WolvenKit.RED4.Archive;
 
 namespace CP77Tools.Tasks
 {
@@ -159,7 +159,7 @@ namespace CP77Tools.Tasks
                 }
 
                 // read archive
-                var ar = Red4ParserServiceExtensions.ReadArchive(fileInfo.FullName, _hashService);
+                var ar = _wolvenkitFileService.ReadRed4Archive(fileInfo.FullName, _hashService);
 
                 // run
                 if (hash != 0)

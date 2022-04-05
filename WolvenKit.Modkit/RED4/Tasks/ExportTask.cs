@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using WolvenKit.Common;
 using WolvenKit.Common.Extensions;
 using WolvenKit.Common.Model.Arguments;
-using WolvenKit.RED4.CR2W.Archive;
+using WolvenKit.RED4.Archive;
 
 namespace CP77Tools.Tasks
 {

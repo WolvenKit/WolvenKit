@@ -1,12 +1,12 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text;
 using WolvenKit.Core.Compression;
 using WolvenKit.Core.Extensions;
-using WolvenKit.RED4.CR2W;
 using WolvenKit.RED4.Types.Exceptions;
 
-namespace WolvenKit.Common.RED4.Archive
+namespace WolvenKit.RED4.Archive
 {
     public class LxrsFooter
     {
@@ -34,7 +34,7 @@ namespace WolvenKit.Common.RED4.Archive
             using var tempBw = new BinaryWriter(ms);
             foreach (var s in FileInfos)
             {
-                tempBw.WriteCR2WString(s);
+                tempBw.WriteNullTerminatedString(s, Encoding.GetEncoding("ISO-8859-1"));
             }
 
             var inbuffer = ms.ToByteArray();
@@ -72,7 +72,7 @@ namespace WolvenKit.Common.RED4.Archive
                 using var tempbr = new BinaryReader(ms);
                 for (var i = 0; i < count; i++)
                 {
-                    FileInfos.Add(tempbr.ReadCR2WString());
+                    FileInfos.Add(tempbr.ReadNullTerminatedString(Encoding.GetEncoding("ISO-8859-1")));
                 }
             }
             else if (size < zsize)
@@ -87,7 +87,7 @@ namespace WolvenKit.Common.RED4.Archive
                 using var tempbr = new BinaryReader(ms);
                 for (var i = 0; i < count; i++)
                 {
-                    FileInfos.Add(tempbr.ReadCR2WString());
+                    FileInfos.Add(tempbr.ReadNullTerminatedString(Encoding.GetEncoding("ISO-8859-1")));
                 }
             }
         }

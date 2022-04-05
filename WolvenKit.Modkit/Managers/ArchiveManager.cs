@@ -10,6 +10,8 @@ using ReactiveUI.Fody.Helpers;
 using WolvenKit.Common;
 using WolvenKit.Common.Model;
 using WolvenKit.Common.Services;
+using WolvenKit.Core.Interfaces;
+using WolvenKit.RED4.Archive;
 using Path = System.IO.Path;
 
 namespace WolvenKit.RED4.CR2W.Archive
@@ -23,19 +25,24 @@ namespace WolvenKit.RED4.CR2W.Archive
 
         private readonly IHashService _hashService;
 
+        private readonly Red4ParserService _wolvenkitFileService;
+
         private readonly ILoggerService _logger;
 
         private readonly SourceList<RedFileSystemModel> _rootCache;
 
         private readonly SourceList<RedFileSystemModel> _modCache;
 
+        private static readonly List<string> s_loadOrder = new() { "memoryresident", "basegame", "audio", "lang" };
+
         #endregion Fields
 
         #region Constructors
 
-        public ArchiveManager(IHashService hashService, ILoggerService logger)
+        public ArchiveManager(IHashService hashService, Red4ParserService wolvenkitFileService, ILoggerService logger)
         {
             _hashService = hashService;
+            _wolvenkitFileService = wolvenkitFileService;
             _logger = logger;
 
             _rootCache = new SourceList<RedFileSystemModel>();
@@ -96,6 +103,42 @@ namespace WolvenKit.RED4.CR2W.Archive
         //    RebuildRootNode();
         //}
 
+        #region sorting
+
+        private static int CompareArchives(string x, string y)
+        {
+            if (ReferenceEquals(x, y))
+            {
+                return 0;
+            }
+
+            if (ReferenceEquals(null, x))
+            {
+                return -1;
+            }
+
+            if (ReferenceEquals(null, y))
+            {
+                return 1;
+            }
+
+            var baseX = Path.GetFileName(x);
+            baseX = baseX[..baseX.IndexOf("_", StringComparison.Ordinal)];
+
+            var baseY = Path.GetFileName(y);
+            baseY = baseY[..baseY.IndexOf("_", StringComparison.Ordinal)];
+
+            var retVal = s_loadOrder.IndexOf(baseX).CompareTo(s_loadOrder.IndexOf(baseY));
+            if (retVal != 0)
+            {
+                return retVal;
+            }
+
+            return string.Compare(x, y, StringComparison.Ordinal);
+        }
+
+        #endregion
+
         #region loading
 
         /// <summary>
@@ -108,7 +151,11 @@ namespace WolvenKit.RED4.CR2W.Archive
             {
                 return;
             }
-            foreach (var file in Directory.GetFiles(archivedir.FullName, "*.archive"))
+
+            var archiveFiles = Directory.GetFiles(archivedir.FullName, "*.archive").ToList();
+            archiveFiles.Sort(CompareArchives);
+
+            foreach (var file in archiveFiles)
             {
                 LoadArchive(file);
             }
@@ -138,7 +185,10 @@ namespace WolvenKit.RED4.CR2W.Archive
             var sw = new Stopwatch();
             sw.Start();
 
-            foreach (var file in Directory.GetFiles(archivedir, "*.archive"))
+            var archiveFiles = Directory.GetFiles(archivedir, "*.archive").ToList();
+            archiveFiles.Sort(CompareArchives);
+
+            foreach (var file in archiveFiles)
             {
                 LoadArchive(file);
             }
@@ -173,7 +223,7 @@ namespace WolvenKit.RED4.CR2W.Archive
                 return;
             }
 
-            var archive = Red4ParserServiceExtensions.ReadArchive(path, _hashService);
+            var archive = _wolvenkitFileService.ReadRed4Archive(path, _hashService);
             Archives.AddOrUpdate(archive);
         }
 
@@ -190,7 +240,7 @@ namespace WolvenKit.RED4.CR2W.Archive
                 return;
             }
 
-            var archive = Red4ParserServiceExtensions.ReadArchive(filename, _hashService);
+            var archive = _wolvenkitFileService.ReadRed4Archive(filename, _hashService);
             ModArchives.AddOrUpdate(archive);
         }
 

@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using WolvenKit.Common.WinFormsEnums;
+using WolvenKit.Core.Interfaces;
 
 namespace WolvenKit.Common.Services
 {

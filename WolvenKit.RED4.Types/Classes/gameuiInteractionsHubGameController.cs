@@ -3,7 +3,7 @@ using static WolvenKit.RED4.Types.Enums;
 namespace WolvenKit.RED4.Types
 {
 	[REDMeta]
-	public partial class InteractionsHubGameController : gameuiHUDGameController
+	public partial class gameuiInteractionsHubGameController : gameuiHUDGameController
 	{
 		[Ordinal(9)] 
 		[RED("TopInteractionWidgetsLibraries")] 
@@ -53,7 +53,15 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<gameuiTooltipsManager>>(value);
 		}
 
-		public InteractionsHubGameController()
+		[Ordinal(15)] 
+		[RED("tooltipProvider")] 
+		public CWeakHandle<TooltipProvider> TooltipProvider
+		{
+			get => GetPropertyValue<CWeakHandle<TooltipProvider>>();
+			set => SetPropertyValue<CWeakHandle<TooltipProvider>>(value);
+		}
+
+		public gameuiInteractionsHubGameController()
 		{
 			TopInteractionWidgetsLibraries = new();
 			TopInteractionsRoot = new();
