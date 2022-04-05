@@ -327,20 +327,17 @@ namespace WolvenKit.RED4.Archive.IO
                 buffer.SetBytes(newData);
             }
 
-            if (buffer is RedBuffer wsb && buffer.Data is WorldTransformsBuffer )
+            if (buffer.Data is WorldTransformsBuffer wtb)
             {
                 using var ms = new MemoryStream();
                 using var transformWriter = new WorldTransformsWriter(ms);
 
-                transformWriter.WriteBuffer(wsb);
+                transformWriter.WriteBuffer(wtb);
 
                 var newData = ms.ToArray();
 
                 buffer.SetBytes(newData);
             }
-
-
-
         }
 
         private CR2WBufferInfo WriteBuffer(BinaryWriter writer, RedBuffer buffer)

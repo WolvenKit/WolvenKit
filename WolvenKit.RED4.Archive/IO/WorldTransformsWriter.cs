@@ -12,33 +12,31 @@ namespace WolvenKit.RED4.Archive.IO
 {
     public class WorldTransformsWriter : Red4Writer
     {
-        public WorldTransformsWriter(Stream ms) : base(ms)
+        public WorldTransformsWriter(MemoryStream ms) : base(ms)
         {
 
         }
 
-        public void WriteBuffer(RedBuffer wsb)
+        public void WriteBuffer(WorldTransformsBuffer wtb)
         {
-            if (wsb.Data is WorldTransformsBuffer swt)
+            foreach (var t in wtb.Transforms)
             {
-                foreach (var t in swt.Transforms)
+                _writer.Write(t.Position.X.Bits);
+                _writer.Write(t.Position.Y.Bits);
+                _writer.Write(t.Position.Z.Bits);
+                _writer.Write(0);
+
+                _writer.Write(t.Orientation.I);
+                _writer.Write(t.Orientation.J);
+                _writer.Write(t.Orientation.K);
+                _writer.Write(t.Orientation.R);
+
+                if (t is WorldTransformExt wte)
                 {
-                    _writer.Write(t.Position.X);
-                    _writer.Write(t.Position.Y);
-                    _writer.Write(t.Position.Z);
-                    //_writer.Write(t.Position.W);
-
-                    _writer.Write(t.Orientation.I);
-                    _writer.Write(t.Orientation.J);
-                    _writer.Write(t.Orientation.K);
-                    _writer.Write(t.Orientation.R);
-
-                    if (t is WorldTransformExt a)
-                    {
-                        _writer.Write(a.Scale.X);
-                        _writer.Write(a.Scale.Y);
-                        _writer.Write(a.Scale.Z);
-                    }
+                    _writer.Write(wte.Scale.X);
+                    _writer.Write(wte.Scale.Y);
+                    _writer.Write(wte.Scale.Z);
+                    _writer.Write(0);
                 }
             }
         }
