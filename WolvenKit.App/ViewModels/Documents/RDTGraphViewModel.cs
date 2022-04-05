@@ -66,6 +66,10 @@ namespace WolvenKit.ViewModels.Documents
             {
                 RenderNodes(ggr.Graph.Chunk.Nodes);
             }
+            else if (data is scnSceneResource ssr)
+            {
+                RenderNodes(ssr.SceneGraph.Chunk.Graph);
+            }
 
             SelectedNodes.CollectionChanged += (object sender, NotifyCollectionChangedEventArgs e) =>
             {
@@ -76,6 +80,18 @@ namespace WolvenKit.ViewModels.Documents
             };
 
             CreateConnectionCommand = new DelegateCommand(x => { });
+        }
+
+        public GeometryGraph RenderNodes(CArray<CHandle<scnSceneGraphNode>> nodes)
+        {
+            var graph = new GeometryGraph();
+
+            //foreach (var node in nodes)
+            //{
+            //    node.Chunk.OutputSockets
+            //}
+
+            return graph;
         }
 
         public GeometryGraph RenderNodes(CArray<CHandle<graphGraphNodeDefinition>> nodes, graphGraphNodeDefinition parent = null)
