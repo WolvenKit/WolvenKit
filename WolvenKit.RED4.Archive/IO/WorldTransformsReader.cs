@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.Archive.IO
 
         public EFileReadErrorCodes ReadBuffer(RedBuffer buffer, Type fileRootType)
         {
-            uint numEntries = 0;
+            var data = new WorldTransformsBuffer();
             if (buffer.RootChunk is worldStreamingSector sec)
             {
                 foreach (var handle in sec.Handles)
@@ -30,64 +30,55 @@ namespace WolvenKit.RED4.Archive.IO
                         && node1.WorldTransformsBuffer.SharedDataBuffer.GetValue() is worldSharedDataBuffer sdb1
                         && ReferenceEquals(sdb1.Buffer.Buffer, buffer))
                     {
-                        numEntries += (uint)node1.WorldTransformsBuffer.NumElements;
+                        while (_reader.BaseStream.Position < _reader.BaseStream.Length)
+                        {
+                            var t = new WorldTransformExt();
+
+                            t.Position.X.Bits = _reader.ReadInt32();
+                            t.Position.Y.Bits = _reader.ReadInt32();
+                            t.Position.Z.Bits = _reader.ReadInt32();
+
+                            _reader.ReadInt32();
+
+                            t.Orientation.I = _reader.ReadSingle();
+                            t.Orientation.J = _reader.ReadSingle();
+                            t.Orientation.K = _reader.ReadSingle();
+                            t.Orientation.R = _reader.ReadSingle();
+
+                            t.Scale.X = _reader.ReadSingle();
+                            t.Scale.Y = _reader.ReadSingle();
+                            t.Scale.Z = _reader.ReadSingle();
+
+                            _reader.ReadInt32();
+
+                            data.Transforms.Add(t);
+                        }
+                        break;
                     }
 
                     if (value is worldInstancedDestructibleMeshNode node2
                         && node2.CookedInstanceTransforms.SharedDataBuffer.GetValue() is worldSharedDataBuffer sdb2
                         && ReferenceEquals(sdb2.Buffer.Buffer, buffer))
                     {
-                        numEntries += (uint)node2.CookedInstanceTransforms.NumElements;
+                        while (_reader.BaseStream.Position < _reader.BaseStream.Length)
+                        {
+                            var t = new WorldTransform();
+
+                            t.Position.X.Bits = _reader.ReadInt32();
+                            t.Position.Y.Bits = _reader.ReadInt32();
+                            t.Position.Z.Bits = _reader.ReadInt32();
+
+                            _reader.ReadInt32();
+
+                            t.Orientation.I = _reader.ReadSingle();
+                            t.Orientation.J = _reader.ReadSingle();
+                            t.Orientation.K = _reader.ReadSingle();
+                            t.Orientation.R = _reader.ReadSingle();
+
+                            data.Transforms.Add(t);
+                        }
+                        break;
                     }
-                }
-            }
-
-            var data = new WorldTransformsBuffer();
-
-            if (_reader.BaseStream.Length == 32 * numEntries)
-            {
-                while (_reader.BaseStream.Position < _reader.BaseStream.Length)
-                {
-                    var t = new WorldTransform();
-
-                    t.Position.X.Bits = _reader.ReadInt32();
-                    t.Position.Y.Bits = _reader.ReadInt32();
-                    t.Position.Z.Bits = _reader.ReadInt32();
-
-                    _reader.ReadInt32();
-
-                    t.Orientation.I = _reader.ReadSingle();
-                    t.Orientation.J = _reader.ReadSingle();
-                    t.Orientation.K = _reader.ReadSingle();
-                    t.Orientation.R = _reader.ReadSingle();
-                 
-                    data.Transforms.Add(t);
-                }
-            }
-            else if (_reader.BaseStream.Length == 48 * numEntries)
-            {
-                while (_reader.BaseStream.Position < _reader.BaseStream.Length)
-                {
-                    var t = new WorldTransformExt();
-
-                    t.Position.X.Bits = _reader.ReadInt32();
-                    t.Position.Y.Bits = _reader.ReadInt32();
-                    t.Position.Z.Bits = _reader.ReadInt32();
-
-                    _reader.ReadInt32();
-
-                    t.Orientation.I = _reader.ReadSingle();
-                    t.Orientation.J = _reader.ReadSingle();
-                    t.Orientation.K = _reader.ReadSingle();
-                    t.Orientation.R = _reader.ReadSingle();
-
-                    t.Scale.X = _reader.ReadSingle();
-                    t.Scale.Y = _reader.ReadSingle();
-                    t.Scale.Z = _reader.ReadSingle();
-
-                    _reader.ReadInt32();
-
-                    data.Transforms.Add(t);
                 }
             }
 
