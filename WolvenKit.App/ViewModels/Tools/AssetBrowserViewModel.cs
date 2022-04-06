@@ -404,28 +404,28 @@ namespace WolvenKit.ViewModels.Tools
         {
             _progressService.IsIndeterminate = true;
 
-            await Task.Run(() =>
+            try
             {
-                try {
+                await Task.Run(() =>
+                {
                     CyberEnhancedSearch();
-                } catch (RegexMatchTimeoutException ex) {
-                    // C# heredoc pls
-                    _loggerService.Log($@"Search took too long! Try to simplify or use refinements? Careful with !. Error: {ex.Message}", Logtype.Error);
-                } catch (Exception ex) {
-                    _loggerService.Log($"Search error: {ex.Message}", Logtype.Error);
-                }
-
-                /*
-                if (IsRegexSearchEnabled)
+                });
+            }
+            catch (AggregateException ae)
+            {
+                foreach (var e in ae.Flatten().InnerExceptions)
                 {
-                    RegexSearch();
+                    if (e is RegexMatchTimeoutException rex)
+                    {
+                        // C# heredoc pls
+                        _loggerService.Log($@"Search took too long! Try to simplify or use refinements? Careful with !. Error: {rex.Message}", Logtype.Error);
+                    }
+                    else
+                    {
+                        _loggerService.Log($"Search error: {e.Message}", Logtype.Error);
+                    }
                 }
-                else
-                {
-                    KeywordSearch();
-                }
-                */
-            });
+            }
 
             _progressService.IsIndeterminate = false;
         }
@@ -452,8 +452,9 @@ namespace WolvenKit.ViewModels.Tools
         private static readonly Regex RefinementSeparator = new("\\s+>\\s+", RegexpOpts, RegexpSafetyTimeout);
         private static readonly Regex Hash = new("^(hash:)?(?<num>\\d+)$", RegexpOpts, RegexpSafetyTimeout);
         private static readonly Regex Whitespace = new("\\s+", RegexpOpts, RegexpSafetyTimeout);
-        private static readonly Regex Negation = new("^\\!(?<term>.+)$", RegexpOpts, RegexpSafetyTimeout);
         private static readonly Regex Or = new("\\|", RegexpOpts, RegexpSafetyTimeout);
+        private static readonly Regex Negation = new("^(?'Open'\\(\\?:)*\\!(?<term>.+?)(?'Close-Open'\\))*$", RegexpOpts, RegexpSafetyTimeout);
+        private static readonly Regex SquashExtraWilds = new("((\\(\\?:)?\\.\\*\\??\\)?){2,}", RegexpOpts, RegexpSafetyTimeout);
 
         private static readonly Func<string, SearchRefinement> IntoTypedRefinementsAndTerms =
             (string refinementString) =>
@@ -492,7 +493,7 @@ namespace WolvenKit.ViewModels.Tools
                         {
                             Type = TermType.Exclude,
                             Pattern = Negation.Replace(term.Pattern, "(?:${term})"),
-                            NegationPattern = Negation.Replace(term.Pattern,"(?:.*)")
+                            NegationPattern = Negation.Replace(term.Pattern,"")
                         };
 
         private static readonly Func<SearchRefinement, CyberSearch> AsMatchFunctions =
@@ -508,17 +509,27 @@ namespace WolvenKit.ViewModels.Tools
                         var searchContainsExclusion =
                             patternRefinement.Terms.Any(term => term.Type == TermType.Exclude);
 
+                        var patternWithMaybeExtraWilds =
+                            $"^.*?{string.Join(".*?", patternRefinement.Terms.Select(term => term.Pattern))}.*$";
+
                         var pattern =
-                            $"^.*{string.Join(".*?", patternRefinement.Terms.Select(term => term.Pattern))}.*$";
-                        var patternWithExclusionsNegated =
-                            $"^.*{string.Join(".*?", patternRefinement.Terms.Select(term => term.NegationPattern ?? term.Pattern))}.*$";
+                            SquashExtraWilds.Replace(patternWithMaybeExtraWilds, ".*?");
+
+                        var exclusionPatternWithMaybeExtraWilds =
+                            $"^.*?{string.Join(".*?", patternRefinement.Terms.Select(term => term.NegationPattern ?? term.Pattern))}.*$";
+
+                        var patternWithoutExcludedTerms =
+                            SquashExtraWilds.Replace(exclusionPatternWithMaybeExtraWilds, ".*?");
 
                         return new CyberSearch
                         {
                             Match =
                                 searchContainsExclusion
-                                ? (IGameFile candidate) => (!Regex.IsMatch(candidate.Name, pattern) && Regex.IsMatch(candidate.Name, patternWithExclusionsNegated))
-                                : (IGameFile candidate) => Regex.IsMatch(candidate.Name, pattern),
+                                ? (IGameFile candidate) =>
+                                    (!Regex.IsMatch(candidate.Name, pattern, RegexpOpts, RegexpSafetyTimeout) &&
+                                    Regex.IsMatch(candidate.Name, patternWithoutExcludedTerms, RegexpOpts, RegexpSafetyTimeout))
+                                : (IGameFile candidate) =>
+                                    Regex.IsMatch(candidate.Name, pattern, RegexpOpts, RegexpSafetyTimeout),
 
                             SourceRefinement = patternRefinement
                         };
@@ -530,6 +541,14 @@ namespace WolvenKit.ViewModels.Tools
 
         private void CyberEnhancedSearch()
         {
+            // Exceptions - this is bananatown but otherwise we're repeating the types all over the place
+            Func<Exception, IObservable<IChangeSet<RedFileViewModel, ulong>>> LogExceptionAndReturnEmpty =
+                ex =>
+                {
+                    _loggerService.Error($"Error performing search: {ex.Message}");
+                    return Observable.Empty<IChangeSet<RedFileViewModel, ulong>>();
+                };
+
             var searchAsSequentialRefinements =
                 RefinementSeparator
                     .Split(SearchBarText)
