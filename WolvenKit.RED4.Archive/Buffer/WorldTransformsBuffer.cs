@@ -18,8 +18,8 @@ namespace WolvenKit.RED4.Archive.Buffer
 
         }
     }
-
-    public class WorldTransformExt : WorldTransform
+/*
+    public partial class WorldTransformExt : WorldTransform
     {
         public Vector3 Scale = new();
 
@@ -27,5 +27,5 @@ namespace WolvenKit.RED4.Archive.Buffer
         {
 
         }
-    }
+    }*/
 }

@@ -316,7 +316,14 @@ namespace WolvenKit.ViewModels.Shell
             PropertiesLoaded = true;
             this.RaisePropertyChanged("ResolvedData");
 
-            Properties.Clear();
+            try
+            {
+                Properties.Clear();
+            } catch(Exception ex )
+            {
+                Console.WriteLine(ex);
+                throw;
+            }
 
             var isreadonly = false;
             if (Parent != null)
@@ -1013,8 +1020,11 @@ namespace WolvenKit.ViewModels.Shell
             }
             else if (PropertyType.IsAssignableTo(typeof(CByteArray)))
             {
-                var ba = (byte[])(CByteArray)Data;
-                Value = string.Join(" ", ba.Select(x => $"{x:X2}"));
+                if( Data != null  )
+                {
+                    var ba = (byte[])(CByteArray)Data;
+                    Value = string.Join(" ", ba.Select(x => $"{x:X2}"));
+                }
             }
             else if (PropertyType.IsAssignableTo(typeof(LocalizationString)))
             {
