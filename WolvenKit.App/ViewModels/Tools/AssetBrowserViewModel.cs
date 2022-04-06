@@ -548,21 +548,20 @@ namespace WolvenKit.ViewModels.Tools
                         _ => searchRefinement
                     })
                     .Select(AsMatchFunctions)
-                    .Select(archive =>
-                    archive)
                     .ToArray();
 
-            // Maybe we could avoid reconnecting every time? Dunno if it makes a difference
-            var gameFiles =
-                _archiveManager
-                    .Archives
-                    .Connect()
-                    .Select(archive =>
-                    archive)
+            var gameFilesOrMods =
+                _archiveManager.IsModBrowserActive
+                ? _archiveManager.ModArchives
+                : _archiveManager.Archives;
+
+            var filesToSearch =
+                gameFilesOrMods
+                    .Connect()   // Maybe we could avoid reconnecting every time? Dunno if it makes a difference
                     .TransformMany((archive => archive.Files.Values), (fileInArchive => fileInArchive.Key));
 
             var filesMatchingQuery =
-                gameFiles
+                filesToSearch
                     .Filter((file) =>
                         searchAsSequentialRefinements.All(refinement => refinement.Match(file)));
 
