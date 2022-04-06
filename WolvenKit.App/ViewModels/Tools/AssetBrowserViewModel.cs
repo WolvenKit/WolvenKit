@@ -68,6 +68,8 @@ namespace WolvenKit.ViewModels.Tools
         private readonly IProjectManager _projectManager;
         private readonly IProgressService<double> _progressService;
 
+        private readonly ILoggerService _loggerService;
+
         private readonly ReadOnlyObservableCollection<RedFileSystemModel> _boundRootNodes;
         private bool _manuallyLoading = false;
         private bool _projectLoaded = false;
@@ -91,6 +93,8 @@ namespace WolvenKit.ViewModels.Tools
             _archiveManager = archiveManager;
             _settings = settings;
             _progressService = progressService;
+
+            _loggerService = Splat.Locator.Current.GetService<ILoggerService>();
 
             ContentId = ToolContentId;
 
@@ -402,7 +406,14 @@ namespace WolvenKit.ViewModels.Tools
 
             await Task.Run(() =>
             {
-                CyberEnhancedSearch();
+                try {
+                    CyberEnhancedSearch();
+                } catch (RegexMatchTimeoutException ex) {
+                    // C# heredoc pls
+                    _loggerService.Log($@"Search took too long! Try to simplify or use refinements? Careful with !. Error: {ex.Message}", Logtype.Error);
+                } catch (Exception ex) {
+                    _loggerService.Log($"Search error: {ex.Message}", Logtype.Error);
+                }
 
                 /*
                 if (IsRegexSearchEnabled)
@@ -424,34 +435,39 @@ namespace WolvenKit.ViewModels.Tools
             Unknown,
             Include,
             Exclude,
+            Hash,
         }
 
         private readonly record struct Term(TermType Type, string Pattern, string NegationPattern);
-        private readonly record struct SearchRefinement(Term[] Terms);
 
-        private readonly record struct CyberSearch(Func<IGameFile, bool> Match, bool ContainsExclusion, string SourcePattern, string SourceNegationPattern);
+        private interface SearchRefinement {}
+        private readonly record struct PatternRefinement(Term[] Terms) : SearchRefinement;
+        private readonly record struct HashRefinement(ulong Hash) : SearchRefinement;
 
-        private static readonly string Negation = "^\\!(?<term>.+)$";
-        private static readonly Regex RefinementSeparator = new("\\s+>\\s+", RegexOptions.Compiled);
-        private static readonly Regex Whitespace = new("\\s+", RegexOptions.Compiled);
+        private readonly record struct CyberSearch(Func<IGameFile, bool> Match, SearchRefinement SourceRefinement);
 
-        private static readonly Func<string, string> CombineTermsToPreventSplitWhereDesired =
-            (string search) =>
-                search;
+        private static readonly RegexOptions RegexpOpts = RegexOptions.Compiled | RegexOptions.IgnoreCase;
+        private static readonly TimeSpan RegexpSafetyTimeout = TimeSpan.FromSeconds(60);
 
-        private static readonly Func<string, SearchRefinement> SplitRefinementToTerms =
-            (string search) =>
-                new SearchRefinement
-                {
-                    Terms = Whitespace.Split(search).Select(term => new Term { Type = TermType.Unknown, Pattern = term }).ToArray(),
+        private static readonly Regex RefinementSeparator = new("\\s+>\\s+", RegexpOpts, RegexpSafetyTimeout);
+        private static readonly Regex Hash = new("^(hash:)?(?<num>\\d+)$", RegexpOpts, RegexpSafetyTimeout);
+        private static readonly Regex Whitespace = new("\\s+", RegexpOpts, RegexpSafetyTimeout);
+        private static readonly Regex Negation = new("^\\!(?<term>.+)$", RegexpOpts, RegexpSafetyTimeout);
+        private static readonly Regex Or = new("\\|", RegexpOpts, RegexpSafetyTimeout);
+
+        private static readonly Func<string, SearchRefinement> IntoTypedRefinementsAndTerms =
+            (string refinementString) =>
+                Hash.Match(refinementString).Groups["num"].Value switch {
+                    "" =>
+                        new PatternRefinement
+                            {
+                                Terms = Whitespace.Split(refinementString).Select(term => new Term { Type = TermType.Unknown, Pattern = term }).ToArray(),
+                            },
+                    string num =>
+                        // let it fail, caught at the top
+                        new HashRefinement { Hash = ulong.Parse(num) },
                 };
-        /*
-        private static readonly Func<Term, Term> AllowDirectHashMatch =
-            (Term term) =>
-                !Regex.IsMatch(term.Pattern, "^(hash:)?\\d+$")
-                ? term
-                : ..
-*/
+
         private static readonly Func<Term, Term> HonorFileExtension =
             (Term term) =>
                 term with { Pattern = Regex.Replace(term.Pattern, "(^|\\W)\\.(?<term>\\w+?)", "$1\\.${term}") };
@@ -461,7 +477,7 @@ namespace WolvenKit.ViewModels.Tools
 
         private static readonly Func<Term, Term> LimitOrToOneTerm =
             (Term term) =>
-                Regex.IsMatch(term.Pattern, "\\|")
+                Or.IsMatch(term.Pattern)
                 ? term with { Pattern = $"(?:{term.Pattern})" }
                 : term;
 
@@ -470,37 +486,46 @@ namespace WolvenKit.ViewModels.Tools
         // positive match so that we know the refinement is otherwise satisfied).
         private static readonly Func<Term, Term> AllowExcludingTerm =
             (Term term) =>
-                !Regex.IsMatch(term.Pattern, Negation)
+                !Negation.IsMatch(term.Pattern)
                     ? term with { Type = TermType.Include }
                     : term with
-                    {
-                        Type = TermType.Exclude,
-                        Pattern = Regex.Replace(term.Pattern, Negation, "(?:${term})"),
-                        NegationPattern = Regex.Replace(term.Pattern, Negation, "(?:.*)")
-                    };
+                        {
+                            Type = TermType.Exclude,
+                            Pattern = Negation.Replace(term.Pattern, "(?:${term})"),
+                            NegationPattern = Negation.Replace(term.Pattern,"(?:.*)")
+                        };
 
         private static readonly Func<SearchRefinement, CyberSearch> AsMatchFunctions =
-            (SearchRefinement searchRefinement) =>
-            {
-                var searchContainsExclusion =
-                    searchRefinement.Terms.Any(term => term.Type == TermType.Exclude);
+            (SearchRefinement searchRefinement) => {
+                switch (searchRefinement) {
+                    case HashRefinement hashRefinement:
+                        return new CyberSearch {
+                            Match = (IGameFile candidate) => candidate.Key == hashRefinement.Hash,
+                            SourceRefinement = hashRefinement,
+                        };
 
-                var pattern = $"^.*{string.Join(".*?", searchRefinement.Terms.Select(term => term.Pattern))}.*$";
-                var patternWithExclusionsNegated = $"^.*{string.Join(".*?", searchRefinement.Terms.Select(term => term.NegationPattern ?? term.Pattern))}.*$";
+                    case PatternRefinement patternRefinement:
+                        var searchContainsExclusion =
+                            patternRefinement.Terms.Any(term => term.Type == TermType.Exclude);
 
-                var cyberSearch = new CyberSearch
-                {
-                    Match =
-                        searchContainsExclusion
-                        ? (IGameFile candidate) => (!Regex.IsMatch(candidate.Name, pattern) && Regex.IsMatch(candidate.Name, patternWithExclusionsNegated))
-                        : (IGameFile candidate) => Regex.IsMatch(candidate.Name, pattern),
+                        var pattern =
+                            $"^.*{string.Join(".*?", patternRefinement.Terms.Select(term => term.Pattern))}.*$";
+                        var patternWithExclusionsNegated =
+                            $"^.*{string.Join(".*?", patternRefinement.Terms.Select(term => term.NegationPattern ?? term.Pattern))}.*$";
 
-                    ContainsExclusion = searchContainsExclusion,
-                    SourcePattern = pattern,
-                    SourceNegationPattern = patternWithExclusionsNegated,
+                        return new CyberSearch
+                        {
+                            Match =
+                                searchContainsExclusion
+                                ? (IGameFile candidate) => (!Regex.IsMatch(candidate.Name, pattern) && Regex.IsMatch(candidate.Name, patternWithExclusionsNegated))
+                                : (IGameFile candidate) => Regex.IsMatch(candidate.Name, pattern),
+
+                            SourceRefinement = patternRefinement
+                        };
+
+                    default:
+                        throw new ArgumentException($"Unknown refinement, shouldn't ever happen. Refinement: {searchRefinement}");
                 };
-
-                return cyberSearch;
             };
 
         private void CyberEnhancedSearch()
@@ -508,28 +533,32 @@ namespace WolvenKit.ViewModels.Tools
             var searchAsSequentialRefinements =
                 RefinementSeparator
                     .Split(SearchBarText)
-                    .Select(CombineTermsToPreventSplitWhereDesired)
-                    .Select(SplitRefinementToTerms)
-                    .Select(searchRefinement => searchRefinement with
-                    {
-                        Terms = searchRefinement.Terms
-                            .Select(HonorFileExtension)
-                            .Select(DropUnnecessaryGlobStars)
-                            .Select(LimitOrToOneTerm)
-                            .ToArray()
-                    })
-                    .Select(searchRefinement => searchRefinement with {
-                        Terms = searchRefinement.Terms
-                            .Select(AllowExcludingTerm)
-                            .ToArray()
+                    .Select(IntoTypedRefinementsAndTerms)
+                    .Select(searchRefinement => searchRefinement switch {
+                        PatternRefinement patternRefinement =>
+                            patternRefinement with
+                            {
+                                Terms = patternRefinement.Terms
+                                    .Select(HonorFileExtension)
+                                    .Select(DropUnnecessaryGlobStars)
+                                    .Select(LimitOrToOneTerm)
+                                    .Select(AllowExcludingTerm)
+                                    .ToArray()
+                            },
+                        _ => searchRefinement
                     })
                     .Select(AsMatchFunctions)
+                    .Select(archive =>
+                    archive)
                     .ToArray();
 
+            // Maybe we could avoid reconnecting every time? Dunno if it makes a difference
             var gameFiles =
                 _archiveManager
                     .Archives
                     .Connect()
+                    .Select(archive =>
+                    archive)
                     .TransformMany((archive => archive.Files.Values), (fileInArchive => fileInArchive.Key));
 
             var filesMatchingQuery =
