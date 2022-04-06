@@ -11,6 +11,7 @@ using System.Windows;
 using System.Windows.Input;
 using DynamicData;
 using Microsoft.Extensions.FileSystemGlobbing;
+using MoreLinq;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using Splat;
@@ -401,6 +402,9 @@ namespace WolvenKit.ViewModels.Tools
 
             await Task.Run(() =>
             {
+                CyberEnhancedSearch();
+
+                /*
                 if (IsRegexSearchEnabled)
                 {
                     RegexSearch();
@@ -409,9 +413,143 @@ namespace WolvenKit.ViewModels.Tools
                 {
                     KeywordSearch();
                 }
+                */
             });
 
             _progressService.IsIndeterminate = false;
+        }
+
+        private enum TermType
+        {
+            Unknown,
+            Include,
+            Exclude,
+        }
+
+        private readonly record struct Term(TermType Type, string Pattern, string NegationPattern);
+        private readonly record struct SearchRefinement(Term[] Terms);
+
+        private readonly record struct CyberSearch(Func<IGameFile, bool> Match, bool ContainsExclusion, string SourcePattern, string SourceNegationPattern);
+
+        private static readonly string Negation = "^\\!(?<term>.+)$";
+        private static readonly Regex RefinementSeparator = new("\\s+>\\s+", RegexOptions.Compiled);
+        private static readonly Regex Whitespace = new("\\s+", RegexOptions.Compiled);
+
+        private static readonly Func<string, string> CombineTermsToPreventSplitWhereDesired =
+            (string search) =>
+                search;
+
+        private static readonly Func<string, SearchRefinement> SplitRefinementToTerms =
+            (string search) =>
+                new SearchRefinement
+                {
+                    Terms = Whitespace.Split(search).Select(term => new Term { Type = TermType.Unknown, Pattern = term }).ToArray(),
+                };
+        /*
+        private static readonly Func<Term, Term> AllowDirectHashMatch =
+            (Term term) =>
+                !Regex.IsMatch(term.Pattern, "^(hash:)?\\d+$")
+                ? term
+                : ..
+*/
+        private static readonly Func<Term, Term> HonorFileExtension =
+            (Term term) =>
+                term with { Pattern = Regex.Replace(term.Pattern, "(^|\\W)\\.(?<term>\\w+?)", "$1\\.${term}") };
+
+        private static readonly Func<Term, Term> DropUnnecessaryGlobStars =
+            (Term term) => term;
+
+        private static readonly Func<Term, Term> LimitOrToOneTerm =
+            (Term term) =>
+                Regex.IsMatch(term.Pattern, "\\|")
+                ? term with { Pattern = $"(?:{term.Pattern})" }
+                : term;
+
+        // Negative regexps are extremely fraught even when not synthesized,
+        // so instead we simply fail on a negative match (with the corresponding
+        // positive match so that we know the refinement is otherwise satisfied).
+        private static readonly Func<Term, Term> AllowExcludingTerm =
+            (Term term) =>
+                !Regex.IsMatch(term.Pattern, Negation)
+                    ? term with { Type = TermType.Include }
+                    : term with
+                    {
+                        Type = TermType.Exclude,
+                        Pattern = Regex.Replace(term.Pattern, Negation, "(?:${term})"),
+                        NegationPattern = Regex.Replace(term.Pattern, Negation, "(?:.*)")
+                    };
+
+        private static readonly Func<SearchRefinement, CyberSearch> AsMatchFunctions =
+            (SearchRefinement searchRefinement) =>
+            {
+                var searchContainsExclusion =
+                    searchRefinement.Terms.Any(term => term.Type == TermType.Exclude);
+
+                var pattern = $"^.*{string.Join(".*?", searchRefinement.Terms.Select(term => term.Pattern))}.*$";
+                var patternWithExclusionsNegated = $"^.*{string.Join(".*?", searchRefinement.Terms.Select(term => term.NegationPattern ?? term.Pattern))}.*$";
+
+                var cyberSearch = new CyberSearch
+                {
+                    Match =
+                        searchContainsExclusion
+                        ? (IGameFile candidate) => (!Regex.IsMatch(candidate.Name, pattern) && Regex.IsMatch(candidate.Name, patternWithExclusionsNegated))
+                        : (IGameFile candidate) => Regex.IsMatch(candidate.Name, pattern),
+
+                    ContainsExclusion = searchContainsExclusion,
+                    SourcePattern = pattern,
+                    SourceNegationPattern = patternWithExclusionsNegated,
+                };
+
+                return cyberSearch;
+            };
+
+        private void CyberEnhancedSearch()
+        {
+            var searchAsSequentialRefinements =
+                RefinementSeparator
+                    .Split(SearchBarText)
+                    .Select(CombineTermsToPreventSplitWhereDesired)
+                    .Select(SplitRefinementToTerms)
+                    .Select(searchRefinement => searchRefinement with
+                    {
+                        Terms = searchRefinement.Terms
+                            .Select(HonorFileExtension)
+                            .Select(DropUnnecessaryGlobStars)
+                            .Select(LimitOrToOneTerm)
+                            .ToArray()
+                    })
+                    .Select(searchRefinement => searchRefinement with {
+                        Terms = searchRefinement.Terms
+                            .Select(AllowExcludingTerm)
+                            .ToArray()
+                    })
+                    .Select(AsMatchFunctions)
+                    .ToArray();
+
+            var gameFiles =
+                _archiveManager
+                    .Archives
+                    .Connect()
+                    .TransformMany((archive => archive.Files.Values), (fileInArchive => fileInArchive.Key));
+
+            var filesMatchingQuery =
+                gameFiles
+                    .Filter((file) =>
+                        searchAsSequentialRefinements.All(refinement => refinement.Match(file)));
+
+            // Should add an indicator here of the failure
+
+            var viewableFileList =
+                filesMatchingQuery
+                    .Transform(matchingFile => new RedFileViewModel(matchingFile))
+                    .Bind(out var list);
+
+            viewableFileList
+                .Subscribe()
+                .Dispose();
+
+            RightItems.Clear();
+            RightItems.AddRange(list);
         }
 
         /// <summary>
