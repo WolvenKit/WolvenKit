@@ -188,8 +188,6 @@ namespace WolvenKit.ViewModels.Tools
 
         [Reactive] public string OptionsSearchBarText { get; set; }
 
-        [Reactive] public bool IsRegexSearchEnabled { get; set; }
-
         #endregion properties
 
         #region commands
@@ -584,148 +582,17 @@ namespace WolvenKit.ViewModels.Tools
                     .Filter((file) =>
                         searchAsSequentialRefinements.All(refinement => refinement.Match(file)));
 
-            // Should add an indicator here of the failure
-
             var viewableFileList =
                 filesMatchingQuery
                     .Transform(matchingFile => new RedFileViewModel(matchingFile))
+                    .Catch(LogExceptionAndReturnEmpty)
                     .Bind(out var list);
 
             viewableFileList
                 .Subscribe()
                 .Dispose();
 
-            RightItems.Clear();
-            RightItems.AddRange(list);
-        }
-
-        /// <summary>
-        /// Parses the search bar and filters all game files by given regex pattern
-        /// Glob patterns from the additional search bar are evaluated first
-        /// Sets the right hand filelist to the result
-        /// </summary>
-        private void RegexSearch()
-        {
-            var matcher = new Matcher();
-            matcher.AddInclude(OptionsSearchBarText);
-
-            var rx = new Regex(SearchBarText,
-                RegexOptions.Compiled | RegexOptions.IgnoreCase);
-
-            _archiveManager.Archives
-                .Connect()
-                .TransformMany(x => x.Files.Values, y => y.Key)
-                .Filter(x => string.IsNullOrEmpty(OptionsSearchBarText) || matcher.Match(x.Name).HasMatches)
-                .Filter(x => rx.IsMatch(x.Name))
-                .Transform(x => new RedFileViewModel(x))
-                .Bind(out var list)
-                .Subscribe()
-                .Dispose();
-
-            RightItems.Clear();
-            RightItems.AddRange(list);
-        }
-
-        /// <summary>
-        /// Parses the search bar and filters all game files by given search keys
-        /// Glob patterns from the additional search bar are evaluated first
-        /// Sets the right hand filelist to the result
-        /// </summary>
-        private void KeywordSearch()
-        {
-            if (string.IsNullOrEmpty(SearchBarText))
-            {
-                return;
-            }
-
-            var inputs = SearchBarText.Split(' ');
-            var keyDict = Enum
-                .GetValues<ESearchKeys>()
-                .ToDictionary(key => key, _ => new List<string>());
-            keyDict[ESearchKeys.Limit] = new List<string>() { SEARCH_LIMIT.ToString() };
-
-            // e.g. judy ext:mesh,ent test:xxx whatever
-            // Name < judy,whatever
-            // Ext < mesh,ent
-            foreach (var item in inputs)
-            {
-                //check if keyword
-                if (item.Contains(':'))
-                {
-                    var split = item.Split(':');
-                    if (split.Length != 2)
-                    {
-                        // incorrect format -> disregard
-                        continue;
-                    }
-
-                    var key = split[0].ToLower();
-                    var value = split[1];
-                    var names = Enum.GetNames<ESearchKeys>().Select(x => x.ToLower());
-                    if (names.Contains(key))
-                    {
-                        var ekey = (ESearchKeys)Enum.Parse(typeof(ESearchKeys), key, true);
-                        // get multiple
-                        var multiple = value.Split(',').ToList();
-                        // add to query
-                        keyDict[ekey] = multiple;
-                    }
-                }
-                else
-                {
-                    // default to filename search term
-                    keyDict[ESearchKeys.Name].Add(item);
-                }
-            }
-
-
-            // order from most specific to least
-            // 0. Glob
-
-            var matcher = new Matcher();
-            matcher.AddInclude(OptionsSearchBarText);
-            //var allfiles = _managers.First().Items
-            //    .KeyValues.Select(x => x.Value.Name);
-            //var match = matcher.Match(allfiles);
-            //var debugresult = match.Files.Select(x => x.Path);
-
-            // 1. Hash
-            var qhashes = keyDict[ESearchKeys.Hash]
-                .Where(x => ulong.TryParse(x, out _))
-                .Select(ulong.Parse);
-            // 2. Extension
-            var qextensions = keyDict[ESearchKeys.Kind]
-                .Where(x => Enum.TryParse<ERedExtension>(x, true, out _))
-                .Select(x => $".{x}");
-            // 3. Name
-            var qnames = keyDict[ESearchKeys.Name];
-            // 4. Limit
-            if (!int.TryParse(keyDict[ESearchKeys.Limit].First(), out var limit))
-            {
-                limit = SEARCH_LIMIT;
-            }
-
-            _archiveManager.Archives
-                .Connect()
-                .TransformMany(x => x.Files.Values, y => y.Key)
-                .Filter(x => string.IsNullOrEmpty(OptionsSearchBarText) || matcher.Match(x.Name).HasMatches)
-                .Filter(x =>
-                {
-                    var enumerable = qhashes as ulong[] ?? qhashes.ToArray();
-                    return !enumerable.Any() || enumerable.Contains(x.Key);
-                })
-                .Filter(x =>
-                {
-                    var enumerable = qextensions as string[] ?? qextensions.ToArray();
-                    return !enumerable.Any() ||
-                           enumerable.Any(y => y.Equals(x.Extension, StringComparison.OrdinalIgnoreCase));
-                })
-                .Filter(x => !qnames.Any() || qnames.Any(y => x.Name.Contains(y, StringComparison.OrdinalIgnoreCase)))
-                .LimitSizeTo(limit)
-                .Transform(x => new RedFileViewModel(x))
-                .Bind(out var list)
-                .Subscribe()
-                .Dispose();
+            // Should add an indicator here of failures and non-matches
 
             RightItems.Clear();
             RightItems.AddRange(list);
