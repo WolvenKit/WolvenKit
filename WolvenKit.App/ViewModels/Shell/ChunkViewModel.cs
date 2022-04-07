@@ -422,14 +422,32 @@ namespace WolvenKit.ViewModels.Shell
                     }
                 }
             }
-            else if (obj is SerializationDeferredDataBuffer sddb && sddb.Data is Package04 p4)
+            else if (obj is SerializationDeferredDataBuffer sddb)
             {
-                for (var i = 0; i < PropertyCount; i++)
+                if (sddb.Data is Package04 p4)
                 {
-                    Properties.Add(new ChunkViewModel(p4.Chunks[i], this, null)
+                    for (var i = 0; i < PropertyCount; i++)
                     {
-                        IsReadOnly = isreadonly
-                    });
+                        Properties.Add(new ChunkViewModel(p4.Chunks[i], this, null)
+                        {
+                            IsReadOnly = isreadonly
+                        });
+                    }
+                }
+                else if (sddb.Data != null)
+                {
+                    var pis = sddb.Data.GetType().GetProperties();
+                    foreach (var pi in pis)
+                    {
+                        var value = pi.GetValue(sddb.Data);
+                        if (value is IRedType irt)
+                        {
+                            Properties.Add(new ChunkViewModel(irt, this, pi.Name)
+                            {
+                                IsReadOnly = isreadonly
+                            });
+                        }
+                    }
                 }
             }
             else if (obj is SharedDataBuffer sdb)
@@ -486,12 +504,20 @@ namespace WolvenKit.ViewModels.Shell
                         });
                     }
                 }
-                else if (db.Data is IParseableBuffer ipb)
+                else if (db.Data != null)
                 {
-                    Properties.Add(new ChunkViewModel(ipb.Data, this)
+                    var pis = db.Data.GetType().GetProperties();
+                    foreach (var pi in pis)
                     {
-                        IsReadOnly = isreadonly
-                    });
+                        var value = pi.GetValue(db.Data);
+                        if (value is IRedType irt)
+                        {
+                            Properties.Add(new ChunkViewModel(irt, this, pi.Name)
+                            {
+                                IsReadOnly = isreadonly
+                            });
+                        }
+                    }
                 }
             }
             //else if (Data is TweakXLFile)
@@ -729,6 +755,18 @@ namespace WolvenKit.ViewModels.Shell
                         return typeof(localizationPersistenceOnScreenEntry);
                     }
                 }
+                if (Data is DataBuffer db && db.Data != null)
+                {
+                    return db.Data.GetType();
+                }
+                if (Data is SharedDataBuffer sdb && sdb.Data != null)
+                {
+                    return sdb.Data.GetType();
+                }
+                if (Data is SerializationDeferredDataBuffer sddb && sddb.Data != null)
+                {
+                    return sddb.Data.GetType();
+                }
                 if (Data is gamedataLocKeyWrapper)
                 {
                     return typeof(localizationPersistenceOnScreenEntry);
@@ -758,7 +796,7 @@ namespace WolvenKit.ViewModels.Shell
             }
         }
 
-        public string ResolvedType => ResolvedPropertyType != null ? GetTypeRedName(ResolvedPropertyType) : "";
+        public string ResolvedType => ResolvedPropertyType != null ? (GetTypeRedName(ResolvedPropertyType) != null ? GetTypeRedName(ResolvedPropertyType) : ResolvedPropertyType.Name) : "";
 
         public bool TypesDiffer => PropertyType != ResolvedPropertyType;
 
@@ -767,9 +805,8 @@ namespace WolvenKit.ViewModels.Shell
         public bool IsArray => PropertyType != null &&
                     (PropertyType.IsAssignableTo(typeof(IRedArray)) ||
                     PropertyType.IsAssignableTo(typeof(IList)) ||
-                    PropertyType.IsAssignableTo(typeof(DataBuffer)) ||
-                    PropertyType.IsAssignableTo(typeof(SharedDataBuffer)) ||
-                    PropertyType.IsAssignableTo(typeof(SerializationDeferredDataBuffer)));
+                    ResolvedPropertyType.IsAssignableTo(typeof(CR2WList)) ||
+                    ResolvedPropertyType.IsAssignableTo(typeof(Package04)));
 
         private int _propertyCountCache = -1;
 
@@ -822,9 +859,16 @@ namespace WolvenKit.ViewModels.Shell
                         var dps = redClass.GetDynamicPropertyNames();
                         count += dps.Count;
                     }
-                    else if (ResolvedData is SerializationDeferredDataBuffer sddb && sddb.Data is Package04 p4)
+                    else if (ResolvedData is SerializationDeferredDataBuffer sddb)
                     {
-                        count += p4.Chunks.Count;
+                        if (sddb.Data is Package04 p4)
+                        {
+                            count += p4.Chunks.Count;
+                        }
+                        else if (sddb.Data != null)
+                        {
+                            count += sddb.Data.GetType().GetProperties().Count();
+                        }
                     }
                     else if (ResolvedData is SharedDataBuffer sdb)
                     {
@@ -1225,7 +1269,8 @@ namespace WolvenKit.ViewModels.Shell
                     "category",
                     "entryName",
                     "className",
-                    "actorName"
+                    "actorName",
+                    "sectorHash"
             };
             if (ResolvedData is RedBaseClass irc)
             {
