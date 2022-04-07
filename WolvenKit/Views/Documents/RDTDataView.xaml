@@ -56,11 +56,11 @@
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
 
-        <Grid.RowDefinitions>
+        <!--<Grid.RowDefinitions>
             <RowDefinition Height="*" />
             <RowDefinition Height="5" />
             <RowDefinition Height="*" />
-        </Grid.RowDefinitions>
+        </Grid.RowDefinitions>-->
 
         <tools:RedTreeView
             x:Name="RedTreeView"
@@ -79,12 +79,12 @@
         -->
 
         <!--  Grid Splitter  -->
-        <GridSplitter
+        <!--<GridSplitter
             Grid.Row="1"
             Grid.ColumnSpan="3"
             Height="5"
             HorizontalAlignment="Stretch"
-            Background="{StaticResource BorderAlt}" />
+            Background="{StaticResource BorderAlt}" />-->
 
 
         <!--
@@ -100,7 +100,7 @@
                     Target="{Binding Input.Anchor}"
                     Source="{Binding Output.Anchor}"
         -->
-        <editors:AutomaticNodifyEditor
+        <!--<editors:AutomaticNodifyEditor
             x:Name="Editor"
             Grid.Row="2"
             Grid.ColumnSpan="3"
@@ -129,7 +129,7 @@
                                 <Setter Property="ToolTip" Value="Double click to split" />
                                 <Setter Property="Stroke" Value="#33FFFFFF" />
                                 <Setter Property="StrokeThickness" Value="2" />
-                                <!--Style.Triggers>
+                                --><!--Style.Triggers>
                                     <Trigger Property="IsMouseOver" Value="True">
                                         <Setter Property="Stroke" Value="{StaticResource WolvenKitYellow}" />
                                     </Trigger>
@@ -139,7 +139,7 @@
                                     <DataTrigger Binding="{Binding Output.Node.IsSelected, UpdateSourceTrigger=PropertyChanged}" Value="True">
                                         <Setter Property="Stroke" Value="{StaticResource WolvenKitCyan}" />
                                     </DataTrigger>
-                                </Style.Triggers-->
+                                </Style.Triggers--><!--
                             </Style>
                         </nodify:Connection.Style>
                     </nodify:Connection>
@@ -208,12 +208,12 @@
                                         Style="{StaticResource ButtonCustom}"
                                         ToolTip="Open in new tab">
                                         <StackPanel Orientation="Horizontal">
-                                            <!--
+                                            --><!--
                                                 TextBlock
                                                 Margin="0,0,3,0"
                                                 Foreground="{StaticResource WolvenKitCyan}"
                                                 Text="Open File" /
-                                            -->
+                                            --><!--
                                             <iconPacks:PackIconVaadinIcons
                                                 Padding="2"
                                                 VerticalAlignment="Center"
@@ -254,12 +254,12 @@
                                         Style="{StaticResource ButtonCustom}"
                                         ToolTip="Open in new tab">
                                         <StackPanel Orientation="Horizontal">
-                                            <!--
+                                            --><!--
                                                 TextBlock
                                                 Margin="0,0,3,0"
                                                 Foreground="{StaticResource WolvenKitCyan}"
                                                 Text="Open File" /
-                                            -->
+                                            --><!--
                                             <iconPacks:PackIconVaadinIcons
                                                 Padding="2"
                                                 VerticalAlignment="Center"
@@ -302,7 +302,7 @@
             <editors:AutomaticNodifyEditor.ItemContainerStyle>
                 <Style BasedOn="{StaticResource {x:Type nodify:ItemContainer}}" TargetType="{x:Type nodify:ItemContainer}">
                     <Setter Property="Location" Value="{Binding Location}" />
-                    <!--  Setter Property="IsSelected" Value="{Binding IsSelected}" /  -->
+                    --><!--  Setter Property="IsSelected" Value="{Binding IsSelected}" /  --><!--
                     <Setter Property="BorderBrush">
                         <Setter.Value>
                             <SolidColorBrush Opacity="0.5" Color="Black" />
@@ -311,7 +311,7 @@
                     <Setter Property="SelectedBrush" Value="{StaticResource WolvenKitCyan}" />
                 </Style>
             </editors:AutomaticNodifyEditor.ItemContainerStyle>
-        </editors:AutomaticNodifyEditor>
+        </editors:AutomaticNodifyEditor>-->
 
     </Grid>
 

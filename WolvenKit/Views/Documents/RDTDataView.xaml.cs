@@ -63,7 +63,7 @@ namespace WolvenKit.Views.Documents
                       view => view.CustomPG.ViewModel)
                   .DisposeWith(disposables);
 
-                LayoutNodes();
+                //LayoutNodes();
 
                 //ViewModel.Nodes.CollectionChanged += (object sender, NotifyCollectionChangedEventArgs e) =>
                 //{
@@ -75,7 +75,7 @@ namespace WolvenKit.Views.Documents
                 //    LayoutNodes();
                 //};
 
-                ViewModel.LayoutNodes = LayoutNodes;
+                //ViewModel.LayoutNodes = LayoutNodes;
 
                 //Editor.ItemsUpdated += (object sender, RoutedEventArgs e) =>
                 //{
@@ -142,7 +142,7 @@ namespace WolvenKit.Views.Documents
         //    ViewModel.SelectedChunk = chunk;
         //}
 
-        public void LayoutNodes()
+    /*    public void LayoutNodes()
         {
             Editor.UpdateLayout();
             var graph = new GeometryGraph();
@@ -242,6 +242,6 @@ namespace WolvenKit.Views.Documents
         private void AutolayoutNodes_MenuItem(object sender, RoutedEventArgs e)
         {
             LayoutNodes();
-        }
+        }*/
     }
 }
