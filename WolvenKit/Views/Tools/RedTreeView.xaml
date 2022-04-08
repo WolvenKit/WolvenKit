@@ -349,6 +349,21 @@
                     </MenuItem.Icon>
                 </MenuItem>
                 <MenuItem
+                    Command="{Binding Path=PlacementTarget.Tag.DeleteSelectedItemCommand, RelativeSource={RelativeSource AncestorType=ContextMenu}}"
+                    Header="Test Items in Array/Buffer"
+                    IsCheckable="False"
+                    Style="{StaticResource SyncfusionMenuItemStyle}">
+                    <MenuItem.Icon>
+                        <iconPacks:PackIconCodicons
+                            Width="13"
+                            Height="13"
+                            Padding="0,0,0,0"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center"
+                            Kind="Remove" />
+                    </MenuItem.Icon>
+                </MenuItem>
+                <MenuItem
                     Command="{Binding Path=PlacementTarget.Tag.DeleteAllCommand, RelativeSource={RelativeSource AncestorType=ContextMenu}}"
                     Header="Delete All Items in Array/Buffer"
                     IsCheckable="False"
@@ -540,7 +555,8 @@
         ItemTemplateSelector="{StaticResource itemTemplateSelector}"
         ItemsSource="{Binding ElementName=redTreeView, Path=ItemsSource, Mode=TwoWay}"
         SelectedItem="{Binding ElementName=redTreeView, Path=SelectedItem, Mode=TwoWay}"
-        SelectionMode="Single"
+        SelectedItems="{Binding ElementName=redTreeView, Path=SelectedItems, Mode=TwoWay}"
+        SelectionMode="Extended"
         ShowLines="True"
         VirtualizingPanel.IsVirtualizing="True"
         VirtualizingPanel.ScrollUnit="Pixel"

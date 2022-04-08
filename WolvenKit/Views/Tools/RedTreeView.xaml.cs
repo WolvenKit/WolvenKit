@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -41,6 +42,7 @@ namespace WolvenKit.Views.Tools
             set { SetValue(ItemsSourceProperty, value); }
         }
 
+        /// <summary>Identifies the <see cref="SelectedItem"/> dependency property.</summary>
         public static readonly DependencyProperty SelectedItemProperty =
             DependencyProperty.Register(nameof(SelectedItem), typeof(object), typeof(RedTreeView));
 
@@ -48,6 +50,18 @@ namespace WolvenKit.Views.Tools
         {
             get { return (object)GetValue(SelectedItemProperty); }
             set { SetValue(SelectedItemProperty, value); }
+        }
+
+        /// <summary>
+        /// Identifies the SelectedItems dependency property.
+        /// </summary>
+        public static readonly DependencyProperty SelectedItemsProperty =
+            DependencyProperty.Register(nameof(SelectedItems), typeof(ObservableCollection<object>), typeof(RedTreeView));
+
+        public ObservableCollection<object> SelectedItems
+        {
+            get { return (ObservableCollection<object>)GetValue(SelectedItemsProperty); }
+            set { SetValue(SelectedItemsProperty, value); }
         }
 
         // Drag & Drop Functionality

@@ -174,6 +174,7 @@ namespace WolvenKit.ViewModels.Shell
             AddHandleCommand = new DelegateCommand(_ => ExecuteAddHandle(), _ => CanAddHandle());
             AddItemToCompiledDataCommand = new DelegateCommand(_ => ExecuteAddItemToCompiledData(), _ => CanAddItemToCompiledData());
             DeleteItemCommand = new DelegateCommand(_ => ExecuteDeleteItem(), _ => CanDeleteItem());
+            DeleteSelectedItemCommand = new DelegateCommand(_ => ExecuteDeleteSelectedItem(), _ => CanDeleteItem());
             DeleteAllCommand = new DelegateCommand(_ => ExecuteDeleteAll(), _ => CanDeleteAll());
             OpenChunkCommand = new DelegateCommand(_ => ExecuteOpenChunk(), _ => CanOpenChunk());
             CopyChunkCommand = new DelegateCommand(_ => ExecuteCopyChunk(), _ => CanCopyChunk());
@@ -1615,7 +1616,45 @@ namespace WolvenKit.ViewModels.Shell
         //    Tab.File.SetIsDirty(true);
         //}
 
+
+        public ICommand DeleteSelectedItemCommand { get; private set; }
+
+        private void ExecuteDeleteSelectedItem()
+        {
+            Console.Write(Data);
+
+/*            if (Tab is RDTDataViewModel dvm)
+            {
+                dvm.SelectedChunk = Parent;
+            }
+            if (Parent.Data is IRedArray ary)
+            {
+                ary.Remove(Data);
+            }
+            else if (Parent.Data is IRedBufferPointer db && db.GetValue().Data is Package04 pkg)
+            {
+                if (!pkg.Chunks.Remove((RedBaseClass)Data))
+                {
+                    Locator.Current.GetService<ILoggerService>().Error("Unable to delete chunk");
+                    return;
+                }
+            }
+            else if (Parent.Data is IRedBufferPointer db2 && db2.GetValue().Data is CR2WList list)
+            {
+                list.Files.RemoveAll(x => x.RootChunk == Data);
+            }
+            else
+            {
+                Locator.Current.GetService<ILoggerService>().Error("Unknown collection - unable to delete chunk");
+                return;
+            }
+
+            Tab.File.SetIsDirty(true);
+            Parent.RecalulateProperties();*/
+        }
+
         public ICommand DeleteItemCommand { get; private set; }
+
         private bool CanDeleteItem() => IsInArray;
         private void ExecuteDeleteItem()
         {
