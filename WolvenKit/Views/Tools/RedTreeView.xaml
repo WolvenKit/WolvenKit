@@ -555,7 +555,7 @@
         ItemTemplateSelector="{StaticResource itemTemplateSelector}"
         ItemsSource="{Binding ElementName=redTreeView, Path=ItemsSource, Mode=TwoWay}"
         SelectedItem="{Binding ElementName=redTreeView, Path=SelectedItem, Mode=TwoWay}"
-        SelectedItems="{Binding ElementName=redTreeView, Path=SelectedItems, Mode=TwoWay}"
+        SelectedItems="{Binding ElementName=redTreeView, Path=SelectedItemsCollection, Mode=TwoWay}"
         SelectionMode="Extended"
         ShowLines="True"
         VirtualizingPanel.IsVirtualizing="True"

@@ -52,16 +52,14 @@ namespace WolvenKit.Views.Tools
             set { SetValue(SelectedItemProperty, value); }
         }
 
-        /// <summary>
-        /// Identifies the SelectedItems dependency property.
-        /// </summary>
-        public static readonly DependencyProperty SelectedItemsProperty =
-            DependencyProperty.Register(nameof(SelectedItems), typeof(ObservableCollection<object>), typeof(RedTreeView));
+        /// <summary>Identifies the <see cref="SelectedItemsCollection"/> dependency property.</summary>
+        public static readonly DependencyProperty SelectedItemsCollectionProperty =
+            DependencyProperty.Register(nameof(SelectedItemsCollection), typeof(ObservableCollection<object>), typeof(RedTreeView));
 
-        public ObservableCollection<object> SelectedItems
+        public ObservableCollection<object> SelectedItemsCollection
         {
-            get { return (ObservableCollection<object>)GetValue(SelectedItemsProperty); }
-            set { SetValue(SelectedItemsProperty, value); }
+            get { return (ObservableCollection<object>)GetValue(SelectedItemsCollectionProperty); }
+            set { SetValue(SelectedItemsCollectionProperty, value); }
         }
 
         // Drag & Drop Functionality
@@ -183,25 +181,25 @@ namespace WolvenKit.Views.Tools
                     {
                         target.Parent.MoveChild(target.Parent.Properties.IndexOf(target) + (e.DropPosition == DropPosition.DropBelow ? 1 : 0), source);
                     }
-                        //if (target.Parent.Data is DataBuffer or SerializationDeferredDataBuffer)
-                        //{
-                        //    target.Parent.AddChunkToDataBuffer((RedBaseClass)rbc.DeepCopy(), target.Parent.Properties.IndexOf(target) + 1);
-                        //}
+                    //if (target.Parent.Data is DataBuffer or SerializationDeferredDataBuffer)
+                    //{
+                    //    target.Parent.AddChunkToDataBuffer((RedBaseClass)rbc.DeepCopy(), target.Parent.Properties.IndexOf(target) + 1);
+                    //}
 
-                        //if (target.Parent.Data is IRedArray arr)
-                        //{
-                        //    var arrayType = target.Parent.Data.GetType().GetGenericTypeDefinition();
+                    //if (target.Parent.Data is IRedArray arr)
+                    //{
+                    //    var arrayType = target.Parent.Data.GetType().GetGenericTypeDefinition();
 
-                        //    if (arrayType == typeof(CArray<>))
-                        //    {
-                        //        target.Parent.AddClassToArray((RedBaseClass)rbc.DeepCopy(), target.Parent.Properties.IndexOf(target) + 1);
-                        //    }
+                    //    if (arrayType == typeof(CArray<>))
+                    //    {
+                    //        target.Parent.AddClassToArray((RedBaseClass)rbc.DeepCopy(), target.Parent.Properties.IndexOf(target) + 1);
+                    //    }
 
-                        //    if (arrayType == typeof(CStatic<>) && arr.Count < arr.MaxSize)
-                        //    {
-                        //        target.Parent.AddClassToArray((RedBaseClass)rbc.DeepCopy(), target.Parent.Properties.IndexOf(target) + 1);
-                        //    }
-                        //}
+                    //    if (arrayType == typeof(CStatic<>) && arr.Count < arr.MaxSize)
+                    //    {
+                    //        target.Parent.AddClassToArray((RedBaseClass)rbc.DeepCopy(), target.Parent.Properties.IndexOf(target) + 1);
+                    //    }
+                    //}
                 }
             }
         }
