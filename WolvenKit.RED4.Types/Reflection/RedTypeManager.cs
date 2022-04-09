@@ -1,15 +1,10 @@
 using System;
-using System.Collections.Concurrent;
-using System.Collections.Generic;
-using System.Diagnostics;
 using WolvenKit.RED4.Types.Exceptions;
 
 namespace WolvenKit.RED4.Types
 {
     public class RedTypeManager
     {
-        public static T Create<T>() where T : RedBaseClass => System.Activator.CreateInstance<T>();
-
         public static RedBaseClass Create(Type type) => (RedBaseClass)System.Activator.CreateInstance(type);
 
         public static RedBaseClass Create(string redTypeName)

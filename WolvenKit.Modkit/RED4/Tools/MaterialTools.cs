@@ -1201,12 +1201,17 @@ namespace WolvenKit.Modkit.RED4
                 names.Add(mat.Name);
                 var mi = new CR2WFile();
                 {
-                    var chunk = RedTypeManager.Create<CMaterialInstance>();
-                    chunk.CookingPlatform = Enums.ECookingPlatform.PLATFORM_PC;
-                    chunk.EnableMask = true;
-                    chunk.ResourceVersion = 4;
-                    chunk.BaseMaterial = new CResourceReference<IMaterial>() { DepotPath = mat.BaseMaterial };
-                    chunk.Values = new CArray<CKeyValuePair>();
+                    var chunk = new CMaterialInstance
+                        {
+                            CookingPlatform = Enums.ECookingPlatform.PLATFORM_PC,
+                            EnableMask = true,
+                            ResourceVersion = 4,
+                            BaseMaterial = new CResourceReference<IMaterial>
+                            {
+                                DepotPath = mat.BaseMaterial
+                            },
+                            Values = new CArray<CKeyValuePair>()
+                        };
 
                     CMaterialTemplate mt = null;
                     if (mts.ContainsKey(mat.MaterialTemplate))
@@ -1314,16 +1319,18 @@ namespace WolvenKit.Modkit.RED4
 
             for (var i = 0; i < names.Count; i++)
             {
-                var entry = RedTypeManager.Create<CMeshMaterialEntry>();
-                entry.IsLocalInstance = true;
-                entry.Name = names[i];
-                entry.Index = (ushort)i;
-                blob.MaterialEntries.Add(entry);
+                blob.MaterialEntries.Add(new CMeshMaterialEntry
+                {
+                    IsLocalInstance = true,
+                    Name = names[i],
+                    Index = (ushort)i
+                });
 
-                var header = RedTypeManager.Create<meshLocalMaterialHeader>();
-                header.Offset = offsets[i];
-                header.Size = sizes[i];
-                blob.LocalMaterialBuffer.RawDataHeaders.Add(header);
+                blob.LocalMaterialBuffer.RawDataHeaders.Add(new meshLocalMaterialHeader
+                {
+                    Offset = offsets[i],
+                    Size = sizes[i]
+                });
             }
 
             if (blob.LocalMaterialBuffer.RawData == null)

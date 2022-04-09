@@ -93,8 +93,10 @@ namespace WolvenKit.Modkit.RED4
                 // create redfile
                 var red = new CR2WFile();
 
-                var c2dArray = RedTypeManager.Create<C2dArray>();
-                c2dArray.CookingPlatform = Enums.ECookingPlatform.PLATFORM_PC;
+                var c2dArray = new C2dArray
+                {
+                    CookingPlatform = Enums.ECookingPlatform.PLATFORM_PC
+                };
 
                 // from csv
                 using (var infs = new FileStream(rawRelative.FullPath, FileMode.Open))
@@ -450,21 +452,27 @@ namespace WolvenKit.Modkit.RED4
                 cr2w = new CR2WFile();
 
                 // xbm chunk
-                var xbm = RedTypeManager.Create<CBitmapTexture>();
-                xbm.CookingPlatform = Enums.ECookingPlatform.PLATFORM_PC;
-                xbm.Width = width;
-                xbm.Height = height;
-
                 var (compression, rawFormat) = CommonFunctions.GetRedFormatsFromDxgiFormat(metadata.Format);
-                xbm.Setup.Group = args.TextureGroup;
-                xbm.Setup.Compression = compression;
-                xbm.Setup.RawFormat = rawFormat;
-                xbm.Setup.IsGamma = args.IsGamma;
+
+                var xbm = new CBitmapTexture
+                    {
+                        CookingPlatform = Enums.ECookingPlatform.PLATFORM_PC,
+                        Width = width,
+                        Height = height,
+                        Setup =
+                            {
+                                Group = args.TextureGroup,
+                                Compression = compression,
+                                RawFormat = rawFormat,
+                                IsGamma = args.IsGamma
+                            }
+                    };
+
 
                 // SetTextureGroupSetup(xbm.Setup, cr2w);
 
                 // blob chunk
-                var blob = RedTypeManager.Create<rendRenderTextureBlobPC>();
+                var blob = new rendRenderTextureBlobPC();
 
                 xbm.RenderTextureResource = new rendRenderTextureResource
                 {
@@ -474,20 +482,22 @@ namespace WolvenKit.Modkit.RED4
                 // create rendRenderTextureBlobPC chunk
 
                 // header
-                var header = RedTypeManager.Create<rendRenderTextureBlobHeader>();
-                header.Version = 2;
-                header.Flags = 1;
-
-                header.SizeInfo = RedTypeManager.Create<rendRenderTextureBlobSizeInfo>();
-                header.SizeInfo.Width = (ushort)width;
-                header.SizeInfo.Height = (ushort)height;
-
-                header.TextureInfo = RedTypeManager.Create<rendRenderTextureBlobTextureInfo>();
-                header.TextureInfo.TextureDataSize = (uint)textureDataSize;
-                header.TextureInfo.SliceSize = (uint)textureDataSize;
-                header.TextureInfo.DataAlignment = alignment;
-                header.TextureInfo.SliceCount = (ushort)slicecount;
-                header.TextureInfo.MipCount = (byte)mipCount;
+                var header = new rendRenderTextureBlobHeader {
+                    Version = 2,
+                    Flags = 1,
+                    SizeInfo = new rendRenderTextureBlobSizeInfo
+                    {
+                        Width = (ushort)width,
+                        Height = (ushort)height
+                    },
+                    TextureInfo = new rendRenderTextureBlobTextureInfo
+                    {
+                        TextureDataSize = (uint)textureDataSize, SliceSize = (uint)textureDataSize,
+                        DataAlignment = alignment,
+                        SliceCount = (ushort)slicecount,
+                        MipCount = (byte)mipCount
+                    }
+                };
 
                 // header.TextureInfo
                 var mipMapInfo = new CArray<rendRenderTextureBlobMipMapInfo>();
@@ -506,16 +516,17 @@ namespace WolvenKit.Modkit.RED4
                         //rowpitch
                         var rowpitch = Texconv.ComputeRowPitch((int)mipsizeW, (int)mipsizeH, fmt);
 
-                        var info = RedTypeManager.Create<rendRenderTextureBlobMipMapInfo>();
-                        info.Layout = new rendRenderTextureBlobMemoryLayout()
-                        {
-                            RowPitch = (uint)rowpitch,
-                            SlicePitch = (uint)slicepitch
-                        };
-                        info.Placement = new rendRenderTextureBlobPlacement()
-                        {
-                            Offset = (uint)offset,
-                            Size = (uint)slicepitch
+                        var info = new rendRenderTextureBlobMipMapInfo {
+                            Layout = new rendRenderTextureBlobMemoryLayout()
+                            {
+                                RowPitch = (uint)rowpitch,
+                                SlicePitch = (uint)slicepitch
+                            },
+                            Placement = new rendRenderTextureBlobPlacement()
+                            {
+                                Offset = (uint)offset,
+                                Size = (uint)slicepitch
+                            }
                         };
 
                         offset += slicepitch;
