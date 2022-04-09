@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class animAnimationSetup : RedBaseClass
 	{
 		[Ordinal(0)] 
@@ -34,6 +33,10 @@ namespace WolvenKit.RED4.Types
 			Cinematics = new() { AnimSets = new(), OverrideAnimSets = new(), AnimWrapperVariables = new() };
 			Gameplay = new() { AnimSets = new(), OverrideAnimSets = new(), AnimWrapperVariables = new() };
 			FinalAnimSetCollection = new() { AnimSets = new(), OverrideAnimSets = new(), AnimWrapperVariables = new() };
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class gameTelemetryEnemy : RedBaseClass
 	{
 		[Ordinal(0)] 
@@ -58,6 +57,10 @@ namespace WolvenKit.RED4.Types
 			EnemyEntityID = new();
 			Archetype = Enums.gamedataArchetypeType.Invalid;
 			Level = -1;
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

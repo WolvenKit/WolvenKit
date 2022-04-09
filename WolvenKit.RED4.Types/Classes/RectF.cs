@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	[REDClass(SerializeDefault = true)]
 	public partial class RectF : RedBaseClass
 	{
@@ -37,5 +36,12 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CFloat>();
 			set => SetPropertyValue<CFloat>(value);
 		}
+
+		public RectF()
+		{
+			PostConstruct();
+		}
+
+		partial void PostConstruct();
 	}
 }

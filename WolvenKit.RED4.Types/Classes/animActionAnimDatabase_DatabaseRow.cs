@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class animActionAnimDatabase_DatabaseRow : RedBaseClass
 	{
 		[Ordinal(0)] 
@@ -40,6 +39,10 @@ namespace WolvenKit.RED4.Types
 		public animActionAnimDatabase_DatabaseRow()
 		{
 			AnimationData = new();
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

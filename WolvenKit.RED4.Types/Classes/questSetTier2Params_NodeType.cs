@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class questSetTier2Params_NodeType : questISceneManagerNodeType
 	{
 		[Ordinal(0)] 
@@ -40,6 +39,10 @@ namespace WolvenKit.RED4.Types
 		public questSetTier2Params_NodeType()
 		{
 			PlayerWalkType = Enums.Tier2WalkType.Normal;
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

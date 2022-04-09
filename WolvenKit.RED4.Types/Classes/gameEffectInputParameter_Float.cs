@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class gameEffectInputParameter_Float : RedBaseClass
 	{
 		[Ordinal(0)] 
@@ -12,5 +11,12 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CHandle<gameIEffectParameter_FloatEvaluator>>();
 			set => SetPropertyValue<CHandle<gameIEffectParameter_FloatEvaluator>>(value);
 		}
+
+		public gameEffectInputParameter_Float()
+		{
+			PostConstruct();
+		}
+
+		partial void PostConstruct();
 	}
 }

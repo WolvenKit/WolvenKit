@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class questForceTokenActivation_NodeSubType : questIContentTokenManager_NodeSubType
 	{
 		[Ordinal(0)] 
@@ -12,5 +11,12 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CBool>();
 			set => SetPropertyValue<CBool>(value);
 		}
+
+		public questForceTokenActivation_NodeSubType()
+		{
+			PostConstruct();
+		}
+
+		partial void PostConstruct();
 	}
 }

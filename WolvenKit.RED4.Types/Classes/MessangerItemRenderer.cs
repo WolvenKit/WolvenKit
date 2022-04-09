@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class MessangerItemRenderer : JournalEntryListItemController
 	{
 		[Ordinal(16)] 
@@ -60,6 +59,10 @@ namespace WolvenKit.RED4.Types
 			FluffText = new();
 			StateMessage = "Default";
 			StatePlayerReply = "Player";
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

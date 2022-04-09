@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class DpadWheelGameController : gameuiHUDGameController
 	{
 		[Ordinal(9)] 
@@ -369,6 +368,10 @@ namespace WolvenKit.RED4.Types
 			ListOfUnassignedCyberware = new();
 			NeutralChoiceDelayId = new();
 			PreviouslySelectedData = new() { IsSlotUnlocked = true, ItemId = new(), PlayerVehicleData = new() { VehicleType = Enums.gamedataVehicleType.Invalid }, InteractiveActionOwner = new() };
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

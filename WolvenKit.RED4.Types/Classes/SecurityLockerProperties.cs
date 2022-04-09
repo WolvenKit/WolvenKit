@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class SecurityLockerProperties : RedBaseClass
 	{
 		[Ordinal(0)] 
@@ -42,6 +41,10 @@ namespace WolvenKit.RED4.Types
 			SecurityLevelAccessGranted = Enums.ESecurityAccessLevel.ESL_4;
 			StoreWeaponSFX = "ui_loot_gun";
 			PickUpWeaponSFX = "ui_loot_take_all";
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class PauseMenuListItemData : ListItemData
 	{
 		[Ordinal(1)] 
@@ -20,5 +19,12 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CEnum<PauseMenuAction>>();
 			set => SetPropertyValue<CEnum<PauseMenuAction>>(value);
 		}
+
+		public PauseMenuListItemData()
+		{
+			PostConstruct();
+		}
+
+		partial void PostConstruct();
 	}
 }

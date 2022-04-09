@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class GameplayRoleComponent : gameScriptableComponent
 	{
 		[Ordinal(5)] 
@@ -157,6 +156,10 @@ namespace WolvenKit.RED4.Types
 			ForcedMappinVisualState = Enums.EMappinVisualState.None;
 			Mappins = new();
 			OffsetValue = 0.040000F;
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class Crosshair_Smart_Rifl_Bucket : inkWidgetLogicController
 	{
 		[Ordinal(1)] 
@@ -69,6 +68,10 @@ namespace WolvenKit.RED4.Types
 			LockedIndicator = new();
 			LockingIndicator = new();
 			Data = new() { Pos = new(), EntityID = new() };
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

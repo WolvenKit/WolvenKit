@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class PlayerPuppetAttachmentSlotsCallback : gameAttachmentSlotsScriptCallback
 	{
 		[Ordinal(2)] 
@@ -12,5 +11,12 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CWeakHandle<PlayerPuppet>>();
 			set => SetPropertyValue<CWeakHandle<PlayerPuppet>>(value);
 		}
+
+		public PlayerPuppetAttachmentSlotsCallback()
+		{
+			PostConstruct();
+		}
+
+		partial void PostConstruct();
 	}
 }

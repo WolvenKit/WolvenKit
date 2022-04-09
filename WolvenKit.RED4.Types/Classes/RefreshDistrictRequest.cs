@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class RefreshDistrictRequest : gameScriptableSystemRequest
 	{
 		[Ordinal(0)] 
@@ -12,5 +11,12 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CWeakHandle<gamedataDistrictPreventionData_Record>>();
 			set => SetPropertyValue<CWeakHandle<gamedataDistrictPreventionData_Record>>(value);
 		}
+
+		public RefreshDistrictRequest()
+		{
+			PostConstruct();
+		}
+
+		partial void PostConstruct();
 	}
 }

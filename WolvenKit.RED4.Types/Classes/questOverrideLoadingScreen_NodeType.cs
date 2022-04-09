@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class questOverrideLoadingScreen_NodeType : questIUIManagerNodeType
 	{
 		[Ordinal(0)] 
@@ -75,6 +74,10 @@ namespace WolvenKit.RED4.Types
 			MinimumPlayCount = 3;
 			Tooltips = new();
 			TooltipDuration = 1.500000F;
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

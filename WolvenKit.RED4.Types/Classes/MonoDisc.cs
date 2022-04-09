@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class MonoDisc : BaseProjectile
 	{
 		[Ordinal(46)] 
@@ -153,6 +152,10 @@ namespace WolvenKit.RED4.Types
 		{
 			DiscSpawnPoint = new();
 			DiscPosition = new();
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

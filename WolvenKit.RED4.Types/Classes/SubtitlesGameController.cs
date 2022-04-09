@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class SubtitlesGameController : BaseSubtitlesGameController
 	{
 		[Ordinal(29)] 
@@ -44,5 +43,12 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CWeakHandle<gameIBlackboard>>();
 			set => SetPropertyValue<CWeakHandle<gameIBlackboard>>(value);
 		}
+
+		public SubtitlesGameController()
+		{
+			PostConstruct();
+		}
+
+		partial void PostConstruct();
 	}
 }

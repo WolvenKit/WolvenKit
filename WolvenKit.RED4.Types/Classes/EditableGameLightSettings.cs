@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class EditableGameLightSettings : RedBaseClass
 	{
 		[Ordinal(0)] 
@@ -112,6 +111,10 @@ namespace WolvenKit.RED4.Types
 		public EditableGameLightSettings()
 		{
 			Color = new();
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class AnimFeature_DroneProcedural : animAnimFeature
 	{
 		[Ordinal(0)] 
@@ -123,6 +122,10 @@ namespace WolvenKit.RED4.Types
 			Starting_recovery_ballance = 0.010000F;
 			Pseudo_acceleration = 30.000000F;
 			Turn_inertia_damping = 0.750000F;
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

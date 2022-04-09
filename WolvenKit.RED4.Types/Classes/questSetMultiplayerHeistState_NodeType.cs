@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class questSetMultiplayerHeistState_NodeType : questIMultiplayerHeistNodeType
 	{
 		[Ordinal(0)] 
@@ -12,5 +11,12 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CEnum<questMultiplayerHeistState>>();
 			set => SetPropertyValue<CEnum<questMultiplayerHeistState>>(value);
 		}
+
+		public questSetMultiplayerHeistState_NodeType()
+		{
+			PostConstruct();
+		}
+
+		partial void PostConstruct();
 	}
 }

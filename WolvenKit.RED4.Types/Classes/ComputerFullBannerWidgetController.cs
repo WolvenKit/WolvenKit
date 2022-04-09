@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class ComputerFullBannerWidgetController : ComputerBannerWidgetController
 	{
 		[Ordinal(12)] 
@@ -16,6 +15,10 @@ namespace WolvenKit.RED4.Types
 		public ComputerFullBannerWidgetController()
 		{
 			CloseButtonWidget = new();
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

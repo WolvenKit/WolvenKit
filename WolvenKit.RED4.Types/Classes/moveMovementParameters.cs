@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class moveMovementParameters : RedBaseClass
 	{
 		[Ordinal(0)] 
@@ -51,6 +50,10 @@ namespace WolvenKit.RED4.Types
 			Acceleration = 16.000000F;
 			Deceleration = 16.000000F;
 			RotationSpeed = 180.000000F;
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

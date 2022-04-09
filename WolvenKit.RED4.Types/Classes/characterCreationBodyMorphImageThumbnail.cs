@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class characterCreationBodyMorphImageThumbnail : inkButtonAnimatedController
 	{
 		[Ordinal(22)] 
@@ -42,6 +41,10 @@ namespace WolvenKit.RED4.Types
 			Selector = new();
 			Equipped = new();
 			Bg = new();
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class DamagePreviewController : inkWidgetLogicController
 	{
 		[Ordinal(1)] 
@@ -74,6 +73,10 @@ namespace WolvenKit.RED4.Types
 			FullBar = new();
 			StippedBar = new();
 			RootCanvas = new();
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

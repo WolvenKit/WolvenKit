@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class rendRenderMeshBlob : IRenderResourceBlob
 	{
 		[Ordinal(0)] 
@@ -24,6 +23,10 @@ namespace WolvenKit.RED4.Types
 		public rendRenderMeshBlob()
 		{
 			Header = new() { BonePositions = new(), RenderLODs = new(), RenderChunks = new(), RenderChunkInfos = new(), SpeedTreeWind = new(), CustomData = new(), TopologyData = new(), TopologyMetadata = new(), Topology = new(), QuantizationScale = new(), QuantizationOffset = new() };
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

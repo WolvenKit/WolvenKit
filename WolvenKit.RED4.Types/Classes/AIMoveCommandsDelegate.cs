@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class AIMoveCommandsDelegate : AIbehaviorScriptBehaviorDelegate
 	{
 		[Ordinal(0)] 
@@ -451,6 +450,10 @@ namespace WolvenKit.RED4.Types
 			PreviousCompanionDistanceToEnd = 9999999.000000F;
 			SplineEndPoint = new();
 			TeleportDestination = new();
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

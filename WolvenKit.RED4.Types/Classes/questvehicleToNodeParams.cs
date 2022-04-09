@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class questvehicleToNodeParams : questVehicleSpecificCommandParams
 	{
 		[Ordinal(3)] 
@@ -84,6 +83,10 @@ namespace WolvenKit.RED4.Types
 			StopAtEnd = true;
 			UseTraffic = true;
 			ForceGreenLights = true;
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

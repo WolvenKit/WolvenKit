@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class ComputerInkGameController : DeviceInkGameControllerBase
 	{
 		[Ordinal(16)] 
@@ -153,6 +152,10 @@ namespace WolvenKit.RED4.Types
 		{
 			ForceOpenDocumentType = Enums.EDocumentType.Invalid;
 			ForceOpenDocumentAdress = new() { FolderID = -1, DocumentID = -1 };
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

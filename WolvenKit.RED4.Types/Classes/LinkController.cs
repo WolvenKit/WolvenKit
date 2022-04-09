@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class LinkController : inkButtonController
 	{
 		[Ordinal(10)] 
@@ -42,6 +41,10 @@ namespace WolvenKit.RED4.Types
 			DefaultColor = new();
 			HoverColor = new();
 			IGNORED_COLOR = new();
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

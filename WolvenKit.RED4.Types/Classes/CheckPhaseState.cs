@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class CheckPhaseState : AIbehaviorconditionScript
 	{
 		[Ordinal(0)] 
@@ -12,5 +11,12 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CEnum<ENPCPhaseState>>();
 			set => SetPropertyValue<CEnum<ENPCPhaseState>>(value);
 		}
+
+		public CheckPhaseState()
+		{
+			PostConstruct();
+		}
+
+		partial void PostConstruct();
 	}
 }

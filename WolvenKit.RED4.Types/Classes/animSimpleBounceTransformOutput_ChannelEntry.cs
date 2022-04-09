@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class animSimpleBounceTransformOutput_ChannelEntry : RedBaseClass
 	{
 		[Ordinal(0)] 
@@ -24,6 +23,10 @@ namespace WolvenKit.RED4.Types
 		public animSimpleBounceTransformOutput_ChannelEntry()
 		{
 			Multiplier = 1.000000F;
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

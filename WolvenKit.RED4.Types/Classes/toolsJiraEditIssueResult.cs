@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class toolsJiraEditIssueResult : ISerializable
 	{
 		[Ordinal(0)] 
@@ -25,6 +24,10 @@ namespace WolvenKit.RED4.Types
 		{
 			ErrorMessages = new();
 			Errors = new() { Labels = new(), FixVersions = new(), Customfield_15306 = new(), Attachment = new() };
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

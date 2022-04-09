@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class physicsclothState : RedBaseClass
 	{
 		[Ordinal(0)] 
@@ -52,6 +51,10 @@ namespace WolvenKit.RED4.Types
 			BendPhaseData = new() { Stiffness = 1.000000F, StiffnessMultiplier = 1.000000F, CompressionLimit = 1.000000F, StretchLimit = 1.000000F };
 			ShearPhaseData = new() { Stiffness = 1.000000F, StiffnessMultiplier = 1.000000F, CompressionLimit = 1.000000F, StretchLimit = 1.000000F };
 			RuntimeInfo = new() { Translation = new(), Rotation = new() { R = 1.000000F }, Gravity = new() { Z = -9.810000F }, Damping = 0.400000F, Drag = 0.200000F, Inertia = 1.000000F, NumSolverIterations = 2, StiffnessFrequency = 100.000000F, Friction = 1.000000F, TetherStiffness = 1.000000F, TetherScale = 1.000000F, SelfCollisionDistance = 0.010000F, SelfCollisionStiffness = 0.500000F, LiftCoefficient = 0.020000F, DragCoefficient = 0.020000F, GravityScale = 1.000000F, MotionConstraintStiffness = 1.000000F };
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

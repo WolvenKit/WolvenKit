@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class JournalEntryListItemData : IScriptable
 	{
 		[Ordinal(0)] 
@@ -20,5 +19,12 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CHandle<IScriptable>>();
 			set => SetPropertyValue<CHandle<IScriptable>>(value);
 		}
+
+		public JournalEntryListItemData()
+		{
+			PostConstruct();
+		}
+
+		partial void PostConstruct();
 	}
 }

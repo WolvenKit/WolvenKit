@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	[REDClass(SerializeDefault = true)]
 	public partial class Vector2 : RedBaseClass
 	{
@@ -21,5 +20,12 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CFloat>();
 			set => SetPropertyValue<CFloat>(value);
 		}
+
+		public Vector2()
+		{
+			PostConstruct();
+		}
+
+		partial void PostConstruct();
 	}
 }

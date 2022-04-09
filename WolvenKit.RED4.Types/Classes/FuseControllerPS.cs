@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class FuseControllerPS : MasterControllerPS
 	{
 		[Ordinal(105)] 
@@ -86,6 +85,10 @@ namespace WolvenKit.RED4.Types
 			MaxLightsSwitchedAtOnce = 5;
 			TimeToNextSwitch = 1.000000F;
 			LightSwitchRandomizerType = Enums.ELightSwitchRandomizerType.RANDOM_PROGRESSIVE;
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

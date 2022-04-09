@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class audioAccumulatedSoundDecoratorMetadata : audioEmitterMetadata
 	{
 		[Ordinal(1)] 
@@ -74,6 +73,10 @@ namespace WolvenKit.RED4.Types
 			AccumulatedSounds = new();
 			SoundTimeout = 1.000000F;
 			SpammingSoundInterval = 1.000000F;
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

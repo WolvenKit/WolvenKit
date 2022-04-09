@@ -1,8 +1,13 @@
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class RemoveSecondaryDiodeLightPresetEvent : redEvent
 	{
+		public RemoveSecondaryDiodeLightPresetEvent()
+		{
+			PostConstruct();
+		}
+
+		partial void PostConstruct();
 	}
 }

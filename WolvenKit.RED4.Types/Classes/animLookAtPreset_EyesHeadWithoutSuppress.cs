@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class animLookAtPreset_EyesHeadWithoutSuppress : animLookAtPreset
 	{
 		[Ordinal(0)] 
@@ -25,6 +24,10 @@ namespace WolvenKit.RED4.Types
 		{
 			HeadMobility = 0.950000F;
 			SoftLimitAngle = 360.000000F;
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

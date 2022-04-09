@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class RemoveStatusEffectsEffector : gameEffector
 	{
 		[Ordinal(0)] 
@@ -34,6 +33,10 @@ namespace WolvenKit.RED4.Types
 			EffectTypes = new();
 			EffectString = new();
 			EffectTags = new();
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

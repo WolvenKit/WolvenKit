@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class megatronChargeController : ChargeLogicController
 	{
 		[Ordinal(1)] 
@@ -12,5 +11,12 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CWeakHandle<inkImageWidget>>();
 			set => SetPropertyValue<CWeakHandle<inkImageWidget>>(value);
 		}
+
+		public megatronChargeController()
+		{
+			PostConstruct();
+		}
+
+		partial void PostConstruct();
 	}
 }

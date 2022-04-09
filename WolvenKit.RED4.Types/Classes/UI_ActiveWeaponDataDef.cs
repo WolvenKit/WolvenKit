@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class UI_ActiveWeaponDataDef : gamebbScriptDefinition
 	{
 		[Ordinal(0)] 
@@ -52,6 +51,10 @@ namespace WolvenKit.RED4.Types
 			SmartGunParams = new();
 			TargetHitEvent = new();
 			ShootEvent = new();
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class GridUserData : IScriptable
 	{
 		[Ordinal(0)] 
@@ -20,5 +19,12 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CEnum<inkEHorizontalAlign>>();
 			set => SetPropertyValue<CEnum<inkEHorizontalAlign>>(value);
 		}
+
+		public GridUserData()
+		{
+			PostConstruct();
+		}
+
+		partial void PostConstruct();
 	}
 }

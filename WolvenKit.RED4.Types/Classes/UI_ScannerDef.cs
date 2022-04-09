@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class UI_ScannerDef : gamebbScriptDefinition
 	{
 		[Ordinal(0)] 
@@ -187,6 +186,10 @@ namespace WolvenKit.RED4.Types
 			HudHintMessegeContent = new();
 			UIVisible = new();
 			ScannerLookAt = new();
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

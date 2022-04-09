@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class PhoneDialerGameController : gameuiHUDGameController
 	{
 		[Ordinal(9)] 
@@ -190,6 +189,10 @@ namespace WolvenKit.RED4.Types
 			ScrollControllerWidget = new();
 			SoundName = "Phone";
 			AudioPhoneNavigation = "ui_phone_navigation";
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

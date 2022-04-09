@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class worldPhysicalDestructionNode : worldNode
 	{
 		[Ordinal(4)] 
@@ -93,6 +92,10 @@ namespace WolvenKit.RED4.Types
 			DestructionLevelData = new();
 			NavigationSetting = new() { NavmeshImpact = Enums.NavGenNavmeshImpact.Blocking };
 			UseMeshNavmeshSettings = true;
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class questAudioSwitchNodeType : questIAudioNodeType
 	{
 		[Ordinal(0)] 
@@ -41,6 +40,10 @@ namespace WolvenKit.RED4.Types
 		{
 			Switch = new();
 			ObjectRef = new() { Names = new() };
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

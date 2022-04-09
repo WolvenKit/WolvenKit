@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class audioKeyUiSoundPairDictionaryItem : audioInlinedAudioMetadata
 	{
 		[Ordinal(1)] 
@@ -24,6 +23,10 @@ namespace WolvenKit.RED4.Types
 		public audioKeyUiSoundPairDictionaryItem()
 		{
 			Value = new() { Events = new() };
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

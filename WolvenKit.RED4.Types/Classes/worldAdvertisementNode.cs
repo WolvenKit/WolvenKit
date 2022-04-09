@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class worldAdvertisementNode : worldStaticMeshNode
 	{
 		[Ordinal(16)] 
@@ -73,6 +72,10 @@ namespace WolvenKit.RED4.Types
 		{
 			MeshInitialScale = new();
 			LightsData = new();
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

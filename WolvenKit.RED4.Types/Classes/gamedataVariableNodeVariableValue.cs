@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class gamedataVariableNodeVariableValue : RedBaseClass
 	{
 		[Ordinal(0)] 
@@ -20,5 +19,12 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CEnum<gamedataVariableNodeVariableValueDeriveInfo>>();
 			set => SetPropertyValue<CEnum<gamedataVariableNodeVariableValueDeriveInfo>>(value);
 		}
+
+		public gamedataVariableNodeVariableValue()
+		{
+			PostConstruct();
+		}
+
+		partial void PostConstruct();
 	}
 }

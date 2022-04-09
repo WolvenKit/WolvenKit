@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class worldTrafficLanePersistent : RedBaseClass
 	{
 		[Ordinal(0)] 
@@ -178,6 +177,10 @@ namespace WolvenKit.RED4.Types
 			NeighborGroupIndex = 65535;
 			RoadMaterials = new();
 			Polygon = new();
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

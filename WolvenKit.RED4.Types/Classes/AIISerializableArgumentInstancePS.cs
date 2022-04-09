@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class AIISerializableArgumentInstancePS : AIArgumentInstancePS
 	{
 		[Ordinal(1)] 
@@ -12,5 +11,12 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CHandle<ISerializable>>();
 			set => SetPropertyValue<CHandle<ISerializable>>(value);
 		}
+
+		public AIISerializableArgumentInstancePS()
+		{
+			PostConstruct();
+		}
+
+		partial void PostConstruct();
 	}
 }

@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class WantedBarGameController : gameuiHUDGameController
 	{
 		[Ordinal(9)] 
@@ -124,6 +123,10 @@ namespace WolvenKit.RED4.Types
 			AnimOptionsLoop = new();
 			WANTED_TIER_1 = 1.000000F;
 			WANTED_MIN = 0.100000F;
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

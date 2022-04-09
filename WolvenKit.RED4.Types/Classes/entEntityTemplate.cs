@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class entEntityTemplate : resStreamedResource
 	{
 		[Ordinal(1)] 
@@ -119,6 +118,10 @@ namespace WolvenKit.RED4.Types
 			BackendDataOverrides = new();
 			ResolvedDependencies = new();
 			InplaceResources = new();
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

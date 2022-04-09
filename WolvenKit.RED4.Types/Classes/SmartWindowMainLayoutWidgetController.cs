@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class SmartWindowMainLayoutWidgetController : ComputerMainLayoutWidgetController
 	{
 		[Ordinal(35)] 
@@ -43,6 +42,10 @@ namespace WolvenKit.RED4.Types
 			MenuFilesSlot = new();
 			MenuNewsFeedSlot = new();
 			MenuDevicesSlot = new();
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class BaseAnimatedDeviceControllerPS : ScriptableDeviceComponentPS
 	{
 		[Ordinal(104)] 
@@ -48,6 +47,10 @@ namespace WolvenKit.RED4.Types
 		public BaseAnimatedDeviceControllerPS()
 		{
 			DeviceName = "Gameplay-Devices-DisplayNames-RoadBlock";
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

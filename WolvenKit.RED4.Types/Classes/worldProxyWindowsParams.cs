@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class worldProxyWindowsParams : RedBaseClass
 	{
 		[Ordinal(0)] 
@@ -87,6 +86,10 @@ namespace WolvenKit.RED4.Types
 			DistantWindowsSize = 3.000000F;
 			DistantWindowsSaturation = 0.750000F;
 			DistantWindowsTurnedOf = 0.450000F;
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class gameLightComponent : entLightComponent
 	{
 		[Ordinal(56)] 
@@ -131,6 +130,10 @@ namespace WolvenKit.RED4.Types
 			TurnOnTime = 0.300000F;
 			TurnOffTime = 0.300000F;
 			IsDestructible = true;
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

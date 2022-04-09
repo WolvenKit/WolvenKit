@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class questPlayEnv_OverrideGlobalLight : questIEnvironmentManagerNodeType
 	{
 		[Ordinal(0)] 
@@ -16,6 +15,10 @@ namespace WolvenKit.RED4.Types
 		public questPlayEnv_OverrideGlobalLight()
 		{
 			Params = new() { LightDirOverride = new() { TimeOfYearSeason = Enums.ETimeOfYearSeason.ETOYS_Summer }, LightColorOverride = new() };
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class ItemTooltipController : AGenericTooltipController
 	{
 		[Ordinal(2)] 
@@ -777,6 +776,10 @@ namespace WolvenKit.RED4.Types
 			WeaponEvolutionDescription = new();
 			DEBUG_iconErrorWrapper = new();
 			DEBUG_iconErrorText = new();
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

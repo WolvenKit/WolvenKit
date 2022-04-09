@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class worldCurvePathNode : worldSplineNode
 	{
 		[Ordinal(9)] 
@@ -102,6 +101,10 @@ namespace WolvenKit.RED4.Types
 			TurnCharacterToMatchVelocity = true;
 			AnimSets = new();
 			TimeDeltaMultiplier = 1.000000F;
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

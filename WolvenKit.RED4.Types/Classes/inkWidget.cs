@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class inkWidget : IScriptable
 	{
 		[Ordinal(0)] 
@@ -179,6 +178,10 @@ namespace WolvenKit.RED4.Types
 			RenderTransformPivot = new() { X = 0.500000F, Y = 0.500000F };
 			RenderTransform = new() { Translation = new(), Scale = new() { X = 1.000000F, Y = 1.000000F }, Shear = new() };
 			Effects = new();
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

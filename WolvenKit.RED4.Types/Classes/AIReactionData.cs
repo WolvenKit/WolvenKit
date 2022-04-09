@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class AIReactionData : IScriptable
 	{
 		[Ordinal(0)] 
@@ -138,6 +137,10 @@ namespace WolvenKit.RED4.Types
 			StimSource = new();
 			StimInvestigateData = new() { DistrationPoint = new(), AttackInstigatorPosition = new(), InvestigationSpots = new() };
 			StimEventData = new();
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

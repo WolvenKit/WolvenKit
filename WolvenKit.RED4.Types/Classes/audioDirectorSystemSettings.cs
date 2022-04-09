@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class audioDirectorSystemSettings : audioAudioMetadata
 	{
 		[Ordinal(1)] 
@@ -239,6 +238,10 @@ namespace WolvenKit.RED4.Types
 			MediumGearMaxTrafficSpeed = 0.570000F;
 			MediumGearAccelerationThreshold = -1.000000F;
 			HighGearAccelerationThreshold = -2.000000F;
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class animAnimation : ISerializable
 	{
 		[Ordinal(0)] 
@@ -100,6 +99,10 @@ namespace WolvenKit.RED4.Types
 			AdditionalTracks = new() { Entries = new(), OverwriteExistingValues = true };
 			FrameClampingStartFrame = -1;
 			FrameClampingEndFrame = -1;
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

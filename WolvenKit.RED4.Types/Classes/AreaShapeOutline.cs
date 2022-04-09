@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class AreaShapeOutline : ISerializable
 	{
 		[Ordinal(0)] 
@@ -25,6 +24,10 @@ namespace WolvenKit.RED4.Types
 		{
 			Points = new() { new() { X = -1.000000F, Y = -1.000000F }, new() { X = 1.000000F, Y = -1.000000F }, new() { X = 1.000000F, Y = 1.000000F }, new() { X = -1.000000F, Y = 1.000000F } };
 			Height = 2.000000F;
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

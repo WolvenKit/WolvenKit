@@ -1,6 +1,6 @@
 namespace WolvenKit.RED4.Types
 {
-    public partial class animCollisionRoundedShape : IRedOverload
+    public partial class animCollisionRoundedShape
     {
         [Ordinal(999)]
         [RED("drawAxis")]
@@ -10,7 +10,7 @@ namespace WolvenKit.RED4.Types
             set => SetPropertyValue<CBool>(value);
         }
 
-        void IRedOverload.ConstructorOverload()
+        partial void PostConstruct()
         {
             DrawAxis = true;
         }

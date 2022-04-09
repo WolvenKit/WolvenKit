@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class questScene_NodeType : questSpawnManagerNodeType
 	{
 		[Ordinal(1)] 
@@ -16,6 +15,10 @@ namespace WolvenKit.RED4.Types
 		public questScene_NodeType()
 		{
 			EntityReference = new() { Names = new() };
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

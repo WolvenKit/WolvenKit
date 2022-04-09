@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class MicroblendDef : RedBaseClass
 	{
 		[Ordinal(0)] 
@@ -20,5 +19,12 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CResourceReference<CBitmapTexture>>();
 			set => SetPropertyValue<CResourceReference<CBitmapTexture>>(value);
 		}
+
+		public MicroblendDef()
+		{
+			PostConstruct();
+		}
+
+		partial void PostConstruct();
 	}
 }

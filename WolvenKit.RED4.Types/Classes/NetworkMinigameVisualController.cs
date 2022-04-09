@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class NetworkMinigameVisualController : inkWidgetLogicController
 	{
 		[Ordinal(1)] 
@@ -271,6 +270,10 @@ namespace WolvenKit.RED4.Types
 			ProgramListController = new();
 			BufferController = new();
 			EndScreenController = new();
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

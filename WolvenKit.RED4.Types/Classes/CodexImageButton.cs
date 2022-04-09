@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class CodexImageButton : CodexListItemController
 	{
 		[Ordinal(19)] 
@@ -42,6 +41,10 @@ namespace WolvenKit.RED4.Types
 			Image = new();
 			Border = new();
 			TranslateOnSelect = new();
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

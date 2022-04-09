@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class CheckLastHitReaction : HitConditions
 	{
 		[Ordinal(0)] 
@@ -12,5 +11,12 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CEnum<animHitReactionType>>();
 			set => SetPropertyValue<CEnum<animHitReactionType>>(value);
 		}
+
+		public CheckLastHitReaction()
+		{
+			PostConstruct();
+		}
+
+		partial void PostConstruct();
 	}
 }

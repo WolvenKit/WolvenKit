@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class questStimuli_ConditionType : questISensesConditionType
 	{
 		[Ordinal(0)] 
@@ -43,6 +42,10 @@ namespace WolvenKit.RED4.Types
 			IsPlayerInstigator = true;
 			TargetRef = new() { Names = new() };
 			Type = Enums.gamedataStimType.FootStepRegular;
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

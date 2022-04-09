@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class questMoveOnSplineParams : questAICommandParams
 	{
 		[Ordinal(0)] 
@@ -133,6 +132,10 @@ namespace WolvenKit.RED4.Types
 			RepeatCommandOnInterrupt = true;
 			NoWaitToEndDistance = 10.000000F;
 			NoWaitToEndCompanionDistance = 5.000000F;
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

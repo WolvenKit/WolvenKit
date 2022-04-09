@@ -1,6 +1,6 @@
 namespace WolvenKit.RED4.Types
 {
-    public partial class animLookAtPartInfo : IRedOverload
+    public partial class animLookAtPartInfo
     {
         [Ordinal(1002)]
         [RED("debugDrawingEnabled")]
@@ -10,7 +10,7 @@ namespace WolvenKit.RED4.Types
             set => SetPropertyValue<CBool>(value);
         }
 
-        void IRedOverload.ConstructorOverload()
+        partial void PostConstruct()
         {
             DebugDrawingEnabled = true;
         }

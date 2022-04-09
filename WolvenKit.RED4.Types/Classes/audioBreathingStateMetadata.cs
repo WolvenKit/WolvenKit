@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class audioBreathingStateMetadata : audioAudioMetadata
 	{
 		[Ordinal(1)] 
@@ -84,5 +83,12 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CBool>();
 			set => SetPropertyValue<CBool>(value);
 		}
+
+		public audioBreathingStateMetadata()
+		{
+			PostConstruct();
+		}
+
+		partial void PostConstruct();
 	}
 }

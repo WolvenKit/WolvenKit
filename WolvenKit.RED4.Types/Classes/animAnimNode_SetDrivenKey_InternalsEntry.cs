@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class animAnimNode_SetDrivenKey_InternalsEntry : RedBaseClass
 	{
 		[Ordinal(0)] 
@@ -44,5 +43,12 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CEnum<animAnimNode_SetDrivenKey_InternalsEChannelType>>();
 			set => SetPropertyValue<CEnum<animAnimNode_SetDrivenKey_InternalsEChannelType>>(value);
 		}
+
+		public animAnimNode_SetDrivenKey_InternalsEntry()
+		{
+			PostConstruct();
+		}
+
+		partial void PostConstruct();
 	}
 }

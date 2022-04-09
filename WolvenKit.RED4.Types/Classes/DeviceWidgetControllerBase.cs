@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class DeviceWidgetControllerBase : DeviceInkLogicControllerBase
 	{
 		[Ordinal(5)] 
@@ -51,6 +50,10 @@ namespace WolvenKit.RED4.Types
 			StatusNameWidget = new();
 			ActionsListWidget = new();
 			ActionWidgetsData = new();
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

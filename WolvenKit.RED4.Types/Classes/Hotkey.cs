@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class Hotkey : IScriptable
 	{
 		[Ordinal(0)] 
@@ -33,6 +32,10 @@ namespace WolvenKit.RED4.Types
 		{
 			ItemID = new();
 			Scope = new();
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

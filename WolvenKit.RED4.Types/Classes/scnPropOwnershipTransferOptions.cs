@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class scnPropOwnershipTransferOptions : RedBaseClass
 	{
 		[Ordinal(0)] 
@@ -33,6 +32,10 @@ namespace WolvenKit.RED4.Types
 		{
 			DettachFromSlot = true;
 			RemoveFromInventory = true;
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

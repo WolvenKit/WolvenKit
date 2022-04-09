@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class HackEngContainer : BaseSkillCheckContainer
 	{
 		[Ordinal(3)] 
@@ -20,5 +19,12 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CHandle<EngineeringSkillCheck>>();
 			set => SetPropertyValue<CHandle<EngineeringSkillCheck>>(value);
 		}
+
+		public HackEngContainer()
+		{
+			PostConstruct();
+		}
+
+		partial void PostConstruct();
 	}
 }

@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class gameweaponAnimFeature_AimPlayer : animAnimFeature_BasicAim
 	{
 		[Ordinal(2)] 
@@ -32,6 +31,10 @@ namespace WolvenKit.RED4.Types
 		public gameweaponAnimFeature_AimPlayer()
 		{
 			ZoomLevel = 1.000000F;
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

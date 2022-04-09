@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class gameDynamicEventNode : worldAreaShapeNode
 	{
 		[Ordinal(6)] 
@@ -20,5 +19,12 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CHandle<questIBaseCondition>>();
 			set => SetPropertyValue<CHandle<questIBaseCondition>>(value);
 		}
+
+		public gameDynamicEventNode()
+		{
+			PostConstruct();
+		}
+
+		partial void PostConstruct();
 	}
 }

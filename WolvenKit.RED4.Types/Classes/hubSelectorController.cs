@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class hubSelectorController : inkSelectorController
 	{
 		[Ordinal(15)] 
@@ -67,6 +66,10 @@ namespace WolvenKit.RED4.Types
 			RightArrowWidget = new();
 			MenuLabelHolder = new();
 			HubElementsData = new();
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

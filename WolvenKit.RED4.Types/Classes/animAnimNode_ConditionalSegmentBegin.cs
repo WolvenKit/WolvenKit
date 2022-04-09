@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class animAnimNode_ConditionalSegmentBegin : animAnimNode_OnePoseInput
 	{
 		[Ordinal(13)] 
@@ -18,6 +17,10 @@ namespace WolvenKit.RED4.Types
 			Id = 4294967295;
 			InputLink = new();
 			Condition = new() { Lod = -1 };
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

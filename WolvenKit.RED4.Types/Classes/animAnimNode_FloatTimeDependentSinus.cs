@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class animAnimNode_FloatTimeDependentSinus : animAnimNode_FloatValue
 	{
 		[Ordinal(11)] 
@@ -43,6 +42,10 @@ namespace WolvenKit.RED4.Types
 			Min = -1.000000F;
 			Max = 1.000000F;
 			FrequencyFactor = 1.000000F;
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

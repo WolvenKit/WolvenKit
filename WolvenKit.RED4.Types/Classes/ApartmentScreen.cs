@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class ApartmentScreen : LcdScreen
 	{
 		[Ordinal(96)] 
@@ -16,6 +15,10 @@ namespace WolvenKit.RED4.Types
 		public ApartmentScreen()
 		{
 			ControllerTypeName = "ApartmentScreenController";
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

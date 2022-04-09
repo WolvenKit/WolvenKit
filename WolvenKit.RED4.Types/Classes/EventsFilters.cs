@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class EventsFilters : RedBaseClass
 	{
 		[Ordinal(0)] 
@@ -25,6 +24,10 @@ namespace WolvenKit.RED4.Types
 		{
 			IncomingEventsFilter = Enums.EFilterType.ALLOW_ALL;
 			OutgoingEventsFilter = Enums.EFilterType.ALLOW_ALL;
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

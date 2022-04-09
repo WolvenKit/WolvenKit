@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class SetSecuritySystemState : redEvent
 	{
 		[Ordinal(0)] 
@@ -12,5 +11,12 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CEnum<ESecuritySystemState>>();
 			set => SetPropertyValue<CEnum<ESecuritySystemState>>(value);
 		}
+
+		public SetSecuritySystemState()
+		{
+			PostConstruct();
+		}
+
+		partial void PostConstruct();
 	}
 }

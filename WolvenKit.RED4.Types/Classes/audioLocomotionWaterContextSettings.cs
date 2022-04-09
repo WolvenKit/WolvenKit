@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class audioLocomotionWaterContextSettings : RedBaseClass
 	{
 		[Ordinal(0)] 
@@ -43,6 +42,10 @@ namespace WolvenKit.RED4.Types
 			ImpulseStrength = 0.002500F;
 			ImpulseMinRadius = 0.040000F;
 			ImpulseMaxRadius = 0.050000F;
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

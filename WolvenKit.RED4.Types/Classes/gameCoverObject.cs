@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class gameCoverObject : gameObject
 	{
 		[Ordinal(35)] 
@@ -61,6 +60,10 @@ namespace WolvenKit.RED4.Types
 			IsDestructible = true;
 			FovDegrees = 120.000000F;
 			FovExposureDegrees = 160.000000F;
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

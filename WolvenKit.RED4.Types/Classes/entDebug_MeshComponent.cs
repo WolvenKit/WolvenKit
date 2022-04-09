@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class entDebug_MeshComponent : entMeshComponent
 	{
 		[Ordinal(24)] 
@@ -16,6 +15,10 @@ namespace WolvenKit.RED4.Types
 		public entDebug_MeshComponent()
 		{
 			FilterName = "Other";
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

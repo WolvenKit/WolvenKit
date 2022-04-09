@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class audioVehicleTemperatureSettings : RedBaseClass
 	{
 		[Ordinal(0)] 
@@ -34,6 +33,10 @@ namespace WolvenKit.RED4.Types
 			RpmThreshold = 3.000000F;
 			TimeToActivateTemperature = 8.000000F;
 			CooldownTime = 10.000000F;
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

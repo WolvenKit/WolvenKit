@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class animAnimNode_LookAtController : animAnimNode_OnePoseInput
 	{
 		[Ordinal(12)] 
@@ -62,6 +61,10 @@ namespace WolvenKit.RED4.Types
 			StateMachinesSettings = new();
 			BodyPartsDependencies = new();
 			SubstepTime = 0.010000F;
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

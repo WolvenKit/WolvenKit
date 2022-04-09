@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class StatusEffectPrereqListener : gameScriptStatusEffectListener
 	{
 		[Ordinal(0)] 
@@ -12,5 +11,12 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CWeakHandle<StatusEffectPrereqState>>();
 			set => SetPropertyValue<CWeakHandle<StatusEffectPrereqState>>(value);
 		}
+
+		public StatusEffectPrereqListener()
+		{
+			PostConstruct();
+		}
+
+		partial void PostConstruct();
 	}
 }

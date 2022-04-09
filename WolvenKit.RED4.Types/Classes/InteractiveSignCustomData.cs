@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class InteractiveSignCustomData : WidgetCustomData
 	{
 		[Ordinal(0)] 
@@ -20,5 +19,12 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CEnum<SignShape>>();
 			set => SetPropertyValue<CEnum<SignShape>>(value);
 		}
+
+		public InteractiveSignCustomData()
+		{
+			PostConstruct();
+		}
+
+		partial void PostConstruct();
 	}
 }

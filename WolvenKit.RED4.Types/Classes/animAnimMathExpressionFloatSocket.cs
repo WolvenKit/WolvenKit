@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class animAnimMathExpressionFloatSocket : RedBaseClass
 	{
 		[Ordinal(0)] 
@@ -33,6 +32,10 @@ namespace WolvenKit.RED4.Types
 		{
 			Link = new();
 			InputFloatTrack = new();
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class ItemModeGridContainer : inkWidgetLogicController
 	{
 		[Ordinal(1)] 
@@ -105,6 +104,10 @@ namespace WolvenKit.RED4.Types
 			M_eyesTexture = new();
 			M_systemReplacementTexture = new();
 			M_handsTexture = new();
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

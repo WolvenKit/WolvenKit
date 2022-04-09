@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class Agent : RedBaseClass
 	{
 		[Ordinal(0)] 
@@ -59,6 +58,10 @@ namespace WolvenKit.RED4.Types
 			Reprimands = new();
 			SupportingAgents = new();
 			Areas = new();
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

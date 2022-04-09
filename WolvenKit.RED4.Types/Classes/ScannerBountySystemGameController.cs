@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class ScannerBountySystemGameController : BaseChunkGameController
 	{
 		[Ordinal(5)] 
@@ -180,6 +179,10 @@ namespace WolvenKit.RED4.Types
 			DeadNotice = new();
 			CrossedOut = new();
 			StarsWidget = new();
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

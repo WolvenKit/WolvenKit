@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class questMoveOnSplineAndKeepDistance_NodeType : questIVehicleManagerNodeType
 	{
 		[Ordinal(0)] 
@@ -66,6 +65,10 @@ namespace WolvenKit.RED4.Types
 			VehicleRef = new() { Names = new() };
 			KeepDistanceFromRef = new() { Names = new() };
 			ReduceSpeedOnTurns = true;
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

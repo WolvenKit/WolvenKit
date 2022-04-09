@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class GameplayItemCondition : GameplayConditionBase
 	{
 		[Ordinal(1)] 
@@ -16,6 +15,10 @@ namespace WolvenKit.RED4.Types
 		public GameplayItemCondition()
 		{
 			EntityID = new();
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class ScannerRequirementItemLogicController : inkWidgetLogicController
 	{
 		[Ordinal(1)] 
@@ -50,6 +49,10 @@ namespace WolvenKit.RED4.Types
 			RequirementNameText = new();
 			RequirementLevelText = new();
 			RequirementIcon = new();
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

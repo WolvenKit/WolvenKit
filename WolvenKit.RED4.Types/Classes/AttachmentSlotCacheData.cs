@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class AttachmentSlotCacheData : RedBaseClass
 	{
 		[Ordinal(0)] 
@@ -36,5 +35,12 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<TweakDBID>();
 			set => SetPropertyValue<TweakDBID>(value);
 		}
+
+		public AttachmentSlotCacheData()
+		{
+			PostConstruct();
+		}
+
+		partial void PostConstruct();
 	}
 }

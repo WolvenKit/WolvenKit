@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class AICTreeNodeActionTeleportToNodeDefinition : AICTreeNodeActionDefinition
 	{
 		[Ordinal(1)] 
@@ -33,6 +32,10 @@ namespace WolvenKit.RED4.Types
 		{
 			NodeRef = new() { VariableId = 65535 };
 			Offset = new() { VariableId = 65535, V = new() };
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class OutputValidationDataStruct : RedBaseClass
 	{
 		[Ordinal(0)] 
@@ -60,6 +59,10 @@ namespace WolvenKit.RED4.Types
 			ReprimenderID = new();
 			EventReportedFromArea = new();
 			BreachedAreas = new();
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class entLookAtRemoveEvent : redEvent
 	{
 		[Ordinal(0)] 
@@ -33,6 +32,10 @@ namespace WolvenKit.RED4.Types
 		{
 			LookAtRef = new() { Id = -1 };
 			OutTransitionSpeed = 60.000000F;
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

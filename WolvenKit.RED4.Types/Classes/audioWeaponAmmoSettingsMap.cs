@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class audioWeaponAmmoSettingsMap : audioAudioMetadata
 	{
 		[Ordinal(1)] 
@@ -88,6 +87,10 @@ namespace WolvenKit.RED4.Types
 			SmartSniperFlyby = new() { MovementSpeed = 15.000000F };
 			HmgFlyby = new() { MovementSpeed = 15.000000F };
 			FlybyMinDistance = 5.000000F;
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

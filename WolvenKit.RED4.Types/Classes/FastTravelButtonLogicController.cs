@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class FastTravelButtonLogicController : inkButtonController
 	{
 		[Ordinal(10)] 
@@ -50,6 +49,10 @@ namespace WolvenKit.RED4.Types
 			DistrictName = new();
 			LocationName = new();
 			SoundData = new() { WidgetAudioName = "Button" };
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

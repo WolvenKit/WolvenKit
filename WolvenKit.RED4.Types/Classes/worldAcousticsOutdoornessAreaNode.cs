@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class worldAcousticsOutdoornessAreaNode : worldAreaShapeNode
 	{
 		[Ordinal(6)] 
@@ -12,5 +11,12 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CFloat>();
 			set => SetPropertyValue<CFloat>(value);
 		}
+
+		public worldAcousticsOutdoornessAreaNode()
+		{
+			PostConstruct();
+		}
+
+		partial void PostConstruct();
 	}
 }

@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class DoorControllerPS : ScriptableDeviceComponentPS
 	{
 		[Ordinal(104)] 
@@ -92,6 +91,10 @@ namespace WolvenKit.RED4.Types
 			TweakDBDescriptionRecord = 104841659775;
 			DoorProperties = new() { DoorType = Enums.EDoorType.INTERACTIVE, AutomaticallyClosesItself = true, OpeningSpeed = 1.000000F, DoorOpeningTime = 1.000000F, DoorOpeningStimRange = 5.000000F };
 			OpeningTokens = new();
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

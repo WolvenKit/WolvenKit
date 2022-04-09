@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class SubMenuPanelLogicController : PlayerStatsUIHolder
 	{
 		[Ordinal(1)] 
@@ -243,6 +242,10 @@ namespace WolvenKit.RED4.Types
 			MenusList = new();
 			CurMenuData = new() { Identifier = -1, SubMenus = new() };
 			CurSubMenuData = new() { Identifier = -1, SubMenus = new() };
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

@@ -1,8 +1,13 @@
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class PrepareForForcedVehicleCombat : redEvent
 	{
+		public PrepareForForcedVehicleCombat()
+		{
+			PostConstruct();
+		}
+
+		partial void PostConstruct();
 	}
 }

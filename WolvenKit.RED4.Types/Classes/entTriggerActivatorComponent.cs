@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class entTriggerActivatorComponent : entIPlacedComponent
 	{
 		[Ordinal(5)] 
@@ -62,6 +61,10 @@ namespace WolvenKit.RED4.Types
 			Channels = Enums.TriggerChannel.TC_Default;
 			MaxContinousDistance = 0.100000F;
 			IsEnabled = true;
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class ActionUploadListener : gameCustomValueStatPoolsListener
 	{
 		[Ordinal(0)] 
@@ -24,6 +23,10 @@ namespace WolvenKit.RED4.Types
 		public ActionUploadListener()
 		{
 			GameInstance = new();
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

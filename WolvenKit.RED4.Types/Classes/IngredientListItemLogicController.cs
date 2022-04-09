@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class IngredientListItemLogicController : inkButtonController
 	{
 		[Ordinal(10)] 
@@ -139,6 +138,10 @@ namespace WolvenKit.RED4.Types
 			CountWrapper = new();
 			ItemRarity = new();
 			Data = new();
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

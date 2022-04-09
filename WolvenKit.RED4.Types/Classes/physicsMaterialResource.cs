@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class physicsMaterialResource : CResource
 	{
 		[Ordinal(1)] 
@@ -77,6 +76,10 @@ namespace WolvenKit.RED4.Types
 			Density = 1000.000000F;
 			Tags = new();
 			Color = new();
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

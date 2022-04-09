@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class meshMeshParamUICollisionData : meshMeshParameter
 	{
 		[Ordinal(0)] 
@@ -34,6 +33,10 @@ namespace WolvenKit.RED4.Types
 			Uvs = new();
 			TrianglesIndices = new();
 			Vertices = new();
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

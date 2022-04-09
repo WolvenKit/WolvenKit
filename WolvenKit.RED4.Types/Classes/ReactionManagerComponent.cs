@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class ReactionManagerComponent : gameScriptableComponent
 	{
 		[Ordinal(5)] 
@@ -674,6 +673,10 @@ namespace WolvenKit.RED4.Types
 			DisturbComfortZoneAggressiveEventId = new();
 			DeadBodyInvestigators = new();
 			DeadBodyStartingPosition = new();
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

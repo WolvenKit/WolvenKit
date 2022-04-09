@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class gamegpsSettings : RedBaseClass
 	{
 		[Ordinal(0)] 
@@ -68,6 +67,10 @@ namespace WolvenKit.RED4.Types
 			PathRefreshTimeInterval = 1.000000F;
 			LastPlayerNavmeshPositionRefreshTimeIntervalSecs = 0.330000F;
 			MaxPathDisplayLength = 400.000000F;
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

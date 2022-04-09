@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class AIbehaviorTrackPatrolProgressNodeDefinition : AIbehaviorDecoratorNodeDefinition
 	{
 		[Ordinal(1)] 
@@ -60,5 +59,12 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CHandle<AIArgumentMapping>>();
 			set => SetPropertyValue<CHandle<AIArgumentMapping>>(value);
 		}
+
+		public AIbehaviorTrackPatrolProgressNodeDefinition()
+		{
+			PostConstruct();
+		}
+
+		partial void PostConstruct();
 	}
 }
