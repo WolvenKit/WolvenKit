@@ -23,5 +23,24 @@ namespace WolvenKit.RED4.Types
         {
 
         }
+
+        public override object DeepCopy()
+        {
+            var other = new CArray<T>();
+
+            foreach (var element in _internalList)
+            {
+                if (element is IRedCloneable cl)
+                {
+                    other.Add((T)cl.DeepCopy());
+                }
+                else
+                {
+                    other.Add(element);
+                }
+            }
+
+            return other;
+        }
     }
 }

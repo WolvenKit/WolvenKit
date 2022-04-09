@@ -90,7 +90,7 @@ namespace WolvenKit.Views.Dialogs
                 {
                     continue;
                 }
-                var fileslist = groupedFiles[key].ToList();
+                var fileslist = groupedFiles[key].GroupBy(x => x.Key).Select(x => x.First()).ToList();
                 _loggerService.Info($"{key}: Found {fileslist.Count} entries to uncook");
                 var progress = 0;
                 _progress.Report(0);
