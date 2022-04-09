@@ -174,6 +174,7 @@ namespace WolvenKit.RED4.Archive.IO
                     {
                         buffer.ParentTypes.Add(parentType);
                     }
+                    buffer.Parent = pointers.GetValue().Parent;
 
                     pointers.SetValue(buffer);
                 }
