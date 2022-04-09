@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class CParticleDrawerMotionBlur : IParticleDrawer
 	{
 		[Ordinal(1)] 
@@ -24,6 +23,10 @@ namespace WolvenKit.RED4.Types
 		public CParticleDrawerMotionBlur()
 		{
 			StretchPerVelocity = 0.500000F;
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

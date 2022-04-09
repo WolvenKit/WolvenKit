@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class AIArgumentUint64Value : AIArgumentDefinition
 	{
 		[Ordinal(3)] 
@@ -24,6 +23,10 @@ namespace WolvenKit.RED4.Types
 		public AIArgumentUint64Value()
 		{
 			Type = Enums.AIArgumentType.Uint64;
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class ShardCaseContainer : gameContainerObjectSingleItem
 	{
 		[Ordinal(47)] 
@@ -20,5 +19,12 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CHandle<entMeshComponent>>();
 			set => SetPropertyValue<CHandle<entMeshComponent>>(value);
 		}
+
+		public ShardCaseContainer()
+		{
+			PostConstruct();
+		}
+
+		partial void PostConstruct();
 	}
 }

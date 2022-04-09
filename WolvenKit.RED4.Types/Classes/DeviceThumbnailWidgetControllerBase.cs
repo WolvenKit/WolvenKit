@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class DeviceThumbnailWidgetControllerBase : DeviceButtonLogicControllerBase
 	{
 		[Ordinal(26)] 
@@ -33,6 +32,10 @@ namespace WolvenKit.RED4.Types
 		{
 			DeviceIconRef = new();
 			StatusNameWidget = new();
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

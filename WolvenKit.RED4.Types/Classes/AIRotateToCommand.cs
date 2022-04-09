@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class AIRotateToCommand : AIMoveCommand
 	{
 		[Ordinal(7)] 
@@ -40,6 +39,10 @@ namespace WolvenKit.RED4.Types
 		public AIRotateToCommand()
 		{
 			Target = new() { WorldPosition = new() { X = new(), Y = new(), Z = new() } };
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

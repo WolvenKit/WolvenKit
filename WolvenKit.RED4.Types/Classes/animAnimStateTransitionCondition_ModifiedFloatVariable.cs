@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class animAnimStateTransitionCondition_ModifiedFloatVariable : animIAnimStateTransitionCondition
 	{
 		[Ordinal(0)] 
@@ -28,5 +27,12 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CEnum<animCompareFunc>>();
 			set => SetPropertyValue<CEnum<animCompareFunc>>(value);
 		}
+
+		public animAnimStateTransitionCondition_ModifiedFloatVariable()
+		{
+			PostConstruct();
+		}
+
+		partial void PostConstruct();
 	}
 }

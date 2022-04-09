@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class gameuiNpcNameplateGameController : gameuiProjectedHUDGameController
 	{
 		[Ordinal(9)] 
@@ -360,6 +359,10 @@ namespace WolvenKit.RED4.Types
 			Zoom = 1.000000F;
 			CurrentHealth = 100;
 			MaximumHealth = 100;
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

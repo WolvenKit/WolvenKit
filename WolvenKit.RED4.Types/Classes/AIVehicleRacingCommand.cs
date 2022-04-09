@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class AIVehicleRacingCommand : AIVehicleCommand
 	{
 		[Ordinal(6)] 
@@ -105,6 +104,10 @@ namespace WolvenKit.RED4.Types
 		{
 			SecureTimeOut = 2.000000F;
 			StartFromClosest = true;
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

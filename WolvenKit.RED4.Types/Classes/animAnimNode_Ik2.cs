@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class animAnimNode_Ik2 : animAnimNode_Base
 	{
 		[Ordinal(11)] 
@@ -168,6 +167,10 @@ namespace WolvenKit.RED4.Types
 			WeightNode = new();
 			EndTargetPositionNode = new();
 			EndTargetOrientationNode = new();
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

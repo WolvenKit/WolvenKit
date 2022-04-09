@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class animAnimFeature_Movement : animAnimFeature
 	{
 		[Ordinal(0)] 
@@ -81,6 +80,10 @@ namespace WolvenKit.RED4.Types
 		{
 			MovementDirection = new() { Y = 1.000000F };
 			TimeToChangeLocomotion = 1.000000F;
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

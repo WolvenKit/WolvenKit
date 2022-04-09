@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class AwacsAlertNotification : GenericNotificationController
 	{
 		[Ordinal(12)] 
@@ -32,6 +31,10 @@ namespace WolvenKit.RED4.Types
 		public AwacsAlertNotification()
 		{
 			ZoneLabelText = new();
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

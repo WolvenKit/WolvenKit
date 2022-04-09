@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class animAnimStateTransitionCondition_IntEdgeFeature : animIAnimStateTransitionCondition
 	{
 		[Ordinal(0)] 
@@ -20,5 +19,12 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CName>();
 			set => SetPropertyValue<CName>(value);
 		}
+
+		public animAnimStateTransitionCondition_IntEdgeFeature()
+		{
+			PostConstruct();
+		}
+
+		partial void PostConstruct();
 	}
 }

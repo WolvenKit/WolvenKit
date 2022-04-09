@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class SurveillanceSystemControllerPS : DeviceSystemBaseControllerPS
 	{
 		[Ordinal(106)] 
@@ -18,6 +17,10 @@ namespace WolvenKit.RED4.Types
 			DeviceName = "LocKey#50770";
 			TweakDBRecord = 115663064038;
 			TweakDBDescriptionRecord = 164957373923;
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

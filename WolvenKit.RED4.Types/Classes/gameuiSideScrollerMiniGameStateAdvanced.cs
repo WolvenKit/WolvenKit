@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class gameuiSideScrollerMiniGameStateAdvanced : IScriptable
 	{
 		[Ordinal(0)] 
@@ -36,5 +35,12 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<gameuiGameStatePropertyChangedCallback>();
 			set => SetPropertyValue<gameuiGameStatePropertyChangedCallback>(value);
 		}
+
+		public gameuiSideScrollerMiniGameStateAdvanced()
+		{
+			PostConstruct();
+		}
+
+		partial void PostConstruct();
 	}
 }

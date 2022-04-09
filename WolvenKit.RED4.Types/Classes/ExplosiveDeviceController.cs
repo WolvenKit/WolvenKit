@@ -1,8 +1,13 @@
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class ExplosiveDeviceController : BasicDistractionDeviceController
 	{
+		public ExplosiveDeviceController()
+		{
+			PostConstruct();
+		}
+
+		partial void PostConstruct();
 	}
 }

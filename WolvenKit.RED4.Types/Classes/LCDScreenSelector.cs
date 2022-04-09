@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class LCDScreenSelector : inkTweakDBIDSelector
 	{
 		[Ordinal(1)] 
@@ -28,5 +27,12 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CInt32>();
 			set => SetPropertyValue<CInt32>(value);
 		}
+
+		public LCDScreenSelector()
+		{
+			PostConstruct();
+		}
+
+		partial void PostConstruct();
 	}
 }

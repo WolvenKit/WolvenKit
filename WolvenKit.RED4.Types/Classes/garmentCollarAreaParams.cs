@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class garmentCollarAreaParams : RedBaseClass
 	{
 		[Ordinal(0)] 
@@ -50,6 +49,10 @@ namespace WolvenKit.RED4.Types
 			RadiusInCM = 32.000000F;
 			RadiusForTriangleRemovalInCM = 16.000000F;
 			Offset = new();
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

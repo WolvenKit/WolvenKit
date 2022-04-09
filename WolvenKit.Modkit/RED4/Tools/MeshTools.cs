@@ -387,19 +387,19 @@ namespace WolvenKit.Modkit.RED4.Tools
                         break;
                     }
 
-                    if (cv.VertexLayout.Elements[e].Usage.Value == GpuWrapApiVertexPackingePackingUsage.PS_Normal)
+                    if (cv.VertexLayout.Elements[e].Usage == GpuWrapApiVertexPackingePackingUsage.PS_Normal)
                     {
                         meshesInfo.normalOffsets[i] = cv.ByteOffsets[cv.VertexLayout.Elements[e].StreamIndex];
                     }
-                    if (cv.VertexLayout.Elements[e].Usage.Value == GpuWrapApiVertexPackingePackingUsage.PS_Tangent)
+                    if (cv.VertexLayout.Elements[e].Usage == GpuWrapApiVertexPackingePackingUsage.PS_Tangent)
                     {
                         meshesInfo.tangentOffsets[i] = cv.ByteOffsets[cv.VertexLayout.Elements[e].StreamIndex];
                     }
-                    if (cv.VertexLayout.Elements[e].Usage.Value == GpuWrapApiVertexPackingePackingUsage.PS_Color)
+                    if (cv.VertexLayout.Elements[e].Usage == GpuWrapApiVertexPackingePackingUsage.PS_Color)
                     {
                         meshesInfo.colorOffsets[i] = cv.ByteOffsets[cv.VertexLayout.Elements[e].StreamIndex];
                     }
-                    if (cv.VertexLayout.Elements[e].Usage.Value == GpuWrapApiVertexPackingePackingUsage.PS_TexCoord)
+                    if (cv.VertexLayout.Elements[e].Usage == GpuWrapApiVertexPackingePackingUsage.PS_TexCoord)
                     {
                         if (meshesInfo.tex0Offsets[i] == 0)
                         {
@@ -435,7 +435,7 @@ namespace WolvenKit.Modkit.RED4.Tools
                 {
                     if (rendmeshblob.Header.RenderChunkInfos[i].ChunkVertices.VertexLayout.Elements[e] != null)
                     {
-                        if (rendmeshblob.Header.RenderChunkInfos[i].ChunkVertices.VertexLayout.Elements[e].Usage.Value == GpuWrapApiVertexPackingePackingUsage.PS_SkinIndices)
+                        if (rendmeshblob.Header.RenderChunkInfos[i].ChunkVertices.VertexLayout.Elements[e].Usage == GpuWrapApiVertexPackingePackingUsage.PS_SkinIndices)
                         {
                             counter++;
                         }
@@ -453,7 +453,7 @@ namespace WolvenKit.Modkit.RED4.Tools
                 {
                     if (rendmeshblob.Header.RenderChunkInfos[i].ChunkVertices.VertexLayout.Elements[e] != null)
                     {
-                        if (rendmeshblob.Header.RenderChunkInfos[i].ChunkVertices.VertexLayout.Elements[e].Usage.Value == GpuWrapApiVertexPackingePackingUsage.PS_ExtraData)
+                        if (rendmeshblob.Header.RenderChunkInfos[i].ChunkVertices.VertexLayout.Elements[e].Usage == GpuWrapApiVertexPackingePackingUsage.PS_ExtraData)
                         {
                             if (rendmeshblob.Header.RenderChunkInfos[i].ChunkVertices.VertexLayout.Elements[e].StreamIndex == 0)
                             {

@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class WorldMapFiltersListItem : inkWidgetLogicController
 	{
 		[Ordinal(1)] 
@@ -49,6 +48,10 @@ namespace WolvenKit.RED4.Types
 		{
 			Checker = new();
 			FilterName = new();
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

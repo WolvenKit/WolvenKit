@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class worldStreamingSector : CResource
 	{
 		[Ordinal(1)] 
@@ -42,6 +41,10 @@ namespace WolvenKit.RED4.Types
 			LocalInplaceResource = new();
 			Level = 255;
 			Category = Enums.worldStreamingSectorCategory.Unknown;
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

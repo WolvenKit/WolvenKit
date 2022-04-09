@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class PhotoModePlayerEntityComponent : gameScriptableComponent
 	{
 		[Ordinal(5)] 
@@ -144,6 +143,10 @@ namespace WolvenKit.RED4.Types
 			SwapRifleWeaponItemId = new();
 			SwapShootgunWeaponItemId = new();
 			LoadingItems = new();
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

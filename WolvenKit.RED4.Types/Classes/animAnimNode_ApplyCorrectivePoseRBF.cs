@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class animAnimNode_ApplyCorrectivePoseRBF : animAnimNode_OnePoseInput
 	{
 		[Ordinal(12)] 
@@ -45,6 +44,10 @@ namespace WolvenKit.RED4.Types
 			RbfPowValue = 20.000000F;
 			CorrectiveFrame = 0.033330F;
 			Correctives = new();
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

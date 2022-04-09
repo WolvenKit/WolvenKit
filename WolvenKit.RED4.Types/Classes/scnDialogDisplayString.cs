@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class scnDialogDisplayString : RedBaseClass
 	{
 		[Ordinal(0)] 
@@ -44,5 +43,12 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CEnum<scnDialogLineLanguage>>();
 			set => SetPropertyValue<CEnum<scnDialogLineLanguage>>(value);
 		}
+
+		public scnDialogDisplayString()
+		{
+			PostConstruct();
+		}
+
+		partial void PostConstruct();
 	}
 }

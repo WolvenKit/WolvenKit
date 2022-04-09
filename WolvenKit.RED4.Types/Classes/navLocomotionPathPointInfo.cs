@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class navLocomotionPathPointInfo : RedBaseClass
 	{
 		[Ordinal(0)] 
@@ -25,6 +24,10 @@ namespace WolvenKit.RED4.Types
 		{
 			Point = new();
 			UserDataIndex = 4294967295;
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

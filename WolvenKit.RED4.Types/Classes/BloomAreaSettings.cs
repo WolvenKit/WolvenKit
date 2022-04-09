@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class BloomAreaSettings : IAreaSettings
 	{
 		[Ordinal(2)] 
@@ -97,6 +96,10 @@ namespace WolvenKit.RED4.Types
 			BloomColorScale = 0.200000F;
 			NumDownsamplePasses = 6;
 			ShaftsAreaSettings = new() { ShaftsLevelIndex = 1, ShaftsIntensity = 1.000000F, ShaftsThresholdsScale = 1.000000F };
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

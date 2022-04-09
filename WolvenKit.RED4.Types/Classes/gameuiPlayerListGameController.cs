@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class gameuiPlayerListGameController : gameuiHUDGameController
 	{
 		[Ordinal(9)] 
@@ -25,6 +24,10 @@ namespace WolvenKit.RED4.Types
 		{
 			PlayerEntries = new();
 			Container = new();
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

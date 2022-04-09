@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class gamePuppetReplicatedState : netIEntityState
 	{
 		[Ordinal(2)] 
@@ -84,5 +83,12 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<gameReplicatedEntityEventsState>();
 			set => SetPropertyValue<gameReplicatedEntityEventsState>(value);
 		}
+
+		public gamePuppetReplicatedState()
+		{
+			PostConstruct();
+		}
+
+		partial void PostConstruct();
 	}
 }

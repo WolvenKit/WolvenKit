@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class questElevator_ManageNPCAttachment_NodeTypeParams : RedBaseClass
 	{
 		[Ordinal(0)] 
@@ -32,6 +31,10 @@ namespace WolvenKit.RED4.Types
 		public questElevator_ManageNPCAttachment_NodeTypeParams()
 		{
 			NpcRef = new() { Names = new() };
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class AgentRegistry : IScriptable
 	{
 		[Ordinal(0)] 
@@ -51,6 +50,10 @@ namespace WolvenKit.RED4.Types
 			AgentsLock = new();
 			MaxReprimandsPerNPC = 2;
 			MaxReprimandsPerDEVICE = 1;
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

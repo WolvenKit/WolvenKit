@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class EffectExecutor_ApplyEffector : gameEffectExecutor_Scripted
 	{
 		[Ordinal(1)] 
@@ -12,5 +11,12 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<TweakDBID>();
 			set => SetPropertyValue<TweakDBID>(value);
 		}
+
+		public EffectExecutor_ApplyEffector()
+		{
+			PostConstruct();
+		}
+
+		partial void PostConstruct();
 	}
 }

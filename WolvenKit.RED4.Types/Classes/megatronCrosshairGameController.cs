@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class megatronCrosshairGameController : gameuiWidgetGameController
 	{
 		[Ordinal(2)] 
@@ -99,6 +98,10 @@ namespace WolvenKit.RED4.Types
 			OrgSideSize = new();
 			MinSpread = 120.000000F;
 			GameplaySpreadMultiplier = 1.000000F;
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class ScannerCrosshairLogicController : inkWidgetLogicController
 	{
 		[Ordinal(1)] 
@@ -20,5 +19,12 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CHandle<inkScreenProjection>>();
 			set => SetPropertyValue<CHandle<inkScreenProjection>>(value);
 		}
+
+		public ScannerCrosshairLogicController()
+		{
+			PostConstruct();
+		}
+
+		partial void PostConstruct();
 	}
 }

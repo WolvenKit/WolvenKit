@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class buffListGameController : gameuiHUDGameController
 	{
 		[Ordinal(9)] 
@@ -83,6 +82,10 @@ namespace WolvenKit.RED4.Types
 			BuffDataList = new();
 			DebuffDataList = new();
 			BuffWidgets = new();
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

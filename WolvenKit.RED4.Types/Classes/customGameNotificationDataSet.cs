@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class customGameNotificationDataSet : inkGameNotificationData
 	{
 		[Ordinal(7)] 
@@ -20,5 +19,12 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CBool>();
 			set => SetPropertyValue<CBool>(value);
 		}
+
+		public customGameNotificationDataSet()
+		{
+			PostConstruct();
+		}
+
+		partial void PostConstruct();
 	}
 }

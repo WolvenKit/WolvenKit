@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class animAnimFeature_PlayerMovement : animAnimFeature_Movement
 	{
 		[Ordinal(9)] 
@@ -48,6 +47,10 @@ namespace WolvenKit.RED4.Types
 		public animAnimFeature_PlayerMovement()
 		{
 			FacingDirection = new() { Y = 1.000000F, W = 1.000000F };
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class CrosshairGameController_Tech_Round : BaseTechCrosshairController
 	{
 		[Ordinal(24)] 
@@ -351,6 +350,10 @@ namespace WolvenKit.RED4.Types
 			OrgSideSize = new();
 			UseVisibleTarget = true;
 			GameplaySpreadMultiplier = 1.000000F;
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

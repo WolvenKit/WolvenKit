@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class gametargetingSystemEntityUntargetedEvent : redEvent
 	{
 		[Ordinal(0)] 
@@ -12,5 +11,12 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CWeakHandle<entEntity>>();
 			set => SetPropertyValue<CWeakHandle<entEntity>>(value);
 		}
+
+		public gametargetingSystemEntityUntargetedEvent()
+		{
+			PostConstruct();
+		}
+
+		partial void PostConstruct();
 	}
 }

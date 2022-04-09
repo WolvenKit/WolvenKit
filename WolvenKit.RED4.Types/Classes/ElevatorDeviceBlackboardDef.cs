@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class ElevatorDeviceBlackboardDef : DeviceBaseBlackboardDef
 	{
 		[Ordinal(7)] 
@@ -34,6 +33,10 @@ namespace WolvenKit.RED4.Types
 			CurrentFloor = new();
 			IsPlayerScanned = new();
 			IsPaused = new();
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

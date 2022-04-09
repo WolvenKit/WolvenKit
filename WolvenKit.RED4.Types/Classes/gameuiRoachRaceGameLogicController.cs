@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class gameuiRoachRaceGameLogicController : gameuiSideScrollerMiniGameLogicController
 	{
 		[Ordinal(10)] 
@@ -168,6 +167,10 @@ namespace WolvenKit.RED4.Types
 			HealthText = new();
 			ScoreText = new();
 			ScoreMultiplierText = new();
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

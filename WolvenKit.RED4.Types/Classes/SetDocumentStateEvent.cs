@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class SetDocumentStateEvent : redEvent
 	{
 		[Ordinal(0)] 
@@ -32,6 +31,10 @@ namespace WolvenKit.RED4.Types
 		public SetDocumentStateEvent()
 		{
 			DocumentAdress = new() { FolderID = -1, DocumentID = -1 };
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

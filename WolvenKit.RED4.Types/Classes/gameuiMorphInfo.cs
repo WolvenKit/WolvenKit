@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class gameuiMorphInfo : gameuiCharacterCustomizationInfo
 	{
 		[Ordinal(13)] 
@@ -19,6 +18,10 @@ namespace WolvenKit.RED4.Types
 			EditTags = new();
 			OnDeactivateActions = new();
 			MorphNames = new();
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

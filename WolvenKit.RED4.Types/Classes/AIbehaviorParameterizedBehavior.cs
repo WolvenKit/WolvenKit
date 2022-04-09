@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class AIbehaviorParameterizedBehavior : ISerializable
 	{
 		[Ordinal(0)] 
@@ -24,6 +23,10 @@ namespace WolvenKit.RED4.Types
 		public AIbehaviorParameterizedBehavior()
 		{
 			ArgumentsOverrides = new();
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

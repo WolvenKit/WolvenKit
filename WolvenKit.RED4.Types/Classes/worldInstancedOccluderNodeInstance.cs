@@ -1,8 +1,13 @@
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class worldInstancedOccluderNodeInstance : worldINodeInstance
 	{
+		public worldInstancedOccluderNodeInstance()
+		{
+			PostConstruct();
+		}
+
+		partial void PostConstruct();
 	}
 }

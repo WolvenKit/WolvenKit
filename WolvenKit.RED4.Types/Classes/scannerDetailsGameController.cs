@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class scannerDetailsGameController : gameuiHUDGameController
 	{
 		[Ordinal(9)] 
@@ -243,6 +242,10 @@ namespace WolvenKit.RED4.Types
 			LastScannedObject = new();
 			IsDescriptionVisible = true;
 			AsyncSpawnRequests = new();
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

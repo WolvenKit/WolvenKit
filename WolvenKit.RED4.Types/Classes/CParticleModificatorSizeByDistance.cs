@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class CParticleModificatorSizeByDistance : IParticleModificator
 	{
 		[Ordinal(4)] 
@@ -58,6 +57,10 @@ namespace WolvenKit.RED4.Types
 			EditorName = "Size by distance";
 			EditorGroup = "Size";
 			IsEnabled = true;
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class worldAudioSignpostTriggerNode : worldTriggerAreaNode
 	{
 		[Ordinal(7)] 
@@ -32,6 +31,10 @@ namespace WolvenKit.RED4.Types
 		public worldAudioSignpostTriggerNode()
 		{
 			ExitCooldown = 5.000000F;
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

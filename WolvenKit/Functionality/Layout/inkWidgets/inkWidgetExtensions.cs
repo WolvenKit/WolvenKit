@@ -59,7 +59,7 @@ namespace WolvenKit.Functionality.Layout.inkWidgets
             if (widget.Children != null && widget.Children.GetValue() is inkMultiChildren imc)
             {
                 var childrenHandles = imc.Children.Reverse();
-                if (widget.ChildOrder.Value == Enums.inkEChildOrder.Forward)
+                if (widget.ChildOrder == Enums.inkEChildOrder.Forward)
                 {
                     childrenHandles = childrenHandles.Reverse();
                 }

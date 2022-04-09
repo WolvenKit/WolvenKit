@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class animSBehaviorConstraintNodeFloorIKVerticalBoneData : RedBaseClass
 	{
 		[Ordinal(0)] 
@@ -60,6 +59,10 @@ namespace WolvenKit.RED4.Types
 			Max_offset = 0.500000F;
 			OffsetToDesiredBlendTime = 0.100000F;
 			Stiffness = 1.000000F;
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

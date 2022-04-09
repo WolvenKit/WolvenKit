@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class questStartRecording_NodeType : questIRecordingNodeType
 	{
 		[Ordinal(0)] 
@@ -20,5 +19,12 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CString>();
 			set => SetPropertyValue<CString>(value);
 		}
+
+		public questStartRecording_NodeType()
+		{
+			PostConstruct();
+		}
+
+		partial void PostConstruct();
 	}
 }

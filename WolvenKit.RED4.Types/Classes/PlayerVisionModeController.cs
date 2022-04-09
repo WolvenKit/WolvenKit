@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class PlayerVisionModeController : IScriptable
 	{
 		[Ordinal(0)] 
@@ -105,6 +104,10 @@ namespace WolvenKit.RED4.Types
 			InputListeners = new();
 			InputActiveFlags = new();
 			OtherVars = new();
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

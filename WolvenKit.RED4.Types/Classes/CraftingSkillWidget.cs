@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class CraftingSkillWidget : gameuiWidgetGameController
 	{
 		[Ordinal(2)] 
@@ -111,6 +110,10 @@ namespace WolvenKit.RED4.Types
 			NextLevelText = new();
 			ExpPointText1 = new();
 			ExpPointText2 = new();
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class gameeventsHitEvent : redEvent
 	{
 		[Ordinal(0)] 
@@ -106,6 +105,10 @@ namespace WolvenKit.RED4.Types
 			HitPosition = new();
 			HitDirection = new();
 			HitRepresentationResult = new() { HitShapes = new() };
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

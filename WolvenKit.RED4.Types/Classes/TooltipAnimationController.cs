@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class TooltipAnimationController : inkWidgetLogicController
 	{
 		[Ordinal(1)] 
@@ -74,6 +73,10 @@ namespace WolvenKit.RED4.Types
 			TooltipContainer = new();
 			AxisDataThreshold = 0.400000F;
 			MouseDataThreshold = 0.900000F;
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

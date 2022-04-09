@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class AIInterruptionHandlerBehaviorDefinition : AIInterruptionHandlerDefinition
 	{
 		[Ordinal(2)] 
@@ -40,6 +39,10 @@ namespace WolvenKit.RED4.Types
 		public AIInterruptionHandlerBehaviorDefinition()
 		{
 			Signal = new() { Importance = Enums.AIEInterruptionImportance.Casual };
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

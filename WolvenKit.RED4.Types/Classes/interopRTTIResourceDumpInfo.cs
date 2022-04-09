@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class interopRTTIResourceDumpInfo : RedBaseClass
 	{
 		[Ordinal(0)] 
@@ -28,5 +27,12 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CString>();
 			set => SetPropertyValue<CString>(value);
 		}
+
+		public interopRTTIResourceDumpInfo()
+		{
+			PostConstruct();
+		}
+
+		partial void PostConstruct();
 	}
 }

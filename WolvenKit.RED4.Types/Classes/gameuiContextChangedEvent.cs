@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class gameuiContextChangedEvent : redEvent
 	{
 		[Ordinal(0)] 
@@ -25,6 +24,10 @@ namespace WolvenKit.RED4.Types
 		{
 			OldContext = Enums.gameuiContext.MAX;
 			NewContext = Enums.gameuiContext.MAX;
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

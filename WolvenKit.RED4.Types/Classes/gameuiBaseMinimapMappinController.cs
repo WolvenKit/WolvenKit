@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class gameuiBaseMinimapMappinController : gameuiMappinBaseController
 	{
 		[Ordinal(7)] 
@@ -71,6 +70,10 @@ namespace WolvenKit.RED4.Types
 			TaggedWidgets = new();
 			FixedOrientationWidget = new();
 			ClampArrowWidget = new();
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class animImportFacialCorrectivePoseDataDesc : RedBaseClass
 	{
 		[Ordinal(0)] 
@@ -52,6 +51,10 @@ namespace WolvenKit.RED4.Types
 			TransformIds = new();
 			TransformNames = new();
 			ParentsWeights = new();
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

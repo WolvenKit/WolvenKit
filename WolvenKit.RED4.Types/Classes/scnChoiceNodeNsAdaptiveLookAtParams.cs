@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class scnChoiceNodeNsAdaptiveLookAtParams : scnChoiceNodeNsLookAtParams
 	{
 		[Ordinal(0)] 
@@ -83,6 +82,10 @@ namespace WolvenKit.RED4.Types
 			ReferencePointFullEffectDistance = 5.000000F;
 			ReferencePoints = new();
 			AuxiliaryRelativePoint = new();
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

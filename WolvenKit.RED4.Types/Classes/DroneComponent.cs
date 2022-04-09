@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class DroneComponent : gameScriptableComponent
 	{
 		[Ordinal(5)] 
@@ -84,5 +83,12 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CName>();
 			set => SetPropertyValue<CName>(value);
 		}
+
+		public DroneComponent()
+		{
+			PostConstruct();
+		}
+
+		partial void PostConstruct();
 	}
 }

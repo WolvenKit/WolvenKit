@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class audioVehicleGridDestruction : audioAudioMetadata
 	{
 		[Ordinal(1)] 
@@ -49,6 +48,10 @@ namespace WolvenKit.RED4.Types
 		{
 			BottomLayer = new() { BackLeft = new(), BackRight = new(), CenterBackLeft = new(), CenterBackRight = new(), CenterForwardLeft = new(), CenterForwardRight = new(), FrontLeft = new(), FrontRight = new() };
 			UpperLayer = new() { BackLeft = new(), BackRight = new(), CenterBackLeft = new(), CenterBackRight = new(), CenterForwardLeft = new(), CenterForwardRight = new(), FrontLeft = new(), FrontRight = new() };
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

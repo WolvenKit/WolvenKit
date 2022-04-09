@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class interopEntityEffectSelectionSyncData : RedBaseClass
 	{
 		[Ordinal(0)] 
@@ -24,6 +23,10 @@ namespace WolvenKit.RED4.Types
 		public interopEntityEffectSelectionSyncData()
 		{
 			EffectIDPath = new() { Elements = new() };
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

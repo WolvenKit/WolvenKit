@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class gameEffectPostAction_Beam_RicochetPreview : gameEffectPostAction
 	{
 		[Ordinal(0)] 
@@ -25,6 +24,10 @@ namespace WolvenKit.RED4.Types
 		{
 			Ricocheted = new();
 			FromMuzzle = new();
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class worldPrefabProxyMeshNode : worldMeshNode
 	{
 		[Ordinal(16)] 
@@ -31,6 +30,10 @@ namespace WolvenKit.RED4.Types
 			WindImpulseEnabled = true;
 			RenderSceneLayerMask = Enums.RenderSceneLayerMask.Default;
 			LodLevelScales = 4294967295;
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

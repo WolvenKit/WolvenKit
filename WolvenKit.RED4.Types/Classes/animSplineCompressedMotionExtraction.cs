@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class animSplineCompressedMotionExtraction : animIMotionExtraction
 	{
 		[Ordinal(0)] 
@@ -34,6 +33,10 @@ namespace WolvenKit.RED4.Types
 			Duration = 1.000000F;
 			PosKeysData = new();
 			RotKeysData = new();
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

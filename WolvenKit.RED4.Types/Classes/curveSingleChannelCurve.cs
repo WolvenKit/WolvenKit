@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class curveSingleChannelCurve : RedBaseClass
 	{
 		[Ordinal(0)] 
@@ -32,6 +31,10 @@ namespace WolvenKit.RED4.Types
 		public curveSingleChannelCurve()
 		{
 			InterpolationType = Enums.curveEInterpolationType.EIT_Linear;
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

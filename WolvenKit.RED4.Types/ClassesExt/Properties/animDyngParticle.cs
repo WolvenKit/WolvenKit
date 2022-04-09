@@ -1,6 +1,6 @@
 namespace WolvenKit.RED4.Types
 {
-    public partial class animDyngParticle : IRedOverload
+    public partial class animDyngParticle
     {
         [Ordinal(0)]
         [RED("isDebugEnabled")]
@@ -10,7 +10,7 @@ namespace WolvenKit.RED4.Types
             set => SetPropertyValue<CBool>(value);
         }
 
-        void IRedOverload.ConstructorOverload()
+        partial void PostConstruct()
         {
             IsDebugEnabled = true;
         }

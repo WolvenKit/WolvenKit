@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class WindowBlindersControllerPS : ScriptableDeviceComponentPS
 	{
 		[Ordinal(104)] 
@@ -43,6 +42,10 @@ namespace WolvenKit.RED4.Types
 			TweakDBRecord = 96252370147;
 			TweakDBDescriptionRecord = 148393279395;
 			WindowBlindersData = new() { WindowBlindersState = Enums.EWindowBlindersStates.Closed, HasOpenInteraction = true, HasQuickHack = true };
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

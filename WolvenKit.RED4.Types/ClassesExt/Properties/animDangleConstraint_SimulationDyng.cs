@@ -1,6 +1,6 @@
 namespace WolvenKit.RED4.Types
 {
-    public partial class animDangleConstraint_SimulationDyng : IRedOverload
+    public partial class animDangleConstraint_SimulationDyng
     {
         [Ordinal(999)]
         [RED("drawDebugConstraint")]
@@ -10,7 +10,7 @@ namespace WolvenKit.RED4.Types
             set => SetPropertyValue<CBool>(value);
         }
 
-        void IRedOverload.ConstructorOverload()
+        partial void PostConstruct()
         {
             DrawDebugText = true;
             DrawDebugAxis = true;

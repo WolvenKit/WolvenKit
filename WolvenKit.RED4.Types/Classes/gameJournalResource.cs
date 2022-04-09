@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class gameJournalResource : gameJournalBaseResource
 	{
 		[Ordinal(1)] 
@@ -12,5 +11,12 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CHandle<gameJournalEntry>>();
 			set => SetPropertyValue<CHandle<gameJournalEntry>>(value);
 		}
+
+		public gameJournalResource()
+		{
+			PostConstruct();
+		}
+
+		partial void PostConstruct();
 	}
 }

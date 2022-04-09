@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class ReadyEvents : WeaponEventsTransition
 	{
 		[Ordinal(3)] 
@@ -12,5 +11,12 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CFloat>();
 			set => SetPropertyValue<CFloat>(value);
 		}
+
+		public ReadyEvents()
+		{
+			PostConstruct();
+		}
+
+		partial void PostConstruct();
 	}
 }

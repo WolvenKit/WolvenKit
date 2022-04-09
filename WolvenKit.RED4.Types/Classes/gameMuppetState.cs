@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class gameMuppetState : RedBaseClass
 	{
 		[Ordinal(0)] 
@@ -124,6 +123,10 @@ namespace WolvenKit.RED4.Types
 			StateMachinesSnapshot = new() { StateMachines = new() };
 			ControllersSnapshot = new() { Controllers = new() };
 			SnapFrameId = 4294967295;
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

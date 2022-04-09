@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class physicsCollisionPresetsResource : ISerializable
 	{
 		[Ordinal(0)] 
@@ -16,6 +15,10 @@ namespace WolvenKit.RED4.Types
 		public physicsCollisionPresetsResource()
 		{
 			Presets = new();
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

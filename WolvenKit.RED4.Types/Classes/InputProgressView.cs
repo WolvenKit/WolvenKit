@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class InputProgressView : inkWidgetLogicController
 	{
 		[Ordinal(1)] 
@@ -32,6 +31,10 @@ namespace WolvenKit.RED4.Types
 		public InputProgressView()
 		{
 			PartName = "icon_circle_anim_";
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

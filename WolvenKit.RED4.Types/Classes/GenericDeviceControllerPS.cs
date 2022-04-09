@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class GenericDeviceControllerPS : ScriptableDeviceComponentPS
 	{
 		[Ordinal(104)] 
@@ -58,6 +57,10 @@ namespace WolvenKit.RED4.Types
 			TweakDBDescriptionRecord = 143157997633;
 			GenericDeviceActionsSetup = new() { StateActionsOverrides = new() { ToggleON = new(), TogglePower = new() }, CustomActions = new() { Actions = new() } };
 			PerformedCustomActionsIDs = new();
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class audioVoiceGruntVariations : RedBaseClass
 	{
 		[Ordinal(0)] 
@@ -16,6 +15,10 @@ namespace WolvenKit.RED4.Types
 		public audioVoiceGruntVariations()
 		{
 			CachedVariations = new();
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

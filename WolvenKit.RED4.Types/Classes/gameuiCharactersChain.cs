@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class gameuiCharactersChain : RedBaseClass
 	{
 		[Ordinal(0)] 
@@ -50,6 +49,10 @@ namespace WolvenKit.RED4.Types
 			Rarities = new();
 			OwnerId = -1;
 			IsPossible = true;
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

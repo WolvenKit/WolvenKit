@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class animDangleConstraint_SimulationPendulum : animDangleConstraint_SimulationSingleBone
 	{
 		[Ordinal(14)] 
@@ -225,6 +224,10 @@ namespace WolvenKit.RED4.Types
 			CosOfHalfYAngle = 1.000000F;
 			CosOfHalfZAngle = 1.000000F;
 			SinOfHalfXAngle = 0.707107F;
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

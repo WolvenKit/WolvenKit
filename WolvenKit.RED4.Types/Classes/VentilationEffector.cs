@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class VentilationEffector : ActivatedDeviceTransfromAnim
 	{
 		[Ordinal(95)] 
@@ -12,5 +11,12 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CHandle<entIPlacedComponent>>();
 			set => SetPropertyValue<CHandle<entIPlacedComponent>>(value);
 		}
+
+		public VentilationEffector()
+		{
+			PostConstruct();
+		}
+
+		partial void PostConstruct();
 	}
 }

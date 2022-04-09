@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class ReloadEvents : WeaponEventsTransition
 	{
 		[Ordinal(3)] 
@@ -92,5 +91,12 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CBool>();
 			set => SetPropertyValue<CBool>(value);
 		}
+
+		public ReloadEvents()
+		{
+			PostConstruct();
+		}
+
+		partial void PostConstruct();
 	}
 }

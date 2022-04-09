@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class gameTransformAnimationDefinition : RedBaseClass
 	{
 		[Ordinal(0)] 
@@ -74,6 +73,10 @@ namespace WolvenKit.RED4.Types
 			TimesToPlay = 1;
 			TimeScale = 1.000000F;
 			Timeline = new() { Items = new() };
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

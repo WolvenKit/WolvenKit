@@ -23,48 +23,42 @@ namespace WolvenKit.RED4.Types
             }
 
             return null;
-            //return new CBitField<T>(value);
         }
     }
 
-    [REDType(IsValueType = true)]
-    [DebuggerDisplay("{Value}")]
-    public class CBitField<T> : IRedBitField<T>, IEquatable<CBitField<T>> where T : struct, Enum
+    [DebuggerDisplay("{_value}")]
+    public readonly struct CBitField<T> : IRedBitField<T>, IEquatable<CBitField<T>> where T : struct, Enum
     {
-        public T Value { get; set; }
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        private readonly T _value;
 
-        public CBitField() { }
+        public CBitField()
+        {
+            _value = default;
+        }
 
         private CBitField(T value)
         {
-            Value = value;
+            _value = value;
         }
 
         public static implicit operator CBitField<T>(T value) => new(value);
-        public static implicit operator T(CBitField<T> value) => value.Value;
+        public static implicit operator T(CBitField<T> value) => value._value;
 
         public static implicit operator CBitField<T>(Enum value) => new((T)value);
-        public static implicit operator Enum(CBitField<T> value) => (Enum)value.Value;
+        public static implicit operator Enum(CBitField<T> value) => value._value;
 
         public Type GetInnerType() => typeof(T);
 
-        public string ToBitFieldString()
-        {
-            return Value.ToString();
-        }
+        public override string ToString() => _value.ToString();
+        public string ToBitFieldString() => _value.ToString();
 
-        public override int GetHashCode() => Value.GetHashCode();
 
         public override bool Equals(object obj)
         {
             if (ReferenceEquals(null, obj))
             {
                 return false;
-            }
-
-            if (ReferenceEquals(this, obj))
-            {
-                return true;
             }
 
             if (obj.GetType() != this.GetType())
@@ -75,19 +69,8 @@ namespace WolvenKit.RED4.Types
             return Equals((CBitField<T>)obj);
         }
 
-        public bool Equals(CBitField<T> other)
-        {
-            if (ReferenceEquals(null, other))
-            {
-                return false;
-            }
+        public bool Equals(CBitField<T> other) => Equals(_value, other._value);
 
-            if (ReferenceEquals(this, other))
-            {
-                return true;
-            }
-
-            return Equals(Value, other.Value);
-        }
+        public override int GetHashCode() => _value.GetHashCode();
     }
 }

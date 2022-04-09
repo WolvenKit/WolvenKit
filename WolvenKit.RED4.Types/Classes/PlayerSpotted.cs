@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class PlayerSpotted : redEvent
 	{
 		[Ordinal(0)] 
@@ -41,6 +40,10 @@ namespace WolvenKit.RED4.Types
 		{
 			OwnerID = new();
 			AgentAreas = new();
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

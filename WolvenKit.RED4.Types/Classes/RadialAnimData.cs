@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class RadialAnimData : RedBaseClass
 	{
 		[Ordinal(0)] 
@@ -43,6 +42,10 @@ namespace WolvenKit.RED4.Types
 			Hover_out = "Anim name for hover out";
 			Cycle_in = "Anim name for cycle in animation";
 			Cycle_out = "Anim name for cycle out animation";
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

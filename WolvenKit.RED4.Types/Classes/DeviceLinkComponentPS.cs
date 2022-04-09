@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class DeviceLinkComponentPS : SharedGameplayPS
 	{
 		[Ordinal(22)] 
@@ -33,6 +32,10 @@ namespace WolvenKit.RED4.Types
 		{
 			ParentDevice = new() { PSID = new() };
 			OwnerEntityID = new();
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

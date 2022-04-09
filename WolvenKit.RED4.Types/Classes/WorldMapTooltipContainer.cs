@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class WorldMapTooltipContainer : inkWidgetLogicController
 	{
 		[Ordinal(1)] 
@@ -59,6 +58,10 @@ namespace WolvenKit.RED4.Types
 			PoliceTooltip = new();
 			Tooltips = new(3);
 			CurrentVisibleIndex = -1;
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

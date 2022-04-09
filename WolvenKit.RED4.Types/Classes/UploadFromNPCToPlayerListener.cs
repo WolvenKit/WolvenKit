@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class UploadFromNPCToPlayerListener : QuickHackUploadListener
 	{
 		[Ordinal(2)] 
@@ -65,6 +64,10 @@ namespace WolvenKit.RED4.Types
 		{
 			NpcSquad = new();
 			VariantHud = new();
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

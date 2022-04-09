@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class RainMissileProjectile : BaseProjectile
 	{
 		[Ordinal(46)] 
@@ -264,6 +263,10 @@ namespace WolvenKit.RED4.Types
 			InitialTargetOffset = new();
 			FinalTargetPosition = new();
 			FinalTargetOffset = new();
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

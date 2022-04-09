@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class gameStatusEffect : gameStatusEffectBase
 	{
 		[Ordinal(1)] 
@@ -119,6 +118,10 @@ namespace WolvenKit.RED4.Types
 			OwnerEntityID = new();
 			InstigatorEntityID = new();
 			Direction = new();
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

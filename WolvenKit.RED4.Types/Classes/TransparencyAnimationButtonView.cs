@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class TransparencyAnimationButtonView : BaseButtonView
 	{
 		[Ordinal(2)] 
@@ -68,6 +67,10 @@ namespace WolvenKit.RED4.Types
 			PressTransparency = 0.400000F;
 			AnimationProxies = new();
 			Targets = new();
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class gameMuppetInputActionRangedAttack : gameIMuppetInputAction
 	{
 		[Ordinal(0)] 
@@ -16,6 +15,10 @@ namespace WolvenKit.RED4.Types
 		public gameMuppetInputActionRangedAttack()
 		{
 			ActionType = Enums.gameMuppetInputActionType.Press;
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

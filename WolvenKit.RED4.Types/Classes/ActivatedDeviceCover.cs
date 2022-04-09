@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class ActivatedDeviceCover : ActivatedDeviceTransfromAnim
 	{
 		[Ordinal(95)] 
@@ -12,5 +11,12 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CHandle<AIOffMeshConnectionComponent>>();
 			set => SetPropertyValue<CHandle<AIOffMeshConnectionComponent>>(value);
 		}
+
+		public ActivatedDeviceCover()
+		{
+			PostConstruct();
+		}
+
+		partial void PostConstruct();
 	}
 }

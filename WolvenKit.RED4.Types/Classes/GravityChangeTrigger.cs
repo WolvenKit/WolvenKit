@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class GravityChangeTrigger : gameObject
 	{
 		[Ordinal(35)] 
@@ -33,6 +32,10 @@ namespace WolvenKit.RED4.Types
 		{
 			RegularStateMachineName = "Locomotion";
 			LowGravityStateMachineName = "LocomotionLowGravity";
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class gearboxLogicController : IVehicleModuleController
 	{
 		[Ordinal(1)] 
@@ -50,6 +49,10 @@ namespace WolvenKit.RED4.Types
 			GearboxRImageWidget = new();
 			GearboxNImageWidget = new();
 			GearboxDImageWidget = new();
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

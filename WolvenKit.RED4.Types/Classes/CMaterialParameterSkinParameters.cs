@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class CMaterialParameterSkinParameters : CMaterialParameter
 	{
 		[Ordinal(2)] 
@@ -12,5 +11,12 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CResourceReference<CSkinProfile>>();
 			set => SetPropertyValue<CResourceReference<CSkinProfile>>(value);
 		}
+
+		public CMaterialParameterSkinParameters()
+		{
+			PostConstruct();
+		}
+
+		partial void PostConstruct();
 	}
 }

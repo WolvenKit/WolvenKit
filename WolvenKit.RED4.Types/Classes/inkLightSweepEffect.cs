@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class inkLightSweepEffect : inkIEffect
 	{
 		[Ordinal(2)] 
@@ -51,6 +50,10 @@ namespace WolvenKit.RED4.Types
 			PositionY = 0.500000F;
 			Width = 0.300000F;
 			Intensity = 2.000000F;
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

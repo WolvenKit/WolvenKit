@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class KnockdownEvents : StatusEffectEvents
 	{
 		[Ordinal(10)] 
@@ -65,6 +64,10 @@ namespace WolvenKit.RED4.Types
 		{
 			CachedPlayerVelocity = new();
 			SecondaryKnockdownDir = new();
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

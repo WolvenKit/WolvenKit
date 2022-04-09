@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class animAnimNode_RotationLimit : animAnimNode_OnePoseInput
 	{
 		[Ordinal(12)] 
@@ -62,6 +61,10 @@ namespace WolvenKit.RED4.Types
 			LimitOnY = new() { Min = -1.000000F, Max = 1.000000F };
 			LimitOnZ = new() { Min = -1.000000F, Max = 1.000000F };
 			WeightLink = new();
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

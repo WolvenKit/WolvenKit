@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class SettingsCategoryController : inkWidgetLogicController
 	{
 		[Ordinal(1)] 
@@ -16,6 +15,10 @@ namespace WolvenKit.RED4.Types
 		public SettingsCategoryController()
 		{
 			Label = new();
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

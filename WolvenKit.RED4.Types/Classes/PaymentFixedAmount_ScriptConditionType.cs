@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class PaymentFixedAmount_ScriptConditionType : PaymentConditionTypeBase
 	{
 		[Ordinal(2)] 
@@ -12,5 +11,12 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CUInt32>();
 			set => SetPropertyValue<CUInt32>(value);
 		}
+
+		public PaymentFixedAmount_ScriptConditionType()
+		{
+			PostConstruct();
+		}
+
+		partial void PostConstruct();
 	}
 }

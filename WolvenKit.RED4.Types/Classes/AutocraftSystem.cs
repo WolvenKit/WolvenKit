@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class AutocraftSystem : gameScriptableSystem
 	{
 		[Ordinal(0)] 
@@ -41,6 +40,10 @@ namespace WolvenKit.RED4.Types
 		{
 			CurrentDelayID = new();
 			ItemsUsed = new();
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

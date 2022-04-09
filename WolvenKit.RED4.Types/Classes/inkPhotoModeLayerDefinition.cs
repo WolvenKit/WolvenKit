@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class inkPhotoModeLayerDefinition : inkLayerDefinition
 	{
 		[Ordinal(8)] 
@@ -28,5 +27,12 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CResourceReference<inkWidgetLibraryResource>>();
 			set => SetPropertyValue<CResourceReference<inkWidgetLibraryResource>>(value);
 		}
+
+		public inkPhotoModeLayerDefinition()
+		{
+			PostConstruct();
+		}
+
+		partial void PostConstruct();
 	}
 }

@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class CParticleSystem : resStreamedResource
 	{
 		[Ordinal(1)] 
@@ -83,6 +82,10 @@ namespace WolvenKit.RED4.Types
 			BoundingBox = new() { Min = new(), Max = new() };
 			AutoHideDistance = 100.000000F;
 			LastLODFadeoutRange = 10.000000F;
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class questTriggerCondition : questCondition
 	{
 		[Ordinal(0)] 
@@ -42,6 +41,10 @@ namespace WolvenKit.RED4.Types
 			Type = Enums.questTriggerConditionType.IsInside;
 			ActivatorRef = new() { Names = new() };
 			IsPlayerActivator = true;
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class gameinfluenceObstacleComponent : entIPlacedComponent
 	{
 		[Ordinal(5)] 
@@ -44,6 +43,10 @@ namespace WolvenKit.RED4.Types
 			CustomBoundingBox = new() { Min = new() { X = 340282346638528859811704183484516925440.000000F, Y = 340282346638528859811704183484516925440.000000F, Z = 340282346638528859811704183484516925440.000000F, W = 340282346638528859811704183484516925440.000000F }, Max = new() { X = -340282346638528859811704183484516925440.000000F, Y = -340282346638528859811704183484516925440.000000F, Z = -340282346638528859811704183484516925440.000000F, W = -340282346638528859811704183484516925440.000000F } };
 			ObstacleAgent = new() { UseMeshes = true };
 			IsEnabled = true;
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

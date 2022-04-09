@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class BillboardDeviceControllerPS : ScriptableDeviceComponentPS
 	{
 		[Ordinal(104)] 
@@ -46,6 +45,10 @@ namespace WolvenKit.RED4.Types
 			UseLights = true;
 			LightsSettings = new();
 			UseDeviceAppearence = true;
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

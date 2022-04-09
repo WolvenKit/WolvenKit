@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class QuestItemController : inkButtonController
 	{
 		[Ordinal(10)] 
@@ -157,6 +156,10 @@ namespace WolvenKit.RED4.Types
 			StyleRoot = new();
 			DefaultStateName = "Default";
 			MarkedStateName = "Marked";
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

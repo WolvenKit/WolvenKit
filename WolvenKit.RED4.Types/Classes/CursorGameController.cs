@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class CursorGameController : gameuiWidgetGameController
 	{
 		[Ordinal(2)] 
@@ -65,6 +64,10 @@ namespace WolvenKit.RED4.Types
 		{
 			Margin = new();
 			CursorType = "default";
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

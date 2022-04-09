@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class inkComboBoxController : inkWidgetLogicController
 	{
 		[Ordinal(1)] 
@@ -25,6 +24,10 @@ namespace WolvenKit.RED4.Types
 		{
 			ComboBoxObjectRef = new();
 			ComboBoxVisibleChanged = new();
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class questSetPossesion_NodeType : questISceneManagerNodeType
 	{
 		[Ordinal(0)] 
@@ -12,5 +11,12 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CEnum<gamedataPlayerPossesion>>();
 			set => SetPropertyValue<CEnum<gamedataPlayerPossesion>>(value);
 		}
+
+		public questSetPossesion_NodeType()
+		{
+			PostConstruct();
+		}
+
+		partial void PostConstruct();
 	}
 }

@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class questStreamingTestMovePlayerOnSpline_NodeType : questIWorldDataManagerNodeType
 	{
 		[Ordinal(0)] 
@@ -12,5 +11,12 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<NodeRef>();
 			set => SetPropertyValue<NodeRef>(value);
 		}
+
+		public questStreamingTestMovePlayerOnSpline_NodeType()
+		{
+			PostConstruct();
+		}
+
+		partial void PostConstruct();
 	}
 }

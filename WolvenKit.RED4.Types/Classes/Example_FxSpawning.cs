@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class Example_FxSpawning : gameScriptableComponent
 	{
 		[Ordinal(5)] 
@@ -20,5 +19,12 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<gameFxResource>();
 			set => SetPropertyValue<gameFxResource>(value);
 		}
+
+		public Example_FxSpawning()
+		{
+			PostConstruct();
+		}
+
+		partial void PostConstruct();
 	}
 }

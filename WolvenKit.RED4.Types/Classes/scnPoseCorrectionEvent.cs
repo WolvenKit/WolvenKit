@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class scnPoseCorrectionEvent : scnSceneEvent
 	{
 		[Ordinal(6)] 
@@ -27,6 +26,10 @@ namespace WolvenKit.RED4.Types
 			Duration = 1000;
 			PerformerId = new() { Id = 4294967040 };
 			PoseCorrectionGroup = new() { PoseCorrections = new(0) };
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class PreventionDamageRequest : gameScriptableSystemRequest
 	{
 		[Ordinal(0)] 
@@ -66,6 +65,10 @@ namespace WolvenKit.RED4.Types
 			TargetID = new();
 			TargetPosition = new();
 			RequestedHeat = Enums.EPreventionHeatStage.Invalid;
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

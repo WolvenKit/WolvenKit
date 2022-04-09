@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class ApartmentScreenControllerPS : LcdScreenControllerPS
 	{
 		[Ordinal(108)] 
@@ -123,6 +122,10 @@ namespace WolvenKit.RED4.Types
 			RandomizeInitialOverdue = true;
 			AllowAutomaticRentStatusChange = true;
 			MaxDays = 90;
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

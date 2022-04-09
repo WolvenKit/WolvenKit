@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class gameuiIndexedMorphName : RedBaseClass
 	{
 		[Ordinal(0)] 
@@ -40,6 +39,10 @@ namespace WolvenKit.RED4.Types
 		public gameuiIndexedMorphName()
 		{
 			Tags = new() { Tags = new() };
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

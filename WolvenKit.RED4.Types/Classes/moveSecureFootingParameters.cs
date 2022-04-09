@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class moveSecureFootingParameters : RedBaseClass
 	{
 		[Ordinal(0)] 
@@ -106,6 +105,10 @@ namespace WolvenKit.RED4.Types
 			NeedsCentreRaycast = true;
 			MinVelocityForFalling = -0.500000F;
 			SlopeCurveName = "slope_curve";
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

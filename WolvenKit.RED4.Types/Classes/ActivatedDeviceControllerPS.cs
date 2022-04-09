@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class ActivatedDeviceControllerPS : ScriptableDeviceComponentPS
 	{
 		[Ordinal(104)] 
@@ -46,6 +45,10 @@ namespace WolvenKit.RED4.Types
 			AnimationSetup = new() { AnimationTime = 0.500000F };
 			ActivatedDeviceSetup = new() { ActionName = "LocKey#233", VfxResource = new(), ThumbnailIconRecord = 133181765352 };
 			IndustrialArmAnimationOverride = -1;
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class questDeviceManager_NodeTypeParams : ISerializable
 	{
 		[Ordinal(0)] 
@@ -57,6 +56,10 @@ namespace WolvenKit.RED4.Types
 		{
 			EntityRef = new() { Names = new() };
 			ActionProperties = new();
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class inkSettingsSelectorControllerKeyBinding : inkSettingsSelectorController
 	{
 		[Ordinal(15)] 
@@ -43,6 +42,10 @@ namespace WolvenKit.RED4.Types
 			ButtonRef = new();
 			EditView = new();
 			EditOpacity = 0.400000F;
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

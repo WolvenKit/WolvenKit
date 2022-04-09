@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class ConsumeGateSignal : GateSignal
 	{
 		[Ordinal(4)] 
@@ -20,5 +19,12 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CHandle<GateSignal>>();
 			set => SetPropertyValue<CHandle<GateSignal>>(value);
 		}
+
+		public ConsumeGateSignal()
+		{
+			PostConstruct();
+		}
+
+		partial void PostConstruct();
 	}
 }

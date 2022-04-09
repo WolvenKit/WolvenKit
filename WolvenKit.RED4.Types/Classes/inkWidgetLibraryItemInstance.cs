@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class inkWidgetLibraryItemInstance : ISerializable
 	{
 		[Ordinal(0)] 
@@ -28,5 +27,12 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CEnum<inkETextureResolution>>();
 			set => SetPropertyValue<CEnum<inkETextureResolution>>(value);
 		}
+
+		public inkWidgetLibraryItemInstance()
+		{
+			PostConstruct();
+		}
+
+		partial void PostConstruct();
 	}
 }

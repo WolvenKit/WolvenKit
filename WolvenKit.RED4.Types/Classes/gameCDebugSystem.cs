@@ -1,8 +1,13 @@
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class gameCDebugSystem : gameIDebugSystem
 	{
+		public gameCDebugSystem()
+		{
+			PostConstruct();
+		}
+
+		partial void PostConstruct();
 	}
 }

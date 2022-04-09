@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class ActivatorControllerPS : MasterControllerPS
 	{
 		[Ordinal(105)] 
@@ -76,6 +75,10 @@ namespace WolvenKit.RED4.Types
 			TweakDBDescriptionRecord = 127414107948;
 			HasSimpleInteraction = true;
 			AlternativeInteractionString = "ToggleActivate";
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

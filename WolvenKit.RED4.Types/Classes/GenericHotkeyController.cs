@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class GenericHotkeyController : gameuiHUDGameController
 	{
 		[Ordinal(9)] 
@@ -89,6 +88,10 @@ namespace WolvenKit.RED4.Types
 		{
 			ShowAnimationName = "unfold";
 			HideAnimationName = "fold";
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

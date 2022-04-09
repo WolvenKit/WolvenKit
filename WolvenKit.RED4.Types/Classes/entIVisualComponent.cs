@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class entIVisualComponent : entIPlacedComponent
 	{
 		[Ordinal(5)] 
@@ -28,5 +27,12 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CInt8>();
 			set => SetPropertyValue<CInt8>(value);
 		}
+
+		public entIVisualComponent()
+		{
+			PostConstruct();
+		}
+
+		partial void PostConstruct();
 	}
 }

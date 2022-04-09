@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class saveMetadata : saveGameMetadata
 	{
 		[Ordinal(41)] 
@@ -137,6 +136,10 @@ namespace WolvenKit.RED4.Types
 		{
 			SaveVersion = 220;
 			GameVersion = 1520;
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

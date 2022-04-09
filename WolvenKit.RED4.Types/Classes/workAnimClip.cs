@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class workAnimClip : workIEntry
 	{
 		[Ordinal(2)] 
@@ -26,6 +25,10 @@ namespace WolvenKit.RED4.Types
 			Id = new() { Id = 4294967295 };
 			Flags = 2;
 			BlendOutTime = 0.500000F;
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

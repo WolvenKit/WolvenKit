@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class WeakspotOnDestroyProperties : RedBaseClass
 	{
 		[Ordinal(0)] 
@@ -129,6 +128,10 @@ namespace WolvenKit.RED4.Types
 		{
 			DisableInteraction = true;
 			DestroyMesh = true;
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

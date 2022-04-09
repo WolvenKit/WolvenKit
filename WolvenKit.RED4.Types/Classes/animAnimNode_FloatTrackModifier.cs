@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class animAnimNode_FloatTrackModifier : animAnimNode_Base
 	{
 		[Ordinal(11)] 
@@ -52,6 +51,10 @@ namespace WolvenKit.RED4.Types
 			InputFloatTrack = new();
 			PoseInputNode = new();
 			FloatInputNode = new();
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

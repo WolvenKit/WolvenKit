@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class StopCallReinforcements : AIbehaviortaskScript
 	{
 		[Ordinal(0)] 
@@ -32,6 +31,10 @@ namespace WolvenKit.RED4.Types
 		public StopCallReinforcements()
 		{
 			StatPoolType = Enums.gamedataStatPoolType.CallReinforcementProgress;
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

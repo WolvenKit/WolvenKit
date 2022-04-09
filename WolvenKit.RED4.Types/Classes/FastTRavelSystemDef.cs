@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class FastTRavelSystemDef : gamebbScriptDefinition
 	{
 		[Ordinal(0)] 
@@ -52,6 +51,10 @@ namespace WolvenKit.RED4.Types
 			FastTravelStarted = new();
 			FastTravelLoadingScreenStarted = new();
 			FastTravelLoadingScreenFinished = new();
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }
