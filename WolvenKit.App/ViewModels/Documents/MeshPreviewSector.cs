@@ -204,7 +204,10 @@ namespace WolvenKit.ViewModels.Documents
                         EnableAutoTangent = true,
                         RenderShadowMap = true,
                         RenderEnvironmentMap = true,
-                        AlbedoColor = new SharpDX.Color4(0.5f * Random.Shared.NextSingle(), 0f, 0.5f * Random.Shared.NextSingle(), 1f)
+                        //AlbedoColor = new SharpDX.Color4(0.5f * Random.Shared.NextSingle(), 0f, 0.5f * Random.Shared.NextSingle(), 1f),
+                        AlbedoColor = new SharpDX.Color4(0.5f, 0f, 0.5f, 1f),
+                        RoughnessFactor = 0.5,
+                        MetallicFactor = 0
                     };
 
                     foreach (var actor in cb.Actors)
@@ -224,7 +227,7 @@ namespace WolvenKit.ViewModels.Documents
                                 mb.CreateNormals = true;
                                 mb.AddBox(new SharpDX.Vector3(0f, 0f, 0f), shape.Size.X * 2, shape.Size.Z * 2, shape.Size.Y * 2);
 
-                                mb.ComputeNormalsAndTangents(MeshFaces.Default);
+                                mb.ComputeNormalsAndTangents(MeshFaces.Default, true);
 
                                 geometry = mb.ToMeshGeometry3D();
                             }
@@ -370,7 +373,8 @@ namespace WolvenKit.ViewModels.Documents
                                 Name = "shape_" + shape.Hash,
                                 IsRendering = true,
                                 Geometry = geometry,
-                                Material = colliderMaterial
+                                Material = colliderMaterial,
+                                IsTransparent = true
                             };
 
                             var shapeMatrix = new Matrix3D();
