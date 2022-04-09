@@ -467,7 +467,13 @@ namespace WolvenKit.Modkit.RED4
                 xbm.Width = width;
                 xbm.Height = height;
 
-                SetTextureGroupSetup(xbm.Setup, cr2w);
+                var (compression, rawFormat) = CommonFunctions.GetRedFormatsFromDxgiFormat(metadata.Format);
+                xbm.Setup.Group = args.TextureGroup;
+                xbm.Setup.Compression = compression;
+                xbm.Setup.RawFormat = rawFormat;
+                xbm.Setup.IsGamma = args.IsGamma;
+
+                // SetTextureGroupSetup(xbm.Setup, cr2w);
 
                 // blob chunk
                 var blob = RedTypeManager.Create<rendRenderTextureBlobPC>();

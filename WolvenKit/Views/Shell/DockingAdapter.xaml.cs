@@ -4,6 +4,7 @@ using System;
 using System.Collections;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -36,6 +37,9 @@ namespace WolvenKit.Views.Shell
         private bool UsingProjectLayout = false;
         private bool _hadLoadedProject = false;
 
+        private Window _mainWindow;
+        private bool _stateChanged;
+
         public DockingAdapter()
         {
             InitializeComponent();
@@ -44,11 +48,55 @@ namespace WolvenKit.Views.Shell
             viewModel = DataContext as AppViewModel;
         }
 
+        private void DockingAdapterOnLoaded(object sender, RoutedEventArgs e)
+        {
+            _mainWindow = Window.GetWindow(this);
+            if (_mainWindow != null)
+            {
+                _mainWindow.Deactivated += OnMainWindowDeactivated;
+                _mainWindow.Closing += OnMainWindowClosing;
+            }
+        }
+
+        private void OnMainWindowDeactivated(object sender, EventArgs e)
+        {
+            if (_stateChanged)
+            {
+                foreach (Window win in Application.Current.Windows)
+                {
+                    if (win is NativeFloatWindow && win.Owner != null)
+                    {
+                        win.Owner = null;
+                    }
+                }
+            }
+            _stateChanged = false;
+        }
+
+        private void OnMainWindowClosing(object sender, CancelEventArgs e)
+        {
+            foreach (Window win in Application.Current.Windows)
+            {
+                if (win is NativeFloatWindow)
+                {
+                    win.Close();
+                }
+            }
+        }
+
         private void PART_DockingManagerOnDockStateChanging(FrameworkElement sender, DockStateChangingEventArgs e)
         {
             if (e.SourceElement is ContentControl { Content: PaneViewModel vm })
             {
                 vm.State = e.TargetState.ToDockState();
+            }
+        }
+
+        private void PART_DockingManagerOnDockStateChanged(FrameworkElement sender, DockStateEventArgs e)
+        {
+            if (e.NewState == Syncfusion.Windows.Tools.Controls.DockState.Float)
+            {
+                _stateChanged = true;
             }
         }
 

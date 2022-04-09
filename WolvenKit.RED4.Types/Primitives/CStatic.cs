@@ -9,5 +9,23 @@ namespace WolvenKit.RED4.Types
     {
         public CStatic() { }
         public CStatic(int size) : base(size) { }
+        public override object DeepCopy()
+        {
+            var other = new CStatic<T>(_internalList.Count);
+
+            for (int i = 0; i < _internalList.Count; i++)
+            {
+                if (_internalList[i] is IRedCloneable cl)
+                {
+                    other[i] = (T)cl.DeepCopy();
+                }
+                else
+                {
+                    other[i] = _internalList[i];
+                }
+            }
+
+            return other;
+        }
     }
 }
