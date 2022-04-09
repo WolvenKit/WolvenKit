@@ -224,6 +224,13 @@ namespace WolvenKit.RED4.CR2W.Archive
             }
 
             var archive = _wolvenkitFileService.ReadRed4Archive(path, _hashService);
+
+            if (archive == null)
+            {
+                _logger.Warning($"Unable to load game archive: {path}");
+                return;
+            }
+
             Archives.AddOrUpdate(archive);
         }
 
@@ -241,6 +248,13 @@ namespace WolvenKit.RED4.CR2W.Archive
             }
 
             var archive = _wolvenkitFileService.ReadRed4Archive(filename, _hashService);
+
+            if (archive == null)
+            {
+                _logger.Warning($"Unable to load mod archive: {filename}");
+                return;
+            }
+
             ModArchives.AddOrUpdate(archive);
         }
 
