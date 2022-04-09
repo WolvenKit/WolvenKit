@@ -368,19 +368,7 @@ namespace WolvenKit.Modkit.RED4
                 {
                     var xbm = (CBitmapTexture)cr2w.RootChunk;
 
-                    var compression = Enums.ETextureCompression.TCM_None;
-                    if (xbm.Setup.Compression?.Value != null)
-                    {
-                        compression = xbm.Setup.Compression.Value.Value;
-                    }
-
-                    var rawfmt = Enums.ETextureRawFormat.TRF_TrueColor;
-                    if (xbm.Setup.RawFormat?.Value != null)
-                    {
-                        rawfmt = xbm.Setup.RawFormat.Value.Value;
-                    }
-
-                    format = CommonFunctions.GetDXGIFormat(compression, rawfmt, _loggerService);
+                    format = CommonFunctions.GetDXGIFormat(xbm.Setup.Compression, xbm.Setup.RawFormat, _loggerService);
                 }
                 else
                 {

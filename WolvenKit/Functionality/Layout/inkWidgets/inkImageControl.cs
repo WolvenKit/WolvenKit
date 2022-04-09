@@ -35,7 +35,7 @@ namespace WolvenKit.Functionality.Layout.inkWidgets
                 }
             }
 
-            TileType = ImageWidget.TileType.Value.GetValueOrDefault();
+            TileType = ImageWidget.TileType;
 
             DrawImage(new Size(Width, Height));
         }
@@ -46,7 +46,7 @@ namespace WolvenKit.Functionality.Layout.inkWidgets
 
             if (ImageSource != null)
             {
-                switch (ImageWidget.MirrorType.Value)
+                switch ((Enums.inkBrushMirrorType)ImageWidget.MirrorType)
                 {
                     case Enums.inkBrushMirrorType.Both:
                         ImageSource = new TransformedBitmap((BitmapSource)ImageSource, new ScaleTransform(-1, -1));
@@ -67,8 +67,8 @@ namespace WolvenKit.Functionality.Layout.inkWidgets
                 {
                     Stretch = Stretch.None,
                     TileMode = ToTileMode(TileType),
-                    AlignmentX = ToAlignmentX(ImageWidget.TileHAlign.Value),
-                    AlignmentY = ToAlignmentY(ImageWidget.TileVAlign.Value),
+                    AlignmentX = ToAlignmentX(ImageWidget.TileHAlign),
+                    AlignmentY = ToAlignmentY(ImageWidget.TileVAlign),
                     ViewportUnits = BrushMappingMode.Absolute,
                     Viewport = new Rect(0, 0, size.Width, size.Height)
                 };
