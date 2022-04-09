@@ -8,7 +8,7 @@ namespace WolvenKit.RED4.Types
 {
     [DebuggerTypeProxy(typeof(ICollectionDebugView<>))]
     [DebuggerDisplay("Count = {Count}")]
-    public class CArrayBase<T> : IRedArray<T>, IRedCloneable, /*IRedNotifyObjectChanged, */IEquatable<CArrayBase<T>>
+    public abstract class CArrayBase<T> : IRedArray<T>, IRedCloneable, /*IRedNotifyObjectChanged, */IEquatable<CArrayBase<T>>
     {
         private int _maxSize = -1;
 
@@ -32,15 +32,15 @@ namespace WolvenKit.RED4.Types
         // public event ObjectChangedEventHandler ObjectChanged;
 
 
-        private readonly List<T> _internalList;
+        protected readonly List<T> _internalList;
 
 
-        public CArrayBase()
+        protected CArrayBase()
         {
             _internalList = new List<T>();
         }
 
-        public CArrayBase(int size)
+        protected CArrayBase(int size)
         {
             _internalList = new List<T>(new T[size]);
 
@@ -54,7 +54,7 @@ namespace WolvenKit.RED4.Types
             }
         }
 
-        public CArrayBase(List<T> list)
+        protected CArrayBase(List<T> list)
         {
             _internalList = list;
         }
@@ -66,24 +66,7 @@ namespace WolvenKit.RED4.Types
             return MemberwiseClone();
         }
 
-        public object DeepCopy()
-        {
-            var other = (IList<T>)RedTypeManager.CreateRedType(GetType());
-
-            foreach (var element in _internalList)
-            {
-                if (element is IRedCloneable cl)
-                {
-                    other.Add((T)cl.DeepCopy());
-                }
-                else
-                {
-                    other.Add(element);
-                }
-            }
-
-            return other;
-        }
+        public abstract object DeepCopy();
 
         #region Event
         /*
