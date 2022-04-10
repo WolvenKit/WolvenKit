@@ -44,14 +44,14 @@ namespace WolvenKit.RED4.Archive.Buffer
 
     public class CollisionShape : IRedType
     {
-        public CEnum<physicsShapeType> ShapeType { get; set; }
+        public physicsShapeType ShapeType { get; set; }
         public Vector3 Size { get; set; } = new();
         public CUInt64 Hash { get; set; }
         public CUInt16 Index { get; set; }
         public Vector3 Position { get; set; } = new();
         public Quaternion Rotation { get; set; } = new();
         public CUInt64 Preset { get; set; }
-        public CEnum<physicsProxyType> ProxyType { get; set; }
+        public physicsProxyType ProxyType { get; set; }
         public CUInt64 Material { get; set; }
         public CArray<IRedType> Uks { get; set; } = new();
     }

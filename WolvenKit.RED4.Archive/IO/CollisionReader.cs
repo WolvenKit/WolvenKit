@@ -146,7 +146,7 @@ namespace WolvenKit.RED4.Archive.IO
 
                     _reader.BaseStream.Seek(-13, SeekOrigin.Current);
 
-                    if (s.ShapeType.Value == physicsShapeType.TriangleMesh || s.ShapeType.Value == physicsShapeType.ConvexMesh)
+                    if (s.ShapeType == physicsShapeType.TriangleMesh || s.ShapeType == physicsShapeType.ConvexMesh)
                     {
                         s.Hash = _reader.ReadUInt64();
                         _reader.ReadSingle();

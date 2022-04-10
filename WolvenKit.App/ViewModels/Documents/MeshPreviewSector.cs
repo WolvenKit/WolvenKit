@@ -221,7 +221,7 @@ namespace WolvenKit.ViewModels.Documents
                         {
                             HelixToolkit.SharpDX.Core.MeshGeometry3D geometry = null;
 
-                            if (shape.ShapeType.Value == Enums.physicsShapeType.Box)
+                            if (shape.ShapeType == Enums.physicsShapeType.Box)
                             {
                                 var mb = new MeshBuilder();
                                 mb.CreateNormals = true;
@@ -231,7 +231,7 @@ namespace WolvenKit.ViewModels.Documents
 
                                 geometry = mb.ToMeshGeometry3D();
                             }
-                            else if (shape.ShapeType.Value == Enums.physicsShapeType.ConvexMesh || shape.ShapeType.Value == Enums.physicsShapeType.TriangleMesh)
+                            else if (shape.ShapeType == Enums.physicsShapeType.ConvexMesh || shape.ShapeType == Enums.physicsShapeType.TriangleMesh)
                             {
                                 var geo = gcs.GetEntry(wcn.SectorHash, shape.Hash);
 
