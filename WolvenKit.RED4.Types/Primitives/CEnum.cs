@@ -16,12 +16,15 @@ namespace WolvenKit.RED4.Types
 
         public static CEnum<T> Parse<T>(string value) where T : struct, Enum
         {
+            var typeInfo = RedReflection.GetEnumTypeInfo(typeof(T));
+            value = typeInfo.GetCSNameFromRedName(value);
+
             if (Enum.TryParse<T>(value, out var result))
             {
                 return result;
             }
 
-            return null;
+            throw new Exception($"CEnum \"{typeof(T).Name}.{value}\" could not be found!");
         }
     }
 

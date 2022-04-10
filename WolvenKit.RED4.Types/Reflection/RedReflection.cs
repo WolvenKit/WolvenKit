@@ -121,6 +121,11 @@ namespace WolvenKit.RED4.Types
             return _redEnumCache.FirstOrDefault(t => t.Value.Type == type).Key;
         }
 
+        public static ExtendedEnumInfo GetEnumTypeInfo(Type type)
+        {
+            return _redEnumCache.FirstOrDefault(t => t.Value.Type == type).Value;
+        }
+
         private static readonly ConcurrentDictionary<string, (Type, Flags)> _csTypeCache2 = new();
 
         public static (Type type, Flags flags) GetCSTypeFromRedType(string redTypeName)
@@ -345,10 +350,44 @@ namespace WolvenKit.RED4.Types
             public Type Type { get; set; }
             public bool IsBitfield { get; set; }
 
+            public Dictionary<string, string> RedNames { get; set; } = new();
+
             public ExtendedEnumInfo(Type type)
             {
                 Type = type;
                 IsBitfield = type.GetCustomAttribute<FlagsAttribute>() != null;
+
+                var valueNames = Enum.GetNames(Type);
+                foreach (var valueName in valueNames)
+                {
+                    var member = Type.GetMember(valueName);
+
+                    var redAttr = member[0].GetCustomAttribute<REDAttribute>();
+                    if (redAttr != null)
+                    {
+                        RedNames.Add(redAttr.Name, valueName);
+                    }
+                }
+            }
+
+            public string GetCSNameFromRedName(string valueName)
+            {
+                if (RedNames.ContainsKey(valueName))
+                {
+                    return RedNames[valueName];
+                }
+
+                return valueName;
+            }
+
+            public string GetRedNameFromCSName(string valueName)
+            {
+                if (RedNames.ContainsValue(valueName))
+                {
+                    return RedNames.FirstOrDefault(x => x.Value == valueName).Key;
+                }
+
+                return valueName;
             }
         }
 

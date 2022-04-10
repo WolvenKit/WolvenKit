@@ -22,7 +22,7 @@ namespace WolvenKit.RED4.Types
                 return result;
             }
 
-            return null;
+            throw new Exception($"CBitField \"{typeof(T).Name}.{value}\" could not be found!");
         }
     }
 
