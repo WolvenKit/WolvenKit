@@ -343,8 +343,13 @@ namespace WolvenKit.RED4.IO
 
         public virtual CEnum<T> ReadCEnum<T>() where T : struct, Enum
         {
+            var enumString = "None";
+
             var index = _reader.ReadUInt16();
-            var enumString = GetStringValue(index);
+            if (index != 0)
+            {
+                enumString = GetStringValue(index);
+            }
 
             return CEnum.Parse<T>(enumString);
         }
