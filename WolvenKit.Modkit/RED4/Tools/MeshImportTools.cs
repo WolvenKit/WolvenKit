@@ -61,7 +61,7 @@ namespace WolvenKit.Modkit.RED4
             var model = ModelRoot.Load(inGltfFile.FullName, new ReadSettings(vmode));
 
             VerifyGLTF(model);
-            var Meshes = Enumerable.Select(model.LogicalMeshes, GltfMeshToRawContainer).ToList();
+            var Meshes = Enumerable.Select(model.LogicalNodes, GltfMeshToRawContainer).ToList();
             Meshes = Meshes.OrderBy(o => o.name).ToList();
 
             var max = new Vec3(Single.MinValue, Single.MinValue, Single.MinValue);
@@ -116,8 +116,54 @@ namespace WolvenKit.Modkit.RED4
             return true;
         }
 
-        private static RawMeshContainer GltfMeshToRawContainer(Mesh mesh)
+        private static RawMeshContainer CreateEmptyMesh(string name)
         {
+            var meshContainer = new RawMeshContainer
+            {
+                boneindices = new ushort[3,0],
+                colors0 = new Vec4[3],
+                colors1 = Array.Empty<Vec4>(),
+                garmentMorph = Array.Empty<Vec3>(),
+                indices = new uint[3],
+                materialNames = null,
+                name = name,
+                normals = new Vec3[3],
+                positions = new Vec3[3],
+                tangents = new Vec4[3],
+                texCoords0 = new Vec2[3],
+                texCoords1 = new Vec2[3],
+                weightCount = 0,
+                weights = new float[3,0]
+            };
+
+            meshContainer.indices[0] = 2;
+            meshContainer.indices[1] = 0;
+            meshContainer.indices[2] = 1;
+
+            meshContainer.texCoords0[0] = new Vec2(1, 1);
+            meshContainer.texCoords0[1] = new Vec2(0, 0);
+            meshContainer.texCoords0[2] = new Vec2(1, 0);
+
+            for (int i = 0; i < 3; i++)
+            {
+                meshContainer.colors0[i] = new Vec4(1, 1, 1, 1);
+                meshContainer.normals[i] = new Vec3(0, 0, 1);
+                meshContainer.positions[i] = new Vec3(0, 0, 0);
+                meshContainer.tangents[i] = new Vec4(1, 0, 0, -1);
+                meshContainer.texCoords1[i] = new Vec2(0, 1);
+            }
+
+            return meshContainer;
+        }
+
+        private static RawMeshContainer GltfMeshToRawContainer(Node node)
+        {
+            if (node.Mesh == null)
+            {
+                return CreateEmptyMesh(node.Name);
+            }
+
+            var mesh = node.Mesh;
             var accessors = mesh.Primitives[0].VertexAccessors.Keys.ToList();
 
             var meshContainer = new RawMeshContainer
