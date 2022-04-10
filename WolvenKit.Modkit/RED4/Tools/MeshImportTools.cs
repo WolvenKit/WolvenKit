@@ -62,6 +62,7 @@ namespace WolvenKit.Modkit.RED4
 
             VerifyGLTF(model);
             var Meshes = Enumerable.Select(model.LogicalMeshes, GltfMeshToRawContainer).ToList();
+            Meshes = Meshes.OrderBy(o => o.name).ToList();
 
             var max = new Vec3(Single.MinValue, Single.MinValue, Single.MinValue);
             var min = new Vec3(Single.MaxValue, Single.MaxValue, Single.MaxValue);
