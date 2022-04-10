@@ -52,16 +52,18 @@ namespace WolvenKit.Views.Tools
             set { SetValue(SelectedItemProperty, value); }
         }
 
-        /// <summary>Identifies the <see cref="SelectedItemsCollection"/> dependency property.</summary>
+/*        /// <summary>Identifies the <see cref="SelectedItemsCollection"/> dependency property.</summary>
         public static readonly DependencyProperty SelectedItemsCollectionProperty =
-            DependencyProperty.Register(nameof(SelectedItemsCollection), typeof(ObservableCollection<object>), typeof(RedTreeView));
+            DependencyProperty.Register(nameof(SelectedItemsCollection), typeof(IList), typeof(RedTreeView));
 
-        public ObservableCollection<object> SelectedItemsCollection
+        public IList SelectedItemsCollection
+        //{ get; set; } = new();
         {
-            get { return (ObservableCollection<object>)GetValue(SelectedItemsCollectionProperty); }
+            get { return (IList)GetValue(SelectedItemsCollectionProperty); }
+                //GetValue(SelectedItemsCollectionProperty); }
             set { SetValue(SelectedItemsCollectionProperty, value); }
         }
-
+*/
         // Drag & Drop Functionality
 
         //private string dropFileLocation;

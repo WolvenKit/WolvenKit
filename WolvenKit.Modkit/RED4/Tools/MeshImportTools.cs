@@ -189,7 +189,7 @@ namespace WolvenKit.Modkit.RED4
 
             for (var i = 0; i < vertCount; i++)
             {
-                if (joints0.Count != 0)
+                if (joints0 != null && joints0.Count > 0)
                 {
                     meshContainer.boneindices[i, 0] = (ushort)joints0[i].X;
                     meshContainer.boneindices[i, 1] = (ushort)joints0[i].Y;
@@ -201,7 +201,7 @@ namespace WolvenKit.Modkit.RED4
                     meshContainer.weights[i, 2] = weights0[i].Z;
                     meshContainer.weights[i, 3] = weights0[i].W;
                 }
-                if (joints1 != null)
+                if (joints1 != null && joints1.Count > 0)
                 {
                     meshContainer.boneindices[i, 4] = (ushort)joints1[i].X;
                     meshContainer.boneindices[i, 5] = (ushort)joints1[i].Y;

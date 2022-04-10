@@ -20,6 +20,7 @@ namespace WolvenKit.Views.Templates
 
         public IRedType SelectedItem { get; set; }
 
+
         public ObservableCollection<IRedType> BindingCollection { get; set; } = new();
 
         public IRedBaseHandle RedChunkPtr
