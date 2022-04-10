@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class questJumpWorkspotAnim_NodeType : questIBehaviourManager_NodeType
 	{
 		[Ordinal(1)] 
@@ -24,6 +23,10 @@ namespace WolvenKit.RED4.Types
 		public questJumpWorkspotAnim_NodeType()
 		{
 			PuppetRef = new() { Names = new() };
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

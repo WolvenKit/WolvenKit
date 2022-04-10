@@ -31,7 +31,7 @@ namespace WolvenKit.RED4.Types
 
             var cnt = size / 2;
 
-            if (Type.Value == Enums.scnAnimNameType.reference)
+            if (Type == Enums.scnAnimNameType.reference)
             {
                 Unk2 = new CArray<CUInt16>();
                 for (int i = 0; i < cnt; i++)
@@ -51,7 +51,7 @@ namespace WolvenKit.RED4.Types
 
         public void Write(Red4Writer writer)
         {
-            if (Type.Value == Enums.scnAnimNameType.reference)
+            if (Type == Enums.scnAnimNameType.reference)
             {
                 foreach (var val in Unk2)
                 {

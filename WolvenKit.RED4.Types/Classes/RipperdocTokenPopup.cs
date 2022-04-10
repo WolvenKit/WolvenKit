@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class RipperdocTokenPopup : gameuiWidgetGameController
 	{
 		[Ordinal(2)] 
@@ -69,6 +68,10 @@ namespace WolvenKit.RED4.Types
 			ButtonCancel = new();
 			ButtonHintsRoot = new();
 			LibraryPath = new() { WidgetLibrary = new() };
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

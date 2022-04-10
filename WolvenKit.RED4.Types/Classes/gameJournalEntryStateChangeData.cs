@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class gameJournalEntryStateChangeData : RedBaseClass
 	{
 		[Ordinal(0)] 
@@ -81,6 +80,10 @@ namespace WolvenKit.RED4.Types
 		{
 			NotifyOption = Enums.gameJournalNotifyOption.DoNotNotify;
 			ChangeType = Enums.gameJournalChangeType.Direct;
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

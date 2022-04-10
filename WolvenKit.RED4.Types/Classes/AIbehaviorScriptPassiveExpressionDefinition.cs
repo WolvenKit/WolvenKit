@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class AIbehaviorScriptPassiveExpressionDefinition : AIbehaviorPassiveExpressionDefinition
 	{
 		[Ordinal(0)] 
@@ -12,5 +11,12 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CHandle<AIbehaviorexpressionScript>>();
 			set => SetPropertyValue<CHandle<AIbehaviorexpressionScript>>(value);
 		}
+
+		public AIbehaviorScriptPassiveExpressionDefinition()
+		{
+			PostConstruct();
+		}
+
+		partial void PostConstruct();
 	}
 }

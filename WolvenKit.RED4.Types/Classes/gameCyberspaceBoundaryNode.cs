@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class gameCyberspaceBoundaryNode : worldTriggerAreaNode
 	{
 		[Ordinal(7)] 
@@ -20,5 +19,12 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<NodeRef>();
 			set => SetPropertyValue<NodeRef>(value);
 		}
+
+		public gameCyberspaceBoundaryNode()
+		{
+			PostConstruct();
+		}
+
+		partial void PostConstruct();
 	}
 }

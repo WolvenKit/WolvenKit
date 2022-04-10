@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class RadialMenuGameController : gameuiHUDGameController
 	{
 		[Ordinal(9)] 
@@ -58,6 +57,10 @@ namespace WolvenKit.RED4.Types
 			ContainerRef = new();
 			HighlightRef = new();
 			ItemListRef = new();
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

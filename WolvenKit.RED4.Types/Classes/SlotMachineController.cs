@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class SlotMachineController : inkWidgetLogicController
 	{
 		[Ordinal(1)] 
@@ -100,6 +99,10 @@ namespace WolvenKit.RED4.Types
 			ImagePresets = new();
 			MaxWinChance = 100;
 			Slots = new();
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

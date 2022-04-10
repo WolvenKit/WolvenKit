@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class EngagementScreenGameController : gameuiMenuGameController
 	{
 		[Ordinal(3)] 
@@ -51,6 +50,10 @@ namespace WolvenKit.RED4.Types
 			Text = new();
 			TextShadow = new();
 			TextContainer = new();
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

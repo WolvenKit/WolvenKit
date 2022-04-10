@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class BaseStateOperations : DeviceOperations
 	{
 		[Ordinal(2)] 
@@ -43,6 +42,10 @@ namespace WolvenKit.RED4.Types
 			FxInstances = new();
 			StateActionsOverrides = new() { ToggleON = new(), TogglePower = new() };
 			BaseStateOperations_ = new();
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class gameinteractionsCPredicateDefinition : RedBaseClass
 	{
 		[Ordinal(0)] 
@@ -36,5 +35,12 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CHandle<gameinteractionsCFunctorDefinition>>();
 			set => SetPropertyValue<CHandle<gameinteractionsCFunctorDefinition>>(value);
 		}
+
+		public gameinteractionsCPredicateDefinition()
+		{
+			PostConstruct();
+		}
+
+		partial void PostConstruct();
 	}
 }

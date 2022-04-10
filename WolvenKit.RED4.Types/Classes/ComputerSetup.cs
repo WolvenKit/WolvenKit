@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class ComputerSetup : TerminalSetup
 	{
 		[Ordinal(5)] 
@@ -112,6 +111,10 @@ namespace WolvenKit.RED4.Types
 			NewsFeed = new();
 			NewsFeedInterval = 5.000000F;
 			InternetSubnet = new();
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

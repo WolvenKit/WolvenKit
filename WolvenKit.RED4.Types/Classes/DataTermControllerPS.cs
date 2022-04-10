@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class DataTermControllerPS : ScriptableDeviceComponentPS
 	{
 		[Ordinal(104)] 
@@ -33,6 +32,10 @@ namespace WolvenKit.RED4.Types
 		{
 			TweakDBRecord = 69877812462;
 			TweakDBDescriptionRecord = 120924954229;
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

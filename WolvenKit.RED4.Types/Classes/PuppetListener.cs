@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class PuppetListener : IScriptable
 	{
 		[Ordinal(0)] 
@@ -12,5 +11,12 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CHandle<gamePrereqState>>();
 			set => SetPropertyValue<CHandle<gamePrereqState>>(value);
 		}
+
+		public PuppetListener()
+		{
+			PostConstruct();
+		}
+
+		partial void PostConstruct();
 	}
 }

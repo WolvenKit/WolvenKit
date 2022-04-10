@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class MaterialTooltip : AGenericTooltipController
 	{
 		[Ordinal(2)] 
@@ -69,6 +68,10 @@ namespace WolvenKit.RED4.Types
 			Title = new();
 			BasePrice = new();
 			Price = new();
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

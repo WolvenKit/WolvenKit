@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class gameTransformAnimation_RotateFromTo : gameTransformAnimationTrackItemImpl
 	{
 		[Ordinal(0)] 
@@ -28,5 +27,12 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CHandle<gameTransformAnimation_Movement>>();
 			set => SetPropertyValue<CHandle<gameTransformAnimation_Movement>>(value);
 		}
+
+		public gameTransformAnimation_RotateFromTo()
+		{
+			PostConstruct();
+		}
+
+		partial void PostConstruct();
 	}
 }

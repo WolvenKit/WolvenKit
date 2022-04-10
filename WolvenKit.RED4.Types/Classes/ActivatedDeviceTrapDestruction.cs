@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class ActivatedDeviceTrapDestruction : ActivatedDeviceTrap
 	{
 		[Ordinal(96)] 
@@ -146,6 +145,10 @@ namespace WolvenKit.RED4.Types
 			ComponentsToEnableNames = new();
 			ComponentsToEnable = new();
 			AlreadyPlayedVFXComponents = new();
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

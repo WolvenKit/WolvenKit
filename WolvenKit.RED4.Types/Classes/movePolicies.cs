@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class movePolicies : IScriptable
 	{
 		[Ordinal(0)] 
@@ -283,6 +282,10 @@ namespace WolvenKit.RED4.Types
 			UseCollisionAvoidance = true;
 			UseStart = true;
 			UseStop = true;
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

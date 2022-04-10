@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class PachinkoMachine : ArcadeMachine
 	{
 		[Ordinal(101)] 
@@ -16,6 +15,10 @@ namespace WolvenKit.RED4.Types
 		public PachinkoMachine()
 		{
 			DistractionFXName = "effect_distraction";
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

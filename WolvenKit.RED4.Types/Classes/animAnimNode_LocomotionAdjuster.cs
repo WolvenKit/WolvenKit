@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class animAnimNode_LocomotionAdjuster : animAnimNode_OnePoseInput
 	{
 		[Ordinal(12)] 
@@ -72,6 +71,10 @@ namespace WolvenKit.RED4.Types
 			BlendSpeedPosMin = 2.000000F;
 			BlendSpeedRot = 180.000000F;
 			MaxDistance = 1.000000F;
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class animCAnimationBufferBitwiseCompressed : animIAnimationBuffer
 	{
 		[Ordinal(0)] 
@@ -126,6 +125,10 @@ namespace WolvenKit.RED4.Types
 			Duration = 1.000000F;
 			Dt = 0.033000F;
 			ExtraDataNames = new();
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class worldDestructibleProxyMeshNode : worldPrefabProxyMeshNode
 	{
 		[Ordinal(18)] 
@@ -12,5 +11,12 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CUInt64>();
 			set => SetPropertyValue<CUInt64>(value);
 		}
+
+		public worldDestructibleProxyMeshNode()
+		{
+			PostConstruct();
+		}
+
+		partial void PostConstruct();
 	}
 }

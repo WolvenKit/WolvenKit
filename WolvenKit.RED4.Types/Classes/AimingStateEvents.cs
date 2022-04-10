@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class AimingStateEvents : UpperBodyEventsTransition
 	{
 		[Ordinal(6)] 
@@ -200,6 +199,10 @@ namespace WolvenKit.RED4.Types
 		public AimingStateEvents()
 		{
 			MouseZoomLevel = 100000.000000F;
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

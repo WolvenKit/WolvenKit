@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class interactionItemLogicController : inkWidgetLogicController
 	{
 		[Ordinal(1)] 
@@ -200,6 +199,10 @@ namespace WolvenKit.RED4.Types
 			SkillCheckNormalReqs = new();
 			SkillCheckIcon = new();
 			SkillCheckText = new();
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

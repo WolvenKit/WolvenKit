@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class gameuiBaseWorldMapMappinController : gameuiInteractionMappinController
 	{
 		[Ordinal(11)] 
@@ -146,6 +145,10 @@ namespace WolvenKit.RED4.Types
 			CollectionCount = 1;
 			GroupContainerWidget = new();
 			GroupCountTextWidget = new();
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

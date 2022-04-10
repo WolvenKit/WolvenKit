@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class DisposalDeviceControllerPS : ScriptableDeviceComponentPS
 	{
 		[Ordinal(104)] 
@@ -72,6 +71,10 @@ namespace WolvenKit.RED4.Types
 			DisposalDeviceSetup = new() { NumberOfUses = 1, IsBodyRequired = true };
 			DistractionSetup = new() { StimuliRange = 10.000000F, ExplosionDefinition = new() };
 			ExplosionSetup = new() { StimuliRange = 10.000000F, ExplosionDefinition = new() };
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

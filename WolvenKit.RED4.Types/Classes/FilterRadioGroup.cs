@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class FilterRadioGroup : inkRadioGroupController
 	{
 		[Ordinal(5)] 
@@ -49,6 +48,10 @@ namespace WolvenKit.RED4.Types
 		{
 			LibraryPath = new() { WidgetLibrary = new() };
 			Toggles = new();
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class ProgressBarSimpleWidgetLogicController : inkWidgetLogicController
 	{
 		[Ordinal(1)] 
@@ -200,6 +199,10 @@ namespace WolvenKit.RED4.Types
 			EmptyBar = new();
 			BarCap = new();
 			AnimDuration = 2.000000F;
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class ArmsCWInSlotCallback : gameAttachmentSlotsScriptCallback
 	{
 		[Ordinal(2)] 
@@ -12,5 +11,12 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CWeakHandle<ArmsCWInSlotPrereqState>>();
 			set => SetPropertyValue<CWeakHandle<ArmsCWInSlotPrereqState>>(value);
 		}
+
+		public ArmsCWInSlotCallback()
+		{
+			PostConstruct();
+		}
+
+		partial void PostConstruct();
 	}
 }

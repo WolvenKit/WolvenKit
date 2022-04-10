@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class inkGradientWidget : inkBaseShapeWidget
 	{
 		[Ordinal(20)] 
@@ -41,6 +40,10 @@ namespace WolvenKit.RED4.Types
 		{
 			StartColor = new() { Alpha = 1.000000F };
 			EndColor = new();
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class garmentGarmentLayerParams : CResource
 	{
 		[Ordinal(1)] 
@@ -43,6 +42,10 @@ namespace WolvenKit.RED4.Types
 			Smoothing = new() { SmoothingRadiusInCM = 15.000000F, SmoothingExponent = 0.500000F, SmoothingNumNeighbours = 4 };
 			CollarArea = new() { RadiusInCM = 32.000000F, RadiusForTriangleRemovalInCM = 16.000000F, Offset = new() };
 			HiddenTrianglesRemoval = new() { GarmentBorderThreshold = 0.650000F, RemoveHiddenTriangles = true, RayLengthInCM = 10.000000F, RayLengthMorphOffsetFactor = 1.000000F };
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class CodexListVirtualEntry : inkVirtualCompoundItemController
 	{
 		[Ordinal(15)] 
@@ -82,6 +81,10 @@ namespace WolvenKit.RED4.Types
 			Title = new();
 			Icon = new();
 			NewWrapper = new();
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

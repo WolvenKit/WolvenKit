@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class gameuiMinimapDynamicEventMappinController : gameuiBaseMinimapMappinController
 	{
 		[Ordinal(14)] 
@@ -50,6 +49,10 @@ namespace WolvenKit.RED4.Types
 			PulseWidget = new();
 			HideAtDistance = 25.000000F;
 			HideInCombat = true;
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

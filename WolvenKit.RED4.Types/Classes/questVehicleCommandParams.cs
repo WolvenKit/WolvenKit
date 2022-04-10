@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class questVehicleCommandParams : questAICommandParams
 	{
 		[Ordinal(0)] 
@@ -52,5 +51,12 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CHandle<questvehicleJoinTrafficParams>>();
 			set => SetPropertyValue<CHandle<questvehicleJoinTrafficParams>>(value);
 		}
+
+		public questVehicleCommandParams()
+		{
+			PostConstruct();
+		}
+
+		partial void PostConstruct();
 	}
 }

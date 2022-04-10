@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class entBakedDestructionComponent : entPhysicalMeshComponent
 	{
 		[Ordinal(30)] 
@@ -135,6 +134,10 @@ namespace WolvenKit.RED4.Types
 			ImpulseToDamage = 1.000000F;
 			ContactToDamage = 1.000000F;
 			AccumulateDamage = true;
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class FUNC_TEST_Container : RedBaseClass
 	{
 		[Ordinal(0)] 
@@ -43,6 +42,10 @@ namespace WolvenKit.RED4.Types
 			Compound = new();
 			Leaf = new();
 			Widget = new();
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

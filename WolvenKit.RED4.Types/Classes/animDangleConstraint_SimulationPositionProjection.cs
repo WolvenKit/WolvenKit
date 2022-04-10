@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class animDangleConstraint_SimulationPositionProjection : animDangleConstraint_SimulationSingleBone
 	{
 		[Ordinal(14)] 
@@ -58,6 +57,10 @@ namespace WolvenKit.RED4.Types
 			CollisionCapsuleAxisLS = new() { X = 0.500000F };
 			DirectionReferenceBone = new();
 			ProjectionType = Enums.animPositionProjectionType.ShortestPath;
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

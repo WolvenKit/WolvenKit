@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class StatsStreetCredReward : inkWidgetLogicController
 	{
 		[Ordinal(1)] 
@@ -76,6 +75,10 @@ namespace WolvenKit.RED4.Types
 			NextRewardsList = new();
 			ScrollSlider = new();
 			ScrollButtonHint = new();
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class minimapuiSettings : RedBaseClass
 	{
 		[Ordinal(0)] 
@@ -25,6 +24,10 @@ namespace WolvenKit.RED4.Types
 		{
 			ShowTime = 0.300000F;
 			HideTime = 0.250000F;
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

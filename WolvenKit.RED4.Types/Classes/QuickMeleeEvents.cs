@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class QuickMeleeEvents : WeaponEventsTransition
 	{
 		[Ordinal(3)] 
@@ -48,6 +47,10 @@ namespace WolvenKit.RED4.Types
 		public QuickMeleeEvents()
 		{
 			QuickMeleeAttackData = new();
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class questUseWorkspotParamsV1 : questAICommandParams
 	{
 		[Ordinal(0)] 
@@ -193,6 +192,10 @@ namespace WolvenKit.RED4.Types
 			RepeatCommandOnInterrupt = true;
 			WorkExcludedGestures = new();
 			MeshDissolvingEnabled = true;
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

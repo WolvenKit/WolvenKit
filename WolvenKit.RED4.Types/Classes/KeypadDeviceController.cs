@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class KeypadDeviceController : DeviceWidgetControllerBase
 	{
 		[Ordinal(10)] 
@@ -96,6 +95,10 @@ namespace WolvenKit.RED4.Types
 		public KeypadDeviceController()
 		{
 			PasswordsList = new();
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class animAnimNode_ExplorationAdjuster : animAnimNode_MotionAdjuster
 	{
 		[Ordinal(16)] 
@@ -61,6 +60,10 @@ namespace WolvenKit.RED4.Types
 			TargetPosition3 = new();
 			TargetDirection3 = new();
 			TotalTimeToAdjust3 = new();
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

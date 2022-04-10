@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class gameuiRefreshGOGState : redEvent
 	{
 		[Ordinal(0)] 
@@ -40,6 +39,10 @@ namespace WolvenKit.RED4.Types
 		public gameuiRefreshGOGState()
 		{
 			QrCodePNGBlob = new();
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

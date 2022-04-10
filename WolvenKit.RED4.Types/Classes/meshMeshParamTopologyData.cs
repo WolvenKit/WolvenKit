@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class meshMeshParamTopologyData : meshMeshParameter
 	{
 		[Ordinal(0)] 
@@ -33,6 +32,10 @@ namespace WolvenKit.RED4.Types
 		{
 			Offsets = new();
 			Sizes = new();
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class NewBackdoorDeviceRequest : gameScriptableSystemRequest
 	{
 		[Ordinal(0)] 
@@ -12,5 +11,12 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CHandle<ScriptableDeviceComponentPS>>();
 			set => SetPropertyValue<CHandle<ScriptableDeviceComponentPS>>(value);
 		}
+
+		public NewBackdoorDeviceRequest()
+		{
+			PostConstruct();
+		}
+
+		partial void PostConstruct();
 	}
 }

@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class animAnimNode_FloatComparator : animAnimNode_FloatValue
 	{
 		[Ordinal(11)] 
@@ -84,6 +83,10 @@ namespace WolvenKit.RED4.Types
 			SecondInputLink = new();
 			TrueInputLink = new();
 			FalseInputLink = new();
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

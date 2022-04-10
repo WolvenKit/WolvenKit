@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class characterCreationLifePathBtn : inkButtonController
 	{
 		[Ordinal(10)] 
@@ -84,6 +83,10 @@ namespace WolvenKit.RED4.Types
 			Image = new();
 			Label = new();
 			Video = new();
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

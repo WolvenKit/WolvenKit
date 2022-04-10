@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class gameuiDamageIndicatorGameController : gameuiHUDGameController
 	{
 		[Ordinal(9)] 
@@ -16,6 +15,10 @@ namespace WolvenKit.RED4.Types
 		public gameuiDamageIndicatorGameController()
 		{
 			MaxVisibleParts = 6;
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class StimDeviceOperation : DeviceOperationBase
 	{
 		[Ordinal(5)] 
@@ -18,6 +17,10 @@ namespace WolvenKit.RED4.Types
 			IsEnabled = true;
 			ToggleOperations = new();
 			Stims = new();
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

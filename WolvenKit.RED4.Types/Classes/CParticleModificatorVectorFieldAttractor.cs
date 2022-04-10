@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class CParticleModificatorVectorFieldAttractor : IParticleModificator
 	{
 		[Ordinal(4)] 
@@ -43,6 +42,10 @@ namespace WolvenKit.RED4.Types
 			EditorGroup = "Velocity";
 			IsEnabled = true;
 			InheritVelocity = true;
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class gameuiInGameMenuGameController : gameuiBaseMenuGameController
 	{
 		[Ordinal(3)] 
@@ -114,6 +113,10 @@ namespace WolvenKit.RED4.Types
 			ItemSceneInfos = new();
 			GarmentSwitchEffectControllers = new();
 			LoadSaveDelayID = new();
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

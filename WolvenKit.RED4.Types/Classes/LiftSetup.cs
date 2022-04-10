@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class LiftSetup : RedBaseClass
 	{
 		[Ordinal(0)] 
@@ -92,6 +91,10 @@ namespace WolvenKit.RED4.Types
 			LiftTravelTimeOverride = 4.000000F;
 			EmptyLiftSpeedMultiplier = 2.000000F;
 			RadioStationNumer = -1;
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics;
 using System.Reflection;
 
 namespace WolvenKit.RED4.Types
@@ -15,79 +16,51 @@ namespace WolvenKit.RED4.Types
 
         public static CEnum<T> Parse<T>(string value) where T : struct, Enum
         {
+            var typeInfo = RedReflection.GetEnumTypeInfo(typeof(T));
+            value = typeInfo.GetCSNameFromRedName(value);
+
             if (Enum.TryParse<T>(value, out var result))
             {
                 return result;
             }
 
-            return new CEnum<T>(value);
+            throw new Exception($"CEnum \"{typeof(T).Name}.{value}\" could not be found!");
         }
     }
 
-    [REDType(IsValueType = true)]
-    public class CEnum<T> : IRedEnum<T>, IEquatable<CEnum<T>> where T : struct, Enum
+    [DebuggerDisplay("{_value}")]
+    public readonly struct CEnum<T> : IRedEnum<T>, IEquatable<CEnum<T>> where T : struct, Enum
     {
-        public T? Value { get; init; }
-        public string StringValue { get; init; }
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        private readonly T _value;
 
         public CEnum()
         {
-            Value = default(T);
-            StringValue = null;
+            _value = default;
         }
 
         internal CEnum(T value)
         {
-            Value = value;
-            StringValue = null;
-        }
-
-        internal CEnum(string value)
-        {
-            Value = null;
-            StringValue = value;
+            _value = value;
         }
 
         public static implicit operator CEnum<T>(T value) => new(value);
+        public static implicit operator T(CEnum<T> value) => value._value;
+
         public static implicit operator CEnum<T>(Enum value) => new((T)value);
+        public static implicit operator Enum(CEnum<T> value) => value._value;
 
         public Type GetInnerType() => typeof(T);
 
-        public string ToEnumString()
-        {
-            if (Value != null)
-            {
-                return Value.ToString();
-            }
+        public override string ToString() => _value.ToString();
+        public string ToEnumString() => _value.ToString();
 
-            return StringValue;
-        }
-
-        public bool Equals(CEnum<T> other)
-        {
-            if (ReferenceEquals(null, other))
-            {
-                return false;
-            }
-
-            if (ReferenceEquals(this, other))
-            {
-                return true;
-            }
-
-            return Nullable.Equals(Value, other.Value) && StringValue == other.StringValue;
-        }
 
         public override bool Equals(object obj)
         {
             if (ReferenceEquals(null, obj))
             {
                 return false;
-            }
-
-            if (ReferenceEquals(this, obj))
-            {
-                return true;
             }
 
             if (obj.GetType() != this.GetType())
@@ -98,8 +71,8 @@ namespace WolvenKit.RED4.Types
             return Equals((CEnum<T>)obj);
         }
 
-        public override int GetHashCode() => HashCode.Combine(Value, StringValue);
+        public bool Equals(CEnum<T> other) => Equals(_value, other._value);
 
-        public override string ToString() => Value.ToString();
+        public override int GetHashCode() => _value.GetHashCode();
     }
 }

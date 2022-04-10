@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class scneventsSpawnEntityEventParams : RedBaseClass
 	{
 		[Ordinal(0)] 
@@ -50,6 +49,10 @@ namespace WolvenKit.RED4.Types
 			Performer = new() { Id = 4294967040 };
 			ReferencePerformer = new() { Id = 4294967040 };
 			FallbackData = new();
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

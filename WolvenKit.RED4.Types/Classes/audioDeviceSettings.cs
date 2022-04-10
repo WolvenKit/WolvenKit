@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class audioDeviceSettings : audioEntitySettings
 	{
 		[Ordinal(6)] 
@@ -12,5 +11,12 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<audioDeviceStateSettings>();
 			set => SetPropertyValue<audioDeviceStateSettings>(value);
 		}
+
+		public audioDeviceSettings()
+		{
+			PostConstruct();
+		}
+
+		partial void PostConstruct();
 	}
 }

@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class OverheatStatListener : gameScriptStatPoolsListener
 	{
 		[Ordinal(0)] 
@@ -28,5 +27,12 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CHandle<StartOverheatEffectEvent>>();
 			set => SetPropertyValue<CHandle<StartOverheatEffectEvent>>(value);
 		}
+
+		public OverheatStatListener()
+		{
+			PostConstruct();
+		}
+
+		partial void PostConstruct();
 	}
 }

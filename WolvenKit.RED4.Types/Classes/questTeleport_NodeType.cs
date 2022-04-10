@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class questTeleport_NodeType : questIVehicleManagerNodeType
 	{
 		[Ordinal(0)] 
@@ -25,6 +24,10 @@ namespace WolvenKit.RED4.Types
 		{
 			EntityReference = new() { Names = new() };
 			Params = new() { DestinationOffset = new() };
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

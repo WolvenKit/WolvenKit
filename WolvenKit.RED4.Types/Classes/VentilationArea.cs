@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class VentilationArea : InteractiveMasterDevice
 	{
 		[Ordinal(94)] 
@@ -58,6 +57,10 @@ namespace WolvenKit.RED4.Types
 			ControllerTypeName = "VentilationAreaController";
 			AttackRecord = "Attacks.FragGrenade";
 			GameEffectRef = new();
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

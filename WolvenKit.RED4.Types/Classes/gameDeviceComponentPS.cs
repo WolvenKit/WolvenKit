@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class gameDeviceComponentPS : gameComponentPS
 	{
 		[Ordinal(0)] 
@@ -113,6 +112,10 @@ namespace WolvenKit.RED4.Types
 		{
 			AutoToggleQuestMark = true;
 			MaxDevicesToExtractInOneFrame = 10;
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

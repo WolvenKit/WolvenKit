@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class gameuiMinigameData : RedBaseClass
 	{
 		[Ordinal(0)] 
@@ -78,6 +77,10 @@ namespace WolvenKit.RED4.Types
 			TimerWaitsForInteraction = true;
 			AcceptableTraps = new();
 			Rules = new();
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

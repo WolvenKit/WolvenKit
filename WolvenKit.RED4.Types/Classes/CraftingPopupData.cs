@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class CraftingPopupData : inkGameNotificationData
 	{
 		[Ordinal(7)] 
@@ -20,5 +19,12 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CEnum<CraftingCommands>>();
 			set => SetPropertyValue<CEnum<CraftingCommands>>(value);
 		}
+
+		public CraftingPopupData()
+		{
+			PostConstruct();
+		}
+
+		partial void PostConstruct();
 	}
 }

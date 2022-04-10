@@ -49,7 +49,6 @@ namespace WolvenKit.RED4.Types
         }
     }
 
-    [REDMeta]
     public class CMaterialParameterInfo : RedBaseClass
     {
         // enum for type

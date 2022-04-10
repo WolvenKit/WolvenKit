@@ -185,7 +185,7 @@ namespace WolvenKit.ViewModels.Documents
                         Name = Path.GetFileNameWithoutExtension(desc.Data.DepotPath.ToString()).Replace("-", "n")
                     };
 
-                    if (desc.Category.Value == Enums.worldStreamingSectorCategory.Exterior)
+                    if (desc.Category == Enums.worldStreamingSectorCategory.Exterior)
                     {
                         //var mb = new MeshBuilder();
 
@@ -248,15 +248,15 @@ namespace WolvenKit.ViewModels.Documents
 
 
                     }
-                    else if (desc.Category.Value == Enums.worldStreamingSectorCategory.Interior)
+                    else if (desc.Category == Enums.worldStreamingSectorCategory.Interior)
                     {
                         interior.Children.Add(bbText);
                     }
-                    else if (desc.Category.Value == Enums.worldStreamingSectorCategory.Quest)
+                    else if (desc.Category == Enums.worldStreamingSectorCategory.Quest)
                     {
                         quest.Children.Add(bbText);
                     }
-                    else if (desc.Category.Value == Enums.worldStreamingSectorCategory.Navigation)
+                    else if (desc.Category == Enums.worldStreamingSectorCategory.Navigation)
                     {
                         navigation.Children.Add(bbText);
                     }

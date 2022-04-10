@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	[REDClass(SerializeDefault = true)]
 	public partial class AbsolutePathSerializable : RedBaseClass
 	{
@@ -13,5 +12,12 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CString>();
 			set => SetPropertyValue<CString>(value);
 		}
+
+		public AbsolutePathSerializable()
+		{
+			PostConstruct();
+		}
+
+		partial void PostConstruct();
 	}
 }

@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class questCharacterManagerCombat_Kill : questICharacterManagerCombat_NodeSubType
 	{
 		[Ordinal(0)] 
@@ -83,6 +82,10 @@ namespace WolvenKit.RED4.Types
 			SkipDefeatedState = true;
 			WoundType = Enums.entdismembermentWoundTypeE.COARSE;
 			DismembermentStrenght = 8.000000F;
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class entHardTransformBinding : entITransformBinding
 	{
 		[Ordinal(3)] 
@@ -17,6 +16,10 @@ namespace WolvenKit.RED4.Types
 		{
 			Enabled = true;
 			EnableMask = new() { HardTags = new() { Tags = new() }, SoftTags = new() { Tags = new() }, ExcludedTags = new() { Tags = new() { "NoBinding" } } };
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

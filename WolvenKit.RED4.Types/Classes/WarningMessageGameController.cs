@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class WarningMessageGameController : gameuiHUDGameController
 	{
 		[Ordinal(9)] 
@@ -105,6 +104,10 @@ namespace WolvenKit.RED4.Types
 		{
 			MainTextWidget = new();
 			SimpleMessage = new();
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

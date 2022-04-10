@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class questMoveToParams : questAICommandParams
 	{
 		[Ordinal(0)] 
@@ -124,6 +123,10 @@ namespace WolvenKit.RED4.Types
 			FinishWhenDestinationReached = true;
 			RepeatCommandOnInterrupt = true;
 			ExecuteWhileDespawned = true;
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

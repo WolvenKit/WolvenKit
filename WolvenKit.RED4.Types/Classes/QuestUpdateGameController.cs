@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class QuestUpdateGameController : gameuiHUDGameController
 	{
 		[Ordinal(9)] 
@@ -66,6 +65,10 @@ namespace WolvenKit.RED4.Types
 			Header = new();
 			Label = new();
 			Icon = new();
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

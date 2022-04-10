@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class animDangleConstraint_SimulationSingleBone : animDangleConstraint_Simulation
 	{
 		[Ordinal(13)] 
@@ -12,5 +11,12 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<animTransformIndex>();
 			set => SetPropertyValue<animTransformIndex>(value);
 		}
+
+		public animDangleConstraint_SimulationSingleBone()
+		{
+			PostConstruct();
+		}
+
+		partial void PostConstruct();
 	}
 }

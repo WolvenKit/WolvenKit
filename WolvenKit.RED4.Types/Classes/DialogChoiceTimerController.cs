@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class DialogChoiceTimerController : inkWidgetLogicController
 	{
 		[Ordinal(1)] 
@@ -90,6 +89,10 @@ namespace WolvenKit.RED4.Types
 			Bar = new();
 			TimerValue = new();
 			AnimOptions = new();
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

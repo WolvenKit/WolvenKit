@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class entEffectDesc : ISerializable
 	{
 		[Ordinal(0)] 
@@ -66,6 +65,10 @@ namespace WolvenKit.RED4.Types
 			CompiledEffectInfo = new() { PlacementTags = new(), ComponentNames = new(), RelativePositions = new(), RelativeRotations = new(), PlacementInfos = new(), EventsSortedByRUID = new() };
 			AutoSpawnTag = "_autospawn";
 			RandomWeight = 1;
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

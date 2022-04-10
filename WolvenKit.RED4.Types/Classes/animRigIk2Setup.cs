@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class animRigIk2Setup : animIRigIkSetup
 	{
 		[Ordinal(1)] 
@@ -66,6 +65,10 @@ namespace WolvenKit.RED4.Types
 			FirstBoneIdx = -1;
 			SecondBoneIdx = -1;
 			EndBoneIdx = -1;
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class EmissiveColorSettings : IAreaSettings
 	{
 		[Ordinal(2)] 
@@ -89,6 +88,10 @@ namespace WolvenKit.RED4.Types
 		{
 			Enable = true;
 			CurveRampIBL = 2.000000F;
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

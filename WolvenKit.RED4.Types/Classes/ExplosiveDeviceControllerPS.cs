@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class ExplosiveDeviceControllerPS : BasicDistractionDeviceControllerPS
 	{
 		[Ordinal(109)] 
@@ -105,6 +104,10 @@ namespace WolvenKit.RED4.Types
 			TimeToMeshSwap = 0.100000F;
 			ProvideExplodeAction = true;
 			DoExplosiveEngineerLogic = true;
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

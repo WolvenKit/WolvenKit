@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class GarmentItemPreviewGameController : gameuiBaseGarmentItemPreviewGameController
 	{
 		[Ordinal(18)] 
@@ -32,6 +31,10 @@ namespace WolvenKit.RED4.Types
 		public GarmentItemPreviewGameController()
 		{
 			C_GARMENT_ROTATION_SPEED = 100.000000F;
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

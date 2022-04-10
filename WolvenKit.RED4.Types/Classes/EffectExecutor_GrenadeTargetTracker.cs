@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class EffectExecutor_GrenadeTargetTracker : gameEffectExecutor_Scripted
 	{
 		[Ordinal(1)] 
@@ -16,6 +15,10 @@ namespace WolvenKit.RED4.Types
 		public EffectExecutor_GrenadeTargetTracker()
 		{
 			PotentialTargetSlots = new();
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

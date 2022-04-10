@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class BaseAnimatedDevice : InteractiveDevice
 	{
 		[Ordinal(94)] 
@@ -50,6 +49,10 @@ namespace WolvenKit.RED4.Types
 			ControllerTypeName = "BaseAnimatedDeviceController";
 			OpeningSpeed = 2.000000F;
 			ClosingSpeed = 2.000000F;
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class inkButtonAnimatedController : inkButtonController
 	{
 		[Ordinal(10)] 
@@ -108,6 +107,10 @@ namespace WolvenKit.RED4.Types
 			NormalRootOpacity = 1.000000F;
 			HoverRootOpacity = 1.000000F;
 			AnimPulseOptions = new();
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

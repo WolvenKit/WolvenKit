@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class rendRenderParticleBlobEmitterInfo : RedBaseClass
 	{
 		[Ordinal(0)] 
@@ -332,6 +331,10 @@ namespace WolvenKit.RED4.Types
 			Lods = new();
 			VolumetricParticleColor = new() { Red = 1.000000F, Green = 1.000000F, Blue = 1.000000F, Alpha = 1.000000F };
 			VolumetricParticleNoiseVelocity = new();
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

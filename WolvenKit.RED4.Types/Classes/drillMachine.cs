@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class drillMachine : gameweaponObject
 	{
 		[Ordinal(59)] 
@@ -68,5 +67,12 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CWeakHandle<gameObject>>();
 			set => SetPropertyValue<CWeakHandle<gameObject>>(value);
 		}
+
+		public drillMachine()
+		{
+			PostConstruct();
+		}
+
+		partial void PostConstruct();
 	}
 }

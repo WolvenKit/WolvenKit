@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class CSourceTexture : ISerializable
 	{
 		[Ordinal(0)] 
@@ -49,6 +48,10 @@ namespace WolvenKit.RED4.Types
 		{
 			Depth = 1;
 			Format = Enums.ETextureRawFormat.TRF_TrueColor;
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class DiodeControlComponent : gameScriptableComponent
 	{
 		[Ordinal(5)] 
@@ -59,6 +58,10 @@ namespace WolvenKit.RED4.Types
 			PrimaryLightPreset = new() { State = true, ColorMax = new(), ColorMin = new(), OverrideColorMin = true, Strength = 1.000000F };
 			SecondaryLightPreset = new() { State = true, ColorMax = new(), ColorMin = new(), OverrideColorMin = true, Strength = 1.000000F };
 			SecondaryPresetRemovalID = new();
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

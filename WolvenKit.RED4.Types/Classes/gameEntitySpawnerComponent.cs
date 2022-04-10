@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class gameEntitySpawnerComponent : gameComponent
 	{
 		[Ordinal(4)] 
@@ -16,6 +15,10 @@ namespace WolvenKit.RED4.Types
 		public gameEntitySpawnerComponent()
 		{
 			SlotDataArray = new();
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

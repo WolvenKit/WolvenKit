@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class audioAcousticConstantsPreset : audioAudioMetadata
 	{
 		[Ordinal(1)] 
@@ -168,6 +167,10 @@ namespace WolvenKit.RED4.Types
 			RepositioningVoScanningZoomFactor = 1.000000F;
 			GroupingExcludedVisualTags = new();
 			MaxWindowOffset = 2.000000F;
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

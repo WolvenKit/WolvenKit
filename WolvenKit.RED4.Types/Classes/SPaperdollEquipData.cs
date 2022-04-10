@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class SPaperdollEquipData : RedBaseClass
 	{
 		[Ordinal(0)] 
@@ -40,6 +39,10 @@ namespace WolvenKit.RED4.Types
 		public SPaperdollEquipData()
 		{
 			EquipArea = new() { AreaType = Enums.gamedataEquipmentArea.Invalid, EquipSlots = new() };
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

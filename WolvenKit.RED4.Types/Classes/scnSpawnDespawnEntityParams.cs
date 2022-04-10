@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class scnSpawnDespawnEntityParams : RedBaseClass
 	{
 		[Ordinal(0)] 
@@ -140,6 +139,10 @@ namespace WolvenKit.RED4.Types
 			SpawnOnStart = true;
 			IsEnabled = true;
 			ValidateSpawnPostion = true;
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

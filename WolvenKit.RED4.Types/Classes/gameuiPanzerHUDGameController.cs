@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class gameuiPanzerHUDGameController : gameuiHUDGameController
 	{
 		[Ordinal(9)] 
@@ -384,6 +383,10 @@ namespace WolvenKit.RED4.Types
 			TargetHolder = new();
 			TargetWidgetLibraryName = "Marker";
 			TargetWidgetPoolSize = 10;
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

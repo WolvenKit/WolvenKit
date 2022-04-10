@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class gameinteractionsInteractionActivationEvent : gameinteractionsInteractionBaseEvent
 	{
 		[Ordinal(3)] 
@@ -12,5 +11,12 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CEnum<gameinteractionsEInteractionEventType>>();
 			set => SetPropertyValue<CEnum<gameinteractionsEInteractionEventType>>(value);
 		}
+
+		public gameinteractionsInteractionActivationEvent()
+		{
+			PostConstruct();
+		}
+
+		partial void PostConstruct();
 	}
 }

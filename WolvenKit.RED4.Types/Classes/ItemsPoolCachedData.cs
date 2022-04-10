@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class ItemsPoolCachedData : IScriptable
 	{
 		[Ordinal(0)] 
@@ -12,5 +11,12 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CHandle<ATooltipData>>();
 			set => SetPropertyValue<CHandle<ATooltipData>>(value);
 		}
+
+		public ItemsPoolCachedData()
+		{
+			PostConstruct();
+		}
+
+		partial void PostConstruct();
 	}
 }

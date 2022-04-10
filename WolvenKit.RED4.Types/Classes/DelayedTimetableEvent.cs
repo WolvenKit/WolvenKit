@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class DelayedTimetableEvent : redEvent
 	{
 		[Ordinal(0)] 
@@ -20,5 +19,12 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CWeakHandle<ScriptableDeviceComponentPS>>();
 			set => SetPropertyValue<CWeakHandle<ScriptableDeviceComponentPS>>(value);
 		}
+
+		public DelayedTimetableEvent()
+		{
+			PostConstruct();
+		}
+
+		partial void PostConstruct();
 	}
 }

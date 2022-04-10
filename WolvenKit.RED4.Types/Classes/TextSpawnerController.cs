@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class TextSpawnerController : inkWidgetLogicController
 	{
 		[Ordinal(1)] 
@@ -33,6 +32,10 @@ namespace WolvenKit.RED4.Types
 		{
 			AmountOfRows = 6;
 			Texts = new();
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

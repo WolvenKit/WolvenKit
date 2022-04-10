@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class hudCarRaceController : gameuiHUDGameController
 	{
 		[Ordinal(9)] 
@@ -117,6 +116,10 @@ namespace WolvenKit.RED4.Types
 			RaceTime = new();
 			RaceCheckpoint = new();
 			RaceStartEngineTime = new();
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

@@ -1,8 +1,8 @@
 namespace WolvenKit.RED4.Types
 {
-    public partial class physicsRagdollBodyInfo : IRedOverload
+    public partial class physicsRagdollBodyInfo
     {
-        void IRedOverload.ConstructorOverload()
+        partial void PostConstruct()
         {
             // TODO: Workaround, default values is Serialized
             SwingAnglesY = null;

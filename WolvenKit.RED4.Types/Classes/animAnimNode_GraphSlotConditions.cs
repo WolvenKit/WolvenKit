@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class animAnimNode_GraphSlotConditions : animAnimNode_GraphSlot
 	{
 		[Ordinal(14)] 
@@ -16,6 +15,10 @@ namespace WolvenKit.RED4.Types
 		public animAnimNode_GraphSlotConditions()
 		{
 			Conditions = new();
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

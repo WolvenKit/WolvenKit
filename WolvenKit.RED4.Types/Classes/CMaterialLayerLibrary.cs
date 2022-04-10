@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class CMaterialLayerLibrary : CResource
 	{
 		[Ordinal(1)] 
@@ -60,6 +59,10 @@ namespace WolvenKit.RED4.Types
 			MicroblendContrast = 1.000000F;
 			Layers = new();
 			Microblends = new();
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

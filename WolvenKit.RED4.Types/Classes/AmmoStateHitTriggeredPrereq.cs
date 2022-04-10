@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class AmmoStateHitTriggeredPrereq : HitTriggeredPrereq
 	{
 		[Ordinal(5)] 
@@ -12,5 +11,12 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CEnum<EMagazineAmmoState>>();
 			set => SetPropertyValue<CEnum<EMagazineAmmoState>>(value);
 		}
+
+		public AmmoStateHitTriggeredPrereq()
+		{
+			PostConstruct();
+		}
+
+		partial void PostConstruct();
 	}
 }

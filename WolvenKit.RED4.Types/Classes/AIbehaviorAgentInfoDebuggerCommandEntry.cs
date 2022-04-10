@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class AIbehaviorAgentInfoDebuggerCommandEntry : RedBaseClass
 	{
 		[Ordinal(0)] 
@@ -24,6 +23,10 @@ namespace WolvenKit.RED4.Types
 		public AIbehaviorAgentInfoDebuggerCommandEntry()
 		{
 			CallStack = new() { ResourceHashes = new() };
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

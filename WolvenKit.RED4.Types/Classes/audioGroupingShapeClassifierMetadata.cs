@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class audioGroupingShapeClassifierMetadata : audioAudioMetadata
 	{
 		[Ordinal(1)] 
@@ -81,6 +80,10 @@ namespace WolvenKit.RED4.Types
 		{
 			MinDistanceLimit = "near";
 			MaxDistanceLimit = "infinite";
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

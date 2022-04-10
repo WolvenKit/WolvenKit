@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class gameTargetingLocalizedEffectComponent : entIComponent
 	{
 		[Ordinal(3)] 
@@ -26,6 +25,10 @@ namespace WolvenKit.RED4.Types
 			Name = "Component";
 			StreamingDistance = 50.000000F;
 			VisibleTargetRange = -1.000000F;
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

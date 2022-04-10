@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class questLogV2GameController : gameuiMenuGameController
 	{
 		[Ordinal(3)] 
@@ -242,6 +241,10 @@ namespace WolvenKit.RED4.Types
 			CodexLibraryPath = new();
 			ObjectiveItems = new();
 			QuestLists = new();
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

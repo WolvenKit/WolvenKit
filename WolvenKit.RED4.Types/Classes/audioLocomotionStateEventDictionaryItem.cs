@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class audioLocomotionStateEventDictionaryItem : audioInlinedAudioMetadata
 	{
 		[Ordinal(1)] 
@@ -20,5 +19,12 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CName>();
 			set => SetPropertyValue<CName>(value);
 		}
+
+		public audioLocomotionStateEventDictionaryItem()
+		{
+			PostConstruct();
+		}
+
+		partial void PostConstruct();
 	}
 }

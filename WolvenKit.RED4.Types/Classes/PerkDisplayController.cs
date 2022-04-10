@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class PerkDisplayController : inkButtonController
 	{
 		[Ordinal(10)] 
@@ -132,6 +131,10 @@ namespace WolvenKit.RED4.Types
 			FluffText = new();
 			RequiredTrainerIcon = new();
 			RequiredPointsText = new();
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

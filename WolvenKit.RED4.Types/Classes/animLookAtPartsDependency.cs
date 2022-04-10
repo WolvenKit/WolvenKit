@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class animLookAtPartsDependency : RedBaseClass
 	{
 		[Ordinal(0)] 
@@ -109,6 +108,10 @@ namespace WolvenKit.RED4.Types
 			HorizontalPullSpeedFactor = 1.000000F;
 			PullScaleBySquareSizeFactor = 1.000000F;
 			InnerSquareScale = 0.500000F;
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

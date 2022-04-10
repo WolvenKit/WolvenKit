@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class animAnimNode_Inertialization : animAnimNode_OnePoseInput
 	{
 		[Ordinal(12)] 
@@ -45,6 +44,10 @@ namespace WolvenKit.RED4.Types
 			TransformsCountUpperBound = 94;
 			TracksCountUpperBound = 37;
 			RotationLimits = new();
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

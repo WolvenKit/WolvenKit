@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class FUNC_TEST_inkGameController : gameuiWidgetGameController
 	{
 		[Ordinal(2)] 
@@ -142,6 +141,10 @@ namespace WolvenKit.RED4.Types
 			Shape = new();
 			BasicInputFields = new();
 			AdditionalFields = new() { BasePanel = new(), Compound = new(), Leaf = new(), Widget = new() };
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }
