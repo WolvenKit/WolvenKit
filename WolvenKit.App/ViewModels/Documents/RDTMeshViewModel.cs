@@ -190,7 +190,6 @@ namespace WolvenKit.ViewModels.Documents
         public ViewModelActivator Activator { get; } = new();
 
         protected readonly RedBaseClass _data;
-        public RedDocumentViewModel File;
         private Dictionary<string, LoadableModel> _modelList = new();
         private Dictionary<string, SlotSet> _slotSets = new();
 
@@ -396,14 +395,19 @@ namespace WolvenKit.ViewModels.Documents
 
         public GroupModel3D GroupFromModel(LoadableModel model)
         {
-            var group = new MeshComponent()
+            var group = new MeshComponent();
+            try
             {
-                Name = !string.IsNullOrEmpty(model.Name) && char.IsDigit(model.Name[0]) ? $"_{model.Name}" : $"{model.Name}",
-                AppearanceName = model.AppearanceName,
-                Transform = model.Transform,
-                IsRendering = model.IsEnabled,
-                DepotPath = model.DepotPath
-            };
+                group.Name = char.IsDigit(model.Name[0]) ? $"_{model.Name}" : $"{model.Name}";
+                group.AppearanceName = model.AppearanceName;
+                group.Transform = model.Transform;
+                group.IsRendering = model.IsEnabled;
+                group.DepotPath = model.DepotPath;
+            }
+            catch(Exception ex)
+            {
+                Console.Write(ex);
+            }
 
             foreach (var mesh in model.Meshes)
             {
