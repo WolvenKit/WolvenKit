@@ -356,7 +356,7 @@ namespace WolvenKit.Functionality.Controllers
             // compile tweak files
             CompileTweakFiles(cp77Proj);
 
-            DeploySoundFiles();     
+            DeploySoundFiles();
 
             var activeMod = _projectManager.ActiveProject;
 
@@ -407,6 +407,12 @@ namespace WolvenKit.Functionality.Controllers
             var files = new List<string>();
             try
             {
+                // clean packed sounds dir
+                foreach (var f in Directory.GetFiles(modProj.PackedSoundsDirectory))
+                {
+                    File.Delete(f);
+                }
+
                 var options = new JsonSerializerOptions
                 {
                     WriteIndented = true,
@@ -420,6 +426,13 @@ namespace WolvenKit.Functionality.Controllers
                     if (!string.IsNullOrEmpty(e.File))
                     {
                         files.Add(e.File);
+
+                        var rawFile = Path.Combine(modProj.SoundDirectory, e.File);
+                        var packedFile = Path.Combine(modProj.PackedSoundsDirectory, e.File);
+                        if (File.Exists(rawFile))
+                        {
+                            File.Copy(rawFile, packedFile, true);
+                        }
                     }
                 }
             }
