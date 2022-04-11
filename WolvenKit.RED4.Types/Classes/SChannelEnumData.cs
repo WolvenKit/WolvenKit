@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class SChannelEnumData : RedBaseClass
 	{
 		[Ordinal(0)] 
@@ -12,5 +11,12 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CEnum<ETVChannel>>();
 			set => SetPropertyValue<CEnum<ETVChannel>>(value);
 		}
+
+		public SChannelEnumData()
+		{
+			PostConstruct();
+		}
+
+		partial void PostConstruct();
 	}
 }

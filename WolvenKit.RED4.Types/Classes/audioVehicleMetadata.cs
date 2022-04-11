@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class audioVehicleMetadata : audioCustomEmitterMetadata
 	{
 		[Ordinal(1)] 
@@ -202,6 +201,10 @@ namespace WolvenKit.RED4.Types
 			RadioReceiverType = "radio_car";
 			MatchingStartupRadioStations = new();
 			RadioPlaysWhenEngineStartsProbability = 0.300000F;
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class gameuiHackingMinigameLogicController : inkWidgetLogicController
 	{
 		[Ordinal(1)] 
@@ -520,6 +519,10 @@ namespace WolvenKit.RED4.Types
 			SuccessExitButton = new();
 			FailureExitButton = new();
 			ResetButton = new();
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

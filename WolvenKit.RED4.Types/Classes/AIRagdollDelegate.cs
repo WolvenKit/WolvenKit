@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class AIRagdollDelegate : AIbehaviorScriptBehaviorDelegate
 	{
 		[Ordinal(0)] 
@@ -48,6 +47,10 @@ namespace WolvenKit.RED4.Types
 		public AIRagdollDelegate()
 		{
 			ClosestNavmeshPoint = new();
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

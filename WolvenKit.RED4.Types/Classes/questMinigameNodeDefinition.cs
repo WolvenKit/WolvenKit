@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class questMinigameNodeDefinition : questSignalStoppingNodeDefinition
 	{
 		[Ordinal(2)] 
@@ -35,6 +34,10 @@ namespace WolvenKit.RED4.Types
 			Id = 65535;
 			Start = true;
 			NetworkRef = new() { Names = new() };
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

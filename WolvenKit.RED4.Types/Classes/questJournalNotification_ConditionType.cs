@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class questJournalNotification_ConditionType : questIUIConditionType
 	{
 		[Ordinal(0)] 
@@ -12,5 +11,12 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CHandle<gameJournalPath>>();
 			set => SetPropertyValue<CHandle<gameJournalPath>>(value);
 		}
+
+		public questJournalNotification_ConditionType()
+		{
+			PostConstruct();
+		}
+
+		partial void PostConstruct();
 	}
 }

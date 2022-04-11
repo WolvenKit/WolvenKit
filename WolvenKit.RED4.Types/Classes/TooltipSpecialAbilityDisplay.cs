@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class TooltipSpecialAbilityDisplay : inkWidgetLogicController
 	{
 		[Ordinal(1)] 
@@ -34,6 +33,10 @@ namespace WolvenKit.RED4.Types
 			AbilityIcon = new();
 			AbilityDescription = new();
 			QualityRoot = new();
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

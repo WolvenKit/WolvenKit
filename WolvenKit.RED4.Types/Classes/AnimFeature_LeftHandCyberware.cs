@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class AnimFeature_LeftHandCyberware : animAnimFeature
 	{
 		[Ordinal(0)] 
@@ -60,5 +59,12 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CBool>();
 			set => SetPropertyValue<CBool>(value);
 		}
+
+		public AnimFeature_LeftHandCyberware()
+		{
+			PostConstruct();
+		}
+
+		partial void PostConstruct();
 	}
 }

@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class CPOMissionDataTransferred : redEvent
 	{
 		[Ordinal(0)] 
@@ -56,6 +55,10 @@ namespace WolvenKit.RED4.Types
 		public CPOMissionDataTransferred()
 		{
 			DataDamagesPresetName = "CPODataRaceParams";
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

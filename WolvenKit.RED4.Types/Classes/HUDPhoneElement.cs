@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class HUDPhoneElement : inkWidgetLogicController
 	{
 		[Ordinal(1)] 
@@ -12,5 +11,12 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CWeakHandle<inkWidget>>();
 			set => SetPropertyValue<CWeakHandle<inkWidget>>(value);
 		}
+
+		public HUDPhoneElement()
+		{
+			PostConstruct();
+		}
+
+		partial void PostConstruct();
 	}
 }

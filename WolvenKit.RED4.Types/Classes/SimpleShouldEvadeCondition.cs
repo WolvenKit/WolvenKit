@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class SimpleShouldEvadeCondition : AIbehaviorconditionScript
 	{
 		[Ordinal(0)] 
@@ -12,5 +11,12 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CHandle<HitReactionComponent>>();
 			set => SetPropertyValue<CHandle<HitReactionComponent>>(value);
 		}
+
+		public SimpleShouldEvadeCondition()
+		{
+			PostConstruct();
+		}
+
+		partial void PostConstruct();
 	}
 }

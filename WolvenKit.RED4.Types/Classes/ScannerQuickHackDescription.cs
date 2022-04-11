@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class ScannerQuickHackDescription : ScannerChunk
 	{
 		[Ordinal(0)] 
@@ -12,5 +11,12 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CHandle<QuickhackData>>();
 			set => SetPropertyValue<CHandle<QuickhackData>>(value);
 		}
+
+		public ScannerQuickHackDescription()
+		{
+			PostConstruct();
+		}
+
+		partial void PostConstruct();
 	}
 }

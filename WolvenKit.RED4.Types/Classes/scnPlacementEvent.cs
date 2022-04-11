@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class scnPlacementEvent : scnSceneEvent
 	{
 		[Ordinal(6)] 
@@ -26,6 +25,10 @@ namespace WolvenKit.RED4.Types
 			Id = new() { Id = 18446744073709551615 };
 			ActorId = new() { Id = 4294967295 };
 			TargetWaypoint = new() { Type = Enums.scnMarkerType.Global, EntityRef = new() { Names = new() }, IsMounted = true };
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

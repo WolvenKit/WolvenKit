@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class questEntityManagerChangeAppearance_NodeType : questIEntityManager_NodeType
 	{
 		[Ordinal(0)] 
@@ -32,6 +31,10 @@ namespace WolvenKit.RED4.Types
 		public questEntityManagerChangeAppearance_NodeType()
 		{
 			EntityRef = new() { Names = new() };
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

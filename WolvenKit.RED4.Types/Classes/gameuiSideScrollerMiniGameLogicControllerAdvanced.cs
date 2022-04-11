@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class gameuiSideScrollerMiniGameLogicControllerAdvanced : inkWidgetLogicController
 	{
 		[Ordinal(1)] 
@@ -68,5 +67,12 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CArray<CName>>();
 			set => SetPropertyValue<CArray<CName>>(value);
 		}
+
+		public gameuiSideScrollerMiniGameLogicControllerAdvanced()
+		{
+			PostConstruct();
+		}
+
+		partial void PostConstruct();
 	}
 }

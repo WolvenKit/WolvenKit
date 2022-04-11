@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class gameuiHackingMinigameGameController : gameuiWidgetGameController
 	{
 		[Ordinal(2)] 
@@ -144,6 +143,10 @@ namespace WolvenKit.RED4.Types
 		public gameuiHackingMinigameGameController()
 		{
 			TooltipsManagerRef = new();
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

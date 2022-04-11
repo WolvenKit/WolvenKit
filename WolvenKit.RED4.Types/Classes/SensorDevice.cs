@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class SensorDevice : ExplosiveDevice
 	{
 		[Ordinal(117)] 
@@ -603,6 +602,10 @@ namespace WolvenKit.RED4.Types
 			PlayerControlData = new();
 			MinPitch = -70.000000F;
 			MaxPitch = 70.000000F;
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

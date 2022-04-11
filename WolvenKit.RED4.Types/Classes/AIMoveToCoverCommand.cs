@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class AIMoveToCoverCommand : AIMoveCommand
 	{
 		[Ordinal(7)] 
@@ -20,5 +19,12 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CEnum<ECoverSpecialAction>>();
 			set => SetPropertyValue<CEnum<ECoverSpecialAction>>(value);
 		}
+
+		public AIMoveToCoverCommand()
+		{
+			PostConstruct();
+		}
+
+		partial void PostConstruct();
 	}
 }

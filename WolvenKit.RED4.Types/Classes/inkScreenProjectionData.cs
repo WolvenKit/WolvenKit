@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class inkScreenProjectionData : RedBaseClass
 	{
 		[Ordinal(0)] 
@@ -65,6 +64,10 @@ namespace WolvenKit.RED4.Types
 		{
 			StaticWorldPosition = new();
 			FixedWorldOffset = new();
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

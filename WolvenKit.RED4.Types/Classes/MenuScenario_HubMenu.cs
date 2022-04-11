@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class MenuScenario_HubMenu : MenuScenario_BaseMenu
 	{
 		[Ordinal(4)] 
@@ -28,5 +27,12 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CUInt32>();
 			set => SetPropertyValue<CUInt32>(value);
 		}
+
+		public MenuScenario_HubMenu()
+		{
+			PostConstruct();
+		}
+
+		partial void PostConstruct();
 	}
 }

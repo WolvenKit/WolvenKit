@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class effectTrackItemChromaticAberration : effectTrackItem
 	{
 		[Ordinal(3)] 
@@ -34,6 +33,10 @@ namespace WolvenKit.RED4.Types
 			TimeDuration = 1.000000F;
 			ChromaticAberrationOffset = new();
 			ChromaticAberrationExp = new();
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class animAnimNode_FloatValueDebugProvider : RedBaseClass
 	{
 		[Ordinal(0)] 
@@ -66,6 +65,10 @@ namespace WolvenKit.RED4.Types
 			Max = 1.000000F;
 			Progress = 1.000000F;
 			Speed = 1.000000F;
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

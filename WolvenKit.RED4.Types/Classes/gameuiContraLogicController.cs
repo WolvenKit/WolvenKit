@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class gameuiContraLogicController : gameuiSideScrollerMiniGameLogicControllerAdvanced
 	{
 		[Ordinal(9)] 
@@ -246,6 +245,10 @@ namespace WolvenKit.RED4.Types
 			MoveXAxis = "left_stick_x";
 			MoveYAxis = "left_stick_y";
 			ShootTriggerName = "right_trigger";
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

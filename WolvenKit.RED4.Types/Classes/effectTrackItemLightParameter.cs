@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class effectTrackItemLightParameter : effectTrackItem
 	{
 		[Ordinal(3)] 
@@ -44,6 +43,10 @@ namespace WolvenKit.RED4.Types
 			IntensityMultiplier = new();
 			Intensity = new();
 			Radius = new();
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

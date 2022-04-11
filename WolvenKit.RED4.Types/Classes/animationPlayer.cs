@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class animationPlayer : inkWidgetLogicController
 	{
 		[Ordinal(1)] 
@@ -84,6 +83,10 @@ namespace WolvenKit.RED4.Types
 			LoopsAmount = 1;
 			AnimTarget = new();
 			AutoPlay = true;
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

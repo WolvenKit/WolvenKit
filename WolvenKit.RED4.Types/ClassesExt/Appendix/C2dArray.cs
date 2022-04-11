@@ -4,7 +4,7 @@ using WolvenKit.RED4.IO;
 
 namespace WolvenKit.RED4.Types
 {
-    public partial class C2dArray : IRedAppendix, IRedOverload
+    public partial class C2dArray : IRedAppendix
     {
         [RED("compiledHeaders")]
         [REDProperty(IsIgnored = true)]
@@ -64,7 +64,7 @@ namespace WolvenKit.RED4.Types
             }
         }
 
-        void IRedOverload.ConstructorOverload()
+        partial void PostConstruct()
         {
             CompiledHeaders = new CArray<CString>();
             CompiledData = new CArray<CArray<CString>>();

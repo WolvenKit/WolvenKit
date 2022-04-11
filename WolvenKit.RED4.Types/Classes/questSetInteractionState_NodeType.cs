@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class questSetInteractionState_NodeType : questIInteractiveObjectManagerNodeType
 	{
 		[Ordinal(0)] 
@@ -24,6 +23,10 @@ namespace WolvenKit.RED4.Types
 		public questSetInteractionState_NodeType()
 		{
 			Enable = true;
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

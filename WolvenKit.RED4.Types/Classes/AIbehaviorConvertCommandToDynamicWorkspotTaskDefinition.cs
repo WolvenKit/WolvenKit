@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class AIbehaviorConvertCommandToDynamicWorkspotTaskDefinition : AIbehaviorTaskDefinition
 	{
 		[Ordinal(1)] 
@@ -20,5 +19,12 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CHandle<AIArgumentMapping>>();
 			set => SetPropertyValue<CHandle<AIArgumentMapping>>(value);
 		}
+
+		public AIbehaviorConvertCommandToDynamicWorkspotTaskDefinition()
+		{
+			PostConstruct();
+		}
+
+		partial void PostConstruct();
 	}
 }

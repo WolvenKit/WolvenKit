@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class scnPlayAnimEventData : RedBaseClass
 	{
 		[Ordinal(0)] 
@@ -57,6 +56,10 @@ namespace WolvenKit.RED4.Types
 		{
 			Stretch = 1.000000F;
 			Weight = 1.000000F;
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class vehicleAnimFeature_VehicleProceduralCamera : animAnimFeature
 	{
 		[Ordinal(0)] 
@@ -33,6 +32,10 @@ namespace WolvenKit.RED4.Types
 		{
 			CameraTranslationVS = new();
 			CameraOrientationVS = new() { R = 1.000000F };
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

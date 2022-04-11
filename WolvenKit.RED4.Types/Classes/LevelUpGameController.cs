@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class LevelUpGameController : gameuiHUDGameController
 	{
 		[Ordinal(9)] 
@@ -41,6 +40,10 @@ namespace WolvenKit.RED4.Types
 		{
 			Value = new();
 			ProficencyLabel = new();
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

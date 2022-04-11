@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class gameHudActor : IScriptable
 	{
 		[Ordinal(0)] 
@@ -115,6 +114,10 @@ namespace WolvenKit.RED4.Types
 			ActiveModules = new();
 			ClueData = new();
 			ShouldRefreshQHack = true;
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

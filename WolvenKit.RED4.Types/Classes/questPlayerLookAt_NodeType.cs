@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class questPlayerLookAt_NodeType : questISceneManagerNodeType
 	{
 		[Ordinal(0)] 
@@ -132,6 +131,10 @@ namespace WolvenKit.RED4.Types
 			MaxDuration = 2.000000F;
 			EaseIn = true;
 			EaseOut = true;
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class rendRenderMorphTargetMeshBlobTextureData : RedBaseClass
 	{
 		[Ordinal(0)] 
@@ -61,6 +60,10 @@ namespace WolvenKit.RED4.Types
 			TargetDiffsDataSize = new(3);
 			TargetDiffsWidth = new(3);
 			TargetDiffsMipLevelCounts = new(3);
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class HDRSettingsVarListener : userSettingsVarListener
 	{
 		[Ordinal(0)] 
@@ -12,5 +11,12 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CWeakHandle<gameuiHDRSettingsGameController>>();
 			set => SetPropertyValue<CWeakHandle<gameuiHDRSettingsGameController>>(value);
 		}
+
+		public HDRSettingsVarListener()
+		{
+			PostConstruct();
+		}
+
+		partial void PostConstruct();
 	}
 }

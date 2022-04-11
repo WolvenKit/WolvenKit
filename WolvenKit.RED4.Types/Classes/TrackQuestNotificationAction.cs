@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class TrackQuestNotificationAction : GenericNotificationBaseAction
 	{
 		[Ordinal(0)] 
@@ -20,5 +19,12 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CWeakHandle<gameJournalManager>>();
 			set => SetPropertyValue<CWeakHandle<gameJournalManager>>(value);
 		}
+
+		public TrackQuestNotificationAction()
+		{
+			PostConstruct();
+		}
+
+		partial void PostConstruct();
 	}
 }

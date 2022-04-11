@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class physicsclothExportedCapsule : RedBaseClass
 	{
 		[Ordinal(0)] 
@@ -49,6 +48,10 @@ namespace WolvenKit.RED4.Types
 		{
 			P0 = new();
 			P1 = new();
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

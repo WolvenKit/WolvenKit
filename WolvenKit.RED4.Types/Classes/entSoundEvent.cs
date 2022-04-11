@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class entSoundEvent : redEvent
 	{
 		[Ordinal(0)] 
@@ -42,6 +41,10 @@ namespace WolvenKit.RED4.Types
 			Switches = new();
 			Params = new();
 			DynamicParams = new();
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

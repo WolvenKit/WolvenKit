@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class QuestListGameController : gameuiHUDGameController
 	{
 		[Ordinal(9)] 
@@ -133,6 +132,10 @@ namespace WolvenKit.RED4.Types
 			ToDoHeader = new();
 			OptionalList = new();
 			NonOptionalList = new();
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

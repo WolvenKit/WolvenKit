@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class ChaosWeaponCustomEffector : gameEffector
 	{
 		[Ordinal(0)] 
@@ -49,6 +48,10 @@ namespace WolvenKit.RED4.Types
 		{
 			EffectorOwnerID = new();
 			Target = new() { IdType = Enums.gameStatIDType.Invalid };
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

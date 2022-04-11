@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class worldOffMeshConnectionNode : worldSplineNode
 	{
 		[Ordinal(9)] 
@@ -41,6 +40,10 @@ namespace WolvenKit.RED4.Types
 		{
 			Radius = 1.000000F;
 			Tags = new();
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

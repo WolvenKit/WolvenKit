@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class ReserveWorkSpotTask : WorkSpotTask
 	{
 		[Ordinal(0)] 
@@ -20,5 +19,12 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CWeakHandle<gameObject>>();
 			set => SetPropertyValue<CWeakHandle<gameObject>>(value);
 		}
+
+		public ReserveWorkSpotTask()
+		{
+			PostConstruct();
+		}
+
+		partial void PostConstruct();
 	}
 }

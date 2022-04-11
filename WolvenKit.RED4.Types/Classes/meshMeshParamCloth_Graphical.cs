@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class meshMeshParamCloth_Graphical : meshMeshParameter
 	{
 		[Ordinal(0)] 
@@ -34,6 +33,10 @@ namespace WolvenKit.RED4.Types
 			LodChunkIndices = new();
 			Chunks = new();
 			Latchers = new();
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

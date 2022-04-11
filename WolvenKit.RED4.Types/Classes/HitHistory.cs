@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class HitHistory : IScriptable
 	{
 		[Ordinal(0)] 
@@ -25,6 +24,10 @@ namespace WolvenKit.RED4.Types
 		{
 			HitHistory_ = new();
 			MaxEntries = 5;
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

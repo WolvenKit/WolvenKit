@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class VendorComponent : gameScriptableComponent
 	{
 		[Ordinal(5)] 
@@ -42,6 +41,10 @@ namespace WolvenKit.RED4.Types
 			JunkItemArray = new();
 			BrandProcessingSFX = "dev_vending_machine_processing";
 			ItemFallSFX = "dev_vending_machine_can_falls";
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

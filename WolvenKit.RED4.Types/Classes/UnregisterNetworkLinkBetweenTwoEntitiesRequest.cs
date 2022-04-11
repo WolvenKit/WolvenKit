@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class UnregisterNetworkLinkBetweenTwoEntitiesRequest : gameScriptableSystemRequest
 	{
 		[Ordinal(0)] 
@@ -33,6 +32,10 @@ namespace WolvenKit.RED4.Types
 		{
 			FirstID = new();
 			SecondID = new();
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

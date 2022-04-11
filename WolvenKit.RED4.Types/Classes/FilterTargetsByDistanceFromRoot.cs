@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class FilterTargetsByDistanceFromRoot : gameEffectObjectSingleFilter_Scripted
 	{
 		[Ordinal(0)] 
@@ -25,6 +24,10 @@ namespace WolvenKit.RED4.Types
 		{
 			RootOffset_Z = 1.000000F;
 			Tollerance = 0.500000F;
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

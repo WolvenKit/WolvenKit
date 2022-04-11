@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class AIbehaviorMovementPolicyTaskItemDefinition : ISerializable
 	{
 		[Ordinal(0)] 
@@ -24,6 +23,10 @@ namespace WolvenKit.RED4.Types
 		public AIbehaviorMovementPolicyTaskItemDefinition()
 		{
 			Params = new(1);
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class questProximityProgressBar_NodeType : questIUIManagerNodeType
 	{
 		[Ordinal(0)] 
@@ -79,6 +78,10 @@ namespace WolvenKit.RED4.Types
 			Target = new() { Names = new() };
 			IsPlayerActivator = true;
 			Activator = new() { Names = new() };
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

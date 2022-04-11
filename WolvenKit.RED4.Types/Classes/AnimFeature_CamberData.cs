@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class AnimFeature_CamberData : animAnimFeatureMarkUnstable
 	{
 		[Ordinal(0)] 
@@ -75,6 +74,10 @@ namespace WolvenKit.RED4.Types
 			LeftFrontCamberOffset = new();
 			RightBackCamberOffset = new();
 			LeftBackCamberOffset = new();
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

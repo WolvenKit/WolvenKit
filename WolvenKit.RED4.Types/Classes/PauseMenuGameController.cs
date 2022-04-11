@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class PauseMenuGameController : gameuiMenuItemListGameController
 	{
 		[Ordinal(6)] 
@@ -49,6 +48,10 @@ namespace WolvenKit.RED4.Types
 		{
 			ButtonHintsManagerRef = new();
 			GameInstance = new();
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

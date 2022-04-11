@@ -1,10 +1,8 @@
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class gamePlayerPuppetReplicatedState : gamePuppetReplicatedState
 	{
-
 		public gamePlayerPuppetReplicatedState()
 		{
 			InitialOrientation = new();
@@ -15,6 +13,10 @@ namespace WolvenKit.RED4.Types
 			CPOMissionVotedHistory = new();
 			AnimEventsState = new() { Items = new(), LastAppliedActionsTime = new() };
 			EntityEventsState = new() { Items = new(), LastAppliedActionsTime = new() };
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

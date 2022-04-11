@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class questCharacterGender_CondtionType : questICharacterConditionType
 	{
 		[Ordinal(0)] 
@@ -33,6 +32,10 @@ namespace WolvenKit.RED4.Types
 		{
 			ObjectRef = new() { Names = new() };
 			Gender = "Female";
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

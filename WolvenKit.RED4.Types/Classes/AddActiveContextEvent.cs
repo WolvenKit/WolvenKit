@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class AddActiveContextEvent : redEvent
 	{
 		[Ordinal(0)] 
@@ -12,5 +11,12 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CEnum<gamedeviceRequestType>>();
 			set => SetPropertyValue<CEnum<gamedeviceRequestType>>(value);
 		}
+
+		public AddActiveContextEvent()
+		{
+			PostConstruct();
+		}
+
+		partial void PostConstruct();
 	}
 }

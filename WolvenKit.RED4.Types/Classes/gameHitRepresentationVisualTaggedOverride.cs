@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class gameHitRepresentationVisualTaggedOverride : ISerializable
 	{
 		[Ordinal(0)] 
@@ -25,6 +24,10 @@ namespace WolvenKit.RED4.Types
 		{
 			VisualTags = new() { Tags = new() };
 			RepresenationOverride = new() { Color = new(), PhysicsMaterial = new() };
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

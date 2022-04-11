@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class FxResourceMapperComponent : gameScriptableComponent
 	{
 		[Ordinal(5)] 
@@ -68,6 +67,10 @@ namespace WolvenKit.RED4.Types
 			AreaEffectData = new();
 			InvestigationSlotOffsetMultiplier = 1.000000F;
 			AreaEffectInFocusMode = new();
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

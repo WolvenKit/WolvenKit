@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class NamedTooltipController : IScriptable
 	{
 		[Ordinal(0)] 
@@ -20,5 +19,12 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CWeakHandle<AGenericTooltipController>>();
 			set => SetPropertyValue<CWeakHandle<AGenericTooltipController>>(value);
 		}
+
+		public NamedTooltipController()
+		{
+			PostConstruct();
+		}
+
+		partial void PostConstruct();
 	}
 }

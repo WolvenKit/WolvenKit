@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class EquipmentChangeTaskData : gameScriptTaskData
 	{
 		[Ordinal(0)] 
@@ -16,6 +15,10 @@ namespace WolvenKit.RED4.Types
 		public EquipmentChangeTaskData()
 		{
 			EqData = new() { EquipArea = new() { AreaType = Enums.gamedataEquipmentArea.Invalid, EquipSlots = new() } };
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

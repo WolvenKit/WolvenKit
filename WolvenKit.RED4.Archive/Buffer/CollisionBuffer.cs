@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using WolvenKit.RED4.Types;
+using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Archive.Buffer
 {
@@ -11,13 +12,17 @@ namespace WolvenKit.RED4.Archive.Buffer
     {
         public IRedType Data => null;
 
-        public List<CollisionActor> Actors = new();
+        public CArray<CollisionActor> Actors { get; set; } = new();
 
-        public List<CollisionShape> Shapes = new();
+        public CArray<CollisionShape> Shapes { get; set; } = new();
 
-        public List<ulong> Materials = new();
+        public CArray<CUInt64> Materials { get; set; } = new();
 
-        public List<ulong> Presets = new();
+        public CArray<CUInt64> Presets { get; set; } = new();
+
+        public CArray<CUInt32> ShapeIndices { get; set; } = new();
+
+        public CArray<CUInt8> MaterialIndices { get; set; } = new();
 
         public CollisionBuffer()
         {
@@ -25,26 +30,29 @@ namespace WolvenKit.RED4.Archive.Buffer
         }
     }
 
-    public class CollisionActor
+    public class CollisionActor : IRedType
     {
-        public WorldPosition Position;
-        public Quaternion Orientation;
-        public ushort Shape;
-        public short Uk1;
-        public short Uk2;
-        public short Uk3;
-        public ulong Uk4;
+        public WorldPosition Position { get; set; } = new();
+        public Quaternion Orientation { get; set; } = new();
+        public CUInt16 ShapeIndexStart {  get; set; }
+        public CUInt16 NumShapes { get; set; }
+        public CArray<CollisionShape> Shapes { get; set; } = new();
+        public Vector3 Scale { get; set; } = new();
+        public CInt16 Uk1 { get; set; }
+        public CUInt64 Uk2 { get; set; }
     }
 
-    public class CollisionShape
+    public class CollisionShape : IRedType
     {
-        public ulong Hash;
-        public Vector3 Scale;
-        public uint Unk1;
-        public ushort Index;
-        public ushort Uk2;
-        public Vector3 Position;
-        public ulong Preset;
-        public ulong Material;
+        public physicsShapeType ShapeType { get; set; }
+        public Vector3 Size { get; set; } = new();
+        public CUInt64 Hash { get; set; }
+        public CUInt16 Index { get; set; }
+        public Vector3 Position { get; set; } = new();
+        public Quaternion Rotation { get; set; } = new();
+        public CUInt64 Preset { get; set; }
+        public physicsProxyType ProxyType { get; set; }
+        public CUInt64 Material { get; set; }
+        public CArray<IRedType> Uks { get; set; } = new();
     }
 }

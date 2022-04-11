@@ -1301,6 +1301,7 @@ namespace WolvenKit.ViewModels.Shell
                     if (prop != null)
                     {
                         Descriptor = irc.GetProperty(prop.RedName).ToString();
+                        return;
                     }
                 }
             }
@@ -1314,6 +1315,7 @@ namespace WolvenKit.ViewModels.Shell
                         if (prop != null)
                         {
                             Descriptor = prop.GetValue(Data).ToString();
+                            return;
                         }
                     }
                 }

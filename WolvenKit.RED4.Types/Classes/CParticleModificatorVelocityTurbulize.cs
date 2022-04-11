@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class CParticleModificatorVelocityTurbulize : IParticleModificator
 	{
 		[Ordinal(4)] 
@@ -53,6 +52,10 @@ namespace WolvenKit.RED4.Types
 			NoiseInterval = 1.000000F;
 			Duration = 1.000000F;
 			WorldSpace = true;
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

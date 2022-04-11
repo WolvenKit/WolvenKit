@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class worldTrafficSplineNode : worldTrafficSourceNode
 	{
 		[Ordinal(9)] 
@@ -111,6 +110,10 @@ namespace WolvenKit.RED4.Types
 			OutLanes = new();
 			Lights = new();
 			LaneSamplingAngle = 15.000000F;
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

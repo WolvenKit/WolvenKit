@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class inkTypographyResource : CResource
 	{
 		[Ordinal(1)] 
@@ -16,6 +15,10 @@ namespace WolvenKit.RED4.Types
 		public inkTypographyResource()
 		{
 			Languages = new() { new() { LanguageCode = "en-us", IsoScriptCode = "Latn", Fonts = new() { new() } } };
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

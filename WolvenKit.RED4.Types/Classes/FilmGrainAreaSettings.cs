@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class FilmGrainAreaSettings : IAreaSettings
 	{
 		[Ordinal(2)] 
@@ -41,6 +40,10 @@ namespace WolvenKit.RED4.Types
 		{
 			Enable = true;
 			GrainSize = new() { X = 0.500000F, Y = 0.500000F, Z = 0.500000F };
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

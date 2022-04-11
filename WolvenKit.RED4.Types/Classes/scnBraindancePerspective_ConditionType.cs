@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class scnBraindancePerspective_ConditionType : scnIBraindanceConditionType
 	{
 		[Ordinal(0)] 
@@ -28,5 +27,12 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CEnum<scnSceneVersionCheck>>();
 			set => SetPropertyValue<CEnum<scnSceneVersionCheck>>(value);
 		}
+
+		public scnBraindancePerspective_ConditionType()
+		{
+			PostConstruct();
+		}
+
+		partial void PostConstruct();
 	}
 }

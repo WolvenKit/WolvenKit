@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class JukeboxControllerPS : ScriptableDeviceComponentPS
 	{
 		[Ordinal(104)] 
@@ -45,6 +44,10 @@ namespace WolvenKit.RED4.Types
 			JukeboxSetup = new();
 			Stations = new();
 			IsPlaying = true;
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

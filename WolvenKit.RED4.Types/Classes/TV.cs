@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class TV : InteractiveDevice
 	{
 		[Ordinal(94)] 
@@ -33,6 +32,10 @@ namespace WolvenKit.RED4.Types
 		{
 			ControllerTypeName = "TVController";
 			ShortGlitchDelayID = new();
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

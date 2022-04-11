@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class VehicleRadioPopupGameController : BaseModalListPopupGameController
 	{
 		[Ordinal(13)] 
@@ -90,6 +89,10 @@ namespace WolvenKit.RED4.Types
 			Icon = new();
 			ScrollArea = new();
 			ScrollControllerWidget = new();
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class gamestateMachineTransitionDefinition : graphGraphConnectionDefinition
 	{
 		[Ordinal(2)] 
@@ -12,5 +11,12 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CFloat>();
 			set => SetPropertyValue<CFloat>(value);
 		}
+
+		public gamestateMachineTransitionDefinition()
+		{
+			PostConstruct();
+		}
+
+		partial void PostConstruct();
 	}
 }

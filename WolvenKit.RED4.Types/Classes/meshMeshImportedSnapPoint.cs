@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class meshMeshImportedSnapPoint : ISerializable
 	{
 		[Ordinal(0)] 
@@ -41,6 +40,10 @@ namespace WolvenKit.RED4.Types
 		{
 			LocalToCloud = new();
 			SnapTags = new() { IncludeTags = new(), ExcludeTags = new() };
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

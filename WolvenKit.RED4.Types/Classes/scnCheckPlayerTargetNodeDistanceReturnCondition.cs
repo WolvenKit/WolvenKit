@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class scnCheckPlayerTargetNodeDistanceReturnCondition : scnIReturnCondition
 	{
 		[Ordinal(0)] 
@@ -16,6 +15,10 @@ namespace WolvenKit.RED4.Types
 		public scnCheckPlayerTargetNodeDistanceReturnCondition()
 		{
 			Params = new() { Distance = 5.000000F, ComparisonType = Enums.EComparisonType.Less };
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

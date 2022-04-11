@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class SubtitleLineLogicController : BaseSubtitleLineLogicController
 	{
 		[Ordinal(5)] 
@@ -105,6 +104,10 @@ namespace WolvenKit.RED4.Types
 			MotherTongueContainter = new();
 			TargetTextWidgetRef = new();
 			LineData = new();
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

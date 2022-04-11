@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class CodexPopupGameController : gameuiWidgetGameController
 	{
 		[Ordinal(2)] 
@@ -74,6 +73,10 @@ namespace WolvenKit.RED4.Types
 			EntryViewRef = new();
 			CharacterEntryViewRef = new();
 			ImageViewRef = new();
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

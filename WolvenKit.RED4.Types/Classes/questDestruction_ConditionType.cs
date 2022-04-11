@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class questDestruction_ConditionType : questIObjectConditionType
 	{
 		[Ordinal(0)] 
@@ -25,6 +24,10 @@ namespace WolvenKit.RED4.Types
 		{
 			ObjectRef = new() { Names = new() };
 			Threshold = 50.000000F;
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class worldQualitySetting : RedBaseClass
 	{
 		[Ordinal(0)] 
@@ -25,6 +24,10 @@ namespace WolvenKit.RED4.Types
 		{
 			QualityLevel = Enums.ConfigGraphicsQualityLevel.PlayStation4;
 			XEntitiesBudget = 50;
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

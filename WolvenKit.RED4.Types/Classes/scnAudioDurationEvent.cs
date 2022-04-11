@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class scnAudioDurationEvent : scnSceneEvent
 	{
 		[Ordinal(6)] 
@@ -34,6 +33,10 @@ namespace WolvenKit.RED4.Types
 			Id = new() { Id = 18446744073709551615 };
 			Performer = new() { Id = 4294967040 };
 			PlaybackDirectionSupport = Enums.scnAudioPlaybackDirectionSupportFlag.Forward;
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

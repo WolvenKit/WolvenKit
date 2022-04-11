@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class CharacterCreationTooltipData : MessageTooltipData
 	{
 		[Ordinal(4)] 
@@ -20,5 +19,12 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CString>();
 			set => SetPropertyValue<CString>(value);
 		}
+
+		public CharacterCreationTooltipData()
+		{
+			PostConstruct();
+		}
+
+		partial void PostConstruct();
 	}
 }

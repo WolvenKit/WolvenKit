@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class gameJournalOnscreen : gameJournalEntry
 	{
 		[Ordinal(1)] 
@@ -41,6 +40,10 @@ namespace WolvenKit.RED4.Types
 		{
 			Title = new() { Unk1 = 0, Value = "" };
 			Description = new() { Unk1 = 0, Value = "" };
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class AIbehaviorSelectCombatTargetTaskDefinition : AIbehaviorTaskDefinition
 	{
 		[Ordinal(1)] 
@@ -24,6 +23,10 @@ namespace WolvenKit.RED4.Types
 		public AIbehaviorSelectCombatTargetTaskDefinition()
 		{
 			TargetClosest = true;
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

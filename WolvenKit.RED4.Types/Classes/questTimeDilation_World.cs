@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class questTimeDilation_World : questTimeDilation_NodeTypeParam
 	{
 		[Ordinal(0)] 
@@ -20,5 +19,12 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CHandle<questTimeDilation_Operation>>();
 			set => SetPropertyValue<CHandle<questTimeDilation_Operation>>(value);
 		}
+
+		public questTimeDilation_World()
+		{
+			PostConstruct();
+		}
+
+		partial void PostConstruct();
 	}
 }

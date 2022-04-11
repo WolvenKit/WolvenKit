@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class animAnimNode_LocomotionMachine : animAnimNode_StateMachine
 	{
 		[Ordinal(19)] 
@@ -90,6 +89,10 @@ namespace WolvenKit.RED4.Types
 			UsePlanner = true;
 			TransitionTime = 0.200000F;
 			NumVariants = 1;
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

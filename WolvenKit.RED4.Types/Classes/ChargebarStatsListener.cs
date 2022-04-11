@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class ChargebarStatsListener : gameScriptStatsListener
 	{
 		[Ordinal(0)] 
@@ -12,5 +11,12 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CWeakHandle<ChargebarController>>();
 			set => SetPropertyValue<CWeakHandle<ChargebarController>>(value);
 		}
+
+		public ChargebarStatsListener()
+		{
+			PostConstruct();
+		}
+
+		partial void PostConstruct();
 	}
 }

@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class toolsJiraFixVersion : RedBaseClass
 	{
 		[Ordinal(0)] 
@@ -12,5 +11,12 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CString>();
 			set => SetPropertyValue<CString>(value);
 		}
+
+		public toolsJiraFixVersion()
+		{
+			PostConstruct();
+		}
+
+		partial void PostConstruct();
 	}
 }

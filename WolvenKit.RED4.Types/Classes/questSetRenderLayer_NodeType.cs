@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class questSetRenderLayer_NodeType : questIRenderFxManagerNodeType
 	{
 		[Ordinal(0)] 
@@ -12,5 +11,12 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CEnum<RenderSceneLayer>>();
 			set => SetPropertyValue<CEnum<RenderSceneLayer>>(value);
 		}
+
+		public questSetRenderLayer_NodeType()
+		{
+			PostConstruct();
+		}
+
+		partial void PostConstruct();
 	}
 }

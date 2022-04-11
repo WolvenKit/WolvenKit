@@ -1,6 +1,6 @@
 namespace WolvenKit.RED4.Types
 {
-    public partial class animAnimNode_Base : IRedOverload
+    public partial class animAnimNode_Base
     {
         [Ordinal(1)]
         [RED("debugName")]
@@ -90,7 +90,7 @@ namespace WolvenKit.RED4.Types
             set => SetPropertyValue<CBool>(value);
         }
 
-        void IRedOverload.ConstructorOverload()
+        partial void PostConstruct()
         {
             VisPrePoseColor = new();
             VisPostPoseColor = new();

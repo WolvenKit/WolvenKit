@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class PhoneMessageNotificationsGameController : gameuiWidgetGameController
 	{
 		[Ordinal(2)] 
@@ -75,6 +74,10 @@ namespace WolvenKit.RED4.Types
 			Title = new();
 			Text = new();
 			ActionText = new();
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

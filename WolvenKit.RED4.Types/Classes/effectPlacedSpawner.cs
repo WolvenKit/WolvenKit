@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class effectPlacedSpawner : effectSpawner
 	{
 		[Ordinal(0)] 
@@ -12,5 +11,12 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CHandle<effectIPlacementEntries>>();
 			set => SetPropertyValue<CHandle<effectIPlacementEntries>>(value);
 		}
+
+		public effectPlacedSpawner()
+		{
+			PostConstruct();
+		}
+
+		partial void PostConstruct();
 	}
 }

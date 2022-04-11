@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class SecurityLockerControllerPS : ScriptableDeviceComponentPS
 	{
 		[Ordinal(104)] 
@@ -25,6 +24,10 @@ namespace WolvenKit.RED4.Types
 		{
 			DeviceName = "LocKey#122";
 			SecurityLockerProperties = new() { SecurityLevelAccessGranted = Enums.ESecurityAccessLevel.ESL_4, StoreWeaponSFX = "ui_loot_gun", PickUpWeaponSFX = "ui_loot_take_all" };
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

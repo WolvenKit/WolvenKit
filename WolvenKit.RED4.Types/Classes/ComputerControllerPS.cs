@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class ComputerControllerPS : TerminalControllerPS
 	{
 		[Ordinal(114)] 
@@ -80,6 +79,10 @@ namespace WolvenKit.RED4.Types
 			OpenedMailAdress = new() { FolderID = -1, DocumentID = -1 };
 			OpenedFileAdress = new() { FolderID = -1, DocumentID = -1 };
 			IsInSleepMode = true;
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class TweakAIActionSequence : TweakAIActionAbstract
 	{
 		[Ordinal(36)] 
@@ -34,6 +33,10 @@ namespace WolvenKit.RED4.Types
 			LookatEvents = new();
 			GeneralSubActionsResults = new(8);
 			PhaseSubActionsResults = new(8);
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

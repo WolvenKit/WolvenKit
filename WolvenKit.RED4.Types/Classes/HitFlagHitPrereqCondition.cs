@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class HitFlagHitPrereqCondition : BaseHitPrereqCondition
 	{
 		[Ordinal(3)] 
@@ -12,5 +11,12 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CEnum<hitFlag>>();
 			set => SetPropertyValue<CEnum<hitFlag>>(value);
 		}
+
+		public HitFlagHitPrereqCondition()
+		{
+			PostConstruct();
+		}
+
+		partial void PostConstruct();
 	}
 }

@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class LightDirectionSettings : IAreaSettings
 	{
 		[Ordinal(2)] 
@@ -17,6 +16,10 @@ namespace WolvenKit.RED4.Types
 		{
 			Enable = true;
 			Direction = new() { TimeOfYearSeason = Enums.ETimeOfYearSeason.ETOYS_Summer };
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

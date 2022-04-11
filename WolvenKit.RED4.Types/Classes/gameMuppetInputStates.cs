@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class gameMuppetInputStates : gameMuppetComponent
 	{
 		[Ordinal(3)] 
@@ -17,6 +16,10 @@ namespace WolvenKit.RED4.Types
 		{
 			Name = "Component";
 			ReplicationTime = new();
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class sampleUISoundsLogicController : inkWidgetLogicController
 	{
 		[Ordinal(1)] 
@@ -12,5 +11,12 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CWeakHandle<inkTextWidget>>();
 			set => SetPropertyValue<CWeakHandle<inkTextWidget>>(value);
 		}
+
+		public sampleUISoundsLogicController()
+		{
+			PostConstruct();
+		}
+
+		partial void PostConstruct();
 	}
 }

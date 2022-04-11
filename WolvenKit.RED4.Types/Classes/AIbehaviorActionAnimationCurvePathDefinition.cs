@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class AIbehaviorActionAnimationCurvePathDefinition : AIbehaviorActionTreeNodeDefinition
 	{
 		[Ordinal(1)] 
@@ -132,5 +131,12 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CHandle<AIArgumentMapping>>();
 			set => SetPropertyValue<CHandle<AIArgumentMapping>>(value);
 		}
+
+		public AIbehaviorActionAnimationCurvePathDefinition()
+		{
+			PostConstruct();
+		}
+
+		partial void PostConstruct();
 	}
 }

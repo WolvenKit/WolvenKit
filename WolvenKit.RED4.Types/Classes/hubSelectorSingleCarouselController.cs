@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class hubSelectorSingleCarouselController : inkSelectorController
 	{
 		[Ordinal(15)] 
@@ -190,6 +189,10 @@ namespace WolvenKit.RED4.Types
 			Elements = new();
 			WidgetsControllers = new();
 			ActiveAnimations = new();
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

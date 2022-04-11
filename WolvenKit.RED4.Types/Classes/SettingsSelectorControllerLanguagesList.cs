@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class SettingsSelectorControllerLanguagesList : SettingsSelectorControllerListName
 	{
 		[Ordinal(22)] 
@@ -41,6 +40,10 @@ namespace WolvenKit.RED4.Types
 		{
 			DownloadButton = new();
 			DescriptionText = new();
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

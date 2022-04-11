@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class ActivatedDeviceNPC : ActivatedDeviceTransfromAnim
 	{
 		[Ordinal(95)] 
@@ -16,6 +15,10 @@ namespace WolvenKit.RED4.Types
 		public ActivatedDeviceNPC()
 		{
 			ControllerTypeName = "ActivatedDeviceNPCController";
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class scneventsSetAnimFeatureEvent : scnSceneEvent
 	{
 		[Ordinal(6)] 
@@ -33,6 +32,10 @@ namespace WolvenKit.RED4.Types
 		{
 			Id = new() { Id = 18446744073709551615 };
 			ActorId = new() { Id = 4294967295 };
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

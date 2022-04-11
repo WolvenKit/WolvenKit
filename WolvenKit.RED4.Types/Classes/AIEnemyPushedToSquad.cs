@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class AIEnemyPushedToSquad : AIAIEvent
 	{
 		[Ordinal(2)] 
@@ -12,5 +11,12 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CWeakHandle<entEntity>>();
 			set => SetPropertyValue<CWeakHandle<entEntity>>(value);
 		}
+
+		public AIEnemyPushedToSquad()
+		{
+			PostConstruct();
+		}
+
+		partial void PostConstruct();
 	}
 }

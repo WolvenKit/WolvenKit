@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class animRigPartBoneTree : RedBaseClass
 	{
 		[Ordinal(0)] 
@@ -33,6 +32,10 @@ namespace WolvenKit.RED4.Types
 		{
 			Weight = 1.000000F;
 			SubtreesToChange = new();
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

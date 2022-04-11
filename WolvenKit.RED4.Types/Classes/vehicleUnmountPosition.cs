@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class vehicleUnmountPosition : RedBaseClass
 	{
 		[Ordinal(0)] 
@@ -24,6 +23,10 @@ namespace WolvenKit.RED4.Types
 		public vehicleUnmountPosition()
 		{
 			Position = new() { X = new(), Y = new(), Z = new() };
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class gameprojectileBroadPhaseHitEvent : redEvent
 	{
 		[Ordinal(0)] 
@@ -41,6 +40,10 @@ namespace WolvenKit.RED4.Types
 		{
 			TraceResult = new() { Position = new() { X = float.PositiveInfinity, Y = float.PositiveInfinity, Z = float.PositiveInfinity }, Normal = new() { X = float.PositiveInfinity, Y = float.PositiveInfinity, Z = float.PositiveInfinity } };
 			Position = new();
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

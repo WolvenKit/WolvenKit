@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class AimWalkDecisions : LocomotionGroundDecisions
 	{
 		[Ordinal(3)] 
@@ -48,6 +47,10 @@ namespace WolvenKit.RED4.Types
 		public AimWalkDecisions()
 		{
 			CallbackIDs = new();
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

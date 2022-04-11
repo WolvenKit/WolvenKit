@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class worldSceneRecordingContentObserverNode : worldNode
 	{
 		[Ordinal(4)] 
@@ -16,6 +15,10 @@ namespace WolvenKit.RED4.Types
 		public worldSceneRecordingContentObserverNode()
 		{
 			Filter = new() { MeshNodesOnly = true, MeshResourceFilter = new() { ForceFilterIgnore = new(), ForceFilterMatch = new() } };
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

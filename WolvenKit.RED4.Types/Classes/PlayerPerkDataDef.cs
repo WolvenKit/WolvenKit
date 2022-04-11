@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class PlayerPerkDataDef : gamebbScriptDefinition
 	{
 		[Ordinal(0)] 
@@ -43,6 +42,10 @@ namespace WolvenKit.RED4.Types
 			DismembermentInstigated = new();
 			EntityNoticedPlayer = new();
 			CombatStateTime = new();
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

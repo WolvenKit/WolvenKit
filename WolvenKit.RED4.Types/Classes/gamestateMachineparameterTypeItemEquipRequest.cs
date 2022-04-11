@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class gamestateMachineparameterTypeItemEquipRequest : IScriptable
 	{
 		[Ordinal(0)] 
@@ -33,6 +32,10 @@ namespace WolvenKit.RED4.Types
 		{
 			ItemId = new();
 			StartingRenderingPlane = Enums.ERenderingPlane.RPl_Weapon;
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

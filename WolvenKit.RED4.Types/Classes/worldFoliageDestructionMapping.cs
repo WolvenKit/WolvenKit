@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class worldFoliageDestructionMapping : ISerializable
 	{
 		[Ordinal(0)] 
@@ -20,5 +19,12 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CResourceAsyncReference<CMesh>>();
 			set => SetPropertyValue<CResourceAsyncReference<CMesh>>(value);
 		}
+
+		public worldFoliageDestructionMapping()
+		{
+			PostConstruct();
+		}
+
+		partial void PostConstruct();
 	}
 }

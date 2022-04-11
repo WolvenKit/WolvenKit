@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class gameActionEquipItemState : gameActionReplicatedState
 	{
 		[Ordinal(5)] 
@@ -58,6 +57,10 @@ namespace WolvenKit.RED4.Types
 			ItemId = new();
 			Duration = -1.000000F;
 			SpawnDelay = -1.000000F;
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

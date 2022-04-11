@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class animFacialEmotionTransitionBaked : RedBaseClass
 	{
 		[Ordinal(0)] 
@@ -97,6 +96,10 @@ namespace WolvenKit.RED4.Types
 		{
 			TransitionType = Enums.animFacialEmotionTransitionType.Fast;
 			ToIdleWeight = 1.000000F;
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class worldRainEvent : redEvent
 	{
 		[Ordinal(0)] 
@@ -12,5 +11,12 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CEnum<worldRainIntensity>>();
 			set => SetPropertyValue<CEnum<worldRainIntensity>>(value);
 		}
+
+		public worldRainEvent()
+		{
+			PostConstruct();
+		}
+
+		partial void PostConstruct();
 	}
 }
