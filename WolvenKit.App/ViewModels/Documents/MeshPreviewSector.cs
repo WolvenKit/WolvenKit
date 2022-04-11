@@ -128,18 +128,66 @@ namespace WolvenKit.ViewModels.Documents
                             matrix.Translate(ToVector3D(transforms[0].Position));
 
                             var wtbMatrix = new Matrix3D();
-                            if (wtbTransforms[(int)(wimn.WorldTransformsBuffer.StartIndex + i)] is WorldTransformExt wte)
+                            if (wtbTransforms[(int)(wimn.WorldTransformsBuffer.StartIndex + i)] is worldNodeTransform wte)
                             {
                                 wtbMatrix.Scale(ToScaleVector3D(wte.Scale));
                             }
-                            wtbMatrix.Rotate(ToQuaternion(wtbTransforms[(int)(wimn.WorldTransformsBuffer.StartIndex + i)].Orientation));
-                            wtbMatrix.Translate(ToVector3D(wtbTransforms[(int)(wimn.WorldTransformsBuffer.StartIndex + i)].Position));
+                            wtbMatrix.Rotate(ToQuaternion(wtbTransforms[(int)(wimn.WorldTransformsBuffer.StartIndex + i)].Rotation));
+                            wtbMatrix.Translate(ToVector3D(wtbTransforms[(int)(wimn.WorldTransformsBuffer.StartIndex + i)].Translation));
 
-                            matrix.Append(wtbMatrix);
+                            wtbMatrix.Append(matrix);
 
-                            subgroup.Transform = new MatrixTransform3D(matrix);
+                            subgroup.Transform = new MatrixTransform3D(wtbMatrix);
 
                             group.Children.Add(subgroup);
+                        }
+                    }
+                    else if (handle.Chunk is worldInstancedDestructibleMeshNode widmn)
+                    {
+                        if (widmn.CookedInstanceTransforms.SharedDataBuffer.Chunk.Buffer.Data is not CookedInstanceTransformsBuffer citb)
+                        {
+                            continue;
+                        }
+
+                        var citbTransforms = citb.Transforms;
+                        for (int i = 0; i < widmn.CookedInstanceTransforms.NumElements; i++)
+                        {
+                            //for (int j = 0; j < transforms.Count; j++)
+                            //{
+                                var meshes = MakeMesh(mesh, ulong.MaxValue, 0);
+
+                                var subgroup = new MeshComponent()
+                                {
+                                    Name = name + $"_instance_{i:D2}",
+                                    AppearanceName = widmn.MeshAppearance,
+                                    DepotPath = irmn.Mesh.DepotPath
+                                };
+
+                                foreach (var submesh in meshes)
+                                {
+                                    if (!app.LODLUT.ContainsKey(submesh.LOD))
+                                    {
+                                        app.LODLUT[submesh.LOD] = new List<SubmeshComponent>();
+                                    }
+                                    app.LODLUT[submesh.LOD].Add(submesh);
+                                    subgroup.Children.Add(submesh);
+                                }
+
+                                var matrix = new Matrix3D();
+                                matrix.Scale(ToScaleVector3D(transforms[0].Scale));
+                                matrix.Rotate(ToQuaternion(transforms[0].Orientation));
+                                matrix.Translate(ToVector3D(transforms[0].Position));
+
+                                var citbMatrix = new Matrix3D();
+                                citbMatrix.Rotate(ToQuaternion(citbTransforms[(int)(widmn.CookedInstanceTransforms.StartIndex + i)].Orientation));
+                                citbMatrix.Translate(ToVector3D(citbTransforms[(int)(widmn.CookedInstanceTransforms.StartIndex + i)].Position));
+
+                                citbMatrix.Append(matrix);
+
+                                subgroup.Transform = new MatrixTransform3D(citbMatrix);
+
+                                group.Children.Add(subgroup);
+                            //}
                         }
                     }
                     else

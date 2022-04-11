@@ -39,9 +39,9 @@ namespace WolvenKit.RED4.Types
             set => SetPropertyValue<CArray<NodeRef>>(value);
         }
 
-        [RED("nodeRanges")]
+        [RED("variantIndices")]
         [REDProperty(IsIgnored = true)]
-        public CArray<CInt32> NodeRanges
+        public CArray<CInt32> VariantIndices
         {
             get => GetPropertyValue<CArray<CInt32>>();
             set => SetPropertyValue<CArray<CInt32>>(value);
@@ -55,11 +55,28 @@ namespace WolvenKit.RED4.Types
             set => SetPropertyValue<CInt32>(value);
         }
 
+        [RED("persistentNodes")]
+        [REDProperty(IsIgnored = true)]
+        public CArray<CHandle<worldNode>> PersistentNodes
+        {
+            get => GetPropertyValue<CArray<CHandle<worldNode>>>();
+            set => SetPropertyValue<CArray<CHandle<worldNode>>>(value);
+        }
+
+        [RED("variantNodes")]
+        [REDProperty(IsIgnored = true)]
+        public CArray<CArray<CHandle<worldNode>>> VariantNodes
+        {
+            get => GetPropertyValue<CArray<CArray<CHandle<worldNode>>>>();
+            set => SetPropertyValue<CArray<CArray<CHandle<worldNode>>>>(value);
+        }
+
         public void Read(Red4Reader reader, uint size)
         {
             Handles = new CArray<CHandle<worldNode>>();
             NodeRefs = new CArray<NodeRef>();
-            NodeRanges = new CArray<CInt32>();
+            VariantIndices = new CArray<CInt32>();
+            VariantNodes = new CArray<CArray<CHandle<worldNode>>>();
 
             Version = reader.ReadCInt32();
 
@@ -88,7 +105,24 @@ namespace WolvenKit.RED4.Types
             var cnt3 = reader.BaseReader.ReadVLQInt32();
             for (int i = 0; i < cnt3; i++)
             {
-                NodeRanges.Add(reader.ReadCInt32());
+                VariantIndices.Add(reader.ReadCInt32());
+            }
+
+            for (int i = 0; i < VariantIndices.Count; i++)
+            {
+                var ra = new CArray<CHandle<worldNode>>();
+                for (int j = VariantIndices[i]; ((i + 1) < VariantIndices.Count && j < VariantIndices[i+1]) || ((i + 1) >= VariantIndices.Count && j < cnt1); j++)
+                {
+                    ra.Add(Handles[j]);
+                }
+                if (i == 0)
+                {
+                    PersistentNodes = ra;
+                }
+                else
+                {
+                    VariantNodes.Add(ra);
+                }
             }
 
             Unk4 = reader.ReadCInt32();
@@ -115,8 +149,8 @@ namespace WolvenKit.RED4.Types
                 writer.Write(nodeRef);
             }
 
-            writer.BaseWriter.WriteVLQInt32(NodeRanges.Count);
-            foreach (var unk in NodeRanges)
+            writer.BaseWriter.WriteVLQInt32(VariantIndices.Count);
+            foreach (var unk in VariantIndices)
             {
                 writer.Write(unk);
             }
