@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class SettingsSelectorControllerRange : inkSettingsSelectorController
 	{
 		[Ordinal(15)] 
@@ -42,10 +43,6 @@ namespace WolvenKit.RED4.Types
 			LeftArrow = new();
 			RightArrow = new();
 			ProgressBar = new();
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

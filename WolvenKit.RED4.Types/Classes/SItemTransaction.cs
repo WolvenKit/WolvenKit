@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class SItemTransaction : RedBaseClass
 	{
 		[Ordinal(0)] 
@@ -23,10 +24,6 @@ namespace WolvenKit.RED4.Types
 		public SItemTransaction()
 		{
 			ItemStack = new() { ItemID = new(), Quantity = 1, IsAvailable = true, Requirement = new() { StatType = Enums.gamedataStatType.Invalid }, DynamicTags = new() };
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

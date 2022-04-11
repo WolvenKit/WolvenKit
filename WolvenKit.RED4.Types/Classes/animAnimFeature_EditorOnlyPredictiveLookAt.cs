@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class animAnimFeature_EditorOnlyPredictiveLookAt : animAnimFeature
 	{
 		[Ordinal(0)] 
@@ -39,10 +40,6 @@ namespace WolvenKit.RED4.Types
 		public animAnimFeature_EditorOnlyPredictiveLookAt()
 		{
 			Target = new();
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

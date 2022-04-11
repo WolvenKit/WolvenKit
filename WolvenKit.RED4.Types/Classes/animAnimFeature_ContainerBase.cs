@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class animAnimFeature_ContainerBase : animAnimFeature
 	{
 		[Ordinal(0)] 
@@ -23,10 +24,6 @@ namespace WolvenKit.RED4.Types
 		public animAnimFeature_ContainerBase()
 		{
 			TransitionDuration = 2.000000F;
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

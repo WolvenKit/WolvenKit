@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class animAnimNode_LocoState : animAnimNode_State
 	{
 		[Ordinal(17)] 
@@ -19,12 +20,5 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CName>();
 			set => SetPropertyValue<CName>(value);
 		}
-
-		public animAnimNode_LocoState()
-		{
-			PostConstruct();
-		}
-
-		partial void PostConstruct();
 	}
 }

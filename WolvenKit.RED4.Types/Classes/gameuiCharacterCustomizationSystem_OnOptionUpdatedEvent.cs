@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class gameuiCharacterCustomizationSystem_OnOptionUpdatedEvent : redEvent
 	{
 		[Ordinal(0)] 
@@ -11,12 +12,5 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CWeakHandle<gameuiCharacterCustomizationOption>>();
 			set => SetPropertyValue<CWeakHandle<gameuiCharacterCustomizationOption>>(value);
 		}
-
-		public gameuiCharacterCustomizationSystem_OnOptionUpdatedEvent()
-		{
-			PostConstruct();
-		}
-
-		partial void PostConstruct();
 	}
 }

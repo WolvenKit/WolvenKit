@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class AIbehaviorSubtreeDefinition : AIbehaviorNestedTreeDefinition
 	{
 		[Ordinal(2)] 
@@ -16,10 +17,6 @@ namespace WolvenKit.RED4.Types
 		{
 			LateInitialization = true;
 			InitializeOnEvent = new();
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

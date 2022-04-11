@@ -108,10 +108,10 @@ namespace WolvenKit.Functionality.Layout.inkWidgets
 
                             if (animI.StartDelay != 0)
                             {
-                                timeline.KeyFrames.Add(ToDoubleKeyframe(animI.InterpolationType, animI.InterpolationMode, animTrnsp.StartValue, 0));
+                                timeline.KeyFrames.Add(ToDoubleKeyframe(animI.InterpolationType.Value, animI.InterpolationMode.Value, animTrnsp.StartValue, 0));
                             }
-                            timeline.KeyFrames.Add(ToDoubleKeyframe(animI.InterpolationType, animI.InterpolationMode, animTrnsp.StartValue, animTrnsp.StartDelay));
-                            timeline.KeyFrames.Add(ToDoubleKeyframe(animI.InterpolationType, animI.InterpolationMode, animTrnsp.EndValue, animTrnsp.StartDelay + animTrnsp.Duration));
+                            timeline.KeyFrames.Add(ToDoubleKeyframe(animI.InterpolationType.Value, animI.InterpolationMode.Value, animTrnsp.StartValue, animTrnsp.StartDelay));
+                            timeline.KeyFrames.Add(ToDoubleKeyframe(animI.InterpolationType.Value, animI.InterpolationMode.Value, animTrnsp.EndValue, animTrnsp.StartDelay + animTrnsp.Duration));
                         }
 
                         if (animI is inkanimMarginInterpolator animMargin)
@@ -137,10 +137,10 @@ namespace WolvenKit.Functionality.Layout.inkWidgets
 
                             if (animI.StartDelay != 0)
                             {
-                                timeline.KeyFrames.Add(ToThicknessKeyframe(animI.InterpolationType, animI.InterpolationMode, animMargin.StartValue, 0));
+                                timeline.KeyFrames.Add(ToThicknessKeyframe(animI.InterpolationType.Value, animI.InterpolationMode.Value, animMargin.StartValue, 0));
                             }
-                            timeline.KeyFrames.Add(ToThicknessKeyframe(animI.InterpolationType, animI.InterpolationMode, animMargin.StartValue, animMargin.StartDelay));
-                            timeline.KeyFrames.Add(ToThicknessKeyframe(animI.InterpolationType, animI.InterpolationMode, animMargin.EndValue, animMargin.StartDelay + animMargin.Duration));
+                            timeline.KeyFrames.Add(ToThicknessKeyframe(animI.InterpolationType.Value, animI.InterpolationMode.Value, animMargin.StartValue, animMargin.StartDelay));
+                            timeline.KeyFrames.Add(ToThicknessKeyframe(animI.InterpolationType.Value, animI.InterpolationMode.Value, animMargin.EndValue, animMargin.StartDelay + animMargin.Duration));
                         }
 
                         if (animI is inkanimSizeInterpolator animSize)
@@ -169,17 +169,17 @@ namespace WolvenKit.Functionality.Layout.inkWidgets
 
                             if (animI.StartDelay != 0)
                             {
-                                widthTimeline.KeyFrames.Add(ToDoubleKeyframe(animI.InterpolationType, animI.InterpolationMode, animSize.StartValue.X, 0));
+                                widthTimeline.KeyFrames.Add(ToDoubleKeyframe(animI.InterpolationType.Value, animI.InterpolationMode.Value, animSize.StartValue.X, 0));
                             }
-                            widthTimeline.KeyFrames.Add(ToDoubleKeyframe(animI.InterpolationType, animI.InterpolationMode, animSize.StartValue.X, animSize.StartDelay));
-                            widthTimeline.KeyFrames.Add(ToDoubleKeyframe(animI.InterpolationType, animI.InterpolationMode, animSize.EndValue.X, animSize.StartDelay + animSize.Duration));
+                            widthTimeline.KeyFrames.Add(ToDoubleKeyframe(animI.InterpolationType.Value, animI.InterpolationMode.Value, animSize.StartValue.X, animSize.StartDelay));
+                            widthTimeline.KeyFrames.Add(ToDoubleKeyframe(animI.InterpolationType.Value, animI.InterpolationMode.Value, animSize.EndValue.X, animSize.StartDelay + animSize.Duration));
 
                             if (animI.StartDelay != 0)
                             {
-                                heightTimeline.KeyFrames.Add(ToDoubleKeyframe(animI.InterpolationType, animI.InterpolationMode, animSize.StartValue.Y, 0));
+                                heightTimeline.KeyFrames.Add(ToDoubleKeyframe(animI.InterpolationType.Value, animI.InterpolationMode.Value, animSize.StartValue.Y, 0));
                             }
-                            heightTimeline.KeyFrames.Add(ToDoubleKeyframe(animI.InterpolationType, animI.InterpolationMode, animSize.StartValue.Y, animSize.StartDelay));
-                            heightTimeline.KeyFrames.Add(ToDoubleKeyframe(animI.InterpolationType, animI.InterpolationMode, animSize.EndValue.Y, animSize.StartDelay + animSize.Duration));
+                            heightTimeline.KeyFrames.Add(ToDoubleKeyframe(animI.InterpolationType.Value, animI.InterpolationMode.Value, animSize.StartValue.Y, animSize.StartDelay));
+                            heightTimeline.KeyFrames.Add(ToDoubleKeyframe(animI.InterpolationType.Value, animI.InterpolationMode.Value, animSize.EndValue.Y, animSize.StartDelay + animSize.Duration));
                         }
 
                         if (animI is inkanimRotationInterpolator animRot)
@@ -206,10 +206,10 @@ namespace WolvenKit.Functionality.Layout.inkWidgets
                             var d = new DoubleAnimationUsingKeyFrames();
                             if (animI.StartDelay != 0)
                             {
-                                timeline.KeyFrames.Add(ToDoubleKeyframe(animI.InterpolationType, animI.InterpolationMode, animRot.StartValue, 0));
+                                timeline.KeyFrames.Add(ToDoubleKeyframe(animI.InterpolationType.Value, animI.InterpolationMode.Value, animRot.StartValue, 0));
                             }
-                            timeline.KeyFrames.Add(ToDoubleKeyframe(animI.InterpolationType, animI.InterpolationMode, animRot.StartValue, animRot.StartDelay));
-                            timeline.KeyFrames.Add(ToDoubleKeyframe(animI.InterpolationType, animI.InterpolationMode, animRot.EndValue, animRot.StartDelay + animRot.Duration));
+                            timeline.KeyFrames.Add(ToDoubleKeyframe(animI.InterpolationType.Value, animI.InterpolationMode.Value, animRot.StartValue, animRot.StartDelay));
+                            timeline.KeyFrames.Add(ToDoubleKeyframe(animI.InterpolationType.Value, animI.InterpolationMode.Value, animRot.EndValue, animRot.StartDelay + animRot.Duration));
                         }
 
                         if (animI is inkanimTranslationInterpolator animTrnsl)
@@ -238,17 +238,17 @@ namespace WolvenKit.Functionality.Layout.inkWidgets
 
                             if (animI.StartDelay != 0)
                             {
-                                xTimeline.KeyFrames.Add(ToDoubleKeyframe(animI.InterpolationType, animI.InterpolationMode, animTrnsl.StartValue.X, 0));
+                                xTimeline.KeyFrames.Add(ToDoubleKeyframe(animI.InterpolationType.Value, animI.InterpolationMode.Value, animTrnsl.StartValue.X, 0));
                             }
-                            xTimeline.KeyFrames.Add(ToDoubleKeyframe(animI.InterpolationType, animI.InterpolationMode, animTrnsl.StartValue.X, animTrnsl.StartDelay));
-                            xTimeline.KeyFrames.Add(ToDoubleKeyframe(animI.InterpolationType, animI.InterpolationMode, animTrnsl.EndValue.X, animTrnsl.StartDelay + animTrnsl.Duration));
+                            xTimeline.KeyFrames.Add(ToDoubleKeyframe(animI.InterpolationType.Value, animI.InterpolationMode.Value, animTrnsl.StartValue.X, animTrnsl.StartDelay));
+                            xTimeline.KeyFrames.Add(ToDoubleKeyframe(animI.InterpolationType.Value, animI.InterpolationMode.Value, animTrnsl.EndValue.X, animTrnsl.StartDelay + animTrnsl.Duration));
 
                             if (animI.StartDelay != 0)
                             {
-                                yTimeline.KeyFrames.Add(ToDoubleKeyframe(animI.InterpolationType, animI.InterpolationMode, animTrnsl.StartValue.Y, 0));
+                                yTimeline.KeyFrames.Add(ToDoubleKeyframe(animI.InterpolationType.Value, animI.InterpolationMode.Value, animTrnsl.StartValue.Y, 0));
                             }
-                            yTimeline.KeyFrames.Add(ToDoubleKeyframe(animI.InterpolationType, animI.InterpolationMode, animTrnsl.StartValue.Y, animTrnsl.StartDelay));
-                            yTimeline.KeyFrames.Add(ToDoubleKeyframe(animI.InterpolationType, animI.InterpolationMode, animTrnsl.EndValue.Y, animTrnsl.StartDelay + animTrnsl.Duration));
+                            yTimeline.KeyFrames.Add(ToDoubleKeyframe(animI.InterpolationType.Value, animI.InterpolationMode.Value, animTrnsl.StartValue.Y, animTrnsl.StartDelay));
+                            yTimeline.KeyFrames.Add(ToDoubleKeyframe(animI.InterpolationType.Value, animI.InterpolationMode.Value, animTrnsl.EndValue.Y, animTrnsl.StartDelay + animTrnsl.Duration));
                         }
 
                         if (animI is inkanimScaleInterpolator animScale)
@@ -277,17 +277,17 @@ namespace WolvenKit.Functionality.Layout.inkWidgets
 
                             if (animI.StartDelay != 0)
                             {
-                                xTimeline.KeyFrames.Add(ToDoubleKeyframe(animI.InterpolationType, animI.InterpolationMode, animScale.StartValue.X, 0));
+                                xTimeline.KeyFrames.Add(ToDoubleKeyframe(animI.InterpolationType.Value, animI.InterpolationMode.Value, animScale.StartValue.X, 0));
                             }
-                            xTimeline.KeyFrames.Add(ToDoubleKeyframe(animI.InterpolationType, animI.InterpolationMode, animScale.StartValue.X, animScale.StartDelay));
-                            xTimeline.KeyFrames.Add(ToDoubleKeyframe(animI.InterpolationType, animI.InterpolationMode, animScale.EndValue.X, animScale.StartDelay + animScale.Duration));
+                            xTimeline.KeyFrames.Add(ToDoubleKeyframe(animI.InterpolationType.Value, animI.InterpolationMode.Value, animScale.StartValue.X, animScale.StartDelay));
+                            xTimeline.KeyFrames.Add(ToDoubleKeyframe(animI.InterpolationType.Value, animI.InterpolationMode.Value, animScale.EndValue.X, animScale.StartDelay + animScale.Duration));
 
                             if (animI.StartDelay != 0)
                             {
-                                yTimeline.KeyFrames.Add(ToDoubleKeyframe(animI.InterpolationType, animI.InterpolationMode, animScale.StartValue.Y, 0));
+                                yTimeline.KeyFrames.Add(ToDoubleKeyframe(animI.InterpolationType.Value, animI.InterpolationMode.Value, animScale.StartValue.Y, 0));
                             }
-                            yTimeline.KeyFrames.Add(ToDoubleKeyframe(animI.InterpolationType, animI.InterpolationMode, animScale.StartValue.Y, animScale.StartDelay));
-                            yTimeline.KeyFrames.Add(ToDoubleKeyframe(animI.InterpolationType, animI.InterpolationMode, animScale.EndValue.Y, animScale.StartDelay + animScale.Duration));
+                            yTimeline.KeyFrames.Add(ToDoubleKeyframe(animI.InterpolationType.Value, animI.InterpolationMode.Value, animScale.StartValue.Y, animScale.StartDelay));
+                            yTimeline.KeyFrames.Add(ToDoubleKeyframe(animI.InterpolationType.Value, animI.InterpolationMode.Value, animScale.EndValue.Y, animScale.StartDelay + animScale.Duration));
 
 
                         }

@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class worldNavigationNode : worldNode
 	{
 		[Ordinal(4)] 
@@ -11,12 +12,5 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CResourceAsyncReference<worldNavigationTileResource>>();
 			set => SetPropertyValue<CResourceAsyncReference<worldNavigationTileResource>>(value);
 		}
-
-		public worldNavigationNode()
-		{
-			PostConstruct();
-		}
-
-		partial void PostConstruct();
 	}
 }

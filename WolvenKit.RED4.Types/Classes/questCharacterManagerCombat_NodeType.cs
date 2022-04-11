@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class questCharacterManagerCombat_NodeType : questICharacterManager_NodeType
 	{
 		[Ordinal(0)] 
@@ -11,12 +12,5 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CHandle<questICharacterManagerCombat_NodeSubType>>();
 			set => SetPropertyValue<CHandle<questICharacterManagerCombat_NodeSubType>>(value);
 		}
-
-		public questCharacterManagerCombat_NodeType()
-		{
-			PostConstruct();
-		}
-
-		partial void PostConstruct();
 	}
 }

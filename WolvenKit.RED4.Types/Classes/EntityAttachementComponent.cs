@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class EntityAttachementComponent : gameScriptableComponent
 	{
 		[Ordinal(5)] 
@@ -15,10 +16,6 @@ namespace WolvenKit.RED4.Types
 		public EntityAttachementComponent()
 		{
 			ParentAttachementData = new() { AttachementComponentName = "EntityAttachementComponent", OwnerID = new() };
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

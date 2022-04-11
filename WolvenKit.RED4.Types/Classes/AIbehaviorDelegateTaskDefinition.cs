@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class AIbehaviorDelegateTaskDefinition : AIbehaviorTaskDefinition
 	{
 		[Ordinal(1)] 
@@ -33,10 +34,6 @@ namespace WolvenKit.RED4.Types
 			OnActivate = new();
 			OnUpdate = new();
 			OnDeactivate = new();
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

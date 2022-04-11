@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class TankTurretComponent : gameScriptableComponent
 	{
 		[Ordinal(5)] 
@@ -59,12 +60,5 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CHandle<entSlotComponent>>();
 			set => SetPropertyValue<CHandle<entSlotComponent>>(value);
 		}
-
-		public TankTurretComponent()
-		{
-			PostConstruct();
-		}
-
-		partial void PostConstruct();
 	}
 }

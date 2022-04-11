@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class AITrackedLocation : RedBaseClass
 	{
 		[Ordinal(0)] 
@@ -117,10 +118,6 @@ namespace WolvenKit.RED4.Types
 			SharedAccuracy = 1.000000F;
 			Speed = new();
 			SharedLastKnown = new() { Position = new() { X = float.PositiveInfinity, Y = float.PositiveInfinity, Z = float.PositiveInfinity, W = float.PositiveInfinity }, Direction = new() { X = float.PositiveInfinity, Y = float.PositiveInfinity, Z = float.PositiveInfinity, W = float.PositiveInfinity } };
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

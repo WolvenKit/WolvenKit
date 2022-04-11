@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class PhoneHotkeyController : GenericHotkeyController
 	{
 		[Ordinal(19)] 
@@ -63,10 +64,6 @@ namespace WolvenKit.RED4.Types
 			MessageCounter = new();
 			PhoneIconAtlas = "base\\gameplay\\gui\\common\\icons\\atlas_common.inkatlas";
 			PhoneIconName = "ico_phone";
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

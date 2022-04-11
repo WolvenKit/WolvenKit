@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class questSetBriefingAlignment_NodeType : questIUIManagerNodeType
 	{
 		[Ordinal(0)] 
@@ -11,12 +12,5 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CEnum<questJournalAlignmentEventType>>();
 			set => SetPropertyValue<CEnum<questJournalAlignmentEventType>>(value);
 		}
-
-		public questSetBriefingAlignment_NodeType()
-		{
-			PostConstruct();
-		}
-
-		partial void PostConstruct();
 	}
 }

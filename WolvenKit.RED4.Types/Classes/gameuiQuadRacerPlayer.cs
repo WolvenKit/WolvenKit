@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class gameuiQuadRacerPlayer : gameuiSideScrollerMiniGamePlayerController
 	{
 		[Ordinal(1)] 
@@ -75,10 +76,6 @@ namespace WolvenKit.RED4.Types
 			RightTireSmoke = new();
 			RightFlame = new();
 			LeftFlame = new();
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

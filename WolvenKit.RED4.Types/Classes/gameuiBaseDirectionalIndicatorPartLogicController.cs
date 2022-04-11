@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class gameuiBaseDirectionalIndicatorPartLogicController : inkWidgetLogicController
 	{
 		[Ordinal(1)] 
@@ -24,10 +25,6 @@ namespace WolvenKit.RED4.Types
 		{
 			DefaultForwardFovRange = 80.000000F;
 			AdjustedForwardFovRange = 160.000000F;
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class interopSelectByDefinitionOptions : RedBaseClass
 	{
 		[Ordinal(0)] 
@@ -63,10 +64,6 @@ namespace WolvenKit.RED4.Types
 		public interopSelectByDefinitionOptions()
 		{
 			MaxBBoxDiagonalLength = 5.000000F;
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

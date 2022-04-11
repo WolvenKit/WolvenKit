@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class LaserDetector : ProximityDetector
 	{
 		[Ordinal(90)] 
@@ -18,10 +19,6 @@ namespace WolvenKit.RED4.Types
 			ScanningAreaName = "scanningArea";
 			SurroundingAreaName = "surroundingArea";
 			Lasers = new(2);
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

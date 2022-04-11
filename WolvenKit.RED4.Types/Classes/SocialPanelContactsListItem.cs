@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class SocialPanelContactsListItem : inkToggleController
 	{
 		[Ordinal(13)] 
@@ -24,10 +25,6 @@ namespace WolvenKit.RED4.Types
 		{
 			Label = new();
 			ContactInfo = new();
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

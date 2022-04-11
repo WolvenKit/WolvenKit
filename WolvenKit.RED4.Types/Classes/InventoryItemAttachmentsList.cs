@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class InventoryItemAttachmentsList : inkWidgetLogicController
 	{
 		[Ordinal(1)] 
@@ -41,10 +42,6 @@ namespace WolvenKit.RED4.Types
 			Container = new();
 			ItemsList = new();
 			Data = new();
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

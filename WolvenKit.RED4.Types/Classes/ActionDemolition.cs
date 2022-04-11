@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class ActionDemolition : ActionSkillCheck
 	{
 		[Ordinal(31)] 
@@ -22,10 +23,6 @@ namespace WolvenKit.RED4.Types
 			LocalizedName = "LocKey#22271";
 			SkillcheckDescription = new() { AdditionalRequirements = new(), OwnerID = new() };
 			SlotID = new();
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

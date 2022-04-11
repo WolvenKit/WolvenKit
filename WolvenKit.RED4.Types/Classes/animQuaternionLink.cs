@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class animQuaternionLink : RedBaseClass
 	{
 		[Ordinal(0)] 
@@ -11,12 +12,5 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CWeakHandle<animAnimNode_QuaternionValue>>();
 			set => SetPropertyValue<CWeakHandle<animAnimNode_QuaternionValue>>(value);
 		}
-
-		public animQuaternionLink()
-		{
-			PostConstruct();
-		}
-
-		partial void PostConstruct();
 	}
 }

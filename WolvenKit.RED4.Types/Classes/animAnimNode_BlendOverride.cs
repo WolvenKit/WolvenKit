@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class animAnimNode_BlendOverride : animAnimNode_Base
 	{
 		[Ordinal(11)] 
@@ -110,10 +111,6 @@ namespace WolvenKit.RED4.Types
 			BlendAllTracks = true;
 			BlendTrackMode = Enums.animEBlendTracksMode.AGBT_Interpolate;
 			Tracks = new();
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

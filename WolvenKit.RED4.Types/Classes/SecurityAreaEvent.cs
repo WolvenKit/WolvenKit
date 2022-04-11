@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class SecurityAreaEvent : ActionBool
 	{
 		[Ordinal(25)] 
@@ -27,10 +28,6 @@ namespace WolvenKit.RED4.Types
 			ActionWidgetPackage = new() { DependendActions = new() };
 			CanTriggerStim = true;
 			SecurityAreaData = new() { Id = new() };
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

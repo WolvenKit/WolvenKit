@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class scnSceneEvent : ISerializable
 	{
 		[Ordinal(0)] 
@@ -51,12 +52,5 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CHandle<scnIScalingData>>();
 			set => SetPropertyValue<CHandle<scnIScalingData>>(value);
 		}
-
-		public scnSceneEvent()
-		{
-			PostConstruct();
-		}
-
-		partial void PostConstruct();
 	}
 }

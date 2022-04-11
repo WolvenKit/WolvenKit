@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class RetractableAd : BaseAnimatedDevice
 	{
 		[Ordinal(99)] 
@@ -39,10 +40,6 @@ namespace WolvenKit.RED4.Types
 		public RetractableAd()
 		{
 			ControllerTypeName = "RetractableAdController";
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

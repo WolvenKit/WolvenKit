@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class gameuiEntityPreviewCameraSettings : RedBaseClass
 	{
 		[Ordinal(0)] 
@@ -103,10 +104,6 @@ namespace WolvenKit.RED4.Types
 			ZoomMin = 25.000000F;
 			ZoomMax = 100.000000F;
 			ZoomDefault = 50.000000F;
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

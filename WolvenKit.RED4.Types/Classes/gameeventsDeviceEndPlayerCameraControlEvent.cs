@@ -1,13 +1,8 @@
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class gameeventsDeviceEndPlayerCameraControlEvent : redEvent
 	{
-		public gameeventsDeviceEndPlayerCameraControlEvent()
-		{
-			PostConstruct();
-		}
-
-		partial void PostConstruct();
 	}
 }

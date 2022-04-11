@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class AnimFeature_LookAt : animAnimFeature
 	{
 		[Ordinal(0)] 
@@ -168,10 +169,6 @@ namespace WolvenKit.RED4.Types
 		{
 			GpLookAtTarget = new();
 			GpLookAtUp = new();
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class HUDJob : RedBaseClass
 	{
 		[Ordinal(0)] 
@@ -19,12 +20,5 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CHandle<HUDInstruction>>();
 			set => SetPropertyValue<CHandle<HUDInstruction>>(value);
 		}
-
-		public HUDJob()
-		{
-			PostConstruct();
-		}
-
-		partial void PostConstruct();
 	}
 }

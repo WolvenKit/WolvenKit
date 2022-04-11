@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class animAnimNode_AnimDatabase : animAnimNode_SkPhaseWithDurationAnim
 	{
 		[Ordinal(32)] 
@@ -25,10 +26,6 @@ namespace WolvenKit.RED4.Types
 			AnimLoopEventName = "At least one animation ended";
 			AnimDataBase = new();
 			InputLinks = new();
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

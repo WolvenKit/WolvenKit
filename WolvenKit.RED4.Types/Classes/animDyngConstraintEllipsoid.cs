@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class animDyngConstraintEllipsoid : animIDyngConstraint
 	{
 		[Ordinal(1)] 
@@ -51,10 +52,6 @@ namespace WolvenKit.RED4.Types
 			ConstraintRadius = 1.000000F;
 			ConstraintScale1 = 1.000000F;
 			ConstraintScale2 = 1.000000F;
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

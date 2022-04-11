@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class worldStreamingSectorDescriptor : RedBaseClass
 	{
 		[Ordinal(0)] 
@@ -74,10 +75,6 @@ namespace WolvenKit.RED4.Types
 			Variants = new();
 			BlockIndex = 4294967295;
 			Category = Enums.worldStreamingSectorCategory.Unknown;
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

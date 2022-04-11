@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class CheckReaction : AIbehaviorconditionScript
 	{
 		[Ordinal(0)] 
@@ -11,12 +12,5 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CEnum<gamedataOutput>>();
 			set => SetPropertyValue<CEnum<gamedataOutput>>(value);
 		}
-
-		public CheckReaction()
-		{
-			PostConstruct();
-		}
-
-		partial void PostConstruct();
 	}
 }

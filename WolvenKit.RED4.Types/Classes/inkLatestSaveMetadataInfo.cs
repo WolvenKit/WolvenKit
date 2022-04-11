@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class inkLatestSaveMetadataInfo : IScriptable
 	{
 		[Ordinal(0)] 
@@ -64,10 +65,6 @@ namespace WolvenKit.RED4.Types
 		{
 			PlayTime = 0.000000;
 			PlaythroughTime = 0.000000;
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

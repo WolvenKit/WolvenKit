@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class DifficultySelectionMenu : gameuiBaseCharacterCreationController
 	{
 		[Ordinal(6)] 
@@ -102,10 +103,6 @@ namespace WolvenKit.RED4.Types
 			Difficulty3 = new();
 			C_atlas1 = new();
 			C_atlas2 = new();
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

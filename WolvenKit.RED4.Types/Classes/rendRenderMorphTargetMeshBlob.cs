@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class rendRenderMorphTargetMeshBlob : IRenderResourceBlob
 	{
 		[Ordinal(0)] 
@@ -47,10 +48,6 @@ namespace WolvenKit.RED4.Types
 		public rendRenderMorphTargetMeshBlob()
 		{
 			Header = new() { TargetStartsInVertexDiffs = new(), TargetStartsInVertexDiffsMapping = new(), TargetPositionDiffScale = new(), TargetPositionDiffOffset = new(), NumVertexDiffsInEachChunk = new(), NumVertexDiffsMappingInEachChunk = new(), TargetTextureDiffsData = new() };
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

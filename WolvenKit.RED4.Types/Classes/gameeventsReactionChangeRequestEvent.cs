@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class gameeventsReactionChangeRequestEvent : redEvent
 	{
 		[Ordinal(0)] 
@@ -11,12 +12,5 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CHandle<gamedataReactionPreset_Record>>();
 			set => SetPropertyValue<CHandle<gamedataReactionPreset_Record>>(value);
 		}
-
-		public gameeventsReactionChangeRequestEvent()
-		{
-			PostConstruct();
-		}
-
-		partial void PostConstruct();
 	}
 }

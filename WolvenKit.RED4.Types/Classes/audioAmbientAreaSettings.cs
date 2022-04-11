@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class audioAmbientAreaSettings : audioAudioMetadata
 	{
 		[Ordinal(1)] 
@@ -215,10 +216,6 @@ namespace WolvenKit.RED4.Types
 			GroupingSettings = new() { MaxDistance = 100.000000F };
 			QuadSettings = new() { Offset = new(), Events = new(4) };
 			AmbientPaletteEntries = new();
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

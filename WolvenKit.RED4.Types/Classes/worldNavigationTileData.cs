@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class worldNavigationTileData : RedBaseClass
 	{
 		[Ordinal(0)] 
@@ -47,10 +48,6 @@ namespace WolvenKit.RED4.Types
 		public worldNavigationTileData()
 		{
 			OffMeshConnections = new() { Verts = new(), Radii = new(), Flags = new(), Areas = new(), Directions = new(), Ids = new(), TagIntervals = new(), TagsX = new(), GlobalNodeIDs = new(), UserData = new() };
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

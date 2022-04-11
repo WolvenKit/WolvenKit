@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class hudButtonReminderGameController : gameuiHUDGameController
 	{
 		[Ordinal(9)] 
@@ -97,10 +98,6 @@ namespace WolvenKit.RED4.Types
 			Button1 = new();
 			Button2 = new();
 			Button3 = new();
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

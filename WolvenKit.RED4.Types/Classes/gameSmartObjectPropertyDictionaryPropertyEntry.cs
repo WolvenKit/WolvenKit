@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class gameSmartObjectPropertyDictionaryPropertyEntry : RedBaseClass
 	{
 		[Ordinal(0)] 
@@ -87,10 +88,6 @@ namespace WolvenKit.RED4.Types
 		public gameSmartObjectPropertyDictionaryPropertyEntry()
 		{
 			MovementOrientation = Enums.moveMovementOrientationType.Forward;
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

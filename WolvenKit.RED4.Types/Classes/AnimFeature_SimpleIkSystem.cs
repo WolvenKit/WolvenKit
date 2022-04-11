@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class AnimFeature_SimpleIkSystem : animAnimFeature
 	{
 		[Ordinal(0)] 
@@ -75,10 +76,6 @@ namespace WolvenKit.RED4.Types
 			PositionOffset = new();
 			Rotation = new() { R = 1.000000F };
 			RotationOffset = new() { R = 1.000000F };
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

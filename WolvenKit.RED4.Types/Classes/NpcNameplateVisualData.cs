@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class NpcNameplateVisualData : RedBaseClass
 	{
 		[Ordinal(0)] 
@@ -33,10 +34,6 @@ namespace WolvenKit.RED4.Types
 			NpcNextToCrosshair = new() { Attitude = Enums.EAIAttitude.AIA_Neutral, HighLevelState = Enums.gamedataNPCHighLevelState.Any };
 			BuffList = new();
 			DebuffList = new();
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

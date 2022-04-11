@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class DistrictManager : IScriptable
 	{
 		[Ordinal(0)] 
@@ -32,10 +33,6 @@ namespace WolvenKit.RED4.Types
 		{
 			Stack = new();
 			VisitedDistricts = new();
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

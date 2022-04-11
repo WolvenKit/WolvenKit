@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class PerkDisplayContainerCreatedEvent : redEvent
 	{
 		[Ordinal(0)] 
@@ -27,12 +28,5 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CWeakHandle<PerkDisplayContainerController>>();
 			set => SetPropertyValue<CWeakHandle<PerkDisplayContainerController>>(value);
 		}
-
-		public PerkDisplayContainerCreatedEvent()
-		{
-			PostConstruct();
-		}
-
-		partial void PostConstruct();
 	}
 }

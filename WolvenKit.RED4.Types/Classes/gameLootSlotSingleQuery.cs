@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class gameLootSlotSingleQuery : gameLootSlot
 	{
 		[Ordinal(48)] 
@@ -15,10 +16,6 @@ namespace WolvenKit.RED4.Types
 		public gameLootSlotSingleQuery()
 		{
 			UseAreaLoot = false;
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class PuppetForceVisionAppearanceData : IScriptable
 	{
 		[Ordinal(0)] 
@@ -91,10 +92,6 @@ namespace WolvenKit.RED4.Types
 			Priority = Enums.EPriority.VeryHigh;
 			Targets = new();
 			HighlightedTargets = new();
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

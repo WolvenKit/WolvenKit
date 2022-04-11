@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class ClothingSetController : BaseButtonView
 	{
 		[Ordinal(2)] 
@@ -33,10 +34,6 @@ namespace WolvenKit.RED4.Types
 			SetEmptyIcon = new();
 			SetIcon = new();
 			ClothingSet = new() { SetID = -1, ClothingList = new() };
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

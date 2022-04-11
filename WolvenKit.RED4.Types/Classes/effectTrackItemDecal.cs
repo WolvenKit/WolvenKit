@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class effectTrackItemDecal : effectTrackItem
 	{
 		[Ordinal(3)] 
@@ -162,10 +163,6 @@ namespace WolvenKit.RED4.Types
 			AtlasFrameStart = -1;
 			AtlasFrameEnd = -1;
 			OrderPriority = Enums.RenderDecalOrderPriority.Priority3;
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

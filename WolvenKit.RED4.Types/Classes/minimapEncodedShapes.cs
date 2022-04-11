@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class minimapEncodedShapes : CResource
 	{
 		[Ordinal(1)] 
@@ -114,10 +115,6 @@ namespace WolvenKit.RED4.Types
 			QuantizationBias = new();
 			BoxQuantizationScale = new();
 			BoxQuantizationBias = new();
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

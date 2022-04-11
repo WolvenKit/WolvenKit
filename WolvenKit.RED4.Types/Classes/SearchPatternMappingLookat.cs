@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class SearchPatternMappingLookat : AISearchingLookat
 	{
 		[Ordinal(14)] 
@@ -28,10 +29,6 @@ namespace WolvenKit.RED4.Types
 			LastTarget = new();
 			SideHorizontal = 1;
 			SideVertical = 1;
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

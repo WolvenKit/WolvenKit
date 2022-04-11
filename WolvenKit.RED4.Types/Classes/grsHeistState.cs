@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class grsHeistState : RedBaseClass
 	{
 		[Ordinal(0)] 
@@ -32,10 +33,6 @@ namespace WolvenKit.RED4.Types
 		{
 			Time = new();
 			PlayersInfo = new(0);
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

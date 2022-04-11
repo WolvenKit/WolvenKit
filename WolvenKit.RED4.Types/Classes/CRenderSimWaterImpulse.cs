@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class CRenderSimWaterImpulse : IDynamicTextureGenerator
 	{
 		[Ordinal(0)] 
@@ -24,10 +25,6 @@ namespace WolvenKit.RED4.Types
 		{
 			Resolution = 1024;
 			SimulationSpeed = 24.000000F;
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

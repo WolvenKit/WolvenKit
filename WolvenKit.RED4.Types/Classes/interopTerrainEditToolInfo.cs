@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class interopTerrainEditToolInfo : RedBaseClass
 	{
 		[Ordinal(0)] 
@@ -95,10 +96,6 @@ namespace WolvenKit.RED4.Types
 		public interopTerrainEditToolInfo()
 		{
 			CreationSlots = new() { new() { Scale = new() { X = 1.000000F, Y = 1.000000F }, HeightMappingMax = 100.000000F }, new() { Scale = new() { X = 1.000000F, Y = 1.000000F }, HeightMappingMax = 100.000000F }, new() { Scale = new() { X = 1.000000F, Y = 1.000000F }, HeightMappingMax = 100.000000F } };
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

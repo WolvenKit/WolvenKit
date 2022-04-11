@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class VirtualItem_TEMP : gameObject
 	{
 		[Ordinal(35)] 
@@ -59,12 +60,5 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CHandle<entPhysicalMeshComponent>>();
 			set => SetPropertyValue<CHandle<entPhysicalMeshComponent>>(value);
 		}
-
-		public VirtualItem_TEMP()
-		{
-			PostConstruct();
-		}
-
-		partial void PostConstruct();
 	}
 }

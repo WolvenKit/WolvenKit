@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class MeleeHitTerminateGameEffectExecutor : gameEffectExecutor_Scripted
 	{
 		[Ordinal(1)] 
@@ -11,12 +12,5 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CBool>();
 			set => SetPropertyValue<CBool>(value);
 		}
-
-		public MeleeHitTerminateGameEffectExecutor()
-		{
-			PostConstruct();
-		}
-
-		partial void PostConstruct();
 	}
 }

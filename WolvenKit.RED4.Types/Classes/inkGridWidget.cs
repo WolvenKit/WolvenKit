@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class inkGridWidget : inkCompoundWidget
 	{
 		[Ordinal(23)] 
@@ -32,10 +33,6 @@ namespace WolvenKit.RED4.Types
 		{
 			ChildPadding = new();
 			ChildSizeStep = new();
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class TvInkGameController : DeviceInkGameControllerBase
 	{
 		[Ordinal(16)] 
@@ -171,10 +172,6 @@ namespace WolvenKit.RED4.Types
 			GlobalTVChannels = new();
 			PreviousGlobalTVChannelID = -1;
 			GlobalTVchanellsCount = -1;
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

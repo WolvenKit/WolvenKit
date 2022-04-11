@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class audioVehicleCollisionMap : audioAudioMetadata
 	{
 		[Ordinal(1)] 
@@ -118,10 +119,6 @@ namespace WolvenKit.RED4.Types
 			ScrapingMinVehicleUpCollisionContactAngle = 30.000000F;
 			UseScrapingMinVehicleUpCollisionContactAngle = true;
 			CollisionSettings = new();
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class SetVendorPriceMultiplierRequest : gameScriptableSystemRequest
 	{
 		[Ordinal(0)] 
@@ -23,10 +24,6 @@ namespace WolvenKit.RED4.Types
 		public SetVendorPriceMultiplierRequest()
 		{
 			Multiplier = 1.000000F;
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

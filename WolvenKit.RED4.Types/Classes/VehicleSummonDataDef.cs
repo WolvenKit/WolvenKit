@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class VehicleSummonDataDef : gamebbScriptDefinition
 	{
 		[Ordinal(0)] 
@@ -42,10 +43,6 @@ namespace WolvenKit.RED4.Types
 			UnlockedVehiclesCount = new();
 			SummonState = new();
 			SummonedVehicleEntityID = new();
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

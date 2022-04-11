@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class gameuiMinimapDeviceMappinController : gameuiBaseMinimapMappinController
 	{
 		[Ordinal(14)] 
@@ -15,10 +16,6 @@ namespace WolvenKit.RED4.Types
 		public gameuiMinimapDeviceMappinController()
 		{
 			EffectAreaWidget = new();
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

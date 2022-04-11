@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class AddItemForPlayerToPickUp : ScriptableDeviceAction
 	{
 		[Ordinal(25)] 
@@ -27,10 +28,6 @@ namespace WolvenKit.RED4.Types
 			ActionWidgetPackage = new() { DependendActions = new() };
 			CanTriggerStim = true;
 			ShouldAdd = true;
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

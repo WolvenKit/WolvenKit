@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class LiftSetMovementStateEvent : redEvent
 	{
 		[Ordinal(0)] 
@@ -11,12 +12,5 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CEnum<gamePlatformMovementState>>();
 			set => SetPropertyValue<CEnum<gamePlatformMovementState>>(value);
 		}
-
-		public LiftSetMovementStateEvent()
-		{
-			PostConstruct();
-		}
-
-		partial void PostConstruct();
 	}
 }

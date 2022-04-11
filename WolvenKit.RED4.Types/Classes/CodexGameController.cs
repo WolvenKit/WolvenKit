@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class CodexGameController : gameuiMenuGameController
 	{
 		[Ordinal(3)] 
@@ -175,10 +176,6 @@ namespace WolvenKit.RED4.Types
 			LeftBlockControllerRef = new();
 			FiltersContainer = new();
 			FiltersControllers = new();
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

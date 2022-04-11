@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class ChangeUpperBodyState : ChangeUpperBodyStateAbstract
 	{
 		[Ordinal(0)] 
@@ -11,12 +12,5 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CEnum<gamedataNPCUpperBodyState>>();
 			set => SetPropertyValue<CEnum<gamedataNPCUpperBodyState>>(value);
 		}
-
-		public ChangeUpperBodyState()
-		{
-			PostConstruct();
-		}
-
-		partial void PostConstruct();
 	}
 }

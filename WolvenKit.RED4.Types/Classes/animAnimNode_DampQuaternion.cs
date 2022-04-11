@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class animAnimNode_DampQuaternion : animAnimNode_QuaternionValue
 	{
 		[Ordinal(11)] 
@@ -52,10 +53,6 @@ namespace WolvenKit.RED4.Types
 			InputNode = new();
 			InitialValueNode = new();
 			RotationSpeedNode = new();
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

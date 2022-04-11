@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class questShiftTime_NodeType : questITimeManagerNodeType
 	{
 		[Ordinal(0)] 
@@ -47,10 +48,6 @@ namespace WolvenKit.RED4.Types
 		public questShiftTime_NodeType()
 		{
 			PreventVisualGlitch = true;
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

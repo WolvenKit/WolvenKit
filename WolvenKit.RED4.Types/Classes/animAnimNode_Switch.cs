@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class animAnimNode_Switch : animAnimNode_MotionTableSwitch
 	{
 		[Ordinal(11)] 
@@ -82,10 +83,6 @@ namespace WolvenKit.RED4.Types
 			BlendTime = 0.100000F;
 			WeightNode = new();
 			InputNodes = new();
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

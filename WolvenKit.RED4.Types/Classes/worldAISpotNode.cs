@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class worldAISpotNode : worldSocketNode
 	{
 		[Ordinal(4)] 
@@ -99,10 +100,6 @@ namespace WolvenKit.RED4.Types
 			UseCrowdBlacklist = true;
 			CrowdWhitelist = new() { Tags = new() };
 			CrowdBlacklist = new() { Tags = new() };
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

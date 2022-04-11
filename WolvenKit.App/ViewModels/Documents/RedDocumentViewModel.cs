@@ -301,15 +301,8 @@ namespace WolvenKit.ViewModels.Documents
                         {
                             using var reader = new BinaryReader(stream);
                             cr2wFile = _parser.ReadRed4File(reader);
+                            cr2wFile.MetaData.FileName = depotPath;
                         }
-
-                        if (cr2wFile == null)
-                        {
-                            goto BadFile;
-                        }
-
-                        cr2wFile.MetaData.FileName = depotPath;
-
                         lock (Files)
                         {
                             foreach (var res in cr2wFile.EmbeddedFiles)
@@ -328,8 +321,6 @@ namespace WolvenKit.ViewModels.Documents
                     }
                 }
             }
-
-            BadFile:
 
             var _archiveManager = Locator.Current.GetService<IArchiveManager>();
             var file = _archiveManager.Lookup(depotPath.GetRedHash());

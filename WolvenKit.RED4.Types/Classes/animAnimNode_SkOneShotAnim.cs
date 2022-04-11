@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class animAnimNode_SkOneShotAnim : animAnimNode_SkAnim
 	{
 		[Ordinal(30)] 
@@ -31,10 +32,6 @@ namespace WolvenKit.RED4.Types
 		public animAnimNode_SkOneShotAnim()
 		{
 			Input = new();
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

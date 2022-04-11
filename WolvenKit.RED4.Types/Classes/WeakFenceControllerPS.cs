@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class WeakFenceControllerPS : ScriptableDeviceComponentPS
 	{
 		[Ordinal(104)] 
@@ -29,10 +30,6 @@ namespace WolvenKit.RED4.Types
 			ShouldScannerShowNetwork = false;
 			ShouldScannerShowRole = true;
 			WeakFenceSetup = new();
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

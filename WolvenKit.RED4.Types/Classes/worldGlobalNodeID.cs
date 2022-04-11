@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class worldGlobalNodeID : RedBaseClass
 	{
 		[Ordinal(0)] 
@@ -11,12 +12,5 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CUInt64>();
 			set => SetPropertyValue<CUInt64>(value);
 		}
-
-		public worldGlobalNodeID()
-		{
-			PostConstruct();
-		}
-
-		partial void PostConstruct();
 	}
 }

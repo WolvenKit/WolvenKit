@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class gameuiInputHintManagerGameController : gameuiWidgetGameController
 	{
 		[Ordinal(2)] 
@@ -66,10 +67,6 @@ namespace WolvenKit.RED4.Types
 			GroupsContainer = new();
 			HintLibRef = new() { WidgetLibrary = new() };
 			GroupLibRef = new() { WidgetLibrary = new() };
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

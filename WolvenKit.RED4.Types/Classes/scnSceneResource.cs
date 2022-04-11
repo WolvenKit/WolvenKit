@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class scnSceneResource : CResource
 	{
 		[Ordinal(1)] 
@@ -229,10 +230,6 @@ namespace WolvenKit.RED4.Types
 			SceneSolutionHash = new() { SceneSolutionHash = new() };
 			SceneCategoryTag = Enums.scnSceneCategoryTag.other;
 			DebugSymbols = new() { PerformersDebugSymbols = new(), WorkspotsDebugSymbols = new(), SceneEventsDebugSymbols = new(), SceneNodesDebugSymbols = new() };
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

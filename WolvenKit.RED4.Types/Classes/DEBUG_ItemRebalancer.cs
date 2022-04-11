@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class DEBUG_ItemRebalancer : gameObject
 	{
 		[Ordinal(35)] 
@@ -11,12 +12,5 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<NodeRef>();
 			set => SetPropertyValue<NodeRef>(value);
 		}
-
-		public DEBUG_ItemRebalancer()
-		{
-			PostConstruct();
-		}
-
-		partial void PostConstruct();
 	}
 }

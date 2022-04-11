@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class SimpleSwitchControllerPS : MasterControllerPS
 	{
 		[Ordinal(105)] 
@@ -33,10 +34,6 @@ namespace WolvenKit.RED4.Types
 			DeviceName = "LocKey#115";
 			TweakDBRecord = 87940692723;
 			TweakDBDescriptionRecord = 138796611214;
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

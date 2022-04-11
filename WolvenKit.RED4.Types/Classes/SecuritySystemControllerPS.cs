@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class SecuritySystemControllerPS : DeviceSystemBaseControllerPS
 	{
 		[Ordinal(106)] 
@@ -258,10 +259,6 @@ namespace WolvenKit.RED4.Types
 			BlacklistDelayID = new();
 			MaxGlobalWarningsCount = 4;
 			DeescalationEventID = new();
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

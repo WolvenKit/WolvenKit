@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class VehicleComponentPS : ScriptableDeviceComponentPS
 	{
 		[Ordinal(104)] 
@@ -216,10 +217,6 @@ namespace WolvenKit.RED4.Types
 		{
 			NpcOccupiedSlots = new();
 			PreviousInteractionState = new();
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

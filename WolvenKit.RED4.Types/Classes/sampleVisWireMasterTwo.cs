@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class sampleVisWireMasterTwo : gameObject
 	{
 		[Ordinal(35)] 
@@ -15,10 +16,6 @@ namespace WolvenKit.RED4.Types
 		public sampleVisWireMasterTwo()
 		{
 			DependableEntities = new();
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

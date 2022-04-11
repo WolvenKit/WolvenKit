@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class ItemCreationPrereq : gameIScriptablePrereq
 	{
 		[Ordinal(0)] 
@@ -35,12 +36,5 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CEnum<EComparisonType>>();
 			set => SetPropertyValue<CEnum<EComparisonType>>(value);
 		}
-
-		public ItemCreationPrereq()
-		{
-			PostConstruct();
-		}
-
-		partial void PostConstruct();
 	}
 }

@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class UIInGameNotificationQueue : gameuiGenericNotificationGameController
 	{
 		[Ordinal(2)] 
@@ -15,10 +16,6 @@ namespace WolvenKit.RED4.Types
 		public UIInGameNotificationQueue()
 		{
 			Duration = 5.000000F;
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

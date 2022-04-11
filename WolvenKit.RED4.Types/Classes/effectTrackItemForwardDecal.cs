@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class effectTrackItemForwardDecal : effectTrackItem
 	{
 		[Ordinal(3)] 
@@ -115,10 +116,6 @@ namespace WolvenKit.RED4.Types
 			SizeThreshold = 0.050000F;
 			SubUVx = 1;
 			SubUVy = 1;
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

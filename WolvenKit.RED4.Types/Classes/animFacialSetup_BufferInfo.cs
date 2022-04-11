@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class animFacialSetup_BufferInfo : RedBaseClass
 	{
 		[Ordinal(0)] 
@@ -58,10 +59,6 @@ namespace WolvenKit.RED4.Types
 			Face = new();
 			Eyes = new();
 			Tongue = new();
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

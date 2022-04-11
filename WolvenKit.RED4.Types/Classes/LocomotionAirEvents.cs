@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class LocomotionAirEvents : LocomotionEventsTransition
 	{
 		[Ordinal(6)] 
@@ -27,12 +28,5 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CBool>();
 			set => SetPropertyValue<CBool>(value);
 		}
-
-		public LocomotionAirEvents()
-		{
-			PostConstruct();
-		}
-
-		partial void PostConstruct();
 	}
 }

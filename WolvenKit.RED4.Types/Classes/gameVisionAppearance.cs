@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class gameVisionAppearance : RedBaseClass
 	{
 		[Ordinal(0)] 
@@ -35,12 +36,5 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CEnum<gameVisionModePatternType>>();
 			set => SetPropertyValue<CEnum<gameVisionModePatternType>>(value);
 		}
-
-		public gameVisionAppearance()
-		{
-			PostConstruct();
-		}
-
-		partial void PostConstruct();
 	}
 }

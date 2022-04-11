@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class AIArchetypeSetEntry : RedBaseClass
 	{
 		[Ordinal(0)] 
@@ -19,12 +20,5 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CResourceReference<AIArchetype>>();
 			set => SetPropertyValue<CResourceReference<AIArchetype>>(value);
 		}
-
-		public AIArchetypeSetEntry()
-		{
-			PostConstruct();
-		}
-
-		partial void PostConstruct();
 	}
 }

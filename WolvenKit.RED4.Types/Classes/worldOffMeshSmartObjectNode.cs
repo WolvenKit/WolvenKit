@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class worldOffMeshSmartObjectNode : worldOffMeshConnectionNode
 	{
 		[Ordinal(13)] 
@@ -11,12 +12,5 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CHandle<gameSmartObjectDefinition>>();
 			set => SetPropertyValue<CHandle<gameSmartObjectDefinition>>(value);
 		}
-
-		public worldOffMeshSmartObjectNode()
-		{
-			PostConstruct();
-		}
-
-		partial void PostConstruct();
 	}
 }

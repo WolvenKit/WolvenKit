@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class PlayerCombatStateTimePrereq : gameIScriptablePrereq
 	{
 		[Ordinal(0)] 
@@ -24,10 +25,6 @@ namespace WolvenKit.RED4.Types
 		{
 			MinTime = -1.000000F;
 			MaxTime = -1.000000F;
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

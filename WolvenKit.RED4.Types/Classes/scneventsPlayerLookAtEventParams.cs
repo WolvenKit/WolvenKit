@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class scneventsPlayerLookAtEventParams : RedBaseClass
 	{
 		[Ordinal(0)] 
@@ -114,10 +115,6 @@ namespace WolvenKit.RED4.Types
 			Duration = 0.250000F;
 			EaseIn = true;
 			EaseOut = true;
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

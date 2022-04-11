@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class ToggleOperationEvent : redEvent
 	{
 		[Ordinal(0)] 
@@ -27,12 +28,5 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CEnum<EOperationClassType>>();
 			set => SetPropertyValue<CEnum<EOperationClassType>>(value);
 		}
-
-		public ToggleOperationEvent()
-		{
-			PostConstruct();
-		}
-
-		partial void PostConstruct();
 	}
 }

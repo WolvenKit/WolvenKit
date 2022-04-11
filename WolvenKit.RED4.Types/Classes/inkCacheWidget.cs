@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class inkCacheWidget : inkCompoundWidget
 	{
 		[Ordinal(23)] 
@@ -31,10 +32,6 @@ namespace WolvenKit.RED4.Types
 		public inkCacheWidget()
 		{
 			InnerScale = new() { X = 1.000000F, Y = 1.000000F };
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

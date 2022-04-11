@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class InventoryTooltipData_StatData : RedBaseClass
 	{
 		[Ordinal(0)] 
@@ -91,12 +92,5 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CEnum<EInventoryDataStatDisplayType>>();
 			set => SetPropertyValue<CEnum<EInventoryDataStatDisplayType>>(value);
 		}
-
-		public InventoryTooltipData_StatData()
-		{
-			PostConstruct();
-		}
-
-		partial void PostConstruct();
 	}
 }

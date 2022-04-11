@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class SystemDeviceWidgetController : DeviceWidgetControllerBase
 	{
 		[Ordinal(10)] 
@@ -24,10 +25,6 @@ namespace WolvenKit.RED4.Types
 		{
 			SlavesConnectedCount = new();
 			ConnectedDevicesHolder = new();
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

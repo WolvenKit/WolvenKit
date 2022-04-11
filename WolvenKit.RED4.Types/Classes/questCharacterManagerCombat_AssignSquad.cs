@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class questCharacterManagerCombat_AssignSquad : questICharacterManagerCombat_NodeSubType
 	{
 		[Ordinal(0)] 
@@ -33,10 +34,6 @@ namespace WolvenKit.RED4.Types
 			PresetID = 130861404206;
 			PuppetRef = new() { Names = new() };
 			SquadType = Enums.AISquadType.Combat;
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

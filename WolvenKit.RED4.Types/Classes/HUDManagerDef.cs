@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class HUDManagerDef : gamebbScriptDefinition
 	{
 		[Ordinal(0)] 
@@ -24,10 +25,6 @@ namespace WolvenKit.RED4.Types
 		{
 			ShowHudHintMessege = new();
 			HudHintMessegeContent = new();
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

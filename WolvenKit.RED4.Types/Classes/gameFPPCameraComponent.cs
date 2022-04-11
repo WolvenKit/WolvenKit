@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class gameFPPCameraComponent : gameCameraComponent
 	{
 		[Ordinal(35)] 
@@ -73,10 +74,6 @@ namespace WolvenKit.RED4.Types
 			Fov = 51.000000F;
 			SensitivityMultX = 1.000000F;
 			SensitivityMultY = 1.000000F;
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class ListItemsGroupController : CodexListItemController
 	{
 		[Ordinal(19)] 
@@ -82,10 +83,6 @@ namespace WolvenKit.RED4.Types
 			FoldArrowRef = new();
 			FoldoutButton = new();
 			Data = new();
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

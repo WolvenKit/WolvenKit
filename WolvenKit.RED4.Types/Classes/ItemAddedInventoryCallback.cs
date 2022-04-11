@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class ItemAddedInventoryCallback : gameInventoryScriptCallback
 	{
 		[Ordinal(1)] 
@@ -11,12 +12,5 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CWeakHandle<ItemsNotificationQueue>>();
 			set => SetPropertyValue<CWeakHandle<ItemsNotificationQueue>>(value);
 		}
-
-		public ItemAddedInventoryCallback()
-		{
-			PostConstruct();
-		}
-
-		partial void PostConstruct();
 	}
 }

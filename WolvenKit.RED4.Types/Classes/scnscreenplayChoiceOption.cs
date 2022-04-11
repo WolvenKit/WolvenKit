@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class scnscreenplayChoiceOption : RedBaseClass
 	{
 		[Ordinal(0)] 
@@ -33,10 +34,6 @@ namespace WolvenKit.RED4.Types
 			ItemId = new() { Id = 4294967040 };
 			Usage = new() { PlayerGenderMask = new() { Mask = 128 } };
 			LocstringId = new();
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

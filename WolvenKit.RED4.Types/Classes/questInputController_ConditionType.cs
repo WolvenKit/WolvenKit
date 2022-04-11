@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class questInputController_ConditionType : questISystemConditionType
 	{
 		[Ordinal(0)] 
@@ -11,12 +12,5 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CEnum<questInputDevice>>();
 			set => SetPropertyValue<CEnum<questInputDevice>>(value);
 		}
-
-		public questInputController_ConditionType()
-		{
-			PostConstruct();
-		}
-
-		partial void PostConstruct();
 	}
 }

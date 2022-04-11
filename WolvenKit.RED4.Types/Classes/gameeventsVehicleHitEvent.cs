@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class gameeventsVehicleHitEvent : gameeventsHitEvent
 	{
 		[Ordinal(12)] 
@@ -24,10 +25,6 @@ namespace WolvenKit.RED4.Types
 		{
 			VehicleVelocity = new();
 			PreyVelocity = new();
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

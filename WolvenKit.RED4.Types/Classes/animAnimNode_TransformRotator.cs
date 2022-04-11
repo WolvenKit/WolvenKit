@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class animAnimNode_TransformRotator : animAnimNode_OnePoseInput
 	{
 		[Ordinal(12)] 
@@ -79,10 +80,6 @@ namespace WolvenKit.RED4.Types
 			AngleMax = 180.000000F;
 			AngleValueNode = new();
 			AngleSpeedNode = new();
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

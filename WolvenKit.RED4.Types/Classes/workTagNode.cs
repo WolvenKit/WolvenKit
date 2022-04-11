@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class workTagNode : workIEntry
 	{
 		[Ordinal(2)] 
@@ -16,10 +17,6 @@ namespace WolvenKit.RED4.Types
 		{
 			Id = new() { Id = 4294967295 };
 			Flags = 128;
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

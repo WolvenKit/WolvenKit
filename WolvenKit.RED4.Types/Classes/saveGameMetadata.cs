@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class saveGameMetadata : RedBaseClass
 	{
 		[Ordinal(0)] 
@@ -337,10 +338,6 @@ namespace WolvenKit.RED4.Types
 			PlayerPosition = new();
 			PlayTime = 0.000000;
 			PlaythroughTime = 0.000000;
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

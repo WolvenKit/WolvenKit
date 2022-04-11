@@ -1,13 +1,8 @@
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class SceneTierAbstract : HighLevelTransition
 	{
-		public SceneTierAbstract()
-		{
-			PostConstruct();
-		}
-
-		partial void PostConstruct();
 	}
 }

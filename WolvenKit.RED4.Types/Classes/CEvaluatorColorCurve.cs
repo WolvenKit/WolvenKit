@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class CEvaluatorColorCurve : IEvaluatorColor
 	{
 		[Ordinal(0)] 
@@ -23,10 +24,6 @@ namespace WolvenKit.RED4.Types
 		public CEvaluatorColorCurve()
 		{
 			NumberOfCurveSamples = 16;
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

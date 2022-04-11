@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class entPhysicalSkinnedMeshComponent : entSkinnedMeshComponent
 	{
 		[Ordinal(25)] 
@@ -47,10 +48,6 @@ namespace WolvenKit.RED4.Types
 		public entPhysicalSkinnedMeshComponent()
 		{
 			SimulationType = Enums.physicsSimulationType.Kinematic;
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

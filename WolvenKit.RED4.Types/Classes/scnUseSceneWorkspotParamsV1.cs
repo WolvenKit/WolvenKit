@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class scnUseSceneWorkspotParamsV1 : questUseWorkspotParamsV1
 	{
 		[Ordinal(22)] 
@@ -32,10 +33,6 @@ namespace WolvenKit.RED4.Types
 		{
 			WorkspotInstanceId = new() { Id = 4294967295 };
 			ItemOverride = new() { PropOverrides = new(), ItemOverrides = new() };
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

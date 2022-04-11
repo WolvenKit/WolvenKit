@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class questPlayFX_NodeTypeParams : RedBaseClass
 	{
 		[Ordinal(0)] 
@@ -48,10 +49,6 @@ namespace WolvenKit.RED4.Types
 		{
 			Play = true;
 			ObjectRef = new() { Names = new() };
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class DistantFogAreaSettings : IAreaSettings
 	{
 		[Ordinal(2)] 
@@ -151,10 +152,6 @@ namespace WolvenKit.RED4.Types
 		public DistantFogAreaSettings()
 		{
 			Enable = true;
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

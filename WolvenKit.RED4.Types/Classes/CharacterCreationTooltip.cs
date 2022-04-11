@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class CharacterCreationTooltip : MessageTooltip
 	{
 		[Ordinal(5)] 
@@ -42,10 +43,6 @@ namespace WolvenKit.RED4.Types
 			MaxedOrMinimumLabelText = new();
 			MaxedOrMinimumLabel = new();
 			AttribiuteLevelLabel = new();
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

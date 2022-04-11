@@ -1,8 +1,8 @@
 namespace WolvenKit.RED4.Types
 {
-    public partial class animAnimNode_ReferencePoseTerminator
+    public partial class animAnimNode_ReferencePoseTerminator : IRedOverload
     {
-        partial void PostConstruct()
+        void IRedOverload.ConstructorOverload()
         {
             VisWhenActive = true;
         }

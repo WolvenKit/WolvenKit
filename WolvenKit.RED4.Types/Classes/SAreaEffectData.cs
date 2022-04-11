@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class SAreaEffectData : RedBaseClass
 	{
 		[Ordinal(0)] 
@@ -150,10 +151,6 @@ namespace WolvenKit.RED4.Types
 			HighlightTargets = true;
 			HighlightType = Enums.EFocusForcedHighlightType.DISTRACTION;
 			HighlightPriority = Enums.EPriority.High;
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

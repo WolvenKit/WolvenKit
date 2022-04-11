@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class AICTreeNodeActionAnimationCurvePathDefinition : AICTreeNodeActionDefinition
 	{
 		[Ordinal(1)] 
@@ -150,10 +151,6 @@ namespace WolvenKit.RED4.Types
 			StopSnapToTerrain = new() { VariableId = 65535 };
 			StartSnapToTerrainBlendTime = new() { VariableId = 65535 };
 			StopSnapToTerrainBlendTime = new() { VariableId = 65535 };
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

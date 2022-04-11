@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class meshRegionData : RedBaseClass
 	{
 		[Ordinal(0)] 
@@ -48,10 +49,6 @@ namespace WolvenKit.RED4.Types
 		{
 			ChunkDataIntact = new();
 			ChunkDataFractured = new();
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

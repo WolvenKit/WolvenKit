@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class TakedownReleasePreyDecisions : LocomotionTakedownDecisions
 	{
 		[Ordinal(3)] 
@@ -11,12 +12,5 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CWeakHandle<LocomotionTakedownInitData>>();
 			set => SetPropertyValue<CWeakHandle<LocomotionTakedownInitData>>(value);
 		}
-
-		public TakedownReleasePreyDecisions()
-		{
-			PostConstruct();
-		}
-
-		partial void PostConstruct();
 	}
 }

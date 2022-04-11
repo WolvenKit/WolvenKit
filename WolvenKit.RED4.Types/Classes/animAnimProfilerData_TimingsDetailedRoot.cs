@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class animAnimProfilerData_TimingsDetailedRoot : ISerializable
 	{
 		[Ordinal(0)] 
@@ -24,10 +25,6 @@ namespace WolvenKit.RED4.Types
 		{
 			Sections = new();
 			Timings = new();
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class entDecalComponent : entIVisualComponent
 	{
 		[Ordinal(8)] 
@@ -145,10 +146,6 @@ namespace WolvenKit.RED4.Types
 			RoughnessScale = 1.000000F;
 			ShouldCollectWithRayTracing = true;
 			IsEnabled = true;
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

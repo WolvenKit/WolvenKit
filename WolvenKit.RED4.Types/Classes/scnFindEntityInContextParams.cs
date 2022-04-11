@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class scnFindEntityInContextParams : RedBaseClass
 	{
 		[Ordinal(0)] 
@@ -47,10 +48,6 @@ namespace WolvenKit.RED4.Types
 		public scnFindEntityInContextParams()
 		{
 			VoiceVagId = new();
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class gamePendingSubtitles : RedBaseClass
 	{
 		[Ordinal(0)] 
@@ -15,10 +16,6 @@ namespace WolvenKit.RED4.Types
 		public gamePendingSubtitles()
 		{
 			PendingSubtitles = new();
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

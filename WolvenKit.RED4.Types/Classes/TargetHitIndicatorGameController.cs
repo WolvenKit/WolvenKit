@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class TargetHitIndicatorGameController : gameuiWidgetGameController
 	{
 		[Ordinal(2)] 
@@ -232,10 +233,6 @@ namespace WolvenKit.RED4.Types
 		{
 			CurrentSway = new();
 			WeaponID = new() { IdType = Enums.gameStatIDType.Invalid };
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

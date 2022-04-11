@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class StopAndPlaySFXEffector : gameEffector
 	{
 		[Ordinal(0)] 
@@ -27,12 +28,5 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CWeakHandle<gameObject>>();
 			set => SetPropertyValue<CWeakHandle<gameObject>>(value);
 		}
-
-		public StopAndPlaySFXEffector()
-		{
-			PostConstruct();
-		}
-
-		partial void PostConstruct();
 	}
 }

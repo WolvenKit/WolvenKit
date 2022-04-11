@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class entClothComponent : entIVisualComponent
 	{
 		[Ordinal(8)] 
@@ -27,10 +28,6 @@ namespace WolvenKit.RED4.Types
 			RenderSceneLayerMask = Enums.RenderSceneLayerMask.Default;
 			ForceLODLevel = -1;
 			IsEnabled = true;
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

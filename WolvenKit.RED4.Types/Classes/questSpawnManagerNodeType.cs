@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class questSpawnManagerNodeType : questIRetNodeType
 	{
 		[Ordinal(0)] 
@@ -11,12 +12,5 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CEnum<populationSpawnerObjectCtrlAction>>();
 			set => SetPropertyValue<CEnum<populationSpawnerObjectCtrlAction>>(value);
 		}
-
-		public questSpawnManagerNodeType()
-		{
-			PostConstruct();
-		}
-
-		partial void PostConstruct();
 	}
 }

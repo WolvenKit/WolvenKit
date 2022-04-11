@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class gameTPPRepresentationComponent : entIComponent
 	{
 		[Ordinal(3)] 
@@ -34,10 +35,6 @@ namespace WolvenKit.RED4.Types
 			DetachedObjectInfo = new();
 			AttachedObjectInfo = new();
 			AffectedAppearanceSlots = new();
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

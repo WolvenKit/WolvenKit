@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class characterCreationStatsAttributeBtn : inkWidgetLogicController
 	{
 		[Ordinal(1)] 
@@ -127,10 +128,6 @@ namespace WolvenKit.RED4.Types
 			MinusBtnhitArea = new();
 			MinMaxLabel = new();
 			MinMaxLabelText = new();
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

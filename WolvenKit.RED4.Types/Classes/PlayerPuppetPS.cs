@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class PlayerPuppetPS : ScriptedPuppetPS
 	{
 		[Ordinal(33)] 
@@ -48,10 +49,6 @@ namespace WolvenKit.RED4.Types
 		{
 			Keybindigs = new();
 			AvailablePrograms = new();
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

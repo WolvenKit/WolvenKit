@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	[REDClass(SerializeDefault = true)]
 	public partial class Sphere : RedBaseClass
 	{
@@ -16,10 +17,6 @@ namespace WolvenKit.RED4.Types
 		public Sphere()
 		{
 			CenterRadius2 = new();
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

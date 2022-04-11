@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	[REDClass(SerializeDefault = true)]
 	public partial class Plane : RedBaseClass
 	{
@@ -16,10 +17,6 @@ namespace WolvenKit.RED4.Types
 		public Plane()
 		{
 			NormalDistance = new();
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

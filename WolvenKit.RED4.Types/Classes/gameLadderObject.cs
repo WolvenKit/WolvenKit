@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class gameLadderObject : gameObject
 	{
 		[Ordinal(35)] 
@@ -78,10 +79,6 @@ namespace WolvenKit.RED4.Types
 			ExitStepJump = 0.600000F;
 			VerticalStepJump = 0.200000F;
 			EnterOffset = 0.500000F;
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

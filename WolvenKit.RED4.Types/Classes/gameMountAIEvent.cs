@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class gameMountAIEvent : AIAIEvent
 	{
 		[Ordinal(2)] 
@@ -11,12 +12,5 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CHandle<gameMountEventData>>();
 			set => SetPropertyValue<CHandle<gameMountEventData>>(value);
 		}
-
-		public gameMountAIEvent()
-		{
-			PostConstruct();
-		}
-
-		partial void PostConstruct();
 	}
 }

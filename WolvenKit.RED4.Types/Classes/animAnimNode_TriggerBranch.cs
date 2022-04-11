@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class animAnimNode_TriggerBranch : animAnimNode_Base
 	{
 		[Ordinal(11)] 
@@ -66,10 +67,6 @@ namespace WolvenKit.RED4.Types
 			Base = new();
 			Overlay = new();
 			Cooldown = -1.000000F;
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

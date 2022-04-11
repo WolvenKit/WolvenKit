@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class gameweaponGrenade : gameItemObject
 	{
 		[Ordinal(38)] 
@@ -23,10 +24,6 @@ namespace WolvenKit.RED4.Types
 		public gameweaponGrenade()
 		{
 			LastHitNormal = new();
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

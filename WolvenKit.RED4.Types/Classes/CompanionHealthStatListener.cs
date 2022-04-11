@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class CompanionHealthStatListener : gameScriptStatPoolsListener
 	{
 		[Ordinal(0)] 
@@ -11,12 +12,5 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CWeakHandle<CompanionHealthBarGameController>>();
 			set => SetPropertyValue<CWeakHandle<CompanionHealthBarGameController>>(value);
 		}
-
-		public CompanionHealthStatListener()
-		{
-			PostConstruct();
-		}
-
-		partial void PostConstruct();
 	}
 }

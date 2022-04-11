@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class questCharacterGroupAttitude_CondtionType : questICharacterConditionType
 	{
 		[Ordinal(0)] 
@@ -31,10 +32,6 @@ namespace WolvenKit.RED4.Types
 		public questCharacterGroupAttitude_CondtionType()
 		{
 			Attitude = Enums.EAIAttitude.AIA_Neutral;
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

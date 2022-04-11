@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class STvChannel : RedBaseClass
 	{
 		[Ordinal(0)] 
@@ -66,10 +67,6 @@ namespace WolvenKit.RED4.Types
 			VideoPath = new();
 			Looped = true;
 			Sequence = new();
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

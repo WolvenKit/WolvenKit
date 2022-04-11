@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class gameuiCreditsController : gameuiWidgetGameController
 	{
 		[Ordinal(2)] 
@@ -206,10 +207,6 @@ namespace WolvenKit.RED4.Types
 			ExitTooltipContainer = new();
 			SubtitlesContainer = new();
 			ExitNotificationDisplayTime = 3.000000F;
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

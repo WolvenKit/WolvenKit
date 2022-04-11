@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class ApplyLightPresetEffector : gameEffector
 	{
 		[Ordinal(0)] 
@@ -11,12 +12,5 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CWeakHandle<gamedataLightPreset_Record>>();
 			set => SetPropertyValue<CWeakHandle<gamedataLightPreset_Record>>(value);
 		}
-
-		public ApplyLightPresetEffector()
-		{
-			PostConstruct();
-		}
-
-		partial void PostConstruct();
 	}
 }

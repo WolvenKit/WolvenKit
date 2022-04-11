@@ -125,7 +125,7 @@ namespace WolvenKit.Functionality.Layout.inkWidgets
                 return null;
             }
 
-            if (CompoundWidget.ChildOrder == Enums.inkEChildOrder.Forward)
+            if (CompoundWidget.ChildOrder.Value == Enums.inkEChildOrder.Forward)
             {
                 return (inkControl)Children[index];
             }

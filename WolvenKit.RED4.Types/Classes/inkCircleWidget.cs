@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class inkCircleWidget : inkBaseShapeWidget
 	{
 		[Ordinal(20)] 
@@ -15,10 +16,6 @@ namespace WolvenKit.RED4.Types
 		public inkCircleWidget()
 		{
 			SegmentsNumber = 20;
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

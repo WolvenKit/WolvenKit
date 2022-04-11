@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class SensorJammed : redEvent
 	{
 		[Ordinal(0)] 
@@ -11,12 +12,5 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CWeakHandle<SensorDevice>>();
 			set => SetPropertyValue<CWeakHandle<SensorDevice>>(value);
 		}
-
-		public SensorJammed()
-		{
-			PostConstruct();
-		}
-
-		partial void PostConstruct();
 	}
 }

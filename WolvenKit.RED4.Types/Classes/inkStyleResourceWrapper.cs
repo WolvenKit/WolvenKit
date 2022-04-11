@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class inkStyleResourceWrapper : ISerializable
 	{
 		[Ordinal(0)] 
@@ -11,12 +12,5 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CResourceAsyncReference<inkStyleResource>>();
 			set => SetPropertyValue<CResourceAsyncReference<inkStyleResource>>(value);
 		}
-
-		public inkStyleResourceWrapper()
-		{
-			PostConstruct();
-		}
-
-		partial void PostConstruct();
 	}
 }

@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class animLookAtAnimationDefinition : RedBaseClass
 	{
 		[Ordinal(0)] 
@@ -41,10 +42,6 @@ namespace WolvenKit.RED4.Types
 			MinTransitionDuration = 1.000000F;
 			PlayAnimProbability = 1.000000F;
 			Animations = new();
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

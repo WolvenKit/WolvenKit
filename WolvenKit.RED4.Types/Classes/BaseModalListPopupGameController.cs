@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class BaseModalListPopupGameController : gameuiWidgetGameController
 	{
 		[Ordinal(2)] 
@@ -96,10 +97,6 @@ namespace WolvenKit.RED4.Types
 		{
 			Content = new();
 			C_scrollInputThreshold = 0.750000F;
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

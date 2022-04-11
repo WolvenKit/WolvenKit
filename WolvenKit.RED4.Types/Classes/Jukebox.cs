@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class Jukebox : InteractiveDevice
 	{
 		[Ordinal(94)] 
@@ -15,10 +16,6 @@ namespace WolvenKit.RED4.Types
 		public Jukebox()
 		{
 			ControllerTypeName = "JukeboxController";
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

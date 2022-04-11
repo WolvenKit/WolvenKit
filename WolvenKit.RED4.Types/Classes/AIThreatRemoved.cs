@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class AIThreatRemoved : AIAIEvent
 	{
 		[Ordinal(2)] 
@@ -43,12 +44,5 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CBool>();
 			set => SetPropertyValue<CBool>(value);
 		}
-
-		public AIThreatRemoved()
-		{
-			PostConstruct();
-		}
-
-		partial void PostConstruct();
 	}
 }

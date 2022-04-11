@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class questCharacterControlledObjectHit_ConditionType : questICharacterConditionType
 	{
 		[Ordinal(0)] 
@@ -68,10 +69,6 @@ namespace WolvenKit.RED4.Types
 			ExcludeHitTypes = new();
 			IncludeHitShapes = new();
 			ExcludeHitShapes = new();
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

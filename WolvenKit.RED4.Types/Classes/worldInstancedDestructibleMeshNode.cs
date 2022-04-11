@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class worldInstancedDestructibleMeshNode : worldMeshNode
 	{
 		[Ordinal(1000)] 
@@ -200,10 +201,6 @@ namespace WolvenKit.RED4.Types
 			CookedInstanceTransforms = new();
 			NavigationSetting = new() { NavmeshImpact = Enums.NavGenNavmeshImpact.Blocking };
 			UseMeshNavmeshSettings = true;
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

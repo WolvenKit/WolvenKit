@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class QuickWheelEndUIStructure : RedBaseClass
 	{
 		[Ordinal(0)] 
@@ -39,10 +40,6 @@ namespace WolvenKit.RED4.Types
 		public QuickWheelEndUIStructure()
 		{
 			ChosenItem = new() { IsSlotUnlocked = true, ItemId = new(), PlayerVehicleData = new() { VehicleType = Enums.gamedataVehicleType.Invalid }, InteractiveActionOwner = new() };
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

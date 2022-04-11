@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class scnEffectInstance : RedBaseClass
 	{
 		[Ordinal(0)] 
@@ -24,10 +25,6 @@ namespace WolvenKit.RED4.Types
 		{
 			EffectInstanceId = new() { EffectId = new() { Id = 4294967295 }, Id = 4294967295 };
 			CompiledEffect = new() { PlacementTags = new(), ComponentNames = new(), RelativePositions = new(), RelativeRotations = new(), PlacementInfos = new(), EventsSortedByRUID = new() };
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

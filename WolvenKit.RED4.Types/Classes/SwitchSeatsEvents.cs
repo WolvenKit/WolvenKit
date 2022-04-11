@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class SwitchSeatsEvents : VehicleEventsTransition
 	{
 		[Ordinal(3)] 
@@ -23,10 +24,6 @@ namespace WolvenKit.RED4.Types
 		public SwitchSeatsEvents()
 		{
 			CameraToggleHoldToResetTimeSeconds = 0.350000F;
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

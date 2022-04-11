@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class animAnimNode_LookAtApplyVehicleRestrictions : animAnimNode_OnePoseInput
 	{
 		[Ordinal(12)] 
@@ -33,10 +34,6 @@ namespace WolvenKit.RED4.Types
 			Id = 4294967295;
 			InputLink = new();
 			ReferenceBone = new();
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

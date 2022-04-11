@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class worldCompiledEffectPlacementInfo : RedBaseClass
 	{
 		[Ordinal(0)] 
@@ -41,10 +42,6 @@ namespace WolvenKit.RED4.Types
 			PlacementTagIndex = 255;
 			RelativePositionIndex = 255;
 			RelativeRotationIndex = 255;
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

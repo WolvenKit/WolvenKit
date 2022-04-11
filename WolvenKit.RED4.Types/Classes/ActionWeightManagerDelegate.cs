@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class ActionWeightManagerDelegate : AIbehaviorScriptBehaviorDelegate
 	{
 		[Ordinal(0)] 
@@ -40,10 +41,6 @@ namespace WolvenKit.RED4.Types
 		{
 			ActionsConditions = new();
 			ActionsWeights = new();
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

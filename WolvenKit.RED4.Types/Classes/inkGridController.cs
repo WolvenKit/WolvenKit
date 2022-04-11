@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class inkGridController : inkVirtualCompoundController
 	{
 		[Ordinal(7)] 
@@ -52,10 +53,6 @@ namespace WolvenKit.RED4.Types
 			Items = new();
 			SlotSize = new();
 			ItemTemplates = new();
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

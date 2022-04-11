@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class OnDisableAreaData : RedBaseClass
 	{
 		[Ordinal(0)] 
@@ -24,10 +25,6 @@ namespace WolvenKit.RED4.Types
 		{
 			Agent = new();
 			RemainingAreas = new();
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

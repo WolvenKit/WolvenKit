@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class entRagdollActivationRequestEvent : redEvent
 	{
 		[Ordinal(0)] 
@@ -15,10 +16,6 @@ namespace WolvenKit.RED4.Types
 		public entRagdollActivationRequestEvent()
 		{
 			Data = new() { ActivateOnCollision = true, ApplyPowerPose = true, ApplyMomentum = true };
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

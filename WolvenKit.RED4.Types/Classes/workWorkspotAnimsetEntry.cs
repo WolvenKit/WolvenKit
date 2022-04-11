@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class workWorkspotAnimsetEntry : RedBaseClass
 	{
 		[Ordinal(0)] 
@@ -32,10 +33,6 @@ namespace WolvenKit.RED4.Types
 		{
 			Animations = new() { Cinematics = new(), Gameplay = new() };
 			LoadingHandles = new();
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

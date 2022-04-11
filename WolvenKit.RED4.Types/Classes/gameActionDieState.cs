@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class gameActionDieState : gameActionReplicatedState
 	{
 		[Ordinal(5)] 
@@ -35,12 +36,5 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CWeakHandle<entSlotComponent>>();
 			set => SetPropertyValue<CWeakHandle<entSlotComponent>>(value);
 		}
-
-		public gameActionDieState()
-		{
-			PostConstruct();
-		}
-
-		partial void PostConstruct();
 	}
 }

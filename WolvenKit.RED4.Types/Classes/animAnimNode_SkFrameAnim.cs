@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class animAnimNode_SkFrameAnim : animAnimNode_SkAnim
 	{
 		[Ordinal(30)] 
@@ -41,10 +42,6 @@ namespace WolvenKit.RED4.Types
 			ProgressLink = new();
 			TimeLink = new();
 			FrameLink = new();
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

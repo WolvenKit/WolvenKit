@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class visOccluderMeshResource : visIOccluderResource
 	{
 		[Ordinal(1)] 
@@ -47,10 +48,6 @@ namespace WolvenKit.RED4.Types
 		public visOccluderMeshResource()
 		{
 			BoundingBox = new() { Min = new(), Max = new() };
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

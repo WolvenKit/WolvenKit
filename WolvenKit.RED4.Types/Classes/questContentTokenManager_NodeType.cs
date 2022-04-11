@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class questContentTokenManager_NodeType : questIGameManagerNonSignalStoppingNodeType
 	{
 		[Ordinal(0)] 
@@ -11,12 +12,5 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CHandle<questIContentTokenManager_NodeSubType>>();
 			set => SetPropertyValue<CHandle<questIContentTokenManager_NodeSubType>>(value);
 		}
-
-		public questContentTokenManager_NodeType()
-		{
-			PostConstruct();
-		}
-
-		partial void PostConstruct();
 	}
 }

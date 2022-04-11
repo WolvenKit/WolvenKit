@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class gameScanningComponent : gameComponent
 	{
 		[Ordinal(4)] 
@@ -205,10 +206,6 @@ namespace WolvenKit.RED4.Types
 			CpoEnableMultiplePlayersScanningModifier = true;
 			Clues = new();
 			IsEntityVisible = true;
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

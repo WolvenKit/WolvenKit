@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class questMinimize_NodeType : questIPhoneManagerNodeType
 	{
 		[Ordinal(0)] 
@@ -15,10 +16,6 @@ namespace WolvenKit.RED4.Types
 		public questMinimize_NodeType()
 		{
 			Minimize = true;
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

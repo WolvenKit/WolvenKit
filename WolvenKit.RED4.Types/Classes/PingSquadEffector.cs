@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class PingSquadEffector : gameEffector
 	{
 		[Ordinal(0)] 
@@ -55,10 +56,6 @@ namespace WolvenKit.RED4.Types
 		public PingSquadEffector()
 		{
 			SquadMembers = new();
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

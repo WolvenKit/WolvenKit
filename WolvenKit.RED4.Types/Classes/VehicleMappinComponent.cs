@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class VehicleMappinComponent : IScriptable
 	{
 		[Ordinal(0)] 
@@ -129,10 +130,6 @@ namespace WolvenKit.RED4.Types
 			VehicleEntityID = new();
 			ScheduleDiscreteModeDelayID = new();
 			InvalidDelayID = new();
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

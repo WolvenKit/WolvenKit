@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class gameActionMoveToState : gameActionReplicatedState
 	{
 		[Ordinal(5)] 
@@ -39,10 +40,6 @@ namespace WolvenKit.RED4.Types
 		public gameActionMoveToState()
 		{
 			TargetPos = new() { X = float.PositiveInfinity, Y = float.PositiveInfinity, Z = float.PositiveInfinity };
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

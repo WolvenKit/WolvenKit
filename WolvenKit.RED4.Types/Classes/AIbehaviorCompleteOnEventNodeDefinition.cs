@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class AIbehaviorCompleteOnEventNodeDefinition : AIbehaviorDecoratorNodeDefinition
 	{
 		[Ordinal(1)] 
@@ -23,10 +24,6 @@ namespace WolvenKit.RED4.Types
 		public AIbehaviorCompleteOnEventNodeDefinition()
 		{
 			ResultOnEvent = Enums.AIbehaviorCompletionStatus.SUCCESS;
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

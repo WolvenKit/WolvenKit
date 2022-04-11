@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class BountyCollectedNotificationQueue : gameuiGenericNotificationGameController
 	{
 		[Ordinal(2)] 
@@ -24,10 +25,6 @@ namespace WolvenKit.RED4.Types
 		{
 			Duration = 2.000000F;
 			BountyNotification = "notification_bounty";
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

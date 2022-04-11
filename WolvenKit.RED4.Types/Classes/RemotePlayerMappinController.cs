@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class RemotePlayerMappinController : gameuiInteractionMappinController
 	{
 		[Ordinal(11)] 
@@ -19,12 +20,5 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CWeakHandle<inkWidget>>();
 			set => SetPropertyValue<CWeakHandle<inkWidget>>(value);
 		}
-
-		public RemotePlayerMappinController()
-		{
-			PostConstruct();
-		}
-
-		partial void PostConstruct();
 	}
 }

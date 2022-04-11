@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class gameuiMappinBaseController : inkWidgetLogicController
 	{
 		[Ordinal(1)] 
@@ -51,12 +52,5 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CArray<inkWidgetReference>>();
 			set => SetPropertyValue<CArray<inkWidgetReference>>(value);
 		}
-
-		public gameuiMappinBaseController()
-		{
-			PostConstruct();
-		}
-
-		partial void PostConstruct();
 	}
 }

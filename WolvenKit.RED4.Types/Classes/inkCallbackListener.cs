@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class inkCallbackListener : RedBaseClass
 	{
 		[Ordinal(0)] 
@@ -19,12 +20,5 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CName>();
 			set => SetPropertyValue<CName>(value);
 		}
-
-		public inkCallbackListener()
-		{
-			PostConstruct();
-		}
-
-		partial void PostConstruct();
 	}
 }

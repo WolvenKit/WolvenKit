@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class CParticleEmitter : IParticleModule
 	{
 		[Ordinal(3)] 
@@ -315,10 +316,6 @@ namespace WolvenKit.RED4.Types
 			Falloff = 1.000000F;
 			NoiseScale = 1.000000F;
 			NoiseVelocity = new();
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

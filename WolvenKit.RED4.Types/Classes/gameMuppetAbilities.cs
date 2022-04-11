@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class gameMuppetAbilities : RedBaseClass
 	{
 		[Ordinal(0)] 
@@ -78,10 +79,6 @@ namespace WolvenKit.RED4.Types
 			CanHoldWeapon = new();
 			CanShoot = new();
 			CanAimDownSight = new();
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

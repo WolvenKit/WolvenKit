@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class TrafficGenTrafficSetting : RedBaseClass
 	{
 		[Ordinal(0)] 
@@ -11,12 +12,5 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CEnum<TrafficGenMeshImpact>>();
 			set => SetPropertyValue<CEnum<TrafficGenMeshImpact>>(value);
 		}
-
-		public TrafficGenTrafficSetting()
-		{
-			PostConstruct();
-		}
-
-		partial void PostConstruct();
 	}
 }

@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class PreventionBountyViewData : gameuiGenericNotificationViewData
 	{
 		[Ordinal(5)] 
@@ -27,12 +28,5 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CInt32>();
 			set => SetPropertyValue<CInt32>(value);
 		}
-
-		public PreventionBountyViewData()
-		{
-			PostConstruct();
-		}
-
-		partial void PostConstruct();
 	}
 }

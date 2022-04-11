@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class questCharacterManagerParameters_SetGroupsAttitude : questICharacterManagerParameters_NodeSubType
 	{
 		[Ordinal(0)] 
@@ -40,10 +41,6 @@ namespace WolvenKit.RED4.Types
 		{
 			Set = true;
 			Attitude = Enums.EAIAttitude.AIA_Neutral;
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

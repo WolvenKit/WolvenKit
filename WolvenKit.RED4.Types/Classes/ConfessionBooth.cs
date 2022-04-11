@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class ConfessionBooth : BasicDistractionDevice
 	{
 		[Ordinal(100)] 
@@ -24,10 +25,6 @@ namespace WolvenKit.RED4.Types
 		{
 			ControllerTypeName = "ConfessionBoothController";
 			ShortGlitchDelayID = new();
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

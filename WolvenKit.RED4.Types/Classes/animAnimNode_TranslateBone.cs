@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class animAnimNode_TranslateBone : animAnimNode_Base
 	{
 		[Ordinal(11)] 
@@ -69,10 +70,6 @@ namespace WolvenKit.RED4.Types
 			BiasValue = new();
 			Bone = new();
 			ResetOnActivation = true;
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

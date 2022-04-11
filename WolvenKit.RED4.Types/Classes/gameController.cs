@@ -1,8 +1,10 @@
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class gameController : gameObject
 	{
+
 		public gameController()
 		{
 			PlayerSocket = new();
@@ -15,10 +17,6 @@ namespace WolvenKit.RED4.Types
 			ReceivedDamageHistory = new();
 			LastHitInstigatorID = new();
 			HitInstigatorCooldownID = new();
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

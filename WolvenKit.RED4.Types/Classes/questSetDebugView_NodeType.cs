@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class questSetDebugView_NodeType : questIRenderFxManagerNodeType
 	{
 		[Ordinal(0)] 
@@ -11,12 +12,5 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CEnum<questEDebugViewMode>>();
 			set => SetPropertyValue<CEnum<questEDebugViewMode>>(value);
 		}
-
-		public questSetDebugView_NodeType()
-		{
-			PostConstruct();
-		}
-
-		partial void PostConstruct();
 	}
 }

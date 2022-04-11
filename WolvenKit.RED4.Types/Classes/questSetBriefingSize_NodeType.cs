@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class questSetBriefingSize_NodeType : questIUIManagerNodeType
 	{
 		[Ordinal(0)] 
@@ -11,12 +12,5 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CEnum<questJournalSizeEventType>>();
 			set => SetPropertyValue<CEnum<questJournalSizeEventType>>(value);
 		}
-
-		public questSetBriefingSize_NodeType()
-		{
-			PostConstruct();
-		}
-
-		partial void PostConstruct();
 	}
 }

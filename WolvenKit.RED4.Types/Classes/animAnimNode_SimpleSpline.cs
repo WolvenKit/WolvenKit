@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class animAnimNode_SimpleSpline : animAnimNode_OnePoseInput
 	{
 		[Ordinal(12)] 
@@ -78,10 +79,6 @@ namespace WolvenKit.RED4.Types
 			ConstrainedTransform = new();
 			DefaultProgress = 0.500000F;
 			ProgressTrack = new();
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class AddTargetToHighlightEvent : redEvent
 	{
 		[Ordinal(0)] 
@@ -15,10 +16,6 @@ namespace WolvenKit.RED4.Types
 		public AddTargetToHighlightEvent()
 		{
 			Target = new();
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

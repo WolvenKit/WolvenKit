@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class gameEffectObjectProvider_PhysicalRay : gameEffectObjectProvider
 	{
 		[Ordinal(0)] 
@@ -59,10 +60,6 @@ namespace WolvenKit.RED4.Types
 			InputRange = new();
 			OutputRaycastEnd = new() { BlackboardProperty = new() { SerializableID = new(), PropertyPath = new() } };
 			QueryPreset = new();
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

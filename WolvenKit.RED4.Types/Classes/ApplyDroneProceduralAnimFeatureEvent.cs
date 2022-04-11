@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class ApplyDroneProceduralAnimFeatureEvent : redEvent
 	{
 		[Ordinal(0)] 
@@ -11,12 +12,5 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CHandle<AnimFeature_DroneProcedural>>();
 			set => SetPropertyValue<CHandle<AnimFeature_DroneProcedural>>(value);
 		}
-
-		public ApplyDroneProceduralAnimFeatureEvent()
-		{
-			PostConstruct();
-		}
-
-		partial void PostConstruct();
 	}
 }

@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class AIbehaviorSendSignalTaskDefinition : AIbehaviorTaskDefinition
 	{
 		[Ordinal(1)] 
@@ -48,10 +49,6 @@ namespace WolvenKit.RED4.Types
 		{
 			StartAction = Enums.gameBoolSignalAction.TurnOn;
 			EndAction = Enums.gameBoolSignalAction.TurnOff;
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

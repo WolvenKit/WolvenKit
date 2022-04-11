@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class gameGodModeSaveEntityData : RedBaseClass
 	{
 		[Ordinal(0)] 
@@ -24,10 +25,6 @@ namespace WolvenKit.RED4.Types
 		{
 			EntityId = new();
 			Data = new() { Overrides = new(), Base = new() };
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

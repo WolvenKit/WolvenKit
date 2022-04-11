@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class questCharacterManagerVisuals_SetBrokenNoseStage : questICharacterManagerVisuals_NodeSubType
 	{
 		[Ordinal(0)] 
@@ -11,12 +12,5 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CEnum<gameuiCharacterCustomization_BrokenNoseStage>>();
 			set => SetPropertyValue<CEnum<gameuiCharacterCustomization_BrokenNoseStage>>(value);
 		}
-
-		public questCharacterManagerVisuals_SetBrokenNoseStage()
-		{
-			PostConstruct();
-		}
-
-		partial void PostConstruct();
 	}
 }

@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class animSBehaviorConstraintNodeFloorIKLegsData : RedBaseClass
 	{
 		[Ordinal(0)] 
@@ -95,10 +96,6 @@ namespace WolvenKit.RED4.Types
 			Max_angle_from_upright_normal = 45.000000F;
 			Max_angle_from_upright_normal_to_side = 180.000000F;
 			Max_angle_from_upright_normal_to_revert_orientation = 70.000000F;
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

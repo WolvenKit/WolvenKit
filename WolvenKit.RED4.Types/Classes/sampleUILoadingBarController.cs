@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class sampleUILoadingBarController : inkWidgetLogicController
 	{
 		[Ordinal(1)] 
@@ -65,10 +66,6 @@ namespace WolvenKit.RED4.Types
 			MinSize = new();
 			MaxSize = new();
 			CurrentSize = new();
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

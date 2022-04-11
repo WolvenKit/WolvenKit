@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class CodexEntryData : GenericCodexEntryData
 	{
 		[Ordinal(10)] 
@@ -19,12 +20,5 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CEnum<CodexImageType>>();
 			set => SetPropertyValue<CEnum<CodexImageType>>(value);
 		}
-
-		public CodexEntryData()
-		{
-			PostConstruct();
-		}
-
-		partial void PostConstruct();
 	}
 }

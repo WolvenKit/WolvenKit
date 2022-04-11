@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class inkHoverResizeController : inkWidgetLogicController
 	{
 		[Ordinal(1)] 
@@ -57,10 +58,6 @@ namespace WolvenKit.RED4.Types
 			VectorNewSize = new();
 			VectorOldSize = new();
 			AnimationDuration = 0.100000F;
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

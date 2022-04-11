@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class scnSceneGraph : ISerializable
 	{
 		[Ordinal(0)] 
@@ -33,10 +34,6 @@ namespace WolvenKit.RED4.Types
 			Graph = new();
 			StartNodes = new();
 			EndNodes = new();
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

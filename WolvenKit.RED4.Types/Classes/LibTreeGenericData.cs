@@ -1,13 +1,8 @@
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class LibTreeGenericData : RedBaseClass
 	{
-		public LibTreeGenericData()
-		{
-			PostConstruct();
-		}
-
-		partial void PostConstruct();
 	}
 }

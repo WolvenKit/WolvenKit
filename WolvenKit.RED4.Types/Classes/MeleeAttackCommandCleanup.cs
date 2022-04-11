@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class MeleeAttackCommandCleanup : AIbehaviortaskScript
 	{
 		[Ordinal(0)] 
@@ -11,12 +12,5 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CHandle<AIArgumentMapping>>();
 			set => SetPropertyValue<CHandle<AIArgumentMapping>>(value);
 		}
-
-		public MeleeAttackCommandCleanup()
-		{
-			PostConstruct();
-		}
-
-		partial void PostConstruct();
 	}
 }

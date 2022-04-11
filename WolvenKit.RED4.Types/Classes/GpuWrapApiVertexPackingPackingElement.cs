@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class GpuWrapApiVertexPackingPackingElement : RedBaseClass
 	{
 		[Ordinal(0)] 
@@ -43,12 +44,5 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CEnum<GpuWrapApiVertexPackingEStreamType>>();
 			set => SetPropertyValue<CEnum<GpuWrapApiVertexPackingEStreamType>>(value);
 		}
-
-		public GpuWrapApiVertexPackingPackingElement()
-		{
-			PostConstruct();
-		}
-
-		partial void PostConstruct();
 	}
 }

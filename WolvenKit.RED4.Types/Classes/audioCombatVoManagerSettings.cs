@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class audioCombatVoManagerSettings : audioAudioMetadata
 	{
 		[Ordinal(1)] 
@@ -150,10 +151,6 @@ namespace WolvenKit.RED4.Types
 			GenericCombatVOContexts = new();
 			GenericCombatLosingVOContexts = new();
 			GenericCombatSingleEnemyVOContexts = new();
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

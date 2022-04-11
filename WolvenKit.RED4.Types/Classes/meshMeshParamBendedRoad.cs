@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class meshMeshParamBendedRoad : meshMeshParameter
 	{
 		[Ordinal(0)] 
@@ -114,10 +115,6 @@ namespace WolvenKit.RED4.Types
 			CollFilterPresetName = new();
 			CollFaceMatInds = new();
 			CollFaceMaterialNames = new();
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class TechQA_ImageSwappingButtonController : inkWidgetLogicController
 	{
 		[Ordinal(1)] 
@@ -19,12 +20,5 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CWeakHandle<inkTextWidget>>();
 			set => SetPropertyValue<CWeakHandle<inkTextWidget>>(value);
 		}
-
-		public TechQA_ImageSwappingButtonController()
-		{
-			PostConstruct();
-		}
-
-		partial void PostConstruct();
 	}
 }

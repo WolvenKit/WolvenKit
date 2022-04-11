@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class gameTier3CameraSettings : RedBaseClass
 	{
 		[Ordinal(0)] 
@@ -60,10 +61,6 @@ namespace WolvenKit.RED4.Types
 			PitchBottomLimit = 45.000000F;
 			PitchSpeedMultiplier = 1.000000F;
 			YawSpeedMultiplier = 1.000000F;
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

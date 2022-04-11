@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class CLSWeatherListener : worldWeatherScriptListener
 	{
 		[Ordinal(0)] 
@@ -11,12 +12,5 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CWeakHandle<CityLightSystem>>();
 			set => SetPropertyValue<CWeakHandle<CityLightSystem>>(value);
 		}
-
-		public CLSWeatherListener()
-		{
-			PostConstruct();
-		}
-
-		partial void PostConstruct();
 	}
 }

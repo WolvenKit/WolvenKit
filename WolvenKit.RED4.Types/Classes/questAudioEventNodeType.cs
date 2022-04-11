@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class questAudioEventNodeType : questIAudioNodeType
 	{
 		[Ordinal(0)] 
@@ -101,10 +102,6 @@ namespace WolvenKit.RED4.Types
 			DynamicParams = new();
 			Event = new();
 			ObjectRef = new() { Names = new() };
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class CHairProfile : CResource
 	{
 		[Ordinal(1)] 
@@ -33,10 +34,6 @@ namespace WolvenKit.RED4.Types
 			SampleCount = 64;
 			GradientEntriesID = new() { new(), new() };
 			GradientEntriesRootToTip = new() { new(), new() };
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class inkInnerGlowEffect : inkIEffect
 	{
 		[Ordinal(2)] 
@@ -58,10 +59,6 @@ namespace WolvenKit.RED4.Types
 			ColorG = 255.000000F;
 			ColorB = 255.000000F;
 			ColorA = 255.000000F;
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

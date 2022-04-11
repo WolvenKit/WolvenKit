@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class vehicleInteriorUIGameController : gameuiHUDGameController
 	{
 		[Ordinal(9)] 
@@ -212,10 +213,6 @@ namespace WolvenKit.RED4.Types
 			RpmGaugeForegroundWidget = new();
 			AutopilotTextWidget = new();
 			RpmGaugeMaxSize = new();
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

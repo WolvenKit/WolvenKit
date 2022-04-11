@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class ScriptedPuppet : gamePuppet
 	{
 		[Ordinal(35)] 
@@ -471,10 +472,6 @@ namespace WolvenKit.RED4.Types
 			LootQuality = Enums.gamedataQuality.Invalid;
 			IsActiveCached = new();
 			AttemptedShards = new();
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

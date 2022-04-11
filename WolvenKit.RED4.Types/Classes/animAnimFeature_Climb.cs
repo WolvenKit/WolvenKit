@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class animAnimFeature_Climb : animAnimFeature
 	{
 		[Ordinal(0)] 
@@ -92,10 +93,6 @@ namespace WolvenKit.RED4.Types
 			FrontEdgeNormal = new();
 			ClimbType = -1;
 			State = -1;
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

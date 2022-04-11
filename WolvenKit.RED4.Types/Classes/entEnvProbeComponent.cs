@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class entEnvProbeComponent : entIVisualComponent
 	{
 		[Ordinal(8)] 
@@ -166,10 +167,6 @@ namespace WolvenKit.RED4.Types
 			NeighborMode = Enums.envUtilsNeighborMode.eONLY_SELF;
 			BrightnessEVClamp = 8;
 			Priority = 2;
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

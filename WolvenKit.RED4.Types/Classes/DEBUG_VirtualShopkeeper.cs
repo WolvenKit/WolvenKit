@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class DEBUG_VirtualShopkeeper : gameObject
 	{
 		[Ordinal(35)] 
@@ -15,10 +16,6 @@ namespace WolvenKit.RED4.Types
 		public DEBUG_VirtualShopkeeper()
 		{
 			VendorID = "Vendors.CCLVendor";
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class audioAppearanceToNPCMetadata : RedBaseClass
 	{
 		[Ordinal(0)] 
@@ -23,10 +24,6 @@ namespace WolvenKit.RED4.Types
 		public audioAppearanceToNPCMetadata()
 		{
 			Appearances = new();
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

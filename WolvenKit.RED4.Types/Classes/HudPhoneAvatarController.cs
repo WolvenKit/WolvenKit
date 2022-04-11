@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class HudPhoneAvatarController : HUDPhoneElement
 	{
 		[Ordinal(2)] 
@@ -241,10 +242,6 @@ namespace WolvenKit.RED4.Types
 			HolocallHidingAnimationName = "avatarHolocallHidingAnimation";
 			Options = new();
 			Holder = new();
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

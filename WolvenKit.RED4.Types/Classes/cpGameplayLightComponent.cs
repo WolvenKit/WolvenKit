@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class cpGameplayLightComponent : entLightComponent
 	{
 		[Ordinal(56)] 
@@ -49,10 +50,6 @@ namespace WolvenKit.RED4.Types
 			Begin = new();
 			End = new();
 			DelayRange = new();
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class VisionContextDecisions : InputContextTransitionDecisions
 	{
 		[Ordinal(0)] 
@@ -43,12 +44,5 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CBool>();
 			set => SetPropertyValue<CBool>(value);
 		}
-
-		public VisionContextDecisions()
-		{
-			PostConstruct();
-		}
-
-		partial void PostConstruct();
 	}
 }

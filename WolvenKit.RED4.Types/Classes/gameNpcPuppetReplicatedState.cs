@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class gameNpcPuppetReplicatedState : gamePuppetReplicatedState
 	{
 		[Ordinal(12)] 
@@ -23,10 +24,6 @@ namespace WolvenKit.RED4.Types
 			AnimEventsState = new() { Items = new(), LastAppliedActionsTime = new() };
 			EntityEventsState = new() { Items = new(), LastAppliedActionsTime = new() };
 			WeaponStates = new();
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

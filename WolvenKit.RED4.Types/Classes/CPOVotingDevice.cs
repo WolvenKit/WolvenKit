@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class CPOVotingDevice : CPOMissionDevice
 	{
 		[Ordinal(40)] 
@@ -16,10 +17,6 @@ namespace WolvenKit.RED4.Types
 		{
 			BlockAfterOperation = false;
 			FactToUnblock = "defaults to compatibleDeviceName_enabled";
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

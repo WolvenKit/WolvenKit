@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class gameActionReplicatedState : RedBaseClass
 	{
 		[Ordinal(0)] 
@@ -50,10 +51,6 @@ namespace WolvenKit.RED4.Types
 			StartTimeStamp = new() { MilliSecs = 18446744073709551615 };
 			StopTimeStamp = new() { MilliSecs = 18446744073709551615 };
 			UpdateBucket = 2;
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class audioAmbientAreaNotifier : worldITriggerAreaNotifer
 	{
 		[Ordinal(3)] 
@@ -74,10 +75,6 @@ namespace WolvenKit.RED4.Types
 			IncludeChannels = Enums.TriggerChannel.TC_Default | Enums.TriggerChannel.TC_SoundAmbientArea;
 			ObstructionChangeTime = 0.200000F;
 			RolloffOverride = 1.000000F;
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

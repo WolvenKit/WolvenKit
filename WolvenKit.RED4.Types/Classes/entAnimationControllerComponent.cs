@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class entAnimationControllerComponent : entIComponent
 	{
 		[Ordinal(3)] 
@@ -32,10 +33,6 @@ namespace WolvenKit.RED4.Types
 		{
 			Name = "Component";
 			AnimDatabaseCollection = new() { AnimDatabases = new() };
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

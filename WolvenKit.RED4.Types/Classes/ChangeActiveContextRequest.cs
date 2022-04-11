@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class ChangeActiveContextRequest : gamePlayerScriptableSystemRequest
 	{
 		[Ordinal(1)] 
@@ -11,12 +12,5 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CEnum<inputContextType>>();
 			set => SetPropertyValue<CEnum<inputContextType>>(value);
 		}
-
-		public ChangeActiveContextRequest()
-		{
-			PostConstruct();
-		}
-
-		partial void PostConstruct();
 	}
 }

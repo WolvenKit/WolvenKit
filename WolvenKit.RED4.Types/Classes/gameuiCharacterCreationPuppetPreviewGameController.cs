@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class gameuiCharacterCreationPuppetPreviewGameController : gameuiPuppetPreviewGameController
 	{
 		[Ordinal(8)] 
@@ -73,10 +74,6 @@ namespace WolvenKit.RED4.Types
 			Root = new();
 			Image = new();
 			AnimLib = new() { WidgetLibrary = new() };
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

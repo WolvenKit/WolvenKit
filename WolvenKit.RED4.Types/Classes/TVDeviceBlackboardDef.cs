@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class TVDeviceBlackboardDef : DeviceBaseBlackboardDef
 	{
 		[Ordinal(7)] 
@@ -24,10 +25,6 @@ namespace WolvenKit.RED4.Types
 		{
 			PreviousChannel = new();
 			CurrentChannel = new();
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

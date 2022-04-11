@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class entEntityUserComponentResolution : RedBaseClass
 	{
 		[Ordinal(0)] 
@@ -27,12 +28,5 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CEnum<entEntityUserComponentResolutionMode>>();
 			set => SetPropertyValue<CEnum<entEntityUserComponentResolutionMode>>(value);
 		}
-
-		public entEntityUserComponentResolution()
-		{
-			PostConstruct();
-		}
-
-		partial void PostConstruct();
 	}
 }

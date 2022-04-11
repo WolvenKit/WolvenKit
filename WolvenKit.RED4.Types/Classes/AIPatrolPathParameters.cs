@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class AIPatrolPathParameters : IScriptable
 	{
 		[Ordinal(0)] 
@@ -83,10 +84,6 @@ namespace WolvenKit.RED4.Types
 			NumberOfLoops = 1;
 			SortPatrolPoints = true;
 			PatrolAction = 144011363920;
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

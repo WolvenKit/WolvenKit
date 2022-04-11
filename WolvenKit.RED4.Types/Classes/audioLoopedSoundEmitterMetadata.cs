@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class audioLoopedSoundEmitterMetadata : audioEmitterMetadata
 	{
 		[Ordinal(1)] 
@@ -11,12 +12,5 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CName>();
 			set => SetPropertyValue<CName>(value);
 		}
-
-		public audioLoopedSoundEmitterMetadata()
-		{
-			PostConstruct();
-		}
-
-		partial void PostConstruct();
 	}
 }

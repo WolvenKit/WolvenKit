@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class Knife : BaseProjectile
 	{
 		[Ordinal(46)] 
@@ -121,10 +122,6 @@ namespace WolvenKit.RED4.Types
 			ForceRegisterInHudManager = true;
 			IsActive = true;
 			DeactivationDepth = -99999.000000F;
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

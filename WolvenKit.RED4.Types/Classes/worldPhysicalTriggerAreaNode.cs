@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class worldPhysicalTriggerAreaNode : worldNode
 	{
 		[Ordinal(4)] 
@@ -32,10 +33,6 @@ namespace WolvenKit.RED4.Types
 		{
 			SimulationType = Enums.physicsSimulationType.Dynamic;
 			Shape = new() { ShapeSize = new() { X = 1.000000F, Y = 1.000000F, Z = 1.000000F }, ShapeLocalPose = new() { Position = new(), Orientation = new() { R = 1.000000F } } };
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

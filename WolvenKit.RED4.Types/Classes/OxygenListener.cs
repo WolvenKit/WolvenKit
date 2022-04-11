@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class OxygenListener : gameScriptStatPoolsListener
 	{
 		[Ordinal(0)] 
@@ -11,12 +12,5 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CWeakHandle<OxygenbarWidgetGameController>>();
 			set => SetPropertyValue<CWeakHandle<OxygenbarWidgetGameController>>(value);
 		}
-
-		public OxygenListener()
-		{
-			PostConstruct();
-		}
-
-		partial void PostConstruct();
 	}
 }

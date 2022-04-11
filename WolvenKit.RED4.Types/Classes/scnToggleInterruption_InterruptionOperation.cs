@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class scnToggleInterruption_InterruptionOperation : scnIInterruptionOperation
 	{
 		[Ordinal(0)] 
@@ -15,10 +16,6 @@ namespace WolvenKit.RED4.Types
 		public scnToggleInterruption_InterruptionOperation()
 		{
 			Enable = true;
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

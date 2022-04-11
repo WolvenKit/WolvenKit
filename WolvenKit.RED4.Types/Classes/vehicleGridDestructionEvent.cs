@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class vehicleGridDestructionEvent : redEvent
 	{
 		[Ordinal(0)] 
@@ -33,10 +34,6 @@ namespace WolvenKit.RED4.Types
 			State = new(16);
 			RawChange = new(16);
 			DesiredChange = new(16);
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class FridgeControllerPS : ScriptableDeviceComponentPS
 	{
 		[Ordinal(104)] 
@@ -17,10 +18,6 @@ namespace WolvenKit.RED4.Types
 			DeviceName = "LocKey#79";
 			TweakDBRecord = 63072019199;
 			TweakDBDescriptionRecord = 115920876132;
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

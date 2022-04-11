@@ -1,8 +1,10 @@
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class ActionHacking : ActionSkillCheck
 	{
+
 		public ActionHacking()
 		{
 			RequesterID = new();
@@ -12,10 +14,6 @@ namespace WolvenKit.RED4.Types
 			SkillCheckName = Enums.EDeviceChallengeSkill.Hacking;
 			LocalizedName = "LocKey#22278";
 			SkillcheckDescription = new() { AdditionalRequirements = new(), OwnerID = new() };
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

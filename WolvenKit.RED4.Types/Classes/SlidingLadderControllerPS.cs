@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class SlidingLadderControllerPS : BaseAnimatedDeviceControllerPS
 	{
 		[Ordinal(109)] 
@@ -28,10 +29,6 @@ namespace WolvenKit.RED4.Types
 			ShouldScannerShowStatus = false;
 			IsShootable = true;
 			AnimationTime = 1.000000F;
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

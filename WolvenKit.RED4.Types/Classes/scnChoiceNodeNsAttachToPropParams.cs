@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class scnChoiceNodeNsAttachToPropParams : RedBaseClass
 	{
 		[Ordinal(0)] 
@@ -24,10 +25,6 @@ namespace WolvenKit.RED4.Types
 		{
 			PropId = new() { Id = 4294967295 };
 			VisualizerStyle = Enums.scnChoiceNodeNsVisualizerStyle.inWorld;
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

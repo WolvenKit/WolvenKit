@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class gameNotificationsReceiverTest : gameuiWidgetGameController
 	{
 		[Ordinal(2)] 
@@ -11,12 +12,5 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CHandle<inkGameNotificationToken>>();
 			set => SetPropertyValue<CHandle<inkGameNotificationToken>>(value);
 		}
-
-		public gameNotificationsReceiverTest()
-		{
-			PostConstruct();
-		}
-
-		partial void PostConstruct();
 	}
 }

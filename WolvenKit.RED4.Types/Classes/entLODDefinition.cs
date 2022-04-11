@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class entLODDefinition : ISerializable
 	{
 		[Ordinal(0)] 
@@ -78,10 +79,6 @@ namespace WolvenKit.RED4.Types
 			VehicleInteriorDistanceLODs = new(0);
 			LargeVehicleInteriorDistanceLODs = new(0);
 			ConsoleDistanceLODs = new(0);
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class gameprojectileSetUpEvent : redEvent
 	{
 		[Ordinal(0)] 
@@ -39,10 +40,6 @@ namespace WolvenKit.RED4.Types
 		public gameprojectileSetUpEvent()
 		{
 			LerpMultiplier = 5.000000F;
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class AIHumanComponent : AICAgent
 	{
 		[Ordinal(4)] 
@@ -196,10 +197,6 @@ namespace WolvenKit.RED4.Types
 			GrenadeThrowQueryId = -1;
 			ScriptContext = new();
 			ActiveCommands = new();
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

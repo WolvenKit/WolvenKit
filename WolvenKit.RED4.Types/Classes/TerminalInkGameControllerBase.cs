@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class TerminalInkGameControllerBase : MasterDeviceInkGameControllerBase
 	{
 		[Ordinal(18)] 
@@ -63,10 +64,6 @@ namespace WolvenKit.RED4.Types
 		public TerminalInkGameControllerBase()
 		{
 			CurrentlyActiveDevices = new();
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

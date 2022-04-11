@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class animAnimEvent_Valued : animAnimEvent
 	{
 		[Ordinal(3)] 
@@ -11,12 +12,5 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CFloat>();
 			set => SetPropertyValue<CFloat>(value);
 		}
-
-		public animAnimEvent_Valued()
-		{
-			PostConstruct();
-		}
-
-		partial void PostConstruct();
 	}
 }

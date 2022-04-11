@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class TimeSkipPopupCloseData : inkGameNotificationData
 	{
 		[Ordinal(7)] 
@@ -11,12 +12,5 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CBool>();
 			set => SetPropertyValue<CBool>(value);
 		}
-
-		public TimeSkipPopupCloseData()
-		{
-			PostConstruct();
-		}
-
-		partial void PostConstruct();
 	}
 }

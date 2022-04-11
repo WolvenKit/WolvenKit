@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class effectTrackItemFOV : effectTrackItem
 	{
 		[Ordinal(3)] 
@@ -16,10 +17,6 @@ namespace WolvenKit.RED4.Types
 		{
 			TimeDuration = 1.000000F;
 			FOV = new();
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class worldEffect : resStreamedResource
 	{
 		[Ordinal(1)] 
@@ -58,10 +59,6 @@ namespace WolvenKit.RED4.Types
 			InputParameterNames = new();
 			Events = new();
 			EffectLoops = new();
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

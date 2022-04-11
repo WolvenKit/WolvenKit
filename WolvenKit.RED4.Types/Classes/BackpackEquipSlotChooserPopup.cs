@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class BackpackEquipSlotChooserPopup : gameuiWidgetGameController
 	{
 		[Ordinal(2)] 
@@ -152,10 +153,6 @@ namespace WolvenKit.RED4.Types
 			ButtonOk = new();
 			ButtonCancel = new();
 			LibraryPath = new() { WidgetLibrary = new() };
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

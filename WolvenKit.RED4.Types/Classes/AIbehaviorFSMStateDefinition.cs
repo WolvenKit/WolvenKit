@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class AIbehaviorFSMStateDefinition : AIbehaviorTreeNodeDefinition
 	{
 		[Ordinal(0)] 
@@ -35,12 +36,5 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CEnum<AIbehaviorStateCompletionStatus>>();
 			set => SetPropertyValue<CEnum<AIbehaviorStateCompletionStatus>>(value);
 		}
-
-		public AIbehaviorFSMStateDefinition()
-		{
-			PostConstruct();
-		}
-
-		partial void PostConstruct();
 	}
 }

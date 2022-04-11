@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class TerminalSetState : redEvent
 	{
 		[Ordinal(0)] 
@@ -11,12 +12,5 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CEnum<gameinteractionsReactionState>>();
 			set => SetPropertyValue<CEnum<gameinteractionsReactionState>>(value);
 		}
-
-		public TerminalSetState()
-		{
-			PostConstruct();
-		}
-
-		partial void PostConstruct();
 	}
 }

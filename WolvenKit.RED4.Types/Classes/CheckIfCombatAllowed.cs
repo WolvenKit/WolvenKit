@@ -1,13 +1,8 @@
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class CheckIfCombatAllowed : AIDebugConditions
 	{
-		public CheckIfCombatAllowed()
-		{
-			PostConstruct();
-		}
-
-		partial void PostConstruct();
 	}
 }

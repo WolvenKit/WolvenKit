@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class HubMenuLabelController : inkWidgetLogicController
 	{
 		[Ordinal(1)] 
@@ -88,10 +89,6 @@ namespace WolvenKit.RED4.Types
 		{
 			Container = new();
 			Data = new() { Identifier = -1, SubMenus = new() };
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class BackdoorDataStreamController : BackdoorInkGameController
 	{
 		[Ordinal(28)] 
@@ -132,10 +133,6 @@ namespace WolvenKit.RED4.Types
 			CanvasC2 = new();
 			CanvasC3 = new();
 			CanvasC4 = new();
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

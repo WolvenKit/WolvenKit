@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class questCharacterEquippedItem_ConditionType : questICharacterConditionType
 	{
 		[Ordinal(0)] 
@@ -65,10 +66,6 @@ namespace WolvenKit.RED4.Types
 			PuppetRef = new() { Names = new() };
 			ExcludedTweakDBIDs = new();
 			ExcludedTags = new();
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

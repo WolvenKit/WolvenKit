@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class ModifyStatPoolModifierEffector : gameEffector
 	{
 		[Ordinal(0)] 
@@ -57,10 +58,6 @@ namespace WolvenKit.RED4.Types
 			OwnerEntityID = new();
 			PoolModifier = new();
 			PreviousMod = new();
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

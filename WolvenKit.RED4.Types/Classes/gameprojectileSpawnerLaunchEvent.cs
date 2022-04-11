@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class gameprojectileSpawnerLaunchEvent : redEvent
 	{
 		[Ordinal(0)] 
@@ -40,10 +41,6 @@ namespace WolvenKit.RED4.Types
 		{
 			LaunchParams = new();
 			ProjectileParams = new() { TargetPosition = new() { X = 340282346638528859811704183484516925440.000000F, Y = 340282346638528859811704183484516925440.000000F, Z = 340282346638528859811704183484516925440.000000F, W = 340282346638528859811704183484516925440.000000F }, SmartGunSpreadOnHitPlane = new(), SmartGunAccuracy = 1.000000F, SmartGunIsProjectileGuided = true, HitPlaneOffset = new(), IgnoreWeaponOwnerCollision = true, RicochetData = new(), Range = -1.000000F };
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

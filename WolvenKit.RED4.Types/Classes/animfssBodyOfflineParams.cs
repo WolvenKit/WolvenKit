@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class animfssBodyOfflineParams : RedBaseClass
 	{
 		[Ordinal(0)] 
@@ -69,10 +70,6 @@ namespace WolvenKit.RED4.Types
 			LegLengthAdjustment = 0.005000F;
 			LegMaxStretchOffset = 0.050000F;
 			LegMaxStretchAdjustment = 0.015000F;
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

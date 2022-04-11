@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class questSetTier_NodeType : questISceneManagerNodeType
 	{
 		[Ordinal(0)] 
@@ -57,10 +58,6 @@ namespace WolvenKit.RED4.Types
 			Tier = Enums.GameplayTier.Tier1_FullGameplay;
 			ForceEmptyHands = true;
 			MotionConstrainedTierDataParams = new();
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class inkVirtualUniformListController : inkVirtualCompoundController
 	{
 		[Ordinal(7)] 
@@ -18,10 +19,6 @@ namespace WolvenKit.RED4.Types
 			ItemActivated = new();
 			AllElementsSpawned = new();
 			ItemTemplate = new() { WidgetLibrary = new() };
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

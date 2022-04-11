@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class ChangeDiodeLightSettingsEvent : redEvent
 	{
 		[Ordinal(0)] 
@@ -47,10 +48,6 @@ namespace WolvenKit.RED4.Types
 		public ChangeDiodeLightSettingsEvent()
 		{
 			ColorValues = new();
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

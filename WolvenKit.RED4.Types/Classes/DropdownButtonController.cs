@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class DropdownButtonController : inkWidgetLogicController
 	{
 		[Ordinal(1)] 
@@ -42,10 +43,6 @@ namespace WolvenKit.RED4.Types
 			Icon = new();
 			Frame = new();
 			Arrow = new();
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

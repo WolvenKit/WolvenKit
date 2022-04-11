@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class ScannerHintInkGameController : gameuiWidgetGameController
 	{
 		[Ordinal(2)] 
@@ -55,10 +56,6 @@ namespace WolvenKit.RED4.Types
 		public ScannerHintInkGameController()
 		{
 			IconWidget = new();
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

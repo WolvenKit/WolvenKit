@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class inkWidgetLibraryResource : CResource
 	{
 		[Ordinal(1)] 
@@ -74,10 +75,6 @@ namespace WolvenKit.RED4.Types
 			ExternalLibraries = new();
 			Sequences = new();
 			ExternalDependenciesForInternalItems = new();
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

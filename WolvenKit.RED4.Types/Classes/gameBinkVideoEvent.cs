@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class gameBinkVideoEvent : redEvent
 	{
 		[Ordinal(0)] 
@@ -19,12 +20,5 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CEnum<gameBinkVideoAction>>();
 			set => SetPropertyValue<CEnum<gameBinkVideoAction>>(value);
 		}
-
-		public gameBinkVideoEvent()
-		{
-			PostConstruct();
-		}
-
-		partial void PostConstruct();
 	}
 }

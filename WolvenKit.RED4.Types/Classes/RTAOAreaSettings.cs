@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class RTAOAreaSettings : IAreaSettings
 	{
 		[Ordinal(2)] 
@@ -79,10 +80,6 @@ namespace WolvenKit.RED4.Types
 		public RTAOAreaSettings()
 		{
 			Enable = true;
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

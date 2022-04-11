@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class TraitDisplayData : BasePerkDisplayData
 	{
 		[Ordinal(10)] 
@@ -11,12 +12,5 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CEnum<gamedataTraitType>>();
 			set => SetPropertyValue<CEnum<gamedataTraitType>>(value);
 		}
-
-		public TraitDisplayData()
-		{
-			PostConstruct();
-		}
-
-		partial void PostConstruct();
 	}
 }

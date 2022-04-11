@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class AIbehaviorScriptEventResolverDefinition : AIbehaviorEventResolverDefinition
 	{
 		[Ordinal(0)] 
@@ -11,12 +12,5 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CHandle<AIbehavioreventResolverScript>>();
 			set => SetPropertyValue<CHandle<AIbehavioreventResolverScript>>(value);
 		}
-
-		public AIbehaviorScriptEventResolverDefinition()
-		{
-			PostConstruct();
-		}
-
-		partial void PostConstruct();
 	}
 }

@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class CParticleInitializerSpawnBox : IParticleInitializer
 	{
 		[Ordinal(4)] 
@@ -34,10 +35,6 @@ namespace WolvenKit.RED4.Types
 			EditorGroup = "Location";
 			IsEnabled = true;
 			WorldSpace = true;
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

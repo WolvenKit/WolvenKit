@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class gameStatPoolPrereq : gameIComparisonPrereq
 	{
 		[Ordinal(1)] 
@@ -19,12 +20,5 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CFloat>();
 			set => SetPropertyValue<CFloat>(value);
 		}
-
-		public gameStatPoolPrereq()
-		{
-			PostConstruct();
-		}
-
-		partial void PostConstruct();
 	}
 }

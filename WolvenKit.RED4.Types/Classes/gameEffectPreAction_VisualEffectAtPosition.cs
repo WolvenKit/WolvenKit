@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class gameEffectPreAction_VisualEffectAtPosition : gameEffectPreAction
 	{
 		[Ordinal(0)] 
@@ -35,12 +36,5 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CName>();
 			set => SetPropertyValue<CName>(value);
 		}
-
-		public gameEffectPreAction_VisualEffectAtPosition()
-		{
-			PostConstruct();
-		}
-
-		partial void PostConstruct();
 	}
 }

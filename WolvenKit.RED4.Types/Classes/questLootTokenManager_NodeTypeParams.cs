@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class questLootTokenManager_NodeTypeParams : RedBaseClass
 	{
 		[Ordinal(0)] 
@@ -19,12 +20,5 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CEnum<questLootTokenState>>();
 			set => SetPropertyValue<CEnum<questLootTokenState>>(value);
 		}
-
-		public questLootTokenManager_NodeTypeParams()
-		{
-			PostConstruct();
-		}
-
-		partial void PostConstruct();
 	}
 }

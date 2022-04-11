@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class ExplosiveDeviceResourceDefinition : RedBaseClass
 	{
 		[Ordinal(0)] 
@@ -65,10 +66,6 @@ namespace WolvenKit.RED4.Types
 			VfxResource = new();
 			VfxEventNamesOnExplosion = new();
 			VfxResourceOnFirstHit = new();
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class SStatusEffectOperationData : RedBaseClass
 	{
 		[Ordinal(0)] 
@@ -41,10 +42,6 @@ namespace WolvenKit.RED4.Types
 			Range = 1.000000F;
 			Offset = new();
 			Effect = new();
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

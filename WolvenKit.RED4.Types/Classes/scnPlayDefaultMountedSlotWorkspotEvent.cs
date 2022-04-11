@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class scnPlayDefaultMountedSlotWorkspotEvent : scnSceneEvent
 	{
 		[Ordinal(6)] 
@@ -41,10 +42,6 @@ namespace WolvenKit.RED4.Types
 			Id = new() { Id = 18446744073709551615 };
 			Performer = new() { Id = 4294967040 };
 			ParentRef = new() { Names = new() };
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

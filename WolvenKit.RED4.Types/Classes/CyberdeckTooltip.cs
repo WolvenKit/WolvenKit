@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class CyberdeckTooltip : AGenericTooltipController
 	{
 		[Ordinal(2)] 
@@ -255,10 +256,6 @@ namespace WolvenKit.RED4.Types
 			ItemAttributeRequirements = new();
 			ItemAttributeRequirementsText = new();
 			IconicLines = new();
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

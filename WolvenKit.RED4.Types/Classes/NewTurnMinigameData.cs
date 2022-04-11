@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class NewTurnMinigameData : RedBaseClass
 	{
 		[Ordinal(0)] 
@@ -145,10 +146,6 @@ namespace WolvenKit.RED4.Types
 			PlayerProgramsRemoved = new();
 			EnemyprogramsAdded = new();
 			EnemyprogramsRemoved = new();
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

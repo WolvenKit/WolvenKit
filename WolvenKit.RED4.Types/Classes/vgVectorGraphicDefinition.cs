@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class vgVectorGraphicDefinition : ISerializable
 	{
 		[Ordinal(0)] 
@@ -23,10 +24,6 @@ namespace WolvenKit.RED4.Types
 		public vgVectorGraphicDefinition()
 		{
 			Dimensions = new();
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

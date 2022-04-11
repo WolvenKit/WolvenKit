@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class effectTrackItemFilmGrain : effectTrackItem
 	{
 		[Ordinal(3)] 
@@ -33,10 +34,6 @@ namespace WolvenKit.RED4.Types
 			TimeDuration = 1.000000F;
 			LuminanceBias = new();
 			Strength = new();
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

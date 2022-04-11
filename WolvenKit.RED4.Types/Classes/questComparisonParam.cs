@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class questComparisonParam : ISerializable
 	{
 		[Ordinal(0)] 
@@ -32,10 +33,6 @@ namespace WolvenKit.RED4.Types
 		{
 			EntireCommunity = true;
 			ComparisonType = Enums.EComparisonType.Equal;
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

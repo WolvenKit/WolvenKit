@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class gameuiInventoryGameController : gameuiMenuGameController
 	{
 		[Ordinal(3)] 
@@ -525,10 +526,6 @@ namespace WolvenKit.RED4.Types
 			ConsumablesAreas = new();
 			EquipmentAreaCategoryEventQueue = new();
 			EquipmentAreaCategories = new();
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

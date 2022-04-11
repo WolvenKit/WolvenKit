@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class animAnimFeature_Aim : animAnimFeature_BasicAim
 	{
 		[Ordinal(2)] 
@@ -15,10 +16,6 @@ namespace WolvenKit.RED4.Types
 		public animAnimFeature_Aim()
 		{
 			AimPoint = new() { Y = 1.000000F, W = 1.000000F };
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

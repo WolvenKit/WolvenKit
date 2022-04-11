@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class inkPointCloudEffect : inkIEffect
 	{
 		[Ordinal(2)] 
@@ -73,10 +74,6 @@ namespace WolvenKit.RED4.Types
 			Repeat = 1.000000F;
 			FovScale = 3.000000F;
 			ParallaxDepth = 0.100000F;
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

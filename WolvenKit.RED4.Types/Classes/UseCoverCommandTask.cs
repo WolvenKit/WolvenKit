@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class UseCoverCommandTask : AIbehaviortaskScript
 	{
 		[Ordinal(0)] 
@@ -19,12 +20,5 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CWeakHandle<AIUseCoverCommand>>();
 			set => SetPropertyValue<CWeakHandle<AIUseCoverCommand>>(value);
 		}
-
-		public UseCoverCommandTask()
-		{
-			PostConstruct();
-		}
-
-		partial void PostConstruct();
 	}
 }

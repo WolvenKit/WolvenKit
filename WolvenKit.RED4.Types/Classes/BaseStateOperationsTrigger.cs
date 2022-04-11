@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class BaseStateOperationsTrigger : DeviceOperationsTrigger
 	{
 		[Ordinal(0)] 
@@ -27,12 +28,5 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CEnum<EDeviceStatus>>();
 			set => SetPropertyValue<CEnum<EDeviceStatus>>(value);
 		}
-
-		public BaseStateOperationsTrigger()
-		{
-			PostConstruct();
-		}
-
-		partial void PostConstruct();
 	}
 }

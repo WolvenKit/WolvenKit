@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class animAnimNode_SkFrameAnimByTrack : animAnimNode_SkFrameAnim
 	{
 		[Ordinal(34)] 
@@ -42,10 +43,6 @@ namespace WolvenKit.RED4.Types
 			TimeFloatTrack = new();
 			FrameFloatTrack = new();
 			InputWithTracks = new();
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

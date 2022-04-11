@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class AIbehaviorStoryTierConditionDefinition : AIbehaviorConditionDefinition
 	{
 		[Ordinal(1)] 
@@ -19,12 +20,5 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CHandle<AIArgumentMapping>>();
 			set => SetPropertyValue<CHandle<AIArgumentMapping>>(value);
 		}
-
-		public AIbehaviorStoryTierConditionDefinition()
-		{
-			PostConstruct();
-		}
-
-		partial void PostConstruct();
 	}
 }

@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class AIArgumentFloatValue : AIArgumentDefinition
 	{
 		[Ordinal(3)] 
@@ -23,10 +24,6 @@ namespace WolvenKit.RED4.Types
 		public AIArgumentFloatValue()
 		{
 			Type = Enums.AIArgumentType.Float;
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

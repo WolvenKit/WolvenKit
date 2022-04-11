@@ -1,13 +1,8 @@
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class gameweaponeventsSetActiveWeaponEvent : redEvent
 	{
-		public gameweaponeventsSetActiveWeaponEvent()
-		{
-			PostConstruct();
-		}
-
-		partial void PostConstruct();
 	}
 }

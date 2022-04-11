@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class MessageTooltip : AGenericTooltipController
 	{
 		[Ordinal(2)] 
@@ -32,10 +33,6 @@ namespace WolvenKit.RED4.Types
 		{
 			Title = new();
 			Description = new();
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

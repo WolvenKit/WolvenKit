@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class scnAddIdleWithBlendAnimEvent : scnSceneEvent
 	{
 		[Ordinal(6)] 
@@ -34,10 +35,6 @@ namespace WolvenKit.RED4.Types
 			PerformerId = new() { Id = 4294967040 };
 			ActorComponent = "body";
 			TargetWeight = 1.000000F;
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

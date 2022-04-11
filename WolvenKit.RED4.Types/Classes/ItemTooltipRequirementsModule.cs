@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class ItemTooltipRequirementsModule : ItemTooltipModuleController
 	{
 		[Ordinal(2)] 
@@ -69,10 +70,6 @@ namespace WolvenKit.RED4.Types
 			LevelRequirementsText = new();
 			StrenghtOrReflexText = new();
 			PerkText = new();
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

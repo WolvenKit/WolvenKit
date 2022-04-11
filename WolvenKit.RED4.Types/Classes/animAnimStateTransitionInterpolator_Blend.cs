@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class animAnimStateTransitionInterpolator_Blend : animIAnimStateTransitionInterpolator
 	{
 		[Ordinal(0)] 
@@ -11,12 +12,5 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CEnum<animAnimStateInterpolationType>>();
 			set => SetPropertyValue<CEnum<animAnimStateInterpolationType>>(value);
 		}
-
-		public animAnimStateTransitionInterpolator_Blend()
-		{
-			PostConstruct();
-		}
-
-		partial void PostConstruct();
 	}
 }

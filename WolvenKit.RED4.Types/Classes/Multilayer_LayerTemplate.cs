@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class Multilayer_LayerTemplate : CResource
 	{
 		[Ordinal(1)] 
@@ -83,10 +84,6 @@ namespace WolvenKit.RED4.Types
 			TilingMultiplier = 1.000000F;
 			ColorMaskLevelsIn = new(2);
 			ColorMaskLevelsOut = new(2);
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

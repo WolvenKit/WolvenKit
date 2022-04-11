@@ -1,13 +1,8 @@
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class cpSplinePlacementProvider : ISerializable
 	{
-		public cpSplinePlacementProvider()
-		{
-			PostConstruct();
-		}
-
-		partial void PostConstruct();
 	}
 }

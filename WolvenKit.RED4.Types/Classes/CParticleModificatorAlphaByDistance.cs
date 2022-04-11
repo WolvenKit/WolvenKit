@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class CParticleModificatorAlphaByDistance : IParticleModificator
 	{
 		[Ordinal(4)] 
@@ -27,10 +28,6 @@ namespace WolvenKit.RED4.Types
 			IsEnabled = true;
 			NearBlendDistance = new() { X = 7.000000F, Y = 5.000000F };
 			FarBlendDistance = new() { X = 27.000000F, Y = 20.000000F };
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

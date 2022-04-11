@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class TonemappingModeLottesACES : ITonemappingMode
 	{
 		[Ordinal(1)] 
@@ -42,10 +43,6 @@ namespace WolvenKit.RED4.Types
 			Contrast = 1.500000F;
 			MidIn = 0.180000F;
 			MidOut = 0.180000F;
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class animAnimNode_FrozenFrame : animAnimNode_OnePoseInput
 	{
 		[Ordinal(12)] 
@@ -35,10 +36,6 @@ namespace WolvenKit.RED4.Types
 			MaxFramesFrozen = 5;
 			TriggerEventName = "FreezeFrame";
 			ClearEventName = "UnfreezeFrame";
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

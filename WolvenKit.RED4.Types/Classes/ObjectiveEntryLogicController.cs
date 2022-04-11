@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class ObjectiveEntryLogicController : inkWidgetLogicController
 	{
 		[Ordinal(1)] 
@@ -212,10 +213,6 @@ namespace WolvenKit.RED4.Types
 			TexturePart_Untracked = "untracked_left";
 			TexturePart_Succeeded = "succeeded";
 			TexturePart_Failed = "failed";
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

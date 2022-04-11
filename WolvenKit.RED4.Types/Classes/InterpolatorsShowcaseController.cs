@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class InterpolatorsShowcaseController : inkWidgetLogicController
 	{
 		[Ordinal(1)] 
@@ -167,10 +168,6 @@ namespace WolvenKit.RED4.Types
 		public InterpolatorsShowcaseController()
 		{
 			StartMargin = new();
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

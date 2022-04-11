@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class gameVisualTagsAppearanceNamesPreset_Entity : ISerializable
 	{
 		[Ordinal(0)] 
@@ -31,10 +32,6 @@ namespace WolvenKit.RED4.Types
 		public gameVisualTagsAppearanceNamesPreset_Entity()
 		{
 			TagsToAppearances = new();
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

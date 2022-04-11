@@ -1,13 +1,8 @@
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class AICombatGuardAreaScriptCondition : AIICombatGuardAreaCondition
 	{
-		public AICombatGuardAreaScriptCondition()
-		{
-			PostConstruct();
-		}
-
-		partial void PostConstruct();
 	}
 }

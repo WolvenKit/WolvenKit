@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class questMountedObjectInfo : ISerializable
 	{
 		[Ordinal(0)] 
@@ -49,10 +50,6 @@ namespace WolvenKit.RED4.Types
 			Ref = new() { Names = new() };
 			OnMount = true;
 			Role = Enums.gameMountingSlotRole.Invalid;
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

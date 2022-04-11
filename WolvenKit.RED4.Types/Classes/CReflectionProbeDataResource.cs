@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class CReflectionProbeDataResource : resStreamedResource
 	{
 		[Ordinal(1)] 
@@ -49,10 +50,6 @@ namespace WolvenKit.RED4.Types
 			TextureData = new();
 			HaveSkyData = true;
 			FaceDepth = new(6);
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

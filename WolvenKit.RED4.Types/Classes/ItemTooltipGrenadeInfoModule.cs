@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class ItemTooltipGrenadeInfoModule : ItemTooltipModuleController
 	{
 		[Ordinal(2)] 
@@ -60,10 +61,6 @@ namespace WolvenKit.RED4.Types
 			RangeText = new();
 			DeliveryIcon = new();
 			DeliveryText = new();
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

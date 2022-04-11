@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class gameuiStealthMappinController : gameuiInteractionMappinController
 	{
 		[Ordinal(11)] 
@@ -588,10 +589,6 @@ namespace WolvenKit.RED4.Types
 			C_deviceCombatToAwareThreshold = 35.000000F;
 			C_objectMarkerMaxDistance = 50.000000F;
 			C_objectMarkerMaxCameraDistance = 30.000000F;
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class characterCreationBodyMorphMenu : gameuiBaseCharacterCreationController
 	{
 		[Ordinal(6)] 
@@ -363,10 +364,6 @@ namespace WolvenKit.RED4.Types
 			Preset3Bg = new();
 			RandomizBg = new();
 			NavigationButtons = new();
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

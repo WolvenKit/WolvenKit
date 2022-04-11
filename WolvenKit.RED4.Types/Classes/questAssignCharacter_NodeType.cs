@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class questAssignCharacter_NodeType : questIVehicleManagerNodeType
 	{
 		[Ordinal(0)] 
@@ -75,10 +76,6 @@ namespace WolvenKit.RED4.Types
 			Assign = true;
 			SlotName = "seat_front_left";
 			EntrySlotName = "default";
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

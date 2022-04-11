@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class DestroyWeakspot : AIActionHelperTask
 	{
 		[Ordinal(5)] 
@@ -31,10 +32,6 @@ namespace WolvenKit.RED4.Types
 		public DestroyWeakspot()
 		{
 			WeakspotArray = new();
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

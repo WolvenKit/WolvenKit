@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class AssignToCyberwareWheelRequest : gamePlayerScriptableSystemRequest
 	{
 		[Ordinal(1)] 
@@ -24,10 +25,6 @@ namespace WolvenKit.RED4.Types
 		{
 			ItemID = new();
 			SlotIndex = -1;
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

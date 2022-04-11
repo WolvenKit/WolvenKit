@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class rendRenderParticleBlob : IRenderResourceBlob
 	{
 		[Ordinal(0)] 
@@ -33,10 +34,6 @@ namespace WolvenKit.RED4.Types
 			Header = new() { EmitterInfo = new() { Seeds = new(), Lods = new(), VolumetricParticleColor = new(), VolumetricParticleNoiseVelocity = new() } };
 			UpdaterData = new() { AnimFrameInit = new(), CollisionRadius = 0.100000F, MaxCollisions = 6, EventFrequency = 1.000000F, EventProbability = 1.000000F, RandomPerChannel = true };
 			GpuSimShaders = new() { SimCS = new(2) };
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

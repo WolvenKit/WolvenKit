@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class SSFXOperationData : RedBaseClass
 	{
 		[Ordinal(0)] 
@@ -19,12 +20,5 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CEnum<EEffectOperationType>>();
 			set => SetPropertyValue<CEnum<EEffectOperationType>>(value);
 		}
-
-		public SSFXOperationData()
-		{
-			PostConstruct();
-		}
-
-		partial void PostConstruct();
 	}
 }

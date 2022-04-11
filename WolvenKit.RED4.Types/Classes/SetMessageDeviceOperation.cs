@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class SetMessageDeviceOperation : DeviceOperationBase
 	{
 		[Ordinal(5)] 
@@ -40,10 +41,6 @@ namespace WolvenKit.RED4.Types
 		{
 			IsEnabled = true;
 			ToggleOperations = new();
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

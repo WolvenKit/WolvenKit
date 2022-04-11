@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class SettingsCategory : RedBaseClass
 	{
 		[Ordinal(0)] 
@@ -49,10 +50,6 @@ namespace WolvenKit.RED4.Types
 			Subcategories = new();
 			Options = new();
 			IsEmpty = true;
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

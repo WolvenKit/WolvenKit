@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class DisposalDevice : InteractiveDevice
 	{
 		[Ordinal(94)] 
@@ -171,10 +172,6 @@ namespace WolvenKit.RED4.Types
 			DistractionSoundName = "v_car_thorton_galena_horn";
 			DistractionSoundDuration = 5.000000F;
 			WorkspotDuration = 0.010000F;
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

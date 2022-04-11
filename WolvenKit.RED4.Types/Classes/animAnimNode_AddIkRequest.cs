@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class animAnimNode_AddIkRequest : animAnimNode_OnePoseInput
 	{
 		[Ordinal(12)] 
@@ -97,10 +98,6 @@ namespace WolvenKit.RED4.Types
 			BlendTimeIn = 0.500000F;
 			BlendTimeOut = 0.500000F;
 			Priority = 100;
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

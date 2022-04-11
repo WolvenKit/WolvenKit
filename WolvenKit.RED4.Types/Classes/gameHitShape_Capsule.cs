@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class gameHitShape_Capsule : gameHitShapeBase
 	{
 		[Ordinal(3)] 
@@ -27,10 +28,6 @@ namespace WolvenKit.RED4.Types
 			LocalTransform = new();
 			Radius = 0.200000F;
 			Height = 0.400000F;
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class questCharacterManagerParameters_SetLifePath : questICharacterManagerParameters_NodeSubType
 	{
 		[Ordinal(0)] 
@@ -11,12 +12,5 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<TweakDBID>();
 			set => SetPropertyValue<TweakDBID>(value);
 		}
-
-		public questCharacterManagerParameters_SetLifePath()
-		{
-			PostConstruct();
-		}
-
-		partial void PostConstruct();
 	}
 }

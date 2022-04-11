@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class gameaudioSoundComponent : gameaudioSoundComponentBase
 	{
 		[Ordinal(11)] 
@@ -43,10 +44,6 @@ namespace WolvenKit.RED4.Types
 			ObstructionChangeTime = 0.200000F;
 			MaxPlayDistance = 40.000000F;
 			SubSystems = new();
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

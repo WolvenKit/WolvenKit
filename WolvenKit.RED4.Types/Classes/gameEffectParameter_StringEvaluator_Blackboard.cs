@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class gameEffectParameter_StringEvaluator_Blackboard : gameIEffectParameter_StringEvaluator
 	{
 		[Ordinal(0)] 
@@ -15,10 +16,6 @@ namespace WolvenKit.RED4.Types
 		public gameEffectParameter_StringEvaluator_Blackboard()
 		{
 			BlackboardProperty = new() { SerializableID = new(), PropertyPath = new() };
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

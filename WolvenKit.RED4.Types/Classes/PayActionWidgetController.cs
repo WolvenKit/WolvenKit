@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class PayActionWidgetController : DeviceActionWidgetControllerBase
 	{
 		[Ordinal(29)] 
@@ -59,10 +60,6 @@ namespace WolvenKit.RED4.Types
 			ProcessingStatusContainer = new();
 			MoneyStatusAnimName = "no_money";
 			ProcessingAnimName = "pay";
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

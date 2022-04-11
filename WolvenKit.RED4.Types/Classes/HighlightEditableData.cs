@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class HighlightEditableData : IScriptable
 	{
 		[Ordinal(0)] 
@@ -65,10 +66,6 @@ namespace WolvenKit.RED4.Types
 			OutlineType = Enums.EFocusOutlineType.INVALID;
 			InTransitionTime = 0.500000F;
 			OutTransitionTime = 0.500000F;
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

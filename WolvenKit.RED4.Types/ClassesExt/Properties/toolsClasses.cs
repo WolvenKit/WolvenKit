@@ -4,6 +4,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+    [REDMeta]
     public class toolsTimeLineBaseDescriptor : IBackendData
     {
         [Ordinal(0)]
@@ -45,6 +46,7 @@ namespace WolvenKit.RED4.Types
         }
     }
 
+    [REDMeta]
     public class toolsTimeLineItemCollection : RedBaseClass
     {
         [Ordinal(0)]
@@ -56,6 +58,7 @@ namespace WolvenKit.RED4.Types
         }
     }
 
+    [REDMeta]
     public class toolsAudioEventDescriptor : toolsEventDescriptor
     {
         [Ordinal(0)]
@@ -170,6 +173,7 @@ namespace WolvenKit.RED4.Types
         }
     }
 
+    [REDMeta]
     public class internalSceneEventIdsPool : RedBaseClass
     {
         [Ordinal(0)]
@@ -181,6 +185,7 @@ namespace WolvenKit.RED4.Types
         }
     }
 
+    [REDMeta]
     public class toolsSceneEventIdsPool : RedBaseClass
     {
         [Ordinal(0)]
@@ -192,6 +197,7 @@ namespace WolvenKit.RED4.Types
         }
     }
 
+    [REDMeta]
     public class toolsPartsCategory : RedBaseClass
     {
         [Ordinal(1)]
@@ -219,10 +225,12 @@ namespace WolvenKit.RED4.Types
         }
     }
 
+    [REDMeta]
     public class toolsIGraphNodeDescriptor : RedBaseClass
     {
     }
 
+    [REDMeta]
     public class toolsAudioDurationEventDescriptor : toolsEventDescriptor
     {
         [Ordinal(0)]
@@ -306,6 +314,7 @@ namespace WolvenKit.RED4.Types
         }
     }
 
+    [REDMeta]
     public class toolsSocketDescription : RedBaseClass
     {
         [Ordinal(0)]
@@ -372,6 +381,7 @@ namespace WolvenKit.RED4.Types
         }
     }
 
+    [REDMeta]
     public class houdiniVehicleDestructionMeshEntry : RedBaseClass
     {
         [Ordinal(0)]
@@ -400,6 +410,7 @@ namespace WolvenKit.RED4.Types
         }
     }
 
+    [REDMeta]
     public class houdiniVehicleGridSettings : RedBaseClass
     {
         [Ordinal(0)]
@@ -459,10 +470,12 @@ namespace WolvenKit.RED4.Types
         }
     }
 
+    [REDMeta]
     public class toolsPresetsData : ISerializable
     {
     }
 
+    [REDMeta]
     public class houdiniVehicleDestructionSettings : ISerializable
     {
         [Ordinal(0)]
@@ -482,6 +495,7 @@ namespace WolvenKit.RED4.Types
         }
     }
 
+    [REDMeta]
     public class toolsSceneEventID : RedBaseClass
     {
         [Ordinal(0)]
@@ -493,6 +507,7 @@ namespace WolvenKit.RED4.Types
         }
     }
 
+    [REDMeta]
     public class toolsScreenplaySection : RedBaseClass
     {
         [Ordinal(0)]
@@ -520,6 +535,7 @@ namespace WolvenKit.RED4.Types
         }
     }
 
+    [REDMeta]
     public class toolsUniqueNodeData : RedBaseClass
     {
         [Ordinal(0)]
@@ -539,6 +555,7 @@ namespace WolvenKit.RED4.Types
         }
     }
 
+    [REDMeta]
     public class toolsSocketVisibilityData : RedBaseClass
     {
         [Ordinal(0)]
@@ -579,6 +596,7 @@ namespace WolvenKit.RED4.Types
         }
     }
 
+    [REDMeta]
     public class toolsSectionClipboardDataHolder : ISerializable
     {
         [Ordinal(0)]
@@ -630,6 +648,7 @@ namespace WolvenKit.RED4.Types
         }
     }
 
+    [REDMeta]
     public class toolsScreenplayLine : RedBaseClass
     {
         [Ordinal(0)]
@@ -681,6 +700,7 @@ namespace WolvenKit.RED4.Types
         }
     }
 
+    [REDMeta]
     public class toolsRagdollExportData : ISerializable
     {
         [Ordinal(0)]
@@ -700,6 +720,7 @@ namespace WolvenKit.RED4.Types
         }
     }
 
+    [REDMeta]
     public class toolsPartsCategories : ISerializable
     {
         [Ordinal(0)]
@@ -711,6 +732,7 @@ namespace WolvenKit.RED4.Types
         }
     }
 
+    [REDMeta]
     public class toolsAppearanceNamingParser : ISerializable
     {
         [Ordinal(0)]
@@ -730,6 +752,7 @@ namespace WolvenKit.RED4.Types
         }
     }
 
+    [REDMeta]
     public class toolsAppearanceConfigMapping : RedBaseClass
     {
         [Ordinal(0)]
@@ -797,6 +820,7 @@ namespace WolvenKit.RED4.Types
         }
     }
 
+    [REDMeta]
     public class toolsAppearancesConfig : ISerializable
     {
         [Ordinal(0)]
@@ -808,6 +832,7 @@ namespace WolvenKit.RED4.Types
         }
     }
 
+    [REDMeta]
     public class toolsPresetSectionData : RedBaseClass
     {
         [Ordinal(0)]
@@ -819,6 +844,7 @@ namespace WolvenKit.RED4.Types
         }
     }
 
+    [REDMeta]
     public class toolsSceneRecorderPresetData : RedBaseClass
     {
         [Ordinal(0)]
@@ -846,6 +872,7 @@ namespace WolvenKit.RED4.Types
         }
     }
 
+    [REDMeta]
     public class toolsAppearanceNamingCaptureGroup : RedBaseClass
     {
         [Ordinal(0)]
@@ -889,10 +916,12 @@ namespace WolvenKit.RED4.Types
         }
     }
 
+    [REDMeta]
     public class toolsTimeLineItemDescription : RedBaseClass
     {
     }
 
+    [REDMeta]
     public class toolsAnimTimelineEvent : toolsTimeLineTrackBaseItem
     {
         [Ordinal(6)]
@@ -920,6 +949,7 @@ namespace WolvenKit.RED4.Types
         }
     }
 
+    [REDMeta]
     public class toolsSceneTrackID : RedBaseClass
     {
         [Ordinal(0)]
@@ -936,10 +966,12 @@ namespace WolvenKit.RED4.Types
         }
     }
 
+    [REDMeta]
     public class toolsEventDescriptor : RedBaseClass
     {
     }
 
+    [REDMeta]
     public class toolsTimeLineTrackBaseItem : toolsTimeLineItemDescription
     {
         [Ordinal(0)]

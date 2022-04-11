@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class RevealRequestEvent : redEvent
 	{
 		[Ordinal(0)] 
@@ -31,10 +32,6 @@ namespace WolvenKit.RED4.Types
 		public RevealRequestEvent()
 		{
 			Requester = new();
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class animDangleConstraint_SimulationDyng : animDangleConstraint_Simulation
 	{
 		[Ordinal(13)] 
@@ -53,10 +54,6 @@ namespace WolvenKit.RED4.Types
 			SubstepTime = 0.010000F;
 			SolverIterations = 1;
 			ParticlesContainer = new() { ExternalForceWS = new(), ExternalForceWsLink = new(), Particles = new(), GravityWS = 9.810000F };
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

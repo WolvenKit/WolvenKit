@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class questPlayEnv_NodeType : questIEnvironmentManagerNodeType
 	{
 		[Ordinal(0)] 
@@ -15,10 +16,6 @@ namespace WolvenKit.RED4.Types
 		public questPlayEnv_NodeType()
 		{
 			Params = new() { Enable = true };
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

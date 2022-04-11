@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class CMaterialParameterCube : CMaterialParameter
 	{
 		[Ordinal(2)] 
@@ -11,12 +12,5 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CResourceReference<ITexture>>();
 			set => SetPropertyValue<CResourceReference<ITexture>>(value);
 		}
-
-		public CMaterialParameterCube()
-		{
-			PostConstruct();
-		}
-
-		partial void PostConstruct();
 	}
 }

@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class ProficiencyDisplayData : IDisplayData
 	{
 		[Ordinal(0)] 
@@ -112,10 +113,6 @@ namespace WolvenKit.RED4.Types
 		{
 			Areas = new();
 			PassiveBonusesData = new();
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

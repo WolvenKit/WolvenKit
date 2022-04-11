@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class AIVehicleChaseCommand : AIVehicleCommand
 	{
 		[Ordinal(6)] 
@@ -41,10 +42,6 @@ namespace WolvenKit.RED4.Types
 			DistanceMin = 0.500000F;
 			DistanceMax = 1.000000F;
 			ForcedStartSpeed = -1.000000F;
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

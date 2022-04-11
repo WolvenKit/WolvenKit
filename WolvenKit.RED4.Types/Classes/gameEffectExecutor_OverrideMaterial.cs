@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class gameEffectExecutor_OverrideMaterial : gameEffectExecutor
 	{
 		[Ordinal(1)] 
@@ -11,12 +12,5 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CResourceReference<IMaterial>>();
 			set => SetPropertyValue<CResourceReference<IMaterial>>(value);
 		}
-
-		public gameEffectExecutor_OverrideMaterial()
-		{
-			PostConstruct();
-		}
-
-		partial void PostConstruct();
 	}
 }

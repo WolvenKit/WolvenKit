@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class audioNpcWeaponSettings : audioWeaponSettings
 	{
 		[Ordinal(10)] 
@@ -97,10 +98,6 @@ namespace WolvenKit.RED4.Types
 			WeaponHandlingSettings = new();
 			FireModeSounds = new();
 			VoiceSwitchCooldown = 3.000000F;
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class questStat_ConditionType : questIStatsConditionType
 	{
 		[Ordinal(0)] 
@@ -48,10 +49,6 @@ namespace WolvenKit.RED4.Types
 		{
 			ObjectRef = new() { Names = new() };
 			StatType = Enums.gamedataStatType.Invalid;
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class questSceneNode_ConditionType : questISceneConditionType
 	{
 		[Ordinal(0)] 
@@ -39,10 +40,6 @@ namespace WolvenKit.RED4.Types
 		public questSceneNode_ConditionType()
 		{
 			Type = Enums.questSceneConditionType.IsInside;
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

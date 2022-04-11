@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class SBokehDofParams : RedBaseClass
 	{
 		[Ordinal(0)] 
@@ -58,10 +59,6 @@ namespace WolvenKit.RED4.Types
 			PlaneInFocus = 3.000000F;
 			FStops = Enums.EApertureValue.f_4_0;
 			BokehSizeMuliplier = 1.000000F;
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

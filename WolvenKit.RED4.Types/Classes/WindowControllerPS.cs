@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class WindowControllerPS : DoorControllerPS
 	{
 		[Ordinal(114)] 
@@ -17,10 +18,6 @@ namespace WolvenKit.RED4.Types
 			DeviceName = "LocKey#78";
 			TweakDBRecord = 63727146667;
 			TweakDBDescriptionRecord = 113890133552;
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

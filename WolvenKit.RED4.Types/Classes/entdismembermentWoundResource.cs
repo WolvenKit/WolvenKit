@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class entdismembermentWoundResource : ISerializable
 	{
 		[Ordinal(0)] 
@@ -117,10 +118,6 @@ namespace WolvenKit.RED4.Types
 			Decals = new();
 			CensoredPaths = new();
 			CensoredCookedPaths = new();
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

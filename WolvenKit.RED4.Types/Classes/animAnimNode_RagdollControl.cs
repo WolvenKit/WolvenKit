@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class animAnimNode_RagdollControl : animAnimNode_Base
 	{
 		[Ordinal(11)] 
@@ -33,10 +34,6 @@ namespace WolvenKit.RED4.Types
 			Id = 4294967295;
 			InertializationBlendDuration = 1.000000F;
 			InputPoseNode = new();
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

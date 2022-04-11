@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class inkToggleController : inkButtonController
 	{
 		[Ordinal(10)] 
@@ -31,10 +32,6 @@ namespace WolvenKit.RED4.Types
 		public inkToggleController()
 		{
 			ToggleChanged = new();
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

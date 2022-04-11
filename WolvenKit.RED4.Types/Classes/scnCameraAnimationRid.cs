@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class scnCameraAnimationRid : RedBaseClass
 	{
 		[Ordinal(0)] 
@@ -32,10 +33,6 @@ namespace WolvenKit.RED4.Types
 		{
 			Tag = new() { SerialNumber = new() { SerialNumber = 4294967295 } };
 			CameraAnimationLOD = new() { Trajectory = new(0), Tracks = new(0) };
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

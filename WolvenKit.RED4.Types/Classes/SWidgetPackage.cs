@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class SWidgetPackage : SWidgetPackageBase
 	{
 		[Ordinal(8)] 
@@ -87,10 +88,6 @@ namespace WolvenKit.RED4.Types
 		public SWidgetPackage()
 		{
 			OwnerID = new();
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

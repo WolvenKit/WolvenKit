@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class KillMarkerGameController : gameuiWidgetGameController
 	{
 		[Ordinal(2)] 
@@ -27,12 +28,5 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CHandle<inkanimProxy>>();
 			set => SetPropertyValue<CHandle<inkanimProxy>>(value);
 		}
-
-		public KillMarkerGameController()
-		{
-			PostConstruct();
-		}
-
-		partial void PostConstruct();
 	}
 }

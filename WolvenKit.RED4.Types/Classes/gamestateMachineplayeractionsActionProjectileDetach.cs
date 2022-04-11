@@ -1,13 +1,8 @@
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class gamestateMachineplayeractionsActionProjectileDetach : gamestateMachineStateActionDefinition
 	{
-		public gamestateMachineplayeractionsActionProjectileDetach()
-		{
-			PostConstruct();
-		}
-
-		partial void PostConstruct();
 	}
 }

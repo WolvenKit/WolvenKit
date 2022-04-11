@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class gamestateMachineComponent : gamePlayerControlledComponent
 	{
 		[Ordinal(3)] 
@@ -16,10 +17,6 @@ namespace WolvenKit.RED4.Types
 		{
 			Name = "StateMachine";
 			PackageName = "playerStateMachine";
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

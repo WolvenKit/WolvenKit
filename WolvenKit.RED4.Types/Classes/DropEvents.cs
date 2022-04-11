@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class DropEvents : CarriedObjectEvents
 	{
 		[Ordinal(9)] 
@@ -16,10 +17,6 @@ namespace WolvenKit.RED4.Types
 		{
 			StyleName = "CarriedObject.Style";
 			ForceStyleName = "CarriedObject.ForcedStyle";
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class minimapuiGeometryWidget : inkCanvasWidget
 	{
 		[Ordinal(23)] 
@@ -24,10 +25,6 @@ namespace WolvenKit.RED4.Types
 		{
 			WidgetTemplates = new() { new(), new(), new(), new(), new(), new(), new() };
 			Settings = new() { ShowTime = 0.300000F, HideTime = 0.250000F };
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

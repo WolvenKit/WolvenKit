@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class CPOMissionDataAccessPoint : CPOMissionDevice
 	{
 		[Ordinal(40)] 
@@ -50,10 +51,6 @@ namespace WolvenKit.RED4.Types
 			DamagesPresetName = "CPODataRaceParams";
 			FactsOnDownload = new();
 			FactsOnUpload = new();
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

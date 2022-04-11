@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class inkScrollAreaWidget : inkCompoundWidget
 	{
 		[Ordinal(23)] 
@@ -47,10 +48,6 @@ namespace WolvenKit.RED4.Types
 		public inkScrollAreaWidget()
 		{
 			UseInternalMask = true;
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

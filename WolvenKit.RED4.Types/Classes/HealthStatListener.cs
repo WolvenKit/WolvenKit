@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class HealthStatListener : gameScriptStatPoolsListener
 	{
 		[Ordinal(0)] 
@@ -19,12 +20,5 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CHandle<HealthUpdateEvent>>();
 			set => SetPropertyValue<CHandle<HealthUpdateEvent>>(value);
 		}
-
-		public HealthStatListener()
-		{
-			PostConstruct();
-		}
-
-		partial void PostConstruct();
 	}
 }

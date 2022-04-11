@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class audioVehiclePartSettingsMap : audioAudioMetadata
 	{
 		[Ordinal(1)] 
@@ -24,10 +25,6 @@ namespace WolvenKit.RED4.Types
 		{
 			MinAcousticsIsolationFactorValue = 0.200000F;
 			PartSettings = new();
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class SecurityTurret : SensorDevice
 	{
 		[Ordinal(189)] 
@@ -162,10 +163,6 @@ namespace WolvenKit.RED4.Types
 			LaserFXSlotName = "laser";
 			BurstDelayEvtID = new();
 			NextShootCycleDelayEvtID = new();
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

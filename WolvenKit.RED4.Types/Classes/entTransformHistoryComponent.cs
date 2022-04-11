@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class entTransformHistoryComponent : entIComponent
 	{
 		[Ordinal(3)] 
@@ -25,10 +26,6 @@ namespace WolvenKit.RED4.Types
 			Name = "Component";
 			HistoryLength = 30.000000F;
 			SamplesAmount = 60;
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class entReplicatedLookAtAdd : entReplicatedLookAtData
 	{
 		[Ordinal(1)] 
@@ -41,10 +42,6 @@ namespace WolvenKit.RED4.Types
 			BodyPart = "Eyes";
 			Request = new() { TransitionSpeed = 60.000000F, OutTransitionSpeed = 60.000000F, FollowingSpeedFactorOverride = -1.000000F, Limits = new() { SoftLimitDegrees = 360.000000F, HardLimitDegrees = 360.000000F, HardLimitDistance = 1000000.000000F, BackLimitDegrees = 180.000000F }, AdditionalParts = new(0) };
 			Ref = new() { Id = -1 };
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

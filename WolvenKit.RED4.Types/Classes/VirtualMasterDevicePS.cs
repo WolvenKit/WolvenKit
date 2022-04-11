@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class VirtualMasterDevicePS : ScriptableDeviceComponentPS
 	{
 		[Ordinal(104)] 
@@ -41,10 +42,6 @@ namespace WolvenKit.RED4.Types
 			GlobalActions = new();
 			Context = new() { RequestorID = new(), ActionPrereqs = new() };
 			ConnectedDevices = new();
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

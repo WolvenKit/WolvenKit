@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class BountyUI : RedBaseClass
 	{
 		[Ordinal(0)] 
@@ -55,10 +56,6 @@ namespace WolvenKit.RED4.Types
 		public BountyUI()
 		{
 			Transgressions = new();
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

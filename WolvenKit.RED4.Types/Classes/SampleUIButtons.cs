@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class SampleUIButtons : inkWidgetLogicController
 	{
 		[Ordinal(1)] 
@@ -60,10 +61,6 @@ namespace WolvenKit.RED4.Types
 			Toggle3 = new();
 			RadioGroup = new();
 			Text = new();
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

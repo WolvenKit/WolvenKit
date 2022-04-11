@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class CloudAreaSettings : IAreaSettings
 	{
 		[Ordinal(2)] 
@@ -276,10 +277,6 @@ namespace WolvenKit.RED4.Types
 			VolNoiseWindInfluence = 1.000000F;
 			VolDetailWindInfluence = 1.250000F;
 			VolDistantFogOpacity = 1.000000F;
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

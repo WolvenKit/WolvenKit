@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class WallScreen : TV
 	{
 		[Ordinal(97)] 
@@ -32,10 +33,6 @@ namespace WolvenKit.RED4.Types
 		{
 			ControllerTypeName = "WallScreenController";
 			MovementPattern = new() { Speed = 2.000000F };
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

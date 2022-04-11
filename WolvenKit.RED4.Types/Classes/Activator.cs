@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class Activator : InteractiveMasterDevice
 	{
 		[Ordinal(94)] 
@@ -85,10 +86,6 @@ namespace WolvenKit.RED4.Types
 			DefaultDelay = 2.980000F;
 			YellowDelay = 1.680000F;
 			RedDelay = 4.030000F;
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

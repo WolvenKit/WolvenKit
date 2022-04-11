@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class worldMirrorNode : worldMeshNode
 	{
 		[Ordinal(16)] 
@@ -24,10 +25,6 @@ namespace WolvenKit.RED4.Types
 		{
 			CullingBoxExtents = new() { X = 20.000000F, Y = 20.000000F, Z = 20.000000F };
 			CullingBoxOffset = new();
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

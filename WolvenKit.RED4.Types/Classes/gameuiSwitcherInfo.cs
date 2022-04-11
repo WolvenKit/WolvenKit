@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class gameuiSwitcherInfo : gameuiCharacterCustomizationInfo
 	{
 		[Ordinal(13)] 
@@ -35,10 +36,6 @@ namespace WolvenKit.RED4.Types
 			OnDeactivateActions = new();
 			UiSlots = new();
 			Options = new();
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

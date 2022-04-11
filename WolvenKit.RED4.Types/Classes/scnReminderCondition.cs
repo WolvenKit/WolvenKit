@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class scnReminderCondition : ISerializable
 	{
 		[Ordinal(0)] 
@@ -101,10 +102,6 @@ namespace WolvenKit.RED4.Types
 			WaitTimeForLooping = new();
 			StartTime = new();
 			ReminderParams = new() { ReminderActor = new() { Id = 4294967295 }, WaitTimeForReminderA = new(), WaitTimeForReminderB = new(), WaitTimeForReminderC = new(), WaitTimeForLooping = new() };
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

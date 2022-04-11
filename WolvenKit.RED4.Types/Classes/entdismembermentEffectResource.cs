@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class entdismembermentEffectResource : ISerializable
 	{
 		[Ordinal(0)] 
@@ -83,10 +84,6 @@ namespace WolvenKit.RED4.Types
 			Placement = Enums.entdismembermentPlacementE.MAIN_MESH;
 			ResourceSets = Enums.entdismembermentResourceSetMask.BARE | Enums.entdismembermentResourceSetMask.BARE1 | Enums.entdismembermentResourceSetMask.BARE2 | Enums.entdismembermentResourceSetMask.BARE3 | Enums.entdismembermentResourceSetMask.GARMENT | Enums.entdismembermentResourceSetMask.GARMENT1 | Enums.entdismembermentResourceSetMask.GARMENT2 | Enums.entdismembermentResourceSetMask.GARMENT3;
 			WoundType = Enums.entdismembermentWoundTypeE.COARSE;
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	[REDClass(SerializeDefault = true)]
 	public partial class Cylinder : RedBaseClass
 	{
@@ -25,10 +26,6 @@ namespace WolvenKit.RED4.Types
 		{
 			PositionAndRadius = new();
 			NormalAndHeight = new();
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

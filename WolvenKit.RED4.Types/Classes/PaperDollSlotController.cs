@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class PaperDollSlotController : inkButtonDpadSupportedController
 	{
 		[Ordinal(26)] 
@@ -64,10 +65,6 @@ namespace WolvenKit.RED4.Types
 		{
 			AreaTags = new();
 			ItemID = new();
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class ButtonCursorStateView : BaseButtonView
 	{
 		[Ordinal(2)] 
@@ -33,10 +34,6 @@ namespace WolvenKit.RED4.Types
 			HoverStateName = "Hover";
 			PressStateName = "Hover";
 			DefaultStateName = "Default";
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

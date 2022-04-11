@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class ProximityDetector : Device
 	{
 		[Ordinal(84)] 
@@ -67,10 +68,6 @@ namespace WolvenKit.RED4.Types
 			AreaEffectsData = new();
 			AreaEffectsInFocusMode = new();
 			DebugOptions = new() { LayerIDs = new() };
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

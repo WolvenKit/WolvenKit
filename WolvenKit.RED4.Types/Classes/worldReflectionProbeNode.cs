@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class worldReflectionProbeNode : worldNode
 	{
 		[Ordinal(4)] 
@@ -230,10 +231,6 @@ namespace WolvenKit.RED4.Types
 			BlendRange = 20;
 			StreamingDistance = 64.000000F;
 			StreamingHeight = -1.000000F;
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

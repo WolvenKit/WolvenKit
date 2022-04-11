@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class scneventsPlayAnimEventData : RedBaseClass
 	{
 		[Ordinal(0)] 
@@ -65,10 +66,6 @@ namespace WolvenKit.RED4.Types
 			Stretch = 1.000000F;
 			BlendInCurve = Enums.scnEasingType.SinusoidalEaseInOut;
 			BlendOutCurve = Enums.scnEasingType.SinusoidalEaseInOut;
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

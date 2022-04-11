@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class inkLayerSystemConnection : RedBaseClass
 	{
 		[Ordinal(0)] 
@@ -19,12 +20,5 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CHandle<inkILayerSystemData>>();
 			set => SetPropertyValue<CHandle<inkILayerSystemData>>(value);
 		}
-
-		public inkLayerSystemConnection()
-		{
-			PostConstruct();
-		}
-
-		partial void PostConstruct();
 	}
 }

@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class audioAnimationOverrideMetadata : audioAudioMetadata
 	{
 		[Ordinal(1)] 
@@ -11,12 +12,5 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CHandle<audioAnimationOverrideDictionary>>();
 			set => SetPropertyValue<CHandle<audioAnimationOverrideDictionary>>(value);
 		}
-
-		public audioAnimationOverrideMetadata()
-		{
-			PostConstruct();
-		}
-
-		partial void PostConstruct();
 	}
 }

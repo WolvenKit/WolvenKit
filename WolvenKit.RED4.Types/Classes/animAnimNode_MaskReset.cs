@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class animAnimNode_MaskReset : animAnimNode_OnePoseInput
 	{
 		[Ordinal(12)] 
@@ -26,10 +27,6 @@ namespace WolvenKit.RED4.Types
 			InputLink = new();
 			WeightNode = new();
 			Transforms = new();
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

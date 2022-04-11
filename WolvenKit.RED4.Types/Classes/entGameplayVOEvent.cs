@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class entGameplayVOEvent : redEvent
 	{
 		[Ordinal(0)] 
@@ -104,10 +105,6 @@ namespace WolvenKit.RED4.Types
 		{
 			AnsweringEntityId = new();
 			OverridingVoiceoverContext = Enums.locVoiceoverContext.Default_Vo_Context;
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

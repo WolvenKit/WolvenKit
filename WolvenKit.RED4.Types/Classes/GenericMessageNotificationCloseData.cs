@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class GenericMessageNotificationCloseData : inkGameNotificationData
 	{
 		[Ordinal(7)] 
@@ -19,12 +20,5 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CEnum<GenericMessageNotificationResult>>();
 			set => SetPropertyValue<CEnum<GenericMessageNotificationResult>>(value);
 		}
-
-		public GenericMessageNotificationCloseData()
-		{
-			PostConstruct();
-		}
-
-		partial void PostConstruct();
 	}
 }

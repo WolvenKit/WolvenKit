@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class audioEntityMetadata : audioAudioMetadata
 	{
 		[Ordinal(1)] 
@@ -83,10 +84,6 @@ namespace WolvenKit.RED4.Types
 			DefaultEmitterName = "default";
 			Priority = 3;
 			EmitterDescriptions = new();
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

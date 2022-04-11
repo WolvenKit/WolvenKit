@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class AIDefTreeVariableComparison : LibTreeDefTreeVariableBoolBase
 	{
 		[Ordinal(2)] 
@@ -66,10 +67,6 @@ namespace WolvenKit.RED4.Types
 			ReadableName = "TreeVar";
 			ReferenceVariableId = 65535;
 			Operator = Enums.EComparisonType.Equal;
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

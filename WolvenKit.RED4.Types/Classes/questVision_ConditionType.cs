@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class questVision_ConditionType : questISensesConditionType
 	{
 		[Ordinal(0)] 
@@ -50,10 +51,6 @@ namespace WolvenKit.RED4.Types
 			ObservedTargetRef = new() { Names = new() };
 			IsObservedTargetPlayer = true;
 			IsInstant = true;
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class gameWeaponReplicationHistory : RedBaseClass
 	{
 		[Ordinal(0)] 
@@ -41,10 +42,6 @@ namespace WolvenKit.RED4.Types
 			Shots = new(0);
 			LatestShotId = 8;
 			ContinuousAttack = new() { StartTimeStamp = new() { MilliSecs = 18446744073709551615 }, StopTimeStamp = new() { MilliSecs = 18446744073709551615 } };
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

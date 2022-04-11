@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class animAnimSetEntry : ISerializable
 	{
 		[Ordinal(0)] 
@@ -19,12 +20,5 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CHandle<animEventsContainer>>();
 			set => SetPropertyValue<CHandle<animEventsContainer>>(value);
 		}
-
-		public animAnimSetEntry()
-		{
-			PostConstruct();
-		}
-
-		partial void PostConstruct();
 	}
 }

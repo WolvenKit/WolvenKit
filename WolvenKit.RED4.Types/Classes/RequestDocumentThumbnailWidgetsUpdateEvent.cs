@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class RequestDocumentThumbnailWidgetsUpdateEvent : RequestWidgetUpdateEvent
 	{
 		[Ordinal(2)] 
@@ -11,12 +12,5 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CEnum<EDocumentType>>();
 			set => SetPropertyValue<CEnum<EDocumentType>>(value);
 		}
-
-		public RequestDocumentThumbnailWidgetsUpdateEvent()
-		{
-			PostConstruct();
-		}
-
-		partial void PostConstruct();
 	}
 }

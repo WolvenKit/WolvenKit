@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class StatPrereqListener : gameScriptStatsListener
 	{
 		[Ordinal(0)] 
@@ -11,12 +12,5 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CWeakHandle<StatPrereqState>>();
 			set => SetPropertyValue<CWeakHandle<StatPrereqState>>(value);
 		}
-
-		public StatPrereqListener()
-		{
-			PostConstruct();
-		}
-
-		partial void PostConstruct();
 	}
 }

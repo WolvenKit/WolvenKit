@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class StatsViewController : inkWidgetLogicController
 	{
 		[Ordinal(1)] 
@@ -50,10 +51,6 @@ namespace WolvenKit.RED4.Types
 			StatValueRef = new();
 			Icon = new();
 			Stat = new() { Type = Enums.gamedataStatType.Invalid };
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class RoadBlock : InteractiveDevice
 	{
 		[Ordinal(94)] 
@@ -56,10 +57,6 @@ namespace WolvenKit.RED4.Types
 		{
 			ControllerTypeName = "RoadBlockController";
 			OpeningSpeed = 2.000000F;
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

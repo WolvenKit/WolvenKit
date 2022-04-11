@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class workWorkspotTree : ISerializable
 	{
 		[Ordinal(0)] 
@@ -221,10 +222,6 @@ namespace WolvenKit.RED4.Types
 			UnmountBodyCarry = true;
 			WhitelistVisualTags = new() { Tags = new() };
 			BlacklistVisualTags = new() { Tags = new() };
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

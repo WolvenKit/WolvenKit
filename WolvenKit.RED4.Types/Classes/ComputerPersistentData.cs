@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class ComputerPersistentData : RedBaseClass
 	{
 		[Ordinal(0)] 
@@ -66,10 +67,6 @@ namespace WolvenKit.RED4.Types
 			Files = new();
 			NewsFeedElements = new();
 			InternetData = new();
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

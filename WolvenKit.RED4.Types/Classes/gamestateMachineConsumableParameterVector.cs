@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class gamestateMachineConsumableParameterVector : gamestateMachineActionParameterVector
 	{
 		[Ordinal(2)] 
@@ -11,12 +12,5 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CBool>();
 			set => SetPropertyValue<CBool>(value);
 		}
-
-		public gamestateMachineConsumableParameterVector()
-		{
-			PostConstruct();
-		}
-
-		partial void PostConstruct();
 	}
 }

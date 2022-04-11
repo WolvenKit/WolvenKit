@@ -1,13 +1,8 @@
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class gamedataCodex_Record : gamedataTweakDBRecord
 	{
-		public gamedataCodex_Record()
-		{
-			PostConstruct();
-		}
-
-		partial void PostConstruct();
 	}
 }

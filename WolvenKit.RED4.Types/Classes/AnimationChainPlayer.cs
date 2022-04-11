@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class AnimationChainPlayer : IScriptable
 	{
 		[Ordinal(0)] 
@@ -43,12 +44,5 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CWeakHandle<inkWidgetLogicController>>();
 			set => SetPropertyValue<CWeakHandle<inkWidgetLogicController>>(value);
 		}
-
-		public AnimationChainPlayer()
-		{
-			PostConstruct();
-		}
-
-		partial void PostConstruct();
 	}
 }

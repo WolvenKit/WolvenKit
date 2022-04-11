@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class CParticleEventGenerator : IParticleEvent
 	{
 		[Ordinal(4)] 
@@ -35,10 +36,6 @@ namespace WolvenKit.RED4.Types
 			IsEnabled = true;
 			Frequency = 0.500000F;
 			Probability = 1.000000F;
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

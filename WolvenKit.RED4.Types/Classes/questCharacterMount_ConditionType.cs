@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class questCharacterMount_ConditionType : questICharacterConditionType
 	{
 		[Ordinal(0)] 
@@ -113,10 +114,6 @@ namespace WolvenKit.RED4.Types
 			ParentRef = new() { Names = new() };
 			ChildRef = new() { Names = new() };
 			Role = Enums.gameMountingSlotRole.Invalid;
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

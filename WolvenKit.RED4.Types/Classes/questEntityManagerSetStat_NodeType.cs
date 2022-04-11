@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class questEntityManagerSetStat_NodeType : questIEntityManager_NodeType
 	{
 		[Ordinal(0)] 
@@ -49,10 +50,6 @@ namespace WolvenKit.RED4.Types
 			ObjectRef = new() { Names = new() };
 			StatType = Enums.gamedataStatType.Invalid;
 			SetExactValue = true;
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

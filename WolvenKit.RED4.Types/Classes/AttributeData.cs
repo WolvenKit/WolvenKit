@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class AttributeData : IDisplayData
 	{
 		[Ordinal(0)] 
@@ -67,12 +68,5 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CEnum<gamedataStatType>>();
 			set => SetPropertyValue<CEnum<gamedataStatType>>(value);
 		}
-
-		public AttributeData()
-		{
-			PostConstruct();
-		}
-
-		partial void PostConstruct();
 	}
 }

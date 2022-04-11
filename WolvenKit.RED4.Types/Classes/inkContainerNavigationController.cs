@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class inkContainerNavigationController : inkDiscreteNavigationController
 	{
 		[Ordinal(4)] 
@@ -23,10 +24,6 @@ namespace WolvenKit.RED4.Types
 		public inkContainerNavigationController()
 		{
 			OverrideEntries = new();
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

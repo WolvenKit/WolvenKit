@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class entTemplateBindingOverride : RedBaseClass
 	{
 		[Ordinal(0)] 
@@ -27,12 +28,5 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CHandle<entIBinding>>();
 			set => SetPropertyValue<CHandle<entIBinding>>(value);
 		}
-
-		public entTemplateBindingOverride()
-		{
-			PostConstruct();
-		}
-
-		partial void PostConstruct();
 	}
 }

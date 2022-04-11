@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class toolsJiraIssue : RedBaseClass
 	{
 		[Ordinal(0)] 
@@ -39,10 +40,6 @@ namespace WolvenKit.RED4.Types
 		public toolsJiraIssue()
 		{
 			Fields = new() { Project = new(), Status = new(), Resolution = new(), Issuetype = new(), Priority = new(), Labels = new(), Assignee = new(), Customfield_10505 = new(), Customfield_29900 = new(), FixVersions = new(), Customfield_15306 = new(), Attachment = new(), Customfield_25500 = new() { Value = "NONE" }, Versions = new() };
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

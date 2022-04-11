@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class scnWorkspotInstance : RedBaseClass
 	{
 		[Ordinal(0)] 
@@ -50,10 +51,6 @@ namespace WolvenKit.RED4.Types
 			DataId = new() { Id = 4294967295 };
 			LocalTransform = new() { Position = new(), Orientation = new() { R = 1.000000F } };
 			OriginMarker = new() { Type = Enums.scnMarkerType.Global, EntityRef = new() { Names = new() }, IsMounted = true };
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

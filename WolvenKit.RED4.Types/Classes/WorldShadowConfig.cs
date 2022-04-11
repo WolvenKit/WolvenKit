@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class WorldShadowConfig : RedBaseClass
 	{
 		[Ordinal(0)] 
@@ -42,10 +43,6 @@ namespace WolvenKit.RED4.Types
 			DistantShadowsNumLevels = 3;
 			DistantShadowsBaseLevelRadius = 250.000000F;
 			FoliageShadowConfig = new() { FoliageShadowCascadeGradient = 0.100000F, FoliageShadowCascadeFilterScale = 0.100000F, FoliageShadowCascadeGradientDistanceRange = 50.000000F };
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

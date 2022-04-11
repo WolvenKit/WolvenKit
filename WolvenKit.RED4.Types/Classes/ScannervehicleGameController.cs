@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class ScannervehicleGameController : BaseChunkGameController
 	{
 		[Ordinal(5)] 
@@ -269,10 +270,6 @@ namespace WolvenKit.RED4.Types
 			VehicleMassHolder = new();
 			VehicleStateHolder = new();
 			VehicleInfoHolder = new();
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

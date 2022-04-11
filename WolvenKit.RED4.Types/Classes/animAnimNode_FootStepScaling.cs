@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class animAnimNode_FootStepScaling : animAnimNode_OnePoseInput
 	{
 		[Ordinal(12)] 
@@ -62,10 +63,6 @@ namespace WolvenKit.RED4.Types
 			InputSpeed = new();
 			Weight = new();
 			Params = new() { HipsTilt = 25.000000F, HipsShift = 0.100000F, LegsPullFactorMin = 0.050000F, LegsPullFactorMax = 0.165000F, LegLengthAdjustment = 0.005000F, LegMaxStretchOffset = 0.050000F, LegMaxStretchAdjustment = 0.015000F };
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

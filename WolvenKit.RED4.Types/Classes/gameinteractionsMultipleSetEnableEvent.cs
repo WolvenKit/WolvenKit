@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class gameinteractionsMultipleSetEnableEvent : redEvent
 	{
 		[Ordinal(0)] 
@@ -33,10 +34,6 @@ namespace WolvenKit.RED4.Types
 			Enable = new(0);
 			Layer = new(0);
 			LinkedLayers = new(0);
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

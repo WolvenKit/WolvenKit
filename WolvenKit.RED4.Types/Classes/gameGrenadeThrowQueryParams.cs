@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class gameGrenadeThrowQueryParams : RedBaseClass
 	{
 		[Ordinal(0)] 
@@ -90,10 +91,6 @@ namespace WolvenKit.RED4.Types
 			GravitySimulation = -9.800000F;
 			MinTargetAngleDegrees = -180.000000F;
 			MaxTargetAngleDegrees = 180.000000F;
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

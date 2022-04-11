@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class physicsSystemJoint : physicsISystemObject
 	{
 		[Ordinal(1)] 
@@ -180,10 +181,6 @@ namespace WolvenKit.RED4.Types
 			DrivePosition = new();
 			LinearTolerance = 10000000000.000000F;
 			AngularTolerance = 3.141593F;
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

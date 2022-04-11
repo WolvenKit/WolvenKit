@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class worldClothMeshNode : worldMeshNode
 	{
 		[Ordinal(16)] 
@@ -19,12 +20,5 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CBitField<physicsEClothCollisionMaskEnum>>();
 			set => SetPropertyValue<CBitField<physicsEClothCollisionMaskEnum>>(value);
 		}
-
-		public worldClothMeshNode()
-		{
-			PostConstruct();
-		}
-
-		partial void PostConstruct();
 	}
 }

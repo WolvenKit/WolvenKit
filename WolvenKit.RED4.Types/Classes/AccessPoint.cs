@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class AccessPoint : InteractiveMasterDevice
 	{
 		[Ordinal(94)] 
@@ -48,10 +49,6 @@ namespace WolvenKit.RED4.Types
 		{
 			ControllerTypeName = "AccessPointController";
 			NetworkName = "Local Network 1";
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

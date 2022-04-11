@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class worldStaticFogVolumeNode : worldNode
 	{
 		[Ordinal(4)] 
@@ -109,10 +110,6 @@ namespace WolvenKit.RED4.Types
 			StreamingDistance = 1000.000000F;
 			AmbientScale = 1.000000F;
 			Color = new();
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

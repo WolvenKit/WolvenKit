@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class audioDismembermentSoundSettings : audioAudioMetadata
 	{
 		[Ordinal(1)] 
@@ -27,12 +28,5 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CName>();
 			set => SetPropertyValue<CName>(value);
 		}
-
-		public audioDismembermentSoundSettings()
-		{
-			PostConstruct();
-		}
-
-		partial void PostConstruct();
 	}
 }

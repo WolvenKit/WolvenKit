@@ -1,13 +1,8 @@
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class gameNarrationPlateBlackboardUpdater : ISerializable
 	{
-		public gameNarrationPlateBlackboardUpdater()
-		{
-			PostConstruct();
-		}
-
-		partial void PostConstruct();
 	}
 }

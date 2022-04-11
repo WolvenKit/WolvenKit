@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class questCharacterManagerCombat_SetWeaponState : questICharacterManagerCombat_NodeSubType
 	{
 		[Ordinal(0)] 
@@ -15,10 +16,6 @@ namespace WolvenKit.RED4.Types
 		public questCharacterManagerCombat_SetWeaponState()
 		{
 			AreaType = Enums.gameCityAreaType.PublicZone;
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

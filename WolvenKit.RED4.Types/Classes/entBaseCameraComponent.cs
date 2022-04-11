@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class entBaseCameraComponent : entIPlacedComponent
 	{
 		[Ordinal(5)] 
@@ -51,10 +52,6 @@ namespace WolvenKit.RED4.Types
 			Fov = 60.000000F;
 			Zoom = 1.000000F;
 			MotionBlurScale = 1.000000F;
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

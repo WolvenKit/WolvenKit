@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class worldNavigationTileResource : resStreamedResource
 	{
 		[Ordinal(1)] 
@@ -24,10 +25,6 @@ namespace WolvenKit.RED4.Types
 		{
 			LocalBoundingBox = new() { Min = new(), Max = new() { X = 1.000000F, Y = 1.000000F, Z = 1.000000F, W = 1.000000F } };
 			TilesData = new();
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

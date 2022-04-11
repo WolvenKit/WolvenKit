@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class moveSecureFootingResult : RedBaseClass
 	{
 		[Ordinal(0)] 
@@ -58,10 +59,6 @@ namespace WolvenKit.RED4.Types
 			NormalDirection = new();
 			LowestLocalPosition = new();
 			StaticGroundFactor = -1.000000F;
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

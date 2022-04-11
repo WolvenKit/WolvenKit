@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class scnPlaySkAnimEvent : scnPlayFPPControlAnimEvent
 	{
 		[Ordinal(32)] 
@@ -40,10 +41,6 @@ namespace WolvenKit.RED4.Types
 		{
 			RootMotionData = new() { OriginMarker = new() { Type = Enums.scnMarkerType.Global, EntityRef = new() { Names = new() }, IsMounted = true }, OriginOffset = new() { Position = new(), Orientation = new() { R = 1.000000F } }, CustomBlendInTime = -1.000000F, CustomBlendInCurve = Enums.scnEasingType.SinusoidalEaseInOut, RemovePitchRollRotation = true, MeshDissolvingEnabled = true, VehicleChangePhysicsState = true, VehicleEnabledPhysicsOnEnd = true, TrajectoryLOD = new() };
 			PlayerData = new() { UnmountBodyCarry = true };
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

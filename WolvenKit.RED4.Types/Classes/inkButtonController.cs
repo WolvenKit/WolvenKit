@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class inkButtonController : inkWidgetLogicController
 	{
 		[Ordinal(1)] 
@@ -84,10 +85,6 @@ namespace WolvenKit.RED4.Types
 			ButtonSelectionChanged = new();
 			ButtonHoldProgressChanged = new();
 			AutoUpdateWidgetState = true;
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

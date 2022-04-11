@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class entEntityParametersBuffer : RedBaseClass
 	{
 		[Ordinal(0)] 
@@ -15,10 +16,6 @@ namespace WolvenKit.RED4.Types
 		public entEntityParametersBuffer()
 		{
 			ParameterBuffers = new();
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

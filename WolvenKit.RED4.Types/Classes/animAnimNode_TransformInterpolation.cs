@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class animAnimNode_TransformInterpolation : animAnimNode_TransformValue
 	{
 		[Ordinal(11)] 
@@ -43,10 +44,6 @@ namespace WolvenKit.RED4.Types
 			FirstInput = new();
 			SecondInput = new();
 			Weight = new();
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

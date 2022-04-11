@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class WireRepairable : gameObject
 	{
 		[Ordinal(35)] 
@@ -47,10 +48,6 @@ namespace WolvenKit.RED4.Types
 		public WireRepairable()
 		{
 			DependableEntities = new();
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

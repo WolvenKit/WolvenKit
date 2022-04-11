@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class worldDynamicMeshNode : worldMeshNode
 	{
 		[Ordinal(16)] 
@@ -59,10 +60,6 @@ namespace WolvenKit.RED4.Types
 			DynamicTrafficSetting = new();
 			NavigationSetting = new() { NavmeshImpact = Enums.NavGenNavmeshImpact.Blocking };
 			UseMeshNavmeshSettings = true;
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

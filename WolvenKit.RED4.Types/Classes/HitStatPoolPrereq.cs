@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class HitStatPoolPrereq : GenericHitPrereq
 	{
 		[Ordinal(5)] 
@@ -40,10 +41,6 @@ namespace WolvenKit.RED4.Types
 		{
 			IsSync = true;
 			PipelineStage = Enums.gameDamagePipelineStage.Process;
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

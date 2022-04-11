@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class CMaterialTemplate : IMaterialDefinition
 	{
 		[Ordinal(9)] 
@@ -86,10 +87,6 @@ namespace WolvenKit.RED4.Types
 			Techniques = new();
 			SamplerStates = new(3);
 			UsedParameters = new(3);
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

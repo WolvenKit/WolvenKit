@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class scneventsSpawnEntityEventFallbackData : RedBaseClass
 	{
 		[Ordinal(0)] 
@@ -48,10 +49,6 @@ namespace WolvenKit.RED4.Types
 		{
 			Owner = new() { Id = 4294967040 };
 			FallbackCachedBones = new(0);
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

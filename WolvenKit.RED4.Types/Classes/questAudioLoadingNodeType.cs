@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class questAudioLoadingNodeType : questIAudioNodeType
 	{
 		[Ordinal(0)] 
@@ -41,10 +42,6 @@ namespace WolvenKit.RED4.Types
 			BanksToLoad = new();
 			BanksToUnload = new();
 			WaitOnLoad = true;
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

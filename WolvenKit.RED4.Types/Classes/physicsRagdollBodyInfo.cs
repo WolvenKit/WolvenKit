@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class physicsRagdollBodyInfo : RedBaseClass
 	{
 		[Ordinal(0)] 
@@ -144,10 +145,6 @@ namespace WolvenKit.RED4.Types
 			SwingAnglesY = new(2);
 			SwingAnglesZ = new(2);
 			TwistAngles = new(2);
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

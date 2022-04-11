@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class inkSystemNotificationsLayerDefinition : inkLayerDefinition
 	{
 		[Ordinal(8)] 
@@ -11,12 +12,5 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CResourceReference<inkWidgetLibraryResource>>();
 			set => SetPropertyValue<CResourceReference<inkWidgetLibraryResource>>(value);
 		}
-
-		public inkSystemNotificationsLayerDefinition()
-		{
-			PostConstruct();
-		}
-
-		partial void PostConstruct();
 	}
 }

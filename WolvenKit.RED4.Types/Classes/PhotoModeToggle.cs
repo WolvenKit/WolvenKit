@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class PhotoModeToggle : inkToggleController
 	{
 		[Ordinal(13)] 
@@ -66,10 +67,6 @@ namespace WolvenKit.RED4.Types
 			FrameWidget = new();
 			IconWidget = new();
 			LabelWidget = new();
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

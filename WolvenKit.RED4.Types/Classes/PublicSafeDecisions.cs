@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class PublicSafeDecisions : WeaponReadyListenerTransition
 	{
 		[Ordinal(25)] 
@@ -75,12 +76,5 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CBool>();
 			set => SetPropertyValue<CBool>(value);
 		}
-
-		public PublicSafeDecisions()
-		{
-			PostConstruct();
-		}
-
-		partial void PostConstruct();
 	}
 }

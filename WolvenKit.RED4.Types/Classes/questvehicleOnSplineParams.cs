@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class questvehicleOnSplineParams : questVehicleSpecificCommandParams
 	{
 		[Ordinal(3)] 
@@ -91,10 +92,6 @@ namespace WolvenKit.RED4.Types
 			Closest = true;
 			ForcedStartSpeed = -1.000000F;
 			StopAtEnd = true;
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

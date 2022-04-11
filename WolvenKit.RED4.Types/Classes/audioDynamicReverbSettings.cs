@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class audioDynamicReverbSettings : audioAudioMetadata
 	{
 		[Ordinal(1)] 
@@ -131,10 +132,6 @@ namespace WolvenKit.RED4.Types
 			SmallReverbMaxDistance = 20.000000F;
 			SmallReverbFadeOutThreshold = 15.000000F;
 			WeaponTailType = Enums.audioWeaponTailEnvironment.ExteriorUrbanNarrow;
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

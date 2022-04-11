@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class Fridge : InteractiveDevice
 	{
 		[Ordinal(94)] 
@@ -23,10 +24,6 @@ namespace WolvenKit.RED4.Types
 		public Fridge()
 		{
 			ControllerTypeName = "FridgeController";
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

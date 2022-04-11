@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class SetDestinationWaypoint : AIActionHelperTask
 	{
 		[Ordinal(5)] 
@@ -48,10 +49,6 @@ namespace WolvenKit.RED4.Types
 		{
 			Destinations = new();
 			FinalDestinations = new();
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class AIbehaviorMountRequestConditionDefinition : AIbehaviorConditionDefinition
 	{
 		[Ordinal(1)] 
@@ -41,10 +42,6 @@ namespace WolvenKit.RED4.Types
 			TestMountRequest = true;
 			AcceptInstant = true;
 			AcceptNotInstant = true;
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class inkBrushWrapper : RedBaseClass
 	{
 		[Ordinal(0)] 
@@ -19,12 +20,5 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CResourceReference<inkWidgetBrushResource>>();
 			set => SetPropertyValue<CResourceReference<inkWidgetBrushResource>>(value);
 		}
-
-		public inkBrushWrapper()
-		{
-			PostConstruct();
-		}
-
-		partial void PostConstruct();
 	}
 }

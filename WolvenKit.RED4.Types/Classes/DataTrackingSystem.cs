@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class DataTrackingSystem : gameScriptableSystem
 	{
 		[Ordinal(0)] 
@@ -442,10 +443,6 @@ namespace WolvenKit.RED4.Types
 			ResetNpcBlockedReqDelayID = new();
 			ResetNpcDeflectedReqDelayID = new();
 			ResetNpcGuardbreakReqDelayID = new();
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

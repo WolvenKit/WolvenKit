@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class grsHeistPlayerGameInfo : RedBaseClass
 	{
 		[Ordinal(0)] 
@@ -80,10 +81,6 @@ namespace WolvenKit.RED4.Types
 		{
 			PeerID = new() { Value = 255 };
 			SpawnTime = new();
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

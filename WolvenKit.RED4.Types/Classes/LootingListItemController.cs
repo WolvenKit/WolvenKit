@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class LootingListItemController : inkWidgetLogicController
 	{
 		[Ordinal(1)] 
@@ -121,10 +122,6 @@ namespace WolvenKit.RED4.Types
 			ItemTypeIconWrapper = new();
 			ItemTypeIcon = new();
 			HighlightFrames = new();
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

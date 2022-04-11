@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class worldWorldEnvironmentParameters : RedBaseClass
 	{
 		[Ordinal(0)] 
@@ -15,10 +16,6 @@ namespace WolvenKit.RED4.Types
 		public worldWorldEnvironmentParameters()
 		{
 			GlobalLightingTrajectory = new() { TimeOfYearSeason = Enums.ETimeOfYearSeason.ETOYS_Summer };
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

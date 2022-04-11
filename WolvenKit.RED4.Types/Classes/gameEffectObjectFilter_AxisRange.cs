@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class gameEffectObjectFilter_AxisRange : gameEffectObjectSingleFilter
 	{
 		[Ordinal(0)] 
@@ -32,10 +33,6 @@ namespace WolvenKit.RED4.Types
 		{
 			Position = new();
 			Constraints = new();
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

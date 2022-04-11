@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class worldEnvAreaNotifier : worldITriggerAreaNotifer
 	{
 		[Ordinal(3)] 
@@ -93,10 +94,6 @@ namespace WolvenKit.RED4.Types
 			Params = new() { AreaParameters = new() };
 			WeatherStateNames = new();
 			WeatherStateValues = new();
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

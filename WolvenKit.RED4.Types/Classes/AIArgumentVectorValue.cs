@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class AIArgumentVectorValue : AIArgumentDefinition
 	{
 		[Ordinal(3)] 
@@ -24,10 +25,6 @@ namespace WolvenKit.RED4.Types
 		{
 			Type = Enums.AIArgumentType.Vector;
 			DefaultValue = new();
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class PlayRecordedSessionMenuGameController : PreGameSubMenuGameController
 	{
 		[Ordinal(3)] 
@@ -23,10 +24,6 @@ namespace WolvenKit.RED4.Types
 		public PlayRecordedSessionMenuGameController()
 		{
 			Records = new();
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

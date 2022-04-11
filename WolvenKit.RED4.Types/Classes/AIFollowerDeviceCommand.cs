@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class AIFollowerDeviceCommand : AIFollowerCommand
 	{
 		[Ordinal(5)] 
@@ -19,12 +20,5 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CWeakHandle<gameObject>>();
 			set => SetPropertyValue<CWeakHandle<gameObject>>(value);
 		}
-
-		public AIFollowerDeviceCommand()
-		{
-			PostConstruct();
-		}
-
-		partial void PostConstruct();
 	}
 }

@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class audioAudioStateTransitionData : RedBaseClass
 	{
 		[Ordinal(0)] 
@@ -65,10 +66,6 @@ namespace WolvenKit.RED4.Types
 			AllConditionsFulfilled = true;
 			ReadVariableActions = new();
 			Conditions = new();
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

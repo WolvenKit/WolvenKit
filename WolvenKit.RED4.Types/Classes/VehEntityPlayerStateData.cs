@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class VehEntityPlayerStateData : RedBaseClass
 	{
 		[Ordinal(0)] 
@@ -23,10 +24,6 @@ namespace WolvenKit.RED4.Types
 		public VehEntityPlayerStateData()
 		{
 			EntID = new();
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

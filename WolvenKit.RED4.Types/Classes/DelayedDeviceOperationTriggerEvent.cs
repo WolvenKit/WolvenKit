@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class DelayedDeviceOperationTriggerEvent : redEvent
 	{
 		[Ordinal(0)] 
@@ -19,12 +20,5 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CHandle<OperationExecutionData>>();
 			set => SetPropertyValue<CHandle<OperationExecutionData>>(value);
 		}
-
-		public DelayedDeviceOperationTriggerEvent()
-		{
-			PostConstruct();
-		}
-
-		partial void PostConstruct();
 	}
 }

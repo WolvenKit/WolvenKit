@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class rendVertexBufferChunk : RedBaseClass
 	{
 		[Ordinal(0)] 
@@ -24,10 +25,6 @@ namespace WolvenKit.RED4.Types
 		{
 			VertexLayout = new() { Elements = new(0), SlotStrides = new(0), Hash = 4294967295 };
 			ByteOffsets = new(0);
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

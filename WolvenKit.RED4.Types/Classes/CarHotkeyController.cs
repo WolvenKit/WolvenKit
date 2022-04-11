@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class CarHotkeyController : GenericHotkeyController
 	{
 		[Ordinal(19)] 
@@ -43,10 +44,6 @@ namespace WolvenKit.RED4.Types
 			Restrictions = new();
 			DebugCommands = new();
 			CarIconSlot = new();
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

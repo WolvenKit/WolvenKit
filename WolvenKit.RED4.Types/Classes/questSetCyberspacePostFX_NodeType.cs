@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class questSetCyberspacePostFX_NodeType : questIRenderFxManagerNodeType
 	{
 		[Ordinal(0)] 
@@ -75,10 +76,6 @@ namespace WolvenKit.RED4.Types
 			TargetDatamosh = 1.000000F;
 			TargetTreshold = 0.300000F;
 			TimeBlend = 3.000000F;
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class gameTransformAnimation_Position_LocalPosition : gameTransformAnimation_Position
 	{
 		[Ordinal(0)] 
@@ -15,10 +16,6 @@ namespace WolvenKit.RED4.Types
 		public gameTransformAnimation_Position_LocalPosition()
 		{
 			Position = new();
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

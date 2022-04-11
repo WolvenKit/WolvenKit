@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class EnvironmentColorGroupsSettings : IAreaSettings
 	{
 		[Ordinal(2)] 
@@ -24,10 +25,6 @@ namespace WolvenKit.RED4.Types
 		{
 			Enable = true;
 			ColorGroup = new(16);
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

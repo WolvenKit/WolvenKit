@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class gameEffectAction_ChildEffectsMovingInCone : gameEffectPostAction
 	{
 		[Ordinal(0)] 
@@ -67,10 +68,6 @@ namespace WolvenKit.RED4.Types
 			MinEffectDuration = 0.300000F;
 			MaxEffectDuration = 1.000000F;
 			SmoothInterpolations = true;
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

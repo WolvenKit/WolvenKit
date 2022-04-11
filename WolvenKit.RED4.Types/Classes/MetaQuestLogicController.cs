@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class MetaQuestLogicController : inkWidgetLogicController
 	{
 		[Ordinal(1)] 
@@ -134,10 +135,6 @@ namespace WolvenKit.RED4.Types
 			MetaQuest1Value = new();
 			MetaQuest2Value = new();
 			MetaQuest3Value = new();
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

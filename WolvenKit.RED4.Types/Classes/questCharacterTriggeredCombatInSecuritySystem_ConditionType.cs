@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class questCharacterTriggeredCombatInSecuritySystem_ConditionType : questICharacterConditionType
 	{
 		[Ordinal(0)] 
@@ -15,10 +16,6 @@ namespace WolvenKit.RED4.Types
 		public questCharacterTriggeredCombatInSecuritySystem_ConditionType()
 		{
 			ObjectRef = new() { Names = new() };
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class ComputerMainLayoutWidgetController : inkWidgetLogicController
 	{
 		[Ordinal(1)] 
@@ -291,10 +292,6 @@ namespace WolvenKit.RED4.Types
 			WindowOpenAanimation = "windowOpen_16x9";
 			ComputerMenuButtonWidgetsData = new();
 			MenuToOpen = Enums.EComputerMenuType.INVALID;
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

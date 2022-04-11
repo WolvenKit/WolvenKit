@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class AIFollowTargetCommand : AIMoveCommand
 	{
 		[Ordinal(7)] 
@@ -72,10 +73,6 @@ namespace WolvenKit.RED4.Types
 		{
 			MatchSpeed = true;
 			Teleport = true;
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

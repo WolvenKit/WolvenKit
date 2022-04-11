@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class worldRaceSplineNode : worldSpeedSplineNode
 	{
 		[Ordinal(17)] 
@@ -24,10 +25,6 @@ namespace WolvenKit.RED4.Types
 		{
 			Offsets = new();
 			OffsetDefault = 5.000000F;
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

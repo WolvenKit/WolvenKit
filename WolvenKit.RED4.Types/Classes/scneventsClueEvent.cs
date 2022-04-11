@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class scneventsClueEvent : scnSceneEvent
 	{
 		[Ordinal(6)] 
@@ -59,10 +60,6 @@ namespace WolvenKit.RED4.Types
 			ClueEntity = new() { Names = new() };
 			MarkedOnTimeline = true;
 			OverrideFact = true;
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

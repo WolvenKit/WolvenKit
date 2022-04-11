@@ -1,13 +1,8 @@
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class gameLootSlotSingleItemLongStreaming : gameLootSlotSingleItem
 	{
-		public gameLootSlotSingleItemLongStreaming()
-		{
-			PostConstruct();
-		}
-
-		partial void PostConstruct();
 	}
 }

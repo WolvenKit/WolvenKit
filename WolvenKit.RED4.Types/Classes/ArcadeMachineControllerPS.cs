@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class ArcadeMachineControllerPS : ScriptableDeviceComponentPS
 	{
 		[Ordinal(104)] 
@@ -26,10 +27,6 @@ namespace WolvenKit.RED4.Types
 			TweakDBRecord = 93060634862;
 			TweakDBDescriptionRecord = 143953089827;
 			GameVideosPaths = new();
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

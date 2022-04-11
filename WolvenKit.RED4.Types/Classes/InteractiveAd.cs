@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class InteractiveAd : InteractiveDevice
 	{
 		[Ordinal(94)] 
@@ -47,10 +48,6 @@ namespace WolvenKit.RED4.Types
 		public InteractiveAd()
 		{
 			ControllerTypeName = "InteractiveAdController";
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

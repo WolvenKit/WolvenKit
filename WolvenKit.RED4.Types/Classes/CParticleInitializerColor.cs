@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class CParticleInitializerColor : IParticleInitializer
 	{
 		[Ordinal(4)] 
@@ -17,10 +18,6 @@ namespace WolvenKit.RED4.Types
 			EditorName = "Initial color";
 			EditorGroup = "Material";
 			IsEnabled = true;
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

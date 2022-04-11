@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class CParticleDrawerTrail : IParticleDrawer
 	{
 		[Ordinal(1)] 
@@ -49,10 +50,6 @@ namespace WolvenKit.RED4.Types
 			TexturesPerUnit = 0.500000F;
 			MinSegmentsPer360Degrees = 40;
 			RibbonTesselationDelta = 100.000000F;
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

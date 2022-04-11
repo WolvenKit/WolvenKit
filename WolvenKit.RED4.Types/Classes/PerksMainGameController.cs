@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class PerksMainGameController : gameuiMenuGameController
 	{
 		[Ordinal(3)] 
@@ -278,10 +279,6 @@ namespace WolvenKit.RED4.Types
 			SpentPerks = new();
 			PerksMenuItemCreatedQueue = new();
 			AttributesControllersList = new();
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

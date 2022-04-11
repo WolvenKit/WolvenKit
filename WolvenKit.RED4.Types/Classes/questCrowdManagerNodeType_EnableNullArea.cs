@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class questCrowdManagerNodeType_EnableNullArea : questICrowdManager_NodeType
 	{
 		[Ordinal(0)] 
@@ -19,12 +20,5 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CBool>();
 			set => SetPropertyValue<CBool>(value);
 		}
-
-		public questCrowdManagerNodeType_EnableNullArea()
-		{
-			PostConstruct();
-		}
-
-		partial void PostConstruct();
 	}
 }

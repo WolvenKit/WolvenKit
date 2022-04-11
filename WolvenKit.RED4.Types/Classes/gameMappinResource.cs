@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class gameMappinResource : CResource
 	{
 		[Ordinal(1)] 
@@ -33,10 +34,6 @@ namespace WolvenKit.RED4.Types
 			CookedData = new();
 			CookedMultiData = new();
 			CookedGpsData = new();
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class UI_CrosshairDef : gamebbScriptDefinition
 	{
 		[Ordinal(0)] 
@@ -15,10 +16,6 @@ namespace WolvenKit.RED4.Types
 		public UI_CrosshairDef()
 		{
 			EnemyNeutralized = new();
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

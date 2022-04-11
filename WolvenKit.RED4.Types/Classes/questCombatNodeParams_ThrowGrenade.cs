@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class questCombatNodeParams_ThrowGrenade : questCombatNodeParams
 	{
 		[Ordinal(0)] 
@@ -48,10 +49,6 @@ namespace WolvenKit.RED4.Types
 		{
 			TargetOverridePuppet = new() { Names = new() };
 			Duration = -1.000000F;
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

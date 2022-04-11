@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class UpgradingScreenController : CraftingMainLogicController
 	{
 		[Ordinal(39)] 
@@ -67,10 +68,6 @@ namespace WolvenKit.RED4.Types
 			TooltipDatas = new();
 			WeaponAreas = new();
 			EquipAreas = new();
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class entExternalComponent : entIComponent
 	{
 		[Ordinal(3)] 
@@ -15,10 +16,6 @@ namespace WolvenKit.RED4.Types
 		public entExternalComponent()
 		{
 			Name = "Component";
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

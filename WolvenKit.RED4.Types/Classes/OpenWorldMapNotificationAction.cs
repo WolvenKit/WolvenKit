@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class OpenWorldMapNotificationAction : GenericNotificationBaseAction
 	{
 		[Ordinal(0)] 
@@ -11,12 +12,5 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CWeakHandle<worlduiIWidgetGameController>>();
 			set => SetPropertyValue<CWeakHandle<worlduiIWidgetGameController>>(value);
 		}
-
-		public OpenWorldMapNotificationAction()
-		{
-			PostConstruct();
-		}
-
-		partial void PostConstruct();
 	}
 }

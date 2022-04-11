@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class SettingsSelectorControllerList : SettingsSelectorControllerRange
 	{
 		[Ordinal(19)] 
@@ -15,10 +16,6 @@ namespace WolvenKit.RED4.Types
 		public SettingsSelectorControllerList()
 		{
 			DotsContainer = new();
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

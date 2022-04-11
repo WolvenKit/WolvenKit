@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class DetectionParameters : RedBaseClass
 	{
 		[Ordinal(0)] 
@@ -59,10 +60,6 @@ namespace WolvenKit.RED4.Types
 			MaxRotationAngle = 90.000000F;
 			PitchAngle = -15.000000F;
 			RotationSpeed = 5.000000F;
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

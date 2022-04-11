@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class ScannerSkillCheckItemLogicController : inkWidgetLogicController
 	{
 		[Ordinal(1)] 
@@ -60,10 +61,6 @@ namespace WolvenKit.RED4.Types
 			ConditionDataItemName = "ConditionDataItem";
 			PassedStateName = "Passed";
 			FailedStateName = "Failed";
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

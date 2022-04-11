@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class BlindingLight : BasicDistractionDevice
 	{
 		[Ordinal(100)] 
@@ -23,10 +24,6 @@ namespace WolvenKit.RED4.Types
 		public BlindingLight()
 		{
 			ControllerTypeName = "BlindingLightController";
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

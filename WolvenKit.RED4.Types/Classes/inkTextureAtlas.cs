@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class inkTextureAtlas : CResource
 	{
 		[Ordinal(1)] 
@@ -83,10 +84,6 @@ namespace WolvenKit.RED4.Types
 			Slots = new(3);
 			DynamicTextureSlot = new() { Parts = new() };
 			IsSingleTextureMode = true;
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

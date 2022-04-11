@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class VehiclePanzerBootupUIQuestEvent : redEvent
 	{
 		[Ordinal(0)] 
@@ -15,10 +16,6 @@ namespace WolvenKit.RED4.Types
 		public VehiclePanzerBootupUIQuestEvent()
 		{
 			Mode = Enums.panzerBootupUI.Loop;
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

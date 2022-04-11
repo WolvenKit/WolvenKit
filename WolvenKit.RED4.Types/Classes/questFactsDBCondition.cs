@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class questFactsDBCondition : questTypedCondition
 	{
 		[Ordinal(0)] 
@@ -11,12 +12,5 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CHandle<questIFactsDBConditionType>>();
 			set => SetPropertyValue<CHandle<questIFactsDBConditionType>>(value);
 		}
-
-		public questFactsDBCondition()
-		{
-			PostConstruct();
-		}
-
-		partial void PostConstruct();
 	}
 }

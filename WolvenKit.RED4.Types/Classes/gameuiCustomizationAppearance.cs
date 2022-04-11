@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class gameuiCustomizationAppearance : gameuiCensorshipInfo
 	{
 		[Ordinal(2)] 
@@ -27,12 +28,5 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CName>();
 			set => SetPropertyValue<CName>(value);
 		}
-
-		public gameuiCustomizationAppearance()
-		{
-			PostConstruct();
-		}
-
-		partial void PostConstruct();
 	}
 }

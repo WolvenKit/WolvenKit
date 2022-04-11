@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class gameuiMappinsContainerController : gameuiProjectedHUDGameController
 	{
 		[Ordinal(9)] 
@@ -66,10 +67,6 @@ namespace WolvenKit.RED4.Types
 			SpawnContainerPath = new() { Names = new() };
 			GpsQuestPathWidget = new();
 			GpsPlayerTrackedPathWidget = new();
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

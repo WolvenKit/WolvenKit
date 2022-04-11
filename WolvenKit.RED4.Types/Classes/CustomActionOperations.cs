@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class CustomActionOperations : DeviceOperations
 	{
 		[Ordinal(2)] 
@@ -26,10 +27,6 @@ namespace WolvenKit.RED4.Types
 			FxInstances = new();
 			CustomActions = new() { Actions = new() };
 			CustomActionsOperations = new();
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

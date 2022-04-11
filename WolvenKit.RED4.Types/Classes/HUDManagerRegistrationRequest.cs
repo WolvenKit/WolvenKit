@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class HUDManagerRegistrationRequest : HUDManagerRequest
 	{
 		[Ordinal(1)] 
@@ -19,12 +20,5 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CEnum<HUDActorType>>();
 			set => SetPropertyValue<CEnum<HUDActorType>>(value);
 		}
-
-		public HUDManagerRegistrationRequest()
-		{
-			PostConstruct();
-		}
-
-		partial void PostConstruct();
 	}
 }

@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class TargetNPCTypeHitPrereqCondition : BaseHitPrereqCondition
 	{
 		[Ordinal(3)] 
@@ -11,12 +12,5 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CEnum<gamedataNPCType>>();
 			set => SetPropertyValue<CEnum<gamedataNPCType>>(value);
 		}
-
-		public TargetNPCTypeHitPrereqCondition()
-		{
-			PostConstruct();
-		}
-
-		partial void PostConstruct();
 	}
 }

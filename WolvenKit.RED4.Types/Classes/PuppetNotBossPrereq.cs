@@ -1,13 +1,8 @@
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class PuppetNotBossPrereq : gameIScriptablePrereq
 	{
-		public PuppetNotBossPrereq()
-		{
-			PostConstruct();
-		}
-
-		partial void PostConstruct();
 	}
 }

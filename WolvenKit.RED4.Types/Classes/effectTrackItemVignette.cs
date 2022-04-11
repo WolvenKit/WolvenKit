@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class effectTrackItemVignette : effectTrackItem
 	{
 		[Ordinal(3)] 
@@ -50,10 +51,6 @@ namespace WolvenKit.RED4.Types
 			VignetteRadius = new();
 			VignetteExp = new();
 			Color = new();
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

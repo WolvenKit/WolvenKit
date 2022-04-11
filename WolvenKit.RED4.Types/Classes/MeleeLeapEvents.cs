@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class MeleeLeapEvents : MeleeEventsTransition
 	{
 		[Ordinal(1)] 
@@ -11,12 +12,5 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CUInt32>();
 			set => SetPropertyValue<CUInt32>(value);
 		}
-
-		public MeleeLeapEvents()
-		{
-			PostConstruct();
-		}
-
-		partial void PostConstruct();
 	}
 }

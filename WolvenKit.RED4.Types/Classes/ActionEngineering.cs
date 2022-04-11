@@ -1,8 +1,10 @@
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class ActionEngineering : ActionSkillCheck
 	{
+
 		public ActionEngineering()
 		{
 			RequesterID = new();
@@ -12,10 +14,6 @@ namespace WolvenKit.RED4.Types
 			SkillCheckName = Enums.EDeviceChallengeSkill.Engineering;
 			LocalizedName = "LocKey#22276";
 			SkillcheckDescription = new() { AdditionalRequirements = new(), OwnerID = new() };
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

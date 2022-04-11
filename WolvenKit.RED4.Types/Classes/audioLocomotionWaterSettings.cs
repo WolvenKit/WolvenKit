@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class audioLocomotionWaterSettings : audioAudioMetadata
 	{
 		[Ordinal(1)] 
@@ -93,10 +94,6 @@ namespace WolvenKit.RED4.Types
 			ShallowSettings = new() { MinDistanceBetweenImpulsesSquared = 0.010000F, ImpulseStrength = 0.002500F, ImpulseMinRadius = 0.040000F, ImpulseMaxRadius = 0.050000F };
 			IntermediateSettings = new() { MinDistanceBetweenImpulsesSquared = 0.010000F, ImpulseStrength = 0.002500F, ImpulseMinRadius = 0.040000F, ImpulseMaxRadius = 0.050000F };
 			DeepSettings = new() { MinDistanceBetweenImpulsesSquared = 0.010000F, ImpulseStrength = 0.002500F, ImpulseMinRadius = 0.040000F, ImpulseMaxRadius = 0.050000F };
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

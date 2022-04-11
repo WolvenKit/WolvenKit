@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class ItemCategoryFliterManager : IScriptable
 	{
 		[Ordinal(0)] 
@@ -41,10 +42,6 @@ namespace WolvenKit.RED4.Types
 			FiltersToCheck = new();
 			Filters = new();
 			SharedFiltersToCheck = new();
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

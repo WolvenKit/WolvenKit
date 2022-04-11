@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class FuseBox : InteractiveMasterDevice
 	{
 		[Ordinal(94)] 
@@ -75,10 +76,6 @@ namespace WolvenKit.RED4.Types
 			IndexesOfComponentsToOFF = new();
 			ComponentsON = new();
 			ComponentsOFF = new();
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

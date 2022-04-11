@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class gamedataFileNode : gamedataDataNode
 	{
 		[Ordinal(3)] 
@@ -49,10 +50,6 @@ namespace WolvenKit.RED4.Types
 			PackageDependencies = new(0);
 			Variables = new();
 			Groups = new();
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

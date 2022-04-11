@@ -5,6 +5,7 @@ using WolvenKit.RED4.Types.Exceptions;
 
 namespace WolvenKit.RED4.Types
 {
+    [REDMeta]
     public partial class RedBaseClass : IRedType, IRedCloneable, IEquatable<RedBaseClass>
     {
         public RedBaseClass()

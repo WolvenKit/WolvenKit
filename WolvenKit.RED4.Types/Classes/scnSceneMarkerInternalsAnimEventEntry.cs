@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class scnSceneMarkerInternalsAnimEventEntry : RedBaseClass
 	{
 		[Ordinal(0)] 
@@ -66,10 +67,6 @@ namespace WolvenKit.RED4.Types
 			EndPos = new();
 			StartDir = new();
 			EndDir = new();
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

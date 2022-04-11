@@ -1,8 +1,8 @@
 namespace WolvenKit.RED4.Types
 {
-    public partial class StreetSignWidgetComponent
+    public partial class StreetSignWidgetComponent : IRedOverload
     {
-        partial void PostConstruct()
+        void IRedOverload.ConstructorOverload()
         {
             IsAStreetName = true;
         }

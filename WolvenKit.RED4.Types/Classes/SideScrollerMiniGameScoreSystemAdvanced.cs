@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class SideScrollerMiniGameScoreSystemAdvanced : gameScriptableSystem
 	{
 		[Ordinal(0)] 
@@ -24,10 +25,6 @@ namespace WolvenKit.RED4.Types
 		{
 			ScoreData = new(3);
 			GameNames = new(3);
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

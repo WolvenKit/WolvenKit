@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class AIDebugLogScope : RedBaseClass
 	{
 		[Ordinal(0)] 
@@ -24,10 +25,6 @@ namespace WolvenKit.RED4.Types
 		{
 			Index = 4294967295;
 			Id = 4294967295;
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

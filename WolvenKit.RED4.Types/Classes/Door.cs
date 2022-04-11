@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class Door : InteractiveDevice
 	{
 		[Ordinal(94)] 
@@ -382,10 +383,6 @@ namespace WolvenKit.RED4.Types
 			ClosingAnimationLength = 1.100000F;
 			AutomaticCloseDelay = 3.000000F;
 			ForceOpeningAudioStimRange = 6.000000F;
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

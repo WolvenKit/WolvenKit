@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class scnRewindableSectionPlaySpeedModifiers : RedBaseClass
 	{
 		[Ordinal(0)] 
@@ -60,10 +61,6 @@ namespace WolvenKit.RED4.Types
 			BackwardVeryFast = 6.000000F;
 			BackwardFast = 3.000000F;
 			BackwardSlow = 0.500000F;
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

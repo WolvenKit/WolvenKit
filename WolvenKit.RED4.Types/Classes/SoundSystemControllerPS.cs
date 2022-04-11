@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class SoundSystemControllerPS : MasterControllerPS
 	{
 		[Ordinal(105)] 
@@ -39,10 +40,6 @@ namespace WolvenKit.RED4.Types
 		public SoundSystemControllerPS()
 		{
 			SoundSystemSettings = new();
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class entStaticOccluderMeshComponent : entIPlacedComponent
 	{
 		[Ordinal(5)] 
@@ -51,10 +52,6 @@ namespace WolvenKit.RED4.Types
 			Scale = new() { X = 1.000000F, Y = 1.000000F, Z = 1.000000F };
 			Color = new();
 			OccluderAutohideDistanceScale = 255;
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

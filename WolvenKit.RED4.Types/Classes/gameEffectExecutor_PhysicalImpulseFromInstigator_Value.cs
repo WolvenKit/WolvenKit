@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class gameEffectExecutor_PhysicalImpulseFromInstigator_Value : gameEffectExecutor
 	{
 		[Ordinal(1)] 
@@ -11,12 +12,5 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CFloat>();
 			set => SetPropertyValue<CFloat>(value);
 		}
-
-		public gameEffectExecutor_PhysicalImpulseFromInstigator_Value()
-		{
-			PostConstruct();
-		}
-
-		partial void PostConstruct();
 	}
 }

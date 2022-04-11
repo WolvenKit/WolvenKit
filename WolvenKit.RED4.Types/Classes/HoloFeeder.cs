@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class HoloFeeder : Device
 	{
 		[Ordinal(84)] 
@@ -15,10 +16,6 @@ namespace WolvenKit.RED4.Types
 		public HoloFeeder()
 		{
 			ControllerTypeName = "HoloFeederController";
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class HitData_Base : gameHitShapeUserData
 	{
 		[Ordinal(0)] 
@@ -27,12 +28,5 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CEnum<HitShape_Type>>();
 			set => SetPropertyValue<CEnum<HitShape_Type>>(value);
 		}
-
-		public HitData_Base()
-		{
-			PostConstruct();
-		}
-
-		partial void PostConstruct();
 	}
 }

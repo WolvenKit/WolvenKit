@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class BaseProjectile : gameItemObject
 	{
 		[Ordinal(38)] 
@@ -72,10 +73,6 @@ namespace WolvenKit.RED4.Types
 		{
 			ProjectileSpawnPoint = new();
 			ProjectilePosition = new();
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

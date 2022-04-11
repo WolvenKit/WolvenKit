@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class animTwistOutput : RedBaseClass
 	{
 		[Ordinal(0)] 
@@ -50,10 +51,6 @@ namespace WolvenKit.RED4.Types
 			NegativeScale = 1.000000F;
 			TwistedTransform = new();
 			OutputAngleTrack = new();
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

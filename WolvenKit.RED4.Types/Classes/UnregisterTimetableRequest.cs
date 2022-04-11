@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class UnregisterTimetableRequest : gameScriptableSystemRequest
 	{
 		[Ordinal(0)] 
@@ -15,10 +16,6 @@ namespace WolvenKit.RED4.Types
 		public UnregisterTimetableRequest()
 		{
 			RequesterData = new() { Id = new() };
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class GlitchData : RedBaseClass
 	{
 		[Ordinal(0)] 
@@ -19,12 +20,5 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CEnum<EGlitchState>>();
 			set => SetPropertyValue<CEnum<EGlitchState>>(value);
 		}
-
-		public GlitchData()
-		{
-			PostConstruct();
-		}
-
-		partial void PostConstruct();
 	}
 }

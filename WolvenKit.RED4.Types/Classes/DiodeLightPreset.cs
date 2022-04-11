@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class DiodeLightPreset : RedBaseClass
 	{
 		[Ordinal(0)] 
@@ -91,10 +92,6 @@ namespace WolvenKit.RED4.Types
 			ColorMin = new();
 			OverrideColorMin = true;
 			Strength = 1.000000F;
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

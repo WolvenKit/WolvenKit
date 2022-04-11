@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class RipperdocScreenAnimationController : inkWidgetLogicController
 	{
 		[Ordinal(1)] 
@@ -332,10 +333,6 @@ namespace WolvenKit.RED4.Types
 			M_eyesHoverTexture = new();
 			Man_wiresTexture = new();
 			Woman_wiresTexture = new();
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

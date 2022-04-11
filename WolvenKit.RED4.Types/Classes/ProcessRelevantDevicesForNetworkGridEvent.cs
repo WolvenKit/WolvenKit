@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class ProcessRelevantDevicesForNetworkGridEvent : ProcessDevicesEvent
 	{
 		[Ordinal(1)] 
@@ -72,10 +73,6 @@ namespace WolvenKit.RED4.Types
 		{
 			BreachedResource = new();
 			DefaultResource = new();
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

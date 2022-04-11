@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class questAddRemoveItem_NodeTypeParams : ISerializable
 	{
 		[Ordinal(0)] 
@@ -106,10 +107,6 @@ namespace WolvenKit.RED4.Types
 			Quantity = 1;
 			ItemIDsToIgnoreOnRemove = new();
 			TagsToIgnoreOnRemove = new();
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class PlayerPuppet : ScriptedPuppet
 	{
 		[Ordinal(92)] 
@@ -889,10 +890,6 @@ namespace WolvenKit.RED4.Types
 			DelayEndGracePeriodAfterSpawnEventID = new();
 			LastActiveWardrobeSet = -1;
 			BossThatTargetsPlayer = new();
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

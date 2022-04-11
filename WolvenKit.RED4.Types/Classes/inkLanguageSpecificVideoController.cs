@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class inkLanguageSpecificVideoController : inkWidgetLogicController
 	{
 		[Ordinal(1)] 
@@ -39,10 +40,6 @@ namespace WolvenKit.RED4.Types
 		public inkLanguageSpecificVideoController()
 		{
 			Languages = new();
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

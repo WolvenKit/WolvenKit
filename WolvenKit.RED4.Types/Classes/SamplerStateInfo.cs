@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class SamplerStateInfo : RedBaseClass
 	{
 		[Ordinal(0)] 
@@ -67,12 +68,5 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CUInt8>();
 			set => SetPropertyValue<CUInt8>(value);
 		}
-
-		public SamplerStateInfo()
-		{
-			PostConstruct();
-		}
-
-		partial void PostConstruct();
 	}
 }

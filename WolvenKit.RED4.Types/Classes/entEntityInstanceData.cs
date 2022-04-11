@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class entEntityInstanceData : ISerializable
 	{
 		[Ordinal(0)] 
@@ -11,12 +12,5 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<DataBuffer>();
 			set => SetPropertyValue<DataBuffer>(value);
 		}
-
-		public entEntityInstanceData()
-		{
-			PostConstruct();
-		}
-
-		partial void PostConstruct();
 	}
 }

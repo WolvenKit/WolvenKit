@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class questInputHint_NodeType : questIUIManagerNodeType
 	{
 		[Ordinal(0)] 
@@ -48,10 +49,6 @@ namespace WolvenKit.RED4.Types
 		{
 			Show = true;
 			QueuePriority = -1;
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

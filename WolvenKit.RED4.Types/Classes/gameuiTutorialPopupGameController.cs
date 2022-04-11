@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class gameuiTutorialPopupGameController : gameuiWidgetGameController
 	{
 		[Ordinal(2)] 
@@ -196,10 +197,6 @@ namespace WolvenKit.RED4.Types
 			AnimOutroFullscreenLeft = "outro_fullscreen_left";
 			AnimOutroFullscreenRight = "outro_fullscreen_right";
 			TargetPopup = new();
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

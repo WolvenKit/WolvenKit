@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class RipperDocGameController : gameuiMenuGameController
 	{
 		[Ordinal(3)] 
@@ -502,10 +503,6 @@ namespace WolvenKit.RED4.Types
 			SortingButton = new();
 			SortingDropdown = new();
 			CybewareGrids = new();
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class BaseBullet : BaseProjectile
 	{
 		[Ordinal(46)] 
@@ -55,10 +56,6 @@ namespace WolvenKit.RED4.Types
 		public BaseBullet()
 		{
 			Alive = true;
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

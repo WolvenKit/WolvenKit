@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class entAnimationControllerReplicatedState : netIComponentState
 	{
 		[Ordinal(2)] 
@@ -42,10 +43,6 @@ namespace WolvenKit.RED4.Types
 			AnimWrapperVarsState = new() { ServerReplicatedTime = new(), Data = new() };
 			AnimFeaturesState = new() { Items = new(), LastAppliedActionsTime = new() };
 			InputSettersState = new() { ServerReplicatedTime = new() };
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

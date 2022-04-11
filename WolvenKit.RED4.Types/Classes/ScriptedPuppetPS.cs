@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class ScriptedPuppetPS : gamePuppetPS
 	{
 		[Ordinal(5)] 
@@ -239,10 +240,6 @@ namespace WolvenKit.RED4.Types
 			GenericMeleeLoadout = new() { ItemID = new() };
 			GenericRangedLoadout = new() { ItemID = new() };
 			Transgressions = new();
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class UI_CraftingDef : gamebbScriptDefinition
 	{
 		[Ordinal(0)] 
@@ -33,10 +34,6 @@ namespace WolvenKit.RED4.Types
 			LastCommand = new();
 			LastItem = new();
 			LastIngredients = new();
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class gameuiMinimapSecurityAreaMappinController : gameuiBaseMinimapMappinController
 	{
 		[Ordinal(14)] 
@@ -31,10 +32,6 @@ namespace WolvenKit.RED4.Types
 		public gameuiMinimapSecurityAreaMappinController()
 		{
 			AreaShapeWidget = new();
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class ShardNotificationController : gameuiWidgetGameController
 	{
 		[Ordinal(2)] 
@@ -128,10 +129,6 @@ namespace WolvenKit.RED4.Types
 			ButtonHintsSecondaryManagerRef = new();
 			ButtonHintsSecondaryManagerParentRef = new();
 			LongTextTrashold = 1000;
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

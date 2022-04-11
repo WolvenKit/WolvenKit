@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class questWorldStateSystemReplicatedState : RedBaseClass
 	{
 		[Ordinal(0)] 
@@ -42,10 +43,6 @@ namespace WolvenKit.RED4.Types
 			IsInMirrorsAreaMapArray = new();
 			NodeCollisionMapArray = new();
 			PrefabVariants = new();
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class FunctionalTestsDataMemoryPoolStaticData : ISerializable
 	{
 		[Ordinal(0)] 
@@ -47,10 +48,6 @@ namespace WolvenKit.RED4.Types
 		public FunctionalTestsDataMemoryPoolStaticData()
 		{
 			Children = new();
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

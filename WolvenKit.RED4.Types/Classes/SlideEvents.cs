@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class SlideEvents : CrouchEvents
 	{
 		[Ordinal(6)] 
@@ -19,12 +20,5 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CHandle<gameStatModifierData_Deprecated>>();
 			set => SetPropertyValue<CHandle<gameStatModifierData_Deprecated>>(value);
 		}
-
-		public SlideEvents()
-		{
-			PostConstruct();
-		}
-
-		partial void PostConstruct();
 	}
 }

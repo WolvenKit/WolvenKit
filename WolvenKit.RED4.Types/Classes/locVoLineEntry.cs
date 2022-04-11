@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class locVoLineEntry : RedBaseClass
 	{
 		[Ordinal(0)] 
@@ -27,12 +28,5 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CResourceAsyncReference<locVoResource>>();
 			set => SetPropertyValue<CResourceAsyncReference<locVoResource>>(value);
 		}
-
-		public locVoLineEntry()
-		{
-			PostConstruct();
-		}
-
-		partial void PostConstruct();
 	}
 }

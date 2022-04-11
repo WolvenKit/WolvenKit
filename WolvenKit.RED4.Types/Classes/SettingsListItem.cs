@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class SettingsListItem : inkListItemController
 	{
 		[Ordinal(16)] 
@@ -23,10 +24,6 @@ namespace WolvenKit.RED4.Types
 		public SettingsListItem()
 		{
 			Selector = new();
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

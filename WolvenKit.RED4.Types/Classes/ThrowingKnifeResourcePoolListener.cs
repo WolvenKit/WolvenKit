@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class ThrowingKnifeResourcePoolListener : gameScriptStatPoolsListener
 	{
 		[Ordinal(0)] 
@@ -27,12 +28,5 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CHandle<ThrowingKnifeReloadFinishedCrosshairEvent>>();
 			set => SetPropertyValue<CHandle<ThrowingKnifeReloadFinishedCrosshairEvent>>(value);
 		}
-
-		public ThrowingKnifeResourcePoolListener()
-		{
-			PostConstruct();
-		}
-
-		partial void PostConstruct();
 	}
 }

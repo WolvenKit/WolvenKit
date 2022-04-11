@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class gameQuestDistanceRequestFilter : gameCustomRequestFilter
 	{
 		[Ordinal(0)] 
@@ -15,10 +16,6 @@ namespace WolvenKit.RED4.Types
 		public gameQuestDistanceRequestFilter()
 		{
 			DistanceSquared = 1000000.000000F;
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

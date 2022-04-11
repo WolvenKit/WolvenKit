@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class GenericDeviceActionsData : RedBaseClass
 	{
 		[Ordinal(0)] 
@@ -24,10 +25,6 @@ namespace WolvenKit.RED4.Types
 		{
 			StateActionsOverrides = new() { ToggleON = new(), TogglePower = new() };
 			CustomActions = new() { Actions = new() };
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

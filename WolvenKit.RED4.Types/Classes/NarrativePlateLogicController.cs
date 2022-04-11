@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class NarrativePlateLogicController : inkWidgetLogicController
 	{
 		[Ordinal(1)] 
@@ -33,10 +34,6 @@ namespace WolvenKit.RED4.Types
 			TextWidget = new();
 			CaptionWidget = new();
 			Root = new();
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

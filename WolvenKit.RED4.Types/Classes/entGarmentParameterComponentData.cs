@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class entGarmentParameterComponentData : RedBaseClass
 	{
 		[Ordinal(0)] 
@@ -166,10 +167,6 @@ namespace WolvenKit.RED4.Types
 			SmoothingNumNeighbours = 1;
 			GarmentBorderThreshold = 0.500000F;
 			RemoveHiddenTriangles = true;
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

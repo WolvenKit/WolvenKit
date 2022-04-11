@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class SplinePoint : RedBaseClass
 	{
 		[Ordinal(0)] 
@@ -59,10 +60,6 @@ namespace WolvenKit.RED4.Types
 			Tangents = new(2);
 			ContinuousTangents = true;
 			AutomaticTangents = true;
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

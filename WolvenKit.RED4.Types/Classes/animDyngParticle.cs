@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class animDyngParticle : RedBaseClass
 	{
 		[Ordinal(1)] 
@@ -84,10 +85,6 @@ namespace WolvenKit.RED4.Types
 			Bone = new();
 			CollisionCapsuleAxisLS = new() { X = 0.500000F };
 			ProjectionType = Enums.animDyngParticleProjectionType.ShortestPath;
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class CEvaluatorVectorRandomUniform : IEvaluatorVector
 	{
 		[Ordinal(2)] 
@@ -58,10 +59,6 @@ namespace WolvenKit.RED4.Types
 			Spill = true;
 			Min = new();
 			Max = new();
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class FocusCluesSystem : gameScriptableSystem
 	{
 		[Ordinal(0)] 
@@ -33,10 +34,6 @@ namespace WolvenKit.RED4.Types
 			LinkedClues = new();
 			DisabledGroupes = new();
 			ActiveLinkedClue = new() { OwnerID = new(), ExtendedClueRecords = new(), PsData = new() { Id = new() } };
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

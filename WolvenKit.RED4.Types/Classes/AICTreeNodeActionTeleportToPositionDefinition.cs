@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class AICTreeNodeActionTeleportToPositionDefinition : AICTreeNodeActionDefinition
 	{
 		[Ordinal(1)] 
@@ -23,10 +24,6 @@ namespace WolvenKit.RED4.Types
 		public AICTreeNodeActionTeleportToPositionDefinition()
 		{
 			PositionName = "MovementTarget";
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class DialerContactDataView : inkScriptableDataViewWrapper
 	{
 		[Ordinal(0)] 
@@ -11,12 +12,5 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CHandle<CompareBuilder>>();
 			set => SetPropertyValue<CHandle<CompareBuilder>>(value);
 		}
-
-		public DialerContactDataView()
-		{
-			PostConstruct();
-		}
-
-		partial void PostConstruct();
 	}
 }

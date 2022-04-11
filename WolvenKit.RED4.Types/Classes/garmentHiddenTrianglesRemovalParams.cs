@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class garmentHiddenTrianglesRemovalParams : RedBaseClass
 	{
 		[Ordinal(0)] 
@@ -50,10 +51,6 @@ namespace WolvenKit.RED4.Types
 			RemoveHiddenTriangles = true;
 			RayLengthInCM = 10.000000F;
 			RayLengthMorphOffsetFactor = 1.000000F;
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

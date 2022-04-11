@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class scneventsBraindanceVisibilityEvent : scnSceneEvent
 	{
 		[Ordinal(6)] 
@@ -86,10 +87,6 @@ namespace WolvenKit.RED4.Types
 			PerspectiveBlend = 0.500000F;
 			RenderSettingsFPP = new() { AreaParameters = new() };
 			RenderSettingsTPP = new() { AreaParameters = new() };
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

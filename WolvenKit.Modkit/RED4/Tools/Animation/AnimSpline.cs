@@ -130,7 +130,7 @@ namespace WolvenKit.Modkit.RED4.Animation
             var anim = model.CreateAnimation(animAnimDes.Name);
             var skin = model.LogicalSkins.FirstOrDefault(_ => _.Name is "Armature");
 
-            if (animAnimDes.AnimationType == Enums.animAnimationType.Additive)
+            if (animAnimDes.AnimationType.Value == Enums.animAnimationType.Additive)
             {
 
                 for (ushort i = 0; i < blob.NumJoints - blob.NumExtraJoints; i++)

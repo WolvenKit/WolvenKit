@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class gameActionAnimationSlideParams : RedBaseClass
 	{
 		[Ordinal(0)] 
@@ -136,10 +137,6 @@ namespace WolvenKit.RED4.Types
 		{
 			UsePositionSlide = true;
 			UseRotationSlide = true;
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

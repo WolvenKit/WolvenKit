@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class FoliageShadowConfig : RedBaseClass
 	{
 		[Ordinal(0)] 
@@ -33,10 +34,6 @@ namespace WolvenKit.RED4.Types
 			FoliageShadowCascadeGradient = 0.100000F;
 			FoliageShadowCascadeFilterScale = 0.100000F;
 			FoliageShadowCascadeGradientDistanceRange = 50.000000F;
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

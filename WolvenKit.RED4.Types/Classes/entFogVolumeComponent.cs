@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class entFogVolumeComponent : entIVisualComponent
 	{
 		[Ordinal(8)] 
@@ -71,10 +72,6 @@ namespace WolvenKit.RED4.Types
 			Absorption = -1.000000F;
 			Size = new() { X = 1.000000F, Y = 1.000000F, Z = 1.000000F };
 			IsEnabled = true;
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

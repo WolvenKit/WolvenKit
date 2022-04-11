@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class gameHitRepresentationResult : RedBaseClass
 	{
 		[Ordinal(0)] 
@@ -24,10 +25,6 @@ namespace WolvenKit.RED4.Types
 		{
 			Sult = new() { HitShapes = new() };
 			TityID = new();
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

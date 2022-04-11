@@ -1,13 +1,8 @@
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class UILocalizationKeys : IScriptable
 	{
-		public UILocalizationKeys()
-		{
-			PostConstruct();
-		}
-
-		partial void PostConstruct();
 	}
 }

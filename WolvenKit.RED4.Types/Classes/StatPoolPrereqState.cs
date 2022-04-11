@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class StatPoolPrereqState : gamePrereqState
 	{
 		[Ordinal(0)] 
@@ -11,12 +12,5 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CHandle<BaseStatPoolPrereqListener>>();
 			set => SetPropertyValue<CHandle<BaseStatPoolPrereqListener>>(value);
 		}
-
-		public StatPoolPrereqState()
-		{
-			PostConstruct();
-		}
-
-		partial void PostConstruct();
 	}
 }

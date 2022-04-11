@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class CParticleModificatorAlphaOverLife : IParticleModificator
 	{
 		[Ordinal(4)] 
@@ -26,10 +27,6 @@ namespace WolvenKit.RED4.Types
 			EditorGroup = "Material";
 			IsEnabled = true;
 			Modulate = true;
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

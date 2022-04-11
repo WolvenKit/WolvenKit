@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class questRequestVehicleCameraPerspective_NodeType : questIVehicleManagerNodeType
 	{
 		[Ordinal(0)] 
@@ -15,10 +16,6 @@ namespace WolvenKit.RED4.Types
 		public questRequestVehicleCameraPerspective_NodeType()
 		{
 			CameraPerspective = Enums.questVehicleCameraPerspective.FPP;
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

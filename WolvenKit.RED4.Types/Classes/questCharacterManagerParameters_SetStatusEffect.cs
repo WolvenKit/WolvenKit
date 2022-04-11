@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class questCharacterManagerParameters_SetStatusEffect : questICharacterManagerParameters_NodeSubType
 	{
 		[Ordinal(0)] 
@@ -65,10 +66,6 @@ namespace WolvenKit.RED4.Types
 			PuppetRef = new() { Names = new() };
 			StatusEffectSourceObject = new() { Names = new() };
 			Set = true;
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

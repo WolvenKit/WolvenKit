@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class PingCachedData : IScriptable
 	{
 		[Ordinal(0)] 
@@ -124,10 +125,6 @@ namespace WolvenKit.RED4.Types
 			LinkType = Enums.ELinkType.FREE;
 			LinkFXresource = new();
 			SourcePosition = new();
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

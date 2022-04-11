@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class AIBackgroundCombatCommand : AICommand
 	{
 		[Ordinal(4)] 
@@ -15,10 +16,6 @@ namespace WolvenKit.RED4.Types
 		public AIBackgroundCombatCommand()
 		{
 			Steps = new();
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

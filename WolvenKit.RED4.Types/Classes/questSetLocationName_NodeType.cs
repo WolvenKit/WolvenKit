@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class questSetLocationName_NodeType : questIUIManagerNodeType
 	{
 		[Ordinal(0)] 
@@ -39,10 +40,6 @@ namespace WolvenKit.RED4.Types
 		public questSetLocationName_NodeType()
 		{
 			IsNewLocation = true;
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

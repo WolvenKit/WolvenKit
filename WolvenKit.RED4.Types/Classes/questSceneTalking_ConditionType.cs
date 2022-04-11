@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class questSceneTalking_ConditionType : questISceneConditionType
 	{
 		[Ordinal(0)] 
@@ -55,10 +56,6 @@ namespace WolvenKit.RED4.Types
 		public questSceneTalking_ConditionType()
 		{
 			GlobalEntityRef = new() { Names = new() };
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

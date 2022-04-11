@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class VehiclesManagerListItemController : inkVirtualCompoundItemController
 	{
 		[Ordinal(15)] 
@@ -32,10 +33,6 @@ namespace WolvenKit.RED4.Types
 		{
 			Label = new();
 			TypeIcon = new();
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

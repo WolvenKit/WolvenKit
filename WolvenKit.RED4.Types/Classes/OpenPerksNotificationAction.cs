@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class OpenPerksNotificationAction : GenericNotificationBaseAction
 	{
 		[Ordinal(0)] 
@@ -11,12 +12,5 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CWeakHandle<worlduiIWidgetGameController>>();
 			set => SetPropertyValue<CWeakHandle<worlduiIWidgetGameController>>(value);
 		}
-
-		public OpenPerksNotificationAction()
-		{
-			PostConstruct();
-		}
-
-		partial void PostConstruct();
 	}
 }

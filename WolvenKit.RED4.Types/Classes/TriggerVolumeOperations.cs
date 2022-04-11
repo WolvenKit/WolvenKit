@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class TriggerVolumeOperations : DeviceOperations
 	{
 		[Ordinal(2)] 
@@ -17,10 +18,6 @@ namespace WolvenKit.RED4.Types
 			Components = new();
 			FxInstances = new();
 			TriggerVolumeOperations_ = new();
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

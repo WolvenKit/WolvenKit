@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class gameuiPanzerEnemyDrone : gameuiPanzerEnemy
 	{
 		[Ordinal(16)] 
@@ -27,12 +28,5 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CFloat>();
 			set => SetPropertyValue<CFloat>(value);
 		}
-
-		public gameuiPanzerEnemyDrone()
-		{
-			PostConstruct();
-		}
-
-		partial void PostConstruct();
 	}
 }

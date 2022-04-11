@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class animAnimNode_SharedMetaPoseAdditive : animAnimNode_OnePoseInput
 	{
 		[Ordinal(12)] 
@@ -43,10 +44,6 @@ namespace WolvenKit.RED4.Types
 			WeightLink = new();
 			BlendTracks = Enums.animEBlendTracksMode.AGBT_Add;
 			ConvertParentPoseToAdditive = true;
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

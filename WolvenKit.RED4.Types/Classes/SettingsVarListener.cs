@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class SettingsVarListener : userSettingsVarListener
 	{
 		[Ordinal(0)] 
@@ -11,12 +12,5 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CWeakHandle<SettingsMainGameController>>();
 			set => SetPropertyValue<CWeakHandle<SettingsMainGameController>>(value);
 		}
-
-		public SettingsVarListener()
-		{
-			PostConstruct();
-		}
-
-		partial void PostConstruct();
 	}
 }

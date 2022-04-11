@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class MusicSettings : IScriptable
 	{
 		[Ordinal(0)] 
@@ -11,12 +12,5 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CEnum<ESoundStatusEffects>>();
 			set => SetPropertyValue<CEnum<ESoundStatusEffects>>(value);
 		}
-
-		public MusicSettings()
-		{
-			PostConstruct();
-		}
-
-		partial void PostConstruct();
 	}
 }

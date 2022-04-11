@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class gameuiKillInfo : RedBaseClass
 	{
 		[Ordinal(0)] 
@@ -27,12 +28,5 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CEnum<gameKillType>>();
 			set => SetPropertyValue<CEnum<gameKillType>>(value);
 		}
-
-		public gameuiKillInfo()
-		{
-			PostConstruct();
-		}
-
-		partial void PostConstruct();
 	}
 }

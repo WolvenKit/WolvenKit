@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	[REDClass(SerializeDefault = true)]
 	public partial class CutCone : RedBaseClass
 	{
@@ -33,10 +34,6 @@ namespace WolvenKit.RED4.Types
 		{
 			PositionAndRadius1 = new();
 			NormalAndRadius2 = new();
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

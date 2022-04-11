@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class inkLayersResource : CResource
 	{
 		[Ordinal(1)] 
@@ -42,10 +43,6 @@ namespace WolvenKit.RED4.Types
 			PreGameLayerDefinitions = new() { MenuLayer = new(), MenuLayerMP = new(), HudLayer = new(), VideoLayer = new(), OffscreenLayer = new(), GameNotificationsLayer = new(), PhotoModeLayer = new(), DebugLayer = new() { Entries = new() } };
 			PermanentLayerDefinitions = new() { LoadingLayer = new(), WatermarksLayer = new(), SysNotificationsLayer = new(), WaitingSignLayerDefinition = new() };
 			LayerDefinitionsSet = new() { LayersDefinitions = new(), LayersSystemConnections = new() };
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

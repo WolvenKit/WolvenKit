@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class gamehitRepresentationEventsSetSingleScaleMultiplier_MultipleShapes : gamehitRepresentationEventsSetSingleScaleMultiplier_AllShapes
 	{
 		[Ordinal(1)] 
@@ -15,10 +16,6 @@ namespace WolvenKit.RED4.Types
 		public gamehitRepresentationEventsSetSingleScaleMultiplier_MultipleShapes()
 		{
 			ShapeNames = new();
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class ScriptedWeakspotObject : gameWeakspotObject
 	{
 		[Ordinal(35)] 
@@ -97,10 +98,6 @@ namespace WolvenKit.RED4.Types
 			WeakspotOnDestroyProperties = new() { DisableInteraction = true, DestroyMesh = true };
 			WeakspotRecordData = new();
 			Alive = true;
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

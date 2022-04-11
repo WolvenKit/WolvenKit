@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class gamedebugFailure : ISerializable
 	{
 		[Ordinal(0)] 
@@ -56,10 +57,6 @@ namespace WolvenKit.RED4.Types
 		{
 			Id = new();
 			Path = new();
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

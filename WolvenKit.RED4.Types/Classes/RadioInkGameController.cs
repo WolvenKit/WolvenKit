@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class RadioInkGameController : DeviceInkGameControllerBase
 	{
 		[Ordinal(16)] 
@@ -24,10 +25,6 @@ namespace WolvenKit.RED4.Types
 		{
 			StationNameWidget = new();
 			StationLogoWidget = new();
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

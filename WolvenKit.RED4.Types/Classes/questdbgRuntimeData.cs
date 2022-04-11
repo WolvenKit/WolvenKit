@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class questdbgRuntimeData : RedBaseClass
 	{
 		[Ordinal(0)] 
@@ -40,10 +41,6 @@ namespace WolvenKit.RED4.Types
 		{
 			SelectedBlockId = 18446744073709551615;
 			Objects = new();
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

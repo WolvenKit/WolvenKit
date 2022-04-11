@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class inkSettingsSelectorController : inkWidgetLogicController
 	{
 		[Ordinal(1)] 
@@ -125,10 +126,6 @@ namespace WolvenKit.RED4.Types
 			HoverGeneralHighlight = new();
 			Container = new();
 			HoveredChildren = new();
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

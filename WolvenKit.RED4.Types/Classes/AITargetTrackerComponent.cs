@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class AITargetTrackerComponent : gameComponent
 	{
 		[Ordinal(4)] 
@@ -16,10 +17,6 @@ namespace WolvenKit.RED4.Types
 		{
 			Name = "TargetTracker";
 			TriggersCombat = true;
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

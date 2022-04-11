@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class inkPlatformSpecificImageController : inkWidgetLogicController
 	{
 		[Ordinal(1)] 
@@ -83,12 +84,5 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CName>();
 			set => SetPropertyValue<CName>(value);
 		}
-
-		public inkPlatformSpecificImageController()
-		{
-			PostConstruct();
-		}
-
-		partial void PostConstruct();
 	}
 }

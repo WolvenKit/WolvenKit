@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class TargetAttitudeAnimationController : BasicAnimationController
 	{
 		[Ordinal(6)] 
@@ -39,10 +40,6 @@ namespace WolvenKit.RED4.Types
 		public TargetAttitudeAnimationController()
 		{
 			Attitude = Enums.EAIAttitude.AIA_Neutral;
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class worldPopulationSpawnerNode : worldNode
 	{
 		[Ordinal(4)] 
@@ -63,10 +64,6 @@ namespace WolvenKit.RED4.Types
 		public worldPopulationSpawnerNode()
 		{
 			AppearanceName = "default";
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

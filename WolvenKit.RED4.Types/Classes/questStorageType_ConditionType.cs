@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class questStorageType_ConditionType : questISystemConditionType
 	{
 		[Ordinal(0)] 
@@ -11,12 +12,5 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CEnum<questStorage>>();
 			set => SetPropertyValue<CEnum<questStorage>>(value);
 		}
-
-		public questStorageType_ConditionType()
-		{
-			PostConstruct();
-		}
-
-		partial void PostConstruct();
 	}
 }

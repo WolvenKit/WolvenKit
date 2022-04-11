@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class InventoryItemDisplayController : BaseButtonView
 	{
 		[Ordinal(2)] 
@@ -762,10 +763,6 @@ namespace WolvenKit.RED4.Types
 			DefaultEmptyImageAtlas = "base\\gameplay\\gui\\fullscreen\\inventory\\inventory4_atlas.inkatlas";
 			NewItemsIDs = new();
 			HasAvailableItems = true;
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

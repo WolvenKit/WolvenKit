@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class gameinteractionsReactionData : IScriptable
 	{
 		[Ordinal(0)] 
@@ -84,10 +85,6 @@ namespace WolvenKit.RED4.Types
 			RequiredEquips = new();
 			InteractionPoint = new() { Position = new(), Orientation = new() { R = 1.000000F } };
 			IKPoint = new();
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

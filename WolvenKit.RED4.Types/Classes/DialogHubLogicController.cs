@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class DialogHubLogicController : inkWidgetLogicController
 	{
 		[Ordinal(1)] 
@@ -255,10 +256,6 @@ namespace WolvenKit.RED4.Types
 			InActiveTransparency = 0.100000F;
 			DialogHubData = new();
 			SpawnTokens = new();
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

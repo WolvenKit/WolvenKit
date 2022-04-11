@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class SimpleCanUseCover : AIbehaviorconditionScript
 	{
 		[Ordinal(0)] 
@@ -40,10 +41,6 @@ namespace WolvenKit.RED4.Types
 		{
 			Prereqs = new();
 			Game = new();
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

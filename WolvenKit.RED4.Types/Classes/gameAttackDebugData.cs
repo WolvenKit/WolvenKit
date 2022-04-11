@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class gameAttackDebugData : RedBaseClass
 	{
 		[Ordinal(0)] 
@@ -33,10 +34,6 @@ namespace WolvenKit.RED4.Types
 			PointOfViewTransform = new() { Position = new() { X = new(), Y = new(), Z = new() }, Orientation = new() { R = 1.000000F } };
 			ProjectileHitplaneSpread = new();
 			BulletStartPosition = new();
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

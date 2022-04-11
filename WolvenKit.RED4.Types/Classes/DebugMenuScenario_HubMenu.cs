@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class DebugMenuScenario_HubMenu : MenuScenario_BaseMenu
 	{
 		[Ordinal(4)] 
@@ -24,10 +25,6 @@ namespace WolvenKit.RED4.Types
 		{
 			DefaultMenu = "builds_panel";
 			CpoDefaultMenu = "builds_panel";
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

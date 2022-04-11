@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class gameJournalBriefingVideoSection : gameJournalBriefingBaseSection
 	{
 		[Ordinal(1)] 
@@ -11,12 +12,5 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CResourceAsyncReference<Bink>>();
 			set => SetPropertyValue<CResourceAsyncReference<Bink>>(value);
 		}
-
-		public gameJournalBriefingVideoSection()
-		{
-			PostConstruct();
-		}
-
-		partial void PostConstruct();
 	}
 }

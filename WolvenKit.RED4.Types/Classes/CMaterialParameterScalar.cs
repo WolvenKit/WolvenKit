@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class CMaterialParameterScalar : CMaterialParameter
 	{
 		[Ordinal(2)] 
@@ -32,10 +33,6 @@ namespace WolvenKit.RED4.Types
 		{
 			Min = -340282346638528859811704183484516925440.000000F;
 			Max = 340282346638528859811704183484516925440.000000F;
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class AnimationSystemForcedVisibilityManager : gameScriptableSystem
 	{
 		[Ordinal(0)] 
@@ -15,10 +16,6 @@ namespace WolvenKit.RED4.Types
 		public AnimationSystemForcedVisibilityManager()
 		{
 			Entities = new();
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

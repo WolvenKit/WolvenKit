@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class questUseWorkspotPlayerParams : RedBaseClass
 	{
 		[Ordinal(0)] 
@@ -74,10 +75,6 @@ namespace WolvenKit.RED4.Types
 			CameraUseTrajectorySpace = true;
 			VehicleProceduralCameraWeight = 1.000000F;
 			ParallaxWeight = 1.000000F;
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

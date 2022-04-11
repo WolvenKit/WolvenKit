@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class animMotionTableProvider_MasterSlaveBlend : animIMotionTableProvider
 	{
 		[Ordinal(5)] 
@@ -16,10 +17,6 @@ namespace WolvenKit.RED4.Types
 		{
 			Id = -1;
 			ParentId = -1;
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

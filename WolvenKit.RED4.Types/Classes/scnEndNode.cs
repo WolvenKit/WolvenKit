@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class scnEndNode : scnSceneGraphNode
 	{
 		[Ordinal(3)] 
@@ -16,10 +17,6 @@ namespace WolvenKit.RED4.Types
 		{
 			NodeId = new() { Id = 4294967295 };
 			OutputSockets = new();
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

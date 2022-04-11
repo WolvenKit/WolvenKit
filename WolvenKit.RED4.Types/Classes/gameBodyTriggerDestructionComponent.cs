@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class gameBodyTriggerDestructionComponent : gameITriggerDestructionComponent
 	{
 		[Ordinal(4)] 
@@ -42,10 +43,6 @@ namespace WolvenKit.RED4.Types
 			StartActive = true;
 			ImpulseForce = 10.000000F;
 			ImpulseRadius = 5.000000F;
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

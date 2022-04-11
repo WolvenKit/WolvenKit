@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class QuickHackDescriptionGameController : BaseChunkGameController
 	{
 		[Ordinal(5)] 
@@ -157,10 +158,6 @@ namespace WolvenKit.RED4.Types
 			DamageLabel = new();
 			DamageValue = new();
 			HealthPercentageLabel = new();
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

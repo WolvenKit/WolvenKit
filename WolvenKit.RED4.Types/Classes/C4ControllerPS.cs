@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class C4ControllerPS : ExplosiveDeviceControllerPS
 	{
 		[Ordinal(120)] 
@@ -19,10 +20,6 @@ namespace WolvenKit.RED4.Types
 			TweakDBRecord = 44966449988;
 			TweakDBDescriptionRecord = 97999174197;
 			ItemTweakDBString = "C4";
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

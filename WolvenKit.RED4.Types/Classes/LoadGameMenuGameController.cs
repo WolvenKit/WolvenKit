@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class LoadGameMenuGameController : gameuiSaveHandlingController
 	{
 		[Ordinal(3)] 
@@ -129,10 +130,6 @@ namespace WolvenKit.RED4.Types
 			List = new();
 			NoSavedGamesLabel = new();
 			ButtonHintsManagerRef = new();
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

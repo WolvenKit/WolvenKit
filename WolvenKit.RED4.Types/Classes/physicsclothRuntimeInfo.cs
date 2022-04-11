@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class physicsclothRuntimeInfo : RedBaseClass
 	{
 		[Ordinal(0)] 
@@ -167,10 +168,6 @@ namespace WolvenKit.RED4.Types
 			DragCoefficient = 0.020000F;
 			GravityScale = 1.000000F;
 			MotionConstraintStiffness = 1.000000F;
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

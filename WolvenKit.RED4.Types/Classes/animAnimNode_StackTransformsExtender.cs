@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class animAnimNode_StackTransformsExtender : animAnimNode_OnePoseInput
 	{
 		[Ordinal(12)] 
@@ -79,10 +80,6 @@ namespace WolvenKit.RED4.Types
 			OffsetToReferenceValues = new();
 			OffsetSpaceBones = new();
 			Offsets = new();
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

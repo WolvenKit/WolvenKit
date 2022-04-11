@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class linkedClueUpdateEvent : redEvent
 	{
 		[Ordinal(0)] 
@@ -33,10 +34,6 @@ namespace WolvenKit.RED4.Types
 			LinkedCluekData = new() { OwnerID = new(), ExtendedClueRecords = new(), PsData = new() { Id = new() } };
 			RequesterID = new();
 			UpdatePS = true;
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

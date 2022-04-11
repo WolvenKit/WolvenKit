@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class questvehicleRacingParams : questVehicleSpecificCommandParams
 	{
 		[Ordinal(3)] 
@@ -66,10 +67,6 @@ namespace WolvenKit.RED4.Types
 			SecureTimeOut = 60.000000F;
 			PreciseLevel = 1.000000F;
 			Closest = true;
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

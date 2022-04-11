@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class StrikeDuration_Debug_VDB : StrikeDuration_Debug
 	{
 		[Ordinal(0)] 
@@ -32,10 +33,6 @@ namespace WolvenKit.RED4.Types
 		{
 			UPDATE_DELAY = 1.000000F;
 			DISPLAY_DURATION = 1.100000F;
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class scnSceneEventSymbol : RedBaseClass
 	{
 		[Ordinal(0)] 
@@ -33,10 +34,6 @@ namespace WolvenKit.RED4.Types
 			EditorEventId = 18446744073709551615;
 			OriginNodeId = new() { Id = 4294967295 };
 			SceneEventIds = new();
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

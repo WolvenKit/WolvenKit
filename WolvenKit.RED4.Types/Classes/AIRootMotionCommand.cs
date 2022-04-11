@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class AIRootMotionCommand : AIMoveCommand
 	{
 		[Ordinal(7)] 
@@ -11,12 +12,5 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CHandle<gameSceneAnimationMotionActionParams>>();
 			set => SetPropertyValue<CHandle<gameSceneAnimationMotionActionParams>>(value);
 		}
-
-		public AIRootMotionCommand()
-		{
-			PostConstruct();
-		}
-
-		partial void PostConstruct();
 	}
 }

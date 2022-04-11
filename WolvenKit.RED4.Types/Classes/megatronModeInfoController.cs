@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class megatronModeInfoController : TriggerModeLogicController
 	{
 		[Ordinal(1)] 
@@ -75,12 +76,5 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CWeakHandle<inkWidget>>();
 			set => SetPropertyValue<CWeakHandle<inkWidget>>(value);
 		}
-
-		public megatronModeInfoController()
-		{
-			PostConstruct();
-		}
-
-		partial void PostConstruct();
 	}
 }

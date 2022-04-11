@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class ContactShadowsConfig : RedBaseClass
 	{
 		[Ordinal(0)] 
@@ -51,10 +52,6 @@ namespace WolvenKit.RED4.Types
 			ScreenEdgeFadeRange = 0.150000F;
 			DistanceFadeLimit = 3.000000F;
 			DistanceFadeRange = 1.000000F;
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

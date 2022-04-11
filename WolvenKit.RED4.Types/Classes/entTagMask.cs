@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class entTagMask : RedBaseClass
 	{
 		[Ordinal(0)] 
@@ -33,10 +34,6 @@ namespace WolvenKit.RED4.Types
 			HardTags = new() { Tags = new() };
 			SoftTags = new() { Tags = new() };
 			ExcludedTags = new() { Tags = new() };
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

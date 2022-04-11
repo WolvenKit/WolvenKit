@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class animAnimNode_EyesLookAt : animAnimNode_OnePoseInput
 	{
 		[Ordinal(12)] 
@@ -89,10 +90,6 @@ namespace WolvenKit.RED4.Types
 			RightEye = new();
 			Head = new();
 			ForwardDirection = Enums.animAxis.NegativeY;
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class InventoryItemDisplayCategoryArea : inkWidgetLogicController
 	{
 		[Ordinal(1)] 
@@ -51,10 +52,6 @@ namespace WolvenKit.RED4.Types
 			NewItemsWrapper = new();
 			NewItemsCounter = new();
 			CategoryAreas = new();
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

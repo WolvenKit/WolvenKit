@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class workFastExit : workIEntry
 	{
 		[Ordinal(2)] 
@@ -34,10 +35,6 @@ namespace WolvenKit.RED4.Types
 			Flags = 32772;
 			ForcedBlendIn = 0.200000F;
 			MovementType = Enums.moveMovementType.Stand;
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

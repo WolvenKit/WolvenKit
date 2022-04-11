@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class AIbehaviorSelectWorkspotNodeDefinition : AIbehaviorDecoratorNodeDefinition
 	{
 		[Ordinal(1)] 
@@ -47,10 +48,6 @@ namespace WolvenKit.RED4.Types
 		public AIbehaviorSelectWorkspotNodeDefinition()
 		{
 			RepeatChild = true;
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

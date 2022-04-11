@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class LedColors : RedBaseClass
 	{
 		[Ordinal(0)] 
@@ -33,10 +34,6 @@ namespace WolvenKit.RED4.Types
 			Off = new() { Color = new() };
 			Red = new() { Color = new() };
 			Green = new() { Color = new() };
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

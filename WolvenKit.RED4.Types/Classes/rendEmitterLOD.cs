@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class rendEmitterLOD : RedBaseClass
 	{
 		[Ordinal(0)] 
@@ -67,10 +68,6 @@ namespace WolvenKit.RED4.Types
 			BirthRate = new();
 			EmitterDurationSettings = new() { EmitterDuration = 1.000000F };
 			EmitterDelaySettings = new();
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

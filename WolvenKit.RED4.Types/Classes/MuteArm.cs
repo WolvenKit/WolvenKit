@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class MuteArm : gameweaponObject
 	{
 		[Ordinal(59)] 
@@ -23,10 +24,6 @@ namespace WolvenKit.RED4.Types
 		public MuteArm()
 		{
 			GameEffectRef = new();
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class WeaponPositionComponent : gameScriptableComponent
 	{
 		[Ordinal(5)] 
@@ -278,10 +279,6 @@ namespace WolvenKit.RED4.Types
 			WeaponRotOffsetFromInput = new();
 			WeaponAimPosOffsetFromInput = new();
 			WeaponAimRotOffsetFromInput = new();
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

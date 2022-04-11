@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class SecurityGateResponseProperties : RedBaseClass
 	{
 		[Ordinal(0)] 
@@ -24,10 +25,6 @@ namespace WolvenKit.RED4.Types
 		{
 			SecurityGateResponseType = Enums.ESecurityGateResponseType.SEC_SYS_REPRIMAND;
 			SecurityLevelAccessGranted = Enums.ESecurityAccessLevel.ESL_3;
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

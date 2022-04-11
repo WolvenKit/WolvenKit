@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class questPopulactionControllerNodeDefinition : questBaseObjectNodeDefinition
 	{
 		[Ordinal(3)] 
@@ -17,10 +18,6 @@ namespace WolvenKit.RED4.Types
 			Sockets = new();
 			Id = 65535;
 			Enable = true;
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

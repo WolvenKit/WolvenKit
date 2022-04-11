@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class KerenzikovEvents : TimeDilationEventsTransitions
 	{
 		[Ordinal(0)] 
@@ -11,12 +12,5 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CHandle<gameStatModifierData_Deprecated>>();
 			set => SetPropertyValue<CHandle<gameStatModifierData_Deprecated>>(value);
 		}
-
-		public KerenzikovEvents()
-		{
-			PostConstruct();
-		}
-
-		partial void PostConstruct();
 	}
 }

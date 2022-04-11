@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class audioVoiceTriggerData : RedBaseClass
 	{
 		[Ordinal(0)] 
@@ -39,10 +40,6 @@ namespace WolvenKit.RED4.Types
 		public audioVoiceTriggerData()
 		{
 			OverridingVoContext = Enums.locVoiceoverContext.Default_Vo_Context;
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

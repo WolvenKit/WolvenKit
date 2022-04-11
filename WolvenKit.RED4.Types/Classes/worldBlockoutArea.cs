@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class worldBlockoutArea : ISerializable
 	{
 		[Ordinal(0)] 
@@ -66,10 +67,6 @@ namespace WolvenKit.RED4.Types
 			Parent = 4294967295;
 			Children = new();
 			Outlines = new();
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

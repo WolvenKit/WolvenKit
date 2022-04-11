@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class effectTrackItemColorGrade : effectTrackItem
 	{
 		[Ordinal(3)] 
@@ -61,10 +62,6 @@ namespace WolvenKit.RED4.Types
 			LutWeight = new();
 			LutParams = new() { InputMapping = Enums.EColorMappingFunction.CMF_sRGB, OutputMapping = Enums.EColorMappingFunction.CMF_sRGB };
 			LutParamsHdr = new() { InputMapping = Enums.EColorMappingFunction.CMF_sRGB, OutputMapping = Enums.EColorMappingFunction.CMF_sRGB };
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

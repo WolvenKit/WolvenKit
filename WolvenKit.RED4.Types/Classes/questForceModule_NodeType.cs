@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class questForceModule_NodeType : questIVisionModeNodeType
 	{
 		[Ordinal(0)] 
@@ -15,10 +16,6 @@ namespace WolvenKit.RED4.Types
 		public questForceModule_NodeType()
 		{
 			Params = new() { new() };
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

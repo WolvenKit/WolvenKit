@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class BraindanceClueLogicController : inkWidgetLogicController
 	{
 		[Ordinal(1)] 
@@ -80,10 +81,6 @@ namespace WolvenKit.RED4.Types
 		{
 			Bg = new();
 			Data = new();
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

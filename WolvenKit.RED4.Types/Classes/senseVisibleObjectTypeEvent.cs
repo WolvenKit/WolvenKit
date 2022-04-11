@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class senseVisibleObjectTypeEvent : redEvent
 	{
 		[Ordinal(0)] 
@@ -15,10 +16,6 @@ namespace WolvenKit.RED4.Types
 		public senseVisibleObjectTypeEvent()
 		{
 			Type = Enums.gamedataSenseObjectType.Undefined;
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

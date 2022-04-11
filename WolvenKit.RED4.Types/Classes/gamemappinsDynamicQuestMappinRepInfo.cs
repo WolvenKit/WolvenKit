@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class gamemappinsDynamicQuestMappinRepInfo : RedBaseClass
 	{
 		[Ordinal(0)] 
@@ -19,12 +20,5 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CWeakHandle<entEntity>>();
 			set => SetPropertyValue<CWeakHandle<entEntity>>(value);
 		}
-
-		public gamemappinsDynamicQuestMappinRepInfo()
-		{
-			PostConstruct();
-		}
-
-		partial void PostConstruct();
 	}
 }

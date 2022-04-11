@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class VehicleSummonWidgetGameController : gameuiHUDGameController
 	{
 		[Ordinal(9)] 
@@ -324,10 +325,6 @@ namespace WolvenKit.RED4.Types
 			DistanceVector = new();
 			GameInstance = new();
 			VehicleID = new();
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class ComputerDocumentWidgetController : DeviceInkLogicControllerBase
 	{
 		[Ordinal(5)] 
@@ -113,10 +114,6 @@ namespace WolvenKit.RED4.Types
 			ImageContentWidget = new();
 			CloseButtonWidget = new();
 			LastPlayedVideo = new();
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

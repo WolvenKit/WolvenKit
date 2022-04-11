@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class enteventsPhysicalCollisionEvent : redEvent
 	{
 		[Ordinal(0)] 
@@ -65,10 +66,6 @@ namespace WolvenKit.RED4.Types
 			WorldPosition = new();
 			WorldNormal = new() { Z = 1.000000F };
 			DeltaVelocity = new();
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class NetworkMinigameData : RedBaseClass
 	{
 		[Ordinal(0)] 
@@ -67,10 +68,6 @@ namespace WolvenKit.RED4.Types
 			PlayerPrograms = new();
 			EnemyLockNetwork = new() { CommandLists = new(), Effects = new() };
 			EnemyPrograms = new();
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

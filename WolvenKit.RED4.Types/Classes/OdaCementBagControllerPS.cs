@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class OdaCementBagControllerPS : ScriptableDeviceComponentPS
 	{
 		[Ordinal(104)] 
@@ -17,10 +18,6 @@ namespace WolvenKit.RED4.Types
 			DeviceName = "LocKey#17265";
 			TweakDBRecord = 102153496184;
 			TweakDBDescriptionRecord = 153526934731;
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

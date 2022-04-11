@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class entGarmentParameter : entEntityParameter
 	{
 		[Ordinal(0)] 
@@ -32,10 +33,6 @@ namespace WolvenKit.RED4.Types
 		{
 			ComponentsData = new();
 			CollarArea = new() { RadiusInCM = 32.000000F, RadiusForTriangleRemovalInCM = 16.000000F, Offset = new() };
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

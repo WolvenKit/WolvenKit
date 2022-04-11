@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class graphGraphResource : CResource
 	{
 		[Ordinal(1)] 
@@ -11,12 +12,5 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CHandle<graphGraphDefinition>>();
 			set => SetPropertyValue<CHandle<graphGraphDefinition>>(value);
 		}
-
-		public graphGraphResource()
-		{
-			PostConstruct();
-		}
-
-		partial void PostConstruct();
 	}
 }

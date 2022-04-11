@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class SDeviceWidgetPackage : SWidgetPackage
 	{
 		[Ordinal(18)] 
@@ -31,10 +32,6 @@ namespace WolvenKit.RED4.Types
 		public SDeviceWidgetPackage()
 		{
 			ActionWidgets = new();
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

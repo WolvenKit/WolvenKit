@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class MovableDevice : InteractiveDevice
 	{
 		[Ordinal(94)] 
@@ -75,10 +76,6 @@ namespace WolvenKit.RED4.Types
 			TriggerComponents = new();
 			OffMeshConnectionsToOpenNames = new();
 			OffMeshConnectionsToOpen = new();
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

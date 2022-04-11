@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class questShowOverlay_NodeSubType : questITutorial_NodeSubType
 	{
 		[Ordinal(0)] 
@@ -56,10 +57,6 @@ namespace WolvenKit.RED4.Types
 		{
 			LibraryItemName = "Root";
 			Visible = true;
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

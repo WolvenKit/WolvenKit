@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class scnWorkspotSymbol : RedBaseClass
 	{
 		[Ordinal(0)] 
@@ -33,10 +34,6 @@ namespace WolvenKit.RED4.Types
 			WsInstance = new() { Id = 4294967295 };
 			WsNodeId = new() { Id = 4294967295 };
 			WsEditorEventId = 18446744073709551615;
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class AIbehaviorDecoratorNodeDefinition : AIbehaviorTreeNodeDefinition
 	{
 		[Ordinal(0)] 
@@ -11,12 +12,5 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CHandle<AIbehaviorTreeNodeDefinition>>();
 			set => SetPropertyValue<CHandle<AIbehaviorTreeNodeDefinition>>(value);
 		}
-
-		public AIbehaviorDecoratorNodeDefinition()
-		{
-			PostConstruct();
-		}
-
-		partial void PostConstruct();
 	}
 }

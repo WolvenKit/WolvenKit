@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class HudPhoneMessageController : HUDPhoneElement
 	{
 		[Ordinal(2)] 
@@ -93,10 +94,6 @@ namespace WolvenKit.RED4.Types
 			MessageMaxLength = 120;
 			MessageTopper = "...";
 			Queue = new();
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

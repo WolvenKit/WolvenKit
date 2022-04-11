@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class gamestateMachineComponentReplicatedState : netIComponentState
 	{
 		[Ordinal(2)] 
@@ -32,10 +33,6 @@ namespace WolvenKit.RED4.Types
 		{
 			Enabled = true;
 			StateContext = new() { Snapshot = new() { Snapshot = new() }, PermanentParameters = new() { BoolParameters = new(0), IntParameters = new(0), FloatParameters = new(0), DoubleParameters = new(0), VectorParameters = new(0), CNameParameters = new(0), IScriptableParameters = new(0), TweakDBIDParameters = new(0) } };
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

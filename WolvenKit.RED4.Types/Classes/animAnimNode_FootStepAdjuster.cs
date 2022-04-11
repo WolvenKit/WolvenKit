@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class animAnimNode_FootStepAdjuster : animAnimNode_OnePoseInput
 	{
 		[Ordinal(12)] 
@@ -151,10 +152,6 @@ namespace WolvenKit.RED4.Types
 			StepAdjustmentInterval = 1.000000F;
 			ControlValueNode = new();
 			ControlVectorNode = new();
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

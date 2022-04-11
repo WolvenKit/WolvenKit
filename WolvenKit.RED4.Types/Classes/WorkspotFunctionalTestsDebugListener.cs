@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class WorkspotFunctionalTestsDebugListener : IScriptable
 	{
 		[Ordinal(0)] 
@@ -106,10 +107,6 @@ namespace WolvenKit.RED4.Types
 			AnimationsStack = new();
 			AnimationsSkippedStack = new();
 			AnimationsMissingStack = new();
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

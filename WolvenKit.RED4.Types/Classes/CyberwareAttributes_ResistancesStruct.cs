@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class CyberwareAttributes_ResistancesStruct : RedBaseClass
 	{
 		[Ordinal(0)] 
@@ -60,10 +61,6 @@ namespace WolvenKit.RED4.Types
 			WidgetEMP = new();
 			WidgetChemical = new();
 			ResistanceTooltip = new();
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

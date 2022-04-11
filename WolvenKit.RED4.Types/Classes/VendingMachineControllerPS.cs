@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class VendingMachineControllerPS : ScriptableDeviceComponentPS
 	{
 		[Ordinal(104)] 
@@ -79,10 +80,6 @@ namespace WolvenKit.RED4.Types
 			IsReady = true;
 			HackCount = 2;
 			ShopStock = new();
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

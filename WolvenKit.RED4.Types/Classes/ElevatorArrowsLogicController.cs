@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class ElevatorArrowsLogicController : DeviceInkLogicControllerBase
 	{
 		[Ordinal(5)] 
@@ -100,10 +101,6 @@ namespace WolvenKit.RED4.Types
 			AnimOptions1 = new();
 			AnimOptions2 = new();
 			AnimOptions3 = new();
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

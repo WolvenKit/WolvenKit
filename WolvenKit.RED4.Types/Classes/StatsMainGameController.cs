@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class StatsMainGameController : gameuiMenuGameController
 	{
 		[Ordinal(3)] 
@@ -268,10 +269,6 @@ namespace WolvenKit.RED4.Types
 			DPSStatsData = new();
 			ArmorStatsData = new();
 			OtherStatsData = new();
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

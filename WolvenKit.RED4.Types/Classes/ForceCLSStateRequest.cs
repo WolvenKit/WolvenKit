@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class ForceCLSStateRequest : gameScriptableSystemRequest
 	{
 		[Ordinal(0)] 
@@ -49,10 +50,6 @@ namespace WolvenKit.RED4.Types
 			Priority = Enums.EPriority.Medium;
 			RemovePreviousRequests = true;
 			Savable = true;
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

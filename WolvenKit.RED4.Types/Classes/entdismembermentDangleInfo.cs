@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class entdismembermentDangleInfo : RedBaseClass
 	{
 		[Ordinal(0)] 
@@ -50,10 +51,6 @@ namespace WolvenKit.RED4.Types
 			DangleVelocityDamping = 0.400000F;
 			DangleBendStiffness = 0.600000F;
 			DangleCollisionSphereRadius = 0.250000F;
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

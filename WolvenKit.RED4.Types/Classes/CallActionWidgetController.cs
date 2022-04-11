@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class CallActionWidgetController : DeviceActionWidgetControllerBase
 	{
 		[Ordinal(29)] 
@@ -41,10 +42,6 @@ namespace WolvenKit.RED4.Types
 			StatusText = new();
 			CallingAnimName = "calling_animation_maelstrom";
 			TalkingAnimName = "talking_animation_maelstrom";
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

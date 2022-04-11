@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class NanoWireProjectile : BaseProjectile
 	{
 		[Ordinal(46)] 
@@ -19,12 +20,5 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CEnum<ELaunchMode>>();
 			set => SetPropertyValue<CEnum<ELaunchMode>>(value);
 		}
-
-		public NanoWireProjectile()
-		{
-			PostConstruct();
-		}
-
-		partial void PostConstruct();
 	}
 }

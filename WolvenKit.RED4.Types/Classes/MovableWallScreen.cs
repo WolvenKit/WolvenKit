@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class MovableWallScreen : Door
 	{
 		[Ordinal(140)] 
@@ -23,10 +24,6 @@ namespace WolvenKit.RED4.Types
 		public MovableWallScreen()
 		{
 			ControllerTypeName = "MovableWallScreenController";
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

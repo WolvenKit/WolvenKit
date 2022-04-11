@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class SmartHouseDeviceWidgetController : DeviceWidgetControllerBase
 	{
 		[Ordinal(10)] 
@@ -11,12 +12,5 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CWeakHandle<inkWidget>>();
 			set => SetPropertyValue<CWeakHandle<inkWidget>>(value);
 		}
-
-		public SmartHouseDeviceWidgetController()
-		{
-			PostConstruct();
-		}
-
-		partial void PostConstruct();
 	}
 }

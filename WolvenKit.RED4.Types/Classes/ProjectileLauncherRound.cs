@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class ProjectileLauncherRound : gameItemObject
 	{
 		[Ordinal(38)] 
@@ -202,10 +203,6 @@ namespace WolvenKit.RED4.Types
 			InstalledProjectile = new();
 			ReleaseRequestDelayID = new();
 			DetonateRequestDelayID = new();
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

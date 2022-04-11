@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class communityPhaseTimePeriod : communityTimePeriod
 	{
 		[Ordinal(1)] 
@@ -50,10 +51,6 @@ namespace WolvenKit.RED4.Types
 			Markings = new();
 			SpotNodeRefs = new();
 			Categories = new();
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

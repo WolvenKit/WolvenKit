@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class worldDebugColoring_ObjectTag : worldEditorDebugColoringSettings
 	{
 		[Ordinal(0)] 
@@ -24,10 +25,6 @@ namespace WolvenKit.RED4.Types
 		{
 			Tag = Enums.worldObjectTag.None;
 			Color = new();
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

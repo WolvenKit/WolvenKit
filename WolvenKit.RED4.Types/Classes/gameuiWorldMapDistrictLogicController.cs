@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class gameuiWorldMapDistrictLogicController : inkWidgetLogicController
 	{
 		[Ordinal(1)] 
@@ -64,10 +65,6 @@ namespace WolvenKit.RED4.Types
 		{
 			OutlineWidget = new();
 			IconWidget = new();
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

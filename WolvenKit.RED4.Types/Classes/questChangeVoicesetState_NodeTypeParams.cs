@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class questChangeVoicesetState_NodeTypeParams : RedBaseClass
 	{
 		[Ordinal(0)] 
@@ -48,10 +49,6 @@ namespace WolvenKit.RED4.Types
 		{
 			PuppetRef = new() { Names = new() };
 			InputsToBlock = new();
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

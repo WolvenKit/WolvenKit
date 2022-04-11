@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class gameEffectObjectProvider_SingleRicochetTarget : gameEffectObjectProvider
 	{
 		[Ordinal(0)] 
@@ -23,10 +24,6 @@ namespace WolvenKit.RED4.Types
 		public gameEffectObjectProvider_SingleRicochetTarget()
 		{
 			QueryPreset = new();
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

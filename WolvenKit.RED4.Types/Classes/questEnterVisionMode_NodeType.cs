@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class questEnterVisionMode_NodeType : questIVisionModeNodeType
 	{
 		[Ordinal(0)] 
@@ -24,10 +25,6 @@ namespace WolvenKit.RED4.Types
 		{
 			ObjectRef = new() { Names = new() };
 			VisionModeType = Enums.gameVisionModeType.Focus;
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

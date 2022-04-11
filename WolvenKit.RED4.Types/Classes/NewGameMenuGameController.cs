@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class NewGameMenuGameController : PreGameSubMenuGameController
 	{
 		[Ordinal(3)] 
@@ -27,12 +28,5 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CWeakHandle<inkSelectorController>>();
 			set => SetPropertyValue<CWeakHandle<inkSelectorController>>(value);
 		}
-
-		public NewGameMenuGameController()
-		{
-			PostConstruct();
-		}
-
-		partial void PostConstruct();
 	}
 }

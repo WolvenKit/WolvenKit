@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class hudTurretController : gameuiHUDGameController
 	{
 		[Ordinal(9)] 
@@ -187,10 +188,6 @@ namespace WolvenKit.RED4.Types
 			OffsetRight = 1495.000000F;
 			CurrentTime = new();
 			GameInstance = new();
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

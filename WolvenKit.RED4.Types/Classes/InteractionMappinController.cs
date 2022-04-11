@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class InteractionMappinController : gameuiInteractionMappinController
 	{
 		[Ordinal(11)] 
@@ -27,12 +28,5 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CBool>();
 			set => SetPropertyValue<CBool>(value);
 		}
-
-		public InteractionMappinController()
-		{
-			PostConstruct();
-		}
-
-		partial void PostConstruct();
 	}
 }

@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class scnChoiceNode : scnSceneGraphNode
 	{
 		[Ordinal(3)] 
@@ -236,10 +237,6 @@ namespace WolvenKit.RED4.Types
 			AtwParams = new() { EntityPosition = new(), EntityOrientation = new() { R = 1.000000F } };
 			InterruptCapability = Enums.scnInterruptCapability.Interruptable;
 			InterruptionSpeakerOverride = new() { Id = 4294967295 };
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

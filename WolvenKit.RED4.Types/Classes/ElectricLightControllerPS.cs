@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class ElectricLightControllerPS : ScriptableDeviceComponentPS
 	{
 		[Ordinal(104)] 
@@ -25,10 +26,6 @@ namespace WolvenKit.RED4.Types
 			DeviceName = "LocKey#42165";
 			TweakDBRecord = 90241852909;
 			TweakDBDescriptionRecord = 142476847136;
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

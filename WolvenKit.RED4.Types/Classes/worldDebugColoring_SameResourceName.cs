@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class worldDebugColoring_SameResourceName : worldEditorDebugColoringSettings
 	{
 		[Ordinal(0)] 
@@ -15,10 +16,6 @@ namespace WolvenKit.RED4.Types
 		public worldDebugColoring_SameResourceName()
 		{
 			Alpha = 192;
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

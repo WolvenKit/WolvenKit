@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class JournalNotification : GenericNotificationController
 	{
 		[Ordinal(12)] 
@@ -35,12 +36,5 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CHandle<gameuiQuestUpdateNotificationViewData>>();
 			set => SetPropertyValue<CHandle<gameuiQuestUpdateNotificationViewData>>(value);
 		}
-
-		public JournalNotification()
-		{
-			PostConstruct();
-		}
-
-		partial void PostConstruct();
 	}
 }

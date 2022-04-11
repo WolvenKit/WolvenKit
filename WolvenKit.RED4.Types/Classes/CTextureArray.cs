@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class CTextureArray : ITexture
 	{
 		[Ordinal(1)] 
@@ -32,10 +33,6 @@ namespace WolvenKit.RED4.Types
 		{
 			Setup = new() { Group = Enums.GpuWrapApieTextureGroup.TEXG_Generic_Color, RawFormat = Enums.ETextureRawFormat.TRF_TrueColor, IsStreamable = true, HasMipchain = true, AllowTextureDowngrade = true };
 			RenderTextureResource = new();
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class scnCheckSpeakersDistanceReturnConditionParams : RedBaseClass
 	{
 		[Ordinal(0)] 
@@ -19,12 +20,5 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CEnum<EComparisonType>>();
 			set => SetPropertyValue<CEnum<EComparisonType>>(value);
 		}
-
-		public scnCheckSpeakersDistanceReturnConditionParams()
-		{
-			PostConstruct();
-		}
-
-		partial void PostConstruct();
 	}
 }

@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class questEntityManagerMountPuppet_NodeType : questIEntityManager_NodeType
 	{
 		[Ordinal(0)] 
@@ -76,10 +77,6 @@ namespace WolvenKit.RED4.Types
 			IsInstant = true;
 			ForcedCarryStyle = Enums.gamePSMBodyCarryingStyle.Friendly;
 			RemovePitchRollRotation = true;
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

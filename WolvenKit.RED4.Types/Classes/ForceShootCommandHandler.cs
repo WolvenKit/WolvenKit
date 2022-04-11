@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class ForceShootCommandHandler : AIbehaviortaskScript
 	{
 		[Ordinal(0)] 
@@ -19,12 +20,5 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CWeakHandle<AIForceShootCommand>>();
 			set => SetPropertyValue<CWeakHandle<AIForceShootCommand>>(value);
 		}
-
-		public ForceShootCommandHandler()
-		{
-			PostConstruct();
-		}
-
-		partial void PostConstruct();
 	}
 }

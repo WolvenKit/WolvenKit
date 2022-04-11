@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class CreditsGameController : gameuiCreditsController
 	{
 		[Ordinal(26)] 
@@ -76,10 +77,6 @@ namespace WolvenKit.RED4.Types
 			BinkVideo = new();
 			BinkVideos = new();
 			VideoSummary = new();
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

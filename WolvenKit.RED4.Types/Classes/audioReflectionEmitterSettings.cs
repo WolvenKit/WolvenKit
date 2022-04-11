@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class audioReflectionEmitterSettings : audioAudioMetadata
 	{
 		[Ordinal(1)] 
@@ -145,10 +146,6 @@ namespace WolvenKit.RED4.Types
 			NearReflectionDistance = 10.000000F;
 			MinimumFaceAlignement = 0.500000F;
 			FixedRaycastPitch = 15.000000F;
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

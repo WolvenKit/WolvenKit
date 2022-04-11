@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class scnCheckTriggerReturnCondition : scnIReturnCondition
 	{
 		[Ordinal(0)] 
@@ -15,10 +16,6 @@ namespace WolvenKit.RED4.Types
 		public scnCheckTriggerReturnCondition()
 		{
 			Params = new() { Inside = true };
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

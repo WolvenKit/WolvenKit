@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class TooltipProgessBarController : inkWidgetLogicController
 	{
 		[Ordinal(1)] 
@@ -85,10 +86,6 @@ namespace WolvenKit.RED4.Types
 			HintTextHolder = new();
 			LibraryPath = new() { WidgetLibrary = new() };
 			PostprogressText = new();
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

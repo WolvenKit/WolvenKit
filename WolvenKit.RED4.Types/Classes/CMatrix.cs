@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	[REDClass(SerializeDefault = true)]
 	[RED("Matrix")]
 	public partial class CMatrix : RedBaseClass
@@ -44,10 +45,6 @@ namespace WolvenKit.RED4.Types
 			Y = new() { Y = 1.000000F };
 			Z = new() { Z = 1.000000F };
 			W = new() { W = 1.000000F };
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

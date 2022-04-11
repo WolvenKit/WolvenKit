@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class StartPingingNetworkRequest : gameScriptableSystemRequest
 	{
 		[Ordinal(0)] 
@@ -64,10 +65,6 @@ namespace WolvenKit.RED4.Types
 		{
 			FxResource = new();
 			Duration = 2.000000F;
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

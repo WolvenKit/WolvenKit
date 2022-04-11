@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class entDebug_ShapeComponent : entIVisualComponent
 	{
 		[Ordinal(8)] 
@@ -54,10 +55,6 @@ namespace WolvenKit.RED4.Types
 			HalfHeight = 0.500000F;
 			Color = new();
 			IsEnabled = true;
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class gameMuppetSubStepData : RedBaseClass
 	{
 		[Ordinal(0)] 
@@ -57,10 +58,6 @@ namespace WolvenKit.RED4.Types
 			InputState = new() { FrameId = 4294967295 };
 			State = new() { FrameId = 4294967295, HighLevelState = new() { DeathFrameId = 4294967295 }, HealthState = new(), PhysicalMoveState = new() { Position = new(), Velocity = new(), IsOnGround = true, GroundNormal = new() { Z = 1.000000F } }, LookState = new() { LookDir = new() }, MoveState = new() { JumpStartFrameId = 4294967295, LandFrameId = 4294967295 }, UpperBodyState = new() { CurrentWeapon = new(), WantedWeapon = new(), InProgressWeapon = new(), LogicWantedWeapon = new(), CurrentWeaponAmmo = 10, CurrentWeaponAmmoCapacity = 10, SelectedConsumable = new() }, ScanningState = new(), InventoryState = new() { Slots = new(), ActiveSlot = -1 }, Abilities = new() { CanLook = new(), CanMove = new(), CanCrouch = new(), CanSprint = new(), CanSwitchWeapon = new(), CanHoldWeapon = new(), CanShoot = new(), CanAimDownSight = new() }, StateMachinesSnapshot = new() { StateMachines = new() }, ControllersSnapshot = new() { Controllers = new() }, SnapFrameId = 4294967295 };
 			ResimulationSubsteps = new();
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

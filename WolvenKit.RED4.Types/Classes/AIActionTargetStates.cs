@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class AIActionTargetStates : RedBaseClass
 	{
 		[Ordinal(0)] 
@@ -24,10 +25,6 @@ namespace WolvenKit.RED4.Types
 		{
 			NpcStates = new() { HighLevelStates = new(), UpperBodyStates = new(), StanceStates = new(), BehaviorStates = new(), DefenseMode = new(), LocomotionMode = new() };
 			PlayerStates = new() { LocomotionStates = new(), UpperBodyStates = new(), MeleeStates = new(), ZoneStates = new(), BodyCarryStates = new(), CombatStates = new() };
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

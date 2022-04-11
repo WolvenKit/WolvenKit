@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class AIArgumentOverrideWrapper : RedBaseClass
 	{
 		[Ordinal(0)] 
@@ -27,12 +28,5 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CHandle<AIArgumentDefinition>>();
 			set => SetPropertyValue<CHandle<AIArgumentDefinition>>(value);
 		}
-
-		public AIArgumentOverrideWrapper()
-		{
-			PostConstruct();
-		}
-
-		partial void PostConstruct();
 	}
 }

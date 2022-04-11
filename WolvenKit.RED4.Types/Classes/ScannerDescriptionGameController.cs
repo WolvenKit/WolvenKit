@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class ScannerDescriptionGameController : BaseChunkGameController
 	{
 		[Ordinal(5)] 
@@ -48,10 +49,6 @@ namespace WolvenKit.RED4.Types
 		{
 			DescriptionText = new();
 			CustomDescriptionText = new();
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

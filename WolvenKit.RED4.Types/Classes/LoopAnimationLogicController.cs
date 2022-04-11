@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class LoopAnimationLogicController : inkWidgetLogicController
 	{
 		[Ordinal(1)] 
@@ -19,12 +20,5 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CEnum<inkSelectionRule>>();
 			set => SetPropertyValue<CEnum<inkSelectionRule>>(value);
 		}
-
-		public LoopAnimationLogicController()
-		{
-			PostConstruct();
-		}
-
-		partial void PostConstruct();
 	}
 }

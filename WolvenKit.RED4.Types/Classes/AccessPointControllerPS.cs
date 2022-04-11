@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class AccessPointControllerPS : MasterControllerPS
 	{
 		[Ordinal(105)] 
@@ -71,10 +72,6 @@ namespace WolvenKit.RED4.Types
 			ShouldScannerShowNetwork = false;
 			RewardNotificationIcons = new();
 			PingedSquads = new();
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

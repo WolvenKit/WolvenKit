@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class inkStyleResource : CResource
 	{
 		[Ordinal(1)] 
@@ -41,10 +42,6 @@ namespace WolvenKit.RED4.Types
 			Styles = new();
 			StyleImports = new();
 			Themes = new();
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

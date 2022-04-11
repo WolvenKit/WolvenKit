@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class gameEffectObjectFilter_RejectOnPrereq : gameEffectObjectSingleFilter
 	{
 		[Ordinal(0)] 
@@ -11,12 +12,5 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CHandle<gameIPrereq>>();
 			set => SetPropertyValue<CHandle<gameIPrereq>>(value);
 		}
-
-		public gameEffectObjectFilter_RejectOnPrereq()
-		{
-			PostConstruct();
-		}
-
-		partial void PostConstruct();
 	}
 }

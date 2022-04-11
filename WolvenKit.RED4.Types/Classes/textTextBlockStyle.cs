@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class textTextBlockStyle : RedBaseClass
 	{
 		[Ordinal(0)] 
@@ -51,10 +52,6 @@ namespace WolvenKit.RED4.Types
 			ShadowColor = new() { Alpha = 1.000000F };
 			FontStyle = new() { OutlineColor = new() { Red = 1.000000F, Green = 1.000000F, Blue = 1.000000F, Alpha = 1.000000F } };
 			FontSize = 22;
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

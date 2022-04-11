@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class tachometerLogicController : IVehicleModuleController
 	{
 		[Ordinal(1)] 
@@ -73,10 +74,6 @@ namespace WolvenKit.RED4.Types
 			RpmValueWidget = new();
 			RpmGaugeForegroundWidget = new();
 			RpmGaugeMaxSize = new();
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

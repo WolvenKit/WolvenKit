@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class ScannerDeviceBodyGameController : BaseChunkGameController
 	{
 		[Ordinal(5)] 
@@ -74,10 +75,6 @@ namespace WolvenKit.RED4.Types
 			DeviceAuthorizationText = new();
 			DeviceAuthorizationRow = new();
 			NetworkStatusRow = new();
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

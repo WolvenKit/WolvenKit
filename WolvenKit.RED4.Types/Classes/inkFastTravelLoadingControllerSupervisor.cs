@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class inkFastTravelLoadingControllerSupervisor : gameuiWidgetGameController
 	{
 		[Ordinal(2)] 
@@ -11,12 +12,5 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CResourceReference<worldEffect>>();
 			set => SetPropertyValue<CResourceReference<worldEffect>>(value);
 		}
-
-		public inkFastTravelLoadingControllerSupervisor()
-		{
-			PostConstruct();
-		}
-
-		partial void PostConstruct();
 	}
 }

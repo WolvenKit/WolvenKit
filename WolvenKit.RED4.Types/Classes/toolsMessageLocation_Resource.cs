@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class toolsMessageLocation_Resource : toolsIMessageLocation
 	{
 		[Ordinal(0)] 
@@ -11,12 +12,5 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<MessageResourcePath>();
 			set => SetPropertyValue<MessageResourcePath>(value);
 		}
-
-		public toolsMessageLocation_Resource()
-		{
-			PostConstruct();
-		}
-
-		partial void PostConstruct();
 	}
 }

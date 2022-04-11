@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class gameTelemetryQuickHack : RedBaseClass
 	{
 		[Ordinal(0)] 
@@ -47,10 +48,6 @@ namespace WolvenKit.RED4.Types
 		public gameTelemetryQuickHack()
 		{
 			Quality = Enums.gamedataQuality.Invalid;
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

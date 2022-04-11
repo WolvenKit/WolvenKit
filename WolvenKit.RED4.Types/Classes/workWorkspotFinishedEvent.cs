@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class workWorkspotFinishedEvent : redEvent
 	{
 		[Ordinal(0)] 
@@ -32,10 +33,6 @@ namespace WolvenKit.RED4.Types
 		{
 			NodeId = new();
 			Tags = new();
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

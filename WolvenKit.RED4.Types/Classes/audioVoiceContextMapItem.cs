@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class audioVoiceContextMapItem : audioAudioMetadata
 	{
 		[Ordinal(1)] 
@@ -57,10 +58,6 @@ namespace WolvenKit.RED4.Types
 			Grunt = Enums.audioVoGruntType.None;
 			Answer = new();
 			OverridingVoContext = Enums.locVoiceoverContext.Default_Vo_Context;
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

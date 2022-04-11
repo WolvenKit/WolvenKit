@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class ItemDisplayInventoryMiniGrid : inkWidgetLogicController
 	{
 		[Ordinal(1)] 
@@ -41,10 +42,6 @@ namespace WolvenKit.RED4.Types
 			GridList = new();
 			Label = new();
 			GridData = new();
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

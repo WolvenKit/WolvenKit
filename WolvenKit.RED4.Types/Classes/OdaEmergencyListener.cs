@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class OdaEmergencyListener : gameCustomValueStatPoolsListener
 	{
 		[Ordinal(0)] 
@@ -67,10 +68,6 @@ namespace WolvenKit.RED4.Types
 			Heal3HealthPercentage = 40.000000F;
 			Heal4HealthPercentage = 25.000000F;
 			Heal5HealthPercentage = 10.000000F;
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

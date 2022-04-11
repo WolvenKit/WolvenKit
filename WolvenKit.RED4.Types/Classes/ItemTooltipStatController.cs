@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class ItemTooltipStatController : inkWidgetLogicController
 	{
 		[Ordinal(1)] 
@@ -59,10 +60,6 @@ namespace WolvenKit.RED4.Types
 			StatComparedContainer = new();
 			StatComparedValue = new();
 			Arrow = new();
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

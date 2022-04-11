@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	[REDClass(SerializeDefault = true)]
 	public partial class Tetrahedron : RedBaseClass
 	{
@@ -43,10 +44,6 @@ namespace WolvenKit.RED4.Types
 			Point2 = new();
 			Point3 = new();
 			Point4 = new();
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

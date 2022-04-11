@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class PuppetMortalPrereqState : gamePrereqState
 	{
 		[Ordinal(0)] 
@@ -19,12 +20,5 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CWeakHandle<PuppetMortalityListener>>();
 			set => SetPropertyValue<CWeakHandle<PuppetMortalityListener>>(value);
 		}
-
-		public PuppetMortalPrereqState()
-		{
-			PostConstruct();
-		}
-
-		partial void PostConstruct();
 	}
 }

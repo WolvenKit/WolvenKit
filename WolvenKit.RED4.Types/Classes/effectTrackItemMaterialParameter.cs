@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class effectTrackItemMaterialParameter : effectTrackItem
 	{
 		[Ordinal(3)] 
@@ -79,10 +80,6 @@ namespace WolvenKit.RED4.Types
 			CustomParameter2 = new();
 			Scale3 = 1.000000F;
 			CustomParameter3 = new();
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class vehicleChangeWindowStateEvent : redEvent
 	{
 		[Ordinal(0)] 
@@ -19,12 +20,5 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CEnum<vehicleEVehicleDoor>>();
 			set => SetPropertyValue<CEnum<vehicleEVehicleDoor>>(value);
 		}
-
-		public vehicleChangeWindowStateEvent()
-		{
-			PostConstruct();
-		}
-
-		partial void PostConstruct();
 	}
 }

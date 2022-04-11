@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class TutorialPopupDisplayController : inkWidgetLogicController
 	{
 		[Ordinal(1)] 
@@ -78,10 +79,6 @@ namespace WolvenKit.RED4.Types
 			Video_1280x720 = new();
 			Video_720x405 = new();
 			InputHint = new();
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

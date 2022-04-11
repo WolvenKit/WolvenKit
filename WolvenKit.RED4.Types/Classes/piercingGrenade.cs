@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class piercingGrenade : BaseProjectile
 	{
 		[Ordinal(46)] 
@@ -73,10 +74,6 @@ namespace WolvenKit.RED4.Types
 			PiercingEffect = new();
 			TrailEffectName = "trail";
 			Alive = true;
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class MaterialPass : RedBaseClass
 	{
 		[Ordinal(0)] 
@@ -89,10 +90,6 @@ namespace WolvenKit.RED4.Types
 			DepthStencilMode = new() { FrontFace = new() };
 			RasterizerMode = new();
 			BlendMode = new() { NumTargets = 1, RenderTarget = new(8) };
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

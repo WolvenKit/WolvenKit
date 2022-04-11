@@ -97,6 +97,43 @@ namespace WolvenKit.RED4.Types
         #endregion Methods
     }
 
+    /// <summary>
+    /// Marks a class as serializable for redengine files.
+    /// </summary>
+    [AttributeUsage(AttributeTargets.Class, AllowMultiple = false)]
+    public sealed class REDMetaAttribute : Attribute
+    {
+        #region Constructors
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="REDMetaAttribute"/> class.
+        /// </summary>
+        /// <param name="keywords">
+        /// Meta values registered in the rtti and additional information for parsing such as enumtype, fixedlayout classes etc.
+        /// </param>
+        internal REDMetaAttribute(params EREDMetaInfo[] keywords)
+        {
+            Keywords = keywords;
+        }
+
+        #endregion Constructors
+
+        #region Properties
+
+        public EREDMetaInfo[] Keywords { get; private set; }
+
+        #endregion Properties
+
+        #region Methods
+
+        public override string ToString()
+        {
+            return String.Format("{0}", String.Join(",", Keywords));
+        }
+
+        #endregion Methods
+    }
+
     [AttributeUsage(AttributeTargets.Class, AllowMultiple = false)]
     public sealed class REDClassAttribute : Attribute
     {

@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class questVehicleSummoned_ConditionType : questIVehicleConditionType
 	{
 		[Ordinal(0)] 
@@ -11,12 +12,5 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CEnum<vehicleESummonedVehicleType>>();
 			set => SetPropertyValue<CEnum<vehicleESummonedVehicleType>>(value);
 		}
-
-		public questVehicleSummoned_ConditionType()
-		{
-			PostConstruct();
-		}
-
-		partial void PostConstruct();
 	}
 }

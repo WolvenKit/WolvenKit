@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class effectTrackItemPointLight : effectTrackItem
 	{
 		[Ordinal(3)] 
@@ -155,10 +156,6 @@ namespace WolvenKit.RED4.Types
 			SceneDiffuse = true;
 			SceneSpecular = true;
 			Flicker = new() { FlickerPeriod = 0.200000F };
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class BrightnessSettingsGameController : gameuiMenuGameController
 	{
 		[Ordinal(3)] 
@@ -64,10 +65,6 @@ namespace WolvenKit.RED4.Types
 		{
 			SettingsOptionsList = new();
 			SettingsElements = new();
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

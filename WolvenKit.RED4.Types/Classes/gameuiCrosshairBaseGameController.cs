@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class gameuiCrosshairBaseGameController : gameuiWidgetGameController
 	{
 		[Ordinal(2)] 
@@ -131,12 +132,5 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CBool>();
 			set => SetPropertyValue<CBool>(value);
 		}
-
-		public gameuiCrosshairBaseGameController()
-		{
-			PostConstruct();
-		}
-
-		partial void PostConstruct();
 	}
 }

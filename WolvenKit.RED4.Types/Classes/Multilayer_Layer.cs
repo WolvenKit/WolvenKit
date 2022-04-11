@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class Multilayer_Layer : RedBaseClass
 	{
 		[Ordinal(0)] 
@@ -155,10 +156,6 @@ namespace WolvenKit.RED4.Types
 			MicroblendContrast = 0.500000F;
 			MicroblendNormalStrength = 1.000000F;
 			Opacity = 1.000000F;
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

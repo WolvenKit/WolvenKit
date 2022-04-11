@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class AddStatusEffectToAttackEffector : ModifyAttackEffector
 	{
 		[Ordinal(0)] 
@@ -39,10 +40,6 @@ namespace WolvenKit.RED4.Types
 		public AddStatusEffectToAttackEffector()
 		{
 			StatusEffect = new();
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

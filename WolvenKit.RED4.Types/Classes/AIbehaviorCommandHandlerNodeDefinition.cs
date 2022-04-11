@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class AIbehaviorCommandHandlerNodeDefinition : AIbehaviorDecoratorNodeDefinition
 	{
 		[Ordinal(1)] 
@@ -80,10 +81,6 @@ namespace WolvenKit.RED4.Types
 		{
 			Contexts = new();
 			ResultIfNoCommand = Enums.AIbehaviorCompletionStatus.SUCCESS;
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

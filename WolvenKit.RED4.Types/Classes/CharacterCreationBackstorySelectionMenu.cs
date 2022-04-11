@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class CharacterCreationBackstorySelectionMenu : gameuiBaseCharacterCreationController
 	{
 		[Ordinal(6)] 
@@ -73,10 +74,6 @@ namespace WolvenKit.RED4.Types
 			Nomad = new();
 			StreetRat = new();
 			Corpo = new();
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

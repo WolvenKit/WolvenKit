@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class CoderControllerPS : BasicDistractionDeviceControllerPS
 	{
 		[Ordinal(109)] 
@@ -15,10 +16,6 @@ namespace WolvenKit.RED4.Types
 		public CoderControllerPS()
 		{
 			ProvidedAuthorizationLevel = Enums.ESecurityAccessLevel.ESL_4;
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

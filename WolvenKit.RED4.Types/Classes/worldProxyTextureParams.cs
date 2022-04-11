@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class worldProxyTextureParams : RedBaseClass
 	{
 		[Ordinal(0)] 
@@ -101,10 +102,6 @@ namespace WolvenKit.RED4.Types
 			GenerateRoughness = true;
 			MetalnessTextureResolution = Enums.worldProxyMeshTexRes.RES_128;
 			DiffuseAlphaAsEmissive = true;
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

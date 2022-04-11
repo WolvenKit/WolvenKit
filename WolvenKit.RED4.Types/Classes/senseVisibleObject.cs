@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class senseVisibleObject : IScriptable
 	{
 		[Ordinal(0)] 
@@ -32,10 +33,6 @@ namespace WolvenKit.RED4.Types
 		{
 			VisibilityDistance = 100.000000F;
 			VisibleObjectType = Enums.gamedataSenseObjectType.Undefined;
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class CFoliageProfile : CResource
 	{
 		[Ordinal(1)] 
@@ -109,10 +110,6 @@ namespace WolvenKit.RED4.Types
 			TerrainBlendScale = 0.200000F;
 			BillboardDepthScale = 1.000000F;
 			BillboardRoughnessBias = 0.100000F;
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

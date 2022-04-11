@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class CheckElapsedTimeFromArgumentFloat : CheckArguments
 	{
 		[Ordinal(1)] 
@@ -19,12 +20,5 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CEnum<ECompareOp>>();
 			set => SetPropertyValue<CEnum<ECompareOp>>(value);
 		}
-
-		public CheckElapsedTimeFromArgumentFloat()
-		{
-			PostConstruct();
-		}
-
-		partial void PostConstruct();
 	}
 }

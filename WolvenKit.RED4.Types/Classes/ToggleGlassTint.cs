@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class ToggleGlassTint : ActionBool
 	{
 		[Ordinal(25)] 
@@ -28,10 +29,6 @@ namespace WolvenKit.RED4.Types
 			CanTriggerStim = true;
 			TrueRecord = "TintGlass";
 			FalseRecord = "ClearGlass";
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

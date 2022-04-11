@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class SetHoverOverEvent : redEvent
 	{
 		[Ordinal(0)] 
@@ -15,10 +16,6 @@ namespace WolvenKit.RED4.Types
 		public SetHoverOverEvent()
 		{
 			ClothingSet = new() { SetID = -1, ClothingList = new() };
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

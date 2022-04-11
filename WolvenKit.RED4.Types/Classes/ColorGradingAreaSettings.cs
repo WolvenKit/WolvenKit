@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class ColorGradingAreaSettings : IAreaSettings
 	{
 		[Ordinal(2)] 
@@ -158,10 +159,6 @@ namespace WolvenKit.RED4.Types
 			HighlightOffset = new();
 			LdrLut = new() { InputMapping = Enums.EColorMappingFunction.CMF_sRGB, OutputMapping = Enums.EColorMappingFunction.CMF_sRGB };
 			HdrLut = new() { InputMapping = Enums.EColorMappingFunction.CMF_sRGB, OutputMapping = Enums.EColorMappingFunction.CMF_sRGB };
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

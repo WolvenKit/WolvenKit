@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class effectTrackItemTonemapping : effectTrackItem
 	{
 		[Ordinal(3)] 
@@ -51,10 +52,6 @@ namespace WolvenKit.RED4.Types
 			MidGrayScaleSDR = new();
 			MaxStopsHDR = new();
 			MidGrayScaleHDR = new();
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

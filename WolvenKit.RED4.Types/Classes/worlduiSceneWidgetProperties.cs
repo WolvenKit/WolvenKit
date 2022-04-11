@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class worlduiSceneWidgetProperties : RedBaseClass
 	{
 		[Ordinal(0)] 
@@ -72,10 +73,6 @@ namespace WolvenKit.RED4.Types
 		{
 			ProjectionPlaneSize = new() { X = 1.000000F, Y = 1.000000F };
 			FaceVector = new();
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

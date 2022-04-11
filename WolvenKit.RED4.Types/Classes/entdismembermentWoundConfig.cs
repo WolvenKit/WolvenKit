@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class entdismembermentWoundConfig : ISerializable
 	{
 		[Ordinal(0)] 
@@ -19,12 +20,5 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CEnum<entdismembermentResourceSetE>>();
 			set => SetPropertyValue<CEnum<entdismembermentResourceSetE>>(value);
 		}
-
-		public entdismembermentWoundConfig()
-		{
-			PostConstruct();
-		}
-
-		partial void PostConstruct();
 	}
 }

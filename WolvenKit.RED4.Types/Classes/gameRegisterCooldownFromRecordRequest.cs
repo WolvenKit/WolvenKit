@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class gameRegisterCooldownFromRecordRequest : RedBaseClass
 	{
 		[Ordinal(0)] 
@@ -39,10 +40,6 @@ namespace WolvenKit.RED4.Types
 		public gameRegisterCooldownFromRecordRequest()
 		{
 			OwnerItemId = new();
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

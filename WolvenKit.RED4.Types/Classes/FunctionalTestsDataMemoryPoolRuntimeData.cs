@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class FunctionalTestsDataMemoryPoolRuntimeData : ISerializable
 	{
 		[Ordinal(0)] 
@@ -27,12 +28,5 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CInt64>();
 			set => SetPropertyValue<CInt64>(value);
 		}
-
-		public FunctionalTestsDataMemoryPoolRuntimeData()
-		{
-			PostConstruct();
-		}
-
-		partial void PostConstruct();
 	}
 }

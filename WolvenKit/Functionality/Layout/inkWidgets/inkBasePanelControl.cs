@@ -37,7 +37,7 @@ namespace WolvenKit.Functionality.Layout.inkWidgets
                     panelContentSize.Width += Math.Max(width, 0);
                     panelContentSize.Height = Math.Max(height, panelContentSize.Height);
 
-                    if (child.Widget.Layout.SizeRule == Enums.inkESizeRule.Fixed)
+                    if (child.Widget.Layout.SizeRule.Value == Enums.inkESizeRule.Fixed)
                     {
                         fixedSize += width;
                     }
@@ -51,7 +51,7 @@ namespace WolvenKit.Functionality.Layout.inkWidgets
                     panelContentSize.Width = Math.Max(width, panelContentSize.Width);
                     panelContentSize.Height += Math.Max(height, 0);
 
-                    if (child.Widget.Layout.SizeRule == Enums.inkESizeRule.Fixed)
+                    if (child.Widget.Layout.SizeRule.Value == Enums.inkESizeRule.Fixed)
                     {
                         fixedSize += height;
                     }
@@ -91,7 +91,7 @@ namespace WolvenKit.Functionality.Layout.inkWidgets
                     height = panelDesiredSize.Height - child.Margin.Top - child.Margin.Bottom - ChildMargin.Top - ChildMargin.Bottom;
                 }
 
-                if (child.Widget.Layout.SizeRule == Enums.inkESizeRule.Stretch)
+                if (child.Widget.Layout.SizeRule.Value == Enums.inkESizeRule.Stretch)
                 {
                     if (Widget is inkHorizontalPanelWidget)
                     {
@@ -129,7 +129,7 @@ namespace WolvenKit.Functionality.Layout.inkWidgets
 
                 if (Widget is inkVerticalPanelWidget)
                 {
-                    switch ((Enums.inkEHorizontalAlign)child.Widget.Layout.HAlign)
+                    switch (child.Widget.Layout.HAlign.Value)
                     {
                         case Enums.inkEHorizontalAlign.Fill:
                             x += child.Margin.Left;
@@ -149,7 +149,7 @@ namespace WolvenKit.Functionality.Layout.inkWidgets
                 }
                 else
                 {
-                    switch ((Enums.inkEVerticalAlign)child.Widget.Layout.VAlign)
+                    switch (child.Widget.Layout.VAlign.Value)
                     {
                         case Enums.inkEVerticalAlign.Fill:
                             y += child.Margin.Top;

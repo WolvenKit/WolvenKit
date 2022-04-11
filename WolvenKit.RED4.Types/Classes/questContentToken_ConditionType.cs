@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class questContentToken_ConditionType : questIContentConditionType
 	{
 		[Ordinal(0)] 
@@ -15,10 +16,6 @@ namespace WolvenKit.RED4.Types
 		public questContentToken_ConditionType()
 		{
 			Type = Enums.questQuestContentType.MainQuest;
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

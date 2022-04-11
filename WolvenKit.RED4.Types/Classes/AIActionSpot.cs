@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class AIActionSpot : AISmartSpot
 	{
 		[Ordinal(0)] 
@@ -72,10 +73,6 @@ namespace WolvenKit.RED4.Types
 		{
 			ClippingSpaceOrientation = 180.000000F;
 			ClippingSpaceRange = 120.000000F;
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

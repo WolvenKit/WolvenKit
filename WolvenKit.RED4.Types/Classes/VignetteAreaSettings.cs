@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class VignetteAreaSettings : IAreaSettings
 	{
 		[Ordinal(2)] 
@@ -42,10 +43,6 @@ namespace WolvenKit.RED4.Types
 			VignetteRadius = 0.500000F;
 			VignetteExp = 2.000000F;
 			VignetteColor = new();
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

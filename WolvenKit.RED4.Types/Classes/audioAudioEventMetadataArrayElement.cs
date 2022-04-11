@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class audioAudioEventMetadataArrayElement : ISerializable
 	{
 		[Ordinal(0)] 
@@ -73,10 +74,6 @@ namespace WolvenKit.RED4.Types
 			WwiseId = 2166136261;
 			StopActionEvents = new();
 			Tags = new();
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

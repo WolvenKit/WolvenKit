@@ -1,8 +1,10 @@
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class SearchInFrontPatternLookat : AISearchingLookat
 	{
+
 		public SearchInFrontPatternLookat()
 		{
 			LookatTarget = new();
@@ -11,10 +13,6 @@ namespace WolvenKit.RED4.Types
 			LastTarget = new();
 			SideHorizontal = 1;
 			SideVertical = 1;
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

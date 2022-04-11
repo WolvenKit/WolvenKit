@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class PhoneCallUploadDurationListener : gameCustomValueStatPoolsListener
 	{
 		[Ordinal(0)] 
@@ -49,10 +50,6 @@ namespace WolvenKit.RED4.Types
 			GameInstance = new();
 			RequesterID = new();
 			StatPoolType = Enums.gamedataStatPoolType.PhoneCallDuration;
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

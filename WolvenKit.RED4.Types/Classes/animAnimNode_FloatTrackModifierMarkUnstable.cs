@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class animAnimNode_FloatTrackModifierMarkUnstable : animAnimNode_FloatTrackModifier
 	{
 		[Ordinal(16)] 
@@ -15,10 +16,6 @@ namespace WolvenKit.RED4.Types
 		public animAnimNode_FloatTrackModifierMarkUnstable()
 		{
 			RequiredQualityDistanceCategory = 4;
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

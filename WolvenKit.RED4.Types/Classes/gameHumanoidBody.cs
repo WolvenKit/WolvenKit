@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class gameHumanoidBody : entIComponent
 	{
 		[Ordinal(3)] 
@@ -52,10 +53,6 @@ namespace WolvenKit.RED4.Types
 			BaseEyesHeightRatio = 0.950000F;
 			StanceAnimFeatureName = "stanceStyle";
 			AimAnimFeatureName = "aim";
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

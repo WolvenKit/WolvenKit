@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class worldTriggerAreaNode : worldAreaShapeNode
 	{
 		[Ordinal(6)] 
@@ -15,10 +16,6 @@ namespace WolvenKit.RED4.Types
 		public worldTriggerAreaNode()
 		{
 			Notifiers = new();
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

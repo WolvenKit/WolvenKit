@@ -4,6 +4,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+    [REDMeta]
     public class scnbExternalLayer : IMaterial
     {
         [Ordinal(0)]
@@ -31,6 +32,7 @@ namespace WolvenKit.RED4.Types
         }
     }
 
+    [REDMeta]
     public class scnbExternalLayerEventData : RedBaseClass
     {
         [Ordinal(0)]
@@ -66,6 +68,9 @@ namespace WolvenKit.RED4.Types
         }
     }
 
+
+
+    [REDMeta]
     public class scnbPerformerInScene_NodeType : questSpawnManagerNodeType
     {
         [Ordinal(1)]
@@ -117,6 +122,7 @@ namespace WolvenKit.RED4.Types
         }
     }
 
+    [REDMeta]
     public class scnbScreenplayLineUsage : RedBaseClass
     {
         [Ordinal(0)]
@@ -127,7 +133,7 @@ namespace WolvenKit.RED4.Types
             set => SetPropertyValue<scnbGenderMask>(value);
         }
     }
-
+    [REDMeta]
     public class scnbVoicetagId : RedBaseClass
     {
         [Ordinal(0)]
@@ -138,7 +144,7 @@ namespace WolvenKit.RED4.Types
             set => SetPropertyValue<CRUID>(value);
         }
     }
-
+    [REDMeta]
     public class scnbgraphSectionNode : toolsIGraphNodeDescriptor
     {
         [Ordinal(0)]
@@ -190,6 +196,7 @@ namespace WolvenKit.RED4.Types
         }
     }
 
+    [REDMeta]
     public class scnbeventsVFXBraindanceEventDescriptor : toolsEventDescriptor
     {
         [Ordinal(0)]
@@ -289,6 +296,7 @@ namespace WolvenKit.RED4.Types
         }
     }
 
+    [REDMeta]
     public class scnbeventsVFXEventDescriptor : toolsEventDescriptor
     {
         [Ordinal(0)]
@@ -396,6 +404,7 @@ namespace WolvenKit.RED4.Types
         }
     }
 
+    [REDMeta]
     public class scnblocSignature : RedBaseClass
     {
         [Ordinal(0)]
@@ -415,6 +424,7 @@ namespace WolvenKit.RED4.Types
         }
     }
 
+    [REDMeta]
     public class scnbEffectEntry : RedBaseClass
     {
         [Ordinal(0)]
@@ -434,6 +444,7 @@ namespace WolvenKit.RED4.Types
         }
     }
 
+    [REDMeta]
     public class scnblocLocstringId : RedBaseClass
     {
         [Ordinal(0)]
@@ -445,6 +456,7 @@ namespace WolvenKit.RED4.Types
         }
     }
 
+    [REDMeta]
     public class scnbSceneActorData : RedBaseClass
     {
         [Ordinal(0)]
@@ -480,6 +492,7 @@ namespace WolvenKit.RED4.Types
         }
     }
 
+    [REDMeta]
     public class scnblocVariantId : RedBaseClass
     {
         [Ordinal(0)]
@@ -491,6 +504,7 @@ namespace WolvenKit.RED4.Types
         }
     }
 
+    [REDMeta]
     public class scnblocVariant : RedBaseClass
     {
         [Ordinal(0)]
@@ -526,6 +540,7 @@ namespace WolvenKit.RED4.Types
         }
     }
 
+    [REDMeta]
     public class scnbSceneEffectId : RedBaseClass
     {
         [Ordinal(0)]
@@ -537,6 +552,7 @@ namespace WolvenKit.RED4.Types
         }
     }
 
+    [REDMeta]
     public class scnbGenderMask : RedBaseClass
     {
         [Ordinal(0)]
@@ -548,6 +564,7 @@ namespace WolvenKit.RED4.Types
         }
     }
 
+    [REDMeta]
     public class scnbAudioLayer : ISerializable
     {
         [Ordinal(0)]
@@ -567,6 +584,7 @@ namespace WolvenKit.RED4.Types
         }
     }
 
+    [REDMeta]
     public class scnbPresetsDataWrapper : ISerializable
     {
         [Ordinal(0)]
@@ -578,6 +596,7 @@ namespace WolvenKit.RED4.Types
         }
     }
 
+    [REDMeta]
     public class scnbAudioLayerNodeData : RedBaseClass
     {
         [Ordinal(1)]
@@ -605,6 +624,7 @@ namespace WolvenKit.RED4.Types
         }
     }
 
+    [REDMeta]
     public class scnbeventsVFXDurationEventDescriptor : toolsEventDescriptor
     {
         [Ordinal(0)]
@@ -712,6 +732,7 @@ namespace WolvenKit.RED4.Types
         }
     }
 
+    [REDMeta]
     public class scnbSceneEventsGroupID : RedBaseClass
     {
         [Ordinal(0)]

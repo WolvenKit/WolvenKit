@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class BaseTechCrosshairController : gameuiCrosshairBaseGameController
 	{
 		[Ordinal(18)] 
@@ -51,12 +52,5 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CHandle<CrosshairWeaponStatsListener>>();
 			set => SetPropertyValue<CHandle<CrosshairWeaponStatsListener>>(value);
 		}
-
-		public BaseTechCrosshairController()
-		{
-			PostConstruct();
-		}
-
-		partial void PostConstruct();
 	}
 }

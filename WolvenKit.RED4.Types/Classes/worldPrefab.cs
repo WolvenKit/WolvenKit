@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class worldPrefab : resStreamedResource
 	{
 		[Ordinal(1)] 
@@ -251,10 +252,6 @@ namespace WolvenKit.RED4.Types
 			ProxyMeshBuildParams = new() { Resolution = 5, Polycount = 500, PolycountPercentage = 5.000000F, CoreAxis = Enums.worldProxyCoreAxis.Z, GroupingNormals = Enums.worldProxyGroupingNormals.Around_All_Axes, Windows = new() { WindowsType = Enums.worldProxWindowsType.PropagateWindows, Distance = 0.400000F, DistanceAboveProxy = 0.020000F, RemoveSmallerThan = 0.300000F, DistantWindowsEmissive = 1.000000F, DistantWindowsSize = 3.000000F, DistantWindowsSaturation = 0.750000F, DistantWindowsTurnedOf = 0.450000F }, Textures = new() { AlbedoTextureResolution = Enums.worldProxyMeshTexRes.RES_256, GenerateAlbedo = true, NormalTextureResolution = Enums.worldProxyMeshTexRes.RES_128, RoughnessTextureResolution = Enums.worldProxyMeshTexRes.RES_128, GenerateRoughness = true, MetalnessTextureResolution = Enums.worldProxyMeshTexRes.RES_128, DiffuseAlphaAsEmissive = true }, CustomGeometry = new() { UvType = Enums.worldProxyMeshUVType.UvGenerateNew }, AdvancedParams = new() { BoundingBoxSyncParams = new() { PullRange = 0.050000F, StackOffset = new() }, SurfaceFlattenParams = new() { GroupingStepAngle = Enums.worldProxyNormalAngleStepSize.STEP_45 }, Misc = new() { UseLod1 = true, BlurCutout = 20, OcclusionRatio = 40, FillHolesBeforeReduceRatio = 1.500000F, FillHolesAfterReduceRatio = 0.400000F, RsAxisPrecision = new() { X = 1.000000F, Y = 1.000000F, Z = 1.000000F }, RsAxisExpand = new(), RsAliasingReduction = 1.000000F, BcMergeRange = 0.800000F, BcSizeCutoff = 120.000000F, BcIterations = 0.500000F, BcMaxSize = 120.000000F, BcMinSize = 2.000000F, BcMergeSensitivity = 50.000000F, BcMinScale = 1.000000F, BcGridSize = 120.000000F, BcFilterSensitivity = 0.250000F, BcBoundsRatioLimit = 0.250000F, RemoveIslands = true, BackgroundColor = new() }, RayBias = 2.100000F, RayMaxDistance = -1.000000F } };
 			ProxyScale = new() { X = 1.000000F, Y = 1.000000F, Z = 1.000000F };
 			ProxyDistanceFactor = 1.500000F;
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

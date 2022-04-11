@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class gamesmartGunUITargetParameters : RedBaseClass
 	{
 		[Ordinal(0)] 
@@ -80,10 +81,6 @@ namespace WolvenKit.RED4.Types
 		{
 			Pos = new();
 			EntityID = new();
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

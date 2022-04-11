@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class cpPlayerDetector_PseudoDevice : gameObject
 	{
 		[Ordinal(35)] 
@@ -11,12 +12,5 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<NodeRef>();
 			set => SetPropertyValue<NodeRef>(value);
 		}
-
-		public cpPlayerDetector_PseudoDevice()
-		{
-			PostConstruct();
-		}
-
-		partial void PostConstruct();
 	}
 }

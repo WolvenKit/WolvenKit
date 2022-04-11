@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class gameEffectObjectProvider_SweepOverTime_Capsule : gameEffectObjectProvider_SweepOverTime
 	{
 		[Ordinal(2)] 
@@ -23,10 +24,6 @@ namespace WolvenKit.RED4.Types
 		public gameEffectObjectProvider_SweepOverTime_Capsule()
 		{
 			QueryPreset = new();
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

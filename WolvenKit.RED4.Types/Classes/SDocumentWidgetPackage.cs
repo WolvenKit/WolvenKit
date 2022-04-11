@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class SDocumentWidgetPackage : SWidgetPackage
 	{
 		[Ordinal(18)] 
@@ -88,10 +89,6 @@ namespace WolvenKit.RED4.Types
 		{
 			VideoPath = new();
 			QuestInfo = new();
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

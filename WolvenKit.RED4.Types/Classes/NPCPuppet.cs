@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class NPCPuppet : ScriptedPuppet
 	{
 		[Ordinal(92)] 
@@ -596,10 +597,6 @@ namespace WolvenKit.RED4.Types
 			ThrowingGrenadeDelayEventID = new();
 			DelayNonStealthQuickHackVictimEventID = new();
 			SmartDespawnDelayID = new();
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

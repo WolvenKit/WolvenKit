@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class ComputerDocumentThumbnailWidgetController : DeviceButtonLogicControllerBase
 	{
 		[Ordinal(26)] 
@@ -41,10 +42,6 @@ namespace WolvenKit.RED4.Types
 			DocumentIconWidget = new();
 			DocumentAdress = new() { FolderID = -1, DocumentID = -1 };
 			QuestInfo = new();
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

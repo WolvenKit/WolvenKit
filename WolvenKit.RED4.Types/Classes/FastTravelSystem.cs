@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class FastTravelSystem : gameScriptableSystem
 	{
 		[Ordinal(0)] 
@@ -98,10 +99,6 @@ namespace WolvenKit.RED4.Types
 			FastTravelPointsTotal = 155;
 			LastUpdatedAchievementCount = -1;
 			FastTravelLocks = new();
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

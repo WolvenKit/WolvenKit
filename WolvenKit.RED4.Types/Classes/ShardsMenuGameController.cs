@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class ShardsMenuGameController : gameuiMenuGameController
 	{
 		[Ordinal(3)] 
@@ -180,10 +181,6 @@ namespace WolvenKit.RED4.Types
 			EmptyPlaceholderRef = new();
 			LeftBlockControllerRef = new();
 			CrackHint = new();
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

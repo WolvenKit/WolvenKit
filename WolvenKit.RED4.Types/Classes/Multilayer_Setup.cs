@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class Multilayer_Setup : CResource
 	{
 		[Ordinal(1)] 
@@ -33,10 +34,6 @@ namespace WolvenKit.RED4.Types
 			Layers = new();
 			Ratio = 1.000000F;
 			UseNormal = true;
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

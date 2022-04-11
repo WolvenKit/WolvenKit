@@ -1,8 +1,8 @@
 namespace WolvenKit.RED4.Types
 {
-    public partial class CReflectionProbeDataResource
+    public partial class CReflectionProbeDataResource : IRedOverload
     {
-        partial void PostConstruct()
+        void IRedOverload.ConstructorOverload()
         {
             FaceDepth = null;
         }

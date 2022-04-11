@@ -1,13 +1,8 @@
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class gameIVisionModeSystem : gameIGameSystem
 	{
-		public gameIVisionModeSystem()
-		{
-			PostConstruct();
-		}
-
-		partial void PostConstruct();
 	}
 }

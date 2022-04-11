@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class gameJournalEmail : gameJournalEntry
 	{
 		[Ordinal(1)] 
@@ -58,10 +59,6 @@ namespace WolvenKit.RED4.Types
 			Addressee = new() { Unk1 = 0, Value = "" };
 			Title = new() { Unk1 = 0, Value = "" };
 			Content = new() { Unk1 = 0, Value = "" };
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

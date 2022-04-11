@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class questMiscAICommandNode : questConfigurableAICommandNode
 	{
 		[Ordinal(2)] 
@@ -34,10 +35,6 @@ namespace WolvenKit.RED4.Types
 			Id = 65535;
 			EntityReference = new() { Names = new() };
 			Function = "AIClearRoleCommandParams";
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

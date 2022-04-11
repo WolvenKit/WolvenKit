@@ -1,13 +1,8 @@
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class ExpressionTreeCParametrizationNodeDefinition : ExpressionTreeCNodeDefinition
 	{
-		public ExpressionTreeCParametrizationNodeDefinition()
-		{
-			PostConstruct();
-		}
-
-		partial void PostConstruct();
 	}
 }

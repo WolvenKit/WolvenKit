@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class LeftHandCyberwareChargeEvents : LeftHandCyberwareEventsTransition
 	{
 		[Ordinal(0)] 
@@ -19,12 +20,5 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CWeakHandle<gameweaponObject>>();
 			set => SetPropertyValue<CWeakHandle<gameweaponObject>>(value);
 		}
-
-		public LeftHandCyberwareChargeEvents()
-		{
-			PostConstruct();
-		}
-
-		partial void PostConstruct();
 	}
 }

@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class SimpleBinkGameController : DeviceInkGameControllerBase
 	{
 		[Ordinal(16)] 
@@ -51,10 +52,6 @@ namespace WolvenKit.RED4.Types
 			Video2Path = "Video2";
 			Video1 = new();
 			Video2 = new();
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

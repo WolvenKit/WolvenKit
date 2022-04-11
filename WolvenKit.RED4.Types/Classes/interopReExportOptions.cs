@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class interopReExportOptions : RedBaseClass
 	{
 		[Ordinal(0)] 
@@ -284,10 +285,6 @@ namespace WolvenKit.RED4.Types
 			AsBBoxThreshold = 0.000000;
 			AsBBoxPrefabsThreshold = 0.000000;
 			AsBBoxPrefabsSubdivide = 0.000000;
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

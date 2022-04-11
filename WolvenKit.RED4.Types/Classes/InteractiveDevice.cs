@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class InteractiveDevice : Device
 	{
 		[Ordinal(84)] 
@@ -89,10 +90,6 @@ namespace WolvenKit.RED4.Types
 			DisableAreaIndicatorID = new();
 			DelayedUIRefreshID = new();
 			InvestigationPositionsArray = new();
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

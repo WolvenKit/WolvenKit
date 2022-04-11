@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class worldPhysicalImpulseAreaNode : worldPhysicalTriggerAreaNode
 	{
 		[Ordinal(7)] 
@@ -23,10 +24,6 @@ namespace WolvenKit.RED4.Types
 		public worldPhysicalImpulseAreaNode()
 		{
 			Impulse = new();
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

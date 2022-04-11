@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class questEntityManagerManageBinkComponent_NodeTypeParams : RedBaseClass
 	{
 		[Ordinal(0)] 
@@ -32,10 +33,6 @@ namespace WolvenKit.RED4.Types
 		{
 			ObjectRef = new() { Names = new() };
 			Action = Enums.gameBinkVideoAction.Start;
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

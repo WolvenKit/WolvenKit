@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class TerminalSetup : RedBaseClass
 	{
 		[Ordinal(0)] 
@@ -49,10 +50,6 @@ namespace WolvenKit.RED4.Types
 			MinClearance = 1;
 			MaxClearance = 10;
 			ShouldForceVirtualSystem = true;
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

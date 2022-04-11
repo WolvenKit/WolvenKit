@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class questSetLootInteractionAccess_NodeType : questIItemManagerNodeType
 	{
 		[Ordinal(0)] 
@@ -24,10 +25,6 @@ namespace WolvenKit.RED4.Types
 		{
 			ObjectRef = new() { Names = new() };
 			Accessible = true;
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

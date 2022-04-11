@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class AIBehaviourSpot : AISmartSpot
 	{
 		[Ordinal(0)] 
@@ -11,12 +12,5 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CHandle<AIResourceReference>>();
 			set => SetPropertyValue<CHandle<AIResourceReference>>(value);
 		}
-
-		public AIBehaviourSpot()
-		{
-			PostConstruct();
-		}
-
-		partial void PostConstruct();
 	}
 }

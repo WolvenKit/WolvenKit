@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class animAnimNodeSourceChannel_TransformQuat : animIAnimNodeSourceChannel_Quat
 	{
 		[Ordinal(0)] 
@@ -15,10 +16,6 @@ namespace WolvenKit.RED4.Types
 		public animAnimNodeSourceChannel_TransformQuat()
 		{
 			TransformIndex = new();
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

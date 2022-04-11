@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class gameJournalInternetText : gameJournalInternetBase
 	{
 		[Ordinal(4)] 
@@ -17,10 +18,6 @@ namespace WolvenKit.RED4.Types
 			TintColor = new();
 			HoverTintColor = new();
 			Text = new() { Unk1 = 0, Value = "" };
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class worldCommunityRegistryNode : worldNode
 	{
 		[Ordinal(4)] 
@@ -49,10 +50,6 @@ namespace WolvenKit.RED4.Types
 			SpawnSetNameToCommunityID = new() { Entries = new() };
 			CommunitiesData = new();
 			WorkspotsPersistentData = new();
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class gameEffectPostAction_BulletExplode : gameEffectPostAction
 	{
 		[Ordinal(0)] 
@@ -24,10 +25,6 @@ namespace WolvenKit.RED4.Types
 		{
 			EndRangeTolerance = 0.100000F;
 			ExplosionDuration = 0.050000F;
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

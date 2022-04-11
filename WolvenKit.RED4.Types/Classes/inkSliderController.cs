@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class inkSliderController : inkWidgetLogicController
 	{
 		[Ordinal(1)] 
@@ -144,10 +145,6 @@ namespace WolvenKit.RED4.Types
 			SliderInput = new();
 			SliderValueChanged = new();
 			SliderHandleReleased = new();
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

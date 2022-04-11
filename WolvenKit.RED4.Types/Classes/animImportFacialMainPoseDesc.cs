@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class animImportFacialMainPoseDesc : RedBaseClass
 	{
 		[Ordinal(0)] 
@@ -100,10 +101,6 @@ namespace WolvenKit.RED4.Types
 			PoseIndices = new();
 			Weights = new();
 			InBetweenScopeMultipliers = new();
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

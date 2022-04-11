@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class StatsManager : IScriptable
 	{
 		[Ordinal(0)] 
@@ -11,12 +12,5 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CHandle<gameStatModifierData_Deprecated>>();
 			set => SetPropertyValue<CHandle<gameStatModifierData_Deprecated>>(value);
 		}
-
-		public StatsManager()
-		{
-			PostConstruct();
-		}
-
-		partial void PostConstruct();
 	}
 }

@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class audioAudioSceneData : audioAudioMetadata
 	{
 		[Ordinal(1)] 
@@ -76,10 +77,6 @@ namespace WolvenKit.RED4.Types
 			VoLineSignals = new();
 			TemplateSceneStateOverrides = new();
 			TemplateSceneSignalOverrides = new();
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

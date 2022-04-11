@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class PerksPointsDisplayController : inkWidgetLogicController
 	{
 		[Ordinal(1)] 
@@ -68,10 +69,6 @@ namespace WolvenKit.RED4.Types
 			Desc2Text = new();
 			Value2Text = new();
 			Icon2 = new();
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

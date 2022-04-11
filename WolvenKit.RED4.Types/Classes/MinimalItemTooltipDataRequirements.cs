@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class MinimalItemTooltipDataRequirements : IScriptable
 	{
 		[Ordinal(0)] 
@@ -103,10 +104,6 @@ namespace WolvenKit.RED4.Types
 		public MinimalItemTooltipDataRequirements()
 		{
 			AnyStatRequirements = new();
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

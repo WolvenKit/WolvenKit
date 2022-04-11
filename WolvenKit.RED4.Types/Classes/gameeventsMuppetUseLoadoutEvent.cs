@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class gameeventsMuppetUseLoadoutEvent : redEvent
 	{
 		[Ordinal(0)] 
@@ -11,12 +12,5 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CHandle<gamedataCPOLoadoutBase_Record>>();
 			set => SetPropertyValue<CHandle<gamedataCPOLoadoutBase_Record>>(value);
 		}
-
-		public gameeventsMuppetUseLoadoutEvent()
-		{
-			PostConstruct();
-		}
-
-		partial void PostConstruct();
 	}
 }

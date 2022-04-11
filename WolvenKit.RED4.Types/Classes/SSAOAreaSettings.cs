@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class SSAOAreaSettings : IAreaSettings
 	{
 		[Ordinal(2)] 
@@ -156,10 +157,6 @@ namespace WolvenKit.RED4.Types
 			NormalsEnable = true;
 			HierarchyDepth = 3;
 			QualityLevel = Enums.ESSAOQualityLevel.SSAOQUALITY_VeryHigh;
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

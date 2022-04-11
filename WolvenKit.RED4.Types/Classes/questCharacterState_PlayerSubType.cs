@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class questCharacterState_PlayerSubType : questICharacterConditionSubType
 	{
 		[Ordinal(0)] 
@@ -125,10 +126,6 @@ namespace WolvenKit.RED4.Types
 			VehicleState = Enums.gamePSMVehicle.Any;
 			TakedownState = Enums.gamePSMTakedown.Any;
 			SwimmingState = Enums.gamePSMSwimming.Any;
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

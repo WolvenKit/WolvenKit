@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class vehicleLightComponent : gameLightComponent
 	{
 		[Ordinal(71)] 
@@ -58,10 +59,6 @@ namespace WolvenKit.RED4.Types
 			LightType = Enums.vehicleELightType.Head;
 			HighBeamRadiusMultiplier = 2.000000F;
 			HighBeamConeMultiplier = 2.000000F;
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

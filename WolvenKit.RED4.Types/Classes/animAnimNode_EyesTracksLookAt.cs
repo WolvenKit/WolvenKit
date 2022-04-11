@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class animAnimNode_EyesTracksLookAt : animAnimNode_OnePoseInput
 	{
 		[Ordinal(12)] 
@@ -61,10 +62,6 @@ namespace WolvenKit.RED4.Types
 			RightTrack = new();
 			UpTrack = new();
 			DownTrack = new();
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

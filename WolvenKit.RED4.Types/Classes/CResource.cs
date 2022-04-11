@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class CResource : ISerializable
 	{
 		[Ordinal(0)] 
@@ -11,12 +12,5 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CEnum<ECookingPlatform>>();
 			set => SetPropertyValue<CEnum<ECookingPlatform>>(value);
 		}
-
-		public CResource()
-		{
-			PostConstruct();
-		}
-
-		partial void PostConstruct();
 	}
 }

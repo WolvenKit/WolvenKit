@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	[REDClass(SerializeDefault = true)]
 	public partial class OrientedBox : RedBaseClass
 	{
@@ -34,10 +35,6 @@ namespace WolvenKit.RED4.Types
 			Position = new();
 			Edge_1 = new();
 			Edge_2 = new();
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

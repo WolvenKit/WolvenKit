@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class animRigSharedData : CResource
 	{
 		[Ordinal(1)] 
@@ -24,10 +25,6 @@ namespace WolvenKit.RED4.Types
 		{
 			Parts = new();
 			IkSetups = new();
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

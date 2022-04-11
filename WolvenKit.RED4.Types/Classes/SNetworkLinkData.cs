@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class SNetworkLinkData : RedBaseClass
 	{
 		[Ordinal(0)] 
@@ -168,10 +169,6 @@ namespace WolvenKit.RED4.Types
 			RevealSlave = true;
 			Lifetime = -1.000000F;
 			DelayID = new();
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

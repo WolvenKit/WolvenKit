@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class inkCensorshipEffect : inkGlitchEffect
 	{
 		[Ordinal(7)] 
@@ -11,12 +12,5 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CBitField<CensorshipFlags>>();
 			set => SetPropertyValue<CBitField<CensorshipFlags>>(value);
 		}
-
-		public inkCensorshipEffect()
-		{
-			PostConstruct();
-		}
-
-		partial void PostConstruct();
 	}
 }

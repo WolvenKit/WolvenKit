@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class toolsMessageLocation_EditorObject : toolsIMessageLocation
 	{
 		[Ordinal(0)] 
@@ -15,10 +16,6 @@ namespace WolvenKit.RED4.Types
 		public toolsMessageLocation_EditorObject()
 		{
 			Path = new() { Elements = new() };
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

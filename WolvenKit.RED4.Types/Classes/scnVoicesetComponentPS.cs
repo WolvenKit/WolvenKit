@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class scnVoicesetComponentPS : gameComponentPS
 	{
 		[Ordinal(0)] 
@@ -58,10 +59,6 @@ namespace WolvenKit.RED4.Types
 			NPCHighLevelState = Enums.gamedataNPCHighLevelState.Invalid;
 			AreVoicesetLinesEnabled = true;
 			AreVoicesetGruntsEnabled = true;
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

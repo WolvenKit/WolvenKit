@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class ClimbEvents : LocomotionGroundEvents
 	{
 		[Ordinal(6)] 
@@ -48,10 +49,6 @@ namespace WolvenKit.RED4.Types
 		{
 			IkHandEvents = new();
 			PlayerCapsuleDimensions = new();
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

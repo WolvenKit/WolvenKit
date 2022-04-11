@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	[REDClass(SerializeDefault = true)]
 	public partial class Transform : RedBaseClass
 	{
@@ -25,10 +26,6 @@ namespace WolvenKit.RED4.Types
 		{
 			Position = new();
 			Orientation = new() { R = 1.000000F };
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

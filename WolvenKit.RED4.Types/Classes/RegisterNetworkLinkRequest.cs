@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class RegisterNetworkLinkRequest : gameScriptableSystemRequest
 	{
 		[Ordinal(0)] 
@@ -15,10 +16,6 @@ namespace WolvenKit.RED4.Types
 		public RegisterNetworkLinkRequest()
 		{
 			LinksData = new();
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

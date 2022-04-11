@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class animAnimNode_SkPhaseSlotWithDurationAnim : animAnimNode_SkPhaseWithDurationAnim
 	{
 		[Ordinal(32)] 
@@ -19,12 +20,5 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CResourceReference<animActionAnimDatabase>>();
 			set => SetPropertyValue<CResourceReference<animActionAnimDatabase>>(value);
 		}
-
-		public animAnimNode_SkPhaseSlotWithDurationAnim()
-		{
-			PostConstruct();
-		}
-
-		partial void PostConstruct();
 	}
 }

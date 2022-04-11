@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class rendRenderTextureResource : RedBaseClass
 	{
 		[Ordinal(0)] 
@@ -11,12 +12,5 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CHandle<IRenderResourceBlob>>();
 			set => SetPropertyValue<CHandle<IRenderResourceBlob>>(value);
 		}
-
-		public rendRenderTextureResource()
-		{
-			PostConstruct();
-		}
-
-		partial void PostConstruct();
 	}
 }

@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class animAnimFeature_Locomotion : animAnimFeature
 	{
 		[Ordinal(0)] 
@@ -99,12 +100,5 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CBool>();
 			set => SetPropertyValue<CBool>(value);
 		}
-
-		public animAnimFeature_Locomotion()
-		{
-			PostConstruct();
-		}
-
-		partial void PostConstruct();
 	}
 }

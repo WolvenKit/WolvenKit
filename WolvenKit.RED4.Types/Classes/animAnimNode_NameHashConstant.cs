@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class animAnimNode_NameHashConstant : animAnimNode_IntValue
 	{
 		[Ordinal(11)] 
@@ -15,10 +16,6 @@ namespace WolvenKit.RED4.Types
 		public animAnimNode_NameHashConstant()
 		{
 			Id = 4294967295;
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

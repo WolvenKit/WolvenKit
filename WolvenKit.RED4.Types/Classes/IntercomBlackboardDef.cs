@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class IntercomBlackboardDef : DeviceBaseBlackboardDef
 	{
 		[Ordinal(7)] 
@@ -33,10 +34,6 @@ namespace WolvenKit.RED4.Types
 			DisplayString = new();
 			EnableActions = new();
 			Status = new();
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

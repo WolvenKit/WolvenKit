@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class SquadTicketReceipt : RedBaseClass
 	{
 		[Ordinal(0)] 
@@ -71,10 +72,6 @@ namespace WolvenKit.RED4.Types
 		public SquadTicketReceipt()
 		{
 			LastRecipient = new();
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

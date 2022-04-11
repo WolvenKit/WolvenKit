@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class OxygenbarWidgetGameController : gameuiHUDGameController
 	{
 		[Ordinal(9)] 
@@ -131,10 +132,6 @@ namespace WolvenKit.RED4.Types
 			OxygenStatusTextPath = new();
 			CurrentOxygen = 100.000000F;
 			SceneTier = Enums.GameplayTier.Tier1_FullGameplay;
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

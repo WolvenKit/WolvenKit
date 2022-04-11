@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class Crosshair_Tech_Omaha : gameuiCrosshairBaseGameController
 	{
 		[Ordinal(18)] 
@@ -55,10 +56,6 @@ namespace WolvenKit.RED4.Types
 		public Crosshair_Tech_Omaha()
 		{
 			SizeOfChargeBar = new();
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

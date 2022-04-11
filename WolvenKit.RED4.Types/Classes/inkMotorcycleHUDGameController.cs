@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class inkMotorcycleHUDGameController : gameuiBaseVehicleHUDGameController
 	{
 		[Ordinal(10)] 
@@ -330,10 +331,6 @@ namespace WolvenKit.RED4.Types
 			SpeedTextWidget = new();
 			GearTextWidget = new();
 			RPMTextWidget = new();
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

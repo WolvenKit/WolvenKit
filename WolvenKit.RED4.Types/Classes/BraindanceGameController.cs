@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class BraindanceGameController : gameuiHUDGameController
 	{
 		[Ordinal(9)] 
@@ -324,10 +325,6 @@ namespace WolvenKit.RED4.Types
 			SpeedIndicatorManagers = new();
 			ClueArray = new();
 			GameInstance = new();
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

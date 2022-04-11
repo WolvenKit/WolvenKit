@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class AIDriveCommandsDelegate : AIbehaviorScriptBehaviorDelegate
 	{
 		[Ordinal(0)] 
@@ -307,12 +308,5 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CHandle<AIVehicleJoinTrafficCommand>>();
 			set => SetPropertyValue<CHandle<AIVehicleJoinTrafficCommand>>(value);
 		}
-
-		public AIDriveCommandsDelegate()
-		{
-			PostConstruct();
-		}
-
-		partial void PostConstruct();
 	}
 }

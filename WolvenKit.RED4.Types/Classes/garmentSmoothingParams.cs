@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class garmentSmoothingParams : RedBaseClass
 	{
 		[Ordinal(0)] 
@@ -41,10 +42,6 @@ namespace WolvenKit.RED4.Types
 			SmoothingRadiusInCM = 15.000000F;
 			SmoothingExponent = 0.500000F;
 			SmoothingNumNeighbours = 4;
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

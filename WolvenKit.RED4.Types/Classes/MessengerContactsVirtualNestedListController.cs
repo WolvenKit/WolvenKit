@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class MessengerContactsVirtualNestedListController : VirtualNestedListController
 	{
 		[Ordinal(14)] 
@@ -11,12 +12,5 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CWeakHandle<MessengerContactDataView>>();
 			set => SetPropertyValue<CWeakHandle<MessengerContactDataView>>(value);
 		}
-
-		public MessengerContactsVirtualNestedListController()
-		{
-			PostConstruct();
-		}
-
-		partial void PostConstruct();
 	}
 }

@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class gameItemObject : gameTimeDilatable
 	{
 		[Ordinal(35)] 
@@ -31,10 +32,6 @@ namespace WolvenKit.RED4.Types
 		public gameItemObject()
 		{
 			UpdateBucket = Enums.UpdateBucketEnum.AttachedObject;
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

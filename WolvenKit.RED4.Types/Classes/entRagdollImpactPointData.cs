@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class entRagdollImpactPointData : RedBaseClass
 	{
 		[Ordinal(0)] 
@@ -81,10 +82,6 @@ namespace WolvenKit.RED4.Types
 			WorldPosition = new() { X = new(), Y = new(), Z = new() };
 			WorldNormal = new() { W = 1.000000F };
 			OtherProxyActorIndex = 1;
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

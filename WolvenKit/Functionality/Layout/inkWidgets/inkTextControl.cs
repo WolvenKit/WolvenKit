@@ -29,11 +29,11 @@ namespace WolvenKit.Functionality.Layout.inkWidgets
                     text = "Test";
                 }
 
-                if (TextWidget.LetterCase == Enums.textLetterCase.UpperCase)
+                if (TextWidget.LetterCase.Value == Enums.textLetterCase.UpperCase)
                 {
                     text = text.ToUpper();
                 }
-                else if (TextWidget.LetterCase == Enums.textLetterCase.LowerCase)
+                else if (TextWidget.LetterCase.Value == Enums.textLetterCase.LowerCase)
                 {
                     text = text.ToLower();
                 }
@@ -236,7 +236,7 @@ namespace WolvenKit.Functionality.Layout.inkWidgets
             }
 
             double x = 0, y = 0;
-            switch ((Enums.textHorizontalAlignment)TextWidget.TextHorizontalAlignment)
+            switch (TextWidget.TextHorizontalAlignment.Value)
             {
                 case Enums.textHorizontalAlignment.Left:
                     x = 0;
@@ -251,7 +251,7 @@ namespace WolvenKit.Functionality.Layout.inkWidgets
                     break;
             }
 
-            switch ((Enums.textVerticalAlignment)TextWidget.TextVerticalAlignment)
+            switch (TextWidget.TextVerticalAlignment.Value)
             {
                 case Enums.textVerticalAlignment.Top:
                     y = -CorrectionY;

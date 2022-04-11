@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class GameplayRoleMappinData : gamemappinsMappinScriptData
 	{
 		[Ordinal(1)] 
@@ -151,10 +152,6 @@ namespace WolvenKit.RED4.Types
 		public GameplayRoleMappinData()
 		{
 			ShowOnMiniMap = true;
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

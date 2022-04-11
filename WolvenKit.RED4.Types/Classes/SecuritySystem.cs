@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class SecuritySystem : DeviceSystemBase
 	{
 		[Ordinal(94)] 
@@ -16,10 +17,6 @@ namespace WolvenKit.RED4.Types
 		{
 			ControllerTypeName = "SecuritySystemController";
 			SavedOutputCache = new();
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

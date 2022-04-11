@@ -1,13 +1,8 @@
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class inkActionName : IScriptable
 	{
-		public inkActionName()
-		{
-			PostConstruct();
-		}
-
-		partial void PostConstruct();
 	}
 }

@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class SecuritySystemInput : SecurityAreaEvent
 	{
 		[Ordinal(27)] 
@@ -97,10 +98,6 @@ namespace WolvenKit.RED4.Types
 			LastKnownPosition = new();
 			Id = -1;
 			CustomRecipientsList = new();
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

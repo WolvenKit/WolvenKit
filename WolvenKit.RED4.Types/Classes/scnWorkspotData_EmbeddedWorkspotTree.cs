@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class scnWorkspotData_EmbeddedWorkspotTree : scnWorkspotData
 	{
 		[Ordinal(1)] 
@@ -15,10 +16,6 @@ namespace WolvenKit.RED4.Types
 		public scnWorkspotData_EmbeddedWorkspotTree()
 		{
 			DataId = new() { Id = 4294967295 };
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

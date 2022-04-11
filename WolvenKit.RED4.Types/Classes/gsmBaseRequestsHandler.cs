@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class gsmBaseRequestsHandler : inkISystemRequestsHandler
 	{
 		[Ordinal(10)] 
@@ -11,12 +12,5 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<gsmSavingRequesResult>();
 			set => SetPropertyValue<gsmSavingRequesResult>(value);
 		}
-
-		public gsmBaseRequestsHandler()
-		{
-			PostConstruct();
-		}
-
-		partial void PostConstruct();
 	}
 }

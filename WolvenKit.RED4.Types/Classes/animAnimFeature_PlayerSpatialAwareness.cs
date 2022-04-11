@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class animAnimFeature_PlayerSpatialAwareness : animAnimFeature
 	{
 		[Ordinal(0)] 
@@ -42,10 +43,6 @@ namespace WolvenKit.RED4.Types
 			RightClosestVector = new();
 			UpHitPosition = new();
 			ForwardDistance = 340282346638528859811704183484516925440.000000F;
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

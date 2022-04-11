@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class BraindanceBlackboardDef : gamebbScriptDefinition
 	{
 		[Ordinal(0)] 
@@ -96,10 +97,6 @@ namespace WolvenKit.RED4.Types
 			IsFPP = new();
 			PlaybackSpeed = new();
 			PlaybackDirection = new();
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

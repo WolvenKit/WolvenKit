@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class JsonResource : CResource
 	{
 		[Ordinal(1)] 
@@ -11,12 +12,5 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CHandle<ISerializable>>();
 			set => SetPropertyValue<CHandle<ISerializable>>(value);
 		}
-
-		public JsonResource()
-		{
-			PostConstruct();
-		}
-
-		partial void PostConstruct();
 	}
 }

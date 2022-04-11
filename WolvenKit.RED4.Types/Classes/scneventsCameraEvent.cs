@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class scneventsCameraEvent : scnSceneEvent
 	{
 		[Ordinal(6)] 
@@ -32,10 +33,6 @@ namespace WolvenKit.RED4.Types
 		{
 			Id = new() { Id = 18446744073709551615 };
 			IsBlendIn = true;
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

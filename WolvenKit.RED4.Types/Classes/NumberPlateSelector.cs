@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class NumberPlateSelector : LCDScreenSelector
 	{
 		[Ordinal(4)] 
@@ -15,10 +16,6 @@ namespace WolvenKit.RED4.Types
 		public NumberPlateSelector()
 		{
 			ReplaceTextWithCustomNumber = true;
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

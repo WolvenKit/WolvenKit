@@ -472,11 +472,8 @@ namespace WolvenKit.RED4.IO
 
         public virtual void Write(IRedEnum instance)
         {
-            var typeInfo = RedReflection.GetEnumTypeInfo(instance.GetInnerType());
-            var valueName = typeInfo.GetRedNameFromCSName(instance.ToEnumString());
-            
-            CNameRef.Add(_writer.BaseStream.Position, valueName);
-            _writer.Write(GetStringIndex(valueName));
+            CNameRef.Add(_writer.BaseStream.Position, instance.ToEnumString());
+            _writer.Write(GetStringIndex(instance.ToEnumString()));
         }
 
         public List<RedBaseClass> ChunkQueue = new();

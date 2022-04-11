@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class SDeviceActionCustomData : SDeviceActionData
 	{
 		[Ordinal(10)] 
@@ -105,10 +106,6 @@ namespace WolvenKit.RED4.Types
 			On = true;
 			Off = true;
 			CustomClearance = 3;
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

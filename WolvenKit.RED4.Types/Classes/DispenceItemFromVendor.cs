@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class DispenceItemFromVendor : ActionBool
 	{
 		[Ordinal(25)] 
@@ -36,10 +37,6 @@ namespace WolvenKit.RED4.Types
 			CanTriggerStim = true;
 			ItemID = new();
 			Price = -1;
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

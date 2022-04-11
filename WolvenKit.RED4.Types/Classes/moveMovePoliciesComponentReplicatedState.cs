@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class moveMovePoliciesComponentReplicatedState : netIComponentState
 	{
 		[Ordinal(2)] 
@@ -16,10 +17,6 @@ namespace WolvenKit.RED4.Types
 		{
 			Enabled = true;
 			MovePolicies = new() { Items = new(), LastAppliedActionsTime = new() };
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

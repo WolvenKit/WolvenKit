@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class audioAudioMaterialMetadataMapItem : audioAudioMetadata
 	{
 		[Ordinal(1)] 
@@ -83,12 +84,5 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CEnum<audioMeleeMaterialType>>();
 			set => SetPropertyValue<CEnum<audioMeleeMaterialType>>(value);
 		}
-
-		public audioAudioMaterialMetadataMapItem()
-		{
-			PostConstruct();
-		}
-
-		partial void PostConstruct();
 	}
 }

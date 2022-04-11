@@ -1,13 +1,8 @@
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class vehicleCameraManagerFT : vehicleCameraManager
 	{
-		public vehicleCameraManagerFT()
-		{
-			PostConstruct();
-		}
-
-		partial void PostConstruct();
 	}
 }

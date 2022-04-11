@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class animAnimEvent_GameplayVo : animAnimEvent
 	{
 		[Ordinal(3)] 
@@ -19,12 +20,5 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CBool>();
 			set => SetPropertyValue<CBool>(value);
 		}
-
-		public animAnimEvent_GameplayVo()
-		{
-			PostConstruct();
-		}
-
-		partial void PostConstruct();
 	}
 }

@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class inkUniformGridWidget : inkCompoundWidget
 	{
 		[Ordinal(23)] 
@@ -19,12 +20,5 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CEnum<inkEOrientation>>();
 			set => SetPropertyValue<CEnum<inkEOrientation>>(value);
 		}
-
-		public inkUniformGridWidget()
-		{
-			PostConstruct();
-		}
-
-		partial void PostConstruct();
 	}
 }

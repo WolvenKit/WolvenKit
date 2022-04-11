@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class gameuiStealthIndicatorPartLogicController : gameuiBaseDirectionalIndicatorPartLogicController
 	{
 		[Ordinal(3)] 
@@ -82,10 +83,6 @@ namespace WolvenKit.RED4.Types
 			Wrapper = new();
 			StealthIndicatorDeadZoneAngle = 40.000000F;
 			SlowestFlashTime = 0.500000F;
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

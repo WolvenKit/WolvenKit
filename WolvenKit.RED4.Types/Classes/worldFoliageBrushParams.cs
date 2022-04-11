@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class worldFoliageBrushParams : RedBaseClass
 	{
 		[Ordinal(0)] 
@@ -33,10 +34,6 @@ namespace WolvenKit.RED4.Types
 			Proximity = 1.000000F;
 			Scale = 1.000000F;
 			ScaleVariation = 0.100000F;
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

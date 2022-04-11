@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class QuickhacksListGameController : gameuiHUDGameController
 	{
 		[Ordinal(9)] 
@@ -619,10 +620,6 @@ namespace WolvenKit.RED4.Types
 			SelectedMemoryLoop = new();
 			LastCompiledTarget = new();
 			StatPoolListenersIndexes = new();
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

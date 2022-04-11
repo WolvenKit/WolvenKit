@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class ElevatorFloorTerminalControllerPS : TerminalControllerPS
 	{
 		[Ordinal(114)] 
@@ -34,10 +35,6 @@ namespace WolvenKit.RED4.Types
 			TweakDBRecord = 127337775259;
 			TweakDBDescriptionRecord = 179291460156;
 			ElevatorFloorSetup = new() { DoorShouldOpenFrontLeftRight = new() };
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class gameActionAnimationState : gameActionReplicatedState
 	{
 		[Ordinal(5)] 
@@ -71,10 +72,6 @@ namespace WolvenKit.RED4.Types
 		public gameActionAnimationState()
 		{
 			SlideParams = new() { UsePositionSlide = true, UseRotationSlide = true };
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

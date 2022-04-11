@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class KeyboardHintItemController : AHintItemController
 	{
 		[Ordinal(4)] 
@@ -71,10 +72,6 @@ namespace WolvenKit.RED4.Types
 			FrameSelectedName = "top_button_selected";
 			FrameUnselectedName = "top_button";
 			AnimationName = "AnimRootOnThenOff";
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class gameAmmoData : RedBaseClass
 	{
 		[Ordinal(0)] 
@@ -33,10 +34,6 @@ namespace WolvenKit.RED4.Types
 			Id = new();
 			Available = -1;
 			Equipped = -1;
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

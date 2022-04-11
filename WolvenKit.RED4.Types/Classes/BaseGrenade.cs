@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class BaseGrenade : gameweaponGrenade
 	{
 		[Ordinal(40)] 
@@ -459,10 +460,6 @@ namespace WolvenKit.RED4.Types
 			AttacksSpawned = new();
 			AdditionalEffect = new();
 			CpoTimeBeforeRelease = 3.000000F;
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

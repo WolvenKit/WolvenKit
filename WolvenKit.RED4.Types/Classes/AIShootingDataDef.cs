@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class AIShootingDataDef : AIBlackboardDef
 	{
 		[Ordinal(0)] 
@@ -141,10 +142,6 @@ namespace WolvenKit.RED4.Types
 			FullyCharged = new();
 			WeaponOverheated = new();
 			RequestedTriggerMode = new();
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

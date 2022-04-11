@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class gameDeviceBaseReplicationProxy : netIEntityState
 	{
 		[Ordinal(2)] 
@@ -49,10 +50,6 @@ namespace WolvenKit.RED4.Types
 			VersionTimestamp = new() { MilliSecs = 18446744073709551615 };
 			InitialOrientation = new();
 			InitialLocation = new();
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

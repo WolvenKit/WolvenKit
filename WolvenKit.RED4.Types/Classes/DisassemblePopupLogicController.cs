@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class DisassemblePopupLogicController : inkWidgetLogicController
 	{
 		[Ordinal(1)] 
@@ -67,10 +68,6 @@ namespace WolvenKit.RED4.Types
 			Label = new();
 			Duration = 3.000000F;
 			AnimOptions = new();
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

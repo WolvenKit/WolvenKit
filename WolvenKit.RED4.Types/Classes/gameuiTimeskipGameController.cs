@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class gameuiTimeskipGameController : gameuiWidgetGameController
 	{
 		[Ordinal(2)] 
@@ -421,10 +422,6 @@ namespace WolvenKit.RED4.Types
 			AxisInputThreshold = 0.000500F;
 			AnimationDurationMin = 3.000000F;
 			AnimationDurationMax = 6.000000F;
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class CParticleModificatorDrag : IParticleModificator
 	{
 		[Ordinal(4)] 
@@ -25,10 +26,6 @@ namespace WolvenKit.RED4.Types
 			EditorName = "Drag";
 			IsEnabled = true;
 			Scale = 1.000000F;
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

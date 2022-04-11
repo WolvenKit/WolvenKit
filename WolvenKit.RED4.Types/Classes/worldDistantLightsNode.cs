@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class worldDistantLightsNode : worldNode
 	{
 		[Ordinal(4)] 
@@ -11,12 +12,5 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CResourceAsyncReference<CDistantLightsResource>>();
 			set => SetPropertyValue<CResourceAsyncReference<CDistantLightsResource>>(value);
 		}
-
-		public worldDistantLightsNode()
-		{
-			PostConstruct();
-		}
-
-		partial void PostConstruct();
 	}
 }

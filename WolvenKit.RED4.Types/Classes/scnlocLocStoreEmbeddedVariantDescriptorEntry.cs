@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class scnlocLocStoreEmbeddedVariantDescriptorEntry : RedBaseClass
 	{
 		[Ordinal(0)] 
@@ -50,10 +51,6 @@ namespace WolvenKit.RED4.Types
 			LocstringId = new();
 			Signature = new();
 			VpeIndex = 4294967295;
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

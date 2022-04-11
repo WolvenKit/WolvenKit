@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class inkColorCorrectionEffect : inkIEffect
 	{
 		[Ordinal(2)] 
@@ -33,10 +34,6 @@ namespace WolvenKit.RED4.Types
 			Brightness = 1.000000F;
 			Contrast = 1.000000F;
 			Saturation = 1.000000F;
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

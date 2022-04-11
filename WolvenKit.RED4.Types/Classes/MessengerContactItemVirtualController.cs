@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class MessengerContactItemVirtualController : inkVirtualCompoundItemController
 	{
 		[Ordinal(15)] 
@@ -125,10 +126,6 @@ namespace WolvenKit.RED4.Types
 			ReplyAlertIcon = new();
 			CollapseIcon = new();
 			Image = new();
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

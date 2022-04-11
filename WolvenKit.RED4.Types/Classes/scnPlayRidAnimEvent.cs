@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class scnPlayRidAnimEvent : scnPlayFPPControlAnimEvent
 	{
 		[Ordinal(32)] 
@@ -57,10 +58,6 @@ namespace WolvenKit.RED4.Types
 			AnimResRefId = new() { Id = 4294967295 };
 			AnimOriginMarker = new() { Type = Enums.scnMarkerType.Global, EntityRef = new() { Names = new() }, IsMounted = true };
 			ActorHasCollision = true;
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

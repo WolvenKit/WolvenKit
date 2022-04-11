@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class DropPoint : BasicDistractionDevice
 	{
 		[Ordinal(100)] 
@@ -49,10 +50,6 @@ namespace WolvenKit.RED4.Types
 			ControllerTypeName = "DropPointController";
 			ShortGlitchDelayID = new();
 			MappinID = new();
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

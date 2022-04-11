@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class PersonnelSystem : DeviceSystemBase
 	{
 		[Ordinal(94)] 
@@ -15,10 +16,6 @@ namespace WolvenKit.RED4.Types
 		public PersonnelSystem()
 		{
 			ControllerTypeName = "PersonnelSystemController";
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class animAnimNode_BlendSpace_InternalsBlendSpaceCoordinateDescription : RedBaseClass
 	{
 		[Ordinal(0)] 
@@ -40,10 +41,6 @@ namespace WolvenKit.RED4.Types
 		{
 			MaxValue = 1.000000F;
 			GridDivisionsCount = 4;
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class animLookAtAdditionalPreset_BothArms : animLookAtAdditionalPreset
 	{
 		[Ordinal(0)] 
@@ -24,10 +25,6 @@ namespace WolvenKit.RED4.Types
 		{
 			RightHanded = true;
 			SoftLimitAngle = 360.000000F;
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

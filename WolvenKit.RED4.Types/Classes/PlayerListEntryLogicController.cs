@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class PlayerListEntryLogicController : inkWidgetLogicController
 	{
 		[Ordinal(1)] 
@@ -24,10 +25,6 @@ namespace WolvenKit.RED4.Types
 		{
 			PlayerNameLabel = new();
 			PlayerClassIcon = new();
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

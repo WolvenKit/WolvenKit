@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class SquadActionSignal : gameTaggedSignalUserData
 	{
 		[Ordinal(1)] 
@@ -19,12 +20,5 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CEnum<EAISquadVerb>>();
 			set => SetPropertyValue<CEnum<EAISquadVerb>>(value);
 		}
-
-		public SquadActionSignal()
-		{
-			PostConstruct();
-		}
-
-		partial void PostConstruct();
 	}
 }

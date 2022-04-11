@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class animAnimNode_State : animAnimNode_Container
 	{
 		[Ordinal(12)] 
@@ -51,10 +52,6 @@ namespace WolvenKit.RED4.Types
 			OutTransitionIndices = new();
 			Tags = new();
 			RequiredQualityDistanceCategory = 4;
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

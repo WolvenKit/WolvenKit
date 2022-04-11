@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class worldStaticVectorFieldNode : worldNode
 	{
 		[Ordinal(4)] 
@@ -23,10 +24,6 @@ namespace WolvenKit.RED4.Types
 		public worldStaticVectorFieldNode()
 		{
 			Direction = new();
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

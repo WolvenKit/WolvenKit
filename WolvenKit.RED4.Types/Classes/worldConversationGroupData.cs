@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class worldConversationGroupData : ISerializable
 	{
 		[Ordinal(0)] 
@@ -39,10 +40,6 @@ namespace WolvenKit.RED4.Types
 		public worldConversationGroupData()
 		{
 			InterruptionOperations = new() { null, null };
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

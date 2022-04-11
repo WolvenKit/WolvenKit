@@ -1,13 +1,8 @@
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class RoadBlockTrapControllerPS : MasterControllerPS
 	{
-		public RoadBlockTrapControllerPS()
-		{
-			PostConstruct();
-		}
-
-		partial void PostConstruct();
 	}
 }

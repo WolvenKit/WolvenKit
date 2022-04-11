@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class questAudioEventPrefetchStruct : RedBaseClass
 	{
 		[Ordinal(0)] 
@@ -19,12 +20,5 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CEnum<questAudioEventPrefetchMode>>();
 			set => SetPropertyValue<CEnum<questAudioEventPrefetchMode>>(value);
 		}
-
-		public questAudioEventPrefetchStruct()
-		{
-			PostConstruct();
-		}
-
-		partial void PostConstruct();
 	}
 }

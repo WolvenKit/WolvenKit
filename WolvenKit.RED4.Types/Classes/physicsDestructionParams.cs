@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class physicsDestructionParams : RedBaseClass
 	{
 		[Ordinal(0)] 
@@ -235,10 +236,6 @@ namespace WolvenKit.RED4.Types
 			DebrisMaxSeparation = 50.000000F;
 			MaxAngularVelocity = -1.000000F;
 			FractureFieldMask = Enums.physicsFractureFieldType.FF_Default;
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

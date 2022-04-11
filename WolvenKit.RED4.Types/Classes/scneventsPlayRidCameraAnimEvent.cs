@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class scneventsPlayRidCameraAnimEvent : scnSceneEvent
 	{
 		[Ordinal(6)] 
@@ -76,10 +77,6 @@ namespace WolvenKit.RED4.Types
 			AnimOriginMarker = new() { Type = Enums.scnMarkerType.Global, EntityRef = new() { Names = new() }, IsMounted = true };
 			ActivateAsGameCamera = true;
 			MarkCamerCut = true;
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

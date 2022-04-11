@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class CCTVCamera : gameObject
 	{
 		[Ordinal(35)] 
@@ -39,10 +40,6 @@ namespace WolvenKit.RED4.Types
 		public CCTVCamera()
 		{
 			CachedPuppetID = new();
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

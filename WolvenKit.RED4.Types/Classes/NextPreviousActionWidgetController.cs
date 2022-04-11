@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class NextPreviousActionWidgetController : DeviceActionWidgetControllerBase
 	{
 		[Ordinal(29)] 
@@ -41,10 +42,6 @@ namespace WolvenKit.RED4.Types
 			DefaultContainer = new();
 			DeclineContainer = new();
 			MoneyStatusAnimName = "no_money";
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

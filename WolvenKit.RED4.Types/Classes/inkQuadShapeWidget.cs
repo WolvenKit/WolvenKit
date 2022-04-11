@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class inkQuadShapeWidget : inkBaseShapeWidget
 	{
 		[Ordinal(20)] 
@@ -31,10 +32,6 @@ namespace WolvenKit.RED4.Types
 		public inkQuadShapeWidget()
 		{
 			VertexList = new() { new(), new(), new(), new() };
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

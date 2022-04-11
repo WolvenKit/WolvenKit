@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class AIBaseUseWorkspotCommand : AICommand
 	{
 		[Ordinal(4)] 
@@ -63,10 +64,6 @@ namespace WolvenKit.RED4.Types
 		public AIBaseUseWorkspotCommand()
 		{
 			Id = 4294967295;
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

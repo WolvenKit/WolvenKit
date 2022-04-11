@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class worldCompiledCommunityAreaNode_Streamable : worldCompiledCommunityAreaNode
 	{
 		[Ordinal(6)] 
@@ -11,12 +12,5 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CFloat>();
 			set => SetPropertyValue<CFloat>(value);
 		}
-
-		public worldCompiledCommunityAreaNode_Streamable()
-		{
-			PostConstruct();
-		}
-
-		partial void PostConstruct();
 	}
 }

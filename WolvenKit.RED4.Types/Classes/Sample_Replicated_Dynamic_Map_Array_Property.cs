@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class Sample_Replicated_Dynamic_Map_Array_Property : RedBaseClass
 	{
 		[Ordinal(0)] 
@@ -15,10 +16,6 @@ namespace WolvenKit.RED4.Types
 		public Sample_Replicated_Dynamic_Map_Array_Property()
 		{
 			Property = new();
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

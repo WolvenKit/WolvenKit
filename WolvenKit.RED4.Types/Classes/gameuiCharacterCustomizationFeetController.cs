@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class gameuiCharacterCustomizationFeetController : gameuiCharacterCustomizationBodyPartsController
 	{
 		[Ordinal(4)] 
@@ -23,10 +24,6 @@ namespace WolvenKit.RED4.Types
 		public gameuiCharacterCustomizationFeetController()
 		{
 			Name = "Component";
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

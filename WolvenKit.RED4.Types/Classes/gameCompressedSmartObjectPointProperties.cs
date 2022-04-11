@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class gameCompressedSmartObjectPointProperties : RedBaseClass
 	{
 		[Ordinal(0)] 
@@ -11,12 +12,5 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CUInt16>();
 			set => SetPropertyValue<CUInt16>(value);
 		}
-
-		public gameCompressedSmartObjectPointProperties()
-		{
-			PostConstruct();
-		}
-
-		partial void PostConstruct();
 	}
 }

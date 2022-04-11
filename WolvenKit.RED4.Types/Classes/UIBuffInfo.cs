@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class UIBuffInfo : gameuiBuffInfo
 	{
 		[Ordinal(2)] 
@@ -19,12 +20,5 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CUInt32>();
 			set => SetPropertyValue<CUInt32>(value);
 		}
-
-		public UIBuffInfo()
-		{
-			PostConstruct();
-		}
-
-		partial void PostConstruct();
 	}
 }

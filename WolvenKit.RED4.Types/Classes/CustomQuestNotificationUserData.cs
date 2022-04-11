@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class CustomQuestNotificationUserData : inkGameNotificationData
 	{
 		[Ordinal(7)] 
@@ -15,10 +16,6 @@ namespace WolvenKit.RED4.Types
 		public CustomQuestNotificationUserData()
 		{
 			Data = new();
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

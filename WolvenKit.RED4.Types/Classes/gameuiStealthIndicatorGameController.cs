@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class gameuiStealthIndicatorGameController : gameuiHUDGameController
 	{
 		[Ordinal(9)] 
@@ -11,12 +12,5 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CWeakHandle<inkCompoundWidget>>();
 			set => SetPropertyValue<CWeakHandle<inkCompoundWidget>>(value);
 		}
-
-		public gameuiStealthIndicatorGameController()
-		{
-			PostConstruct();
-		}
-
-		partial void PostConstruct();
 	}
 }

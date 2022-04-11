@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class ItemsNotificationQueue : gameuiGenericNotificationGameController
 	{
 		[Ordinal(2)] 
@@ -114,10 +115,6 @@ namespace WolvenKit.RED4.Types
 			CurrencyNotification = "notification_currency";
 			ItemNotification = "Item_Received_SMALL";
 			XpNotification = "progression";
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

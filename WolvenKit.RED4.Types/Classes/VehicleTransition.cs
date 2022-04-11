@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class VehicleTransition : DefaultTransition
 	{
 		[Ordinal(0)] 
@@ -11,12 +12,5 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CWeakHandle<VehicleTransitionInitData>>();
 			set => SetPropertyValue<CWeakHandle<VehicleTransitionInitData>>(value);
 		}
-
-		public VehicleTransition()
-		{
-			PostConstruct();
-		}
-
-		partial void PostConstruct();
 	}
 }

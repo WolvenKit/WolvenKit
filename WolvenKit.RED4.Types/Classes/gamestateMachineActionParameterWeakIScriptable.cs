@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class gamestateMachineActionParameterWeakIScriptable : RedBaseClass
 	{
 		[Ordinal(0)] 
@@ -19,12 +20,5 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CWeakHandle<IScriptable>>();
 			set => SetPropertyValue<CWeakHandle<IScriptable>>(value);
 		}
-
-		public gamestateMachineActionParameterWeakIScriptable()
-		{
-			PostConstruct();
-		}
-
-		partial void PostConstruct();
 	}
 }

@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class LevelUpNotification : GenericNotificationController
 	{
 		[Ordinal(12)] 
@@ -163,10 +164,6 @@ namespace WolvenKit.RED4.Types
 			SkillIconShadow = new();
 			PassiveBonusRewardLabel = new();
 			PassiveBonusReward = new();
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

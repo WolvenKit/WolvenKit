@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class scneventsAttachPropToWorld : scnSceneEvent
 	{
 		[Ordinal(6)] 
@@ -76,10 +77,6 @@ namespace WolvenKit.RED4.Types
 			CustomOffsetRot = new() { R = 1.000000F };
 			ReferencePerformer = new() { Id = 4294967040 };
 			FallbackData = new();
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

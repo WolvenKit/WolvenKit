@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class questAddRemoveItem_NodeType : questIItemManagerNodeType
 	{
 		[Ordinal(0)] 
@@ -15,10 +16,6 @@ namespace WolvenKit.RED4.Types
 		public questAddRemoveItem_NodeType()
 		{
 			Params = new() { null };
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

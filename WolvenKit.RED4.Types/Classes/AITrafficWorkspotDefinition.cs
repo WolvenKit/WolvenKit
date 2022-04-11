@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class AITrafficWorkspotDefinition : worldTrafficSpotDefinition
 	{
 		[Ordinal(2)] 
@@ -15,10 +16,6 @@ namespace WolvenKit.RED4.Types
 		public AITrafficWorkspotDefinition()
 		{
 			Direction = Enums.worldTrafficSpotDirection.Both;
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

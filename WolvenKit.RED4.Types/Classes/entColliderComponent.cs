@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class entColliderComponent : entIPlacedComponent
 	{
 		[Ordinal(5)] 
@@ -111,10 +112,6 @@ namespace WolvenKit.RED4.Types
 			ComOffset = new() { Position = new(), Orientation = new() { R = 1.000000F } };
 			IsEnabled = true;
 			DynamicTrafficSetting = new();
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

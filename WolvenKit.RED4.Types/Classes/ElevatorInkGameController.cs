@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class ElevatorInkGameController : DeviceInkGameControllerBase
 	{
 		[Ordinal(16)] 
@@ -143,10 +144,6 @@ namespace WolvenKit.RED4.Types
 			DataScanningWidget = new();
 			ElevatorStoppedWidget = new();
 			ButtonSizes = new();
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

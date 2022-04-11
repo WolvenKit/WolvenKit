@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class WeaponVendingMachineSFX : VendingMachineSFX
 	{
 		[Ordinal(2)] 
@@ -23,10 +24,6 @@ namespace WolvenKit.RED4.Types
 		public WeaponVendingMachineSFX()
 		{
 			Processing = "dev_vending_machine_processing";
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

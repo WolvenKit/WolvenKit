@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class gameStaticTriggerAreaComponent : gameStaticAreaShapeComponent
 	{
 		[Ordinal(8)] 
@@ -23,10 +24,6 @@ namespace WolvenKit.RED4.Types
 		public gameStaticTriggerAreaComponent()
 		{
 			IncludeMask = 1;
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

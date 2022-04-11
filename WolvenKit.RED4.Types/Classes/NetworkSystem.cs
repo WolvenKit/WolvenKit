@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class NetworkSystem : gameScriptableSystem
 	{
 		[Ordinal(0)] 
@@ -236,10 +237,6 @@ namespace WolvenKit.RED4.Types
 			DebugCashedPingFxResource = new();
 			ActivateLinksDelayID = new();
 			DeactivateLinksDelayID = new();
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

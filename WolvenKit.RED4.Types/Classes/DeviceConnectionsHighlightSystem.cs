@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class DeviceConnectionsHighlightSystem : gameScriptableSystem
 	{
 		[Ordinal(0)] 
@@ -24,10 +25,6 @@ namespace WolvenKit.RED4.Types
 		{
 			HighlightedDeviceID = new();
 			HighlightedConnectionsIDs = new();
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

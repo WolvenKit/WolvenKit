@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class Window : Door
 	{
 		[Ordinal(140)] 
@@ -31,10 +32,6 @@ namespace WolvenKit.RED4.Types
 		public Window()
 		{
 			ControllerTypeName = "WindowController";
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

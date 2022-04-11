@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class questDevice_ConditionFunctionParameter : RedBaseClass
 	{
 		[Ordinal(0)] 
@@ -19,12 +20,5 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CVariant>();
 			set => SetPropertyValue<CVariant>(value);
 		}
-
-		public questDevice_ConditionFunctionParameter()
-		{
-			PostConstruct();
-		}
-
-		partial void PostConstruct();
 	}
 }

@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class gameBraindanceDissolveComponent : entIComponent
 	{
 		[Ordinal(3)] 
@@ -16,10 +17,6 @@ namespace WolvenKit.RED4.Types
 		{
 			Name = "Component";
 			DissolveRadius = 0.600000F;
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

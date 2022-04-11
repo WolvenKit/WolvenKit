@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class HitAttackSubtypePrereq : GenericHitPrereq
 	{
 		[Ordinal(5)] 
@@ -11,12 +12,5 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CEnum<gamedataAttackSubtype>>();
 			set => SetPropertyValue<CEnum<gamedataAttackSubtype>>(value);
 		}
-
-		public HitAttackSubtypePrereq()
-		{
-			PostConstruct();
-		}
-
-		partial void PostConstruct();
 	}
 }

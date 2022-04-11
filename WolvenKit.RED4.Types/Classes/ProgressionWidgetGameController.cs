@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class ProgressionWidgetGameController : gameuiGenericNotificationGameController
 	{
 		[Ordinal(2)] 
@@ -56,10 +57,6 @@ namespace WolvenKit.RED4.Types
 		{
 			Duration = 3.000000F;
 			GameInstance = new();
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

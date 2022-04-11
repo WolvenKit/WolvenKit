@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class sampleUICustomizableAnimationsController : inkWidgetLogicController
 	{
 		[Ordinal(1)] 
@@ -201,10 +202,6 @@ namespace WolvenKit.RED4.Types
 			DefaultSize = new();
 			DefaultMargin = new();
 			DefaultColor = new();
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

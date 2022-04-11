@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class gameuiGlobaltvWidgetGameController : gameuiWidgetGameController
 	{
 		[Ordinal(2)] 
@@ -15,10 +16,6 @@ namespace WolvenKit.RED4.Types
 		public gameuiGlobaltvWidgetGameController()
 		{
 			OverlayContainer = new();
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

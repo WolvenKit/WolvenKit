@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class workRandomList : workIContainerEntry
 	{
 		[Ordinal(4)] 
@@ -71,10 +72,6 @@ namespace WolvenKit.RED4.Types
 			Weights = new();
 			PauseBlendOutTime = 0.500000F;
 			DontRepeatLastAnims = 1;
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

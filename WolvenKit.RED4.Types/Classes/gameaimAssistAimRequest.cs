@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class gameaimAssistAimRequest : RedBaseClass
 	{
 		[Ordinal(0)] 
@@ -170,10 +171,6 @@ namespace WolvenKit.RED4.Types
 			LookAtTarget = new();
 			ProcessAsInput = true;
 			BptMaxSwitches = -1.000000F;
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

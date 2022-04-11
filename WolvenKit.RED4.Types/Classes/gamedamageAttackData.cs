@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class gamedamageAttackData : IScriptable
 	{
 		[Ordinal(0)] 
@@ -121,10 +122,6 @@ namespace WolvenKit.RED4.Types
 			AttackPosition = new();
 			Flags = new();
 			StatusEffects = new();
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class gameStatViewData : RedBaseClass
 	{
 		[Ordinal(0)] 
@@ -111,10 +112,6 @@ namespace WolvenKit.RED4.Types
 		public gameStatViewData()
 		{
 			Type = Enums.gamedataStatType.Invalid;
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

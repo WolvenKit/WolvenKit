@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class CpoHudRootGameController : gameuiWidgetGameController
 	{
 		[Ordinal(2)] 
@@ -59,12 +60,5 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CWeakHandle<inkWidget>>();
 			set => SetPropertyValue<CWeakHandle<inkWidget>>(value);
 		}
-
-		public CpoHudRootGameController()
-		{
-			PostConstruct();
-		}
-
-		partial void PostConstruct();
 	}
 }

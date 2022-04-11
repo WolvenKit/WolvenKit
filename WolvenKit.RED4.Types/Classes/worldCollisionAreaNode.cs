@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class worldCollisionAreaNode : worldAreaShapeNode
 	{
 		[Ordinal(6)] 
@@ -31,10 +32,6 @@ namespace WolvenKit.RED4.Types
 		public worldCollisionAreaNode()
 		{
 			NavigationSetting = new() { NavmeshImpact = Enums.NavGenNavmeshImpact.Blocking };
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

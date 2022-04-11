@@ -599,7 +599,19 @@ namespace WolvenKit.Modkit.RED4
             var height = blob.Header.SizeInfo.Height;
             var width = blob.Header.SizeInfo.Width;
 
-            var texformat = CommonFunctions.GetDXGIFormat(texa.Setup.Compression, texa.Setup.RawFormat, _loggerService);
+            var rawfmt = Enums.ETextureRawFormat.TRF_Invalid;
+            if (texa.Setup.RawFormat?.Value != null)
+            {
+                rawfmt = texa.Setup.RawFormat.Value.Value;
+            }
+
+            var compression = Enums.ETextureCompression.TCM_None;
+            if (texa.Setup.Compression?.Value != null)
+            {
+                compression = texa.Setup.Compression.Value.Value;
+            }
+
+            var texformat = CommonFunctions.GetDXGIFormat(compression, rawfmt, _loggerService);
 
             DDSUtils.GenerateAndWriteHeader(outstream,
                 new DDSMetadata(width, height, 1, sliceCount, mipCount,
@@ -653,7 +665,20 @@ namespace WolvenKit.Modkit.RED4
             var height = blob.Header.SizeInfo.Height;
             var width = blob.Header.SizeInfo.Width;
 
-            var texformat = CommonFunctions.GetDXGIFormat(ctex.Setup.Compression, ctex.Setup.RawFormat, _loggerService);
+            var compression = Enums.ETextureCompression.TCM_None;
+            var rawfmt = Enums.ETextureRawFormat.TRF_Invalid;
+
+            if (ctex.Setup.RawFormat?.Value != null)
+            {
+                rawfmt = ctex.Setup.RawFormat.Value.Value;
+            }
+
+            if (ctex.Setup.Compression?.Value != null)
+            {
+                compression = ctex.Setup.Compression.Value.Value;
+            }
+
+            var texformat = CommonFunctions.GetDXGIFormat(compression, rawfmt, _loggerService);
 
             DDSUtils.GenerateAndWriteHeader(outstream,
                 new DDSMetadata(width, height, 1, sliceCount, mipCount,
@@ -710,8 +735,14 @@ namespace WolvenKit.Modkit.RED4
                 {
                     blob = xbmBlob;
                 }
-                rawfmt = xbm.Setup.RawFormat;
-                compression = xbm.Setup.Compression;
+                if (xbm.Setup.RawFormat?.Value != null)
+                {
+                    rawfmt = xbm.Setup.RawFormat.Value.Value;
+                }
+                if (xbm.Setup.Compression?.Value != null)
+                {
+                    compression = xbm.Setup.Compression.Value.Value;
+                }
             }
 
             if (cls is CMesh mesh)

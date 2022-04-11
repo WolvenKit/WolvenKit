@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class InventoryWeaponSlot : InventoryEquipmentSlot
 	{
 		[Ordinal(17)] 
@@ -49,10 +50,6 @@ namespace WolvenKit.RED4.Types
 			DamageIndicatorRef = new();
 			DPSRef = new();
 			DPSValueLabel = new();
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

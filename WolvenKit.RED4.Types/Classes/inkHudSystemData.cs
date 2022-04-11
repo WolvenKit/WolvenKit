@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class inkHudSystemData : inkILayerSystemData
 	{
 		[Ordinal(0)] 
@@ -19,12 +20,5 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CResourceReference<inkHudEntriesResource>>();
 			set => SetPropertyValue<CResourceReference<inkHudEntriesResource>>(value);
 		}
-
-		public inkHudSystemData()
-		{
-			PostConstruct();
-		}
-
-		partial void PostConstruct();
 	}
 }

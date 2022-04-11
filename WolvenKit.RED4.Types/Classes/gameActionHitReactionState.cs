@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class gameActionHitReactionState : gameActionReplicatedState
 	{
 		[Ordinal(5)] 
@@ -11,12 +12,5 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CHandle<animAnimFeature_HitReactionsData>>();
 			set => SetPropertyValue<CHandle<animAnimFeature_HitReactionsData>>(value);
 		}
-
-		public gameActionHitReactionState()
-		{
-			PostConstruct();
-		}
-
-		partial void PostConstruct();
 	}
 }

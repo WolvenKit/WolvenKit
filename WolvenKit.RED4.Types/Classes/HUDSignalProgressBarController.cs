@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class HUDSignalProgressBarController : gameuiHUDGameController
 	{
 		[Ordinal(9)] 
@@ -173,10 +174,6 @@ namespace WolvenKit.RED4.Types
 			SignalBars = new();
 			Data = new();
 			AnimOptions = new();
-
-			PostConstruct();
 		}
-
-		partial void PostConstruct();
 	}
 }

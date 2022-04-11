@@ -2,6 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
+	[REDMeta]
 	public partial class DeviceOperations : IScriptable
 	{
 		[Ordinal(0)] 
@@ -19,12 +20,5 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CArray<SVfxInstanceData>>();
 			set => SetPropertyValue<CArray<SVfxInstanceData>>(value);
 		}
-
-		public DeviceOperations()
-		{
-			PostConstruct();
-		}
-
-		partial void PostConstruct();
 	}
 }
