@@ -82,9 +82,7 @@ namespace WolvenKit.RED4.Archive.IO
             }
             var varName = GetStringValue(nameId);
             var test = varName.ToString();
-            if( test.Contains("boneNames")){
-                Console.Write("boop");
-            }
+            
 
             // Read Type
             var typeId = _reader.ReadUInt16();
@@ -121,7 +119,10 @@ namespace WolvenKit.RED4.Archive.IO
                     throw new InvalidParsingException($"Invalid default val for: \"{propName}\"");
                 }
 #endif
-
+                if (test.Contains("boneNames"))
+                {
+                    Console.Write("boop");
+                }
                 cls.SetProperty(prop.RedName, value);
             }
 
