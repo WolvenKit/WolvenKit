@@ -7,13 +7,13 @@ using WolvenKit.RED4.Types;
 
 namespace WolvenKit.RED4.Archive.Buffer
 {
-    public class WorldTransformsBuffer : IParseableBuffer
+    public class CookedInstanceTransformsBuffer : IParseableBuffer
     {
         public IRedType Data => Transforms;
 
-        public CArray<worldNodeTransform> Transforms = new();
+        public CArray<Transform> Transforms = new();
 
-        public WorldTransformsBuffer()
+        public CookedInstanceTransformsBuffer()
         {
 
         }
