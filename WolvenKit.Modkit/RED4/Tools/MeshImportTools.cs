@@ -19,6 +19,8 @@ namespace WolvenKit.Modkit.RED4
 {
     public partial class ModTools
     {
+        
+
         public bool ImportMesh(FileInfo inGltfFile, Stream inmeshStream, List<Archive> archives = null, ValidationMode vmode = ValidationMode.Strict, bool importMaterialOnly = false, Stream outStream = null)
         {
             var cr2w = _wolvenkitFileService.ReadRed4File(inmeshStream);
@@ -87,6 +89,20 @@ namespace WolvenKit.Modkit.RED4
                     Names = Enumerable.Range(0, model.LogicalSkins[0].JointsCount).Select(_ => model.LogicalSkins[0].GetJoint(_).Joint.Name).ToArray()
                 };
             }
+
+
+            var ibm = Enumerable.Range(0, model.LogicalSkins[0].JointsCount).Select(_ => model.LogicalSkins[0].GetJoint(_).InverseBindMatrix).ToArray();
+            Console.Write(ibm);
+            if (cr2w.RootChunk is CMesh root)
+            {
+                for (int i = 0; i < ibm.Count(); i++)
+                {
+                    root.BoneRigMatrices[i] = ibm[i];
+
+                }
+            }
+
+
 
             MeshTools.UpdateMeshJoints(ref Meshes, newRig, oldRig);
 
@@ -214,7 +230,7 @@ namespace WolvenKit.Modkit.RED4
                     meshContainer.weights[i, 7] = weights1[i].W;
                 }
             }
-            
+
             meshContainer.garmentMorph = Array.Empty<Vec3>();
             if (mesh.Primitives[0].MorphTargetsCount > 0)
             {
@@ -504,7 +520,7 @@ namespace WolvenKit.Modkit.RED4
             }
 
             // removing BS topology data which causes a lot of issues with improved facial lighting geomerty, vertex colors uroborus and what not
-            if(blob.Header.Topology is not null)
+            if (blob.Header.Topology is not null)
             {
                 blob.Header.Topology.Clear();
                 for (var i = 0; i < info.meshCount; i++)
