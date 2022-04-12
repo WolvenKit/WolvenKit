@@ -19,7 +19,7 @@ namespace WolvenKit.Modkit.RED4
 {
     public partial class ModTools
     {
-        
+
 
         public bool ImportMesh(FileInfo inGltfFile, Stream inmeshStream, List<Archive> archives = null, ValidationMode vmode = ValidationMode.Strict, bool importMaterialOnly = false, Stream outStream = null)
         {
@@ -809,6 +809,13 @@ namespace WolvenKit.Modkit.RED4
 
             blob.RenderBuffer.Buffer.SetBytes(buffer.ToArray());
 
+            if (cr2w.RootChunk is CMesh root)
+            {
+                for (int i = 0; i < blob.Header.BonePositions.Count; i++)
+                {
+                    blob.Header.BonePositions[i] = root.BoneRigMatrices[i].W;
+                }
+            }
             var ms = new MemoryStream();
             using var writer = new CR2WWriter(ms, Encoding.UTF8, true);
             writer.WriteFile(cr2w);
