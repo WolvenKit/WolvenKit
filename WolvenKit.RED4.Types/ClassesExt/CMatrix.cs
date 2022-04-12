@@ -20,15 +20,15 @@ namespace WolvenKit.RED4.Types
             cmatrix.X.Z = matrix.M13;
             cmatrix.X.W = matrix.M14;
 
-            cmatrix.Y.X = matrix.M21;
-            cmatrix.Y.Y = matrix.M22;
-            cmatrix.Y.Z = matrix.M23;
-            cmatrix.Y.W = matrix.M24;
+            cmatrix.Z.X = matrix.M21;
+            cmatrix.Z.Y = matrix.M22;
+            cmatrix.Z.Z = matrix.M23;
+            cmatrix.Z.W = matrix.M24;
 
-            cmatrix.Z.X = matrix.M31;
-            cmatrix.Z.Y = matrix.M32;
-            cmatrix.Z.Z = matrix.M33;
-            cmatrix.Z.W = matrix.M34;
+            cmatrix.Y.X = - matrix.M31;
+            cmatrix.Y.Y = - matrix.M32;
+            cmatrix.Y.Z = - matrix.M33;
+            cmatrix.Y.W = - matrix.M34;
 
             cmatrix.W.X = matrix.M41;
             cmatrix.W.Y = matrix.M42;
