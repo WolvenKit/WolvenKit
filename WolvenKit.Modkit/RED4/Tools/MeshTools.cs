@@ -1068,6 +1068,26 @@ namespace WolvenKit.Modkit.RED4.Tools
             }
             return null;
         }
+
+        public static RawArmature GetOrphanRig(ModelRoot model)
+        {
+            if (model.LogicalSkins.Count > 0 && model.LogicalSkins[0].JointsCount > 0)
+            {  
+                var boneCount = model.LogicalSkins[0].JointsCount;
+                var Rig = new RawArmature
+                {
+                    BoneCount    = boneCount,
+                    LocalPosn    = Enumerable.Range(0, boneCount).Select(_ => model.LogicalSkins[0].GetJoint(_).Joint.LocalTransform.Translation).ToArray(),
+                    LocalRot     = Enumerable.Range(0, boneCount).Select(_ => model.LogicalSkins[0].GetJoint(_).Joint.LocalTransform.Rotation).ToArray(),
+                    LocalScale   = Enumerable.Range(0, boneCount).Select(_ => model.LogicalSkins[0].GetJoint(_).Joint.LocalTransform.Scale).ToArray(),
+                    Parent       = Enumerable.Range(0, boneCount).Select(_ => (short)model.LogicalSkins[0].GetJoint(_).Joint.VisualParent.LogicalIndex).ToArray(),
+                    Names        = Enumerable.Range(0, model.LogicalSkins[0].JointsCount).Select(_ => model.LogicalSkins[0].GetJoint(_).Joint.Name).ToArray()
+                };
+                return Rig;
+            }
+            return null;
+        }
+
         private static void RemoveDoubleFaces(ref List<RawMeshContainer> meshes)
         {
             for (var i = 0; i < meshes.Count; i++)

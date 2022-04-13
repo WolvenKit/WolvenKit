@@ -7,6 +7,7 @@ using SharpGLTF.Schema2;
 using SharpGLTF.Validation;
 using WolvenKit.Modkit.RED4.GeneralStructs;
 using WolvenKit.Modkit.RED4.Tools;
+using WolvenKit.Modkit.RED4.RigFile;
 using WolvenKit.RED4.Archive;
 using WolvenKit.RED4.Archive.CR2W;
 using WolvenKit.RED4.Archive.IO;
@@ -61,6 +62,46 @@ namespace WolvenKit.Modkit.RED4
             }
 
             var model = ModelRoot.Load(inGltfFile.FullName, new ReadSettings(vmode));
+            //check how verify is done
+            //retry with the original mesh and the original rig
+
+
+            //var joints0 = Enumerable.Range(0, model.LogicalSkins[0].JointsCount).Select(_ => model.LogicalSkins[0].GetJoint(_).Joint.Skin.GetJoint(_)).ToArray();
+
+            var joints = Enumerable.Range(0, model.LogicalSkins[0].JointsCount).Select(_ => model.LogicalSkins[0].GetJoint(_)).ToArray();
+            Console.Write(joints);
+
+
+            var jointarray = Enumerable.Range(0, model.LogicalSkins[0].JointsCount).Select(_ => model.LogicalSkins[0].GetJoint(_).Joint).ToArray();
+            Console.Write(jointarray);
+
+            var ibm = Enumerable.Range(0, model.LogicalSkins[0].JointsCount).Select(_ => model.LogicalSkins[0].GetJoint(_).InverseBindMatrix).ToArray();
+            Console.Write(ibm);
+
+            var wm = Enumerable.Range(0, model.LogicalSkins[0].JointsCount).Select(_ => model.LogicalSkins[0].GetJoint(_).Joint.WorldMatrix).ToArray();
+            Console.Write(wm);
+
+
+
+            if (cr2w.RootChunk is CMesh root)
+            {
+                for (int i = 0; i < wm.Count(); i++)
+                {
+                    //System.Numerics.Matrix4x4.Invert(wm[i], out wm[i]);
+                    //System.Numerics.Matrix4x4.Invert(ibm[i], out ibm[i]);
+                    root.BoneRigMatrices[i] = wm[i];
+
+                }
+            }
+
+
+
+
+
+            var somerig = MeshTools.GetOrphanRig(model);
+            var newmodel = ModelRoot.CreateModel();
+            var tempdict = RIG.ExportNodes(ref newmodel, somerig);
+
 
             VerifyGLTF(model);
             var Meshes = Enumerable.Select(model.LogicalMeshes, GltfMeshToRawContainer).ToList();
@@ -89,20 +130,6 @@ namespace WolvenKit.Modkit.RED4
                     Names = Enumerable.Range(0, model.LogicalSkins[0].JointsCount).Select(_ => model.LogicalSkins[0].GetJoint(_).Joint.Name).ToArray()
                 };
             }
-
-
-            var ibm = Enumerable.Range(0, model.LogicalSkins[0].JointsCount).Select(_ => model.LogicalSkins[0].GetJoint(_).InverseBindMatrix).ToArray();
-            Console.Write(ibm);
-            if (cr2w.RootChunk is CMesh root)
-            {
-                for (int i = 0; i < ibm.Count(); i++)
-                {
-                    root.BoneRigMatrices[i] = ibm[i];
-
-                }
-            }
-
-
 
             MeshTools.UpdateMeshJoints(ref Meshes, newRig, oldRig);
 
