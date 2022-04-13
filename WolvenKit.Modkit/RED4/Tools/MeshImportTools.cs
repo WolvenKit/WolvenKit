@@ -69,27 +69,25 @@ namespace WolvenKit.Modkit.RED4
             //var joints0 = Enumerable.Range(0, model.LogicalSkins[0].JointsCount).Select(_ => model.LogicalSkins[0].GetJoint(_).Joint.Skin.GetJoint(_)).ToArray();
 
             var joints = Enumerable.Range(0, model.LogicalSkins[0].JointsCount).Select(_ => model.LogicalSkins[0].GetJoint(_)).ToArray();
-            Console.Write(joints);
-
 
             var jointarray = Enumerable.Range(0, model.LogicalSkins[0].JointsCount).Select(_ => model.LogicalSkins[0].GetJoint(_).Joint).ToArray();
-            Console.Write(jointarray);
+            var jointnames = Enumerable.Range(0, model.LogicalSkins[0].JointsCount).Select(_ => model.LogicalSkins[0].GetJoint(_).Joint.Name).ToArray();
 
             var ibm = Enumerable.Range(0, model.LogicalSkins[0].JointsCount).Select(_ => model.LogicalSkins[0].GetJoint(_).InverseBindMatrix).ToArray();
-            Console.Write(ibm);
 
             var wm = Enumerable.Range(0, model.LogicalSkins[0].JointsCount).Select(_ => model.LogicalSkins[0].GetJoint(_).Joint.WorldMatrix).ToArray();
-            Console.Write(wm);
 
 
 
             if (cr2w.RootChunk is CMesh root)
             {
-                for (int i = 0; i < wm.Count(); i++)
+                for (int i = 0; i < root.BoneNames.Count; i++)
                 {
-                    //System.Numerics.Matrix4x4.Invert(wm[i], out wm[i]);
-                    //System.Numerics.Matrix4x4.Invert(ibm[i], out ibm[i]);
-                    root.BoneRigMatrices[i] = wm[i];
+                    var foundbone = jointarray.FirstOrDefault(x => root.BoneNames[i] == x.Name);
+                    if (foundbone is not null)
+                    {
+                        root.BoneRigMatrices[i] = foundbone.WorldMatrix;
+                    }
 
                 }
             }
