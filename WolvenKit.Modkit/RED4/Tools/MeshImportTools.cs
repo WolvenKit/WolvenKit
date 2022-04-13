@@ -62,11 +62,7 @@ namespace WolvenKit.Modkit.RED4
             }
 
             var model = ModelRoot.Load(inGltfFile.FullName, new ReadSettings(vmode));
-            //check how verify is done
-            //retry with the original mesh and the original rig
-
-
-            //var joints0 = Enumerable.Range(0, model.LogicalSkins[0].JointsCount).Select(_ => model.LogicalSkins[0].GetJoint(_).Joint.Skin.GetJoint(_)).ToArray();
+   
 
             var joints = Enumerable.Range(0, model.LogicalSkins[0].JointsCount).Select(_ => model.LogicalSkins[0].GetJoint(_)).ToArray();
 
@@ -74,7 +70,6 @@ namespace WolvenKit.Modkit.RED4
             var jointnames = Enumerable.Range(0, model.LogicalSkins[0].JointsCount).Select(_ => model.LogicalSkins[0].GetJoint(_).Joint.Name).ToArray();
 
             var ibm = Enumerable.Range(0, model.LogicalSkins[0].JointsCount).Select(_ => model.LogicalSkins[0].GetJoint(_).InverseBindMatrix).ToArray();
-
             var wm = Enumerable.Range(0, model.LogicalSkins[0].JointsCount).Select(_ => model.LogicalSkins[0].GetJoint(_).Joint.WorldMatrix).ToArray();
 
 
@@ -86,7 +81,9 @@ namespace WolvenKit.Modkit.RED4
                     var foundbone = jointarray.FirstOrDefault(x => root.BoneNames[i] == x.Name);
                     if (foundbone is not null)
                     {
-                        root.BoneRigMatrices[i] = foundbone.WorldMatrix;
+                        var inverted = new System.Numerics.Matrix4x4();
+                        System.Numerics.Matrix4x4.Invert(foundbone.WorldMatrix, out inverted);
+                        root.BoneRigMatrices[i] = inverted;
                     }
 
                 }
