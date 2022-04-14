@@ -591,7 +591,7 @@ namespace WolvenKit.Modkit.RED4
             return meshesInfo;
         }
 
-        private static MemoryStream GetEditedCr2wFile(CR2WFile cr2w, MeshesInfo info, MemoryStream buffer)
+        private static MemoryStream GetEditedCr2wFile(CR2WFile cr2w, MeshesInfo info, MemoryStream buffer, System.Numerics.Matrix4x4[] inverseBindMatrices = null )
         {
             rendRenderMeshBlob blob = null;
             if (cr2w.RootChunk is CMesh obj1 && obj1.RenderResourceBlob.Chunk is rendRenderMeshBlob obj2)
@@ -898,7 +898,11 @@ namespace WolvenKit.Modkit.RED4
             {
                 for (int i = 0; i < blob.Header.BonePositions.Count; i++)
                 {
-                    blob.Header.BonePositions[i] = root.BoneRigMatrices[i].W;
+                    blob.Header.BonePositions[i].X = inverseBindMatrices[i].M41;
+                    blob.Header.BonePositions[i].Y = inverseBindMatrices[i].M42;
+                    blob.Header.BonePositions[i].Z = inverseBindMatrices[i].M43;
+                    blob.Header.BonePositions[i].W = inverseBindMatrices[i].M44;
+                    //blob.Header.BonePositions[i] = root.BoneRigMatrices[i].W;
                 }
             }
             var ms = new MemoryStream();
