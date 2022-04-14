@@ -708,9 +708,16 @@ namespace WolvenKit.Modkit.RED4.Tools
                     {
                         for (var eye = 0; eye < meshes[i].weightCount; eye++)
                         {
-                            if (meshes[i].boneindices[e, eye] >= oldRig.BoneCount && meshes[i].weights[e, eye] == 0)
+                            try
                             {
-                                meshes[i].boneindices[e, eye] = 0;
+                                if (meshes[i].boneindices[e, eye] >= oldRig.BoneCount && meshes[i].weights[e, eye] == 0)
+                                {
+                                    meshes[i].boneindices[e, eye] = 0;
+                                }
+                            }
+                            catch
+                            {
+
                             }
                             var found = false;
                             for (ushort r = 0; r < newRig.BoneCount; r++)

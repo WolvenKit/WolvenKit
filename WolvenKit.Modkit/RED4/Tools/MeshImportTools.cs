@@ -114,17 +114,41 @@ namespace WolvenKit.Modkit.RED4
             var QuantTrans = new Vec4((max.X + min.X) / 2, (max.Y + min.Y) / 2, (max.Z + min.Z) / 2, 1);
 
 
-            var newRig = MeshTools.GetOrphanRig(meshBlob);
+            
             RawArmature oldRig = null;
+            RawArmature newRig = null;
             if (originalRig != null)
             {
+
+
+
+
+
+
+                
+                using var msss = new MemoryStream(rendblob.RenderBuffer.Buffer.GetBytes());
+
+                var meshesinfo = MeshTools.GetMeshesinfo(rendblob, cr2w.RootChunk as CMesh);
+
+                var expMeshesss = MeshTools.ContainRawMesh(msss, meshesinfo, true);
+
+                for(var i = 0; i < Meshes.Count; i++)
+                {
+                    Array.Clear(Meshes[i].boneindices, 0, Meshes[i].boneindices.Length);
+                }
+
+                oldRig = MeshTools.GetOrphanRig(meshBlob);
+
+
+
                 var ar = originalRig.Archive as Archive;
                 using var msr = new MemoryStream();
                 ar?.CopyFileToStream(msr, originalRig.NameHash64, false);
-                oldRig = RIG.ProcessRig(_wolvenkitFileService.ReadRed4File(msr));
+                newRig = RIG.ProcessRig(_wolvenkitFileService.ReadRed4File(msr));
             }
             else
             {
+                newRig = MeshTools.GetOrphanRig(meshBlob);
                 if (model.LogicalSkins.Count > 0 && model.LogicalSkins[0].JointsCount > 0)
                 {
                     oldRig = new RawArmature
