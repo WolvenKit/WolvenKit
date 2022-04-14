@@ -20,9 +20,7 @@ namespace WolvenKit.Modkit.RED4
 {
     public partial class ModTools
     {
-
-
-        public bool ImportMesh(FileInfo inGltfFile, Stream inmeshStream, List<Archive> archives = null, ValidationMode vmode = ValidationMode.Strict, bool importMaterialOnly = false, Stream outStream = null)
+        public bool ImportMesh(FileInfo inGltfFile, Stream inmeshStream, List<Archive> archives = null, ValidationMode vmode = ValidationMode.Strict, bool importMaterialOnly = false, Stream outStream = null, FileEntry originalRig = null)
         {
             var cr2w = _wolvenkitFileService.ReadRed4File(inmeshStream);
 
@@ -132,7 +130,7 @@ namespace WolvenKit.Modkit.RED4
             {
                 MeshTools.UpdateMeshJoints(ref Meshes, newRig, oldRig);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 Console.Write(ex);
                 if (cr2w == null || cr2w.RootChunk is not CMesh cMesh || cMesh.RenderResourceBlob.Chunk is not rendRenderMeshBlob rendblobb)

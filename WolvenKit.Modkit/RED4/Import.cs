@@ -660,6 +660,9 @@ namespace WolvenKit.Modkit.RED4
                         case GltfImportAsFormat.Anims:
                             result = ImportAnims(rawRelative.ToFileInfo(), redFs, args.Archives);
                             break;
+                        case GltfImportAsFormat.MeshWithRig:
+                            result = ImportMesh(rawRelative.ToFileInfo(), redFs, args.Archives, args.validationMode, args.importMaterialOnly, originalRig: args.Rig.FirstOrDefault());
+                            break;
                     }
 
                     if (result)
