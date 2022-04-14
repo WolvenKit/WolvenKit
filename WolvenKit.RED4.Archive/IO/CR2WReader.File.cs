@@ -34,7 +34,7 @@ namespace WolvenKit.RED4.Archive.IO
             _bufferReaders.Add("animAnimDataChunk.buffer", typeof(AnimationReader));
             _bufferReaders.Add("worldNavigationTileData.tilesBuffer", typeof(TilesReader));
             _bufferReaders.Add("worldSharedDataBuffer.buffer", typeof(WorldSharedDataBufferReader));
-            _bufferReaders.Add("worldStreamingSector.transforms", typeof(StreamingSectorTransformReader));
+            _bufferReaders.Add("worldStreamingSector.transforms", typeof(worldNodeDataReader));
             _bufferReaders.Add("worldCollisionNode.compiledData", typeof(CollisionReader));
             _bufferReaders.Add("physicsGeometryCache.bufferTableSectors", typeof(GeometryCacheReader));
             _bufferReaders.Add("physicsGeometryCache.alwaysLoadedSectorDDB", typeof(GeometryCacheReader));

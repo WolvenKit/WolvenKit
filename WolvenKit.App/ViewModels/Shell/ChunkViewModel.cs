@@ -283,6 +283,10 @@ namespace WolvenKit.ViewModels.Shell
                             data = Locator.Current.GetService<TweakDBService>().GetRecord(tdb);
                         }
                     }
+                    else if (Data is DataBuffer db && db.Buffer.Data is IRedType irt)
+                    {
+                        data = irt;
+                    }
                     _resolvedDataCache = data;
                     //this.RaisePropertyChanged("ResolvedData");
                 }
@@ -504,6 +508,16 @@ namespace WolvenKit.ViewModels.Shell
                         });
                     }
                 }
+                else if (db.Data is IList list)
+                {
+                    foreach (var thing in list)
+                    {
+                        Properties.Add(new ChunkViewModel((IRedType)thing, this, null)
+                        {
+                            IsReadOnly = isreadonly
+                        });
+                    }
+                }
                 else if (db.Data != null)
                 {
                     var pis = db.Data.GetType().GetProperties();
@@ -569,9 +583,9 @@ namespace WolvenKit.ViewModels.Shell
                             });
                         }
                     }
-                    if (Data is StreamingSectorTransform sst && Tab.Chunks[0].Data is worldStreamingSector wss)
+                    if (Data is worldNodeData sst && Tab.Chunks[0].Data is worldStreamingSector wss)
                     {
-                        Properties.Add(new ChunkViewModel(wss.Handles[sst.HandleIndex], this, "Handle")
+                        Properties.Add(new ChunkViewModel(wss.Nodes[sst.NodeIndex], this, "Node")
                         {
                             IsReadOnly = isreadonly
                         });
@@ -804,7 +818,7 @@ namespace WolvenKit.ViewModels.Shell
 
         public bool IsArray => PropertyType != null &&
                     (PropertyType.IsAssignableTo(typeof(IRedArray)) ||
-                    PropertyType.IsAssignableTo(typeof(IList)) ||
+                    ResolvedPropertyType.IsAssignableTo(typeof(IList)) ||
                     ResolvedPropertyType.IsAssignableTo(typeof(CR2WList)) ||
                     ResolvedPropertyType.IsAssignableTo(typeof(Package04)));
 
@@ -895,6 +909,10 @@ namespace WolvenKit.ViewModels.Shell
                         {
                             count += cl.Files.Count;
                         }
+                        else if (db.Data is IList list)
+                        {
+                            count += list.Count;
+                        }
                         else if (db.Data is IParseableBuffer)
                         {
                             count += 1; // needs refinement?
@@ -920,7 +938,7 @@ namespace WolvenKit.ViewModels.Shell
                             var pis = Data.GetType().GetProperties();
                             count += pis.Count();
                         }
-                        if (Data is StreamingSectorTransform)
+                        if (Data is worldNodeData)
                         {
                             count += 1;
                         }
@@ -1013,22 +1031,15 @@ namespace WolvenKit.ViewModels.Shell
             if (PropertyType.IsAssignableTo(typeof(BaseStringType)))
             {
                 var value = (BaseStringType)Data;
-                if (string.IsNullOrEmpty(value))
+                if (value is NodeRef rn)
                 {
-                    if (value is NodeRef rn)
+                    if (rn.GetResolvedText() is var text && !string.IsNullOrEmpty(text))
                     {
-                        if (rn.GetResolvedText() != null)
-                        {
-                            Value = rn.GetResolvedText();
-                        }
-                        else if (rn.GetRedHash() != 0)
-                        {
-                            Value = rn.GetRedHash().ToString();
-                        }
-                        else
-                        {
-                            Value = "null";
-                        }
+                        Value = text;
+                    }
+                    else if (rn.GetRedHash() != 0)
+                    {
+                        Value = rn.GetRedHash().ToString();
                     }
                     else
                     {
@@ -1036,6 +1047,10 @@ namespace WolvenKit.ViewModels.Shell
                     }
                 }
                 else
+                {
+                    Value = "null";
+                }
+                if (!string.IsNullOrEmpty(value))
                 {
                     Value = value;
                     if (Value != null && Value.StartsWith("LocKey#") && ulong.TryParse(Value.Substring(7), out var key))
@@ -1090,7 +1105,14 @@ namespace WolvenKit.ViewModels.Shell
             else if (PropertyType.IsAssignableTo(typeof(CUInt64)))
             {
                 var value = (CUInt64)Data;
-                Value = ((ulong)value).ToString();
+                if (value != 0)
+                {
+                    Value = ((NodeRef)(ulong)value).ToString();
+                }
+                else
+                {
+                    Value = ((ulong)value).ToString();
+                }
             }
             else if (PropertyType.IsAssignableTo(typeof(gamedataLocKeyWrapper)))
             {
@@ -1155,9 +1177,9 @@ namespace WolvenKit.ViewModels.Shell
             }
 
 
-            if (Data is StreamingSectorTransform sst && Tab.Chunks[0].Data is worldStreamingSector wss)
+            if (Data is worldNodeData sst && Tab.Chunks[0].Data is worldStreamingSector wss)
             {
-                Descriptor = $"[{sst.HandleIndex}] {wss.Handles[sst.HandleIndex].Chunk.DebugName}";
+                Descriptor = $"[{sst.NodeIndex}] {wss.Nodes[sst.NodeIndex].Chunk.DebugName}";
                 return;
             }
 
@@ -1393,7 +1415,7 @@ namespace WolvenKit.ViewModels.Shell
             {
                 //string depotpath = r.DepotPath;
                 //Tab.File.OpenRefAsTab(depotpath);
-                Locator.Current.GetService<AppViewModel>().OpenFileFromDepotPath(r.DepotPath);
+                Locator.Current.GetService<AppViewModel>().OpenFileFromHash(r.DepotPath.GetRedHash());
             }
             //var key = FNV1A64HashAlgorithm.HashString(depotpath);
 

@@ -340,7 +340,11 @@ namespace WolvenKit.ViewModels.Documents
                     fe.Extract(stream);
                     using var reader = new BinaryReader(stream);
                     cr2wFile = _parser.ReadRed4File(reader);
-                    if (cr2wFile != null && (string)depotPath != null)
+                    if (cr2wFile == null)
+                    {
+                        return null;
+                    }
+                    if ((string)depotPath != null)
                     {
                         cr2wFile.MetaData.FileName = depotPath;
                     }

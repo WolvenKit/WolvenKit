@@ -51,12 +51,12 @@ namespace WolvenKit.ViewModels.Documents
 
         public Element3D RenderSector(worldStreamingSector data, Appearance app)
         {
-            var ssTransforms = ((StreamingSectorBuffer)data.Transforms.Data).Transforms;
+            var ssTransforms = ((worldNodeDataBuffer)data.NodeData.Data).Lookup;
 
             var groups = new List<Element3D>();
             foreach (var (handleIndex, transforms) in ssTransforms)
             {
-                var handle = data.Handles[handleIndex];
+                var handle = data.Nodes[handleIndex];
                 var name = (string)handle.Chunk.DebugName;
                 name = "_"+name?.Replace("{", "").Replace("}", "").Replace("\\", "_").Replace(".", "_").Replace("!", "").Replace("-", "_") ?? "none";
 
