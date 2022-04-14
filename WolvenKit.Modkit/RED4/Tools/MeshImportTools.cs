@@ -62,7 +62,7 @@ namespace WolvenKit.Modkit.RED4
             }
 
             var model = ModelRoot.Load(inGltfFile.FullName, new ReadSettings(vmode));
-   
+
 
             var joints = Enumerable.Range(0, model.LogicalSkins[0].JointsCount).Select(_ => model.LogicalSkins[0].GetJoint(_)).ToArray();
 
@@ -84,6 +84,8 @@ namespace WolvenKit.Modkit.RED4
                         var inverted = new System.Numerics.Matrix4x4();
                         System.Numerics.Matrix4x4.Invert(foundbone.WorldMatrix, out inverted);
                         root.BoneRigMatrices[i] = inverted;
+                        //component Y and -Z are being swapped in vector W
+                        //should probably figure out why
                     }
 
                 }
@@ -126,7 +128,36 @@ namespace WolvenKit.Modkit.RED4
                 };
             }
 
-            MeshTools.UpdateMeshJoints(ref Meshes, newRig, oldRig);
+            try
+            {
+                MeshTools.UpdateMeshJoints(ref Meshes, newRig, oldRig);
+            }
+            catch(Exception ex)
+            {
+                Console.Write(ex);
+                if (cr2w == null || cr2w.RootChunk is not CMesh cMesh || cMesh.RenderResourceBlob.Chunk is not rendRenderMeshBlob rendblobb)
+                {
+                    return false;
+                }
+
+                using var mss = new MemoryStream(rendblobb.RenderBuffer.Buffer.GetBytes());
+
+                var meshesinfo = MeshTools.GetMeshesinfo(rendblobb, cr2w.RootChunk as CMesh);
+                var expMeshess = MeshTools.ContainRawMesh(mss, meshesinfo, true);
+                var meshRigs = MeshTools.GetOrphanRig(cMesh);
+                //var Rigs = RIG.ProcessRig(_wolvenkitFileService.ReadRed4File(rigStream));
+
+                MeshTools.UpdateMeshJoints(ref expMeshess, newRig, oldRig);
+
+                var models = MeshTools.RawMeshesToGLTF(expMeshess, newRig);
+
+                for (var j = 0; j < expMeshess.Count; j++)
+                {
+                    Meshes[j].boneindices = expMeshess[j].boneindices;
+                }
+            }
+
+
 
             UpdateSkinningParamCloth(ref Meshes, ref cr2w);
 

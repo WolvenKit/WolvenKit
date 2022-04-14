@@ -5,8 +5,10 @@ using System.Linq;
 using SharpGLTF.Schema2;
 using SharpGLTF.Validation;
 using WolvenKit.Common.FNV1A;
+using WolvenKit.RED4.CR2W;
 using WolvenKit.Modkit.RED4.GeneralStructs;
 using WolvenKit.Modkit.RED4.Tools;
+using WolvenKit.Modkit.RED4.RigFile;
 using WolvenKit.RED4.Archive;
 using WolvenKit.RED4.Archive.CR2W;
 using WolvenKit.RED4.Types;
@@ -73,7 +75,7 @@ namespace WolvenKit.Modkit.RED4
             }
 
             MeshTools.UpdateMeshJoints(ref Meshes, newRig, oldRig);
-
+            
             var expMeshes = Meshes.Select(_=> RawMeshToRE4Mesh(_, QuantScale, QuantTrans)).ToList();
 
             var meshBuffer = new MemoryStream();

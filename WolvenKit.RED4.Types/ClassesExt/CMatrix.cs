@@ -31,8 +31,8 @@ namespace WolvenKit.RED4.Types
             cmatrix.Z.W = matrix.M34;
 
             cmatrix.W.X = matrix.M41;
-            cmatrix.W.Y = matrix.M42;
-            cmatrix.W.Z = matrix.M43;
+            cmatrix.W.Y = - matrix.M43;
+            cmatrix.W.Z = matrix.M42;
             cmatrix.W.W = matrix.M44;
 
             return cmatrix;
