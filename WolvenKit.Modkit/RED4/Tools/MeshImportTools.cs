@@ -115,21 +115,31 @@ namespace WolvenKit.Modkit.RED4
 
 
             var newRig = MeshTools.GetOrphanRig(meshBlob);
-
             RawArmature oldRig = null;
-            if (model.LogicalSkins.Count > 0 && model.LogicalSkins[0].JointsCount > 0)
+            if (originalRig != null)
             {
-                oldRig = new RawArmature
+                var ar = originalRig.Archive as Archive;
+                using var msr = new MemoryStream();
+                ar?.CopyFileToStream(msr, originalRig.NameHash64, false);
+                oldRig = RIG.ProcessRig(_wolvenkitFileService.ReadRed4File(msr));
+            }
+            else
+            {
+                if (model.LogicalSkins.Count > 0 && model.LogicalSkins[0].JointsCount > 0)
                 {
-                    BoneCount = model.LogicalSkins[0].JointsCount,
-                    Names = Enumerable.Range(0, model.LogicalSkins[0].JointsCount).Select(_ => model.LogicalSkins[0].GetJoint(_).Joint.Name).ToArray()
-                };
+                    oldRig = new RawArmature
+                    {
+                        BoneCount = model.LogicalSkins[0].JointsCount,
+                        Names = Enumerable.Range(0, model.LogicalSkins[0].JointsCount).Select(_ => model.LogicalSkins[0].GetJoint(_).Joint.Name).ToArray()
+                    };
+                }
             }
 
-            try
-            {
+
+            /*try
+            {*/
                 MeshTools.UpdateMeshJoints(ref Meshes, newRig, oldRig);
-            }
+           /* }
             catch (Exception ex)
             {
                 Console.Write(ex);
@@ -155,7 +165,7 @@ namespace WolvenKit.Modkit.RED4
                 }
             }
 
-
+*/
 
             UpdateSkinningParamCloth(ref Meshes, ref cr2w);
 
