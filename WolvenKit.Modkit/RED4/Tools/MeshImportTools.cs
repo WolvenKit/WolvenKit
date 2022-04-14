@@ -4,10 +4,9 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using SharpGLTF.Schema2;
-using SharpGLTF.Validation;
+using WolvenKit.Common.Model.Arguments;
 using WolvenKit.Modkit.RED4.GeneralStructs;
 using WolvenKit.Modkit.RED4.Tools;
-using WolvenKit.RED4.Archive;
 using WolvenKit.RED4.Archive.CR2W;
 using WolvenKit.RED4.Archive.IO;
 using WolvenKit.RED4.Types;
@@ -19,7 +18,7 @@ namespace WolvenKit.Modkit.RED4
 {
     public partial class ModTools
     {
-        public bool ImportMesh(FileInfo inGltfFile, Stream inmeshStream, List<Archive> archives = null, ValidationMode vmode = ValidationMode.Strict, bool importMaterialOnly = false, Stream outStream = null)
+        public bool ImportMesh(FileInfo inGltfFile, Stream inmeshStream, GltfImportArgs args, Stream outStream = null)
         {
             var cr2w = _wolvenkitFileService.ReadRed4File(inmeshStream);
 
@@ -30,11 +29,11 @@ namespace WolvenKit.Modkit.RED4
 
             if (File.Exists(Path.ChangeExtension(inGltfFile.FullName, ".Material.json")))
             {
-                if (archives != null)
+                if (args.Archives != null)
                 {
-                    WriteMatToMesh(ref cr2w, File.ReadAllText(Path.ChangeExtension(inGltfFile.FullName, ".Material.json")), archives);
+                    WriteMatToMesh(ref cr2w, File.ReadAllText(Path.ChangeExtension(inGltfFile.FullName, ".Material.json")), args.Archives);
                 }
-                if (importMaterialOnly)
+                if (args.importMaterialOnly)
                 {
                     var matOnlyStream = new MemoryStream();
 
@@ -58,10 +57,22 @@ namespace WolvenKit.Modkit.RED4
 
             }
 
-            var model = ModelRoot.Load(inGltfFile.FullName, new ReadSettings(vmode));
+            var model = ModelRoot.Load(inGltfFile.FullName, new ReadSettings(args.validationMode));
 
             VerifyGLTF(model);
-            var Meshes = Enumerable.Select(model.LogicalNodes, GltfMeshToRawContainer).ToList();
+
+            var Meshes = new List<RawMeshContainer>();
+            foreach (var node in model.LogicalNodes)
+            {
+                if (node.Mesh != null)
+                {
+                    Meshes.Add(GltfMeshToRawContainer(node));
+                }
+                else if (args.FillEmpty)
+                {
+                    Meshes.Add(CreateEmptyMesh(node.Name));
+                }
+            }
             Meshes = Meshes.OrderBy(o => o.name).ToList();
 
             var max = new Vec3(Single.MinValue, Single.MinValue, Single.MinValue);
