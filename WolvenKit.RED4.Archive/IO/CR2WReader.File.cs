@@ -38,6 +38,7 @@ namespace WolvenKit.RED4.Archive.IO
             _bufferReaders.Add("worldCollisionNode.compiledData", typeof(CollisionReader));
             _bufferReaders.Add("physicsGeometryCache.bufferTableSectors", typeof(GeometryCacheReader));
             _bufferReaders.Add("physicsGeometryCache.alwaysLoadedSectorDDB", typeof(GeometryCacheReader));
+            _bufferReaders.Add("CGIDataResource.data", typeof(CGIDataReader));
         }
 
         public EFileReadErrorCodes ReadFileInfo(out CR2WFileInfo info)

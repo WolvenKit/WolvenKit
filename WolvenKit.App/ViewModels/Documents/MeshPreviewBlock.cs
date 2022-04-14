@@ -49,7 +49,9 @@ namespace WolvenKit.ViewModels.Documents
     {
         public List<Sector> Sectors { get; set; } = new();
 
-        public SharpDX.Vector3 SearchPoint = new(0f, 0f, 0f);
+        public Vector3 SearchPoint { get; set; } = new();
+
+        public bool SearchActive = false;
 
         public ICommand LoadSectorCommand => new DelegateCommand<Sector>(x => LoadSector(x));
         public void LoadSector(Sector sector)
@@ -58,7 +60,7 @@ namespace WolvenKit.ViewModels.Documents
             {
                 var sectorFile = File.GetFileFromDepotPathOrCache(sector.DepotPath);
 
-                if (sectorFile.RootChunk is worldStreamingSector wss)
+                if (sectorFile != null && sectorFile.RootChunk is worldStreamingSector wss)
                 {
                     sector.Element = RenderSector(wss, Appearances[0]);
                     sector.Element.Name = sector.Name.Replace("-", "n");
@@ -74,10 +76,27 @@ namespace WolvenKit.ViewModels.Documents
             _data = data;
             Header = "Sector Previews";
 
+            SearchForPointCommand = new DelegateCommand((x) => ExecuteSearchForPoint());
+            ClearSearchCommand = new DelegateCommand((x) => ExecuteClearSearch());
+
             this.WhenActivated((CompositeDisposable disposables) =>
             {
                 RenderBlockSolo();
             });
+        }
+
+        public ICommand ClearSearchCommand { get; set; }
+        public void ExecuteClearSearch()
+        {
+            SearchActive = false;
+            RenderBlock((worldStreamingBlock)_data);
+        }
+
+        public ICommand SearchForPointCommand { get; set; }
+        public void ExecuteSearchForPoint()
+        {
+            SearchActive = true;
+            RenderBlock((worldStreamingBlock)_data);
         }
 
         public void RenderBlockSolo()
@@ -91,7 +110,9 @@ namespace WolvenKit.ViewModels.Documents
         }
 
         public void RenderBlock(worldStreamingBlock data)
-        { 
+        {
+            Appearances = new();
+
             var app = new Appearance()
             {
                 Name = "All_Sectors",
@@ -165,7 +186,7 @@ namespace WolvenKit.ViewModels.Documents
 
             foreach (var desc in data.Descriptors)
             {
-                if (true || SearchPoint.X < desc.StreamingBox.Max.X && SearchPoint.X > desc.StreamingBox.Min.X &&
+                if (!SearchActive || SearchPoint.X < desc.StreamingBox.Max.X && SearchPoint.X > desc.StreamingBox.Min.X &&
                     SearchPoint.Y < desc.StreamingBox.Max.Y && SearchPoint.Y > desc.StreamingBox.Min.Y &&
                     SearchPoint.Z < desc.StreamingBox.Max.Z && SearchPoint.Z > desc.StreamingBox.Min.Z)
                 {
