@@ -46,8 +46,8 @@ namespace WolvenKit.Modkit.RED4
                 var index = Array.FindIndex(jointnames, x => x.Contains(rig.BoneNames[i]));
 
                 rig.BoneTransforms[i].Rotation.I = jointarray[index].LocalTransform.Rotation.X;
-                rig.BoneTransforms[i].Rotation.J = jointarray[index].LocalTransform.Rotation.Y;
-                rig.BoneTransforms[i].Rotation.K = jointarray[index].LocalTransform.Rotation.Z;
+                rig.BoneTransforms[i].Rotation.J = - jointarray[index].LocalTransform.Rotation.Z;
+                rig.BoneTransforms[i].Rotation.K = jointarray[index].LocalTransform.Rotation.Y;
                 rig.BoneTransforms[i].Rotation.R = jointarray[index].LocalTransform.Rotation.W;
 
                 rig.BoneTransforms[i].Scale.W = 1;
@@ -57,8 +57,8 @@ namespace WolvenKit.Modkit.RED4
 
                 rig.BoneTransforms[i].Translation.W = i == 0 ? 1 : 0;
                 rig.BoneTransforms[i].Translation.X = jointarray[index].LocalTransform.Translation.X;
-                rig.BoneTransforms[i].Translation.Y = jointarray[index].LocalTransform.Translation.Y;
-                rig.BoneTransforms[i].Translation.Z = jointarray[index].LocalTransform.Translation.Z;
+                rig.BoneTransforms[i].Translation.Y = - jointarray[index].LocalTransform.Translation.Z;
+                rig.BoneTransforms[i].Translation.Z = jointarray[index].LocalTransform.Translation.Y;
             }
 
             var ms = new MemoryStream();
