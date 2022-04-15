@@ -55,10 +55,10 @@ namespace WolvenKit.Modkit.RED4
                 rig.BoneTransforms[i].Scale.Y = jointarray[index].LocalTransform.Scale.Y;
                 rig.BoneTransforms[i].Scale.Z = jointarray[index].LocalTransform.Scale.Z;
 
-                rig.BoneTransforms[i].Translation.W = 0;
+                rig.BoneTransforms[i].Translation.W = i == 0 ? 1 : 0;
                 rig.BoneTransforms[i].Translation.X = jointarray[index].LocalTransform.Translation.X;
-                rig.BoneTransforms[i].Translation.Y = - jointarray[index].LocalTransform.Translation.Z;
-                rig.BoneTransforms[i].Translation.Z = jointarray[index].LocalTransform.Translation.Y;
+                rig.BoneTransforms[i].Translation.Y = jointarray[index].LocalTransform.Translation.Y;
+                rig.BoneTransforms[i].Translation.Z = jointarray[index].LocalTransform.Translation.Z;
             }
 
             var ms = new MemoryStream();
@@ -113,14 +113,33 @@ namespace WolvenKit.Modkit.RED4
 
             var model = ModelRoot.Load(inGltfFile.FullName, new ReadSettings(vmode));
 
+            if (model.LogicalSkins.Count > 0)
+            {
 
-            var joints = Enumerable.Range(0, model.LogicalSkins[0].JointsCount).Select(_ => model.LogicalSkins[0].GetJoint(_)).ToArray();
+                var joints = Enumerable.Range(0, model.LogicalSkins[0].JointsCount).Select(_ => model.LogicalSkins[0].GetJoint(_)).ToArray();
 
-            var jointarray = Enumerable.Range(0, model.LogicalSkins[0].JointsCount).Select(_ => model.LogicalSkins[0].GetJoint(_).Joint).ToArray();
-            var jointnames = Enumerable.Range(0, model.LogicalSkins[0].JointsCount).Select(_ => model.LogicalSkins[0].GetJoint(_).Joint.Name).ToArray();
+                var jointarray = Enumerable.Range(0, model.LogicalSkins[0].JointsCount).Select(_ => model.LogicalSkins[0].GetJoint(_).Joint).ToArray();
+                var jointnames = Enumerable.Range(0, model.LogicalSkins[0].JointsCount).Select(_ => model.LogicalSkins[0].GetJoint(_).Joint.Name).ToArray();
 
-            var ibm = Enumerable.Range(0, model.LogicalSkins[0].JointsCount).Select(_ => model.LogicalSkins[0].GetJoint(_).InverseBindMatrix).ToArray();
-            var wm = Enumerable.Range(0, model.LogicalSkins[0].JointsCount).Select(_ => model.LogicalSkins[0].GetJoint(_).Joint.WorldMatrix).ToArray();
+                var ibm = Enumerable.Range(0, model.LogicalSkins[0].JointsCount).Select(_ => model.LogicalSkins[0].GetJoint(_).InverseBindMatrix).ToArray();
+                var wm = Enumerable.Range(0, model.LogicalSkins[0].JointsCount).Select(_ => model.LogicalSkins[0].GetJoint(_).Joint.WorldMatrix).ToArray();
+
+                if (cr2w.RootChunk is CMesh root)
+                {
+                    for (int i = 0; i < root.BoneNames.Count; i++)
+                    {
+                        var foundbone = jointarray.FirstOrDefault(x => root.BoneNames[i] == x.Name);
+                        if (foundbone is not null)
+                        {
+                            var inverted = new System.Numerics.Matrix4x4();
+                            System.Numerics.Matrix4x4.Invert(foundbone.WorldMatrix, out inverted);
+                            root.BoneRigMatrices[i] = inverted;
+                            //component Y and -Z are being swapped in vector W
+                            //should probably figure out why
+                        }
+                    }
+                }
+            }
 
             var tt = model.LogicalSkins.Count >= 2 ?
                 Enumerable.Range(0, model.LogicalSkins[1].JointsCount).Select(_ => model.LogicalSkins[1].GetJoint(_).Joint.WorldMatrix).ToArray()
@@ -131,32 +150,11 @@ namespace WolvenKit.Modkit.RED4
                 : null;
 
 
-
-            if (cr2w.RootChunk is CMesh root)
-            {
-                for (int i = 0; i < root.BoneNames.Count; i++)
-                {
-                    var foundbone = jointarray.FirstOrDefault(x => root.BoneNames[i] == x.Name);
-                    if (foundbone is not null)
-                    {
-                        var inverted = new System.Numerics.Matrix4x4();
-                        System.Numerics.Matrix4x4.Invert(foundbone.WorldMatrix, out inverted);
-                        root.BoneRigMatrices[i] = inverted;
-                        //component Y and -Z are being swapped in vector W
-                        //should probably figure out why
-                    }
-
-                }
-            }
-
-
-
-
-
-            var somerig = MeshTools.GetOrphanRig(model);
-            var newmodel = ModelRoot.CreateModel();
-            var tempdict = RIG.ExportNodes(ref newmodel, somerig);
-
+            /*
+                        var somerig = MeshTools.GetOrphanRig(model);
+                        var newmodel = ModelRoot.CreateModel();
+                        var tempdict = RIG.ExportNodes(ref newmodel, somerig);
+            */
 
             VerifyGLTF(model);
             var Meshes = Enumerable.Select(model.LogicalMeshes, GltfMeshToRawContainer).ToList();
@@ -180,12 +178,6 @@ namespace WolvenKit.Modkit.RED4
             if (originalRig != null)
             {
 
-
-
-
-
-
-
                 using var msss = new MemoryStream(rendblob.RenderBuffer.Buffer.GetBytes());
 
                 var meshesinfo = MeshTools.GetMeshesinfo(rendblob, cr2w.RootChunk as CMesh);
@@ -199,13 +191,6 @@ namespace WolvenKit.Modkit.RED4
 
                 oldRig = MeshTools.GetOrphanRig(meshBlob);
 
-
-
-
-                /*
-                                var redfileName = Path.GetFileName(redfile);
-                                using var redFs = new FileStream(redfile, FileMode.Open, FileAccess.ReadWrite);
-                                var cr2w = _wolvenkitFileService.ReadRed4File(inmeshStream);*/
 
                 var ar = originalRig.Archive as Archive;
                 using var msr = new MemoryStream();
