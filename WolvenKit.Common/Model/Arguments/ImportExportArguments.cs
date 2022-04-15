@@ -300,7 +300,8 @@ namespace WolvenKit.Common.Model.Arguments
         Mesh,
         Morphtarget,
         Anims,
-        MeshWithRig
+        MeshWithRig,
+        Rig
     }
     public class MlmaskImportArgs : ImportArgs
     {

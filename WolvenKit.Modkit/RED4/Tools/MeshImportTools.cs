@@ -20,6 +20,58 @@ namespace WolvenKit.Modkit.RED4
 {
     public partial class ModTools
     {
+        public bool ImportRig(FileInfo inGltfFile, Stream rigStream, ValidationMode vmode = ValidationMode.TryFix)
+        {
+            var cr2w = _wolvenkitFileService.ReadRed4File(rigStream);
+
+            if (cr2w == null || cr2w.RootChunk is not animRig rig)
+            {
+                return false;
+            }
+
+            var model = ModelRoot.Load(inGltfFile.FullName, new ReadSettings(vmode));
+
+            //VerifyGLTF(model);
+
+            var joints = Enumerable.Range(0, model.LogicalSkins[0].JointsCount).Select(_ => model.LogicalSkins[0].GetJoint(_)).ToArray();
+
+            var jointarray = Enumerable.Range(0, model.LogicalSkins[0].JointsCount).Select(_ => model.LogicalSkins[0].GetJoint(_).Joint).ToArray();
+            var jointnames = Enumerable.Range(0, model.LogicalSkins[0].JointsCount).Select(_ => model.LogicalSkins[0].GetJoint(_).Joint.Name).ToArray();
+
+            var ibm = Enumerable.Range(0, model.LogicalSkins[0].JointsCount).Select(_ => model.LogicalSkins[0].GetJoint(_).InverseBindMatrix).ToArray();
+            var wm = Enumerable.Range(0, model.LogicalSkins[0].JointsCount).Select(_ => model.LogicalSkins[0].GetJoint(_).Joint.WorldMatrix).ToArray();
+
+            for (var i = 0; i < rig.BoneNames.Count; i++)
+            {
+                var index = Array.FindIndex(jointnames, x => x.Contains(rig.BoneNames[i]));
+
+                rig.BoneTransforms[i].Rotation.I = jointarray[index].LocalTransform.Rotation.X;
+                rig.BoneTransforms[i].Rotation.J = jointarray[index].LocalTransform.Rotation.Y;
+                rig.BoneTransforms[i].Rotation.K = jointarray[index].LocalTransform.Rotation.Z;
+                rig.BoneTransforms[i].Rotation.R = jointarray[index].LocalTransform.Rotation.W;
+
+                rig.BoneTransforms[i].Scale.W = 1;
+                rig.BoneTransforms[i].Scale.X = jointarray[index].LocalTransform.Scale.X;
+                rig.BoneTransforms[i].Scale.Y = jointarray[index].LocalTransform.Scale.Y;
+                rig.BoneTransforms[i].Scale.Z = jointarray[index].LocalTransform.Scale.Z;
+
+                rig.BoneTransforms[i].Translation.W = 0;
+                rig.BoneTransforms[i].Translation.X = jointarray[index].LocalTransform.Translation.X;
+                rig.BoneTransforms[i].Translation.Y = - jointarray[index].LocalTransform.Translation.Z;
+                rig.BoneTransforms[i].Translation.Z = jointarray[index].LocalTransform.Translation.Y;
+            }
+
+            var ms = new MemoryStream();
+            using var writer = new CR2WWriter(ms, Encoding.UTF8, true);
+            writer.WriteFile(cr2w);
+            ms.Seek(0, SeekOrigin.Begin);
+
+            rigStream.SetLength(0);
+            ms.CopyTo(rigStream);
+
+            return true;
+        }
+
         public bool ImportMesh(FileInfo inGltfFile, Stream inmeshStream, List<Archive> archives = null, ValidationMode vmode = ValidationMode.Strict, bool importMaterialOnly = false, Stream outStream = null, FileEntry originalRig = null)
         {
             var cr2w = _wolvenkitFileService.ReadRed4File(inmeshStream);
@@ -70,6 +122,14 @@ namespace WolvenKit.Modkit.RED4
             var ibm = Enumerable.Range(0, model.LogicalSkins[0].JointsCount).Select(_ => model.LogicalSkins[0].GetJoint(_).InverseBindMatrix).ToArray();
             var wm = Enumerable.Range(0, model.LogicalSkins[0].JointsCount).Select(_ => model.LogicalSkins[0].GetJoint(_).Joint.WorldMatrix).ToArray();
 
+            var tt = model.LogicalSkins.Count >= 2 ?
+                Enumerable.Range(0, model.LogicalSkins[1].JointsCount).Select(_ => model.LogicalSkins[1].GetJoint(_).Joint.WorldMatrix).ToArray()
+                : null;
+
+            var tjointnames = model.LogicalSkins.Count >= 2 ?
+                Enumerable.Range(0, model.LogicalSkins[1].JointsCount).Select(_ => model.LogicalSkins[1].GetJoint(_).Joint.Name).ToArray()
+                : null;
+
 
 
             if (cr2w.RootChunk is CMesh root)
@@ -114,7 +174,7 @@ namespace WolvenKit.Modkit.RED4
             var QuantTrans = new Vec4((max.X + min.X) / 2, (max.Y + min.Y) / 2, (max.Z + min.Z) / 2, 1);
 
 
-            
+
             RawArmature oldRig = null;
             RawArmature newRig = null;
             if (originalRig != null)
@@ -125,14 +185,14 @@ namespace WolvenKit.Modkit.RED4
 
 
 
-                
+
                 using var msss = new MemoryStream(rendblob.RenderBuffer.Buffer.GetBytes());
 
                 var meshesinfo = MeshTools.GetMeshesinfo(rendblob, cr2w.RootChunk as CMesh);
 
                 var expMeshesss = MeshTools.ContainRawMesh(msss, meshesinfo, true);
 
-                for(var i = 0; i < Meshes.Count; i++)
+                for (var i = 0; i < Meshes.Count; i++)
                 {
                     Array.Clear(Meshes[i].boneindices, 0, Meshes[i].boneindices.Length);
                 }
@@ -140,6 +200,12 @@ namespace WolvenKit.Modkit.RED4
                 oldRig = MeshTools.GetOrphanRig(meshBlob);
 
 
+
+
+                /*
+                                var redfileName = Path.GetFileName(redfile);
+                                using var redFs = new FileStream(redfile, FileMode.Open, FileAccess.ReadWrite);
+                                var cr2w = _wolvenkitFileService.ReadRed4File(inmeshStream);*/
 
                 var ar = originalRig.Archive as Archive;
                 using var msr = new MemoryStream();
@@ -159,37 +225,7 @@ namespace WolvenKit.Modkit.RED4
                 }
             }
 
-
-            /*try
-            {*/
-                MeshTools.UpdateMeshJoints(ref Meshes, newRig, oldRig);
-           /* }
-            catch (Exception ex)
-            {
-                Console.Write(ex);
-                if (cr2w == null || cr2w.RootChunk is not CMesh cMesh || cMesh.RenderResourceBlob.Chunk is not rendRenderMeshBlob rendblobb)
-                {
-                    return false;
-                }
-
-                using var mss = new MemoryStream(rendblobb.RenderBuffer.Buffer.GetBytes());
-
-                var meshesinfo = MeshTools.GetMeshesinfo(rendblobb, cr2w.RootChunk as CMesh);
-                var expMeshess = MeshTools.ContainRawMesh(mss, meshesinfo, true);
-                var meshRigs = MeshTools.GetOrphanRig(cMesh);
-                //var Rigs = RIG.ProcessRig(_wolvenkitFileService.ReadRed4File(rigStream));
-
-                MeshTools.UpdateMeshJoints(ref expMeshess, newRig, oldRig);
-
-                var models = MeshTools.RawMeshesToGLTF(expMeshess, newRig);
-
-                for (var j = 0; j < expMeshess.Count; j++)
-                {
-                    Meshes[j].boneindices = expMeshess[j].boneindices;
-                }
-            }
-
-*/
+            MeshTools.UpdateMeshJoints(ref Meshes, newRig, oldRig);
 
             UpdateSkinningParamCloth(ref Meshes, ref cr2w);
 
@@ -201,7 +237,16 @@ namespace WolvenKit.Modkit.RED4
             meshesInfo.quantScale = QuantScale;
             meshesInfo.quantTrans = QuantTrans;
 
-            var ms = GetEditedCr2wFile(cr2w, meshesInfo, meshBuffer);
+            var ms = new MemoryStream();
+            if (originalRig != null)
+            {
+                ms = GetEditedCr2wFile(cr2w, meshesInfo, meshBuffer, tt, tjointnames);
+            }
+            else
+            {
+                ms = GetEditedCr2wFile(cr2w, meshesInfo, meshBuffer);
+
+            }
 
             ms.Seek(0, SeekOrigin.Begin);
             if (outStream != null)
@@ -591,7 +636,7 @@ namespace WolvenKit.Modkit.RED4
             return meshesInfo;
         }
 
-        private static MemoryStream GetEditedCr2wFile(CR2WFile cr2w, MeshesInfo info, MemoryStream buffer, System.Numerics.Matrix4x4[] inverseBindMatrices = null )
+        private static MemoryStream GetEditedCr2wFile(CR2WFile cr2w, MeshesInfo info, MemoryStream buffer, System.Numerics.Matrix4x4[] inverseBindMatrices = null, string[] boneNames = null)
         {
             rendRenderMeshBlob blob = null;
             if (cr2w.RootChunk is CMesh obj1 && obj1.RenderResourceBlob.Chunk is rendRenderMeshBlob obj2)
@@ -894,17 +939,20 @@ namespace WolvenKit.Modkit.RED4
 
             blob.RenderBuffer.Buffer.SetBytes(buffer.ToArray());
 
-            if (cr2w.RootChunk is CMesh root)
+            if (cr2w.RootChunk is CMesh root && inverseBindMatrices != null)
             {
                 for (int i = 0; i < blob.Header.BonePositions.Count; i++)
                 {
-                    blob.Header.BonePositions[i].X = inverseBindMatrices[i].M41;
-                    blob.Header.BonePositions[i].Y = inverseBindMatrices[i].M42;
-                    blob.Header.BonePositions[i].Z = inverseBindMatrices[i].M43;
-                    blob.Header.BonePositions[i].W = inverseBindMatrices[i].M44;
+                    var index = Array.FindIndex(boneNames, x => x.Contains(root.BoneNames[i]));
+
+                    blob.Header.BonePositions[i].X = inverseBindMatrices[index].M41;
+                    blob.Header.BonePositions[i].Y = -inverseBindMatrices[index].M43;
+                    blob.Header.BonePositions[i].Z = inverseBindMatrices[index].M42;
+                    blob.Header.BonePositions[i].W = inverseBindMatrices[index].M44;
                     //blob.Header.BonePositions[i] = root.BoneRigMatrices[i].W;
                 }
             }
+
             var ms = new MemoryStream();
             using var writer = new CR2WWriter(ms, Encoding.UTF8, true);
             writer.WriteFile(cr2w);
@@ -918,10 +966,10 @@ namespace WolvenKit.Modkit.RED4
             {
                 throw new Exception("Provided glTF doesn't contain any 3D Meshes");
             }
-            if (model.LogicalSkins.Count > 1)
+            /*if (model.LogicalSkins.Count > 1)
             {
                 throw new Exception($"Armature Count: {model.LogicalSkins.Count}, Only 1 Armature is allowed");
-            }
+            }*/
 
             var LODs = new List<uint>();
             for (var i = 0; i < model.LogicalMeshes.Count; i++)
