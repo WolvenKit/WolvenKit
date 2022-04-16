@@ -43,10 +43,10 @@ namespace WolvenKit.Modkit.RED4
 
             for (var i = 0; i < rig.BoneNames.Count; i++)
             {
-                var index = Array.FindIndex(jointnames, x => x.Contains(rig.BoneNames[i]));
+                var index = Array.FindIndex(jointnames, x => x.Contains(rig.BoneNames[i]) && x.Length == rig.BoneNames[i].Length);
 
                 rig.BoneTransforms[i].Rotation.I = jointarray[index].LocalTransform.Rotation.X;
-                rig.BoneTransforms[i].Rotation.J = - jointarray[index].LocalTransform.Rotation.Z;
+                rig.BoneTransforms[i].Rotation.J = -jointarray[index].LocalTransform.Rotation.Z;
                 rig.BoneTransforms[i].Rotation.K = jointarray[index].LocalTransform.Rotation.Y;
                 rig.BoneTransforms[i].Rotation.R = jointarray[index].LocalTransform.Rotation.W;
 
@@ -57,7 +57,7 @@ namespace WolvenKit.Modkit.RED4
 
                 rig.BoneTransforms[i].Translation.W = i == 0 ? 1 : 0;
                 rig.BoneTransforms[i].Translation.X = jointarray[index].LocalTransform.Translation.X;
-                rig.BoneTransforms[i].Translation.Y = - jointarray[index].LocalTransform.Translation.Z;
+                rig.BoneTransforms[i].Translation.Y = -jointarray[index].LocalTransform.Translation.Z;
                 rig.BoneTransforms[i].Translation.Z = jointarray[index].LocalTransform.Translation.Y;
             }
 
@@ -928,7 +928,7 @@ namespace WolvenKit.Modkit.RED4
             {
                 for (int i = 0; i < blob.Header.BonePositions.Count; i++)
                 {
-                    var index = Array.FindIndex(boneNames, x => x.Contains(root.BoneNames[i]));
+                    var index = Array.FindIndex(boneNames, x => x.Contains(root.BoneNames[i]) && x.Length == root.BoneNames[i].Length);
 
                     blob.Header.BonePositions[i].X = inverseBindMatrices[index].M41;
                     blob.Header.BonePositions[i].Y = -inverseBindMatrices[index].M43;
