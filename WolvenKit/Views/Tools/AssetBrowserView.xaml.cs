@@ -98,6 +98,10 @@ namespace WolvenKit.Views.Tools
                   .DisposeWith(disposables);
 
                 this.BindCommand(ViewModel,
+                        viewModel => viewModel.FindUsesCommand,
+                        view => view.RightContextMenuFindUsesMenuItem)
+                    .DisposeWith(disposables);
+                this.BindCommand(ViewModel,
                       viewModel => viewModel.FindUsingCommand,
                       view => view.RightContextMenuFindUsingMenuItem)
                   .DisposeWith(disposables);
