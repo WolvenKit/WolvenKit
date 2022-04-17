@@ -33,56 +33,91 @@ namespace WolvenKit.Modkit.RED4
 
             //VerifyGLTF(model);
 
-            var joints = Enumerable.Range(0, model.LogicalSkins[0].JointsCount).Select(_ => model.LogicalSkins[0].GetJoint(_)).ToArray();
+            var armature = new List<LogicalChildOfRoot>();
 
-            var jointarray = Enumerable.Range(0, model.LogicalSkins[0].JointsCount).Select(_ => model.LogicalSkins[0].GetJoint(_).Joint).ToArray();
-            var jointnames = Enumerable.Range(0, model.LogicalSkins[0].JointsCount).Select(_ => model.LogicalSkins[0].GetJoint(_).Joint.Name).ToArray();
+            var joints = new List<(Node Joint, System.Numerics.Matrix4x4 InverseBindMatrix)>();
+            var jointlist = new List<Node>();
+            var jointnames = new List<string>();
+            var ibm = new List<System.Numerics.Matrix4x4>();
+            var wm = new List<System.Numerics.Matrix4x4>();
 
-            var ibm = Enumerable.Range(0, model.LogicalSkins[0].JointsCount).Select(_ => model.LogicalSkins[0].GetJoint(_).InverseBindMatrix).ToArray();
-            var wm = Enumerable.Range(0, model.LogicalSkins[0].JointsCount).Select(_ => model.LogicalSkins[0].GetJoint(_).Joint.WorldMatrix).ToArray();
 
+            if (model.LogicalSkins.Count > 0)
+            {
+                armature = Enumerable.Range(0, model.LogicalSkins[0].JointsCount).Select(_ => (LogicalChildOfRoot)model.LogicalSkins[_]).ToList();
+                joints = Enumerable.Range(0, armature.Count).Select(_ => ((Skin)armature[_]).GetJoint(_)).ToList();
+                jointlist = Enumerable.Range(0, armature.Count).Select(_ => ((Skin)armature[_]).GetJoint(_).Joint).ToList();
+                jointnames = Enumerable.Range(0, armature.Count).Select(_ => ((Skin)armature[_]).GetJoint(_).Joint.Name).ToList();
+                ibm = Enumerable.Range(0, armature.Count).Select(_ => ((Skin)armature[_]).GetJoint(_).InverseBindMatrix).ToList();
+                wm = Enumerable.Range(0, armature.Count).Select(_ => ((Skin)armature[_]).GetJoint(_).Joint.WorldMatrix).ToList();
 
+            }
+            if (model.LogicalNodes.Count > 0)
+            {
+                armature = Enumerable.Range(0, model.LogicalNodes.Count).Select(_ => (LogicalChildOfRoot)model.LogicalNodes[_]).ToList();
+                jointlist = Enumerable.Range(0, armature.Count).Select(_ => ((Node)armature[_])).ToList();
+                jointnames = Enumerable.Range(0, armature.Count).Select(_ => ((Node)armature[_]).Name).ToList();
+                wm = Enumerable.Range(0, armature.Count).Select(_ => ((Node)armature[_]).WorldMatrix).ToList();
 
-            var rr = System.Numerics.Matrix4x4.CreateScale(joints[1].Joint.LocalTransform.Scale);
+                for(var i = 0; i < wm.Count; i++)
+                {
+                    var temp = new System.Numerics.Matrix4x4();
+                    System.Numerics.Matrix4x4.Invert(wm[i], out temp);
+                    ibm.Add(temp);
+                }
 
-            rr = rr * joints[1].InverseBindMatrix;
+                //ibm = Enumerable.Range(0, wm.Count).Select(_ => System.Numerics.Matrix4x4.Invert( wm[_], out ibm[_] )).ToList();
+
+                joints = Enumerable.Range(0, armature.Count).Select(_ => (jointlist[_], ibm[_])).ToList();
+            }
+
+            /*
+                        var joints      = Enumerable.Range(0, armature.Count).Select(_ => (armature[_].GetJoint(_)).ToArray();
+                        var jointarray  = Enumerable.Range(0, armature.Count).Select(_ => (armature[_]).GetJoint(_).Joint).ToArray();
+                        var jointnames  = Enumerable.Range(0, armature.Count).Select(_ => (armature[_]).GetJoint(_).Joint.Name).ToArray();
+                        var ibm         = Enumerable.Range(0, armature.Count).Select(_ => (armature[_]).GetJoint(_).InverseBindMatrix).ToArray();
+                        var wm          = Enumerable.Range(0, armature.Count).Select(_ => (armature[_]).GetJoint(_).Joint.WorldMatrix).ToArray();
+            */
 
             var inversedWorldMatrix = new System.Numerics.Matrix4x4();
-            System.Numerics.Matrix4x4.Invert(joints[1].Joint.WorldMatrix,out inversedWorldMatrix);
+            var inversedLocalMatrix = new System.Numerics.Matrix4x4();
+            System.Numerics.Matrix4x4.Invert(joints[1].Joint.WorldMatrix, out inversedWorldMatrix);
+            System.Numerics.Matrix4x4.Invert(joints[1].Joint.LocalMatrix, out inversedLocalMatrix);
 
             Console.Write(inversedWorldMatrix == joints[1].InverseBindMatrix);
-
-            var inversedLocalMatrix = new System.Numerics.Matrix4x4();
-            System.Numerics.Matrix4x4.Invert(joints[1].Joint.LocalMatrix, out inversedLocalMatrix);
             Console.Write(inversedLocalMatrix == joints[1].InverseBindMatrix);
             Console.Write(inversedLocalMatrix == inversedWorldMatrix);
 
-            var ls = joints[1].Joint.LocalTransform.Translation;
-            /*var tz = ls.Z;
-            ls.Z = ls.Y;
-            ls.Y = -tz;*/
-
-
-            var tt = System.Numerics.Matrix4x4.CreateTranslation(ls);
-
-            rr = tt * rr;
-            System.Numerics.Matrix4x4.Invert(rr, out tt);
-
-            var rotationVector = System.Numerics.Quaternion.CreateFromRotationMatrix(tt);
-            Console.Write(rotationVector);
-            Console.Write(rotationVector == joints[1].Joint.LocalTransform.Rotation);
 
             var oriRotM = System.Numerics.Matrix4x4.CreateFromQuaternion(joints[1].Joint.LocalTransform.Rotation);
             var oriScaM = System.Numerics.Matrix4x4.CreateScale(joints[1].Joint.LocalTransform.Scale);
             var oriTraM = System.Numerics.Matrix4x4.CreateTranslation(joints[1].Joint.LocalTransform.Translation);
 
-            var manualTRS = oriTraM * oriRotM * oriScaM;
+            var RotM = oriScaM * joints[1].InverseBindMatrix * oriTraM;
+            System.Numerics.Matrix4x4.Invert(RotM, out RotM);
 
-            Console.Write(manualTRS == joints[1].Joint.WorldMatrix);
-            Console.Write(manualTRS == joints[1].Joint.LocalMatrix);
+            var manualTRS = oriTraM * oriRotM * oriScaM;
 
             var inversedManualTRS = new System.Numerics.Matrix4x4();
             System.Numerics.Matrix4x4.Invert(manualTRS, out inversedManualTRS);
+
+            var manualRotM = oriScaM * inversedManualTRS * oriTraM;
+            System.Numerics.Matrix4x4.Invert(manualRotM, out manualRotM);
+
+
+            var inv2 = oriTraM * RotM * oriScaM;
+
+            var localinvRotM = oriScaM * inversedLocalMatrix * oriTraM;
+            System.Numerics.Matrix4x4.Invert(localinvRotM, out localinvRotM);
+
+            var rotationVector = System.Numerics.Quaternion.CreateFromRotationMatrix(RotM);
+            var manualrotationVector = System.Numerics.Quaternion.CreateFromRotationMatrix(manualRotM);
+            var localrotationVector = System.Numerics.Quaternion.CreateFromRotationMatrix(localinvRotM);
+
+            Console.Write(rotationVector == joints[1].Joint.LocalTransform.Rotation);
+            Console.Write(manualrotationVector == joints[1].Joint.LocalTransform.Rotation);
+            Console.Write(manualTRS == joints[1].Joint.WorldMatrix);
+            Console.Write(manualTRS == joints[1].Joint.LocalMatrix);
 
             Console.Write(inversedManualTRS == joints[1].InverseBindMatrix);
 
@@ -90,23 +125,23 @@ namespace WolvenKit.Modkit.RED4
 
             for (var i = 0; i < rig.BoneNames.Count; i++)
             {
-                //var index = Array.FindIndex(jointnames, x => x.Contains(rig.BoneNames[i]) && x.Length == rig.BoneNames[i].Length);
-                var index = Array.IndexOf(jointnames, rig.BoneNames[i]);
+                //var index = DynamicData.List.FindIndex(jointnames, x => x.Contains(rig.BoneNames[i]) && x.Length == rig.BoneNames[i].Length);
+                var index = jointnames.IndexOf(rig.BoneNames[i]);
 
-                rig.BoneTransforms[i].Rotation.I = jointarray[index].LocalTransform.Rotation.X;
-                rig.BoneTransforms[i].Rotation.J = -jointarray[index].LocalTransform.Rotation.Z;
-                rig.BoneTransforms[i].Rotation.K = jointarray[index].LocalTransform.Rotation.Y;
-                rig.BoneTransforms[i].Rotation.R = jointarray[index].LocalTransform.Rotation.W;
+                rig.BoneTransforms[i].Rotation.I = jointlist[index].LocalTransform.Rotation.X;
+                rig.BoneTransforms[i].Rotation.J = -jointlist[index].LocalTransform.Rotation.Z;
+                rig.BoneTransforms[i].Rotation.K = jointlist[index].LocalTransform.Rotation.Y;
+                rig.BoneTransforms[i].Rotation.R = jointlist[index].LocalTransform.Rotation.W;
 
                 rig.BoneTransforms[i].Scale.W = 1;
-                rig.BoneTransforms[i].Scale.X = jointarray[index].LocalTransform.Scale.X;
-                rig.BoneTransforms[i].Scale.Y = jointarray[index].LocalTransform.Scale.Y;
-                rig.BoneTransforms[i].Scale.Z = jointarray[index].LocalTransform.Scale.Z;
+                rig.BoneTransforms[i].Scale.X = jointlist[index].LocalTransform.Scale.X;
+                rig.BoneTransforms[i].Scale.Y = jointlist[index].LocalTransform.Scale.Y;
+                rig.BoneTransforms[i].Scale.Z = jointlist[index].LocalTransform.Scale.Z;
 
                 rig.BoneTransforms[i].Translation.W = i == 0 ? 1 : 0;
-                rig.BoneTransforms[i].Translation.X = jointarray[index].LocalTransform.Translation.X;
-                rig.BoneTransforms[i].Translation.Y = -jointarray[index].LocalTransform.Translation.Z;
-                rig.BoneTransforms[i].Translation.Z = jointarray[index].LocalTransform.Translation.Y;
+                rig.BoneTransforms[i].Translation.X = jointlist[index].LocalTransform.Translation.X;
+                rig.BoneTransforms[i].Translation.Y = -jointlist[index].LocalTransform.Translation.Z;
+                rig.BoneTransforms[i].Translation.Z = jointlist[index].LocalTransform.Translation.Y;
             }
 
             var ms = new MemoryStream();
@@ -179,11 +214,11 @@ namespace WolvenKit.Modkit.RED4
                         var foundbone = jointarray.FirstOrDefault(x => root.BoneNames[i] == x.Name);
                         if (foundbone is not null)
                         {
-                            var inverted = new System.Numerics.Matrix4x4();
-                            System.Numerics.Matrix4x4.Invert(foundbone.WorldMatrix, out inverted);
+                            var inversedWorldMatrix = new System.Numerics.Matrix4x4();
+                            System.Numerics.Matrix4x4.Invert(foundbone.WorldMatrix, out inversedWorldMatrix);
 
 
-                            root.BoneRigMatrices[i] = inverted;
+                            root.BoneRigMatrices[i] = inversedWorldMatrix;
                             //component Y and -Z are being swapped in vector W
                             //should probably figure out why
                         }
