@@ -41,9 +41,57 @@ namespace WolvenKit.Modkit.RED4
             var ibm = Enumerable.Range(0, model.LogicalSkins[0].JointsCount).Select(_ => model.LogicalSkins[0].GetJoint(_).InverseBindMatrix).ToArray();
             var wm = Enumerable.Range(0, model.LogicalSkins[0].JointsCount).Select(_ => model.LogicalSkins[0].GetJoint(_).Joint.WorldMatrix).ToArray();
 
+
+
+            var rr = System.Numerics.Matrix4x4.CreateScale(joints[1].Joint.LocalTransform.Scale);
+
+            rr = rr * joints[1].InverseBindMatrix;
+
+            var inversedWorldMatrix = new System.Numerics.Matrix4x4();
+            System.Numerics.Matrix4x4.Invert(joints[1].Joint.WorldMatrix,out inversedWorldMatrix);
+
+            Console.Write(inversedWorldMatrix == joints[1].InverseBindMatrix);
+
+            var inversedLocalMatrix = new System.Numerics.Matrix4x4();
+            System.Numerics.Matrix4x4.Invert(joints[1].Joint.LocalMatrix, out inversedLocalMatrix);
+            Console.Write(inversedLocalMatrix == joints[1].InverseBindMatrix);
+            Console.Write(inversedLocalMatrix == inversedWorldMatrix);
+
+            var ls = joints[1].Joint.LocalTransform.Translation;
+            /*var tz = ls.Z;
+            ls.Z = ls.Y;
+            ls.Y = -tz;*/
+
+
+            var tt = System.Numerics.Matrix4x4.CreateTranslation(ls);
+
+            rr = tt * rr;
+            System.Numerics.Matrix4x4.Invert(rr, out tt);
+
+            var rotationVector = System.Numerics.Quaternion.CreateFromRotationMatrix(tt);
+            Console.Write(rotationVector);
+            Console.Write(rotationVector == joints[1].Joint.LocalTransform.Rotation);
+
+            var oriRotM = System.Numerics.Matrix4x4.CreateFromQuaternion(joints[1].Joint.LocalTransform.Rotation);
+            var oriScaM = System.Numerics.Matrix4x4.CreateScale(joints[1].Joint.LocalTransform.Scale);
+            var oriTraM = System.Numerics.Matrix4x4.CreateTranslation(joints[1].Joint.LocalTransform.Translation);
+
+            var manualTRS = oriTraM * oriRotM * oriScaM;
+
+            Console.Write(manualTRS == joints[1].Joint.WorldMatrix);
+            Console.Write(manualTRS == joints[1].Joint.LocalMatrix);
+
+            var inversedManualTRS = new System.Numerics.Matrix4x4();
+            System.Numerics.Matrix4x4.Invert(manualTRS, out inversedManualTRS);
+
+            Console.Write(inversedManualTRS == joints[1].InverseBindMatrix);
+
+
+
             for (var i = 0; i < rig.BoneNames.Count; i++)
             {
-                var index = Array.FindIndex(jointnames, x => x.Contains(rig.BoneNames[i]) && x.Length == rig.BoneNames[i].Length);
+                //var index = Array.FindIndex(jointnames, x => x.Contains(rig.BoneNames[i]) && x.Length == rig.BoneNames[i].Length);
+                var index = Array.IndexOf(jointnames, rig.BoneNames[i]);
 
                 rig.BoneTransforms[i].Rotation.I = jointarray[index].LocalTransform.Rotation.X;
                 rig.BoneTransforms[i].Rotation.J = -jointarray[index].LocalTransform.Rotation.Z;
@@ -133,6 +181,8 @@ namespace WolvenKit.Modkit.RED4
                         {
                             var inverted = new System.Numerics.Matrix4x4();
                             System.Numerics.Matrix4x4.Invert(foundbone.WorldMatrix, out inverted);
+
+
                             root.BoneRigMatrices[i] = inverted;
                             //component Y and -Z are being swapped in vector W
                             //should probably figure out why
