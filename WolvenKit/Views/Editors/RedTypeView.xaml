@@ -302,6 +302,13 @@
                         <editors:RedCurveEditor DataContext="{Binding}" />
                     </DataTemplate>
                 </converters:RedEditorTemplateSelector.RedCurveEditor>
+                <converters:RedEditorTemplateSelector.RedCurvePointEditor>
+                    <DataTemplate>
+                        <editors:RedCurvePointEditor
+                            Point="{Binding Data.Point, Mode=TwoWay}"
+                            Value="{Binding Data.Value, Mode=TwoWay}" />
+                    </DataTemplate>
+                </converters:RedEditorTemplateSelector.RedCurvePointEditor>
                 <converters:RedEditorTemplateSelector.RedRefEditor>
                     <DataTemplate>
                         <editors:RedRefEditor RedRef="{Binding Data, Mode=TwoWay}" />

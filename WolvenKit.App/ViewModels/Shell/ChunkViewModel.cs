@@ -1314,17 +1314,42 @@ namespace WolvenKit.ViewModels.Shell
         }
 
         public ICommand AddItemToArrayCommand { get; private set; }
-        private bool CanAddItemToArray() => Data is IRedArray;
+        private bool CanAddItemToArray() => PropertyType.IsAssignableTo(typeof(IRedArray)) || PropertyType.IsAssignableTo(typeof(IRedLegacySingleChannelCurve));
         private void ExecuteAddItemToArray()
         {
-            var type = (Data as IRedArray).InnerType;
-            var newItem = RedTypeManager.CreateRedType(type);
-            if (newItem is IRedBaseHandle handle)
+            if (PropertyType.IsAssignableTo(typeof(IRedArray)))
             {
-                var pointee = RedTypeManager.CreateRedType(handle.InnerType);
-                handle.SetValue((RedBaseClass)pointee);
+                if (Data == null)
+                {
+                    // TODO: Need info for CStatic, ...
+                    return;
+                }
+
+                var arr = (IRedArray)Data;
+
+                var type = arr.InnerType;
+                var newItem = RedTypeManager.CreateRedType(type);
+                if (newItem is IRedBaseHandle handle)
+                {
+                    var pointee = RedTypeManager.CreateRedType(handle.InnerType);
+                    handle.SetValue((RedBaseClass)pointee);
+                }
+                InsertChild(-1, newItem);
             }
-            InsertChild(-1, newItem);
+
+            if (PropertyType.IsAssignableTo(typeof(IRedLegacySingleChannelCurve)))
+            {
+                if (Data == null)
+                {
+                    Data = RedTypeManager.CreateRedType(PropertyType);
+                }
+
+                var curve = (IRedLegacySingleChannelCurve)Data;
+
+                var type = curve.ElementType;
+                var newItem = RedTypeManager.CreateRedType(type);
+                InsertChild(-1, newItem);
+            }
             //(Data as IRedArray).Add(newItem);
             //var cvm = new ChunkViewModel(newItem, this);
             //PropertyCount = -1;
@@ -1418,6 +1443,15 @@ namespace WolvenKit.ViewModels.Shell
             {
                 ary.Remove(Data);
             }
+            else if (Parent.Data is IRedLegacySingleChannelCurve curve)
+            {
+                curve.Remove((IRedCurvePoint)Data);
+                if (curve.Count == 0)
+                {
+                    Parent.ResolvedData = null;
+                    Parent.Data = null;
+                }
+            }
             else if (Parent.Data is IRedBufferPointer db && db.GetValue().Data is Package04 pkg)
             {
                 if (!pkg.Chunks.Remove((RedBaseClass)Data))
@@ -1459,6 +1493,11 @@ namespace WolvenKit.ViewModels.Shell
             if (ResolvedData is IRedArray ary)
             {
                 ary.Clear();
+            }
+            else if (ResolvedData is IRedLegacySingleChannelCurve curve)
+            {
+                ResolvedData = null;
+                Data = null;
             }
             else if (ResolvedData is IRedBufferPointer db && db.GetValue().Data is Package04 pkg)
             {
@@ -1682,6 +1721,10 @@ namespace WolvenKit.ViewModels.Shell
                 {
                     return false;
                 }
+            }
+            else if (ResolvedData is IRedLegacySingleChannelCurve curve && curve.ElementType.IsAssignableTo(item.GetType()))
+            {
+                curve.Add(0F, item);
             }
             else if (item is RedBaseClass rbc)
             {
