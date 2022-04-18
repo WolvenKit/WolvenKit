@@ -1,6 +1,7 @@
 using System;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 using WolvenKit.RED4.Types;
 
 namespace WolvenKit.Views.Editors
@@ -53,5 +54,11 @@ namespace WolvenKit.Views.Editors
             TweakDBID tdbid => ((ulong)tdbid).ToString(),
             _ => throw new ArgumentOutOfRangeException(nameof(RedNumber)),
         };
+
+        private void NumberValidationTextBox(object sender, TextCompositionEventArgs e)
+        {
+            var tb = (TextBox)e.Source;
+            e.Handled = !ulong.TryParse(tb.Text.Insert(tb.CaretIndex, e.Text), out _);
+        }
     }
 }

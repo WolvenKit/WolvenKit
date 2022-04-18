@@ -11,84 +11,33 @@ using WolvenKit.RED4.Types;
 
 namespace WolvenKit.RED4.Archive.IO
 {
-    public class WorldTransformsReader : Red4Reader, IBufferReader
+    public partial class WorldSharedDataBufferReader
     {
-        public WorldTransformsReader(MemoryStream ms) : base(ms)
+        public EFileReadErrorCodes ReadWorldTransformsBuffer(RedBuffer buffer, Type fileRootType)
         {
-
-        }
-
-        public EFileReadErrorCodes ReadBuffer(RedBuffer buffer, Type fileRootType)
-        {
-            uint numEntries = 0;
-            if (buffer.RootChunk is worldStreamingSector sec)
-            {
-                foreach (var handle in sec.Handles)
-                {
-                    var value = handle.GetValue();
-                    if (value is worldInstancedMeshNode node1
-                        && node1.WorldTransformsBuffer.SharedDataBuffer.GetValue() is worldSharedDataBuffer sdb1
-                        && ReferenceEquals(sdb1.Buffer.Buffer, buffer))
-                    {
-                        numEntries += (uint)node1.WorldTransformsBuffer.NumElements;
-                    }
-
-                    if (value is worldInstancedDestructibleMeshNode node2
-                        && node2.CookedInstanceTransforms.SharedDataBuffer.GetValue() is worldSharedDataBuffer sdb2
-                        && ReferenceEquals(sdb2.Buffer.Buffer, buffer))
-                    {
-                        numEntries += (uint)node2.CookedInstanceTransforms.NumElements;
-                    }
-                }
-            }
-
             var data = new WorldTransformsBuffer();
-
-            if (_reader.BaseStream.Length == 32 * numEntries)
+            while (_reader.BaseStream.Position < _reader.BaseStream.Length)
             {
-                while (_reader.BaseStream.Position < _reader.BaseStream.Length)
-                {
-                    var t = new WorldTransform();
+                var t = new worldNodeTransform();
 
-                    t.Position.X.Bits = _reader.ReadInt32();
-                    t.Position.Y.Bits = _reader.ReadInt32();
-                    t.Position.Z.Bits = _reader.ReadInt32();
+                t.Translation.X = _reader.ReadInt32() * 0.0000076293945F;
+                t.Translation.Y = _reader.ReadInt32() * 0.0000076293945F;
+                t.Translation.Z = _reader.ReadInt32() * 0.0000076293945F;
 
-                    _reader.ReadInt32();
+                _reader.ReadInt32();
 
-                    t.Orientation.I = _reader.ReadSingle();
-                    t.Orientation.J = _reader.ReadSingle();
-                    t.Orientation.K = _reader.ReadSingle();
-                    t.Orientation.R = _reader.ReadSingle();
-                 
-                    data.Transforms.Add(t);
-                }
-            }
-            else if (_reader.BaseStream.Length == 48 * numEntries)
-            {
-                while (_reader.BaseStream.Position < _reader.BaseStream.Length)
-                {
-                    var t = new WorldTransformExt();
+                t.Rotation.I = _reader.ReadSingle();
+                t.Rotation.J = _reader.ReadSingle();
+                t.Rotation.K = _reader.ReadSingle();
+                t.Rotation.R = _reader.ReadSingle();
 
-                    t.Position.X.Bits = _reader.ReadInt32();
-                    t.Position.Y.Bits = _reader.ReadInt32();
-                    t.Position.Z.Bits = _reader.ReadInt32();
+                t.Scale.X = _reader.ReadSingle();
+                t.Scale.Y = _reader.ReadSingle();
+                t.Scale.Z = _reader.ReadSingle();
 
-                    _reader.ReadInt32();
+                _reader.ReadInt32();
 
-                    t.Orientation.I = _reader.ReadSingle();
-                    t.Orientation.J = _reader.ReadSingle();
-                    t.Orientation.K = _reader.ReadSingle();
-                    t.Orientation.R = _reader.ReadSingle();
-
-                    t.Scale.X = _reader.ReadSingle();
-                    t.Scale.Y = _reader.ReadSingle();
-                    t.Scale.Z = _reader.ReadSingle();
-
-                    _reader.ReadInt32();
-
-                    data.Transforms.Add(t);
-                }
+                data.Transforms.Add(t);
             }
 
             buffer.Data = data;

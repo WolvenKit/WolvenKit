@@ -62,6 +62,8 @@ namespace WolvenKit
                     services.AddSingleton<IArchiveManager, ArchiveManager>();
                     services.AddSingleton<MockGameController>();
 
+                    services.AddSingleton<GeometryCacheService>();
+
                     services.AddSingleton<TweakDBService>();
                     services.AddSingleton<ITweakDBService>(x => x.GetRequiredService<TweakDBService>());
 

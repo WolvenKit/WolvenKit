@@ -82,8 +82,11 @@ namespace WolvenKit.Views.Editors
         private string GetValueFromZValue() => ((float)Z).ToString("R");
         private string GetValueFromWValue() => ((float)W).ToString("R");
 
-
-        private void NumberValidationTextBox(object sender, TextCompositionEventArgs e) => e.Handled = float.TryParse(e.Text, out var _);
+        private void NumberValidationTextBox(object sender, TextCompositionEventArgs e)
+        {
+            var tb = (TextBox)e.Source;
+            e.Handled = !float.TryParse(tb.Text.Insert(tb.CaretIndex, e.Text), out _);
+        }
 
     }
 }

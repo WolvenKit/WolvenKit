@@ -140,6 +140,7 @@ namespace WolvenKit.RED4.Archive.IO
                         foreach (IRedBufferPointer entry in arr)
                         {
                             entry.GetValue().ParentTypes.Add($"{cls.GetType().Name}.{varName}");
+                            entry.GetValue().Parent = cls;
                         }
                     }
                 }

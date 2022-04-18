@@ -33,9 +33,12 @@ namespace WolvenKit.RED4.Archive.IO
             _bufferReaders.Add("entEntityParametersBuffer.parameterBuffers", typeof(CR2WListReader));
             _bufferReaders.Add("animAnimDataChunk.buffer", typeof(AnimationReader));
             _bufferReaders.Add("worldNavigationTileData.tilesBuffer", typeof(TilesReader));
-            _bufferReaders.Add("worldSharedDataBuffer.buffer", typeof(WorldTransformsReader));
-            _bufferReaders.Add("worldStreamingSector.transforms", typeof(StreamingSectorTransformReader));
+            _bufferReaders.Add("worldSharedDataBuffer.buffer", typeof(WorldSharedDataBufferReader));
+            _bufferReaders.Add("worldStreamingSector.transforms", typeof(worldNodeDataReader));
             _bufferReaders.Add("worldCollisionNode.compiledData", typeof(CollisionReader));
+            _bufferReaders.Add("physicsGeometryCache.bufferTableSectors", typeof(GeometryCacheReader));
+            _bufferReaders.Add("physicsGeometryCache.alwaysLoadedSectorDDB", typeof(GeometryCacheReader));
+            _bufferReaders.Add("CGIDataResource.data", typeof(CGIDataReader));
         }
 
         public EFileReadErrorCodes ReadFileInfo(out CR2WFileInfo info)
@@ -172,6 +175,7 @@ namespace WolvenKit.RED4.Archive.IO
                     {
                         buffer.ParentTypes.Add(parentType);
                     }
+                    buffer.Parent = pointers.GetValue().Parent;
 
                     pointers.SetValue(buffer);
                 }
