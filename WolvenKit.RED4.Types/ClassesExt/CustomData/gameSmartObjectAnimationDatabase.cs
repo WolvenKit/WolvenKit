@@ -31,8 +31,6 @@ namespace WolvenKit.RED4.Types
             set => SetPropertyValue<CArray<gameSmartObjectAnimationDatabase_PathHashPair>>(value);
         }
 
-        private static int _cnt = 0;
-
         public void CustomRead(Red4Reader reader, uint size)
         {
             Unk1 = new CArray<gameSmartObjectAnimationDatabase_App1>();
