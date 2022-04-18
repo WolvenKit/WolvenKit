@@ -38,16 +38,18 @@ namespace WolvenKit.Modkit.RED4
             var joints = new List<(Node Joint, System.Numerics.Matrix4x4 InverseBindMatrix)>();
             var jointlist = new List<Node>();
             var jointnames = new List<string>();
+            var jointparentnames = new List<string>();
             var ibm = new List<System.Numerics.Matrix4x4>();
             var wm = new List<System.Numerics.Matrix4x4>();
 
 
             if (model.LogicalSkins.Count > 0)
             {
-                armature = Enumerable.Range(0, model.LogicalSkins[0].JointsCount).Select(_ => (LogicalChildOfRoot)model.LogicalSkins[_]).ToList();
+                armature = Enumerable.Range(0, model.LogicalSkins[0].JointsCount).Select(_ => (LogicalChildOfRoot)model.LogicalSkins[0]).ToList();
                 joints = Enumerable.Range(0, armature.Count).Select(_ => ((Skin)armature[_]).GetJoint(_)).ToList();
                 jointlist = Enumerable.Range(0, armature.Count).Select(_ => ((Skin)armature[_]).GetJoint(_).Joint).ToList();
                 jointnames = Enumerable.Range(0, armature.Count).Select(_ => ((Skin)armature[_]).GetJoint(_).Joint.Name).ToList();
+                jointparentnames = Enumerable.Range(0, armature.Count).Select(_ => ((Skin)armature[_]).GetJoint(_).Joint.VisualParent.Name).ToList();
                 ibm = Enumerable.Range(0, armature.Count).Select(_ => ((Skin)armature[_]).GetJoint(_).InverseBindMatrix).ToList();
                 wm = Enumerable.Range(0, armature.Count).Select(_ => ((Skin)armature[_]).GetJoint(_).Joint.WorldMatrix).ToList();
 
@@ -57,9 +59,11 @@ namespace WolvenKit.Modkit.RED4
                 armature = Enumerable.Range(0, model.LogicalNodes.Count).Select(_ => (LogicalChildOfRoot)model.LogicalNodes[_]).ToList();
                 jointlist = Enumerable.Range(0, armature.Count).Select(_ => ((Node)armature[_])).ToList();
                 jointnames = Enumerable.Range(0, armature.Count).Select(_ => ((Node)armature[_]).Name).ToList();
+                jointparentnames = Enumerable.Range(0, armature.Count).Select(_ => ((Node)armature[_]).VisualParent is null
+                                                                    ? "firstbone" : ((Node)armature[_]).VisualParent.Name).ToList();
                 wm = Enumerable.Range(0, armature.Count).Select(_ => ((Node)armature[_]).WorldMatrix).ToList();
 
-                for(var i = 0; i < wm.Count; i++)
+                for (var i = 0; i < wm.Count; i++)
                 {
                     var temp = new System.Numerics.Matrix4x4();
                     System.Numerics.Matrix4x4.Invert(wm[i], out temp);
@@ -71,13 +75,33 @@ namespace WolvenKit.Modkit.RED4
                 joints = Enumerable.Range(0, armature.Count).Select(_ => (jointlist[_], ibm[_])).ToList();
             }
 
-            /*
-                        var joints      = Enumerable.Range(0, armature.Count).Select(_ => (armature[_].GetJoint(_)).ToArray();
-                        var jointarray  = Enumerable.Range(0, armature.Count).Select(_ => (armature[_]).GetJoint(_).Joint).ToArray();
-                        var jointnames  = Enumerable.Range(0, armature.Count).Select(_ => (armature[_]).GetJoint(_).Joint.Name).ToArray();
-                        var ibm         = Enumerable.Range(0, armature.Count).Select(_ => (armature[_]).GetJoint(_).InverseBindMatrix).ToArray();
-                        var wm          = Enumerable.Range(0, armature.Count).Select(_ => (armature[_]).GetJoint(_).Joint.WorldMatrix).ToArray();
-            */
+            int[] GetLevels()
+            {
+                var rootindex = jointnames.IndexOf("Root");
+                var treelevel = new int[jointnames.Count];
+
+                if (jointparentnames[rootindex] == "Armature")
+                {
+                    treelevel[rootindex] = 0;
+                    void rec(string parent, int level)
+                    {
+                        var tindex = Enumerable.Range(0, jointnames.Count).Where(i => jointparentnames[i] == parent).ToList();
+                        if (tindex is not null)
+                        {
+                            foreach (var ind in tindex)
+                            {
+                                treelevel[ind] = level;
+                                rec(jointnames[ind], level + 1);
+                            }
+                        }
+                    }
+                    rec("Root", 0);
+                    return treelevel;
+                }
+                return null;
+            }
+
+            var levels = GetLevels();
 
             var inversedWorldMatrix = new System.Numerics.Matrix4x4();
             var inversedLocalMatrix = new System.Numerics.Matrix4x4();
@@ -127,21 +151,30 @@ namespace WolvenKit.Modkit.RED4
             {
                 //var index = DynamicData.List.FindIndex(jointnames, x => x.Contains(rig.BoneNames[i]) && x.Length == rig.BoneNames[i].Length);
                 var index = jointnames.IndexOf(rig.BoneNames[i]);
+                /*
+                                rig.BoneTransforms[i].Rotation.I = jointlist[index].LocalTransform.Rotation.X;
+                                rig.BoneTransforms[i].Rotation.J = -jointlist[index].LocalTransform.Rotation.Z;
+                                rig.BoneTransforms[i].Rotation.K = jointlist[index].LocalTransform.Rotation.Y;
+                                rig.BoneTransforms[i].Rotation.R = jointlist[index].LocalTransform.Rotation.W;
 
-                rig.BoneTransforms[i].Rotation.I = jointlist[index].LocalTransform.Rotation.X;
-                rig.BoneTransforms[i].Rotation.J = -jointlist[index].LocalTransform.Rotation.Z;
-                rig.BoneTransforms[i].Rotation.K = jointlist[index].LocalTransform.Rotation.Y;
-                rig.BoneTransforms[i].Rotation.R = jointlist[index].LocalTransform.Rotation.W;
+                                rig.BoneTransforms[i].Scale.W = 1;
+                                rig.BoneTransforms[i].Scale.X = jointlist[index].LocalTransform.Scale.X;
+                                rig.BoneTransforms[i].Scale.Y = jointlist[index].LocalTransform.Scale.Y;
+                                rig.BoneTransforms[i].Scale.Z = jointlist[index].LocalTransform.Scale.Z;
 
-                rig.BoneTransforms[i].Scale.W = 1;
-                rig.BoneTransforms[i].Scale.X = jointlist[index].LocalTransform.Scale.X;
-                rig.BoneTransforms[i].Scale.Y = jointlist[index].LocalTransform.Scale.Y;
-                rig.BoneTransforms[i].Scale.Z = jointlist[index].LocalTransform.Scale.Z;
+                                //if the bit flippy thingy should be flipped like with original rigs from the game
+                                rig.BoneTransforms[i].Translation.W = i == 0 ? 1 : 0;
+                                rig.BoneTransforms[i].Translation.X = jointlist[index].LocalTransform.Translation.X;
+                                rig.BoneTransforms[i].Translation.Y = -jointlist[index].LocalTransform.Translation.Z;
+                                rig.BoneTransforms[i].Translation.Z = jointlist[index].LocalTransform.Translation.Y;*/
 
+                var level = levels[index] % 4;
+                var tr = jointlist[index].LocalTransform.Translation;
                 rig.BoneTransforms[i].Translation.W = i == 0 ? 1 : 0;
-                rig.BoneTransforms[i].Translation.X = jointlist[index].LocalTransform.Translation.X;
-                rig.BoneTransforms[i].Translation.Y = -jointlist[index].LocalTransform.Translation.Z;
-                rig.BoneTransforms[i].Translation.Z = jointlist[index].LocalTransform.Translation.Y;
+                rig.BoneTransforms[i].Translation.X = tr.X;
+
+                rig.BoneTransforms[i].Translation.Y = level == 0 ? tr.Y : level == 1 ? -tr.Z : level == 2 ? -tr.Y :  tr.Z;
+                rig.BoneTransforms[i].Translation.Z = level == 0 ? tr.Z : level == 1 ?  tr.Y : level == 2 ? -tr.Z : -tr.Y;
             }
 
             var ms = new MemoryStream();
