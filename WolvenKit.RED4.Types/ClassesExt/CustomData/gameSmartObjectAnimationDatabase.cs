@@ -1,5 +1,4 @@
-using System;
-using System.IO;
+using WolvenKit.Common.FNV1A;
 using WolvenKit.Core.Extensions;
 using WolvenKit.RED4.IO;
 using WolvenKit.RED4.Types.Exceptions;
@@ -24,19 +23,19 @@ namespace WolvenKit.RED4.Types
             set => SetPropertyValue<CArray<gameSmartObjectAnimationDatabase_App3>>(value);
         }
 
-        [RED("unk3")]
+        [RED("pathHashes")]
         [REDProperty(IsIgnored = true)]
-        public CArray<gameSmartObjectAnimationDatabase_App5> Unk3
+        public CArray<gameSmartObjectAnimationDatabase_PathHashPair> PathHashes
         {
-            get => GetPropertyValue<CArray<gameSmartObjectAnimationDatabase_App5>>();
-            set => SetPropertyValue<CArray<gameSmartObjectAnimationDatabase_App5>>(value);
+            get => GetPropertyValue<CArray<gameSmartObjectAnimationDatabase_PathHashPair>>();
+            set => SetPropertyValue<CArray<gameSmartObjectAnimationDatabase_PathHashPair>>(value);
         }
 
         public void CustomRead(Red4Reader reader, uint size)
         {
             Unk1 = new CArray<gameSmartObjectAnimationDatabase_App1>();
             Unk2 = new CArray<gameSmartObjectAnimationDatabase_App3>();
-            Unk3 = new CArray<gameSmartObjectAnimationDatabase_App5>();
+            PathHashes = new CArray<gameSmartObjectAnimationDatabase_PathHashPair>();
 
             var unk1 = reader.BaseReader.ReadInt32();
             if (unk1 != -1)
@@ -58,22 +57,19 @@ namespace WolvenKit.RED4.Types
 
                     var entry2 = new gameSmartObjectAnimationDatabase_App2();
 
+
+                    // Some kind of frames?
                     var cnt3 = reader.BaseReader.ReadVLQInt32();
-
-                    entry2.Unk1 = reader.ReadCUInt32();
-                    for (int k = 0; k < (cnt3 * 2) + 3; k++)
+                    for (int k = 0; k < cnt3; k++)
                     {
-                        var entry3 = new Vector4();
-
-                        entry3.X = reader.ReadCFloat();
-                        entry3.Y = reader.ReadCFloat();
-                        entry3.Z = reader.ReadCFloat();
-                        entry3.W = reader.ReadCFloat();
-
-                        entry2.Unk2.Add(entry3);
+                        entry2.Unk2.Add(ReadBox());
                     }
 
-                    entry2.Unk3 = reader.BaseReader.ReadBytes(20);
+                    entry2.EndPoint = ReadBox();
+                    entry2.StartPoint = ReadBox();
+
+                    entry2.AnimationSet = new CResourceReference<animAnimSet> { DepotPath = reader.BaseReader.ReadUInt64() };
+
                     entry1.Unk2.Add(entry2);
                 }
                 entry1.Unk3 = reader.ReadCUInt32();
@@ -86,12 +82,12 @@ namespace WolvenKit.RED4.Types
             {
                 var entry1 = new gameSmartObjectAnimationDatabase_App3();
 
-                entry1.Unk1 = reader.ReadCUInt64();
+                entry1.AnimRig = new CResourceReference<animRig> { DepotPath = reader.BaseReader.ReadUInt64() };
 
                 var cnt5 = reader.BaseReader.ReadVLQInt32();
                 for (int j = 0; j < cnt5; j++)
                 {
-                    entry1.Unk2.Add(reader.ReadCUInt64());
+                    entry1.AnimationSets.Add(new CResourceReference<animAnimSet> { DepotPath = reader.BaseReader.ReadUInt64() });
                 }
 
                 var cnt6 = reader.BaseReader.ReadVLQInt32();
@@ -99,7 +95,7 @@ namespace WolvenKit.RED4.Types
                 {
                     var entry2 = new gameSmartObjectAnimationDatabase_App4();
 
-                    entry2.Unk1 = reader.ReadCUInt64();
+                    entry2.AnimationSet = new CResourceReference<animAnimSet> { DepotPath = reader.BaseReader.ReadUInt64() };
 
                     var cnt7 = reader.BaseReader.ReadVLQInt32();
                     for (int k = 0; k < cnt7; k++)
@@ -115,12 +111,38 @@ namespace WolvenKit.RED4.Types
             var cnt8 = reader.BaseReader.ReadVLQInt32();
             for (int i = 0; i < cnt8; i++)
             {
-                var entry1 = new gameSmartObjectAnimationDatabase_App5();
+                var entry1 = new gameSmartObjectAnimationDatabase_PathHashPair();
 
-                entry1.Unk1 = reader.ReadCUInt64();
-                entry1.Unk2 = reader.ReadCString();
+                entry1.Hash = reader.BaseReader.ReadUInt64();
+                entry1.Path = reader.ReadCString();
 
-                Unk3.Add(entry1);
+                if (FNV1A64HashAlgorithm.HashString(entry1.Path) != entry1.Hash)
+                {
+                    throw new TodoException("gameSmartObjectAnimationDatabase: Invalid hash pair");
+                }
+
+                PathHashes.Add(entry1);
+            }
+
+            Box ReadBox()
+            {
+                return new Box
+                {
+                    Min =
+                    {
+                        X = reader.ReadCFloat(),
+                        Y = reader.ReadCFloat(),
+                        Z = reader.ReadCFloat(),
+                        W = reader.ReadCFloat()
+                    },
+                    Max =
+                    {
+                        X = reader.ReadCFloat(),
+                        Y = reader.ReadCFloat(),
+                        Z = reader.ReadCFloat(),
+                        W = reader.ReadCFloat()
+                    }
+                };
             }
         }
 
@@ -135,18 +157,18 @@ namespace WolvenKit.RED4.Types
                 writer.BaseWriter.WriteVLQInt32(app1.Unk2.Count);
                 foreach (var app2 in app1.Unk2)
                 {
-                    writer.BaseWriter.WriteVLQInt32((app2.Unk2.Count - 3) / 2);
+                    writer.BaseWriter.WriteVLQInt32(app2.Unk2.Count);
                     writer.Write(app2.Unk1);
 
-                    foreach (var vec in app2.Unk2)
+                    foreach (var box in app2.Unk2)
                     {
-                        writer.Write(vec.X);
-                        writer.Write(vec.Y);
-                        writer.Write(vec.Z);
-                        writer.Write(vec.W);
+                        WriteBox(box);
                     }
 
-                    writer.BaseWriter.Write(app2.Unk3);
+                    WriteBox(app2.EndPoint);
+                    WriteBox(app2.StartPoint);
+
+                    writer.BaseWriter.Write((ulong)app2.AnimationSet.DepotPath);
                 }
                 writer.Write(app1.Unk3);
             }
@@ -154,18 +176,18 @@ namespace WolvenKit.RED4.Types
             writer.BaseWriter.WriteVLQInt32(Unk2.Count);
             foreach (var app3 in Unk2)
             {
-                writer.Write(app3.Unk1);
+                writer.BaseWriter.Write((ulong)app3.AnimRig.DepotPath);
 
-                writer.BaseWriter.WriteVLQInt32(app3.Unk2.Count);
-                foreach (var hash in app3.Unk2)
+                writer.BaseWriter.WriteVLQInt32(app3.AnimationSets.Count);
+                foreach (var animationSet in app3.AnimationSets)
                 {
-                    writer.Write(hash);
+                    writer.BaseWriter.Write((ulong)animationSet.DepotPath);
                 }
 
                 writer.BaseWriter.WriteVLQInt32(app3.Unk3.Count);
                 foreach (var app4 in app3.Unk3)
                 {
-                    writer.Write(app4.Unk1);
+                    writer.BaseWriter.Write((ulong)app4.AnimationSet.DepotPath);
 
                     writer.BaseWriter.WriteVLQInt32(app4.Unk2.Count);
                     foreach (var cName in app4.Unk2)
@@ -175,11 +197,24 @@ namespace WolvenKit.RED4.Types
                 }
             }
 
-            writer.BaseWriter.WriteVLQInt32(Unk3.Count);
-            foreach (var app5 in Unk3)
+            writer.BaseWriter.WriteVLQInt32(PathHashes.Count);
+            foreach (var app5 in PathHashes)
             {
-                writer.Write(app5.Unk1);
-                writer.Write(app5.Unk2);
+                writer.Write(app5.Hash);
+                writer.Write(app5.Path);
+            }
+
+            void WriteBox(Box box)
+            {
+                writer.Write(box.Min.X);
+                writer.Write(box.Min.Y);
+                writer.Write(box.Min.Z);
+                writer.Write(box.Min.W);
+
+                writer.Write(box.Max.X);
+                writer.Write(box.Max.Y);
+                writer.Write(box.Max.Z);
+                writer.Write(box.Max.W);
             }
         }
     }
@@ -228,42 +263,58 @@ namespace WolvenKit.RED4.Types
 
         [RED("unk2")]
         [REDProperty(IsIgnored = true)]
-        public CArray<Vector4> Unk2
+        public CArray<Box> Unk2
         {
-            get => GetPropertyValue<CArray<Vector4>>();
-            set => SetPropertyValue<CArray<Vector4>>(value);
+            get => GetPropertyValue<CArray<Box>>();
+            set => SetPropertyValue<CArray<Box>>(value);
         }
 
-        [RED("unk3")]
+        [RED("endPoint")]
         [REDProperty(IsIgnored = true)]
-        public CByteArray Unk3
+        public Box EndPoint
         {
-            get => GetPropertyValue<CByteArray>();
-            set => SetPropertyValue<CByteArray>(value);
+            get => GetPropertyValue<Box>();
+            set => SetPropertyValue<Box>(value);
+        }
+
+        [RED("startPoint")]
+        [REDProperty(IsIgnored = true)]
+        public Box StartPoint
+        {
+            get => GetPropertyValue<Box>();
+            set => SetPropertyValue<Box>(value);
+        }
+
+        [RED("animationSet")]
+        [REDProperty(IsIgnored = true)]
+        public CResourceReference<animAnimSet> AnimationSet
+        {
+            get => GetPropertyValue<CResourceReference<animAnimSet>>();
+            set => SetPropertyValue<CResourceReference<animAnimSet>>(value);
         }
 
         public gameSmartObjectAnimationDatabase_App2()
         {
-            Unk2 = new CArray<Vector4>();
+            Unk2 = new CArray<Box>();
         }
     }
 
     public class gameSmartObjectAnimationDatabase_App3 : RedBaseClass
     {
-        [RED("unk1")]
+        [RED("animRig")]
         [REDProperty(IsIgnored = true)]
-        public CUInt64 Unk1 // hash
+        public CResourceReference<animRig> AnimRig
         {
-            get => GetPropertyValue<CUInt64>();
-            set => SetPropertyValue<CUInt64>(value);
+            get => GetPropertyValue<CResourceReference<animRig>>();
+            set => SetPropertyValue<CResourceReference<animRig>>(value);
         }
 
-        [RED("unk2")]
+        [RED("animationSets")]
         [REDProperty(IsIgnored = true)]
-        public CArray<CUInt64> Unk2 // hashes
+        public CArray<CResourceReference<animAnimSet>> AnimationSets
         {
-            get => GetPropertyValue<CArray<CUInt64>>();
-            set => SetPropertyValue<CArray<CUInt64>>(value);
+            get => GetPropertyValue<CArray<CResourceReference<animAnimSet>>>();
+            set => SetPropertyValue<CArray<CResourceReference<animAnimSet>>>(value);
         }
 
         [RED("unk3")]
@@ -276,19 +327,19 @@ namespace WolvenKit.RED4.Types
 
         public gameSmartObjectAnimationDatabase_App3()
         {
-            Unk2 = new CArray<CUInt64>();
+            AnimationSets = new CArray<CResourceReference<animAnimSet>>();
             Unk3 = new CArray<gameSmartObjectAnimationDatabase_App4>();
         }
     }
 
     public class gameSmartObjectAnimationDatabase_App4 : RedBaseClass
     {
-        [RED("unk1")]
+        [RED("animationSet")]
         [REDProperty(IsIgnored = true)]
-        public CUInt64 Unk1 // hash
+        public CResourceReference<animAnimSet> AnimationSet
         {
-            get => GetPropertyValue<CUInt64>();
-            set => SetPropertyValue<CUInt64>(value);
+            get => GetPropertyValue<CResourceReference<animAnimSet>>();
+            set => SetPropertyValue<CResourceReference<animAnimSet>>(value);
         }
 
         [RED("unk2")]
@@ -305,19 +356,19 @@ namespace WolvenKit.RED4.Types
         }
     }
 
-    public class gameSmartObjectAnimationDatabase_App5 : RedBaseClass
+    public class gameSmartObjectAnimationDatabase_PathHashPair : RedBaseClass
     {
-        [RED("unk1")]
+        [RED("pathHash")]
         [REDProperty(IsIgnored = true)]
-        public CUInt64 Unk1 // hash
+        public CUInt64 Hash
         {
             get => GetPropertyValue<CUInt64>();
             set => SetPropertyValue<CUInt64>(value);
         }
 
-        [RED("unk2")]
+        [RED("path")]
         [REDProperty(IsIgnored = true)]
-        public CString Unk2
+        public CString Path
         {
             get => GetPropertyValue<CString>();
             set => SetPropertyValue<CString>(value);

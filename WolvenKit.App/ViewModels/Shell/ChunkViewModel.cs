@@ -125,7 +125,7 @@ namespace WolvenKit.ViewModels.Shell
                             if (index != -1)
                             {
                                 arr[index] = Data;
-
+                                Tab.File.SetIsDirty(true);
                                 Parent.NotifyChain("Data");
                             }
                         }
@@ -142,9 +142,19 @@ namespace WolvenKit.ViewModels.Shell
 
                             if (parentData is RedBaseClass rbc)
                             {
-                                if (rbc.HasProperty(propertyName) && rbc.GetProperty(propertyName) != Data)
-                                {
+                                //if (rbc.HasProperty(propertyName) && rbc.GetProperty(propertyName) != Data)
+                                //{
                                     rbc.SetProperty(propertyName, Data);
+                                    Tab.File.SetIsDirty(true);
+                                    Parent.NotifyChain("Data");
+                                //}
+                            }
+                            else
+                            {
+                                var pi = parentData.GetType().GetProperty(propertyName);
+                                if (pi != null)
+                                {
+                                    pi.SetValue(parentData, Data);
                                     Tab.File.SetIsDirty(true);
                                     Parent.NotifyChain("Data");
                                 }
@@ -272,6 +282,10 @@ namespace WolvenKit.ViewModels.Shell
                         {
                             data = Locator.Current.GetService<TweakDBService>().GetRecord(tdb);
                         }
+                    }
+                    else if (Data is DataBuffer db && db.Buffer.Data is IRedType irt)
+                    {
+                        data = irt;
                     }
                     _resolvedDataCache = data;
                     //this.RaisePropertyChanged("ResolvedData");
@@ -412,14 +426,32 @@ namespace WolvenKit.ViewModels.Shell
                     }
                 }
             }
-            else if (obj is SerializationDeferredDataBuffer sddb && sddb.Data is Package04 p4)
+            else if (obj is SerializationDeferredDataBuffer sddb)
             {
-                for (var i = 0; i < PropertyCount; i++)
+                if (sddb.Data is Package04 p4)
                 {
-                    Properties.Add(new ChunkViewModel(p4.Chunks[i], this, null)
+                    for (var i = 0; i < PropertyCount; i++)
                     {
-                        IsReadOnly = isreadonly
-                    });
+                        Properties.Add(new ChunkViewModel(p4.Chunks[i], this, null)
+                        {
+                            IsReadOnly = isreadonly
+                        });
+                    }
+                }
+                else if (sddb.Data != null)
+                {
+                    var pis = sddb.Data.GetType().GetProperties();
+                    foreach (var pi in pis)
+                    {
+                        var value = pi.GetValue(sddb.Data);
+                        if (value is IRedType irt)
+                        {
+                            Properties.Add(new ChunkViewModel(irt, this, pi.Name)
+                            {
+                                IsReadOnly = isreadonly
+                            });
+                        }
+                    }
                 }
             }
             else if (obj is SharedDataBuffer sdb)
@@ -476,12 +508,30 @@ namespace WolvenKit.ViewModels.Shell
                         });
                     }
                 }
-                else if (db.Data is IParseableBuffer ipb)
+                else if (db.Data is IList list)
                 {
-                    Properties.Add(new ChunkViewModel(ipb.Data, this)
+                    foreach (var thing in list)
                     {
-                        IsReadOnly = isreadonly
-                    });
+                        Properties.Add(new ChunkViewModel((IRedType)thing, this, null)
+                        {
+                            IsReadOnly = isreadonly
+                        });
+                    }
+                }
+                else if (db.Data != null)
+                {
+                    var pis = db.Data.GetType().GetProperties();
+                    foreach (var pi in pis)
+                    {
+                        var value = pi.GetValue(db.Data);
+                        if (value is IRedType irt)
+                        {
+                            Properties.Add(new ChunkViewModel(irt, this, pi.Name)
+                            {
+                                IsReadOnly = isreadonly
+                            });
+                        }
+                    }
                 }
             }
             //else if (Data is TweakXLFile)
@@ -519,18 +569,28 @@ namespace WolvenKit.ViewModels.Shell
                         });
                     }
                 }
-                //else
-                //{
-                //    var pis = Data.GetType().GetProperties();
-                //    foreach (var pi in pis)
-                //    {
-                //        var value = pi.GetValue(Data);
-                //        if (value is IRedType irt)
-                //        {
-                //            Properties.Add(new ChunkViewModel(irt, this, pi.Name));
-                //        }
-                //    }
-                //}
+                else
+                {
+                    var pis = Data.GetType().GetProperties();
+                    foreach (var pi in pis)
+                    {
+                        var value = Data != null ? pi.GetValue(Data) : null;
+                        if (value is IRedType irt)
+                        {
+                            Properties.Add(new ChunkViewModel(irt, this, pi.Name)
+                            {
+                                IsReadOnly = isreadonly
+                            });
+                        }
+                    }
+                    if (Data is worldNodeData sst && Tab.Chunks[0].Data is worldStreamingSector wss)
+                    {
+                        Properties.Add(new ChunkViewModel(wss.Nodes[sst.NodeIndex], this, "Node")
+                        {
+                            IsReadOnly = isreadonly
+                        });
+                    }
+                }
             }
             this.RaisePropertyChanged("TVProperties");
         }
@@ -709,6 +769,18 @@ namespace WolvenKit.ViewModels.Shell
                         return typeof(localizationPersistenceOnScreenEntry);
                     }
                 }
+                if (Data is DataBuffer db && db.Data != null)
+                {
+                    return db.Data.GetType();
+                }
+                if (Data is SharedDataBuffer sdb && sdb.Data != null)
+                {
+                    return sdb.Data.GetType();
+                }
+                if (Data is SerializationDeferredDataBuffer sddb && sddb.Data != null)
+                {
+                    return sddb.Data.GetType();
+                }
                 if (Data is gamedataLocKeyWrapper)
                 {
                     return typeof(localizationPersistenceOnScreenEntry);
@@ -738,7 +810,7 @@ namespace WolvenKit.ViewModels.Shell
             }
         }
 
-        public string ResolvedType => ResolvedPropertyType != null ? GetTypeRedName(ResolvedPropertyType) : "";
+        public string ResolvedType => ResolvedPropertyType != null ? (GetTypeRedName(ResolvedPropertyType) != null ? GetTypeRedName(ResolvedPropertyType) : ResolvedPropertyType.Name) : "";
 
         public bool TypesDiffer => PropertyType != ResolvedPropertyType;
 
@@ -746,10 +818,9 @@ namespace WolvenKit.ViewModels.Shell
 
         public bool IsArray => PropertyType != null &&
                     (PropertyType.IsAssignableTo(typeof(IRedArray)) ||
-                    PropertyType.IsAssignableTo(typeof(IList)) ||
-                    PropertyType.IsAssignableTo(typeof(DataBuffer)) ||
-                    PropertyType.IsAssignableTo(typeof(SharedDataBuffer)) ||
-                    PropertyType.IsAssignableTo(typeof(SerializationDeferredDataBuffer)));
+                    ResolvedPropertyType.IsAssignableTo(typeof(IList)) ||
+                    ResolvedPropertyType.IsAssignableTo(typeof(CR2WList)) ||
+                    ResolvedPropertyType.IsAssignableTo(typeof(Package04)));
 
         private int _propertyCountCache = -1;
 
@@ -802,9 +873,16 @@ namespace WolvenKit.ViewModels.Shell
                         var dps = redClass.GetDynamicPropertyNames();
                         count += dps.Count;
                     }
-                    else if (ResolvedData is SerializationDeferredDataBuffer sddb && sddb.Data is Package04 p4)
+                    else if (ResolvedData is SerializationDeferredDataBuffer sddb)
                     {
-                        count += p4.Chunks.Count;
+                        if (sddb.Data is Package04 p4)
+                        {
+                            count += p4.Chunks.Count;
+                        }
+                        else if (sddb.Data != null)
+                        {
+                            count += sddb.Data.GetType().GetProperties().Count();
+                        }
                     }
                     else if (ResolvedData is SharedDataBuffer sdb)
                     {
@@ -831,6 +909,10 @@ namespace WolvenKit.ViewModels.Shell
                         {
                             count += cl.Files.Count;
                         }
+                        else if (db.Data is IList list)
+                        {
+                            count += list.Count;
+                        }
                         else if (db.Data is IParseableBuffer)
                         {
                             count += 1; // needs refinement?
@@ -851,11 +933,15 @@ namespace WolvenKit.ViewModels.Shell
                         {
                             count += dict.Count;
                         }
-                        //else
-                        //{
-                        //    var pis = Data.GetType().GetProperties();
-                        //    count += pis.Count();
-                        //}
+                        else
+                        {
+                            var pis = Data.GetType().GetProperties();
+                            count += pis.Count();
+                        }
+                        if (Data is worldNodeData)
+                        {
+                            count += 1;
+                        }
                     }
                     _propertyCountCache = count;
                     //this.RaisePropertyChanged("PropertyCount");
@@ -941,14 +1027,30 @@ namespace WolvenKit.ViewModels.Shell
             {
                 Value = "null";
             }
-            else if (PropertyType.IsAssignableTo(typeof(BaseStringType)))
+
+            if (PropertyType.IsAssignableTo(typeof(BaseStringType)))
             {
                 var value = (BaseStringType)Data;
-                if (string.IsNullOrEmpty(value))
+                if (value is NodeRef rn)
+                {
+                    if (rn.GetResolvedText() is var text && !string.IsNullOrEmpty(text))
+                    {
+                        Value = text;
+                    }
+                    else if (rn.GetRedHash() != 0)
+                    {
+                        Value = rn.GetRedHash().ToString();
+                    }
+                    else
+                    {
+                        Value = "null";
+                    }
+                }
+                else
                 {
                     Value = "null";
                 }
-                else
+                if (!string.IsNullOrEmpty(value))
                 {
                     Value = value;
                     if (Value != null && Value.StartsWith("LocKey#") && ulong.TryParse(Value.Substring(7), out var key))
@@ -1003,7 +1105,14 @@ namespace WolvenKit.ViewModels.Shell
             else if (PropertyType.IsAssignableTo(typeof(CUInt64)))
             {
                 var value = (CUInt64)Data;
-                Value = ((ulong)value).ToString();
+                if (value != 0)
+                {
+                    Value = ((NodeRef)(ulong)value).ToString();
+                }
+                else
+                {
+                    Value = ((ulong)value).ToString();
+                }
             }
             else if (PropertyType.IsAssignableTo(typeof(gamedataLocKeyWrapper)))
             {
@@ -1024,7 +1133,7 @@ namespace WolvenKit.ViewModels.Shell
                     CUInt32 uint64 => uint64,
                     CInt64 uint64 => (float)uint64,
                     _ => throw new ArgumentOutOfRangeException(nameof(value)),
-                }).ToString();
+                }).ToString("F0");
             }
             else if (PropertyType.IsAssignableTo(typeof(FixedPoint)))
             {
@@ -1067,34 +1176,47 @@ namespace WolvenKit.ViewModels.Shell
                 return;
             }
 
+
+            if (Data is worldNodeData sst && Tab.Chunks[0].Data is worldStreamingSector wss)
+            {
+                Descriptor = $"[{sst.NodeIndex}] {wss.Nodes[sst.NodeIndex].Chunk.DebugName}";
+                return;
+            }
+
+            if (Data is worldStreamingSectorDescriptor wssd)
+            {
+                Descriptor = wssd.Data.DepotPath.ToString().Replace("base\\worlds\\03_night_city\\_compiled\\default\\", "").Replace(".streamingsector", "");
+                return;
+            }
+
             if (ResolvedData is IRedArray ary)
             {
                 Descriptor = $"[{ary.Count}]";
             }
-            if (ResolvedData is IRedBufferPointer rbp && rbp.GetValue().Data is Package04 pkg)
+            else if (ResolvedData is IRedBufferPointer rbp && rbp.GetValue().Data is Package04 pkg)
             {
                 Descriptor = $"[{pkg.Chunks.Count}]";
             }
-            if (ResolvedData is IRedBufferPointer rbp2 && rbp2.GetValue().Data is CR2WList cl)
+            else if (ResolvedData is IRedBufferPointer rbp2 && rbp2.GetValue().Data is CR2WList cl)
             {
                 Descriptor = $"[{cl.Files.Count}]";
             }
-            if (ResolvedData is CKeyValuePair kvp)
+            else if (ResolvedData is CKeyValuePair kvp)
             {
                 Descriptor = kvp.Key;
             }
-            if (Data is TweakDBID tdb)
+            else if (Data is TweakDBID tdb)
             {
                 //Descriptor = Locator.Current.GetService<TweakDBService>().GetString(tdb);
-                Descriptor = (string)tdb;
+                Descriptor = tdb.GetResolvedText();
                 return;
             }
-            if (Data is gamedataLocKeyWrapper locKey)
+            else if (Data is gamedataLocKeyWrapper locKey)
             {
                 Descriptor = ((ulong)locKey).ToString();
                 //Value = Locator.Current.GetService<LocKeyService>().GetFemaleVariant(value);
             }
-            if (Data is BaseStringType str)
+            else if (Data is BaseStringType str)
             {
                 var s = (string)str;
                 if (s != null && s.StartsWith("LocKey#") && ulong.TryParse(s.Substring(7), out var locKey2))
@@ -1109,6 +1231,18 @@ namespace WolvenKit.ViewModels.Shell
             //        Descriptor = mesh.MaterialEntries[int.Parse(Name)].Name;
             //    }
             //}
+            else if (Data is Vector3 v3)
+            {
+                Descriptor = $"{v3.X}, {v3.Y}, {v3.Z}";
+            }
+            else if (Data is Vector4 v4)
+            {
+                Descriptor = $"{v4.X}, {v4.Y}, {v4.Z}, {v4.W}";
+            }
+            else if (Data is Quaternion q)
+            {
+                Descriptor = $"{q.I}, {q.J}, {q.K}, {q.R}";
+            }
             if (Data is CMaterialInstance && Parent != null && Tab.File.Cr2wFile.RootChunk is CMesh mesh)
             {
                 if (mesh.LocalMaterialBuffer.RawData.Data is CR2WList list)
@@ -1126,11 +1260,25 @@ namespace WolvenKit.ViewModels.Shell
                     }
                 }
             }
-            if (ResolvedData is RedBaseClass irc)
+            else if (ResolvedData != null)
             {
-                // some common "names" of classes that might be useful to display in the UI
-                var propNames = new string[]
+                if (Data is IBrowsableDictionary ibd)
                 {
+                    var pns = ibd.GetPropertyNames();
+                    Descriptor = $"[{pns.Count()}]";
+                }
+                else if (Data is IList list)
+                {
+                    Descriptor = $"[{list.Count}]";
+                }
+                else if (Data is Dictionary<string, object> dict)
+                {
+                    Descriptor = $"[{dict.Count}]";
+                }
+            }
+            // some common "names" of classes that might be useful to display in the UI
+            var propNames = new string[]
+            {
                     "name",
                     "partName",
                     "slotName",
@@ -1140,15 +1288,36 @@ namespace WolvenKit.ViewModels.Shell
                     "componentName",
                     "parameterName",
                     "debugName",
-                    "category"
-                };
-
+                    "category",
+                    "entryName",
+                    "className",
+                    "actorName",
+                    "sectorHash"
+            };
+            if (ResolvedData is RedBaseClass irc)
+            {
                 foreach (var propName in propNames)
                 {
                     var prop = GetPropertyByRedName(irc.GetType(), propName);
                     if (prop != null)
                     {
                         Descriptor = irc.GetProperty(prop.RedName).ToString();
+                        return;
+                    }
+                }
+            }
+            else
+            {
+                foreach (var propName in propNames)
+                {
+                    if (Data != null)
+                    {
+                        var prop = Data.GetType().GetProperty(propName);
+                        if (prop != null)
+                        {
+                            Descriptor = prop.GetValue(Data).ToString();
+                            return;
+                        }
                     }
                 }
             }
@@ -1246,7 +1415,7 @@ namespace WolvenKit.ViewModels.Shell
             {
                 //string depotpath = r.DepotPath;
                 //Tab.File.OpenRefAsTab(depotpath);
-                Locator.Current.GetService<AppViewModel>().OpenFileFromDepotPath(r.DepotPath);
+                Locator.Current.GetService<AppViewModel>().OpenFileFromHash(r.DepotPath.GetRedHash());
             }
             //var key = FNV1A64HashAlgorithm.HashString(depotpath);
 
@@ -1284,8 +1453,8 @@ namespace WolvenKit.ViewModels.Shell
         private bool CanAddHandle() => (PropertyType?.IsAssignableTo(typeof(IRedBaseHandle)) ?? false);
         private void ExecuteAddHandle()
         {
-            Data = RedTypeManager.CreateRedType(PropertyType);
-            if (Data is IRedBaseHandle handle)
+            var data = RedTypeManager.CreateRedType(PropertyType);
+            if (data is IRedBaseHandle handle)
             {
                 var existing = new ObservableCollection<string>(AppDomain.CurrentDomain.GetAssemblies().SelectMany(s => s.GetTypes()).Where(p => handle.InnerType.IsAssignableFrom(p) && p.IsClass).Select(x => x.Name));
                 var app = Locator.Current.GetService<AppViewModel>();
@@ -1304,9 +1473,21 @@ namespace WolvenKit.ViewModels.Shell
             {
                 var vm = sender as CreateClassDialogViewModel;
                 var instance = RedTypeManager.Create(vm.SelectedClass);
-                if (Data is IRedBaseHandle handle)
+                var data = RedTypeManager.CreateRedType(PropertyType);
+                if (data is IRedBaseHandle handle)
                 {
                     handle.SetValue(instance);
+                    Data = data;
+
+                    if (Parent.ResolvedData is RedBaseClass rbc)
+                    {
+                        rbc.SetProperty(propertyName, Data);
+                    }
+                    PropertyCount = -1;
+                    // might not be needed
+                    CalculateDescriptor();
+                    PropertiesLoaded = false;
+                    CalculateProperties();
                     this.RaisePropertyChanged("Data");
                     Tab.File.SetIsDirty(true);
                 }
@@ -1327,14 +1508,35 @@ namespace WolvenKit.ViewModels.Shell
 
                 var arr = (IRedArray)Data;
 
-                var type = arr.InnerType;
-                var newItem = RedTypeManager.CreateRedType(type);
-                if (newItem is IRedBaseHandle handle)
+                var innerType = arr.InnerType;
+                var pointer = false;
+                if (innerType.IsAssignableTo(typeof(IRedBaseHandle)))
                 {
-                    var pointee = RedTypeManager.CreateRedType(handle.InnerType);
-                    handle.SetValue((RedBaseClass)pointee);
+                    pointer = true;
+                    innerType = innerType.GenericTypeArguments[0];
                 }
-                InsertChild(-1, newItem);
+                var existing = new ObservableCollection<string>(AppDomain.CurrentDomain.GetAssemblies().SelectMany(s => s.GetTypes()).Where(p => innerType.IsAssignableFrom(p) && p.IsClass).Select(x => x.Name));
+
+                // no inheritable
+                if (existing.Count == 1)
+                {
+                    var type = arr.InnerType;
+                    var newItem = RedTypeManager.CreateRedType(type);
+                    if (newItem is IRedBaseHandle handle)
+                    {
+                        var pointee = RedTypeManager.CreateRedType(handle.InnerType);
+                        handle.SetValue((RedBaseClass)pointee);
+                    }
+                    InsertChild(-1, newItem);
+                }
+                else
+                {
+                    var app = Locator.Current.GetService<AppViewModel>();
+                    app.SetActiveDialog(new CreateClassDialogViewModel(existing, true)
+                    {
+                        DialogHandler = pointer ? HandleChunkPointer : HandleChunk
+                    });
+                }
             }
 
             if (PropertyType.IsAssignableTo(typeof(IRedLegacySingleChannelCurve)))
@@ -1350,17 +1552,6 @@ namespace WolvenKit.ViewModels.Shell
                 var newItem = RedTypeManager.CreateRedType(type);
                 InsertChild(-1, newItem);
             }
-            //(Data as IRedArray).Add(newItem);
-            //var cvm = new ChunkViewModel(newItem, this);
-            //PropertyCount = -1;
-            //CalculateDescriptor();
-            //Properties.Add(cvm);
-            //this.RaisePropertyChanged("Data");
-            //cvm.IsExpanded = true;
-            //IsExpanded = true;
-            //Parent.IsExpanded = true;
-            //Tab.SelectedChunk = cvm;
-            //Tab.File.SetIsDirty(true);
         }
 
         public ICommand AddItemToCompiledDataCommand { get; private set; }
@@ -1408,6 +1599,25 @@ namespace WolvenKit.ViewModels.Shell
                 var vm = sender as CreateClassDialogViewModel;
                 var instance = RedTypeManager.Create(vm.SelectedClass);
                 InsertChild(-1, instance);
+            }
+        }
+
+        public void HandleChunkPointer(DialogViewModel sender)
+        {
+            var app = Locator.Current.GetService<AppViewModel>();
+            app.CloseDialogCommand.Execute(null);
+            if (sender != null)
+            {
+                var vm = sender as CreateClassDialogViewModel;
+                var instance = RedTypeManager.Create(vm.SelectedClass);
+
+                var type = (Data as IRedArray).InnerType;
+                var newItem = RedTypeManager.CreateRedType(type);
+                if (newItem is IRedBaseHandle handle)
+                {
+                    handle.SetValue(instance);
+                    InsertChild(-1, newItem);
+                }
             }
         }
 

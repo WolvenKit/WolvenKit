@@ -1,18 +1,15 @@
-using System.ComponentModel.DataAnnotations;
+using System.Collections.Generic;
 
 namespace WolvenKit.Common.Model.Database
 {
     public class RedFile
     {
-        [Key]
-        public ulong RedFileId { get; set; }
+        public int Id { get; set; }
 
-        public string Name { get; set; }
+        public int ArchiveId { get; set; }
+        public RedArchive Archive { get; set; }
+        public ulong Hash { get; set; }
 
-        public string Archive { get; set; }
-
-        public virtual ulong[] Uses { get; set; }
-
-        public virtual ulong[] UsedBy { get; set; }
+        public virtual ICollection<RedFileUse> Uses { get; set; }
     }
 }

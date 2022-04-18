@@ -49,12 +49,19 @@ namespace WolvenKit.RED4.Archive.IO
 
             for (int i = 0; i < header.count1; i++)
             {
-                var u = new TilesBufferUk1();
+                var u = new TileFaceInfo();
                 u.Zero = _reader.ReadUInt32();
-                for (int j = 0; j < 8; j++)
+                for (int j = 0; j < 3; j++)
                 {
                     u.Indices.Add(_reader.ReadUInt16());
                 }
+                for (int j = 0; j < 3; j++)
+                {
+                    u.ConnectedFaces.Add(new TileConnectedFace(_reader.ReadUInt16()));
+                }
+                u.Three = _reader.ReadUInt16();
+                u.NumIndices = _reader.ReadByte();
+                u.Bits = _reader.ReadByte();
                 tiles.FaceInfo.Add(u);
             }
 
@@ -75,7 +82,7 @@ namespace WolvenKit.RED4.Archive.IO
                 tiles.Indices.Add(u);
             }
 
-            for (int i = 0; i < header.count7; i++)
+            for (int i = 0; i < header.count4; i++)
             {
                 tiles.Flags.Add(_reader.ReadUInt32());
             }

@@ -1072,47 +1072,50 @@ namespace WolvenKit.Modkit.RED4.Tools
         {
             for (var i = 0; i < meshes.Count; i++)
             {
-                var idx0 = meshes[i].indices[0];
-                var idx1 = meshes[i].indices[1];
-                var idx2 = meshes[i].indices[2];
-
-                var doubled = false;
-                for (var j = 3; j < meshes[i].indices.Length; j += 3)
+                if (meshes[i].indices.Length > 0)
                 {
-                    var bool0 = idx0 == meshes[i].indices[j] || idx0 == meshes[i].indices[j + 1] || idx0 == meshes[i].indices[j + 2];
-                    var bool1 = idx1 == meshes[i].indices[j] || idx1 == meshes[i].indices[j + 1] || idx1 == meshes[i].indices[j + 2];
-                    var bool2 = idx2 == meshes[i].indices[j] || idx2 == meshes[i].indices[j + 1] || idx2 == meshes[i].indices[j + 2];
+                    var idx0 = meshes[i].indices[0];
+                    var idx1 = meshes[i].indices[1];
+                    var idx2 = meshes[i].indices[2];
 
-                    doubled = bool0 && bool1 && bool2;
-                    if (doubled)
+                    var doubled = false;
+                    for (var j = 3; j < meshes[i].indices.Length; j += 3)
                     {
-                        break;
-                    }
-                }
-                if (doubled)
-                {
-                    var indices = new List<uint>();
-                    for (var j = 0; j < meshes[i].indices.Length; j += 3)
-                    {
-                        var v0 = meshes[i].positions[meshes[i].indices[j]];
-                        var v1 = meshes[i].positions[meshes[i].indices[j + 1]];
-                        var v2 = meshes[i].positions[meshes[i].indices[j + 2]];
-                        var cross = Vec3.Normalize(Vec3.Cross(new Vec3(v1.X - v0.X, v1.Y - v0.Y, v1.Z - v0.Z), new Vec3(v2.X - v1.X, v2.Y - v1.Y, v2.Z - v1.Z)));
+                        var bool0 = idx0 == meshes[i].indices[j] || idx0 == meshes[i].indices[j + 1] || idx0 == meshes[i].indices[j + 2];
+                        var bool1 = idx1 == meshes[i].indices[j] || idx1 == meshes[i].indices[j + 1] || idx1 == meshes[i].indices[j + 2];
+                        var bool2 = idx2 == meshes[i].indices[j] || idx2 == meshes[i].indices[j + 1] || idx2 == meshes[i].indices[j + 2];
 
-                        var n0 = meshes[i].normals[meshes[i].indices[j]];
-                        var n1 = meshes[i].normals[meshes[i].indices[j + 1]];
-                        var n2 = meshes[i].normals[meshes[i].indices[j + 2]];
-                        var avg = Vec3.Normalize(new Vec3((n0.X + n1.X + n2.X) / 3, (n0.Y + n1.Y + n2.Y) / 3, (n0.Z + n1.Z + n2.Z) / 3));
-
-                        if (Vec3.Dot(cross, avg) <= 0)
+                        doubled = bool0 && bool1 && bool2;
+                        if (doubled)
                         {
-                            indices.Add(meshes[i].indices[j]);
-                            indices.Add(meshes[i].indices[j + 1]);
-                            indices.Add(meshes[i].indices[j + 2]);
+                            break;
                         }
                     }
-                    meshes[i].indices = indices.ToArray();
-                    meshes[i].name += "_doubled";
+                    if (doubled && meshes[i].normals.Length > 0)
+                    {
+                        var indices = new List<uint>();
+                        for (var j = 0; j < meshes[i].indices.Length; j += 3)
+                        {
+                            var v0 = meshes[i].positions[meshes[i].indices[j]];
+                            var v1 = meshes[i].positions[meshes[i].indices[j + 1]];
+                            var v2 = meshes[i].positions[meshes[i].indices[j + 2]];
+                            var cross = Vec3.Normalize(Vec3.Cross(new Vec3(v1.X - v0.X, v1.Y - v0.Y, v1.Z - v0.Z), new Vec3(v2.X - v1.X, v2.Y - v1.Y, v2.Z - v1.Z)));
+
+                            var n0 = meshes[i].normals[meshes[i].indices[j]];
+                            var n1 = meshes[i].normals[meshes[i].indices[j + 1]];
+                            var n2 = meshes[i].normals[meshes[i].indices[j + 2]];
+                            var avg = Vec3.Normalize(new Vec3((n0.X + n1.X + n2.X) / 3, (n0.Y + n1.Y + n2.Y) / 3, (n0.Z + n1.Z + n2.Z) / 3));
+
+                            if (Vec3.Dot(cross, avg) <= 0)
+                            {
+                                indices.Add(meshes[i].indices[j]);
+                                indices.Add(meshes[i].indices[j + 1]);
+                                indices.Add(meshes[i].indices[j + 2]);
+                            }
+                        }
+                        meshes[i].indices = indices.ToArray();
+                        meshes[i].name += "_doubled";
+                    }
                 }
             }
         }

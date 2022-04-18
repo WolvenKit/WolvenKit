@@ -11,19 +11,9 @@ namespace WolvenKit.RED4.Archive.Buffer
     {
         public IRedType Data => Transforms;
 
-        public CArray<WorldTransform> Transforms = new();
+        public CArray<worldNodeTransform> Transforms = new();
 
         public WorldTransformsBuffer()
-        {
-
-        }
-    }
-
-    public class WorldTransformExt : WorldTransform
-    {
-        public Vector3 Scale = new();
-
-        public WorldTransformExt() : base()
         {
 
         }
