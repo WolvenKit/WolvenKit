@@ -1,13 +1,8 @@
 using System;
 using System.ComponentModel;
-using System.Diagnostics;
-using System.Reactive.Linq;
-using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Media;
 using ColorPicker;
-using ColorPicker.Models;
-using ReactiveUI;
 using WolvenKit.RED4.Types;
 
 namespace WolvenKit.Views.Tools
@@ -24,9 +19,6 @@ namespace WolvenKit.Views.Tools
             InitializeComponent();
 
             Color.PropertyChanged += OnColorPropertyChanged;
-
-            this.WhenAnyValue(x => x.ColorState)
-                .Do(x => Debugger.Break());
         }
 
         public CColor RedColor
@@ -88,14 +80,6 @@ namespace WolvenKit.Views.Tools
             });
 
             UpdateBrush();
-
-            //if (RedHDRColor != null)
-            //{
-            //    RedHDRColor.Alpha = (CFloat)Color.A;
-            //    RedHDRColor.Red = (CFloat)Color.RGB_R;
-            //    RedHDRColor.Green = (CFloat)Color.RGB_G;
-            //    RedHDRColor.Blue = (CFloat)Color.RGB_B;
-            //}
 
             _updateFromColor = false;
         }
