@@ -54,35 +54,37 @@ namespace WolvenKit.Modkit.RED4
                 wm = Enumerable.Range(0, armature.Count).Select(_ => ((Skin)armature[_]).GetJoint(_).Joint.WorldMatrix).ToList();
 
             }
-            if (model.LogicalNodes.Count > 0)
+            else
             {
-                armature = Enumerable.Range(0, model.LogicalNodes.Count).Select(_ => (LogicalChildOfRoot)model.LogicalNodes[_]).ToList();
-                jointlist = Enumerable.Range(0, armature.Count).Select(_ => ((Node)armature[_])).ToList();
-                jointnames = Enumerable.Range(0, armature.Count).Select(_ => ((Node)armature[_]).Name).ToList();
-                jointparentnames = Enumerable.Range(0, armature.Count).Select(_ => ((Node)armature[_]).VisualParent is null
-                                                                    ? "firstbone" : ((Node)armature[_]).VisualParent.Name).ToList();
-                wm = Enumerable.Range(0, armature.Count).Select(_ => ((Node)armature[_]).WorldMatrix).ToList();
-
-                for (var i = 0; i < wm.Count; i++)
+                if (model.LogicalNodes.Count > 0)
                 {
-                    var temp = new System.Numerics.Matrix4x4();
-                    System.Numerics.Matrix4x4.Invert(wm[i], out temp);
-                    ibm.Add(temp);
+                    armature = Enumerable.Range(0, model.LogicalNodes.Count).Select(_ => (LogicalChildOfRoot)model.LogicalNodes[_]).ToList();
+                    jointlist = Enumerable.Range(0, armature.Count).Select(_ => ((Node)armature[_])).ToList();
+                    jointnames = Enumerable.Range(0, armature.Count).Select(_ => ((Node)armature[_]).Name).ToList();
+                    jointparentnames = Enumerable.Range(0, armature.Count).Select(_ => ((Node)armature[_]).VisualParent is null
+                                                                        ? "firstbone" : ((Node)armature[_]).VisualParent.Name).ToList();
+                    wm = Enumerable.Range(0, armature.Count).Select(_ => ((Node)armature[_]).WorldMatrix).ToList();
+
+                    for (var i = 0; i < wm.Count; i++)
+                    {
+                        var temp = new System.Numerics.Matrix4x4();
+                        System.Numerics.Matrix4x4.Invert(wm[i], out temp);
+                        ibm.Add(temp);
+                    }
+
+                    //ibm = Enumerable.Range(0, wm.Count).Select(_ => System.Numerics.Matrix4x4.Invert( wm[_], out ibm[_] )).ToList();
+
+                    joints = Enumerable.Range(0, armature.Count).Select(_ => (jointlist[_], ibm[_])).ToList();
                 }
-
-                //ibm = Enumerable.Range(0, wm.Count).Select(_ => System.Numerics.Matrix4x4.Invert( wm[_], out ibm[_] )).ToList();
-
-                joints = Enumerable.Range(0, armature.Count).Select(_ => (jointlist[_], ibm[_])).ToList();
             }
 
-            int[] GetLevels()
+            int[] GetLevels(string root = "Root")
             {
                 var rootindex = jointnames.IndexOf("Root");
                 var treelevel = new int[jointnames.Count];
 
                 if (jointparentnames[rootindex] == "Armature")
                 {
-                    treelevel[rootindex] = 0;
                     void rec(string parent, int level)
                     {
                         var tindex = Enumerable.Range(0, jointnames.Count).Where(i => jointparentnames[i] == parent).ToList();
@@ -95,13 +97,12 @@ namespace WolvenKit.Modkit.RED4
                             }
                         }
                     }
-                    rec("Root", 0);
+                    rec(root, 0);
                     return treelevel;
                 }
                 return null;
             }
 
-            var levels = GetLevels();
 
             var inversedWorldMatrix = new System.Numerics.Matrix4x4();
             var inversedLocalMatrix = new System.Numerics.Matrix4x4();
@@ -145,36 +146,84 @@ namespace WolvenKit.Modkit.RED4
 
             Console.Write(inversedManualTRS == joints[1].InverseBindMatrix);
 
-
+            
+            var levels = GetLevels("Root");
 
             for (var i = 0; i < rig.BoneNames.Count; i++)
             {
-                //var index = DynamicData.List.FindIndex(jointnames, x => x.Contains(rig.BoneNames[i]) && x.Length == rig.BoneNames[i].Length);
-                var index = jointnames.IndexOf(rig.BoneNames[i]);
-                /*
-                                rig.BoneTransforms[i].Rotation.I = jointlist[index].LocalTransform.Rotation.X;
-                                rig.BoneTransforms[i].Rotation.J = -jointlist[index].LocalTransform.Rotation.Z;
-                                rig.BoneTransforms[i].Rotation.K = jointlist[index].LocalTransform.Rotation.Y;
-                                rig.BoneTransforms[i].Rotation.R = jointlist[index].LocalTransform.Rotation.W;
+                var currentbone = rig.BoneNames[i];
+                var index = jointnames.IndexOf(currentbone);
 
-                                rig.BoneTransforms[i].Scale.W = 1;
-                                rig.BoneTransforms[i].Scale.X = jointlist[index].LocalTransform.Scale.X;
-                                rig.BoneTransforms[i].Scale.Y = jointlist[index].LocalTransform.Scale.Y;
-                                rig.BoneTransforms[i].Scale.Z = jointlist[index].LocalTransform.Scale.Z;
+                {
+                    /*
+                                    rig.BoneTransforms[i].Rotation.I = jointlist[index].LocalTransform.Rotation.X;
+                                    rig.BoneTransforms[i].Rotation.J = -jointlist[index].LocalTransform.Rotation.Z;
+                                    rig.BoneTransforms[i].Rotation.K = jointlist[index].LocalTransform.Rotation.Y;
+                                    rig.BoneTransforms[i].Rotation.R = jointlist[index].LocalTransform.Rotation.W;
 
-                                //if the bit flippy thingy should be flipped like with original rigs from the game
-                                rig.BoneTransforms[i].Translation.W = i == 0 ? 1 : 0;
-                                rig.BoneTransforms[i].Translation.X = jointlist[index].LocalTransform.Translation.X;
-                                rig.BoneTransforms[i].Translation.Y = -jointlist[index].LocalTransform.Translation.Z;
-                                rig.BoneTransforms[i].Translation.Z = jointlist[index].LocalTransform.Translation.Y;*/
+                                    rig.BoneTransforms[i].Scale.W = 1;
+                                    rig.BoneTransforms[i].Scale.X = jointlist[index].LocalTransform.Scale.X;
+                                    rig.BoneTransforms[i].Scale.Y = jointlist[index].LocalTransform.Scale.Y;
+                                    rig.BoneTransforms[i].Scale.Z = jointlist[index].LocalTransform.Scale.Z;
 
-                var level = levels[index] % 4;
+                                    //if the bit flippy thingy should be flipped like with original rigs from the game
+                                    rig.BoneTransforms[i].Translation.W = i == 0 ? 1 : 0;
+                                    rig.BoneTransforms[i].Translation.X = jointlist[index].LocalTransform.Translation.X;
+                                    rig.BoneTransforms[i].Translation.Y = -jointlist[index].LocalTransform.Translation.Z;
+                                    rig.BoneTransforms[i].Translation.Z = jointlist[index].LocalTransform.Translation.Y;*/
+
+                } //gotta figure out those rotations
+
+                var oriR = rig.BoneTransforms[i].Rotation;
+                var newR = jointlist[index].LocalTransform.Rotation;
+                var parR = jointlist[index].VisualParent.LocalTransform.Rotation;
+                var quat = new System.Numerics.Quaternion(oriR.I, oriR.J, oriR.K, oriR.R);
+                var quatM = System.Numerics.Matrix4x4.CreateFromQuaternion(quat);
+
+                var d = newR - quat + new System.Numerics.Quaternion(0, 0, 0, 1);
+                var p = newR * quat;
+                var e = d == p;
+                var esmall = (d - p).Length() < 0.001;
+
+                var level = levels[index];
                 var tr = jointlist[index].LocalTransform.Translation;
-                rig.BoneTransforms[i].Translation.W = i == 0 ? 1 : 0;
-                rig.BoneTransforms[i].Translation.X = tr.X;
+                var oriT = rig.BoneTransforms[i].Translation;
 
-                rig.BoneTransforms[i].Translation.Y = level == 0 ? tr.Y : level == 1 ? -tr.Z : level == 2 ? -tr.Y :  tr.Z;
-                rig.BoneTransforms[i].Translation.Z = level == 0 ? tr.Z : level == 1 ?  tr.Y : level == 2 ? -tr.Z : -tr.Y;
+                var diffT = new Vec3(oriT.X, oriT.Y, oriT.Z) - tr;
+                var len = diffT.Length();
+                var small = len < 0.1;
+
+                var before = rig.BoneTransforms[i].Translation.DeepCopy();
+
+                {
+                    rig.BoneTransforms[i].Translation.W = i == 0 ? 1 : 0;
+                    rig.BoneTransforms[i].Translation.X = level == 0 ? tr.X :
+                                                          level == 1 ? tr.X :
+                                                          level == 2 ? tr.X :
+                                                          level == 3 ? tr.X :
+                                                          level == 6 ? -tr.Y :
+                                                          level == 8 ? tr.Z :
+                                                          tr.X;
+
+                    rig.BoneTransforms[i].Translation.Y = level == 0 ? tr.Y :
+                                                          level == 2 ? -tr.Z :
+                                                          level == 3 ? -tr.Z :
+                                                          level == 4 ? -tr.Z :
+                                                          level == 5 ? -tr.Z :
+                                                          level == 6 ? tr.X :
+                                                          level == 8 ? -tr.Y :
+                                                          tr.Y;
+                    rig.BoneTransforms[i].Translation.Z = level == 0 ? tr.Z :
+                                                          level == 2 ? -tr.Y :
+                                                          level == 3 ? -tr.Y :
+                                                          level == 4 ? -tr.Y :
+                                                          level == 5 ? tr.Y :
+                                                          level == 6 ? tr.Z :
+                                                          level == 8 ? tr.X :
+                                                          tr.Z;
+                }
+
+                var after = rig.BoneTransforms[i].Translation;
             }
 
             var ms = new MemoryStream();
@@ -252,6 +301,8 @@ namespace WolvenKit.Modkit.RED4
 
 
                             root.BoneRigMatrices[i] = inversedWorldMatrix;
+                            root.BoneRigMatrices[i].W.Y = -inversedWorldMatrix.M43;
+                            root.BoneRigMatrices[i].W.Z = inversedWorldMatrix.M42;
                             //component Y and -Z are being swapped in vector W
                             //should probably figure out why
                         }

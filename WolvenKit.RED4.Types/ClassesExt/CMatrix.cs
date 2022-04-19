@@ -4,14 +4,6 @@ namespace WolvenKit.RED4.Types
 {
     public partial class CMatrix : RedBaseClass
     {
-/*        public CMatrix(System.Numerics.Matrix4x4 matrix)
-        {
-            X = new() { X = matrix.M11 };
-            Y = new() { Y = matrix.M22 };
-            Z = new() { Z = 1.000000F };
-            W = new() { W = 1.000000F };
-        }
-*/
         public static implicit operator CMatrix(System.Numerics.Matrix4x4 matrix)
         {
             CMatrix cmatrix = new CMatrix();
@@ -31,8 +23,8 @@ namespace WolvenKit.RED4.Types
             cmatrix.Z.W = matrix.M34;
 
             cmatrix.W.X = matrix.M41;
-            cmatrix.W.Y = - matrix.M43;
-            cmatrix.W.Z = matrix.M42;
+            cmatrix.W.Y = matrix.M42;
+            cmatrix.W.Z = matrix.M43;
             cmatrix.W.W = matrix.M44;
 
             return cmatrix;
