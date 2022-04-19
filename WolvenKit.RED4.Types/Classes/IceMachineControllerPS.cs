@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class IceMachineControllerPS : VendingMachineControllerPS
 	{
 		[Ordinal(112)] 
@@ -27,6 +26,10 @@ namespace WolvenKit.RED4.Types
 			TweakDBRecord = 78736419072;
 			TweakDBDescriptionRecord = 132501907971;
 			IceMachineSFX = new() { IceFalls = "dev_ice_machine_ice_cube_falls", Processing = "dev_vending_machine_processing" };
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

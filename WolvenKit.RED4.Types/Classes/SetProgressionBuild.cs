@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class SetProgressionBuild : gamePlayerScriptableSystemRequest
 	{
 		[Ordinal(1)] 
@@ -12,5 +11,12 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CEnum<gamedataBuildType>>();
 			set => SetPropertyValue<CEnum<gamedataBuildType>>(value);
 		}
+
+		public SetProgressionBuild()
+		{
+			PostConstruct();
+		}
+
+		partial void PostConstruct();
 	}
 }

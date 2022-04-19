@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class animAnimNode_MixerSlot : animAnimNode_OnePoseInput
 	{
 		[Ordinal(12)] 
@@ -36,6 +35,10 @@ namespace WolvenKit.RED4.Types
 			MaxNormalAnimEntriesCount = 2;
 			MaxAdditiveAnimEntriesCount = 2;
 			MaxOverrideAnimEntriesCount = 2;
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

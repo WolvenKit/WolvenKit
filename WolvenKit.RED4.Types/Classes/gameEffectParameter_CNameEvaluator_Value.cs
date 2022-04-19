@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class gameEffectParameter_CNameEvaluator_Value : gameIEffectParameter_CNameEvaluator
 	{
 		[Ordinal(0)] 
@@ -12,5 +11,12 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CName>();
 			set => SetPropertyValue<CName>(value);
 		}
+
+		public gameEffectParameter_CNameEvaluator_Value()
+		{
+			PostConstruct();
+		}
+
+		partial void PostConstruct();
 	}
 }

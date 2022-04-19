@@ -7,9 +7,9 @@ using SharpGLTF.Schema2;
 using SharpGLTF.Validation;
 using WolvenKit.Modkit.RED4.GeneralStructs;
 using WolvenKit.Modkit.RED4.Tools;
+using WolvenKit.RED4.Archive;
 using WolvenKit.RED4.Archive.CR2W;
 using WolvenKit.RED4.Archive.IO;
-using WolvenKit.RED4.CR2W.Archive;
 using WolvenKit.RED4.Types;
 using Vec2 = System.Numerics.Vector2;
 using Vec3 = System.Numerics.Vector3;
@@ -189,7 +189,7 @@ namespace WolvenKit.Modkit.RED4
 
             for (var i = 0; i < vertCount; i++)
             {
-                if (joints0.Count != 0)
+                if (joints0 != null && i < joints0.Count)
                 {
                     meshContainer.boneindices[i, 0] = (ushort)joints0[i].X;
                     meshContainer.boneindices[i, 1] = (ushort)joints0[i].Y;
@@ -201,7 +201,7 @@ namespace WolvenKit.Modkit.RED4
                     meshContainer.weights[i, 2] = weights0[i].Z;
                     meshContainer.weights[i, 3] = weights0[i].W;
                 }
-                if (joints1 != null)
+                if (joints1 != null && i < joints1.Count)
                 {
                     meshContainer.boneindices[i, 4] = (ushort)joints1[i].X;
                     meshContainer.boneindices[i, 5] = (ushort)joints1[i].Y;
@@ -509,7 +509,7 @@ namespace WolvenKit.Modkit.RED4
                 blob.Header.Topology.Clear();
                 for (var i = 0; i < info.meshCount; i++)
                 {
-                    blob.Header.Topology.Add(RedTypeManager.Create<rendTopologyData>());
+                    blob.Header.Topology.Add(new rendTopologyData());
                 }
             }
 
@@ -559,208 +559,218 @@ namespace WolvenKit.Modkit.RED4
             // adding new rendChunks
             for (var i = 0; i < info.meshCount; i++)
             {
-                var chunk = RedTypeManager.Create<rendChunk>();
+                var chunk = new rendChunk
+                    {
+                        LodMask = (byte)info.LODLvl[i],
+                        RenderMask = Enums.EMeshChunkFlags.MCF_RenderInScene | Enums.EMeshChunkFlags.MCF_RenderInShadows,
+                        // based upon VertexBlock, subject to change, incremental will be good, for weightcount ++ etc
+                        // VertexFactory is really important to be taken care of properly
+                        VertexFactory = 2,
+                        NumIndices = info.indCounts[i],
+                        NumVertices = (ushort)info.vertCounts[i],
+                        ChunkIndices = new rendIndexBufferChunk
+                            {
+                                Pe = Enums.GpuWrapApieIndexBufferChunkType.IBCT_IndexUShort,
+                                TeOffset = info.indicesOffsets[i] - info.indexBufferOffset
+                            },
+                        ChunkVertices = new rendVertexBufferChunk()
+                    };
 
-                chunk.LodMask = Convert.ToByte(info.LODLvl[i]);
-
-                chunk.RenderMask = Enums.EMeshChunkFlags.MCF_RenderInScene | Enums.EMeshChunkFlags.MCF_RenderInShadows;
-
-                // vertexfactory is really important to be taken care of properly
-                // based upon VertexBlock, subject to change, incremental will be good, for weightcount ++ etc
-                chunk.VertexFactory = Convert.ToByte(2);
-
-                chunk.NumIndices = info.indCounts[i];
-                chunk.NumVertices = Convert.ToUInt16(info.vertCounts[i]);
-
-                chunk.ChunkIndices = RedTypeManager.Create<rendIndexBufferChunk>();
-                chunk.ChunkIndices.Pe = Enums.GpuWrapApieIndexBufferChunkType.IBCT_IndexUShort;
-                chunk.ChunkIndices.TeOffset = info.indicesOffsets[i] - info.indexBufferOffset;
-
-
-                chunk.ChunkVertices = RedTypeManager.Create<rendVertexBufferChunk>();
                 chunk.ChunkVertices.ByteOffsets.Add(info.posnOffsets[i]);
                 chunk.ChunkVertices.ByteOffsets.Add(info.tex0Offsets[i]);
                 chunk.ChunkVertices.ByteOffsets.Add(info.normalOffsets[i]);
                 chunk.ChunkVertices.ByteOffsets.Add(info.colorOffsets[i]);
                 chunk.ChunkVertices.ByteOffsets.Add(info.unknownOffsets[i]);
 
-                chunk.ChunkVertices.VertexLayout = RedTypeManager.Create<GpuWrapApiVertexLayoutDesc>();
+                chunk.ChunkVertices.VertexLayout = new GpuWrapApiVertexLayoutDesc {
+                    //hash and slotmask are not understood/no-interest, subject to change
+                    Hash = 0,
+                    SlotMask = 0
+                };
 
-                //hash and slotmask are not understood/no-interest, subject to change
-                chunk.ChunkVertices.VertexLayout.Hash = 0;
-                chunk.ChunkVertices.VertexLayout.SlotMask = 0;
+                chunk.ChunkVertices.VertexLayout.SlotStrides.Add((byte)info.vpStrides[i]);
+                chunk.ChunkVertices.VertexLayout.SlotStrides.Add(4);
+                chunk.ChunkVertices.VertexLayout.SlotStrides.Add(8);
+                chunk.ChunkVertices.VertexLayout.SlotStrides.Add(8);
 
-                chunk.ChunkVertices.VertexLayout.SlotStrides.Add(Convert.ToByte(info.vpStrides[i]));
-                chunk.ChunkVertices.VertexLayout.SlotStrides.Add(Convert.ToByte(4));
-                chunk.ChunkVertices.VertexLayout.SlotStrides.Add(Convert.ToByte(8));
-                chunk.ChunkVertices.VertexLayout.SlotStrides.Add(Convert.ToByte(8));
+                chunk.ChunkVertices.VertexLayout.SlotStrides.Add(info.unknownOffsets[i] == 0 ? 0 : 4);
 
-                chunk.ChunkVertices.VertexLayout.SlotStrides.Add(info.unknownOffsets[i] == 0 ? Convert.ToByte(0) : Convert.ToByte(4));
+                chunk.ChunkVertices.VertexLayout.SlotStrides.Add(0);
+                chunk.ChunkVertices.VertexLayout.SlotStrides.Add(0);
 
-                chunk.ChunkVertices.VertexLayout.SlotStrides.Add(Convert.ToByte(0));
-                chunk.ChunkVertices.VertexLayout.SlotStrides.Add(Convert.ToByte(0));
-
-                chunk.ChunkVertices.VertexLayout.SlotStrides.Add(info.weightCounts[i] == 0 ? Convert.ToByte(48) : Convert.ToByte(64));
-
-                var elementIdx = 0;
+                chunk.ChunkVertices.VertexLayout.SlotStrides.Add(info.weightCounts[i] == 0 ? 48 : 64);
 
                 // Position
-                chunk.ChunkVertices.VertexLayout.Elements.Add(RedTypeManager.Create<GpuWrapApiVertexPackingPackingElement>());
-                chunk.ChunkVertices.VertexLayout.Elements[elementIdx].StreamIndex = Convert.ToByte(0);
-                chunk.ChunkVertices.VertexLayout.Elements[elementIdx].UsageIndex = Convert.ToByte(0);
-                chunk.ChunkVertices.VertexLayout.Elements[elementIdx].Usage = Enums.GpuWrapApiVertexPackingePackingUsage.PS_Position;
-                chunk.ChunkVertices.VertexLayout.Elements[elementIdx].Type = Enums.GpuWrapApiVertexPackingePackingType.PT_Short4N;
-                //chunk.ChunkVertices.VertexLayout.Elements[elementIdx].StreamType = new CEnum<Enums.GpuWrapApiVertexPackingEStreamType>(cr2w, chunk.ChunkVertices.VertexLayout.Elements[0], "streamType") { Value = Enums.GpuWrapApiVertexPackingEStreamType.ST_PerVertex };
-                elementIdx++;
+                chunk.ChunkVertices.VertexLayout.Elements.Add(new GpuWrapApiVertexPackingPackingElement
+                {
+                    StreamIndex = 0,
+                    UsageIndex = 0,
+                    Usage = Enums.GpuWrapApiVertexPackingePackingUsage.PS_Position,
+                    Type = Enums.GpuWrapApiVertexPackingePackingType.PT_Short4N
+                    //StreamType = Enums.GpuWrapApiVertexPackingEStreamType.ST_PerVertex
+                });
 
                 // Joint0
                 if (info.weightCounts[i] > 0)
                 {
-                    chunk.ChunkVertices.VertexLayout.Elements.Add(RedTypeManager.Create<GpuWrapApiVertexPackingPackingElement>());
-                    chunk.ChunkVertices.VertexLayout.Elements[elementIdx].StreamIndex = Convert.ToByte(0);
-                    chunk.ChunkVertices.VertexLayout.Elements[elementIdx].UsageIndex = Convert.ToByte(0);
-                    chunk.ChunkVertices.VertexLayout.Elements[elementIdx].Usage = Enums.GpuWrapApiVertexPackingePackingUsage.PS_SkinIndices;
-                    chunk.ChunkVertices.VertexLayout.Elements[elementIdx].Type = Enums.GpuWrapApiVertexPackingePackingType.PT_UByte4;
-                    //chunk.ChunkVertices.VertexLayout.Elements[elementIdx].StreamType = new CEnum<Enums.GpuWrapApiVertexPackingEStreamType>(cr2w, chunk.ChunkVertices.VertexLayout.Elements[0], "streamType") { Value = Enums.GpuWrapApiVertexPackingEStreamType.ST_PerVertex };
-                    elementIdx++;
+                    chunk.ChunkVertices.VertexLayout.Elements.Add(new GpuWrapApiVertexPackingPackingElement
+                    {
+                        StreamIndex = 0,
+                        UsageIndex = 0,
+                        Usage = Enums.GpuWrapApiVertexPackingePackingUsage.PS_SkinIndices,
+                        Type = Enums.GpuWrapApiVertexPackingePackingType.PT_UByte4
+                        //StreamType = Enums.GpuWrapApiVertexPackingEStreamType.ST_PerVertex
+                    });
 
-                    // subject to change, maybe, vertfactory is weird
+                    // subject to change, maybe, VertexFactory is weird
                     chunk.VertexFactory++;
                 }
+
                 // joint1
                 if (info.weightCounts[i] > 4)
                 {
-                    chunk.ChunkVertices.VertexLayout.Elements.Add(RedTypeManager.Create<GpuWrapApiVertexPackingPackingElement>());
-                    chunk.ChunkVertices.VertexLayout.Elements[elementIdx].StreamIndex = Convert.ToByte(0);
-                    chunk.ChunkVertices.VertexLayout.Elements[elementIdx].UsageIndex = Convert.ToByte(1);
-                    chunk.ChunkVertices.VertexLayout.Elements[elementIdx].Usage = Enums.GpuWrapApiVertexPackingePackingUsage.PS_SkinIndices;
-                    chunk.ChunkVertices.VertexLayout.Elements[elementIdx].Type = Enums.GpuWrapApiVertexPackingePackingType.PT_UByte4;
-                    //chunk.ChunkVertices.VertexLayout.Elements[elementIdx].StreamType = new CEnum<Enums.GpuWrapApiVertexPackingEStreamType>(cr2w, chunk.ChunkVertices.VertexLayout.Elements[0], "streamType") { Value = Enums.GpuWrapApiVertexPackingEStreamType.ST_PerVertex };
-                    elementIdx++;
+                    chunk.ChunkVertices.VertexLayout.Elements.Add(new GpuWrapApiVertexPackingPackingElement
+                    {
+                        StreamIndex = 0,
+                        UsageIndex = 1,
+                        Usage = Enums.GpuWrapApiVertexPackingePackingUsage.PS_SkinIndices,
+                        Type = Enums.GpuWrapApiVertexPackingePackingType.PT_UByte4
+                        //StreamType = Enums.GpuWrapApiVertexPackingEStreamType.ST_PerVertex
+                    });
 
-                    // subject to change, maybe, vertfactory is weird
+                    // subject to change, maybe, VertexFactory is weird
                     chunk.VertexFactory++;
                 }
 
                 // weight0
                 if (info.weightCounts[i] > 0)
                 {
-                    chunk.ChunkVertices.VertexLayout.Elements.Add(RedTypeManager.Create<GpuWrapApiVertexPackingPackingElement>());
-                    chunk.ChunkVertices.VertexLayout.Elements[elementIdx].StreamIndex = Convert.ToByte(0);
-                    chunk.ChunkVertices.VertexLayout.Elements[elementIdx].UsageIndex = Convert.ToByte(0);
-                    chunk.ChunkVertices.VertexLayout.Elements[elementIdx].Usage = Enums.GpuWrapApiVertexPackingePackingUsage.PS_SkinWeights;
-                    chunk.ChunkVertices.VertexLayout.Elements[elementIdx].Type = Enums.GpuWrapApiVertexPackingePackingType.PT_UByte4N;
-                    //chunk.ChunkVertices.VertexLayout.Elements[elementIdx].StreamType = new CEnum<Enums.GpuWrapApiVertexPackingEStreamType>(cr2w, chunk.ChunkVertices.VertexLayout.Elements[0], "streamType") { Value = Enums.GpuWrapApiVertexPackingEStreamType.ST_PerVertex };
-                    elementIdx++;
+                    chunk.ChunkVertices.VertexLayout.Elements.Add(new GpuWrapApiVertexPackingPackingElement
+                    {
+                        StreamIndex = 0,
+                        UsageIndex = 0,
+                        Usage = Enums.GpuWrapApiVertexPackingePackingUsage.PS_SkinWeights,
+                        Type = Enums.GpuWrapApiVertexPackingePackingType.PT_UByte4N
+                        //StreamType = Enums.GpuWrapApiVertexPackingEStreamType.ST_PerVertex
+                    });
                 }
                 // weight1
                 if (info.weightCounts[i] > 4)
                 {
-                    chunk.ChunkVertices.VertexLayout.Elements.Add(RedTypeManager.Create<GpuWrapApiVertexPackingPackingElement>());
-                    chunk.ChunkVertices.VertexLayout.Elements[elementIdx].StreamIndex = Convert.ToByte(0);
-                    chunk.ChunkVertices.VertexLayout.Elements[elementIdx].UsageIndex = Convert.ToByte(1);
-                    chunk.ChunkVertices.VertexLayout.Elements[elementIdx].Usage = Enums.GpuWrapApiVertexPackingePackingUsage.PS_SkinWeights;
-                    chunk.ChunkVertices.VertexLayout.Elements[elementIdx].Type = Enums.GpuWrapApiVertexPackingePackingType.PT_UByte4N;
-                    //chunk.ChunkVertices.VertexLayout.Elements[elementIdx].StreamType = new CEnum<Enums.GpuWrapApiVertexPackingEStreamType>(cr2w, chunk.ChunkVertices.VertexLayout.Elements[0], "streamType") { Value = Enums.GpuWrapApiVertexPackingEStreamType.ST_PerVertex };
-                    elementIdx++;
+                    chunk.ChunkVertices.VertexLayout.Elements.Add(new GpuWrapApiVertexPackingPackingElement
+                    {
+                        StreamIndex = 0,
+                        UsageIndex = 1,
+                        Usage = Enums.GpuWrapApiVertexPackingePackingUsage.PS_SkinWeights,
+                        Type = Enums.GpuWrapApiVertexPackingePackingType.PT_UByte4N
+                        //StreamType = Enums.GpuWrapApiVertexPackingEStreamType.ST_PerVertex
+                    });
                 }
 
                 // tx0coords
-                chunk.ChunkVertices.VertexLayout.Elements.Add(RedTypeManager.Create<GpuWrapApiVertexPackingPackingElement>());
-                chunk.ChunkVertices.VertexLayout.Elements[elementIdx].StreamIndex = Convert.ToByte(1);
-                chunk.ChunkVertices.VertexLayout.Elements[elementIdx].UsageIndex = Convert.ToByte(0);
-                chunk.ChunkVertices.VertexLayout.Elements[elementIdx].Usage = Enums.GpuWrapApiVertexPackingePackingUsage.PS_TexCoord;
-                chunk.ChunkVertices.VertexLayout.Elements[elementIdx].Type = Enums.GpuWrapApiVertexPackingePackingType.PT_Float16_2;
-                //chunk.ChunkVertices.VertexLayout.Elements[elementIdx].StreamType = new CEnum<Enums.GpuWrapApiVertexPackingEStreamType>(cr2w, chunk.ChunkVertices.VertexLayout.Elements[0], "streamType") { Value = Enums.GpuWrapApiVertexPackingEStreamType.ST_PerVertex };
-                elementIdx++;
+                chunk.ChunkVertices.VertexLayout.Elements.Add(new GpuWrapApiVertexPackingPackingElement
+                {
+                    StreamIndex = 1,
+                    UsageIndex = 0,
+                    Usage = Enums.GpuWrapApiVertexPackingePackingUsage.PS_TexCoord,
+                    Type = Enums.GpuWrapApiVertexPackingePackingType.PT_Float16_2
+                    //StreamType = Enums.GpuWrapApiVertexPackingEStreamType.ST_PerVertex
+                });
 
                 // normals
-                chunk.ChunkVertices.VertexLayout.Elements.Add(RedTypeManager.Create<GpuWrapApiVertexPackingPackingElement>());
-                chunk.ChunkVertices.VertexLayout.Elements[elementIdx].StreamIndex = Convert.ToByte(2);
-                chunk.ChunkVertices.VertexLayout.Elements[elementIdx].UsageIndex = Convert.ToByte(0);
-                chunk.ChunkVertices.VertexLayout.Elements[elementIdx].Usage = Enums.GpuWrapApiVertexPackingePackingUsage.PS_Normal;
-                chunk.ChunkVertices.VertexLayout.Elements[elementIdx].Type = Enums.GpuWrapApiVertexPackingePackingType.PT_Dec4;
-                //chunk.ChunkVertices.VertexLayout.Elements[elementIdx].StreamType = new CEnum<Enums.GpuWrapApiVertexPackingEStreamType>(cr2w, chunk.ChunkVertices.VertexLayout.Elements[0], "streamType") { Value = Enums.GpuWrapApiVertexPackingEStreamType.ST_PerVertex };
-                elementIdx++;
+                chunk.ChunkVertices.VertexLayout.Elements.Add(new GpuWrapApiVertexPackingPackingElement
+                {
+                    StreamIndex = 2,
+                    UsageIndex = 0,
+                    Usage = Enums.GpuWrapApiVertexPackingePackingUsage.PS_Normal,
+                    Type = Enums.GpuWrapApiVertexPackingePackingType.PT_Dec4
+                    //StreamType = Enums.GpuWrapApiVertexPackingEStreamType.ST_PerVertex
+                });
 
                 // tangents
-                chunk.ChunkVertices.VertexLayout.Elements.Add(RedTypeManager.Create<GpuWrapApiVertexPackingPackingElement>());
-                chunk.ChunkVertices.VertexLayout.Elements[elementIdx].StreamIndex = Convert.ToByte(2);
-                chunk.ChunkVertices.VertexLayout.Elements[elementIdx].UsageIndex = Convert.ToByte(0);
-                chunk.ChunkVertices.VertexLayout.Elements[elementIdx].Usage = Enums.GpuWrapApiVertexPackingePackingUsage.PS_Tangent;
-                chunk.ChunkVertices.VertexLayout.Elements[elementIdx].Type = Enums.GpuWrapApiVertexPackingePackingType.PT_Dec4;
-                //chunk.ChunkVertices.VertexLayout.Elements[elementIdx].StreamType = new CEnum<Enums.GpuWrapApiVertexPackingEStreamType>(cr2w, chunk.ChunkVertices.VertexLayout.Elements[0], "streamType") { Value = Enums.GpuWrapApiVertexPackingEStreamType.ST_PerVertex };
-                elementIdx++;
+                chunk.ChunkVertices.VertexLayout.Elements.Add(new GpuWrapApiVertexPackingPackingElement
+                {
+                    StreamIndex = 2,
+                    UsageIndex = 0,
+                    Usage = Enums.GpuWrapApiVertexPackingePackingUsage.PS_Tangent,
+                    Type = Enums.GpuWrapApiVertexPackingePackingType.PT_Dec4
+                    //StreamType = Enums.GpuWrapApiVertexPackingEStreamType.ST_PerVertex
+                });
 
                 // color
-                chunk.ChunkVertices.VertexLayout.Elements.Add(RedTypeManager.Create<GpuWrapApiVertexPackingPackingElement>());
-                chunk.ChunkVertices.VertexLayout.Elements[elementIdx].StreamIndex = Convert.ToByte(3);
-                chunk.ChunkVertices.VertexLayout.Elements[elementIdx].UsageIndex = Convert.ToByte(0);
-                chunk.ChunkVertices.VertexLayout.Elements[elementIdx].Usage = Enums.GpuWrapApiVertexPackingePackingUsage.PS_Color;
-                chunk.ChunkVertices.VertexLayout.Elements[elementIdx].Type = Enums.GpuWrapApiVertexPackingePackingType.PT_Color;
-                //chunk.ChunkVertices.VertexLayout.Elements[elementIdx].StreamType = new CEnum<Enums.GpuWrapApiVertexPackingEStreamType>(cr2w, chunk.ChunkVertices.VertexLayout.Elements[0], "streamType") { Value = Enums.GpuWrapApiVertexPackingEStreamType.ST_PerVertex };
-                elementIdx++;
+                chunk.ChunkVertices.VertexLayout.Elements.Add(new GpuWrapApiVertexPackingPackingElement
+                {
+                    StreamIndex = 3,
+                    UsageIndex = 0,
+                    Usage = Enums.GpuWrapApiVertexPackingePackingUsage.PS_Color,
+                    Type = Enums.GpuWrapApiVertexPackingePackingType.PT_Color
+                    //StreamType = Enums.GpuWrapApiVertexPackingEStreamType.ST_PerVertex
+                });
 
                 // tx1coords
-                chunk.ChunkVertices.VertexLayout.Elements.Add(RedTypeManager.Create<GpuWrapApiVertexPackingPackingElement>());
-                chunk.ChunkVertices.VertexLayout.Elements[elementIdx].StreamIndex = Convert.ToByte(3);
-                chunk.ChunkVertices.VertexLayout.Elements[elementIdx].UsageIndex = Convert.ToByte(1);
-                chunk.ChunkVertices.VertexLayout.Elements[elementIdx].Usage = Enums.GpuWrapApiVertexPackingePackingUsage.PS_TexCoord;
-                chunk.ChunkVertices.VertexLayout.Elements[elementIdx].Type = Enums.GpuWrapApiVertexPackingePackingType.PT_Float16_2;
-                //chunk.ChunkVertices.VertexLayout.Elements[elementIdx].StreamType = new CEnum<Enums.GpuWrapApiVertexPackingEStreamType>(cr2w, chunk.ChunkVertices.VertexLayout.Elements[0], "streamType") { Value = Enums.GpuWrapApiVertexPackingEStreamType.ST_PerVertex };
-                elementIdx++;
-
+                chunk.ChunkVertices.VertexLayout.Elements.Add(new GpuWrapApiVertexPackingPackingElement
+                {
+                    StreamIndex = 3,
+                    UsageIndex = 1,
+                    Usage = Enums.GpuWrapApiVertexPackingePackingUsage.PS_TexCoord,
+                    Type = Enums.GpuWrapApiVertexPackingePackingType.PT_Float16_2
+                    //StreamType = Enums.GpuWrapApiVertexPackingEStreamType.ST_PerVertex
+                });
 
                 // extra data/ morphoffsets
                 if (info.garmentSupportExists[i])
                 {
-                    chunk.ChunkVertices.VertexLayout.Elements.Add(RedTypeManager.Create<GpuWrapApiVertexPackingPackingElement>());
-                    // fishy
-                    chunk.ChunkVertices.VertexLayout.Elements[elementIdx].StreamIndex = Convert.ToByte(0);
-                    chunk.ChunkVertices.VertexLayout.Elements[elementIdx].UsageIndex = Convert.ToByte(0);
-                    chunk.ChunkVertices.VertexLayout.Elements[elementIdx].Usage = Enums.GpuWrapApiVertexPackingePackingUsage.PS_ExtraData;
-                    chunk.ChunkVertices.VertexLayout.Elements[elementIdx].Type = Enums.GpuWrapApiVertexPackingePackingType.PT_Float16_4;
-                    //chunk.ChunkVertices.VertexLayout.Elements[elementIdx].StreamType = new CEnum<Enums.GpuWrapApiVertexPackingEStreamType>(cr2w, chunk.ChunkVertices.VertexLayout.Elements[0], "streamType") { Value = Enums.GpuWrapApiVertexPackingEStreamType.ST_PerVertex };
-                    elementIdx++;
+                    chunk.ChunkVertices.VertexLayout.Elements.Add(new GpuWrapApiVertexPackingPackingElement
+                    {
+                        // fishy
+                        StreamIndex = 0,
+                        UsageIndex = 0,
+                        Usage = Enums.GpuWrapApiVertexPackingePackingUsage.PS_ExtraData,
+                        Type = Enums.GpuWrapApiVertexPackingePackingType.PT_Float16_4
+                        //StreamType = Enums.GpuWrapApiVertexPackingEStreamType.ST_PerVertex
+                    });
 
-                    // subject to change, maybe, vertfactory is weird, extra data ads 2 to this
+                    // subject to change, maybe, VertexFactory is weird, extra data ads 2 to this
                     chunk.VertexFactory += 2;
                 }
 
                 // instanceTransforms
-                for (var e = 0; e < 3; e++)
+                for (byte e = 0; e < 3; e++)
                 {
-                    chunk.ChunkVertices.VertexLayout.Elements.Add(RedTypeManager.Create<GpuWrapApiVertexPackingPackingElement>());
-                    chunk.ChunkVertices.VertexLayout.Elements[elementIdx].StreamType = Enums.GpuWrapApiVertexPackingEStreamType.ST_PerInstance;
-                    chunk.ChunkVertices.VertexLayout.Elements[elementIdx].StreamIndex = Convert.ToByte(7);
-                    chunk.ChunkVertices.VertexLayout.Elements[elementIdx].UsageIndex = Convert.ToByte(e);
-                    chunk.ChunkVertices.VertexLayout.Elements[elementIdx].Usage = Enums.GpuWrapApiVertexPackingePackingUsage.PS_InstanceTransform;
-                    chunk.ChunkVertices.VertexLayout.Elements[elementIdx].Type = Enums.GpuWrapApiVertexPackingePackingType.PT_Float4;
-                    elementIdx++;
+                    chunk.ChunkVertices.VertexLayout.Elements.Add(new GpuWrapApiVertexPackingPackingElement
+                    {
+                        StreamIndex = 7,
+                        UsageIndex = e,
+                        Usage = Enums.GpuWrapApiVertexPackingePackingUsage.PS_InstanceTransform,
+                        Type = Enums.GpuWrapApiVertexPackingePackingType.PT_Float4,
+                        StreamType = Enums.GpuWrapApiVertexPackingEStreamType.ST_PerInstance
+                    });
                 }
 
                 // instanceSkinningDatas
                 if (info.weightCounts[i] > 0)
                 {
-                    chunk.ChunkVertices.VertexLayout.Elements.Add(RedTypeManager.Create<GpuWrapApiVertexPackingPackingElement>());
-                    chunk.ChunkVertices.VertexLayout.Elements[elementIdx].StreamType = Enums.GpuWrapApiVertexPackingEStreamType.ST_PerInstance;
-                    chunk.ChunkVertices.VertexLayout.Elements[elementIdx].StreamIndex = Convert.ToByte(7);
-                    chunk.ChunkVertices.VertexLayout.Elements[elementIdx].UsageIndex = Convert.ToByte(0);
-                    chunk.ChunkVertices.VertexLayout.Elements[elementIdx].Usage = Enums.GpuWrapApiVertexPackingePackingUsage.PS_InstanceSkinningData;
-                    chunk.ChunkVertices.VertexLayout.Elements[elementIdx].Type = Enums.GpuWrapApiVertexPackingePackingType.PT_UInt4;
-                    elementIdx++;
+                    chunk.ChunkVertices.VertexLayout.Elements.Add(new GpuWrapApiVertexPackingPackingElement
+                    {
+                        StreamIndex = 7,
+                        UsageIndex = 0,
+                        Usage = Enums.GpuWrapApiVertexPackingePackingUsage.PS_InstanceSkinningData,
+                        Type = Enums.GpuWrapApiVertexPackingePackingType.PT_UInt4,
+                        StreamType = Enums.GpuWrapApiVertexPackingEStreamType.ST_PerInstance
+                    });
                 }
 
                 // LightBlockerIntensity
                 if (info.unknownOffsets[i] != 0)
                 {
-                    chunk.ChunkVertices.VertexLayout.Elements.Add(RedTypeManager.Create<GpuWrapApiVertexPackingPackingElement>());
-                    chunk.ChunkVertices.VertexLayout.Elements[elementIdx].StreamIndex = Convert.ToByte(4);
-                    chunk.ChunkVertices.VertexLayout.Elements[elementIdx].UsageIndex = Convert.ToByte(0);
-                    chunk.ChunkVertices.VertexLayout.Elements[elementIdx].Usage = Enums.GpuWrapApiVertexPackingePackingUsage.PS_LightBlockerIntensity;
-                    chunk.ChunkVertices.VertexLayout.Elements[elementIdx].Type = Enums.GpuWrapApiVertexPackingePackingType.PT_Float1;
-                    //chunk.ChunkVertices.VertexLayout.Elements[elementIdx].StreamType = new CEnum<Enums.GpuWrapApiVertexPackingEStreamType>(cr2w, chunk.ChunkVertices.VertexLayout.Elements[0], "streamType") { Value = Enums.GpuWrapApiVertexPackingEStreamType.ST_PerVertex };
-                    elementIdx++;
+                    chunk.ChunkVertices.VertexLayout.Elements.Add(new GpuWrapApiVertexPackingPackingElement
+                    {
+                        StreamIndex = 4,
+                        UsageIndex = 0,
+                        Usage = Enums.GpuWrapApiVertexPackingePackingUsage.PS_LightBlockerIntensity,
+                        Type = Enums.GpuWrapApiVertexPackingePackingType.PT_Float1,
+                        // StreamType = Enums.GpuWrapApiVertexPackingEStreamType.ST_PerVertex
+                    });
 
                     // for lightblocker its 24, after testing some files, somtimes unknownoffsets[4] is used for destruction indices and some paint instead of lightblocker, so this needs to be taken care of
                     chunk.VertexFactory += 24;
@@ -768,13 +778,14 @@ namespace WolvenKit.Modkit.RED4
 
 
                 // Invalid, Required
-                chunk.ChunkVertices.VertexLayout.Elements.Add(RedTypeManager.Create<GpuWrapApiVertexPackingPackingElement>());
-                chunk.ChunkVertices.VertexLayout.Elements[elementIdx].StreamType = Enums.GpuWrapApiVertexPackingEStreamType.ST_Invalid;
-                chunk.ChunkVertices.VertexLayout.Elements[elementIdx].StreamIndex = Convert.ToByte(0);
-                chunk.ChunkVertices.VertexLayout.Elements[elementIdx].UsageIndex = Convert.ToByte(0);
-                chunk.ChunkVertices.VertexLayout.Elements[elementIdx].Usage = Enums.GpuWrapApiVertexPackingePackingUsage.PS_Invalid;
-                chunk.ChunkVertices.VertexLayout.Elements[elementIdx].Type = Enums.GpuWrapApiVertexPackingePackingType.PT_Invalid;
-                elementIdx++;
+                chunk.ChunkVertices.VertexLayout.Elements.Add(new GpuWrapApiVertexPackingPackingElement
+                {
+                    StreamIndex = 0,
+                    UsageIndex = 0,
+                    Usage = Enums.GpuWrapApiVertexPackingePackingUsage.PS_Invalid,
+                    Type = Enums.GpuWrapApiVertexPackingePackingType.PT_Invalid,
+                    StreamType = Enums.GpuWrapApiVertexPackingEStreamType.ST_Invalid
+                });
 
                 // Adding Chunk
                 blob.Header.RenderChunkInfos.Add(chunk);
@@ -1058,7 +1069,7 @@ namespace WolvenKit.Modkit.RED4
                 blob.Chunks = new CArray<meshGfxClothChunkData>();
                 for (var i = 0; i < meshes.Count; i++)
                 {
-                    var chunk = RedTypeManager.Create<meshGfxClothChunkData>();
+                    var chunk = new meshGfxClothChunkData();
                     {
                         var buffer = new MemoryStream();
                         var bw = new BinaryWriter(buffer);

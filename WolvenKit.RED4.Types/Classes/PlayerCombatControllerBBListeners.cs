@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class PlayerCombatControllerBBListeners : RedBaseClass
 	{
 		[Ordinal(0)] 
@@ -12,5 +11,12 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CHandle<redCallbackObject>>();
 			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
+
+		public PlayerCombatControllerBBListeners()
+		{
+			PostConstruct();
+		}
+
+		partial void PostConstruct();
 	}
 }

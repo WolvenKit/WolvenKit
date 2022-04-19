@@ -540,7 +540,7 @@ namespace WolvenKit.Functionality.Layout.inkWidgets
 
         public static HorizontalAlignment ToHorizontalAlignment(CEnum<Enums.inkEHorizontalAlign> hAlign)
         {
-            switch (hAlign.Value)
+            switch ((Enums.inkEHorizontalAlign)hAlign)
             {
                 case Enums.inkEHorizontalAlign.Fill:
                     return HorizontalAlignment.Stretch;
@@ -557,7 +557,7 @@ namespace WolvenKit.Functionality.Layout.inkWidgets
 
         public static VerticalAlignment ToVerticalAlignment(CEnum<Enums.inkEVerticalAlign> hAlign)
         {
-            switch (hAlign.Value)
+            switch ((Enums.inkEVerticalAlign)hAlign)
             {
                 case Enums.inkEVerticalAlign.Fill:
                     return VerticalAlignment.Stretch;
@@ -586,7 +586,7 @@ namespace WolvenKit.Functionality.Layout.inkWidgets
                 case inkVerticalPanelWidget:
                     return HAlignToFill(control);
                 case inkHorizontalPanelWidget:
-                    return control.Widget.Layout.SizeRule.Value == Enums.inkESizeRule.Stretch;
+                    return control.Widget.Layout.SizeRule == Enums.inkESizeRule.Stretch;
                 default:
                     return false;
             }
@@ -602,7 +602,7 @@ namespace WolvenKit.Functionality.Layout.inkWidgets
                 case inkHorizontalPanelWidget:
                     return VAlignToFill(control);
                 case inkVerticalPanelWidget:
-                    return control.Widget.Layout.SizeRule.Value == Enums.inkESizeRule.Stretch;
+                    return control.Widget.Layout.SizeRule == Enums.inkESizeRule.Stretch;
                 default:
                     return false;
             }
@@ -610,7 +610,7 @@ namespace WolvenKit.Functionality.Layout.inkWidgets
 
         public static bool AnchorLeft(inkControl control)
         {
-            switch (control.Widget.Layout.Anchor.Value)
+            switch ((Enums.inkEAnchor)control.Widget.Layout.Anchor)
             {
                 case Enums.inkEAnchor.TopLeft:
                 case Enums.inkEAnchor.CenterLeft:
@@ -636,7 +636,7 @@ namespace WolvenKit.Functionality.Layout.inkWidgets
 
         public static bool AnchorRight(inkControl control)
         {
-            switch (control.Widget.Layout.Anchor.Value)
+            switch ((Enums.inkEAnchor)control.Widget.Layout.Anchor)
             {
                 case Enums.inkEAnchor.TopRight:
                 case Enums.inkEAnchor.CenterRight:
@@ -662,7 +662,7 @@ namespace WolvenKit.Functionality.Layout.inkWidgets
 
         public static bool AnchorCenterH(inkControl control)
         {
-            switch (control.Widget.Layout.Anchor.Value)
+            switch ((Enums.inkEAnchor)control.Widget.Layout.Anchor)
             {
                 case Enums.inkEAnchor.Centered:
                 case Enums.inkEAnchor.TopCenter:
@@ -688,7 +688,7 @@ namespace WolvenKit.Functionality.Layout.inkWidgets
 
         public static bool AnchorCenterV(inkControl control)
         {
-            switch (control.Widget.Layout.Anchor.Value)
+            switch ((Enums.inkEAnchor)control.Widget.Layout.Anchor)
             {
                 case Enums.inkEAnchor.Centered:
                 case Enums.inkEAnchor.CenterRight:
@@ -714,7 +714,7 @@ namespace WolvenKit.Functionality.Layout.inkWidgets
 
         public static double AnchorToX(inkControl control)
         {
-            switch (control.Widget.Layout.Anchor.Value)
+            switch ((Enums.inkEAnchor)control.Widget.Layout.Anchor)
             {
                 case Enums.inkEAnchor.TopLeft:
                 case Enums.inkEAnchor.CenterLeft:
@@ -742,7 +742,7 @@ namespace WolvenKit.Functionality.Layout.inkWidgets
 
         public static bool AnchorTop(inkControl control)
         {
-            switch (control.Widget.Layout.Anchor.Value)
+            switch ((Enums.inkEAnchor)control.Widget.Layout.Anchor)
             {
                 case Enums.inkEAnchor.TopLeft:
                 case Enums.inkEAnchor.TopFillHorizontaly:
@@ -768,7 +768,7 @@ namespace WolvenKit.Functionality.Layout.inkWidgets
 
         public static bool AnchorBottom(inkControl control)
         {
-            switch (control.Widget.Layout.Anchor.Value)
+            switch ((Enums.inkEAnchor)control.Widget.Layout.Anchor)
             {
                 case Enums.inkEAnchor.BottomLeft:
                 case Enums.inkEAnchor.BottomFillHorizontaly:
@@ -794,7 +794,7 @@ namespace WolvenKit.Functionality.Layout.inkWidgets
 
         public static double AnchorToY(inkControl control)
         {
-            switch (control.Widget.Layout.Anchor.Value)
+            switch ((Enums.inkEAnchor)control.Widget.Layout.Anchor)
             {
                 case Enums.inkEAnchor.TopLeft:
                 case Enums.inkEAnchor.TopFillHorizontaly:
@@ -822,7 +822,7 @@ namespace WolvenKit.Functionality.Layout.inkWidgets
 
         public static bool AnchorToFillH(inkControl control)
         {
-            switch (control.Widget.Layout.Anchor.Value)
+            switch ((Enums.inkEAnchor)control.Widget.Layout.Anchor)
             {
                 case Enums.inkEAnchor.TopFillHorizontaly:
                 case Enums.inkEAnchor.CenterFillHorizontaly:
@@ -848,7 +848,7 @@ namespace WolvenKit.Functionality.Layout.inkWidgets
 
         public static bool AnchorToFillV(inkControl control)
         {
-            switch (control.Widget.Layout.Anchor.Value)
+            switch ((Enums.inkEAnchor)control.Widget.Layout.Anchor)
             {
                 case Enums.inkEAnchor.Fill:
                 case Enums.inkEAnchor.LeftFillVerticaly:
@@ -874,7 +874,7 @@ namespace WolvenKit.Functionality.Layout.inkWidgets
 
         public static double HAlignToX(inkControl control)
         {
-            switch (control.Widget.Layout.HAlign.Value)
+            switch ((Enums.inkEHorizontalAlign)control.Widget.Layout.HAlign)
             {
                 case Enums.inkEHorizontalAlign.Left:
                 case Enums.inkEHorizontalAlign.Fill:
@@ -890,7 +890,7 @@ namespace WolvenKit.Functionality.Layout.inkWidgets
 
         public static double VAlignToY(inkControl control)
         {
-            switch (control.Widget.Layout.VAlign.Value)
+            switch ((Enums.inkEVerticalAlign)control.Widget.Layout.VAlign)
             {
                 case Enums.inkEVerticalAlign.Top:
                 case Enums.inkEVerticalAlign.Fill:
@@ -904,8 +904,8 @@ namespace WolvenKit.Functionality.Layout.inkWidgets
             }
         }
 
-        public static bool HAlignToFill(inkControl control) => control.Widget.Layout.HAlign.Value == Enums.inkEHorizontalAlign.Fill;
+        public static bool HAlignToFill(inkControl control) => control.Widget.Layout.HAlign == Enums.inkEHorizontalAlign.Fill;
 
-        public static bool VAlignToFill(inkControl control) => control.Widget.Layout.VAlign.Value == Enums.inkEVerticalAlign.Fill;
+        public static bool VAlignToFill(inkControl control) => control.Widget.Layout.VAlign == Enums.inkEVerticalAlign.Fill;
     }
 }

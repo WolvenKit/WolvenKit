@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class ProficiencyTabButtonController : TabButtonController
 	{
 		[Ordinal(18)] 
@@ -20,5 +19,12 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CBool>();
 			set => SetPropertyValue<CBool>(value);
 		}
+
+		public ProficiencyTabButtonController()
+		{
+			PostConstruct();
+		}
+
+		partial void PostConstruct();
 	}
 }

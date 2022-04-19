@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class vgVectorGraphicShape_Group : vgBaseVectorGraphicShape
 	{
 		[Ordinal(2)] 
@@ -17,6 +16,10 @@ namespace WolvenKit.RED4.Types
 		{
 			CalTransform = new();
 			ChildShapes = new();
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

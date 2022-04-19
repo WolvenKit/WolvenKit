@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class gameuiCyberspaceUIObject : gameObject
 	{
 		[Ordinal(35)] 
@@ -28,5 +27,12 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CString>();
 			set => SetPropertyValue<CString>(value);
 		}
+
+		public gameuiCyberspaceUIObject()
+		{
+			PostConstruct();
+		}
+
+		partial void PostConstruct();
 	}
 }

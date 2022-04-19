@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class CombatGadgetChargedThrowEvents : CombatGadgetTransitions
 	{
 		[Ordinal(0)] 
@@ -33,6 +32,10 @@ namespace WolvenKit.RED4.Types
 		{
 			LocalAimForward = new();
 			LocalAimPosition = new();
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

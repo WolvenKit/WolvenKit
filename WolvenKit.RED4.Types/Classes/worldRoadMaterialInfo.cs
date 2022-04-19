@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class worldRoadMaterialInfo : RedBaseClass
 	{
 		[Ordinal(0)] 
@@ -20,5 +19,12 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CEnum<worldRoadMaterial>>();
 			set => SetPropertyValue<CEnum<worldRoadMaterial>>(value);
 		}
+
+		public worldRoadMaterialInfo()
+		{
+			PostConstruct();
+		}
+
+		partial void PostConstruct();
 	}
 }

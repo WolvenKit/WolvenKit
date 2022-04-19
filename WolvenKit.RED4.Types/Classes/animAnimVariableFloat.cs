@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class animAnimVariableFloat : animAnimVariable
 	{
 		[Ordinal(2)] 
@@ -41,6 +40,10 @@ namespace WolvenKit.RED4.Types
 		{
 			Min = -16.000000F;
 			Max = 16.000000F;
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

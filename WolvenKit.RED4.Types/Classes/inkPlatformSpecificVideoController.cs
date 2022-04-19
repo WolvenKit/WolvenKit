@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class inkPlatformSpecificVideoController : inkWidgetLogicController
 	{
 		[Ordinal(1)] 
@@ -36,5 +35,12 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CResourceAsyncReference<Bink>>();
 			set => SetPropertyValue<CResourceAsyncReference<Bink>>(value);
 		}
+
+		public inkPlatformSpecificVideoController()
+		{
+			PostConstruct();
+		}
+
+		partial void PostConstruct();
 	}
 }

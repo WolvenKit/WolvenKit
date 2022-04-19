@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class saveMetadataContainer : ISerializable
 	{
 		[Ordinal(0)] 
@@ -15,7 +14,11 @@ namespace WolvenKit.RED4.Types
 
 		public saveMetadataContainer()
 		{
-			Metadata = new() { SaveVersion = 220, GameVersion = 1500 };
+			Metadata = new() { SaveVersion = 220, GameVersion = 1520 };
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

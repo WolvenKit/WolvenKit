@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class CrosshairHealthChangeListener : gameCustomValueStatPoolsListener
 	{
 		[Ordinal(0)] 
@@ -12,5 +11,12 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CWeakHandle<gameuiCrosshairBaseGameController>>();
 			set => SetPropertyValue<CWeakHandle<gameuiCrosshairBaseGameController>>(value);
 		}
+
+		public CrosshairHealthChangeListener()
+		{
+			PostConstruct();
+		}
+
+		partial void PostConstruct();
 	}
 }

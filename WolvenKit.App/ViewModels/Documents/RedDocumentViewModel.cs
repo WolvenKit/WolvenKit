@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
-using System.Reactive.Linq;
 using System.Threading.Tasks;
 using DynamicData.Kernel;
 using ReactiveUI.Fody.Helpers;
@@ -13,10 +12,10 @@ using WolvenKit.Common.FNV1A;
 using WolvenKit.Common.Services;
 using WolvenKit.Functionality.Services;
 using WolvenKit.Modkit.RED4;
+using WolvenKit.RED4.Archive;
 using WolvenKit.RED4.Archive.CR2W;
 using WolvenKit.RED4.Archive.IO;
 using WolvenKit.RED4.CR2W;
-using WolvenKit.RED4.CR2W.Archive;
 using WolvenKit.RED4.Types;
 
 namespace WolvenKit.ViewModels.Documents
@@ -306,8 +305,15 @@ namespace WolvenKit.ViewModels.Documents
                         {
                             using var reader = new BinaryReader(stream);
                             cr2wFile = _parser.ReadRed4File(reader);
-                            cr2wFile.MetaData.FileName = depotPath;
                         }
+
+                        if (cr2wFile == null)
+                        {
+                            goto BadFile;
+                        }
+
+                        cr2wFile.MetaData.FileName = depotPath;
+
                         lock (Files)
                         {
                             foreach (var res in cr2wFile.EmbeddedFiles)
@@ -327,6 +333,8 @@ namespace WolvenKit.ViewModels.Documents
                 }
             }
 
+            BadFile:
+
             var _archiveManager = Locator.Current.GetService<IArchiveManager>();
             var file = _archiveManager.Lookup(depotPath.GetRedHash());
             if (file.HasValue && file.Value is FileEntry fe)
@@ -336,7 +344,11 @@ namespace WolvenKit.ViewModels.Documents
                     fe.Extract(stream);
                     using var reader = new BinaryReader(stream);
                     cr2wFile = _parser.ReadRed4File(reader);
-                    if (cr2wFile != null && (string)depotPath != null)
+                    if (cr2wFile == null)
+                    {
+                        return null;
+                    }
+                    if ((string)depotPath != null)
                     {
                         cr2wFile.MetaData.FileName = depotPath;
                     }

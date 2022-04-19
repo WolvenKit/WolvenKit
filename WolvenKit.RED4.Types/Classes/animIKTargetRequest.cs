@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class animIKTargetRequest : RedBaseClass
 	{
 		[Ordinal(0)] 
@@ -51,6 +50,10 @@ namespace WolvenKit.RED4.Types
 			WeightOrientation = 1.000000F;
 			TransitionIn = 0.300000F;
 			TransitionOut = 0.300000F;
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

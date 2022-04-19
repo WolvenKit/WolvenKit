@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class scnOverridePhantomParamsEventParams : RedBaseClass
 	{
 		[Ordinal(0)] 
@@ -32,6 +31,10 @@ namespace WolvenKit.RED4.Types
 		public scnOverridePhantomParamsEventParams()
 		{
 			Performer = new() { Id = 4294967040 };
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

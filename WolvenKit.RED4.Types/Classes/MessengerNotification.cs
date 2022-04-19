@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class MessengerNotification : GenericNotificationController
 	{
 		[Ordinal(12)] 
@@ -109,6 +108,10 @@ namespace WolvenKit.RED4.Types
 			MappinIcon = new();
 			EnvelopIcon = new();
 			TextSizeLimit = 40;
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

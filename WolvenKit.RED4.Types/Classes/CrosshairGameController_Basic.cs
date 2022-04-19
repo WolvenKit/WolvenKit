@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class CrosshairGameController_Basic : gameuiCrosshairBaseGameController
 	{
 		[Ordinal(18)] 
@@ -128,6 +127,10 @@ namespace WolvenKit.RED4.Types
 			HorizontalMinSpread = 20.000000F;
 			VerticalMinSpread = 20.000000F;
 			GameplaySpreadMultiplier = 1.000000F;
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

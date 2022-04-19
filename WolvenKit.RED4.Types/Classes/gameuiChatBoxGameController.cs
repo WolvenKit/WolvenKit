@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class gameuiChatBoxGameController : gameuiHUDGameController
 	{
 		[Ordinal(9)] 
@@ -109,6 +108,10 @@ namespace WolvenKit.RED4.Types
 			ChatHistory = new();
 			MaxChatsDisplayed = 7;
 			MaxChatHistory = 100;
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

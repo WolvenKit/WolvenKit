@@ -12,9 +12,9 @@ using WolvenKit.Common.FNV1A;
 using WolvenKit.Common.Services;
 using WolvenKit.Core.Compression;
 using WolvenKit.Modkit.RED4;
+using WolvenKit.RED4.Archive;
 using WolvenKit.RED4.Archive.IO;
 using WolvenKit.RED4.CR2W;
-using WolvenKit.RED4.CR2W.Archive;
 
 namespace WolvenKit.Utility
 {
@@ -93,7 +93,7 @@ namespace WolvenKit.Utility
             Directory.CreateDirectory(resultDir);
 
             // load new hashes
-            var newHashesPath = Path.Combine(s_testResultsDirectory, "new_hashes.txt");
+            var newHashesPath = Path.Combine(s_testResultsDirectory, "resourcePaths.txt");
             var newHashes = new Dictionary<ulong, string>();
             if (File.Exists(newHashesPath))
             {
@@ -257,8 +257,7 @@ namespace WolvenKit.Utility
                     continue;
                 }
 
-                using var fs = new FileStream(archive.ArchiveAbsolutePath, FileMode.Open, FileAccess.Read, FileShare.Read);
-                using var mmf = MemoryMappedFile.CreateFromFile(fs, null, 0, MemoryMappedFileAccess.Read, HandleInheritability.None, false);
+                using var mmf = archive.GetMemoryMappedFile();
 
                 Parallel.ForEach(archive.Files, pair =>
                 {

@@ -1,44 +1,81 @@
 using System;
-using System.Linq;
+using System.IO;
 using Microsoft.EntityFrameworkCore;
 
-namespace WolvenKit.Common.Model.Database
+namespace WolvenKit.Common.Model.Database;
+
+public class RedDBContext : DbContext
 {
-    public class RedDBContext : DbContext
+    public RedDBContext()
     {
-        public RedDBContext()
+        var dir = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "REDModding", "WolvenKit");
+        if (!Directory.Exists(dir))
         {
-            const Environment.SpecialFolder folder = Environment.SpecialFolder.LocalApplicationData;
-            var path = Environment.GetFolderPath(folder);
-            DbPath = $"{path}{System.IO.Path.DirectorySeparatorChar}red.db";
+            Directory.CreateDirectory(dir);
         }
 
-        public DbSet<RedFile> Files { get; set; }
+        DbPath = Path.Combine(dir, "red.db");
+    }
 
-        public string DbPath { get; private set; }
+    public DbSet<RedArchive> Archives { get; set; }
+    public DbSet<RedFile> Files { get; set; }
 
-        protected override void OnConfiguring(DbContextOptionsBuilder options) => options.UseSqlite($"Data Source={DbPath}");
+    public string DbPath { get; }
 
-        protected override void OnModelCreating(ModelBuilder modelBuilder)
+    protected override void OnConfiguring(DbContextOptionsBuilder options) => options.UseSqlite($"Data Source={DbPath}");
+
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        modelBuilder.Entity<RedArchive>(entity =>
         {
-            modelBuilder.Entity<RedFile>()
-            .Property(e => e.Uses)
-            .HasConversion(
-                v => string.Join(',', v),
-                v => v.Split(',', StringSplitOptions.RemoveEmptyEntries)
-                    .Select(x => ulong.Parse(x))
-                    .ToArray()
-            );
+            entity
+                .HasKey(nameof(RedArchive.Id));
 
-            modelBuilder.Entity<RedFile>()
-           .Property(e => e.UsedBy)
-           .HasConversion(
-               v => string.Join(',', v),
-               v => v.Split(',', StringSplitOptions.RemoveEmptyEntries)
-                   .Select(x => ulong.Parse(x))
-                   .ToArray()
-           );
+            entity
+                .Property(a => a.Id)
+                .ValueGeneratedOnAdd();
+
+            entity
+                .Property(a => a.Name)
+                .HasMaxLength(255)
+                .IsRequired();
+        });
+
+        modelBuilder.Entity<RedFile>(entity =>
+        {
+            entity
+                .HasKey(nameof(RedFile.Id));
+
+            entity
+                .Property(a => a.Id)
+                .ValueGeneratedOnAdd();
+
+            entity
+                .HasOne(f => f.Archive)
+                .WithMany(a => a.Files)
+                .IsRequired();
+
+            entity
+                .HasIndex(nameof(RedFile.ArchiveId), nameof(RedFile.Hash))
+                .IsUnique();
+
+            entity
+                .HasMany(x => x.Uses);
+        });
+
+        modelBuilder.Entity<RedFileUse>(entity =>
+        {
+            entity
+                .HasKey(nameof(RedFileUse.RedFileId), nameof(RedFileUse.Hash));
+        });
+    }
+
+    public static void ClearDatabase()
+    {
+        using (var client = new RedDBContext())
+        {
+            client.Database.EnsureDeleted();
+            client.Database.EnsureCreated();
         }
-
     }
 }

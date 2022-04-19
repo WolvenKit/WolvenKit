@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class questDrillingState_ConditionType : questIObjectConditionType
 	{
 		[Ordinal(0)] 
@@ -20,5 +19,12 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CEnum<questDrillingState>>();
 			set => SetPropertyValue<CEnum<questDrillingState>>(value);
 		}
+
+		public questDrillingState_ConditionType()
+		{
+			PostConstruct();
+		}
+
+		partial void PostConstruct();
 	}
 }

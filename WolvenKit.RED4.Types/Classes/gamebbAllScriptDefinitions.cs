@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class gamebbAllScriptDefinitions : IScriptable
 	{
 		[Ordinal(0)] 
@@ -908,5 +907,12 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CHandle<GameplaySettingsDef>>();
 			set => SetPropertyValue<CHandle<GameplaySettingsDef>>(value);
 		}
+
+		public gamebbAllScriptDefinitions()
+		{
+			PostConstruct();
+		}
+
+		partial void PostConstruct();
 	}
 }

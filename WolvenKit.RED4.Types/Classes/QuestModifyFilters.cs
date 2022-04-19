@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class QuestModifyFilters : redEvent
 	{
 		[Ordinal(0)] 
@@ -20,5 +19,12 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CEnum<EQuestFilterType>>();
 			set => SetPropertyValue<CEnum<EQuestFilterType>>(value);
 		}
+
+		public QuestModifyFilters()
+		{
+			PostConstruct();
+		}
+
+		partial void PostConstruct();
 	}
 }

@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class gameuiBaseGarmentItemPreviewGameController : gameuiInventoryPuppetPreviewGameController
 	{
 		[Ordinal(14)] 
@@ -42,6 +41,10 @@ namespace WolvenKit.RED4.Types
 			GarmentSwitchEffectControllers = new();
 			GivenItem = new();
 			InitialItem = new();
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

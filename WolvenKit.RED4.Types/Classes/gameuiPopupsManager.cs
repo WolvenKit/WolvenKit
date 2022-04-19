@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class gameuiPopupsManager : gameuiWidgetGameController
 	{
 		[Ordinal(2)] 
@@ -142,6 +141,22 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(19)] 
+		[RED("shardReadOnHold")] 
+		public CBool ShardReadOnHold
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(20)] 
+		[RED("shardReadData")] 
+		public CHandle<NotifyShardRead> ShardReadData
+		{
+			get => GetPropertyValue<CHandle<NotifyShardRead>>();
+			set => SetPropertyValue<CHandle<NotifyShardRead>>(value);
+		}
+
+		[Ordinal(21)] 
 		[RED("tutorialToken")] 
 		public CHandle<inkGameNotificationToken> TutorialToken
 		{
@@ -149,7 +164,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<inkGameNotificationToken>>(value);
 		}
 
-		[Ordinal(20)] 
+		[Ordinal(22)] 
 		[RED("phoneMessageToken")] 
 		public CHandle<inkGameNotificationToken> PhoneMessageToken
 		{
@@ -157,7 +172,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<inkGameNotificationToken>>(value);
 		}
 
-		[Ordinal(21)] 
+		[Ordinal(23)] 
 		[RED("shardToken")] 
 		public CHandle<inkGameNotificationToken> ShardToken
 		{
@@ -165,7 +180,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<inkGameNotificationToken>>(value);
 		}
 
-		[Ordinal(22)] 
+		[Ordinal(24)] 
 		[RED("vehiclesManagerToken")] 
 		public CHandle<inkGameNotificationToken> VehiclesManagerToken
 		{
@@ -173,7 +188,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<inkGameNotificationToken>>(value);
 		}
 
-		[Ordinal(23)] 
+		[Ordinal(25)] 
 		[RED("vehicleRadioToken")] 
 		public CHandle<inkGameNotificationToken> VehicleRadioToken
 		{
@@ -181,7 +196,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<inkGameNotificationToken>>(value);
 		}
 
-		[Ordinal(24)] 
+		[Ordinal(26)] 
 		[RED("codexToken")] 
 		public CHandle<inkGameNotificationToken> CodexToken
 		{
@@ -189,7 +204,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<inkGameNotificationToken>>(value);
 		}
 
-		[Ordinal(25)] 
+		[Ordinal(27)] 
 		[RED("ponrToken")] 
 		public CHandle<inkGameNotificationToken> PonrToken
 		{
@@ -203,6 +218,10 @@ namespace WolvenKit.RED4.Types
 			TutorialOverlayContainer = new();
 			TutorialData = new() { VideoType = Enums.gameVideoType.Unknown };
 			TutorialSettings = new() { CloseAtInput = true, Position = Enums.gamePopupPosition.Center, Margin = new() };
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class questVendorPanel_NodeType : questIUIManagerNodeType
 	{
 		[Ordinal(0)] 
@@ -58,6 +57,10 @@ namespace WolvenKit.RED4.Types
 			ScenarioName = "MenuScenario_Vendor";
 			OpenVendorPanel = true;
 			ObjectRef = new() { Names = new() };
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

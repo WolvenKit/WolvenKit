@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class ActivatedDeviceIndustrialArm : ActivatedDeviceTrap
 	{
 		[Ordinal(96)] 
@@ -12,5 +11,12 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CEnum<EIndustrialArmAnimations>>();
 			set => SetPropertyValue<CEnum<EIndustrialArmAnimations>>(value);
 		}
+
+		public ActivatedDeviceIndustrialArm()
+		{
+			PostConstruct();
+		}
+
+		partial void PostConstruct();
 	}
 }

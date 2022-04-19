@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class rendRenderMultilayerMaskResource : RedBaseClass
 	{
 		[Ordinal(0)] 
@@ -12,5 +11,12 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CHandle<IRenderResourceBlob>>();
 			set => SetPropertyValue<CHandle<IRenderResourceBlob>>(value);
 		}
+
+		public rendRenderMultilayerMaskResource()
+		{
+			PostConstruct();
+		}
+
+		partial void PostConstruct();
 	}
 }

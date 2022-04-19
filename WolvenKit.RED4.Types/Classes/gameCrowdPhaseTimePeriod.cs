@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class gameCrowdPhaseTimePeriod : communityTimePeriod
 	{
 		[Ordinal(1)] 
@@ -77,6 +76,10 @@ namespace WolvenKit.RED4.Types
 			CharactersData = new();
 			ReducedCharactersData = new();
 			UseDensityPreset = true;
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

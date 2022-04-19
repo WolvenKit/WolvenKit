@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class AIArgumentCNameValue : AIArgumentDefinition
 	{
 		[Ordinal(3)] 
@@ -24,6 +23,10 @@ namespace WolvenKit.RED4.Types
 		public AIArgumentCNameValue()
 		{
 			Type = Enums.AIArgumentType.CName;
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

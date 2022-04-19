@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class DestructibleMasterLight : DestructibleMasterDevice
 	{
 		[Ordinal(94)] 
@@ -26,6 +25,10 @@ namespace WolvenKit.RED4.Types
 			ControllerTypeName = "DestructibleMasterLightController";
 			LightComponents = new();
 			LightDefinitions = new();
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class FindServersMenuGameController : PreGameSubMenuGameController
 	{
 		[Ordinal(3)] 
@@ -75,6 +74,10 @@ namespace WolvenKit.RED4.Types
 			CurentlyChoosenServer = -1;
 			C_onlineColor = new();
 			C_offlineColor = new();
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

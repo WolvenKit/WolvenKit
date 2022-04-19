@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class animAnimFeature_PlayerCover : animAnimFeature
 	{
 		[Ordinal(0)] 
@@ -48,6 +47,10 @@ namespace WolvenKit.RED4.Types
 		public animAnimFeature_PlayerCover()
 		{
 			CameraPositionMS = new();
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

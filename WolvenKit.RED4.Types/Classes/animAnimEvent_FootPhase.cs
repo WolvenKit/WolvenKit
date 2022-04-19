@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class animAnimEvent_FootPhase : animAnimEvent
 	{
 		[Ordinal(3)] 
@@ -16,6 +15,10 @@ namespace WolvenKit.RED4.Types
 		public animAnimEvent_FootPhase()
 		{
 			DurationInFrames = 15;
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

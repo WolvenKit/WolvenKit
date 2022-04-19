@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class TemporalPrereqDelayCallback : gameDelaySystemScriptedDelayCallbackWrapper
 	{
 		[Ordinal(0)] 
@@ -12,5 +11,12 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CWeakHandle<TemporalPrereqState>>();
 			set => SetPropertyValue<CWeakHandle<TemporalPrereqState>>(value);
 		}
+
+		public TemporalPrereqDelayCallback()
+		{
+			PostConstruct();
+		}
+
+		partial void PostConstruct();
 	}
 }

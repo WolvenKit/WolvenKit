@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class gameCombinedStatModifierData_Deprecated : gameStatModifierData_Deprecated
 	{
 		[Ordinal(2)] 
@@ -44,6 +43,10 @@ namespace WolvenKit.RED4.Types
 			RefStatType = Enums.gamedataStatType.Invalid;
 			Operation = Enums.gameCombinedStatOperation.Invalid;
 			RefObject = Enums.gameStatObjectsRelation.Invalid;
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

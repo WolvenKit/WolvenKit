@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class AnimFeature_CameraBodyOffset : animAnimFeature
 	{
 		[Ordinal(0)] 
@@ -100,6 +99,10 @@ namespace WolvenKit.RED4.Types
 			Lookat_yaw_offset_active_angle = 45.000000F;
 			Paralax_radius = 0.100000F;
 			Paralax_forward_offset = 0.100000F;
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

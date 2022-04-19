@@ -175,7 +175,7 @@ namespace WolvenKit.ViewModels.Tools
                 return;
             }
 
-            var extension = Path.GetExtension(model.FullName).TrimStart('.');
+            var extension = model.DisplayExtension;
 
             if (Enum.TryParse<TexturePreviewExtensions>(extension, true, out _) ||
                 Enum.TryParse<MeshPreviewExtensions>(extension, true, out _) ||

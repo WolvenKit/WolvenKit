@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class worldStaticSoundEmitterNode : worldNode
 	{
 		[Ordinal(4)] 
@@ -122,6 +121,10 @@ namespace WolvenKit.RED4.Types
 			ObstructionChangeTime = 0.200000F;
 			DopplerFactor = 1.000000F;
 			RolloffOverride = 1.000000F;
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

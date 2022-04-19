@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class SubCharEquipRequest : gameEquipRequest
 	{
 		[Ordinal(5)] 
@@ -12,5 +11,12 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CEnum<gamedataSubCharacter>>();
 			set => SetPropertyValue<CEnum<gamedataSubCharacter>>(value);
 		}
+
+		public SubCharEquipRequest()
+		{
+			PostConstruct();
+		}
+
+		partial void PostConstruct();
 	}
 }

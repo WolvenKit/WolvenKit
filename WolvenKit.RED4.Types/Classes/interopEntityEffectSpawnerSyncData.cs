@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class interopEntityEffectSpawnerSyncData : RedBaseClass
 	{
 		[Ordinal(0)] 
@@ -65,6 +64,10 @@ namespace WolvenKit.RED4.Types
 		{
 			Effects = new();
 			TemplateColor = new();
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

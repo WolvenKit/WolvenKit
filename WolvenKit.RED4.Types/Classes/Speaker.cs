@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class Speaker : InteractiveDevice
 	{
 		[Ordinal(94)] 
@@ -58,6 +57,10 @@ namespace WolvenKit.RED4.Types
 			ControllerTypeName = "SpeakerController";
 			EffectRef = new();
 			Targets = new();
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

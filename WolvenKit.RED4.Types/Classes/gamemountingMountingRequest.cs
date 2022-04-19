@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class gamemountingMountingRequest : IScriptable
 	{
 		[Ordinal(0)] 
@@ -33,6 +32,10 @@ namespace WolvenKit.RED4.Types
 		{
 			LowLevelMountingInfo = new() { ChildId = new(), ParentId = new(), SlotId = new() };
 			PreservePositionAfterMounting = true;
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

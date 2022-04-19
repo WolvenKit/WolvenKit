@@ -15,6 +15,7 @@ using WolvenKit.Common;
 using WolvenKit.Common.Interfaces;
 using WolvenKit.Common.Model;
 using WolvenKit.Common.Model.Arguments;
+using WolvenKit.Core.Interfaces;
 using WolvenKit.Functionality.Ab4d;
 using WolvenKit.Functionality.Commands;
 using WolvenKit.Functionality.Helpers;
@@ -96,6 +97,10 @@ namespace WolvenKit.Views.Tools
                       view => view.InnerList.SelectedItems)
                   .DisposeWith(disposables);
 
+                this.BindCommand(ViewModel,
+                        viewModel => viewModel.FindUsesCommand,
+                        view => view.RightContextMenuFindUsesMenuItem)
+                    .DisposeWith(disposables);
                 this.BindCommand(ViewModel,
                       viewModel => viewModel.FindUsingCommand,
                       view => view.RightContextMenuFindUsingMenuItem)

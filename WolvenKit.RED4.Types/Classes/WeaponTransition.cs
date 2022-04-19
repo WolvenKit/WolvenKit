@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class WeaponTransition : DefaultTransition
 	{
 		[Ordinal(0)] 
@@ -28,5 +27,12 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CHandle<gamedataRangedAttackPackage_Record>>();
 			set => SetPropertyValue<CHandle<gamedataRangedAttackPackage_Record>>(value);
 		}
+
+		public WeaponTransition()
+		{
+			PostConstruct();
+		}
+
+		partial void PostConstruct();
 	}
 }

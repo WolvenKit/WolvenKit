@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class questDisplayMessageBox_NodeType : questIUIManagerNodeType
 	{
 		[Ordinal(0)] 
@@ -41,6 +40,10 @@ namespace WolvenKit.RED4.Types
 		{
 			LocalizedTitle = new() { Unk1 = 0, Value = "" };
 			LocalizedMessage = new() { Unk1 = 0, Value = "" };
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

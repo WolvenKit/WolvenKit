@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class ScriptableDeviceComponentPS : SharedGameplayPS
 	{
 		[Ordinal(22)] 
@@ -688,6 +687,10 @@ namespace WolvenKit.RED4.Types
 			QuickHackVulnerabilties = new();
 			WillingInvestigators = new();
 			IsInteractive = true;
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

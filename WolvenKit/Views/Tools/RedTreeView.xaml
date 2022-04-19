@@ -18,10 +18,10 @@
         <ResourceDictionary>
             <Style x:Key="PropertyValueStyle" TargetType="TextBlock">
                 <Style.Triggers>
-                    <DataTrigger Binding="{Binding Value}" Value="null">
+                    <DataTrigger Binding="{Binding Value, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" Value="null">
                         <Setter Property="Foreground" Value="{StaticResource Border}" />
                     </DataTrigger>
-                    <DataTrigger Binding="{Binding IsDefault}" Value="True">
+                    <DataTrigger Binding="{Binding IsDefault, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" Value="True">
                         <Setter Property="Foreground" Value="{StaticResource BorderAlt2}" />
                         <Setter Property="FontStyle" Value="Italic" />
                     </DataTrigger>
@@ -40,7 +40,7 @@
                                 <DataTrigger Binding="{Binding IsMouseOver, RelativeSource={RelativeSource AncestorType={x:Type syncfusion:TreeViewItem}}}" Value="True">
                                     <Setter Property="Visibility" Value="Collapsed" />
                                 </DataTrigger>
-                                <DataTrigger Binding="{Binding IsDefault}" Value="True">
+                                <DataTrigger Binding="{Binding IsDefault, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" Value="True">
                                     <Setter Property="Foreground" Value="{StaticResource BorderAlt2}" />
                                     <Setter Property="FontStyle" Value="Italic" />
                                 </DataTrigger>
@@ -51,7 +51,7 @@
                         </Style>
                         <Style TargetType="TextBlock">
                             <Style.Triggers>
-                                <DataTrigger Binding="{Binding IsDefault}" Value="True">
+                                <DataTrigger Binding="{Binding IsDefault, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" Value="True">
                                     <Setter Property="Foreground" Value="{StaticResource BorderAlt2}" />
                                     <Setter Property="FontStyle" Value="Italic" />
                                 </DataTrigger>
@@ -69,7 +69,7 @@
                         Grid.Column="1"
                         Width="Auto"
                         Margin="0,0,0,2"
-                        Text="{Binding Name}" />
+                        Text="{Binding Name, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" />
                     <TextBlock
                         Grid.Column="2"
                         Width="Auto"
@@ -94,7 +94,7 @@
                     <Grid.Resources>
                         <Style TargetType="{x:Type TextBlock}">
                             <Style.Triggers>
-                                <DataTrigger Binding="{Binding IsDefault}" Value="True">
+                                <DataTrigger Binding="{Binding IsDefault, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" Value="True">
                                     <Setter Property="Foreground" Value="{StaticResource BorderAlt2}" />
                                     <Setter Property="FontStyle" Value="Italic" />
                                 </DataTrigger>
@@ -102,7 +102,7 @@
                         </Style>
                         <Style TargetType="{x:Type iconPacks:PackIconCodicons}">
                             <Style.Triggers>
-                                <DataTrigger Binding="{Binding IsDefault}" Value="True">
+                                <DataTrigger Binding="{Binding IsDefault, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" Value="True">
                                     <Setter Property="Foreground" Value="{StaticResource BorderAlt2}" />
                                 </DataTrigger>
                             </Style.Triggers>
@@ -208,7 +208,7 @@
                     <DataTrigger Binding="{Binding IsInArray}" Value="True">
                         <Setter Property="Width" Value="{Binding ArrayIndexWidth}" />
                     </DataTrigger>
-                    <DataTrigger Binding="{Binding Name}" Value="{x:Null}">
+                    <DataTrigger Binding="{Binding Name, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" Value="{x:Null}">
                         <Setter Property="Width" Value="0" />
                     </DataTrigger>
                 </Style.Triggers>

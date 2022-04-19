@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class WeaponMachineInkGameController : VendingMachineInkGameController
 	{
 		[Ordinal(26)] 
@@ -12,5 +11,12 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CWeakHandle<WeaponVendorActionWidgetController>>();
 			set => SetPropertyValue<CWeakHandle<WeaponVendorActionWidgetController>>(value);
 		}
+
+		public WeaponMachineInkGameController()
+		{
+			PostConstruct();
+		}
+
+		partial void PostConstruct();
 	}
 }

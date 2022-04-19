@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class gameJournalQuestMultiMapPin : gameJournalQuestMapPinBase
 	{
 		[Ordinal(3)] 
@@ -53,6 +52,10 @@ namespace WolvenKit.RED4.Types
 			SlotName = "UI_Interaction";
 			MappinData = new() { MappinType = 151509826449, Variant = Enums.gamedataMappinVariant.DefaultQuestVariant, Active = true, LocalizedCaption = new() { Unk1 = 0, Value = "" }, VisibleThroughWalls = true };
 			Offset = new() { Z = 0.500000F };
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

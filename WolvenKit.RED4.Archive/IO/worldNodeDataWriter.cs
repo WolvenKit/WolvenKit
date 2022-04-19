@@ -9,16 +9,16 @@ using WolvenKit.RED4.IO;
 
 namespace WolvenKit.RED4.Archive.IO
 {
-    public class StreamingSectorTransformWriter : Red4Writer
+    public class worldNodeDataWriter : Red4Writer
     {
-        public StreamingSectorTransformWriter(Stream ms) : base(ms)
+        public worldNodeDataWriter(Stream ms) : base(ms)
         {
 
         }
 
-        public void WriteBuffer(StreamingSectorBuffer ssb)
+        public void WriteBuffer(worldNodeDataBuffer ssb)
         {
-            foreach (var t in ssb.AllTransforms)
+            foreach (var t in ssb)
             {
                 _writer.Write(t.Position.X);
                 _writer.Write(t.Position.Y);
@@ -38,24 +38,24 @@ namespace WolvenKit.RED4.Archive.IO
                 _writer.Write(t.Pivot.Y);
                 _writer.Write(t.Pivot.Z);
 
-                _writer.Write(t.Uk2.X);
-                _writer.Write(t.Uk2.Y);
-                _writer.Write(t.Uk2.Z);
+                _writer.Write(t.Bounds.Min.X);
+                _writer.Write(t.Bounds.Min.Y);
+                _writer.Write(t.Bounds.Min.Z);
 
-                _writer.Write(t.Uk3.X);
-                _writer.Write(t.Uk3.Y);
-                _writer.Write(t.Uk3.Z);
+                _writer.Write(t.Bounds.Max.X);
+                _writer.Write(t.Bounds.Max.Y);
+                _writer.Write(t.Bounds.Max.Z);
 
                 _writer.Write(t.Id);
 
                 _writer.Write((ulong)t.QuestPrefabRefHash);
                 _writer.Write((ulong)t.UkHash1);
-                _writer.Write((ulong)t.UkHash2);
+                _writer.Write((ulong)t.CookedPrefabData.DepotPath.GetRedHash());
 
                 _writer.Write(t.MaxStreamingDistance);
-                _writer.Write(t.VariantID);
+                _writer.Write(t.UkFloat1);
 
-                _writer.Write(t.HandleIndex);
+                _writer.Write(t.NodeIndex);
                 _writer.Write(t.Uk10);
                 _writer.Write(t.Uk11);
                 _writer.Write(t.Uk12);

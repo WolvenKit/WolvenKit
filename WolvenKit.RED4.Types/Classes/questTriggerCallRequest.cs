@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class questTriggerCallRequest : gameScriptableSystemRequest
 	{
 		[Ordinal(0)] 
@@ -57,6 +56,10 @@ namespace WolvenKit.RED4.Types
 		{
 			CallPhase = Enums.questPhoneCallPhase.IncomingCall;
 			CallMode = Enums.questPhoneCallMode.Audio;
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class CMesh : resStreamedResource
 	{
 		[Ordinal(2)] 
@@ -208,6 +207,10 @@ namespace WolvenKit.RED4.Types
 			BoneRigMatrices = new();
 			BoneVertexEpsilons = new();
 			LodBoneMask = new();
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

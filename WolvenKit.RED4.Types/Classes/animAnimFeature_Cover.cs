@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class animAnimFeature_Cover : animAnimFeature
 	{
 		[Ordinal(0)] 
@@ -93,6 +92,10 @@ namespace WolvenKit.RED4.Types
 			BehaviorTime_PreAction = 1.000000F;
 			BehaviorTime_Action = 1.000000F;
 			BehaviorTime_PostAction = 1.000000F;
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

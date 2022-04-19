@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class entMeshComponent : entIVisualComponent
 	{
 		[Ordinal(8)] 
@@ -148,6 +147,10 @@ namespace WolvenKit.RED4.Types
 			IsEnabled = true;
 			OverrideMeshNavigationImpact = true;
 			NavigationImpact = new() { NavmeshImpact = Enums.NavGenNavmeshImpact.Ignored };
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

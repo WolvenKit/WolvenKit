@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class inkFastTravelLoadingScreenLogicController : inkILoadingLogicController
 	{
 		[Ordinal(1)] 
@@ -91,6 +90,10 @@ namespace WolvenKit.RED4.Types
 			SupportBackgroundImage = new();
 			TooltipsWidget = new();
 			ProgressBarRoot = new();
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

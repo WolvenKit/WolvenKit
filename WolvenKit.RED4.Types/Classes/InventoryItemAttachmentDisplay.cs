@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class InventoryItemAttachmentDisplay : inkWidgetLogicController
 	{
 		[Ordinal(1)] 
@@ -43,6 +42,10 @@ namespace WolvenKit.RED4.Types
 			ShapeRef = new();
 			BorderRef = new();
 			MarkedStateName = "Marked";
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

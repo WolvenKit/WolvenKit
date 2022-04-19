@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class VehicleComponent : ScriptableDeviceComponent
 	{
 		[Ordinal(4)] 
@@ -322,6 +321,10 @@ namespace WolvenKit.RED4.Types
 			MappinID = new();
 			RaceClockTickID = new();
 			ArePlayerHitShapesEnabled = true;
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

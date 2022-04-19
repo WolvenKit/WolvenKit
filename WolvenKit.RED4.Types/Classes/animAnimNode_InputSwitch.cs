@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class animAnimNode_InputSwitch : animAnimNode_BaseSwitch
 	{
 		[Ordinal(16)] 
@@ -25,6 +24,10 @@ namespace WolvenKit.RED4.Types
 		{
 			SelectIntNode = new();
 			SelectFloatNode = new();
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

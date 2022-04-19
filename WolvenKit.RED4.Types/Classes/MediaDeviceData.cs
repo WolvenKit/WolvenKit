@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class MediaDeviceData : RedBaseClass
 	{
 		[Ordinal(0)] 
@@ -36,5 +35,12 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CBool>();
 			set => SetPropertyValue<CBool>(value);
 		}
+
+		public MediaDeviceData()
+		{
+			PostConstruct();
+		}
+
+		partial void PostConstruct();
 	}
 }

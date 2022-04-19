@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class animAnimNode_BoolInput : animAnimNode_BoolValue
 	{
 		[Ordinal(11)] 
@@ -24,6 +23,10 @@ namespace WolvenKit.RED4.Types
 		public animAnimNode_BoolInput()
 		{
 			Id = 4294967295;
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

@@ -15,17 +15,17 @@ namespace WolvenKit.RED4.Types
             set => SetPropertyValue<CInt32>(value);
         }
 
-        [RED("transforms")]
+        [RED("nodeData")]
         [REDProperty(IsIgnored = true)]
-        public DataBuffer Transforms
+        public DataBuffer NodeData
         {
             get => GetPropertyValue<DataBuffer>();
             set => SetPropertyValue<DataBuffer>(value);
         }
 
-        [RED("handles")]
+        [RED("nodes")]
         [REDProperty(IsIgnored = true)]
-        public CArray<CHandle<worldNode>> Handles
+        public CArray<CHandle<worldNode>> Nodes
         {
             get => GetPropertyValue<CArray<CHandle<worldNode>>>();
             set => SetPropertyValue<CArray<CHandle<worldNode>>>(value);
@@ -39,44 +39,60 @@ namespace WolvenKit.RED4.Types
             set => SetPropertyValue<CArray<NodeRef>>(value);
         }
 
-        [RED("nodeRanges")]
+        [RED("variantIndices")]
         [REDProperty(IsIgnored = true)]
-        public CArray<CInt32> NodeRanges
+        public CArray<CInt32> VariantIndices
         {
             get => GetPropertyValue<CArray<CInt32>>();
             set => SetPropertyValue<CArray<CInt32>>(value);
         }
 
-        [RED("unk4")]
+        [RED("persistentNodeIndex")]
         [REDProperty(IsIgnored = true)]
-        public CInt32 Unk4
+        public CInt32 PersisentNodeIndex
         {
             get => GetPropertyValue<CInt32>();
             set => SetPropertyValue<CInt32>(value);
         }
 
+        [RED("persistentNodes")]
+        [REDProperty(IsIgnored = true)]
+        public CArray<IRedType> PersistentNodes
+        {
+            get => GetPropertyValue<CArray<IRedType>>();
+            set => SetPropertyValue<CArray<IRedType>>(value);
+        }
+
+        [RED("variantNodes")]
+        [REDProperty(IsIgnored = true)]
+        public CArray<CArray<IRedType>> VariantNodes
+        {
+            get => GetPropertyValue<CArray<CArray<IRedType>>>();
+            set => SetPropertyValue<CArray<CArray<IRedType>>>(value);
+        }
+
         public void Read(Red4Reader reader, uint size)
         {
-            Handles = new CArray<CHandle<worldNode>>();
+            Nodes = new CArray<CHandle<worldNode>>();
             NodeRefs = new CArray<NodeRef>();
-            NodeRanges = new CArray<CInt32>();
+            VariantIndices = new CArray<CInt32>();
 
             Version = reader.ReadCInt32();
 
             var innerSize = reader.BaseReader.ReadInt32();
 
-            Transforms = reader.ReadDataBuffer();
-            Transforms.GetValue().ParentTypes.Add("worldStreamingSector.transforms");
+            NodeData = reader.ReadDataBuffer();
+            NodeData.GetValue().ParentTypes.Add("worldStreamingSector.transforms");
+            NodeData.GetValue().Parent = this;
 
             //var ms = new MemoryStream(Transforms.Buffer.GetBytes());
             //var bufferReader = new StreamingSectorTransformReader(ms);
             //bufferReader.ReadBuffer(Transforms.Buffer, typeof(worldStreamingSector));
 
-
             var cnt1 = reader.BaseReader.ReadVLQInt32();
             for (int i = 0; i < cnt1; i++)
             {
-                Handles.Add((CHandle<worldNode>)reader.ReadCHandle<worldNode>());
+                Nodes.Add((CHandle<worldNode>)reader.ReadCHandle<worldNode>());
             }
 
             var cnt2 = reader.BaseReader.ReadVLQInt32();
@@ -88,10 +104,10 @@ namespace WolvenKit.RED4.Types
             var cnt3 = reader.BaseReader.ReadVLQInt32();
             for (int i = 0; i < cnt3; i++)
             {
-                NodeRanges.Add(reader.ReadCInt32());
+                VariantIndices.Add(reader.ReadCInt32());
             }
 
-            Unk4 = reader.ReadCInt32();
+            PersisentNodeIndex = reader.ReadCInt32();
         }
 
         public void Write(Red4Writer writer)
@@ -101,10 +117,10 @@ namespace WolvenKit.RED4.Types
             var sizePos = writer.BaseStream.Position;
             writer.BaseWriter.Write(0);
 
-            writer.Write(Transforms);
+            writer.Write(NodeData);
 
-            writer.BaseWriter.WriteVLQInt32(Handles.Count);
-            foreach (var handle in Handles)
+            writer.BaseWriter.WriteVLQInt32(Nodes.Count);
+            foreach (var handle in Nodes)
             {
                 writer.Write((IRedHandle)handle);
             }
@@ -115,13 +131,13 @@ namespace WolvenKit.RED4.Types
                 writer.Write(nodeRef);
             }
 
-            writer.BaseWriter.WriteVLQInt32(NodeRanges.Count);
-            foreach (var unk in NodeRanges)
+            writer.BaseWriter.WriteVLQInt32(VariantIndices.Count);
+            foreach (var unk in VariantIndices)
             {
                 writer.Write(unk);
             }
 
-            writer.Write(Unk4);
+            writer.Write(PersisentNodeIndex);
 
             var endPos = writer.BaseStream.Position;
             writer.BaseStream.Position = sizePos;

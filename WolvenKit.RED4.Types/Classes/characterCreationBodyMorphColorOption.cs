@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class characterCreationBodyMorphColorOption : inkWidgetLogicController
 	{
 		[Ordinal(1)] 
@@ -103,6 +102,10 @@ namespace WolvenKit.RED4.Types
 			ArrowsTexture = new();
 			OptionSwitchHint = new();
 			CurrColorIndex = -1;
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

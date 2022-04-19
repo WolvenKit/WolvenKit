@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class PerksItemHoldStart : redEvent
 	{
 		[Ordinal(0)] 
@@ -28,5 +27,12 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CHandle<BasePerkDisplayData>>();
 			set => SetPropertyValue<CHandle<BasePerkDisplayData>>(value);
 		}
+
+		public PerksItemHoldStart()
+		{
+			PostConstruct();
+		}
+
+		partial void PostConstruct();
 	}
 }

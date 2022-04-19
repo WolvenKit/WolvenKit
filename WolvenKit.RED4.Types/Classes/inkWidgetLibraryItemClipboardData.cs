@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class inkWidgetLibraryItemClipboardData : ISerializable
 	{
 		[Ordinal(0)] 
@@ -12,5 +11,12 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CHandle<inkWidgetLibraryItemUnpackedView>>();
 			set => SetPropertyValue<CHandle<inkWidgetLibraryItemUnpackedView>>(value);
 		}
+
+		public inkWidgetLibraryItemClipboardData()
+		{
+			PostConstruct();
+		}
+
+		partial void PostConstruct();
 	}
 }

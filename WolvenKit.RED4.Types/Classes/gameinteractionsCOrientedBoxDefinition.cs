@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class gameinteractionsCOrientedBoxDefinition : gameinteractionsIShapeDefinition
 	{
 		[Ordinal(0)] 
@@ -43,6 +42,10 @@ namespace WolvenKit.RED4.Types
 			Forward = new() { Y = 1.000000F };
 			Right = new() { X = 1.000000F };
 			Up = new() { Z = 1.000000F };
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

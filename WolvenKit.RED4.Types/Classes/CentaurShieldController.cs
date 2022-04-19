@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class CentaurShieldController : AICustomComponents
 	{
 		[Ordinal(5)] 
@@ -50,6 +49,10 @@ namespace WolvenKit.RED4.Types
 			StartWithShieldActive = true;
 			AnimFeatureName = "ShieldState";
 			ShieldDestroyedModifierName = "Shield_ControllerDestroyed";
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

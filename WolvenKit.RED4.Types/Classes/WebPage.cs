@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class WebPage : inkWidgetLogicController
 	{
 		[Ordinal(1)] 
@@ -69,6 +68,10 @@ namespace WolvenKit.RED4.Types
 			VideoList = new();
 			HOME_IMAGE_NAME = "ImageLink";
 			HOME_TEXT_NAME = "TextLink";
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

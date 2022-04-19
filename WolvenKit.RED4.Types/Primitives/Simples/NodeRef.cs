@@ -37,10 +37,10 @@ namespace WolvenKit.RED4.Types
             {
                 return _value;
             }
-            else if (s_NodeRefHashCache.ContainsKey(_hash))
-            {
-                return s_NodeRefHashCache[_hash];
-            }
+            //else if (s_NodeRefHashCache.ContainsKey(_hash))
+            //{
+            //    return s_NodeRefHashCache[_hash];
+            //}
             else
             {
                 return ResolveHashHandler?.Invoke(_hash);
@@ -110,7 +110,7 @@ namespace WolvenKit.RED4.Types
             return true;
         }
 
-        public override string ToString() => GetResolvedText();
+        public override string ToString() => (GetResolvedText() is var text && !string.IsNullOrEmpty(text)) ? text : _hash.ToString();
 
         //public NodeRef() {}
         //private NodeRef(string value) : base(value) {}

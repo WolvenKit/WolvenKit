@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class DrillMachineScanManager : gameScriptableComponent
 	{
 		[Ordinal(5)] 
@@ -57,6 +56,10 @@ namespace WolvenKit.RED4.Types
 		{
 			IdleToScanTime = 1.700000F;
 			PpOffFrameDelay = 2;
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

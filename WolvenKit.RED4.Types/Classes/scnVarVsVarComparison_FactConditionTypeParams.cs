@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class scnVarVsVarComparison_FactConditionTypeParams : RedBaseClass
 	{
 		[Ordinal(0)] 
@@ -28,5 +27,12 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CEnum<EComparisonType>>();
 			set => SetPropertyValue<CEnum<EComparisonType>>(value);
 		}
+
+		public scnVarVsVarComparison_FactConditionTypeParams()
+		{
+			PostConstruct();
+		}
+
+		partial void PostConstruct();
 	}
 }

@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class StartGrenadeThrowQueryEvent : redEvent
 	{
 		[Ordinal(0)] 
@@ -16,6 +15,10 @@ namespace WolvenKit.RED4.Types
 		public StartGrenadeThrowQueryEvent()
 		{
 			QueryParams = new() { ThrowAngleDegrees = -1.000000F, GravitySimulation = -9.800000F, MinTargetAngleDegrees = -180.000000F, MaxTargetAngleDegrees = 180.000000F };
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

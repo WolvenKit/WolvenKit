@@ -14,6 +14,7 @@ using WolvenKit.RED4.Archive.Buffer;
 using WolvenKit.RED4.Archive.CR2W;
 using WolvenKit.RED4.Types;
 using WolvenKit.Common.Services;
+using WolvenKit.Functionality.Extensions;
 
 namespace WolvenKit.ViewModels.Documents
 {
@@ -50,12 +51,12 @@ namespace WolvenKit.ViewModels.Documents
 
         public Element3D RenderSector(worldStreamingSector data, Appearance app)
         {
-            var ssTransforms = ((StreamingSectorBuffer)data.Transforms.Data).Transforms;
+            var ssTransforms = ((worldNodeDataBuffer)data.NodeData.Data).Lookup;
 
             var groups = new List<Element3D>();
             foreach (var (handleIndex, transforms) in ssTransforms)
             {
-                var handle = data.Handles[handleIndex];
+                var handle = data.Nodes[handleIndex];
                 var name = (string)handle.Chunk.DebugName;
                 name = "_"+name?.Replace("{", "").Replace("}", "").Replace("\\", "_").Replace(".", "_").Replace("!", "").Replace("-", "_") ?? "none";
 
@@ -127,18 +128,66 @@ namespace WolvenKit.ViewModels.Documents
                             matrix.Translate(ToVector3D(transforms[0].Position));
 
                             var wtbMatrix = new Matrix3D();
-                            if (wtbTransforms[(int)(wimn.WorldTransformsBuffer.StartIndex + i)] is WorldTransformExt wte)
+                            if (wtbTransforms[(int)(wimn.WorldTransformsBuffer.StartIndex + i)] is worldNodeTransform wte)
                             {
                                 wtbMatrix.Scale(ToScaleVector3D(wte.Scale));
                             }
-                            wtbMatrix.Rotate(ToQuaternion(wtbTransforms[(int)(wimn.WorldTransformsBuffer.StartIndex + i)].Orientation));
-                            wtbMatrix.Translate(ToVector3D(wtbTransforms[(int)(wimn.WorldTransformsBuffer.StartIndex + i)].Position));
+                            wtbMatrix.Rotate(ToQuaternion(wtbTransforms[(int)(wimn.WorldTransformsBuffer.StartIndex + i)].Rotation));
+                            wtbMatrix.Translate(ToVector3D(wtbTransforms[(int)(wimn.WorldTransformsBuffer.StartIndex + i)].Translation));
 
-                            matrix.Append(wtbMatrix);
+                            wtbMatrix.Append(matrix);
 
-                            subgroup.Transform = new MatrixTransform3D(matrix);
+                            subgroup.Transform = new MatrixTransform3D(wtbMatrix);
 
                             group.Children.Add(subgroup);
+                        }
+                    }
+                    else if (handle.Chunk is worldInstancedDestructibleMeshNode widmn)
+                    {
+                        if (widmn.CookedInstanceTransforms.SharedDataBuffer.Chunk.Buffer.Data is not CookedInstanceTransformsBuffer citb)
+                        {
+                            continue;
+                        }
+
+                        var citbTransforms = citb.Transforms;
+                        for (int i = 0; i < widmn.CookedInstanceTransforms.NumElements; i++)
+                        {
+                            //for (int j = 0; j < transforms.Count; j++)
+                            //{
+                                var meshes = MakeMesh(mesh, ulong.MaxValue, 0);
+
+                                var subgroup = new MeshComponent()
+                                {
+                                    Name = name + $"_instance_{i:D2}",
+                                    AppearanceName = widmn.MeshAppearance,
+                                    DepotPath = irmn.Mesh.DepotPath
+                                };
+
+                                foreach (var submesh in meshes)
+                                {
+                                    if (!app.LODLUT.ContainsKey(submesh.LOD))
+                                    {
+                                        app.LODLUT[submesh.LOD] = new List<SubmeshComponent>();
+                                    }
+                                    app.LODLUT[submesh.LOD].Add(submesh);
+                                    subgroup.Children.Add(submesh);
+                                }
+
+                                var matrix = new Matrix3D();
+                                matrix.Scale(ToScaleVector3D(transforms[0].Scale));
+                                matrix.Rotate(ToQuaternion(transforms[0].Orientation));
+                                matrix.Translate(ToVector3D(transforms[0].Position));
+
+                                var citbMatrix = new Matrix3D();
+                                citbMatrix.Rotate(ToQuaternion(citbTransforms[(int)(widmn.CookedInstanceTransforms.StartIndex + i)].Orientation));
+                                citbMatrix.Translate(ToVector3D(citbTransforms[(int)(widmn.CookedInstanceTransforms.StartIndex + i)].Position));
+
+                                citbMatrix.Append(matrix);
+
+                                subgroup.Transform = new MatrixTransform3D(citbMatrix);
+
+                                group.Children.Add(subgroup);
+                            //}
                         }
                     }
                     else
@@ -183,6 +232,226 @@ namespace WolvenKit.ViewModels.Documents
                     }
 
                     groups.Add(group);
+                }
+                else if (handle.Chunk is worldCollisionNode wcn)
+                {
+                    if (wcn.CompiledData.Data is not CollisionBuffer cb)
+                    {
+                        continue;
+                    }
+
+                    var gcs = Locator.Current.GetService<GeometryCacheService>();
+
+                    var mesh = new MeshComponent()
+                    {
+                        Name = "collisionNode_" + wcn.SectorHash
+                    };
+
+                    var colliderMaterial = new PBRMaterial()
+                    {
+                        EnableAutoTangent = true,
+                        RenderShadowMap = true,
+                        RenderEnvironmentMap = true,
+                        //AlbedoColor = new SharpDX.Color4(0.5f * Random.Shared.NextSingle(), 0f, 0.5f * Random.Shared.NextSingle(), 1f),
+                        AlbedoColor = new SharpDX.Color4(0.5f, 0f, 0.5f, 1f),
+                        RoughnessFactor = 0.5,
+                        MetallicFactor = 0
+                    };
+
+                    foreach (var actor in cb.Actors)
+                    {
+                        var actorGroup = new MeshComponent()
+                        {
+                            Name = "actor_" + cb.Actors.IndexOf(actor)
+                        };
+
+                        foreach (var shape in actor.Shapes)
+                        {
+                            HelixToolkit.SharpDX.Core.MeshGeometry3D geometry = null;
+
+                            if (shape.ShapeType == Enums.physicsShapeType.Box)
+                            {
+                                var mb = new MeshBuilder();
+                                mb.CreateNormals = true;
+                                mb.AddBox(new SharpDX.Vector3(0f, 0f, 0f), shape.Size.X * 2, shape.Size.Z * 2, shape.Size.Y * 2);
+
+                                mb.ComputeNormalsAndTangents(MeshFaces.Default, true);
+
+                                geometry = mb.ToMeshGeometry3D();
+                            }
+                            else if (shape.ShapeType == Enums.physicsShapeType.ConvexMesh || shape.ShapeType == Enums.physicsShapeType.TriangleMesh)
+                            {
+                                var geo = gcs.GetEntry(wcn.SectorHash, shape.Hash);
+
+                                if (geo == null)
+                                {
+                                    //Locator.Current.GetService<ILoggerService>().Warning($"Couldn't find entry with hash {shape.Hash} in sector {wcn.SectorHash}, handle[{data.Handles.IndexOf(handle)}], actor[{cb.Actors.IndexOf(actor)}], shape[{actor.Shapes.IndexOf(shape)}]");
+                                    continue;
+                                }
+
+                                if (geo is CVXMCacheEntry cce)
+                                {
+                                    var mb = new MeshBuilder();
+
+                                    mb.CreateNormals = true;
+
+                                    var positions = new Vector3Collection();
+                                    for (var i = 0; i < cce.Vertices.Count; i++)
+                                    {
+                                        positions.Add(cce.Vertices[i].ToVector3());
+                                    }
+
+                                    //foreach (var face in cce.Faces)
+                                    //{
+                                    //    var points = new List<SharpDX.Vector3>();
+                                    //    foreach (var point in face)
+                                    //    {
+                                    //        points.Add(positions[point]);
+                                    //    }
+                                    //    switch (points.Count)
+                                    //    {
+                                    //        case 3:
+                                    //            mb.AddTriangle(points[0], points[1], points[2]);
+                                    //            break;
+                                    //        case 4:
+                                    //            mb.AddQuad(points[3], points[2], points[1], points[0]);
+                                    //            break;
+                                    //        default:
+                                    //            for (int i = 0; i + 2 < points.Count; i++)
+                                    //            {
+                                    //                mb.AddTriangle(points[0], points[i + 1], points[i + 2]);
+                                    //            }
+                                    //            break;
+                                    //    }
+                                    //}
+
+
+                                    //for (var i = 0; i < cce.Vertices.Count; i++)
+                                    //{
+                                    //    mb.Positions.Add(cce.Vertices[i].ToVector3());
+                                    //}
+
+                                    for (var i = 0; i < cce.FaceData.Count; i++)
+                                    {
+                                        var count = mb.Positions.Count;
+                                        switch (cce.Faces[i].Count)
+                                        {
+                                            case 3:
+                                                mb.Positions.Add(positions[cce.Faces[i][0]]);
+                                                mb.Positions.Add(positions[cce.Faces[i][1]]);
+                                                mb.Positions.Add(positions[cce.Faces[i][2]]);
+                                                mb.Normals.Add(cce.FaceData[i].Normal.ToVector3());
+                                                mb.Normals.Add(cce.FaceData[i].Normal.ToVector3());
+                                                mb.Normals.Add(cce.FaceData[i].Normal.ToVector3());
+                                                mb.TriangleIndices.Add(count);
+                                                mb.TriangleIndices.Add(count + 1);
+                                                mb.TriangleIndices.Add(count + 2);
+                                                break;
+                                            case 4:
+                                                mb.Positions.Add(positions[cce.Faces[i][0]]);
+                                                mb.Positions.Add(positions[cce.Faces[i][1]]);
+                                                mb.Positions.Add(positions[cce.Faces[i][2]]);
+                                                mb.Positions.Add(positions[cce.Faces[i][3]]);
+                                                mb.Normals.Add(cce.FaceData[i].Normal.ToVector3());
+                                                mb.Normals.Add(cce.FaceData[i].Normal.ToVector3());
+                                                mb.Normals.Add(cce.FaceData[i].Normal.ToVector3());
+                                                mb.Normals.Add(cce.FaceData[i].Normal.ToVector3());
+                                                mb.TriangleIndices.Add(count);
+                                                mb.TriangleIndices.Add(count + 1);
+                                                mb.TriangleIndices.Add(count + 2);
+                                                mb.TriangleIndices.Add(count + 2);
+                                                mb.TriangleIndices.Add(count + 3);
+                                                mb.TriangleIndices.Add(count);
+                                                break;
+                                            default:
+                                                for (int j = 0; j < cce.Faces[i].Count; j++)
+                                                {
+                                                    mb.Positions.Add(positions[cce.Faces[i][j]]);
+                                                    mb.Normals.Add(cce.FaceData[i].Normal.ToVector3());
+                                                }
+                                                for (int j = 0; j + 2 < cce.Faces[i].Count; j++)
+                                                {
+                                                    mb.TriangleIndices.Add(count);
+                                                    mb.TriangleIndices.Add(count + j + 1);
+                                                    mb.TriangleIndices.Add(count + j + 2);
+                                                }
+                                                break;
+                                        }
+                                    }
+
+                                    //mb.ComputeNormalsAndTangents(MeshFaces.Default);
+
+                                    geometry = mb.ToMeshGeometry3D();
+                                }
+                                else if (geo is MeshCacheEntry mce)
+                                {
+                                    var mb = new MeshBuilder();
+
+                                    mb.CreateNormals = true;
+
+                                    var positions = new Vector3Collection();
+                                    for (var i = 0; i < mce.Vertices.Count; i++)
+                                    {
+                                        positions.Add(mce.Vertices[i].ToVector3());
+                                    }
+
+                                    foreach (var face in mce.Faces)
+                                    {
+                                        var points = new List<SharpDX.Vector3>();
+                                        foreach (var point in face)
+                                        {
+                                            points.Add(positions[point]);
+                                        }
+                                        mb.AddTriangle(points[0], points[1], points[2]);
+                                    }
+
+                                    //mb.ComputeNormalsAndTangents(MeshFaces.Default);
+
+                                    geometry = mb.ToMeshGeometry3D();
+                                }
+                            }
+
+                            if (geometry == null)
+                            {
+                                continue;
+                            }
+
+                            var shapeGroup = new SubmeshComponent()
+                            {
+                                Name = "shape_" + shape.Hash,
+                                IsRendering = true,
+                                Geometry = geometry,
+                                Material = colliderMaterial,
+                                IsTransparent = true
+                            };
+
+                            var shapeMatrix = new Matrix3D();
+                            shapeMatrix.Rotate(ToQuaternion(shape.Rotation));
+                            shapeMatrix.Translate(ToVector3D(shape.Position));
+
+                            shapeGroup.Transform = new MatrixTransform3D(shapeMatrix);
+
+                            actorGroup.Children.Add(shapeGroup);
+                        }
+
+                        var matrix = new Matrix3D();
+                        matrix.Scale(ToScaleVector3D(actor.Scale));
+                        matrix.Rotate(ToQuaternion(actor.Orientation));
+                        matrix.Translate(ToVector3D(actor.Position));
+
+                        actorGroup.Transform = new MatrixTransform3D(matrix);
+
+                        mesh.Children.Add(actorGroup);
+                    }
+
+                    // not used?
+                    //var meshMatrix = new Matrix3D();
+                    //meshMatrix.Scale(ToScaleVector3D(transforms[0].Scale));
+                    //meshMatrix.Rotate(ToQuaternion(transforms[0].Orientation));
+                    //meshMatrix.Translate(ToVector3D(transforms[0].Position));
+
+                    //mesh.Transform = new MatrixTransform3D(meshMatrix);
+                    groups.Add(mesh);
                 }
                 else if (handle.Chunk is worldNavigationNode wnm)
                 {
@@ -270,31 +539,31 @@ namespace WolvenKit.ViewModels.Documents
                 }
                 else if (handle.Chunk is worldPopulationSpawnerNode wpsn)
                 {
-                    var tdb = Locator.Current.GetService<TweakDBService>();
-                    var record = tdb.GetRecord(wpsn.ObjectRecordId);
+                    //var tdb = Locator.Current.GetService<TweakDBService>();
+                    //var record = tdb.GetRecord(wpsn.ObjectRecordId);
 
-                    if (record is gamedataVehicle_Record vehicle)
-                    {
-                        var entFile = File.GetFileFromDepotPathOrCache(vehicle.EntityTemplatePath.DepotPath);
+                    //if (record is gamedataVehicle_Record vehicle)
+                    //{
+                    //    var entFile = File.GetFileFromDepotPathOrCache(vehicle.EntityTemplatePath.DepotPath);
 
-                        if (entFile != null && entFile.RootChunk is entEntityTemplate eet)
-                        {
-                            var entity = RenderEntity(eet, app);
-                            if (entity != null)
-                            {
-                                entity.Name = "Entity";
+                    //    if (entFile != null && entFile.RootChunk is entEntityTemplate eet)
+                    //    {
+                    //        var entity = RenderEntity(eet, app);
+                    //        if (entity != null)
+                    //        {
+                    //            entity.Name = "Entity";
 
-                                var matrix = new Matrix3D();
-                                matrix.Scale(ToScaleVector3D(transforms[0].Scale));
-                                matrix.Rotate(ToQuaternion(transforms[0].Orientation));
-                                matrix.Translate(ToVector3D(transforms[0].Position));
+                    //            var matrix = new Matrix3D();
+                    //            matrix.Scale(ToScaleVector3D(transforms[0].Scale));
+                    //            matrix.Rotate(ToQuaternion(transforms[0].Orientation));
+                    //            matrix.Translate(ToVector3D(transforms[0].Position));
 
-                                entity.Transform = new MatrixTransform3D(matrix);
+                    //            entity.Transform = new MatrixTransform3D(matrix);
 
-                                groups.Add(entity);
-                            }
-                        }
-                    }
+                    //            groups.Add(entity);
+                    //        }
+                    //    }
+                    //}
                 }
                 else if (handle.Chunk is worldAreaShapeNode wasn)
                 {

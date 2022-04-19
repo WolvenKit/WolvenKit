@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class animAnimNode_FloatMathOp : animAnimNode_FloatValue
 	{
 		[Ordinal(11)] 
@@ -35,6 +34,10 @@ namespace WolvenKit.RED4.Types
 			OperationType = Enums.animEAnimGraphMathOp.AGMO_Abs;
 			FirstInputNode = new();
 			SecondInputNode = new();
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

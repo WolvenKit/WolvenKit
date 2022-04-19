@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class BrowserController : inkWidgetLogicController
 	{
 		[Ordinal(1)] 
@@ -116,6 +115,10 @@ namespace WolvenKit.RED4.Types
 			PageContentRoot = new();
 			SpinnerPath = new();
 			WebsiteData = new();
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class EasingFunction : RedBaseClass
 	{
 		[Ordinal(0)] 
@@ -20,5 +19,12 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CEnum<EEasingType>>();
 			set => SetPropertyValue<CEnum<EEasingType>>(value);
 		}
+
+		public EasingFunction()
+		{
+			PostConstruct();
+		}
+
+		partial void PostConstruct();
 	}
 }

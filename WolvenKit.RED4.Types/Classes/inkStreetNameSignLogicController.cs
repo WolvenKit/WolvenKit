@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class inkStreetNameSignLogicController : inkIStreetNameSignLogicController
 	{
 		[Ordinal(1)] 
@@ -34,6 +33,10 @@ namespace WolvenKit.RED4.Types
 			StreetName = new();
 			DistrictName = new();
 			SubdistrictName = new();
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

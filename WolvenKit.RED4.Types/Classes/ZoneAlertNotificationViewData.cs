@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class ZoneAlertNotificationViewData : gameuiGenericNotificationViewData
 	{
 		[Ordinal(5)] 
@@ -20,5 +19,12 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CEnum<ESecurityAreaType>>();
 			set => SetPropertyValue<CEnum<ESecurityAreaType>>(value);
 		}
+
+		public ZoneAlertNotificationViewData()
+		{
+			PostConstruct();
+		}
+
+		partial void PostConstruct();
 	}
 }

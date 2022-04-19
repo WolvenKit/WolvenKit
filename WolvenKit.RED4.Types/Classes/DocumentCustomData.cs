@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class DocumentCustomData : IScriptable
 	{
 		[Ordinal(0)] 
@@ -20,5 +19,12 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CEnum<EDocumentType>>();
 			set => SetPropertyValue<CEnum<EDocumentType>>(value);
 		}
+
+		public DocumentCustomData()
+		{
+			PostConstruct();
+		}
+
+		partial void PostConstruct();
 	}
 }

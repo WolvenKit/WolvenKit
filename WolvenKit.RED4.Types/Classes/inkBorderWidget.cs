@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class inkBorderWidget : inkLeafWidget
 	{
 		[Ordinal(20)] 
@@ -12,5 +11,12 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CFloat>();
 			set => SetPropertyValue<CFloat>(value);
 		}
+
+		public inkBorderWidget()
+		{
+			PostConstruct();
+		}
+
+		partial void PostConstruct();
 	}
 }

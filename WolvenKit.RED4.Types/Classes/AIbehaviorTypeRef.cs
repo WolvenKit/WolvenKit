@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class AIbehaviorTypeRef : RedBaseClass
 	{
 		[Ordinal(0)] 
@@ -28,5 +27,12 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CEnum<AIArgumentType>>();
 			set => SetPropertyValue<CEnum<AIArgumentType>>(value);
 		}
+
+		public AIbehaviorTypeRef()
+		{
+			PostConstruct();
+		}
+
+		partial void PostConstruct();
 	}
 }

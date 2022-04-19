@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class SettingsLanguageInstallProgressBar : inkWidgetLogicController
 	{
 		[Ordinal(1)] 
@@ -42,6 +41,10 @@ namespace WolvenKit.RED4.Types
 			ProgressBarRoot = new();
 			ProgressBarFill = new();
 			TextProgress = new();
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

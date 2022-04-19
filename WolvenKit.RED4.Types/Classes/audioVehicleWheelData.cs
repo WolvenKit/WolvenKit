@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class audioVehicleWheelData : RedBaseClass
 	{
 		[Ordinal(0)] 
@@ -97,6 +96,10 @@ namespace WolvenKit.RED4.Types
 			MinSuspensionPressureThreshold = 0.100000F;
 			SuspensionImpactCooldown = 0.200000F;
 			MinWheelTimeInAirBeforeLanding = 0.500000F;
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

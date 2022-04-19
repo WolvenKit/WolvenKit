@@ -1,5 +1,6 @@
 using System.IO;
 using WolvenKit.RED4.IO;
+using System.ComponentModel;
 
 namespace WolvenKit.RED4.Types
 {
@@ -7,6 +8,7 @@ namespace WolvenKit.RED4.Types
     {
         [RED("buffer")]
         [REDProperty(IsIgnored = true)]
+        [Browsable(false)]
         public CByteArray Buffer
         {
             get => GetPropertyValue<CByteArray>();

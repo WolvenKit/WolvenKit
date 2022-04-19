@@ -295,6 +295,10 @@ namespace WolvenKit.ViewModels.Shell
                             data = Locator.Current.GetService<TweakDBService>().GetRecord(tdb);
                         }
                     }
+                    else if (Data is DataBuffer db && db.Buffer.Data is IRedType irt)
+                    {
+                        data = irt;
+                    }
                     _resolvedDataCache = data;
                     //this.RaisePropertyChanged("ResolvedData");
                 }
@@ -434,14 +438,32 @@ namespace WolvenKit.ViewModels.Shell
                     }
                 }
             }
-            else if (obj is SerializationDeferredDataBuffer sddb && sddb.Data is Package04 p4)
+            else if (obj is SerializationDeferredDataBuffer sddb)
             {
-                for (var i = 0; i < PropertyCount; i++)
+                if (sddb.Data is Package04 p4)
                 {
-                    Properties.Add(new ChunkViewModel(p4.Chunks[i], this, null)
+                    for (var i = 0; i < PropertyCount; i++)
                     {
-                        IsReadOnly = isreadonly
-                    });
+                        Properties.Add(new ChunkViewModel(p4.Chunks[i], this, null)
+                        {
+                            IsReadOnly = isreadonly
+                        });
+                    }
+                }
+                else if (sddb.Data != null)
+                {
+                    var pis = sddb.Data.GetType().GetProperties();
+                    foreach (var pi in pis)
+                    {
+                        var value = pi.GetValue(sddb.Data);
+                        if (value is IRedType irt)
+                        {
+                            Properties.Add(new ChunkViewModel(irt, this, pi.Name)
+                            {
+                                IsReadOnly = isreadonly
+                            });
+                        }
+                    }
                 }
             }
             else if (obj is SharedDataBuffer sdb)
@@ -498,12 +520,30 @@ namespace WolvenKit.ViewModels.Shell
                         });
                     }
                 }
-                else if (db.Data is IParseableBuffer ipb)
+                else if (db.Data is IList list)
                 {
-                    Properties.Add(new ChunkViewModel(ipb.Data, this)
+                    foreach (var thing in list)
                     {
-                        IsReadOnly = isreadonly
-                    });
+                        Properties.Add(new ChunkViewModel((IRedType)thing, this, null)
+                        {
+                            IsReadOnly = isreadonly
+                        });
+                    }
+                }
+                else if (db.Data != null)
+                {
+                    var pis = db.Data.GetType().GetProperties();
+                    foreach (var pi in pis)
+                    {
+                        var value = pi.GetValue(db.Data);
+                        if (value is IRedType irt)
+                        {
+                            Properties.Add(new ChunkViewModel(irt, this, pi.Name)
+                            {
+                                IsReadOnly = isreadonly
+                            });
+                        }
+                    }
                 }
             }
             //else if (Data is TweakXLFile)
@@ -555,9 +595,10 @@ namespace WolvenKit.ViewModels.Shell
                             });
                         }
                     }
-                    if (Data is StreamingSectorTransform sst && Tab is RDTDataViewModel dvm && dvm.Chunks[0].Data is worldStreamingSector wss)
+
+                    if (Data is worldNodeData sst && Tab is RDTDataViewModel dvm && dvm.Chunks[0].Data is worldStreamingSector wss)
                     {
-                        Properties.Add(new ChunkViewModel(wss.Handles[sst.HandleIndex], this, "Handle")
+                        Properties.Add(new ChunkViewModel(wss.Nodes[sst.NodeIndex], this, "Node")
                         {
                             IsReadOnly = isreadonly
                         });
@@ -741,6 +782,18 @@ namespace WolvenKit.ViewModels.Shell
                         return typeof(localizationPersistenceOnScreenEntry);
                     }
                 }
+                if (Data is DataBuffer db && db.Data != null)
+                {
+                    return db.Data.GetType();
+                }
+                if (Data is SharedDataBuffer sdb && sdb.Data != null)
+                {
+                    return sdb.Data.GetType();
+                }
+                if (Data is SerializationDeferredDataBuffer sddb && sddb.Data != null)
+                {
+                    return sddb.Data.GetType();
+                }
                 if (Data is gamedataLocKeyWrapper)
                 {
                     return typeof(localizationPersistenceOnScreenEntry);
@@ -770,7 +823,7 @@ namespace WolvenKit.ViewModels.Shell
             }
         }
 
-        public string ResolvedType => ResolvedPropertyType != null ? GetTypeRedName(ResolvedPropertyType) : "";
+        public string ResolvedType => ResolvedPropertyType != null ? (GetTypeRedName(ResolvedPropertyType) != null ? GetTypeRedName(ResolvedPropertyType) : ResolvedPropertyType.Name) : "";
 
         public bool TypesDiffer => PropertyType != ResolvedPropertyType;
 
@@ -778,10 +831,9 @@ namespace WolvenKit.ViewModels.Shell
 
         public bool IsArray => PropertyType != null &&
                     (PropertyType.IsAssignableTo(typeof(IRedArray)) ||
-                    PropertyType.IsAssignableTo(typeof(IList)) ||
-                    PropertyType.IsAssignableTo(typeof(DataBuffer)) ||
-                    PropertyType.IsAssignableTo(typeof(SharedDataBuffer)) ||
-                    PropertyType.IsAssignableTo(typeof(SerializationDeferredDataBuffer)));
+                    ResolvedPropertyType.IsAssignableTo(typeof(IList)) ||
+                    ResolvedPropertyType.IsAssignableTo(typeof(CR2WList)) ||
+                    ResolvedPropertyType.IsAssignableTo(typeof(Package04)));
 
         private int _propertyCountCache = -1;
 
@@ -834,9 +886,16 @@ namespace WolvenKit.ViewModels.Shell
                         var dps = redClass.GetDynamicPropertyNames();
                         count += dps.Count;
                     }
-                    else if (ResolvedData is SerializationDeferredDataBuffer sddb && sddb.Data is Package04 p4)
+                    else if (ResolvedData is SerializationDeferredDataBuffer sddb)
                     {
-                        count += p4.Chunks.Count;
+                        if (sddb.Data is Package04 p4)
+                        {
+                            count += p4.Chunks.Count;
+                        }
+                        else if (sddb.Data != null)
+                        {
+                            count += sddb.Data.GetType().GetProperties().Count();
+                        }
                     }
                     else if (ResolvedData is SharedDataBuffer sdb)
                     {
@@ -863,6 +922,10 @@ namespace WolvenKit.ViewModels.Shell
                         {
                             count += cl.Files.Count;
                         }
+                        else if (db.Data is IList list)
+                        {
+                            count += list.Count;
+                        }
                         else if (db.Data is IParseableBuffer)
                         {
                             count += 1; // needs refinement?
@@ -888,7 +951,7 @@ namespace WolvenKit.ViewModels.Shell
                             var pis = Data.GetType().GetProperties();
                             count += pis.Count();
                         }
-                        if (Data is StreamingSectorTransform)
+                        if (Data is worldNodeData)
                         {
                             count += 1;
                         }
@@ -981,22 +1044,15 @@ namespace WolvenKit.ViewModels.Shell
             if (PropertyType.IsAssignableTo(typeof(BaseStringType)))
             {
                 var value = (BaseStringType)Data;
-                if (string.IsNullOrEmpty(value))
+                if (value is NodeRef rn)
                 {
-                    if (value is NodeRef rn)
+                    if (rn.GetResolvedText() is var text && !string.IsNullOrEmpty(text))
                     {
-                        if (rn.GetResolvedText() != null)
-                        {
-                            Value = rn.GetResolvedText();
-                        }
-                        else if (rn.GetRedHash() != 0)
-                        {
-                            Value = rn.GetRedHash().ToString();
-                        }
-                        else
-                        {
-                            Value = "null";
-                        }
+                        Value = text;
+                    }
+                    else if (rn.GetRedHash() != 0)
+                    {
+                        Value = rn.GetRedHash().ToString();
                     }
                     else
                     {
@@ -1004,6 +1060,10 @@ namespace WolvenKit.ViewModels.Shell
                     }
                 }
                 else
+                {
+                    Value = "null";
+                }
+                if (!string.IsNullOrEmpty(value))
                 {
                     Value = value;
                     if (Value != null && Value.StartsWith("LocKey#") && ulong.TryParse(Value.Substring(7), out var key))
@@ -1058,7 +1118,14 @@ namespace WolvenKit.ViewModels.Shell
             else if (PropertyType.IsAssignableTo(typeof(CUInt64)))
             {
                 var value = (CUInt64)Data;
-                Value = ((ulong)value).ToString();
+                if (value != 0)
+                {
+                    Value = ((NodeRef)(ulong)value).ToString();
+                }
+                else
+                {
+                    Value = ((ulong)value).ToString();
+                }
             }
             else if (PropertyType.IsAssignableTo(typeof(gamedataLocKeyWrapper)))
             {
@@ -1122,10 +1189,9 @@ namespace WolvenKit.ViewModels.Shell
                 return;
             }
 
-
-            if (Data is StreamingSectorTransform sst && Tab is RDTDataViewModel dvm && dvm.Chunks[0].Data is worldStreamingSector wss)
+            if (Data is worldNodeData sst && Tab is RDTDataViewModel dvm && dvm.Chunks[0].Data is worldStreamingSector wss)
             {
-                Descriptor = $"[{sst.HandleIndex}] {wss.Handles[sst.HandleIndex].Chunk.DebugName}";
+                Descriptor = $"[{sst.NodeIndex}] {wss.Nodes[sst.NodeIndex].Chunk.DebugName}";
                 return;
             }
 
@@ -1237,7 +1303,8 @@ namespace WolvenKit.ViewModels.Shell
                     "category",
                     "entryName",
                     "className",
-                    "actorName"
+                    "actorName",
+                    "sectorHash"
             };
             if (ResolvedData is RedBaseClass irc)
             {
@@ -1247,6 +1314,7 @@ namespace WolvenKit.ViewModels.Shell
                     if (prop != null)
                     {
                         Descriptor = irc.GetProperty(prop.RedName).ToString();
+                        return;
                     }
                 }
             }
@@ -1260,6 +1328,7 @@ namespace WolvenKit.ViewModels.Shell
                         if (prop != null)
                         {
                             Descriptor = prop.GetValue(Data).ToString();
+                            return;
                         }
                     }
                 }
@@ -1358,7 +1427,7 @@ namespace WolvenKit.ViewModels.Shell
             {
                 //string depotpath = r.DepotPath;
                 //Tab.File.OpenRefAsTab(depotpath);
-                Locator.Current.GetService<AppViewModel>().OpenFileFromDepotPath(r.DepotPath);
+                Locator.Current.GetService<AppViewModel>().OpenFileFromHash(r.DepotPath.GetRedHash());
             }
             //var key = FNV1A64HashAlgorithm.HashString(depotpath);
 

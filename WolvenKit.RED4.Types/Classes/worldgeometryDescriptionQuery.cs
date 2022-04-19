@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class worldgeometryDescriptionQuery : IScriptable
 	{
 		[Ordinal(0)] 
@@ -132,6 +131,10 @@ namespace WolvenKit.RED4.Types
 			MaxProbes = 100;
 			ProbeDimensions = new() { X = 0.400000F, Y = -1.000000F, Z = -1.000000F, W = 1.000000F };
 			Filter = new();
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

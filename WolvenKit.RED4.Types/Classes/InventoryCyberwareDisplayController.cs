@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class InventoryCyberwareDisplayController : InventoryItemDisplayController
 	{
 		[Ordinal(90)] 
@@ -43,6 +42,10 @@ namespace WolvenKit.RED4.Types
 			SelectedFrame = new();
 			AmountPanel = new();
 			Amount = new();
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

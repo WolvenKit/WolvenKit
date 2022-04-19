@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class AIBackgroundCombatDelegate : AIbehaviorScriptBehaviorDelegate
 	{
 		[Ordinal(0)] 
@@ -121,6 +120,10 @@ namespace WolvenKit.RED4.Types
 		{
 			Steps = new();
 			DesiredTarget = new() { Names = new() };
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

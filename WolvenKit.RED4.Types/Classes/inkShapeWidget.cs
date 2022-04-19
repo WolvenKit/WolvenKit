@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class inkShapeWidget : inkBaseShapeWidget
 	{
 		[Ordinal(20)] 
@@ -133,6 +132,10 @@ namespace WolvenKit.RED4.Types
 			BorderOpacity = 1.000000F;
 			FillOpacity = 1.000000F;
 			VertexList = new();
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

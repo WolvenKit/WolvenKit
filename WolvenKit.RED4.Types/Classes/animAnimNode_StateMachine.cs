@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class animAnimNode_StateMachine : animAnimNode_Base
 	{
 		[Ordinal(11)] 
@@ -76,6 +75,10 @@ namespace WolvenKit.RED4.Types
 			Transitions = new();
 			ConditionalEntries = new();
 			GlobalTransitions = new();
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

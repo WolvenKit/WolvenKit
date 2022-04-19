@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class AIFindPositionAroundSelf : AIbehaviortaskScript
 	{
 		[Ordinal(0)] 
@@ -56,6 +55,10 @@ namespace WolvenKit.RED4.Types
 		public AIFindPositionAroundSelf()
 		{
 			FinalPosition = new();
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

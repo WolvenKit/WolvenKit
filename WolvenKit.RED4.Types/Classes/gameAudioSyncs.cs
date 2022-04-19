@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class gameAudioSyncs : RedBaseClass
 	{
 		[Ordinal(0)] 
@@ -43,6 +42,10 @@ namespace WolvenKit.RED4.Types
 			PlayEvents = new();
 			StopEvents = new();
 			ParameterEvents = new();
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

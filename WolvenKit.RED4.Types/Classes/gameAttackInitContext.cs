@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class gameAttackInitContext : RedBaseClass
 	{
 		[Ordinal(0)] 
@@ -36,5 +35,12 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CWeakHandle<gameweaponObject>>();
 			set => SetPropertyValue<CWeakHandle<gameweaponObject>>(value);
 		}
+
+		public gameAttackInitContext()
+		{
+			PostConstruct();
+		}
+
+		partial void PostConstruct();
 	}
 }

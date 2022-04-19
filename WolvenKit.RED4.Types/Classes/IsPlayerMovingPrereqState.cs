@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class IsPlayerMovingPrereqState : PlayerStateMachinePrereqState
 	{
 		[Ordinal(3)] 
@@ -20,5 +19,12 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CHandle<redCallbackObject>>();
 			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
+
+		public IsPlayerMovingPrereqState()
+		{
+			PostConstruct();
+		}
+
+		partial void PostConstruct();
 	}
 }

@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class BraindanceClueData : RedBaseClass
 	{
 		[Ordinal(0)] 
@@ -44,5 +43,12 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CEnum<gameuiEBraindanceLayer>>();
 			set => SetPropertyValue<CEnum<gameuiEBraindanceLayer>>(value);
 		}
+
+		public BraindanceClueData()
+		{
+			PostConstruct();
+		}
+
+		partial void PostConstruct();
 	}
 }

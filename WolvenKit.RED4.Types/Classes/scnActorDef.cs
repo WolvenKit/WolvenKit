@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class scnActorDef : RedBaseClass
 	{
 		[Ordinal(0)] 
@@ -201,6 +200,10 @@ namespace WolvenKit.RED4.Types
 			CyberwareCinematicAnimSets = new();
 			DynamicAnimSets = new();
 			SpecAppearance = "default";
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

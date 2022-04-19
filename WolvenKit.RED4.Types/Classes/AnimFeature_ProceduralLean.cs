@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class AnimFeature_ProceduralLean : animAnimFeature
 	{
 		[Ordinal(0)] 
@@ -115,6 +114,10 @@ namespace WolvenKit.RED4.Types
 			Transform_multiplyer = 1.000000F;
 			Damp_value_walk = 100.000000F;
 			Damp_value_sprint = 100.000000F;
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class animAnimNode_LookAtPose360 : animAnimNode_Base
 	{
 		[Ordinal(11)] 
@@ -51,6 +50,10 @@ namespace WolvenKit.RED4.Types
 			SpeedInDegreesPerSecond = 120.000000F;
 			AngleOffsetNode = new();
 			TargetAngleOffsetNode = new();
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

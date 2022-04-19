@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class inkanimEffectInterpolator : inkanimInterpolator
 	{
 		[Ordinal(7)] 
@@ -49,6 +48,10 @@ namespace WolvenKit.RED4.Types
 		{
 			InterpolationDirection = Enums.inkanimInterpolationDirection.FromTo;
 			EffectName = "";
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

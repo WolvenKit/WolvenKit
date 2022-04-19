@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class VendorHubMenuGameController : gameuiMenuGameController
 	{
 		[Ordinal(3)] 
@@ -292,6 +291,10 @@ namespace WolvenKit.RED4.Types
 			StreetCredBarProgress = new();
 			StreetCredBarSpacer = new();
 			MenuData = new();
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

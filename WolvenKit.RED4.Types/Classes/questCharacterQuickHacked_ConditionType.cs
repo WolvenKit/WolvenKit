@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class questCharacterQuickHacked_ConditionType : questICharacterConditionType
 	{
 		[Ordinal(0)] 
@@ -25,6 +24,10 @@ namespace WolvenKit.RED4.Types
 		{
 			ObjectRef = new() { Names = new() };
 			QuickHacked = true;
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

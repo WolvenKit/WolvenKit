@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class TogglePersonalLink : ActionBool
 	{
 		[Ordinal(25)] 
@@ -28,6 +27,10 @@ namespace WolvenKit.RED4.Types
 			ActionWidgetPackage = new() { DependendActions = new() };
 			Duration = 2.733000F;
 			CanTriggerStim = true;
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

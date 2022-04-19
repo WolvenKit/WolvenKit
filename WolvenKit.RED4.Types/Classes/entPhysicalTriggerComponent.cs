@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class entPhysicalTriggerComponent : entIPlacedComponent
 	{
 		[Ordinal(5)] 
@@ -36,5 +35,12 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CBool>();
 			set => SetPropertyValue<CBool>(value);
 		}
+
+		public entPhysicalTriggerComponent()
+		{
+			PostConstruct();
+		}
+
+		partial void PostConstruct();
 	}
 }

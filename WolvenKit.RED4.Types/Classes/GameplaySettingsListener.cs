@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class GameplaySettingsListener : userSettingsVarListener
 	{
 		[Ordinal(0)] 
@@ -159,6 +158,10 @@ namespace WolvenKit.RED4.Types
 			ControlsPath = "/controls";
 			HudPath = "/interface/hud";
 			HintsName = "input_hints";
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

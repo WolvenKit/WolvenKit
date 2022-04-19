@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class gameEffectObjectFilter_HitType : gameEffectObjectSingleFilter
 	{
 		[Ordinal(0)] 
@@ -20,5 +19,12 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CEnum<gameEffectHitDataType>>();
 			set => SetPropertyValue<CEnum<gameEffectHitDataType>>(value);
 		}
+
+		public gameEffectObjectFilter_HitType()
+		{
+			PostConstruct();
+		}
+
+		partial void PostConstruct();
 	}
 }

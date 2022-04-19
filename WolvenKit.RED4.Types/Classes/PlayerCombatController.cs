@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class PlayerCombatController : IScriptable
 	{
 		[Ordinal(0)] 
@@ -87,6 +86,10 @@ namespace WolvenKit.RED4.Types
 			DelayEventsIds = new() { Crouch = new() };
 			GameplayActiveFlags = new();
 			OtherVars = new();
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

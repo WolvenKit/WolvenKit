@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class audioGrenadeEntitySettings : audioEntitySettings
 	{
 		[Ordinal(6)] 
@@ -18,6 +17,10 @@ namespace WolvenKit.RED4.Types
 			CommonSettings = new() { StopAllSoundsOnDetach = true };
 			ScanningSettings = new();
 			AuxiliaryMetadata = new();
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

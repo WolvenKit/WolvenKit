@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class InventoryStatsDisplay : inkWidgetLogicController
 	{
 		[Ordinal(1)] 
@@ -33,6 +32,10 @@ namespace WolvenKit.RED4.Types
 		{
 			StatsRoot = new();
 			StatItems = new();
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

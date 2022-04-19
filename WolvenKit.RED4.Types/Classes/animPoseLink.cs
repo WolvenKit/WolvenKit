@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class animPoseLink : RedBaseClass
 	{
 		[Ordinal(0)] 
@@ -12,5 +11,12 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CWeakHandle<animAnimNode_Base>>();
 			set => SetPropertyValue<CWeakHandle<animAnimNode_Base>>(value);
 		}
+
+		public animPoseLink()
+		{
+			PostConstruct();
+		}
+
+		partial void PostConstruct();
 	}
 }

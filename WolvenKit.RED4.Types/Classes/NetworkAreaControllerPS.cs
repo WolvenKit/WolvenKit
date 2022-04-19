@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class NetworkAreaControllerPS : MasterControllerPS
 	{
 		[Ordinal(105)] 
@@ -49,6 +48,10 @@ namespace WolvenKit.RED4.Types
 		{
 			RevealDevicesGrid = false;
 			DeviceName = "DBGNetworkName";
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

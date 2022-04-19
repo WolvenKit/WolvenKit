@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class scnFindEntityInEntityParams : RedBaseClass
 	{
 		[Ordinal(0)] 
@@ -58,6 +57,10 @@ namespace WolvenKit.RED4.Types
 			ActorId = new() { Id = 4294967295 };
 			PerformerId = new() { Id = 4294967040 };
 			OwnershipTransferOptions = new() { DettachFromSlot = true, RemoveFromInventory = true };
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

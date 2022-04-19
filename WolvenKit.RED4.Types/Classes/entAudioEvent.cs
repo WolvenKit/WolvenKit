@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class entAudioEvent : redEvent
 	{
 		[Ordinal(0)] 
@@ -52,5 +51,12 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CEnum<audioAudioEventFlags>>();
 			set => SetPropertyValue<CEnum<audioAudioEventFlags>>(value);
 		}
+
+		public entAudioEvent()
+		{
+			PostConstruct();
+		}
+
+		partial void PostConstruct();
 	}
 }

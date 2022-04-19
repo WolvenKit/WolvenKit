@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class FUNC_TEST_Container_2 : RedBaseClass
 	{
 		[Ordinal(0)] 
@@ -60,5 +59,12 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<TweakDBID>();
 			set => SetPropertyValue<TweakDBID>(value);
 		}
+
+		public FUNC_TEST_Container_2()
+		{
+			PostConstruct();
+		}
+
+		partial void PostConstruct();
 	}
 }

@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class gameTargetingComponent : entIPlacedComponent
 	{
 		[Ordinal(5)] 
@@ -52,6 +51,10 @@ namespace WolvenKit.RED4.Types
 			IsPrimary = true;
 			AimAssistData = new();
 			IsEnabled = true;
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

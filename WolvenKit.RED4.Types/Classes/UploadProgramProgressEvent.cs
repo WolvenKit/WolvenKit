@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class UploadProgramProgressEvent : redEvent
 	{
 		[Ordinal(0)] 
@@ -73,6 +72,10 @@ namespace WolvenKit.RED4.Types
 		{
 			Duration = 3.000000F;
 			StatPoolType = Enums.gamedataStatPoolType.Invalid;
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

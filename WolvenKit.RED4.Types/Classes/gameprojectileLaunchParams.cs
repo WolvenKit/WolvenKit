@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class gameprojectileLaunchParams : RedBaseClass
 	{
 		[Ordinal(0)] 
@@ -52,5 +51,12 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CHandle<entIVelocityProvider>>();
 			set => SetPropertyValue<CHandle<entIVelocityProvider>>(value);
 		}
+
+		public gameprojectileLaunchParams()
+		{
+			PostConstruct();
+		}
+
+		partial void PostConstruct();
 	}
 }

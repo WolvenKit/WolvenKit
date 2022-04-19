@@ -17,5 +17,29 @@ namespace WolvenKit.RED4.Types
         public static bool operator !=(CString a, CString b) => !(a == b);
 
         public override string ToString() => this;
+
+        private bool Equals(CString other) => string.Equals(_value, other?._value);
+
+        public override bool Equals(object obj)
+        {
+            if (ReferenceEquals(null, obj))
+            {
+                return false;
+            }
+
+            if (ReferenceEquals(this, obj))
+            {
+                return true;
+            }
+
+            if (obj.GetType() != this.GetType())
+            {
+                return false;
+            }
+
+            return Equals((CString)obj);
+        }
+
+        public override int GetHashCode() => _value.GetHashCode();
     }
 }

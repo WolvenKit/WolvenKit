@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class Stillage : InteractiveDevice
 	{
 		[Ordinal(94)] 
@@ -16,6 +15,10 @@ namespace WolvenKit.RED4.Types
 		public Stillage()
 		{
 			ControllerTypeName = "StillageController";
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

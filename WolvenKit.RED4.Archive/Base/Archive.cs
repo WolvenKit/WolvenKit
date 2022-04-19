@@ -4,12 +4,12 @@ using System.IO;
 using System.IO.MemoryMappedFiles;
 using System.Linq;
 using System.Threading.Tasks;
-using CP77Tools.Model;
 using ProtoBuf;
 using WolvenKit.Common;
 using WolvenKit.Core.Compression;
+using WolvenKit.Core.Interfaces;
 
-namespace WolvenKit.RED4.CR2W.Archive
+namespace WolvenKit.RED4.Archive
 {
     [ProtoContract]
     public class Archive : ICyberGameArchive
@@ -19,7 +19,7 @@ namespace WolvenKit.RED4.CR2W.Archive
         public Archive()
         {
             Header = new Header();
-            Index = new CP77Tools.Model.Index();
+            Index = new Index();
             Files = new Dictionary<ulong, IGameFile>();
         }
 
@@ -31,7 +31,7 @@ namespace WolvenKit.RED4.CR2W.Archive
 
         [ProtoMember(2)] public Header Header { get; set; }
 
-        [ProtoMember(3)] public CP77Tools.Model.Index Index { get; set; }
+        [ProtoMember(3)] public Index Index { get; set; }
 
 
         public Dictionary<ulong, IGameFile> Files { get; }
@@ -47,6 +47,8 @@ namespace WolvenKit.RED4.CR2W.Archive
         #endregion properties
 
         #region methods
+
+        public MemoryMappedFile GetMemoryMappedFile() => MemoryMappedFile.CreateFromFile(ArchiveAbsolutePath, FileMode.Open, null, 0, MemoryMappedFileAccess.Read);
 
         /// <summary>
         ///
@@ -64,7 +66,7 @@ namespace WolvenKit.RED4.CR2W.Archive
             var hasBuffers = (archiveItem.SegmentsEnd - archiveItem.SegmentsStart) > 1;
 
             var values = Enum.GetNames(typeof(ECookedFileFormat));
-            var b = values.Any(e => e == Path.GetExtension(archiveItem.FileName)?[1..]) || hasBuffers;
+            var b = values.Any(e => e == archiveItem.Extension) || hasBuffers;
             return b;
         }
 
@@ -223,19 +225,13 @@ namespace WolvenKit.RED4.CR2W.Archive
         /// <param name="outStream"></param>
         /// <param name="offsetEntry"></param>
         /// <param name="decompress"></param>
-        private void CopyFileSegmentToStream(Stream outStream, FileSegment offsetEntry, bool decompress, MemoryMappedFile mf = null)
+        private void CopyFileSegmentToStream(Stream outStream, FileSegment offsetEntry, bool decompress, MemoryMappedFile mmf = null)
         {
             var zSize = offsetEntry.ZSize;
 
-            if (mf == null)
-            {
-                using var fs = new FileStream(ArchiveAbsolutePath, FileMode.Open, FileAccess.ReadWrite,
-                    FileShare.ReadWrite);
-                mf = MemoryMappedFile.CreateFromFile(fs, null, 0, MemoryMappedFileAccess.ReadWrite,
-                    HandleInheritability.None, false);
-            }
+            mmf ??= GetMemoryMappedFile();
 
-            using var vs = mf.CreateViewStream((long)offsetEntry.Offset, zSize, MemoryMappedFileAccess.Read);
+            using var vs = mmf.CreateViewStream((long)offsetEntry.Offset, zSize, MemoryMappedFileAccess.Read);
             if (!decompress)
             {
                 vs.CopyTo(outStream);
@@ -254,19 +250,13 @@ namespace WolvenKit.RED4.CR2W.Archive
         /// <param name="outStream"></param>
         /// <param name="offsetEntry"></param>
         /// <param name="decompress"></param>
-        private async Task CopyFileSegmentToStreamAsync(Stream outStream, FileSegment offsetEntry, bool decompress, MemoryMappedFile mf = null)
+        private async Task CopyFileSegmentToStreamAsync(Stream outStream, FileSegment offsetEntry, bool decompress, MemoryMappedFile mmf = null)
         {
             var zSize = offsetEntry.ZSize;
 
-            if (mf == null)
-            {
-                await using var fs = new FileStream(ArchiveAbsolutePath, FileMode.Open, FileAccess.ReadWrite,
-                    FileShare.ReadWrite);
-                mf = MemoryMappedFile.CreateFromFile(fs, null, 0, MemoryMappedFileAccess.ReadWrite,
-                    HandleInheritability.None, false);
-            }
+            mmf ??= GetMemoryMappedFile();
 
-            await using var vs = mf.CreateViewStream((long)offsetEntry.Offset, zSize, MemoryMappedFileAccess.Read);
+            await using var vs = mmf.CreateViewStream((long)offsetEntry.Offset, zSize, MemoryMappedFileAccess.Read);
             if (!decompress)
             {
                 await vs.CopyToAsync(outStream);

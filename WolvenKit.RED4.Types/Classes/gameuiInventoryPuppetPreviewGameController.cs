@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class gameuiInventoryPuppetPreviewGameController : gameuiPuppetPreviewGameController
 	{
 		[Ordinal(8)] 
@@ -59,6 +58,10 @@ namespace WolvenKit.RED4.Types
 			Collider = new();
 			MaxMousePointerOffset = 40.000000F;
 			MouseRotationSpeed = 250.000000F;
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

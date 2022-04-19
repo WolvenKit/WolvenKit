@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class CParticleModificatorCollision : IParticleModificator
 	{
 		[Ordinal(4)] 
@@ -95,6 +94,10 @@ namespace WolvenKit.RED4.Types
 			ParticleMass = 0.100000F;
 			ParticleRadius = 0.010000F;
 			UseGPUAcceleration = true;
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }
