@@ -145,7 +145,6 @@ namespace WolvenKit.Modkit.RED4
             Console.Write(manualTRS == joints[1].Joint.LocalMatrix);
 
             Console.Write(inversedManualTRS == joints[1].InverseBindMatrix);
-
             
             var levels = GetLevels("Root");
 
@@ -206,7 +205,7 @@ namespace WolvenKit.Modkit.RED4
                                                           tr.X;
 
                     rig.BoneTransforms[i].Translation.Y = level == 0 ? tr.Y :
-                                                          level == 2 ? -tr.Z :
+                                                          level == 1 ? tr.Z :
                                                           level == 3 ? -tr.Z :
                                                           level == 4 ? -tr.Z :
                                                           level == 5 ? -tr.Z :
@@ -214,7 +213,7 @@ namespace WolvenKit.Modkit.RED4
                                                           level == 8 ? -tr.Y :
                                                           tr.Y;
                     rig.BoneTransforms[i].Translation.Z = level == 0 ? tr.Z :
-                                                          level == 2 ? -tr.Y :
+                                                          level == 1 ? tr.Y :
                                                           level == 3 ? -tr.Y :
                                                           level == 4 ? -tr.Y :
                                                           level == 5 ? tr.Y :
