@@ -978,7 +978,7 @@ public class CLegacySingleChannelCurveConverter : JsonConverter<IRedLegacySingle
             throw new JsonException();
         }
 
-        var (elementType, _) = RedReflection.GetCSTypeFromRedType(result.ElementType);
+        var elementType = result.ElementType;
 
         while (reader.Read())
         {

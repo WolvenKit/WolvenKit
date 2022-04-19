@@ -1495,37 +1495,62 @@ namespace WolvenKit.ViewModels.Shell
         }
 
         public ICommand AddItemToArrayCommand { get; private set; }
-        private bool CanAddItemToArray() => Data is IRedArray;
+        private bool CanAddItemToArray() => PropertyType.IsAssignableTo(typeof(IRedArray)) || PropertyType.IsAssignableTo(typeof(IRedLegacySingleChannelCurve));
         private void ExecuteAddItemToArray()
         {
-            var innerType = (Data as IRedArray).InnerType;
-            var pointer = false;
-            if (innerType.IsAssignableTo(typeof(IRedBaseHandle)))
+            if (PropertyType.IsAssignableTo(typeof(IRedArray)))
             {
-                pointer = true;
-                innerType = innerType.GenericTypeArguments[0];
-            }
-            var existing = new ObservableCollection<string>(AppDomain.CurrentDomain.GetAssemblies().SelectMany(s => s.GetTypes()).Where(p => innerType.IsAssignableFrom(p) && p.IsClass).Select(x => x.Name));
-
-            // no inheritable
-            if (existing.Count == 1)
-            {
-                var type = (Data as IRedArray).InnerType;
-                var newItem = RedTypeManager.CreateRedType(type);
-                if (newItem is IRedBaseHandle handle)
+                if (Data == null)
                 {
-                    var pointee = RedTypeManager.CreateRedType(handle.InnerType);
-                    handle.SetValue((RedBaseClass)pointee);
+                    // TODO: Need info for CStatic, ...
+                    return;
                 }
-                InsertChild(-1, newItem);
-            }
-            else
-            {
-                var app = Locator.Current.GetService<AppViewModel>();
-                app.SetActiveDialog(new CreateClassDialogViewModel(existing, true)
+
+                var arr = (IRedArray)Data;
+
+                var innerType = arr.InnerType;
+                var pointer = false;
+                if (innerType.IsAssignableTo(typeof(IRedBaseHandle)))
                 {
-                    DialogHandler = pointer ? HandleChunkPointer : HandleChunk
-                });
+                    pointer = true;
+                    innerType = innerType.GenericTypeArguments[0];
+                }
+                var existing = new ObservableCollection<string>(AppDomain.CurrentDomain.GetAssemblies().SelectMany(s => s.GetTypes()).Where(p => innerType.IsAssignableFrom(p) && p.IsClass).Select(x => x.Name));
+
+                // no inheritable
+                if (existing.Count == 1)
+                {
+                    var type = arr.InnerType;
+                    var newItem = RedTypeManager.CreateRedType(type);
+                    if (newItem is IRedBaseHandle handle)
+                    {
+                        var pointee = RedTypeManager.CreateRedType(handle.InnerType);
+                        handle.SetValue((RedBaseClass)pointee);
+                    }
+                    InsertChild(-1, newItem);
+                }
+                else
+                {
+                    var app = Locator.Current.GetService<AppViewModel>();
+                    app.SetActiveDialog(new CreateClassDialogViewModel(existing, true)
+                    {
+                        DialogHandler = pointer ? HandleChunkPointer : HandleChunk
+                    });
+                }
+            }
+
+            if (PropertyType.IsAssignableTo(typeof(IRedLegacySingleChannelCurve)))
+            {
+                if (Data == null)
+                {
+                    Data = RedTypeManager.CreateRedType(PropertyType);
+                }
+
+                var curve = (IRedLegacySingleChannelCurve)Data;
+
+                var type = curve.ElementType;
+                var newItem = RedTypeManager.CreateRedType(type);
+                InsertChild(-1, newItem);
             }
         }
 
@@ -1628,6 +1653,15 @@ namespace WolvenKit.ViewModels.Shell
             {
                 ary.Remove(Data);
             }
+            else if (Parent.Data is IRedLegacySingleChannelCurve curve)
+            {
+                curve.Remove((IRedCurvePoint)Data);
+                if (curve.Count == 0)
+                {
+                    Parent.ResolvedData = null;
+                    Parent.Data = null;
+                }
+            }
             else if (Parent.Data is IRedBufferPointer db && db.GetValue().Data is Package04 pkg)
             {
                 if (!pkg.Chunks.Remove((RedBaseClass)Data))
@@ -1669,6 +1703,11 @@ namespace WolvenKit.ViewModels.Shell
             if (ResolvedData is IRedArray ary)
             {
                 ary.Clear();
+            }
+            else if (ResolvedData is IRedLegacySingleChannelCurve curve)
+            {
+                ResolvedData = null;
+                Data = null;
             }
             else if (ResolvedData is IRedBufferPointer db && db.GetValue().Data is Package04 pkg)
             {
@@ -1892,6 +1931,10 @@ namespace WolvenKit.ViewModels.Shell
                 {
                     return false;
                 }
+            }
+            else if (ResolvedData is IRedLegacySingleChannelCurve curve && curve.ElementType.IsAssignableTo(item.GetType()))
+            {
+                curve.Add(0F, item);
             }
             else if (item is RedBaseClass rbc)
             {
