@@ -443,8 +443,8 @@ namespace WolvenKit.ViewModels.Documents
                 bool isInput;
                 if (socket.Chunk is questSocketDefinition qsd)
                 {
-                    isInput = qsd.Type.Value == Enums.questSocketType.Input || qsd.Type.Value == Enums.questSocketType.CutDestination;
-                    if (qsd.Type.Value == Enums.questSocketType.CutDestination || qsd.Type.Value == Enums.questSocketType.CutSource)
+                    isInput = qsd.Type == Enums.questSocketType.Input || qsd.Type == Enums.questSocketType.CutDestination;
+                    if (qsd.Type == Enums.questSocketType.CutDestination || qsd.Type == Enums.questSocketType.CutSource)
                     {
                         svm.Color = WkitBrushes.Purple;
                     }
