@@ -46,6 +46,16 @@ namespace WolvenKit.Views.Wizards
                     v => v.matdepotButton).DisposeWith(disposables);
 
             });
+
+            this.WhenActivated(disposables =>
+            {
+                this.BindCommand(
+                    ViewModel,
+                    vm => vm.OpenLinkCommand,
+                    v => v.helpButton,
+                    vm => vm.WikiHelpLink);
+            });
+
         }
 
         #endregion Constructors
