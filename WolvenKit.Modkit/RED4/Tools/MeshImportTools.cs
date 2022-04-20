@@ -7,6 +7,10 @@ using SharpGLTF.Schema2;
 using WolvenKit.Common.Model.Arguments;
 using WolvenKit.Modkit.RED4.GeneralStructs;
 using WolvenKit.Modkit.RED4.Tools;
+
+using WolvenKit.Modkit.RED4.RigFile;
+using WolvenKit.RED4.Archive;
+
 using WolvenKit.RED4.Archive.CR2W;
 using WolvenKit.RED4.Archive.IO;
 using WolvenKit.RED4.Types;
@@ -18,6 +22,229 @@ namespace WolvenKit.Modkit.RED4
 {
     public partial class ModTools
     {
+
+
+
+        public bool ImportRig(FileInfo inGltfFile, Stream rigStream, GltfImportArgs args)
+        {
+            var cr2w = _wolvenkitFileService.ReadRed4File(rigStream);
+
+            if (cr2w == null || cr2w.RootChunk is not animRig rig)
+            {
+                return false;
+            }
+
+            var model = ModelRoot.Load(inGltfFile.FullName, new ReadSettings(args.validationMode));
+
+            //VerifyGLTF(model);
+
+            var armature = new List<LogicalChildOfRoot>();
+
+            var joints = new List<(Node Joint, System.Numerics.Matrix4x4 InverseBindMatrix)>();
+            var jointlist = new List<Node>();
+            var jointnames = new List<string>();
+            var jointparentnames = new List<string>();
+            var ibm = new List<System.Numerics.Matrix4x4>();
+            var wm = new List<System.Numerics.Matrix4x4>();
+
+
+            if (model.LogicalSkins.Count > 0)
+            {
+                armature = Enumerable.Range(0, model.LogicalSkins[0].JointsCount).Select(_ => (LogicalChildOfRoot)model.LogicalSkins[0]).ToList();
+                joints = Enumerable.Range(0, armature.Count).Select(_ => ((Skin)armature[_]).GetJoint(_)).ToList();
+                jointlist = Enumerable.Range(0, armature.Count).Select(_ => ((Skin)armature[_]).GetJoint(_).Joint).ToList();
+                jointnames = Enumerable.Range(0, armature.Count).Select(_ => ((Skin)armature[_]).GetJoint(_).Joint.Name).ToList();
+                jointparentnames = Enumerable.Range(0, armature.Count).Select(_ => ((Skin)armature[_]).GetJoint(_).Joint.VisualParent.Name).ToList();
+                ibm = Enumerable.Range(0, armature.Count).Select(_ => ((Skin)armature[_]).GetJoint(_).InverseBindMatrix).ToList();
+                wm = Enumerable.Range(0, armature.Count).Select(_ => ((Skin)armature[_]).GetJoint(_).Joint.WorldMatrix).ToList();
+
+            }
+            else
+            {
+                if (model.LogicalNodes.Count > 0)
+                {
+                    armature = Enumerable.Range(0, model.LogicalNodes.Count).Select(_ => (LogicalChildOfRoot)model.LogicalNodes[_]).ToList();
+                    jointlist = Enumerable.Range(0, armature.Count).Select(_ => ((Node)armature[_])).ToList();
+                    jointnames = Enumerable.Range(0, armature.Count).Select(_ => ((Node)armature[_]).Name).ToList();
+                    jointparentnames = Enumerable.Range(0, armature.Count).Select(_ => ((Node)armature[_]).VisualParent is null
+                                                                        ? "firstbone" : ((Node)armature[_]).VisualParent.Name).ToList();
+                    wm = Enumerable.Range(0, armature.Count).Select(_ => ((Node)armature[_]).WorldMatrix).ToList();
+
+                    for (var i = 0; i < wm.Count; i++)
+                    {
+                        var temp = new System.Numerics.Matrix4x4();
+                        System.Numerics.Matrix4x4.Invert(wm[i], out temp);
+                        ibm.Add(temp);
+                    }
+
+                    //ibm = Enumerable.Range(0, wm.Count).Select(_ => System.Numerics.Matrix4x4.Invert( wm[_], out ibm[_] )).ToList();
+
+                    joints = Enumerable.Range(0, armature.Count).Select(_ => (jointlist[_], ibm[_])).ToList();
+                }
+            }
+
+            int[] GetLevels(string root = "Root")
+            {
+                var rootindex = jointnames.IndexOf("Root");
+                var treelevel = new int[jointnames.Count];
+
+                if (jointparentnames[rootindex] == "Armature")
+                {
+                    void rec(string parent, int level)
+                    {
+                        var tindex = Enumerable.Range(0, jointnames.Count).Where(i => jointparentnames[i] == parent).ToList();
+                        if (tindex is not null)
+                        {
+                            foreach (var ind in tindex)
+                            {
+                                treelevel[ind] = level;
+                                rec(jointnames[ind], level + 1);
+                            }
+                        }
+                    }
+                    rec(root, 0);
+                    return treelevel;
+                }
+                return null;
+            }
+
+
+            var inversedWorldMatrix = new System.Numerics.Matrix4x4();
+            var inversedLocalMatrix = new System.Numerics.Matrix4x4();
+            System.Numerics.Matrix4x4.Invert(joints[1].Joint.WorldMatrix, out inversedWorldMatrix);
+            System.Numerics.Matrix4x4.Invert(joints[1].Joint.LocalMatrix, out inversedLocalMatrix);
+
+            Console.Write(inversedWorldMatrix == joints[1].InverseBindMatrix);
+            Console.Write(inversedLocalMatrix == joints[1].InverseBindMatrix);
+            Console.Write(inversedLocalMatrix == inversedWorldMatrix);
+
+
+            var oriRotM = System.Numerics.Matrix4x4.CreateFromQuaternion(joints[1].Joint.LocalTransform.Rotation);
+            var oriScaM = System.Numerics.Matrix4x4.CreateScale(joints[1].Joint.LocalTransform.Scale);
+            var oriTraM = System.Numerics.Matrix4x4.CreateTranslation(joints[1].Joint.LocalTransform.Translation);
+
+            var RotM = oriScaM * joints[1].InverseBindMatrix * oriTraM;
+            System.Numerics.Matrix4x4.Invert(RotM, out RotM);
+
+            var manualTRS = oriTraM * oriRotM * oriScaM;
+
+            var inversedManualTRS = new System.Numerics.Matrix4x4();
+            System.Numerics.Matrix4x4.Invert(manualTRS, out inversedManualTRS);
+
+            var manualRotM = oriScaM * inversedManualTRS * oriTraM;
+            System.Numerics.Matrix4x4.Invert(manualRotM, out manualRotM);
+
+
+            var inv2 = oriTraM * RotM * oriScaM;
+
+            var localinvRotM = oriScaM * inversedLocalMatrix * oriTraM;
+            System.Numerics.Matrix4x4.Invert(localinvRotM, out localinvRotM);
+
+            var rotationVector = System.Numerics.Quaternion.CreateFromRotationMatrix(RotM);
+            var manualrotationVector = System.Numerics.Quaternion.CreateFromRotationMatrix(manualRotM);
+            var localrotationVector = System.Numerics.Quaternion.CreateFromRotationMatrix(localinvRotM);
+
+            Console.Write(rotationVector == joints[1].Joint.LocalTransform.Rotation);
+            Console.Write(manualrotationVector == joints[1].Joint.LocalTransform.Rotation);
+            Console.Write(manualTRS == joints[1].Joint.WorldMatrix);
+            Console.Write(manualTRS == joints[1].Joint.LocalMatrix);
+
+            Console.Write(inversedManualTRS == joints[1].InverseBindMatrix);
+
+            var levels = GetLevels("Root");
+
+            for (var i = 0; i < rig.BoneNames.Count; i++)
+            {
+                var currentbone = rig.BoneNames[i];
+                var index = jointnames.IndexOf(currentbone);
+
+                {
+
+                    rig.BoneTransforms[i].Rotation.I = jointlist[index].LocalTransform.Rotation.X;
+                    rig.BoneTransforms[i].Rotation.J = -jointlist[index].LocalTransform.Rotation.Z;
+                    rig.BoneTransforms[i].Rotation.K = jointlist[index].LocalTransform.Rotation.Y;
+                    rig.BoneTransforms[i].Rotation.R = jointlist[index].LocalTransform.Rotation.W;
+
+                    rig.BoneTransforms[i].Scale.W = 1;
+                    rig.BoneTransforms[i].Scale.X = jointlist[index].LocalTransform.Scale.X;
+                    rig.BoneTransforms[i].Scale.Y = jointlist[index].LocalTransform.Scale.Y;
+                    rig.BoneTransforms[i].Scale.Z = jointlist[index].LocalTransform.Scale.Z;
+
+                    //if the bit flippy thingy should be flipped like with original rigs from the game
+                    rig.BoneTransforms[i].Translation.W = i == 0 ? 1 : 0;
+                    rig.BoneTransforms[i].Translation.X = jointlist[index].LocalTransform.Translation.X;
+                    rig.BoneTransforms[i].Translation.Y = -jointlist[index].LocalTransform.Translation.Z;
+                    rig.BoneTransforms[i].Translation.Z = jointlist[index].LocalTransform.Translation.Y;
+
+                } //gotta figure out those rotations
+
+                var oriR = rig.BoneTransforms[i].Rotation;
+                var newR = jointlist[index].LocalTransform.Rotation;
+                var parR = jointlist[index].VisualParent.LocalTransform.Rotation;
+                var quat = new System.Numerics.Quaternion(oriR.I, oriR.J, oriR.K, oriR.R);
+                var quatM = System.Numerics.Matrix4x4.CreateFromQuaternion(quat);
+
+                var d = newR - quat + new System.Numerics.Quaternion(0, 0, 0, 1);
+                var p = newR * quat;
+                var e = d == p;
+                var esmall = (d - p).Length() < 0.001;
+
+                var level = levels[index];
+                var tr = jointlist[index].LocalTransform.Translation;
+                var oriT = rig.BoneTransforms[i].Translation;
+
+                var diffT = new Vec3(oriT.X, oriT.Y, oriT.Z) - tr;
+                var len = diffT.Length();
+                var small = len < 0.1;
+
+                var before = rig.BoneTransforms[i].Translation.DeepCopy();
+
+                {
+                    rig.BoneTransforms[i].Translation.W = i == 0 ? 1 : 0;
+                    rig.BoneTransforms[i].Translation.X = level == 0 ? tr.X :
+                                                          level == 1 ? tr.X :
+                                                          level == 2 ? tr.X :
+                                                          level == 3 ? tr.X :
+                                                          level == 6 ? -tr.Y :
+                                                          level == 8 ? tr.Z :
+                                                          tr.X;
+
+                    rig.BoneTransforms[i].Translation.Y = level == 0 ? tr.Y :
+                                                          level == 1 ? tr.Z :
+                                                          level == 3 ? -tr.Z :
+                                                          level == 4 ? -tr.Z :
+                                                          level == 5 ? -tr.Z :
+                                                          level == 6 ? tr.X :
+                                                          level == 8 ? -tr.Y :
+                                                          tr.Y;
+                    rig.BoneTransforms[i].Translation.Z = level == 0 ? tr.Z :
+                                                          level == 1 ? tr.Y :
+                                                          level == 3 ? -tr.Y :
+                                                          level == 4 ? -tr.Y :
+                                                          level == 5 ? tr.Y :
+                                                          level == 6 ? tr.Z :
+                                                          level == 8 ? tr.X :
+                                                          tr.Z;
+                }
+
+                var after = rig.BoneTransforms[i].Translation;
+            }
+
+            var ms = new MemoryStream();
+            using var writer = new CR2WWriter(ms, Encoding.UTF8, true);
+            writer.WriteFile(cr2w);
+            ms.Seek(0, SeekOrigin.Begin);
+
+            rigStream.SetLength(0);
+            ms.CopyTo(rigStream);
+
+            return true;
+        }
+
+
+        //public bool ImportMesh(FileInfo inGltfFile, Stream inmeshStream, List<Archive> archives = null,
+        //  ValidationMode vmode = ValidationMode.Strict, bool importMaterialOnly = false, Stream outStream = null, FileEntry originalRig = null)
+
         public bool ImportMesh(FileInfo inGltfFile, Stream inmeshStream, GltfImportArgs args, Stream outStream = null)
         {
             var cr2w = _wolvenkitFileService.ReadRed4File(inmeshStream);
@@ -26,6 +253,8 @@ namespace WolvenKit.Modkit.RED4
             {
                 return false;
             }
+
+            var originalRig = args.Rig.FirstOrDefault();
 
             if (File.Exists(Path.ChangeExtension(inGltfFile.FullName, ".Material.json")))
             {
@@ -59,6 +288,54 @@ namespace WolvenKit.Modkit.RED4
 
             var model = ModelRoot.Load(inGltfFile.FullName, new ReadSettings(args.validationMode));
 
+            if (model.LogicalSkins.Count > 0)
+            {
+
+                var joints = Enumerable.Range(0, model.LogicalSkins[0].JointsCount).Select(_ => model.LogicalSkins[0].GetJoint(_)).ToArray();
+
+                var jointarray = Enumerable.Range(0, model.LogicalSkins[0].JointsCount).Select(_ => model.LogicalSkins[0].GetJoint(_).Joint).ToArray();
+                var jointnames = Enumerable.Range(0, model.LogicalSkins[0].JointsCount).Select(_ => model.LogicalSkins[0].GetJoint(_).Joint.Name).ToArray();
+
+                var ibm = Enumerable.Range(0, model.LogicalSkins[0].JointsCount).Select(_ => model.LogicalSkins[0].GetJoint(_).InverseBindMatrix).ToArray();
+                var wm = Enumerable.Range(0, model.LogicalSkins[0].JointsCount).Select(_ => model.LogicalSkins[0].GetJoint(_).Joint.WorldMatrix).ToArray();
+
+                if (cr2w.RootChunk is CMesh root)
+                {
+                    for (int i = 0; i < root.BoneNames.Count; i++)
+                    {
+                        var foundbone = jointarray.FirstOrDefault(x => root.BoneNames[i] == x.Name);
+                        if (foundbone is not null)
+                        {
+                            var inversedWorldMatrix = new System.Numerics.Matrix4x4();
+                            System.Numerics.Matrix4x4.Invert(foundbone.WorldMatrix, out inversedWorldMatrix);
+
+
+                            root.BoneRigMatrices[i] = inversedWorldMatrix;
+                            root.BoneRigMatrices[i].W.Y = -inversedWorldMatrix.M43;
+                            root.BoneRigMatrices[i].W.Z = inversedWorldMatrix.M42;
+                            //component Y and -Z are being swapped in vector W
+                            //should probably figure out why
+                        }
+                    }
+                }
+            }
+
+            var tt = model.LogicalSkins.Count >= 2 ?
+                Enumerable.Range(0, model.LogicalSkins[1].JointsCount).Select(_ => model.LogicalSkins[1].GetJoint(_).Joint.WorldMatrix).ToArray()
+                : null;
+
+            var tjointnames = model.LogicalSkins.Count >= 2 ?
+                Enumerable.Range(0, model.LogicalSkins[1].JointsCount).Select(_ => model.LogicalSkins[1].GetJoint(_).Joint.Name).ToArray()
+                : null;
+
+
+            /*
+                        var somerig = MeshTools.GetOrphanRig(model);
+                        var newmodel = ModelRoot.CreateModel();
+                        var tempdict = RIG.ExportNodes(ref newmodel, somerig);
+            */
+
+
             VerifyGLTF(model);
 
             var Meshes = new List<RawMeshContainer>();
@@ -88,17 +365,45 @@ namespace WolvenKit.Modkit.RED4
             var QuantTrans = new Vec4((max.X + min.X) / 2, (max.Y + min.Y) / 2, (max.Z + min.Z) / 2, 1);
 
 
-            var newRig = MeshTools.GetOrphanRig(meshBlob);
+
 
             RawArmature oldRig = null;
-            if (model.LogicalSkins.Count > 0 && model.LogicalSkins[0].JointsCount > 0)
+            RawArmature newRig = null;
+            if (originalRig != null)
             {
-                oldRig = new RawArmature
+
+                using var msss = new MemoryStream(rendblob.RenderBuffer.Buffer.GetBytes());
+
+                var meshesinfo = MeshTools.GetMeshesinfo(rendblob, cr2w.RootChunk as CMesh);
+
+                var expMeshesss = MeshTools.ContainRawMesh(msss, meshesinfo, true);
+
+                for (var i = 0; i < Meshes.Count; i++)
                 {
-                    BoneCount = model.LogicalSkins[0].JointsCount,
-                    Names = Enumerable.Range(0, model.LogicalSkins[0].JointsCount).Select(_ => model.LogicalSkins[0].GetJoint(_).Joint.Name).ToArray()
-                };
+                    Array.Clear(Meshes[i].boneindices, 0, Meshes[i].boneindices.Length);
+                }
+
+                oldRig = MeshTools.GetOrphanRig(meshBlob);
+
+
+                var ar = originalRig.Archive as Archive;
+                using var msr = new MemoryStream();
+                ar?.CopyFileToStream(msr, originalRig.NameHash64, false);
+                newRig = RIG.ProcessRig(_wolvenkitFileService.ReadRed4File(msr));
             }
+            else
+            {
+                newRig = MeshTools.GetOrphanRig(meshBlob);
+                if (model.LogicalSkins.Count > 0 && model.LogicalSkins[0].JointsCount > 0)
+                {
+                    oldRig = new RawArmature
+                    {
+                        BoneCount = model.LogicalSkins[0].JointsCount,
+                        Names = Enumerable.Range(0, model.LogicalSkins[0].JointsCount).Select(_ => model.LogicalSkins[0].GetJoint(_).Joint.Name).ToArray()
+                    };
+                }
+            }
+
 
             MeshTools.UpdateMeshJoints(ref Meshes, newRig, oldRig);
 
@@ -112,7 +417,22 @@ namespace WolvenKit.Modkit.RED4
             meshesInfo.quantScale = QuantScale;
             meshesInfo.quantTrans = QuantTrans;
 
-            var ms = GetEditedCr2wFile(cr2w, meshesInfo, meshBuffer);
+            var ms = (originalRig != null) ? GetEditedCr2wFile(cr2w, meshesInfo, meshBuffer, tt, tjointnames) :
+                                             GetEditedCr2wFile(cr2w, meshesInfo, meshBuffer);
+
+
+            /* 
+             var ms = new MemoryStream();
+            if (originalRig != null)
+            {
+                ms = GetEditedCr2wFile(cr2w, meshesInfo, meshBuffer, tt, tjointnames);
+            }
+            else
+            {
+                ms = GetEditedCr2wFile(cr2w, meshesInfo, meshBuffer);
+
+            }
+             */
 
             ms.Seek(0, SeekOrigin.Begin);
             if (outStream != null)
@@ -131,7 +451,7 @@ namespace WolvenKit.Modkit.RED4
         {
             var meshContainer = new RawMeshContainer
             {
-                boneindices = new ushort[3,0],
+                boneindices = new ushort[3, 0],
                 colors0 = new Vec4[3],
                 colors1 = Array.Empty<Vec4>(),
                 garmentMorph = Array.Empty<Vec3>(),
@@ -144,7 +464,7 @@ namespace WolvenKit.Modkit.RED4
                 texCoords0 = new Vec2[3],
                 texCoords1 = new Vec2[3],
                 weightCount = 0,
-                weights = new float[3,0]
+                weights = new float[3, 0]
             };
 
             meshContainer.indices[0] = 2;
@@ -272,7 +592,7 @@ namespace WolvenKit.Modkit.RED4
                     meshContainer.weights[i, 7] = weights1[i].W;
                 }
             }
-            
+
             meshContainer.garmentMorph = Array.Empty<Vec3>();
             if (mesh.Primitives[0].MorphTargetsCount > 0)
             {
@@ -542,13 +862,13 @@ namespace WolvenKit.Modkit.RED4
                 {
                     meshesInfo.LODLvl[i] = 1;
                 }
-
             }
 
             return meshesInfo;
         }
 
-        private static MemoryStream GetEditedCr2wFile(CR2WFile cr2w, MeshesInfo info, MemoryStream buffer)
+        private static MemoryStream GetEditedCr2wFile(CR2WFile cr2w, MeshesInfo info, MemoryStream buffer, System.Numerics.Matrix4x4[] inverseBindMatrices = null, string[] boneNames = null)
+        //private static MemoryStream GetEditedCr2wFile(CR2WFile cr2w, MeshesInfo info, MemoryStream buffer)
         {
             rendRenderMeshBlob blob = null;
             if (cr2w.RootChunk is CMesh obj1 && obj1.RenderResourceBlob.Chunk is rendRenderMeshBlob obj2)
@@ -562,7 +882,7 @@ namespace WolvenKit.Modkit.RED4
             }
 
             // removing BS topology data which causes a lot of issues with improved facial lighting geomerty, vertex colors uroborus and what not
-            if(blob.Header.Topology is not null)
+            if (blob.Header.Topology is not null)
             {
                 blob.Header.Topology.Clear();
                 for (var i = 0; i < info.meshCount; i++)
@@ -618,21 +938,21 @@ namespace WolvenKit.Modkit.RED4
             for (var i = 0; i < info.meshCount; i++)
             {
                 var chunk = new rendChunk
+                {
+                    LodMask = (byte)info.LODLvl[i],
+                    RenderMask = Enums.EMeshChunkFlags.MCF_RenderInScene | Enums.EMeshChunkFlags.MCF_RenderInShadows,
+                    // based upon VertexBlock, subject to change, incremental will be good, for weightcount ++ etc
+                    // VertexFactory is really important to be taken care of properly
+                    VertexFactory = 2,
+                    NumIndices = info.indCounts[i],
+                    NumVertices = (ushort)info.vertCounts[i],
+                    ChunkIndices = new rendIndexBufferChunk
                     {
-                        LodMask = (byte)info.LODLvl[i],
-                        RenderMask = Enums.EMeshChunkFlags.MCF_RenderInScene | Enums.EMeshChunkFlags.MCF_RenderInShadows,
-                        // based upon VertexBlock, subject to change, incremental will be good, for weightcount ++ etc
-                        // VertexFactory is really important to be taken care of properly
-                        VertexFactory = 2,
-                        NumIndices = info.indCounts[i],
-                        NumVertices = (ushort)info.vertCounts[i],
-                        ChunkIndices = new rendIndexBufferChunk
-                            {
-                                Pe = Enums.GpuWrapApieIndexBufferChunkType.IBCT_IndexUShort,
-                                TeOffset = info.indicesOffsets[i] - info.indexBufferOffset
-                            },
-                        ChunkVertices = new rendVertexBufferChunk()
-                    };
+                        Pe = Enums.GpuWrapApieIndexBufferChunkType.IBCT_IndexUShort,
+                        TeOffset = info.indicesOffsets[i] - info.indexBufferOffset
+                    },
+                    ChunkVertices = new rendVertexBufferChunk()
+                };
 
                 chunk.ChunkVertices.ByteOffsets.Add(info.posnOffsets[i]);
                 chunk.ChunkVertices.ByteOffsets.Add(info.tex0Offsets[i]);
@@ -640,7 +960,8 @@ namespace WolvenKit.Modkit.RED4
                 chunk.ChunkVertices.ByteOffsets.Add(info.colorOffsets[i]);
                 chunk.ChunkVertices.ByteOffsets.Add(info.unknownOffsets[i]);
 
-                chunk.ChunkVertices.VertexLayout = new GpuWrapApiVertexLayoutDesc {
+                chunk.ChunkVertices.VertexLayout = new GpuWrapApiVertexLayoutDesc
+                {
                     //hash and slotmask are not understood/no-interest, subject to change
                     Hash = 0,
                     SlotMask = 0
@@ -861,6 +1182,23 @@ namespace WolvenKit.Modkit.RED4
             blob.Header.IndexBufferOffset = info.indexBufferOffset;
 
             blob.RenderBuffer.Buffer.SetBytes(buffer.ToArray());
+
+
+            if (cr2w.RootChunk is CMesh root && inverseBindMatrices != null)
+            {
+                for (int i = 0; i < blob.Header.BonePositions.Count; i++)
+                {
+                    var index = Array.FindIndex(boneNames, x => x.Contains(root.BoneNames[i]) && x.Length == root.BoneNames[i].Length);
+
+                    blob.Header.BonePositions[i].X = inverseBindMatrices[index].M41;
+                    blob.Header.BonePositions[i].Y = -inverseBindMatrices[index].M43;
+                    blob.Header.BonePositions[i].Z = inverseBindMatrices[index].M42;
+                    blob.Header.BonePositions[i].W = inverseBindMatrices[index].M44;
+                    //blob.Header.BonePositions[i] = root.BoneRigMatrices[i].W;
+                }
+            }
+
+
 
             var ms = new MemoryStream();
             using var writer = new CR2WWriter(ms, Encoding.UTF8, true);
