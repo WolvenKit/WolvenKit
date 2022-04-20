@@ -22,7 +22,7 @@ namespace WolvenKit.RED4.Archive.IO
         {
             if (buffer.RootChunk is worldStreamingSector sec)
             {
-                foreach (var handle in sec.Handles)
+                foreach (var handle in sec.Nodes)
                 {
                     var value = handle.GetValue();
                     if (value is worldInstancedMeshNode node1

@@ -653,10 +653,10 @@ namespace WolvenKit.Modkit.RED4
                     switch (args.importFormat)
                     {
                         case GltfImportAsFormat.Mesh:
-                            result = ImportMesh(rawRelative.ToFileInfo(), redFs, args.Archives, args.validationMode, args.importMaterialOnly);
+                            result = ImportMesh(rawRelative.ToFileInfo(), redFs, args);
                             break;
                         case GltfImportAsFormat.Morphtarget:
-                            result = ImportMorphTargets(rawRelative.ToFileInfo(), redFs, args.Archives, args.validationMode);
+                            result = ImportMorphTargets(rawRelative.ToFileInfo(), redFs, args);
                             break;
                         case GltfImportAsFormat.Anims:
                             result = ImportAnims(rawRelative.ToFileInfo(), redFs, args.Archives);

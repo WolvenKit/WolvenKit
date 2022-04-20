@@ -285,6 +285,13 @@ namespace WolvenKit.Common.Model.Arguments
         public List<FileEntry> Rig { get; set; }
 
         /// <summary>
+        /// Fills empty sub meshes with dummy data
+        /// </summary>
+        [Category("Import Settings")]
+        [Display(Name = "Fill empty sub meshes")]
+        [Description("Fills empty sub meshes with dummy data")]
+        public bool FillEmpty { get; set; } = false;
+        /// <summary>
         /// List of Archives for Morphtarget Import.
         /// </summary>
         [Browsable(false)]

@@ -16,8 +16,6 @@
             <ColumnDefinition />
             <ColumnDefinition Width="20" />
             <ColumnDefinition />
-            <ColumnDefinition Width="20" />
-            <ColumnDefinition />
         </Grid.ColumnDefinitions>
         <TextBlock Text="X" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.Column="0"/>
         <TextBox PreviewTextInput="NumberValidationTextBox"  Grid.Column="1"
@@ -31,6 +29,5 @@
         <TextBox PreviewTextInput="NumberValidationTextBox"  Grid.Column="5"
             Text="{Binding ZText}"
             />
-
     </Grid>
 </UserControl>

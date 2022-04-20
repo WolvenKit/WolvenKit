@@ -396,6 +396,8 @@ namespace WolvenKit.RED4.IO
             {
                 var curvePoint = new CurvePoint<T>();
 
+                var point = _reader.ReadSingle();
+
                 IRedType element;
                 if (typeof(RedBaseClass).IsAssignableFrom(typeof(T)))
                 {
@@ -405,8 +407,6 @@ namespace WolvenKit.RED4.IO
                 {
                     element = Read(typeof(T), 0, Flags.Empty);
                 }
-
-                var point = _reader.ReadSingle();
 
                 if (element.GetType() == typeof(T))
                 {
@@ -433,7 +433,7 @@ namespace WolvenKit.RED4.IO
             return (IRedResourceAsyncReference)generic.Invoke(this, null);
         }
 
-        public virtual IRedResourceAsyncReference<T> ReadCResourceAsyncReference<T>() where T : RedBaseClass
+        public virtual IRedResourceAsyncReference<T> ReadCResourceAsyncReference<T>() where T : CResource
         {
             var index = _reader.ReadUInt16();
 
@@ -463,7 +463,7 @@ namespace WolvenKit.RED4.IO
             return (IRedResourceReference)generic.Invoke(this, null);
         }
 
-        public virtual IRedResourceReference<T> ReadCResourceReference<T>() where T : RedBaseClass
+        public virtual IRedResourceReference<T> ReadCResourceReference<T>() where T : CResource
         {
             var index = _reader.ReadUInt16();
 

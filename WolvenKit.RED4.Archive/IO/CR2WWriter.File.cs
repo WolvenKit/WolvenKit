@@ -315,10 +315,10 @@ namespace WolvenKit.RED4.Archive.IO
                 buffer.SetBytes(newData);
             }
 
-            if (buffer.Data is StreamingSectorBuffer ssb)
+            if (buffer.Data is worldNodeDataBuffer ssb)
             {
                 using var ms = new MemoryStream();
-                using var transformWriter = new StreamingSectorTransformWriter(ms);
+                using var transformWriter = new worldNodeDataWriter(ms);
 
                 transformWriter.WriteBuffer(ssb);
 

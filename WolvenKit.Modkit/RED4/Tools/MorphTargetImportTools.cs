@@ -3,13 +3,10 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using SharpGLTF.Schema2;
-using SharpGLTF.Validation;
 using WolvenKit.Common.FNV1A;
-using WolvenKit.RED4.CR2W;
+using WolvenKit.Common.Model.Arguments;
 using WolvenKit.Modkit.RED4.GeneralStructs;
 using WolvenKit.Modkit.RED4.Tools;
-using WolvenKit.Modkit.RED4.RigFile;
-using WolvenKit.RED4.Archive;
 using WolvenKit.RED4.Archive.CR2W;
 using WolvenKit.RED4.Types;
 using Vec3 = System.Numerics.Vector3;
@@ -19,7 +16,7 @@ namespace WolvenKit.Modkit.RED4
 {
     public partial class ModTools
     {
-        public bool ImportMorphTargets(FileInfo inGltfFile, Stream intargetStream, List<Archive> archives, ValidationMode vmode = ValidationMode.Strict, Stream outStream = null)
+        public bool ImportMorphTargets(FileInfo inGltfFile, Stream intargetStream, GltfImportArgs args, Stream outStream = null)
         {
             var cr2w = _wolvenkitFileService.ReadRed4File(intargetStream);
             if (cr2w == null || cr2w.RootChunk is not MorphTargetMesh blob || blob.Blob.Chunk is not rendRenderMorphTargetMeshBlob renderblob || renderblob.BaseBlob.Chunk is not rendRenderMeshBlob)
@@ -31,7 +28,7 @@ namespace WolvenKit.Modkit.RED4
             {
                 var hash = FNV1A64HashAlgorithm.HashString(blob.BaseMesh.DepotPath);
                 var meshStream = new MemoryStream();
-                foreach (var ar in archives)
+                foreach (var ar in args.Archives)
                 {
                     if (ar.Files.ContainsKey(hash))
                     {
@@ -46,10 +43,22 @@ namespace WolvenKit.Modkit.RED4
                 }
             }
 
-            var model = ModelRoot.Load(inGltfFile.FullName, new ReadSettings(vmode));
+            var model = ModelRoot.Load(inGltfFile.FullName, new ReadSettings(args.validationMode));
             VerifyGLTF(model);
 
-            var Meshes = Enumerable.Select(model.LogicalMeshes, GltfMeshToRawContainer).ToList();
+            var Meshes = new List<RawMeshContainer>();
+            foreach (var node in model.LogicalNodes)
+            {
+                if (node.Mesh != null)
+                {
+                    Meshes.Add(GltfMeshToRawContainer(node));
+                }
+                else if (args.FillEmpty)
+                {
+                    Meshes.Add(CreateEmptyMesh(node.Name));
+                }
+            }
+            Meshes = Meshes.OrderBy(o => o.name).ToList();
 
             var max = new Vec3(Single.MinValue, Single.MinValue, Single.MinValue);
             var min = new Vec3(Single.MaxValue, Single.MaxValue, Single.MaxValue);
@@ -75,7 +84,7 @@ namespace WolvenKit.Modkit.RED4
             }
 
             MeshTools.UpdateMeshJoints(ref Meshes, newRig, oldRig);
-            
+
             var expMeshes = Meshes.Select(_=> RawMeshToRE4Mesh(_, QuantScale, QuantTrans)).ToList();
 
             var meshBuffer = new MemoryStream();
