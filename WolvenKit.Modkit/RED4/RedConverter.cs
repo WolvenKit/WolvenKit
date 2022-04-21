@@ -97,7 +97,11 @@ namespace WolvenKit.Modkit.RED4
         public static CR2WFile ConvertFromJson(string json)
         {
             var dto = RedJsonSerializer.Deserialize<RedFileDto>(json);
-            return dto.Data;
+            if (dto is null)
+            {
+                return new CR2WFile();
+            }
+            return dto.Data == null ? new CR2WFile() : dto.Data;
         }
 
         /// <summary>

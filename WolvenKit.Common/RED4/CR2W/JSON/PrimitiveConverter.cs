@@ -13,6 +13,8 @@ using WolvenKit.Common.Conversion;
 using WolvenKit.RED4.Archive.Buffer;
 using WolvenKit.RED4.Archive.CR2W;
 using WolvenKit.RED4.Types;
+using WolvenKit.Common.Services;
+using Splat;
 
 namespace WolvenKit.RED4.CR2W.JSON;
 
@@ -3119,14 +3121,20 @@ public static class RedJsonSerializer
 
     public static T? Deserialize<T>(string json)
     {
-        s_bufferResolver.Begin();
-        s_classResolver.Begin();
+        try
+        {
+            s_bufferResolver.Begin();
+            s_classResolver.Begin();
+            var result = JsonSerializer.Deserialize<T>(json, Options);
+            s_bufferResolver.End();
+            s_classResolver.End();
 
-        var result = JsonSerializer.Deserialize<T>(json, Options);
-
-        s_bufferResolver.End();
-        s_classResolver.End();
-
-        return result;
+            return result;
+        }
+        catch(Exception ex)
+        {
+            Locator.Current.GetService<ILoggerService>()?.Error($"Couldn't Import From JSON : {ex}");
+        }
+        return default;
     }
 }
