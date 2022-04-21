@@ -126,7 +126,7 @@ namespace WolvenKit.RED4.Types
             var propertyInfo = RedReflection.GetNativePropertyInfo(GetType(), propertyName);
             if (propertyInfo != null)
             {
-                if (_properties.ContainsKey(propertyInfo.RedName))
+                if (propertyInfo.RedName is not null && _properties.ContainsKey(propertyInfo.RedName))
                 {
                     return _properties[propertyInfo.RedName];
                 }

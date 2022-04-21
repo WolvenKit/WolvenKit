@@ -2384,8 +2384,23 @@ public class RedClassConverter : JsonConverter<RedBaseClass>, ICustomRedConverte
         var typeInfo = RedReflection.GetTypeInfo(value.GetType());
         foreach (var propertyInfo in typeInfo.PropertyInfos.OrderBy(x => x.RedName))
         {
-            writer.WritePropertyName(propertyInfo.RedName);
-            JsonSerializer.Serialize(writer, (object)value.GetProperty(propertyInfo.RedName), options);
+            if (propertyInfo is not null)
+            {
+                if (propertyInfo.RedName is not null)
+                {
+                    writer.WritePropertyName(propertyInfo.RedName);
+                    JsonSerializer.Serialize(writer, (object)value.GetProperty(propertyInfo.RedName), options);
+                }
+                else if (propertyInfo is RedReflection.ExtendedPropertyInfo Extpr && Extpr.Name is not null)
+                {
+                    writer.WritePropertyName(propertyInfo.Name);
+                    JsonSerializer.Serialize(writer, (object)value.GetProperty(propertyInfo.Name), options);
+                }
+            }
+            else
+            {
+                Console.Write("boop");
+            }
         }
 
         writer.WriteEndObject();
