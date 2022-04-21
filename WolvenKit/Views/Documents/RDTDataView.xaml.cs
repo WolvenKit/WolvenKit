@@ -54,10 +54,10 @@ namespace WolvenKit.Views.Documents
                       viewmodel => viewmodel.SelectedChunk,
                       view => view.RedTreeView.SelectedItem)
                   .DisposeWith(disposables);
-/*                this.Bind(ViewModel,
-                      viewmodel => viewmodel.SelectedChunk,
-                      view => view.RedTreeView.SelectedItemsCollection)
-                  .DisposeWith(disposables);*/
+                this.Bind(ViewModel,
+                      viewmodel => viewmodel.SelectedChunks,
+                      view => view.RedTreeView.SelectedItems)
+                  .DisposeWith(disposables);
                 this.OneWayBind(ViewModel,
                       viewmodel => viewmodel.SelectedChunk,
                       view => view.CustomPG.DataContext)
@@ -146,106 +146,106 @@ namespace WolvenKit.Views.Documents
         //    ViewModel.SelectedChunk = chunk;
         //}
 
-    /*    public void LayoutNodes()
-        {
-            Editor.UpdateLayout();
-            var graph = new GeometryGraph();
-            var msaglNodes = new Dictionary<int, Microsoft.Msagl.Core.Layout.Node>();
-            var socketNodeLookup = new Dictionary<int, int>();
-            foreach (var item in Editor.GetItemHost().Children)
+        /*    public void LayoutNodes()
             {
-                if (item is ItemContainer ic)
-                {
-                    if (ic.DataContext is INodeViewModel nvm)
-                    {
-                        var width = ic.ActualWidth != 0 ? ic.ActualWidth : 300;
-                        var height = ic.ActualHeight != 0 ? ic.ActualHeight : 40;
-                        var msaglNode = new Microsoft.Msagl.Core.Layout.Node(
-                        CurveFactory.CreateRectangle(width, height, new Microsoft.Msagl.Core.Geometry.Point()))
-                        {
-                            UserData = nvm.GetHashCode()
-                        };
-                        msaglNodes.Add(nvm.GetHashCode(), msaglNode);
-                        graph.Nodes.Add(msaglNode);
-                        if (nvm is CNameWrapper cnw)
-                        {
-                            socketNodeLookup[cnw.Socket.GetHashCode()] = nvm.GetHashCode();
-                        }
-                        else if (nvm is ChunkViewModel cvm)
-                        {
-                            if (cvm.Socket != null)
-                            {
-                                socketNodeLookup[cvm.Socket.GetHashCode()] = nvm.GetHashCode();
-                            }
-                            foreach (var reference in cvm.References)
-                            {
-                                socketNodeLookup[reference.GetHashCode()] = nvm.GetHashCode();
-                            }
-                        }
-                    }
-                }
-            }
-
-            foreach (var nvm in ViewModel.Nodes)
-            {
-                if (!msaglNodes.ContainsKey(nvm.GetHashCode()))
-                {
-                    var node = new Microsoft.Msagl.Core.Layout.Node(
-                        CurveFactory.CreateRectangle(300, 40, new Microsoft.Msagl.Core.Geometry.Point()))
-                    {
-                        UserData = nvm.GetHashCode()
-                    };
-                    msaglNodes[nvm.GetHashCode()] = node;
-                    graph.Nodes.Add(node);
-                }
-            }
-
-            foreach (var reference in ViewModel.References)
-            {
-                if (socketNodeLookup.ContainsKey(reference.Output.GetHashCode()) &&
-                    socketNodeLookup.ContainsKey(reference.Input.GetHashCode()))
-                {
-                    var source = socketNodeLookup[reference.Output.GetHashCode()];
-                    var dest = socketNodeLookup[reference.Input.GetHashCode()];
-                    graph.Edges.Add(new Edge(msaglNodes[source], msaglNodes[dest]));
-                }
-            }
-
-            var settings = new SugiyamaLayoutSettings
-            {
-                Transformation = PlaneTransformation.Rotation(Math.PI / 2),
-                EdgeRoutingSettings = { EdgeRoutingMode = EdgeRoutingMode.Spline }
-            };
-            var layout = new LayeredLayout(graph, settings);
-            try
-            {
-                layout.Run();
-
+                Editor.UpdateLayout();
+                var graph = new GeometryGraph();
+                var msaglNodes = new Dictionary<int, Microsoft.Msagl.Core.Layout.Node>();
+                var socketNodeLookup = new Dictionary<int, int>();
                 foreach (var item in Editor.GetItemHost().Children)
                 {
                     if (item is ItemContainer ic)
                     {
-                        if (ic.DataContext is INodeViewModel nvm && msaglNodes.ContainsKey(nvm.GetHashCode()))
+                        if (ic.DataContext is INodeViewModel nvm)
                         {
-                            var node = msaglNodes[nvm.GetHashCode()];
-                            nvm.Location = new System.Windows.Point(
-                                node.Center.X - graph.BoundingBox.Center.X - ic.ActualWidth / 2,
-                                node.Center.Y - graph.BoundingBox.Center.Y - ic.ActualHeight / 2);
+                            var width = ic.ActualWidth != 0 ? ic.ActualWidth : 300;
+                            var height = ic.ActualHeight != 0 ? ic.ActualHeight : 40;
+                            var msaglNode = new Microsoft.Msagl.Core.Layout.Node(
+                            CurveFactory.CreateRectangle(width, height, new Microsoft.Msagl.Core.Geometry.Point()))
+                            {
+                                UserData = nvm.GetHashCode()
+                            };
+                            msaglNodes.Add(nvm.GetHashCode(), msaglNode);
+                            graph.Nodes.Add(msaglNode);
+                            if (nvm is CNameWrapper cnw)
+                            {
+                                socketNodeLookup[cnw.Socket.GetHashCode()] = nvm.GetHashCode();
+                            }
+                            else if (nvm is ChunkViewModel cvm)
+                            {
+                                if (cvm.Socket != null)
+                                {
+                                    socketNodeLookup[cvm.Socket.GetHashCode()] = nvm.GetHashCode();
+                                }
+                                foreach (var reference in cvm.References)
+                                {
+                                    socketNodeLookup[reference.GetHashCode()] = nvm.GetHashCode();
+                                }
+                            }
                         }
                     }
                 }
 
-                Editor.BringIntoView(new System.Windows.Point(0, 0));
+                foreach (var nvm in ViewModel.Nodes)
+                {
+                    if (!msaglNodes.ContainsKey(nvm.GetHashCode()))
+                    {
+                        var node = new Microsoft.Msagl.Core.Layout.Node(
+                            CurveFactory.CreateRectangle(300, 40, new Microsoft.Msagl.Core.Geometry.Point()))
+                        {
+                            UserData = nvm.GetHashCode()
+                        };
+                        msaglNodes[nvm.GetHashCode()] = node;
+                        graph.Nodes.Add(node);
+                    }
+                }
+
+                foreach (var reference in ViewModel.References)
+                {
+                    if (socketNodeLookup.ContainsKey(reference.Output.GetHashCode()) &&
+                        socketNodeLookup.ContainsKey(reference.Input.GetHashCode()))
+                    {
+                        var source = socketNodeLookup[reference.Output.GetHashCode()];
+                        var dest = socketNodeLookup[reference.Input.GetHashCode()];
+                        graph.Edges.Add(new Edge(msaglNodes[source], msaglNodes[dest]));
+                    }
+                }
+
+                var settings = new SugiyamaLayoutSettings
+                {
+                    Transformation = PlaneTransformation.Rotation(Math.PI / 2),
+                    EdgeRoutingSettings = { EdgeRoutingMode = EdgeRoutingMode.Spline }
+                };
+                var layout = new LayeredLayout(graph, settings);
+                try
+                {
+                    layout.Run();
+
+                    foreach (var item in Editor.GetItemHost().Children)
+                    {
+                        if (item is ItemContainer ic)
+                        {
+                            if (ic.DataContext is INodeViewModel nvm && msaglNodes.ContainsKey(nvm.GetHashCode()))
+                            {
+                                var node = msaglNodes[nvm.GetHashCode()];
+                                nvm.Location = new System.Windows.Point(
+                                    node.Center.X - graph.BoundingBox.Center.X - ic.ActualWidth / 2,
+                                    node.Center.Y - graph.BoundingBox.Center.Y - ic.ActualHeight / 2);
+                            }
+                        }
+                    }
+
+                    Editor.BringIntoView(new System.Windows.Point(0, 0));
+                }
+                catch (InvalidOperationException)
+                {
+
+                }
             }
-            catch (InvalidOperationException)
+
+            private void AutolayoutNodes_MenuItem(object sender, RoutedEventArgs e)
             {
-
-            }
-        }
-
-        private void AutolayoutNodes_MenuItem(object sender, RoutedEventArgs e)
-        {
-            LayoutNodes();
-        }*/
+                LayoutNodes();
+            }*/
     }
 }

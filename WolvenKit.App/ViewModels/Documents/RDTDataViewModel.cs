@@ -98,6 +98,9 @@ namespace WolvenKit.ViewModels.Documents
 
         [Reactive] public ChunkViewModel SelectedChunk { get; set; }
 
+        [Reactive] public ChunkViewModel SelectedChunks { get; set; }
+
+
         [Reactive] public ChunkViewModel RootChunk { get; set; }
 
         [Reactive] public IRedRef SelectedImport { get; set; }

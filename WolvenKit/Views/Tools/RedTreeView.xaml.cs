@@ -52,18 +52,10 @@ namespace WolvenKit.Views.Tools
             set { SetValue(SelectedItemProperty, value); }
         }
 
-/*        /// <summary>Identifies the <see cref="SelectedItemsCollection"/> dependency property.</summary>
-        public static readonly DependencyProperty SelectedItemsCollectionProperty =
-            DependencyProperty.Register(nameof(SelectedItemsCollection), typeof(IList), typeof(RedTreeView));
 
-        public IList SelectedItemsCollection
-        //{ get; set; } = new();
-        {
-            get { return (IList)GetValue(SelectedItemsCollectionProperty); }
-                //GetValue(SelectedItemsCollectionProperty); }
-            set { SetValue(SelectedItemsCollectionProperty, value); }
-        }
-*/
+        public object SelectedItems { get; set; }
+
+
         // Drag & Drop Functionality
 
         //private string dropFileLocation;
@@ -77,6 +69,7 @@ namespace WolvenKit.Views.Tools
         }
 
         public bool IsControlBeingHeld => Keyboard.IsKeyDown(Key.LeftCtrl) || Keyboard.IsKeyDown(Key.RightCtrl);
+
 
         private void SfTreeView_ItemDragOver(object sender, TreeViewItemDragOverEventArgs e)
         {

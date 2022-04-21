@@ -144,9 +144,9 @@ namespace WolvenKit.ViewModels.Shell
                             {
                                 //if (rbc.HasProperty(propertyName) && rbc.GetProperty(propertyName) != Data)
                                 //{
-                                    rbc.SetProperty(propertyName, Data);
-                                    Tab.File.SetIsDirty(true);
-                                    Parent.NotifyChain("Data");
+                                rbc.SetProperty(propertyName, Data);
+                                Tab.File.SetIsDirty(true);
+                                Parent.NotifyChain("Data");
                                 //}
                             }
                             else
@@ -175,10 +175,26 @@ namespace WolvenKit.ViewModels.Shell
             AddItemToCompiledDataCommand = new DelegateCommand(_ => ExecuteAddItemToCompiledData(), _ => CanAddItemToCompiledData());
             DeleteItemCommand = new DelegateCommand(_ => ExecuteDeleteItem(), _ => CanDeleteItem());
             DeleteAllCommand = new DelegateCommand(_ => ExecuteDeleteAll(), _ => CanDeleteAll());
+            DeleteSelectionCommand = new DelegateCommand(_ => ExecuteDeleteSelection(), _ => CanDeleteSelection());
             OpenChunkCommand = new DelegateCommand(_ => ExecuteOpenChunk(), _ => CanOpenChunk());
             CopyChunkCommand = new DelegateCommand(_ => ExecuteCopyChunk(), _ => CanCopyChunk());
             DuplicateChunkCommand = new DelegateCommand(_ => ExecuteDuplicateChunk(), _ => CanDuplicateChunk());
             PasteChunkCommand = new DelegateCommand(_ => ExecutePasteChunk(), _ => CanPasteChunk());
+        }
+
+        private bool CanDeleteSelection() => IsInArray;
+        private void ExecuteDeleteSelection()
+        {
+            var selection = Parent.DisplayProperties
+                            .Where(_ => _.IsSelected)
+                            .Select(_ => _.Data)
+                            .ToList();
+
+            foreach (var d in selection)
+            {
+                Data = d;
+                ExecuteDeleteItem();
+            }
         }
 
         public ChunkViewModel(IRedType export, RDTDataViewModel tab) : this(export)
@@ -655,7 +671,8 @@ namespace WolvenKit.ViewModels.Shell
                 var index = 0;
                 foreach (var item in ary)
                 {
-                    if (item.GetHashCode() == child.Data.GetHashCode())
+                    if (child.Data is not null
+                        && item.GetHashCode() == child.Data.GetHashCode())
                     {
                         if (!PropertiesLoaded || Properties[index].GetHashCode() == child.GetHashCode())
                         {
@@ -1645,6 +1662,8 @@ namespace WolvenKit.ViewModels.Shell
         //}
 
         public ICommand DeleteItemCommand { get; private set; }
+        public ICommand DeleteSelectionCommand { get; private set; }
+
         private bool CanDeleteItem() => IsInArray;
         private void ExecuteDeleteItem()
         {
@@ -1673,6 +1692,11 @@ namespace WolvenKit.ViewModels.Shell
             else if (Parent.Data is IRedBufferPointer db2 && db2.GetValue().Data is CR2WList list)
             {
                 list.Files.RemoveAll(x => x.RootChunk == Data);
+            }
+            else if (Parent.Data is IRedBufferPointer db3 && db3.GetValue().Data is worldNodeDataBuffer dict)
+            {
+                dict.Remove((worldNodeData)Data);
+                //dict.RemoveAt(((worldNodeData)Data).NodeIndex);
             }
             else
             {
@@ -1838,7 +1862,7 @@ namespace WolvenKit.ViewModels.Shell
         public void MoveChild(int index, ChunkViewModel item)
         {
             if (item.Parent == null)
-            { 
+            {
                 return;
             }
 
@@ -1879,7 +1903,7 @@ namespace WolvenKit.ViewModels.Shell
             }
 
             if (sourceList != null && destList != null)
-            { 
+            {
                 int oldIndex = -1, i = 0;
                 foreach (var thing in sourceList)
                 {
