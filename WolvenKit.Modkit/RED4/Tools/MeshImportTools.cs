@@ -17,6 +17,8 @@ using WolvenKit.RED4.Types;
 using Vec2 = System.Numerics.Vector2;
 using Vec3 = System.Numerics.Vector3;
 using Vec4 = System.Numerics.Vector4;
+using Quat = System.Numerics.Quaternion;
+using Mat4 = System.Numerics.Matrix4x4;
 
 namespace WolvenKit.Modkit.RED4
 {
@@ -40,12 +42,12 @@ namespace WolvenKit.Modkit.RED4
 
             var armature = new List<LogicalChildOfRoot>();
 
-            var joints = new List<(Node Joint, System.Numerics.Matrix4x4 InverseBindMatrix)>();
+            var joints = new List<(Node Joint, Mat4 InverseBindMatrix)>();
             var jointlist = new List<Node>();
             var jointnames = new List<string>();
             var jointparentnames = new List<string>();
-            var ibm = new List<System.Numerics.Matrix4x4>();
-            var wm = new List<System.Numerics.Matrix4x4>();
+            var ibm = new List<Mat4>();
+            var wm = new List<Mat4>();
 
 
             if (model.LogicalSkins.Count > 0)
@@ -72,12 +74,12 @@ namespace WolvenKit.Modkit.RED4
 
                     for (var i = 0; i < wm.Count; i++)
                     {
-                        var temp = new System.Numerics.Matrix4x4();
-                        System.Numerics.Matrix4x4.Invert(wm[i], out temp);
+                        var temp = new Mat4();
+                        Mat4.Invert(wm[i], out temp);
                         ibm.Add(temp);
                     }
 
-                    //ibm = Enumerable.Range(0, wm.Count).Select(_ => System.Numerics.Matrix4x4.Invert( wm[_], out ibm[_] )).ToList();
+                    //ibm = Enumerable.Range(0, wm.Count).Select(_ => Mat4.Invert( wm[_], out ibm[_] )).ToList();
 
                     joints = Enumerable.Range(0, armature.Count).Select(_ => (jointlist[_], ibm[_])).ToList();
                 }
@@ -109,40 +111,40 @@ namespace WolvenKit.Modkit.RED4
             }
 
 
-            var inversedWorldMatrix = new System.Numerics.Matrix4x4();
-            var inversedLocalMatrix = new System.Numerics.Matrix4x4();
-            System.Numerics.Matrix4x4.Invert(joints[1].Joint.WorldMatrix, out inversedWorldMatrix);
-            System.Numerics.Matrix4x4.Invert(joints[1].Joint.LocalMatrix, out inversedLocalMatrix);
+            var inversedWorldMatrix = new Mat4();
+            var inversedLocalMatrix = new Mat4();
+            Mat4.Invert(joints[1].Joint.WorldMatrix, out inversedWorldMatrix);
+            Mat4.Invert(joints[1].Joint.LocalMatrix, out inversedLocalMatrix);
 
             Console.Write(inversedWorldMatrix == joints[1].InverseBindMatrix);
             Console.Write(inversedLocalMatrix == joints[1].InverseBindMatrix);
             Console.Write(inversedLocalMatrix == inversedWorldMatrix);
 
 
-            var oriRotM = System.Numerics.Matrix4x4.CreateFromQuaternion(joints[1].Joint.LocalTransform.Rotation);
-            var oriScaM = System.Numerics.Matrix4x4.CreateScale(joints[1].Joint.LocalTransform.Scale);
-            var oriTraM = System.Numerics.Matrix4x4.CreateTranslation(joints[1].Joint.LocalTransform.Translation);
+            var oriRotM = Mat4.CreateFromQuaternion(joints[1].Joint.LocalTransform.Rotation);
+            var oriScaM = Mat4.CreateScale(joints[1].Joint.LocalTransform.Scale);
+            var oriTraM = Mat4.CreateTranslation(joints[1].Joint.LocalTransform.Translation);
 
             var RotM = oriScaM * joints[1].InverseBindMatrix * oriTraM;
-            System.Numerics.Matrix4x4.Invert(RotM, out RotM);
+            Mat4.Invert(RotM, out RotM);
 
             var manualTRS = oriTraM * oriRotM * oriScaM;
 
-            var inversedManualTRS = new System.Numerics.Matrix4x4();
-            System.Numerics.Matrix4x4.Invert(manualTRS, out inversedManualTRS);
+            var inversedManualTRS = new Mat4();
+            Mat4.Invert(manualTRS, out inversedManualTRS);
 
             var manualRotM = oriScaM * inversedManualTRS * oriTraM;
-            System.Numerics.Matrix4x4.Invert(manualRotM, out manualRotM);
+            Mat4.Invert(manualRotM, out manualRotM);
 
 
             var inv2 = oriTraM * RotM * oriScaM;
 
             var localinvRotM = oriScaM * inversedLocalMatrix * oriTraM;
-            System.Numerics.Matrix4x4.Invert(localinvRotM, out localinvRotM);
+            Mat4.Invert(localinvRotM, out localinvRotM);
 
-            var rotationVector = System.Numerics.Quaternion.CreateFromRotationMatrix(RotM);
-            var manualrotationVector = System.Numerics.Quaternion.CreateFromRotationMatrix(manualRotM);
-            var localrotationVector = System.Numerics.Quaternion.CreateFromRotationMatrix(localinvRotM);
+            var rotationVector = Quat.CreateFromRotationMatrix(RotM);
+            var manualrotationVector = Quat.CreateFromRotationMatrix(manualRotM);
+            var localrotationVector = Quat.CreateFromRotationMatrix(localinvRotM);
 
             Console.Write(rotationVector == joints[1].Joint.LocalTransform.Rotation);
             Console.Write(manualrotationVector == joints[1].Joint.LocalTransform.Rotation);
@@ -157,41 +159,112 @@ namespace WolvenKit.Modkit.RED4
             {
                 var currentbone = rig.BoneNames[i];
                 var index = jointnames.IndexOf(currentbone);
+                var parindex = jointnames.IndexOf(jointlist[index].VisualParent.Name);
 
                 {
+                    /*
+                                        rig.BoneTransforms[i].Rotation.I = jointlist[index].LocalTransform.Rotation.X;
+                                        rig.BoneTransforms[i].Rotation.J = -jointlist[index].LocalTransform.Rotation.Z;
+                                        rig.BoneTransforms[i].Rotation.K = jointlist[index].LocalTransform.Rotation.Y;
+                                        rig.BoneTransforms[i].Rotation.R = jointlist[index].LocalTransform.Rotation.W;
 
-                    rig.BoneTransforms[i].Rotation.I = jointlist[index].LocalTransform.Rotation.X;
-                    rig.BoneTransforms[i].Rotation.J = -jointlist[index].LocalTransform.Rotation.Z;
-                    rig.BoneTransforms[i].Rotation.K = jointlist[index].LocalTransform.Rotation.Y;
-                    rig.BoneTransforms[i].Rotation.R = jointlist[index].LocalTransform.Rotation.W;
+                                        rig.BoneTransforms[i].Scale.W = 1;
+                                        rig.BoneTransforms[i].Scale.X = jointlist[index].LocalTransform.Scale.X;
+                                        rig.BoneTransforms[i].Scale.Y = jointlist[index].LocalTransform.Scale.Y;
+                                        rig.BoneTransforms[i].Scale.Z = jointlist[index].LocalTransform.Scale.Z;
 
-                    rig.BoneTransforms[i].Scale.W = 1;
-                    rig.BoneTransforms[i].Scale.X = jointlist[index].LocalTransform.Scale.X;
-                    rig.BoneTransforms[i].Scale.Y = jointlist[index].LocalTransform.Scale.Y;
-                    rig.BoneTransforms[i].Scale.Z = jointlist[index].LocalTransform.Scale.Z;
-
-                    //if the bit flippy thingy should be flipped like with original rigs from the game
-                    rig.BoneTransforms[i].Translation.W = i == 0 ? 1 : 0;
-                    rig.BoneTransforms[i].Translation.X = jointlist[index].LocalTransform.Translation.X;
-                    rig.BoneTransforms[i].Translation.Y = -jointlist[index].LocalTransform.Translation.Z;
-                    rig.BoneTransforms[i].Translation.Z = jointlist[index].LocalTransform.Translation.Y;
-
+                                        rig.BoneTransforms[i].Translation.W = i == 0 ? 1 : 0;
+                                        rig.BoneTransforms[i].Translation.X = jointlist[index].LocalTransform.Translation.X;
+                                        rig.BoneTransforms[i].Translation.Y = -jointlist[index].LocalTransform.Translation.Z;
+                                        rig.BoneTransforms[i].Translation.Z = jointlist[index].LocalTransform.Translation.Y;
+                    */
                 } //gotta figure out those rotations
 
                 var oriR = rig.BoneTransforms[i].Rotation;
                 var newR = jointlist[index].LocalTransform.Rotation;
                 var parR = jointlist[index].VisualParent.LocalTransform.Rotation;
-                var quat = new System.Numerics.Quaternion(oriR.I, oriR.J, oriR.K, oriR.R);
-                var quatM = System.Numerics.Matrix4x4.CreateFromQuaternion(quat);
+                var quat = new Quat(oriR.I, oriR.J, oriR.K, oriR.R);
 
-                var d = newR - quat + new System.Numerics.Quaternion(0, 0, 0, 1);
+                var ttt = System.Numerics.Vector4.Transform(Vec4.One, quat);
+
+                var quatM = Mat4.CreateFromQuaternion(quat);
+
+                var d = newR - quat + new Quat(0, 0, 0, 1);
                 var p = newR * quat;
                 var e = d == p;
                 var esmall = (d - p).Length() < 0.001;
 
                 var level = levels[index];
                 var tr = jointlist[index].LocalTransform.Translation;
+
+                {
+                    /*
+                    var nya = System.Numerics.Vector3.Transform(tr, parR);
+
+                    //var rr = jointlist[index].VisualParent.VisualParent.LocalTransform.Rotation;
+                    var nye = System.Numerics.Vector3.Transform(tr, parR * rr);
+                    var rrr = jointlist[index].VisualParent.VisualParent.VisualParent.LocalTransform.Rotation;
+                    var ya = System.Numerics.Vector3.Transform(tr, parR * rr * rrr);
+
+                    var (r, s, t) = (new Quat(), new Vec3(), new Vec3());
+                    var tinverse = new Mat4();
+                    Mat4.Invert(jointlist[index].VisualParent.WorldMatrix, out tinverse);
+                    Mat4.Decompose(tinverse, out s, out r, out t);
+
+                    var yaya = System.Numerics.Vector3.Transform(tr, r * parR);
+                    */
+                }
+
+                Mat4 TRSFromRig(QsTransform parTr)
+                {
+                    var (r, s, t) = (parTr.Rotation, parTr.Scale, parTr.Translation);
+
+                    var R = Mat4.CreateFromQuaternion(new Quat(r.R, r.I, r.J, r.K));
+                    var S = Mat4.CreateScale(new Vec3(s.X, s.Y, s.Z));
+                    var T = Mat4.CreateTranslation(new Vec3(t.X, t.Y, t.Z));
+                    var M = T * R * S;
+                    return M;
+                }
+
+                var parM = TRSFromRig(rig.BoneTransforms[parindex]);
+                var parMinv = new Mat4();
+                Mat4.Invert(parM, out parMinv);
+
+
+                var M = TRSFromRig(rig.BoneTransforms[index]);
+                var (r, s, t) = (new Quat(), new Vec3(), new Vec3());
+                //var tinverse = new Mat4();
+                //Mat4.Invert(jointlist[index].VisualParent.WorldMatrix, out tinverse);
+                Mat4.Decompose(parMinv * M, out s, out r, out t);
+
+
+
+                Quat AllOriginalRotations(int i)
+                {
+                    var wquat = rig.BoneTransforms[i].Rotation;
+                    var quat = new Quat(wquat.I, wquat.J, wquat.K, wquat.R);
+                    return (rig.BoneNames[i] == "Root") ? quat : AllOriginalRotations(rig.BoneParentIndexes[i]) * quat;
+                }
+                var oriAllR = AllOriginalRotations(i);
+                var oriParAllR = oriAllR * Quat.Inverse(quat);
+                var yetatr = System.Numerics.Vector4.Transform(tr, oriAllR);
+
+                Quat AllRotations(Node node)
+                {
+                    var quat = node.LocalTransform.Rotation;
+                    return (node.Name == "Root") ? quat : AllRotations(node.VisualParent) * quat;
+                }
+                var infinya = AllRotations(jointlist[index]);
+                var finit = Vec4.Transform(tr, infinya);
+                var aynifni = Vec4.Transform(tr, Quat.Inverse(infinya));
+
                 var oriT = rig.BoneTransforms[i].Translation;
+
+                var dkjh = Vec4.Transform(Vec4.UnitZ, Quat.CreateFromAxisAngle(Vec3.UnitY, newR.Y));
+                var dkjl = Vec4.Transform(Vec4.UnitZ, Quat.CreateFromAxisAngle(Vec3.UnitY, quat.Y));
+                var dkjm = Vec4.Transform(Vec4.UnitZ, Quat.CreateFromAxisAngle(Vec3.UnitY, parR.Y));
+                var dtrh = Vec4.Transform(Vec4.UnitZ, Quat.CreateFromAxisAngle(Vec3.UnitY, tr.Y));
+                var dtrl = Vec4.Transform(Vec4.UnitX, Quat.CreateFromAxisAngle(-Vec3.UnitY, tr.Y));
 
                 var diffT = new Vec3(oriT.X, oriT.Y, oriT.Z) - tr;
                 var len = diffT.Length();
@@ -306,8 +379,8 @@ namespace WolvenKit.Modkit.RED4
                         var foundbone = jointarray.FirstOrDefault(x => root.BoneNames[i] == x.Name);
                         if (foundbone is not null)
                         {
-                            var inversedWorldMatrix = new System.Numerics.Matrix4x4();
-                            System.Numerics.Matrix4x4.Invert(foundbone.WorldMatrix, out inversedWorldMatrix);
+                            var inversedWorldMatrix = new Mat4();
+                            Mat4.Invert(foundbone.WorldMatrix, out inversedWorldMatrix);
 
 
                             root.BoneRigMatrices[i] = inversedWorldMatrix;
@@ -867,7 +940,7 @@ namespace WolvenKit.Modkit.RED4
             return meshesInfo;
         }
 
-        private static MemoryStream GetEditedCr2wFile(CR2WFile cr2w, MeshesInfo info, MemoryStream buffer, System.Numerics.Matrix4x4[] inverseBindMatrices = null, string[] boneNames = null)
+        private static MemoryStream GetEditedCr2wFile(CR2WFile cr2w, MeshesInfo info, MemoryStream buffer, Mat4[] inverseBindMatrices = null, string[] boneNames = null)
         //private static MemoryStream GetEditedCr2wFile(CR2WFile cr2w, MeshesInfo info, MemoryStream buffer)
         {
             rendRenderMeshBlob blob = null;
