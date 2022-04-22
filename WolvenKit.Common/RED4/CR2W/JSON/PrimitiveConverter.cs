@@ -2333,7 +2333,7 @@ public class RedClassConverter : JsonConverter<RedBaseClass>, ICustomRedConverte
                             throw new JsonException();
                         }
 
-                        var valInfo = typeInfo.PropertyInfos.FirstOrDefault(x => x.RedName == key);
+                        var valInfo = typeInfo.PropertyInfos.FirstOrDefault(x => x.RedName == key || x.Name == key);
                         if (valInfo == null)
                         {
                             throw new JsonException();
@@ -2401,7 +2401,7 @@ public class RedClassConverter : JsonConverter<RedBaseClass>, ICustomRedConverte
             }
             else
             {
-                Console.Write("boop");
+                Locator.Current.GetService<ILoggerService>()?.Error($"propertyInfo was null i guess");
             }
         }
 
