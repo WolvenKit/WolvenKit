@@ -436,16 +436,18 @@ namespace WolvenKit.RED4.Types
 
             public ExtendedPropertyInfo GetPropertyInfoByName(string name)
             {
-                if (_redNameIndex.TryGetValue(name, out var i1))
+                if (name is not null)
                 {
-                    return PropertyInfos[i1];
-                }
+                    if (_redNameIndex.TryGetValue(name, out var i1))
+                    {
+                        return PropertyInfos[i1];
+                    }
 
-                if (_nameIndex.TryGetValue(name, out var i2))
-                {
-                    return PropertyInfos[i2];
+                    if (_nameIndex.TryGetValue(name, out var i2))
+                    {
+                        return PropertyInfos[i2];
+                    }
                 }
-
                 return null;
             }
 

@@ -26,7 +26,7 @@ namespace WolvenKit.Views.Tools
     /// <summary>
     /// Interaction logic for RedTreeView.xaml
     /// </summary>
-    public partial class RedTreeView : UserControl
+    public partial class RedTreeView : UserControl 
     {
         public RedTreeView()
         {
@@ -51,10 +51,47 @@ namespace WolvenKit.Views.Tools
             get { return (object)GetValue(SelectedItemProperty); }
             set { SetValue(SelectedItemProperty, value); }
         }
+       
+        //
+        // Summary:
+        //     Identifies the Syncfusion.UI.Xaml.TreeView.SfTreeView.SelectedItems dependency
+        //     property.
+        public static readonly DependencyProperty SelectedItemsProperty = DependencyProperty.Register(nameof(SelectedItems), typeof(ObservableCollection<object>), typeof(RedTreeView), new PropertyMetadata(null, delegate (DependencyObject sender, DependencyPropertyChangedEventArgs args)
+        {
+            (sender as RedTreeView).OnContentChanged((ObservableCollection<object>)args.OldValue, (ObservableCollection<object>)args.NewValue);
+        }));
 
 
-        public object SelectedItems { get; set; }
+        /*
+                public object SelectedItems { get; set; }
+        */
 
+        //
+        // Summary:
+        //     Gets or sets the selected items for selection.
+        //
+        // Value:
+        //     The collection of object that contains data item that are selected.
+        public ObservableCollection<object> SelectedItems
+        {
+            get
+            {
+                return (ObservableCollection<object>)GetValue(SelectedItemsProperty);
+            }
+            set
+            {
+                SetValue(SelectedItemsProperty, value);
+            }
+        }
+
+/*
+        RedTreeView.SelectionChanged += TreeView_SelectionChanged;
+
+        private void TreeView_SelectionChanged(object sender, Syncfusion.UI.Xaml.TreeView.ItemSelectionChangedEventArgs e)
+        {
+            RedTreeView.SelectedItems.Clear();
+        }
+*/
 
         // Drag & Drop Functionality
 

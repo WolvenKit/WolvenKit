@@ -518,8 +518,12 @@ public class DataBufferConverter : JsonConverter<DataBuffer>, ICustomRedConverte
 
         if (id != null)
         {
+            //when id is "0" TryAdd fails somehow because it found a duplicate
+            //id = (int.Parse(id) + 1).ToString();
             _referenceResolver.AddReference(id, val.Buffer);
         }
+
+        //misplaced curly bracket ?!
 
         return val;
     }
@@ -2619,9 +2623,12 @@ public class ReferenceResolver<T> where T : class
 
     public void AddReference(string referenceId, T value)
     {
-        if (!ReferenceIdToObjectMap.TryAdd(referenceId, value))
+        if (!ReferenceIdToObjectMap.ContainsValue(value))
         {
-            throw new JsonException();
+            if (!ReferenceIdToObjectMap.TryAdd(referenceId, value))
+            {
+                throw new JsonException();
+            }
         }
     }
 
@@ -3131,7 +3138,7 @@ public static class RedJsonSerializer
 
             return result;
         }
-        catch(Exception ex)
+        catch (Exception ex)
         {
             Locator.Current.GetService<ILoggerService>()?.Error($"Couldn't Import From JSON : {ex}");
         }
