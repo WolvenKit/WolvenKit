@@ -556,7 +556,10 @@
         ItemsSource="{Binding ElementName=redTreeView, Path=ItemsSource, Mode=TwoWay}"
         SelectedItem="{Binding ElementName=redTreeView, Path=SelectedItem, Mode=TwoWay}"
         SelectedItems="{Binding ElementName=redTreeView, Path=SelectedItems, Mode=TwoWay}"
+        
         SelectionMode="Extended"
+        SelectionChanged="OnSelectionChanged"
+
         ShowLines="True"
         VirtualizingPanel.IsVirtualizing="True"
         VirtualizingPanel.ScrollUnit="Pixel"
