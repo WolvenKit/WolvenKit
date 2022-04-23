@@ -2355,7 +2355,17 @@ public class RedClassConverter : JsonConverter<RedBaseClass>, ICustomRedConverte
                             val = JsonSerializer.Deserialize(ref reader, valInfo.Type, options);
                         }
 
-                        if (!typeInfo.SerializeDefault && RedReflection.IsDefault(cls.GetType(), valInfo.RedName, val))
+                        static string? FirstCharToLowerCase( string? str)
+                        {
+                            if (!string.IsNullOrEmpty(str) && char.IsUpper(str[0]))
+                                return str.Length == 1 ? char.ToLower(str[0]).ToString() : char.ToLower(str[0]) + str[1..];
+
+                            return str;
+                        }
+
+                        //what's the difference between RedName and Name ?!
+                        var name = valInfo.RedName ?? FirstCharToLowerCase(valInfo.Name);
+                        if (!typeInfo.SerializeDefault && RedReflection.IsDefault(cls.GetType(), name, val))
                         {
                             continue;
                         }

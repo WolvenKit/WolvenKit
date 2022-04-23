@@ -189,12 +189,40 @@ namespace WolvenKit.ViewModels.Shell
                             .Where(_ => _.IsSelected)
                             .Select(_ => _.Data)
                             .ToList();
-
-            foreach (var d in selection)
+            try
             {
-                Data = d;
-                ExecuteDeleteItem();
+                var indices = selection.Select(_ => (int)((worldNodeData)_).NodeIndex).ToList();
+                var (start, end) = (indices.Min(), indices.Max());
+
+                var fullselection = Parent.DisplayProperties
+                    .Where( _ => Enumerable.Range(start, end - start+1)
+                        .Contains( (int)((worldNodeData)_.Data).NodeIndex ) )
+                    .Select(_ => _.Data)
+                    .ToList();
+
+                if (Parent.Data is IRedBufferPointer db3 && db3.GetValue().Data is worldNodeDataBuffer dict)
+                {
+                    //dict.Remove((worldNodeData)Data);
+                    foreach (var i in fullselection)
+                    { try { dict.Remove(i); } catch { } }
+/*
+                    foreach (var i in Enumerable.Range(start, end - start))
+                    { try { dict.RemoveAt(i); } catch { } }
+*/
+                    Tab.File.SetIsDirty(true);
+                    Parent.RecalulateProperties();
+                }
+                else
+                {
+                    foreach (worldNodeData d in fullselection)
+                    {
+                        Data = d;
+                        ExecuteDeleteItem();
+                    }
+                }
             }
+            catch { }
+
         }
 
         public ChunkViewModel(IRedType export, RDTDataViewModel tab) : this(export)

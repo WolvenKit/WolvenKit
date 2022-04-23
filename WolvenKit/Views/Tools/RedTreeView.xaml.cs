@@ -16,8 +16,10 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using Newtonsoft.Json;
+using Splat;
 using Syncfusion.UI.Xaml.TreeView;
 using WolvenKit.Common.Conversion;
+using WolvenKit.Common.Services;
 using WolvenKit.RED4.Types;
 using WolvenKit.ViewModels.Shell;
 
@@ -54,33 +56,34 @@ namespace WolvenKit.Views.Tools
 
         public object SelectedItems { get; set; }
 
+/*
 
-        /*
-                //
-                // Summary:
-                //     Identifies the Syncfusion.UI.Xaml.TreeView.SfTreeView.SelectedItems dependency
-                //     property.
-                public static readonly DependencyProperty SelectedItemsProperty =
-                    DependencyProperty.Register(nameof(SelectedItems), typeof(ObservableCollection<object>), typeof(RedTreeView));
-                //    , new PropertyMetadata(null, delegate (DependencyObject sender, DependencyPropertyChangedEventArgs args) {(sender as RedTreeView).OnPropertyChanged(args); }));
+        //
+        // Summary:
+        //     Identifies the Syncfusion.UI.Xaml.TreeView.SfTreeView.SelectedItems dependency
+        //     property.
+        public static readonly DependencyProperty SelectedItemsProperty =
+            DependencyProperty.Register(nameof(SelectedItems), typeof(ObservableCollection<object>), typeof(RedTreeView));
+        //    , new PropertyMetadata(null, delegate (DependencyObject sender, DependencyPropertyChangedEventArgs args) {(sender as RedTreeView).OnPropertyChanged(args); }));
 
-                //
-                // Summary:
-                //     Gets or sets the selected items for selection.
-                //
-                // Value:
-                //     The collection of object that contains data item that are selected.
-                public ObservableCollection<object> SelectedItems
-                {
-                    get { return (ObservableCollection<object>)GetValue(SelectedItemsProperty); }
-                    set { SetValue(SelectedItemsProperty, value); }
-                }
-        */
+        //
+        // Summary:
+        //     Gets or sets the selected items for selection.
+        //
+        // Value:
+        //     The collection of object that contains data item that are selected.
+        public ObservableCollection<object> SelectedItems
+        {
+            get { return (ObservableCollection<object>)GetValue(SelectedItemsProperty); }
+            set { SetValue(SelectedItemsProperty, value); }
+        }
 
 
+*/
 
         private void OnSelectionChanged(object sender, Syncfusion.UI.Xaml.TreeView.ItemSelectionChangedEventArgs e)
         {
+            //Locator.Current.GetService<ILoggerService>().Success($"Selected item : {SelectedItems}");
 
         }
 
