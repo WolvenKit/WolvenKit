@@ -242,7 +242,7 @@ namespace WolvenKit.ViewModels.Shell
                 {
                     //my bad :P
                     var t = Parent.Data.GetType().Name;
-                    Locator.Current.GetService<ILoggerService>().Error($"Handle this type {t} wen ._. : {ex}");
+                    Locator.Current.GetService<ILoggerService>().Error($"Handle this type {t} wen ._. ");
                     /*
                     foreach (var d in selection)
                     {
