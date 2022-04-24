@@ -189,40 +189,68 @@ namespace WolvenKit.ViewModels.Shell
                             .Where(_ => _.IsSelected)
                             .Select(_ => _.Data)
                             .ToList();
+
+            var ts = Parent.DisplayProperties
+                            .Where(_ => _.IsSelected)
+                            .Select(_ => _)
+                            .ToList();
+
+
+
             try
             {
-                var indices = selection.Select(_ => (int)((worldNodeData)_).NodeIndex).ToList();
-                var (start, end) = (indices.Min(), indices.Max());
+                Console.Write(ts);
 
-                var fullselection = Parent.DisplayProperties
-                    .Where( _ => Enumerable.Range(start, end - start+1)
-                        .Contains( (int)((worldNodeData)_.Data).NodeIndex ) )
-                    .Select(_ => _.Data)
-                    .ToList();
+                Tab.SelectedChunk = Parent;
 
                 if (Parent.Data is IRedBufferPointer db3 && db3.GetValue().Data is worldNodeDataBuffer dict)
                 {
-                    //dict.Remove((worldNodeData)Data);
+                    var indices = selection.Select(_ => (int)((worldNodeData)_).NodeIndex).ToList();
+                    var (start, end) = (indices.Min(), indices.Max());
+
+                    var fullselection = Parent.DisplayProperties
+                        .Where(_ => Enumerable.Range(start, end - start + 1)
+                           .Contains((int)((worldNodeData)_.Data).NodeIndex))
+                        .Select(_ => _.Data)
+                        .ToList();
+
+
                     foreach (var i in fullselection)
                     { try { dict.Remove(i); } catch { } }
-/*
-                    foreach (var i in Enumerable.Range(start, end - start))
-                    { try { dict.RemoveAt(i); } catch { } }
-*/
+
+                    Tab.File.SetIsDirty(true);
+                    Parent.RecalulateProperties();
+                }
+                else if (Parent.Data is IRedArray db4)
+                {
+                    var indices = ts.Select(_ => int.Parse(_.Name)).ToList();
+                    var (start, end) = (indices.Min(), indices.Max());
+
+                    var fullselection = Parent.DisplayProperties
+                        .Where(_ => Enumerable.Range(start, end - start + 1)
+                           .Contains(int.Parse(_.Name)))
+                        .Select(_ => _.Data)
+                        .ToList();
+
+                    foreach (var i in fullselection)
+                    { try { db4.Remove(i); } catch { } }
+
                     Tab.File.SetIsDirty(true);
                     Parent.RecalulateProperties();
                 }
                 else
                 {
-                    foreach (worldNodeData d in fullselection)
+                    foreach (var d in selection)
                     {
                         Data = d;
                         ExecuteDeleteItem();
                     }
                 }
             }
-            catch { }
-
+            catch(Exception ex)
+            {
+                Locator.Current.GetService<ILoggerService>().Error($"Handle this type wen ._. : {ex}");
+            }
         }
 
         public ChunkViewModel(IRedType export, RDTDataViewModel tab) : this(export)

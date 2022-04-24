@@ -25,8 +25,6 @@ namespace WolvenKit.Modkit.RED4
     public partial class ModTools
     {
 
-
-
         public bool ImportRig(FileInfo inGltfFile, Stream rigStream, GltfImportArgs args)
         {
             var cr2w = _wolvenkitFileService.ReadRed4File(rigStream);
@@ -130,8 +128,8 @@ namespace WolvenKit.Modkit.RED4
 
             var manualTRS = oriTraM * oriRotM * oriScaM;
 
-            var inversedManualTRS = new Mat4();
-            Mat4.Invert(manualTRS, out inversedManualTRS);
+            //var inversedManualTRS = new Mat4();
+            Mat4.Invert(manualTRS, out var inversedManualTRS);
 
             var manualRotM = oriScaM * inversedManualTRS * oriTraM;
             Mat4.Invert(manualRotM, out manualRotM);
@@ -154,155 +152,156 @@ namespace WolvenKit.Modkit.RED4
             Console.Write(inversedManualTRS == joints[1].InverseBindMatrix);
 
             var levels = GetLevels("Root");
-
-            for (var i = 0; i < rig.BoneNames.Count; i++)
+            if (levels is not null)
             {
-                var currentbone = rig.BoneNames[i];
-                var index = jointnames.IndexOf(currentbone);
-                var parindex = jointnames.IndexOf(jointlist[index].VisualParent.Name);
-
+                for (var i = 0; i < rig.BoneNames.Count; i++)
                 {
-                    /*
-                                        rig.BoneTransforms[i].Rotation.I = jointlist[index].LocalTransform.Rotation.X;
-                                        rig.BoneTransforms[i].Rotation.J = -jointlist[index].LocalTransform.Rotation.Z;
-                                        rig.BoneTransforms[i].Rotation.K = jointlist[index].LocalTransform.Rotation.Y;
-                                        rig.BoneTransforms[i].Rotation.R = jointlist[index].LocalTransform.Rotation.W;
+                    var currentbone = rig.BoneNames[i];
+                    var index = jointnames.IndexOf(currentbone);
+                    var parindex = jointnames.IndexOf(jointlist[index].VisualParent.Name);
 
-                                        rig.BoneTransforms[i].Scale.W = 1;
-                                        rig.BoneTransforms[i].Scale.X = jointlist[index].LocalTransform.Scale.X;
-                                        rig.BoneTransforms[i].Scale.Y = jointlist[index].LocalTransform.Scale.Y;
-                                        rig.BoneTransforms[i].Scale.Z = jointlist[index].LocalTransform.Scale.Z;
+                    {
+                        /*
+                                            rig.BoneTransforms[i].Rotation.I = jointlist[index].LocalTransform.Rotation.X;
+                                            rig.BoneTransforms[i].Rotation.J = -jointlist[index].LocalTransform.Rotation.Z;
+                                            rig.BoneTransforms[i].Rotation.K = jointlist[index].LocalTransform.Rotation.Y;
+                                            rig.BoneTransforms[i].Rotation.R = jointlist[index].LocalTransform.Rotation.W;
 
-                                        rig.BoneTransforms[i].Translation.W = i == 0 ? 1 : 0;
-                                        rig.BoneTransforms[i].Translation.X = jointlist[index].LocalTransform.Translation.X;
-                                        rig.BoneTransforms[i].Translation.Y = -jointlist[index].LocalTransform.Translation.Z;
-                                        rig.BoneTransforms[i].Translation.Z = jointlist[index].LocalTransform.Translation.Y;
-                    */
-                } //gotta figure out those rotations
+                                            rig.BoneTransforms[i].Scale.W = 1;
+                                            rig.BoneTransforms[i].Scale.X = jointlist[index].LocalTransform.Scale.X;
+                                            rig.BoneTransforms[i].Scale.Y = jointlist[index].LocalTransform.Scale.Y;
+                                            rig.BoneTransforms[i].Scale.Z = jointlist[index].LocalTransform.Scale.Z;
 
-                var oriR = rig.BoneTransforms[i].Rotation;
-                var newR = jointlist[index].LocalTransform.Rotation;
-                var parR = jointlist[index].VisualParent.LocalTransform.Rotation;
-                var quat = new Quat(oriR.I, oriR.J, oriR.K, oriR.R);
+                                            rig.BoneTransforms[i].Translation.W = i == 0 ? 1 : 0;
+                                            rig.BoneTransforms[i].Translation.X = jointlist[index].LocalTransform.Translation.X;
+                                            rig.BoneTransforms[i].Translation.Y = -jointlist[index].LocalTransform.Translation.Z;
+                                            rig.BoneTransforms[i].Translation.Z = jointlist[index].LocalTransform.Translation.Y;
+                        */
+                    } //gotta figure out those rotations
 
-                var ttt = System.Numerics.Vector4.Transform(Vec4.One, quat);
+                    var oriR = rig.BoneTransforms[i].Rotation;
+                    var newR = jointlist[index].LocalTransform.Rotation;
+                    var parR = jointlist[index].VisualParent.LocalTransform.Rotation;
+                    var quat = new Quat(oriR.I, oriR.J, oriR.K, oriR.R);
 
-                var quatM = Mat4.CreateFromQuaternion(quat);
+                    var ttt = System.Numerics.Vector4.Transform(Vec4.One, quat);
 
-                var d = newR - quat + new Quat(0, 0, 0, 1);
-                var p = newR * quat;
-                var e = d == p;
-                var esmall = (d - p).Length() < 0.001;
+                    var quatM = Mat4.CreateFromQuaternion(quat);
 
-                var level = levels[index];
-                var tr = jointlist[index].LocalTransform.Translation;
+                    var d = newR - quat + new Quat(0, 0, 0, 1);
+                    var p = newR * quat;
+                    var e = d == p;
+                    var esmall = (d - p).Length() < 0.001;
 
-                {
-                    /*
-                    var nya = System.Numerics.Vector3.Transform(tr, parR);
+                    var level = levels[index];
+                    var tr = jointlist[index].LocalTransform.Translation;
 
-                    //var rr = jointlist[index].VisualParent.VisualParent.LocalTransform.Rotation;
-                    var nye = System.Numerics.Vector3.Transform(tr, parR * rr);
-                    var rrr = jointlist[index].VisualParent.VisualParent.VisualParent.LocalTransform.Rotation;
-                    var ya = System.Numerics.Vector3.Transform(tr, parR * rr * rrr);
+                    {
+                        /*
+                        var nya = System.Numerics.Vector3.Transform(tr, parR);
 
+                        //var rr = jointlist[index].VisualParent.VisualParent.LocalTransform.Rotation;
+                        var nye = System.Numerics.Vector3.Transform(tr, parR * rr);
+                        var rrr = jointlist[index].VisualParent.VisualParent.VisualParent.LocalTransform.Rotation;
+                        var ya = System.Numerics.Vector3.Transform(tr, parR * rr * rrr);
+
+                        var (r, s, t) = (new Quat(), new Vec3(), new Vec3());
+                        var tinverse = new Mat4();
+                        Mat4.Invert(jointlist[index].VisualParent.WorldMatrix, out tinverse);
+                        Mat4.Decompose(tinverse, out s, out r, out t);
+
+                        var yaya = System.Numerics.Vector3.Transform(tr, r * parR);
+                        */
+                    }
+
+                    Mat4 TRSFromRig(QsTransform parTr)
+                    {
+                        var (r, s, t) = (parTr.Rotation, parTr.Scale, parTr.Translation);
+
+                        var R = Mat4.CreateFromQuaternion(new Quat(r.R, r.I, r.J, r.K));
+                        var S = Mat4.CreateScale(new Vec3(s.X, s.Y, s.Z));
+                        var T = Mat4.CreateTranslation(new Vec3(t.X, t.Y, t.Z));
+                        var M = T * R * S;
+                        return M;
+                    }
+
+                    var parM = TRSFromRig(rig.BoneTransforms[parindex]);
+                    var parMinv = new Mat4();
+                    Mat4.Invert(parM, out parMinv);
+
+
+                    var M = TRSFromRig(rig.BoneTransforms[index]);
                     var (r, s, t) = (new Quat(), new Vec3(), new Vec3());
-                    var tinverse = new Mat4();
-                    Mat4.Invert(jointlist[index].VisualParent.WorldMatrix, out tinverse);
-                    Mat4.Decompose(tinverse, out s, out r, out t);
+                    //var tinverse = new Mat4();
+                    //Mat4.Invert(jointlist[index].VisualParent.WorldMatrix, out tinverse);
+                    Mat4.Decompose(parMinv * M, out s, out r, out t);
 
-                    var yaya = System.Numerics.Vector3.Transform(tr, r * parR);
-                    */
+
+
+                    Quat AllOriginalRotations(int i)
+                    {
+                        var wquat = rig.BoneTransforms[i].Rotation;
+                        var quat = new Quat(wquat.I, wquat.J, wquat.K, wquat.R);
+                        return (rig.BoneNames[i] == "Root") ? quat : AllOriginalRotations(rig.BoneParentIndexes[i]) * quat;
+                    }
+                    var oriAllR = AllOriginalRotations(i);
+                    var oriParAllR = oriAllR * Quat.Inverse(quat);
+                    var yetatr = System.Numerics.Vector4.Transform(tr, oriAllR);
+
+                    Quat AllRotations(Node node)
+                    {
+                        var quat = node.LocalTransform.Rotation;
+                        return (node.Name == "Root") ? quat : AllRotations(node.VisualParent) * quat;
+                    }
+                    var infinya = AllRotations(jointlist[index]);
+                    var finit = Vec4.Transform(tr, infinya);
+                    var aynifni = Vec4.Transform(tr, Quat.Inverse(infinya));
+
+                    var oriT = rig.BoneTransforms[i].Translation;
+
+                    var dkjh = Vec4.Transform(Vec4.UnitZ, Quat.CreateFromAxisAngle(Vec3.UnitY, newR.Y));
+                    var dkjl = Vec4.Transform(Vec4.UnitZ, Quat.CreateFromAxisAngle(Vec3.UnitY, quat.Y));
+                    var dkjm = Vec4.Transform(Vec4.UnitZ, Quat.CreateFromAxisAngle(Vec3.UnitY, parR.Y));
+                    var dtrh = Vec4.Transform(Vec4.UnitZ, Quat.CreateFromAxisAngle(Vec3.UnitY, tr.Y));
+                    var dtrl = Vec4.Transform(Vec4.UnitX, Quat.CreateFromAxisAngle(-Vec3.UnitY, tr.Y));
+
+                    var diffT = new Vec3(oriT.X, oriT.Y, oriT.Z) - tr;
+                    var len = diffT.Length();
+                    var small = len < 0.1;
+
+                    var before = rig.BoneTransforms[i].Translation.DeepCopy();
+
+                    {
+                        rig.BoneTransforms[i].Translation.W = i == 0 ? 1 : 0;
+                        rig.BoneTransforms[i].Translation.X = level == 0 ? tr.X :
+                                                              level == 1 ? tr.X :
+                                                              level == 2 ? tr.X :
+                                                              level == 3 ? tr.X :
+                                                              level == 6 ? -tr.Y :
+                                                              level == 8 ? tr.Z :
+                                                              tr.X;
+
+                        rig.BoneTransforms[i].Translation.Y = level == 0 ? tr.Y :
+                                                              level == 1 ? tr.Z :
+                                                              level == 3 ? -tr.Z :
+                                                              level == 4 ? -tr.Z :
+                                                              level == 5 ? -tr.Z :
+                                                              level == 6 ? tr.X :
+                                                              level == 8 ? -tr.Y :
+                                                              tr.Y;
+                        rig.BoneTransforms[i].Translation.Z = level == 0 ? tr.Z :
+                                                              level == 1 ? tr.Y :
+                                                              level == 3 ? -tr.Y :
+                                                              level == 4 ? -tr.Y :
+                                                              level == 5 ? tr.Y :
+                                                              level == 6 ? tr.Z :
+                                                              level == 8 ? tr.X :
+                                                              tr.Z;
+                    }
+
+                    var after = rig.BoneTransforms[i].Translation;
                 }
-
-                Mat4 TRSFromRig(QsTransform parTr)
-                {
-                    var (r, s, t) = (parTr.Rotation, parTr.Scale, parTr.Translation);
-
-                    var R = Mat4.CreateFromQuaternion(new Quat(r.R, r.I, r.J, r.K));
-                    var S = Mat4.CreateScale(new Vec3(s.X, s.Y, s.Z));
-                    var T = Mat4.CreateTranslation(new Vec3(t.X, t.Y, t.Z));
-                    var M = T * R * S;
-                    return M;
-                }
-
-                var parM = TRSFromRig(rig.BoneTransforms[parindex]);
-                var parMinv = new Mat4();
-                Mat4.Invert(parM, out parMinv);
-
-
-                var M = TRSFromRig(rig.BoneTransforms[index]);
-                var (r, s, t) = (new Quat(), new Vec3(), new Vec3());
-                //var tinverse = new Mat4();
-                //Mat4.Invert(jointlist[index].VisualParent.WorldMatrix, out tinverse);
-                Mat4.Decompose(parMinv * M, out s, out r, out t);
-
-
-
-                Quat AllOriginalRotations(int i)
-                {
-                    var wquat = rig.BoneTransforms[i].Rotation;
-                    var quat = new Quat(wquat.I, wquat.J, wquat.K, wquat.R);
-                    return (rig.BoneNames[i] == "Root") ? quat : AllOriginalRotations(rig.BoneParentIndexes[i]) * quat;
-                }
-                var oriAllR = AllOriginalRotations(i);
-                var oriParAllR = oriAllR * Quat.Inverse(quat);
-                var yetatr = System.Numerics.Vector4.Transform(tr, oriAllR);
-
-                Quat AllRotations(Node node)
-                {
-                    var quat = node.LocalTransform.Rotation;
-                    return (node.Name == "Root") ? quat : AllRotations(node.VisualParent) * quat;
-                }
-                var infinya = AllRotations(jointlist[index]);
-                var finit = Vec4.Transform(tr, infinya);
-                var aynifni = Vec4.Transform(tr, Quat.Inverse(infinya));
-
-                var oriT = rig.BoneTransforms[i].Translation;
-
-                var dkjh = Vec4.Transform(Vec4.UnitZ, Quat.CreateFromAxisAngle(Vec3.UnitY, newR.Y));
-                var dkjl = Vec4.Transform(Vec4.UnitZ, Quat.CreateFromAxisAngle(Vec3.UnitY, quat.Y));
-                var dkjm = Vec4.Transform(Vec4.UnitZ, Quat.CreateFromAxisAngle(Vec3.UnitY, parR.Y));
-                var dtrh = Vec4.Transform(Vec4.UnitZ, Quat.CreateFromAxisAngle(Vec3.UnitY, tr.Y));
-                var dtrl = Vec4.Transform(Vec4.UnitX, Quat.CreateFromAxisAngle(-Vec3.UnitY, tr.Y));
-
-                var diffT = new Vec3(oriT.X, oriT.Y, oriT.Z) - tr;
-                var len = diffT.Length();
-                var small = len < 0.1;
-
-                var before = rig.BoneTransforms[i].Translation.DeepCopy();
-
-                {
-                    rig.BoneTransforms[i].Translation.W = i == 0 ? 1 : 0;
-                    rig.BoneTransforms[i].Translation.X = level == 0 ? tr.X :
-                                                          level == 1 ? tr.X :
-                                                          level == 2 ? tr.X :
-                                                          level == 3 ? tr.X :
-                                                          level == 6 ? -tr.Y :
-                                                          level == 8 ? tr.Z :
-                                                          tr.X;
-
-                    rig.BoneTransforms[i].Translation.Y = level == 0 ? tr.Y :
-                                                          level == 1 ? tr.Z :
-                                                          level == 3 ? -tr.Z :
-                                                          level == 4 ? -tr.Z :
-                                                          level == 5 ? -tr.Z :
-                                                          level == 6 ? tr.X :
-                                                          level == 8 ? -tr.Y :
-                                                          tr.Y;
-                    rig.BoneTransforms[i].Translation.Z = level == 0 ? tr.Z :
-                                                          level == 1 ? tr.Y :
-                                                          level == 3 ? -tr.Y :
-                                                          level == 4 ? -tr.Y :
-                                                          level == 5 ? tr.Y :
-                                                          level == 6 ? tr.Z :
-                                                          level == 8 ? tr.X :
-                                                          tr.Z;
-                }
-
-                var after = rig.BoneTransforms[i].Translation;
             }
-
             var ms = new MemoryStream();
             using var writer = new CR2WWriter(ms, Encoding.UTF8, true);
             writer.WriteFile(cr2w);
