@@ -240,16 +240,21 @@ namespace WolvenKit.ViewModels.Shell
                 }
                 else
                 {
+                    //my bad :P
+                    var t = Parent.Data.GetType().Name;
+                    Locator.Current.GetService<ILoggerService>().Error($"Handle this type {t} wen ._. : {ex}");
+                    /*
                     foreach (var d in selection)
                     {
                         Data = d;
                         ExecuteDeleteItem();
-                    }
+                    }*/
                 }
             }
             catch(Exception ex)
             {
-                Locator.Current.GetService<ILoggerService>().Error($"Handle this type wen ._. : {ex}");
+                Locator.Current.GetService<ILoggerService>()
+                    .Error($"Something went wrong while trying to delete the selection : {ex}");
             }
         }
 
