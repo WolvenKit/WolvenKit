@@ -57,7 +57,7 @@ namespace WolvenKit.Modkit.RED4
                     relFileFullName += ".bin";
                 }
 
-                var mainFileInfo = new FileInfo(Path.Combine(outDir.FullName, $"{relFileFullName}"));
+                var mainFileInfo = new FileInfo(Path.Combine(outDir.FullName, $"{relFileFullName.Replace('\\', Path.DirectorySeparatorChar)}"));
 
                 // write mainFile
                 if (!WolvenTesting.IsTesting)
@@ -211,7 +211,7 @@ namespace WolvenKit.Modkit.RED4
         /// <returns></returns>
         private bool UncookBuffers(Stream cr2wStream, string relPath, GlobalExportArgs settings, DirectoryInfo rawOutDir, ECookedFileFormat[] forcebuffers = null)
         {
-            var outfile = new FileInfo(Path.Combine(rawOutDir.FullName, relPath));
+            var outfile = new FileInfo(Path.Combine(rawOutDir.FullName, $"{relPath.Replace('\\', Path.DirectorySeparatorChar)}"));
             if (outfile.Directory == null)
             {
                 return false;
