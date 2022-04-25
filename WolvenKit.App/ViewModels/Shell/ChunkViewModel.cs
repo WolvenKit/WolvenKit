@@ -201,7 +201,7 @@ namespace WolvenKit.ViewModels.Shell
             {
                 Console.Write(ts);
 
-                Tab.SelectedChunk = Parent;
+                
 
                 if (Parent.Data is IRedBufferPointer db3 && db3.GetValue().Data is worldNodeDataBuffer dict)
                 {
@@ -256,6 +256,7 @@ namespace WolvenKit.ViewModels.Shell
                 Locator.Current.GetService<ILoggerService>()
                     .Error($"Something went wrong while trying to delete the selection : {ex}");
             }
+            Tab.SelectedChunk = Parent;
         }
 
         public ChunkViewModel(IRedType export, RDTDataViewModel tab) : this(export)
