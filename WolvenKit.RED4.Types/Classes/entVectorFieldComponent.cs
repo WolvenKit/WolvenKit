@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class entVectorFieldComponent : entIVisualComponent
 	{
 		[Ordinal(8)] 
@@ -29,6 +28,10 @@ namespace WolvenKit.RED4.Types
 			ForceLODLevel = -1;
 			Direction = new();
 			IsEnabled = true;
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

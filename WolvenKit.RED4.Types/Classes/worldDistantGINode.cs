@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class worldDistantGINode : worldNode
 	{
 		[Ordinal(4)] 
@@ -40,6 +39,10 @@ namespace WolvenKit.RED4.Types
 		public worldDistantGINode()
 		{
 			SectorSpan = new() { X = -1.000000F, Y = -1.000000F, Z = 1.000000F, W = 1.000000F };
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

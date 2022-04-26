@@ -1,8 +1,13 @@
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class inkVariantDataSourceWrapper : inkBaseVariantDataSource
 	{
+		public inkVariantDataSourceWrapper()
+		{
+			PostConstruct();
+		}
+
+		partial void PostConstruct();
 	}
 }

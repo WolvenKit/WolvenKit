@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class ShardReadPopupData : inkGameNotificationData
 	{
 		[Ordinal(7)] 
@@ -40,6 +39,10 @@ namespace WolvenKit.RED4.Types
 		public ShardReadPopupData()
 		{
 			ItemID = new();
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

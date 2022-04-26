@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class QuestTrackerGameController : gameuiHUDGameController
 	{
 		[Ordinal(9)] 
@@ -156,6 +155,10 @@ namespace WolvenKit.RED4.Types
 			TrackedMappinTitle = new();
 			TrackedMappinContainer = new();
 			TrackedMappinObjectiveContainer = new();
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class gameHitRepresentationComponent : entSlotComponent
 	{
 		[Ordinal(7)] 
@@ -58,6 +57,10 @@ namespace WolvenKit.RED4.Types
 			Representations = new();
 			BvhRoot = new() { ChildrenNodes = new(), ChildrenShapeNames = new() };
 			AppearanceOverrides = new();
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

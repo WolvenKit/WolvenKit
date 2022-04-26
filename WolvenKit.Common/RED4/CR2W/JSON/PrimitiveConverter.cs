@@ -978,7 +978,7 @@ public class CLegacySingleChannelCurveConverter : JsonConverter<IRedLegacySingle
             throw new JsonException();
         }
 
-        var (elementType, _) = RedReflection.GetCSTypeFromRedType(result.ElementType);
+        var elementType = result.ElementType;
 
         while (reader.Read())
         {
@@ -1323,19 +1323,40 @@ public class MultiChannelCurveConverter : JsonConverter<IRedMultiChannelCurve>, 
 
 public class NodeRefConverter : JsonConverter<NodeRef>, ICustomRedConverter
 {
-    public object? ReadRedType(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options) => Read(ref reader, typeToConvert, options);
+    public object ReadRedType(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options) => Read(ref reader, typeToConvert, options);
 
-    public override NodeRef? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+    public override NodeRef Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
     {
         if (reader.TokenType == JsonTokenType.Null)
         {
-            return null;
+            return (NodeRef)RedTypeManager.CreateRedType(typeToConvert);
         }
 
-        return reader.GetString();
+        if (reader.TokenType == JsonTokenType.String)
+        {
+            return reader.GetString();
+        }
+        else if (reader.TokenType == JsonTokenType.Number)
+        {
+            return reader.GetUInt64();
+        }
+        else
+        {
+            throw new JsonException();
+        }
     }
 
-    public override void Write(Utf8JsonWriter writer, NodeRef value, JsonSerializerOptions options) => writer.WriteStringValue(value);
+    public override void Write(Utf8JsonWriter writer, NodeRef value, JsonSerializerOptions options)
+    {
+        if ((string)value != null)
+        {
+            writer.WriteStringValue(value);
+        }
+        else
+        {
+            writer.WriteNumberValue(value);
+        }
+    }
 }
 
 public class TweakDBIDConverter : JsonConverter<TweakDBID>, ICustomRedConverter

@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class audioGeneralVoiceGruntSettings : RedBaseClass
 	{
 		[Ordinal(0)] 
@@ -218,6 +217,10 @@ namespace WolvenKit.RED4.Types
 			VariationsCount = 1;
 			ContextualVoiceGruntSettings = new() { PainShort = new(), Effort = new() };
 			GruntVariations = new() { CachedVariations = new() };
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

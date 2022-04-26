@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class ComputerBannerWidgetController : DeviceInkLogicControllerBase
 	{
 		[Ordinal(5)] 
@@ -70,6 +69,10 @@ namespace WolvenKit.RED4.Types
 			BannerButtonWidget = new();
 			BannerData = new() { Content = new() };
 			LastPlayedVideo = new();
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

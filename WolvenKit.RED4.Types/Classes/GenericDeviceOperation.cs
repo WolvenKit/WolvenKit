@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class GenericDeviceOperation : DeviceOperationBase
 	{
 		[Ordinal(5)] 
@@ -125,6 +124,10 @@ namespace WolvenKit.RED4.Types
 			Items = new();
 			Teleport = new();
 			PlayerWorkspot = new();
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class gameJournalQuestTrackedData : RedBaseClass
 	{
 		[Ordinal(0)] 
@@ -28,5 +27,12 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CEnum<gameJournalEntryState>>();
 			set => SetPropertyValue<CEnum<gameJournalEntryState>>(value);
 		}
+
+		public gameJournalQuestTrackedData()
+		{
+			PostConstruct();
+		}
+
+		partial void PostConstruct();
 	}
 }

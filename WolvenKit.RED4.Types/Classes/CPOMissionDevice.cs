@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class CPOMissionDevice : gameObject
 	{
 		[Ordinal(35)] 
@@ -48,6 +47,10 @@ namespace WolvenKit.RED4.Types
 		public CPOMissionDevice()
 		{
 			BlockAfterOperation = true;
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

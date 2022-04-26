@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class animAnimNode_VectorVariable : animAnimNode_VectorValue
 	{
 		[Ordinal(11)] 
@@ -16,6 +15,10 @@ namespace WolvenKit.RED4.Types
 		public animAnimNode_VectorVariable()
 		{
 			Id = 4294967295;
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

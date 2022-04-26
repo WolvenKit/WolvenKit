@@ -76,7 +76,7 @@ namespace WolvenKit.Modkit.RED4
             DirectoryInfo subdir = null;
             if (args.AsList)
             {
-                subdir = new DirectoryInfo(Path.GetFullPath(outfile.FullName));
+                subdir = new DirectoryInfo(Path.ChangeExtension(outfile.FullName, null) + "_layers");
                 if (!subdir.Exists)
                 {
                     Directory.CreateDirectory(subdir.FullName);

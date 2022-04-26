@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class gameuiMinimapStealthMappinController : gameuiBaseMinimapMappinController
 	{
 		[Ordinal(14)] 
@@ -377,6 +376,10 @@ namespace WolvenKit.RED4.Types
 		{
 			VisionConeWidget = new();
 			PulseWidget = new();
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

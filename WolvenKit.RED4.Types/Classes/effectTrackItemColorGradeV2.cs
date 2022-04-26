@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class effectTrackItemColorGradeV2 : effectTrackItem
 	{
 		[Ordinal(3)] 
@@ -134,6 +133,10 @@ namespace WolvenKit.RED4.Types
 			Shadow = new();
 			Midtone = new();
 			Highlight = new();
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

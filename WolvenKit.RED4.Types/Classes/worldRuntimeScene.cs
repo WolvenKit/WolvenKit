@@ -1,8 +1,13 @@
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class worldRuntimeScene : RedBaseClass
 	{
+		public worldRuntimeScene()
+		{
+			PostConstruct();
+		}
+
+		partial void PostConstruct();
 	}
 }

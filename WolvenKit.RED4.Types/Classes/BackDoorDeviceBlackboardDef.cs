@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class BackDoorDeviceBlackboardDef : MasterDeviceBaseBlackboardDef
 	{
 		[Ordinal(8)] 
@@ -34,6 +33,10 @@ namespace WolvenKit.RED4.Types
 			IsInDefaultState = new();
 			ShutdownModule = new();
 			BootModule = new();
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

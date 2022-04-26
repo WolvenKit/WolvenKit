@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class DoorProximityDetector : ProximityDetector
 	{
 		[Ordinal(90)] 
@@ -36,6 +35,10 @@ namespace WolvenKit.RED4.Types
 			SurroundingAreaName = "surroundingArea";
 			TriggeredAlarmID = new();
 			BlinkInterval = 2.000000F;
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class ActivatedDeviceSetup : RedBaseClass
 	{
 		[Ordinal(0)] 
@@ -154,6 +153,10 @@ namespace WolvenKit.RED4.Types
 			ActionName = "LocKey#233";
 			VfxResource = new();
 			ThumbnailIconRecord = 133181765352;
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

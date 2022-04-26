@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class questTimePeriod_ConditionType : questITimeConditionType
 	{
 		[Ordinal(0)] 
@@ -25,6 +24,10 @@ namespace WolvenKit.RED4.Types
 		{
 			Begin = new();
 			End = new();
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

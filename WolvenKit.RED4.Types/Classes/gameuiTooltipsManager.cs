@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class gameuiTooltipsManager : inkWidgetLogicController
 	{
 		[Ordinal(1)] 
@@ -209,6 +208,10 @@ namespace WolvenKit.RED4.Types
 			EnableTransitionAnimation = true;
 			AxisDataThreshold = 0.500000F;
 			MouseDataThreshold = 7.000000F;
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

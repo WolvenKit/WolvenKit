@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class animAnimNode_Pose360 : animAnimNode_Base
 	{
 		[Ordinal(11)] 
@@ -25,6 +24,10 @@ namespace WolvenKit.RED4.Types
 		{
 			Id = 4294967295;
 			Angle = new();
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

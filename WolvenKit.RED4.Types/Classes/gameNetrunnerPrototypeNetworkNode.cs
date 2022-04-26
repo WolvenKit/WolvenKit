@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class gameNetrunnerPrototypeNetworkNode : gameObject
 	{
 		[Ordinal(35)] 
@@ -12,5 +11,12 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CInt8>();
 			set => SetPropertyValue<CInt8>(value);
 		}
+
+		public gameNetrunnerPrototypeNetworkNode()
+		{
+			PostConstruct();
+		}
+
+		partial void PostConstruct();
 	}
 }

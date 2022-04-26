@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class gameuiPanzerPlayerController : gameuiSideScrollerMiniGameDynObjectLogicAdvanced
 	{
 		[Ordinal(1)] 
@@ -64,6 +63,10 @@ namespace WolvenKit.RED4.Types
 		public gameuiPanzerPlayerController()
 		{
 			BulletSpawnOffset = new();
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

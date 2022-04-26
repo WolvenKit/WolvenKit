@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class AIUseWorkspotCommand : AIBaseUseWorkspotCommand
 	{
 		[Ordinal(11)] 
@@ -42,6 +41,10 @@ namespace WolvenKit.RED4.Types
 			WorkExcludedGestures = new();
 			InfiniteSequenceEntryId = new() { Id = 4294967295 };
 			EntryId = new() { Id = 4294967295 };
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class RequirementUserData : IScriptable
 	{
 		[Ordinal(0)] 
@@ -44,5 +43,12 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CWeakHandle<inkAsyncSpawnRequest>>();
 			set => SetPropertyValue<CWeakHandle<inkAsyncSpawnRequest>>(value);
 		}
+
+		public RequirementUserData()
+		{
+			PostConstruct();
+		}
+
+		partial void PostConstruct();
 	}
 }

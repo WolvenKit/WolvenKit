@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class RadialWheelController : gameuiHUDGameController
 	{
 		[Ordinal(9)] 
@@ -290,6 +289,10 @@ namespace WolvenKit.RED4.Types
 			RadialMode = Enums.ERadialMode.ApplyActiveSlotAndConsumables;
 			Dbg_layers = new();
 			Dbg_activeSlotLayers = new();
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

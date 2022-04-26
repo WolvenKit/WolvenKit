@@ -472,8 +472,11 @@ namespace WolvenKit.RED4.IO
 
         public virtual void Write(IRedEnum instance)
         {
-            CNameRef.Add(_writer.BaseStream.Position, instance.ToEnumString());
-            _writer.Write(GetStringIndex(instance.ToEnumString()));
+            var typeInfo = RedReflection.GetEnumTypeInfo(instance.GetInnerType());
+            var valueName = typeInfo.GetRedNameFromCSName(instance.ToEnumString());
+            
+            CNameRef.Add(_writer.BaseStream.Position, valueName);
+            _writer.Write(GetStringIndex(valueName));
         }
 
         public List<RedBaseClass> ChunkQueue = new();
@@ -564,6 +567,8 @@ namespace WolvenKit.RED4.IO
             _writer.Write((uint)instance.Count);
             foreach (var curvePoint in instance)
             {
+                _writer.Write(curvePoint.GetPoint());
+
                 var value = curvePoint.GetValue();
                 if (value is RedBaseClass cls)
                 {
@@ -573,8 +578,6 @@ namespace WolvenKit.RED4.IO
                 {
                     Write(curvePoint.GetValue());
                 }
-
-                _writer.Write(curvePoint.GetPoint());
             }
             _writer.Write((byte)instance.InterpolationType);
             _writer.Write((byte)instance.LinkType);

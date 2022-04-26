@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class gameaudioSoundComponentBase : entIPlacedComponent
 	{
 		[Ordinal(5)] 
@@ -52,5 +51,12 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CFloat>();
 			set => SetPropertyValue<CFloat>(value);
 		}
+
+		public gameaudioSoundComponentBase()
+		{
+			PostConstruct();
+		}
+
+		partial void PostConstruct();
 	}
 }

@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class TooltipSpawnedCallbackData : IScriptable
 	{
 		[Ordinal(0)] 
@@ -41,6 +40,10 @@ namespace WolvenKit.RED4.Types
 		{
 			Index = -1;
 			StyleResRef = new();
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

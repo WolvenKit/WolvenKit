@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class HUDProgressBarController : gameuiHUDGameController
 	{
 		[Ordinal(9)] 
@@ -140,6 +139,10 @@ namespace WolvenKit.RED4.Types
 			Percent = new();
 			Completed = new();
 			Failed = new();
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

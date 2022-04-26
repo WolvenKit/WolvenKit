@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class animAnimNode_Ik2Constraint : animAnimNode_OnePoseInput
 	{
 		[Ordinal(12)] 
@@ -121,6 +120,10 @@ namespace WolvenKit.RED4.Types
 			WeightFloatTrack = new();
 			WeightNode = new();
 			TwistNode = new();
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

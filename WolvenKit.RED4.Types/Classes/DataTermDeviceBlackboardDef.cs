@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class DataTermDeviceBlackboardDef : DeviceBaseBlackboardDef
 	{
 		[Ordinal(7)] 
@@ -25,6 +24,10 @@ namespace WolvenKit.RED4.Types
 		{
 			FastTravelPoint = new();
 			TriggerWorldMap = new();
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class gameprojectileSpiralParams : IScriptable
 	{
 		[Ordinal(0)] 
@@ -100,6 +99,10 @@ namespace WolvenKit.RED4.Types
 			RampUpDistanceEnd = 1.000000F;
 			RampDownDistanceStart = 1.000000F;
 			RampDownDistanceEnd = 2.000000F;
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

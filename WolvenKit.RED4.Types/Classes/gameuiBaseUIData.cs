@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class gameuiBaseUIData : RedBaseClass
 	{
 		[Ordinal(0)] 
@@ -12,5 +11,12 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CInt64>();
 			set => SetPropertyValue<CInt64>(value);
 		}
+
+		public gameuiBaseUIData()
+		{
+			PostConstruct();
+		}
+
+		partial void PostConstruct();
 	}
 }

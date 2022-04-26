@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class audioConversationMetadata : audioAudioMetadata
 	{
 		[Ordinal(1)] 
@@ -16,6 +15,10 @@ namespace WolvenKit.RED4.Types
 		public audioConversationMetadata()
 		{
 			Conversations = new();
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class characterCreationGenderBackstoryBtn : inkButtonController
 	{
 		[Ordinal(10)] 
@@ -25,6 +24,10 @@ namespace WolvenKit.RED4.Types
 		{
 			Selector = new();
 			FluffText = new();
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

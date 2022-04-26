@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class questTeleportVehicleNodeDefinition : questDisableableNodeDefinition
 	{
 		[Ordinal(2)] 
@@ -36,6 +35,10 @@ namespace WolvenKit.RED4.Types
 			EntityReference = new() { Names = new() };
 			Params = new() { DestinationOffset = new() };
 			ResetVelocities = true;
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

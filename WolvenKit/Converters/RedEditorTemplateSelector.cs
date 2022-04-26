@@ -16,7 +16,9 @@ namespace WolvenKit.Converters
         public DataTemplate RedIntegerEditor { get; set; }
         public DataTemplate RedColorEditor { get; set; }
         public DataTemplate RedCurveEditor { get; set; }
+        public DataTemplate RedCurvePointEditor { get; set; }
         public DataTemplate RedRefEditor { get; set; }
+        public DataTemplate RedNodeRefEditor { get; set; }
         public DataTemplate HandleTemplateView { get; set; }
         public DataTemplate BitfieldTemplateView { get; set; }
         public DataTemplate EnumTemplateView { get; set; }
@@ -41,6 +43,10 @@ namespace WolvenKit.Converters
                 if (vm.PropertyType == null)
                 {
                     return RedTypeViewer;
+                }
+                if (vm.PropertyType.IsAssignableTo(typeof(NodeRef)))
+                {
+                    return RedNodeRefEditor;
                 }
                 if (vm.PropertyType.IsAssignableTo(typeof(BaseStringType)))
                 {
@@ -121,9 +127,9 @@ namespace WolvenKit.Converters
                 {
                     return RedArrayEditor;
                 }
-                if (vm.PropertyType.IsAssignableTo(typeof(NodeRef)))
+                if (vm.PropertyType.IsAssignableTo(typeof(IRedCurvePoint)))
                 {
-                    return RedStringEditor;
+                    return RedCurvePointEditor;
                 }
                 if (vm.HasChildren())
                 {

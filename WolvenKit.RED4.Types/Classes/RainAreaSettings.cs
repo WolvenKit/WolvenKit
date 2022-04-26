@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class RainAreaSettings : IAreaSettings
 	{
 		[Ordinal(2)] 
@@ -187,6 +186,10 @@ namespace WolvenKit.RED4.Types
 			PuddlesAccumulationSpeed = 1.500000F;
 			MoistureEvaporationSpeed = 2.500000F;
 			PuddlesEvaporationSpeed = 0.250000F;
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

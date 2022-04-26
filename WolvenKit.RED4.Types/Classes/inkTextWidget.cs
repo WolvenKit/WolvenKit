@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class inkTextWidget : inkLeafWidget
 	{
 		[Ordinal(20)] 
@@ -174,6 +173,10 @@ namespace WolvenKit.RED4.Types
 			LineHeightPercentage = 1.000000F;
 			ScrollTextSpeed = 0.200000F;
 			ScrollDelay = 30;
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

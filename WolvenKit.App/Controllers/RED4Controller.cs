@@ -160,7 +160,7 @@ namespace WolvenKit.Functionality.Controllers
         private void InitializeRedDB()
         {
             var resourcePath = Path.GetFullPath(Path.Combine("Resources", "red.kark"));
-            var destinationPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "red.db");
+            var destinationPath = Path.Combine(ISettingsManager.GetAppData(), "red.db");
 
             var (hash, size) = CommonFunctions.HashFileSHA512(resourcePath);
 

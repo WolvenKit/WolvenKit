@@ -33,6 +33,8 @@ namespace WolvenKit.RED4.CR2W.Archive
 
         private readonly SourceList<RedFileSystemModel> _modCache;
 
+        private static readonly List<string> s_loadOrder = new() { "memoryresident", "basegame", "audio", "lang" };
+
         #endregion Fields
 
         #region Constructors
@@ -101,6 +103,42 @@ namespace WolvenKit.RED4.CR2W.Archive
         //    RebuildRootNode();
         //}
 
+        #region sorting
+
+        private static int CompareArchives(string x, string y)
+        {
+            if (ReferenceEquals(x, y))
+            {
+                return 0;
+            }
+
+            if (ReferenceEquals(null, x))
+            {
+                return -1;
+            }
+
+            if (ReferenceEquals(null, y))
+            {
+                return 1;
+            }
+
+            var baseX = Path.GetFileName(x);
+            baseX = baseX[..baseX.IndexOf("_", StringComparison.Ordinal)];
+
+            var baseY = Path.GetFileName(y);
+            baseY = baseY[..baseY.IndexOf("_", StringComparison.Ordinal)];
+
+            var retVal = s_loadOrder.IndexOf(baseX).CompareTo(s_loadOrder.IndexOf(baseY));
+            if (retVal != 0)
+            {
+                return retVal;
+            }
+
+            return string.Compare(x, y, StringComparison.Ordinal);
+        }
+
+        #endregion
+
         #region loading
 
         /// <summary>
@@ -113,7 +151,11 @@ namespace WolvenKit.RED4.CR2W.Archive
             {
                 return;
             }
-            foreach (var file in Directory.GetFiles(archivedir.FullName, "*.archive"))
+
+            var archiveFiles = Directory.GetFiles(archivedir.FullName, "*.archive").ToList();
+            archiveFiles.Sort(CompareArchives);
+
+            foreach (var file in archiveFiles)
             {
                 LoadArchive(file);
             }
@@ -143,7 +185,10 @@ namespace WolvenKit.RED4.CR2W.Archive
             var sw = new Stopwatch();
             sw.Start();
 
-            foreach (var file in Directory.GetFiles(archivedir, "*.archive"))
+            var archiveFiles = Directory.GetFiles(archivedir, "*.archive").ToList();
+            archiveFiles.Sort(CompareArchives);
+
+            foreach (var file in archiveFiles)
             {
                 LoadArchive(file);
             }
@@ -179,6 +224,13 @@ namespace WolvenKit.RED4.CR2W.Archive
             }
 
             var archive = _wolvenkitFileService.ReadRed4Archive(path, _hashService);
+
+            if (archive == null)
+            {
+                _logger.Warning($"Unable to load game archive: {path}");
+                return;
+            }
+
             Archives.AddOrUpdate(archive);
         }
 
@@ -196,6 +248,13 @@ namespace WolvenKit.RED4.CR2W.Archive
             }
 
             var archive = _wolvenkitFileService.ReadRed4Archive(filename, _hashService);
+
+            if (archive == null)
+            {
+                _logger.Warning($"Unable to load mod archive: {filename}");
+                return;
+            }
+
             ModArchives.AddOrUpdate(archive);
         }
 
@@ -243,20 +302,28 @@ namespace WolvenKit.RED4.CR2W.Archive
         /// </summary>
         /// <returns></returns>
         public override Dictionary<string, IEnumerable<FileEntry>> GetGroupedFiles() =>
-            GetItems()
-                .SelectMany(_ => _.Files.Values)
-                .GroupBy(_ => _.Extension)
-                .ToDictionary(_ => _.Key, _ => _.Select(x => x as FileEntry));
+            IsModBrowserActive
+            ? ModArchives.Items
+              .SelectMany(_ => _.Files.Values)
+              .GroupBy(_ => _.Extension)
+              .ToDictionary(_ => _.Key, _ => _.Select(x => x as FileEntry))
+            : Archives.Items
+              .SelectMany(_ => _.Files.Values)
+              .GroupBy(_ => _.Extension)
+              .ToDictionary(_ => _.Key, _ => _.Select(x => x as FileEntry));
 
         /// <summary>
         /// Get all files in all archives
         /// </summary>
         /// <returns></returns>
         public override IEnumerable<FileEntry> GetFiles() =>
-            GetItems()
+            IsModBrowserActive
+            ? ModArchives.Items
+                .SelectMany(_ => _.Files.Values)
+                .Cast<FileEntry>()
+            : Archives.Items
                 .SelectMany(_ => _.Files.Values)
                 .Cast<FileEntry>();
-
 
         /// <summary>
         /// Checks if a file with the given hash exists in the archivemanager
@@ -265,17 +332,26 @@ namespace WolvenKit.RED4.CR2W.Archive
         /// <returns></returns>
         public bool ContainsFile(ulong hash) => Lookup(hash).HasValue;
 
-        private IEnumerable<IGameArchive> GetItems() => (IsModBrowserActive ? ModArchives.Items : Archives.Items).OrderByDescending(x => x.Name);
-
         /// <summary>
         /// Look up a hash in the ArchiveManager
         /// </summary>
         /// <param name="hash"></param>
         /// <returns></returns>
-        public override Optional<IGameFile> Lookup(ulong hash) =>
-            Optional<IGameFile>.ToOptional(
-                (from item in GetItems() where item.Files.ContainsKey(hash) select item.Files[hash])
+        public override Optional<IGameFile> Lookup(ulong hash)
+        {
+            if (IsModBrowserActive)
+            {
+                return Optional<IGameFile>.ToOptional(
+                    (from item in ModArchives.Items where item.Files.ContainsKey(hash) select item.Files[hash])
                 .FirstOrDefault());
+            }
+            else
+            {
+                return Optional<IGameFile>.ToOptional(
+                    (from item in Archives.Items where item.Files.ContainsKey(hash) select item.Files[hash])
+                .FirstOrDefault());
+            }
+        }
 
         /// <summary>
         /// Retrieves a directory with the given fullpath

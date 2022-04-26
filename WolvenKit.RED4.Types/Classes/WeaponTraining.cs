@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class WeaponTraining : InteractiveDevice
 	{
 		[Ordinal(94)] 
@@ -42,6 +41,10 @@ namespace WolvenKit.RED4.Types
 			ControllerTypeName = "WeaponTrainingController";
 			WeaponTypes = new();
 			LimitOfHits = 30;
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

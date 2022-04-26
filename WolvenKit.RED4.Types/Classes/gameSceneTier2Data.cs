@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class gameSceneTier2Data : gameSceneTierData
 	{
 		[Ordinal(3)] 
@@ -16,6 +15,10 @@ namespace WolvenKit.RED4.Types
 		public gameSceneTier2Data()
 		{
 			Tier = Enums.GameplayTier.Tier2_StagedGameplay;
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

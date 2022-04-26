@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class effectTrackItemParticles : effectTrackItem
 	{
 		[Ordinal(3)] 
@@ -78,6 +77,10 @@ namespace WolvenKit.RED4.Types
 			Velocity = new();
 			SoundPositionOffset = new();
 			RenderLayerMask = Enums.RenderSceneLayerMask.Default;
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class questCharacterManagerParameters_SetMortality : questICharacterManagerParameters_NodeSubType
 	{
 		[Ordinal(0)] 
@@ -48,6 +47,10 @@ namespace WolvenKit.RED4.Types
 		public questCharacterManagerParameters_SetMortality()
 		{
 			PuppetRef = new() { Names = new() };
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

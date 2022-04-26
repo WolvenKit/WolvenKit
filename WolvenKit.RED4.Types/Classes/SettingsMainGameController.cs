@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class SettingsMainGameController : gameuiSettingsMenuGameController
 	{
 		[Ordinal(3)] 
@@ -307,6 +306,10 @@ namespace WolvenKit.RED4.Types
 			MenusList = new();
 			EventsList = new();
 			LanguageMenuIndex = 5;
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

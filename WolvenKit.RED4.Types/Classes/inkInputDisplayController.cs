@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class inkInputDisplayController : inkWidgetLogicController
 	{
 		[Ordinal(1)] 
@@ -93,6 +92,10 @@ namespace WolvenKit.RED4.Types
 			HoldIndicatorContainerRef = new();
 			GamepadHoldIndicatorLibraryRef = new() { WidgetLibrary = new() };
 			KeyboardHoldIndicatorLibraryRef = new() { WidgetLibrary = new() };
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

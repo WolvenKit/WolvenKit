@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class questSpawnerReady_ConditionType : questISpawnerConditionType
 	{
 		[Ordinal(0)] 
@@ -24,6 +23,10 @@ namespace WolvenKit.RED4.Types
 		public questSpawnerReady_ConditionType()
 		{
 			CommunityEntryNames = new();
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

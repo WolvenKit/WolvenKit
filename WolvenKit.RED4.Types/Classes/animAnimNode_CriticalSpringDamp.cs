@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class animAnimNode_CriticalSpringDamp : animAnimNode_FloatValue
 	{
 		[Ordinal(11)] 
@@ -52,6 +51,10 @@ namespace WolvenKit.RED4.Types
 			RangeMin = -180.000000F;
 			RangeMax = 180.000000F;
 			InputNode = new();
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

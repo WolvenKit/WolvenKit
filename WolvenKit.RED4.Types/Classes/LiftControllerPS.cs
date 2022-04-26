@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class LiftControllerPS : MasterControllerPS
 	{
 		[Ordinal(105)] 
@@ -155,6 +154,10 @@ namespace WolvenKit.RED4.Types
 			FloorsAuthorization = new();
 			Stations = new();
 			CachedGoToFloorAction = -1;
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

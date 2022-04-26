@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class GameplayFactCondition : GameplayConditionBase
 	{
 		[Ordinal(1)] 
@@ -41,6 +40,10 @@ namespace WolvenKit.RED4.Types
 		{
 			EntityID = new();
 			Description = "Quest progress";
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class entAnimatedComponent : entISkinableComponent
 	{
 		[Ordinal(5)] 
@@ -126,6 +125,10 @@ namespace WolvenKit.RED4.Types
 			AnimParameters = new();
 			ServerForcedLod = -1;
 			ClientForcedLod = -1;
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class StanceNPCStatePrereq : NPCStatePrereq
 	{
 		[Ordinal(3)] 
@@ -12,5 +11,12 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CEnum<gamedataNPCStanceState>>();
 			set => SetPropertyValue<CEnum<gamedataNPCStanceState>>(value);
 		}
+
+		public StanceNPCStatePrereq()
+		{
+			PostConstruct();
+		}
+
+		partial void PostConstruct();
 	}
 }

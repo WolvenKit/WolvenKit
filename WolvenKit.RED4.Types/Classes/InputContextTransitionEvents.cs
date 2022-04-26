@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class InputContextTransitionEvents : DefaultTransition
 	{
 		[Ordinal(0)] 
@@ -12,5 +11,12 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CWeakHandle<GameplaySettingsSystem>>();
 			set => SetPropertyValue<CWeakHandle<GameplaySettingsSystem>>(value);
 		}
+
+		public InputContextTransitionEvents()
+		{
+			PostConstruct();
+		}
+
+		partial void PostConstruct();
 	}
 }

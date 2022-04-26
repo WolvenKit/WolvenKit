@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class workReactionSequence : workIContainerEntry
 	{
 		[Ordinal(4)] 
@@ -84,6 +83,10 @@ namespace WolvenKit.RED4.Types
 			ForcedBlendIn = 0.200000F;
 			ReactionTypes = new();
 			FacialKeyWeight = 1.000000F;
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

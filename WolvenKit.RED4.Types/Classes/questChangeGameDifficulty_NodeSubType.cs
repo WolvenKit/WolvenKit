@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class questChangeGameDifficulty_NodeSubType : questIGameManagerNonSignalStoppingNodeType
 	{
 		[Ordinal(0)] 
@@ -12,5 +11,12 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CEnum<gameDifficulty>>();
 			set => SetPropertyValue<CEnum<gameDifficulty>>(value);
 		}
+
+		public questChangeGameDifficulty_NodeSubType()
+		{
+			PostConstruct();
+		}
+
+		partial void PostConstruct();
 	}
 }

@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class gameLootObject : gameObject
 	{
 		[Ordinal(35)] 
@@ -36,5 +35,12 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CEnum<gamedataQuality>>();
 			set => SetPropertyValue<CEnum<gamedataQuality>>(value);
 		}
+
+		public gameLootObject()
+		{
+			PostConstruct();
+		}
+
+		partial void PostConstruct();
 	}
 }

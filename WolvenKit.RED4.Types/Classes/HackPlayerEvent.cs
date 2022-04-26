@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class HackPlayerEvent : redEvent
 	{
 		[Ordinal(0)] 
@@ -50,6 +49,10 @@ namespace WolvenKit.RED4.Types
 			NetrunnerID = new();
 			TargetID = new();
 			ShowDirectionalIndicator = true;
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

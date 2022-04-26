@@ -44,19 +44,19 @@ namespace WolvenKit.RED4.Types
 
     }
 
-    public partial class worldStaticOccluderMeshNode : IRedMeshNode
-    {
-        [REDProperty(IsIgnored = true)]
-        public CName MeshAppearance
-        {
-            get
-            {
-                return "default";
-            }
-            set 
-            {
+    //public partial class worldStaticOccluderMeshNode : IRedMeshNode
+    //{
+    //    [REDProperty(IsIgnored = true)]
+    //    public CName MeshAppearance
+    //    {
+    //        get
+    //        {
+    //            return "default";
+    //        }
+    //        set 
+    //        {
 
-            }
-        }
-    }
+    //        }
+    //    }
+    //}
 }

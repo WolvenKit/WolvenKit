@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class AIbehaviorFSMTransitionDefinition : AIbehaviorBehaviorComponentDefinition
 	{
 		[Ordinal(0)] 
@@ -67,6 +66,10 @@ namespace WolvenKit.RED4.Types
 			MonitorConditions = new();
 			EventConditions = new();
 			PassiveConditions = new();
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

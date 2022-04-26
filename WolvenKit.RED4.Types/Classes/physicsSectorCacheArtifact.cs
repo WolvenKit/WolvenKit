@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class physicsSectorCacheArtifact : CResource
 	{
 		[Ordinal(1)] 
@@ -25,6 +24,10 @@ namespace WolvenKit.RED4.Types
 		{
 			SectorBounds = new() { Min = new(), Max = new() };
 			SectorGeometries = new();
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

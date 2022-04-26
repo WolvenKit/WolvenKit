@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class animAnimNode_SkAnimAdjuster : animAnimNode_SkAnim
 	{
 		[Ordinal(30)] 
@@ -50,6 +49,10 @@ namespace WolvenKit.RED4.Types
 			TargetPositionWs = new();
 			TargetDirectionWs = new();
 			InitialForwardVector = new() { Y = 1.000000F };
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

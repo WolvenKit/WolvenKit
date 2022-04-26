@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class gameCameraComponent : entBaseCameraComponent
 	{
 		[Ordinal(10)] 
@@ -226,6 +225,10 @@ namespace WolvenKit.RED4.Types
 			AnimParamWeaponVignetteCircular = "weaponVignetteCircular";
 			AnimParamWeaponBlurIntensity = "weaponBlurIntensity";
 			WeaponPlane = new();
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

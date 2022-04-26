@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class inkStyleTheme : RedBaseClass
 	{
 		[Ordinal(0)] 
@@ -20,5 +19,12 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CResourceReference<inkStyleResource>>();
 			set => SetPropertyValue<CResourceReference<inkStyleResource>>(value);
 		}
+
+		public inkStyleTheme()
+		{
+			PostConstruct();
+		}
+
+		partial void PostConstruct();
 	}
 }

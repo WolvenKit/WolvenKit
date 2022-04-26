@@ -1140,10 +1140,20 @@ namespace WolvenKit.ViewModels.Shell
         /// Saves a document and resets the dirty flag.
         /// </summary>
         /// <param name="fileToSave"></param>
-        /// <param name="saveAsFlag"></param>
-        public void Save(IDocumentViewModel fileToSave, bool saveAsFlag = false)
+        /// <param name="saveAsDialogRequested"></param>
+        public void Save(IDocumentViewModel fileToSave, bool saveAsDialogRequested = false)
         {
-            if (fileToSave.FilePath == null || saveAsFlag)
+            var needSaveAsDialog =
+                fileToSave switch {
+                    RedDocumentViewModel red =>
+                        saveAsDialogRequested ||
+                        red.FilePath == null ||
+                        !Directory.Exists(Path.GetDirectoryName(Path.Combine(_projectManager.ActiveProject.ModDirectory, red.RelativePath)))
+                    ,
+                    _ => false,
+                };
+
+            if (needSaveAsDialog)
             {
                 var dlg = new SaveFileDialog();
                 if (fileToSave.FilePath == null && fileToSave is RedDocumentViewModel red)

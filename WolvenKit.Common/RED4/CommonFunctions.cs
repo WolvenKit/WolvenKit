@@ -1,292 +1,41 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using WolvenKit.Common;
 using WolvenKit.Common.DDS;
 using WolvenKit.Common.Services;
+using WolvenKit.RED4.Archive;
 using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.CR2W
 {
     public static class CommonFunctions
     {
-        public static string[] GetResourceClassesFromExtension(ERedExtension extension)
+        public static string GetResourceClassesFromExtension(ERedExtension extension)
         {
-            try
+            foreach (var fileType in FileTypeHelper.FileTypes)
             {
-                return s_extensionsToClass[extension].Split(',');
+                if (fileType.Extension == extension)
+                {
+                    return fileType.RootType.Name;
+                }
             }
-            catch (KeyNotFoundException)
-            {
-                return null;
-            }
+
+            return null;
         }
 
         public static ERedExtension[] GetExtensionFromResourceClass(string resourceClass)
         {
-            try
+            var ext = new List<ERedExtension>();
+            foreach (var fileType in FileTypeHelper.FileTypes)
             {
-                return s_classToExtensions[resourceClass].Split(',').Select(x => Enum.Parse<ERedExtension>(x)).ToArray();
+                if (fileType.RootType.Name == resourceClass)
+                {
+                    ext.Add(fileType.Extension);
+                }
             }
-            catch (KeyNotFoundException)
-            {
-                return null;
-            }
+
+            return ext.ToArray();
         }
-
-        private static readonly Dictionary<ERedExtension, string> s_extensionsToClass = new()
-        {
-            { ERedExtension.json, "JsonResource" },
-            { ERedExtension.voicetags, "locVoiceTagListResource" },
-            { ERedExtension.scene, "scnSceneResource" },
-            { ERedExtension.audio_metadata, "audioCookedMetadataResource" },
-            { ERedExtension.xbm, "CBitmapTexture" },
-            { ERedExtension.app, "appearanceAppearanceResource" },
-            { ERedExtension.curveset, "CurveSet" },
-            { ERedExtension.behavior, "AIbehaviorResource" },
-            { ERedExtension.anims, "animAnimSet" },
-            { ERedExtension.w2mesh, "CMesh" },
-            { ERedExtension.particle, "CParticleSystem" },
-            { ERedExtension.mesh, "CMesh" },
-            { ERedExtension.csv, "C2dArray" },
-            { ERedExtension.hp, "CHairProfile" },
-            { ERedExtension.fp, "CFoliageProfile" },
-            { ERedExtension.sp, "CSkinProfile" },
-            { ERedExtension.inkfontfamily, "inkFontFamilyResource" },
-            { ERedExtension.es, "gameEffectSet" },
-            { ERedExtension.mltemplate, "Multilayer_LayerTemplate" },
-            { ERedExtension.aiarch, "AIArchetype" },
-            { ERedExtension.charcustpreset, "gameuiCharacterCustomizationUiPreset" },
-            { ERedExtension.garmentlayerparams, "garmentGarmentLayerParams" },
-            { ERedExtension.effect, "worldEffect" },
-            { ERedExtension.fnt, "rendFont" },
-            { ERedExtension.rig, "animRig" },
-            { ERedExtension.ent, "entEntityTemplate" },
-            { ERedExtension.env, "worldEnvironmentDefinition" },
-            { ERedExtension.dtex, "DynamicTexture" },
-            { ERedExtension.inkcharcustomization, "gameuiCharacterCustomizationInfoResource" },
-            { ERedExtension.inkenginesettings, "inkEngineSettingsResource" },
-            { ERedExtension.w2mi, "CMaterialInstance" },
-            { ERedExtension.inkshapecollection, "inkShapeCollectionResource" },
-            { ERedExtension.inkfullscreencomposition, "inkFullscreenCompositionResource" },
-            { ERedExtension.mlmask, "Multilayer_Mask" },
-            { ERedExtension.actionanimdb, "animActionAnimDatabase" },
-            { ERedExtension.inkanim, "inkanimAnimationLibraryResource" },
-            { ERedExtension.bk2, "" },
-            { ERedExtension.inkatlas, "inkTextureAtlas" },
-            { ERedExtension.inktypography, "inkTypographyResource" },
-            { ERedExtension.archetypes, "AIArchetypeSet" },
-            { ERedExtension.texarray, "CTextureArray" },
-            { ERedExtension.inkgamesettings, "inkGameSettingsResource" },
-            { ERedExtension.envparam, "worldEnvironmentAreaParameters" },
-            { ERedExtension.facialsetup, "animFacialSetup" },
-            { ERedExtension.xcube, "CCubeTexture" },
-            { ERedExtension.inkwidget, "inkWidgetLibraryResource" },
-            { ERedExtension.curveresset, "CurveResourceSet" },
-            { ERedExtension.mlsetup, "Multilayer_Setup" },
-            { ERedExtension.gradient, "CGradient" },
-            { ERedExtension.regionset, "CTextureRegionSet" },
-            { ERedExtension.interaction, "gameinteractionsInteractionDescriptorResource" },
-            { ERedExtension.acousticdata, "worldAcousticDataResource" },
-            { ERedExtension.envprobe, "CReflectionProbeDataResource" },
-            { ERedExtension.smartobjects, "gameSmartObjectsCompiledResource" },
-            { ERedExtension.null_areas, "worldTrafficNullAreaCollisionResource" },
-            { ERedExtension.psrep, "gamePersistentStateDataResource" },
-            { ERedExtension.streamingsector, "worldStreamingSector" },
-            { ERedExtension.spatial_representation, "worldTrafficPersistentSpatialResource" },
-            { ERedExtension.areas, "gameAreaResource" },
-            { ERedExtension.location, "gameLocationResource" },
-            { ERedExtension.lane_connections, "worldTrafficPersistentLaneConnectionsResource" },
-            { ERedExtension.streamingworld, "worldStreamingWorld" },
-            { ERedExtension.lane_polygons, "worldTrafficPersistentLanePolygonResource" },
-            { ERedExtension.devices, "gameDeviceResource" },
-            { ERedExtension.locopaths, "navLocomotionPathResource" },
-            { ERedExtension.loot, "gameLootResource" },
-            { ERedExtension.geometry_cache, "physicsGeometryCache" },
-            { ERedExtension.traffic_persistent, "worldTrafficPersistentResource" },
-            { ERedExtension.poimappins, "gamePointOfInterestMappinResource" },
-            { ERedExtension.lane_spots, "worldTrafficLanesSpotsResource" },
-            { ERedExtension.mappins, "gameMappinResource" },
-            { ERedExtension.mi, "CMaterialInstance" },
-            { ERedExtension.streamingsector_inplace, "worldStreamingSectorInplaceContent" },
-            { ERedExtension.cfoliage, "worldFoliageCompiledResource" },
-            { ERedExtension.folbrush, "worldFoliageBrush" },
-            { ERedExtension.conversations, "scnInterestingConversationsResource" },
-            { ERedExtension.physicalscene, "CPhysicsDecorationResource" },
-            { ERedExtension.smartobject, "gameSmartObjectResource" },
-            { ERedExtension.animgraph, "animAnimGraph" },
-            { ERedExtension.cminimap, "minimapEncodedShapes" },
-            { ERedExtension.cubemap, "CCubeTexture" },
-            { ERedExtension.lights, "CDistantLightsResource" },
-            { ERedExtension.terrainsetup, "CTerrainSetup" },
-            { ERedExtension.genericanimdb, "animGenericAnimDatabase" },
-            { ERedExtension.inkhud, "inkHudEntriesResource" },
-            { ERedExtension.fb2tl, "worldAutoFoliageMapping" },
-            { ERedExtension.traffic_collisions, "worldTrafficCollisionResource" },
-            { ERedExtension.gidata, "CGIDataResource" },
-            { ERedExtension.cookedanims, "animAnimSetupResource" },
-            { ERedExtension.cookedapp, "appearanceCookedAppearanceData" },
-            { ERedExtension.workspot, "workWorkspotResource" },
-            { ERedExtension.phys, "physicsSystemResource" },
-            { ERedExtension.morphtarget, "MorphTargetMesh" },
-            { ERedExtension.camcurveset, "gameCameraCurveSet" },
-            { ERedExtension.facialcustom, "animFacialCustomizationSet" },
-            { ERedExtension.hitrepresentation, "gameHitRepresentationResource" },
-            { ERedExtension.community, "communityCommunityTemplate" },
-            { ERedExtension.scenerid, "scnRidResource" },
-            { ERedExtension.questphase, "questQuestPhaseResource" },
-            { ERedExtension.gamedef, "gsmGameDefinition" },
-            { ERedExtension.quest, "questQuestResource" },
-            { ERedExtension.inkstyle, "inkStyleResource" },
-            { ERedExtension.audiovehcurveset, "vehicleAudioVehicleCurveSet" },
-            { ERedExtension.journaldesc, "gameJournalDescriptorResource" },
-            { ERedExtension.cooked_mlsetup, "CookedMultilayer_Setup" },
-            { ERedExtension.vehcurveset, "gameVehicleCurveSet" },
-            { ERedExtension.reslist, "redResourceListResource,worldWorldListResource" },
-            { ERedExtension.matlib, "CMaterialLayerLibrary" },
-            { ERedExtension.reps, "CParticleSystem" },
-            { ERedExtension.credits, "inkCreditsResource" },
-            { ERedExtension.inklayers, "inkLayersResource" },
-            { ERedExtension.inkmenu, "inkMenuResource" },
-            { ERedExtension.scenesversions, "scnScenesVersions" },
-            { ERedExtension.foldest, "worldFoliageDestructionResource" },
-            { ERedExtension.physmatlib, "physicsMaterialLibraryResource" },
-            { ERedExtension.bikecurveset, "vehicleBikeCurveSet" },
-            { ERedExtension.vehcommoncurveset, "gameVehicleCommonCurveSet" },
-            { ERedExtension.game, "gsmGameDefinition" },
-            { ERedExtension.journal, "gameJournalResource" },
-            { ERedExtension.lipmap, "animLipsyncMapping" },
-            { ERedExtension.mt, "CMaterialTemplate" },
-            { ERedExtension.ies, "CIESDataResource" },
-            { ERedExtension.remt, "CMaterialTemplate" },
-            { ERedExtension.ccstate, "gameuiCharacterCustomizationPreset" },
-            { ERedExtension.streamingblock, "worldStreamingBlock" },
-
-        };
-
-        private static readonly Dictionary<string, string> s_classToExtensions = new()
-        {
-            { "JsonResource", "json" },
-            { "locVoiceTagListResource", "voicetags" },
-            { "scnSceneResource", "scene" },
-            { "audioCookedMetadataResource", "audio_metadata" },
-            { "CBitmapTexture", "xbm" },
-            { "appearanceAppearanceResource", "app" },
-            { "CurveSet", "curveset" },
-            { "AIbehaviorResource", "behavior" },
-            { "animAnimSet", "anims" },
-            { "CMesh", "w2mesh,mesh" },
-            { "CParticleSystem", "particle,reps" },
-            { "C2dArray", "csv" },
-            { "CHairProfile", "hp" },
-            { "CFoliageProfile", "fp" },
-            { "CSkinProfile", "sp" },
-            { "inkFontFamilyResource", "inkfontfamily" },
-            { "gameEffectSet", "es" },
-            { "Multilayer_LayerTemplate", "mltemplate" },
-            { "AIArchetype", "aiarch" },
-            { "gameuiCharacterCustomizationUiPreset", "charcustpreset" },
-            { "garmentGarmentLayerParams", "garmentlayerparams" },
-            { "worldEffect", "effect" },
-            { "rendFont", "fnt" },
-            { "animRig", "rig" },
-            { "entEntityTemplate", "ent" },
-            { "worldEnvironmentDefinition", "env" },
-            { "DynamicTexture", "dtex" },
-            { "gameuiCharacterCustomizationInfoResource", "inkcharcustomization" },
-            { "CMaterialInstance", "w2mi,mi" },
-            { "inkShapeCollectionResource", "inkshapecollection" },
-            { "inkFullscreenCompositionResource", "inkfullscreencomposition" },
-            { "Multilayer_Mask", "mlmask" },
-            { "animActionAnimDatabase", "actionanimdb" },
-            { "inkanimAnimationLibraryResource", "inkanim" },
-            { "inkTextureAtlas", "inkatlas" },
-            { "inkTypographyResource", "inktypography" },
-            { "AIArchetypeSet", "archetypes" },
-            { "CTextureArray", "texarray" },
-            { "inkGameSettingsResource", "inkgamesettings" },
-            { "worldEnvironmentAreaParameters", "envparam" },
-            { "animFacialSetup", "facialsetup" },
-            { "CCubeTexture", "xcube,cubemap" },
-            { "inkWidgetLibraryResource", "inkwidget" },
-            { "CurveResourceSet", "curveresset" },
-            { "Multilayer_Setup", "mlsetup" },
-            { "CGradient", "gradient" },
-            { "CTextureRegionSet", "regionset" },
-            { "gameinteractionsInteractionDescriptorResource", "interaction" },
-            { "worldAcousticDataResource", "acousticdata" },
-            { "CReflectionProbeDataResource", "envprobe" },
-            { "gameSmartObjectsCompiledResource", "smartobjects" },
-            { "worldTrafficNullAreaCollisionResource", "null_areas" },
-            { "gamePersistentStateDataResource", "psrep" },
-            { "worldStreamingSector", "streamingsector" },
-            { "worldTrafficPersistentSpatialResource", "spatial_representation" },
-            { "gameAreaResource", "areas" },
-            { "gameLocationResource", "location" },
-            { "worldTrafficPersistentLaneConnectionsResource", "lane_connections" },
-            { "worldStreamingWorld", "streamingworld" },
-            { "worldTrafficPersistentLanePolygonResource", "lane_polygons" },
-            { "gameDeviceResource", "devices" },
-            { "navLocomotionPathResource", "locopaths" },
-            { "gameLootResource", "loot" },
-            { "physicsGeometryCache", "geometry_cache" },
-            { "worldTrafficPersistentResource", "traffic_persistent" },
-            { "gamePointOfInterestMappinResource", "poimappins" },
-            { "worldTrafficLanesSpotsResource", "lane_spots" },
-            { "gameMappinResource", "mappins" },
-            { "worldStreamingSectorInplaceContent", "streamingsector_inplace" },
-            { "worldFoliageCompiledResource", "cfoliage" },
-            { "worldFoliageBrush", "folbrush" },
-            { "scnInterestingConversationsResource", "conversations" },
-            { "CPhysicsDecorationResource", "physicalscene" },
-            { "gameSmartObjectResource", "smartobject" },
-            { "animAnimGraph", "animgraph" },
-            { "minimapEncodedShapes", "cminimap" },
-            { "CDistantLightsResource", "lights" },
-            { "CTerrainSetup", "terrainsetup" },
-            { "animGenericAnimDatabase", "genericanimdb" },
-            { "inkHudEntriesResource", "inkhud" },
-            { "worldAutoFoliageMapping", "fb2tl" },
-            { "worldTrafficCollisionResource", "traffic_collisions" },
-            { "CGIDataResource", "gidata" },
-            { "animAnimSetupResource", "cookedanims" },
-            { "appearanceCookedAppearanceData", "cookedapp" },
-            { "workWorkspotResource", "workspot" },
-            { "physicsSystemResource", "phys" },
-            { "MorphTargetMesh", "morphtarget" },
-            { "gameCameraCurveSet", "camcurveset" },
-            { "animFacialCustomizationSet", "facialcustom" },
-            { "gameHitRepresentationResource", "hitrepresentation" },
-            { "communityCommunityTemplate", "community" },
-            { "scnRidResource", "scenerid" },
-            { "questQuestPhaseResource", "questphase" },
-            { "gsmGameDefinition", "gamedef,game" },
-            { "questQuestResource", "quest" },
-            { "inkStyleResource", "inkstyle" },
-            { "vehicleAudioVehicleCurveSet", "audiovehcurveset" },
-            { "gameJournalDescriptorResource", "journaldesc" },
-            { "CookedMultilayer_Setup", "cooked_mlsetup" },
-            { "gameVehicleCurveSet", "vehcurveset" },
-            { "redResourceListResource,worldWorldListResource", "reslist" },
-            { "CMaterialLayerLibrary", "matlib" },
-            { "inkCreditsResource", "credits" },
-            { "inkLayersResource", "inklayers" },
-            { "inkMenuResource", "inkmenu" },
-            { "scnScenesVersions", "scenesversions" },
-            { "worldFoliageDestructionResource", "foldest" },
-            { "physicsMaterialLibraryResource", "physmatlib" },
-            { "vehicleBikeCurveSet", "bikecurveset" },
-            { "gameVehicleCommonCurveSet", "vehcommoncurveset" },
-            { "gameJournalResource", "journal" },
-            { "animLipsyncMapping", "lipmap" },
-            { "CMaterialTemplate", "mt,remt" },
-            { "CIESDataResource", "ies" },
-            { "gameuiCharacterCustomizationPreset", "ccstate" },
-            { "worldStreamingBlock", "streamingblock" },
-            { "inkEngineSettingsResource", "inkenginesettings" },
-
-        };
-
 
         #region Methods
 

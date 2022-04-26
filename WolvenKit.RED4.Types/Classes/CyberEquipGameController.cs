@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class CyberEquipGameController : ArmorEquipGameController
 	{
 		[Ordinal(46)] 
@@ -124,6 +123,10 @@ namespace WolvenKit.RED4.Types
 			QuickSlotTags = new();
 			WeaponsQuickSlotTags = new();
 			FragmentTags = new();
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

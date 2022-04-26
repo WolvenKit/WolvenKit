@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class SecurityAreaControllerPS : MasterControllerPS
 	{
 		[Ordinal(105)] 
@@ -120,6 +119,10 @@ namespace WolvenKit.RED4.Types
 			AreaTransitions = new();
 			RuntimeTransitions = new();
 			LastOutput = new() { LastKnownPosition = new(), ObjectOfInterest = new(), WhoBreached = new(), Reporter = new() };
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class CheckHighLevelState : AINPCHighLevelStateCheck
 	{
 		[Ordinal(1)] 
@@ -12,5 +11,12 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CEnum<gamedataNPCHighLevelState>>();
 			set => SetPropertyValue<CEnum<gamedataNPCHighLevelState>>(value);
 		}
+
+		public CheckHighLevelState()
+		{
+			PostConstruct();
+		}
+
+		partial void PostConstruct();
 	}
 }

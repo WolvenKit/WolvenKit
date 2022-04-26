@@ -1,7 +1,7 @@
 namespace WolvenKit.RED4.Types
 {
     // TODO: Check Ordinal
-    public partial class animDyngConstraintLink : IRedOverload
+    public partial class animDyngConstraintLink
     {
         [Ordinal(0)]
         [RED("isDebugEnabled")]
@@ -11,7 +11,7 @@ namespace WolvenKit.RED4.Types
             set => SetPropertyValue<CBool>(value);
         }
 
-        void IRedOverload.ConstructorOverload()
+        partial void PostConstruct()
         {
             IsDebugEnabled = true;
         }

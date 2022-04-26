@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class Vendor : IScriptable
 	{
 		[Ordinal(0)] 
@@ -99,6 +98,10 @@ namespace WolvenKit.RED4.Types
 			Stock = new();
 			PriceMultiplier = 1.000000F;
 			VendorPersistentID = new();
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

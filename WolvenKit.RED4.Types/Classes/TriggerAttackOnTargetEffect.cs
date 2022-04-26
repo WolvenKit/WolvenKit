@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class TriggerAttackOnTargetEffect : gameEffector
 	{
 		[Ordinal(0)] 
@@ -44,5 +43,12 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CHandle<gameAttack_GameEffect>>();
 			set => SetPropertyValue<CHandle<gameAttack_GameEffect>>(value);
 		}
+
+		public TriggerAttackOnTargetEffect()
+		{
+			PostConstruct();
+		}
+
+		partial void PostConstruct();
 	}
 }

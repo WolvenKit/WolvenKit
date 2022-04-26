@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class questEquipItemParams : questAICommandParams
 	{
 		[Ordinal(0)] 
@@ -123,6 +122,10 @@ namespace WolvenKit.RED4.Types
 			UnequipDurationOverride = -1.000000F;
 			IsPlayer = true;
 			UnequipTypes = Enums.gameItemUnequipContexts.AllItems;
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

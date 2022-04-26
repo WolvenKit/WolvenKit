@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class SDeviceMappinData : RedBaseClass
 	{
 		[Ordinal(0)] 
@@ -125,6 +124,10 @@ namespace WolvenKit.RED4.Types
 			Position = new();
 			CheckIfIsTarget = true;
 			Id = new();
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

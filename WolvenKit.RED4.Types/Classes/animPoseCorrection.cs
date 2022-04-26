@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class animPoseCorrection : RedBaseClass
 	{
 		[Ordinal(0)] 
@@ -43,6 +42,10 @@ namespace WolvenKit.RED4.Types
 			RbfPowValue = 20.000000F;
 			CompareBones = new(0);
 			BoneCorrections = new(0);
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

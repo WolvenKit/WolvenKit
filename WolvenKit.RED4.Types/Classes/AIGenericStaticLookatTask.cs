@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class AIGenericStaticLookatTask : AIGenericLookatTask
 	{
 		[Ordinal(0)] 
@@ -36,5 +35,12 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<Vector4>();
 			set => SetPropertyValue<Vector4>(value);
 		}
+
+		public AIGenericStaticLookatTask()
+		{
+			PostConstruct();
+		}
+
+		partial void PostConstruct();
 	}
 }

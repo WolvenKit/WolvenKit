@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class interopRTTIClassDumpEntry : RedBaseClass
 	{
 		[Ordinal(0)] 
@@ -42,6 +41,10 @@ namespace WolvenKit.RED4.Types
 			I = -1;
 			B = -1;
 			R = -1;
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

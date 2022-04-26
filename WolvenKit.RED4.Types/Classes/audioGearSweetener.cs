@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class audioGearSweetener : audioAudioMetadata
 	{
 		[Ordinal(1)] 
@@ -48,6 +47,10 @@ namespace WolvenKit.RED4.Types
 		public audioGearSweetener()
 		{
 			BurnoutFactor = 1.000000F;
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

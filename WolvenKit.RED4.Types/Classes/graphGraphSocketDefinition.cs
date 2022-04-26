@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class graphGraphSocketDefinition : graphIGraphObjectDefinition
 	{
 		[Ordinal(0)] 
@@ -20,5 +19,12 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CArray<CHandle<graphGraphConnectionDefinition>>>();
 			set => SetPropertyValue<CArray<CHandle<graphGraphConnectionDefinition>>>(value);
 		}
+
+		public graphGraphSocketDefinition()
+		{
+			PostConstruct();
+		}
+
+		partial void PostConstruct();
 	}
 }

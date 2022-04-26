@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class AddDevelopmentPoints : gamePlayerScriptableSystemRequest
 	{
 		[Ordinal(1)] 
@@ -20,5 +19,12 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CEnum<gamedataDevelopmentPointType>>();
 			set => SetPropertyValue<CEnum<gamedataDevelopmentPointType>>(value);
 		}
+
+		public AddDevelopmentPoints()
+		{
+			PostConstruct();
+		}
+
+		partial void PostConstruct();
 	}
 }

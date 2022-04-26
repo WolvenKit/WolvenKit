@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class questCharacterManagerCombat_EquipWeapon : questICharacterManagerCombat_NodeSubType
 	{
 		[Ordinal(0)] 
@@ -66,6 +65,10 @@ namespace WolvenKit.RED4.Types
 			Equip = true;
 			WeaponID = 71614763877;
 			SlotID = 118070326407;
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

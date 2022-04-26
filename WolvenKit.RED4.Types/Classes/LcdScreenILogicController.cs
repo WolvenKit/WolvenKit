@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class LcdScreenILogicController : inkWidgetLogicController
 	{
 		[Ordinal(1)] 
@@ -67,6 +66,10 @@ namespace WolvenKit.RED4.Types
 			MainDisplayWidget = new();
 			MessegeWidget = new();
 			BackgroundWidget = new();
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

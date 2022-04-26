@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class ThrowingKnifeReloadListener : gameScriptStatPoolsListener
 	{
 		[Ordinal(0)] 
@@ -12,5 +11,12 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CWeakHandle<Knife>>();
 			set => SetPropertyValue<CWeakHandle<Knife>>(value);
 		}
+
+		public ThrowingKnifeReloadListener()
+		{
+			PostConstruct();
+		}
+
+		partial void PostConstruct();
 	}
 }

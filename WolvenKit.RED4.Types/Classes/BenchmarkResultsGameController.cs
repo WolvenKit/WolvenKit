@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class BenchmarkResultsGameController : gameuiWidgetGameController
 	{
 		[Ordinal(2)] 
@@ -57,6 +56,10 @@ namespace WolvenKit.RED4.Types
 		{
 			Button = new();
 			EntriesListContainer = new();
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

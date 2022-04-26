@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class questShowBracket_NodeSubType : questITutorial_NodeSubType
 	{
 		[Ordinal(0)] 
@@ -75,6 +74,10 @@ namespace WolvenKit.RED4.Types
 			VisibleOnUILayer = Enums.inkELayerType.MAX;
 			Offset = new();
 			Size = new();
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

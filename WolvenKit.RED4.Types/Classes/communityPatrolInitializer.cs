@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class communityPatrolInitializer : communitySpawnInitializer
 	{
 		[Ordinal(0)] 
@@ -12,5 +11,12 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CHandle<AIPatrolRole>>();
 			set => SetPropertyValue<CHandle<AIPatrolRole>>(value);
 		}
+
+		public communityPatrolInitializer()
+		{
+			PostConstruct();
+		}
+
+		partial void PostConstruct();
 	}
 }

@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class AIVehicleOnSplineCommand : AIVehicleCommand
 	{
 		[Ordinal(6)] 
@@ -147,6 +146,10 @@ namespace WolvenKit.RED4.Types
 			StartFromClosest = true;
 			ForcedStartSpeed = -1.000000F;
 			StopAtPathEnd = true;
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

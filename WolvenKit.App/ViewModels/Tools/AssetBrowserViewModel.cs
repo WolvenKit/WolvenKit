@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 using DynamicData;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.FileSystemGlobbing;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
@@ -26,6 +27,7 @@ using WolvenKit.Functionality.Controllers;
 using WolvenKit.Functionality.Services;
 using WolvenKit.Models;
 using WolvenKit.Models.Docking;
+using WolvenKit.RED4.Archive;
 using WolvenKit.ViewModels.Shell;
 
 namespace WolvenKit.ViewModels.Tools
@@ -110,6 +112,7 @@ namespace WolvenKit.ViewModels.Tools
             Expand = ReactiveCommand.Create(() => { });
 
             AddSearchKeyCommand = ReactiveCommand.Create<string>(x => SearchBarText += $" {x}:");
+            FindUsesCommand = ReactiveCommand.CreateFromTask(FindUses);
             FindUsingCommand = ReactiveCommand.CreateFromTask(FindUsing);
             LoadAssetBrowserCommand = ReactiveCommand.CreateFromTask(LoadAssetBrowser);
 
@@ -207,38 +210,70 @@ namespace WolvenKit.ViewModels.Tools
             {
                 using var db = new RedDBContext();
 
-                if (RightSelectedItem is RedFileViewModel { } file)
+                if (RightSelectedItem is RedFileViewModel file)
                 {
                     var hash = file.GetGameFile().Key;
-                    var item = db.Find(typeof(RedFile), hash);
-                    if (item is RedFile redfile)
-                    {
-                        var usedby = await db.Files.AsQueryable()
-                            .Where(delegate (RedFile x)
-                            {
-                                return x.Uses != null && x.Uses.Contains(hash);
-                            })
-                            .Select(x => x.RedFileId)
-                            .ToAsyncEnumerable()
-                            .ToListAsync();
 
-                        //add all found items to
-                        _archiveManager.Archives
-                            .Connect()
-                            .TransformMany(x => x.Files.Values, y => y.Key)
-                            .Filter(x => usedby.Contains(x.Key))
-                            .Transform(x => new RedFileViewModel(x))
-                            .Bind(out var list)
-                            .Subscribe()
-                            .Dispose();
+                    var usedBy = await db.Files.Include("Uses")
+                        .Where(x => x.Uses.Any(y => y.Hash == hash))
+                        .Select(x => x.Hash)
+                        .ToAsyncEnumerable()
+                        .ToListAsync();
 
-                        RightItems.Clear();
-                        RightItems.AddRange(list);
-                    }
+                    //add all found items to
+                    _archiveManager.Archives
+                        .Connect()
+                        .TransformMany(x => x.Files.Values, y => y.Key)
+                        .Filter(x => usedBy.Contains(x.Key))
+                        .Transform(x => new RedFileViewModel(x))
+                        .Bind(out var list)
+                        .Subscribe()
+                        .Dispose();
+
+                    RightItems.Clear();
+                    RightItems.AddRange(list);
                 }
 
                 await Task.CompletedTask;
+            });
 
+            _progressService.IsIndeterminate = false;
+        }
+
+        public ReactiveCommand<Unit, Unit> FindUsesCommand { get; }
+        private async Task FindUses()
+        {
+            _progressService.IsIndeterminate = true;
+
+            await Task.Run(async () =>
+            {
+                using var db = new RedDBContext();
+
+                if (RightSelectedItem is RedFileViewModel file)
+                {
+                    var hash = file.GetGameFile().Key;
+
+                    var uses = await db.Files.Include("Archive").Include("Uses")
+                        .Where(x => x.Archive.Name == file.ArchiveName && x.Hash == hash)
+                        .Select(x => x.Uses.Select(y => y.Hash))
+                        .ToAsyncEnumerable()
+                        .ToListAsync();
+
+                    //add all found items to
+                    _archiveManager.Archives
+                        .Connect()
+                        .TransformMany(x => x.Files.Values, y => y.Key)
+                        .Filter(x => uses.Any(y => y.Contains(x.Key)))
+                        .Transform(x => new RedFileViewModel(x))
+                        .Bind(out var list)
+                        .Subscribe()
+                        .Dispose();
+
+                    RightItems.Clear();
+                    RightItems.AddRange(list);
+                }
+
+                await Task.CompletedTask;
             });
 
             _progressService.IsIndeterminate = false;

@@ -314,6 +314,30 @@ namespace WolvenKit.RED4.Archive.IO
 
                 buffer.SetBytes(newData);
             }
+
+            if (buffer.Data is worldNodeDataBuffer ssb)
+            {
+                using var ms = new MemoryStream();
+                using var transformWriter = new worldNodeDataWriter(ms);
+
+                transformWriter.WriteBuffer(ssb);
+
+                var newData = ms.ToArray();
+
+                buffer.SetBytes(newData);
+            }
+
+            if (buffer.Data is WorldTransformsBuffer wtb)
+            {
+                using var ms = new MemoryStream();
+                using var transformWriter = new WorldTransformsWriter(ms);
+
+                transformWriter.WriteBuffer(wtb);
+
+                var newData = ms.ToArray();
+
+                buffer.SetBytes(newData);
+            }
         }
 
         private CR2WBufferInfo WriteBuffer(BinaryWriter writer, RedBuffer buffer)

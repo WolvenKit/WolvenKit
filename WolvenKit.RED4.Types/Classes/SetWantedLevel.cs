@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class SetWantedLevel : gameScriptableSystemRequest
 	{
 		[Ordinal(0)] 
@@ -24,6 +23,10 @@ namespace WolvenKit.RED4.Types
 		public SetWantedLevel()
 		{
 			WantedLevel = Enums.EPreventionHeatStage.Heat_1;
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

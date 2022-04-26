@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class CBitmapTexture : ITexture
 	{
 		[Ordinal(1)] 
@@ -76,6 +75,10 @@ namespace WolvenKit.RED4.Types
 			HistBiasMulCoef = new() { X = 1.000000F, Y = 1.000000F, Z = 1.000000F };
 			HistBiasAddCoef = new();
 			RenderTextureResource = new();
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

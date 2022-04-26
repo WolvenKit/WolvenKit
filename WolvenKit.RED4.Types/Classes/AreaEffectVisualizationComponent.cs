@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class AreaEffectVisualizationComponent : gameScriptableComponent
 	{
 		[Ordinal(5)] 
@@ -59,6 +58,10 @@ namespace WolvenKit.RED4.Types
 			AvailableQuickHacks = new();
 			AvailablespiderbotActions = new();
 			ActiveEffectIndex = -1;
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

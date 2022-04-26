@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class questFollowParams : questAICommandParams
 	{
 		[Ordinal(0)] 
@@ -76,6 +75,10 @@ namespace WolvenKit.RED4.Types
 			MatchSpeed = true;
 			UseTeleport = true;
 			RepeatCommandOnInterrupt = true;
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

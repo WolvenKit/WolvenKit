@@ -5,7 +5,6 @@ using WolvenKit.RED4.Types.Exceptions;
 
 namespace WolvenKit.RED4.Types
 {
-    [REDMeta]
     public partial class RedBaseClass : IRedType, IRedCloneable, IEquatable<RedBaseClass>
     {
         public RedBaseClass()
@@ -112,7 +111,7 @@ namespace WolvenKit.RED4.Types
         protected void SetPropertyValue<T>(T value, [CallerMemberName] string callerName = "") where T : IRedType
             => InternalSetPropertyValue(callerName, value);
 
-        public bool HasProperty(string propertyName) => _properties.ContainsKey(propertyName);
+        public bool HasProperty(string propertyName) => _properties.ContainsKey(propertyName) || RedReflection.GetNativePropertyInfo(GetType(), propertyName) != null;
 
         public void SetProperty(string propertyName, IRedType value) => InternalSetPropertyValue(propertyName, value, false);
 

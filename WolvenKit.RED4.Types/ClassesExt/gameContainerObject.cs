@@ -1,6 +1,5 @@
 namespace WolvenKit.RED4.Types;
 
-[REDMeta]
 public class gameContainerObject : RedBaseClass
 {
     [RED("lootID")]

@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class CharacterCreationPersistantElements : inkWidgetLogicController
 	{
 		[Ordinal(1)] 
@@ -141,6 +140,10 @@ namespace WolvenKit.RED4.Types
 			C_fluffMaxX = 1800.000000F;
 			C_fluffMinY = 300.000000F;
 			C_fluffMaxY = 2000.000000F;
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

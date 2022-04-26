@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class CParticleModificatorOrbit : IParticleModificator
 	{
 		[Ordinal(4)] 
@@ -42,6 +41,10 @@ namespace WolvenKit.RED4.Types
 			EditorName = "Orbit";
 			EditorGroup = "Orbit";
 			IsEnabled = true;
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

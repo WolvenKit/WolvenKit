@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class scnAnimName : ISerializable
 	{
 		[Ordinal(0)] 
@@ -12,5 +11,12 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CEnum<scnAnimNameType>>();
 			set => SetPropertyValue<CEnum<scnAnimNameType>>(value);
 		}
+
+		public scnAnimName()
+		{
+			PostConstruct();
+		}
+
+		partial void PostConstruct();
 	}
 }

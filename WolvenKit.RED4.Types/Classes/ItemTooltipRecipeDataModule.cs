@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class ItemTooltipRecipeDataModule : ItemTooltipModuleController
 	{
 		[Ordinal(2)] 
@@ -79,6 +78,10 @@ namespace WolvenKit.RED4.Types
 			DamageTypesLabel = new();
 			DamageTypesWrapper = new();
 			DamageTypesContainer = new();
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

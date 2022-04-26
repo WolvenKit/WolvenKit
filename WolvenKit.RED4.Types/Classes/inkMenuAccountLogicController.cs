@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class inkMenuAccountLogicController : inkWidgetLogicController
 	{
 		[Ordinal(1)] 
@@ -42,6 +41,10 @@ namespace WolvenKit.RED4.Types
 			PlayerId = new();
 			ChangeAccountLabelTextRef = new();
 			InputDisplayControllerRef = new();
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

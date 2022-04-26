@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class InventoryTooltipData_QuickhackData : RedBaseClass
 	{
 		[Ordinal(0)] 
@@ -80,6 +79,10 @@ namespace WolvenKit.RED4.Types
 		public InventoryTooltipData_QuickhackData()
 		{
 			AttackEffects = new();
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

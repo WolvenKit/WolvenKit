@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class scnRandomizerNode : scnSceneGraphNode
 	{
 		[Ordinal(3)] 
@@ -34,6 +33,10 @@ namespace WolvenKit.RED4.Types
 			NodeId = new() { Id = 4294967295 };
 			OutputSockets = new();
 			Weights = new(32);
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class AuthorizeUser : ActionBool
 	{
 		[Ordinal(25)] 
@@ -44,6 +43,10 @@ namespace WolvenKit.RED4.Types
 			ActionWidgetPackage = new() { DependendActions = new() };
 			CanTriggerStim = true;
 			ValidPasswords = new();
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

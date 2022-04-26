@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class gameinteractionsvisLootData : RedBaseClass
 	{
 		[Ordinal(0)] 
@@ -83,6 +82,10 @@ namespace WolvenKit.RED4.Types
 			Choices = new();
 			ItemIDs = new();
 			OwnerId = new();
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

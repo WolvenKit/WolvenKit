@@ -2,7 +2,7 @@ using WolvenKit.RED4.IO;
 
 namespace WolvenKit.RED4.Types
 {
-    public partial class CMaterialInstance : IRedAppendix, IRedOverload
+    public partial class CMaterialInstance : IRedAppendix
     {
         [RED("values")]
         [REDProperty(IsIgnored = true)]
@@ -50,7 +50,7 @@ namespace WolvenKit.RED4.Types
             }
         }
 
-        void IRedOverload.ConstructorOverload()
+        partial void PostConstruct()
         {
             Values = new CArray<CKeyValuePair>();
         }

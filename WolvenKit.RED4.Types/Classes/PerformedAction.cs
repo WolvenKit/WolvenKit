@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class PerformedAction : redEvent
 	{
 		[Ordinal(0)] 
@@ -12,5 +11,12 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CHandle<gamedeviceAction>>();
 			set => SetPropertyValue<CHandle<gamedeviceAction>>(value);
 		}
+
+		public PerformedAction()
+		{
+			PostConstruct();
+		}
+
+		partial void PostConstruct();
 	}
 }

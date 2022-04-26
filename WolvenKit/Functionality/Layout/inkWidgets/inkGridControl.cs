@@ -34,12 +34,12 @@ namespace WolvenKit.Functionality.Layout.inkWidgets
                 var width = child.DesiredSize.Width + child.Margin.Left + child.Margin.Right;
                 var height = child.DesiredSize.Height + child.Margin.Top + child.Margin.Bottom;
 
-                if (GridWidget.Orientation.Value == Enums.inkEOrientation.Horizontal)
+                if (GridWidget.Orientation == Enums.inkEOrientation.Horizontal)
                 {
                     panelContentSize.Width += Math.Max(width, 0);
                     panelContentSize.Height = Math.Max(height, panelContentSize.Height);
 
-                    if (child.Widget.Layout.SizeRule.Value == Enums.inkESizeRule.Fixed)
+                    if (child.Widget.Layout.SizeRule == Enums.inkESizeRule.Fixed)
                     {
                         fixedSize += width;
                     }
@@ -53,7 +53,7 @@ namespace WolvenKit.Functionality.Layout.inkWidgets
                     panelContentSize.Width = Math.Max(width, panelContentSize.Width);
                     panelContentSize.Height += Math.Max(height, 0);
 
-                    if (child.Widget.Layout.SizeRule.Value == Enums.inkESizeRule.Fixed)
+                    if (child.Widget.Layout.SizeRule == Enums.inkESizeRule.Fixed)
                     {
                         fixedSize += height;
                     }
@@ -83,19 +83,19 @@ namespace WolvenKit.Functionality.Layout.inkWidgets
                 var width = child.DesiredSize.Width;
                 var height = child.DesiredSize.Height;
 
-                if (HAlignToFill(child) && GridWidget.Orientation.Value == Enums.inkEOrientation.Vertical)
+                if (HAlignToFill(child) && GridWidget.Orientation == Enums.inkEOrientation.Vertical)
                 {
                     width = panelDesiredSize.Width - child.Margin.Left - child.Margin.Right - ChildMargin.Left - ChildMargin.Right;
                 }
 
-                if (VAlignToFill(child) && GridWidget.Orientation.Value == Enums.inkEOrientation.Horizontal)
+                if (VAlignToFill(child) && GridWidget.Orientation == Enums.inkEOrientation.Horizontal)
                 {
                     height = panelDesiredSize.Height - child.Margin.Top - child.Margin.Bottom - ChildMargin.Top - ChildMargin.Bottom;
                 }
 
-                if (child.Widget.Layout.SizeRule.Value == Enums.inkESizeRule.Stretch)
+                if (child.Widget.Layout.SizeRule == Enums.inkESizeRule.Stretch)
                 {
-                    if (GridWidget.Orientation.Value == Enums.inkEOrientation.Horizontal)
+                    if (GridWidget.Orientation == Enums.inkEOrientation.Horizontal)
                     {
                         width = child.Widget.Layout.SizeCoefficient * (panelDesiredSize.Width - fixedSize - ChildMargin.Left - ChildMargin.Right) / totalUnits - child.Margin.Left - child.Margin.Right;
                     }
@@ -131,7 +131,7 @@ namespace WolvenKit.Functionality.Layout.inkWidgets
 
                 if (Widget is inkVerticalPanelWidget)
                 {
-                    switch (child.Widget.Layout.HAlign.Value)
+                    switch ((Enums.inkEHorizontalAlign)child.Widget.Layout.HAlign)
                     {
                         case Enums.inkEHorizontalAlign.Fill:
                             x += child.Margin.Left;
@@ -151,7 +151,7 @@ namespace WolvenKit.Functionality.Layout.inkWidgets
                 }
                 else
                 {
-                    switch (child.Widget.Layout.VAlign.Value)
+                    switch ((Enums.inkEVerticalAlign)child.Widget.Layout.VAlign)
                     {
                         case Enums.inkEVerticalAlign.Fill:
                             y += child.Margin.Top;
@@ -193,7 +193,7 @@ namespace WolvenKit.Functionality.Layout.inkWidgets
 
                 child.Arrange(new Rect(ChildMargin.Left + x, ChildMargin.Top + y, width, height));
 
-                if (GridWidget.Orientation.Value == Enums.inkEOrientation.Vertical)
+                if (GridWidget.Orientation == Enums.inkEOrientation.Vertical)
                 {
                     currentY = y + height + child.Margin.Bottom;
                 }

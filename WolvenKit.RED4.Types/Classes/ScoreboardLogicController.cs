@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class ScoreboardLogicController : inkWidgetLogicController
 	{
 		[Ordinal(1)] 
@@ -42,6 +41,10 @@ namespace WolvenKit.RED4.Types
 			NamesWidget = new();
 			ScoresWidget = new();
 			HighScores = new();
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

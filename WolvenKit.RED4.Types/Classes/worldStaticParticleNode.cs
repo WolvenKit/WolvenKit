@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class worldStaticParticleNode : worldNode
 	{
 		[Ordinal(4)] 
@@ -41,6 +40,10 @@ namespace WolvenKit.RED4.Types
 		{
 			ForcedAutoHideDistance = -1.000000F;
 			ForcedAutoHideRange = -1.000000F;
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

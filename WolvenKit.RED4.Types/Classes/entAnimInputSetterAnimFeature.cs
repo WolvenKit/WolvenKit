@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class entAnimInputSetterAnimFeature : entAnimInputSetter
 	{
 		[Ordinal(1)] 
@@ -20,5 +19,12 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CFloat>();
 			set => SetPropertyValue<CFloat>(value);
 		}
+
+		public entAnimInputSetterAnimFeature()
+		{
+			PostConstruct();
+		}
+
+		partial void PostConstruct();
 	}
 }

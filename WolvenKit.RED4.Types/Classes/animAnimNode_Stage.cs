@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class animAnimNode_Stage : animAnimNode_Container
 	{
 		[Ordinal(12)] 
@@ -18,6 +17,10 @@ namespace WolvenKit.RED4.Types
 			Id = 4294967295;
 			Nodes = new();
 			InputPoses = new();
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

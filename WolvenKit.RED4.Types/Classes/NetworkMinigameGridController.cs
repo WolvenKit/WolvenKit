@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class NetworkMinigameGridController : inkWidgetLogicController
 	{
 		[Ordinal(1)] 
@@ -145,6 +144,10 @@ namespace WolvenKit.RED4.Types
 			LastSelected = new() { Position = new(), Element = new(), Properties = new() { Traps = new() } };
 			CurrentActivePosition = new();
 			LastHighlighted = new() { Position = new(), Element = new(), Properties = new() { Traps = new() } };
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

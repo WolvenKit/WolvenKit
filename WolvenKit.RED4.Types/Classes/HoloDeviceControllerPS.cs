@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class HoloDeviceControllerPS : ScriptableDeviceComponentPS
 	{
 		[Ordinal(104)] 
@@ -17,6 +16,10 @@ namespace WolvenKit.RED4.Types
 		{
 			TweakDBRecord = 80645782896;
 			TweakDBDescriptionRecord = 130097364595;
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

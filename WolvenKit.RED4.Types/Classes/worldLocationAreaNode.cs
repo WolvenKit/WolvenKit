@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class worldLocationAreaNode : worldTriggerAreaNode
 	{
 		[Ordinal(7)] 
@@ -12,5 +11,12 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CString>();
 			set => SetPropertyValue<CString>(value);
 		}
+
+		public worldLocationAreaNode()
+		{
+			PostConstruct();
+		}
+
+		partial void PostConstruct();
 	}
 }

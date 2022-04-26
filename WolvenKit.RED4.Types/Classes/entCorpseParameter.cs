@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class entCorpseParameter : entEntityParameter
 	{
 		[Ordinal(0)] 
@@ -50,6 +49,10 @@ namespace WolvenKit.RED4.Types
 			BakedPose = new();
 			BakedBoneNames = new();
 			ForceLOD0Components = new();
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

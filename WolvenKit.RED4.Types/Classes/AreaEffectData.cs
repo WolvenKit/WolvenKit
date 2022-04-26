@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class AreaEffectData : IScriptable
 	{
 		[Ordinal(0)] 
@@ -176,6 +175,10 @@ namespace WolvenKit.RED4.Types
 			HighlightType = Enums.EFocusForcedHighlightType.INVALID;
 			OutlineType = Enums.EFocusOutlineType.DISTRACTION;
 			HighlightPriority = Enums.EPriority.High;
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }
