@@ -201,8 +201,6 @@ namespace WolvenKit.ViewModels.Shell
             {
                 Console.Write(ts);
 
-                
-
                 if (Parent.Data is IRedBufferPointer db3 && db3.GetValue().Data is worldNodeDataBuffer dict)
                 {
                     var indices = selection.Select(_ => (int)((worldNodeData)_).NodeIndex).ToList();
@@ -213,7 +211,6 @@ namespace WolvenKit.ViewModels.Shell
                            .Contains((int)((worldNodeData)_.Data).NodeIndex))
                         .Select(_ => _.Data)
                         .ToList();
-
 
                     foreach (var i in fullselection)
                     { try { dict.Remove(i); } catch { } }
@@ -231,6 +228,24 @@ namespace WolvenKit.ViewModels.Shell
                            .Contains(int.Parse(_.Name)))
                         .Select(_ => _.Data)
                         .ToList();
+
+
+
+/*
+                    var fullselectiondb = Parent.DisplayProperties
+                        .Where(_ => Enumerable.Range(start, end - start + 1)
+                           .Contains(int.Parse(_.Name)))
+                        .Select(_ => _)
+                        .ToList();
+
+
+                    var addonsn = ((worldStreamingSector)Tab.Chunks[0].Data).NodeData.GetValue();
+                    //(Parent.Data is IRedBufferPointer db3 && db3.GetValue().Data is worldNodeDataBuffer dict)
+                    if ((((worldStreamingSector)Tab.Chunks[0].Data).NodeData) is IRedBufferPointer db5
+                            && db5.GetValue().Data is worldNodeDataBuffer dictt)
+                    {
+
+                    }*/
 
                     foreach (var i in fullselection)
                     { try { db4.Remove(i); } catch { } }
@@ -251,11 +266,12 @@ namespace WolvenKit.ViewModels.Shell
                     }*/
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 Locator.Current.GetService<ILoggerService>()
                     .Error($"Something went wrong while trying to delete the selection : {ex}");
             }
+
             Tab.SelectedChunk = Parent;
         }
 
@@ -663,10 +679,14 @@ namespace WolvenKit.ViewModels.Shell
                     }
                     if (Data is worldNodeData sst && Tab.Chunks[0].Data is worldStreamingSector wss)
                     {
-                        Properties.Add(new ChunkViewModel(wss.Nodes[sst.NodeIndex], this, "Node")
+                        try
                         {
-                            IsReadOnly = isreadonly
-                        });
+                            Properties.Add(new ChunkViewModel(wss.Nodes[sst.NodeIndex], this, "Node")
+                            {
+                                IsReadOnly = isreadonly
+                            });
+                        }
+                        catch { }
                     }
                 }
             }

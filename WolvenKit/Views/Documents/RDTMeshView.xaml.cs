@@ -61,12 +61,7 @@ namespace WolvenKit.Views.Documents
             {
                 if (DataContext is RDTMeshViewModel vm)
                 {
-                    try
-                    {
-                        SetCurrentValue(ViewModelProperty, vm);
-
-                    }
-                    catch { }
+                    SetCurrentValue(ViewModelProperty, vm);
                 }
 
                 this.OneWayBind(ViewModel,

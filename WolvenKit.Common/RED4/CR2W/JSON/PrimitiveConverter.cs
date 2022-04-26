@@ -2337,7 +2337,7 @@ public class RedClassConverter : JsonConverter<RedBaseClass>, ICustomRedConverte
                             throw new JsonException();
                         }
 
-                        var valInfo = typeInfo.PropertyInfos.FirstOrDefault(x => x.RedName == key || x.Name == key);
+                        var valInfo = typeInfo.PropertyInfos.FirstOrDefault(x => x.RedName == key /*|| x.Name == key)*/);
                         if (valInfo == null)
                         {
                             throw new JsonException();
@@ -2354,7 +2354,7 @@ public class RedClassConverter : JsonConverter<RedBaseClass>, ICustomRedConverte
                         {
                             val = JsonSerializer.Deserialize(ref reader, valInfo.Type, options);
                         }
-
+/*
                         static string? FirstCharToLowerCase( string? str)
                         {
                             if (!string.IsNullOrEmpty(str) && char.IsUpper(str[0]))
@@ -2362,10 +2362,10 @@ public class RedClassConverter : JsonConverter<RedBaseClass>, ICustomRedConverte
 
                             return str;
                         }
-
+*/
                         //what's the difference between RedName and Name ?!
-                        var name = valInfo.RedName ?? FirstCharToLowerCase(valInfo.Name);
-                        if (!typeInfo.SerializeDefault && RedReflection.IsDefault(cls.GetType(), name, val))
+                        //var name = valInfo.RedName ?? FirstCharToLowerCase(valInfo.Name);
+                        if (!typeInfo.SerializeDefault && RedReflection.IsDefault(cls.GetType(), valInfo.RedName, val))
                         {
                             continue;
                         }

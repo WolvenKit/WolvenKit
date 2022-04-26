@@ -228,11 +228,9 @@ namespace WolvenKit.ViewModels.Documents
                         });
                     }
                 }
-                try
-                {
-                    EffectsManager = new DefaultEffectsManager();
-                }
-                catch { }
+
+                EffectsManager = new DefaultEffectsManager();
+
                 //EnvironmentMap = TextureModel.Create(Path.Combine(ISettingsManager.GetTemp_OBJPath(), "Cubemap_Grandcanyon.dds"));
                 Camera = new HelixToolkit.Wpf.SharpDX.PerspectiveCamera()
                 {

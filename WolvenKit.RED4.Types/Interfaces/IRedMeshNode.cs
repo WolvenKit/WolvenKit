@@ -47,6 +47,8 @@ namespace WolvenKit.RED4.Types
     public partial class worldStaticOccluderMeshNode : IRedMeshNode
     {
         [REDProperty(IsIgnored = true)]
+        [Ordinal(9)]
+        [RED("MeshAppearance")]
         public CName MeshAppearance
         {
             get
