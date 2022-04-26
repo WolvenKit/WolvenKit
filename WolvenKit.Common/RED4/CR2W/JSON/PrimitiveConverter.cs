@@ -518,8 +518,6 @@ public class DataBufferConverter : JsonConverter<DataBuffer>, ICustomRedConverte
 
         if (id != null)
         {
-            //when id is "0" TryAdd fails somehow because it found a duplicate
-            //id = (int.Parse(id) + 1).ToString();
             _referenceResolver.AddReference(id, val.Buffer);
         }
 
@@ -2354,15 +2352,15 @@ public class RedClassConverter : JsonConverter<RedBaseClass>, ICustomRedConverte
                         {
                             val = JsonSerializer.Deserialize(ref reader, valInfo.Type, options);
                         }
-/*
-                        static string? FirstCharToLowerCase( string? str)
-                        {
-                            if (!string.IsNullOrEmpty(str) && char.IsUpper(str[0]))
-                                return str.Length == 1 ? char.ToLower(str[0]).ToString() : char.ToLower(str[0]) + str[1..];
+                        /*
+                                                static string? FirstCharToLowerCase( string? str)
+                                                {
+                                                    if (!string.IsNullOrEmpty(str) && char.IsUpper(str[0]))
+                                                        return str.Length == 1 ? char.ToLower(str[0]).ToString() : char.ToLower(str[0]) + str[1..];
 
-                            return str;
-                        }
-*/
+                                                    return str;
+                                                }
+                        */
                         //what's the difference between RedName and Name ?!
                         //var name = valInfo.RedName ?? FirstCharToLowerCase(valInfo.Name);
                         if (!typeInfo.SerializeDefault && RedReflection.IsDefault(cls.GetType(), valInfo.RedName, val))
@@ -2633,13 +2631,19 @@ public class ReferenceResolver<T> where T : class
 
     public void AddReference(string referenceId, T value)
     {
-        if (!ReferenceIdToObjectMap.ContainsValue(value))
+        try
         {
-            if (!ReferenceIdToObjectMap.TryAdd(referenceId, value))
-            {
-                throw new JsonException();
-            }
+            ReferenceIdToObjectMap[referenceId] = value;
         }
+        catch (Exception ex)
+        {
+            throw new JsonException($"{ex}");
+        }
+/*
+        if (!ReferenceIdToObjectMap.TryAdd(referenceId, value))
+        {
+            throw new JsonException();
+        }*/
     }
 
     public string GetReference(T value, out bool alreadyExists)
