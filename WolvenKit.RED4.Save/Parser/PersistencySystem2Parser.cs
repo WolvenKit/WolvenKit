@@ -9,8 +9,8 @@ namespace WolvenKit.RED4.Save;
 public class PS2Entry
 {
     public ulong Id { get; set; }
-    public Type Type { get; set; }
-    public RedBaseClass Data { get; set; }
+    public Type? Type { get; set; }
+    public RedBaseClass? Data { get; set; }
 }
 
 public class PersistencySystem2 : INodeData
@@ -149,6 +149,86 @@ public class PersistencySystem2Reader : Red4Reader
     }
 }
 
+public class PersistencySystem2Writer : Red4Writer
+{
+    public PersistencySystem2Writer(Stream output) : base(output)
+    {
+    }
+
+    public PersistencySystem2Writer(Stream output, Encoding encoding) : base(output, encoding)
+    {
+    }
+
+    public PersistencySystem2Writer(Stream output, Encoding encoding, bool leaveOpen) : base(output, encoding, leaveOpen)
+    {
+    }
+
+    public override void WriteClass(RedBaseClass instance)
+    {
+        var typeInfo = RedReflection.GetTypeInfo(instance.GetType());
+        foreach (var propertyInfo in typeInfo.GetWritableProperties())
+        {
+            var value = instance.GetProperty(propertyInfo.RedName);
+            if (!typeInfo.SerializeDefault && RedReflection.IsDefault(instance.GetType(), propertyInfo, value))
+            {
+                continue;
+            }
+
+            BaseWriter.Write(FNV1A64HashAlgorithm.HashString(propertyInfo.RedName));
+            BaseWriter.Write(ClassHashHelper.GetRedTypeHash(propertyInfo));
+
+            Write(value);
+        }
+    }
+
+    public override void Write(CName val) => BaseWriter.Write((ulong)val);
+    public override void Write(NodeRef val) => BaseWriter.Write((ulong)val);
+    public override void Write(IRedEnum instance)
+    {
+        var sizeType = Enum.GetUnderlyingType(instance.GetInnerType());
+        var value = instance.GetEnumValue();
+
+        if (sizeType == typeof(sbyte))
+        {
+            BaseWriter.Write(Convert.ToSByte(value));
+        }
+        if (sizeType == typeof(byte))
+        {
+            BaseWriter.Write(Convert.ToByte(value));
+        }
+        if (sizeType == typeof(short))
+        {
+            BaseWriter.Write(Convert.ToInt16(value));
+        }
+        if (sizeType == typeof(ushort))
+        {
+            BaseWriter.Write(Convert.ToUInt16(value));
+        }
+        if (sizeType == typeof(int))
+        {
+            BaseWriter.Write(Convert.ToInt32(value));
+        }
+        if (sizeType == typeof(uint))
+        {
+            BaseWriter.Write(Convert.ToUInt32(value));
+        }
+        if (sizeType == typeof(long))
+        {
+            BaseWriter.Write(Convert.ToInt64(value));
+        }
+        if (sizeType == typeof(ulong))
+        {
+            BaseWriter.Write(Convert.ToUInt64(value));
+        }
+    }
+
+    public override void Write(IRedHandle instance)
+    {
+        BaseWriter.Write(ClassHashHelper.GetHashFromType(instance.InnerType));
+        WriteClass(instance.GetValue());
+    }
+}
+
 public class PersistencySystem2Parser : INodeParser
 {
     public static string NodeName => Constants.NodeNames.PERSISTENCY_SYSTEM_2;
@@ -194,5 +274,49 @@ public class PersistencySystem2Parser : INodeParser
         node.Value = result;
     }
 
-    public void Write(NodeWriter writer, NodeEntry node) => throw new NotImplementedException();
+    public void Write(NodeWriter writer, NodeEntry node)
+    {
+        var data = (PersistencySystem2)node.Value;
+
+        writer.Write(data.Ids.Count);
+        foreach (var id in data.Ids)
+        {
+            writer.Write(id);
+        }
+
+        writer.Write(data.Unk1);
+
+        writer.Write(data.Entries.Count);
+        foreach (var entry in data.Entries)
+        {
+            writer.Write(entry.Id);
+            if (entry.Id != 0)
+            {
+                if (entry.Type != null)
+                {
+                    writer.Write(ClassHashHelper.GetHashFromType(entry.Type));
+                }
+                else
+                {
+                    writer.Write((ulong)0);
+                }
+
+                if (entry.Data != null)
+                {
+                    using var subMemory = new MemoryStream();
+                    using var subWriter = new PersistencySystem2Writer(subMemory);
+
+                    subWriter.WriteClass(entry.Data);
+
+                    var bytes = subMemory.ToArray();
+                    writer.Write(bytes.Length);
+                    writer.Write(bytes);
+                }
+                else
+                {
+                    writer.Write(0);
+                }
+            }
+        }
+    }
 }

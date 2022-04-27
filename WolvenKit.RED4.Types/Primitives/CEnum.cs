@@ -54,7 +54,7 @@ namespace WolvenKit.RED4.Types
 
         public override string ToString() => _value.ToString();
         public string ToEnumString() => _value.ToString();
-
+        public object GetEnumValue() => _value;
 
         public override bool Equals(object obj)
         {

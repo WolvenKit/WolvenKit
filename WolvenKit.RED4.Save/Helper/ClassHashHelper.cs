@@ -6,6 +6,8 @@ namespace WolvenKit.RED4.Save;
 public class ClassHashHelper
 {
     private static readonly Dictionary<ulong, Type> _classHashes = new();
+    private static Dictionary<Type, ulong> _classHashesReverse = new();
+
     private static readonly Dictionary<ulong, RedReflection.ExtendedPropertyInfo> _propertyHashes = new();
     private static readonly Dictionary<Type, ulong> _typeHashes = new();
 
@@ -16,6 +18,8 @@ public class ClassHashHelper
         {
             _classHashes.Add(FNV1A64HashAlgorithm.HashString(redType.Key), redType.Value);
         }
+
+        _classHashesReverse = _classHashes.ToDictionary(x => x.Value, x => x.Key);
     }
 
     public static Type? GetTypeFromHash(ulong hash)
@@ -26,6 +30,16 @@ public class ClassHashHelper
         }
 
         return _classHashes[hash];
+    }
+
+    public static ulong GetHashFromType(Type type)
+    {
+        if (_classHashesReverse.Count == 0)
+        {
+            GenerateClassHashes();
+        }
+
+        return _classHashesReverse[type];
     }
 
     public static RedReflection.ExtendedPropertyInfo? GetPropertyInfo(Type clsType, ulong propHash)
