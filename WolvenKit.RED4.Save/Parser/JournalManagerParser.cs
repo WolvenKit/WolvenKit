@@ -4,7 +4,7 @@ using WolvenKit.RED4.Save.IO;
 
 namespace WolvenKit.RED4.Save
 {
-    public class JournalManager : IParseableBuffer
+    public class JournalManager : INodeData
     {
         public List<Entry1> Entries { get; set; }
         public uint Unk1_TrackedQuestPath { get; set; }

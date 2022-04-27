@@ -13,7 +13,7 @@ public class PS2Entry
     public RedBaseClass Data { get; set; }
 }
 
-public class PersistencySystem2 : IParseableBuffer
+public class PersistencySystem2 : INodeData
 {
     public List<uint> Ids { get; set; } = new();
     public uint Unk1 { get; set; }
@@ -67,7 +67,7 @@ public class PersistencySystem2Reader : Red4Reader
             }
 
             var value = Read(propertyInfo.Type, (uint)Remaining, propertyInfo.Flags);
-            propertyInfo.SetValue(instance, value);
+            instance.SetProperty(propertyInfo.RedName, value);
         }
 
         return instance;
@@ -130,6 +130,22 @@ public class PersistencySystem2Reader : Red4Reader
     {
         var clsType = ClassHashHelper.GetTypeFromHash(BaseReader.ReadUInt64())!;
         return (CHandle<T>)ReadClass(clsType, (uint)Remaining);
+    }
+
+    public override IRedArray<T> ReadCArray<T>(uint size)
+    {
+        var array = new CArray<T>();
+
+        var elementCount = _reader.ReadUInt32();
+
+        var i = 0;
+        for (; i < elementCount; i++)
+        {
+            var element = ReadArrayItem(i, typeof(T), Flags.Empty);
+            array.Add((T)element);
+        }
+
+        return array;
     }
 }
 

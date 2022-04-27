@@ -4,7 +4,7 @@ using WolvenKit.RED4.Save.IO;
 
 namespace WolvenKit.RED4.Save
 {
-    public class DynamicEntityIDSystem : IParseableBuffer
+    public class DynamicEntityIDSystem : INodeData
     {
         public uint Unknown1 { get; set; }
         public uint Unk_NextEntityHash { get; set; }

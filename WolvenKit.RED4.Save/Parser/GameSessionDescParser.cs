@@ -3,7 +3,7 @@ using WolvenKit.RED4.Types;
 
 namespace WolvenKit.RED4.Save;
 
-public class GameSessionDesc : IParseableBuffer
+public class GameSessionDesc : INodeData
 {
     public GameSessionConfig GameSessionConfig { get; set; }
 }

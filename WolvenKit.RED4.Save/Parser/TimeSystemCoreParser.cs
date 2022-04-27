@@ -4,7 +4,7 @@ using WolvenKit.RED4.Save.IO;
 
 namespace WolvenKit.RED4.Save
 {
-    public class TimeSystemCore : IParseableBuffer
+    public class TimeSystemCore : INodeData
     {
         public uint Unknown1 { get; set; }
         public RED4.Save.GameTime CurrentGameTime { get; set; }

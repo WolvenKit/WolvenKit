@@ -4,7 +4,7 @@ using WolvenKit.RED4.Types;
 
 namespace WolvenKit.RED4.Save;
 
-public class GameSessionConfig : IParseableBuffer
+public class GameSessionConfig : INodeData
 {
     public ulong Hash1 { get; set; }
     public ulong Hash2 { get; set; }

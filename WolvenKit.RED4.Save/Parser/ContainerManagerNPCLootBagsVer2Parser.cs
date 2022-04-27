@@ -4,7 +4,7 @@ using WolvenKit.RED4.Save.IO;
 
 namespace WolvenKit.RED4.Save
 {
-    public class ContainerManagerNPCLootBagsVer2 : IParseableBuffer
+    public class ContainerManagerNPCLootBagsVer2 : INodeData
     {
         public List<Entry> Entries { get; set; }
 

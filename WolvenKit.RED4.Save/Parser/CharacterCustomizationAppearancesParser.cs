@@ -5,7 +5,7 @@ using WolvenKit.RED4.Save.IO;
 
 namespace WolvenKit.RED4.Save
 {
-    public class CharacterCustomizationAppearances : IParseableBuffer
+    public class CharacterCustomizationAppearances : INodeData
     {
         private bool _dataExists;
         private uint _unknown1;

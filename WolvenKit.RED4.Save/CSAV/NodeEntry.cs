@@ -10,7 +10,7 @@ public class NodeEntry
     public string Name { get; set; }
     public int Offset { get; set; }
     public int Size { get; set; }
-    public IParseableBuffer Value { get; set; }
+    public INodeData Value { get; set; }
     public bool IsChild { get; set; }
     public bool IsFirstChild { get; set; }
     public int DataSize { get; set; }

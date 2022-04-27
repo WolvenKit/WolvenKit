@@ -4,7 +4,7 @@ using WolvenKit.RED4.Save.IO;
 
 namespace WolvenKit.RED4.Save
 {
-    public class UniqueItemCounter : IParseableBuffer
+    public class UniqueItemCounter : INodeData
     {
         public ushort Count { get; set; }
     }

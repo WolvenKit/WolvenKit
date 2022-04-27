@@ -3,7 +3,7 @@ using WolvenKit.RED4.Types;
 
 namespace WolvenKit.RED4.Save;
 
-public class DefaultRepresentation : IParseableBuffer
+public class DefaultRepresentation : INodeData
 {
     public byte[] HeaderBlob { get; set; }
     public byte[] TrailingBlob { get; set; }

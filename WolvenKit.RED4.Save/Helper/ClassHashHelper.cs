@@ -12,7 +12,7 @@ public class ClassHashHelper
 
     private static void GenerateClassHashes()
     {
-        foreach (var redType in RedReflection.GetRedTypes())
+        foreach (var redType in RedReflection.GetTypes())
         {
             _classHashes.Add(FNV1A64HashAlgorithm.HashString(redType.Key), redType.Value);
         }

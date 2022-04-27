@@ -4,7 +4,7 @@ using WolvenKit.RED4.Save.IO;
 
 namespace WolvenKit.RED4.Save
 {
-    public class ContainerManagerInjectedLoot : IParseableBuffer
+    public class ContainerManagerInjectedLoot : INodeData
     {
         public List<Entry> Entries { get; set; }
         public byte[] TrailingBytes { get; set; }

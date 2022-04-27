@@ -4,7 +4,7 @@ using WolvenKit.RED4.Save.IO;
 
 namespace WolvenKit.RED4.Save
 {
-    public class DirectorSystem : IParseableBuffer
+    public class DirectorSystem : INodeData
     {
         // counter?
         public uint Unknown1 { get; set; }

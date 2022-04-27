@@ -4,7 +4,7 @@ using WolvenKit.RED4.Save.IO;
 
 namespace WolvenKit.RED4.Save
 {
-    public class GameAudio : IParseableBuffer
+    public class GameAudio : INodeData
     {
     }
 

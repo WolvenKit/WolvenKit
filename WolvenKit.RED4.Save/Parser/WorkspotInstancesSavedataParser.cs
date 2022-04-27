@@ -4,7 +4,7 @@ using WolvenKit.RED4.Save.IO;
 
 namespace WolvenKit.RED4.Save
 {
-    public class WorkspotInstancesSavedata : IParseableBuffer
+    public class WorkspotInstancesSavedata : INodeData
     {
         public List<WorkspotInstancesSavedataEntry> Entries { get; set; }
 

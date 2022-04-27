@@ -4,7 +4,7 @@ using WolvenKit.RED4.Save.IO;
 
 namespace WolvenKit.RED4.Save
 {
-    public class QuestDebugLogManager : IParseableBuffer
+    public class QuestDebugLogManager : INodeData
     {
         public string[] Lines { get; set; }
     }

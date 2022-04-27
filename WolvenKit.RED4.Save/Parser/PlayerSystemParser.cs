@@ -4,7 +4,7 @@ using WolvenKit.RED4.Save.IO;
 
 namespace WolvenKit.RED4.Save
 {
-    public class PlayerSystem : IParseableBuffer
+    public class PlayerSystem : INodeData
     {
         public ulong Unk_Hash { get; set; }
         public TweakDBID Unk_Id { get; set; }

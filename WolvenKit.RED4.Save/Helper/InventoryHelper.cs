@@ -142,7 +142,7 @@ public class InventoryHelper
         public static bool operator !=(NextItemEntry? left, NextItemEntry? right) => !Equals(left, right);
     }
 
-    public class ItemData : NextItemEntry, IParseableBuffer
+    public class ItemData : NextItemEntry, INodeData
     {
         public ItemFlag Flags { get; set; }
         public uint CreationTime { get; set; }

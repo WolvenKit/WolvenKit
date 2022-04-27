@@ -4,7 +4,7 @@ using WolvenKit.RED4.Save.IO;
 
 namespace WolvenKit.RED4.Save
 {
-    public class MusicSystem : IParseableBuffer
+    public class MusicSystem : INodeData
     {
         public string Unknown1 { get; set; }
         public string Unknown2 { get; set; }

@@ -8,7 +8,7 @@ using WolvenKit.RED4.Types;
 
 namespace WolvenKit.RED4.Save
 {
-    public class CCoverManager : IParseableBuffer
+    public class CCoverManager : INodeData
     {
         public List<CCoverManagerEntry> Entries { get; set; }
 

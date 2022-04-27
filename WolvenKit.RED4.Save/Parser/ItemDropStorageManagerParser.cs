@@ -4,7 +4,7 @@ using WolvenKit.RED4.Save.IO;
 
 namespace WolvenKit.RED4.Save
 {
-    public class ItemDropStorageManager : IParseableBuffer
+    public class ItemDropStorageManager : INodeData
     {
         public List<ItemDropStorage> ItemDropStorages { get; set; } = new();
         public byte[] TrailingBytes { get; set; }

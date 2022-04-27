@@ -4,7 +4,7 @@ using WolvenKit.RED4.Save.IO;
 
 namespace WolvenKit.RED4.Save
 {
-    public class ItemDropStorage : IParseableBuffer
+    public class ItemDropStorage : INodeData
     {
         public string Unk1 { get; set; }
         public byte[] Unk2 { get; set; }

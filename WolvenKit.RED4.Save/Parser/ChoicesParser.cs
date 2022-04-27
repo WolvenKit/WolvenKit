@@ -8,7 +8,7 @@ using WolvenKit.RED4.Types;
 
 namespace WolvenKit.RED4.Save
 {
-    public class Choices : IParseableBuffer
+    public class Choices : INodeData
     {
         public List<Entry1> Unknown1 { get; set; }
 

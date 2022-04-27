@@ -8,7 +8,7 @@ using WolvenKit.RED4.Types;
 
 namespace WolvenKit.RED4.Save
 {
-    public class CAttitudeManager : IParseableBuffer
+    public class CAttitudeManager : INodeData
     {
         public List<CAttitudeManagerEntry> Entries { get; set; }
         public byte[] Unknown2 { get; set; }

@@ -4,7 +4,7 @@ using WolvenKit.RED4.Save.IO;
 
 namespace WolvenKit.RED4.Save
 {
-    public class Inventory : IParseableBuffer
+    public class Inventory : INodeData
     {
         public List<InventoryHelper.SubInventory> SubInventories { get; set; } = new();
     }

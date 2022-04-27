@@ -41,7 +41,7 @@ namespace WolvenKit.RED4.Save
         }
     }
 
-    public class FactsTable : IParseableBuffer
+    public class FactsTable : INodeData
     {
         private List<FactEntry> _factEntries;
 

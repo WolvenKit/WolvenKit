@@ -3,7 +3,7 @@ using WolvenKit.RED4.Types;
 
 namespace WolvenKit.RED4.Save
 {
-    public class CommunitySystem : IParseableBuffer
+    public class CommunitySystem : INodeData
     {
         public List<ulong> Unk_HashList { get; set; }
         public byte[] TrailingBytes { get; set; }
