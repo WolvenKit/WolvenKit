@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class inkanimShapeFillTransparencyInterpolator : inkanimInterpolator
 	{
 		[Ordinal(7)] 
@@ -24,6 +23,10 @@ namespace WolvenKit.RED4.Types
 		public inkanimShapeFillTransparencyInterpolator()
 		{
 			InterpolationDirection = Enums.inkanimInterpolationDirection.FromTo;
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

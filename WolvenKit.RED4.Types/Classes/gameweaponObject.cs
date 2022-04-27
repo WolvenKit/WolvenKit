@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class gameweaponObject : gameItemObject
 	{
 		[Ordinal(38)] 
@@ -176,6 +175,10 @@ namespace WolvenKit.RED4.Types
 		public gameweaponObject()
 		{
 			MaxChargeThreshold = 100.000000F;
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

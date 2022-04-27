@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class NPCInScenePrereqState : gamePrereqState
 	{
 		[Ordinal(0)] 
@@ -12,5 +11,12 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CHandle<gameScriptedPrereqSceneInspectionListenerWrapper>>();
 			set => SetPropertyValue<CHandle<gameScriptedPrereqSceneInspectionListenerWrapper>>(value);
 		}
+
+		public NPCInScenePrereqState()
+		{
+			PostConstruct();
+		}
+
+		partial void PostConstruct();
 	}
 }

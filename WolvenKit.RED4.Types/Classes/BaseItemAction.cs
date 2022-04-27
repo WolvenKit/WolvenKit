@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class BaseItemAction : BaseScriptableAction
 	{
 		[Ordinal(11)] 
@@ -28,5 +27,12 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CInt32>();
 			set => SetPropertyValue<CInt32>(value);
 		}
+
+		public BaseItemAction()
+		{
+			PostConstruct();
+		}
+
+		partial void PostConstruct();
 	}
 }

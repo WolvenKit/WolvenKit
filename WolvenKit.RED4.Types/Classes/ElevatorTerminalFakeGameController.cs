@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class ElevatorTerminalFakeGameController : DeviceInkGameControllerBase
 	{
 		[Ordinal(16)] 
@@ -16,6 +15,10 @@ namespace WolvenKit.RED4.Types
 		public ElevatorTerminalFakeGameController()
 		{
 			ElevatorTerminalWidget = new();
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

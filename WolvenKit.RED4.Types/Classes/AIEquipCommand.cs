@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class AIEquipCommand : AICommand
 	{
 		[Ordinal(4)] 
@@ -40,6 +39,10 @@ namespace WolvenKit.RED4.Types
 		public AIEquipCommand()
 		{
 			DurationOverride = -1.000000F;
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

@@ -5,9 +5,9 @@ using System.Diagnostics;
 namespace WolvenKit.RED4.Types
 {
     [RED("whandle")]
-    public class CWeakHandle<T> : IRedWeakHandle<T>, IRedNotifyObjectChanged, IEquatable<CWeakHandle<T>> where T : RedBaseClass
+    public class CWeakHandle<T> : IRedWeakHandle<T>, /*IRedNotifyObjectChanged,*/ IEquatable<CWeakHandle<T>> where T : RedBaseClass
     {
-        public event ObjectChangedEventHandler ObjectChanged;
+        //public event ObjectChangedEventHandler ObjectChanged;
 
         private T _chunk;
 
@@ -17,39 +17,41 @@ namespace WolvenKit.RED4.Types
             get => _chunk;
             set
             {
-                if (!Equals(_chunk, value))
-                {
-                    if (_chunk != null)
-                    {
-                        _chunk.ObjectChanged -= OnObjectChanged;
-                    }
+                _chunk = value;
 
-                    var oldChunk = _chunk;
-                    _chunk = value;
-
-                    if (_chunk != null)
-                    {
-                        _chunk.ObjectChanged += OnObjectChanged;
-                    }
-
-                    var args = new ObjectChangedEventArgs(ObjectChangedType.Modified, null, oldChunk, _chunk);
-                    args._callStack.Add(this);
-
-                    ObjectChanged?.Invoke(null, args);
-                }
+                //if (!Equals(_chunk, value))
+                //{
+                //    if (_chunk != null)
+                //    {
+                //        _chunk.ObjectChanged -= OnObjectChanged;
+                //    }
+                //
+                //    var oldChunk = _chunk;
+                //    _chunk = value;
+                //
+                //    if (_chunk != null)
+                //    {
+                //        _chunk.ObjectChanged += OnObjectChanged;
+                //    }
+                //
+                //    var args = new ObjectChangedEventArgs(ObjectChangedType.Modified, null, oldChunk, _chunk);
+                //    args._callStack.Add(this);
+                //
+                //    ObjectChanged?.Invoke(null, args);
+                //}
             }
         }
 
-        private void OnObjectChanged(object sender, ObjectChangedEventArgs e)
-        {
-            if (e._callStack.Contains(this))
-            {
-                return;
-            }
-            e._callStack.Add(this);
-
-            ObjectChanged?.Invoke(sender, e);
-        }
+        //private void OnObjectChanged(object sender, ObjectChangedEventArgs e)
+        //{
+        //    if (e._callStack.Contains(this))
+        //    {
+        //        return;
+        //    }
+        //    e._callStack.Add(this);
+        //
+        //    ObjectChanged?.Invoke(sender, e);
+        //}
 
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         public Type InnerType => typeof(T);
@@ -71,7 +73,7 @@ namespace WolvenKit.RED4.Types
                 return true;
             }
 
-            
+
 
             if (!Equals(Chunk, other.Chunk))
             {

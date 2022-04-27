@@ -9,12 +9,16 @@ namespace WolvenKit.Converters
     {
         public DataTemplate RedStringEditor { get; set; }
         public DataTemplate RedUlongEditor { get; set; }
+        public DataTemplate RedTweakEditor { get; set; }
         public DataTemplate RedFloatEditor { get; set; }
         public DataTemplate RedFixedPointEditor { get; set; }
+        public DataTemplate RedChunkMaskEditor { get; set; }
         public DataTemplate RedIntegerEditor { get; set; }
         public DataTemplate RedColorEditor { get; set; }
         public DataTemplate RedCurveEditor { get; set; }
+        public DataTemplate RedCurvePointEditor { get; set; }
         public DataTemplate RedRefEditor { get; set; }
+        public DataTemplate RedNodeRefEditor { get; set; }
         public DataTemplate HandleTemplateView { get; set; }
         public DataTemplate BitfieldTemplateView { get; set; }
         public DataTemplate EnumTemplateView { get; set; }
@@ -26,22 +30,42 @@ namespace WolvenKit.Converters
         public DataTemplate RedWorldPositionEditor { get; set; }
         public DataTemplate RedArrayEditor { get; set; }
         public DataTemplate RedTypeViewer { get; set; }
+        public DataTemplate NullTemplate { get; set; }
 
         public override DataTemplate SelectTemplate(object item, DependencyObject container)
         {
+            if (item == null)
+            {
+                return NullTemplate;
+            }
             if (item is ChunkViewModel vm)
             {
                 if (vm.PropertyType == null)
                 {
                     return RedTypeViewer;
                 }
-                if (vm.PropertyType.IsAssignableTo(typeof(IRedString)))
+                if (vm.PropertyType.IsAssignableTo(typeof(NodeRef)))
+                {
+                    return RedNodeRefEditor;
+                }
+                if (vm.PropertyType.IsAssignableTo(typeof(BaseStringType)))
                 {
                     return RedStringEditor;
                 }
+                if (vm.PropertyType.IsAssignableTo(typeof(TweakDBID)))
+                {
+                    return RedTweakEditor;
+                }
                 if (vm.PropertyType.IsAssignableTo(typeof(IRedPrimitive<ulong>)))
                 {
-                    return RedUlongEditor;
+                    if (vm.propertyName == "chunkMask")
+                    {
+                        return RedChunkMaskEditor;
+                    }
+                    else
+                    {
+                        return RedUlongEditor;
+                    }
                 }
                 if (vm.PropertyType.IsAssignableTo(typeof(IRedInteger)))
                 {
@@ -95,20 +119,28 @@ namespace WolvenKit.Converters
                 {
                     return RedColorEditor;
                 }
-                if (vm.PropertyType.IsAssignableTo(typeof(IRedArray)))
-                {
-                    return RedArrayEditor;
-                }
+                //if (vm.PropertyType.IsAssignableTo(typeof(IRedArray)))
+                //{
+                //    return RedArrayEditor;
+                //}
                 if (vm.PropertyType.IsAssignableTo(typeof(IRedBufferPointer)))
                 {
                     return RedArrayEditor;
                 }
-                if (vm.ResolvedData is RedBaseClass && (
-                    ((vm.Properties == null || vm.Properties.Count < 5) && vm.DetailsLevel <= 0) ||
-                    (vm.ForceLoadProperties && vm.DetailsLevel <= 2)) && (vm.Properties == null || vm.Properties.Count < 500))
+                if (vm.PropertyType.IsAssignableTo(typeof(IRedCurvePoint)))
+                {
+                    return RedCurvePointEditor;
+                }
+                if (vm.HasChildren())
                 {
                     return RedArrayEditor;
                 }
+                //if (vm.ResolvedData is RedBaseClass && (
+                //    ((vm.Properties == null || vm.Properties.Count < 5) && vm.DetailsLevel <= 0) ||
+                //    (vm.ForceLoadProperties && vm.DetailsLevel <= 2)) && (vm.Properties == null || vm.Properties.Count < 500))
+                //{
+                //    return RedArrayEditor;
+                //}
                 return RedTypeViewer;
             }
             return null;

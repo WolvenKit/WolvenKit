@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class VendingTerminal : InteractiveDevice
 	{
 		[Ordinal(94)] 
@@ -34,6 +33,10 @@ namespace WolvenKit.RED4.Types
 			ControllerTypeName = "VendingTerminalController";
 			Position = new();
 			VendingBlacklist = new();
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

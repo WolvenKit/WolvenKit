@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class AIPhaseStateEventHandlerComponent : AIRelatedComponents
 	{
 		[Ordinal(5)] 
@@ -12,5 +11,12 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CEnum<ENPCPhaseState>>();
 			set => SetPropertyValue<CEnum<ENPCPhaseState>>(value);
 		}
+
+		public AIPhaseStateEventHandlerComponent()
+		{
+			PostConstruct();
+		}
+
+		partial void PostConstruct();
 	}
 }

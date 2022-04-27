@@ -1,4 +1,3 @@
-using CP77.CR2W;
 using gpm.Installer;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -12,6 +11,7 @@ using WolvenKit.Functionality.Controllers;
 using WolvenKit.Functionality.ProjectManagement;
 using WolvenKit.Functionality.Services;
 using WolvenKit.Modkit.RED4;
+using WolvenKit.Modkit.RED4.Tools;
 using WolvenKit.RED4.CR2W;
 using WolvenKit.RED4.CR2W.Archive;
 using WolvenKit.Services;
@@ -54,6 +54,7 @@ namespace WolvenKit
 
                     // singletons
                     services.AddSingleton<IHashService, HashService>();
+                    //services.AddSingleton<ITweakDBService, TweakDBService>();
                     services.AddSingleton<IRecentlyUsedItemsService, RecentlyUsedItemsService>();
                     services.AddSingleton<IProjectManager, ProjectManager>();
                     services.AddSingleton<IWatcherService, WatcherService>();
@@ -61,11 +62,20 @@ namespace WolvenKit
                     services.AddSingleton<IArchiveManager, ArchiveManager>();
                     services.AddSingleton<MockGameController>();
 
+                    services.AddSingleton<GeometryCacheService>();
+
+                    services.AddSingleton<TweakDBService>();
+                    services.AddSingleton<ITweakDBService>(x => x.GetRequiredService<TweakDBService>());
+
+                    services.AddSingleton<LocKeyService>();
+                    services.AddSingleton<ILocKeyService>(x => x.GetRequiredService<LocKeyService>());
+
                     // red4 modding tools
                     services.AddSingleton<Red4ParserService>();
                     services.AddSingleton<MeshTools>();
 
-                    services.AddSingleton<IModTools, ModTools>();
+                    services.AddSingleton<ModTools>();
+                    services.AddSingleton<IModTools>(x => x.GetRequiredService<ModTools>());
                     services.AddSingleton<RED4Controller>();
 
                     // red3 modding tools
@@ -78,7 +88,7 @@ namespace WolvenKit
                     services.AddSingleton<IViewFor<AppViewModel>, MainView>();
 
                     services.AddGpmInstaller();
-                    services.AddSingleton<IPluginService, PLuginService>();
+                    services.AddSingleton<IPluginService, PluginService>();
 
 
                     // register views
@@ -130,6 +140,12 @@ namespace WolvenKit
 
                     services.AddSingleton<PropertiesViewModel>();
                     services.AddTransient<IViewFor<PropertiesViewModel>, PropertiesView>();
+
+                    services.AddSingleton<TweakBrowserViewModel>();
+                    services.AddTransient<IViewFor<TweakBrowserViewModel>, TweakBrowserView>();
+
+                    services.AddSingleton<LocKeyBrowserViewModel>();
+                    services.AddTransient<IViewFor<LocKeyBrowserViewModel>, LocKeyBrowserView>();
 
                     #endregion
 

@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class ItemTooltipHeaderController : ItemTooltipModuleController
 	{
 		[Ordinal(2)] 
@@ -34,6 +33,10 @@ namespace WolvenKit.RED4.Types
 			ItemNameText = new();
 			ItemRarityText = new();
 			ItemTypeText = new();
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

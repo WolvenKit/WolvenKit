@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class InteractiveAdControllerPS : ScriptableDeviceComponentPS
 	{
 		[Ordinal(104)] 
@@ -32,8 +31,12 @@ namespace WolvenKit.RED4.Types
 		public InteractiveAdControllerPS()
 		{
 			DeviceName = "LocKey#197";
-			TweakDBRecord = new() { Value = 92183574454 };
-			TweakDBDescriptionRecord = new() { Value = 143211166331 };
+			TweakDBRecord = 92183574454;
+			TweakDBDescriptionRecord = 143211166331;
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

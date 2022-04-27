@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class UI_ComDeviceDef : gamebbScriptDefinition
 	{
 		[Ordinal(0)] 
@@ -97,6 +96,10 @@ namespace WolvenKit.RED4.Types
 			PhoneStyle_Minimized = new();
 			IsDisplayingMessage = new();
 			ContactsActive = new();
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class CyberwareTooltip : AGenericTooltipController
 	{
 		[Ordinal(2)] 
@@ -33,6 +32,10 @@ namespace WolvenKit.RED4.Types
 		{
 			SlotList = new();
 			Label = new();
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

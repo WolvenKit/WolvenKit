@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class gameuiDamageIndicatorPartLogicController : gameuiBaseDirectionalIndicatorPartLogicController
 	{
 		[Ordinal(3)] 
@@ -66,6 +65,10 @@ namespace WolvenKit.RED4.Types
 			MaxDistanceForSharedIndicators = 4.000000F;
 			ArrowFrontWidget = new();
 			DamageThreshold = 100.000000F;
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

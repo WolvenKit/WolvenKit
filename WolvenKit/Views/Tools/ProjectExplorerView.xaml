@@ -52,6 +52,10 @@
                     <MenuItem Command="{Binding FastRenderCommand}" Header="Fast render" />
                 </MenuItem>
 
+                <MenuItem Command="{Binding OpenInMlsbCommand}" Header="Open in MlSetupbuilder"/>
+
+                <Separator />
+
                 <MenuItem
                     x:Name="ConvertToJsonMenuItem"
                     Command="{Binding ConvertToJsonCommand}"
@@ -120,6 +124,7 @@
                     Visibility="{Binding Path=IsEnabled, RelativeSource={RelativeSource Self}, Mode=OneWay, Converter={StaticResource Boolean2VisibilityConverter}}" />
 
                 <Separator />
+                
                 <MenuItem Command="{Binding DeleteFileCommand}" Header="Delete">
                     <MenuItem.Icon>
                         <iconPacks:PackIconForkAwesome
@@ -163,9 +168,7 @@
                 <Separator />
 
                 <MenuItem Command="{Binding CopyRelPathCommand}" Header="Copy relative path" />
-                <MenuItem Command="{Binding OpenInFileExplorerCommand}" Header="Open in File Explorer" />
-                <MenuItem
-                    Command="{Binding OpenInAssetBrowserCommand}"
+                <MenuItem Command="{Binding OpenInAssetBrowserCommand}"
                     Header="Open in Asset Browser"
                     Visibility="{Binding Path=IsEnabled, RelativeSource={RelativeSource Self}, Mode=OneWay, Converter={StaticResource Boolean2VisibilityConverter}}">
                     <MenuItem.Icon>
@@ -177,8 +180,7 @@
                             Kind="ArrowCircleRight" />
                     </MenuItem.Icon>
                 </MenuItem>
-                <MenuItem
-                    Command="{Binding ReimportFileCommand}"
+                <MenuItem Command="{Binding ReimportFileCommand}"
                     Header="Replace with original"
                     Visibility="{Binding Path=IsEnabled, RelativeSource={RelativeSource Self}, Mode=OneWay, Converter={StaticResource Boolean2VisibilityConverter}}">
                     <MenuItem.Icon>
@@ -191,12 +193,10 @@
                     </MenuItem.Icon>
                 </MenuItem>
 
-                <!--<Separator/>-->
+                <Separator />
 
-                <!--<MenuItem Click="ExpandChildren_OnClick" Header="Expand" />
-                    <MenuItem Click="CollapseChildren_OnClick" Header="Collapse" />
-                    <MenuItem Click="ExpandAll_OnClick" Header="Expand all" />
-                    <MenuItem Click="CollapseAll_OnClick" Header="Collapse all" />-->
+                <MenuItem Command="{Binding OpenInFileExplorerCommand}" Header="Open in File Explorer" />
+               
             </ContextMenu>
 
             <DataTemplate x:Key="TreeGridCellTemplate">
@@ -424,9 +424,9 @@
             AllowDrop="False"
             BorderThickness="0,0,0,1"
             CloseButtonType="Hide"
+            SelectedIndex="{Binding SelectedTabIndex}"
             ShowTabItemContextMenu="False"
             ShowTabListContextMenu="False"
-            SelectedIndex="{Binding SelectedTabIndex}"
             Style="{StaticResource WolvenKitTabControl}">
             <syncfusion:TabItemExt>
                 <syncfusion:TabItemExt.Style>
@@ -573,7 +573,10 @@
                             Height="13"
                             Kind="ArrowsCollapse" />
                     </Button>
-                    <Button Margin="3,0,0,0" ToolTip="Open Root Folder" x:Name="OpenFolderButton">
+                    <Button
+                        x:Name="OpenFolderButton"
+                        Margin="3,0,0,0"
+                        ToolTip="Open Root Folder">
                         <iconPacks:PackIconCodicons
                             Width="13"
                             Height="13"
@@ -633,6 +636,9 @@
             SelectedItems="{Binding SelectedItems}"
             SelectionMode="Extended"
             SelfRelationRootValue="0"
+            VirtualizingPanel.IsVirtualizing="True"
+            VirtualizingPanel.ScrollUnit="Pixel"
+            VirtualizingPanel.VirtualizationMode="Recycling"
             Visibility="{Binding IsFlatModeEnabled, Converter={StaticResource BoolInvertConverter}}">
 
             <syncfusion:SfTreeGrid.Resources>
@@ -691,6 +697,9 @@
             SelectedItems="{Binding SelectedItems}"
             SelectionMode="Extended"
             SelfRelationRootValue="0"
+            VirtualizingPanel.IsVirtualizing="True"
+            VirtualizingPanel.ScrollUnit="Pixel"
+            VirtualizingPanel.VirtualizationMode="Recycling"
             Visibility="{Binding IsFlatModeEnabled, Converter={StaticResource Boolean2VisibilityConverter}}">
 
             <syncfusion:SfTreeGrid.Resources>

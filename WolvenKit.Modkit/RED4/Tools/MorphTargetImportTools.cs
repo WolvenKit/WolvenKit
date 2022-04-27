@@ -2,13 +2,12 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using CP77.CR2W;
 using SharpGLTF.Schema2;
-using SharpGLTF.Validation;
 using WolvenKit.Common.FNV1A;
+using WolvenKit.Common.Model.Arguments;
 using WolvenKit.Modkit.RED4.GeneralStructs;
+using WolvenKit.Modkit.RED4.Tools;
 using WolvenKit.RED4.Archive.CR2W;
-using WolvenKit.RED4.CR2W.Archive;
 using WolvenKit.RED4.Types;
 using Vec3 = System.Numerics.Vector3;
 using Vec4 = System.Numerics.Vector4;
@@ -17,10 +16,10 @@ namespace WolvenKit.Modkit.RED4
 {
     public partial class ModTools
     {
-        public bool ImportMorphTargets(FileInfo inGltfFile, Stream intargetStream, List<Archive> archives, ValidationMode vmode = ValidationMode.Strict, Stream outStream = null)
+        public bool ImportMorphTargets(FileInfo inGltfFile, Stream intargetStream, GltfImportArgs args, Stream outStream = null)
         {
             var cr2w = _wolvenkitFileService.ReadRed4File(intargetStream);
-            if (cr2w == null || cr2w.RootChunk is not MorphTargetMesh blob || blob.Blob.Chunk is not rendRenderMorphTargetMeshBlob renderblob || renderblob.BaseBlob.Chunk is not rendRenderMeshBlob rendblob)
+            if (cr2w == null || cr2w.RootChunk is not MorphTargetMesh blob || blob.Blob.Chunk is not rendRenderMorphTargetMeshBlob renderblob || renderblob.BaseBlob.Chunk is not rendRenderMeshBlob)
             {
                 return false;
             }
@@ -29,7 +28,7 @@ namespace WolvenKit.Modkit.RED4
             {
                 var hash = FNV1A64HashAlgorithm.HashString(blob.BaseMesh.DepotPath);
                 var meshStream = new MemoryStream();
-                foreach (var ar in archives)
+                foreach (var ar in args.Archives)
                 {
                     if (ar.Files.ContainsKey(hash))
                     {
@@ -40,22 +39,63 @@ namespace WolvenKit.Modkit.RED4
                 var meshCr2w = _wolvenkitFileService.ReadRed4File(meshStream);
                 if (meshCr2w != null && meshCr2w.RootChunk is CMesh mesh && mesh.RenderResourceBlob.Chunk is rendRenderMeshBlob rendBlob)
                 {
-                    newRig = MeshTools.GetOrphanRig(rendBlob, meshCr2w);
+                    newRig = MeshTools.GetOrphanRig(mesh);
                 }
             }
 
-            var model = ModelRoot.Load(inGltfFile.FullName, new ReadSettings(vmode));
+            var model = ModelRoot.Load(inGltfFile.FullName, new ReadSettings(args.validationMode));
             VerifyGLTF(model);
 
-            var submeshCount = model.LogicalMeshes.Count;
-
-            if (submeshCount == 0)
+            var Meshes = new List<RawMeshContainer>();
+            foreach (var node in model.LogicalNodes)
             {
-                throw new Exception("No submeshes found in model file.");
+                if (node.Mesh != null)
+                {
+                    Meshes.Add(GltfMeshToRawContainer(node));
+                }
+                else if (args.FillEmpty)
+                {
+                    Meshes.Add(CreateEmptyMesh(node.Name));
+                }
+            }
+            Meshes = Meshes.OrderBy(o => o.name).ToList();
+
+            var max = new Vec3(Single.MinValue, Single.MinValue, Single.MinValue);
+            var min = new Vec3(Single.MaxValue, Single.MaxValue, Single.MaxValue);
+
+            Meshes.ForEach(p => p.positions.ToList().ForEach(q => { max.X = Math.Max(q.X, max.X); max.Y = Math.Max(q.Y, max.Y); max.Z = Math.Max(q.Z, max.Z); }));
+            Meshes.ForEach(p => p.positions.ToList().ForEach(q => { min.X = Math.Min(q.X, min.X); min.Y = Math.Min(q.Y, min.Y); min.Z = Math.Min(q.Z, min.Z); }));
+
+            blob.BoundingBox.Min = new Vector4 { X = min.X, Y = min.Y, Z = min.Z, W = 1f };
+            blob.BoundingBox.Max = new Vector4 { X = max.X, Y = max.Y, Z = max.Z, W = 1f };
+
+            var QuantScale = new Vec4((max.X - min.X) / 2, (max.Y - min.Y) / 2, (max.Z - min.Z) / 2, 0);
+            var QuantTrans = new Vec4((max.X + min.X) / 2, (max.Y + min.Y) / 2, (max.Z + min.Z) / 2, 1);
+
+
+            RawArmature oldRig = null;
+            if (model.LogicalSkins.Count > 0 && model.LogicalSkins[0].JointsCount > 0)
+            {
+                oldRig = new RawArmature
+                {
+                    BoneCount = model.LogicalSkins[0].JointsCount,
+                    Names = Enumerable.Range(0, model.LogicalSkins[0].JointsCount).Select(_=> model.LogicalSkins[0].GetJoint(_).Joint.Name).ToArray()
+                };
             }
 
-            using var diffsBuffer = new MemoryStream();
-            using var mappingsBuffer = new MemoryStream();
+            MeshTools.UpdateMeshJoints(ref Meshes, newRig, oldRig);
+
+            var expMeshes = Meshes.Select(_=> RawMeshToRE4Mesh(_, QuantScale, QuantTrans)).ToList();
+
+            var meshBuffer = new MemoryStream();
+            var meshesInfo = BufferWriter(expMeshes, ref meshBuffer);
+
+            meshesInfo.quantScale = QuantScale;
+            meshesInfo.quantTrans = QuantTrans;
+
+            var diffsBuffer = new MemoryStream();
+            var mappingsBuffer = new MemoryStream();
+            var texbuffer = new MemoryStream();
 
             // Deserialize mappings buffer
             /*if (renderblob.MappingBuffer.IsSerialized)
@@ -66,6 +106,7 @@ namespace WolvenKit.Modkit.RED4
 
             // Zero out some values that will be set later
             renderblob.Header.NumDiffs = 0;
+
             for (var i = 0; i < renderblob.Header.TargetStartsInVertexDiffs.Count; i++)
             {
                 renderblob.Header.TargetStartsInVertexDiffs[i] = 0;
@@ -79,94 +120,6 @@ namespace WolvenKit.Modkit.RED4
             SetTargets(cr2w, model, renderblob, diffsBuffer, mappingsBuffer);
             renderblob.DiffsBuffer.Buffer.SetBytes(diffsBuffer.ToArray());
             renderblob.MappingBuffer.Buffer.SetBytes(mappingsBuffer.ToArray());
-
-            VerifyGLTF(model);
-            var Meshes = new List<RawMeshContainer>();
-
-            for (var i = 0; i < model.LogicalMeshes.Count; i++)
-            {
-                Meshes.Add(GltfMeshToRawContainer(model.LogicalMeshes[i]));
-            }
-            var max = new Vec3(Meshes[0].positions[0].X, Meshes[0].positions[0].Y, Meshes[0].positions[0].Z);
-            var min = new Vec3(Meshes[0].positions[0].X, Meshes[0].positions[0].Y, Meshes[0].positions[0].Z);
-
-            for (var e = 0; e < Meshes.Count; e++)
-            {
-                for (var i = 0; i < Meshes[e].positions.Length; i++)
-                {
-                    if (Meshes[e].positions[i].X >= max.X)
-                    {
-                        max.X = Meshes[e].positions[i].X;
-                    }
-
-                    if (Meshes[e].positions[i].Y >= max.Y)
-                    {
-                        max.Y = Meshes[e].positions[i].Y;
-                    }
-
-                    if (Meshes[e].positions[i].Z >= max.Z)
-                    {
-                        max.Z = Meshes[e].positions[i].Z;
-                    }
-
-                    if (Meshes[e].positions[i].X <= min.X)
-                    {
-                        min.X = Meshes[e].positions[i].X;
-                    }
-
-                    if (Meshes[e].positions[i].Y <= min.Y)
-                    {
-                        min.Y = Meshes[e].positions[i].Y;
-                    }
-
-                    if (Meshes[e].positions[i].Z <= min.Z)
-                    {
-                        min.Z = Meshes[e].positions[i].Z;
-                    }
-                }
-            }
-
-
-            // updating bounding box
-
-            blob.BoundingBox.Min.X = min.X;
-            blob.BoundingBox.Min.Y = min.Y;
-            blob.BoundingBox.Min.Z = min.Z;
-            blob.BoundingBox.Max.X = max.X;
-            blob.BoundingBox.Max.Y = max.Y;
-            blob.BoundingBox.Max.Z = max.Z;
-
-            var QuantScale = new Vec4((max.X - min.X) / 2, (max.Y - min.Y) / 2, (max.Z - min.Z) / 2, 0);
-            var QuantTrans = new Vec4((max.X + min.X) / 2, (max.Y + min.Y) / 2, (max.Z + min.Z) / 2, 1);
-
-
-            RawArmature oldRig = null;
-            if (model.LogicalSkins.Count != 0)
-            {
-                oldRig = new RawArmature
-                {
-                    Names = new string[model.LogicalSkins[0].JointsCount]
-                };
-
-                for (var i = 0; i < model.LogicalSkins[0].JointsCount; i++)
-                {
-                    oldRig.Names[i] = model.LogicalSkins[0].GetJoint(i).Joint.Name;
-                }
-            }
-            MeshTools.UpdateMeshJoints(ref Meshes, newRig, oldRig);
-
-            var expMeshes = new List<Re4MeshContainer>();
-
-            for (var i = 0; i < Meshes.Count; i++)
-            {
-                expMeshes.Add(RawMeshToRE4Mesh(Meshes[i], QuantScale, QuantTrans));
-            }
-
-            var meshBuffer = new MemoryStream();
-            var meshesInfo = BufferWriter(expMeshes, ref meshBuffer);
-
-            meshesInfo.quantScale = QuantScale;
-            meshesInfo.quantTrans = QuantTrans;
 
             var ms = GetEditedCr2wFile(cr2w, meshesInfo, meshBuffer);
 

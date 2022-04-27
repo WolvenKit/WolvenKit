@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class TVControllerPS : MediaDeviceControllerPS
 	{
 		[Ordinal(109)] 
@@ -48,12 +47,16 @@ namespace WolvenKit.RED4.Types
 		public TVControllerPS()
 		{
 			DeviceName = "LocKey#97";
-			TweakDBRecord = new() { Value = 46674876326 };
-			TweakDBDescriptionRecord = new() { Value = 96486506199 };
+			TweakDBRecord = 46674876326;
+			TweakDBDescriptionRecord = 96486506199;
 			TvSetup = new() { Channels = new() };
 			DefaultGlitchVideoPath = new();
 			BroadcastGlitchVideoPath = new();
 			BackupCustomChannels = new();
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

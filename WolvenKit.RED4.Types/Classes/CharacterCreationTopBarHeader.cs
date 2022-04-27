@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class CharacterCreationTopBarHeader : inkButtonController
 	{
 		[Ordinal(10)] 
@@ -41,6 +40,10 @@ namespace WolvenKit.RED4.Types
 		{
 			Icon = new();
 			Label = new();
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class gamePuppetPS : gameObjectPS
 	{
 		[Ordinal(0)] 
@@ -36,5 +35,20 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CBool>();
 			set => SetPropertyValue<CBool>(value);
 		}
+
+		[Ordinal(4)] 
+		[RED("allowVehicleCollisionRagdoll")] 
+		public CBool AllowVehicleCollisionRagdoll
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		public gamePuppetPS()
+		{
+			PostConstruct();
+		}
+
+		partial void PostConstruct();
 	}
 }

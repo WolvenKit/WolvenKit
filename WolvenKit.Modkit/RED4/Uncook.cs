@@ -13,8 +13,8 @@ using WolvenKit.Common.Model.Arguments;
 using WolvenKit.Common.Services;
 using WolvenKit.Modkit.Extensions;
 using WolvenKit.Modkit.RED4.Opus;
+using WolvenKit.RED4.Archive;
 using WolvenKit.RED4.CR2W;
-using WolvenKit.RED4.CR2W.Archive;
 using WolvenKit.RED4.Types;
 
 namespace WolvenKit.Modkit.RED4
@@ -57,7 +57,7 @@ namespace WolvenKit.Modkit.RED4
                     relFileFullName += ".bin";
                 }
 
-                var mainFileInfo = new FileInfo(Path.Combine(outDir.FullName, $"{relFileFullName}"));
+                var mainFileInfo = new FileInfo(Path.Combine(outDir.FullName, $"{relFileFullName.Replace('\\', Path.DirectorySeparatorChar)}"));
 
                 // write mainFile
                 if (!WolvenTesting.IsTesting)
@@ -211,7 +211,7 @@ namespace WolvenKit.Modkit.RED4
         /// <returns></returns>
         private bool UncookBuffers(Stream cr2wStream, string relPath, GlobalExportArgs settings, DirectoryInfo rawOutDir, ECookedFileFormat[] forcebuffers = null)
         {
-            var outfile = new FileInfo(Path.Combine(rawOutDir.FullName, relPath));
+            var outfile = new FileInfo(Path.Combine(rawOutDir.FullName, $"{relPath.Replace('\\', Path.DirectorySeparatorChar)}"));
             if (outfile.Directory == null)
             {
                 return false;
@@ -270,7 +270,8 @@ namespace WolvenKit.Modkit.RED4
             //args.FileName = outFileInfo.FullName;
             switch (extAsEnum)
             {
-                //case ECookedFileFormat.ent:
+                case ECookedFileFormat.ent:
+                    return ExportEntity(cr2wStream, "default", outfile);
                 //case ECookedFileFormat.app:
                 //    return HandleEntity(cr2wStream, outfile, settings.Get<EntityExportArgs>());
                 case ECookedFileFormat.opusinfo:
@@ -305,7 +306,7 @@ namespace WolvenKit.Modkit.RED4
                 case ECookedFileFormat.anims:
                     try
                     {
-                        return ExportAnim(cr2wStream, settings.Get<AnimationExportArgs>().Archives, outfile, settings.Get<AnimationExportArgs>().IsBinary);
+                        return ExportAnim(cr2wStream, settings.Get<AnimationExportArgs>().Archives, outfile, settings.Get<AnimationExportArgs>().IsBinary, settings.Get<AnimationExportArgs>().incRootMotion);
                     }
                     catch (Exception e)
                     {
@@ -598,19 +599,7 @@ namespace WolvenKit.Modkit.RED4
             var height = blob.Header.SizeInfo.Height;
             var width = blob.Header.SizeInfo.Width;
 
-            var rawfmt = Enums.ETextureRawFormat.TRF_Invalid;
-            if (texa.Setup.RawFormat?.Value != null)
-            {
-                rawfmt = texa.Setup.RawFormat.Value.Value;
-            }
-
-            var compression = Enums.ETextureCompression.TCM_None;
-            if (texa.Setup.Compression?.Value != null)
-            {
-                compression = texa.Setup.Compression.Value.Value;
-            }
-
-            var texformat = CommonFunctions.GetDXGIFormat(compression, rawfmt, _loggerService);
+            var texformat = CommonFunctions.GetDXGIFormat(texa.Setup.Compression, texa.Setup.RawFormat, _loggerService);
 
             DDSUtils.GenerateAndWriteHeader(outstream,
                 new DDSMetadata(width, height, 1, sliceCount, mipCount,
@@ -664,20 +653,7 @@ namespace WolvenKit.Modkit.RED4
             var height = blob.Header.SizeInfo.Height;
             var width = blob.Header.SizeInfo.Width;
 
-            var compression = Enums.ETextureCompression.TCM_None;
-            var rawfmt = Enums.ETextureRawFormat.TRF_Invalid;
-
-            if (ctex.Setup.RawFormat?.Value != null)
-            {
-                rawfmt = ctex.Setup.RawFormat.Value.Value;
-            }
-
-            if (ctex.Setup.Compression?.Value != null)
-            {
-                compression = ctex.Setup.Compression.Value.Value;
-            }
-
-            var texformat = CommonFunctions.GetDXGIFormat(compression, rawfmt, _loggerService);
+            var texformat = CommonFunctions.GetDXGIFormat(ctex.Setup.Compression, ctex.Setup.RawFormat, _loggerService);
 
             DDSUtils.GenerateAndWriteHeader(outstream,
                 new DDSMetadata(width, height, 1, sliceCount, mipCount,
@@ -734,14 +710,8 @@ namespace WolvenKit.Modkit.RED4
                 {
                     blob = xbmBlob;
                 }
-                if (xbm.Setup.RawFormat?.Value != null)
-                {
-                    rawfmt = xbm.Setup.RawFormat.Value.Value;
-                }
-                if (xbm.Setup.Compression?.Value != null)
-                {
-                    compression = xbm.Setup.Compression.Value.Value;
-                }
+                rawfmt = xbm.Setup.RawFormat;
+                compression = xbm.Setup.Compression;
             }
 
             if (cls is CMesh mesh)

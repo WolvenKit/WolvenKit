@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class entdismembermentDebrisResourceItem : RedBaseClass
 	{
 		[Ordinal(0)] 
@@ -20,5 +19,12 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CResourceReference<CMesh>>();
 			set => SetPropertyValue<CResourceReference<CMesh>>(value);
 		}
+
+		public entdismembermentDebrisResourceItem()
+		{
+			PostConstruct();
+		}
+
+		partial void PostConstruct();
 	}
 }

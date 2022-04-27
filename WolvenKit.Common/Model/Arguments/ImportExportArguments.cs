@@ -4,7 +4,7 @@ using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using ReactiveUI;
 using SharpGLTF.Validation;
-using WolvenKit.RED4.CR2W.Archive;
+using WolvenKit.RED4.Archive;
 using WolvenKit.RED4.Types;
 
 namespace WolvenKit.Common.Model.Arguments
@@ -180,7 +180,7 @@ namespace WolvenKit.Common.Model.Arguments
     {
         [Category("Default Import Settings")]
         [Display(Name = "Use existing file")]
-        [Description("If checked the file will replace the original file in the archives.")]
+        [Description("If checked the corresponding archive file will be used for importing.")]
         public bool Keep { get; set; } = true;
     }
 
@@ -254,7 +254,7 @@ namespace WolvenKit.Common.Model.Arguments
     {
         [Category("Import Settings")]
         [Display(Name = "Import Material.Json Only")]
-        [Description("If checked only the Materials from Material.Json will be imported to the mesh, geometry from GLTF/GLB will not be imported!, uncheck imports Both!")]
+        [Description("If checked only materials will be updated, mesh geometry will remain unchanged.")]
         public bool importMaterialOnly { get; set; } = false;
 
         /// <summary>
@@ -262,15 +262,22 @@ namespace WolvenKit.Common.Model.Arguments
         /// </summary>
         [Category("Import Settings")]
         [Display(Name = "GLTF Validation Checks")]
-        [Description("The type of validation check for your glb/gltf file")]
+        [Description("Optional validation check for glb/glTF files")]
         public ValidationMode validationMode { get; set; } = ValidationMode.Strict;
         /// <summary>
         /// RedEngine4 Cooked File type for the selected GLB/GLTF.
         /// </summary>
         [Category("Import Settings")]
         [Display(Name = "Import As RedEngine File Format")]
-        [Description("The RedEngine file format to import as for your glb/gltf file")]
+        [Description("The REDengine file format to import as for glb/glTF files")]
         public GltfImportAsFormat importFormat { get; set; } = GltfImportAsFormat.Mesh;
+        /// <summary>
+        /// Fills empty sub meshes with dummy data
+        /// </summary>
+        [Category("Import Settings")]
+        [Display(Name = "Fill empty sub meshes")]
+        [Description("Fills empty sub meshes with dummy data")]
+        public bool FillEmpty { get; set; } = false;
         /// <summary>
         /// List of Archives for Morphtarget Import.
         /// </summary>
@@ -285,7 +292,8 @@ namespace WolvenKit.Common.Model.Arguments
     public enum GltfImportAsFormat
     {
         Mesh,
-        Morphtarget
+        Morphtarget,
+        Anims
     }
     public class MlmaskImportArgs : ImportArgs
     {
@@ -293,7 +301,7 @@ namespace WolvenKit.Common.Model.Arguments
         /// String Override to display info in datagrid.
         /// </summary>
         /// <returns>String</returns>
-        public override string ToString() => "Masklist(txt file containing mask image paths) TO--> Mlmask";
+        public override string ToString() => "MLMASK";
     }
 
     #endregion import args
@@ -311,7 +319,7 @@ namespace WolvenKit.Common.Model.Arguments
     {
         [Category("Export Settings")]
         [Display(Name = "Use Modified OpusInfo")]
-        [Description("FALSE is when u want to grab the sounds from the original opusinfo and paks that are present in the archives. TRUE when u already have a modded opusinfo and paks in the mod folder")]
+        [Description("If checked modified OpusInfo and paks within the Mod Project are used. If unchecked the original OpusInfo and paks will be exported.")]
         public bool UseMod { get; set; }
 
         [Category("Export Settings")]
@@ -385,6 +393,9 @@ namespace WolvenKit.Common.Model.Arguments
         [Category("Export Type")]
         [Display(Name = "MLmask Export Type")]
         public EMlmaskUncookExtension UncookExtension { get; set; } = EMlmaskUncookExtension.png;
+
+        [Browsable(false)]
+        public bool AsList { get; set; } = true;
 
         /// <summary>
         /// String Override to display info in datagrid.
@@ -503,7 +514,7 @@ namespace WolvenKit.Common.Model.Arguments
         /// </summary>
         [Category("WithMaterials Settings")]
         [Display(Name = "Select Texture Format")]
-        [Description("Select the preferred texture format to be exported within the Material Repository.")]
+        [Description("Select the preferred texture format to be exported within the Depot.")]
         public EUncookExtension MaterialUncookExtension { get; set; } = EUncookExtension.png;
 
         /// <summary>
@@ -541,7 +552,7 @@ namespace WolvenKit.Common.Model.Arguments
         /// </summary>
         [Category("Export Type")]
         [Display(Name = "Wem Export Type")]
-        [Description("Set the audioformat you want your wem file to be converted to.")]
+        [Description("Select audio output format")]
         public WemExportTypes wemExportType { get; set; } = WemExportTypes.Mp3;
 
         [Browsable(false)]
@@ -561,8 +572,16 @@ namespace WolvenKit.Common.Model.Arguments
         /// </summary>
         [Category("Export Settings")]
         [Display(Name = "Is Binary")]
-        [Description("If checked the mesh will be exported as GLB, if unchecked as GLTF")]
+        [Description("If checked the anims will be exported as GLB, if unchecked as GLTF")]
         public bool IsBinary { get; set; } = true;
+
+        /// <summary>
+        /// Root Motion Export Bool
+        /// </summary>
+        [Category("Export Settings")]
+        [Display(Name = "Include Root Motion")]
+        [Description("If checked the anims will have the root translations")]
+        public bool incRootMotion { get; set; } = false;
 
         /// <summary>
         /// List of Archives for Animations Export.

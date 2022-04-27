@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class gameuiHoldIndicatorGameController : gameuiWidgetGameController
 	{
 		[Ordinal(2)] 
@@ -43,6 +42,10 @@ namespace WolvenKit.RED4.Types
 			HoldStart = new();
 			HoldFinish = new();
 			HoldStop = new();
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

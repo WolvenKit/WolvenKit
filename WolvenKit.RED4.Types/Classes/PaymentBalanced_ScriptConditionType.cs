@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class PaymentBalanced_ScriptConditionType : PaymentConditionTypeBase
 	{
 		[Ordinal(2)] 
@@ -20,5 +19,12 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CEnum<EGameplayChallengeLevel>>();
 			set => SetPropertyValue<CEnum<EGameplayChallengeLevel>>(value);
 		}
+
+		public PaymentBalanced_ScriptConditionType()
+		{
+			PostConstruct();
+		}
+
+		partial void PostConstruct();
 	}
 }

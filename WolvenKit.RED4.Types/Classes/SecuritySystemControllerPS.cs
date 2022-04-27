@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class SecuritySystemControllerPS : DeviceSystemBaseControllerPS
 	{
 		[Ordinal(106)] 
@@ -241,8 +240,8 @@ namespace WolvenKit.RED4.Types
 		{
 			RevealDevicesGrid = false;
 			DeviceName = "LocKey#50988";
-			TweakDBRecord = new() { Value = 96691730947 };
-			TweakDBDescriptionRecord = new() { Value = 147752589635 };
+			TweakDBRecord = 96691730947;
+			TweakDBDescriptionRecord = 147752589635;
 			Level_0 = new();
 			Level_1 = new();
 			Level_2 = new();
@@ -259,6 +258,10 @@ namespace WolvenKit.RED4.Types
 			BlacklistDelayID = new();
 			MaxGlobalWarningsCount = 4;
 			DeescalationEventID = new();
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

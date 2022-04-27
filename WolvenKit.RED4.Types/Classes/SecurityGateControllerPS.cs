@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class SecurityGateControllerPS : MasterControllerPS
 	{
 		[Ordinal(105)] 
@@ -43,6 +42,10 @@ namespace WolvenKit.RED4.Types
 			SecurityGateDetectionProperties = new() { PerformWeaponCheck = true, PerformCheckOnPlayerOnly = true };
 			SecurityGateResponseProperties = new() { SecurityGateResponseType = Enums.ESecurityGateResponseType.SEC_SYS_REPRIMAND, SecurityLevelAccessGranted = Enums.ESecurityAccessLevel.ESL_3 };
 			TrespassersDataList = new();
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

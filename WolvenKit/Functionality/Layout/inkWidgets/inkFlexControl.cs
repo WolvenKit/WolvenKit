@@ -108,7 +108,7 @@ namespace WolvenKit.Functionality.Layout.inkWidgets
 
                 double x = 0, y = 0;
 
-                switch (child.Widget.Layout.HAlign.Value)
+                switch ((Enums.inkEHorizontalAlign)child.Widget.Layout.HAlign)
                 {
                     case Enums.inkEHorizontalAlign.Fill:
                         x = child.Margin.Left;
@@ -124,7 +124,7 @@ namespace WolvenKit.Functionality.Layout.inkWidgets
                         break;
                 }
 
-                switch (child.Widget.Layout.VAlign.Value)
+                switch ((Enums.inkEVerticalAlign)child.Widget.Layout.VAlign)
                 {
                     case Enums.inkEVerticalAlign.Fill:
                         y = child.Margin.Top;

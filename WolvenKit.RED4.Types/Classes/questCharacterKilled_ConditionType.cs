@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class questCharacterKilled_ConditionType : questICharacterConditionType
 	{
 		[Ordinal(0)] 
@@ -51,6 +50,10 @@ namespace WolvenKit.RED4.Types
 			Killed = true;
 			Unconscious = true;
 			Defeated = true;
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

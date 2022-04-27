@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class PerkMenuTooltipController : AGenericTooltipController
 	{
 		[Ordinal(2)] 
@@ -150,6 +149,10 @@ namespace WolvenKit.RED4.Types
 			VideoContainerWidget = new();
 			VideoWidget = new();
 			MaxProficiencyLevel = 20;
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

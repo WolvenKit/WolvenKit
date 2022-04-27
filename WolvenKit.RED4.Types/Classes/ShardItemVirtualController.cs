@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class ShardItemVirtualController : inkVirtualCompoundItemController
 	{
 		[Ordinal(15)] 
@@ -91,6 +90,10 @@ namespace WolvenKit.RED4.Types
 			Counter = new();
 			CollapseIcon = new();
 			IsNewFlag = new();
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

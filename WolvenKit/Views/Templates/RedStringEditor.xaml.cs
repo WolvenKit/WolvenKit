@@ -30,13 +30,13 @@ namespace WolvenKit.Views.Editors
 
         }
 
-        public IRedString RedString
+        public BaseStringType RedString
         {
-            get => (IRedString)GetValue(RedStringProperty);
+            get => (BaseStringType)GetValue(RedStringProperty);
             set => SetValue(RedStringProperty, value);
         }
         public static readonly DependencyProperty RedStringProperty = DependencyProperty.Register(
-            nameof(RedString), typeof(IRedString), typeof(RedStringEditor), new PropertyMetadata(default(IRedString)));
+            nameof(RedString), typeof(BaseStringType), typeof(RedStringEditor), new PropertyMetadata(default(BaseStringType)));
 
 
         public string Text
@@ -58,6 +58,10 @@ namespace WolvenKit.Views.Editors
             {
                 SetCurrentValue(RedStringProperty, (CString)value);
             }
+            else if (RedString is NodeRef)
+            {
+                SetCurrentValue(RedStringProperty, (NodeRef)value);
+            }
         }
 
         private string GetValueFromRedValue()
@@ -67,7 +71,7 @@ namespace WolvenKit.Views.Editors
             {
                 return "";
             }
-            var redvalue = RedString.GetValue();
+            var redvalue = (string)RedString;
             if (redvalue is string redstring)
             {
                 return redstring;

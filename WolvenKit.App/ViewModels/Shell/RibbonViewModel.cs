@@ -13,7 +13,7 @@ using WolvenKit.Functionality.Commands;
 using WolvenKit.Functionality.Services;
 using WolvenKit.Interaction;
 using WolvenKit.Models;
-using WolvenKit.RED4.CR2W.Archive;
+using WolvenKit.RED4.Archive;
 
 namespace WolvenKit.ViewModels.Shell
 { // #MVVM
@@ -28,7 +28,7 @@ namespace WolvenKit.ViewModels.Shell
         private readonly IArchiveManager _archiveManager;
         private readonly IModTools _modTools;
         public ISettingsManager _settingsManager { get; }
-        public readonly AppViewModel _mainViewModel;
+        public AppViewModel _mainViewModel { get; }
 
         #endregion fields
 

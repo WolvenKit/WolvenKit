@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class artist_test_area_r : gameuiHUDGameController
 	{
 		[Ordinal(9)] 
@@ -20,5 +19,12 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CWeakHandle<inkCanvasWidget>>();
 			set => SetPropertyValue<CWeakHandle<inkCanvasWidget>>(value);
 		}
+
+		public artist_test_area_r()
+		{
+			PostConstruct();
+		}
+
+		partial void PostConstruct();
 	}
 }

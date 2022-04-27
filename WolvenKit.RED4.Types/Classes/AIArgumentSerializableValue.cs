@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class AIArgumentSerializableValue : AIArgumentDefinition
 	{
 		[Ordinal(3)] 
@@ -24,6 +23,10 @@ namespace WolvenKit.RED4.Types
 		public AIArgumentSerializableValue()
 		{
 			Type = Enums.AIArgumentType.Serializable;
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class animImportFacialSetupCombinedDesc : RedBaseClass
 	{
 		[Ordinal(0)] 
@@ -61,6 +60,10 @@ namespace WolvenKit.RED4.Types
 			UsedTransformIndices = new();
 			LipsyncOverrideToMainPosesTracksMapping = new();
 			FirstLipsyncOverrideTrackIndex = -1;
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

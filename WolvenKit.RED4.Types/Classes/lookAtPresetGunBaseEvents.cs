@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class lookAtPresetGunBaseEvents : LookAtPresetBaseEvents
 	{
 		[Ordinal(3)] 
@@ -41,6 +40,10 @@ namespace WolvenKit.RED4.Types
 		{
 			LookAtEvents = new();
 			OverrideLookAtEvents = new();
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

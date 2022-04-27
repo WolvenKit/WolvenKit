@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class HitOperationTriggerData : DeviceOperationTriggerData
 	{
 		[Ordinal(1)] 
@@ -58,6 +57,10 @@ namespace WolvenKit.RED4.Types
 			IsAttackerPlayer = true;
 			Bullets = true;
 			HealthPercentage = 100.000000F;
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

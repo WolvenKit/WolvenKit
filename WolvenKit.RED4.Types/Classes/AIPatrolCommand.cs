@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class AIPatrolCommand : AIMoveCommand
 	{
 		[Ordinal(7)] 
@@ -56,6 +55,10 @@ namespace WolvenKit.RED4.Types
 		public AIPatrolCommand()
 		{
 			AlertedSpots = new();
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

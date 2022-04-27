@@ -12,7 +12,6 @@ using System.Windows.Media;
 using System.Windows.Media.Media3D;
 using Ab3d.Assimp;
 using Assimp;
-using CP77.CR2W;
 using DynamicData;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
@@ -23,6 +22,7 @@ using WolvenKit.Common.Interfaces;
 using WolvenKit.Common.Model;
 using WolvenKit.Common.Model.Arguments;
 using WolvenKit.Common.Services;
+using WolvenKit.Core.Interfaces;
 using WolvenKit.Core.Services;
 using WolvenKit.Functionality.Commands;
 using WolvenKit.Functionality.Controllers;
@@ -31,7 +31,8 @@ using WolvenKit.Interaction;
 using WolvenKit.Models;
 using WolvenKit.Models.Docking;
 using WolvenKit.Modkit.RED4.Opus;
-using WolvenKit.RED4.CR2W.Archive;
+using WolvenKit.Modkit.RED4.Tools;
+using WolvenKit.RED4.Archive;
 
 namespace WolvenKit.ViewModels.Tools
 {
@@ -726,7 +727,11 @@ namespace WolvenKit.ViewModels.Tools
                             await ImportSingle(item);
                         }
                     }
-                    await ImportWavs(wavs);
+
+                    if (wavs.Count > 0)
+                    {
+                        await ImportWavs(wavs);
+                    }
                 }
                 if (IsExportsSelected)
                 {

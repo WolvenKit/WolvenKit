@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class animAnimSet : CResource
 	{
 		[Ordinal(1)] 
@@ -110,6 +109,10 @@ namespace WolvenKit.RED4.Types
 			FallbackAnimFrameDescs = new();
 			FallbackAnimDescIndexes = new();
 			Tags = new() { Tags = new() };
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

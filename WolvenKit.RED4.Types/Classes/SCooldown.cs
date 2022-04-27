@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class SCooldown : RedBaseClass
 	{
 		[Ordinal(0)] 
@@ -122,6 +121,10 @@ namespace WolvenKit.RED4.Types
 			DelayId = new();
 			RemoveId = new();
 			OwnerItemID = new();
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

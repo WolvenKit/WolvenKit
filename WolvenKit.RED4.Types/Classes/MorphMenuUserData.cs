@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class MorphMenuUserData : IScriptable
 	{
 		[Ordinal(0)] 
@@ -28,5 +27,12 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CEnum<gameuiCharacterCustomizationEditTag>>();
 			set => SetPropertyValue<CEnum<gameuiCharacterCustomizationEditTag>>(value);
 		}
+
+		public MorphMenuUserData()
+		{
+			PostConstruct();
+		}
+
+		partial void PostConstruct();
 	}
 }

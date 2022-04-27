@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class questCombatNodeDefinition : questConfigurableAICommandNode
 	{
 		[Ordinal(2)] 
@@ -35,6 +34,10 @@ namespace WolvenKit.RED4.Types
 			Id = 65535;
 			EntityReference = new() { Names = new() };
 			Function = "questCombatNodeParams_ShootAt";
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class SFactToChange : RedBaseClass
 	{
 		[Ordinal(0)] 
@@ -32,6 +31,10 @@ namespace WolvenKit.RED4.Types
 		public SFactToChange()
 		{
 			OperationType = Enums.EMathOperationType.Set;
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

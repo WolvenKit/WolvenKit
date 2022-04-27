@@ -1,5 +1,35 @@
+WolvenKit 8.5.3
+-----------------
+- fixed a bug that would cause the game to crash on certain inkwidget files
+- fixed a bug where the app would crash when loading kraken
+
+WolvenKit 8.5.2
+-----------------
+- fixed a bug where the app would crash when launching the first time
+- better error logging
+- fixed a bug where non-windows libraries were loaded on windows
+
+WolvenKit 8.5.1
+-----------------
+- fixed a bug where the settingspage would not load
+
 WolvenKit 8.5
 -----------------
+
+Implemented: 
+- add mlsb support
+
+Fixed:
+- fixed a bug where null curves would crash
+- Fix Linux Ooz library paths
+- fixed a bug where kraken lib would not load
+- fix linux support
+- hooks up sync flag to IResource(Async)References
+- fixed a bug where the updater would not recognize installed versions
+- fix nuget publish action
+- fixed a bug where the installer would not reinstall a plugin
+- Fix warnings on publish
+
 
 WolvenKit 8.5-rc1
 -----------------
@@ -30,6 +60,7 @@ Implemented:
 - Updated RTTI classes
 - More filepaths
 - 1.5 game patch support
+- add pluginView
 
 Fixed:
 - Lots of bug fixes
@@ -49,6 +80,8 @@ Fixed:
 - Fixed csv import
 - Fixed masklist writing for PNG exports
 - Changed default export format for mlmask from DDS to PNG
+- Asset Browser: add base/mod files toggle button
+- Asset Browser: change home button to foldup, w/ tooltip
 
 WolvenKit 8.4.3
 -----------------

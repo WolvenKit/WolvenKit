@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class EffectExecutor_SlashEffect_Entry : RedBaseClass
 	{
 		[Ordinal(0)] 
@@ -24,6 +23,10 @@ namespace WolvenKit.RED4.Types
 		public EffectExecutor_SlashEffect_Entry()
 		{
 			EffectNames = new();
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

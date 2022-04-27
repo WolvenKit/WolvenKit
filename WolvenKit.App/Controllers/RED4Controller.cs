@@ -4,8 +4,6 @@ using System.Diagnostics;
 using System.IO;
 using System.IO.Compression;
 using System.Linq;
-using System.Text.Json;
-using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Xml.Linq;
@@ -15,9 +13,9 @@ using WolvenKit.Common.Interfaces;
 using WolvenKit.Common.Services;
 using WolvenKit.Core;
 using WolvenKit.Core.Compression;
+using WolvenKit.Core.Interfaces;
 using WolvenKit.Core.Services;
 using WolvenKit.Functionality.Services;
-using WolvenKit.Helpers;
 using WolvenKit.Models;
 using WolvenKit.Modkit.RED4.Serialization;
 using WolvenKit.ProjectManagement.Project;
@@ -159,7 +157,7 @@ namespace WolvenKit.Functionality.Controllers
         private void InitializeRedDB()
         {
             var resourcePath = Path.GetFullPath(Path.Combine("Resources", "red.kark"));
-            var destinationPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "red.db");
+            var destinationPath = Path.Combine(ISettingsManager.GetAppData(), "red.db");
 
             var (hash, size) = CommonFunctions.HashFileSHA512(resourcePath);
 
@@ -273,8 +271,7 @@ namespace WolvenKit.Functionality.Controllers
         {
             _progressService.IsIndeterminate = true;
 
-            var packTask = PackProject();
-            if (!packTask.Result)
+            if (!await PackProject())
             {
                 _progressService.IsIndeterminate = false;
                 return await Task.FromResult(false);
@@ -393,7 +390,10 @@ namespace WolvenKit.Functionality.Controllers
                         db.Add(key, value);
                     }
 
-                    db.Save(outPath);
+                    using var ms = new MemoryStream();
+                    using var writer = new TweakDBWriter(ms);
+                    writer.WriteFile(db);
+                    File.WriteAllBytes(outPath, ms.ToArray());
                 }
                 catch (Exception e)
                 {
@@ -516,7 +516,13 @@ namespace WolvenKit.Functionality.Controllers
                 {
                     if (project is Cp77Project cyberpunkProject)
                     {
-                        var diskPathInfo = new FileInfo(Path.Combine(cyberpunkProject.ModDirectory, file.Name));
+                        var fileName = file.Name;
+                        if (file.Name == file.Key.ToString() && file.GuessedExtension != null)
+                        {
+                            fileName += file.GuessedExtension;
+                        }
+
+                        var diskPathInfo = new FileInfo(Path.Combine(cyberpunkProject.ModDirectory, fileName));
                         if (diskPathInfo.Directory == null)
                         {
                             break;

@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class NPCStatesComponent : gameAINetStateComponent
 	{
 		[Ordinal(5)] 
@@ -189,6 +188,10 @@ namespace WolvenKit.RED4.Types
 			PrevNPCStanceState = Enums.gamedataNPCStanceState.Invalid;
 			PreviousHighLevelState = Enums.gamedataNPCHighLevelState.Invalid;
 			PrevHitReactionMode = Enums.EHitReactionMode.Invalid;
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

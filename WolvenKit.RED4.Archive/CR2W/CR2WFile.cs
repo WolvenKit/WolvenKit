@@ -37,7 +37,7 @@ namespace WolvenKit.RED4.Archive.CR2W
         }
 
         #region Events
-
+        /*
 #pragma warning disable CS0067
         public event ObjectChangedEventHandler ObjectChanged;
 #pragma warning restore CS0067
@@ -56,7 +56,7 @@ namespace WolvenKit.RED4.Archive.CR2W
         {
 
         }
-
+        */
         #endregion
 
         #region Methods

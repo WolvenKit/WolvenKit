@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class CSkinProfile : CResource
 	{
 		[Ordinal(1)] 
@@ -61,6 +60,10 @@ namespace WolvenKit.RED4.Types
 			Roughness0 = 0.750000F;
 			Roughness1 = 1.250000F;
 			LobeMix = 0.800000F;
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

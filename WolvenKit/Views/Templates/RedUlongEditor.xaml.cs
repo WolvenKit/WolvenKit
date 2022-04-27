@@ -1,6 +1,7 @@
 using System;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 using WolvenKit.RED4.Types;
 
 namespace WolvenKit.Views.Editors
@@ -40,6 +41,9 @@ namespace WolvenKit.Views.Editors
                 case CUInt64:
                     SetCurrentValue(RedNumberProperty, (CUInt64)ulong.Parse(value));
                     break;
+                case TweakDBID:
+                    SetCurrentValue(RedNumberProperty, (TweakDBID)ulong.Parse(value));
+                    break;
             }
         }
 
@@ -47,7 +51,14 @@ namespace WolvenKit.Views.Editors
         {
             CRUID cruid => ((ulong)cruid).ToString(),
             CUInt64 uint64 => ((ulong)uint64).ToString(),
+            TweakDBID tdbid => ((ulong)tdbid).ToString(),
             _ => throw new ArgumentOutOfRangeException(nameof(RedNumber)),
         };
+
+        private void NumberValidationTextBox(object sender, TextCompositionEventArgs e)
+        {
+            var tb = (TextBox)e.Source;
+            e.Handled = !ulong.TryParse(tb.Text.Insert(tb.CaretIndex, e.Text), out _);
+        }
     }
 }

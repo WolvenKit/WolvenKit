@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class BillboardDeviceControllerPS : ScriptableDeviceComponentPS
 	{
 		[Ordinal(104)] 
@@ -40,12 +39,16 @@ namespace WolvenKit.RED4.Types
 		public BillboardDeviceControllerPS()
 		{
 			DeviceName = "LocKey#153";
-			TweakDBRecord = new() { Value = 73108591298 };
-			TweakDBDescriptionRecord = new() { Value = 126200537756 };
+			TweakDBRecord = 73108591298;
+			TweakDBDescriptionRecord = 126200537756;
 			GlitchSFX = "amb_int_custom_megabuilding_01_adverts_interactive_nicola_01_select_q110";
 			UseLights = true;
 			LightsSettings = new();
 			UseDeviceAppearence = true;
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

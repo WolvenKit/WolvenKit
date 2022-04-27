@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class WeaponVendingMachineControllerPS : VendingMachineControllerPS
 	{
 		[Ordinal(112)] 
@@ -24,10 +23,14 @@ namespace WolvenKit.RED4.Types
 		public WeaponVendingMachineControllerPS()
 		{
 			DeviceName = "LocKey#17883";
-			TweakDBRecord = new() { Value = 124293458313 };
-			TweakDBDescriptionRecord = new() { Value = 174063646172 };
+			TweakDBRecord = 124293458313;
+			TweakDBDescriptionRecord = 174063646172;
 			WeaponVendingMachineSetup = new() { TimeToCompletePurchase = 3.000000F };
 			WeaponVendingMachineSFX = new() { Processing = "dev_vending_machine_processing" };
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

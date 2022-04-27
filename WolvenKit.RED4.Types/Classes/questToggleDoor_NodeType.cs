@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class questToggleDoor_NodeType : questIVehicleManagerNodeType
 	{
 		[Ordinal(0)] 
@@ -59,6 +58,10 @@ namespace WolvenKit.RED4.Types
 			DoorAction = Enums.vehicleEQuestVehicleDoorState.Invalid;
 			Door = Enums.vehicleEVehicleDoor.invalid;
 			ToOpen = true;
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

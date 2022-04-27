@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class questQuestPhaseResource : graphGraphResource
 	{
 		[Ordinal(2)] 
@@ -25,6 +24,10 @@ namespace WolvenKit.RED4.Types
 		{
 			PhasePrefabs = new();
 			InplacePhases = new();
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

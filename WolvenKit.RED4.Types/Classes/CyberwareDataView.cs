@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class CyberwareDataView : inkScriptableDataViewWrapper
 	{
 		[Ordinal(0)] 
@@ -28,5 +27,12 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CWeakHandle<UIScriptableSystem>>();
 			set => SetPropertyValue<CWeakHandle<UIScriptableSystem>>(value);
 		}
+
+		public CyberwareDataView()
+		{
+			PostConstruct();
+		}
+
+		partial void PostConstruct();
 	}
 }

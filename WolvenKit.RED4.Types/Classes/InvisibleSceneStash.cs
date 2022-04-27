@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class InvisibleSceneStash : Device
 	{
 		[Ordinal(84)] 
@@ -25,6 +24,10 @@ namespace WolvenKit.RED4.Types
 		{
 			ControllerTypeName = "InvisibleSceneStashController";
 			ItemSlots = new();
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class RadialStatusEffectController : inkWidgetLogicController
 	{
 		[Ordinal(1)] 
@@ -52,6 +51,10 @@ namespace WolvenKit.RED4.Types
 			EffectTemplateRef = new() { WidgetLibrary = new() };
 			MaxSize = 8;
 			Effects = new();
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

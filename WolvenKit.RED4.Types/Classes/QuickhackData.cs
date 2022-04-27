@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class QuickhackData : IScriptable
 	{
 		[Ordinal(0)] 
@@ -234,6 +233,10 @@ namespace WolvenKit.RED4.Types
 			ActionOwner = new();
 			Vulnerabilities = new();
 			ActionCompletionEffects = new();
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class SecuritySystemOutputTaskData : gameScriptTaskData
 	{
 		[Ordinal(0)] 
@@ -12,5 +11,12 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CHandle<SecuritySystemOutput>>();
 			set => SetPropertyValue<CHandle<SecuritySystemOutput>>(value);
 		}
+
+		public SecuritySystemOutputTaskData()
+		{
+			PostConstruct();
+		}
+
+		partial void PostConstruct();
 	}
 }

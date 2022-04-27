@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class AIMoveToCommand : AIMoveCommand
 	{
 		[Ordinal(7)] 
@@ -81,6 +80,10 @@ namespace WolvenKit.RED4.Types
 		{
 			MovementTarget = new() { WorldPosition = new() { X = new(), Y = new(), Z = new() } };
 			FacingTarget = new() { WorldPosition = new() { X = new(), Y = new(), Z = new() } };
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

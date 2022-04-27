@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class effectTrackItemHudParameter : effectTrackItem
 	{
 		[Ordinal(3)] 
@@ -44,6 +43,10 @@ namespace WolvenKit.RED4.Types
 			GlitchParameter = new();
 			Scale1 = 1.000000F;
 			GlitchParameter1 = new();
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

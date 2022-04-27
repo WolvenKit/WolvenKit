@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class TabRadioGroup : inkRadioGroupController
 	{
 		[Ordinal(5)] 
@@ -33,6 +32,10 @@ namespace WolvenKit.RED4.Types
 		{
 			Root = new();
 			Toggles = new();
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

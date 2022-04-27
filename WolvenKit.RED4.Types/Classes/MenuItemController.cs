@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class MenuItemController : inkWidgetLogicController
 	{
 		[Ordinal(1)] 
@@ -162,6 +161,10 @@ namespace WolvenKit.RED4.Types
 			AttrText = new();
 			PerkFlag = new();
 			PerkText = new();
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

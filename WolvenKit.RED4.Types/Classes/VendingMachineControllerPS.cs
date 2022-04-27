@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class VendingMachineControllerPS : ScriptableDeviceComponentPS
 	{
 		[Ordinal(104)] 
@@ -72,14 +71,18 @@ namespace WolvenKit.RED4.Types
 		public VendingMachineControllerPS()
 		{
 			DeviceName = "LocKey#176";
-			TweakDBRecord = new() { Value = 98753771029 };
-			TweakDBDescriptionRecord = new() { Value = 146495886677 };
+			TweakDBRecord = 98753771029;
+			TweakDBDescriptionRecord = 146495886677;
 			VendingMachineSetup = new() { TimeToCompletePurchase = 0.100000F };
 			VendingMachineSFX = new() { GlitchingStart = "amb_int_custom_megabuilding_01_adverts_interactive_nicola_01_select_q110", GlitchingStop = "amb_int_custom_megabuilding_01_adverts_interactive_nicola_01_select_q110_stop" };
 			SoldOutProbability = 0.050000F;
 			IsReady = true;
 			HackCount = 2;
 			ShopStock = new();
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

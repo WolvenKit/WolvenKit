@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class gameEffectExecutor_BulletImpact : gameEffectExecutor
 	{
 		[Ordinal(1)] 
@@ -28,5 +27,12 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CBool>();
 			set => SetPropertyValue<CBool>(value);
 		}
+
+		public gameEffectExecutor_BulletImpact()
+		{
+			PostConstruct();
+		}
+
+		partial void PostConstruct();
 	}
 }

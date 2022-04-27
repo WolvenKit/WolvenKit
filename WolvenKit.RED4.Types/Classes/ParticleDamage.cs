@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class ParticleDamage : ISerializable
 	{
 		[Ordinal(0)] 
@@ -16,6 +15,10 @@ namespace WolvenKit.RED4.Types
 		public ParticleDamage()
 		{
 			BoundingBoxes = new();
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class scnscreenplayDialogLine : RedBaseClass
 	{
 		[Ordinal(0)] 
@@ -68,6 +67,10 @@ namespace WolvenKit.RED4.Types
 			Addressee = new() { Id = 4294967295 };
 			Usage = new() { PlayerGenderMask = new() { Mask = 128 } };
 			LocstringId = new();
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

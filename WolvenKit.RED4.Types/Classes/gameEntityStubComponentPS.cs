@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class gameEntityStubComponentPS : gameComponentPS
 	{
 		[Ordinal(0)] 
@@ -58,6 +57,10 @@ namespace WolvenKit.RED4.Types
 			EntityLocalPosition = new();
 			EntityLocalRotation = new() { R = 1.000000F };
 			SpawnerId = new() { EntityId = new() };
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class VentilationAreaControllerPS : MasterControllerPS
 	{
 		[Ordinal(105)] 
@@ -24,9 +23,13 @@ namespace WolvenKit.RED4.Types
 		public VentilationAreaControllerPS()
 		{
 			DeviceName = "VentilationArea";
-			TweakDBRecord = new() { Value = 102529162810 };
-			TweakDBDescriptionRecord = new() { Value = 153160213641 };
+			TweakDBRecord = 102529162810;
+			TweakDBDescriptionRecord = 153160213641;
 			VentilationAreaSetup = new() { ActionName = "Activate" };
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

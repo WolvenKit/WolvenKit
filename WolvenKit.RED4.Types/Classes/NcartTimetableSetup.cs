@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class NcartTimetableSetup : RedBaseClass
 	{
 		[Ordinal(0)] 
@@ -25,6 +24,10 @@ namespace WolvenKit.RED4.Types
 		{
 			DepartFrequency = 5;
 			UiUpdateFrequency = 1;
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

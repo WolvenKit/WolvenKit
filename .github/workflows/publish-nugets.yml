@@ -1,0 +1,21 @@
+name: publish-nuget
+on:
+  workflow_dispatch:
+
+jobs:   
+
+  check-console-win:
+    runs-on: windows-latest
+
+    steps:
+    - name: checkout
+      uses: actions/checkout@v2
+    - name: Setup .NET Core
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: 6.x
+
+    - name: build
+      run: dotnet build .\WolvenKit.CLI\WolvenKit.CLI.csproj
+    - name: publish package to NuGet
+      run: dotnet nuget push .\WolvenKit.CLI\nupkg\*.nupkg --api-key ${{secrets.NUGET_KEY}} --source "https://api.nuget.org/v3/index.json" --skip-duplicate

@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class GenericNotificationController : gameuiGenericNotificationReceiverGameController
 	{
 		[Ordinal(3)] 
@@ -83,6 +82,10 @@ namespace WolvenKit.RED4.Types
 			TextRef = new();
 			ActionLabelRef = new();
 			ActionRef = new();
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

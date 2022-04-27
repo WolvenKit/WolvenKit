@@ -5,7 +5,6 @@ using System.Linq;
 using System.Reactive.Disposables;
 using System.Text.RegularExpressions;
 using System.Windows;
-using CP77.CR2W;
 using DynamicData;
 using HandyControl.Data;
 using ReactiveUI;
@@ -16,11 +15,13 @@ using WolvenKit.Common;
 using WolvenKit.Common.Interfaces;
 using WolvenKit.Common.Model;
 using WolvenKit.Common.Model.Arguments;
+using WolvenKit.Core.Interfaces;
 using WolvenKit.Functionality.Ab4d;
 using WolvenKit.Functionality.Commands;
 using WolvenKit.Functionality.Helpers;
 using WolvenKit.Functionality.Services;
 using WolvenKit.Models.Docking;
+using WolvenKit.Modkit.RED4.Tools;
 using WolvenKit.ViewModels.Tools;
 
 namespace WolvenKit.Views.Tools
@@ -97,6 +98,10 @@ namespace WolvenKit.Views.Tools
                   .DisposeWith(disposables);
 
                 this.BindCommand(ViewModel,
+                        viewModel => viewModel.FindUsesCommand,
+                        view => view.RightContextMenuFindUsesMenuItem)
+                    .DisposeWith(disposables);
+                this.BindCommand(ViewModel,
                       viewModel => viewModel.FindUsingCommand,
                       view => view.RightContextMenuFindUsingMenuItem)
                   .DisposeWith(disposables);
@@ -121,36 +126,45 @@ namespace WolvenKit.Views.Tools
 
         private static void PreviewMesh(PropertiesViewModel propertiesViewModel, RedFileViewModel selectedItem, IGameFile selectedGameFile)
         {
-            propertiesViewModel.AB_MeshPreviewVisible = true;
-            propertiesViewModel.SelectedIndex = 1;
+            //propertiesViewModel.AB_SelectedItem = selectedItem;
+            //propertiesViewModel.LoadModel(selectedItem.FullName);
+            //propertiesViewModel.AB_MeshPreviewVisible = true;
+            //propertiesViewModel.SelectedIndex = 1;
 
-            var managerCacheDir = ISettingsManager.GetTemp_MeshPath();
-            _ = Directory.CreateDirectory(managerCacheDir);
-            foreach (var f in Directory.GetFiles(managerCacheDir))
-            {
-                try
-                {
-                    File.Delete(f);
-                }
-                catch
-                {
-                    // ignored
-                }
-            }
 
-            using (var meshStream = new MemoryStream())
-            {
-                selectedGameFile.Extract(meshStream);
-                meshStream.Seek(0, SeekOrigin.Begin);
-                var outPath = Path.Combine(ISettingsManager.GetTemp_OBJPath(), Path.GetFileName(selectedItem.Name) ?? throw new InvalidOperationException());
-                outPath = Path.ChangeExtension(outPath, ".glb");
-                if (Locator.Current.GetService<MeshTools>().ExportMeshPreviewer(meshStream, new FileInfo(outPath)))
-                {
-                    propertiesViewModel.LoadModel(outPath);
-                }
-                meshStream.Dispose();
-                meshStream.Close();
-            }
+            //using (var meshStream = new MemoryStream())
+            //{
+            //    selectedGameFile.Extract(meshStream);
+            //    propertiesViewModel.LoadModel(meshStream);
+            //}
+
+            //var managerCacheDir = ISettingsManager.GetTemp_MeshPath();
+            //_ = Directory.CreateDirectory(managerCacheDir);
+            //foreach (var f in Directory.GetFiles(managerCacheDir))
+            //{
+            //    try
+            //    {
+            //        File.Delete(f);
+            //    }
+            //    catch
+            //    {
+            //        // ignored
+            //    }
+            //}
+
+            //using (var meshStream = new MemoryStream())
+            //{
+            //    selectedGameFile.Extract(meshStream);
+            //    meshStream.Seek(0, SeekOrigin.Begin);
+            //    var outPath = Path.Combine(ISettingsManager.GetTemp_OBJPath(), Path.GetFileName(selectedItem.Name) ?? throw new InvalidOperationException());
+            //    outPath = Path.ChangeExtension(outPath, ".glb");
+            //    if (Locator.Current.GetService<MeshTools>().ExportMeshPreviewer(meshStream, new FileInfo(outPath)))
+            //    {
+            //        propertiesViewModel.LoadModel(outPath);
+            //    }
+            //    meshStream.Dispose();
+            //    meshStream.Close();
+            //}
         }
 
         private static void PreviewWem(PropertiesViewModel propertiesViewModel, IFileSystemViewModel selectedItem, IGameFile selectedGameFile)
@@ -308,6 +322,10 @@ namespace WolvenKit.Views.Tools
 
             var propertiesViewModel = Locator.Current.GetService<PropertiesViewModel>();
 
+            _ = propertiesViewModel.ExecuteSelectFile(vm.RightSelectedItem);
+
+            /*
+
             if (propertiesViewModel.State is DockState.AutoHidden or DockState.Hidden)
             {
                 return;
@@ -322,7 +340,7 @@ namespace WolvenKit.Views.Tools
                 return;
             }
 
-            propertiesViewModel.AB_MeshPreviewVisible = false;
+            propertiesViewModel.IsMeshPreviewVisible = false;
             propertiesViewModel.IsAudioPreviewVisible = false;
             propertiesViewModel.IsImagePreviewVisible = false;
             propertiesViewModel.SelectedIndex = 0;
@@ -346,7 +364,7 @@ namespace WolvenKit.Views.Tools
                     PreviewTexture(propertiesViewModel, selectedItem, selectedGameFile);
                 }
             }
-            propertiesViewModel.DecideForMeshPreview();
+            */
         }
 
         private void InnerList_MouseDoubleClick(object sender, System.Windows.Input.MouseButtonEventArgs e)

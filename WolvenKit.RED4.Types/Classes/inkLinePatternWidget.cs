@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class inkLinePatternWidget : inkImageWidget
 	{
 		[Ordinal(32)] 
@@ -75,6 +74,10 @@ namespace WolvenKit.RED4.Types
 			Spacing = 10.000000F;
 			LooseSpacing = 20.000000F;
 			RotateWithSegment = true;
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

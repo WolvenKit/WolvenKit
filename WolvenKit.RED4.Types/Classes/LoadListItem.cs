@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class LoadListItem : AnimatedListItemController
 	{
 		[Ordinal(30)] 
@@ -62,14 +61,6 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(37)] 
-		[RED("cloudStatus")] 
-		public inkImageWidgetReference CloudStatus
-		{
-			get => GetPropertyValue<inkImageWidgetReference>();
-			set => SetPropertyValue<inkImageWidgetReference>(value);
-		}
-
-		[Ordinal(38)] 
 		[RED("playTime")] 
 		public inkTextWidgetReference PlayTime
 		{
@@ -77,7 +68,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
-		[Ordinal(39)] 
+		[Ordinal(38)] 
 		[RED("characterLevel")] 
 		public inkTextWidgetReference CharacterLevel
 		{
@@ -85,7 +76,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
-		[Ordinal(40)] 
+		[Ordinal(39)] 
 		[RED("characterLevelLabel")] 
 		public inkTextWidgetReference CharacterLevelLabel
 		{
@@ -93,7 +84,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
-		[Ordinal(41)] 
+		[Ordinal(40)] 
 		[RED("gameVersion")] 
 		public inkTextWidgetReference GameVersion
 		{
@@ -101,7 +92,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
-		[Ordinal(42)] 
+		[Ordinal(41)] 
 		[RED("emptySlotWrapper")] 
 		public inkWidgetReference EmptySlotWrapper
 		{
@@ -109,7 +100,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(43)] 
+		[Ordinal(42)] 
 		[RED("wrapper")] 
 		public inkWidgetReference Wrapper
 		{
@@ -117,7 +108,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(44)] 
+		[Ordinal(43)] 
 		[RED("versionParams")] 
 		public CHandle<textTextParameterSet> VersionParams
 		{
@@ -125,7 +116,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<textTextParameterSet>>(value);
 		}
 
-		[Ordinal(45)] 
+		[Ordinal(44)] 
 		[RED("index")] 
 		public CInt32 Index
 		{
@@ -133,7 +124,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CInt32>(value);
 		}
 
-		[Ordinal(46)] 
+		[Ordinal(45)] 
 		[RED("emptySlot")] 
 		public CBool EmptySlot
 		{
@@ -141,7 +132,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(47)] 
+		[Ordinal(46)] 
 		[RED("validSlot")] 
 		public CBool ValidSlot
 		{
@@ -149,7 +140,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(48)] 
+		[Ordinal(47)] 
 		[RED("initialLoadingID")] 
 		public CUInt64 InitialLoadingID
 		{
@@ -166,13 +157,16 @@ namespace WolvenKit.RED4.Types
 			Quest = new();
 			Level = new();
 			Lifepath = new();
-			CloudStatus = new();
 			PlayTime = new();
 			CharacterLevel = new();
 			CharacterLevelLabel = new();
 			GameVersion = new();
 			EmptySlotWrapper = new();
 			Wrapper = new();
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

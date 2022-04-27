@@ -4,7 +4,9 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using WolvenKit.Core.Extensions;
+using WolvenKit.RED4.Archive.Buffer;
 using WolvenKit.RED4.Archive.CR2W;
+using WolvenKit.RED4.IO;
 using WolvenKit.RED4.Types;
 using WolvenKit.RED4.Types.Exceptions;
 
@@ -27,6 +29,16 @@ namespace WolvenKit.RED4.Archive.IO
             _bufferReaders.Add("inkWidgetLibraryItem.packageData", typeof(PackageReader));
             _bufferReaders.Add("entEntityInstanceData.buffer", typeof(PackageReader));
             _bufferReaders.Add("gamePersistentStateDataResource.buffer", typeof(PackageReader));
+            _bufferReaders.Add("meshMeshMaterialBuffer.rawData", typeof(CR2WListReader));
+            _bufferReaders.Add("entEntityParametersBuffer.parameterBuffers", typeof(CR2WListReader));
+            _bufferReaders.Add("animAnimDataChunk.buffer", typeof(AnimationReader));
+            _bufferReaders.Add("worldNavigationTileData.tilesBuffer", typeof(TilesReader));
+            _bufferReaders.Add("worldSharedDataBuffer.buffer", typeof(WorldSharedDataBufferReader));
+            _bufferReaders.Add("worldStreamingSector.transforms", typeof(worldNodeDataReader));
+            _bufferReaders.Add("worldCollisionNode.compiledData", typeof(CollisionReader));
+            _bufferReaders.Add("physicsGeometryCache.bufferTableSectors", typeof(GeometryCacheReader));
+            _bufferReaders.Add("physicsGeometryCache.alwaysLoadedSectorDDB", typeof(GeometryCacheReader));
+            _bufferReaders.Add("CGIDataResource.data", typeof(CGIDataReader));
         }
 
         public EFileReadErrorCodes ReadFileInfo(out CR2WFileInfo info)
@@ -54,6 +66,13 @@ namespace WolvenKit.RED4.Archive.IO
 
             // read strings - block 1 (index 0)
             result.StringDict = ReadStringDict(tableHeaders[0]);
+            if (CollectData)
+            {
+                foreach (var pair in result.StringDict)
+                {
+                    DataCollection.RawStringList.Add(pair.Value);
+                }
+            }
 
             // read the other tables
 
@@ -143,6 +162,8 @@ namespace WolvenKit.RED4.Archive.IO
             for (var i = 0; i < _cr2wFile.Info.BufferInfo.Length; i++)
             {
                 var buffer = ReadBuffer(_cr2wFile.Info.BufferInfo[i]);
+                buffer.RootChunk = _cr2wFile.RootChunk;
+
                 if (!BufferQueue.ContainsKey(i))
                 {
                     throw new TodoException("Unused buffer");
@@ -154,6 +175,7 @@ namespace WolvenKit.RED4.Archive.IO
                     {
                         buffer.ParentTypes.Add(parentType);
                     }
+                    buffer.Parent = pointers.GetValue().Parent;
 
                     pointers.SetValue(buffer);
                 }
@@ -168,10 +190,10 @@ namespace WolvenKit.RED4.Archive.IO
 
             #endregion Read Data
 
-            if (BaseStream.Position != BaseStream.Length)
-            {
-                throw new TodoException();
-            }
+            //if (BaseStream.Position != BaseStream.Length)
+            //{
+            //    throw new TodoException();
+            //}
 
             /*if (_chunks.Count > 1)
             {
@@ -179,7 +201,7 @@ namespace WolvenKit.RED4.Archive.IO
             }*/
 
             file = _cr2wFile;
-            _cr2wFile.AttachEventHandler();
+            //_cr2wFile.AttachEventHandler();
 
             return EFileReadErrorCodes.NoError;
         }
@@ -196,12 +218,23 @@ namespace WolvenKit.RED4.Archive.IO
             return stringDict[info.offset];
         }
 
-        private CR2WImport ReadImport(CR2WImportInfo info, IDictionary<uint, CName> stringDict) => new CR2WImport
+        private CR2WImport ReadImport(CR2WImportInfo info, IDictionary<uint, CName> stringDict)
         {
-            ClassName = _namesList[info.className],
-            DepotPath = stringDict[info.offset],
-            Flags = (InternalEnums.EImportFlags)info.flags
-        };
+            var ret = new CR2WImport
+            {
+                ClassName = _namesList[info.className],
+                DepotPath = stringDict[info.offset],
+                Flags = (InternalEnums.EImportFlags)info.flags
+            };
+
+            if (CollectData)
+            {
+                DataCollection.RawStringList.Remove(ret.DepotPath);
+                DataCollection.RawImportList.Add(ret.DepotPath);
+            }
+
+            return ret;
+        }
 
         private CR2WProperty ReadProperty(CR2WPropertyInfo info) => new CR2WProperty();
 
@@ -248,7 +281,19 @@ namespace WolvenKit.RED4.Archive.IO
             {
                 var ms = new MemoryStream(buffer.GetBytes());
                 var reader = (IBufferReader)System.Activator.CreateInstance(_bufferReaders[parentType], ms);
+                var baseReader = reader as Red4Reader;
+                if (baseReader != null)
+                {
+                    baseReader.CollectData = CollectData;
+                }
+
                 reader.ReadBuffer(buffer, _cr2wFile.RootChunk.GetType());
+
+                if (baseReader is { CollectData: true })
+                {
+                    DataCollection.Buffers ??= new List<DataCollection>();
+                    DataCollection.Buffers.Add(baseReader.DataCollection);
+                }
             }
         }
 

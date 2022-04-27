@@ -25,10 +25,30 @@ namespace WolvenKit.Core
             }
         }
 
+        public static SemVersion GetAssemblyVersion(Assembly assembly)
+        {
+            if (assembly == null)
+            {
+                throw new ArgumentNullException(nameof(assembly));
+            }
+
+            var infoAttr = assembly.GetCustomAttribute<AssemblyInformationalVersionAttribute>();
+            if (infoAttr != null)
+            {
+                return SemVersion.Parse(infoAttr.InformationalVersion);
+            }
+
+            return SemVersion.Parse("1.0.0");
+        }
+
         public static SemVersion GetAssemblyVersion(string assemblyName)
         {
             var runtimeAssemblies = Directory.GetFiles(RuntimeEnvironment.GetRuntimeDirectory(), "*.dll");
             var paths = new List<string>(runtimeAssemblies);
+            if (paths == null)
+            {
+                return SemVersion.Parse("1.0.0");
+            }
             var resolver = new PathAssemblyResolver(paths);
             var mlc = new MetadataLoadContext(resolver);
 

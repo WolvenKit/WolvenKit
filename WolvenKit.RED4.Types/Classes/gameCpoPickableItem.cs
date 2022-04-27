@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class gameCpoPickableItem : gameObject
 	{
 		[Ordinal(35)] 
@@ -24,6 +23,10 @@ namespace WolvenKit.RED4.Types
 		public gameCpoPickableItem()
 		{
 			QuickSlotID = -1;
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

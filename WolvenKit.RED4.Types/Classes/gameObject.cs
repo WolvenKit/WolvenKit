@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class gameObject : entGameEntity
 	{
 		[Ordinal(2)] 
@@ -281,6 +280,10 @@ namespace WolvenKit.RED4.Types
 			ReceivedDamageHistory = new();
 			LastHitInstigatorID = new();
 			HitInstigatorCooldownID = new();
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

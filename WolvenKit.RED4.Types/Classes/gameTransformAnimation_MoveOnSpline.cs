@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class gameTransformAnimation_MoveOnSpline : gameTransformAnimationTrackItemImpl
 	{
 		[Ordinal(0)] 
@@ -48,6 +47,10 @@ namespace WolvenKit.RED4.Types
 		public gameTransformAnimation_MoveOnSpline()
 		{
 			RotationMode = Enums.gameTransformAnimation_MoveOnSplineRotationMode.Yaw;
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

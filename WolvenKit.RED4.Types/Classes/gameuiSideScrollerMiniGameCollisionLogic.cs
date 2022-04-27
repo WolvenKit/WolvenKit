@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class gameuiSideScrollerMiniGameCollisionLogic : inkWidgetLogicController
 	{
 		[Ordinal(1)] 
@@ -25,6 +24,10 @@ namespace WolvenKit.RED4.Types
 		{
 			ColliderPositionOffset = new();
 			ColliderSizeOffset = new();
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

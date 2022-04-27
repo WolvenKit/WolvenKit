@@ -27,7 +27,6 @@ namespace WolvenKit.ViewModels
             _autoInstallerService = autoInstallerService;
 
             _main = Locator.Current.GetService<AppViewModel>();
-
             Settings = settingsManager;
             _loggerService = loggerService;
 
@@ -47,11 +46,15 @@ namespace WolvenKit.ViewModels
             if (!(await _autoInstallerService.CheckForUpdate())
                 .Out(out var release))
             {
-                _loggerService.Info($"Is update available: {release != null}");
                 return;
             }
 
-            _loggerService.Success($"Update available: {release.TagName}");
+            if (release.TagName.Equals(Settings.GetVersionNumber()))
+            {
+                return;
+            }
+
+            _loggerService.Success($"WolvenKit update available: {release.TagName}");
             Settings.IsUpdateAvailable = true;
 
             var result = await Interactions.ShowMessageBoxAsync("An update is ready to install for WolvenKit. Exit the app and install it?", "Update available");

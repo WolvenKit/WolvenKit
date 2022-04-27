@@ -2,7 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
+	[REDClass(SerializeDefault = true)]
 	public partial class Segment : RedBaseClass
 	{
 		[Ordinal(0)] 
@@ -25,6 +25,10 @@ namespace WolvenKit.RED4.Types
 		{
 			Origin = new();
 			Direction = new();
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

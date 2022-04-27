@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class gameRegular1v1FinisherScenario : gameIFinisherScenario
 	{
 		[Ordinal(0)] 
@@ -83,6 +82,10 @@ namespace WolvenKit.RED4.Types
 			TargetBlendTime = 0.500000F;
 			AttackerBlendTime = 0.500000F;
 			AttackerIsMaster = true;
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

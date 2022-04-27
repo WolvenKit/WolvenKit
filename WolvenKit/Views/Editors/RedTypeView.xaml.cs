@@ -11,6 +11,14 @@ namespace WolvenKit.Views.Editors
         public RedTypeView()
         {
             InitializeComponent();
+
+            this.WhenActivated(disposables =>
+            {
+                if (DataContext is ChunkViewModel vm)
+                {
+                    SetCurrentValue(ViewModelProperty, vm);
+                }
+            });
         }
     }
 }

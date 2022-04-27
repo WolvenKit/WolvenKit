@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class FriendlyTargetWeaponChangeCallback : gameAttachmentSlotsScriptCallback
 	{
 		[Ordinal(2)] 
@@ -12,5 +11,12 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CHandle<AIFollowerRole>>();
 			set => SetPropertyValue<CHandle<AIFollowerRole>>(value);
 		}
+
+		public FriendlyTargetWeaponChangeCallback()
+		{
+			PostConstruct();
+		}
+
+		partial void PostConstruct();
 	}
 }

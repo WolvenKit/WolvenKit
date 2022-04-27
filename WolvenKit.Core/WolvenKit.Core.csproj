@@ -19,7 +19,6 @@
       <Platforms>x64</Platforms>
       <SatelliteResourceLanguages>en</SatelliteResourceLanguages>
       <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-
   </PropertyGroup>
 
     <PropertyGroup Condition="$([MSBuild]::IsOSPlatform('Windows'))">
@@ -31,29 +30,30 @@
     <PropertyGroup Condition="$([MSBuild]::IsOSPlatform('OSX'))">
         <DefineConstants>_OSX</DefineConstants>
     </PropertyGroup>
-    
+
   <ItemGroup>
     <None Remove="lib\kraken.dll" />
-    <None Remove="lib\libooz.so" />
+    <None Remove="lib\libkraken.so" />
+    <None Remove="lib\libkraken.dylib" />
   </ItemGroup>
 
   <ItemGroup>
-    <Content Include="lib\kraken.dll">
-      <PackagePath>lib\net5.0</PackagePath>
+    <ContentWithTargetPath Include="lib\kraken.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      <Pack>true</Pack>
-    </Content>
-    <None Remove="lib\libkraken.dylib" />
-    <Content Include="lib\libkraken.dylib">
+      <TargetPath>kraken.dll</TargetPath>
+    </ContentWithTargetPath>
+    <ContentWithTargetPath Include="lib\libkraken.so">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="lib\libooz.so">
+      <TargetPath>libkraken.so</TargetPath>
+    </ContentWithTargetPath>
+    <ContentWithTargetPath Include="lib\libkraken.dylib">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
+      <TargetPath>libkraken.dylib</TargetPath>
+    </ContentWithTargetPath>
   </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="DynamicData" Version="7.4.9" />
+        <PackageReference Include="DynamicData" Version="7.5.4" />
         <PackageReference Include="CsvHelper" Version="27.2.1" />
         <PackageReference Include="Microsoft.Win32.Registry" Version="5.0.0" />
         <PackageReference Include="protobuf-net.Core" Version="3.0.101" />

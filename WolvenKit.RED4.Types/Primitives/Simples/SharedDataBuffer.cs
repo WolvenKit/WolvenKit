@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace WolvenKit.RED4.Types
 {
-    public class SharedDataBuffer : IRedBufferWrapper, IRedPrimitive, IEquatable<SharedDataBuffer>
+    public class SharedDataBuffer : IRedBufferWrapper, IRedPrimitive, IEquatable<SharedDataBuffer>, IRedCloneable
     {
         [Browsable(false)]
         public RedBuffer Buffer { get; set; }
@@ -59,5 +59,24 @@ namespace WolvenKit.RED4.Types
         }
 
         public override int GetHashCode() => (Buffer != null ? Buffer.GetHashCode() : 0);
+
+        public object ShallowCopy()
+        {
+            return MemberwiseClone();
+        }
+
+        public object DeepCopy()
+        {
+            var db = new SharedDataBuffer();
+            if (Data is IRedCloneable irc)
+            {
+                db.Data = (IParseableBuffer)irc.DeepCopy();
+            }
+            else
+            {
+                db.Data = Data;
+            }
+            return db;
+        }
     }
 }

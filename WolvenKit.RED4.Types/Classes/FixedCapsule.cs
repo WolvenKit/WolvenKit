@@ -2,7 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
+	[REDClass(SerializeDefault = true)]
 	public partial class FixedCapsule : RedBaseClass
 	{
 		[Ordinal(0)] 
@@ -24,6 +24,10 @@ namespace WolvenKit.RED4.Types
 		public FixedCapsule()
 		{
 			PointRadius = new();
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

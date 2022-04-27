@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class sharedMenuItem : RedBaseClass
 	{
 		[Ordinal(0)] 
@@ -73,6 +72,10 @@ namespace WolvenKit.RED4.Types
 		{
 			SubItems = new();
 			IsEnabled = true;
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

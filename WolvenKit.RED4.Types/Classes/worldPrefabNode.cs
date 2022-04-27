@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class worldPrefabNode : worldNode
 	{
 		[Ordinal(4)] 
@@ -135,7 +134,7 @@ namespace WolvenKit.RED4.Types
 
 		[Ordinal(20)] 
 		[RED("proxyScale")] 
-		public Vector3 ProxyScale
+		public new Vector3 ProxyScale
 		{
 			get => GetPropertyValue<Vector3>();
 			set => SetPropertyValue<Vector3>(value);
@@ -146,6 +145,10 @@ namespace WolvenKit.RED4.Types
 			RenderSceneLayerMask = Enums.RenderSceneLayerMask.Default;
 			OccluderAutoHideDistanceScale = 255;
 			ProxyScale = new() { X = 1.000000F, Y = 1.000000F, Z = 1.000000F };
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

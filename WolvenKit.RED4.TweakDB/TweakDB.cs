@@ -1,9 +1,7 @@
+using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Runtime.InteropServices;
-using WolvenKit.Core.Extensions;
-using WolvenKit.Core.Murmur3;
-using WolvenKit.RED4.TweakDB.Types;
+using System.Linq;
+using WolvenKit.RED4.Types;
 
 namespace WolvenKit.RED4.TweakDB
 {
@@ -28,97 +26,110 @@ namespace WolvenKit.RED4.TweakDB
     /// </remarks>
     public class TweakDB
     {
-        private const uint s_magic = 0xBB1DB47;
-        private const uint s_blobVersion = 5;
-        private const uint s_parserVersion = 4;
+        public const uint Magic = 0x0BB1DB47;
+        public const uint RecordsSeed = 0x5EEDBA5E;
 
-        private const uint s_recordsSeed = 0x5EEDBA5E;
+        public const uint BlobVersion = 5;
+        public const uint ParserVersion = 4;
 
-        private readonly FlatsPool _flats = new();
-        private readonly Dictionary<string, string> _records = new();
+        public FlatsPool Flats { get; set; } = new();
+        public RecordsPool Records { get; set; } = new();
+        public Dictionary<TweakDBID, List<TweakDBID>> Queries { get; set; } = new();
+        public Dictionary<TweakDBID, byte> GroupTags { get; set; } = new();
+
 
         /// <summary>
         /// Add a new flat value to the pool.
         /// </summary>
         /// <param name="name">The flat's name.</param>
         /// <param name="value">The value.</param>
-        public void Add(string name, IType value) => _flats.Add(name, value);
+        public void Add(string name, IRedType value)
+        {
+            if (name.Length > byte.MaxValue)
+            {
+                throw new ArgumentException();
+            }
+
+            Flats.Add(name, value);
+        }
 
         /// <summary>
         /// Add a new record to the pool.
         /// </summary>
         /// <param name="name">The flat's name.</param>
         /// <param name="record">The value.</param>
-        public void Add(string name, Record record)
+        public void Add(string name, gamedataTweakDBRecord record)
         {
-            foreach (var (key, flat) in record.Members)
+            var typeInfo = RedReflection.GetTypeInfo(record.GetType());
+            foreach (var propertyInfo in typeInfo.PropertyInfos)
             {
-                _flats.Add($"{name}.{key}", flat);
+                var value = record.GetProperty(propertyInfo.RedName);
+                if (!typeInfo.SerializeDefault && RedReflection.IsDefault(record.GetType(), propertyInfo, value))
+                {
+                    continue;
+                }
+
+                Add($"{name}.{propertyInfo.RedName}", value);
             }
 
-            var recordType = record.Type;
-
-            _records.Add(name, recordType);
+            Records.Add(name, record.GetType());
         }
 
-        /// <summary>
-        /// Save the database to a file.
-        /// </summary>
-        /// <param name="path">The path to the file.</param>
-        public void Save(string path)
+        public IRedType GetFlatValue(string path)
         {
-            using var file = File.Open(path, FileMode.Create);
-            using var writer = new BinaryWriter(file);
-            Save(writer);
-        }
-
-        /// <summary>
-        /// Save the database to the a stream.
-        /// </summary>
-        /// <param name="writer">The writer.</param>
-        public void Save(BinaryWriter writer)
-        {
-            var header = new FileHeader
+            foreach (var (id, value) in Flats)
             {
-                Magic = s_magic,
-                BlobVersion = s_blobVersion,
-                ParserVersion = s_parserVersion
-            };
-
-            // Skip the header for now, it will be written last when we know all offsets.
-            writer.Seek(Marshal.SizeOf(typeof(FileHeader)), SeekOrigin.Begin);
-
-            // Save flats.
-            header.Offsets.Flats = (uint)writer.BaseStream.Position;
-            _flats.Serialize(writer);
-
-            // Save records.
-            header.Offsets.Records = (uint)writer.BaseStream.Position;
-            SerializeRecords(writer);
-
-            // Save queries.
-            header.Offsets.Queries = (uint)writer.BaseStream.Position;
-            writer.Write(0);
-
-            // Save group tags.
-            header.Offsets.GroupTags = (uint)writer.BaseStream.Position;
-            writer.Write(0);
-
-            // Now the header should be written.
-            writer.Seek(0, SeekOrigin.Begin);
-            writer.Write(header);
-        }
-
-        private void SerializeRecords(BinaryWriter writer)
-        {
-            writer.Write(_records.Count);
-            foreach (var (name, type) in _records)
-            {
-                TweakDBID tdbid = name;
-                tdbid.Serialize(writer);
-
-                writer.Write(Murmur32.Hash(type, s_recordsSeed));
+                if (id == path)
+                {
+                    return value;
+                }
             }
+
+            return null;
+        }
+
+        public List<TweakDBID> GetRecords() => Records.GetResolvableRecords(true);
+
+        public Type GetRecordType(string path)
+        {
+            foreach (var (id, type) in Records)
+            {
+                var resolvedName = id.GetResolvedText();
+                if (resolvedName == null)
+                {
+                    continue;
+                }
+
+                if (resolvedName == path)
+                {
+                    return type;
+                }
+            }
+
+            return null;
+        }
+
+        public gamedataTweakDBRecord GetFullRecord(string path)
+        {
+            var type = GetRecordType(path);
+            if (type == null)
+            {
+                return null;
+            }
+
+            var instance = RedTypeManager.Create(type);
+            var values = Flats.GetRecordValues(path);
+
+            var typeInfo = RedReflection.GetTypeInfo(type);
+            foreach (var propertyInfo in typeInfo.PropertyInfos)
+            {
+                if (values.ContainsKey(propertyInfo.RedName))
+                {
+                    instance.SetProperty(propertyInfo.RedName, values[propertyInfo.RedName]);
+                }
+            }
+
+            return (gamedataTweakDBRecord)instance;
         }
     }
 }

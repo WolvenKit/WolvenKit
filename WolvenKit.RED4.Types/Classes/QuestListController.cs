@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class QuestListController : inkWidgetLogicController
 	{
 		[Ordinal(1)] 
@@ -59,6 +58,10 @@ namespace WolvenKit.RED4.Types
 			Icon = new();
 			QuestListRef = new();
 			QuestItems = new();
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

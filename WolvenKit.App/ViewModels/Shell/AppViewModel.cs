@@ -33,9 +33,9 @@ using WolvenKit.Interaction;
 using WolvenKit.Models;
 using WolvenKit.Models.Docking;
 using WolvenKit.ProjectManagement.Project;
+using WolvenKit.RED4.Archive;
 using WolvenKit.RED4.Archive.CR2W;
 using WolvenKit.RED4.Archive.IO;
-using WolvenKit.RED4.CR2W.Archive;
 using WolvenKit.RED4.Types;
 using WolvenKit.ViewModels.Dialogs;
 using WolvenKit.ViewModels.Documents;
@@ -113,8 +113,9 @@ namespace WolvenKit.ViewModels.Shell
             OpenFileAsyncCommand = ReactiveCommand.CreateFromTask<FileModel, Unit>(OpenFileAsync);
             OpenRedFileAsyncCommand = ReactiveCommand.CreateFromTask<FileEntry, Unit>(OpenRedFileAsync);
 
-            PackModCommand = new RelayCommand(ExecutePackMod, CanPackMod);
-            PackInstallModCommand = new RelayCommand(ExecutePackInstallMod, CanPackInstallMod);
+            var canExecute = this.WhenAny(x => x._projectManager.ActiveProject, (p) => p != null);
+            PackModCommand = ReactiveCommand.CreateFromTask(ExecutePackMod, canExecute);
+            PackInstallModCommand = ReactiveCommand.CreateFromTask(ExecutePackInstallMod, canExecute);
             //BackupModCommand = new RelayCommand(ExecuteBackupMod, CanBackupMod);
             //PublishModCommand = new RelayCommand(ExecutePublishMod, CanPublishMod);
 
@@ -132,9 +133,19 @@ namespace WolvenKit.ViewModels.Shell
             ShowHomePageCommand = new RelayCommand(ExecuteShowHomePage, CanShowHomePage);
             ShowSettingsCommand = new RelayCommand(ExecuteShowSettings, CanShowSettings);
 
+            LaunchGameCommand = new RelayCommand(ExecuteLaunchGame, CanLaunchGame);
+            LaunchSteamGameCommand = new RelayCommand(ExecuteLaunchSteamGame, CanLaunchSteamGame);
+
             CloseModalCommand = new RelayCommand(ExecuteCloseModal, CanCloseModal);
             CloseOverlayCommand = new RelayCommand(ExecuteCloseOverlay, CanCloseOverlay);
             CloseDialogCommand = new RelayCommand(ExecuteCloseDialog, CanCloseDialog);
+
+
+            OpenFileAsyncCommand.ThrownExceptions.Subscribe(ex => LogExtended(ex));
+            OpenRedFileAsyncCommand.ThrownExceptions.Subscribe(ex => LogExtended(ex));
+            PackModCommand.ThrownExceptions.Subscribe(ex => LogExtended(ex));
+            PackInstallModCommand.ThrownExceptions.Subscribe(ex => LogExtended(ex));
+            OpenProjectCommand.ThrownExceptions.Subscribe(ex => LogExtended(ex));
 
             #endregion commands
 
@@ -153,7 +164,19 @@ namespace WolvenKit.ViewModels.Shell
                 PropertiesViewModel,
                 AssetBrowserVM,
                 ImportExportToolVM,
+                TweakBrowserVM,
+                LocKeyBrowserVM
             };
+
+            // TweakDB when we're good and ready
+            _settingsManager
+                .WhenAnyValue(x => x.CP77GameDirPath)
+                .SkipWhile(x => string.IsNullOrWhiteSpace(x)) // -.-
+                .Take(1)
+                .Subscribe(x =>
+                {
+                    LoadTweakDB(_settingsManager.GetRED4GameRootDir());
+                });
 
             _settingsManager
                 .WhenAnyValue(x => x.UpdateChannel)
@@ -165,24 +188,16 @@ namespace WolvenKit.ViewModels.Shell
                     if (!(await _autoInstallerService.CheckForUpdate())
                         .Out(out var release))
                     {
-                        _loggerService.Info($"Is update available: {release != null}");
+                        return;
+                    }
+
+                    if (release.TagName.Equals(_settingsManager.GetVersionNumber()))
+                    {
                         return;
                     }
 
                     _settingsManager.IsUpdateAvailable = true;
-                    _loggerService.Success($"Update available: {release.TagName}");
-
-                    //var result = await Interactions.ShowMessageBoxAsync("An update is available for WolvenKit. Exit the app and install it?", "Update available");
-                    //switch (result)
-                    //{
-                    //    case WMessageBoxResult.OK:
-                    //    case WMessageBoxResult.Yes:
-                    //        if (await _autoInstallerService.Update()) // 1 API call
-                    //        {
-
-                    //        }
-                    //        break;
-                    //}
+                    _loggerService.Success($"WolvenKit update available: {release.TagName}");
                 });
         }
 
@@ -248,8 +263,14 @@ namespace WolvenKit.ViewModels.Shell
         {
             if (!_settingsManager.IsHealthy())
             {
-                await Interactions.ShowFirstTimeSetup.Handle(Unit.Default);
+                var setupWasOk = await Interactions.ShowFirstTimeSetup.Handle(Unit.Default);
             }
+        }
+
+        private void LoadTweakDB(string gameDir)
+        {
+            var tweakdbService = Locator.Current.GetService<TweakDBService>();
+            tweakdbService.LoadDB(Path.Combine(gameDir, "r6", "cache", "tweakdb.bin"));
         }
 
         #endregion init
@@ -462,6 +483,52 @@ namespace WolvenKit.ViewModels.Shell
 
             _homePageViewModel.SelectedIndex = 1;
             SetActiveOverlay(_homePageViewModel);
+        }
+
+        public ICommand LaunchGameCommand { get; private set; }
+        private bool CanLaunchGame() => true;
+        private void ExecuteLaunchGame()
+        {
+            try
+            {
+                Process.Start(new ProcessStartInfo
+                {
+                    FileName = _settingsManager.GetRED4GameLaunchCommand(),
+                    Arguments = _settingsManager.GetRED4GameLaunchOptions() ?? "",
+                    ErrorDialog = true,
+                    UseShellExecute = true,
+                });
+            }
+            catch (Exception ex)
+            {
+                _loggerService.Error("Launch: error launching game! Please check your executable path in Settings.");
+                _loggerService.Info($"Launch: error debug info: {ex.Message}");
+            }
+
+            _loggerService.Success("Game launching.");
+        }
+        public ICommand LaunchSteamGameCommand { get; private set; }
+        private bool CanLaunchSteamGame() => true;
+        private void ExecuteLaunchSteamGame()
+        {
+            try
+            {
+                var steamrunid = "steam://rungameid/1091500";
+
+                Process.Start(new ProcessStartInfo
+                {
+                    FileName = steamrunid,
+                    ErrorDialog = true,
+                    UseShellExecute = true
+                });
+            }
+            catch (Exception ex)
+            {
+                _loggerService.Error("Launch: Error! Please check if you have Steam installed, and a valid Steam installation of Cyberpunk 2077");
+                _loggerService.Info($"Launch: error debug info: {ex.Message}");
+            }
+
+            _loggerService.Success("Game launching.");
         }
 
         public ICommand ShowPluginCommand { get; private set; }
@@ -714,13 +781,11 @@ namespace WolvenKit.ViewModels.Shell
             }
         }
 
-        public ICommand PackModCommand { get; private set; }
-        private bool CanPackMod() => _projectManager.ActiveProject != null;
-        private void ExecutePackMod() => _gameControllerFactory.GetController().PackProject();
+        public ReactiveCommand<Unit, Unit> PackModCommand { get; private set; }
+        private async Task ExecutePackMod() => await _gameControllerFactory.GetController().PackProject();
 
-        public ICommand PackInstallModCommand { get; private set; }
-        private bool CanPackInstallMod() => CanPackMod();
-        private void ExecutePackInstallMod() => _gameControllerFactory.GetController().PackAndInstallProject();
+        public ReactiveCommand<Unit, Unit> PackInstallModCommand { get; private set; }
+        private async Task ExecutePackInstallMod() => await _gameControllerFactory.GetController().PackAndInstallProject();
 
         //public ICommand PublishModCommand { get; private set; }
         //private bool CanPublishMod() => _projectManager.ActiveProject != null;
@@ -885,6 +950,26 @@ namespace WolvenKit.ViewModels.Shell
             }
         }
 
+        private TweakBrowserViewModel _tweakBrowserViewModel;
+        public TweakBrowserViewModel TweakBrowserVM
+        {
+            get
+            {
+                _tweakBrowserViewModel ??= Locator.Current.GetService<TweakBrowserViewModel>();
+                return _tweakBrowserViewModel;
+            }
+        }
+
+        private LocKeyBrowserViewModel _locKeyBrowserViewModel;
+        public LocKeyBrowserViewModel LocKeyBrowserVM
+        {
+            get
+            {
+                _locKeyBrowserViewModel ??= Locator.Current.GetService<LocKeyBrowserViewModel>();
+                return _locKeyBrowserViewModel;
+            }
+        }
+
         //private VisualEditorViewModel _visualEditorVm;
         //public VisualEditorViewModel VisualEditorVM
         //{
@@ -956,6 +1041,7 @@ namespace WolvenKit.ViewModels.Shell
 
         #region methods
 
+        private void LogExtended(Exception ex) => _loggerService.Error($"Message: {ex.Message}\nSource: {ex.Source}\nStackTrace: {ex.StackTrace}");
         public void UpdateTitle()
         {
             var title = "";
@@ -1006,7 +1092,14 @@ namespace WolvenKit.ViewModels.Shell
                     fileViewModel = new ScriptDocumentViewModel(fullPath);
                     break;
                 case EWolvenKitFile.Tweak:
-                    fileViewModel = new TweakDocumentViewModel(fullPath);
+                    if (Path.GetExtension(fullPath).ToUpper() == ".YAML")
+                    {
+                        fileViewModel = new TweakXLDocumentViewModel(fullPath);
+                    }
+                    else
+                    {
+                        fileViewModel = new TweakDocumentViewModel(fullPath);
+                    }
                     break;
                 default:
                     break;
@@ -1039,27 +1132,52 @@ namespace WolvenKit.ViewModels.Shell
         /// Saves a document and resets the dirty flag.
         /// </summary>
         /// <param name="fileToSave"></param>
-        /// <param name="saveAsFlag"></param>
-        public void Save(IDocumentViewModel fileToSave, bool saveAsFlag = false)
+        /// <param name="saveAsDialogRequested"></param>
+        public void Save(IDocumentViewModel fileToSave, bool saveAsDialogRequested = false)
         {
-            if (fileToSave.FilePath == null || saveAsFlag)
+            var needSaveAsDialog =
+                fileToSave switch {
+                    RedDocumentViewModel red =>
+                        saveAsDialogRequested ||
+                        red.FilePath == null ||
+                        !Directory.Exists(Path.GetDirectoryName(Path.Combine(_projectManager.ActiveProject.ModDirectory, red.RelativePath)))
+                    ,
+                    _ => false,
+                };
+
+            if (needSaveAsDialog)
             {
                 var dlg = new SaveFileDialog();
-                if (fileToSave.FilePath != null)
+                if (fileToSave.FilePath == null && fileToSave is RedDocumentViewModel red)
                 {
-                    dlg.FileName = Path.GetFileName(fileToSave.FilePath);
+                    var directory = Path.GetDirectoryName(Path.Combine(_projectManager.ActiveProject.ModDirectory, red.RelativePath));
+                    if (!Directory.Exists(directory))
+                    {
+                        Directory.CreateDirectory(directory);
+                    }
+                    dlg.FileName = Path.GetFileName(red.RelativePath);
+                    dlg.InitialDirectory = directory;
                 }
                 else
                 {
-                    dlg.FileName = Path.GetFileName(fileToSave.ContentId);
+                    if (fileToSave.FilePath != null)
+                    {
+                        dlg.FileName = Path.GetFileName(fileToSave.FilePath);
+                    }
+                    else
+                    {
+                        dlg.FileName = Path.GetFileName(fileToSave.ContentId);
+                    }
+                    dlg.InitialDirectory = Path.GetDirectoryName(fileToSave.FilePath);
                 }
-                //dlg.RestoreDirectory = true;
-                dlg.InitialDirectory = Path.GetDirectoryName(fileToSave.FilePath);
+                _watcherService.IsSuspended = true;
                 if (dlg.ShowDialog().GetValueOrDefault())
                 {
-                    fileToSave.FilePath = dlg.SafeFileName;
-                    ActiveDocument.SaveAsCommand.SafeExecute();
+                    fileToSave.FilePath = dlg.FileName;
+                    ActiveDocument.SaveCommand.SafeExecute();
                 }
+                _watcherService.IsSuspended = false;
+                _ = _watcherService.RefreshAsync(ActiveProject);
             }
             else
             {

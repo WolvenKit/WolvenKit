@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class audioAmbientPaletteBrushDictionaryItem : audioInlinedAudioMetadata
 	{
 		[Ordinal(1)] 
@@ -24,6 +23,10 @@ namespace WolvenKit.RED4.Types
 		public audioAmbientPaletteBrushDictionaryItem()
 		{
 			Value = new() { DistributionBucketSize = 10.000000F, VirtualHearingRadius = 10.000000F, HearingDistanceCooldown = 1.000000F, EventsPool = new() };
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

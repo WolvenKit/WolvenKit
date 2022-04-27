@@ -80,14 +80,13 @@ public static class Oodle
     public const uint KARK = 1263681867; // 0x4b, 0x41, 0x52, 0x4b
 
     public static bool Load()
-    {
-        // try get oodle dll from game
+    {   
         if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
         {
-            var result = false;
+            // try get oodle dll from game
             if (TryCopyOodleLib())
             {
-                result = OodleLib.Load(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "oo2ext_7_win64.dll"));
+                var result = OodleLib.Load(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "oo2ext_7_win64.dll"));
                 if (result)
                 {
                     CompressionSettings.Get().CompressionLevel = CompressionLevel.Optimal2;
@@ -96,23 +95,12 @@ public static class Oodle
                 }
             }
 
-            // try load Kraken
-            result = KrakenLib.Load();
-            if (result)
-            {
-                return true;
-            }
-
-            Log.Error("Could not automatically find oo2ext_7_win64.dll. " +
-                      "Please manually copy and paste the DLL found in <gamedir>\\Cyberpunk 2077\\bin\\x64\\oo2ext_7_win64.dll into this folder: " +
-                      $"{AppDomain.CurrentDomain.BaseDirectory}.");
-            return false;
-
+            return true;
         }
 
         if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
         {
-            return KrakenLib.Load();
+            return true;
         }
 
         if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
@@ -123,8 +111,14 @@ public static class Oodle
     }
 
     public static bool IsCompressed(byte[] buf) => buf.Length >= 4 && buf[0] == 0x4B && buf[1] == 0x41 && buf[2] == 0x52 && buf[3] == 0x4B;
+    public static bool IsCompressed(Stream stream) => stream.PeekFourCC() == 0x4B52414B;
 
     public static Status CompressBuffer(byte[] rawBuf, out byte[] compBuf)
+    {
+        return CompressBuffer(rawBuf, out compBuf, CompressionSettings.Get().CompressionLevel);
+    }
+
+    public static Status CompressBuffer(byte[] rawBuf, out byte[] compBuf, CompressionLevel compressionLevel)
     {
         if (rawBuf.Length > 256)
         {
@@ -132,7 +126,7 @@ public static class Oodle
             //var compressedBuffer = new byte[compressedBufferSizeNeeded];
             IEnumerable<byte> compressedBuffer = new List<byte>();
 
-            var compressedSize = Oodle.Compress(rawBuf, ref compressedBuffer, false, CompressionSettings.Get().CompressionLevel);
+            var compressedSize = Oodle.Compress(rawBuf, ref compressedBuffer, false, compressionLevel);
 
             var outArray = new byte[compressedSize + 8];
 
@@ -151,26 +145,34 @@ public static class Oodle
         return Status.Uncompressed;
     }
 
-    public static void DecompressBuffer(byte[] compBuf, out byte[] rawBuf)
+    public static bool DecompressBuffer(byte[] compBuf, out byte[] rawBuf)
     {
         using var ms = new MemoryStream(compBuf);
-        using var br = new BinaryReader(ms);
+        return DecompressBuffer(ms, out rawBuf);
+    }
 
-        var header = br.ReadUInt32();
+    public static bool DecompressBuffer(Stream inStream, out byte[] rawBuf)
+    {
+        if (inStream is not { CanRead: true })
+        {
+            throw new ArgumentException(nameof(inStream));
+        }
+
+        var header = inStream.ReadStruct<uint>();
         if (header == KARK)
         {
-            var size = br.ReadUInt32();
+            var size = inStream.ReadStruct<uint>();
 
-            var compressedData = br.ReadBytes(compBuf.Length - 8);
+            var compressedData = new byte[inStream.Length - 8];
+            inStream.Read(compressedData, 0, compressedData.Length);
             rawBuf = new byte[size];
 
-            var r = Oodle.Decompress(compressedData, rawBuf);
+            Decompress(compressedData, rawBuf);
+            return true;
+        }
 
-        }
-        else
-        {
-            throw new Exception();
-        }
+        rawBuf = Array.Empty<byte>();
+        return false;
     }
 
     public static int Compress(byte[] inputBuffer, ref IEnumerable<byte> outputBuffer, bool useRedHeader,
@@ -198,15 +200,15 @@ public static class Oodle
         {
             result = CompressionSettings.Get().UseOodle
                 ? OodleLib.OodleLZ_Compress(inputBuffer, compressedBuffer, compressor, level)
-                : KrakenLib.Compress(inputBuffer, compressedBuffer, (int)level);
+                : KrakenNative.Compress(inputBuffer, compressedBuffer, (int)level);
         }
         else if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
         {
-            result = KrakenLib.Compress(inputBuffer, compressedBuffer, (int)level);
+            result = KrakenNative.Compress(inputBuffer, compressedBuffer, (int)level);
         }
         else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
         {
-            result = OozNative.Kraken_Compress(inputBuffer, compressedBuffer, (int)level);
+            result = KrakenNative.Compress(inputBuffer, compressedBuffer, (int)level);
         }
         else
         {
@@ -251,15 +253,15 @@ public static class Oodle
         {
             result = CompressionSettings.Get().UseOodle
                 ? OodleLib.OodleLZ_Decompress(inputBuffer, outputBuffer)
-                : KrakenLib.Decompress(inputBuffer, outputBuffer);
+                : KrakenNative.Decompress(inputBuffer, outputBuffer);
         }
         else if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
         {
-            result = KrakenLib.Decompress(inputBuffer, outputBuffer);
+            result = KrakenNative.Decompress(inputBuffer, outputBuffer);
         }
         else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
         {
-            result = OozNative.Kraken_Decompress(inputBuffer, outputBuffer);
+            result = KrakenNative.Decompress(inputBuffer, outputBuffer);
         }
         else
         {

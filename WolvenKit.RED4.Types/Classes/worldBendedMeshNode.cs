@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class worldBendedMeshNode : worldNode
 	{
 		[Ordinal(4)] 
@@ -85,6 +84,10 @@ namespace WolvenKit.RED4.Types
 			CastShadows = true;
 			CastLocalShadows = true;
 			NavigationSetting = new() { NavmeshImpact = Enums.NavGenNavmeshImpact.Blocking };
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

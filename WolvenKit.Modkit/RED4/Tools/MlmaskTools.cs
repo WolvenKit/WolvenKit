@@ -73,10 +73,14 @@ namespace WolvenKit.Modkit.RED4
             }
 
             // write texture to file
-            var subdir = new DirectoryInfo(Path.GetFullPath(outfile.FullName));
-            if (!subdir.Exists)
+            DirectoryInfo subdir = null;
+            if (args.AsList)
             {
-                Directory.CreateDirectory(subdir.FullName);
+                subdir = new DirectoryInfo(Path.ChangeExtension(outfile.FullName, null) + "_layers");
+                if (!subdir.Exists)
+                {
+                    Directory.CreateDirectory(subdir.FullName);
+                }
             }
 
             var maskData = new byte[maskWidth * maskHeight];
@@ -109,15 +113,28 @@ namespace WolvenKit.Modkit.RED4
                     1, 1, 0, 0, 0, DXGI_FORMAT.DXGI_FORMAT_R8_UNORM, TEX_DIMENSION.TEX_DIMENSION_TEXTURE2D, 8, true));
                 ms.Write(maskData);
 
+                string newpath;
 
-                var newpath = Path.Combine(subdir.FullName, $"{i}.dds");
+                var mFilename = Path.GetFileNameWithoutExtension(outfile.FullName) + $"_{i}";
+                if (args.AsList)
+                {
+                    newpath = Path.Combine(subdir.FullName, $"{mFilename}.dds");
+                }
+                else
+                {
+                    newpath = Path.Combine(outfile.Directory.FullName, $"{mFilename}.dds");
+                }
+
                 if (args.UncookExtension == EMlmaskUncookExtension.dds)
                 {
                     using var ddsStream = new FileStream($"{newpath}", FileMode.Create, FileAccess.Write);
                     ms.Seek(0, SeekOrigin.Begin);
                     ms.CopyTo(ddsStream);
 
-                    masks.Add($"{subdir.Name}/{i}.dds");
+                    if (args.AsList)
+                    {
+                        masks.Add($"{subdir.Name}/{mFilename}.dds");
+                    }
                 }
                 //else if (args.UncookExtension == EUncookExtension.tga)
                 //{
@@ -155,16 +172,19 @@ namespace WolvenKit.Modkit.RED4
                         return false;
                     }
 
+                    if (args.AsList)
                     {
-                        masks.Add($"{subdir.Name}/{i}.png");
+                        masks.Add($"{subdir.Name}/{mFilename}.png");
                     }
-
                 }
             }
 
-            // write metadata
-            var masklist = Path.ChangeExtension(outfile.FullName, "masklist");
-            File.WriteAllLines(masklist, masks.ToArray());
+            if (args.AsList)
+            {
+                // write metadata
+                var masklist = Path.ChangeExtension(outfile.FullName, "masklist");
+                File.WriteAllLines(masklist, masks.ToArray());
+            }
 
             return true;
         }

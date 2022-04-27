@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class worldStaticOccluderMeshNode : worldNode
 	{
 		[Ordinal(4)] 
@@ -41,6 +40,10 @@ namespace WolvenKit.RED4.Types
 		{
 			Color = new();
 			AutohideDistanceScale = 255;
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

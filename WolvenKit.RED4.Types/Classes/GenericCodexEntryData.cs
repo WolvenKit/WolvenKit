@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class GenericCodexEntryData : IScriptable
 	{
 		[Ordinal(0)] 
@@ -90,6 +89,10 @@ namespace WolvenKit.RED4.Types
 			TimeStamp = new();
 			NewEntries = new();
 			ItemID = new();
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

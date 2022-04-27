@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class animFacialSetup : CResource
 	{
 		[Ordinal(1)] 
@@ -90,6 +89,10 @@ namespace WolvenKit.RED4.Types
 			Info = new() { TracksMapping = new(), Face = new(), Eyes = new(), Tongue = new() };
 			PosesInfo = new() { Face = new(), Tongue = new(), Eyes = new() };
 			UsedTransformIndices = new();
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

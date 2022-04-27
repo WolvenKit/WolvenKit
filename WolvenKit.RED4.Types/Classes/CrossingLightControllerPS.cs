@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class CrossingLightControllerPS : TrafficLightControllerPS
 	{
 		[Ordinal(104)] 
@@ -16,9 +15,13 @@ namespace WolvenKit.RED4.Types
 		public CrossingLightControllerPS()
 		{
 			DeviceName = "LocKey#125";
-			TweakDBRecord = new() { Value = 92771606930 };
-			TweakDBDescriptionRecord = new() { Value = 144804359263 };
+			TweakDBRecord = 92771606930;
+			TweakDBDescriptionRecord = 144804359263;
 			CrossingLightSFXSetup = new();
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

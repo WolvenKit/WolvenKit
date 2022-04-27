@@ -18,18 +18,22 @@ namespace WolvenKit.ViewModels.Documents
         public RedDocumentViewModel File;
         //protected Stream ImageStream;
 
+        public delegate void RenderDelegate();
+        public RenderDelegate Render;
+        public bool IsRendered;
+
         public RDTTextureViewModel(RedBaseClass data, RedDocumentViewModel file)
         {
             Header = "Texture Preview";
             File = file;
             _data = data;
 
-            SetupImage();
+            Render = SetupImage;
         }
 
         public RDTTextureViewModel(Stream stream, RedDocumentViewModel file)
         {
-            Header = "Preview";
+            Header = "Texture Preview";
             File = file;
             //_data = data;
             //ImageStream = stream;
@@ -39,12 +43,18 @@ namespace WolvenKit.ViewModels.Documents
 
         protected void SetupImage()
         {
+            if (IsRendered)
+            {
+                return;
+            }
+
             using var ddsstream = new MemoryStream();
             try
             {
                 if (ModTools.ConvertRedClassToDdsStream(_data, ddsstream, out _))
                 {
                     _ = LoadImageFromStream(ddsstream);
+                    IsRendered = true;
                 }
             }
             catch (Exception e)

@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class BasicDistractionDeviceControllerPS : ScriptableDeviceComponentPS
 	{
 		[Ordinal(104)] 
@@ -48,11 +47,15 @@ namespace WolvenKit.RED4.Types
 		public BasicDistractionDeviceControllerPS()
 		{
 			DeviceName = "LocKey#42164";
-			TweakDBRecord = new() { Value = 97438729774 };
-			TweakDBDescriptionRecord = new() { Value = 147273950574 };
+			TweakDBRecord = 97438729774;
+			TweakDBDescriptionRecord = 147273950574;
 			DistractorType = Enums.EPlaystyleType.NETRUNNER;
 			EffectOnSartNames = new();
 			AnimationType = Enums.EAnimationType.TRANSFORM;
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class animSBehaviorConstraintNodeFloorIKCommonData : RedBaseClass
 	{
 		[Ordinal(0)] 
@@ -52,6 +51,10 @@ namespace WolvenKit.RED4.Types
 			VerticalVelocityOffsetUpBlendTime = 0.080000F;
 			VerticalVelocityOffsetDownBlendTime = 0.030000F;
 			SlidingOnSlopeBlendTime = 0.200000F;
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

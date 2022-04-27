@@ -1,8 +1,13 @@
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class gameAttachmentSlotEventsAttachmentSlotEvent : redEvent
 	{
+		public gameAttachmentSlotEventsAttachmentSlotEvent()
+		{
+			PostConstruct();
+		}
+
+		partial void PostConstruct();
 	}
 }

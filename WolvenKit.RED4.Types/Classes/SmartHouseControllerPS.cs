@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class SmartHouseControllerPS : MasterControllerPS
 	{
 		[Ordinal(105)] 
@@ -48,11 +47,15 @@ namespace WolvenKit.RED4.Types
 		public SmartHouseControllerPS()
 		{
 			DeviceName = "LocKey#15648";
-			TweakDBRecord = new() { Value = 81162730366 };
-			TweakDBDescriptionRecord = new() { Value = 130612213885 };
+			TweakDBRecord = 81162730366;
+			TweakDBDescriptionRecord = 130612213885;
 			Timetable = new();
 			AvailablePresets = new();
 			SmartHouseCustomization = new();
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

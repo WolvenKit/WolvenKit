@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class animAnimNode_GraphSlot_Test : animAnimNode_GraphSlot
 	{
 		[Ordinal(14)] 
@@ -12,5 +11,12 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CResourceReference<animAnimGraph>>();
 			set => SetPropertyValue<CResourceReference<animAnimGraph>>(value);
 		}
+
+		public animAnimNode_GraphSlot_Test()
+		{
+			PostConstruct();
+		}
+
+		partial void PostConstruct();
 	}
 }

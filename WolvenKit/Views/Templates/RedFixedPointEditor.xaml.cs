@@ -1,7 +1,11 @@
+using System;
+using System.Reactive.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using ReactiveUI;
 using WolvenKit.RED4.Types;
+using WolvenKit.ViewModels.Shell;
 
 namespace WolvenKit.Views.Editors
 {
@@ -10,9 +14,21 @@ namespace WolvenKit.Views.Editors
     /// </summary>
     public partial class RedFixedPointEditor : UserControl
     {
+        public ChunkViewModel cvm => DataContext as ChunkViewModel;
+
         public RedFixedPointEditor()
         {
             InitializeComponent();
+
+            Observable.FromEventPattern<TextChangedEventHandler, TextChangedEventArgs>(
+                handler => TextBox.TextChanged += handler,
+                handler => TextBox.TextChanged -= handler)
+                .Throttle(TimeSpan.FromSeconds(.5))
+                .ObserveOn(RxApp.MainThreadScheduler)
+                .Subscribe(x =>
+                {
+                    SetRedValue(TextBox.Text);
+                });
         }
 
         public FixedPoint RedNumber
@@ -23,18 +39,37 @@ namespace WolvenKit.Views.Editors
         public static readonly DependencyProperty RedNumberProperty = DependencyProperty.Register(
             nameof(RedNumber), typeof(FixedPoint), typeof(RedFixedPointEditor), new PropertyMetadata(default(FixedPoint)));
 
+
         public string Text
         {
             get => GetValueFromRedValue();
             set => SetRedValue(value);
         }
 
+        private void SetRedValue(string value)
+        {
+            try
+            {
+                if (cvm != null)
+                {
+                    cvm.Data = (FixedPoint)float.Parse(value);
+                }
+                else
+                {
+                    SetCurrentValue(RedNumberProperty, (FixedPoint)float.Parse(value));
+                }
+            }
+            catch (FormatException)
+            {
 
-        private void SetRedValue(string value) => SetCurrentValue(RedNumberProperty, (FixedPoint)float.Parse(value));
+            }
+        }
 
-        private string GetValueFromRedValue() => ((float)RedNumber).ToString("R");
-
-        private void NumberValidationTextBox(object sender, TextCompositionEventArgs e) => e.Handled = float.TryParse(e.Text, out var _);
-
+        private string GetValueFromRedValue() => cvm != null ? ((float)(FixedPoint)cvm.Data).ToString("R") : ((float)RedNumber).ToString("R");
+        private void NumberValidationTextBox(object sender, TextCompositionEventArgs e)
+        {
+            var tb = (TextBox)e.Source;
+            e.Handled = !float.TryParse(tb.Text.Insert(tb.CaretIndex, e.Text), out _);
+        }
     }
 }

@@ -51,7 +51,7 @@ namespace WolvenKit.RED4.Archive.Buffer
         private const int sizeShift = 23;
         private const uint offsetMask = (1U << sizeShift) - 1U;
         private const uint sizeMask = 0xFF << (sizeShift);
-        private const int unkShift = 31;
+        private const int syncShift = 31;
 
         public uint offset
         {
@@ -73,13 +73,13 @@ namespace WolvenKit.RED4.Archive.Buffer
             }
         }
 
-        public bool unk1
+        public bool sync
         {
-            get => Convert.ToBoolean(bitfield >> unkShift);
+            get => Convert.ToBoolean(bitfield >> syncShift);
             set
             {
-                bitfield &= ~(1U << unkShift);
-                bitfield |= Convert.ToUInt32(value) << unkShift;
+                bitfield &= ~(1U << syncShift);
+                bitfield |= Convert.ToUInt32(value) << syncShift;
             }
         }
     }

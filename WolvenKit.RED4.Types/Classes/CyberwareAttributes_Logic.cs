@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class CyberwareAttributes_Logic : inkWidgetLogicController
 	{
 		[Ordinal(1)] 
@@ -43,6 +42,10 @@ namespace WolvenKit.RED4.Types
 			ButtonRef = new();
 			TooltipRef = new();
 			ConnectorRef = new();
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

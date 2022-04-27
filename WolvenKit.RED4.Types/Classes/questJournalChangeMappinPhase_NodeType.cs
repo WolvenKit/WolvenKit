@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class questJournalChangeMappinPhase_NodeType : questIJournal_NodeType
 	{
 		[Ordinal(0)] 
@@ -33,6 +32,10 @@ namespace WolvenKit.RED4.Types
 		{
 			Phase = Enums.gamedataMappinPhase.DefaultPhase;
 			NotifyUI = true;
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

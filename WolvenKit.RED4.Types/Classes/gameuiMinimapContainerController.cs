@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class gameuiMinimapContainerController : gameuiMappinsContainerController
 	{
 		[Ordinal(16)] 
@@ -298,6 +297,10 @@ namespace WolvenKit.RED4.Types
 			SecurityAreaVignetteWidget = new();
 			SecurityAreaText = new();
 			CombatModeHighlight = new();
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

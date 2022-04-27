@@ -1,5 +1,5 @@
 using System.Collections.Generic;
-using WolvenKit.RED4.TweakDB.Types;
+using WolvenKit.RED4.Types;
 
 namespace WolvenKit.RED4.TweakDB
 {
@@ -7,7 +7,7 @@ namespace WolvenKit.RED4.TweakDB
     {
         public string Type { get; set; }
 
-        public Dictionary<string, IType> Members { get; set; } = new();
+        public Dictionary<string, IRedType> Members { get; set; } = new();
 
         public override string ToString() => $"[{Type}] {string.Join(',', Members.Keys)}";
     }

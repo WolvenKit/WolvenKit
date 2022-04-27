@@ -2,7 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
+	[REDClass(SerializeDefault = true)]
 	public partial class Quad : RedBaseClass
 	{
 		[Ordinal(0)] 
@@ -43,6 +43,10 @@ namespace WolvenKit.RED4.Types
 			P2 = new();
 			P3 = new();
 			P4 = new();
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

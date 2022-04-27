@@ -2,7 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
+	[REDClass(SerializeDefault = true)]
 	public partial class ColorBalance : RedBaseClass
 	{
 		[Ordinal(0)] 
@@ -36,5 +36,12 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CFloat>();
 			set => SetPropertyValue<CFloat>(value);
 		}
+
+		public ColorBalance()
+		{
+			PostConstruct();
+		}
+
+		partial void PostConstruct();
 	}
 }

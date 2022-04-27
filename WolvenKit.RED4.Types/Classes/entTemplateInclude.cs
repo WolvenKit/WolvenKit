@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class entTemplateInclude : RedBaseClass
 	{
 		[Ordinal(0)] 
@@ -20,5 +19,12 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CResourceAsyncReference<entEntityTemplate>>();
 			set => SetPropertyValue<CResourceAsyncReference<entEntityTemplate>>(value);
 		}
+
+		public entTemplateInclude()
+		{
+			PostConstruct();
+		}
+
+		partial void PostConstruct();
 	}
 }

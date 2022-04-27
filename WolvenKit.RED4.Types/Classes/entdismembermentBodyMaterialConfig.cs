@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class entdismembermentBodyMaterialConfig : RedBaseClass
 	{
 		[Ordinal(0)] 
@@ -20,5 +19,12 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CBitField<physicsRagdollBodyPartE>>();
 			set => SetPropertyValue<CBitField<physicsRagdollBodyPartE>>(value);
 		}
+
+		public entdismembermentBodyMaterialConfig()
+		{
+			PostConstruct();
+		}
+
+		partial void PostConstruct();
 	}
 }

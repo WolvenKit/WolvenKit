@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class DeviceBaseBlackboardDef : gamebbScriptDefinition
 	{
 		[Ordinal(0)] 
@@ -70,6 +69,10 @@ namespace WolvenKit.RED4.Types
 			GlitchData = new();
 			UI_InteractivityBlocked = new();
 			IsInvestigated = new();
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

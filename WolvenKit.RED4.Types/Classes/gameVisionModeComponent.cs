@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class gameVisionModeComponent : gameComponent
 	{
 		[Ordinal(4)] 
@@ -75,6 +74,10 @@ namespace WolvenKit.RED4.Types
 			ForcedHighlights = new();
 			ActiveRevealRequests = new();
 			SlaveObjectsToHighlight = new();
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

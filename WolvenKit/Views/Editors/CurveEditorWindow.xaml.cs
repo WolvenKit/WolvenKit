@@ -37,7 +37,7 @@ namespace WolvenKit.Views.Editors
 
             _model = model;
 
-            _elementType = model.ElementType;
+            _elementType = model.RedElementType;
 
             var points = model.GetCurvePoints().ToArray();
             var times = points.Select(x => (double)x.GetPoint()).ToArray();
@@ -559,7 +559,7 @@ namespace WolvenKit.Views.Editors
                     }
                     case "Float":
                     {
-                        var vec = vm.Curve.Select(_ => new Tuple<double, IRedType>(_.T, (CFloat)_.V));
+                        var vec = vm.Curve.Select(_ => new Tuple<double, IRedType>(_.T, (CFloat)_.V)).ToList();
                         var type = vm.GetInterpolationTypeEnum();
                         return new CurveDto(vec, type);
                     }

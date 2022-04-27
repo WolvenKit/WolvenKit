@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class MarkBackdoorAsRevealedRequest : gameScriptableSystemRequest
 	{
 		[Ordinal(0)] 
@@ -12,5 +11,12 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CHandle<SharedGameplayPS>>();
 			set => SetPropertyValue<CHandle<SharedGameplayPS>>(value);
 		}
+
+		public MarkBackdoorAsRevealedRequest()
+		{
+			PostConstruct();
+		}
+
+		partial void PostConstruct();
 	}
 }

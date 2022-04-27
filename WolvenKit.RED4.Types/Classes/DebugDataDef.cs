@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class DebugDataDef : gamebbScriptDefinition
 	{
 		[Ordinal(0)] 
@@ -52,6 +51,10 @@ namespace WolvenKit.RED4.Types
 			WeaponSpread_UseCircularSpread = new();
 			WeaponSpread_UseEvenDistribution = new();
 			Vehicle_BlockSwitchSeats = new();
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

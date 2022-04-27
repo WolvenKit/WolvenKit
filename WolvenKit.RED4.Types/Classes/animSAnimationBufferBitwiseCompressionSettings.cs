@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class animSAnimationBufferBitwiseCompressionSettings : RedBaseClass
 	{
 		[Ordinal(0)] 
@@ -88,6 +87,10 @@ namespace WolvenKit.RED4.Types
 			ScaleSkipFrameTolerance = 0.010000F;
 			TrackTolerance = 0.001000F;
 			TrackSkipFrameTolerance = 0.001000F;
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

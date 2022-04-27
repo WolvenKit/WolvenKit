@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class questTransformAnimatorNode_Action_Skip : questTransformAnimatorNode_ActionType
 	{
 		[Ordinal(0)] 
@@ -20,5 +19,12 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CBool>();
 			set => SetPropertyValue<CBool>(value);
 		}
+
+		public questTransformAnimatorNode_Action_Skip()
+		{
+			PostConstruct();
+		}
+
+		partial void PostConstruct();
 	}
 }

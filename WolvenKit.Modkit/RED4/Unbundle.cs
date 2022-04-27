@@ -6,7 +6,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Dasync.Collections;
 using WolvenKit.Common.Extensions;
-using WolvenKit.RED4.CR2W.Archive;
+using WolvenKit.RED4.Archive;
 
 namespace WolvenKit.Modkit.RED4
 {
@@ -30,8 +30,6 @@ namespace WolvenKit.Modkit.RED4
         {
             var extractedList = new ConcurrentBag<string>();
             var failedList = new ConcurrentBag<string>();
-
-            var mapName = "ExtractAll_Map";
 
             // check search pattern then regex
             var finalmatches = ar.Files.Values.Cast<FileEntry>();
@@ -60,8 +58,7 @@ namespace WolvenKit.Modkit.RED4
                 return;
             }
 
-            using var fs = new FileStream(ar.ArchiveAbsolutePath, FileMode.Open, FileAccess.ReadWrite, FileShare.ReadWrite);
-            using var mmf = MemoryMappedFileExtensions.GetMemoryMappedFile(fs, mapName);
+            using var mmf = ar.GetMemoryMappedFile();
 
             var progress = 0;
 
@@ -138,8 +135,7 @@ namespace WolvenKit.Modkit.RED4
             var finalMatchesList = finalmatches.ToList();
             _loggerService.Info($"Found {finalMatchesList.Count} bundle entries to extract.");
 
-            await using var fs = new FileStream(ar.ArchiveAbsolutePath, FileMode.Open, FileAccess.ReadWrite, FileShare.ReadWrite);
-            using var mmf = MemoryMappedFile.CreateFromFile(fs, null, 0, MemoryMappedFileAccess.ReadWrite, HandleInheritability.None, false);
+            using var mmf = ar.GetMemoryMappedFile();
 
             //Thread.Sleep(1000);
             var progress = 0;
@@ -181,7 +177,7 @@ namespace WolvenKit.Modkit.RED4
 
             Directory.CreateDirectory(outDir.FullName);
             // get outfile name
-            var outfile = new FileInfo(Path.Combine(outDir.FullName, $"{name}"));
+            var outfile = new FileInfo(Path.Combine(outDir.FullName, $"{name.Replace('\\', Path.DirectorySeparatorChar)}"));
             if (outfile.Directory == null)
             {
                 return -1;
@@ -223,7 +219,7 @@ namespace WolvenKit.Modkit.RED4
             }
 
             // get outfile name
-            var outfile = new FileInfo(Path.Combine(outDir.FullName, $"{name}"));
+            var outfile = new FileInfo(Path.Combine(outDir.FullName, $"{name.Replace('\\', Path.DirectorySeparatorChar)}"));
             if (outfile.Directory == null)
             {
                 return -1;

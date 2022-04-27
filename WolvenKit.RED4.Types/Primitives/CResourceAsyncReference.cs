@@ -1,15 +1,11 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Security.Cryptography;
-using System.Text;
 using WolvenKit.Common.FNV1A;
 
 namespace WolvenKit.RED4.Types
 {
     [RED("raRef")]
     [REDType(IsValueType = true)]
-    public class CResourceAsyncReference<T> : IRedResourceAsyncReference<T>, IEquatable<CResourceAsyncReference<T>> where T : IRedType
+    public class CResourceAsyncReference<T> : IRedResourceAsyncReference<T>, IEquatable<CResourceAsyncReference<T>> where T : CResource
     {
         public CName DepotPath { get; set; } = new();
         public InternalEnums.EImportFlags Flags { get; set; }
@@ -72,6 +68,7 @@ namespace WolvenKit.RED4.Types
                 return fnv.HashUInt32;
             }
         }
-        public override string ToString() => DepotPath;
+
+        public override string ToString() => $"{DepotPath} <{RedReflection.GetRedTypeFromCSType(GetType())} 0x{DepotPath.GetRedHash():X} / {DepotPath.GetRedHash()}>";
     }
 }

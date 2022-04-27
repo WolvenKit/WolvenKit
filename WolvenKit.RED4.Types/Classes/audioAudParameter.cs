@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class audioAudParameter : RedBaseClass
 	{
 		[Ordinal(0)] 
@@ -59,6 +58,10 @@ namespace WolvenKit.RED4.Types
 			EnterCurveTime = 1.000000F;
 			ExitCurveType = Enums.audioESoundCurveType.Linear;
 			ExitCurveTime = 1.000000F;
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

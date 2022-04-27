@@ -33,7 +33,7 @@ namespace WolvenKit.RED4.Archive.IO
             var typeInfo = RedReflection.GetTypeInfo(cls.GetType());
             foreach (var propertyInfo in typeInfo.GetWritableProperties())
             {
-                var value = propertyInfo.GetValue(cls);
+                var value = cls.GetProperty(propertyInfo.RedName);
                 if (!typeInfo.SerializeDefault && RedReflection.IsDefault(cls.GetType(), propertyInfo, value))
                 {
                     continue;

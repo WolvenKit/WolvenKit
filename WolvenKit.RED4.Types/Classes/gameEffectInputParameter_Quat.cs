@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class gameEffectInputParameter_Quat : RedBaseClass
 	{
 		[Ordinal(0)] 
@@ -12,5 +11,12 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CHandle<gameIEffectParameter_QuatEvaluator>>();
 			set => SetPropertyValue<CHandle<gameIEffectParameter_QuatEvaluator>>(value);
 		}
+
+		public gameEffectInputParameter_Quat()
+		{
+			PostConstruct();
+		}
+
+		partial void PostConstruct();
 	}
 }

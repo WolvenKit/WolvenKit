@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class Crosshair_Melee_Nano_Wire : CrosshairGameController_Melee
 	{
 		[Ordinal(32)] 
@@ -92,5 +91,12 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CHandle<inkanimProxy>>();
 			set => SetPropertyValue<CHandle<inkanimProxy>>(value);
 		}
+
+		public Crosshair_Melee_Nano_Wire()
+		{
+			PostConstruct();
+		}
+
+		partial void PostConstruct();
 	}
 }

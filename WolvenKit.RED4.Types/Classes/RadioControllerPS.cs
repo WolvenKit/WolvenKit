@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class RadioControllerPS : MediaDeviceControllerPS
 	{
 		[Ordinal(109)] 
@@ -32,10 +31,14 @@ namespace WolvenKit.RED4.Types
 		public RadioControllerPS()
 		{
 			DeviceName = "LocKey#96";
-			TweakDBRecord = new() { Value = 55896600565 };
-			TweakDBDescriptionRecord = new() { Value = 109081313862 };
+			TweakDBRecord = 55896600565;
+			TweakDBDescriptionRecord = 109081313862;
 			RadioSetup = new();
 			Stations = new();
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

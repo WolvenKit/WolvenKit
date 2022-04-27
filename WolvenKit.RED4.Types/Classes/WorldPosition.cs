@@ -2,7 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
+	[REDClass(SerializeDefault = true)]
 	public partial class WorldPosition : RedBaseClass
 	{
 		[Ordinal(0)] 
@@ -34,6 +34,10 @@ namespace WolvenKit.RED4.Types
 			X = new();
 			Y = new();
 			Z = new();
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

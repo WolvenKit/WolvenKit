@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class meshMeshParamWaterPatchData : meshMeshParameter
 	{
 		[Ordinal(0)] 
@@ -32,6 +31,10 @@ namespace WolvenKit.RED4.Types
 		public meshMeshParamWaterPatchData()
 		{
 			Nodes = new(0);
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

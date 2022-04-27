@@ -2,7 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
+	[REDClass(SerializeDefault = true)]
 	public partial class Quaternion : RedBaseClass
 	{
 		[Ordinal(0)] 
@@ -40,6 +40,10 @@ namespace WolvenKit.RED4.Types
 		public Quaternion()
 		{
 			R = 1.000000F;
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class PerksMenuAttributeItemController : inkWidgetLogicController
 	{
 		[Ordinal(1)] 
@@ -115,6 +114,10 @@ namespace WolvenKit.RED4.Types
 			ConnectionLine = new();
 			SkillsLevelsContainer = new();
 			ProficiencyButtonRefs = new();
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

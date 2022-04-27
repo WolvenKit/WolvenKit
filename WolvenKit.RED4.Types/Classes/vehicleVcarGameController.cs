@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class vehicleVcarGameController : gameuiWidgetGameController
 	{
 		[Ordinal(2)] 
@@ -564,6 +563,10 @@ namespace WolvenKit.RED4.Types
 			Fluff1animOptions2 = new();
 			Fluff2animOptions1 = new();
 			Fluff2animOptions2 = new();
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

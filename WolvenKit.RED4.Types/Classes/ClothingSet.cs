@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class ClothingSet : RedBaseClass
 	{
 		[Ordinal(0)] 
@@ -41,6 +40,10 @@ namespace WolvenKit.RED4.Types
 		{
 			SetID = -1;
 			ClothingList = new();
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class gameuiCharacterCustomizationBrokenNoseController : gameuiICharacterCustomizationComponent
 	{
 		[Ordinal(3)] 
@@ -26,6 +25,10 @@ namespace WolvenKit.RED4.Types
 			Name = "Component";
 			Stage1App = new();
 			Stage2App = new();
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

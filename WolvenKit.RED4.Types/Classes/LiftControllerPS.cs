@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class LiftControllerPS : MasterControllerPS
 	{
 		[Ordinal(105)] 
@@ -144,8 +143,8 @@ namespace WolvenKit.RED4.Types
 		public LiftControllerPS()
 		{
 			DeviceName = "LocKey#101";
-			TweakDBRecord = new() { Value = 78520840316 };
-			TweakDBDescriptionRecord = new() { Value = 132145755007 };
+			TweakDBRecord = 78520840316;
+			TweakDBDescriptionRecord = 132145755007;
 			DisableQuickHacks = true;
 			LiftSetup = new() { LiftSpeed = 2.500000F, LiftStartingDelay = 1.000000F, LiftTravelTimeOverride = 4.000000F, EmptyLiftSpeedMultiplier = 2.000000F, RadioStationNumer = -1 };
 			TargetFloor = -1;
@@ -155,6 +154,10 @@ namespace WolvenKit.RED4.Types
 			FloorsAuthorization = new();
 			Stations = new();
 			CachedGoToFloorAction = -1;
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

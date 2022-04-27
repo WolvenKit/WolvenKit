@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class SlidingLadderControllerPS : BaseAnimatedDeviceControllerPS
 	{
 		[Ordinal(109)] 
@@ -24,11 +23,15 @@ namespace WolvenKit.RED4.Types
 		public SlidingLadderControllerPS()
 		{
 			DeviceName = "LocKey#2128";
-			TweakDBRecord = new() { Value = 93333720801 };
-			TweakDBDescriptionRecord = new() { Value = 144242295596 };
+			TweakDBRecord = 93333720801;
+			TweakDBDescriptionRecord = 144242295596;
 			ShouldScannerShowStatus = false;
 			IsShootable = true;
 			AnimationTime = 1.000000F;
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

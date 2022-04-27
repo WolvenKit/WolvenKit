@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class audioAudioFoliageMetadata : audioAudioMetadata
 	{
 		[Ordinal(1)] 
@@ -84,6 +83,10 @@ namespace WolvenKit.RED4.Types
 			MinFoliageMeshVolumeThreshold = 5.000000F;
 			MaxFoliageMeshHeight = 7.000000F;
 			PlayerInsideRequiredPercentage = 0.500000F;
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

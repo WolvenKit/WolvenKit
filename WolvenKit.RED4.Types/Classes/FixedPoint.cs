@@ -2,7 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
+	[REDClass(SerializeDefault = true)]
 	public partial class FixedPoint : RedBaseClass
 	{
 		[Ordinal(0)] 
@@ -12,5 +12,12 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CInt32>();
 			set => SetPropertyValue<CInt32>(value);
 		}
+
+		public FixedPoint()
+		{
+			PostConstruct();
+		}
+
+		partial void PostConstruct();
 	}
 }
