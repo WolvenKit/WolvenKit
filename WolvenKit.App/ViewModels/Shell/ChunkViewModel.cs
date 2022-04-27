@@ -231,21 +231,21 @@ namespace WolvenKit.ViewModels.Shell
 
 
 
-/*
-                    var fullselectiondb = Parent.DisplayProperties
-                        .Where(_ => Enumerable.Range(start, end - start + 1)
-                           .Contains(int.Parse(_.Name)))
-                        .Select(_ => _)
-                        .ToList();
+                    /*
+                                        var fullselectiondb = Parent.DisplayProperties
+                                            .Where(_ => Enumerable.Range(start, end - start + 1)
+                                               .Contains(int.Parse(_.Name)))
+                                            .Select(_ => _)
+                                            .ToList();
 
 
-                    var addonsn = ((worldStreamingSector)Tab.Chunks[0].Data).NodeData.GetValue();
-                    //(Parent.Data is IRedBufferPointer db3 && db3.GetValue().Data is worldNodeDataBuffer dict)
-                    if ((((worldStreamingSector)Tab.Chunks[0].Data).NodeData) is IRedBufferPointer db5
-                            && db5.GetValue().Data is worldNodeDataBuffer dictt)
-                    {
+                                        var addonsn = ((worldStreamingSector)Tab.Chunks[0].Data).NodeData.GetValue();
+                                        //(Parent.Data is IRedBufferPointer db3 && db3.GetValue().Data is worldNodeDataBuffer dict)
+                                        if ((((worldStreamingSector)Tab.Chunks[0].Data).NodeData) is IRedBufferPointer db5
+                                                && db5.GetValue().Data is worldNodeDataBuffer dictt)
+                                        {
 
-                    }*/
+                                        }*/
 
                     foreach (var i in fullselection)
                     { try { db4.Remove(i); } catch { } }
@@ -1832,6 +1832,41 @@ namespace WolvenKit.ViewModels.Shell
             RecalulateProperties();
         }
 
+
+
+        public ICommand ImportChunkCommand { get; private set; }
+        private bool CanImportChunk() => PropertyCount > 0;
+        private void ExecuteImportChunk()
+        {
+            Stream myStream;
+            var saveFileDialog = new SaveFileDialog
+            {
+                Filter = "JSON files (*.json)|*.json|All files (*.*)|*.*",
+                FilterIndex = 2,
+                FileName = Type + ".json",
+                RestoreDirectory = true
+            };
+
+            if (saveFileDialog.ShowDialog() == DialogResult.OK)
+            {
+                if ((myStream = saveFileDialog.OpenFile()) != null)
+                {
+                    var dto = new RedTypeDto(ResolvedData);
+                    var json = RedJsonSerializer.Serialize(dto);
+
+                    if (string.IsNullOrEmpty(json))
+                    {
+                        throw new SerializationException();
+                    }
+
+                    myStream.Write(json.ToCharArray().Select(c => (byte)c).ToArray());
+                    myStream.Close();
+                }
+            }
+        }
+
+
+
         public ICommand ExportChunkCommand { get; private set; }
         private bool CanExportChunk() => PropertyCount > 0;
         private void ExecuteExportChunk()
@@ -1877,14 +1912,19 @@ namespace WolvenKit.ViewModels.Shell
         private bool CanCopyChunk() => IsInArray;
         private void ExecuteCopyChunk()
         {
-            if (Data is IRedCloneable irc)
+            try
             {
-                RDTDataViewModel.CopiedChunk = (IRedType)irc.DeepCopy();
+                if (Data is IRedCloneable irc)
+                {
+                    RDTDataViewModel.CopiedChunk = (IRedType)irc.DeepCopy();
+                }
+                else
+                {
+                    RDTDataViewModel.CopiedChunk = Data;
+                }
             }
-            else
-            {
-                RDTDataViewModel.CopiedChunk = Data;
-            }
+            catch { }
+
         }
 
         public ICommand DuplicateChunkCommand { get; private set; }
@@ -1918,7 +1958,9 @@ namespace WolvenKit.ViewModels.Shell
         }
 
         public ICommand PasteChunkCommand { get; private set; }
-        private bool CanPasteChunk() => (IsArray || IsInArray) && RDTDataViewModel.CopiedChunk != null && (ArraySelfOrParent?.InnerType.IsAssignableTo(RDTDataViewModel.CopiedChunk.GetType()) ?? true);
+        private bool CanPasteChunk() => (IsArray || IsInArray)
+            && RDTDataViewModel.CopiedChunk != null
+            && (ArraySelfOrParent?.InnerType.IsAssignableTo(RDTDataViewModel.CopiedChunk.GetType()) ?? true);
         private void ExecutePasteChunk()
         {
             if (RDTDataViewModel.CopiedChunk == null)
@@ -2021,72 +2063,77 @@ namespace WolvenKit.ViewModels.Shell
 
         public bool InsertChild(int index, IRedType item)
         {
-            // update actual data
-            if (ResolvedData is IRedArray ira && ira.InnerType.IsAssignableTo(item.GetType()))
+            try
             {
-                var arrayType = Data.GetType().GetGenericTypeDefinition();
-                if (arrayType == typeof(CArray<>) || (arrayType == typeof(CStatic<>) && ira.Count < ira.MaxSize))
+                // update actual data
+                if (ResolvedData is IRedArray ira && ira.InnerType.IsAssignableTo(item.GetType()))
                 {
-                    if (index == -1 || index > ira.Count)
+                    var arrayType = Data.GetType().GetGenericTypeDefinition();
+                    if (arrayType == typeof(CArray<>) || (arrayType == typeof(CStatic<>) && ira.Count < ira.MaxSize))
                     {
-                        index = ira.Count;
+                        if (index == -1 || index > ira.Count)
+                        {
+                            index = ira.Count;
+                        }
+                        ira.Insert(index, item);
                     }
-                    ira.Insert(index, item);
+                    else
+                    {
+                        return false;
+                    }
+                }
+                else if (ResolvedData is IRedLegacySingleChannelCurve curve && curve.ElementType.IsAssignableTo(item.GetType()))
+                {
+                    curve.Add(0F, item);
+                }
+                else if (item is RedBaseClass rbc)
+                {
+                    if (ResolvedData is IRedBufferPointer db)
+                    {
+                        if (db.GetValue().Data is Package04 pkg)
+                        {
+                            if (index == -1 || index > pkg.Chunks.Count)
+                            {
+                                index = pkg.Chunks.Count;
+                            }
+                            pkg.Chunks.Insert(index, rbc);
+                        }
+                        else if (db.GetValue().Data is CR2WList list)
+                        {
+                            if (index == -1 || index > list.Files.Count)
+                            {
+                                index = list.Files.Count;
+                            }
+                            list.Files.Insert(index, new CR2WFile()
+                            {
+                                RootChunk = rbc
+                            });
+                        }
+                    }
+                    else
+                    {
+                        return false;
+                    }
                 }
                 else
                 {
                     return false;
                 }
-            }
-            else if (ResolvedData is IRedLegacySingleChannelCurve curve && curve.ElementType.IsAssignableTo(item.GetType()))
-            {
-                curve.Add(0F, item);
-            }
-            else if (item is RedBaseClass rbc)
-            {
-                if (ResolvedData is IRedBufferPointer db)
-                {
-                    if (db.GetValue().Data is Package04 pkg)
-                    {
-                        if (index == -1 || index > pkg.Chunks.Count)
-                        {
-                            index = pkg.Chunks.Count;
-                        }
-                        pkg.Chunks.Insert(index, rbc);
-                    }
-                    else if (db.GetValue().Data is CR2WList list)
-                    {
-                        if (index == -1 || index > list.Files.Count)
-                        {
-                            index = list.Files.Count;
-                        }
-                        list.Files.Insert(index, new CR2WFile()
-                        {
-                            RootChunk = rbc
-                        });
-                    }
-                }
-                else
-                {
-                    return false;
-                }
-            }
-            else
-            {
-                return false;
-            }
 
-            //Name = null;
-            //PropertyCount = -1;
-            //CalculateDescriptor();
-            //PropertiesLoaded = false;
-            //CalculateProperties();
-            //Tab.File.SetIsDirty(true);
+                //Name = null;
+                //PropertyCount = -1;
+                //CalculateDescriptor();
+                //PropertiesLoaded = false;
+                //CalculateProperties();
+                //Tab.File.SetIsDirty(true);
 
-            Tab.File.SetIsDirty(true);
-            RecalulateProperties(item);
+                Tab.File.SetIsDirty(true);
+                RecalulateProperties(item);
 
-            return true;
+                return true;
+            }
+            catch { }
+            return false;
         }
 
         public void RecalulateProperties(IRedType selectChild = null)
