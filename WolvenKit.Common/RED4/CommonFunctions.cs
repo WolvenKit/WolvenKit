@@ -151,9 +151,11 @@ namespace WolvenKit.RED4.CR2W
                     return (ETextureCompression.TCM_None, ETextureRawFormat.TRF_DeepColor);
 
                 case DXGI_FORMAT.DXGI_FORMAT_R8G8B8A8_UNORM:
-                    throw new NotImplementedException($"{nameof(GetRedFormatsFromDxgiFormat)}: R8G8B8A8_UNORM");
+                    return (ETextureCompression.TCM_None, ETextureRawFormat.TRF_TrueColor);
+
                 case DXGI_FORMAT.DXGI_FORMAT_R32_UINT:
                     throw new NotImplementedException($"{nameof(GetRedFormatsFromDxgiFormat)}: R32_UINT");
+
                 case DXGI_FORMAT.DXGI_FORMAT_R8G8_UNORM:
                     return (ETextureCompression.TCM_None, ETextureRawFormat.TRF_R8G8);
 
@@ -171,6 +173,7 @@ namespace WolvenKit.RED4.CR2W
 
                 case DXGI_FORMAT.DXGI_FORMAT_BC2_UNORM:
                     throw new NotImplementedException($"{nameof(GetRedFormatsFromDxgiFormat)}: BC2_UNORM");
+
                 case DXGI_FORMAT.DXGI_FORMAT_BC3_UNORM:
                     return (ETextureCompression.TCM_DXTAlpha, ETextureRawFormat.TRF_Invalid);
 

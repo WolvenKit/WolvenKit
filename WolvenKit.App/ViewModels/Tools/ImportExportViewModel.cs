@@ -760,7 +760,11 @@ namespace WolvenKit.ViewModels.Tools
                             await ImportSingle(item);
                         }
                     }
-                    await ImportWavs(wavs);
+
+                    if (wavs.Count > 0)
+                    {
+                        await ImportWavs(wavs);
+                    }
                 }
                 if (IsExportsSelected)
                 {
