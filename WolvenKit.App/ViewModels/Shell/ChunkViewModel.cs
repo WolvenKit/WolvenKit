@@ -1950,6 +1950,23 @@ namespace WolvenKit.ViewModels.Shell
                             var ww = PutQuotes(line.scale);
                             var scala = RedJsonSerializer.Deserialize<Vec3S>(ww);
 
+
+                            if (Parent.Parent is not null && Parent.Parent.Data is worldStreamingSector wss)
+                            {
+                                var currentnode = wss.Nodes[current.NodeIndex];
+
+                                if (currentnode is not null)
+                                {
+                                    var mesh = currentnode.GetValue().GetProperty("Mesh");
+                                    if (mesh is not null && mesh is CResourceAsyncReference<CMesh> m)
+                                    {
+                                        m.DepotPath = line.template_path;
+                                    }
+                                }
+                                ((IRedArray)wss.Nodes).Insert(Parent.GetIndexOf(this) + 1, (IRedType)currentnode);
+                            }
+
+
                             if (gottatry2 is not null)
                             {
 
@@ -1959,14 +1976,19 @@ namespace WolvenKit.ViewModels.Shell
                                 current.Position.W += float.Parse(gottatry2.w);
                                 if (scala is not null)
                                 {
-                                    current.Scale.X = float.Parse(scala.x);
-                                    current.Scale.Y = float.Parse(scala.y);
-                                    current.Scale.Z = float.Parse(scala.z);
+                                    current.Scale.X = float.Parse(scala.x) / 100;
+                                    current.Scale.Y = float.Parse(scala.y) / 100;
+                                    current.Scale.Z = float.Parse(scala.z) / 100;
                                 }
                                 current.Orientation = System.Numerics.Quaternion.CreateFromYawPitchRoll(
                                     float.Parse(gottatry2.yaw), float.Parse(gottatry2.pitch), float.Parse(gottatry2.roll));
 
+                                current.Pivot.X = current.Position.X;
+                                current.Pivot.Y = current.Position.Y;
+                                current.Pivot.Z = current.Position.Z;
+
                                 Parent.InsertChild(Parent.GetIndexOf(this) + 1, (IRedType)current);
+
                             }
                         }
                     }
