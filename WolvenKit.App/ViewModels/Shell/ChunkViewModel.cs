@@ -34,6 +34,12 @@ using Vec3 = System.Numerics.Vector3;
 
 namespace WolvenKit.ViewModels.Shell
 {
+    public class Vec3S
+    {
+        public string x { get; set; }
+        public string y { get; set; }
+        public string z { get; set; }
+    }
     public class Vec7S
     {
         public string x { get; set; }
@@ -1918,19 +1924,47 @@ namespace WolvenKit.ViewModels.Shell
                         {
                             current = RedJsonSerializer.Deserialize<worldNodeData>(tr);
 
-                            var gottatry = RedJsonSerializer.Deserialize<Vec7>(line.pos);
-                            var gottatry2 = RedJsonSerializer.Deserialize<Vec7S>(line.pos);
+                            string PutQuotes(string w)
+                            {
+                                w = w.Replace("{", "{\"");
+                                w = w.Replace("}", "\"}");
+                                w = w.Replace(", ", "\",\"");
+                                w = w.Replace(" = ", "\":\"");
+                                return w;
+                            }
 
-                            if (gottatry is not null)
+                            var w = PutQuotes(line.pos);
+
+                            /*var tt = String.Join(" ", w.Split(' ').Select(word => "\"" + word +"\""));
+                            tt = tt.Replace($"\"=\"", $"=");*/
+
+                            //var gottatry = RedJsonSerializer.Deserialize<Vec7>(w);
+                            var gottatry2 = RedJsonSerializer.Deserialize<Vec7S>(w);
+
+                            var lol = RedJsonSerializer.Serialize(gottatry2);
+
+                            var gotit = RedJsonSerializer.Deserialize<Vec7>(lol);
+                            //dynamic dyn = JsonConvert.DeserializeObject(line.pos);
+
+
+                            var ww = PutQuotes(line.scale);
+                            var scala = RedJsonSerializer.Deserialize<Vec3S>(ww);
+
+                            if (gottatry2 is not null)
                             {
 
-                                current.Position.X += gottatry.x;
-                                current.Position.Y += gottatry.y;
-                                current.Position.Z += gottatry.z;
-                                current.Position.W += gottatry.w;
-                                current.Scale = line.scale == "nil" ? new Vector3() { X = 1, Y = 1, Z = 1 } : RedJsonSerializer.Deserialize<Vector3>(line.scale);
-                                current.Orientation = System.Numerics.Quaternion
-                                    .CreateFromYawPitchRoll(gottatry.yaw, gottatry.pitch, gottatry.roll);
+                                current.Position.X += float.Parse(gottatry2.x);
+                                current.Position.Y += float.Parse(gottatry2.y);
+                                current.Position.Z += float.Parse(gottatry2.z);
+                                current.Position.W += float.Parse(gottatry2.w);
+                                if (scala is not null)
+                                {
+                                    current.Scale.X = float.Parse(scala.x);
+                                    current.Scale.Y = float.Parse(scala.y);
+                                    current.Scale.Z = float.Parse(scala.z);
+                                }
+                                current.Orientation = System.Numerics.Quaternion.CreateFromYawPitchRoll(
+                                    float.Parse(gottatry2.yaw), float.Parse(gottatry2.pitch), float.Parse(gottatry2.roll));
 
                                 Parent.InsertChild(Parent.GetIndexOf(this) + 1, (IRedType)current);
                             }
