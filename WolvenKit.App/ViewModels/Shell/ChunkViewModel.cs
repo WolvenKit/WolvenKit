@@ -31,6 +31,8 @@ using WolvenKit.ViewModels.Documents;
 using static WolvenKit.RED4.Types.RedReflection;
 
 using Vec3 = System.Numerics.Vector3;
+using Vec4 = System.Numerics.Vector4;
+using Quat = System.Numerics.Quaternion;
 
 namespace WolvenKit.ViewModels.Shell
 {
@@ -1908,32 +1910,75 @@ namespace WolvenKit.ViewModels.Shell
                     //yup !! that's a copy :D
                     var text = File.ReadAllText(openFileDialog.FileName);
                     if (string.IsNullOrEmpty(text) || current is null)
-                    { throw new SerializationException(); }
+                    {
+                        throw new SerializationException();
+                    }
                     var json = RedJsonSerializer.Deserialize<Root>(text);
+
+                    string PutQuotes(string w)
+                    {
+                        w = w.Replace("{", "{\"");
+                        w = w.Replace("}", "\"}");
+                        w = w.Replace(", ", "\",\"");
+                        w = w.Replace(" = ", "\":\"");
+                        return w;
+                    }
 
                     if (json is not null && json.props is not null && json.props.Count > 0)
                     {
+                        var poslist = new List<Vec4>();
+                        var rotlist = new List<Quat>();
+
                         foreach (var line in json.props)
                         {
-                            current = RedJsonSerializer.Deserialize<worldNodeData>(tr);
-
-                            string PutQuotes(string w)
+                            var posandrot = RedJsonSerializer.Deserialize<Vec7S>(PutQuotes(line.pos));
+                            var v = new Vec4()
                             {
-                                w = w.Replace("{", "{\"");
-                                w = w.Replace("}", "\"}");
-                                w = w.Replace(", ", "\",\"");
-                                w = w.Replace(" = ", "\":\"");
-                                return w;
-                            }
+                                X = float.Parse(posandrot.x),
+                                Y = float.Parse(posandrot.y),
+                                Z = float.Parse(posandrot.z),
+                                W = float.Parse(posandrot.w)
+                            };
+                            poslist.Add(v);
+
+                            var q = Quat.CreateFromYawPitchRoll(
+                                float.Parse(posandrot.yaw), float.Parse(posandrot.pitch), float.Parse(posandrot.roll));
+                            rotlist.Add(q);
+                        }
+
+                        var (minX, maxX) = (poslist.Select(_ => _.X).Min(), poslist.Select(_ => _.X).Max());
+                        var cX = (maxX + minX) / 2;
+                        //minX + (maxX - minX)/2 == (maxX + minX)/2;
+                        var (minY, maxY) = (poslist.Select(_ => _.Y).Min(), poslist.Select(_ => _.Y).Max());
+                        var cY = (maxY + minY) / 2;
+
+                        var (minZ, maxZ) = (poslist.Select(_ => _.Z).Min(), poslist.Select(_ => _.Z).Max());
+                        var cZ = (maxZ + minZ) / 2;
+
+                        var (minW, maxW) = (poslist.Select(_ => _.W).Min(), poslist.Select(_ => _.W).Max());
+                        var cW = (maxW + minW) / 2;
+
+                        for (var i = 0; i < poslist.Count; i++)
+                        {
+                            var pos = poslist[i];
+                            pos.X -= cX;
+                            pos.Y -= cY;
+                            pos.Z -= cZ;
+                            pos.W -= cW;
+                            poslist[i] = pos;
+                        }
+
+
+                        for (var i = 0; i < json.props.Count; i++)
+                        {
+                            var line = json.props[i];
+                            current = RedJsonSerializer.Deserialize<worldNodeData>(tr);
 
                             //No clue why none of these worked :D
                             //var gottatry = RedJsonSerializer.Deserialize<Vec7>(w);
                             //var lol = RedJsonSerializer.Serialize(gottatry2);
                             //var gotit = RedJsonSerializer.Deserialize<Vec7>(lol);
                             //dynamic dyn = JsonConvert.DeserializeObject(line.pos);
-
-                            var posandrot = RedJsonSerializer.Deserialize<Vec7S>(PutQuotes(line.pos));
-                            var scala = line.scale == "nil" ? null : RedJsonSerializer.Deserialize<Vec3S>(PutQuotes(line.scale));
 
                             if (Parent.Parent is not null &&
                                 Parent.Parent.Data is not null &&
@@ -1954,28 +1999,26 @@ namespace WolvenKit.ViewModels.Shell
                                 ((IRedArray)wss.Nodes).Insert(Parent.GetIndexOf(this) + 1, (IRedType)currentnode);
                             }
 
+                            var posandrot = poslist[i]; //RedJsonSerializer.Deserialize<Vec7S>(PutQuotes(line.pos));
+                            var scala = line.scale == "nil" ? null : RedJsonSerializer.Deserialize<Vec3S>(PutQuotes(line.scale));
 
-                            if (posandrot is not null)
+                            current.Position.X += posandrot.X;
+                            current.Position.Y += posandrot.Y;
+                            current.Position.Z += posandrot.Z;
+                            current.Position.W *= posandrot.W;
+                            if (scala is not null)
                             {
+                                current.Scale.X = float.Parse(scala.x) / 100;
+                                current.Scale.Y = float.Parse(scala.y) / 100;
+                                current.Scale.Z = float.Parse(scala.z) / 100;
+                            }
+                            current.Orientation = rotlist[i];
 
-                                current.Position.X += float.Parse(posandrot.x) / 1000000;
-                                current.Position.Y += float.Parse(posandrot.y) / 1000000;
-                                current.Position.Z += float.Parse(posandrot.z) / 1000000;
-                                current.Position.W *= float.Parse(posandrot.w) / 1000000;
-                                if (scala is not null)
-                                {
-                                    current.Scale.X = float.Parse(scala.x) *1000/ 100;
-                                    current.Scale.Y = float.Parse(scala.y) *1000/ 100;
-                                    current.Scale.Z = float.Parse(scala.z) *1000/ 100;
-                                }
-                                current.Orientation = System.Numerics.Quaternion.CreateFromYawPitchRoll(
-                                    float.Parse(posandrot.yaw), float.Parse(posandrot.pitch), float.Parse(posandrot.roll));
+                            current.Pivot.X = current.Position.X;
+                            current.Pivot.Y = current.Position.Y;
+                            current.Pivot.Z = current.Position.Z;
 
-                                current.Pivot.X = current.Position.X;
-                                current.Pivot.Y = current.Position.Y;
-                                current.Pivot.Z = current.Position.Z;
-
-
+                            {
                                 /*if (Parent.Data is IRedArray ira && ira.InnerType.IsAssignableTo(current.GetType()))
                                 {
                                     var index = Parent.GetIndexOf(this) + 1;
@@ -1989,10 +2032,9 @@ namespace WolvenKit.ViewModels.Shell
                                     Tab.File.SetIsDirty(true);
                                     RecalulateProperties(current);
                                 }*/
-
-                                Parent.InsertChild(Parent.GetIndexOf(this) + 1, (IRedType)current);
-
                             }
+                            Parent.InsertChild(Parent.GetIndexOf(this) + 1, (IRedType)current);
+
                         }
 
                         Locator.Current.GetService<ILoggerService>().Success($"might have done the thing maybe, who knows really");
