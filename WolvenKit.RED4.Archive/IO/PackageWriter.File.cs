@@ -248,7 +248,7 @@ namespace WolvenKit.RED4.Archive.IO
         private (IList<CName>, IList<ImportEntry>, List<Package04ChunkHeader>, byte[]) GenerateChunkData()
         {
             using var ms = new MemoryStream();
-            using var file = new PackageWriter(ms);
+            using var file = new PackageWriter(ms) { IsRoot = false };
 
             file._header = _header;
             file._chunkInfos = _chunkInfos;
