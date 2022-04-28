@@ -1891,7 +1891,6 @@ namespace WolvenKit.ViewModels.Shell
         private void ExecuteImportChunk()
         {
             //Open JSON
-            //Stream myStream;
             var openFileDialog = new OpenFileDialog
             {
                 Filter = "JSON files (*.json)|*.json|All files (*.*)|*.*",
@@ -1909,14 +1908,8 @@ namespace WolvenKit.ViewModels.Shell
                     //yup !! that's a copy :D
                     var text = File.ReadAllText(openFileDialog.FileName);
                     if (string.IsNullOrEmpty(text) || current is null)
-                    {
-                        throw new SerializationException();
-                    }
-                    var settings = new System.Text.Json.JsonSerializerOptions
-                    {
-                        DefaultIgnoreCondition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull
-                    };
-                    var json = System.Text.Json.JsonSerializer.Deserialize<Root>(text, settings);
+                    { throw new SerializationException(); }
+                    var json = RedJsonSerializer.Deserialize<Root>(text);
 
                     if (json is not null && json.props is not null && json.props.Count > 0)
                     {
@@ -1933,33 +1926,28 @@ namespace WolvenKit.ViewModels.Shell
                                 return w;
                             }
 
-                            var w = PutQuotes(line.pos);
-
-                            /*var tt = String.Join(" ", w.Split(' ').Select(word => "\"" + word +"\""));
-                            tt = tt.Replace($"\"=\"", $"=");*/
-
+                            //No clue why none of these worked :D
                             //var gottatry = RedJsonSerializer.Deserialize<Vec7>(w);
-                            var gottatry2 = RedJsonSerializer.Deserialize<Vec7S>(w);
-
-                            var lol = RedJsonSerializer.Serialize(gottatry2);
-
-                            var gotit = RedJsonSerializer.Deserialize<Vec7>(lol);
+                            //var lol = RedJsonSerializer.Serialize(gottatry2);
+                            //var gotit = RedJsonSerializer.Deserialize<Vec7>(lol);
                             //dynamic dyn = JsonConvert.DeserializeObject(line.pos);
 
+                            var posandrot = RedJsonSerializer.Deserialize<Vec7S>(PutQuotes(line.pos));
+                            var scala = line.scale == "nil" ? null : RedJsonSerializer.Deserialize<Vec3S>(PutQuotes(line.scale));
 
-                            var ww = PutQuotes(line.scale);
-                            var scala = RedJsonSerializer.Deserialize<Vec3S>(ww);
-
-
-                            if (Parent.Parent is not null && Parent.Parent.Data is worldStreamingSector wss)
+                            if (Parent.Parent is not null &&
+                                Parent.Parent.Data is not null &&
+                                Parent.Parent.Data is worldStreamingSector wss)
                             {
-                                var currentnode = wss.Nodes[current.NodeIndex];
+                                var currentnode = (CHandle<worldNode>)wss.Nodes[current.NodeIndex].DeepCopy();
 
-                                if (currentnode is not null)
+                                if (currentnode is not null &&
+                                    currentnode.GetValue() is not null)
                                 {
                                     var mesh = currentnode.GetValue().GetProperty("Mesh");
                                     if (mesh is not null && mesh is CResourceAsyncReference<CMesh> m)
                                     {
+
                                         m.DepotPath = line.template_path;
                                     }
                                 }
@@ -1967,30 +1955,48 @@ namespace WolvenKit.ViewModels.Shell
                             }
 
 
-                            if (gottatry2 is not null)
+                            if (posandrot is not null)
                             {
 
-                                current.Position.X += float.Parse(gottatry2.x);
-                                current.Position.Y += float.Parse(gottatry2.y);
-                                current.Position.Z += float.Parse(gottatry2.z);
-                                current.Position.W += float.Parse(gottatry2.w);
+                                current.Position.X += float.Parse(posandrot.x) / 1000000;
+                                current.Position.Y += float.Parse(posandrot.y) / 1000000;
+                                current.Position.Z += float.Parse(posandrot.z) / 1000000;
+                                current.Position.W *= float.Parse(posandrot.w) / 1000000;
                                 if (scala is not null)
                                 {
-                                    current.Scale.X = float.Parse(scala.x) / 100;
-                                    current.Scale.Y = float.Parse(scala.y) / 100;
-                                    current.Scale.Z = float.Parse(scala.z) / 100;
+                                    current.Scale.X = float.Parse(scala.x) *1000/ 100;
+                                    current.Scale.Y = float.Parse(scala.y) *1000/ 100;
+                                    current.Scale.Z = float.Parse(scala.z) *1000/ 100;
                                 }
                                 current.Orientation = System.Numerics.Quaternion.CreateFromYawPitchRoll(
-                                    float.Parse(gottatry2.yaw), float.Parse(gottatry2.pitch), float.Parse(gottatry2.roll));
+                                    float.Parse(posandrot.yaw), float.Parse(posandrot.pitch), float.Parse(posandrot.roll));
 
                                 current.Pivot.X = current.Position.X;
                                 current.Pivot.Y = current.Position.Y;
                                 current.Pivot.Z = current.Position.Z;
 
+
+                                /*if (Parent.Data is IRedArray ira && ira.InnerType.IsAssignableTo(current.GetType()))
+                                {
+                                    var index = Parent.GetIndexOf(this) + 1;
+                                    if (index == -1 || index > ira.Count)
+                                    {
+                                        index = ira.Count;
+                                    }
+
+                                    ira.Insert(index, (IRedType)current);
+
+                                    Tab.File.SetIsDirty(true);
+                                    RecalulateProperties(current);
+                                }*/
+
                                 Parent.InsertChild(Parent.GetIndexOf(this) + 1, (IRedType)current);
 
                             }
                         }
+
+                        Locator.Current.GetService<ILoggerService>().Success($"might have done the thing maybe, who knows really");
+
                     }
                 }
                 catch { }
