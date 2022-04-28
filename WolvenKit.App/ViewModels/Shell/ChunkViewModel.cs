@@ -30,8 +30,53 @@ using WolvenKit.ViewModels.Dialogs;
 using WolvenKit.ViewModels.Documents;
 using static WolvenKit.RED4.Types.RedReflection;
 
+using Vec3 = System.Numerics.Vector3;
+
 namespace WolvenKit.ViewModels.Shell
 {
+    public class Vec7S
+    {
+        public string x { get; set; }
+        public string y { get; set; }
+        public string z { get; set; }
+        public string w { get; set; }
+        public string roll { get; set; }
+        public string pitch { get; set; }
+        public string yaw { get; set; }
+    }
+    public class Vec7
+    {
+        public float x { get; set; }
+        public float y { get; set; }
+        public float z { get; set; }
+        public float w { get; set; }
+        public float roll { get; set; }
+        public float pitch { get; set; }
+        public float yaw { get; set; }
+    }
+    public class Prop
+    {
+        public string scale { get; set; }
+        public string tag { get; set; }
+        public string template_path { get; set; }
+        public string entity_id { get; set; }
+        public string pos { get; set; }
+        public int uid { get; set; }
+        public string app { get; set; }
+        public string name { get; set; }
+        public string trigger { get; set; }
+    }
+
+    public class Root
+    {
+        public bool customIncluded { get; set; }
+        public List<Prop> props { get; set; }
+        public List<object> lights { get; set; }
+        public string name { get; set; }
+        public string file_name { get; set; }
+    }
+
+
     public class ChunkViewModel : ReactiveObject, ISelectableTreeViewItemModel
     {
         public bool PropertiesLoaded;
@@ -170,6 +215,7 @@ namespace WolvenKit.ViewModels.Shell
             OpenRefCommand = new DelegateCommand(_ => ExecuteOpenRef(), _ => CanOpenRef());
             AddRefCommand = new DelegateCommand(_ => ExecuteAddRef(), _ => CanAddRef());
             ExportChunkCommand = new DelegateCommand(_ => ExecuteExportChunk(), _ => CanExportChunk());
+            ImportChunkCommand = new DelegateCommand(_ => ExecuteImportChunk(), _ => CanImportChunk());
             AddItemToArrayCommand = new DelegateCommand(_ => ExecuteAddItemToArray(), _ => CanAddItemToArray());
             AddHandleCommand = new DelegateCommand(_ => ExecuteAddHandle(), _ => CanAddHandle());
             AddItemToCompiledDataCommand = new DelegateCommand(_ => ExecuteAddItemToCompiledData(), _ => CanAddItemToCompiledData());
@@ -1838,8 +1884,9 @@ namespace WolvenKit.ViewModels.Shell
         private bool CanImportChunk() => PropertyCount > 0;
         private void ExecuteImportChunk()
         {
-            Stream myStream;
-            var saveFileDialog = new SaveFileDialog
+            //Open JSON
+            //Stream myStream;
+            var openFileDialog = new OpenFileDialog
             {
                 Filter = "JSON files (*.json)|*.json|All files (*.*)|*.*",
                 FilterIndex = 2,
@@ -1847,21 +1894,50 @@ namespace WolvenKit.ViewModels.Shell
                 RestoreDirectory = true
             };
 
-            if (saveFileDialog.ShowDialog() == DialogResult.OK)
+            if (openFileDialog.ShowDialog() == DialogResult.OK)
             {
-                if ((myStream = saveFileDialog.OpenFile()) != null)
+                try
                 {
-                    var dto = new RedTypeDto(ResolvedData);
-                    var json = RedJsonSerializer.Serialize(dto);
-
-                    if (string.IsNullOrEmpty(json))
+                    var tr = RedJsonSerializer.Serialize(Data);
+                    var current = RedJsonSerializer.Deserialize<worldNodeData>(tr);
+                    //yup !! that's a copy :D
+                    var text = File.ReadAllText(openFileDialog.FileName);
+                    if (string.IsNullOrEmpty(text) || current is null)
                     {
                         throw new SerializationException();
                     }
+                    var settings = new System.Text.Json.JsonSerializerOptions
+                    {
+                        DefaultIgnoreCondition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull
+                    };
+                    var json = System.Text.Json.JsonSerializer.Deserialize<Root>(text, settings);
 
-                    myStream.Write(json.ToCharArray().Select(c => (byte)c).ToArray());
-                    myStream.Close();
+                    if (json is not null && json.props is not null && json.props.Count > 0)
+                    {
+                        foreach (var line in json.props)
+                        {
+                            current = RedJsonSerializer.Deserialize<worldNodeData>(tr);
+
+                            var gottatry = RedJsonSerializer.Deserialize<Vec7>(line.pos);
+                            var gottatry2 = RedJsonSerializer.Deserialize<Vec7S>(line.pos);
+
+                            if (gottatry is not null)
+                            {
+
+                                current.Position.X += gottatry.x;
+                                current.Position.Y += gottatry.y;
+                                current.Position.Z += gottatry.z;
+                                current.Position.W += gottatry.w;
+                                current.Scale = line.scale == "nil" ? new Vector3() { X = 1, Y = 1, Z = 1 } : RedJsonSerializer.Deserialize<Vector3>(line.scale);
+                                current.Orientation = System.Numerics.Quaternion
+                                    .CreateFromYawPitchRoll(gottatry.yaw, gottatry.pitch, gottatry.roll);
+
+                                Parent.InsertChild(Parent.GetIndexOf(this) + 1, (IRedType)current);
+                            }
+                        }
+                    }
                 }
+                catch { }
             }
         }
 
@@ -2068,18 +2144,29 @@ namespace WolvenKit.ViewModels.Shell
                 // update actual data
                 if (ResolvedData is IRedArray ira && ira.InnerType.IsAssignableTo(item.GetType()))
                 {
-                    var arrayType = Data.GetType().GetGenericTypeDefinition();
-                    if (arrayType == typeof(CArray<>) || (arrayType == typeof(CStatic<>) && ira.Count < ira.MaxSize))
+                    if (Data.GetType().IsGenericTypeDefinition)
+                    {
+                        var arrayType = Data.GetType().GetGenericTypeDefinition();
+                        if (arrayType == typeof(CArray<>) || (arrayType == typeof(CStatic<>) && ira.Count < ira.MaxSize))
+                        {
+                            if (index == -1 || index > ira.Count)
+                            {
+                                index = ira.Count;
+                            }
+                            ira.Insert(index, item);
+                        }
+                        else
+                        {
+                            return false;
+                        }
+                    }
+                    else if (Data is IRedBufferPointer db)
                     {
                         if (index == -1 || index > ira.Count)
                         {
                             index = ira.Count;
                         }
                         ira.Insert(index, item);
-                    }
-                    else
-                    {
-                        return false;
                     }
                 }
                 else if (ResolvedData is IRedLegacySingleChannelCurve curve && curve.ElementType.IsAssignableTo(item.GetType()))
