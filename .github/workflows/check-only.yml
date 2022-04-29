@@ -1,6 +1,6 @@
-name: wkit-check-builds
+name: check-only
 on:
-  push:
+  pull_request:
     branches: [develop, master, main]
 
 jobs:
@@ -18,11 +18,6 @@ jobs:
     - name: Publish with Dotnet
       run: dotnet publish .\WolvenKit\WolvenKit.csproj -o .\publish -c Release
 
-    - uses: actions/upload-artifact@v2
-      with:
-        name: WolvenKit Desktop
-        path: .\publish
-
   console-win:
     runs-on: ubuntu-latest
 
@@ -36,11 +31,6 @@ jobs:
 
     - name: Publish with Dotnet
       run: dotnet publish ./WolvenKit.CLI/WolvenKit.CLI.csproj -o ./publish_cli -r win-x64 -c Release --no-self-contained
-
-    - uses: actions/upload-artifact@v2
-      with:
-        name: WolvenKit CLI
-        path: ./publish_cli
 
 
   console-linux:
@@ -56,8 +46,3 @@ jobs:
 
     - name: Publish with Dotnet
       run: dotnet publish ./WolvenKit.CLI/WolvenKit.CLI.csproj -o ./publish_cli_linux -r linux-x64 -c Release --no-self-contained
-
-    - uses: actions/upload-artifact@v2
-      with:
-        name: WolvenKit CLI Linux
-        path: ./publish_cli_linux
