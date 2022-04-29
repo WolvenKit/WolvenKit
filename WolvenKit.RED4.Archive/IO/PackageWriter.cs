@@ -221,19 +221,6 @@ namespace WolvenKit.RED4.Archive.IO
             _writer.Write(strBytes);
         }
 
-        public override void Write(DataBuffer val)
-        {
-            if (val.Buffer.IsEmpty)
-            {
-                _writer.Write(0x80000000);
-            }
-            else
-            {
-                _writer.Write(val.Buffer.MemSize);
-                _writer.Write(val.Buffer.GetBytes());
-            }
-        }
-
         public override void Write(TweakDBID val)
         {
             if (_header.version == 02 || _header.version == 03)
