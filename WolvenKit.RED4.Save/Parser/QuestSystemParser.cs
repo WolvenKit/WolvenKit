@@ -12,5 +12,5 @@ public class QuestSystemParser : INodeParser
         ParserHelper.ReadChildren(reader, node);
     }
 
-    public void Write(NodeWriter writer, NodeEntry node) => throw new NotImplementedException();
+    public void Write(NodeWriter writer, NodeEntry node) => ParserHelper.WriteChildren(writer, node);
 }

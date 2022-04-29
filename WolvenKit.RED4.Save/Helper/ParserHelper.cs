@@ -69,4 +69,12 @@ public class ParserHelper
         var parser = GetParser(node.Name);
         parser.Read(reader, node);
     }
+
+    public static void WriteChildren(NodeWriter writer, NodeEntry node)
+    {
+        foreach (var child in node.Children)
+        {
+            writer.Write(child);
+        }
+    }
 }

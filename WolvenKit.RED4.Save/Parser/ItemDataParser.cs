@@ -14,7 +14,12 @@ namespace WolvenKit.RED4.Save
             node.Value = InventoryHelper.ReadItemData(reader);
         }
 
-        public void Write(NodeWriter writer, NodeEntry node) => throw new NotImplementedException();
+        public void Write(NodeWriter writer, NodeEntry node)
+        {
+            var value = (InventoryHelper.ItemData)node.Value;
+
+            InventoryHelper.WriteItemData(writer, value);
+        }
     }
 
 }

@@ -1,4 +1,5 @@
 using WolvenKit.Core.Extensions;
+using WolvenKit.RED4.Save.IO;
 using WolvenKit.RED4.Types;
 
 namespace WolvenKit.RED4.Save;
@@ -214,7 +215,7 @@ public class InventoryHelper
             Header = ReadHeaderThing(reader)
         };
 
-    public static void WriteNextItemEntry(BinaryWriter writer, NextItemEntry item)
+    public static void WriteNextItemEntry(NodeWriter writer, NextItemEntry item)
     {
         writer.Write((ulong)item.ItemTdbId);
         WriteHeaderThing(writer, item.Header);

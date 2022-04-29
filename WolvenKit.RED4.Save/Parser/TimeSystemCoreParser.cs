@@ -61,7 +61,14 @@ namespace WolvenKit.RED4.Save
             node.Value = data;
         }
 
-        public void Write(NodeWriter writer, NodeEntry node) => throw new NotImplementedException();
+        public void Write(NodeWriter writer, NodeEntry node)
+        {
+            var value = (TimeSystemCore)node.Value;
+
+            writer.Write(value.Unknown1);
+            writer.Write(value.CurrentGameTime);
+            writer.Write(value.Unknown2);
+        }
     }
 
 }

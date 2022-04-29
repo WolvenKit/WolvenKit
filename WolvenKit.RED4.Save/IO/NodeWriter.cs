@@ -72,6 +72,8 @@ public class NodeWriter : BinaryWriter
         _currentDepth--;
     }
 
+    public int GetId() => _currentId++;
+
     public List<NodeInfo> GetFinalizedInfos()
     {
         for (var i = _nodeInfos.Count - 1; i >= 0; i--)

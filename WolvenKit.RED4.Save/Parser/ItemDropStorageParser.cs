@@ -22,7 +22,7 @@ namespace WolvenKit.RED4.Save
 
     public class ItemDropStorageParser : INodeParser
     {
-        //public static string NodeName => Constants.NodeNames.ITEM_DROP_STORAGE;
+        public static string NodeName => Constants.NodeNames.ITEM_DROP_STORAGE;
 
         public void Read(BinaryReader reader, NodeEntry node)
         {
@@ -58,7 +58,37 @@ namespace WolvenKit.RED4.Save
             node.Value = data;
         }
 
-        public void Write(NodeWriter writer, NodeEntry node) => throw new NotImplementedException();
+        public void Write(NodeWriter writer, NodeEntry node) => Write(writer, (ItemDropStorage)node.Value);
+
+        public void Write(NodeWriter writer, ItemDropStorage value)
+        {
+            writer.WriteLengthPrefixedString(value.Unk1);
+            writer.Write(value.Unk2);
+            writer.Write(value.Unk3);
+            writer.Write(value.Unk4);
+            writer.Write(value.Unk5);
+            writer.Write(value.Unk6);
+            writer.Write(value.Unk7);
+
+            writer.Write(value.Items.Count);
+            foreach (var itemData in value.Items)
+            {
+                var nextItemEntry = new InventoryHelper.NextItemEntry
+                {
+                    ItemTdbId = itemData.ItemTdbId,
+                    Header = itemData.Header
+                };
+
+                InventoryHelper.WriteNextItemEntry(writer, nextItemEntry);
+
+                var subNode = new NodeEntry
+                {
+                    Name = "itemData",
+                    Value = itemData,
+                };
+                writer.Write(subNode);
+            }
+        }
     }
 
 }

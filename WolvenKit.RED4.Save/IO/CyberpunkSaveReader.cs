@@ -11,7 +11,9 @@ public class CyberpunkSaveReader
 
     private CyberpunkSaveFile? _csavFile;
 
-    
+    public List<NodeEntry> NodeEntries;
+
+
     public CyberpunkSaveReader(Stream input) : this(input, Encoding.UTF8, false)
     {
     }
@@ -86,6 +88,8 @@ public class CyberpunkSaveReader
                 Size = BaseReader.ReadInt32()
             });
         }
+
+        NodeEntries = flatNodes;
 
         BaseStream.Position = 0;
         var dataStream = Compression.Decompress(_reader, out var compressionSettings);

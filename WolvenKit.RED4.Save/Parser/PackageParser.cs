@@ -18,6 +18,7 @@ public class PackageParser : INodeParser
     {
         var dummyBuffer = new RedBuffer();
 
+        reader.ReadInt32(); // nodeId
         var subReader = new PackageReader(reader);
         subReader.ReadBuffer(dummyBuffer, dummyType);
 

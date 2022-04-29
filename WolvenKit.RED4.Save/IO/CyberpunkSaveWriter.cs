@@ -10,6 +10,8 @@ public class CyberpunkSaveWriter
 
     private CyberpunkSaveFile _file;
 
+    public List<NodeInfo> NodeInfos;
+
     public CyberpunkSaveWriter(Stream output) : this(output, Encoding.UTF8, false)
     {
     }
@@ -38,6 +40,7 @@ public class CyberpunkSaveWriter
                 writer.Write(file.FileHeader);
 
                 var uncompressedData = GetNodeData(out var nodeInfos);
+                NodeInfos = nodeInfos;
 
                 var dataOffset = (int)(writer.BaseStream.Position + 8 + (_file.CompressionSettings.TableEntriesCount * 12));
                 foreach (var nodeInfo in nodeInfos)

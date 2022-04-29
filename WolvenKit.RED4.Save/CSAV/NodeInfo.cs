@@ -1,5 +1,8 @@
+using System.Diagnostics;
+
 namespace WolvenKit.RED4.Save;
 
+[DebuggerDisplay("{Name}")]
 public class NodeInfo
 {
     public string Name { get; set; }

@@ -31,7 +31,40 @@ namespace WolvenKit.RED4.Save
             node.Value = data;
         }
 
-        public void Write(NodeWriter writer, NodeEntry node) => throw new NotImplementedException();
+        public void Write(NodeWriter writer, NodeEntry node)
+        {
+            var parser = ParserHelper.GetParser(Constants.NodeNames.ITEM_DATA);
+            if (parser == null)
+            {
+                throw new NotImplementedException(Constants.NodeNames.ITEM_DATA);
+            }
+
+            var value = (Inventory)node.Value;
+
+            writer.Write(value.SubInventories.Count);
+            foreach (var subInventory in value.SubInventories)
+            {
+                writer.Write(subInventory.InventoryId);
+                writer.Write(subInventory.Items.Count);
+                foreach (var itemData in subInventory.Items)
+                {
+                    var nextItemEntry = new InventoryHelper.NextItemEntry
+                    {
+                        ItemTdbId = itemData.ItemTdbId,
+                        Header = itemData.Header
+                    };
+
+                    InventoryHelper.WriteNextItemEntry(writer, nextItemEntry);
+
+                    var subNode = new NodeEntry
+                    {
+                        Name = "itemData",
+                        Value = itemData,
+                    };
+                    writer.Write(subNode);
+                }
+            }
+        }
 
         #region Reader
 

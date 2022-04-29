@@ -41,6 +41,23 @@ namespace WolvenKit.RED4.Save
             node.Value = data;
         }
 
-        public void Write(NodeWriter writer, NodeEntry node) => throw new NotImplementedException();
+        public void Write(NodeWriter writer, NodeEntry node)
+        {
+            var value = (ItemDropStorageManager)node.Value;
+
+            writer.Write(value.ItemDropStorages.Count);
+            foreach (var storage in value.ItemDropStorages)
+            {
+                var subNode = new NodeEntry
+                {
+                    Name = "ItemDropStorage",
+                    Value = storage
+                };
+
+                writer.Write(subNode);
+            }
+
+            writer.Write(value.TrailingBytes);
+        }
     }
 }
