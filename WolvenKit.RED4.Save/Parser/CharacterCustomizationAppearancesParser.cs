@@ -63,12 +63,12 @@ namespace WolvenKit.RED4.Save
 
         public class HashValueEntry
         {
-            private ulong _hash;
+            private CResourceReference<appearanceAppearanceResource> _hash;
             private string _firstString;
             private string _secondString;
             private byte[] _trailingBytes;
 
-            public ulong Hash
+            public CResourceReference<appearanceAppearanceResource> Hash
             {
                 get => _hash;
                 set
@@ -343,7 +343,7 @@ namespace WolvenKit.RED4.Save
             writer.Write(appearanceSection.MainList.Count);
             foreach (var entry in appearanceSection.MainList)
             {
-                writer.Write(entry.Hash);
+                writer.Write((ulong)entry.Hash.DepotPath);
                 writer.WriteLengthPrefixedString(entry.FirstString);
                 writer.WriteLengthPrefixedString(entry.SecondString);
                 writer.Write(entry.TrailingBytes);
@@ -454,7 +454,7 @@ namespace WolvenKit.RED4.Save
                 var entry = new CharacterCustomizationAppearances.HashValueEntry();
                 // CSE is doing a version check here on ArchiveVersion < 195
                 // Unt64 only read if ArchiveVersion >= 195, otherwise: https://github.com/PixelRick/CyberpunkSaveEditor/blob/7c47c6c7ce099c714e2ba43515380f99a2422c20/Source/cserialization/cnodes/CCharacterCustomization.hpp#L74
-                entry.Hash = reader.ReadUInt64();
+                entry.Hash = new CResourceReference<appearanceAppearanceResource> { DepotPath = reader.ReadUInt64() };
                 entry.FirstString = reader.ReadLengthPrefixedString();
                 entry.SecondString = reader.ReadLengthPrefixedString();
                 entry.TrailingBytes = reader.ReadBytes(8);

@@ -45,22 +45,6 @@ public static class Extensions
         _factsLoaded = true;
     }
 
-    public static TweakDBID ReadTweakDbId(this BinaryReader reader)
-    {
-        if (!_tweaksLoaded)
-        {
-            LoadTweaks();
-        }
-
-        var val = reader.ReadUInt64();
-        if (_tweakList.ContainsKey(val))
-        {
-            return _tweakList[val];
-        }
-
-        return val;
-    }
-
     public static Fact ReadFact(this BinaryReader reader)
     {
         if (!_factsLoaded)

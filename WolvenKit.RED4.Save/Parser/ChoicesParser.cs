@@ -19,7 +19,7 @@ namespace WolvenKit.RED4.Save
 
         public class Entry1
         {
-            public ulong Unknown1 { get; set; }
+            public CResourceReference<scnSceneResource> Unknown1 { get; set; }
             public List<Entry2> Unknown2 { get; set; }
 
             public Entry1()
@@ -50,7 +50,7 @@ namespace WolvenKit.RED4.Save
             {
                 var entry = new Choices.Entry1();
 
-                entry.Unknown1 = reader.ReadUInt64();
+                entry.Unknown1 = new CResourceReference<scnSceneResource> { DepotPath = reader.ReadUInt64() };
 
                 var subEntryCount = reader.ReadUInt32();
                 for (int j = 0; j < subEntryCount; j++)
@@ -77,7 +77,7 @@ namespace WolvenKit.RED4.Save
             writer.Write(data.Unknown1.Count);
             foreach (var entry in data.Unknown1)
             {
-                writer.Write(entry.Unknown1);
+                writer.Write((ulong)entry.Unknown1.DepotPath);
 
                 writer.Write(entry.Unknown2.Count);
                 foreach (var subEntry in entry.Unknown2)

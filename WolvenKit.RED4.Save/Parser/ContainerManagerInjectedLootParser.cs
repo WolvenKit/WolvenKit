@@ -52,7 +52,7 @@ namespace WolvenKit.RED4.Save
                 {
                     var subEntry = new ContainerManagerInjectedLoot.SubEntry();
 
-                    subEntry.ItemTbdId = reader.ReadTweakDbId();
+                    subEntry.ItemTbdId = reader.ReadUInt64();
                     subEntry.Unknown2 = reader.ReadByte();
                     subEntry.Unknown3 = reader.ReadUInt32();
                     subEntry.Unknown4 = reader.ReadByte();

@@ -55,10 +55,10 @@ namespace WolvenKit.RED4.Save
                 for (int j = 0; j < subCount; j++)
                 {
                     var subEntry = new ContainerManagerNPCLootBagsVer2.Item();
-                    subEntry.Unk1_ItemTbdId = reader.ReadTweakDbId();
+                    subEntry.Unk1_ItemTbdId = reader.ReadUInt64();
                     subEntry.Unk1_Seed = reader.ReadUInt32();
                     subEntry.Unk2_Counter = reader.ReadUInt32();
-                    subEntry.Unk2_ItemTbdId = reader.ReadTweakDbId();
+                    subEntry.Unk2_ItemTbdId = reader.ReadUInt64();
                     subEntry.Unk2_Seed = reader.ReadUInt32();
 
                     entry.Items.Add(subEntry);

@@ -19,7 +19,7 @@ namespace WolvenKit.RED4.Save
         {
             var data = new PlayerSystem();
             data.Unk_Hash = reader.ReadUInt64();
-            data.Unk_Id = reader.ReadTweakDbId();
+            data.Unk_Id = reader.ReadUInt64();
 
             node.Value = data;
         }
