@@ -8,7 +8,7 @@ namespace WolvenKit.RED4.Save
     {
         public string Unk1 { get; set; }
         public byte[] Unk2 { get; set; }
-        public bool Unk3 { get; set; }
+        public byte Unk3 { get; set; }
 
         // Vector4?
         public float Unk4 { get; set; }
@@ -31,7 +31,7 @@ namespace WolvenKit.RED4.Save
             reader.ReadUInt32(); // nodeId
             data.Unk1 = reader.ReadLengthPrefixedString();
             data.Unk2 = reader.ReadBytes(16);
-            data.Unk3 = reader.ReadBoolean();
+            data.Unk3 = reader.ReadByte();
             data.Unk4 = reader.ReadSingle();
             data.Unk5 = reader.ReadSingle();
             data.Unk6 = reader.ReadSingle();

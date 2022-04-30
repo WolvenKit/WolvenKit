@@ -18,7 +18,7 @@ public class PackageParser : INodeParser
     {
         var dummyBuffer = new RedBuffer();
 
-        reader.ReadInt32(); // nodeId
+        reader.ReadInt32(); // dataSize
         var subReader = new PackageReader(reader);
         subReader.ReadBuffer(dummyBuffer, dummyType);
 
@@ -32,6 +32,9 @@ public class PackageParser : INodeParser
         using var subWriter = new PackageWriter(ms);
         subWriter.WritePackage((Package04)((Package)node.Value).Content, dummyType);
 
-        writer.Write(ms.ToArray());
+        var bytes = ms.ToArray();
+
+        writer.Write(bytes.Length);
+        writer.Write(bytes);
     }
 }

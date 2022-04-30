@@ -59,6 +59,10 @@ namespace WolvenKit.RED4.Archive.IO
                         }
                     }
                 }
+                else if (file.Chunks[i] is gameScriptableSystem script && i < file.RootCruids.Count)
+                {
+                    cruids.Add(file.RootCruids[i]);
+                }
                 else
                 {
                     if (cuidsIndex == -1)

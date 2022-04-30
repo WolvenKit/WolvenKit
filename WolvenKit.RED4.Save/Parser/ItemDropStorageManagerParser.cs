@@ -35,7 +35,7 @@ namespace WolvenKit.RED4.Save
                 data.ItemDropStorages.Add((ItemDropStorage)node.Children[i].Value);
             }
 
-            var remaining = node.Size - (reader.BaseStream.Position - startPos);
+            var remaining = node.Size - (reader.BaseStream.Position - startPos) - 4;
             data.TrailingBytes = reader.ReadBytes((int)remaining);
 
             node.Value = data;

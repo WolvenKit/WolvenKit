@@ -26,7 +26,7 @@ public class GameSessionConfigParser : INodeParser
                 StreamingWorld = new CResourceReference<worldStreamingWorld> { DepotPath = reader.ReadUInt64() },
                 TextValue = reader.ReadLengthPrefixedString(),
                 Hash3 = reader.ReadUInt64(),
-                TrailingBytes = reader.ReadBytes(node.TrailingSize)
+                TrailingBytes = reader.ReadBytes(12)
             };
     }
 

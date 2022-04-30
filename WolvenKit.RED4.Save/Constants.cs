@@ -69,6 +69,7 @@ namespace WolvenKit.RED4.Save
             public const string CONTAINER_MANAGER_NPC_LOOT_BAGS_VER2 = "ContainerManager_NPCLootBags_Ver2";
             public const string CONTAINER_MANAGER_NPC_LOOT_BAGS_VER3_LOOTED_IDS = "ContainerManager_NPCLootBags_Ver3_LootedIDs";
             public const string CUSTOM_ARRAY = "customArray";
+            public const string DELAY_SYSTEM = "DelaySystem";
             public const string DEVICE_SYSTEM = "DeviceSystem";
             public const string DIRECTOR_SYSTEM = "DirectorSystem";
             public const string DS_DYNAMIC_CONNECTIONS = "DS_DynamicConnections";

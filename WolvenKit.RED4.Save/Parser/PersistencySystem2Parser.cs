@@ -169,7 +169,7 @@ public class PersistencySystem2Writer : Red4Writer
         foreach (var propertyInfo in typeInfo.GetWritableProperties())
         {
             var value = instance.GetProperty(propertyInfo.RedName);
-            if (!typeInfo.SerializeDefault && RedReflection.IsDefault(instance.GetType(), propertyInfo, value))
+            if (!typeInfo.SerializeDefault && !propertyInfo.SerializeDefault && RedReflection.IsDefault(instance.GetType(), propertyInfo, value))
             {
                 continue;
             }
@@ -179,6 +179,8 @@ public class PersistencySystem2Writer : Red4Writer
 
             Write(value);
         }
+
+        BaseWriter.Write((ulong)0);
     }
 
     public override void Write(CName val) => BaseWriter.Write((ulong)val);
@@ -224,8 +226,10 @@ public class PersistencySystem2Writer : Red4Writer
 
     public override void Write(IRedHandle instance)
     {
-        BaseWriter.Write(ClassHashHelper.GetHashFromType(instance.InnerType));
-        WriteClass(instance.GetValue());
+        var value = instance.GetValue();
+
+        BaseWriter.Write(ClassHashHelper.GetHashFromType(value.GetType()));
+        WriteClass(value);
     }
 }
 
@@ -308,7 +312,7 @@ public class PersistencySystem2Parser : INodeParser
 
                     subWriter.WriteClass(entry.Data);
 
-                    var bytes = subMemory.ToArray();
+                    var bytes = subMemory.ToArray()[..^8];
                     writer.Write(bytes.Length);
                     writer.Write(bytes);
                 }

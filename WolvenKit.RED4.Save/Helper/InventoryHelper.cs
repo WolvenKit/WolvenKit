@@ -268,15 +268,13 @@ public class InventoryHelper
         {
             WriteModableItemWithQuantityData(writer, modq);
         }
-
-        if (item.Data is SimpleItemData simp)
-        {
-            WriteSimpleItemData(writer, simp);
-        }
-
-        if (item.Data is ModableItemData mod)
+        else if (item.Data is ModableItemData mod)
         {
             WriteModableItemData(writer, mod);
+        }
+        else if (item.Data is SimpleItemData simp)
+        {
+            WriteSimpleItemData(writer, simp);
         }
     }
 

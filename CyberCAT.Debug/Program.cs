@@ -9,7 +9,7 @@ using WolvenKit.RED4.Save.IO;
 var hashService = new HashService();
 var tweakService = new TweakDBService();
 
-var path = SaveHelper.GetSavePath("ManualSave-2093");
+var path = SaveHelper.GetSavePath("Autosave-17");
 if (path == null)
 {
     return;
@@ -63,39 +63,43 @@ if (reader.ReadFile(out var save) == EFileReadErrorCodes.NoError)
 
     var test = writer.WriteFile(save);
 
-    if (reader.NodeEntries.Count == writer.NodeInfos.Count)
+    //if (reader.NodeEntries.Count == writer.NodeInfos.Count)
+    //{
+    //    for (int i = 0; i < reader.NodeEntries.Count; i++)
+    //    {
+    //        var orgInfo = reader.NodeEntries[i];
+    //        var newInfo = writer.NodeInfos[i];
+    //
+    //        if (orgInfo.Name != newInfo.Name)
+    //        {
+    //            Debugger.Break();
+    //        }
+    //
+    //        if (orgInfo.NextId != newInfo.NextId)
+    //        {
+    //            Debugger.Break();
+    //        }
+    //
+    //        if (orgInfo.ChildId != newInfo.ChildId)
+    //        {
+    //            Debugger.Break();
+    //        }
+    //
+    //        if (orgInfo.Offset != newInfo.Offset)
+    //        {
+    //            Debugger.Break();
+    //        }
+    //
+    //        if (orgInfo.Size != newInfo.Size)
+    //        {
+    //            Debugger.Break();
+    //        }
+    //    }
+    //}
+
+    var outPath = SaveHelper.GetSavePath("ManualSave-2094");
+    if (outPath != null)
     {
-        for (int i = 0; i < reader.NodeEntries.Count; i++)
-        {
-            var orgInfo = reader.NodeEntries[i];
-            var newInfo = writer.NodeInfos[i];
-
-            if (orgInfo.Name != newInfo.Name)
-            {
-                Debugger.Break();
-            }
-
-            if (orgInfo.NextId != newInfo.NextId)
-            {
-                Debugger.Break();
-            }
-
-            if (orgInfo.ChildId != newInfo.ChildId)
-            {
-                Debugger.Break();
-            }
-
-            if (orgInfo.Offset != newInfo.Offset)
-            {
-                Debugger.Break();
-            }
-
-            if (orgInfo.Size != newInfo.Size)
-            {
-                Debugger.Break();
-            }
-        }
+        File.WriteAllBytes(outPath, test);
     }
-
-    File.WriteAllBytes(@"C:\Dev\C77\SAve2\sav.dat", test);
 }

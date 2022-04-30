@@ -22,8 +22,9 @@ public class NodeWriter : BinaryWriter
         _nodeMetaInfos = new List<NodeMeta>();
     }
 
-    
-    public void Write(NodeEntry node)
+    public void Write(NodeEntry node) => Write(node, ParserHelper.GetParser(node.Name));
+
+    public void Write(NodeEntry node, INodeParser parser)
     {
         var isChild = _currentDepth > _lastDepth;
         var isNext = _currentDepth == _lastDepth;
@@ -59,7 +60,6 @@ public class NodeWriter : BinaryWriter
         _nodeInfos.Add(nodeInfo);
         _nodeMetaInfos.Add(new NodeMeta(currentId, _currentDepth));
 
-        var parser = ParserHelper.GetParser(node.Name);
         Write(currentId);
         parser.Write(this, node);
 
@@ -71,8 +71,6 @@ public class NodeWriter : BinaryWriter
 
         _currentDepth--;
     }
-
-    public int GetId() => _currentId++;
 
     public List<NodeInfo> GetFinalizedInfos()
     {
