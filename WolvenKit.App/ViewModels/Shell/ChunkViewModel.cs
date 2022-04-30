@@ -1924,7 +1924,7 @@ namespace WolvenKit.ViewModels.Shell
                             };
                             poslist.Add(v);
 
-                            if(float.Parse(posandrot.pitch) != 0)
+                            if (float.Parse(posandrot.pitch) != 0)
                             {
                                 Console.Write(posandrot.pitch);
                             }
@@ -1962,7 +1962,7 @@ namespace WolvenKit.ViewModels.Shell
                             pos.X -= cX;
                             pos.Y -= cY;
                             pos.Z -= cZ;
-                            pos.W -= cW;
+                            //pos.W -= cW;
                             poslist[i] = pos;
                         }
 
@@ -2035,23 +2035,35 @@ namespace WolvenKit.ViewModels.Shell
 
                                 current.NodeIndex = (CUInt16)index;
 
+
+                                if (Parent.Data is DataBuffer db && db.Buffer.Data is IRedType irt)
                                 {
-                                    /*if (Parent.Data is IRedArray ira && ira.InnerType.IsAssignableTo(current.GetType()))
+
                                     {
-                                        var index = Parent.GetIndexOf(this) + 1;
-                                        if (index == -1 || index > ira.Count)
+                                        if (irt is IRedArray ira && ira.InnerType.IsAssignableTo(current.GetType()))
                                         {
-                                            index = ira.Count;
+                                            var indexx = Parent.GetIndexOf(this) + 1;
+                                            if (indexx == -1 || indexx > ira.Count)
+                                            {
+                                                indexx = ira.Count;
+                                            }
+
+                                            ira.Insert(indexx, (IRedType)current);
+
+                                            /*Tab.File.SetIsDirty(true);
+                                            RecalulateProperties(current);*/
                                         }
-
-                                        ira.Insert(index, (IRedType)current);
-
-                                        Tab.File.SetIsDirty(true);
-                                        RecalulateProperties(current);
-                                    }*/
+                                    }
+                                    //Parent.InsertChild(Parent.GetIndexOf(this) + 1, (IRedType)current);
                                 }
-                                Parent.InsertChild(Parent.GetIndexOf(this) + 1, (IRedType)current);
+
                             }
+                        }
+
+                        if (Parent.Data is DataBuffer dbf && dbf.Buffer.Data is IRedType irtt)
+                        {
+                            Tab.File.SetIsDirty(true);
+                            RecalulateProperties(irtt);
                         }
 
                         Locator.Current.GetService<ILoggerService>().Success($"might have done the thing maybe, who knows really");
