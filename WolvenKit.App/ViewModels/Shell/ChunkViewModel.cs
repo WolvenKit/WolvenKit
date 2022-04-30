@@ -284,23 +284,6 @@ namespace WolvenKit.ViewModels.Shell
                         .ToList();
 
 
-
-                    /*
-                                        var fullselectiondb = Parent.DisplayProperties
-                                            .Where(_ => Enumerable.Range(start, end - start + 1)
-                                               .Contains(int.Parse(_.Name)))
-                                            .Select(_ => _)
-                                            .ToList();
-
-
-                                        var addonsn = ((worldStreamingSector)Tab.Chunks[0].Data).NodeData.GetValue();
-                                        //(Parent.Data is IRedBufferPointer db3 && db3.GetValue().Data is worldNodeDataBuffer dict)
-                                        if ((((worldStreamingSector)Tab.Chunks[0].Data).NodeData) is IRedBufferPointer db5
-                                                && db5.GetValue().Data is worldNodeDataBuffer dictt)
-                                        {
-
-                                        }*/
-
                     foreach (var i in fullselection)
                     { try { db4.Remove(i); } catch { } }
 
@@ -1941,8 +1924,12 @@ namespace WolvenKit.ViewModels.Shell
                             };
                             poslist.Add(v);
 
-                            var q = Quat.CreateFromYawPitchRoll(
-                                float.Parse(posandrot.yaw), float.Parse(posandrot.pitch), float.Parse(posandrot.roll));
+                            var q = //Quat.CreateFromAxisAngle(new Vec3(0,-1,0), (float)(Math.PI / 180 * 90)) *
+                                Quat.CreateFromYawPitchRoll(
+                                (float)(Math.PI / 180) * float.Parse(posandrot.yaw),
+                                (float)(Math.PI / 180) * float.Parse(posandrot.pitch),
+                                (float)(Math.PI / 180) * float.Parse(posandrot.roll));
+                            (q.Z, q.Y) = (q.Y, q.Z);
                             rotlist.Add(q);
                         }
 
@@ -1980,61 +1967,86 @@ namespace WolvenKit.ViewModels.Shell
                             //var gotit = RedJsonSerializer.Deserialize<Vec7>(lol);
                             //dynamic dyn = JsonConvert.DeserializeObject(line.pos);
 
+                            var b = new FileInfo(line.template_path).Extension == ".ent";
+
                             if (Parent.Parent is not null &&
                                 Parent.Parent.Data is not null &&
                                 Parent.Parent.Data is worldStreamingSector wss)
                             {
                                 var currentnode = (CHandle<worldNode>)wss.Nodes[current.NodeIndex].DeepCopy();
+                                var ttt = new worldEntityNode();
+                                var tttp = new CHandle<worldNode>(ttt);
+
 
                                 if (currentnode is not null &&
                                     currentnode.GetValue() is not null)
                                 {
-                                    var mesh = currentnode.GetValue().GetProperty("Mesh");
-                                    if (mesh is not null && mesh is CResourceAsyncReference<CMesh> m)
+                                    //copy an ent node
+                                    if (b)
                                     {
 
-                                        m.DepotPath = line.template_path;
+                                        ttt.EntityTemplate.DepotPath = line.template_path;
+
+                                        /*var ent = currentnode.GetValue().GetProperty("EntityTemplate");
+                                        if (ent is CResourceAsyncReference<entEntityTemplate> e)
+                                        {
+                                            e.DepotPath = line.template_path;
+                                        }*/
                                     }
+                                    //copy a mesh node
+                                    else
+                                    {
+                                        var mesh = currentnode.GetValue().GetProperty("Mesh");
+                                        if (mesh is CResourceAsyncReference<CMesh> m)
+                                        {
+                                            m.DepotPath = line.template_path;
+                                        }
+                                    }
+
                                 }
-                                ((IRedArray)wss.Nodes).Insert(Parent.GetIndexOf(this) + 1, (IRedType)currentnode);
-                            }
+                                var index = wss.Nodes.Count;
+                                ((IRedArray)wss.Nodes).Insert(index, (IRedType)tttp);
 
-                            var posandrot = poslist[i]; //RedJsonSerializer.Deserialize<Vec7S>(PutQuotes(line.pos));
-                            var scala = line.scale == "nil" ? null : RedJsonSerializer.Deserialize<Vec3S>(PutQuotes(line.scale));
 
-                            current.Position.X += posandrot.X;
-                            current.Position.Y += posandrot.Y;
-                            current.Position.Z += posandrot.Z;
-                            current.Position.W *= posandrot.W;
-                            if (scala is not null)
-                            {
-                                current.Scale.X = float.Parse(scala.x) / 100;
-                                current.Scale.Y = float.Parse(scala.y) / 100;
-                                current.Scale.Z = float.Parse(scala.z) / 100;
-                            }
-                            current.Orientation = rotlist[i];
+                                var posandrot = poslist[i]; //RedJsonSerializer.Deserialize<Vec7S>(PutQuotes(line.pos));
+                                var scala = line.scale == "nil" ? null : RedJsonSerializer.Deserialize<Vec3S>(PutQuotes(line.scale));
 
-                            current.Pivot.X = current.Position.X;
-                            current.Pivot.Y = current.Position.Y;
-                            current.Pivot.Z = current.Position.Z;
-
-                            {
-                                /*if (Parent.Data is IRedArray ira && ira.InnerType.IsAssignableTo(current.GetType()))
+                                current.Position.X += posandrot.X;
+                                current.Position.Y += posandrot.Y;
+                                current.Position.Z += posandrot.Z;
+                                current.Position.W *= posandrot.W;
+                                if (scala is not null)
                                 {
-                                    var index = Parent.GetIndexOf(this) + 1;
-                                    if (index == -1 || index > ira.Count)
+                                    current.Scale.X = float.Parse(scala.x) / 100;
+                                    current.Scale.Y = float.Parse(scala.y) / 100;
+                                    current.Scale.Z = float.Parse(scala.z) / 100;
+                                }
+                                current.Orientation = rotlist[i];
+                                //current.Orientation = Quat.Identity;// rotlist[i];
+
+                                current.Pivot.X = current.Position.X;
+                                current.Pivot.Y = current.Position.Y;
+                                current.Pivot.Z = current.Position.Z;
+
+                                current.NodeIndex = (CUInt16)index;
+
+                                {
+                                    /*if (Parent.Data is IRedArray ira && ira.InnerType.IsAssignableTo(current.GetType()))
                                     {
-                                        index = ira.Count;
-                                    }
+                                        var index = Parent.GetIndexOf(this) + 1;
+                                        if (index == -1 || index > ira.Count)
+                                        {
+                                            index = ira.Count;
+                                        }
 
-                                    ira.Insert(index, (IRedType)current);
+                                        ira.Insert(index, (IRedType)current);
 
-                                    Tab.File.SetIsDirty(true);
-                                    RecalulateProperties(current);
-                                }*/
+                                        Tab.File.SetIsDirty(true);
+                                        RecalulateProperties(current);
+                                    }*/
+                                }
+                                Parent.InsertChild(Parent.GetIndexOf(this) + 1, (IRedType)current);
                             }
-                            Parent.InsertChild(Parent.GetIndexOf(this) + 1, (IRedType)current);
-
                         }
 
                         Locator.Current.GetService<ILoggerService>().Success($"might have done the thing maybe, who knows really");
