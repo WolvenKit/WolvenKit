@@ -1924,13 +1924,24 @@ namespace WolvenKit.ViewModels.Shell
                             };
                             poslist.Add(v);
 
-                            var q = //Quat.CreateFromAxisAngle(new Vec3(0,-1,0), (float)(Math.PI / 180 * 90)) *
-                                Quat.CreateFromYawPitchRoll(
+                            if(float.Parse(posandrot.pitch) != 0)
+                            {
+                                Console.Write(posandrot.pitch);
+                            }
+
+                            var q = Quat.CreateFromYawPitchRoll(
                                 (float)(Math.PI / 180) * float.Parse(posandrot.yaw),
                                 (float)(Math.PI / 180) * float.Parse(posandrot.pitch),
                                 (float)(Math.PI / 180) * float.Parse(posandrot.roll));
-                            (q.Z, q.Y) = (q.Y, q.Z);
-                            rotlist.Add(q);
+
+                            var angleindegrees = 90;
+                            var flip = Quat.CreateFromAxisAngle(new Vec3(1, 0, 0), (float)(Math.PI / 180 * angleindegrees));
+                            var qq = flip * q * Quat.Conjugate(flip);
+
+                            //Console.Write(qq);
+                            //throw new Exception("boop");
+                            //(q.Z, q.Y) = (q.Y, q.Z);
+                            rotlist.Add(qq);
                         }
 
                         var (minX, maxX) = (poslist.Select(_ => _.X).Min(), poslist.Select(_ => _.X).Max());
@@ -1960,12 +1971,6 @@ namespace WolvenKit.ViewModels.Shell
                         {
                             var line = json.props[i];
                             current = RedJsonSerializer.Deserialize<worldNodeData>(tr);
-
-                            //No clue why none of these worked :D
-                            //var gottatry = RedJsonSerializer.Deserialize<Vec7>(w);
-                            //var lol = RedJsonSerializer.Serialize(gottatry2);
-                            //var gotit = RedJsonSerializer.Deserialize<Vec7>(lol);
-                            //dynamic dyn = JsonConvert.DeserializeObject(line.pos);
 
                             var b = new FileInfo(line.template_path).Extension == ".ent";
 
