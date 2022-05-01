@@ -30,6 +30,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WolvenKit.Common", "WolvenK
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WolvenKit.RED4.TweakDB", "WolvenKit.RED4.TweakDB\WolvenKit.RED4.TweakDB.csproj", "{3731A89A-60F3-45B2-84F9-761075CC50A2}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CyberCAT.Forms", "CyberCAT.Forms\CyberCAT.Forms.csproj", "{040F20D7-3EC2-4D73-98B9-316C0F3E4D13}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -124,6 +126,18 @@ Global
 		{3731A89A-60F3-45B2-84F9-761075CC50A2}.Release|Any CPU.Build.0 = Release|x64
 		{3731A89A-60F3-45B2-84F9-761075CC50A2}.Release|x64.ActiveCfg = Release|x64
 		{3731A89A-60F3-45B2-84F9-761075CC50A2}.Release|x64.Build.0 = Release|x64
+		{040F20D7-3EC2-4D73-98B9-316C0F3E4D13}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{040F20D7-3EC2-4D73-98B9-316C0F3E4D13}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{040F20D7-3EC2-4D73-98B9-316C0F3E4D13}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{040F20D7-3EC2-4D73-98B9-316C0F3E4D13}.Debug|x64.Build.0 = Debug|Any CPU
+		{040F20D7-3EC2-4D73-98B9-316C0F3E4D13}.Profile|Any CPU.ActiveCfg = Debug|Any CPU
+		{040F20D7-3EC2-4D73-98B9-316C0F3E4D13}.Profile|Any CPU.Build.0 = Debug|Any CPU
+		{040F20D7-3EC2-4D73-98B9-316C0F3E4D13}.Profile|x64.ActiveCfg = Debug|Any CPU
+		{040F20D7-3EC2-4D73-98B9-316C0F3E4D13}.Profile|x64.Build.0 = Debug|Any CPU
+		{040F20D7-3EC2-4D73-98B9-316C0F3E4D13}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{040F20D7-3EC2-4D73-98B9-316C0F3E4D13}.Release|Any CPU.Build.0 = Release|Any CPU
+		{040F20D7-3EC2-4D73-98B9-316C0F3E4D13}.Release|x64.ActiveCfg = Release|Any CPU
+		{040F20D7-3EC2-4D73-98B9-316C0F3E4D13}.Release|x64.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
