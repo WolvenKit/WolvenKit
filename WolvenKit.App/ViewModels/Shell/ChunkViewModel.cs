@@ -1935,13 +1935,30 @@ namespace WolvenKit.ViewModels.Shell
                                 (float)(Math.PI / 180) * float.Parse(posandrot.roll));
 
                             var angleindegrees = 90;
-                            var flip = Quat.CreateFromAxisAngle(new Vec3(1, 0, 0), (float)(Math.PI / 180 * angleindegrees));
-                            var qq = flip * q * Quat.Conjugate(flip);
+
+                            var flipx = Quat.CreateFromAxisAngle(new Vec3(1, 0, 0), (float)(Math.PI / 180 * angleindegrees * 1));
+                            var flipy = Quat.CreateFromAxisAngle(new Vec3(0, 1, 0), (float)(Math.PI / 180 * angleindegrees * 2));
+                            var flipz = Quat.CreateFromAxisAngle(new Vec3(0, 0, 1), (float)(Math.PI / 180 * angleindegrees * 1));
+
+                            
+                            var t0 =System.Numerics.Matrix4x4.CreateFromYawPitchRoll(
+                                (float)(Math.PI / 180) * float.Parse(posandrot.yaw),
+                                (float)(Math.PI / 180) * float.Parse(posandrot.pitch),
+                                (float)(Math.PI / 180) * float.Parse(posandrot.roll));
+
+
+                            var t1 = System.Numerics.Matrix4x4.CreateFromQuaternion(q);
+
+                            var tt = t0 == t1;
+
+                            q = flipy * q * Quat.Conjugate(flipy);
+                            q = flipx * q * Quat.Conjugate(flipx);
+                            //q = flipz * q * Quat.Conjugate(flipz);
 
                             //Console.Write(qq);
                             //throw new Exception("boop");
                             //(q.Z, q.Y) = (q.Y, q.Z);
-                            rotlist.Add(qq);
+                            rotlist.Add(q);
                         }
 
                         var (minX, maxX) = (poslist.Select(_ => _.X).Min(), poslist.Select(_ => _.X).Max());
@@ -2033,26 +2050,25 @@ namespace WolvenKit.ViewModels.Shell
                                 current.Pivot.Y = current.Position.Y;
                                 current.Pivot.Z = current.Position.Z;
 
+                                current.MaxStreamingDistance = 5000;
+
                                 current.NodeIndex = (CUInt16)index;
 
 
                                 if (Parent.Data is DataBuffer db && db.Buffer.Data is IRedType irt)
                                 {
-
+                                    if (irt is IRedArray ira && ira.InnerType.IsAssignableTo(current.GetType()))
                                     {
-                                        if (irt is IRedArray ira && ira.InnerType.IsAssignableTo(current.GetType()))
+                                        var indexx = Parent.GetIndexOf(this) + 1;
+                                        if (indexx == -1 || indexx > ira.Count)
                                         {
-                                            var indexx = Parent.GetIndexOf(this) + 1;
-                                            if (indexx == -1 || indexx > ira.Count)
-                                            {
-                                                indexx = ira.Count;
-                                            }
-
-                                            ira.Insert(indexx, (IRedType)current);
-
-                                            /*Tab.File.SetIsDirty(true);
-                                            RecalulateProperties(current);*/
+                                            indexx = ira.Count;
                                         }
+
+                                        ira.Insert(indexx, (IRedType)current);
+
+                                        /*Tab.File.SetIsDirty(true);
+                                        RecalulateProperties(current);*/
                                     }
                                     //Parent.InsertChild(Parent.GetIndexOf(this) + 1, (IRedType)current);
                                 }
