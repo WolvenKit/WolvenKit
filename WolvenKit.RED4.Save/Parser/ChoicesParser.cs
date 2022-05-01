@@ -19,7 +19,7 @@ namespace WolvenKit.RED4.Save
 
         public class Entry1
         {
-            public CResourceReference<scnSceneResource> Unknown1 { get; set; }
+            public CResourceReference<scnSceneResource> Scene { get; set; }
             public List<Entry2> Unknown2 { get; set; }
 
             public Entry1()
@@ -30,7 +30,7 @@ namespace WolvenKit.RED4.Save
 
         public class Entry2
         {
-            public uint Unknown1 { get; set; }
+            public uint ScnNodeId { get; set; }
             public uint Unknown2 { get; set; }
             public uint Unknown3 { get; set; }
         }
@@ -50,14 +50,14 @@ namespace WolvenKit.RED4.Save
             {
                 var entry = new Choices.Entry1();
 
-                entry.Unknown1 = new CResourceReference<scnSceneResource> { DepotPath = reader.ReadUInt64() };
+                entry.Scene = new CResourceReference<scnSceneResource> { DepotPath = reader.ReadUInt64() };
 
                 var subEntryCount = reader.ReadUInt32();
                 for (int j = 0; j < subEntryCount; j++)
                 {
                     var subEntry = new Choices.Entry2();
 
-                    subEntry.Unknown1 = reader.ReadUInt32();
+                    subEntry.ScnNodeId = reader.ReadUInt32();
                     subEntry.Unknown2 = reader.ReadUInt32();
                     subEntry.Unknown3 = reader.ReadUInt32();
 
@@ -77,12 +77,12 @@ namespace WolvenKit.RED4.Save
             writer.Write(data.Unknown1.Count);
             foreach (var entry in data.Unknown1)
             {
-                writer.Write((ulong)entry.Unknown1.DepotPath);
+                writer.Write((ulong)entry.Scene.DepotPath);
 
                 writer.Write(entry.Unknown2.Count);
                 foreach (var subEntry in entry.Unknown2)
                 {
-                    writer.Write(subEntry.Unknown1);
+                    writer.Write(subEntry.ScnNodeId);
                     writer.Write(subEntry.Unknown2);
                     writer.Write(subEntry.Unknown3);
                 }

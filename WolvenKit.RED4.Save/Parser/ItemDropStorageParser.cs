@@ -8,13 +8,8 @@ namespace WolvenKit.RED4.Save
     {
         public string Unk1 { get; set; }
         public byte[] Unk2 { get; set; }
-        public byte Unk3 { get; set; }
 
-        // Vector4?
-        public float Unk4 { get; set; }
-        public float Unk5 { get; set; }
-        public float Unk6 { get; set; }
-        public float Unk7 { get; set; }
+        public Vector4 Unk3 { get; set; }
 
         public List<InventoryHelper.ItemData> Items { get; set; } = new();
     }
@@ -30,12 +25,16 @@ namespace WolvenKit.RED4.Save
 
             reader.ReadUInt32(); // nodeId
             data.Unk1 = reader.ReadLengthPrefixedString();
-            data.Unk2 = reader.ReadBytes(16);
-            data.Unk3 = reader.ReadByte();
-            data.Unk4 = reader.ReadSingle();
-            data.Unk5 = reader.ReadSingle();
-            data.Unk6 = reader.ReadSingle();
-            data.Unk7 = reader.ReadSingle();
+
+            data.Unk2 = reader.ReadBytes(17);
+
+            data.Unk3 = new Vector4()
+            {
+                X = reader.ReadSingle(),
+                Y = reader.ReadSingle(),
+                Z = reader.ReadSingle(),
+                W = reader.ReadSingle()
+            };
 
             var cnt = reader.ReadUInt32();
             for (int i = 0; i < cnt; i++)
@@ -64,11 +63,10 @@ namespace WolvenKit.RED4.Save
         {
             writer.WriteLengthPrefixedString(value.Unk1);
             writer.Write(value.Unk2);
-            writer.Write(value.Unk3);
-            writer.Write(value.Unk4);
-            writer.Write(value.Unk5);
-            writer.Write(value.Unk6);
-            writer.Write(value.Unk7);
+            writer.Write(value.Unk3.X);
+            writer.Write(value.Unk3.Y);
+            writer.Write(value.Unk3.Z);
+            writer.Write(value.Unk3.W);
 
             writer.Write(value.Items.Count);
             foreach (var itemData in value.Items)
