@@ -33,6 +33,7 @@ using static WolvenKit.RED4.Types.RedReflection;
 using Vec3 = System.Numerics.Vector3;
 using Vec4 = System.Numerics.Vector4;
 using Quat = System.Numerics.Quaternion;
+using Mat4 = System.Numerics.Matrix4x4;
 
 namespace WolvenKit.ViewModels.Shell
 {
@@ -1936,29 +1937,60 @@ namespace WolvenKit.ViewModels.Shell
 
                             var angleindegrees = 90;
 
-                            var flipx = Quat.CreateFromAxisAngle(new Vec3(1, 0, 0), (float)(Math.PI / 180 * angleindegrees * 1));
-                            var flipy = Quat.CreateFromAxisAngle(new Vec3(0, 1, 0), (float)(Math.PI / 180 * angleindegrees * 2));
+                            var flipx = Quat.CreateFromAxisAngle(new Vec3(1, -1, 0), (float)(Math.PI / 180 * angleindegrees * 1));
+                            var flipy = Quat.CreateFromAxisAngle(new Vec3(0, 1, 0), (float)(Math.PI / 180 * angleindegrees * 1));
                             var flipz = Quat.CreateFromAxisAngle(new Vec3(0, 0, 1), (float)(Math.PI / 180 * angleindegrees * 1));
 
                             
-                            var t0 =System.Numerics.Matrix4x4.CreateFromYawPitchRoll(
+                            var t0 =Mat4.CreateFromYawPitchRoll(
                                 (float)(Math.PI / 180) * float.Parse(posandrot.yaw),
                                 (float)(Math.PI / 180) * float.Parse(posandrot.pitch),
                                 (float)(Math.PI / 180) * float.Parse(posandrot.roll));
 
 
-                            var t1 = System.Numerics.Matrix4x4.CreateFromQuaternion(q);
+                            var t1 = Mat4.CreateFromQuaternion(q);
 
                             var tt = t0 == t1;
 
-                            q = flipy * q * Quat.Conjugate(flipy);
-                            q = flipx * q * Quat.Conjugate(flipx);
+                            var t9000 = Mat4.Identity;
+                            t9000.M11 = 1;
+                            t9000.M13 = 0;
+                            t9000.M21 = 0;
+                            t9000.M22 = 0;
+                            t9000.M23 = 1;
+                            //t9000.M31 = -1;
+                            t9000.M32 = -1;
+                            t9000.M33 = 0;
+
+                            var ttt = Mat4.CreateFromQuaternion(q);
+
+                            var fuckx = Mat4.CreateRotationX((float)Math.PI / 2);
+                            var fucky = Mat4.CreateRotationY((float)Math.PI / 2);
+
+                            var t9001 = Mat4.Identity;
+                            
+                            t9001.M11 = 1;
+                            t9001.M22 = 1;
+                            t9001.M33 = -1;
+
+                            t9000 = t9000 * ttt;
+                            //fuckx = fuckx * fucky * ttt;
+                            fuckx = t9001 * ttt;
+
+                            var q9 = Quat.CreateFromRotationMatrix(t9000);
+                            var tt000 = q9 == q;
+
+
+                            //q = flipy * q * Quat.Conjugate(flipy);
+                            //q = flipx * q * Quat.Conjugate(flipx);
                             //q = flipz * q * Quat.Conjugate(flipz);
+                            //q = q9 * q * Quat.Conjugate(q9);
+
 
                             //Console.Write(qq);
                             //throw new Exception("boop");
                             //(q.Z, q.Y) = (q.Y, q.Z);
-                            rotlist.Add(q);
+                            rotlist.Add(q9);
                         }
 
                         var (minX, maxX) = (poslist.Select(_ => _.X).Min(), poslist.Select(_ => _.X).Max());
