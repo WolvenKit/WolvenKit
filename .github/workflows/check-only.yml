@@ -1,0 +1,39 @@
+name: check-only
+on:
+  pull_request:
+    branches: [develop, master, main]
+  push:
+    branches: [develop]
+
+jobs:
+  desktop-win:
+    runs-on: windows-latest
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+    - name: Setup .NET Core
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: 6.x
+
+    - name: Restore dependencies
+      run: dotnet restore .\All.sln
+    - name: Build
+      run: dotnet build .\All.sln --no-restore
+
+  console-linux:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+    - name: Setup .NET Core
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: 6.x
+
+    - name: Restore dependencies
+      run: dotnet restore ./WolvenKit.CLI/WolvenKit.CLI.csproj
+    - name: Build
+      run: dotnet build ./WolvenKit.CLI/WolvenKit.CLI.csproj --no-restore

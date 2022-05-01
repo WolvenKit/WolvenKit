@@ -70,7 +70,7 @@ namespace WolvenKit.RED4.Archive.IO
             if (val.File != null)
             {
                 using var ms = new MemoryStream();
-                using var cr2wWriter = new CR2WWriter(ms);
+                using var cr2wWriter = new CR2WWriter(ms) { IsRoot = false };
 
                 cr2wWriter.WriteFile((CR2WFile)val.File);
 

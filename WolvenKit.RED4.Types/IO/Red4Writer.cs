@@ -19,6 +19,7 @@ namespace WolvenKit.RED4.IO
         public ICacheList<RedBuffer> BufferCacheList = new CacheList<RedBuffer>(ReferenceEqualityComparer.Instance);
 
         public int CurrentChunk { get; private set; }
+        public bool IsRoot = true;
 
         public readonly Dictionary<long, string> CNameRef = new();
         public readonly Dictionary<long, ImportEntry> ImportRef = new();
@@ -274,10 +275,15 @@ namespace WolvenKit.RED4.IO
             {
                 _writer.Write(0x80000000);
             }
-            else
+            else if (IsRoot)
             {
                 BufferRef.Add(_writer.BaseStream.Position, val.Buffer);
                 _writer.Write((GetRedBufferIndex(val.Buffer) | 0x80000000) + 1);
+            }
+            else
+            {
+                _writer.Write(val.Buffer.MemSize);
+                _writer.Write(val.Buffer.GetBytes());
             }
         }
 

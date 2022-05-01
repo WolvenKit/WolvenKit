@@ -286,20 +286,11 @@ namespace WolvenKit.RED4.Archive.IO
             if (buffer.Data is Package04 p4)
             {
                 using var ms = new MemoryStream();
-                using var packageWriter = new PackageWriter(ms);
+                using var packageWriter = new PackageWriter(ms) { IsRoot = false };
 
                 packageWriter.WritePackage(p4, _file.RootChunk.GetType());
 
-                var newData = ms.ToArray();
-
-                /*var oldData = buffer.GetBytes();
-                if (!oldData.SequenceEqual(newData))
-                {
-                    File.WriteAllBytes(@"C:\Dev\C77\Buffer\OldBuffer.bin", oldData);
-                    File.WriteAllBytes(@"C:\Dev\C77\Buffer\NewBuffer.bin", newData);
-                }*/
-
-                buffer.SetBytes(newData);
+                buffer.SetBytes(ms.ToArray());
             }
 
             if (buffer.Data is CR2WList list)
@@ -349,6 +340,11 @@ namespace WolvenKit.RED4.Archive.IO
                 memSize = buffer.MemSize
             };
 
+            if (!IsRoot)
+            {
+                throw new TodoException();
+            }
+
             var compBuf = buffer.GetCompressedBytes();
             writer.Write(compBuf);
 
@@ -390,7 +386,7 @@ namespace WolvenKit.RED4.Archive.IO
         private (List<CR2WEmbeddedInfo>, byte[]) GenerateEmbeddedData(IList<ImportEntry> importsList)
         {
             using var ms = new MemoryStream();
-            using var writer = new CR2WWriter(ms);
+            using var writer = new CR2WWriter(ms) { IsRoot = IsRoot };
 
             var embeddedInfoList = new List<CR2WEmbeddedInfo>();
             foreach (var embedded in _file.EmbeddedFiles)
@@ -450,7 +446,7 @@ namespace WolvenKit.RED4.Archive.IO
             var result = new DataCollection();
 
             using var ms = new MemoryStream();
-            using var file = new CR2WWriter(ms);
+            using var file = new CR2WWriter(ms) { IsRoot = IsRoot };
 
             file._chunkInfos = _chunkInfos;
 
