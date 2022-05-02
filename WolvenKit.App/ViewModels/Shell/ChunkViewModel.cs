@@ -37,56 +37,7 @@ using Mat4 = System.Numerics.Matrix4x4;
 
 namespace WolvenKit.ViewModels.Shell
 {
-    public class Vec3S
-    {
-        public string x { get; set; }
-        public string y { get; set; }
-        public string z { get; set; }
-    }
-    public class Vec7S
-    {
-        public string x { get; set; }
-        public string y { get; set; }
-        public string z { get; set; }
-        public string w { get; set; }
-        public string roll { get; set; }
-        public string pitch { get; set; }
-        public string yaw { get; set; }
-    }
-    public class Vec7
-    {
-        public float x { get; set; }
-        public float y { get; set; }
-        public float z { get; set; }
-        public float w { get; set; }
-        public float roll { get; set; }
-        public float pitch { get; set; }
-        public float yaw { get; set; }
-    }
-    public class Prop
-    {
-        public string scale { get; set; }
-        public string tag { get; set; }
-        public string template_path { get; set; }
-        public string entity_id { get; set; }
-        public string pos { get; set; }
-        public int uid { get; set; }
-        public string app { get; set; }
-        public string name { get; set; }
-        public string trigger { get; set; }
-    }
-
-    public class Root
-    {
-        public bool customIncluded { get; set; }
-        public List<Prop> props { get; set; }
-        public List<object> lights { get; set; }
-        public string name { get; set; }
-        public string file_name { get; set; }
-    }
-
-
-    public class ChunkViewModel : ReactiveObject, ISelectableTreeViewItemModel
+    public partial class ChunkViewModel : ReactiveObject, ISelectableTreeViewItemModel
     {
         public bool PropertiesLoaded;
 
@@ -1897,232 +1848,58 @@ namespace WolvenKit.ViewModels.Shell
                     {
                         throw new SerializationException();
                     }
-                    var json = RedJsonSerializer.Deserialize<Root>(text);
 
-                    string PutQuotes(string w)
+
+                    //TODO take a look at a less crummy way of reading a goddam JSON
+                    var json0 = new Root0();
+                    var json1 = new Root1();
+
+                    try
                     {
-                        w = w.Replace("{", "{\"");
-                        w = w.Replace("}", "\"}");
-                        w = w.Replace(", ", "\",\"");
-                        w = w.Replace(" = ", "\":\"");
-                        return w;
+                        json0 = RedJsonSerializer.Deserialize<Root0>(text);
+                    }
+                    catch
+                    {
+                        try
+                        {
+                            json1 = RedJsonSerializer.Deserialize<Root1>(text);
+                        }
+                        catch { }
                     }
 
-                    if (json is not null && json.props is not null && json.props.Count > 0)
+                    if (json0 is not null && json0.props is not null && json0.props.Count > 0)
                     {
-                        var poslist = new List<Vec4>();
-                        var rotlist = new List<Quat>();
-
-                        foreach (var line in json.props)
-                        {
-                            var posandrot = RedJsonSerializer.Deserialize<Vec7S>(PutQuotes(line.pos));
-                            var v = new Vec4()
-                            {
-                                X = float.Parse(posandrot.x),
-                                Y = float.Parse(posandrot.y),
-                                Z = float.Parse(posandrot.z),
-                                W = float.Parse(posandrot.w)
-                            };
-                            poslist.Add(v);
-
-                            if (float.Parse(posandrot.pitch) != 0)
-                            {
-                                Console.Write(posandrot.pitch);
-                            }
-
-                            var q = Quat.CreateFromYawPitchRoll(
-                                (float)(Math.PI / 180) * float.Parse(posandrot.yaw),
-                                (float)(Math.PI / 180) * float.Parse(posandrot.pitch),
-                                (float)(Math.PI / 180) * float.Parse(posandrot.roll));
-
-                            var angleindegrees = 90;
-
-                            var flipx = Quat.CreateFromAxisAngle(new Vec3(1, -1, 0), (float)(Math.PI / 180 * angleindegrees * 1));
-                            var flipy = Quat.CreateFromAxisAngle(new Vec3(0, 1, 0), (float)(Math.PI / 180 * angleindegrees * 1));
-                            var flipz = Quat.CreateFromAxisAngle(new Vec3(0, 0, 1), (float)(Math.PI / 180 * angleindegrees * 1));
-
-                            
-                            var t0 =Mat4.CreateFromYawPitchRoll(
-                                (float)(Math.PI / 180) * float.Parse(posandrot.yaw),
-                                (float)(Math.PI / 180) * float.Parse(posandrot.pitch),
-                                (float)(Math.PI / 180) * float.Parse(posandrot.roll));
-
-
-                            var t1 = Mat4.CreateFromQuaternion(q);
-
-                            var tt = t0 == t1;
-
-                            var t9000 = Mat4.Identity;
-                            t9000.M11 = 1;
-                            t9000.M13 = 0;
-                            t9000.M21 = 0;
-                            t9000.M22 = 0;
-                            t9000.M23 = 1;
-                            //t9000.M31 = -1;
-                            t9000.M32 = -1;
-                            t9000.M33 = 0;
-
-                            var ttt = Mat4.CreateFromQuaternion(q);
-
-                            var fuckx = Mat4.CreateRotationX((float)Math.PI / 2);
-                            var fucky = Mat4.CreateRotationY((float)Math.PI / 2);
-
-                            var t9001 = Mat4.Identity;
-                            
-                            t9001.M11 = 1;
-                            t9001.M22 = 1;
-                            t9001.M33 = -1;
-
-                            t9000 = t9000 * ttt;
-                            //fuckx = fuckx * fucky * ttt;
-                            fuckx = t9001 * ttt;
-
-                            var q9 = Quat.CreateFromRotationMatrix(t9000);
-                            var tt000 = q9 == q;
-
-
-                            //q = flipy * q * Quat.Conjugate(flipy);
-                            //q = flipx * q * Quat.Conjugate(flipx);
-                            //q = flipz * q * Quat.Conjugate(flipz);
-                            //q = q9 * q * Quat.Conjugate(q9);
-
-
-                            //Console.Write(qq);
-                            //throw new Exception("boop");
-                            //(q.Z, q.Y) = (q.Y, q.Z);
-                            rotlist.Add(q9);
-                        }
-
-                        var (minX, maxX) = (poslist.Select(_ => _.X).Min(), poslist.Select(_ => _.X).Max());
-                        var cX = (maxX + minX) / 2;
-                        //minX + (maxX - minX)/2 == (maxX + minX)/2;
-                        var (minY, maxY) = (poslist.Select(_ => _.Y).Min(), poslist.Select(_ => _.Y).Max());
-                        var cY = (maxY + minY) / 2;
-
-                        var (minZ, maxZ) = (poslist.Select(_ => _.Z).Min(), poslist.Select(_ => _.Z).Max());
-                        var cZ = (maxZ + minZ) / 2;
-
-                        var (minW, maxW) = (poslist.Select(_ => _.W).Min(), poslist.Select(_ => _.W).Max());
-                        var cW = (maxW + minW) / 2;
-
-                        for (var i = 0; i < poslist.Count; i++)
-                        {
-                            var pos = poslist[i];
-                            pos.X -= cX;
-                            pos.Y -= cY;
-                            pos.Z -= cZ;
-                            //pos.W -= cW;
-                            poslist[i] = pos;
-                        }
-
-
-                        for (var i = 0; i < json.props.Count; i++)
-                        {
-                            var line = json.props[i];
-                            current = RedJsonSerializer.Deserialize<worldNodeData>(tr);
-
-                            var b = new FileInfo(line.template_path).Extension == ".ent";
-
-                            if (Parent.Parent is not null &&
-                                Parent.Parent.Data is not null &&
-                                Parent.Parent.Data is worldStreamingSector wss)
-                            {
-                                var currentnode = (CHandle<worldNode>)wss.Nodes[current.NodeIndex].DeepCopy();
-                                var ttt = new worldEntityNode();
-                                var tttp = new CHandle<worldNode>(ttt);
-
-
-                                if (currentnode is not null &&
-                                    currentnode.GetValue() is not null)
-                                {
-                                    //copy an ent node
-                                    if (b)
-                                    {
-
-                                        ttt.EntityTemplate.DepotPath = line.template_path;
-
-                                        /*var ent = currentnode.GetValue().GetProperty("EntityTemplate");
-                                        if (ent is CResourceAsyncReference<entEntityTemplate> e)
-                                        {
-                                            e.DepotPath = line.template_path;
-                                        }*/
-                                    }
-                                    //copy a mesh node
-                                    else
-                                    {
-                                        var mesh = currentnode.GetValue().GetProperty("Mesh");
-                                        if (mesh is CResourceAsyncReference<CMesh> m)
-                                        {
-                                            m.DepotPath = line.template_path;
-                                        }
-                                    }
-
-                                }
-                                var index = wss.Nodes.Count;
-                                ((IRedArray)wss.Nodes).Insert(index, (IRedType)tttp);
-
-
-                                var posandrot = poslist[i]; //RedJsonSerializer.Deserialize<Vec7S>(PutQuotes(line.pos));
-                                var scala = line.scale == "nil" ? null : RedJsonSerializer.Deserialize<Vec3S>(PutQuotes(line.scale));
-
-                                current.Position.X += posandrot.X;
-                                current.Position.Y += posandrot.Y;
-                                current.Position.Z += posandrot.Z;
-                                current.Position.W *= posandrot.W;
-                                if (scala is not null)
-                                {
-                                    current.Scale.X = float.Parse(scala.x) / 100;
-                                    current.Scale.Y = float.Parse(scala.y) / 100;
-                                    current.Scale.Z = float.Parse(scala.z) / 100;
-                                }
-                                current.Orientation = rotlist[i];
-                                //current.Orientation = Quat.Identity;// rotlist[i];
-
-                                current.Pivot.X = current.Position.X;
-                                current.Pivot.Y = current.Position.Y;
-                                current.Pivot.Z = current.Position.Z;
-
-                                current.MaxStreamingDistance = 5000;
-
-                                current.NodeIndex = (CUInt16)index;
-
-
-                                if (Parent.Data is DataBuffer db && db.Buffer.Data is IRedType irt)
-                                {
-                                    if (irt is IRedArray ira && ira.InnerType.IsAssignableTo(current.GetType()))
-                                    {
-                                        var indexx = Parent.GetIndexOf(this) + 1;
-                                        if (indexx == -1 || indexx > ira.Count)
-                                        {
-                                            indexx = ira.Count;
-                                        }
-
-                                        ira.Insert(indexx, (IRedType)current);
-
-                                        /*Tab.File.SetIsDirty(true);
-                                        RecalulateProperties(current);*/
-                                    }
-                                    //Parent.InsertChild(Parent.GetIndexOf(this) + 1, (IRedType)current);
-                                }
-
-                            }
-                        }
-
-                        if (Parent.Data is DataBuffer dbf && dbf.Buffer.Data is IRedType irtt)
-                        {
-                            Tab.File.SetIsDirty(true);
-                            RecalulateProperties(irtt);
-                        }
-
-                        Locator.Current.GetService<ILoggerService>().Success($"might have done the thing maybe, who knows really");
-
+                        Add00(json0.props, tr);
                     }
+                    else if (json1 is not null && json1.childs is not null && json1.childs.Count > 0)
+                    {
+                        Add00(json1.childs, tr);
+                    }
+                    //lord have mercy for this is fuckin disgusting :P
+
+
+                    if (Parent.Data is DataBuffer dbf && dbf.Buffer.Data is IRedType irtt)
+                    {
+                        Tab.File.SetIsDirty(true);
+                        RecalulateProperties(irtt);
+                    }
+
+                    Locator.Current.GetService<ILoggerService>().Success($"might have done the thing maybe, who knows really");
+
+
                 }
                 catch { }
             }
         }
 
-
+        public string PutQuotes(string w)
+        {
+            w = w.Replace("{", "{\"");
+            w = w.Replace("}", "\"}");
+            w = w.Replace(", ", "\",\"");
+            w = w.Replace(" = ", "\":\"");
+            return w;
+        }
 
         public ICommand ExportChunkCommand { get; private set; }
         private bool CanExportChunk() => PropertyCount > 0;
