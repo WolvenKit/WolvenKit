@@ -1849,24 +1849,11 @@ namespace WolvenKit.ViewModels.Shell
                         throw new SerializationException();
                     }
 
+                    //TODO take a look at a less crummy way of reading a goddam JSON                    
+                    var json0 = RedJsonSerializer.Deserialize<Root0>(text);
+                    var json1 = RedJsonSerializer.Deserialize<Root1>(text);
 
-                    //TODO take a look at a less crummy way of reading a goddam JSON
-                    var json0 = new Root0();
-                    var json1 = new Root1();
-
-                    try
-                    {
-                        json0 = RedJsonSerializer.Deserialize<Root0>(text);
-                    }
-                    catch
-                    {
-                        try
-                        {
-                            json1 = RedJsonSerializer.Deserialize<Root1>(text);
-                        }
-                        catch { }
-                    }
-
+                    //Add00 adds to the Data directly
                     if (json0 is not null && json0.props is not null && json0.props.Count > 0)
                     {
                         Add00(json0.props, tr);
@@ -1875,8 +1862,11 @@ namespace WolvenKit.ViewModels.Shell
                     {
                         Add00(json1.childs, tr);
                     }
+                    else
+                    {
+                        throw new Exception("boop");
+                    }
                     //lord have mercy for this is fuckin disgusting :P
-
 
                     if (Parent.Data is DataBuffer dbf && dbf.Buffer.Data is IRedType irtt)
                     {
@@ -1885,8 +1875,6 @@ namespace WolvenKit.ViewModels.Shell
                     }
 
                     Locator.Current.GetService<ILoggerService>().Success($"might have done the thing maybe, who knows really");
-
-
                 }
                 catch { }
             }

@@ -373,7 +373,7 @@ namespace WolvenKit.ViewModels.Shell
             return q9;
         }
 
-        public List<Vec4> UpdateCoords(List<Vec4> poslist, Vec4 center)
+        public static List<Vec4> UpdateCoords(List<Vec4> poslist, Vec4 center)
         {
             for (var i = 0; i < poslist.Count; i++)
             {
@@ -456,7 +456,6 @@ namespace WolvenKit.ViewModels.Shell
 
             }
         }
-
 
         public void Add00(List<Child> props, string tr)
         {
