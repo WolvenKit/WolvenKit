@@ -245,7 +245,8 @@ namespace WolvenKit.ViewModels.Shell
             {
                 pos = c.pos,
                 rot = c.rot,
-                name = c.name
+                name = c.name,
+                path = c.path
             };
             props.Add(v);
             if (c.childs is not null)
@@ -256,7 +257,10 @@ namespace WolvenKit.ViewModels.Shell
                 }
             }
         }
-
+        public static Vec4 GetCenter(Root1 r)
+        {
+            return new Vec4(r.pos.x, r.pos.y, r.pos.z, r.pos.w);
+        }
         public void Add00(List<Prop> props, string tr)
         {
             var (poslist, rotlist) = GetPosRot(props);
@@ -287,7 +291,7 @@ namespace WolvenKit.ViewModels.Shell
         {
             var props = GetLines(json);
             var (poslist, rotlist) = GetPosRot(props);
-            var center = GetCenter(poslist);
+            var center = GetCenter(json);
 
             poslist = UpdateCoords(poslist, center);
 
