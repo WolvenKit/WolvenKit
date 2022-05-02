@@ -1842,18 +1842,17 @@ namespace WolvenKit.ViewModels.Shell
                 {
                     var tr = RedJsonSerializer.Serialize(Data);
                     var current = RedJsonSerializer.Deserialize<worldNodeData>(tr);
-                    //yup !! that's a copy :D
+                    //deepcopy of Data but not really
+
                     var text = File.ReadAllText(openFileDialog.FileName);
                     if (string.IsNullOrEmpty(text) || current is null)
                     {
                         throw new SerializationException();
                     }
-
-                    //TODO take a look at a less crummy way of reading a goddam JSON                    
+                 
                     var json0 = RedJsonSerializer.Deserialize<Root0>(text);
                     var json1 = RedJsonSerializer.Deserialize<Root1>(text);
 
-                    //Add00 adds to the Data directly
                     if (json0 is not null && json0.props is not null && json0.props.Count > 0)
                     {
                         Add00(json0.props, tr);
@@ -1864,9 +1863,8 @@ namespace WolvenKit.ViewModels.Shell
                     }
                     else
                     {
-                        throw new Exception("boop");
+                        throw new SerializationException();
                     }
-                    //lord have mercy for this is fuckin disgusting :P
 
                     if (Parent.Data is DataBuffer dbf && dbf.Buffer.Data is IRedType irtt)
                     {
@@ -1880,14 +1878,6 @@ namespace WolvenKit.ViewModels.Shell
             }
         }
 
-        public string PutQuotes(string w)
-        {
-            w = w.Replace("{", "{\"");
-            w = w.Replace("}", "\"}");
-            w = w.Replace(", ", "\",\"");
-            w = w.Replace(" = ", "\":\"");
-            return w;
-        }
 
         public ICommand ExportChunkCommand { get; private set; }
         private bool CanExportChunk() => PropertyCount > 0;

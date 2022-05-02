@@ -34,7 +34,6 @@ namespace WolvenKit.ViewModels.Shell
             return new Vec4(cX, cY, cZ, cW);
         }
 
-        //Guess those two are different enough ... maybe
         public (List<Vec4>, List<Quat>) GetPosRot(List<Prop> props)
         {
             var poslist = new List<Vec4>();
@@ -70,7 +69,6 @@ namespace WolvenKit.ViewModels.Shell
             return (poslist, rotlist);
         }
 
-        //this won't work until TreeTraversal is written
         public (List<Vec4>, List<Quat>) GetPosRot(List<Child> props)
         {
             var poslist = new List<Vec4>();
@@ -78,7 +76,6 @@ namespace WolvenKit.ViewModels.Shell
 
             foreach (var line in props)
             {
-                //var posandrot = RedJsonSerializer.Deserialize<Vec7S>(PutQuotes(line.pos));
                 var pos = line.pos;
                 var rot = line.rot;
                 var v = new Vec4()
@@ -94,12 +91,20 @@ namespace WolvenKit.ViewModels.Shell
                     (float)(Math.PI / 180) * rot.yaw,
                     (float)(Math.PI / 180) * rot.pitch,
                     (float)(Math.PI / 180) * rot.roll);
-
                 q = FixRotation(q);
 
                 rotlist.Add(q);
             }
             return (poslist, rotlist);
+        }
+
+        public string PutQuotes(string w)
+        {
+            w = w.Replace("{", "{\"");
+            w = w.Replace("}", "\"}");
+            w = w.Replace(", ", "\",\"");
+            w = w.Replace(" = ", "\":\"");
+            return w;
         }
 
         public static Quat FixRotation(Quat q)
@@ -199,6 +204,7 @@ namespace WolvenKit.ViewModels.Shell
                 current.Pivot.Y = current.Position.Y;
                 current.Pivot.Z = current.Position.Z;
 
+                //definitely does not go to 5000
                 current.MaxStreamingDistance = 5000;
 
                 current.NodeIndex = (CUInt16)index;
