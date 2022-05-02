@@ -51,17 +51,10 @@ namespace WolvenKit.ViewModels.Shell
                 };
                 poslist.Add(v);
 
-                //delete this when you're done !!
-                if (float.Parse(posandrot.pitch) != 0)
-                {
-                    Console.Write(posandrot.pitch);
-                }
-
                 var q = Quat.CreateFromYawPitchRoll(
                     (float)(Math.PI / 180) * float.Parse(posandrot.yaw),
                     (float)(Math.PI / 180) * float.Parse(posandrot.pitch),
                     (float)(Math.PI / 180) * float.Parse(posandrot.roll));
-
                 q = FixRotation(q);
 
                 rotlist.Add(q);
@@ -98,7 +91,7 @@ namespace WolvenKit.ViewModels.Shell
             return (poslist, rotlist);
         }
 
-        public string PutQuotes(string w)
+        public static string PutQuotes(string w)
         {
             w = w.Replace("{", "{\"");
             w = w.Replace("}", "\"}");
@@ -118,14 +111,7 @@ namespace WolvenKit.ViewModels.Shell
             var mq = Mat4.CreateFromQuaternion(q);
             Mat4.Invert(rbcm, out var irbcm);
 
-            //var blipx = Mat4.CreateRotationX((float)Math.PI / 2);
-            var blipy = Mat4.CreateRotationY((float)Math.PI * 2 / 2);
-            Mat4.Invert(blipy, out var iblipy);
-
-            var blipz = Mat4.CreateRotationY((float)Math.PI * 2 / 2);
-            Mat4.Invert(blipz, out var iblipz);
-
-            rbcm = irbcm * iblipy * iblipz * mq * blipz * blipy * rbcm;            
+            rbcm = irbcm * mq * rbcm;
 
             var q9 = Quat.CreateFromRotationMatrix(rbcm);
 
@@ -257,7 +243,6 @@ namespace WolvenKit.ViewModels.Shell
                 }
 
                 AddToData(current, line.template_path, poslist[i], rotlist[i]);
-
             }
         }
 
