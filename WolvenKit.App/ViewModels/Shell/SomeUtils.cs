@@ -16,6 +16,251 @@ namespace WolvenKit.ViewModels.Shell
 {
     public partial class ChunkViewModel
     {
+        public static Vec4 GetCenter(List<Vec4> poslist)
+        {
+            //minX + (maxX - minX)/2 == (maxX + minX)/2;
+            var (minX, maxX) = (poslist.Select(_ => _.X).Min(), poslist.Select(_ => _.X).Max());
+            var cX = (maxX + minX) / 2;
+
+            var (minY, maxY) = (poslist.Select(_ => _.Y).Min(), poslist.Select(_ => _.Y).Max());
+            var cY = (maxY + minY) / 2;
+
+            var (minZ, maxZ) = (poslist.Select(_ => _.Z).Min(), poslist.Select(_ => _.Z).Max());
+            var cZ = (maxZ + minZ) / 2;
+
+            var (minW, maxW) = (poslist.Select(_ => _.W).Min(), poslist.Select(_ => _.W).Max());
+            var cW = (maxW + minW) / 2;
+
+            return new Vec4(cX, cY, cZ, cW);
+        }
+
+        //Guess those two are different enough ... maybe
+        public (List<Vec4>, List<Quat>) GetPosRot(List<Prop> props)
+        {
+            var poslist = new List<Vec4>();
+            var rotlist = new List<Quat>();
+
+            foreach (var line in props)
+            {
+                var posandrot = RedJsonSerializer.Deserialize<Vec7S>(PutQuotes(line.pos));
+                var v = new Vec4()
+                {
+                    X = float.Parse(posandrot.x),
+                    Y = float.Parse(posandrot.y),
+                    Z = float.Parse(posandrot.z),
+                    W = float.Parse(posandrot.w)
+                };
+                poslist.Add(v);
+
+                //delete this when you're done !!
+                if (float.Parse(posandrot.pitch) != 0)
+                {
+                    Console.Write(posandrot.pitch);
+                }
+
+                var q = Quat.CreateFromYawPitchRoll(
+                    (float)(Math.PI / 180) * float.Parse(posandrot.yaw),
+                    (float)(Math.PI / 180) * float.Parse(posandrot.pitch),
+                    (float)(Math.PI / 180) * float.Parse(posandrot.roll));
+
+                q = FixRotation(q);
+
+                rotlist.Add(q);
+            }
+            return (poslist, rotlist);
+        }
+
+        //this won't work until TreeTraversal is written
+        public (List<Vec4>, List<Quat>) GetPosRot(List<Child> props)
+        {
+            var poslist = new List<Vec4>();
+            var rotlist = new List<Quat>();
+
+            foreach (var line in props)
+            {
+                //var posandrot = RedJsonSerializer.Deserialize<Vec7S>(PutQuotes(line.pos));
+                var pos = line.pos;
+                var rot = line.rot;
+                var v = new Vec4()
+                {
+                    X = pos.x,
+                    Y = pos.y,
+                    Z = pos.z,
+                    W = pos.w
+                };
+                poslist.Add(v);
+
+                var q = Quat.CreateFromYawPitchRoll(
+                    (float)(Math.PI / 180) * rot.yaw,
+                    (float)(Math.PI / 180) * rot.pitch,
+                    (float)(Math.PI / 180) * rot.roll);
+
+                q = FixRotation(q);
+
+                rotlist.Add(q);
+            }
+            return (poslist, rotlist);
+        }
+
+        public static Quat FixRotation(Quat q)
+        {
+            var angleindegrees = 90;
+
+            var flipx = Quat.CreateFromAxisAngle(new Vec3(1, 0, 0), (float)(Math.PI / 180 * angleindegrees * 1));
+            var flipy = Quat.CreateFromAxisAngle(new Vec3(0, 1, 0), (float)(Math.PI / 180 * angleindegrees * 1));
+            var flipz = Quat.CreateFromAxisAngle(new Vec3(0, 0, 1), (float)(Math.PI / 180 * angleindegrees * 1));
+
+            Mat4.CreateReflection(new System.Numerics.Plane());
+
+            var t1 = Mat4.CreateFromQuaternion(q);
+
+            var t9000 = Mat4.Identity;
+            t9000.M11 = 1;
+            t9000.M13 = 0;
+            t9000.M21 = 0;
+            t9000.M22 = 0;
+            t9000.M23 = 1;
+            //t9000.M31 = -1;
+            t9000.M32 = -1;
+            t9000.M33 = 0;
+
+            var ttt = Mat4.CreateFromQuaternion(q);
+            Mat4.Invert(t9000, out var i9000);
+
+
+            var fuckx = Mat4.CreateRotationX((float)Math.PI / 2);
+            var fucky = Mat4.CreateRotationY((float)Math.PI * 2 / 2);
+            Mat4.Invert(fucky, out var ifucky);
+
+            var fuckz = Mat4.CreateRotationY((float)Math.PI * 2 / 2);
+            Mat4.Invert(fuckz, out var ifuckz);
+
+            var t9001 = Mat4.Identity;
+
+            t9001.M11 = 1;
+            t9001.M22 = 1;
+            t9001.M33 = -1;
+
+            t9000 = i9000 * ifucky * ifuckz * ttt * fuckz * fucky * t9000;
+            //fuckx = fuckx * fucky * ttt;
+            fuckx = t9001 * ttt;
+
+            //var tt000 = q == q9;
+            var q9 = Quat.CreateFromRotationMatrix(t9000);
+
+
+            //q = flipy * q * Quat.Conjugate(flipy);
+            //q = flipx * q * Quat.Conjugate(flipx);
+            //q = flipz * q * Quat.Conjugate(flipz);
+            //q = q9 * q * Quat.Conjugate(q9);
+
+
+            //Console.Write(qq);
+            //throw new Exception("boop");
+            //(q.Z, q.Y) = (q.Y, q.Z);
+            return q9;
+        }
+
+        public static List<Vec4> UpdateCoords(List<Vec4> poslist, Vec4 center)
+        {
+            for (var i = 0; i < poslist.Count; i++)
+            {
+                var pos = poslist[i];
+                pos.X -= center.X;
+                pos.Y -= center.Y;
+                pos.Z -= center.Z;
+                //pos.W -= center.W;
+                poslist[i] = pos;
+            }
+            return poslist;
+        }
+
+        public void AddToData(worldNodeData current, string path, Vec4 pos, Quat rot)
+        {
+            if (Parent.Parent is not null &&
+                Parent.Parent.Data is not null &&
+                Parent.Parent.Data is worldStreamingSector wss)
+            {
+                var wen = new worldEntityNode();
+                var wenh = new CHandle<worldNode>(wen);
+                var index = wss.Nodes.Count;
+
+                wen.EntityTemplate.DepotPath = path;
+                ((IRedArray)wss.Nodes).Insert(index, (IRedType)wenh);
+
+                current.Position.X += pos.X;
+                current.Position.Y += pos.Y;
+                current.Position.Z += pos.Z;
+                current.Position.W *= pos.W;
+
+                current.Orientation = rot;
+
+                current.Pivot.X = current.Position.X;
+                current.Pivot.Y = current.Position.Y;
+                current.Pivot.Z = current.Position.Z;
+
+                current.MaxStreamingDistance = 5000;
+
+                current.NodeIndex = (CUInt16)index;
+
+                if (Parent.Data is DataBuffer db && db.Buffer.Data is IRedType irt)
+                {
+                    if (irt is IRedArray ira && ira.InnerType.IsAssignableTo(current.GetType()))
+                    {
+                        var indexx = Parent.GetIndexOf(this) + 1;
+                        if (indexx == -1 || indexx > ira.Count)
+                        {
+                            indexx = ira.Count;
+                        }
+                        ira.Insert(indexx, (IRedType)current);
+                    }
+                }
+
+            }
+        }
+
+        public void Add00(List<Prop> props, string tr)
+        {
+            var (poslist, rotlist) = GetPosRot(props);
+            var center = GetCenter(poslist);
+
+            poslist = UpdateCoords(poslist, center);
+
+            for (var i = 0; i < props.Count; i++)
+            {
+                var line = props[i];
+                var current = RedJsonSerializer.Deserialize<worldNodeData>(tr);
+
+                var scala = line.scale == "nil" ? null
+                    : RedJsonSerializer.Deserialize<Vec3S>(PutQuotes(line.scale));
+                if (scala is not null)
+                {
+                    current.Scale.X = float.Parse(scala.x) / 100;
+                    current.Scale.Y = float.Parse(scala.y) / 100;
+                    current.Scale.Z = float.Parse(scala.z) / 100;
+                }
+
+                AddToData(current, line.template_path, poslist[i], rotlist[i]);
+
+            }
+        }
+
+        public void Add00(List<Child> props, string tr)
+        {
+            var (poslist, rotlist) = GetPosRot(props);
+            var center = GetCenter(poslist);
+
+            poslist = UpdateCoords(poslist, center);
+
+            for (var i = 0; i < props.Count; i++)
+            {
+                var line = props[i];
+                var current = RedJsonSerializer.Deserialize<worldNodeData>(tr);
+
+                AddToData(current, line.path, poslist[i], rotlist[i]);
+            }
+        }
+
         //OG version, gotta refactor that mess
         public void Add0_OG(Root0 json, string tr)
         {
@@ -226,250 +471,6 @@ namespace WolvenKit.ViewModels.Shell
 
 
                 }
-            }
-        }
-
-
-        public static Vec4 GetCenter(List<Vec4> poslist)
-        {
-            //minX + (maxX - minX)/2 == (maxX + minX)/2;
-            var (minX, maxX) = (poslist.Select(_ => _.X).Min(), poslist.Select(_ => _.X).Max());
-            var cX = (maxX + minX) / 2;
-
-            var (minY, maxY) = (poslist.Select(_ => _.Y).Min(), poslist.Select(_ => _.Y).Max());
-            var cY = (maxY + minY) / 2;
-
-            var (minZ, maxZ) = (poslist.Select(_ => _.Z).Min(), poslist.Select(_ => _.Z).Max());
-            var cZ = (maxZ + minZ) / 2;
-
-            var (minW, maxW) = (poslist.Select(_ => _.W).Min(), poslist.Select(_ => _.W).Max());
-            var cW = (maxW + minW) / 2;
-
-            return new Vec4(cX, cY, cZ, cW);
-        }
-
-        //Guess those two are different enough ... maybe
-        public (List<Vec4>, List<Quat>) GetPosRot(List<Prop> props)
-        {
-            var poslist = new List<Vec4>();
-            var rotlist = new List<Quat>();
-
-            foreach (var line in props)
-            {
-                var posandrot = RedJsonSerializer.Deserialize<Vec7S>(PutQuotes(line.pos));
-                var v = new Vec4()
-                {
-                    X = float.Parse(posandrot.x),
-                    Y = float.Parse(posandrot.y),
-                    Z = float.Parse(posandrot.z),
-                    W = float.Parse(posandrot.w)
-                };
-                poslist.Add(v);
-
-                //delete this when you're done !!
-                if (float.Parse(posandrot.pitch) != 0)
-                {
-                    Console.Write(posandrot.pitch);
-                }
-
-                var q = Quat.CreateFromYawPitchRoll(
-                    (float)(Math.PI / 180) * float.Parse(posandrot.yaw),
-                    (float)(Math.PI / 180) * float.Parse(posandrot.pitch),
-                    (float)(Math.PI / 180) * float.Parse(posandrot.roll));
-
-                q = FixRotation(q);
-
-                rotlist.Add(q);
-            }
-            return (poslist, rotlist);
-        }
-        public (List<Vec4>, List<Quat>) GetPosRot(List<Child> props)
-        {
-            var poslist = new List<Vec4>();
-            var rotlist = new List<Quat>();
-
-            foreach (var line in props)
-            {
-                //var posandrot = RedJsonSerializer.Deserialize<Vec7S>(PutQuotes(line.pos));
-                var pos = line.pos;
-                var rot = line.rot;
-                var v = new Vec4()
-                {
-                    X = pos.x,
-                    Y = pos.y,
-                    Z = pos.z,
-                    W = pos.w
-                };
-                poslist.Add(v);
-
-                var q = Quat.CreateFromYawPitchRoll(
-                    (float)(Math.PI / 180) * rot.yaw,
-                    (float)(Math.PI / 180) * rot.pitch,
-                    (float)(Math.PI / 180) * rot.roll);
-
-                q = FixRotation(q);
-
-                rotlist.Add(q);
-            }
-            return (poslist, rotlist);
-        }
-
-        public static Quat FixRotation(Quat q)
-        {
-            var angleindegrees = 90;
-
-            var flipx = Quat.CreateFromAxisAngle(new Vec3(1, 0, 0), (float)(Math.PI / 180 * angleindegrees * 1));
-            var flipy = Quat.CreateFromAxisAngle(new Vec3(0, 1, 0), (float)(Math.PI / 180 * angleindegrees * 1));
-            var flipz = Quat.CreateFromAxisAngle(new Vec3(0, 0, 1), (float)(Math.PI / 180 * angleindegrees * 1));
-
-            Mat4.CreateReflection(new System.Numerics.Plane());
-
-            var t1 = Mat4.CreateFromQuaternion(q);
-
-            var t9000 = Mat4.Identity;
-            t9000.M11 = 1;
-            t9000.M13 = 0;
-            t9000.M21 = 0;
-            t9000.M22 = 0;
-            t9000.M23 = 1;
-            //t9000.M31 = -1;
-            t9000.M32 = -1;
-            t9000.M33 = 0;
-
-            var ttt = Mat4.CreateFromQuaternion(q);
-            Mat4.Invert(t9000, out var i9000);
-
-
-            var fuckx = Mat4.CreateRotationX((float)Math.PI / 2);
-            var fucky = Mat4.CreateRotationY((float)Math.PI * 2 / 2);
-            Mat4.Invert(fucky, out var ifucky);
-
-            var fuckz = Mat4.CreateRotationY((float)Math.PI * 2 / 2);
-            Mat4.Invert(fuckz, out var ifuckz);
-
-            var t9001 = Mat4.Identity;
-
-            t9001.M11 = 1;
-            t9001.M22 = 1;
-            t9001.M33 = -1;
-
-            t9000 = i9000 * ifucky * ifuckz * ttt * fuckz * fucky * t9000;
-            //fuckx = fuckx * fucky * ttt;
-            fuckx = t9001 * ttt;
-
-            //var tt000 = q == q9;
-            var q9 = Quat.CreateFromRotationMatrix(t9000);
-
-
-            //q = flipy * q * Quat.Conjugate(flipy);
-            //q = flipx * q * Quat.Conjugate(flipx);
-            //q = flipz * q * Quat.Conjugate(flipz);
-            //q = q9 * q * Quat.Conjugate(q9);
-
-
-            //Console.Write(qq);
-            //throw new Exception("boop");
-            //(q.Z, q.Y) = (q.Y, q.Z);
-            return q9;
-        }
-
-        public static List<Vec4> UpdateCoords(List<Vec4> poslist, Vec4 center)
-        {
-            for (var i = 0; i < poslist.Count; i++)
-            {
-                var pos = poslist[i];
-                pos.X -= center.X;
-                pos.Y -= center.Y;
-                pos.Z -= center.Z;
-                //pos.W -= center.W;
-                poslist[i] = pos;
-            }
-            return poslist;
-        }
-
-        public void AddToData(worldNodeData current, string path, Vec4 pos, Quat rot)
-        {
-            if (Parent.Parent is not null &&
-                Parent.Parent.Data is not null &&
-                Parent.Parent.Data is worldStreamingSector wss)
-            {
-                var wen = new worldEntityNode();
-                var wenh = new CHandle<worldNode>(wen);
-                var index = wss.Nodes.Count;
-
-                wen.EntityTemplate.DepotPath = path;
-                ((IRedArray)wss.Nodes).Insert(index, (IRedType)wenh);
-
-                current.Position.X += pos.X;
-                current.Position.Y += pos.Y;
-                current.Position.Z += pos.Z;
-                current.Position.W *= pos.W;
-
-                current.Orientation = rot;
-
-                current.Pivot.X = current.Position.X;
-                current.Pivot.Y = current.Position.Y;
-                current.Pivot.Z = current.Position.Z;
-
-                current.MaxStreamingDistance = 5000;
-
-                current.NodeIndex = (CUInt16)index;
-
-                if (Parent.Data is DataBuffer db && db.Buffer.Data is IRedType irt)
-                {
-                    if (irt is IRedArray ira && ira.InnerType.IsAssignableTo(current.GetType()))
-                    {
-                        var indexx = Parent.GetIndexOf(this) + 1;
-                        if (indexx == -1 || indexx > ira.Count)
-                        {
-                            indexx = ira.Count;
-                        }
-                        ira.Insert(indexx, (IRedType)current);
-                    }
-                }
-
-            }
-        }
-
-        public void Add00(List<Prop> props, string tr)
-        {
-            var (poslist, rotlist) = GetPosRot(props);
-            var center = GetCenter(poslist);
-
-            poslist = UpdateCoords(poslist, center);
-
-            for (var i = 0; i < props.Count; i++)
-            {
-                var line = props[i];
-                var current = RedJsonSerializer.Deserialize<worldNodeData>(tr);
-
-                var scala = line.scale == "nil" ? null
-                    : RedJsonSerializer.Deserialize<Vec3S>(PutQuotes(line.scale));
-                if (scala is not null)
-                {
-                    current.Scale.X = float.Parse(scala.x) / 100;
-                    current.Scale.Y = float.Parse(scala.y) / 100;
-                    current.Scale.Z = float.Parse(scala.z) / 100;
-                }
-
-                AddToData(current, line.template_path, poslist[i], rotlist[i]);
-
-            }
-        }
-
-        public void Add00(List<Child> props, string tr)
-        {
-            var (poslist, rotlist) = GetPosRot(props);
-            var center = GetCenter(poslist);
-
-            poslist = UpdateCoords(poslist, center);
-
-            for (var i = 0; i < props.Count; i++)
-            {
-                var line = props[i];
-                var current = RedJsonSerializer.Deserialize<worldNodeData>(tr);
-
-                AddToData(current, line.path, poslist[i], rotlist[i]);
             }
         }
 
