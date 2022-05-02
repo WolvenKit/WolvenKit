@@ -71,8 +71,10 @@ namespace WolvenKit.ViewModels.Shell
         }
 
         //this won't work until TreeTraversal is written
-        public (List<Vec4>, List<Quat>) GetPosRot(List<Child> props)
+        public (List<Vec4>, List<Quat>) GetPosRot(Root1 json)
         {
+            var props = json.childs;
+
             var poslist = new List<Vec4>();
             var rotlist = new List<Quat>();
 
@@ -219,6 +221,42 @@ namespace WolvenKit.ViewModels.Shell
             }
         }
 
+        public List<Child> GetLines(Root1 json)
+        {
+            var props = new List<Child>();
+
+            var v = new Child()
+            {
+                pos = json.pos,
+                rot = json.rot,
+                name = json.name
+            };
+            props.Add(v);
+
+            foreach (var child in json.childs)
+            {
+                GetLines(child, props);
+            }
+
+            return props;
+        }
+
+        public void GetLines(Child c, List<Child> props)
+        {
+            var v = new Child()
+            {
+                pos = c.pos,
+                rot = c.rot,
+                name = c.name
+            };
+            props.Add(v);
+
+            foreach (var cc in c.childs)
+            {
+                GetLines(cc, props);
+            }
+        }
+
         public void Add00(List<Prop> props, string tr)
         {
             var (poslist, rotlist) = GetPosRot(props);
@@ -245,9 +283,10 @@ namespace WolvenKit.ViewModels.Shell
             }
         }
 
-        public void Add00(List<Child> props, string tr)
+        public void Add00(Root1 json, string tr)
         {
-            var (poslist, rotlist) = GetPosRot(props);
+            var props = GetLines(json);
+            var (poslist, rotlist) = GetPosRot(json);
             var center = GetCenter(poslist);
 
             poslist = UpdateCoords(poslist, center);

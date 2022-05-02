@@ -1860,7 +1860,7 @@ namespace WolvenKit.ViewModels.Shell
                     }
                     else if (json1 is not null && json1.childs is not null && json1.childs.Count > 0)
                     {
-                        Add00(json1.childs, tr);
+                        Add00(json1, tr);
                     }
                     else
                     {
