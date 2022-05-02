@@ -109,58 +109,26 @@ namespace WolvenKit.ViewModels.Shell
 
         public static Quat FixRotation(Quat q)
         {
-            var angleindegrees = 90;
+            var rbcm = Mat4.Identity;
+            rbcm.M22 = 0;
+            rbcm.M23 = 1;
+            rbcm.M32 = -1;
+            rbcm.M33 = 0;
 
-            var flipx = Quat.CreateFromAxisAngle(new Vec3(1, 0, 0), (float)(Math.PI / 180 * angleindegrees * 1));
-            var flipy = Quat.CreateFromAxisAngle(new Vec3(0, 1, 0), (float)(Math.PI / 180 * angleindegrees * 1));
-            var flipz = Quat.CreateFromAxisAngle(new Vec3(0, 0, 1), (float)(Math.PI / 180 * angleindegrees * 1));
+            var mq = Mat4.CreateFromQuaternion(q);
+            Mat4.Invert(rbcm, out var irbcm);
 
-            Mat4.CreateReflection(new System.Numerics.Plane());
+            //var blipx = Mat4.CreateRotationX((float)Math.PI / 2);
+            var blipy = Mat4.CreateRotationY((float)Math.PI * 2 / 2);
+            Mat4.Invert(blipy, out var iblipy);
 
-            var t1 = Mat4.CreateFromQuaternion(q);
+            var blipz = Mat4.CreateRotationY((float)Math.PI * 2 / 2);
+            Mat4.Invert(blipz, out var iblipz);
 
-            var t9000 = Mat4.Identity;
-            t9000.M11 = 1;
-            t9000.M13 = 0;
-            t9000.M21 = 0;
-            t9000.M22 = 0;
-            t9000.M23 = 1;
-            //t9000.M31 = -1;
-            t9000.M32 = -1;
-            t9000.M33 = 0;
+            rbcm = irbcm * iblipy * iblipz * mq * blipz * blipy * rbcm;            
 
-            var ttt = Mat4.CreateFromQuaternion(q);
-            Mat4.Invert(t9000, out var i9000);
+            var q9 = Quat.CreateFromRotationMatrix(rbcm);
 
-
-            var fuckx = Mat4.CreateRotationX((float)Math.PI / 2);
-            var fucky = Mat4.CreateRotationY((float)Math.PI * 2 / 2);
-            Mat4.Invert(fucky, out var ifucky);
-
-            var fuckz = Mat4.CreateRotationY((float)Math.PI * 2 / 2);
-            Mat4.Invert(fuckz, out var ifuckz);
-
-            var t9001 = Mat4.Identity;
-
-            t9001.M11 = 1;
-            t9001.M22 = 1;
-            t9001.M33 = -1;
-
-            t9000 = i9000 * ifucky * ifuckz * ttt * fuckz * fucky * t9000;
-            //fuckx = fuckx * fucky * ttt;
-            fuckx = t9001 * ttt;
-
-            //var tt000 = q == q9;
-            var q9 = Quat.CreateFromRotationMatrix(t9000);
-
-
-            //q = flipy * q * Quat.Conjugate(flipy);
-            //q = flipx * q * Quat.Conjugate(flipx);
-            //q = flipz * q * Quat.Conjugate(flipz);
-            //q = q9 * q * Quat.Conjugate(q9);
-
-
-            //Console.Write(qq);
             //throw new Exception("boop");
             //(q.Z, q.Y) = (q.Y, q.Z);
             return q9;
