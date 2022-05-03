@@ -311,8 +311,8 @@ namespace WolvenKit.ViewModels.Documents
                             {
                                 W = transforms[0].Orientation.R,
                                 X = transforms[0].Orientation.I,
-                                Y = transforms[0].Orientation.K,
-                                Z = transforms[0].Orientation.J
+                                Y = transforms[0].Orientation.J,
+                                Z = transforms[0].Orientation.K
                             };
 
                             q = f(q);
