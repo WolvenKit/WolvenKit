@@ -34,10 +34,11 @@ namespace WolvenKit.ViewModels.Shell
             return new Vec4(cX, cY, cZ, cW);
         }
 
-        public (List<Vec4>, List<Quat>) GetPosRot(List<Prop> props)
+        public (List<Vec4>, List<Quat>, List<string>) GetPosRotApp(List<Prop> props)
         {
             var poslist = new List<Vec4>();
             var rotlist = new List<Quat>();
+            var applist = new List<string>();
 
             foreach (var line in props)
             {
@@ -58,14 +59,17 @@ namespace WolvenKit.ViewModels.Shell
                 q = FixRotation(q);
 
                 rotlist.Add(q);
+
+                applist.Add(line.app);
             }
-            return (poslist, rotlist);
+            return (poslist, rotlist, applist);
         }
 
-        public (List<Vec4>, List<Quat>) GetPosRot(List<Child> props)
+        public (List<Vec4>, List<Quat>, List<string>) GetPosRotApp(List<Child> props)
         {
             var poslist = new List<Vec4>();
             var rotlist = new List<Quat>();
+            var applist = new List<string>();
 
             foreach (var line in props)
             {
@@ -87,8 +91,18 @@ namespace WolvenKit.ViewModels.Shell
                 q = FixRotation(q);
 
                 rotlist.Add(q);
+
+                if (line.app != null)
+                {
+                    string app = line.app == "" ? "default" : line.app;
+                    applist.Add(app);
+                }
+                else
+                {
+                    applist.Add("default");
+                }
             }
-            return (poslist, rotlist);
+            return (poslist, rotlist, applist);
         }
 
         public static string PutQuotes(string w)
@@ -142,7 +156,7 @@ namespace WolvenKit.ViewModels.Shell
             return poslist;
         }
 
-        public void AddToData(worldNodeData current, string path, Vec4 pos, Quat rot)
+        public void AddToData(worldNodeData current, string path, Vec4 pos, Quat rot, string app)
         {
             if (Parent.Parent is not null &&
                 Parent.Parent.Data is not null &&
@@ -153,6 +167,7 @@ namespace WolvenKit.ViewModels.Shell
                 var index = wss.Nodes.Count;
 
                 wen.EntityTemplate.DepotPath = path;
+                wen.AppearanceName = app;
                 ((IRedArray)wss.Nodes).Insert(index, (IRedType)wenh);
 
                 current.Position.X += pos.X;
@@ -217,7 +232,8 @@ namespace WolvenKit.ViewModels.Shell
                 pos = c.pos,
                 rot = c.rot,
                 name = c.name,
-                path = c.path
+                path = c.path,
+                app = c.app
             };
             props.Add(v);
             if (c.childs is not null)
@@ -234,7 +250,7 @@ namespace WolvenKit.ViewModels.Shell
         }
         public void Add00(List<Prop> props, string tr)
         {
-            var (poslist, rotlist) = GetPosRot(props);
+            var (poslist, rotlist, applist) = GetPosRotApp(props);
             var center = GetCenter(poslist);
 
             poslist = UpdateCoords(poslist, center);
@@ -253,14 +269,14 @@ namespace WolvenKit.ViewModels.Shell
                     current.Scale.Z = float.Parse(scala.z) / 100;
                 }
 
-                AddToData(current, line.template_path, poslist[i], rotlist[i]);
+                AddToData(current, line.template_path, poslist[i], rotlist[i], applist[i]);
             }
         }
 
         public void Add00(Root1 json, string tr)
         {
             var props = GetLines(json);
-            var (poslist, rotlist) = GetPosRot(props);
+            var (poslist, rotlist, applist) = GetPosRotApp(props);
             var center = GetCenter(json);
 
             poslist = UpdateCoords(poslist, center);
@@ -270,7 +286,7 @@ namespace WolvenKit.ViewModels.Shell
                 var line = props[i];
                 var current = RedJsonSerializer.Deserialize<worldNodeData>(tr);
 
-                AddToData(current, line.path, poslist[i], rotlist[i]);
+                AddToData(current, line.path, poslist[i], rotlist[i], applist[i]);
             }
         }
 
