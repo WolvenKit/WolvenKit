@@ -581,10 +581,6 @@
         VirtualizingPanel.VirtualizationMode="Recycling"
         Visibility="Visible">
         <!--
-            TODO add copy and delete selected items
-            SelectionMode="Extended"
-        -->
-        <!--
             LoadOnDemandCommand="{Binding OnDemandLoadingCommand}"
             QueryNodeSize="TreeView_QueryNodeSize"
         -->

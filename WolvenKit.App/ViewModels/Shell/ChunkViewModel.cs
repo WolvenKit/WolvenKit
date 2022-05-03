@@ -1849,7 +1849,7 @@ namespace WolvenKit.ViewModels.Shell
                     {
                         throw new SerializationException();
                     }
-                 
+
                     var json0 = RedJsonSerializer.Deserialize<Root0>(text);
                     var json1 = RedJsonSerializer.Deserialize<Root1>(text);
 
@@ -1870,6 +1870,17 @@ namespace WolvenKit.ViewModels.Shell
                     {
                         Tab.File.SetIsDirty(true);
                         RecalulateProperties(irtt);
+                        //re   ca lu tate ....huh
+                    }
+
+                    var currentfile = new FileModel(Parent.Tab.File.FilePath, Locator.Current.GetService<AppViewModel>().ActiveProject);
+
+                    Locator.Current.GetService<AppViewModel>().SaveFileCommand.SafeExecute(currentfile);
+                    Parent.Tab.File.TabItemViewModels.RemoveMany(Parent.Tab.File.TabItemViewModels.AsEnumerable());
+
+                    if (Parent.Parent.Data is RedBaseClass cls)
+                    {
+                        Tab.File.TabItemViewModels.Add(new RDTDataViewModel(cls, Tab.File));
                     }
 
                     Locator.Current.GetService<ILoggerService>().Success($"might have done the thing maybe, who knows really");

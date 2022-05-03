@@ -102,18 +102,18 @@ namespace WolvenKit.ViewModels.Shell
 
         public static Quat FixRotation(Quat q)
         {
+            var mq = Mat4.CreateFromQuaternion(q);
+
             var rbcm = Mat4.Identity;
             rbcm.M22 = 0;
             rbcm.M23 = 1;
             rbcm.M32 = -1;
             rbcm.M33 = 0;
-
-            var mq = Mat4.CreateFromQuaternion(q);
             Mat4.Invert(rbcm, out var irbcm);
 
-            rbcm = irbcm * mq * rbcm;
+            mq = irbcm * mq * rbcm;
 
-            var q9 = Quat.CreateFromRotationMatrix(rbcm);
+            var q9 = Quat.CreateFromRotationMatrix(mq);
 
             //throw new Exception("boop");
             //(q.Z, q.Y) = (q.Y, q.Z);
@@ -160,6 +160,9 @@ namespace WolvenKit.ViewModels.Shell
 
                 //definitely does not go to 5000
                 current.MaxStreamingDistance = 5000;
+
+                //seem to be doing something to the max distance, kinda
+                current.UkFloat1 = 5000;
 
                 current.NodeIndex = (CUInt16)index;
 
