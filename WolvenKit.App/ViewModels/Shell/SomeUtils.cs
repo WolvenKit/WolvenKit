@@ -111,7 +111,15 @@ namespace WolvenKit.ViewModels.Shell
             rbcm.M33 = 0;
             Mat4.Invert(rbcm, out var irbcm);
 
-            mq = irbcm * mq * rbcm;
+            //var blipx = Mat4.CreateRotationX((float)Math.PI / 2);
+            //Mat4.Invert(blipx, out var iblipx);
+            var blipy = Mat4.CreateRotationY((float)Math.PI * 2 / 2);
+            Mat4.Invert(blipy, out var iblipy);
+            //var blipz = Mat4.CreateRotationY((float)Math.PI * 2 / 2);
+            //Mat4.Invert(blipz, out var iblipz);
+            //rbcm = irbcm * iblipy * iblipz * mq * blipz * blipy * rbcm;
+
+            mq = irbcm * iblipy * mq * blipy * rbcm;
 
             var q9 = Quat.CreateFromRotationMatrix(mq);
 
