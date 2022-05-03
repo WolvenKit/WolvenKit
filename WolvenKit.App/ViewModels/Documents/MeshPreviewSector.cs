@@ -311,12 +311,16 @@ namespace WolvenKit.ViewModels.Documents
                             {
                                 W = transforms[0].Orientation.R,
                                 X = transforms[0].Orientation.I,
-                                Y = -transforms[0].Orientation.K,
+                                Y = transforms[0].Orientation.K,
                                 Z = transforms[0].Orientation.J
                             };
+
+                            q = f(q);
+                            var qq = new System.Windows.Media.Media3D.Quaternion(q.X, q.Y, q.Z, q.W);
+
                             var matrix = new Matrix3D();
                             matrix.Scale(ToScaleVector3D(transforms[0].Scale));
-                            matrix.Rotate(ToQuaternion(f(q)));
+                            matrix.Rotate(qq);
                             matrix.Translate(ToVector3D(transforms[0].Position));
 
                             entity.Transform = new MatrixTransform3D(matrix);
