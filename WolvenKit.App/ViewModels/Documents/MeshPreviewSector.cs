@@ -57,7 +57,7 @@ namespace WolvenKit.ViewModels.Documents
             {
                 var handle = data.Nodes[handleIndex];
                 var name = (string)handle.Chunk.DebugName;
-                name = "_"+name?.Replace("{", "").Replace("}", "").Replace("\\", "_").Replace(".", "_").Replace("!", "").Replace("-", "_") ?? "none";
+                name = "_" + name?.Replace("{", "").Replace("}", "").Replace("\\", "_").Replace(".", "_").Replace("!", "").Replace("-", "_") ?? "none";
 
                 if (handle.Chunk is IRedMeshNode irmn)
                 {
@@ -153,39 +153,39 @@ namespace WolvenKit.ViewModels.Documents
                         {
                             //for (int j = 0; j < transforms.Count; j++)
                             //{
-                                var meshes = MakeMesh(mesh, ulong.MaxValue, 0);
+                            var meshes = MakeMesh(mesh, ulong.MaxValue, 0);
 
-                                var subgroup = new MeshComponent()
-                                {
-                                    Name = name + $"_instance_{i:D2}",
-                                    AppearanceName = widmn.MeshAppearance,
-                                    DepotPath = irmn.Mesh.DepotPath
-                                };
+                            var subgroup = new MeshComponent()
+                            {
+                                Name = name + $"_instance_{i:D2}",
+                                AppearanceName = widmn.MeshAppearance,
+                                DepotPath = irmn.Mesh.DepotPath
+                            };
 
-                                foreach (var submesh in meshes)
+                            foreach (var submesh in meshes)
+                            {
+                                if (!app.LODLUT.ContainsKey(submesh.LOD))
                                 {
-                                    if (!app.LODLUT.ContainsKey(submesh.LOD))
-                                    {
-                                        app.LODLUT[submesh.LOD] = new List<SubmeshComponent>();
-                                    }
-                                    app.LODLUT[submesh.LOD].Add(submesh);
-                                    subgroup.Children.Add(submesh);
+                                    app.LODLUT[submesh.LOD] = new List<SubmeshComponent>();
                                 }
+                                app.LODLUT[submesh.LOD].Add(submesh);
+                                subgroup.Children.Add(submesh);
+                            }
 
-                                var matrix = new Matrix3D();
-                                matrix.Scale(ToScaleVector3D(transforms[0].Scale));
-                                matrix.Rotate(ToQuaternion(transforms[0].Orientation));
-                                matrix.Translate(ToVector3D(transforms[0].Position));
+                            var matrix = new Matrix3D();
+                            matrix.Scale(ToScaleVector3D(transforms[0].Scale));
+                            matrix.Rotate(ToQuaternion(transforms[0].Orientation));
+                            matrix.Translate(ToVector3D(transforms[0].Position));
 
-                                var citbMatrix = new Matrix3D();
-                                citbMatrix.Rotate(ToQuaternion(citbTransforms[(int)(widmn.CookedInstanceTransforms.StartIndex + i)].Orientation));
-                                citbMatrix.Translate(ToVector3D(citbTransforms[(int)(widmn.CookedInstanceTransforms.StartIndex + i)].Position));
+                            var citbMatrix = new Matrix3D();
+                            citbMatrix.Rotate(ToQuaternion(citbTransforms[(int)(widmn.CookedInstanceTransforms.StartIndex + i)].Orientation));
+                            citbMatrix.Translate(ToVector3D(citbTransforms[(int)(widmn.CookedInstanceTransforms.StartIndex + i)].Position));
 
-                                citbMatrix.Append(matrix);
+                            citbMatrix.Append(matrix);
 
-                                subgroup.Transform = new MatrixTransform3D(citbMatrix);
+                            subgroup.Transform = new MatrixTransform3D(citbMatrix);
 
-                                group.Children.Add(subgroup);
+                            group.Children.Add(subgroup);
                             //}
                         }
                     }
@@ -250,7 +250,7 @@ namespace WolvenKit.ViewModels.Documents
 
                         var positions = new Vector3Collection();
 
-                        foreach(var v in tb.Vertices)
+                        foreach (var v in tb.Vertices)
                         {
                             positions.Add(new SharpDX.Vector3(v.X, v.Y, -v.Z));
                         }
@@ -295,26 +295,35 @@ namespace WolvenKit.ViewModels.Documents
                 }
                 else if (handle.Chunk is worldEntityNode wen)
                 {
-                    // a little slow for what we want to do
-                    //var entFile = File.GetFileFromDepotPathOrCache(wen.EntityTemplate.DepotPath);
+                    //a little slow for what we want to do
+                    // <3
 
-                    //if (entFile != null && entFile.RootChunk is entEntityTemplate eet)
-                    //{
-                    //    var entity = RenderEntity(eet, app);
-                    //    if (entity != null)
-                    //    {
-                    //        entity.Name = "Entity";
+                    var entFile = File.GetFileFromDepotPathOrCache(wen.EntityTemplate.DepotPath);
 
-                    //        var matrix = new Matrix3D();
-                    //        matrix.Scale(ToScaleVector3D(transforms[0].Scale));
-                    //        matrix.Rotate(ToQuaternion(transforms[0].Orientation));
-                    //        matrix.Translate(ToVector3D(transforms[0].Position));
+                    if (entFile != null && entFile.RootChunk is entEntityTemplate eet)
+                    {
+                        var entity = RenderEntity(eet, app);
+                        if (entity != null)
+                        {
+                            entity.Name = "Entity";
+                            var f = WolvenKit.ViewModels.Shell.ChunkViewModel.FixRotation;
+                            var q = new System.Numerics.Quaternion()
+                            {
+                                W = transforms[0].Orientation.R,
+                                X = transforms[0].Orientation.I,
+                                Y = -transforms[0].Orientation.K,
+                                Z = transforms[0].Orientation.J
+                            };
+                            var matrix = new Matrix3D();
+                            matrix.Scale(ToScaleVector3D(transforms[0].Scale));
+                            matrix.Rotate(ToQuaternion(f(q)));
+                            matrix.Translate(ToVector3D(transforms[0].Position));
 
-                    //        entity.Transform = new MatrixTransform3D(matrix);
+                            entity.Transform = new MatrixTransform3D(matrix);
 
-                    //        groups.Add(entity);
-                    //    }
-                    //}
+                            groups.Add(entity);
+                        }
+                    }
                 }
                 else if (handle.Chunk is worldPopulationSpawnerNode wpsn)
                 {
