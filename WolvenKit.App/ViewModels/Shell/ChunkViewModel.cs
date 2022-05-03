@@ -222,7 +222,7 @@ namespace WolvenKit.ViewModels.Shell
                     { try { dict.Remove(i); } catch { } }
 
                     Tab.File.SetIsDirty(true);
-                    Parent.RecalulateProperties();
+                    Parent.RecalculateProperties();
                 }
                 else if (Parent.Data is IRedArray db4)
                 {
@@ -240,7 +240,7 @@ namespace WolvenKit.ViewModels.Shell
                     { try { db4.Remove(i); } catch { } }
 
                     Tab.File.SetIsDirty(true);
-                    Parent.RecalulateProperties();
+                    Parent.RecalculateProperties();
                 }
                 else
                 {
@@ -1776,7 +1776,7 @@ namespace WolvenKit.ViewModels.Shell
             }
 
             Tab.File.SetIsDirty(true);
-            Parent.RecalulateProperties();
+            Parent.RecalculateProperties();
         }
 
         public ICommand DeleteAllCommand { get; private set; }
@@ -1818,7 +1818,7 @@ namespace WolvenKit.ViewModels.Shell
             }
             IsDeleteReady = false;
             Tab.File.SetIsDirty(true);
-            RecalulateProperties();
+            RecalculateProperties();
         }
 
 
@@ -1869,8 +1869,7 @@ namespace WolvenKit.ViewModels.Shell
                     if (Parent.Data is DataBuffer dbf && dbf.Buffer.Data is IRedType irtt)
                     {
                         Tab.File.SetIsDirty(true);
-                        RecalulateProperties(irtt);
-                        //re   ca lu tate ....huh
+                        RecalculateProperties(irtt);
                     }
 
                     var currentfile = new FileModel(Parent.Tab.File.FilePath, Locator.Current.GetService<AppViewModel>().ActiveProject);
@@ -2071,10 +2070,10 @@ namespace WolvenKit.ViewModels.Shell
                     }
                     InsertChild(index, item.Data);
                     Tab.File.SetIsDirty(true);
-                    RecalulateProperties();
+                    RecalculateProperties();
                     if (sourceList.GetHashCode() != destList.GetHashCode())
                     {
-                        oldParent.RecalulateProperties();
+                        oldParent.RecalculateProperties();
                         if (oldParent.Tab.File.GetHashCode() != Tab.File.GetHashCode())
                         {
                             oldParent.Tab.File.SetIsDirty(true);
@@ -2162,7 +2161,7 @@ namespace WolvenKit.ViewModels.Shell
                 //Tab.File.SetIsDirty(true);
 
                 Tab.File.SetIsDirty(true);
-                RecalulateProperties(item);
+                RecalculateProperties(item);
 
                 return true;
             }
@@ -2170,7 +2169,7 @@ namespace WolvenKit.ViewModels.Shell
             return false;
         }
 
-        public void RecalulateProperties(IRedType selectChild = null)
+        public void RecalculateProperties(IRedType selectChild = null)
         {
             PropertyCount = -1;
             // might not be needed
