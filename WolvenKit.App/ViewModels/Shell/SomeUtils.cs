@@ -189,6 +189,16 @@ namespace WolvenKit.ViewModels.Shell
 
                 current.NodeIndex = (CUInt16)index;
 
+                if (Parent.Data is DataBuffer db00 &&
+                    db00.Buffer.Data is worldNodeDataBuffer db0)
+                {
+                    if (!db0.Lookup.ContainsKey(current.NodeIndex))
+                    {
+                        db0.Lookup[current.NodeIndex] = new();
+                    }
+                    db0.Lookup[current.NodeIndex].Add(current);
+                }
+
                 if (Parent.Data is DataBuffer db && db.Buffer.Data is IRedType irt)
                 {
                     if (irt is IRedArray ira && ira.InnerType.IsAssignableTo(current.GetType()))

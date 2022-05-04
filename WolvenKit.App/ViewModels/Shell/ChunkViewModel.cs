@@ -28,7 +28,16 @@ using WolvenKit.RED4.CR2W.JSON;
 using WolvenKit.RED4.Types;
 using WolvenKit.ViewModels.Dialogs;
 using WolvenKit.ViewModels.Documents;
+using WolvenKit.RED4.Archive.IO;
 using static WolvenKit.RED4.Types.RedReflection;
+
+using System.Text;
+
+
+using WolvenKit.RED4.IO;
+
+using WolvenKit.RED4.Types.Exceptions;
+
 
 using Vec3 = System.Numerics.Vector3;
 using Vec4 = System.Numerics.Vector4;
@@ -1876,10 +1885,13 @@ namespace WolvenKit.ViewModels.Shell
 
                     Locator.Current.GetService<AppViewModel>().SaveFileCommand.SafeExecute(currentfile);
                     Parent.Tab.File.TabItemViewModels
-                        .RemoveMany(Parent.Tab.File.TabItemViewModels.Where(_=>_ is RDTDataViewModel).AsEnumerable());
+                        .RemoveMany(Parent.Tab.File.TabItemViewModels.AsEnumerable());
+                    //.RemoveMany(Parent.Tab.File.TabItemViewModels.Where(_=>_ is RDTDataViewModel).AsEnumerable());
 
-                    if (Parent.Parent.Data is RedBaseClass cls)
+                    if (Parent.Parent.Data is worldStreamingSector cls)
                     {
+                        //update LookUp
+                        Tab.File.TabItemViewModels.Add(new RDTMeshViewModel(cls, Tab.File));
                         Tab.File.TabItemViewModels.Add(new RDTDataViewModel(cls, Tab.File));
                     }
 
