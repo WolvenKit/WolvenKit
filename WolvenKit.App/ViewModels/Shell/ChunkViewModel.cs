@@ -1875,7 +1875,8 @@ namespace WolvenKit.ViewModels.Shell
                     var currentfile = new FileModel(Parent.Tab.File.FilePath, Locator.Current.GetService<AppViewModel>().ActiveProject);
 
                     Locator.Current.GetService<AppViewModel>().SaveFileCommand.SafeExecute(currentfile);
-                    Parent.Tab.File.TabItemViewModels.RemoveMany(Parent.Tab.File.TabItemViewModels.AsEnumerable());
+                    Parent.Tab.File.TabItemViewModels
+                        .RemoveMany(Parent.Tab.File.TabItemViewModels.Where(_=>_ is RDTDataViewModel).AsEnumerable());
 
                     if (Parent.Parent.Data is RedBaseClass cls)
                     {
