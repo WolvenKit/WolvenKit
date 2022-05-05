@@ -274,7 +274,7 @@ namespace WolvenKit.Functionality.Controllers
             if (!await PackProject())
             {
                 _progressService.IsIndeterminate = false;
-                return await Task.FromResult(false);
+                return false;
             }
 
             InstallMod();
