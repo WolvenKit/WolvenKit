@@ -1504,6 +1504,17 @@ namespace WolvenKit.ViewModels.Shell
                 if (existing.Count == 1)
                 {
                     var type = arr.InnerType;
+                    if (type == typeof(CKeyValuePair))
+                    {
+                        var app = Locator.Current.GetService<AppViewModel>();
+                        app.SetActiveDialog(new SelectRedTypeDialogViewModel
+                        {
+                            DialogHandler = HandleCKeyValuePair
+                        });
+
+                        return;
+                    }
+
                     var newItem = RedTypeManager.CreateRedType(type);
                     if (newItem is IRedBaseHandle handle)
                     {
@@ -1571,6 +1582,19 @@ namespace WolvenKit.ViewModels.Shell
             {
                 DialogHandler = HandleChunk
             });
+        }
+
+        public void HandleCKeyValuePair(DialogViewModel sender)
+        {
+            var app = Locator.Current.GetService<AppViewModel>();
+            app.CloseDialogCommand.Execute(null);
+            if (sender != null)
+            {
+                var vm = sender as SelectRedTypeDialogViewModel;
+
+                var instance = new CKeyValuePair("", (IRedType)System.Activator.CreateInstance(vm.SelectedType));
+                InsertChild(-1, instance);
+            }
         }
 
         public void HandleChunk(DialogViewModel sender)
