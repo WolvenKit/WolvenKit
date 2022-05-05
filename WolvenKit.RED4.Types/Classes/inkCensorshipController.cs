@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class inkCensorshipController : inkWidgetLogicController
 	{
 		[Ordinal(1)] 
@@ -12,5 +11,12 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CBitField<CensorshipFlags>>();
 			set => SetPropertyValue<CBitField<CensorshipFlags>>(value);
 		}
+
+		public inkCensorshipController()
+		{
+			PostConstruct();
+		}
+
+		partial void PostConstruct();
 	}
 }

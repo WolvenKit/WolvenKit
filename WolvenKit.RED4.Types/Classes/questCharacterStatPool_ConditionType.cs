@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class questCharacterStatPool_ConditionType : questICharacterConditionType
 	{
 		[Ordinal(0)] 
@@ -51,6 +50,10 @@ namespace WolvenKit.RED4.Types
 			IsPlayer = true;
 			ComparisonType = Enums.EComparisonType.Equal;
 			StatPoolType = Enums.gamedataStatPoolType.Invalid;
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

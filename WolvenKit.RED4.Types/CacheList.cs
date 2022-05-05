@@ -1,15 +1,28 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using WolvenKit.RED4.IO;
 
 namespace WolvenKit.RED4.Types
 {
-    public class CacheList<T>
+    public class CacheList<T> : ICacheList<T>
     {
-        private readonly HashSet<T> _valueList = new();
-        private readonly Dictionary<T, ushort> _keyValueList = new();
+        private readonly HashSet<T> _valueList;
+        private readonly Dictionary<T, ushort> _keyValueList;
         private ushort _index;
+        private IEqualityComparer<T> _comparer;
 
         public ushort Count => _index;
+
+        public CacheList() : this(EqualityComparer<T>.Default) {}
+
+        public CacheList(IEqualityComparer<T> comparer)
+        {
+            _comparer = comparer;
+
+            _valueList = new HashSet<T>(_comparer);
+            _keyValueList = new Dictionary<T, ushort>(_comparer);
+        }
 
         public ushort Add(T value)
         {
@@ -34,16 +47,11 @@ namespace WolvenKit.RED4.Types
             return _valueList.Remove(item) && _keyValueList.Remove(item);
         }
 
-        public ushort IndexOf(T value, IEqualityComparer<T> comparer = null)
+        public ushort IndexOf(T value)
         {
-            comparer ??= EqualityComparer<T>.Default;
-
-            foreach (var (element, index) in _keyValueList)
+            if (_keyValueList.TryGetValue(value, out var index))
             {
-                if (comparer.Equals(element, value))
-                {
-                    return index;
-                }
+                return index;
             }
 
             return ushort.MaxValue;
@@ -55,12 +63,6 @@ namespace WolvenKit.RED4.Types
             _keyValueList.Clear();
             _index = 0;
         }
-
-        public Dictionary<T, ushort> ToDictionary(IEqualityComparer<T> comparer = null)
-        {
-            return new Dictionary<T, ushort>(_keyValueList, comparer);
-        }
-
         public List<T> ToList()
         {
             return _keyValueList.Keys.ToList();

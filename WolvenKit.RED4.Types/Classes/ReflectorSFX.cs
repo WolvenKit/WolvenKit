@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class ReflectorSFX : VendingMachineSFX
 	{
 		[Ordinal(2)] 
@@ -34,6 +33,10 @@ namespace WolvenKit.RED4.Types
 			Distraction = "dev_reflector_distraction";
 			TurnOn = "dev_reflector_turn_on_loop";
 			TurnOff = "dev_reflector_turn_on_loop_stop";
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

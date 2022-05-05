@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class gameuiQuestMappinController : gameuiInteractionMappinController
 	{
 		[Ordinal(11)] 
@@ -33,6 +32,10 @@ namespace WolvenKit.RED4.Types
 		{
 			DistanceText = new();
 			DisplayName = new();
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

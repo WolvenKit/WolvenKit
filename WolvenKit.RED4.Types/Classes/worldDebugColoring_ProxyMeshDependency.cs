@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class worldDebugColoring_ProxyMeshDependency : worldEditorDebugColoringSettings
 	{
 		[Ordinal(0)] 
@@ -25,6 +24,10 @@ namespace WolvenKit.RED4.Types
 		{
 			AutoColor = new();
 			DiscardColor = new();
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

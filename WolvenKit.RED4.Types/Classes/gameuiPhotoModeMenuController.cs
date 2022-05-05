@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class gameuiPhotoModeMenuController : gameuiWidgetGameController
 	{
 		[Ordinal(2)] 
@@ -324,6 +323,10 @@ namespace WolvenKit.RED4.Types
 			CameraLocation = new();
 			InputBottomRoot = new();
 			MenuPages = new();
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

@@ -68,11 +68,11 @@ namespace CP77Tools.Tasks
             {
                 archives.AddRange(inputDirInfo
                     .GetFiles("*.archive", SearchOption.AllDirectories)
-                    .Select(_ => Red4ParserServiceExtensions.ReadArchive(_.FullName, _hashService)));
+                    .Select(_ => _wolvenkitFileService.ReadRed4Archive(_.FullName, _hashService)));
             }
             else
             {
-                archives.Add(Red4ParserServiceExtensions.ReadArchive(inputFileInfo.FullName, _hashService));
+                archives.Add(_wolvenkitFileService.ReadRed4Archive(inputFileInfo.FullName, _hashService));
             }
 
             if (missinghashes)
@@ -230,9 +230,9 @@ namespace CP77Tools.Tasks
                                     Mips = blob.Header.TextureInfo.MipCount.ToString(),
                                     Slicecount = blob.Header.TextureInfo.SliceCount.ToString(),
                                     Alignment = blob.Header.TextureInfo.DataAlignment.ToString(),
-                                    Compression = xbm.Setup.Compression.Value.ToString(),
-                                    Group = xbm.Setup.Group.Value.ToString(),
-                                    RawFormat = xbm.Setup.RawFormat.Value.ToString()
+                                    Compression = xbm.Setup.Compression.ToString(),
+                                    Group = xbm.Setup.Group.ToString(),
+                                    RawFormat = xbm.Setup.RawFormat.ToString()
                                 };
 
                                 texDictionary.AddOrUpdate(hash, texinfoObj, (arg1, o) => texinfoObj);

@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class CParticleModificatorNoise : IParticleModificator
 	{
 		[Ordinal(4)] 
@@ -67,6 +66,10 @@ namespace WolvenKit.RED4.Types
 			EditorGroup = "Position";
 			IsEnabled = true;
 			ChangeRate = new() { X = 1.000000F, Y = 1.000000F, Z = 1.000000F };
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

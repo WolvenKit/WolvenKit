@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class questQuickItemsManager_NodeType : questIUIManagerNodeType
 	{
 		[Ordinal(0)] 
@@ -16,6 +15,10 @@ namespace WolvenKit.RED4.Types
 		public questQuickItemsManager_NodeType()
 		{
 			Set = Enums.questQuickItemsSet.Q003_All;
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

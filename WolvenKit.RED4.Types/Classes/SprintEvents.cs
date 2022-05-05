@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class SprintEvents : LocomotionGroundEvents
 	{
 		[Ordinal(6)] 
@@ -36,5 +35,12 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CHandle<gameStatModifierData_Deprecated>>();
 			set => SetPropertyValue<CHandle<gameStatModifierData_Deprecated>>(value);
 		}
+
+		public SprintEvents()
+		{
+			PostConstruct();
+		}
+
+		partial void PostConstruct();
 	}
 }

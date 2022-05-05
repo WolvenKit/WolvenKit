@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class ActionsSequencerControllerPS : MasterControllerPS
 	{
 		[Ordinal(105)] 
@@ -43,6 +42,10 @@ namespace WolvenKit.RED4.Types
 			SequenceDuration = 2.000000F;
 			ActionTypeToForward = new() { QHack = true };
 			OngoingSequence = new() { SequenceInitiator = new(), DelayIDs = new() };
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

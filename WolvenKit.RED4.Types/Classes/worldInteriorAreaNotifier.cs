@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class worldInteriorAreaNotifier : worldITriggerAreaNotifer
 	{
 		[Ordinal(3)] 
@@ -33,8 +32,12 @@ namespace WolvenKit.RED4.Types
 		{
 			IsEnabled = true;
 			IncludeChannels = Enums.TriggerChannel.TC_Player;
-			GameRestrictionIDs = new() { new() { Value = 131161243162 } };
+			GameRestrictionIDs = new() { 131161243162 };
 			TreatAsInterior = true;
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

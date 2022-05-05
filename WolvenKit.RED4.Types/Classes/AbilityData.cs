@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class AbilityData : RedBaseClass
 	{
 		[Ordinal(0)] 
@@ -91,6 +90,10 @@ namespace WolvenKit.RED4.Types
 			ID = new();
 			EquipmentArea = Enums.gamedataEquipmentArea.Invalid;
 			AssignedIndex = -1;
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

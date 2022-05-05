@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class gameUILocalizationDataPackage : IScriptable
 	{
 		[Ordinal(0)] 
@@ -69,6 +68,10 @@ namespace WolvenKit.RED4.Types
 			StatValues = new();
 			StatNames = new();
 			ParamsCount = -1;
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

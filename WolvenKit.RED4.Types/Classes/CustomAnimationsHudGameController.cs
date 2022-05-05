@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class CustomAnimationsHudGameController : gameuiHUDGameController
 	{
 		[Ordinal(9)] 
@@ -90,6 +89,10 @@ namespace WolvenKit.RED4.Types
 			OnSpawnAnimations = new();
 			DefaultLibraryItemAnchor = Enums.inkEAnchor.Fill;
 			OwnerID = new();
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

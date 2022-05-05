@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class inkVirtualCompoundController : inkDiscreteNavigationController
 	{
 		[Ordinal(4)] 
@@ -33,6 +32,10 @@ namespace WolvenKit.RED4.Types
 		{
 			IsNavigalbe = true;
 			SupportsHoldInput = true;
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

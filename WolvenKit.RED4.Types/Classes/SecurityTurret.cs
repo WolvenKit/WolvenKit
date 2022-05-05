@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class SecurityTurret : SensorDevice
 	{
 		[Ordinal(189)] 
@@ -152,7 +151,7 @@ namespace WolvenKit.RED4.Types
 		public SecurityTurret()
 		{
 			ControllerTypeName = "SecurityTurretController";
-			DefaultSensePreset = new() { Value = 77796192748 };
+			DefaultSensePreset = 77796192748;
 			IdleSound = "idleStart";
 			IdleSoundStop = "idleStop";
 			SoundDeviceON = "activated";
@@ -163,6 +162,10 @@ namespace WolvenKit.RED4.Types
 			LaserFXSlotName = "laser";
 			BurstDelayEvtID = new();
 			NextShootCycleDelayEvtID = new();
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class animAnimNode_FloorIkBase : animAnimNode_OnePoseInput
 	{
 		[Ordinal(12)] 
@@ -61,6 +60,10 @@ namespace WolvenKit.RED4.Types
 			UseFixedVersion = true;
 			SlopeAngleDamp = 0.200000F;
 			Common = new() { GravityCentreBone = new(), RootRotationBlendTime = 0.200000F, VerticalVelocityOffsetUpBlendTime = 0.080000F, VerticalVelocityOffsetDownBlendTime = 0.030000F, SlidingOnSlopeBlendTime = 0.200000F };
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

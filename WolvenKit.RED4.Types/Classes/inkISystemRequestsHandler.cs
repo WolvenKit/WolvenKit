@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class inkISystemRequestsHandler : IScriptable
 	{
 		[Ordinal(0)] 
@@ -84,5 +83,12 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<inkTrialOnBuyFullGame>();
 			set => SetPropertyValue<inkTrialOnBuyFullGame>(value);
 		}
+
+		public inkISystemRequestsHandler()
+		{
+			PostConstruct();
+		}
+
+		partial void PostConstruct();
 	}
 }

@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class sampleTimeDilatable : gameTimeDilatable
 	{
 		[Ordinal(35)] 
@@ -12,5 +11,12 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CHandle<sampleTimeListener>>();
 			set => SetPropertyValue<CHandle<sampleTimeListener>>(value);
 		}
+
+		public sampleTimeDilatable()
+		{
+			PostConstruct();
+		}
+
+		partial void PostConstruct();
 	}
 }

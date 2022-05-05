@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class questIAudioCharacterManager_NodeSubType : questINodeType
 	{
 		[Ordinal(0)] 
@@ -12,5 +11,12 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CArray<questIAudioCharacterManager_NodeSubTypeCharacterEntry>>();
 			set => SetPropertyValue<CArray<questIAudioCharacterManager_NodeSubTypeCharacterEntry>>(value);
 		}
+
+		public questIAudioCharacterManager_NodeSubType()
+		{
+			PostConstruct();
+		}
+
+		partial void PostConstruct();
 	}
 }

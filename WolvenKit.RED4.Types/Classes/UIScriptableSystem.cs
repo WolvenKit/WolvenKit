@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class UIScriptableSystem : gameScriptableSystem
 	{
 		[Ordinal(0)] 
@@ -97,6 +96,10 @@ namespace WolvenKit.RED4.Types
 		{
 			NewItems = new();
 			DLCAddedItems = new();
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

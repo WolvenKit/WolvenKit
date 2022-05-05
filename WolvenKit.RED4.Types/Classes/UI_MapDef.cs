@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class UI_MapDef : gamebbScriptDefinition
 	{
 		[Ordinal(0)] 
@@ -43,6 +42,10 @@ namespace WolvenKit.RED4.Types
 			CurrentLocationEnumName = new();
 			NewLocationDiscovered = new();
 			CurrentState = new();
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

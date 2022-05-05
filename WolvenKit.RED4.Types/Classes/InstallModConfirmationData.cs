@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class InstallModConfirmationData : IScriptable
 	{
 		[Ordinal(0)] 
@@ -51,6 +50,10 @@ namespace WolvenKit.RED4.Types
 			PartId = new();
 			TelemetryItemData = new() { ItemID = new(), Quality = Enums.gamedataQuality.Invalid, ItemType = Enums.gamedataItemType.Invalid, ItemLevel = -1 };
 			TelemetryPartData = new() { ItemID = new(), Quality = Enums.gamedataQuality.Invalid, ItemType = Enums.gamedataItemType.Invalid, ItemLevel = -1 };
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

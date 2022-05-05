@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class SecurityTurretControllerPS : SensorDeviceControllerPS
 	{
 		[Ordinal(145)] 
@@ -56,11 +55,15 @@ namespace WolvenKit.RED4.Types
 		public SecurityTurretControllerPS()
 		{
 			DeviceName = "LocKey#121";
-			TweakDBRecord = new() { Value = 96702420141 };
-			TweakDBDescriptionRecord = new() { Value = 147741407213 };
-			LookAtPresetVert = new() { Value = 116799757519 };
-			LookAtPresetHor = new() { Value = 125000267963 };
+			TweakDBRecord = 96702420141;
+			TweakDBDescriptionRecord = 147741407213;
+			LookAtPresetVert = 116799757519;
+			LookAtPresetHor = 125000267963;
 			LaserGameEffectRef = new();
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

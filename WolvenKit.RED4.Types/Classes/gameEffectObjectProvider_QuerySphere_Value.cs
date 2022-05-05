@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class gameEffectObjectProvider_QuerySphere_Value : gameEffectObjectProvider
 	{
 		[Ordinal(0)] 
@@ -32,6 +31,10 @@ namespace WolvenKit.RED4.Types
 		public gameEffectObjectProvider_QuerySphere_Value()
 		{
 			QueryPreset = new();
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

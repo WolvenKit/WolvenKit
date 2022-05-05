@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class scnSceneEventId : RedBaseClass
 	{
 		[Ordinal(0)] 
@@ -16,6 +15,10 @@ namespace WolvenKit.RED4.Types
 		public scnSceneEventId()
 		{
 			Id = 18446744073709551615;
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

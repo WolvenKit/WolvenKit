@@ -5,7 +5,7 @@ using System.ComponentModel;
 namespace WolvenKit.RED4.Types
 {
     [RED("serializationDeferredDataBuffer")]
-    public class SerializationDeferredDataBuffer : IRedBufferWrapper, IRedBufferPointer, IRedPrimitive, IEquatable<SerializationDeferredDataBuffer>
+    public class SerializationDeferredDataBuffer : IRedBufferWrapper, IRedBufferPointer, IRedPrimitive, IEquatable<SerializationDeferredDataBuffer>, IRedCloneable
     {
         [Browsable(false)]
         public RedBuffer Buffer { get; set; }
@@ -73,5 +73,24 @@ namespace WolvenKit.RED4.Types
         }
 
         public override int GetHashCode() => Buffer.GetHashCode();
+
+        public object ShallowCopy()
+        {
+            return MemberwiseClone();
+        }
+
+        public object DeepCopy()
+        {
+            var db = new SerializationDeferredDataBuffer();
+            if (Data is IRedCloneable irc)
+            {
+                db.Data = (IParseableBuffer)irc.DeepCopy();
+            }
+            else
+            {
+                db.Data = Data;
+            }
+            return db;
+        }
     }
 }

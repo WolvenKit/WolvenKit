@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class audioMeleeWeaponSettings : audioAudioMetadata
 	{
 		[Ordinal(1)] 
@@ -28,5 +27,12 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<audioWeaponHandlingSettings>();
 			set => SetPropertyValue<audioWeaponHandlingSettings>(value);
 		}
+
+		public audioMeleeWeaponSettings()
+		{
+			PostConstruct();
+		}
+
+		partial void PostConstruct();
 	}
 }

@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class worldFoliageBrushItem : ISerializable
 	{
 		[Ordinal(0)] 
@@ -41,6 +40,10 @@ namespace WolvenKit.RED4.Types
 		{
 			Params = new() { Proximity = 1.000000F, Scale = 1.000000F, ScaleVariation = 0.100000F };
 			Selected = true;
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class animAnimFeature_Bump : animAnimFeature
 	{
 		[Ordinal(0)] 
@@ -44,5 +43,12 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CInt32>();
 			set => SetPropertyValue<CInt32>(value);
 		}
+
+		public animAnimFeature_Bump()
+		{
+			PostConstruct();
+		}
+
+		partial void PostConstruct();
 	}
 }

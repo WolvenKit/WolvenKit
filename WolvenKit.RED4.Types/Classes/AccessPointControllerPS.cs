@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class AccessPointControllerPS : MasterControllerPS
 	{
 		[Ordinal(105)] 
@@ -66,12 +65,16 @@ namespace WolvenKit.RED4.Types
 			RevealDevicesGrid = false;
 			HasNetworkBackdoor = true;
 			DeviceName = "LocKey#138";
-			TweakDBRecord = new() { Value = 84949555524 };
-			TweakDBDescriptionRecord = new() { Value = 134736165949 };
+			TweakDBRecord = 84949555524;
+			TweakDBDescriptionRecord = 134736165949;
 			HasPersonalLinkSlot = true;
 			ShouldScannerShowNetwork = false;
 			RewardNotificationIcons = new();
 			PingedSquads = new();
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

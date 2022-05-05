@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class UI_QuickSlotsDataDef : gamebbScriptDefinition
 	{
 		[Ordinal(0)] 
@@ -169,6 +168,10 @@ namespace WolvenKit.RED4.Types
 			DpadHintRefresh = new();
 			ContainerConsumable = new();
 			ConsumableBeingUsed = new();
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

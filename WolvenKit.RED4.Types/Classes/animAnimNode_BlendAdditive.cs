@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class animAnimNode_BlendAdditive : animAnimNode_Base
 	{
 		[Ordinal(11)] 
@@ -118,6 +117,10 @@ namespace WolvenKit.RED4.Types
 			AddedInputNode = new();
 			WeightNode = new();
 			WeightPreviousFrameFloatTrack = new();
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

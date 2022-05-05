@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class animAnimEvent_ItemEffectDuration : animAnimEvent
 	{
 		[Ordinal(3)] 
@@ -32,6 +31,10 @@ namespace WolvenKit.RED4.Types
 		public animAnimEvent_ItemEffectDuration()
 		{
 			DurationInFrames = 15;
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

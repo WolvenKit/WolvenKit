@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class animSTwoBonesIKSolverData : RedBaseClass
 	{
 		[Ordinal(0)] 
@@ -194,6 +193,10 @@ namespace WolvenKit.RED4.Types
 			Joint_bend_dir_in_upper_s_BS = new() { Y = 1.000000F };
 			Joint_bend_dir_in_joint_s_BS = new() { Y = 1.000000F };
 			Joint_bend_dir_in_lower_s_BS = new() { Y = 1.000000F };
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

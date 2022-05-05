@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class ScriptableDeviceAction : BaseScriptableAction
 	{
 		[Ordinal(11)] 
@@ -116,5 +115,12 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CString>();
 			set => SetPropertyValue<CString>(value);
 		}
+
+		public ScriptableDeviceAction()
+		{
+			PostConstruct();
+		}
+
+		partial void PostConstruct();
 	}
 }

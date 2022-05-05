@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class InventoryWeaponItemChooser : InventoryGenericItemChooser
 	{
 		[Ordinal(16)] 
@@ -106,6 +105,10 @@ namespace WolvenKit.RED4.Types
 			SoftwareModsLabel = new();
 			SoftwareModsPush = new();
 			SoftwareModsContainer = new();
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

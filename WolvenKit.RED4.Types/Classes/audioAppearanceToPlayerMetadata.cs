@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class audioAppearanceToPlayerMetadata : RedBaseClass
 	{
 		[Ordinal(0)] 
@@ -33,6 +32,10 @@ namespace WolvenKit.RED4.Types
 		{
 			Appearances = new();
 			Priority = Enums.audioFoleyItemPriority.P6;
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

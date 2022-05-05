@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class gameuiCharacterCustomizationInfoResource : CResource
 	{
 		[Ordinal(1)] 
@@ -105,6 +104,10 @@ namespace WolvenKit.RED4.Types
 			UiPresets = new();
 			ExcludedFromRandomize = new();
 			VersionUpdateInfo = new();
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

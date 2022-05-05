@@ -10,13 +10,13 @@ using ReactiveUI;
 using Serilog;
 using Splat;
 using Splat.Microsoft.Extensions.DependencyInjection;
-using WolvenKit.Common;
 using WolvenKit.Common.Services;
 using WolvenKit.Core.Compression;
+using WolvenKit.Core.Interfaces;
 using WolvenKit.Functionality.Services;
 using WolvenKit.Functionality.WKitGlobal.Helpers;
 using WolvenKit.Interaction;
-using WolvenKit.RED4.CR2W.Archive;
+using WolvenKit.RED4.Archive;
 using WolvenKit.ViewModels.Wizards;
 using WolvenKit.Views.Dialogs;
 

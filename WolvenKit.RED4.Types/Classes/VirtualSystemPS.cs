@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class VirtualSystemPS : MasterControllerPS
 	{
 		[Ordinal(105)] 
@@ -33,6 +32,10 @@ namespace WolvenKit.RED4.Types
 		{
 			DeviceName = "SYSTEM";
 			Slaves = new();
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

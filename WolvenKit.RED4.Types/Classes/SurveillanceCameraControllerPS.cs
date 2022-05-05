@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class SurveillanceCameraControllerPS : SensorDeviceControllerPS
 	{
 		[Ordinal(145)] 
@@ -104,16 +103,20 @@ namespace WolvenKit.RED4.Types
 		public SurveillanceCameraControllerPS()
 		{
 			DeviceName = "LocKey#100";
-			TweakDBRecord = new() { Value = 112145183848 };
-			TweakDBDescriptionRecord = new() { Value = 165799279213 };
+			TweakDBRecord = 112145183848;
+			TweakDBDescriptionRecord = 165799279213;
 			CanBeInDeviceChain = true;
-			LookAtPresetVert = new() { Value = 118588422213 };
-			LookAtPresetHor = new() { Value = 126989615262 };
+			LookAtPresetVert = 118588422213;
+			LookAtPresetHor = 126989615262;
 			CameraProperties = new();
 			CameraQuestProperties = new() { FollowedTargetID = new() };
 			FeedReceivers = new();
 			MostRecentRequester = new();
 			BinkVideoPath = new();
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

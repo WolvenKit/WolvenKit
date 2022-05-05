@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class CallOffReactionAction : SquadTask
 	{
 		[Ordinal(0)] 
@@ -12,5 +11,12 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CEnum<EAISquadAction>>();
 			set => SetPropertyValue<CEnum<EAISquadAction>>(value);
 		}
+
+		public CallOffReactionAction()
+		{
+			PostConstruct();
+		}
+
+		partial void PostConstruct();
 	}
 }

@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class questCharacterManagerParameters_EnableBumps : questICharacterManagerParameters_NodeSubType
 	{
 		[Ordinal(0)] 
@@ -42,6 +41,10 @@ namespace WolvenKit.RED4.Types
 			PuppetRef = new() { Names = new() };
 			Enable = true;
 			Policy = Enums.AIinfluenceEBumpPolicy.Lean;
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

@@ -8,6 +8,9 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using ImageMagick;
 using Pfim;
+using Splat;
+using WolvenKit.Common.Services;
+
 //using SkiaSharp;
 //using SkiaSharp.Views.WPF;
 
@@ -18,18 +21,27 @@ namespace WolvenKit.Functionality.Ab4d
     {
         public static async Task<BitmapSource> RenderToBitmapSourceDds(Stream stream)
         {
-            stream.Seek(0, SeekOrigin.Begin);
-            var image = Pfim.Pfim.FromStream(stream);
-            await stream.DisposeAsync().ConfigureAwait(false);
-            var pinnedArray = GCHandle.Alloc(image.Data, GCHandleType.Pinned);
-            var addr = pinnedArray.AddrOfPinnedObject();
-            var pfimPic = BitmapSource.Create(image.Width, image.Height, 96.0, 96.0,
-                PixelFormat(image), null, addr, image.DataLen, image.Stride);
-            image.Dispose();
-            pfimPic.Freeze();
-            // yes
-            //return new TransformedBitmap(pfimPic, new ScaleTransform(1, -1));
-            return pfimPic;
+            try
+            {
+                stream.Seek(0, SeekOrigin.Begin);
+                var image = Pfim.Pfim.FromStream(stream);
+                await stream.DisposeAsync().ConfigureAwait(false);
+                var pinnedArray = GCHandle.Alloc(image.Data, GCHandleType.Pinned);
+                var addr = pinnedArray.AddrOfPinnedObject();
+                var pfimPic = BitmapSource.Create(image.Width, image.Height, 96.0, 96.0,
+                    PixelFormat(image), null, addr, image.DataLen, image.Stride);
+                image.Dispose();
+                pfimPic.Freeze();
+                // yes
+                //return new TransformedBitmap(pfimPic, new ScaleTransform(1, -1));
+                return pfimPic;
+            }
+            catch (Exception e)
+            {
+                Locator.Current.GetService<ILoggerService>()?.Error(e);
+
+                return null;
+            }
         }
 
 
@@ -73,7 +85,7 @@ namespace WolvenKit.Functionality.Ab4d
                     //    return skPic;
 
                     case ".DDS":
-                    case "TGA": // TODO some tga files are created upside down https://github.com/Ruben2776/PicView/issues/22
+                    case ".TGA": // TODO some tga files are created upside down https://github.com/Ruben2776/PicView/issues/22
                         filestream = new FileStream(file, FileMode.Open, FileAccess.Read, FileShare.ReadWrite, 4096, FileOptions.SequentialScan);
                         var image = Pfim.Pfim.FromStream(filestream);
                         await filestream.DisposeAsync().ConfigureAwait(false);

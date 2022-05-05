@@ -5,7 +5,7 @@ using System.Linq;
 using Microsoft.IO;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using WolvenKit.RED4.TweakDB;
-using WolvenKit.RED4.TweakDB.Types;
+using WolvenKit.RED4.Types;
 
 namespace WolvenKit.UnitTests
 {
@@ -17,38 +17,38 @@ namespace WolvenKit.UnitTests
         [TestMethod]
         public void Serialize_Fundamentals() =>
             // Parameterized tests do not work, do our own thing then.
-            SerializeAndAssert(new List<(IType value, byte[] expected)>
+            SerializeAndAssert(new List<(IRedType value, byte[] expected)>
             {
-                new (new CBool { Value = false } , new byte[] { 0x00 }),
-                new (new CBool { Value = true }, new byte[] { 0x01 }),
-                new (new CInt8 { Value = 0x50 }, new byte[] { 0x50 }),
-                new (new CUint8 { Value = 0xA0 }, new byte[] { 0xA0 }),
-                new (new CInt16 { Value = -0x83 }, new byte[] { 0x7D, 0xFF }),
-                new (new CUint16 { Value = 0xFFFF }, new byte[] { 0xFF, 0xFF }),
-                new (new CInt32 { Value = 0x7FFFFFFF }, new byte[] { 0xFF, 0xFF, 0xFF, 0x7F }),
-                new (new CUint32 { Value = 0xFFFFFFFF }, new byte[] { 0xFF, 0xFF, 0xFF, 0xFF }),
-                new (new CInt64 { Value = 0x7FFFFFFFFFFFFFFF }, new byte[] { 0xFF, 0xFF, 0xFF, 0xFF,0xFF, 0xFF, 0xFF, 0x7F }),
-                new (new CUint64 { Value = 0xFFFFFFFFFFFFFFFF }, new byte[] { 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF }),
-                new (new CFloat { Value = 123.5f }, new byte[] { 0x00, 0x00, 0xF7, 0x42 })
+                new ((CBool)false , new byte[] { 0x00 }),
+                new ((CBool)true, new byte[] { 0x01 }),
+                new ((CInt8)0x50, new byte[] { 0x50 }),
+                new ((CUInt8)0xA0, new byte[] { 0xA0 }),
+                new ((CInt16)(-0x83), new byte[] { 0x7D, 0xFF }),
+                new ((CUInt16)0xFFFF, new byte[] { 0xFF, 0xFF }),
+                new ((CInt32)0x7FFFFFFF, new byte[] { 0xFF, 0xFF, 0xFF, 0x7F }),
+                new ((CUInt32)0xFFFFFFFF, new byte[] { 0xFF, 0xFF, 0xFF, 0xFF }),
+                new ((CInt64)0x7FFFFFFFFFFFFFFF, new byte[] { 0xFF, 0xFF, 0xFF, 0xFF,0xFF, 0xFF, 0xFF, 0x7F }),
+                new ((CUInt64)0xFFFFFFFFFFFFFFFF, new byte[] { 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF }),
+                new ((CFloat)123.5f, new byte[] { 0x00, 0x00, 0xF7, 0x42 })
             });
 
         [TestMethod]
         public void Serialize_Simples() =>
             // Parameterized tests do not work, do our own thing then.
-            SerializeAndAssert(new List<(IType value, byte[] expected)>
+            SerializeAndAssert(new List<(IRedType value, byte[] expected)>
             {
-                new (new CName { Text = "AName" }, new byte[] { 0x85, 0x41, 0x4E, 0x61, 0x6D, 0x65 }),
-                new (new CName { Text = "ScriptGameInstance" }, new byte[] { 0x92, 0x53, 0x63, 0x72, 0x69, 0x70, 0x74, 0x47, 0x61, 0x6D, 0x65, 0x49, 0x6E, 0x73, 0x74, 0x61, 0x6E, 0x63, 0x65 }),
-                new (new CName { Text = "Color" }, new byte[] { 0x85, 0x43,0x6F, 0x6C, 0x6F, 0x72 }),
-                new (new CString { Text = "AString" }, new byte[] { 0x87, 0x41, 0x53, 0x74, 0x72, 0x69, 0x6E, 0x67 }),
-                new (new CString { Text = "Hello!" }, new byte[] { 0x86, 0x48, 0x65, 0x6C, 0x6C, 0x6F, 0x21 }),
-                new (new CString { Text = "This is a longer string :(" }, new byte[] { 0x9A, 0x54, 0x68, 0x69, 0x73, 0x20, 0x69, 0x73, 0x20, 0x61, 0x20, 0x6C, 0x6F, 0x6E, 0x67, 0x65, 0x72, 0x20, 0x73, 0x74, 0x72, 0x69, 0x6E, 0x67, 0x20, 0x3A, 0x28 }),
+                new ((CName)"AName", new byte[] { 0x85, 0x41, 0x4E, 0x61, 0x6D, 0x65 }),
+                new ((CName)"ScriptGameInstance", new byte[] { 0x92, 0x53, 0x63, 0x72, 0x69, 0x70, 0x74, 0x47, 0x61, 0x6D, 0x65, 0x49, 0x6E, 0x73, 0x74, 0x61, 0x6E, 0x63, 0x65 }),
+                new ((CName)"Color", new byte[] { 0x85, 0x43,0x6F, 0x6C, 0x6F, 0x72 }),
+                new ((CString)"AString", new byte[] { 0x87, 0x41, 0x53, 0x74, 0x72, 0x69, 0x6E, 0x67 }),
+                new ((CString)"Hello!", new byte[] { 0x86, 0x48, 0x65, 0x6C, 0x6C, 0x6F, 0x21 }),
+                new ((CString)"This is a longer string :(", new byte[] { 0x9A, 0x54, 0x68, 0x69, 0x73, 0x20, 0x69, 0x73, 0x20, 0x61, 0x20, 0x6C, 0x6F, 0x6E, 0x67, 0x65, 0x72, 0x20, 0x73, 0x74, 0x72, 0x69, 0x6E, 0x67, 0x20, 0x3A, 0x28 }),
             });
 
         [TestMethod]
         public void Serialize_Complexes() =>
             // Parameterized tests do not work, do our own thing then.
-            SerializeAndAssert(new List<(IType value, byte[] expected)>
+            SerializeAndAssert(new List<(IRedType value, byte[] expected)>
             {
                 new (
                     new CColor
@@ -69,7 +69,7 @@ namespace WolvenKit.UnitTests
                     }
                 ),
                 new (
-                    new CEulerAngles
+                    new EulerAngles
                     {
                         Pitch = 150.79f,
                         Yaw = 15.0f,
@@ -85,7 +85,7 @@ namespace WolvenKit.UnitTests
                     }
                 ),
                 new (
-                    new CQuaternion
+                    new Quaternion
                     {
                         I = 150.79f,
                         J = 15.0f,
@@ -103,7 +103,7 @@ namespace WolvenKit.UnitTests
                     }
                 ),
                 new (
-                    new CVector2
+                    new Vector2
                     {
                         X = 150.79f,
                         Y = 360.063f
@@ -117,7 +117,7 @@ namespace WolvenKit.UnitTests
                     }
                 ),
                 new (
-                    new CVector3
+                    new Vector3
                     {
                         X = 150.79f,
                         Z = 360.063f,
@@ -138,22 +138,20 @@ namespace WolvenKit.UnitTests
         public void Serialize_Db_ExpectedOutput()
         {
             using var stream = s_streamManager.GetStream();
-            using var writer = new BinaryWriter(stream);
+            using var writer = new TweakDBWriter(stream);
 
             var db = new TweakDB();
-            db.Add("FirstItem", new CBool { Value = true });
-            db.Add("SecondItem", new CInt32 { Value = 500 });
+            db.Add("FirstItem", (CBool)true);
+            db.Add("SecondItem", (CInt32)500);
 
-            db.Add("PhotoModeBackgrounds.bg_new_bg", new Record
+            var record = new gamedataPhotoModeBackground_Record
             {
-                Type = "PhotoModeBackground",
-                Members = new Dictionary<string, IType>
-                {
-                    { "locked", new CBool { Value = true } }
-                }
-            });
+                Locked = true
+            };
 
-            db.Save(writer);
+            db.Add("PhotoModeBackgrounds.bg_new_bg", record);
+
+            writer.WriteFile(db);
 
             var expected = new byte[]
             {
@@ -216,9 +214,9 @@ namespace WolvenKit.UnitTests
             using var writer = new BinaryWriter(stream);
 
             var db = new TweakDB();
-            db.Add("FirstItem", new CBool { Value = true });
-            db.Add("SecondItem", new CInt32 { Value = 500 });
-            db.Add("ThirdItem", new CInt32 { Value = 500 });
+            db.Add("FirstItem", (CBool)true);
+            db.Add("SecondItem", (CInt32)500);
+            db.Add("ThirdItem", (CInt32)500);
         }
 
         [TestMethod]
@@ -229,8 +227,8 @@ namespace WolvenKit.UnitTests
             using var writer = new BinaryWriter(stream);
 
             var db = new TweakDB();
-            db.Add("FirstItem", new CBool { Value = true });
-            db.Add("FirstItem", new CInt32 { Value = 500 });
+            db.Add("FirstItem", (CBool)true);
+            db.Add("FirstItem", (CInt32)500);
         }
 
         [TestMethod]
@@ -240,7 +238,7 @@ namespace WolvenKit.UnitTests
             using var writer = new BinaryWriter(stream);
 
             var db = new TweakDB();
-            db.Add("SomeName", new CBool { Value = true });
+            db.Add("SomeName", (CBool)true);
         }
 
         [TestMethod]
@@ -258,10 +256,10 @@ namespace WolvenKit.UnitTests
                 name += i.ToString();
             }
 
-            db.Add(name, new CBool { Value = true });
+            db.Add(name, (CBool)true);
         }
 
-        private static void SerializeAndAssert(List<(IType value, byte[] expected)> tests)
+        private static void SerializeAndAssert(List<(IRedType value, byte[] expected)> tests)
         {
             foreach (var (value, expected) in tests)
             {
@@ -269,11 +267,11 @@ namespace WolvenKit.UnitTests
             }
         }
 
-        private static void SerializeAndAssert(IType value, byte[] expected)
+        private static void SerializeAndAssert(IRedType value, byte[] expected)
         {
             using var stream = s_streamManager.GetStream();
-            using var writer = new BinaryWriter(stream);
-            value.Serialize(writer);
+            using var writer = new TweakDBWriter(stream);
+            writer.Write(value);
 
             stream.TryGetBuffer(out var buffer);
             Assert.IsTrue(buffer.SequenceEqual(expected), $"[{value}]: buffer != expected");

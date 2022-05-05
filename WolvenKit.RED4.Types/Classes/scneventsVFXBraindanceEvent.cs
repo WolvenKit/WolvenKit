@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class scneventsVFXBraindanceEvent : scnSceneEvent
 	{
 		[Ordinal(6)] 
@@ -67,6 +66,10 @@ namespace WolvenKit.RED4.Types
 			PerformerId = new() { Id = 4294967040 };
 			EffectEntry = new() { EffectInstanceId = new() { EffectId = new() { Id = 4294967295 }, Id = 4294967295 } };
 			GlitchEffectEntry = new() { EffectInstanceId = new() { EffectId = new() { Id = 4294967295 }, Id = 4294967295 } };
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

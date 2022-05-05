@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class DebugHubMenuGameController : gameuiMenuGameController
 	{
 		[Ordinal(3)] 
@@ -92,5 +91,12 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CHandle<gameTransactionSystem>>();
 			set => SetPropertyValue<CHandle<gameTransactionSystem>>(value);
 		}
+
+		public DebugHubMenuGameController()
+		{
+			PostConstruct();
+		}
+
+		partial void PostConstruct();
 	}
 }

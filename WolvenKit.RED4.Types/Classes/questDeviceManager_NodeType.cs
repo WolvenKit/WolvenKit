@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class questDeviceManager_NodeType : questIInteractiveObjectManagerNodeType
 	{
 		[Ordinal(0)] 
@@ -16,6 +15,10 @@ namespace WolvenKit.RED4.Types
 		public questDeviceManager_NodeType()
 		{
 			Params = new() { null };
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

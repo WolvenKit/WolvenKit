@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class SingleCooldownManager : inkWidgetLogicController
 	{
 		[Ordinal(1)] 
@@ -180,6 +179,10 @@ namespace WolvenKit.RED4.Types
 			Grid = new();
 			BuffData = new();
 			C_EXCLUDED_STATUS_EFFECT_NAME = "BaseStatusEffect.AlcoholDebuff";
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

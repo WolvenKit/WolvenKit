@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class MinimapDataNode : worldNode
 	{
 		[Ordinal(4)] 
@@ -32,6 +31,10 @@ namespace WolvenKit.RED4.Types
 		public MinimapDataNode()
 		{
 			LocalBounds = new() { Min = new(), Max = new() };
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

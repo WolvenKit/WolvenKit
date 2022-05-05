@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class DataTerm : InteractiveDevice
 	{
 		[Ordinal(94)] 
@@ -66,6 +65,10 @@ namespace WolvenKit.RED4.Types
 			ControllerTypeName = "DataTermController";
 			MappinID = new();
 			ShortGlitchDelayID = new();
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

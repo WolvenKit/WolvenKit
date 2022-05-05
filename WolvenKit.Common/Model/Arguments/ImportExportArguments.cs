@@ -4,7 +4,7 @@ using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using ReactiveUI;
 using SharpGLTF.Validation;
-using WolvenKit.RED4.CR2W.Archive;
+using WolvenKit.RED4.Archive;
 using WolvenKit.RED4.Types;
 
 namespace WolvenKit.Common.Model.Arguments
@@ -263,7 +263,7 @@ namespace WolvenKit.Common.Model.Arguments
         [Category("Import Settings")]
         [Display(Name = "GLTF Validation Checks")]
         [Description("Optional validation check for glb/glTF files")]
-        public ValidationMode validationMode { get; set; } = ValidationMode.Skip;
+        public ValidationMode validationMode { get; set; } = ValidationMode.Strict;
         /// <summary>
         /// RedEngine4 Cooked File type for the selected GLB/GLTF.
         /// </summary>
@@ -271,6 +271,13 @@ namespace WolvenKit.Common.Model.Arguments
         [Display(Name = "Import As RedEngine File Format")]
         [Description("The REDengine file format to import as for glb/glTF files")]
         public GltfImportAsFormat importFormat { get; set; } = GltfImportAsFormat.Mesh;
+        /// <summary>
+        /// Fills empty sub meshes with dummy data
+        /// </summary>
+        [Category("Import Settings")]
+        [Display(Name = "Fill empty sub meshes")]
+        [Description("Fills empty sub meshes with dummy data")]
+        public bool FillEmpty { get; set; } = false;
         /// <summary>
         /// List of Archives for Morphtarget Import.
         /// </summary>
@@ -285,7 +292,8 @@ namespace WolvenKit.Common.Model.Arguments
     public enum GltfImportAsFormat
     {
         Mesh,
-        Morphtarget
+        Morphtarget,
+        Anims
     }
     public class MlmaskImportArgs : ImportArgs
     {
@@ -564,8 +572,16 @@ namespace WolvenKit.Common.Model.Arguments
         /// </summary>
         [Category("Export Settings")]
         [Display(Name = "Is Binary")]
-        [Description("If checked the mesh will be exported as GLB, if unchecked as GLTF")]
+        [Description("If checked the anims will be exported as GLB, if unchecked as GLTF")]
         public bool IsBinary { get; set; } = true;
+
+        /// <summary>
+        /// Root Motion Export Bool
+        /// </summary>
+        [Category("Export Settings")]
+        [Display(Name = "Include Root Motion")]
+        [Description("If checked the anims will have the root translations")]
+        public bool incRootMotion { get; set; } = false;
 
         /// <summary>
         /// List of Archives for Animations Export.

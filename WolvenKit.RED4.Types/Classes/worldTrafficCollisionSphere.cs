@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class worldTrafficCollisionSphere : RedBaseClass
 	{
 		[Ordinal(0)] 
@@ -50,6 +49,10 @@ namespace WolvenKit.RED4.Types
 			WorldPos = new() { X = float.PositiveInfinity, Y = float.PositiveInfinity, Z = float.PositiveInfinity };
 			Direction = new() { X = float.PositiveInfinity, Y = float.PositiveInfinity, Z = float.PositiveInfinity };
 			Flags = 1;
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

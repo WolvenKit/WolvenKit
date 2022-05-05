@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class SlidingLadder : BaseAnimatedDevice
 	{
 		[Ordinal(99)] 
@@ -40,6 +39,10 @@ namespace WolvenKit.RED4.Types
 		public SlidingLadder()
 		{
 			ControllerTypeName = "SlidingLadderController";
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

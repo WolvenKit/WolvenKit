@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class WardrobeControllerPS : ScriptableDeviceComponentPS
 	{
 		[Ordinal(104)] 
@@ -16,8 +15,12 @@ namespace WolvenKit.RED4.Types
 		public WardrobeControllerPS()
 		{
 			DeviceName = "LocKey#2120";
-			TweakDBRecord = new() { Value = 70419249436 };
+			TweakDBRecord = 70419249436;
 			ClothingSets = new();
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

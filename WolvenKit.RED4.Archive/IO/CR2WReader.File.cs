@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using WolvenKit.Core.Extensions;
+using WolvenKit.RED4.Archive.Buffer;
 using WolvenKit.RED4.Archive.CR2W;
 using WolvenKit.RED4.IO;
 using WolvenKit.RED4.Types;
@@ -28,6 +29,16 @@ namespace WolvenKit.RED4.Archive.IO
             _bufferReaders.Add("inkWidgetLibraryItem.packageData", typeof(PackageReader));
             _bufferReaders.Add("entEntityInstanceData.buffer", typeof(PackageReader));
             _bufferReaders.Add("gamePersistentStateDataResource.buffer", typeof(PackageReader));
+            _bufferReaders.Add("meshMeshMaterialBuffer.rawData", typeof(CR2WListReader));
+            _bufferReaders.Add("entEntityParametersBuffer.parameterBuffers", typeof(CR2WListReader));
+            _bufferReaders.Add("animAnimDataChunk.buffer", typeof(AnimationReader));
+            _bufferReaders.Add("worldNavigationTileData.tilesBuffer", typeof(TilesReader));
+            _bufferReaders.Add("worldSharedDataBuffer.buffer", typeof(WorldSharedDataBufferReader));
+            _bufferReaders.Add("worldStreamingSector.transforms", typeof(worldNodeDataReader));
+            _bufferReaders.Add("worldCollisionNode.compiledData", typeof(CollisionReader));
+            _bufferReaders.Add("physicsGeometryCache.bufferTableSectors", typeof(GeometryCacheReader));
+            _bufferReaders.Add("physicsGeometryCache.alwaysLoadedSectorDDB", typeof(GeometryCacheReader));
+            _bufferReaders.Add("CGIDataResource.data", typeof(CGIDataReader));
         }
 
         public EFileReadErrorCodes ReadFileInfo(out CR2WFileInfo info)
@@ -119,7 +130,7 @@ namespace WolvenKit.RED4.Archive.IO
 
             if (_cr2wFile.Info.PropertyInfo.Length > 1)
             {
-                throw new TodoException();
+                throw new TodoException("Found unsupported PropertyInfo");
             }
 
             for (var i = 0; i < _cr2wFile.Info.ExportInfo.Length; i++)
@@ -151,9 +162,12 @@ namespace WolvenKit.RED4.Archive.IO
             for (var i = 0; i < _cr2wFile.Info.BufferInfo.Length; i++)
             {
                 var buffer = ReadBuffer(_cr2wFile.Info.BufferInfo[i]);
+                buffer.RootChunk = _cr2wFile.RootChunk;
+
                 if (!BufferQueue.ContainsKey(i))
                 {
-                    throw new TodoException("Unused buffer");
+                    _logger?.Warning("Unused buffer found!");
+                    continue;
                 }
 
                 foreach (var pointers in BufferQueue[i])
@@ -162,11 +176,19 @@ namespace WolvenKit.RED4.Archive.IO
                     {
                         buffer.ParentTypes.Add(parentType);
                     }
+                    buffer.Parent = pointers.GetValue().Parent;
 
                     pointers.SetValue(buffer);
                 }
 
+                BufferQueue.Remove(i);
+
                 ParseBuffer(buffer);
+            }
+
+            if (BufferQueue.Count > 0)
+            {
+                throw new TodoException($"The CR2W file is missing {BufferQueue.Count} buffer(s)");
             }
 
             foreach (var embeddedInfo in _cr2wFile.Info.EmbeddedInfo)
@@ -176,10 +198,10 @@ namespace WolvenKit.RED4.Archive.IO
 
             #endregion Read Data
 
-            if (BaseStream.Position != BaseStream.Length)
-            {
-                throw new TodoException();
-            }
+            //if (BaseStream.Position != BaseStream.Length)
+            //{
+            //    throw new TodoException();
+            //}
 
             /*if (_chunks.Count > 1)
             {

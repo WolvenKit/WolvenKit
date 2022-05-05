@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class BaseDestructibleControllerPS : ScriptableDeviceComponentPS
 	{
 		[Ordinal(104)] 
@@ -16,8 +15,12 @@ namespace WolvenKit.RED4.Types
 		public BaseDestructibleControllerPS()
 		{
 			DeviceName = "LocKey#127";
-			TweakDBRecord = new() { Value = 86578523053 };
-			TweakDBDescriptionRecord = new() { Value = 137459607504 };
+			TweakDBRecord = 86578523053;
+			TweakDBDescriptionRecord = 137459607504;
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

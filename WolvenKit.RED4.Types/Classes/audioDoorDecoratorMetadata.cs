@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class audioDoorDecoratorMetadata : audioEmitterMetadata
 	{
 		[Ordinal(1)] 
@@ -73,6 +72,10 @@ namespace WolvenKit.RED4.Types
 		{
 			OpenTime = 1.000000F;
 			CloseTime = 1.000000F;
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

@@ -1,6 +1,6 @@
 using System;
+using System.Collections.Concurrent;
 using System.Diagnostics;
-using System.IO;
 using System.Text;
 using WolvenKit.Common.FNV1A;
 
@@ -9,30 +9,28 @@ namespace WolvenKit.RED4.Types
     [RED("CName")]
     [REDType(IsValueType = true)]
     [DebuggerDisplay("{_value}", Type = "CName")]
-    public sealed class CName : IRedPrimitive<string>, IEquatable<CName>, IRedString
+    public sealed class CName : BaseStringType, IEquatable<CName>
     {
-        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        private string _value;
+        private static readonly ConcurrentDictionary<string, ulong> s_cNameCache = new();
 
-        private ulong _hash;
+        public delegate string ResolveHash(ulong hash);
+        public static ResolveHash ResolveHashHandler;
+
+        private readonly ulong _hash;
 
         public CName() { }
 
-        private CName(string value)
+        private CName(string value) : base(value)
         {
-            _value = value;
             _hash = CalculateHash();
         }
 
         private CName(ulong value)
         {
-            _value = null;
             _hash = value;
         }
 
-        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        public int Length => _value?.Length ?? 0;
-
+        public string GetResolvedText() => !string.IsNullOrEmpty(_value) ? _value : ResolveHashHandler?.Invoke(_hash);
         private ulong CalculateHash()
         {
             if (string.IsNullOrEmpty(_value))
@@ -40,9 +38,14 @@ namespace WolvenKit.RED4.Types
                 return 0;
             }
 
-            var buffer = Encoding.UTF8.GetBytes(_value);
-            var sBuffer = Array.ConvertAll(buffer, b => b != 0x80 ? (byte)Math.Abs((sbyte)b) : (byte)0x80);
-            return FNV1A64HashAlgorithm.HashReadOnlySpan(sBuffer);
+            if (!s_cNameCache.ContainsKey(_value))
+            {
+                var buffer = Encoding.UTF8.GetBytes(_value);
+                var sBuffer = Array.ConvertAll(buffer, b => b != 0x80 ? (byte)Math.Abs((sbyte)b) : (byte)0x80);
+                s_cNameCache.TryAdd(_value, FNV1A64HashAlgorithm.HashReadOnlySpan(sBuffer));
+            }
+
+            return s_cNameCache[_value];
         }
 
         public ulong GetRedHash() => _hash;
@@ -52,10 +55,13 @@ namespace WolvenKit.RED4.Types
         public uint GetOldRedHash() => (uint)(_hash & 0xFFFFFFFF);
 
         public static implicit operator CName(string value) => new(value);
-        public static implicit operator string(CName value) => value?._value ?? null; 
+        public static implicit operator string(CName value) => value?._value; 
 
         public static implicit operator CName(ulong value) => new(value);
         public static implicit operator ulong(CName value) => value?._hash ?? 0;
+
+        public static bool operator ==(CName a, CName b) => Equals(a, b);
+        public static bool operator !=(CName a, CName b) => !(a == b);
 
         public override int GetHashCode() => _hash.GetHashCode();
 
@@ -81,7 +87,7 @@ namespace WolvenKit.RED4.Types
 
         public bool Equals(CName other)
         {
-            if (!Equals(GetRedHash(), other.GetRedHash()))
+            if (!Equals(GetRedHash(), other?.GetRedHash()))
             {
                 return false;
             }
@@ -89,14 +95,6 @@ namespace WolvenKit.RED4.Types
             return true;
         }
 
-        public string GetValue() => (string)this;
-
-        public void SetValue(string value)
-        {
-            _value = value;
-            _hash = CalculateHash();
-        }
-
-        public override string ToString() => GetValue();
+        public override string ToString() => GetResolvedText();
     }
 }

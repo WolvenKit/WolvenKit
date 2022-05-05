@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class animLookAtPreset_FullControl : animLookAtPreset
 	{
 		[Ordinal(0)] 
@@ -82,6 +81,10 @@ namespace WolvenKit.RED4.Types
 			Limits = new() { SoftLimitDegrees = 360.000000F, HardLimitDegrees = 360.000000F, HardLimitDistance = 1000000.000000F, BackLimitDegrees = 180.000000F };
 			HeadSuppress = 1.000000F;
 			ChestSuppress = 1.000000F;
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

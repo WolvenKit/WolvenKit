@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reactive;
@@ -55,35 +56,12 @@ namespace WolvenKit.ViewModels.Wizards
             OpenCP77GamePathCommand = new RelayCommand(ExecuteOpenCP77GamePath, CanOpenGamePath);
             OpenDepotPathCommand = new RelayCommand(ExecuteOpenDepotPath, CanOpenDepotPath);
 
+            TryToFindCP77ExecutableAutomatically();
 
-
-            //OpenW3GamePathCommand = new RelayCommand(ExecuteOpenGamePath, CanOpenGamePath);
-            //OpenWccPathCommand = new RelayCommand(ExecuteOpenWccPath, CanOpenWccPath);
-            //OpenModDirectoryCommand = new RelayCommand(ExecuteOpenMod, CanOpenMod);
-            //OpenDlcDirectoryCommand = new RelayCommand(ExecuteOpenDlc, CanOpenDlc);
-
-
-            CheckForUpdates = _settingsManager.CheckForUpdates;
-            // W3ExePath = _settingsManager.W3ExecutablePath;
-            CP77ExePath = _settingsManager.CP77ExecutablePath;
-            //WccLitePath = _settingsManager.WccLitePath;
-
-            MaterialDepotPath = _settingsManager.MaterialRepositoryPath;
-
-            // automatically scan the registry for exe paths for wcc and tw3
-            // if either text field is empty
-            if (/*string.IsNullOrEmpty(W3ExePath) || string.IsNullOrEmpty(WccLitePath) ||*/ string.IsNullOrEmpty(CP77ExePath))
+            MaterialDepotPath = Path.Combine(ISettingsManager.GetAppData(), "MaterialDepot");
+            if (!Directory.Exists(MaterialDepotPath))
             {
-                exeSearcherSlave_DoWork();
-            }
-
-            if (string.IsNullOrEmpty(MaterialDepotPath))
-            {
-                MaterialDepotPath = Path.Combine(ISettingsManager.GetAppData(), "MaterialDepot");
-                if (!Directory.Exists(MaterialDepotPath))
-                {
-                    Directory.CreateDirectory(MaterialDepotPath);
-                }
+                Directory.CreateDirectory(MaterialDepotPath);
             }
         }
 
@@ -112,6 +90,19 @@ namespace WolvenKit.ViewModels.Wizards
         [Reactive] public bool CheckForUpdates { get; set; }
 
         [Reactive] public string CP77ExePath { get; set; }
+
+        public string WikiHelpLink = "https://wiki.redmodding.org/wolvenkit/getting-started/setup";
+
+        public readonly ReactiveCommand<string, Unit> OpenLinkCommand = ReactiveCommand.Create<string>(
+            link =>
+            {
+                var ps = new ProcessStartInfo(link)
+                {
+                    UseShellExecute = true,
+                    Verb = "open"
+                };
+                Process.Start(ps);
+            });
 
         // public string ExecutablePathBG => string.IsNullOrEmpty(W3ExePath) ? redBG : greenBG;
         //public bool IsUpdateSystemAvailable { get; private set; }
@@ -153,20 +144,10 @@ namespace WolvenKit.ViewModels.Wizards
 
         private void ExecuteFinish()
         {
-
-            _settingsManager.CheckForUpdates = CheckForUpdates;
-            // _settingsManager.W3ExecutablePath = W3ExePath;
             _settingsManager.CP77ExecutablePath = CP77ExePath;
-            //_settingsManager.WccLitePath = WccLitePath;
             _settingsManager.MaterialRepositoryPath = MaterialDepotPath;
-
-            _settingsManager.Save();
-
-
+            _settingsManager.Bounce();
         }
-
-
-
 
 
         public ICommand OpenDepotPathCommand { get; private set; }
@@ -278,7 +259,7 @@ namespace WolvenKit.ViewModels.Wizards
 
         private delegate void StrDelegate(string value);
 
-        private void exeSearcherSlave_DoWork()
+        private void TryToFindCP77ExecutableAutomatically()
         {
             const string uninstallkey = "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\";
             const string uninstallkey2 = "SOFTWARE\\Wow6432Node\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\";

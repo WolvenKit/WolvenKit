@@ -10,7 +10,9 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 using DynamicData;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.FileSystemGlobbing;
+using MoreLinq;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using Splat;
@@ -19,12 +21,14 @@ using WolvenKit.Common.Interfaces;
 using WolvenKit.Common.Model;
 using WolvenKit.Common.Model.Database;
 using WolvenKit.Common.Services;
+using WolvenKit.Core.Interfaces;
 using WolvenKit.Core.Services;
 using WolvenKit.Functionality.Commands;
 using WolvenKit.Functionality.Controllers;
 using WolvenKit.Functionality.Services;
 using WolvenKit.Models;
 using WolvenKit.Models.Docking;
+using WolvenKit.RED4.Archive;
 using WolvenKit.ViewModels.Shell;
 
 namespace WolvenKit.ViewModels.Tools
@@ -65,6 +69,8 @@ namespace WolvenKit.ViewModels.Tools
         private readonly IProjectManager _projectManager;
         private readonly IProgressService<double> _progressService;
 
+        private readonly ILoggerService _loggerService;
+
         private readonly ReadOnlyObservableCollection<RedFileSystemModel> _boundRootNodes;
         private bool _manuallyLoading = false;
         private bool _projectLoaded = false;
@@ -89,6 +95,8 @@ namespace WolvenKit.ViewModels.Tools
             _settings = settings;
             _progressService = progressService;
 
+            _loggerService = Splat.Locator.Current.GetService<ILoggerService>();
+
             ContentId = ToolContentId;
 
             State = DockState.Dock;
@@ -109,6 +117,7 @@ namespace WolvenKit.ViewModels.Tools
             Expand = ReactiveCommand.Create(() => { });
 
             AddSearchKeyCommand = ReactiveCommand.Create<string>(x => SearchBarText += $" {x}:");
+            FindUsesCommand = ReactiveCommand.CreateFromTask(FindUses);
             FindUsingCommand = ReactiveCommand.CreateFromTask(FindUsing);
             LoadAssetBrowserCommand = ReactiveCommand.CreateFromTask(LoadAssetBrowser);
 
@@ -181,8 +190,6 @@ namespace WolvenKit.ViewModels.Tools
 
         [Reactive] public string OptionsSearchBarText { get; set; }
 
-        [Reactive] public bool IsRegexSearchEnabled { get; set; }
-
         #endregion properties
 
         #region commands
@@ -206,38 +213,70 @@ namespace WolvenKit.ViewModels.Tools
             {
                 using var db = new RedDBContext();
 
-                if (RightSelectedItem is RedFileViewModel { } file)
+                if (RightSelectedItem is RedFileViewModel file)
                 {
                     var hash = file.GetGameFile().Key;
-                    var item = db.Find(typeof(RedFile), hash);
-                    if (item is RedFile redfile)
-                    {
-                        var usedby = await db.Files.AsQueryable()
-                            .Where(delegate (RedFile x)
-                            {
-                                return x.Uses != null && x.Uses.Contains(hash);
-                            })
-                            .Select(x => x.RedFileId)
-                            .ToAsyncEnumerable()
-                            .ToListAsync();
 
-                        //add all found items to
-                        _archiveManager.Archives
-                            .Connect()
-                            .TransformMany(x => x.Files.Values, y => y.Key)
-                            .Filter(x => usedby.Contains(x.Key))
-                            .Transform(x => new RedFileViewModel(x))
-                            .Bind(out var list)
-                            .Subscribe()
-                            .Dispose();
+                    var usedBy = await db.Files.Include("Uses")
+                        .Where(x => x.Uses.Any(y => y.Hash == hash))
+                        .Select(x => x.Hash)
+                        .ToAsyncEnumerable()
+                        .ToListAsync();
 
-                        RightItems.Clear();
-                        RightItems.AddRange(list);
-                    }
+                    //add all found items to
+                    _archiveManager.Archives
+                        .Connect()
+                        .TransformMany(x => x.Files.Values, y => y.Key)
+                        .Filter(x => usedBy.Contains(x.Key))
+                        .Transform(x => new RedFileViewModel(x))
+                        .Bind(out var list)
+                        .Subscribe()
+                        .Dispose();
+
+                    RightItems.Clear();
+                    RightItems.AddRange(list);
                 }
 
                 await Task.CompletedTask;
+            });
 
+            _progressService.IsIndeterminate = false;
+        }
+
+        public ReactiveCommand<Unit, Unit> FindUsesCommand { get; }
+        private async Task FindUses()
+        {
+            _progressService.IsIndeterminate = true;
+
+            await Task.Run(async () =>
+            {
+                using var db = new RedDBContext();
+
+                if (RightSelectedItem is RedFileViewModel file)
+                {
+                    var hash = file.GetGameFile().Key;
+
+                    var uses = await db.Files.Include("Archive").Include("Uses")
+                        .Where(x => x.Archive.Name == file.ArchiveName && x.Hash == hash)
+                        .Select(x => x.Uses.Select(y => y.Hash))
+                        .ToAsyncEnumerable()
+                        .ToListAsync();
+
+                    //add all found items to
+                    _archiveManager.Archives
+                        .Connect()
+                        .TransformMany(x => x.Files.Values, y => y.Key)
+                        .Filter(x => uses.Any(y => y.Contains(x.Key)))
+                        .Transform(x => new RedFileViewModel(x))
+                        .Bind(out var list)
+                        .Subscribe()
+                        .Dispose();
+
+                    RightItems.Clear();
+                    RightItems.AddRange(list);
+                }
+
+                await Task.CompletedTask;
             });
 
             _progressService.IsIndeterminate = false;
@@ -354,7 +393,7 @@ namespace WolvenKit.ViewModels.Tools
 
         private void MoveToFolder(RedDirectoryViewModel dir) => LeftSelectedItem = dir.GetModel();
 
-        private void AddFile(RedFileViewModel item) => Task.Run(() => _gameController.GetController().AddToMod(item.GetGameFile().Key));
+        private void AddFile(RedFileViewModel item) => Task.Run(() => _gameController.GetController().AddToMod(item.GetGameFile()));
 
         private void AddFile(ulong hash) => Task.Run(() => _gameController.GetController().AddToMod(hash));
 
@@ -397,148 +436,197 @@ namespace WolvenKit.ViewModels.Tools
         {
             _progressService.IsIndeterminate = true;
 
-            await Task.Run(() =>
+            try
             {
-                if (IsRegexSearchEnabled)
+                await Task.Run(() =>
                 {
-                    RegexSearch();
-                }
-                else
+                    CyberEnhancedSearch();
+                });
+            }
+            catch (AggregateException ae)
+            {
+                foreach (var e in ae.Flatten().InnerExceptions)
                 {
-                    KeywordSearch();
+                    if (e is RegexMatchTimeoutException rex)
+                    {
+                        // C# heredoc pls
+                        _loggerService.Log($@"Search took too long! Try to simplify or use refinements? Careful with !. Error: {rex.Message}", Logtype.Error);
+                    }
+                    else
+                    {
+                        _loggerService.Log($"Search error: {e.Message}", Logtype.Error);
+                    }
                 }
-            });
+            }
 
             _progressService.IsIndeterminate = false;
         }
 
-        /// <summary>
-        /// Parses the search bar and filters all game files by given regex pattern
-        /// Glob patterns from the additional search bar are evaluated first
-        /// Sets the right hand filelist to the result
-        /// </summary>
-        private void RegexSearch()
+        private enum TermType
         {
-            var matcher = new Matcher();
-            matcher.AddInclude(OptionsSearchBarText);
-
-            var rx = new Regex(SearchBarText,
-                RegexOptions.Compiled | RegexOptions.IgnoreCase);
-
-            _archiveManager.Archives
-                .Connect()
-                .TransformMany(x => x.Files.Values, y => y.Key)
-                .Filter(x => string.IsNullOrEmpty(OptionsSearchBarText) || matcher.Match(x.Name).HasMatches)
-                .Filter(x => rx.IsMatch(x.Name))
-                .Transform(x => new RedFileViewModel(x))
-                .Bind(out var list)
-                .Subscribe()
-                .Dispose();
-
-            RightItems.Clear();
-            RightItems.AddRange(list);
+            Unknown,
+            Include,
+            Exclude,
+            Hash,
         }
 
-        /// <summary>
-        /// Parses the search bar and filters all game files by given search keys
-        /// Glob patterns from the additional search bar are evaluated first
-        /// Sets the right hand filelist to the result
-        /// </summary>
-        private void KeywordSearch()
+        private readonly record struct Term(TermType Type, string Pattern, string NegationPattern);
+
+        private interface SearchRefinement {}
+        private readonly record struct PatternRefinement(Term[] Terms) : SearchRefinement;
+        private readonly record struct HashRefinement(ulong Hash) : SearchRefinement;
+
+        private readonly record struct CyberSearch(Func<IGameFile, bool> Match, SearchRefinement SourceRefinement);
+
+        private static readonly RegexOptions RegexpOpts = RegexOptions.Compiled | RegexOptions.IgnoreCase;
+        private static readonly TimeSpan RegexpSafetyTimeout = TimeSpan.FromSeconds(60);
+
+        private static readonly Regex RefinementSeparator = new("\\s+>\\s+", RegexpOpts, RegexpSafetyTimeout);
+        private static readonly Regex Hash = new("^(hash:)?(?<num>\\d+)$", RegexpOpts, RegexpSafetyTimeout);
+        private static readonly Regex Whitespace = new("\\s+", RegexpOpts, RegexpSafetyTimeout);
+        private static readonly Regex Or = new("\\|", RegexpOpts, RegexpSafetyTimeout);
+        private static readonly Regex Negation = new("^(?'Open'\\(\\?:)*\\!(?<term>.+?)(?'Close-Open'\\))*$", RegexpOpts, RegexpSafetyTimeout);
+        private static readonly Regex SquashExtraWilds = new("((\\(\\?:)?\\.\\*\\??\\)?){2,}", RegexpOpts, RegexpSafetyTimeout);
+
+        private static readonly Func<string, SearchRefinement> IntoTypedRefinementsAndTerms =
+            (string refinementString) =>
+                Hash.Match(refinementString).Groups["num"].Value switch {
+                    "" =>
+                        new PatternRefinement
+                            {
+                                Terms = Whitespace.Split(refinementString).Select(term => new Term { Type = TermType.Unknown, Pattern = term }).ToArray(),
+                            },
+                    string num =>
+                        // let it fail, caught at the top
+                        new HashRefinement { Hash = ulong.Parse(num) },
+                };
+
+        private static readonly Func<Term, Term> HonorFileExtension =
+            (Term term) =>
+                term with { Pattern = Regex.Replace(term.Pattern, "(^|\\W)\\.(?<term>\\w+?)", "$1\\.${term}") };
+
+        private static readonly Func<Term, Term> DropUnnecessaryGlobStars =
+            (Term term) => term;
+
+        private static readonly Func<Term, Term> LimitOrToOneTerm =
+            (Term term) =>
+                Or.IsMatch(term.Pattern)
+                ? term with { Pattern = $"(?:{term.Pattern})" }
+                : term;
+
+        // Negative regexps are extremely fraught even when not synthesized,
+        // so instead we simply fail on a negative match (with the corresponding
+        // positive match so that we know the refinement is otherwise satisfied).
+        private static readonly Func<Term, Term> AllowExcludingTerm =
+            (Term term) =>
+                !Negation.IsMatch(term.Pattern)
+                    ? term with { Type = TermType.Include }
+                    : term with
+                        {
+                            Type = TermType.Exclude,
+                            Pattern = Negation.Replace(term.Pattern, "(?:${term})"),
+                            NegationPattern = Negation.Replace(term.Pattern,"")
+                        };
+
+        private static readonly Func<SearchRefinement, CyberSearch> AsMatchFunctions =
+            (SearchRefinement searchRefinement) => {
+                switch (searchRefinement) {
+                    case HashRefinement hashRefinement:
+                        return new CyberSearch {
+                            Match = (IGameFile candidate) => candidate.Key == hashRefinement.Hash,
+                            SourceRefinement = hashRefinement,
+                        };
+
+                    case PatternRefinement patternRefinement:
+                        var searchContainsExclusion =
+                            patternRefinement.Terms.Any(term => term.Type == TermType.Exclude);
+
+                        var patternWithMaybeExtraWilds =
+                            $"^.*?{string.Join(".*?", patternRefinement.Terms.Select(term => term.Pattern))}.*$";
+
+                        var pattern =
+                            SquashExtraWilds.Replace(patternWithMaybeExtraWilds, ".*?");
+
+                        var exclusionPatternWithMaybeExtraWilds =
+                            $"^.*?{string.Join(".*?", patternRefinement.Terms.Select(term => term.NegationPattern ?? term.Pattern))}.*$";
+
+                        var patternWithoutExcludedTerms =
+                            SquashExtraWilds.Replace(exclusionPatternWithMaybeExtraWilds, ".*?");
+
+                        return new CyberSearch
+                        {
+                            Match =
+                                searchContainsExclusion
+                                ? (IGameFile candidate) =>
+                                    (!Regex.IsMatch(candidate.Name, pattern, RegexpOpts, RegexpSafetyTimeout) &&
+                                    Regex.IsMatch(candidate.Name, patternWithoutExcludedTerms, RegexpOpts, RegexpSafetyTimeout))
+                                : (IGameFile candidate) =>
+                                    Regex.IsMatch(candidate.Name, pattern, RegexpOpts, RegexpSafetyTimeout),
+
+                            SourceRefinement = patternRefinement
+                        };
+
+                    default:
+                        throw new ArgumentException($"Unknown refinement, shouldn't ever happen. Refinement: {searchRefinement}");
+                };
+            };
+
+        private void CyberEnhancedSearch()
         {
-            if (string.IsNullOrEmpty(SearchBarText))
-            {
-                return;
-            }
-
-            var inputs = SearchBarText.Split(' ');
-            var keyDict = Enum
-                .GetValues<ESearchKeys>()
-                .ToDictionary(key => key, _ => new List<string>());
-            keyDict[ESearchKeys.Limit] = new List<string>() { SEARCH_LIMIT.ToString() };
-
-            // e.g. judy ext:mesh,ent test:xxx whatever
-            // Name < judy,whatever
-            // Ext < mesh,ent
-            foreach (var item in inputs)
-            {
-                //check if keyword
-                if (item.Contains(':'))
+            // Exceptions - this is bananatown but otherwise we're repeating the types all over the place
+            Func<Exception, IObservable<IChangeSet<RedFileViewModel, ulong>>> LogExceptionAndReturnEmpty =
+                ex =>
                 {
-                    var split = item.Split(':');
-                    if (split.Length != 2)
-                    {
-                        // incorrect format -> disregard
-                        continue;
-                    }
+                    _loggerService.Error($"Error performing search: {ex.Message}");
+                    return Observable.Empty<IChangeSet<RedFileViewModel, ulong>>();
+                };
 
-                    var key = split[0].ToLower();
-                    var value = split[1];
-                    var names = Enum.GetNames<ESearchKeys>().Select(x => x.ToLower());
-                    if (names.Contains(key))
-                    {
-                        var ekey = (ESearchKeys)Enum.Parse(typeof(ESearchKeys), key, true);
-                        // get multiple
-                        var multiple = value.Split(',').ToList();
-                        // add to query
-                        keyDict[ekey] = multiple;
-                    }
-                }
-                else
-                {
-                    // default to filename search term
-                    keyDict[ESearchKeys.Name].Add(item);
-                }
-            }
+            var searchAsSequentialRefinements =
+                RefinementSeparator
+                    .Split(SearchBarText)
+                    .Select(IntoTypedRefinementsAndTerms)
+                    .Select(searchRefinement => searchRefinement switch {
+                        PatternRefinement patternRefinement =>
+                            patternRefinement with
+                            {
+                                Terms = patternRefinement.Terms
+                                    .Select(HonorFileExtension)
+                                    .Select(DropUnnecessaryGlobStars)
+                                    .Select(LimitOrToOneTerm)
+                                    .Select(AllowExcludingTerm)
+                                    .ToArray()
+                            },
+                        _ => searchRefinement
+                    })
+                    .Select(AsMatchFunctions)
+                    .ToArray();
 
+            var gameFilesOrMods =
+                _archiveManager.IsModBrowserActive
+                ? _archiveManager.ModArchives
+                : _archiveManager.Archives;
 
-            // order from most specific to least
-            // 0. Glob
+            var filesToSearch =
+                gameFilesOrMods
+                    .Connect()   // Maybe we could avoid reconnecting every time? Dunno if it makes a difference
+                    .TransformMany((archive => archive.Files.Values), (fileInArchive => fileInArchive.Key));
 
-            var matcher = new Matcher();
-            matcher.AddInclude(OptionsSearchBarText);
-            //var allfiles = _managers.First().Items
-            //    .KeyValues.Select(x => x.Value.Name);
-            //var match = matcher.Match(allfiles);
-            //var debugresult = match.Files.Select(x => x.Path);
+            var filesMatchingQuery =
+                filesToSearch
+                    .Filter((file) =>
+                        searchAsSequentialRefinements.All(refinement => refinement.Match(file)));
 
-            // 1. Hash
-            var qhashes = keyDict[ESearchKeys.Hash]
-                .Where(x => ulong.TryParse(x, out _))
-                .Select(ulong.Parse);
-            // 2. Extension
-            var qextensions = keyDict[ESearchKeys.Kind]
-                .Where(x => Enum.TryParse<ERedExtension>(x, true, out _))
-                .Select(x => $".{x}");
-            // 3. Name
-            var qnames = keyDict[ESearchKeys.Name];
-            // 4. Limit
-            if (!int.TryParse(keyDict[ESearchKeys.Limit].First(), out var limit))
-            {
-                limit = SEARCH_LIMIT;
-            }
+            var viewableFileList =
+                filesMatchingQuery
+                    .Transform(matchingFile => new RedFileViewModel(matchingFile))
+                    .Catch(LogExceptionAndReturnEmpty)
+                    .Bind(out var list);
 
-            _archiveManager.Archives
-                .Connect()
-                .TransformMany(x => x.Files.Values, y => y.Key)
-                .Filter(x => string.IsNullOrEmpty(OptionsSearchBarText) || matcher.Match(x.Name).HasMatches)
-                .Filter(x =>
-                {
-                    var enumerable = qhashes as ulong[] ?? qhashes.ToArray();
-                    return !enumerable.Any() || enumerable.Contains(x.Key);
-                })
-                .Filter(x =>
-                {
-                    var enumerable = qextensions as string[] ?? qextensions.ToArray();
-                    return !enumerable.Any() ||
-                           enumerable.Any(y => y.Equals(x.Extension, StringComparison.OrdinalIgnoreCase));
-                })
-                .Filter(x => !qnames.Any() || qnames.Any(y => x.Name.Contains(y, StringComparison.OrdinalIgnoreCase)))
-                .LimitSizeTo(limit)
-                .Transform(x => new RedFileViewModel(x))
-                .Bind(out var list)
+            viewableFileList
                 .Subscribe()
                 .Dispose();
+
+            // Should add an indicator here of failures and non-matches
 
             RightItems.Clear();
             RightItems.AddRange(list);

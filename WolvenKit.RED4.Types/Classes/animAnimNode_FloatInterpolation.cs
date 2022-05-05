@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class animAnimNode_FloatInterpolation : animAnimNode_FloatValue
 	{
 		[Ordinal(11)] 
@@ -57,6 +56,10 @@ namespace WolvenKit.RED4.Types
 		{
 			Id = 4294967295;
 			InputNode = new();
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

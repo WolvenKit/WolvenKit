@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class ScriptableDeviceComponentPS : SharedGameplayPS
 	{
 		[Ordinal(22)] 
@@ -667,7 +666,7 @@ namespace WolvenKit.RED4.Types
 			RevealDevicesGrid = true;
 			Masters = new();
 			FullDepth = true;
-			TweakDBRecord = new() { Value = 92249324940 };
+			TweakDBRecord = 92249324940;
 			HasAuthorizationModule = true;
 			BackdoorBreachDifficulty = Enums.EGameplayChallengeLevel.EASY;
 			MinigameAttempt = 1;
@@ -688,6 +687,10 @@ namespace WolvenKit.RED4.Types
 			QuickHackVulnerabilties = new();
 			WillingInvestigators = new();
 			IsInteractive = true;
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

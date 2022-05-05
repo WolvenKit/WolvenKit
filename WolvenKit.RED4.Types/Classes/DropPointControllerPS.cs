@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class DropPointControllerPS : BasicDistractionDeviceControllerPS
 	{
 		[Ordinal(109)] 
@@ -32,6 +31,10 @@ namespace WolvenKit.RED4.Types
 		public DropPointControllerPS()
 		{
 			RewardsLootTable = new();
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

@@ -1,5 +1,4 @@
-#define IS_PARALLEL
-// #undef IS_PARALLEL
+//#define IS_PARALLEL
 
 using System;
 using System.Collections.Concurrent;
@@ -10,9 +9,9 @@ using System.Linq;
 using System.Text;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using WolvenKit.RED4.Archive.IO;
-using WolvenKit.RED4.CR2W.Archive;
 using EFileReadErrorCodes = WolvenKit.RED4.Archive.IO.EFileReadErrorCodes;
 using WolvenKit.FunctionalTests.Model;
+using WolvenKit.RED4.Archive;
 
 #if IS_PARALLEL
 using System.Threading.Tasks;
@@ -37,7 +36,6 @@ namespace WolvenKit.FunctionalTests
         //{
         //    Test_Extension();
         //}
-
 
         [TestMethod]
         public void Write_acousticdata() => Test_Extension(".acousticdata");
@@ -514,16 +512,17 @@ namespace WolvenKit.FunctionalTests
             {
                 var fileList = fileGroup.ToList();
 
-                var ar = s_bm.Archives.Lookup(fileGroup.Key).Value as Archive;
-                ArgumentNullException.ThrowIfNull(ar);
+                if (s_bm.Archives.Lookup(fileGroup.Key).Value is not Archive ar)
+                {
+                    continue;
+                }
 
-                using var fs = new FileStream(fileGroup.Key, FileMode.Open, FileAccess.Read, FileShare.Read);
-                using var mmf = MemoryMappedFile.CreateFromFile(fs, null, 0, MemoryMappedFileAccess.Read, HandleInheritability.None, false);
+                using var mmf = ar.GetMemoryMappedFile();
 
 #if IS_PARALLEL
                 Parallel.ForEach(fileList, tmpFile =>
 #else
-            foreach (var tmpFile in fileList)
+                foreach (var tmpFile in fileList)
 #endif
                 {
                     var file = tmpFile.Value;
@@ -588,7 +587,12 @@ namespace WolvenKit.FunctionalTests
                                 if (!isBinaryEqual && WRITE_FAILED)
 #pragma warning disable CS0162
                                 {
-                                    var resultDir = Path.Combine(Environment.CurrentDirectory, s_testResultsDirectory);
+                                    var resultDir = Path.Combine(Environment.CurrentDirectory, s_testResultsDirectory, file.Extension[1..]);
+                                    if (!Directory.Exists(resultDir))
+                                    {
+                                        Directory.CreateDirectory(resultDir);
+                                    }
+
                                     var filename = Path.Combine(resultDir, Path.GetFileName(cr2wFile.MetaData.FileName));
 
                                     using var oFile = new FileStream($"{filename}.o.bin", FileMode.OpenOrCreate, FileAccess.Write);

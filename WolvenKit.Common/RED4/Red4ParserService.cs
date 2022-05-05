@@ -3,6 +3,7 @@ using System;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Text;
+using Splat;
 using WolvenKit.Common.Services;
 using WolvenKit.RED4.Archive.CR2W;
 using WolvenKit.RED4.Archive.IO;
@@ -21,6 +22,29 @@ namespace WolvenKit.RED4.CR2W
 
         #region Methods
 
+        public bool TryReadRed4Archive(string path, IHashService hashService, [NotNullWhen(true)] out Archive.Archive? archiveFile)
+        {
+            try
+            {
+                var reader = new ArchiveReader();
+                return reader.ReadArchive(path, hashService, out archiveFile) == EFileReadErrorCodes.NoError;
+            }
+            catch (Exception e)
+            {
+                var logger = Locator.Current.GetService<ILoggerService>();
+                logger?.Error(e);
+
+                archiveFile = null;
+                return false;
+            }
+        }
+
+        public Archive.Archive? ReadRed4Archive(string path, IHashService hashService)
+        {
+            TryReadRed4Archive(path, hashService, out var archive);
+            return archive;
+        }
+
         /// <summary>
         /// Try reading a <see cref="CR2WFile">CR2WFile</see> from a <see cref="Stream">Stream</see>
         /// </summary>
@@ -29,10 +53,21 @@ namespace WolvenKit.RED4.CR2W
         /// <returns>Returns true if successful, otherwise false</returns>
         public bool TryReadRed4File(Stream stream, [NotNullWhen(true)] out CR2WFile? redFile)
         {
-            // TODO: Shouldn't be done here...
-            stream.Seek(0, SeekOrigin.Begin);
-            using var reader = new CR2WReader(stream, Encoding.Default, true);
-            return reader.ReadFile(out redFile) == EFileReadErrorCodes.NoError;
+            try
+            {
+                // TODO: Shouldn't be done here...
+                stream.Seek(0, SeekOrigin.Begin);
+                using var reader = new CR2WReader(stream, Encoding.Default, true);
+                return reader.ReadFile(out redFile) == EFileReadErrorCodes.NoError;
+            }
+            catch (Exception e)
+            {
+                var logger = Locator.Current.GetService<ILoggerService>();
+                logger?.Error(e);
+
+                redFile = null;
+                return false;
+            }
         }
 
         /// <summary>
@@ -43,10 +78,21 @@ namespace WolvenKit.RED4.CR2W
         /// <returns>Returns true if successful, otherwise false</returns>
         public bool TryReadRed4File(BinaryReader br, [NotNullWhen(true)] out CR2WFile? redFile)
         {
-            // TODO: Shouldn't be done here...
-            br.BaseStream.Seek(0, SeekOrigin.Begin);
-            using var reader = new CR2WReader(br);
-            return reader.ReadFile(out redFile) == EFileReadErrorCodes.NoError;
+            try
+            {
+                // TODO: Shouldn't be done here...
+                br.BaseStream.Seek(0, SeekOrigin.Begin);
+                using var reader = new CR2WReader(br);
+                return reader.ReadFile(out redFile) == EFileReadErrorCodes.NoError;
+            }
+            catch (Exception e)
+            {
+                var logger = Locator.Current.GetService<ILoggerService>();
+                logger?.Error(e);
+
+                redFile = null;
+                return false;
+            }
         }
 
         /// <summary>
@@ -79,10 +125,21 @@ namespace WolvenKit.RED4.CR2W
         /// <returns>Returns true if successful, otherwise false</returns>
         public bool TryReadRed4FileHeaders(Stream stream, [NotNullWhen(true)] out CR2WFileInfo? info)
         {
-            // TODO: Shouldn't be done here...
-            stream.Seek(0, SeekOrigin.Begin);
-            using var reader = new CR2WReader(stream, Encoding.Default, true);
-            return reader.ReadFileInfo(out info) == EFileReadErrorCodes.NoError;
+            try
+            {
+                // TODO: Shouldn't be done here...
+                stream.Seek(0, SeekOrigin.Begin);
+                using var reader = new CR2WReader(stream, Encoding.Default, true);
+                return reader.ReadFileInfo(out info) == EFileReadErrorCodes.NoError;
+            }
+            catch (Exception e)
+            {
+                var logger = Locator.Current.GetService<ILoggerService>();
+                logger?.Error(e);
+
+                info = null;
+                return false;
+            }
         }
 
         /// <summary>
@@ -93,10 +150,21 @@ namespace WolvenKit.RED4.CR2W
         /// <returns>Returns true if successful, otherwise false</returns>
         public bool TryReadRed4FileHeaders(BinaryReader br, [NotNullWhen(true)] out CR2WFileInfo? info)
         {
-            // TODO: Shouldn't be done here...
-            br.BaseStream.Seek(0, SeekOrigin.Begin);
-            using var reader = new CR2WReader(br);
-            return reader.ReadFileInfo(out info) == EFileReadErrorCodes.NoError;
+            try
+            {
+                // TODO: Shouldn't be done here...
+                br.BaseStream.Seek(0, SeekOrigin.Begin);
+                using var reader = new CR2WReader(br);
+                return reader.ReadFileInfo(out info) == EFileReadErrorCodes.NoError;
+            }
+            catch (Exception e)
+            {
+                var logger = Locator.Current.GetService<ILoggerService>();
+                logger?.Error(e);
+
+                info = null;
+                return false;
+            }
         }
 
         /// <summary>

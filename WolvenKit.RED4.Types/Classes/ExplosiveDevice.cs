@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class ExplosiveDevice : BasicDistractionDevice
 	{
 		[Ordinal(100)] 
@@ -148,6 +147,10 @@ namespace WolvenKit.RED4.Types
 			SpawnedFxInstancesToKill = new();
 			ComponentsON = new();
 			ComponentsOFF = new();
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

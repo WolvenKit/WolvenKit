@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class gameFreeCamera : gameObject
 	{
 		[Ordinal(35)] 
@@ -59,6 +58,10 @@ namespace WolvenKit.RED4.Types
 			AnalogTurnRate = 100.000000F;
 			MouseTurnRate = 7.000000F;
 			UsePhysicalCollision = true;
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

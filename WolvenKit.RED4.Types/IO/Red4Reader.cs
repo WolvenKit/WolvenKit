@@ -44,7 +44,11 @@ namespace WolvenKit.RED4.IO
         public BinaryReader BaseReader => _reader;
         public Stream BaseStream => _reader.BaseStream;
 
-        public int Position => (int)_reader.BaseStream.Position;
+        public int Position
+        {
+            get => (int)BaseStream.Position;
+            set => BaseStream.Position = value;
+        }
 
         public List<IRedImport> ImportsList { get => importsList; set => importsList = value; }
 
@@ -187,6 +191,8 @@ namespace WolvenKit.RED4.IO
 
         public virtual TweakDBID ReadTweakDBID() => _reader.ReadUInt64();
 
+        public virtual gamedataLocKeyWrapper ReadGamedataLocKeyWrapper() => _reader.ReadUInt64();
+
         #endregion Simples
 
         #region General
@@ -226,27 +232,33 @@ namespace WolvenKit.RED4.IO
             return (IRedArray)generic.Invoke(this, new object[] { size });
         }
 
-        protected virtual IRedType ReadArrayItem(int index, Type type, uint elementSize, Flags flags)
+        protected virtual IRedType ReadArrayItem(int index, Type type, Flags flags)
         {
-            return Read(type, elementSize, flags);
+            return Read(type, 0, flags);
         }
 
         public virtual IRedArray<T> ReadCArray<T>(uint size) where T : IRedType
         {
             var array = new CArray<T>();
 
+            var startPos = BaseStream.Position;
+
             var elementCount = _reader.ReadUInt32();
 
-            uint elementSize = 0;
-            if (elementCount > 0)
+            var i = 0;
+            for (; i < elementCount; i++)
             {
-                elementSize = (size - 4) / elementCount;
+                var element = ReadArrayItem(i, typeof(T), Flags.Empty);
+                array.Add((T)element);
             }
 
-            for (var i = 0; i < elementCount; i++)
+            var remaining = size - (BaseStream.Position - startPos);
+            while (remaining > 0)
             {
-                var element = ReadArrayItem(i, typeof(T), elementSize, Flags.Empty);
+                var element = ReadArrayItem(i++, typeof(T), Flags.Empty);
                 array.Add((T)element);
+
+                remaining = size - (BaseStream.Position - startPos);
             }
 
             return array;
@@ -264,21 +276,17 @@ namespace WolvenKit.RED4.IO
 
         public virtual IRedArrayFixedSize<T> ReadCArrayFixedSize<T>(uint size, Flags flags) where T : IRedType
         {
-            //var array = new CArrayFixedSize<T>(flags.MoveNext() ? flags.Current : 0);
-            flags.MoveNext();
+            if (!flags.MoveNext())
+            {
+                throw new InvalidDataException();
+            }
+
             var array = new CArrayFixedSize<T>(flags.Current);
 
             var elementCount = _reader.ReadUInt32();
-
-            uint elementSize = 0;
-            if (elementCount > 0)
-            {
-                elementSize = (size - 4) / elementCount;
-            }
-
             for (var i = 0; i < elementCount; i++)
             {
-                var element = ReadArrayItem(i, typeof(T), elementSize, flags.Clone());
+                var element = ReadArrayItem(i, typeof(T), flags.Clone());
                 ((IList<T>)array)[i] = (T)element;
             }
 
@@ -335,8 +343,13 @@ namespace WolvenKit.RED4.IO
 
         public virtual CEnum<T> ReadCEnum<T>() where T : struct, Enum
         {
+            var enumString = "None";
+
             var index = _reader.ReadUInt16();
-            var enumString = GetStringValue(index);
+            if (index != 0)
+            {
+                enumString = GetStringValue(index);
+            }
 
             return CEnum.Parse<T>(enumString);
         }
@@ -388,6 +401,8 @@ namespace WolvenKit.RED4.IO
             {
                 var curvePoint = new CurvePoint<T>();
 
+                var point = _reader.ReadSingle();
+
                 IRedType element;
                 if (typeof(RedBaseClass).IsAssignableFrom(typeof(T)))
                 {
@@ -397,8 +412,6 @@ namespace WolvenKit.RED4.IO
                 {
                     element = Read(typeof(T), 0, Flags.Empty);
                 }
-
-                var point = _reader.ReadSingle();
 
                 if (element.GetType() == typeof(T))
                 {
@@ -425,7 +438,7 @@ namespace WolvenKit.RED4.IO
             return (IRedResourceAsyncReference)generic.Invoke(this, null);
         }
 
-        public virtual IRedResourceAsyncReference<T> ReadCResourceAsyncReference<T>() where T : RedBaseClass
+        public virtual IRedResourceAsyncReference<T> ReadCResourceAsyncReference<T>() where T : CResource
         {
             var index = _reader.ReadUInt16();
 
@@ -455,7 +468,7 @@ namespace WolvenKit.RED4.IO
             return (IRedResourceReference)generic.Invoke(this, null);
         }
 
-        public virtual IRedResourceReference<T> ReadCResourceReference<T>() where T : RedBaseClass
+        public virtual IRedResourceReference<T> ReadCResourceReference<T>() where T : CResource
         {
             var index = _reader.ReadUInt16();
 
@@ -489,18 +502,14 @@ namespace WolvenKit.RED4.IO
         {
             var elementCount = _reader.ReadUInt32();
 
-            uint elementSize = 0;
-            if (elementCount > 0)
+            var array = new CStatic<T>((int)elementCount)
             {
-                elementSize = (size - 4) / elementCount;
-            }
-
-            var array = new CStatic<T>((int)elementCount);
-            array.MaxSize = flags.MoveNext() ? flags.Current : 0;
+                MaxSize = flags.MoveNext() ? flags.Current : 0
+            };
 
             for (var i = 0; i < elementCount; i++)
             {
-                var element = ReadArrayItem(i, typeof(T), elementSize, flags.Clone());
+                var element = ReadArrayItem(i, typeof(T), flags.Clone());
                 ((IList<T>)array)[i] = (T)element;
             }
 
@@ -573,7 +582,7 @@ namespace WolvenKit.RED4.IO
             foreach (var propertyInfo in typeInfo.GetWritableProperties())
             {
                 var value = Read(propertyInfo.Type, 0, Flags.Empty);
-                instance.InternalSetPropertyValue(propertyInfo.RedName, value, true);
+                instance.SetProperty(propertyInfo.RedName, value);
             }
 
             return instance;
@@ -672,6 +681,9 @@ namespace WolvenKit.RED4.IO
 
                 case { } when type == typeof(TweakDBID):
                     return ReadTweakDBID();
+
+                case { } when type == typeof(gamedataLocKeyWrapper):
+                    return ReadGamedataLocKeyWrapper();
 
                 default:
                     return ThrowNotSupported(type.Name);

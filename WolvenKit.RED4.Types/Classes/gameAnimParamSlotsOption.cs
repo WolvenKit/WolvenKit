@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class gameAnimParamSlotsOption : RedBaseClass
 	{
 		[Ordinal(0)] 
@@ -28,5 +27,12 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CEnum<entAnimParamSlotFunction>>();
 			set => SetPropertyValue<CEnum<entAnimParamSlotFunction>>(value);
 		}
+
+		public gameAnimParamSlotsOption()
+		{
+			PostConstruct();
+		}
+
+		partial void PostConstruct();
 	}
 }

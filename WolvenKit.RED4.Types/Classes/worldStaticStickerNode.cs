@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class worldStaticStickerNode : worldNode
 	{
 		[Ordinal(4)] 
@@ -88,6 +87,10 @@ namespace WolvenKit.RED4.Types
 			AlignSpritesHorizontally = true;
 			Scale = 1.000000F;
 			VisibilityDistance = 25.000000F;
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

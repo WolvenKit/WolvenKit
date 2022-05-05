@@ -8,7 +8,7 @@ namespace WolvenKit.RED4.Types
 {
     [DebuggerTypeProxy(typeof(ICollectionDebugView<>))]
     [DebuggerDisplay("Count = {Count}")]
-    public class CArrayBase<T> : IRedArray<T>, IRedCloneable, /*IRedNotifyObjectChanged, */IEquatable<CArrayBase<T>>
+    public abstract class CArrayBase<T> : IRedArray<T>, IRedCloneable, /*IRedNotifyObjectChanged, */IEquatable<CArrayBase<T>>
     {
         private int _maxSize = -1;
 
@@ -32,15 +32,15 @@ namespace WolvenKit.RED4.Types
         // public event ObjectChangedEventHandler ObjectChanged;
 
 
-        private readonly List<T> _internalList;
+        protected readonly List<T> _internalList;
 
 
-        public CArrayBase()
+        protected CArrayBase()
         {
             _internalList = new List<T>();
         }
 
-        public CArrayBase(int size)
+        protected CArrayBase(int size)
         {
             _internalList = new List<T>(new T[size]);
 
@@ -53,6 +53,12 @@ namespace WolvenKit.RED4.Types
                 }
             }
         }
+
+        protected CArrayBase(List<T> list)
+        {
+            _internalList = list;
+        }
+
         public Type InnerType => typeof(T);
 
         public object ShallowCopy()
@@ -60,24 +66,7 @@ namespace WolvenKit.RED4.Types
             return MemberwiseClone();
         }
 
-        public object DeepCopy()
-        {
-            var other = (IList<T>)RedTypeManager.CreateRedType(GetType());
-
-            foreach (var element in _internalList)
-            {
-                if (element is IRedCloneable cl)
-                {
-                    other.Add((T)cl.DeepCopy());
-                }
-                else
-                {
-                    other.Add(element);
-                }
-            }
-
-            return other;
-        }
+        public abstract object DeepCopy();
 
         #region Event
         /*
@@ -220,6 +209,36 @@ namespace WolvenKit.RED4.Types
 
         public int Add(object item) => AddItem(item);
 
+        public void AddRange(ICollection collection)
+        {
+            if (IsReadOnly)
+            {
+                throw new NotSupportedException();
+            }
+
+            if ((collection.Count + Count) > MaxSize)
+            {
+                throw new NotSupportedException();
+            }
+
+            InsertRange(Count, collection);
+        }
+
+        public void AddRange(ICollection<T> collection)
+        {
+            if (IsReadOnly)
+            {
+                throw new NotSupportedException();
+            }
+
+            if ((collection.Count + Count) > MaxSize)
+            {
+                throw new NotSupportedException();
+            }
+
+            InsertRange(Count, collection);
+        }
+
         public void CopyTo(Array array, int index) => throw new NotImplementedException();
 
         public void Clear()
@@ -255,6 +274,22 @@ namespace WolvenKit.RED4.Types
             //OnObjectChanged(ObjectChangedType.Added, null, value);
 
             ((IList)_internalList).Insert(index, value);
+        }
+
+        public void InsertRange(int index, ICollection collection)
+        {
+            foreach (var item in collection)
+            {
+                Insert(index++, item);
+            }
+        }
+
+        public void InsertRange(int index, ICollection<T> collection)
+        {
+            foreach (var item in collection)
+            {
+                Insert(index++, item);
+            }
         }
 
         public void Remove(object value)

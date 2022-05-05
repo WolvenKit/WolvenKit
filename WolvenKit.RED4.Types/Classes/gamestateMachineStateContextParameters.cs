@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class gamestateMachineStateContextParameters : RedBaseClass
 	{
 		[Ordinal(0)] 
@@ -79,6 +78,10 @@ namespace WolvenKit.RED4.Types
 			CNameParameters = new(0);
 			IScriptableParameters = new(0);
 			TweakDBIDParameters = new(0);
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

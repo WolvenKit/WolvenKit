@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class audioAmbientAreaGroupingSettings : RedBaseClass
 	{
 		[Ordinal(0)] 
@@ -56,6 +55,10 @@ namespace WolvenKit.RED4.Types
 		public audioAmbientAreaGroupingSettings()
 		{
 			MaxDistance = 100.000000F;
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

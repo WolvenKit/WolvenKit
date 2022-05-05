@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class BrightnessSettingsVarListener : userSettingsVarListener
 	{
 		[Ordinal(0)] 
@@ -12,5 +11,12 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CWeakHandle<BrightnessSettingsGameController>>();
 			set => SetPropertyValue<CWeakHandle<BrightnessSettingsGameController>>(value);
 		}
+
+		public BrightnessSettingsVarListener()
+		{
+			PostConstruct();
+		}
+
+		partial void PostConstruct();
 	}
 }

@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class HudPhoneGameController : gameuiProjectedHUDGameController
 	{
 		[Ordinal(9)] 
@@ -295,6 +294,10 @@ namespace WolvenKit.RED4.Types
 			DelayedTimeoutCallbackId = new();
 			TimeoutPeroid = 8.000000F;
 			Options = new();
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class worldTrafficPersistentResource : resStreamedResource
 	{
 		[Ordinal(1)] 
@@ -16,6 +15,10 @@ namespace WolvenKit.RED4.Types
 		public worldTrafficPersistentResource()
 		{
 			Data = new() { Lanes = new(), NeighborGroups = new() };
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

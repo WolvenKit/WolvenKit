@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	[REDClass(SerializeDefault = true)]
 	public partial class Box : RedBaseClass
 	{
@@ -26,6 +25,10 @@ namespace WolvenKit.RED4.Types
 		{
 			Min = new();
 			Max = new();
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

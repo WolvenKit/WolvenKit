@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class ProficiencyButtonController : inkButtonController
 	{
 		[Ordinal(10)] 
@@ -50,6 +49,10 @@ namespace WolvenKit.RED4.Types
 			LabelText = new();
 			LevelText = new();
 			FrameHovered = new();
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

@@ -1,8 +1,13 @@
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class gameinteractionsvisIVisualizerLogicInterface : ISerializable
 	{
+		public gameinteractionsvisIVisualizerLogicInterface()
+		{
+			PostConstruct();
+		}
+
+		partial void PostConstruct();
 	}
 }

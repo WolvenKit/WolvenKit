@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class gameuiStaticIconLogicController : gameuiDynamicIconLogicController
 	{
 		[Ordinal(1)] 
@@ -15,7 +14,11 @@ namespace WolvenKit.RED4.Types
 
 		public gameuiStaticIconLogicController()
 		{
-			IconReference = new() { Value = 61952742650 };
+			IconReference = 61952742650;
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

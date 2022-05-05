@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using DynamicData;
 using WolvenKit.Common;
 using WolvenKit.Common.Model;
+using WolvenKit.Core.Interfaces;
 
 namespace WolvenKit.Functionality.Controllers
 {

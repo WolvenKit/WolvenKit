@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class worldStreamingBlock : CResource
 	{
 		[Ordinal(1)] 
@@ -25,6 +24,10 @@ namespace WolvenKit.RED4.Types
 		{
 			Descriptors = new();
 			Index = 4294967295;
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

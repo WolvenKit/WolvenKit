@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class TraitTooltipData : BasePerksMenuTooltipData
 	{
 		[Ordinal(1)] 
@@ -44,5 +43,12 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CHandle<AttributeData>>();
 			set => SetPropertyValue<CHandle<AttributeData>>(value);
 		}
+
+		public TraitTooltipData()
+		{
+			PostConstruct();
+		}
+
+		partial void PostConstruct();
 	}
 }

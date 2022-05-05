@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class WorldMapTooltipController : WorldMapTooltipBaseController
 	{
 		[Ordinal(5)] 
@@ -157,6 +156,10 @@ namespace WolvenKit.RED4.Types
 			Bar = new();
 			GigBarCompletedText = new();
 			GigBarTotalText = new();
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class hudRecordingController : gameuiHUDGameController
 	{
 		[Ordinal(9)] 
@@ -74,6 +73,10 @@ namespace WolvenKit.RED4.Types
 			Option_intro = new();
 			Option_loop = new();
 			Option_outro = new();
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class ComputerMenuWidgetController : inkWidgetLogicController
 	{
 		[Ordinal(1)] 
@@ -51,6 +50,10 @@ namespace WolvenKit.RED4.Types
 			ContentWidget = new();
 			FileWidgetsData = new();
 			FileThumbnailWidgetsData = new();
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class LiftDevice : InteractiveMasterDevice
 	{
 		[Ordinal(94)] 
@@ -109,6 +108,10 @@ namespace WolvenKit.RED4.Types
 			Floors = new();
 			QuestSafeguardColliders = new();
 			QuestSafeguardColliderNames = new();
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

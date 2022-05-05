@@ -65,11 +65,14 @@ namespace WolvenKit.Views.HomePage.Pages
                     e.Cancel = true;
                     break;
             }
-
+            // Generate special editors for the properties for which default is not ok
             if (e.OriginalSource is PropertyItem { } propertyItem)
             {
                 switch (propertyItem.DisplayName)
                 {
+                    case nameof(ISettingsDto.CP77GameDirPath):
+                        propertyItem.Editor = new Controls.SingleFolderPathEditor();
+                        break;
                     case nameof(ISettingsDto.CP77ExecutablePath):
                         propertyItem.Editor = new Controls.SingleFilePathEditor();
                         break;

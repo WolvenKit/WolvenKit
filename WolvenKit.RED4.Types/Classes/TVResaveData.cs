@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class TVResaveData : RedBaseClass
 	{
 		[Ordinal(0)] 
@@ -49,6 +48,10 @@ namespace WolvenKit.RED4.Types
 		{
 			MediaResaveData = new() { MediaDeviceData = new() };
 			Channels = new();
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

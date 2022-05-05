@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class TextAnimOnTextChange : inkWidgetLogicController
 	{
 		[Ordinal(1)] 
@@ -49,6 +48,10 @@ namespace WolvenKit.RED4.Types
 		{
 			TextField = new();
 			AnimationName = "default";
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

@@ -223,9 +223,53 @@ namespace WolvenKit.Views.Shell
                         viewModel => viewModel._mainViewModel.PackInstallModCommand,
                         view => view.ToolbarPackInstallButton)
                     .DisposeWith(disposables);
+
+                this.BindCommand(ViewModel,
+                        viewModel => viewModel._mainViewModel.LaunchGameCommand,
+                        view => view.ToolbarLaunchButton)
+                    .DisposeWith(disposables);
+               
+                this.Bind(ViewModel,
+                        viewModel => viewModel._mainViewModel.SelectedGameCommandIdx,
+                        view => view.ToolbarLaunchCombobox.SelectedIndex)
+                    .DisposeWith(disposables);
+                this.OneWayBind(ViewModel,
+                        viewModel => viewModel._mainViewModel.SelectedGameCommands,
+                        view => view.ToolbarLaunchCombobox.ItemsSource)
+                    .DisposeWith(disposables);
+
                 this.BindCommand(ViewModel,
                         viewModel => viewModel._mainViewModel.ShowSettingsCommand,
                         view => view.ToolbarSettingsButton)
+                    .DisposeWith(disposables);
+
+                this.Bind(ViewModel,
+                        viewModel => viewModel._mainViewModel.ProjectExplorer.IsVisible,
+                        view => view.ProjectExplorerCheckbox.IsChecked)
+                    .DisposeWith(disposables);
+                this.Bind(ViewModel,
+                        viewModel => viewModel._mainViewModel.AssetBrowserVM.IsVisible,
+                        view => view.AssetBrowserCheckbox.IsChecked)
+                    .DisposeWith(disposables);
+                this.Bind(ViewModel,
+                    viewModel => viewModel._mainViewModel.PropertiesViewModel.IsVisible,
+                        view => view.PropertiesCheckbox.IsChecked)
+                    .DisposeWith(disposables);
+                this.Bind(ViewModel,
+                        viewModel => viewModel._mainViewModel.Log.IsVisible,
+                        view => view.LogCheckbox.IsChecked)
+                    .DisposeWith(disposables);
+                this.Bind(ViewModel,
+                        viewModel => viewModel._mainViewModel.ImportExportToolVM.IsVisible,
+                        view => view.ImportExportCheckbox.IsChecked)
+                    .DisposeWith(disposables);
+                this.Bind(ViewModel,
+                        viewModel => viewModel._mainViewModel.TweakBrowserVM.IsVisible,
+                        view => view.TweakBrowserCheckbox.IsChecked)
+                    .DisposeWith(disposables);
+                this.Bind(ViewModel,
+                        viewModel => viewModel._mainViewModel.LocKeyBrowserVM.IsVisible,
+                        view => view.LocKeyBrowserCheckbox.IsChecked)
                     .DisposeWith(disposables);
 
                 #endregion

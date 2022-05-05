@@ -14,7 +14,7 @@ using WolvenKit.Common.Services;
 using WolvenKit.Core.Services;
 using WolvenKit.Functionality.Controllers;
 using WolvenKit.Functionality.Services;
-using WolvenKit.RED4.CR2W.Archive;
+using WolvenKit.RED4.Archive;
 using WolvenKit.Views.Shell;
 
 namespace WolvenKit.Views.Dialogs
@@ -90,7 +90,7 @@ namespace WolvenKit.Views.Dialogs
                 {
                     continue;
                 }
-                var fileslist = groupedFiles[key].ToList();
+                var fileslist = groupedFiles[key].GroupBy(x => x.Key).Select(x => x.First()).ToList();
                 _loggerService.Info($"{key}: Found {fileslist.Count} entries to uncook");
                 var progress = 0;
                 _progress.Report(0);

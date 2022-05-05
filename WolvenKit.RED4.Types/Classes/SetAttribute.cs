@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class SetAttribute : gamePlayerScriptableSystemRequest
 	{
 		[Ordinal(1)] 
@@ -20,5 +19,12 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CEnum<gamedataStatType>>();
 			set => SetPropertyValue<CEnum<gamedataStatType>>(value);
 		}
+
+		public SetAttribute()
+		{
+			PostConstruct();
+		}
+
+		partial void PostConstruct();
 	}
 }

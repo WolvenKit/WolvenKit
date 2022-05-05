@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class BaseSubtitleLineLogicController : inkWidgetLogicController
 	{
 		[Ordinal(1)] 
@@ -41,6 +40,10 @@ namespace WolvenKit.RED4.Types
 		{
 			C_tier1_duration = 0.500000F;
 			C_tier2_duration = 5.000000F;
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

@@ -1,8 +1,13 @@
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class AIObjectSelectionManagerInterface : gameIGameSystem
 	{
+		public AIObjectSelectionManagerInterface()
+		{
+			PostConstruct();
+		}
+
+		partial void PostConstruct();
 	}
 }

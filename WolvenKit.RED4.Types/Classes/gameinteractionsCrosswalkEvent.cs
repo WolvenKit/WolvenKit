@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class gameinteractionsCrosswalkEvent : redEvent
 	{
 		[Ordinal(0)] 
@@ -41,6 +40,10 @@ namespace WolvenKit.RED4.Types
 		{
 			TrafficLightColor = Enums.worldTrafficLightColor.INVALID;
 			OldTrafficLightColor = Enums.worldTrafficLightColor.INVALID;
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

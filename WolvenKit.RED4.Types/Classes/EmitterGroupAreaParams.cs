@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class EmitterGroupAreaParams : RedBaseClass
 	{
 		[Ordinal(0)] 
@@ -28,5 +27,12 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CLegacySingleChannelCurve<CFloat>>();
 			set => SetPropertyValue<CLegacySingleChannelCurve<CFloat>>(value);
 		}
+
+		public EmitterGroupAreaParams()
+		{
+			PostConstruct();
+		}
+
+		partial void PostConstruct();
 	}
 }

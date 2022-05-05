@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class AIbehaviorCommandConditionDefinition : AIbehaviorConditionDefinition
 	{
 		[Ordinal(1)] 
@@ -49,6 +48,10 @@ namespace WolvenKit.RED4.Types
 		{
 			IsWaiting = true;
 			IsExecuting = true;
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

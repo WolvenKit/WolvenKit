@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class WeakFenceControllerPS : ScriptableDeviceComponentPS
 	{
 		[Ordinal(104)] 
@@ -24,12 +23,16 @@ namespace WolvenKit.RED4.Types
 		public WeakFenceControllerPS()
 		{
 			DeviceName = "LocKey#189";
-			TweakDBRecord = new() { Value = 76181728464 };
-			TweakDBDescriptionRecord = new() { Value = 128236067982 };
+			TweakDBRecord = 76181728464;
+			TweakDBDescriptionRecord = 128236067982;
 			ShouldScannerShowStatus = false;
 			ShouldScannerShowNetwork = false;
 			ShouldScannerShowRole = true;
 			WeakFenceSetup = new();
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

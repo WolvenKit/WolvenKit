@@ -754,10 +754,13 @@ public class SharedDataBufferConverter : JsonConverter<SharedDataBuffer>, ICusto
         {
             case "File":
             {
-                var converter = options.GetConverter(typeof(CR2WFile));
+                //var dto = RedJsonSerializer.Deserialize<RedFileDto>(json);
+
+                var converter = options.GetConverter(typeof(RedFileDto));
                 if (converter is ICustomRedConverter conv)
                 {
-                    val.File = (CR2WFile?)conv.ReadRedType(ref reader, typeof(CR2WFile), options);
+                    var obj = conv.ReadRedType(ref reader, typeof(RedFileDto), options);
+                    val.File = ((RedFileDto?)obj)?.Data;
                 }
                 else
                 {
@@ -837,7 +840,7 @@ public class SharedDataBufferConverter : JsonConverter<SharedDataBuffer>, ICusto
         if (value.File is CR2WFile file)
         {
             writer.WritePropertyName("File");
-            JsonSerializer.Serialize(writer, file, options);
+            JsonSerializer.Serialize(writer, new RedFileDto(file), options);
         }
         else if (value.Data is Package04 pkg)
         {
@@ -975,7 +978,7 @@ public class CLegacySingleChannelCurveConverter : JsonConverter<IRedLegacySingle
             throw new JsonException();
         }
 
-        var (elementType, _) = RedReflection.GetCSTypeFromRedType(result.ElementType);
+        var elementType = result.ElementType;
 
         while (reader.Read())
         {
@@ -1320,19 +1323,40 @@ public class MultiChannelCurveConverter : JsonConverter<IRedMultiChannelCurve>, 
 
 public class NodeRefConverter : JsonConverter<NodeRef>, ICustomRedConverter
 {
-    public object? ReadRedType(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options) => Read(ref reader, typeToConvert, options);
+    public object ReadRedType(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options) => Read(ref reader, typeToConvert, options);
 
-    public override NodeRef? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+    public override NodeRef Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
     {
         if (reader.TokenType == JsonTokenType.Null)
         {
-            return null;
+            return (NodeRef)RedTypeManager.CreateRedType(typeToConvert);
         }
 
-        return reader.GetString();
+        if (reader.TokenType == JsonTokenType.String)
+        {
+            return reader.GetString();
+        }
+        else if (reader.TokenType == JsonTokenType.Number)
+        {
+            return reader.GetUInt64();
+        }
+        else
+        {
+            throw new JsonException();
+        }
     }
 
-    public override void Write(Utf8JsonWriter writer, NodeRef value, JsonSerializerOptions options) => writer.WriteStringValue(value);
+    public override void Write(Utf8JsonWriter writer, NodeRef value, JsonSerializerOptions options)
+    {
+        if ((string)value != null)
+        {
+            writer.WriteStringValue(value);
+        }
+        else
+        {
+            writer.WriteNumberValue(value);
+        }
+    }
 }
 
 public class TweakDBIDConverter : JsonConverter<TweakDBID>, ICustomRedConverter
@@ -2325,7 +2349,12 @@ public class RedClassConverter : JsonConverter<RedBaseClass>, ICustomRedConverte
                             val = JsonSerializer.Deserialize(ref reader, valInfo.Type, options);
                         }
 
-                        valInfo.SetValue(cls, (IRedType?)val);
+                        if (!typeInfo.SerializeDefault && RedReflection.IsDefault(cls.GetType(), valInfo.RedName, val))
+                        {
+                            continue;
+                        }
+
+                        cls.SetProperty(valInfo.RedName, (IRedType?)val);
                     }
 
                     break;
@@ -2356,7 +2385,7 @@ public class RedClassConverter : JsonConverter<RedBaseClass>, ICustomRedConverte
         foreach (var propertyInfo in typeInfo.PropertyInfos.OrderBy(x => x.RedName))
         {
             writer.WritePropertyName(propertyInfo.RedName);
-            JsonSerializer.Serialize(writer, propertyInfo.GetValue(value), options);
+            JsonSerializer.Serialize(writer, (object)value.GetProperty(propertyInfo.RedName), options);
         }
 
         writer.WriteEndObject();
@@ -2615,7 +2644,7 @@ public class SemVersionConverter : JsonConverter<SemVersion>
     public override void Write(Utf8JsonWriter writer, SemVersion value, JsonSerializerOptions options) => writer.WriteStringValue(value.ToString());
 }
 
-public class RedFileDtoConverter : JsonConverter<RedFileDto>
+public class RedFileDtoConverter : JsonConverter<RedFileDto>, ICustomRedConverter
 {
     private readonly ReferenceResolver<RedBaseClass> _referenceResolver;
 
@@ -2623,6 +2652,8 @@ public class RedFileDtoConverter : JsonConverter<RedFileDto>
     {
         _referenceResolver = referenceResolver;
     }
+
+    public object? ReadRedType(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options) => Read(ref reader, typeToConvert, options);
 
     public override RedFileDto Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
     {

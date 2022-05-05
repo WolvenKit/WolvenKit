@@ -29,4 +29,4 @@
 *.tga binary
 *.xbm binary
 *.zip binary
-*.lib filter=lfs diff=lfs merge=lfs -text
+*.lib -text

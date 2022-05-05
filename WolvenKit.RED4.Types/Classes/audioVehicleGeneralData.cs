@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class audioVehicleGeneralData : RedBaseClass
 	{
 		[Ordinal(0)] 
@@ -258,6 +257,10 @@ namespace WolvenKit.RED4.Types
 			VehicleDoorsSettings = new() { Door = new(), Trunk = new(), Hood = new() };
 			VehicleInteriorParameterData = new() { EnterCurveType = Enums.audioESoundCurveType.Linear, EnterCurveTime = 3.000000F, EnterDelayTime = 2.000000F, ExitCurveType = Enums.audioESoundCurveType.Linear, ExitCurveTime = 3.000000F, ExitDelayTime = 2.000000F };
 			VehicleTemperatureSettings = new() { RpmThreshold = 3.000000F, TimeToActivateTemperature = 8.000000F, CooldownTime = 10.000000F };
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

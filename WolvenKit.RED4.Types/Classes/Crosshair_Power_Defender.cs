@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class Crosshair_Power_Defender : gameuiCrosshairBaseGameController
 	{
 		[Ordinal(18)] 
@@ -43,6 +42,10 @@ namespace WolvenKit.RED4.Types
 			RightPart = new();
 			TopPart = new();
 			BotPart = new();
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

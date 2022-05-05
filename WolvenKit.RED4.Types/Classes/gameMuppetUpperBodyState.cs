@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class gameMuppetUpperBodyState : RedBaseClass
 	{
 		[Ordinal(0)] 
@@ -230,6 +229,10 @@ namespace WolvenKit.RED4.Types
 			CurrentWeaponAmmo = 10;
 			CurrentWeaponAmmoCapacity = 10;
 			SelectedConsumable = new();
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

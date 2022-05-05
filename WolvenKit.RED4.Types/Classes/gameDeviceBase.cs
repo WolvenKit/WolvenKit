@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class gameDeviceBase : gameObject
 	{
 		[Ordinal(35)] 
@@ -12,5 +11,12 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CBool>();
 			set => SetPropertyValue<CBool>(value);
 		}
+
+		public gameDeviceBase()
+		{
+			PostConstruct();
+		}
+
+		partial void PostConstruct();
 	}
 }

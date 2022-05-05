@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class inkWorldLayerDefinition : inkLayerDefinition
 	{
 		[Ordinal(8)] 
@@ -66,6 +65,10 @@ namespace WolvenKit.RED4.Types
 			ActiveByDefault = true;
 			ProjectionPlaneSize = new() { X = 1.000000F, Y = 1.000000F };
 			FaceVector = new();
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

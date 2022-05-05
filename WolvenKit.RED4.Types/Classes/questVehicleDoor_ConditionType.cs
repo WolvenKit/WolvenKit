@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class questVehicleDoor_ConditionType : questIVehicleConditionType
 	{
 		[Ordinal(0)] 
@@ -33,6 +32,10 @@ namespace WolvenKit.RED4.Types
 		{
 			VehicleRef = new() { Names = new() };
 			State = Enums.vehicleVehicleDoorState.Open;
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

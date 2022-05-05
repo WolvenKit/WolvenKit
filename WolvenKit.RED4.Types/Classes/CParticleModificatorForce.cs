@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class CParticleModificatorForce : IParticleModificator
 	{
 		[Ordinal(4)] 
@@ -44,6 +43,10 @@ namespace WolvenKit.RED4.Types
 			IsEnabled = true;
 			Pivot = new();
 			Radius = 10.000000F;
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

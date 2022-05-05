@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class HoloTable : InteractiveDevice
 	{
 		[Ordinal(94)] 
@@ -41,6 +40,10 @@ namespace WolvenKit.RED4.Types
 		{
 			ControllerTypeName = "HoloTableController";
 			MeshTable = new();
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

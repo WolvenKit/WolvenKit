@@ -1,6 +1,8 @@
 using System;
 using System.IO;
 using System.Text;
+using Splat;
+using WolvenKit.Common.Services;
 using WolvenKit.RED4.IO;
 using WolvenKit.RED4.Types;
 using WolvenKit.RED4.Types.Exceptions;
@@ -9,20 +11,23 @@ namespace WolvenKit.RED4.Archive.IO
 {
     public partial class CR2WReader : Red4Reader
     {
-        public CR2WReader(Stream input) : base(input)
+        private ILoggerService _logger;
+
+        public CR2WReader(Stream input) : this(input, Encoding.UTF8, false)
         {
         }
 
-        public CR2WReader(Stream input, Encoding encoding) : base(input, encoding)
+        public CR2WReader(Stream input, Encoding encoding) : this(input, encoding, false)
         {
         }
 
-        public CR2WReader(Stream input, Encoding encoding, bool leaveOpen) : base(input, encoding, leaveOpen)
+        public CR2WReader(Stream input, Encoding encoding, bool leaveOpen) : this(new BinaryReader(input, encoding, leaveOpen))
         {
         }
 
         public CR2WReader(BinaryReader reader) : base(reader)
         {
+            _logger = Locator.Current.GetService<ILoggerService>();
         }
 
         public override void ReadClass(RedBaseClass cls, uint size)
@@ -95,8 +100,7 @@ namespace WolvenKit.RED4.Archive.IO
             if (prop == null)
             {
                 value = Read(type, size - 4, flags);
-
-                RedReflection.AddDynamicProperty(cls, varName, value);
+                cls.SetProperty(varName, value);
             }
             else
             {
@@ -117,7 +121,7 @@ namespace WolvenKit.RED4.Archive.IO
                 }
 #endif
 
-                prop.SetValue(cls, value);
+                cls.SetProperty(prop.RedName, value);
             }
 
             PostProcess();
@@ -129,6 +133,7 @@ namespace WolvenKit.RED4.Archive.IO
                 if (value is IRedBufferPointer buf)
                 {
                     buf.GetValue().ParentTypes.Add($"{cls.GetType().Name}.{varName}");
+                    buf.GetValue().Parent = cls;
                 }
 
                 if (value is IRedArray arr)
@@ -138,6 +143,7 @@ namespace WolvenKit.RED4.Archive.IO
                         foreach (IRedBufferPointer entry in arr)
                         {
                             entry.GetValue().ParentTypes.Add($"{cls.GetType().Name}.{varName}");
+                            entry.GetValue().Parent = cls;
                         }
                     }
                 }

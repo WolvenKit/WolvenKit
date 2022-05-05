@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class questShowCustomTooltip_NodeType : questIUIManagerNodeType
 	{
 		[Ordinal(0)] 
@@ -50,6 +49,10 @@ namespace WolvenKit.RED4.Types
 			SetTooltip = true;
 			Text = new() { Unk1 = 0, Value = "" };
 			QueuePriority = -1;
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

@@ -130,6 +130,8 @@ namespace WolvenKit.Modkit.RED4
             using var writer = new CR2WWriter(fs2);
             writer.WriteFile(w2rc);
 
+            _loggerService.Success($"Imported {fileInfo.Name} to {outpath}");
+
             return true;
         }
     }

@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class SecurityAreaControllerPS : MasterControllerPS
 	{
 		[Ordinal(105)] 
@@ -112,14 +111,18 @@ namespace WolvenKit.RED4.Types
 		public SecurityAreaControllerPS()
 		{
 			RevealDevicesGrid = false;
-			TweakDBRecord = new() { Value = 87550704395 };
-			TweakDBDescriptionRecord = new() { Value = 138700257142 };
+			TweakDBRecord = 87550704395;
+			TweakDBDescriptionRecord = 138700257142;
 			UsersInPerimeter = new();
 			SecurityAreaType = Enums.ESecurityAreaType.DANGEROUS;
 			EventsFilters = new() { IncomingEventsFilter = Enums.EFilterType.ALLOW_ALL, OutgoingEventsFilter = Enums.EFilterType.ALLOW_ALL };
 			AreaTransitions = new();
 			RuntimeTransitions = new();
 			LastOutput = new() { LastKnownPosition = new(), ObjectOfInterest = new(), WhoBreached = new(), Reporter = new() };
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

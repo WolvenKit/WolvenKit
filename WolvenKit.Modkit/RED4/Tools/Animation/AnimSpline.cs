@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using SharpGLTF.Schema2;
 using WolvenKit.RED4.Types;
 
@@ -9,16 +10,26 @@ namespace WolvenKit.Modkit.RED4.Animation
     using Quat = System.Numerics.Quaternion;
     using Vec3 = System.Numerics.Vector3;
 
-    internal class SPLINE
+    public class CompressedBuffer
     {
-        private const ushort wSignMask = 0x8000;
-        private const ushort componentTypeMask = 0x6000;
-        private const ushort boneIdxMask = 0x1FFF;
-        private const int wSignRightShift = 15;
-        private const int componentRightShift = 13;
-        private const int boneIdxRightShift = 0;
-        public static void AddAnimationSpline(ref ModelRoot model, animAnimationBufferCompressed blob, string animName, Stream defferedBuffer, animAnimation animAnimDes)
+        public static Vec3 TRVector(float x, float y, float z)
         {
+            return new Vec3(x, z, -y);
+        }
+
+        public static Quat RQuat(float x, float y, float z, float w)
+        {
+            return new Quat(x, z, -y, w);
+        }
+
+        public static Vec3 SVector(float x, float y, float z)
+        {
+            return new Vec3(x, z, y);
+        }
+
+        public static void AddAnimation(ref ModelRoot model, animAnimation animAnimDes,bool incRootMotion = true)
+        {
+            var blob = animAnimDes.AnimBuffer.GetValue() as animAnimationBufferCompressed;
             //boneidx time value
             var positions = new Dictionary<ushort, Dictionary<float, Vec3>>();
             var rotations = new Dictionary<ushort, Dictionary<float, Quat>>();
@@ -26,261 +37,148 @@ namespace WolvenKit.Modkit.RED4.Animation
 
             var tracks = new Dictionary<ushort, float>();
 
-            if (animAnimDes.MotionExtraction.Chunk != null)
+            if (animAnimDes.MotionExtraction != null && animAnimDes.MotionExtraction.Chunk != null && incRootMotion)
             {
                 ROOT_MOTION.AddRootMotion(ref positions, ref rotations, animAnimDes);
             }
 
-            var br = new BinaryReader(defferedBuffer);
-            float duration = blob.Duration;
-            uint numFrames = blob.NumFrames;
-            uint numJoints = blob.NumJoints;
-            uint numTracks = blob.NumTracks;
-            uint numExtraJoints = blob.NumExtraJoints;
-            uint numAnimKeys = blob.NumAnimKeys;
-            uint numAnimKeysRaw = blob.NumAnimKeysRaw;
-            uint NumConstAnimKeys = blob.NumConstAnimKeys;
-            uint numConstTrackKeys = blob.NumConstTrackKeys;
-
-            defferedBuffer.Seek(0, SeekOrigin.Begin);
-            for (uint i = 0; i < numAnimKeys; i++)
+            foreach (var key in blob.AnimKeys)
             {
-                var timeNormalized = br.ReadUInt16() / (float)ushort.MaxValue;
-                var bitWiseData = br.ReadUInt16();
-                var wSign = Convert.ToUInt16((bitWiseData & wSignMask) >> wSignRightShift);
-                var component = Convert.ToUInt16((bitWiseData & componentTypeMask) >> componentRightShift);
-                var boneIdx = Convert.ToUInt16((bitWiseData & boneIdxMask) >> boneIdxRightShift);
-
-                var x = ((1f / 65535f) * br.ReadUInt16() * 2) - 1f;
-                var y = ((1f / 65535f) * br.ReadUInt16() * 2) - 1f;
-                var z = ((1f / 65535f) * br.ReadUInt16() * 2) - 1f;
-
-                switch (component)
+                if (key is animKeyPosition p)
                 {
-                    case 0:
-                        if (positions.ContainsKey(boneIdx))
-                        {
-                            positions[boneIdx].Add(timeNormalized * duration, new Vec3(x, z, -y));
-                        }
-                        else
-                        {
-                            var dic = new Dictionary<float, Vec3>
-                            {
-                                { timeNormalized * duration, new Vec3(x, z, -y) }
-                            };
-                            positions.Add(boneIdx, dic);
-                        }
-                        break;
-                    case 1:
-                        var dotPr = (x * x + y * y + z * z);
-                        x = x * Convert.ToSingle(Math.Sqrt(2f - dotPr));
-                        y = y * Convert.ToSingle(Math.Sqrt(2f - dotPr));
-                        z = z * Convert.ToSingle(Math.Sqrt(2f - dotPr));
-                        var w = 1f - dotPr;
-                        if (wSign == 1)
-                        {
-                            w = -w;
-                        }
-
-                        var q = new Quat(x, z, -y, w);
-                        if (rotations.ContainsKey(boneIdx))
-                        {
-                            rotations[boneIdx].Add(timeNormalized * duration, Quat.Normalize(q));
-                        }
-                        else
-                        {
-                            var dic = new Dictionary<float, Quat>
-                            {
-                                { timeNormalized * duration, Quat.Normalize(q) }
-                            };
-                            rotations.Add(boneIdx, dic);
-                        }
-                        break;
-                    case 2:
-                        if (scales.ContainsKey(boneIdx))
-                        {
-                            scales[boneIdx].Add(timeNormalized * duration, new Vec3(x, z, -y));
-                        }
-                        else
-                        {
-                            var dic = new Dictionary<float, Vec3>
-                            {
-                                { timeNormalized * duration, new Vec3(x, z, -y) }
-                            };
-                            scales.Add(boneIdx, dic);
-                        }
-                        break;
-                    default:
-                        break;
+                    if (!positions.ContainsKey(p.Idx))
+                    {
+                        positions[p.Idx] = new Dictionary<float, Vec3>();
+                    }
+                    positions[p.Idx][p.Time] = TRVector(p.Position.X, p.Position.Y, p.Position.Z);
                 }
-            }
-            for (uint i = 0; i < numAnimKeysRaw; i++)
-            {
-                var timeNormalized = br.ReadUInt16() / (float)ushort.MaxValue;
-                var bitWiseData = br.ReadUInt16();
-                var wSign = Convert.ToUInt16((bitWiseData & wSignMask) >> wSignRightShift);
-                var component = Convert.ToUInt16((bitWiseData & componentTypeMask) >> componentRightShift);
-                var boneIdx = Convert.ToUInt16((bitWiseData & boneIdxMask) >> boneIdxRightShift);
-
-                var x = br.ReadSingle();
-                var y = br.ReadSingle();
-                var z = br.ReadSingle();
-
-                switch (component)
+                else if (key is animKeyRotation r)
                 {
-                    case 0:
-                        if (positions.ContainsKey(boneIdx))
-                        {
-                            positions[boneIdx].Add(timeNormalized * duration, new Vec3(x, z, -y));
-                        }
-                        else
-                        {
-                            var dic = new Dictionary<float, Vec3>
-                            {
-                                { timeNormalized * duration, new Vec3(x, z, -y) }
-                            };
-                            positions.Add(boneIdx, dic);
-                        }
-                        break;
-                    case 1:
-                        var dotPr = (x * x + y * y + z * z);
-                        x = x * Convert.ToSingle(Math.Sqrt(2f - dotPr));
-                        y = y * Convert.ToSingle(Math.Sqrt(2f - dotPr));
-                        z = z * Convert.ToSingle(Math.Sqrt(2f - dotPr));
-                        var w = 1f - dotPr;
-                        if (wSign == 1)
-                        {
-                            w = -w;
-                        }
-
-                        var q = new Quat(x, z, -y, w);
-                        if (rotations.ContainsKey(boneIdx))
-                        {
-                            rotations[boneIdx].Add(timeNormalized * duration, Quat.Normalize(q));
-                        }
-                        else
-                        {
-                            var dic = new Dictionary<float, Quat>
-                            {
-                                { timeNormalized * duration, Quat.Normalize(q) }
-                            };
-                            rotations.Add(boneIdx, dic);
-                        }
-                        break;
-                    case 2:
-                        if (scales.ContainsKey(boneIdx))
-                        {
-                            scales[boneIdx].Add(timeNormalized * duration, new Vec3(x, z, -y));
-                        }
-                        else
-                        {
-                            var dic = new Dictionary<float, Vec3>
-                            {
-                                { timeNormalized * duration, new Vec3(x, z, -y) }
-                            };
-                            scales.Add(boneIdx, dic);
-                        }
-                        break;
-                    default:
-                        break;
+                    if (!rotations.ContainsKey(r.Idx))
+                    {
+                        rotations[r.Idx] = new Dictionary<float, Quat>();
+                    }
+                    rotations[r.Idx][r.Time] = RQuat(r.Rotation.I, r.Rotation.J, r.Rotation.K, r.Rotation.R);
+                }
+                else if (key is animKeyScale s)
+                {
+                    if (!scales.ContainsKey(s.Idx))
+                    {
+                        scales[s.Idx] = new Dictionary<float, Vec3>();
+                    }
+                    scales[s.Idx][s.Time] = SVector(s.Scale.X, s.Scale.Y, s.Scale.Z);
                 }
             }
 
-            for (uint i = 0; i < NumConstAnimKeys; i++)
+            foreach (var key in blob.AnimKeysRaw)
             {
-                var bitWiseData = br.ReadUInt16();
-                var timeNormalized = br.ReadUInt16() / (float)ushort.MaxValue; // is it some time normalized or some padding garbage data i have no idea
-                var wSign = Convert.ToUInt16((bitWiseData & wSignMask) >> wSignRightShift);
-                var component = Convert.ToUInt16((bitWiseData & componentTypeMask) >> componentRightShift);
-                var boneIdx = Convert.ToUInt16((bitWiseData & boneIdxMask) >> boneIdxRightShift);
-
-                var x = br.ReadSingle();
-                var y = br.ReadSingle();
-                var z = br.ReadSingle();
-
-                switch (component)
+                if (key is animKeyPosition p)
                 {
-                    case 0:
-                        if (positions.ContainsKey(boneIdx))
-                        {
-                            positions[boneIdx].Add(0f, new Vec3(x, z, -y));
-                        }
-                        else
-                        {
-                            var dic = new Dictionary<float, Vec3>
-                            {
-                                { 0f, new Vec3(x, z, -y) }
-                            };
-                            positions.Add(boneIdx, dic);
-                        }
-                        break;
-                    case 1:
-                        var dotPr = (x * x + y * y + z * z);
-                        x = x * Convert.ToSingle(Math.Sqrt(2f - dotPr));
-                        y = y * Convert.ToSingle(Math.Sqrt(2f - dotPr));
-                        z = z * Convert.ToSingle(Math.Sqrt(2f - dotPr));
-                        var w = 1f - dotPr;
-                        if (wSign == 1)
-                        {
-                            w = -w;
-                        }
-
-                        var q = new Quat(x, z, -y, w);
-                        if (rotations.ContainsKey(boneIdx))
-                        {
-                            rotations[boneIdx].Add(0f, Quat.Normalize(q));
-                        }
-                        else
-                        {
-                            var dic = new Dictionary<float, Quat>
-                            {
-                                { 0f, Quat.Normalize(q) }
-                            };
-                            rotations.Add(boneIdx, dic);
-                        }
-                        break;
-                    case 2:
-                        if (scales.ContainsKey(boneIdx))
-                        {
-                            scales[boneIdx].Add(0f, new Vec3(x, z, -y));
-                        }
-                        else
-                        {
-                            var dic = new Dictionary<float, Vec3>
-                            {
-                                { 0f, new Vec3(x, z, -y) }
-                            };
-                            scales.Add(boneIdx, dic);
-                        }
-                        break;
-                    default:
-                        break;
+                    if (!positions.ContainsKey(p.Idx))
+                    {
+                        positions[p.Idx] = new Dictionary<float, Vec3>();
+                    }
+                    positions[p.Idx][p.Time] = TRVector(p.Position.X, p.Position.Y, p.Position.Z);
+                }
+                else if (key is animKeyRotation r)
+                {
+                    if (!rotations.ContainsKey(r.Idx))
+                    {
+                        rotations[r.Idx] = new Dictionary<float, Quat>();
+                    }
+                    rotations[r.Idx][r.Time] = RQuat(r.Rotation.I, r.Rotation.J, r.Rotation.K, r.Rotation.R);
+                }
+                else if (key is animKeyScale s)
+                {
+                    if (!scales.ContainsKey(s.Idx))
+                    {
+                        scales[s.Idx] = new Dictionary<float, Vec3>();
+                    }
+                    scales[s.Idx][s.Time] = SVector(s.Scale.X, s.Scale.Y, s.Scale.Z);
                 }
             }
-            /*
-            for (UInt32 i = 0; i < numConstTrackKeys; i++)
+
+            foreach (var key in blob.ConstAnimKeys)
             {
-                UInt16 idx = br.ReadUInt16();
-                br.ReadUInt16(); //is it time or some garbage idk
-                float value = br.ReadSingle();
+                // using x.Time here causes some problems - not sure what data it actually is. maybe a hold time?
+                if (key is animKeyPosition p)
+                {
+                    if (!positions.ContainsKey(p.Idx))
+                    {
+                        positions[p.Idx] = new Dictionary<float, Vec3>();
+                    }
+                    positions[p.Idx][0] = TRVector(p.Position.X, p.Position.Y, p.Position.Z);
+                }
+                else if (key is animKeyRotation r)
+                {
+                    if (!rotations.ContainsKey(r.Idx))
+                    {
+                        rotations[r.Idx] = new Dictionary<float, Quat>();
+                    }
+                    rotations[r.Idx][0] = RQuat(r.Rotation.I, r.Rotation.J, r.Rotation.K, r.Rotation.R);
+                }
+                else if (key is animKeyScale s)
+                {
+                    if (!scales.ContainsKey(s.Idx))
+                    {
+                        scales[s.Idx] = new Dictionary<float, Vec3>();
+                    }
+                    scales[s.Idx][0] = SVector(s.Scale.X, s.Scale.Y, s.Scale.Z);
+                }
             }
-            */
-            var anim = model.CreateAnimation(animName);
 
-            for (ushort i = 0; i < numJoints - numExtraJoints; i++)
+            var anim = model.CreateAnimation(animAnimDes.Name);
+            var skin = model.LogicalSkins.FirstOrDefault(_ => _.Name is "Armature");
+
+            if (animAnimDes.AnimationType == Enums.animAnimationType.Additive)
             {
 
-                if (positions.ContainsKey(i))
+                for (ushort i = 0; i < blob.NumJoints - blob.NumExtraJoints; i++)
                 {
-                    anim.CreateTranslationChannel(model.LogicalNodes[i], positions[i]);
+                    var node = skin.GetJoint(i).Joint;
+                    if (positions.ContainsKey(i))
+                    {
+                        foreach (var (t, position) in positions[i])
+                        {
+                            positions[i][t] = node.LocalTransform.Translation + position;
+                        }
+                        anim.CreateTranslationChannel(node, positions[i]);
+                    }
+                    if (rotations.ContainsKey(i))
+                    {
+                        foreach (var (t, rotation) in rotations[i])
+                        {
+                            rotations[i][t] = node.LocalTransform.Rotation * rotation;
+                        }
+                        anim.CreateRotationChannel(node, rotations[i]);
+                    }
+                    if (scales.ContainsKey(i))
+                    {
+                        foreach (var (t, scale) in scales[i])
+                        {
+                            scales[i][t] = node.LocalTransform.Scale + scale;
+                        }
+                        anim.CreateScaleChannel(node, scales[i]);
+                    }
                 }
-                if (rotations.ContainsKey(i))
+            }
+            else
+            {
+                for (ushort i = 0; i < blob.NumJoints - blob.NumExtraJoints; i++)
                 {
-                    anim.CreateRotationChannel(model.LogicalNodes[i], rotations[i]);
-                }
-                if (scales.ContainsKey(i))
-                {
-                    anim.CreateScaleChannel(model.LogicalNodes[i], scales[i]);
+                    var node = skin.GetJoint(i).Joint;
+                    if (positions.ContainsKey(i))
+                    {
+                        anim.CreateTranslationChannel(node, positions[i]);
+                    }
+                    if (rotations.ContainsKey(i))
+                    {
+                        anim.CreateRotationChannel(node, rotations[i]);
+                    }
+                    if (scales.ContainsKey(i))
+                    {
+                        anim.CreateScaleChannel(node, scales[i]);
+                    }
                 }
             }
         }

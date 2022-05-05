@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class GpuWrapApiVertexLayoutDesc : RedBaseClass
 	{
 		[Ordinal(0)] 
@@ -42,6 +41,10 @@ namespace WolvenKit.RED4.Types
 			Elements = new(0);
 			SlotStrides = new(0);
 			Hash = 4294967295;
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

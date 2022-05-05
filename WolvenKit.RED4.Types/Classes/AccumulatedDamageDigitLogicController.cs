@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class AccumulatedDamageDigitLogicController : inkWidgetLogicController
 	{
 		[Ordinal(1)] 
@@ -651,6 +650,10 @@ namespace WolvenKit.RED4.Types
 			AnimStickingDistanceHeightBias = 70.000000F;
 			AnimPositiveOpacity = 1.000000F;
 			AnimNegativeOpacity = 0.800000F;
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

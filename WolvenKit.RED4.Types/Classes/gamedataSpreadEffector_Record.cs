@@ -1,8 +1,13 @@
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class gamedataSpreadEffector_Record : gamedataEffector_Record
 	{
+		public gamedataSpreadEffector_Record()
+		{
+			PostConstruct();
+		}
+
+		partial void PostConstruct();
 	}
 }

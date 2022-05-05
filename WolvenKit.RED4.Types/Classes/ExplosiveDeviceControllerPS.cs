@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class ExplosiveDeviceControllerPS : BasicDistractionDeviceControllerPS
 	{
 		[Ordinal(109)] 
@@ -96,8 +95,8 @@ namespace WolvenKit.RED4.Types
 		public ExplosiveDeviceControllerPS()
 		{
 			DeviceName = "LocKey#42163";
-			TweakDBRecord = new() { Value = 99486442134 };
-			TweakDBDescriptionRecord = new() { Value = 151932573733 };
+			TweakDBRecord = 99486442134;
+			TweakDBDescriptionRecord = 151932573733;
 			ShouldScannerShowStatus = false;
 			ShouldScannerShowNetwork = false;
 			ShouldScannerShowHealth = true;
@@ -105,6 +104,10 @@ namespace WolvenKit.RED4.Types
 			TimeToMeshSwap = 0.100000F;
 			ProvideExplodeAction = true;
 			DoExplosiveEngineerLogic = true;
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

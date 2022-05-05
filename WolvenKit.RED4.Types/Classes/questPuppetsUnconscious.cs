@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class questPuppetsUnconscious : questPuppetsEffector
 	{
 		[Ordinal(0)] 
@@ -16,6 +15,10 @@ namespace WolvenKit.RED4.Types
 		public questPuppetsUnconscious()
 		{
 			SetUnconscious = true;
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

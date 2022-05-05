@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class inkUITransform : RedBaseClass
 	{
 		[Ordinal(0)] 
@@ -42,6 +41,10 @@ namespace WolvenKit.RED4.Types
 			Translation = new();
 			Scale = new() { X = 1.000000F, Y = 1.000000F };
 			Shear = new();
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

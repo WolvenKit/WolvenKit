@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class CodexPopupData : inkGameNotificationData
 	{
 		[Ordinal(7)] 
@@ -12,5 +11,12 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CWeakHandle<gameJournalEntry>>();
 			set => SetPropertyValue<CWeakHandle<gameJournalEntry>>(value);
 		}
+
+		public CodexPopupData()
+		{
+			PostConstruct();
+		}
+
+		partial void PostConstruct();
 	}
 }

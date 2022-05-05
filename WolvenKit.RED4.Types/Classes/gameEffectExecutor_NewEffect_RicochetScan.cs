@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class gameEffectExecutor_NewEffect_RicochetScan : gameEffectExecutor_NewEffect
 	{
 		[Ordinal(5)] 
@@ -33,6 +32,10 @@ namespace WolvenKit.RED4.Types
 		{
 			Box = new();
 			OnlyForPlayer = true;
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

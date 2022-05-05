@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class gameEffectObjectProvider_SweepMelee_Box : gameEffectObjectProvider_SweepOverTime
 	{
 		[Ordinal(2)] 
@@ -52,6 +51,10 @@ namespace WolvenKit.RED4.Types
 			PlayerStaticDetectionConeStartAngle = 5.000000F;
 			PlayerStaticDetectionConeEndAngle = 18.000000F;
 			CheckMeleeInvulnerability = true;
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

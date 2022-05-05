@@ -36,21 +36,9 @@ namespace WolvenKit.RED4.Archive.IO
 
             var dataCollection = GenerateData();
 
-            foreach (var embedded in _file.EmbeddedFiles)
-            {
-                var tuple = ("", (CName)embedded.FileName, (ushort)8);
-                if (!dataCollection.ImportList.Contains(tuple))
-                {
-                    dataCollection.ImportList.Add(tuple);
-                }
-            }
-
             fileHeader.objectsEnd = (uint)BaseStream.Position;
 
-            var combinedList = new List<CName>(dataCollection.StringList);
-            combinedList.AddRange(dataCollection.ImportList.Select(x => x.Item2).ToList());
-
-            var (stringBuffer, stringOffsets) = GenerateStringBuffer(combinedList);
+            var (stringBuffer, stringOffsets) = GenerateStringBuffer(dataCollection.CombinedStringList);
 
             tableHeaders[0] = new CR2WTable()
             {
@@ -104,9 +92,9 @@ namespace WolvenKit.RED4.Archive.IO
                 {
                     var entry = new CR2WImportInfo()
                     {
-                        className = (ushort)dataCollection.StringList.IndexOf(import.Item1),
-                        offset = stringOffsets[import.Item2],
-                        flags = import.Item3
+                        className = (ushort)dataCollection.StringList.IndexOf(import.ClassName),
+                        offset = stringOffsets[import.DepotPath],
+                        flags = import.Flag
                     };
 
                     BaseStream.WriteStruct(entry, crc);
@@ -298,18 +286,46 @@ namespace WolvenKit.RED4.Archive.IO
             if (buffer.Data is Package04 p4)
             {
                 using var ms = new MemoryStream();
-                using var packageWriter = new PackageWriter(ms);
+                using var packageWriter = new PackageWriter(ms) { IsRoot = false };
 
                 packageWriter.WritePackage(p4, _file.RootChunk.GetType());
 
+                buffer.SetBytes(ms.ToArray());
+            }
+
+            if (buffer.Data is CR2WList list)
+            {
+                using var ms = new MemoryStream();
+                using var listWriter = new CR2WListWriter(ms);
+
+                listWriter.WriteList(list, _file.RootChunk);
+                //listWriter.WriteList(list);
+
                 var newData = ms.ToArray();
 
-                /*var oldData = buffer.GetBytes();
-                if (!oldData.SequenceEqual(newData))
-                {
-                    File.WriteAllBytes(@"C:\Dev\C77\Buffer\OldBuffer.bin", oldData);
-                    File.WriteAllBytes(@"C:\Dev\C77\Buffer\NewBuffer.bin", newData);
-                }*/
+                buffer.SetBytes(newData);
+            }
+
+            if (buffer.Data is worldNodeDataBuffer ssb)
+            {
+                using var ms = new MemoryStream();
+                using var transformWriter = new worldNodeDataWriter(ms);
+
+                transformWriter.WriteBuffer(ssb);
+
+                var newData = ms.ToArray();
+
+                buffer.SetBytes(newData);
+            }
+
+            if (buffer.Data is WorldTransformsBuffer wtb)
+            {
+                using var ms = new MemoryStream();
+                using var transformWriter = new WorldTransformsWriter(ms);
+
+                transformWriter.WriteBuffer(wtb);
+
+                var newData = ms.ToArray();
 
                 buffer.SetBytes(newData);
             }
@@ -324,6 +340,11 @@ namespace WolvenKit.RED4.Archive.IO
                 memSize = buffer.MemSize
             };
 
+            if (!IsRoot)
+            {
+                throw new TodoException();
+            }
+
             var compBuf = buffer.GetCompressedBytes();
             writer.Write(compBuf);
 
@@ -337,12 +358,12 @@ namespace WolvenKit.RED4.Archive.IO
 
         #region Embedded
 
-        private CR2WEmbeddedInfo WriteEmbedded(CR2WWriter writer, ICR2WEmbeddedFile embeddedData, IList<(string, CName, ushort)> importsList)
+        private CR2WEmbeddedInfo WriteEmbedded(CR2WWriter writer, ICR2WEmbeddedFile embeddedData, IList<ImportEntry> importsList)
         {
             var importIndex = -1;
             for (var i = 0; i < importsList.Count; i++)
             {
-                if (importsList[i].Item2 == embeddedData.FileName)
+                if (importsList[i].DepotPath == embeddedData.FileName)
                 {
                     importIndex = i + 1;
                     break;
@@ -362,10 +383,10 @@ namespace WolvenKit.RED4.Archive.IO
             };
         }
 
-        private (List<CR2WEmbeddedInfo>, byte[]) GenerateEmbeddedData(IList<(string, CName, ushort)> importsList)
+        private (List<CR2WEmbeddedInfo>, byte[]) GenerateEmbeddedData(IList<ImportEntry> importsList)
         {
             using var ms = new MemoryStream();
-            using var writer = new CR2WWriter(ms);
+            using var writer = new CR2WWriter(ms) { IsRoot = IsRoot };
 
             var embeddedInfoList = new List<CR2WEmbeddedInfo>();
             foreach (var embedded in _file.EmbeddedFiles)
@@ -410,7 +431,8 @@ namespace WolvenKit.RED4.Archive.IO
         private class DataCollection
         {
             public List<CName> StringList { get; set; }
-            public List<(string, CName, ushort)> ImportList { get; set; }
+            public List<ImportEntry> ImportList { get; set; }
+            public List<CName> CombinedStringList { get; set; }
 
             public List<CR2WExportInfo> ChunkInfoList { get; set; }
             public byte[] ChunkData { get; set; }
@@ -424,7 +446,7 @@ namespace WolvenKit.RED4.Archive.IO
             var result = new DataCollection();
 
             using var ms = new MemoryStream();
-            using var file = new CR2WWriter(ms);
+            using var file = new CR2WWriter(ms) { IsRoot = IsRoot };
 
             file._chunkInfos = _chunkInfos;
 
@@ -501,6 +523,27 @@ namespace WolvenKit.RED4.Archive.IO
             result.StringList = file.StringCacheList.ToList();
             result.ImportList = file.ImportCacheList.ToList();
 
+            foreach (var embeddedFile in _file.EmbeddedFiles)
+            {
+                var typeInfo = RedReflection.GetTypeInfo(embeddedFile.Content.GetType());
+                SetParent(_chunkInfos[embeddedFile.Content].Id, maxDepth: typeInfo.ChildLevel);
+
+                var tuple = new ImportEntry("", (CName)embeddedFile.FileName, (ushort)8);
+                if (!result.ImportList.Contains(tuple))
+                {
+                    result.ImportList.Add(tuple);
+                }
+            }
+
+            result.CombinedStringList = new List<CName>(result.StringList);
+            foreach (var importEntry in result.ImportList)
+            {
+                if (!result.CombinedStringList.Contains(importEntry.DepotPath))
+                {
+                    result.CombinedStringList.Add(importEntry.DepotPath);
+                }
+            }
+
             for (var i = 0; i < chunkInfoList.Count; i++)
             {
                 var chunkInfo = chunkInfoList[i];
@@ -511,12 +554,6 @@ namespace WolvenKit.RED4.Archive.IO
             if (_file.RootChunk is worldFoliageBrush)
             {
                 SetParent(0);
-            }
-
-            foreach (var embeddedFile in _file.EmbeddedFiles)
-            {
-                var typeInfo = RedReflection.GetTypeInfo(embeddedFile.Content.GetType());
-                SetParent(_chunkInfos[embeddedFile.Content].Id, maxDepth: typeInfo.ChildLevel);
             }
 
             var ms2 = new MemoryStream();
@@ -541,14 +578,14 @@ namespace WolvenKit.RED4.Archive.IO
             foreach (var kvp in file.ImportRef)
             {
                 file.BaseStream.Position = kvp.Key;
-                var index = (short)(file.ImportCacheList.IndexOf(kvp.Value, _importComparer) + 1);
+                var index = (short)(file.ImportCacheList.IndexOf(kvp.Value) + 1);
                 file.BaseWriter.Write(index);
             }
 
             foreach (var kvp in file.BufferRef)
             {
                 file.BaseStream.Position = kvp.Key;
-                var index = (ushort)(file.BufferCacheList.IndexOf(kvp.Value, ReferenceEqualityComparer.Instance) + 1);
+                var index = (ushort)(file.BufferCacheList.IndexOf(kvp.Value) + 1);
                 file.BaseWriter.Write(index);
             }
             file.BaseStream.Position = pos;

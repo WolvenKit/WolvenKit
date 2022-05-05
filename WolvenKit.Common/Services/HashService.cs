@@ -8,6 +8,7 @@ using WolvenKit.Common.Model;
 using WolvenKit.Core.Compression;
 using WolvenKit.Core.Exceptions;
 using WolvenKit.Core.Extensions;
+using WolvenKit.RED4.Types;
 
 namespace WolvenKit.Common.Services
 {
@@ -17,12 +18,14 @@ namespace WolvenKit.Common.Services
 
         private const string s_used = "WolvenKit.Common.Resources.usedhashes.kark";
         private const string s_unused = "WolvenKit.Common.Resources.unusedhashes.kark";
+        private const string s_noderefs = "WolvenKit.Common.Resources.noderefs.kark";
         private const string s_userHashes = "user_hashes.txt";
         private const string s_missing = "WolvenKit.Common.Resources.missinghashes.txt";
 
         private readonly Dictionary<ulong, SAsciiString> _hashes = new();
         private readonly Dictionary<ulong, SAsciiString> _additionalhashes = new();
         private readonly Dictionary<ulong, SAsciiString> _userHashes = new();
+        private readonly Dictionary<ulong, SAsciiString> _noderefs = new();
 
         private readonly List<ulong> _missing = new();
 
@@ -33,6 +36,8 @@ namespace WolvenKit.Common.Services
         public HashService()
         {
             Load();
+            CName.ResolveHashHandler = Get;
+            NodeRef.ResolveHashHandler = GetNodeRef;
         }
 
         #endregion Constructors
@@ -102,6 +107,16 @@ namespace WolvenKit.Common.Services
             return "";
         }
 
+        public string GetNodeRef(ulong key)
+        {
+            if (_noderefs.ContainsKey(key))
+            {
+                return _noderefs[key].ToString();
+            }
+
+            return Get(key);
+        }
+
         public void AddCustom(ulong hash, string path)
         {
             if (!Contains(hash))
@@ -136,6 +151,7 @@ namespace WolvenKit.Common.Services
         private void Load()
         {
             LoadEmbeddedHashes(s_used, _hashes);
+            LoadEmbeddedHashes(s_noderefs, _noderefs);
 
             LoadAdditional();
 

@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class worldInteriorMapNode : worldNode
 	{
 		[Ordinal(4)] 
@@ -28,5 +27,12 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<SerializationDeferredDataBuffer>();
 			set => SetPropertyValue<SerializationDeferredDataBuffer>(value);
 		}
+
+		public worldInteriorMapNode()
+		{
+			PostConstruct();
+		}
+
+		partial void PostConstruct();
 	}
 }

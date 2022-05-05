@@ -1,4 +1,5 @@
 using System;
+using System.Globalization;
 using System.Windows;
 using System.Windows.Controls;
 using WolvenKit.RED4.Types;
@@ -50,16 +51,16 @@ namespace WolvenKit.Views.Editors
             {
                 return "null";
             }
-            else if (PropertyType.IsAssignableTo(typeof(IRedString)))
+            else if (PropertyType.IsAssignableTo(typeof(BaseStringType)))
             {
-                var value = (IRedString)RedType;
-                if (value.GetValue() == "")
+                var value = (BaseStringType)RedType;
+                if (string.Equals(value, ""))
                 {
                     return "null";
                 }
                 else
                 {
-                    return value.GetValue();
+                    return value;
                 }
             }
             else if (PropertyType.IsAssignableTo(typeof(IRedArray)))
@@ -99,17 +100,8 @@ namespace WolvenKit.Views.Editors
             else if (PropertyType.IsAssignableTo(typeof(IRedInteger)))
             {
                 var value = (IRedInteger)RedType;
-                return (value switch
-                {
-                    CUInt8 uint64 => uint64,
-                    CInt8 uint64 => uint64,
-                    CInt16 uint64 => uint64,
-                    CUInt16 uint64 => uint64,
-                    CInt32 uint64 => uint64,
-                    CUInt32 uint64 => uint64,
-                    CInt64 uint64 => (float)uint64,
-                    _ => throw new ArgumentOutOfRangeException(nameof(value)),
-                }).ToString();
+
+                return value.ToString(CultureInfo.CurrentCulture);
             }
             else if (PropertyType.IsAssignableTo(typeof(FixedPoint)))
             {

@@ -37,5 +37,13 @@ public class DataCollection
         {
             UsedStrings = RawUsedStrings.ToList();
         }
+
+        if (Buffers != null)
+        {
+            foreach (var dataCollection in Buffers)
+            {
+                dataCollection.CleanUp();
+            }
+        }
     }
 }

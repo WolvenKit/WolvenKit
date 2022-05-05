@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class workPauseClip : workIEntry
 	{
 		[Ordinal(2)] 
@@ -36,6 +35,10 @@ namespace WolvenKit.RED4.Types
 			TimeMin = 2.000000F;
 			TimeMax = 5.000000F;
 			BlendOutTime = 0.500000F;
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

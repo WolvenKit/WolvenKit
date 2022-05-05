@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class GOGProfileGameController : gameuiBaseGOGProfileController
 	{
 		[Ordinal(2)] 
@@ -49,6 +48,10 @@ namespace WolvenKit.RED4.Types
 		{
 			RetryButton = new();
 			ParentContainerWidget = new();
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

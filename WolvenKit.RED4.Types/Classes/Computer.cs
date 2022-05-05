@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class Computer : Terminal
 	{
 		[Ordinal(97)] 
@@ -58,6 +57,10 @@ namespace WolvenKit.RED4.Types
 			ControllerTypeName = "ComputerController";
 			BannerUpdateID = new();
 			PlayerControlData = new();
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

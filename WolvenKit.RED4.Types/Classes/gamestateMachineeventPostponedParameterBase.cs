@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class gamestateMachineeventPostponedParameterBase : gamestateMachineeventBaseEvent
 	{
 		[Ordinal(1)] 
@@ -12,5 +11,12 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CEnum<gamestateMachineParameterAspect>>();
 			set => SetPropertyValue<CEnum<gamestateMachineParameterAspect>>(value);
 		}
+
+		public gamestateMachineeventPostponedParameterBase()
+		{
+			PostConstruct();
+		}
+
+		partial void PostConstruct();
 	}
 }

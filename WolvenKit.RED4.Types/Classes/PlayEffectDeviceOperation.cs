@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class PlayEffectDeviceOperation : DeviceOperationBase
 	{
 		[Ordinal(5)] 
@@ -27,6 +26,10 @@ namespace WolvenKit.RED4.Types
 			ToggleOperations = new();
 			VFXs = new();
 			FxInstances = new();
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

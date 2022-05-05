@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class FuseBoxControllerPS : MasterControllerPS
 	{
 		[Ordinal(105)] 
@@ -32,8 +31,12 @@ namespace WolvenKit.RED4.Types
 		public FuseBoxControllerPS()
 		{
 			DeviceName = "LocKey#2013";
-			TweakDBRecord = new() { Value = 68366184403 };
-			TweakDBDescriptionRecord = new() { Value = 118337989519 };
+			TweakDBRecord = 68366184403;
+			TweakDBDescriptionRecord = 118337989519;
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

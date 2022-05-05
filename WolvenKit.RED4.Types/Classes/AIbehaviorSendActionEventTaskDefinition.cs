@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class AIbehaviorSendActionEventTaskDefinition : AIbehaviorTaskDefinition
 	{
 		[Ordinal(1)] 
@@ -12,5 +11,12 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CHandle<gameActionEvent>>();
 			set => SetPropertyValue<CHandle<gameActionEvent>>(value);
 		}
+
+		public AIbehaviorSendActionEventTaskDefinition()
+		{
+			PostConstruct();
+		}
+
+		partial void PostConstruct();
 	}
 }

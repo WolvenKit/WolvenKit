@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class ComputerControllerPS : TerminalControllerPS
 	{
 		[Ordinal(114)] 
@@ -72,14 +71,18 @@ namespace WolvenKit.RED4.Types
 		public ComputerControllerPS()
 		{
 			DeviceName = "LocKey#48";
-			TweakDBRecord = new() { Value = 72666897332 };
-			TweakDBDescriptionRecord = new() { Value = 122573441327 };
+			TweakDBRecord = 72666897332;
+			TweakDBDescriptionRecord = 122573441327;
 			HasUICameraZoom = true;
 			ComputerSetup = new() { MailsMenu = true, FilesMenu = true, SystemMenu = true, InternetMenu = true, MailsStructure = new(), FilesStructure = new(), NewsFeed = new(), NewsFeedInterval = 5.000000F, InternetSubnet = new() };
 			QuickHackSetup = new();
 			OpenedMailAdress = new() { FolderID = -1, DocumentID = -1 };
 			OpenedFileAdress = new() { FolderID = -1, DocumentID = -1 };
 			IsInSleepMode = true;
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

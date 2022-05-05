@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class questLookAtDrivenTurnsNode : questSignalStoppingNodeDefinition
 	{
 		[Ordinal(2)] 
@@ -35,6 +34,10 @@ namespace WolvenKit.RED4.Types
 			Id = 65535;
 			PuppetRef = new() { Names = new() };
 			CanLookAtDrivenTurnsInterruptGesture = true;
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

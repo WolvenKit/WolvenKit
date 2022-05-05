@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class ChestPressControllerPS : ScriptableDeviceComponentPS
 	{
 		[Ordinal(104)] 
@@ -32,8 +31,12 @@ namespace WolvenKit.RED4.Types
 		public ChestPressControllerPS()
 		{
 			DeviceName = "LocKey#601";
-			TweakDBRecord = new() { Value = 80274358199 };
-			TweakDBDescriptionRecord = new() { Value = 129856552116 };
+			TweakDBRecord = 80274358199;
+			TweakDBDescriptionRecord = 129856552116;
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

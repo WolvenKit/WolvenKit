@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class HACK_AREA_Settings : IAreaSettings
 	{
 		[Ordinal(2)] 
@@ -95,6 +94,10 @@ namespace WolvenKit.RED4.Types
 			SkyScale = 1.000000F;
 			EmissiveScale = 1.000000F;
 			AlbedoMetalness = 1.000000F;
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

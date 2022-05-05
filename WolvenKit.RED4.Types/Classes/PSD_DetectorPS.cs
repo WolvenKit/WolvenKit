@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class PSD_DetectorPS : gameDeviceComponentPS
 	{
 		[Ordinal(13)] 
@@ -49,6 +48,10 @@ namespace WolvenKit.RED4.Types
 		{
 			LastEntityID = new();
 			LastPersistentID = new();
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

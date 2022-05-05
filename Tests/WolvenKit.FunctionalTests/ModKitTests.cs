@@ -14,7 +14,7 @@ using WolvenKit.Common.Model.Arguments;
 using WolvenKit.Core.Extensions;
 using WolvenKit.FunctionalTests.Model;
 using WolvenKit.Modkit.RED4;
-using WolvenKit.RED4.CR2W.Archive;
+using WolvenKit.RED4.Archive;
 
 namespace WolvenKit.FunctionalTests
 {
@@ -290,16 +290,39 @@ namespace WolvenKit.FunctionalTests
             Assert.Fail(msg);
         }
 
+        //public enum ECookedFileFormat
+        //{
+        //    wem,
+        //    mesh,
+        //    xbm,
+        //    csv,
+        //    //app,
+        //    //ent,
+        //    //json,
+        //    mlmask,
+        //    cubemap,
+        //    envprobe,
+        //    texarray,
+        //    morphtarget,
+        //    fnt,
+        //    opusinfo,
+        //    anims
+        //}
+
+
         [TestMethod]
-        //[DataRow(ECookedFileFormat.csv)]
-        //[DataRow(ECookedFileFormat.cubemap)]
-        //[DataRow(ECookedFileFormat.envprobe)]
+        [DataRow(ECookedFileFormat.wem)]
         [DataRow(ECookedFileFormat.mesh)]
-        //[DataRow(ECookedFileFormat.mlmask)]
-        //// [DataRow(ECookedFileFormat.morphtarget)]
-        //[DataRow(ECookedFileFormat.texarray)]
-        //[DataRow(ECookedFileFormat.wem)]
-        //[DataRow(ECookedFileFormat.xbm)]
+        [DataRow(ECookedFileFormat.xbm)]
+        [DataRow(ECookedFileFormat.csv)]
+        [DataRow(ECookedFileFormat.mlmask)]
+        [DataRow(ECookedFileFormat.cubemap)]
+        [DataRow(ECookedFileFormat.envprobe)]
+        [DataRow(ECookedFileFormat.texarray)]
+        [DataRow(ECookedFileFormat.morphtarget)]
+        [DataRow(ECookedFileFormat.fnt)]
+        [DataRow(ECookedFileFormat.opusinfo)]
+        [DataRow(ECookedFileFormat.anims)]
         public void Test_Uncook(ECookedFileFormat extension)
         {
             ArgumentNullException.ThrowIfNull(s_config);
@@ -308,7 +331,7 @@ namespace WolvenKit.FunctionalTests
             var ext = $".{extension.ToString()}";
             var infiles = s_groupedFiles[ext].ToList();
 
-            var modtools = _host.Services.GetRequiredService<ModTools>();
+            var modtools = _host.Services.GetRequiredService<IModTools>();
             var resultDir = new DirectoryInfo(Path.Combine(Environment.CurrentDirectory, s_testResultsDirectory, "temp"));
             if (!resultDir.Exists)
             {
@@ -331,9 +354,10 @@ namespace WolvenKit.FunctionalTests
             var uncookfails = new List<FileEntry>();
 
             // random tests
-            var random = new Random();
-            var limit = Math.Min(int.Parse(s_config.GetSection(s_LIMIT).Value), infiles.Count);
-            var filesToTest = infiles.OrderBy(a => random.Next()).Take(limit).ToList();
+            //var random = new Random();
+            //var limit = Math.Min(int.Parse(s_config.GetSection(s_LIMIT).Value), infiles.Count);
+            //var filesToTest = infiles.OrderBy(a => random.Next()).Take(limit).ToList();
+            var filesToTest = infiles.ToList();
 
             Parallel.ForEach(filesToTest, fileEntry =>
             //foreach (var fileEntry in filesToTest)
@@ -365,7 +389,8 @@ namespace WolvenKit.FunctionalTests
                 }
             }
 
-            Assert.AreEqual(limit, limit - uncookfails.Count);
+            Assert.AreEqual(filesToTest.Count, filesToTest.Count - uncookfails.Count);
+            //Assert.AreEqual(limit, limit - uncookfails.Count);
         }
 
     }

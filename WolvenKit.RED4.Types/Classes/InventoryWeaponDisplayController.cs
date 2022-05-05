@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class InventoryWeaponDisplayController : InventoryItemDisplayController
 	{
 		[Ordinal(90)] 
@@ -88,6 +87,10 @@ namespace WolvenKit.RED4.Types
 			SilencerIcon = new();
 			ScopeIcon = new();
 			WeaponAttachmentsDisplay = new();
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

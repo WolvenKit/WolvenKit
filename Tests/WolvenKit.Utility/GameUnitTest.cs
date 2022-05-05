@@ -8,13 +8,16 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using ProtoBuf.Meta;
 using Serilog;
+using Splat;
 using WolvenKit.Common;
 using WolvenKit.Common.Interfaces;
 using WolvenKit.Common.Services;
 using WolvenKit.Core.Compression;
+using WolvenKit.Core.Interfaces;
 using WolvenKit.Core.Services;
 using WolvenKit.Modkit.RED4;
 using WolvenKit.Modkit.RED4.Tools;
+using WolvenKit.RED4.Archive;
 using WolvenKit.RED4.CR2W;
 using WolvenKit.RED4.CR2W.Archive;
 
@@ -37,6 +40,7 @@ namespace WolvenKit.Utility
                         .AddScoped<ILoggerService, SerilogWrapper>()
                         .AddScoped<IProgressService<double>, ProgressService<double>>()
                         .AddSingleton<IHashService, HashService>()
+                        .AddSingleton<ITweakDBService, TweakDBService>()
 
                         .AddScoped<Red4ParserService>()
                         .AddScoped<MeshTools>()
@@ -117,7 +121,9 @@ namespace WolvenKit.Utility
             RuntimeTypeModel.Default[typeof(IGameArchive)].AddSubType(20, typeof(Archive));
 
 
-            //var hashService = _host.Services.GetRequiredService<IHashService>();
+            Locator.CurrentMutable.RegisterConstant(new TweakDBService(), typeof(ITweakDBService));
+            var tweakService = _host.Services.GetRequiredService<ITweakDBService>();
+            tweakService.LoadDB(Path.Combine(gameDirectory.FullName, "r6", "cache", "tweakdb.bin"));
             s_bm = _host.Services.GetRequiredService<IArchiveManager>();
 
             var archivedir = new DirectoryInfo(Path.Combine(gameDirectory.FullName, "archive", "pc", "content"));

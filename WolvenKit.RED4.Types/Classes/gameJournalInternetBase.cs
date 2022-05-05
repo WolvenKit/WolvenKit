@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class gameJournalInternetBase : IScriptable
 	{
 		[Ordinal(0)] 
@@ -36,5 +35,12 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CColor>();
 			set => SetPropertyValue<CColor>(value);
 		}
+
+		public gameJournalInternetBase()
+		{
+			PostConstruct();
+		}
+
+		partial void PostConstruct();
 	}
 }

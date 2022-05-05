@@ -2,8 +2,8 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	[REDClass(SerializeDefault = true)]
+	[RED("Color")]
 	public partial class CColor : RedBaseClass
 	{
 		[Ordinal(0)] 
@@ -37,5 +37,12 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CUInt8>();
 			set => SetPropertyValue<CUInt8>(value);
 		}
+
+		public CColor()
+		{
+			PostConstruct();
+		}
+
+		partial void PostConstruct();
 	}
 }

@@ -1,8 +1,13 @@
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class MeleeLookAtEvents : LookAtPresetMeleeBaseEvents
 	{
+		public MeleeLookAtEvents()
+		{
+			PostConstruct();
+		}
+
+		partial void PostConstruct();
 	}
 }

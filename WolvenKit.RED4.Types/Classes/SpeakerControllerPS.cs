@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class SpeakerControllerPS : ScriptableDeviceComponentPS
 	{
 		[Ordinal(104)] 
@@ -32,9 +31,13 @@ namespace WolvenKit.RED4.Types
 		public SpeakerControllerPS()
 		{
 			DeviceName = "LocKey#166";
-			TweakDBRecord = new() { Value = 67691775111 };
-			TweakDBDescriptionRecord = new() { Value = 118735618267 };
+			TweakDBRecord = 67691775111;
+			TweakDBDescriptionRecord = 118735618267;
 			SpeakerSetup = new() { Range = 10.000000F, GlitchSFX = "dev_radio_ditraction_glitching" };
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

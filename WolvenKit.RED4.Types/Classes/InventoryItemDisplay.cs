@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class InventoryItemDisplay : BaseButtonView
 	{
 		[Ordinal(2)] 
@@ -176,6 +175,10 @@ namespace WolvenKit.RED4.Types
 			AttachementsDisplay = new();
 			SmallSize = new();
 			BigSize = new();
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

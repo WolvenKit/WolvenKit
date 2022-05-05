@@ -6,7 +6,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Dasync.Collections;
 using WolvenKit.Common.Extensions;
-using WolvenKit.RED4.CR2W.Archive;
+using WolvenKit.RED4.Archive;
 
 namespace WolvenKit.Modkit.RED4
 {
@@ -58,8 +58,7 @@ namespace WolvenKit.Modkit.RED4
                 return;
             }
 
-            using var fs = new FileStream(ar.ArchiveAbsolutePath, FileMode.Open, FileAccess.ReadWrite, FileShare.ReadWrite);
-            using var mmf = MemoryMappedFile.CreateFromFile(fs, null, 0, MemoryMappedFileAccess.ReadWrite, HandleInheritability.None, false);
+            using var mmf = ar.GetMemoryMappedFile();
 
             var progress = 0;
 
@@ -136,8 +135,7 @@ namespace WolvenKit.Modkit.RED4
             var finalMatchesList = finalmatches.ToList();
             _loggerService.Info($"Found {finalMatchesList.Count} bundle entries to extract.");
 
-            await using var fs = new FileStream(ar.ArchiveAbsolutePath, FileMode.Open, FileAccess.ReadWrite, FileShare.ReadWrite);
-            using var mmf = MemoryMappedFile.CreateFromFile(fs, null, 0, MemoryMappedFileAccess.ReadWrite, HandleInheritability.None, false);
+            using var mmf = ar.GetMemoryMappedFile();
 
             //Thread.Sleep(1000);
             var progress = 0;

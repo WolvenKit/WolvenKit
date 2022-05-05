@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class DisplayGlassControllerPS : ScriptableDeviceComponentPS
 	{
 		[Ordinal(104)] 
@@ -40,8 +39,12 @@ namespace WolvenKit.RED4.Types
 		public DisplayGlassControllerPS()
 		{
 			DeviceName = "LocKey#2069";
-			TweakDBRecord = new() { Value = 86545678090 };
-			TweakDBDescriptionRecord = new() { Value = 137703617399 };
+			TweakDBRecord = 86545678090;
+			TweakDBDescriptionRecord = 137703617399;
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

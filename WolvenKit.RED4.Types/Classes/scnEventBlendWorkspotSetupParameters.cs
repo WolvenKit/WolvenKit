@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class scnEventBlendWorkspotSetupParameters : ISerializable
 	{
 		[Ordinal(0)] 
@@ -52,6 +51,10 @@ namespace WolvenKit.RED4.Types
 			IdleOnlyMode = true;
 			WorkExcludedGestures = new();
 			ItemOverride = new() { PropOverrides = new(), ItemOverrides = new() };
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class SpeakerSetup : RedBaseClass
 	{
 		[Ordinal(0)] 
@@ -49,6 +48,10 @@ namespace WolvenKit.RED4.Types
 		{
 			Range = 10.000000F;
 			GlitchSFX = "dev_radio_ditraction_glitching";
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

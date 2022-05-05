@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class CameraAreaSettings : IAreaSettings
 	{
 		[Ordinal(2)] 
@@ -61,6 +60,10 @@ namespace WolvenKit.RED4.Types
 			ISO = 100;
 			ShutterTime = 125.000000F;
 			FStop = 8.000000F;
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

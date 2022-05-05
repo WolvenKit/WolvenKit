@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class animAnimNode_RotateBone : animAnimNode_Base
 	{
 		[Ordinal(11)] 
@@ -130,6 +129,10 @@ namespace WolvenKit.RED4.Types
 			MinAngle = -90.000000F;
 			MaxAngle = 90.000000F;
 			ResetOnActivation = true;
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

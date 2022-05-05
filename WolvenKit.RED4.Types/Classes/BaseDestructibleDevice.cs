@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class BaseDestructibleDevice : Device
 	{
 		[Ordinal(84)] 
@@ -34,6 +33,10 @@ namespace WolvenKit.RED4.Types
 			ControllerTypeName = "BaseDestructibleController";
 			MinTime = 5.000000F;
 			MaxTime = 10.000000F;
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

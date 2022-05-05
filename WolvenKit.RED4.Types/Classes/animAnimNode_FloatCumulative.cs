@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class animAnimNode_FloatCumulative : animAnimNode_FloatValue
 	{
 		[Ordinal(11)] 
@@ -113,6 +112,10 @@ namespace WolvenKit.RED4.Types
 			Override = new();
 			CurValue = new();
 			Normalize180Input = new();
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

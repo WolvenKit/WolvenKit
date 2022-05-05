@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class CyberwareMainGameController : gameuiWidgetGameController
 	{
 		[Ordinal(2)] 
@@ -128,6 +127,10 @@ namespace WolvenKit.RED4.Types
 			TooltipsManagerRef = new();
 			ToolTipOffset = new();
 			RawStatsData = new();
+
+			PostConstruct();
 		}
+
+		partial void PostConstruct();
 	}
 }

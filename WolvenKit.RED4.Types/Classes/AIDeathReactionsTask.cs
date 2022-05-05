@@ -2,7 +2,6 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	[REDMeta]
 	public partial class AIDeathReactionsTask : AIbehaviortaskScript
 	{
 		[Ordinal(0)] 
@@ -52,5 +51,12 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CInt32>();
 			set => SetPropertyValue<CInt32>(value);
 		}
+
+		public AIDeathReactionsTask()
+		{
+			PostConstruct();
+		}
+
+		partial void PostConstruct();
 	}
 }
