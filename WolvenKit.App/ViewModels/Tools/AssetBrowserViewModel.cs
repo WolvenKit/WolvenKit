@@ -393,7 +393,7 @@ namespace WolvenKit.ViewModels.Tools
 
         private void MoveToFolder(RedDirectoryViewModel dir) => LeftSelectedItem = dir.GetModel();
 
-        private void AddFile(RedFileViewModel item) => Task.Run(() => _gameController.GetController().AddToMod(item.GetGameFile().Key));
+        private void AddFile(RedFileViewModel item) => Task.Run(() => _gameController.GetController().AddToMod(item.GetGameFile()));
 
         private void AddFile(ulong hash) => Task.Run(() => _gameController.GetController().AddToMod(hash));
 
