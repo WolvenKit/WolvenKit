@@ -306,7 +306,8 @@ namespace WolvenKit.ViewModels.Documents
                         if (entity != null)
                         {
                             entity.Name = "Entity";
-                            var f = WolvenKit.ViewModels.Shell.ChunkViewModel.FixRotation;
+                            //var f = Shell.ChunkViewModel.FixRotation;
+
                             var q = new System.Numerics.Quaternion()
                             {
                                 W = transforms[0].Orientation.R,
@@ -315,7 +316,7 @@ namespace WolvenKit.ViewModels.Documents
                                 Z = transforms[0].Orientation.K
                             };
 
-                            q = f(q);
+                            q = Shell.ChunkViewModel.FixRotation(q);
                             var qq = new System.Windows.Media.Media3D.Quaternion(q.X, q.Y, q.Z, q.W);
 
                             var matrix = new Matrix3D();

@@ -34,7 +34,7 @@ namespace WolvenKit.ViewModels.Shell
             return new Vec4(cX, cY, cZ, cW);
         }
 
-        public (List<Vec4>, List<Quat>, List<string>) GetPosRotApp(List<Prop> props)
+        public (List<Vec4>, List<Quat>, List<string>) GetPosRotApp(List<Prop> props, int i)
         {
             var poslist = new List<Vec4>();
             var rotlist = new List<Quat>();
@@ -47,7 +47,7 @@ namespace WolvenKit.ViewModels.Shell
                 {
                     X = float.Parse(posandrot.x),
                     Y = float.Parse(posandrot.y),
-                    Z = float.Parse(posandrot.z),
+                    Z = float.Parse(posandrot.z) + (i * 10),
                     W = float.Parse(posandrot.w)
                 };
                 poslist.Add(v);
@@ -56,7 +56,7 @@ namespace WolvenKit.ViewModels.Shell
                     (float)(Math.PI / 180) * float.Parse(posandrot.yaw),
                     (float)(Math.PI / 180) * float.Parse(posandrot.pitch),
                     (float)(Math.PI / 180) * float.Parse(posandrot.roll));
-                q = FixRotation(q);
+                q = FixRotation(q, i);
 
                 rotlist.Add(q);
 
@@ -114,7 +114,7 @@ namespace WolvenKit.ViewModels.Shell
             return w;
         }
 
-        public static Quat FixRotation(Quat q)
+        public static Quat FixRotation(Quat q, int i = 0)
         {
             var mq = Mat4.CreateFromQuaternion(q);
 
@@ -125,17 +125,37 @@ namespace WolvenKit.ViewModels.Shell
             rbcm.M33 = 0;
             Mat4.Invert(rbcm, out var irbcm);
 
-            //var blipx = Mat4.CreateRotationX((float)Math.PI / 2);
-            //Mat4.Invert(blipx, out var iblipx);
-            var blipy = Mat4.CreateRotationY((float)Math.PI * 2 / 2);
-            Mat4.Invert(blipy, out var iblipy);
-            //var blipz = Mat4.CreateRotationY((float)Math.PI * 2 / 2);
-            //Mat4.Invert(blipz, out var iblipz);
-            //rbcm = irbcm * iblipy * iblipz * mq * blipz * blipy * rbcm;
 
-            mq = irbcm * iblipy * mq * blipy * rbcm;
+            var j = i < 4 ? 0 : 1;
+            var blipx = Mat4.CreateRotationX((float)Math.PI * 1 / 2);
+            Mat4.Invert(blipx, out var iblipx);
+            //in theory those two should be the same right ?!?!?!!!
+
+            //from here there's 4 cardinal directions and either point up or down
+            //so ... 8
+
+            //negative rotation on the X axis gives 45 degrees tilted mess
+
+            //x:1, y:0 z:2 and y:2 z:0 top titled
+            //x:1, y:0 z:0 and y:2 z:2 front tilted
+            //x:1, y:1 z:1 and y:-1 z:-1 top tilted
+            //x:1 z:1 top tilted
+            //x:1 z:1 front tilted
+
+            //well ... that wasn't it ...
+
+            var blipy = Mat4.CreateRotationY((float)Math.PI * j / 2);//0 et 2
+            Mat4.Invert(blipy, out var iblipy);
+            var blipz = Mat4.CreateRotationY((float)Math.PI * i / 2);//0 et 2
+            Mat4.Invert(blipz, out var iblipz);
+
+            mq = iblipx * iblipy * iblipz * mq * blipz * blipy * blipx;
+            //mq = iblipx * iblipy * mq * blipy * blipx;
+            //mq = rbcm * mq * irbcm;
 
             var q9 = Quat.CreateFromRotationMatrix(mq);
+
+            //q9 = Quat.Normalize(q9);
 
             //throw new Exception("boop");
             //(q.Z, q.Y) = (q.Y, q.Z);
@@ -260,26 +280,31 @@ namespace WolvenKit.ViewModels.Shell
         }
         public void Add00(List<Prop> props, string tr)
         {
-            var (poslist, rotlist, applist) = GetPosRotApp(props);
-            var center = GetCenter(poslist);
-
-            poslist = UpdateCoords(poslist, center);
-
-            for (var i = 0; i < props.Count; i++)
+            for (var j = 0; j < 8; j++)
             {
-                var line = props[i];
-                var current = RedJsonSerializer.Deserialize<worldNodeData>(tr);
+                var (poslist, rotlist, applist) = GetPosRotApp(props, j);
+                var center = GetCenter(poslist);
 
-                var scala = line.scale == "nil" ? null
-                    : RedJsonSerializer.Deserialize<Vec3S>(PutQuotes(line.scale));
-                if (scala is not null)
+                center.Z -= j * 10;
+
+                poslist = UpdateCoords(poslist, center);
+
+                for (var i = 0; i < props.Count; i++)
                 {
-                    current.Scale.X = float.Parse(scala.x) / 100;
-                    current.Scale.Y = float.Parse(scala.y) / 100;
-                    current.Scale.Z = float.Parse(scala.z) / 100;
-                }
+                    var line = props[i];
+                    var current = RedJsonSerializer.Deserialize<worldNodeData>(tr);
 
-                AddToData(current, line.template_path, poslist[i], rotlist[i], applist[i]);
+                    var scala = line.scale == "nil" ? null
+                        : RedJsonSerializer.Deserialize<Vec3S>(PutQuotes(line.scale));
+                    if (scala is not null)
+                    {
+                        current.Scale.X = float.Parse(scala.x) / 100;
+                        current.Scale.Y = float.Parse(scala.y) / 100;
+                        current.Scale.Z = float.Parse(scala.z) / 100;
+                    }
+
+                    AddToData(current, line.template_path, poslist[i], rotlist[i], applist[i]);
+                }
             }
         }
 
