@@ -491,7 +491,7 @@ namespace WolvenKit.Functionality.Controllers
             }
         }
 
-        private void AddToMod(IGameFile file)
+        public void AddToMod(IGameFile file)
         {
             var project = _projectManager.ActiveProject;
             switch (project.GameType)
