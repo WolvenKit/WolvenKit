@@ -1,6 +1,7 @@
 using System;
 using System.IO;
 using System.Threading.Tasks;
+using WolvenKit.Core.Interfaces;
 using WolvenKit.Functionality.Services;
 using WolvenKit.Functionality.WKitGlobal;
 
@@ -10,6 +11,7 @@ namespace WolvenKit.Functionality.Controllers
     {
         #region Methods
         public void AddToMod(ulong hash);
+        public void AddToMod(IGameFile file);
 
         public static string GetManagerPath(EManagerType type)
         {
