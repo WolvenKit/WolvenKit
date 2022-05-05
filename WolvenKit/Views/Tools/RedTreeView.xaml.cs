@@ -22,6 +22,7 @@ using WolvenKit.Common.Conversion;
 using WolvenKit.Common.Services;
 using WolvenKit.RED4.Types;
 using WolvenKit.ViewModels.Shell;
+using WolvenKit.ViewModels.Documents;
 
 namespace WolvenKit.Views.Tools
 {
@@ -56,35 +57,57 @@ namespace WolvenKit.Views.Tools
 
         public object SelectedItems { get; set; }
 
-/*
+        /*
 
-        //
-        // Summary:
-        //     Identifies the Syncfusion.UI.Xaml.TreeView.SfTreeView.SelectedItems dependency
-        //     property.
-        public static readonly DependencyProperty SelectedItemsProperty =
-            DependencyProperty.Register(nameof(SelectedItems), typeof(ObservableCollection<object>), typeof(RedTreeView));
-        //    , new PropertyMetadata(null, delegate (DependencyObject sender, DependencyPropertyChangedEventArgs args) {(sender as RedTreeView).OnPropertyChanged(args); }));
+                //
+                // Summary:
+                //     Identifies the Syncfusion.UI.Xaml.TreeView.SfTreeView.SelectedItems dependency
+                //     property.
+                public static readonly DependencyProperty SelectedItemsProperty =
+                    DependencyProperty.Register(nameof(SelectedItems), typeof(ObservableCollection<object>), typeof(RedTreeView));
+                //    , new PropertyMetadata(null, delegate (DependencyObject sender, DependencyPropertyChangedEventArgs args) {(sender as RedTreeView).OnPropertyChanged(args); }));
 
-        //
-        // Summary:
-        //     Gets or sets the selected items for selection.
-        //
-        // Value:
-        //     The collection of object that contains data item that are selected.
-        public ObservableCollection<object> SelectedItems
-        {
-            get { return (ObservableCollection<object>)GetValue(SelectedItemsProperty); }
-            set { SetValue(SelectedItemsProperty, value); }
-        }
+                //
+                // Summary:
+                //     Gets or sets the selected items for selection.
+                //
+                // Value:
+                //     The collection of object that contains data item that are selected.
+                public ObservableCollection<object> SelectedItems
+                {
+                    get { return (ObservableCollection<object>)GetValue(SelectedItemsProperty); }
+                    set { SetValue(SelectedItemsProperty, value); }
+                }
 
 
-*/
+        */
 
         private void OnSelectionChanged(object sender, Syncfusion.UI.Xaml.TreeView.ItemSelectionChangedEventArgs e)
         {
             //Locator.Current.GetService<ILoggerService>().Success($"Selected item : {SelectedItems}");
 
+        }
+
+        public void OnCollapsed(object sender, Syncfusion.UI.Xaml.TreeView.NodeExpandedCollapsedEventArgs e)
+        {
+            if (e.Node.Level == 0 &&
+                e.Node.Content is ChunkViewModel cvm &&
+                cvm.ResolvedData is worldStreamingSector)
+            {
+                var test = Locator.Current.GetService<AppViewModel>();
+                var tt = Locator.Current.GetService<AppViewModel>();
+
+                if (tt.ActiveDocument is RedDocumentViewModel rr &&
+                    rr.SelectedTabItemViewModel is RDTDataViewModel rdtd)
+                {
+                    var chunk = rdtd.Chunks.First();
+                    try
+                    {
+                        chunk.Refresh();
+                    }
+                    catch { }
+                }
+            }
         }
 
 

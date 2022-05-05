@@ -1,16 +1,46 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.ComponentModel;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Reactive.Linq;
+using System.Runtime.Serialization;
+using System.Windows.Forms;
+using System.Windows.Input;
+using DynamicData;
+using DynamicData.Binding;
+using ReactiveUI;
+using ReactiveUI.Fody.Helpers;
+using Splat;
+using WolvenKit.Common;
+using WolvenKit.Common.Conversion;
+using WolvenKit.Common.Services;
+using WolvenKit.Functionality.Commands;
+using WolvenKit.Functionality.Controllers;
+using WolvenKit.Functionality.Services;
+using WolvenKit.Models;
+using WolvenKit.RED4;
 using WolvenKit.RED4.Archive.Buffer;
+using WolvenKit.RED4.Archive.CR2W;
 using WolvenKit.RED4.CR2W.JSON;
 using WolvenKit.RED4.Types;
+using WolvenKit.ViewModels.Dialogs;
+using WolvenKit.ViewModels.Documents;
+using WolvenKit.RED4.Archive.IO;
+using static WolvenKit.RED4.Types.RedReflection;
+using System.Text;
+using WolvenKit.RED4.IO;
+using WolvenKit.RED4.Types.Exceptions;
 
 using Vec3 = System.Numerics.Vector3;
 using Vec4 = System.Numerics.Vector4;
 using Quat = System.Numerics.Quaternion;
 using Mat4 = System.Numerics.Matrix4x4;
+using WolvenKit.RED4.Archive;
+using WolvenKit.RED4.CR2W;
 
 namespace WolvenKit.ViewModels.Shell
 {
@@ -114,6 +144,68 @@ namespace WolvenKit.ViewModels.Shell
             return w;
         }
 
+        public ChunkViewModel GetParent() => Parent;
+
+        public void Refresh()
+        {
+            var currentfile = new FileModel(Tab.File.FilePath,
+                Locator.Current.GetService<AppViewModel>().ActiveProject);
+            var asm = typeof(AppViewModel).Assembly;
+            var types = Tab.File.TabItemViewModels
+                .Where(_ => _.GetType().Name != "RDTDataViewModel")
+                .Select(_ => _.GetType().FullName).ToList();
+            types.Add(Tab.File.TabItemViewModels
+                .Where(_ => _.GetType().Name == "RDTDataViewModel")
+                .Select(_ => _.GetType().FullName));
+
+            Tab.File.TabItemViewModels
+                .RemoveMany(Tab.File.TabItemViewModels.AsEnumerable());
+            /*
+                        var redfile = WolvenKit.Modkit.RED4.ModTools.
+                            FindRedFile(currentfile.RelativePath, currentfile.Project.RawDirectory,
+                            ERedExtension.streamingsector.ToString());*/
+
+
+            using (var stream = new FileStream(currentfile.FullName, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
+            {
+                using var reader = new BinaryReader(stream);
+                var cr2wFile = Locator.Current.GetService<Red4ParserService>()
+                    .ReadRed4File(reader);
+                cr2wFile.MetaData.FileName = currentfile.FullName;
+
+
+
+                var cls = new worldStreamingSector();
+                if (Parent is not null)
+                {
+                    if (Parent.Data is worldStreamingSector wss1)
+                    {
+                        cls = wss1;
+                    }
+                    else if (Parent.Parent is not null && Parent.Parent.Data is worldStreamingSector wss2)
+                    {
+                        cls = wss2;
+                    }
+                }
+                else if (cr2wFile.RootChunk is worldStreamingSector wss3)
+                {
+                    cls = wss3;
+                }
+
+                if (cls is not null)
+                {
+                    foreach (var type in types)
+                    {
+                        var t = asm.GetType(type);
+                        var instance = System.Activator.CreateInstance(t, cls, Tab.File)
+                            as WolvenKit.ViewModels.Documents.RedDocumentTabViewModel;
+
+                        Tab.File.TabItemViewModels.Add(instance);
+                    }
+                }
+            }
+        }
+
         public static Quat FixRotation(Quat q, int i = 0)
         {
             var mq = Mat4.CreateFromQuaternion(q);
@@ -125,8 +217,7 @@ namespace WolvenKit.ViewModels.Shell
             rbcm.M33 = 0;
             Mat4.Invert(rbcm, out var irbcm);
 
-
-            var j = i < 4 ? 0 : 1;
+            var j = i < 4 ? 2 : -1;
             var blipx = Mat4.CreateRotationX((float)Math.PI * 1 / 2);
             Mat4.Invert(blipx, out var iblipx);
             //in theory those two should be the same right ?!?!?!!!
@@ -149,7 +240,7 @@ namespace WolvenKit.ViewModels.Shell
             var blipz = Mat4.CreateRotationY((float)Math.PI * i / 2);//0 et 2
             Mat4.Invert(blipz, out var iblipz);
 
-            mq = iblipx * iblipy * iblipz * mq * blipz * blipy * blipx;
+            mq = iblipx * iblipy * iblipz * mq;
             //mq = iblipx * iblipy * mq * blipy * blipx;
             //mq = rbcm * mq * irbcm;
 

@@ -571,7 +571,8 @@
         ItemsSource="{Binding ElementName=redTreeView, Path=ItemsSource, Mode=TwoWay}"
         SelectedItem="{Binding ElementName=redTreeView, Path=SelectedItem, Mode=TwoWay}"
         SelectedItems="{Binding ElementName=redTreeView, Path=SelectedItems, Mode=TwoWay}"
-        
+
+        NodeCollapsed="OnCollapsed"        
         SelectionMode="Extended"
         SelectionChanged="OnSelectionChanged"
 

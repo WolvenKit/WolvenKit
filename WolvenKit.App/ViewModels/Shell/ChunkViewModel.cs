@@ -31,12 +31,8 @@ using WolvenKit.ViewModels.Dialogs;
 using WolvenKit.ViewModels.Documents;
 using WolvenKit.RED4.Archive.IO;
 using static WolvenKit.RED4.Types.RedReflection;
-
 using System.Text;
-
-
 using WolvenKit.RED4.IO;
-
 using WolvenKit.RED4.Types.Exceptions;
 
 
@@ -1888,19 +1884,10 @@ namespace WolvenKit.ViewModels.Shell
                         RecalculateProperties(irtt);
                     }
 
-                    var currentfile = new FileModel(Parent.Tab.File.FilePath, Locator.Current.GetService<AppViewModel>().ActiveProject);
-
+                    var currentfile = new FileModel(Tab.File.FilePath,
+                        Locator.Current.GetService<AppViewModel>().ActiveProject);
                     Locator.Current.GetService<AppViewModel>().SaveFileCommand.SafeExecute(currentfile);
-                    Parent.Tab.File.TabItemViewModels
-                        .RemoveMany(Parent.Tab.File.TabItemViewModels.AsEnumerable());
-                    //.RemoveMany(Parent.Tab.File.TabItemViewModels.Where(_=>_ is RDTDataViewModel).AsEnumerable());
-
-                    if (Parent.Parent.Data is worldStreamingSector cls)
-                    {
-                        //update LookUp
-                        Tab.File.TabItemViewModels.Add(new RDTMeshViewModel(cls, Tab.File));
-                        Tab.File.TabItemViewModels.Add(new RDTDataViewModel(cls, Tab.File));
-                    }
+                    Refresh();
 
                     Locator.Current.GetService<ILoggerService>().Success($"might have done the thing maybe, who knows really");
                 }
