@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Reactive.Linq;
@@ -1220,27 +1221,13 @@ namespace WolvenKit.ViewModels.Shell
             else if (PropertyType.IsAssignableTo(typeof(IRedInteger)))
             {
                 var value = (IRedInteger)Data;
-                Value = (value switch
-                {
-                    CUInt8 uint64 => uint64,
-                    CInt8 uint64 => uint64,
-                    CInt16 uint64 => uint64,
-                    CUInt16 uint64 => uint64,
-                    CInt32 uint64 => uint64,
-                    CUInt32 uint64 => uint64,
-                    CInt64 uint64 => (float)uint64,
-                    _ => throw new ArgumentOutOfRangeException(nameof(value)),
-                }).ToString("F0");
+
+                Value = value.ToString(CultureInfo.CurrentCulture);
             }
             else if (PropertyType.IsAssignableTo(typeof(FixedPoint)))
             {
                 var value = (FixedPoint)Data;
                 Value = ((float)value).ToString("R");
-            }
-            else if (PropertyType.IsAssignableTo(typeof(IRedPrimitive<float>)))
-            {
-                var value = (IRedPrimitive)Data;
-                Value = ((float)(CFloat)value).ToString("R");
             }
             else if (PropertyType.IsAssignableTo(typeof(NodeRef)))
             {
@@ -1432,10 +1419,6 @@ namespace WolvenKit.ViewModels.Shell
                 {
                     return "SymbolNumeric";
                 }
-                if (PropertyType.IsAssignableTo(typeof(IRedPrimitive<float>)))
-                {
-                    return "SymbolNumeric";
-                }
                 if (PropertyType.IsAssignableTo(typeof(BaseStringType)))
                 {
                     return "SymbolString";
@@ -1618,6 +1601,17 @@ namespace WolvenKit.ViewModels.Shell
                 if (existing.Count == 1)
                 {
                     var type = arr.InnerType;
+                    if (type == typeof(CKeyValuePair))
+                    {
+                        var app = Locator.Current.GetService<AppViewModel>();
+                        app.SetActiveDialog(new SelectRedTypeDialogViewModel
+                        {
+                            DialogHandler = HandleCKeyValuePair
+                        });
+
+                        return;
+                    }
+
                     var newItem = RedTypeManager.CreateRedType(type);
                     if (newItem is IRedBaseHandle handle)
                     {
@@ -1685,6 +1679,19 @@ namespace WolvenKit.ViewModels.Shell
             {
                 DialogHandler = HandleChunk
             });
+        }
+
+        public void HandleCKeyValuePair(DialogViewModel sender)
+        {
+            var app = Locator.Current.GetService<AppViewModel>();
+            app.CloseDialogCommand.Execute(null);
+            if (sender != null)
+            {
+                var vm = sender as SelectRedTypeDialogViewModel;
+
+                var instance = new CKeyValuePair("", (IRedType)System.Activator.CreateInstance(vm.SelectedType));
+                InsertChild(-1, instance);
+            }
         }
 
         public void HandleChunk(DialogViewModel sender)

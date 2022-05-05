@@ -16,7 +16,7 @@ namespace WolvenKit.Modkit.RED4.Animation
         {
             var rootPositions = new Dictionary<ushort, Dictionary<float, Vec3>>();
             var rootRotations = new Dictionary<ushort, Dictionary<float, Quat>>();
-            var hasRootMotion = animAnimDes.MotionExtraction.Chunk is not null;
+            var hasRootMotion = animAnimDes.MotionExtraction?.Chunk is not null;
             if (hasRootMotion && incRootMotion)
             {
                 ROOT_MOTION.AddRootMotion(ref rootPositions, ref rootRotations, animAnimDes);

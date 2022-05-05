@@ -130,7 +130,7 @@ namespace WolvenKit.RED4.Archive.IO
 
             if (_cr2wFile.Info.PropertyInfo.Length > 1)
             {
-                throw new TodoException();
+                throw new TodoException("Found unsupported PropertyInfo");
             }
 
             for (var i = 0; i < _cr2wFile.Info.ExportInfo.Length; i++)
@@ -166,7 +166,8 @@ namespace WolvenKit.RED4.Archive.IO
 
                 if (!BufferQueue.ContainsKey(i))
                 {
-                    throw new TodoException("Unused buffer");
+                    _logger?.Warning("Unused buffer found!");
+                    continue;
                 }
 
                 foreach (var pointers in BufferQueue[i])
@@ -179,7 +180,14 @@ namespace WolvenKit.RED4.Archive.IO
                     pointers.SetValue(buffer);
                 }
 
+                BufferQueue.Remove(i);
+
                 ParseBuffer(buffer);
+            }
+
+            if (BufferQueue.Count > 0)
+            {
+                throw new TodoException($"The CR2W file is missing {BufferQueue.Count} buffer(s)");
             }
 
             foreach (var embeddedInfo in _cr2wFile.Info.EmbeddedInfo)
