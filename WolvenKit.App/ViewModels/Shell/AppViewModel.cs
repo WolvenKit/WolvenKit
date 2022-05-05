@@ -110,6 +110,8 @@ namespace WolvenKit.ViewModels.Shell
             ShowPluginCommand = new RelayCommand(ExecuteShowPlugin, CanShowPlugin);
             ShowSoundModdingToolCommand = new RelayCommand(ExecuteShowSoundModdingTool, CanShowSoundModdingTool);
 
+            ShowModsViewCommand = new RelayCommand(ExecuteShowModsView, CanShowModsView);
+
             OpenFileCommand = new DelegateCommand<FileModel>(p => ExecuteOpenFile(p), CanOpenFile);
             OpenFileAsyncCommand = ReactiveCommand.CreateFromTask<FileModel, Unit>(OpenFileAsync);
             OpenRedFileAsyncCommand = ReactiveCommand.CreateFromTask<FileEntry, Unit>(OpenRedFileAsync);
@@ -580,6 +582,13 @@ namespace WolvenKit.ViewModels.Shell
         public ICommand ShowSoundModdingToolCommand { get; private set; }
         private bool CanShowSoundModdingTool() => !IsDialogShown;
         private void ExecuteShowSoundModdingTool() => SetActiveDialog(new SoundModdingViewModel
+        {
+            FileHandler = OpenFromNewFile
+        });
+
+        public ICommand ShowModsViewCommand { get; private set; }
+        private bool CanShowModsView() => !IsDialogShown;
+        private void ExecuteShowModsView() => SetActiveDialog(new ModsViewModel
         {
             FileHandler = OpenFromNewFile
         });

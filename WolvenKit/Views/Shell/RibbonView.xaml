@@ -579,6 +579,13 @@
 
                             <Separator Margin="0,5,0,3" Background="{StaticResource BorderAlt}" />
 
+                            <MenuItem 
+                                Command="{Binding ShowModsViewCommand}" 
+                                Header="Mod Manager"
+                                IsCheckable="False" />
+
+                            <Separator Margin="0,5,0,3" Background="{StaticResource BorderAlt}" />
+
                             <MenuItem Click="SaveLayoutToProject" Header="Save Layout to Project">
                                 <MenuItem.Icon>
                                     <iconPacks:PackIconMaterialDesign Padding="7,1,-2,0" Kind="Save" />
@@ -590,22 +597,19 @@
                                 </MenuItem.Icon>
                             </MenuItem>
                             <Separator Margin="0,5,0,3" Background="{StaticResource BorderAlt}" />
-                            <MenuItem
-                                Header="Show File Preview"
+                            <MenuItem Header="Show File Preview"
                                 IsCheckable="True"
                                 IsChecked="{Binding _settingsManager.ShowFilePreview, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                 ToolTip="Toggle interactive file preview for improved performance" />
                             <Separator Margin="0,5,0,3" Background="{StaticResource BorderAlt}" />
                             <!--  MenuItem x:Name="lockTop" Header="Lock Toolbar" IsCheckable="True" IsChecked="True" /  -->
                             <!--  MenuItem x:Name="toolbarIcons" Header="Show Toolbar Icons" IsCheckable="True" IsChecked="True" /  -->
-                            <MenuItem
-                                x:Name="toolbarLabels"
-                                Header="Show Toolbar Labels"
+                            <MenuItem Header="Show Toolbar Labels"
+                                x:Name="toolbarLabels"                        
                                 IsCheckable="True"
                                 IsChecked="True" />
-                            <MenuItem
+                            <MenuItem Header="Use Ribbon Instead"
                                 x:Name="ribbonEnabled"
-                                Header="Use Ribbon Instead"
                                 IsCheckable="True"
                                 IsChecked="False" />
                         </MenuItem>

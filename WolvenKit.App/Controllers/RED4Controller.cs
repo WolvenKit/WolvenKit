@@ -282,11 +282,13 @@ namespace WolvenKit.Functionality.Controllers
 
             InstallMod();
 
+            await DeployRedmod();
+
             _progressService.IsIndeterminate = false;
             return true;
         }
 
-        private async Task<bool> CompileRedmod()
+        public async Task<bool> DeployRedmod()
         {
             if (!_pluginService.IsInstalled(EPlugin.redmod))
             {
@@ -295,11 +297,10 @@ namespace WolvenKit.Functionality.Controllers
 
             var result = false;
             // compile with redmod
-            var redmodPath = Path.Combine(_settingsManager.GetRED4GameRootDir(), "tools", "redmod", "redmod.exe");
+            var redmodPath = Path.Combine(_settingsManager.GetRED4GameRootDir(), "tools", "redmod", "bin", "redmod.exe");
             if (File.Exists(redmodPath))
             {
-                var gameRoot = Path.Combine(_settingsManager.GetRED4GameRootDir(), "r6");
-                var args = $"deploy -gameRoot=\"{gameRoot}\"";
+                var args = $"deploy -root=\"{_settingsManager.GetRED4GameRootDir()}\"";
 
                 _loggerService.Info($"WorkDir: {redmodPath}");
                 _loggerService.Info($"Running commandlet: {args}");

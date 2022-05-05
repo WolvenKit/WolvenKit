@@ -126,6 +126,8 @@ namespace WolvenKit
                     services.AddTransient<IViewFor<PluginsToolViewModel>, PluginsToolView>();
                     services.AddTransient<SoundModdingViewModel>();
                     services.AddTransient<IViewFor<SoundModdingViewModel>, SoundModdingView>();
+                    services.AddTransient<ModsViewModel>();
+                    services.AddTransient<IViewFor<ModsViewModel>, ModsView>();
 
                     #endregion
 

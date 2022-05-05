@@ -1,8 +1,4 @@
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using WolvenKit.Modkit.RED4.Sounds;
 
 namespace WolvenKit.Models
@@ -18,4 +14,20 @@ namespace WolvenKit.Models
         public List<CustomSoundsModel> CustomSounds { get; set; } = new();
 
     }
+
+    public class ModInfoEntry
+    {
+        public string folder { get; set; }
+        public bool enabled { get; set; }
+        public bool deployed { get; set; }
+        public string deployedVersion { get; set; }
+        public object[] customSounds { get; set; }
+    }
+
+    public class ModsInfo
+    {
+        public List<ModInfoEntry> Mods { get; set; } = new();
+
+    }
+
 }
