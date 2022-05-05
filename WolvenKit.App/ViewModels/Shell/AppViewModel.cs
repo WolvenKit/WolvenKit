@@ -133,8 +133,7 @@ namespace WolvenKit.ViewModels.Shell
             ShowHomePageCommand = new RelayCommand(ExecuteShowHomePage, CanShowHomePage);
             ShowSettingsCommand = new RelayCommand(ExecuteShowSettings, CanShowSettings);
 
-            LaunchGameCommand = new RelayCommand(ExecuteLaunchGame, CanLaunchGame);
-            LaunchSteamGameCommand = new RelayCommand(ExecuteLaunchSteamGame, CanLaunchSteamGame);
+            LaunchGameCommand = ReactiveCommand.CreateFromTask(ExecuteLaunchGame);
 
             CloseModalCommand = new RelayCommand(ExecuteCloseModal, CanCloseModal);
             CloseOverlayCommand = new RelayCommand(ExecuteCloseOverlay, CanCloseOverlay);
@@ -485,47 +484,86 @@ namespace WolvenKit.ViewModels.Shell
             SetActiveOverlay(_homePageViewModel);
         }
 
-        public ICommand LaunchGameCommand { get; private set; }
-        private bool CanLaunchGame() => true;
-        private void ExecuteLaunchGame()
-        {
-            try
-            {
-                Process.Start(new ProcessStartInfo
-                {
-                    FileName = _settingsManager.GetRED4GameLaunchCommand(),
-                    Arguments = _settingsManager.GetRED4GameLaunchOptions() ?? "",
-                    ErrorDialog = true,
-                    UseShellExecute = true,
-                });
-            }
-            catch (Exception ex)
-            {
-                _loggerService.Error("Launch: error launching game! Please check your executable path in Settings.");
-                _loggerService.Info($"Launch: error debug info: {ex.Message}");
-            }
+        [Reactive] public int SelectedGameCommandIdx { get; set; }
 
-            _loggerService.Success("Game launching.");
+        public record GameLaunchCommand(string Name, EGameLaunchCommand Command);
+        public enum EGameLaunchCommand
+        {
+            Launch,
+            SteamLaunch,
+            PackInstallLaunch
         }
-        public ICommand LaunchSteamGameCommand { get; private set; }
-        private bool CanLaunchSteamGame() => true;
-        private void ExecuteLaunchSteamGame()
+        [Reactive]
+        public ObservableCollection<GameLaunchCommand> SelectedGameCommands { get; set; } = new()
         {
-            try
-            {
-                var steamrunid = "steam://rungameid/1091500";
+            new GameLaunchCommand("Launch Game", EGameLaunchCommand.Launch),
+            new GameLaunchCommand("Launch Game with Steam", EGameLaunchCommand.SteamLaunch),
+            new GameLaunchCommand("Pack, Install and Launch Game", EGameLaunchCommand.PackInstallLaunch)
+        };
 
-                Process.Start(new ProcessStartInfo
-                {
-                    FileName = steamrunid,
-                    ErrorDialog = true,
-                    UseShellExecute = true
-                });
-            }
-            catch (Exception ex)
+        public ReactiveCommand<Unit, Unit> LaunchGameCommand { get; private set; }
+        private async Task ExecuteLaunchGame()
+        {
+            var command = SelectedGameCommands[SelectedGameCommandIdx].Command;
+            switch (command)
             {
-                _loggerService.Error("Launch: Error! Please check if you have Steam installed, and a valid Steam installation of Cyberpunk 2077");
-                _loggerService.Info($"Launch: error debug info: {ex.Message}");
+                case EGameLaunchCommand.Launch:
+                    try
+                    {
+                        Process.Start(new ProcessStartInfo
+                        {
+                            FileName = _settingsManager.GetRED4GameLaunchCommand(),
+                            Arguments = _settingsManager.GetRED4GameLaunchOptions() ?? "",
+                            ErrorDialog = true,
+                            UseShellExecute = true,
+                        });
+                    }
+                    catch (Exception ex)
+                    {
+                        _loggerService.Error("Launch: error launching game! Please check your executable path in Settings.");
+                        _loggerService.Info($"Launch: error debug info: {ex.Message}");
+                    }
+                    break;
+                case EGameLaunchCommand.SteamLaunch:
+                    try
+                    {
+                        var steamrunid = "steam://rungameid/1091500";
+
+                        Process.Start(new ProcessStartInfo
+                        {
+                            FileName = steamrunid,
+                            ErrorDialog = true,
+                            UseShellExecute = true
+                        });
+                    }
+                    catch (Exception ex)
+                    {
+                        _loggerService.Error("Launch: Error! Please check if you have Steam installed, and a valid Steam installation of Cyberpunk 2077");
+                        _loggerService.Info($"Launch: error debug info: {ex.Message}");
+                    }
+                    break;
+                case EGameLaunchCommand.PackInstallLaunch:
+                    try
+                    {
+                        if (await Task.Run(() => _gameControllerFactory.GetController().PackAndInstallProject()))
+                        {
+                            Process.Start(new ProcessStartInfo
+                            {
+                                FileName = _settingsManager.GetRED4GameLaunchCommand(),
+                                Arguments = _settingsManager.GetRED4GameLaunchOptions() ?? "",
+                                ErrorDialog = true,
+                                UseShellExecute = true,
+                            });
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        _loggerService.Error("Launch: error launching game! Please check your executable path in Settings.");
+                        _loggerService.Info($"Launch: error debug info: {ex.Message}");
+                    }
+                    break;
+                default:
+                    break;
             }
 
             _loggerService.Success("Game launching.");
@@ -785,7 +823,13 @@ namespace WolvenKit.ViewModels.Shell
         private async Task ExecutePackMod() => await _gameControllerFactory.GetController().PackProject();
 
         public ReactiveCommand<Unit, Unit> PackInstallModCommand { get; private set; }
-        private async Task ExecutePackInstallMod() => await _gameControllerFactory.GetController().PackAndInstallProject();
+        private async Task ExecutePackInstallMod()
+        {
+            await Task.Run(async () =>
+            {
+                await _gameControllerFactory.GetController().PackAndInstallProject();
+            });
+        }
 
         //public ICommand PublishModCommand { get; private set; }
         //private bool CanPublishMod() => _projectManager.ActiveProject != null;
@@ -1136,7 +1180,8 @@ namespace WolvenKit.ViewModels.Shell
         public void Save(IDocumentViewModel fileToSave, bool saveAsDialogRequested = false)
         {
             var needSaveAsDialog =
-                fileToSave switch {
+                fileToSave switch
+                {
                     RedDocumentViewModel red =>
                         saveAsDialogRequested ||
                         red.FilePath == null ||
