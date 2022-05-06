@@ -160,48 +160,39 @@ namespace WolvenKit.ViewModels.Shell
 
             Tab.File.TabItemViewModels
                 .RemoveMany(Tab.File.TabItemViewModels.AsEnumerable());
-            /*
-                        var redfile = WolvenKit.Modkit.RED4.ModTools.
-                            FindRedFile(currentfile.RelativePath, currentfile.Project.RawDirectory,
-                            ERedExtension.streamingsector.ToString());*/
 
+            using var stream = new FileStream(currentfile.FullName, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
+            using var reader = new BinaryReader(stream);
+            var cr2wFile = Locator.Current.GetService<Red4ParserService>()
+                .ReadRed4File(reader);
+            cr2wFile.MetaData.FileName = currentfile.FullName;
 
-            using (var stream = new FileStream(currentfile.FullName, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
+            var cls = new worldStreamingSector();
+            if (Parent is not null)
             {
-                using var reader = new BinaryReader(stream);
-                var cr2wFile = Locator.Current.GetService<Red4ParserService>()
-                    .ReadRed4File(reader);
-                cr2wFile.MetaData.FileName = currentfile.FullName;
-
-
-
-                var cls = new worldStreamingSector();
-                if (Parent is not null)
+                if (Parent.Data is worldStreamingSector wss1)
                 {
-                    if (Parent.Data is worldStreamingSector wss1)
-                    {
-                        cls = wss1;
-                    }
-                    else if (Parent.Parent is not null && Parent.Parent.Data is worldStreamingSector wss2)
-                    {
-                        cls = wss2;
-                    }
+                    cls = wss1;
                 }
-                else if (cr2wFile.RootChunk is worldStreamingSector wss3)
+                else if (Parent.Parent is not null && Parent.Parent.Data is worldStreamingSector wss2)
                 {
-                    cls = wss3;
+                    cls = wss2;
                 }
+            }
+            else if (cr2wFile.RootChunk is worldStreamingSector wss3)
+            {
+                cls = wss3;
+            }
 
-                if (cls is not null)
+            if (cls is not null)
+            {
+                foreach (var type in types)
                 {
-                    foreach (var type in types)
-                    {
-                        var t = asm.GetType(type);
-                        var instance = System.Activator.CreateInstance(t, cls, Tab.File)
-                            as WolvenKit.ViewModels.Documents.RedDocumentTabViewModel;
+                    var t = asm.GetType(type);
+                    var instance = System.Activator.CreateInstance(t, cls, Tab.File)
+                        as WolvenKit.ViewModels.Documents.RedDocumentTabViewModel;
 
-                        Tab.File.TabItemViewModels.Add(instance);
-                    }
+                    Tab.File.TabItemViewModels.Add(instance);
                 }
             }
         }
@@ -217,38 +208,10 @@ namespace WolvenKit.ViewModels.Shell
             rbcm.M33 = 0;
             Mat4.Invert(rbcm, out var irbcm);
 
-            var j = i < 4 ? 2 : -1;
-            var blipx = Mat4.CreateRotationX((float)Math.PI * 1 / 2);
-            Mat4.Invert(blipx, out var iblipx);
-            //in theory those two should be the same right ?!?!?!!!
-
-            //from here there's 4 cardinal directions and either point up or down
-            //so ... 8
-
-            //negative rotation on the X axis gives 45 degrees tilted mess
-
-            //x:1, y:0 z:2 and y:2 z:0 top titled
-            //x:1, y:0 z:0 and y:2 z:2 front tilted
-            //x:1, y:1 z:1 and y:-1 z:-1 top tilted
-            //x:1 z:1 top tilted
-            //x:1 z:1 front tilted
-
-            //well ... that wasn't it ...
-
-            var blipy = Mat4.CreateRotationY((float)Math.PI * j / 2);//0 et 2
-            Mat4.Invert(blipy, out var iblipy);
-            var blipz = Mat4.CreateRotationY((float)Math.PI * i / 2);//0 et 2
-            Mat4.Invert(blipz, out var iblipz);
-
-            mq = iblipx * iblipy * iblipz * mq;
-            //mq = iblipx * iblipy * mq * blipy * blipx;
-            //mq = rbcm * mq * irbcm;
+            mq = rbcm * mq * irbcm;
 
             var q9 = Quat.CreateFromRotationMatrix(mq);
 
-            //q9 = Quat.Normalize(q9);
-
-            //throw new Exception("boop");
             //(q.Z, q.Y) = (q.Y, q.Z);
             return q9;
         }
