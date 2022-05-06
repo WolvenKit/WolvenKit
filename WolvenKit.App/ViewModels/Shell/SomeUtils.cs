@@ -1,46 +1,20 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.ComponentModel;
-using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Reactive.Linq;
-using System.Runtime.Serialization;
-using System.Windows.Forms;
-using System.Windows.Input;
 using DynamicData;
-using DynamicData.Binding;
-using ReactiveUI;
-using ReactiveUI.Fody.Helpers;
 using Splat;
-using WolvenKit.Common;
-using WolvenKit.Common.Conversion;
-using WolvenKit.Common.Services;
-using WolvenKit.Functionality.Commands;
-using WolvenKit.Functionality.Controllers;
-using WolvenKit.Functionality.Services;
 using WolvenKit.Models;
-using WolvenKit.RED4;
 using WolvenKit.RED4.Archive.Buffer;
-using WolvenKit.RED4.Archive.CR2W;
 using WolvenKit.RED4.CR2W.JSON;
 using WolvenKit.RED4.Types;
-using WolvenKit.ViewModels.Dialogs;
-using WolvenKit.ViewModels.Documents;
-using WolvenKit.RED4.Archive.IO;
-using static WolvenKit.RED4.Types.RedReflection;
-using System.Text;
-using WolvenKit.RED4.IO;
-using WolvenKit.RED4.Types.Exceptions;
+using WolvenKit.RED4.CR2W;
 
 using Vec3 = System.Numerics.Vector3;
 using Vec4 = System.Numerics.Vector4;
 using Quat = System.Numerics.Quaternion;
 using Mat4 = System.Numerics.Matrix4x4;
-using WolvenKit.RED4.Archive;
-using WolvenKit.RED4.CR2W;
 
 namespace WolvenKit.ViewModels.Shell
 {
