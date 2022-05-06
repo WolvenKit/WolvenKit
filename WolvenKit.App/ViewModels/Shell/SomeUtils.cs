@@ -64,7 +64,7 @@ namespace WolvenKit.ViewModels.Shell
             return new Vec4(cX, cY, cZ, cW);
         }
 
-        public (List<Vec4>, List<Quat>, List<string>) GetPosRotApp(List<Prop> props, int i)
+        public (List<Vec4>, List<Quat>, List<string>) GetPosRotApp(List<Prop> props, int i = 0)
         {
             var poslist = new List<Vec4>();
             var rotlist = new List<Quat>();
@@ -334,9 +334,10 @@ namespace WolvenKit.ViewModels.Shell
         }
         public void Add00(List<Prop> props, string tr)
         {
-            for (var j = 0; j < 8; j++)
-            {
-                var (poslist, rotlist, applist) = GetPosRotApp(props, j);
+            /*for (var j = 0; j < 8; j++)
+            {*/
+            var j = 0;
+            var (poslist, rotlist, applist) = GetPosRotApp(props, j);
                 var center = GetCenter(poslist);
 
                 center.Z -= j * 10;
@@ -359,7 +360,7 @@ namespace WolvenKit.ViewModels.Shell
 
                     AddToData(current, line.template_path, poslist[i], rotlist[i], applist[i]);
                 }
-            }
+            //}
         }
 
         public void Add00(Root1 json, string tr)
