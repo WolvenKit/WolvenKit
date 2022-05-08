@@ -80,10 +80,11 @@ namespace WolvenKit.RED4.Save
             }
 
             var cnt = reader.ReadUInt32();
-            var nextItemHeader = InventoryHelper.ReadNextItemEntry(reader);
 
             for (int i = 0; i < cnt; i++)
             {
+                var nextItemHeader = InventoryHelper.ReadNextItemEntry(reader);
+
                 reader.ReadUInt32(); // nodeId
                 parser.Read(reader, node.Children[offset + i]);
 
@@ -95,11 +96,6 @@ namespace WolvenKit.RED4.Save
                 }
 
                 subInventory.Items.Add(item);
-
-                if (i < cnt - 1)
-                {
-                    nextItemHeader = InventoryHelper.ReadNextItemEntry(reader);
-                }
             }
 
             return subInventory;
