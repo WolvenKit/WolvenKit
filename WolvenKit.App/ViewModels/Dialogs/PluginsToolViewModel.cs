@@ -1,6 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.IO;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
@@ -26,7 +24,7 @@ namespace WolvenKit.ViewModels.Dialogs
         private readonly IGitHubService _gitHubService;
         private readonly ITaskService _taskService;
 
-       
+
         public delegate Task ReturnHandler(NewFileViewModel file);
         public ReturnHandler FileHandler;
 
@@ -61,6 +59,34 @@ namespace WolvenKit.ViewModels.Dialogs
             {
                 var package = plugin.Package;
 
+                // hack for supporting redmod
+                if (plugin.Plugin == EPlugin.redmod)
+                {
+                    var redModLocalversion = "";
+                    var redModManifest = Path.Combine(new FileInfo(plugin.InstallPath).Directory.FullName, "manifest.txt");
+                    if (File.Exists(redModManifest))
+                    {
+                        redModLocalversion = File.ReadAllText(redModManifest);
+
+                        // remoteVersion
+                        // REDMODTODO
+                        var redModRemoteVersion = "1.0";
+
+                        if (redModLocalversion != redModRemoteVersion)
+                        {
+                            plugin.Status = EPluginStatus.Outdated;
+                            plugin.Version = redModLocalversion;
+                        }
+                        else
+                        {
+                            plugin.Status = EPluginStatus.Latest;
+                            plugin.Version = redModLocalversion;
+                        }
+                    }
+
+                    continue;
+                }
+
                 // get the latest release
                 if (!(await _gitHubService.TryGetRelease(package, ""))
                 .Out(out var release))
@@ -79,7 +105,6 @@ namespace WolvenKit.ViewModels.Dialogs
                 if (!_libraryService.TryGetValue(package.Id, out var model))
                 {
                     // not installed
-                    // TODO: display => "Install"
                     status = EPluginStatus.NotInstalled;
                 }
                 else
@@ -109,7 +134,7 @@ namespace WolvenKit.ViewModels.Dialogs
                 plugin.Status = status;
                 plugin.Version = installedVersion;
                 plugin.ReleaseModel = release;
-
+                plugin.IsEnabled = true;
             }
 
             _logger.Info("Check for updates finished");

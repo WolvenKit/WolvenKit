@@ -61,7 +61,7 @@
             
             <ListBox.ItemTemplate>
                 <DataTemplate>
-                    <Grid Height="85" >
+                    <Grid Height="85" IsEnabled="{Binding IsEnabled}" >
                         <Grid.RowDefinitions>
                             <RowDefinition Height="*"/>
                             <RowDefinition Height="Auto"/>
@@ -82,18 +82,14 @@
                             </StackPanel>
 
                             <Button Grid.Column="1" Command="{Binding InstallCommand}"
-                                    Visibility="{Binding IsNotInstalled, Converter={StaticResource boolToVisibilityConverter}}"
-                                    Background="Transparent" BorderBrush="Transparent"
-                                    syncfusion:FocusManagerHelper.FocusedElement="True">
-                                <iconPacks:PackIconMaterial Kind="Download" Width="30" Height="30"
-                                                            Foreground="CadetBlue" />
+                                    Visibility="{Binding IsUpdateAvailable, Converter={StaticResource boolToVisibilityConverter}}"
+                                    Background="Transparent" BorderBrush="Transparent">
+                                <iconPacks:PackIconMaterial Kind="Download" Width="30" Height="30" Foreground="CadetBlue" />
                             </Button>
                             <Button Grid.Column="1"
-                                    Visibility="{Binding IsOpenEnabled, Converter={StaticResource boolToVisibilityConverter}}"
-                                    Background="Transparent" BorderBrush="Transparent"
-                                    syncfusion:FocusManagerHelper.FocusedElement="True">
-                                <iconPacks:PackIconMaterial Kind="Check" Width="30" Height="30"
-                                                            Foreground="LawnGreen" />
+                                    Visibility="{Binding IsNoUpdateAvailable, Converter={StaticResource boolToVisibilityConverter}}"
+                                    Background="Transparent" BorderBrush="Transparent">
+                                <iconPacks:PackIconMaterial Kind="Check" Width="30" Height="30" Foreground="LawnGreen" />
                             </Button>
 
                             <StackPanel Grid.Column="2">

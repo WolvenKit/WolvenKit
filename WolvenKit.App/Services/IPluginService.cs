@@ -1,9 +1,8 @@
 using System;
 using System.Collections.ObjectModel;
+using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 using WolvenKit.ViewModels.Dialogs;
-using WolvenKit.Functionality.Services;
-using System.Diagnostics.CodeAnalysis;
 
 namespace WolvenKit.Functionality.Services
 {
@@ -43,6 +42,7 @@ namespace WolvenKit.Functionality.Services
 
     public enum EPluginStatus
     {
+        Installed,
         NotInstalled,
         Outdated,
         Latest

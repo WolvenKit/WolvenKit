@@ -557,6 +557,9 @@
                                 x:Name="ImportExportCheckbox"
                                 Header="Import / Export"
                                 IsCheckable="True" />
+
+                            <Separator Margin="0,5,0,3" Background="{StaticResource BorderAlt}" />
+                            
                             <MenuItem
                                 x:Name="TweakBrowserCheckbox"
                                 Header="Tweak Browser"
@@ -565,13 +568,6 @@
                                 x:Name="LocKeyBrowserCheckbox"
                                 Header="LocKey Browser"
                                 IsCheckable="True" />
-                                
-                            <Separator Margin="0,5,0,3" Background="{StaticResource BorderAlt}" />
-
-                            <MenuItem
-                                Command="{Binding ShowPluginToolCommand}"
-                                Header="Plugins"
-                                IsCheckable="False" />
                             <MenuItem 
                                 Command="{Binding ShowSoundModdingToolCommand}" 
                                 Header="Sound Modding Tool"
@@ -579,6 +575,10 @@
 
                             <Separator Margin="0,5,0,3" Background="{StaticResource BorderAlt}" />
 
+                            <MenuItem
+                                Command="{Binding ShowPluginToolCommand}"
+                                Header="Plugins"
+                                IsCheckable="False" />
                             <MenuItem 
                                 Command="{Binding ShowModsViewCommand}" 
                                 Header="Mod Manager"

@@ -292,7 +292,7 @@ namespace WolvenKit.Functionality.Controllers
         {
             if (!_pluginService.IsInstalled(EPlugin.redmod))
             {
-                return true;
+                return false;
             }
 
             var result = false;

@@ -80,7 +80,6 @@ namespace WolvenKit.Functionality.Services
                 if (!_libraryService.TryGetValue(package.Id, out var model))
                 {
                     // not installed
-                    // TODO: display => "Install"
                     status = EPluginStatus.NotInstalled;
                 }
                 else
@@ -101,18 +100,49 @@ namespace WolvenKit.Functionality.Services
                         //}
                         //else
                         {
-                            _logger.Info($"[{package}] Update available");
-                            status = EPluginStatus.Outdated;
+                            //_logger.Info($"[{package}] Update available");
+                            status = EPluginStatus.Installed;
                         }
                     }
                 }
 
-                Plugins.Add(new PluginViewModel(id, package, null, _taskService, installPath)
-                {
-                    Status = status,
-                    Version = installedVersion
-                });
+                Plugins.Add(new PluginViewModel(id, installPath, status, installedVersion, package.Name, package.Description, package, null));
             }
+
+            // handle redmod differently for now
+            var redmodPath = Path.Combine(_settings.GetRED4GameRootDir(), "tools", "redmod", "bin", "redmod.exe");
+
+            // get version and status
+            var rmStatus = EPluginStatus.NotInstalled;
+            var version = "";
+            if (File.Exists(redmodPath))
+            {
+                var redModManifest = Path.Combine(new FileInfo(redmodPath).Directory.FullName, "manifest.txt");
+                if (File.Exists(redModManifest))
+                {
+                    version = File.ReadAllText(redModManifest);
+                    var redModRemoteVersion = "1.0";
+
+                    if (version != redModRemoteVersion)
+                    {
+                        rmStatus = EPluginStatus.Outdated;
+                    }
+                    else
+                    {
+                        rmStatus = EPluginStatus.Latest;
+                    }
+                }
+                else
+                {
+                    rmStatus = EPluginStatus.Outdated;
+                }
+            }
+
+            // check for update manually
+            Plugins.Add(new PluginViewModel(EPlugin.redmod, redmodPath, rmStatus, version, "Redmod", "CP77 modding tools")
+            {
+                IsEnabled = true
+            });
         }
 
         public bool IsInstalled(EPlugin pluginName)
