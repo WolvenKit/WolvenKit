@@ -57,72 +57,97 @@
                         <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
 
-                    <syncfusion:RibbonButton Grid.Column="0" Command="{Binding RefreshCommand}"
+                    <StackPanel Grid.Column="0" Orientation="Horizontal">
+                        
+                        <syncfusion:RibbonButton Command="{Binding RefreshCommand}"
                             x:Name="ButtonRefresh"
-                            Padding="10,0"
                             IconStretch="Fill"
                             IconType="Icon"
                             Label="Refresh"
                             SizeForm="Small">
-                        <syncfusion:RibbonButton.IconTemplate>
-                            <DataTemplate>
-                                <iconPacks:PackIconCodicons
+                            <syncfusion:RibbonButton.IconTemplate>
+                                <DataTemplate>
+                                    <iconPacks:PackIconCodicons
                                         Width="auto"
                                         Height="auto"
                                         HorizontalAlignment="Center"
                                         VerticalAlignment="Stretch"
                                         Foreground="CornflowerBlue"
                                         Kind="Refresh" />
-                            </DataTemplate>
-                        </syncfusion:RibbonButton.IconTemplate>
-                    </syncfusion:RibbonButton>
+                                </DataTemplate>
+                            </syncfusion:RibbonButton.IconTemplate>
+                        </syncfusion:RibbonButton>
 
-                    <syncfusion:RibbonButton Grid.Column="1" Command="{Binding DeployCommand}"
+                        <syncfusion:RibbonButton Command="{Binding DeployCommand}"
                             x:Name="ButtonDeploy"
-                            Padding="10,0"
                             IconStretch="Fill"
                             IconType="Icon"
                             Label="Deploy"
                             SizeForm="Small">
-                        <syncfusion:RibbonButton.IconTemplate>
-                            <DataTemplate>
-                                <iconPacks:PackIconCodicons
+                            <syncfusion:RibbonButton.IconTemplate>
+                                <DataTemplate>
+                                    <iconPacks:PackIconCodicons
                                         Width="auto"
                                         Height="auto"
                                         HorizontalAlignment="Center"
                                         VerticalAlignment="Stretch"
                                         Foreground="Red"
-                                        Kind="RunAll" />
-                            </DataTemplate>
-                        </syncfusion:RibbonButton.IconTemplate>
-                    </syncfusion:RibbonButton>
-                    
-                    <Label  Grid.Column="2" Content="Filter: " VerticalAlignment="Center"/>
-                    <TextBox Grid.Column="3" x:Name="TextBoxSearch"/>
+                                        Kind="DesktopDownload" />
+                                </DataTemplate>
+                            </syncfusion:RibbonButton.IconTemplate>
+                        </syncfusion:RibbonButton>
+
+                        <syncfusion:RibbonButton Command="{Binding LaunchGameCommand}"
+                            x:Name="ButtonLaunchGame"
+                            IconStretch="Fill"
+                            IconType="Icon"
+                            Label="Launch Game"
+                            SizeForm="Small">
+                            <syncfusion:RibbonButton.IconTemplate>
+                                <DataTemplate>
+                                    <iconPacks:PackIconCodicons
+                                        Width="auto"
+                                        Height="auto"
+                                        HorizontalAlignment="Center"
+                                        VerticalAlignment="Stretch"
+                                        Foreground="ForestGreen"
+                                        Kind="DebugStart" />
+                                </DataTemplate>
+                            </syncfusion:RibbonButton.IconTemplate>
+                        </syncfusion:RibbonButton>
+                        
+                    </StackPanel>
+
+                    <Separator Grid.Column="1" />
+
+                    <Label Grid.Column="2" Content="Filter: " VerticalAlignment="Center"/>
+                    <TextBox Grid.Column="3" x:Name="TextBoxSearch" />
+
                 </Grid>
 
                 <!-- DataGrid -->
                 <syncfusion:SfDataGrid Grid.Row="1" x:Name="DataGridEvents" Margin="5"
-                                       AllowFiltering="True"
+                                       ItemsSource="{Binding Mods}"
+                                       AutoGenerateColumns="False"
                                        ColumnSizer="AutoLastColumnFill"
+                                       AllowResizingColumns="True"
                                        SelectionMode="Extended"
                                        AllowDraggingColumns="True"
                                        AllowDraggingRows="True"
                                        AllowDrop="True"
-                                       AllowResizingColumns="True"
-                                       AutoGenerateColumns="False"
-                                       ItemsSource="{Binding Mods}"
-                                       >
+                                       Drop="DataGridEvents_Drop"
+                                       RowDropIndicatorMode="Line"
+                                       AllowFiltering="True">
 
-
-                    
                     <syncfusion:SfDataGrid.Columns>
+
+                        <syncfusion:GridTextColumn HeaderText="#" MappingName="LoadOrder" AllowEditing="False" TextAlignment="Center" />
 
                         <syncfusion:GridCheckBoxColumn HeaderText="Enabled" MappingName="IsEnabled" />
 
-                        <syncfusion:GridTextColumn HeaderText="LO" MappingName="LoadOrder" AllowEditing="False" />
+                        <syncfusion:GridTextColumn HeaderText="Name" MappingName="Name" AllowEditing="False" />
 
-                        <syncfusion:GridTemplateColumn MappingName="Name">
+                        <!--<syncfusion:GridTemplateColumn MappingName="Name">
                             <syncfusion:GridTemplateColumn.CellTemplate>
                                 <DataTemplate>
                                     <Grid>
@@ -136,9 +161,17 @@
                                     </Grid>
                                 </DataTemplate>
                             </syncfusion:GridTemplateColumn.CellTemplate>
-                        </syncfusion:GridTemplateColumn>
-                        
+                        </syncfusion:GridTemplateColumn>-->
+
                     </syncfusion:SfDataGrid.Columns>
+
+                    <syncfusion:SfDataGrid.ContextMenu>
+                        
+                        <ContextMenu Style="{x:Null}">
+                            <MenuItem  CommandParameter="{Binding}" Header="Remove Mod"/>
+                            <MenuItem  CommandParameter="{Binding}" Header="Information"/>
+                        </ContextMenu>
+                    </syncfusion:SfDataGrid.ContextMenu>
 
                 </syncfusion:SfDataGrid>
             </Grid>

@@ -1,9 +1,6 @@
-using System;
 using System.Linq;
-using System.Collections.Generic;
-using System.Reactive.Disposables;
 using ReactiveUI;
-using WolvenKit.Modkit.RED4.Sounds;
+using Syncfusion.UI.Xaml.Grid;
 using WolvenKit.ViewModels.Dialogs;
 
 namespace WolvenKit.Views.Dialogs
@@ -16,6 +13,43 @@ namespace WolvenKit.Views.Dialogs
         public ModsView()
         {
             InitializeComponent();
+
+            DataGridEvents.RowDragDropController.Dropped += RowDragDropController_Dropped;
+        }
+
+        private void RowDragDropController_Dropped(object sender, GridRowDroppedEventArgs e)
+        {
+            if (e.IsFromOutSideSource)
+            {
+                // install mod
+
+
+
+            }
+            else
+            {
+                // adjust load order
+                var records = DataGridEvents.View.Records.ToList();
+                for (var i = 0; i < records.Count; i++)
+                {
+                    var r = records[i];
+                    var idx = GridIndexResolver.ResolveToRowIndex(DataGridEvents, r) - 1;
+                    if (r.Data is ModInfoViewModel m)
+                    {
+                        m.LoadOrder = idx;
+                    }
+                }
+            }
+        }
+
+        private void RowDragDropController_Drop(object sender, GridRowDropEventArgs e)
+        {
+
+        }
+
+        private void DataGridEvents_Drop(object sender, System.Windows.DragEventArgs e)
+        {
+
         }
     }
 }

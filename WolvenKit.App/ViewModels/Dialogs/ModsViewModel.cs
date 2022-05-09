@@ -1,5 +1,7 @@
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text.Json;
@@ -42,6 +44,7 @@ namespace WolvenKit.ViewModels.Dialogs
 
             RefreshCommand = ReactiveCommand.Create(() => Refresh());
             DeployCommand = ReactiveCommand.Create(() => Deploy());
+            LaunchGameCommand = ReactiveCommand.Create(() => LaunchGame());
 
             // load all mods
             LoadMods();
@@ -66,7 +69,7 @@ namespace WolvenKit.ViewModels.Dialogs
         public ICommand SaveCommand { get; private set; }
         private void Save()
         {
-
+            // REDMODTODO
         }
 
 
@@ -75,6 +78,26 @@ namespace WolvenKit.ViewModels.Dialogs
 
         public ICommand RefreshCommand { get; private set; }
         private void Refresh() => LoadMods();
+
+        public ICommand LaunchGameCommand { get; private set; }
+        private void LaunchGame()
+        {
+            try
+            {
+                Process.Start(new ProcessStartInfo
+                {
+                    FileName = _settings.GetRED4GameLaunchCommand(),
+                    Arguments = _settings.GetRED4GameLaunchOptions() ?? "-modded",
+                    ErrorDialog = true,
+                    UseShellExecute = true,
+                });
+            }
+            catch (Exception ex)
+            {
+                _logger.Error("Launch: error launching game! Please check your executable path in Settings.");
+                _logger.Info($"Launch: error debug info: {ex.Message}");
+            }
+        }
 
         #endregion
 
@@ -116,26 +139,40 @@ namespace WolvenKit.ViewModels.Dialogs
 
             ArgumentNullException.ThrowIfNull(modsInfo);
 
+            var foundmods = new List<ModInfoViewModel>();
             for (var i = 0; i < modsInfo.Mods.Count; i++)
             {
                 var mod = modsInfo.Mods[i];
+
                 var local = Mods.FirstOrDefault(x => x.Folder == mod.folder);
                 if (local is not null)
                 {
                     local.IsEnabled = mod.enabled;
                     local.LoadOrder = i;
+                    foundmods.Add(local);
                 }
-                else
+            }
+
+            // loop through all existing mods
+            // reorder according to modsInfo
+            // first come all the mods in mods.info
+            // then the rest
+            for (var i = 0; i < Mods.Count; i++)
+            {
+                var mod = Mods[i];
+
+                if (foundmods.Contains(mod))
                 {
-                    // when the user uninstalls mods
-                    // TODO
+                    continue;
                 }
+
+                mod.LoadOrder = i + foundmods.Count;
             }
 
         }
     }
 
-    public class ModInfoViewModel
+    public class ModInfoViewModel : ReactiveObject
     {
         public ModInfoViewModel(ModInfo mod, string folder)
         {
@@ -147,7 +184,7 @@ namespace WolvenKit.ViewModels.Dialogs
 
         public string Folder { get; init; }
 
-        public int LoadOrder { get; set; }
+        [Reactive] public int LoadOrder { get; set; }
 
         public bool IsEnabled { get; set; }
 
