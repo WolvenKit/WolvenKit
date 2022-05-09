@@ -25,6 +25,8 @@ namespace WolvenKit.RED4.Save
             public byte Unknown2 { get; set; }
             public uint Unknown3 { get; set; }
             public byte Unknown4 { get; set; }
+            public byte Unknown5 { get; set; }
+            public byte Unknown6 { get; set; }
         }
     }
 
@@ -56,6 +58,8 @@ namespace WolvenKit.RED4.Save
                     subEntry.Unknown2 = reader.ReadByte();
                     subEntry.Unknown3 = reader.ReadUInt32();
                     subEntry.Unknown4 = reader.ReadByte();
+                    subEntry.Unknown5 = reader.ReadByte();
+                    subEntry.Unknown6 = reader.ReadByte();
 
                     entry.Entries.Add(subEntry);
                 }
@@ -86,6 +90,8 @@ namespace WolvenKit.RED4.Save
                     writer.Write(subEntry.Unknown2);
                     writer.Write(subEntry.Unknown3);
                     writer.Write(subEntry.Unknown4);
+                    writer.Write(subEntry.Unknown5);
+                    writer.Write(subEntry.Unknown6);
                 }
             }
             writer.Write(data.TrailingBytes);
