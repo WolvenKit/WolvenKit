@@ -7,7 +7,7 @@ using WolvenKit.ViewModels.HomePage;
 namespace WolvenKit.Views.HomePage.Pages
 {
     /// <summary>
-    /// Interaction logic for NewFileView.xaml
+    /// Interaction logic for ModsView.xaml
     /// </summary>
     public partial class ModsView : ReactiveUserControl<ModsViewModel>
     {

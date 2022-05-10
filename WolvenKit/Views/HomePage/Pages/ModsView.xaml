@@ -86,6 +86,7 @@
             <StackPanel Grid.Column="0" Orientation="Horizontal">
 
                 <syncfusion:RibbonButton Command="{Binding RefreshCommand}"
+                                         Margin="5"
                     x:Name="ButtonRefresh"
                     IconStretch="Fill"
                     IconType="Icon"
@@ -105,6 +106,7 @@
                 </syncfusion:RibbonButton>
 
                 <syncfusion:RibbonButton Command="{Binding DeployCommand}"
+                                          Margin="5"
                     x:Name="ButtonDeploy"
                     IconStretch="Fill"
                     IconType="Icon"
@@ -124,6 +126,7 @@
                 </syncfusion:RibbonButton>
 
                 <syncfusion:RibbonButton Command="{Binding LaunchGameCommand}"
+                                          Margin="5"
                     x:Name="ButtonLaunchGame"
                     IconStretch="Fill"
                     IconType="Icon"
@@ -146,7 +149,7 @@
 
             <Separator Grid.Column="1" />
 
-            <Label Grid.Column="2" Content="Filter: " VerticalAlignment="Center"/>
+            <Label Grid.Column="2" Content="Filter: " VerticalAlignment="Center" Margin="20,0,0,0"/>
             <TextBox Grid.Column="3" x:Name="TextBoxSearch" />
 
         </Grid>
@@ -169,7 +172,7 @@
 
                 <syncfusion:GridTextColumn HeaderText="#" MappingName="LoadOrder" AllowEditing="False" TextAlignment="Center" />
 
-                <syncfusion:GridCheckBoxColumn HeaderText="Enabled" MappingName="IsEnabled" />
+                <syncfusion:GridCheckBoxColumn HeaderText="Enabled" MappingName="IsEnabled" AllowEditing="True"/>
 
                 <syncfusion:GridTextColumn HeaderText="Name" MappingName="Name" AllowEditing="False" />
 
@@ -191,9 +194,9 @@
 
             </syncfusion:SfDataGrid.Columns>
 
-            <syncfusion:SfDataGrid.ContextMenu>
+            <syncfusion:SfDataGrid.ContextMenu >
 
-                <ContextMenu Style="{x:Null}">
+                <ContextMenu >
                     <MenuItem  CommandParameter="{Binding}" Header="Remove Mod"/>
                     <MenuItem  CommandParameter="{Binding}" Header="Information"/>
                 </ContextMenu>

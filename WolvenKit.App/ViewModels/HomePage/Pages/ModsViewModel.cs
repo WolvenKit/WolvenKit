@@ -11,9 +11,9 @@ using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using Splat;
 using WolvenKit.Common.Services;
-using WolvenKit.Functionality.Controllers;
 using WolvenKit.Functionality.Services;
 using WolvenKit.Helpers;
+using WolvenKit.Interaction;
 using WolvenKit.Models;
 using WolvenKit.ViewModels.Shell;
 
@@ -23,9 +23,7 @@ namespace WolvenKit.ViewModels.HomePage
     {
         private readonly ISettingsManager _settings;
         private readonly ILoggerService _logger;
-        private readonly INotificationService _notificationService;
         private readonly IProjectManager _projectManager;
-        private readonly IGameControllerFactory _gameControllerFactory;
         private readonly IPluginService _pluginService;
         private readonly AppViewModel _mainViewModel;
 
@@ -42,20 +40,21 @@ namespace WolvenKit.ViewModels.HomePage
             _settings = Locator.Current.GetService<ISettingsManager>();
             _logger = Locator.Current.GetService<ILoggerService>();
             _projectManager = Locator.Current.GetService<IProjectManager>();
-            _gameControllerFactory = Locator.Current.GetService<IGameControllerFactory>();
             _pluginService = Locator.Current.GetService<IPluginService>();
-            _notificationService = Locator.Current.GetService<INotificationService>();
 
             _mainViewModel = Locator.Current.GetService<AppViewModel>();
 
             RefreshCommand = ReactiveCommand.Create(() => Refresh());
             DeployCommand = ReactiveCommand.Create(() => Deploy());
             LaunchGameCommand = ReactiveCommand.Create(() => LaunchGame());
+            CheckRedModCommand = ReactiveCommand.Create(() => CheckRedMod());
 
             LoadMods();
         }
 
         [Reactive] public ObservableCollection<ModInfoViewModel> Mods { get; set; } = new();
+
+        [Reactive] public bool IsRedModInstalled { get; set; }
 
         #region commands
 
@@ -69,10 +68,13 @@ namespace WolvenKit.ViewModels.HomePage
             if (!_pluginService.IsInstalled(EPlugin.redmod))
             {
                 _logger.Error("Redmod needs to be installed to deploy mods.");
-
-
-
-
+                switch (await Interactions.ShowMessageBoxAsync("The RedMod tools are not installed. Would you like to install them?", "RedMod not found"))
+                {
+                    case WMessageBoxResult.OK:
+                    case WMessageBoxResult.Yes:
+                        _homePageViewModel.NavigateTo(EHomePage.Plugins);
+                        break;
+                }
 
                 return false;
             }
@@ -80,24 +82,41 @@ namespace WolvenKit.ViewModels.HomePage
             var result = false;
             // compile with redmod
             var redmodPath = Path.Combine(_settings.GetRED4GameRootDir(), "tools", "redmod", "bin", "redmod.exe");
-            if (File.Exists(redmodPath))
+            if (!File.Exists(redmodPath))
             {
-                var args = $"deploy -root=\"{_settings.GetRED4GameRootDir()}\"";
-
-                var enabledMods = GetEnabledMods();
-                if (enabledMods.Any())
-                {
-                    var modsStr = string.Join(' ', enabledMods.Select(x => $"\"{x.Folder}\""));
-                    args += $" -mod={modsStr}";
-                }
-
-                _logger.Info($"WorkDir: {redmodPath}");
-                _logger.Info($"Running commandlet: {args}");
-                result = await ProcessUtil.RunProcessAsync(redmodPath, args);
+                _logger.Error("RedMod tools are not installed. Please go to WolvenKit plugins and install RedMod.");
+                result = await Task.FromResult(false);
             }
             else
             {
-                result = await Task.FromResult(true);
+                var enabledMods = GetEnabledMods().ToList();
+                if (enabledMods.Any())
+                {
+                    switch (await Interactions.ShowMessageBoxAsync($"Deploying {enabledMods.Count} enabled mods with RedMod. Continue?", "RedMod deploy"))
+                    {
+                        case WMessageBoxResult.OK:
+                        case WMessageBoxResult.Yes:
+                            var args = $"deploy -root=\"{_settings.GetRED4GameRootDir()}\"";
+
+                            var modsStr = string.Join(' ', enabledMods.Select(x => $"\"{x.Folder}\""));
+                            args += $" -mod={modsStr}";
+
+                            _logger.Info($"WorkDir: {redmodPath}");
+                            _logger.Info($"Running commandlet: {args}");
+                            result = await ProcessUtil.RunProcessAsync(redmodPath, args);
+
+                            if (!result)
+                            {
+                                await Interactions.ShowMessageBoxAsync("RedMod deploy failed. Please check the log for details.", "RedMod");
+                            }
+
+                            break;
+                    }
+                }
+                else
+                {
+                    _logger.Warning("No mods enabled.");
+                }
             }
 
             return result;
@@ -126,6 +145,25 @@ namespace WolvenKit.ViewModels.HomePage
             }
         }
 
+        public ICommand CheckRedModCommand { get; private set; }
+        private async Task CheckRedMod()
+        {
+            if (!_pluginService.IsInstalled(EPlugin.redmod))
+            {
+                var res = await Interactions
+                    .ShowMessageBoxAsync("The RedMod tools are not installed and mod compilation will not work. Would you like to install the RedMod tools now?",
+                    "RedMod not found");
+
+                switch (res)
+                {
+                    case WMessageBoxResult.OK:
+                    case WMessageBoxResult.Yes:
+                        _homePageViewModel.NavigateTo(EHomePage.Plugins);
+                        break;
+                }
+            }
+        }
+
         #endregion
 
         private void LoadMods()
@@ -151,6 +189,7 @@ namespace WolvenKit.ViewModels.HomePage
             // also update load order
             var modsInfoPath = Path.Combine(_settings.GetRED4GameRootDir(), "r6", "cache", "modded", "mods.json");
             ModsInfo modsInfo = null;
+            var foundmods = new List<ModInfoViewModel>();
             if (File.Exists(modsInfoPath))
             {
                 try
@@ -162,21 +201,19 @@ namespace WolvenKit.ViewModels.HomePage
                     _logger.Warning($"Could not read mods info file: {modsInfoPath}");
                     return;
                 }
-            }
 
-            ArgumentNullException.ThrowIfNull(modsInfo);
 
-            var foundmods = new List<ModInfoViewModel>();
-            for (var i = 0; i < modsInfo.Mods.Count; i++)
-            {
-                var mod = modsInfo.Mods[i];
-
-                var local = Mods.FirstOrDefault(x => x.Folder == mod.folder);
-                if (local is not null)
+                for (var i = 0; i < modsInfo.Mods.Count; i++)
                 {
-                    local.IsEnabled = mod.enabled;
-                    local.LoadOrder = i;
-                    foundmods.Add(local);
+                    var mod = modsInfo.Mods[i];
+
+                    var local = Mods.FirstOrDefault(x => x.Folder == mod.folder);
+                    if (local is not null)
+                    {
+                        local.IsEnabled = mod.enabled;
+                        local.LoadOrder = i;
+                        foundmods.Add(local);
+                    }
                 }
             }
 
@@ -194,25 +231,5 @@ namespace WolvenKit.ViewModels.HomePage
             _logger.Info($"Found {Mods.Count} mods.");
 
         }
-    }
-
-    public class ModInfoViewModel : ReactiveObject
-    {
-        public ModInfoViewModel(ModInfo mod, string folder)
-        {
-            Mod = mod;
-            Folder = folder;
-        }
-
-        public ModInfo Mod { get; init; }
-
-        public string Folder { get; init; }
-
-        [Reactive] public int LoadOrder { get; set; }
-
-        public bool IsEnabled { get; set; }
-
-        public string Name => Mod.Name;
-
     }
 }

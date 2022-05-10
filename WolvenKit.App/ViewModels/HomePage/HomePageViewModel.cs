@@ -14,8 +14,8 @@ namespace WolvenKit.ViewModels.HomePage
     {
         Welcome,
         Mods,
-        Settings,
         Plugins,
+        Settings,
         Wiki,
         Github,
         Website
@@ -28,14 +28,16 @@ namespace WolvenKit.ViewModels.HomePage
         #region Fields
 
         private readonly ISettingsManager _settingsManager;
+        private readonly IPluginService _pluginService;
 
         #endregion Fields
 
         #region Constructors
 
-        public HomePageViewModel(ISettingsManager settingsManager)
+        public HomePageViewModel(ISettingsManager settingsManager, IPluginService pluginService)
         {
             _settingsManager = settingsManager;
+            _pluginService = pluginService;
 
             CloseHomePage = new RelayCommand(ExecuteHome, CanHome);
             RestoreWindow = new RelayCommand(ExecuteRestoreWindow);

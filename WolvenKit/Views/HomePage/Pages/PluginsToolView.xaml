@@ -134,11 +134,11 @@
                             </Button>
 
                             <StackPanel Grid.Column="2" Margin="5">
-                                <Button Padding="1" Margin="1" Height="20" Width="70"
+                                <Button Padding="1" Margin="1" Height="20" Width="110"
                                         Content="{Binding Label}" Command="{Binding InstallCommand}"/>
-                                <Button Padding="1" Margin="1" Height="20" Width="70"
+                                <Button Padding="1" Margin="1" Height="20" Width="110"
                                         Content="Open"  IsEnabled="{Binding IsOpenEnabled}" Command="{Binding OpenCommand}"/>
-                                <Button Padding="1" Margin="1" Height="20" Width="70"
+                                <Button Padding="1" Margin="1" Height="20" Width="110"
                                         Content="Remove"  IsEnabled="{Binding IsOpenEnabled}" Command="{Binding RemoveCommand}"/>
                             </StackPanel>
                         </Grid>

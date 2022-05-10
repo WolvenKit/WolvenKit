@@ -32,10 +32,14 @@ namespace WolvenKit.ViewModels.HomePage
             _taskService = Locator.Current.GetService<ITaskService>();
 
             SyncCommand = ReactiveCommand.Create(SyncAsync);
+            ReloadCommand = ReactiveCommand.Create(Reload);
         }
 
 
         [Reactive] public PluginViewModel SelectedPlugin { get; set; }
+
+        public ICommand ReloadCommand { get; private set; }
+        public void Reload() => _pluginService.Init();
 
         public ICommand SyncCommand { get; private set; }
         public async Task SyncAsync()
