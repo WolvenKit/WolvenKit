@@ -10,6 +10,17 @@ using WolvenKit.ViewModels.Shell;
 
 namespace WolvenKit.ViewModels.HomePage
 {
+    public enum EHomePage
+    {
+        Welcome,
+        Mods,
+        Settings,
+        Plugins,
+        Wiki,
+        Github,
+        Website
+    }
+
     public class HomePageViewModel : ReactiveObject
     {
         // #needs_MVVM
@@ -86,6 +97,8 @@ namespace WolvenKit.ViewModels.HomePage
             var main = Locator.Current.GetService<AppViewModel>();
             main.CloseModalCommand.Execute(null);
         }
+
+        public void NavigateTo(EHomePage page) => SelectedIndex = (int)page;
 
         #endregion Methods
     }

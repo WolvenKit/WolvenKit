@@ -11,11 +11,9 @@ using Splat;
 using WolvenKit.Common.Services;
 using WolvenKit.Functionality.Services;
 
-namespace WolvenKit.ViewModels.Dialogs
+namespace WolvenKit.ViewModels.HomePage
 {
-
-
-    public class PluginsToolViewModel : DialogViewModel
+    public class PluginsToolViewModel : PageViewModel
     {
         private readonly ILoggerService _logger;
         [Reactive] public IPluginService _pluginService { get; set; }
@@ -23,10 +21,6 @@ namespace WolvenKit.ViewModels.Dialogs
         private readonly ILibraryService _libraryService;
         private readonly IGitHubService _gitHubService;
         private readonly ITaskService _taskService;
-
-
-        public delegate Task ReturnHandler(NewFileViewModel file);
-        public ReturnHandler FileHandler;
 
         public PluginsToolViewModel()
         {
@@ -37,19 +31,12 @@ namespace WolvenKit.ViewModels.Dialogs
             _gitHubService = Locator.Current.GetService<IGitHubService>();
             _taskService = Locator.Current.GetService<ITaskService>();
 
-            CancelCommand = ReactiveCommand.Create(() => FileHandler(null));
             SyncCommand = ReactiveCommand.Create(SyncAsync);
-
-            _pluginService.Init();
         }
 
 
         [Reactive] public PluginViewModel SelectedPlugin { get; set; }
 
-
-        public ICommand CancelCommand { get; private set; }
-
-        //public ICommand StartCommand { get; private set; }
         public ICommand SyncCommand { get; private set; }
         public async Task SyncAsync()
         {
@@ -63,7 +50,7 @@ namespace WolvenKit.ViewModels.Dialogs
                 if (plugin.Plugin == EPlugin.redmod)
                 {
                     var redModLocalversion = "";
-                    var redModManifest = Path.Combine(new FileInfo(plugin.InstallPath).Directory.FullName, "manifest.txt");
+                    var redModManifest = Path.Combine(new FileInfo(plugin.InstallPath).Directory.FullName, "version.txt");
                     if (File.Exists(redModManifest))
                     {
                         redModLocalversion = File.ReadAllText(redModManifest);
@@ -139,9 +126,5 @@ namespace WolvenKit.ViewModels.Dialogs
 
             _logger.Info("Check for updates finished");
         }
-
-
     }
-
-
 }

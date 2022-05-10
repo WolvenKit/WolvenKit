@@ -1,9 +1,10 @@
 using System.Linq;
 using ReactiveUI;
+using Splat;
 using Syncfusion.UI.Xaml.Grid;
-using WolvenKit.ViewModels.Dialogs;
+using WolvenKit.ViewModels.HomePage;
 
-namespace WolvenKit.Views.Dialogs
+namespace WolvenKit.Views.HomePage.Pages
 {
     /// <summary>
     /// Interaction logic for NewFileView.xaml
@@ -14,7 +15,26 @@ namespace WolvenKit.Views.Dialogs
         {
             InitializeComponent();
 
+            ViewModel = Locator.Current.GetService<ModsViewModel>();
+            DataContext = ViewModel;
+
             DataGridEvents.RowDragDropController.Dropped += RowDragDropController_Dropped;
+            // DataGridEvents.RowDragDropController.Drop += RowDragDropController_Drop;
+            DataGridEvents.RowDragDropController.DragStart += RowDragDropController_DragStart;
+            // DataGridEvents.RowDragDropController.DragOver += RowDragDropController_DragOver;
+        }
+
+        private void RowDragDropController_DragStart(object sender, GridRowDragStartEventArgs e)
+        {
+            var sortDesc = DataGridEvents.SortColumnDescriptions;
+            if (sortDesc.Any())
+            {
+                var sorter = sortDesc.First().ColumnName;
+                if (sorter != "LoadOrder")
+                {
+                    e.Handled = true;
+                }
+            }
         }
 
         private void RowDragDropController_Dropped(object sender, GridRowDroppedEventArgs e)
@@ -40,16 +60,6 @@ namespace WolvenKit.Views.Dialogs
                     }
                 }
             }
-        }
-
-        private void RowDragDropController_Drop(object sender, GridRowDropEventArgs e)
-        {
-
-        }
-
-        private void DataGridEvents_Drop(object sender, System.Windows.DragEventArgs e)
-        {
-
         }
     }
 }

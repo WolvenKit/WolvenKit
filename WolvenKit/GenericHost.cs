@@ -122,12 +122,8 @@ namespace WolvenKit
                     services.AddTransient<NewFileViewModel>();
                     services.AddTransient<IViewFor<NewFileViewModel>, NewFileView>();
 
-                    services.AddTransient<PluginsToolViewModel>();
-                    services.AddTransient<IViewFor<PluginsToolViewModel>, PluginsToolView>();
                     services.AddTransient<SoundModdingViewModel>();
                     services.AddTransient<IViewFor<SoundModdingViewModel>, SoundModdingView>();
-                    services.AddTransient<ModsViewModel>();
-                    services.AddTransient<IViewFor<ModsViewModel>, ModsView>();
 
                     #endregion
 
@@ -188,6 +184,12 @@ namespace WolvenKit
 
                     services.AddTransient<WikiPageViewModel>();
                     services.AddTransient<IViewFor<WikiPageViewModel>, WikiPageView>();
+
+                    services.AddTransient<ModsViewModel>();
+                    services.AddTransient<IViewFor<ModsViewModel>, ModsView>();
+
+                    services.AddTransient<PluginsToolViewModel>();
+                    services.AddTransient<IViewFor<PluginsToolViewModel>, PluginsToolView>();
 
                     #endregion
 

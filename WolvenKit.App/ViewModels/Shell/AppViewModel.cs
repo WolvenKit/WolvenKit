@@ -58,6 +58,7 @@ namespace WolvenKit.ViewModels.Shell
         private readonly IRecentlyUsedItemsService _recentlyUsedItemsService;
         private readonly IProgressService<double> _progressService;
         private readonly IWatcherService _watcherService;
+        private readonly IPluginService _pluginService;
         private readonly AutoInstallerService _autoInstallerService;
         private readonly HomePageViewModel _homePageViewModel;
 
@@ -77,6 +78,7 @@ namespace WolvenKit.ViewModels.Shell
             IRecentlyUsedItemsService recentlyUsedItemsService,
             IProgressService<double> progressService,
             IWatcherService watcherService,
+            IPluginService pluginService,
             AutoInstallerService autoInstallerService
         )
         {
@@ -89,6 +91,7 @@ namespace WolvenKit.ViewModels.Shell
             _progressService = progressService;
             _watcherService = watcherService;
             _autoInstallerService = autoInstallerService;
+            _pluginService = pluginService;
 
             _homePageViewModel = Locator.Current.GetService<HomePageViewModel>();
 
@@ -177,6 +180,7 @@ namespace WolvenKit.ViewModels.Shell
                 .Take(1)
                 .Subscribe(x =>
                 {
+                    _pluginService.Init();
                     LoadTweakDB(_settingsManager.GetRED4GameRootDir());
                 });
 
@@ -247,6 +251,8 @@ namespace WolvenKit.ViewModels.Shell
             InitUpdateService();
 
             ShowFirstTimeSetup();
+
+
         }
 
 
@@ -423,10 +429,7 @@ namespace WolvenKit.ViewModels.Shell
 
                 await _projectManager.LoadAsync(projectLocation);
 
-                DispatcherHelper.RunOnMainThread(() =>
-                {
-                    ActiveProject = _projectManager.ActiveProject;
-                });
+                DispatcherHelper.RunOnMainThread(() => ActiveProject = _projectManager.ActiveProject);
 
                 await _gameControllerFactory.GetController().HandleStartup().ContinueWith(_ =>
                 {
@@ -474,7 +477,7 @@ namespace WolvenKit.ViewModels.Shell
         private bool CanShowHomePage() => !IsDialogShown;
         private void ExecuteShowHomePage()
         {
-            _homePageViewModel.SelectedIndex = 0;
+            _homePageViewModel.NavigateTo(EHomePage.Welcome);
             SetActiveOverlay(_homePageViewModel);
         }
 
@@ -483,7 +486,7 @@ namespace WolvenKit.ViewModels.Shell
         private void ExecuteShowSettings()
         {
 
-            _homePageViewModel.SelectedIndex = 1;
+            _homePageViewModel.NavigateTo(EHomePage.Settings);
             SetActiveOverlay(_homePageViewModel);
         }
 
@@ -572,13 +575,6 @@ namespace WolvenKit.ViewModels.Shell
             _loggerService.Success("Game launching.");
         }
 
-        public ICommand ShowPluginCommand { get; private set; }
-        private bool CanShowPlugin() => !IsDialogShown;
-        private void ExecuteShowPlugin() => SetActiveDialog(new PluginsToolViewModel
-        {
-            FileHandler = OpenFromNewFile
-        });
-
         public ICommand ShowSoundModdingToolCommand { get; private set; }
         private bool CanShowSoundModdingTool() => !IsDialogShown;
         private void ExecuteShowSoundModdingTool() => SetActiveDialog(new SoundModdingViewModel
@@ -586,12 +582,21 @@ namespace WolvenKit.ViewModels.Shell
             FileHandler = OpenFromNewFile
         });
 
+        public ICommand ShowPluginCommand { get; private set; }
+        private bool CanShowPlugin() => !IsDialogShown;
+        private void ExecuteShowPlugin()
+        {
+            _homePageViewModel.NavigateTo(EHomePage.Plugins);
+            SetActiveOverlay(_homePageViewModel);
+        }
+
         public ICommand ShowModsViewCommand { get; private set; }
         private bool CanShowModsView() => !IsDialogShown;
-        private void ExecuteShowModsView() => SetActiveDialog(new ModsViewModel
+        private void ExecuteShowModsView()
         {
-            FileHandler = OpenFromNewFile
-        });
+            _homePageViewModel.NavigateTo(EHomePage.Mods);
+            SetActiveOverlay(_homePageViewModel);
+        }
 
         public ICommand NewFileCommand { get; private set; }
         private bool CanNewFile(string inputDir) => ActiveProject != null && !IsDialogShown;
@@ -840,13 +845,7 @@ namespace WolvenKit.ViewModels.Shell
         private async Task ExecutePackMod() => await _gameControllerFactory.GetController().PackProject();
 
         public ReactiveCommand<Unit, Unit> PackInstallModCommand { get; private set; }
-        private async Task ExecutePackInstallMod()
-        {
-            await Task.Run(async () =>
-            {
-                await _gameControllerFactory.GetController().PackAndInstallProject();
-            });
-        }
+        private async Task ExecutePackInstallMod() => await Task.Run(async () => await _gameControllerFactory.GetController().PackAndInstallProject());
 
         //public ICommand PublishModCommand { get; private set; }
         //private bool CanPublishMod() => _projectManager.ActiveProject != null;

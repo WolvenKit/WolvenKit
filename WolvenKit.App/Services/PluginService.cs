@@ -7,7 +7,7 @@ using gpm.Core.Services;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using WolvenKit.Common.Services;
-using WolvenKit.ViewModels.Dialogs;
+using WolvenKit.ViewModels.HomePage;
 
 namespace WolvenKit.Functionality.Services
 {

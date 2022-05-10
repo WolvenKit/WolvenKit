@@ -14,13 +14,13 @@
     mc:Ignorable="av"
     xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:homePage="clr-namespace:WolvenKit.ViewModels.HomePage;assembly=WolvenKit.App"
+    xmlns:homePage="clr-namespace:WolvenKit.ViewModels.HomePage;assembly=WolvenKit.App" xmlns:dialogs="clr-namespace:WolvenKit.Views.Dialogs"
     d:DataContext="{d:DesignInstance Type=homePage:HomePageViewModel}"
     MinWidth="960"
     BorderThickness="1"
     BorderBrush="{StaticResource ContentBackgroundAlt4}"
-        Background="{DynamicResource ContentBackgroundAlt2}"
-        MouseLeftButtonDown="Grid_MouseLeftButtonDown_1"
+    Background="{DynamicResource ContentBackgroundAlt2}"
+    MouseLeftButtonDown="Grid_MouseLeftButtonDown_1"
     >
 
 
@@ -37,49 +37,13 @@
                 </ResourceDictionary.MergedDictionaries>
             </ResourceDictionary>
         </Grid.Resources>
+
         <Grid>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="1*" x:Name="HomePageSideBar" />
                 <ColumnDefinition Width="5*" x:Name="HomePageContent" />
             </Grid.ColumnDefinitions>
         </Grid>
-        <!--<Button
-                Margin="0,0,0,0"
-                HorizontalAlignment="Center"
-                VerticalAlignment="Bottom"
-                BorderBrush="Transparent"
-                Click="MenuItem_Click"
-                Style="{DynamicResource MahApps.Styles.Button.Chromeless}">
-                <StackPanel Margin="0,0,0,5">
-                    <TextBlock Foreground="White" Text="New? Take a guided tour!" />
-
-
-                </StackPanel>
-
-            </Button>-->
-            <!--Button
-                Grid.Row="2"
-                Width="55"
-                Height="55"
-                Margin="0,0,0,25"
-                HorizontalAlignment="Center"
-                VerticalAlignment="Bottom"
-                BorderBrush="{DynamicResource RegionBrush}"
-                BorderThickness="0"
-                Command="{Binding CloseHomePage}"
-                Effect="{DynamicResource MahApps.DropShadowEffect.Menu}"
-                Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}"
-                Style="{StaticResource MahApps.Styles.Button.Chromeless}">
-                <iconPacks:PackIconBootstrapIcons
-                    Width="35"
-                    Height="35"
-                    Foreground="{DynamicResource Fluent.Ribbon.Brushes.Backstage.Foreground}"
-                    Kind="BoxArrowLeft">
-                    <iconPacks:PackIconBootstrapIcons.Effect>
-                        <DropShadowEffect />
-                    </iconPacks:PackIconBootstrapIcons.Effect>
-                </iconPacks:PackIconBootstrapIcons>
-            </Button-->
 
         <Grid
             Margin="0,0,25,18"
@@ -233,6 +197,7 @@
                     </Setter>
                 </Style>
             </TabControl.Style>
+
             <TabItem Name="WelcomePageTab">
                 <TabItem.Header>
                     <StackPanel Orientation="Horizontal">
@@ -247,6 +212,40 @@
                 </TabItem.Header>
                 <TabItem.Content>
                     <pages:WelcomePageView x:Name="WlcmPage"/>
+                </TabItem.Content>
+            </TabItem>
+
+            <TabItem Name="ModsPageTab">
+                <TabItem.Header>
+                    <StackPanel Orientation="Horizontal">
+                        <iconPacks:PackIconCodicons
+                            Foreground="White"
+                            VerticalAlignment="Center"
+                            Width="20"
+                            Height="20"
+                            Kind="Package" />
+                        <TextBlock Text="Mod Manager" Margin="8,0,0,0" VerticalAlignment="Center" FontSize="16"/>
+                    </StackPanel>
+                </TabItem.Header>
+                <TabItem.Content>
+                    <pages:ModsView/>
+                </TabItem.Content>
+            </TabItem>
+
+            <TabItem Name="PluginsPageTab">
+                <TabItem.Header>
+                    <StackPanel Orientation="Horizontal">
+                        <iconPacks:PackIconCodicons
+                            Foreground="White"
+                            VerticalAlignment="Center"
+                            Width="20"
+                            Height="20"
+                            Kind="Extensions" />
+                        <TextBlock Text="Plugins" Margin="8,0,0,0" VerticalAlignment="Center" FontSize="16"/>
+                    </StackPanel>
+                </TabItem.Header>
+                <TabItem.Content>
+                    <pages:PluginsToolView/>
                 </TabItem.Content>
             </TabItem>
 
@@ -321,73 +320,6 @@
                 </TabItem.Content>
             </TabItem>
         </TabControl>
-
-        <!--  Min/Max/Close Buttons  -->
-        <!--Grid Grid.Column="2">
-            <Grid.OpacityMask>
-                <VisualBrush Visual="{Binding ElementName=ButtonsBackground}" />
-            </Grid.OpacityMask>
-        <Border
-            Name="ButtonsBackground"
-            Height="30"
-            Margin="0,28,28,0"
-            HorizontalAlignment="Right"
-            VerticalAlignment="Top"
-            Background="{StaticResource ContentBackgroundAlt}"
-            CornerRadius="5">
-            <StackPanel
-                Margin="0,0,0,0"
-                HorizontalAlignment="Right"
-                VerticalAlignment="Center"
-                Orientation="Horizontal">
-                <Button
-                    Width="63"
-                    VerticalAlignment="Center"
-                    BorderBrush="Transparent"
-                    Command="{Binding MinimizeWindow}"
-                    Style="{StaticResource ModernButtonStyle}">
-                        <iconPacks:PackIconCodicons
-                        Width="13"
-                        Height="13"
-                        Foreground="{StaticResource Fluent.Ribbon.Brushes.Backstage.Foreground}"
-                        Kind="ChromeMinimize">
-                        </iconPacks:PackIconCodicons>
-                </Button>
-
-                <Button
-                    Width="63"
-                    VerticalAlignment="Center"
-                    BorderBrush="Transparent"
-                    Command="{Binding RestoreWindow}"
-                    Style="{StaticResource ModernButtonStyle}">
-                        <iconPacks:PackIconCodicons
-                        Width="13"
-                        Height="13"
-                        Foreground="{StaticResource Fluent.Ribbon.Brushes.Backstage.Foreground}"
-                        Kind="ChromeRestore">
-                        </iconPacks:PackIconCodicons>
-                </Button>
-
-                <Button
-                    Width="63"
-                    VerticalAlignment="Center"
-                    Command="hc:ControlCommands.ShutdownApp"
-                    Style="{StaticResource ModernButtonStyle}">
-                        <iconPacks:PackIconCodicons
-                        Width="13"
-                        Height="13"
-                        HorizontalAlignment="Center"
-                        VerticalAlignment="Center"
-                        Foreground="{StaticResource Fluent.Ribbon.Brushes.Backstage.Foreground}"
-                        Kind="ChromeClose">
-                        </iconPacks:PackIconCodicons>
-                </Button>
-            </StackPanel>
-            </Border>
-        </Grid-->
-
-
-
 
         <feather:GuidedTour
             Name="guide"

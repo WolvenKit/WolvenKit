@@ -13,16 +13,21 @@ using Splat;
 using WolvenKit.Common.Services;
 using WolvenKit.Functionality.Controllers;
 using WolvenKit.Functionality.Services;
+using WolvenKit.Helpers;
 using WolvenKit.Models;
+using WolvenKit.ViewModels.Shell;
 
-namespace WolvenKit.ViewModels.Dialogs
+namespace WolvenKit.ViewModels.HomePage
 {
-    public class ModsViewModel : DialogViewModel
+    public class ModsViewModel : PageViewModel
     {
         private readonly ISettingsManager _settings;
         private readonly ILoggerService _logger;
+        private readonly INotificationService _notificationService;
         private readonly IProjectManager _projectManager;
         private readonly IGameControllerFactory _gameControllerFactory;
+        private readonly IPluginService _pluginService;
+        private readonly AppViewModel _mainViewModel;
 
         private readonly JsonSerializerOptions _options = new JsonSerializerOptions
         {
@@ -38,43 +43,65 @@ namespace WolvenKit.ViewModels.Dialogs
             _logger = Locator.Current.GetService<ILoggerService>();
             _projectManager = Locator.Current.GetService<IProjectManager>();
             _gameControllerFactory = Locator.Current.GetService<IGameControllerFactory>();
+            _pluginService = Locator.Current.GetService<IPluginService>();
+            _notificationService = Locator.Current.GetService<INotificationService>();
 
-            SaveCommand = ReactiveCommand.Create(() => Save());
-            CancelCommand = ReactiveCommand.Create(() => FileHandler(null));
+            _mainViewModel = Locator.Current.GetService<AppViewModel>();
 
             RefreshCommand = ReactiveCommand.Create(() => Refresh());
             DeployCommand = ReactiveCommand.Create(() => Deploy());
             LaunchGameCommand = ReactiveCommand.Create(() => LaunchGame());
 
-            // load all mods
             LoadMods();
-
-
-            _logger.Info($"Found {Mods.Count} mods.");
-
         }
-
-
-
-
-        public delegate Task ReturnHandler(NewFileViewModel file);
-        public ReturnHandler FileHandler;
 
         [Reactive] public ObservableCollection<ModInfoViewModel> Mods { get; set; } = new();
 
         #region commands
 
-        public ICommand CancelCommand { get; private set; }
-
-        public ICommand SaveCommand { get; private set; }
-        private void Save()
-        {
-            // REDMODTODO
-        }
-
-
         public ICommand DeployCommand { get; private set; }
-        private async Task Deploy() => await _gameControllerFactory.GetController().DeployRedmod();
+        private async Task Deploy() => await DeployRedmod();
+
+        private IEnumerable<ModInfoViewModel> GetEnabledMods() => Mods.Where(x => x.IsEnabled);
+
+        private async Task<bool> DeployRedmod()
+        {
+            if (!_pluginService.IsInstalled(EPlugin.redmod))
+            {
+                _logger.Error("Redmod needs to be installed to deploy mods.");
+
+
+
+
+
+                return false;
+            }
+
+            var result = false;
+            // compile with redmod
+            var redmodPath = Path.Combine(_settings.GetRED4GameRootDir(), "tools", "redmod", "bin", "redmod.exe");
+            if (File.Exists(redmodPath))
+            {
+                var args = $"deploy -root=\"{_settings.GetRED4GameRootDir()}\"";
+
+                var enabledMods = GetEnabledMods();
+                if (enabledMods.Any())
+                {
+                    var modsStr = string.Join(' ', enabledMods.Select(x => $"\"{x.Folder}\""));
+                    args += $" -mod={modsStr}";
+                }
+
+                _logger.Info($"WorkDir: {redmodPath}");
+                _logger.Info($"Running commandlet: {args}");
+                result = await ProcessUtil.RunProcessAsync(redmodPath, args);
+            }
+            else
+            {
+                result = await Task.FromResult(true);
+            }
+
+            return result;
+        }
 
         public ICommand RefreshCommand { get; private set; }
         private void Refresh() => LoadMods();
@@ -157,17 +184,14 @@ namespace WolvenKit.ViewModels.Dialogs
             // reorder according to modsInfo
             // first come all the mods in mods.info
             // then the rest
-            for (var i = 0; i < Mods.Count; i++)
+            var rest = Mods.Where(x => !foundmods.Contains(x)).ToList();
+            for (var i = 0; i < rest.Count; i++)
             {
-                var mod = Mods[i];
-
-                if (foundmods.Contains(mod))
-                {
-                    continue;
-                }
-
+                var mod = rest[i];
                 mod.LoadOrder = i + foundmods.Count;
             }
+
+            _logger.Info($"Found {Mods.Count} mods.");
 
         }
     }

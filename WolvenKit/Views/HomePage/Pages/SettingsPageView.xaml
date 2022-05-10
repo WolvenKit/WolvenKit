@@ -10,43 +10,22 @@
     xmlns:sp="clr-namespace:WolvenKit.Views.HomePage.Pages"
     xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
     xmlns:viewmodels="clr-namespace:WolvenKit.ViewModels">
-   
+
     <Grid MinWidth="300" MinHeight="300">
-
-        <Grid.Resources>
-            <ResourceDictionary>
-                <!--<ResourceDictionary.MergedDictionaries>
-                    <hc:ThemeResources RequestedTheme="Dark" />
-                    <hc:Theme />
-                </ResourceDictionary.MergedDictionaries>-->
-
-                <ResourceDictionary.MergedDictionaries>
-                    <ResourceDictionary Source="pack://application:,,,/AdonisUI;component/ColorSchemes/Dark.xaml"/>
-                    <ResourceDictionary Source="pack://application:,,,/AdonisUI.ClassicTheme;component/Resources.xaml"/>
-                </ResourceDictionary.MergedDictionaries>
-            </ResourceDictionary>
-        </Grid.Resources>
 
         <Grid.RowDefinitions>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
-        <syncfusion:PropertyGrid
-            x:Name="SettingsPropertygrid" Grid.Row="0"  Margin="0,85,0,0"
+        <syncfusion:PropertyGrid Grid.Row="0" 
+            x:Name="SettingsPropertygrid" Margin="0,85,0,0"
             AutoGeneratingPropertyGridItem="SettingsPropertygrid_OnAutoGeneratingPropertyGridItem"
             CategoryForeground="{StaticResource WolvenKitRed}"
             EnableGrouping="True"
             BorderThickness="0"
             SearchBoxVisibility="Collapsed"
             ButtonPanelVisibility="Collapsed"
-            PropertyNameColumnDefinition="200">
-            <!--syncfusion:PropertyGrid.Resources>
-                <Style TargetType="{x:Type propertygrid:PropertyViewItem}" BasedOn="{StaticResource SyncfusionPropertyViewItemStyle}">
-                    <Setter Property="IsCategoryEditorEnabled" Value="False" />
-                </Style>
-            </syncfusion:PropertyGrid.Resources-->
-        </syncfusion:PropertyGrid>
-
+            PropertyNameColumnDefinition="200"/>
 
         <StackPanel
             Margin="25,0,5,0"

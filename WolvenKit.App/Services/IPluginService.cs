@@ -2,7 +2,7 @@ using System;
 using System.Collections.ObjectModel;
 using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
-using WolvenKit.ViewModels.Dialogs;
+using WolvenKit.ViewModels.HomePage;
 
 namespace WolvenKit.Functionality.Services
 {

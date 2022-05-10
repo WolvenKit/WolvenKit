@@ -1825,7 +1825,7 @@
     <Page Update="PathIcon.xaml">
       <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
     </Page>
-    <Page Update="Views\Dialogs\ModsView.xaml">
+    <Page Update="Views\HomePage\Pages\ModsView.xaml">
       <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
       <SubType>Designer</SubType>
     </Page>
@@ -1833,7 +1833,7 @@
       <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
       <SubType>Designer</SubType>
     </Page>
-    <Page Update="Views\Dialogs\PluginsToolView.xaml">
+    <Page Update="Views\HomePage\Pages\PluginsToolView.xaml">
       <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
     </Page>
     <Page Update="Views\Templates\PathEditorView.xaml">

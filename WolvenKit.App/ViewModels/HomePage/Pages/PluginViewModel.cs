@@ -13,7 +13,7 @@ using WolvenKit.Common.Services;
 using WolvenKit.Functionality.Services;
 using WolvenKit.Models;
 
-namespace WolvenKit.ViewModels.Dialogs
+namespace WolvenKit.ViewModels.HomePage
 {
     public class PluginViewModel : ReactiveObject
     {
