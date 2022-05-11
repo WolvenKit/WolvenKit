@@ -154,7 +154,7 @@ public class TweakDBWriter : Red4Writer
     {
         BaseWriter.Write((byte)0x00); // Garbage, it is read but not used when "Unserialized" is called.
 
-        var typeInfo = RedReflection.GetTypeInfo(instance.GetType());
+        var typeInfo = RedReflection.GetTypeInfo(instance);
         foreach (var propertyInfo in typeInfo.GetWritableProperties())
         {
             BaseWriter.WriteLengthPrefixedString(propertyInfo.RedName);

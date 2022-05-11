@@ -71,7 +71,7 @@ namespace WolvenKit.ViewModels.Documents
 
         public Element3D RenderEntity(entEntityTemplate ent, Appearance appearance = null, string appearanceName = null)
         { 
-            if (ent.CompiledData.Data is not Package04 pkg)
+            if (ent.CompiledData.Data is not RedPackage pkg)
                 return null;
 
             if (ent.Appearances.Count > 0)
@@ -180,7 +180,7 @@ namespace WolvenKit.ViewModels.Documents
                     {
                         var appDef = (appearanceAppearanceDefinition)handle.GetValue();
 
-                        if (appDef.Name != app.AppearanceName || appDef.CompiledData.Data is not Package04 appPkg)
+                        if (appDef.Name != app.AppearanceName || appDef.CompiledData.Data is not RedPackage appPkg)
                         {
                             continue;
                         }

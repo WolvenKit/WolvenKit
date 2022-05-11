@@ -60,7 +60,7 @@ namespace WolvenKit.RED4.TweakDB
         /// <param name="record">The value.</param>
         public void Add(string name, gamedataTweakDBRecord record)
         {
-            var typeInfo = RedReflection.GetTypeInfo(record.GetType());
+            var typeInfo = RedReflection.GetTypeInfo(record);
             foreach (var propertyInfo in typeInfo.PropertyInfos)
             {
                 var value = record.GetProperty(propertyInfo.RedName);
@@ -120,7 +120,7 @@ namespace WolvenKit.RED4.TweakDB
             var instance = RedTypeManager.Create(type);
             var values = Flats.GetRecordValues(path);
 
-            var typeInfo = RedReflection.GetTypeInfo(type);
+            var typeInfo = RedReflection.GetTypeInfo(instance);
             foreach (var propertyInfo in typeInfo.PropertyInfos)
             {
                 if (values.ContainsKey(propertyInfo.RedName))

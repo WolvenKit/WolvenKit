@@ -13,7 +13,7 @@ namespace WolvenKit.RED4.Archive.IO
 {
     public partial class WorldSharedDataBufferReader
     { 
-        public EFileReadErrorCodes ReadCookedInstanceTransformsBuffer(RedBuffer buffer, Type fileRootType)
+        public EFileReadErrorCodes ReadCookedInstanceTransformsBuffer(RedBuffer buffer)
         {
             var data = new CookedInstanceTransformsBuffer();
             while (_reader.BaseStream.Position < _reader.BaseStream.Length)

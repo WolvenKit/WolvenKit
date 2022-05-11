@@ -81,9 +81,9 @@ namespace WolvenKit.Views.Documents
 
                 foreach (var item in ViewModel.library.LibraryItems)
                 {
-                    if (item.PackageData == null || item.PackageData.Data is not Package04 pkg)
+                    if (item.PackageData == null || item.PackageData.Data is not RedPackage pkg)
                     {
-                        if (item.Package.Data is not Package04 pkg2)
+                        if (item.Package.Data is not RedPackage pkg2)
                         {
                             return;
                         }

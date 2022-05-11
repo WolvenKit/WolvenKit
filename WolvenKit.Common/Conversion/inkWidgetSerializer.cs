@@ -61,7 +61,7 @@ namespace WolvenKit.Common.Conversion
 
             var childSets = new List<IRedType>();
 
-            var pis = RedReflection.GetTypeInfo(value.GetType()).PropertyInfos.Sort((a, b) => a.Name.CompareTo(b.Name));
+            var pis = RedReflection.GetTypeInfo(value).PropertyInfos.Sort((a, b) => a.Name.CompareTo(b.Name));
             pis.ForEach((pi) =>
             {
                 var name = !string.IsNullOrEmpty(pi.RedName) ? pi.RedName : pi.Name;

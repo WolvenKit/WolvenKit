@@ -461,10 +461,10 @@ public class DataBufferConverter : JsonConverter<DataBuffer>, ICustomRedConverte
 
                 case "Data":
                 {
-                    var converter = options.GetConverter(typeof(Package04));
+                    var converter = options.GetConverter(typeof(RedPackage));
                     if (converter is ICustomRedConverter conv)
                     {
-                        val.Data = (IParseableBuffer?)conv.ReadRedType(ref reader, typeof(Package04), options);
+                        val.Data = (IParseableBuffer?)conv.ReadRedType(ref reader, typeof(RedPackage), options);
                     }
                     else
                     {
@@ -535,7 +535,7 @@ public class DataBufferConverter : JsonConverter<DataBuffer>, ICustomRedConverte
         {
             writer.WriteString("BufferId", refId);
 
-            if (value.Buffer.Data is Package04 pkg)
+            if (value.Buffer.Data is RedPackage pkg)
             {
                 writer.WritePropertyName("Data");
                 JsonSerializer.Serialize(writer, pkg, options);
@@ -632,10 +632,10 @@ public class SerializationDeferredDataBufferConverter : JsonConverter<Serializat
 
                 case "Data":
                 {
-                    var converter = options.GetConverter(typeof(Package04));
+                    var converter = options.GetConverter(typeof(RedPackage));
                     if (converter is ICustomRedConverter conv)
                     {
-                        val.Data = (IParseableBuffer?)conv.ReadRedType(ref reader, typeof(Package04), options);
+                        val.Data = (IParseableBuffer?)conv.ReadRedType(ref reader, typeof(RedPackage), options);
                     }
                     else
                     {
@@ -706,7 +706,7 @@ public class SerializationDeferredDataBufferConverter : JsonConverter<Serializat
         {
             writer.WriteString("BufferId", refId);
 
-            if (value.Buffer.Data is Package04 pkg)
+            if (value.Buffer.Data is RedPackage pkg)
             {
                 writer.WritePropertyName("Data");
                 JsonSerializer.Serialize(writer, pkg, options);
@@ -772,10 +772,10 @@ public class SharedDataBufferConverter : JsonConverter<SharedDataBuffer>, ICusto
 
             case "Data":
             {
-                var converter = options.GetConverter(typeof(Package04));
+                var converter = options.GetConverter(typeof(RedPackage));
                 if (converter is ICustomRedConverter conv)
                 {
-                    val.Data = (IParseableBuffer?)conv.ReadRedType(ref reader, typeof(Package04), options);
+                    val.Data = (IParseableBuffer?)conv.ReadRedType(ref reader, typeof(RedPackage), options);
                 }
                 else
                 {
@@ -842,7 +842,7 @@ public class SharedDataBufferConverter : JsonConverter<SharedDataBuffer>, ICusto
             writer.WritePropertyName("File");
             JsonSerializer.Serialize(writer, new RedFileDto(file), options);
         }
-        else if (value.Data is Package04 pkg)
+        else if (value.Data is RedPackage pkg)
         {
             writer.WritePropertyName("Data");
             JsonSerializer.Serialize(writer, pkg, options);
@@ -2291,7 +2291,7 @@ public class RedClassConverter : JsonConverter<RedBaseClass>, ICustomRedConverte
                         cls = RedTypeManager.Create(clsType);
                     }
 
-                    typeInfo = RedReflection.GetTypeInfo(cls.GetType());
+                    typeInfo = RedReflection.GetTypeInfo(cls);
 
                     if (refId != null && !_referenceResolver.HasReference(refId))
                     {
@@ -2381,7 +2381,7 @@ public class RedClassConverter : JsonConverter<RedBaseClass>, ICustomRedConverte
         writer.WritePropertyName("Properties");
         writer.WriteStartObject();
 
-        var typeInfo = RedReflection.GetTypeInfo(value.GetType());
+        var typeInfo = RedReflection.GetTypeInfo(value);
         foreach (var propertyInfo in typeInfo.PropertyInfos.OrderBy(x => x.RedName))
         {
             writer.WritePropertyName(propertyInfo.RedName);
@@ -2400,26 +2400,26 @@ public class RedClassConverter : JsonConverter<RedBaseClass>, ICustomRedConverte
 
 public class Red4FileConverterFactory : JsonConverterFactory
 {
-    private readonly Package04Converter _package04Converter = new();
+    private readonly RedPackageConverter _redPackageConverter = new();
 
     public override bool CanConvert(Type typeToConvert) => typeToConvert.IsSubclassOf(typeof(Red4File));
 
     public override JsonConverter CreateConverter(Type typeToConvert, JsonSerializerOptions options)
     {
-        if (typeToConvert == typeof(Package04))
+        if (typeToConvert == typeof(RedPackage))
         {
-            return _package04Converter;
+            return _redPackageConverter;
         }
 
         throw new NotSupportedException("CreateConverter got called on a type that this converter factory doesn't support");
     }
 }
 
-public class Package04Converter : JsonConverter<Package04>, ICustomRedConverter
+public class RedPackageConverter : JsonConverter<RedPackage>, ICustomRedConverter
 {
     public object? ReadRedType(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options) => Read(ref reader, typeToConvert, options);
 
-    public override Package04? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+    public override RedPackage? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
     {
         if (reader.TokenType == JsonTokenType.Null)
         {
@@ -2431,7 +2431,7 @@ public class Package04Converter : JsonConverter<Package04>, ICustomRedConverter
             throw new JsonException();
         }
 
-        var result = new Package04();
+        var result = new RedPackage();
         while (reader.Read())
         {
             if (reader.TokenType == JsonTokenType.EndObject)
@@ -2544,7 +2544,7 @@ public class Package04Converter : JsonConverter<Package04>, ICustomRedConverter
         throw new JsonException();
     }
 
-    public override void Write(Utf8JsonWriter writer, Package04 value, JsonSerializerOptions options)
+    public override void Write(Utf8JsonWriter writer, RedPackage value, JsonSerializerOptions options)
     {
         writer.WriteStartObject();
 

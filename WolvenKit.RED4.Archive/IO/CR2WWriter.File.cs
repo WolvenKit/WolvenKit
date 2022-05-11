@@ -283,12 +283,12 @@ namespace WolvenKit.RED4.Archive.IO
 
         private void WriteBufferData(RedBuffer buffer)
         {
-            if (buffer.Data is Package04 p4)
+            if (buffer.Data is RedPackage p4)
             {
                 using var ms = new MemoryStream();
-                using var packageWriter = new PackageWriter(ms) { IsRoot = false };
+                using var packageWriter = new RedPackageWriter(ms) { IsRoot = false };
 
-                packageWriter.WritePackage(p4, _file.RootChunk.GetType());
+                packageWriter.WritePackage(p4);
 
                 buffer.SetBytes(ms.ToArray());
             }
@@ -525,7 +525,7 @@ namespace WolvenKit.RED4.Archive.IO
 
             foreach (var embeddedFile in _file.EmbeddedFiles)
             {
-                var typeInfo = RedReflection.GetTypeInfo(embeddedFile.Content.GetType());
+                var typeInfo = RedReflection.GetTypeInfo(embeddedFile.Content);
                 SetParent(_chunkInfos[embeddedFile.Content].Id, maxDepth: typeInfo.ChildLevel);
 
                 var tuple = new ImportEntry("", (CName)embeddedFile.FileName, (ushort)8);

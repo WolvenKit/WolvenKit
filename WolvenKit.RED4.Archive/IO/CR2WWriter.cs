@@ -30,7 +30,7 @@ namespace WolvenKit.RED4.Archive.IO
 
             _writer.Write((byte)0);
 
-            var typeInfo = RedReflection.GetTypeInfo(cls.GetType());
+            var typeInfo = RedReflection.GetTypeInfo(cls);
             foreach (var propertyInfo in typeInfo.GetWritableProperties())
             {
                 var value = cls.GetProperty(propertyInfo.RedName);

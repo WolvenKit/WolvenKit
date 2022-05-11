@@ -5,7 +5,7 @@ namespace WolvenKit.RED4.Archive.Buffer
 {
 
     [StructLayout(LayoutKind.Explicit, Size = 32)]
-    public struct Package04Header
+    public struct RedPackageHeader
     {
         [FieldOffset(0)]
         public ushort version;
@@ -43,7 +43,7 @@ namespace WolvenKit.RED4.Archive.Buffer
     }
 
     [StructLayout(LayoutKind.Explicit, Size = 4)]
-    public struct Package04ImportHeader
+    public struct RedPackageImportHeader
     {
         [FieldOffset(0)]
         public uint bitfield;
@@ -85,7 +85,7 @@ namespace WolvenKit.RED4.Archive.Buffer
     }
 
     [StructLayout(LayoutKind.Explicit, Size = 4)]
-    public struct Package04NameHeader
+    public struct RedPackageNameHeader
     {
         [FieldOffset(0)]
         public uint bitfield;
@@ -116,7 +116,7 @@ namespace WolvenKit.RED4.Archive.Buffer
     }
 
     [StructLayout(LayoutKind.Explicit, Size = 8)]
-    public struct Package04ChunkHeader
+    public struct RedPackageChunkHeader
     {
         [FieldOffset(0)]
         public uint typeID;
@@ -126,7 +126,7 @@ namespace WolvenKit.RED4.Archive.Buffer
     }
 
     [StructLayout(LayoutKind.Explicit, Size = 8)]
-    public struct Package04FieldHeader
+    public struct RedPackageFieldHeader
     {
         [FieldOffset(0)]
         public ushort nameID;

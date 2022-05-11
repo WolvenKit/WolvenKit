@@ -14,7 +14,7 @@ namespace WolvenKit.RED4.Types
 
         internal void InternalInitClass()
         {
-            var info = RedReflection.GetTypeInfo(GetType());
+            var info = RedReflection.GetTypeInfo(this);
             foreach (var propertyInfo in info.PropertyInfos)
             {
                 if (string.IsNullOrEmpty(propertyInfo.RedName))
@@ -40,7 +40,7 @@ namespace WolvenKit.RED4.Types
 
         internal void InternalSetPropertyValue(string propertyName, IRedType value, bool onlyNative = true)
         {
-            var propertyInfo = RedReflection.GetNativePropertyInfo(GetType(), propertyName);
+            var propertyInfo = RedReflection.GetTypeInfo(this).GetPropertyInfoByName(propertyName);
             if (propertyInfo != null)
             {
                 propertyName = propertyInfo.RedName;
@@ -74,7 +74,10 @@ namespace WolvenKit.RED4.Types
                     throw new ArgumentException($"Native prop '{propertyName}' could not be found!");
                 }
 
-                _dynamicProperties.Add(propertyName);
+                if (!_dynamicProperties.Contains(propertyName))
+                {
+                    _dynamicProperties.Add(propertyName);
+                }
             }
 
             _properties[propertyName] = value;

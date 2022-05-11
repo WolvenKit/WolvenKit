@@ -18,7 +18,7 @@ namespace WolvenKit.RED4.Archive.IO
 
         }
 
-        public EFileReadErrorCodes ReadBuffer(RedBuffer buffer, Type fileRootType)
+        public EFileReadErrorCodes ReadBuffer(RedBuffer buffer)
         {
             if (buffer.RootChunk is worldStreamingSector sec)
             {
@@ -29,13 +29,13 @@ namespace WolvenKit.RED4.Archive.IO
                         && node1.WorldTransformsBuffer.SharedDataBuffer.GetValue() is worldSharedDataBuffer sdb1
                         && ReferenceEquals(sdb1.Buffer.Buffer, buffer))
                     {
-                        return ReadWorldTransformsBuffer(buffer, fileRootType);
+                        return ReadWorldTransformsBuffer(buffer);
                     }   
                     else if (value is worldInstancedDestructibleMeshNode node2
                         && node2.CookedInstanceTransforms.SharedDataBuffer.GetValue() is worldSharedDataBuffer sdb2
                         && ReferenceEquals(sdb2.Buffer.Buffer, buffer))
                     {
-                        return ReadCookedInstanceTransformsBuffer(buffer, fileRootType);
+                        return ReadCookedInstanceTransformsBuffer(buffer);
                     }
                 }
             }

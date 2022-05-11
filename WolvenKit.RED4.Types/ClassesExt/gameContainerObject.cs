@@ -1,6 +1,7 @@
 namespace WolvenKit.RED4.Types;
 
-public class gameContainerObject : RedBaseClass
+// Probably gameContainerObjectBase
+public class gameContainerObject : entEntity
 {
     [RED("lootID")]
     public TweakDBID LootID

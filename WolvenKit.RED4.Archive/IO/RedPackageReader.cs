@@ -12,32 +12,26 @@ using WolvenKit.RED4.Types.Exceptions;
 
 namespace WolvenKit.RED4.Archive.IO
 {
-    public partial class PackageReader : Red4Reader
+    public partial class RedPackageReader : Red4Reader
     {
-        public PackageReader(Stream input) : base(input)
+        public RedPackageSettings Settings = new();
+
+        public RedPackageReader(Stream input) : this(new BinaryReader(input, Encoding.UTF8, false))
         {
         }
 
-        public PackageReader(Stream input, Encoding encoding) : base(input, encoding)
+        public RedPackageReader(BinaryReader reader) : base(reader)
         {
         }
 
-        public PackageReader(Stream input, Encoding encoding, bool leaveOpen) : base(input, encoding, leaveOpen)
+        public override void ReadClass(RedBaseClass cls, uint size)
         {
-        }
-
-        public PackageReader(BinaryReader reader) : base(reader)
-        {
-        }
-
-        public RedBaseClass ReadClass(Type type)
-        {
-            var instance = RedTypeManager.Create(type);
+            var typeInfo = RedReflection.GetTypeInfo(cls);
 
             var baseOff = BaseStream.Position;
             var fieldCount = _reader.ReadUInt16();
             //var unk = _reader.ReadUInt16();
-            var fields = BaseStream.ReadStructs<Package04FieldHeader>(fieldCount);
+            var fields = BaseStream.ReadStructs<RedPackageFieldHeader>(fieldCount);
 
             foreach (var f in fields)
             {
@@ -45,40 +39,32 @@ namespace WolvenKit.RED4.Archive.IO
                 var typeName = GetStringValue(f.typeID);
                 var (fieldType, flags) = RedReflection.GetCSTypeFromRedType(typeName);
 
-                var prop = RedReflection.GetPropertyByRedName(type, varName);
+                var prop = typeInfo.GetPropertyInfoByRedName(varName);
+                if (prop == null)
+                {
+                    prop = typeInfo.AddDynamicProperty(varName, typeName);
+                }
 
                 IRedType value;
 
                 BaseStream.Position = baseOff + f.offset;
-                if (prop == null)
+                if (prop.IsDynamic)
                 {
                     value = Read(fieldType, 0, Flags.Empty);
-                    instance.SetProperty(varName, value);
+                    cls.SetProperty(varName, value);
                 }
                 else
                 {
                     if (fieldType != prop.Type)
                     {
-                        var propName = $"{RedReflection.GetRedTypeFromCSType(instance.GetType())}.{varName}";
+                        var propName = $"{RedReflection.GetRedTypeFromCSType(cls.GetType())}.{varName}";
                         throw new InvalidRTTIException(propName, prop.Type, fieldType);
                     }
 
                     value = Read(prop.Type, 0, flags);
-                    instance.SetProperty(prop.RedName, value);
+                    cls.SetProperty(prop.RedName, value);
                 }
             }
-
-            return instance;
-        }
-
-        public override IRedType Read(Type type, uint size = 0, Flags flags = null)
-        {
-            if (typeof(RedBaseClass).IsAssignableFrom(type))
-            {
-                return ReadClass(type);
-            }
-
-            return base.Read(type, size, flags);
         }
 
         public override TweakDBID ReadTweakDBID()

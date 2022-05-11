@@ -106,7 +106,7 @@ namespace WolvenKit.RED4.Archive.IO
             {
                 value = Read(prop.Type, size - 4, prop.Flags.Clone());
 
-                var typeInfo = RedReflection.GetTypeInfo(cls.GetType());
+                var typeInfo = RedReflection.GetTypeInfo(cls);
 
                 var propName = $"{RedReflection.GetRedTypeFromCSType(cls.GetType())}.{varName}";
                 if (type != prop.Type)

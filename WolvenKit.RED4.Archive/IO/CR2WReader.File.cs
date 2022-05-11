@@ -24,21 +24,21 @@ namespace WolvenKit.RED4.Archive.IO
 
         static CR2WReader()
         {
-            _bufferReaders.Add("appearanceAppearanceDefinition.compiledData", typeof(PackageReader));
-            _bufferReaders.Add("entEntityTemplate.compiledData", typeof(PackageReader));
-            _bufferReaders.Add("inkWidgetLibraryItem.packageData", typeof(PackageReader));
-            _bufferReaders.Add("entEntityInstanceData.buffer", typeof(PackageReader));
-            _bufferReaders.Add("gamePersistentStateDataResource.buffer", typeof(PackageReader));
+            _bufferReaders.Add("appearanceAppearanceDefinition.compiledData", typeof(RedPackageReader));
+            _bufferReaders.Add("entEntityTemplate.compiledData", typeof(RedPackageReader));
+            _bufferReaders.Add("inkWidgetLibraryItem.packageData", typeof(RedPackageReader));
+            _bufferReaders.Add("entEntityInstanceData.buffer", typeof(RedPackageReader));
+            _bufferReaders.Add("gamePersistentStateDataResource.buffer", typeof(RedPackageReader));
             _bufferReaders.Add("meshMeshMaterialBuffer.rawData", typeof(CR2WListReader));
             _bufferReaders.Add("entEntityParametersBuffer.parameterBuffers", typeof(CR2WListReader));
-            _bufferReaders.Add("animAnimDataChunk.buffer", typeof(AnimationReader));
-            _bufferReaders.Add("worldNavigationTileData.tilesBuffer", typeof(TilesReader));
-            _bufferReaders.Add("worldSharedDataBuffer.buffer", typeof(WorldSharedDataBufferReader));
-            _bufferReaders.Add("worldStreamingSector.transforms", typeof(worldNodeDataReader));
-            _bufferReaders.Add("worldCollisionNode.compiledData", typeof(CollisionReader));
-            _bufferReaders.Add("physicsGeometryCache.bufferTableSectors", typeof(GeometryCacheReader));
-            _bufferReaders.Add("physicsGeometryCache.alwaysLoadedSectorDDB", typeof(GeometryCacheReader));
-            _bufferReaders.Add("CGIDataResource.data", typeof(CGIDataReader));
+            //_bufferReaders.Add("animAnimDataChunk.buffer", typeof(AnimationReader));
+            //_bufferReaders.Add("worldNavigationTileData.tilesBuffer", typeof(TilesReader));
+            //_bufferReaders.Add("worldSharedDataBuffer.buffer", typeof(WorldSharedDataBufferReader));
+            //_bufferReaders.Add("worldStreamingSector.transforms", typeof(worldNodeDataReader));
+            //_bufferReaders.Add("worldCollisionNode.compiledData", typeof(CollisionReader));
+            //_bufferReaders.Add("physicsGeometryCache.bufferTableSectors", typeof(GeometryCacheReader));
+            //_bufferReaders.Add("physicsGeometryCache.alwaysLoadedSectorDDB", typeof(GeometryCacheReader));
+            //_bufferReaders.Add("CGIDataResource.data", typeof(CGIDataReader));
         }
 
         public EFileReadErrorCodes ReadFileInfo(out CR2WFileInfo info)
@@ -295,7 +295,25 @@ namespace WolvenKit.RED4.Archive.IO
                     baseReader.CollectData = CollectData;
                 }
 
-                reader.ReadBuffer(buffer, _cr2wFile.RootChunk.GetType());
+                if (baseReader is RedPackageReader pReader)
+                {
+                    var rootType = _cr2wFile.RootChunk.GetType();
+
+                    if (rootType == typeof(gamePersistentStateDataResource))
+                    {
+                        pReader.Settings.RedPackageType = RedPackageType.SaveResource;
+                    }
+                    else if (rootType == typeof(inkWidgetLibraryResource))
+                    {
+                        pReader.Settings.RedPackageType = RedPackageType.InkLibResource;
+                    }
+                    else if (rootType == typeof(appearanceAppearanceResource))
+                    {
+                        pReader.Settings.ImportsAsHash = true;
+                    }
+                }
+
+                reader.ReadBuffer(buffer);
 
                 if (baseReader is { CollectData: true })
                 {
