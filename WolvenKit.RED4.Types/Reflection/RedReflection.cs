@@ -526,14 +526,14 @@ namespace WolvenKit.RED4.Types
                     throw new ArgumentNullException(nameof(name));
                 }
 
-                if (_redNameIndex.TryGetValue(name, out var i))
+                if (_redNameIndex.TryGetValue(name, out var i1))
                 {
-                    return PropertyInfos[i];
+                    return PropertyInfos[i1];
                 }
 
-                if (_nameIndex.TryGetValue(name, out var i))
+                if (_nameIndex.TryGetValue(name, out var i2))
                 {
-                    return PropertyInfos[i];
+                    return PropertyInfos[i2];
                 }
 
                 return null;
