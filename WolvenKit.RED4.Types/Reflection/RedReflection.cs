@@ -488,7 +488,7 @@ namespace WolvenKit.RED4.Types
                     }
                 }                
                 throw new ArgumentNullException();                
-                return null;
+                //return null;
             }
 
             public IEnumerable<ExtendedPropertyInfo> GetWritableProperties()
