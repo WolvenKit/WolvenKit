@@ -2,6 +2,7 @@ using System.Linq;
 using ReactiveUI;
 using Splat;
 using Syncfusion.UI.Xaml.Grid;
+using WolvenKit.Functionality.Commands;
 using WolvenKit.ViewModels.HomePage;
 
 namespace WolvenKit.Views.HomePage.Pages
@@ -78,6 +79,11 @@ namespace WolvenKit.Views.HomePage.Pages
                     }
                 }
             }
+        }
+
+        private void RemoveModMenuItem_Click(object sender, System.Windows.RoutedEventArgs e)
+        {
+            ViewModel.RemoveCommand.SafeExecute();
         }
     }
 }

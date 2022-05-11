@@ -5,7 +5,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-    xmlns:local="clr-namespace:WolvenKit.Views.Dialogs"
+    xmlns:local="clr-namespace:WolvenKit.Views.HomePage.Pages"
     xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
     xmlns:reactiveUi="http://reactiveui.net"
     xmlns:hc="https://handyorg.github.io/handycontrol"
@@ -166,6 +166,7 @@
         <!-- DataGrid -->
         <syncfusion:SfDataGrid Grid.Row="3" x:Name="DataGridEvents" Margin="5"
                                 ItemsSource="{Binding Mods}"
+                                SelectedItem="{Binding SelectedMod}"
                                 AutoGenerateColumns="False"
                                 ColumnSizer="AutoLastColumnFill"
                                 AllowResizingColumns="True"
@@ -203,13 +204,11 @@
 
             </syncfusion:SfDataGrid.Columns>
 
-            <syncfusion:SfDataGrid.ContextMenu >
-
-                <ContextMenu >
-                    <MenuItem  CommandParameter="{Binding}" Header="Remove Mod"/>
-                    <MenuItem  CommandParameter="{Binding}" Header="Information"/>
+            <syncfusion:SfDataGrid.RecordContextMenu>
+                <ContextMenu>
+                    <MenuItem x:Name="RemoveModMenuItem" Header="Remove Mod" Click="RemoveModMenuItem_Click"/>
                 </ContextMenu>
-            </syncfusion:SfDataGrid.ContextMenu>
+            </syncfusion:SfDataGrid.RecordContextMenu>
 
         </syncfusion:SfDataGrid>
 

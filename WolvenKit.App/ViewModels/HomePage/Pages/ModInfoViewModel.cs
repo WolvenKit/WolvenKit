@@ -2,22 +2,30 @@ using System.IO;
 using System.Windows.Input;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
+using WolvenKit.Common.Services;
+using WolvenKit.Functionality.Services;
 using WolvenKit.Models;
 
 namespace WolvenKit.ViewModels.HomePage
 {
     public class ModInfoViewModel : ReactiveObject
     {
-        public ModInfoViewModel(ModInfo mod, string folder)
-        {
-            Mod = mod;
-            Folder = folder;
+        private readonly ILoggerService _logger;
 
-            RemoveCommand = ReactiveCommand.Create(() => Remove());
+        public ModInfoViewModel(ModInfo mod, string path, ILoggerService settings)
+        {
+            _logger = settings;
+            Mod = mod;
+            Path = path;
+
+            Folder = System.IO.Path.GetFileName(Path);
+
+
         }
 
         public ModInfo Mod { get; init; }
 
+        public string Path { get; init; }
         public string Folder { get; init; }
 
         [Reactive] public int LoadOrder { get; set; }
@@ -26,20 +34,7 @@ namespace WolvenKit.ViewModels.HomePage
 
         public string Name => Mod.Name;
 
-        public ICommand RemoveCommand { get; private set; }
-        private void Remove()
-        {
-            try
-            {
-                var folderPath = Path.Combine(Folder);
-                Directory.Delete(folderPath, true);
-            }
-            catch (System.Exception)
-            {
 
-                throw;
-            }
-        }
 
     }
 }

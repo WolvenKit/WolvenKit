@@ -11,6 +11,7 @@ using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using Splat;
 using WolvenKit.Common.Services;
+using WolvenKit.Functionality.Commands;
 using WolvenKit.Functionality.Services;
 using WolvenKit.Helpers;
 using WolvenKit.Interaction;
@@ -50,20 +51,19 @@ namespace WolvenKit.ViewModels.HomePage
             CheckRedModCommand = ReactiveCommand.Create(() => CheckRedMod());
             OpenModFolderCommand = ReactiveCommand.Create(() => OpenModFolder());
 
+            RemoveCommand = ReactiveCommand.Create(() => Remove());
+
             LoadMods();
         }
 
         [Reactive] public ObservableCollection<ModInfoViewModel> Mods { get; set; } = new();
-
-        [Reactive] public bool IsRedModInstalled { get; set; }
+        [Reactive] public ModInfoViewModel SelectedMod { get; set; }
 
         #region commands
 
         public ICommand DeployCommand { get; private set; }
         private async Task Deploy() => await DeployRedmod();
-
         private IEnumerable<ModInfoViewModel> GetEnabledMods() => Mods.Where(x => x.IsEnabled);
-
         private async Task<bool> DeployRedmod()
         {
             if (!_pluginService.IsInstalled(EPlugin.redmod))
@@ -168,6 +168,31 @@ namespace WolvenKit.ViewModels.HomePage
             }
         }
 
+        public ICommand RemoveCommand { get; private set; }
+        private void Remove()
+        {
+            if (SelectedMod is null)
+            {
+                return;
+            }
+
+            if (!Directory.Exists(SelectedMod.Path))
+            {
+                _logger.Warning($"Could not find mod: {SelectedMod.Path}");
+            }
+
+            try
+            {
+                Directory.Delete(SelectedMod.Path, true);
+
+                Mods.Remove(SelectedMod);
+            }
+            catch (System.Exception)
+            {
+                _logger.Error($"Could not delete mod: {SelectedMod.Path}");
+            }
+        }
+
         #endregion
 
         private void LoadMods()
@@ -181,8 +206,8 @@ namespace WolvenKit.ViewModels.HomePage
                 try
                 {
                     var info = JsonSerializer.Deserialize<ModInfo>(File.ReadAllText(item.FullName), _options);
-                    var folder = item.Directory.Name;
-                    Mods.Add(new ModInfoViewModel(info, folder));
+                    var folder = item.Directory.FullName;
+                    Mods.Add(new ModInfoViewModel(info, folder, _logger));
                 }
                 catch (Exception)
                 {
