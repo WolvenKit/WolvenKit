@@ -274,7 +274,7 @@ namespace WolvenKit.Functionality.Controllers
             if (!await PackProject())
             {
                 _progressService.IsIndeterminate = false;
-                return await Task.FromResult(false);
+                return false;
             }
 
             InstallMod();
@@ -491,7 +491,7 @@ namespace WolvenKit.Functionality.Controllers
             }
         }
 
-        private void AddToMod(IGameFile file)
+        public void AddToMod(IGameFile file)
         {
             var project = _projectManager.ActiveProject;
             switch (project.GameType)

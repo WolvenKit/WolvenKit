@@ -11,20 +11,23 @@ namespace WolvenKit.RED4.Archive.IO
 {
     public partial class CR2WReader : Red4Reader
     {
-        public CR2WReader(Stream input) : base(input)
+        private ILoggerService _logger;
+
+        public CR2WReader(Stream input) : this(input, Encoding.UTF8, false)
         {
         }
 
-        public CR2WReader(Stream input, Encoding encoding) : base(input, encoding)
+        public CR2WReader(Stream input, Encoding encoding) : this(input, encoding, false)
         {
         }
 
-        public CR2WReader(Stream input, Encoding encoding, bool leaveOpen) : base(input, encoding, leaveOpen)
+        public CR2WReader(Stream input, Encoding encoding, bool leaveOpen) : this(new BinaryReader(input, encoding, leaveOpen))
         {
         }
 
         public CR2WReader(BinaryReader reader) : base(reader)
         {
+            _logger = Locator.Current.GetService<ILoggerService>();
         }
 
         public override void ReadClass(RedBaseClass cls, uint size)
