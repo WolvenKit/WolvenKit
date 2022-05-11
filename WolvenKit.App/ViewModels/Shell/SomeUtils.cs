@@ -235,24 +235,24 @@ namespace WolvenKit.ViewModels.Shell
             return poslist;
         }
 
-        public void AddToData(string tr, string path, Vec4 pos, Quat rot, string app, Vec3 scale = default, string ff = "")
-        {          
+        public void AddToData(string tr, string path, Vec4 pos, Quat rot, string app, Vec3 scale = default, string ff = "", bool isdoor = false)
+        {
             if (Parent.Parent is not null &&
                 Parent.Parent.Data is not null &&
                 Parent.Parent.Data is worldStreamingSector wss)
             {
                 if (scale == Vec3.One)
                 {
-                    AddEntity(tr, path, pos, wss, rot, app, scale, visible: true);
+                    AddEntity(tr, path, pos, wss, rot, app, scale, isdoor, visible: true);
                 }
-                else if(ff != "")
+                else if (ff != "")
                 {
-                    AddEntity(tr, path, pos, wss, rot, app, scale, visible: false);
+                    AddEntity(tr, path, pos, wss, rot, app, scale, isdoor, visible: false);
                     AddMesh(tr, ff, pos, wss, rot, app, scale);
                 }
             }
         }
-        public void AddEntity(string tr, string path, Vec4 pos, worldStreamingSector wss, Quat rot, string app, Vec3 scale = default, bool visible = true)
+        public void AddEntity(string tr, string path, Vec4 pos, worldStreamingSector wss, Quat rot, string app, Vec3 scale = default, bool isdoor = false, bool visible = true)
         {
             var current = RedJsonSerializer.Deserialize<worldNodeData>(tr);
 
@@ -266,22 +266,25 @@ namespace WolvenKit.ViewModels.Shell
             wen.EntityTemplate.DepotPath = path;
             wen.AppearanceName = app;
 
-            var eeid = new entEntityInstanceData();
-            var eeidh = new CHandle<entEntityInstanceData>(eeid);
-
-            wen.InstanceData = eeidh;
-            eeid.Buffer = new DataBuffer();
-
-            var pk = new Package04();
-            var dc = new DoorController();
-            pk.Chunks = new List<RedBaseClass>();
-
-            dc.PersistentState = new DoorControllerPS()
+            if (isdoor)
             {
-                IsInteractive = true
-            };
-            pk.Chunks.Add((RedBaseClass)dc);
-            eeid.Buffer.Data = pk;
+                var eeid = new entEntityInstanceData();
+                var eeidh = new CHandle<entEntityInstanceData>(eeid);
+
+                wen.InstanceData = eeidh;
+                eeid.Buffer = new DataBuffer();
+
+                var pk = new Package04();
+                var dc = new DoorController();
+                pk.Chunks = new List<RedBaseClass>();
+
+                dc.PersistentState = new DoorControllerPS()
+                {
+                    IsInteractive = true
+                };
+                pk.Chunks.Add((RedBaseClass)dc);
+                eeid.Buffer.Data = pk;
+            }
 
             ((IRedArray)wss.Nodes).Insert(index, (IRedType)wenh);
             SetCoords(current, index, pos, rot, scale);
@@ -458,8 +461,9 @@ namespace WolvenKit.ViewModels.Shell
                         var foundfile = flt.Where(x => x.FileName.Contains(sp)).Select(_ => _).ToList();
                         ff = foundfile.Count == 0 ? "" : foundfile.Last().FileName;
                     }
+                    var door = line.isdoor is bool b ? b : false;
 
-                    AddToData(tr, line.template_path, poslist[i], rotlist[i], applist[i], scale, ff);
+                    AddToData(tr, line.template_path, poslist[i], rotlist[i], applist[i], scale, ff, door);
                 }
             }
             catch { }
@@ -567,6 +571,7 @@ namespace WolvenKit.ViewModels.Shell
         public string app { get; set; }
         public string name { get; set; }
         public string trigger { get; set; }
+        public bool isdoor { get; set; }
     }
 
     public class Root0 : Root

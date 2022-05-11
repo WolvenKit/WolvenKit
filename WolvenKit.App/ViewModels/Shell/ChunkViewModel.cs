@@ -1940,7 +1940,41 @@ namespace WolvenKit.ViewModels.Shell
                     
 
                     Locator.Current.GetService<AppViewModel>().SaveFileCommand.SafeExecute(currentfile);
+                    
 
+                    ;
+
+
+                    Stream myStream;
+                    var saveFileDialog = new SaveFileDialog
+                    {
+                        Filter = "JSON files (*.json)|*.json|All files (*.*)|*.*",
+                        FilterIndex = 2,
+                        FileName = Type + ".json",
+                        RestoreDirectory = true
+                    };
+
+                    if (saveFileDialog.ShowDialog() == DialogResult.OK)
+                    {
+                        if ((myStream = saveFileDialog.OpenFile()) != null)
+                        {
+                            //var dto = new RedFileDto(Parent.Parent.Data);
+                            var json = RedJsonSerializer.Serialize(Parent.Parent.Tab.File);
+
+                            if (string.IsNullOrEmpty(json))
+                            {
+                                throw new SerializationException();
+                            }
+
+                            myStream.Write(json.ToCharArray().Select(c => (byte)c).ToArray());
+                            myStream.Close();
+                        }
+                    }
+
+                    ;
+
+
+                    
 
                     Refresh();
 
