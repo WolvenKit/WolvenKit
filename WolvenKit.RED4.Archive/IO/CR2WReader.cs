@@ -84,10 +84,6 @@ namespace WolvenKit.RED4.Archive.IO
                 return false;
             }
             var varName = GetStringValue(nameId);
-            var test = varName.ToString();
-            if( test.Contains("boneNames")){
-                Console.Write("boop");
-            }
 
             // Read Type
             var typeId = _reader.ReadUInt16();

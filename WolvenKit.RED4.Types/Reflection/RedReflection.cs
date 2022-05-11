@@ -486,7 +486,8 @@ namespace WolvenKit.RED4.Types
                     {
                         return PropertyInfos[i2];
                     }
-                }
+                }                
+                throw new ArgumentNullException();                
                 return null;
             }
 
