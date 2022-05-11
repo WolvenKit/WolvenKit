@@ -29,5 +29,30 @@ namespace WolvenKit.RED4.Types
 
             return cmatrix;
         }
+
+        public static implicit operator System.Numerics.Matrix4x4(CMatrix matrix) =>
+            new System.Numerics.Matrix4x4()
+            {
+                M11 = matrix.X.X,
+                M12 = matrix.X.Y,
+                M13 = matrix.X.Z,
+                M14 = matrix.X.W,
+
+                M21 = matrix.Y.X,
+                M22 = matrix.Y.Y,
+                M23 = matrix.Y.Z,
+                M24 = matrix.Y.W,
+
+                M31 = matrix.Z.X,
+                M32 = matrix.Z.Y,
+                M33 = matrix.Z.Z,
+                M34 = matrix.Z.W,
+
+                M41 = matrix.W.X,
+                M42 = matrix.W.Y,
+                M43 = matrix.W.Z,
+                M44 = matrix.W.W
+            };
+
     }
 }
