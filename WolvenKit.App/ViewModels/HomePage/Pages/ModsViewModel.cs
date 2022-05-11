@@ -58,6 +58,8 @@ namespace WolvenKit.ViewModels.HomePage
 
         [Reactive] public ObservableCollection<ModInfoViewModel> Mods { get; set; } = new();
         [Reactive] public ModInfoViewModel SelectedMod { get; set; }
+        [Reactive] public IEnumerable<ModInfoViewModel> SelectedMods { get; set; }
+        [Reactive] public bool IsProcessing { get; set; }
 
         #region commands
 
@@ -90,28 +92,39 @@ namespace WolvenKit.ViewModels.HomePage
             }
             else
             {
+
+
                 var enabledMods = GetEnabledMods().ToList();
                 if (enabledMods.Any())
                 {
-                    switch (await Interactions.ShowMessageBoxAsync($"Deploying {enabledMods.Count} enabled mods with RedMod. Continue?", "RedMod deploy"))
+                    IsProcessing = true;
+
+                    var args = $"deploy -root=\"{_settings.GetRED4GameRootDir()}\"";
+
+                    var modsStr = string.Join(' ', enabledMods.Select(x => $"\"{x.Folder}\""));
+                    args += $" -mod={modsStr}";
+
+                    _logger.Info($"WorkDir: {redmodPath}");
+                    _logger.Info($"Running commandlet: {args}");
+                    result = await ProcessUtil.RunProcessAsync(redmodPath, args);
+
+                    IsProcessing = false;
+
+                    if (!result)
                     {
-                        case WMessageBoxResult.OK:
-                        case WMessageBoxResult.Yes:
-                            var args = $"deploy -root=\"{_settings.GetRED4GameRootDir()}\"";
-
-                            var modsStr = string.Join(' ', enabledMods.Select(x => $"\"{x.Folder}\""));
-                            args += $" -mod={modsStr}";
-
-                            _logger.Info($"WorkDir: {redmodPath}");
-                            _logger.Info($"Running commandlet: {args}");
-                            result = await ProcessUtil.RunProcessAsync(redmodPath, args);
-
-                            if (!result)
-                            {
-                                await Interactions.ShowMessageBoxAsync("RedMod deploy failed. Please check the log for details.", "RedMod");
-                            }
-
-                            break;
+                        await Interactions.ShowMessageBoxAsync(
+                            "RedMod deploy failed. Please check the log for details.",
+                            "RedMod",
+                            WMessageBoxButtons.Ok,
+                            WMessageBoxImage.Error);
+                    }
+                    else
+                    {
+                        await Interactions.ShowMessageBoxAsync(
+                            $"Deployed {enabledMods.Count} enabled mods with RedMod.",
+                            "RedMod deploy",
+                            WMessageBoxButtons.Ok,
+                            WMessageBoxImage.Exclamation);
                     }
                 }
                 else

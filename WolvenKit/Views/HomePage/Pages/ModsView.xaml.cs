@@ -29,18 +29,11 @@ namespace WolvenKit.Views.HomePage.Pages
 
         private void RowDragDropController_Drop(object sender, GridRowDropEventArgs e)
         {
-            if (e.IsFromOutSideSource)
-            {
-                // install mod
-
-
-
-            }
         }
 
         private void DataGridEvents_Drop(object sender, System.Windows.DragEventArgs e)
         {
-
+            // REDMODTODO install mod
         }
 
         private void RowDragDropController_DragStart(object sender, GridRowDragStartEventArgs e)
