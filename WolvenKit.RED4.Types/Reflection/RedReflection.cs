@@ -68,7 +68,7 @@ namespace WolvenKit.RED4.Types
         }
 
         public static ExtendedPropertyInfo GetNativePropertyInfo(Type classType, string propertyName) =>
-            GetTypeInfo(classType).GetPropertyInfoByName(propertyName);
+            GetTypeInfo(classType).GetNativePropertyInfoByName(propertyName);
 
         public static object GetClassDefaultValue(Type classType, string propertyName)
         {
@@ -517,6 +517,26 @@ namespace WolvenKit.RED4.Types
                         _redNameIndex.Add(PropertyInfos[i].RedName, i);
                     }
                 }
+            }
+
+            public ExtendedPropertyInfo GetNativePropertyInfoByName(string name)
+            {
+                if (string.IsNullOrEmpty(name))
+                {
+                    throw new ArgumentNullException(nameof(name));
+                }
+
+                if (_redNameIndex.TryGetValue(name, out var i))
+                {
+                    return PropertyInfos[i];
+                }
+
+                if (_nameIndex.TryGetValue(name, out var i))
+                {
+                    return PropertyInfos[i];
+                }
+
+                return null;
             }
 
             public ExtendedPropertyInfo GetPropertyInfoByName(string name)

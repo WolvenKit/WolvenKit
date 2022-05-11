@@ -14,7 +14,7 @@ namespace WolvenKit.RED4.Types
 
         internal void InternalInitClass()
         {
-            var info = RedReflection.GetTypeInfo(this);
+            var info = RedReflection.GetTypeInfo(GetType());
             foreach (var propertyInfo in info.PropertyInfos)
             {
                 if (string.IsNullOrEmpty(propertyInfo.RedName))
@@ -40,7 +40,7 @@ namespace WolvenKit.RED4.Types
 
         internal void InternalSetPropertyValue(string propertyName, IRedType value, bool onlyNative = true)
         {
-            var propertyInfo = RedReflection.GetTypeInfo(this).GetPropertyInfoByName(propertyName);
+            var propertyInfo = RedReflection.GetNativePropertyInfo(GetType(), propertyName);
             if (propertyInfo != null)
             {
                 propertyName = propertyInfo.RedName;

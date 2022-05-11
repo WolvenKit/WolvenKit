@@ -197,7 +197,9 @@ namespace WolvenKit.RED4.Archive.IO
                 dbc.ClassName = redTypeName;
             }
 
-            return ReadClass(type, 0);
+            ReadClass(instance, 0);
+
+            return instance;
         }
     }
 
