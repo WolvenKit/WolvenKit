@@ -19,9 +19,27 @@ namespace WolvenKit.Views.HomePage.Pages
             DataContext = ViewModel;
 
             DataGridEvents.RowDragDropController.Dropped += RowDragDropController_Dropped;
-            // DataGridEvents.RowDragDropController.Drop += RowDragDropController_Drop;
             DataGridEvents.RowDragDropController.DragStart += RowDragDropController_DragStart;
+
+            DataGridEvents.RowDragDropController.Drop += RowDragDropController_Drop;
             // DataGridEvents.RowDragDropController.DragOver += RowDragDropController_DragOver;
+            DataGridEvents.Drop += DataGridEvents_Drop;
+        }
+
+        private void RowDragDropController_Drop(object sender, GridRowDropEventArgs e)
+        {
+            if (e.IsFromOutSideSource)
+            {
+                // install mod
+
+
+
+            }
+        }
+
+        private void DataGridEvents_Drop(object sender, System.Windows.DragEventArgs e)
+        {
+
         }
 
         private void RowDragDropController_DragStart(object sender, GridRowDragStartEventArgs e)

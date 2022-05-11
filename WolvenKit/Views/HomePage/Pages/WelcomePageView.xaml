@@ -17,6 +17,7 @@
     <Grid
         x:Name="topGrid"
         Margin="50,00,50,0">
+        
         <Grid.ColumnDefinitions>
             <ColumnDefinition x:Name="PercentageThing" Width="4*" />
             <ColumnDefinition Width="200*" />
@@ -200,7 +201,6 @@
             <!-- WK Text Logo  -->
             <Image Margin="66,30,66,20" RenderOptions.BitmapScalingMode="HighQuality" Source="pack://application:,,,/Resources/Media/Images/Application/wkit_logo_text_singlestack_white.png" HorizontalAlignment="Center"></Image>
 
-
             <!--  Recent Projects Header  -->
             <StackPanel VerticalAlignment="Bottom">
                 <StackPanel Margin="9,0,0,20" Orientation="Horizontal">
@@ -259,8 +259,7 @@
                     VerticalAlignment="Top"
                     Margin="0,0,0,0">
                     <StackPanel>
-                        <Button
-                            x:Name="NewProjectButton"
+                        <Button x:Name="NewProjectButton"
                             Height="100"
                             Margin="0,0,0,4"
                             HorizontalAlignment="Stretch"
@@ -294,8 +293,7 @@
                             </Grid>
                         </Button>
 
-                        <Button
-                            x:Name="OpenProjectButton"
+                        <Button x:Name="OpenProjectButton"
                             Height="100"
                             Style="{StaticResource WelcomeButton}"
                             Margin="0,4"
@@ -329,8 +327,7 @@
                             </Grid>
                         </Button>
 
-                        <Button
-                            x:Name="ContinueWithoutProjectButton"
+                        <Button x:Name="ContinueWithoutProjectButton"
                             Width="350"
                             Height="100"
                             Margin="0,4,0,0"
@@ -364,7 +361,6 @@
                                         Kind="ArrowRight" />
                             </Grid>
                         </Button>
-
 
                         <!-- Socials Header  -->
 

@@ -81,76 +81,85 @@
                 <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
             </Grid.ColumnDefinitions>
 
-            <StackPanel Grid.Column="0" Orientation="Horizontal">
 
-                <syncfusion:RibbonButton Command="{Binding RefreshCommand}"
-                                         Margin="5"
+            <syncfusion:RibbonButton Command="{Binding RefreshCommand}" Grid.Column="0" Margin="5"
                     x:Name="ButtonRefresh"
                     IconStretch="Fill"
                     IconType="Icon"
                     Label="Refresh"
                     SizeForm="Small">
-                    <syncfusion:RibbonButton.IconTemplate>
-                        <DataTemplate>
-                            <iconPacks:PackIconCodicons
+                <syncfusion:RibbonButton.IconTemplate>
+                    <DataTemplate>
+                        <iconPacks:PackIconCodicons
                                 Width="auto"
                                 Height="auto"
                                 HorizontalAlignment="Center"
                                 VerticalAlignment="Stretch"
                                 Foreground="CornflowerBlue"
                                 Kind="Refresh" />
-                        </DataTemplate>
-                    </syncfusion:RibbonButton.IconTemplate>
-                </syncfusion:RibbonButton>
+                    </DataTemplate>
+                </syncfusion:RibbonButton.IconTemplate>
+            </syncfusion:RibbonButton>
 
-                <syncfusion:RibbonButton Command="{Binding DeployCommand}"
-                                          Margin="5"
+            <syncfusion:RibbonButton Command="{Binding DeployCommand}"  Grid.Column="1" Margin="5"
                     x:Name="ButtonDeploy"
                     IconStretch="Fill"
                     IconType="Icon"
                     Label="Deploy"
                     SizeForm="Small">
-                    <syncfusion:RibbonButton.IconTemplate>
-                        <DataTemplate>
-                            <iconPacks:PackIconCodicons
+                <syncfusion:RibbonButton.IconTemplate>
+                    <DataTemplate>
+                        <iconPacks:PackIconCodicons
                                 Width="auto"
                                 Height="auto"
                                 HorizontalAlignment="Center"
                                 VerticalAlignment="Stretch"
                                 Foreground="Red"
                                 Kind="DesktopDownload" />
-                        </DataTemplate>
-                    </syncfusion:RibbonButton.IconTemplate>
-                </syncfusion:RibbonButton>
+                    </DataTemplate>
+                </syncfusion:RibbonButton.IconTemplate>
+            </syncfusion:RibbonButton>
 
-                <syncfusion:RibbonButton Command="{Binding LaunchGameCommand}"
-                                          Margin="5"
+            <syncfusion:RibbonButton Command="{Binding LaunchGameCommand}" Grid.Column="2" Margin="5"
                     x:Name="ButtonLaunchGame"
                     IconStretch="Fill"
                     IconType="Icon"
                     Label="Launch Game"
                     SizeForm="Small">
-                    <syncfusion:RibbonButton.IconTemplate>
-                        <DataTemplate>
-                            <iconPacks:PackIconCodicons
+                <syncfusion:RibbonButton.IconTemplate>
+                    <DataTemplate>
+                        <iconPacks:PackIconCodicons
                                 Width="auto"
                                 Height="auto"
                                 HorizontalAlignment="Center"
                                 VerticalAlignment="Stretch"
                                 Foreground="ForestGreen"
                                 Kind="DebugStart" />
-                        </DataTemplate>
-                    </syncfusion:RibbonButton.IconTemplate>
-                </syncfusion:RibbonButton>
+                    </DataTemplate>
+                </syncfusion:RibbonButton.IconTemplate>
+            </syncfusion:RibbonButton>
 
-            </StackPanel>
-
-            <Separator Grid.Column="1" />
-
-            <Label Grid.Column="2" Content="Filter: " VerticalAlignment="Center" Margin="20,0,0,0"/>
-            <TextBox Grid.Column="3" x:Name="TextBoxSearch" />
+            <syncfusion:RibbonButton Command="{Binding OpenModFolderCommand}" Grid.Column="4" Margin="5"
+                    x:Name="ButtonOpenModFolder"
+                    IconStretch="Fill"
+                    IconType="Icon"
+                    Label="Open Mods Folder"
+                    SizeForm="Small">
+                <syncfusion:RibbonButton.IconTemplate>
+                    <DataTemplate>
+                        <iconPacks:PackIconCodicons
+                                Width="auto"
+                                Height="auto"
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Stretch"
+                                Foreground="Goldenrod"
+                                Kind="FolderOpened" />
+                    </DataTemplate>
+                </syncfusion:RibbonButton.IconTemplate>
+            </syncfusion:RibbonButton>
 
         </Grid>
 

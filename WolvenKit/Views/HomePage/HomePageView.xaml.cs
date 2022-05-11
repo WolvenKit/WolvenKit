@@ -32,10 +32,18 @@ namespace WolvenKit.Views.HomePage
             _settingsManager = Locator.Current.GetService<ISettingsManager>();
             _ribbon = Locator.Current.GetService<RibbonViewModel>();
 
-            this.WhenActivated(disposables => this.Bind(ViewModel,
-                      viewmodel => viewmodel.SelectedIndex,
-                      view => view.HomeTabs.SelectedIndex)
-                  .DisposeWith(disposables));
+            this.WhenActivated(disposables =>
+            {
+                this.Bind(ViewModel,
+                        viewmodel => viewmodel.SelectedIndex,
+                        view => view.HomeTabs.SelectedIndex)
+                    .DisposeWith(disposables);
+
+                this.BindCommand(ViewModel,
+                        viewModel => viewModel.CloseHomePage,
+                        view => view.ToEditorButton)
+                    .DisposeWith(disposables);
+            });
 
             //guide.SetCurrentValue(GuidedTour.ItemsProperty, new[]{
             //    new GuidedTourItem()

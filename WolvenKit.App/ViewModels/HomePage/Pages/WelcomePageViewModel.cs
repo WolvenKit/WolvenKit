@@ -58,14 +58,8 @@ namespace WolvenKit.ViewModels.Shared
             UnpinItem = new DelegateCommand<string>(OnUnpinItemExecute);
             OpenInExplorer = new DelegateCommand<string>(OnOpenInExplorerExecute);
 
-            OpenProjectCommand = ReactiveCommand.Create<string>(s =>
-            {
-                _mainViewModel.OpenProjectCommand.Execute(s).Subscribe();
-            });
-            DeleteProjectCommand = ReactiveCommand.Create<string>(s =>
-            {
-                _mainViewModel.DeleteProjectCommand.Execute(s).Subscribe();
-            });
+            OpenProjectCommand = ReactiveCommand.Create<string>(s => _mainViewModel.OpenProjectCommand.Execute(s).Subscribe());
+            DeleteProjectCommand = ReactiveCommand.Create<string>(s => _mainViewModel.DeleteProjectCommand.Execute(s).Subscribe());
             NewProjectCommand = ReactiveCommand.Create(() =>
             {
                 _mainViewModel.NewProjectCommand.Execute().Subscribe();
@@ -208,10 +202,7 @@ namespace WolvenKit.ViewModels.Shared
 
         private void ConvertRecentProjects() // Converts Recent projects for the homepage.
         {
-            DispatcherHelper.RunOnMainThread(() =>
-            {
-                FancyProjects.Clear();
-            });
+            DispatcherHelper.RunOnMainThread(() => FancyProjects.Clear());
 
             var sorted = _recentlyUsedItems.ToList();
             sorted.Sort(delegate (RecentlyUsedItemModel a, RecentlyUsedItemModel b)
@@ -258,10 +249,7 @@ namespace WolvenKit.ViewModels.Shared
                     if (!IsThere)
                     { newfi = "pack://application:,,,/Resources/Media/Images/Application/V Male Logo Cropped.png"; }
                     NewItem = new FancyProjectObject(fi.Name, cd, "Cyberpunk 2077", p, newfi);
-                    DispatcherHelper.RunOnMainThread(() =>
-                    {
-                        FancyProjects.Add(NewItem);
-                    });
+                    DispatcherHelper.RunOnMainThread(() => FancyProjects.Add(NewItem));
                 }
                 if (Path.GetExtension(item.Name).TrimStart('.') == EProjectType.w3modproj.ToString())
                 {
@@ -269,10 +257,7 @@ namespace WolvenKit.ViewModels.Shared
                     { newfi = "pack://application:,,,/Resources/Media/Images/Application/tw3proj.png"; }
 
                     NewItem = new FancyProjectObject(n, cd, "The Witcher 3", p, newfi);
-                    DispatcherHelper.RunOnMainThread(() =>
-                    {
-                        FancyProjects.Add(NewItem);
-                    });
+                    DispatcherHelper.RunOnMainThread(() => FancyProjects.Add(NewItem));
                 }
             }
         }
@@ -280,11 +265,7 @@ namespace WolvenKit.ViewModels.Shared
 
         private bool CanHome() => true;
 
-        private void ExecuteHome()
-        {
-            var main = Locator.Current.GetService<AppViewModel>();
-            main.CloseModalCommand.Execute(null);
-        }
+        private void ExecuteHome() => _mainViewModel.CloseModalCommand.Execute(null);
 
         //private void OnRecentlyUsedItemsServiceUpdated(object sender, EventArgs e)
         //{

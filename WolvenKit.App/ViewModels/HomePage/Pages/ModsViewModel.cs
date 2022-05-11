@@ -48,6 +48,7 @@ namespace WolvenKit.ViewModels.HomePage
             DeployCommand = ReactiveCommand.Create(() => Deploy());
             LaunchGameCommand = ReactiveCommand.Create(() => LaunchGame());
             CheckRedModCommand = ReactiveCommand.Create(() => CheckRedMod());
+            OpenModFolderCommand = ReactiveCommand.Create(() => OpenModFolder());
 
             LoadMods();
         }
@@ -125,6 +126,9 @@ namespace WolvenKit.ViewModels.HomePage
         public ICommand RefreshCommand { get; private set; }
         private void Refresh() => LoadMods();
 
+        public ICommand OpenModFolderCommand { get; private set; }
+        private void OpenModFolder() => Commonfunctions.ShowFolderInExplorer(_settings.GetRED4GameModDir());
+
         public ICommand LaunchGameCommand { get; private set; }
         private void LaunchGame()
         {
@@ -168,6 +172,8 @@ namespace WolvenKit.ViewModels.HomePage
 
         private void LoadMods()
         {
+            Mods.Clear();
+
             var di = new DirectoryInfo(_settings.GetRED4GameModDir());
             var infos = di.GetFiles("info.json", SearchOption.AllDirectories);
             foreach (var item in infos)

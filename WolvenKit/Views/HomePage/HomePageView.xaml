@@ -23,9 +23,7 @@
     MouseLeftButtonDown="Grid_MouseLeftButtonDown_1"
     >
 
-    <Grid
-        x:Name="FocusGrid"
-        hc:ThemeManager.RequestedAccentColor="{DynamicResource MahApps.Brushes.Accent3}">
+    <Grid x:Name="FocusGrid" hc:ThemeManager.RequestedAccentColor="{DynamicResource MahApps.Brushes.Accent3}">
 
         <Grid.Resources>
             <ResourceDictionary>
@@ -43,6 +41,7 @@
             </Grid.ColumnDefinitions>
         </Grid>
 
+        <!-- Left Navigation -->
         <TabControl Grid.Row="0" x:Name="HomeTabs" TabStripPlacement="Left" Margin="0">
             <TabControl.Resources>
                 <Style TargetType="{x:Type TabItem}">
@@ -293,37 +292,28 @@
             </TabItem>
         </TabControl>
 
-        <Grid HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="0,0,25,18">
-            <Button Grid.Row="1" x:Name="ToEditorButton" HorizontalAlignment="Stretch" BorderThickness="0" >
+        <!-- Left Bottom Button -->
+        <Grid HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="18,0,25,18">
+            <Button Grid.Row="1" x:Name="ToEditorButton"
+                    HorizontalAlignment="Stretch" BorderThickness="0" >
                 <Grid>
-                    <StackPanel >
-                        <TextBlock
-                            Margin="0,0,50,0"
-                            Width="250"
-                            HorizontalAlignment="Center"
-                            FontSize="20"
-                            Text="Continue to editor" />
-                    </StackPanel>
-                    <iconPacks:PackIconCodicons
-                                        Margin="0,0,0,0"
-                                        HorizontalAlignment="Right"
-                                        VerticalAlignment="Center"
-                                        Height="36"
-                                        Width="36"
-                                        Kind="ArrowRight" />
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+
+                    <TextBlock Text="Continue to editor" Width="150" FontSize="16" 
+                               HorizontalAlignment="Center" VerticalAlignment="Center" />
+                    <iconPacks:PackIconCodicons Grid.Column="1" Kind="ArrowRight" Height="30" Width="30" 
+                                        HorizontalAlignment="Right" VerticalAlignment="Center" />
                 </Grid>
             </Button>
-
         </Grid>
 
-        <Grid
-            Margin="0,0,25,18"
-            HorizontalAlignment="Right"
-            VerticalAlignment="Bottom">
+        <!-- Right Bottom Version Number -->
+        <Grid Margin="0,0,25,18" HorizontalAlignment="Right" VerticalAlignment="Bottom">
 
             <StackPanel Orientation="Horizontal">
-
-
                 <TextBlock
                     Margin="5"
                     VerticalAlignment="Center"
@@ -342,6 +332,7 @@
 
         </Grid>
 
+        <!-- GuidedTour -->
         <feather:GuidedTour
             Name="guide"
             AllowDismiss="True"
@@ -352,7 +343,6 @@
         <Grid x:Name="Fgrid2" />
         <Grid x:Name="Fgrid3" />
         <Grid x:Name="Fgrid4" />
-
 
     </Grid>
 </reactiveUi:ReactiveUserControl>
