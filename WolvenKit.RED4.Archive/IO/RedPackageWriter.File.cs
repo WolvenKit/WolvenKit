@@ -33,11 +33,9 @@ namespace WolvenKit.RED4.Archive.IO
 
             WriteHeader();
 
-            IList<RedBaseClass> chunkList = new List<RedBaseClass>();
+            var chunkList = file.Chunks;
             if (_file.Settings.RedPackageType == RedPackageType.Default)
             {
-                chunkList = file.Chunks;
-
                 short cruidsIndex = -1;
                 var cruids = new List<CRUID>();
                 for (var i = 0; i < chunkList.Count; i++)
