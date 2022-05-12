@@ -191,9 +191,14 @@ namespace WolvenKit.ViewModels.Shell
             DeleteSelectionCommand = new DelegateCommand(_ => ExecuteDeleteSelection(), _ => CanDeleteSelection());
             OpenChunkCommand = new DelegateCommand(_ => ExecuteOpenChunk(), _ => CanOpenChunk());
             CopyChunkCommand = new DelegateCommand(_ => ExecuteCopyChunk(), _ => CanCopyChunk());
+            CopySelectionCommand = new DelegateCommand(_ => ExecuteCopySelection(), _ => CanCopySelection());
             DuplicateChunkCommand = new DelegateCommand(_ => ExecuteDuplicateChunk(), _ => CanDuplicateChunk());
             PasteChunkCommand = new DelegateCommand(_ => ExecutePasteChunk(), _ => CanPasteChunk());
+            PasteSelectionCommand = new DelegateCommand(_ => ExecutePasteSelection(), _ => CanPasteSelection());
         }
+
+
+
 
         private bool CanDeleteSelection() => IsInArray;
         private void ExecuteDeleteSelection()
@@ -212,8 +217,6 @@ namespace WolvenKit.ViewModels.Shell
 
             try
             {
-                Console.Write(ts);
-
                 if (Parent.Data is IRedBufferPointer db3 && db3.GetValue().Data is worldNodeDataBuffer dict)
                 {
                     var indices = selection.Select(_ => (int)((worldNodeData)_).NodeIndex).ToList();
@@ -2038,12 +2041,112 @@ namespace WolvenKit.ViewModels.Shell
                 }
                 else
                 {
-                    RDTDataViewModel.CopiedChunk = Data;
+                    var tr = RedJsonSerializer.Serialize(Data);
+                    var copied = RedJsonSerializer.Deserialize<IRedType>(tr);
+
+                    RDTDataViewModel.CopiedChunk = copied;
                 }
             }
             catch { }
 
         }
+
+
+
+        void somefunc(object elem)
+        {
+            try
+            {
+                if (elem is IRedCloneable irc)
+                {
+                    RDTDataViewModel.CopiedChunk = (IRedType)irc.DeepCopy();
+                }
+                else
+                {
+                    var tr = RedJsonSerializer.Serialize(elem);
+                    var copied = RedJsonSerializer.Deserialize<IRedType>(tr);
+
+                    RDTDataViewModel.CopiedChunks.Add(copied);
+                }
+            }
+            catch { }
+        }
+
+
+        public ICommand CopySelectionCommand { get; private set; }
+        private bool CanCopySelection() => IsInArray;
+        private void ExecuteCopySelection()
+        {
+            var selection = Parent.DisplayProperties
+                            .Where(_ => _.IsSelected)
+                            .Select(_ => _.Data)
+                            .ToList();
+
+            var ts = Parent.DisplayProperties
+                            .Where(_ => _.IsSelected)
+                            .Select(_ => _)
+                            .ToList();
+
+            try
+            {
+                if (Parent.Data is IRedBufferPointer)
+                {
+                    /*var indices = selection.Select(_ => (int)((worldNodeData)_).NodeIndex).ToList();
+                    var (start, end) = (indices.Min(), indices.Max());
+
+                    var fullselection = Parent.DisplayProperties
+                        .Where(_ => Enumerable.Range(start, end - start + 1)
+                           .Contains((int)((worldNodeData)_.Data).NodeIndex))
+                        .Select(_ => _.Data)
+                        .ToList();*/
+
+                    foreach (var i in selection)
+                    { try { somefunc(i); } catch { } }
+
+                    Tab.File.SetIsDirty(true);
+                    Parent.RecalculateProperties();
+                }
+                else if (Parent.Data is IRedArray db4)
+                {
+                    var indices = ts.Select(_ => int.Parse(_.Name)).ToList();
+                    var (start, end) = (indices.Min(), indices.Max());
+
+                    var fullselection = Parent.DisplayProperties
+                        .Where(_ => Enumerable.Range(start, end - start + 1)
+                           .Contains(int.Parse(_.Name)))
+                        .Select(_ => _.Data)
+                        .ToList();
+
+
+                    foreach (var i in fullselection)
+                    { try { somefunc(i); } catch { } }
+
+                    Tab.File.SetIsDirty(true);
+                    Parent.RecalculateProperties();
+                }
+                else
+                {
+                    var t = Parent.Data.GetType().Name;
+                    Locator.Current.GetService<ILoggerService>().Error($"Handle this type {t} wen ._. ");
+                    /*
+                    foreach (var d in selection)
+                    {
+                        Data = d;
+                        ExecuteDeleteItem();
+                    }*/
+                }
+            }
+            catch (Exception ex)
+            {
+                Locator.Current.GetService<ILoggerService>()
+                    .Error($"Something went wrong while trying to copy the selection : {ex}");
+            }
+
+            Tab.SelectedChunk = Parent;
+        }
+
+
+
 
         public ICommand DuplicateChunkCommand { get; private set; }
         private bool CanDuplicateChunk() => IsInArray;
@@ -2074,6 +2177,44 @@ namespace WolvenKit.ViewModels.Shell
                 return null;
             }
         }
+
+
+        public ICommand PasteSelectionCommand { get; private set; }
+        private bool CanPasteSelection() => (IsArray || IsInArray)
+            && RDTDataViewModel.CopiedChunks != null
+            && (ArraySelfOrParent?.InnerType.IsAssignableTo(RDTDataViewModel.CopiedChunks.GetType()) ?? true);
+        private void ExecutePasteSelection()
+        {
+            if (RDTDataViewModel.CopiedChunks == null)
+            {
+                return;
+            }
+
+            if (Parent.ResolvedData is IRedArray)
+            {
+                for (var i = 0; i < RedDocumentTabViewModel.CopiedChunks.Count; i++)
+                {
+                    var e = RDTDataViewModel.CopiedChunks[i];
+                    if (Parent.InsertChild(Parent.GetIndexOf(this) + i + 1, e))
+                    {
+                        //RDTDataViewModel.CopiedChunk = null;
+                    }
+                }
+            }
+            if (ResolvedData is IRedArray)
+            {
+                for (var i = 0; i < RedDocumentTabViewModel.CopiedChunks.Count; i++)
+                {
+                    var e = RDTDataViewModel.CopiedChunks[i];
+                    if (InsertChild(-1, e))
+                    {
+                        //RDTDataViewModel.CopiedChunk = null;
+                    }
+                }
+            }
+        }
+
+
 
         public ICommand PasteChunkCommand { get; private set; }
         private bool CanPasteChunk() => (IsArray || IsInArray)

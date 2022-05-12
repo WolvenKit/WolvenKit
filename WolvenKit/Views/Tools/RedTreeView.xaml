@@ -285,7 +285,40 @@
                             VerticalAlignment="Center"
                             Kind="ContentCopy" />
                     </MenuItem.Icon>
+                </MenuItem> 
+                <MenuItem
+                    Command="{Binding Path=PlacementTarget.Tag.CopySelectionCommand, RelativeSource={RelativeSource AncestorType=ContextMenu}}"
+                    Header="Copy Selection From Array/Buffer"
+                    IsCheckable="False"
+                    Style="{StaticResource SyncfusionMenuItemStyle}">
+                    <MenuItem.Icon>
+                        <iconPacks:PackIconMaterial
+                            Width="13"
+                            Height="13"
+                            Padding="0,0,0,0"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center"
+                            Kind="ContentCopy" />
+                    </MenuItem.Icon>
                 </MenuItem>
+                <MenuItem
+                    Command="{Binding Path=PlacementTarget.Tag.PasteSelectionCommand, RelativeSource={RelativeSource AncestorType=ContextMenu}}"
+                    Header="Paste Selection From Array/Buffer"
+                    IsCheckable="False"
+                    Style="{StaticResource SyncfusionMenuItemStyle}">
+                    <MenuItem.Icon>
+                        <iconPacks:PackIconMaterial
+                            Width="13"
+                            Height="13"
+                            Padding="0,0,0,0"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center"
+                            Kind="ContentCopy" />
+                    </MenuItem.Icon>
+                </MenuItem>
+
+
+
                 <MenuItem
                     Command="{Binding Path=PlacementTarget.Tag.PasteChunkCommand, RelativeSource={RelativeSource AncestorType=ContextMenu}}"
                     Header="Paste Into Array/Buffer"
