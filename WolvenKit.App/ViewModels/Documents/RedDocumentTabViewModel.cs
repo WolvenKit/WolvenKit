@@ -17,7 +17,7 @@ namespace WolvenKit.ViewModels.Documents
 
         public static IRedType CopiedChunk;
 
-        public static List<IRedType> CopiedChunks;
+        public static List<IRedType> CopiedChunks = new();
 
         public RedDocumentTabViewModel()
         {
