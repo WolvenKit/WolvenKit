@@ -7,7 +7,8 @@ namespace WolvenKit.RED4.Archive.Buffer
     {
         Default,
         InkLibResource,
-        SaveResource
+        SaveResource,
+        ScriptableSystem
     }
 
     public class RedPackageSettings

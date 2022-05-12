@@ -83,29 +83,53 @@ namespace WolvenKit.RED4.Archive.IO
                 }
             }
 
-            if (_file.Settings.RedPackageType == RedPackageType.SaveResource)
+            if (_file.Settings.RedPackageType is RedPackageType.SaveResource or RedPackageType.ScriptableSystem)
             {
-                var chunkDict = new Dictionary<ulong, RedBaseClass>();
-
-                foreach (var chunk in _file.Chunks)
+                IList<CRUID> cruids = new List<CRUID>();
+                if (_file.Settings.RedPackageType is RedPackageType.SaveResource)
                 {
-                    ulong hash;
-                    if (chunk is DynamicBaseClass dbc)
+                    foreach (var chunk in file.Chunks)
                     {
-                        hash = FNV1A64HashAlgorithm.HashString(dbc.ClassName);
+                        if (file.ChunkDictionary.TryGetValue(chunk, out var cruid))
+                        {
+                            cruids.Add(cruid);
+                        }
+                        else
+                        {
+                            // TODO: Proper way to get these?
+                            cruids.Add((ulong)Random.Shared.NextInt64());
+                        }
                     }
-                    else
-                    {
-                        hash = FNV1A64HashAlgorithm.HashString(chunk.GetType().Name);
-                    }
-
-                    chunkDict.Add(hash, chunk);
                 }
 
-                chunkDict = chunkDict.OrderBy(x => x.Key).ToDictionary(x => x.Key, x => x.Value);
+                if (_file.Settings.RedPackageType is RedPackageType.ScriptableSystem)
+                {
+                    var chunkDict = new Dictionary<ulong, RedBaseClass>();
 
-                chunkList = chunkDict.Values.ToList();
-                var cruids = chunkDict.Keys;
+                    foreach (var chunk in _file.Chunks)
+                    {
+                        ulong hash;
+                        if (chunk is DynamicBaseClass dbc)
+                        {
+                            hash = FNV1A64HashAlgorithm.HashString(dbc.ClassName);
+                        }
+                        else
+                        {
+                            hash = FNV1A64HashAlgorithm.HashString(chunk.GetType().Name);
+                        }
+
+                        chunkDict.Add(hash, chunk);
+                    }
+
+                    chunkDict = chunkDict.OrderBy(x => x.Key).ToDictionary(x => x.Key, x => x.Value);
+
+                    chunkList = chunkDict.Values.ToList();
+                    foreach (var cruid in chunkDict.Keys)
+                    {
+                        cruids.Add(cruid);
+                    }
+                }
+
 
                 BaseWriter.Write(cruids.Count);
                 foreach (var cruid in cruids)

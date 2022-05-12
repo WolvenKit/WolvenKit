@@ -80,7 +80,7 @@ namespace WolvenKit.RED4.Archive.IO
                 }
             }
 
-            if (Settings.RedPackageType == RedPackageType.SaveResource)
+            if (Settings.RedPackageType == RedPackageType.SaveResource || Settings.RedPackageType == RedPackageType.ScriptableSystem)
             {
                 var numCruids = _reader.ReadUInt32();
                 for (var i = 0; i < numCruids; i++)
@@ -139,6 +139,14 @@ namespace WolvenKit.RED4.Archive.IO
             }
 
             result.Chunks = newChunks;
+
+            if (Settings.RedPackageType is RedPackageType.Default or RedPackageType.SaveResource)
+            {
+                for (int i = 0; i < result.Chunks.Count; i++)
+                {
+                    result.ChunkDictionary.Add(result.Chunks[i], result.RootCruids[i]);
+                }
+            }
 
             buffer.Data = result;
 
