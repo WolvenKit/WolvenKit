@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Reactive.Disposables;
 using System.Windows;
 using System.Windows.Input;
@@ -45,7 +46,9 @@ namespace WolvenKit.ViewModels.Documents
                 if (SelectedChunk == null)
                 {
                     SelectedChunk = Chunks[0];
+                    SelectedChunks.Add(Chunks[0]);
                 }
+
                 //ExportChunkCommand = new DelegateCommand<ChunkViewModel>((p) => ExecuteExportChunk(p), (p) => CanExportChunk(p));
 
                 //this.HandleActivation()
@@ -102,7 +105,7 @@ namespace WolvenKit.ViewModels.Documents
 
         [Reactive] public ChunkViewModel SelectedChunk { get; set; }
 
-        [Reactive] public ChunkViewModel SelectedChunks { get; set; }
+        [Reactive] public ObservableCollection<ChunkViewModel> SelectedChunks { get; set; } = new ObservableCollection<ChunkViewModel>();
 
 
         [Reactive] public ChunkViewModel RootChunk { get; set; }

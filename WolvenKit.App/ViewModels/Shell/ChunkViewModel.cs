@@ -211,9 +211,6 @@ namespace WolvenKit.ViewModels.Shell
                             .Where(_ => _.IsSelected)
                             .Select(_ => _)
                             .ToList();
-
-
-
             try
             {
                 if (Parent.Data is IRedBufferPointer db3 && db3.GetValue().Data is worldNodeDataBuffer dict)
@@ -244,7 +241,6 @@ namespace WolvenKit.ViewModels.Shell
                         .Select(_ => _.Data)
                         .ToList();
 
-
                     foreach (var i in fullselection)
                     { try { db4.Remove(i); } catch { } }
 
@@ -253,15 +249,8 @@ namespace WolvenKit.ViewModels.Shell
                 }
                 else
                 {
-                    //my bad :P
                     var t = Parent.Data.GetType().Name;
                     Locator.Current.GetService<ILoggerService>().Error($"Handle this type {t} wen ._. ");
-                    /*
-                    foreach (var d in selection)
-                    {
-                        Data = d;
-                        ExecuteDeleteItem();
-                    }*/
                 }
             }
             catch (Exception ex)
@@ -1892,8 +1881,6 @@ namespace WolvenKit.ViewModels.Shell
                     var currentfile = new FileModel(Tab.File.FilePath,
                         Locator.Current.GetService<AppViewModel>().ActiveProject);
 
-
-
                     Locator.Current.GetService<AppViewModel>().SaveFileCommand.SafeExecute(currentfile);
 
                     //QuickToJSON(Parent.Parent.Data);
@@ -2019,9 +2006,9 @@ namespace WolvenKit.ViewModels.Shell
                 else
                 {
                     var tr = RedJsonSerializer.Serialize(elem);
-                    var copied = RedJsonSerializer.Deserialize<IRedType>(tr);
+                    var copied = RedJsonSerializer.Deserialize<object>(tr);
 
-                    RDTDataViewModel.CopiedChunks.Add(copied);
+                    RDTDataViewModel.CopiedChunks.Add((IRedType)copied);
                 }
             }
             catch { }
@@ -2032,50 +2019,34 @@ namespace WolvenKit.ViewModels.Shell
         private bool CanCopySelection() => IsInArray;
         private void ExecuteCopySelection()
         {
-            var selection = Parent.DisplayProperties
-                            .Where(_ => _.IsSelected)
-                            .Select(_ => _.Data)
-                            .ToList();
-
             var ts = Parent.DisplayProperties
                             .Where(_ => _.IsSelected)
                             .Select(_ => _)
                             .ToList();
-
             try
             {
+                var indices = ts.Select(_ => int.Parse(_.Name)).ToList();
+                var (start, end) = (indices.Min(), indices.Max());
+
+                var fullselection = Parent.DisplayProperties
+                    .Where(_ => Enumerable.Range(start, end - start + 1)
+                       .Contains(int.Parse(_.Name)))
+                    .Select(_ => _.Data)
+                    .ToList();
+
                 if (Parent.Data is IRedBufferPointer)
                 {
-                    /*var indices = selection.Select(_ => (int)((worldNodeData)_).NodeIndex).ToList();
-                    var (start, end) = (indices.Min(), indices.Max());
-
-                    var fullselection = Parent.DisplayProperties
-                        .Where(_ => Enumerable.Range(start, end - start + 1)
-                           .Contains((int)((worldNodeData)_.Data).NodeIndex))
-                        .Select(_ => _.Data)
-                        .ToList();*/
-
                     RDTDataViewModel.CopiedChunks.Clear();
 
-                    foreach (var i in selection)
+                    foreach (var i in fullselection)
                     { try { AddToCopiedChunks(i); } catch { } }
 
                     Tab.File.SetIsDirty(true);
                     Parent.RecalculateProperties();
                 }
-                else if (Parent.Data is IRedArray db4)
-                {/*
-                    var indices = ts.Select(_ => int.Parse(_.Name)).ToList();
-                    var (start, end) = (indices.Min(), indices.Max());
-
-                    var fullselection = Parent.DisplayProperties
-                        .Where(_ => Enumerable.Range(start, end - start + 1)
-                           .Contains(int.Parse(_.Name)))
-                        .Select(_ => _.Data)
-                        .ToList();*/
-
-
-                    foreach (var i in selection)
+                else if (Parent.Data is IRedArray)
+                {
+                    foreach (var i in fullselection)
                     { try { AddToCopiedChunks(i); } catch { } }
 
                     Tab.File.SetIsDirty(true);
@@ -2085,12 +2056,6 @@ namespace WolvenKit.ViewModels.Shell
                 {
                     var t = Parent.Data.GetType().Name;
                     Locator.Current.GetService<ILoggerService>().Error($"Handle this type {t} wen ._. ");
-                    /*
-                    foreach (var d in selection)
-                    {
-                        Data = d;
-                        ExecuteDeleteItem();
-                    }*/
                 }
             }
             catch (Exception ex)

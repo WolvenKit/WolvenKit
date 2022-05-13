@@ -9,26 +9,20 @@ using WolvenKit.Models;
 using WolvenKit.RED4.Archive.Buffer;
 using WolvenKit.RED4.CR2W.JSON;
 using WolvenKit.RED4.Types;
-using WolvenKit.RED4.CR2W;
-using WolvenKit.ViewModels.Documents;
-using WolvenKit.ViewModels.Tools;
+using WolvenKit.Common;
+using static WolvenKit.RED4.Types.Enums;
+using WolvenKit.Functionality.Services;
 
 using Vec3 = System.Numerics.Vector3;
 using Vec4 = System.Numerics.Vector4;
 using Quat = System.Numerics.Quaternion;
 using Mat4 = System.Numerics.Matrix4x4;
-using WolvenKit.Common.Model.Database;
-using Microsoft.EntityFrameworkCore;
-using WolvenKit.RED4.CR2W.Archive;
-using WolvenKit.Common;
-using static WolvenKit.RED4.Types.Enums;
-using WolvenKit.Functionality.Services;
 
 namespace WolvenKit.ViewModels.Shell
 {
     public partial class ChunkViewModel
     {
-        public static Vec4 GetCenter(List<Vec4> poslist)
+        private static Vec4 GetCenter(List<Vec4> poslist)
         {
             //minX + (maxX - minX)/2 == (maxX + minX)/2;
             var (minX, maxX) = (poslist.Select(_ => _.X).Min(), poslist.Select(_ => _.X).Max());
@@ -46,7 +40,7 @@ namespace WolvenKit.ViewModels.Shell
             return new Vec4(cX, cY, cZ, cW);
         }
 
-        public (List<Vec4>, List<Quat>, List<string>) GetPosRotApp(List<Prop> props, int i = 0)
+        private (List<Vec4>, List<Quat>, List<string>) GetPosRotApp(List<Prop> props, int i = 0)
         {
             var poslist = new List<Vec4>();
             var rotlist = new List<Quat>();
@@ -81,7 +75,7 @@ namespace WolvenKit.ViewModels.Shell
             return (poslist, rotlist, applist);
         }
 
-        public (List<Vec4>, List<Quat>, List<string>) GetPosRotApp(List<Child> props)
+        private (List<Vec4>, List<Quat>, List<string>) GetPosRotApp(List<Child> props)
         {
             var poslist = new List<Vec4>();
             var rotlist = new List<Quat>();
@@ -129,7 +123,7 @@ namespace WolvenKit.ViewModels.Shell
             return (poslist, rotlist, applist);
         }
 
-        public static string PutQuotes(string w)
+        private static string PutQuotes(string w)
         {
             w = w.Replace("{", "{\"");
             w = w.Replace("}", "\"}");
@@ -164,7 +158,7 @@ namespace WolvenKit.ViewModels.Shell
             return q;
         }
 
-        public static List<Vec4> UpdateCoords(List<Vec4> poslist, Vec4 center)
+        private static List<Vec4> UpdateCoords(List<Vec4> poslist, Vec4 center)
         {
             for (var i = 0; i < poslist.Count; i++)
             {
@@ -178,7 +172,7 @@ namespace WolvenKit.ViewModels.Shell
             return poslist;
         }
 
-        public void AddToData(string tr, string path, Vec4 pos, Quat rot, string app, Vec3 scale = default, string ff = "", bool isdoor = false)
+        private void AddToData(string tr, string path, Vec4 pos, Quat rot, string app, Vec3 scale = default, string ff = "", bool isdoor = false)
         {
             if (Parent.Parent is not null &&
                 Parent.Parent.Data is not null &&
@@ -196,7 +190,7 @@ namespace WolvenKit.ViewModels.Shell
                 }
             }
         }
-        public void AddEntity(string tr, string path, Vec4 pos, worldStreamingSector wss, Quat rot, string app, Vec3 scale = default, bool isdoor = false, bool visible = true)
+        private void AddEntity(string tr, string path, Vec4 pos, worldStreamingSector wss, Quat rot, string app, Vec3 scale = default, bool isdoor = false, bool visible = true)
         {
             var current = RedJsonSerializer.Deserialize<worldNodeData>(tr);
 
@@ -234,7 +228,7 @@ namespace WolvenKit.ViewModels.Shell
             SetCoords(current, index, pos, rot, scale);
         }
 
-        public void AddMesh(string tr, string path, Vec4 pos, worldStreamingSector wss, Quat rot, string app, Vec3 scale = default)
+        private void AddMesh(string tr, string path, Vec4 pos, worldStreamingSector wss, Quat rot, string app, Vec3 scale = default)
         {
             var current = RedJsonSerializer.Deserialize<worldNodeData>(tr);
 
@@ -250,7 +244,7 @@ namespace WolvenKit.ViewModels.Shell
             SetCoords(current, index, pos, rot, scale);
         }
 
-        public void SetCoords(worldNodeData current, int index, Vec4 pos, Quat rot, Vec3 scale = default)
+        private void SetCoords(worldNodeData current, int index, Vec4 pos, Quat rot, Vec3 scale = default)
         {
             current.Position.X += pos.X;
             current.Position.Y += pos.Y;
@@ -279,7 +273,7 @@ namespace WolvenKit.ViewModels.Shell
             AddCurrent(current);
         }
 
-        public void AddCurrent(worldNodeData current)
+        private void AddCurrent(worldNodeData current)
         {
             if (Parent.Data is DataBuffer db00 &&
                 db00.Buffer.Data is worldNodeDataBuffer db0)
@@ -305,7 +299,7 @@ namespace WolvenKit.ViewModels.Shell
             }
         }
 
-        public List<Child> GetLines(Root1 json)
+        private List<Child> GetLines(Root1 json)
         {
             var props = new List<Child>();
 
@@ -325,7 +319,7 @@ namespace WolvenKit.ViewModels.Shell
             return props;
         }
 
-        public void GetLines(Child c, List<Child> props)
+        private void GetLines(Child c, List<Child> props)
         {
             var v = new Child()
             {
@@ -345,12 +339,12 @@ namespace WolvenKit.ViewModels.Shell
             }
         }
 
-        public static Vec4 GetCenter(Root1 r)
+        private static Vec4 GetCenter(Root1 r)
         {
             return new Vec4(r.pos.x, r.pos.y, r.pos.z, r.pos.w);
         }
 
-        public void Add00(List<Prop> props, string tr)
+        private void Add00(List<Prop> props, string tr)
         {
             try
             {
@@ -426,7 +420,7 @@ namespace WolvenKit.ViewModels.Shell
             catch { }
         }
 
-        public void Add00(Root1 json, string tr)
+        private void Add00(Root1 json, string tr)
         {
             var props = GetLines(json);
             var (poslist, rotlist, applist) = GetPosRotApp(props);
