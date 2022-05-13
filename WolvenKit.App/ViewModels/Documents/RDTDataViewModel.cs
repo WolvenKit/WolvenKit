@@ -31,7 +31,7 @@ namespace WolvenKit.ViewModels.Documents
 
         [Reactive] public RedDocumentViewModel File { get; set; }
 
-        public static IRedType CopiedChunk;
+        //public static IRedType CopiedChunk;
 
         public RDTDataViewModel(IRedType data, RedDocumentViewModel file)
         {

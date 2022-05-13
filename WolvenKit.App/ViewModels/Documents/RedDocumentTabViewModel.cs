@@ -13,7 +13,7 @@ namespace WolvenKit.ViewModels.Documents
 
         [Reactive] public bool CanClose { get; set; }
 
-        [Reactive] public RedDocumentViewModel File { get; set; }
+        //[Reactive] public RedDocumentViewModel File { get; set; }
 
         public static IRedType CopiedChunk;
 
