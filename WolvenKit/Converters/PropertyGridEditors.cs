@@ -23,10 +23,6 @@ namespace WolvenKit.Converters
             {
                 return new UlongEditor();
             }
-            if (PropertyType.IsAssignableTo(typeof(IRedInteger)))
-            {
-                return new IntegerEditor();
-            }
             if (PropertyType.IsAssignableTo(typeof(FixedPoint)))
             {
                 return new FixedPointEditor();
@@ -34,6 +30,10 @@ namespace WolvenKit.Converters
             if (PropertyType.IsAssignableTo(typeof(IRedPrimitive<float>)))
             {
                 return new FloatEditor();
+            }
+            if (PropertyType.IsAssignableTo(typeof(IRedInteger)))
+            {
+                return new IntegerEditor();
             }
             if (PropertyType.IsAssignableTo(typeof(IRedPrimitive<bool>)))
             {

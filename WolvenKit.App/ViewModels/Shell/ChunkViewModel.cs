@@ -1130,7 +1130,7 @@ namespace WolvenKit.ViewModels.Shell
             else if (PropertyType.IsAssignableTo(typeof(FixedPoint)))
             {
                 var value = (FixedPoint)Data;
-                Value = ((float)value).ToString("R");
+                Value = ((float)value).ToString("G9");
             }
             else if (PropertyType.IsAssignableTo(typeof(NodeRef)))
             {

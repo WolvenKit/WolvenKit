@@ -67,10 +67,6 @@ namespace WolvenKit.Converters
                         return RedUlongEditor;
                     }
                 }
-                if (vm.PropertyType.IsAssignableTo(typeof(IRedInteger)))
-                {
-                    return RedIntegerEditor;
-                }
                 if (vm.PropertyType.IsAssignableTo(typeof(FixedPoint)))
                 {
                     return RedFixedPointEditor;
@@ -94,6 +90,10 @@ namespace WolvenKit.Converters
                 if (vm.PropertyType.IsAssignableTo(typeof(IRedPrimitive<float>)))
                 {
                     return RedFloatEditor;
+                }
+                if (vm.PropertyType.IsAssignableTo(typeof(IRedInteger)))
+                {
+                    return RedIntegerEditor;
                 }
                 if (vm.PropertyType.IsAssignableTo(typeof(IRedPrimitive<bool>)))
                 {
