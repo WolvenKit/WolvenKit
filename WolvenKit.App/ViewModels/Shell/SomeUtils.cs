@@ -138,72 +138,15 @@ namespace WolvenKit.ViewModels.Shell
             return w;
         }
 
-        public ChunkViewModel GetParent() => Parent;
-
         public void Refresh()
         {
             var currentfile = new FileModel(Tab.File.FilePath,
                 Locator.Current.GetService<AppViewModel>().ActiveProject);
-            var asm = typeof(AppViewModel).Assembly;
-            var types = Tab.File.TabItemViewModels
-                .Where(_ => _.GetType().Name != "RDTDataViewModel")
-                .Select(_ => _.GetType().FullName).ToList();
-            types.Add(Tab.File.TabItemViewModels
-                .Where(_ => _.GetType().Name == "RDTDataViewModel")
-                .Select(_ => _.GetType().FullName));
-
             Tab.File.TabItemViewModels
                 .RemoveMany(Tab.File.TabItemViewModels.AsEnumerable());
 
-            using var stream = new FileStream(currentfile.FullName, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
-            using var reader = new BinaryReader(stream);
-            var cr2wFile = Locator.Current.GetService<Red4ParserService>()
-                .ReadRed4File(reader);
-            cr2wFile.MetaData.FileName = currentfile.FullName;
-
-            var cls = new worldStreamingSector();
-            if (Parent is not null)
-            {
-                if (Parent.Data is worldStreamingSector wss1)
-                {
-                    cls = wss1;
-                }
-                else if (Parent.Parent is not null && Parent.Parent.Data is worldStreamingSector wss2)
-                {
-                    cls = wss2;
-                }
-            }
-            else if (cr2wFile.RootChunk is worldStreamingSector wss3)
-            {
-                cls = wss3;
-            }
-
-            if (cls is not null)
-            {
-                foreach (var type in types)
-                {
-                    var t = asm.GetType(type);
-                    var instance = System.Activator.CreateInstance(t, cls, Tab.File)
-                        as RedDocumentTabViewModel;
-
-                    Tab.File.TabItemViewModels.Add(instance);
-                    /*
-                                        if (instance is RDTDataViewModel ii)
-                                        {
-                                            //hmmm
-                                            //pressing the save button after refreshing
-                                            //saves modified data instead of resetting them ...
-                                            //non of these work ......
-                                            Parent = ii.Chunks.First();
-                                            ResolvedData = cls;
-                                            Data = cls;
-                                        }
-                                        //TLDR refresh does NOT work
-                    */
-                    //Locator.Current.GetService<AppViewModel>().SaveFileCommand.Execute(currentfile);
-                }
-
-            }
+            var ad = Locator.Current.GetService<AppViewModel>().ActiveDocument;
+            ad.OpenFileAsync(currentfile.FullName);
         }
 
 
@@ -241,6 +184,7 @@ namespace WolvenKit.ViewModels.Shell
                 Parent.Parent.Data is not null &&
                 Parent.Parent.Data is worldStreamingSector wss)
             {
+                //loads the mesh when found and scaled
                 if (scale == Vec3.One)
                 {
                     AddEntity(tr, path, pos, wss, rot, app, scale, isdoor, visible: true);
@@ -410,11 +354,6 @@ namespace WolvenKit.ViewModels.Shell
         {
             try
             {
-                // turned .ent to .mesh in the JSON
-                // should instead search find and dest ... explore the ent
-                // to find a mesh or an app that needs to be found and explored
-                // to finally find a mesh and it's collisions and transforms
-
                 var am = Locator.Current.GetService<IArchiveManager>();
                 var sm = Locator.Current.GetService<ISettingsManager>();
                 am.LoadModsArchives(new DirectoryInfo(sm.GetRED4GameModDir()), null);
@@ -424,11 +363,14 @@ namespace WolvenKit.ViewModels.Shell
                 am.IsModBrowserActive = true;
                 var tt2 = am.GetGroupedFiles();
 
-                var filelist = af[".mesh"].GroupBy(x => x.Key).Select(x => x.First()).ToList();
-                var filelist2 = tt2[".mesh"].GroupBy(x => x.Key).Select(x => x.First()).ToList();
+                var archiveMeshList = af[".mesh"].GroupBy(x => x.Key).Select(x => x.First()).ToList();
+                var modMeshList = tt2[".mesh"].GroupBy(x => x.Key).Select(x => x.First()).ToList();
+                var archiveEntList = af[".ent"].GroupBy(x => x.Key).Select(x => x.First()).ToList();
+                var modEntList = tt2[".ent"].GroupBy(x => x.Key).Select(x => x.First()).ToList();
                 am.IsModBrowserActive = tempbool;
 
-                var flt = filelist.Concat(filelist2).ToList();
+                var entList = archiveEntList.Concat(modEntList).ToList();
+                var meshList = archiveMeshList.Concat(modMeshList).ToList();
 
                 // this searches for the name of the file as .mesh
                 // and changes the path if a new path is found
@@ -457,9 +399,24 @@ namespace WolvenKit.ViewModels.Shell
                     if (scale != Vec3.One)
                     {
                         var path = line.template_path;
-                        var sp = Path.ChangeExtension(Path.GetFileName(path), ".mesh");
-                        var foundfile = flt.Where(x => x.FileName.Contains(sp)).Select(_ => _).ToList();
-                        ff = foundfile.Count == 0 ? "" : foundfile.Last().FileName;
+                        var sp = Path.GetFileName(path);
+                        var spm = Path.ChangeExtension(sp, ".mesh");
+
+                        /*
+                                                var foundents = entList.Where(x => x.FileName.Contains(sp)).Select(_ => _).ToList();
+                                                if (foundents.Any())
+                                                {
+                                                    var foundent = foundents.Last();
+                                                    using var db = new RedDBContext();
+
+                                                    var file = new RedFileViewModel(foundent);
+                                                    var hash = file.GetGameFile().Key;
+                        */
+                        //}
+
+                        var foundmesh = meshList.Where(x => x.FileName.Contains(spm)).Select(_ => _).ToList();
+                        ff = foundmesh.Count == 0 ? "" : foundmesh.Last().FileName;
+
                     }
                     var door = line.isdoor is bool b ? b : false;
 

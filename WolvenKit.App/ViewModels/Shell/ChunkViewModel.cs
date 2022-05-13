@@ -186,7 +186,6 @@ namespace WolvenKit.ViewModels.Shell
             AddHandleCommand = new DelegateCommand(_ => ExecuteAddHandle(), _ => CanAddHandle());
             AddItemToCompiledDataCommand = new DelegateCommand(_ => ExecuteAddItemToCompiledData(), _ => CanAddItemToCompiledData());
             DeleteItemCommand = new DelegateCommand(_ => ExecuteDeleteItem(), _ => CanDeleteItem());
-            DeleteSelectedItemCommand = new DelegateCommand(_ => ExecuteDeleteSelectedItem(), _ => CanDeleteItem());
             DeleteAllCommand = new DelegateCommand(_ => ExecuteDeleteAll(), _ => CanDeleteAll());
             DeleteSelectionCommand = new DelegateCommand(_ => ExecuteDeleteSelection(), _ => CanDeleteSelection());
             OpenChunkCommand = new DelegateCommand(_ => ExecuteOpenChunk(), _ => CanOpenChunk());
@@ -403,14 +402,7 @@ namespace WolvenKit.ViewModels.Shell
             PropertiesLoaded = true;
             this.RaisePropertyChanged("ResolvedData");
 
-            try
-            {
-                Properties.Clear();
-            } catch(Exception ex )
-            {
-                Console.WriteLine(ex);
-                throw;
-            }
+            Properties.Clear();
 
             var isreadonly = false;
             if (Parent != null)
@@ -1167,11 +1159,8 @@ namespace WolvenKit.ViewModels.Shell
             }
             else if (PropertyType.IsAssignableTo(typeof(CByteArray)))
             {
-                if( Data != null  )
-                {
-                    var ba = (byte[])(CByteArray)Data;
-                    Value = string.Join(" ", ba.Select(x => $"{x:X2}"));
-                }
+                var ba = (byte[])(CByteArray)Data;
+                Value = string.Join(" ", ba.Select(x => $"{x:X2}"));
             }
             else if (PropertyType.IsAssignableTo(typeof(LocalizationString)))
             {
@@ -1758,43 +1747,6 @@ namespace WolvenKit.ViewModels.Shell
         //    Tab.File.SetIsDirty(true);
         //}
 
-
-        public ICommand DeleteSelectedItemCommand { get; private set; }
-
-        private void ExecuteDeleteSelectedItem()
-        {
-            Console.Write(Data);
-
-/*            if (Tab is RDTDataViewModel dvm)
-            {
-                dvm.SelectedChunk = Parent;
-            }
-            if (Parent.Data is IRedArray ary)
-            {
-                ary.Remove(Data);
-            }
-            else if (Parent.Data is IRedBufferPointer db && db.GetValue().Data is Package04 pkg)
-            {
-                if (!pkg.Chunks.Remove((RedBaseClass)Data))
-                {
-                    Locator.Current.GetService<ILoggerService>().Error("Unable to delete chunk");
-                    return;
-                }
-            }
-            else if (Parent.Data is IRedBufferPointer db2 && db2.GetValue().Data is CR2WList list)
-            {
-                list.Files.RemoveAll(x => x.RootChunk == Data);
-            }
-            else
-            {
-                Locator.Current.GetService<ILoggerService>().Error("Unknown collection - unable to delete chunk");
-                return;
-            }
-
-            Tab.File.SetIsDirty(true);
-            Parent.RecalulateProperties();*/
-        }
-
         public ICommand DeleteItemCommand { get; private set; }
         public ICommand DeleteSelectionCommand { get; private set; }
 
@@ -1940,44 +1892,11 @@ namespace WolvenKit.ViewModels.Shell
                     var currentfile = new FileModel(Tab.File.FilePath,
                         Locator.Current.GetService<AppViewModel>().ActiveProject);
 
-                    
+
 
                     Locator.Current.GetService<AppViewModel>().SaveFileCommand.SafeExecute(currentfile);
-                    
 
-                    ;
-
-
-                    Stream myStream;
-                    var saveFileDialog = new SaveFileDialog
-                    {
-                        Filter = "JSON files (*.json)|*.json|All files (*.*)|*.*",
-                        FilterIndex = 2,
-                        FileName = Type + ".json",
-                        RestoreDirectory = true
-                    };
-
-                    if (saveFileDialog.ShowDialog() == DialogResult.OK)
-                    {
-                        if ((myStream = saveFileDialog.OpenFile()) != null)
-                        {
-                            //var dto = new RedFileDto(Parent.Parent.Data);
-                            var json = RedJsonSerializer.Serialize(Parent.Parent.Tab.File);
-
-                            if (string.IsNullOrEmpty(json))
-                            {
-                                throw new SerializationException();
-                            }
-
-                            myStream.Write(json.ToCharArray().Select(c => (byte)c).ToArray());
-                            myStream.Close();
-                        }
-                    }
-
-                    ;
-
-
-                    
+                    //QuickToJSON(Parent.Parent.Data);
 
                     Refresh();
 
@@ -1985,6 +1904,42 @@ namespace WolvenKit.ViewModels.Shell
                 }
                 catch { }
             }
+        }
+
+        public void QuickToJSON(IRedType irt)
+        {
+            try
+            {
+                Stream myStream;
+                var saveFileDialog = new SaveFileDialog
+                {
+                    Filter = "JSON files (*.json)|*.json|All files (*.*)|*.*",
+                    FilterIndex = 2,
+                    FileName = Type + ".json",
+                    RestoreDirectory = true
+                };
+
+                if (saveFileDialog.ShowDialog() == DialogResult.OK)
+                {
+                    if ((myStream = saveFileDialog.OpenFile()) != null)
+                    {
+                        //var dto = new RedFileDto(Parent.Parent.Data);
+
+                        var json = RedJsonSerializer.Serialize(irt);
+                        //var jsont = RedJsonSerializer.Serialize(Parent.Parent.Tab.File);
+
+
+                        if (string.IsNullOrEmpty(json))
+                        {
+                            throw new SerializationException();
+                        }
+
+                        myStream.Write(json.ToCharArray().Select(c => (byte)c).ToArray());
+                        myStream.Close();
+                    }
+                }
+            }
+            catch { }
         }
 
 
