@@ -77,10 +77,10 @@ namespace WolvenKit.Views.Editors
         private void SetZValue(string value) => SetCurrentValue(ZProperty, (CFloat)float.Parse(value));
         private void SetWValue(string value) => SetCurrentValue(WProperty, (CFloat)float.Parse(value));
 
-        private string GetValueFromXValue() => ((float)X).ToString("R");
-        private string GetValueFromYValue() => ((float)Y).ToString("R");
-        private string GetValueFromZValue() => ((float)Z).ToString("R");
-        private string GetValueFromWValue() => ((float)W).ToString("R");
+        private string GetValueFromXValue() => ((float)X).ToString("G9");
+        private string GetValueFromYValue() => ((float)Y).ToString("G9");
+        private string GetValueFromZValue() => ((float)Z).ToString("G9");
+        private string GetValueFromWValue() => ((float)W).ToString("G9");
 
         private void NumberValidationTextBox(object sender, TextCompositionEventArgs e)
         {
