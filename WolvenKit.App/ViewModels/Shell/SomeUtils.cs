@@ -93,12 +93,7 @@ namespace WolvenKit.ViewModels.Shell
                     W = pos.w
                 };
                 poslist.Add(v);
-                /*
-                                var q = Quat.CreateFromYawPitchRoll(
-                                    (float)(Math.PI / 180) * rot.yaw,
-                                    (float)(Math.PI / 180) * rot.pitch,
-                                    (float)(Math.PI / 180) * rot.roll);
-                */
+
                 var euler = new Vec3()
                 {
                     X = (float)(Math.PI / 180) * rot.yaw,
@@ -144,19 +139,13 @@ namespace WolvenKit.ViewModels.Shell
         }
 
 
-        public static Quat FixRotation(Vec3 euler, int i = 0)
-        {
-            var q = Quat.CreateFromRotationMatrix(
-                    Mat4.Identity
-                    * Mat4.CreateFromAxisAngle(Vec3.UnitY, euler.Z)
-                    * Mat4.CreateFromAxisAngle(Vec3.UnitX, euler.Y)
-                    * Mat4.CreateFromAxisAngle(Vec3.UnitZ, euler.X)
-                    );
-            //var mq = Mat4.CreateFromQuaternion(q);
-            //var q9 = Quat.CreateFromRotationMatrix(mq);
-
-            return q;
-        }
+        public static Quat FixRotation(Vec3 euler, int i = 0) =>
+            Quat.CreateFromRotationMatrix(
+                Mat4.Identity
+                * Mat4.CreateFromAxisAngle(Vec3.UnitY, euler.Z)
+                * Mat4.CreateFromAxisAngle(Vec3.UnitX, euler.Y)
+                * Mat4.CreateFromAxisAngle(Vec3.UnitZ, euler.X)
+                );
 
         private static List<Vec4> UpdateCoords(List<Vec4> poslist, Vec4 center)
         {

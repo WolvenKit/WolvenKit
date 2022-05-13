@@ -22,7 +22,7 @@ namespace WolvenKit.Modkit.RED4
 {
     public partial class ModTools
     {
-
+        //WIP does not do the thing yet
         public bool ImportRig(FileInfo inGltfFile, Stream rigStream, GltfImportArgs args)
         {
             var cr2w = _wolvenkitFileService.ReadRed4File(rigStream);
@@ -55,7 +55,6 @@ namespace WolvenKit.Modkit.RED4
                 jointparentnames = Enumerable.Range(0, armature.Count).Select(_ => ((Skin)armature[_]).GetJoint(_).Joint.VisualParent.Name).ToList();
                 ibm = Enumerable.Range(0, armature.Count).Select(_ => ((Skin)armature[_]).GetJoint(_).InverseBindMatrix).ToList();
                 wm = Enumerable.Range(0, armature.Count).Select(_ => ((Skin)armature[_]).GetJoint(_).Joint.WorldMatrix).ToList();
-
             }
             else
             {
@@ -74,9 +73,7 @@ namespace WolvenKit.Modkit.RED4
                         Mat4.Invert(wm[i], out temp);
                         ibm.Add(temp);
                     }
-
                     //ibm = Enumerable.Range(0, wm.Count).Select(_ => Mat4.Invert( wm[_], out ibm[_] )).ToList();
-
                     joints = Enumerable.Range(0, armature.Count).Select(_ => (jointlist[_], ibm[_])).ToList();
                 }
             }
@@ -106,16 +103,8 @@ namespace WolvenKit.Modkit.RED4
                 return null;
             }
 
-
-            var inversedWorldMatrix = new Mat4();
-            var inversedLocalMatrix = new Mat4();
-            Mat4.Invert(joints[1].Joint.WorldMatrix, out inversedWorldMatrix);
-            Mat4.Invert(joints[1].Joint.LocalMatrix, out inversedLocalMatrix);
-
-            Console.Write(inversedWorldMatrix == joints[1].InverseBindMatrix);
-            Console.Write(inversedLocalMatrix == joints[1].InverseBindMatrix);
-            Console.Write(inversedLocalMatrix == inversedWorldMatrix);
-
+            Mat4.Invert(joints[1].Joint.WorldMatrix, out var inversedWorldMatrix);
+            Mat4.Invert(joints[1].Joint.LocalMatrix, out var inversedLocalMatrix);
 
             var oriRotM = Mat4.CreateFromQuaternion(joints[1].Joint.LocalTransform.Rotation);
             var oriScaM = Mat4.CreateScale(joints[1].Joint.LocalTransform.Scale);
@@ -125,13 +114,10 @@ namespace WolvenKit.Modkit.RED4
             Mat4.Invert(RotM, out RotM);
 
             var manualTRS = oriTraM * oriRotM * oriScaM;
-
-            //var inversedManualTRS = new Mat4();
             Mat4.Invert(manualTRS, out var inversedManualTRS);
 
             var manualRotM = oriScaM * inversedManualTRS * oriTraM;
             Mat4.Invert(manualRotM, out manualRotM);
-
 
             var inv2 = oriTraM * RotM * oriScaM;
 
@@ -141,13 +127,6 @@ namespace WolvenKit.Modkit.RED4
             var rotationVector = Quat.CreateFromRotationMatrix(RotM);
             var manualrotationVector = Quat.CreateFromRotationMatrix(manualRotM);
             var localrotationVector = Quat.CreateFromRotationMatrix(localinvRotM);
-
-            Console.Write(rotationVector == joints[1].Joint.LocalTransform.Rotation);
-            Console.Write(manualrotationVector == joints[1].Joint.LocalTransform.Rotation);
-            Console.Write(manualTRS == joints[1].Joint.WorldMatrix);
-            Console.Write(manualTRS == joints[1].Joint.LocalMatrix);
-
-            Console.Write(inversedManualTRS == joints[1].InverseBindMatrix);
 
             var levels = GetLevels("Root");
             if (levels is not null)
@@ -222,19 +201,17 @@ namespace WolvenKit.Modkit.RED4
                         var M = T * R * S;
                         return M;
                     }
-
-                    var parM = TRSFromRig(rig.BoneTransforms[parindex]);
-                    var parMinv = new Mat4();
-                    Mat4.Invert(parM, out parMinv);
-
+                    /*
+                                        var parM = TRSFromRig(rig.BoneTransforms[parindex]);
+                                        var parMinv = new Mat4();
+                                        Mat4.Invert(parM, out parMinv);
+                    */
 
                     var M = TRSFromRig(rig.BoneTransforms[index]);
                     var (r, s, t) = (new Quat(), new Vec3(), new Vec3());
                     //var tinverse = new Mat4();
                     //Mat4.Invert(jointlist[index].VisualParent.WorldMatrix, out tinverse);
-                    Mat4.Decompose(parMinv * M, out s, out r, out t);
-
-
+                    //Mat4.Decompose(parMinv * M, out s, out r, out t);
 
                     Quat AllOriginalRotations(int i)
                     {
@@ -244,13 +221,14 @@ namespace WolvenKit.Modkit.RED4
                     }
                     var oriAllR = AllOriginalRotations(i);
                     var oriParAllR = oriAllR * Quat.Inverse(quat);
-                    var yetatr = System.Numerics.Vector4.Transform(tr, oriAllR);
+                    var yetatr = Vec4.Transform(tr, oriAllR);
 
                     Quat AllRotations(Node node)
                     {
                         var quat = node.LocalTransform.Rotation;
                         return (node.Name == "Root") ? quat : AllRotations(node.VisualParent) * quat;
                     }
+
                     var infinya = AllRotations(jointlist[index]);
                     var finit = Vec4.Transform(tr, infinya);
                     var aynifni = Vec4.Transform(tr, Quat.Inverse(infinya));
@@ -269,30 +247,33 @@ namespace WolvenKit.Modkit.RED4
 
                     var before = rig.BoneTransforms[i].Translation.DeepCopy();
 
+                    var somevar = Quat.CreateFromRotationMatrix(
+                        Mat4.Identity
+                        * Mat4.CreateFromAxisAngle(Vec3.UnitY, (float)(Math.PI / 2) )
+                        //* Mat4.CreateFromAxisAngle(Vec3.UnitX, 1)
+                        //* Mat4.CreateFromAxisAngle(Vec3.UnitZ, 1)
+                         );
+
+
                     {
                         rig.BoneTransforms[i].Translation.W = i == 0 ? 1 : 0;
-                        rig.BoneTransforms[i].Translation.X = level == 0 ? tr.X :
-                                                              level == 1 ? tr.X :
-                                                              level == 2 ? tr.X :
-                                                              level == 3 ? tr.X :
-                                                              level == 6 ? -tr.Y :
+
+                        rig.BoneTransforms[i].Translation.X = level == 6 ? -tr.Y :
                                                               level == 8 ? tr.Z :
                                                               tr.X;
 
-                        rig.BoneTransforms[i].Translation.Y = level == 0 ? tr.Y :
-                                                              level == 1 ? tr.Z :
+                        rig.BoneTransforms[i].Translation.Y = level == 1 ? tr.Z :
                                                               level == 3 ? -tr.Z :
                                                               level == 4 ? -tr.Z :
                                                               level == 5 ? -tr.Z :
                                                               level == 6 ? tr.X :
                                                               level == 8 ? -tr.Y :
                                                               tr.Y;
-                        rig.BoneTransforms[i].Translation.Z = level == 0 ? tr.Z :
-                                                              level == 1 ? tr.Y :
+
+                        rig.BoneTransforms[i].Translation.Z = level == 1 ? tr.Y :
                                                               level == 3 ? -tr.Y :
                                                               level == 4 ? -tr.Y :
                                                               level == 5 ? tr.Y :
-                                                              level == 6 ? tr.Z :
                                                               level == 8 ? tr.X :
                                                               tr.Z;
                     }
@@ -311,9 +292,6 @@ namespace WolvenKit.Modkit.RED4
             return true;
         }
 
-
-        //public bool ImportMesh(FileInfo inGltfFile, Stream inmeshStream, List<Archive> archives = null,
-        //  ValidationMode vmode = ValidationMode.Strict, bool importMaterialOnly = false, Stream outStream = null, FileEntry originalRig = null)
 
         public bool ImportMesh(FileInfo inGltfFile, Stream inmeshStream, GltfImportArgs args, Stream outStream = null)
         {
