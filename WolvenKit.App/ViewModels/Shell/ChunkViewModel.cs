@@ -1984,9 +1984,9 @@ namespace WolvenKit.ViewModels.Shell
                 else
                 {
                     var tr = RedJsonSerializer.Serialize(Data);
-                    var copied = RedJsonSerializer.Deserialize<IRedType>(tr);
+                    var copied = RedJsonSerializer.Deserialize<object>(tr);
 
-                    RDTDataViewModel.CopiedChunk = copied;
+                    RDTDataViewModel.CopiedChunk = (IRedType)copied;
                 }
             }
             catch { }
