@@ -157,21 +157,26 @@ namespace WolvenKit.Modkit.RED4
                     } //gotta figure out those rotations
 
                     var oriR = rig.BoneTransforms[i].Rotation;
+                    var oriRquat = new Quat(oriR.I, oriR.J, oriR.K, oriR.R);
                     var newR = jointlist[index].LocalTransform.Rotation;
                     var parR = jointlist[index].VisualParent.LocalTransform.Rotation;
-                    var quat = new Quat(oriR.I, oriR.J, oriR.K, oriR.R);
 
-                    var ttt = System.Numerics.Vector4.Transform(Vec4.One, quat);
+                    var oriT = rig.BoneTransforms[i].Translation;
+                    var oriTvec = new Vec4(oriT.X, oriT.Y, oriT.Z, oriT.W);
+                    var newT = jointlist[index].LocalTransform.Translation;
+                    var parT = jointlist[index].VisualParent.LocalTransform.Translation;
 
-                    var quatM = Mat4.CreateFromQuaternion(quat);
+                    var herewegoagane = parR * newR;
 
-                    var d = newR - quat + new Quat(0, 0, 0, 1);
-                    var p = newR * quat;
+
+                    var quatM = Mat4.CreateFromQuaternion(oriRquat);
+
+                    var d = newR - oriRquat + new Quat(0, 0, 0, 1);
+                    var p = newR * oriRquat;
                     var e = d == p;
                     var esmall = (d - p).Length() < 0.001;
 
                     var level = levels[index];
-                    var tr = jointlist[index].LocalTransform.Translation;
 
                     {
                         /*
@@ -201,17 +206,15 @@ namespace WolvenKit.Modkit.RED4
                         var M = T * R * S;
                         return M;
                     }
-                    /*
-                                        var parM = TRSFromRig(rig.BoneTransforms[parindex]);
-                                        var parMinv = new Mat4();
-                                        Mat4.Invert(parM, out parMinv);
-                    */
 
-                    var M = TRSFromRig(rig.BoneTransforms[index]);
-                    var (r, s, t) = (new Quat(), new Vec3(), new Vec3());
-                    //var tinverse = new Mat4();
-                    //Mat4.Invert(jointlist[index].VisualParent.WorldMatrix, out tinverse);
-                    //Mat4.Decompose(parMinv * M, out s, out r, out t);
+                    /*if (index > -1 && parindex > -1)
+                    {
+                        var parM = TRSFromRig(rig.BoneTransforms[parindex]);
+                        Mat4.Invert(parM, out var parMinv);
+                        var M = TRSFromRig(rig.BoneTransforms[index]);
+                        Mat4.Invert(jointlist[index].VisualParent.WorldMatrix, out var tinverse);
+                        Mat4.Decompose(parMinv * M, out var s, out var r, out var t);
+                    }*/
 
                     Quat AllOriginalRotations(int i)
                     {
@@ -219,9 +222,10 @@ namespace WolvenKit.Modkit.RED4
                         var quat = new Quat(wquat.I, wquat.J, wquat.K, wquat.R);
                         return (rig.BoneNames[i] == "Root") ? quat : AllOriginalRotations(rig.BoneParentIndexes[i]) * quat;
                     }
+
                     var oriAllR = AllOriginalRotations(i);
-                    var oriParAllR = oriAllR * Quat.Inverse(quat);
-                    var yetatr = Vec4.Transform(tr, oriAllR);
+                    var oriParAllR = oriAllR * Quat.Inverse(oriRquat);
+                    var yetatr = Vec4.Transform(newT, oriAllR);
 
                     Quat AllRotations(Node node)
                     {
@@ -230,52 +234,51 @@ namespace WolvenKit.Modkit.RED4
                     }
 
                     var infinya = AllRotations(jointlist[index]);
-                    var finit = Vec4.Transform(tr, infinya);
-                    var aynifni = Vec4.Transform(tr, Quat.Inverse(infinya));
+                    var finit = Vec4.Transform(newT, infinya);
+                    var aynifni = Vec4.Transform(newT, Quat.Inverse(infinya));
 
-                    var oriT = rig.BoneTransforms[i].Translation;
-
-                    var dkjh = Vec4.Transform(Vec4.UnitZ, Quat.CreateFromAxisAngle(Vec3.UnitY, newR.Y));
-                    var dkjl = Vec4.Transform(Vec4.UnitZ, Quat.CreateFromAxisAngle(Vec3.UnitY, quat.Y));
-                    var dkjm = Vec4.Transform(Vec4.UnitZ, Quat.CreateFromAxisAngle(Vec3.UnitY, parR.Y));
-                    var dtrh = Vec4.Transform(Vec4.UnitZ, Quat.CreateFromAxisAngle(Vec3.UnitY, tr.Y));
-                    var dtrl = Vec4.Transform(Vec4.UnitX, Quat.CreateFromAxisAngle(-Vec3.UnitY, tr.Y));
-
-                    var diffT = new Vec3(oriT.X, oriT.Y, oriT.Z) - tr;
-                    var len = diffT.Length();
-                    var small = len < 0.1;
 
                     var before = rig.BoneTransforms[i].Translation.DeepCopy();
 
-                    var somevar = Quat.CreateFromRotationMatrix(
-                        Mat4.Identity
-                        * Mat4.CreateFromAxisAngle(Vec3.UnitY, (float)(Math.PI / 2) )
-                        //* Mat4.CreateFromAxisAngle(Vec3.UnitX, 1)
-                        //* Mat4.CreateFromAxisAngle(Vec3.UnitZ, 1)
-                         );
+                    //level = 0;
 
+                    var x90 = Quat.CreateFromAxisAngle(Vec3.UnitX, ((float)Math.PI / 2));
+                    var y90 = Quat.CreateFromAxisAngle(Vec3.UnitY, ((float)Math.PI / 2));
+                    var z90 = Quat.CreateFromAxisAngle(Vec3.UnitZ, ((float)Math.PI / 2));
+
+                    if (level > 2)
+                    {
+
+                    }
 
                     {
+                        rig.BoneTransforms[i].Translation = level == 1 ? Vec4.Transform(newT, x90) :
+                                                            level == 3 ||
+                                                            level == 4 ? Vec4.Transform(newT, new Quat(0, 1, 0, 0) * x90) :
+                                                            level == 5 ? Vec4.Transform(newT, x90) :
+                                                            level == 6 ? Vec4.Transform(newT, z90) :
+                                                            level == 8 ? Vec4.Transform(newT, y90 * z90 * z90) :
+                                                            new Vec4(newT.X, newT.Y, newT.Z, 0);
+
                         rig.BoneTransforms[i].Translation.W = i == 0 ? 1 : 0;
-
-                        rig.BoneTransforms[i].Translation.X = level == 6 ? -tr.Y :
-                                                              level == 8 ? tr.Z :
-                                                              tr.X;
-
-                        rig.BoneTransforms[i].Translation.Y = level == 1 ? tr.Z :
-                                                              level == 3 ? -tr.Z :
-                                                              level == 4 ? -tr.Z :
-                                                              level == 5 ? -tr.Z :
-                                                              level == 6 ? tr.X :
-                                                              level == 8 ? -tr.Y :
-                                                              tr.Y;
-
-                        rig.BoneTransforms[i].Translation.Z = level == 1 ? tr.Y :
-                                                              level == 3 ? -tr.Y :
-                                                              level == 4 ? -tr.Y :
-                                                              level == 5 ? tr.Y :
-                                                              level == 8 ? tr.X :
-                                                              tr.Z;
+/*
+                        rig.BoneTransforms[i].Translation.X = level == 6 ? -newT.Y :
+                                                              level == 8 ? newT.Z :
+                                                              newT.X;
+                        rig.BoneTransforms[i].Translation.Y = level == 1 ? newT.Z :
+                                                              level == 3 ? -newT.Z :
+                                                              level == 4 ? -newT.Z :
+                                                              level == 5 ? -newT.Z :
+                                                              level == 6 ? newT.X :
+                                                              level == 8 ? -newT.Y :
+                                                              newT.Y;
+                        rig.BoneTransforms[i].Translation.Z = level == 1 ? newT.Y :
+                                                              level == 3 ? -newT.Y :
+                                                              level == 4 ? -newT.Y :
+                                                              level == 5 ? newT.Y :
+                                                              level == 8 ? newT.X :
+                                                              newT.Z;
+*/
                     }
 
                     var after = rig.BoneTransforms[i].Translation;
