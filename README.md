@@ -40,6 +40,16 @@ Our primary focus at the moment is progressing with support for the new game, Cy
   
 ## Installation
 
+### Prerequisite: .NET 6.0 Runtime
+
+We recommend always using the latest .NET 6.0 runtime, unless otherwise specified. 
+
+1. Go to [Microsoft's .NET 6.0 download page](https://dotnet.microsoft.com/en-us/download/dotnet/6.0)
+2. Find the ".NET Desktop Runtime 6.0.x" section and download the installer for your architecture (x64/x86/Arm64)
+3. Run the downloaded installer
+
+### WolvenKit
+
 Download either the latest stable version or the current nightly (beta) version from here:
 
 | Package | Latest Release | Checks  |
@@ -48,18 +58,15 @@ Download either the latest stable version or the current nightly (beta) version 
 | [WolvenKit](https://github.com/WolvenKit/WolvenKit/) | [![GitHub release (latest by date)](https://img.shields.io/github/v/release/WolvenKit/WolvenKit)](https://github.com/WolvenKit/WolvenKit/releases/latest) | ![GitHub branch checks state](https://img.shields.io/github/workflow/status/WolvenKit/WolvenKit/wkit-check-builds) | 
 
 ### Installer
-1. Install the NET 6 Runtime: https://dotnet.microsoft.com/en-us/download/dotnet/thank-you/runtime-6.0.1-windows-x64-installer
-2. Double click on the .exe to start the installation procedure and the program will take care of the rest.
+1. Double click on the .exe to start the installation procedure and the program will take care of the rest.
 
 ### Portable
-1. Install the NET 6 Runtime: https://dotnet.microsoft.com/en-us/download/dotnet/thank-you/runtime-6.0.1-windows-x64-installer
-2. Download Wolvenkit.zip
-3. Run WolvenKit.exe
+1. Download Wolvenkit.zip
+2. Run WolvenKit.exe
 
 ## Usage
 
 📑 Check out the wiki: https://wiki.redmodding.org/wolvenkit
-
 
 ## Build instructions
 1. Download and install [Visual Studio 2022 Community Edition](https://www.visualstudio.com/) or a higher version.
