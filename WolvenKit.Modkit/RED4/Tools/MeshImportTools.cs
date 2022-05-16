@@ -83,7 +83,7 @@ namespace WolvenKit.Modkit.RED4
                 var rootindex = jointnames.IndexOf("Root");
                 var treelevel = new int[jointnames.Count];
 
-                if (jointparentnames[rootindex] == "Armature")
+                if (jointparentnames[rootindex].Contains( "Armature"))
                 {
                     void rec(string parent, int level)
                     {
@@ -178,8 +178,7 @@ namespace WolvenKit.Modkit.RED4
 
                     var level = levels[index];
 
-                    {
-                        /*
+                    {/*
                         var nya = System.Numerics.Vector3.Transform(tr, parR);
 
                         //var rr = jointlist[index].VisualParent.VisualParent.LocalTransform.Rotation;
@@ -192,11 +191,10 @@ namespace WolvenKit.Modkit.RED4
                         Mat4.Invert(jointlist[index].VisualParent.WorldMatrix, out tinverse);
                         Mat4.Decompose(tinverse, out s, out r, out t);
 
-                        var yaya = System.Numerics.Vector3.Transform(tr, r * parR);
-                        */
+                        var yaya = System.Numerics.Vector3.Transform(tr, r * parR);*/
                     }
 
-                    Mat4 TRSFromRig(QsTransform parTr)
+                    /*Mat4 TRSFromRig(QsTransform parTr)
                     {
                         var (r, s, t) = (parTr.Rotation, parTr.Scale, parTr.Translation);
 
@@ -207,7 +205,7 @@ namespace WolvenKit.Modkit.RED4
                         return M;
                     }
 
-                    /*if (index > -1 && parindex > -1)
+                    if (index > -1 && parindex > -1)
                     {
                         var parM = TRSFromRig(rig.BoneTransforms[parindex]);
                         Mat4.Invert(parM, out var parMinv);
@@ -246,40 +244,36 @@ namespace WolvenKit.Modkit.RED4
                     var y90 = Quat.CreateFromAxisAngle(Vec3.UnitY, ((float)Math.PI / 2));
                     var z90 = Quat.CreateFromAxisAngle(Vec3.UnitZ, ((float)Math.PI / 2));
 
-                    if (level > 2)
-                    {
 
-                    }
+                    //works only for the rig of the kusanagi bike
+                    rig.BoneTransforms[i].Translation = level == 1 ? Vec4.Transform(newT, x90) :
+                                                        level == 3 ||
+                                                        level == 4 ? Vec4.Transform(newT, new Quat(0, 1, 0, 0) * x90) :
+                                                        level == 5 ? Vec4.Transform(newT, x90) :
+                                                        level == 6 ? Vec4.Transform(newT, z90) :
+                                                        level == 8 ? Vec4.Transform(newT, y90 * new Quat(0, 0, 0, 1)) : // Quat(0, 0, 0, 1) is z90 * z90
+                                                        new Vec4(newT.X, newT.Y, newT.Z, 0);
 
-                    {
-                        rig.BoneTransforms[i].Translation = level == 1 ? Vec4.Transform(newT, x90) :
-                                                            level == 3 ||
-                                                            level == 4 ? Vec4.Transform(newT, new Quat(0, 1, 0, 0) * x90) :
-                                                            level == 5 ? Vec4.Transform(newT, x90) :
-                                                            level == 6 ? Vec4.Transform(newT, z90) :
-                                                            level == 8 ? Vec4.Transform(newT, y90 * z90 * z90) :
-                                                            new Vec4(newT.X, newT.Y, newT.Z, 0);
+                    rig.BoneTransforms[i].Translation.W = i == 0 ? 1 : 0;
 
-                        rig.BoneTransforms[i].Translation.W = i == 0 ? 1 : 0;
-/*
-                        rig.BoneTransforms[i].Translation.X = level == 6 ? -newT.Y :
-                                                              level == 8 ? newT.Z :
-                                                              newT.X;
-                        rig.BoneTransforms[i].Translation.Y = level == 1 ? newT.Z :
-                                                              level == 3 ? -newT.Z :
-                                                              level == 4 ? -newT.Z :
-                                                              level == 5 ? -newT.Z :
-                                                              level == 6 ? newT.X :
-                                                              level == 8 ? -newT.Y :
-                                                              newT.Y;
-                        rig.BoneTransforms[i].Translation.Z = level == 1 ? newT.Y :
-                                                              level == 3 ? -newT.Y :
-                                                              level == 4 ? -newT.Y :
-                                                              level == 5 ? newT.Y :
-                                                              level == 8 ? newT.X :
-                                                              newT.Z;
-*/
-                    }
+                    /*
+                                            rig.BoneTransforms[i].Translation.X = level == 6 ? -newT.Y :
+                                                                                  level == 8 ? newT.Z :
+                                                                                  newT.X;
+                                            rig.BoneTransforms[i].Translation.Y = level == 1 ? newT.Z :
+                                                                                  level == 3 ? -newT.Z :
+                                                                                  level == 4 ? -newT.Z :
+                                                                                  level == 5 ? -newT.Z :
+                                                                                  level == 6 ? newT.X :
+                                                                                  level == 8 ? -newT.Y :
+                                                                                  newT.Y;
+                                            rig.BoneTransforms[i].Translation.Z = level == 1 ? newT.Y :
+                                                                                  level == 3 ? -newT.Y :
+                                                                                  level == 4 ? -newT.Y :
+                                                                                  level == 5 ? newT.Y :
+                                                                                  level == 8 ? newT.X :
+                                                                                  newT.Z;
+                    */
 
                     var after = rig.BoneTransforms[i].Translation;
                 }
