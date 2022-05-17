@@ -1829,20 +1829,12 @@ namespace WolvenKit.ViewModels.Shell
 
 
         public ICommand ImportChunkCommand { get; private set; }
-        private bool CanImportChunk() => PropertyCount > 0;
-        private void ExecuteImportChunk()
-        {
-            importchunkbody(true);
-        }
-
-
         public ICommand ImportChunk2Command { get; private set; }
-        private void ExecuteImportChunk2()
-        {
-            importchunkbody(false);
-        }
+        private bool CanImportChunk() => PropertyCount > 0;
+        private void ExecuteImportChunk() => importchunkbody(true);
+        private void ExecuteImportChunk2() => importchunkbody(false);
 
-        private void importchunkbody(bool uc)
+        private void importchunkbody(bool updatecoords)
         {
             //Open JSON
             var openFileDialog = new OpenFileDialog
@@ -1872,7 +1864,7 @@ namespace WolvenKit.ViewModels.Shell
 
                     if (json0 is not null && json0.props is not null && json0.props.Count > 0)
                     {
-                        Add00(json0.props, tr, uc);
+                        Add00(json0.props, tr, updatecoords);
                     }
                     else if (json1 is not null && json1.childs is not null && json1.childs.Count > 0)
                     {

@@ -161,7 +161,7 @@ namespace WolvenKit.ViewModels.Shell
             return poslist;
         }
 
-        private void AddToData(string tr, string path, Vec4 pos, Quat rot, string app, Vec3 scale = default, string ff = "", bool isdoor = false)
+        private void AddToData(string tr, string path, Vec4 pos, Quat rot, string app, Vec3 scale = default, string ff = "", bool isdoor = false, bool updatecoords = true)
         {
             if (Parent.Parent is not null &&
                 Parent.Parent.Data is not null &&
@@ -170,16 +170,16 @@ namespace WolvenKit.ViewModels.Shell
                 //loads the mesh when found and scaled
                 if (scale == Vec3.One)
                 {
-                    AddEntity(tr, path, pos, wss, rot, app, scale, isdoor, visible: true);
+                    AddEntity(tr, path, pos, wss, rot, app, scale, isdoor, visible: true, updatecoords);
                 }
                 else if (ff != "")
                 {
-                    AddEntity(tr, path, pos, wss, rot, app, scale, isdoor, visible: false);
-                    AddMesh(tr, ff, pos, wss, rot, app, scale);
+                    AddEntity(tr, path, pos, wss, rot, app, scale, isdoor, visible: false, updatecoords);
+                    AddMesh(tr, ff, pos, wss, rot, app, scale, updatecoords);
                 }
             }
         }
-        private void AddEntity(string tr, string path, Vec4 pos, worldStreamingSector wss, Quat rot, string app, Vec3 scale = default, bool isdoor = false, bool visible = true)
+        private void AddEntity(string tr, string path, Vec4 pos, worldStreamingSector wss, Quat rot, string app, Vec3 scale = default, bool isdoor = false, bool visible = true, bool updatecoords = true)
         {
             var current = RedJsonSerializer.Deserialize<worldNodeData>(tr);
 
@@ -214,10 +214,10 @@ namespace WolvenKit.ViewModels.Shell
             }
 
             ((IRedArray)wss.Nodes).Insert(index, (IRedType)wenh);
-            SetCoords(current, index, pos, rot, scale);
+            SetCoords(current, index, pos, rot, scale, updatecoords);
         }
 
-        private void AddMesh(string tr, string path, Vec4 pos, worldStreamingSector wss, Quat rot, string app, Vec3 scale = default)
+        private void AddMesh(string tr, string path, Vec4 pos, worldStreamingSector wss, Quat rot, string app, Vec3 scale = default, bool updatecoords = true)
         {
             var current = RedJsonSerializer.Deserialize<worldNodeData>(tr);
 
@@ -230,15 +230,24 @@ namespace WolvenKit.ViewModels.Shell
             cmesh.MeshAppearance = app;
 
             ((IRedArray)wss.Nodes).Insert(index, (IRedType)wenh);
-            SetCoords(current, index, pos, rot, scale);
+            SetCoords(current, index, pos, rot, scale, updatecoords);
         }
 
-        private void SetCoords(worldNodeData current, int index, Vec4 pos, Quat rot, Vec3 scale = default)
+        private void SetCoords(worldNodeData current, int index, Vec4 pos, Quat rot, Vec3 scale = default, bool updatecoords = true)
         {
-            current.Position.X += pos.X;
-            current.Position.Y += pos.Y;
-            current.Position.Z += pos.Z;
-            current.Position.W *= pos.W;
+
+            if (updatecoords)
+            {
+                current.Position.X += pos.X;
+                current.Position.Y += pos.Y;
+                current.Position.Z += pos.Z;
+                current.Position.W *= pos.W;
+            }
+            else
+            {
+                current.Position = pos;
+            }
+
 
             current.Orientation = rot;
 
@@ -364,7 +373,7 @@ namespace WolvenKit.ViewModels.Shell
                     var center = GetCenter(poslist);
                     poslist = UpdateCoords(poslist, center);
                 }
-                
+
 
                 for (var i = 0; i < props.Count; i++)
                 {
@@ -405,13 +414,13 @@ namespace WolvenKit.ViewModels.Shell
                     }
                     var door = line.isdoor is bool b ? b : false;
 
-                    AddToData(tr, line.template_path, poslist[i], rotlist[i], applist[i], scale, ff, door);
+                    AddToData(tr, line.template_path, poslist[i], rotlist[i], applist[i], scale, ff, door, updatecoords);
                 }
             }
             catch { }
         }
 
-        private void Add00(Root1 json, string tr)
+        private void Add00(Root1 json, string tr, bool updatecoords = true)
         {
             var props = GetLines(json);
             var (poslist, rotlist, applist) = GetPosRotApp(props);
@@ -422,7 +431,7 @@ namespace WolvenKit.ViewModels.Shell
             for (var i = 0; i < props.Count; i++)
             {
                 var line = props[i];
-                AddToData(tr, line.path, poslist[i], rotlist[i], applist[i]);
+                AddToData(tr, line.path, poslist[i], rotlist[i], applist[i], updatecoords: updatecoords);
             }
         }
 
