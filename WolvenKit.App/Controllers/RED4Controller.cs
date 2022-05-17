@@ -201,7 +201,7 @@ namespace WolvenKit.Functionality.Controllers
                 using var br = new BinaryReader(ms);
 
                 var oodleCompression = br.ReadBytes(4);
-                if (!(oodleCompression.SequenceEqual(new byte[] { 0x4b, 0x41, 0x52, 0x4b })))
+                if (!oodleCompression.SequenceEqual(new byte[] { 0x4b, 0x41, 0x52, 0x4b }))
                 {
                     throw new NotImplementedException();
                 }
@@ -300,7 +300,8 @@ namespace WolvenKit.Functionality.Controllers
             var redmodPath = Path.Combine(_settingsManager.GetRED4GameRootDir(), "tools", "redmod", "bin", "redmod.exe");
             if (File.Exists(redmodPath))
             {
-                var args = $"deploy -root=\"{_settingsManager.GetRED4GameRootDir()}\"";
+                var rttiSchemaPath = Path.Combine(_settingsManager.GetRED4GameRootDir(), "tools", "redmod", "metadata.json");
+                var args = $"deploy -root=\"{_settingsManager.GetRED4GameRootDir()}\" -rttiSchemaPath=\"{rttiSchemaPath}\"";
 
                 _loggerService.Info($"WorkDir: {redmodPath}");
                 _loggerService.Info($"Running commandlet: {args}");
