@@ -333,7 +333,7 @@ namespace WolvenKit.ViewModels.Shell
             return new Vec4(r.pos.x, r.pos.y, r.pos.z, r.pos.w);
         }
 
-        private void Add00(List<Prop> props, string tr)
+        private void Add00(List<Prop> props, string tr, bool updatecoords = true)
         {
             try
             {
@@ -359,10 +359,12 @@ namespace WolvenKit.ViewModels.Shell
                 // and changes the path if a new path is found
 
                 var (poslist, rotlist, applist) = GetPosRotApp(props);
-                var center = GetCenter(poslist);
-
-
-                poslist = UpdateCoords(poslist, center);
+                if (updatecoords)
+                {
+                    var center = GetCenter(poslist);
+                    poslist = UpdateCoords(poslist, center);
+                }
+                
 
                 for (var i = 0; i < props.Count; i++)
                 {

@@ -365,6 +365,21 @@
                     </MenuItem.Icon>
                 </MenuItem>
                 <MenuItem
+                    Command="{Binding Path=PlacementTarget.Tag.ImportChunk2Command, RelativeSource={RelativeSource AncestorType=ContextMenu}}"
+                    Header="Import from JSON (no coords update)"
+                    IsCheckable="False"
+                    Style="{StaticResource SyncfusionMenuItemStyle}">
+                    <MenuItem.Icon>
+                        <iconPacks:PackIconCodicons
+                            Width="13"
+                            Height="13"
+                            Padding="0,0,0,0"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center"
+                            Kind="Json" />
+                    </MenuItem.Icon>
+                </MenuItem>
+                <MenuItem
                     Command="ApplicationCommands.Copy"
                     CommandParameter="{Binding}"
                     CommandTarget="{Binding}"

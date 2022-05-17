@@ -182,6 +182,7 @@ namespace WolvenKit.ViewModels.Shell
             AddRefCommand = new DelegateCommand(_ => ExecuteAddRef(), _ => CanAddRef());
             ExportChunkCommand = new DelegateCommand(_ => ExecuteExportChunk(), _ => CanExportChunk());
             ImportChunkCommand = new DelegateCommand(_ => ExecuteImportChunk(), _ => CanImportChunk());
+            ImportChunk2Command = new DelegateCommand(_ => ExecuteImportChunk2(), _ => CanImportChunk());
             AddItemToArrayCommand = new DelegateCommand(_ => ExecuteAddItemToArray(), _ => CanAddItemToArray());
             AddHandleCommand = new DelegateCommand(_ => ExecuteAddHandle(), _ => CanAddHandle());
             AddItemToCompiledDataCommand = new DelegateCommand(_ => ExecuteAddItemToCompiledData(), _ => CanAddItemToCompiledData());
@@ -1831,6 +1832,18 @@ namespace WolvenKit.ViewModels.Shell
         private bool CanImportChunk() => PropertyCount > 0;
         private void ExecuteImportChunk()
         {
+            importchunkbody(true);
+        }
+
+
+        public ICommand ImportChunk2Command { get; private set; }
+        private void ExecuteImportChunk2()
+        {
+            importchunkbody(false);
+        }
+
+        private void importchunkbody(bool uc)
+        {
             //Open JSON
             var openFileDialog = new OpenFileDialog
             {
@@ -1859,7 +1872,7 @@ namespace WolvenKit.ViewModels.Shell
 
                     if (json0 is not null && json0.props is not null && json0.props.Count > 0)
                     {
-                        Add00(json0.props, tr);
+                        Add00(json0.props, tr, uc);
                     }
                     else if (json1 is not null && json1.childs is not null && json1.childs.Count > 0)
                     {
@@ -1891,7 +1904,9 @@ namespace WolvenKit.ViewModels.Shell
                 }
                 catch { }
             }
+
         }
+
 
         public void QuickToJSON(IRedType irt)
         {
