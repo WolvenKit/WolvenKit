@@ -43,7 +43,89 @@ namespace WolvenKit.ViewModels.Shell
             return new Vec4(cX, cY, cZ, cW);
         }
 
-        private (List<Vec4>, List<Quat>, List<string>) GetPosRotApp(List<Prop> props, int i = 0)
+        private static Vec4 GetPos(Prop line)
+        {
+            var posandrot = RedJsonSerializer.Deserialize<Vec7S>(PutQuotes(line.pos));
+            return new Vec4()
+            {
+                X = float.Parse(posandrot.x),
+                Y = float.Parse(posandrot.y),
+                Z = float.Parse(posandrot.z),
+                W = float.Parse(posandrot.w)
+            };
+        }
+
+        private static List<Vec4> GetPos(List<Prop> props)
+        {
+            var poslist = new List<Vec4>();
+            foreach (var line in props)
+            {
+                var posandrot = RedJsonSerializer.Deserialize<Vec7S>(PutQuotes(line.pos));
+                var v = new Vec4()
+                {
+                    X = float.Parse(posandrot.x),
+                    Y = float.Parse(posandrot.y),
+                    Z = float.Parse(posandrot.z),
+                    W = float.Parse(posandrot.w)
+                };
+                poslist.Add(v);
+            }
+            return poslist;
+        }
+
+        private (Vec4, Quat) GetPosRot(Prop line)
+        {
+            var posandrot = RedJsonSerializer.Deserialize<Vec7S>(PutQuotes(line.pos));
+            var v = new Vec4()
+            {
+                X = float.Parse(posandrot.x),
+                Y = float.Parse(posandrot.y),
+                Z = float.Parse(posandrot.z),
+                W = float.Parse(posandrot.w)
+            };
+
+            var euler = new Vec3()
+            {
+                X = (float)(Math.PI / 180) * float.Parse(posandrot.yaw),
+                Y = (float)(Math.PI / 180) * float.Parse(posandrot.pitch),
+                Z = (float)(Math.PI / 180) * float.Parse(posandrot.roll)
+            };
+            var q = FixRotation(euler);
+
+            return (v, q);
+        }
+
+        private (List<Vec4>, List<Quat>) GetPosRot(List<Prop> props)
+        {
+            var poslist = new List<Vec4>();
+            var rotlist = new List<Quat>();
+
+            foreach (var line in props)
+            {
+                var posandrot = RedJsonSerializer.Deserialize<Vec7S>(PutQuotes(line.pos));
+                var v = new Vec4()
+                {
+                    X = float.Parse(posandrot.x),
+                    Y = float.Parse(posandrot.y),
+                    Z = float.Parse(posandrot.z),
+                    W = float.Parse(posandrot.w)
+                };
+                poslist.Add(v);
+
+                var euler = new Vec3()
+                {
+                    X = (float)(Math.PI / 180) * float.Parse(posandrot.yaw),
+                    Y = (float)(Math.PI / 180) * float.Parse(posandrot.pitch),
+                    Z = (float)(Math.PI / 180) * float.Parse(posandrot.roll)
+                };
+                var q = FixRotation(euler);
+
+                rotlist.Add(q);
+            }
+            return (poslist, rotlist);
+        }
+
+        private (List<Vec4>, List<Quat>, List<string>) GetPosRotApp(List<Prop> props)
         {
             var poslist = new List<Vec4>();
             var rotlist = new List<Quat>();
@@ -56,7 +138,7 @@ namespace WolvenKit.ViewModels.Shell
                 {
                     X = float.Parse(posandrot.x),
                     Y = float.Parse(posandrot.y),
-                    Z = float.Parse(posandrot.z) + (i * 10),
+                    Z = float.Parse(posandrot.z),
                     W = float.Parse(posandrot.w)
                 };
                 poslist.Add(v);
@@ -68,7 +150,7 @@ namespace WolvenKit.ViewModels.Shell
                     Z = (float)(Math.PI / 180) * float.Parse(posandrot.roll)
                 };
 
-                var q = FixRotation(euler, i);
+                var q = FixRotation(euler);
 
                 // (q.Y, q.Z) = (-q.Z, -q.Y);
                 rotlist.Add(q);
@@ -142,13 +224,23 @@ namespace WolvenKit.ViewModels.Shell
         }
 
 
-        public static Quat FixRotation(Vec3 euler, int i = 0) =>
+        public static Quat FixRotation(Vec3 euler) =>
             Quat.CreateFromRotationMatrix(
                 Mat4.Identity
                 * Mat4.CreateFromAxisAngle(Vec3.UnitY, euler.Z)
                 * Mat4.CreateFromAxisAngle(Vec3.UnitX, euler.Y)
                 * Mat4.CreateFromAxisAngle(Vec3.UnitZ, euler.X)
                 );
+
+        private static Vec4 UpdateCoords(Vec4 pos, Vec4 center)
+        {
+            pos.X -= center.X;
+            pos.Y -= center.Y;
+            pos.Z -= center.Z;
+            //pos.W -= center.W;
+
+            return pos;
+        }
 
         private static List<Vec4> UpdateCoords(List<Vec4> poslist, Vec4 center)
         {
@@ -164,26 +256,27 @@ namespace WolvenKit.ViewModels.Shell
             return poslist;
         }
 
-        private void AddToData(string tr, string path, Vec4 pos, Quat rot, string app, Vec3 scale = default, string ff = "", bool isdoor = false, bool updatecoords = true)
+        private void AddToData(string tr, Prop line, string ff = "", bool updatecoords = true)
         {
             if (Parent.Parent is not null &&
                 Parent.Parent.Data is not null &&
-                Parent.Parent.Data is worldStreamingSector wss)
+                Parent.Parent.Data is worldStreamingSector)
             {
                 //loads the mesh when found and scaled
-                if (scale == Vec3.One)
+                if (GetScale(line) == Vec3.One)
                 {
-                    AddEntity(tr, path, wss, pos, rot, app, scale, isdoor, updatecoords, visible: true);
+                    AddEntity(tr, line, updatecoords);
                 }
                 else if (ff != "")
                 {
-                    //AddEntity(tr, path, pos, wss, rot, app, scale, isdoor, visible: false, updatecoords);
-                    AddMesh(tr, ff, wss, pos, rot, app, scale, updatecoords);
+                    AddMesh(tr, line, updatecoords);
                 }
             }
         }
-        private void AddEntity(string tr, string path, worldStreamingSector wss, Vec4 pos, Quat rot, string app, Vec3 scale = default, bool isdoor = false, bool updatecoords = true, bool visible = true)
+
+        private void AddEntity(string tr, Prop line, bool updatecoords = true, bool visible = true)
         {
+            var wss = (worldStreamingSector)Parent.Parent.Data;
             var current = RedJsonSerializer.Deserialize<worldNodeData>(tr);
 
             var wen = new worldEntityNode();
@@ -193,10 +286,12 @@ namespace WolvenKit.ViewModels.Shell
             //loading ents just for their colliders
             //gotta figure out colliders
             wen.IsVisibleInGame = visible;
-            wen.EntityTemplate.DepotPath = path;
-            wen.AppearanceName = app;
+            wen.EntityTemplate.DepotPath = line.template_path;
+            wen.AppearanceName = line.app == "" ? "default" : line.app;
+            wen.DebugName = line.template_path;
 
-            if (isdoor)
+
+            if (line.isdoor is bool b && b)
             {
                 var eeid = new entEntityInstanceData();
                 var eeidh = new CHandle<entEntityInstanceData>(eeid);
@@ -217,29 +312,43 @@ namespace WolvenKit.ViewModels.Shell
             }
 
             ((IRedArray)wss.Nodes).Insert(index, (IRedType)wenh);
-            SetCoords(current, index, pos, rot, scale, updatecoords);
+            SetCoords(current, index, line, updatecoords);
         }
 
-        private void AddMesh(string tr, string path, worldStreamingSector wss, Vec4 pos, Quat rot, string app, Vec3 scale = default, bool updatecoords = true)
+        private void AddMesh(string tr, Prop line, bool updatecoords = true, Vec4 pos = default, Quat rot = default)
         {
+            var wss = (worldStreamingSector)Parent.Parent.Data;
             var current = RedJsonSerializer.Deserialize<worldNodeData>(tr);
 
             var cmesh = new worldStaticMeshNode();
             var wenh = new CHandle<worldNode>(cmesh);
             var index = wss.Nodes.Count;
 
-            cmesh.OccluderType = visWorldOccluderType.None;
-            cmesh.Mesh.DepotPath = path;
-            cmesh.MeshAppearance = app;
+            //who knows
+            cmesh.RemoveFromRainMap = true;
+
+            cmesh.DebugName = line.template_path;
+            //cmesh.OccluderType = visWorldOccluderType.None;
+            cmesh.Mesh.DepotPath = line.template_path;
+            cmesh.MeshAppearance = line.app == "" ? "default" : line.app;
 
             ((IRedArray)wss.Nodes).Insert(index, (IRedType)wenh);
-            SetCoords(current, index, pos, rot, scale, updatecoords);
+            SetCoords(current, index, line, updatecoords, pos, rot);
         }
 
-        private void SetCoords(worldNodeData current, int index, Vec4 pos, Quat rot, Vec3 scale = default, bool updatecoords = true)
+        private void SetCoords(worldNodeData current, int index, Prop line, bool updatecoords = true, Vec4 pos = default, Quat rot = default)
         {
-            if (updatecoords)
+            if (pos == default || rot == default)
             {
+                (pos, rot) = GetPosRot(line);
+            }
+
+            var scale = GetScale(line);
+
+            if (line.center != default && updatecoords)
+            {
+                pos = UpdateCoords(pos, line.center);
+
                 current.Position.X += pos.X;
                 current.Position.Y += pos.Y;
                 current.Position.Z += pos.Z;
@@ -250,26 +359,17 @@ namespace WolvenKit.ViewModels.Shell
                 current.Position = pos;
             }
 
-
             current.Orientation = rot;
-
             //doesn't do anything in ents ?!?
-            current.Scale.X = scale.X;
-            current.Scale.Y = scale.Y;
-            current.Scale.Z = scale.Z;
-
+            current.Scale = scale;
             current.Pivot.X = current.Position.X;
             current.Pivot.Y = current.Position.Y;
             current.Pivot.Z = current.Position.Z;
-
             //definitely does not go to 5000
             current.MaxStreamingDistance = 5000;
-
             //seem to be doing something to the max distance, kinda
             current.UkFloat1 = 5000;
-
             current.NodeIndex = (CUInt16)index;
-
             AddCurrent(current);
         }
 
@@ -339,7 +439,7 @@ namespace WolvenKit.ViewModels.Shell
             }
         }
 
-        private static Vec4 GetCenter(Root1 r) => new Vec4(r.pos.x, r.pos.y, r.pos.z, r.pos.w);
+        private static Vec4 GetCenter(Root1 r) => new(r.pos.x, r.pos.y, r.pos.z, r.pos.w);
 
         private void Add00(List<Prop> props, string tr, bool updatecoords = true)
         {
@@ -360,35 +460,19 @@ namespace WolvenKit.ViewModels.Shell
                 var modEntList = tt2[".ent"].GroupBy(x => x.Key).Select(x => x.First()).ToList();
                 am.IsModBrowserActive = tempbool;
 
+                //lists of all ents and mesh found in archives and mods
                 var entList = archiveEntList.Concat(modEntList).ToList();
                 var meshList = archiveMeshList.Concat(modMeshList).ToList();
 
-                // this searches for the name of the file as .mesh
-                // and changes the path if a new path is found
+                var center = updatecoords ? GetCenter(GetPos(props)) : new Vec4();
 
-                var (poslist, rotlist, applist) = GetPosRotApp(props);
-                if (updatecoords)
+                foreach (var line in props)
                 {
-                    var center = GetCenter(poslist);
-                    poslist = UpdateCoords(poslist, center);
-                }
-
-
-                for (var i = 0; i < props.Count; i++)
-                {
-                    var line = props[i];
+                    if (updatecoords)
+                    { line.center = center; }
                     var current = RedJsonSerializer.Deserialize<worldNodeData>(tr);
 
-                    var scala = line.scale == "nil" ? null
-                        : RedJsonSerializer.Deserialize<Vec3S>(PutQuotes(line.scale));
-                    var scale = scala is null ? Vec3.One : new Vec3(
-                        float.Parse(scala.x) / 100,
-                        float.Parse(scala.y) / 100,
-                        float.Parse(scala.z) / 100
-                        );
-
-                    //var ff = "";
-
+                    var scale = GetScale(line);
                     var door = line.isdoor is bool b && b;
 
                     if (scale != Vec3.One)
@@ -402,74 +486,98 @@ namespace WolvenKit.ViewModels.Shell
 
                         if (foundents.Any() && foundents.Last() is FileEntry foundent)
                         {
-                            using (var stream = new MemoryStream())
+                            using var stream = new MemoryStream();
+                            foundent.Extract(stream);
+                            using var reader = new BinaryReader(stream);
+                            var cr2wFile = Locator.Current.GetService<Red4ParserService>().ReadRed4File(reader);
+
+                            //open ent
+                            if (cr2wFile is not null &&
+                                cr2wFile.RootChunk is entEntityTemplate rc &&
+                                rc.CompiledData.Data is RedPackage data)
                             {
-                                foundent.Extract(stream);
-                                using var reader = new BinaryReader(stream);
-                                var cr2wFile = Locator.Current.GetService<Red4ParserService>().ReadRed4File(reader);
+                                var meshes = data.Chunks.Where(x => x is entMeshComponent)
+                                             .Select(_ => (entMeshComponent)_).ToList();
 
-                                //open ent
-                                if (cr2wFile is not null &&
-                                    cr2wFile.RootChunk is entEntityTemplate rc &&
-                                    rc.CompiledData.Data is RedPackage data)
+                                for (var i1 = 0; i1 < meshes.Count; i1++)
                                 {
-                                    List<entMeshComponent> meshes =
-                                        data.Chunks.Where(x => x is entMeshComponent)
-                                        .Select(_ => (entMeshComponent)_).ToList();
+                                    var mesh = meshes[i1];
+                                    var (p, r) = GetPosRot(line);
 
-                                    //call AddToData with a list of copies of current prop and for each new mesh after the first one
-                                    foreach (var mesh in meshes)
+                                    var t = mesh.LocalTransform.Position;
+                                    var mp = new Vec4(t.X, t.Y, t.Z, 1);
+
+                                    var np = p + mp;
+                                    var nrq = r * mesh.LocalTransform.Orientation;
+
+                                    var newline = new Prop()
                                     {
-                                        var ll = new List<Prop>();
-                                        ll.Add(line);
-                                        var (p, r, a) = GetPosRotApp(ll);
-                                        //TODO check apps again
+                                        name = line.name + "_" + i1,
+                                        app = line.app == "" ? "default" : line.app,
+                                        template_path = mesh.Mesh.DepotPath,
+                                        scale = line.scale
+                                    };
 
-                                        var t = mesh.LocalTransform.Position;
-                                        var mp = new Vec4(t.X, t.Y, t.Z, 1);
-
-                                        var np = p.First() + mp;
-                                        var nrq = r.First() * mesh.LocalTransform.Orientation;
-                                        var na = a.First();
-
-                                        AddMesh(tr, mesh.Mesh.DepotPath, (worldStreamingSector)Parent.Parent.Data, np, nrq, line.app, scale, updatecoords);
-                                    }
-                                }
-                                else
-                                {
-                                    var foundmesh = meshList.Where(x => x.FileName.Contains(spm)).Select(_ => _.FileName).ToList();
-                                    if (foundmesh.Count > 0)
-                                    {
-
-                                        AddMesh(tr, foundmesh.Last(), (worldStreamingSector)Parent.Parent.Data,
-                                            poslist[i], rotlist[i], applist[i], scale, updatecoords);
-                                    }
-
+                                    AddMesh(tr, newline, updatecoords, np, nrq);
                                 }
                             }
-
+                            else
+                            {
+                                var foundmesh = meshList.Where(x => x.FileName.Contains(spm)).Select(_ => _.FileName).ToList();
+                                if (foundmesh.Count > 0)
+                                {
+                                    line.template_path = foundmesh.Last();
+                                    AddMesh(tr, line, updatecoords);
+                                }
+                            }
                         }
                         else
                         {
                             var foundmesh = meshList.Where(x => x.FileName.Contains(spm)).Select(_ => _.FileName).ToList();
                             if (foundmesh.Count > 0)
                             {
-                                AddMesh(tr, foundmesh.Last(), (worldStreamingSector)Parent.Parent.Data, poslist[i],
-                                    rotlist[i], applist[i], scale, updatecoords);
+                                line.template_path = foundmesh.Last();
+                                AddMesh(tr, line, updatecoords);
                             }
                             else
                             {
-                                AddEntity(tr, line.template_path, (worldStreamingSector)Parent.Parent.Data, poslist[i], rotlist[i], applist[i], scale, door, updatecoords);
+                                //those ents will not be scaled properly
+                                //if they load anything at all
+                                AddEntity(tr, line, updatecoords);
                             }
                         }
                     }
                     else
                     {
-                        AddEntity(tr, line.template_path, (worldStreamingSector)Parent.Parent.Data, poslist[i], rotlist[i], applist[i], scale, door, updatecoords);
+                        AddEntity(tr, line, updatecoords);
                     }
                 }
             }
             catch { }
+        }
+
+        private void Add00(Root1 json, string tr, bool updatecoords = true)
+        {
+            var center = updatecoords ? GetCenter(json) : new Vec4();
+            var props = GetLines(json);
+
+            foreach (Prop line in props)
+            {
+                if (updatecoords)
+                { line.center = center; }
+                AddEntity(tr, line, updatecoords);
+            }
+        }
+
+        private Vec3 GetScale(Prop line)
+        {
+            var scala = line.scale == "nil" ? null
+                : RedJsonSerializer.Deserialize<Vec3S>(PutQuotes(line.scale));
+            return scala is null ? Vec3.One : new Vec3(
+                float.Parse(scala.x) / 100,
+                float.Parse(scala.y) / 100,
+                float.Parse(scala.z) / 100
+                );
         }
 
         public static void CreateFromYawPitchRoll(Quaternion r, out float yaw, out float pitch, out float roll)
@@ -479,20 +587,6 @@ namespace WolvenKit.ViewModels.Shell
             roll = MathF.Atan2(2.0f * (r.I * r.J + r.K * r.R), 1.0f - 2.0f * (r.I * r.I + r.K * r.K));
         }
 
-        private void Add00(Root1 json, string tr, bool updatecoords = true)
-        {
-            var props = GetLines(json);
-            var (poslist, rotlist, applist) = GetPosRotApp(props);
-            var center = GetCenter(json);
-
-            poslist = UpdateCoords(poslist, center);
-
-            for (var i = 0; i < props.Count; i++)
-            {
-                var line = props[i];
-                AddToData(tr, line.path, poslist[i], rotlist[i], applist[i], updatecoords: updatecoords);
-            }
-        }
 
     }
 
@@ -583,6 +677,22 @@ namespace WolvenKit.ViewModels.Shell
         public string name { get; set; }
         public string trigger { get; set; }
         public bool isdoor { get; set; }
+        public Vec4 center { get; set; }
+
+        public static string PosRotToString(Vec4 pos, Vec3 rot) =>
+            "{" + $"x = {pos.X},y = {pos.Y}, z = {pos.Z}, w = {pos.W}, roll = {rot.X}, pitch = {rot.Y}, yaw = {rot.Z}" + "}";
+        private static string PosRotToString(Pos pos, Rot rot) =>
+            "{" + $"x = {pos.x},y = {pos.y}, z = {pos.z}, w = {pos.w}, roll = {rot.roll}, pitch = {rot.pitch}, yaw = {rot.yaw}" + "}";
+
+        public static implicit operator Prop(Child C) =>
+          new()
+          {
+              name = C.name,
+              app = C.app,
+              template_path = C.path,
+              scale = "nil",
+              pos = PosRotToString(C.pos, C.rot)
+          };
     }
 
     public class Root0 : Root
