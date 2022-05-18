@@ -4,19 +4,22 @@ using System.IO;
 using System.Linq;
 using System.Reactive.Linq;
 using DynamicData;
+using MoreLinq;
 using Splat;
+using WolvenKit.Common;
+using WolvenKit.Functionality.Services;
 using WolvenKit.Models;
+using WolvenKit.RED4.Archive;
 using WolvenKit.RED4.Archive.Buffer;
+using WolvenKit.RED4.CR2W;
 using WolvenKit.RED4.CR2W.JSON;
 using WolvenKit.RED4.Types;
-using WolvenKit.Common;
 using static WolvenKit.RED4.Types.Enums;
-using WolvenKit.Functionality.Services;
 
+using Mat4 = System.Numerics.Matrix4x4;
+using Quat = System.Numerics.Quaternion;
 using Vec3 = System.Numerics.Vector3;
 using Vec4 = System.Numerics.Vector4;
-using Quat = System.Numerics.Quaternion;
-using Mat4 = System.Numerics.Matrix4x4;
 
 namespace WolvenKit.ViewModels.Shell
 {
@@ -170,16 +173,16 @@ namespace WolvenKit.ViewModels.Shell
                 //loads the mesh when found and scaled
                 if (scale == Vec3.One)
                 {
-                    AddEntity(tr, path, pos, wss, rot, app, scale, isdoor, visible: true, updatecoords);
+                    AddEntity(tr, path, wss, pos, rot, app, scale, isdoor, updatecoords, visible: true);
                 }
                 else if (ff != "")
                 {
-                    AddEntity(tr, path, pos, wss, rot, app, scale, isdoor, visible: false, updatecoords);
-                    AddMesh(tr, ff, pos, wss, rot, app, scale, updatecoords);
+                    //AddEntity(tr, path, pos, wss, rot, app, scale, isdoor, visible: false, updatecoords);
+                    AddMesh(tr, ff, wss, pos, rot, app, scale, updatecoords);
                 }
             }
         }
-        private void AddEntity(string tr, string path, Vec4 pos, worldStreamingSector wss, Quat rot, string app, Vec3 scale = default, bool isdoor = false, bool visible = true, bool updatecoords = true)
+        private void AddEntity(string tr, string path, worldStreamingSector wss, Vec4 pos, Quat rot, string app, Vec3 scale = default, bool isdoor = false, bool updatecoords = true, bool visible = true)
         {
             var current = RedJsonSerializer.Deserialize<worldNodeData>(tr);
 
@@ -217,7 +220,7 @@ namespace WolvenKit.ViewModels.Shell
             SetCoords(current, index, pos, rot, scale, updatecoords);
         }
 
-        private void AddMesh(string tr, string path, Vec4 pos, worldStreamingSector wss, Quat rot, string app, Vec3 scale = default, bool updatecoords = true)
+        private void AddMesh(string tr, string path, worldStreamingSector wss, Vec4 pos, Quat rot, string app, Vec3 scale = default, bool updatecoords = true)
         {
             var current = RedJsonSerializer.Deserialize<worldNodeData>(tr);
 
@@ -235,7 +238,6 @@ namespace WolvenKit.ViewModels.Shell
 
         private void SetCoords(worldNodeData current, int index, Vec4 pos, Quat rot, Vec3 scale = default, bool updatecoords = true)
         {
-
             if (updatecoords)
             {
                 current.Position.X += pos.X;
@@ -337,10 +339,7 @@ namespace WolvenKit.ViewModels.Shell
             }
         }
 
-        private static Vec4 GetCenter(Root1 r)
-        {
-            return new Vec4(r.pos.x, r.pos.y, r.pos.z, r.pos.w);
-        }
+        private static Vec4 GetCenter(Root1 r) => new Vec4(r.pos.x, r.pos.y, r.pos.z, r.pos.w);
 
         private void Add00(List<Prop> props, string tr, bool updatecoords = true)
         {
@@ -388,7 +387,9 @@ namespace WolvenKit.ViewModels.Shell
                         float.Parse(scala.z) / 100
                         );
 
-                    var ff = "";
+                    //var ff = "";
+
+                    var door = line.isdoor is bool b && b;
 
                     if (scale != Vec3.One)
                     {
@@ -396,28 +397,86 @@ namespace WolvenKit.ViewModels.Shell
                         var sp = Path.GetFileName(path);
                         var spm = Path.ChangeExtension(sp, ".mesh");
 
-                        /*
-                                                var foundents = entList.Where(x => x.FileName.Contains(sp)).Select(_ => _).ToList();
-                                                if (foundents.Any())
-                                                {
-                                                    var foundent = foundents.Last();
-                                                    using var db = new RedDBContext();
+                        //find ent
+                        var foundents = entList.Where(x => x.FileName.Contains(sp)).Select(_ => _).ToList();
 
-                                                    var file = new RedFileViewModel(foundent);
-                                                    var hash = file.GetGameFile().Key;
-                        */
-                        //}
+                        if (foundents.Any() && foundents.Last() is FileEntry foundent)
+                        {
+                            using (var stream = new MemoryStream())
+                            {
+                                foundent.Extract(stream);
+                                using var reader = new BinaryReader(stream);
+                                var cr2wFile = Locator.Current.GetService<Red4ParserService>().ReadRed4File(reader);
 
-                        var foundmesh = meshList.Where(x => x.FileName.Contains(spm)).Select(_ => _).ToList();
-                        ff = foundmesh.Count == 0 ? "" : foundmesh.Last().FileName;
+                                //open ent
+                                if (cr2wFile is not null &&
+                                    cr2wFile.RootChunk is entEntityTemplate rc &&
+                                    rc.CompiledData.Data is RedPackage data)
+                                {
+                                    List<entMeshComponent> meshes =
+                                        data.Chunks.Where(x => x is entMeshComponent)
+                                        .Select(_ => (entMeshComponent)_).ToList();
 
+                                    //call AddToData with a list of copies of current prop and for each new mesh after the first one
+                                    foreach (var mesh in meshes)
+                                    {
+                                        var ll = new List<Prop>();
+                                        ll.Add(line);
+                                        var (p, r, a) = GetPosRotApp(ll);
+                                        //TODO check apps again
+
+                                        var t = mesh.LocalTransform.Position;
+                                        var mp = new Vec4(t.X, t.Y, t.Z, 1);
+
+                                        var np = p.First() + mp;
+                                        var nrq = r.First() * mesh.LocalTransform.Orientation;
+                                        var na = a.First();
+
+                                        AddMesh(tr, mesh.Mesh.DepotPath, (worldStreamingSector)Parent.Parent.Data, np, nrq, line.app, scale, updatecoords);
+                                    }
+                                }
+                                else
+                                {
+                                    var foundmesh = meshList.Where(x => x.FileName.Contains(spm)).Select(_ => _.FileName).ToList();
+                                    if (foundmesh.Count > 0)
+                                    {
+
+                                        AddMesh(tr, foundmesh.Last(), (worldStreamingSector)Parent.Parent.Data,
+                                            poslist[i], rotlist[i], applist[i], scale, updatecoords);
+                                    }
+
+                                }
+                            }
+
+                        }
+                        else
+                        {
+                            var foundmesh = meshList.Where(x => x.FileName.Contains(spm)).Select(_ => _.FileName).ToList();
+                            if (foundmesh.Count > 0)
+                            {
+                                AddMesh(tr, foundmesh.Last(), (worldStreamingSector)Parent.Parent.Data, poslist[i],
+                                    rotlist[i], applist[i], scale, updatecoords);
+                            }
+                            else
+                            {
+                                AddEntity(tr, line.template_path, (worldStreamingSector)Parent.Parent.Data, poslist[i], rotlist[i], applist[i], scale, door, updatecoords);
+                            }
+                        }
                     }
-                    var door = line.isdoor is bool b ? b : false;
-
-                    AddToData(tr, line.template_path, poslist[i], rotlist[i], applist[i], scale, ff, door, updatecoords);
+                    else
+                    {
+                        AddEntity(tr, line.template_path, (worldStreamingSector)Parent.Parent.Data, poslist[i], rotlist[i], applist[i], scale, door, updatecoords);
+                    }
                 }
             }
             catch { }
+        }
+
+        public static void CreateFromYawPitchRoll(Quaternion r, out float yaw, out float pitch, out float roll)
+        {
+            yaw = MathF.Atan2(2.0f * (r.J * r.R + r.I * r.K), 1.0f - 2.0f * (r.I * r.I + r.J * r.J));
+            pitch = MathF.Asin(2.0f * (r.I * r.R - r.J * r.K));
+            roll = MathF.Atan2(2.0f * (r.I * r.J + r.K * r.R), 1.0f - 2.0f * (r.I * r.I + r.K * r.K));
         }
 
         private void Add00(Root1 json, string tr, bool updatecoords = true)
@@ -436,6 +495,7 @@ namespace WolvenKit.ViewModels.Shell
         }
 
     }
+
 
     public class Root
     {
