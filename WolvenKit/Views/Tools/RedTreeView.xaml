@@ -413,7 +413,7 @@
                 </MenuItem>
                 <MenuItem
                     Command="{Binding Path=PlacementTarget.Tag.DeleteSelectionCommand, RelativeSource={RelativeSource AncestorType=ContextMenu}}"
-                    Header="Delete Items in Array/Buffer"
+                    Header="Delete Selection in Array/Buffer"
                     IsCheckable="False"
                     Style="{StaticResource SyncfusionMenuItemStyle}">
                     <MenuItem.Icon>

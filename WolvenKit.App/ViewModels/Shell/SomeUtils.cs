@@ -320,12 +320,18 @@ namespace WolvenKit.ViewModels.Shell
             var wss = (worldStreamingSector)Parent.Parent.Data;
             var current = RedJsonSerializer.Deserialize<worldNodeData>(tr);
 
-            var cmesh = new worldStaticMeshNode();
+            //var cmesh = new worldStaticMeshNode();
+            var cmesh = new worldGenericProxyMeshNode();
+
             var wenh = new CHandle<worldNode>(cmesh);
             var index = wss.Nodes.Count;
 
-            //who knows
-            cmesh.RemoveFromRainMap = true;
+            cmesh.DebugName = line.template_path;
+            cmesh.ForceAutoHideDistance = 5000;
+            cmesh.NearAutoHideDistance = 0;
+            //not sure what these do
+            //cmesh.RemoveFromRainMap = true;
+            //cmesh.OccluderType = visWorldOccluderType.Exterior;
 
             cmesh.DebugName = line.template_path;
             //cmesh.OccluderType = visWorldOccluderType.None;
