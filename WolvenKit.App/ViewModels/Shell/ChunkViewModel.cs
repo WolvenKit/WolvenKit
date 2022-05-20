@@ -1743,45 +1743,49 @@ namespace WolvenKit.ViewModels.Shell
         private bool CanDeleteItem() => IsInArray;
         private void ExecuteDeleteItem()
         {
-            Tab.SelectedChunk = Parent;
-            if (Parent.Data is IRedArray ary)
+            try
             {
-                ary.Remove(Data);
-            }
-            else if (Parent.Data is IRedLegacySingleChannelCurve curve)
-            {
-                curve.Remove((IRedCurvePoint)Data);
-                if (curve.Count == 0)
+                Tab.SelectedChunk = Parent;
+                if (Parent.Data is IRedArray ary)
                 {
-                    Parent.ResolvedData = null;
-                    Parent.Data = null;
+                    ary.Remove(Data);
                 }
-            }
-            else if (Parent.Data is IRedBufferPointer db && db.GetValue().Data is Package04 pkg)
-            {
-                if (!pkg.Chunks.Remove((RedBaseClass)Data))
+                else if (Parent.Data is IRedLegacySingleChannelCurve curve)
                 {
-                    Locator.Current.GetService<ILoggerService>().Error("Unable to delete chunk");
+                    curve.Remove((IRedCurvePoint)Data);
+                    if (curve.Count == 0)
+                    {
+                        Parent.ResolvedData = null;
+                        Parent.Data = null;
+                    }
+                }
+                else if (Parent.Data is IRedBufferPointer db && db.GetValue().Data is Package04 pkg)
+                {
+                    if (!pkg.Chunks.Remove((RedBaseClass)Data))
+                    {
+                        Locator.Current.GetService<ILoggerService>().Error("Unable to delete chunk");
+                        return;
+                    }
+                }
+                else if (Parent.Data is IRedBufferPointer db2 && db2.GetValue().Data is CR2WList list)
+                {
+                    list.Files.RemoveAll(x => x.RootChunk == Data);
+                }
+                else if (Parent.Data is IRedBufferPointer db3 && db3.GetValue().Data is worldNodeDataBuffer dict)
+                {
+                    dict.Remove((worldNodeData)Data);
+                    //dict.RemoveAt(((worldNodeData)Data).NodeIndex);
+                }
+                else
+                {
+                    Locator.Current.GetService<ILoggerService>().Error("Unknown collection - unable to delete chunk");
                     return;
                 }
-            }
-            else if (Parent.Data is IRedBufferPointer db2 && db2.GetValue().Data is CR2WList list)
-            {
-                list.Files.RemoveAll(x => x.RootChunk == Data);
-            }
-            else if (Parent.Data is IRedBufferPointer db3 && db3.GetValue().Data is worldNodeDataBuffer dict)
-            {
-                dict.Remove((worldNodeData)Data);
-                //dict.RemoveAt(((worldNodeData)Data).NodeIndex);
-            }
-            else
-            {
-                Locator.Current.GetService<ILoggerService>().Error("Unknown collection - unable to delete chunk");
-                return;
-            }
 
-            Tab.File.SetIsDirty(true);
-            Parent.RecalculateProperties();
+                Tab.File.SetIsDirty(true);
+                Parent.RecalculateProperties();
+            }
+            catch { }
         }
 
         public ICommand DeleteAllCommand { get; private set; }
