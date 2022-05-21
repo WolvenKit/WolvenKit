@@ -198,8 +198,7 @@ namespace WolvenKit.ViewModels.Shell
         }
 
 
-
-
+        public ICommand DeleteSelectionCommand { get; private set; }
         private bool CanDeleteSelection() => IsInArray;
         private void ExecuteDeleteSelection()
         {
@@ -217,6 +216,8 @@ namespace WolvenKit.ViewModels.Shell
                 if (Parent.Data is IRedBufferPointer db3 && db3.GetValue().Data is worldNodeDataBuffer dict)
                 {
                     var indices = selection.Select(_ => (int)((worldNodeData)_).NodeIndex).ToList();
+                    if (indices.Count == 0)
+                    { throw new Exception("Please select something first"); }
                     var (start, end) = (indices.Min(), indices.Max());
 
                     var fullselection = Parent.DisplayProperties
@@ -256,8 +257,8 @@ namespace WolvenKit.ViewModels.Shell
             }
             catch (Exception ex)
             {
-                Locator.Current.GetService<ILoggerService>()
-                    .Error($"Something went wrong while trying to delete the selection : {ex}");
+                Locator.Current.GetService<ILoggerService>().Warning
+                    ($"Something went wrong while trying to delete the selection : {ex}");
             }
 
             Tab.SelectedChunk = Parent;
@@ -1738,8 +1739,7 @@ namespace WolvenKit.ViewModels.Shell
         //}
 
         public ICommand DeleteItemCommand { get; private set; }
-        public ICommand DeleteSelectionCommand { get; private set; }
-
+        
         private bool CanDeleteItem() => IsInArray;
         private void ExecuteDeleteItem()
         {
