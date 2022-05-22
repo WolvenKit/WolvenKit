@@ -350,6 +350,21 @@
                     </MenuItem.Icon>
                 </MenuItem>
                 <MenuItem
+                    Command="{Binding Path=PlacementTarget.Tag.ExportNodeDataCommand, RelativeSource={RelativeSource AncestorType=ContextMenu}}"
+                    Header="Export NodeData to JSON"
+                    IsCheckable="False"
+                    Style="{StaticResource SyncfusionMenuItemStyle}">
+                    <MenuItem.Icon>
+                        <iconPacks:PackIconCodicons
+                            Width="13"
+                            Height="13"
+                            Padding="0,0,0,0"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center"
+                            Kind="Json" />
+                    </MenuItem.Icon>
+                </MenuItem>
+                <MenuItem
                     Command="{Binding Path=PlacementTarget.Tag.ImportChunkCommand, RelativeSource={RelativeSource AncestorType=ContextMenu}}"
                     Header="Import from JSON"
                     IsCheckable="False"

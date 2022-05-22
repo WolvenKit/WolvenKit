@@ -31,15 +31,14 @@ using WolvenKit.ViewModels.Dialogs;
 using WolvenKit.ViewModels.Documents;
 using WolvenKit.RED4.Archive.IO;
 using static WolvenKit.RED4.Types.RedReflection;
-using System.Text;
-using WolvenKit.RED4.IO;
-using WolvenKit.RED4.Types.Exceptions;
 
 
 using Vec3 = System.Numerics.Vector3;
 using Vec4 = System.Numerics.Vector4;
 using Quat = System.Numerics.Quaternion;
 using Mat4 = System.Numerics.Matrix4x4;
+using System.Reflection;
+using System.Text.Json;
 
 namespace WolvenKit.ViewModels.Shell
 {
@@ -193,6 +192,7 @@ namespace WolvenKit.ViewModels.Shell
             CopyChunkCommand = new DelegateCommand(_ => ExecuteCopyChunk(), _ => CanCopyChunk());
             CopySelectionCommand = new DelegateCommand(_ => ExecuteCopySelection(), _ => CanCopySelection());
             DuplicateChunkCommand = new DelegateCommand(_ => ExecuteDuplicateChunk(), _ => CanDuplicateChunk());
+            ExportNodeDataCommand = new DelegateCommand(_ => ExecuteExportNodeData(), _ => CanExportNodeData());
             PasteChunkCommand = new DelegateCommand(_ => ExecutePasteChunk(), _ => CanPasteChunk());
             PasteSelectionCommand = new DelegateCommand(_ => ExecutePasteSelection(), _ => CanPasteSelection());
         }
@@ -1739,7 +1739,7 @@ namespace WolvenKit.ViewModels.Shell
         //}
 
         public ICommand DeleteItemCommand { get; private set; }
-        
+
         private bool CanDeleteItem() => IsInArray;
         private void ExecuteDeleteItem()
         {
@@ -1904,7 +1904,7 @@ namespace WolvenKit.ViewModels.Shell
         }
 
 
-        public void QuickToJSON(IRedType irt)
+        public void QuickToJSON(object irt)
         {
             try
             {
@@ -2076,9 +2076,31 @@ namespace WolvenKit.ViewModels.Shell
             }
 
             Tab.SelectedChunk = Parent;
+
         }
 
 
+
+        public ICommand ExportNodeDataCommand { get; private set; }
+        private bool CanExportNodeData() => IsInArray;
+        private void ExecuteExportNodeData()
+        {
+            if (Parent.Data is DataBuffer rb && rb.Data is worldNodeDataBuffer wndb)
+            {
+                try
+                {
+                    if (Parent.Parent.Data is worldStreamingSector wss)
+                    {
+                        var nodes = wss.Nodes.ToList();
+
+                        var nl = new List<(worldNodeData, CName)>();
+                        var test = wndb.ToList();
+                        QuickToJSON(test);
+                    }
+                }
+                catch { }
+            }
+        }
 
 
         public ICommand DuplicateChunkCommand { get; private set; }
