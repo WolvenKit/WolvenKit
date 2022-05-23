@@ -1865,6 +1865,9 @@ namespace WolvenKit.ViewModels.Shell
 
                     var json0 = RedJsonSerializer.Deserialize<Root0>(text);
                     var json1 = RedJsonSerializer.Deserialize<Root1>(text);
+                    var json2 = RedJsonSerializer.Deserialize<Root2>(text);
+
+                    ;
 
                     if (json0 is not null && json0.props is not null && json0.props.Count > 0)
                     {
@@ -1873,6 +1876,10 @@ namespace WolvenKit.ViewModels.Shell
                     else if (json1 is not null && json1.childs is not null && json1.childs.Count > 0)
                     {
                         Add00(json1, tr);
+                    }
+                    else if (json2 is not null)
+                    {
+                        Add00(json2, tr, updatecoords);
                     }
                     else
                     {

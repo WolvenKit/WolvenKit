@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using Splat;
 using WolvenKit.Common;
 using WolvenKit.Common.DDS;
 using WolvenKit.Common.Extensions;
@@ -455,18 +456,18 @@ namespace WolvenKit.Modkit.RED4
                 var (compression, rawFormat) = CommonFunctions.GetRedFormatsFromDxgiFormat(metadata.Format);
 
                 var xbm = new CBitmapTexture
-                    {
-                        CookingPlatform = Enums.ECookingPlatform.PLATFORM_PC,
-                        Width = width,
-                        Height = height,
-                        Setup =
+                {
+                    CookingPlatform = Enums.ECookingPlatform.PLATFORM_PC,
+                    Width = width,
+                    Height = height,
+                    Setup =
                             {
                                 Group = args.TextureGroup,
                                 Compression = compression,
                                 RawFormat = rawFormat,
                                 IsGamma = args.IsGamma
                             }
-                    };
+                };
 
 
                 // SetTextureGroupSetup(xbm.Setup, cr2w);
@@ -482,7 +483,8 @@ namespace WolvenKit.Modkit.RED4
                 // create rendRenderTextureBlobPC chunk
 
                 // header
-                var header = new rendRenderTextureBlobHeader {
+                var header = new rendRenderTextureBlobHeader
+                {
                     Version = 2,
                     Flags = 1,
                     SizeInfo = new rendRenderTextureBlobSizeInfo
@@ -492,7 +494,8 @@ namespace WolvenKit.Modkit.RED4
                     },
                     TextureInfo = new rendRenderTextureBlobTextureInfo
                     {
-                        TextureDataSize = (uint)textureDataSize, SliceSize = (uint)textureDataSize,
+                        TextureDataSize = (uint)textureDataSize,
+                        SliceSize = (uint)textureDataSize,
                         DataAlignment = alignment,
                         SliceCount = (ushort)slicecount,
                         MipCount = (byte)mipCount
@@ -516,7 +519,8 @@ namespace WolvenKit.Modkit.RED4
                         //rowpitch
                         var rowpitch = Texconv.ComputeRowPitch((int)mipsizeW, (int)mipsizeH, fmt);
 
-                        var info = new rendRenderTextureBlobMipMapInfo {
+                        var info = new rendRenderTextureBlobMipMapInfo
+                        {
                             Layout = new rendRenderTextureBlobMemoryLayout()
                             {
                                 RowPitch = (uint)rowpitch,
@@ -633,15 +637,28 @@ namespace WolvenKit.Modkit.RED4
 
         private bool ImportGltf(RedRelativePath rawRelative, DirectoryInfo outDir, GltfImportArgs args)
         {
+            var am = Locator.Current.GetService<IArchiveManager>();
+            var somefile = am.Lookup(15966709641681476693); //some cube            
+            var file = somefile.Value;
+
             if (args.Keep)
             {
 
-                var ext = args.importFormat == GltfImportAsFormat.MeshWithRig ? $".mesh" : $".{args.importFormat.ToString().ToLower()}"; 
+                var ext = args.importFormat == GltfImportAsFormat.MeshWithRig ? $".mesh" : $".{args.importFormat.ToString().ToLower()}";
                 var redfile = FindRedFile(rawRelative, outDir, ext);
                 if (string.IsNullOrEmpty(redfile))
                 {
-                    _loggerService.Warning($"No existing redfile found to rebuild for {rawRelative.Name}");
-                    return false;
+                    var name = rawRelative.NameWithoutExtension + ".mesh";
+                    var rr = new RedRelativePath(rawRelative);
+                    rr.ChangeBaseDir(outDir);
+                    var path = Path.GetDirectoryName(rr.FullName);
+                    if (!Directory.Exists(path))
+                    { Directory.CreateDirectory(path); }
+
+                    using var fs = new FileStream(path + @"\" + name, FileMode.Create);
+                    file.Extract(fs);
+
+                    redfile = FindRedFile(rr, outDir, ext);
                 }
 
                 var redfileName = Path.GetFileName(redfile);

@@ -299,7 +299,7 @@ namespace WolvenKit.Modkit.RED4
                 return false;
             }
 
-            var originalRig = args.Rig.FirstOrDefault();
+            var originalRig = args.Rig != null ? args.Rig.FirstOrDefault() : null;
 
             if (File.Exists(Path.ChangeExtension(inGltfFile.FullName, ".Material.json")))
             {
