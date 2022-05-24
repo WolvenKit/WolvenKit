@@ -113,22 +113,22 @@ namespace WolvenKit.ViewModels.Shell
                 posandrot == null
                 ? new Vec4()
                 : new Vec4()
-            {
-                X = float.Parse(posandrot.x),
-                Y = float.Parse(posandrot.y),
-                Z = float.Parse(posandrot.z),
-                W = float.Parse(posandrot.w)
-            };
+                {
+                    X = float.Parse(posandrot.x),
+                    Y = float.Parse(posandrot.y),
+                    Z = float.Parse(posandrot.z),
+                    W = float.Parse(posandrot.w)
+                };
 
             var euler =
                 posandrot == null
                 ? new Vec3()
                 : new Vec3()
-            {
-                X = (float)(Math.PI / 180) * float.Parse(posandrot.yaw),
-                Y = (float)(Math.PI / 180) * float.Parse(posandrot.pitch),
-                Z = (float)(Math.PI / 180) * float.Parse(posandrot.roll)
-            };
+                {
+                    X = (float)(Math.PI / 180) * float.Parse(posandrot.yaw),
+                    Y = (float)(Math.PI / 180) * float.Parse(posandrot.pitch),
+                    Z = (float)(Math.PI / 180) * float.Parse(posandrot.roll)
+                };
             var q = FixRotation(euler);
 
             return (v, q);
@@ -365,8 +365,8 @@ namespace WolvenKit.ViewModels.Shell
             var wenh = new CHandle<worldNode>(cmesh);
             var index = wss.Nodes.Count;
 
-            cmesh.DebugName = line.template_path+"_"+index.ToString();
-            cmesh.ForceAutoHideDistance = 5000;
+            cmesh.DebugName = Path.GetFileNameWithoutExtension(line.template_path) + "_" + index.ToString();
+            cmesh.ForceAutoHideDistance = 20000;
             cmesh.NearAutoHideDistance = 0;
             //not sure what these do
             //cmesh.RemoveFromRainMap = true;
@@ -389,20 +389,20 @@ namespace WolvenKit.ViewModels.Shell
                 (pos, rot) = GetPosRot(line);
             }
 
-            var scale = GetScale(line);
+            var scale = line.isunreal ? GetScale(line, (float)0.1) : GetScale(line);
+            var f = line.isunreal ? (float)0.1 : 1;
 
             if (line.center != default && updatecoords)
             {
                 pos = UpdateCoords(pos, line.center);
-
-                current.Position.X += pos.X;
-                current.Position.Y += pos.Y;
-                current.Position.Z += pos.Z;
-                current.Position.W *= pos.W;
+                current.Position.X += pos.X * f;
+                current.Position.Y += pos.Y * f;
+                current.Position.Z += pos.Z * f;
+                current.Position.W *= pos.W * f;
             }
             else
             {
-                current.Position = pos;
+                current.Position = Vec4.Multiply(f, pos);
             }
 
             current.Orientation = rot;
@@ -412,9 +412,10 @@ namespace WolvenKit.ViewModels.Shell
             current.Pivot.Y = current.Position.Y;
             current.Pivot.Z = current.Position.Z;
             //definitely does not go to 5000
-            current.MaxStreamingDistance = 5000;
+            current.MaxStreamingDistance = 20000;
             //seem to be doing something to the max distance, kinda
-            current.UkFloat1 = 5000;
+            current.UkFloat1 = 20000;
+            current.Uk11 = 20000;
             current.NodeIndex = (CUInt16)index;
             AddCurrent(current);
         }
@@ -623,18 +624,19 @@ namespace WolvenKit.ViewModels.Shell
             {
                 if (updatecoords)
                 { line.center = center; }
+                line.isunreal = true;
                 AddMesh(tr, line, updatecoords);
             }
         }
 
-        private Vec3 GetScale(Prop line)
+        private Vec3 GetScale(Prop line, float factor = (float)0.01)
         {
             var scala = line.scale == "nil" ? null
                 : RedJsonSerializer.Deserialize<Vec3S>(PutQuotes(line.scale));
             return scala is null ? Vec3.One : new Vec3(
-                float.Parse(scala.x) / 100,
-                float.Parse(scala.y) / 100,
-                float.Parse(scala.z) / 100
+                float.Parse(scala.x) * factor,
+                float.Parse(scala.y) * factor,
+                float.Parse(scala.z) * factor
                 );
         }
 
@@ -735,6 +737,8 @@ namespace WolvenKit.ViewModels.Shell
         public string name { get; set; }
         public string trigger { get; set; }
         public bool isdoor { get; set; }
+        public bool isunreal { get; set; }
+
         public Vec4 center { get; set; }
 
         public Prop()
@@ -769,12 +773,14 @@ namespace WolvenKit.ViewModels.Shell
 
             var meshname = ((System.Text.Json.JsonElement)C[1]).GetString();
             var foundnames = fileslist
-                .Where(x => x.Contains(meshname) && x.Contains(".mesh") )
+                .Where(x => x.Contains(meshname) && x.Contains(".mesh"))
                 .Select(x => x).ToList();
 
             if (foundnames.Count > 0)
             {
-                var foundname = foundnames.First();
+                var foundname =
+                    String.Join("\\", foundnames.First().Split("\\").Skip(1).ToArray());
+
 
                 var scaleX = ((System.Text.Json.JsonElement)C[7])[0].GetDouble().ToString();
                 var scaleY = ((System.Text.Json.JsonElement)C[7])[1].GetDouble().ToString();
