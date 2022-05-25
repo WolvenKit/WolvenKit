@@ -2000,12 +2000,16 @@ namespace WolvenKit.ViewModels.Shell
                 {
                     RDTDataViewModel.CopiedChunk = (IRedType)irc.DeepCopy();
                 }
+                else if (Data is worldNodeData)
+                {
+                    var tr = RedJsonSerializer.Serialize(Data);
+                    var copied = RedJsonSerializer.Deserialize<worldNodeData>(tr);
+
+                    RDTDataViewModel.CopiedChunks.Add(copied);
+                }
                 else
                 {
-                    /*var tr = RedJsonSerializer.Serialize(Data);
-                    var copied = RedJsonSerializer.Deserialize<object>(tr);*/
-
-                    RDTDataViewModel.CopiedChunk = Data;//(IRedType)copied;
+                    RDTDataViewModel.CopiedChunk = Data;
                 }
             }
             catch { }
@@ -2022,7 +2026,7 @@ namespace WolvenKit.ViewModels.Shell
                 {
                     RDTDataViewModel.CopiedChunks.Add((IRedType)irc.DeepCopy());
                 }
-                else if( elem is worldNodeData )
+                else if (elem is worldNodeData)
                 {
                     /*dynamic t = elem.GetType().GetProperty("Value").GetValue(elem, null);
                     var v = System.Activator.CreateInstance(t);*/
@@ -2030,7 +2034,8 @@ namespace WolvenKit.ViewModels.Shell
                     var copied = RedJsonSerializer.Deserialize<worldNodeData>(tr);
 
                     RDTDataViewModel.CopiedChunks.Add(copied);
-                } else
+                }
+                else
                 {
                     throw new NotImplementedException();
                 }
