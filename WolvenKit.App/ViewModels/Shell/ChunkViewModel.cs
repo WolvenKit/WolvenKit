@@ -2005,7 +2005,7 @@ namespace WolvenKit.ViewModels.Shell
                     var tr = RedJsonSerializer.Serialize(Data);
                     var copied = RedJsonSerializer.Deserialize<worldNodeData>(tr);
 
-                    RDTDataViewModel.CopiedChunks.Add(copied);
+                    RDTDataViewModel.CopiedChunk = copied;
                 }
                 else
                 {
