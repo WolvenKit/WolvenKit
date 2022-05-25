@@ -638,8 +638,10 @@ namespace WolvenKit.Modkit.RED4
         private bool ImportGltf(RedRelativePath rawRelative, DirectoryInfo outDir, GltfImportArgs args)
         {
             var am = Locator.Current.GetService<IArchiveManager>();
-            var somefile = am.Lookup(15966709641681476693); //some cube            
+            var somefile = am.Lookup(11327483717126307343); //some ice cube
+                                                            //some cube 15966709641681476693
             var file = somefile.Value;
+            
 
             if (args.Keep)
             {

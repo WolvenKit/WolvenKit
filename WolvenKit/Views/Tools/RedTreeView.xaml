@@ -303,7 +303,7 @@
                 </MenuItem>
                 <MenuItem
                     Command="{Binding Path=PlacementTarget.Tag.PasteSelectionCommand, RelativeSource={RelativeSource AncestorType=ContextMenu}}"
-                    Header="Paste Selection From Array/Buffer"
+                    Header="Paste Selection To Array/Buffer"
                     IsCheckable="False"
                     Style="{StaticResource SyncfusionMenuItemStyle}">
                     <MenuItem.Icon>

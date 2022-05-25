@@ -389,8 +389,8 @@ namespace WolvenKit.ViewModels.Shell
                 (pos, rot) = GetPosRot(line);
             }
 
-            var scale = line.isunreal ? GetScale(line, (float)0.1) : GetScale(line);
-            var f = line.isunreal ? (float)0.1 : 1;
+            var scale = line.isunreal ? GetScale(line, (float)1) : GetScale(line);
+            var f = line.isunreal ? (float)0.001 : 1;
 
             if (line.center != default && updatecoords)
             {
