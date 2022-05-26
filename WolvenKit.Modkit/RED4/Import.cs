@@ -638,8 +638,9 @@ namespace WolvenKit.Modkit.RED4
         private bool ImportGltf(RedRelativePath rawRelative, DirectoryInfo outDir, GltfImportArgs args)
         {
             var am = Locator.Current.GetService<IArchiveManager>();
-            var somefile = am.Lookup(11327483717126307343); //some ice cube
-                                                            //some cube 15966709641681476693
+            var somefile = am.Lookup(11327483717126307343); //some ice cube  11327483717126307343
+                                                            //some cube     15966709641681476693
+                                                            //chicken       6971078133910275869
             var file = somefile.Value;
             
 
@@ -650,7 +651,7 @@ namespace WolvenKit.Modkit.RED4
                 var redfile = FindRedFile(rawRelative, outDir, ext);
                 if (string.IsNullOrEmpty(redfile))
                 {
-                    var name = rawRelative.NameWithoutExtension + ".mesh";
+                    var name = rawRelative.NameWithoutExtension.ToLower() + ".mesh";
                     var rr = new RedRelativePath(rawRelative);
                     rr.ChangeBaseDir(outDir);
                     var path = Path.GetDirectoryName(rr.FullName);

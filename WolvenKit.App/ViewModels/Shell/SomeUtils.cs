@@ -129,7 +129,8 @@ namespace WolvenKit.ViewModels.Shell
                     Y = (float)(Math.PI / 180) * float.Parse(posandrot.pitch),
                     Z = (float)(Math.PI / 180) * float.Parse(posandrot.roll)
                 };
-            var q = FixRotation(euler);
+            var q = line.isunreal ? FixRotation2(euler) :
+                FixRotation(euler);
 
             return (v, q);
         }
@@ -270,6 +271,14 @@ namespace WolvenKit.ViewModels.Shell
                 * Mat4.CreateFromAxisAngle(Vec3.UnitX, euler.Y)
                 * Mat4.CreateFromAxisAngle(Vec3.UnitZ, euler.X)
                 );
+        public static Quat FixRotation2(Vec3 euler) =>
+            Quat.CreateFromRotationMatrix(
+                Mat4.Identity
+                * Mat4.CreateFromAxisAngle(Vec3.UnitY, euler.Z)
+                * Mat4.CreateFromAxisAngle(Vec3.UnitX, euler.Y)
+                * Mat4.CreateFromAxisAngle(Vec3.UnitZ, euler.X)
+                * Mat4.CreateFromAxisAngle(Vec3.UnitZ, (float)Math.PI)
+                );
 
         private static Vec4 UpdateCoords(Vec4 pos, Vec4 center)
         {
@@ -372,8 +381,9 @@ namespace WolvenKit.ViewModels.Shell
             //cmesh.RemoveFromRainMap = true;
             //cmesh.OccluderType = visWorldOccluderType.Exterior;
 
-            cmesh.DebugName = line.template_path;
-            //cmesh.OccluderType = visWorldOccluderType.None;
+            //line.template_path;//
+            //@"engine\meshes\editor\cube.mesh";
+            //
             cmesh.Mesh.DepotPath = line.template_path;
             cmesh.MeshAppearance = line.app == "" ? "default" : line.app;
 
@@ -390,7 +400,7 @@ namespace WolvenKit.ViewModels.Shell
             }
 
             var scale = line.isunreal ? GetScale(line, (float)1) : GetScale(line);
-            var f = line.isunreal ? (float)0.001 : 1;
+            var f = line.isunreal ? (float)0.01 : 1;
 
             if (line.center != default && updatecoords)
             {
@@ -771,7 +781,7 @@ namespace WolvenKit.ViewModels.Shell
 
             var fileslist = pm.ActiveProject.Files.ToList();
 
-            var meshname = ((System.Text.Json.JsonElement)C[1]).GetString();
+            var meshname = ((System.Text.Json.JsonElement)C[1]).GetString().ToLower();
             var foundnames = fileslist
                 .Where(x => x.Contains(meshname) && x.Contains(".mesh"))
                 .Select(x => x).ToList();
