@@ -1339,6 +1339,9 @@ namespace WolvenKit.Modkit.RED4
             }
             else
             {
+                // Forcing the data to null, so it doesn't generate a new byte array on write
+                // TODO: Should be handled better
+                blob.LocalMaterialBuffer.RawData.Buffer.Data = null;
                 blob.LocalMaterialBuffer.RawData.Buffer.SetBytes(materialbuffer.ToArray());
             }
 

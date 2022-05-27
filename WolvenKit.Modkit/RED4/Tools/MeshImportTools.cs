@@ -651,12 +651,12 @@ namespace WolvenKit.Modkit.RED4
                 chunk.ChunkVertices.VertexLayout.SlotStrides.Add(8);
                 chunk.ChunkVertices.VertexLayout.SlotStrides.Add(8);
 
-                chunk.ChunkVertices.VertexLayout.SlotStrides.Add(info.unknownOffsets[i] == 0 ? 0 : 4);
+                chunk.ChunkVertices.VertexLayout.SlotStrides.Add(info.unknownOffsets[i] == 0 ? (byte)0 : (byte)4);
 
                 chunk.ChunkVertices.VertexLayout.SlotStrides.Add(0);
                 chunk.ChunkVertices.VertexLayout.SlotStrides.Add(0);
 
-                chunk.ChunkVertices.VertexLayout.SlotStrides.Add(info.weightCounts[i] == 0 ? 48 : 64);
+                chunk.ChunkVertices.VertexLayout.SlotStrides.Add(info.weightCounts[i] == 0 ? (byte)48 : (byte)64);
 
                 // Position
                 chunk.ChunkVertices.VertexLayout.Elements.Add(new GpuWrapApiVertexPackingPackingElement
