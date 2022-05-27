@@ -106,7 +106,7 @@ namespace WolvenKit.ViewModels.Shell
             return poslist;
         }
 
-        private (Vec4, Quat) GetPosRot(Prop line)
+        private (Vec4, Quat) GetPosRot(Prop line, int rottestind = 0)
         {
             var posandrot = RedJsonSerializer.Deserialize<Vec7S>(PutQuotes(line.pos));
             var v =
@@ -129,7 +129,7 @@ namespace WolvenKit.ViewModels.Shell
                     Y = (float)(Math.PI / 180) * float.Parse(posandrot.pitch),
                     Z = (float)(Math.PI / 180) * float.Parse(posandrot.roll)
                 };
-            var q = line.isunreal ? FixRotation2(euler) :
+            var q = line.isunreal ? FixRotation2(euler, rottestind) :
                 FixRotation(euler);
 
             return (v, q);
@@ -271,14 +271,39 @@ namespace WolvenKit.ViewModels.Shell
                 * Mat4.CreateFromAxisAngle(Vec3.UnitX, euler.Y)
                 * Mat4.CreateFromAxisAngle(Vec3.UnitZ, euler.X)
                 );
-        public static Quat FixRotation2(Vec3 euler) =>
-            Quat.CreateFromRotationMatrix(
+
+        public static Quat FixRotation2(Vec3 euler, int rottestind = 0)
+        {
+            var sa = rottestind > 7 ? -1 : 1;
+            var a = rottestind % 2 == 0 ? Vec3.UnitZ : Vec3.UnitX;
+            var b = (rottestind / 2) % 2 == 0 ? euler.X : euler.Z;
+            var sc = (rottestind / 4) % 2 == 0 ? 1 : -1;
+            var c = rottestind % 2 == 1 ? Vec3.UnitZ : Vec3.UnitX;
+            var d = (rottestind / 2) % 2 == 1 ? euler.X : euler.Z;
+            var mf = Mat4.Identity;
+            mf.M22 = 0;
+            mf.M23 = 1;
+            mf.M33 = 0;
+            mf.M32 = 1;
+
+            return Quat.Inverse(Quat.CreateFromRotationMatrix(
                 Mat4.Identity
+                //* Mat4.CreateFromAxisAngle(Vec3.UnitZ, (float)Math.PI / 2)
+
                 * Mat4.CreateFromAxisAngle(Vec3.UnitY, euler.Z)
                 * Mat4.CreateFromAxisAngle(Vec3.UnitX, euler.Y)
                 * Mat4.CreateFromAxisAngle(Vec3.UnitZ, euler.X)
                 * Mat4.CreateFromAxisAngle(Vec3.UnitZ, (float)Math.PI)
-                );
+                //* Mat4.CreateFromAxisAngle(Vec3.UnitZ, (float)Math.PI / 2)
+                //* Mat4.CreateFromAxisAngle(Vec3.UnitZ, -(float)Math.PI / 2)
+
+
+
+                //* Mat4.CreateFromAxisAngle(sa * a, b)
+                //* Mat4.CreateFromAxisAngle(sc * c, d)
+                ));
+        }
+
 
         private static Vec4 UpdateCoords(Vec4 pos, Vec4 center)
         {
@@ -365,38 +390,41 @@ namespace WolvenKit.ViewModels.Shell
 
         private void AddMesh(string tr, Prop line, bool updatecoords = true, Vec4 pos = default, Quat rot = default)
         {
-            var wss = (worldStreamingSector)Parent.Parent.Data;
-            var current = RedJsonSerializer.Deserialize<worldNodeData>(tr);
+            for (var i = 0; i < 1; i++)
+            {
+                var wss = (worldStreamingSector)Parent.Parent.Data;
+                var current = RedJsonSerializer.Deserialize<worldNodeData>(tr);
 
-            //var cmesh = new worldStaticMeshNode();
-            var cmesh = new worldGenericProxyMeshNode();
+                //var cmesh = new worldStaticMeshNode();
+                var cmesh = new worldGenericProxyMeshNode();
 
-            var wenh = new CHandle<worldNode>(cmesh);
-            var index = wss.Nodes.Count;
+                var wenh = new CHandle<worldNode>(cmesh);
+                var index = wss.Nodes.Count;
 
-            cmesh.DebugName = Path.GetFileNameWithoutExtension(line.template_path) + "_" + index.ToString();
-            cmesh.ForceAutoHideDistance = 20000;
-            cmesh.NearAutoHideDistance = 0;
-            //not sure what these do
-            //cmesh.RemoveFromRainMap = true;
-            //cmesh.OccluderType = visWorldOccluderType.Exterior;
+                cmesh.DebugName = Path.GetFileNameWithoutExtension(line.template_path) + "_" + index.ToString();
+                cmesh.ForceAutoHideDistance = 20000;
+                cmesh.NearAutoHideDistance = 0;
+                //not sure what these do
+                //cmesh.RemoveFromRainMap = true;
+                //cmesh.OccluderType = visWorldOccluderType.Exterior;
 
-            //line.template_path;//
-            //@"engine\meshes\editor\cube.mesh";
-            //
-            cmesh.Mesh.DepotPath = line.template_path;
-            cmesh.MeshAppearance = line.app == "" ? "default" : line.app;
+                //line.template_path;//
+                //@"engine\meshes\editor\cube.mesh";
+                //
+                cmesh.Mesh.DepotPath = line.template_path;
+                cmesh.MeshAppearance = line.app == "" ? "default" : line.app;
 
-            ((IRedArray)wss.Nodes).Insert(index, (IRedType)wenh);
+                ((IRedArray)wss.Nodes).Insert(index, (IRedType)wenh);
 
-            SetCoords(current, index, line, updatecoords, pos, rot);
+                SetCoords(current, index, line, updatecoords, pos, rot, i);
+            }
         }
 
-        private void SetCoords(worldNodeData current, int index, Prop line, bool updatecoords = true, Vec4 pos = default, Quat rot = default)
+        private void SetCoords(worldNodeData current, int index, Prop line, bool updatecoords = true, Vec4 pos = default, Quat rot = default, int rottestind = 0)
         {
             if (pos == default || rot == default)
             {
-                (pos, rot) = GetPosRot(line);
+                (pos, rot) = GetPosRot(line, rottestind);
             }
 
             var scale = line.isunreal ? GetScale(line, (float)1) : GetScale(line);
@@ -404,11 +432,22 @@ namespace WolvenKit.ViewModels.Shell
 
             if (line.center != default && updatecoords)
             {
-                pos = UpdateCoords(pos, line.center);
-                current.Position.X += pos.X * f;
-                current.Position.Y += pos.Y * f;
-                current.Position.Z += pos.Z * f;
-                current.Position.W *= pos.W * f;
+                if (line.isunreal)
+                {
+                    pos = UpdateCoords(pos, line.center);
+                    current.Position.X += -pos.X * f;
+                    current.Position.Y += pos.Y * f;
+                    current.Position.Z += pos.Z * f + rottestind * 10;
+                    current.Position.W *= pos.W * f;
+                }
+                else
+                {
+                    pos = UpdateCoords(pos, line.center);
+                    current.Position.X += pos.X * f;
+                    current.Position.Y += pos.Y * f;
+                    current.Position.Z += pos.Z * f + rottestind * 10;
+                    current.Position.W *= pos.W * f;
+                }
             }
             else
             {
