@@ -9,6 +9,7 @@ using DynamicData;
 using MoreLinq;
 using Splat;
 using WolvenKit.Common;
+using WolvenKit.Common.Services;
 using WolvenKit.Functionality.Services;
 using WolvenKit.Models;
 using WolvenKit.RED4.Archive;
@@ -624,7 +625,7 @@ namespace WolvenKit.ViewModels.Shell
                     }
                 }
             }
-            catch { }
+            catch (Exception ex){Locator.Current.GetService<ILoggerService>().Error(ex);}
         }
 
         private void Add00(Root1 json, string tr, bool updatecoords = true)

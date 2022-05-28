@@ -8,6 +8,7 @@ using Syncfusion.UI.Xaml.TreeView;
 using WolvenKit.RED4.Types;
 using WolvenKit.ViewModels.Shell;
 using WolvenKit.ViewModels.Documents;
+using WolvenKit.Common.Services;
 
 namespace WolvenKit.Views.Tools
 {
@@ -90,7 +91,8 @@ namespace WolvenKit.Views.Tools
                     {
                         chunk.Refresh();
                     }
-                    catch { }
+                    catch (Exception ex){Locator.Current.GetService<ILoggerService>().Error(ex);}
+
                 }
             }
         }

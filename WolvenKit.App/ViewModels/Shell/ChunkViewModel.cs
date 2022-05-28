@@ -228,7 +228,7 @@ namespace WolvenKit.ViewModels.Shell
                         .ToList();
 
                     foreach (var i in fullselection)
-                    { try { dict.Remove(i); } catch { } }
+                    { try { dict.Remove(i); } catch (Exception ex){Locator.Current.GetService<ILoggerService>().Error(ex);} }
 
                     Tab.File.SetIsDirty(true);
                     Parent.RecalculateProperties();
@@ -245,7 +245,7 @@ namespace WolvenKit.ViewModels.Shell
                         .ToList();
 
                     foreach (var i in fullselection)
-                    { try { db4.Remove(i); } catch { } }
+                    { try { db4.Remove(i); } catch (Exception ex){Locator.Current.GetService<ILoggerService>().Error(ex);} }
 
                     Tab.File.SetIsDirty(true);
                     Parent.RecalculateProperties();
@@ -676,7 +676,7 @@ namespace WolvenKit.ViewModels.Shell
                                 IsReadOnly = isreadonly
                             });
                         }
-                        catch { }
+                        catch (Exception ex){Locator.Current.GetService<ILoggerService>().Error(ex);}
                     }
                 }
             }
@@ -1786,7 +1786,7 @@ namespace WolvenKit.ViewModels.Shell
                 Tab.File.SetIsDirty(true);
                 Parent.RecalculateProperties();
             }
-            catch { }
+            catch (Exception ex){Locator.Current.GetService<ILoggerService>().Error(ex);}
         }
 
         public ICommand DeleteAllCommand { get; private set; }
@@ -1906,7 +1906,7 @@ namespace WolvenKit.ViewModels.Shell
 
                     Locator.Current.GetService<ILoggerService>().Success($"might have done the thing maybe, who knows really");
                 }
-                catch { }
+                catch (Exception ex){Locator.Current.GetService<ILoggerService>().Error(ex);}
             }
 
         }
@@ -1945,7 +1945,7 @@ namespace WolvenKit.ViewModels.Shell
                     }
                 }
             }
-            catch { }
+            catch (Exception ex){Locator.Current.GetService<ILoggerService>().Error(ex);}
         }
 
 
@@ -2012,7 +2012,7 @@ namespace WolvenKit.ViewModels.Shell
                     RDTDataViewModel.CopiedChunk = Data;
                 }
             }
-            catch { }
+            catch (Exception ex){Locator.Current.GetService<ILoggerService>().Error(ex);}
 
         }
 
@@ -2040,7 +2040,7 @@ namespace WolvenKit.ViewModels.Shell
                     throw new NotImplementedException();
                 }
             }
-            catch { }
+            catch (Exception ex){Locator.Current.GetService<ILoggerService>().Error(ex);}
         }
 
 
@@ -2068,7 +2068,7 @@ namespace WolvenKit.ViewModels.Shell
                     RDTDataViewModel.CopiedChunks.Clear();
 
                     foreach (var i in fullselection)
-                    { try { AddToCopiedChunks(i); } catch { } }
+                    { try { AddToCopiedChunks(i); } catch (Exception ex){Locator.Current.GetService<ILoggerService>().Error(ex);} }
 
                     //Tab.File.SetIsDirty(true);
                     //Parent.RecalculateProperties();
@@ -2076,7 +2076,7 @@ namespace WolvenKit.ViewModels.Shell
                 else if (Parent.Data is IRedArray)
                 {
                     foreach (var i in fullselection)
-                    { try { AddToCopiedChunks(i); } catch { } }
+                    { try { AddToCopiedChunks(i); } catch (Exception ex){Locator.Current.GetService<ILoggerService>().Error(ex);} }
 
                     //Tab.File.SetIsDirty(true);
                     //Parent.RecalculateProperties();
@@ -2116,7 +2116,7 @@ namespace WolvenKit.ViewModels.Shell
                         QuickToJSON(test);
                     }
                 }
-                catch { }
+                catch (Exception ex){Locator.Current.GetService<ILoggerService>().Error(ex);}
             }
         }
 
@@ -2223,7 +2223,7 @@ namespace WolvenKit.ViewModels.Shell
                     }
                 }
             }
-            catch { }
+            catch (Exception ex){Locator.Current.GetService<ILoggerService>().Error(ex);}
         }
 
 
@@ -2255,7 +2255,7 @@ namespace WolvenKit.ViewModels.Shell
                     }
                 }
             }
-            catch { }
+            catch (Exception ex){Locator.Current.GetService<ILoggerService>().Error(ex);}
         }
 
         public void MoveChild(int index, ChunkViewModel item)
@@ -2418,7 +2418,7 @@ namespace WolvenKit.ViewModels.Shell
 
                 return true;
             }
-            catch { }
+            catch (Exception ex){Locator.Current.GetService<ILoggerService>().Error(ex);}
             return false;
         }
 

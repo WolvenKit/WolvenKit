@@ -15,6 +15,8 @@ using WolvenKit.Functionality.Commands;
 using WolvenKit.RED4.Archive.Buffer;
 using WolvenKit.RED4.Archive.CR2W;
 using WolvenKit.RED4.Types;
+using Splat;
+using WolvenKit.Common.Services;
 
 namespace WolvenKit.ViewModels.Documents
 {
@@ -317,7 +319,7 @@ namespace WolvenKit.ViewModels.Documents
                         {
                             LoadSector(sector);
                         }
-                        catch { }
+                        catch (Exception ex){Locator.Current.GetService<ILoggerService>().Error(ex);}
                     }
                     e.Handled = true;
                 }

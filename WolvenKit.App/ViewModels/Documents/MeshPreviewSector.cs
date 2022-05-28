@@ -556,7 +556,7 @@ namespace WolvenKit.ViewModels.Documents
                             }
                         }
                     }
-                    catch { }
+                    catch (Exception ex){Locator.Current.GetService<ILoggerService>().Error(ex);}
                 }
                 else if (handle.Chunk is worldPopulationSpawnerNode wpsn)
                 {

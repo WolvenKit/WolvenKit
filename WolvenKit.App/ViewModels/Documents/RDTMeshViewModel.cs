@@ -242,7 +242,7 @@ namespace WolvenKit.ViewModels.Documents
                 ExtractShadersCommand = new RelayCommand(ExtractShaders);
                 LoadMaterialsCommand = new RelayCommand(LoadMaterials);
             }
-            catch { }
+            catch (Exception ex){Locator.Current.GetService<ILoggerService>().Error(ex);}
 
         }
 
