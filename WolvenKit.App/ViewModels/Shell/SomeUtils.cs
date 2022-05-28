@@ -565,7 +565,7 @@ namespace WolvenKit.ViewModels.Shell
                             //open ent
                             if (cr2wFile is not null &&
                                 cr2wFile.RootChunk is entEntityTemplate rc &&
-                                rc.CompiledData.Data is RedPackage data)
+                                rc.CompiledData.Data is Package04 data)
                             {
                                 var meshes = data.Chunks.Where(x => x is entMeshComponent)
                                              .Select(_ => (entMeshComponent)_).ToList();
