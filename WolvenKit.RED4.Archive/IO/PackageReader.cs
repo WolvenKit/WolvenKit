@@ -59,7 +59,7 @@ namespace WolvenKit.RED4.Archive.IO
                 {
                     if (fieldType != prop.Type)
                     {
-                        var propName = $"{RedReflection.GetRedTypeFromCSType(cls.GetType())}.{varName}";
+                        var propName = $"{RedReflection.GetRedTypeFromCSType(instance.GetType())}.{varName}";
                         //throw new InvalidRTTIException(propName, prop.Type, fieldType);
 
                     }
