@@ -406,7 +406,7 @@ namespace WolvenKit.RED4.Archive.IO
             var tmpQueue = file.ChunkQueue;
             file.ChunkQueue = new List<RedBaseClass>();
 
-            var redTypeName = RedReflection.GetTypeRedName(chunkData.GetType());
+            var redTypeName = GetClassName(chunkData);
             var typeIndex = file.GetStringIndex(redTypeName);
 
             var result = new CR2WExportInfo
@@ -427,6 +427,21 @@ namespace WolvenKit.RED4.Archive.IO
         #endregion Write Sections
 
         #region Support
+
+        private string GetClassName(RedBaseClass cls)
+        {
+            if (cls is DynamicResource dres)
+            {
+                return dres.ClassName;
+            }
+
+            if (cls is DynamicBaseClass dbc)
+            {
+                return dbc.ClassName;
+            }
+
+            return RedReflection.GetTypeRedName(cls.GetType());
+        }
 
         private class DataCollection
         {
@@ -480,7 +495,7 @@ namespace WolvenKit.RED4.Archive.IO
                         continue;
                     }
 
-                    chunkClassNames.Add(RedReflection.GetTypeRedName(chunk.GetType()));
+                    chunkClassNames.Add(GetClassName(chunk));
 
                     _chunkInfos[chunk].Id = chunkCounter;
                     file.StartChunk(chunk);
