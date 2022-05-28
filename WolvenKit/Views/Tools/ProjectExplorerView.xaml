@@ -145,16 +145,6 @@
                             Kind="Pencil" />
                     </MenuItem.Icon>
                 </MenuItem>
-                <!--<MenuItem Command="{Binding TeststuffCommand}" Header="TestStuff">
-                    <MenuItem.Icon>
-                        <iconPacks:PackIconForkAwesome
-                            Width="13"
-                            Height="13"
-                            HorizontalAlignment="Center"
-                            VerticalAlignment="Stretch"
-                            Kind="Pencil" />
-                    </MenuItem.Icon>
-                </MenuItem>-->
                 <MenuItem Command="{Binding CopyFileCommand}" Header="Copy">
                     <MenuItem.Icon>
                         <iconPacks:PackIconMaterial
