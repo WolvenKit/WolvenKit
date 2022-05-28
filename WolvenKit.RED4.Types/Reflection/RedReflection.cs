@@ -634,6 +634,19 @@ namespace WolvenKit.RED4.Types
 
             public ExtendedPropertyInfo AddDynamicProperty(string varName, string typeName)
             {
+                foreach (var oldPropertyInfo in DynamicPropertyInfos)
+                {
+                    if (oldPropertyInfo.RedName == varName)
+                    {
+                        if (oldPropertyInfo.RedType == typeName)
+                        {
+                            return oldPropertyInfo;
+                        }
+
+                        throw new ArgumentException($"A dynamic property with the name '{varName}' already exists!");
+                    }
+                }
+
                 var propertyInfo = new ExtendedPropertyInfo(varName, typeName);
 
                 DynamicPropertyInfos.Add(propertyInfo);
