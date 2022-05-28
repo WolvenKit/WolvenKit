@@ -2631,19 +2631,19 @@ public class ReferenceResolver<T> where T : class
 
     public void AddReference(string referenceId, T value)
     {
-        try
+        /*try
         {
             ReferenceIdToObjectMap[referenceId] = value;
         }
         catch (Exception ex)
         {
             throw new JsonException($"{ex}");
-        }
-/*
+        }*/
+
         if (!ReferenceIdToObjectMap.TryAdd(referenceId, value))
         {
             throw new JsonException();
-        }*/
+        }
     }
 
     public string GetReference(T value, out bool alreadyExists)
