@@ -4,3 +4,8 @@ public class DynamicBaseClass : RedBaseClass
 {
     public string ClassName;
 }
+
+public class DynamicResource : CResource
+{
+    public string ClassName;
+}
