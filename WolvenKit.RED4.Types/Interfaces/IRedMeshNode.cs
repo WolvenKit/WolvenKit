@@ -44,8 +44,9 @@ namespace WolvenKit.RED4.Types
 
     }
 
-    public partial class worldStaticOccluderMeshNode : IRedMeshNode
+/*    public partial class worldStaticOccluderMeshNode : IRedMeshNode
     {
+
         [REDProperty(IsIgnored = true)]
         [Ordinal(9)]
         [RED("MeshAppearance")]
@@ -60,5 +61,7 @@ namespace WolvenKit.RED4.Types
 
             }
         }
-    }
+
+    }*/
+
 }
