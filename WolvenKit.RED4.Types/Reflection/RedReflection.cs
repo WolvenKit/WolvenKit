@@ -429,7 +429,7 @@ namespace WolvenKit.RED4.Types
             private readonly Dictionary<string, int> _nameIndex = new();
             private readonly Dictionary<string, int> _redNameIndex = new();
 
-            public Type? BaseType { get; }
+            public Type BaseType { get; }
             public bool SerializeDefault { get; }
             public int ChildLevel { get; }
 
