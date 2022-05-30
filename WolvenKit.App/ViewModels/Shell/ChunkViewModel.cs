@@ -1777,10 +1777,11 @@ namespace WolvenKit.ViewModels.Shell
                         throw new SerializationException();
                     }
 
+                    //gotta find a better way
                     var json0 = RedJsonSerializer.Deserialize<Root0>(text);
                     var json1 = RedJsonSerializer.Deserialize<Root1>(text);
                     var json2 = RedJsonSerializer.Deserialize<Root2>(text);
-
+                    var json3 = RedJsonSerializer.Deserialize<List<worldNodeData>>(text);
                     ;
 
                     if (json0 is not null && json0.props is not null && json0.props.Count > 0)
@@ -1794,6 +1795,10 @@ namespace WolvenKit.ViewModels.Shell
                     else if (json2 is not null)
                     {
                         Add00(json2, tr, updatecoords);
+                    }
+                    else if (json3 is not null)
+                    {
+                        Add00(json3, tr, updatecoords);
                     }
                     else
                     {
@@ -2022,7 +2027,7 @@ namespace WolvenKit.ViewModels.Shell
                     {
                         var nodes = wss.Nodes.ToList();
 
-                        var nl = new List<(worldNodeData, CName)>();
+                        //var nl = new List<(worldNodeData, CName)>();
                         var test = wndb.ToList();
                         QuickToJSON(test);
                     }
