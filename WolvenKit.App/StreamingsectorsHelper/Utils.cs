@@ -654,7 +654,7 @@ namespace WolvenKit.ViewModels.Shell
             }
         }
 
-        private void Add00(List<worldNodeData> json, string tr, bool updatecoords = true)
+        private void Add00(List<worldNodeData> json, string tr, bool updatecoords = false)
         {
             if (Parent.Data is DataBuffer db
                     && db.Buffer.Data is IRedType irt
@@ -662,21 +662,21 @@ namespace WolvenKit.ViewModels.Shell
             {
                 if (json.Count == ira.Count)
                 {
-                    var center = updatecoords
+                    /*var center = updatecoords
                         ? GetCenter(json.Select(x => (Vec4)x.Position).ToList())
-                        : new Vec4();
+                        : new Vec4();*/
 
                     for (var i = 0; i < json.Count; i++)
                     {
                         var line = json[i];
-                        if (updatecoords)
+                        /*if (updatecoords)
                         {
                             var pos = UpdateCoords((Vec4)line.Position, center);
                             line.Position.X += pos.X;
                             line.Position.Y += pos.Y;
                             line.Position.Z += pos.Z;
                             line.Position.W *= pos.W;
-                        }
+                        }*/
                         ira[i] = line;
                     }
                 }

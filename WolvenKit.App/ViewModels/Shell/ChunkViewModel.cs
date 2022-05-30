@@ -1798,7 +1798,7 @@ namespace WolvenKit.ViewModels.Shell
                     }
                     else if (json3 is not null)
                     {
-                        Add00(json3, tr, updatecoords);
+                        Add00(json3, tr);
                     }
                     else
                     {
