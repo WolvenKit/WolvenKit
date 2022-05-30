@@ -3,10 +3,26 @@ using WolvenKit.RED4.Types;
 
 namespace WolvenKit.RED4.Archive.Buffer
 {
-    public class Package04 : Red4File, IParseableBuffer, IRedCloneable
+    public enum RedPackageType
+    {
+        Default,
+        InkLibResource,
+        SaveResource,
+        ScriptableSystem
+    }
+
+    public class RedPackageSettings
+    {
+        public RedPackageType RedPackageType { get; set; } = RedPackageType.Default;
+        public bool ImportsAsHash { get; set; } = false;
+    }
+
+    public class RedPackage : Red4File, IParseableBuffer, IRedCloneable
     {
         public ushort Version = 4;
         public ushort Sections = 7;
+
+        public RedPackageSettings Settings { get; set; } = new();
 
         public short CruidIndex;
         public IList<CRUID> RootCruids;
@@ -16,7 +32,9 @@ namespace WolvenKit.RED4.Archive.Buffer
         public IList<RedBaseClass> Chunks { get; set; }
         public RedBaseClass RootChunk => Chunks[0];
 
-        public Package04()
+        public Dictionary<IRedType, CRUID> ChunkDictionary { get; set; } = new();
+
+        public RedPackage()
         {
             RootCruids = new List<CRUID>();
         }
@@ -28,7 +46,7 @@ namespace WolvenKit.RED4.Archive.Buffer
 
         public object DeepCopy()
         {
-            var pkg = new Package04();
+            var pkg = new RedPackage();
             pkg.RootCruids = RootCruids;
             pkg.Chunks = new List<RedBaseClass>();
             foreach (var chunk in Chunks)

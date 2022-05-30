@@ -402,7 +402,7 @@ namespace WolvenKit.ViewModels.Shell
             }
             else if (obj is RedBaseClass redClass)
             {
-                var pis = GetTypeInfo(redClass.GetType()).PropertyInfos.Sort((a, b) => a.Name.CompareTo(b.Name));
+                var pis = GetTypeInfo(redClass).PropertyInfos.Sort((a, b) => a.Name.CompareTo(b.Name));
 
                 var dps = redClass.GetDynamicPropertyNames();
                 dps.Sort();
@@ -429,7 +429,7 @@ namespace WolvenKit.ViewModels.Shell
             }
             else if (obj is SerializationDeferredDataBuffer sddb)
             {
-                if (sddb.Data is Package04 p4)
+                if (sddb.Data is RedPackage p4)
                 {
                     for (var i = 0; i < PropertyCount; i++)
                     {
@@ -457,7 +457,7 @@ namespace WolvenKit.ViewModels.Shell
             }
             else if (obj is SharedDataBuffer sdb)
             {
-                if (sdb.Data is Package04 p42)
+                if (sdb.Data is RedPackage p42)
                 {
                     for (var i = 0; i < PropertyCount; i++)
                     {
@@ -489,7 +489,7 @@ namespace WolvenKit.ViewModels.Shell
             }
             else if (obj is DataBuffer db)
             {
-                if (db.Data is Package04 p43)
+                if (db.Data is RedPackage p43)
                 {
                     for (var i = 0; i < PropertyCount; i++)
                     {
@@ -666,7 +666,7 @@ namespace WolvenKit.ViewModels.Shell
                     index++;
                 }
             }
-            else if (ResolvedData is IRedBufferPointer rbp && rbp.GetValue().Data is Package04 pkg)
+            else if (ResolvedData is IRedBufferPointer rbp && rbp.GetValue().Data is RedPackage pkg)
             {
                 var index = 0;
                 foreach (var item in pkg.Chunks)
@@ -821,7 +821,7 @@ namespace WolvenKit.ViewModels.Shell
                     (PropertyType.IsAssignableTo(typeof(IRedArray)) ||
                     ResolvedPropertyType.IsAssignableTo(typeof(IList)) ||
                     ResolvedPropertyType.IsAssignableTo(typeof(CR2WList)) ||
-                    ResolvedPropertyType.IsAssignableTo(typeof(Package04)));
+                    ResolvedPropertyType.IsAssignableTo(typeof(RedPackage)));
 
         private int _propertyCountCache = -1;
 
@@ -868,7 +868,7 @@ namespace WolvenKit.ViewModels.Shell
                     }
                     else if (ResolvedData is RedBaseClass redClass)
                     {
-                        var pis = GetTypeInfo(redClass.GetType()).PropertyInfos;
+                        var pis = GetTypeInfo(redClass).PropertyInfos;
                         count += pis.Count;
 
                         var dps = redClass.GetDynamicPropertyNames();
@@ -876,7 +876,7 @@ namespace WolvenKit.ViewModels.Shell
                     }
                     else if (ResolvedData is SerializationDeferredDataBuffer sddb)
                     {
-                        if (sddb.Data is Package04 p4)
+                        if (sddb.Data is RedPackage p4)
                         {
                             count += p4.Chunks.Count;
                         }
@@ -887,7 +887,7 @@ namespace WolvenKit.ViewModels.Shell
                     }
                     else if (ResolvedData is SharedDataBuffer sdb)
                     {
-                        if (sdb.Data is Package04 p42)
+                        if (sdb.Data is RedPackage p42)
                         {
                             count += p42.Chunks.Count;
                         }
@@ -902,7 +902,7 @@ namespace WolvenKit.ViewModels.Shell
                     }
                     else if (ResolvedData is DataBuffer db)
                     {
-                        if (db.Data is Package04 p43)
+                        if (db.Data is RedPackage p43)
                         {
                             count += p43.Chunks.Count;
                         }
@@ -1180,7 +1180,7 @@ namespace WolvenKit.ViewModels.Shell
             {
                 Descriptor = $"[{ary.Count}]";
             }
-            else if (ResolvedData is IRedBufferPointer rbp && rbp.GetValue().Data is Package04 pkg)
+            else if (ResolvedData is IRedBufferPointer rbp && rbp.GetValue().Data is RedPackage pkg)
             {
                 Descriptor = $"[{pkg.Chunks.Count}]";
             }
@@ -1557,7 +1557,7 @@ namespace WolvenKit.ViewModels.Shell
                 Data = RedTypeManager.CreateRedType(ResolvedPropertyType);
                 (Data as IRedBufferPointer).SetValue(new RED4.RedBuffer()
                 {
-                    Data = new Package04()
+                    Data = new RedPackage()
                     {
                         Chunks = new List<RedBaseClass>()
                     }
@@ -1573,7 +1573,7 @@ namespace WolvenKit.ViewModels.Shell
             }
             var db = Data as IRedBufferPointer;
             ObservableCollection<string> existing = null;
-            if (db.GetValue().Data is Package04 pkg)
+            if (db.GetValue().Data is RedPackage pkg)
             {
                 existing = new ObservableCollection<string>(pkg.Chunks.Select(t => t.GetType().Name).Distinct());
             }
@@ -1669,7 +1669,7 @@ namespace WolvenKit.ViewModels.Shell
                     Parent.Data = null;
                 }
             }
-            else if (Parent.Data is IRedBufferPointer db && db.GetValue().Data is Package04 pkg)
+            else if (Parent.Data is IRedBufferPointer db && db.GetValue().Data is RedPackage pkg)
             {
                 if (!pkg.Chunks.Remove((RedBaseClass)Data))
                 {
@@ -1716,7 +1716,7 @@ namespace WolvenKit.ViewModels.Shell
                 ResolvedData = null;
                 Data = null;
             }
-            else if (ResolvedData is IRedBufferPointer db && db.GetValue().Data is Package04 pkg)
+            else if (ResolvedData is IRedBufferPointer db && db.GetValue().Data is RedPackage pkg)
             {
                 pkg.Chunks.Clear();
             }
@@ -1859,7 +1859,7 @@ namespace WolvenKit.ViewModels.Shell
             }
             else if (oldParent.ResolvedData is IRedBufferPointer db)
             {
-                if (db.GetValue().Data is Package04 pkg)
+                if (db.GetValue().Data is RedPackage pkg)
                 {
                     sourceList = (IList)pkg.Chunks;
                 }
@@ -1875,7 +1875,7 @@ namespace WolvenKit.ViewModels.Shell
             }
             else if (ResolvedData is IRedBufferPointer db)
             {
-                if (db.GetValue().Data is Package04 pkg)
+                if (db.GetValue().Data is RedPackage pkg)
                 {
                     destList = (IList)pkg.Chunks;
                 }
@@ -1947,7 +1947,7 @@ namespace WolvenKit.ViewModels.Shell
             {
                 if (ResolvedData is IRedBufferPointer db)
                 {
-                    if (db.GetValue().Data is Package04 pkg)
+                    if (db.GetValue().Data is RedPackage pkg)
                     {
                         if (index == -1 || index > pkg.Chunks.Count)
                         {

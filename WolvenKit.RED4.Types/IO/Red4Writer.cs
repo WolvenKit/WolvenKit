@@ -645,7 +645,7 @@ namespace WolvenKit.RED4.IO
 
         public virtual void WriteFixedClass(RedBaseClass instance)
         {
-            var typeInfo = RedReflection.GetTypeInfo(instance.GetType());
+            var typeInfo = RedReflection.GetTypeInfo(instance);
             foreach (var propertyInfo in typeInfo.GetWritableProperties())
             {
                 var value = instance.GetProperty(propertyInfo.RedName);

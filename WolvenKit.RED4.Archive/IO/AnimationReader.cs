@@ -17,7 +17,7 @@ namespace WolvenKit.RED4.Archive.IO
             _ms = ms;
         }
 
-        public EFileReadErrorCodes ReadBuffer(RedBuffer buffer, Type fileRootType)
+        public EFileReadErrorCodes ReadBuffer(RedBuffer buffer)
         {
             if (buffer.RootChunk is animAnimSet aas)
             {
