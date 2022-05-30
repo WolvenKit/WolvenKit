@@ -318,7 +318,7 @@ namespace WolvenKit.RED4.Archive.IO
                 buffer.SetBytes(newData);
             }
 
-            if (buffer.Data is WorldTransformsBuffer wtb)
+            if (buffer is RedBuffer wsb && buffer.Data is WorldTransformsBuffer wtb)
             {
                 using var ms = new MemoryStream();
                 using var transformWriter = new WorldTransformsWriter(ms);

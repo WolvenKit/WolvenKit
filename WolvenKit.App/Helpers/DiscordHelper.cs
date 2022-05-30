@@ -1,4 +1,6 @@
 using System;
+using Splat;
+using WolvenKit.Common.Services;
 
 namespace WolvenKit.Functionality.WKitGlobal.Helpers
 {
@@ -44,7 +46,7 @@ namespace WolvenKit.Functionality.WKitGlobal.Helpers
                         client.Invoke();
                     }
                 }
-                catch { }
+                catch (Exception ex){Locator.Current.GetService<ILoggerService>().Error(ex);}
             }
         }
 

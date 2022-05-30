@@ -300,7 +300,7 @@ namespace WolvenKit.RED4.Types
                         break;
                     }
 
-                    
+
 
                     if (genericType == typeof(CArrayFixedSize<>))
                     {
@@ -313,7 +313,7 @@ namespace WolvenKit.RED4.Types
 
                     if (genericType == typeof(CStatic<>))
                     {
-                        result +=  (flags.MoveNext() ? flags.Current : 0) + ",";
+                        result += (flags.MoveNext() ? flags.Current : 0) + ",";
                     }
 
                     tType = innerType;
@@ -535,8 +535,8 @@ namespace WolvenKit.RED4.Types
                 {
                     return PropertyInfos[i2];
                 }
-
-                return null;
+                throw new ArgumentNullException();
+                //return null;
             }
 
             public ExtendedPropertyInfo GetPropertyInfoByName(string name)

@@ -13,6 +13,8 @@ using WolvenKit.Common.Conversion;
 using WolvenKit.RED4.Archive.Buffer;
 using WolvenKit.RED4.Archive.CR2W;
 using WolvenKit.RED4.Types;
+using WolvenKit.Common.Services;
+using Splat;
 
 namespace WolvenKit.RED4.CR2W.JSON;
 
@@ -518,6 +520,8 @@ public class DataBufferConverter : JsonConverter<DataBuffer>, ICustomRedConverte
         {
             _referenceResolver.AddReference(id, val.Buffer);
         }
+
+        //misplaced curly bracket ?!
 
         return val;
     }
@@ -2331,7 +2335,7 @@ public class RedClassConverter : JsonConverter<RedBaseClass>, ICustomRedConverte
                             throw new JsonException();
                         }
 
-                        var valInfo = typeInfo.PropertyInfos.FirstOrDefault(x => x.RedName == key);
+                        var valInfo = typeInfo.PropertyInfos.FirstOrDefault(x => x.RedName == key /*|| x.Name == key)*/);
                         if (valInfo == null)
                         {
                             throw new JsonException();
@@ -2348,7 +2352,17 @@ public class RedClassConverter : JsonConverter<RedBaseClass>, ICustomRedConverte
                         {
                             val = JsonSerializer.Deserialize(ref reader, valInfo.Type, options);
                         }
+                        /*
+                                                static string? FirstCharToLowerCase( string? str)
+                                                {
+                                                    if (!string.IsNullOrEmpty(str) && char.IsUpper(str[0]))
+                                                        return str.Length == 1 ? char.ToLower(str[0]).ToString() : char.ToLower(str[0]) + str[1..];
 
+                                                    return str;
+                                                }
+                        */
+                        //what's the difference between RedName and Name ?!
+                        //var name = valInfo.RedName ?? FirstCharToLowerCase(valInfo.Name);
                         if (!typeInfo.SerializeDefault && RedReflection.IsDefault(cls.GetType(), valInfo.RedName, val))
                         {
                             continue;
@@ -2384,8 +2398,23 @@ public class RedClassConverter : JsonConverter<RedBaseClass>, ICustomRedConverte
         var typeInfo = RedReflection.GetTypeInfo(value);
         foreach (var propertyInfo in typeInfo.PropertyInfos.OrderBy(x => x.RedName))
         {
-            writer.WritePropertyName(propertyInfo.RedName);
-            JsonSerializer.Serialize(writer, (object)value.GetProperty(propertyInfo.RedName), options);
+            if (propertyInfo is not null)
+            {
+                if (propertyInfo.RedName is not null)
+                {
+                    writer.WritePropertyName(propertyInfo.RedName);
+                    JsonSerializer.Serialize(writer, (object)value.GetProperty(propertyInfo.RedName), options);
+                }
+                else if (propertyInfo is RedReflection.ExtendedPropertyInfo Extpr && Extpr.Name is not null)
+                {
+                    writer.WritePropertyName(propertyInfo.Name);
+                    JsonSerializer.Serialize(writer, (object)value.GetProperty(propertyInfo.Name), options);
+                }
+            }
+            else
+            {
+                Locator.Current.GetService<ILoggerService>()?.Error($"propertyInfo was null i guess");
+            }
         }
 
         writer.WriteEndObject();
@@ -2602,6 +2631,15 @@ public class ReferenceResolver<T> where T : class
 
     public void AddReference(string referenceId, T value)
     {
+        /*try
+        {
+            ReferenceIdToObjectMap[referenceId] = value;
+        }
+        catch (Exception ex)
+        {
+            throw new JsonException($"{ex}");
+        }*/
+
         if (!ReferenceIdToObjectMap.TryAdd(referenceId, value))
         {
             throw new JsonException();
@@ -3104,14 +3142,20 @@ public static class RedJsonSerializer
 
     public static T? Deserialize<T>(string json)
     {
-        s_bufferResolver.Begin();
-        s_classResolver.Begin();
+        try
+        {
+            s_bufferResolver.Begin();
+            s_classResolver.Begin();
+            var result = JsonSerializer.Deserialize<T>(json, Options);
+            s_bufferResolver.End();
+            s_classResolver.End();
 
-        var result = JsonSerializer.Deserialize<T>(json, Options);
-
-        s_bufferResolver.End();
-        s_classResolver.End();
-
-        return result;
+            return result;
+        }
+        catch (Exception ex)
+        {
+            Locator.Current.GetService<ILoggerService>()?.Error($"Couldn't Import From JSON : {ex}");
+        }
+        return default;
     }
 }

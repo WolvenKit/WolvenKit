@@ -78,10 +78,10 @@ namespace WolvenKit.RED4.Archive.IO
 
             if (buffer.Parent is worldStreamingSector wss)
             {
-                wss.VariantNodes = new CArray<CArray<IRedType>>();
+                wss.VariantNodes = new CArray<CArray<RedBaseClass>>();
                 for (int i = 0; i < wss.VariantIndices.Count; i++)
                 {
-                    var ra = new CArray<IRedType>();
+                    var ra = new CArray<RedBaseClass>();
                     for (int j = wss.VariantIndices[i]; j < data.Count && (((i + 1) < wss.VariantIndices.Count && j < wss.VariantIndices[i + 1]) || ((i + 1) >= wss.VariantIndices.Count && j < data.Count)); j++)
                     {
                         ra.Add(data[j]);
