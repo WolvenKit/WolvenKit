@@ -13,6 +13,8 @@ using WolvenKit.Common.Conversion;
 using WolvenKit.RED4.Archive.Buffer;
 using WolvenKit.RED4.Archive.CR2W;
 using WolvenKit.RED4.Types;
+using WolvenKit.Common.Services;
+using Splat;
 
 namespace WolvenKit.RED4.CR2W.JSON;
 
@@ -461,10 +463,10 @@ public class DataBufferConverter : JsonConverter<DataBuffer>, ICustomRedConverte
 
                 case "Data":
                 {
-                    var converter = options.GetConverter(typeof(Package04));
+                    var converter = options.GetConverter(typeof(RedPackage));
                     if (converter is ICustomRedConverter conv)
                     {
-                        val.Data = (IParseableBuffer?)conv.ReadRedType(ref reader, typeof(Package04), options);
+                        val.Data = (IParseableBuffer?)conv.ReadRedType(ref reader, typeof(RedPackage), options);
                     }
                     else
                     {
@@ -519,6 +521,8 @@ public class DataBufferConverter : JsonConverter<DataBuffer>, ICustomRedConverte
             _referenceResolver.AddReference(id, val.Buffer);
         }
 
+        //misplaced curly bracket ?!
+
         return val;
     }
 
@@ -535,7 +539,7 @@ public class DataBufferConverter : JsonConverter<DataBuffer>, ICustomRedConverte
         {
             writer.WriteString("BufferId", refId);
 
-            if (value.Buffer.Data is Package04 pkg)
+            if (value.Buffer.Data is RedPackage pkg)
             {
                 writer.WritePropertyName("Data");
                 JsonSerializer.Serialize(writer, pkg, options);
@@ -632,10 +636,10 @@ public class SerializationDeferredDataBufferConverter : JsonConverter<Serializat
 
                 case "Data":
                 {
-                    var converter = options.GetConverter(typeof(Package04));
+                    var converter = options.GetConverter(typeof(RedPackage));
                     if (converter is ICustomRedConverter conv)
                     {
-                        val.Data = (IParseableBuffer?)conv.ReadRedType(ref reader, typeof(Package04), options);
+                        val.Data = (IParseableBuffer?)conv.ReadRedType(ref reader, typeof(RedPackage), options);
                     }
                     else
                     {
@@ -706,7 +710,7 @@ public class SerializationDeferredDataBufferConverter : JsonConverter<Serializat
         {
             writer.WriteString("BufferId", refId);
 
-            if (value.Buffer.Data is Package04 pkg)
+            if (value.Buffer.Data is RedPackage pkg)
             {
                 writer.WritePropertyName("Data");
                 JsonSerializer.Serialize(writer, pkg, options);
@@ -772,10 +776,10 @@ public class SharedDataBufferConverter : JsonConverter<SharedDataBuffer>, ICusto
 
             case "Data":
             {
-                var converter = options.GetConverter(typeof(Package04));
+                var converter = options.GetConverter(typeof(RedPackage));
                 if (converter is ICustomRedConverter conv)
                 {
-                    val.Data = (IParseableBuffer?)conv.ReadRedType(ref reader, typeof(Package04), options);
+                    val.Data = (IParseableBuffer?)conv.ReadRedType(ref reader, typeof(RedPackage), options);
                 }
                 else
                 {
@@ -842,7 +846,7 @@ public class SharedDataBufferConverter : JsonConverter<SharedDataBuffer>, ICusto
             writer.WritePropertyName("File");
             JsonSerializer.Serialize(writer, new RedFileDto(file), options);
         }
-        else if (value.Data is Package04 pkg)
+        else if (value.Data is RedPackage pkg)
         {
             writer.WritePropertyName("Data");
             JsonSerializer.Serialize(writer, pkg, options);
@@ -2291,7 +2295,7 @@ public class RedClassConverter : JsonConverter<RedBaseClass>, ICustomRedConverte
                         cls = RedTypeManager.Create(clsType);
                     }
 
-                    typeInfo = RedReflection.GetTypeInfo(cls.GetType());
+                    typeInfo = RedReflection.GetTypeInfo(cls);
 
                     if (refId != null && !_referenceResolver.HasReference(refId))
                     {
@@ -2331,7 +2335,7 @@ public class RedClassConverter : JsonConverter<RedBaseClass>, ICustomRedConverte
                             throw new JsonException();
                         }
 
-                        var valInfo = typeInfo.PropertyInfos.FirstOrDefault(x => x.RedName == key);
+                        var valInfo = typeInfo.PropertyInfos.FirstOrDefault(x => x.RedName == key /*|| x.Name == key)*/);
                         if (valInfo == null)
                         {
                             throw new JsonException();
@@ -2348,7 +2352,17 @@ public class RedClassConverter : JsonConverter<RedBaseClass>, ICustomRedConverte
                         {
                             val = JsonSerializer.Deserialize(ref reader, valInfo.Type, options);
                         }
+                        /*
+                                                static string? FirstCharToLowerCase( string? str)
+                                                {
+                                                    if (!string.IsNullOrEmpty(str) && char.IsUpper(str[0]))
+                                                        return str.Length == 1 ? char.ToLower(str[0]).ToString() : char.ToLower(str[0]) + str[1..];
 
+                                                    return str;
+                                                }
+                        */
+                        //what's the difference between RedName and Name ?!
+                        //var name = valInfo.RedName ?? FirstCharToLowerCase(valInfo.Name);
                         if (!typeInfo.SerializeDefault && RedReflection.IsDefault(cls.GetType(), valInfo.RedName, val))
                         {
                             continue;
@@ -2381,11 +2395,26 @@ public class RedClassConverter : JsonConverter<RedBaseClass>, ICustomRedConverte
         writer.WritePropertyName("Properties");
         writer.WriteStartObject();
 
-        var typeInfo = RedReflection.GetTypeInfo(value.GetType());
+        var typeInfo = RedReflection.GetTypeInfo(value);
         foreach (var propertyInfo in typeInfo.PropertyInfos.OrderBy(x => x.RedName))
         {
-            writer.WritePropertyName(propertyInfo.RedName);
-            JsonSerializer.Serialize(writer, (object)value.GetProperty(propertyInfo.RedName), options);
+            if (propertyInfo is not null)
+            {
+                if (propertyInfo.RedName is not null)
+                {
+                    writer.WritePropertyName(propertyInfo.RedName);
+                    JsonSerializer.Serialize(writer, (object)value.GetProperty(propertyInfo.RedName), options);
+                }
+                else if (propertyInfo is RedReflection.ExtendedPropertyInfo Extpr && Extpr.Name is not null)
+                {
+                    writer.WritePropertyName(propertyInfo.Name);
+                    JsonSerializer.Serialize(writer, (object)value.GetProperty(propertyInfo.Name), options);
+                }
+            }
+            else
+            {
+                Locator.Current.GetService<ILoggerService>()?.Error($"propertyInfo was null i guess");
+            }
         }
 
         writer.WriteEndObject();
@@ -2400,26 +2429,26 @@ public class RedClassConverter : JsonConverter<RedBaseClass>, ICustomRedConverte
 
 public class Red4FileConverterFactory : JsonConverterFactory
 {
-    private readonly Package04Converter _package04Converter = new();
+    private readonly RedPackageConverter _redPackageConverter = new();
 
     public override bool CanConvert(Type typeToConvert) => typeToConvert.IsSubclassOf(typeof(Red4File));
 
     public override JsonConverter CreateConverter(Type typeToConvert, JsonSerializerOptions options)
     {
-        if (typeToConvert == typeof(Package04))
+        if (typeToConvert == typeof(RedPackage))
         {
-            return _package04Converter;
+            return _redPackageConverter;
         }
 
         throw new NotSupportedException("CreateConverter got called on a type that this converter factory doesn't support");
     }
 }
 
-public class Package04Converter : JsonConverter<Package04>, ICustomRedConverter
+public class RedPackageConverter : JsonConverter<RedPackage>, ICustomRedConverter
 {
     public object? ReadRedType(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options) => Read(ref reader, typeToConvert, options);
 
-    public override Package04? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+    public override RedPackage? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
     {
         if (reader.TokenType == JsonTokenType.Null)
         {
@@ -2431,7 +2460,7 @@ public class Package04Converter : JsonConverter<Package04>, ICustomRedConverter
             throw new JsonException();
         }
 
-        var result = new Package04();
+        var result = new RedPackage();
         while (reader.Read())
         {
             if (reader.TokenType == JsonTokenType.EndObject)
@@ -2544,7 +2573,7 @@ public class Package04Converter : JsonConverter<Package04>, ICustomRedConverter
         throw new JsonException();
     }
 
-    public override void Write(Utf8JsonWriter writer, Package04 value, JsonSerializerOptions options)
+    public override void Write(Utf8JsonWriter writer, RedPackage value, JsonSerializerOptions options)
     {
         writer.WriteStartObject();
 
@@ -2602,6 +2631,15 @@ public class ReferenceResolver<T> where T : class
 
     public void AddReference(string referenceId, T value)
     {
+        /*try
+        {
+            ReferenceIdToObjectMap[referenceId] = value;
+        }
+        catch (Exception ex)
+        {
+            throw new JsonException($"{ex}");
+        }*/
+
         if (!ReferenceIdToObjectMap.TryAdd(referenceId, value))
         {
             throw new JsonException();
@@ -3104,14 +3142,20 @@ public static class RedJsonSerializer
 
     public static T? Deserialize<T>(string json)
     {
-        s_bufferResolver.Begin();
-        s_classResolver.Begin();
+        try
+        {
+            s_bufferResolver.Begin();
+            s_classResolver.Begin();
+            var result = JsonSerializer.Deserialize<T>(json, Options);
+            s_bufferResolver.End();
+            s_classResolver.End();
 
-        var result = JsonSerializer.Deserialize<T>(json, Options);
-
-        s_bufferResolver.End();
-        s_classResolver.End();
-
-        return result;
+            return result;
+        }
+        catch (Exception ex)
+        {
+            Locator.Current.GetService<ILoggerService>()?.Error($"Couldn't Import From JSON : {ex}");
+        }
+        return default;
     }
 }

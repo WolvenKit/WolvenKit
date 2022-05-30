@@ -95,9 +95,16 @@ namespace WolvenKit.RED4.Archive.IO
 
             var (type, flags) = RedReflection.GetCSTypeFromRedType(typename);
 
+            var typeInfo = RedReflection.GetTypeInfo(cls);
+
             IRedType value;
             var prop = RedReflection.GetPropertyByRedName(cls.GetType(), varName);
             if (prop == null)
+            {
+                prop = typeInfo.AddDynamicProperty(varName, typename);
+            }
+
+            if (prop.IsDynamic)
             {
                 value = Read(type, size - 4, flags);
                 cls.SetProperty(varName, value);
@@ -105,8 +112,6 @@ namespace WolvenKit.RED4.Archive.IO
             else
             {
                 value = Read(prop.Type, size - 4, prop.Flags.Clone());
-
-                var typeInfo = RedReflection.GetTypeInfo(cls.GetType());
 
                 var propName = $"{RedReflection.GetRedTypeFromCSType(cls.GetType())}.{varName}";
                 if (type != prop.Type)

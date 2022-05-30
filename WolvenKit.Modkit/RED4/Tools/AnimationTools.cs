@@ -180,7 +180,7 @@ namespace WolvenKit.Modkit.RED4
                     var dict = positions[bone];
                     foreach (var time in dict.Keys)
                     {
-                        var timeNormalized = time / srcAnim.Duration;
+                        var timeNormalized = NormalizeTime(time, srcAnim.Duration);
                         UInt16 t = Convert.ToUInt16(Math.Clamp(timeNormalized, 0, 1.0f) * UInt16.MaxValue);
                         bw.Write(t);
                         bw.Write(bone);
@@ -196,7 +196,7 @@ namespace WolvenKit.Modkit.RED4
                     var dict = rotations[bone];
                     foreach (var time in dict.Keys)
                     {
-                        var timeNormalized = time / srcAnim.Duration;
+                        var timeNormalized = NormalizeTime(time, srcAnim.Duration);
                         UInt16 t = Convert.ToUInt16(Math.Clamp(timeNormalized, 0, 1.0f) * UInt16.MaxValue);
                         bw.Write(t);
 
@@ -235,7 +235,7 @@ namespace WolvenKit.Modkit.RED4
                     var dict = scales[bone];
                     foreach (var time in dict.Keys)
                     {
-                        var timeNormalized = time / srcAnim.Duration;
+                        var timeNormalized = NormalizeTime(time, srcAnim.Duration);
                         UInt16 t = Convert.ToUInt16(Math.Clamp(timeNormalized, 0, 1.0f) * UInt16.MaxValue);
                         bw.Write(t);
 
@@ -273,6 +273,8 @@ namespace WolvenKit.Modkit.RED4
             outMs.CopyTo(animStream);
 
             return true;
+
+            static float NormalizeTime(float time, float scene_length) => (0 == time * scene_length) ? 0 : time / scene_length;
         }
         public static bool GetAnimation(CR2WFile animsFile, CR2WFile rigFile, ref ModelRoot model, bool includeRig = true,bool incRootMotion = true)
         {

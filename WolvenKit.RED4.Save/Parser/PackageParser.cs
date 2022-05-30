@@ -12,25 +12,29 @@ public class Package : INodeData
 
 public class PackageParser : INodeParser
 {
-    public virtual void Read(BinaryReader reader, NodeEntry node) => Read(reader, node, typeof(inkWidgetLibraryResource));
+    public virtual void Read(BinaryReader reader, NodeEntry node) => Read(reader, node, RedPackageType.InkLibResource);
 
-    protected void Read(BinaryReader reader, NodeEntry node, Type dummyType)
+    protected void Read(BinaryReader reader, NodeEntry node, RedPackageType redPackageType)
     {
         var dummyBuffer = new RedBuffer();
 
         reader.ReadInt32(); // dataSize
-        var subReader = new PackageReader(reader);
-        subReader.ReadBuffer(dummyBuffer, dummyType);
+        var subReader = new RedPackageReader(reader);
+        subReader.Settings.RedPackageType = redPackageType;
+
+        subReader.ReadBuffer(dummyBuffer);
 
         node.Value = new Package { Content = dummyBuffer.Data };
     }
 
-    public virtual void Write(NodeWriter writer, NodeEntry node) => Write(writer, node, typeof(inkWidgetLibraryResource));
-    public virtual void Write(NodeWriter writer, NodeEntry node, Type dummyType)
+    public virtual void Write(NodeWriter writer, NodeEntry node) => Write(writer, node, RedPackageType.InkLibResource);
+    public virtual void Write(NodeWriter writer, NodeEntry node, RedPackageType redPackageType)
     {
         using var ms = new MemoryStream();
-        using var subWriter = new PackageWriter(ms);
-        subWriter.WritePackage((Package04)((Package)node.Value).Content, dummyType);
+        using var subWriter = new RedPackageWriter(ms);
+        subWriter.Settings.RedPackageType = redPackageType;
+
+        subWriter.WritePackage((RedPackage)((Package)node.Value).Content);
 
         var bytes = ms.ToArray();
 

@@ -232,6 +232,22 @@ namespace WolvenKit.ViewModels.Tools
 
             return b;
         }
+/*
+        /// <summary>
+        /// Test stuff selected node.
+        /// </summary>
+        public ICommand TeststuffCommand { get; private set; }
+
+        private async void Teststuff()
+        {
+            var selected = SelectedItems.OfType<FileModel>().ToList();
+            var delete = await Interactions.DeleteFiles.Handle(selected.Select(_ => _.Name));
+            if (!delete)
+            {
+                return;
+            }
+        }*/
+
         private async void ExecuteDeleteFile()
         {
             var selected = SelectedItems.OfType<FileModel>().ToList();
@@ -652,6 +668,7 @@ namespace WolvenKit.ViewModels.Tools
             CopyFileCommand = new RelayCommand(CopyFile, CanCopyFile);
             PasteFileCommand = new RelayCommand(PasteFile, CanPasteFile);
             DeleteFileCommand = new RelayCommand(ExecuteDeleteFile, CanDeleteFile);
+            //TeststuffCommand = new RelayCommand(Teststuff, CanDeleteFile);
             RenameFileCommand = new RelayCommand(ExecuteRenameFile, CanRenameFile);
             CopyRelPathCommand = new RelayCommand(ExecuteCopyRelPath, CanCopyRelPath);
             ReimportFileCommand = new RelayCommand(ExecuteReimportFile, CanReimportFile);

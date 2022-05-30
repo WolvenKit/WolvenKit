@@ -97,21 +97,21 @@ namespace WolvenKit.Views.Editors
                 var value = (CUInt64)RedType;
                 return ((ulong)value).ToString();
             }
+            else if (PropertyType.IsAssignableTo(typeof(FixedPoint)))
+            {
+                var value = (FixedPoint)RedType;
+                return ((float)value).ToString("G9");
+            }
+            else if (PropertyType.IsAssignableTo(typeof(IRedPrimitive<float>)))
+            {
+                var value = (IRedPrimitive)RedType;
+                return ((float)(CFloat)value).ToString("G9");
+            }
             else if (PropertyType.IsAssignableTo(typeof(IRedInteger)))
             {
                 var value = (IRedInteger)RedType;
 
                 return value.ToString(CultureInfo.CurrentCulture);
-            }
-            else if (PropertyType.IsAssignableTo(typeof(FixedPoint)))
-            {
-                var value = (FixedPoint)RedType;
-                return ((float)value).ToString("R");
-            }
-            else if (PropertyType.IsAssignableTo(typeof(IRedPrimitive<float>)))
-            {
-                var value = (IRedPrimitive)RedType;
-                return ((float)(CFloat)value).ToString("R");
             }
             else if (PropertyType.IsAssignableTo(typeof(IRedRef)))
             {

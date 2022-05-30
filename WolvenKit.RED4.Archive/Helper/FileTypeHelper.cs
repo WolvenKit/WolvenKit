@@ -145,7 +145,9 @@ namespace WolvenKit.RED4.Archive
         workspot,
         worldlist,
         xbm,
-        xcube
+        xcube,
+
+        wdyn
     }
     // ReSharper restore InconsistentNaming
     // ReSharper restore IdentifierTypo
@@ -309,6 +311,8 @@ namespace WolvenKit.RED4.Archive
             FileTypes.Add(new FileType(ERedExtension.worldlist, "List of World IDs", typeof(worldWorldListResource)));
             FileTypes.Add(new FileType(ERedExtension.xbm, "Bitmap Texture", typeof(CBitmapTexture)));
             FileTypes.Add(new FileType(ERedExtension.xcube, "Cubemap", typeof(CCubeTexture))); //same as cubemap
+
+            FileTypes.Add(new FileType(ERedExtension.wdyn, "WolvenKit Test File", typeof(DynamicResource)));
         }
 
         public static string[] GetFileExtensions(string filePath)
