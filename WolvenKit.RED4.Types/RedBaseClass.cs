@@ -74,7 +74,10 @@ namespace WolvenKit.RED4.Types
                     throw new ArgumentException($"Native prop '{propertyName}' could not be found!");
                 }
 
-                _dynamicProperties.Add(propertyName);
+                if (!_dynamicProperties.Contains(propertyName))
+                {
+                    _dynamicProperties.Add(propertyName);
+                }
             }
 
             _properties[propertyName] = value;

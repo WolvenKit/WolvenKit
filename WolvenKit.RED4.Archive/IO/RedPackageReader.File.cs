@@ -1,7 +1,9 @@
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using Splat;
 using WolvenKit.Common.FNV1A;
 using WolvenKit.Common.Services;
@@ -12,19 +14,21 @@ using WolvenKit.RED4.Types.Exceptions;
 
 namespace WolvenKit.RED4.Archive.IO
 {
-    public partial class PackageReader : IBufferReader
+    public partial class RedPackageReader : IBufferReader
     {
-        private Package04Header header;
+        private RedPackageHeader header;
         private IHashService _hashService;
 
-        public EFileReadErrorCodes ReadBuffer(RedBuffer buffer, Type fileRootType)
+        public EFileReadErrorCodes ReadBuffer(RedBuffer buffer)
         {
             _hashService = Locator.Current.GetService<IHashService>();
 
-            var _chunks = new List<RedBaseClass>();
+            var chunks = new List<RedBaseClass>();
 
-            var result = new Package04();
+            var result = new RedPackage();
             _outputFile = result;
+
+            result.Settings = Settings;
 
             header.version = BaseReader.ReadUInt16();
             if (header.version < 2 || header.version > 4)
@@ -65,19 +69,20 @@ namespace WolvenKit.RED4.Archive.IO
                 return EFileReadErrorCodes.NoCr2w;
             }
 
-            if (fileRootType == typeof(gamePersistentStateDataResource))
+            if (Settings.RedPackageType == RedPackageType.Default)
             {
-                var numCruids = _reader.ReadUInt32();
+                result.CruidIndex = _reader.ReadInt16();
+
+                var numCruids = _reader.ReadUInt16();
                 for (var i = 0; i < numCruids; i++)
                 {
                     result.RootCruids.Add(_reader.ReadUInt64());
                 }
             }
-            else if (fileRootType != typeof(inkWidgetLibraryResource))
-            {
-                result.CruidIndex = _reader.ReadInt16();
-                var numCruids = _reader.ReadUInt16();
 
+            if (Settings.RedPackageType == RedPackageType.SaveResource || Settings.RedPackageType == RedPackageType.ScriptableSystem)
+            {
+                var numCruids = _reader.ReadUInt32();
                 for (var i = 0; i < numCruids; i++)
                 {
                     result.RootCruids.Add(_reader.ReadUInt64());
@@ -89,19 +94,18 @@ namespace WolvenKit.RED4.Archive.IO
             // read refs
             var refCount = (header.refPoolDataOffset - header.refPoolDescOffset) / 4;
             BaseStream.Position = baseOff + header.refPoolDescOffset;
-            var refDesc = BaseStream.ReadStructs<Package04ImportHeader>(refCount);
+            var refDesc = BaseStream.ReadStructs<RedPackageImportHeader>(refCount);
 
-            var readAsHash = fileRootType == typeof(appearanceAppearanceResource);
             foreach (var r in refDesc)
             {
                 BaseStream.Position = baseOff + r.offset;
-                importsList.Add(ReadImport(r, readAsHash));
+                importsList.Add(ReadImport(r));
             }
 
             // read strings
             var nameCount = (header.namePoolDataOffset - header.namePoolDescOffset) / 4;
             BaseStream.Position = baseOff + header.namePoolDescOffset;
-            var nameDesc = BaseStream.ReadStructs<Package04NameHeader>(nameCount);
+            var nameDesc = BaseStream.ReadStructs<RedPackageNameHeader>(nameCount);
 
             foreach (var s in nameDesc)
             {
@@ -112,36 +116,44 @@ namespace WolvenKit.RED4.Archive.IO
             // read chunks
             var chunkCount = (header.chunkDataOffset - header.chunkDescOffset) / 8;
             BaseStream.Position = baseOff + header.chunkDescOffset;
-            var chunkDesc = BaseStream.ReadStructs<Package04ChunkHeader>(chunkCount);
+            var chunkDesc = BaseStream.ReadStructs<RedPackageChunkHeader>(chunkCount);
 
             for (var i = 0; i < chunkDesc.Length; i++)
             {
-                _chunks.Add(ReadChunk(chunkDesc[i]));
+                chunks.Add(ReadChunk(chunkDesc[i]));
             }
 
             var newChunks = new List<RedBaseClass>();
-            for (var i = 0; i < _chunks.Count; i++)
+            for (var i = 0; i < chunks.Count; i++)
             {
                 if (!HandleQueue.ContainsKey(i))
                 {
-                    newChunks.Add(_chunks[i]);
+                    newChunks.Add(chunks[i]);
                     continue;
                 }
 
                 foreach (var handle in HandleQueue[i])
                 {
-                    handle.SetValue(_chunks[i]);
+                    handle.SetValue(chunks[i]);
                 }
             }
 
             result.Chunks = newChunks;
+
+            if (Settings.RedPackageType is RedPackageType.Default or RedPackageType.SaveResource)
+            {
+                for (int i = 0; i < result.Chunks.Count; i++)
+                {
+                    result.ChunkDictionary.Add(result.Chunks[i], result.RootCruids[i]);
+                }
+            }
 
             buffer.Data = result;
 
             return EFileReadErrorCodes.NoError;
         }
 
-        private PackageImport ReadImport(Package04ImportHeader r, bool readAsHash)
+        private PackageImport ReadImport(RedPackageImportHeader r)
         {
             // needs header offset
             //Debug.Assert(BaseStream.Position == r.offset);
@@ -150,7 +162,7 @@ namespace WolvenKit.RED4.Archive.IO
             {
                 Flags = (InternalEnums.EImportFlags)(r.sync ? 0b1 : 0b0)
             };
-            if (readAsHash)
+            if (Settings.ImportsAsHash)
             {
                 import.Hash = _reader.ReadUInt64();
                 import.DepotPath = _hashService.Get(import.Hash);
@@ -168,7 +180,7 @@ namespace WolvenKit.RED4.Archive.IO
             }
             return import;
         }
-        private string ReadName(Package04NameHeader n)
+        private string ReadName(RedPackageNameHeader n)
         {
             var s = _reader.ReadNullTerminatedString();
             //Debug.Assert(s.Length == n.size);
@@ -180,18 +192,22 @@ namespace WolvenKit.RED4.Archive.IO
             return s;
         }
 
-        private RedBaseClass ReadChunk(Package04ChunkHeader c)
+        protected virtual RedBaseClass ReadChunk(RedPackageChunkHeader c)
         {
             // needs header offset
             //Debug.Assert(BaseStream.Position == c.offset);
             var redTypeName = GetStringValue((ushort)c.typeID);
             var (type, _) = RedReflection.GetCSTypeFromRedType(redTypeName);
-            if (type == typeof(RedBaseClass))
+
+            var instance = RedTypeManager.Create(type);
+            if (instance is DynamicBaseClass dbc)
             {
-                throw new TypeNotFoundException(redTypeName);
+                dbc.ClassName = redTypeName;
             }
 
-            return ReadClass(type);
+            ReadClass(instance, 0);
+
+            return instance;
         }
     }
 

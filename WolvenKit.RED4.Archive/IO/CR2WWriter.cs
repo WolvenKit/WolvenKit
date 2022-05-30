@@ -30,16 +30,24 @@ namespace WolvenKit.RED4.Archive.IO
 
             _writer.Write((byte)0);
 
-            var typeInfo = RedReflection.GetTypeInfo(cls.GetType());
+            var typeInfo = RedReflection.GetTypeInfo(cls);
             foreach (var propertyInfo in typeInfo.GetWritableProperties())
             {
+                string redTypeName;
                 var value = cls.GetProperty(propertyInfo.RedName);
-                if (!typeInfo.SerializeDefault && RedReflection.IsDefault(cls.GetType(), propertyInfo, value))
+                if (!propertyInfo.IsDynamic)
                 {
-                    continue;
-                }
+                    if (!typeInfo.SerializeDefault && !propertyInfo.SerializeDefault && RedReflection.IsDefault(cls.GetType(), propertyInfo, value))
+                    {
+                        continue;
+                    }
 
-                var redTypeName = RedReflection.GetRedTypeFromCSType(propertyInfo.Type, propertyInfo.Flags.Clone());
+                    redTypeName = RedReflection.GetRedTypeFromCSType(propertyInfo.Type, propertyInfo.Flags.Clone());
+                }
+                else
+                {
+                    redTypeName = propertyInfo.RedType;
+                }
 
                 CNameRef.Add(_writer.BaseStream.Position, propertyInfo.RedName);
                 _writer.Write(GetStringIndex(propertyInfo.RedName));
@@ -48,7 +56,7 @@ namespace WolvenKit.RED4.Archive.IO
 
                 var sizePos = _writer.BaseStream.Position;
                 _writer.Write(0);
-                Write((IRedType)value);
+                Write(value);
                 var endPos = _writer.BaseStream.Position;
                 var bytesWritten = (uint)(endPos - sizePos);
 

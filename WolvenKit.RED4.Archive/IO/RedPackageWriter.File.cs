@@ -3,27 +3,26 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using WolvenKit.Common.FNV1A;
 using WolvenKit.Core.Extensions;
 using WolvenKit.RED4.Archive.Buffer;
 using WolvenKit.RED4.Types;
 
 namespace WolvenKit.RED4.Archive.IO
 {
-    public partial class PackageWriter
+    public partial class RedPackageWriter
     {
-        private Package04 _file;
+        private RedPackage _file;
 
-        private Package04Header _header;
-        private short _cruidIndex = -1;
-        private readonly List<CRUID> _cruids = new();
+        private RedPackageHeader _header;
 
-        public void WritePackage(Package04 file, Type fileRootType)
+        public void WritePackage(RedPackage file)
         {
             _file = file;
 
             // might need to work through chunks to figure out if there are 7 sections
             // setup a separate stream for that?
-            _header = new Package04Header
+            _header = new RedPackageHeader
             {
                 version = _file.Version,
                 numSections = _file.Sections,
@@ -34,52 +33,49 @@ namespace WolvenKit.RED4.Archive.IO
 
             WriteHeader();
 
-            var (strings, imports, chunkDesc, chunkData) = GenerateChunkData();
-
-            short cuidsIndex = -1;
-            var cruids = new List<CRUID>();
-            for (var i = 0; i < file.Chunks.Count; i++)
+            var chunkList = file.Chunks;
+            if (_file.Settings.RedPackageType == RedPackageType.Default)
             {
-                if (file.Chunks[i] is entIComponent comp)
+                short cruidsIndex = -1;
+                var cruids = new List<CRUID>();
+                for (var i = 0; i < chunkList.Count; i++)
                 {
-                    if (comp.Id != 0)
+                    if (file.ChunkDictionary.TryGetValue(chunkList[i], out var cruid))
                     {
-                        cruids.Add(comp.Id);
+                        cruids.Add(cruid);
                     }
                     else
                     {
-                        if (i < file.RootCruids.Count)
+                        if (chunkList[i] is entIComponent iComp)
                         {
-                            cruids.Add(file.RootCruids[i]);
+                            if (iComp.Id != 0)
+                            {
+                                cruids.Add(iComp.Id);
+                            }
+                            else
+                            {
+                                // TODO: Proper way to get these?
+                                cruids.Add((ulong)Random.Shared.NextInt64());
+                            }
+                        }
+                        else if (chunkList[i] is entEntity ent)
+                        {
+                            cruids.Add(0);
                         }
                         else
                         {
-                            // TODO: ...
-                            cruids.Add((ulong)Random.Shared.NextInt64());
+                            throw new NotSupportedException();
                         }
                     }
-                }
-                else
-                {
-                    if (cuidsIndex == -1)
-                    {
-                        cuidsIndex = (short)i;
-                    }
-                    cruids.Add(0);
-                }
-            }
 
-            if (fileRootType == typeof(gamePersistentStateDataResource))
-            {
-                BaseWriter.Write(cruids.Count);
-                foreach (var cruid in cruids)
-                {
-                    Write(cruid);
+                    if (chunkList[i] is entEntity && cruidsIndex == -1)
+                    {
+                        cruidsIndex = (short)i;
+                    }
                 }
-            }
-            else if (fileRootType != typeof(inkWidgetLibraryResource))
-            {
-                BaseWriter.Write(cuidsIndex);
+
+                BaseWriter.Write(cruidsIndex);
+
                 BaseWriter.Write((ushort)cruids.Count);
                 foreach (var cruid in cruids)
                 {
@@ -87,16 +83,71 @@ namespace WolvenKit.RED4.Archive.IO
                 }
             }
 
+            if (_file.Settings.RedPackageType is RedPackageType.SaveResource or RedPackageType.ScriptableSystem)
+            {
+                IList<CRUID> cruids = new List<CRUID>();
+                if (_file.Settings.RedPackageType is RedPackageType.SaveResource)
+                {
+                    foreach (var chunk in file.Chunks)
+                    {
+                        if (file.ChunkDictionary.TryGetValue(chunk, out var cruid))
+                        {
+                            cruids.Add(cruid);
+                        }
+                        else
+                        {
+                            // TODO: Proper way to get these?
+                            cruids.Add((ulong)Random.Shared.NextInt64());
+                        }
+                    }
+                }
+
+                if (_file.Settings.RedPackageType is RedPackageType.ScriptableSystem)
+                {
+                    var chunkDict = new Dictionary<ulong, RedBaseClass>();
+
+                    foreach (var chunk in _file.Chunks)
+                    {
+                        ulong hash;
+                        if (chunk is DynamicBaseClass dbc)
+                        {
+                            hash = FNV1A64HashAlgorithm.HashString(dbc.ClassName);
+                        }
+                        else
+                        {
+                            hash = FNV1A64HashAlgorithm.HashString(chunk.GetType().Name);
+                        }
+
+                        chunkDict.Add(hash, chunk);
+                    }
+
+                    chunkDict = chunkDict.OrderBy(x => x.Key).ToDictionary(x => x.Key, x => x.Value);
+
+                    chunkList = chunkDict.Values.ToList();
+                    foreach (var cruid in chunkDict.Keys)
+                    {
+                        cruids.Add(cruid);
+                    }
+                }
+
+
+                BaseWriter.Write(cruids.Count);
+                foreach (var cruid in cruids)
+                {
+                    BaseWriter.Write(cruid);
+                }
+            }
+
+            var (strings, imports, chunkDesc, chunkData) = GenerateChunkData(chunkList);
+
             var headerEnd = BaseStream.Position;
 
             // write refs
 
             if (_header.numSections == 7)
             {
-                var writeRefAsHash = fileRootType == typeof(appearanceAppearanceResource);
-
                 _header.refPoolDescOffset = Convert.ToUInt32(BaseStream.Position - headerEnd);
-                var (refData, refDesc) = GenerateRefBuffer(imports, (uint)(_header.refPoolDescOffset + imports.Count * 4), writeRefAsHash);
+                var (refData, refDesc) = GenerateRefBuffer(imports, (uint)(_header.refPoolDescOffset + imports.Count * 4));
                 BaseStream.WriteStructs(refDesc.ToArray());
 
                 _header.refPoolDataOffset = Convert.ToUInt32(BaseStream.Position - headerEnd);
@@ -153,12 +204,12 @@ namespace WolvenKit.RED4.Archive.IO
             _writer.Write(_header.chunkDataOffset);
         }
 
-        private Package04ChunkHeader WriteChunk(PackageWriter file, RedBaseClass chunk)
+        protected virtual RedPackageChunkHeader WriteChunk(RedPackageWriter file, RedBaseClass chunk)
         {
-            var redTypeName = RedReflection.GetTypeRedName(chunk.GetType());
+            var redTypeName = GetClassName(chunk);
             var typeIndex = file.GetStringIndex(redTypeName);
 
-            var result = new Package04ChunkHeader
+            var result = new RedPackageChunkHeader
             {
                 typeID = typeIndex,
                 offset = (uint)file.BaseStream.Position
@@ -169,16 +220,16 @@ namespace WolvenKit.RED4.Archive.IO
             return result;
         }
 
-        private (byte[], IList<Package04ImportHeader>) GenerateRefBuffer(IList<ImportEntry> refs, uint position, bool writeRefAsHash)
+        private (byte[], IList<RedPackageImportHeader>) GenerateRefBuffer(IList<ImportEntry> refs, uint position)
         {
 
-            var refDesc = new List<Package04ImportHeader>();
+            var refDesc = new List<RedPackageImportHeader>();
             var refData = new List<byte>();
             foreach (var reff in refs)
             {
-                if (writeRefAsHash)
+                if (_file.Settings.ImportsAsHash)
                 {
-                    refDesc.Add(new Package04ImportHeader
+                    refDesc.Add(new RedPackageImportHeader
                     {
                         offset = (uint)refData.Count + position,
                         size = 8,
@@ -188,7 +239,7 @@ namespace WolvenKit.RED4.Archive.IO
                 }
                 else
                 {
-                    refDesc.Add(new Package04ImportHeader
+                    refDesc.Add(new RedPackageImportHeader
                     {
                         offset = (uint)refData.Count + position,
                         size = (byte)reff.DepotPath.Length,
@@ -204,15 +255,15 @@ namespace WolvenKit.RED4.Archive.IO
             return (refData.ToArray(), refDesc);
         }
 
-        private (byte[], IList<Package04NameHeader>) GenerateStringBuffer(IList<CName> strings, uint position)
+        private (byte[], IList<RedPackageNameHeader>) GenerateStringBuffer(IList<CName> strings, uint position)
         {
 
-            var nameDesc = new List<Package04NameHeader>();
+            var nameDesc = new List<RedPackageNameHeader>();
             var nameData = new List<byte>();
             foreach (var str in strings)
             {
                 var strBytes = Encoding.UTF8.GetBytes(str);
-                nameDesc.Add(new Package04NameHeader
+                nameDesc.Add(new RedPackageNameHeader
                 {
                     offset = (uint)nameData.Count + position,
                     size = (byte)(strBytes.Length + 1)
@@ -245,19 +296,29 @@ namespace WolvenKit.RED4.Archive.IO
             }
         }
 
-        private (IList<CName>, IList<ImportEntry>, List<Package04ChunkHeader>, byte[]) GenerateChunkData()
+        private string GetClassName(RedBaseClass cls)
+        {
+            if (cls is DynamicBaseClass dbc)
+            {
+                return dbc.ClassName;
+            }
+
+            return RedReflection.GetTypeRedName(cls.GetType());
+        }
+
+        private (IList<CName>, IList<ImportEntry>, List<RedPackageChunkHeader>, byte[]) GenerateChunkData(IList<RedBaseClass> chunkList)
         {
             using var ms = new MemoryStream();
-            using var file = new PackageWriter(ms) { IsRoot = false };
+            using var file = new RedPackageWriter(ms) { IsRoot = false };
 
             file._header = _header;
             file._chunkInfos = _chunkInfos;
 
-            var chunkDesc = new List<Package04ChunkHeader>();
+            var chunkDesc = new List<RedPackageChunkHeader>();
             var chunkClassNames = new List<string>();
             var chunkCounter = 0;
 
-            foreach (var chunk in _file.Chunks)
+            foreach (var chunk in chunkList)
             {
                 file.ChunkQueue.Add(chunk);
             }
@@ -277,17 +338,7 @@ namespace WolvenKit.RED4.Archive.IO
                     continue;
                 }
 
-                if (chunk is entEntity)
-                {
-                    if (_cruidIndex == -1)
-                    {
-                        _cruidIndex = (short)chunkCounter;
-                    }
-
-                    _cruids.Add(1);
-                }
-
-                chunkClassNames.Add(RedReflection.GetTypeRedName(chunk.GetType()));
+                chunkClassNames.Add(GetClassName(chunk));
 
                 _chunkInfos[chunk].Id = chunkCounter;
                 file.StartChunk(chunk);
@@ -318,8 +369,6 @@ namespace WolvenKit.RED4.Archive.IO
 
                 chunkCounter++;
             }
-
-            _cruids.AddRange(file._cruids);
 
             file.GenerateStringDictionary();
             file.StringCacheList.Remove("");
