@@ -300,7 +300,7 @@ namespace WolvenKit.RED4.Types
                         break;
                     }
 
-                    
+
 
                     if (genericType == typeof(CArrayFixedSize<>))
                     {
@@ -313,7 +313,7 @@ namespace WolvenKit.RED4.Types
 
                     if (genericType == typeof(CStatic<>))
                     {
-                        result +=  (flags.MoveNext() ? flags.Current : 0) + ",";
+                        result += (flags.MoveNext() ? flags.Current : 0) + ",";
                     }
 
                     tType = innerType;
@@ -528,17 +528,14 @@ namespace WolvenKit.RED4.Types
 
                 if (_redNameIndex.TryGetValue(name, out var i1))
                 {
-                    if (_redNameIndex.TryGetValue(name, out var i1))
-                    {
-                        return PropertyInfos[i1];
-                    }
+                    return PropertyInfos[i1];
+                }
 
-                    if (_nameIndex.TryGetValue(name, out var i2))
-                    {
-                        return PropertyInfos[i2];
-                    }
-                }                
-                throw new ArgumentNullException();                
+                if (_nameIndex.TryGetValue(name, out var i2))
+                {
+                    return PropertyInfos[i2];
+                }
+                throw new ArgumentNullException();
                 //return null;
             }
 

@@ -233,7 +233,7 @@ namespace WolvenKit.ViewModels.Shell
 
                 if (line.app != null)
                 {
-                    string app = line.app == "" ? "default" : line.app;
+                    var app = line.app == "" ? "default" : line.app;
                     applist.Add(app);
                 }
                 else
@@ -350,7 +350,7 @@ namespace WolvenKit.ViewModels.Shell
                 wen.InstanceData = eeidh;
                 eeid.Buffer = new DataBuffer();
 
-                var pk = new Package04();
+                var pk = new RedPackage();
                 var dc = new DoorController();
                 pk.Chunks = new List<RedBaseClass>();
 
@@ -358,11 +358,11 @@ namespace WolvenKit.ViewModels.Shell
                 {
                     IsInteractive = true
                 };
-                pk.Chunks.Add((RedBaseClass)dc);
+                pk.Chunks.Add(dc);
                 eeid.Buffer.Data = pk;
             }
 
-            ((IRedArray)wss.Nodes).Insert(index, (IRedType)wenh);
+            ((IRedArray)wss.Nodes).Insert(index, wenh);
             SetCoords(current, index, line, updatecoords);
         }
 
@@ -390,7 +390,7 @@ namespace WolvenKit.ViewModels.Shell
             cmesh.Mesh.DepotPath = line.template_path;
             cmesh.MeshAppearance = line.app == "" ? "default" : line.app;
 
-            ((IRedArray)wss.Nodes).Insert(index, (IRedType)wenh);
+            ((IRedArray)wss.Nodes).Insert(index, wenh);
 
             SetCoords(current, index, line, updatecoords, pos, rot);
 
@@ -403,7 +403,7 @@ namespace WolvenKit.ViewModels.Shell
                 (pos, rot) = GetPosRot(line);
             }
 
-            var scale = line.isunreal ? GetScale(line, (float)1) : GetScale(line);
+            var scale = line.isunreal ? GetScale(line, 1) : GetScale(line);
             var f = line.isunreal ? (float)0.01 : 1;
 
             if (line.center != default && updatecoords)
@@ -466,7 +466,7 @@ namespace WolvenKit.ViewModels.Shell
                     {
                         indexx = ira.Count;
                     }
-                    ira.Insert(indexx, (IRedType)current);
+                    ira.Insert(indexx, current);
                 }
             }
         }
@@ -566,7 +566,7 @@ namespace WolvenKit.ViewModels.Shell
                             //open ent
                             if (cr2wFile is not null &&
                                 cr2wFile.RootChunk is entEntityTemplate rc &&
-                                rc.CompiledData.Data is Package04 data)
+                                rc.CompiledData.Data is RedPackage data)
                             {
                                 var meshes = data.Chunks.Where(x => x is entMeshComponent)
                                              .Select(_ => (entMeshComponent)_).ToList();
@@ -625,7 +625,7 @@ namespace WolvenKit.ViewModels.Shell
                     }
                 }
             }
-            catch (Exception ex){Locator.Current.GetService<ILoggerService>().Error(ex);}
+            catch (Exception ex) { Locator.Current.GetService<ILoggerService>().Error(ex); }
         }
 
         private void Add00(Root1 json, string tr, bool updatecoords = true)
@@ -667,9 +667,9 @@ namespace WolvenKit.ViewModels.Shell
 
         public static void CreateFromYawPitchRoll(Quaternion r, out float yaw, out float pitch, out float roll)
         {
-            yaw = MathF.Atan2(2.0f * (r.J * r.R + r.I * r.K), 1.0f - 2.0f * (r.I * r.I + r.J * r.J));
-            pitch = MathF.Asin(2.0f * (r.I * r.R - r.J * r.K));
-            roll = MathF.Atan2(2.0f * (r.I * r.J + r.K * r.R), 1.0f - 2.0f * (r.I * r.I + r.K * r.K));
+            yaw = MathF.Atan2(2.0f * ((r.J * r.R) + (r.I * r.K)), 1.0f - (2.0f * ((r.I * r.I) + (r.J * r.J))));
+            pitch = MathF.Asin(2.0f * ((r.I * r.R) - (r.J * r.K)));
+            roll = MathF.Atan2(2.0f * ((r.I * r.J) + (r.K * r.R)), 1.0f - (2.0f * ((r.I * r.I) + (r.K * r.K))));
         }
 
 
@@ -804,7 +804,7 @@ namespace WolvenKit.ViewModels.Shell
             if (foundnames.Count > 0)
             {
                 var foundname =
-                    String.Join("\\", foundnames.First().Split("\\").Skip(1).ToArray());
+                    string.Join("\\", foundnames.First().Split("\\").Skip(1).ToArray());
 
 
                 var scaleX = ((System.Text.Json.JsonElement)C[7])[0].GetDouble().ToString();
@@ -820,16 +820,16 @@ namespace WolvenKit.ViewModels.Shell
                     pos = PosRotToString(
                         new Pos()
                         {
-                            x = (float)(((System.Text.Json.JsonElement)C[5])[0].GetDouble()),
-                            y = (float)(((System.Text.Json.JsonElement)C[5])[1].GetDouble()),
-                            z = (float)(((System.Text.Json.JsonElement)C[5])[2].GetDouble()),
-                            w = (float)1
+                            x = (float)((System.Text.Json.JsonElement)C[5])[0].GetDouble(),
+                            y = (float)((System.Text.Json.JsonElement)C[5])[1].GetDouble(),
+                            z = (float)((System.Text.Json.JsonElement)C[5])[2].GetDouble(),
+                            w = 1
                         }
                         , new Rot()
                         {
-                            roll = (float)(((System.Text.Json.JsonElement)C[6])[0].GetDouble()),
-                            pitch = (float)(((System.Text.Json.JsonElement)C[6])[2].GetDouble()),
-                            yaw = (float)(((System.Text.Json.JsonElement)C[6])[1].GetDouble()),
+                            roll = (float)((System.Text.Json.JsonElement)C[6])[0].GetDouble(),
+                            pitch = (float)((System.Text.Json.JsonElement)C[6])[2].GetDouble(),
+                            yaw = (float)((System.Text.Json.JsonElement)C[6])[1].GetDouble(),
                         }
                     )
                 };

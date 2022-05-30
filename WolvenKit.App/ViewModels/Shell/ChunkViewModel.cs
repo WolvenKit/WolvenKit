@@ -7,11 +7,14 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Reactive.Linq;
+using System.Reflection;
 using System.Runtime.Serialization;
+using System.Text.Json;
 using System.Windows.Forms;
 using System.Windows.Input;
 using DynamicData;
 using DynamicData.Binding;
+using Newtonsoft.Json;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using Splat;
@@ -25,21 +28,16 @@ using WolvenKit.Models;
 using WolvenKit.RED4;
 using WolvenKit.RED4.Archive.Buffer;
 using WolvenKit.RED4.Archive.CR2W;
+using WolvenKit.RED4.Archive.IO;
 using WolvenKit.RED4.CR2W.JSON;
 using WolvenKit.RED4.Types;
 using WolvenKit.ViewModels.Dialogs;
 using WolvenKit.ViewModels.Documents;
-using WolvenKit.RED4.Archive.IO;
 using static WolvenKit.RED4.Types.RedReflection;
-
-
+using Mat4 = System.Numerics.Matrix4x4;
+using Quat = System.Numerics.Quaternion;
 using Vec3 = System.Numerics.Vector3;
 using Vec4 = System.Numerics.Vector4;
-using Quat = System.Numerics.Quaternion;
-using Mat4 = System.Numerics.Matrix4x4;
-using System.Reflection;
-using System.Text.Json;
-using Newtonsoft.Json;
 
 namespace WolvenKit.ViewModels.Shell
 {
@@ -53,35 +51,9 @@ namespace WolvenKit.ViewModels.Shell
 
         public ObservableCollectionExtended<ChunkViewModel> TempList { get; set; }
 
-        public ObservableCollectionExtended<ChunkViewModel> TVProperties
-        {
-            get
-            {
-                if (PropertiesLoaded)
-                {
-                    return Properties;
-                }
-                else
-                {
-                    return TempList;
-                }
-            }
-        }
+        public ObservableCollectionExtended<ChunkViewModel> TVProperties => PropertiesLoaded ? Properties : TempList;
 
-        public ObservableCollectionExtended<ChunkViewModel> DisplayProperties
-        {
-            get
-            {
-                if (MightHaveChildren())
-                {
-                    return Properties;
-                }
-                else
-                {
-                    return SelfList;
-                }
-            }
-        }
+        public ObservableCollectionExtended<ChunkViewModel> DisplayProperties => MightHaveChildren() ? Properties : SelfList;
 
         [Reactive] public string Value { get; private set; }
         [Reactive] public string Descriptor { get; private set; }
@@ -228,7 +200,7 @@ namespace WolvenKit.ViewModels.Shell
                         .ToList();
 
                     foreach (var i in fullselection)
-                    { try { dict.Remove(i); } catch (Exception ex){Locator.Current.GetService<ILoggerService>().Error(ex);} }
+                    { try { dict.Remove(i); } catch (Exception ex) { Locator.Current.GetService<ILoggerService>().Error(ex); } }
 
                     Tab.File.SetIsDirty(true);
                     Parent.RecalculateProperties();
@@ -245,7 +217,7 @@ namespace WolvenKit.ViewModels.Shell
                         .ToList();
 
                     foreach (var i in fullselection)
-                    { try { db4.Remove(i); } catch (Exception ex){Locator.Current.GetService<ILoggerService>().Error(ex);} }
+                    { try { db4.Remove(i); } catch (Exception ex) { Locator.Current.GetService<ILoggerService>().Error(ex); } }
 
                     Tab.File.SetIsDirty(true);
                     Parent.RecalculateProperties();
@@ -276,10 +248,7 @@ namespace WolvenKit.ViewModels.Shell
             //}
             //TVProperties.AddRange(Properties);
             //this.RaisePropertyChanged("Data");
-            this.WhenAnyValue(x => x.Data).Skip(1).Subscribe((x) =>
-            {
-                Tab.File.SetIsDirty(true);
-            });
+            this.WhenAnyValue(x => x.Data).Skip(1).Subscribe((x) => Tab.File.SetIsDirty(true));
         }
 
         #endregion Constructors
@@ -316,10 +285,7 @@ namespace WolvenKit.ViewModels.Shell
             return list;
         }
 
-        public bool MightHaveChildren()
-        {
-            return HasChildren() || IsArray;
-        }
+        public bool MightHaveChildren() => HasChildren() || IsArray;
 
         public bool HasChildren() => PropertyCount > 0;
 
@@ -327,18 +293,7 @@ namespace WolvenKit.ViewModels.Shell
 
         private readonly RDTDataViewModel _tab;
 
-        public RDTDataViewModel Tab
-        {
-            get
-            {
-                if (_tab != null)
-                {
-                    return _tab;
-                }
-
-                return Parent.Tab;
-            }
-        }
+        public RDTDataViewModel Tab => _tab != null ? _tab : Parent.Tab;
 
         [Reactive] public IRedType Data { get; set; }
 
@@ -376,10 +331,7 @@ namespace WolvenKit.ViewModels.Shell
                 }
                 return _resolvedDataCache;
             }
-            set
-            {
-                _resolvedDataCache = null;
-            }
+            set => _resolvedDataCache = null;
         }
 
         public ChunkViewModel Parent { get; set; }
@@ -676,7 +628,7 @@ namespace WolvenKit.ViewModels.Shell
                                 IsReadOnly = isreadonly
                             });
                         }
-                        catch (Exception ex){Locator.Current.GetService<ILoggerService>().Error(ex);}
+                        catch (Exception ex) { Locator.Current.GetService<ILoggerService>().Error(ex); }
                     }
                 }
             }
@@ -715,10 +667,7 @@ namespace WolvenKit.ViewModels.Shell
                 }
                 return _name;
             }
-            set
-            {
-                _name = null;
-            }
+            set => _name = null;
         }
 
         private void CalculateIsDefault()
@@ -889,17 +838,13 @@ namespace WolvenKit.ViewModels.Shell
                 if (PropertyType != null)
                 {
                     var redName = GetRedTypeFromCSType(PropertyType, _flags);
-                    if (redName != "")
-                    {
-                        return redName;
-                    }
-                    return PropertyType.Name;
+                    return redName != "" ? redName : PropertyType.Name;
                 }
                 return "null";
             }
         }
 
-        public string ResolvedType => ResolvedPropertyType != null ? (GetTypeRedName(ResolvedPropertyType) != null ? GetTypeRedName(ResolvedPropertyType) : ResolvedPropertyType.Name) : "";
+        public string ResolvedType => ResolvedPropertyType != null ? (GetTypeRedName(ResolvedPropertyType) ?? ResolvedPropertyType.Name) : "";
 
         public bool TypesDiffer => PropertyType != ResolvedPropertyType;
 
@@ -983,7 +928,7 @@ namespace WolvenKit.ViewModels.Shell
                         {
                             count += 1;
                         }
-                        if (sdb.Data is IParseableBuffer)
+                        if (sdb.Data is not null)
                         {
                             count += 1;  // needs refinement?
                         }
@@ -1002,7 +947,7 @@ namespace WolvenKit.ViewModels.Shell
                         {
                             count += list.Count;
                         }
-                        else if (db.Data is IParseableBuffer)
+                        else if (db.Data is not null)
                         {
                             count += 1; // needs refinement?
                         }
@@ -1037,10 +982,7 @@ namespace WolvenKit.ViewModels.Shell
                 }
                 return _propertyCountCache;
             }
-            set
-            {
-                _propertyCountCache = -1;
-            }
+            set => _propertyCountCache = -1;
         }
 
         public int ArrayIndexWidth
@@ -1126,13 +1068,9 @@ namespace WolvenKit.ViewModels.Shell
                     {
                         Value = text;
                     }
-                    else if (rn.GetRedHash() != 0)
-                    {
-                        Value = rn.GetRedHash().ToString();
-                    }
                     else
                     {
-                        Value = "null";
+                        Value = rn.GetRedHash() != 0 ? rn.GetRedHash().ToString() : "null";
                     }
                 }
                 else
@@ -1157,14 +1095,7 @@ namespace WolvenKit.ViewModels.Shell
             else if (PropertyType.IsAssignableTo(typeof(LocalizationString)))
             {
                 var value = (LocalizationString)Data;
-                if (value.Value == "" || value.Value == null)
-                {
-                    Value = "null";
-                }
-                else
-                {
-                    Value = value.Value;
-                }
+                Value = value.Value is "" or null ? "null" : value.Value;
             }
             else if (PropertyType.IsAssignableTo(typeof(IRedEnum)))
             {
@@ -1194,14 +1125,7 @@ namespace WolvenKit.ViewModels.Shell
             else if (PropertyType.IsAssignableTo(typeof(CUInt64)))
             {
                 var value = (CUInt64)Data;
-                if (value != 0)
-                {
-                    Value = ((NodeRef)(ulong)value).ToString();
-                }
-                else
-                {
-                    Value = ((ulong)value).ToString();
-                }
+                Value = value != 0 ? ((NodeRef)(ulong)value).ToString() : ((ulong)value).ToString();
             }
             else if (PropertyType.IsAssignableTo(typeof(gamedataLocKeyWrapper)))
             {
@@ -1228,14 +1152,7 @@ namespace WolvenKit.ViewModels.Shell
             else if (PropertyType.IsAssignableTo(typeof(IRedRef)))
             {
                 var value = (IRedRef)Data;
-                if (value != null && value.DepotPath.GetResolvedText() != "")
-                {
-                    Value = value.DepotPath.GetResolvedText();
-                }
-                else
-                {
-                    Value = "null";
-                }
+                Value = value != null && value.DepotPath.GetResolvedText() != "" ? value.DepotPath.GetResolvedText() : "null";
             }
             else if (Data is IBrowsableType ibt)
             {
@@ -1296,7 +1213,7 @@ namespace WolvenKit.ViewModels.Shell
                 var s = (string)str;
                 if (s != null && s.StartsWith("LocKey#") && ulong.TryParse(s.Substring(7), out var locKey2))
                 {
-                    Descriptor = ((ulong)locKey2).ToString();
+                    Descriptor = locKey2.ToString();
                 }
             }
             //if (ResolvedData is CMaterialInstance && Parent != null)
@@ -1466,11 +1383,7 @@ namespace WolvenKit.ViewModels.Shell
                 {
                     return "IssueReopened";
                 }
-                if (PropertyType.IsAssignableTo(typeof(CColor)))
-                {
-                    return "SymbolColor";
-                }
-                return "SymbolClass";
+                return PropertyType.IsAssignableTo(typeof(CColor)) ? "SymbolColor" : "SymbolClass";
             }
         }
 
@@ -1521,7 +1434,7 @@ namespace WolvenKit.ViewModels.Shell
         }
 
         public ICommand AddHandleCommand { get; private set; }
-        private bool CanAddHandle() => (PropertyType?.IsAssignableTo(typeof(IRedBaseHandle)) ?? false);
+        private bool CanAddHandle() => PropertyType?.IsAssignableTo(typeof(IRedBaseHandle)) ?? false;
         private void ExecuteAddHandle()
         {
             var data = RedTypeManager.CreateRedType(PropertyType);
@@ -1786,7 +1699,7 @@ namespace WolvenKit.ViewModels.Shell
                 Tab.File.SetIsDirty(true);
                 Parent.RecalculateProperties();
             }
-            catch (Exception ex){Locator.Current.GetService<ILoggerService>().Error(ex);}
+            catch (Exception ex) { Locator.Current.GetService<ILoggerService>().Error(ex); }
         }
 
         public ICommand DeleteAllCommand { get; private set; }
@@ -1906,7 +1819,7 @@ namespace WolvenKit.ViewModels.Shell
 
                     Locator.Current.GetService<ILoggerService>().Success($"might have done the thing maybe, who knows really");
                 }
-                catch (Exception ex){Locator.Current.GetService<ILoggerService>().Error(ex);}
+                catch (Exception ex) { Locator.Current.GetService<ILoggerService>().Error(ex); }
             }
 
         }
@@ -1945,7 +1858,7 @@ namespace WolvenKit.ViewModels.Shell
                     }
                 }
             }
-            catch (Exception ex){Locator.Current.GetService<ILoggerService>().Error(ex);}
+            catch (Exception ex) { Locator.Current.GetService<ILoggerService>().Error(ex); }
         }
 
 
@@ -2012,13 +1925,11 @@ namespace WolvenKit.ViewModels.Shell
                     RDTDataViewModel.CopiedChunk = Data;
                 }
             }
-            catch (Exception ex){Locator.Current.GetService<ILoggerService>().Error(ex);}
+            catch (Exception ex) { Locator.Current.GetService<ILoggerService>().Error(ex); }
 
         }
 
-
-
-        void AddToCopiedChunks(object elem)
+        private void AddToCopiedChunks(object elem)
         {
             try
             {
@@ -2040,7 +1951,7 @@ namespace WolvenKit.ViewModels.Shell
                     throw new NotImplementedException();
                 }
             }
-            catch (Exception ex){Locator.Current.GetService<ILoggerService>().Error(ex);}
+            catch (Exception ex) { Locator.Current.GetService<ILoggerService>().Error(ex); }
         }
 
 
@@ -2068,7 +1979,7 @@ namespace WolvenKit.ViewModels.Shell
                     RDTDataViewModel.CopiedChunks.Clear();
 
                     foreach (var i in fullselection)
-                    { try { AddToCopiedChunks(i); } catch (Exception ex){Locator.Current.GetService<ILoggerService>().Error(ex);} }
+                    { try { AddToCopiedChunks(i); } catch (Exception ex) { Locator.Current.GetService<ILoggerService>().Error(ex); } }
 
                     //Tab.File.SetIsDirty(true);
                     //Parent.RecalculateProperties();
@@ -2076,7 +1987,7 @@ namespace WolvenKit.ViewModels.Shell
                 else if (Parent.Data is IRedArray)
                 {
                     foreach (var i in fullselection)
-                    { try { AddToCopiedChunks(i); } catch (Exception ex){Locator.Current.GetService<ILoggerService>().Error(ex);} }
+                    { try { AddToCopiedChunks(i); } catch (Exception ex) { Locator.Current.GetService<ILoggerService>().Error(ex); } }
 
                     //Tab.File.SetIsDirty(true);
                     //Parent.RecalculateProperties();
@@ -2116,7 +2027,7 @@ namespace WolvenKit.ViewModels.Shell
                         QuickToJSON(test);
                     }
                 }
-                catch (Exception ex){Locator.Current.GetService<ILoggerService>().Error(ex);}
+                catch (Exception ex) { Locator.Current.GetService<ILoggerService>().Error(ex); }
             }
         }
 
@@ -2143,11 +2054,7 @@ namespace WolvenKit.ViewModels.Shell
                 {
                     return ira;
                 }
-                if (ResolvedData is IRedArray ira2)
-                {
-                    return ira2;
-                }
-                return null;
+                return ResolvedData is IRedArray ira2 ? ira2 : null;
             }
         }
 
@@ -2172,7 +2079,7 @@ namespace WolvenKit.ViewModels.Shell
 
                     if (ResolvedData is IRedBufferPointer db)
                     {
-                        if (db.GetValue().Data is Package04 pkg)
+                        if (db.GetValue().Data is RedPackage pkg)
                         {
                             if (index == -1 || index > pkg.Chunks.Count)
                             {
@@ -2223,7 +2130,7 @@ namespace WolvenKit.ViewModels.Shell
                     }
                 }
             }
-            catch (Exception ex){Locator.Current.GetService<ILoggerService>().Error(ex);}
+            catch (Exception ex) { Locator.Current.GetService<ILoggerService>().Error(ex); }
         }
 
 
@@ -2255,7 +2162,7 @@ namespace WolvenKit.ViewModels.Shell
                     }
                 }
             }
-            catch (Exception ex){Locator.Current.GetService<ILoggerService>().Error(ex);}
+            catch (Exception ex) { Locator.Current.GetService<ILoggerService>().Error(ex); }
         }
 
         public void MoveChild(int index, ChunkViewModel item)
@@ -2422,7 +2329,7 @@ namespace WolvenKit.ViewModels.Shell
 
                 return true;
             }
-            catch (Exception ex){Locator.Current.GetService<ILoggerService>().Error(ex);}
+            catch (Exception ex) { Locator.Current.GetService<ILoggerService>().Error(ex); }
             return false;
         }
 
