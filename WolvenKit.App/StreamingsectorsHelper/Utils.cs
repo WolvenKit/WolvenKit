@@ -338,7 +338,7 @@ namespace WolvenKit.ViewModels.Shell
             //gotta figure out colliders
             wen.IsVisibleInGame = visible;
             wen.EntityTemplate.DepotPath = line.template_path;
-            wen.AppearanceName = line.app == "" ? "default" : line.app;
+            wen.AppearanceName = string.IsNullOrEmpty(line.app) ? "default" : line.app;
             wen.DebugName = line.template_path + "_" + index.ToString();
 
 
@@ -388,7 +388,7 @@ namespace WolvenKit.ViewModels.Shell
             //@"engine\meshes\editor\cube.mesh";
             //
             cmesh.Mesh.DepotPath = line.template_path;
-            cmesh.MeshAppearance = line.app == "" ? "default" : line.app;
+            cmesh.MeshAppearance = string.IsNullOrEmpty(line.app) ? "default" : line.app;
 
             ((IRedArray)wss.Nodes).Insert(index, wenh);
 
