@@ -334,13 +334,11 @@ namespace WolvenKit.ViewModels.Shell
             var wenh = new CHandle<worldNode>(wen);
             var index = wss.Nodes.Count;
 
-            //loading ents just for their colliders
             //gotta figure out colliders
             wen.IsVisibleInGame = visible;
             wen.EntityTemplate.DepotPath = line.template_path;
             wen.AppearanceName = string.IsNullOrEmpty(line.app) ? "default" : line.app;
             wen.DebugName = Path.GetFileNameWithoutExtension(line.template_path) + "_" + index.ToString();
-
 
             if (line.isdoor is bool b && b)
             {
@@ -384,16 +382,11 @@ namespace WolvenKit.ViewModels.Shell
             //cmesh.RemoveFromRainMap = true;
             //cmesh.OccluderType = visWorldOccluderType.Exterior;
 
-            //line.template_path;//
-            //@"engine\meshes\editor\cube.mesh";
-            //
             cmesh.Mesh.DepotPath = line.template_path;
             cmesh.MeshAppearance = string.IsNullOrEmpty(line.app) ? "default" : line.app;
 
             ((IRedArray)wss.Nodes).Insert(index, wenh);
-
             SetCoords(current, index, line, updatecoords, pos, rot);
-
         }
 
         private void SetCoords(worldNodeData current, int index, Prop line, bool updatecoords = true, Vec4 pos = default, Quat rot = default)
@@ -405,29 +398,20 @@ namespace WolvenKit.ViewModels.Shell
 
             var scale = line.isunreal ? GetScale(line, 1) : GetScale(line);
             var f = line.isunreal ? (float)0.01 : 1;
+            var s = line.isunreal ? -1 : 1;
 
             if (line.center != default && updatecoords)
             {
-                if (line.isunreal)
-                {
-                    pos = UpdateCoords(pos, line.center);
-                    current.Position.X += -pos.X * f;
-                    current.Position.Y += pos.Y * f;
-                    current.Position.Z += pos.Z * f;
-                    current.Position.W *= pos.W * f;
-                }
-                else
-                {
-                    pos = UpdateCoords(pos, line.center);
-                    current.Position.X += pos.X * f;
-                    current.Position.Y += pos.Y * f;
-                    current.Position.Z += pos.Z * f;
-                    current.Position.W *= pos.W * f;
-                }
+                pos = UpdateCoords(pos, line.center);
+                current.Position.X += s * pos.X * f;
+                current.Position.Y += pos.Y * f;
+                current.Position.Z += pos.Z * f;
+                current.Position.W *= pos.W * f;
             }
             else
             {
                 current.Position = Vec4.Multiply(f, pos);
+                current.Position.X = s * current.Position.X;
             }
 
             current.Orientation = rot;
@@ -671,35 +655,13 @@ namespace WolvenKit.ViewModels.Shell
 
         private void Add00(List<worldNodeData> json, string tr, bool updatecoords = false)
         {
-            if (Parent.Data is DataBuffer db
-                    && db.Buffer.Data is IRedType irt
-                    && irt is IRedArray ira)
+            if (Parent.Data is DataBuffer db && db.Buffer.Data is IRedArray ira)
             {
-                if (json.Count == ira.Count)
+                for (var i = 0; i < json.Count; i++)
                 {
-                    /*var center = updatecoords
-                        ? GetCenter(json.Select(x => (Vec4)x.Position).ToList())
-                        : new Vec4();*/
-
-                    for (var i = 0; i < json.Count; i++)
-                    {
-                        var line = json[i];
-                        /*if (updatecoords)
-                        {
-                            var pos = UpdateCoords((Vec4)line.Position, center);
-                            line.Position.X += pos.X;
-                            line.Position.Y += pos.Y;
-                            line.Position.Z += pos.Z;
-                            line.Position.W *= pos.W;
-                        }*/
-                        ira[i] = line;
-                    }
+                    var line = json[i];
+                    ira[i] = line;
                 }
-                else
-                {
-                    Locator.Current.GetService<ILoggerService>()
-                        .Error("nodeData and your JSON must contain the same number of elements");
-                } 
             }
         }
 

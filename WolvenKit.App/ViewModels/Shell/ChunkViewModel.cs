@@ -225,7 +225,7 @@ namespace WolvenKit.ViewModels.Shell
                 else
                 {
                     var t = Parent.Data.GetType().Name;
-                    Locator.Current.GetService<ILoggerService>().Error($"Handle this type {t} wen ._. ");
+                    Locator.Current.GetService<ILoggerService>().Warning($"Handle this type {t} wen ._. ");
                 }
             }
             catch (Exception ex)
@@ -1778,12 +1778,15 @@ namespace WolvenKit.ViewModels.Shell
                         return false;
                     }
 
+                    
+
+
                     //gotta find a better way
-                    var json0 = RedJsonSerializer.Deserialize<Root0>(text);
-                    var json1 = RedJsonSerializer.Deserialize<Root1>(text);
-                    var json2 = RedJsonSerializer.Deserialize<Root2>(text);
-                    var json3 = RedJsonSerializer.Deserialize<List<Root3>>(text);
-                    var json4 = RedJsonSerializer.Deserialize<List<worldNodeData>>(text);
+                    var json0 = RedJsonSerializer.TryParse<Root0>(text, false);
+                    var json1 = RedJsonSerializer.TryParse<Root1>(text, false);
+                    var json2 = RedJsonSerializer.TryParse<Root2>(text, false);
+                    var json3 = RedJsonSerializer.TryParse<List<Root3>>(text, false);
+                    var json4 = RedJsonSerializer.TryParse<List<worldNodeData>>(text, false);
                     ;
 
                     if (json0 is not null && json0.props is not null && json0.props.Count > 0)
@@ -1792,23 +1795,33 @@ namespace WolvenKit.ViewModels.Shell
                     }
                     else if (json1 is not null && json1.childs is not null && json1.childs.Count > 0)
                     {
-                        Add00(json1, tr);
+                        Add00(json1, tr, updatecoords);
                     }
                     else if (json2 is not null)
                     {
                         Add00(json2, tr, updatecoords);
                     }
-                    else if (json3 is not null)
+                    else if (json3 is not null && json3.First() is not null && json3.First().pos is not null)
                     {
                         Add00(json3, tr, updatecoords);
                     }
                     else if (json4 is not null)
                     {
-                        Add00(json4, tr);
+                        if (Parent.Data is DataBuffer db && db.Buffer.Data is IRedArray ira
+                            && json4.Count == ira.Count)
+                        {
+                            Add00(json4, tr);
+                        }
+                        else
+                        {
+                            Locator.Current.GetService<ILoggerService>()
+                                .Warning("nodeData and your JSON must contain the same number of elements");
+                            return false;
+                        }
                     }
                     else
                     {
-                        Locator.Current.GetService<ILoggerService>().Error("could not recognize the format of your JSON");
+                        Locator.Current.GetService<ILoggerService>().Warning("could not recognize the format of your JSON");
                         return false;
                     }
 
@@ -1838,7 +1851,6 @@ namespace WolvenKit.ViewModels.Shell
                 }
             }
             return false;
-
         }
 
 
@@ -2012,7 +2024,7 @@ namespace WolvenKit.ViewModels.Shell
                 else
                 {
                     var t = Parent.Data.GetType().Name;
-                    Locator.Current.GetService<ILoggerService>().Error($"Handle this type {t} wen ._. ");
+                    Locator.Current.GetService<ILoggerService>().Warning($"Handle this type {t} wen ._. ");
                 }
             }
             catch (Exception ex)
