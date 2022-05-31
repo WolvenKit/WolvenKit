@@ -44,6 +44,14 @@ namespace WolvenKit.ViewModels.Shell
 {
     public partial class ChunkViewModel : ReactiveObject, ISelectableTreeViewItemModel
     {
+        private static readonly List<string> s_hiddenProperties = new();
+
+        static ChunkViewModel()
+        {
+            s_hiddenProperties.Add("meshMeshMaterialBuffer.rawDataHeaders");
+            s_hiddenProperties.Add("meshMeshMaterialBuffer.rawData");
+        }
+
         public bool PropertiesLoaded;
 
         public ObservableCollectionExtended<ChunkViewModel> Properties { get; } = new();
@@ -447,6 +455,10 @@ namespace WolvenKit.ViewModels.Shell
 
                 for (var i = 0; i < pis.Count + dps.Count; i++)
                 {
+                    if (s_hiddenProperties.Contains(obj.GetType().Name + "." + pis[i].RedName))
+                    {
+                        continue;
+                    }
                     if (pis.Count > i)
                     {
                         var name = !string.IsNullOrEmpty(pis[i].RedName) ? pis[i].RedName : pis[i].Name;

@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using WolvenKit.RED4.Archive.Buffer;
+using WolvenKit.RED4.Archive.CR2W;
 using WolvenKit.RED4.Types;
 
 namespace WolvenKit.RED4.Archive.IO
@@ -21,6 +22,17 @@ namespace WolvenKit.RED4.Archive.IO
 
         public void WriteList(CR2WList list, RedBaseClass root)
         {
+            if (root is meshMeshMaterialBuffer mmmb)
+            {
+                list.Files = new();
+                foreach (var material in mmmb.Materials)
+                {
+                    var file = new CR2WFile();
+                    file.RootChunk = material;
+                    list.Files.Add(file);
+                }
+            }
+
             var headers = new CArray<meshLocalMaterialHeader>();
             var starting_position = _ms.Position;
             foreach (var file in list.Files)
