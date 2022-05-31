@@ -1752,7 +1752,7 @@ namespace WolvenKit.ViewModels.Shell
         private void ExecuteImportChunk() => importchunkbody(true);
         private void ExecuteImportChunk2() => importchunkbody(false);
 
-        private void importchunkbody(bool updatecoords)
+        private bool importchunkbody(bool updatecoords)
         {
             //Open JSON
             var openFileDialog = new OpenFileDialog
@@ -1774,7 +1774,8 @@ namespace WolvenKit.ViewModels.Shell
                     var text = File.ReadAllText(openFileDialog.FileName);
                     if (string.IsNullOrEmpty(text) || current is null)
                     {
-                        throw new SerializationException();
+                        Locator.Current.GetService<ILoggerService>().Error("Could not open file");
+                        return false;
                     }
 
                     //gotta find a better way
@@ -1807,7 +1808,8 @@ namespace WolvenKit.ViewModels.Shell
                     }
                     else
                     {
-                        throw new SerializationException();
+                        Locator.Current.GetService<ILoggerService>().Error("could not recognize the format of your JSON");
+                        return false;
                     }
 
                     if (Parent.Data is DataBuffer dbf && dbf.Buffer.Data is IRedType irtt)
@@ -1828,9 +1830,14 @@ namespace WolvenKit.ViewModels.Shell
                     Refresh();
 
                     Locator.Current.GetService<ILoggerService>().Success($"might have done the thing maybe, who knows really");
+                    return true;
                 }
-                catch (Exception ex) { Locator.Current.GetService<ILoggerService>().Error(ex); }
+                catch (Exception ex)
+                {
+                    Locator.Current.GetService<ILoggerService>().Error(ex);
+                }
             }
+            return false;
 
         }
 
