@@ -1781,7 +1781,8 @@ namespace WolvenKit.ViewModels.Shell
                     var json0 = RedJsonSerializer.Deserialize<Root0>(text);
                     var json1 = RedJsonSerializer.Deserialize<Root1>(text);
                     var json2 = RedJsonSerializer.Deserialize<Root2>(text);
-                    var json3 = RedJsonSerializer.Deserialize<List<worldNodeData>>(text);
+                    var json3 = RedJsonSerializer.Deserialize<List<Root3>>(text);
+                    var json4 = RedJsonSerializer.Deserialize<List<worldNodeData>>(text);
                     ;
 
                     if (json0 is not null && json0.props is not null && json0.props.Count > 0)
@@ -1798,7 +1799,11 @@ namespace WolvenKit.ViewModels.Shell
                     }
                     else if (json3 is not null)
                     {
-                        Add00(json3, tr);
+                        Add00(json3, tr, updatecoords);
+                    }
+                    else if (json4 is not null)
+                    {
+                        Add00(json4, tr);
                     }
                     else
                     {

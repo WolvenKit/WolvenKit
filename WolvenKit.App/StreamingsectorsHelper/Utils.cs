@@ -654,6 +654,21 @@ namespace WolvenKit.ViewModels.Shell
             }
         }
 
+        private void Add00(List<Root3> json, string tr, bool updatecoords = true)
+        {
+            var center = updatecoords
+                        ? GetCenter(json.Select(x => new Vec4(x.pos.x, x.pos.y, x.pos.z, x.pos.w)).ToList())
+                        : new Vec4();
+
+            foreach (Prop line in json)
+            {
+                if (updatecoords)
+                { line.center = center; }
+                line.isunreal = true;
+                AddEntity(tr, line, updatecoords);
+            }
+        }
+
         private void Add00(List<worldNodeData> json, string tr, bool updatecoords = false)
         {
             if (Parent.Data is DataBuffer db
@@ -824,6 +839,16 @@ namespace WolvenKit.ViewModels.Shell
               pos = PosRotToString(C.pos, C.rot)
           };
 
+        public static implicit operator Prop(Root3 C) =>
+          new()
+          {
+              name = Path.GetFileNameWithoutExtension(C.path),
+              app = C.app,
+              template_path = C.path,
+              scale = "nil",
+              pos = PosRotToString(C.pos, C.rot)
+          };
+
         public static implicit operator Prop(List<object> C)
         {
             var pm = Locator.Current.GetService<IProjectManager>();
@@ -887,6 +912,14 @@ namespace WolvenKit.ViewModels.Shell
     public class Root2 : List<List<object>>
     {
 
+    }
+
+    public class Root3 : Root
+    {
+        public string path { get; set; }
+        public Pos pos { get; set; }
+        public string app { get; set; }
+        public Rot rot { get; set; }
     }
 
 }
