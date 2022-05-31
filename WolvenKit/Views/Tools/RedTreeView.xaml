@@ -260,7 +260,8 @@
                     Command="{Binding Path=PlacementTarget.Tag.DuplicateChunkCommand, RelativeSource={RelativeSource AncestorType=ContextMenu}}"
                     Header="Duplicate Item in Array/Buffer"
                     IsCheckable="False"
-                    Style="{StaticResource SyncfusionMenuItemStyle}">
+                    Style="{StaticResource SyncfusionMenuItemStyle}"
+                    Visibility="{Binding Path=PlacementTarget.Tag.ShouldShowArrayOps, RelativeSource={RelativeSource AncestorType=ContextMenu}, Converter={StaticResource Boolean2VisibilityConverter}}">
                     <MenuItem.Icon>
                         <iconPacks:PackIconMaterial
                             Width="13"
@@ -272,10 +273,11 @@
                     </MenuItem.Icon>
                 </MenuItem>
                 <MenuItem
-                    Command="{Binding Path=PlacementTarget.Tag.CopyChunkCommand, RelativeSource={RelativeSource AncestorType=ContextMenu}}"
-                    Header="Copy From Array/Buffer"
+                    Command="{Binding Path=PlacementTarget.Tag.CopyHandleCommand, RelativeSource={RelativeSource AncestorType=ContextMenu}}"
+                    Header="Copy Handle"
                     IsCheckable="False"
-                    Style="{StaticResource SyncfusionMenuItemStyle}">
+                    Style="{StaticResource SyncfusionMenuItemStyle}"
+                    Visibility="{Binding Path=PlacementTarget.Tag.ShouldShowCopyPasteHandle, RelativeSource={RelativeSource AncestorType=ContextMenu}, Converter={StaticResource Boolean2VisibilityConverter}}">
                     <MenuItem.Icon>
                         <iconPacks:PackIconMaterial
                             Width="13"
@@ -285,12 +287,30 @@
                             VerticalAlignment="Center"
                             Kind="ContentCopy" />
                     </MenuItem.Icon>
-                </MenuItem> 
+                </MenuItem>
+                <MenuItem
+                    Command="{Binding Path=PlacementTarget.Tag.CopyChunkCommand, RelativeSource={RelativeSource AncestorType=ContextMenu}}"
+                    Header="Copy From Array/Buffer"
+                    IsCheckable="False"
+                    Style="{StaticResource SyncfusionMenuItemStyle}"
+                    Visibility="{Binding Path=PlacementTarget.Tag.ShouldShowArrayOps, RelativeSource={RelativeSource AncestorType=ContextMenu}, Converter={StaticResource Boolean2VisibilityConverter}}">
+                    <MenuItem.Icon>
+                        <iconPacks:PackIconMaterial
+                            Width="13"
+                            Height="13"
+                            Padding="0,0,0,0"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center"
+                            Kind="ContentCopy" />
+                    </MenuItem.Icon>
+                </MenuItem>
                 <MenuItem
                     Command="{Binding Path=PlacementTarget.Tag.CopySelectionCommand, RelativeSource={RelativeSource AncestorType=ContextMenu}}"
                     Header="Copy Selection From Array/Buffer"
                     IsCheckable="False"
-                    Style="{StaticResource SyncfusionMenuItemStyle}">
+                    Style="{StaticResource SyncfusionMenuItemStyle}"
+                    Visibility="{Binding Path=PlacementTarget.Tag.ShouldShowArrayOps, RelativeSource={RelativeSource AncestorType=ContextMenu}, Converter={StaticResource Boolean2VisibilityConverter}}">
+
                     <MenuItem.Icon>
                         <iconPacks:PackIconMaterial
                             Width="13"
@@ -305,7 +325,9 @@
                     Command="{Binding Path=PlacementTarget.Tag.PasteSelectionCommand, RelativeSource={RelativeSource AncestorType=ContextMenu}}"
                     Header="Paste Selection To Array/Buffer"
                     IsCheckable="False"
-                    Style="{StaticResource SyncfusionMenuItemStyle}">
+                    Style="{StaticResource SyncfusionMenuItemStyle}"
+                    Visibility="{Binding Path=PlacementTarget.Tag.ShouldShowArrayOps, RelativeSource={RelativeSource AncestorType=ContextMenu}, Converter={StaticResource Boolean2VisibilityConverter}}">
+
                     <MenuItem.Icon>
                         <iconPacks:PackIconMaterial
                             Width="13"
@@ -313,17 +335,35 @@
                             Padding="0,0,0,0"
                             HorizontalAlignment="Center"
                             VerticalAlignment="Center"
-                            Kind="ContentCopy" />
+                            Kind="ContentPaste" />
                     </MenuItem.Icon>
                 </MenuItem>
 
 
 
                 <MenuItem
+                    Command="{Binding Path=PlacementTarget.Tag.PasteHandleCommand, RelativeSource={RelativeSource AncestorType=ContextMenu}}"
+                    Header="Paste Handle"
+                    IsCheckable="False"
+                    Style="{StaticResource SyncfusionMenuItemStyle}"
+                    Visibility="{Binding Path=PlacementTarget.Tag.ShouldShowCopyPasteHandle, RelativeSource={RelativeSource AncestorType=ContextMenu}, Converter={StaticResource Boolean2VisibilityConverter}}">
+                    <MenuItem.Icon>
+                        <iconPacks:PackIconMaterial
+                            Width="13"
+                            Height="13"
+                            Padding="0,0,0,0"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center"
+                            Kind="ContentPaste" />
+                    </MenuItem.Icon>
+                </MenuItem>
+                <MenuItem
                     Command="{Binding Path=PlacementTarget.Tag.PasteChunkCommand, RelativeSource={RelativeSource AncestorType=ContextMenu}}"
                     Header="Paste Into Array/Buffer"
                     IsCheckable="False"
-                    Style="{StaticResource SyncfusionMenuItemStyle}">
+                    Style="{StaticResource SyncfusionMenuItemStyle}"
+                    Visibility="{Binding Path=PlacementTarget.Tag.ShouldShowArrayOps, RelativeSource={RelativeSource AncestorType=ContextMenu}, Converter={StaticResource Boolean2VisibilityConverter}}">
+
                     <MenuItem.Icon>
                         <iconPacks:PackIconMaterial
                             Width="13"
@@ -353,7 +393,8 @@
                     Command="{Binding Path=PlacementTarget.Tag.ExportNodeDataCommand, RelativeSource={RelativeSource AncestorType=ContextMenu}}"
                     Header="Export NodeData to JSON"
                     IsCheckable="False"
-                    Style="{StaticResource SyncfusionMenuItemStyle}">
+                    Style="{StaticResource SyncfusionMenuItemStyle}"
+                    Visibility="{Binding Path=PlacementTarget.Tag.ShouldShowExportNodeData, RelativeSource={RelativeSource AncestorType=ContextMenu}, Converter={StaticResource Boolean2VisibilityConverter}}">
                     <MenuItem.Icon>
                         <iconPacks:PackIconCodicons
                             Width="13"
@@ -415,7 +456,8 @@
                     Command="{Binding Path=PlacementTarget.Tag.DeleteItemCommand, RelativeSource={RelativeSource AncestorType=ContextMenu}}"
                     Header="Delete Item in Array/Buffer"
                     IsCheckable="False"
-                    Style="{StaticResource SyncfusionMenuItemStyle}">
+                    Style="{StaticResource SyncfusionMenuItemStyle}"
+                    Visibility="{Binding Path=PlacementTarget.Tag.ShouldShowArrayOps, RelativeSource={RelativeSource AncestorType=ContextMenu}, Converter={StaticResource Boolean2VisibilityConverter}}">
                     <MenuItem.Icon>
                         <iconPacks:PackIconCodicons
                             Width="13"
@@ -430,7 +472,8 @@
                     Command="{Binding Path=PlacementTarget.Tag.DeleteSelectionCommand, RelativeSource={RelativeSource AncestorType=ContextMenu}}"
                     Header="Delete Selection in Array/Buffer"
                     IsCheckable="False"
-                    Style="{StaticResource SyncfusionMenuItemStyle}">
+                    Style="{StaticResource SyncfusionMenuItemStyle}"
+                    Visibility="{Binding Path=PlacementTarget.Tag.ShouldShowArrayOps, RelativeSource={RelativeSource AncestorType=ContextMenu}, Converter={StaticResource Boolean2VisibilityConverter}}">
                     <MenuItem.Icon>
                         <iconPacks:PackIconCodicons
                             Width="13"
@@ -445,7 +488,9 @@
                     Command="{Binding Path=PlacementTarget.Tag.DeleteAllCommand, RelativeSource={RelativeSource AncestorType=ContextMenu}}"
                     Header="Delete All Items in Array/Buffer"
                     IsCheckable="False"
-                    Style="{StaticResource SyncfusionMenuItemStyle}">
+                    Style="{StaticResource SyncfusionMenuItemStyle}"
+                    Visibility="{Binding Path=PlacementTarget.Tag.ShouldShowArrayOps, RelativeSource={RelativeSource AncestorType=ContextMenu}, Converter={StaticResource Boolean2VisibilityConverter}}">
+
                     <MenuItem.Icon>
                         <iconPacks:PackIconMaterial
                             Width="13"
@@ -632,13 +677,11 @@
         ItemDropping="SfTreeView_ItemDropping"
         ItemTemplateSelector="{StaticResource itemTemplateSelector}"
         ItemsSource="{Binding ElementName=redTreeView, Path=ItemsSource, Mode=TwoWay}"
+        NodeCollapsed="OnCollapsed"
         SelectedItem="{Binding ElementName=redTreeView, Path=SelectedItem, Mode=TwoWay}"
         SelectedItems="{Binding ElementName=redTreeView, Path=SelectedItems, Mode=TwoWay}"
-
-        NodeCollapsed="OnCollapsed"        
-        SelectionMode="Extended"
         SelectionChanged="OnSelectionChanged"
-
+        SelectionMode="Extended"
         ShowLines="True"
         VirtualizingPanel.IsVirtualizing="True"
         VirtualizingPanel.ScrollUnit="Pixel"
