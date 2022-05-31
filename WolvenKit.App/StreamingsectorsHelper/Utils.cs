@@ -664,7 +664,7 @@ namespace WolvenKit.ViewModels.Shell
             {
                 if (updatecoords)
                 { line.center = center; }
-                line.isunreal = true;
+                line.isunreal = false;
                 AddEntity(tr, line, updatecoords);
             }
         }
