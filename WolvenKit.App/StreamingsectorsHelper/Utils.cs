@@ -339,7 +339,7 @@ namespace WolvenKit.ViewModels.Shell
             wen.IsVisibleInGame = visible;
             wen.EntityTemplate.DepotPath = line.template_path;
             wen.AppearanceName = string.IsNullOrEmpty(line.app) ? "default" : line.app;
-            wen.DebugName = line.template_path + "_" + index.ToString();
+            wen.DebugName = Path.GetFileNameWithoutExtension(line.template_path) + "_" + index.ToString();
 
 
             if (line.isdoor is bool b && b)
