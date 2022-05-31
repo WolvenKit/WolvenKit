@@ -17,6 +17,10 @@ using WolvenKit.RED4.Archive.CR2W;
 using WolvenKit.RED4.Archive.IO;
 using WolvenKit.RED4.CR2W;
 using WolvenKit.RED4.Types;
+using System.Windows.Input;
+using WolvenKit.Functionality.Commands;
+using WolvenKit.ViewModels.Dialogs;
+using WolvenKit.ViewModels.Shell;
 
 namespace WolvenKit.ViewModels.Documents
 {
@@ -56,6 +60,7 @@ namespace WolvenKit.ViewModels.Documents
             }
 
             Extension = Path.GetExtension(path) != "" ? Path.GetExtension(path).Substring(1) : "";
+            NewEmbeddedFileCommand = new DelegateCommand(_ => ExecuteNewEmbeddedFile());
         }
 
         #region properties
@@ -229,14 +234,19 @@ namespace WolvenKit.ViewModels.Documents
 
         private void PopulateItems()
         {
-            TabItemViewModels.Add(new RDTDataViewModel(Cr2wFile.RootChunk, this));
+            var root = new RDTDataViewModel(Cr2wFile.RootChunk, this);
+            root.FilePath = "(root)";
+            TabItemViewModels.Add(root);
             AddTabForRedType(Cr2wFile.RootChunk);
 
             foreach (var file in Cr2wFile.EmbeddedFiles)
             {
                 if (file.Content != null)
                 {
-                    TabItemViewModels.Add(new RDTDataViewModel(file.Content, this));
+                    var vm = new RDTDataViewModel(file.Content, this);
+                    vm.FilePath = file.FileName;
+                    vm.IsEmbeddedFile = true;
+                    TabItemViewModels.Add(vm);
                     AddTabForRedType(file.Content);
                 }
             }
@@ -272,6 +282,42 @@ namespace WolvenKit.ViewModels.Documents
                 }
             }
             return Files[depotPath];
+        }
+
+        public ICommand NewEmbeddedFileCommand { get; private set; }
+        private void ExecuteNewEmbeddedFile()
+        {
+            var existing = new ObservableCollection<string>(AppDomain.CurrentDomain.GetAssemblies().SelectMany(s => s.GetTypes()).Where(p => p.IsAssignableTo(typeof(CResource)) && p.IsClass).Select(x => x.Name));
+
+            var app = Locator.Current.GetService<AppViewModel>();
+            app.SetActiveDialog(new CreateClassDialogViewModel(existing, true)
+            {
+                DialogHandler = HandleEmbeddedFile
+            });
+        }
+
+        public void HandleEmbeddedFile(DialogViewModel sender)
+        {
+            var app = Locator.Current.GetService<AppViewModel>();
+            app.CloseDialogCommand.Execute(null);
+            if (sender != null)
+            {
+                var dvm = sender as CreateClassDialogViewModel;
+                var instance = RedTypeManager.Create(dvm.SelectedClass);
+
+                var file = new CR2WEmbedded();
+                file.Content = instance;
+                file.FileName = "unnamed." + FileTypeHelper.GetFileExtensionsFromRootName(instance.GetType().Name)[0];
+
+                Cr2wFile.EmbeddedFiles.Add(file);
+                IsDirty = true;
+
+                var vm = new RDTDataViewModel(file.Content, this);
+                vm.FilePath = file.FileName;
+                vm.IsEmbeddedFile = true;
+                TabItemViewModels.Add(vm);
+                AddTabForRedType(file.Content);
+            }
         }
 
         public CR2WFile GetFileFromDepotPath(CName depotPath, bool original = false)
@@ -329,7 +375,7 @@ namespace WolvenKit.ViewModels.Documents
                 }
             }
 
-            BadFile:
+        BadFile:
 
             var _archiveManager = Locator.Current.GetService<IArchiveManager>();
             var file = _archiveManager.Lookup(depotPath.GetRedHash());

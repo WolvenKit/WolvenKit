@@ -24,7 +24,7 @@ namespace WolvenKit.ViewModels.Documents
 
         protected readonly IRedType _data;
 
-        [Reactive] public RedDocumentViewModel File { get; set; }
+        //[Reactive] public RedDocumentViewModel File { get; set; }
 
         public RDTGraphViewModel(IRedType data, RedDocumentViewModel file)
         {

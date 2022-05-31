@@ -24,7 +24,7 @@ namespace WolvenKit.ViewModels.Documents
     {
         protected readonly RedBaseClass _data;
         public inkWidgetLibraryResource library;
-        public RedDocumentViewModel File;
+        //public RedDocumentViewModel File;
 
         [Reactive] public Dictionary<object, inkTextWidget> TextWidgets { get; set; } = new();
 

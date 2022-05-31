@@ -191,7 +191,7 @@ namespace WolvenKit.ViewModels.Documents
         public ViewModelActivator Activator { get; } = new();
 
         protected readonly RedBaseClass _data;
-        public RedDocumentViewModel File;
+        //public RedDocumentViewModel File;
         private Dictionary<string, LoadableModel> _modelList = new();
         private Dictionary<string, SlotSet> _slotSets = new();
 
@@ -375,7 +375,10 @@ namespace WolvenKit.ViewModels.Documents
                 }
                 appIndex++;
             }
-            SelectedAppearance = Appearances[0];
+            if (Appearances.Count > 0)
+            {
+                SelectedAppearance = Appearances[0];
+            }
         }
 
 
