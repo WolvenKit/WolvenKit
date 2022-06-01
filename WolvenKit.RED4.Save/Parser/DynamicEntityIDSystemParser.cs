@@ -6,8 +6,8 @@ namespace WolvenKit.RED4.Save
 {
     public class DynamicEntityIDSystem : INodeData
     {
-        public uint Unknown1 { get; set; }
-        public uint Unk_NextEntityHash { get; set; }
+        public uint NextNonSavableEntityID { get; set; }
+        public uint NextSavableEntityID { get; set; }
         public List<uint> Unknown3 { get; set; }
         public List<KeyValuePair<string, uint>> Unknown4 { get; set; }
         public uint Unk_NextListId { get; set; }
@@ -27,8 +27,8 @@ namespace WolvenKit.RED4.Save
         public void Read(BinaryReader reader, NodeEntry node)
         {
             var data = new DynamicEntityIDSystem();
-            data.Unknown1 = reader.ReadUInt32();
-            data.Unk_NextEntityHash = reader.ReadUInt32();
+            data.NextNonSavableEntityID = reader.ReadUInt32();
+            data.NextSavableEntityID = reader.ReadUInt32();
             var unkCount = reader.ReadUInt32();
             for (int i = 0; i < unkCount; i++)
             {
@@ -48,8 +48,8 @@ namespace WolvenKit.RED4.Save
         {
             var data = (DynamicEntityIDSystem)node.Value;
 
-            writer.Write(data.Unknown1);
-            writer.Write(data.Unk_NextEntityHash);
+            writer.Write(data.NextNonSavableEntityID);
+            writer.Write(data.NextSavableEntityID);
 
             writer.Write(data.Unknown3.Count);
             foreach (var item in data.Unknown3)
