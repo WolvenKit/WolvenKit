@@ -3150,7 +3150,7 @@ public static class RedJsonSerializer
         }
         catch (Exception)
         {
-            result = null;
+            result = default;
             return false;
         }
     }
