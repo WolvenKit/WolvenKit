@@ -1778,34 +1778,41 @@ namespace WolvenKit.ViewModels.Shell
                         return false;
                     }
 
-                    
+
 
 
                     //gotta find a better way
-                    var json0 = RedJsonSerializer.TryParse<Root0>(text, false);
-                    var json1 = RedJsonSerializer.TryParse<Root1>(text, false);
-                    var json2 = RedJsonSerializer.TryParse<Root2>(text, false);
-                    var json3 = RedJsonSerializer.TryParse<List<Root3>>(text, false);
-                    var json4 = RedJsonSerializer.TryParse<List<worldNodeData>>(text, false);
+
+                    /*var json0 = RedJsonSerializer.TryDeserialize<Root0>(text, false);
+                    var json1 = RedJsonSerializer.TryDeserialize<Root1>(text, false);
+                    var json2 = RedJsonSerializer.TryDeserialize<Root2>(text, false);
+                    var json3 = RedJsonSerializer.TryDeserialize<List<Root3>>(text, false);
+                    var json4 = RedJsonSerializer.TryDeserialize<List<worldNodeData>>(text, false);*/
+
                     ;
 
-                    if (json0 is not null && json0.props is not null && json0.props.Count > 0)
+                    if (RedJsonSerializer.TryDeserialize<Root0>(text, out var json0) &&
+                       json0 is not null && json0.props is not null && json0.props.Count > 0)
                     {
                         Add00(json0.props, tr, updatecoords);
                     }
-                    else if (json1 is not null && json1.childs is not null && json1.childs.Count > 0)
+                    else if (RedJsonSerializer.TryDeserialize<Root1>(text, out var json1) &&
+                       json1 is not null && json1.childs is not null && json1.childs.Count > 0)
                     {
                         Add00(json1, tr, updatecoords);
                     }
-                    else if (json2 is not null)
+                    else if (RedJsonSerializer.TryDeserialize<Root2>(text, out var json2) &&
+                       json2 is not null)
                     {
                         Add00(json2, tr, updatecoords);
                     }
-                    else if (json3 is not null && json3.First() is not null && json3.First().pos is not null)
+                    else if (RedJsonSerializer.TryDeserialize<List<Root3>>(text, out var json3) &&
+                       json3 is not null && json3.First() is not null && json3.First().pos is not null)
                     {
                         Add00(json3, tr, updatecoords);
                     }
-                    else if (json4 is not null)
+                    else if (RedJsonSerializer.TryDeserialize<List<worldNodeData>>(text, out var json4) &&
+                       json4 is not null)
                     {
                         if (Parent.Data is DataBuffer db && db.Buffer.Data is IRedArray ira
                             && json4.Count == ira.Count)

@@ -3141,13 +3141,18 @@ public static class RedJsonSerializer
     }
 
 
-    public static T? TryParse<T>(string json, bool v = true)
+    public static bool TryDeserialize<T>(string json, out T? result)
     {
         try
-        { return Deserialize<T>(json); }
-        catch (Exception ex)
-        { if (v) { Locator.Current.GetService<ILoggerService>()?.Error($"Couldn't Import From JSON : {ex}"); } }
-        return default;
+        {
+            result = Deserialize<T>(json);
+            return true;
+        }
+        catch (Exception)
+        {
+            result = null;
+            return false;
+        }
     }
 
     public static T? Deserialize<T>(string json)
