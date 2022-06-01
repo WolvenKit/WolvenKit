@@ -29,7 +29,7 @@ namespace CyberCAT.Forms
             TypeDescriptor.AddAttributes(typeof(InventoryHelper.ModableItemData), new TypeConverterAttribute(typeof(ExpandableObjectConverter)));
             TypeDescriptor.AddAttributes(typeof(InventoryHelper.ModableItemWithQuantityData), new TypeConverterAttribute(typeof(ExpandableObjectConverter)));
             TypeDescriptor.AddAttributes(typeof(IParseableBuffer), new TypeConverterAttribute(typeof(ExpandableObjectConverter)));
-            TypeDescriptor.AddAttributes(typeof(Package04), new TypeConverterAttribute(typeof(ExpandableObjectConverter)));
+            TypeDescriptor.AddAttributes(typeof(RedPackage), new TypeConverterAttribute(typeof(ExpandableObjectConverter)));
             TypeDescriptor.AddAttributes(typeof(RedBaseClass), new TypeConverterAttribute(typeof(ExpandableObjectConverter)));
         }
 
