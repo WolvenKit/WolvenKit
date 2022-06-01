@@ -50,6 +50,8 @@ namespace WolvenKit.ViewModels.Shell
         {
             s_hiddenProperties.Add("meshMeshMaterialBuffer.rawDataHeaders");
             s_hiddenProperties.Add("meshMeshMaterialBuffer.rawData");
+            s_hiddenProperties.Add("entEntityTemplate.compiledData");
+            s_hiddenProperties.Add("appearanceAppearanceDefinition.compiledData");
         }
 
         public bool PropertiesLoaded;
