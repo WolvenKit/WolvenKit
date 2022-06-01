@@ -51,10 +51,16 @@ public class CyberpunkSaveReader
     public EFileReadErrorCodes ReadFile(out CyberpunkSaveFile? file)
     {
         var result = ReadFileInfo(out var info);
-        if (result != EFileReadErrorCodes.NoError)
+        if (result == EFileReadErrorCodes.NoCSav || info == null)
         {
             file = null;
             return result;
+        }
+
+        if (((CyberpunkSaveHeaderStruct)info).gameVersion != (ulong)Enums.gameGameVersion.CP77_Patch_1_5_Actual_Hotfix1)
+        {
+            file = null;
+            return EFileReadErrorCodes.UnsupportedVersion;
         }
 
         BaseStream.Seek(-8, SeekOrigin.End);
