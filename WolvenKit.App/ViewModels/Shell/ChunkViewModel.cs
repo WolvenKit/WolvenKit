@@ -1749,12 +1749,11 @@ namespace WolvenKit.ViewModels.Shell
         public ICommand ImportChunkCommand { get; private set; }
         public ICommand ImportChunk2Command { get; private set; }
         private bool CanImportChunk() => PropertyCount > 0;
-        private void ExecuteImportChunk() => importchunkbody(true);
-        private void ExecuteImportChunk2() => importchunkbody(false);
+        private void ExecuteImportChunk() => Importchunkbody(true);
+        private void ExecuteImportChunk2() => Importchunkbody(false);
 
-        private bool importchunkbody(bool updatecoords)
+        private bool Importchunkbody(bool updatecoords)
         {
-            //Open JSON
             var openFileDialog = new OpenFileDialog
             {
                 Filter = "JSON files (*.json)|*.json|All files (*.*)|*.*",
@@ -1766,102 +1765,86 @@ namespace WolvenKit.ViewModels.Shell
             if (openFileDialog.ShowDialog() == DialogResult.OK)
             {
                 try
-                {
-                    var tr = RedJsonSerializer.Serialize(Data);
-                    var current = RedJsonSerializer.Deserialize<worldNodeData>(tr);
-                    //deepcopy of Data but not really
-
-                    var text = File.ReadAllText(openFileDialog.FileName);
-                    if (string.IsNullOrEmpty(text) || current is null)
-                    {
-                        Locator.Current.GetService<ILoggerService>().Error("Could not open file");
-                        return false;
-                    }
-
-
-
-
-                    //gotta find a better way
-
-                    /*var json0 = RedJsonSerializer.TryDeserialize<Root0>(text, false);
-                    var json1 = RedJsonSerializer.TryDeserialize<Root1>(text, false);
-                    var json2 = RedJsonSerializer.TryDeserialize<Root2>(text, false);
-                    var json3 = RedJsonSerializer.TryDeserialize<List<Root3>>(text, false);
-                    var json4 = RedJsonSerializer.TryDeserialize<List<worldNodeData>>(text, false);*/
-
-                    ;
-
-                    if (RedJsonSerializer.TryDeserialize<Root0>(text, out var json0) &&
-                       json0 is not null && json0.props is not null && json0.props.Count > 0)
-                    {
-                        Add00(json0.props, tr, updatecoords);
-                    }
-                    else if (RedJsonSerializer.TryDeserialize<Root1>(text, out var json1) &&
-                       json1 is not null && json1.childs is not null && json1.childs.Count > 0)
-                    {
-                        Add00(json1, tr, updatecoords);
-                    }
-                    else if (RedJsonSerializer.TryDeserialize<Root2>(text, out var json2) &&
-                       json2 is not null)
-                    {
-                        Add00(json2, tr, updatecoords);
-                    }
-                    else if (RedJsonSerializer.TryDeserialize<List<Root3>>(text, out var json3) &&
-                       json3 is not null && json3.First() is not null && json3.First().pos is not null)
-                    {
-                        Add00(json3, tr, updatecoords);
-                    }
-                    else if (RedJsonSerializer.TryDeserialize<List<worldNodeData>>(text, out var json4) &&
-                       json4 is not null)
-                    {
-                        if (Parent.Data is DataBuffer db && db.Buffer.Data is IRedArray ira
-                            && json4.Count == ira.Count)
-                        {
-                            Add00(json4, tr);
-                        }
-                        else
-                        {
-                            Locator.Current.GetService<ILoggerService>()
-                                .Warning("nodeData and your JSON must contain the same number of elements");
-                            return false;
-                        }
-                    }
-                    else
-                    {
-                        Locator.Current.GetService<ILoggerService>().Warning("could not recognize the format of your JSON");
-                        return false;
-                    }
-
-                    if (Parent.Data is DataBuffer dbf && dbf.Buffer.Data is IRedType irtt)
-                    {
-                        Tab.File.SetIsDirty(true);
-                        RecalculateProperties(irtt);
-                    }
-
-                    var ad = Locator.Current.GetService<AppViewModel>().ActiveDocument;
-
-                    var currentfile = new FileModel(Tab.File.FilePath,
-                        Locator.Current.GetService<AppViewModel>().ActiveProject);
-
-                    Locator.Current.GetService<AppViewModel>().SaveFileCommand.SafeExecute(currentfile);
-
-                    //QuickToJSON(Parent.Parent.Data);
-
-                    Refresh();
-
-                    Locator.Current.GetService<ILoggerService>().Success($"might have done the thing maybe, who knows really");
-                    return true;
-                }
+                { return AddFromJSON(openFileDialog, updatecoords); }
                 catch (Exception ex)
-                {
-                    Locator.Current.GetService<ILoggerService>().Error(ex);
-                }
+                { Locator.Current.GetService<ILoggerService>().Error(ex); }
             }
             return false;
         }
 
+        public bool AddFromJSON(OpenFileDialog openFileDialog, bool updatecoords)
+        {
+            var tr = RedJsonSerializer.Serialize(Data);
+            var current = RedJsonSerializer.Deserialize<worldNodeData>(tr);
+            //deepcopy of Data but not really
 
-        public void QuickToJSON(object irt)
+            var text = File.ReadAllText(openFileDialog.FileName);
+            if (string.IsNullOrEmpty(text) || current is null)
+            {
+                Locator.Current.GetService<ILoggerService>().Error("Could not read file");
+                return false;
+            }
+
+            if (RedJsonSerializer.TryDeserialize<JsonAMM>(text, out var json0) &&
+               json0 is not null && json0.props is not null && json0.props.Count > 0)
+            {
+                AddFromAMM(json0.props, tr, updatecoords);
+            }
+            else if (RedJsonSerializer.TryDeserialize<JsonAMM2>(text, out var json1) &&
+               json1 is not null && json1.childs is not null && json1.childs.Count > 0)
+            {
+                AddFromAMM2(json1, tr, updatecoords);
+            }
+            else if (RedJsonSerializer.TryDeserialize<List<List<object>>>(text, out var json2) &&
+               json2 is not null)
+            {
+                AddFromUnreal(json2, tr, updatecoords);
+            }
+            else if (RedJsonSerializer.TryDeserialize<List<JsonObjectSpawner>>(text, out var json3) &&
+               json3 is not null && json3.First() is not null && json3.First().pos is not null)
+            {
+                AddFromObjectSpawner(json3, tr, updatecoords);
+            }
+            else if (RedJsonSerializer.TryDeserialize<List<worldNodeData>>(text, out var json4) &&
+               json4 is not null)
+            {
+                if (Parent.Data is DataBuffer db && db.Buffer.Data is IRedArray ira
+                    && json4.Count == ira.Count)
+                {
+                    AddFromBlender(json4, tr);
+                }
+                else
+                {
+                    Locator.Current.GetService<ILoggerService>()
+                        .Warning("nodeData and your JSON must contain the same number of elements");
+                    return false;
+                }
+            }
+            else
+            {
+                Locator.Current.GetService<ILoggerService>().Warning("could not recognize the format of your JSON");
+                return false;
+            }
+
+            if (Parent.Data is DataBuffer dbf && dbf.Buffer.Data is IRedType irtt)
+            {
+                Tab.File.SetIsDirty(true);
+                RecalculateProperties(irtt);
+            }
+
+            //var ad = Locator.Current.GetService<AppViewModel>().ActiveDocument;
+            var currentfile = new FileModel(Tab.File.FilePath,
+                Locator.Current.GetService<AppViewModel>().ActiveProject);
+
+            Locator.Current.GetService<AppViewModel>().SaveFileCommand.SafeExecute(currentfile);
+            //QuickToJSON(Parent.Parent.Data);
+            Refresh();
+
+            Locator.Current.GetService<ILoggerService>().Success($"might have done the thing maybe, who knows really");
+            return true;
+        }
+
+        public void WriteObjectToJSON(object irt)
         {
             try
             {
@@ -1878,19 +1861,12 @@ namespace WolvenKit.ViewModels.Shell
                 {
                     if ((myStream = saveFileDialog.OpenFile()) != null)
                     {
-                        //var dto = new RedFileDto(Parent.Parent.Data);
-
                         var json = RedJsonSerializer.Serialize(irt);
-                        //var jsont = RedJsonSerializer.Serialize(Parent.Parent.Tab.File);
-
-
-                        if (string.IsNullOrEmpty(json))
+                        if (!string.IsNullOrEmpty(json))
                         {
-                            throw new SerializationException();
+                            myStream.Write(json.ToCharArray().Select(c => (byte)c).ToArray());
+                            myStream.Close();
                         }
-
-                        myStream.Write(json.ToCharArray().Select(c => (byte)c).ToArray());
-                        myStream.Close();
                     }
                 }
             }
@@ -1965,7 +1941,7 @@ namespace WolvenKit.ViewModels.Shell
 
         }
 
-        private void AddToCopiedChunks(object elem)
+        private static void AddToCopiedChunks(object elem)
         {
             try
             {
@@ -1995,12 +1971,13 @@ namespace WolvenKit.ViewModels.Shell
         private bool CanCopySelection() => IsInArray;
         private void ExecuteCopySelection()
         {
-            var ts = Parent.DisplayProperties
-                            .Where(_ => _.IsSelected)
-                            .Select(_ => _)
-                            .ToList();
             try
             {
+                var ts = Parent.DisplayProperties
+                                .Where(_ => _.IsSelected)
+                                .Select(_ => _)
+                                .ToList();
+
                 var indices = ts.Select(_ => int.Parse(_.Name)).ToList();
                 var (start, end) = (indices.Min(), indices.Max());
 
@@ -2013,20 +1990,24 @@ namespace WolvenKit.ViewModels.Shell
                 if (Parent.Data is IRedBufferPointer)
                 {
                     RDTDataViewModel.CopiedChunks.Clear();
-
                     foreach (var i in fullselection)
-                    { try { AddToCopiedChunks(i); } catch (Exception ex) { Locator.Current.GetService<ILoggerService>().Error(ex); } }
-
-                    //Tab.File.SetIsDirty(true);
-                    //Parent.RecalculateProperties();
+                    {
+                        try
+                        { AddToCopiedChunks(i); }
+                        catch (Exception ex)
+                        { Locator.Current.GetService<ILoggerService>().Error(ex); }
+                    }
                 }
                 else if (Parent.Data is IRedArray)
                 {
+                    RDTDataViewModel.CopiedChunks.Clear();
                     foreach (var i in fullselection)
-                    { try { AddToCopiedChunks(i); } catch (Exception ex) { Locator.Current.GetService<ILoggerService>().Error(ex); } }
-
-                    //Tab.File.SetIsDirty(true);
-                    //Parent.RecalculateProperties();
+                    {
+                        try
+                        { AddToCopiedChunks(i); }
+                        catch (Exception ex)
+                        { Locator.Current.GetService<ILoggerService>().Error(ex); }
+                    }
                 }
                 else
                 {
@@ -2039,32 +2020,27 @@ namespace WolvenKit.ViewModels.Shell
                 Locator.Current.GetService<ILoggerService>()
                     .Error($"Something went wrong while trying to copy the selection : {ex}");
             }
-
             //Tab.SelectedChunk = Parent;
-
         }
 
 
 
         public ICommand ExportNodeDataCommand { get; private set; }
-        private bool CanExportNodeData() => IsInArray;
+        private bool CanExportNodeData() =>
+            IsInArray &&
+            Parent.Data is DataBuffer rb &&
+            Parent.Parent.Data is worldStreamingSector &&
+            rb.Data is worldNodeDataBuffer;
         private void ExecuteExportNodeData()
         {
-            if (Parent.Data is DataBuffer rb && rb.Data is worldNodeDataBuffer wndb)
+            try
             {
-                try
-                {
-                    if (Parent.Parent.Data is worldStreamingSector wss)
-                    {
-                        var nodes = wss.Nodes.ToList();
-
-                        //var nl = new List<(worldNodeData, CName)>();
-                        var test = wndb.ToList();
-                        QuickToJSON(test);
-                    }
-                }
-                catch (Exception ex) { Locator.Current.GetService<ILoggerService>().Error(ex); }
+                if (Parent.Data is DataBuffer rb &&
+                    Parent.Parent.Data is worldStreamingSector &&
+                    rb.Data is worldNodeDataBuffer wndb)
+                { WriteObjectToJSON(wndb.ToList()); }
             }
+            catch (Exception ex) { Locator.Current.GetService<ILoggerService>().Error(ex); }
         }
 
 

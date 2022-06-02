@@ -46,7 +46,7 @@ namespace WolvenKit.ViewModels.Shell
             return new Vec4(cX, cY, cZ, cW);
         }
 
-        private static Vec4 GetCenter(Root2 json)
+        private static Vec4 GetCenter(List<List<object>> json)
         {
             var poslist =
                 json.Select(j =>
@@ -455,7 +455,7 @@ namespace WolvenKit.ViewModels.Shell
             }
         }
 
-        private List<Child> GetLines(Root1 json)
+        private List<Child> GetLines(JsonAMM2 json)
         {
             var props = new List<Child>();
 
@@ -495,9 +495,9 @@ namespace WolvenKit.ViewModels.Shell
             }
         }
 
-        private static Vec4 GetCenter(Root1 r) => new(r.pos.x, r.pos.y, r.pos.z, r.pos.w);
+        private static Vec4 GetCenter(JsonAMM2 r) => new(r.pos.x, r.pos.y, r.pos.z, r.pos.w);
 
-        private void Add00(List<Prop> props, string tr, bool updatecoords = true)
+        private void AddFromAMM(List<Prop> props, string tr, bool updatecoords = true)
         {
             try
             {
@@ -612,7 +612,7 @@ namespace WolvenKit.ViewModels.Shell
             catch (Exception ex) { Locator.Current.GetService<ILoggerService>().Error(ex); }
         }
 
-        private void Add00(Root1 json, string tr, bool updatecoords = true)
+        private void AddFromAMM2(JsonAMM2 json, string tr, bool updatecoords = true)
         {
             var center = updatecoords ? GetCenter(json) : new Vec4();
             var props = GetLines(json);
@@ -625,7 +625,7 @@ namespace WolvenKit.ViewModels.Shell
             }
         }
 
-        private void Add00(Root2 json, string tr, bool updatecoords = true)
+        private void AddFromUnreal(List<List<object>> json, string tr, bool updatecoords = true)
         {
             var center = updatecoords ? GetCenter(json) : new Vec4();
 
@@ -638,7 +638,7 @@ namespace WolvenKit.ViewModels.Shell
             }
         }
 
-        private void Add00(List<Root3> json, string tr, bool updatecoords = true)
+        private void AddFromObjectSpawner(List<JsonObjectSpawner> json, string tr, bool updatecoords = true)
         {
             var center = updatecoords
                         ? GetCenter(json.Select(x => new Vec4(x.pos.x, x.pos.y, x.pos.z, x.pos.w)).ToList())
@@ -648,12 +648,11 @@ namespace WolvenKit.ViewModels.Shell
             {
                 if (updatecoords)
                 { line.center = center; }
-                line.isunreal = false;
                 AddEntity(tr, line, updatecoords);
             }
         }
 
-        private void Add00(List<worldNodeData> json, string tr, bool updatecoords = false)
+        private void AddFromBlender(List<worldNodeData> json, string tr, bool updatecoords = false)
         {
             if (Parent.Data is DataBuffer db && db.Buffer.Data is IRedArray ira)
             {
@@ -687,12 +686,6 @@ namespace WolvenKit.ViewModels.Shell
     }
 
 
-    public class Root
-    {
-        public Root0 r0;
-        public Root1 r1;
-    }
-
     public class Rot
     {
         public float yaw { get; set; }
@@ -722,7 +715,7 @@ namespace WolvenKit.ViewModels.Shell
         public List<Child> childs { get; set; }
     }
 
-    public class Root1 : Root
+    public class JsonAMM2
     {
         public List<Child> childs { get; set; }
         public Pos pos { get; set; }
@@ -801,7 +794,7 @@ namespace WolvenKit.ViewModels.Shell
               pos = PosRotToString(C.pos, C.rot)
           };
 
-        public static implicit operator Prop(Root3 C) =>
+        public static implicit operator Prop(JsonObjectSpawner C) =>
           new()
           {
               name = Path.GetFileNameWithoutExtension(C.path),
@@ -862,7 +855,7 @@ namespace WolvenKit.ViewModels.Shell
         }
     }
 
-    public class Root0 : Root
+    public class JsonAMM
     {
         public bool customIncluded { get; set; }
         public List<Prop> props { get; set; }
@@ -871,12 +864,8 @@ namespace WolvenKit.ViewModels.Shell
         public string file_name { get; set; }
     }
 
-    public class Root2 : List<List<object>>
-    {
 
-    }
-
-    public class Root3 : Root
+    public class JsonObjectSpawner
     {
         public string path { get; set; }
         public Pos pos { get; set; }
