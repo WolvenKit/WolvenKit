@@ -1748,11 +1748,11 @@ namespace WolvenKit.ViewModels.Shell
 
         public ICommand ImportChunkCommand { get; private set; }
         public ICommand ImportChunk2Command { get; private set; }
-        private bool CanImportChunk() => PropertyCount > 0;
-        private void ExecuteImportChunk() => Importchunkbody(true);
-        private void ExecuteImportChunk2() => Importchunkbody(false);
+        private bool CanImportChunk() => Data is worldNodeData && PropertyCount > 0;
+        private void ExecuteImportChunk() => ImportWorldNodeData(true);
+        private void ExecuteImportChunk2() => ImportWorldNodeData(false);
 
-        private bool Importchunkbody(bool updatecoords)
+        private bool ImportWorldNodeData(bool updatecoords)
         {
             var openFileDialog = new OpenFileDialog
             {
