@@ -353,7 +353,7 @@
                     Command="{Binding Path=PlacementTarget.Tag.ExportNodeDataCommand, RelativeSource={RelativeSource AncestorType=ContextMenu}}"
                     Header="Export NodeData to JSON"
                     IsCheckable="False"
-                    Style="{StaticResource SyncfusionMenuItemStyle}">
+                    Visibility="{Binding Path=IsEnabled, RelativeSource={RelativeSource Self}, Mode=OneWay, Converter={StaticResource Boolean2VisibilityConverter}}">
                     <MenuItem.Icon>
                         <iconPacks:PackIconCodicons
                             Width="13"
@@ -366,9 +366,9 @@
                 </MenuItem>
                 <MenuItem
                     Command="{Binding Path=PlacementTarget.Tag.ImportChunkCommand, RelativeSource={RelativeSource AncestorType=ContextMenu}}"
-                    Header="Import from JSON"
+                    Header="Import from JSON to worldStreamingSector"                    
                     IsCheckable="False"
-                    Style="{StaticResource SyncfusionMenuItemStyle}">
+                    Visibility="{Binding Path=IsEnabled, RelativeSource={RelativeSource Self}, Mode=OneWay, Converter={StaticResource Boolean2VisibilityConverter}}">
                     <MenuItem.Icon>
                         <iconPacks:PackIconCodicons
                             Width="13"
@@ -383,7 +383,7 @@
                     Command="{Binding Path=PlacementTarget.Tag.ImportChunk2Command, RelativeSource={RelativeSource AncestorType=ContextMenu}}"
                     Header="Import from JSON (no coords update)"
                     IsCheckable="False"
-                    Style="{StaticResource SyncfusionMenuItemStyle}">
+                    Visibility="{Binding Path=IsEnabled, RelativeSource={RelativeSource Self}, Mode=OneWay, Converter={StaticResource Boolean2VisibilityConverter}}">
                     <MenuItem.Icon>
                         <iconPacks:PackIconCodicons
                             Width="13"
