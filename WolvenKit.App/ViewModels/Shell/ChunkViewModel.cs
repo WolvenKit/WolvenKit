@@ -429,14 +429,14 @@ namespace WolvenKit.ViewModels.Shell
                 {
                     if (i == 0)
                     {
-                        Properties.Add(new ChunkViewModel(kvp.Key, this, "key")
+                        Properties.Add(new ChunkViewModel(kvp.Key, this, "Key")
                         {
                             IsReadOnly = isreadonly
                         });
                     }
                     else
                     {
-                        Properties.Add(new ChunkViewModel(kvp.Value, this, "value")
+                        Properties.Add(new ChunkViewModel(kvp.Value, this, "Value")
                         {
                             IsReadOnly = isreadonly
                         });
