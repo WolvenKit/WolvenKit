@@ -343,6 +343,12 @@ namespace WolvenKit.ViewModels.Tools
                             _notificationService.Success($"Selected Rigs were added to WithRig arguments.");
                             gltfImportArgs.importFormat = GltfImportAsFormat.MeshWithRig;
                             break;
+
+                        case nameof(GltfImportArgs.BaseMesh):
+                            gltfImportArgs.BaseMesh = new List<FileEntry>() { CollectionSelectedItems.Select(_ => _.Model).Cast<FileEntry>().FirstOrDefault() };
+                            _notificationService.Success($"Selected Mesh was added to Mesh arguments.");
+                            gltfImportArgs.importFormat = GltfImportAsFormat.Mesh;
+                            break;
                     }
                     break;
 
@@ -394,7 +400,7 @@ namespace WolvenKit.ViewModels.Tools
                 return;
             }
 
-            var fetchExtension = ERedExtension.rig;
+            var fetchExtension = ERedExtension.mesh;
             List<FileEntry> selectedEntries = new();
             if (args is MeshExportArgs meshExportArgs)
             {
@@ -426,6 +432,11 @@ namespace WolvenKit.ViewModels.Tools
                     case nameof(GltfImportArgs.Rig):
                         selectedEntries = gltfImportArgs.Rig;
                         fetchExtension = ERedExtension.rig;
+                        break;
+
+                    case nameof(GltfImportArgs.BaseMesh):
+                        selectedEntries = gltfImportArgs.BaseMesh;
+                        fetchExtension = ERedExtension.mesh;
                         break;
 
                     default:

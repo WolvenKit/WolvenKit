@@ -3140,22 +3140,28 @@ public static class RedJsonSerializer
         return result;
     }
 
-    public static T? Deserialize<T>(string json)
+
+    public static bool TryDeserialize<T>(string json, out T? result)
     {
         try
         {
-            s_bufferResolver.Begin();
-            s_classResolver.Begin();
-            var result = JsonSerializer.Deserialize<T>(json, Options);
-            s_bufferResolver.End();
-            s_classResolver.End();
-
-            return result;
+            result = Deserialize<T>(json);
+            return true;
         }
-        catch (Exception ex)
+        catch (Exception)
         {
-            Locator.Current.GetService<ILoggerService>()?.Error($"Couldn't Import From JSON : {ex}");
+            result = default;
+            return false;
         }
-        return default;
+    }
+
+    public static T? Deserialize<T>(string json)
+    {
+        s_bufferResolver.Begin();
+        s_classResolver.Begin();
+        var result = JsonSerializer.Deserialize<T>(json, Options);
+        s_bufferResolver.End();
+        s_classResolver.End();
+        return result;
     }
 }

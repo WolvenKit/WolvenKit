@@ -46,7 +46,7 @@ namespace WolvenKit.ViewModels.Shell
             return new Vec4(cX, cY, cZ, cW);
         }
 
-        private static Vec4 GetCenter(Root2 json)
+        private static Vec4 GetCenter(List<List<object>> json)
         {
             var poslist =
                 json.Select(j =>
@@ -334,13 +334,11 @@ namespace WolvenKit.ViewModels.Shell
             var wenh = new CHandle<worldNode>(wen);
             var index = wss.Nodes.Count;
 
-            //loading ents just for their colliders
             //gotta figure out colliders
             wen.IsVisibleInGame = visible;
             wen.EntityTemplate.DepotPath = line.template_path;
-            wen.AppearanceName = line.app == "" ? "default" : line.app;
-            wen.DebugName = line.template_path + "_" + index.ToString();
-
+            wen.AppearanceName = string.IsNullOrEmpty(line.app) ? "default" : line.app;
+            wen.DebugName = Path.GetFileNameWithoutExtension(line.template_path) + "_" + index.ToString();
 
             if (line.isdoor is bool b && b)
             {
@@ -384,16 +382,11 @@ namespace WolvenKit.ViewModels.Shell
             //cmesh.RemoveFromRainMap = true;
             //cmesh.OccluderType = visWorldOccluderType.Exterior;
 
-            //line.template_path;//
-            //@"engine\meshes\editor\cube.mesh";
-            //
             cmesh.Mesh.DepotPath = line.template_path;
-            cmesh.MeshAppearance = line.app == "" ? "default" : line.app;
+            cmesh.MeshAppearance = string.IsNullOrEmpty(line.app) ? "default" : line.app;
 
             ((IRedArray)wss.Nodes).Insert(index, wenh);
-
             SetCoords(current, index, line, updatecoords, pos, rot);
-
         }
 
         private void SetCoords(worldNodeData current, int index, Prop line, bool updatecoords = true, Vec4 pos = default, Quat rot = default)
@@ -405,29 +398,20 @@ namespace WolvenKit.ViewModels.Shell
 
             var scale = line.isunreal ? GetScale(line, 1) : GetScale(line);
             var f = line.isunreal ? (float)0.01 : 1;
+            var s = line.isunreal ? -1 : 1;
 
             if (line.center != default && updatecoords)
             {
-                if (line.isunreal)
-                {
-                    pos = UpdateCoords(pos, line.center);
-                    current.Position.X += -pos.X * f;
-                    current.Position.Y += pos.Y * f;
-                    current.Position.Z += pos.Z * f;
-                    current.Position.W *= pos.W * f;
-                }
-                else
-                {
-                    pos = UpdateCoords(pos, line.center);
-                    current.Position.X += pos.X * f;
-                    current.Position.Y += pos.Y * f;
-                    current.Position.Z += pos.Z * f;
-                    current.Position.W *= pos.W * f;
-                }
+                pos = UpdateCoords(pos, line.center);
+                current.Position.X += s * pos.X * f;
+                current.Position.Y += pos.Y * f;
+                current.Position.Z += pos.Z * f;
+                current.Position.W *= pos.W * f;
             }
             else
             {
                 current.Position = Vec4.Multiply(f, pos);
+                current.Position.X = s * current.Position.X;
             }
 
             current.Orientation = rot;
@@ -471,7 +455,7 @@ namespace WolvenKit.ViewModels.Shell
             }
         }
 
-        private List<Child> GetLines(Root1 json)
+        private List<Child> GetLines(JsonAMM2 json)
         {
             var props = new List<Child>();
 
@@ -511,9 +495,9 @@ namespace WolvenKit.ViewModels.Shell
             }
         }
 
-        private static Vec4 GetCenter(Root1 r) => new(r.pos.x, r.pos.y, r.pos.z, r.pos.w);
+        private static Vec4 GetCenter(JsonAMM2 r) => new(r.pos.x, r.pos.y, r.pos.z, r.pos.w);
 
-        private void Add00(List<Prop> props, string tr, bool updatecoords = true)
+        private void AddFromAMM(List<Prop> props, string tr, bool updatecoords = true)
         {
             try
             {
@@ -628,7 +612,7 @@ namespace WolvenKit.ViewModels.Shell
             catch (Exception ex) { Locator.Current.GetService<ILoggerService>().Error(ex); }
         }
 
-        private void Add00(Root1 json, string tr, bool updatecoords = true)
+        private void AddFromAMM2(JsonAMM2 json, string tr, bool updatecoords = true)
         {
             var center = updatecoords ? GetCenter(json) : new Vec4();
             var props = GetLines(json);
@@ -641,7 +625,7 @@ namespace WolvenKit.ViewModels.Shell
             }
         }
 
-        private void Add00(Root2 json, string tr, bool updatecoords = true)
+        private void AddFromUnreal(List<List<object>> json, string tr, bool updatecoords = true)
         {
             var center = updatecoords ? GetCenter(json) : new Vec4();
 
@@ -651,6 +635,32 @@ namespace WolvenKit.ViewModels.Shell
                 { line.center = center; }
                 line.isunreal = true;
                 AddMesh(tr, line, updatecoords);
+            }
+        }
+
+        private void AddFromObjectSpawner(List<JsonObjectSpawner> json, string tr, bool updatecoords = true)
+        {
+            var center = updatecoords
+                        ? GetCenter(json.Select(x => new Vec4(x.pos.x, x.pos.y, x.pos.z, x.pos.w)).ToList())
+                        : new Vec4();
+
+            foreach (Prop line in json)
+            {
+                if (updatecoords)
+                { line.center = center; }
+                AddEntity(tr, line, updatecoords);
+            }
+        }
+
+        private void AddFromBlender(List<worldNodeData> json, string tr, bool updatecoords = false)
+        {
+            if (Parent.Data is DataBuffer db && db.Buffer.Data is IRedArray ira)
+            {
+                for (var i = 0; i < json.Count; i++)
+                {
+                    var line = json[i];
+                    ira[i] = line;
+                }
             }
         }
 
@@ -675,12 +685,6 @@ namespace WolvenKit.ViewModels.Shell
 
     }
 
-
-    public class Root
-    {
-        public Root0 r0;
-        public Root1 r1;
-    }
 
     public class Rot
     {
@@ -711,7 +715,7 @@ namespace WolvenKit.ViewModels.Shell
         public List<Child> childs { get; set; }
     }
 
-    public class Root1 : Root
+    public class JsonAMM2
     {
         public List<Child> childs { get; set; }
         public Pos pos { get; set; }
@@ -790,6 +794,16 @@ namespace WolvenKit.ViewModels.Shell
               pos = PosRotToString(C.pos, C.rot)
           };
 
+        public static implicit operator Prop(JsonObjectSpawner C) =>
+          new()
+          {
+              name = Path.GetFileNameWithoutExtension(C.path),
+              app = C.app,
+              template_path = C.path,
+              scale = "nil",
+              pos = PosRotToString(C.pos, C.rot)
+          };
+
         public static implicit operator Prop(List<object> C)
         {
             var pm = Locator.Current.GetService<IProjectManager>();
@@ -841,7 +855,7 @@ namespace WolvenKit.ViewModels.Shell
         }
     }
 
-    public class Root0 : Root
+    public class JsonAMM
     {
         public bool customIncluded { get; set; }
         public List<Prop> props { get; set; }
@@ -850,9 +864,13 @@ namespace WolvenKit.ViewModels.Shell
         public string file_name { get; set; }
     }
 
-    public class Root2 : List<List<object>>
-    {
 
+    public class JsonObjectSpawner
+    {
+        public string path { get; set; }
+        public Pos pos { get; set; }
+        public string app { get; set; }
+        public Rot rot { get; set; }
     }
 
 }
