@@ -488,19 +488,6 @@ namespace WolvenKit.ViewModels.Tools
         private static readonly Regex Negation = new("^(?'Open'\\(\\?:)*\\!(?<term>.+?)(?'Close-Open'\\))*$", RegexpOpts, RegexpSafetyTimeout);
         private static readonly Regex SquashExtraWilds = new("((\\(\\?:)?\\.\\*\\??\\)?){2,}", RegexpOpts, RegexpSafetyTimeout);
 
-        private static readonly Func<string, SearchRefinement> IntoTypedRefinementsAndTerms =
-            (string refinementString) =>
-                Hash.Match(refinementString).Groups["num"].Value switch {
-                    "" =>
-                        new PatternRefinement
-                            {
-                                Terms = Whitespace.Split(refinementString).Select(term => new Term { Type = TermType.Unknown, Pattern = term }).ToArray(),
-                            },
-                    string num =>
-                        // let it fail, caught at the top
-                        new HashRefinement { Hash = ulong.Parse(num) },
-                };
-
         private static readonly Func<Term, Term> HonorFileExtension =
             (Term term) =>
                 term with { Pattern = Regex.Replace(term.Pattern, "(^|\\W)\\.(?<term>\\w+?)", "$1\\.${term}") };
@@ -528,7 +515,38 @@ namespace WolvenKit.ViewModels.Tools
                             NegationPattern = Negation.Replace(term.Pattern,"")
                         };
 
-        private static readonly Func<SearchRefinement, CyberSearch> AsMatchFunctions =
+        // Pipeline
+
+        private static readonly Func<string, SearchRefinement> TermsIntoSequentialPipeline =
+            (string refinementString) =>
+                Hash.Match(refinementString).Groups["num"].Value switch {
+                    "" =>
+                        new PatternRefinement
+                        {
+                            Terms = Whitespace.Split(refinementString).Select(term => new Term { Type = TermType.Unknown, Pattern = term }).ToArray(),
+                        },
+                    string num =>
+                        // let it fail, caught at the top
+                        new HashRefinement { Hash = ulong.Parse(num) },
+                };
+
+        private static readonly Func<SearchRefinement, SearchRefinement> PipelineIntoSpecificTypedRefinements =
+            (searchRefinement) => searchRefinement switch
+            {
+                PatternRefinement patternRefinement =>
+                    patternRefinement with
+                    {
+                        Terms = patternRefinement.Terms
+                            .Select(HonorFileExtension)
+                            .Select(DropUnnecessaryGlobStars)
+                            .Select(LimitOrToOneTerm)
+                            .Select(AllowExcludingTerm)
+                            .ToArray()
+                    },
+                _ => searchRefinement
+            };
+
+        private static readonly Func<SearchRefinement, CyberSearch> RefinementsIntoMatchFunctions =
             (SearchRefinement searchRefinement) => {
                 switch (searchRefinement) {
                     case HashRefinement hashRefinement:
@@ -573,7 +591,7 @@ namespace WolvenKit.ViewModels.Tools
 
         private void CyberEnhancedSearch()
         {
-            // Exceptions - this is bananatown but otherwise we're repeating the types all over the place
+            // Exceptions - this is bananatown you can't put this outside the func, but otherwise we're repeating the types all over the place
             Func<Exception, IObservable<IChangeSet<RedFileViewModel, ulong>>> LogExceptionAndReturnEmpty =
                 ex =>
                 {
@@ -584,21 +602,9 @@ namespace WolvenKit.ViewModels.Tools
             var searchAsSequentialRefinements =
                 RefinementSeparator
                     .Split(SearchBarText)
-                    .Select(IntoTypedRefinementsAndTerms)
-                    .Select(searchRefinement => searchRefinement switch {
-                        PatternRefinement patternRefinement =>
-                            patternRefinement with
-                            {
-                                Terms = patternRefinement.Terms
-                                    .Select(HonorFileExtension)
-                                    .Select(DropUnnecessaryGlobStars)
-                                    .Select(LimitOrToOneTerm)
-                                    .Select(AllowExcludingTerm)
-                                    .ToArray()
-                            },
-                        _ => searchRefinement
-                    })
-                    .Select(AsMatchFunctions)
+                    .Select(TermsIntoSequentialPipeline)
+                    .Select(PipelineIntoSpecificTypedRefinements)
+                    .Select(RefinementsIntoMatchFunctions)
                     .ToArray();
 
             var gameFilesOrMods =
