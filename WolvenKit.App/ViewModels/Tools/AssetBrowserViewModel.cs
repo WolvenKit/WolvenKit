@@ -478,11 +478,13 @@ namespace WolvenKit.ViewModels.Tools
 
         private readonly record struct CyberSearch(Func<IGameFile, bool> Match, SearchRefinement SourceRefinement);
 
+        // Term to refinement pattern conversion regexps
+
         private static readonly RegexOptions RegexpOpts = RegexOptions.Compiled | RegexOptions.IgnoreCase;
         private static readonly TimeSpan RegexpSafetyTimeout = TimeSpan.FromSeconds(60);
 
         private static readonly Regex RefinementSeparator = new("\\s+>\\s+", RegexpOpts, RegexpSafetyTimeout);
-        private static readonly Regex Hash = new("^(hash:)?(?<num>\\d+)$", RegexpOpts, RegexpSafetyTimeout);
+        private static readonly Regex Hash = new("^hash:(?<num>\\d+)$", RegexpOpts, RegexpSafetyTimeout);
         private static readonly Regex Whitespace = new("\\s+", RegexpOpts, RegexpSafetyTimeout);
         private static readonly Regex Or = new("\\|", RegexpOpts, RegexpSafetyTimeout);
         private static readonly Regex Negation = new("^(?'Open'\\(\\?:)*\\!(?<term>.+?)(?'Close-Open'\\))*$", RegexpOpts, RegexpSafetyTimeout);
