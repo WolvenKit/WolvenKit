@@ -543,8 +543,8 @@ namespace WolvenKit.RED4.Archive.IO
                 var typeInfo = RedReflection.GetTypeInfo(embeddedFile.Content);
                 SetParent(_chunkInfos[embeddedFile.Content].Id, maxDepth: typeInfo.ChildLevel);
 
-                var tuple = new ImportEntry("", (CName)embeddedFile.FileName, (ushort)8);
-                if (!result.ImportList.Contains(tuple))
+                var tuple = new ImportEntry("", embeddedFile.FileName, 8);
+                if (result.ImportList.All(x => x.DepotPath != tuple.DepotPath))
                 {
                     result.ImportList.Add(tuple);
                 }
