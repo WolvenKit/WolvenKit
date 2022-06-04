@@ -78,7 +78,7 @@ namespace WolvenKit.Common.FNV1A
             {
                 unchecked
                 {
-                    hash = (hash ^ (uint)b) * FnvHashPrime;
+                    hash = (hash ^ (ulong)b) * FnvHashPrime;
                 }
             }
 
