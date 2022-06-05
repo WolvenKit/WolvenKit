@@ -480,6 +480,11 @@ namespace WolvenKit.RED4.IO
         {
             var typeInfo = RedReflection.GetEnumTypeInfo(instance.GetInnerType());
             var valueName = typeInfo.GetRedNameFromCSName(instance.ToEnumString());
+
+            if (valueName == "None")
+            {
+                valueName = "";
+            }
             
             CNameRef.Add(_writer.BaseStream.Position, valueName);
             _writer.Write(GetStringIndex(valueName));
