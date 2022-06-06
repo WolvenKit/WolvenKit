@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text.Json;
+using SharpGLTF.Validation;
+using SharpGLTF.Schema2;
 using WolvenKit.Common;
 using WolvenKit.Common.Conversion;
 using WolvenKit.Common.Extensions;
@@ -24,7 +26,7 @@ namespace WolvenKit.Modkit.RED4
     /// </summary>
     public partial class ModTools
     {
-        public bool ExportMeshWithMaterials(Stream meshStream, FileInfo outfile, List<Archive> archives, string matRepo, EUncookExtension eUncookExtension = EUncookExtension.dds, bool isGLBinary = true, bool LodFilter = true)
+        public bool ExportMeshWithMaterials(Stream meshStream, FileInfo outfile, List<Archive> archives, string matRepo, EUncookExtension eUncookExtension = EUncookExtension.dds, bool isGLBinary = true, bool LodFilter = true, ValidationMode vmode = ValidationMode.TryFix)
         {
             if (matRepo == null)
             {
@@ -52,11 +54,11 @@ namespace WolvenKit.Modkit.RED4
 
             if (isGLBinary)
             {
-                model.SaveGLB(outfile.FullName);
+                model.SaveGLB(outfile.FullName, new WriteSettings(vmode));
             }
             else
             {
-                model.SaveGLTF(outfile.FullName);
+                model.SaveGLTF(outfile.FullName, new WriteSettings(vmode));
             }
 
             meshStream.Dispose();
