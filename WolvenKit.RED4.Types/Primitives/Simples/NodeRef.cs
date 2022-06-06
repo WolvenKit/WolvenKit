@@ -56,9 +56,8 @@ namespace WolvenKit.RED4.Types
 
             if (!s_NodeRefStringCache.ContainsKey(_value))
             {
-                var buffer = Encoding.UTF8.GetBytes(_value);
-                var sBuffer = Array.ConvertAll(buffer, b => b != 0x80 ? (byte)Math.Abs((sbyte)b) : (byte)0x80);
-                var hash = FNV1A64HashAlgorithm.HashReadOnlySpan(sBuffer);
+                var hash = FNV1A64HashAlgorithm.HashString(_value, Encoding.UTF8, false, true);
+
                 s_NodeRefStringCache.TryAdd(_value, hash);
                 s_NodeRefHashCache.TryAdd(hash, _value);
             }

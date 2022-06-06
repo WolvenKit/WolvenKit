@@ -102,6 +102,15 @@ namespace WolvenKit.RED4.Archive.IO
             }
         }
 
+        public override void Write(IRedEnum instance)
+        {
+            var typeInfo = RedReflection.GetEnumTypeInfo(instance.GetInnerType());
+            var valueName = typeInfo.GetRedNameFromCSName(instance.ToEnumString());
+
+            CNameRef.Add(_writer.BaseStream.Position, valueName);
+            _writer.Write(GetStringIndex(valueName));
+        }
+
         public override void Write(IRedBitField instance)
         {
             var enumString = instance.ToBitFieldString();
