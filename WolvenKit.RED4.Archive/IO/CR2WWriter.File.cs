@@ -456,6 +456,8 @@ namespace WolvenKit.RED4.Archive.IO
             public byte[] BufferData { get; set; }
         }
 
+        protected override void GenerateBufferBytes(RedBuffer buffer) => WriteBufferData(buffer);
+
         private DataCollection GenerateData()
         {
             var result = new DataCollection();
@@ -527,11 +529,6 @@ namespace WolvenKit.RED4.Archive.IO
 
                     chunkCounter++;
                 }
-            }
-
-            foreach (var kvp in file.BufferRef)
-            {
-                WriteBufferData(kvp.Value);
             }
 
             file.GenerateStringDictionary();
