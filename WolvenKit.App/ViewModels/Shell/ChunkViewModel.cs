@@ -1927,12 +1927,17 @@ namespace WolvenKit.ViewModels.Shell
         private bool CanExportChunk() => PropertyCount > 0;
         private void ExecuteExportChunk()
         {
+            string filename = XPath;
+            if (Descriptor != null)
+            {
+                filename = Descriptor;
+            }
             Stream myStream;
             var saveFileDialog = new SaveFileDialog
             {
                 Filter = "JSON files (*.json)|*.json|All files (*.*)|*.*",
                 FilterIndex = 2,
-                FileName = XPath + ".json",
+                FileName = filename + ".json",
                 RestoreDirectory = true
             };
 
