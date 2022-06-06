@@ -229,7 +229,8 @@
                     Command="{Binding Path=PlacementTarget.Tag.OpenChunkCommand, RelativeSource={RelativeSource AncestorType=ContextMenu}}"
                     Header="Open in New Tab"
                     IsCheckable="False"
-                    Style="{StaticResource SyncfusionMenuItemStyle}">
+                    Style="{StaticResource SyncfusionMenuItemStyle}"
+                    Visibility="{Binding Path=IsEnabled, RelativeSource={RelativeSource Self}, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}">
                     <MenuItem.Icon>
                         <iconPacks:PackIconCodicons
                             Width="13"
@@ -406,10 +407,11 @@
                     </MenuItem.Icon>
                 </MenuItem>
                 <MenuItem
-                    Command="{Binding Path=PlacementTarget.Tag.ImportChunkCommand, RelativeSource={RelativeSource AncestorType=ContextMenu}}"
+                    Command="{Binding Path=PlacementTarget.Tag.ImportWorldNodeDataCommand, RelativeSource={RelativeSource AncestorType=ContextMenu}}"
                     Header="Import from JSON to worldStreamingSector"
                     IsCheckable="False"
-                    Visibility="{Binding Path=IsEnabled, RelativeSource={RelativeSource Self}, Mode=OneWay, Converter={StaticResource Boolean2VisibilityConverter}}">
+                    Style="{StaticResource SyncfusionMenuItemStyle}"
+                    Visibility="{Binding Path=PlacementTarget.Tag.ShouldShowWorldNodeDataImport, RelativeSource={RelativeSource AncestorType=ContextMenu}, Converter={StaticResource Boolean2VisibilityConverter}}">
                     <MenuItem.Icon>
                         <iconPacks:PackIconCodicons
                             Width="13"
@@ -421,10 +423,11 @@
                     </MenuItem.Icon>
                 </MenuItem>
                 <MenuItem
-                    Command="{Binding Path=PlacementTarget.Tag.ImportChunk2Command, RelativeSource={RelativeSource AncestorType=ContextMenu}}"
+                    Command="{Binding Path=PlacementTarget.Tag.ImportWorldNodeDataWithoutCoordsCommand, RelativeSource={RelativeSource AncestorType=ContextMenu}}"
                     Header="Import from JSON (no coords update)"
                     IsCheckable="False"
-                    Visibility="{Binding Path=IsEnabled, RelativeSource={RelativeSource Self}, Mode=OneWay, Converter={StaticResource Boolean2VisibilityConverter}}">
+                    Style="{StaticResource SyncfusionMenuItemStyle}"
+                    Visibility="{Binding Path=PlacementTarget.Tag.ShouldShowWorldNodeDataImport, RelativeSource={RelativeSource AncestorType=ContextMenu}, Converter={StaticResource Boolean2VisibilityConverter}}">
                     <MenuItem.Icon>
                         <iconPacks:PackIconCodicons
                             Width="13"

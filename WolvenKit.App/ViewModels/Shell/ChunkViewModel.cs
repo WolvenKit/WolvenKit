@@ -164,8 +164,8 @@ namespace WolvenKit.ViewModels.Shell
             OpenRefCommand = new DelegateCommand(_ => ExecuteOpenRef(), _ => CanOpenRef());
             AddRefCommand = new DelegateCommand(_ => ExecuteAddRef(), _ => CanAddRef());
             ExportChunkCommand = new DelegateCommand(_ => ExecuteExportChunk(), _ => CanExportChunk());
-            ImportChunkCommand = new DelegateCommand(_ => ExecuteImportChunk(), _ => CanImportChunk());
-            ImportChunk2Command = new DelegateCommand(_ => ExecuteImportChunk2(), _ => CanImportChunk());
+            ImportWorldNodeDataCommand = new DelegateCommand(_ => ExecuteImportWorldNodeData(), _ => CanImportWorldNodeData());
+            ImportWorldNodeDataWithoutCoordsCommand = new DelegateCommand(_ => ExecuteImportWorldNodeDataWithoutCoords(), _ => CanImportWorldNodeData());
             AddItemToArrayCommand = new DelegateCommand(_ => ExecuteAddItemToArray(), _ => CanAddItemToArray());
             AddHandleCommand = new DelegateCommand(_ => ExecuteAddHandle(), _ => CanAddHandle());
             AddItemToCompiledDataCommand = new DelegateCommand(_ => ExecuteAddItemToCompiledData(), _ => CanAddItemToCompiledData());
@@ -1771,12 +1771,16 @@ namespace WolvenKit.ViewModels.Shell
             RecalculateProperties();
         }
 
-        public ICommand ImportChunkCommand { get; private set; }
-        public ICommand ImportChunk2Command { get; private set; }
+        // WorldNodeData Ops
 
-        private bool CanImportChunk() => Data is worldNodeData && PropertyCount > 0;
-        private void ExecuteImportChunk() => ImportWorldNodeData(true);
-        private void ExecuteImportChunk2() => ImportWorldNodeData(false);
+        public bool ShouldShowWorldNodeDataImport => Data is worldNodeData;
+
+        public ICommand ImportWorldNodeDataCommand { get; private set; }
+        public ICommand ImportWorldNodeDataWithoutCoordsCommand { get; private set; }
+
+        private bool CanImportWorldNodeData() => Data is worldNodeData && PropertyCount > 0;
+        private void ExecuteImportWorldNodeData() => ImportWorldNodeData(true);
+        private void ExecuteImportWorldNodeDataWithoutCoords() => ImportWorldNodeData(false);
 
         private bool ImportWorldNodeData(bool updatecoords)
         {
@@ -1899,6 +1903,25 @@ namespace WolvenKit.ViewModels.Shell
             catch (Exception ex) { Locator.Current.GetService<ILoggerService>().Error(ex); }
         }
 
+        public bool ShouldShowExportNodeData => Parent != null && Parent.Data is DataBuffer rb && rb.Data is worldNodeDataBuffer;
+
+        public ICommand ExportNodeDataCommand { get; private set; }
+        private bool CanExportNodeData() =>
+            IsInArray &&
+            Parent.Data is DataBuffer rb &&
+            Parent.Parent.Data is worldStreamingSector &&
+            rb.Data is worldNodeDataBuffer;
+        private void ExecuteExportNodeData()
+        {
+            try
+            {
+                if (Parent.Data is DataBuffer rb &&
+                    Parent.Parent.Data is worldStreamingSector &&
+                    rb.Data is worldNodeDataBuffer wndb)
+                { WriteObjectToJSON(wndb.ToList()); }
+            }
+            catch (Exception ex) { Locator.Current.GetService<ILoggerService>().Error(ex); }
+        }
 
         public ICommand ExportChunkCommand { get; private set; }
         private bool CanExportChunk() => PropertyCount > 0;
@@ -2153,10 +2176,7 @@ namespace WolvenKit.ViewModels.Shell
                     RDTDataViewModel.CopiedChunks.Clear();
                     foreach (var i in fullselection)
                     {
-                        try
-                        { AddToCopiedChunks(i); }
-                        catch (Exception ex)
-                        { Locator.Current.GetService<ILoggerService>().Error(ex); }
+                        AddToCopiedChunks(i);
                     }
                 }
                 else if (Parent.Data is IRedArray)
@@ -2164,16 +2184,13 @@ namespace WolvenKit.ViewModels.Shell
                     RDTDataViewModel.CopiedChunks.Clear();
                     foreach (var i in fullselection)
                     {
-                        try
-                        { AddToCopiedChunks(i); }
-                        catch (Exception ex)
-                        { Locator.Current.GetService<ILoggerService>().Error(ex); }
+                        AddToCopiedChunks(i);
                     }
                 }
                 else
                 {
                     var t = Parent.Data.GetType().Name;
-                    Locator.Current.GetService<ILoggerService>().Warning($"Handle this type {t} wen ._. ");
+                    Locator.Current.GetService<ILoggerService>().Warning($"Cannot copy unsupported type: {t}");
                 }
             }
             catch (Exception ex)
@@ -2224,8 +2241,6 @@ namespace WolvenKit.ViewModels.Shell
                             });
                         }
                     }
-
-
                     if (Parent.ResolvedData is IRedBufferPointer)
                     {
                         if (Parent.InsertChild(index, e))
@@ -2233,17 +2248,12 @@ namespace WolvenKit.ViewModels.Shell
                             //RDTDataViewModel.CopiedChunk = null;
                         }
                     }
-
-
-
-
                     if (Parent.ResolvedData is IRedArray)
                     {
                         if (Parent.InsertChild(index, e))
                         {
                             //RDTDataViewModel.CopiedChunk = null;
                         }
-
                     }
                     if (ResolvedData is IRedArray)
                     {
@@ -2251,29 +2261,8 @@ namespace WolvenKit.ViewModels.Shell
                         {
                             //RDTDataViewModel.CopiedChunk = null;
                         }
-
                     }
                 }
-            }
-            catch (Exception ex) { Locator.Current.GetService<ILoggerService>().Error(ex); }
-        }
-
-        public bool ShouldShowExportNodeData => Parent != null && Parent.Data is DataBuffer rb && rb.Data is worldNodeDataBuffer;
-
-        public ICommand ExportNodeDataCommand { get; private set; }
-        private bool CanExportNodeData() =>
-            IsInArray &&
-            Parent.Data is DataBuffer rb &&
-            Parent.Parent.Data is worldStreamingSector &&
-            rb.Data is worldNodeDataBuffer;
-        private void ExecuteExportNodeData()
-        {
-            try
-            {
-                if (Parent.Data is DataBuffer rb &&
-                    Parent.Parent.Data is worldStreamingSector &&
-                    rb.Data is worldNodeDataBuffer wndb)
-                { WriteObjectToJSON(wndb.ToList()); }
             }
             catch (Exception ex) { Locator.Current.GetService<ILoggerService>().Error(ex); }
         }
