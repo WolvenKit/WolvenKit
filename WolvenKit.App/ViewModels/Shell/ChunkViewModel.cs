@@ -1940,8 +1940,8 @@ namespace WolvenKit.ViewModels.Shell
             {
                 if ((myStream = saveFileDialog.OpenFile()) != null)
                 {
-                    var dto = new RedTypeDto(ResolvedData);
-                    var json = RedJsonSerializer.Serialize(dto);
+                    //var dto = new RedTypeDto(ResolvedData);
+                    var json = RedJsonSerializer.Serialize(ResolvedData);
 
                     if (string.IsNullOrEmpty(json))
                     {
