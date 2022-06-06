@@ -464,7 +464,12 @@ namespace WolvenKit.ViewModels.Tools
             CollectionAvailableItems.Clear();
             if (_archiveManager != null)
             {
-                CollectionAvailableItems.AddRange(_archiveManager.GetGroupedFiles()[$".{fetchExtension}"].Select(_ => new CollectionItemViewModel(_)));
+                CollectionAvailableItems.AddRange(_archiveManager
+                    .GetGroupedFiles()[$".{fetchExtension}"]
+                    .Select(_ => new CollectionItemViewModel(_))
+                    .GroupBy(x => x.Name)
+                    .Select(x => x.First())
+                );
             }
         }
 
