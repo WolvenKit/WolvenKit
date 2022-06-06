@@ -777,7 +777,14 @@ namespace WolvenKit.Modkit.RED4
             Re4Mesh.indices = new ushort[mesh.indices.Length];
             for (var i = 0; i < mesh.indices.Length; i++)
             {
-                Re4Mesh.indices[i] = Convert.ToUInt16(mesh.indices[i]);
+                if (mesh.indices[i] <= ushort.MaxValue)
+                {
+                    Re4Mesh.indices[i] = Convert.ToUInt16(mesh.indices[i]);
+                }
+                else
+                {
+                    throw new Exception($"Too many vertices ({mesh.indices[i]}) in submesh - max is {ushort.MaxValue}");
+                }
             }
 
             return Re4Mesh;
