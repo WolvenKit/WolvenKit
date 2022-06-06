@@ -1269,6 +1269,20 @@ namespace WolvenKit.ViewModels.Shell
                     }
                 }
             }
+            else if (ResolvedData is CMaterialInstance && Parent != null && Tab.File.Cr2wFile.RootChunk is CMesh mesh2)
+            {
+                for (var i = 0; i < mesh2.PreloadLocalMaterialInstances.Count; i++)
+                {
+                    if (mesh2.PreloadLocalMaterialInstances[i] == Data)
+                    {
+                        if (mesh2.MaterialEntries.Count > i)
+                        {
+                            Descriptor = mesh2.MaterialEntries[i].Name;
+                        }
+                        break;
+                    }
+                }
+            }
             else if (ResolvedData != null)
             {
                 if (Data is IBrowsableDictionary ibd)
