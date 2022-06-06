@@ -614,7 +614,11 @@ namespace WolvenKit.ViewModels.Tools
                         success = await ImportSingle(item);
                     }
                 }
-                success = await ImportWavs(wavs);
+
+                if (wavs.Count > 0)
+                {
+                    success = await ImportWavs(wavs);
+                }
             }
             if (IsExportsSelected)
             {
