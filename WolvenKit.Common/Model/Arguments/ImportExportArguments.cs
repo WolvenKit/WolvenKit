@@ -183,6 +183,10 @@ namespace WolvenKit.Common.Model.Arguments
         [Description("If checked the corresponding archive file will be used for importing.")]
         public bool Keep { get; set; } = true;
         [Category("Default Import Settings")]
+        [Display(Name = "Use selected base mesh")]
+        [Description("If checked the specified mesh file will be used for importing.")]
+        public bool SelectBase { get; set; } = false;
+        [Category("Default Import Settings")]
         [Display(Name = "Use selected rig")]
         [Description("If checked the corresponding rig file will be used for importing.")]
         public bool KeepRig { get; set; } = false;
@@ -281,8 +285,16 @@ namespace WolvenKit.Common.Model.Arguments
         /// </summary>
         [Category("WithRig Settings")]
         [Display(Name = "Select Rig")]
-        [Description("Select a rig to omport within the mesh.")]
+        [Description("Select a rig to import within the mesh.")]
         public List<FileEntry> Rig { get; set; }
+
+        /// <summary>
+        /// Selected Rig for Mesh WithRig Export. ALWAYS USE THE FIRST ENTRY IN THE LIST.
+        /// </summary>
+        [Category("Import Settings")]
+        [Display(Name = "Select Base Mesh")]
+        [Description("Select a base mesh to import on.")]
+        public List<FileEntry> BaseMesh { get; set; }
 
         /// <summary>
         /// Fills empty sub meshes with dummy data

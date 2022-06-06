@@ -90,9 +90,24 @@ namespace WolvenKit.Modkit.RED4
                         }
 
                         using var reader = new CR2WReader(ms);
-                        _ = reader.ReadFile(out var mi, false);
+                        _ = reader.ReadFile(out var matFile, false);
 
-                        ExternalMaterial.Add(mi.RootChunk as CMaterialInstance);
+                        var mi = matFile.RootChunk as CMaterialInstance;
+                        if (mi != null)
+                        {
+                            ExternalMaterial.Add(mi);
+                        } else
+                        {
+                            // The external materials can also directly reference MaterialTemplates. To keep it easier for the exporter we can expose these as material instances
+                            var fakeMaterialInstance = new CMaterialInstance()
+                            {
+                                BaseMaterial = new CResourceReference<IMaterial> { DepotPath = path },
+                                Values = new CArray<CKeyValuePair>()
+                            };
+
+                            ExternalMaterial.Add(fakeMaterialInstance);
+                        }
+
 
                         foreach (var import in reader.ImportsList)
                         {

@@ -40,9 +40,7 @@ namespace WolvenKit.RED4.Types
 
             if (!s_cNameCache.ContainsKey(_value))
             {
-                var buffer = Encoding.UTF8.GetBytes(_value);
-                var sBuffer = Array.ConvertAll(buffer, b => b != 0x80 ? (byte)Math.Abs((sbyte)b) : (byte)0x80);
-                s_cNameCache.TryAdd(_value, FNV1A64HashAlgorithm.HashReadOnlySpan(sBuffer));
+                s_cNameCache.TryAdd(_value, FNV1A64HashAlgorithm.HashString(_value, Encoding.UTF8, false, true));
             }
 
             return s_cNameCache[_value];

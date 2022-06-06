@@ -637,19 +637,21 @@ namespace WolvenKit.Modkit.RED4
 
         private bool ImportGltf(RedRelativePath rawRelative, DirectoryInfo outDir, GltfImportArgs args)
         {
-            var am = Locator.Current.GetService<IArchiveManager>();
-            var somefile = am.Lookup(11327483717126307343); //some ice cube  11327483717126307343
-                                                            //some cube     15966709641681476693
-                                                            //chicken       6971078133910275869
-            var file = somefile.Value;
-            
+            string redfile;
+            var ext = args.importFormat ==
+                GltfImportAsFormat.MeshWithRig ? $".mesh" : $".{args.importFormat.ToString().ToLower()}";
 
-            if (args.Keep)
+
+            if (args.SelectBase)
             {
+                if (args.BaseMesh is null)
+                {
+                    _loggerService.Warning($"Please select a base mesh");
+                    return false;
+                }
 
-                var ext = args.importFormat == GltfImportAsFormat.MeshWithRig ? $".mesh" : $".{args.importFormat.ToString().ToLower()}";
-                var redfile = FindRedFile(rawRelative, outDir, ext);
-                if (string.IsNullOrEmpty(redfile))
+                if (_archiveManager.Lookup(args.BaseMesh.FirstOrDefault().NameHash64).Value
+                    is Core.Interfaces.IGameFile file)
                 {
                     var name = rawRelative.NameWithoutExtension.ToLower() + ".mesh";
                     var rr = new RedRelativePath(rawRelative);
@@ -662,57 +664,75 @@ namespace WolvenKit.Modkit.RED4
                     file.Extract(fs);
 
                     redfile = FindRedFile(rr, outDir, ext);
-                }
 
-                var redfileName = Path.GetFileName(redfile);
-                using var redFs = new FileStream(redfile, FileMode.Open, FileAccess.ReadWrite);
-                try
-                {
-                    var result = false;
-                    switch (args.importFormat)
-                    {
-                        case GltfImportAsFormat.Mesh:
-                            result = ImportMesh(rawRelative.ToFileInfo(), redFs, args);
-                            break;
-                        case GltfImportAsFormat.Morphtarget:
-                            result = ImportMorphTargets(rawRelative.ToFileInfo(), redFs, args);
-                            break;
-                        case GltfImportAsFormat.Anims:
-                            result = ImportAnims(rawRelative.ToFileInfo(), redFs, args.Archives);
-                            break;
-                        case GltfImportAsFormat.MeshWithRig:
-                            result = ImportMesh(rawRelative.ToFileInfo(), redFs, args);
-                            break;
-                        case GltfImportAsFormat.Rig:
-                            result = ImportRig(rawRelative.ToFileInfo(), redFs, args);
-                            break;
-                    }
-
-                    if (result)
-                    {
-                        _loggerService.Success($"Rebuilt with buffers: {redfileName} ");
-                    }
-                    else
-                    {
-                        _loggerService.Error($"Failed to rebuild with buffers: {redfileName}");
-                    }
-                    return result;
                 }
-                catch (Exception e)
+                else
                 {
-                    _loggerService.Error(e);
+                    _loggerService.Error($"Could not open base mesh {args.BaseMesh.FirstOrDefault().FileName}");
                     return false;
-                }
-                finally
-                {
-                    redFs.Close();
                 }
 
             }
+            else if (args.Keep)
+            {
+                redfile = FindRedFile(rawRelative, outDir, ext);
+                if (string.IsNullOrEmpty(redfile))
+                {
+                    _loggerService.Warning($"No existing redfile found to rebuild for {rawRelative.Name}");
+                    return false;
+                }
+            }
+            else
+            {
+                _loggerService.Warning($"{rawRelative.Name} - Direct mesh importing is not implemented");
+                return false;
+            }
+
+            var redfileName = Path.GetFileName(redfile);
+            using var redFs = new FileStream(redfile, FileMode.Open, FileAccess.ReadWrite);
+            try
+            {
+                var result = false;
+                switch (args.importFormat)
+                {
+                    case GltfImportAsFormat.Mesh:
+                        result = ImportMesh(rawRelative.ToFileInfo(), redFs, args);
+                        break;
+                    case GltfImportAsFormat.Morphtarget:
+                        result = ImportMorphTargets(rawRelative.ToFileInfo(), redFs, args);
+                        break;
+                    case GltfImportAsFormat.Anims:
+                        result = ImportAnims(rawRelative.ToFileInfo(), redFs, args.Archives);
+                        break;
+                    case GltfImportAsFormat.MeshWithRig:
+                        result = ImportMesh(rawRelative.ToFileInfo(), redFs, args);
+                        break;
+                    case GltfImportAsFormat.Rig:
+                        result = ImportRig(rawRelative.ToFileInfo(), redFs, args);
+                        break;
+                }
+
+                if (result)
+                {
+                    _loggerService.Success($"Rebuilt with buffers: {redfileName} ");
+                }
+                else
+                {
+                    _loggerService.Error($"Failed to rebuild with buffers: {redfileName}");
+                }
+                return result;
+            }
+            catch (Exception e)
+            {
+                _loggerService.Error(e);
+                return false;
+            }
+            finally
+            {
+                redFs.Close();
+            }
 
 
-            _loggerService.Warning($"{rawRelative.Name} - Direct mesh importing is not implemented");
-            return false;
         }
 
         private static ECookedFileFormat FromRawExtension(ERawFileFormat rawextension) =>
