@@ -1627,7 +1627,10 @@ namespace WolvenKit.ViewModels.Shell
             {
                 var vm = sender as CreateClassDialogViewModel;
                 var instance = RedTypeManager.Create(vm.SelectedClass);
-                InsertChild(-1, instance);
+                if (!InsertChild(-1, instance))
+                {
+                    Locator.Current.GetService<ILoggerService>().Error("Unable to insert child");
+                }
             }
         }
 
@@ -1645,7 +1648,10 @@ namespace WolvenKit.ViewModels.Shell
                 if (newItem is IRedBaseHandle handle)
                 {
                     handle.SetValue(instance);
-                    InsertChild(-1, newItem);
+                    if (!InsertChild(-1, newItem))
+                    {
+                        Locator.Current.GetService<ILoggerService>().Error("Unable to insert child");
+                    }
                 }
             }
         }
