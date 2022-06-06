@@ -76,6 +76,7 @@
     <PackageReference Include="HelixToolkit.SharpDX.Assimp" Version="2.20.2" />
     <PackageReference Include="HelixToolkit.SharpDX.Core.Wpf" Version="2.20.2" />
     <PackageReference Include="gpm.Installer" Version="0.2.4" />
+    <PackageReference Include="Markdig.Wpf" Version="0.5.0.1" />
     <PackageReference Include="Microsoft.Extensions.FileSystemGlobbing" Version="6.0.0" />
     <PackageReference Include="Nodify" Version="1.7.0" /> 
     <PackageReference Include="morelinq" Version="3.3.2" />

@@ -7,6 +7,7 @@
     xmlns:hc="https://handyorg.github.io/handycontrol"
     xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
     xmlns:local="clr-namespace:WolvenKit"
+    xmlns:markdig="clr-namespace:Markdig.Wpf;assembly=Markdig.Wpf"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:others="clr-namespace:WolvenKit.Views.Others"
     xmlns:reactiveUi="http://reactiveui.net"
@@ -41,6 +42,7 @@
 
                     <iconPacks:PackIconCodicons x:Key="AB_ToggleModButtonIcon_ToMods" Kind="Package" />
                     <iconPacks:PackIconCodicons x:Key="AB_ToggleModButtonIcon_ToBase" Kind="Archive" />
+                    <iconPacks:PackIconCodicons x:Key="AB_SearchContextHelpIcon" Kind="Info" />
 
                 </Grid.Resources>
 
@@ -68,6 +70,7 @@
                         <ColumnDefinition Width="Auto" />
                         <ColumnDefinition Width="Auto" />
                         <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
                     </Grid.ColumnDefinitions>
 
                     <Button
@@ -113,12 +116,34 @@
                         Grid.Column="2"
                         Margin="5,0,0,0"
                         VerticalAlignment="Top"
-                        hc:InfoElement.Placeholder="Search all game or mod files, e.g. game !quest judy .ent|.app|.mesh"
+                        hc:InfoElement.Placeholder="Search all game or mod files! (i) for help. `judy .mesh`, `.mesh > diving > judy`, `judy .ent|.app`, `quest !river`"
                         FlowDirection="LeftToRight"
                         SearchStarted="FileSearchBar_SearchStarted"
                         ShowClearButton="False"
-                        Style="{StaticResource SearchBarPlus}" />
+                        Style="{StaticResource SearchBarPlus}"
+                     />
 
+                    <Button
+                        x:Name="SearchHelpPopupButton"
+                        Grid.Column="3"
+                        Margin="5,0,0,0"
+                        VerticalAlignment="Center"
+                        Visibility="Visible">
+                        <Button.Style>
+                            <Style BasedOn="{StaticResource ButtonDefault}" TargetType="Button">
+                                <Setter Property="Content" Value="{StaticResource AB_SearchContextHelpIcon}" />
+                                <Setter Property="Foreground" Value="LightBlue" />
+                                <Setter Property="BorderBrush" Value="LightBlue" />
+                            </Style>
+                        </Button.Style>
+                        <hc:Poptip.Instance>
+                            <hc:Poptip PlacementType="LeftBottom">
+                                <hc:Poptip.Content>
+                                    <markdig:MarkdownViewer Name="SearchContextHelpMarkdownViewer"></markdig:MarkdownViewer>
+                                </hc:Poptip.Content>
+                            </hc:Poptip>
+                        </hc:Poptip.Instance>
+                    </Button>
 
                 </Grid>
 

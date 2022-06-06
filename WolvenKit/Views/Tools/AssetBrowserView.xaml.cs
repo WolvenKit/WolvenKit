@@ -37,6 +37,7 @@ namespace WolvenKit.Views.Tools
             ViewModel = Locator.Current.GetService<AssetBrowserViewModel>();
             DataContext = ViewModel;
 
+            Loaded += OnLoaded;
 
             this.WhenActivated(disposables =>
             {
@@ -117,6 +118,9 @@ namespace WolvenKit.Views.Tools
             });
 
         }
+
+        private void OnLoaded(object sender, RoutedEventArgs e) =>
+            RenderMarkdown();
 
         #region methods
 
@@ -482,6 +486,23 @@ namespace WolvenKit.Views.Tools
                     args.ChildItems = childFolders.Directories.Values.OrderBy(x => x.Name).ToList();
                 }
             }
+        }
+
+        private void RenderMarkdown()
+        {
+            var md = $@"
+- `judy` single term matches anywhere in an asset path
+- `judy suit` multiple terms match left to right, allowing anything between
+- `judy .mesh` file type match is just another term
+- `judy suit .mesh|.ent|.app` -matching one of many options uses `|` (no spaces)
+- `judy !shoes .app|.ent` exclusion is supported with `!` (no space after)
+- `hash:12344563563` special cases: `hash:` prefix matches a file hash
+- ` > ` refines preceding search if you like searching iteratively
+  - `suit > judy` is the same as `judy suit` because every refinement searches left to right
+  - This is mostly a convenience but it's often easier to search for something, then refine, repeat
+  - The full syntax above works in every refinement (technically you always have one refinement)
+";
+            SearchContextHelpMarkdownViewer.SetCurrentValue(Markdig.Wpf.MarkdownViewer.MarkdownProperty, md);
         }
     }
 }
