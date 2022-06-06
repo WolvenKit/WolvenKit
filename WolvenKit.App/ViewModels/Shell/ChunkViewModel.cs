@@ -1932,7 +1932,7 @@ namespace WolvenKit.ViewModels.Shell
             {
                 Filter = "JSON files (*.json)|*.json|All files (*.*)|*.*",
                 FilterIndex = 2,
-                FileName = Type + ".json",
+                FileName = XPath + ".json",
                 RestoreDirectory = true
             };
 
@@ -1940,7 +1940,6 @@ namespace WolvenKit.ViewModels.Shell
             {
                 if ((myStream = saveFileDialog.OpenFile()) != null)
                 {
-                    //var dto = new RedTypeDto(ResolvedData);
                     var json = RedJsonSerializer.Serialize(ResolvedData);
 
                     if (string.IsNullOrEmpty(json))
