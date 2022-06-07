@@ -1199,7 +1199,11 @@ namespace WolvenKit.Modkit.RED4
             {
                 if (Path.GetExtension(file.FileName).Contains("mt"))
                 {
-                    materialTemplates.Add(file.FileName, file.Content as CMaterialTemplate);
+                    var mt = file.Content as CMaterialTemplate;
+                    if(mt != null)
+                    {
+                        materialTemplates.Add(file.FileName, mt);
+                    }
                 }
             }
 
