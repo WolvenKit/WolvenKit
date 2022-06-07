@@ -28,7 +28,7 @@ namespace WolvenKit.Modkit.RED4
             return ExportAnim(animsFile, archives, outfile, isGLBinary,incRootMotion);
         }
 
-        public bool ExportAnim(CR2WFile animsFile, List<Archive> archives, FileInfo outfile, bool isGLBinary = true, bool incRootMotion = true)
+        public bool ExportAnim(CR2WFile animsFile, List<Archive> archives, FileInfo outfile, bool isGLBinary = true, bool incRootMotion = true, ValidationMode vmode = ValidationMode.TryFix)
         {
             if (animsFile == null || animsFile.RootChunk is not animAnimSet anims)
             {
@@ -62,11 +62,11 @@ namespace WolvenKit.Modkit.RED4
 
             if (isGLBinary)
             {
-                model.SaveGLB(outfile.FullName);
+                model.SaveGLB(outfile.FullName, new WriteSettings(vmode));
             }
             else
             {
-                model.SaveGLTF(outfile.FullName);
+                model.SaveGLTF(outfile.FullName, new WriteSettings(vmode));
             }
 
             return true;
