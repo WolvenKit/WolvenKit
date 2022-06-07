@@ -66,7 +66,7 @@ namespace WolvenKit.Modkit.RED4.Tools
 
             var model = RawMeshesToMinimalGLTF(expMeshes);
 
-            model.SaveGLB(outFile.FullName);
+            model.SaveGLB(outFile.FullName, new WriteSettings(ValidationMode.TryFix));
 
             return true;
         }
