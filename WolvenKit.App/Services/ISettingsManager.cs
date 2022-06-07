@@ -49,6 +49,8 @@ namespace WolvenKit.Functionality.Services
 
         public bool IsUpdateAvailable { get; set; }
 
+        public bool IsDiscordStatusEnabled { get; set; }
+
         string GetRED4OodleDll();
 
         string GetW3GameContentDir();

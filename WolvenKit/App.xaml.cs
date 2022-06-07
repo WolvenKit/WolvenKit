@@ -82,10 +82,16 @@ namespace WolvenKit
             loggerService.Info("Initializing Shell");
             Initializations.InitializeShell(settings);
 
-
-            loggerService.Info("Initializing Discord RPC API");
-            DiscordHelper.InitializeDiscordRPC();
-
+            if (settings is {IsDiscordStatusEnabled: true})
+            {
+                loggerService.Info("Initializing Discord RPC API");
+                DiscordHelper.InitializeDiscordRPC();
+            }
+            else
+            {
+                loggerService.Info("Discord RPC is disabled, not initializing");
+            }
+            
             loggerService.Info("Initializing Github API");
             Initializations.InitializeGitHub();
 

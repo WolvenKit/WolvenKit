@@ -151,6 +151,11 @@ namespace WolvenKit.Functionality.Services
         [Reactive]
         public string ThemeAccentString { get; set; }
 
+        [Category("General")]
+        [Display(Name = "Discord RPC Enabled")]
+        [Reactive]
+        public bool IsDiscordStatusEnabled { get; set; }
+
         // unused
         [Reactive]
         [Browsable(false)]

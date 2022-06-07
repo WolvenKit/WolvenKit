@@ -17,7 +17,7 @@ namespace WolvenKit.Functionality.WKitGlobal.Helpers
 
         public static void InitializeDiscordRPC()
         {
-            if (DiscordRPCEnabled == true && DiscordRPCInitizialized == false)
+            if (DiscordRPCEnabled && !DiscordRPCInitizialized)
             {
                 client = new DiscordRPC.DiscordRpcClient(DiscordAppID);
                 client.OnReady += (sender, e) => Console.WriteLine("Received Ready from user {0}", e.User.Username);
