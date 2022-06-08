@@ -21,10 +21,7 @@ namespace CP77Tools.Tasks
                 return;
             }
 
-            Parallel.ForEach(path, file =>
-            {
-                ExportTaskInner(file, outDir, uncookext, flip, forcebuffers);
-            });
+            Parallel.ForEach(path, file => ExportTaskInner(file, outDir, uncookext, flip, forcebuffers));
         }
 
         private void ExportTaskInner(string path, string outDir, EUncookExtension? uext, bool? flip, ECookedFileFormat[] forcebuffers)

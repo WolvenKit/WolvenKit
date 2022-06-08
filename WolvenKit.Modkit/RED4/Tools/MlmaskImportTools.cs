@@ -944,13 +944,9 @@ namespace WolvenKit.Modkit.RED4.MLMask
                         // D3DX10 / D3DX11 didn't take into account the proper minimum value for the bRange (BC4S/BC5S) case
                         iStep = 6 == cSteps && pPoints[(int)iPoint] <= fX * 0.5f ? (uint)6 : 0;
                     }
-                    else if (fDot >= fSteps)
-                    {
-                        iStep = 6 == cSteps && pPoints[(int)iPoint] >= (fY + 1.0f) * 0.5f ? 7 : cSteps - 1;
-                    }
                     else
                     {
-                        iStep = (uint)(fDot + 0.5f);
+                        iStep = fDot >= fSteps ? 6 == cSteps && pPoints[(int)iPoint] >= (fY + 1.0f) * 0.5f ? 7 : cSteps - 1 : (uint)(fDot + 0.5f);
                     }
 
                     if (iStep < cSteps)
@@ -980,9 +976,7 @@ namespace WolvenKit.Modkit.RED4.MLMask
 
                 if (fX > fY)
                 {
-                    var f = fX;
-                    fX = fY;
-                    fY = f;
+                    (fY, fX) = (fX, fY);
                 }
 
                 if (dX * dX < 1.0f / 64.0f && dY * dY < 1.0f / 64.0f)

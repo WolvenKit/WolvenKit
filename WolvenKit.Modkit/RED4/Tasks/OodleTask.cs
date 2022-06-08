@@ -29,7 +29,7 @@ namespace CP77Tools.Tasks
                 using var br = new BinaryReader(ms);
 
                 var oodleCompression = br.ReadBytes(4);
-                if (!(oodleCompression.SequenceEqual(new byte[] { 0x4b, 0x41, 0x52, 0x4b })))
+                if (!oodleCompression.SequenceEqual(new byte[] { 0x4b, 0x41, 0x52, 0x4b }))
                 {
                     throw new NotImplementedException();
                 }
@@ -47,7 +47,7 @@ namespace CP77Tools.Tasks
 
                 File.WriteAllBytes($"{outpath}.bin", msout.ToArray());
 
-                _loggerService.Success($"Finished decompressing: { outpath}.bin");
+                _loggerService.Success($"Finished decompressing: {outpath}.bin");
             }
 
             if (compress)

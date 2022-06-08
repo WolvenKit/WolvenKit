@@ -119,7 +119,7 @@ namespace CP77Tools.Tasks
                     var infile = fileInfo.FullName;
                     if (await Task.Run(() => _modTools.ConvertToAndWrite(format, infile, outputDirInfo)))
                     {
-                        _loggerService.Success($"Saved {infile} to {format.ToString()}.");
+                        _loggerService.Success($"Saved {infile} to {format}.");
                     }
                 }
 
@@ -143,7 +143,7 @@ namespace CP77Tools.Tasks
             }
 
             watch.Stop();
-            _loggerService.Info($"Elapsed time: {watch.ElapsedMilliseconds.ToString()}ms.");
+            _loggerService.Info($"Elapsed time: {watch.ElapsedMilliseconds}ms.");
         }
 
         #endregion Methods

@@ -4,30 +4,20 @@ using System.IO;
 using System.Linq;
 using SharpGLTF.Schema2;
 using WolvenKit.RED4.Types;
+using Quat = System.Numerics.Quaternion;
+using Vec3 = System.Numerics.Vector3;
 
 namespace WolvenKit.Modkit.RED4.Animation
 {
-    using Quat = System.Numerics.Quaternion;
-    using Vec3 = System.Numerics.Vector3;
-
     public class CompressedBuffer
     {
-        public static Vec3 TRVector(float x, float y, float z)
-        {
-            return new Vec3(x, z, -y);
-        }
+        public static Vec3 TRVector(float x, float y, float z) => new(x, z, -y);
 
-        public static Quat RQuat(float x, float y, float z, float w)
-        {
-            return new Quat(x, z, -y, w);
-        }
+        public static Quat RQuat(float x, float y, float z, float w) => new(x, z, -y, w);
 
-        public static Vec3 SVector(float x, float y, float z)
-        {
-            return new Vec3(x, z, y);
-        }
+        public static Vec3 SVector(float x, float y, float z) => new(x, z, y);
 
-        public static void AddAnimation(ref ModelRoot model, animAnimation animAnimDes,bool incRootMotion = true)
+        public static void AddAnimation(ref ModelRoot model, animAnimation animAnimDes, bool incRootMotion = true)
         {
             var blob = animAnimDes.AnimBuffer.GetValue() as animAnimationBufferCompressed;
             //boneidx time value

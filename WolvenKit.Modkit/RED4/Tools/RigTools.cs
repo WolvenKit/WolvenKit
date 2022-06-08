@@ -5,12 +5,11 @@ using SharpGLTF.Schema2;
 using WolvenKit.Modkit.RED4.GeneralStructs;
 using WolvenKit.RED4.Archive.CR2W;
 using WolvenKit.RED4.Types;
+using Quat = System.Numerics.Quaternion;
+using Vec3 = System.Numerics.Vector3;
 
 namespace WolvenKit.Modkit.RED4.RigFile
 {
-    using Quat = System.Numerics.Quaternion;
-    using Vec3 = System.Numerics.Vector3;
-
     public class RIG
     {
         public static RawArmature ProcessRig(CR2WFile cr2w)
@@ -24,7 +23,7 @@ namespace WolvenKit.Modkit.RED4.RigFile
             {
                 BoneCount = animrig.BoneNames.Count,
                 Names = animrig.BoneNames.Select(_ => _.GetResolvedText()).ToArray(),
-                Parent = animrig.BoneParentIndexes.Select(_=>(short)_).ToArray(),
+                Parent = animrig.BoneParentIndexes.Select(_ => (short)_).ToArray(),
                 LocalPosn = animrig.BoneTransforms.Select(p => new Vec3(p.Translation.X, p.Translation.Z, -p.Translation.Y)).ToArray(),
                 LocalRot = animrig.BoneTransforms.Select(p => new Quat(p.Rotation.I, p.Rotation.K, -p.Rotation.J, p.Rotation.R)).ToArray(),
                 LocalScale = animrig.BoneTransforms.Select(p => new Vec3(p.Scale.X, p.Scale.Y, p.Scale.Z)).ToArray(),
@@ -37,8 +36,8 @@ namespace WolvenKit.Modkit.RED4.RigFile
                 {
                     Rig.AposeMSExits = true;
 
-                    Rig.AposeMSTrans = aRig.APoseMS.Select(p => new Vec3(p.Translation.X,p.Translation.Z, -p.Translation.Y)).ToArray();
-                    Rig.AposeMSRot = aRig.APoseMS.Select(p => new Quat(p.Rotation.I, p.Rotation.K, -p.Rotation.J,p.Rotation.R)).ToArray();
+                    Rig.AposeMSTrans = aRig.APoseMS.Select(p => new Vec3(p.Translation.X, p.Translation.Z, -p.Translation.Y)).ToArray();
+                    Rig.AposeMSRot = aRig.APoseMS.Select(p => new Quat(p.Rotation.I, p.Rotation.K, -p.Rotation.J, p.Rotation.R)).ToArray();
                     Rig.AposeMSScale = aRig.APoseMS.Select(p => new Vec3(p.Scale.X, p.Scale.Y, p.Scale.Z)).ToArray();
                 }
 

@@ -21,10 +21,7 @@ namespace CP77Tools.Tasks
                 return;
             }
 
-            Parallel.ForEach(path, file =>
-            {
-                UnbundleTaskInner(file, outpath, hash, pattern, regex, DEBUG_decompress);
-            });
+            Parallel.ForEach(path, file => UnbundleTaskInner(file, outpath, hash, pattern, regex, DEBUG_decompress));
         }
 
         private void UnbundleTaskInner(string path, string outpath,

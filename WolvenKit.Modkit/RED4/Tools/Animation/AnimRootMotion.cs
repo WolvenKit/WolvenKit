@@ -3,12 +3,11 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using WolvenKit.RED4.Types;
+using Quat = System.Numerics.Quaternion;
+using Vec3 = System.Numerics.Vector3;
 
 namespace WolvenKit.Modkit.RED4.Animation
 {
-    using Quat = System.Numerics.Quaternion;
-    using Vec3 = System.Numerics.Vector3;
-
     internal class ROOT_MOTION
     {
         private const ushort wSignMask = 0x8000;
@@ -138,10 +137,10 @@ namespace WolvenKit.Modkit.RED4.Animation
                                     }
                                     break;
                                 case 1:
-                                    var dotPr = (x * x + y * y + z * z);
-                                    x = x * Convert.ToSingle(Math.Sqrt(2f - dotPr));
-                                    y = y * Convert.ToSingle(Math.Sqrt(2f - dotPr));
-                                    z = z * Convert.ToSingle(Math.Sqrt(2f - dotPr));
+                                    var dotPr = (x * x) + (y * y) + (z * z);
+                                    x *= Convert.ToSingle(Math.Sqrt(2f - dotPr));
+                                    y *= Convert.ToSingle(Math.Sqrt(2f - dotPr));
+                                    z *= Convert.ToSingle(Math.Sqrt(2f - dotPr));
                                     var w = 1f - dotPr;
                                     if (wSign == 1)
                                     {
@@ -214,10 +213,10 @@ namespace WolvenKit.Modkit.RED4.Animation
                                     }
                                     break;
                                 case 1:
-                                    var dotPr = (x * x + y * y + z * z);
-                                    x = x * Convert.ToSingle(Math.Sqrt(2f - dotPr));
-                                    y = y * Convert.ToSingle(Math.Sqrt(2f - dotPr));
-                                    z = z * Convert.ToSingle(Math.Sqrt(2f - dotPr));
+                                    var dotPr = (x * x) + (y * y) + (z * z);
+                                    x *= Convert.ToSingle(Math.Sqrt(2f - dotPr));
+                                    y *= Convert.ToSingle(Math.Sqrt(2f - dotPr));
+                                    z *= Convert.ToSingle(Math.Sqrt(2f - dotPr));
                                     var w = 1f - dotPr;
                                     if (wSign == 1)
                                     {

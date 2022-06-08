@@ -17,12 +17,7 @@ namespace WolvenKit.Modkit.RED4.Serialization.json
         public override bool CanConvert(Type typeToConvert)
         {
             var baseType = typeToConvert.BaseType;
-            if (baseType is { IsGenericType: false })
-            {
-                return false;
-            }
-
-            return baseType != null && baseType.GetGenericTypeDefinition() == typeof(CArray<>);
+            return baseType is not { IsGenericType: false } && baseType != null && baseType.GetGenericTypeDefinition() == typeof(CArray<>);
         }
 
         public override JsonConverter CreateConverter(Type type, JsonSerializerOptions options)

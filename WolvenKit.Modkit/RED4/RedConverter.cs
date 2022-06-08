@@ -35,20 +35,14 @@ namespace WolvenKit.Modkit.RED4
             var dto = new RedFileDto(cr2w);
             var json = RedJsonSerializer.Serialize(dto);
 
-            if (string.IsNullOrEmpty(json))
-            {
-                throw new SerializationException();
-            }
-
-            switch (format)
-            {
-                case ETextConvertFormat.json:
-                    return json;
-                case ETextConvertFormat.xml:
-                    throw new NotSupportedException(nameof(format));
-                default:
-                    throw new ArgumentOutOfRangeException(nameof(format), format, null);
-            }
+            return string.IsNullOrEmpty(json)
+                ? throw new SerializationException()
+                : format switch
+                {
+                    ETextConvertFormat.json => json,
+                    ETextConvertFormat.xml => throw new NotSupportedException(nameof(format)),
+                    _ => throw new ArgumentOutOfRangeException(nameof(format), format, null),
+                };
         }
 
         /// <summary>
@@ -97,8 +91,8 @@ namespace WolvenKit.Modkit.RED4
         public static CR2WFile ConvertFromJson(string json)
         {
             var dto = RedJsonSerializer.Deserialize<RedFileDto>(json);
-            
-            return dto is null ? null : dto.Data == null ? null : dto.Data;
+
+            return dto is null ? null : dto.Data ?? null;
         }
 
         /// <summary>
@@ -118,14 +112,14 @@ namespace WolvenKit.Modkit.RED4
             var text = File.ReadAllText(fileInfo.FullName);
 
             // get extension from filename //TODO pass?
-            var filenameWithoutConvertExtension = fileInfo.Name[..^(convertExtension.Length /*+ 1*/)];
+            var filenameWithoutConvertExtension = fileInfo.Name[..^convertExtension.Length /*+ 1*/];
             var ext = Path.GetExtension(filenameWithoutConvertExtension);
             var w2rc = textConvertFormat switch
             {
                 ETextConvertFormat.json => ConvertFromJson(text),
                 _ => throw new NotSupportedException(),
             };
-            if(w2rc is null)
+            if (w2rc is null)
             {
                 return false;
             }

@@ -99,7 +99,7 @@ namespace WolvenKit.Modkit.RED4
 
             for (var i = 0; i < textureStreams.Count; i++)
             {
-                File.WriteAllBytes(Path.Combine(dir.FullName,$"{Path.GetFileNameWithoutExtension(outfile.FullName)}_{i}.dds"), textureStreams[i].ToArray());
+                File.WriteAllBytes(Path.Combine(dir.FullName, $"{Path.GetFileNameWithoutExtension(outfile.FullName)}_{i}.dds"), textureStreams[i].ToArray());
             }
 
             targetStream.Dispose();

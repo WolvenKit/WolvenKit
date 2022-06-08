@@ -171,14 +171,9 @@ namespace WolvenKit.Modkit.RED4
                                 unhandleChunks.Add((RedBaseClass)mc);
                                 continue;
                             }
-                            if (component is entMeshComponent emc)
-                            {
-                                node.LocalTransform = new SharpGLTF.Transforms.AffineTransform(ToVector3(emc.VisualScale), ToQuaternion(mc.LocalTransform.Orientation), ToVector3(mc.LocalTransform.Position));
-                            }
-                            else
-                            {
-                                node.LocalTransform = new SharpGLTF.Transforms.AffineTransform(new System.Numerics.Vector3(1f, 1f, 1f), ToQuaternion(mc.LocalTransform.Orientation), ToVector3(mc.LocalTransform.Position));
-                            }
+                            node.LocalTransform = component is entMeshComponent emc
+                                ? new SharpGLTF.Transforms.AffineTransform(ToVector3(emc.VisualScale), ToQuaternion(mc.LocalTransform.Orientation), ToVector3(mc.LocalTransform.Position))
+                                : new SharpGLTF.Transforms.AffineTransform(new System.Numerics.Vector3(1f, 1f, 1f), ToQuaternion(mc.LocalTransform.Orientation), ToVector3(mc.LocalTransform.Position));
                             nodes.Add(mc.Name, node);
 
                             if (!GetFileFromCName(mc.Mesh.DepotPath, out var meshFile))
@@ -207,23 +202,13 @@ namespace WolvenKit.Modkit.RED4
                             Node node = null;
 
                             var transform = (entHardTransformBinding)mc.ParentTransform.GetValue();
-                            if (nodes.ContainsKey(transform.BindName))
-                            {
-                                node = nodes[transform.BindName].CreateNode(mc.Name);
-                            }
-                            else
-                            {
-                                node = root.LogicalSkins[0].GetJoint(0).Joint.CreateNode(mc.Name);
-                            }
+                            node = nodes.ContainsKey(transform.BindName)
+                                ? nodes[transform.BindName].CreateNode(mc.Name)
+                                : root.LogicalSkins[0].GetJoint(0).Joint.CreateNode(mc.Name);
 
-                            if (component is entMeshComponent emc)
-                            {
-                                node.LocalTransform = new SharpGLTF.Transforms.AffineTransform(ToVector3(emc.VisualScale), ToQuaternion(mc.LocalTransform.Orientation), ToVector3(mc.LocalTransform.Position));
-                            }
-                            else
-                            {
-                                node.LocalTransform = new SharpGLTF.Transforms.AffineTransform(new System.Numerics.Vector3(1f, 1f, 1f), ToQuaternion(mc.LocalTransform.Orientation), ToVector3(mc.LocalTransform.Position));
-                            }
+                            node.LocalTransform = component is entMeshComponent emc
+                                ? new SharpGLTF.Transforms.AffineTransform(ToVector3(emc.VisualScale), ToQuaternion(mc.LocalTransform.Orientation), ToVector3(mc.LocalTransform.Position))
+                                : new SharpGLTF.Transforms.AffineTransform(new System.Numerics.Vector3(1f, 1f, 1f), ToQuaternion(mc.LocalTransform.Orientation), ToVector3(mc.LocalTransform.Position));
                             nodes.Add(mc.Name, node);
 
                             MeshTools.AddMeshToModel(meshFile, root, root.LogicalSkins[0], node, true, mc.ChunkMask, materials);
@@ -242,11 +227,11 @@ namespace WolvenKit.Modkit.RED4
             return false;
         }
 
-        public static System.Numerics.Vector3 ToVector3(WolvenKit.RED4.Types.Vector3 v) => new System.Numerics.Vector3(v.X, v.Z, v.Y);
+        public static System.Numerics.Vector3 ToVector3(WolvenKit.RED4.Types.Vector3 v) => new(v.X, v.Z, v.Y);
 
-        public static System.Numerics.Quaternion ToQuaternion(WolvenKit.RED4.Types.Quaternion q) => new System.Numerics.Quaternion(q.I, q.K, -q.J, q.R);
+        public static System.Numerics.Quaternion ToQuaternion(WolvenKit.RED4.Types.Quaternion q) => new(q.I, q.K, -q.J, q.R);
 
-        public static System.Numerics.Vector3 ToVector3(WolvenKit.RED4.Types.WorldPosition p) => new System.Numerics.Vector3(p.X, p.Z, -p.Y);
+        public static System.Numerics.Vector3 ToVector3(WolvenKit.RED4.Types.WorldPosition p) => new(p.X, p.Z, -p.Y);
 
         public bool DumpEntityPackageAsJson(Stream entStream, FileInfo outfile)
         {
@@ -255,15 +240,9 @@ namespace WolvenKit.Modkit.RED4
             {
                 return false;
             }
-            if (cr2w.RootChunk is entEntityTemplate)
-            {
-                return DumpEntPackage(cr2w, entStream, outpath);
-            }
-            if (cr2w.RootChunk is appearanceAppearanceResource)
-            {
-                return DumpAppPackage(cr2w, entStream, outpath);
-            }
-            return false;
+            return cr2w.RootChunk is entEntityTemplate
+                ? DumpEntPackage(cr2w, entStream, outpath)
+                : cr2w.RootChunk is appearanceAppearanceResource && DumpAppPackage(cr2w, entStream, outpath);
         }
 
         private bool DumpEntPackage(CR2WFile cr2w, Stream entStream, string outfile)

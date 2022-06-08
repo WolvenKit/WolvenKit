@@ -142,7 +142,7 @@ namespace WolvenKit.Modkit.RED4.Opus
                     var idddd = Convert.ToUInt32(Path.GetFileNameWithoutExtension(wav));
                     foundids.Add(idddd);
                 }
-                catch (Exception ex){Locator.Current.GetService<ILoggerService>().Error(ex);}
+                catch (Exception ex) { Locator.Current.GetService<ILoggerService>().Error(ex); }
             }
 
             var validids = new List<uint>();
@@ -380,10 +380,8 @@ namespace WolvenKit.Modkit.RED4.Opus
                 RedirectStandardOutput = true,
                 CreateNoWindow = true,
             };
-            using (var p = Process.Start(proc))
-            {
-                p.WaitForExit();
-            }
+            using var p = Process.Start(proc);
+            p.WaitForExit();
         }
 
         public void WriteOpusToPak(MemoryStream opus, ref Stream pak, uint hash, MemoryStream wav)

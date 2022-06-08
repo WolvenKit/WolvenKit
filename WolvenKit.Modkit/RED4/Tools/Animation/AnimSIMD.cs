@@ -1,15 +1,14 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using SharpGLTF.Schema2;
 using WolvenKit.RED4.Types;
-using System.Linq;
+using Quat = System.Numerics.Quaternion;
+using Vec3 = System.Numerics.Vector3;
 
 namespace WolvenKit.Modkit.RED4.Animation
 {
-    using Quat = System.Numerics.Quaternion;
-    using Vec3 = System.Numerics.Vector3;
-
     internal class SIMD
     {
         public static void AddAnimationSIMD(ref ModelRoot model, animAnimationBufferSimd blob, string animName, Stream defferedBuffer, animAnimation animAnimDes, bool incRootMotion = true)
@@ -24,7 +23,7 @@ namespace WolvenKit.Modkit.RED4.Animation
             var br = new BinaryReader(defferedBuffer);
 
             var jointsCountAligned = (blob.NumJoints + 3U) & (~3U); // simd 4 alignment
-            var totalFloatCount = (blob.NumFrames * jointsCountAligned * 3 + 3U) & (~3U);  // simd 4 alignment
+            var totalFloatCount = ((blob.NumFrames * jointsCountAligned * 3) + 3U) & (~3U);  // simd 4 alignment
             var rotCompressedBuffSize = totalFloatCount * blob.QuantizationBits / 8U;
             rotCompressedBuffSize = (rotCompressedBuffSize + 15U) & (~15U); // 16byte padding aligment
             var mask = (1U << blob.QuantizationBits) - 1U;
@@ -34,16 +33,16 @@ namespace WolvenKit.Modkit.RED4.Animation
             {
                 var bitOff = i * blob.QuantizationBits;
                 var byteOff = bitOff / 8;
-                var shift = (bitOff % 8);
+                var shift = bitOff % 8;
                 defferedBuffer.Position = byteOff;
                 var val = br.ReadUInt32();
-                val = val >> (int)shift;
+                val >>= (int)shift;
                 floatsPacked[i] = Convert.ToUInt16(val & mask);
             }
             var floatsDecompressed = new float[totalFloatCount];
             for (uint i = 0; i < totalFloatCount; i++)
             {
-                floatsDecompressed[i] = ((1f / mask) * floatsPacked[i] * 2) - 1f;
+                floatsDecompressed[i] = (1f / mask * floatsPacked[i] * 2) - 1f;
             }
             var Rotations = new Quat[blob.NumFrames, blob.NumJoints];
             for (uint i = 0; i < blob.NumFrames; i++)
@@ -54,15 +53,15 @@ namespace WolvenKit.Modkit.RED4.Animation
                     {
                         var q = new Quat
                         {
-                            X = floatsDecompressed[i * jointsCountAligned * 3 + e * 3 + eye],
-                            Y = floatsDecompressed[i * jointsCountAligned * 3 + e * 3 + 4 + eye],
-                            Z = floatsDecompressed[i * jointsCountAligned * 3 + e * 3 + 8 + eye]
+                            X = floatsDecompressed[(i * jointsCountAligned * 3) + (e * 3) + eye],
+                            Y = floatsDecompressed[(i * jointsCountAligned * 3) + (e * 3) + 4 + eye],
+                            Z = floatsDecompressed[(i * jointsCountAligned * 3) + (e * 3) + 8 + eye]
                         };
 
-                        var dotPr = (q.X * q.X + q.Y * q.Y + q.Z * q.Z);
-                        q.X = q.X * Convert.ToSingle(Math.Sqrt(2f - dotPr));
-                        q.Y = q.Y * Convert.ToSingle(Math.Sqrt(2f - dotPr));
-                        q.Z = q.Z * Convert.ToSingle(Math.Sqrt(2f - dotPr));
+                        var dotPr = (q.X * q.X) + (q.Y * q.Y) + (q.Z * q.Z);
+                        q.X *= Convert.ToSingle(Math.Sqrt(2f - dotPr));
+                        q.Y *= Convert.ToSingle(Math.Sqrt(2f - dotPr));
+                        q.Z *= Convert.ToSingle(Math.Sqrt(2f - dotPr));
                         q.W = 1f - dotPr;
                         q = Quat.Normalize(q);
                         if (e + eye < blob.NumJoints)
@@ -115,9 +114,9 @@ namespace WolvenKit.Modkit.RED4.Animation
                         {
                             var v = new Vec3
                             {
-                                X = scalesRaw[i * jointsCountAligned * 3 + e * 3 + eye],
-                                Y = scalesRaw[i * jointsCountAligned * 3 + e * 3 + 4 + eye],
-                                Z = scalesRaw[i * jointsCountAligned * 3 + e * 3 + 8 + eye]
+                                X = scalesRaw[(i * jointsCountAligned * 3) + (e * 3) + eye],
+                                Y = scalesRaw[(i * jointsCountAligned * 3) + (e * 3) + 4 + eye],
+                                Z = scalesRaw[(i * jointsCountAligned * 3) + (e * 3) + 8 + eye]
                             };
                             Scales[i, e + eye] = v;
                         }
@@ -166,9 +165,9 @@ namespace WolvenKit.Modkit.RED4.Animation
                     {
                         var v = new Vec3
                         {
-                            X = EvalAlignedPositions[i * blob.NumTranslationsToEvalAlignedToSimd * 3 + e * 3 + eye],
-                            Y = EvalAlignedPositions[i * blob.NumTranslationsToEvalAlignedToSimd * 3 + e * 3 + 4 + eye],
-                            Z = EvalAlignedPositions[i * blob.NumTranslationsToEvalAlignedToSimd * 3 + e * 3 + 8 + eye]
+                            X = EvalAlignedPositions[(i * blob.NumTranslationsToEvalAlignedToSimd * 3) + (e * 3) + eye],
+                            Y = EvalAlignedPositions[(i * blob.NumTranslationsToEvalAlignedToSimd * 3) + (e * 3) + 4 + eye],
+                            Z = EvalAlignedPositions[(i * blob.NumTranslationsToEvalAlignedToSimd * 3) + (e * 3) + 8 + eye]
                         };
 
                         if (evalIndices[e + eye] > -1)

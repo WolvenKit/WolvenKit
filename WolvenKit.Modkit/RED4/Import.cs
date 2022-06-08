@@ -58,30 +58,16 @@ namespace WolvenKit.Modkit.RED4
             }
 
             // import files
-            switch (extAsEnum)
+            return extAsEnum switch
             {
-                case ERawFileFormat.bmp:
-                case ERawFileFormat.jpg:
-                case ERawFileFormat.png:
-                case ERawFileFormat.tiff:
-                case ERawFileFormat.tga:
-                case ERawFileFormat.dds:
-                    return HandleTextures(rawRelative, outDir, args);
-                case ERawFileFormat.fbx:
-                case ERawFileFormat.gltf:
-                case ERawFileFormat.glb:
-                    return ImportGltf(rawRelative, outDir, args.Get<GltfImportArgs>());
-                case ERawFileFormat.masklist:
-                    return ImportMlmask(rawRelative, outDir);
-                case ERawFileFormat.ttf:
-                    return ImportTtf(rawRelative, outDir, args.Get<CommonImportArgs>());
-                case ERawFileFormat.wav:
-                    return ImportWav(rawRelative, outDir, args.Get<OpusImportArgs>());
-                case ERawFileFormat.csv:
-                    return ImportCsv(rawRelative, outDir, args);
-                default:
-                    throw new ArgumentOutOfRangeException();
-            }
+                ERawFileFormat.bmp or ERawFileFormat.jpg or ERawFileFormat.png or ERawFileFormat.tiff or ERawFileFormat.tga or ERawFileFormat.dds => HandleTextures(rawRelative, outDir, args),
+                ERawFileFormat.fbx or ERawFileFormat.gltf or ERawFileFormat.glb => ImportGltf(rawRelative, outDir, args.Get<GltfImportArgs>()),
+                ERawFileFormat.masklist => ImportMlmask(rawRelative, outDir),
+                ERawFileFormat.ttf => ImportTtf(rawRelative, outDir, args.Get<CommonImportArgs>()),
+                ERawFileFormat.wav => ImportWav(rawRelative, outDir, args.Get<OpusImportArgs>()),
+                ERawFileFormat.csv => ImportCsv(rawRelative, outDir, args),
+                _ => throw new ArgumentOutOfRangeException(),
+            };
         }
 
         private bool ImportCsv(RedRelativePath rawRelative, DirectoryInfo outDir, GlobalImportArgs args)
@@ -176,16 +162,11 @@ namespace WolvenKit.Modkit.RED4
                 {
                     // find the first matching redfile
                     var redfile = FindRedFile(rawRelative, outDir, cookedTextureFormat.ToString());
-                    if (!string.IsNullOrEmpty(redfile))
-                    {
-                        return cookedTextureFormat == ECookedTextureFormat.xbm
+                    return !string.IsNullOrEmpty(redfile)
+                        ? cookedTextureFormat == ECookedTextureFormat.xbm
                             ? ImportXbm(rawRelative, outDir, args.Get<XbmImportArgs>())
-                            : RebuildTexture(redfile);
-                    }
-                    else
-                    {
-                        return ImportXbm(rawRelative, outDir, args.Get<XbmImportArgs>());
-                    }
+                            : RebuildTexture(redfile)
+                        : ImportXbm(rawRelative, outDir, args.Get<XbmImportArgs>());
                 }
             }
 
@@ -383,16 +364,14 @@ namespace WolvenKit.Modkit.RED4
                     }
                     else if (rawExt == EUncookExtension.png.ToString())
                     {
-                        using (var stream = new FileStream(infile, FileMode.Open, FileAccess.Read, FileShare.Read))
-                        {
-                            // need to figure out how to decide format/etc from png header
-                            //var image = Png.Open(stream);
-                            //image.Header.ColorType;
-                            //var md = new DDSMetadata(new DirectXTexSharp.TexMetadata(), image.Header.BitDepth, true);
+                        using var stream = new FileStream(infile, FileMode.Open, FileAccess.Read, FileShare.Read);
+                        // need to figure out how to decide format/etc from png header
+                        //var image = Png.Open(stream);
+                        //image.Header.ColorType;
+                        //var md = new DDSMetadata(new DirectXTexSharp.TexMetadata(), image.Header.BitDepth, true);
 
-                            //format = md.Format;
-                            format = DXGI_FORMAT.DXGI_FORMAT_R8G8B8A8_UNORM;
-                        }
+                        //format = md.Format;
+                        format = DXGI_FORMAT.DXGI_FORMAT_R8G8B8A8_UNORM;
                     }
                     else
                     {

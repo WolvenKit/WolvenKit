@@ -412,14 +412,9 @@ namespace WolvenKit.Modkit.RED4.Tools
                     }
                 }
 
-                if (rendmeshblob.Header.RenderChunkInfos[i].ChunkIndices.TeOffset == 0)
-                {
-                    meshesInfo.indicesOffsets[i] = rendmeshblob.Header.IndexBufferOffset;
-                }
-                else
-                {
-                    meshesInfo.indicesOffsets[i] = rendmeshblob.Header.IndexBufferOffset + rendmeshblob.Header.RenderChunkInfos[i].ChunkIndices.TeOffset;
-                }
+                meshesInfo.indicesOffsets[i] = rendmeshblob.Header.RenderChunkInfos[i].ChunkIndices.TeOffset == 0
+                    ? (uint)rendmeshblob.Header.IndexBufferOffset
+                    : (uint)(rendmeshblob.Header.IndexBufferOffset + rendmeshblob.Header.RenderChunkInfos[i].ChunkIndices.TeOffset);
                 meshesInfo.vpStrides[i] = rendmeshblob.Header.RenderChunkInfos[i].ChunkVertices.VertexLayout.SlotStrides[0];
                 meshesInfo.LODLvl[i] = rendmeshblob.Header.RenderChunkInfos[i].LodMask;
             }
@@ -499,7 +494,7 @@ namespace WolvenKit.Modkit.RED4.Tools
 
             for (var index = 0; index < info.meshCount; index++)
             {
-                if (info.LODLvl[index] != 1 && lodFilter || ((chunkMask & 1UL << index) == 0))
+                if ((info.LODLvl[index] != 1 && lodFilter) || ((chunkMask & 1UL << index) == 0))
                 {
                     continue;
                 }
@@ -858,14 +853,7 @@ namespace WolvenKit.Modkit.RED4.Tools
             {
                 var mes = model.CreateMesh(mesh.name);
                 var prim = mes.CreatePrimitive();
-                if (materials != null && materials.ContainsKey(mesh.materialNames[0]))
-                {
-                    prim.Material = materials[mesh.materialNames[0]];
-                }
-                else
-                {
-                    prim.Material = mat;
-                }
+                prim.Material = materials != null && materials.ContainsKey(mesh.materialNames[0]) ? materials[mesh.materialNames[0]] : mat;
                 {
                     var acc = model.CreateAccessor();
                     var buff = model.UseBufferView(buffer, BuffViewoffset, mesh.positions.Length * 12);
@@ -1143,10 +1131,7 @@ namespace WolvenKit.Modkit.RED4.Tools
             }
         }
 
-        public static void UpdateSkinningParamCloth(ref List<RawMeshContainer> meshes, Stream ms, CR2WFile cr2w)
-        {
-            UpdateSkinningParamCloth(ref meshes, cr2w);
-        }
+        public static void UpdateSkinningParamCloth(ref List<RawMeshContainer> meshes, Stream ms, CR2WFile cr2w) => UpdateSkinningParamCloth(ref meshes, cr2w);
 
         public static void UpdateSkinningParamCloth(ref List<RawMeshContainer> meshes, CR2WFile cr2w)
         {

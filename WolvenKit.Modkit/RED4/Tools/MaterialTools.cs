@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text.Json;
-using SharpGLTF.Validation;
 using SharpGLTF.Schema2;
+using SharpGLTF.Validation;
 using WolvenKit.Common;
 using WolvenKit.Common.Conversion;
 using WolvenKit.Common.Extensions;
@@ -94,11 +94,11 @@ namespace WolvenKit.Modkit.RED4
                         using var reader = new CR2WReader(ms);
                         _ = reader.ReadFile(out var matFile, false);
 
-                        var mi = matFile.RootChunk as CMaterialInstance;
-                        if (mi != null)
+                        if (matFile.RootChunk is CMaterialInstance mi)
                         {
                             ExternalMaterial.Add(mi);
-                        } else
+                        }
+                        else
                         {
                             // The external materials can also directly reference MaterialTemplates. To keep it easier for the exporter we can expose these as material instances
                             var fakeMaterialInstance = new CMaterialInstance()
@@ -359,7 +359,7 @@ namespace WolvenKit.Modkit.RED4
                     {
                         if (ar.Files.ContainsKey(hash))
                         {
-                            if (!File.Exists(Path.Combine(matRepo, primaryDependencies[i].Replace(".mlmask", $"_0.{exportArgs.Get<XbmExportArgs>().UncookExtension.ToString()}"))))
+                            if (!File.Exists(Path.Combine(matRepo, primaryDependencies[i].Replace(".mlmask", $"_0.{exportArgs.Get<XbmExportArgs>().UncookExtension}"))))
                             {
                                 if (Directory.Exists(matRepo))
                                 {
@@ -659,12 +659,7 @@ namespace WolvenKit.Modkit.RED4
 
             if (materialParameterType == typeof(CMaterialParameterCpuNameU64))
             {
-                if (obj is not JsonElement value)
-                {
-                    return RedTypeManager.CreateRedType(typeof(CName));
-                }
-
-                return (CName)value.GetString();
+                return obj is not JsonElement value ? RedTypeManager.CreateRedType(typeof(CName)) : (CName)value.GetString();
             }
 
             if (materialParameterType == typeof(CMaterialParameterCube))
@@ -759,12 +754,7 @@ namespace WolvenKit.Modkit.RED4
 
             if (materialParameterType == typeof(CMaterialParameterScalar))
             {
-                if (obj is not JsonElement value)
-                {
-                    return RedTypeManager.CreateRedType(typeof(CFloat));
-                }
-
-                return (CFloat)value.GetSingle();
+                return obj is not JsonElement value ? RedTypeManager.CreateRedType(typeof(CFloat)) : (CFloat)value.GetSingle();
             }
 
             if (materialParameterType == typeof(CMaterialParameterSkinParameters))
@@ -887,12 +877,7 @@ namespace WolvenKit.Modkit.RED4
                 };
             }
 
-            if (value is IRedResourceReference rRef)
-            {
-                return (string)rRef.DepotPath;
-            }
-
-            throw new NotImplementedException(value.GetType().Name);
+            return value is IRedResourceReference rRef ? (object)(string)rRef.DepotPath : throw new NotImplementedException(value.GetType().Name);
         }
 
         private object GetSerializableValue(CMaterialParameter materialParameter)
@@ -968,12 +953,9 @@ namespace WolvenKit.Modkit.RED4
                 return GetSerializableValue(texa.Texture);
             }
 
-            if (materialParameter is CMaterialParameterVector vec)
-            {
-                return GetSerializableValue(vec.Vector);
-            }
-
-            throw new NotImplementedException(materialParameter.GetType().Name);
+            return materialParameter is CMaterialParameterVector vec
+                ? GetSerializableValue(vec.Vector)
+                : throw new NotImplementedException(materialParameter.GetType().Name);
         }
 
         private IRedType GetMaterialParameterValue(CMaterialParameter materialParameter)
@@ -1049,12 +1031,9 @@ namespace WolvenKit.Modkit.RED4
                 return texa.Texture;
             }
 
-            if (materialParameter is CMaterialParameterVector vec)
-            {
-                return vec.Vector;
-            }
-
-            throw new NotImplementedException(materialParameter.GetType().Name);
+            return materialParameter is CMaterialParameterVector vec
+                ? (IRedType)vec.Vector
+                : throw new NotImplementedException(materialParameter.GetType().Name);
         }
 
         private CR2WFile LoadFile(string path, List<Archive> archives)
@@ -1068,12 +1047,7 @@ namespace WolvenKit.Modkit.RED4
                     ExtractSingleToStream(ar, hash, ms);
                     ms.Seek(0, SeekOrigin.Begin);
 
-                    if (!_wolvenkitFileService.TryReadRed4File(ms, out var file))
-                    {
-                        throw new Exception("Invalid CR2W file");
-                    }
-
-                    return file;
+                    return !_wolvenkitFileService.TryReadRed4File(ms, out var file) ? throw new Exception("Invalid CR2W file") : file;
                 }
             }
 
@@ -1199,8 +1173,7 @@ namespace WolvenKit.Modkit.RED4
             {
                 if (Path.GetExtension(file.FileName).Contains("mt"))
                 {
-                    var mt = file.Content as CMaterialTemplate;
-                    if(mt != null)
+                    if (file.Content is CMaterialTemplate mt)
                     {
                         materialTemplates.Add(file.FileName, mt);
                     }
@@ -1237,16 +1210,16 @@ namespace WolvenKit.Modkit.RED4
                 var mi = new CR2WFile();
                 {
                     var chunk = new CMaterialInstance
+                    {
+                        CookingPlatform = Enums.ECookingPlatform.PLATFORM_PC,
+                        EnableMask = true,
+                        ResourceVersion = 4,
+                        BaseMaterial = new CResourceReference<IMaterial>
                         {
-                            CookingPlatform = Enums.ECookingPlatform.PLATFORM_PC,
-                            EnableMask = true,
-                            ResourceVersion = 4,
-                            BaseMaterial = new CResourceReference<IMaterial>
-                            {
-                                DepotPath = mat.BaseMaterial
-                            },
-                            Values = new CArray<CKeyValuePair>()
-                        };
+                            DepotPath = mat.BaseMaterial
+                        },
+                        Values = new CArray<CKeyValuePair>()
+                    };
 
                     CMaterialTemplate mt = null;
                     if (mts.ContainsKey(mat.MaterialTemplate))
@@ -1276,7 +1249,7 @@ namespace WolvenKit.Modkit.RED4
                         BaseMaterial = new CResourceReference<IMaterial> { DepotPath = mat.BaseMaterial },
                         Values = new CArray<CKeyValuePair>()
                     };
-                    var orgChain = GetMaterialChain(fakeMaterialInstance, archives, ref mts);
+                    var (materialTemplate, valueDict) = GetMaterialChain(fakeMaterialInstance, archives, ref mts);
 
                     if (mt != null)
                     {
@@ -1293,7 +1266,7 @@ namespace WolvenKit.Modkit.RED4
                                     found = true;
 
                                     object convValue = GetMaterialParameterValue(refer.GetType(), value);
-                                    if (orgChain.valueDict.ContainsKey(refer.ParameterName) && !Equals(orgChain.valueDict[refer.ParameterName], convValue))
+                                    if (valueDict.ContainsKey(refer.ParameterName) && !Equals(valueDict[refer.ParameterName], convValue))
                                     {
                                         chunk.Values.Add(new CKeyValuePair(refer.ParameterName, (IRedType)convValue));
                                     }

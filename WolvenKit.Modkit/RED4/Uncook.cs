@@ -691,12 +691,8 @@ namespace WolvenKit.Modkit.RED4
             texformat = DXGI_FORMAT.DXGI_FORMAT_R8G8B8A8_UNORM;
 
             // read the cr2wfile
-            if (!_wolvenkitFileService.TryReadRed4File(redInFile, out var cr2w))
-            {
-                return false;
-            }
-
-            return ConvertRedClassToDdsStream(cr2w.RootChunk, outstream, out texformat);
+            return _wolvenkitFileService.TryReadRed4File(redInFile, out var cr2w)
+&& ConvertRedClassToDdsStream(cr2w.RootChunk, outstream, out texformat);
         }
 
         public static bool ConvertRedClassToDdsStream(RedBaseClass cls, Stream outstream, out DXGI_FORMAT texformat)

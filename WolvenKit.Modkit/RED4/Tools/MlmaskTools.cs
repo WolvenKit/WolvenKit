@@ -116,14 +116,7 @@ namespace WolvenKit.Modkit.RED4
                 string newpath;
 
                 var mFilename = Path.GetFileNameWithoutExtension(outfile.FullName) + $"_{i}";
-                if (args.AsList)
-                {
-                    newpath = Path.Combine(subdir.FullName, $"{mFilename}.dds");
-                }
-                else
-                {
-                    newpath = Path.Combine(outfile.Directory.FullName, $"{mFilename}.dds");
-                }
+                newpath = args.AsList ? Path.Combine(subdir.FullName, $"{mFilename}.dds") : Path.Combine(outfile.Directory.FullName, $"{mFilename}.dds");
 
                 if (args.UncookExtension == EMlmaskUncookExtension.dds)
                 {

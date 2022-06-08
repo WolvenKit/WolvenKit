@@ -27,10 +27,7 @@ namespace CP77Tools.Tasks
                 return;
             }
 
-            Parallel.ForEach(path, p =>
-            {
-                ImportTaskInner(p, outDir, keep);
-            });
+            Parallel.ForEach(path, p => ImportTaskInner(p, outDir, keep));
         }
 
         private void ImportTaskInner(string path,

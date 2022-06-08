@@ -223,12 +223,7 @@ namespace WolvenKit.Modkit.RED4.Serialization
                 typename = "CResource";
             }
 
-            if (!Enum.TryParse<ETweakType>(typename, out var type))
-            {
-                throw new ArgumentOutOfRangeException(nameof(t));
-            }
-
-            return type;
+            return !Enum.TryParse<ETweakType>(typename, out var type) ? throw new ArgumentOutOfRangeException(nameof(t)) : type;
         }
 
 
@@ -311,11 +306,7 @@ namespace WolvenKit.Modkit.RED4.Serialization
                         binder: null,
                         args: null,
                         culture: null);
-                    if (outer == null)
-                    {
-                        throw new InvalidDataException();
-                    }
-                    return outer.GetType();
+                    return outer == null ? throw new InvalidDataException() : outer.GetType();
                 }
                 else
                 {

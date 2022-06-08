@@ -4,15 +4,14 @@ using System.IO;
 using System.Linq;
 using SharpGLTF.Schema2;
 using WolvenKit.Common.FNV1A;
-using WolvenKit.RED4.CR2W;
+using WolvenKit.Common.Model.Arguments;
 using WolvenKit.Modkit.RED4.GeneralStructs;
-using WolvenKit.Modkit.RED4.Tools;
 using WolvenKit.Modkit.RED4.RigFile;
+using WolvenKit.Modkit.RED4.Tools;
 using WolvenKit.RED4.Archive;
 using WolvenKit.RED4.Archive.CR2W;
+using WolvenKit.RED4.CR2W;
 using WolvenKit.RED4.Types;
-using WolvenKit.Common.Model.Arguments;
-
 using Vec3 = System.Numerics.Vector3;
 using Vec4 = System.Numerics.Vector4;
 
@@ -64,8 +63,8 @@ namespace WolvenKit.Modkit.RED4
             }
             Meshes = Meshes.OrderBy(o => o.name).ToList();
 
-            var max = new Vec3(Single.MinValue, Single.MinValue, Single.MinValue);
-            var min = new Vec3(Single.MaxValue, Single.MaxValue, Single.MaxValue);
+            var max = new Vec3(float.MinValue, float.MinValue, float.MinValue);
+            var min = new Vec3(float.MaxValue, float.MaxValue, float.MaxValue);
 
             Meshes.ForEach(p => p.positions.ToList().ForEach(q => { max.X = Math.Max(q.X, max.X); max.Y = Math.Max(q.Y, max.Y); max.Z = Math.Max(q.Z, max.Z); }));
             Meshes.ForEach(p => p.positions.ToList().ForEach(q => { min.X = Math.Min(q.X, min.X); min.Y = Math.Min(q.Y, min.Y); min.Z = Math.Min(q.Z, min.Z); }));
@@ -83,13 +82,13 @@ namespace WolvenKit.Modkit.RED4
                 oldRig = new RawArmature
                 {
                     BoneCount = model.LogicalSkins[0].JointsCount,
-                    Names = Enumerable.Range(0, model.LogicalSkins[0].JointsCount).Select(_=> model.LogicalSkins[0].GetJoint(_).Joint.Name).ToArray()
+                    Names = Enumerable.Range(0, model.LogicalSkins[0].JointsCount).Select(_ => model.LogicalSkins[0].GetJoint(_).Joint.Name).ToArray()
                 };
             }
 
             MeshTools.UpdateMeshJoints(ref Meshes, newRig, oldRig);
 
-            var expMeshes = Meshes.Select(_=> RawMeshToRE4Mesh(_, QuantScale, QuantTrans)).ToList();
+            var expMeshes = Meshes.Select(_ => RawMeshToRE4Mesh(_, QuantScale, QuantTrans)).ToList();
 
             var meshBuffer = new MemoryStream();
             var meshesInfo = BufferWriter(expMeshes, ref meshBuffer);

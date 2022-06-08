@@ -20,10 +20,7 @@ namespace CP77Tools.Tasks
                 return;
             }
 
-            Parallel.ForEach(path, file =>
-            {
-                PackTaskInner(file, outpath);
-            });
+            Parallel.ForEach(path, file => PackTaskInner(file, outpath));
         }
 
         private void PackTaskInner(string path, string outpath, int cp = 0)

@@ -269,11 +269,8 @@ namespace WolvenKit.Modkit.RED4.Serialization.yaml
         private static bool IsArray(Type type) =>
             type is not { IsGenericType: false } and { } && type.GetGenericTypeDefinition() == typeof(CArray<>);
 
-        public IRedType Parse(string s, Type type)
-        {
-            if (typeof(IRedPrimitive).IsAssignableFrom(type))
-            {
-                return Serialization.GetEnumFromType(type) switch
+        public IRedType Parse(string s, Type type) => typeof(IRedPrimitive).IsAssignableFrom(type)
+                ? Serialization.GetEnumFromType(type) switch
                 {
                     ETweakType.CName => (CName)s,
                     ETweakType.CString => (CString)s,
@@ -291,23 +288,15 @@ namespace WolvenKit.Modkit.RED4.Serialization.yaml
                     ETweakType.CInt32 => (CInt32)int.Parse(s),
                     ETweakType.CInt64 => (CInt64)long.Parse(s),
                     _ => throw new ArgumentOutOfRangeException()
-                };
-            }
-
-            throw new ArgumentOutOfRangeException();
-        }
+                }
+                : throw new ArgumentOutOfRangeException();
 
         private CResourceAsyncReference<CResource> ParseCResource(string value)
         {
-            var cres = new CResourceAsyncReference<CResource>();
-            if (ulong.TryParse(value, out var key))
+            var cres = new CResourceAsyncReference<CResource>
             {
-                cres.DepotPath = key;
-            }
-            else
-            {
-                cres.DepotPath = value;
-            }
+                DepotPath = ulong.TryParse(value, out var key) ? (CName)key : (CName)value
+            };
             return cres;
         }
     }

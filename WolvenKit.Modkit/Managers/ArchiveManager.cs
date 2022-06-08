@@ -112,12 +112,12 @@ namespace WolvenKit.RED4.CR2W.Archive
                 return 0;
             }
 
-            if (ReferenceEquals(null, x))
+            if (x is null)
             {
                 return -1;
             }
 
-            if (ReferenceEquals(null, y))
+            if (y is null)
             {
                 return 1;
             }
@@ -129,12 +129,7 @@ namespace WolvenKit.RED4.CR2W.Archive
             baseY = baseY[..baseY.IndexOf("_", StringComparison.Ordinal)];
 
             var retVal = s_loadOrder.IndexOf(baseX).CompareTo(s_loadOrder.IndexOf(baseY));
-            if (retVal != 0)
-            {
-                return retVal;
-            }
-
-            return string.Compare(x, y, StringComparison.Ordinal);
+            return retVal != 0 ? retVal : string.Compare(x, y, StringComparison.Ordinal);
         }
 
         #endregion
@@ -337,21 +332,13 @@ namespace WolvenKit.RED4.CR2W.Archive
         /// </summary>
         /// <param name="hash"></param>
         /// <returns></returns>
-        public override Optional<IGameFile> Lookup(ulong hash)
-        {
-            if (IsModBrowserActive)
-            {
-                return Optional<IGameFile>.ToOptional(
+        public override Optional<IGameFile> Lookup(ulong hash) => IsModBrowserActive
+                ? Optional<IGameFile>.ToOptional(
                     (from item in ModArchives.Items where item.Files.ContainsKey(hash) select item.Files[hash])
-                .FirstOrDefault());
-            }
-            else
-            {
-                return Optional<IGameFile>.ToOptional(
+                .FirstOrDefault())
+                : Optional<IGameFile>.ToOptional(
                     (from item in Archives.Items where item.Files.ContainsKey(hash) select item.Files[hash])
                 .FirstOrDefault());
-            }
-        }
 
         /// <summary>
         /// Retrieves a directory with the given fullpath
@@ -405,14 +392,7 @@ namespace WolvenKit.RED4.CR2W.Archive
                 }
                 else
                 {
-                    if (i == splits.Length - 1)
-                    {
-                        return currentDir;
-                    }
-                    else
-                    {
-                        return null;
-                    }
+                    return i == splits.Length - 1 ? currentDir : null;
                 }
             }
             return null;

@@ -23,10 +23,7 @@ namespace CP77Tools.Tasks
                 return;
             }
 
-            Parallel.ForEach(path, file =>
-            {
-                ArchiveTaskInner(file, pattern, regex, diff, list);
-            });
+            Parallel.ForEach(path, file => ArchiveTaskInner(file, pattern, regex, diff, list));
         }
 
         private void ArchiveTaskInner(string path, string pattern, string regex, bool diff, bool list)

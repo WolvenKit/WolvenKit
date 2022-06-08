@@ -45,14 +45,9 @@ namespace WolvenKit.Common.Model
 
         public abstract void LoadModsArchives(DirectoryInfo modsDir, DirectoryInfo dlcDir);
 
-        protected static string GetModFolder(string path)
-        {
-            if (path.Split('\\').Length > 3 && path.Split('\\').Contains("content"))
-            {
-                return path.Split('\\')[path.Split('\\').ToList().IndexOf(path.Split('\\').FirstOrDefault(x => x == "content")) - 1];
-            }
-            return path;
-        }
+        protected static string GetModFolder(string path) => path.Split('\\').Length > 3 && path.Split('\\').Contains("content")
+                ? path.Split('\\')[path.Split('\\').ToList().IndexOf(path.Split('\\').FirstOrDefault(x => x == "content")) - 1]
+                : path;
 
         protected void RebuildGameRoot()
         {
