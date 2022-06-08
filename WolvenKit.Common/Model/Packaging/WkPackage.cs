@@ -121,59 +121,60 @@ namespace WolvenKit.Common.Model.Packaging
             zipStream.CloseEntry();
         }
 
+        public record AuthorInfo(string Name, string NexusmodsProfile, string Web, string Facebook, string Twitter, string Youtube);
+
         /// <summary>
         /// This creates the modassembly xml. Values which are optional are marked in their description as such. If a value is not given pass the method NULL for that value.
         /// </summary>
         /// <param name="version">The Version of the mod. [REQUIRED]</param>
         /// <param name="name">The name of the mod. [REQUIRED]</param>
-        /// <param name="Author">Author info [Name,NexusmodsProfile,Web,Facebook,Twitter,Youtube] Note: Only Name is required!</param>
+        /// <param name="author">Author info [Name,NexusmodsProfile,Web,Facebook,Twitter,Youtube] Note: Only Name is required!</param>
         /// <param name="description">The description of the mod. [OPTIONAL]</param>
-        /// <param name="Largedescription">Aditional description of the mod. [OPTIONAL]</param>
+        /// <param name="largedescription">Aditional description of the mod. [OPTIONAL]</param>
         /// <param name="license">The License of the mod. [OPTIONAL]</param>
-        /// <param name="Colors">Header background color, If true the header text will be black otherwise white, Icon bacground color. [REQUIRED]</param>
-        /// /// <param name="Contents">The commands to run on the games files. eg.: adding new lines to xmls and such. [OPTIONAL]</param>
+        /// <param name="colors">Header background color, If true the header text will be black otherwise white, Icon bacground color. [REQUIRED]</param>
+        /// /// <param name="contents">The commands to run on the games files. eg.: adding new lines to xmls and such. [OPTIONAL]</param>
         /// <returns></returns>
         public static XDocument CreateModAssembly(
             string version,
             string name,
-            Tuple<string, string, string, string, string, string> Author,
+            AuthorInfo author,
             string description,
-            string Largedescription,
+            string largedescription,
             string license,
-            Tuple<Color, bool,
-            Color> Colors,
-            List<XElement> Contents)
+            Tuple<Color, bool, Color> colors,
+            List<XElement> contents)
         {
-            if (version == null || name == null || Author.Item1 == null || Colors == null)
+            if (version == null || name == null || author.Name == null || colors == null)
             {
                 throw new ArgumentException("Invalid parameters when trying to generate assembly.xml.");
             }
             var rootnode = new XElement("package", new XAttribute("version", version), new XAttribute("name", name));
-            var authorelement = new XElement("author", new XElement("displayName", Author.Item1));
+            var authorelement = new XElement("author", new XElement("displayName", author.Name));
             var metadataelement = new XElement("metadata");
-            if (Author.Item2 is not null or not "")
+            if (!string.IsNullOrEmpty(author.NexusmodsProfile))
             {
-                authorelement.Add(new XElement("actionLink", Author.Item2));
+                authorelement.Add(new XElement("actionLink", author.NexusmodsProfile));
             }
 
-            if (Author.Item3 is not null or not "")
+            if (!string.IsNullOrEmpty(author.Web))
             {
-                authorelement.Add(new XElement("web", Author.Item3));
+                authorelement.Add(new XElement("web", author.Web));
             }
 
-            if (Author.Item4 is not null or not "")
+            if (!string.IsNullOrEmpty(author.Facebook))
             {
-                authorelement.Add(new XElement("facebook", Author.Item4));
+                authorelement.Add(new XElement("facebook", author.Facebook));
             }
 
-            if (Author.Item5 is not null or not "")
+            if (!string.IsNullOrEmpty(author.Twitter))
             {
-                authorelement.Add(new XElement("twitter", Author.Item5));
+                authorelement.Add(new XElement("twitter", author.Twitter));
             }
 
-            if (Author.Item6 is not null or not "")
+            if (!string.IsNullOrEmpty(author.Youtube))
             {
-                authorelement.Add(new XElement("youtube", Author.Item6));
+                authorelement.Add(new XElement("youtube", author.Youtube));
             }
 
             metadataelement.Add(authorelement);
@@ -182,9 +183,9 @@ namespace WolvenKit.Common.Model.Packaging
                 metadataelement.Add(new XElement("description", description));
             }
 
-            if (Largedescription?.Length > 0)
+            if (largedescription?.Length > 0)
             {
-                metadataelement.Add(new XElement("largeDescription", Largedescription));
+                metadataelement.Add(new XElement("largeDescription", largedescription));
             }
 
             if (license?.Length > 0)
@@ -193,8 +194,8 @@ namespace WolvenKit.Common.Model.Packaging
             }
 
             rootnode.Add(metadataelement);
-            rootnode.Add(new XElement("colors", new XElement("headerBackground", ColorTranslator.ToHtml(Colors.Item1), new XAttribute("useBlackTextColor", Colors.Item2)), new XElement("iconBackground", ColorTranslator.ToHtml(Colors.Item3))));
-            rootnode.Add(new XElement("content", Contents));
+            rootnode.Add(new XElement("colors", new XElement("headerBackground", ColorTranslator.ToHtml(colors.Item1), new XAttribute("useBlackTextColor", colors.Item2)), new XElement("iconBackground", ColorTranslator.ToHtml(colors.Item3))));
+            rootnode.Add(new XElement("content", contents));
             return new XDocument(new XDeclaration("1.0", "UTF-8", "True"), rootnode);
         }
 
