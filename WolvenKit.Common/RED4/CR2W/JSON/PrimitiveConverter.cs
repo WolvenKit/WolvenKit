@@ -178,17 +178,11 @@ public class CNameConverter : JsonConverter<CName>, ICustomRedConverter
 {
     public object ReadRedType(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options) => Read(ref reader, typeToConvert, options);
 
-    public override CName Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
-    {
-        if (reader.TokenType == JsonTokenType.Null)
-        {
-            return (CName)RedTypeManager.CreateRedType(typeToConvert);
-        }
-
-        return reader.TokenType == JsonTokenType.String
+    public override CName Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options) => reader.TokenType == JsonTokenType.Null
+            ? (CName)RedTypeManager.CreateRedType(typeToConvert)
+            : reader.TokenType == JsonTokenType.String
             ? (CName)reader.GetString()
             : reader.TokenType == JsonTokenType.Number ? (CName)reader.GetUInt64() : throw new JsonException();
-    }
 
     public override void Write(Utf8JsonWriter writer, CName value, JsonSerializerOptions options)
     {
@@ -324,19 +318,13 @@ public class BufferConverterFactory : JsonConverterFactory
 
     public override bool CanConvert(Type typeToConvert) => typeof(IRedBufferWrapper).IsAssignableFrom(typeToConvert);
 
-    public override JsonConverter CreateConverter(Type typeToConvert, JsonSerializerOptions options)
-    {
-        if (typeToConvert == typeof(DataBuffer))
-        {
-            return _dataBufferConverter;
-        }
-
-        return typeToConvert == typeof(SerializationDeferredDataBuffer)
+    public override JsonConverter CreateConverter(Type typeToConvert, JsonSerializerOptions options) => typeToConvert == typeof(DataBuffer)
+            ? _dataBufferConverter
+            : typeToConvert == typeof(SerializationDeferredDataBuffer)
             ? _serializationDeferredDataBufferConverter
             : typeToConvert == typeof(SharedDataBuffer)
             ? (JsonConverter)_sharedDataBufferConverter
             : throw new NotSupportedException("CreateConverter got called on a type that this converter factory doesn't support");
-    }
 }
 
 public class DataBufferConverter : JsonConverter<DataBuffer>, ICustomRedConverter
@@ -1253,17 +1241,11 @@ public class NodeRefConverter : JsonConverter<NodeRef>, ICustomRedConverter
 {
     public object ReadRedType(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options) => Read(ref reader, typeToConvert, options);
 
-    public override NodeRef Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
-    {
-        if (reader.TokenType == JsonTokenType.Null)
-        {
-            return (NodeRef)RedTypeManager.CreateRedType(typeToConvert);
-        }
-
-        return reader.TokenType == JsonTokenType.String
+    public override NodeRef Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options) => reader.TokenType == JsonTokenType.Null
+            ? (NodeRef)RedTypeManager.CreateRedType(typeToConvert)
+            : reader.TokenType == JsonTokenType.String
             ? (NodeRef)reader.GetString()
             : reader.TokenType == JsonTokenType.Number ? (NodeRef)reader.GetUInt64() : throw new JsonException();
-    }
 
     public override void Write(Utf8JsonWriter writer, NodeRef value, JsonSerializerOptions options)
     {
@@ -1282,17 +1264,11 @@ public class TweakDBIDConverter : JsonConverter<TweakDBID>, ICustomRedConverter
 {
     public object ReadRedType(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options) => Read(ref reader, typeToConvert, options);
 
-    public override TweakDBID Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
-    {
-        if (reader.TokenType == JsonTokenType.Null)
-        {
-            return (TweakDBID)RedTypeManager.CreateRedType(typeToConvert);
-        }
-
-        return reader.TokenType == JsonTokenType.String
+    public override TweakDBID Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options) => reader.TokenType == JsonTokenType.Null
+            ? (TweakDBID)RedTypeManager.CreateRedType(typeToConvert)
+            : reader.TokenType == JsonTokenType.String
             ? (TweakDBID)reader.GetString()
             : reader.TokenType == JsonTokenType.Number ? (TweakDBID)reader.GetUInt64() : throw new JsonException();
-    }
 
     public override void Write(Utf8JsonWriter writer, TweakDBID value, JsonSerializerOptions options)
     {
@@ -1414,19 +1390,13 @@ public class ArrayConverterFactory : JsonConverterFactory
 
     public override bool CanConvert(Type typeToConvert) => typeof(IRedArray).IsAssignableFrom(typeToConvert);
 
-    public override JsonConverter CreateConverter(Type typeToConvert, JsonSerializerOptions options)
-    {
-        if (typeToConvert.GetGenericTypeDefinition() == typeof(CArray<>))
-        {
-            return _cArrayConverter;
-        }
-
-        return typeToConvert.GetGenericTypeDefinition() == typeof(CArrayFixedSize<>)
+    public override JsonConverter CreateConverter(Type typeToConvert, JsonSerializerOptions options) => typeToConvert.GetGenericTypeDefinition() == typeof(CArray<>)
+            ? _cArrayConverter
+            : typeToConvert.GetGenericTypeDefinition() == typeof(CArrayFixedSize<>)
             ? _cArrayFixedSizeConverter
             : typeToConvert.GetGenericTypeDefinition() == typeof(CStatic<>)
             ? (JsonConverter)_cStaticConverter
             : throw new NotSupportedException("CreateConverter got called on a type that this converter factory doesn't support");
-    }
 }
 
 public class CArrayConverter : JsonConverter<IRedArray>, ICustomRedConverter
@@ -2485,7 +2455,7 @@ public class ReferenceResolver<T> where T : class
 
 public class SemVersionConverter : JsonConverter<SemVersion>
 {
-    public override SemVersion? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options) => reader.GetString();
+    public override SemVersion? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options) => SemVersion.Parse(reader.GetString(), SemVersionStyles.Strict);
 
     public override void Write(Utf8JsonWriter writer, SemVersion value, JsonSerializerOptions options) => writer.WriteStringValue(value.ToString());
 }
