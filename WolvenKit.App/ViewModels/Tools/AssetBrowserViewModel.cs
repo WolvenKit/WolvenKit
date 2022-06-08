@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
@@ -11,8 +10,6 @@ using System.Windows;
 using System.Windows.Input;
 using DynamicData;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.FileSystemGlobbing;
-using MoreLinq;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using Splat;
@@ -23,12 +20,12 @@ using WolvenKit.Common.Model.Database;
 using WolvenKit.Common.Services;
 using WolvenKit.Core.Interfaces;
 using WolvenKit.Core.Services;
+using WolvenKit.Functionality;
 using WolvenKit.Functionality.Commands;
 using WolvenKit.Functionality.Controllers;
 using WolvenKit.Functionality.Services;
 using WolvenKit.Models;
 using WolvenKit.Models.Docking;
-using WolvenKit.RED4.Archive;
 using WolvenKit.ViewModels.Shell;
 
 namespace WolvenKit.ViewModels.Tools
@@ -176,7 +173,7 @@ namespace WolvenKit.ViewModels.Tools
 
         [Reactive] public IFileSystemViewModel RightSelectedItem { get; set; }
 
-        [Reactive] public ObservableCollection<IFileSystemViewModel> RightItems { get; set; } = new();
+        [Reactive] public ObservableCollectionEx<IFileSystemViewModel> RightItems { get; set; } = new();
 
         [Reactive] public ObservableCollection<object> RightSelectedItems { get; set; } = new();
 
@@ -325,7 +322,7 @@ namespace WolvenKit.ViewModels.Tools
                 LeftItems = new ObservableCollection<RedFileSystemModel>(_boundRootNodes);
             }
 
-            RightItems = new ObservableCollection<IFileSystemViewModel>();
+            RightItems = new ObservableCollectionEx<IFileSystemViewModel>();
             _archiveManager.IsModBrowserActive = !_archiveManager.IsModBrowserActive;
         }
 
@@ -588,7 +585,7 @@ namespace WolvenKit.ViewModels.Tools
 
                     default:
                         throw new ArgumentException($"Unknown refinement, shouldn't ever happen. Refinement: {searchRefinement}");
-                };
+                }
             };
 
         private void CyberEnhancedSearch()
@@ -636,8 +633,10 @@ namespace WolvenKit.ViewModels.Tools
 
             // Should add an indicator here of failures and non-matches
 
+            RightItems.SuppressNotification = true;
             RightItems.Clear();
             RightItems.AddRange(list);
+            RightItems.SuppressNotification = false;
         }
 
         public IGameFile LookupGameFile(ulong hash)
