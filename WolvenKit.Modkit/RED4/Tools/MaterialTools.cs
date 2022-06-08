@@ -596,7 +596,7 @@ namespace WolvenKit.Modkit.RED4
 
 
             var RawMaterials = new List<RawMaterial>();
-            var usedMts = new Dictionary<string, CMaterialTemplate>();
+            var usedMts = GetEmbeddedMaterialTemplates(ref cr2w);
             for (var i = 0; i < materialEntries.Count; i++)
             {
                 RawMaterials.Add(ContainRawMaterial(materialEntries[i], materialEntryNames[i], archives, ref usedMts));
@@ -1190,6 +1190,24 @@ namespace WolvenKit.Modkit.RED4
             var b = blob.LocalMaterialBuffer.RawData.Buffer;
 
             return new MemoryStream(b.GetBytes());
+        }
+
+        private static Dictionary<string, CMaterialTemplate> GetEmbeddedMaterialTemplates(ref CR2WFile cr2w)
+        {
+            var materialTemplates = new Dictionary<string, CMaterialTemplate>();
+            foreach (var file in cr2w.EmbeddedFiles)
+            {
+                if (Path.GetExtension(file.FileName).Contains("mt"))
+                {
+                    var mt = file.Content as CMaterialTemplate;
+                    if(mt != null)
+                    {
+                        materialTemplates.Add(file.FileName, mt);
+                    }
+                }
+            }
+
+            return materialTemplates;
         }
 
         public bool WriteMatToMesh(ref CR2WFile cr2w, string _matData, List<Archive> archives)
