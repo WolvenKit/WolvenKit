@@ -61,80 +61,36 @@ namespace WolvenKit.Common.Wcc
     {
         #region Methods
 
-        public static EImportable ExportExtensionToRawExtension(EExportable ext)
+        public static EImportable ExportExtensionToRawExtension(EExportable ext) => ext switch
         {
-            switch (ext)
-            {
-                case EExportable.w2mesh:
-                    return EImportable.fbx;
-
-                case EExportable.reddest:
-                    return EImportable.nxs;
-
-                case EExportable.redcloth:
-                case EExportable.redapex:
-                    return EImportable.apb;
-
-                case EExportable.xbm:
-                    return EImportable.tga;
-
-                default:
-                    throw new NotImplementedException();
-            }
-        }
+            EExportable.w2mesh => EImportable.fbx,
+            EExportable.reddest => EImportable.nxs,
+            EExportable.redcloth or EExportable.redapex => EImportable.apb,
+            EExportable.xbm => EImportable.tga,
+            _ => throw new NotImplementedException(),
+        };
 
         public static Enum RawExtensionToEnum(string ext)
         {
             ext = ext.ToLower();
-            switch (ext)
+            return ext switch
             {
-                case ".apb":
-                    return new EApbImports();
-
-                case ".nxs":
-                    return new ENxsImports();
-
-                case ".png":
-                case ".bmp":
-                case ".jpg":
-                case ".tga":
-                case ".dds":
-                    return new ETextureImports();
-
-                case ".re":
-                case ".fbx":
-                    return new EMeshImports();
-
-                default:
-                    throw new NotImplementedException();
-            }
+                ".apb" => new EApbImports(),
+                ".nxs" => new ENxsImports(),
+                ".png" or ".bmp" or ".jpg" or ".tga" or ".dds" => new ETextureImports(),
+                ".re" or ".fbx" => new EMeshImports(),
+                _ => throw new NotImplementedException(),
+            };
         }
 
-        public static List<string> RawExtensionToRedImport(string ext)
+        public static List<string> RawExtensionToRedImport(string ext) => ext switch
         {
-            switch (ext)
-            {
-                case "apb":
-                    return Enum.GetNames(typeof(EApbImports)).Select(_ => $".{_}").ToList();
-
-                case "nxs":
-                    return Enum.GetNames(typeof(ENxsImports)).Select(_ => $".{_}").ToList();
-
-                case ".re":
-                case ".fbx":
-                    return Enum.GetNames(typeof(EMeshImports)).Select(_ => $".{_}").ToList();
-
-                case ".jpg":
-                case ".pga":
-                case ".tga":
-                case ".bmp":
-                case "dds":
-                    return Enum.GetNames(typeof(ETextureImports)).Select(_ => $".{_}").ToList();
-
-                default:
-                    return new List<string>();
-            }
-        }
+            "apb" => Enum.GetNames(typeof(EApbImports)).Select(_ => $".{_}").ToList(),
+            "nxs" => Enum.GetNames(typeof(ENxsImports)).Select(_ => $".{_}").ToList(),
+            ".re" or ".fbx" => Enum.GetNames(typeof(EMeshImports)).Select(_ => $".{_}").ToList(),
+            ".jpg" or ".pga" or ".tga" or ".bmp" or "dds" => Enum.GetNames(typeof(ETextureImports)).Select(_ => $".{_}").ToList(),
+            _ => new List<string>(),
+        };
 
         #endregion Methods
 

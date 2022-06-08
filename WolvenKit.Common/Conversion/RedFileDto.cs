@@ -28,9 +28,9 @@ public class RedFileDto
         var list = new List<RedBaseClass>();
         var comp = ReferenceEqualityComparer.Instance;
 
-        foreach (var propTuple in Data.RootChunk.GetEnumerator())
+        foreach (var (propPath, value) in Data.RootChunk.GetEnumerator())
         {
-            if (propTuple.value is IRedBaseHandle handle)
+            if (value is IRedBaseHandle handle)
             {
                 var subCls = handle.GetValue();
                 if (!Contains(subCls))
@@ -42,9 +42,9 @@ public class RedFileDto
 
         foreach (var embeddedFile in Data.EmbeddedFiles)
         {
-            foreach (var propTuple in embeddedFile.Content.GetEnumerator())
+            foreach (var (propPath, value) in embeddedFile.Content.GetEnumerator())
             {
-                if (propTuple.value is IRedBaseHandle handle)
+                if (value is IRedBaseHandle handle)
                 {
                     var subCls = handle.GetValue();
                     if (!Contains(subCls))

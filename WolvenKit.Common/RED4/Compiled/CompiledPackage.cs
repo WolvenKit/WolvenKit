@@ -124,11 +124,11 @@ namespace WolvenKit.Common.RED4.Compiled
 
             for (uint i = 0; i < NumRefPoolDesc; i++)
             {
-                br.BaseStream.Seek(baseOff + _header.RefPoolDescOffset + i * 4, SeekOrigin.Begin);
+                br.BaseStream.Seek(baseOff + _header.RefPoolDescOffset + (i * 4), SeekOrigin.Begin);
                 var bitmaskData = br.ReadUInt32();
                 RefPoolDescTable.Add(bitmaskData);
                 var off = bitmaskData & RefTableOffsetMask;
-                var len = bitmaskData >> (int)RefTableSizeBitShift & SizeBitMask;
+                var len = (bitmaskData >> (int)RefTableSizeBitShift) & SizeBitMask;
 
                 br.BaseStream.Seek(baseOff + off, SeekOrigin.Begin);
                 if (_header.Uk2 == 0)
@@ -149,11 +149,11 @@ namespace WolvenKit.Common.RED4.Compiled
 
             for (uint i = 0; i < NumNamesPoolDesc; i++)
             {
-                br.BaseStream.Seek(baseOff + _header.NamesPoolDescoffset + i * 4, SeekOrigin.Begin);
+                br.BaseStream.Seek(baseOff + _header.NamesPoolDescoffset + (i * 4), SeekOrigin.Begin);
                 var bitmaskData = br.ReadUInt32();
                 NamesPoolDescTable.Add(bitmaskData);
                 var off = bitmaskData & NamesTableOffsetMask;
-                var len = bitmaskData >> (int)NamesTableSizeBitShift & SizeBitMask;
+                var len = (bitmaskData >> (int)NamesTableSizeBitShift) & SizeBitMask;
 
                 br.BaseStream.Seek(baseOff + off, SeekOrigin.Begin);
                 var name = new string(br.ReadChars((int)len - 1));
@@ -166,7 +166,7 @@ namespace WolvenKit.Common.RED4.Compiled
             //throw new WolvenKit.RED4.Types.Exceptions.TodoException();
             for (var i = 0; i < NumChunksDesc; i++)
             {
-                br.BaseStream.Seek(baseOff + _header.ChunkDescOffset + i * 8, SeekOrigin.Begin);
+                br.BaseStream.Seek(baseOff + _header.ChunkDescOffset + (i * 8), SeekOrigin.Begin);
                 var chunkDesc = br.BaseStream.ReadStruct<ChunkDesc>();
                 ChunkDescs.Add(chunkDesc);
 

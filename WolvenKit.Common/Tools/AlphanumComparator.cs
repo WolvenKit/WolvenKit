@@ -55,9 +55,7 @@ namespace WolvenKit.Common
 
         public int Compare(T x, T y)
         {
-            var s1 = x as string;
-            var s2 = y as string;
-            if (s1 == null || s2 == null)
+            if (x is not string s1 || y is not string s2)
             {
                 return 0;
             }
@@ -143,13 +141,8 @@ namespace WolvenKit.Common
                 type = ChunkType.Numeric;
             }
 
-            if ((type == ChunkType.Alphanumeric && char.IsDigit(ch))
-                || (type == ChunkType.Numeric && !char.IsDigit(ch)))
-            {
-                return false;
-            }
-
-            return true;
+            return (type != ChunkType.Alphanumeric || !char.IsDigit(ch))
+                && (type != ChunkType.Numeric || char.IsDigit(ch));
         }
 
         #endregion Methods

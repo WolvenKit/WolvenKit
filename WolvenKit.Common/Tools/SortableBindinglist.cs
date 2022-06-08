@@ -40,22 +40,14 @@ namespace VanWassenhove.Util
                 var value1 = propertyInfo.GetValue(t1, null);
                 var value2 = propertyInfo.GetValue(t2, null);
 
-                var comparable = value1 as IComparable;
-                if (comparable != null)
+                if (value1 is IComparable comparable)
                 {
                     return reverse * comparable.CompareTo(value2);
                 }
                 else
                 {
                     comparable = value2 as IComparable;
-                    if (comparable != null)
-                    {
-                        return -1 * reverse * comparable.CompareTo(value1);
-                    }
-                    else
-                    {
-                        return 0;
-                    }
+                    return comparable != null ? -1 * reverse * comparable.CompareTo(value1) : 0;
                 }
             });
 

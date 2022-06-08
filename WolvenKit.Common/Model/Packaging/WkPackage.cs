@@ -151,27 +151,27 @@ namespace WolvenKit.Common.Model.Packaging
             var rootnode = new XElement("package", new XAttribute("version", version), new XAttribute("name", name));
             var authorelement = new XElement("author", new XElement("displayName", Author.Item1));
             var metadataelement = new XElement("metadata");
-            if (Author.Item2 != null || Author.Item2 != "")
+            if (Author.Item2 is not null or not "")
             {
                 authorelement.Add(new XElement("actionLink", Author.Item2));
             }
 
-            if (Author.Item3 != null || Author.Item3 != "")
+            if (Author.Item3 is not null or not "")
             {
                 authorelement.Add(new XElement("web", Author.Item3));
             }
 
-            if (Author.Item4 != null || Author.Item4 != "")
+            if (Author.Item4 is not null or not "")
             {
                 authorelement.Add(new XElement("facebook", Author.Item4));
             }
 
-            if (Author.Item5 != null || Author.Item5 != "")
+            if (Author.Item5 is not null or not "")
             {
                 authorelement.Add(new XElement("twitter", Author.Item5));
             }
 
-            if (Author.Item6 != null || Author.Item6 != "")
+            if (Author.Item6 is not null or not "")
             {
                 authorelement.Add(new XElement("youtube", Author.Item6));
             }

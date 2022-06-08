@@ -37,12 +37,7 @@ namespace WolvenKit.Common.Model.Arguments
         public T Get<T>() where T : ConvertArgs
         {
             var arg = _argsList[typeof(T)];
-            if (arg is T t)
-            {
-                return t;
-            }
-
-            return null;
+            return arg is T t ? t : null;
         }
     }
 
@@ -98,12 +93,7 @@ namespace WolvenKit.Common.Model.Arguments
         public T Get<T>() where T : ExportArgs
         {
             var arg = _argsList[typeof(T)];
-            if (arg is T t)
-            {
-                return t;
-            }
-
-            return null;
+            return arg is T t ? t : null;
         }
     }
 
@@ -155,12 +145,7 @@ namespace WolvenKit.Common.Model.Arguments
         public T Get<T>() where T : ImportArgs
         {
             var arg = _argsList[typeof(T)];
-            if (arg is T t)
-            {
-                return t;
-            }
-
-            return null;
+            return arg is T t ? t : null;
         }
     }
 
@@ -312,7 +297,7 @@ namespace WolvenKit.Common.Model.Arguments
         /// String Override to display info in datagrid.
         /// </summary>
         /// <returns>String</returns>
-        public override string ToString() => "Mesh/Morphtarget | " + $"Import Format :  {importFormat.ToString()}";
+        public override string ToString() => "Mesh/Morphtarget | " + $"Import Format :  {importFormat}";
     }
     public enum GltfImportAsFormat
     {
@@ -365,7 +350,7 @@ namespace WolvenKit.Common.Model.Arguments
         [Display(Name = "Dump all information inside OpusInfo to Json.")]
         public bool DumpAllToJson { get; set; }
 
-        public override string ToString() => "Wem Files | " + $"Use Modified OpusInfo :  {UseMod.ToString()} | Selected :  {SelectedForExport.Count.ToString()}";
+        public override string ToString() => "Wem Files | " + $"Use Modified OpusInfo :  {UseMod} | Selected :  {SelectedForExport.Count}";
     }
 
     /// <summary>
@@ -398,7 +383,7 @@ namespace WolvenKit.Common.Model.Arguments
         /// String Override to display info in datagrid.
         /// </summary>
         /// <returns>String</returns>
-        public override string ToString() => "GLTF/GLB | " + $"Is Binary :  {IsBinary.ToString()}";
+        public override string ToString() => "GLTF/GLB | " + $"Is Binary :  {IsBinary}";
     }
 
     /// <summary>
@@ -428,7 +413,7 @@ namespace WolvenKit.Common.Model.Arguments
         /// String Override to display info in datagrid.
         /// </summary>
         /// <returns>String</returns>
-        public override string ToString() => $"{UncookExtension.ToString()}";
+        public override string ToString() => $"{UncookExtension}";
     }
 
     /// <summary>
@@ -454,7 +439,7 @@ namespace WolvenKit.Common.Model.Arguments
         /// String Override to display info in datagrid.
         /// </summary>
         /// <returns>String</returns>
-        public override string ToString() => $"{UncookExtension.ToString()} | Flip : {Flip.ToString()}";
+        public override string ToString() => $"{UncookExtension} | Flip : {Flip}";
     }
     /// <summary>
     /// ENT Export Arguments
@@ -476,7 +461,7 @@ namespace WolvenKit.Common.Model.Arguments
         /// String Override to display info in datagrid.
         /// </summary>
         /// <returns>String</returns>
-        public override string ToString() => $"{ExportType.ToString()}";
+        public override string ToString() => $"{ExportType}";
     }
     public enum EntityExportType
     {
@@ -566,7 +551,7 @@ namespace WolvenKit.Common.Model.Arguments
         /// String Override to display info in datagrid.
         /// </summary>
         /// <returns>String</returns>
-        public override string ToString() => "GLTF/GLB | " + $"Export Type : {meshExportType.ToString()} | Lod filter : {LodFilter.ToString()} | Is Binary : {isGLBinary.ToString()}";
+        public override string ToString() => "GLTF/GLB | " + $"Export Type : {meshExportType} | Lod filter : {LodFilter} | Is Binary : {isGLBinary}";
     }
 
     /// <summary>
@@ -624,7 +609,7 @@ namespace WolvenKit.Common.Model.Arguments
         /// String Override to display info in datagrid.
         /// </summary>
         /// <returns>String</returns>
-        public override string ToString() => "GLTF/GLB | " + $"Is Binary :  {IsBinary.ToString()}";
+        public override string ToString() => "GLTF/GLB | " + $"Is Binary :  {IsBinary}";
     }
     /// <summary>
     /// Wem Export Types

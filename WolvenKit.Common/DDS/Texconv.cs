@@ -56,29 +56,13 @@ namespace WolvenKit.Common.DDS
             }
         }
 
-        public static int ComputeRowPitch(int width, int height, DXGI_FORMAT format)
-        {
-            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
-            {
-                return (int)TexconvNative.ComputeRowPitch(format, width, height);
-            }
-            else
-            {
-                throw new NotImplementedException();
-            }
-        }
+        public static int ComputeRowPitch(int width, int height, DXGI_FORMAT format) => RuntimeInformation.IsOSPlatform(OSPlatform.Windows)
+                ? (int)TexconvNative.ComputeRowPitch(format, width, height)
+                : throw new NotImplementedException();
 
-        public static int ComputeSlicePitch(int width, int height, DXGI_FORMAT format)
-        {
-            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
-            {
-                return (int)TexconvNative.ComputeSlicePitch(format, width, height);
-            }
-            else
-            {
-                throw new NotImplementedException();
-            }
-        }
+        public static int ComputeSlicePitch(int width, int height, DXGI_FORMAT format) => RuntimeInformation.IsOSPlatform(OSPlatform.Windows)
+                ? (int)TexconvNative.ComputeSlicePitch(format, width, height)
+                : throw new NotImplementedException();
 
         public static ESaveFileTypes ToSaveFormat(EUncookExtension extension) =>
             extension switch
@@ -169,7 +153,7 @@ namespace WolvenKit.Common.DDS
             }
             finally
             {
-                if (rentedBuffer is object)
+                if (rentedBuffer is not null)
                 {
                     ArrayPool<byte>.Shared.Return(rentedBuffer);
                 }
@@ -220,7 +204,7 @@ namespace WolvenKit.Common.DDS
             }
             finally
             {
-                if (rentedBuffer is object)
+                if (rentedBuffer is not null)
                 {
                     ArrayPool<byte>.Shared.Return(rentedBuffer);
                 }
@@ -272,7 +256,7 @@ namespace WolvenKit.Common.DDS
             }
             finally
             {
-                if (rentedBuffer is object)
+                if (rentedBuffer is not null)
                 {
                     ArrayPool<byte>.Shared.Return(rentedBuffer);
                 }

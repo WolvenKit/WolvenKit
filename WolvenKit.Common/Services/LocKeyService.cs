@@ -3,8 +3,8 @@ using System.IO;
 using System.Linq;
 using Splat;
 using WolvenKit.Core.Interfaces;
-using WolvenKit.RED4.Types;
 using WolvenKit.RED4.CR2W;
+using WolvenKit.RED4.Types;
 
 namespace WolvenKit.Common.Services
 {
@@ -31,10 +31,7 @@ namespace WolvenKit.Common.Services
             //});
         }
 
-        public void LoadCurrentLanguage()
-        {
-            (_primaryKeys[Language], _secondaryKeys[Language]) = Load("base\\localization\\en-us\\onscreens\\onscreens_final.json");
-        }
+        public void LoadCurrentLanguage() => (_primaryKeys[Language], _secondaryKeys[Language]) = Load("base\\localization\\en-us\\onscreens\\onscreens_final.json");
 
         public (Dictionary<ulong, localizationPersistenceOnScreenEntry>,
             Dictionary<string, localizationPersistenceOnScreenEntry>)
@@ -45,23 +42,21 @@ namespace WolvenKit.Common.Services
             var file = _archive.Lookup(depotPath.GetRedHash());
             if (file.HasValue && file.Value is IGameFile fe)
             {
-                using (var stream = new MemoryStream())
-                {
-                    fe.Extract(stream);
-                    using var reader = new BinaryReader(stream);
-                    var cr2wFile = _parser.ReadRed4File(reader);
+                using var stream = new MemoryStream();
+                fe.Extract(stream);
+                using var reader = new BinaryReader(stream);
+                var cr2wFile = _parser.ReadRed4File(reader);
 
-                    if (cr2wFile.RootChunk is JsonResource json)
+                if (cr2wFile.RootChunk is JsonResource json)
+                {
+                    if (json.Root.Chunk is localizationPersistenceOnScreenEntries os)
                     {
-                        if (json.Root.Chunk is localizationPersistenceOnScreenEntries os)
+                        foreach (var entry in os.Entries)
                         {
-                            foreach (var entry in os.Entries)
+                            primary[entry.PrimaryKey] = entry;
+                            if ((string)entry.SecondaryKey != null)
                             {
-                                primary[entry.PrimaryKey] = entry;
-                                if ((string)entry.SecondaryKey != null)
-                                {
-                                    secondary[entry.SecondaryKey] = entry;
-                                }
+                                secondary[entry.SecondaryKey] = entry;
                             }
                         }
                     }

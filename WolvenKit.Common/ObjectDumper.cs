@@ -58,7 +58,7 @@ namespace WolvenKit.Common
 
         private string DumpElement(object element)
         {
-            if (element == null || element is ValueType || element is string)
+            if (element is null or ValueType or string)
             {
                 Write(FormatValue(element));
             }
@@ -72,12 +72,11 @@ namespace WolvenKit.Common
                     _level++;
                 }
 
-                var enumerableElement = element as IEnumerable;
-                if (enumerableElement != null)
+                if (element is IEnumerable enumerableElement)
                 {
                     foreach (var item in enumerableElement)
                     {
-                        if (item is IEnumerable && !(item is string))
+                        if (item is IEnumerable and not string)
                         {
                             _level++;
                             DumpElement(item);
@@ -152,12 +151,12 @@ namespace WolvenKit.Common
         {
             if (o == null)
             {
-                return ("null");
+                return "null";
             }
 
             if (o is DateTime)
             {
-                return (((DateTime)o).ToShortDateString());
+                return ((DateTime)o).ToShortDateString();
             }
 
             if (o is string)
@@ -170,17 +169,7 @@ namespace WolvenKit.Common
                 return string.Empty;
             }
 
-            if (o is ValueType)
-            {
-                return (o.ToString());
-            }
-
-            if (o is IEnumerable)
-            {
-                return ("...");
-            }
-
-            return ("{ }");
+            return o is ValueType ? o.ToString() : o is IEnumerable ? "..." : "{ }";
         }
 
         private void Write(string value, params object[] args)

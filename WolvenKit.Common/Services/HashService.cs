@@ -73,12 +73,7 @@ namespace WolvenKit.Common.Services
 
             // load additional
             LoadAdditional();
-            if (_additionalhashes.ContainsKey(key))
-            {
-                return true;
-            }
-
-            return false;
+            return _additionalhashes.ContainsKey(key);
         }
 
         public string Get(ulong key)
@@ -99,23 +94,10 @@ namespace WolvenKit.Common.Services
 
             // load additional
             LoadAdditional();
-            if (_additionalhashes.ContainsKey(key))
-            {
-                return _additionalhashes[key].ToString();
-            }
-
-            return "";
+            return _additionalhashes.ContainsKey(key) ? _additionalhashes[key].ToString() : "";
         }
 
-        public string GetNodeRef(ulong key)
-        {
-            if (_noderefs.ContainsKey(key))
-            {
-                return _noderefs[key].ToString();
-            }
-
-            return Get(key);
-        }
+        public string GetNodeRef(ulong key) => _noderefs.ContainsKey(key) ? _noderefs[key].ToString() : Get(key);
 
         public void AddCustom(ulong hash, string path)
         {

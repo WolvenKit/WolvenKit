@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
 using WolvenKit.Common.Model;
-using WolvenKit.RED4.Types;
 using WolvenKit.RED4.TweakDB;
 using WolvenKit.RED4.TweakDB.Helper;
+using WolvenKit.RED4.Types;
 
 namespace WolvenKit.Common.Services
 {
@@ -46,10 +46,7 @@ namespace WolvenKit.Common.Services
             }
         }
 
-        public bool Exists(TweakDBID key)
-        {
-            return s_tweakDb.Flats.Exists(key) || s_tweakDb.Records.Exists(key);
-        }
+        public bool Exists(TweakDBID key) => s_tweakDb.Flats.Exists(key) || s_tweakDb.Records.Exists(key);
 
         public string GetString(ulong key) => s_stringHelper.GetString(key);
 
@@ -66,12 +63,7 @@ namespace WolvenKit.Common.Services
             }
 
             var flatValue = s_tweakDb.Flats.GetValue(hash);
-            if (flatValue != null)
-            {
-                return flatValue.GetType();
-            }
-
-            return null;
+            return flatValue?.GetType();
         }
 
         public List<TweakDBID> GetRecords() => s_tweakDb.GetRecords();

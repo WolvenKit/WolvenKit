@@ -33,62 +33,60 @@ namespace WolvenKit.Common.Services
             var file = _archive.Lookup(10378000475152730580);
             if (file.HasValue && file.Value is IGameFile fe)
             {
-                using (var stream = new MemoryStream())
+                using var stream = new MemoryStream();
+                fe.Extract(stream);
+                using var reader = new BinaryReader(stream);
+                var cr2wFile = _parser.ReadRed4File(reader);
+
+                if (cr2wFile.RootChunk is physicsGeometryCache pgc)
                 {
-                    fe.Extract(stream);
-                    using var reader = new BinaryReader(stream);
-                    var cr2wFile = _parser.ReadRed4File(reader);
-
-                    if (cr2wFile.RootChunk is physicsGeometryCache pgc)
+                    var totalEntryIndex = 0;
+                    for (var sectorIndex = 0; sectorIndex < pgc.BufferTableSectors.Count; sectorIndex++)
                     {
-                        var totalEntryIndex = 0;
-                        for (var sectorIndex = 0; sectorIndex < pgc.BufferTableSectors.Count; sectorIndex++)
+                        var sectorHash = pgc.SectorEntries[sectorIndex].SectorHash;
+                        if (!_entries.ContainsKey(sectorHash))
                         {
-                            var sectorHash = pgc.SectorEntries[sectorIndex].SectorHash;
-                            if (!_entries.ContainsKey(sectorHash))
-                            {
-                                _entries[sectorHash] = new();
-                            }
-
-                            if (pgc.BufferTableSectors[sectorIndex].Data is not GeometryCacheBuffer gcb)
-                            {
-                                continue;
-                            }
-                            
-                            for (int entryIndex = 0; entryIndex < gcb.Entries.Count; entryIndex++)
-                            {
-                                var entry = pgc.SectorGeometries[totalEntryIndex];
-                                ulong entryHash = 0;
-                                for (int i = 0; i < 8; i++)
-                                {
-                                    entryHash |= (ulong)(entry.Ta[i]) << (i * 8);
-                                }
-                                _entries[sectorHash][entryHash] = gcb.Entries[entryIndex];
-                                totalEntryIndex++;
-                            }
+                            _entries[sectorHash] = new();
                         }
 
-                        if (!_entries.ContainsKey(0))
+                        if (pgc.BufferTableSectors[sectorIndex].Data is not GeometryCacheBuffer gcb)
                         {
-                            _entries[0] = new();
+                            continue;
                         }
 
-                        if (pgc.AlwaysLoadedSectorDDB.Data is not GeometryCacheBuffer algcb)
-                        {
-                            return;
-                        }
-
-                        foreach (var als in algcb.Entries)
+                        for (var entryIndex = 0; entryIndex < gcb.Entries.Count; entryIndex++)
                         {
                             var entry = pgc.SectorGeometries[totalEntryIndex];
                             ulong entryHash = 0;
-                            for (int i = 0; i < 8; i++)
+                            for (var i = 0; i < 8; i++)
                             {
-                                entryHash |= (ulong)(entry.Ta[i]) << (i * 8);
+                                entryHash |= (ulong)entry.Ta[i] << (i * 8);
                             }
-                            _entries[0][entryHash] = als;
+                            _entries[sectorHash][entryHash] = gcb.Entries[entryIndex];
                             totalEntryIndex++;
                         }
+                    }
+
+                    if (!_entries.ContainsKey(0))
+                    {
+                        _entries[0] = new();
+                    }
+
+                    if (pgc.AlwaysLoadedSectorDDB.Data is not GeometryCacheBuffer algcb)
+                    {
+                        return;
+                    }
+
+                    foreach (var als in algcb.Entries)
+                    {
+                        var entry = pgc.SectorGeometries[totalEntryIndex];
+                        ulong entryHash = 0;
+                        for (var i = 0; i < 8; i++)
+                        {
+                            entryHash |= (ulong)entry.Ta[i] << (i * 8);
+                        }
+                        _entries[0][entryHash] = als;
+                        totalEntryIndex++;
                     }
                 }
             }
@@ -104,15 +102,9 @@ namespace WolvenKit.Common.Services
             {
                 return null;
             }
-            if (_entries[sectorHash].ContainsKey(entryHash))
-            {
-                return _entries[sectorHash][entryHash];
-            }
-            if (_entries[0].ContainsKey(entryHash))
-            {
-                return _entries[0][entryHash];
-            }
-            return null;
+            return _entries[sectorHash].ContainsKey(entryHash)
+                ? _entries[sectorHash][entryHash]
+                : _entries[0].ContainsKey(entryHash) ? _entries[0][entryHash] : null;
         }
     }
 }

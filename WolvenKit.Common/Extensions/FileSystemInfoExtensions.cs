@@ -29,14 +29,7 @@ namespace WolvenKit.Common.Extensions
                 DirectoryInfo => true,
                 _ => false
             };
-            if (b1 != b2)
-            {
-                throw new DirectoryNotFoundException();
-            }
-            else
-            {
-                return b1;
-            }
+            return b1 != b2 ? throw new DirectoryNotFoundException() : b1;
         }
 
         public static string TrimmedExtension(this FileInfo fi) => fi.Extension.TrimStart('.');

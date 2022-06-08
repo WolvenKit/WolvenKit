@@ -214,12 +214,7 @@ namespace WolvenKit.RED4.CR2W
 
             stream.Seek(-4, SeekOrigin.Current);
 
-            if (magic != CR2WFile.MAGIC)
-            {
-                return false;
-            }
-
-            return true;
+            return magic == CR2WFile.MAGIC;
         }
 
         #endregion Methods

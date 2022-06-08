@@ -128,7 +128,7 @@ namespace System
     internal static class ProgressStatics
     {
         /// <summary>A default synchronization context that targets the ThreadPool.</summary>
-        internal static readonly SynchronizationContext DefaultContext = new SynchronizationContext();
+        internal static readonly SynchronizationContext DefaultContext = new();
     }
 
 }

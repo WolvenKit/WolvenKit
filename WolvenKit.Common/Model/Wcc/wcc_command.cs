@@ -121,7 +121,7 @@ namespace WolvenKit.Common.Wcc
                     var tag = (REDTags)Attribute.GetCustomAttribute(pi, typeof(REDTags));
 
                     // Paths
-                    if (Attribute.GetCustomAttributes(pi).Any(x => (x is REDTags))
+                    if (Attribute.GetCustomAttributes(pi).Any(x => x is REDTags)
                         && tag.tag.Contains("Path")
                         && val.First() != '"') //check for alrady declared paths
                     {

@@ -105,7 +105,7 @@ namespace WolvenKit.RED4.CR2W
                         case ETextureRawFormat.TRF_R32UI:
                             //return DXGI_FORMAT.R32_UINT;
                             //throw new NotImplementedException($"{nameof(GetDXGIFormat)}: TRF_R32UI");
-                            logger.Warning($"Unknown texture format: {rawFormat.ToString()}");
+                            logger.Warning($"Unknown texture format: {rawFormat}");
                             return DXGI_FORMAT.DXGI_FORMAT_R8G8B8A8_UNORM;
                         default:
                             throw new ArgumentOutOfRangeException(nameof(rawFormat), rawFormat, null);
@@ -123,7 +123,7 @@ namespace WolvenKit.RED4.CR2W
                 case ETextureCompression.TCM_HalfHDR_Signed:
                 case ETextureCompression.TCM_Max:
                 {
-                    logger.Warning($"Unknown texture compression format: {compression.ToString()}");
+                    logger.Warning($"Unknown texture compression format: {compression}");
                     return DXGI_FORMAT.DXGI_FORMAT_BC7_UNORM;
                 }
                 default:
@@ -137,85 +137,34 @@ namespace WolvenKit.RED4.CR2W
         /// <param name="DXGIFormat"></param>
         /// <returns></returns>
         /// <exception cref="ArgumentOutOfRangeException"></exception>
-        public static (ETextureCompression, ETextureRawFormat) GetRedFormatsFromDxgiFormat(DXGI_FORMAT DXGIFormat)
+        public static (ETextureCompression, ETextureRawFormat) GetRedFormatsFromDxgiFormat(DXGI_FORMAT DXGIFormat) => DXGIFormat switch
         {
-            switch (DXGIFormat)
-            {
-                case DXGI_FORMAT.DXGI_FORMAT_R32G32B32A32_FLOAT:
-                    return (ETextureCompression.TCM_None, ETextureRawFormat.TRF_HDRFloat);
-
-                case DXGI_FORMAT.DXGI_FORMAT_R16G16B16A16_FLOAT:
-                    return (ETextureCompression.TCM_None, ETextureRawFormat.TRF_HDRHalf);
-
-                case DXGI_FORMAT.DXGI_FORMAT_R10G10B10A2_UNORM:
-                    return (ETextureCompression.TCM_None, ETextureRawFormat.TRF_DeepColor);
-
-                case DXGI_FORMAT.DXGI_FORMAT_R8G8B8A8_UNORM:
-                    return (ETextureCompression.TCM_None, ETextureRawFormat.TRF_TrueColor);
-
-                case DXGI_FORMAT.DXGI_FORMAT_R32_UINT:
-                    throw new NotImplementedException($"{nameof(GetRedFormatsFromDxgiFormat)}: R32_UINT");
-
-                case DXGI_FORMAT.DXGI_FORMAT_R8G8_UNORM:
-                    return (ETextureCompression.TCM_None, ETextureRawFormat.TRF_R8G8);
-
-                case DXGI_FORMAT.DXGI_FORMAT_R16_FLOAT:
-                    return (ETextureCompression.TCM_None, ETextureRawFormat.TRF_HDRFloatGrayscale);
-
-                case DXGI_FORMAT.DXGI_FORMAT_R8_UINT:
-                    return (ETextureCompression.TCM_None, ETextureRawFormat.TRF_Grayscale);
-
-                case DXGI_FORMAT.DXGI_FORMAT_A8_UNORM:
-                    return (ETextureCompression.TCM_None, ETextureRawFormat.TRF_AlphaGrayscale);
-
-                case DXGI_FORMAT.DXGI_FORMAT_BC1_UNORM:
-                    return (ETextureCompression.TCM_DXTNoAlpha, ETextureRawFormat.TRF_Invalid);
-
-                case DXGI_FORMAT.DXGI_FORMAT_BC2_UNORM:
-                    throw new NotImplementedException($"{nameof(GetRedFormatsFromDxgiFormat)}: BC2_UNORM");
-
-                case DXGI_FORMAT.DXGI_FORMAT_BC3_UNORM:
-                    return (ETextureCompression.TCM_DXTAlpha, ETextureRawFormat.TRF_Invalid);
-
-                case DXGI_FORMAT.DXGI_FORMAT_BC4_UNORM:
-                    return (ETextureCompression.TCM_QualityR, ETextureRawFormat.TRF_Invalid);
-
-                case DXGI_FORMAT.DXGI_FORMAT_BC5_UNORM:
-                    return (ETextureCompression.TCM_Normalmap, ETextureRawFormat.TRF_Invalid);
-
-                case DXGI_FORMAT.DXGI_FORMAT_BC7_UNORM:
-                    return (ETextureCompression.TCM_QualityColor, ETextureRawFormat.TRF_Invalid);
-
-                default:
-                    throw new ArgumentOutOfRangeException(nameof(DXGIFormat), DXGIFormat, null);
-            }
-        }
+            DXGI_FORMAT.DXGI_FORMAT_R32G32B32A32_FLOAT => (ETextureCompression.TCM_None, ETextureRawFormat.TRF_HDRFloat),
+            DXGI_FORMAT.DXGI_FORMAT_R16G16B16A16_FLOAT => (ETextureCompression.TCM_None, ETextureRawFormat.TRF_HDRHalf),
+            DXGI_FORMAT.DXGI_FORMAT_R10G10B10A2_UNORM => (ETextureCompression.TCM_None, ETextureRawFormat.TRF_DeepColor),
+            DXGI_FORMAT.DXGI_FORMAT_R8G8B8A8_UNORM => (ETextureCompression.TCM_None, ETextureRawFormat.TRF_TrueColor),
+            DXGI_FORMAT.DXGI_FORMAT_R32_UINT => throw new NotImplementedException($"{nameof(GetRedFormatsFromDxgiFormat)}: R32_UINT"),
+            DXGI_FORMAT.DXGI_FORMAT_R8G8_UNORM => (ETextureCompression.TCM_None, ETextureRawFormat.TRF_R8G8),
+            DXGI_FORMAT.DXGI_FORMAT_R16_FLOAT => (ETextureCompression.TCM_None, ETextureRawFormat.TRF_HDRFloatGrayscale),
+            DXGI_FORMAT.DXGI_FORMAT_R8_UINT => (ETextureCompression.TCM_None, ETextureRawFormat.TRF_Grayscale),
+            DXGI_FORMAT.DXGI_FORMAT_A8_UNORM => (ETextureCompression.TCM_None, ETextureRawFormat.TRF_AlphaGrayscale),
+            DXGI_FORMAT.DXGI_FORMAT_BC1_UNORM => (ETextureCompression.TCM_DXTNoAlpha, ETextureRawFormat.TRF_Invalid),
+            DXGI_FORMAT.DXGI_FORMAT_BC2_UNORM => throw new NotImplementedException($"{nameof(GetRedFormatsFromDxgiFormat)}: BC2_UNORM"),
+            DXGI_FORMAT.DXGI_FORMAT_BC3_UNORM => (ETextureCompression.TCM_DXTAlpha, ETextureRawFormat.TRF_Invalid),
+            DXGI_FORMAT.DXGI_FORMAT_BC4_UNORM => (ETextureCompression.TCM_QualityR, ETextureRawFormat.TRF_Invalid),
+            DXGI_FORMAT.DXGI_FORMAT_BC5_UNORM => (ETextureCompression.TCM_Normalmap, ETextureRawFormat.TRF_Invalid),
+            DXGI_FORMAT.DXGI_FORMAT_BC7_UNORM => (ETextureCompression.TCM_QualityColor, ETextureRawFormat.TRF_Invalid),
+            _ => throw new ArgumentOutOfRangeException(nameof(DXGIFormat), DXGIFormat, null),
+        };
 
         public static (ETextureCompression, ETextureRawFormat)
-            GetRedFormatsFromTextureGroup(GpuWrapApieTextureGroup textureGroup)
-        {
-            switch (textureGroup)
+            GetRedFormatsFromTextureGroup(GpuWrapApieTextureGroup textureGroup) => textureGroup switch
             {
-                case GpuWrapApieTextureGroup.TEXG_Generic_Grayscale:
-                    return (ETextureCompression.TCM_QualityR, ETextureRawFormat.TRF_Invalid);
-
-                case GpuWrapApieTextureGroup.TEXG_Generic_Normal: //TODO: support TCM_Normals_DEPRECATED?
-                    return (ETextureCompression.TCM_Normalmap, ETextureRawFormat.TRF_Invalid);
-
-                case GpuWrapApieTextureGroup.TEXG_Generic_Color:
-                case GpuWrapApieTextureGroup.TEXG_Generic_Data:
-                case GpuWrapApieTextureGroup.TEXG_Generic_UI:
-                case GpuWrapApieTextureGroup.TEXG_Generic_Font:
-                case GpuWrapApieTextureGroup.TEXG_Generic_LUT:
-                case GpuWrapApieTextureGroup.TEXG_Generic_MorphBlend:
-                case GpuWrapApieTextureGroup.TEXG_Multilayer_Color:
-                case GpuWrapApieTextureGroup.TEXG_Multilayer_Normal:
-                case GpuWrapApieTextureGroup.TEXG_Multilayer_Grayscale:
-                case GpuWrapApieTextureGroup.TEXG_Multilayer_Microblend:
-                default:
-                    throw new ArgumentOutOfRangeException(nameof(textureGroup), textureGroup, null);
-            }
-        }
+                GpuWrapApieTextureGroup.TEXG_Generic_Grayscale => (ETextureCompression.TCM_QualityR, ETextureRawFormat.TRF_Invalid),
+                //TODO: support TCM_Normals_DEPRECATED?
+                GpuWrapApieTextureGroup.TEXG_Generic_Normal => (ETextureCompression.TCM_Normalmap, ETextureRawFormat.TRF_Invalid),
+                _ => throw new ArgumentOutOfRangeException(nameof(textureGroup), textureGroup, null),
+            };
 
 
 
