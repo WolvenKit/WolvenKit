@@ -45,7 +45,6 @@ namespace WolvenKit.App.Services
                 nameof(MaterialRepositoryPath),
                 nameof(ThemeAccentString),
                 nameof(CheckForUpdates),
-                nameof(CP77GameDirPath),
                 nameof(CP77ExecutablePath),
                 nameof(CP77LaunchCommand),
                 nameof(CP77LaunchOptions),
@@ -164,11 +163,6 @@ namespace WolvenKit.App.Services
         #region red4
 
         [Category("Cyberpunk")]
-        [Display(Name = "Game Directory Path")]
-        [Reactive]
-        public string CP77GameDirPath { get; set; }
-
-        [Category("Cyberpunk")]
         [Display(Name = "Game Executable Path (.exe)")]
         [Reactive]
         public string CP77ExecutablePath { get; set; }
@@ -248,7 +242,14 @@ namespace WolvenKit.App.Services
 
         #region red4
 
-        public string GetRED4GameRootDir() => CP77GameDirPath;
+        public string GetRED4GameRootDir()
+        {
+            var fi = new FileInfo(CP77ExecutablePath);
+
+            return fi.Directory is { Parent.Parent: { } }
+                ? Path.Combine(fi.Directory.Parent.Parent.FullName)
+                : throw new DirectoryNotFoundException();
+        }
 
         public string GetRED4GameExecutablePath() => CP77ExecutablePath;
 
@@ -306,7 +307,6 @@ namespace WolvenKit.App.Services
             UpdateChannel = settings.UpdateChannel;
             ShowGuidedTour = settings.ShowGuidedTour;
             ThemeAccentString = settings.ThemeAccentString;
-            CP77GameDirPath = settings.CP77GameDirPath;
             CP77ExecutablePath = settings.CP77ExecutablePath;
             CP77LaunchCommand = settings.CP77LaunchCommand;
             CP77LaunchOptions = settings.CP77LaunchOptions;
@@ -330,7 +330,6 @@ namespace WolvenKit.App.Services
         public EUpdateChannel UpdateChannel { get; set; }
         public bool ShowGuidedTour { get; set; }
         public string ThemeAccentString { get; set; }
-        public string CP77GameDirPath { get; set; }
         public string CP77ExecutablePath { get; set; }
         public string CP77LaunchCommand { get; set; }
         public string CP77LaunchOptions { get; set; }
@@ -355,7 +354,6 @@ namespace WolvenKit.App.Services
             settingsManager.UpdateChannel = UpdateChannel;
             settingsManager.ShowGuidedTour = ShowGuidedTour;
             settingsManager.ThemeAccentString = ThemeAccentString;
-            settingsManager.CP77GameDirPath = CP77GameDirPath;
             settingsManager.CP77ExecutablePath = CP77ExecutablePath;
             settingsManager.CP77LaunchCommand = CP77LaunchCommand;
             settingsManager.CP77LaunchOptions = CP77LaunchOptions;
@@ -387,12 +385,6 @@ namespace WolvenKit.App.Services
         {
             if (!string.IsNullOrWhiteSpace(CP77ExecutablePath))
             {
-                var fi = new FileInfo(CP77ExecutablePath);
-
-                CP77GameDirPath = fi.Directory is { Parent.Parent: { } }
-                    ? Path.Combine(fi.Directory.Parent.Parent.FullName)
-                    : null;
-
                 CP77LaunchCommand = CP77ExecutablePath;
             }
 

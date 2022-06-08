@@ -17,7 +17,7 @@ namespace WolvenKit.App.Services
         public EUpdateChannel UpdateChannel { get; set; }
         public bool ShowGuidedTour { get; set; }
         public string ThemeAccentString { get; set; }
-        public string CP77GameDirPath { get; set; }
+        //public string CP77GameDirPath { get; set; }
         public string CP77ExecutablePath { get; set; }
         public string CP77LaunchCommand { get; set; }
         public string CP77LaunchOptions { get; set; }

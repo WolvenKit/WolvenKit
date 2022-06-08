@@ -5,6 +5,7 @@ using ReactiveUI;
 using Splat;
 using Syncfusion.Windows.PropertyGrid;
 using WolvenKit.App.Services;
+using WolvenKit.Controls;
 using WolvenKit.ViewModels;
 using static WolvenKit.Converters.PropertyGridEditors;
 
@@ -70,11 +71,8 @@ namespace WolvenKit.Views.HomePage.Pages
             {
                 switch (propertyItem.DisplayName)
                 {
-                    case nameof(ISettingsDto.CP77GameDirPath):
-                        propertyItem.Editor = new Controls.SingleFolderPathEditor();
-                        break;
                     case nameof(ISettingsDto.CP77ExecutablePath):
-                        propertyItem.Editor = new Controls.SingleFilePathEditor();
+                        propertyItem.Editor = new Controls.SingleFilePathEditor() { Filters = new PathEditorFilter[] { new("Cyberpunk2077.exe", "*.exe") } };
                         break;
                     case nameof(ISettingsManager.MaterialRepositoryPath):
                         propertyItem.Editor = new Controls.SingleFolderPathEditor();

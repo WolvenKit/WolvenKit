@@ -58,6 +58,8 @@ namespace WolvenKit.App.ViewModels.Shell
         private readonly IRecentlyUsedItemsService _recentlyUsedItemsService;
         private readonly IProgressService<double> _progressService;
         private readonly IWatcherService _watcherService;
+        private readonly IPluginService _pluginService;
+        private readonly TweakDBService _tweakDBService;
         private readonly AutoInstallerService _autoInstallerService;
         private readonly HomePageViewModel _homePageViewModel;
 
@@ -77,6 +79,8 @@ namespace WolvenKit.App.ViewModels.Shell
             IRecentlyUsedItemsService recentlyUsedItemsService,
             IProgressService<double> progressService,
             IWatcherService watcherService,
+            IPluginService pluginService,
+            TweakDBService tweakDBService,
             AutoInstallerService autoInstallerService
         )
         {
@@ -89,6 +93,8 @@ namespace WolvenKit.App.ViewModels.Shell
             _progressService = progressService;
             _watcherService = watcherService;
             _autoInstallerService = autoInstallerService;
+            _pluginService = pluginService;
+            _tweakDBService = tweakDBService;
 
             _homePageViewModel = Locator.Current.GetService<HomePageViewModel>();
 
@@ -168,11 +174,15 @@ namespace WolvenKit.App.ViewModels.Shell
             };
 
             // TweakDB when we're good and ready
-            _ = _settingsManager
-                .WhenAnyValue(x => x.CP77GameDirPath)
-                .SkipWhile(x => string.IsNullOrWhiteSpace(x)) // -.-
+            _settingsManager
+                .WhenAnyValue(x => x.CP77ExecutablePath)
+                .SkipWhile(x => string.IsNullOrWhiteSpace(x) || !File.Exists(x)) // -.-
                 .Take(1)
-                .Subscribe(x => LoadTweakDB(_settingsManager.GetRED4GameRootDir()));
+                .Subscribe(x =>
+                {
+                    _pluginService.Init();
+                    _tweakDBService.LoadDB(Path.Combine(_settingsManager.GetRED4GameRootDir(), "r6", "cache", "tweakdb.bin"));
+                });
 
             _ = _settingsManager
                 .WhenAnyValue(x => x.UpdateChannel)
@@ -259,14 +269,13 @@ namespace WolvenKit.App.ViewModels.Shell
         {
             if (!_settingsManager.IsHealthy())
             {
-                _ = await Interactions.ShowFirstTimeSetup.Handle(Unit.Default);
+                var setupWasOk = await Interactions.ShowFirstTimeSetup.Handle(Unit.Default);
+                if (setupWasOk)
+                {
+                    _pluginService.Init();
+                    _tweakDBService.LoadDB(Path.Combine(_settingsManager.GetRED4GameRootDir(), "r6", "cache", "tweakdb.bin"));
+                }
             }
-        }
-
-        private void LoadTweakDB(string gameDir)
-        {
-            var tweakdbService = Locator.Current.GetService<TweakDBService>();
-            tweakdbService.LoadDB(Path.Combine(gameDir, "r6", "cache", "tweakdb.bin"));
         }
 
         #endregion init

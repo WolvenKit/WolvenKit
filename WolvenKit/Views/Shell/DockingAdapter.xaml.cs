@@ -131,9 +131,9 @@ namespace WolvenKit.Views.Shell
                 Trace.WriteLine(Debugging_A);
                 reader.Close();
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-
+                Trace.WriteLine(ex.Message);
             }
         }
 
