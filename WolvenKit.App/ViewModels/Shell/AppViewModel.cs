@@ -175,13 +175,13 @@ namespace WolvenKit.ViewModels.Shell
 
             // TweakDB when we're good and ready
             _settingsManager
-                .WhenAnyValue(x => x.CP77GameDirPath)
-                .SkipWhile(x => string.IsNullOrWhiteSpace(x) || !Directory.Exists(x)) // -.-
+                .WhenAnyValue(x => x.CP77ExecutablePath)
+                .SkipWhile(x => string.IsNullOrWhiteSpace(x) || !File.Exists(x)) // -.-
                 .Take(1)
                 .Subscribe(x =>
                 {
                     _pluginService.Init();
-                    _tweakDBService.LoadDB(Path.Combine(x, "r6", "cache", "tweakdb.bin"));
+                    _tweakDBService.LoadDB(Path.Combine(_settingsManager.GetRED4GameRootDir(), "r6", "cache", "tweakdb.bin"));
                 });
 
             _settingsManager
@@ -426,10 +426,7 @@ namespace WolvenKit.ViewModels.Shell
 
                 await _projectManager.LoadAsync(projectLocation);
 
-                DispatcherHelper.RunOnMainThread(() =>
-                {
-                    ActiveProject = _projectManager.ActiveProject;
-                });
+                DispatcherHelper.RunOnMainThread(() => ActiveProject = _projectManager.ActiveProject);
 
                 await _gameControllerFactory.GetController().HandleStartup().ContinueWith(_ =>
                 {
@@ -825,13 +822,7 @@ namespace WolvenKit.ViewModels.Shell
         private async Task ExecutePackMod() => await _gameControllerFactory.GetController().PackProject();
 
         public ReactiveCommand<Unit, Unit> PackInstallModCommand { get; private set; }
-        private async Task ExecutePackInstallMod()
-        {
-            await Task.Run(async () =>
-            {
-                await _gameControllerFactory.GetController().PackAndInstallProject();
-            });
-        }
+        private async Task ExecutePackInstallMod() => await Task.Run(async () => await _gameControllerFactory.GetController().PackAndInstallProject());
 
         //public ICommand PublishModCommand { get; private set; }
         //private bool CanPublishMod() => _projectManager.ActiveProject != null;
