@@ -1,35 +1,27 @@
 using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
+using System.ComponentModel;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using HelixToolkit.SharpDX.Core;
 using HelixToolkit.Wpf.SharpDX;
-using SharpDX.Direct3D9;
 using Splat;
 using WolvenKit.Common.Services;
-using WolvenKit.Functionality.Ab4d;
+using WolvenKit.Functionality.Extensions;
+using WolvenKit.Functionality.Helpers;
+using WolvenKit.Functionality.Other;
 using WolvenKit.Functionality.Services;
 using WolvenKit.Modkit.RED4;
-using WolvenKit.RED4.Archive.CR2W;
-using WolvenKit.RED4.Types;
-using System.Collections.ObjectModel;
-using System.Windows.Input;
-using ReactiveUI.Fody.Helpers;
-using WolvenKit.Common.DDS;
-using WolvenKit.Functionality.Commands;
-using WolvenKit.RED4.Archive.Buffer;
-using WolvenKit.RED4.Archive.IO;
-using WolvenKit.Functionality.Helpers;
-using System.ComponentModel;
-using System.Collections.Specialized;
-using WolvenKit.Functionality.Extensions;
 using WolvenKit.Modkit.RED4.Tools;
+using WolvenKit.RED4.Archive.Buffer;
+using WolvenKit.RED4.Types;
 
 namespace WolvenKit.ViewModels.Documents
 {
@@ -55,14 +47,14 @@ namespace WolvenKit.ViewModels.Documents
                 Items.Add(item);
             }
 
-            this.OnPropertyChanged(new PropertyChangedEventArgs("Count"));
-            this.OnPropertyChanged(new PropertyChangedEventArgs("Item[]"));
-            this.OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
+            OnPropertyChanged(new PropertyChangedEventArgs("Count"));
+            OnPropertyChanged(new PropertyChangedEventArgs("Item[]"));
+            OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
         }
 
         public void Reset(IEnumerable<Element3D> range)
         {
-            this.Items.Clear();
+            Items.Clear();
 
             AddRange(range);
         }
@@ -183,7 +175,7 @@ namespace WolvenKit.ViewModels.Documents
                         {
                             textureCoordinates.Add(new SharpDX.Vector2(
                                 (mesh.positions[i].X - xMin) / (xMax - xMin),
-                                1f - (mesh.positions[i].Z - yMin) / (yMax - yMin)
+                                1f - ((mesh.positions[i].Z - yMin) / (yMax - yMin))
                             ));
                         }
                     }
@@ -202,13 +194,13 @@ namespace WolvenKit.ViewModels.Documents
                 {
                     MeshBuilder.ComputeTangents(positions, normals, textureCoordinates, indices, out tangents, out var bitangents);
                 }
-                
+
                 var sm = new SubmeshComponent()
                 {
                     Name = $"submesh_{index:D2}_LOD_{meshesinfo.LODLvl[index]:D2}",
                     LOD = meshesinfo.LODLvl[index],
-                    IsRendering = (chunkMask & 1UL << index) > 0 && meshesinfo.LODLvl[index] == (SelectedAppearance?.SelectedLOD ?? 1),
-                    EnabledWithMask = (chunkMask & 1UL << index) > 0,
+                    IsRendering = (chunkMask & (1UL << index)) > 0 && meshesinfo.LODLvl[index] == (SelectedAppearance?.SelectedLOD ?? 1),
+                    EnabledWithMask = (chunkMask & (1UL << index)) > 0,
                     //CullMode = SharpDX.Direct3D11.CullMode.Front,
                     Geometry = new MeshGeometry3D()
                     {
@@ -252,48 +244,42 @@ namespace WolvenKit.ViewModels.Documents
         public static void ComputeNormals(Vector3Collection positions, IntCollection triangleIndices, out Vector3Collection normals)
         {
             normals = new Vector3Collection(positions.Count);
-            for (int i = 0; i < positions.Count; i++)
+            for (var i = 0; i < positions.Count; i++)
             {
                 normals.Add(new SharpDX.Vector3(0f, 0f, 0f));
             }
 
-            for (int j = 0; j < triangleIndices.Count; j += 3)
+            for (var j = 0; j < triangleIndices.Count; j += 3)
             {
-                int index = triangleIndices[j + 2];
-                int index2 = triangleIndices[j + 1];
-                int index3 = triangleIndices[j];
-                SharpDX.Vector3 right = positions[index];
-                SharpDX.Vector3 left = positions[index2];
-                SharpDX.Vector3 left2 = positions[index3];
-                SharpDX.Vector3 first = left - right;
-                SharpDX.Vector3 second = left2 - right;
-                SharpDX.Vector3 value = CrossProduct(ref first, ref second);
+                var index = triangleIndices[j + 2];
+                var index2 = triangleIndices[j + 1];
+                var index3 = triangleIndices[j];
+                var right = positions[index];
+                var left = positions[index2];
+                var left2 = positions[index3];
+                var first = left - right;
+                var second = left2 - right;
+                var value = CrossProduct(ref first, ref second);
                 first.Normalize();
                 second.Normalize();
-                float scale = (float)Math.Acos(DotProduct(ref first, ref second));
+                var scale = (float)Math.Acos(DotProduct(ref first, ref second));
                 value.Normalize();
                 normals[index] += scale * value;
                 normals[index2] += scale * value;
                 normals[index3] += scale * value;
             }
 
-            for (int k = 0; k < normals.Count; k++)
+            for (var k = 0; k < normals.Count; k++)
             {
-                SharpDX.Vector3 value2 = normals[k];
+                var value2 = normals[k];
                 value2.Normalize();
                 normals[k] = value2;
             }
         }
 
-        public static SharpDX.Vector3 CrossProduct(ref SharpDX.Vector3 first, ref SharpDX.Vector3 second)
-        {
-            return SharpDX.Vector3.Cross(first, second);
-        }
+        public static SharpDX.Vector3 CrossProduct(ref SharpDX.Vector3 first, ref SharpDX.Vector3 second) => SharpDX.Vector3.Cross(first, second);
 
-        public static float DotProduct(ref SharpDX.Vector3 first, ref SharpDX.Vector3 second)
-        {
-            return first.X * second.X + first.Y * second.Y + first.Z * second.Z;
-        }
+        public static float DotProduct(ref SharpDX.Vector3 first, ref SharpDX.Vector3 second) => (first.X * second.X) + (first.Y * second.Y) + (first.Z * second.Z);
 
 
         public PBRMaterial SetupPBRMaterial(string name, bool force = false)
@@ -396,14 +382,7 @@ namespace WolvenKit.ViewModels.Documents
             return appMaterials;
         }
 
-        public string GetUniqueMaterialName(string name, CMesh mesh)
-        {
-            if (mesh.InplaceResources.Count > 0)
-            {
-                return Path.GetFileNameWithoutExtension(mesh.InplaceResources[0].DepotPath.ToString());
-            }
-            return name;
-        }
+        public string GetUniqueMaterialName(string name, CMesh mesh) => mesh.InplaceResources.Count > 0 ? Path.GetFileNameWithoutExtension(mesh.InplaceResources[0].DepotPath.ToString()) : name;
 
         public Dictionary<string, Material> GetMaterialsFromMesh(CMesh mesh)
         {
@@ -425,16 +404,9 @@ namespace WolvenKit.ViewModels.Documents
                     }
                     continue;
                 }
-                CMaterialInstance inst = null;
-
-                if (localList != null && localList.Files.Count > me.Index)
-                {
-                    inst = (CMaterialInstance)localList.Files[me.Index].RootChunk;
-                }
-                else
-                {
-                    inst = (CMaterialInstance)mesh.PreloadLocalMaterialInstances[me.Index].GetValue();
-                }
+                var inst = localList != null && localList.Files.Count > me.Index
+                    ? (CMaterialInstance)localList.Files[me.Index].RootChunk
+                    : (CMaterialInstance)mesh.PreloadLocalMaterialInstances[me.Index].GetValue();
 
                 var material = new Material()
                 {
@@ -508,7 +480,9 @@ namespace WolvenKit.ViewModels.Documents
                     foreach (var pair in cmi.Values)
                     {
                         if (!dictionary.ContainsKey(pair.Key))
+                        {
                             dictionary.Add(pair.Key, pair.Value);
+                        }
                     }
                     mat = cmi;
                 }
@@ -527,24 +501,36 @@ namespace WolvenKit.ViewModels.Documents
             if (dictionary.ContainsKey("Metalness") && dictionary["Metalness"] is CResourceReference<ITexture> metalTexture)
             {
                 if (metalTexture.DepotPath == "base\\materials\\placeholder\\black.xbm")
+                {
                     material.Metalness = 0;
+                }
                 else if (metalTexture.DepotPath == "base\\materials\\placeholder\\white.xbm")
+                {
                     material.Metalness = 1;
+                }
             }
 
             if (dictionary.ContainsKey("MetalnessScale"))
+            {
                 material.Metalness = (CFloat)dictionary["MetalnessScale"];
+            }
 
             if (dictionary.ContainsKey("Roughness") && dictionary["Roughness"] is CResourceReference<ITexture> roughTexture)
             {
                 if (roughTexture.DepotPath == "base\\materials\\placeholder\\black.xbm")
+                {
                     material.Roughness = 0;
+                }
                 else if (roughTexture.DepotPath == "base\\materials\\placeholder\\white.xbm")
+                {
                     material.Roughness = 1;
+                }
             }
 
             if (dictionary.ContainsKey("RoughnessScale"))
+            {
                 material.Roughness = (CFloat)dictionary["RoughnessScale"];
+            }
 
             var filename_b = Path.Combine(ISettingsManager.GetTemp_OBJPath(), material.Name + ".png");
             var filename_bn = Path.Combine(ISettingsManager.GetTemp_OBJPath(), material.Name + "_n.png");
@@ -559,7 +545,9 @@ namespace WolvenKit.ViewModels.Documents
                 var normalExists = System.IO.File.Exists(filename_bn);
 
                 if (albedoExists && normalExists && roughMetallicExists)
+                {
                     goto DiffuseMaps;
+                }
 
                 if (dictionary["MultilayerSetup"] is not CResourceReference<Multilayer_Setup> mlsRef)
                 {
@@ -590,24 +578,26 @@ namespace WolvenKit.ViewModels.Documents
 
                 var firstStream = await ImageDecoder.RenderToBitmapSourceDds(streams[0]);
 
-                Bitmap destBitmap = new Bitmap((int)firstStream.Width, (int)firstStream.Height);
-                Bitmap rmBitmap = new Bitmap((int)firstStream.Width, (int)firstStream.Height);
-                Bitmap normalBitmap = new Bitmap((int)firstStream.Width, (int)firstStream.Height);
-                using (Graphics gfx_n = Graphics.FromImage(normalBitmap))
-                using (SolidBrush brush = new SolidBrush(System.Drawing.Color.FromArgb(128, 128, 255)))
+                var destBitmap = new Bitmap((int)firstStream.Width, (int)firstStream.Height);
+                var rmBitmap = new Bitmap((int)firstStream.Width, (int)firstStream.Height);
+                var normalBitmap = new Bitmap((int)firstStream.Width, (int)firstStream.Height);
+                using (var gfx_n = Graphics.FromImage(normalBitmap))
+                using (var brush = new SolidBrush(System.Drawing.Color.FromArgb(128, 128, 255)))
                 {
                     gfx_n.FillRectangle(brush, 0, 0, (int)firstStream.Width, (int)firstStream.Height);
                 }
 
-                Graphics gfx = Graphics.FromImage(destBitmap);
-                Graphics gfx_rm = Graphics.FromImage(rmBitmap);
+                var gfx = Graphics.FromImage(destBitmap);
+                var gfx_rm = Graphics.FromImage(rmBitmap);
                 //Graphics gfx_n = Graphics.FromImage(destBitmap);
 
                 var i = 0;
                 foreach (var layer in mls.Layers)
                 {
                     if (i >= streams.Count)
+                    {
                         break;
+                    }
 
                     if (layer.Material == null)
                     {
@@ -621,15 +611,7 @@ namespace WolvenKit.ViewModels.Documents
                         goto SkipLayer;
                     }
 
-                    BitmapSource mask;
-                    if (i == 0)
-                    {
-                        mask = firstStream;
-                    }
-                    else
-                    {
-                        mask = await ImageDecoder.RenderToBitmapSourceDds(streams[i]);
-                    }
+                    var mask = i == 0 ? firstStream : await ImageDecoder.RenderToBitmapSourceDds(streams[i]);
                     mask = new TransformedBitmap(mask, new ScaleTransform(1, -1));
 
                     Bitmap maskBitmap;
@@ -661,13 +643,15 @@ namespace WolvenKit.ViewModels.Documents
                             new float[] { 0, 0, 0, 0, 0},
                             new float[] { 0, 0, 0, 0, 0},
                             new float[] { 0, 0, 0, 0, 0},
-                        });
-                        colorMatrix.Matrix03 = layer.Opacity;
-                        colorMatrix.Matrix40 = color[0];
-                        colorMatrix.Matrix41 = color[1];
-                        colorMatrix.Matrix42 = color[2];
+                        })
+                        {
+                            Matrix03 = layer.Opacity,
+                            Matrix40 = color[0],
+                            Matrix41 = color[1],
+                            Matrix42 = color[2]
+                        };
 
-                        ImageAttributes attributes = new ImageAttributes();
+                        var attributes = new ImageAttributes();
 
                         attributes.SetColorMatrix(colorMatrix, ColorMatrixFlag.Default, ColorAdjustType.Bitmap);
 
@@ -688,34 +672,22 @@ namespace WolvenKit.ViewModels.Documents
                             new float[] { 0, 0, 0, 0, 0},
                             new float[] { 0, 0, 0, 0, 0},
                             new float[] { 0, 0, 0, 0, 0},
-                        });
-                        colorMatrix.Matrix03 = 1f;
-                        colorMatrix.Matrix40 = 0;
-                        if (roughOut != null)
+                        })
                         {
-                            colorMatrix.Matrix41 = (roughOut[0] + roughOut[1]) / 2f;
-                        }
-                        else
-                        {
-                            colorMatrix.Matrix41 = 0.5f;
-                        }
-                        if (metalOut != null)
-                        {
-                            colorMatrix.Matrix42 = (metalOut[0] + metalOut[1]) / 2f;
-                        }
-                        else
-                        {
-                            colorMatrix.Matrix42 = 0.0f;
-                        }
+                            Matrix03 = 1f,
+                            Matrix40 = 0
+                        };
+                        colorMatrix.Matrix41 = roughOut != null ? (float)((roughOut[0] + roughOut[1]) / 2f) : 0.5f;
+                        colorMatrix.Matrix42 = metalOut != null ? (float)((metalOut[0] + metalOut[1]) / 2f) : 0.0f;
 
-                        ImageAttributes attributes = new ImageAttributes();
+                        var attributes = new ImageAttributes();
 
                         attributes.SetColorMatrix(colorMatrix, ColorMatrixFlag.Default, ColorAdjustType.Bitmap);
 
                         gfx_rm.DrawImage(maskBitmap, new Rectangle(0, 0, maskBitmap.Width, maskBitmap.Height), 0, 0, maskBitmap.Width, maskBitmap.Height, GraphicsUnit.Pixel, attributes);
                     }
 
-                //SkipRoughMetal:
+                    //SkipRoughMetal:
 
                     var normalFile = File.GetFileFromDepotPathOrCache(mllt.NormalTexture.DepotPath);
 
@@ -738,7 +710,7 @@ namespace WolvenKit.ViewModels.Documents
                         var layerWidth = (int)(normalLayer.Width * layer.MatTile);
                         var layerHeight = (int)(normalLayer.Height * layer.MatTile);
 
-                        Bitmap tempNormalBitmap = new Bitmap(maskBitmap.Width, maskBitmap.Height);
+                        var tempNormalBitmap = new Bitmap(maskBitmap.Width, maskBitmap.Height);
 
                         if (layerWidth != 0 && layerHeight != 0)
                         {
@@ -752,7 +724,7 @@ namespace WolvenKit.ViewModels.Documents
                             }
                         }
 
-                        Graphics gfx_n = Graphics.FromImage(tempNormalBitmap);
+                        var gfx_n = Graphics.FromImage(tempNormalBitmap);
                         gfx_n.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.HighQualityBilinear;
                         gfx_n.DrawImage(normalLayer, new Rectangle(0, 0, layerWidth, layerHeight), 0, 0, normalLayer.Width, normalLayer.Height, GraphicsUnit.Pixel, null);
                         gfx_n.Dispose();
@@ -761,16 +733,16 @@ namespace WolvenKit.ViewModels.Documents
                         {
                             if (strength.N == layer.NormalStrength)
                             {
-                                for (int y = 0; y < maskBitmap.Height; y++)
+                                for (var y = 0; y < maskBitmap.Height; y++)
                                 {
-                                    for (int x = 0; x < maskBitmap.Width; x++)
+                                    for (var x = 0; x < maskBitmap.Width; x++)
                                     {
                                         var oc = normalBitmap.GetPixel(x, y);
                                         var n = tempNormalBitmap.GetPixel(x % tempNormalBitmap.Width, y % tempNormalBitmap.Height);
                                         var alpha = maskBitmap.GetPixel(x, y).R / 255F * (float)strength.V;
-                                        var r = (int)((oc.R - 127) * (1F - alpha) + (n.R - 127) * alpha) + 127;
+                                        var r = (int)(((oc.R - 127) * (1F - alpha)) + ((n.R - 127) * alpha)) + 127;
                                         //var g = 255 - ((int)((oc.G - 127) * (1F - alpha) + (n.G - 127) * alpha) + 127);
-                                        var g = (int)((oc.G - 127) * (1F - alpha) + (n.G - 127) * alpha) + 127;
+                                        var g = (int)(((oc.G - 127) * (1F - alpha)) + ((n.G - 127) * alpha)) + 127;
                                         var b = (int)((oc.B - 127) * (1F - alpha)) + 127;
                                         if (n.B == 0)
                                         {
@@ -837,9 +809,11 @@ namespace WolvenKit.ViewModels.Documents
                 }
             }
 
-            DiffuseMaps:
+        DiffuseMaps:
             if (System.IO.File.Exists(filename_d))
+            {
                 goto NormalMaps;
+            }
 
             if (dictionary.ContainsKey("DiffuseTexture") && dictionary["DiffuseTexture"] is CResourceReference<ITexture> crrd)
             {
@@ -888,7 +862,9 @@ namespace WolvenKit.ViewModels.Documents
             // normals
 
             if (System.IO.File.Exists(filename_bn))
+            {
                 goto SkipNormals;
+            }
 
             if (dictionary.ContainsKey("NormalTexture") && dictionary["NormalTexture"] is CResourceReference<ITexture> crrn)
             {
@@ -919,9 +895,9 @@ namespace WolvenKit.ViewModels.Documents
                     normalLayer = new Bitmap(outStream);
                 }
 
-                for (int y = 0; y < normalLayer.Height; y++)
+                for (var y = 0; y < normalLayer.Height; y++)
                 {
-                    for (int x = 0; x < normalLayer.Width; x++)
+                    for (var x = 0; x < normalLayer.Width; x++)
                     {
                         var oc = normalLayer.GetPixel(x, y);
                         var r = oc.R;
@@ -975,9 +951,9 @@ namespace WolvenKit.ViewModels.Documents
                     normalLayer = new Bitmap(outStream);
                 }
 
-                for (int y = 0; y < normalLayer.Height; y++)
+                for (var y = 0; y < normalLayer.Height; y++)
                 {
-                    for (int x = 0; x < normalLayer.Width; x++)
+                    for (var x = 0; x < normalLayer.Width; x++)
                     {
                         var oc = normalLayer.GetPixel(x, y);
                         var r = oc.R;
@@ -1003,17 +979,11 @@ namespace WolvenKit.ViewModels.Documents
             }
 
         SkipNormals:
-            DispatcherHelper.RunOnMainThread(() =>
-            {
-                SetupPBRMaterial(material.Name, true);
-            });
+            DispatcherHelper.RunOnMainThread(() => SetupPBRMaterial(material.Name, true));
 
             return;
         }
 
-        public byte ToBlue(byte r, byte g)
-        {
-            return (byte)Math.Clamp(Math.Round((Math.Sqrt(1.02 - 2 * ((r / 255F) * 2 - 1) * ((g / 255F) * 2 - 1)) + 1) / 2 * 255), 0, 255);
-        }
+        public byte ToBlue(byte r, byte g) => (byte)Math.Clamp(Math.Round((Math.Sqrt(1.02 - (2 * ((r / 255F * 2) - 1) * ((g / 255F * 2) - 1))) + 1) / 2 * 255), 0, 255);
     }
 }

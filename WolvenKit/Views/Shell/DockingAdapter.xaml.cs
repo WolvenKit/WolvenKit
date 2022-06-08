@@ -1,5 +1,3 @@
-//https://github.com/SyncfusionExamples/working-with-wpf-docking-manager-and-mvvm
-
 using System;
 using System.Collections;
 using System.Collections.ObjectModel;
@@ -27,6 +25,8 @@ using DockState = WolvenKit.Models.Docking.DockState;
 
 namespace WolvenKit.Views.Shell
 {
+    //https://github.com/SyncfusionExamples/working-with-wpf-docking-manager-and-mvvm
+
     /// <summary>
     /// Interaction logic for DockingAdapter.xaml
     /// </summary>
@@ -221,8 +221,7 @@ namespace WolvenKit.Views.Shell
 
         private static void OnActiveDocumentChanged(DependencyObject sender, DependencyPropertyChangedEventArgs args)
         {
-            var adapter = sender as DockingAdapter;
-            if (adapter == null)
+            if (sender is not DockingAdapter adapter)
             {
                 return;
             }
@@ -310,7 +309,7 @@ namespace WolvenKit.Views.Shell
                     ((DocumentContainer)PART_DockingManager.DocContainer).SetCurrentValue(DocumentContainer.AddTabDocumentAtLastProperty, true);
                     var newcollection = e.NewValue as INotifyCollectionChanged;
                     var count = 0;
-                    foreach (var item in ((IList)e.NewValue))
+                    foreach (var item in (IList)e.NewValue)
                     {
                         if (item is IDockElement dockElement)
                         {
@@ -329,7 +328,7 @@ namespace WolvenKit.Views.Shell
                                 {
                                     //DockingManager.SetTargetNameInDockedMode(control, "item" + (count - 1).ToString());
                                 }
-                                control.Name = "item" + (count++).ToString();
+                                control.Name = "item" + count++.ToString();
                             }
                             PART_DockingManager.Children.Add(control);
                         }
@@ -419,8 +418,7 @@ namespace WolvenKit.Views.Shell
 
         public DataTemplate FindDataTemplate(Type type, FrameworkElement element)
         {
-            var dataTemplate = element.TryFindResource(type) as DataTemplate;
-            if (dataTemplate != null)
+            if (element.TryFindResource(type) is DataTemplate dataTemplate)
             {
                 return dataTemplate;
             }

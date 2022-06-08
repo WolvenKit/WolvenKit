@@ -37,9 +37,6 @@
     <PackageReference Include="AdonisUI" Version="1.17.1" />
     <PackageReference Include="AdonisUI.ClassicTheme" Version="1.17.1" />
     <PackageReference Include="Fluent.Ribbon" Version="9.0.4" />
-    <PackageReference Include="Ab3d.DXEngine.Wpf" Version="5.0.8000" />
-    <PackageReference Include="Ab3d.DXEngine" Version="5.0.8000" />
-    <PackageReference Include="Ab3d.PowerToys" Version="10.0.8000" />
     <PackageReference Include="Discord.Net" Version="3.7.2" />
     <PackageReference Include="DrawStringLineHeight" Version="1.0.0" />
     <PackageReference Include="Feather.Controls" Version="1.0.3" />
@@ -140,21 +137,6 @@
     <Compile Remove="Views\Wizards\PublishWizardView.xaml.cs" />
   </ItemGroup>
     <ItemGroup>
-    <Content Include="Ab3d.DirectX.Client.Settings.dll">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Ab3d.PowerToys.Assimp.dll">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Assimp32.dll">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Assimp64.dll">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="AssimpNet.dll">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
     <Content Include="Obsolete.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -1620,8 +1602,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Remove="Ab3d.DirectX.Client.Settings.dll" />
-    <None Remove="Ab3d.PowerToys.Assimp.dll" />
     <None Remove="Assimp32.dll" />
     <None Remove="Assimp64.dll" />
     <None Remove="AssimpNet.dll" />
@@ -1806,16 +1786,6 @@
 
   <ItemGroup>
     <Page Remove="Views\Wizards\PublishWizardView.xaml" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Reference Include="Ab3d.DirectX.Client.Settings">
-      <HintPath>Ab3d.DirectX.Client.Settings.dll</HintPath>
-    </Reference>
-    <Reference Include="Ab3d.PowerToys.Assimp">
-    </Reference>
-    <Reference Include="AssimpNet">
-    </Reference>
   </ItemGroup>
 
   <ItemGroup>

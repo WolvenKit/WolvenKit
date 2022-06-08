@@ -100,15 +100,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Reference Include="Ab3d.PowerToys.Assimp">
-      <HintPath>..\WolvenKit\Ab3d.PowerToys.Assimp.dll</HintPath>
-    </Reference>
-    <Reference Include="AssimpNet">
-      <HintPath>..\WolvenKit\AssimpNet.dll</HintPath>
-    </Reference>
-  </ItemGroup>
-
-  <ItemGroup>
     <Folder Include="Models\Arguments\" />
   </ItemGroup>
 

@@ -2,11 +2,9 @@ using System;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Windows;
-using Ab3d.DirectX.Client.Settings;
 using ReactiveUI;
 using Splat;
 using Syncfusion.Windows.Tools.Controls;
-using WolvenKit.Functionality.Ab4d;
 using WolvenKit.Interaction;
 using WolvenKit.ViewModels.Shell;
 using WolvenKit.ViewModels.Tools;
@@ -27,8 +25,6 @@ namespace WolvenKit.Views.Shell
 
             InitializeComponent();
 
-            var dxEngineSettingsStorage = new DXEngineSettingsStorage();
-            DXEngineSettings.Initialize(dxEngineSettingsStorage);
             MaxBackgroundThreadsCount = Environment.ProcessorCount - 1;
 
             this.WhenActivated(disposables =>
@@ -228,7 +224,7 @@ namespace WolvenKit.Views.Shell
                         viewModel => viewModel._mainViewModel.LaunchGameCommand,
                         view => view.ToolbarLaunchButton)
                     .DisposeWith(disposables);
-               
+
                 this.Bind(ViewModel,
                         viewModel => viewModel._mainViewModel.SelectedGameCommandIdx,
                         view => view.ToolbarLaunchCombobox.SelectedIndex)
@@ -318,41 +314,7 @@ namespace WolvenKit.Views.Shell
         //    Trace.WriteLine("Disabled File Button");
         //}
 
-        private double _selectedDpiScale = double.NaN;
-
         public int MaxBackgroundThreadsCount { get; set; }
-
-        private void Button_Click(object sender, RoutedEventArgs e)
-        {
-            var dxEngineSettingsWindow = new DXEngineSettingsWindow();
-
-            if (DXEngineSettings.Current.GraphicsProfiles != null && DXEngineSettings.Current.GraphicsProfiles.Length > 0)
-            {
-                dxEngineSettingsWindow.SelectedGraphicsProfile = DXEngineSettings.Current.GraphicsProfiles[0];
-            }
-            else
-            {
-                dxEngineSettingsWindow.SelectedGraphicsProfile = null;
-            }
-
-            dxEngineSettingsWindow.SelectedDpiScale = _selectedDpiScale;
-
-            dxEngineSettingsWindow.SelectedMaxBackgroundThreadsCount = MaxBackgroundThreadsCount;
-
-            dxEngineSettingsWindow.ShowDialog();
-
-            var selectedGraphicsProfile = dxEngineSettingsWindow.SelectedGraphicsProfile;
-
-            // Save the selected GraphicsProfile to application settings
-            DXEngineSettings.Current.SaveGraphicsProfile(selectedGraphicsProfile);
-
-            _selectedDpiScale = dxEngineSettingsWindow.SelectedDpiScale;
-            MaxBackgroundThreadsCount = dxEngineSettingsWindow.SelectedMaxBackgroundThreadsCount;
-
-            // Now create an array of GraphicsProfile from selectedGraphicsProfiles
-            // If selectedGraphicsProfiles is hardware GraphicProfile, than we will also add software and WPF 3D rendering as fallback to the array
-            DXEngineSettings.Current.GraphicsProfiles = DXEngineSettings.Current.SystemCapabilities.CreateArrayOfRecommendedGraphicsProfiles(selectedGraphicsProfile);
-        }
 
         public static MaterialsRepositoryDialog MaterialsRepositoryDia { get; set; }
 
