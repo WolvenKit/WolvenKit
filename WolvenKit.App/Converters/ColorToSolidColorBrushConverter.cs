@@ -2,7 +2,7 @@ using System;
 using System.Windows.Data;
 using System.Windows.Media;
 
-namespace WolvenKit.Functionality.Converters
+namespace WolvenKit.App.Converters
 {
     [ValueConversion(typeof(System.Drawing.Color), typeof(SolidColorBrush))]
     public class ColorToSolidColorBrushConverter : IValueConverter

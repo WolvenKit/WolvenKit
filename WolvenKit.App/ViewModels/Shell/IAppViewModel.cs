@@ -1,11 +1,11 @@
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using WolvenKit.App.Models.Docking;
+using WolvenKit.App.ViewModels.Documents;
 using WolvenKit.Common;
-using WolvenKit.Models.Docking;
-using WolvenKit.ViewModels.Documents;
 
-namespace WolvenKit.ViewModels.Shell
+namespace WolvenKit.App.ViewModels.Shell
 {
     public interface IAppViewModel
     {

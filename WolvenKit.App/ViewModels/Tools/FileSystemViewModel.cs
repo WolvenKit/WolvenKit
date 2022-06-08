@@ -3,7 +3,7 @@ using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using WolvenKit.Common.Interfaces;
 
-namespace WolvenKit.ViewModels.Tools
+namespace WolvenKit.App.ViewModels.Tools
 {
     public abstract class FileSystemViewModel : ReactiveObject, IFileSystemViewModel, ISelectableViewModel
     {
@@ -21,6 +21,6 @@ namespace WolvenKit.ViewModels.Tools
 
         //public abstract ulong ParentKey { get; }
 
-        [Browsable(false)] [Reactive] public bool IsChecked { get; set; }
+        [Browsable(false)][Reactive] public bool IsChecked { get; set; }
     }
 }

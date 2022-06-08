@@ -10,31 +10,31 @@ using ReactiveUI;
 using Serilog;
 using Splat;
 using Splat.Microsoft.Extensions.DependencyInjection;
+using WolvenKit.App;
+using WolvenKit.App.Helpers;
+using WolvenKit.App.Interaction;
+using WolvenKit.App.Services;
+using WolvenKit.App.ViewModels.Wizards;
 using WolvenKit.Common.Services;
 using WolvenKit.Core.Compression;
 using WolvenKit.Core.Interfaces;
-using WolvenKit.Functionality.Services;
-using WolvenKit.Functionality.WKitGlobal.Helpers;
-using WolvenKit.Interaction;
 using WolvenKit.RED4.Archive;
-using WolvenKit.ViewModels.Wizards;
 using WolvenKit.Views.Dialogs;
 
 namespace WolvenKit
 {
-    public partial class App //: Application
+    public partial class Appl //: Application
     {
         // Determines if the application is in design mode.
         //public static bool IsInDesignMode => !(Current is App) || (bool)DesignerProperties.IsInDesignModeProperty.GetMetadata(typeof(DependencyObject)).DefaultValue;
 
         // Constructor #1
-        static App()
+        static Appl()
         {
-
         }
 
         // Constructor #2
-        public App()
+        public Appl()
         {
             Directory.SetCurrentDirectory(AppContext.BaseDirectory);
 

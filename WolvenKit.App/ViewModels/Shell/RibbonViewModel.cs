@@ -5,17 +5,17 @@ using System.Reactive;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
 using ReactiveUI;
+using WolvenKit.App.Commands.Base;
+using WolvenKit.App.Interaction;
+using WolvenKit.App.Models;
+using WolvenKit.App.Services;
 using WolvenKit.Common;
 using WolvenKit.Common.Interfaces;
 using WolvenKit.Common.Services;
 using WolvenKit.Core.Services;
-using WolvenKit.Functionality.Commands;
-using WolvenKit.Functionality.Services;
-using WolvenKit.Interaction;
-using WolvenKit.Models;
 using WolvenKit.RED4.Archive;
 
-namespace WolvenKit.ViewModels.Shell
+namespace WolvenKit.App.ViewModels.Shell
 { // #MVVM
     // #SortNameSpace
     public class RibbonViewModel : ReactiveObject
@@ -85,10 +85,7 @@ namespace WolvenKit.ViewModels.Shell
                 var result = await Interactions.ShowFeedback.Handle(Unit.Default);
             });
 
-            OpenMaterialRepositoryCommand = ReactiveCommand.Create(() =>
-            {
-                Commonfunctions.ShowFolderInExplorer(_settingsManager.MaterialRepositoryPath);
-            });
+            OpenMaterialRepositoryCommand = ReactiveCommand.Create(() => Commonfunctions.ShowFolderInExplorer(_settingsManager.MaterialRepositoryPath));
 
             UnbundleGameCommand = ReactiveCommand.CreateFromTask(UnbundleGame);
 

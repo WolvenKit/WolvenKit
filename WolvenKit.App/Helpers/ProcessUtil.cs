@@ -3,7 +3,7 @@ using System.Diagnostics;
 using System.Threading.Tasks;
 using Serilog;
 
-namespace WolvenKit.Helpers;
+namespace WolvenKit.App.Helpers;
 
 public static class ProcessUtil
 {
@@ -32,14 +32,8 @@ public static class ProcessUtil
 
                 p.EnableRaisingEvents = true;
 
-                p.OutputDataReceived += (s, e) =>
-                {
-                    Log.Information(e.Data);
-                };
-                p.ErrorDataReceived += (s, e) =>
-                {
-                    Log.Error(e.Data);
-                };
+                p.OutputDataReceived += (s, e) => Log.Information(e.Data);
+                p.ErrorDataReceived += (s, e) => Log.Error(e.Data);
 
                 //p.Exited += new EventHandler(myProcess_Exited);
                 p.Exited += (s, e) =>
@@ -49,10 +43,10 @@ public static class ProcessUtil
                         $"Exit time    : {p.ExitTime}\n" +
                         $"Exit code    : {exitCode}\n" +
                         $"Elapsed time : {Math.Round((p.ExitTime - p.StartTime).TotalMilliseconds)}");
-                    eventHandled.TrySetResult(true);
+                    _ = eventHandled.TrySetResult(true);
                 };
 
-                p.Start();
+                _ = p.Start();
                 p.BeginOutputReadLine();
                 p.BeginErrorReadLine();
             }

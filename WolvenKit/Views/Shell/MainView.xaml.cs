@@ -9,10 +9,10 @@ using System.Windows;
 using AdonisUI.Controls;
 using ReactiveUI;
 using Splat;
-using WolvenKit.Interaction;
-using WolvenKit.ViewModels.Dialogs;
-using WolvenKit.ViewModels.Shell;
-using WolvenKit.ViewModels.Wizards;
+using WolvenKit.App.Interaction;
+using WolvenKit.App.ViewModels.Dialogs;
+using WolvenKit.App.ViewModels.Shell;
+using WolvenKit.App.ViewModels.Wizards;
 using WolvenKit.Views.Dialogs;
 
 namespace WolvenKit.Views.Shell
@@ -94,10 +94,7 @@ namespace WolvenKit.Views.Shell
                     }, RxApp.MainThreadScheduler);
                 });
 
-                Interactions.ShowConfirmation.RegisterHandler(interaction =>
-                {
-                    interaction.SetOutput(ShowConfirmation(interaction.Input));
-                });
+                Interactions.ShowConfirmation.RegisterHandler(interaction => interaction.SetOutput(ShowConfirmation(interaction.Input)));
 
 
 

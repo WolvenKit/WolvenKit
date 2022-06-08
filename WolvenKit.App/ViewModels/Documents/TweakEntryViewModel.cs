@@ -1,11 +1,9 @@
 using System.Collections.ObjectModel;
 using System.Linq;
 using ReactiveUI;
-using WinCopies.Collections.DotNetFix;
-using WolvenKit.RED4.TweakDB;
 using WolvenKit.RED4.Types;
 
-namespace WolvenKit.ViewModels.Documents
+namespace WolvenKit.App.ViewModels.Documents
 {
     public abstract class TweakEntryViewModel : ReactiveObject
     {
@@ -69,7 +67,7 @@ namespace WolvenKit.ViewModels.Documents
         public override string DisplayString => _value.ToString();
         public override string DisplayType => RedReflection.GetRedTypeFromCSType(_value.GetType());
 
-        public bool IsArray => _value is IRedArray array;
+        public bool IsArray => _value is IRedArray;
 
         public IRedType GetValue() => _value;
 

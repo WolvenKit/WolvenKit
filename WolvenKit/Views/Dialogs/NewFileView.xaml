@@ -9,7 +9,7 @@
     xmlns:others="clr-namespace:WolvenKit.Views.Others"
     xmlns:reactiveUi="http://reactiveui.net"
     xmlns:hc="https://handyorg.github.io/handycontrol"
-    xmlns:dialogs="clr-namespace:WolvenKit.ViewModels.Dialogs;assembly=WolvenKit.App"
+    xmlns:dialogs="clr-namespace:WolvenKit.App.ViewModels.Dialogs;assembly=WolvenKit.App"
     xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
     mc:Ignorable="d" 
     d:DesignHeight="600" d:DesignWidth="800"

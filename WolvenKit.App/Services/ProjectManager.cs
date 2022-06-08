@@ -6,11 +6,11 @@ using System.Threading.Tasks;
 using System.Xml.Serialization;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
+using WolvenKit.App.Functionality.ProjectManagement;
+using WolvenKit.App.Functionality.ProjectManagement.Project;
 using WolvenKit.Common.Services;
-using WolvenKit.Functionality.ProjectManagement;
-using WolvenKit.ProjectManagement.Project;
 
-namespace WolvenKit.Functionality.Services
+namespace WolvenKit.App.Services
 {
     /// <summary>
     /// Singleton Service
@@ -145,17 +145,15 @@ namespace WolvenKit.Functionality.Services
                 //    };
                 //}
                 /*else*/
-                if (typeof(T) == typeof(Cp77Project))
-                {
-                    return new Cp77Project(path)
+                return typeof(T) == typeof(Cp77Project)
+                    ? new Cp77Project(path)
                     {
                         Author = obj.Author,
                         Email = obj.Email,
                         Name = obj.Name,
                         Version = obj.Version,
-                    };
-                }
-                return null;
+                    }
+                    : (EditorProject)null;
             }
             catch (Exception e)
             {
@@ -171,7 +169,7 @@ namespace WolvenKit.Functionality.Services
             {
                 if (!Directory.Exists(ActiveProject.ProjectDirectory))
                 {
-                    Directory.CreateDirectory(ActiveProject.ProjectDirectory);
+                    _ = Directory.CreateDirectory(ActiveProject.ProjectDirectory);
                 }
 
                 await using var fs = new FileStream(ActiveProject.Location, FileMode.Create, FileAccess.Write);

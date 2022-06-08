@@ -2,8 +2,8 @@ using System.Collections;
 using System.Windows;
 using System.Windows.Controls;
 using Syncfusion.UI.Xaml.TreeView.Engine;
+using WolvenKit.App.ViewModels.Shell;
 using WolvenKit.RED4.Types;
-using WolvenKit.ViewModels.Shell;
 
 namespace WolvenKit.Converters
 {
@@ -38,13 +38,9 @@ namespace WolvenKit.Converters
                     {
                         return HandleTemplate;
                     }
-                    else if (vm.PropertyType.IsAssignableTo(typeof(IRedRef)))
-                    {
-                        return RefTemplate;
-                    }
                     else
                     {
-                        return PropertyTemplate;
+                        return vm.PropertyType.IsAssignableTo(typeof(IRedRef)) ? RefTemplate : PropertyTemplate;
                     }
                 }
             }

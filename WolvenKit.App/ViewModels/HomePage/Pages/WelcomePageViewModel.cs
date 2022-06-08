@@ -13,16 +13,15 @@ using Microsoft.WindowsAPICodePack.Dialogs;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using Splat;
-using WolvenKit.Functionality.Commands;
-using WolvenKit.Functionality.Helpers;
-using WolvenKit.Functionality.ProjectManagement;
-using WolvenKit.Functionality.Services;
-using WolvenKit.Functionality.WKitGlobal;
-using WolvenKit.Interaction;
-using WolvenKit.ViewModels.HomePage;
-using WolvenKit.ViewModels.Shell;
+using WolvenKit.App.Commands.Base;
+using WolvenKit.App.Functionality;
+using WolvenKit.App.Functionality.ProjectManagement;
+using WolvenKit.App.Helpers;
+using WolvenKit.App.Interaction;
+using WolvenKit.App.Services;
+using WolvenKit.App.ViewModels.Shell;
 
-namespace WolvenKit.ViewModels.Shared
+namespace WolvenKit.App.ViewModels.HomePage.Pages
 {
     public class WelcomePageViewModel : PageViewModel
     {
@@ -58,20 +57,16 @@ namespace WolvenKit.ViewModels.Shared
             UnpinItem = new DelegateCommand<string>(OnUnpinItemExecute);
             OpenInExplorer = new DelegateCommand<string>(OnOpenInExplorerExecute);
 
-            OpenProjectCommand = ReactiveCommand.Create<string>(s =>
-            {
-                _mainViewModel.OpenProjectCommand.Execute(s).Subscribe();
-            });
-            DeleteProjectCommand = ReactiveCommand.Create<string>(s =>
-            {
-                _mainViewModel.DeleteProjectCommand.Execute(s).Subscribe();
-            });
+            OpenProjectCommand = ReactiveCommand.Create<string>(s => _mainViewModel.OpenProjectCommand.Execute(s).Subscribe());
+            DeleteProjectCommand = ReactiveCommand.Create<string>(s => _mainViewModel.DeleteProjectCommand.Execute(s).Subscribe());
+#pragma warning disable IDE0053 // Use expression body for lambda expressions
             NewProjectCommand = ReactiveCommand.Create(() =>
             {
                 _mainViewModel.NewProjectCommand.Execute().Subscribe();
             });
+#pragma warning restore IDE0053 // Use expression body for lambda expressions
 
-            recentlyUsedItemsService.Items
+            _ = recentlyUsedItemsService.Items
                 .Connect()
                 .ObserveOn(RxApp.MainThreadScheduler)
                 .Bind(out _recentlyUsedItems)
@@ -116,7 +111,7 @@ namespace WolvenKit.ViewModels.Shared
                     UseShellExecute = true,
                     Verb = "open"
                 };
-                Process.Start(ps);
+                _ = Process.Start(ps);
             });
 
 
@@ -124,12 +119,8 @@ namespace WolvenKit.ViewModels.Shared
 
         #region Methods
 
-#pragma warning disable AsyncFixer03 // Avoid fire & forget async void methods
-#pragma warning disable AvoidAsyncVoid
 
         private async void OnOpenInExplorerExecute(string parameter)
-#pragma warning restore AsyncFixer03 // Avoid fire & forget async void methods
-#pragma warning restore AvoidAsyncVoid
         {
             if (!File.Exists(parameter))
             {
@@ -141,7 +132,7 @@ namespace WolvenKit.ViewModels.Shared
                 return;
             }
 
-            Process.Start("explorer.exe", $"/select, \"{parameter}\"");
+            _ = Process.Start("explorer.exe", $"/select, \"{parameter}\"");
         }
 
 
@@ -208,32 +199,15 @@ namespace WolvenKit.ViewModels.Shared
 
         private void ConvertRecentProjects() // Converts Recent projects for the homepage.
         {
-            DispatcherHelper.RunOnMainThread(() =>
-            {
-                FancyProjects.Clear();
-            });
+            DispatcherHelper.RunOnMainThread(() => FancyProjects.Clear());
 
             var sorted = _recentlyUsedItems.ToList();
             sorted.Sort(delegate (RecentlyUsedItemModel a, RecentlyUsedItemModel b)
             {
                 DateTime ad, bd;
-                if (a.Modified != default(DateTime))
-                {
-                    ad = a.Modified;
-                }
-                else
-                {
-                    ad = a.DateTime;
-                }
+                ad = a.Modified != default ? a.Modified : a.DateTime;
 
-                if (b.Modified != default(DateTime))
-                {
-                    bd = b.Modified;
-                }
-                else
-                {
-                    bd = b.DateTime;
-                }
+                bd = b.Modified != default ? b.Modified : b.DateTime;
 
                 return bd.CompareTo(ad);
             });
@@ -250,7 +224,7 @@ namespace WolvenKit.ViewModels.Shared
                 var newfi = fi.Directory + "\\" + newfo[0] + "\\" + "img.png";
 
                 var IsThere = File.Exists(newfi);
-                File.GetLastWriteTime(item.Name);
+                _ = File.GetLastWriteTime(item.Name);
 
                 FancyProjectObject NewItem;
                 if (Path.GetExtension(item.Name).TrimStart('.') == EProjectType.cpmodproj.ToString())
@@ -258,10 +232,7 @@ namespace WolvenKit.ViewModels.Shared
                     if (!IsThere)
                     { newfi = "pack://application:,,,/Resources/Media/Images/Application/V Male Logo Cropped.png"; }
                     NewItem = new FancyProjectObject(fi.Name, cd, "Cyberpunk 2077", p, newfi);
-                    DispatcherHelper.RunOnMainThread(() =>
-                    {
-                        FancyProjects.Add(NewItem);
-                    });
+                    DispatcherHelper.RunOnMainThread(() => FancyProjects.Add(NewItem));
                 }
                 if (Path.GetExtension(item.Name).TrimStart('.') == EProjectType.w3modproj.ToString())
                 {
@@ -269,10 +240,7 @@ namespace WolvenKit.ViewModels.Shared
                     { newfi = "pack://application:,,,/Resources/Media/Images/Application/tw3proj.png"; }
 
                     NewItem = new FancyProjectObject(n, cd, "The Witcher 3", p, newfi);
-                    DispatcherHelper.RunOnMainThread(() =>
-                    {
-                        FancyProjects.Add(NewItem);
-                    });
+                    DispatcherHelper.RunOnMainThread(() => FancyProjects.Add(NewItem));
                 }
             }
         }

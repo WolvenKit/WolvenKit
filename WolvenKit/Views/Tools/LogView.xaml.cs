@@ -7,7 +7,8 @@ using DynamicData;
 using ReactiveUI;
 using Serilog.Events;
 using Splat;
-using WolvenKit.ViewModels.Tools;
+using WolvenKit.App;
+using WolvenKit.App.ViewModels.Tools;
 
 namespace WolvenKit.Views.Tools
 {
@@ -112,7 +113,7 @@ namespace WolvenKit.Views.Tools
             {
                 LineHeight = 1
             };
-            var run = new Run($"[{DateTime.Now.ToString()}] {item.RenderMessage()}")
+            var run = new Run($"[{DateTime.Now}] {item.RenderMessage()}")
             {
                 Foreground = GetBrushForLevel(level)
             };

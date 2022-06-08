@@ -6,14 +6,14 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.WindowsAPICodePack.Dialogs;
 using Splat;
+using WolvenKit.App.Controllers;
+using WolvenKit.App.Services;
 using WolvenKit.Common;
 using WolvenKit.Common.Extensions;
 using WolvenKit.Common.Interfaces;
 using WolvenKit.Common.Model.Arguments;
 using WolvenKit.Common.Services;
 using WolvenKit.Core.Services;
-using WolvenKit.Functionality.Controllers;
-using WolvenKit.Functionality.Services;
 using WolvenKit.RED4.Archive;
 using WolvenKit.Views.Shell;
 
@@ -30,8 +30,6 @@ namespace WolvenKit.Views.Dialogs
         private readonly IModTools _modTools;
         private readonly ILoggerService _loggerService;
 
-        private readonly string _archivesFolderPath;
-
         public MaterialsRepositoryDialog()
         {
             InitializeComponent();
@@ -42,12 +40,12 @@ namespace WolvenKit.Views.Dialogs
             _progress = Locator.Current.GetService<IProgressService<double>>();
             _loggerService = Locator.Current.GetService<ILoggerService>();
 
-            _archivesFolderPath = Path.Combine(_settingsManager.GetRED4GameRootDir(), "archive", "pc", "content");
+            ArchivesFolderPath = Path.Combine(_settingsManager.GetRED4GameRootDir(), "archive", "pc", "content");
             MaterialsDepotPath = _settingsManager.MaterialRepositoryPath;
             MaterialsTextBox.SetCurrentValue(System.Windows.Controls.TextBox.TextProperty, _settingsManager.MaterialRepositoryPath);
         }
 
-        public string ArchivesFolderPath => _archivesFolderPath;
+        public string ArchivesFolderPath { get; }
 
         public string MaterialsDepotPath { get; set; }
 

@@ -1,26 +1,20 @@
 using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Data;
 using ReactiveUI;
 using Splat;
+using WolvenKit.App.Controllers;
+using WolvenKit.App.Functionality.ProjectManagement.Project;
+using WolvenKit.App.Services;
+using WolvenKit.App.ViewModels.Shell;
 using WolvenKit.Common;
 using WolvenKit.Common.Interfaces;
 using WolvenKit.Common.Services;
 using WolvenKit.Core.Services;
-using WolvenKit.Functionality.Controllers;
-using WolvenKit.Functionality.Services;
-using WolvenKit.Models;
-using WolvenKit.Models.Docking;
-using WolvenKit.ProjectManagement.Project;
 using WolvenKit.RED4.Types;
-using WolvenKit.ViewModels.Shell;
 
-namespace WolvenKit.ViewModels.Tools
+namespace WolvenKit.App.ViewModels.Tools
 {
     public class LocKeyBrowserViewModel : ToolViewModel
     {
@@ -81,7 +75,7 @@ namespace WolvenKit.ViewModels.Tools
             }
             else
             {
-                _archive.WhenAnyValue(x => x.IsManagerLoaded).Subscribe(x =>
+                _ = _archive.WhenAnyValue(x => x.IsManagerLoaded).Subscribe(x =>
                 {
                     if (x)
                     {
@@ -109,9 +103,8 @@ namespace WolvenKit.ViewModels.Tools
             set
             {
                 _searchText = value;
-                if (_searchText != "")
-                {
-                    LocKeys.Filter = (obj) =>
+                LocKeys.Filter = _searchText != ""
+                    ? ((obj) =>
                     {
                         if (obj is localizationPersistenceOnScreenEntry entry)
                         {
@@ -121,12 +114,8 @@ namespace WolvenKit.ViewModels.Tools
                             }
                         }
                         return false;
-                    };
-                }
-                else
-                {
-                    LocKeys.Filter = null;
-                }
+                    })
+                    : null;
                 this.RaisePropertyChanged("SearchText");
             }
         }

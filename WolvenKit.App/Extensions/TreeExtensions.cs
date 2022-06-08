@@ -1,9 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using WolvenKit.Functionality.Interfaces;
+using WolvenKit.App.Functionality.Interfaces;
 
-namespace WolvenKit.Functionality.Extensions
+namespace WolvenKit.App.Extensions
 {
     //https://gist.github.com/dmitry-pavlov/f3933c937c3520a410ab15c3ebc24d5e
     public static class TreeExtensions
@@ -49,7 +49,7 @@ namespace WolvenKit.Functionality.Extensions
 
             public static Tree<T> FromLookup(ILookup<T, T> lookup)
             {
-                var rootData = lookup.Count == 1 ? lookup.First().Key : default(T);
+                var rootData = lookup.Count == 1 ? lookup.First().Key : default;
                 var root = new Tree<T>(rootData);
                 root.LoadChildren(lookup);
                 return root;

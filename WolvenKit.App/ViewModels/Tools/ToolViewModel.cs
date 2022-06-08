@@ -1,10 +1,9 @@
 using System;
 using ReactiveUI;
-using ReactiveUI.Fody.Helpers;
-using WolvenKit.Models.Docking;
-using WolvenKit.ViewModels.Shell;
+using WolvenKit.App.Models.Docking;
+using WolvenKit.App.ViewModels.Shell;
 
-namespace WolvenKit.ViewModels.Tools
+namespace WolvenKit.App.ViewModels.Tools
 {
     public abstract class ToolViewModel : PaneViewModel
     {
@@ -22,10 +21,7 @@ namespace WolvenKit.ViewModels.Tools
             Name = name;
             Header = name;
 
-            this.WhenAnyValue(x => x.State).Subscribe(b =>
-            {
-                this.RaisePropertyChanged("IsVisible");
-            });
+            _ = this.WhenAnyValue(x => x.State).Subscribe(b => this.RaisePropertyChanged("IsVisible"));
         }
 
         /// <summary>

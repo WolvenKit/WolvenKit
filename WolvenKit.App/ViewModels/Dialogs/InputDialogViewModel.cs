@@ -2,7 +2,7 @@ using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 
 
-namespace WolvenKit.ViewModels.Dialogs
+namespace WolvenKit.App.ViewModels.Dialogs
 {
     /// <summary>
     /// Implements the viewmodel that drives the log view.

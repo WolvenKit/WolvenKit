@@ -8,14 +8,14 @@ using System.Reactive.Linq;
 using System.Windows.Input;
 using ReactiveUI;
 using Splat;
+using WolvenKit.App.Commands.Base;
+using WolvenKit.App.Functionality.ProjectManagement.Project;
+using WolvenKit.App.Interaction;
+using WolvenKit.App.ViewModels.Shell;
 using WolvenKit.Common;
 using WolvenKit.Common.FNV1A;
-using WolvenKit.Functionality.Commands;
-using WolvenKit.Interaction;
-using WolvenKit.ProjectManagement.Project;
-using WolvenKit.ViewModels.Shell;
 
-namespace WolvenKit.Models
+namespace WolvenKit.App.Models
 {
     public class FileModel : ReactiveObject
     {
@@ -195,17 +195,9 @@ namespace WolvenKit.Models
                 return rel;
             }
 
-            if (FullName.StartsWith(filedir, StringComparison.Ordinal))
-            {
-                return FullName[(filedir.Length + 1)..];
-            }
-
-            if (FullName.StartsWith(packedDir, StringComparison.Ordinal))
-            {
-                return FullName[(packedDir.Length + 1)..];
-            }
-
-            return FullName;
+            return FullName.StartsWith(filedir, StringComparison.Ordinal)
+                ? FullName[(filedir.Length + 1)..]
+                : FullName.StartsWith(packedDir, StringComparison.Ordinal) ? FullName[(packedDir.Length + 1)..] : FullName;
             //throw new System.NullReferenceException("fuzzy exception");
         }
 
@@ -231,11 +223,7 @@ namespace WolvenKit.Models
                     var tmpName = Path.GetRelativePath(project.ModDirectory, fullname);
                     if (tmpName != ".")
                     {
-                        if (ulong.TryParse(tmpName, out var hash))
-                        {
-                            return hash;
-                        }
-                        return FNV1A64HashAlgorithm.HashString(tmpName);
+                        return ulong.TryParse(tmpName, out var hash) ? hash : FNV1A64HashAlgorithm.HashString(tmpName);
                     }
                 }
 
@@ -308,7 +296,7 @@ namespace WolvenKit.Models
 
             try
             {
-                Directory.CreateDirectory(Path.GetDirectoryName(newfullpath));
+                _ = Directory.CreateDirectory(Path.GetDirectoryName(newfullpath));
                 if (IsDirectory)
                 {
                     Directory.Move(filename, newfullpath);

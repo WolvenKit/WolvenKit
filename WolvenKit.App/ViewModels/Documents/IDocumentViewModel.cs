@@ -2,9 +2,9 @@ using System.Reactive;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using ReactiveUI;
-using WolvenKit.Models.Docking;
+using WolvenKit.App.Models.Docking;
 
-namespace WolvenKit.ViewModels.Documents
+namespace WolvenKit.App.ViewModels.Documents
 {
     public interface IDocumentViewModel : IDockElement
     {

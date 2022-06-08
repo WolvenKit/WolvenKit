@@ -7,23 +7,18 @@ using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using WolvenKit.RED4.Types;
 
-namespace WolvenKit.ViewModels.Dialogs
+namespace WolvenKit.App.ViewModels.Dialogs
 {
     public class CreateClassDialogViewModel : DialogViewModel
     {
         public CreateClassDialogViewModel(ObservableCollection<string> existingClasses, bool allowOthers = true)
         {
             ExistingClasses = existingClasses;
-            if (allowOthers)
-            {
-                Classes = new ObservableCollection<string>(Assembly.GetAssembly(typeof(RedBaseClass)).GetTypes()
+            Classes = allowOthers
+                ? new ObservableCollection<string>(Assembly.GetAssembly(typeof(RedBaseClass)).GetTypes()
                     .Where(t => t.IsSubclassOf(typeof(RedBaseClass)) && !t.IsAbstract)
-                    .Select(t => t.Name));
-            }
-            else
-            {
-                Classes = ExistingClasses;
-            }
+                    .Select(t => t.Name))
+                : ExistingClasses;
             CreateCommand = ReactiveCommand.Create(() => DialogHandler(this), CanCreate);
             CancelCommand = ReactiveCommand.Create(() => DialogHandler(null));
         }

@@ -4,7 +4,7 @@ using System.Windows.Controls;
 using ReactiveUI;
 using Splat;
 using Syncfusion.Windows.PropertyGrid;
-using WolvenKit.Functionality.Services;
+using WolvenKit.App.Services;
 using WolvenKit.ViewModels;
 using static WolvenKit.Converters.PropertyGridEditors;
 

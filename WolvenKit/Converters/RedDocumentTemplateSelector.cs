@@ -1,6 +1,6 @@
 using System.Windows;
 using System.Windows.Controls;
-using WolvenKit.ViewModels.Documents;
+using WolvenKit.App.ViewModels.Documents;
 
 namespace WolvenKit.Converters
 {
@@ -13,16 +13,12 @@ namespace WolvenKit.Converters
         {
             if (item is RedDocumentTabViewModel vm)
             {
-                switch (vm.DocumentItemType)
+                return vm.DocumentItemType switch
                 {
-                    case ERedDocumentItemType.MainFile:
-                        return MainTemplate;
-                    case ERedDocumentItemType.W2rcBuffer:
-                        return BufferTemplate;
-                    case ERedDocumentItemType.Editor:
-                    default:
-                        return null;
-                }
+                    ERedDocumentItemType.MainFile => MainTemplate,
+                    ERedDocumentItemType.W2rcBuffer => BufferTemplate,
+                    _ => null,
+                };
             }
             else
             {

@@ -1,4 +1,4 @@
-namespace WolvenKit.Functionality
+namespace WolvenKit.App
 {
     public static class Constants
     {

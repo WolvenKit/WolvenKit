@@ -2,12 +2,12 @@ using System;
 using DynamicData.Binding;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
+using WolvenKit.App.Models;
 using WolvenKit.Common;
 using WolvenKit.Common.Interfaces;
 using WolvenKit.Common.Model.Arguments;
-using WolvenKit.Models;
 
-namespace WolvenKit.ViewModels.Tools
+namespace WolvenKit.App.ViewModels.Tools
 {
     /// <summary>
     /// ImportExportItem ViewModel
@@ -50,10 +50,7 @@ namespace WolvenKit.ViewModels.Tools
             BaseFile = model;
             Properties = DecideImportOptions(model);
 
-            Properties.WhenAnyPropertyChanged().Subscribe(v =>
-            {
-                this.RaisePropertyChanged(nameof(Properties));
-            });
+            _ = Properties.WhenAnyPropertyChanged().Subscribe(v => this.RaisePropertyChanged(nameof(Properties)));
         }
 
         private ImportArgs DecideImportOptions(FileModel model)
@@ -86,10 +83,7 @@ namespace WolvenKit.ViewModels.Tools
             BaseFile = model;
             Properties = DecideConverOptions(model);
 
-            Properties.WhenAnyPropertyChanged().Subscribe(v =>
-            {
-                this.RaisePropertyChanged(nameof(Properties));
-            });
+            _ = Properties.WhenAnyPropertyChanged().Subscribe(v => this.RaisePropertyChanged(nameof(Properties)));
         }
 
         private ConvertArgs DecideConverOptions(FileModel model) => new CommonConvertArgs();
@@ -102,10 +96,7 @@ namespace WolvenKit.ViewModels.Tools
             BaseFile = model;
             Properties = DecideExportOptions(model);
 
-            Properties.WhenAnyPropertyChanged().Subscribe(v =>
-            {
-                this.RaisePropertyChanged(nameof(Properties));
-            });
+            _ = Properties.WhenAnyPropertyChanged().Subscribe(v => this.RaisePropertyChanged(nameof(Properties)));
         }
 
         private ExportArgs DecideExportOptions(FileModel model)

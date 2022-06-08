@@ -6,7 +6,7 @@
 using System;
 using NAudio.Dsp;
 
-namespace WolvenKit.MVVM.Views.Components.Tools.AudioTool
+namespace WolvenKit.App.Functionality.Other
 {
     public class SampleAggregator
     {
@@ -16,10 +16,6 @@ namespace WolvenKit.MVVM.Views.Components.Tools.AudioTool
         private readonly int bufferSize;
         private readonly Complex[] channelData;
         private int channelDataPosition;
-        private float volumeLeftMaxValue;
-        private float volumeLeftMinValue;
-        private float volumeRightMaxValue;
-        private float volumeRightMinValue;
 
         #endregion Fields
 
@@ -36,13 +32,13 @@ namespace WolvenKit.MVVM.Views.Components.Tools.AudioTool
 
         #region Properties
 
-        public float LeftMaxVolume => volumeLeftMaxValue;
+        public float LeftMaxVolume { get; private set; }
 
-        public float LeftMinVolume => volumeLeftMinValue;
+        public float LeftMinVolume { get; private set; }
 
-        public float RightMaxVolume => volumeRightMaxValue;
+        public float RightMaxVolume { get; private set; }
 
-        public float RightMinVolume => volumeRightMinValue;
+        public float RightMinVolume { get; private set; }
 
         #endregion Properties
 
@@ -56,10 +52,10 @@ namespace WolvenKit.MVVM.Views.Components.Tools.AudioTool
         {
             if (channelDataPosition == 0)
             {
-                volumeLeftMaxValue = float.MinValue;
-                volumeRightMaxValue = float.MinValue;
-                volumeLeftMinValue = float.MaxValue;
-                volumeRightMinValue = float.MaxValue;
+                LeftMaxVolume = float.MinValue;
+                RightMaxVolume = float.MinValue;
+                LeftMinVolume = float.MaxValue;
+                RightMinVolume = float.MaxValue;
             }
 
             // Make stored channel data stereo by averaging left and right values.
@@ -67,10 +63,10 @@ namespace WolvenKit.MVVM.Views.Components.Tools.AudioTool
             channelData[channelDataPosition].Y = 0;
             channelDataPosition++;
 
-            volumeLeftMaxValue = Math.Max(volumeLeftMaxValue, leftValue);
-            volumeLeftMinValue = Math.Min(volumeLeftMinValue, leftValue);
-            volumeRightMaxValue = Math.Max(volumeRightMaxValue, rightValue);
-            volumeRightMinValue = Math.Min(volumeRightMinValue, rightValue);
+            LeftMaxVolume = Math.Max(LeftMaxVolume, leftValue);
+            LeftMinVolume = Math.Min(LeftMinVolume, leftValue);
+            RightMaxVolume = Math.Max(RightMaxVolume, rightValue);
+            RightMinVolume = Math.Min(RightMinVolume, rightValue);
 
             if (channelDataPosition >= channelData.Length)
             {
@@ -80,10 +76,10 @@ namespace WolvenKit.MVVM.Views.Components.Tools.AudioTool
 
         public void Clear()
         {
-            volumeLeftMaxValue = float.MinValue;
-            volumeRightMaxValue = float.MinValue;
-            volumeLeftMinValue = float.MaxValue;
-            volumeRightMinValue = float.MaxValue;
+            LeftMaxVolume = float.MinValue;
+            RightMaxVolume = float.MinValue;
+            LeftMinVolume = float.MaxValue;
+            RightMinVolume = float.MaxValue;
             channelDataPosition = 0;
         }
 
@@ -99,7 +95,7 @@ namespace WolvenKit.MVVM.Views.Components.Tools.AudioTool
             for (var i = 0; i < channelDataClone.Length / 2; i++)
             {
                 // Calculate actual intensities for the FFT results.
-                fftBuffer[i] = (float)Math.Sqrt(channelDataClone[i].X * channelDataClone[i].X + channelDataClone[i].Y * channelDataClone[i].Y);
+                fftBuffer[i] = (float)Math.Sqrt((channelDataClone[i].X * channelDataClone[i].X) + (channelDataClone[i].Y * channelDataClone[i].Y));
             }
         }
 

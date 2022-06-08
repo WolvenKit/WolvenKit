@@ -6,10 +6,10 @@ using System.Linq;
 using gpm.Core.Services;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
+using WolvenKit.App.ViewModels.Dialogs;
 using WolvenKit.Common.Services;
-using WolvenKit.ViewModels.Dialogs;
 
-namespace WolvenKit.Functionality.Services
+namespace WolvenKit.App.Services
 {
     public class PluginService : ReactiveObject, IPluginService
     {
@@ -118,14 +118,7 @@ namespace WolvenKit.Functionality.Services
         public bool IsInstalled(EPlugin pluginName)
         {
             var p = Plugins.FirstOrDefault(x => x.Plugin == pluginName);
-            if (p == null)
-            {
-                return false;
-            }
-            else
-            {
-                return p.Status != EPluginStatus.NotInstalled;
-            }
+            return p != null && p.Status != EPluginStatus.NotInstalled;
         }
 
         public bool TryGetInstallPath(EPlugin plugin, [NotNullWhen(true)] out string path)

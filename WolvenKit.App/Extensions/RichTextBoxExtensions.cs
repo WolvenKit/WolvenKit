@@ -3,7 +3,7 @@ using System.Windows.Controls;
 using System.Windows.Documents;
 using System.Windows.Media;
 
-namespace WolvenKit.Functionality.Extensions
+namespace WolvenKit.App.Extensions
 {
     public static class RichTextBoxExtensions
     {

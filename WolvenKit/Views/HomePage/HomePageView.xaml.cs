@@ -2,9 +2,9 @@ using System.Reactive.Disposables;
 using System.Windows;
 using ReactiveUI;
 using Splat;
-using WolvenKit.Functionality.Services;
-using WolvenKit.ViewModels.HomePage;
-using WolvenKit.ViewModels.Shell;
+using WolvenKit.App.Services;
+using WolvenKit.App.ViewModels.HomePage;
+using WolvenKit.App.ViewModels.Shell;
 using WolvenKit.Views.Shell;
 
 namespace WolvenKit.Views.HomePage
@@ -30,13 +30,10 @@ namespace WolvenKit.Views.HomePage
             _settingsManager = Locator.Current.GetService<ISettingsManager>();
             _ribbon = Locator.Current.GetService<RibbonViewModel>();
 
-            this.WhenActivated(disposables =>
-            {
-                this.Bind(ViewModel,
+            this.WhenActivated(disposables => this.Bind(ViewModel,
                       viewmodel => viewmodel.SelectedIndex,
                       view => view.HomeTabs.SelectedIndex)
-                  .DisposeWith(disposables);
-            });
+                  .DisposeWith(disposables));
 
             //guide.SetCurrentValue(GuidedTour.ItemsProperty, new[]{
             //    new GuidedTourItem()

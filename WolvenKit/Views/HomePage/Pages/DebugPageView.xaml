@@ -6,7 +6,7 @@
  xmlns:reactiveUi="http://reactiveui.net"
  xmlns:hc="https://handyorg.github.io/handycontrol"
  xmlns:svgc="http://sharpvectors.codeplex.com/svgc/"
- xmlns:pages="clr-namespace:WolvenKit.ViewModels.HomePage.Pages;assembly=WolvenKit.App">
+ xmlns:pages="clr-namespace:WolvenKit.App.ViewModels.HomePage.Pages;assembly=WolvenKit.App">
 
     <Grid />
 </reactiveUi:ReactiveUserControl>

@@ -4,8 +4,8 @@ using System.Reactive.Linq;
 using System.Windows.Controls;
 using System.Windows.Input;
 using ReactiveUI;
+using WolvenKit.App.ViewModels.Shell;
 using WolvenKit.RED4.Types;
-using WolvenKit.ViewModels.Shell;
 
 namespace WolvenKit.Views.Editors
 {
@@ -25,40 +25,28 @@ namespace WolvenKit.Views.Editors
                 handler => ITextBox.TextChanged -= handler)
                 .Throttle(TimeSpan.FromSeconds(.5))
                 .ObserveOn(RxApp.MainThreadScheduler)
-                .Subscribe(x =>
-                {
-                    SetIValue(ITextBox.Text);
-                });
+                .Subscribe(x => SetIValue(ITextBox.Text));
 
             Observable.FromEventPattern<TextChangedEventHandler, TextChangedEventArgs>(
                 handler => JTextBox.TextChanged += handler,
                 handler => JTextBox.TextChanged -= handler)
                 .Throttle(TimeSpan.FromSeconds(.5))
                 .ObserveOn(RxApp.MainThreadScheduler)
-                .Subscribe(x =>
-                {
-                    SetJValue(JTextBox.Text);
-                });
+                .Subscribe(x => SetJValue(JTextBox.Text));
 
             Observable.FromEventPattern<TextChangedEventHandler, TextChangedEventArgs>(
                 handler => KTextBox.TextChanged += handler,
                 handler => KTextBox.TextChanged -= handler)
                 .Throttle(TimeSpan.FromSeconds(.5))
                 .ObserveOn(RxApp.MainThreadScheduler)
-                .Subscribe(x =>
-                {
-                    SetKValue(KTextBox.Text);
-                });
+                .Subscribe(x => SetKValue(KTextBox.Text));
 
             Observable.FromEventPattern<TextChangedEventHandler, TextChangedEventArgs>(
                 handler => RTextBox.TextChanged += handler,
                 handler => RTextBox.TextChanged -= handler)
                 .Throttle(TimeSpan.FromSeconds(.5))
                 .ObserveOn(RxApp.MainThreadScheduler)
-                .Subscribe(x =>
-                {
-                    SetRValue(RTextBox.Text);
-                });
+                .Subscribe(x => SetRValue(RTextBox.Text));
 
         }
 

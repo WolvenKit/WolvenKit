@@ -1,6 +1,6 @@
 using System.Reactive.Disposables;
 using ReactiveUI;
-using WolvenKit.ViewModels.Dialogs;
+using WolvenKit.App.ViewModels.Dialogs;
 
 namespace WolvenKit.Views.Dialogs
 {

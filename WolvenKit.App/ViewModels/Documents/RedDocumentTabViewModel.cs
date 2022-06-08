@@ -3,7 +3,7 @@ using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using WolvenKit.RED4.Types;
 
-namespace WolvenKit.ViewModels.Documents
+namespace WolvenKit.App.ViewModels.Documents
 {
     public abstract class RedDocumentTabViewModel : ReactiveObject
     {

@@ -1,6 +1,6 @@
 using ReactiveUI;
 using Splat;
-using WolvenKit.ViewModels.HomePage.Pages;
+using WolvenKit.App.ViewModels.HomePage.Pages;
 
 namespace WolvenKit.Views.HomePage.Pages
 {

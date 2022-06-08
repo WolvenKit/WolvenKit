@@ -8,6 +8,9 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Xml.Linq;
 using ReactiveUI;
+using WolvenKit.App.Functionality.ProjectManagement.Project;
+using WolvenKit.App.Models;
+using WolvenKit.App.Services;
 using WolvenKit.Common;
 using WolvenKit.Common.Interfaces;
 using WolvenKit.Common.Services;
@@ -15,13 +18,10 @@ using WolvenKit.Core;
 using WolvenKit.Core.Compression;
 using WolvenKit.Core.Interfaces;
 using WolvenKit.Core.Services;
-using WolvenKit.Functionality.Services;
-using WolvenKit.Models;
 using WolvenKit.Modkit.RED4.Serialization;
-using WolvenKit.ProjectManagement.Project;
 using WolvenKit.RED4.TweakDB;
 
-namespace WolvenKit.Functionality.Controllers
+namespace WolvenKit.App.Controllers
 {
     public class RED4Controller : ReactiveObject, IGameController
     {
@@ -79,7 +79,7 @@ namespace WolvenKit.Functionality.Controllers
                 {
                     LoadArchiveManager,
                 };
-                Parallel.ForEach(todo, _ => Task.Run(_));
+                _ = Parallel.ForEach(todo, _ => Task.Run(_));
 
                 // requires oodle
                 InitializeBk();
@@ -159,11 +159,12 @@ namespace WolvenKit.Functionality.Controllers
             var resourcePath = Path.GetFullPath(Path.Combine("Resources", "red.kark"));
             var destinationPath = Path.Combine(ISettingsManager.GetAppData(), "red.db");
 
-            var (hash, size) = CommonFunctions.HashFileSHA512(resourcePath);
+
+            var (hash, _) = CommonFunctions.HashFileSHA512(resourcePath);
 
             if (!File.Exists(destinationPath))
             {
-                OodleTask(resourcePath, destinationPath, true, false);
+                _ = OodleTask(resourcePath, destinationPath, true, false);
                 _settingsManager.ReddbHash = hash;
                 _settingsManager.Save();
             }
@@ -172,7 +173,7 @@ namespace WolvenKit.Functionality.Controllers
                 if (!hash.Equals(_settingsManager.ReddbHash))
                 {
                     _loggerService.Info($"old hash: {_settingsManager.ReddbHash}, new hash: {hash}. Updating reddb");
-                    OodleTask(resourcePath, destinationPath, true, false);
+                    _ = OodleTask(resourcePath, destinationPath, true, false);
                     _settingsManager.ReddbHash = hash;
                     _settingsManager.Save();
                 }
@@ -198,7 +199,7 @@ namespace WolvenKit.Functionality.Controllers
                 using var br = new BinaryReader(ms);
 
                 var oodleCompression = br.ReadBytes(4);
-                if (!(oodleCompression.SequenceEqual(new byte[] { 0x4b, 0x41, 0x52, 0x4b })))
+                if (!oodleCompression.SequenceEqual(new byte[] { 0x4b, 0x41, 0x52, 0x4b }))
                 {
                     throw new NotImplementedException();
                 }
@@ -222,7 +223,7 @@ namespace WolvenKit.Functionality.Controllers
                 var inbuffer = File.ReadAllBytes(path);
                 IEnumerable<byte> outBuffer = new List<byte>();
 
-                var r = Oodle.Compress(inbuffer, ref outBuffer, true);
+                _ = Oodle.Compress(inbuffer, ref outBuffer, true);
 
                 File.WriteAllBytes(outpath, outBuffer.ToArray());
             }
@@ -258,9 +259,7 @@ namespace WolvenKit.Functionality.Controllers
                 _loggerService.Success("Finished loading Archive Manager.");
             }
 
-#pragma warning disable 162
             return _archiveManager;
-#pragma warning restore 162
         }
 
         /// <summary>
@@ -314,7 +313,7 @@ namespace WolvenKit.Functionality.Controllers
             var modfiles = Directory.GetFiles(cp77Proj.ModDirectory, "*", SearchOption.AllDirectories);
             if (modfiles.Any())
             {
-                _modTools.Pack(
+                _ = _modTools.Pack(
                     new DirectoryInfo(cp77Proj.ModDirectory),
                     new DirectoryInfo(cp77Proj.PackedArchiveDirectory),
                     cp77Proj.Name);
@@ -367,7 +366,7 @@ namespace WolvenKit.Functionality.Controllers
                 var outDirectory = Path.Combine(cp77Proj.PackedTweakDirectory, folder);
                 if (!Directory.Exists(outDirectory))
                 {
-                    Directory.CreateDirectory(outDirectory);
+                    _ = Directory.CreateDirectory(outDirectory);
                 }
                 var filename = Path.GetFileNameWithoutExtension(f) + ".bin";
                 var outPath = Path.Combine(outDirectory, filename);
@@ -543,7 +542,7 @@ namespace WolvenKit.Functionality.Controllers
                         }
                         else
                         {
-                            Directory.CreateDirectory(diskPathInfo.Directory.FullName);
+                            _ = Directory.CreateDirectory(diskPathInfo.Directory.FullName);
                             using var fs = new FileStream(diskPathInfo.FullName, FileMode.Create);
                             file.Extract(fs);
                             _loggerService.Success($"Added game file to project: {file.Name}");

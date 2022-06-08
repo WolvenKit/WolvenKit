@@ -24,7 +24,7 @@ namespace WolvenKit.Functionality.Layout.inkWidgets
             get
             {
                 string text = TextWidget.Text;
-                if (text == "" || text == null)
+                if (text is "" or null)
                 {
                     text = "Test";
                 }
@@ -50,7 +50,7 @@ namespace WolvenKit.Functionality.Layout.inkWidgets
 
         public float WrapWidth = 10000;
 
-        public Size RenderedSize = new Size(0, 0);
+        public Size RenderedSize = new(0, 0);
 
         public double TextWidth = 10000;
         public double TextHeight;
@@ -185,45 +185,33 @@ namespace WolvenKit.Functionality.Layout.inkWidgets
                 return;
             }
 
-            using (var tempbmp = new Bitmap(1, 1))
-            {
-                using (var g = Graphics.FromImage(tempbmp))
-                {
-                    var textSize = g.MeasureStringLineHeight(Text, Font, (int)Math.Round(GetWrapLength(size)), LineHeight);
-                    TextWidth = textSize.Width;
-                    TextHeight = Math.Max(textSize.Height - CorrectionY * 2, 0);
-                }
-            }
+            using var tempbmp = new Bitmap(1, 1);
+            using var g = Graphics.FromImage(tempbmp);
+            var textSize = g.MeasureStringLineHeight(Text, Font, (int)Math.Round(GetWrapLength(size)), LineHeight);
+            TextWidth = textSize.Width;
+            TextHeight = Math.Max(textSize.Height - (CorrectionY * 2), 0);
         }
 
         public static StringAlignment ToStringAlignment(Enums.textHorizontalAlignment a)
         {
-            switch (a)
+            return a switch
             {
-                case Enums.textHorizontalAlignment.Left:
-                    return StringAlignment.Near;
-                case Enums.textHorizontalAlignment.Center:
-                    return StringAlignment.Center;
-                case Enums.textHorizontalAlignment.Right:
-                    return StringAlignment.Far;
-                default:
-                    return StringAlignment.Near;
-            }
+                Enums.textHorizontalAlignment.Left => StringAlignment.Near,
+                Enums.textHorizontalAlignment.Center => StringAlignment.Center,
+                Enums.textHorizontalAlignment.Right => StringAlignment.Far,
+                _ => StringAlignment.Near,
+            };
         }
 
         public static StringAlignment ToStringAlignment(Enums.textVerticalAlignment a)
         {
-            switch (a)
+            return a switch
             {
-                case Enums.textVerticalAlignment.Top:
-                    return StringAlignment.Near;
-                case Enums.textVerticalAlignment.Center:
-                    return StringAlignment.Center;
-                case Enums.textVerticalAlignment.Bottom:
-                    return StringAlignment.Far;
-                default:
-                    return StringAlignment.Near;
-            }
+                Enums.textVerticalAlignment.Top => StringAlignment.Near,
+                Enums.textVerticalAlignment.Center => StringAlignment.Center,
+                Enums.textVerticalAlignment.Bottom => StringAlignment.Far,
+                _ => StringAlignment.Near,
+            };
         }
 
         private void DrawText(Size size)
@@ -257,7 +245,7 @@ namespace WolvenKit.Functionality.Layout.inkWidgets
                     y = -CorrectionY;
                     break;
                 case Enums.textVerticalAlignment.Center:
-                    y = (size.Height - TextHeight) / 2 - CorrectionY;
+                    y = ((size.Height - TextHeight) / 2) - CorrectionY;
                     break;
                 case Enums.textVerticalAlignment.Bottom:
                     y = size.Height - TextHeight - CorrectionY;
@@ -266,7 +254,7 @@ namespace WolvenKit.Functionality.Layout.inkWidgets
                     break;
             }
 
-            var bmp = new Bitmap((int)size.Width, (int)(size.Height), System.Drawing.Imaging.PixelFormat.Format32bppPArgb);
+            var bmp = new Bitmap((int)size.Width, (int)size.Height, System.Drawing.Imaging.PixelFormat.Format32bppPArgb);
             using (var g = Graphics.FromImage(bmp))
             {
                 g.TextRenderingHint = TextRenderingHint.AntiAliasGridFit;

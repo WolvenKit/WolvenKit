@@ -2,7 +2,7 @@ using System;
 using System.Reactive.Disposables;
 using System.Windows;
 using ReactiveUI;
-using WolvenKit.ViewModels.Documents;
+using WolvenKit.App.ViewModels.Documents;
 
 namespace WolvenKit.Views.Documents
 {

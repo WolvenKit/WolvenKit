@@ -8,11 +8,14 @@ using System.Reactive;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Media3D;
 using DynamicData;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
+using WolvenKit.App.Commands.Base;
+using WolvenKit.App.Controllers;
+using WolvenKit.App.Models;
+using WolvenKit.App.Models.Docking;
+using WolvenKit.App.Services;
 using WolvenKit.Common;
 using WolvenKit.Common.Extensions;
 using WolvenKit.Common.FNV1A;
@@ -22,17 +25,11 @@ using WolvenKit.Common.Model.Arguments;
 using WolvenKit.Common.Services;
 using WolvenKit.Core.Interfaces;
 using WolvenKit.Core.Services;
-using WolvenKit.Functionality.Commands;
-using WolvenKit.Functionality.Controllers;
-using WolvenKit.Functionality.Services;
-using WolvenKit.Interaction;
-using WolvenKit.Models;
-using WolvenKit.Models.Docking;
 using WolvenKit.Modkit.RED4.Opus;
 using WolvenKit.Modkit.RED4.Tools;
 using WolvenKit.RED4.Archive;
 
-namespace WolvenKit.ViewModels.Tools
+namespace WolvenKit.App.ViewModels.Tools
 {
     public class ImportExportViewModel : ToolViewModel
     {
@@ -128,7 +125,7 @@ namespace WolvenKit.ViewModels.Tools
             AddItemsCommand = new DelegateCommand<ObservableCollection<object>>(ExecuteAddItems, CanAddItems);
             RemoveItemsCommand = new DelegateCommand<ObservableCollection<object>>(ExecuteRemoveItems, CanRemoveItems);
 
-            _watcherService.Files
+            _ = _watcherService.Files
                 .Connect()
                 .Filter(_ => _.IsImportable)
                 .Filter(_ => _.FullName.Contains(_projectManager.ActiveProject.RawDirectory))
@@ -138,7 +135,7 @@ namespace WolvenKit.ViewModels.Tools
                 .Bind(out _importableItems)
                 .Subscribe();
 
-            _watcherService.Files
+            _ = _watcherService.Files
                 .Connect()
                 .Filter(_ => _.IsExportable)
                 .Filter(_ => _.FullName.Contains(_projectManager.ActiveProject.ModDirectory))
@@ -147,7 +144,7 @@ namespace WolvenKit.ViewModels.Tools
                 .Bind(out _exportableItems)
                 .Subscribe();
 
-            _watcherService.Files
+            _ = _watcherService.Files
                 .Connect()
                 .Filter(_ => _.IsConvertable)
                 .Filter(_ => _.FullName.Contains(_projectManager.ActiveProject.RawDirectory))
@@ -164,7 +161,7 @@ namespace WolvenKit.ViewModels.Tools
             //});
 
 
-            this.WhenAnyValue(x => x.SelectedExport, y => y.SelectedImport, z => z.SelectedConvert)
+            _ = this.WhenAnyValue(x => x.SelectedExport, y => y.SelectedImport, z => z.SelectedConvert)
                 .Subscribe(b =>
                 {
                     var x = b.Item1;
@@ -866,7 +863,7 @@ namespace WolvenKit.ViewModels.Tools
                     {
                         var meshStream = new MemoryStream();
                         file.Extract(meshStream);
-                        meshStream.Seek(0, SeekOrigin.Begin);
+                        _ = meshStream.Seek(0, SeekOrigin.Begin);
 
                         outfile = Path.Combine(ISettingsManager.GetTemp_OBJPath(), qx.Name);
                         outfile = Path.ChangeExtension(outfile, ".glb");

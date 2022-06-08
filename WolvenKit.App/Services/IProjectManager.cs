@@ -1,7 +1,7 @@
 using System.Threading.Tasks;
-using WolvenKit.ProjectManagement.Project;
+using WolvenKit.App.Functionality.ProjectManagement.Project;
 
-namespace WolvenKit.Functionality.Services
+namespace WolvenKit.App.Services
 {
     public interface IProjectManager
     {

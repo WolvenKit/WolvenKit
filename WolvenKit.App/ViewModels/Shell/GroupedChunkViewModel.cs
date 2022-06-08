@@ -4,7 +4,7 @@ using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using WolvenKit.Common.Services;
 
-namespace WolvenKit.ViewModels.Shell;
+namespace WolvenKit.App.ViewModels.Shell;
 
 public class GroupedChunkViewModel : ReactiveObject, ISelectableTreeViewItemModel
 {

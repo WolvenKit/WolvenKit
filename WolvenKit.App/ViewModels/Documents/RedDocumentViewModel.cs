@@ -7,10 +7,10 @@ using System.Threading.Tasks;
 using DynamicData.Kernel;
 using ReactiveUI.Fody.Helpers;
 using Splat;
+using WolvenKit.App.Services;
 using WolvenKit.Common;
 using WolvenKit.Common.FNV1A;
 using WolvenKit.Common.Services;
-using WolvenKit.Functionality.Services;
 using WolvenKit.Modkit.RED4;
 using WolvenKit.RED4.Archive;
 using WolvenKit.RED4.Archive.CR2W;
@@ -18,7 +18,7 @@ using WolvenKit.RED4.Archive.IO;
 using WolvenKit.RED4.CR2W;
 using WolvenKit.RED4.Types;
 
-namespace WolvenKit.ViewModels.Documents
+namespace WolvenKit.App.ViewModels.Documents
 {
     public enum ERedDocumentItemType
     {
@@ -45,17 +45,10 @@ namespace WolvenKit.ViewModels.Documents
             if (_projectManager.ActiveProject != null)
             {
                 // assume files that don't exist are relative paths
-                if (File.Exists(path))
-                {
-                    RelativePath = Path.GetRelativePath(_projectManager.ActiveProject.ModDirectory, path);
-                }
-                else
-                {
-                    RelativePath = path;
-                }
+                RelativePath = File.Exists(path) ? Path.GetRelativePath(_projectManager.ActiveProject.ModDirectory, path) : path;
             }
 
-            Extension = Path.GetExtension(path) != "" ? Path.GetExtension(path).Substring(1) : "";
+            Extension = Path.GetExtension(path) != "" ? Path.GetExtension(path)[1..] : "";
         }
 
         #region properties
@@ -123,7 +116,7 @@ namespace WolvenKit.ViewModels.Documents
             {
                 using (var stream = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
                 {
-                    OpenStream(stream, path);
+                    _ = OpenStream(stream, path);
                 }
 
                 return true;
@@ -146,7 +139,7 @@ namespace WolvenKit.ViewModels.Documents
             {
                 await using (var stream = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
                 {
-                    OpenStream(stream, path);
+                    _ = OpenStream(stream, path);
                 }
 
                 return true;
@@ -183,7 +176,7 @@ namespace WolvenKit.ViewModels.Documents
             if (cls is Multilayer_Mask mlmask)
             {
                 // maybe it makes more sense to put these all into one tab?
-                ModTools.ConvertMultilayerMaskToDdsStreams(mlmask, out var streams);
+                _ = ModTools.ConvertMultilayerMaskToDdsStreams(mlmask, out var streams);
                 for (var i = 0; i < streams.Count; i++)
                 {
                     var tab = new RDTTextureViewModel(streams[i], this)
@@ -292,7 +285,9 @@ namespace WolvenKit.ViewModels.Documents
                     {
                         var fm = Locator.Current.GetService<IWatcherService>().GetFileModelFromHash(depotPath.GetRedHash());
                         if (fm != null)
+                        {
                             path = fm.FullName;
+                        }
                     }
 
                     if (path != null && File.Exists(path))
@@ -329,7 +324,7 @@ namespace WolvenKit.ViewModels.Documents
                 }
             }
 
-            BadFile:
+        BadFile:
 
             var _archiveManager = Locator.Current.GetService<IArchiveManager>();
             var file = _archiveManager.Lookup(depotPath.GetRedHash());

@@ -9,7 +9,7 @@
     xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
-    xmlns:wizards="clr-namespace:WolvenKit.ViewModels.Wizards;assembly=WolvenKit.App"
+    xmlns:wizards="clr-namespace:WolvenKit.App.ViewModels.Wizards;assembly=WolvenKit.App"
     BorderBrush="{x:Null}"
     Tag="Project Wizard"
     Background="{StaticResource ContentBackgroundAlt3}"

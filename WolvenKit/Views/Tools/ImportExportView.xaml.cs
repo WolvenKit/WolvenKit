@@ -4,9 +4,9 @@ using System.Windows;
 using ReactiveUI;
 using Splat;
 using Syncfusion.Windows.PropertyGrid;
+using WolvenKit.App.Commands.Base;
+using WolvenKit.App.ViewModels.Tools;
 using WolvenKit.Common;
-using WolvenKit.Functionality.Commands;
-using WolvenKit.ViewModels.Tools;
 
 namespace WolvenKit.Views.Tools
 {

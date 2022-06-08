@@ -1,7 +1,7 @@
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 
-namespace WolvenKit.Functionality;
+namespace WolvenKit.App.Functionality;
 
 public class ObservableCollectionEx<T> : ObservableCollection<T>
 {

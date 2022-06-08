@@ -3,7 +3,7 @@ using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 
 
-namespace WolvenKit.Models.Wizards
+namespace WolvenKit.App.Models.Wizards
 {
     /// <summary>
     /// Keeps track of which game was selected by the user during setting up a project.
@@ -67,7 +67,7 @@ namespace WolvenKit.Models.Wizards
         /// <summary>
         /// Gets/Sets the author's profile image brush.
         /// </summary>
-        [Reactive] public ImageBrush ProfileImageBrush { get; set; } = default(ImageBrush);
+        [Reactive] public ImageBrush ProfileImageBrush { get; set; } = default;
 
         /// <summary>
         /// Gets/Sets the author's profile image path.

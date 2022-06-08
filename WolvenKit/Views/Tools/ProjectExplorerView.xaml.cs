@@ -15,13 +15,13 @@ using Splat;
 using Syncfusion.UI.Xaml.Grid;
 using Syncfusion.UI.Xaml.ScrollAxis;
 using Syncfusion.UI.Xaml.TreeGrid;
+using WolvenKit.App.Functionality.ProjectManagement.Project;
+using WolvenKit.App.Interaction;
+using WolvenKit.App.Models;
+using WolvenKit.App.Services;
+using WolvenKit.App.ViewModels.Dialogs;
+using WolvenKit.App.ViewModels.Tools;
 using WolvenKit.Functionality.Helpers;
-using WolvenKit.Functionality.Services;
-using WolvenKit.Interaction;
-using WolvenKit.Models;
-using WolvenKit.ProjectManagement.Project;
-using WolvenKit.ViewModels.Dialogs;
-using WolvenKit.ViewModels.Tools;
 using WolvenKit.Views.Dialogs;
 
 namespace WolvenKit.Views.Tools
@@ -243,14 +243,7 @@ namespace WolvenKit.Views.Tools
             return includeFile;
         }
 
-        private bool IsFileInFlat(object o)
-        {
-            if (tabControl != null && o is FileModel fm)
-            {
-                return IsFileIn(o) && !fm.IsDirectory;
-            }
-            return false;
-        }
+        private bool IsFileInFlat(object o) => tabControl != null && o is FileModel fm && IsFileIn(o) && !fm.IsDirectory;
 
         private void UpdateTreeGrid()
         {
@@ -401,8 +394,7 @@ namespace WolvenKit.Views.Tools
         {
             if (e.Data.GetDataPresent("Nodes"))
             {
-                var treeNodes = e.Data.GetData("Nodes") as ObservableCollection<TreeNode>;
-                if (treeNodes != null && treeNodes[0].Item is FileModel sourceFile)
+                if (e.Data.GetData("Nodes") is ObservableCollection<TreeNode> treeNodes && treeNodes[0].Item is FileModel sourceFile)
                 {
                     if (e.TargetNode.Item is FileModel targetFile)
                     {
@@ -545,7 +537,7 @@ namespace WolvenKit.Views.Tools
                     return;
                 }
 
-                var args = $"\"{ selected.FullName}\" /I102 /p";
+                var args = $"\"{selected.FullName}\" /I102 /p";
                 var procInfo =
                     new System.Diagnostics.ProcessStartInfo(Path.Combine(ISettingsManager.GetWorkDir(),
                         "test.exe"))

@@ -1,4 +1,4 @@
-namespace WolvenKit.Functionality.WKitGlobal
+namespace WolvenKit.App.Functionality
 {
     /// <summary>
     /// Enumeration of serialized Managers

@@ -10,11 +10,11 @@ using Microsoft.Win32;
 using Microsoft.WindowsAPICodePack.Dialogs;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
-using WolvenKit.Functionality.Commands;
-using WolvenKit.Functionality.Services;
-using WolvenKit.ViewModels.Dialogs;
+using WolvenKit.App.Commands.Base;
+using WolvenKit.App.Services;
+using WolvenKit.App.ViewModels.Dialogs;
 
-namespace WolvenKit.ViewModels.Wizards
+namespace WolvenKit.App.ViewModels.Wizards
 {
     /// <summary>
     /// During the first time setup it tries to automatically determine the missing paths and settings.
@@ -61,7 +61,7 @@ namespace WolvenKit.ViewModels.Wizards
             MaterialDepotPath = Path.Combine(ISettingsManager.GetAppData(), "MaterialDepot");
             if (!Directory.Exists(MaterialDepotPath))
             {
-                Directory.CreateDirectory(MaterialDepotPath);
+                _ = Directory.CreateDirectory(MaterialDepotPath);
             }
         }
 
@@ -101,7 +101,7 @@ namespace WolvenKit.ViewModels.Wizards
                     UseShellExecute = true,
                     Verb = "open"
                 };
-                Process.Start(ps);
+                _ = Process.Start(ps);
             });
 
         // public string ExecutablePathBG => string.IsNullOrEmpty(W3ExePath) ? redBG : greenBG;
@@ -270,9 +270,9 @@ namespace WolvenKit.ViewModels.Wizards
             {
                 //StrDelegate w3del = msg => witcherexe = msg;
                 //StrDelegate wccdel = msg => wccLiteexe = msg;
-                StrDelegate cp77del = msg => _cp77Eexe = msg;
+                void cp77del(string msg) => _cp77Eexe = msg;
 
-                Parallel.ForEach(Registry.LocalMachine.OpenSubKey(uninstallkey)?.GetSubKeyNames(), item =>
+                _ = Parallel.ForEach(Registry.LocalMachine.OpenSubKey(uninstallkey)?.GetSubKeyNames(), item =>
                 {
                     var programName = Registry.LocalMachine.OpenSubKey(uninstallkey + item)
                         ?.GetValue("DisplayName");
@@ -315,7 +315,7 @@ namespace WolvenKit.ViewModels.Wizards
                     //w3del.Invoke(w3);
                     //wccdel.Invoke(wcc);
                 });
-                Parallel.ForEach(Registry.LocalMachine.OpenSubKey(uninstallkey2)?.GetSubKeyNames(), item =>
+                _ = Parallel.ForEach(Registry.LocalMachine.OpenSubKey(uninstallkey2)?.GetSubKeyNames(), item =>
                 {
                     var programName = Registry.LocalMachine.OpenSubKey(uninstallkey2 + item)
                         ?.GetValue("DisplayName");
@@ -354,7 +354,7 @@ namespace WolvenKit.ViewModels.Wizards
 
                     //w3del.Invoke(w3);
                     //wccdel.Invoke(wcc);
-                    cp77del.Invoke(cp77);
+                    cp77del(cp77);
                 });
             }
             catch (Exception)

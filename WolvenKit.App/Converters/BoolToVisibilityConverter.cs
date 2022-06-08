@@ -3,7 +3,7 @@ using System.Globalization;
 using System.Windows;
 using System.Windows.Data;
 
-namespace WolvenKit.Functionality.Converters
+namespace WolvenKit.App.Converters
 {
     /// <summary>
     /// Source: http://stackoverflow.com/questions/534575/how-do-i-invert-booleantovisibilityconverter
@@ -11,10 +11,8 @@ namespace WolvenKit.Functionality.Converters
     /// Implements a Boolean to Visibility converter
     /// Use ConverterParameter=true to negate the visibility - boolean interpretation.
     /// </summary>
-#pragma warning disable WPF0072 // ValueConversion must use correct types.
 
     [ValueConversion(typeof(bool), typeof(Visibility))]
-#pragma warning restore WPF0072 // ValueConversion must use correct types.
     public sealed class BoolToVisibilityConverter : IValueConverter
     {
         /// <summary>
@@ -28,7 +26,7 @@ namespace WolvenKit.Functionality.Converters
         /// <returns></returns>
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            var back = (value is Visibility visibility) && (visibility == Visibility.Visible);
+            var back = value is Visibility visibility && visibility == Visibility.Visible;
 
             return back;
         }
@@ -55,14 +53,7 @@ namespace WolvenKit.Functionality.Converters
                 flag = nullable.GetValueOrDefault();
             }
 
-            if (flag)
-            {
-                return Visibility.Visible;
-            }
-            else
-            {
-                return Visibility.Collapsed;
-            }
+            return flag ? Visibility.Visible : (object)Visibility.Collapsed;
         }
     }
 }

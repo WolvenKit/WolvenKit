@@ -18,33 +18,33 @@ using Microsoft.WindowsAPICodePack.Dialogs;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using Splat;
+using WolvenKit.App.Commands.Base;
+using WolvenKit.App.Controllers;
+using WolvenKit.App.Functionality.ProjectManagement;
+using WolvenKit.App.Functionality.ProjectManagement.Project;
+using WolvenKit.App.Helpers;
+using WolvenKit.App.Interaction;
+using WolvenKit.App.Models;
+using WolvenKit.App.Models.Docking;
+using WolvenKit.App.Services;
+using WolvenKit.App.ViewModels.Dialogs;
+using WolvenKit.App.ViewModels.Documents;
+using WolvenKit.App.ViewModels.HomePage;
+using WolvenKit.App.ViewModels.Tools;
+using WolvenKit.App.ViewModels.Wizards;
 using WolvenKit.Common;
 using WolvenKit.Common.Exceptions;
 using WolvenKit.Common.Extensions;
 using WolvenKit.Common.FNV1A;
 using WolvenKit.Common.Services;
 using WolvenKit.Core.Services;
-using WolvenKit.Functionality.Commands;
-using WolvenKit.Functionality.Controllers;
-using WolvenKit.Functionality.Helpers;
-using WolvenKit.Functionality.ProjectManagement;
-using WolvenKit.Functionality.Services;
-using WolvenKit.Interaction;
-using WolvenKit.Models;
-using WolvenKit.Models.Docking;
-using WolvenKit.ProjectManagement.Project;
 using WolvenKit.RED4.Archive;
 using WolvenKit.RED4.Archive.CR2W;
 using WolvenKit.RED4.Archive.IO;
 using WolvenKit.RED4.Types;
-using WolvenKit.ViewModels.Dialogs;
-using WolvenKit.ViewModels.Documents;
-using WolvenKit.ViewModels.HomePage;
-using WolvenKit.ViewModels.Tools;
-using WolvenKit.ViewModels.Wizards;
-using NativeMethods = WolvenKit.Functionality.NativeWin.NativeMethods;
+using NativeMethods = WolvenKit.App.Functionality.Other.NativeWin.NativeMethods;
 
-namespace WolvenKit.ViewModels.Shell
+namespace WolvenKit.App.ViewModels.Shell
 {
     public class AppViewModel : ReactiveObject/*, IAppViewModel*/
     {
@@ -140,11 +140,11 @@ namespace WolvenKit.ViewModels.Shell
             CloseDialogCommand = new RelayCommand(ExecuteCloseDialog, CanCloseDialog);
 
 
-            OpenFileAsyncCommand.ThrownExceptions.Subscribe(ex => LogExtended(ex));
-            OpenRedFileAsyncCommand.ThrownExceptions.Subscribe(ex => LogExtended(ex));
-            PackModCommand.ThrownExceptions.Subscribe(ex => LogExtended(ex));
-            PackInstallModCommand.ThrownExceptions.Subscribe(ex => LogExtended(ex));
-            OpenProjectCommand.ThrownExceptions.Subscribe(ex => LogExtended(ex));
+            _ = OpenFileAsyncCommand.ThrownExceptions.Subscribe(ex => LogExtended(ex));
+            _ = OpenRedFileAsyncCommand.ThrownExceptions.Subscribe(ex => LogExtended(ex));
+            _ = PackModCommand.ThrownExceptions.Subscribe(ex => LogExtended(ex));
+            _ = PackInstallModCommand.ThrownExceptions.Subscribe(ex => LogExtended(ex));
+            _ = OpenProjectCommand.ThrownExceptions.Subscribe(ex => LogExtended(ex));
 
             #endregion commands
 
@@ -168,20 +168,17 @@ namespace WolvenKit.ViewModels.Shell
             };
 
             // TweakDB when we're good and ready
-            _settingsManager
+            _ = _settingsManager
                 .WhenAnyValue(x => x.CP77GameDirPath)
                 .SkipWhile(x => string.IsNullOrWhiteSpace(x)) // -.-
                 .Take(1)
-                .Subscribe(x =>
-                {
-                    LoadTweakDB(_settingsManager.GetRED4GameRootDir());
-                });
+                .Subscribe(x => LoadTweakDB(_settingsManager.GetRED4GameRootDir()));
 
-            _settingsManager
+            _ = _settingsManager
                 .WhenAnyValue(x => x.UpdateChannel)
                 .Subscribe(async x =>
                 {
-                    _autoInstallerService.UseChannel(x.ToString());
+                    _ = _autoInstallerService.UseChannel(x.ToString());
 
                     // 1 API call
                     if (!(await _autoInstallerService.CheckForUpdate())
@@ -217,7 +214,7 @@ namespace WolvenKit.ViewModels.Shell
             {
                 var message = $"Sorry, '{args[1]}' could not be found";
                 _loggerService.Error(message);
-                MessageBox.Show(message);
+                _ = MessageBox.Show(message);
                 return false;
             }
 
@@ -227,7 +224,7 @@ namespace WolvenKit.ViewModels.Shell
                 return true;
             }
 
-            if (Enum.TryParse<ERedExtension>(Path.GetExtension(args[1]).Substring(1), out var _))
+            if (Enum.TryParse<ERedExtension>(Path.GetExtension(args[1])[1..], out _))
             {
                 _ = OpenFileAsync(new FileModel(args[1], null));
                 return true;
@@ -235,7 +232,7 @@ namespace WolvenKit.ViewModels.Shell
 
             var message2 = $"Sorry, {Path.GetExtension(args[1])} files aren't supported by WolvenKit";
             _loggerService.Error(message2);
-            MessageBox.Show(message2);
+            _ = MessageBox.Show(message2);
             return false;
         }
 
@@ -262,7 +259,7 @@ namespace WolvenKit.ViewModels.Shell
         {
             if (!_settingsManager.IsHealthy())
             {
-                var setupWasOk = await Interactions.ShowFirstTimeSetup.Handle(Unit.Default);
+                _ = await Interactions.ShowFirstTimeSetup.Handle(Unit.Default);
             }
         }
 
@@ -362,7 +359,7 @@ namespace WolvenKit.ViewModels.Shell
 
                 CloseModalCommand.Execute(null);
 
-                await _projectManager.LoadAsync(location);
+                _ = await _projectManager.LoadAsync(location);
 
                 ActiveProject = _projectManager.ActiveProject;
 
@@ -415,15 +412,12 @@ namespace WolvenKit.ViewModels.Shell
                     Version = project.Version
                 };
                 _projectManager.ActiveProject = np;
-                await _projectManager.SaveAsync();
+                _ = await _projectManager.SaveAsync();
                 np.CreateDefaultDirectories();
 
-                await _projectManager.LoadAsync(projectLocation);
+                _ = await _projectManager.LoadAsync(projectLocation);
 
-                DispatcherHelper.RunOnMainThread(() =>
-                {
-                    ActiveProject = _projectManager.ActiveProject;
-                });
+                DispatcherHelper.RunOnMainThread(() => ActiveProject = _projectManager.ActiveProject);
 
                 await _gameControllerFactory.GetController().HandleStartup().ContinueWith(_ =>
                 {
@@ -510,7 +504,7 @@ namespace WolvenKit.ViewModels.Shell
                 case EGameLaunchCommand.Launch:
                     try
                     {
-                        Process.Start(new ProcessStartInfo
+                        _ = Process.Start(new ProcessStartInfo
                         {
                             FileName = _settingsManager.GetRED4GameLaunchCommand(),
                             Arguments = _settingsManager.GetRED4GameLaunchOptions() ?? "",
@@ -529,7 +523,7 @@ namespace WolvenKit.ViewModels.Shell
                     {
                         var steamrunid = "steam://rungameid/1091500";
 
-                        Process.Start(new ProcessStartInfo
+                        _ = Process.Start(new ProcessStartInfo
                         {
                             FileName = steamrunid,
                             ErrorDialog = true,
@@ -547,7 +541,7 @@ namespace WolvenKit.ViewModels.Shell
                     {
                         if (await Task.Run(() => _gameControllerFactory.GetController().PackAndInstallProject()))
                         {
-                            Process.Start(new ProcessStartInfo
+                            _ = Process.Start(new ProcessStartInfo
                             {
                                 FileName = _settingsManager.GetRED4GameLaunchCommand(),
                                 Arguments = _settingsManager.GetRED4GameLaunchOptions() ?? "",
@@ -592,7 +586,7 @@ namespace WolvenKit.ViewModels.Shell
             }
 
             _watcherService.IsSuspended = true;
-            await Task.Run(() => OpenFromNewFileTask(file)).ContinueWith(async (result) =>
+            _ = await Task.Run(() => OpenFromNewFileTask(file)).ContinueWith(async (result) =>
             {
                 _watcherService.IsSuspended = false;
                 await _watcherService.RefreshAsync(ActiveProject);
@@ -609,11 +603,9 @@ namespace WolvenKit.ViewModels.Shell
                 case EWolvenKitFile.Tweak:
                     if (!string.IsNullOrEmpty(file.SelectedFile.Template))
                     {
-                        await using (var resource = Assembly.GetExecutingAssembly().GetManifestResourceStream($"WolvenKit.App.Resources.{file.SelectedFile.Template}"))
-                        {
-                            stream = new FileStream(file.FullPath, FileMode.Create, FileAccess.Write);
-                            resource.CopyTo(stream);
-                        }
+                        await using var resource = Assembly.GetExecutingAssembly().GetManifestResourceStream($"WolvenKit.App.Resources.{file.SelectedFile.Template}");
+                        stream = new FileStream(file.FullPath, FileMode.Create, FileAccess.Write);
+                        resource.CopyTo(stream);
                     }
                     else
                     {
@@ -629,10 +621,8 @@ namespace WolvenKit.ViewModels.Shell
                             RootChunk = RedTypeManager.Create(redType)
                         };
                         stream = new FileStream(file.FullPath, FileMode.Create, FileAccess.Write);
-                        using (var writer = new CR2WWriter(stream))
-                        {
-                            writer.WriteFile(cr2w);
-                        }
+                        using var writer = new CR2WWriter(stream);
+                        writer.WriteFile(cr2w);
                     }
                     break;
             }
@@ -697,7 +687,7 @@ namespace WolvenKit.ViewModels.Shell
                 {
                     _progressService.IsIndeterminate = true;
 
-                    RequestFileOpen(model.FullName);
+                    _ = RequestFileOpen(model.FullName);
 
                     _progressService.IsIndeterminate = false;
                 }
@@ -756,7 +746,7 @@ namespace WolvenKit.ViewModels.Shell
                     await using (var stream = new MemoryStream())
                     {
                         file.Extract(stream);
-                        fileViewModel.OpenStream(stream, null);
+                        _ = fileViewModel.OpenStream(stream, null);
                     }
 
                     if (!DockedViews.Contains(fileViewModel))
@@ -797,7 +787,7 @@ namespace WolvenKit.ViewModels.Shell
                         using (var stream = new MemoryStream())
                         {
                             fe.Extract(stream);
-                            fileViewModel.OpenStream(stream, null);
+                            _ = fileViewModel.OpenStream(stream, null);
                         }
                         if (!DockedViews.Contains(fileViewModel))
                         {
@@ -823,13 +813,7 @@ namespace WolvenKit.ViewModels.Shell
         private async Task ExecutePackMod() => await _gameControllerFactory.GetController().PackProject();
 
         public ReactiveCommand<Unit, Unit> PackInstallModCommand { get; private set; }
-        private async Task ExecutePackInstallMod()
-        {
-            await Task.Run(async () =>
-            {
-                await _gameControllerFactory.GetController().PackAndInstallProject();
-            });
-        }
+        private async Task ExecutePackInstallMod() => await Task.Run(async () => await _gameControllerFactory.GetController().PackAndInstallProject());
 
         //public ICommand PublishModCommand { get; private set; }
         //private bool CanPublishMod() => _projectManager.ActiveProject != null;
@@ -1062,7 +1046,7 @@ namespace WolvenKit.ViewModels.Shell
         {
             ActiveOverlay = overlay;
             //Application.Current.Dispatcher.BeginInvoke(DispatcherPriority.Render, (Action)OnAfterRendered);
-            Task.Run(OnAfterOverlayRendered);
+            _ = Task.Run(OnAfterOverlayRendered);
         }
 
         [Reactive] public DialogViewModel ActiveDialog { get; set; }
@@ -1070,7 +1054,7 @@ namespace WolvenKit.ViewModels.Shell
         {
             ActiveDialog = modal;
             //Application.Current.Dispatcher.BeginInvoke(DispatcherPriority.Render, (Action)OnAfterRendered);
-            Task.Run(OnAfterDialogRendered);
+            _ = Task.Run(OnAfterDialogRendered);
         }
 
         [Reactive] public IDocumentViewModel ActiveDocument { get; set; }
@@ -1136,14 +1120,9 @@ namespace WolvenKit.ViewModels.Shell
                     fileViewModel = new ScriptDocumentViewModel(fullPath);
                     break;
                 case EWolvenKitFile.Tweak:
-                    if (Path.GetExtension(fullPath).ToUpper() == ".YAML")
-                    {
-                        fileViewModel = new TweakXLDocumentViewModel(fullPath);
-                    }
-                    else
-                    {
-                        fileViewModel = new TweakDocumentViewModel(fullPath);
-                    }
+                    fileViewModel = Path.GetExtension(fullPath).ToUpper() == ".YAML"
+                        ? new TweakXLDocumentViewModel(fullPath)
+                        : new TweakDocumentViewModel(fullPath);
                     break;
                 default:
                     break;
@@ -1198,21 +1177,14 @@ namespace WolvenKit.ViewModels.Shell
                     var directory = Path.GetDirectoryName(Path.Combine(_projectManager.ActiveProject.ModDirectory, red.RelativePath));
                     if (!Directory.Exists(directory))
                     {
-                        Directory.CreateDirectory(directory);
+                        _ = Directory.CreateDirectory(directory);
                     }
                     dlg.FileName = Path.GetFileName(red.RelativePath);
                     dlg.InitialDirectory = directory;
                 }
                 else
                 {
-                    if (fileToSave.FilePath != null)
-                    {
-                        dlg.FileName = Path.GetFileName(fileToSave.FilePath);
-                    }
-                    else
-                    {
-                        dlg.FileName = Path.GetFileName(fileToSave.ContentId);
-                    }
+                    dlg.FileName = fileToSave.FilePath != null ? Path.GetFileName(fileToSave.FilePath) : Path.GetFileName(fileToSave.ContentId);
                     dlg.InitialDirectory = Path.GetDirectoryName(fileToSave.FilePath);
                 }
                 _watcherService.IsSuspended = true;
@@ -1283,14 +1255,7 @@ namespace WolvenKit.ViewModels.Shell
                 // double file formats
                 case ".csv":
                 case ".json":
-                    if (IsInRawFolder(fullpath))
-                    {
-                        return Task.Run(() => ShellExecute());
-                    }
-                    else
-                    {
-                        return Task.Run(() => OpenRedengineFile());
-                    }
+                    return IsInRawFolder(fullpath) ? Task.Run(() => ShellExecute()) : Task.Run(() => OpenRedengineFile());
 
                 // VIDEO
                 case ".bk2":
@@ -1376,7 +1341,7 @@ namespace WolvenKit.ViewModels.Shell
                 try
                 {
                     var proc = new ProcessStartInfo(fullpath.ToEscapedPath()) { UseShellExecute = true };
-                    Process.Start(proc);
+                    _ = Process.Start(proc);
                 }
                 catch (Win32Exception)
                 {
@@ -1389,15 +1354,10 @@ namespace WolvenKit.ViewModels.Shell
             {
                 File.WriteAllBytes(Path.GetTempPath() + "asd." + extension, new byte[] { 0x01 });
                 var programname = new StringBuilder();
-                NativeMethods.FindExecutable("asd." + extension, Path.GetTempPath(), programname);
-                if (programname.ToString().ToUpper().Contains(".EXE"))
-                {
-                    Process.Start(programname.ToString(), path.ToEscapedPath());
-                }
-                else
-                {
-                    throw new InvalidFileTypeException("Invalid file type");
-                }
+                _ = NativeMethods.FindExecutable("asd." + extension, Path.GetTempPath(), programname);
+                _ = programname.ToString().ToUpper().Contains(".EXE")
+                    ? Process.Start(programname.ToString(), path.ToEscapedPath())
+                    : throw new InvalidFileTypeException("Invalid file type");
             }
         }
 

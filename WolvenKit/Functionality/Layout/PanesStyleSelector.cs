@@ -1,7 +1,7 @@
 using System.Windows;
 using System.Windows.Controls;
-using WolvenKit.ViewModels.Documents;
-using WolvenKit.ViewModels.Tools;
+using WolvenKit.App.ViewModels.Documents;
+using WolvenKit.App.ViewModels.Tools;
 
 namespace WolvenKit.Functionality.Layout
 {
@@ -27,17 +27,12 @@ namespace WolvenKit.Functionality.Layout
 
         public override System.Windows.Style SelectStyle(object item, System.Windows.DependencyObject container)
         {
-            switch (item)
+            return item switch
             {
-                case ToolViewModel _:
-                    return ToolStyle;
-
-                case DocumentViewModel _:
-                    return FileStyle;
-
-                default:
-                    return base.SelectStyle(item, container);
-            }
+                ToolViewModel _ => ToolStyle,
+                DocumentViewModel _ => FileStyle,
+                _ => base.SelectStyle(item, container),
+            };
         }
 
         #endregion Methods

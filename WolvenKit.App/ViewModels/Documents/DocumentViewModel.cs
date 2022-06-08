@@ -5,11 +5,11 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
-using WolvenKit.Functionality.Commands;
-using WolvenKit.Models.Docking;
-using WolvenKit.ViewModels.Shell;
+using WolvenKit.App.Commands.Base;
+using WolvenKit.App.Models.Docking;
+using WolvenKit.App.ViewModels.Shell;
 
-namespace WolvenKit.ViewModels.Documents
+namespace WolvenKit.App.ViewModels.Documents
 {
     public abstract class DocumentViewModel : PaneViewModel, IDocumentViewModel
     {

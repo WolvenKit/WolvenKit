@@ -15,21 +15,21 @@ using DynamicData.Binding;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using Splat;
+using WolvenKit.App.Commands.Base;
+using WolvenKit.App.Controllers;
+using WolvenKit.App.Functionality.ProjectManagement.Project;
+using WolvenKit.App.Interaction;
+using WolvenKit.App.Models;
+using WolvenKit.App.Models.Docking;
+using WolvenKit.App.Services;
+using WolvenKit.App.ViewModels.Shell;
 using WolvenKit.Common;
 using WolvenKit.Common.Interfaces;
 using WolvenKit.Common.Services;
 using WolvenKit.Core.Services;
-using WolvenKit.Functionality.Commands;
-using WolvenKit.Functionality.Controllers;
-using WolvenKit.Functionality.Services;
-using WolvenKit.Interaction;
-using WolvenKit.Models;
-using WolvenKit.Models.Docking;
-using WolvenKit.ProjectManagement.Project;
 using WolvenKit.RED4.Archive;
-using WolvenKit.ViewModels.Shell;
 
-namespace WolvenKit.ViewModels.Tools
+namespace WolvenKit.App.ViewModels.Tools
 {
     public class ProjectExplorerViewModel : ToolViewModel
     {
@@ -86,7 +86,7 @@ namespace WolvenKit.ViewModels.Tools
             SetupCommands();
             SetupToolDefaults();
 
-            _watcherService.Files
+            _ = _watcherService.Files
                 .Connect()
                 .ObserveOn(RxApp.MainThreadScheduler)
                 .BindToObservableList(out _observableList)
@@ -97,7 +97,7 @@ namespace WolvenKit.ViewModels.Tools
             CollapseChildren = ReactiveCommand.Create(() => { });
             ExpandChildren = ReactiveCommand.Create(() => { });
 
-            this.WhenAnyValue(x => x.SelectedItem).Subscribe(model =>
+            _ = this.WhenAnyValue(x => x.SelectedItem).Subscribe(model =>
             {
                 if (model != null)
                 {
@@ -126,7 +126,7 @@ namespace WolvenKit.ViewModels.Tools
 
         [Reactive] public bool IsFlatModeEnabled { get; set; }
 
-        [Reactive] public int SelectedTabIndex { get;set; }
+        [Reactive] public int SelectedTabIndex { get; set; }
 
         public FileModel LastSelected => _watcherService.LastSelect;
 
@@ -232,21 +232,21 @@ namespace WolvenKit.ViewModels.Tools
 
             return b;
         }
-/*
-        /// <summary>
-        /// Test stuff selected node.
-        /// </summary>
-        public ICommand TeststuffCommand { get; private set; }
+        /*
+                /// <summary>
+                /// Test stuff selected node.
+                /// </summary>
+                public ICommand TeststuffCommand { get; private set; }
 
-        private async void Teststuff()
-        {
-            var selected = SelectedItems.OfType<FileModel>().ToList();
-            var delete = await Interactions.DeleteFiles.Handle(selected.Select(_ => _.Name));
-            if (!delete)
-            {
-                return;
-            }
-        }*/
+                private async void Teststuff()
+                {
+                    var selected = SelectedItems.OfType<FileModel>().ToList();
+                    var delete = await Interactions.DeleteFiles.Handle(selected.Select(_ => _.Name));
+                    if (!delete)
+                    {
+                        return;
+                    }
+                }*/
 
         private async void ExecuteDeleteFile()
         {
@@ -369,7 +369,7 @@ namespace WolvenKit.ViewModels.Tools
 
             try
             {
-                Directory.CreateDirectory(Path.GetDirectoryName(newfullpath));
+                _ = Directory.CreateDirectory(Path.GetDirectoryName(newfullpath));
                 if (SelectedItem.IsDirectory)
                 {
                     Directory.Move(filename, newfullpath);
@@ -404,7 +404,7 @@ namespace WolvenKit.ViewModels.Tools
             var modpath = Path.Combine(ActiveMod.ModDirectory, FileModel.GetRelativeName(SelectedItem.FullName, ActiveMod));
             modpath = Path.ChangeExtension(modpath, ".bk2");
             var directoryName = Path.GetDirectoryName(modpath);
-            Directory.CreateDirectory(directoryName);
+            _ = Directory.CreateDirectory(directoryName);
 
             var args = $"\"{SelectedItem.FullName}\" \"{modpath}\" /o /#";
             var procInfo =
@@ -415,7 +415,7 @@ namespace WolvenKit.ViewModels.Tools
                 };
 
             var process = Process.Start(procInfo);
-            process?.WaitForInputIdle();
+            _ = (process?.WaitForInputIdle());
         }
         public ICommand Bk2ExportCommand { get; private set; }
         private bool CanBk2Export() => SelectedItem != null && !IsInRawFolder(SelectedItem) && SelectedItem.Extension.ToLower().Contains("bk2");
@@ -424,11 +424,11 @@ namespace WolvenKit.ViewModels.Tools
             var rawpath = Path.Combine(ActiveMod.RawDirectory, FileModel.GetRelativeName(SelectedItem.FullName, ActiveMod));
             rawpath = Path.ChangeExtension(rawpath, ".avi");
             var directoryName = Path.GetDirectoryName(rawpath);
-            Directory.CreateDirectory(directoryName);
+            _ = Directory.CreateDirectory(directoryName);
 
             var args = $"\"{SelectedItem.FullName}\" \"{rawpath}\" /o /#";
             var procInfo =
-                new System.Diagnostics.ProcessStartInfo(Path.Combine(ISettingsManager.GetWorkDir(),
+                new ProcessStartInfo(Path.Combine(ISettingsManager.GetWorkDir(),
                     "testconv.exe"))
                 {
                     Arguments = args,
@@ -436,7 +436,7 @@ namespace WolvenKit.ViewModels.Tools
                 };
 
             var process = Process.Start(procInfo);
-            process?.WaitForInputIdle();
+            _ = (process?.WaitForInputIdle());
         }
 
         public AsyncAwaitBestPractices.MVVM.IAsyncCommand ConvertToJsonCommand { get; private set; }
@@ -488,9 +488,9 @@ namespace WolvenKit.ViewModels.Tools
             var outDirectoryPath = Path.GetDirectoryName(rawOutPath);
             if (outDirectoryPath != null)
             {
-                Directory.CreateDirectory(outDirectoryPath);
+                _ = Directory.CreateDirectory(outDirectoryPath);
 
-                await Task.Run(() => _modTools.ConvertToAndWrite(fmt, file, new DirectoryInfo(outDirectoryPath)));
+                _ = await Task.Run(() => _modTools.ConvertToAndWrite(fmt, file, new DirectoryInfo(outDirectoryPath)));
             }
         }
 
@@ -506,9 +506,9 @@ namespace WolvenKit.ViewModels.Tools
             var outDirectoryPath = Path.GetDirectoryName(modPath);
             if (outDirectoryPath != null)
             {
-                Directory.CreateDirectory(outDirectoryPath);
+                _ = Directory.CreateDirectory(outDirectoryPath);
 
-                _modTools.ConvertFromAndWrite(new FileInfo(inpath), new DirectoryInfo(outDirectoryPath));
+                _ = _modTools.ConvertFromAndWrite(new FileInfo(inpath), new DirectoryInfo(outDirectoryPath));
             }
         }
 
@@ -551,7 +551,7 @@ namespace WolvenKit.ViewModels.Tools
                 }
 
                 var exe = Path.Combine(firstFolder, "MlsetupBuilder.exe");
-                
+
                 if (!File.Exists(exe))
                 {
                     _loggerService.Error($"Mlsetupbuilder exe not found: {exe}");
@@ -564,7 +564,7 @@ namespace WolvenKit.ViewModels.Tools
                 {
                     var args = $"-o=\"{filepath}\" -wkit=\"{version}\"";
                     _loggerService.Info($"executing: {Path.GetFileName(exe)} {args}");
-                    Process.Start(exe, args);
+                    _ = Process.Start(exe, args);
                 }
                 catch (Exception ex)
                 {

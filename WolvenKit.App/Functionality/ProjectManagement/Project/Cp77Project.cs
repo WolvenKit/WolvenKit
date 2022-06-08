@@ -3,7 +3,7 @@ using System.IO;
 using WolvenKit.Common;
 
 
-namespace WolvenKit.ProjectManagement.Project
+namespace WolvenKit.App.Functionality.ProjectManagement.Project
 {
     public sealed class Cp77Project : EditorProject, ICloneable
     {
@@ -25,7 +25,7 @@ namespace WolvenKit.ProjectManagement.Project
                 var dir = Path.Combine(FileDirectory, "scripts");
                 if (!Directory.Exists(dir))
                 {
-                    Directory.CreateDirectory(dir);
+                    _ = Directory.CreateDirectory(dir);
                 }
 
                 return dir;
@@ -44,7 +44,7 @@ namespace WolvenKit.ProjectManagement.Project
                 var dir = Path.Combine(FileDirectory, "tweaks");
                 if (!Directory.Exists(dir))
                 {
-                    Directory.CreateDirectory(dir);
+                    _ = Directory.CreateDirectory(dir);
                 }
 
                 return dir;
@@ -58,7 +58,7 @@ namespace WolvenKit.ProjectManagement.Project
                 var dir = Path.Combine(ProjectDirectory, "packed");
                 if (!Directory.Exists(dir))
                 {
-                    Directory.CreateDirectory(dir);
+                    _ = Directory.CreateDirectory(dir);
                 }
 
                 return dir;
@@ -72,7 +72,7 @@ namespace WolvenKit.ProjectManagement.Project
                 var dir = Path.Combine(PackedRootDirectory, "archive", "pc", "mod"/*, $"mod{Name}"*/);
                 if (!Directory.Exists(dir))
                 {
-                    Directory.CreateDirectory(dir);
+                    _ = Directory.CreateDirectory(dir);
                 }
 
                 return dir;
@@ -86,7 +86,7 @@ namespace WolvenKit.ProjectManagement.Project
                 var dir = Path.Combine(PackedRootDirectory, "r6", "tweakdbs");
                 if (!Directory.Exists(dir))
                 {
-                    Directory.CreateDirectory(dir);
+                    _ = Directory.CreateDirectory(dir);
                 }
 
                 return dir;
@@ -100,14 +100,14 @@ namespace WolvenKit.ProjectManagement.Project
                 var dir = Path.Combine(PackedRootDirectory, "r6", "scripts");
                 if (!Directory.Exists(dir))
                 {
-                    Directory.CreateDirectory(dir);
+                    _ = Directory.CreateDirectory(dir);
                 }
 
                 return dir;
             }
         }
 
-        
+
 
         #region methods
 

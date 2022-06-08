@@ -7,8 +7,8 @@ using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Windows.Threading;
 using NAudio.Wave;
-using WolvenKit.Functionality.Helpers;
-using WolvenKit.MVVM.Views.Components.Tools.AudioTool;
+using WolvenKit.App.Functionality.Other;
+using WolvenKit.App.Helpers;
 using WPFSoundVisualizationLib;
 
 namespace WolvenKit.Views.Editor.AudioTool
@@ -19,9 +19,9 @@ namespace WolvenKit.Views.Editor.AudioTool
     public class NAudioSimpleEngine : INotifyPropertyChanged, ISpectrumPlayer, IDisposable, IWaveformPlayer
     {
 
-        private readonly object _lockChannelSet = new object();
+        private readonly object _lockChannelSet = new();
         private readonly DispatcherTimer _updateChannelPositionTimer;
-        private readonly BackgroundWorker waveformGenerateWorker = new BackgroundWorker();
+        private readonly BackgroundWorker waveformGenerateWorker = new();
 
         public WaveOut WaveOutDevice;
         private WaveStream _activeStream;
@@ -32,7 +32,7 @@ namespace WolvenKit.Views.Editor.AudioTool
         private string _currentFilePath;
 
         private bool _disposed;
-        private static readonly Lazy<NAudioSimpleEngine> _instance = new Lazy<NAudioSimpleEngine>(() => new NAudioSimpleEngine(), LazyThreadSafetyMode.ExecutionAndPublication);
+        private static readonly Lazy<NAudioSimpleEngine> _instance = new(() => new NAudioSimpleEngine(), LazyThreadSafetyMode.ExecutionAndPublication);
 
         public static NAudioSimpleEngine Instance => _instance.Value;
 
@@ -76,29 +76,21 @@ namespace WolvenKit.Views.Editor.AudioTool
         /// </summary>
         public double ChannelPosition
         {
-            get
-            {
-                if (_activeStream != null)
-                {
-                    return (_activeStream.Position / (double)_activeStream.Length) * _activeStream.TotalTime.TotalSeconds;
-                }
-
-                return 0d;
-            }
+            get => _activeStream != null ? _activeStream.Position / (double)_activeStream.Length * _activeStream.TotalTime.TotalSeconds : 0d;
             set
             {
                 if (CanPlay)
                 {
                     lock (_lockChannelSet)
                     {
-                        var oldValue = (_activeStream.Position / (double)_activeStream.Length) *
+                        var oldValue = _activeStream.Position / (double)_activeStream.Length *
                                           _activeStream.TotalTime.TotalSeconds;
                         var position = Math.Max(0, Math.Min(value, ChannelLength));
 
                         if (oldValue != position)
                         {
                             _activeStream.Position =
-                                (long)((position / _activeStream.TotalTime.TotalSeconds) * _activeStream.Length);
+                                (long)(position / _activeStream.TotalTime.TotalSeconds * _activeStream.Length);
                             OnPropertyChanged();
                         }
                     }
@@ -227,11 +219,7 @@ namespace WolvenKit.Views.Editor.AudioTool
                 {
                     var clonedData = (float[])waveformCompressedPoints.Clone();
 
-                    DispatcherHelper.RunOnMainThread(() =>
-                    {
-                        WaveformData = clonedData;
-
-                    });
+                    DispatcherHelper.RunOnMainThread(() => WaveformData = clonedData);
                 }
 
                 if (waveformGenerateWorker.CancellationPending)
@@ -337,7 +325,7 @@ namespace WolvenKit.Views.Editor.AudioTool
             {
                 maxFrequency = 22050; // Assume a default 44.1 kHz sample rate.
             }
-            return (int)((frequency / maxFrequency) * (_fftDataSize / 2));
+            return (int)(frequency / maxFrequency * (_fftDataSize / 2));
         }
 
         /// <summary>

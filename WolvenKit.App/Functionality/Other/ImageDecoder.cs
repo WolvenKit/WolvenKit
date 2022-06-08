@@ -15,7 +15,7 @@ using WolvenKit.Common.Services;
 //using SkiaSharp.Views.WPF;
 
 
-namespace WolvenKit.Functionality.Other
+namespace WolvenKit.App.Functionality.Other
 {
     public static class ImageDecoder
     {
@@ -23,7 +23,7 @@ namespace WolvenKit.Functionality.Other
         {
             try
             {
-                stream.Seek(0, SeekOrigin.Begin);
+                _ = stream.Seek(0, SeekOrigin.Begin);
                 var image = Pfim.Pfim.FromStream(stream);
                 await stream.DisposeAsync().ConfigureAwait(false);
                 var pinnedArray = GCHandle.Alloc(image.Data, GCHandleType.Pinned);

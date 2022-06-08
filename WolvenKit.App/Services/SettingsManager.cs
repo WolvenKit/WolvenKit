@@ -3,7 +3,6 @@ using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.IO;
 using System.Text.Json;
-using System.Text.Json.Serialization;
 using System.Windows.Media;
 using DynamicData.Binding;
 using ReactiveUI;
@@ -13,7 +12,7 @@ using WolvenKit.Common;
 using WolvenKit.Common.Services;
 using WolvenKit.Core;
 
-namespace WolvenKit.Functionality.Services
+namespace WolvenKit.App.Services
 {
     /// <summary>
     /// This handles the application settings defined by the user.
@@ -100,8 +99,8 @@ namespace WolvenKit.Functionality.Services
         public void Bounce()
         {
             Save();
-            var bouncedSettings = SettingsManager.LoadFromFile();
-            bouncedSettings.ReconfigureSettingsManager(this);
+            var bouncedSettings = LoadFromFile();
+            _ = bouncedSettings.ReconfigureSettingsManager(this);
         }
 
         private static SettingsDto LoadFromFile()
@@ -262,13 +261,13 @@ namespace WolvenKit.Functionality.Services
             var dir = Path.Combine(GetRED4GameRootDir(), "archive", "pc", "mod");
             if (!Directory.Exists(dir))
             {
-                Directory.CreateDirectory(dir);
+                _ = Directory.CreateDirectory(dir);
             }
 
             return dir;
         }
 
-        public string GetRED4OodleDll() => string.IsNullOrEmpty(GetRED4GameRootDir()) ? null : Path.Combine(GetRED4GameRootDir(), "bin", "x64", WolvenKit.Core.Constants.Oodle);
+        public string GetRED4OodleDll() => string.IsNullOrEmpty(GetRED4GameRootDir()) ? null : Path.Combine(GetRED4GameRootDir(), "bin", "x64", Core.Constants.Oodle);
 
         #endregion
 
@@ -286,7 +285,7 @@ namespace WolvenKit.Functionality.Services
             }
 
             var fi = new FileInfo(W3ExecutablePath);
-            return fi.Directory is { Parent: { Parent: { } } } ? Path.Combine(fi.Directory.Parent.Parent.FullName) : null;
+            return fi.Directory is { Parent.Parent: { } } ? Path.Combine(fi.Directory.Parent.Parent.FullName) : null;
         }
 
         public bool IsHealthy() => File.Exists(CP77ExecutablePath) && File.Exists(GetRED4OodleDll());
@@ -326,7 +325,7 @@ namespace WolvenKit.Functionality.Services
             }
         }
 
-        public string SettingsVersion { get; set;  }
+        public string SettingsVersion { get; set; }
         public bool CheckForUpdates { get; set; }
         public EUpdateChannel UpdateChannel { get; set; }
         public bool ShowGuidedTour { get; set; }

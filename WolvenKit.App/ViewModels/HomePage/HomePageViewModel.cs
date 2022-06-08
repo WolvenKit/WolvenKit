@@ -4,11 +4,11 @@ using System.Windows.Input;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using Splat;
-using WolvenKit.Functionality.Commands;
-using WolvenKit.Functionality.Services;
-using WolvenKit.ViewModels.Shell;
+using WolvenKit.App.Commands.Base;
+using WolvenKit.App.Services;
+using WolvenKit.App.ViewModels.Shell;
 
-namespace WolvenKit.ViewModels.HomePage
+namespace WolvenKit.App.ViewModels.HomePage
 {
     public class HomePageViewModel : ReactiveObject
     {
@@ -61,7 +61,7 @@ namespace WolvenKit.ViewModels.HomePage
 
         public void ExecuteMinimizeWindow()
         {
-            SystemCommands.MinimizeWindow((System.Windows.Window)Locator.Current.GetService<IViewFor<AppViewModel>>());
+            SystemCommands.MinimizeWindow((Window)Locator.Current.GetService<IViewFor<AppViewModel>>());
             CurrentWindowState = WindowState.Minimized;
         }
 
@@ -69,12 +69,12 @@ namespace WolvenKit.ViewModels.HomePage
         {
             if (CurrentWindowState == WindowState.Maximized)
             {
-                SystemCommands.RestoreWindow((System.Windows.Window)Locator.Current.GetService<IViewFor<AppViewModel>>());
+                SystemCommands.RestoreWindow((Window)Locator.Current.GetService<IViewFor<AppViewModel>>());
                 CurrentWindowState = WindowState.Normal;
             }
             else
             {
-                SystemCommands.MaximizeWindow((System.Windows.Window)Locator.Current.GetService<IViewFor<AppViewModel>>());
+                SystemCommands.MaximizeWindow((Window)Locator.Current.GetService<IViewFor<AppViewModel>>());
                 CurrentWindowState = WindowState.Maximized;
             }
         }

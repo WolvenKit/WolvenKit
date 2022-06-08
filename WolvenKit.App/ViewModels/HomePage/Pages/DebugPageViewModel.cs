@@ -2,16 +2,16 @@ using System.Collections.ObjectModel;
 using System.Windows.Controls;
 
 
-namespace WolvenKit.ViewModels.HomePage.Pages
+namespace WolvenKit.App.ViewModels.HomePage.Pages
 {
     public class DebugPageViewModel : PageViewModel
     {
         #region Fields
 
-        public static ObservableCollection<UserControl> _DialogsUC = new ObservableCollection<UserControl>();
-        public static ObservableCollection<UserControl> _EditorsUC = new ObservableCollection<UserControl>();
-        public static ObservableCollection<UserControl> _ToolsUC = new ObservableCollection<UserControl>();
-        public static ObservableCollection<UserControl> _WizardsUC = new ObservableCollection<UserControl>();
+        public static ObservableCollection<UserControl> _DialogsUC = new();
+        public static ObservableCollection<UserControl> _EditorsUC = new();
+        public static ObservableCollection<UserControl> _ToolsUC = new();
+        public static ObservableCollection<UserControl> _WizardsUC = new();
 
         #endregion Fields
 

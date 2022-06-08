@@ -1,4 +1,4 @@
-namespace WolvenKit.Models.Docking
+namespace WolvenKit.App.Models.Docking
 {
     public enum DockState
     {

@@ -2,7 +2,7 @@
 
 using ReactiveUI;
 
-namespace WolvenKit.ViewModels.Dialogs
+namespace WolvenKit.App.ViewModels.Dialogs
 {
     public class StringsGuiScriptsPrefixDialogViewModel : ReactiveObject
     {

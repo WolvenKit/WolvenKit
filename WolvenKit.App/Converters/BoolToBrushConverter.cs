@@ -2,7 +2,7 @@ using System;
 using System.Windows.Data;
 using System.Windows.Media;
 
-namespace WolvenKit.Functionality.Converters
+namespace WolvenKit.App.Converters
 {
     [ValueConversion(typeof(bool), typeof(SolidColorBrush))]
     public class BoolToBrushConverter : IValueConverter
@@ -18,14 +18,7 @@ namespace WolvenKit.Functionality.Converters
             var colorIfFalse = Colors.Transparent;
 
             // Creating Color Brush
-            if (value != null && (bool)value)
-            {
-                color = new SolidColorBrush(colorIfTrue);
-            }
-            else
-            {
-                color = new SolidColorBrush(colorIfFalse);
-            }
+            color = value != null && (bool)value ? new SolidColorBrush(colorIfTrue) : new SolidColorBrush(colorIfFalse);
             return color;
         }
 

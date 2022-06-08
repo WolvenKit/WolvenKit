@@ -1,7 +1,7 @@
 using System.Windows;
 using System.Windows.Controls;
-using WolvenKit.ViewModels.Documents;
-using WolvenKit.ViewModels.Tools;
+using WolvenKit.App.ViewModels.Documents;
+using WolvenKit.App.ViewModels.Tools;
 
 namespace WolvenKit.Functionality.Layout
 {

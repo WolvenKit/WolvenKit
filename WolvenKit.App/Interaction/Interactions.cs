@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using ReactiveUI;
 using WolvenKit.Common.Model;
 
-namespace WolvenKit.Interaction
+namespace WolvenKit.App.Interaction
 {
     public static class Interactions
     {

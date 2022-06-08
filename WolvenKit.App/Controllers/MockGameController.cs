@@ -6,7 +6,7 @@ using WolvenKit.Common;
 using WolvenKit.Common.Model;
 using WolvenKit.Core.Interfaces;
 
-namespace WolvenKit.Functionality.Controllers
+namespace WolvenKit.App.Controllers
 {
     public class MockGameController : IGameController
     {
@@ -24,12 +24,12 @@ namespace WolvenKit.Functionality.Controllers
 
         public IObservable<IChangeSet<RedFileSystemModel>> ConnectHierarchy() => _rootCache.Connect();
 
-        public List<IArchiveManager> GetArchiveManagers(bool loadmods) => new List<IArchiveManager>();
+        public List<IArchiveManager> GetArchiveManagers(bool loadmods) => new();
 
         public void AddToMod(IGameFile file) => throw new NotImplementedException();
         public void AddToMod(ulong hash) => throw new NotImplementedException();
 
-        public List<string> GetAvaliableClasses() => new List<string>();
+        public List<string> GetAvaliableClasses() => new();
 
         public async Task HandleStartup() => await Task.CompletedTask;//Nothing to do here :)
 
@@ -43,7 +43,7 @@ namespace WolvenKit.Functionality.Controllers
 
         public Task<bool> PackAndInstallProject() =>
             //Nothing to do here :)
-            new Task<bool>(new Func<bool>(() => true));
+            new(new Func<bool>(() => true));
 
         #endregion Methods
     }

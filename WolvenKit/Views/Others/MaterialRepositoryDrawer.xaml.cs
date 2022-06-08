@@ -4,8 +4,8 @@ using System.Linq;
 using System.Windows.Controls;
 using System.Windows.Media.Imaging;
 using Splat;
-using WolvenKit.Functionality.Other;
-using WolvenKit.Functionality.Services;
+using WolvenKit.App.Functionality.Other;
+using WolvenKit.App.Services;
 
 namespace WolvenKit.Views.Others
 {
@@ -94,7 +94,7 @@ namespace WolvenKit.Views.Others
             Folders.Clear();
             var dirs = Directory.GetDirectories(dir, "*", SearchOption.TopDirectoryOnly);
             var newitem = new MatDepoItem(PreviousFolder);
-            MaterialRepositoryDrawer.Folders.Add(newitem);
+            Folders.Add(newitem);
             foreach (var z in dirs)
             {
                 var newitem2 = new MatDepoItem(z);

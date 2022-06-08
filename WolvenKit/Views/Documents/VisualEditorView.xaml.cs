@@ -1,6 +1,6 @@
 using ReactiveUI;
 using Splat;
-using WolvenKit.ViewModels.Tools;
+using WolvenKit.App.ViewModels.Documents;
 
 namespace WolvenKit.Views.Documents
 {

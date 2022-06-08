@@ -6,10 +6,10 @@ using System.Windows.Input;
 using Microsoft.WindowsAPICodePack.Dialogs;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
-using WolvenKit.Functionality.Commands;
-using WolvenKit.ViewModels.Dialogs;
+using WolvenKit.App.Commands.Base;
+using WolvenKit.App.ViewModels.Dialogs;
 
-namespace WolvenKit.ViewModels.Wizards
+namespace WolvenKit.App.ViewModels.Wizards
 {
     public class ProjectWizardViewModel : DialogViewModel
     {

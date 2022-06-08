@@ -2,7 +2,7 @@ using System;
 using System.Runtime.InteropServices;
 using System.Text;
 
-namespace WolvenKit.Functionality.NativeWin
+namespace WolvenKit.App.Functionality.Other.NativeWin
 {
     public class NativeMethods
     {

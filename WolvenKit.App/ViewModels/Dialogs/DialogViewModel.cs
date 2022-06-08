@@ -1,6 +1,6 @@
 using ReactiveUI;
 
-namespace WolvenKit.ViewModels.Dialogs
+namespace WolvenKit.App.ViewModels.Dialogs
 {
     public abstract class DialogViewModel : ReactiveObject
     {

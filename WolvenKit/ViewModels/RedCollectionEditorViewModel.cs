@@ -3,8 +3,8 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows.Input;
+using WolvenKit.App.Commands.Base;
 using WolvenKit.Common.Annotations;
-using WolvenKit.Functionality.Commands;
 using WolvenKit.RED4.Types;
 
 namespace WolvenKit.ViewModels

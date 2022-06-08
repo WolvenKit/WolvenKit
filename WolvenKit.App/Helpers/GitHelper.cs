@@ -25,7 +25,7 @@ using System.IO;
 using System.Threading.Tasks;
 using WolvenKit.Common.Services;
 
-namespace WolvenKit.MVVM.Model
+namespace WolvenKit.App.Helpers
 {
     public static class GitHelper
     {
@@ -51,7 +51,7 @@ namespace WolvenKit.MVVM.Model
             }
             catch (Exception ex)
             {
-                loggerService.Error($"Error creating git archive: {ex.ToString()}");
+                loggerService.Error($"Error creating git archive: {ex}");
             }
             return false;
         }
@@ -66,7 +66,7 @@ namespace WolvenKit.MVVM.Model
             }
             catch (Exception ex)
             {
-                loggerService.Error($"Error creating commit for git repository: {ex.ToString()}");
+                loggerService.Error($"Error creating commit for git repository: {ex}");
             }
             return false;
         }
@@ -77,7 +77,7 @@ namespace WolvenKit.MVVM.Model
             {
                 if (!Directory.Exists(RepoPath))
                 {
-                    Directory.CreateDirectory(RepoPath);
+                    _ = Directory.CreateDirectory(RepoPath);
                 }
 
                 var initargs = "git init";
@@ -109,7 +109,7 @@ namespace WolvenKit.MVVM.Model
             }
             catch (Exception ex)
             {
-                loggerService.Error($"Error creating git repository: {ex.ToString()}");
+                loggerService.Error($"Error creating git repository: {ex}");
             }
             return false;
         }

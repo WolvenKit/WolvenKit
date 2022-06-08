@@ -9,14 +9,14 @@ using System.Xml.Serialization;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using Splat;
+using WolvenKit.App.Functionality.ProjectManagement.Project;
+using WolvenKit.App.Services;
 using WolvenKit.Common;
 using WolvenKit.Common.Model;
-using WolvenKit.Functionality.Services;
-using WolvenKit.ProjectManagement.Project;
 using WolvenKit.RED4.Archive;
 using WolvenKit.RED4.CR2W;
 
-namespace WolvenKit.ViewModels.Dialogs
+namespace WolvenKit.App.ViewModels.Dialogs
 {
     public class NewFileViewModel : DialogViewModel
     {
@@ -29,7 +29,7 @@ namespace WolvenKit.ViewModels.Dialogs
             CreateCommand = ReactiveCommand.Create(() =>
             {
                 IsCreating = true;
-                FileHandler(this);
+                _ = FileHandler(this);
             }, this.WhenAnyValue(
                 x => x.FileName, x => x.FullPath, x => x.IsCreating,
                 (file, path, isCreating) =>
@@ -45,26 +45,24 @@ namespace WolvenKit.ViewModels.Dialogs
             try
             {
                 var serializer = new XmlSerializer(typeof(WolvenKitFileDefinitions));
-                using (var stream = Assembly.GetExecutingAssembly()
-                    .GetManifestResourceStream(@"WolvenKit.App.Resources.WolvenKitFileDefinitions.xml"))
+                using var stream = Assembly.GetExecutingAssembly()
+                    .GetManifestResourceStream(@"WolvenKit.App.Resources.WolvenKitFileDefinitions.xml");
+                var newdef = (WolvenKitFileDefinitions)serializer.Deserialize(stream);
+                foreach (ERedExtension ext in Enum.GetValues(typeof(ERedExtension)))
                 {
-                    var newdef = (WolvenKitFileDefinitions)serializer.Deserialize(stream);
-                    foreach (ERedExtension ext in Enum.GetValues(typeof(ERedExtension)))
+                    if (CommonFunctions.GetResourceClassesFromExtension(ext) != null)
                     {
-                        if (CommonFunctions.GetResourceClassesFromExtension(ext) != null)
+                        newdef.Categories[2].Files.Add(new AddFileModel()
                         {
-                            newdef.Categories[2].Files.Add(new AddFileModel()
-                            {
-                                Name = CommonFunctions.GetResourceClassesFromExtension(ext),
-                                Description = $"A .{ext} File",
-                                Extension = ext.ToString(),
-                                Type = EWolvenKitFile.Cr2w,
-                                Template = ""
-                            });
-                        }
+                            Name = CommonFunctions.GetResourceClassesFromExtension(ext),
+                            Description = $"A .{ext} File",
+                            Extension = ext.ToString(),
+                            Type = EWolvenKitFile.Cr2w,
+                            Template = ""
+                        });
                     }
-                    Categories = new ObservableCollection<FileCategoryModel>(newdef.Categories);
                 }
+                Categories = new ObservableCollection<FileCategoryModel>(newdef.Categories);
 
             }
             catch (Exception e)
@@ -78,19 +76,9 @@ namespace WolvenKit.ViewModels.Dialogs
             //=> FileName != null && !string.IsNullOrEmpty(FileName) && !File.Exists(FullPath);
 
 
-            this.WhenAnyValue(x => x.SelectedFile)
-                .Subscribe(x =>
-                {
-                    if (x != null)
-                    {
-                        FileName = $"{x.Name.Split(' ').First()}1.{x.Extension.ToLower()}";
-                    }
-                    else
-                    {
-                        FileName = null;
-                    }
-                });
-            this.WhenAnyValue(x => x.FileName)
+            _ = this.WhenAnyValue(x => x.SelectedFile)
+                .Subscribe(x => FileName = x != null ? $"{x.Name.Split(' ').First()}1.{x.Extension.ToLower()}" : null);
+            _ = this.WhenAnyValue(x => x.FileName)
                 .Subscribe(x =>
                 {
                     if (SelectedFile != null && x != null)

@@ -8,7 +8,7 @@ using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using WolvenKit.RED4.Types;
 
-namespace WolvenKit.ViewModels.Dialogs;
+namespace WolvenKit.App.ViewModels.Dialogs;
 
 public class SelectRedTypeDialogViewModel : DialogViewModel
 {

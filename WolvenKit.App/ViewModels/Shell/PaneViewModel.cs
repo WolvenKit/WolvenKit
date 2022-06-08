@@ -1,9 +1,9 @@
 using System.Windows.Media;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
-using WolvenKit.Models.Docking;
+using WolvenKit.App.Models.Docking;
 
-namespace WolvenKit.ViewModels.Shell
+namespace WolvenKit.App.ViewModels.Shell
 {
     public abstract class PaneViewModel : ReactiveObject, IDockElement
     {

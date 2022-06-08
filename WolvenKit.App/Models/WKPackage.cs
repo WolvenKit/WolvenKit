@@ -5,7 +5,7 @@ using System.IO;
 using System.Xml.Linq;
 using ICSharpCode.SharpZipLib.Zip;
 
-namespace WolvenKit.Models
+namespace WolvenKit.App.Models
 {
     public class WKPackage
     {
@@ -75,6 +75,7 @@ namespace WolvenKit.Models
             var rootnode = new XElement("package", new XAttribute("version", version), new XAttribute("name", name));
             var authorelement = new XElement("author", new XElement("displayName", Author.Item1));
             var metadataelement = new XElement("metadata");
+#pragma warning disable IDE0078 // Use pattern matching
             if (Author.Item2 != null || Author.Item2 != "")
             {
                 authorelement.Add(new XElement("actionLink", Author.Item2));
@@ -99,6 +100,7 @@ namespace WolvenKit.Models
             {
                 authorelement.Add(new XElement("youtube", Author.Item6));
             }
+#pragma warning restore IDE0078 // Use pattern matching
 
             metadataelement.Add(authorelement);
             if (description?.Length > 0)

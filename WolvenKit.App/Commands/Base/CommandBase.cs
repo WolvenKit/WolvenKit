@@ -1,7 +1,7 @@
 using System;
 using System.Windows.Input;
 
-namespace WolvenKit.Functionality.Commands
+namespace WolvenKit.App.Commands.Base
 {
     /// <summary>
     /// Base abstract class for all commands
@@ -12,14 +12,8 @@ namespace WolvenKit.Functionality.Commands
 
         public virtual event EventHandler CanExecuteChanged
         {
-            add
-            {
-                CommandManager.RequerySuggested += value;
-            }
-            remove
-            {
-                CommandManager.RequerySuggested -= value;
-            }
+            add => CommandManager.RequerySuggested += value;
+            remove => CommandManager.RequerySuggested -= value;
         }
 
         #endregion Events

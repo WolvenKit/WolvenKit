@@ -1,22 +1,9 @@
-using System;
 using System.Collections.Generic;
-using System.Reactive.Disposables;
-using System.Windows;
-using System.Windows.Input;
-using System.Windows.Threading;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
-using Splat;
-using Syncfusion.UI.Xaml.TreeView.Engine;
-using Syncfusion.Windows.Shared;
-using WolvenKit.Common;
-using WolvenKit.Common.FNV1A;
-using WolvenKit.Functionality.Controllers;
-using WolvenKit.RED4.Archive;
 using WolvenKit.RED4.Types;
-using WolvenKit.ViewModels.Shell;
 
-namespace WolvenKit.ViewModels.Documents
+namespace WolvenKit.App.ViewModels.Documents
 {
     public class RDTGraphViewModel : RedDocumentTabViewModel, IActivatableViewModel
     {
@@ -78,7 +65,8 @@ graph [
                 GraphText += "};\n";
             }
             GraphText += "\n";
-            foreach (var (hash, connection) in connections)
+
+            foreach (var (_, connection) in connections)
             {
                 GraphText += $"{connection.Source.Chunk.GetHashCode()} -> {connection.Destination.Chunk.GetHashCode()};\n";
             }

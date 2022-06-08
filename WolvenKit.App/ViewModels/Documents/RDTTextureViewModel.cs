@@ -6,11 +6,11 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
-using WolvenKit.Functionality.Other;
+using WolvenKit.App.Functionality.Other;
 using WolvenKit.Modkit.RED4;
 using WolvenKit.RED4.Types;
 
-namespace WolvenKit.ViewModels.Documents
+namespace WolvenKit.App.ViewModels.Documents
 {
     public class RDTTextureViewModel : RedDocumentTabViewModel
     {

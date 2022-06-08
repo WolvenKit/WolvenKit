@@ -2,7 +2,7 @@ using System;
 using ReactiveUI;
 using Splat;
 
-namespace WolvenKit.ViewModels.HomePage
+namespace WolvenKit.App.ViewModels.HomePage
 {
     /// <summary>
     /// A mainViewModel class for Pages

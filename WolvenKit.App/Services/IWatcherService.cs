@@ -1,9 +1,9 @@
 using System.Threading.Tasks;
 using DynamicData;
-using WolvenKit.Models;
-using WolvenKit.ProjectManagement.Project;
+using WolvenKit.App.Functionality.ProjectManagement.Project;
+using WolvenKit.App.Models;
 
-namespace WolvenKit.Functionality.Services
+namespace WolvenKit.App.Services
 {
     public interface IWatcherService
     {

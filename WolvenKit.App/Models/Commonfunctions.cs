@@ -10,7 +10,7 @@ using ICSharpCode.SharpZipLib.Core;
 using ICSharpCode.SharpZipLib.Zip;
 using Microsoft.Win32;
 
-namespace WolvenKit.Models
+namespace WolvenKit.App.Models
 {
     public static class Commonfunctions
     {
@@ -25,23 +25,12 @@ namespace WolvenKit.Models
         /// <returns></returns>
         public static bool RegistryValueExists(RegistryHive hive, string registryRoot, string valueName)
         {
-            RegistryKey root;
-            switch (hive)
+            var root = hive switch
             {
-                case RegistryHive.LocalMachine:
-                    root = Registry.LocalMachine.OpenSubKey(registryRoot, false);
-                    break;
-                case RegistryHive.CurrentUser:
-                    root = Registry.CurrentUser.OpenSubKey(registryRoot, false);
-                    break;
-                case RegistryHive.ClassesRoot:
-                case RegistryHive.Users:
-                case RegistryHive.PerformanceData:
-                case RegistryHive.CurrentConfig:
-                default:
-                    throw new System.InvalidOperationException("parameter registryRoot must be either \"HKLM\" or \"HKCU\"");
-            }
-
+                RegistryHive.LocalMachine => Registry.LocalMachine.OpenSubKey(registryRoot, false),
+                RegistryHive.CurrentUser => Registry.CurrentUser.OpenSubKey(registryRoot, false),
+                _ => throw new InvalidOperationException("parameter registryRoot must be either \"HKLM\" or \"HKCU\""),
+            };
             var r = root.GetValue(valueName) != null;
             return r;
         }
@@ -188,7 +177,7 @@ namespace WolvenKit.Models
             // If the destination directory does not exist, create it.
             if (!Directory.Exists(destDirName))
             {
-                Directory.CreateDirectory(destDirName);
+                _ = Directory.CreateDirectory(destDirName);
             }
 
             // Get the file contents of the directory to copy.
@@ -201,7 +190,7 @@ namespace WolvenKit.Models
 
                 // Copy the file.
                 ret.Add(new XElement("file", temppath));
-                file.CopyTo(temppath, true);
+                _ = file.CopyTo(temppath, true);
             }
 
             // If copySubDirs is true, copy the subdirectories.
@@ -236,7 +225,7 @@ namespace WolvenKit.Models
             foreach (var dirPath in Directory.GetDirectories(newdir, "*",
                 SearchOption.AllDirectories))
             {
-                Directory.CreateDirectory(dirPath.Replace(newdir, DestinationPath));
+                _ = Directory.CreateDirectory(dirPath.Replace(newdir, DestinationPath));
             }
 
             //Copy all the files & Replaces any files with the same name
@@ -296,7 +285,7 @@ namespace WolvenKit.Models
         {
             if (Directory.Exists(path))
             {
-                Process.Start("explorer.exe", "\"" + path + "\"");
+                _ = Process.Start("explorer.exe", "\"" + path + "\"");
             }
         }
 

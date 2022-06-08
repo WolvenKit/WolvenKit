@@ -1,9 +1,9 @@
 using System.ComponentModel;
 using System.Windows.Input;
+using WolvenKit.App.Commands.Base;
 using WolvenKit.Common;
-using WolvenKit.Functionality.Commands;
 
-namespace WolvenKit.Models
+namespace WolvenKit.App.Models
 {
     public class SearchParameters : ObservableObject, INotifyPropertyChanged, INotifyPropertyChanging
     {

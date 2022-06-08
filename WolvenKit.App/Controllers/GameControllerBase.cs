@@ -1,11 +1,11 @@
 using System;
 using System.IO;
 using System.Threading.Tasks;
+using WolvenKit.App.Functionality;
+using WolvenKit.App.Services;
 using WolvenKit.Core.Interfaces;
-using WolvenKit.Functionality.Services;
-using WolvenKit.Functionality.WKitGlobal;
 
-namespace WolvenKit.Functionality.Controllers
+namespace WolvenKit.App.Controllers
 {
     public interface IGameController
     {

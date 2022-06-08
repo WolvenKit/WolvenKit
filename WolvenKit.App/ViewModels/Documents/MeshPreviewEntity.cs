@@ -2,24 +2,19 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Media.Media3D;
-using HelixToolkit.SharpDX.Core;
-using HelixToolkit.Wpf.SharpDX;
-using ReactiveUI;
 using System.Reactive.Disposables;
-using WolvenKit.RED4.Archive.Buffer;
-using WolvenKit.RED4.Archive.CR2W;
-using WolvenKit.RED4.Types;
 using System.Windows.Input;
-using WolvenKit.Functionality.Commands;
-using WolvenKit.Modkit.RED4;
-using Splat;
+using HelixToolkit.Wpf.SharpDX;
 using Microsoft.Win32;
+using ReactiveUI;
+using Splat;
+using WolvenKit.App.Commands.Base;
 using WolvenKit.Common.Services;
+using WolvenKit.Modkit.RED4;
+using WolvenKit.RED4.Archive.Buffer;
+using WolvenKit.RED4.Types;
 
-namespace WolvenKit.ViewModels.Documents
+namespace WolvenKit.App.ViewModels.Documents
 {
     public partial class RDTMeshViewModel
     {
@@ -35,9 +30,11 @@ namespace WolvenKit.ViewModels.Documents
             ShowExportEntity = true;
             ExportEntity = new DelegateCommand((e) =>
             {
-                var dlg = new SaveFileDialog();
-                dlg.FileName = Path.GetFileNameWithoutExtension(file.RelativePath) + ".glb";
-                dlg.Filter = "GLB files (*.glb)|*.glb|All files (*.*)|*.*";
+                var dlg = new SaveFileDialog
+                {
+                    FileName = Path.GetFileNameWithoutExtension(file.RelativePath) + ".glb",
+                    Filter = "GLB files (*.glb)|*.glb|All files (*.*)|*.*"
+                };
                 if (dlg.ShowDialog().GetValueOrDefault())
                 {
                     var outFile = new FileInfo(dlg.FileName);
@@ -53,10 +50,7 @@ namespace WolvenKit.ViewModels.Documents
                 }
             });
 
-            this.WhenActivated((CompositeDisposable disposables) =>
-            {
-                RenderEntitySolo();
-            });
+            this.WhenActivated((CompositeDisposable disposables) => RenderEntitySolo());
         }
 
         public void RenderEntitySolo()
@@ -66,13 +60,15 @@ namespace WolvenKit.ViewModels.Documents
                 return;
             }
             IsRendered = true;
-            RenderEntity((entEntityTemplate)_data);
+            _ = RenderEntity((entEntityTemplate)_data);
         }
 
         public Element3D RenderEntity(entEntityTemplate ent, Appearance appearance = null, string appearanceName = null)
-        { 
+        {
             if (ent.CompiledData.Data is not RedPackage pkg)
+            {
                 return null;
+            }
 
             if (ent.Appearances.Count > 0)
             {
@@ -84,7 +80,9 @@ namespace WolvenKit.ViewModels.Documents
                         foreach (var slot in slotset.Slots)
                         {
                             if (!slots.ContainsKey(slot.SlotName))
+                            {
                                 slots.Add(slot.SlotName, slot.BoneName);
+                            }
                         }
 
                         string bindName = null, slotName = null;
@@ -113,7 +111,7 @@ namespace WolvenKit.ViewModels.Documents
                         if (rigFile.RootChunk is animRig rig)
                         {
                             var rigBones = new List<RigBone>();
-                            for (int i = 0; i < rig.BoneNames.Count; i++)
+                            for (var i = 0; i < rig.BoneNames.Count; i++)
                             {
                                 var rigBone = new RigBone()
                                 {
@@ -155,15 +153,7 @@ namespace WolvenKit.ViewModels.Documents
                     }
                 }
 
-                List<entTemplateAppearance> appearances;
-                if (appearanceName == null)
-                {
-                    appearances = ent.Appearances.ToList();
-                }
-                else
-                {
-                    appearances = ent.Appearances.Where(x => x.AppearanceName == appearanceName).ToList();
-                }
+                var appearances = appearanceName == null ? ent.Appearances.ToList() : ent.Appearances.Where(x => x.AppearanceName == appearanceName).ToList();
 
                 var element = new GroupModel3D();
 
@@ -254,19 +244,11 @@ namespace WolvenKit.ViewModels.Documents
                     return null;
                 }
 
-                Appearance a;
-                if (appearance == null)
+                var a = appearance ?? new Appearance()
                 {
-                    a = new Appearance()
-                    {
-                        Name = "Default",
-                        Models = models
-                    };
-                }
-                else
-                {
-                    a = appearance;
-                }
+                    Name = "Default",
+                    Models = models
+                };
 
                 var group = new MeshComponent();
 

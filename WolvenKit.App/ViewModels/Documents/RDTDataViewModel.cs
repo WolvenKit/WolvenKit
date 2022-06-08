@@ -9,25 +9,25 @@ using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using Splat;
 using Syncfusion.UI.Xaml.TreeView.Engine;
-using Syncfusion.Windows.Shared;
+using WolvenKit.App.Commands.Base;
+using WolvenKit.App.Controllers;
+using WolvenKit.App.ViewModels.Shell;
 using WolvenKit.Common;
 using WolvenKit.Common.FNV1A;
-using WolvenKit.Functionality.Controllers;
 using WolvenKit.RED4.Archive;
 using WolvenKit.RED4.Types;
-using WolvenKit.ViewModels.Shell;
 
-namespace WolvenKit.ViewModels.Documents
+namespace WolvenKit.App.ViewModels.Documents
 {
     public class RDTDataViewModel : RedDocumentTabViewModel, IActivatableViewModel
     {
         public ViewModelActivator Activator { get; } = new();
 
         protected readonly IRedType _data;
-/*
-        [Reactive] public RedDocumentViewModel File { get; set; }
+        /*
+                [Reactive] public RedDocumentViewModel File { get; set; }
 
-        public static IRedType CopiedChunk;*/
+                public static IRedType CopiedChunk;*/
 
         [Reactive] public RedDocumentViewModel File { get; set; }
 
@@ -42,7 +42,7 @@ namespace WolvenKit.ViewModels.Documents
             this.WhenActivated((CompositeDisposable disposables) =>
             {
                 OnDemandLoadingCommand = new DelegateCommand<TreeViewNode>(ExecuteOnDemandLoading, CanExecuteOnDemandLoading);
-                OpenImportCommand = new Functionality.Commands.DelegateCommand<ICR2WImport>(ExecuteOpenImport);
+                OpenImportCommand = new DelegateCommand<ICR2WImport>(ExecuteOpenImport);
                 if (SelectedChunk == null)
                 {
                     SelectedChunk = Chunks[0];
@@ -101,7 +101,7 @@ namespace WolvenKit.ViewModels.Documents
             set => _chunks = value;
         }
 
-        public virtual ChunkViewModel GenerateChunks() => new ChunkViewModel(_data, this);
+        public virtual ChunkViewModel GenerateChunks() => new(_data, this);
 
         [Reactive] public ChunkViewModel SelectedChunk { get; set; }
 
@@ -118,20 +118,7 @@ namespace WolvenKit.ViewModels.Documents
 
         public ICommand OnDemandLoadingCommand { get; private set; }
 
-        private bool CanExecuteOnDemandLoading(TreeViewNode node)
-        {
-            if (node.Content is GroupedChunkViewModel)
-            {
-                return true;
-            }
-
-            if (node.Content is ChunkViewModel cvm && cvm.HasChildren())
-            {
-                return true;
-            }
-
-            return false;
-        }
+        private bool CanExecuteOnDemandLoading(TreeViewNode node) => node.Content is GroupedChunkViewModel || (node.Content is ChunkViewModel cvm && cvm.HasChildren());
 
         private void ExecuteOnDemandLoading(TreeViewNode node)
         {
@@ -145,7 +132,7 @@ namespace WolvenKit.ViewModels.Documents
 
             if (node.Content is GroupedChunkViewModel gcvm)
             {
-                Application.Current.MainWindow.Dispatcher.BeginInvoke(DispatcherPriority.Background,
+                _ = Application.Current.MainWindow.Dispatcher.BeginInvoke(DispatcherPriority.Background,
                     new Action(() =>
                     {
                         node.PopulateChildNodes(gcvm.TVProperties);
@@ -160,7 +147,7 @@ namespace WolvenKit.ViewModels.Documents
 
             if (node.Content is ChunkViewModel cvm)
             {
-                Application.Current.MainWindow.Dispatcher.BeginInvoke(DispatcherPriority.Background,
+                _ = Application.Current.MainWindow.Dispatcher.BeginInvoke(DispatcherPriority.Background,
                     new Action(() =>
                     {
                         cvm.CalculateProperties();

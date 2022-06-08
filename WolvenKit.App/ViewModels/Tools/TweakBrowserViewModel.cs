@@ -1,25 +1,19 @@
 using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Data;
 using ReactiveUI;
 using Splat;
+using WolvenKit.App.Controllers;
+using WolvenKit.App.Functionality.ProjectManagement.Project;
+using WolvenKit.App.Services;
+using WolvenKit.App.ViewModels.Shell;
 using WolvenKit.Common.Interfaces;
 using WolvenKit.Common.Services;
 using WolvenKit.Core.Services;
-using WolvenKit.Functionality.Controllers;
-using WolvenKit.Functionality.Services;
-using WolvenKit.Models;
-using WolvenKit.Models.Docking;
-using WolvenKit.ProjectManagement.Project;
 using WolvenKit.RED4.Types;
-using WolvenKit.ViewModels.Shell;
 
-namespace WolvenKit.ViewModels.Tools
+namespace WolvenKit.App.ViewModels.Tools
 {
     public class TweakBrowserViewModel : ToolViewModel
     {
@@ -70,31 +64,21 @@ namespace WolvenKit.ViewModels.Tools
 
             //State = DockState.Document;
 
-            _tweakDB.Loaded += new EventHandler((_, args) =>
-            { 
-                TweakDBIDs = CollectionViewSource.GetDefaultView(_tweakDB.GetRecords());
-            });
+            _tweakDB.Loaded += new EventHandler((_, args) => TweakDBIDs = CollectionViewSource.GetDefaultView(_tweakDB.GetRecords()));
         }
 
         #endregion constructors
 
         public ICollectionView TweakDBIDs { get; set; }
 
-        private string _searchText = ""; 
+        private string _searchText = "";
         public string SearchText
         {
             get => _searchText;
             set
             {
                 _searchText = value;
-                if (_searchText != "")
-                {
-                    TweakDBIDs.Filter = (o) => o.ToString().Contains(_searchText);
-                }
-                else
-                {
-                    TweakDBIDs.Filter = null;
-                }
+                TweakDBIDs.Filter = _searchText != "" ? ((o) => o.ToString().Contains(_searchText)) : null;
                 this.RaisePropertyChanged("SearchText");
             }
         }

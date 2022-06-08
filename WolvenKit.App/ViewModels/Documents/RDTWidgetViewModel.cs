@@ -11,13 +11,13 @@ using System.Windows.Media.Imaging;
 using System.Xml;
 using System.Xml.Serialization;
 using ReactiveUI.Fody.Helpers;
+using WolvenKit.App.Functionality.Other;
 using WolvenKit.Common.Conversion;
-using WolvenKit.Functionality.Other;
 using WolvenKit.Modkit.RED4;
 using WolvenKit.RED4.Types;
 using Application = System.Windows.Application;
 
-namespace WolvenKit.ViewModels.Documents
+namespace WolvenKit.App.ViewModels.Documents
 {
     public class RDTWidgetViewModel : RedDocumentTabViewModel
     {

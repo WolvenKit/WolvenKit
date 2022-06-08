@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.IO;
 using WolvenKit.Core.Interfaces;
 
-namespace WolvenKit.ViewModels.Tools
+namespace WolvenKit.App.ViewModels.Tools
 {
     /// <summary>
     /// Wraps an IGameFile to display in a View
@@ -53,7 +53,7 @@ namespace WolvenKit.ViewModels.Tools
             var number = (decimal)size;
             while (Math.Round(number / 1024) >= 1)
             {
-                number = number / 1024;
+                number /= 1024;
                 counter++;
             }
             return $"{number:n1} {suffixes[counter]}";

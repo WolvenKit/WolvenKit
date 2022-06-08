@@ -1,8 +1,8 @@
 using System.Reactive;
 using ReactiveUI;
-using WolvenKit.ViewModels.Dialogs;
+using WolvenKit.App.ViewModels.Dialogs;
 
-namespace WolvenKit.ViewModels.Wizards
+namespace WolvenKit.App.ViewModels.Wizards
 {
     public class FeedbackWizardViewModel : DialogViewModel
     {

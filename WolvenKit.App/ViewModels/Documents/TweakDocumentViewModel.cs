@@ -13,15 +13,14 @@ using ICSharpCode.AvalonEdit.Utils;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using Splat;
-using WinCopies.Collections.DotNetFix;
+using WolvenKit.App.Interaction;
 using WolvenKit.Common.Services;
-using WolvenKit.Interaction;
 using WolvenKit.Modkit.RED4.Serialization;
 using WolvenKit.RED4.TweakDB;
 using WolvenKit.RED4.Types;
 using Activator = System.Activator;
 
-namespace WolvenKit.ViewModels.Documents
+namespace WolvenKit.App.ViewModels.Documents
 {
     public class TweakDocumentViewModel : DocumentViewModel
     {
@@ -91,7 +90,7 @@ namespace WolvenKit.ViewModels.Documents
             // check name
             if (TweakDocument.Groups.ContainsKey(FlatName))
             {
-                await Interactions.ShowMessageBoxAsync(
+                _ = await Interactions.ShowMessageBoxAsync(
                     $"A group with name {FlatName} is already part of your database. Please give a unique name to the item you are adding, or delete the existing item first.",
                      "WolvenKit", WMessageBoxButtons.Ok, WMessageBoxImage.Error);
                 return;
@@ -123,7 +122,7 @@ namespace WolvenKit.ViewModels.Documents
                 // check name
                 if (group.GetValue().GetPropertyNames().Contains(FlatName))
                 {
-                    await Interactions.ShowMessageBoxAsync(
+                    _ = await Interactions.ShowMessageBoxAsync(
                     $"A flat with name {FlatName} is already part of this group. Please give a unique name to the item you are adding, or delete the existing item first.",
                     "WolvenKit", WMessageBoxButtons.Ok, WMessageBoxImage.Error);
                     return;
@@ -133,14 +132,14 @@ namespace WolvenKit.ViewModels.Documents
             }
             else if (SelectedItem is FlatViewModel { IsArray: true } arrayVm && arrayVm.GetValue() is IRedArray array)
             {
-                array.Add(ivalue);
+                _ = array.Add(ivalue);
             }
             else
             {
                 // check name
                 if (TweakDocument.Flats.ContainsKey(FlatName))
                 {
-                    await Interactions.ShowMessageBoxAsync(
+                    _ = await Interactions.ShowMessageBoxAsync(
                     $"A flat with name {FlatName} is already part of your database. Please give a unique name to the item you are adding, or delete the existing item first.",
                     "WolvenKit", WMessageBoxButtons.Ok, WMessageBoxImage.Error);
                     return;
@@ -184,7 +183,7 @@ namespace WolvenKit.ViewModels.Documents
                 // check name
                 if (group.GetValue().GetPropertyNames().Contains(FlatName))
                 {
-                    await Interactions.ShowMessageBoxAsync(
+                    _ = await Interactions.ShowMessageBoxAsync(
                     $"A flat with name {FlatName} is already part of this group. Please give a unique name to the item you are adding, or delete the existing item first.",
                     "WolvenKit", WMessageBoxButtons.Ok, WMessageBoxImage.Error);
                     return;
@@ -197,7 +196,7 @@ namespace WolvenKit.ViewModels.Documents
                 // check name
                 if (TweakDocument.Flats.ContainsKey(FlatName))
                 {
-                    await Interactions.ShowMessageBoxAsync(
+                    _ = await Interactions.ShowMessageBoxAsync(
                     $"A flat with name {FlatName} is already part of your database. Please give a unique name to the item you are adding, or delete the existing item first.",
                     "WolvenKit", WMessageBoxButtons.Ok, WMessageBoxImage.Error);
                     return;
@@ -230,7 +229,7 @@ namespace WolvenKit.ViewModels.Documents
                     // if not in a group
                     if (!string.IsNullOrEmpty(fvm.GroupName))
                     {
-                        TweakDocument.Groups[fvm.GroupName].ResetProperty(fvm.Name);
+                        _ = TweakDocument.Groups[fvm.GroupName].ResetProperty(fvm.Name);
                     }
                     else if (!string.IsNullOrEmpty(fvm.ArrayName))
                     {
@@ -238,12 +237,12 @@ namespace WolvenKit.ViewModels.Documents
                     }
                     else
                     {
-                        TweakDocument.Flats.Remove(fvm.Name);
+                        _ = TweakDocument.Flats.Remove(fvm.Name);
                     }
 
                     break;
                 case GroupViewModel gvm:
-                    TweakDocument.Groups.Remove(gvm.Name);
+                    _ = TweakDocument.Groups.Remove(gvm.Name);
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();
@@ -297,7 +296,7 @@ namespace WolvenKit.ViewModels.Documents
             }
             catch (Exception e)
             {
-                await Interactions.ShowMessageBoxAsync(
+                _ = await Interactions.ShowMessageBoxAsync(
                         $"The tweak file could not be parsed. Please check the file for errors.",
                         "WolvenKit",
                         WMessageBoxButtons.Ok,
@@ -392,7 +391,7 @@ namespace WolvenKit.ViewModels.Documents
             }
             catch (Exception e)
             {
-                await Interactions.ShowMessageBoxAsync(
+                _ = await Interactions.ShowMessageBoxAsync(
                         $"The tweak file could not be parsed. Please check the file for errors.",
                         "WolvenKit",
                         WMessageBoxButtons.Ok,

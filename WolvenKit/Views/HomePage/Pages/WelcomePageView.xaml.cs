@@ -3,8 +3,8 @@ using System.Reactive.Disposables;
 using System.Threading.Tasks;
 using ReactiveUI;
 using Splat;
+using WolvenKit.App.ViewModels.HomePage.Pages;
 using WolvenKit.Functionality.Helpers;
-using WolvenKit.ViewModels.Shared;
 
 namespace WolvenKit.Views.HomePage.Pages
 {

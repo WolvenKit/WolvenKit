@@ -6,8 +6,8 @@ using Discord.WebSocket;
 using HandyControl.Controls;
 using ReactiveUI;
 using Splat;
-using WolvenKit.Functionality.Services;
-using WolvenKit.ViewModels.Wizards;
+using WolvenKit.App.Services;
+using WolvenKit.App.ViewModels.Wizards;
 
 namespace WolvenKit.Views.Wizards
 {

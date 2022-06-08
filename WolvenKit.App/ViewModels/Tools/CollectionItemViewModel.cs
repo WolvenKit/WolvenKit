@@ -1,7 +1,7 @@
 using WolvenKit.Common;
 using WolvenKit.RED4.Archive;
 
-namespace WolvenKit.ViewModels.Tools
+namespace WolvenKit.App.ViewModels.Tools
 {
     public class CollectionItemViewModel : ObservableObject
     {

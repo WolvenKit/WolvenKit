@@ -3,9 +3,8 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using WolvenKit.Common;
-using WolvenKit.Models;
 
-namespace WolvenKit.ProjectManagement.Project
+namespace WolvenKit.App.Functionality.ProjectManagement.Project
 {
     public abstract class EditorProject : ObservableObject, IEquatable<EditorProject>
     {
@@ -56,7 +55,7 @@ namespace WolvenKit.ProjectManagement.Project
                 var dir = Path.Combine(ProjectDirectory, "source");
                 if (!Directory.Exists(dir))
                 {
-                    Directory.CreateDirectory(dir);
+                    _ = Directory.CreateDirectory(dir);
                 }
 
                 return dir;
@@ -75,7 +74,7 @@ namespace WolvenKit.ProjectManagement.Project
                 var dir = Path.Combine(FileDirectory, "archive");
                 if (!Directory.Exists(dir))
                 {
-                    Directory.CreateDirectory(dir);
+                    _ = Directory.CreateDirectory(dir);
                 }
 
                 return dir;
@@ -89,7 +88,7 @@ namespace WolvenKit.ProjectManagement.Project
                 var dir = Path.Combine(ProjectDirectory, "_backups");
                 if (!Directory.Exists(dir))
                 {
-                    Directory.CreateDirectory(dir);
+                    _ = Directory.CreateDirectory(dir);
                 }
 
                 return dir;
@@ -108,7 +107,7 @@ namespace WolvenKit.ProjectManagement.Project
                 var dir = Path.Combine(FileDirectory, "raw");
                 if (!Directory.Exists(dir))
                 {
-                    Directory.CreateDirectory(dir);
+                    _ = Directory.CreateDirectory(dir);
                 }
 
                 return dir;
@@ -136,7 +135,7 @@ namespace WolvenKit.ProjectManagement.Project
             {
                 if (!Directory.Exists(FileDirectory))
                 {
-                    Directory.CreateDirectory(FileDirectory);
+                    _ = Directory.CreateDirectory(FileDirectory);
                 }
                 return Directory.EnumerateFiles(FileDirectory, "*", SearchOption.AllDirectories)
                     .Select(file => file[(FileDirectory.Length + 1)..])
@@ -150,7 +149,7 @@ namespace WolvenKit.ProjectManagement.Project
             {
                 if (!Directory.Exists(ModDirectory))
                 {
-                    Directory.CreateDirectory(ModDirectory);
+                    _ = Directory.CreateDirectory(ModDirectory);
                 }
                 return Directory.EnumerateFiles(ModDirectory, "*", SearchOption.AllDirectories)
                     .Select(file => file[(ModDirectory.Length + 1)..])
@@ -164,7 +163,7 @@ namespace WolvenKit.ProjectManagement.Project
             {
                 if (!Directory.Exists(RawDirectory))
                 {
-                    Directory.CreateDirectory(RawDirectory);
+                    _ = Directory.CreateDirectory(RawDirectory);
                 }
                 return Directory.EnumerateFiles(RawDirectory, "*", SearchOption.AllDirectories)
                     .Select(file => file[(RawDirectory.Length + 1)..])
@@ -177,11 +176,7 @@ namespace WolvenKit.ProjectManagement.Project
             get
             {
                 var oldDir = Path.Combine(Path.GetDirectoryName(Location), Name);
-                if (Directory.Exists(oldDir))
-                {
-                    return oldDir;
-                }
-                return Path.GetDirectoryName(Location);
+                return Directory.Exists(oldDir) ? oldDir : Path.GetDirectoryName(Location);
             }
         }
 
@@ -197,35 +192,9 @@ namespace WolvenKit.ProjectManagement.Project
 
         #region implements IEquatable
 
-        public bool Equals(EditorProject other)
-        {
-            if (ReferenceEquals(null, other))
-            {
-                return false;
-            }
+        public bool Equals(EditorProject other) => other is not null && (ReferenceEquals(this, other) || string.Equals(Location, other.Location));
 
-            if (ReferenceEquals(this, other))
-            {
-                return true;
-            }
-
-            return string.Equals(Location, other.Location);
-        }
-
-        public override bool Equals(object obj)
-        {
-            if (ReferenceEquals(null, obj))
-            {
-                return false;
-            }
-
-            if (ReferenceEquals(this, obj))
-            {
-                return true;
-            }
-
-            return obj.GetType() == GetType() && Equals((EditorProject)obj);
-        }
+        public override bool Equals(object obj) => obj is not null && (ReferenceEquals(this, obj) || (obj.GetType() == GetType() && Equals((EditorProject)obj)));
 
         public override int GetHashCode() => Location != null ? Location.GetHashCode() : 0;
 

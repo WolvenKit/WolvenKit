@@ -7,9 +7,9 @@ using gpm.Core.Models;
 using gpm.Core.Services;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
-using WolvenKit.Functionality.Services;
+using WolvenKit.App.Services;
 
-namespace WolvenKit.ViewModels.Dialogs
+namespace WolvenKit.App.ViewModels.Dialogs
 {
     public class PluginViewModel : ReactiveObject
     {
@@ -43,7 +43,7 @@ namespace WolvenKit.ViewModels.Dialogs
             RemoveCommand = ReactiveCommand.Create(RemoveAsync);
 
 
-            this.WhenAnyValue(x => x.Status).Subscribe(status =>
+            _ = this.WhenAnyValue(x => x.Status).Subscribe(status =>
             {
                 switch (status)
                 {
@@ -80,13 +80,11 @@ namespace WolvenKit.ViewModels.Dialogs
         [Reactive] public bool IsNotInstalled { get; set; }
         [Reactive] public bool IsOpenEnabled { get; set; } // = IsInstalled
 
-        
+
         public ICommand OpenCommand { get; private set; }
-        private async Task OpenAsync()
-        {
+        private async Task OpenAsync() =>
             // TODO
             await Task.Delay(1);
-        }
 
         public ICommand RemoveCommand { get; private set; }
         private async Task RemoveAsync()
@@ -119,7 +117,7 @@ namespace WolvenKit.ViewModels.Dialogs
                 {
                     if (!Directory.Exists(InstallPath))
                     {
-                        Directory.CreateDirectory(InstallPath);
+                        _ = Directory.CreateDirectory(InstallPath);
                     }
                     var result = await _taskService.Install(Package.Id, "", InstallPath, false);
                     if (result)

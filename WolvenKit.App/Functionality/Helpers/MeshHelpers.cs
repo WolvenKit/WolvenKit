@@ -13,17 +13,17 @@ using System.Windows.Media.Imaging;
 using HelixToolkit.SharpDX.Core;
 using HelixToolkit.Wpf.SharpDX;
 using Splat;
+using WolvenKit.App.Functionality.Extensions;
+using WolvenKit.App.Functionality.Other;
+using WolvenKit.App.Helpers;
+using WolvenKit.App.Services;
 using WolvenKit.Common.Services;
-using WolvenKit.Functionality.Extensions;
-using WolvenKit.Functionality.Helpers;
-using WolvenKit.Functionality.Other;
-using WolvenKit.Functionality.Services;
 using WolvenKit.Modkit.RED4;
 using WolvenKit.Modkit.RED4.Tools;
 using WolvenKit.RED4.Archive.Buffer;
 using WolvenKit.RED4.Types;
 
-namespace WolvenKit.ViewModels.Documents
+namespace WolvenKit.App.ViewModels.Documents
 {
     public class SubmeshComponent : MeshGeometryModel3D
     {
@@ -438,7 +438,7 @@ namespace WolvenKit.ViewModels.Documents
         public void LoadMaterials()
         {
             IsLoadingMaterials = true;
-            Parallel.ForEachAsync(from entry in SelectedAppearance.RawMaterials orderby entry.Key ascending select entry, (material, cancellationToken) => LoadMaterial(material.Value)).ContinueWith((result) =>
+            _ = Parallel.ForEachAsync(from entry in SelectedAppearance.RawMaterials orderby entry.Key ascending select entry, (material, cancellationToken) => LoadMaterial(material.Value)).ContinueWith((result) =>
             {
                 Locator.Current.GetService<ILoggerService>().Info($"All materials loaded!");
                 IsLoadingMaterials = false;
@@ -573,7 +573,7 @@ namespace WolvenKit.ViewModels.Documents
                     goto DiffuseMaps;
                 }
 
-                ModTools.ConvertMultilayerMaskToDdsStreams(mlm, out var streams);
+                _ = ModTools.ConvertMultilayerMaskToDdsStreams(mlm, out var streams);
 
 
                 var firstStream = await ImageDecoder.RenderToBitmapSourceDds(streams[0]);
@@ -675,10 +675,10 @@ namespace WolvenKit.ViewModels.Documents
                         })
                         {
                             Matrix03 = 1f,
-                            Matrix40 = 0
+                            Matrix40 = 0,
+                            Matrix41 = roughOut != null ? (float)((roughOut[0] + roughOut[1]) / 2f) : 0.5f,
+                            Matrix42 = metalOut != null ? (float)((metalOut[0] + metalOut[1]) / 2f) : 0.0f
                         };
-                        colorMatrix.Matrix41 = roughOut != null ? (float)((roughOut[0] + roughOut[1]) / 2f) : 0.5f;
-                        colorMatrix.Matrix42 = metalOut != null ? (float)((metalOut[0] + metalOut[1]) / 2f) : 0.0f;
 
                         var attributes = new ImageAttributes();
 
@@ -694,7 +694,7 @@ namespace WolvenKit.ViewModels.Documents
                     if (normalFile != null && normalFile.RootChunk is ITexture it)
                     {
                         var stream = new MemoryStream();
-                        ModTools.ConvertRedClassToDdsStream(it, stream, out var format);
+                        _ = ModTools.ConvertRedClassToDdsStream(it, stream, out var format);
 
                         var normal = await ImageDecoder.RenderToBitmapSourceDds(stream);
 
@@ -825,7 +825,7 @@ namespace WolvenKit.ViewModels.Documents
                 }
 
                 var stream = new FileStream(filename_d, FileMode.Create);
-                ModTools.ConvertRedClassToDdsStream(it, stream, out var format);
+                _ = ModTools.ConvertRedClassToDdsStream(it, stream, out var format);
                 stream.Dispose();
             }
 
@@ -839,7 +839,7 @@ namespace WolvenKit.ViewModels.Documents
                 }
 
                 var stream = new FileStream(filename_d, FileMode.Create);
-                ModTools.ConvertRedClassToDdsStream(it, stream, out var format);
+                _ = ModTools.ConvertRedClassToDdsStream(it, stream, out var format);
                 stream.Dispose();
             }
 
@@ -853,7 +853,7 @@ namespace WolvenKit.ViewModels.Documents
                 }
 
                 var stream = new FileStream(filename_d, FileMode.Create);
-                ModTools.ConvertRedClassToDdsStream(it, stream, out var format);
+                _ = ModTools.ConvertRedClassToDdsStream(it, stream, out var format);
                 stream.Dispose();
             }
 
@@ -880,7 +880,7 @@ namespace WolvenKit.ViewModels.Documents
                 //stream.Dispose();
 
                 var stream = new MemoryStream();
-                ModTools.ConvertRedClassToDdsStream(it, stream, out var format);
+                _ = ModTools.ConvertRedClassToDdsStream(it, stream, out var format);
 
                 var normal = await ImageDecoder.RenderToBitmapSourceDds(stream);
 
@@ -936,7 +936,7 @@ namespace WolvenKit.ViewModels.Documents
                 //stream.Dispose();
 
                 var stream = new MemoryStream();
-                ModTools.ConvertRedClassToDdsStream(it, stream, out var format);
+                _ = ModTools.ConvertRedClassToDdsStream(it, stream, out var format);
 
                 var normal = await ImageDecoder.RenderToBitmapSourceDds(stream);
 

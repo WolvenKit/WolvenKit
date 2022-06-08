@@ -8,7 +8,7 @@
     xmlns:hc="https://handyorg.github.io/handycontrol"
     xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
     xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
-    xmlns:wizards="clr-namespace:WolvenKit.ViewModels.Wizards;assembly=WolvenKit.App"
+    xmlns:wizards="clr-namespace:WolvenKit.App.ViewModels.Wizards;assembly=WolvenKit.App"
     MinWidth="700"
     MinHeight="200"
     >

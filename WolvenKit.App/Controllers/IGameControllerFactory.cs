@@ -1,8 +1,8 @@
 using System;
+using WolvenKit.App.Services;
 using WolvenKit.Common;
-using WolvenKit.Functionality.Services;
 
-namespace WolvenKit.Functionality.Controllers
+namespace WolvenKit.App.Controllers
 {
     public interface IGameControllerFactory
     {

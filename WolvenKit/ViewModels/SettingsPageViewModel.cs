@@ -4,11 +4,11 @@ using System.Threading.Tasks;
 using gpm.Installer;
 using ReactiveUI;
 using Splat;
+using WolvenKit.App.Interaction;
+using WolvenKit.App.Services;
+using WolvenKit.App.ViewModels.HomePage;
+using WolvenKit.App.ViewModels.Shell;
 using WolvenKit.Common.Services;
-using WolvenKit.Functionality.Services;
-using WolvenKit.Interaction;
-using WolvenKit.ViewModels.HomePage;
-using WolvenKit.ViewModels.Shell;
 
 namespace WolvenKit.ViewModels
 {
@@ -64,7 +64,7 @@ namespace WolvenKit.ViewModels
                 case WMessageBoxResult.Yes:
                     if (await _autoInstallerService.Update()) // 1 API call
                     {
-                        
+
                     }
                     break;
             }

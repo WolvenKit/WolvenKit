@@ -1,8 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.IO;
-using System.Reactive.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using gpm.Core.Services;
@@ -10,10 +6,10 @@ using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using Serilog;
 using Splat;
+using WolvenKit.App.Services;
 using WolvenKit.Common.Services;
-using WolvenKit.Functionality.Services;
 
-namespace WolvenKit.ViewModels.Dialogs
+namespace WolvenKit.App.ViewModels.Dialogs
 {
 
 
@@ -26,7 +22,7 @@ namespace WolvenKit.ViewModels.Dialogs
         private readonly IGitHubService _gitHubService;
         private readonly ITaskService _taskService;
 
-       
+
         public delegate Task ReturnHandler(NewFileViewModel file);
         public ReturnHandler FileHandler;
 
@@ -55,7 +51,7 @@ namespace WolvenKit.ViewModels.Dialogs
         public ICommand SyncCommand { get; private set; }
         public async Task SyncAsync()
         {
-            _taskService.Upgrade();
+            _ = _taskService.Upgrade();
 
             foreach (var plugin in _pluginService.Plugins)
             {

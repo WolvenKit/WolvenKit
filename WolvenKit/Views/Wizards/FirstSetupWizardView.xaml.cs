@@ -4,8 +4,8 @@ using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Windows;
 using ReactiveUI;
+using WolvenKit.App.ViewModels.Wizards;
 using WolvenKit.Core;
-using WolvenKit.ViewModels.Wizards;
 
 namespace WolvenKit.Views.Wizards
 {
@@ -47,14 +47,11 @@ namespace WolvenKit.Views.Wizards
 
             });
 
-            this.WhenActivated(disposables =>
-            {
-                this.BindCommand(
+            this.WhenActivated(disposables => this.BindCommand(
                     ViewModel,
                     vm => vm.OpenLinkCommand,
                     v => v.helpButton,
-                    vm => vm.WikiHelpLink);
-            });
+                    vm => vm.WikiHelpLink));
 
         }
 

@@ -1,7 +1,7 @@
 ﻿using System.Threading.Tasks;
 using System.Windows.Input;
 
-namespace WolvenKit.Functionality.Commands
+namespace WolvenKit.App.Commands.Base
 {
     public interface IAsyncCommand : ICommand
     {

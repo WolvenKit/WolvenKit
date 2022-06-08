@@ -4,7 +4,7 @@ using System.Linq;
 using WolvenKit.Common;
 using WolvenKit.Common.Model;
 
-namespace WolvenKit.ViewModels.Tools
+namespace WolvenKit.App.ViewModels.Tools
 {
     /// <summary>
     /// Wraps a directory of RedFileViewModels to display in a View

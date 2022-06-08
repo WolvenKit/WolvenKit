@@ -1,6 +1,6 @@
 using System;
 
-namespace WolvenKit.Functionality.Commands
+namespace WolvenKit.App.Commands.Base
 {
     /// <summary>
     /// Defines an ICommand that delegates implementation to an <see cref="Action"/> and <see cref="Func{TResult}(bool)"/>.
@@ -37,14 +37,7 @@ namespace WolvenKit.Functionality.Commands
         /// </summary>
         /// <param name="parameter">The command parameter</param>
         /// <returns>True if the command can be executed, otherwise false.</returns>
-        public override bool CanExecute(object parameter)
-        {
-            if (_canExecute is null)
-            {
-                return true;
-            }
-            return _canExecute();
-        }
+        public override bool CanExecute(object parameter) => _canExecute is null || _canExecute();
 
         /// <summary>
         /// Execute the command

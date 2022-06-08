@@ -6,8 +6,8 @@ using Discord;
 using Discord.WebSocket;
 using ReactiveUI;
 using Splat;
-using WolvenKit.Functionality.Services;
-using WolvenKit.ViewModels.Wizards;
+using WolvenKit.App.Services;
+using WolvenKit.App.ViewModels.Wizards;
 
 namespace WolvenKit.Views.Wizards
 {
@@ -60,15 +60,7 @@ namespace WolvenKit.Views.Wizards
                 + "||-||:arrow_down: **Review** :arrow_down: \n" +
                 "```" + _reviewtext + "```";
 
-            string qa;
-            if (teststring.Length > 2047)
-            {
-                qa = teststring.Substring(0, 2048);
-            }
-            else
-            {
-                qa = teststring;
-            }
+            var qa = teststring.Length > 2047 ? teststring.Substring(0, 2048) : teststring;
             var embed = new EmbedBuilder
             {
                 Color = Color.Green,

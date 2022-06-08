@@ -2,7 +2,7 @@ using System;
 using Splat;
 using WolvenKit.Common.Services;
 
-namespace WolvenKit.Functionality.WKitGlobal.Helpers
+namespace WolvenKit.App.Helpers
 {
     public static class DiscordHelper
     {
@@ -24,7 +24,7 @@ namespace WolvenKit.Functionality.WKitGlobal.Helpers
                 client = new DiscordRPC.DiscordRpcClient(DiscordAppID);
                 client.OnReady += (sender, e) => Console.WriteLine("Received Ready from user {0}", e.User.Username);
                 client.OnPresenceUpdate += (sender, e) => Console.WriteLine("Received Update! {0}", e.Presence);
-                client.Initialize();
+                _ = client.Initialize();
                 DiscordRPCInitizialized = true;
             }
         }
@@ -43,10 +43,10 @@ namespace WolvenKit.Functionality.WKitGlobal.Helpers
                             Timestamps = new DiscordRPC.Timestamps() { Start = DateTime.UtcNow },
                             Assets = new DiscordRPC.Assets() { LargeImageKey = "bigwk", LargeImageText = "WolvenKit", }
                         });
-                        client.Invoke();
+                        _ = client.Invoke();
                     }
                 }
-                catch (Exception ex){Locator.Current.GetService<ILoggerService>().Error(ex);}
+                catch (Exception ex) { Locator.Current.GetService<ILoggerService>().Error(ex); }
             }
         }
 

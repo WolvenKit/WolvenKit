@@ -10,24 +10,23 @@ using HelixToolkit.SharpDX.Core;
 using HelixToolkit.Wpf.SharpDX;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
+using WolvenKit.App.Commands.Base;
+using WolvenKit.App.Functionality.Extensions;
+using WolvenKit.App.Functionality.Other;
+using WolvenKit.App.Models;
+using WolvenKit.App.Models.Docking;
+using WolvenKit.App.Services;
+using WolvenKit.App.ViewModels.Documents;
 using WolvenKit.Common;
 using WolvenKit.Common.Interfaces;
 using WolvenKit.Common.Services;
-using WolvenKit.Functionality.Commands;
-using WolvenKit.Functionality.Extensions;
-using WolvenKit.Functionality.Other;
-using WolvenKit.Functionality.Services;
-using WolvenKit.Models;
-using WolvenKit.Models.Docking;
 using WolvenKit.Modkit.RED4;
 using WolvenKit.Modkit.RED4.Tools;
 using WolvenKit.RED4.Archive.CR2W;
 using WolvenKit.RED4.CR2W;
 using WolvenKit.RED4.Types;
-using WolvenKit.ViewModels.Documents;
-using static WolvenKit.ViewModels.Documents.RDTMeshViewModel;
 
-namespace WolvenKit.ViewModels.Tools
+namespace WolvenKit.App.ViewModels.Tools
 {
     public class PropertiesViewModel : ToolViewModel
     {
@@ -51,7 +50,7 @@ namespace WolvenKit.ViewModels.Tools
 
         public SharpDX.BoundingBox ModelGroupBounds { get; set; } = new();
 
-        public HelixToolkit.Wpf.SharpDX.Camera Camera { get; }
+        public Camera Camera { get; }
 
         public SmartElement3DCollection ModelGroup { get; set; } = new();
 
@@ -89,7 +88,7 @@ namespace WolvenKit.ViewModels.Tools
             PreviewAudioCommand = ReactiveCommand.Create<string, string>(str => str);
 
             EffectsManager = new DefaultEffectsManager();
-            Camera = new HelixToolkit.Wpf.SharpDX.PerspectiveCamera()
+            Camera = new PerspectiveCamera()
             {
                 FarPlaneDistance = 1E+8,
                 LookDirection = new System.Windows.Media.Media3D.Vector3D(1f, -1f, -1f),
@@ -184,7 +183,7 @@ namespace WolvenKit.ViewModels.Tools
                 {
                     var selectedGameFile = selectedItem.GetGameFile();
                     selectedGameFile.Extract(stream);
-                    _parser.TryReadRed4File(stream, out cr2w);
+                    _ = _parser.TryReadRed4File(stream, out cr2w);
                 }
                 if (cr2w != null)
                 {
@@ -448,7 +447,7 @@ namespace WolvenKit.ViewModels.Tools
                 }
                 else
                 {
-                    ComputeNormals(positions, indices, out normals);
+                    RDTMeshViewModel.ComputeNormals(positions, indices, out normals);
                 }
 
                 var sm = new SubmeshComponent()
@@ -457,7 +456,7 @@ namespace WolvenKit.ViewModels.Tools
                     LOD = meshesinfo.LODLvl[index],
                     IsRendering = (chunkMask & (1UL << index)) > 0 && meshesinfo.LODLvl[index] == SelectedLOD,
                     EnabledWithMask = (chunkMask & (1UL << index)) > 0,
-                    Geometry = new HelixToolkit.SharpDX.Core.MeshGeometry3D()
+                    Geometry = new MeshGeometry3D()
                     {
                         Positions = positions,
                         Indices = indices,

@@ -1,6 +1,6 @@
 using ReactiveUI;
 using Syncfusion.Windows.Edit;
-using WolvenKit.ViewModels.Documents;
+using WolvenKit.App.ViewModels.Documents;
 
 namespace WolvenKit.Views.Documents
 {

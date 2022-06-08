@@ -13,6 +13,13 @@ using Microsoft.EntityFrameworkCore;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using Splat;
+using WolvenKit.App.Commands.Base;
+using WolvenKit.App.Controllers;
+using WolvenKit.App.Functionality;
+using WolvenKit.App.Models;
+using WolvenKit.App.Models.Docking;
+using WolvenKit.App.Services;
+using WolvenKit.App.ViewModels.Shell;
 using WolvenKit.Common;
 using WolvenKit.Common.Interfaces;
 using WolvenKit.Common.Model;
@@ -20,15 +27,8 @@ using WolvenKit.Common.Model.Database;
 using WolvenKit.Common.Services;
 using WolvenKit.Core.Interfaces;
 using WolvenKit.Core.Services;
-using WolvenKit.Functionality;
-using WolvenKit.Functionality.Commands;
-using WolvenKit.Functionality.Controllers;
-using WolvenKit.Functionality.Services;
-using WolvenKit.Models;
-using WolvenKit.Models.Docking;
-using WolvenKit.ViewModels.Shell;
 
-namespace WolvenKit.ViewModels.Tools
+namespace WolvenKit.App.ViewModels.Tools
 {
     public class AssetBrowserViewModel : ToolViewModel
     {
@@ -92,7 +92,7 @@ namespace WolvenKit.ViewModels.Tools
             _settings = settings;
             _progressService = progressService;
 
-            _loggerService = Splat.Locator.Current.GetService<ILoggerService>();
+            _loggerService = Locator.Current.GetService<ILoggerService>();
 
             ContentId = ToolContentId;
 
@@ -118,17 +118,15 @@ namespace WolvenKit.ViewModels.Tools
             FindUsingCommand = ReactiveCommand.CreateFromTask(FindUsing);
             LoadAssetBrowserCommand = ReactiveCommand.CreateFromTask(LoadAssetBrowser);
 
-            archiveManager.ConnectGameRoot()
+            _ = archiveManager.ConnectGameRoot()
                 .ObserveOn(RxApp.MainThreadScheduler)
                 .Bind(out _boundRootNodes)
                 .Subscribe(
                 _ =>
-                {
                     // binds only the root node
-                    LeftItems = new ObservableCollection<RedFileSystemModel>(_boundRootNodes);
-                });
+                    LeftItems = new ObservableCollection<RedFileSystemModel>(_boundRootNodes));
 
-            _archiveManager
+            _ = _archiveManager
                 .WhenAnyValue(x => x.IsManagerLoaded)
                 .Subscribe(loaded =>
                 {
@@ -139,7 +137,7 @@ namespace WolvenKit.ViewModels.Tools
                         NoProjectBorderVisibility = Visibility.Collapsed;
                     }
                 });
-            _projectManager
+            _ = _projectManager
                 .WhenAnyValue(_ => _.IsProjectLoaded)
                 .Subscribe(loaded =>
                 {
@@ -346,9 +344,9 @@ namespace WolvenKit.ViewModels.Tools
         public ICommand TogglePreviewCommand { get; private set; }
         private bool CanTogglePreview() => true;
         private void ExecuteTogglePreview() =>
-            PreviewWidth = PreviewWidth.GridUnitType != System.Windows.GridUnitType.Pixel
-                ? new System.Windows.GridLength(0, System.Windows.GridUnitType.Pixel)
-                : new System.Windows.GridLength(1, System.Windows.GridUnitType.Star);
+            PreviewWidth = PreviewWidth.GridUnitType != GridUnitType.Pixel
+                ? new GridLength(0, GridUnitType.Pixel)
+                : new GridLength(1, GridUnitType.Star);
 
         public ICommand OpenFileSystemItemCommand { get; private set; }
         private bool CanOpenFile() => true;
@@ -396,7 +394,7 @@ namespace WolvenKit.ViewModels.Tools
 
         private void AddFolderRecursive(RedFileSystemModel item)
         {
-            foreach (var (key, dir) in item.Directories)
+            foreach (var (_, dir) in item.Directories)
             {
                 AddFolderRecursive(dir);
             }
@@ -435,10 +433,7 @@ namespace WolvenKit.ViewModels.Tools
 
             try
             {
-                await Task.Run(() =>
-                {
-                    CyberEnhancedSearch();
-                });
+                await Task.Run(() => CyberEnhancedSearch());
             }
             catch (AggregateException ae)
             {
@@ -469,7 +464,7 @@ namespace WolvenKit.ViewModels.Tools
 
         private readonly record struct Term(TermType Type, string Pattern, string NegationPattern);
 
-        private interface SearchRefinement {}
+        private interface SearchRefinement { }
         private readonly record struct PatternRefinement(Term[] Terms) : SearchRefinement;
         private readonly record struct HashRefinement(ulong Hash) : SearchRefinement;
 
@@ -488,14 +483,14 @@ namespace WolvenKit.ViewModels.Tools
         private static readonly Regex SquashExtraWilds = new("((\\(\\?:)?\\.\\*\\??\\)?){2,}", RegexpOpts, RegexpSafetyTimeout);
 
         private static readonly Func<Term, Term> HonorFileExtension =
-            (Term term) =>
+            (term) =>
                 term with { Pattern = Regex.Replace(term.Pattern, "(^|\\W)\\.(?<term>\\w+?)", "$1\\.${term}") };
 
         private static readonly Func<Term, Term> DropUnnecessaryGlobStars =
-            (Term term) => term;
+            (term) => term;
 
         private static readonly Func<Term, Term> LimitOrToOneTerm =
-            (Term term) =>
+            (term) =>
                 Or.IsMatch(term.Pattern)
                 ? term with { Pattern = $"(?:{term.Pattern})" }
                 : term;
@@ -504,21 +499,22 @@ namespace WolvenKit.ViewModels.Tools
         // so instead we simply fail on a negative match (with the corresponding
         // positive match so that we know the refinement is otherwise satisfied).
         private static readonly Func<Term, Term> AllowExcludingTerm =
-            (Term term) =>
+            (term) =>
                 !Negation.IsMatch(term.Pattern)
                     ? term with { Type = TermType.Include }
                     : term with
-                        {
-                            Type = TermType.Exclude,
-                            Pattern = Negation.Replace(term.Pattern, "(?:${term})"),
-                            NegationPattern = Negation.Replace(term.Pattern,"")
-                        };
+                    {
+                        Type = TermType.Exclude,
+                        Pattern = Negation.Replace(term.Pattern, "(?:${term})"),
+                        NegationPattern = Negation.Replace(term.Pattern, "")
+                    };
 
         // Pipeline
 
         private static readonly Func<string, SearchRefinement> TermsIntoSequentialPipeline =
-            (string refinementString) =>
-                Hash.Match(refinementString).Groups["num"].Value switch {
+            (refinementString) =>
+                Hash.Match(refinementString).Groups["num"].Value switch
+                {
                     "" =>
                         new PatternRefinement
                         {
@@ -546,11 +542,14 @@ namespace WolvenKit.ViewModels.Tools
             };
 
         private static readonly Func<SearchRefinement, CyberSearch> RefinementsIntoMatchFunctions =
-            (SearchRefinement searchRefinement) => {
-                switch (searchRefinement) {
+            (searchRefinement) =>
+            {
+                switch (searchRefinement)
+                {
                     case HashRefinement hashRefinement:
-                        return new CyberSearch {
-                            Match = (IGameFile candidate) => candidate.Key == hashRefinement.Hash,
+                        return new CyberSearch
+                        {
+                            Match = (candidate) => candidate.Key == hashRefinement.Hash,
                             SourceRefinement = hashRefinement,
                         };
 
@@ -575,8 +574,8 @@ namespace WolvenKit.ViewModels.Tools
                             Match =
                                 searchContainsExclusion
                                 ? (IGameFile candidate) =>
-                                    (!Regex.IsMatch(candidate.Name, pattern, RegexpOpts, RegexpSafetyTimeout) &&
-                                    Regex.IsMatch(candidate.Name, patternWithoutExcludedTerms, RegexpOpts, RegexpSafetyTimeout))
+                                    !Regex.IsMatch(candidate.Name, pattern, RegexpOpts, RegexpSafetyTimeout) &&
+                                    Regex.IsMatch(candidate.Name, patternWithoutExcludedTerms, RegexpOpts, RegexpSafetyTimeout)
                                 : (IGameFile candidate) =>
                                     Regex.IsMatch(candidate.Name, pattern, RegexpOpts, RegexpSafetyTimeout),
 
@@ -591,12 +590,11 @@ namespace WolvenKit.ViewModels.Tools
         private void CyberEnhancedSearch()
         {
             // Exceptions - this is bananatown you can't put this outside the func, but otherwise we're repeating the types all over the place
-            Func<Exception, IObservable<IChangeSet<RedFileViewModel, ulong>>> LogExceptionAndReturnEmpty =
-                ex =>
-                {
-                    _loggerService.Error($"Error performing search: {ex.Message}");
-                    return Observable.Empty<IChangeSet<RedFileViewModel, ulong>>();
-                };
+            IObservable<IChangeSet<RedFileViewModel, ulong>> LogExceptionAndReturnEmpty(Exception ex)
+            {
+                _loggerService.Error($"Error performing search: {ex.Message}");
+                return Observable.Empty<IChangeSet<RedFileViewModel, ulong>>();
+            }
 
             var searchAsSequentialRefinements =
                 RefinementSeparator
@@ -614,7 +612,7 @@ namespace WolvenKit.ViewModels.Tools
             var filesToSearch =
                 gameFilesOrMods
                     .Connect()   // Maybe we could avoid reconnecting every time? Dunno if it makes a difference
-                    .TransformMany((archive => archive.Files.Values), (fileInArchive => fileInArchive.Key));
+                    .TransformMany(archive => archive.Files.Values, fileInArchive => fileInArchive.Key);
 
             var filesMatchingQuery =
                 filesToSearch
@@ -624,7 +622,7 @@ namespace WolvenKit.ViewModels.Tools
             var viewableFileList =
                 filesMatchingQuery
                     .Transform(matchingFile => new RedFileViewModel(matchingFile))
-                    .Catch(LogExceptionAndReturnEmpty)
+                    .Catch((Func<Exception, IObservable<IChangeSet<RedFileViewModel, ulong>>>)LogExceptionAndReturnEmpty)
                     .Bind(out var list);
 
             viewableFileList

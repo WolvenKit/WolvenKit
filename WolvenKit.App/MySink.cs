@@ -5,7 +5,7 @@ using Serilog.Configuration;
 using Serilog.Core;
 using Serilog.Events;
 
-namespace WolvenKit;
+namespace WolvenKit.App;
 
 public class MySink : ILogEventSink
 {

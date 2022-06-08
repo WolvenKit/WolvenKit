@@ -6,8 +6,8 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using ReactiveUI;
 using Splat;
+using WolvenKit.App.ViewModels.Documents;
 using WolvenKit.Common.Services;
-using WolvenKit.ViewModels.Documents;
 
 namespace WolvenKit.Views.Documents
 {
@@ -167,8 +167,8 @@ namespace WolvenKit.Views.Documents
             var zoom = e.Delta > 0 ? 1.2 : (1 / 1.2);
 
             var CursorPosCanvas = e.GetPosition(ImagePreviewCanvas);
-            pan.X += -(CursorPosCanvas.X - ImagePreviewCanvas.RenderSize.Width / 2.0 - pan.X) * (zoom - 1.0);
-            pan.Y += -(CursorPosCanvas.Y - ImagePreviewCanvas.RenderSize.Height / 2.0 - pan.Y) * (zoom - 1.0);
+            pan.X += -(CursorPosCanvas.X - (ImagePreviewCanvas.RenderSize.Width / 2.0) - pan.X) * (zoom - 1.0);
+            pan.Y += -(CursorPosCanvas.Y - (ImagePreviewCanvas.RenderSize.Height / 2.0) - pan.Y) * (zoom - 1.0);
             end.X = pan.X;
             end.Y = pan.Y;
 

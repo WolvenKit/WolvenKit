@@ -1,4 +1,4 @@
-namespace WolvenKit.Functionality.Helpers
+namespace WolvenKit.App.Helpers
 {
     public static class WolvenDBG
     {

@@ -4,7 +4,7 @@ using System.IO;
 using System.Windows.Media;
 using WolvenKit.Common;
 
-namespace WolvenKit.Functionality.Services
+namespace WolvenKit.App.Services
 {
     public interface ISettingsDto
     {
@@ -76,7 +76,7 @@ namespace WolvenKit.Functionality.Services
                 "WolvenKit");
             if (!Directory.Exists(dir))
             {
-                Directory.CreateDirectory(dir);
+                _ = Directory.CreateDirectory(dir);
             }
 
             return dir;
@@ -87,7 +87,7 @@ namespace WolvenKit.Functionality.Services
             var dir = Path.Combine(GetAppData(), "Config");
             if (!Directory.Exists(dir))
             {
-                Directory.CreateDirectory(dir);
+                _ = Directory.CreateDirectory(dir);
             }
 
             return dir;
@@ -98,7 +98,7 @@ namespace WolvenKit.Functionality.Services
             var dir = Path.Combine(GetAppData(), "tmp_workdir");
             if (!Directory.Exists(dir))
             {
-                Directory.CreateDirectory(dir);
+                _ = Directory.CreateDirectory(dir);
             }
 
             return dir;
@@ -111,7 +111,7 @@ namespace WolvenKit.Functionality.Services
             var dir = Path.Combine(GetAppData(), "Temp_Audio");
             if (!Directory.Exists(dir))
             {
-                Directory.CreateDirectory(dir);
+                _ = Directory.CreateDirectory(dir);
             }
 
             return dir;
@@ -122,7 +122,7 @@ namespace WolvenKit.Functionality.Services
             var dir = Path.Combine(GetAppData(), "Temp_OBJ");
             if (!Directory.Exists(dir))
             {
-                Directory.CreateDirectory(dir);
+                _ = Directory.CreateDirectory(dir);
             }
 
             return dir;
@@ -133,7 +133,7 @@ namespace WolvenKit.Functionality.Services
             var dir = Path.Combine(GetAppData(), "Temp_Mesh");
             if (!Directory.Exists(dir))
             {
-                Directory.CreateDirectory(dir);
+                _ = Directory.CreateDirectory(dir);
             }
 
             return dir;
@@ -144,7 +144,7 @@ namespace WolvenKit.Functionality.Services
             var dir = Path.Combine(GetAppData(), "Temp_Audio_import");
             if (!Directory.Exists(dir))
             {
-                Directory.CreateDirectory(dir);
+                _ = Directory.CreateDirectory(dir);
             }
 
             return dir;
@@ -155,7 +155,7 @@ namespace WolvenKit.Functionality.Services
             var dir = Path.Combine(GetAppData(), "Temp_Video_Preview");
             if (!Directory.Exists(dir))
             {
-                Directory.CreateDirectory(dir);
+                _ = Directory.CreateDirectory(dir);
             }
 
             return dir;
@@ -166,7 +166,7 @@ namespace WolvenKit.Functionality.Services
             var dir = Path.Combine(GetAppData(), "WebViewData");
             if (!Directory.Exists(dir))
             {
-                Directory.CreateDirectory(dir);
+                _ = Directory.CreateDirectory(dir);
             }
 
             return dir;

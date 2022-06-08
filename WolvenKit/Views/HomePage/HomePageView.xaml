@@ -14,7 +14,7 @@
     mc:Ignorable="av"
     xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:homePage="clr-namespace:WolvenKit.ViewModels.HomePage;assembly=WolvenKit.App"
+    xmlns:homePage="clr-namespace:WolvenKit.App.ViewModels.HomePage;assembly=WolvenKit.App"
     d:DataContext="{d:DesignInstance Type=homePage:HomePageViewModel}"
     MinWidth="960"
     BorderThickness="1"

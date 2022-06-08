@@ -1,8 +1,9 @@
+using WolvenKit.App.Functionality.ProjectManagement.Project;
+using WolvenKit.App.Services;
+using WolvenKit.App.ViewModels.Tools;
 using WolvenKit.Common.Services;
-using WolvenKit.Functionality.Services;
-using WolvenKit.ProjectManagement.Project;
 
-namespace WolvenKit.ViewModels.Tools
+namespace WolvenKit.App.ViewModels.Documents
 {
     public class VisualEditorViewModel : ToolViewModel
     {

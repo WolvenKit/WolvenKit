@@ -7,7 +7,7 @@ using System.Windows;
 using System.Windows.Data;
 using System.Windows.Media;
 
-namespace WolvenKit.MVVM.Views.Components.Tools.AudioTool
+namespace WolvenKit.App.Functionality.Other
 {
     public static class UIHelper
     {
@@ -32,7 +32,7 @@ namespace WolvenKit.MVVM.Views.Components.Tools.AudioTool
                 StringFormat = stringFormat,
                 Converter = converter
             };
-            destinationObject.SetBinding(dp, binding);
+            _ = destinationObject.SetBinding(dp, binding);
         }
 
         public static T FindParent<T>(this DependencyObject child) where T : DependencyObject
@@ -40,8 +40,7 @@ namespace WolvenKit.MVVM.Views.Components.Tools.AudioTool
             var parent = VisualTreeHelper.GetParent(child);
             do
             {
-                var matchedParent = parent as T;
-                if (matchedParent != null)
+                if (parent is T matchedParent)
                 {
                     return matchedParent;
                 }

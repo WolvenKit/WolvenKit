@@ -1,17 +1,14 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Splat;
+using WolvenKit.Common.Services;
 using WolvenKit.RED4.Types;
 using YamlDotNet.Core;
 using YamlDotNet.Core.Events;
 using YamlDotNet.Serialization;
-using Splat;
-using WolvenKit.Common.Services;
 
-namespace WolvenKit.Models
+namespace WolvenKit.App.Models
 {
     public interface IBrowsableType
     {
@@ -99,15 +96,7 @@ namespace WolvenKit.Models
             {
                 return Value;
             }
-            if (name == "Base")
-            {
-                return Base;
-            }
-            if (name == "Type")
-            {
-                return Type;
-            }
-            return Properties.GetValueOrDefault(name);
+            return name == "Base" ? Base : name == "Type" ? Type : (object)Properties.GetValueOrDefault(name);
         }
     }
 
@@ -152,15 +141,7 @@ namespace WolvenKit.Models
             {
                 return ID;
             }
-            if (name == "Type")
-            {
-                return Type;
-            }
-            if (name == "Items")
-            {
-                return Items;
-            }
-            return null;
+            return name == "Type" ? Type : name == "Items" ? Items : (object)null;
         }
     }
 
@@ -184,14 +165,7 @@ namespace WolvenKit.Models
             }
         }
 
-        public override object GetPropertyValue(string name)
-        {
-            if (name == "AppendType")
-            {
-                return AppendType;
-            }
-            return base.GetPropertyValue(name);
-        }
+        public override object GetPropertyValue(string name) => name == "AppendType" ? AppendType : base.GetPropertyValue(name);
     }
 
     public class TweakXLYamlTypeConverter : IYamlTypeConverter
@@ -207,11 +181,11 @@ namespace WolvenKit.Models
                 throw new InvalidDataException("Invalid YAML content.");
             }
 
-            parser.MoveNext(); // move on from the map start
+            _ = parser.MoveNext(); // move on from the map start
 
             result = new TweakXLFile();
 
-            while (!parser.TryConsume<MappingEnd>(out var _))
+            while (!parser.TryConsume<MappingEnd>(out _))
             {
                 if (parser.TryConsume<Scalar>(out var id))
                 {
@@ -223,7 +197,7 @@ namespace WolvenKit.Models
                 }
                 else if (parser.Current is not MappingEnd)
                 {
-                    parser.MoveNext();
+                    _ = parser.MoveNext();
                 }
 
             }
@@ -237,20 +211,14 @@ namespace WolvenKit.Models
         }
 
         // eventually ITweakXLItem
-        public IRedType ReadScalar(Scalar s, Type type = null)
-        {
+        public IRedType ReadScalar(Scalar s, Type type = null) =>
             // TODO get parent type & property name, look-up type if ambiguous?
             // TODO parse type strings
-            if (type == typeof(TweakDBID))
-            {
-                return (TweakDBID)s.Value;
-            }
-            return (CString)s.Value;
-        }
+            type == typeof(TweakDBID) ? (TweakDBID)s.Value : (CString)s.Value;
 
         public ITweakXLItem ReadTweakXL(IParser parser, string id = null, Type type = null)
         {
-            if (parser.TryConsume<SequenceStart>(out var _))
+            if (parser.TryConsume<SequenceStart>(out _))
             {
                 var tweak = new TweakXLSequence();
                 if (id != null)
@@ -261,20 +229,20 @@ namespace WolvenKit.Models
                 //{
                 //    tweak.Type = type.Name;
                 //}
-                while (!parser.TryConsume<SequenceEnd>(out var _))
+                while (!parser.TryConsume<SequenceEnd>(out _))
                 {
                     tweak.Items.Add(ReadTweakXL(parser));
                 }
                 return tweak;
             }
-            else if (parser.TryConsume<MappingStart>(out var _))
+            else if (parser.TryConsume<MappingStart>(out _))
             {
                 var tweak = new TweakXL();
                 if (id != null)
                 {
                     tweak.ID = id;
                 }
-                while (!parser.TryConsume<MappingEnd>(out var _))
+                while (!parser.TryConsume<MappingEnd>(out _))
                 {
                     if (parser.TryConsume<Scalar>(out var pn))
                     {
@@ -301,7 +269,7 @@ namespace WolvenKit.Models
                         // embedded record
                         else if (parser.Current is MappingStart)
                         {
-                            string childID = id;
+                            var childID = id;
                             if (childID != null && propertyName != null)
                             {
                                 childID = childID + "." + propertyName;
@@ -314,7 +282,7 @@ namespace WolvenKit.Models
                             propertyValue = ReadTweakXL(parser, id: childID, type: childType);
                         }
                         // array/list
-                        else if (parser.TryConsume<SequenceStart>(out var _))
+                        else if (parser.TryConsume<SequenceStart>(out _))
                         {
                             propertyValue = new TweakXLSequence();
                             if (id != null)
@@ -329,7 +297,7 @@ namespace WolvenKit.Models
                             //{
                             //    ((TweakXLSequence)propertyValue).Type = type;
                             //}
-                            while (!parser.TryConsume<SequenceEnd>(out var _))
+                            while (!parser.TryConsume<SequenceEnd>(out _))
                             {
                                 ((TweakXLSequence)propertyValue).Items.Add(ReadTweakXL(parser));
                             }
@@ -343,14 +311,14 @@ namespace WolvenKit.Models
                         {
                             tweak.Base = (TweakDBID)propertyValue.ToString();
                         }
-                        else if (propertyName != null && propertyName != "")
+                        else if (propertyName is not null and not "")
                         {
                             tweak.Properties[propertyName] = propertyValue;
                         }
                     }
                     else if (parser.Current is not MappingEnd)
                     {
-                        parser.MoveNext();
+                        _ = parser.MoveNext();
                         continue;
                     }
 
@@ -362,8 +330,10 @@ namespace WolvenKit.Models
             {
                 if (s.Tag == "!append")
                 {
-                    var tweak = new TweakXLAppend();
-                    tweak.ID = ReadScalar(s).ToString();
+                    var tweak = new TweakXLAppend
+                    {
+                        ID = ReadScalar(s).ToString()
+                    };
                     return tweak;
                 }
                 else
@@ -380,13 +350,13 @@ namespace WolvenKit.Models
                     {
                         tweak.ID = id;
                     }
-                    tweak.Value = (IRedType)ReadScalar(s);
+                    tweak.Value = ReadScalar(s);
                     return tweak;
                 }
             }
             else
             {
-                parser.MoveNext();
+                _ = parser.MoveNext();
             }
 
             return null;

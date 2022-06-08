@@ -6,7 +6,7 @@
  xmlns:reactiveUi="http://reactiveui.net"
  xmlns:hc="https://handyorg.github.io/handycontrol"
  xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
- xmlns:wizards="clr-namespace:WolvenKit.ViewModels.Wizards;assembly=WolvenKit.App">
+ xmlns:wizards="clr-namespace:WolvenKit.App.ViewModels.Wizards;assembly=WolvenKit.App">
 
     
     <Grid

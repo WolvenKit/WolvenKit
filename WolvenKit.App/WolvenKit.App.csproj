@@ -5,6 +5,7 @@
       <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
       <SatelliteResourceLanguages>en</SatelliteResourceLanguages>
       <Platforms>x64</Platforms>
+      
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">

@@ -1,4 +1,4 @@
-namespace WolvenKit.Models
+namespace WolvenKit.App.Models
 {
     //public static class CopyController
     //{

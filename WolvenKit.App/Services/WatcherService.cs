@@ -5,10 +5,10 @@ using System.Linq;
 using System.Threading.Tasks;
 using DynamicData;
 using ReactiveUI;
-using WolvenKit.Models;
-using WolvenKit.ProjectManagement.Project;
+using WolvenKit.App.Functionality.ProjectManagement.Project;
+using WolvenKit.App.Models;
 
-namespace WolvenKit.Functionality.Services
+namespace WolvenKit.App.Services
 {
     /// <summary>
     /// This service watches certain locations in the game files and notifies changes
@@ -32,7 +32,7 @@ namespace WolvenKit.Functionality.Services
         {
             _projectManager = projectManager;
 
-            _projectManager.WhenAnyValue(_ => _.IsProjectLoaded).Subscribe(async loaded =>
+            _ = _projectManager.WhenAnyValue(_ => _.IsProjectLoaded).Subscribe(async loaded =>
             {
                 if (loaded)
                 {

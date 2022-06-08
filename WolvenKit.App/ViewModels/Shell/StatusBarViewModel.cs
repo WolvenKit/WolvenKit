@@ -5,12 +5,12 @@ using System.Threading.Tasks;
 using gpm.Installer;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
+using WolvenKit.App.Interaction;
+using WolvenKit.App.Services;
 using WolvenKit.Common.Services;
 using WolvenKit.Core.Services;
-using WolvenKit.Functionality.Services;
-using WolvenKit.Interaction;
 
-namespace WolvenKit.ViewModels.Shell
+namespace WolvenKit.App.ViewModels.Shell
 {
     public class StatusBarViewModel : ReactiveObject
     {
@@ -56,7 +56,7 @@ namespace WolvenKit.ViewModels.Shell
 
             CheckForUpdatesCommand = ReactiveCommand.CreateFromTask(CheckForUpdates);
 
-            _projectManager
+            _ = _projectManager
                 .WhenAnyValue(
                     x => x.ActiveProject,
                     project => project != null ? project.Name : s_noProjectLoaded)
@@ -75,10 +75,7 @@ namespace WolvenKit.ViewModels.Shell
                 .WhenAnyValue(x => x.IsIndeterminate)
                 .ToProperty(this, x => x.IsIndeterminate, out _isIndeterminate);
 
-            _ = _progressService.WhenAnyValue(x => x.IsIndeterminate).Subscribe(b =>
-            {
-                IsIndeterminate = b;
-            });
+            _ = _progressService.WhenAnyValue(x => x.IsIndeterminate).Subscribe(b => IsIndeterminate = b);
         }
 
         #endregion Constructors

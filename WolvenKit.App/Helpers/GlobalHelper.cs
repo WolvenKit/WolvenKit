@@ -1,4 +1,4 @@
-namespace WolvenKit.Functionality.WKitGlobal.Helpers
+namespace WolvenKit.App.Helpers
 {
     public enum EAnimals
     {

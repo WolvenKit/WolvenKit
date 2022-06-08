@@ -1,9 +1,9 @@
 using System.Windows.Documents;
 using ReactiveUI.Fody.Helpers;
+using WolvenKit.App.Models.Docking;
 using WolvenKit.Common.Services;
-using WolvenKit.Models.Docking;
 
-namespace WolvenKit.ViewModels.Tools
+namespace WolvenKit.App.ViewModels.Tools
 {
     /// <summary>
     /// Implements the viewmodel that drives the log view.

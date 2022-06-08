@@ -1,6 +1,6 @@
 using System.Reactive.Disposables;
 using ReactiveUI;
-using WolvenKit.ViewModels.Wizards;
+using WolvenKit.App.ViewModels.Wizards;
 
 namespace WolvenKit.Views.Wizards
 {
@@ -70,7 +70,7 @@ namespace WolvenKit.Views.Wizards
 
         private void TextBox_TextChanged(object sender, System.Windows.Controls.TextChangedEventArgs e)
         {
-            if(timer == null)
+            if (timer == null)
             {
                 StartTimer();
             }

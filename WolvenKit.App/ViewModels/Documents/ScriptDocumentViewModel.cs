@@ -9,7 +9,7 @@ using ReactiveUI.Fody.Helpers;
 using Splat;
 using WolvenKit.Common.Services;
 
-namespace WolvenKit.ViewModels.Documents
+namespace WolvenKit.App.ViewModels.Documents
 {
     public class ScriptDocumentViewModel : DocumentViewModel
     {

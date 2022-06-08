@@ -1,22 +1,17 @@
 using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Splat;
+using WolvenKit.App.Models;
 using WolvenKit.Common.Services;
-using WolvenKit.RED4.Types;
-using WolvenKit.ViewModels.Documents;
 using YamlDotNet.Serialization;
-using WolvenKit.Models;
 
-namespace WolvenKit.ViewModels.Documents
+namespace WolvenKit.App.ViewModels.Documents
 {
     public class TweakXLDocumentViewModel : RedDocumentViewModel
     {
 
-        private TweakDBService _tdbs;
+        private readonly TweakDBService _tdbs;
 
         public TweakXLDocumentViewModel(string path) : base(path)
         {

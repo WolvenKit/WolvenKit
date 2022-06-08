@@ -5,10 +5,10 @@ using System.Windows;
 using ReactiveUI;
 using Splat;
 using Syncfusion.Windows.Tools.Controls;
-using WolvenKit.Interaction;
-using WolvenKit.ViewModels.Shell;
-using WolvenKit.ViewModels.Tools;
-using WolvenKit.ViewModels.Wizards;
+using WolvenKit.App.Interaction;
+using WolvenKit.App.ViewModels.Shell;
+using WolvenKit.App.ViewModels.Tools;
+using WolvenKit.App.ViewModels.Wizards;
 using WolvenKit.Views.Dialogs;
 
 namespace WolvenKit.Views.Shell

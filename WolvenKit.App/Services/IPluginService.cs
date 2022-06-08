@@ -1,11 +1,10 @@
 using System;
 using System.Collections.ObjectModel;
-using System.Reflection;
-using WolvenKit.ViewModels.Dialogs;
-using WolvenKit.Functionality.Services;
 using System.Diagnostics.CodeAnalysis;
+using System.Reflection;
+using WolvenKit.App.ViewModels.Dialogs;
 
-namespace WolvenKit.Functionality.Services
+namespace WolvenKit.App.Services
 {
     //https://stackoverflow.com/a/4778347
     public static class PluginExtensions

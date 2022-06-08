@@ -2,7 +2,7 @@ using System;
 using System.Reactive.Disposables;
 using ReactiveUI;
 using Splat;
-using WolvenKit.ViewModels.Dialogs;
+using WolvenKit.App.ViewModels.Dialogs;
 
 namespace WolvenKit.Views.Dialogs
 {
@@ -25,18 +25,10 @@ namespace WolvenKit.Views.Dialogs
 
             ViewModel = Locator.Current.GetService<DialogHostViewModel>();
 
-            this.WhenActivated(disposables =>
-            {
-                this.Bind(ViewModel,
+            this.WhenActivated(disposables => this.Bind(ViewModel,
                     vm => vm.HostedViewModel,
                     view => view.ViewModelViewHost.ViewModel)
-                    .DisposeWith(disposables);
-                //this.Bind(ViewModel,
-                //        vm => vm.HostedViewModel.Title,
-                //        view => view.Title)
-                //    .DisposeWith(disposables);
-
-            });
+                    .DisposeWith(disposables));
 
         }
 

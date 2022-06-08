@@ -13,15 +13,15 @@ using HelixToolkit.Wpf.SharpDX;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using Splat;
+using WolvenKit.App.Commands.Base;
+using WolvenKit.App.Services;
 using WolvenKit.Common.Services;
-using WolvenKit.Functionality.Commands;
-using WolvenKit.Functionality.Services;
 using WolvenKit.RED4.Archive.Buffer;
 using WolvenKit.RED4.Archive.CR2W;
 using WolvenKit.RED4.Archive.IO;
 using WolvenKit.RED4.Types;
 
-namespace WolvenKit.ViewModels.Documents
+namespace WolvenKit.App.ViewModels.Documents
 {
 
     public interface IBindable
@@ -264,8 +264,7 @@ namespace WolvenKit.ViewModels.Documents
                     });
                     continue;
                 }
-                CMaterialInstance inst = null;
-
+                CMaterialInstance inst;
                 if (localList != null && localList.Files.Count > me.Index)
                 {
                     inst = (CMaterialInstance)localList.Files[me.Index].RootChunk;

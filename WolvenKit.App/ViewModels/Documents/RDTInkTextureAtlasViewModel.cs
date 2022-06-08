@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Drawing;
@@ -11,10 +10,10 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using Microsoft.Win32;
 using ReactiveUI.Fody.Helpers;
-using WolvenKit.Functionality.Commands;
+using WolvenKit.App.Commands.Base;
 using WolvenKit.RED4.Types;
 
-namespace WolvenKit.ViewModels.Documents
+namespace WolvenKit.App.ViewModels.Documents
 {
     public class RDTInkTextureAtlasViewModel : RDTTextureViewModel
     {
@@ -159,7 +158,7 @@ image.SetTexturePart(n""{PartName}"");";
                     Title = "Save an Image As",
                     FileName = PartName + ".png"
                 };
-                saveFileDialog1.ShowDialog();
+                _ = saveFileDialog1.ShowDialog();
 
                 if (saveFileDialog1.FileName != "")
                 {
@@ -167,10 +166,8 @@ image.SetTexturePart(n""{PartName}"");";
                     BitmapEncoder encoder = new PngBitmapEncoder();
                     encoder.Frames.Add(BitmapFrame.Create(Image as BitmapSource));
 
-                    using (var fileStream = new FileStream(saveFileDialog1.FileName, FileMode.Create))
-                    {
-                        encoder.Save(fileStream);
-                    }
+                    using var fileStream = new FileStream(saveFileDialog1.FileName, FileMode.Create);
+                    encoder.Save(fileStream);
                 }
             }
 

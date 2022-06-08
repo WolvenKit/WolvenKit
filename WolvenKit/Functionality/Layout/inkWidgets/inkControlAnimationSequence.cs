@@ -5,7 +5,7 @@ using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
-using WolvenKit.Functionality.Commands;
+using WolvenKit.App.Commands.Base;
 using WolvenKit.RED4.Types;
 using WolvenKit.Views.Documents;
 
@@ -317,182 +317,155 @@ namespace WolvenKit.Functionality.Layout.inkWidgets
 
         public static DoubleKeyFrame ToDoubleKeyframe(Enums.inkanimInterpolationType? type, Enums.inkanimInterpolationMode? mode, float value, float keyframe)
         {
-            switch (type)
+            return type switch
             {
-                case Enums.inkanimInterpolationType.Linear:
-                    return new LinearDoubleKeyFrame(value, KeyTime.FromTimeSpan(TimeSpan.FromSeconds(keyframe)));
-                case Enums.inkanimInterpolationType.Quadratic:
-                    return new EasingDoubleKeyFrame(value, KeyTime.FromTimeSpan(TimeSpan.FromSeconds(keyframe)))
+                Enums.inkanimInterpolationType.Linear => new LinearDoubleKeyFrame(value, KeyTime.FromTimeSpan(TimeSpan.FromSeconds(keyframe))),
+                Enums.inkanimInterpolationType.Quadratic => new EasingDoubleKeyFrame(value, KeyTime.FromTimeSpan(TimeSpan.FromSeconds(keyframe)))
+                {
+                    EasingFunction = new QuadraticEase()
                     {
-                        EasingFunction = new QuadraticEase()
-                        {
-                            EasingMode = ToEasingMode(mode)
-                        }
-                    };
-                case Enums.inkanimInterpolationType.Qubic:
-                    return new EasingDoubleKeyFrame(value, KeyTime.FromTimeSpan(TimeSpan.FromSeconds(keyframe)))
+                        EasingMode = ToEasingMode(mode)
+                    }
+                },
+                Enums.inkanimInterpolationType.Qubic => new EasingDoubleKeyFrame(value, KeyTime.FromTimeSpan(TimeSpan.FromSeconds(keyframe)))
+                {
+                    EasingFunction = new CubicEase()
                     {
-                        EasingFunction = new CubicEase()
-                        {
-                            EasingMode = ToEasingMode(mode)
-                        }
-                    };
-                case Enums.inkanimInterpolationType.Quartic:
-                    return new EasingDoubleKeyFrame(value, KeyTime.FromTimeSpan(TimeSpan.FromSeconds(keyframe)))
+                        EasingMode = ToEasingMode(mode)
+                    }
+                },
+                Enums.inkanimInterpolationType.Quartic => new EasingDoubleKeyFrame(value, KeyTime.FromTimeSpan(TimeSpan.FromSeconds(keyframe)))
+                {
+                    EasingFunction = new QuarticEase()
                     {
-                        EasingFunction = new QuarticEase()
-                        {
-                            EasingMode = ToEasingMode(mode)
-                        }
-                    };
-                case Enums.inkanimInterpolationType.Quintic:
-                    return new EasingDoubleKeyFrame(value, KeyTime.FromTimeSpan(TimeSpan.FromSeconds(keyframe)))
+                        EasingMode = ToEasingMode(mode)
+                    }
+                },
+                Enums.inkanimInterpolationType.Quintic => new EasingDoubleKeyFrame(value, KeyTime.FromTimeSpan(TimeSpan.FromSeconds(keyframe)))
+                {
+                    EasingFunction = new QuinticEase()
                     {
-                        EasingFunction = new QuinticEase()
-                        {
-                            EasingMode = ToEasingMode(mode)
-                        }
-                    };
-                case Enums.inkanimInterpolationType.Sinusoidal:
-                    return new EasingDoubleKeyFrame(value, KeyTime.FromTimeSpan(TimeSpan.FromSeconds(keyframe)))
+                        EasingMode = ToEasingMode(mode)
+                    }
+                },
+                Enums.inkanimInterpolationType.Sinusoidal => new EasingDoubleKeyFrame(value, KeyTime.FromTimeSpan(TimeSpan.FromSeconds(keyframe)))
+                {
+                    EasingFunction = new SineEase()
                     {
-                        EasingFunction = new SineEase()
-                        {
-                            EasingMode = ToEasingMode(mode)
-                        }
-                    };
-                case Enums.inkanimInterpolationType.Exponential:
-                    return new EasingDoubleKeyFrame(value, KeyTime.FromTimeSpan(TimeSpan.FromSeconds(keyframe)))
+                        EasingMode = ToEasingMode(mode)
+                    }
+                },
+                Enums.inkanimInterpolationType.Exponential => new EasingDoubleKeyFrame(value, KeyTime.FromTimeSpan(TimeSpan.FromSeconds(keyframe)))
+                {
+                    EasingFunction = new ExponentialEase()
                     {
-                        EasingFunction = new ExponentialEase()
-                        {
-                            EasingMode = ToEasingMode(mode)
-                        }
-                    };
-                case Enums.inkanimInterpolationType.Elastic:
-                    return new EasingDoubleKeyFrame(value, KeyTime.FromTimeSpan(TimeSpan.FromSeconds(keyframe)))
+                        EasingMode = ToEasingMode(mode)
+                    }
+                },
+                Enums.inkanimInterpolationType.Elastic => new EasingDoubleKeyFrame(value, KeyTime.FromTimeSpan(TimeSpan.FromSeconds(keyframe)))
+                {
+                    EasingFunction = new ElasticEase()
                     {
-                        EasingFunction = new ElasticEase()
-                        {
-                            EasingMode = ToEasingMode(mode)
-                        }
-                    };
-                case Enums.inkanimInterpolationType.Circular:
-                    return new EasingDoubleKeyFrame(value, KeyTime.FromTimeSpan(TimeSpan.FromSeconds(keyframe)))
+                        EasingMode = ToEasingMode(mode)
+                    }
+                },
+                Enums.inkanimInterpolationType.Circular => new EasingDoubleKeyFrame(value, KeyTime.FromTimeSpan(TimeSpan.FromSeconds(keyframe)))
+                {
+                    EasingFunction = new CircleEase()
                     {
-                        EasingFunction = new CircleEase()
-                        {
-                            EasingMode = ToEasingMode(mode)
-                        }
-                    };
-                case Enums.inkanimInterpolationType.Back:
-                    return new EasingDoubleKeyFrame(value, KeyTime.FromTimeSpan(TimeSpan.FromSeconds(keyframe)))
+                        EasingMode = ToEasingMode(mode)
+                    }
+                },
+                Enums.inkanimInterpolationType.Back => new EasingDoubleKeyFrame(value, KeyTime.FromTimeSpan(TimeSpan.FromSeconds(keyframe)))
+                {
+                    EasingFunction = new BackEase()
                     {
-                        EasingFunction = new BackEase()
-                        {
-                            EasingMode = ToEasingMode(mode)
-                        }
-                    };
-                default:
-                    return null;
-            }
+                        EasingMode = ToEasingMode(mode)
+                    }
+                },
+                _ => null,
+            };
         }
         public static ThicknessKeyFrame ToThicknessKeyframe(Enums.inkanimInterpolationType? type, Enums.inkanimInterpolationMode? mode, inkMargin value, float keyframe)
         {
-            switch (type)
+            return type switch
             {
-                case Enums.inkanimInterpolationType.Linear:
-                    return new LinearThicknessKeyFrame(inkControl.ToThickness(value), KeyTime.FromTimeSpan(TimeSpan.FromSeconds(keyframe)));
-                case Enums.inkanimInterpolationType.Quadratic:
-                    return new EasingThicknessKeyFrame(inkControl.ToThickness(value), KeyTime.FromTimeSpan(TimeSpan.FromSeconds(keyframe)))
+                Enums.inkanimInterpolationType.Linear => new LinearThicknessKeyFrame(inkControl.ToThickness(value), KeyTime.FromTimeSpan(TimeSpan.FromSeconds(keyframe))),
+                Enums.inkanimInterpolationType.Quadratic => new EasingThicknessKeyFrame(inkControl.ToThickness(value), KeyTime.FromTimeSpan(TimeSpan.FromSeconds(keyframe)))
+                {
+                    EasingFunction = new QuadraticEase()
                     {
-                        EasingFunction = new QuadraticEase()
-                        {
-                            EasingMode = ToEasingMode(mode)
-                        }
-                    };
-                case Enums.inkanimInterpolationType.Qubic:
-                    return new EasingThicknessKeyFrame(inkControl.ToThickness(value), KeyTime.FromTimeSpan(TimeSpan.FromSeconds(keyframe)))
+                        EasingMode = ToEasingMode(mode)
+                    }
+                },
+                Enums.inkanimInterpolationType.Qubic => new EasingThicknessKeyFrame(inkControl.ToThickness(value), KeyTime.FromTimeSpan(TimeSpan.FromSeconds(keyframe)))
+                {
+                    EasingFunction = new CubicEase()
                     {
-                        EasingFunction = new CubicEase()
-                        {
-                            EasingMode = ToEasingMode(mode)
-                        }
-                    };
-                case Enums.inkanimInterpolationType.Quartic:
-                    return new EasingThicknessKeyFrame(inkControl.ToThickness(value), KeyTime.FromTimeSpan(TimeSpan.FromSeconds(keyframe)))
+                        EasingMode = ToEasingMode(mode)
+                    }
+                },
+                Enums.inkanimInterpolationType.Quartic => new EasingThicknessKeyFrame(inkControl.ToThickness(value), KeyTime.FromTimeSpan(TimeSpan.FromSeconds(keyframe)))
+                {
+                    EasingFunction = new QuarticEase()
                     {
-                        EasingFunction = new QuarticEase()
-                        {
-                            EasingMode = ToEasingMode(mode)
-                        }
-                    };
-                case Enums.inkanimInterpolationType.Quintic:
-                    return new EasingThicknessKeyFrame(inkControl.ToThickness(value), KeyTime.FromTimeSpan(TimeSpan.FromSeconds(keyframe)))
+                        EasingMode = ToEasingMode(mode)
+                    }
+                },
+                Enums.inkanimInterpolationType.Quintic => new EasingThicknessKeyFrame(inkControl.ToThickness(value), KeyTime.FromTimeSpan(TimeSpan.FromSeconds(keyframe)))
+                {
+                    EasingFunction = new QuinticEase()
                     {
-                        EasingFunction = new QuinticEase()
-                        {
-                            EasingMode = ToEasingMode(mode)
-                        }
-                    };
-                case Enums.inkanimInterpolationType.Sinusoidal:
-                    return new EasingThicknessKeyFrame(inkControl.ToThickness(value), KeyTime.FromTimeSpan(TimeSpan.FromSeconds(keyframe)))
+                        EasingMode = ToEasingMode(mode)
+                    }
+                },
+                Enums.inkanimInterpolationType.Sinusoidal => new EasingThicknessKeyFrame(inkControl.ToThickness(value), KeyTime.FromTimeSpan(TimeSpan.FromSeconds(keyframe)))
+                {
+                    EasingFunction = new SineEase()
                     {
-                        EasingFunction = new SineEase()
-                        {
-                            EasingMode = ToEasingMode(mode)
-                        }
-                    };
-                case Enums.inkanimInterpolationType.Exponential:
-                    return new EasingThicknessKeyFrame(inkControl.ToThickness(value), KeyTime.FromTimeSpan(TimeSpan.FromSeconds(keyframe)))
+                        EasingMode = ToEasingMode(mode)
+                    }
+                },
+                Enums.inkanimInterpolationType.Exponential => new EasingThicknessKeyFrame(inkControl.ToThickness(value), KeyTime.FromTimeSpan(TimeSpan.FromSeconds(keyframe)))
+                {
+                    EasingFunction = new ExponentialEase()
                     {
-                        EasingFunction = new ExponentialEase()
-                        {
-                            EasingMode = ToEasingMode(mode)
-                        }
-                    };
-                case Enums.inkanimInterpolationType.Elastic:
-                    return new EasingThicknessKeyFrame(inkControl.ToThickness(value), KeyTime.FromTimeSpan(TimeSpan.FromSeconds(keyframe)))
+                        EasingMode = ToEasingMode(mode)
+                    }
+                },
+                Enums.inkanimInterpolationType.Elastic => new EasingThicknessKeyFrame(inkControl.ToThickness(value), KeyTime.FromTimeSpan(TimeSpan.FromSeconds(keyframe)))
+                {
+                    EasingFunction = new ElasticEase()
                     {
-                        EasingFunction = new ElasticEase()
-                        {
-                            EasingMode = ToEasingMode(mode)
-                        }
-                    };
-                case Enums.inkanimInterpolationType.Circular:
-                    return new EasingThicknessKeyFrame(inkControl.ToThickness(value), KeyTime.FromTimeSpan(TimeSpan.FromSeconds(keyframe)))
+                        EasingMode = ToEasingMode(mode)
+                    }
+                },
+                Enums.inkanimInterpolationType.Circular => new EasingThicknessKeyFrame(inkControl.ToThickness(value), KeyTime.FromTimeSpan(TimeSpan.FromSeconds(keyframe)))
+                {
+                    EasingFunction = new CircleEase()
                     {
-                        EasingFunction = new CircleEase()
-                        {
-                            EasingMode = ToEasingMode(mode)
-                        }
-                    };
-                case Enums.inkanimInterpolationType.Back:
-                    return new EasingThicknessKeyFrame(inkControl.ToThickness(value), KeyTime.FromTimeSpan(TimeSpan.FromSeconds(keyframe)))
+                        EasingMode = ToEasingMode(mode)
+                    }
+                },
+                Enums.inkanimInterpolationType.Back => new EasingThicknessKeyFrame(inkControl.ToThickness(value), KeyTime.FromTimeSpan(TimeSpan.FromSeconds(keyframe)))
+                {
+                    EasingFunction = new BackEase()
                     {
-                        EasingFunction = new BackEase()
-                        {
-                            EasingMode = ToEasingMode(mode)
-                        }
-                    };
-                default:
-                    return null;
-            }
+                        EasingMode = ToEasingMode(mode)
+                    }
+                },
+                _ => null,
+            };
         }
 
         public static EasingMode ToEasingMode(Enums.inkanimInterpolationMode? mode)
         {
-            switch (mode)
+            return mode switch
             {
-                case Enums.inkanimInterpolationMode.EasyOut:
-                    return EasingMode.EaseOut;
-                case Enums.inkanimInterpolationMode.EasyInOut:
-                case Enums.inkanimInterpolationMode.EasyOutIn:
-                    return EasingMode.EaseInOut;
-                case Enums.inkanimInterpolationMode.EasyIn:
-                default:
-                    return EasingMode.EaseIn;
-            }
+                Enums.inkanimInterpolationMode.EasyOut => EasingMode.EaseOut,
+                Enums.inkanimInterpolationMode.EasyInOut or Enums.inkanimInterpolationMode.EasyOutIn => EasingMode.EaseInOut,
+                _ => EasingMode.EaseIn,
+            };
         }
     }
 }

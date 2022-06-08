@@ -11,16 +11,16 @@ using ReactiveUI;
 using Splat;
 using Syncfusion.UI.Xaml.Grid;
 using Syncfusion.UI.Xaml.TreeGrid;
+using WolvenKit.App.Commands.Base;
+using WolvenKit.App.Functionality.Other;
+using WolvenKit.App.Services;
+using WolvenKit.App.ViewModels.Tools;
 using WolvenKit.Common;
 using WolvenKit.Common.Interfaces;
 using WolvenKit.Common.Model;
 using WolvenKit.Common.Model.Arguments;
 using WolvenKit.Core.Interfaces;
-using WolvenKit.Functionality.Commands;
 using WolvenKit.Functionality.Helpers;
-using WolvenKit.Functionality.Other;
-using WolvenKit.Functionality.Services;
-using WolvenKit.ViewModels.Tools;
 
 namespace WolvenKit.Views.Tools
 {
