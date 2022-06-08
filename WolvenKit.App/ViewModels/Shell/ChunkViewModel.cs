@@ -1315,7 +1315,8 @@ namespace WolvenKit.ViewModels.Shell
                     "entryName",
                     "className",
                     "actorName",
-                    "sectorHash"
+                    "sectorHash",
+                    "propertyPath"
             };
             if (ResolvedData is RedBaseClass irc)
             {
