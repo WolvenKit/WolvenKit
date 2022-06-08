@@ -37,15 +37,7 @@ namespace WolvenKit.RED3.CR2W
                 len += 64 * br.ReadByte();
             }
 
-            string readstring;
-            if (widechar)
-            {
-                readstring = Encoding.Unicode.GetString(br.ReadBytes(len * 2));
-            }
-            else
-            {
-                readstring = Encoding.GetEncoding("ISO-8859-1").GetString(br.ReadBytes(len));
-            }
+            var readstring = widechar ? Encoding.Unicode.GetString(br.ReadBytes(len * 2)) : Encoding.GetEncoding("ISO-8859-1").GetString(br.ReadBytes(len));
 
             return readstring;
         }

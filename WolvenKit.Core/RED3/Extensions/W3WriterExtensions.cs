@@ -31,7 +31,7 @@ namespace WolvenKit.RED3.CR2W
             var requiresWideChar = value.Any(c => c > 255);
 
             var div = Math.DivRem(len, 0x40, out var mod);
-            len -= (div * 0x40);
+            len -= div * 0x40;
 
             // mask the value
             var b = (byte)(len & 0x3F); // 00xxxxxx

@@ -65,7 +65,7 @@ namespace WolvenKit.Core.CRC
 
             while (--length >= 0)
             {
-                crcLocal = table[(byte)(crcLocal ^ input[offset++])] ^ crcLocal >> 8;
+                crcLocal = table[(byte)(crcLocal ^ input[offset++])] ^ (crcLocal >> 8);
             }
 
             return crcLocal ^ uint.MaxValue;

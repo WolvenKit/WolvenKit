@@ -42,39 +42,28 @@ namespace WolvenKit.Core.Extensions
             var bytes = new List<int>();
             var left = c;
 
-            for (var i = 0; (left > 0); i++)
+            for (var i = 0; left > 0; i++)
             {
                 if (i == 0)
                 {
                     bytes.Add(left & 63);
-                    left = left >> 6;
+                    left >>= 6;
                 }
                 else
                 {
                     bytes.Add(left & 255);
-                    left = left >> 7;
+                    left >>= 7;
                 }
             }
 
             for (var i = 0; i < bytes.Count; i++)
             {
-                var last = (i == bytes.Count - 1);
-                var cleft = (bytes.Count - 1) - i;
+                var last = i == bytes.Count - 1;
+                var cleft = bytes.Count - 1 - i;
 
                 if (!last)
                 {
-                    if (cleft >= 1 && i >= 1)
-                    {
-                        bytes[i] = bytes[i] | 128;
-                    }
-                    else if (bytes[i] < 64)
-                    {
-                        bytes[i] = bytes[i] | 64;
-                    }
-                    else
-                    {
-                        bytes[i] = bytes[i] | 128;
-                    }
+                    bytes[i] = cleft >= 1 && i >= 1 ? bytes[i] | 128 : bytes[i] < 64 ? bytes[i] | 64 : bytes[i] | 128;
                 }
 
                 if (bytes[i] == 128)

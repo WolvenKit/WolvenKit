@@ -9,18 +9,12 @@ namespace WolvenKit.Interfaces.Extensions
 {
     public static class StringExtensions
     {
-        public static string FirstCharToLower(this string input)
+        public static string FirstCharToLower(this string input) => input switch
         {
-            switch (input)
-            {
-                case null:
-                    throw new ArgumentNullException(nameof(input));
-                case "":
-                    throw new ArgumentException($"{nameof(input)} cannot be empty", nameof(input));
-                default:
-                    return input.First().ToString().ToLower() + input.Substring(1);
-            }
-        }
+            null => throw new ArgumentNullException(nameof(input)),
+            "" => throw new ArgumentException($"{nameof(input)} cannot be empty", nameof(input)),
+            _ => input.First().ToString().ToLower() + input.Substring(1),
+        };
 
         public static string FirstCharToUpper(this string input) => input switch
         {
@@ -57,18 +51,7 @@ namespace WolvenKit.Interfaces.Extensions
             bool isDLC;
             var projectfolder = EProjectFolders.Cooked;
 
-            if (relativePath.StartsWith("DLC\\"))
-            {
-                isDLC = true;
-            }
-            else if (relativePath.StartsWith("Mod\\"))
-            {
-                isDLC = false;
-            }
-            else
-            {
-                throw new NotImplementedException();
-            }
+            isDLC = relativePath.StartsWith("DLC\\") || (relativePath.StartsWith("Mod\\") ? false : throw new NotImplementedException());
 
             relativePath = relativePath.Substring(4);
 

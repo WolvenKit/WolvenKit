@@ -10,14 +10,12 @@ namespace WolvenKit.Core.CRC
     /// </summary>
     public class Crc32Algorithm : HashAlgorithm
     {
-        private uint _currentCrc;
-
         private readonly bool _isBigEndian = true;
 
         /// <summary>
         /// Get the current hash value as a UInt32 value;
         /// </summary>
-        public uint HashUInt32 => _currentCrc;
+        public uint HashUInt32 { get; private set; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Crc32Algorithm"/> class.
@@ -52,20 +50,11 @@ namespace WolvenKit.Core.CRC
         /// <param name="offset">Offset of the input data within the buffer.</param>
         /// <param name="length">Length of the input data in the buffer.</param>
         /// <returns>Accumulated CRC-32 of all buffers processed so far.</returns>
-        public static uint Append(uint initial, byte[] input, int offset, int length)
-        {
-            if (input == null)
-            {
-                throw new ArgumentNullException("input");
-            }
-
-            if (offset < 0 || length < 0 || offset + length > input.Length)
-            {
-                throw new ArgumentOutOfRangeException("length");
-            }
-
-            return AppendInternal(initial, input, offset, length);
-        }
+        public static uint Append(uint initial, byte[] input, int offset, int length) => input == null
+                ? throw new ArgumentNullException("input")
+                : offset < 0 || length < 0 || offset + length > input.Length
+                ? throw new ArgumentOutOfRangeException("length")
+                : AppendInternal(initial, input, offset, length);
 
         /// <summary>
         /// Computes CRC-32 from multiple buffers.
@@ -77,15 +66,7 @@ namespace WolvenKit.Core.CRC
         /// </param>
         /// <param name="input">Input buffer containing data to be checksummed.</param>
         /// <returns>Accumulated CRC-32 of all buffers processed so far.</returns>
-        public static uint Append(uint initial, byte[] input)
-        {
-            if (input == null)
-            {
-                throw new ArgumentNullException();
-            }
-
-            return AppendInternal(initial, input, 0, input.Length);
-        }
+        public static uint Append(uint initial, byte[] input) => input == null ? throw new ArgumentNullException() : AppendInternal(initial, input, 0, input.Length);
 
         /// <summary>
         /// Computes CRC-32 from an ASCII string.
@@ -130,7 +111,7 @@ namespace WolvenKit.Core.CRC
         /// <summary>
         /// Resets internal state of the algorithm. Used internally.
         /// </summary>
-        public override void Initialize() => _currentCrc = 0;
+        public override void Initialize() => HashUInt32 = 0;
 
         /// <summary>
 		/// Appends CRC-32 from multiple buffers, using the currently stored hash value.
@@ -155,35 +136,17 @@ namespace WolvenKit.Core.CRC
         /// <summary>
         /// Appends CRC-32 from given buffer
         /// </summary>
-        protected override void HashCore(byte[] input, int offset, int length) => _currentCrc = AppendInternal(_currentCrc, input, offset, length);
+        protected override void HashCore(byte[] input, int offset, int length) => HashUInt32 = AppendInternal(HashUInt32, input, offset, length);
 
         /// <summary>
         /// Computes CRC-32 from <see cref="HashCore"/>
         /// </summary>
-        protected override byte[] HashFinal()
-        {
-            if (_isBigEndian)
-            {
-                return new[] { (byte)(_currentCrc >> 24), (byte)(_currentCrc >> 16), (byte)(_currentCrc >> 8), (byte)_currentCrc };
-            }
-            else
-            {
-                return new[] { (byte)_currentCrc, (byte)(_currentCrc >> 8), (byte)(_currentCrc >> 16), (byte)(_currentCrc >> 24) };
-            }
-        }
+        protected override byte[] HashFinal() => _isBigEndian
+                ? (new[] { (byte)(HashUInt32 >> 24), (byte)(HashUInt32 >> 16), (byte)(HashUInt32 >> 8), (byte)HashUInt32 })
+                : (new[] { (byte)HashUInt32, (byte)(HashUInt32 >> 8), (byte)(HashUInt32 >> 16), (byte)(HashUInt32 >> 24) });
 
-        private static readonly SafeProxy _proxy = new SafeProxy();
+        private static readonly SafeProxy _proxy = new();
 
-        private static uint AppendInternal(uint initial, byte[] input, int offset, int length)
-        {
-            if (length > 0)
-            {
-                return _proxy.Append(initial, input, offset, length);
-            }
-            else
-            {
-                return initial;
-            }
-        }
+        private static uint AppendInternal(uint initial, byte[] input, int offset, int length) => length > 0 ? _proxy.Append(initial, input, offset, length) : initial;
     }
 }

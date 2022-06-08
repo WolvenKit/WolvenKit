@@ -47,17 +47,7 @@ namespace WolvenKit.Common.FNV1A
         /// <summary>
         /// Current hash value as a 32 bit unsigned integer.
         /// </summary>
-        public uint HashUInt32
-        {
-            get
-            {
-                if (fnvhash == FnvHashInitial)
-                {
-                    return 0;
-                }
-                return fnvhash;
-            }
-        }
+        public uint HashUInt32 => fnvhash == FnvHashInitial ? 0 : fnvhash;
 
         #endregion Properties
 

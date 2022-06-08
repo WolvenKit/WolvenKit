@@ -35,14 +35,7 @@ namespace WolvenKit.Core.Murmur3
             var val = seed;
             for (var i = source.Length >> 2; i > 0; i--)
             {
-                if (BitConverter.IsLittleEndian)
-                {
-                    k = BinaryPrimitives.ReadUInt32LittleEndian(source);
-                }
-                else
-                {
-                    k = BinaryPrimitives.ReadUInt32BigEndian(source);
-                }
+                k = BitConverter.IsLittleEndian ? BinaryPrimitives.ReadUInt32LittleEndian(source) : BinaryPrimitives.ReadUInt32BigEndian(source);
 
                 source = source.Slice(sizeof(uint));
 
@@ -87,10 +80,7 @@ namespace WolvenKit.Core.Murmur3
             return HashBytes(new ReadOnlySpan<byte>(encoding.GetBytes(source)), seed);
         }
 
-        public static byte[] HashBytes(ReadOnlySpan<byte> source, uint seed)
-        {
-            return BitConverter.GetBytes(Hash(source, seed));
-        }
+        public static byte[] HashBytes(ReadOnlySpan<byte> source, uint seed) => BitConverter.GetBytes(Hash(source, seed));
 
         private static uint Rotl(uint x, byte r) => (uint)((int)x << r) | (x >> (32 - r));
     }

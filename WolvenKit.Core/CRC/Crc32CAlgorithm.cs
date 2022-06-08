@@ -45,20 +45,11 @@ namespace WolvenKit.Core.CRC
         /// <param name="offset">Offset of the input data within the buffer.</param>
         /// <param name="length">Length of the input data in the buffer.</param>
         /// <returns>Accumulated CRC-32C of all buffers processed so far.</returns>
-        public static uint Append(uint initial, byte[] input, int offset, int length)
-        {
-            if (input == null)
-            {
-                throw new ArgumentNullException("input");
-            }
-
-            if (offset < 0 || length < 0 || offset + length > input.Length)
-            {
-                throw new ArgumentOutOfRangeException("length");
-            }
-
-            return AppendInternal(initial, input, offset, length);
-        }
+        public static uint Append(uint initial, byte[] input, int offset, int length) => input == null
+                ? throw new ArgumentNullException("input")
+                : offset < 0 || length < 0 || offset + length > input.Length
+                ? throw new ArgumentOutOfRangeException("length")
+                : AppendInternal(initial, input, offset, length);
 
         /// <summary>
         /// Computes CRC-32C from multiple buffers.
@@ -70,15 +61,7 @@ namespace WolvenKit.Core.CRC
         /// </param>
         /// <param name="input">Input buffer containing data to be checksummed.</param>
         /// <returns>Accumulated CRC-32C of all buffers processed so far.</returns>
-        public static uint Append(uint initial, byte[] input)
-        {
-            if (input == null)
-            {
-                throw new ArgumentNullException("input");
-            }
-
-            return AppendInternal(initial, input, 0, input.Length);
-        }
+        public static uint Append(uint initial, byte[] input) => input == null ? throw new ArgumentNullException("input") : AppendInternal(initial, input, 0, input.Length);
 
         /// <summary>
         /// Computes CRC-32C from input buffer.
@@ -124,15 +107,9 @@ namespace WolvenKit.Core.CRC
         /// </summary>
         /// <param name="input">Input buffer with data to be checksummed.</param>
         /// <returns>CRC-32C of the data in the buffer.</returns>
-        public static uint ComputeAndWriteToEnd(byte[] input)
-        {
-            if (input.Length < 4)
-            {
-                throw new ArgumentOutOfRangeException("input", "Input array should be 4 bytes at least");
-            }
-
-            return ComputeAndWriteToEnd(input, 0, input.Length - 4);
-        }
+        public static uint ComputeAndWriteToEnd(byte[] input) => input.Length < 4
+                ? throw new ArgumentOutOfRangeException("input", "Input array should be 4 bytes at least")
+                : ComputeAndWriteToEnd(input, 0, input.Length - 4);
 
         /// <summary>
         /// Validates correctness of CRC-32C data in source buffer with assumption that CRC-32C data located at end of buffer in reverse bytes order. Can be used in conjunction with <see cref="ComputeAndWriteToEnd(byte[],int,int)"/>
@@ -148,15 +125,9 @@ namespace WolvenKit.Core.CRC
         /// </summary>
         /// <param name="input">Input buffer with data to be checksummed.</param>
         /// <returns>Is checksum valid.</returns>
-        public static bool IsValidWithCrcAtEnd(byte[] input)
-        {
-            if (input.Length < 4)
-            {
-                throw new ArgumentOutOfRangeException("input", "Input array should be 4 bytes at least");
-            }
-
-            return Append(0, input, 0, input.Length) == 0x48674BC7;
-        }
+        public static bool IsValidWithCrcAtEnd(byte[] input) => input.Length < 4
+                ? throw new ArgumentOutOfRangeException("input", "Input array should be 4 bytes at least")
+                : Append(0, input, 0, input.Length) == 0x48674BC7;
 
         /// <summary>
         /// Resets internal state of the algorithm. Used internally.
@@ -171,30 +142,12 @@ namespace WolvenKit.Core.CRC
         /// <summary>
         /// Computes CRC-32C from <see cref="HashCore"/>
         /// </summary>
-        protected override byte[] HashFinal()
-        {
-            if (_isBigEndian)
-            {
-                return new[] { (byte)(_currentCrc >> 24), (byte)(_currentCrc >> 16), (byte)(_currentCrc >> 8), (byte)_currentCrc };
-            }
-            else
-            {
-                return new[] { (byte)_currentCrc, (byte)(_currentCrc >> 8), (byte)(_currentCrc >> 16), (byte)(_currentCrc >> 24) };
-            }
-        }
+        protected override byte[] HashFinal() => _isBigEndian
+                ? (new[] { (byte)(_currentCrc >> 24), (byte)(_currentCrc >> 16), (byte)(_currentCrc >> 8), (byte)_currentCrc })
+                : (new[] { (byte)_currentCrc, (byte)(_currentCrc >> 8), (byte)(_currentCrc >> 16), (byte)(_currentCrc >> 24) });
 
-        private static readonly SafeProxyC _proxy = new SafeProxyC();
+        private static readonly SafeProxyC _proxy = new();
 
-        private static uint AppendInternal(uint initial, byte[] input, int offset, int length)
-        {
-            if (length > 0)
-            {
-                return _proxy.Append(initial, input, offset, length);
-            }
-            else
-            {
-                return initial;
-            }
-        }
+        private static uint AppendInternal(uint initial, byte[] input, int offset, int length) => length > 0 ? _proxy.Append(initial, input, offset, length) : initial;
     }
 }

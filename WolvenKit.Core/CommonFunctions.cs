@@ -33,12 +33,7 @@ namespace WolvenKit.Core
             }
 
             var infoAttr = assembly.GetCustomAttribute<AssemblyInformationalVersionAttribute>();
-            if (infoAttr != null)
-            {
-                return SemVersion.Parse(infoAttr.InformationalVersion);
-            }
-
-            return SemVersion.Parse("1.0.0");
+            return infoAttr != null ? SemVersion.Parse(infoAttr.InformationalVersion) : SemVersion.Parse("1.0.0");
         }
 
         public static SemVersion GetAssemblyVersion(string assemblyName)
@@ -93,13 +88,11 @@ namespace WolvenKit.Core
 
         public static (string, long) HashFileSHA512(string filepath)
         {
-            using (var shaM = SHA512.Create())
-            {
-                using var fileStream = File.OpenRead(filepath);
-                var hash1 = shaM.ComputeHash(fileStream);
-                var hashStr = BitConverter.ToString(hash1).Replace("-", "").ToLowerInvariant();
-                return (hashStr, fileStream.Length);
-            }
+            using var shaM = SHA512.Create();
+            using var fileStream = File.OpenRead(filepath);
+            var hash1 = shaM.ComputeHash(fileStream);
+            var hashStr = BitConverter.ToString(hash1).Replace("-", "").ToLowerInvariant();
+            return (hashStr, fileStream.Length);
         }
 
         // Display a byte array in a readable format.
