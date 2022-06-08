@@ -10,15 +10,13 @@
 </p>
 
 <p align="center">
-  This repository was created to demonstrate how <a href="https://en.wikipedia.org/wiki/CD_Projekt">CDPR</a>'s proprietary <a href="https://en.wikipedia.org/wiki/CD_Projekt#REDengine"><strong>REDEngine</strong></a> reads and writes file formats.
-And to experiment with the working of games running on this engine i.e. <em>The Witcher 3: The Wild Hunt</em> and <em>Cyberpunk 2077</em>. 
+  WolvenKit is an open-source modding tool for <em>The Witcher 3: Wild Hunt</em> and <em>Cyberpunk 2077</em>. Our vision is to develop a standalone software which is capable of reading and writing all REDengine file formats. Additionally the WolvenKit application is designed to simplify and accelerate modding workflows. Our current development focus is REDengine 4 with Cyberpunk 2077.<br /><br />
+This repository was created to demonstrate how <a href="https://en.wikipedia.org/wiki/CD_Projekt">CDPR</a>'s proprietary <a href="https://en.wikipedia.org/wiki/CD_Projekt#REDengine"><strong>REDengine</strong></a> reads and writes file formats.
+And to experiment with the working of games running on this engine. 
 This toolkit is being made solely for research and educational purposes, and the dev team is in no way responsible for any malfunctions that occur from its use.
 Its completely open source, licensed under the <a href="https://github.com/WolvenKit/WolvenKit/blob/main/LICENSE">GPL v3.0</a>, and in no way is it made to generate revenue.
 An ancestor to this tool was <a href="https://drive.google.com/file/d/0B3axqSlhNHOOYmpkWk83TXRkZmM/view">W3Edit</a>, initially developed by <a href="https://forums.cdprojektred.com/forum/en/the-witcher-series/the-witcher-3-wild-hunt/mod-discussions/58758-mod-editor">Sarcen</a> in 2015, around the time The Witcher 3 first came out.
-After Sarcen stopped working on it, a few of us picked it up and continued from there.<br /><br />
-Currently, WolvenKit allows reading and writing nearly every REDEngine file format to some extent. 
-It can also be used to create file modifications to the assets of the game, though this is currently beign actively worked upon, so do make sure to check it regularly.
-Our primary focus at the moment is progressing with support for the new game, Cyberpunk 2077.
+After Sarcen stopped working on it, a few of us picked it up and continued from there.
 </p>
   
 ---
@@ -91,9 +89,10 @@ Rfuzzo | Project Lead / Core Development | [Email](mailto:r.fuzzo@gmail.com)
 
 ## Screenshots
 
-![screenshot](https://media.discordapp.net/attachments/803648048018096170/809406032336912394/unknown.png?width=837&height=640)
+![WK 8 6 Home Page Example](https://user-images.githubusercontent.com/65016231/172458777-d521aeaa-b2fb-43ef-a909-3786c1b8bf02.png)
 
-![screenshot](https://cdn.discordapp.com/attachments/788051447081598976/811578293676539904/unknown.png)
+
+![WK 8 6 Editor Example](https://user-images.githubusercontent.com/65016231/172455912-e1d4fe29-9ab6-45a1-9e0c-17f2bb47c447.png)
 
 
 ## Credits

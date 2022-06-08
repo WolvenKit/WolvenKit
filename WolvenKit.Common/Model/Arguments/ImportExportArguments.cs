@@ -180,7 +180,7 @@ namespace WolvenKit.Common.Model.Arguments
     {
         [Category("Default Import Settings")]
         [Display(Name = "Use existing file")]
-        [Description("If checked the corresponding archive file will be used for importing.")]
+        [Description("If selected the corresponding archive file will be used for importing.")]
         public bool Keep { get; set; } = true;
     }
 
@@ -254,7 +254,7 @@ namespace WolvenKit.Common.Model.Arguments
     {
         [Category("Import Settings")]
         [Display(Name = "Import Material.Json Only")]
-        [Description("If checked only materials will be updated, mesh geometry will remain unchanged.")]
+        [Description("If selected only materials will be updated from a Material.json file. Mesh geometry will remain unchanged.")]
         public bool importMaterialOnly { get; set; } = false;
 
         /// <summary>
@@ -263,21 +263,21 @@ namespace WolvenKit.Common.Model.Arguments
         [Category("Import Settings")]
         [Display(Name = "GLTF Validation Checks")]
         [Description("Optional validation check for glb/glTF files")]
-        public ValidationMode validationMode { get; set; } = ValidationMode.Strict;
+        public ValidationMode validationMode { get; set; } = ValidationMode.Skip;
         /// <summary>
         /// RedEngine4 Cooked File type for the selected GLB/GLTF.
         /// </summary>
         [Category("Import Settings")]
-        [Display(Name = "Import As RedEngine File Format")]
+        [Display(Name = "Target File Format")]
         [Description("The REDengine file format to import as for glb/glTF files")]
         public GltfImportAsFormat importFormat { get; set; } = GltfImportAsFormat.Mesh;
         /// <summary>
         /// Fills empty sub meshes with dummy data
         /// </summary>
         [Category("Import Settings")]
-        [Display(Name = "Fill empty sub meshes")]
-        [Description("Fills empty sub meshes with dummy data")]
-        public bool FillEmpty { get; set; } = false;
+        [Display(Name = "Preserve Submesh Order")]
+        [Description("If selected empty submesh slots will be filled with placeholder data. This preserves the original submesh-material index. (Recommended)")]
+        public bool FillEmpty { get; set; } = true;
         /// <summary>
         /// List of Archives for Morphtarget Import.
         /// </summary>
@@ -319,7 +319,7 @@ namespace WolvenKit.Common.Model.Arguments
     {
         [Category("Export Settings")]
         [Display(Name = "Use Modified OpusInfo")]
-        [Description("If checked modified OpusInfo and paks within the Mod Project are used. If unchecked the original OpusInfo and paks will be exported.")]
+        [Description("If selected modified OpusInfo and paks within the Mod Project are used. If unchecked the original OpusInfo and paks will be exported.")]
         public bool UseMod { get; set; }
 
         [Category("Export Settings")]
@@ -351,7 +351,7 @@ namespace WolvenKit.Common.Model.Arguments
         /// </summary>
         [Category("Export Settings")]
         [Display(Name = "Is Binary")]
-        [Description("If checked the mesh will be exported as GLB, if unchecked as GLTF")]
+        [Description("If selected the mesh will be exported as GLB, if unchecked as GLTF")]
         public bool IsBinary { get; set; } = true;
 
         /// <summary>
@@ -474,15 +474,15 @@ namespace WolvenKit.Common.Model.Arguments
         /// </summary>
         [Category("Default Export Settings")]
         [Display(Name = "LOD Filter")]
-        [Description("When used LOD meshes will not be included. Not recommended for most cases due to complications with clipping decals.")]
-        public bool LodFilter { get; set; } = true;
+        [Description("If selected LOD meshes will not be included. Not recommended for most cases due to complications with clipping decals.")]
+        public bool LodFilter { get; set; } = false;
 
         /// <summary>
         /// Binary Export Bool, Decides between GLB and GLTF
         /// </summary>
         [Category("Default Export Settings")]
         [Display(Name = "Is Binary")]
-        [Description("When used mesh exports will be in binary form as GLB rather than glTF format. (Recommended)")]
+        [Description("If selected mesh exports will be in binary form as GLB rather than glTF format. (Recommended)")]
         public bool isGLBinary { get; set; } = true;
 
         /// <summary>
@@ -572,7 +572,7 @@ namespace WolvenKit.Common.Model.Arguments
         /// </summary>
         [Category("Export Settings")]
         [Display(Name = "Is Binary")]
-        [Description("If checked the anims will be exported as GLB, if unchecked as GLTF")]
+        [Description("If selected the anims will be exported as GLB, if unchecked as GLTF")]
         public bool IsBinary { get; set; } = true;
 
         /// <summary>
@@ -580,7 +580,7 @@ namespace WolvenKit.Common.Model.Arguments
         /// </summary>
         [Category("Export Settings")]
         [Display(Name = "Include Root Motion")]
-        [Description("If checked the anims will have the root translations")]
+        [Description("If selected the anims will have the root translations")]
         public bool incRootMotion { get; set; } = false;
 
         /// <summary>
@@ -627,7 +627,7 @@ namespace WolvenKit.Common.Model.Arguments
     {
         [Category("Convert Settings")]
         [Display(Name = "Output format")]
-        [Description("Use this to select to what format you want to export your file.")]
+        [Description("Select file output format")]
         public EConvertableOutput EConvertableOutput { get; set; }
         public override string ToString() => EConvertableOutput.ToString();
 
