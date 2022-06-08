@@ -1,5 +1,3 @@
-//https://github.com/SyncfusionExamples/working-with-wpf-docking-manager-and-mvvm
-
 using System;
 using System.Collections;
 using System.Collections.ObjectModel;
@@ -27,6 +25,8 @@ using DockState = WolvenKit.Models.Docking.DockState;
 
 namespace WolvenKit.Views.Shell
 {
+    //https://github.com/SyncfusionExamples/working-with-wpf-docking-manager-and-mvvm
+
     /// <summary>
     /// Interaction logic for DockingAdapter.xaml
     /// </summary>

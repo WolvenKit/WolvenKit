@@ -15,7 +15,7 @@ using WolvenKit.Common.Services;
 //using SkiaSharp.Views.WPF;
 
 
-namespace WolvenKit.Functionality.Ab4d
+namespace WolvenKit.Functionality.Other
 {
     public static class ImageDecoder
     {
