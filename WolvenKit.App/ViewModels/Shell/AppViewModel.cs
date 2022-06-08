@@ -58,6 +58,8 @@ namespace WolvenKit.ViewModels.Shell
         private readonly IRecentlyUsedItemsService _recentlyUsedItemsService;
         private readonly IProgressService<double> _progressService;
         private readonly IWatcherService _watcherService;
+        private readonly IPluginService _pluginService;
+        private readonly TweakDBService _tweakDBService;
         private readonly AutoInstallerService _autoInstallerService;
         private readonly HomePageViewModel _homePageViewModel;
 
@@ -77,6 +79,8 @@ namespace WolvenKit.ViewModels.Shell
             IRecentlyUsedItemsService recentlyUsedItemsService,
             IProgressService<double> progressService,
             IWatcherService watcherService,
+            IPluginService pluginService,
+            TweakDBService tweakDBService,
             AutoInstallerService autoInstallerService
         )
         {
@@ -89,6 +93,8 @@ namespace WolvenKit.ViewModels.Shell
             _progressService = progressService;
             _watcherService = watcherService;
             _autoInstallerService = autoInstallerService;
+            _pluginService = pluginService;
+            _tweakDBService = tweakDBService;
 
             _homePageViewModel = Locator.Current.GetService<HomePageViewModel>();
 
@@ -169,12 +175,13 @@ namespace WolvenKit.ViewModels.Shell
 
             // TweakDB when we're good and ready
             _settingsManager
-                .WhenAnyValue(x => x.CP77GameDirPath)
-                .SkipWhile(x => string.IsNullOrWhiteSpace(x)) // -.-
+                .WhenAnyValue(x => x.CP77ExecutablePath)
+                .SkipWhile(x => string.IsNullOrWhiteSpace(x) || !File.Exists(x)) // -.-
                 .Take(1)
                 .Subscribe(x =>
                 {
-                    LoadTweakDB(_settingsManager.GetRED4GameRootDir());
+                    _pluginService.Init();
+                    _tweakDBService.LoadDB(Path.Combine(_settingsManager.GetRED4GameRootDir(), "r6", "cache", "tweakdb.bin"));
                 });
 
             _settingsManager
@@ -263,13 +270,12 @@ namespace WolvenKit.ViewModels.Shell
             if (!_settingsManager.IsHealthy())
             {
                 var setupWasOk = await Interactions.ShowFirstTimeSetup.Handle(Unit.Default);
+                if (setupWasOk)
+                {
+                    _pluginService.Init();
+                    _tweakDBService.LoadDB(Path.Combine(_settingsManager.GetRED4GameRootDir(), "r6", "cache", "tweakdb.bin"));
+                }
             }
-        }
-
-        private void LoadTweakDB(string gameDir)
-        {
-            var tweakdbService = Locator.Current.GetService<TweakDBService>();
-            tweakdbService.LoadDB(Path.Combine(gameDir, "r6", "cache", "tweakdb.bin"));
         }
 
         #endregion init
@@ -420,10 +426,7 @@ namespace WolvenKit.ViewModels.Shell
 
                 await _projectManager.LoadAsync(projectLocation);
 
-                DispatcherHelper.RunOnMainThread(() =>
-                {
-                    ActiveProject = _projectManager.ActiveProject;
-                });
+                DispatcherHelper.RunOnMainThread(() => ActiveProject = _projectManager.ActiveProject);
 
                 await _gameControllerFactory.GetController().HandleStartup().ContinueWith(_ =>
                 {
@@ -609,11 +612,9 @@ namespace WolvenKit.ViewModels.Shell
                 case EWolvenKitFile.Tweak:
                     if (!string.IsNullOrEmpty(file.SelectedFile.Template))
                     {
-                        await using (var resource = Assembly.GetExecutingAssembly().GetManifestResourceStream($"WolvenKit.App.Resources.{file.SelectedFile.Template}"))
-                        {
-                            stream = new FileStream(file.FullPath, FileMode.Create, FileAccess.Write);
-                            resource.CopyTo(stream);
-                        }
+                        await using var resource = Assembly.GetExecutingAssembly().GetManifestResourceStream($"WolvenKit.App.Resources.{file.SelectedFile.Template}");
+                        stream = new FileStream(file.FullPath, FileMode.Create, FileAccess.Write);
+                        resource.CopyTo(stream);
                     }
                     else
                     {
@@ -629,10 +630,8 @@ namespace WolvenKit.ViewModels.Shell
                             RootChunk = RedTypeManager.Create(redType)
                         };
                         stream = new FileStream(file.FullPath, FileMode.Create, FileAccess.Write);
-                        using (var writer = new CR2WWriter(stream))
-                        {
-                            writer.WriteFile(cr2w);
-                        }
+                        using var writer = new CR2WWriter(stream);
+                        writer.WriteFile(cr2w);
                     }
                     break;
             }
@@ -823,13 +822,7 @@ namespace WolvenKit.ViewModels.Shell
         private async Task ExecutePackMod() => await _gameControllerFactory.GetController().PackProject();
 
         public ReactiveCommand<Unit, Unit> PackInstallModCommand { get; private set; }
-        private async Task ExecutePackInstallMod()
-        {
-            await Task.Run(async () =>
-            {
-                await _gameControllerFactory.GetController().PackAndInstallProject();
-            });
-        }
+        private async Task ExecutePackInstallMod() => await Task.Run(async () => await _gameControllerFactory.GetController().PackAndInstallProject());
 
         //public ICommand PublishModCommand { get; private set; }
         //private bool CanPublishMod() => _projectManager.ActiveProject != null;
@@ -1136,14 +1129,9 @@ namespace WolvenKit.ViewModels.Shell
                     fileViewModel = new ScriptDocumentViewModel(fullPath);
                     break;
                 case EWolvenKitFile.Tweak:
-                    if (Path.GetExtension(fullPath).ToUpper() == ".YAML")
-                    {
-                        fileViewModel = new TweakXLDocumentViewModel(fullPath);
-                    }
-                    else
-                    {
-                        fileViewModel = new TweakDocumentViewModel(fullPath);
-                    }
+                    fileViewModel = Path.GetExtension(fullPath).ToUpper() == ".YAML"
+                        ? new TweakXLDocumentViewModel(fullPath)
+                        : new TweakDocumentViewModel(fullPath);
                     break;
                 default:
                     break;
@@ -1205,14 +1193,7 @@ namespace WolvenKit.ViewModels.Shell
                 }
                 else
                 {
-                    if (fileToSave.FilePath != null)
-                    {
-                        dlg.FileName = Path.GetFileName(fileToSave.FilePath);
-                    }
-                    else
-                    {
-                        dlg.FileName = Path.GetFileName(fileToSave.ContentId);
-                    }
+                    dlg.FileName = fileToSave.FilePath != null ? Path.GetFileName(fileToSave.FilePath) : Path.GetFileName(fileToSave.ContentId);
                     dlg.InitialDirectory = Path.GetDirectoryName(fileToSave.FilePath);
                 }
                 _watcherService.IsSuspended = true;
@@ -1283,14 +1264,7 @@ namespace WolvenKit.ViewModels.Shell
                 // double file formats
                 case ".csv":
                 case ".json":
-                    if (IsInRawFolder(fullpath))
-                    {
-                        return Task.Run(() => ShellExecute());
-                    }
-                    else
-                    {
-                        return Task.Run(() => OpenRedengineFile());
-                    }
+                    return IsInRawFolder(fullpath) ? Task.Run(() => ShellExecute()) : Task.Run(() => OpenRedengineFile());
 
                 // VIDEO
                 case ".bk2":
