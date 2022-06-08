@@ -17,7 +17,7 @@ public sealed class DataTypes
 public class JsonHeader
 {
     public SemVersion WolvenKitVersion { get; } = CommonFunctions.GetAssemblyVersion(Assembly.GetEntryAssembly());
-    public SemVersion WKitJsonVersion { get; } = "0.0.1";
+    public SemVersion WKitJsonVersion { get; } = SemVersion.Parse("0.0.1", SemVersionStyles.Strict);
     public int GameVersion { get; } = (int)Enums.gameGameVersion.Current;
     public string ExportedDateTime { get; } = DateTime.UtcNow.ToString("o");
     public string DataType { get; set; } = DataTypes.Custom;
