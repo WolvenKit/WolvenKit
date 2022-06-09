@@ -13,7 +13,7 @@
       <RepositoryType>git</RepositoryType>
       <PackageTags>wolvenkit, witcher3, cyberpunk2077</PackageTags>
       <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
-      <Version>1.3</Version>
+      <Version>1.4</Version>
       <PackageOutputPath>./nupkg</PackageOutputPath>
       <DebugType>embedded</DebugType>
       <Platforms>x64</Platforms>

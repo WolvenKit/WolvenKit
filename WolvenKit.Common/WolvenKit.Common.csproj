@@ -12,7 +12,7 @@
     <PackageTags>wolvenkit</PackageTags>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
       <TargetFramework>net6.0</TargetFramework>
-      <AssemblyVersion>2.4</AssemblyVersion>
+      <AssemblyVersion>2.5</AssemblyVersion>
       <PackageOutputPath>./nupkg</PackageOutputPath>
       <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
       <DebugType>embedded</DebugType>
