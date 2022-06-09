@@ -304,7 +304,7 @@ namespace WolvenKit.ViewModels.Documents
         {
             var app = Locator.Current.GetService<AppViewModel>();
             app.CloseDialogCommand.Execute(null);
-            if (sender != null)
+            if (sender is not null)
             {
                 var dvm = sender as CreateClassDialogViewModel;
                 var instance = RedTypeManager.Create(dvm.SelectedClass);
