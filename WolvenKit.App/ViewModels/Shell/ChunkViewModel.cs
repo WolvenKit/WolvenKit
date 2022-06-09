@@ -19,6 +19,7 @@ using WolvenKit.Common.Conversion;
 using WolvenKit.Common.Services;
 using WolvenKit.Functionality.Commands;
 using WolvenKit.Functionality.Controllers;
+using WolvenKit.Functionality.Interfaces;
 using WolvenKit.Models;
 using WolvenKit.RED4;
 using WolvenKit.RED4.Archive.Buffer;
@@ -294,7 +295,7 @@ namespace WolvenKit.ViewModels.Shell
         #region Properties
 
         private readonly RedDocumentTabViewModel _tab;
-        public RedDocumentTabViewModel Tab => _tab != null ? _tab : Parent.Tab;
+        public RedDocumentTabViewModel Tab => _tab ?? Parent.Tab;
 
         [Reactive] public IRedType Data { get; set; }
 

@@ -31,11 +31,11 @@ namespace WolvenKit.ViewModels.Documents
         public string SlotName { get; set; }
     }
 
-    public interface INode
+    public interface IMeshNode
     {
         public string Name { get; set; }
         public SeparateMatrix Matrix { get; set; }
-        public INode Parent { get; set; }
+        public IMeshNode Parent { get; set; }
         public List<LoadableModel> Models { get; set; }
 
         public void AddModel(LoadableModel child);
@@ -65,13 +65,13 @@ namespace WolvenKit.ViewModels.Documents
         public string Name { get; set; }
         public List<LoadableModel> Models { get; set; } = new();
         public CName Resource { get; set; }
-        public List<INode> Nodes { get; set; } = new();
+        public List<IMeshNode> Nodes { get; set; } = new();
         public SmartElement3DCollection ModelGroup { get; set; } = new();
         public List<LoadableModel> BindableModels { get; set; } = new();
         public Dictionary<string, Material> RawMaterials { get; set; } = new();
     }
 
-    public class LoadableModel : IBindable, INode
+    public class LoadableModel : IBindable, IMeshNode
     {
         public int AppearanceIndex { get; set; }
         public string AppearanceName { get; set; }
@@ -95,7 +95,7 @@ namespace WolvenKit.ViewModels.Documents
         public ObservableCollection<int> AllChunks { get; set; } = new();
         public ObservableCollection<int> EnabledChunks { get; set; } = new();
 
-        public INode Parent { get; set; }
+        public IMeshNode Parent { get; set; }
         public List<LoadableModel> Models { get; set; } = new();
         public void AddModel(LoadableModel child)
         {
@@ -104,7 +104,7 @@ namespace WolvenKit.ViewModels.Documents
         }
     }
 
-    public class Rig : IBindable, INode
+    public class Rig : IBindable, IMeshNode
     {
         public string Name { get; set; }
         public List<RigBone> Bones { get; set; } = new();
@@ -120,7 +120,7 @@ namespace WolvenKit.ViewModels.Documents
             Children.Add(child);
         }
 
-        public INode Parent { get; set; }
+        public IMeshNode Parent { get; set; }
         public List<LoadableModel> Models { get; set; } = new();
         public void AddModel(LoadableModel child)
         {
@@ -129,7 +129,7 @@ namespace WolvenKit.ViewModels.Documents
         }
     }
 
-    public class RigBone : INode
+    public class RigBone : IMeshNode
     {
         public string Name { get; set; }
         public List<RigBone> Children { get; set; } = new();
@@ -141,7 +141,7 @@ namespace WolvenKit.ViewModels.Documents
             Children.Add(child);
         }
 
-        public INode Parent { get; set; }
+        public IMeshNode Parent { get; set; }
         public List<LoadableModel> Models { get; set; } = new();
         public void AddModel(LoadableModel child)
         {
@@ -178,7 +178,6 @@ namespace WolvenKit.ViewModels.Documents
         public ViewModelActivator Activator { get; } = new();
 
         protected readonly RedBaseClass _data;
-        public RedDocumentViewModel File;
         private readonly Dictionary<string, LoadableModel> _modelList = new();
         private readonly Dictionary<string, SlotSet> _slotSets = new();
 
