@@ -675,10 +675,10 @@ namespace WolvenKit.ViewModels.Documents
                         })
                         {
                             Matrix03 = 1f,
-                            Matrix40 = 0
+                            Matrix40 = 0,
+                            Matrix41 = roughOut != null ? (float)((roughOut[0] + roughOut[1]) / 2f) : 0.5f,
+                            Matrix42 = metalOut != null ? (float)((metalOut[0] + metalOut[1]) / 2f) : 0.0f
                         };
-                        colorMatrix.Matrix41 = roughOut != null ? (float)((roughOut[0] + roughOut[1]) / 2f) : 0.5f;
-                        colorMatrix.Matrix42 = metalOut != null ? (float)((metalOut[0] + metalOut[1]) / 2f) : 0.0f;
 
                         var attributes = new ImageAttributes();
 

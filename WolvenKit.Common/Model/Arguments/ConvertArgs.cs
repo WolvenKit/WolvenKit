@@ -15,7 +15,7 @@ namespace WolvenKit.Common.Model.Arguments
     {
         [Category("Convert Settings")]
         [Display(Name = "Output format")]
-        [Description("Use this to select to what format you want to export your file.")]
+        [Description("Select file output format")]
         public EConvertableOutput EConvertableOutput { get; set; }
         public override string ToString() => EConvertableOutput.ToString();
 

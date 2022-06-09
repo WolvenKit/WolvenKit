@@ -23,7 +23,7 @@ namespace WolvenKit.Common.Model.Arguments
     {
         [Category("Export Settings")]
         [Display(Name = "Use Modified OpusInfo")]
-        [Description("If checked modified OpusInfo and paks within the Mod Project are used. If unchecked the original OpusInfo and paks will be exported.")]
+        [Description("If selected modified OpusInfo and paks within the Mod Project are used. If unchecked the original OpusInfo and paks will be exported.")]
         public bool UseMod { get; set; }
 
         [Category("Export Settings")]
@@ -55,7 +55,7 @@ namespace WolvenKit.Common.Model.Arguments
         /// </summary>
         [Category("Export Settings")]
         [Display(Name = "Is Binary")]
-        [Description("If checked the mesh will be exported as GLB, if unchecked as GLTF")]
+        [Description("If selected the mesh will be exported as GLB, if unchecked as GLTF")]
         public bool IsBinary { get; set; } = true;
 
         /// <summary>
@@ -179,15 +179,15 @@ namespace WolvenKit.Common.Model.Arguments
         /// </summary>
         [Category("Default Export Settings")]
         [Display(Name = "LOD Filter")]
-        [Description("When used LOD meshes will not be included. Not recommended for most cases due to complications with clipping decals.")]
-        public bool LodFilter { get; set; } = true;
+        [Description("If selected LOD meshes will not be included. Not recommended for most cases due to complications with clipping decals.")]
+        public bool LodFilter { get; set; } = false;
 
         /// <summary>
         /// Binary Export Bool, Decides between GLB and GLTF
         /// </summary>
         [Category("Default Export Settings")]
         [Display(Name = "Is Binary")]
-        [Description("When used mesh exports will be in binary form as GLB rather than glTF format. (Recommended)")]
+        [Description("If selected mesh exports will be in binary form as GLB rather than glTF format. (Recommended)")]
         public bool isGLBinary { get; set; } = true;
 
         /// <summary>
@@ -277,7 +277,7 @@ namespace WolvenKit.Common.Model.Arguments
         /// </summary>
         [Category("Export Settings")]
         [Display(Name = "Is Binary")]
-        [Description("If checked the anims will be exported as GLB, if unchecked as GLTF")]
+        [Description("If selected the anims will be exported as GLB, if unchecked as GLTF")]
         public bool IsBinary { get; set; } = true;
 
         /// <summary>
@@ -285,7 +285,7 @@ namespace WolvenKit.Common.Model.Arguments
         /// </summary>
         [Category("Export Settings")]
         [Display(Name = "Include Root Motion")]
-        [Description("If checked the anims will have the root translations")]
+        [Description("If selected the anims will have the root translations")]
         public bool incRootMotion { get; set; } = false;
 
         /// <summary>
