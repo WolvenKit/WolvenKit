@@ -4,9 +4,9 @@ using System.Reactive;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Microsoft.WindowsAPICodePack.Dialogs;
+using Prism.Commands;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
-using WolvenKit.Functionality.Commands;
 using WolvenKit.ViewModels.Dialogs;
 
 namespace WolvenKit.ViewModels.Wizards
@@ -30,7 +30,7 @@ namespace WolvenKit.ViewModels.Wizards
             Title = "Project Wizard";
 
 
-            OpenProjectPathCommand = new RelayCommand(ExecuteOpenProjectPath, CanOpenProjectPath);
+            OpenProjectPathCommand = new DelegateCommand(ExecuteOpenProjectPath, CanOpenProjectPath);
 
             CloseCommand = ReactiveCommand.Create(() => { });
             CreateCommand = ReactiveCommand.Create(() => FileHandler(this), CanExecute);

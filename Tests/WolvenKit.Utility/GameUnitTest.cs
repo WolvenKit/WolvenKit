@@ -9,6 +9,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using ProtoBuf.Meta;
 using Serilog;
 using Splat;
+using Splat.Microsoft.Extensions.DependencyInjection;
 using WolvenKit.Common;
 using WolvenKit.Common.Interfaces;
 using WolvenKit.Common.Services;
@@ -46,6 +47,7 @@ namespace WolvenKit.Utility
                         .AddScoped<MeshTools>()
                         .AddSingleton<IArchiveManager, ArchiveManager>()
                         .AddSingleton<IModTools, ModTools>()
+                        .UseMicrosoftDependencyResolver()
                         )
                 .Build();
 

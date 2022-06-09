@@ -28,7 +28,7 @@ namespace WolvenKit.Modkit.RED4
             return ExportAnim(animsFile, archives, outfile, isGLBinary,incRootMotion);
         }
 
-        public bool ExportAnim(CR2WFile animsFile, List<Archive> archives, FileInfo outfile, bool isGLBinary = true, bool incRootMotion = true)
+        public bool ExportAnim(CR2WFile animsFile, List<Archive> archives, FileInfo outfile, bool isGLBinary = true, bool incRootMotion = true, ValidationMode vmode = ValidationMode.TryFix)
         {
             if (animsFile == null || animsFile.RootChunk is not animAnimSet anims)
             {
@@ -62,11 +62,11 @@ namespace WolvenKit.Modkit.RED4
 
             if (isGLBinary)
             {
-                model.SaveGLB(outfile.FullName);
+                model.SaveGLB(outfile.FullName, new WriteSettings(vmode));
             }
             else
             {
-                model.SaveGLTF(outfile.FullName);
+                model.SaveGLTF(outfile.FullName, new WriteSettings(vmode));
             }
 
             return true;
@@ -180,7 +180,7 @@ namespace WolvenKit.Modkit.RED4
                     var dict = positions[bone];
                     foreach (var time in dict.Keys)
                     {
-                        var timeNormalized = time / srcAnim.Duration;
+                        var timeNormalized = NormalizeTime(time, srcAnim.Duration);
                         UInt16 t = Convert.ToUInt16(Math.Clamp(timeNormalized, 0, 1.0f) * UInt16.MaxValue);
                         bw.Write(t);
                         bw.Write(bone);
@@ -196,7 +196,7 @@ namespace WolvenKit.Modkit.RED4
                     var dict = rotations[bone];
                     foreach (var time in dict.Keys)
                     {
-                        var timeNormalized = time / srcAnim.Duration;
+                        var timeNormalized = NormalizeTime(time, srcAnim.Duration);
                         UInt16 t = Convert.ToUInt16(Math.Clamp(timeNormalized, 0, 1.0f) * UInt16.MaxValue);
                         bw.Write(t);
 
@@ -235,7 +235,7 @@ namespace WolvenKit.Modkit.RED4
                     var dict = scales[bone];
                     foreach (var time in dict.Keys)
                     {
-                        var timeNormalized = time / srcAnim.Duration;
+                        var timeNormalized = NormalizeTime(time, srcAnim.Duration);
                         UInt16 t = Convert.ToUInt16(Math.Clamp(timeNormalized, 0, 1.0f) * UInt16.MaxValue);
                         bw.Write(t);
 
@@ -273,6 +273,8 @@ namespace WolvenKit.Modkit.RED4
             outMs.CopyTo(animStream);
 
             return true;
+
+            static float NormalizeTime(float time, float scene_length) => (0 == time * scene_length) ? 0 : time / scene_length;
         }
         public static bool GetAnimation(CR2WFile animsFile, CR2WFile rigFile, ref ModelRoot model, bool includeRig = true,bool incRootMotion = true)
         {

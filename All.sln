@@ -34,7 +34,6 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Installers", "Installers", "{E4ECEE21-F0F1-440F-A356-76BBD57E710E}"
 	ProjectSection(SolutionItems) = preProject
 		Installers\installer.iss = Installers\installer.iss
-		Installers\wkit_setup.aip = Installers\wkit_setup.aip
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WolvenKit.RED4.TweakDB", "WolvenKit.RED4.TweakDB\WolvenKit.RED4.TweakDB.csproj", "{30FF3602-DA2B-4289-A9C6-7D1E1AA35A81}"

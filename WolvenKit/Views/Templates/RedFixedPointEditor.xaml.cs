@@ -65,7 +65,7 @@ namespace WolvenKit.Views.Editors
             }
         }
 
-        private string GetValueFromRedValue() => cvm != null ? ((float)(FixedPoint)cvm.Data).ToString("R") : ((float)RedNumber).ToString("R");
+        private string GetValueFromRedValue() => cvm != null ? ((float)(FixedPoint)cvm.Data).ToString("G9") : ((float)RedNumber).ToString("G9");
         private void NumberValidationTextBox(object sender, TextCompositionEventArgs e)
         {
             var tb = (TextBox)e.Source;

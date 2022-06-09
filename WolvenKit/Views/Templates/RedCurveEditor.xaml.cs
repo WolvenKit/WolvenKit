@@ -58,7 +58,7 @@ namespace WolvenKit.Views.Editors
 
                         cvm.Data = data;
                         cvm.NotifyChain("Data");
-                        cvm.RecalulateProperties();
+                        cvm.RecalculateProperties();
                     }
                 }
             }

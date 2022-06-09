@@ -81,9 +81,7 @@ namespace CP77Tools.Tasks
                 DirectoryInfo outDir;
                 if (string.IsNullOrEmpty(outpath))
                 {
-                    outDir = new DirectoryInfo(Path.Combine(
-                        basedir.FullName,
-                        fileInfo.Name.Replace(".archive", "")));
+                    outDir = new DirectoryInfo(basedir.FullName);
                 }
                 else
                 {
@@ -91,13 +89,6 @@ namespace CP77Tools.Tasks
                     if (!outDir.Exists)
                     {
                         outDir = new DirectoryInfo(outpath);
-                    }
-
-                    if (inputDirInfo.Exists)
-                    {
-                        outDir = new DirectoryInfo(Path.Combine(
-                            outDir.FullName,
-                            fileInfo.Name.Replace(".archive", "")));
                     }
                 }
 

@@ -11,10 +11,8 @@ namespace WolvenKit.Functionality.Converters
     /// Implements a Boolean to Visibility converter
     /// Use ConverterParameter=true to negate the visibility - boolean interpretation.
     /// </summary>
-#pragma warning disable WPF0072 // ValueConversion must use correct types.
 
     [ValueConversion(typeof(bool), typeof(Visibility))]
-#pragma warning restore WPF0072 // ValueConversion must use correct types.
     public sealed class BoolToVisibilityConverter : IValueConverter
     {
         /// <summary>
@@ -28,9 +26,12 @@ namespace WolvenKit.Functionality.Converters
         /// <returns></returns>
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            var back = (value is Visibility visibility) && (visibility == Visibility.Visible);
+            if (value is Visibility visibility)
+            {
+                return visibility == Visibility.Visible;
+            }
 
-            return back;
+            return false;
         }
 
         /// <summary>

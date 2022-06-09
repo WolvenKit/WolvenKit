@@ -12,6 +12,7 @@ using System.Windows.Input;
 using AsyncAwaitBestPractices.MVVM;
 using DynamicData;
 using DynamicData.Binding;
+using Prism.Commands;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using Splat;
@@ -126,7 +127,7 @@ namespace WolvenKit.ViewModels.Tools
 
         [Reactive] public bool IsFlatModeEnabled { get; set; }
 
-        [Reactive] public int SelectedTabIndex { get;set; }
+        [Reactive] public int SelectedTabIndex { get; set; }
 
         public FileModel LastSelected => _watcherService.LastSelect;
 
@@ -232,6 +233,22 @@ namespace WolvenKit.ViewModels.Tools
 
             return b;
         }
+        /*
+                /// <summary>
+                /// Test stuff selected node.
+                /// </summary>
+                public ICommand TeststuffCommand { get; private set; }
+
+                private async void Teststuff()
+                {
+                    var selected = SelectedItems.OfType<FileModel>().ToList();
+                    var delete = await Interactions.DeleteFiles.Handle(selected.Select(_ => _.Name));
+                    if (!delete)
+                    {
+                        return;
+                    }
+                }*/
+
         private async void ExecuteDeleteFile()
         {
             var selected = SelectedItems.OfType<FileModel>().ToList();
@@ -535,7 +552,7 @@ namespace WolvenKit.ViewModels.Tools
                 }
 
                 var exe = Path.Combine(firstFolder, "MlsetupBuilder.exe");
-                
+
                 if (!File.Exists(exe))
                 {
                     _loggerService.Error($"Mlsetupbuilder exe not found: {exe}");
@@ -647,20 +664,21 @@ namespace WolvenKit.ViewModels.Tools
         /// </summary>
         private void SetupCommands()
         {
-            OpenFileCommand = new RelayCommand(ExecuteOpenFile, CanOpenFile);
-            CutFileCommand = new RelayCommand(ExecuteCutFile, CanCutFile);
-            CopyFileCommand = new RelayCommand(CopyFile, CanCopyFile);
-            PasteFileCommand = new RelayCommand(PasteFile, CanPasteFile);
-            DeleteFileCommand = new RelayCommand(ExecuteDeleteFile, CanDeleteFile);
-            RenameFileCommand = new RelayCommand(ExecuteRenameFile, CanRenameFile);
-            CopyRelPathCommand = new RelayCommand(ExecuteCopyRelPath, CanCopyRelPath);
-            ReimportFileCommand = new RelayCommand(ExecuteReimportFile, CanReimportFile);
-            OpenInFileExplorerCommand = new RelayCommand(ExecuteOpenInFileExplorer, CanOpenInFileExplorer);
+            OpenFileCommand = new DelegateCommand(ExecuteOpenFile, CanOpenFile);
+            CutFileCommand = new DelegateCommand(ExecuteCutFile, CanCutFile);
+            CopyFileCommand = new DelegateCommand(CopyFile, CanCopyFile);
+            PasteFileCommand = new DelegateCommand(PasteFile, CanPasteFile);
+            DeleteFileCommand = new DelegateCommand(ExecuteDeleteFile, CanDeleteFile);
+            //TeststuffCommand = new DelegateCommand(Teststuff, CanDeleteFile);
+            RenameFileCommand = new DelegateCommand(ExecuteRenameFile, CanRenameFile);
+            CopyRelPathCommand = new DelegateCommand(ExecuteCopyRelPath, CanCopyRelPath);
+            ReimportFileCommand = new DelegateCommand(ExecuteReimportFile, CanReimportFile);
+            OpenInFileExplorerCommand = new DelegateCommand(ExecuteOpenInFileExplorer, CanOpenInFileExplorer);
 
-            OpenRootFolderCommand = new RelayCommand(ExecuteOpenRootFolder, CanOpenRootFolder);
+            OpenRootFolderCommand = new DelegateCommand(ExecuteOpenRootFolder, CanOpenRootFolder);
 
-            Bk2ImportCommand = new RelayCommand(ExecuteBk2Import, CanBk2Import);
-            Bk2ExportCommand = new RelayCommand(ExecuteBk2Export, CanBk2Export);
+            Bk2ImportCommand = new DelegateCommand(ExecuteBk2Import, CanBk2Import);
+            Bk2ExportCommand = new DelegateCommand(ExecuteBk2Export, CanBk2Export);
 
             //CountUrlBytesCommand = new AsyncCommand(async () =>
             //{
@@ -668,17 +686,17 @@ namespace WolvenKit.ViewModels.Tools
             //});
             ConvertToJsonCommand = new AsyncCommand(ExecuteConvertToJsonAsync, CanConvertTo);
             ConvertToXmlCommand = new AsyncCommand(ExecuteConvertToXmlAsync, CanConvertTo);
-            ConvertFromJsonCommand = new RelayCommand(ExecuteConvertFromJson, CanConvertFromJson);
+            ConvertFromJsonCommand = new DelegateCommand(ExecuteConvertFromJson, CanConvertFromJson);
 
             //PESearchStartedCommand = new DelegateCommand<object>(ExecutePESearchStartedCommand, CanPESearchStartedCommand);
 
-            //CookCommand = new RelayCommand(Cook, CanCook);
-            //FastRenderCommand = new RelayCommand(ExecuteFastRender, CanFastRender);
-            //ExportMeshCommand = new RelayCommand(ExportMesh, CanExportMesh);
-            //AddAllImportsCommand = new RelayCommand(AddAllImports, CanAddAllImports);
-            //ExportJsonCommand = new RelayCommand(ExecuteExportJson, CanExportJson);
-            OpenInAssetBrowserCommand = new RelayCommand(ExecuteOpenInAssetBrowser, CanOpenInAssetBrowser);
-            OpenInMlsbCommand = new RelayCommand(ExecuteOpenInMlsb, CanOpenInMlsb);
+            //CookCommand = new DelegateCommand(Cook, CanCook);
+            //FastRenderCommand = new DelegateCommand(ExecuteFastRender, CanFastRender);
+            //ExportMeshCommand = new DelegateCommand(ExportMesh, CanExportMesh);
+            //AddAllImportsCommand = new DelegateCommand(AddAllImports, CanAddAllImports);
+            //ExportJsonCommand = new DelegateCommand(ExecuteExportJson, CanExportJson);
+            OpenInAssetBrowserCommand = new DelegateCommand(ExecuteOpenInAssetBrowser, CanOpenInAssetBrowser);
+            OpenInMlsbCommand = new DelegateCommand(ExecuteOpenInMlsb, CanOpenInMlsb);
         }
 
         /// <summary>

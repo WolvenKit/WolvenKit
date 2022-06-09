@@ -167,9 +167,6 @@ namespace WolvenKit
                     services.AddSingleton<HomePageViewModel>();
                     services.AddTransient<IViewFor<HomePageViewModel>, HomePageView>();
 
-                    services.AddTransient<DebugPageViewModel>();
-                    services.AddTransient<IViewFor<DebugPageViewModel>, DebugPageView>();
-
                     services.AddTransient<GithubPageViewModel>();
                     services.AddTransient<IViewFor<GithubPageViewModel>, GithubPageView>();
 

@@ -1,7 +1,7 @@
 using System.ComponentModel;
 using System.Windows.Input;
+using Prism.Commands;
 using WolvenKit.Common;
-using WolvenKit.Functionality.Commands;
 
 namespace WolvenKit.Models
 {
@@ -11,9 +11,9 @@ namespace WolvenKit.Models
 
         public SearchParameters()
         {
-            CaseSensitiveCommand = new RelayCommand(CaseSensitive);
-            WholeWordCommand = new RelayCommand(WholeWord);
-            RegexCommand = new RelayCommand(Regex);
+            CaseSensitiveCommand = new DelegateCommand(CaseSensitive);
+            WholeWordCommand = new DelegateCommand(WholeWord);
+            RegexCommand = new DelegateCommand(Regex);
         }
 
         #endregion Constructors
