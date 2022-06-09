@@ -2463,7 +2463,7 @@ namespace WolvenKit.ViewModels.Shell
             {
                 foreach (var prop in Properties)
                 {
-                    if (prop.Data != null && prop.Data.GetHashCode() == selectChild.GetHashCode())
+                    if (prop.Data is not null && prop.Data.GetHashCode() == selectChild.GetHashCode())
                     {
                         prop.IsExpanded = true;
                         Tab.SelectedChunk = prop;
