@@ -7,7 +7,7 @@ using Syncfusion.UI.Xaml.Grid.Helpers;
 using Syncfusion.UI.Xaml.ScrollAxis;
 using WolvenKit.Common.Interfaces;
 
-namespace WolvenKit
+namespace WolvenKit.Layout
 {
     public class RowSelectionController : GridSelectionController
     {

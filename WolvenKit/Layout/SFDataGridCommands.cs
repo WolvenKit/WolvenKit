@@ -3,7 +3,7 @@ using System.Windows.Input;
 using Syncfusion.UI.Xaml.Grid;
 using WolvenKit.Common.Interfaces;
 
-namespace WolvenKit
+namespace WolvenKit.Layout
 {
     public static class SFDataGridCommands
     {

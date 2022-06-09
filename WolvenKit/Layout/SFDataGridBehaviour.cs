@@ -1,7 +1,7 @@
 using System.Windows.Interactivity;
 using Syncfusion.UI.Xaml.Grid;
 
-namespace WolvenKit
+namespace WolvenKit.Layout
 {
     public class Behaviour : Behavior<SfDataGrid>
     {

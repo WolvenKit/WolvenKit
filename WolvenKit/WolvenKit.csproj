@@ -105,25 +105,21 @@
 
 
   <ItemGroup>
-    <Compile Remove="Functionality\Behavior\**" />
     <Compile Remove="lib\**" />
     <Compile Remove="NewFolder1\**" />
     <Compile Remove="Resources\Styles\CustomBase\**" />
     <Compile Remove="Resources\Styles\Custom\**" />
     <Compile Remove="Views\Wizards\PublishWizard\**" />
-    <EmbeddedResource Remove="Functionality\Behavior\**" />
     <EmbeddedResource Remove="lib\**" />
     <EmbeddedResource Remove="NewFolder1\**" />
     <EmbeddedResource Remove="Resources\Styles\CustomBase\**" />
     <EmbeddedResource Remove="Resources\Styles\Custom\**" />
     <EmbeddedResource Remove="Views\Wizards\PublishWizard\**" />
-    <None Remove="Functionality\Behavior\**" />
     <None Remove="lib\**" />
     <None Remove="NewFolder1\**" />
     <None Remove="Resources\Styles\CustomBase\**" />
     <None Remove="Resources\Styles\Custom\**" />
     <None Remove="Views\Wizards\PublishWizard\**" />
-    <Page Remove="Functionality\Behavior\**" />
     <Page Remove="lib\**" />
     <Page Remove="NewFolder1\**" />
     <Page Remove="Resources\Styles\CustomBase\**" />

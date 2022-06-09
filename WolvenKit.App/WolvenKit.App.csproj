@@ -40,7 +40,7 @@
 
   <ItemGroup>
     <Compile Remove="Controllers\Tw3Controller.cs" />
-    <Compile Remove="Functionality\ProjectManagement\Project\Tw3Project.cs" />
+    <Compile Remove="Models\ProjectManagement\Project\Tw3Project.cs" />
     <Compile Remove="Models\CsvCommonFunctions.cs" />
     <Compile Remove="Models\CsvMaps.cs" />
     <Compile Remove="Models\ImageUtility.cs" />
