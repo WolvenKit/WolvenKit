@@ -11,10 +11,10 @@ namespace WolvenKit.RED4.Archive.IO
         {
         }
 
-        public void WritePackage(appearanceAppearanceDefinition aad, RedPackage buffer)
+        public void WritePackage(appearanceAppearanceDefinition appearanceDefinition, RedPackage buffer)
         {
             buffer.Chunks = new List<RedBaseClass>();
-            foreach (var component in aad.Components)
+            foreach (var component in appearanceDefinition.Components)
             {
                 buffer.Chunks.Add(component);
             }

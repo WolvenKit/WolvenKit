@@ -15,6 +15,5 @@ namespace WolvenKit.RED4.Types
             get => GetPropertyValue<CArray<IMaterial>>();
             set => SetPropertyValue<CArray<IMaterial>>(value);
         }
-
     }
 }

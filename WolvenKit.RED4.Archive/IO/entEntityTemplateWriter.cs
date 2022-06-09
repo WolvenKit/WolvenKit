@@ -11,11 +11,11 @@ namespace WolvenKit.RED4.Archive.IO
         {
         }
 
-        public void WritePackage(entEntityTemplate eet, RedPackage buffer)
+        public void WritePackage(entEntityTemplate entityTemplate, RedPackage buffer)
         { 
             buffer.Chunks = new List<RedBaseClass>();
-            buffer.Chunks.Add(eet.Entity);
-            foreach (var component in eet.Components)
+            buffer.Chunks.Add(entityTemplate.Entity);
+            foreach (var component in entityTemplate.Components)
             {
                 buffer.Chunks.Add(component);
             }

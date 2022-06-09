@@ -24,19 +24,19 @@ namespace WolvenKit.RED4.Archive.IO
             var code = base.ReadBuffer(buffer);
             if (code == EFileReadErrorCodes.NoError)
             {
-                if (buffer.Parent is entEntityTemplate eet && buffer.Data is RedPackage rp)
+                if (buffer.Parent is entEntityTemplate entityTemplate && buffer.Data is RedPackage rp)
                 {
-                    eet.Entity = new();
+                    entityTemplate.Entity = new();
                     if (rp.RootChunk is entEntity ee)
                     {
-                        eet.Entity.SetValue(ee);
+                        entityTemplate.Entity.SetValue(ee);
                     }
-                    eet.Components = new();
+                    entityTemplate.Components = new();
                     foreach (var component in rp.Chunks)
                     {
                         if (component is entIComponent eic)
                         {
-                            eet.Components.Add(eic);
+                            entityTemplate.Components.Add(eic);
                         }
                         // maybe should catch/look for items that differ?
                     }

@@ -24,14 +24,8 @@ namespace WolvenKit.ViewModels.Documents
         public ViewModelActivator Activator { get; } = new();
 
         protected readonly IRedType _data;
-        /*
-                [Reactive] public RedDocumentViewModel File { get; set; }
-
-                public static IRedType CopiedChunk;*/
 
         public bool IsEmbeddedFile { get; set; }
-
-        //public static IRedType CopiedChunk;
 
         public RDTDataViewModel(IRedType data, RedDocumentViewModel file)
         {

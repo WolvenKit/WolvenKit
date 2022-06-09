@@ -27,8 +27,10 @@ namespace WolvenKit.RED4.Archive.IO
                 list.Files = new();
                 foreach (var material in mmmb.Materials)
                 {
-                    var file = new CR2WFile();
-                    file.RootChunk = material;
+                    var file = new CR2WFile()
+                    {
+                        RootChunk = material
+                    };
                     list.Files.Add(file);
                 }
             }

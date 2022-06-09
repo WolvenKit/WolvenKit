@@ -24,14 +24,14 @@ namespace WolvenKit.RED4.Archive.IO
             var code = base.ReadBuffer(buffer);
             if (code == EFileReadErrorCodes.NoError)
             {
-                if (buffer.Parent is appearanceAppearanceDefinition aad && buffer.Data is RedPackage rp)
+                if (buffer.Parent is appearanceAppearanceDefinition appearanceDefinition && buffer.Data is RedPackage rp)
                 {
-                    aad.Components = new();
+                    appearanceDefinition.Components = new();
                     foreach (var component in rp.Chunks)
                     {
                         if (component is entIComponent eic)
                         {
-                            aad.Components.Add(eic);
+                            appearanceDefinition.Components.Add(eic);
                         }
                     }
                 }

@@ -291,7 +291,10 @@ namespace WolvenKit.ViewModels.Documents
         public ICommand NewEmbeddedFileCommand { get; private set; }
         private void ExecuteNewEmbeddedFile()
         {
-            var existing = new ObservableCollection<string>(AppDomain.CurrentDomain.GetAssemblies().SelectMany(s => s.GetTypes()).Where(p => p.IsAssignableTo(typeof(CResource)) && p.IsClass).Select(x => x.Name));
+            var existing = new ObservableCollection<string>(AppDomain.CurrentDomain.GetAssemblies()
+                .SelectMany(s => s.GetTypes())
+                .Where(p => p.IsAssignableTo(typeof(CResource)) && p.IsClass)
+                .Select(x => x.Name));
 
             var app = Locator.Current.GetService<AppViewModel>();
             app.SetActiveDialog(new CreateClassDialogViewModel(existing, true)
@@ -304,9 +307,8 @@ namespace WolvenKit.ViewModels.Documents
         {
             var app = Locator.Current.GetService<AppViewModel>();
             app.CloseDialogCommand.Execute(null);
-            if (sender is not null)
+            if (sender is not null && sender is CreateClassDialogViewModel dvm)
             {
-                var dvm = sender as CreateClassDialogViewModel;
                 var instance = RedTypeManager.Create(dvm.SelectedClass);
 
                 var file = new CR2WEmbedded
