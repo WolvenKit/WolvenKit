@@ -16,21 +16,6 @@ public static class Wem
         return outBuffer;
     }
 
-    public static void Test()
-    {
-        byte[] data = File.ReadAllBytes("./test.wem");
-        byte[] out_data = new byte[1 << 24];
-        IntPtr buffer = Marshal.AllocCoTaskMem(out_data.Length);
-        long out_size = wem_to_ogg(data, data.Length, ref buffer);
-        byte[] final_out = new byte[out_size];
-        Marshal.Copy(buffer, final_out, 0, final_out.Length);
-        Marshal.FreeCoTaskMem(buffer);
-        Console.WriteLine("Out size: " + out_size);
-        Console.WriteLine("Final out length: " + final_out.Length);
-        Array.Resize(ref final_out, (int)out_size);
-        File.WriteAllBytes("./test.ogg", final_out);
-    }
-
     [DllImport("wwtools")]
     private static extern long wem_to_ogg(
         byte[] inData,
