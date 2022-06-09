@@ -98,8 +98,6 @@ namespace WolvenKit.Views.HomePage
             }
         }
 
-        #endregion Methods
-
         //private void MenuItem_Click(object sender, RoutedEventArgs e)
         //{
         //    guide.SetCurrentValue(VisibilityProperty, Visibility.Visible);

@@ -7,6 +7,7 @@ using System.Reactive.Linq;
 using System.Text.Json;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using Prism.Commands;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using Splat;
@@ -27,7 +28,7 @@ namespace WolvenKit.ViewModels.Dialogs
         private readonly SoundEventMetadata _metadata;
         private readonly ModInfo _info;
 
-        private readonly JsonSerializerOptions _options = new JsonSerializerOptions
+        private readonly JsonSerializerOptions _options = new()
         {
             WriteIndented = true,
             DefaultIgnoreCondition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull,
@@ -46,7 +47,7 @@ namespace WolvenKit.ViewModels.Dialogs
             SaveCommand = ReactiveCommand.Create(() => Save());
             CancelCommand = ReactiveCommand.Create(() => FileHandler(null));
 
-            AddCommand = new WolvenKit.Functionality.Commands.RelayCommand(AddEvents, CanAddEvents);
+            AddCommand = new DelegateCommand(AddEvents, CanAddEvents);
 
             // load events
             var path = Path.Combine(Environment.CurrentDirectory, "Resources", "soundEvents.json");
@@ -61,7 +62,7 @@ namespace WolvenKit.ViewModels.Dialogs
                     _logger.Error(e);
                 }
 
-                
+
                 foreach (var item in _metadata.Events.OrderBy(x => x.Name))
                 {
                     SoundEvents.Add(item);
@@ -96,7 +97,7 @@ namespace WolvenKit.ViewModels.Dialogs
             var modfiles = Directory.GetFiles(modProj.SoundDirectory, "*.wav", SearchOption.AllDirectories);
             foreach (var modfile in modfiles)
             {
-                var relPath = modfile.Substring(modProj.SoundDirectory.Length + 1);
+                var relPath = modfile[(modProj.SoundDirectory.Length + 1)..];
                 Files.Add(relPath);
             }
         }
@@ -172,7 +173,7 @@ namespace WolvenKit.ViewModels.Dialogs
                     }
                     info.CustomSounds.Add(e);
 
-                    
+
                 }
 
                 var jsonString = JsonSerializer.Serialize(info, _options);
