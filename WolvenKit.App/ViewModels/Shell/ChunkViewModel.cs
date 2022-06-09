@@ -10,6 +10,7 @@ using System.Runtime.Serialization;
 using System.Windows.Forms;
 using System.Windows.Input;
 using DynamicData.Binding;
+using Prism.Commands;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using Splat;
@@ -139,24 +140,24 @@ namespace WolvenKit.ViewModels.Shell
 
             //DoSubscribe();
 
-            OpenRefCommand = new DelegateCommand(_ => ExecuteOpenRef(), _ => CanOpenRef());
-            AddRefCommand = new DelegateCommand(_ => ExecuteAddRef(), _ => CanAddRef());
-            ExportChunkCommand = new DelegateCommand(_ => ExecuteExportChunk(), _ => CanExportChunk());
-            ImportChunkCommand = new DelegateCommand(_ => ExecuteImportChunk(), _ => CanImportChunk());
-            ImportChunk2Command = new DelegateCommand(_ => ExecuteImportChunk2(), _ => CanImportChunk());
-            AddItemToArrayCommand = new DelegateCommand(_ => ExecuteAddItemToArray(), _ => CanAddItemToArray());
-            AddHandleCommand = new DelegateCommand(_ => ExecuteAddHandle(), _ => CanAddHandle());
-            AddItemToCompiledDataCommand = new DelegateCommand(_ => ExecuteAddItemToCompiledData(), _ => CanAddItemToCompiledData());
-            DeleteItemCommand = new DelegateCommand(_ => ExecuteDeleteItem(), _ => CanDeleteItem());
-            DeleteAllCommand = new DelegateCommand(_ => ExecuteDeleteAll(), _ => CanDeleteAll());
-            DeleteSelectionCommand = new DelegateCommand(_ => ExecuteDeleteSelection(), _ => CanDeleteSelection());
-            OpenChunkCommand = new DelegateCommand(_ => ExecuteOpenChunk(), _ => CanOpenChunk());
-            CopyChunkCommand = new DelegateCommand(_ => ExecuteCopyChunk(), _ => CanCopyChunk());
-            CopySelectionCommand = new DelegateCommand(_ => ExecuteCopySelection(), _ => CanCopySelection());
-            DuplicateChunkCommand = new DelegateCommand(_ => ExecuteDuplicateChunk(), _ => CanDuplicateChunk());
-            ExportNodeDataCommand = new DelegateCommand(_ => ExecuteExportNodeData(), _ => CanExportNodeData());
-            PasteChunkCommand = new DelegateCommand(_ => ExecutePasteChunk(), _ => CanPasteChunk());
-            PasteSelectionCommand = new DelegateCommand(_ => ExecutePasteSelection(), _ => CanPasteSelection());
+            OpenRefCommand = new DelegateCommand(ExecuteOpenRef, CanOpenRef);
+            AddRefCommand = new DelegateCommand(ExecuteAddRef, CanAddRef);
+            ExportChunkCommand = new DelegateCommand(ExecuteExportChunk, CanExportChunk);
+            ImportChunkCommand = new DelegateCommand(ExecuteImportChunk, CanImportChunk);
+            ImportChunk2Command = new DelegateCommand(ExecuteImportChunk2, CanImportChunk);
+            AddItemToArrayCommand = new DelegateCommand(ExecuteAddItemToArray, CanAddItemToArray);
+            AddHandleCommand = new DelegateCommand(ExecuteAddHandle, CanAddHandle);
+            AddItemToCompiledDataCommand = new DelegateCommand(ExecuteAddItemToCompiledData, CanAddItemToCompiledData);
+            DeleteItemCommand = new DelegateCommand(ExecuteDeleteItem, CanDeleteItem);
+            DeleteAllCommand = new DelegateCommand(ExecuteDeleteAll, CanDeleteAll);
+            DeleteSelectionCommand = new DelegateCommand(ExecuteDeleteSelection, CanDeleteSelection);
+            OpenChunkCommand = new DelegateCommand(ExecuteOpenChunk, CanOpenChunk);
+            CopyChunkCommand = new DelegateCommand(ExecuteCopyChunk, CanCopyChunk);
+            CopySelectionCommand = new DelegateCommand(ExecuteCopySelection, CanCopySelection);
+            DuplicateChunkCommand = new DelegateCommand(ExecuteDuplicateChunk, CanDuplicateChunk);
+            ExportNodeDataCommand = new DelegateCommand(ExecuteExportNodeData, CanExportNodeData);
+            PasteChunkCommand = new DelegateCommand(ExecutePasteChunk, CanPasteChunk);
+            PasteSelectionCommand = new DelegateCommand(ExecutePasteSelection, CanPasteSelection);
         }
 
 

@@ -6,10 +6,10 @@ using System.Reactive.Disposables;
 using System.Windows.Input;
 using HelixToolkit.SharpDX.Core;
 using HelixToolkit.Wpf.SharpDX;
+using Prism.Commands;
 using ReactiveUI;
 using Splat;
 using WolvenKit.Common.Services;
-using WolvenKit.Functionality.Commands;
 using WolvenKit.RED4.Types;
 
 namespace WolvenKit.ViewModels.Documents
@@ -72,8 +72,8 @@ namespace WolvenKit.ViewModels.Documents
             _data = data;
             Header = "Sector Previews";
 
-            SearchForPointCommand = new DelegateCommand((x) => ExecuteSearchForPoint());
-            ClearSearchCommand = new DelegateCommand((x) => ExecuteClearSearch());
+            SearchForPointCommand = new DelegateCommand(ExecuteSearchForPoint);
+            ClearSearchCommand = new DelegateCommand(ExecuteClearSearch);
 
             this.WhenActivated((CompositeDisposable disposables) => RenderBlockSolo());
         }

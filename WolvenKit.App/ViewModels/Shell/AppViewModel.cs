@@ -15,6 +15,7 @@ using System.Windows.Input;
 using gpm.Installer;
 using Microsoft.Win32;
 using Microsoft.WindowsAPICodePack.Dialogs;
+using Prism.Commands;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using Splat;
@@ -100,20 +101,20 @@ namespace WolvenKit.ViewModels.Shell
 
             #region commands
 
-            ShowLogCommand = new RelayCommand(ExecuteShowLog, CanShowLog);
-            ShowProjectExplorerCommand = new RelayCommand(ExecuteShowProjectExplorer, CanShowProjectExplorer);
-            //ShowImportUtilityCommand = new RelayCommand(ExecuteShowImportUtility, CanShowImportUtility);
-            ShowPropertiesCommand = new RelayCommand(ExecuteShowProperties, CanShowProperties);
-            ShowAssetsCommand = new RelayCommand(ExecuteAssetBrowser, CanShowAssetBrowser);
-            //ShowVisualEditorCommand = new RelayCommand(ExecuteVisualEditor, CanShowVisualEditor);
-            //ShowAudioToolCommand = new RelayCommand(ExecuteAudioTool, CanShowAudioTool);
-            //ShowVideoToolCommand = new RelayCommand(ExecuteVideoTool, CanShowVideoTool);
-            //ShowCodeEditorCommand = new RelayCommand(ExecuteCodeEditor, CanShowCodeEditor);
+            ShowLogCommand = new DelegateCommand(ExecuteShowLog, CanShowLog);
+            ShowProjectExplorerCommand = new DelegateCommand(ExecuteShowProjectExplorer, CanShowProjectExplorer);
+            //ShowImportUtilityCommand = new DelegateCommand(ExecuteShowImportUtility, CanShowImportUtility);
+            ShowPropertiesCommand = new DelegateCommand(ExecuteShowProperties, CanShowProperties);
+            ShowAssetsCommand = new DelegateCommand(ExecuteAssetBrowser, CanShowAssetBrowser);
+            //ShowVisualEditorCommand = new DelegateCommand(ExecuteVisualEditor, CanShowVisualEditor);
+            //ShowAudioToolCommand = new DelegateCommand(ExecuteAudioTool, CanShowAudioTool);
+            //ShowVideoToolCommand = new DelegateCommand(ExecuteVideoTool, CanShowVideoTool);
+            //ShowCodeEditorCommand = new DelegateCommand(ExecuteCodeEditor, CanShowCodeEditor);
 
-            ShowImportExportToolCommand = new RelayCommand(ExecuteImportExportTool, CanShowImportExportTool);
-            //ShowPackageInstallerCommand = new RelayCommand(ExecuteShowInstaller, CanShowInstaller);
+            ShowImportExportToolCommand = new DelegateCommand(ExecuteImportExportTool, CanShowImportExportTool);
+            //ShowPackageInstallerCommand = new DelegateCommand(ExecuteShowInstaller, CanShowInstaller);
 
-            ShowPluginCommand = new RelayCommand(ExecuteShowPlugin, CanShowPlugin);
+            ShowPluginCommand = new DelegateCommand(ExecuteShowPlugin, CanShowPlugin);
 
             OpenFileCommand = new DelegateCommand<FileModel>(p => ExecuteOpenFile(p), CanOpenFile);
             OpenFileAsyncCommand = ReactiveCommand.CreateFromTask<FileModel, Unit>(OpenFileAsync);
@@ -122,13 +123,13 @@ namespace WolvenKit.ViewModels.Shell
             var canExecute = this.WhenAny(x => x._projectManager.ActiveProject, (p) => p is not null);
             PackModCommand = ReactiveCommand.CreateFromTask(ExecutePackMod, canExecute);
             PackInstallModCommand = ReactiveCommand.CreateFromTask(ExecutePackInstallMod, canExecute);
-            //BackupModCommand = new RelayCommand(ExecuteBackupMod, CanBackupMod);
-            //PublishModCommand = new RelayCommand(ExecutePublishMod, CanPublishMod);
+            //BackupModCommand = new DelegateCommand(ExecuteBackupMod, CanBackupMod);
+            //PublishModCommand = new DelegateCommand(ExecutePublishMod, CanPublishMod);
 
             NewFileCommand = new DelegateCommand<string>(ExecuteNewFile, CanNewFile);
-            SaveFileCommand = new RelayCommand(ExecuteSaveFile, CanSaveFile);
-            SaveAsCommand = new RelayCommand(ExecuteSaveAs, CanSaveFile);
-            SaveAllCommand = new RelayCommand(ExecuteSaveAll, CanSaveAll);
+            SaveFileCommand = new DelegateCommand(ExecuteSaveFile, CanSaveFile);
+            SaveAsCommand = new DelegateCommand(ExecuteSaveAs, CanSaveFile);
+            SaveAllCommand = new DelegateCommand(ExecuteSaveAll, CanSaveAll);
 
             FileSelectedCommand = new DelegateCommand<FileModel>(async (p) => await ExecuteSelectFile(p), CanSelectFile);
 
@@ -136,14 +137,14 @@ namespace WolvenKit.ViewModels.Shell
             DeleteProjectCommand = ReactiveCommand.Create<string>(DeleteProject);
             NewProjectCommand = ReactiveCommand.Create(ExecuteNewProject);
 
-            ShowHomePageCommand = new RelayCommand(ExecuteShowHomePage, CanShowHomePage);
-            ShowSettingsCommand = new RelayCommand(ExecuteShowSettings, CanShowSettings);
+            ShowHomePageCommand = new DelegateCommand(ExecuteShowHomePage, CanShowHomePage);
+            ShowSettingsCommand = new DelegateCommand(ExecuteShowSettings, CanShowSettings);
 
             LaunchGameCommand = ReactiveCommand.CreateFromTask(ExecuteLaunchGame);
 
-            CloseModalCommand = new RelayCommand(ExecuteCloseModal, CanCloseModal);
-            CloseOverlayCommand = new RelayCommand(ExecuteCloseOverlay, CanCloseOverlay);
-            CloseDialogCommand = new RelayCommand(ExecuteCloseDialog, CanCloseDialog);
+            CloseModalCommand = new DelegateCommand(ExecuteCloseModal, CanCloseModal);
+            CloseOverlayCommand = new DelegateCommand(ExecuteCloseOverlay, CanCloseOverlay);
+            CloseDialogCommand = new DelegateCommand(ExecuteCloseDialog, CanCloseDialog);
 
 
             OpenFileAsyncCommand.ThrownExceptions.Subscribe(ex => LogExtended(ex));
@@ -603,7 +604,7 @@ namespace WolvenKit.ViewModels.Shell
             });
         }
 
-        public async Task OpenFromNewFileTask(NewFileViewModel file)
+        public static async Task OpenFromNewFileTask(NewFileViewModel file)
         {
             Stream stream = null;
             switch (file.SelectedFile.Type)
@@ -1212,7 +1213,6 @@ namespace WolvenKit.ViewModels.Shell
 
         }
 
-        private bool IsInRawFolder(FileModel model) => IsInRawFolder(model.FullName);
         private bool IsInRawFolder(string path) => _projectManager.ActiveProject is not null &&
                                                        path.Contains(_projectManager.ActiveProject
                                                            .RawDirectory);
@@ -1363,7 +1363,7 @@ namespace WolvenKit.ViewModels.Shell
             {
                 File.WriteAllBytes(Path.GetTempPath() + "asd." + extension, new byte[] { 0x01 });
                 var programname = new StringBuilder();
-                NativeMethods.FindExecutable("asd." + extension, Path.GetTempPath(), programname);
+                _ = NativeMethods.FindExecutable("asd." + extension, Path.GetTempPath(), programname);
                 if (programname.ToString().ToUpper().Contains(".EXE"))
                 {
                     Process.Start(programname.ToString(), path.ToEscapedPath());

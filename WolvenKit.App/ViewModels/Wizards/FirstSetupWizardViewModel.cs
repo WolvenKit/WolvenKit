@@ -8,9 +8,9 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 using Microsoft.Win32;
 using Microsoft.WindowsAPICodePack.Dialogs;
+using Prism.Commands;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
-using WolvenKit.Functionality.Commands;
 using WolvenKit.Functionality.Services;
 using WolvenKit.ViewModels.Dialogs;
 
@@ -53,8 +53,8 @@ namespace WolvenKit.ViewModels.Wizards
             OkCommand = ReactiveCommand.Create(ExecuteFinish, CanExecute);
             CancelCommand = ReactiveCommand.Create(() => { });
 
-            OpenCP77GamePathCommand = new RelayCommand(ExecuteOpenCP77GamePath, CanOpenGamePath);
-            OpenDepotPathCommand = new RelayCommand(ExecuteOpenDepotPath, CanOpenDepotPath);
+            OpenCP77GamePathCommand = new DelegateCommand(ExecuteOpenCP77GamePath, CanOpenGamePath);
+            OpenDepotPathCommand = new DelegateCommand(ExecuteOpenDepotPath, CanOpenDepotPath);
 
             TryToFindCP77ExecutableAutomatically();
 
@@ -270,7 +270,7 @@ namespace WolvenKit.ViewModels.Wizards
             {
                 //StrDelegate w3del = msg => witcherexe = msg;
                 //StrDelegate wccdel = msg => wccLiteexe = msg;
-                StrDelegate cp77del = msg => _cp77Eexe = msg;
+                void cp77del(string msg) => _cp77Eexe = msg;
 
                 Parallel.ForEach(Registry.LocalMachine.OpenSubKey(uninstallkey)?.GetSubKeyNames(), item =>
                 {
@@ -354,7 +354,7 @@ namespace WolvenKit.ViewModels.Wizards
 
                     //w3del.Invoke(w3);
                     //wccdel.Invoke(wcc);
-                    cp77del.Invoke(cp77);
+                    cp77del(cp77);
                 });
             }
             catch (Exception)

@@ -10,11 +10,11 @@ using System.Windows.Media;
 using System.Windows.Media.Media3D;
 using HelixToolkit.SharpDX.Core;
 using HelixToolkit.Wpf.SharpDX;
+using Prism.Commands;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using Splat;
 using WolvenKit.Common.Services;
-using WolvenKit.Functionality.Commands;
 using WolvenKit.Functionality.Services;
 using WolvenKit.RED4.Archive.Buffer;
 using WolvenKit.RED4.Archive.CR2W;
@@ -31,11 +31,11 @@ namespace WolvenKit.ViewModels.Documents
         public string SlotName { get; set; }
     }
 
-    public interface Node
+    public interface INode
     {
         public string Name { get; set; }
         public SeparateMatrix Matrix { get; set; }
-        public Node Parent { get; set; }
+        public INode Parent { get; set; }
         public List<LoadableModel> Models { get; set; }
 
         public void AddModel(LoadableModel child);
@@ -65,13 +65,13 @@ namespace WolvenKit.ViewModels.Documents
         public string Name { get; set; }
         public List<LoadableModel> Models { get; set; } = new();
         public CName Resource { get; set; }
-        public List<Node> Nodes { get; set; } = new();
+        public List<INode> Nodes { get; set; } = new();
         public SmartElement3DCollection ModelGroup { get; set; } = new();
         public List<LoadableModel> BindableModels { get; set; } = new();
         public Dictionary<string, Material> RawMaterials { get; set; } = new();
     }
 
-    public class LoadableModel : IBindable, Node
+    public class LoadableModel : IBindable, INode
     {
         public int AppearanceIndex { get; set; }
         public string AppearanceName { get; set; }
@@ -95,7 +95,7 @@ namespace WolvenKit.ViewModels.Documents
         public ObservableCollection<int> AllChunks { get; set; } = new();
         public ObservableCollection<int> EnabledChunks { get; set; } = new();
 
-        public Node Parent { get; set; }
+        public INode Parent { get; set; }
         public List<LoadableModel> Models { get; set; } = new();
         public void AddModel(LoadableModel child)
         {
@@ -104,7 +104,7 @@ namespace WolvenKit.ViewModels.Documents
         }
     }
 
-    public class Rig : IBindable, Node
+    public class Rig : IBindable, INode
     {
         public string Name { get; set; }
         public List<RigBone> Bones { get; set; } = new();
@@ -120,7 +120,7 @@ namespace WolvenKit.ViewModels.Documents
             Children.Add(child);
         }
 
-        public Node Parent { get; set; }
+        public INode Parent { get; set; }
         public List<LoadableModel> Models { get; set; } = new();
         public void AddModel(LoadableModel child)
         {
@@ -129,7 +129,7 @@ namespace WolvenKit.ViewModels.Documents
         }
     }
 
-    public class RigBone : Node
+    public class RigBone : INode
     {
         public string Name { get; set; }
         public List<RigBone> Children { get; set; } = new();
@@ -141,7 +141,7 @@ namespace WolvenKit.ViewModels.Documents
             Children.Add(child);
         }
 
-        public Node Parent { get; set; }
+        public INode Parent { get; set; }
         public List<LoadableModel> Models { get; set; } = new();
         public void AddModel(LoadableModel child)
         {
@@ -226,8 +226,8 @@ namespace WolvenKit.ViewModels.Documents
                     LookDirection = new System.Windows.Media.Media3D.Vector3D(1f, -1f, -1f)
                 };
 
-                ExtractShadersCommand = new RelayCommand(ExtractShaders);
-                LoadMaterialsCommand = new RelayCommand(LoadMaterials);
+                ExtractShadersCommand = new DelegateCommand(ExtractShaders);
+                LoadMaterialsCommand = new DelegateCommand(LoadMaterials);
             }
             catch (Exception ex) { Locator.Current.GetService<ILoggerService>().Error(ex); }
 
@@ -760,7 +760,7 @@ namespace WolvenKit.ViewModels.Documents
 
 
         public ICommand ExtractShadersCommand { get; set; }
-        public void ExtractShaders()
+        public static void ExtractShaders()
         {
             var _settingsManager = Locator.Current.GetService<ISettingsManager>();
             ShaderCacheReader.ExtractShaders(new FileInfo(_settingsManager.CP77ExecutablePath), ISettingsManager.GetTemp_OBJPath());

@@ -10,6 +10,7 @@ using System.Windows;
 using System.Windows.Input;
 using DynamicData;
 using Microsoft.EntityFrameworkCore;
+using Prism.Commands;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using Splat;
@@ -99,14 +100,14 @@ namespace WolvenKit.ViewModels.Tools
             State = DockState.Dock;
             SideInDockedMode = DockSide.Tabbed;
 
-            TogglePreviewCommand = new RelayCommand(ExecuteTogglePreview, CanTogglePreview);
-            OpenFileSystemItemCommand = new RelayCommand(ExecuteOpenFile, CanOpenFile);
-            ToggleModBrowserCommand = new RelayCommand(ExecuteToggleModBrowser, CanToggleModBrowser);
-            OpenFileLocationCommand = new RelayCommand(ExecuteOpenFileLocationCommand, CanOpenFileLocationCommand);
-            CopyRelPathCommand = new RelayCommand(ExecuteCopyRelPath, CanCopyRelPath);
+            TogglePreviewCommand = new DelegateCommand(ExecuteTogglePreview, CanTogglePreview);
+            OpenFileSystemItemCommand = new DelegateCommand(ExecuteOpenFile, CanOpenFile);
+            ToggleModBrowserCommand = new DelegateCommand(ExecuteToggleModBrowser, CanToggleModBrowser);
+            OpenFileLocationCommand = new DelegateCommand(ExecuteOpenFileLocationCommand, CanOpenFileLocationCommand);
+            CopyRelPathCommand = new DelegateCommand(ExecuteCopyRelPath, CanCopyRelPath);
 
-            OpenFileOnlyCommand = new RelayCommand(ExecuteOpenFileOnly, CanOpenFileOnly);
-            AddSelectedCommand = new RelayCommand(ExecuteAddSelected, CanAddSelected);
+            OpenFileOnlyCommand = new DelegateCommand(ExecuteOpenFileOnly, CanOpenFileOnly);
+            AddSelectedCommand = new DelegateCommand(ExecuteAddSelected, CanAddSelected);
 
             ExpandAll = ReactiveCommand.Create(() => { });
             CollapseAll = ReactiveCommand.Create(() => { });
@@ -123,10 +124,8 @@ namespace WolvenKit.ViewModels.Tools
                 .Bind(out _boundRootNodes)
                 .Subscribe(
                 _ =>
-                {
                     // binds only the root node
-                    LeftItems = new ObservableCollection<RedFileSystemModel>(_boundRootNodes);
-                });
+                    LeftItems = new ObservableCollection<RedFileSystemModel>(_boundRootNodes));
 
             _archiveManager
                 .WhenAnyValue(x => x.IsManagerLoaded)
@@ -435,10 +434,7 @@ namespace WolvenKit.ViewModels.Tools
 
             try
             {
-                await Task.Run(() =>
-                {
-                    CyberEnhancedSearch();
-                });
+                await Task.Run(() => CyberEnhancedSearch());
             }
             catch (AggregateException ae)
             {
@@ -469,7 +465,7 @@ namespace WolvenKit.ViewModels.Tools
 
         private readonly record struct Term(TermType Type, string Pattern, string NegationPattern);
 
-        private interface SearchRefinement {}
+        private interface SearchRefinement { }
         private readonly record struct PatternRefinement(Term[] Terms) : SearchRefinement;
         private readonly record struct HashRefinement(ulong Hash) : SearchRefinement;
 
@@ -508,17 +504,18 @@ namespace WolvenKit.ViewModels.Tools
                 !Negation.IsMatch(term.Pattern)
                     ? term with { Type = TermType.Include }
                     : term with
-                        {
-                            Type = TermType.Exclude,
-                            Pattern = Negation.Replace(term.Pattern, "(?:${term})"),
-                            NegationPattern = Negation.Replace(term.Pattern,"")
-                        };
+                    {
+                        Type = TermType.Exclude,
+                        Pattern = Negation.Replace(term.Pattern, "(?:${term})"),
+                        NegationPattern = Negation.Replace(term.Pattern, "")
+                    };
 
         // Pipeline
 
         private static readonly Func<string, SearchRefinement> TermsIntoSequentialPipeline =
             (string refinementString) =>
-                Hash.Match(refinementString).Groups["num"].Value switch {
+                Hash.Match(refinementString).Groups["num"].Value switch
+                {
                     "" =>
                         new PatternRefinement
                         {
@@ -546,10 +543,13 @@ namespace WolvenKit.ViewModels.Tools
             };
 
         private static readonly Func<SearchRefinement, CyberSearch> RefinementsIntoMatchFunctions =
-            (SearchRefinement searchRefinement) => {
-                switch (searchRefinement) {
+            (SearchRefinement searchRefinement) =>
+            {
+                switch (searchRefinement)
+                {
                     case HashRefinement hashRefinement:
-                        return new CyberSearch {
+                        return new CyberSearch
+                        {
                             Match = (IGameFile candidate) => candidate.Key == hashRefinement.Hash,
                             SourceRefinement = hashRefinement,
                         };
@@ -575,8 +575,8 @@ namespace WolvenKit.ViewModels.Tools
                             Match =
                                 searchContainsExclusion
                                 ? (IGameFile candidate) =>
-                                    (!Regex.IsMatch(candidate.Name, pattern, RegexpOpts, RegexpSafetyTimeout) &&
-                                    Regex.IsMatch(candidate.Name, patternWithoutExcludedTerms, RegexpOpts, RegexpSafetyTimeout))
+                                    !Regex.IsMatch(candidate.Name, pattern, RegexpOpts, RegexpSafetyTimeout) &&
+                                    Regex.IsMatch(candidate.Name, patternWithoutExcludedTerms, RegexpOpts, RegexpSafetyTimeout)
                                 : (IGameFile candidate) =>
                                     Regex.IsMatch(candidate.Name, pattern, RegexpOpts, RegexpSafetyTimeout),
 
@@ -591,12 +591,11 @@ namespace WolvenKit.ViewModels.Tools
         private void CyberEnhancedSearch()
         {
             // Exceptions - this is bananatown you can't put this outside the func, but otherwise we're repeating the types all over the place
-            Func<Exception, IObservable<IChangeSet<RedFileViewModel, ulong>>> LogExceptionAndReturnEmpty =
-                ex =>
-                {
-                    _loggerService.Error($"Error performing search: {ex.Message}");
-                    return Observable.Empty<IChangeSet<RedFileViewModel, ulong>>();
-                };
+            IObservable<IChangeSet<RedFileViewModel, ulong>> LogExceptionAndReturnEmpty(Exception ex)
+            {
+                _loggerService.Error($"Error performing search: {ex.Message}");
+                return Observable.Empty<IChangeSet<RedFileViewModel, ulong>>();
+            }
 
             var searchAsSequentialRefinements =
                 RefinementSeparator
@@ -614,7 +613,7 @@ namespace WolvenKit.ViewModels.Tools
             var filesToSearch =
                 gameFilesOrMods
                     .Connect()   // Maybe we could avoid reconnecting every time? Dunno if it makes a difference
-                    .TransformMany((archive => archive.Files.Values), (fileInArchive => fileInArchive.Key));
+                    .TransformMany(archive => archive.Files.Values, fileInArchive => fileInArchive.Key);
 
             var filesMatchingQuery =
                 filesToSearch
@@ -624,7 +623,7 @@ namespace WolvenKit.ViewModels.Tools
             var viewableFileList =
                 filesMatchingQuery
                     .Transform(matchingFile => new RedFileViewModel(matchingFile))
-                    .Catch(LogExceptionAndReturnEmpty)
+                    .Catch((Func<Exception, IObservable<IChangeSet<RedFileViewModel, ulong>>>)LogExceptionAndReturnEmpty)
                     .Bind(out var list);
 
             viewableFileList

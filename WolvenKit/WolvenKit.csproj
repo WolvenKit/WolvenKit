@@ -39,8 +39,6 @@
     <PackageReference Include="Fluent.Ribbon" Version="9.0.4" />
     <PackageReference Include="Discord.Net" Version="3.7.2" />
     <PackageReference Include="DrawStringLineHeight" Version="1.0.0" />
-    <PackageReference Include="Feather.Controls" Version="1.0.3" />
-    <PackageReference Include="Feather.Core" Version="1.0.0" />
     <PackageReference Include="HelixToolkit.SharpDX.Assimp" Version="2.21.0" />
     <PackageReference Include="HelixToolkit.SharpDX.Core.Wpf" Version="2.21.0" />
     <PackageReference Include="PixiEditor.ColorPicker" Version="3.3.1" />

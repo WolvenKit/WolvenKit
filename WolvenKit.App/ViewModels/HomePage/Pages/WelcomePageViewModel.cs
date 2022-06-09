@@ -10,13 +10,12 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 using DynamicData;
 using Microsoft.WindowsAPICodePack.Dialogs;
+using Prism.Commands;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using Splat;
-using WolvenKit.Functionality.Commands;
 using WolvenKit.Functionality.Helpers;
 using WolvenKit.Functionality.ProjectManagement;
-using WolvenKit.Functionality.Services;
 using WolvenKit.Functionality.WKitGlobal;
 using WolvenKit.Interaction;
 using WolvenKit.ViewModels.HomePage;
@@ -29,31 +28,24 @@ namespace WolvenKit.ViewModels.Shared
         #region Fields
 
         private readonly IRecentlyUsedItemsService _recentlyUsedItemsService;
-        private readonly IProjectManager _projectManager;
         private readonly AppViewModel _mainViewModel;
 
         private readonly ReadOnlyObservableCollection<RecentlyUsedItemModel> _recentlyUsedItems;
-
-        private readonly ISettingsManager _settingsManager;
 
         #endregion Fields
 
         #region Constructors
 
         public WelcomePageViewModel(
-            IRecentlyUsedItemsService recentlyUsedItemsService,
-            ISettingsManager settingsManager,
-            IProjectManager projectManager
+            IRecentlyUsedItemsService recentlyUsedItemsService
             )
         {
 
             _mainViewModel = Locator.Current.GetService<AppViewModel>();
 
-            _projectManager = projectManager;
             _recentlyUsedItemsService = recentlyUsedItemsService;
-            _settingsManager = settingsManager;
 
-            CloseHomePage = new RelayCommand(ExecuteHome, CanHome);
+            CloseHomePage = new DelegateCommand(ExecuteHome, CanHome);
             PinItem = new DelegateCommand<string>(OnPinItemExecute);
             UnpinItem = new DelegateCommand<string>(OnUnpinItemExecute);
             OpenInExplorer = new DelegateCommand<string>(OnOpenInExplorerExecute);

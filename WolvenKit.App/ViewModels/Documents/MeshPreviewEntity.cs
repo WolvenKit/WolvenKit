@@ -6,10 +6,10 @@ using System.Reactive.Disposables;
 using System.Windows.Input;
 using HelixToolkit.Wpf.SharpDX;
 using Microsoft.Win32;
+using Prism.Commands;
 using ReactiveUI;
 using Splat;
 using WolvenKit.Common.Services;
-using WolvenKit.Functionality.Commands;
 using WolvenKit.Modkit.RED4;
 using WolvenKit.RED4.Archive.Buffer;
 using WolvenKit.RED4.Types;
@@ -28,7 +28,7 @@ namespace WolvenKit.ViewModels.Documents
             _data = ent;
 
             ShowExportEntity = true;
-            ExportEntity = new DelegateCommand((e) =>
+            ExportEntity = new DelegateCommand(() =>
             {
                 var dlg = new SaveFileDialog
                 {

@@ -1,8 +1,8 @@
 using System.Windows.Input;
 using System.Windows.Media;
+using Prism.Commands;
 using ReactiveUI.Fody.Helpers;
 using WolvenKit.Common.Services;
-using WolvenKit.Functionality.Commands;
 using WolvenKit.Functionality.Services;
 using WolvenKit.ProjectManagement.Project;
 
@@ -41,7 +41,7 @@ namespace WolvenKit.ViewModels.Tools
             SelectedFont = new FontFamily("Verdana");
             IsChecked = false;
             //Language = Languages.C;
-            sampleCommand = new DelegateCommand<object>(ExecuteSampleCommand);
+            SampleCommand = new DelegateCommand<object>(ExecuteSampleCommand);
         }
 
         #endregion Constructors
@@ -61,7 +61,6 @@ namespace WolvenKit.ViewModels.Tools
         /// <summary>
         /// Maintains the command for code samples
         /// </summary>
-        private readonly ICommand sampleCommand;
 
         /// <summary>
         /// Initializes the instance of the <see cref="SyntaxHighlightingViewModel"/> class
@@ -71,7 +70,7 @@ namespace WolvenKit.ViewModels.Tools
         /// <summary>
         /// Gets or sets the command for code sample 1 in menu items
         /// </summary>
-        public ICommand SampleCommand => sampleCommand;
+        public ICommand SampleCommand { get; }
 
         /// <summary>
         /// Gets or sets the command for code sample for checked property.
