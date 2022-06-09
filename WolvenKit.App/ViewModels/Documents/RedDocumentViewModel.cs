@@ -4,7 +4,9 @@ using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Windows.Input;
 using DynamicData.Kernel;
+using Prism.Commands;
 using ReactiveUI.Fody.Helpers;
 using Splat;
 using WolvenKit.Common;
@@ -17,8 +19,6 @@ using WolvenKit.RED4.Archive.CR2W;
 using WolvenKit.RED4.Archive.IO;
 using WolvenKit.RED4.CR2W;
 using WolvenKit.RED4.Types;
-using System.Windows.Input;
-using WolvenKit.Functionality.Commands;
 using WolvenKit.ViewModels.Dialogs;
 using WolvenKit.ViewModels.Shell;
 
@@ -59,8 +59,8 @@ namespace WolvenKit.ViewModels.Documents
                 }
             }
 
-            Extension = Path.GetExtension(path) != "" ? Path.GetExtension(path).Substring(1) : "";
-            NewEmbeddedFileCommand = new DelegateCommand(_ => ExecuteNewEmbeddedFile());
+            Extension = Path.GetExtension(path) != "" ? Path.GetExtension(path)[1..] : "";
+            NewEmbeddedFileCommand = new DelegateCommand(ExecuteNewEmbeddedFile);
         }
 
         #region properties
@@ -234,8 +234,10 @@ namespace WolvenKit.ViewModels.Documents
 
         private void PopulateItems()
         {
-            var root = new RDTDataViewModel(Cr2wFile.RootChunk, this);
-            root.FilePath = "(root)";
+            var root = new RDTDataViewModel(Cr2wFile.RootChunk, this)
+            {
+                FilePath = "(root)"
+            };
             TabItemViewModels.Add(root);
             AddTabForRedType(Cr2wFile.RootChunk);
 
@@ -243,9 +245,11 @@ namespace WolvenKit.ViewModels.Documents
             {
                 if (file.Content != null)
                 {
-                    var vm = new RDTDataViewModel(file.Content, this);
-                    vm.FilePath = file.FileName;
-                    vm.IsEmbeddedFile = true;
+                    var vm = new RDTDataViewModel(file.Content, this)
+                    {
+                        FilePath = file.FileName,
+                        IsEmbeddedFile = true
+                    };
                     TabItemViewModels.Add(vm);
                     AddTabForRedType(file.Content);
                 }
@@ -305,16 +309,20 @@ namespace WolvenKit.ViewModels.Documents
                 var dvm = sender as CreateClassDialogViewModel;
                 var instance = RedTypeManager.Create(dvm.SelectedClass);
 
-                var file = new CR2WEmbedded();
-                file.Content = instance;
-                file.FileName = "unnamed." + FileTypeHelper.GetFileExtensionsFromRootName(instance.GetType().Name)[0];
+                var file = new CR2WEmbedded
+                {
+                    Content = instance,
+                    FileName = "unnamed." + FileTypeHelper.GetFileExtensionsFromRootName(instance.GetType().Name)[0]
+                };
 
                 Cr2wFile.EmbeddedFiles.Add(file);
                 IsDirty = true;
 
-                var vm = new RDTDataViewModel(file.Content, this);
-                vm.FilePath = file.FileName;
-                vm.IsEmbeddedFile = true;
+                var vm = new RDTDataViewModel(file.Content, this)
+                {
+                    FilePath = file.FileName,
+                    IsEmbeddedFile = true
+                };
                 TabItemViewModels.Add(vm);
                 AddTabForRedType(file.Content);
             }
@@ -338,7 +346,9 @@ namespace WolvenKit.ViewModels.Documents
                     {
                         var fm = Locator.Current.GetService<IWatcherService>().GetFileModelFromHash(depotPath.GetRedHash());
                         if (fm != null)
+                        {
                             path = fm.FullName;
+                        }
                     }
 
                     if (path != null && File.Exists(path))

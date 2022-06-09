@@ -15,7 +15,6 @@ using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using Splat;
 using WolvenKit.Common;
-using WolvenKit.Common.Conversion;
 using WolvenKit.Common.Services;
 using WolvenKit.Functionality.Commands;
 using WolvenKit.Functionality.Controllers;
@@ -29,10 +28,6 @@ using WolvenKit.ViewModels.Dialogs;
 using WolvenKit.ViewModels.Documents;
 using static WolvenKit.RED4.Types.RedReflection;
 using static WolvenKit.ViewModels.Dialogs.DialogViewModel;
-using Mat4 = System.Numerics.Matrix4x4;
-using Quat = System.Numerics.Quaternion;
-using Vec3 = System.Numerics.Vector3;
-using Vec4 = System.Numerics.Vector4;
 
 namespace WolvenKit.ViewModels.Shell
 {
@@ -158,8 +153,8 @@ namespace WolvenKit.ViewModels.Shell
             OpenRefCommand = new DelegateCommand(ExecuteOpenRef, CanOpenRef);
             AddRefCommand = new DelegateCommand(ExecuteAddRef, CanAddRef);
             ExportChunkCommand = new DelegateCommand(ExecuteExportChunk, CanExportChunk);
-            ImportChunkCommand = new DelegateCommand(ExecuteImportChunk, CanImportChunk);
-            ImportChunk2Command = new DelegateCommand(ExecuteImportChunk2, CanImportChunk);
+            ImportWorldNodeDataCommand = new DelegateCommand(ExecuteImportWorldNodeData, CanImportWorldNodeData);
+            ImportWorldNodeDataWithoutCoordsCommand = new DelegateCommand(ExecuteImportWorldNodeDataWithoutCoords, CanImportWorldNodeData);
             AddItemToArrayCommand = new DelegateCommand(ExecuteAddItemToArray, CanAddItemToArray);
             AddHandleCommand = new DelegateCommand(ExecuteAddHandle, CanAddHandle);
             AddItemToCompiledDataCommand = new DelegateCommand(ExecuteAddItemToCompiledData, CanAddItemToCompiledData);
@@ -174,6 +169,7 @@ namespace WolvenKit.ViewModels.Shell
             PasteChunkCommand = new DelegateCommand(ExecutePasteChunk, CanPasteChunk);
             PasteHandleCommand = new DelegateCommand(ExecutePasteHandle, CanPasteHandle);
             PasteSelectionCommand = new DelegateCommand(ExecutePasteSelection, CanPasteSelection);
+            CopyHandleCommand = new DelegateCommand(ExecuteCopyHandle, CanCopyHandle);
         }
 
 
@@ -1921,7 +1917,7 @@ namespace WolvenKit.ViewModels.Shell
         private bool CanExportChunk() => PropertyCount > 0;
         private void ExecuteExportChunk()
         {
-            string filename = XPath;
+            var filename = XPath;
             if (Descriptor != null)
             {
                 filename = Descriptor;
@@ -2266,12 +2262,6 @@ namespace WolvenKit.ViewModels.Shell
         }
 
         public IRedArray ArraySelfOrParent
-
-        public ICommand PasteChunkCommand { get; private set; }
-        private bool CanPasteChunk() => (IsArray || IsInArray)
-            && RDTDataViewModel.CopiedChunk is not null
-            && (ArraySelfOrParent?.InnerType.IsAssignableTo(RDTDataViewModel.CopiedChunk.GetType()) ?? true);
-        private void ExecutePasteChunk()
         {
             get
             {
@@ -2282,6 +2272,7 @@ namespace WolvenKit.ViewModels.Shell
                 return ResolvedData is IRedArray ira2 ? ira2 : null;
             }
         }
+
 
         public void MoveChild(int index, ChunkViewModel item)
         {
@@ -2366,8 +2357,7 @@ namespace WolvenKit.ViewModels.Shell
             try
             {
                 // update actual data
-                var ira = ResolvedData as IRedArray;
-                if (ira == null)
+                if (ResolvedData is not IRedArray ira)
                 {
                     ira = Data as IRedArray;
                 }

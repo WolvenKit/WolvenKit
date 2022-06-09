@@ -1,19 +1,12 @@
-using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.IO;
-using System.Linq;
 using System.Reactive.Linq;
 using System.Windows.Input;
+using Prism.Commands;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
-using Splat;
-using WolvenKit.Functionality.Commands;
 using WolvenKit.Interaction;
 using WolvenKit.RED4.Archive.CR2W;
 using WolvenKit.RED4.Types;
-using WolvenKit.ViewModels.Dialogs;
-using WolvenKit.ViewModels.Shell;
 
 namespace WolvenKit.ViewModels.Documents
 {
@@ -33,8 +26,8 @@ namespace WolvenKit.ViewModels.Documents
 
         public RedDocumentTabViewModel()
         {
-            DeleteEmbeddedFileCommand = new DelegateCommand(_ => ExecuteDeleteEmbeddedFile(), _ => CanDeleteEmbeddedFile());
-            RenameEmbeddedFileCommand = new RelayCommand(ExecuteRenameEmbeddedFile, CanRenameEmbeddedFile);
+            DeleteEmbeddedFileCommand = new DelegateCommand(ExecuteDeleteEmbeddedFile, CanDeleteEmbeddedFile);
+            RenameEmbeddedFileCommand = new DelegateCommand(ExecuteRenameEmbeddedFile, CanRenameEmbeddedFile);
         }
 
         public ICommand DeleteEmbeddedFileCommand { get; private set; }
@@ -43,7 +36,7 @@ namespace WolvenKit.ViewModels.Documents
         {
             if (this is RDTDataViewModel datavm)
             {
-                for (int i = 0; i < File.Cr2wFile.EmbeddedFiles.Count; i++)
+                for (var i = 0; i < File.Cr2wFile.EmbeddedFiles.Count; i++)
                 {
                     var file = File.Cr2wFile.EmbeddedFiles[i];
                     if (file.Content == datavm.GetData())
@@ -52,7 +45,7 @@ namespace WolvenKit.ViewModels.Documents
                         break;
                     }
                 }
-                for (int i = 0; i < File.TabItemViewModels.Count; i++)
+                for (var i = 0; i < File.TabItemViewModels.Count; i++)
                 {
                     var vm = File.TabItemViewModels[i];
                     if (vm == this)
@@ -72,7 +65,7 @@ namespace WolvenKit.ViewModels.Documents
             if (this is RDTDataViewModel datavm)
             {
                 CR2WEmbedded embeddedFile = null;
-                for (int i = 0; i < File.Cr2wFile.EmbeddedFiles.Count; i++)
+                for (var i = 0; i < File.Cr2wFile.EmbeddedFiles.Count; i++)
                 {
                     var file = File.Cr2wFile.EmbeddedFiles[i];
                     if (file.Content == datavm.GetData())
