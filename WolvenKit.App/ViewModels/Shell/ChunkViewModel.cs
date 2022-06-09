@@ -2,19 +2,14 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.ComponentModel;
 using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Reactive.Linq;
-using System.Reflection;
 using System.Runtime.Serialization;
-using System.Text.Json;
 using System.Windows.Forms;
 using System.Windows.Input;
-using DynamicData;
 using DynamicData.Binding;
-using Newtonsoft.Json;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using Splat;
@@ -24,21 +19,15 @@ using WolvenKit.Common.Services;
 using WolvenKit.Functionality.Commands;
 using WolvenKit.Functionality.Controllers;
 using WolvenKit.Functionality.Interfaces;
-using WolvenKit.Functionality.Services;
 using WolvenKit.Models;
 using WolvenKit.RED4;
 using WolvenKit.RED4.Archive.Buffer;
 using WolvenKit.RED4.Archive.CR2W;
-using WolvenKit.RED4.Archive.IO;
 using WolvenKit.RED4.CR2W.JSON;
 using WolvenKit.RED4.Types;
 using WolvenKit.ViewModels.Dialogs;
 using WolvenKit.ViewModels.Documents;
 using static WolvenKit.RED4.Types.RedReflection;
-using Mat4 = System.Numerics.Matrix4x4;
-using Quat = System.Numerics.Quaternion;
-using Vec3 = System.Numerics.Vector3;
-using Vec4 = System.Numerics.Vector4;
 
 namespace WolvenKit.ViewModels.Shell
 {
@@ -236,7 +225,10 @@ namespace WolvenKit.ViewModels.Shell
                     ($"Something went wrong while trying to delete the selection : {ex}");
             }
 
-            Tab.SelectedChunk = Parent;
+            if (Tab is RDTDataViewModel dvm)
+            {
+                dvm.SelectedChunk = Parent;
+            }
         }
 
         public ChunkViewModel(IRedType export, RedDocumentTabViewModel tab) : this(export)
@@ -303,18 +295,7 @@ namespace WolvenKit.ViewModels.Shell
 
         private readonly RedDocumentTabViewModel _tab;
 
-        public RedDocumentTabViewModel Tab
-        {
-            get
-            {
-                if (_tab != null)
-                {
-                    return _tab;
-                }
-
-                return Parent.Tab;
-            }
-        }
+        public RedDocumentTabViewModel Tab => _tab != null ? _tab : Parent.Tab;
 
         [Reactive] public IRedType Data { get; set; }
 
@@ -1086,21 +1067,11 @@ namespace WolvenKit.ViewModels.Shell
             if (PropertyType.IsAssignableTo(typeof(BaseStringType)))
             {
                 var value = (BaseStringType)Data;
-                if (value is NodeRef rn)
-                {
-                    if (rn.GetResolvedText() is var text && !string.IsNullOrEmpty(text))
-                    {
-                        Value = text;
-                    }
-                    else
-                    {
-                        Value = rn.GetRedHash() != 0 ? rn.GetRedHash().ToString() : "null";
-                    }
-                }
-                else
-                {
-                    Value = "null";
-                }
+                Value = value is NodeRef rn
+                    ? rn.GetResolvedText() is var text && !string.IsNullOrEmpty(text)
+                        ? text
+                        : rn.GetRedHash() != 0 ? rn.GetRedHash().ToString() : "null"
+                    : "null";
                 if (!string.IsNullOrEmpty(value))
                 {
                     Value = value;
@@ -1398,15 +1369,11 @@ namespace WolvenKit.ViewModels.Shell
                 {
                     return "Compass";
                 }
-                if (PropertyType.IsAssignableTo(typeof(WorldPosition)))
-                {
-                    return "Move";
-                }
-                if (PropertyType.IsAssignableTo(typeof(Quaternion)))
-                {
-                    return "IssueReopened";
-                }
-                return PropertyType.IsAssignableTo(typeof(CColor)) ? "SymbolColor" : "SymbolClass";
+                return PropertyType.IsAssignableTo(typeof(WorldPosition))
+                    ? "Move"
+                    : PropertyType.IsAssignableTo(typeof(Quaternion))
+                    ? "IssueReopened"
+                    : PropertyType.IsAssignableTo(typeof(CColor)) ? "SymbolColor" : "SymbolClass";
             }
         }
 
@@ -1680,14 +1647,12 @@ namespace WolvenKit.ViewModels.Shell
         private bool CanDeleteItem() => IsInArray;
         private void ExecuteDeleteItem()
         {
-            // if (Tab is RDTDataViewModel dvm)
-            // {
-            //     dvm.SelectedChunk = Parent;
-            // }
-            // if (Parent.Data is IRedArray ary)
             try
             {
-                Tab.SelectedChunk = Parent;
+                if (Tab is RDTDataViewModel dvm)
+                {
+                    dvm.SelectedChunk = Parent;
+                }
                 if (Parent.Data is IRedArray ary)
                 {
                     ary.Remove(Data);
@@ -2086,17 +2051,7 @@ namespace WolvenKit.ViewModels.Shell
             }
         }
 
-        public IRedArray ArraySelfOrParent
-        {
-            get
-            {
-                if (Parent.ResolvedData is IRedArray ira)
-                {
-                    return ira;
-                }
-                return ResolvedData is IRedArray ira2 ? ira2 : null;
-            }
-        }
+        public IRedArray ArraySelfOrParent => Parent.ResolvedData is IRedArray ira ? ira : ResolvedData is IRedArray ira2 ? ira2 : null;
 
 
         public ICommand PasteSelectionCommand { get; private set; }
@@ -2421,9 +2376,6 @@ namespace WolvenKit.ViewModels.Shell
 
         public ICommand OpenSelfCommand { get; private set; }
         private bool CanOpenSelf() => RelativePath != null && _tab == null;
-        private void ExecuteOpenSelf()
-        {
-            Locator.Current.GetService<AppViewModel>().OpenFileFromDepotPath(RelativePath);
-        }
+        private void ExecuteOpenSelf() => Locator.Current.GetService<AppViewModel>().OpenFileFromDepotPath(RelativePath);
     }
 }
