@@ -463,7 +463,7 @@ namespace WolvenKit.RED4.Archive.IO
             var result = new DataCollection();
 
             using var ms = new MemoryStream();
-            using var file = new CR2WWriter(ms) { IsRoot = IsRoot };
+            using var file = new CR2WWriter(ms) { IsRoot = IsRoot, _file = _file };
 
             file._chunkInfos = _chunkInfos;
 

@@ -6,7 +6,6 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Media.Media3D;
 using HelixToolkit.SharpDX.Core;
 using HelixToolkit.Wpf.SharpDX;
 using ReactiveUI;
@@ -14,20 +13,19 @@ using ReactiveUI.Fody.Helpers;
 using WolvenKit.Common;
 using WolvenKit.Common.Interfaces;
 using WolvenKit.Common.Services;
-using WolvenKit.Functionality.Ab4d;
 using WolvenKit.Functionality.Commands;
 using WolvenKit.Functionality.Extensions;
-using WolvenKit.Functionality.Helpers;
+using WolvenKit.Functionality.Other;
 using WolvenKit.Functionality.Services;
 using WolvenKit.Models;
 using WolvenKit.Models.Docking;
 using WolvenKit.Modkit.RED4;
+using WolvenKit.Modkit.RED4.Tools;
 using WolvenKit.RED4.Archive.CR2W;
 using WolvenKit.RED4.CR2W;
 using WolvenKit.RED4.Types;
 using WolvenKit.ViewModels.Documents;
 using static WolvenKit.ViewModels.Documents.RDTMeshViewModel;
-using WolvenKit.Modkit.RED4.Tools;
 
 namespace WolvenKit.ViewModels.Tools
 {
@@ -380,10 +378,7 @@ namespace WolvenKit.ViewModels.Tools
 
         public bool ShowWireFrame
         {
-            get
-            {
-                return _showWireFrame;
-            }
+            get => _showWireFrame;
             set
             {
                 _showWireFrame = value;
@@ -460,8 +455,8 @@ namespace WolvenKit.ViewModels.Tools
                 {
                     Name = $"submesh_{index:D2}_LOD_{meshesinfo.LODLvl[index]:D2}",
                     LOD = meshesinfo.LODLvl[index],
-                    IsRendering = (chunkMask & 1UL << index) > 0 && meshesinfo.LODLvl[index] == SelectedLOD,
-                    EnabledWithMask = (chunkMask & 1UL << index) > 0,
+                    IsRendering = (chunkMask & (1UL << index)) > 0 && meshesinfo.LODLvl[index] == SelectedLOD,
+                    EnabledWithMask = (chunkMask & (1UL << index)) > 0,
                     Geometry = new HelixToolkit.SharpDX.Core.MeshGeometry3D()
                     {
                         Positions = positions,

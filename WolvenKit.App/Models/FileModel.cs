@@ -6,6 +6,7 @@ using System.IO;
 using System.Linq;
 using System.Reactive.Linq;
 using System.Windows.Input;
+using Prism.Commands;
 using ReactiveUI;
 using Splat;
 using WolvenKit.Common;
@@ -88,9 +89,9 @@ namespace WolvenKit.Models
             Hash = GenerateKey(FullName, project);
             ParentHash = GenerateKey(parentfullname, project);
             RelativePath = GetRelativeName(FullName, project);
-            OpenFileCommand = new RelayCommand(ExecuteOpenFile, CanOpenFile);
-            DeleteFileCommand = new RelayCommand(ExecuteDeleteFile, CanDeleteFile);
-            RenameFileCommand = new RelayCommand(ExecuteRenameFile, CanRenameFile);
+            OpenFileCommand = new DelegateCommand(ExecuteOpenFile, CanOpenFile);
+            DeleteFileCommand = new DelegateCommand(ExecuteDeleteFile, CanDeleteFile);
+            RenameFileCommand = new DelegateCommand(ExecuteRenameFile, CanRenameFile);
         }
 
         #region properties

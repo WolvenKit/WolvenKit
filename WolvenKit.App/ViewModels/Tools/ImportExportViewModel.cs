@@ -8,11 +8,8 @@ using System.Reactive;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Media3D;
-using Ab3d.Assimp;
-using Assimp;
 using DynamicData;
+using Prism.Commands;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using WolvenKit.Common;
@@ -24,10 +21,8 @@ using WolvenKit.Common.Model.Arguments;
 using WolvenKit.Common.Services;
 using WolvenKit.Core.Interfaces;
 using WolvenKit.Core.Services;
-using WolvenKit.Functionality.Commands;
 using WolvenKit.Functionality.Controllers;
 using WolvenKit.Functionality.Services;
-using WolvenKit.Interaction;
 using WolvenKit.Models;
 using WolvenKit.Models.Docking;
 using WolvenKit.Modkit.RED4.Opus;
@@ -183,12 +178,7 @@ namespace WolvenKit.ViewModels.Tools
             // example: if a masklist exists in the filelist, ignore all files in the subdirectory
             // named the same as masklist but with extension mlmask
             var directory = new FileInfo(file.FullName).Directory;
-            if (directory.Name.Contains($".{ERedExtension.mlmask}"))
-            {
-                return false;
-            }
-
-            return true;
+            return !directory.Name.Contains($".{ERedExtension.mlmask}");
         }
 
         #region properties
@@ -237,7 +227,7 @@ namespace WolvenKit.ViewModels.Tools
         {
             get
             {
-                if (SelectedObject != null)
+                if (SelectedObject is not null)
                 {
                     if (!SelectionLocked)
                     {
@@ -246,12 +236,7 @@ namespace WolvenKit.ViewModels.Tools
                     }
                     else
                     {
-                        if (_lastselected == null)
-                        { return ""; }
-                        else
-                        {
-                            return _lastselected.Name;
-                        }
+                        return _lastselected == null ? "" : _lastselected.Name;
                     }
                 }
                 else
@@ -445,10 +430,10 @@ namespace WolvenKit.ViewModels.Tools
             }
 
             // set selected types
-            if (CollectionSelectedItems != null)
+            if (CollectionSelectedItems is not null)
             {
                 CollectionSelectedItems.Clear();
-                if (selectedEntries != null)
+                if (selectedEntries is not null)
                 {
                     CollectionSelectedItems.AddRange(selectedEntries.Select(_ => new CollectionItemViewModel(_)));
                 }
@@ -462,7 +447,7 @@ namespace WolvenKit.ViewModels.Tools
             }
 
             CollectionAvailableItems.Clear();
-            if (_archiveManager != null)
+            if (_archiveManager is not null)
             {
                 CollectionAvailableItems.AddRange(_archiveManager
                     .GetGroupedFiles()[$".{fetchExtension}"]
@@ -502,10 +487,10 @@ namespace WolvenKit.ViewModels.Tools
             }
 
             // set selected types
-            if (CollectionSelectedItems != null)
+            if (CollectionSelectedItems is not null)
             {
                 CollectionSelectedItems.Clear();
-                if (selectedEntries != null)
+                if (selectedEntries is not null)
                 {
                     CollectionSelectedItems.AddRange(selectedEntries.Select(_ => new CollectionItemViewModel(_)));
                 }
@@ -834,7 +819,6 @@ namespace WolvenKit.ViewModels.Tools
                 _progressService.IsIndeterminate = false;
             }
         }
-        private Dictionary<string, object> _namedObjects;
 
         private async Task<bool> ConvertSingle(ConvertableItemViewModel item)
         {
@@ -861,24 +845,8 @@ namespace WolvenKit.ViewModels.Tools
                     return false;
             }
 
-
-
-
-
-
-
-
-            // Create an instance of AssimpWpfImporter
-            var assimpWpfImporter = new AssimpWpfImporter();
-
             try
             {
-                assimpWpfImporter.DefaultMaterial = new DiffuseMaterial(Brushes.Silver);
-                assimpWpfImporter.AssimpPostProcessSteps = PostProcessSteps.Triangulate;
-
-                // When ReadPolygonIndices is true, assimpWpfImporter will read PolygonIndices collection that can be used to show polygons instead of triangles.
-                assimpWpfImporter.ReadPolygonIndices = false;
-
                 var qx = item.GetBaseFile();
                 var proj = _projectManager.ActiveProject;
                 var relativename = FileModel.GetRelativeName(qx.FullName, proj);
@@ -891,7 +859,7 @@ namespace WolvenKit.ViewModels.Tools
                 if (_archiveManager.Lookup(hash).HasValue)
                 {
                     file = _archiveManager.Lookup(hash).Value;
-                    if (file != null)
+                    if (file is not null)
                     {
                         var meshStream = new MemoryStream();
                         file.Extract(meshStream);
@@ -917,92 +885,9 @@ namespace WolvenKit.ViewModels.Tools
                 {
                     outfile = qx.FullName;
                 }
-
-
-
-
-
-
-                Model3D readModel3D;
-
-                try
-                {
-                    readModel3D =
-                        assimpWpfImporter.ReadModel3D(outfile,
-                            texturesPath: null); // we can also define a textures path if the textures are located in some other directory (this is parameter can be skipped, but is defined here so you will know that you can use it)
-                    _namedObjects = assimpWpfImporter.NamedObjects;
-                }
-                catch (Exception ex)
-                {
-                    readModel3D = null;
-                    await Interactions.ShowMessageBoxAsync(
-                        $"Error importing file:\r\n {ex.Message}",
-                        "WolvenKit",
-                        WMessageBoxButtons.Ok,
-                        WMessageBoxImage.Error);
-                }
-
-                if (readModel3D != null)
-                {
-                    // First create an instance of AssimpWpfExporter
-                    var assimpWpfExporter = new AssimpWpfExporter
-                    {
-                        NamedObjects = _namedObjects
-                    };
-
-                    // We can export Model3D, Visual3D or entire Viewport3D:
-                    //assimpWpfExporter.AddModel(model3D);
-                    //assimpWpfExporter.AddVisual3D(ContentModelVisual3D);
-                    //assimpWpfExporter.AddViewport3D(MainViewport);
-
-                    // Here we export Viewport3D:
-                    assimpWpfExporter.AddModel(readModel3D);
-
-                    bool isExported;
-
-                    try
-                    {
-
-                        var qaz = item.Properties as CommonConvertArgs;
-                        var test = Path.ChangeExtension(item.FullName, "." + qaz.EConvertableOutput.ToString());
-
-
-
-                        // Item Full name has to be the end output aka raw folder ty :D
-                        isExported = assimpWpfExporter.Export(test, qaz.EConvertableOutput.ToString());
-
-                        if (!isExported)
-                        {
-                            await Interactions.ShowMessageBoxAsync(
-                            "Not exported",
-                            "WolvenKit",
-                            WMessageBoxButtons.Ok,
-                            WMessageBoxImage.Error);
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        await Interactions.ShowMessageBoxAsync(
-                            $"Error exporting:\r\n {ex.Message}",
-                            "WolvenKit",
-                            WMessageBoxButtons.Ok,
-                            WMessageBoxImage.Error);
-                        isExported = false;
-                    }
-                }
-
-                GC.Collect();
-                GC.WaitForPendingFinalizers();
-                GC.Collect();
             }
             catch
             {
-
-            }
-            finally
-            {
-                // Dispose unmanaged resources
-                assimpWpfImporter.Dispose();
 
             }
 

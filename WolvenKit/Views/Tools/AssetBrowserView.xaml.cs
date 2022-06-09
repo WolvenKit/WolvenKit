@@ -16,12 +16,10 @@ using WolvenKit.Common.Interfaces;
 using WolvenKit.Common.Model;
 using WolvenKit.Common.Model.Arguments;
 using WolvenKit.Core.Interfaces;
-using WolvenKit.Functionality.Ab4d;
 using WolvenKit.Functionality.Commands;
 using WolvenKit.Functionality.Helpers;
+using WolvenKit.Functionality.Other;
 using WolvenKit.Functionality.Services;
-using WolvenKit.Models.Docking;
-using WolvenKit.Modkit.RED4.Tools;
 using WolvenKit.ViewModels.Tools;
 
 namespace WolvenKit.Views.Tools
