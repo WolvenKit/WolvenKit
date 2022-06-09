@@ -36,36 +36,32 @@
     <PackageReference Include="ControlzEx" Version="5.0.1" />
     <PackageReference Include="AdonisUI" Version="1.17.1" />
     <PackageReference Include="AdonisUI.ClassicTheme" Version="1.17.1" />
-    <PackageReference Include="Fluent.Ribbon" Version="9.0.3" />
-    <PackageReference Include="Ab3d.DXEngine.Wpf" Version="5.0.8000" />
-    <PackageReference Include="Ab3d.DXEngine" Version="5.0.8000" />
-    <PackageReference Include="Ab3d.PowerToys" Version="10.0.8000" />
-    <PackageReference Include="Discord.Net" Version="3.3.2" />
+    <PackageReference Include="Fluent.Ribbon" Version="9.0.4" />
+    <PackageReference Include="Discord.Net" Version="3.7.2" />
     <PackageReference Include="DrawStringLineHeight" Version="1.0.0" />
-    <PackageReference Include="Feather.Controls" Version="1.0.3" />
-    <PackageReference Include="Feather.Core" Version="1.0.0" />
-    <PackageReference Include="HelixToolkit.SharpDX.Assimp" Version="2.20.2" />
-    <PackageReference Include="HelixToolkit.SharpDX.Core.Wpf" Version="2.20.2" />
     <PackageReference Include="Nodify" Version="1.7.0" />
     <PackageReference Include="PixiEditor.ColorPicker" Version="3.3.1" />
-    <PackageReference Include="ReactiveUI" Version="17.1.17" />
+    <PackageReference Include="HelixToolkit.SharpDX.Assimp" Version="2.21.0" />
+    <PackageReference Include="HelixToolkit.SharpDX.Core.Wpf" Version="2.21.0" />
+    <PackageReference Include="PixiEditor.ColorPicker" Version="3.3.1" />
+    <PackageReference Include="ReactiveUI" Version="18.0.10" />
     <PackageReference Include="ReactiveUI.Events.WPF" Version="15.1.1" />
-    <PackageReference Include="ReactiveUI.Fody" Version="17.1.17" />
-    <PackageReference Include="ReactiveUI.WPF" Version="17.1.17" />
-    <PackageReference Include="ScottPlot.WPF" Version="4.1.33" />
-    <PackageReference Include="Splat" Version="14.1.45" />
+    <PackageReference Include="ReactiveUI.Fody" Version="18.0.10" />
+    <PackageReference Include="ReactiveUI.WPF" Version="18.0.10" />
+    <PackageReference Include="ScottPlot.WPF" Version="4.1.47" />
+    <PackageReference Include="Splat" Version="14.2.8" />
     <PackageReference Include="Microsoft.Extensions.Hosting" Version="6.0.1" />
     <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="6.0.0" />
-    <PackageReference Include="Splat.Microsoft.Extensions.DependencyInjection" Version="14.1.45" />
-    <PackageReference Include="Splat.Microsoft.Extensions.Logging" Version="14.1.45" />
+    <PackageReference Include="Splat.Microsoft.Extensions.DependencyInjection" Version="14.2.8" />
+    <PackageReference Include="Splat.Microsoft.Extensions.Logging" Version="14.2.8" />
 
     <PackageReference Include="MahApps.Metro" Version="2.4.9" />
     <PackageReference Include="MahApps.Metro.IconPacks" Version="4.11.0" />
-    <PackageReference Include="Microsoft.Web.WebView2" Version="1.0.1108.44" />
+    <PackageReference Include="Microsoft.Web.WebView2" Version="1.0.1210.39" />
     <PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.39" />
     <PackageReference Include="NodeNetwork" Version="6.0.0" />
     <PackageReference Include="NodeNetworkToolkit" Version="6.0.0" />
-    <PackageReference Include="Octokit" Version="0.50.0" />
+    <PackageReference Include="Octokit" Version="0.51.0" />
     <PackageReference Include="Syncfusion.Edit.WPF" Version="19.4.0.38" />
 
     <PackageReference Include="Syncfusion.Tools.WPF" Version="19.4.0.38" />
@@ -103,7 +99,7 @@
 
     <PackageReference Include="WolvenKit.WPFSoundVisualizationLibNet5" Version="1.0.1" />
 
-    <PackageReference Include="WpfAnalyzers" Version="4.0.2" PrivateAssets="all">
+    <PackageReference Include="WpfAnalyzers" Version="4.1.1" PrivateAssets="all">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
     </PackageReference>
   </ItemGroup>
@@ -139,22 +135,7 @@
     <Compile Remove="Views\Templates\RedFixedPointEditor.cs" />
     <Compile Remove="Views\Wizards\PublishWizardView.xaml.cs" />
   </ItemGroup>
-    <ItemGroup>
-    <Content Include="Ab3d.DirectX.Client.Settings.dll">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Ab3d.PowerToys.Assimp.dll">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Assimp32.dll">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Assimp64.dll">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="AssimpNet.dll">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
+  <ItemGroup>
     <Content Include="DockStatesDefault.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -1623,8 +1604,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Remove="Ab3d.DirectX.Client.Settings.dll" />
-    <None Remove="Ab3d.PowerToys.Assimp.dll" />
     <None Remove="Assimp32.dll" />
     <None Remove="Assimp64.dll" />
     <None Remove="AssimpNet.dll" />
@@ -1810,16 +1789,6 @@
 
   <ItemGroup>
     <Page Remove="Views\Wizards\PublishWizardView.xaml" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Reference Include="Ab3d.DirectX.Client.Settings">
-      <HintPath>Ab3d.DirectX.Client.Settings.dll</HintPath>
-    </Reference>
-    <Reference Include="Ab3d.PowerToys.Assimp">
-    </Reference>
-    <Reference Include="AssimpNet">
-    </Reference>
   </ItemGroup>
 
   <ItemGroup>

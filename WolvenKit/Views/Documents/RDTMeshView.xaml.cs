@@ -1,42 +1,8 @@
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Reactive.Disposables;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Media.Media3D;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
-using Ab3d;
-using Ab3d.Assimp;
-using Ab3d.Common.Cameras;
-using Ab3d.DirectX;
-using Ab3d.DirectX.Effects;
-using Ab3d.DirectX.Materials;
-using Ab3d.Utilities;
-using Ab3d.Visuals;
-using Assimp;
 using ReactiveUI;
-using SharpDX;
-using Splat;
-using WolvenKit.Common.Services;
-using WolvenKit.Functionality.Ab4d;
-using WolvenKit.Functionality.Services;
 using WolvenKit.ViewModels.Documents;
-using Material = WolvenKit.ViewModels.Documents.Material;
-using Node = WolvenKit.ViewModels.Documents.Node;
-using HelixToolkit.Wpf.SharpDX;
-using HelixToolkit.SharpDX.Core.Assimp;
-using HelixToolkit.SharpDX.Core;
-using HelixToolkit.SharpDX.Core.Model.Scene;
-using System.Reactive.Disposables;
 
 namespace WolvenKit.Views.Documents
 {
@@ -71,12 +37,7 @@ namespace WolvenKit.Views.Documents
             });
         }
 
-        private void ReloadModels(object sender, RoutedEventArgs e)
-        {
-            hxViewport.ZoomExtents();
-            //if (ViewModel != null)
-            //    LoadModels(ViewModel.SelectedAppearance);
-        }
+        private void ReloadModels(object sender, RoutedEventArgs e) => hxViewport.ZoomExtents();//if (ViewModel != null)//    LoadModels(ViewModel.SelectedAppearance);
         private void ComboBoxAdv_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             //if (ViewModel != null)

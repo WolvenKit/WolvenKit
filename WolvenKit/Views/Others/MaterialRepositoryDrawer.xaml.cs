@@ -4,7 +4,7 @@ using System.Linq;
 using System.Windows.Controls;
 using System.Windows.Media.Imaging;
 using Splat;
-using WolvenKit.Functionality.Ab4d;
+using WolvenKit.Functionality.Other;
 using WolvenKit.Functionality.Services;
 
 namespace WolvenKit.Views.Others

@@ -1,15 +1,12 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Splat;
+using WolvenKit.Common.Services;
 using WolvenKit.RED4.Types;
 using YamlDotNet.Core;
 using YamlDotNet.Core.Events;
 using YamlDotNet.Serialization;
-using Splat;
-using WolvenKit.Common.Services;
 
 namespace WolvenKit.Models
 {
@@ -241,6 +238,7 @@ namespace WolvenKit.Models
         {
             // TODO get parent type & property name, look-up type if ambiguous?
             // TODO parse type strings
+            // TODO Maybe this can be done with some is magic.
             if (type == typeof(TweakDBID))
             {
                 return (TweakDBID)s.Value;
@@ -301,7 +299,7 @@ namespace WolvenKit.Models
                         // embedded record
                         else if (parser.Current is MappingStart)
                         {
-                            string childID = id;
+                            var childID = id;
                             if (childID != null && propertyName != null)
                             {
                                 childID = childID + "." + propertyName;
@@ -343,7 +341,7 @@ namespace WolvenKit.Models
                         {
                             tweak.Base = (TweakDBID)propertyValue.ToString();
                         }
-                        else if (propertyName != null && propertyName != "")
+                        else if (propertyName is not null and not "")
                         {
                             tweak.Properties[propertyName] = propertyValue;
                         }
@@ -362,8 +360,10 @@ namespace WolvenKit.Models
             {
                 if (s.Tag == "!append")
                 {
-                    var tweak = new TweakXLAppend();
-                    tweak.ID = ReadScalar(s).ToString();
+                    var tweak = new TweakXLAppend
+                    {
+                        ID = ReadScalar(s).ToString()
+                    };
                     return tweak;
                 }
                 else
@@ -380,7 +380,7 @@ namespace WolvenKit.Models
                     {
                         tweak.ID = id;
                     }
-                    tweak.Value = (IRedType)ReadScalar(s);
+                    tweak.Value = ReadScalar(s);
                     return tweak;
                 }
             }

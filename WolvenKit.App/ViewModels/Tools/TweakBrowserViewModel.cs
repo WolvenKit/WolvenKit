@@ -1,10 +1,6 @@
 using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Data;
 using ReactiveUI;
 using Splat;
@@ -13,8 +9,6 @@ using WolvenKit.Common.Services;
 using WolvenKit.Core.Services;
 using WolvenKit.Functionality.Controllers;
 using WolvenKit.Functionality.Services;
-using WolvenKit.Models;
-using WolvenKit.Models.Docking;
 using WolvenKit.ProjectManagement.Project;
 using WolvenKit.RED4.Types;
 using WolvenKit.ViewModels.Shell;
@@ -70,24 +64,21 @@ namespace WolvenKit.ViewModels.Tools
 
             //State = DockState.Document;
 
-            _tweakDB.Loaded += new EventHandler((_, args) =>
-            { 
-                TweakDBIDs = CollectionViewSource.GetDefaultView(_tweakDB.GetRecords());
-            });
+            _tweakDB.Loaded += new EventHandler((_, args) => TweakDBIDs = CollectionViewSource.GetDefaultView(_tweakDB.GetRecords()));
         }
 
         #endregion constructors
 
         public ICollectionView TweakDBIDs { get; set; }
 
-        private string _searchText = ""; 
+        private string _searchText = string.Empty;
         public string SearchText
         {
             get => _searchText;
             set
             {
                 _searchText = value;
-                if (_searchText != "")
+                if (!string.IsNullOrEmpty(_searchText))
                 {
                     TweakDBIDs.Filter = (o) => o.ToString().Contains(_searchText);
                 }
@@ -95,7 +86,7 @@ namespace WolvenKit.ViewModels.Tools
                 {
                     TweakDBIDs.Filter = null;
                 }
-                this.RaisePropertyChanged("SearchText");
+                this.RaisePropertyChanged(nameof(SearchText));
             }
         }
 
@@ -106,7 +97,7 @@ namespace WolvenKit.ViewModels.Tools
             set
             {
                 _selectedTweakDBID = value;
-                this.RaisePropertyChanged("SelectedTweakDBID");
+                this.RaisePropertyChanged(nameof(SelectedTweakDBID));
                 if (_selectedTweakDBID != null)
                 {
                     SelectedRecord.Clear();
@@ -120,7 +111,7 @@ namespace WolvenKit.ViewModels.Tools
                 {
                     SelectedRecord.Clear();
                 }
-                this.RaisePropertyChanged("SelectedRecord");
+                this.RaisePropertyChanged(nameof(SelectedRecord));
             }
         }
 

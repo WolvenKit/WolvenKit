@@ -33,12 +33,8 @@ namespace WolvenKit.Core
             }
 
             var infoAttr = assembly.GetCustomAttribute<AssemblyInformationalVersionAttribute>();
-            if (infoAttr != null)
-            {
-                return SemVersion.Parse(infoAttr.InformationalVersion);
-            }
 
-            return SemVersion.Parse("1.0.0");
+            return infoAttr != null ? SemVersion.Parse(infoAttr.InformationalVersion, SemVersionStyles.Strict) : SemVersion.Parse("1.0.0", SemVersionStyles.Strict);
         }
 
         public static SemVersion GetAssemblyVersion(string assemblyName)
@@ -47,7 +43,7 @@ namespace WolvenKit.Core
             var paths = new List<string>(runtimeAssemblies);
             if (paths == null)
             {
-                return SemVersion.Parse("1.0.0");
+                return SemVersion.Parse("1.0.0", SemVersionStyles.Strict);
             }
             var resolver = new PathAssemblyResolver(paths);
             var mlc = new MetadataLoadContext(resolver);
@@ -80,7 +76,7 @@ namespace WolvenKit.Core
                     }
                 }
 
-                var version = SemVersion.Parse(productVersion);
+                var version = SemVersion.Parse(productVersion, SemVersionStyles.Strict);
                 return version;
             }
         }

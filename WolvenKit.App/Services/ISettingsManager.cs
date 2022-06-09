@@ -12,12 +12,11 @@ namespace WolvenKit.Functionality.Services
 
         // I wish there was a better way to inject deps
         // than creating unnecessary interfaces.
-        public string SettingsVersion { get; }
+        public int SettingsVersion { get; }
         public bool CheckForUpdates { get; set; }
         public EUpdateChannel UpdateChannel { get; set; }
         public bool ShowGuidedTour { get; set; }
         public string ThemeAccentString { get; set; }
-        //public string CP77GameDirPath { get; set; }
         public string CP77ExecutablePath { get; set; }
         public string CP77LaunchCommand { get; set; }
         public string CP77LaunchOptions { get; set; }
