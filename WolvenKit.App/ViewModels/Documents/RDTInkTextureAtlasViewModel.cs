@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Drawing;
@@ -10,8 +9,8 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using Microsoft.Win32;
+using Prism.Commands;
 using ReactiveUI.Fody.Helpers;
-using WolvenKit.Functionality.Commands;
 using WolvenKit.RED4.Types;
 
 namespace WolvenKit.ViewModels.Documents
@@ -137,7 +136,7 @@ image.SetTexturePart(n""{PartName}"");";
                 Width = Math.Round(itam.ClippingRectInUVCoords.Right * xbm.Width) - Left;
                 Height = Math.Round(itam.ClippingRectInUVCoords.Bottom * xbm.Height) - Top;
                 Name = $"{itam.PartName} ({(uint)Width}x{(uint)Height})";
-                SaveImageCommand = new RelayCommand(ExecuteSaveImage, CanSaveImage);
+                SaveImageCommand = new DelegateCommand(ExecuteSaveImage, CanSaveImage);
                 try
                 {
                     Image = new CroppedBitmap(image, new Int32Rect((int)Left, (int)Top, (int)Width, (int)Height));
@@ -167,10 +166,8 @@ image.SetTexturePart(n""{PartName}"");";
                     BitmapEncoder encoder = new PngBitmapEncoder();
                     encoder.Frames.Add(BitmapFrame.Create(Image as BitmapSource));
 
-                    using (var fileStream = new FileStream(saveFileDialog1.FileName, FileMode.Create))
-                    {
-                        encoder.Save(fileStream);
-                    }
+                    using var fileStream = new FileStream(saveFileDialog1.FileName, FileMode.Create);
+                    encoder.Save(fileStream);
                 }
             }
 

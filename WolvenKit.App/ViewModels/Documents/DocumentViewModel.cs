@@ -3,9 +3,9 @@ using System.IO;
 using System.Reactive;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using Prism.Commands;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
-using WolvenKit.Functionality.Commands;
 using WolvenKit.Models.Docking;
 using WolvenKit.ViewModels.Shell;
 

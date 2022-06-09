@@ -456,12 +456,14 @@ namespace WolvenKit.RED4.Archive.IO
             public byte[] BufferData { get; set; }
         }
 
+        protected override void GenerateBufferBytes(RedBuffer buffer) => WriteBufferData(buffer);
+
         private DataCollection GenerateData()
         {
             var result = new DataCollection();
 
             using var ms = new MemoryStream();
-            using var file = new CR2WWriter(ms) { IsRoot = IsRoot };
+            using var file = new CR2WWriter(ms) { IsRoot = IsRoot, _file = _file };
 
             file._chunkInfos = _chunkInfos;
 
@@ -529,11 +531,6 @@ namespace WolvenKit.RED4.Archive.IO
                 }
             }
 
-            foreach (var kvp in file.BufferRef)
-            {
-                WriteBufferData(kvp.Value);
-            }
-
             file.GenerateStringDictionary();
             result.StringList = file.StringCacheList.ToList();
             result.ImportList = file.ImportCacheList.ToList();
@@ -543,8 +540,8 @@ namespace WolvenKit.RED4.Archive.IO
                 var typeInfo = RedReflection.GetTypeInfo(embeddedFile.Content);
                 SetParent(_chunkInfos[embeddedFile.Content].Id, maxDepth: typeInfo.ChildLevel);
 
-                var tuple = new ImportEntry("", (CName)embeddedFile.FileName, (ushort)8);
-                if (!result.ImportList.Contains(tuple))
+                var tuple = new ImportEntry("", embeddedFile.FileName, 8);
+                if (result.ImportList.All(x => x.DepotPath != tuple.DepotPath))
                 {
                     result.ImportList.Add(tuple);
                 }

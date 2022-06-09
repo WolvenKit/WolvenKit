@@ -1,22 +1,16 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Reactive.Disposables;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Media.Media3D;
-using Splat;
 using HelixToolkit.SharpDX.Core;
 using HelixToolkit.Wpf.SharpDX;
 using ReactiveUI;
-using WolvenKit.RED4.Archive.Buffer;
-using WolvenKit.RED4.Archive.CR2W;
-using WolvenKit.RED4.Types;
+using Splat;
 using WolvenKit.Common.Services;
-using WolvenKit.RED4.CR2W.Archive;
-using WolvenKit.Common;
 using WolvenKit.Functionality.Extensions;
+using WolvenKit.RED4.Archive.Buffer;
+using WolvenKit.RED4.Types;
 
 namespace WolvenKit.ViewModels.Documents
 {
@@ -556,7 +550,7 @@ namespace WolvenKit.ViewModels.Documents
                             }
                         }
                     }
-                    catch (Exception ex){Locator.Current.GetService<ILoggerService>().Error(ex);}
+                    catch (Exception ex) { Locator.Current.GetService<ILoggerService>().Error(ex); }
                 }
                 else if (handle.Chunk is worldPopulationSpawnerNode wpsn)
                 {
