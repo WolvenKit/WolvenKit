@@ -18,7 +18,7 @@ namespace WolvenKit.RED4.Archive.IO
 
         }
 
-        public EFileReadErrorCodes ReadBuffer(RedBuffer buffer, Type fileRootType)
+        public EFileReadErrorCodes ReadBuffer(RedBuffer buffer)
         {
             var tiles = new TilesBuffer();
 

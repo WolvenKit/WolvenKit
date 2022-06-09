@@ -27,7 +27,7 @@ namespace WolvenKit.RED4.Archive.IO
             {
                 var header = new meshLocalMaterialHeader();
                 var ms = new MemoryStream();
-                var cr2wWriter = new CR2WWriter(ms);
+                var cr2wWriter = new CR2WWriter(ms) { IsRoot = false };
                 cr2wWriter.WriteFile(file);
                 header.Offset = (CUInt32)(_ms.Position - starting_position);
                 _ms.Write(ms.ToArray());

@@ -401,6 +401,8 @@ namespace WolvenKit.RED4.IO
             {
                 var curvePoint = new CurvePoint<T>();
 
+                var point = _reader.ReadSingle();
+
                 IRedType element;
                 if (typeof(RedBaseClass).IsAssignableFrom(typeof(T)))
                 {
@@ -410,8 +412,6 @@ namespace WolvenKit.RED4.IO
                 {
                     element = Read(typeof(T), 0, Flags.Empty);
                 }
-
-                var point = _reader.ReadSingle();
 
                 if (element.GetType() == typeof(T))
                 {
@@ -576,9 +576,9 @@ namespace WolvenKit.RED4.IO
 
         public virtual RedBaseClass ReadFixedClass(Type type, uint size)
         {
-            var typeInfo = RedReflection.GetTypeInfo(type);
-
             var instance = RedTypeManager.Create(type);
+            var typeInfo = RedReflection.GetTypeInfo(instance);
+
             foreach (var propertyInfo in typeInfo.GetWritableProperties())
             {
                 var value = Read(propertyInfo.Type, 0, Flags.Empty);

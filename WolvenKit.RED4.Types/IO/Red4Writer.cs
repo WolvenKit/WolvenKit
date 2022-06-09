@@ -19,6 +19,7 @@ namespace WolvenKit.RED4.IO
         public ICacheList<RedBuffer> BufferCacheList = new CacheList<RedBuffer>(ReferenceEqualityComparer.Instance);
 
         public int CurrentChunk { get; private set; }
+        public bool IsRoot = true;
 
         public readonly Dictionary<long, string> CNameRef = new();
         public readonly Dictionary<long, ImportEntry> ImportRef = new();
@@ -268,16 +269,28 @@ namespace WolvenKit.RED4.IO
 
         public List<RedBuffer> BufferStack = new();
 
+        protected virtual void GenerateBufferBytes(RedBuffer buffer)
+        {
+
+        }
+
         public virtual void Write(DataBuffer val)
         {
+            GenerateBufferBytes(val.Buffer);
+
             if (val.Buffer.IsEmpty)
             {
                 _writer.Write(0x80000000);
             }
-            else
+            else if (IsRoot)
             {
                 BufferRef.Add(_writer.BaseStream.Position, val.Buffer);
                 _writer.Write((GetRedBufferIndex(val.Buffer) | 0x80000000) + 1);
+            }
+            else
+            {
+                _writer.Write(val.Buffer.MemSize);
+                _writer.Write(val.Buffer.GetBytes());
             }
         }
 
@@ -293,11 +306,19 @@ namespace WolvenKit.RED4.IO
         public virtual void Write(NodeRef val) => _writer.WriteLengthPrefixedString(val);
         public virtual void Write(SerializationDeferredDataBuffer val)
         {
+            GenerateBufferBytes(val.Buffer);
+
             BufferRef.Add(_writer.BaseStream.Position, val.Buffer);
             _writer.Write((ushort)(GetRedBufferIndex(val.Buffer) + 1));
         }
 
-        public virtual void Write(SharedDataBuffer val) => _writer.Write(val.Buffer.GetBytes());
+        public virtual void Write(SharedDataBuffer val)
+        {
+            GenerateBufferBytes(val.Buffer);
+
+            _writer.Write(val.Buffer.GetBytes());
+        }
+
         public virtual void Write(TweakDBID val) => _writer.Write((ulong)val);
         public virtual void Write(gamedataLocKeyWrapper val) => _writer.Write((ulong)val);
 
@@ -474,6 +495,11 @@ namespace WolvenKit.RED4.IO
         {
             var typeInfo = RedReflection.GetEnumTypeInfo(instance.GetInnerType());
             var valueName = typeInfo.GetRedNameFromCSName(instance.ToEnumString());
+
+            if (valueName == "None")
+            {
+                valueName = "";
+            }
             
             CNameRef.Add(_writer.BaseStream.Position, valueName);
             _writer.Write(GetStringIndex(valueName));
@@ -567,6 +593,8 @@ namespace WolvenKit.RED4.IO
             _writer.Write((uint)instance.Count);
             foreach (var curvePoint in instance)
             {
+                _writer.Write(curvePoint.GetPoint());
+
                 var value = curvePoint.GetValue();
                 if (value is RedBaseClass cls)
                 {
@@ -576,8 +604,6 @@ namespace WolvenKit.RED4.IO
                 {
                     Write(curvePoint.GetValue());
                 }
-
-                _writer.Write(curvePoint.GetPoint());
             }
             _writer.Write((byte)instance.InterpolationType);
             _writer.Write((byte)instance.LinkType);
@@ -639,7 +665,7 @@ namespace WolvenKit.RED4.IO
 
         public virtual void WriteFixedClass(RedBaseClass instance)
         {
-            var typeInfo = RedReflection.GetTypeInfo(instance.GetType());
+            var typeInfo = RedReflection.GetTypeInfo(instance);
             foreach (var propertyInfo in typeInfo.GetWritableProperties())
             {
                 var value = instance.GetProperty(propertyInfo.RedName);

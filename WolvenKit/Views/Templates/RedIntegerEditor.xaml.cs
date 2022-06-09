@@ -58,6 +58,7 @@ namespace WolvenKit.Views.Editors
                     CInt32 => int.MinValue,
                     CUInt32 => uint.MinValue,
                     CInt64 => long.MinValue,
+                    CFloat => float.MinValue,
                     _ => throw new ArgumentOutOfRangeException(nameof(RedInteger))
                 };
             }
@@ -79,6 +80,7 @@ namespace WolvenKit.Views.Editors
                     CInt32 => int.MaxValue,
                     CUInt32 => uint.MaxValue,
                     CInt64 => long.MaxValue,
+                    CFloat => float.MaxValue,
                     _ => throw new ArgumentOutOfRangeException(nameof(RedInteger))
                 };
             }
@@ -91,6 +93,9 @@ namespace WolvenKit.Views.Editors
             {
                 case CDouble:
                     SetCurrentValue(RedIntegerProperty, (CDouble)value);
+                    break;
+                case CFloat:
+                    SetCurrentValue(RedIntegerProperty, (CFloat)value);
                     break;
                 case CUInt8:
                     SetCurrentValue(RedIntegerProperty, (CUInt8)value);
@@ -127,6 +132,7 @@ namespace WolvenKit.Views.Editors
             CInt32 uint64 => uint64,
             CUInt32 uint64 => uint64,
             CInt64 uint64 => uint64,
+            CFloat uint64 => uint64,
             _ => throw new ArgumentOutOfRangeException(nameof(RedInteger)),
         };
 

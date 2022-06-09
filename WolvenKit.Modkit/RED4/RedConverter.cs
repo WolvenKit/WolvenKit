@@ -97,7 +97,8 @@ namespace WolvenKit.Modkit.RED4
         public static CR2WFile ConvertFromJson(string json)
         {
             var dto = RedJsonSerializer.Deserialize<RedFileDto>(json);
-            return dto.Data;
+            
+            return dto is null ? null : dto.Data == null ? null : dto.Data;
         }
 
         /// <summary>
@@ -117,18 +118,25 @@ namespace WolvenKit.Modkit.RED4
             var text = File.ReadAllText(fileInfo.FullName);
 
             // get extension from filename //TODO pass?
-            var filenameWithoutConvertExtension = fileInfo.Name[..^convertExtension.Length];
+            var filenameWithoutConvertExtension = fileInfo.Name[..^(convertExtension.Length /*+ 1*/)];
             var ext = Path.GetExtension(filenameWithoutConvertExtension);
             var w2rc = textConvertFormat switch
             {
                 ETextConvertFormat.json => ConvertFromJson(text),
                 _ => throw new NotSupportedException(),
             };
+            if(w2rc is null)
+            {
+                return false;
+            }
+
             var outpath = Path.ChangeExtension(Path.Combine(outputDirInfo.FullName, fileInfo.Name), ext);
 
             using var fs2 = new FileStream(outpath, FileMode.Create, FileAccess.ReadWrite);
             using var writer = new CR2WWriter(fs2);
             writer.WriteFile(w2rc);
+
+            _loggerService.Success($"Imported {fileInfo.Name} to {outpath}");
 
             return true;
         }

@@ -14,6 +14,8 @@ using WolvenKit.RED4.Archive.Buffer;
 using WolvenKit.RED4.Archive.CR2W;
 using WolvenKit.RED4.Types;
 using WolvenKit.Common.Services;
+using WolvenKit.RED4.CR2W.Archive;
+using WolvenKit.Common;
 using WolvenKit.Functionality.Extensions;
 
 namespace WolvenKit.ViewModels.Documents
@@ -58,7 +60,7 @@ namespace WolvenKit.ViewModels.Documents
             {
                 var handle = data.Nodes[handleIndex];
                 var name = (string)handle.Chunk.DebugName;
-                name = "_"+name?.Replace("{", "").Replace("}", "").Replace("\\", "_").Replace(".", "_").Replace("!", "").Replace("-", "_") ?? "none";
+                name = "_" + name?.Replace("{", "").Replace("}", "").Replace("\\", "_").Replace(".", "_").Replace("!", "").Replace("-", "_") ?? "none";
 
                 if (handle.Chunk is IRedMeshNode irmn)
                 {
@@ -154,39 +156,39 @@ namespace WolvenKit.ViewModels.Documents
                         {
                             //for (int j = 0; j < transforms.Count; j++)
                             //{
-                                var meshes = MakeMesh(mesh, ulong.MaxValue, 0);
+                            var meshes = MakeMesh(mesh, ulong.MaxValue, 0);
 
-                                var subgroup = new MeshComponent()
-                                {
-                                    Name = name + $"_instance_{i:D2}",
-                                    AppearanceName = widmn.MeshAppearance,
-                                    DepotPath = irmn.Mesh.DepotPath
-                                };
+                            var subgroup = new MeshComponent()
+                            {
+                                Name = name + $"_instance_{i:D2}",
+                                AppearanceName = widmn.MeshAppearance,
+                                DepotPath = irmn.Mesh.DepotPath
+                            };
 
-                                foreach (var submesh in meshes)
+                            foreach (var submesh in meshes)
+                            {
+                                if (!app.LODLUT.ContainsKey(submesh.LOD))
                                 {
-                                    if (!app.LODLUT.ContainsKey(submesh.LOD))
-                                    {
-                                        app.LODLUT[submesh.LOD] = new List<SubmeshComponent>();
-                                    }
-                                    app.LODLUT[submesh.LOD].Add(submesh);
-                                    subgroup.Children.Add(submesh);
+                                    app.LODLUT[submesh.LOD] = new List<SubmeshComponent>();
                                 }
+                                app.LODLUT[submesh.LOD].Add(submesh);
+                                subgroup.Children.Add(submesh);
+                            }
 
-                                var matrix = new Matrix3D();
-                                matrix.Scale(ToScaleVector3D(transforms[0].Scale));
-                                matrix.Rotate(ToQuaternion(transforms[0].Orientation));
-                                matrix.Translate(ToVector3D(transforms[0].Position));
+                            var matrix = new Matrix3D();
+                            matrix.Scale(ToScaleVector3D(transforms[0].Scale));
+                            matrix.Rotate(ToQuaternion(transforms[0].Orientation));
+                            matrix.Translate(ToVector3D(transforms[0].Position));
 
-                                var citbMatrix = new Matrix3D();
-                                citbMatrix.Rotate(ToQuaternion(citbTransforms[(int)(widmn.CookedInstanceTransforms.StartIndex + i)].Orientation));
-                                citbMatrix.Translate(ToVector3D(citbTransforms[(int)(widmn.CookedInstanceTransforms.StartIndex + i)].Position));
+                            var citbMatrix = new Matrix3D();
+                            citbMatrix.Rotate(ToQuaternion(citbTransforms[(int)(widmn.CookedInstanceTransforms.StartIndex + i)].Orientation));
+                            citbMatrix.Translate(ToVector3D(citbTransforms[(int)(widmn.CookedInstanceTransforms.StartIndex + i)].Position));
 
-                                citbMatrix.Append(matrix);
+                            citbMatrix.Append(matrix);
 
-                                subgroup.Transform = new MatrixTransform3D(citbMatrix);
+                            subgroup.Transform = new MatrixTransform3D(citbMatrix);
 
-                                group.Children.Add(subgroup);
+                            group.Children.Add(subgroup);
                             //}
                         }
                     }
@@ -471,7 +473,7 @@ namespace WolvenKit.ViewModels.Documents
 
                         var positions = new Vector3Collection();
 
-                        foreach(var v in tb.Vertices)
+                        foreach (var v in tb.Vertices)
                         {
                             positions.Add(new SharpDX.Vector3(v.X, v.Y, -v.Z));
                         }
@@ -516,26 +518,45 @@ namespace WolvenKit.ViewModels.Documents
                 }
                 else if (handle.Chunk is worldEntityNode wen)
                 {
-                    // a little slow for what we want to do
-                    //var entFile = File.GetFileFromDepotPathOrCache(wen.EntityTemplate.DepotPath);
+                    //a little slow for what we want to do
+                    // <3
 
-                    //if (entFile != null && entFile.RootChunk is entEntityTemplate eet)
-                    //{
-                    //    var entity = RenderEntity(eet, app);
-                    //    if (entity != null)
-                    //    {
-                    //        entity.Name = "Entity";
+                    try
+                    {
 
-                    //        var matrix = new Matrix3D();
-                    //        matrix.Scale(ToScaleVector3D(transforms[0].Scale));
-                    //        matrix.Rotate(ToQuaternion(transforms[0].Orientation));
-                    //        matrix.Translate(ToVector3D(transforms[0].Position));
+                        var entFile = File.GetFileFromDepotPathOrCache(wen.EntityTemplate.DepotPath);
 
-                    //        entity.Transform = new MatrixTransform3D(matrix);
+                        if (entFile != null && entFile.RootChunk is entEntityTemplate eet)
+                        {
+                            var entity = RenderEntity(eet, app);
+                            if (entity != null)
+                            {
+                                entity.Name = "Entity";
+                                //var f = Shell.ChunkViewModel.FixRotation;
 
-                    //        groups.Add(entity);
-                    //    }
-                    //}
+                                var q = new System.Numerics.Quaternion()
+                                {
+                                    W = transforms[0].Orientation.R,
+                                    X = transforms[0].Orientation.I,
+                                    Y = transforms[0].Orientation.J,
+                                    Z = transforms[0].Orientation.K
+                                };
+
+                                //q = Shell.ChunkViewModel.FixRotation(q);
+                                var qq = new System.Windows.Media.Media3D.Quaternion(q.X, q.Y, q.Z, q.W);
+
+                                var matrix = new Matrix3D();
+                                matrix.Scale(ToScaleVector3D(transforms[0].Scale));
+                                matrix.Rotate(qq);
+                                matrix.Translate(ToVector3D(transforms[0].Position));
+
+                                entity.Transform = new MatrixTransform3D(matrix);
+
+                                groups.Add(entity);
+                            }
+                        }
+                    }
+                    catch (Exception ex){Locator.Current.GetService<ILoggerService>().Error(ex);}
                 }
                 else if (handle.Chunk is worldPopulationSpawnerNode wpsn)
                 {

@@ -9,9 +9,9 @@ namespace WolvenKit.Views.Editors
     public class CurveDto
     {
         public Enums.EInterpolationType Type { get; set; }
-        public IEnumerable<Tuple<double, IRedType>> Points { get; set; }
+        public ICollection<Tuple<double, IRedType>> Points { get; set; }
 
-        public CurveDto(IEnumerable<Tuple<double, IRedType>> points, Enums.EInterpolationType type)
+        public CurveDto(ICollection<Tuple<double, IRedType>> points, Enums.EInterpolationType type)
         {
             Points = points;
             Type = type;

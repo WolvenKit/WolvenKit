@@ -260,6 +260,9 @@ paket-files/
 .idea/
 *.sln.iml
 
+# VSCode
+.vscode
+
 #macOS
 .DS_Store
 

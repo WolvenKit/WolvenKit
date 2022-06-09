@@ -40,6 +40,6 @@ namespace WolvenKit.RED4.Types
             return Equals((CString)obj);
         }
 
-        public override int GetHashCode() => _value.GetHashCode();
+        public override int GetHashCode() => _value != null ? _value.GetHashCode() : 0;
     }
 }

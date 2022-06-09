@@ -52,6 +52,10 @@ namespace WolvenKit.Views.Documents
                       viewmodel => viewmodel.SelectedChunk,
                       view => view.RedTreeView.SelectedItem)
                   .DisposeWith(disposables);
+                this.Bind(ViewModel,
+                      viewmodel => viewmodel.SelectedChunks,
+                      view => view.RedTreeView.SelectedItems)
+                  .DisposeWith(disposables);
                 this.OneWayBind(ViewModel,
                       viewmodel => viewmodel.SelectedChunk,
                       view => view.CustomPG.DataContext)

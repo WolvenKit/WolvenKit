@@ -45,7 +45,7 @@ namespace WolvenKit.RED4.Types
 
         public bool Equals(CDouble other) => Equals(_value, other._value);
 
-        public override string ToString() => _value.ToString();
-        public string ToString(CultureInfo cultureInfo) => _value.ToString(cultureInfo);
+        public override string ToString() => _value.ToString("G17");
+        public string ToString(CultureInfo cultureInfo) => _value.ToString("G17", cultureInfo);
     }
 }

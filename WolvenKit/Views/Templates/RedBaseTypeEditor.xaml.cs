@@ -1,4 +1,5 @@
 using System;
+using System.Globalization;
 using System.Windows;
 using System.Windows.Controls;
 using WolvenKit.RED4.Types;
@@ -96,30 +97,21 @@ namespace WolvenKit.Views.Editors
                 var value = (CUInt64)RedType;
                 return ((ulong)value).ToString();
             }
-            else if (PropertyType.IsAssignableTo(typeof(IRedInteger)))
-            {
-                var value = (IRedInteger)RedType;
-                return (value switch
-                {
-                    CUInt8 uint64 => uint64,
-                    CInt8 uint64 => uint64,
-                    CInt16 uint64 => uint64,
-                    CUInt16 uint64 => uint64,
-                    CInt32 uint64 => uint64,
-                    CUInt32 uint64 => uint64,
-                    CInt64 uint64 => (float)uint64,
-                    _ => throw new ArgumentOutOfRangeException(nameof(value)),
-                }).ToString();
-            }
             else if (PropertyType.IsAssignableTo(typeof(FixedPoint)))
             {
                 var value = (FixedPoint)RedType;
-                return ((float)value).ToString("R");
+                return ((float)value).ToString("G9");
             }
             else if (PropertyType.IsAssignableTo(typeof(IRedPrimitive<float>)))
             {
                 var value = (IRedPrimitive)RedType;
-                return ((float)(CFloat)value).ToString("R");
+                return ((float)(CFloat)value).ToString("G9");
+            }
+            else if (PropertyType.IsAssignableTo(typeof(IRedInteger)))
+            {
+                var value = (IRedInteger)RedType;
+
+                return value.ToString(CultureInfo.CurrentCulture);
             }
             else if (PropertyType.IsAssignableTo(typeof(IRedRef)))
             {

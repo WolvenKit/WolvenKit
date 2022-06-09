@@ -68,10 +68,6 @@ namespace WolvenKit.Views.Tools
                       viewModel => viewModel.SearchBarText,
                       view => view.FileSearchBar.Text)
                   .DisposeWith(disposables);
-                this.Bind(ViewModel,
-                        viewModel => viewModel.OptionsSearchBarText,
-                        view => view.OptionsSearchBar.Text)
-                    .DisposeWith(disposables);
 
                 // left navigation
                 this.OneWayBind(ViewModel,

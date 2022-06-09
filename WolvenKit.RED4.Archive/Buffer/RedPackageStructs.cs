@@ -5,7 +5,7 @@ namespace WolvenKit.RED4.Archive.Buffer
 {
 
     [StructLayout(LayoutKind.Explicit, Size = 32)]
-    public struct Package04Header
+    public struct RedPackageHeader
     {
         [FieldOffset(0)]
         public ushort version;
@@ -43,7 +43,7 @@ namespace WolvenKit.RED4.Archive.Buffer
     }
 
     [StructLayout(LayoutKind.Explicit, Size = 4)]
-    public struct Package04ImportHeader
+    public struct RedPackageImportHeader
     {
         [FieldOffset(0)]
         public uint bitfield;
@@ -85,38 +85,38 @@ namespace WolvenKit.RED4.Archive.Buffer
     }
 
     [StructLayout(LayoutKind.Explicit, Size = 4)]
-    public struct Package04NameHeader
+    public struct RedPackageNameHeader
     {
         [FieldOffset(0)]
-        public uint bitfield;
+        private uint bitfield;
 
-        private const int sizeShift = 24;
-        private const uint offsetMask = (1U << sizeShift) - 1U;
-        private const uint sizeMask = 0xFF << (sizeShift - 1);
+        private const int s_sizeShift = 24;
+        private const uint s_offsetMask = 0x00FFFFFF;
+        private const uint s_sizeMask   = 0xFF000000;
 
         public uint offset
         {
-            get => bitfield & offsetMask;
+            get => bitfield & s_offsetMask;
             set
             {
-                bitfield &= ~offsetMask;
-                bitfield |= value & offsetMask;
+                bitfield &= ~s_offsetMask;
+                bitfield |= value & s_offsetMask;
             }
         }
 
         public byte size
         {
-            get => (byte)((bitfield & sizeMask) >> sizeShift);
+            get => (byte)((bitfield & s_sizeMask) >> s_sizeShift);
             set
             {
-                bitfield &= ~sizeMask;
-                bitfield |= ((uint)value << sizeShift) & sizeMask;
+                bitfield &= ~s_sizeMask;
+                bitfield |= ((uint)value << s_sizeShift) & s_sizeMask;
             }
         }
     }
 
     [StructLayout(LayoutKind.Explicit, Size = 8)]
-    public struct Package04ChunkHeader
+    public struct RedPackageChunkHeader
     {
         [FieldOffset(0)]
         public uint typeID;
@@ -126,7 +126,7 @@ namespace WolvenKit.RED4.Archive.Buffer
     }
 
     [StructLayout(LayoutKind.Explicit, Size = 8)]
-    public struct Package04FieldHeader
+    public struct RedPackageFieldHeader
     {
         [FieldOffset(0)]
         public ushort nameID;

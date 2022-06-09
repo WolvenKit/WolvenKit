@@ -18,8 +18,8 @@
     <NoWarn>$(NoWarn);SA1652</NoWarn>
     <NoWarn>$(NoWarn);CA1416</NoWarn>
     <NoWarn>$(NoWarn);SYSLIB0001</NoWarn>
-    <AssemblyVersion>8.6.0</AssemblyVersion>
-    <InformationalVersion>8.6.0</InformationalVersion>
+    <AssemblyVersion>8.7.0</AssemblyVersion>
+    <InformationalVersion>8.7.0</InformationalVersion>
     <Description>WPF</Description>
     <SatelliteResourceLanguages>en</SatelliteResourceLanguages>
       <Product>WolvenKit</Product>
@@ -47,7 +47,7 @@
     <PackageReference Include="HelixToolkit.SharpDX.Assimp" Version="2.20.2" />
     <PackageReference Include="HelixToolkit.SharpDX.Core.Wpf" Version="2.20.2" />
     <PackageReference Include="Nodify" Version="1.7.0" />
-
+    <PackageReference Include="PixiEditor.ColorPicker" Version="3.3.1" />
     <PackageReference Include="ReactiveUI" Version="17.1.17" />
     <PackageReference Include="ReactiveUI.Events.WPF" Version="15.1.1" />
     <PackageReference Include="ReactiveUI.Fody" Version="17.1.17" />
@@ -153,6 +153,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="AssimpNet.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="DockStatesDefault.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Obsolete.dll">
@@ -1626,6 +1629,7 @@
     <None Remove="Assimp64.dll" />
     <None Remove="AssimpNet.dll" />
     <None Remove="distraction_generic.bk2" />
+    <None Remove="DockStatesDefault.xml" />
     <None Remove="Obsolete.dll" />
     <None Remove="Resources\Media\bkmk.kark" />
     <None Remove="Resources\Media\Images\Application\.cpmodproj.png" />

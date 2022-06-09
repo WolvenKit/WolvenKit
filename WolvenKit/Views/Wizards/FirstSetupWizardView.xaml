@@ -132,6 +132,14 @@
                                     SpinAutoReverse="False" />
                             </Button>
                         </StackPanel>
+                        <StackPanel VerticalAlignment="Bottom" Margin="0,30">
+                            <Button x:Name="helpButton" HorizontalAlignment="Right">
+                                <TextBlock
+                                    Text="Get Help with WolvenKit"
+                                    Margin="12,0">
+                                </TextBlock>
+                            </Button>
+                        </StackPanel>
                     </StackPanel>
                 </Grid>
             </syncfusion:WizardPage>

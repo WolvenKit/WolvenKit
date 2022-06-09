@@ -3,14 +3,18 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Reactive.Linq;
+using System.Reflection;
 using System.Runtime.Serialization;
+using System.Text.Json;
 using System.Windows.Forms;
 using System.Windows.Input;
 using DynamicData;
 using DynamicData.Binding;
+using Newtonsoft.Json;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using Splat;
@@ -25,15 +29,20 @@ using WolvenKit.Models;
 using WolvenKit.RED4;
 using WolvenKit.RED4.Archive.Buffer;
 using WolvenKit.RED4.Archive.CR2W;
+using WolvenKit.RED4.Archive.IO;
 using WolvenKit.RED4.CR2W.JSON;
 using WolvenKit.RED4.Types;
 using WolvenKit.ViewModels.Dialogs;
 using WolvenKit.ViewModels.Documents;
 using static WolvenKit.RED4.Types.RedReflection;
+using Mat4 = System.Numerics.Matrix4x4;
+using Quat = System.Numerics.Quaternion;
+using Vec3 = System.Numerics.Vector3;
+using Vec4 = System.Numerics.Vector4;
 
 namespace WolvenKit.ViewModels.Shell
 {
-    public class ChunkViewModel : ReactiveObject, ISelectableTreeViewItemModel, INode<ReferenceSocket>
+    public partial class ChunkViewModel : ReactiveObject, ISelectableTreeViewItemModel, INode<ReferenceSocket>
     {
         public bool PropertiesLoaded;
 
@@ -43,35 +52,9 @@ namespace WolvenKit.ViewModels.Shell
 
         public ObservableCollectionExtended<ChunkViewModel> TempList { get; set; }
 
-        public ObservableCollectionExtended<ChunkViewModel> TVProperties
-        {
-            get
-            {
-                if (PropertiesLoaded)
-                {
-                    return Properties;
-                }
-                else
-                {
-                    return TempList;
-                }
-            }
-        }
+        public ObservableCollectionExtended<ChunkViewModel> TVProperties => PropertiesLoaded ? Properties : TempList;
 
-        public ObservableCollectionExtended<ChunkViewModel> DisplayProperties
-        {
-            get
-            {
-                if (MightHaveChildren())
-                {
-                    return Properties;
-                }
-                else
-                {
-                    return SelfList;
-                }
-            }
-        }
+        public ObservableCollectionExtended<ChunkViewModel> DisplayProperties => MightHaveChildren() ? Properties : SelfList;
 
         [Reactive] public string Value { get; private set; }
         [Reactive] public string Descriptor { get; private set; }
@@ -145,9 +128,9 @@ namespace WolvenKit.ViewModels.Shell
                             {
                                 //if (rbc.HasProperty(propertyName) && rbc.GetProperty(propertyName) != Data)
                                 //{
-                                    rbc.SetProperty(propertyName, Data);
-                                    Tab.File.SetIsDirty(true);
-                                    Parent.NotifyChain("Data");
+                                rbc.SetProperty(propertyName, Data);
+                                Tab.File.SetIsDirty(true);
+                                Parent.NotifyChain("Data");
                                 //}
                             }
                             else
@@ -171,16 +154,89 @@ namespace WolvenKit.ViewModels.Shell
             OpenRefCommand = new DelegateCommand(_ => ExecuteOpenRef(), _ => CanOpenRef());
             AddRefCommand = new DelegateCommand(_ => ExecuteAddRef(), _ => CanAddRef());
             ExportChunkCommand = new DelegateCommand(_ => ExecuteExportChunk(), _ => CanExportChunk());
+            ImportChunkCommand = new DelegateCommand(_ => ExecuteImportChunk(), _ => CanImportChunk());
+            ImportChunk2Command = new DelegateCommand(_ => ExecuteImportChunk2(), _ => CanImportChunk());
             AddItemToArrayCommand = new DelegateCommand(_ => ExecuteAddItemToArray(), _ => CanAddItemToArray());
             AddHandleCommand = new DelegateCommand(_ => ExecuteAddHandle(), _ => CanAddHandle());
             AddItemToCompiledDataCommand = new DelegateCommand(_ => ExecuteAddItemToCompiledData(), _ => CanAddItemToCompiledData());
             DeleteItemCommand = new DelegateCommand(_ => ExecuteDeleteItem(), _ => CanDeleteItem());
             DeleteAllCommand = new DelegateCommand(_ => ExecuteDeleteAll(), _ => CanDeleteAll());
+            DeleteSelectionCommand = new DelegateCommand(_ => ExecuteDeleteSelection(), _ => CanDeleteSelection());
             OpenChunkCommand = new DelegateCommand(_ => ExecuteOpenChunk(), _ => CanOpenChunk());
             CopyChunkCommand = new DelegateCommand(_ => ExecuteCopyChunk(), _ => CanCopyChunk());
+            CopySelectionCommand = new DelegateCommand(_ => ExecuteCopySelection(), _ => CanCopySelection());
             DuplicateChunkCommand = new DelegateCommand(_ => ExecuteDuplicateChunk(), _ => CanDuplicateChunk());
+            ExportNodeDataCommand = new DelegateCommand(_ => ExecuteExportNodeData(), _ => CanExportNodeData());
             PasteChunkCommand = new DelegateCommand(_ => ExecutePasteChunk(), _ => CanPasteChunk());
             OpenSelfCommand = new DelegateCommand(_ => ExecuteOpenSelf(), _ => CanOpenSelf());
+            PasteSelectionCommand = new DelegateCommand(_ => ExecutePasteSelection(), _ => CanPasteSelection());
+        }
+
+
+        public ICommand DeleteSelectionCommand { get; private set; }
+        private bool CanDeleteSelection() => IsInArray;
+        private void ExecuteDeleteSelection()
+        {
+            var selection = Parent.DisplayProperties
+                            .Where(_ => _.IsSelected)
+                            .Select(_ => _.Data)
+                            .ToList();
+
+            var ts = Parent.DisplayProperties
+                            .Where(_ => _.IsSelected)
+                            .Select(_ => _)
+                            .ToList();
+            try
+            {
+                if (Parent.Data is IRedBufferPointer db3 && db3.GetValue().Data is worldNodeDataBuffer dict)
+                {
+                    var indices = selection.Select(_ => (int)((worldNodeData)_).NodeIndex).ToList();
+                    if (indices.Count == 0)
+                    { throw new Exception("Please select something first"); }
+                    var (start, end) = (indices.Min(), indices.Max());
+
+                    var fullselection = Parent.DisplayProperties
+                        .Where(_ => Enumerable.Range(start, end - start + 1)
+                           .Contains((int)((worldNodeData)_.Data).NodeIndex))
+                        .Select(_ => _.Data)
+                        .ToList();
+
+                    foreach (var i in fullselection)
+                    { try { dict.Remove(i); } catch (Exception ex) { Locator.Current.GetService<ILoggerService>().Error(ex); } }
+
+                    Tab.File.SetIsDirty(true);
+                    Parent.RecalculateProperties();
+                }
+                else if (Parent.Data is IRedArray db4)
+                {
+                    var indices = ts.Select(_ => int.Parse(_.Name)).ToList();
+                    var (start, end) = (indices.Min(), indices.Max());
+
+                    var fullselection = Parent.DisplayProperties
+                        .Where(_ => Enumerable.Range(start, end - start + 1)
+                           .Contains(int.Parse(_.Name)))
+                        .Select(_ => _.Data)
+                        .ToList();
+
+                    foreach (var i in fullselection)
+                    { try { db4.Remove(i); } catch (Exception ex) { Locator.Current.GetService<ILoggerService>().Error(ex); } }
+
+                    Tab.File.SetIsDirty(true);
+                    Parent.RecalculateProperties();
+                }
+                else
+                {
+                    var t = Parent.Data.GetType().Name;
+                    Locator.Current.GetService<ILoggerService>().Warning($"Handle this type {t} wen ._. ");
+                }
+            }
+            catch (Exception ex)
+            {
+                Locator.Current.GetService<ILoggerService>().Warning
+                    ($"Something went wrong while trying to delete the selection : {ex}");
+            }
+
+            Tab.SelectedChunk = Parent;
         }
 
         public ChunkViewModel(IRedType export, RedDocumentTabViewModel tab) : this(export)
@@ -195,10 +251,7 @@ namespace WolvenKit.ViewModels.Shell
             //}
             //TVProperties.AddRange(Properties);
             //this.RaisePropertyChanged("Data");
-            this.WhenAnyValue(x => x.Data).Skip(1).Subscribe((x) =>
-            {
-                Tab.File.SetIsDirty(true);
-            });
+            this.WhenAnyValue(x => x.Data).Skip(1).Subscribe((x) => Tab.File.SetIsDirty(true));
         }
 
         public ChunkViewModel(IRedType export, ReferenceSocket socket) : this(export)
@@ -242,10 +295,7 @@ namespace WolvenKit.ViewModels.Shell
             return list;
         }
 
-        public bool MightHaveChildren()
-        {
-            return HasChildren() || IsArray;
-        }
+        public bool MightHaveChildren() => HasChildren() || IsArray;
 
         public bool HasChildren() => PropertyCount > 0;
 
@@ -304,10 +354,7 @@ namespace WolvenKit.ViewModels.Shell
                 }
                 return _resolvedDataCache;
             }
-            set
-            {
-                _resolvedDataCache = null;
-            }
+            set => _resolvedDataCache = null;
         }
 
         public ChunkViewModel Parent { get; set; }
@@ -413,7 +460,7 @@ namespace WolvenKit.ViewModels.Shell
             }
             else if (obj is RedBaseClass redClass)
             {
-                var pis = GetTypeInfo(redClass.GetType()).PropertyInfos.Sort((a, b) => a.Name.CompareTo(b.Name));
+                var pis = GetTypeInfo(redClass).PropertyInfos.Sort((a, b) => a.Name.CompareTo(b.Name));
 
                 var dps = redClass.GetDynamicPropertyNames();
                 dps.Sort();
@@ -440,7 +487,7 @@ namespace WolvenKit.ViewModels.Shell
             }
             else if (obj is SerializationDeferredDataBuffer sddb)
             {
-                if (sddb.Data is Package04 p4)
+                if (sddb.Data is RedPackage p4)
                 {
                     for (var i = 0; i < PropertyCount; i++)
                     {
@@ -468,7 +515,7 @@ namespace WolvenKit.ViewModels.Shell
             }
             else if (obj is SharedDataBuffer sdb)
             {
-                if (sdb.Data is Package04 p42)
+                if (sdb.Data is RedPackage p42)
                 {
                     for (var i = 0; i < PropertyCount; i++)
                     {
@@ -500,7 +547,7 @@ namespace WolvenKit.ViewModels.Shell
             }
             else if (obj is DataBuffer db)
             {
-                if (db.Data is Package04 p43)
+                if (db.Data is RedPackage p43)
                 {
                     for (var i = 0; i < PropertyCount; i++)
                     {
@@ -598,10 +645,14 @@ namespace WolvenKit.ViewModels.Shell
 
                     if (Data is worldNodeData sst && Tab is RDTDataViewModel dvm && dvm.Chunks[0].Data is worldStreamingSector wss)
                     {
-                        Properties.Add(new ChunkViewModel(wss.Nodes[sst.NodeIndex], this, "Node")
+                        try
                         {
-                            IsReadOnly = isreadonly
-                        });
+                            Properties.Add(new ChunkViewModel(wss.Nodes[sst.NodeIndex], this, "Node")
+                            {
+                                IsReadOnly = isreadonly
+                            });
+                        }
+                        catch (Exception ex) { Locator.Current.GetService<ILoggerService>().Error(ex); }
                     }
                 }
             }
@@ -640,10 +691,7 @@ namespace WolvenKit.ViewModels.Shell
                 }
                 return _name;
             }
-            set
-            {
-                _name = null;
-            }
+            set => _name = null;
         }
 
         private void CalculateIsDefault()
@@ -668,7 +716,8 @@ namespace WolvenKit.ViewModels.Shell
                 var index = 0;
                 foreach (var item in ary)
                 {
-                    if (item.GetHashCode() == child.Data.GetHashCode())
+                    if (child.Data is not null
+                        && item.GetHashCode() == child.Data.GetHashCode())
                     {
                         if (!PropertiesLoaded || Properties[index].GetHashCode() == child.GetHashCode())
                         {
@@ -678,7 +727,7 @@ namespace WolvenKit.ViewModels.Shell
                     index++;
                 }
             }
-            else if (ResolvedData is IRedBufferPointer rbp && rbp.GetValue().Data is Package04 pkg)
+            else if (ResolvedData is IRedBufferPointer rbp && rbp.GetValue().Data is RedPackage pkg)
             {
                 var index = 0;
                 foreach (var item in pkg.Chunks)
@@ -813,17 +862,13 @@ namespace WolvenKit.ViewModels.Shell
                 if (PropertyType != null)
                 {
                     var redName = GetRedTypeFromCSType(PropertyType, _flags);
-                    if (redName != "")
-                    {
-                        return redName;
-                    }
-                    return PropertyType.Name;
+                    return redName != "" ? redName : PropertyType.Name;
                 }
                 return "null";
             }
         }
 
-        public string ResolvedType => ResolvedPropertyType != null ? (GetTypeRedName(ResolvedPropertyType) != null ? GetTypeRedName(ResolvedPropertyType) : ResolvedPropertyType.Name) : "";
+        public string ResolvedType => ResolvedPropertyType != null ? (GetTypeRedName(ResolvedPropertyType) ?? ResolvedPropertyType.Name) : "";
 
         public bool TypesDiffer => PropertyType != ResolvedPropertyType;
 
@@ -833,7 +878,7 @@ namespace WolvenKit.ViewModels.Shell
                     (PropertyType.IsAssignableTo(typeof(IRedArray)) ||
                     ResolvedPropertyType.IsAssignableTo(typeof(IList)) ||
                     ResolvedPropertyType.IsAssignableTo(typeof(CR2WList)) ||
-                    ResolvedPropertyType.IsAssignableTo(typeof(Package04)));
+                    ResolvedPropertyType.IsAssignableTo(typeof(RedPackage)));
 
         private int _propertyCountCache = -1;
 
@@ -880,7 +925,7 @@ namespace WolvenKit.ViewModels.Shell
                     }
                     else if (ResolvedData is RedBaseClass redClass)
                     {
-                        var pis = GetTypeInfo(redClass.GetType()).PropertyInfos;
+                        var pis = GetTypeInfo(redClass).PropertyInfos;
                         count += pis.Count;
 
                         var dps = redClass.GetDynamicPropertyNames();
@@ -888,7 +933,7 @@ namespace WolvenKit.ViewModels.Shell
                     }
                     else if (ResolvedData is SerializationDeferredDataBuffer sddb)
                     {
-                        if (sddb.Data is Package04 p4)
+                        if (sddb.Data is RedPackage p4)
                         {
                             count += p4.Chunks.Count;
                         }
@@ -899,7 +944,7 @@ namespace WolvenKit.ViewModels.Shell
                     }
                     else if (ResolvedData is SharedDataBuffer sdb)
                     {
-                        if (sdb.Data is Package04 p42)
+                        if (sdb.Data is RedPackage p42)
                         {
                             count += p42.Chunks.Count;
                         }
@@ -907,14 +952,14 @@ namespace WolvenKit.ViewModels.Shell
                         {
                             count += 1;
                         }
-                        if (sdb.Data is IParseableBuffer)
+                        if (sdb.Data is not null)
                         {
                             count += 1;  // needs refinement?
                         }
                     }
                     else if (ResolvedData is DataBuffer db)
                     {
-                        if (db.Data is Package04 p43)
+                        if (db.Data is RedPackage p43)
                         {
                             count += p43.Chunks.Count;
                         }
@@ -926,7 +971,7 @@ namespace WolvenKit.ViewModels.Shell
                         {
                             count += list.Count;
                         }
-                        else if (db.Data is IParseableBuffer)
+                        else if (db.Data is not null)
                         {
                             count += 1; // needs refinement?
                         }
@@ -961,10 +1006,7 @@ namespace WolvenKit.ViewModels.Shell
                 }
                 return _propertyCountCache;
             }
-            set
-            {
-                _propertyCountCache = -1;
-            }
+            set => _propertyCountCache = -1;
         }
 
         public int ArrayIndexWidth
@@ -1050,13 +1092,9 @@ namespace WolvenKit.ViewModels.Shell
                     {
                         Value = text;
                     }
-                    else if (rn.GetRedHash() != 0)
-                    {
-                        Value = rn.GetRedHash().ToString();
-                    }
                     else
                     {
-                        Value = "null";
+                        Value = rn.GetRedHash() != 0 ? rn.GetRedHash().ToString() : "null";
                     }
                 }
                 else
@@ -1081,14 +1119,7 @@ namespace WolvenKit.ViewModels.Shell
             else if (PropertyType.IsAssignableTo(typeof(LocalizationString)))
             {
                 var value = (LocalizationString)Data;
-                if (value.Value == "" || value.Value == null)
-                {
-                    Value = "null";
-                }
-                else
-                {
-                    Value = value.Value;
-                }
+                Value = value.Value is "" or null ? "null" : value.Value;
             }
             else if (PropertyType.IsAssignableTo(typeof(IRedEnum)))
             {
@@ -1118,14 +1149,7 @@ namespace WolvenKit.ViewModels.Shell
             else if (PropertyType.IsAssignableTo(typeof(CUInt64)))
             {
                 var value = (CUInt64)Data;
-                if (value != 0)
-                {
-                    Value = ((NodeRef)(ulong)value).ToString();
-                }
-                else
-                {
-                    Value = ((ulong)value).ToString();
-                }
+                Value = value != 0 ? ((NodeRef)(ulong)value).ToString() : ((ulong)value).ToString();
             }
             else if (PropertyType.IsAssignableTo(typeof(gamedataLocKeyWrapper)))
             {
@@ -1136,27 +1160,13 @@ namespace WolvenKit.ViewModels.Shell
             else if (PropertyType.IsAssignableTo(typeof(IRedInteger)))
             {
                 var value = (IRedInteger)Data;
-                Value = (value switch
-                {
-                    CUInt8 uint64 => uint64,
-                    CInt8 uint64 => uint64,
-                    CInt16 uint64 => uint64,
-                    CUInt16 uint64 => uint64,
-                    CInt32 uint64 => uint64,
-                    CUInt32 uint64 => uint64,
-                    CInt64 uint64 => (float)uint64,
-                    _ => throw new ArgumentOutOfRangeException(nameof(value)),
-                }).ToString("F0");
+
+                Value = value.ToString(CultureInfo.CurrentCulture);
             }
             else if (PropertyType.IsAssignableTo(typeof(FixedPoint)))
             {
                 var value = (FixedPoint)Data;
-                Value = ((float)value).ToString("R");
-            }
-            else if (PropertyType.IsAssignableTo(typeof(IRedPrimitive<float>)))
-            {
-                var value = (IRedPrimitive)Data;
-                Value = ((float)(CFloat)value).ToString("R");
+                Value = ((float)value).ToString("G9");
             }
             else if (PropertyType.IsAssignableTo(typeof(NodeRef)))
             {
@@ -1166,14 +1176,7 @@ namespace WolvenKit.ViewModels.Shell
             else if (PropertyType.IsAssignableTo(typeof(IRedRef)))
             {
                 var value = (IRedRef)Data;
-                if (value != null && value.DepotPath.GetResolvedText() != "")
-                {
-                    Value = value.DepotPath.GetResolvedText();
-                }
-                else
-                {
-                    Value = "null";
-                }
+                Value = value != null && value.DepotPath.GetResolvedText() != "" ? value.DepotPath.GetResolvedText() : "null";
             }
             else if (Data is IBrowsableType ibt)
             {
@@ -1205,7 +1208,7 @@ namespace WolvenKit.ViewModels.Shell
             {
                 Descriptor = $"[{ary.Count}]";
             }
-            else if (ResolvedData is IRedBufferPointer rbp && rbp.GetValue().Data is Package04 pkg)
+            else if (ResolvedData is IRedBufferPointer rbp && rbp.GetValue().Data is RedPackage pkg)
             {
                 Descriptor = $"[{pkg.Chunks.Count}]";
             }
@@ -1233,7 +1236,7 @@ namespace WolvenKit.ViewModels.Shell
                 var s = (string)str;
                 if (s != null && s.StartsWith("LocKey#") && ulong.TryParse(s.Substring(7), out var locKey2))
                 {
-                    Descriptor = ((ulong)locKey2).ToString();
+                    Descriptor = locKey2.ToString();
                 }
             }
             //if (ResolvedData is CMaterialInstance && Parent != null)
@@ -1347,10 +1350,6 @@ namespace WolvenKit.ViewModels.Shell
                 {
                     return "SymbolNumeric";
                 }
-                if (PropertyType.IsAssignableTo(typeof(IRedPrimitive<float>)))
-                {
-                    return "SymbolNumeric";
-                }
                 if (PropertyType.IsAssignableTo(typeof(BaseStringType)))
                 {
                     return "SymbolString";
@@ -1407,11 +1406,7 @@ namespace WolvenKit.ViewModels.Shell
                 {
                     return "IssueReopened";
                 }
-                if (PropertyType.IsAssignableTo(typeof(CColor)))
-                {
-                    return "SymbolColor";
-                }
-                return "SymbolClass";
+                return PropertyType.IsAssignableTo(typeof(CColor)) ? "SymbolColor" : "SymbolClass";
             }
         }
 
@@ -1462,7 +1457,7 @@ namespace WolvenKit.ViewModels.Shell
         }
 
         public ICommand AddHandleCommand { get; private set; }
-        private bool CanAddHandle() => (PropertyType?.IsAssignableTo(typeof(IRedBaseHandle)) ?? false);
+        private bool CanAddHandle() => PropertyType?.IsAssignableTo(typeof(IRedBaseHandle)) ?? false;
         private void ExecuteAddHandle()
         {
             var data = RedTypeManager.CreateRedType(PropertyType);
@@ -1507,37 +1502,73 @@ namespace WolvenKit.ViewModels.Shell
         }
 
         public ICommand AddItemToArrayCommand { get; private set; }
-        private bool CanAddItemToArray() => Data is IRedArray;
+        private bool CanAddItemToArray() => PropertyType.IsAssignableTo(typeof(IRedArray)) || PropertyType.IsAssignableTo(typeof(IRedLegacySingleChannelCurve));
         private void ExecuteAddItemToArray()
         {
-            var innerType = (Data as IRedArray).InnerType;
-            var pointer = false;
-            if (innerType.IsAssignableTo(typeof(IRedBaseHandle)))
+            if (PropertyType.IsAssignableTo(typeof(IRedArray)))
             {
-                pointer = true;
-                innerType = innerType.GenericTypeArguments[0];
-            }
-            var existing = new ObservableCollection<string>(AppDomain.CurrentDomain.GetAssemblies().SelectMany(s => s.GetTypes()).Where(p => innerType.IsAssignableFrom(p) && p.IsClass).Select(x => x.Name));
-
-            // no inheritable
-            if (existing.Count == 1)
-            {
-                var type = (Data as IRedArray).InnerType;
-                var newItem = RedTypeManager.CreateRedType(type);
-                if (newItem is IRedBaseHandle handle)
+                if (Data == null)
                 {
-                    var pointee = RedTypeManager.CreateRedType(handle.InnerType);
-                    handle.SetValue((RedBaseClass)pointee);
+                    // TODO: Need info for CStatic, ...
+                    return;
                 }
-                InsertChild(-1, newItem);
-            }
-            else
-            {
-                var app = Locator.Current.GetService<AppViewModel>();
-                app.SetActiveDialog(new CreateClassDialogViewModel(existing, true)
+
+                var arr = (IRedArray)Data;
+
+                var innerType = arr.InnerType;
+                var pointer = false;
+                if (innerType.IsAssignableTo(typeof(IRedBaseHandle)))
                 {
-                    DialogHandler = pointer ? HandleChunkPointer : HandleChunk
-                });
+                    pointer = true;
+                    innerType = innerType.GenericTypeArguments[0];
+                }
+                var existing = new ObservableCollection<string>(AppDomain.CurrentDomain.GetAssemblies().SelectMany(s => s.GetTypes()).Where(p => innerType.IsAssignableFrom(p) && p.IsClass).Select(x => x.Name));
+
+                // no inheritable
+                if (existing.Count == 1)
+                {
+                    var type = arr.InnerType;
+                    if (type == typeof(CKeyValuePair))
+                    {
+                        var app = Locator.Current.GetService<AppViewModel>();
+                        app.SetActiveDialog(new SelectRedTypeDialogViewModel
+                        {
+                            DialogHandler = HandleCKeyValuePair
+                        });
+
+                        return;
+                    }
+
+                    var newItem = RedTypeManager.CreateRedType(type);
+                    if (newItem is IRedBaseHandle handle)
+                    {
+                        var pointee = RedTypeManager.CreateRedType(handle.InnerType);
+                        handle.SetValue((RedBaseClass)pointee);
+                    }
+                    InsertChild(-1, newItem);
+                }
+                else
+                {
+                    var app = Locator.Current.GetService<AppViewModel>();
+                    app.SetActiveDialog(new CreateClassDialogViewModel(existing, true)
+                    {
+                        DialogHandler = pointer ? HandleChunkPointer : HandleChunk
+                    });
+                }
+            }
+
+            if (PropertyType.IsAssignableTo(typeof(IRedLegacySingleChannelCurve)))
+            {
+                if (Data == null)
+                {
+                    Data = RedTypeManager.CreateRedType(PropertyType);
+                }
+
+                var curve = (IRedLegacySingleChannelCurve)Data;
+
+                var type = curve.ElementType;
+                var newItem = RedTypeManager.CreateRedType(type);
+                InsertChild(-1, newItem);
             }
         }
 
@@ -1550,7 +1581,7 @@ namespace WolvenKit.ViewModels.Shell
                 Data = RedTypeManager.CreateRedType(ResolvedPropertyType);
                 (Data as IRedBufferPointer).SetValue(new RED4.RedBuffer()
                 {
-                    Data = new Package04()
+                    Data = new RedPackage()
                     {
                         Chunks = new List<RedBaseClass>()
                     }
@@ -1566,7 +1597,7 @@ namespace WolvenKit.ViewModels.Shell
             }
             var db = Data as IRedBufferPointer;
             ObservableCollection<string> existing = null;
-            if (db.GetValue().Data is Package04 pkg)
+            if (db.GetValue().Data is RedPackage pkg)
             {
                 existing = new ObservableCollection<string>(pkg.Chunks.Select(t => t.GetType().Name).Distinct());
             }
@@ -1575,6 +1606,19 @@ namespace WolvenKit.ViewModels.Shell
             {
                 DialogHandler = HandleChunk
             });
+        }
+
+        public void HandleCKeyValuePair(DialogViewModel sender)
+        {
+            var app = Locator.Current.GetService<AppViewModel>();
+            app.CloseDialogCommand.Execute(null);
+            if (sender != null)
+            {
+                var vm = sender as SelectRedTypeDialogViewModel;
+
+                var instance = new CKeyValuePair("", (IRedType)System.Activator.CreateInstance(vm.SelectedType));
+                InsertChild(-1, instance);
+            }
         }
 
         public void HandleChunk(DialogViewModel sender)
@@ -1632,38 +1676,58 @@ namespace WolvenKit.ViewModels.Shell
         //}
 
         public ICommand DeleteItemCommand { get; private set; }
+
         private bool CanDeleteItem() => IsInArray;
         private void ExecuteDeleteItem()
         {
-
-            if (Tab is RDTDataViewModel dvm)
+            // if (Tab is RDTDataViewModel dvm)
+            // {
+            //     dvm.SelectedChunk = Parent;
+            // }
+            // if (Parent.Data is IRedArray ary)
+            try
             {
-                dvm.SelectedChunk = Parent;
-            }
-            if (Parent.Data is IRedArray ary)
-            {
-                ary.Remove(Data);
-            }
-            else if (Parent.Data is IRedBufferPointer db && db.GetValue().Data is Package04 pkg)
-            {
-                if (!pkg.Chunks.Remove((RedBaseClass)Data))
+                Tab.SelectedChunk = Parent;
+                if (Parent.Data is IRedArray ary)
                 {
-                    Locator.Current.GetService<ILoggerService>().Error("Unable to delete chunk");
+                    ary.Remove(Data);
+                }
+                else if (Parent.Data is IRedLegacySingleChannelCurve curve)
+                {
+                    curve.Remove((IRedCurvePoint)Data);
+                    if (curve.Count == 0)
+                    {
+                        Parent.ResolvedData = null;
+                        Parent.Data = null;
+                    }
+                }
+                else if (Parent.Data is IRedBufferPointer db && db.GetValue().Data is RedPackage pkg)
+                {
+                    if (!pkg.Chunks.Remove((RedBaseClass)Data))
+                    {
+                        Locator.Current.GetService<ILoggerService>().Error("Unable to delete chunk");
+                        return;
+                    }
+                }
+                else if (Parent.Data is IRedBufferPointer db2 && db2.GetValue().Data is CR2WList list)
+                {
+                    list.Files.RemoveAll(x => x.RootChunk == Data);
+                }
+                else if (Parent.Data is IRedBufferPointer db3 && db3.GetValue().Data is worldNodeDataBuffer dict)
+                {
+                    dict.Remove((worldNodeData)Data);
+                    //dict.RemoveAt(((worldNodeData)Data).NodeIndex);
+                }
+                else
+                {
+                    Locator.Current.GetService<ILoggerService>().Error("Unknown collection - unable to delete chunk");
                     return;
                 }
-            }
-            else if (Parent.Data is IRedBufferPointer db2 && db2.GetValue().Data is CR2WList list)
-            {
-                list.Files.RemoveAll(x => x.RootChunk == Data);
-            }
-            else
-            {
-                Locator.Current.GetService<ILoggerService>().Error("Unknown collection - unable to delete chunk");
-                return;
-            }
 
-            Tab.File.SetIsDirty(true);
-            Parent.RecalulateProperties();
+                Tab.File.SetIsDirty(true);
+                Parent.RecalculateProperties();
+            }
+            catch (Exception ex) { Locator.Current.GetService<ILoggerService>().Error(ex); }
         }
 
         public ICommand DeleteAllCommand { get; private set; }
@@ -1686,7 +1750,12 @@ namespace WolvenKit.ViewModels.Shell
             {
                 ary.Clear();
             }
-            else if (ResolvedData is IRedBufferPointer db && db.GetValue().Data is Package04 pkg)
+            else if (ResolvedData is IRedLegacySingleChannelCurve curve)
+            {
+                ResolvedData = null;
+                Data = null;
+            }
+            else if (ResolvedData is IRedBufferPointer db && db.GetValue().Data is RedPackage pkg)
             {
                 pkg.Chunks.Clear();
             }
@@ -1700,8 +1769,138 @@ namespace WolvenKit.ViewModels.Shell
             }
             IsDeleteReady = false;
             Tab.File.SetIsDirty(true);
-            RecalulateProperties();
+            RecalculateProperties();
         }
+
+
+
+        public ICommand ImportChunkCommand { get; private set; }
+        public ICommand ImportChunk2Command { get; private set; }
+        private bool CanImportChunk() => Data is worldNodeData && PropertyCount > 0;
+        private void ExecuteImportChunk() => ImportWorldNodeData(true);
+        private void ExecuteImportChunk2() => ImportWorldNodeData(false);
+
+        private bool ImportWorldNodeData(bool updatecoords)
+        {
+            var openFileDialog = new OpenFileDialog
+            {
+                Filter = "JSON files (*.json)|*.json|All files (*.*)|*.*",
+                FilterIndex = 2,
+                FileName = Type + ".json",
+                RestoreDirectory = true
+            };
+
+            if (openFileDialog.ShowDialog() == DialogResult.OK)
+            {
+                try
+                { return AddFromJSON(openFileDialog, updatecoords); }
+                catch (Exception ex)
+                { Locator.Current.GetService<ILoggerService>().Error(ex); }
+            }
+            return false;
+        }
+
+        public bool AddFromJSON(OpenFileDialog openFileDialog, bool updatecoords)
+        {
+            var tr = RedJsonSerializer.Serialize(Data);
+            var current = RedJsonSerializer.Deserialize<worldNodeData>(tr);
+            //deepcopy of Data but not really
+
+            var text = File.ReadAllText(openFileDialog.FileName);
+            if (string.IsNullOrEmpty(text) || current is null)
+            {
+                Locator.Current.GetService<ILoggerService>().Error("Could not read file");
+                return false;
+            }
+
+            if (RedJsonSerializer.TryDeserialize<JsonAMM>(text, out var json0) &&
+               json0 is not null && json0.props is not null && json0.props.Count > 0)
+            {
+                AddFromAMM(json0.props, tr, updatecoords);
+            }
+            else if (RedJsonSerializer.TryDeserialize<JsonAMM2>(text, out var json1) &&
+               json1 is not null && json1.childs is not null && json1.childs.Count > 0)
+            {
+                AddFromAMM2(json1, tr, updatecoords);
+            }
+            else if (RedJsonSerializer.TryDeserialize<List<List<object>>>(text, out var json2) &&
+               json2 is not null)
+            {
+                AddFromUnreal(json2, tr, updatecoords);
+            }
+            else if (RedJsonSerializer.TryDeserialize<List<JsonObjectSpawner>>(text, out var json3) &&
+               json3 is not null && json3.First() is not null && json3.First().pos is not null)
+            {
+                AddFromObjectSpawner(json3, tr, updatecoords);
+            }
+            else if (RedJsonSerializer.TryDeserialize<List<worldNodeData>>(text, out var json4) &&
+               json4 is not null)
+            {
+                if (Parent.Data is DataBuffer db && db.Buffer.Data is IRedArray ira
+                    && json4.Count == ira.Count)
+                {
+                    AddFromBlender(json4, tr);
+                }
+                else
+                {
+                    Locator.Current.GetService<ILoggerService>()
+                        .Warning("nodeData and your JSON must contain the same number of elements");
+                    return false;
+                }
+            }
+            else
+            {
+                Locator.Current.GetService<ILoggerService>().Warning("could not recognize the format of your JSON");
+                return false;
+            }
+
+            if (Parent.Data is DataBuffer dbf && dbf.Buffer.Data is IRedType irtt)
+            {
+                Tab.File.SetIsDirty(true);
+                RecalculateProperties(irtt);
+            }
+
+            //var ad = Locator.Current.GetService<AppViewModel>().ActiveDocument;
+            var currentfile = new FileModel(Tab.File.FilePath,
+                Locator.Current.GetService<AppViewModel>().ActiveProject);
+
+            Locator.Current.GetService<AppViewModel>().SaveFileCommand.SafeExecute(currentfile);
+            //QuickToJSON(Parent.Parent.Data);
+            Refresh();
+
+            Locator.Current.GetService<ILoggerService>().Success($"might have done the thing maybe, who knows really");
+            return true;
+        }
+
+        public void WriteObjectToJSON(object irt)
+        {
+            try
+            {
+                Stream myStream;
+                var saveFileDialog = new SaveFileDialog
+                {
+                    Filter = "JSON files (*.json)|*.json|All files (*.*)|*.*",
+                    FilterIndex = 2,
+                    FileName = Type + ".json",
+                    RestoreDirectory = true
+                };
+
+                if (saveFileDialog.ShowDialog() == DialogResult.OK)
+                {
+                    if ((myStream = saveFileDialog.OpenFile()) != null)
+                    {
+                        var json = RedJsonSerializer.Serialize(irt);
+                        if (!string.IsNullOrEmpty(json))
+                        {
+                            myStream.Write(json.ToCharArray().Select(c => (byte)c).ToArray());
+                            myStream.Close();
+                        }
+                    }
+                }
+            }
+            catch (Exception ex) { Locator.Current.GetService<ILoggerService>().Error(ex); }
+        }
+
 
         public ICommand ExportChunkCommand { get; private set; }
         private bool CanExportChunk() => PropertyCount > 0;
@@ -1748,15 +1947,130 @@ namespace WolvenKit.ViewModels.Shell
         private bool CanCopyChunk() => IsInArray;
         private void ExecuteCopyChunk()
         {
-            if (Data is IRedCloneable irc)
+            try
             {
-                RedDocumentTabViewModel.CopiedChunk = (IRedType)irc.DeepCopy();
+                if (Data is IRedCloneable irc)
+                {
+                    RedDocumentTabViewModel.CopiedChunk = (IRedType)irc.DeepCopy();
+                }
+                else if (Data is worldNodeData)
+                {
+                    var tr = RedJsonSerializer.Serialize(Data);
+                    var copied = RedJsonSerializer.Deserialize<worldNodeData>(tr);
+
+                    RedDocumentTabViewModel.CopiedChunk = copied;
+                }
+                else
+                {
+                    RedDocumentTabViewModel.CopiedChunk = Data;
+                }
             }
-            else
-            {
-                RedDocumentTabViewModel.CopiedChunk = Data;
-            }
+            catch (Exception ex) { Locator.Current.GetService<ILoggerService>().Error(ex); }
+
         }
+
+        private static void AddToCopiedChunks(object elem)
+        {
+            try
+            {
+                if (elem is IRedCloneable irc)
+                {
+                    RDTDataViewModel.CopiedChunks.Add((IRedType)irc.DeepCopy());
+                }
+                else if (elem is worldNodeData)
+                {
+                    /*dynamic t = elem.GetType().GetProperty("Value").GetValue(elem, null);
+                    var v = System.Activator.CreateInstance(t);*/
+                    var tr = RedJsonSerializer.Serialize(elem);
+                    var copied = RedJsonSerializer.Deserialize<worldNodeData>(tr);
+
+                    RDTDataViewModel.CopiedChunks.Add(copied);
+                }
+                else
+                {
+                    throw new NotImplementedException();
+                }
+            }
+            catch (Exception ex) { Locator.Current.GetService<ILoggerService>().Error(ex); }
+        }
+
+
+        public ICommand CopySelectionCommand { get; private set; }
+        private bool CanCopySelection() => IsInArray;
+        private void ExecuteCopySelection()
+        {
+            try
+            {
+                var ts = Parent.DisplayProperties
+                                .Where(_ => _.IsSelected)
+                                .Select(_ => _)
+                                .ToList();
+
+                var indices = ts.Select(_ => int.Parse(_.Name)).ToList();
+                var (start, end) = (indices.Min(), indices.Max());
+
+                var fullselection = Parent.DisplayProperties
+                    .Where(_ => Enumerable.Range(start, end - start + 1)
+                       .Contains(int.Parse(_.Name)))
+                    .Select(_ => _.Data)
+                    .ToList();
+
+                if (Parent.Data is IRedBufferPointer)
+                {
+                    RDTDataViewModel.CopiedChunks.Clear();
+                    foreach (var i in fullselection)
+                    {
+                        try
+                        { AddToCopiedChunks(i); }
+                        catch (Exception ex)
+                        { Locator.Current.GetService<ILoggerService>().Error(ex); }
+                    }
+                }
+                else if (Parent.Data is IRedArray)
+                {
+                    RDTDataViewModel.CopiedChunks.Clear();
+                    foreach (var i in fullselection)
+                    {
+                        try
+                        { AddToCopiedChunks(i); }
+                        catch (Exception ex)
+                        { Locator.Current.GetService<ILoggerService>().Error(ex); }
+                    }
+                }
+                else
+                {
+                    var t = Parent.Data.GetType().Name;
+                    Locator.Current.GetService<ILoggerService>().Warning($"Handle this type {t} wen ._. ");
+                }
+            }
+            catch (Exception ex)
+            {
+                Locator.Current.GetService<ILoggerService>()
+                    .Error($"Something went wrong while trying to copy the selection : {ex}");
+            }
+            //Tab.SelectedChunk = Parent;
+        }
+
+
+
+        public ICommand ExportNodeDataCommand { get; private set; }
+        private bool CanExportNodeData() =>
+            IsInArray &&
+            Parent.Data is DataBuffer rb &&
+            Parent.Parent.Data is worldStreamingSector &&
+            rb.Data is worldNodeDataBuffer;
+        private void ExecuteExportNodeData()
+        {
+            try
+            {
+                if (Parent.Data is DataBuffer rb &&
+                    Parent.Parent.Data is worldStreamingSector &&
+                    rb.Data is worldNodeDataBuffer wndb)
+                { WriteObjectToJSON(wndb.ToList()); }
+            }
+            catch (Exception ex) { Locator.Current.GetService<ILoggerService>().Error(ex); }
+        }
+
 
         public ICommand DuplicateChunkCommand { get; private set; }
         private bool CanDuplicateChunk() => IsInArray;
@@ -1780,42 +2094,119 @@ namespace WolvenKit.ViewModels.Shell
                 {
                     return ira;
                 }
-                if (ResolvedData is IRedArray ira2)
-                {
-                    return ira2;
-                }
-                return null;
+                return ResolvedData is IRedArray ira2 ? ira2 : null;
             }
         }
+
+
+        public ICommand PasteSelectionCommand { get; private set; }
+        private bool CanPasteSelection() => (IsArray || IsInArray)
+            && RDTDataViewModel.CopiedChunks.Count > 0
+            && (ArraySelfOrParent?.InnerType.IsAssignableTo(RDTDataViewModel.CopiedChunks.First().GetType()) ?? true);
+        private void ExecutePasteSelection()
+        {
+            try
+            {
+                if (RDTDataViewModel.CopiedChunks.Count == 0)
+                {
+                    return;
+                }
+
+                for (var i = 0; i < RedDocumentTabViewModel.CopiedChunks.Count; i++)
+                {
+                    var e = RDTDataViewModel.CopiedChunks[i];
+                    var index = Parent.GetIndexOf(this) + i + 1;
+
+                    if (ResolvedData is IRedBufferPointer db)
+                    {
+                        if (db.GetValue().Data is RedPackage pkg)
+                        {
+                            if (index == -1 || index > pkg.Chunks.Count)
+                            {
+                                index = pkg.Chunks.Count;
+                            }
+                            pkg.Chunks.Insert(index, (RedBaseClass)e);
+                        }
+                        else if (db.GetValue().Data is CR2WList list)
+                        {
+                            if (index == -1 || index > list.Files.Count)
+                            {
+                                index = list.Files.Count;
+                            }
+                            list.Files.Insert(index, new CR2WFile()
+                            {
+                                RootChunk = (RedBaseClass)e
+                            });
+                        }
+                    }
+
+
+                    if (Parent.ResolvedData is IRedBufferPointer)
+                    {
+                        if (Parent.InsertChild(index, e))
+                        {
+                            //RDTDataViewModel.CopiedChunk = null;
+                        }
+                    }
+
+
+
+
+                    if (Parent.ResolvedData is IRedArray)
+                    {
+                        if (Parent.InsertChild(index, e))
+                        {
+                            //RDTDataViewModel.CopiedChunk = null;
+                        }
+
+                    }
+                    if (ResolvedData is IRedArray)
+                    {
+                        if (InsertChild(-1, e))
+                        {
+                            //RDTDataViewModel.CopiedChunk = null;
+                        }
+
+                    }
+                }
+            }
+            catch (Exception ex) { Locator.Current.GetService<ILoggerService>().Error(ex); }
+        }
+
+
 
         public ICommand PasteChunkCommand { get; private set; }
         private bool CanPasteChunk() => (IsArray || IsInArray) && RedDocumentTabViewModel.CopiedChunk != null && (ArraySelfOrParent?.InnerType.IsAssignableTo(RedDocumentTabViewModel.CopiedChunk.GetType()) ?? true);
         private void ExecutePasteChunk()
         {
-            if (RedDocumentTabViewModel.CopiedChunk == null)
+            try
             {
-                return;
-            }
-            if (Parent.ResolvedData is IRedArray)
-            {
-                if (Parent.InsertChild(Parent.GetIndexOf(this) + 1, RedDocumentTabViewModel.CopiedChunk))
+                if (RedDocumentTabViewModel.CopiedChunk == null)
                 {
-                    RedDocumentTabViewModel.CopiedChunk = null;
+                    return;
+                }
+                if (Parent.ResolvedData is IRedArray)
+                {
+                    if (Parent.InsertChild(Parent.GetIndexOf(this) + 1, RedDocumentTabViewModel.CopiedChunk))
+                    {
+                        RedDocumentTabViewModel.CopiedChunk = null;
+                    }
+                }
+                if (ResolvedData is IRedArray)
+                {
+                    if (InsertChild(-1, RedDocumentTabViewModel.CopiedChunk))
+                    {
+                        RedDocumentTabViewModel.CopiedChunk = null;
+                    }
                 }
             }
-            if (ResolvedData is IRedArray)
-            {
-                if (InsertChild(-1, RedDocumentTabViewModel.CopiedChunk))
-                {
-                    RedDocumentTabViewModel.CopiedChunk = null;
-                }
-            }
+            catch (Exception ex) { Locator.Current.GetService<ILoggerService>().Error(ex); }
         }
 
         public void MoveChild(int index, ChunkViewModel item)
         {
             if (item.Parent == null)
-            { 
+            {
                 return;
             }
 
@@ -1829,7 +2220,7 @@ namespace WolvenKit.ViewModels.Shell
             }
             else if (oldParent.ResolvedData is IRedBufferPointer db)
             {
-                if (db.GetValue().Data is Package04 pkg)
+                if (db.GetValue().Data is RedPackage pkg)
                 {
                     sourceList = (IList)pkg.Chunks;
                 }
@@ -1845,7 +2236,7 @@ namespace WolvenKit.ViewModels.Shell
             }
             else if (ResolvedData is IRedBufferPointer db)
             {
-                if (db.GetValue().Data is Package04 pkg)
+                if (db.GetValue().Data is RedPackage pkg)
                 {
                     destList = (IList)pkg.Chunks;
                 }
@@ -1856,7 +2247,7 @@ namespace WolvenKit.ViewModels.Shell
             }
 
             if (sourceList != null && destList != null)
-            { 
+            {
                 int oldIndex = -1, i = 0;
                 foreach (var thing in sourceList)
                 {
@@ -1877,10 +2268,10 @@ namespace WolvenKit.ViewModels.Shell
                     }
                     InsertChild(index, item.Data);
                     Tab.File.SetIsDirty(true);
-                    RecalulateProperties();
+                    RecalculateProperties();
                     if (sourceList.GetHashCode() != destList.GetHashCode())
                     {
-                        oldParent.RecalulateProperties();
+                        oldParent.RecalculateProperties();
                         if (oldParent.Tab.File.GetHashCode() != Tab.File.GetHashCode())
                         {
                             oldParent.Tab.File.SetIsDirty(true);
@@ -1892,71 +2283,95 @@ namespace WolvenKit.ViewModels.Shell
 
         public bool InsertChild(int index, IRedType item)
         {
-            // update actual data
-            if (ResolvedData is IRedArray ira && ira.InnerType.IsAssignableTo(item.GetType()))
+            try
             {
-                var arrayType = Data.GetType().GetGenericTypeDefinition();
-                if (arrayType == typeof(CArray<>) || (arrayType == typeof(CStatic<>) && ira.Count < ira.MaxSize))
+                // update actual data
+                if (ResolvedData is IRedArray ira && ira.InnerType.IsAssignableTo(item.GetType()))
                 {
-                    if (index == -1 || index > ira.Count)
+                    if (Data.GetType().IsGenericTypeDefinition)
                     {
-                        index = ira.Count;
+                        var arrayType = Data.GetType().GetGenericTypeDefinition();
+                        if (arrayType == typeof(CArray<>) || (arrayType == typeof(CStatic<>) && ira.Count < ira.MaxSize))
+                        {
+                            if (index == -1 || index > ira.Count)
+                            {
+                                index = ira.Count;
+                            }
+                            ira.Insert(index, item);
+                        }
+                        else
+                        {
+                            return false;
+                        }
                     }
-                    ira.Insert(index, item);
+                    else if (Data is IRedBufferPointer db)
+                    {
+                        if (index == -1 || index > ira.Count)
+                        {
+                            index = ira.Count;
+                        }
+                        ira.Insert(index, item);
+                    }
+                    else
+                    {
+                        return false;
+                    }
+                }
+                else if (ResolvedData is IRedLegacySingleChannelCurve curve && curve.ElementType.IsAssignableTo(item.GetType()))
+                {
+                    curve.Add(0F, item);
+                }
+                else if (item is RedBaseClass rbc)
+                {
+                    if (ResolvedData is IRedBufferPointer db)
+                    {
+                        if (db.GetValue().Data is RedPackage pkg)
+                        {
+                            if (index == -1 || index > pkg.Chunks.Count)
+                            {
+                                index = pkg.Chunks.Count;
+                            }
+                            pkg.Chunks.Insert(index, rbc);
+                        }
+                        else if (db.GetValue().Data is CR2WList list)
+                        {
+                            if (index == -1 || index > list.Files.Count)
+                            {
+                                index = list.Files.Count;
+                            }
+                            list.Files.Insert(index, new CR2WFile()
+                            {
+                                RootChunk = rbc
+                            });
+                        }
+                    }
+                    else
+                    {
+                        return false;
+                    }
                 }
                 else
                 {
                     return false;
                 }
-            }
-            else if (item is RedBaseClass rbc)
-            {
-                if (ResolvedData is IRedBufferPointer db)
-                {
-                    if (db.GetValue().Data is Package04 pkg)
-                    {
-                        if (index == -1 || index > pkg.Chunks.Count)
-                        {
-                            index = pkg.Chunks.Count;
-                        }
-                        pkg.Chunks.Insert(index, rbc);
-                    }
-                    else if (db.GetValue().Data is CR2WList list)
-                    {
-                        if (index == -1 || index > list.Files.Count)
-                        {
-                            index = list.Files.Count;
-                        }
-                        list.Files.Insert(index, new CR2WFile()
-                        {
-                            RootChunk = rbc
-                        });
-                    }
-                }
-                else
-                {
-                    return false;
-                }
-            }
-            else
-            {
-                return false;
-            }
 
-            //Name = null;
-            //PropertyCount = -1;
-            //CalculateDescriptor();
-            //PropertiesLoaded = false;
-            //CalculateProperties();
-            //Tab.File.SetIsDirty(true);
+                //Name = null;
+                //PropertyCount = -1;
+                //CalculateDescriptor();
+                //PropertiesLoaded = false;
+                //CalculateProperties();
+                //Tab.File.SetIsDirty(true);
 
-            Tab.File.SetIsDirty(true);
-            RecalulateProperties(item);
+                Tab.File.SetIsDirty(true);
+                RecalculateProperties(item);
 
-            return true;
+                return true;
+            }
+            catch (Exception ex) { Locator.Current.GetService<ILoggerService>().Error(ex); }
+            return false;
         }
 
-        public void RecalulateProperties(IRedType selectChild = null)
+        public void RecalculateProperties(IRedType selectChild = null)
         {
             PropertyCount = -1;
             // might not be needed

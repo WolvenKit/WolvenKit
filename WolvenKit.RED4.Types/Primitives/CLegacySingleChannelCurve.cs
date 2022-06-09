@@ -6,12 +6,12 @@ namespace WolvenKit.RED4.Types
 {
     public class CurvePoint<T> : IRedCurvePoint<T>, IEquatable<CurvePoint<T>> where T : IRedType
     {
-        public float Point { get; set; }
+        public CFloat Point { get; set; }
         public T Value { get; set; }
 
 
-        public float GetPoint() => Point;
-        public void SetPoint(float point) => Point = point;
+        public CFloat GetPoint() => Point;
+        public void SetPoint(CFloat point) => Point = point;
 
         public IRedType GetValue() => Value;
         public void SetValue(object value) => Value = (T)value;
@@ -57,7 +57,8 @@ namespace WolvenKit.RED4.Types
     [RED("curveData")]
     public class CLegacySingleChannelCurve<T> : List<IRedCurvePoint>, IRedLegacySingleChannelCurve<T>, IEquatable<CLegacySingleChannelCurve<T>> where T : IRedType
     {
-        public string ElementType => RedReflection.GetRedTypeFromCSType(typeof(T));
+        public Type ElementType => typeof(T);
+        public string RedElementType => RedReflection.GetRedTypeFromCSType(typeof(T));
 
         public Enums.EInterpolationType InterpolationType { get; set; }
         public Enums.ESegmentsLinkType LinkType { get; set; }
@@ -65,8 +66,8 @@ namespace WolvenKit.RED4.Types
 
         public IEnumerable<IRedCurvePoint> GetCurvePoints() => this;
 
-        public void Add(float point, object value) => Add(point, (T)value);
-        public void Add(float point, T value) => Add(new CurvePoint<T> {Point = point, Value = value});
+        public void Add(CFloat point, object value) => Add(point, (T)value);
+        public void Add(CFloat point, T value) => Add(new CurvePoint<T> {Point = point, Value = value});
 
         public override bool Equals(object obj)
         {

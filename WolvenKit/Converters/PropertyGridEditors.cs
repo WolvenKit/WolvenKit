@@ -23,10 +23,6 @@ namespace WolvenKit.Converters
             {
                 return new UlongEditor();
             }
-            if (PropertyType.IsAssignableTo(typeof(IRedInteger)))
-            {
-                return new IntegerEditor();
-            }
             if (PropertyType.IsAssignableTo(typeof(FixedPoint)))
             {
                 return new FixedPointEditor();
@@ -34,6 +30,10 @@ namespace WolvenKit.Converters
             if (PropertyType.IsAssignableTo(typeof(IRedPrimitive<float>)))
             {
                 return new FloatEditor();
+            }
+            if (PropertyType.IsAssignableTo(typeof(IRedInteger)))
+            {
+                return new IntegerEditor();
             }
             if (PropertyType.IsAssignableTo(typeof(IRedPrimitive<bool>)))
             {
@@ -51,10 +51,10 @@ namespace WolvenKit.Converters
             {
                 return new RefEditor();
             }
-            if (PropertyType.IsAssignableTo(typeof(IRedLegacySingleChannelCurve)))
-            {
-                return new CurveEditor();
-            }
+            //if (PropertyType.IsAssignableTo(typeof(IRedLegacySingleChannelCurve)))
+            //{
+            //    return new CurveEditor();
+            //}
             if (PropertyType.IsAssignableTo(typeof(CColor)))
             {
                 return new ColorEditor();
@@ -130,46 +130,46 @@ namespace WolvenKit.Converters
             }
         }
 
-        public class CurveEditor : ITypeEditor
-        {
-            private RedCurveEditor _editor;
-
-            public void Attach(PropertyViewItem property, PropertyItem info)
-            {
-                if (info.CanWrite)
-                {
-                    var binding = new Binding("Value")
-                    {
-                        Mode = BindingMode.TwoWay,
-                        Source = info,
-                        ValidatesOnExceptions = true,
-                        ValidatesOnDataErrors = true,
-                    };
-                    BindingOperations.SetBinding(_editor, RedCurveEditor.RedCurveProperty, binding);
-                }
-                else
-                {
-                    _editor.SetCurrentValue(UIElement.IsEnabledProperty, false);
-                    var binding = new Binding("Value")
-                    {
-                        Source = info,
-                        ValidatesOnExceptions = true,
-                        ValidatesOnDataErrors = true
-                    };
-                    BindingOperations.SetBinding(_editor, RedCurveEditor.RedCurveProperty, binding);
-                }
-            }
-            public object Create(PropertyInfo propertyInfo)
-            {
-                _editor = new RedCurveEditor();
-
-                return _editor;
-            }
-            public void Detach(PropertyViewItem property)
-            {
-
-            }
-        }
+        //public class CurveEditor : ITypeEditor
+        //{
+        //    private RedCurveEditor _editor;
+        //
+        //    public void Attach(PropertyViewItem property, PropertyItem info)
+        //    {
+        //        if (info.CanWrite)
+        //        {
+        //            var binding = new Binding("Value")
+        //            {
+        //                Mode = BindingMode.TwoWay,
+        //                Source = info,
+        //                ValidatesOnExceptions = true,
+        //                ValidatesOnDataErrors = true,
+        //            };
+        //            BindingOperations.SetBinding(_editor, RedCurveEditor.RedCurveProperty, binding);
+        //        }
+        //        else
+        //        {
+        //            _editor.SetCurrentValue(UIElement.IsEnabledProperty, false);
+        //            var binding = new Binding("Value")
+        //            {
+        //                Source = info,
+        //                ValidatesOnExceptions = true,
+        //                ValidatesOnDataErrors = true
+        //            };
+        //            BindingOperations.SetBinding(_editor, RedCurveEditor.RedCurveProperty, binding);
+        //        }
+        //    }
+        //    public object Create(PropertyInfo propertyInfo)
+        //    {
+        //        _editor = new RedCurveEditor();
+        //
+        //        return _editor;
+        //    }
+        //    public void Detach(PropertyViewItem property)
+        //    {
+        //
+        //    }
+        //}
 
         public class RefEditor : ITypeEditor
         {

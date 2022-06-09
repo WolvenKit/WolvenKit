@@ -7,7 +7,7 @@ namespace WolvenKit.RED4.Types
 {
     [RED("Float")]
     [DebuggerDisplay("{_value,nq}", Type = "CFloat")]
-    public readonly struct CFloat : IRedPrimitive<float>, IEquatable<CFloat>
+    public readonly struct CFloat : IRedPrimitive<float>, IEquatable<CFloat>, IRedInteger
     {
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         private readonly float _value;
@@ -45,7 +45,7 @@ namespace WolvenKit.RED4.Types
 
         public bool Equals(CFloat other) => Equals(BitConverter.SingleToInt32Bits(_value), BitConverter.SingleToInt32Bits(other._value));
 
-        public override string ToString() => _value.ToString();
-        public string ToString(CultureInfo cultureInfo) => _value.ToString(cultureInfo);
+        public override string ToString() => _value.ToString("G9");
+        public string ToString(CultureInfo cultureInfo) => _value.ToString("G9", cultureInfo);
     }
 }

@@ -3,7 +3,7 @@ using System.Diagnostics;
 
 namespace WolvenKit.RED4.Types;
 
-public class BaseStringType : IRedPrimitive<string>, IEquatable<BaseStringType>, IComparable<BaseStringType>, IComparable
+public abstract class BaseStringType : IRedPrimitive<string>, IEquatable<BaseStringType>, IComparable<BaseStringType>, IComparable
 {
     [DebuggerBrowsable(DebuggerBrowsableState.Never)]
     protected readonly string _value;
@@ -17,7 +17,6 @@ public class BaseStringType : IRedPrimitive<string>, IEquatable<BaseStringType>,
         _value = value;
     }
 
-    public static implicit operator BaseStringType(string value) => new(value);
     public static implicit operator string(BaseStringType value) => value._value;
 
     public int CompareTo(object value)

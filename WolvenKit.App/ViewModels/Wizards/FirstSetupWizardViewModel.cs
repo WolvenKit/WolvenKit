@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reactive;
@@ -89,6 +90,19 @@ namespace WolvenKit.ViewModels.Wizards
         [Reactive] public bool CheckForUpdates { get; set; }
 
         [Reactive] public string CP77ExePath { get; set; }
+
+        public string WikiHelpLink = "https://wiki.redmodding.org/wolvenkit/getting-started/setup";
+
+        public readonly ReactiveCommand<string, Unit> OpenLinkCommand = ReactiveCommand.Create<string>(
+            link =>
+            {
+                var ps = new ProcessStartInfo(link)
+                {
+                    UseShellExecute = true,
+                    Verb = "open"
+                };
+                Process.Start(ps);
+            });
 
         // public string ExecutablePathBG => string.IsNullOrEmpty(W3ExePath) ? redBG : greenBG;
         //public bool IsUpdateSystemAvailable { get; private set; }

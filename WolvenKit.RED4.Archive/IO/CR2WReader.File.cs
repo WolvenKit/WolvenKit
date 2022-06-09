@@ -18,27 +18,26 @@ namespace WolvenKit.RED4.Archive.IO
         private bool _parseBuffer;
 
         private readonly Dictionary<int, RedBaseClass> _chunks = new();
-        private readonly Dictionary<int, RedBuffer> _buffers = new();
 
-        private static readonly Dictionary<string, Type> _bufferReaders = new();
+        private static readonly Dictionary<string, Type> s_bufferReaders = new();
 
         static CR2WReader()
         {
-            _bufferReaders.Add("appearanceAppearanceDefinition.compiledData", typeof(PackageReader));
-            _bufferReaders.Add("entEntityTemplate.compiledData", typeof(PackageReader));
-            _bufferReaders.Add("inkWidgetLibraryItem.packageData", typeof(PackageReader));
-            _bufferReaders.Add("entEntityInstanceData.buffer", typeof(PackageReader));
-            _bufferReaders.Add("gamePersistentStateDataResource.buffer", typeof(PackageReader));
-            _bufferReaders.Add("meshMeshMaterialBuffer.rawData", typeof(CR2WListReader));
-            _bufferReaders.Add("entEntityParametersBuffer.parameterBuffers", typeof(CR2WListReader));
-            _bufferReaders.Add("animAnimDataChunk.buffer", typeof(AnimationReader));
-            _bufferReaders.Add("worldNavigationTileData.tilesBuffer", typeof(TilesReader));
-            _bufferReaders.Add("worldSharedDataBuffer.buffer", typeof(WorldSharedDataBufferReader));
-            _bufferReaders.Add("worldStreamingSector.transforms", typeof(worldNodeDataReader));
-            _bufferReaders.Add("worldCollisionNode.compiledData", typeof(CollisionReader));
-            _bufferReaders.Add("physicsGeometryCache.bufferTableSectors", typeof(GeometryCacheReader));
-            _bufferReaders.Add("physicsGeometryCache.alwaysLoadedSectorDDB", typeof(GeometryCacheReader));
-            _bufferReaders.Add("CGIDataResource.data", typeof(CGIDataReader));
+            s_bufferReaders.Add("appearanceAppearanceDefinition.compiledData", typeof(RedPackageReader));
+            s_bufferReaders.Add("entEntityTemplate.compiledData", typeof(RedPackageReader));
+            s_bufferReaders.Add("inkWidgetLibraryItem.packageData", typeof(RedPackageReader));
+            s_bufferReaders.Add("entEntityInstanceData.buffer", typeof(RedPackageReader));
+            s_bufferReaders.Add("gamePersistentStateDataResource.buffer", typeof(RedPackageReader));
+            s_bufferReaders.Add("meshMeshMaterialBuffer.rawData", typeof(CR2WListReader));
+            s_bufferReaders.Add("entEntityParametersBuffer.parameterBuffers", typeof(CR2WListReader));
+            s_bufferReaders.Add("animAnimDataChunk.buffer", typeof(AnimationReader));
+            s_bufferReaders.Add("worldNavigationTileData.tilesBuffer", typeof(TilesReader));
+            s_bufferReaders.Add("worldSharedDataBuffer.buffer", typeof(WorldSharedDataBufferReader));
+            s_bufferReaders.Add("worldStreamingSector.transforms", typeof(worldNodeDataReader));
+            s_bufferReaders.Add("worldCollisionNode.compiledData", typeof(CollisionReader));
+            s_bufferReaders.Add("physicsGeometryCache.bufferTableSectors", typeof(GeometryCacheReader));
+            s_bufferReaders.Add("physicsGeometryCache.alwaysLoadedSectorDDB", typeof(GeometryCacheReader));
+            s_bufferReaders.Add("CGIDataResource.data", typeof(CGIDataReader));
         }
 
         public EFileReadErrorCodes ReadFileInfo(out CR2WFileInfo info)
@@ -130,18 +129,12 @@ namespace WolvenKit.RED4.Archive.IO
 
             if (_cr2wFile.Info.PropertyInfo.Length > 1)
             {
-                throw new TodoException();
+                throw new TodoException("Found unsupported PropertyInfo");
             }
 
             for (var i = 0; i < _cr2wFile.Info.ExportInfo.Length; i++)
             {
-                var chunk = ReadChunk(_cr2wFile.Info.ExportInfo[i]);
-                if (i == 0)
-                {
-                    _cr2wFile.RootChunk = chunk;
-                }
-
-                _chunks.Add(i, chunk);
+                ReadChunk(i);
             }
 
             for (var i = _chunks.Count - 1; i >= 0; i--)
@@ -166,7 +159,8 @@ namespace WolvenKit.RED4.Archive.IO
 
                 if (!BufferQueue.ContainsKey(i))
                 {
-                    throw new TodoException("Unused buffer");
+                    _logger?.Warning("Unused buffer found!");
+                    continue;
                 }
 
                 foreach (var pointers in BufferQueue[i])
@@ -180,7 +174,14 @@ namespace WolvenKit.RED4.Archive.IO
                     pointers.SetValue(buffer);
                 }
 
+                BufferQueue.Remove(i);
+
                 ParseBuffer(buffer);
+            }
+
+            if (BufferQueue.Count > 0)
+            {
+                throw new TodoException($"The CR2W file is missing {BufferQueue.Count} buffer(s)");
             }
 
             foreach (var embeddedInfo in _cr2wFile.Info.EmbeddedInfo)
@@ -201,7 +202,6 @@ namespace WolvenKit.RED4.Archive.IO
             }*/
 
             file = _cr2wFile;
-            //_cr2wFile.AttachEventHandler();
 
             return EFileReadErrorCodes.NoError;
         }
@@ -238,22 +238,44 @@ namespace WolvenKit.RED4.Archive.IO
 
         private CR2WProperty ReadProperty(CR2WPropertyInfo info) => new CR2WProperty();
 
-        private RedBaseClass ReadChunk(CR2WExportInfo info)
+        private void ReadChunk(int chunkIndex)
         {
+            var info = _cr2wFile.Info.ExportInfo[chunkIndex];
+
             Debug.Assert(BaseStream.Position == info.dataOffset);
 
-            var result = RedTypeManager.Create(GetStringValue(info.className));
+            var redTypeName = GetStringValue(info.className);
+            var (type, _) = RedReflection.GetCSTypeFromRedType(redTypeName);
+
+            var instance = RedTypeManager.Create(type);
+            if (instance is DynamicBaseClass dbc)
+            {
+                if (chunkIndex == 0)
+                {
+                    instance = new DynamicResource { ClassName = redTypeName };
+                }
+                else
+                {
+                    dbc.ClassName = redTypeName;
+                }
+            }
+
 
             var startPos = BaseStream.Position;
-            ReadClass(result, info.dataSize);
+            ReadClass(instance, info.dataSize);
             var bytesRead = BaseStream.Position - startPos;
 
             if (bytesRead != info.dataSize)
             {
-                throw new TodoException($"Chunk size mismatch");
+                throw new TodoException("Chunk size mismatch");
             }
 
-            return result;
+            if (chunkIndex == 0)
+            {
+                _cr2wFile.RootChunk = instance;
+            }
+
+            _chunks.Add(chunkIndex, instance);
         }
 
         private RedBuffer ReadBuffer(CR2WBufferInfo info)
@@ -277,17 +299,35 @@ namespace WolvenKit.RED4.Archive.IO
             }
 
             var parentType = buffer.ParentTypes.First();
-            if (_bufferReaders.ContainsKey(parentType))
+            if (s_bufferReaders.ContainsKey(parentType))
             {
                 var ms = new MemoryStream(buffer.GetBytes());
-                var reader = (IBufferReader)System.Activator.CreateInstance(_bufferReaders[parentType], ms);
+                var reader = (IBufferReader)System.Activator.CreateInstance(s_bufferReaders[parentType], ms);
                 var baseReader = reader as Red4Reader;
                 if (baseReader != null)
                 {
                     baseReader.CollectData = CollectData;
                 }
 
-                reader.ReadBuffer(buffer, _cr2wFile.RootChunk.GetType());
+                if (baseReader is RedPackageReader pReader)
+                {
+                    var rootType = _cr2wFile.RootChunk.GetType();
+
+                    if (rootType == typeof(gamePersistentStateDataResource))
+                    {
+                        pReader.Settings.RedPackageType = RedPackageType.SaveResource;
+                    }
+                    else if (rootType == typeof(inkWidgetLibraryResource))
+                    {
+                        pReader.Settings.RedPackageType = RedPackageType.InkLibResource;
+                    }
+                    else if (rootType == typeof(appearanceAppearanceResource))
+                    {
+                        pReader.Settings.ImportsAsHash = true;
+                    }
+                }
+
+                reader.ReadBuffer(buffer);
 
                 if (baseReader is { CollectData: true })
                 {

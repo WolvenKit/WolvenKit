@@ -52,7 +52,8 @@ namespace WolvenKit.ViewModels.Documents
         public Dictionary<uint, List<SubmeshComponent>> LODLUT { get; set; } = new();
 
         private uint _selectedLOD = 1;
-        public uint SelectedLOD {
+        public uint SelectedLOD
+        {
             get => _selectedLOD;
             set
             {
@@ -208,34 +209,40 @@ namespace WolvenKit.ViewModels.Documents
 
         public RDTMeshViewModel(RedDocumentViewModel file)
         {
-            if (Header == null)
+            try
             {
-                Header = "Mesh Preview";
-            }
-
-            File = file;
-
-            foreach (var res in File.Cr2wFile.EmbeddedFiles)
-            {
-                if (!File.Files.ContainsKey(res.FileName))
+                if (Header == null)
                 {
-                    File.Files.Add(res.FileName, new CR2WFile()
-                    {
-                        RootChunk = res.Content
-                    });
+                    Header = "Mesh Preview";
                 }
+
+                File = file;
+
+                foreach (var res in File.Cr2wFile.EmbeddedFiles)
+                {
+                    if (!File.Files.ContainsKey(res.FileName))
+                    {
+                        File.Files.Add(res.FileName, new CR2WFile()
+                        {
+                            RootChunk = res.Content
+                        });
+                    }
+                }
+
+                EffectsManager = new DefaultEffectsManager();
+
+                //EnvironmentMap = TextureModel.Create(Path.Combine(ISettingsManager.GetTemp_OBJPath(), "Cubemap_Grandcanyon.dds"));
+                Camera = new HelixToolkit.Wpf.SharpDX.PerspectiveCamera()
+                {
+                    FarPlaneDistance = 1E+8,
+                    LookDirection = new System.Windows.Media.Media3D.Vector3D(1f, -1f, -1f)
+                };
+
+                ExtractShadersCommand = new RelayCommand(ExtractShaders);
+                LoadMaterialsCommand = new RelayCommand(LoadMaterials);
             }
+            catch (Exception ex){Locator.Current.GetService<ILoggerService>().Error(ex);}
 
-            EffectsManager = new DefaultEffectsManager();
-            //EnvironmentMap = TextureModel.Create(Path.Combine(ISettingsManager.GetTemp_OBJPath(), "Cubemap_Grandcanyon.dds"));
-            Camera = new HelixToolkit.Wpf.SharpDX.PerspectiveCamera()
-            {
-                FarPlaneDistance = 1E+8,
-                LookDirection = new System.Windows.Media.Media3D.Vector3D(1f, -1f, -1f)
-            };
-
-            ExtractShadersCommand = new RelayCommand(ExtractShaders);
-            LoadMaterialsCommand = new RelayCommand(LoadMaterials);
         }
 
         public RDTMeshViewModel(CMesh data, RedDocumentViewModel file) : this(file)
@@ -395,14 +402,19 @@ namespace WolvenKit.ViewModels.Documents
 
         public GroupModel3D GroupFromModel(LoadableModel model)
         {
-            var group = new MeshComponent()
+            var group = new MeshComponent();
+            try
             {
-                Name = !string.IsNullOrEmpty(model.Name) && char.IsDigit(model.Name[0]) ? $"_{model.Name}" : $"{model.Name}",
-                AppearanceName = model.AppearanceName,
-                Transform = model.Transform,
-                IsRendering = model.IsEnabled,
-                DepotPath = model.DepotPath
-            };
+                group.Name = !string.IsNullOrEmpty(model.Name) && char.IsDigit(model.Name[0]) ? $"_{model.Name}" : $"{model.Name}";
+                group.AppearanceName = model.AppearanceName;
+                group.Transform = model.Transform;
+                group.IsRendering = model.IsEnabled;
+                group.DepotPath = model.DepotPath;
+            }
+            catch (Exception ex)
+            {
+                Console.Write(ex);
+            }
 
             foreach (var mesh in model.Meshes)
             {
@@ -429,7 +441,7 @@ namespace WolvenKit.ViewModels.Documents
                 };
                 group.Children.Add(GroupFromRigBone(rig, rig.Bones[0], groups));
                 groups.Add(name, group);
-               modelGroups.Add(group);
+                modelGroups.Add(group);
             }
 
             foreach (var model in app.BindableModels)
@@ -459,7 +471,7 @@ namespace WolvenKit.ViewModels.Documents
                 }
                 else
                 {
-                   modelGroups.Add(group);
+                    modelGroups.Add(group);
                 }
             }
             return modelGroups;
@@ -497,7 +509,7 @@ namespace WolvenKit.ViewModels.Documents
                 var enabledChunks = new ObservableCollection<int>();
 
                 for (var i = 0; i < 64; i++)
-                { 
+                {
                     chunkList[i] = (chunkMask & (1UL << i)) > 0;
                     if (chunkList[i])
                         enabledChunks.Add(i);
@@ -571,7 +583,7 @@ namespace WolvenKit.ViewModels.Documents
                         {
                             material.Values[pair.Key] = pair.Value;
                         }
-                        
+
                         materials[name] = material;
                     }
                     var apps = new List<string>();
@@ -858,7 +870,8 @@ namespace WolvenKit.ViewModels.Documents
         public Matrix3D scale = new();
         public Matrix3D post = new();
 
-        public SeparateMatrix() {
+        public SeparateMatrix()
+        {
 
         }
 

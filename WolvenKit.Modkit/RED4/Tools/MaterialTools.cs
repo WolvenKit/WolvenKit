@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text.Json;
+using SharpGLTF.Validation;
+using SharpGLTF.Schema2;
 using WolvenKit.Common;
 using WolvenKit.Common.Conversion;
 using WolvenKit.Common.Extensions;
@@ -24,7 +26,7 @@ namespace WolvenKit.Modkit.RED4
     /// </summary>
     public partial class ModTools
     {
-        public bool ExportMeshWithMaterials(Stream meshStream, FileInfo outfile, List<Archive> archives, string matRepo, EUncookExtension eUncookExtension = EUncookExtension.dds, bool isGLBinary = true, bool LodFilter = true)
+        public bool ExportMeshWithMaterials(Stream meshStream, FileInfo outfile, List<Archive> archives, string matRepo, EUncookExtension eUncookExtension = EUncookExtension.dds, bool isGLBinary = true, bool LodFilter = true, ValidationMode vmode = ValidationMode.TryFix)
         {
             if (matRepo == null)
             {
@@ -52,11 +54,11 @@ namespace WolvenKit.Modkit.RED4
 
             if (isGLBinary)
             {
-                model.SaveGLB(outfile.FullName);
+                model.SaveGLB(outfile.FullName, new WriteSettings(vmode));
             }
             else
             {
-                model.SaveGLTF(outfile.FullName);
+                model.SaveGLTF(outfile.FullName, new WriteSettings(vmode));
             }
 
             meshStream.Dispose();
@@ -90,9 +92,24 @@ namespace WolvenKit.Modkit.RED4
                         }
 
                         using var reader = new CR2WReader(ms);
-                        _ = reader.ReadFile(out var mi, false);
+                        _ = reader.ReadFile(out var matFile, false);
 
-                        ExternalMaterial.Add(mi.RootChunk as CMaterialInstance);
+                        var mi = matFile.RootChunk as CMaterialInstance;
+                        if (mi != null)
+                        {
+                            ExternalMaterial.Add(mi);
+                        } else
+                        {
+                            // The external materials can also directly reference MaterialTemplates. To keep it easier for the exporter we can expose these as material instances
+                            var fakeMaterialInstance = new CMaterialInstance()
+                            {
+                                BaseMaterial = new CResourceReference<IMaterial> { DepotPath = path },
+                                Values = new CArray<CKeyValuePair>()
+                            };
+
+                            ExternalMaterial.Add(fakeMaterialInstance);
+                        }
+
 
                         foreach (var import in reader.ImportsList)
                         {
@@ -579,7 +596,7 @@ namespace WolvenKit.Modkit.RED4
 
 
             var RawMaterials = new List<RawMaterial>();
-            var usedMts = new Dictionary<string, CMaterialTemplate>();
+            var usedMts = GetEmbeddedMaterialTemplates(ref cr2w);
             for (var i = 0; i < materialEntries.Count; i++)
             {
                 RawMaterials.Add(ContainRawMaterial(materialEntries[i], materialEntryNames[i], archives, ref usedMts));
@@ -1175,6 +1192,24 @@ namespace WolvenKit.Modkit.RED4
             return new MemoryStream(b.GetBytes());
         }
 
+        private static Dictionary<string, CMaterialTemplate> GetEmbeddedMaterialTemplates(ref CR2WFile cr2w)
+        {
+            var materialTemplates = new Dictionary<string, CMaterialTemplate>();
+            foreach (var file in cr2w.EmbeddedFiles)
+            {
+                if (Path.GetExtension(file.FileName).Contains("mt"))
+                {
+                    var mt = file.Content as CMaterialTemplate;
+                    if(mt != null)
+                    {
+                        materialTemplates.Add(file.FileName, mt);
+                    }
+                }
+            }
+
+            return materialTemplates;
+        }
+
         public bool WriteMatToMesh(ref CR2WFile cr2w, string _matData, List<Archive> archives)
         {
             if (cr2w == null || cr2w.RootChunk is not CMesh cMesh || cMesh.RenderResourceBlob.Chunk is not rendRenderMeshBlob)
@@ -1339,6 +1374,9 @@ namespace WolvenKit.Modkit.RED4
             }
             else
             {
+                // Forcing the data to null, so it doesn't generate a new byte array on write
+                // TODO: Should be handled better
+                blob.LocalMaterialBuffer.RawData.Buffer.Data = null;
                 blob.LocalMaterialBuffer.RawData.Buffer.SetBytes(materialbuffer.ToArray());
             }
 

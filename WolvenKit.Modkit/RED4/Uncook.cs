@@ -57,7 +57,7 @@ namespace WolvenKit.Modkit.RED4
                     relFileFullName += ".bin";
                 }
 
-                var mainFileInfo = new FileInfo(Path.Combine(outDir.FullName, $"{relFileFullName}"));
+                var mainFileInfo = new FileInfo(Path.Combine(outDir.FullName, $"{relFileFullName.Replace('\\', Path.DirectorySeparatorChar)}"));
 
                 // write mainFile
                 if (!WolvenTesting.IsTesting)
@@ -67,9 +67,13 @@ namespace WolvenKit.Modkit.RED4
                         Directory.CreateDirectory(mainFileInfo.Directory.FullName);
                     }
 
-                    using var fs = new FileStream(mainFileInfo.FullName, FileMode.Create, FileAccess.Write);
-                    cr2WStream.Seek(0, SeekOrigin.Begin);
-                    cr2WStream.CopyTo(fs);
+                    // prevents batch extract to create write conflicts when a single file is referrenced by multiple items
+                    if (!File.Exists(mainFileInfo.FullName))
+                    {
+                        using var fs = new FileStream(mainFileInfo.FullName, FileMode.Create, FileAccess.Write);
+                        cr2WStream.Seek(0, SeekOrigin.Begin);
+                        cr2WStream.CopyTo(fs);
+                    }
                 }
 
                 #endregion unbundle main file
@@ -211,7 +215,7 @@ namespace WolvenKit.Modkit.RED4
         /// <returns></returns>
         private bool UncookBuffers(Stream cr2wStream, string relPath, GlobalExportArgs settings, DirectoryInfo rawOutDir, ECookedFileFormat[] forcebuffers = null)
         {
-            var outfile = new FileInfo(Path.Combine(rawOutDir.FullName, relPath));
+            var outfile = new FileInfo(Path.Combine(rawOutDir.FullName, $"{relPath.Replace('\\', Path.DirectorySeparatorChar)}"));
             if (outfile.Directory == null)
             {
                 return false;

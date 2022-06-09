@@ -11,20 +11,23 @@ namespace WolvenKit.RED4.Archive.IO
 {
     public partial class CR2WReader : Red4Reader
     {
-        public CR2WReader(Stream input) : base(input)
+        private ILoggerService _logger;
+
+        public CR2WReader(Stream input) : this(input, Encoding.UTF8, false)
         {
         }
 
-        public CR2WReader(Stream input, Encoding encoding) : base(input, encoding)
+        public CR2WReader(Stream input, Encoding encoding) : this(input, encoding, false)
         {
         }
 
-        public CR2WReader(Stream input, Encoding encoding, bool leaveOpen) : base(input, encoding, leaveOpen)
+        public CR2WReader(Stream input, Encoding encoding, bool leaveOpen) : this(new BinaryReader(input, encoding, leaveOpen))
         {
         }
 
         public CR2WReader(BinaryReader reader) : base(reader)
         {
+            _logger = Locator.Current.GetService<ILoggerService>();
         }
 
         public override void ReadClass(RedBaseClass cls, uint size)
@@ -92,9 +95,16 @@ namespace WolvenKit.RED4.Archive.IO
 
             var (type, flags) = RedReflection.GetCSTypeFromRedType(typename);
 
+            var typeInfo = RedReflection.GetTypeInfo(cls);
+
             IRedType value;
             var prop = RedReflection.GetPropertyByRedName(cls.GetType(), varName);
             if (prop == null)
+            {
+                prop = typeInfo.AddDynamicProperty(varName, typename);
+            }
+
+            if (prop.IsDynamic)
             {
                 value = Read(type, size - 4, flags);
                 cls.SetProperty(varName, value);
@@ -102,8 +112,6 @@ namespace WolvenKit.RED4.Archive.IO
             else
             {
                 value = Read(prop.Type, size - 4, prop.Flags.Clone());
-
-                var typeInfo = RedReflection.GetTypeInfo(cls.GetType());
 
                 var propName = $"{RedReflection.GetRedTypeFromCSType(cls.GetType())}.{varName}";
                 if (type != prop.Type)

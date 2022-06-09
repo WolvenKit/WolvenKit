@@ -1,4 +1,3 @@
-using System.IO;
 using WolvenKit.Core.Extensions;
 using WolvenKit.RED4.IO;
 
@@ -6,46 +5,62 @@ namespace WolvenKit.RED4.Types
 {
     public partial class gameLootResourceData : IRedAppendix
     {
-        [RED("unk1")]
+        [RED("nodeRefsHash")]
         [REDProperty(IsIgnored = true)]
-        public CArray<CUInt64> Unk1
+        public CArray<CUInt64> NodeRefsHash
         {
             get => GetPropertyValue<CArray<CUInt64>>();
             set => SetPropertyValue<CArray<CUInt64>>(value);
         }
 
-        [RED("buffer")]
+        [RED("tweakDbIds")]
         [REDProperty(IsIgnored = true)]
-        public CByteArray Buffer
+        public CArray<CArray<TweakDBID>> TweakDbIds
         {
-            get => GetPropertyValue<CByteArray>();
-            set => SetPropertyValue<CByteArray>(value);
+            get => GetPropertyValue<CArray<CArray<TweakDBID>>>();
+            set => SetPropertyValue<CArray<CArray<TweakDBID>>>(value);
         }
 
         public void Read(Red4Reader reader, uint size)
         {
-            Unk1 = new CArray<CUInt64>();
-
-            var startPos = reader.BaseReader.BaseStream.Position;
+            NodeRefsHash = new CArray<CUInt64>();
+            TweakDbIds = new CArray<CArray<TweakDBID>>();
 
             var cnt = reader.BaseReader.ReadVLQInt32();
             for (int i = 0; i < cnt; i++)
             {
-                Unk1.Add(reader.ReadCUInt64());
+                NodeRefsHash.Add(reader.ReadCUInt64());
             }
 
-            var bytesRead = reader.BaseReader.BaseStream.Position - startPos;
-            Buffer = reader.BaseReader.ReadBytes((int)(size - bytesRead));
+            for (int i = 0; i < cnt; i++)
+            {
+                var tmp = new CArray<TweakDBID>();
+
+                var cnt2 = reader.BaseReader.ReadByte();
+                for (int j = 0; j <= cnt2; j++)
+                {
+                    tmp.Add(reader.ReadTweakDBID());
+                }
+                TweakDbIds.Add(tmp);
+            }
         }
 
         public void Write(Red4Writer writer)
         {
-            writer.WriteVLQ(Unk1.Count);
-            foreach (var entry in Unk1)
+            writer.WriteVLQ(NodeRefsHash.Count);
+            foreach (var entry in NodeRefsHash)
             {
                 writer.Write(entry);
             }
-            writer.BaseWriter.Write(Buffer);
+
+            foreach (var ids in TweakDbIds)
+            {
+                writer.BaseWriter.Write((byte)(ids.Count - 1));
+                foreach (var tweakDbid in ids)
+                {
+                    writer.Write(tweakDbid);
+                }
+            }
         }
     }
 }

@@ -283,23 +283,14 @@ namespace WolvenKit.RED4.Archive.IO
 
         private void WriteBufferData(RedBuffer buffer)
         {
-            if (buffer.Data is Package04 p4)
+            if (buffer.Data is RedPackage p4)
             {
                 using var ms = new MemoryStream();
-                using var packageWriter = new PackageWriter(ms);
+                using var packageWriter = new RedPackageWriter(ms) { IsRoot = false };
 
-                packageWriter.WritePackage(p4, _file.RootChunk.GetType());
+                packageWriter.WritePackage(p4);
 
-                var newData = ms.ToArray();
-
-                /*var oldData = buffer.GetBytes();
-                if (!oldData.SequenceEqual(newData))
-                {
-                    File.WriteAllBytes(@"C:\Dev\C77\Buffer\OldBuffer.bin", oldData);
-                    File.WriteAllBytes(@"C:\Dev\C77\Buffer\NewBuffer.bin", newData);
-                }*/
-
-                buffer.SetBytes(newData);
+                buffer.SetBytes(ms.ToArray());
             }
 
             if (buffer.Data is CR2WList list)
@@ -327,7 +318,7 @@ namespace WolvenKit.RED4.Archive.IO
                 buffer.SetBytes(newData);
             }
 
-            if (buffer.Data is WorldTransformsBuffer wtb)
+            if (buffer is RedBuffer wsb && buffer.Data is WorldTransformsBuffer wtb)
             {
                 using var ms = new MemoryStream();
                 using var transformWriter = new WorldTransformsWriter(ms);
@@ -348,6 +339,11 @@ namespace WolvenKit.RED4.Archive.IO
                 offset = (uint)writer.BaseStream.Position,
                 memSize = buffer.MemSize
             };
+
+            if (!IsRoot)
+            {
+                throw new TodoException();
+            }
 
             var compBuf = buffer.GetCompressedBytes();
             writer.Write(compBuf);
@@ -390,7 +386,7 @@ namespace WolvenKit.RED4.Archive.IO
         private (List<CR2WEmbeddedInfo>, byte[]) GenerateEmbeddedData(IList<ImportEntry> importsList)
         {
             using var ms = new MemoryStream();
-            using var writer = new CR2WWriter(ms);
+            using var writer = new CR2WWriter(ms) { IsRoot = IsRoot };
 
             var embeddedInfoList = new List<CR2WEmbeddedInfo>();
             foreach (var embedded in _file.EmbeddedFiles)
@@ -410,7 +406,7 @@ namespace WolvenKit.RED4.Archive.IO
             var tmpQueue = file.ChunkQueue;
             file.ChunkQueue = new List<RedBaseClass>();
 
-            var redTypeName = RedReflection.GetTypeRedName(chunkData.GetType());
+            var redTypeName = GetClassName(chunkData);
             var typeIndex = file.GetStringIndex(redTypeName);
 
             var result = new CR2WExportInfo
@@ -432,6 +428,21 @@ namespace WolvenKit.RED4.Archive.IO
 
         #region Support
 
+        private string GetClassName(RedBaseClass cls)
+        {
+            if (cls is DynamicResource dres)
+            {
+                return dres.ClassName;
+            }
+
+            if (cls is DynamicBaseClass dbc)
+            {
+                return dbc.ClassName;
+            }
+
+            return RedReflection.GetTypeRedName(cls.GetType());
+        }
+
         private class DataCollection
         {
             public List<CName> StringList { get; set; }
@@ -445,12 +456,14 @@ namespace WolvenKit.RED4.Archive.IO
             public byte[] BufferData { get; set; }
         }
 
+        protected override void GenerateBufferBytes(RedBuffer buffer) => WriteBufferData(buffer);
+
         private DataCollection GenerateData()
         {
             var result = new DataCollection();
 
             using var ms = new MemoryStream();
-            using var file = new CR2WWriter(ms);
+            using var file = new CR2WWriter(ms) { IsRoot = IsRoot, _file = _file };
 
             file._chunkInfos = _chunkInfos;
 
@@ -484,7 +497,7 @@ namespace WolvenKit.RED4.Archive.IO
                         continue;
                     }
 
-                    chunkClassNames.Add(RedReflection.GetTypeRedName(chunk.GetType()));
+                    chunkClassNames.Add(GetClassName(chunk));
 
                     _chunkInfos[chunk].Id = chunkCounter;
                     file.StartChunk(chunk);
@@ -518,22 +531,17 @@ namespace WolvenKit.RED4.Archive.IO
                 }
             }
 
-            foreach (var kvp in file.BufferRef)
-            {
-                WriteBufferData(kvp.Value);
-            }
-
             file.GenerateStringDictionary();
             result.StringList = file.StringCacheList.ToList();
             result.ImportList = file.ImportCacheList.ToList();
 
             foreach (var embeddedFile in _file.EmbeddedFiles)
             {
-                var typeInfo = RedReflection.GetTypeInfo(embeddedFile.Content.GetType());
+                var typeInfo = RedReflection.GetTypeInfo(embeddedFile.Content);
                 SetParent(_chunkInfos[embeddedFile.Content].Id, maxDepth: typeInfo.ChildLevel);
 
-                var tuple = new ImportEntry("", (CName)embeddedFile.FileName, (ushort)8);
-                if (!result.ImportList.Contains(tuple))
+                var tuple = new ImportEntry("", embeddedFile.FileName, 8);
+                if (result.ImportList.All(x => x.DepotPath != tuple.DepotPath))
                 {
                     result.ImportList.Add(tuple);
                 }

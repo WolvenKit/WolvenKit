@@ -74,7 +74,10 @@ namespace WolvenKit.RED4.Types
                     throw new ArgumentException($"Native prop '{propertyName}' could not be found!");
                 }
 
-                _dynamicProperties.Add(propertyName);
+                if (!_dynamicProperties.Contains(propertyName))
+                {
+                    _dynamicProperties.Add(propertyName);
+                }
             }
 
             _properties[propertyName] = value;
@@ -111,7 +114,7 @@ namespace WolvenKit.RED4.Types
         protected void SetPropertyValue<T>(T value, [CallerMemberName] string callerName = "") where T : IRedType
             => InternalSetPropertyValue(callerName, value);
 
-        public bool HasProperty(string propertyName) => _properties.ContainsKey(propertyName);
+        public bool HasProperty(string propertyName) => _properties.ContainsKey(propertyName) || RedReflection.GetNativePropertyInfo(GetType(), propertyName) != null;
 
         public void SetProperty(string propertyName, IRedType value) => InternalSetPropertyValue(propertyName, value, false);
 
@@ -125,7 +128,12 @@ namespace WolvenKit.RED4.Types
             var propertyInfo = RedReflection.GetNativePropertyInfo(GetType(), propertyName);
             if (propertyInfo != null)
             {
-                if (_properties.ContainsKey(propertyInfo.RedName))
+                if ( propertyInfo.RedName is null)
+                {
+                    throw new PropertyNotFoundException(" RedName is null ");
+                }
+
+                if ( _properties.ContainsKey(propertyInfo.RedName))
                 {
                     return _properties[propertyInfo.RedName];
                 }

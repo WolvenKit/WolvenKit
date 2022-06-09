@@ -3,24 +3,26 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using WolvenKit.RED4.Archive.Buffer;
 using WolvenKit.RED4.IO;
 using WolvenKit.RED4.Types;
 
 
 namespace WolvenKit.RED4.Archive.IO
 {
-    public partial class PackageWriter : Red4Writer
+    public partial class RedPackageWriter : Red4Writer
     {
+        public RedPackageSettings Settings = new();
 
-        public PackageWriter(Stream output) : this(output, Encoding.UTF8, false)
+        public RedPackageWriter(Stream output) : this(output, Encoding.UTF8, false)
         {
         }
 
-        public PackageWriter(Stream output, Encoding encoding) : this(output, encoding, false)
+        public RedPackageWriter(Stream output, Encoding encoding) : this(output, encoding, false)
         {
         }
 
-        public PackageWriter(Stream output, Encoding encoding, bool leaveOpen) : base(output, encoding, leaveOpen)
+        public RedPackageWriter(Stream output, Encoding encoding, bool leaveOpen) : base(output, encoding, leaveOpen)
         {
             ImportCacheList = new PackageImportCacheList();
         }
@@ -42,35 +44,42 @@ namespace WolvenKit.RED4.Archive.IO
 
         public override void WriteClass(RedBaseClass cls)
         {
-            var typeInfo = RedReflection.GetTypeInfo(cls.GetType());
-
+            var typeInfo = RedReflection.GetTypeInfo(cls);
 
             var nonDefaultProperties = new List<RedReflection.ExtendedPropertyInfo>();
-            foreach (var propertyInfo in typeInfo.PropertyInfos)
+            foreach (var propertyInfo in typeInfo.GetWritableProperties())
             {
                 var value = cls.GetProperty(propertyInfo.RedName);
-                if (!typeInfo.SerializeDefault && !propertyInfo.SerializeDefault && RedReflection.IsDefault(cls.GetType(), propertyInfo, value))
+                if (!propertyInfo.IsDynamic)
                 {
-                    if (propertyInfo.Type == typeof(CRUID) && _doubleHeaderCRUIDS.Contains(cls.GetType()))
+                    if (!typeInfo.SerializeDefault && !propertyInfo.SerializeDefault && RedReflection.IsDefault(cls.GetType(), propertyInfo, value))
                     {
-                        _cruids.Add((CRUID)value);
+                        continue;
                     }
-
-                    continue;
                 }
+
                 nonDefaultProperties.Add(propertyInfo);
             }
 
             _writer.Write((ushort)nonDefaultProperties.Count);
-            var currentDataPosition = BaseStream.Position + nonDefaultProperties.Count * 8;
+            var currentDataPosition = BaseStream.Position + (nonDefaultProperties.Count * 8);
             var descStartPosition = BaseStream.Position;
 
             foreach (var propertyInfo in nonDefaultProperties)
             {
                 var value = cls.GetProperty(propertyInfo.RedName);
-                var redTypeName = RedReflection.GetRedTypeFromCSType(propertyInfo.Type, propertyInfo.Flags.Clone());
 
-                BaseStream.Position = descStartPosition + nonDefaultProperties.IndexOf(propertyInfo) * 8;
+                string redTypeName;
+                if (propertyInfo.IsDynamic)
+                {
+                    redTypeName = propertyInfo.RedType;
+                }
+                else
+                {
+                    redTypeName = RedReflection.GetRedTypeFromCSType(propertyInfo.Type, propertyInfo.Flags.Clone());
+                }
+
+                BaseStream.Position = descStartPosition + (nonDefaultProperties.IndexOf(propertyInfo) * 8);
 
                 CNameRef.Add(_writer.BaseStream.Position, propertyInfo.RedName);
                 _writer.Write(GetStringIndex(propertyInfo.RedName));
@@ -82,12 +91,7 @@ namespace WolvenKit.RED4.Archive.IO
 
                 BaseStream.Position = currentDataPosition;
                 // write data, prefixed with size?
-                Write((IRedType)value);
-
-                if (propertyInfo.Type == typeof(CRUID) && !_ignoreCRUIDS.Contains(cls.GetType()))
-                {
-                    _cruids.Add((CRUID)value);
-                }
+                Write(value);
 
                 currentDataPosition = BaseStream.Position;
             }
@@ -96,6 +100,15 @@ namespace WolvenKit.RED4.Archive.IO
             {
                 app.Write(this);
             }
+        }
+
+        public override void Write(IRedEnum instance)
+        {
+            var typeInfo = RedReflection.GetEnumTypeInfo(instance.GetInnerType());
+            var valueName = typeInfo.GetRedNameFromCSName(instance.ToEnumString());
+
+            CNameRef.Add(_writer.BaseStream.Position, valueName);
+            _writer.Write(GetStringIndex(valueName));
         }
 
         public override void Write(IRedBitField instance)
@@ -219,19 +232,6 @@ namespace WolvenKit.RED4.Archive.IO
 
             _writer.Write((short)strBytes.Length);
             _writer.Write(strBytes);
-        }
-
-        public override void Write(DataBuffer val)
-        {
-            if (val.Buffer.IsEmpty)
-            {
-                _writer.Write(0x80000000);
-            }
-            else
-            {
-                _writer.Write(val.Buffer.MemSize);
-                _writer.Write(val.Buffer.GetBytes());
-            }
         }
 
         public override void Write(TweakDBID val)
