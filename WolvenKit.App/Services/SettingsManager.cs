@@ -3,7 +3,6 @@ using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.IO;
 using System.Text.Json;
-using System.Text.Json.Serialization;
 using System.Windows.Media;
 using DynamicData.Binding;
 using ReactiveUI;
@@ -133,7 +132,7 @@ namespace WolvenKit.Functionality.Services
         [Display(Name = "Settings Version")]
         [Reactive]
         [Browsable(false)]
-        public string SettingsVersion { get; set; }
+        public int SettingsVersion { get; set; }
 
         [Category("General")]
         [Display(Name = "Show Guided Tour")]
@@ -269,7 +268,9 @@ namespace WolvenKit.Functionality.Services
             return dir;
         }
 
-        public string GetRED4OodleDll() => string.IsNullOrEmpty(GetRED4GameRootDir()) ? null : Path.Combine(GetRED4GameRootDir(), "bin", "x64", WolvenKit.Core.Constants.Oodle);
+        public string GetRED4OodleDll() => string.IsNullOrEmpty(GetRED4GameRootDir())
+                ? null
+                : Path.Combine(GetRED4GameRootDir(), "bin", "x64", WolvenKit.Core.Constants.Oodle);
 
         #endregion
 
@@ -320,13 +321,13 @@ namespace WolvenKit.Functionality.Services
             TreeViewGroups = settings.TreeViewGroups;
             TreeViewGroupSize = settings.TreeViewGroupSize;
 
-            if (settings.SettingsVersion != "2")
+            if (settings.SettingsVersion != 2)
             {
                 MigrateFromV1ToV2();
             }
         }
 
-        public string SettingsVersion { get; set; }
+        public int SettingsVersion { get; set; }
         public bool CheckForUpdates { get; set; }
         public EUpdateChannel UpdateChannel { get; set; }
         public bool ShowGuidedTour { get; set; }
@@ -345,7 +346,7 @@ namespace WolvenKit.Functionality.Services
 
         public SettingsManager ReconfigureSettingsManager(SettingsManager settingsManager)
         {
-            if (SettingsVersion != "2")
+            if (SettingsVersion != 2)
             {
                 MigrateFromV1ToV2();
             }
@@ -389,7 +390,7 @@ namespace WolvenKit.Functionality.Services
                 CP77LaunchCommand = CP77ExecutablePath;
             }
 
-            SettingsVersion = "2";
+            SettingsVersion = 2;
         }
     }
 }

@@ -24,10 +24,10 @@ namespace WolvenKit.ViewModels.Documents
         public ViewModelActivator Activator { get; } = new();
 
         protected readonly IRedType _data;
-/*
-        [Reactive] public RedDocumentViewModel File { get; set; }
+        /*
+                [Reactive] public RedDocumentViewModel File { get; set; }
 
-        public static IRedType CopiedChunk;*/
+                public static IRedType CopiedChunk;*/
 
         [Reactive] public RedDocumentViewModel File { get; set; }
 
@@ -42,7 +42,7 @@ namespace WolvenKit.ViewModels.Documents
             this.WhenActivated((CompositeDisposable disposables) =>
             {
                 OnDemandLoadingCommand = new DelegateCommand<TreeViewNode>(ExecuteOnDemandLoading, CanExecuteOnDemandLoading);
-                OpenImportCommand = new Functionality.Commands.DelegateCommand<ICR2WImport>(ExecuteOpenImport);
+                OpenImportCommand = new DelegateCommand<ICR2WImport>(ExecuteOpenImport);
                 if (SelectedChunk == null)
                 {
                     SelectedChunk = Chunks[0];
@@ -101,7 +101,7 @@ namespace WolvenKit.ViewModels.Documents
             set => _chunks = value;
         }
 
-        public virtual ChunkViewModel GenerateChunks() => new ChunkViewModel(_data, this);
+        public virtual ChunkViewModel GenerateChunks() => new(_data, this);
 
         [Reactive] public ChunkViewModel SelectedChunk { get; set; }
 
