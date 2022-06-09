@@ -16,16 +16,10 @@ namespace WolvenKit.RED4.Save
 
         public void Read(BinaryReader reader, NodeEntry node)
         {
-            var startPos = reader.BaseStream.Position;
-            //var bytes = reader.ReadBytes(node.Size);
-            //reader.BaseStream.Position = startPos;
-            //
-            //File.WriteAllBytes(@"C:\Dev\C77\asd.bin", bytes);
-
             var data = new ItemDropStorageManager();
-
             var parser = new ItemDropStorageParser();
 
+            var startPos = reader.BaseStream.Position;
 
             var cnt = reader.ReadInt32();
             for (int i = 0; i < cnt; i++)
