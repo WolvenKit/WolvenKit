@@ -597,6 +597,12 @@ namespace WolvenKit.ViewModels.Tools
                 return Observable.Empty<IChangeSet<RedFileViewModel, ulong>>();
             }
 
+            if (string.IsNullOrEmpty(SearchBarText?.Trim()))
+            {
+                RightItems.Clear();
+                return;
+            }
+
             var searchAsSequentialRefinements =
                 RefinementSeparator
                     .Split(SearchBarText)
