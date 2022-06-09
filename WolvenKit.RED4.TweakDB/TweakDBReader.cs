@@ -229,7 +229,7 @@ public class TweakDBReader : Red4Reader
 
         var unk1 = BaseReader.ReadByte();
 
-        var typeInfo = RedReflection.GetTypeInfo(type);
+        var typeInfo = RedReflection.GetTypeInfo(instance);
         while (true)
         {
             var varName = BaseReader.ReadLengthPrefixedString();

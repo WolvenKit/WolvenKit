@@ -1,6 +1,7 @@
 namespace WolvenKit.RED4.Types;
 
-public class ElevatorDevice : RedBaseClass
+// Probably Device or InteractiveDevice
+public class ElevatorDevice : entEntity
 {
     [RED("elevatorSpeed")]
     public CFloat ElevatorSpeed

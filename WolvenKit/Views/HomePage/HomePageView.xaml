@@ -5,7 +5,6 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:av="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:reactiveUi="http://reactiveui.net"
-    xmlns:feather="clr-namespace:Feather.Controls;assembly=Feather.Controls"
     xmlns:hc="https://handyorg.github.io/handycontrol"
     xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
     xmlns:local="clr-namespace:WolvenKit.Functionality.Helpers"
@@ -331,18 +330,6 @@
             </StackPanel>
 
         </Grid>
-
-        <!-- GuidedTour -->
-        <feather:GuidedTour
-            Name="guide"
-            AllowDismiss="True"
-            Animate="True"
-            Visibility="Hidden" />
-
-        <Grid x:Name="Fgrid1" />
-        <Grid x:Name="Fgrid2" />
-        <Grid x:Name="Fgrid3" />
-        <Grid x:Name="Fgrid4" />
 
     </Grid>
 </reactiveUi:ReactiveUserControl>

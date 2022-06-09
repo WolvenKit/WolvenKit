@@ -285,7 +285,40 @@
                             VerticalAlignment="Center"
                             Kind="ContentCopy" />
                     </MenuItem.Icon>
+                </MenuItem> 
+                <MenuItem
+                    Command="{Binding Path=PlacementTarget.Tag.CopySelectionCommand, RelativeSource={RelativeSource AncestorType=ContextMenu}}"
+                    Header="Copy Selection From Array/Buffer"
+                    IsCheckable="False"
+                    Style="{StaticResource SyncfusionMenuItemStyle}">
+                    <MenuItem.Icon>
+                        <iconPacks:PackIconMaterial
+                            Width="13"
+                            Height="13"
+                            Padding="0,0,0,0"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center"
+                            Kind="ContentCopy" />
+                    </MenuItem.Icon>
                 </MenuItem>
+                <MenuItem
+                    Command="{Binding Path=PlacementTarget.Tag.PasteSelectionCommand, RelativeSource={RelativeSource AncestorType=ContextMenu}}"
+                    Header="Paste Selection To Array/Buffer"
+                    IsCheckable="False"
+                    Style="{StaticResource SyncfusionMenuItemStyle}">
+                    <MenuItem.Icon>
+                        <iconPacks:PackIconMaterial
+                            Width="13"
+                            Height="13"
+                            Padding="0,0,0,0"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center"
+                            Kind="ContentCopy" />
+                    </MenuItem.Icon>
+                </MenuItem>
+
+
+
                 <MenuItem
                     Command="{Binding Path=PlacementTarget.Tag.PasteChunkCommand, RelativeSource={RelativeSource AncestorType=ContextMenu}}"
                     Header="Paste Into Array/Buffer"
@@ -317,6 +350,51 @@
                     </MenuItem.Icon>
                 </MenuItem>
                 <MenuItem
+                    Command="{Binding Path=PlacementTarget.Tag.ExportNodeDataCommand, RelativeSource={RelativeSource AncestorType=ContextMenu}}"
+                    Header="Export NodeData to JSON"
+                    IsCheckable="False"
+                    Visibility="{Binding Path=IsEnabled, RelativeSource={RelativeSource Self}, Mode=OneWay, Converter={StaticResource Boolean2VisibilityConverter}}">
+                    <MenuItem.Icon>
+                        <iconPacks:PackIconCodicons
+                            Width="13"
+                            Height="13"
+                            Padding="0,0,0,0"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center"
+                            Kind="Json" />
+                    </MenuItem.Icon>
+                </MenuItem>
+                <MenuItem
+                    Command="{Binding Path=PlacementTarget.Tag.ImportChunkCommand, RelativeSource={RelativeSource AncestorType=ContextMenu}}"
+                    Header="Import from JSON to worldStreamingSector"                    
+                    IsCheckable="False"
+                    Visibility="{Binding Path=IsEnabled, RelativeSource={RelativeSource Self}, Mode=OneWay, Converter={StaticResource Boolean2VisibilityConverter}}">
+                    <MenuItem.Icon>
+                        <iconPacks:PackIconCodicons
+                            Width="13"
+                            Height="13"
+                            Padding="0,0,0,0"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center"
+                            Kind="Json" />
+                    </MenuItem.Icon>
+                </MenuItem>
+                <MenuItem
+                    Command="{Binding Path=PlacementTarget.Tag.ImportChunk2Command, RelativeSource={RelativeSource AncestorType=ContextMenu}}"
+                    Header="Import from JSON (no coords update)"
+                    IsCheckable="False"
+                    Visibility="{Binding Path=IsEnabled, RelativeSource={RelativeSource Self}, Mode=OneWay, Converter={StaticResource Boolean2VisibilityConverter}}">
+                    <MenuItem.Icon>
+                        <iconPacks:PackIconCodicons
+                            Width="13"
+                            Height="13"
+                            Padding="0,0,0,0"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center"
+                            Kind="Json" />
+                    </MenuItem.Icon>
+                </MenuItem>
+                <MenuItem
                     Command="ApplicationCommands.Copy"
                     CommandParameter="{Binding}"
                     CommandTarget="{Binding}"
@@ -336,6 +414,21 @@
                 <MenuItem
                     Command="{Binding Path=PlacementTarget.Tag.DeleteItemCommand, RelativeSource={RelativeSource AncestorType=ContextMenu}}"
                     Header="Delete Item in Array/Buffer"
+                    IsCheckable="False"
+                    Style="{StaticResource SyncfusionMenuItemStyle}">
+                    <MenuItem.Icon>
+                        <iconPacks:PackIconCodicons
+                            Width="13"
+                            Height="13"
+                            Padding="0,0,0,0"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center"
+                            Kind="Remove" />
+                    </MenuItem.Icon>
+                </MenuItem>
+                <MenuItem
+                    Command="{Binding Path=PlacementTarget.Tag.DeleteSelectionCommand, RelativeSource={RelativeSource AncestorType=ContextMenu}}"
+                    Header="Delete Selection in Array/Buffer"
                     IsCheckable="False"
                     Style="{StaticResource SyncfusionMenuItemStyle}">
                     <MenuItem.Icon>
@@ -540,7 +633,12 @@
         ItemTemplateSelector="{StaticResource itemTemplateSelector}"
         ItemsSource="{Binding ElementName=redTreeView, Path=ItemsSource, Mode=TwoWay}"
         SelectedItem="{Binding ElementName=redTreeView, Path=SelectedItem, Mode=TwoWay}"
-        SelectionMode="Single"
+        SelectedItems="{Binding ElementName=redTreeView, Path=SelectedItems, Mode=TwoWay}"
+
+        NodeCollapsed="OnCollapsed"        
+        SelectionMode="Extended"
+        SelectionChanged="OnSelectionChanged"
+
         ShowLines="True"
         VirtualizingPanel.IsVirtualizing="True"
         VirtualizingPanel.ScrollUnit="Pixel"

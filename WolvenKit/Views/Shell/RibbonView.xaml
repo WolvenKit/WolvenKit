@@ -2549,62 +2549,6 @@
                 </Grid>
 
             </Grid>
-
-            <!--<feather:GuidedTour
-            Name="guide"
-            AllowDismiss="True"
-            Animate="True" />
-
-        <hc:Drawer
-            x:Name="MatRepoDrawer"
-            Dock="Right"
-            IsEnabled="True"
-            IsOpen="False"
-            ShowMode="Cover"
-            Visibility="Visible">
-            <Border
-                Width="1200"
-                Background="{DynamicResource ContentBackgroundAlt}"
-                BorderBrush="{DynamicResource MahApps.Brushes.Accent3}"
-                BorderThickness="0"
-                CornerRadius="0,0,0,0">
-                <Grid>
-
-                    <others:MaterialRepositoryDrawer />
-                    <Button
-                        Width="150"
-                        Height="30"
-                        Margin="20"
-                        HorizontalAlignment="Left"
-                        VerticalAlignment="Top"
-                        Click="Button_Click_2"
-                        Content="Close" />
-                </Grid>
-            </Border>
-        </hc:Drawer>
-
-        <hc:Drawer
-            Name="DrawerTop"
-            Dock="Bottom"
-            IsEnabled="True"
-            IsOpen="False"
-            ShowMode="Cover"
-            Visibility="Visible">
-            <Border
-                Height="500"
-                Background="{DynamicResource RegionBrush}"
-                BorderBrush="{DynamicResource MahApps.Brushes.Accent3}"
-                BorderThickness="0,2,0,0"
-                CornerRadius="0">
-                <Grid>
-
-                    <Grid Grid.Row="1">
-                        <shell1:BackStageView />
-                    </Grid>
-                </Grid>
-            </Border>
-        </hc:Drawer>-->
-
         </Grid>
     </Border>
 

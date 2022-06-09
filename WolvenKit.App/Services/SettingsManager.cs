@@ -3,7 +3,6 @@ using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.IO;
 using System.Text.Json;
-using System.Text.Json.Serialization;
 using System.Windows.Media;
 using DynamicData.Binding;
 using ReactiveUI;
@@ -46,7 +45,6 @@ namespace WolvenKit.Functionality.Services
                 nameof(MaterialRepositoryPath),
                 nameof(ThemeAccentString),
                 nameof(CheckForUpdates),
-                nameof(CP77GameDirPath),
                 nameof(CP77ExecutablePath),
                 nameof(CP77LaunchCommand),
                 nameof(CP77LaunchOptions),
@@ -134,7 +132,7 @@ namespace WolvenKit.Functionality.Services
         [Display(Name = "Settings Version")]
         [Reactive]
         [Browsable(false)]
-        public string SettingsVersion { get; set; }
+        public int SettingsVersion { get; set; }
 
         [Category("General")]
         [Display(Name = "Show Guided Tour")]
@@ -163,11 +161,6 @@ namespace WolvenKit.Functionality.Services
         #endregion
 
         #region red4
-
-        [Category("Cyberpunk")]
-        [Display(Name = "Game Directory Path")]
-        [Reactive]
-        public string CP77GameDirPath { get; set; }
 
         [Category("Cyberpunk")]
         [Display(Name = "Game Executable Path (.exe)")]
@@ -249,7 +242,14 @@ namespace WolvenKit.Functionality.Services
 
         #region red4
 
-        public string GetRED4GameRootDir() => CP77GameDirPath;
+        public string GetRED4GameRootDir()
+        {
+            var fi = new FileInfo(CP77ExecutablePath);
+
+            return fi.Directory is { Parent.Parent: { } }
+                ? Path.Combine(fi.Directory.Parent.Parent.FullName)
+                : throw new DirectoryNotFoundException();
+        }
 
         public string GetRED4GameExecutablePath() => CP77ExecutablePath;
 
@@ -269,7 +269,9 @@ namespace WolvenKit.Functionality.Services
             return dir;
         }
 
-        public string GetRED4OodleDll() => string.IsNullOrEmpty(GetRED4GameRootDir()) ? null : Path.Combine(GetRED4GameRootDir(), "bin", "x64", WolvenKit.Core.Constants.Oodle);
+        public string GetRED4OodleDll() => string.IsNullOrEmpty(GetRED4GameRootDir())
+                ? null
+                : Path.Combine(GetRED4GameRootDir(), "bin", "x64", WolvenKit.Core.Constants.Oodle);
 
         #endregion
 
@@ -287,7 +289,7 @@ namespace WolvenKit.Functionality.Services
             }
 
             var fi = new FileInfo(W3ExecutablePath);
-            return fi.Directory is { Parent: { Parent: { } } } ? Path.Combine(fi.Directory.Parent.Parent.FullName) : null;
+            return fi.Directory is { Parent.Parent: { } } ? Path.Combine(fi.Directory.Parent.Parent.FullName) : null;
         }
 
         public bool IsHealthy() => File.Exists(CP77ExecutablePath) && File.Exists(GetRED4OodleDll());
@@ -308,7 +310,6 @@ namespace WolvenKit.Functionality.Services
             UpdateChannel = settings.UpdateChannel;
             ShowGuidedTour = settings.ShowGuidedTour;
             ThemeAccentString = settings.ThemeAccentString;
-            CP77GameDirPath = settings.CP77GameDirPath;
             CP77ExecutablePath = settings.CP77ExecutablePath;
             CP77LaunchCommand = settings.CP77LaunchCommand;
             CP77LaunchOptions = settings.CP77LaunchOptions;
@@ -321,18 +322,17 @@ namespace WolvenKit.Functionality.Services
             TreeViewGroups = settings.TreeViewGroups;
             TreeViewGroupSize = settings.TreeViewGroupSize;
 
-            if (settings.SettingsVersion != "2")
+            if (settings.SettingsVersion != 2)
             {
                 MigrateFromV1ToV2();
             }
         }
 
-        public string SettingsVersion { get; set;  }
+        public int SettingsVersion { get; set; }
         public bool CheckForUpdates { get; set; }
         public EUpdateChannel UpdateChannel { get; set; }
         public bool ShowGuidedTour { get; set; }
         public string ThemeAccentString { get; set; }
-        public string CP77GameDirPath { get; set; }
         public string CP77ExecutablePath { get; set; }
         public string CP77LaunchCommand { get; set; }
         public string CP77LaunchOptions { get; set; }
@@ -347,7 +347,7 @@ namespace WolvenKit.Functionality.Services
 
         public SettingsManager ReconfigureSettingsManager(SettingsManager settingsManager)
         {
-            if (SettingsVersion != "2")
+            if (SettingsVersion != 2)
             {
                 MigrateFromV1ToV2();
             }
@@ -357,7 +357,6 @@ namespace WolvenKit.Functionality.Services
             settingsManager.UpdateChannel = UpdateChannel;
             settingsManager.ShowGuidedTour = ShowGuidedTour;
             settingsManager.ThemeAccentString = ThemeAccentString;
-            settingsManager.CP77GameDirPath = CP77GameDirPath;
             settingsManager.CP77ExecutablePath = CP77ExecutablePath;
             settingsManager.CP77LaunchCommand = CP77LaunchCommand;
             settingsManager.CP77LaunchOptions = CP77LaunchOptions;
@@ -389,16 +388,10 @@ namespace WolvenKit.Functionality.Services
         {
             if (!string.IsNullOrWhiteSpace(CP77ExecutablePath))
             {
-                var fi = new FileInfo(CP77ExecutablePath);
-
-                CP77GameDirPath = fi.Directory is { Parent.Parent: { } }
-                    ? Path.Combine(fi.Directory.Parent.Parent.FullName)
-                    : null;
-
                 CP77LaunchCommand = CP77ExecutablePath;
             }
 
-            SettingsVersion = "2";
+            SettingsVersion = 2;
         }
     }
 }

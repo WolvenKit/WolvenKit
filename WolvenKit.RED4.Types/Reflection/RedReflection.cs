@@ -15,7 +15,35 @@ namespace WolvenKit.RED4.Types
         private static Dictionary<Type, string> _redTypeCacheReverse = new();
 
         private static readonly Dictionary<string, ExtendedEnumInfo> _redEnumCache = new();
+
         private static readonly ConcurrentDictionary<Type, ExtendedTypeInfo> s_typeInfoCache = new();
+        private static readonly ConcurrentDictionary<string, ExtendedTypeInfo> s_dynamicTypeInfoCache = new();
+
+        public static ExtendedTypeInfo GetTypeInfo(IRedType value)
+        {
+            if (value is DynamicBaseClass dbc)
+            {
+                if (!s_dynamicTypeInfoCache.TryGetValue(dbc.ClassName, out var result))
+                {
+                    result = new ExtendedTypeInfo();
+                    s_dynamicTypeInfoCache.TryAdd(dbc.ClassName, result);
+                }
+
+                return result;
+            }
+            else
+            {
+                var type = value.GetType();
+
+                if (!s_typeInfoCache.TryGetValue(type, out var result))
+                {
+                    result = new ExtendedTypeInfo(type);
+                    s_typeInfoCache.TryAdd(type, result);
+                }
+
+                return result;
+            }
+        }
 
         public static ExtendedTypeInfo GetTypeInfo(Type type)
         {
@@ -40,7 +68,7 @@ namespace WolvenKit.RED4.Types
         }
 
         public static ExtendedPropertyInfo GetNativePropertyInfo(Type classType, string propertyName) =>
-            GetTypeInfo(classType).GetPropertyInfoByName(propertyName);
+            GetTypeInfo(classType).GetNativePropertyInfoByName(propertyName);
 
         public static object GetClassDefaultValue(Type classType, string propertyName)
         {
@@ -86,6 +114,11 @@ namespace WolvenKit.RED4.Types
         {
             var typeInfo = GetTypeInfo(type);
 
+            return typeInfo.PropertyInfos.FirstOrDefault(p => p.RedName == redPropertyName);
+        }
+
+        public static ExtendedPropertyInfo GetPropertyByRedName(ExtendedTypeInfo typeInfo, string redPropertyName)
+        {
             return typeInfo.PropertyInfos.FirstOrDefault(p => p.RedName == redPropertyName);
         }
 
@@ -211,7 +244,7 @@ namespace WolvenKit.RED4.Types
 
                 if (type == null)
                 {
-                    type = typeof(RedBaseClass);
+                    type = typeof(DynamicBaseClass);
                 }
                 else
                 {
@@ -267,7 +300,7 @@ namespace WolvenKit.RED4.Types
                         break;
                     }
 
-                    
+
 
                     if (genericType == typeof(CArrayFixedSize<>))
                     {
@@ -280,7 +313,7 @@ namespace WolvenKit.RED4.Types
 
                     if (genericType == typeof(CStatic<>))
                     {
-                        result +=  (flags.MoveNext() ? flags.Current : 0) + ",";
+                        result += (flags.MoveNext() ? flags.Current : 0) + ",";
                     }
 
                     tType = innerType;
@@ -396,14 +429,27 @@ namespace WolvenKit.RED4.Types
             private readonly Dictionary<string, int> _nameIndex = new();
             private readonly Dictionary<string, int> _redNameIndex = new();
 
+            public Type BaseType { get; }
             public bool SerializeDefault { get; }
             public int ChildLevel { get; }
 
+            public bool IsDynamicType { get; }
+
             public bool IsValueType { get; }
             public ImmutableList<ExtendedPropertyInfo> PropertyInfos { get; } = ImmutableList<ExtendedPropertyInfo>.Empty;
+            public List<ExtendedPropertyInfo> DynamicPropertyInfos { get; } = new();
+
+            public ExtendedTypeInfo()
+            {
+                IsDynamicType = true;
+            }
 
             public ExtendedTypeInfo(Type type)
             {
+                IsDynamicType = false;
+
+                BaseType = type.BaseType;
+
                 var attrs = type.GetCustomAttributes(false);
                 foreach (var attribute in attrs)
                 {
@@ -473,8 +519,13 @@ namespace WolvenKit.RED4.Types
                 }
             }
 
-            public ExtendedPropertyInfo GetPropertyInfoByName(string name)
+            public ExtendedPropertyInfo GetNativePropertyInfoByName(string name)
             {
+                if (string.IsNullOrEmpty(name))
+                {
+                    throw new ArgumentNullException(nameof(name));
+                }
+
                 if (_redNameIndex.TryGetValue(name, out var i1))
                 {
                     return PropertyInfos[i1];
@@ -483,6 +534,28 @@ namespace WolvenKit.RED4.Types
                 if (_nameIndex.TryGetValue(name, out var i2))
                 {
                     return PropertyInfos[i2];
+                }
+
+                return null;
+            }
+
+            public ExtendedPropertyInfo GetPropertyInfoByName(string name)
+            {
+                if (string.IsNullOrEmpty(name))
+                {
+                    throw new ArgumentNullException(nameof(name));
+                }
+
+                var propInfo = GetPropertyInfoByRedName(name);
+                if (propInfo != null)
+                {
+                    return propInfo;
+                }
+
+                propInfo = GetPropertyInfoByCsName(name);
+                if (propInfo != null)
+                {
+                    return propInfo;
                 }
 
                 return null;
@@ -497,6 +570,88 @@ namespace WolvenKit.RED4.Types
                         yield return propertyInfo;
                     }
                 }
+
+                foreach (var propertyInfo in DynamicPropertyInfos)
+                {
+                    if (!propertyInfo.IsIgnored)
+                    {
+                        yield return propertyInfo;
+                    }
+                }
+            }
+
+            public ExtendedPropertyInfo GetPropertyInfoByCsName(string name)
+            {
+                if (string.IsNullOrEmpty(name))
+                {
+                    throw new ArgumentNullException(nameof(name));
+                }
+
+                if (!IsDynamicType)
+                {
+                    if (_nameIndex.TryGetValue(name, out var i))
+                    {
+                        return PropertyInfos[i];
+                    }
+                }
+
+                foreach (var propertyInfo in DynamicPropertyInfos)
+                {
+                    if (propertyInfo.Name == name)
+                    {
+                        return propertyInfo;
+                    }
+                }
+
+                return null;
+            }
+
+            public ExtendedPropertyInfo GetPropertyInfoByRedName(string name)
+            {
+                if (string.IsNullOrEmpty(name))
+                {
+                    throw new ArgumentNullException(nameof(name));
+                }
+
+                if (!IsDynamicType)
+                {
+                    if (_redNameIndex.TryGetValue(name, out var i))
+                    {
+                        return PropertyInfos[i];
+                    }
+                }
+
+                foreach (var propertyInfo in DynamicPropertyInfos)
+                {
+                    if (propertyInfo.RedName == name)
+                    {
+                        return propertyInfo;
+                    }
+                }
+
+                return null;
+            }
+
+            public ExtendedPropertyInfo AddDynamicProperty(string varName, string typeName)
+            {
+                foreach (var oldPropertyInfo in DynamicPropertyInfos)
+                {
+                    if (oldPropertyInfo.RedName == varName)
+                    {
+                        if (oldPropertyInfo.RedType == typeName)
+                        {
+                            return oldPropertyInfo;
+                        }
+
+                        throw new ArgumentException($"A dynamic property with the name '{varName}' already exists!");
+                    }
+                }
+
+                var propertyInfo = new ExtendedPropertyInfo(varName, typeName);
+
+                DynamicPropertyInfos.Add(propertyInfo);
+
+                return propertyInfo;
             }
         }
 
@@ -511,8 +666,11 @@ namespace WolvenKit.RED4.Types
 
             public string Name { get; }
             public string RedName { get; private set; }
+            public string RedType { get; private set; }
             public Flags Flags => _flags != null ? _flags.Clone() : Flags.Empty;
             public bool IsIgnored { get; internal set; }
+
+            public bool IsDynamic { get; }
 
             public Type Type { get; }
             public Type GenericType { get; }
@@ -520,9 +678,18 @@ namespace WolvenKit.RED4.Types
             public bool SerializeDefault { get; private set; }
             public object DefaultValue { get; internal set; }
 
+            public ExtendedPropertyInfo(string name, string type)
+            {
+                IsDynamic = true;
+
+                RedName = name;
+                RedType = type;
+            }
 
             public ExtendedPropertyInfo(Type parent, PropertyInfo propertyInfo)
             {
+                IsDynamic = false;
+
                 Name = propertyInfo.Name;
                 Type = propertyInfo.PropertyType;
                 if (Type.IsGenericType)

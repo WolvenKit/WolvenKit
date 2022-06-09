@@ -10,13 +10,12 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 using DynamicData;
 using Microsoft.WindowsAPICodePack.Dialogs;
+using Prism.Commands;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using Splat;
-using WolvenKit.Functionality.Commands;
 using WolvenKit.Functionality.Helpers;
 using WolvenKit.Functionality.ProjectManagement;
-using WolvenKit.Functionality.Services;
 using WolvenKit.Functionality.WKitGlobal;
 using WolvenKit.Interaction;
 using WolvenKit.ViewModels.HomePage;
@@ -29,41 +28,37 @@ namespace WolvenKit.ViewModels.Shared
         #region Fields
 
         private readonly IRecentlyUsedItemsService _recentlyUsedItemsService;
-        private readonly IProjectManager _projectManager;
         private readonly AppViewModel _mainViewModel;
 
         private readonly ReadOnlyObservableCollection<RecentlyUsedItemModel> _recentlyUsedItems;
-
-        private readonly ISettingsManager _settingsManager;
 
         #endregion Fields
 
         #region Constructors
 
         public WelcomePageViewModel(
-            IRecentlyUsedItemsService recentlyUsedItemsService,
-            ISettingsManager settingsManager,
-            IProjectManager projectManager
+            IRecentlyUsedItemsService recentlyUsedItemsService
             )
         {
 
             _mainViewModel = Locator.Current.GetService<AppViewModel>();
 
-            _projectManager = projectManager;
             _recentlyUsedItemsService = recentlyUsedItemsService;
-            _settingsManager = settingsManager;
 
-            CloseHomePage = new RelayCommand(ExecuteHome, CanHome);
+            CloseHomePage = new DelegateCommand(ExecuteHome, CanHome);
             PinItem = new DelegateCommand<string>(OnPinItemExecute);
             UnpinItem = new DelegateCommand<string>(OnUnpinItemExecute);
             OpenInExplorer = new DelegateCommand<string>(OnOpenInExplorerExecute);
 
             OpenProjectCommand = ReactiveCommand.Create<string>(s => _mainViewModel.OpenProjectCommand.Execute(s).Subscribe());
             DeleteProjectCommand = ReactiveCommand.Create<string>(s => _mainViewModel.DeleteProjectCommand.Execute(s).Subscribe());
+
+#pragma warning disable IDE0053 // Doesn't compile with lambda expressions
             NewProjectCommand = ReactiveCommand.Create(() =>
             {
                 _mainViewModel.NewProjectCommand.Execute().Subscribe();
             });
+#pragma warning restore IDE0053 // Doesn't compile with lambda expressions
 
             recentlyUsedItemsService.Items
                 .Connect()
@@ -118,12 +113,7 @@ namespace WolvenKit.ViewModels.Shared
 
         #region Methods
 
-#pragma warning disable AsyncFixer03 // Avoid fire & forget async void methods
-#pragma warning disable AvoidAsyncVoid
-
         private async void OnOpenInExplorerExecute(string parameter)
-#pragma warning restore AsyncFixer03 // Avoid fire & forget async void methods
-#pragma warning restore AvoidAsyncVoid
         {
             if (!File.Exists(parameter))
             {
@@ -208,7 +198,7 @@ namespace WolvenKit.ViewModels.Shared
             sorted.Sort(delegate (RecentlyUsedItemModel a, RecentlyUsedItemModel b)
             {
                 DateTime ad, bd;
-                if (a.Modified != default(DateTime))
+                if (a.Modified != default)
                 {
                     ad = a.Modified;
                 }
@@ -217,7 +207,7 @@ namespace WolvenKit.ViewModels.Shared
                     ad = a.DateTime;
                 }
 
-                if (b.Modified != default(DateTime))
+                if (b.Modified != default)
                 {
                     bd = b.Modified;
                 }

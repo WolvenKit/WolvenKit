@@ -67,9 +67,13 @@ namespace WolvenKit.Modkit.RED4
                         Directory.CreateDirectory(mainFileInfo.Directory.FullName);
                     }
 
-                    using var fs = new FileStream(mainFileInfo.FullName, FileMode.Create, FileAccess.Write);
-                    cr2WStream.Seek(0, SeekOrigin.Begin);
-                    cr2WStream.CopyTo(fs);
+                    // prevents batch extract to create write conflicts when a single file is referrenced by multiple items
+                    if (!File.Exists(mainFileInfo.FullName))
+                    {
+                        using var fs = new FileStream(mainFileInfo.FullName, FileMode.Create, FileAccess.Write);
+                        cr2WStream.Seek(0, SeekOrigin.Begin);
+                        cr2WStream.CopyTo(fs);
+                    }
                 }
 
                 #endregion unbundle main file

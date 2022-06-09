@@ -15,6 +15,7 @@ using System.Windows.Input;
 using gpm.Installer;
 using Microsoft.Win32;
 using Microsoft.WindowsAPICodePack.Dialogs;
+using Prism.Commands;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using Splat;
@@ -100,38 +101,38 @@ namespace WolvenKit.ViewModels.Shell
 
             #region commands
 
-            ShowLogCommand = new RelayCommand(ExecuteShowLog, CanShowLog);
-            ShowProjectExplorerCommand = new RelayCommand(ExecuteShowProjectExplorer, CanShowProjectExplorer);
-            //ShowImportUtilityCommand = new RelayCommand(ExecuteShowImportUtility, CanShowImportUtility);
-            ShowPropertiesCommand = new RelayCommand(ExecuteShowProperties, CanShowProperties);
-            ShowAssetsCommand = new RelayCommand(ExecuteAssetBrowser, CanShowAssetBrowser);
-            //ShowVisualEditorCommand = new RelayCommand(ExecuteVisualEditor, CanShowVisualEditor);
-            //ShowAudioToolCommand = new RelayCommand(ExecuteAudioTool, CanShowAudioTool);
-            //ShowVideoToolCommand = new RelayCommand(ExecuteVideoTool, CanShowVideoTool);
-            //ShowCodeEditorCommand = new RelayCommand(ExecuteCodeEditor, CanShowCodeEditor);
+            ShowLogCommand = new DelegateCommand(ExecuteShowLog, CanShowLog);
+            ShowProjectExplorerCommand = new DelegateCommand(ExecuteShowProjectExplorer, CanShowProjectExplorer);
+            //ShowImportUtilityCommand = new DelegateCommand(ExecuteShowImportUtility, CanShowImportUtility);
+            ShowPropertiesCommand = new DelegateCommand(ExecuteShowProperties, CanShowProperties);
+            ShowAssetsCommand = new DelegateCommand(ExecuteAssetBrowser, CanShowAssetBrowser);
+            //ShowVisualEditorCommand = new DelegateCommand(ExecuteVisualEditor, CanShowVisualEditor);
+            //ShowAudioToolCommand = new DelegateCommand(ExecuteAudioTool, CanShowAudioTool);
+            //ShowVideoToolCommand = new DelegateCommand(ExecuteVideoTool, CanShowVideoTool);
+            //ShowCodeEditorCommand = new DelegateCommand(ExecuteCodeEditor, CanShowCodeEditor);
 
-            ShowImportExportToolCommand = new RelayCommand(ExecuteImportExportTool, CanShowImportExportTool);
-            //ShowPackageInstallerCommand = new RelayCommand(ExecuteShowInstaller, CanShowInstaller);
+            ShowImportExportToolCommand = new DelegateCommand(ExecuteImportExportTool, CanShowImportExportTool);
+            //ShowPackageInstallerCommand = new DelegateCommand(ExecuteShowInstaller, CanShowInstaller);
 
-            ShowPluginCommand = new RelayCommand(ExecuteShowPlugin, CanShowPlugin);
-            ShowSoundModdingToolCommand = new RelayCommand(ExecuteShowSoundModdingTool, CanShowSoundModdingTool);
+            ShowSoundModdingToolCommand = new DelegateCommand(ExecuteShowSoundModdingTool, CanShowSoundModdingTool);
 
-            ShowModsViewCommand = new RelayCommand(ExecuteShowModsView, CanShowModsView);
+            ShowModsViewCommand = new DelegateCommand(ExecuteShowModsView, CanShowModsView);
+            ShowPluginCommand = new DelegateCommand(ExecuteShowPlugin, CanShowPlugin);
 
             OpenFileCommand = new DelegateCommand<FileModel>(p => ExecuteOpenFile(p), CanOpenFile);
             OpenFileAsyncCommand = ReactiveCommand.CreateFromTask<FileModel, Unit>(OpenFileAsync);
             OpenRedFileAsyncCommand = ReactiveCommand.CreateFromTask<FileEntry, Unit>(OpenRedFileAsync);
 
-            var canExecute = this.WhenAny(x => x._projectManager.ActiveProject, (p) => p != null);
+            var canExecute = this.WhenAny(x => x._projectManager.ActiveProject, (p) => p is not null);
             PackModCommand = ReactiveCommand.CreateFromTask(ExecutePackMod, canExecute);
             PackInstallModCommand = ReactiveCommand.CreateFromTask(ExecutePackInstallMod, canExecute);
-            //BackupModCommand = new RelayCommand(ExecuteBackupMod, CanBackupMod);
-            //PublishModCommand = new RelayCommand(ExecutePublishMod, CanPublishMod);
+            //BackupModCommand = new DelegateCommand(ExecuteBackupMod, CanBackupMod);
+            //PublishModCommand = new DelegateCommand(ExecutePublishMod, CanPublishMod);
 
             NewFileCommand = new DelegateCommand<string>(ExecuteNewFile, CanNewFile);
-            SaveFileCommand = new RelayCommand(ExecuteSaveFile, CanSaveFile);
-            SaveAsCommand = new RelayCommand(ExecuteSaveAs, CanSaveFile);
-            SaveAllCommand = new RelayCommand(ExecuteSaveAll, CanSaveAll);
+            SaveFileCommand = new DelegateCommand(ExecuteSaveFile, CanSaveFile);
+            SaveAsCommand = new DelegateCommand(ExecuteSaveAs, CanSaveFile);
+            SaveAllCommand = new DelegateCommand(ExecuteSaveAll, CanSaveAll);
 
             FileSelectedCommand = new DelegateCommand<FileModel>(async (p) => await ExecuteSelectFile(p), CanSelectFile);
 
@@ -139,14 +140,14 @@ namespace WolvenKit.ViewModels.Shell
             DeleteProjectCommand = ReactiveCommand.Create<string>(DeleteProject);
             NewProjectCommand = ReactiveCommand.Create(ExecuteNewProject);
 
-            ShowHomePageCommand = new RelayCommand(ExecuteShowHomePage, CanShowHomePage);
-            ShowSettingsCommand = new RelayCommand(ExecuteShowSettings, CanShowSettings);
+            ShowHomePageCommand = new DelegateCommand(ExecuteShowHomePage, CanShowHomePage);
+            ShowSettingsCommand = new DelegateCommand(ExecuteShowSettings, CanShowSettings);
 
             LaunchGameCommand = ReactiveCommand.CreateFromTask(ExecuteLaunchGame);
 
-            CloseModalCommand = new RelayCommand(ExecuteCloseModal, CanCloseModal);
-            CloseOverlayCommand = new RelayCommand(ExecuteCloseOverlay, CanCloseOverlay);
-            CloseDialogCommand = new RelayCommand(ExecuteCloseDialog, CanCloseDialog);
+            CloseModalCommand = new DelegateCommand(ExecuteCloseModal, CanCloseModal);
+            CloseOverlayCommand = new DelegateCommand(ExecuteCloseOverlay, CanCloseOverlay);
+            CloseDialogCommand = new DelegateCommand(ExecuteCloseDialog, CanCloseDialog);
 
 
             OpenFileAsyncCommand.ThrownExceptions.Subscribe(ex => LogExtended(ex));
@@ -178,13 +179,13 @@ namespace WolvenKit.ViewModels.Shell
 
             // TweakDB when we're good and ready
             _settingsManager
-                .WhenAnyValue(x => x.CP77GameDirPath)
-                .SkipWhile(x => string.IsNullOrWhiteSpace(x) || !Directory.Exists(x)) // -.-
+                .WhenAnyValue(x => x.CP77ExecutablePath)
+                .SkipWhile(x => string.IsNullOrWhiteSpace(x) || !File.Exists(x)) // -.-
                 .Take(1)
                 .Subscribe(x =>
                 {
                     _pluginService.Init();
-                    _tweakDBService.LoadDB(Path.Combine(x, "r6", "cache", "tweakdb.bin"));
+                    _tweakDBService.LoadDB(Path.Combine(_settingsManager.GetRED4GameRootDir(), "r6", "cache", "tweakdb.bin"));
                 });
 
             _settingsManager
@@ -237,7 +238,7 @@ namespace WolvenKit.ViewModels.Shell
                 return true;
             }
 
-            if (Enum.TryParse<ERedExtension>(Path.GetExtension(args[1]).Substring(1), out var _))
+            if (Enum.TryParse<ERedExtension>(Path.GetExtension(args[1])[1..], out var _))
             {
                 _ = OpenFileAsync(new FileModel(args[1], null));
                 return true;
@@ -292,7 +293,7 @@ namespace WolvenKit.ViewModels.Shell
             {
                 var projectToDel = _recentlyUsedItemsService.Items.Items
                     .FirstOrDefault(project => project.Name == parameter);
-                if (projectToDel != null)
+                if (projectToDel is not null)
                 {
                     _recentlyUsedItemsService.RemoveItem(projectToDel);
                 }
@@ -309,7 +310,7 @@ namespace WolvenKit.ViewModels.Shell
         {
             // switch from one active project to another
 
-            if (_projectManager.ActiveProject != null && !string.IsNullOrEmpty(location))
+            if (_projectManager.ActiveProject is not null && !string.IsNullOrEmpty(location))
             {
                 if (_projectManager.ActiveProject.Location == location)
                 {
@@ -450,14 +451,14 @@ namespace WolvenKit.ViewModels.Shell
         private async Task ExecuteSelectFile(FileModel model) => await PropertiesViewModel.ExecuteSelectFile(model);
 
         public ICommand SaveFileCommand { get; private set; }
-        private bool CanSaveFile() => ActiveDocument != null; // _projectManager.ActiveProject != null && 
+        private bool CanSaveFile() => ActiveDocument is not null; // _projectManager.ActiveProject != null &&
         private void ExecuteSaveFile() => Save(ActiveDocument);
 
         public ICommand SaveAsCommand { get; private set; }
         private void ExecuteSaveAs() => Save(ActiveDocument, true);
 
         public ICommand SaveAllCommand { get; private set; }
-        private bool CanSaveAll() => OpenDocuments?.Count > 0; //  _projectManager.ActiveProject != null && 
+        private bool CanSaveAll() => OpenDocuments?.Count > 0; //  _projectManager.ActiveProject != null &&
         private void ExecuteSaveAll()
         {
             foreach (var file in OpenDocuments)
@@ -599,7 +600,7 @@ namespace WolvenKit.ViewModels.Shell
         }
 
         public ICommand NewFileCommand { get; private set; }
-        private bool CanNewFile(string inputDir) => ActiveProject != null && !IsDialogShown;
+        private bool CanNewFile(string inputDir) => ActiveProject is not null && !IsDialogShown;
         private void ExecuteNewFile(string inputDir) => SetActiveDialog(new NewFileViewModel
         {
             FileHandler = OpenFromNewFile
@@ -622,7 +623,7 @@ namespace WolvenKit.ViewModels.Shell
             });
         }
 
-        public async Task OpenFromNewFileTask(NewFileViewModel file)
+        public static async Task OpenFromNewFileTask(NewFileViewModel file)
         {
             Stream stream = null;
             switch (file.SelectedFile.Type)
@@ -765,7 +766,7 @@ namespace WolvenKit.ViewModels.Shell
         public ReactiveCommand<FileEntry, Unit> OpenRedFileAsyncCommand { get; }
         private async Task<Unit> OpenRedFileAsync(FileEntry file)
         {
-            if (file != null)
+            if (file is not null)
             {
                 _progressService.IsIndeterminate = true;
                 try
@@ -880,11 +881,11 @@ namespace WolvenKit.ViewModels.Shell
         //}
 
         public ICommand ShowImportExportToolCommand { get; private set; }
-        private bool CanShowImportExportTool() => _projectManager.ActiveProject != null;
+        private bool CanShowImportExportTool() => _projectManager.ActiveProject is not null;
         private void ExecuteImportExportTool() => ImportExportToolVM.IsVisible = !ImportExportToolVM.IsVisible;
 
         public ICommand ShowLogCommand { get; private set; }
-        private bool CanShowLog() => _projectManager.ActiveProject != null;
+        private bool CanShowLog() => _projectManager.ActiveProject is not null;
         private void ExecuteShowLog() => Log.IsVisible = !Log.IsVisible;
 
         //public ICommand ShowPackageInstallerCommand { get; private set; }
@@ -902,11 +903,11 @@ namespace WolvenKit.ViewModels.Shell
 
 
         public ICommand ShowProjectExplorerCommand { get; private set; }
-        private bool CanShowProjectExplorer() => _projectManager.ActiveProject != null;
+        private bool CanShowProjectExplorer() => _projectManager.ActiveProject is not null;
         private void ExecuteShowProjectExplorer() => ProjectExplorer.IsVisible = !ProjectExplorer.IsVisible;
 
         public ICommand ShowPropertiesCommand { get; private set; }
-        private bool CanShowProperties() => _projectManager.ActiveProject != null;
+        private bool CanShowProperties() => _projectManager.ActiveProject is not null;
         private void ExecuteShowProperties() => PropertiesViewModel.IsVisible = !PropertiesViewModel.IsVisible;
 
         //public ICommand ShowVisualEditorCommand { get; private set; }
@@ -1101,12 +1102,12 @@ namespace WolvenKit.ViewModels.Shell
         public void UpdateTitle()
         {
             var title = "";
-            if (ActiveDocument != null)
+            if (ActiveDocument is not null)
             {
                 title += ActiveDocument.Header + " - ";
             }
 
-            if (_projectManager.ActiveProject != null)
+            if (_projectManager.ActiveProject is not null)
             {
                 title += _projectManager.ActiveProject.Name + " - ";
             }
@@ -1133,7 +1134,7 @@ namespace WolvenKit.ViewModels.Shell
         {
             // Check if we have already loaded this file and return it if so
             var fileViewModel = OpenDocuments.FirstOrDefault(fm => fm.ContentId == fullPath);
-            if (fileViewModel != null)
+            if (fileViewModel is not null)
             {
                 return fileViewModel;
             }
@@ -1212,7 +1213,7 @@ namespace WolvenKit.ViewModels.Shell
                 }
                 else
                 {
-                    dlg.FileName = fileToSave.FilePath != null ? Path.GetFileName(fileToSave.FilePath) : Path.GetFileName(fileToSave.ContentId);
+                    dlg.FileName = fileToSave.FilePath is not null ? Path.GetFileName(fileToSave.FilePath) : Path.GetFileName(fileToSave.ContentId);
                     dlg.InitialDirectory = Path.GetDirectoryName(fileToSave.FilePath);
                 }
                 _watcherService.IsSuspended = true;
@@ -1231,8 +1232,7 @@ namespace WolvenKit.ViewModels.Shell
 
         }
 
-        private bool IsInRawFolder(FileModel model) => IsInRawFolder(model.FullName);
-        private bool IsInRawFolder(string path) => _projectManager.ActiveProject != null &&
+        private bool IsInRawFolder(string path) => _projectManager.ActiveProject is not null &&
                                                        path.Contains(_projectManager.ActiveProject
                                                            .RawDirectory);
 
@@ -1341,7 +1341,7 @@ namespace WolvenKit.ViewModels.Shell
                     DispatcherHelper.RunOnMainThread(() =>
                     {
                         var document = Open(fullpath, type);
-                        if (document != null)
+                        if (document is not null)
                         {
                             if (!DockedViews.Contains(document))
                             {
@@ -1382,7 +1382,7 @@ namespace WolvenKit.ViewModels.Shell
             {
                 File.WriteAllBytes(Path.GetTempPath() + "asd." + extension, new byte[] { 0x01 });
                 var programname = new StringBuilder();
-                NativeMethods.FindExecutable("asd." + extension, Path.GetTempPath(), programname);
+                _ = NativeMethods.FindExecutable("asd." + extension, Path.GetTempPath(), programname);
                 if (programname.ToString().ToUpper().Contains(".EXE"))
                 {
                     Process.Start(programname.ToString(), path.ToEscapedPath());
