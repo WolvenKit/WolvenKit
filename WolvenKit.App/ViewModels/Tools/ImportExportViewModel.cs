@@ -8,8 +8,6 @@ using System.Reactive;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Media3D;
 using DynamicData;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
@@ -25,7 +23,6 @@ using WolvenKit.Core.Services;
 using WolvenKit.Functionality.Commands;
 using WolvenKit.Functionality.Controllers;
 using WolvenKit.Functionality.Services;
-using WolvenKit.Interaction;
 using WolvenKit.Models;
 using WolvenKit.Models.Docking;
 using WolvenKit.Modkit.RED4.Opus;
@@ -230,7 +227,7 @@ namespace WolvenKit.ViewModels.Tools
         {
             get
             {
-                if (SelectedObject != null)
+                if (SelectedObject is not null)
                 {
                     if (!SelectionLocked)
                     {
@@ -433,10 +430,10 @@ namespace WolvenKit.ViewModels.Tools
             }
 
             // set selected types
-            if (CollectionSelectedItems != null)
+            if (CollectionSelectedItems is not null)
             {
                 CollectionSelectedItems.Clear();
-                if (selectedEntries != null)
+                if (selectedEntries is not null)
                 {
                     CollectionSelectedItems.AddRange(selectedEntries.Select(_ => new CollectionItemViewModel(_)));
                 }
@@ -450,7 +447,7 @@ namespace WolvenKit.ViewModels.Tools
             }
 
             CollectionAvailableItems.Clear();
-            if (_archiveManager != null)
+            if (_archiveManager is not null)
             {
                 CollectionAvailableItems.AddRange(_archiveManager
                     .GetGroupedFiles()[$".{fetchExtension}"]
@@ -490,10 +487,10 @@ namespace WolvenKit.ViewModels.Tools
             }
 
             // set selected types
-            if (CollectionSelectedItems != null)
+            if (CollectionSelectedItems is not null)
             {
                 CollectionSelectedItems.Clear();
-                if (selectedEntries != null)
+                if (selectedEntries is not null)
                 {
                     CollectionSelectedItems.AddRange(selectedEntries.Select(_ => new CollectionItemViewModel(_)));
                 }
@@ -862,7 +859,7 @@ namespace WolvenKit.ViewModels.Tools
                 if (_archiveManager.Lookup(hash).HasValue)
                 {
                     file = _archiveManager.Lookup(hash).Value;
-                    if (file != null)
+                    if (file is not null)
                     {
                         var meshStream = new MemoryStream();
                         file.Extract(meshStream);

@@ -90,7 +90,7 @@ namespace WolvenKit.ViewModels.Documents
         public string BindName { get; set; }
         public string SlotName { get; set; }
 
-        public ulong ChunkMask { get; set; } = 18446744073709551615;
+        public ulong ChunkMask { get; set; } = ulong.MaxValue;
         public List<bool> ChunkList { get; set; } = new(64);
         public ObservableCollection<int> AllChunks { get; set; } = new();
         public ObservableCollection<int> EnabledChunks { get; set; } = new();

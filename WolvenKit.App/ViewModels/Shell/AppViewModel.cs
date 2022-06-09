@@ -119,7 +119,7 @@ namespace WolvenKit.ViewModels.Shell
             OpenFileAsyncCommand = ReactiveCommand.CreateFromTask<FileModel, Unit>(OpenFileAsync);
             OpenRedFileAsyncCommand = ReactiveCommand.CreateFromTask<FileEntry, Unit>(OpenRedFileAsync);
 
-            var canExecute = this.WhenAny(x => x._projectManager.ActiveProject, (p) => p != null);
+            var canExecute = this.WhenAny(x => x._projectManager.ActiveProject, (p) => p is not null);
             PackModCommand = ReactiveCommand.CreateFromTask(ExecutePackMod, canExecute);
             PackInstallModCommand = ReactiveCommand.CreateFromTask(ExecutePackInstallMod, canExecute);
             //BackupModCommand = new RelayCommand(ExecuteBackupMod, CanBackupMod);
@@ -234,7 +234,7 @@ namespace WolvenKit.ViewModels.Shell
                 return true;
             }
 
-            if (Enum.TryParse<ERedExtension>(Path.GetExtension(args[1]).Substring(1), out var _))
+            if (Enum.TryParse<ERedExtension>(Path.GetExtension(args[1])[1..], out var _))
             {
                 _ = OpenFileAsync(new FileModel(args[1], null));
                 return true;
@@ -289,7 +289,7 @@ namespace WolvenKit.ViewModels.Shell
             {
                 var projectToDel = _recentlyUsedItemsService.Items.Items
                     .FirstOrDefault(project => project.Name == parameter);
-                if (projectToDel != null)
+                if (projectToDel is not null)
                 {
                     _recentlyUsedItemsService.RemoveItem(projectToDel);
                 }
@@ -306,7 +306,7 @@ namespace WolvenKit.ViewModels.Shell
         {
             // switch from one active project to another
 
-            if (_projectManager.ActiveProject != null && !string.IsNullOrEmpty(location))
+            if (_projectManager.ActiveProject is not null && !string.IsNullOrEmpty(location))
             {
                 if (_projectManager.ActiveProject.Location == location)
                 {
@@ -447,7 +447,7 @@ namespace WolvenKit.ViewModels.Shell
         private async Task ExecuteSelectFile(FileModel model) => await PropertiesViewModel.ExecuteSelectFile(model);
 
         public ICommand SaveFileCommand { get; private set; }
-        private bool CanSaveFile() => ActiveDocument != null; // _projectManager.ActiveProject != null &&
+        private bool CanSaveFile() => ActiveDocument is not null; // _projectManager.ActiveProject != null &&
         private void ExecuteSaveFile() => Save(ActiveDocument);
 
         public ICommand SaveAsCommand { get; private set; }
@@ -580,7 +580,7 @@ namespace WolvenKit.ViewModels.Shell
         });
 
         public ICommand NewFileCommand { get; private set; }
-        private bool CanNewFile(string inputDir) => ActiveProject != null && !IsDialogShown;
+        private bool CanNewFile(string inputDir) => ActiveProject is not null && !IsDialogShown;
         private void ExecuteNewFile(string inputDir) => SetActiveDialog(new NewFileViewModel
         {
             FileHandler = OpenFromNewFile
@@ -746,7 +746,7 @@ namespace WolvenKit.ViewModels.Shell
         public ReactiveCommand<FileEntry, Unit> OpenRedFileAsyncCommand { get; }
         private async Task<Unit> OpenRedFileAsync(FileEntry file)
         {
-            if (file != null)
+            if (file is not null)
             {
                 _progressService.IsIndeterminate = true;
                 try
@@ -861,11 +861,11 @@ namespace WolvenKit.ViewModels.Shell
         //}
 
         public ICommand ShowImportExportToolCommand { get; private set; }
-        private bool CanShowImportExportTool() => _projectManager.ActiveProject != null;
+        private bool CanShowImportExportTool() => _projectManager.ActiveProject is not null;
         private void ExecuteImportExportTool() => ImportExportToolVM.IsVisible = !ImportExportToolVM.IsVisible;
 
         public ICommand ShowLogCommand { get; private set; }
-        private bool CanShowLog() => _projectManager.ActiveProject != null;
+        private bool CanShowLog() => _projectManager.ActiveProject is not null;
         private void ExecuteShowLog() => Log.IsVisible = !Log.IsVisible;
 
         //public ICommand ShowPackageInstallerCommand { get; private set; }
@@ -883,11 +883,11 @@ namespace WolvenKit.ViewModels.Shell
 
 
         public ICommand ShowProjectExplorerCommand { get; private set; }
-        private bool CanShowProjectExplorer() => _projectManager.ActiveProject != null;
+        private bool CanShowProjectExplorer() => _projectManager.ActiveProject is not null;
         private void ExecuteShowProjectExplorer() => ProjectExplorer.IsVisible = !ProjectExplorer.IsVisible;
 
         public ICommand ShowPropertiesCommand { get; private set; }
-        private bool CanShowProperties() => _projectManager.ActiveProject != null;
+        private bool CanShowProperties() => _projectManager.ActiveProject is not null;
         private void ExecuteShowProperties() => PropertiesViewModel.IsVisible = !PropertiesViewModel.IsVisible;
 
         //public ICommand ShowVisualEditorCommand { get; private set; }
@@ -1082,12 +1082,12 @@ namespace WolvenKit.ViewModels.Shell
         public void UpdateTitle()
         {
             var title = "";
-            if (ActiveDocument != null)
+            if (ActiveDocument is not null)
             {
                 title += ActiveDocument.Header + " - ";
             }
 
-            if (_projectManager.ActiveProject != null)
+            if (_projectManager.ActiveProject is not null)
             {
                 title += _projectManager.ActiveProject.Name + " - ";
             }
@@ -1114,7 +1114,7 @@ namespace WolvenKit.ViewModels.Shell
         {
             // Check if we have already loaded this file and return it if so
             var fileViewModel = OpenDocuments.FirstOrDefault(fm => fm.ContentId == fullPath);
-            if (fileViewModel != null)
+            if (fileViewModel is not null)
             {
                 return fileViewModel;
             }
@@ -1193,7 +1193,7 @@ namespace WolvenKit.ViewModels.Shell
                 }
                 else
                 {
-                    dlg.FileName = fileToSave.FilePath != null ? Path.GetFileName(fileToSave.FilePath) : Path.GetFileName(fileToSave.ContentId);
+                    dlg.FileName = fileToSave.FilePath is not null ? Path.GetFileName(fileToSave.FilePath) : Path.GetFileName(fileToSave.ContentId);
                     dlg.InitialDirectory = Path.GetDirectoryName(fileToSave.FilePath);
                 }
                 _watcherService.IsSuspended = true;
@@ -1213,7 +1213,7 @@ namespace WolvenKit.ViewModels.Shell
         }
 
         private bool IsInRawFolder(FileModel model) => IsInRawFolder(model.FullName);
-        private bool IsInRawFolder(string path) => _projectManager.ActiveProject != null &&
+        private bool IsInRawFolder(string path) => _projectManager.ActiveProject is not null &&
                                                        path.Contains(_projectManager.ActiveProject
                                                            .RawDirectory);
 
@@ -1322,7 +1322,7 @@ namespace WolvenKit.ViewModels.Shell
                     DispatcherHelper.RunOnMainThread(() =>
                     {
                         var document = Open(fullpath, type);
-                        if (document != null)
+                        if (document is not null)
                         {
                             if (!DockedViews.Contains(document))
                             {
