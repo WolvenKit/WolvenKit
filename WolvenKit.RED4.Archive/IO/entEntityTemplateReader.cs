@@ -38,6 +38,7 @@ namespace WolvenKit.RED4.Archive.IO
                         {
                             eet.Components.Add(eic);
                         }
+                        // maybe should catch/look for items that differ?
                     }
                 }
             }
