@@ -43,6 +43,7 @@ namespace WolvenKit.Functionality.Services
             _ = this.WhenAnyPropertyChanged(
                 nameof(ShowGuidedTour),
                 nameof(UpdateChannel),
+                nameof(IsDiscordStatusEnabled),
                 nameof(MaterialRepositoryPath),
                 nameof(ThemeAccentString),
                 nameof(CheckForUpdates),
@@ -310,6 +311,7 @@ namespace WolvenKit.Functionality.Services
         {
             CheckForUpdates = settings.CheckForUpdates;
             UpdateChannel = settings.UpdateChannel;
+            IsDiscordStatusEnabled = settings.IsDiscordStatusEnabled;
             ShowGuidedTour = settings.ShowGuidedTour;
             ThemeAccentString = settings.ThemeAccentString;
             CP77GameDirPath = settings.CP77GameDirPath;
@@ -334,6 +336,7 @@ namespace WolvenKit.Functionality.Services
         public string SettingsVersion { get; set;  }
         public bool CheckForUpdates { get; set; }
         public EUpdateChannel UpdateChannel { get; set; }
+        public bool IsDiscordStatusEnabled { get; set; }
         public bool ShowGuidedTour { get; set; }
         public string ThemeAccentString { get; set; }
         public string CP77GameDirPath { get; set; }
@@ -359,6 +362,7 @@ namespace WolvenKit.Functionality.Services
             settingsManager.SettingsVersion = SettingsVersion;
             settingsManager.CheckForUpdates = CheckForUpdates;
             settingsManager.UpdateChannel = UpdateChannel;
+            settingsManager.IsDiscordStatusEnabled = IsDiscordStatusEnabled;
             settingsManager.ShowGuidedTour = ShowGuidedTour;
             settingsManager.ThemeAccentString = ThemeAccentString;
             settingsManager.CP77GameDirPath = CP77GameDirPath;
