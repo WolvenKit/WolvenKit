@@ -597,7 +597,7 @@ namespace WolvenKit.ViewModels.Tools
                 return Observable.Empty<IChangeSet<RedFileViewModel, ulong>>();
             }
 
-            if (string.IsNullOrEmpty(SearchBarText?.Trim()))
+            if (string.IsNullOrWhiteSpace(SearchBarText))
             {
                 RightItems.Clear();
                 return;
