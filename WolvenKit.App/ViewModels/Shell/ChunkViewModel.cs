@@ -1524,7 +1524,10 @@ namespace WolvenKit.ViewModels.Shell
                 {
                     innerType = innerType.GetGenericTypeDefinition();
                 }
-                var existing = new ObservableCollection<string>(AppDomain.CurrentDomain.GetAssemblies().SelectMany(s => s.GetTypes()).Where(p => innerType.IsAssignableFrom(p) && p.IsClass).Select(x => x.Name));
+                var existing = new ObservableCollection<string>(AppDomain.CurrentDomain.GetAssemblies()
+                    .SelectMany(s => s.GetTypes())
+                    .Where(p => innerType.IsAssignableFrom(p) && p.IsClass)
+                    .Select(x => x.Name));
 
                 // no inheritable
                 if (existing.Count == 1)
@@ -2051,7 +2054,7 @@ namespace WolvenKit.ViewModels.Shell
                 return false;
             }
 
-            if (Parent.ResolvedData is IRedArray destinationParentArray)
+            if (Parent is not null && Parent.ResolvedData is IRedArray destinationParentArray)
             {
                 return destinationParentArray.InnerType.IsAssignableFrom(RDTDataViewModel.CopiedChunk.GetType());
             }
