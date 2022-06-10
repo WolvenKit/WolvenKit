@@ -1,19 +1,15 @@
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Reactive.Disposables;
 using System.Windows.Input;
-using System.Windows.Media.Media3D;
 using HelixToolkit.SharpDX.Core;
 using HelixToolkit.Wpf.SharpDX;
+using Prism.Commands;
 using ReactiveUI;
-using System.Reactive.Disposables;
-using WolvenKit.Functionality.Commands;
-using WolvenKit.RED4.Archive.Buffer;
-using WolvenKit.RED4.Archive.CR2W;
+using Splat;
+using WolvenKit.Common.Services;
 using WolvenKit.RED4.Types;
 
 namespace WolvenKit.ViewModels.Documents
@@ -60,7 +56,7 @@ namespace WolvenKit.ViewModels.Documents
             {
                 var sectorFile = File.GetFileFromDepotPathOrCache(sector.DepotPath);
 
-                if (sectorFile != null && sectorFile.RootChunk is worldStreamingSector wss)
+                if (sectorFile is not null && sectorFile.RootChunk is worldStreamingSector wss)
                 {
                     sector.Element = RenderSector(wss, Appearances[0]);
                     sector.Element.Name = sector.Name.Replace("-", "n");
@@ -76,13 +72,10 @@ namespace WolvenKit.ViewModels.Documents
             _data = data;
             Header = "Sector Previews";
 
-            SearchForPointCommand = new DelegateCommand((x) => ExecuteSearchForPoint());
-            ClearSearchCommand = new DelegateCommand((x) => ExecuteClearSearch());
+            SearchForPointCommand = new DelegateCommand(ExecuteSearchForPoint);
+            ClearSearchCommand = new DelegateCommand(ExecuteClearSearch);
 
-            this.WhenActivated((CompositeDisposable disposables) =>
-            {
-                RenderBlockSolo();
-            });
+            this.WhenActivated((CompositeDisposable disposables) => RenderBlockSolo());
         }
 
         public ICommand ClearSearchCommand { get; set; }
@@ -186,9 +179,9 @@ namespace WolvenKit.ViewModels.Documents
 
             foreach (var desc in data.Descriptors)
             {
-                if (!SearchActive || SearchPoint.X < desc.StreamingBox.Max.X && SearchPoint.X > desc.StreamingBox.Min.X &&
+                if (!SearchActive || (SearchPoint.X < desc.StreamingBox.Max.X && SearchPoint.X > desc.StreamingBox.Min.X &&
                     SearchPoint.Y < desc.StreamingBox.Max.Y && SearchPoint.Y > desc.StreamingBox.Min.Y &&
-                    SearchPoint.Z < desc.StreamingBox.Max.Z && SearchPoint.Z > desc.StreamingBox.Min.Z)
+                    SearchPoint.Z < desc.StreamingBox.Max.Z && SearchPoint.Z > desc.StreamingBox.Min.Z))
                 {
                     var text = new BillboardText3D();
                     text.TextInfo.Add(
@@ -306,14 +299,21 @@ namespace WolvenKit.ViewModels.Documents
 
         public void OnMouseDown3DHandler(object sender, MouseDown3DEventArgs e)
         {
-            if (e.HitTestResult != null && ((MouseButtonEventArgs)e.OriginalInputEventArgs).LeftButton == MouseButtonState.Pressed)
+            if (e.HitTestResult is not null && ((MouseButtonEventArgs)e.OriginalInputEventArgs).LeftButton == MouseButtonState.Pressed)
             {
                 if (e.HitTestResult.ModelHit is WKBillboardTextModel3D text)
                 {
                     var sector = Sectors.Where(x => x.Text == text).FirstOrDefault();
-                    if (sector != null)
+                    if (sector is not null)
                     {
-                        LoadSector(sector);
+                        try
+                        {
+                            LoadSector(sector);
+                        }
+                        catch (Exception ex)
+                        {
+                            Locator.Current.GetService<ILoggerService>().Error(ex);
+                        }
                     }
                     e.Handled = true;
                 }

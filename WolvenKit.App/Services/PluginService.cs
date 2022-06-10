@@ -118,14 +118,7 @@ namespace WolvenKit.Functionality.Services
         public bool IsInstalled(EPlugin pluginName)
         {
             var p = Plugins.FirstOrDefault(x => x.Plugin == pluginName);
-            if (p == null)
-            {
-                return false;
-            }
-            else
-            {
-                return p.Status != EPluginStatus.NotInstalled;
-            }
+            return p is not null && p.Status != EPluginStatus.NotInstalled;
         }
 
         public bool TryGetInstallPath(EPlugin plugin, [NotNullWhen(true)] out string path)

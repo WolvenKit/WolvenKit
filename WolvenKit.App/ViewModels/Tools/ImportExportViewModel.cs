@@ -8,11 +8,8 @@ using System.Reactive;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Media3D;
-using Ab3d.Assimp;
-using Assimp;
 using DynamicData;
+using Prism.Commands;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using WolvenKit.Common;
@@ -24,10 +21,8 @@ using WolvenKit.Common.Model.Arguments;
 using WolvenKit.Common.Services;
 using WolvenKit.Core.Interfaces;
 using WolvenKit.Core.Services;
-using WolvenKit.Functionality.Commands;
 using WolvenKit.Functionality.Controllers;
 using WolvenKit.Functionality.Services;
-using WolvenKit.Interaction;
 using WolvenKit.Models;
 using WolvenKit.Models.Docking;
 using WolvenKit.Modkit.RED4.Opus;
@@ -183,12 +178,7 @@ namespace WolvenKit.ViewModels.Tools
             // example: if a masklist exists in the filelist, ignore all files in the subdirectory
             // named the same as masklist but with extension mlmask
             var directory = new FileInfo(file.FullName).Directory;
-            if (directory.Name.Contains($".{ERedExtension.mlmask}"))
-            {
-                return false;
-            }
-
-            return true;
+            return !directory.Name.Contains($".{ERedExtension.mlmask}");
         }
 
         #region properties
@@ -237,7 +227,7 @@ namespace WolvenKit.ViewModels.Tools
         {
             get
             {
-                if (SelectedObject != null)
+                if (SelectedObject is not null)
                 {
                     if (!SelectionLocked)
                     {
@@ -246,12 +236,7 @@ namespace WolvenKit.ViewModels.Tools
                     }
                     else
                     {
-                        if (_lastselected == null)
-                        { return ""; }
-                        else
-                        {
-                            return _lastselected.Name;
-                        }
+                        return _lastselected == null ? "" : _lastselected.Name;
                     }
                 }
                 else
@@ -308,7 +293,7 @@ namespace WolvenKit.ViewModels.Tools
 
         private void ExecuteConfirmCollection(string v)
         {
-            switch (SelectedExport)
+            switch (SelectedObject)
             {
                 case { Properties: MeshExportArgs meshExportArgs }:
                     switch (v)
@@ -335,6 +320,24 @@ namespace WolvenKit.ViewModels.Tools
                     }
                     break;
 
+                case { Properties: GltfImportArgs gltfImportArgs }:
+                    switch (v)
+                    {
+                        case nameof(GltfImportArgs.Rig):
+                            gltfImportArgs.Rig = new List<FileEntry>() { CollectionSelectedItems.Select(_ => _.Model).Cast<FileEntry>().FirstOrDefault() };
+                            _notificationService.Success($"Selected Rigs were added to WithRig arguments.");
+                            gltfImportArgs.importFormat = GltfImportAsFormat.MeshWithRig;
+                            break;
+
+                        case nameof(GltfImportArgs.BaseMesh):
+                            gltfImportArgs.BaseMesh = new List<FileEntry>() { CollectionSelectedItems.Select(_ => _.Model).Cast<FileEntry>().FirstOrDefault() };
+                            _notificationService.Success($"Selected Mesh was added to Mesh arguments.");
+                            gltfImportArgs.importFormat = GltfImportAsFormat.Mesh;
+                            break;
+                    }
+                    break;
+
+
                 case { Properties: OpusExportArgs opusExportArgs }:
                     switch (v)
                     {
@@ -358,11 +361,14 @@ namespace WolvenKit.ViewModels.Tools
 
         private void ExecuteSetCollection(string argType)
         {
-            switch (SelectedExport)
+            switch (SelectedObject)
             {
+                case { Properties: GltfImportArgs gltfImportArgs }:
+                    InitCollectionEditorForMesh(argType, gltfImportArgs);
+                    break;
+
                 case { Properties: MeshExportArgs meshExportArgs }:
                     InitCollectionEditorForMesh(argType, meshExportArgs);
-
                     break;
 
                 case { Properties: OpusExportArgs opusExportArgs }:
@@ -372,39 +378,62 @@ namespace WolvenKit.ViewModels.Tools
             }
         }
 
-        private void InitCollectionEditorForMesh(string argType, MeshExportArgs meshExportArgs)
+        private void InitCollectionEditorForMesh(string argType, ImportExportArgs args)
         {
             if (_gameController.GetController() is not RED4Controller cp77Controller)
             {
                 return;
             }
 
-            var fetchExtension = ERedExtension.rig;
+            var fetchExtension = ERedExtension.mesh;
             List<FileEntry> selectedEntries = new();
-            switch (argType)
+            if (args is MeshExportArgs meshExportArgs)
             {
-                case nameof(MeshExportArgs.MultiMeshMeshes):
-                    fetchExtension = ERedExtension.mesh;
-                    selectedEntries = meshExportArgs.MultiMeshMeshes;
-                    break;
+                switch (argType)
+                {
+                    case nameof(MeshExportArgs.MultiMeshMeshes):
+                        fetchExtension = ERedExtension.mesh;
+                        selectedEntries = meshExportArgs.MultiMeshMeshes;
+                        break;
 
-                case nameof(MeshExportArgs.MultiMeshRigs):
-                    selectedEntries = meshExportArgs.MultiMeshRigs;
-                    break;
+                    case nameof(MeshExportArgs.MultiMeshRigs):
+                        selectedEntries = meshExportArgs.MultiMeshRigs;
+                        break;
 
-                case nameof(MeshExportArgs.Rig):
-                    selectedEntries = meshExportArgs.Rig;
-                    break;
+                    case nameof(MeshExportArgs.Rig):
+                        selectedEntries = meshExportArgs.Rig;
+                        fetchExtension = ERedExtension.rig;
+                        break;
 
-                default:
-                    break;
+                    default:
+                        break;
+                }
+            }
+
+            if (args is GltfImportArgs gltfImportArgs)
+            {
+                switch (argType)
+                {
+                    case nameof(GltfImportArgs.Rig):
+                        selectedEntries = gltfImportArgs.Rig;
+                        fetchExtension = ERedExtension.rig;
+                        break;
+
+                    case nameof(GltfImportArgs.BaseMesh):
+                        selectedEntries = gltfImportArgs.BaseMesh;
+                        fetchExtension = ERedExtension.mesh;
+                        break;
+
+                    default:
+                        break;
+                }
             }
 
             // set selected types
-            if (CollectionSelectedItems != null)
+            if (CollectionSelectedItems is not null)
             {
                 CollectionSelectedItems.Clear();
-                if (selectedEntries != null)
+                if (selectedEntries is not null)
                 {
                     CollectionSelectedItems.AddRange(selectedEntries.Select(_ => new CollectionItemViewModel(_)));
                 }
@@ -418,9 +447,14 @@ namespace WolvenKit.ViewModels.Tools
             }
 
             CollectionAvailableItems.Clear();
-            if (_archiveManager != null)
+            if (_archiveManager is not null)
             {
-                CollectionAvailableItems.AddRange(_archiveManager.GetGroupedFiles()[$".{fetchExtension}"].Select(_ => new CollectionItemViewModel(_)));
+                CollectionAvailableItems.AddRange(_archiveManager
+                    .GetGroupedFiles()[$".{fetchExtension}"]
+                    .Select(_ => new CollectionItemViewModel(_))
+                    .GroupBy(x => x.Name)
+                    .Select(x => x.First())
+                );
             }
         }
 
@@ -453,10 +487,10 @@ namespace WolvenKit.ViewModels.Tools
             }
 
             // set selected types
-            if (CollectionSelectedItems != null)
+            if (CollectionSelectedItems is not null)
             {
                 CollectionSelectedItems.Clear();
-                if (selectedEntries != null)
+                if (selectedEntries is not null)
                 {
                     CollectionSelectedItems.AddRange(selectedEntries.Select(_ => new CollectionItemViewModel(_)));
                 }
@@ -551,6 +585,7 @@ namespace WolvenKit.ViewModels.Tools
         /// </summary>
         private async Task ExecuteProcessAll()
         {
+            var success = false;
             IsProcessing = true;
 
             if (IsImportsSelected)
@@ -566,17 +601,21 @@ namespace WolvenKit.ViewModels.Tools
                     }
                     else
                     {
-                        await ImportSingle(item);
+                        success = await ImportSingle(item);
                     }
                 }
-                await ImportWavs(wavs);
+
+                if (wavs.Count > 0)
+                {
+                    success = await ImportWavs(wavs);
+                }
             }
             if (IsExportsSelected)
             {
                 var toBeExported = ExportableItems.ToList();
                 foreach (var item in toBeExported)
                 {
-                    await ExportSingle(item);
+                    success = await ExportSingle(item);
                 }
             }
             if (IsConvertsSelected)
@@ -584,15 +623,19 @@ namespace WolvenKit.ViewModels.Tools
                 var toBeConverted = ConvertableItems.ToList();
                 foreach (var itemViewModel in toBeConverted)
                 {
-                    await Task.Run(() => ConvertSingle(itemViewModel));
+                    success = await Task.Run(() => ConvertSingle(itemViewModel));
                 }
 
             }
             IsProcessing = false;
-            _notificationService.Success($"Files have been processed and are available in the Project Explorer");
+
+            if (success)
+            {
+                _notificationService.Success($"Files have been processed and are available in the Project Explorer");
+            }
         }
 
-        private async Task ImportWavs(List<string> wavs)
+        private async Task<bool> ImportWavs(List<string> wavs)
         {
             var proj = _projectManager.ActiveProject;
             if (_gameController.GetController() is RED4Controller cp77Controller)
@@ -607,19 +650,21 @@ namespace WolvenKit.ViewModels.Tools
                     proj.RawDirectory,
                     true);
 
-                await Task.Run(() => opusTools.ImportWavs(wavs.ToArray()));
+                return await Task.Run(() => opusTools.ImportWavs(wavs.ToArray()));
             }
+
+            return false;
         }
 
         /// <summary>
         /// Import Single item
         /// </summary>
         /// <param name="item"></param>
-        private async Task ImportSingle(ImportableItemViewModel item)
+        private async Task<bool> ImportSingle(ImportableItemViewModel item)
         {
             if (_gameController.GetController() is not RED4Controller cp77Controller)
             {
-                return;
+                return false;
             }
 
             var proj = _projectManager.ActiveProject;
@@ -633,15 +678,17 @@ namespace WolvenKit.ViewModels.Tools
                 var settings = new GlobalImportArgs().Register(item.Properties as ImportArgs);
                 var rawDir = new DirectoryInfo(proj.RawDirectory);
                 var redrelative = new RedRelativePath(rawDir, fi.GetRelativePath(rawDir));
-                await Task.Run(() => _modTools.Import(redrelative, settings, new DirectoryInfo(proj.ModDirectory)));
+                return await Task.Run(() => _modTools.Import(redrelative, settings, new DirectoryInfo(proj.ModDirectory)));
             }
+
+            return false;
         }
 
         /// <summary>
         /// Export Single Item
         /// </summary>
         /// <param name="item"></param>
-        private async Task ExportSingle(ExportableItemViewModel item)
+        private async Task<bool> ExportSingle(ExportableItemViewModel item)
         {
             var proj = _projectManager.ActiveProject;
             var fi = new FileInfo(item.FullName);
@@ -690,10 +737,12 @@ namespace WolvenKit.ViewModels.Tools
                     }
                 }
                 var settings = new GlobalExportArgs().Register(item.Properties as ExportArgs);
-                await Task.Run(() => _modTools.Export(fi, settings,
+                return await Task.Run(() => _modTools.Export(fi, settings,
                     new DirectoryInfo(proj.ModDirectory),
                     new DirectoryInfo(proj.RawDirectory)));
             }
+
+            return false;
         }
 
         /// <summary>
@@ -707,6 +756,8 @@ namespace WolvenKit.ViewModels.Tools
         /// </summary>
         private async Task ExecuteProcessSelected()
         {
+            var success = false;
+
             IsProcessing = true;
             _progressService.IsIndeterminate = true;
             try
@@ -724,13 +775,13 @@ namespace WolvenKit.ViewModels.Tools
                         }
                         else
                         {
-                            await ImportSingle(item);
+                            success = await ImportSingle(item);
                         }
                     }
 
                     if (wavs.Count > 0)
                     {
-                        await ImportWavs(wavs);
+                        success = await ImportWavs(wavs);
                     }
                 }
                 if (IsExportsSelected)
@@ -738,7 +789,7 @@ namespace WolvenKit.ViewModels.Tools
                     var toBeConverted = ExportableItems.Where(_ => _.IsChecked).ToList();
                     foreach (var item in toBeConverted)
                     {
-                        await ExportSingle(item);
+                        success = await ExportSingle(item);
                     }
                 }
                 if (IsConvertsSelected)
@@ -747,11 +798,15 @@ namespace WolvenKit.ViewModels.Tools
                     var toBeConverted = ConvertableItems.Where(_ => _.IsChecked).ToList();
                     foreach (var itemViewModel in toBeConverted)
                     {
-                        await Task.Run(() => ConvertSingle(itemViewModel));
+                        success = await Task.Run(() => ConvertSingle(itemViewModel));
                     }
                 }
-                _notificationService.Success($"Files have been processed and are available in the Project Explorer");
-                _loggerService.Success("Files have been processed and are available in the Project Explorer");
+
+                if (success)
+                {
+                    _notificationService.Success($"Files have been processed and are available in the Project Explorer");
+                    _loggerService.Success("Files have been processed and are available in the Project Explorer");
+                }
             }
             catch (Exception e)
             {
@@ -764,9 +819,8 @@ namespace WolvenKit.ViewModels.Tools
                 _progressService.IsIndeterminate = false;
             }
         }
-        private Dictionary<string, object> _namedObjects;
 
-        private async Task ConvertSingle(ConvertableItemViewModel item)
+        private async Task<bool> ConvertSingle(ConvertableItemViewModel item)
         {
             IsProcessing = true;
 
@@ -775,12 +829,12 @@ namespace WolvenKit.ViewModels.Tools
 
             if (item == null)
             {
-                return;
+                return false;
             }
             var fi = new FileInfo(item.FullName);
             if (!fi.Exists)
             {
-                return;
+                return false;
             }
 
             switch (item.Properties)
@@ -788,27 +842,11 @@ namespace WolvenKit.ViewModels.Tools
                 case CommonConvertArgs:
                     break;
                 default:
-                    return;
+                    return false;
             }
-
-
-
-
-
-
-
-
-            // Create an instance of AssimpWpfImporter
-            var assimpWpfImporter = new AssimpWpfImporter();
 
             try
             {
-                assimpWpfImporter.DefaultMaterial = new DiffuseMaterial(Brushes.Silver);
-                assimpWpfImporter.AssimpPostProcessSteps = PostProcessSteps.Triangulate;
-
-                // When ReadPolygonIndices is true, assimpWpfImporter will read PolygonIndices collection that can be used to show polygons instead of triangles.
-                assimpWpfImporter.ReadPolygonIndices = false;
-
                 var qx = item.GetBaseFile();
                 var proj = _projectManager.ActiveProject;
                 var relativename = FileModel.GetRelativeName(qx.FullName, proj);
@@ -821,7 +859,7 @@ namespace WolvenKit.ViewModels.Tools
                 if (_archiveManager.Lookup(hash).HasValue)
                 {
                     file = _archiveManager.Lookup(hash).Value;
-                    if (file != null)
+                    if (file is not null)
                     {
                         var meshStream = new MemoryStream();
                         file.Extract(meshStream);
@@ -840,103 +878,22 @@ namespace WolvenKit.ViewModels.Tools
                     }
                     else
                     {
-                        return;
+                        return false;
                     }
                 }
                 else
                 {
                     outfile = qx.FullName;
                 }
-
-
-
-
-
-
-                Model3D readModel3D;
-
-                try
-                {
-                    readModel3D =
-                        assimpWpfImporter.ReadModel3D(outfile,
-                            texturesPath: null); // we can also define a textures path if the textures are located in some other directory (this is parameter can be skipped, but is defined here so you will know that you can use it)
-                    _namedObjects = assimpWpfImporter.NamedObjects;
-                }
-                catch (Exception ex)
-                {
-                    readModel3D = null;
-                    await Interactions.ShowMessageBoxAsync(
-                        $"Error importing file:\r\n {ex.Message}",
-                        "WolvenKit",
-                        WMessageBoxButtons.Ok,
-                        WMessageBoxImage.Error);
-                }
-
-                if (readModel3D != null)
-                {
-                    // First create an instance of AssimpWpfExporter
-                    var assimpWpfExporter = new AssimpWpfExporter
-                    {
-                        NamedObjects = _namedObjects
-                    };
-
-                    // We can export Model3D, Visual3D or entire Viewport3D:
-                    //assimpWpfExporter.AddModel(model3D);
-                    //assimpWpfExporter.AddVisual3D(ContentModelVisual3D);
-                    //assimpWpfExporter.AddViewport3D(MainViewport);
-
-                    // Here we export Viewport3D:
-                    assimpWpfExporter.AddModel(readModel3D);
-
-                    bool isExported;
-
-                    try
-                    {
-
-                        var qaz = item.Properties as CommonConvertArgs;
-                        var test = Path.ChangeExtension(item.FullName, "." + qaz.EConvertableOutput.ToString());
-
-
-
-                        // Item Full name has to be the end output aka raw folder ty :D
-                        isExported = assimpWpfExporter.Export(test, qaz.EConvertableOutput.ToString());
-
-                        if (!isExported)
-                        {
-                            await Interactions.ShowMessageBoxAsync(
-                            "Not exported",
-                            "WolvenKit",
-                            WMessageBoxButtons.Ok,
-                            WMessageBoxImage.Error);
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        await Interactions.ShowMessageBoxAsync(
-                            $"Error exporting:\r\n {ex.Message}",
-                            "WolvenKit",
-                            WMessageBoxButtons.Ok,
-                            WMessageBoxImage.Error);
-                        isExported = false;
-                    }
-                }
-
-                GC.Collect();
-                GC.WaitForPendingFinalizers();
-                GC.Collect();
             }
             catch
             {
 
             }
-            finally
-            {
-                // Dispose unmanaged resources
-                assimpWpfImporter.Dispose();
-
-            }
 
             await Task.CompletedTask;
+
+            return true;
         }
 
         /// <summary>
