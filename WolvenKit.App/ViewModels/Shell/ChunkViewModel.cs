@@ -2049,7 +2049,7 @@ namespace WolvenKit.ViewModels.Shell
         public ICommand PasteChunkCommand { get; private set; }
         private bool CanPasteChunk()
         {
-            if (RDTDataViewModel.CopiedChunk == null)
+            if (RDTDataViewModel.CopiedChunk is null)
             {
                 return false;
             }
