@@ -1896,7 +1896,7 @@ namespace WolvenKit.ViewModels.Shell
             catch (Exception ex) { Locator.Current.GetService<ILoggerService>().Error(ex); }
         }
 
-        public bool ShouldShowExportNodeData => Parent != null && Parent.Data is DataBuffer rb && rb.Data is worldNodeDataBuffer;
+        public bool ShouldShowExportNodeData => Parent is not null && Parent.Data is DataBuffer rb && rb.Data is worldNodeDataBuffer;
 
         public ICommand ExportNodeDataCommand { get; private set; }
         private bool CanExportNodeData() =>
