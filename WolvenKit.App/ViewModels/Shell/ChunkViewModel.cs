@@ -1258,7 +1258,7 @@ namespace WolvenKit.ViewModels.Shell
                     }
                 }
             }
-            else if (ResolvedData is CMaterialInstance && Parent != null && Tab.File.Cr2wFile.RootChunk is CMesh mesh2)
+            else if (ResolvedData is CMaterialInstance && Parent is not null && Tab.File.Cr2wFile.RootChunk is CMesh mesh2)
             {
                 for (var i = 0; i < mesh2.PreloadLocalMaterialInstances.Count; i++)
                 {
