@@ -2069,7 +2069,7 @@ namespace WolvenKit.ViewModels.Shell
         {
             try
             {
-                if (RDTDataViewModel.CopiedChunk == null)
+                if (RDTDataViewModel.CopiedChunk is null)
                 {
                     return;
                 }
