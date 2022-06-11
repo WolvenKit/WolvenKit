@@ -1921,7 +1921,7 @@ namespace WolvenKit.ViewModels.Shell
         private void ExecuteExportChunk()
         {
             var filename = XPath;
-            if (Descriptor != null)
+            if (!string.IsNullOrEmpty(Descriptor))
             {
                 filename = Descriptor;
             }
@@ -1987,10 +1987,7 @@ namespace WolvenKit.ViewModels.Shell
             {
                 if (Data is IRedBaseHandle destinationHandle)
                 {
-                    if (destinationHandle.InnerType.IsAssignableFrom(sourceHandle.GetValue().GetType()))
-                    {
-                        return true;
-                    }
+                    return destinationHandle.InnerType.IsAssignableFrom(sourceHandle.GetValue().GetType());
                 }
             }
             return false;
