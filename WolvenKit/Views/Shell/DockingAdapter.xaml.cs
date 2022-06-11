@@ -484,7 +484,17 @@ namespace WolvenKit.Views.Shell
 
                 if (content.Content != null)
                 {
-                    DiscordHelper.SetDiscordRPCStatus(content.Content as string);
+                    if (DiscordHelper.IsInitialized)
+                    {
+                        if (DiscordHelper.IsEnabled)
+                        {
+                            DiscordHelper.SetStatus(content.Content as string);
+                        }
+                        else
+                        {
+                            DiscordHelper.Deinitialize();
+                        } 
+                    }
                 }
 
                 //if (((IDockElement)content.Content).State == DockState.Document)

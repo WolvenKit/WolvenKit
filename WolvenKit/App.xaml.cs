@@ -85,7 +85,8 @@ namespace WolvenKit
             if (settings is {IsDiscordStatusEnabled: true})
             {
                 loggerService.Info("Initializing Discord RPC API");
-                DiscordHelper.InitializeDiscordRPC();
+                DiscordHelper.Initialize();
+                DiscordHelper.SetStatus("Idling");
             }
             else
             {
