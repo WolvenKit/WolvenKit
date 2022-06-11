@@ -1998,7 +1998,7 @@ namespace WolvenKit.ViewModels.Shell
 
         private void ExecutePasteHandle()
         {
-            if (RDTDataViewModel.CopiedChunk == null)
+            if (RDTDataViewModel.CopiedChunk is null)
             {
                 return;
             }
