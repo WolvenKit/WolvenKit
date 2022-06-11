@@ -1889,7 +1889,13 @@ namespace WolvenKit.ViewModels.Shell
                         {
                             myStream.Write(json.ToCharArray().Select(c => (byte)c).ToArray());
                             myStream.Close();
+
+                            Locator.Current.GetService<ILoggerService>().Success($"{irt.GetType().Name} written to: {saveFileDialog.FileName}");
                         }
+                    }
+                    else
+                    {
+                        Locator.Current.GetService<ILoggerService>().Error($"Could not open file: {saveFileDialog.FileName}");
                     }
                 }
             }
@@ -1921,7 +1927,7 @@ namespace WolvenKit.ViewModels.Shell
         private void ExecuteExportChunk()
         {
             var filename = XPath;
-            if (!string.IsNullOrEmpty(Descriptor))
+            if (!string.IsNullOrEmpty(Descriptor) && Descriptor != "root")
             {
                 filename = Descriptor;
             }
@@ -1947,6 +1953,12 @@ namespace WolvenKit.ViewModels.Shell
 
                     myStream.Write(json.ToCharArray().Select(c => (byte)c).ToArray());
                     myStream.Close();
+
+                    Locator.Current.GetService<ILoggerService>().Success($"{ResolvedType} written to: {saveFileDialog.FileName}");
+                }
+                else
+                {
+                    Locator.Current.GetService<ILoggerService>().Error($"Could not open file: {saveFileDialog.FileName}");
                 }
             }
         }
