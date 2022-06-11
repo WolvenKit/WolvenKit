@@ -1578,7 +1578,7 @@ namespace WolvenKit.ViewModels.Shell
         }
 
         public ICommand AddItemToCompiledDataCommand { get; private set; }
-        private bool CanAddItemToCompiledData() => ResolvedPropertyType != null && PropertyType.IsAssignableTo(typeof(IRedBufferPointer));
+        private bool CanAddItemToCompiledData() => ResolvedPropertyType is not null && PropertyType.IsAssignableTo(typeof(IRedBufferPointer));
         private void ExecuteAddItemToCompiledData()
         {
             if (Data == null)
