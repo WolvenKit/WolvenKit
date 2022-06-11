@@ -2272,7 +2272,7 @@ namespace WolvenKit.ViewModels.Shell
                 {
                     return ira;
                 }
-                return ResolvedData is IRedArray ira2 ? ira2 : null;
+                return ResolvedData as IRedArray;
             }
         }
 
