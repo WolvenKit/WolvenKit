@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using WolvenKit.RED4.Archive.Buffer;
+using WolvenKit.RED4.Types;
 
 namespace WolvenKit.RED4.Archive.IO
 {
@@ -35,6 +36,15 @@ namespace WolvenKit.RED4.Archive.IO
             }
 
             buffer.Data = list;
+
+            if (buffer.Parent is meshMeshMaterialBuffer mmmb)
+            {
+                mmmb.Materials = new();
+                foreach (var material in list.Files)
+                {
+                    mmmb.Materials.Add(material.RootChunk);
+                }
+            }
 
             return EFileReadErrorCodes.NoError;
         }

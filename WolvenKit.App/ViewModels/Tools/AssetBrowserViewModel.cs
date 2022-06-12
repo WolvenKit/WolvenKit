@@ -71,7 +71,7 @@ namespace WolvenKit.ViewModels.Tools
 
         private readonly ReadOnlyObservableCollection<RedFileSystemModel> _boundRootNodes;
         private bool _manuallyLoading = false;
-        private bool _projectLoaded = false;
+        [Reactive] private bool _projectLoaded { get; set; } = false;
 
         #endregion fields
 
@@ -101,13 +101,13 @@ namespace WolvenKit.ViewModels.Tools
             SideInDockedMode = DockSide.Tabbed;
 
             TogglePreviewCommand = new DelegateCommand(ExecuteTogglePreview, CanTogglePreview);
-            OpenFileSystemItemCommand = new DelegateCommand(ExecuteOpenFile, CanOpenFile);
+            OpenFileSystemItemCommand = new DelegateCommand(ExecuteOpenFile, CanOpenFile).ObservesProperty(() => RightSelectedItem).ObservesProperty(() => RightSelectedItems).ObservesProperty(() => _projectLoaded);
             ToggleModBrowserCommand = new DelegateCommand(ExecuteToggleModBrowser, CanToggleModBrowser);
             OpenFileLocationCommand = new DelegateCommand(ExecuteOpenFileLocationCommand, CanOpenFileLocationCommand);
-            CopyRelPathCommand = new DelegateCommand(ExecuteCopyRelPath, CanCopyRelPath);
+            CopyRelPathCommand = new DelegateCommand(ExecuteCopyRelPath, CanCopyRelPath).ObservesProperty(() => RightSelectedItem);
 
-            OpenFileOnlyCommand = new DelegateCommand(ExecuteOpenFileOnly, CanOpenFileOnly);
-            AddSelectedCommand = new DelegateCommand(ExecuteAddSelected, CanAddSelected);
+            OpenFileOnlyCommand = new DelegateCommand(ExecuteOpenFileOnly, CanOpenFileOnly).ObservesProperty(() => RightSelectedItem).ObservesProperty(() => RightSelectedItems);
+            AddSelectedCommand = new DelegateCommand(ExecuteAddSelected, CanAddSelected).ObservesProperty(() => RightSelectedItem).ObservesProperty(() => RightSelectedItems).ObservesProperty(() => _projectLoaded);
 
             ExpandAll = ReactiveCommand.Create(() => { });
             CollapseAll = ReactiveCommand.Create(() => { });

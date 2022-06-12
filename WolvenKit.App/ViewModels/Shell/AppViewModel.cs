@@ -116,20 +116,21 @@ namespace WolvenKit.ViewModels.Shell
 
             ShowPluginCommand = new DelegateCommand(ExecuteShowPlugin, CanShowPlugin);
 
-            OpenFileCommand = new DelegateCommand<FileModel>(p => ExecuteOpenFile(p), CanOpenFile);
+            OpenFileCommand = new DelegateCommand<FileModel>(p => ExecuteOpenFile(p));
             OpenFileAsyncCommand = ReactiveCommand.CreateFromTask<FileModel, Unit>(OpenFileAsync);
             OpenRedFileAsyncCommand = ReactiveCommand.CreateFromTask<FileEntry, Unit>(OpenRedFileAsync);
 
-            var canExecute = this.WhenAny(x => x._projectManager.ActiveProject, (p) => p is not null);
-            PackModCommand = ReactiveCommand.CreateFromTask(ExecutePackMod, canExecute);
-            PackInstallModCommand = ReactiveCommand.CreateFromTask(ExecutePackInstallMod, canExecute);
+            var hasActiveProject = this.WhenAny(x => x._projectManager.ActiveProject, (p) => p is not null);
+            PackModCommand = ReactiveCommand.CreateFromTask(ExecutePackMod, hasActiveProject);
+            PackInstallModCommand = ReactiveCommand.CreateFromTask(ExecutePackInstallMod, hasActiveProject);
             //BackupModCommand = new DelegateCommand(ExecuteBackupMod, CanBackupMod);
             //PublishModCommand = new DelegateCommand(ExecutePublishMod, CanPublishMod);
 
-            NewFileCommand = new DelegateCommand<string>(ExecuteNewFile, CanNewFile);
-            SaveFileCommand = new DelegateCommand(ExecuteSaveFile, CanSaveFile);
-            SaveAsCommand = new DelegateCommand(ExecuteSaveAs, CanSaveFile);
-            SaveAllCommand = new DelegateCommand(ExecuteSaveAll, CanSaveAll);
+            NewFileCommand = new DelegateCommand<string>(ExecuteNewFile, CanNewFile).ObservesProperty(() => ActiveProject).ObservesProperty(() => IsDialogShown);
+
+            SaveFileCommand = new DelegateCommand(ExecuteSaveFile, CanSaveFile).ObservesProperty(() => ActiveDocument);
+            SaveAsCommand = new DelegateCommand(ExecuteSaveAs, CanSaveFile).ObservesProperty(() => ActiveDocument);
+            SaveAllCommand = new DelegateCommand(ExecuteSaveAll, CanSaveAll).ObservesProperty(() => DockedViews);
 
             FileSelectedCommand = new DelegateCommand<FileModel>(async (p) => await ExecuteSelectFile(p), CanSelectFile);
 
@@ -674,7 +675,6 @@ namespace WolvenKit.ViewModels.Shell
         }
 
         public ICommand OpenFileCommand { get; private set; }
-        private bool CanOpenFile(FileModel model) => true;
         private void ExecuteOpenFile(FileModel model)
         {
             if (model == null)
