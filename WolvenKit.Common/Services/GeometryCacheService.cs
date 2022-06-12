@@ -19,6 +19,7 @@ namespace WolvenKit.Common.Services
         private readonly Red4ParserService _parser;
         private readonly IArchiveManager _archive;
 
+        private readonly CName _cachePath = (CName)@"base\worlds\03_night_city\sectors\_generated\collisions\03_night_city.geometry_cache";
         private bool _isLoaded;
 
         public GeometryCacheService()
@@ -30,7 +31,7 @@ namespace WolvenKit.Common.Services
         public void Load()
         {
             _isLoaded = true;
-            var file = _archive.Lookup(10378000475152730580);
+            var file = _archive.Lookup(_cachePath.GetRedHash());
             if (file.HasValue && file.Value is IGameFile fe)
             {
                 using (var stream = new MemoryStream())
