@@ -15,7 +15,7 @@ namespace CP77Tools.Tasks
 
         public void UncookTask(string[] path, string outpath, string rawOutDir,
             EUncookExtension? uext, bool? flip, ulong hash, string pattern, string regex, bool unbundle,
-            ECookedFileFormat[] forcebuffers)
+            ECookedFileFormat[] forcebuffers, bool? serialize)
         {
             if (path == null || path.Length < 1)
             {
@@ -25,13 +25,13 @@ namespace CP77Tools.Tasks
 
             foreach (var file in path)
             {
-                UncookTaskInner(file, outpath, rawOutDir, uext, flip, hash, pattern, regex, unbundle, forcebuffers);
+                UncookTaskInner(file, outpath, rawOutDir, uext, flip, hash, pattern, regex, unbundle, forcebuffers, serialize);
             }
         }
 
         private void UncookTaskInner(string path, string outpath, string rawOutDir,
             EUncookExtension? uext, bool? flip, ulong hash, string pattern, string regex, bool unbundle,
-            ECookedFileFormat[] forcebuffers)
+            ECookedFileFormat[] forcebuffers, bool? serialize)
         {
             #region checks
 
@@ -162,12 +162,12 @@ namespace CP77Tools.Tasks
                 // run
                 if (hash != 0)
                 {
-                    _modTools.UncookSingle(ar, hash, outDir, exportArgs, rawOutDirInfo, forcebuffers);
+                    _modTools.UncookSingle(ar, hash, outDir, exportArgs, rawOutDirInfo, forcebuffers, serialize ?? false);
                     _loggerService.Success($" {ar.ArchiveAbsolutePath}: Uncooked one file: {hash}");
                 }
                 else
                 {
-                    _modTools.UncookAll(ar, outDir, exportArgs, unbundle, pattern, regex, rawOutDirInfo, forcebuffers);
+                    _modTools.UncookAll(ar, outDir, exportArgs, unbundle, pattern, regex, rawOutDirInfo, forcebuffers, serialize ?? false);
                 }
             }
 
