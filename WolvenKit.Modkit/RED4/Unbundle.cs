@@ -26,14 +26,14 @@ namespace WolvenKit.Modkit.RED4
         /// <param name="regex"></param>
         /// <param name="decompressBuffers"></param>
         /// <returns></returns>
-        public void ExtractAll(Archive ar, DirectoryInfo outDir, string pattern = "", string regex = "", bool decompressBuffers = false)
+        public void ExtractAll(ICyberGameArchive ar, DirectoryInfo outDir, string pattern = "", string regex = "", bool decompressBuffers = false)
         {
             var extractedList = new ConcurrentBag<string>();
             var failedList = new ConcurrentBag<string>();
 
             // check search pattern then regex
             var finalmatches = ar.Files.Values.Cast<FileEntry>();
-            var totalInArchiveCount = ar.FileCount;
+            var totalInArchiveCount = ar.Files?.Count ?? 0;
             if (!string.IsNullOrEmpty(pattern))
             {
                 finalmatches = ar.Files.Values.Cast<FileEntry>().MatchesWildcard(item => item.FileName, pattern);
@@ -58,8 +58,6 @@ namespace WolvenKit.Modkit.RED4
                 return;
             }
 
-            using var mmf = ar.GetMemoryMappedFile();
-
             var progress = 0;
 
             // check hashes before parallel unbundling
@@ -72,7 +70,7 @@ namespace WolvenKit.Modkit.RED4
 
             Parallel.ForEach(finalMatchesList, info =>
             {
-                var extracted = ExtractSingle(ar, info.NameHash64, outDir, decompressBuffers, mmf);
+                var extracted = ExtractSingle(ar, info.NameHash64, outDir, decompressBuffers);
 
                 if (extracted != 0)
                 {
@@ -108,7 +106,7 @@ namespace WolvenKit.Modkit.RED4
         /// <param name="regex"></param>
         /// <param name="decompressBuffers"></param>
         /// <returns></returns>
-        public async Task ExtractAllAsync(Archive ar, DirectoryInfo outDir, string pattern = "", string regex = "", bool decompressBuffers = false)
+        public async Task ExtractAllAsync(ICyberGameArchive ar, DirectoryInfo outDir, string pattern = "", string regex = "", bool decompressBuffers = false)
         {
             var extractedList = new ConcurrentBag<string>();
             var failedList = new ConcurrentBag<string>();
@@ -135,15 +133,13 @@ namespace WolvenKit.Modkit.RED4
             var finalMatchesList = finalmatches.ToList();
             _loggerService.Info($"Found {finalMatchesList.Count} bundle entries to extract.");
 
-            using var mmf = ar.GetMemoryMappedFile();
-
             //Thread.Sleep(1000);
             var progress = 0;
 
             var bag = new ConcurrentBag<object>();
             await finalMatchesList.ParallelForEachAsync(async info =>
             {
-                var response = await ExtractSingleAsync(ar, info.NameHash64, outDir, decompressBuffers, mmf);
+                var response = await ExtractSingleAsync(ar, info.NameHash64, outDir, decompressBuffers);
                 bag.Add(response);
                 Interlocked.Increment(ref progress);
                 _progressService.Report(progress / (float)finalMatchesList.Count);
@@ -160,16 +156,15 @@ namespace WolvenKit.Modkit.RED4
         /// <param name="outDir"></param>
         /// <param name="decompressBuffers"></param>
         /// <returns></returns>
-        public static int ExtractSingle(Archive ar, ulong hash, DirectoryInfo outDir, bool decompressBuffers = false, MemoryMappedFile mmf = null)
+        public static int ExtractSingle(ICyberGameArchive ar, ulong hash, DirectoryInfo outDir, bool decompressBuffers = false)
         {
-            if (!ar.Files.ContainsKey(hash))
+            if (!ar.Files.TryGetValue(hash, out var tmp) || tmp is not FileEntry gameFile)
             {
                 return 0;
             }
 
             // get filename
-            var entry = ar.Files[hash] as FileEntry;
-            var name = entry.FileName;
+            var name = gameFile.FileName;
             if (string.IsNullOrEmpty(Path.GetExtension(name)))
             {
                 name += ".bin";
@@ -190,7 +185,7 @@ namespace WolvenKit.Modkit.RED4
             }
 
             using var fs = new FileStream(outfile.FullName, FileMode.Create, FileAccess.Write);
-            ExtractSingleToStream(ar, hash, fs, mmf, decompressBuffers);
+            gameFile.Extract(fs, decompressBuffers);
 
             return 1;
         }
@@ -203,16 +198,15 @@ namespace WolvenKit.Modkit.RED4
         /// <param name="outDir"></param>
         /// <param name="decompressBuffers"></param>
         /// <returns></returns>
-        public static async Task<int> ExtractSingleAsync(Archive ar, ulong hash, DirectoryInfo outDir, bool decompressBuffers = false, MemoryMappedFile mmf = null)
+        public static async Task<int> ExtractSingleAsync(ICyberGameArchive ar, ulong hash, DirectoryInfo outDir, bool decompressBuffers = false)
         {
-            if (!ar.Files.ContainsKey(hash))
+            if (!ar.Files.TryGetValue(hash, out var tmp) || tmp is not FileEntry gameFile)
             {
                 return 0;
             }
 
             // get filename
-            var entry = ar.Files[hash] as FileEntry;
-            var name = entry.FileName;
+            var name = gameFile.FileName;
             if (string.IsNullOrEmpty(Path.GetExtension(name)))
             {
                 name += ".bin";
@@ -232,7 +226,7 @@ namespace WolvenKit.Modkit.RED4
             }
 
             await using var fs = new FileStream(outfile.FullName, FileMode.Create, FileAccess.Write);
-            await ExtractSingleToStreamAsync(ar, hash, fs, mmf, decompressBuffers);
+            await gameFile.ExtractAsync(fs, decompressBuffers);
 
             return 1;
         }

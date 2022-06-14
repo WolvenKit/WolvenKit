@@ -26,7 +26,7 @@ namespace WolvenKit.Modkit.RED4
     /// </summary>
     public partial class ModTools
     {
-        public bool ExportMeshWithMaterials(Stream meshStream, FileInfo outfile, List<Archive> archives, string matRepo, EUncookExtension eUncookExtension = EUncookExtension.dds, bool isGLBinary = true, bool LodFilter = true, ValidationMode vmode = ValidationMode.TryFix)
+        public bool ExportMeshWithMaterials(Stream meshStream, FileInfo outfile, List<ICyberGameArchive> archives, string matRepo, EUncookExtension eUncookExtension = EUncookExtension.dds, bool isGLBinary = true, bool LodFilter = true, ValidationMode vmode = ValidationMode.TryFix)
         {
             if (matRepo == null)
             {
@@ -66,7 +66,7 @@ namespace WolvenKit.Modkit.RED4
 
             return true;
         }
-        private void GetMateriaEntries(CR2WFile cr2w, Stream meshStream, ref List<string> primaryDependencies, ref List<string> materialEntryNames, ref List<CMaterialInstance> materialEntries, List<Archive> archives)
+        private void GetMateriaEntries(CR2WFile cr2w, Stream meshStream, ref List<string> primaryDependencies, ref List<string> materialEntryNames, ref List<CMaterialInstance> materialEntries, List<ICyberGameArchive> archives)
         {
             var cmesh = cr2w.RootChunk as CMesh;
 
@@ -79,10 +79,10 @@ namespace WolvenKit.Modkit.RED4
                 var hash = FNV1A64HashAlgorithm.HashString(path);
                 foreach (var ar in archives)
                 {
-                    if (ar.Files.ContainsKey(hash))
+                    if (ar.Files.TryGetValue(hash, out var gameFile))
                     {
                         var ms = new MemoryStream();
-                        ExtractSingleToStream(ar, hash, ms);
+                        gameFile.Extract(ms);
                         ms.Seek(0, SeekOrigin.Begin);
 
                         var isResource = _wolvenkitFileService.IsCR2WFile(ms);
@@ -130,10 +130,10 @@ namespace WolvenKit.Modkit.RED4
                 var hash = FNV1A64HashAlgorithm.HashString(path);
                 foreach (var ar in archives)
                 {
-                    if (ar.Files.ContainsKey(hash))
+                    if (ar.Files.TryGetValue(hash, out var gameFile))
                     {
                         var ms = new MemoryStream();
-                        ExtractSingleToStream(ar, hash, ms);
+                        gameFile.Extract(ms);
                         ms.Seek(0, SeekOrigin.Begin);
 
                         var isResource = _wolvenkitFileService.IsCR2WFile(ms);
@@ -239,10 +239,10 @@ namespace WolvenKit.Modkit.RED4
                     var hash = FNV1A64HashAlgorithm.HashString(path);
                     foreach (var ar in archives)
                     {
-                        if (ar.Files.ContainsKey(hash))
+                        if (ar.Files.TryGetValue(hash, out var gameFile))
                         {
                             var ms = new MemoryStream();
-                            ExtractSingleToStream(ar, hash, ms);
+                            gameFile.Extract(ms);
                             ms.Seek(0, SeekOrigin.Begin);
 
                             var isResource = _wolvenkitFileService.IsCR2WFile(ms);
@@ -270,10 +270,10 @@ namespace WolvenKit.Modkit.RED4
                 var mt = FNV1A64HashAlgorithm.HashString(path);
                 foreach (var ar in archives)
                 {
-                    if (ar.Files.ContainsKey(mt))
+                    if (ar.Files.TryGetValue(mt, out var gameFile))
                     {
                         var ms = new MemoryStream();
-                        ExtractSingleToStream(ar, mt, ms);
+                        gameFile.Extract(ms);
                         ms.Seek(0, SeekOrigin.Begin);
 
                         var isResource = _wolvenkitFileService.IsCR2WFile(ms);
@@ -297,7 +297,7 @@ namespace WolvenKit.Modkit.RED4
                 }
             }
         }
-        private void ParseMaterials(CR2WFile cr2w, Stream meshStream, FileInfo outfile, List<Archive> archives, string matRepo, EUncookExtension eUncookExtension = EUncookExtension.dds)
+        private void ParseMaterials(CR2WFile cr2w, Stream meshStream, FileInfo outfile, List<ICyberGameArchive> archives, string matRepo, EUncookExtension eUncookExtension = EUncookExtension.dds)
         {
             var primaryDependencies = new List<string>();
 
@@ -380,10 +380,10 @@ namespace WolvenKit.Modkit.RED4
                         var hash = FNV1A64HashAlgorithm.HashString(primaryDependencies[i]);
                         foreach (var ar in archives)
                         {
-                            if (ar.Files.ContainsKey(hash))
+                            if (ar.Files.TryGetValue(hash, out var gameFile))
                             {
                                 var ms = new MemoryStream();
-                                ExtractSingleToStream(ar, hash, ms);
+                                gameFile.Extract(ms);
                                 ms.Seek(0, SeekOrigin.Begin);
 
                                 HairProfileNames.Add(primaryDependencies[i]);
@@ -413,10 +413,10 @@ namespace WolvenKit.Modkit.RED4
                         var hash = FNV1A64HashAlgorithm.HashString(primaryDependencies[i]);
                         foreach (var ar in archives)
                         {
-                            if (ar.Files.ContainsKey(hash))
+                            if (ar.Files.TryGetValue(hash, out var gameFile))
                             {
                                 var ms = new MemoryStream();
-                                ExtractSingleToStream(ar, hash, ms);
+                                gameFile.Extract(ms);
                                 ms.Seek(0, SeekOrigin.Begin);
 
                                 var isResource = _wolvenkitFileService.IsCR2WFile(ms);
@@ -474,10 +474,10 @@ namespace WolvenKit.Modkit.RED4
                                             var hash2 = FNV1A64HashAlgorithm.HashString(reader.ImportsList[e].DepotPath);
                                             foreach (var arr in archives)
                                             {
-                                                if (arr.Files.ContainsKey(hash2))
+                                                if (arr.Files.TryGetValue(hash2, out var gameFile2))
                                                 {
                                                     var mss = new MemoryStream();
-                                                    ExtractSingleToStream(arr, hash2, mss);
+                                                    gameFile2.Extract(mss);
                                                     mss.Seek(0, SeekOrigin.Begin);
 
                                                     var mlt = _wolvenkitFileService.ReadRed4File(mss);
@@ -567,10 +567,10 @@ namespace WolvenKit.Modkit.RED4
                         var hash = FNV1A64HashAlgorithm.HashString(primaryDependencies[i]);
                         foreach (var ar in archives)
                         {
-                            if (ar.Files.ContainsKey(hash))
+                            if (ar.Files.TryGetValue(hash, out var gameFile))
                             {
                                 var ms = new MemoryStream();
-                                ExtractSingleToStream(ar, hash, ms);
+                                gameFile.Extract(ms);
                                 ms.Seek(0, SeekOrigin.Begin);
 
                                 TexturesList.Add(primaryDependencies[i]);
@@ -1057,15 +1057,15 @@ namespace WolvenKit.Modkit.RED4
             throw new NotImplementedException(materialParameter.GetType().Name);
         }
 
-        private CR2WFile LoadFile(string path, List<Archive> archives)
+        private CR2WFile LoadFile(string path, List<ICyberGameArchive> archives)
         {
             var hash = FNV1A64HashAlgorithm.HashString(path);
-            foreach (var ar in archives)
+            foreach (var archive in archives)
             {
-                if (ar.Files.ContainsKey(hash))
+                if (archive.Files.TryGetValue(hash, out var gameFile))
                 {
                     var ms = new MemoryStream();
-                    ExtractSingleToStream(ar, hash, ms);
+                    gameFile.Extract(ms);
                     ms.Seek(0, SeekOrigin.Begin);
 
                     if (!_wolvenkitFileService.TryReadRed4File(ms, out var file))
@@ -1080,7 +1080,7 @@ namespace WolvenKit.Modkit.RED4
             throw new FileNotFoundException(path);
         }
 
-        private (string materialTemplate, Dictionary<string, object> valueDict) GetMaterialChain(CMaterialInstance cMaterialInstance, List<Archive> archives, ref Dictionary<string, CMaterialTemplate> mts)
+        private (string materialTemplate, Dictionary<string, object> valueDict) GetMaterialChain(CMaterialInstance cMaterialInstance, List<ICyberGameArchive> archives, ref Dictionary<string, CMaterialTemplate> mts)
         {
             var resultDict = new Dictionary<string, object>();
 
@@ -1157,7 +1157,7 @@ namespace WolvenKit.Modkit.RED4
             return (path, resultDict);
         }
 
-        private RawMaterial ContainRawMaterial(CMaterialInstance cMaterialInstance, string name, List<Archive> archives, ref Dictionary<string, CMaterialTemplate> mts)
+        private RawMaterial ContainRawMaterial(CMaterialInstance cMaterialInstance, string name, List<ICyberGameArchive> archives, ref Dictionary<string, CMaterialTemplate> mts)
         {
             var (materialTemplatePath, valueDict) = GetMaterialChain(cMaterialInstance, archives, ref mts);
 
@@ -1210,7 +1210,7 @@ namespace WolvenKit.Modkit.RED4
             return materialTemplates;
         }
 
-        public bool WriteMatToMesh(ref CR2WFile cr2w, string _matData, List<Archive> archives)
+        public bool WriteMatToMesh(ref CR2WFile cr2w, string _matData, List<ICyberGameArchive> archives)
         {
             if (cr2w == null || cr2w.RootChunk is not CMesh cMesh || cMesh.RenderResourceBlob.Chunk is not rendRenderMeshBlob)
             {
@@ -1258,10 +1258,10 @@ namespace WolvenKit.Modkit.RED4
                         var hash = FNV1A64HashAlgorithm.HashString(mat.MaterialTemplate);
                         foreach (var ar in archives)
                         {
-                            if (ar.Files.ContainsKey(hash))
+                            if (ar.Files.TryGetValue(hash, out var gameFile))
                             {
                                 var ms = new MemoryStream();
-                                ExtractSingleToStream(ar, hash, ms);
+                                gameFile.Extract(ms);
                                 ms.Seek(0, SeekOrigin.Begin);
 
                                 mt = (CMaterialTemplate)_wolvenkitFileService.ReadRed4File(ms).RootChunk;
