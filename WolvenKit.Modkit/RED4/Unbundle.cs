@@ -1,6 +1,5 @@
 using System.Collections.Concurrent;
 using System.IO;
-using System.IO.MemoryMappedFiles;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -239,26 +238,14 @@ namespace WolvenKit.Modkit.RED4
         /// <param name="hash"></param>
         /// <param name="stream"></param>
         /// <param name="decompressBuffers"></param>
-        public static void ExtractSingleToStream(Archive ar, ulong hash, Stream ms, MemoryMappedFile mmf = null, bool decompressBuffers = false)
+        public static void ExtractSingleToStream(Archive ar, ulong hash, Stream ms)
         {
-            if (!ar.Files.ContainsKey(hash))
+            if (!ar.Files.TryGetValue(hash, out var tmp) || tmp is not FileEntry gameFile)
             {
                 return;
             }
 
-            // extract file to memorystream
-            //using var ms = new MemoryStream();
-            if (mmf != null)
-            {
-                ar.CopyFileToStream(ms, hash, decompressBuffers, mmf);
-            }
-            else
-            {
-                ar.CopyFileToStream(ms, hash, decompressBuffers);
-            }
-
-            //ms.Seek(0, SeekOrigin.Begin);
-            //ms.CopyTo(stream);
+            gameFile.Extract(ms);
         }
 
 
@@ -269,21 +256,14 @@ namespace WolvenKit.Modkit.RED4
         /// <param name="hash"></param>
         /// <param name="stream"></param>
         /// <param name="decompressBuffers"></param>
-        public static async Task ExtractSingleToStreamAsync(Archive ar, ulong hash, Stream ms, MemoryMappedFile mmf = null, bool decompressBuffers = false)
+        public static async Task ExtractSingleToStreamAsync(Archive ar, ulong hash, Stream ms)
         {
-            if (!ar.Files.ContainsKey(hash))
+            if (!ar.Files.TryGetValue(hash, out var tmp) || tmp is not FileEntry gameFile)
             {
                 return;
             }
 
-            if (mmf != null)
-            {
-                await ar.CopyFileToStreamAsync(ms, hash, decompressBuffers, mmf);
-            }
-            else
-            {
-                await ar.CopyFileToStreamAsync(ms, hash, decompressBuffers);
-            }
+            await gameFile.ExtractAsync(ms);
         }
 
 

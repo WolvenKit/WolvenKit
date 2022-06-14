@@ -4,7 +4,6 @@ using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
-using System.IO.MemoryMappedFiles;
 using System.Linq;
 using System.Text;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -517,8 +516,6 @@ namespace WolvenKit.FunctionalTests
                     continue;
                 }
 
-                using var mmf = ar.GetMemoryMappedFile();
-
 #if IS_PARALLEL
                 Parallel.ForEach(fileList, tmpFile =>
 #else
@@ -529,7 +526,7 @@ namespace WolvenKit.FunctionalTests
                     try
                     {
                         using var originalStream = new MemoryStream();
-                        ar.CopyFileToStream(originalStream, file.NameHash64, false, mmf);
+                        ar.CopyFileToStream(originalStream, file.NameHash64, false);
                         originalStream.Seek(0, SeekOrigin.Begin);
 
                         using var originalReader = new CR2WReader(originalStream, Encoding.UTF8, true);

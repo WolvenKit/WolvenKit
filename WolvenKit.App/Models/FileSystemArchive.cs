@@ -1,8 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.IO.MemoryMappedFiles;
-using System.Linq;
 using System.Threading.Tasks;
 using WolvenKit.Common;
 using WolvenKit.Common.FNV1A;
@@ -21,7 +19,7 @@ public class FileSystemArchive : ICyberGameArchive
     public EArchiveType TypeName { get; set; }
     public bool CanUncook(ulong hash) => throw new System.NotImplementedException();
 
-    public void CopyFileToStream(Stream stream, ulong hash, bool decompressBuffers, MemoryMappedFile mmf = null)
+    public void CopyFileToStream(Stream stream, ulong hash, bool decompressBuffers)
     {
         if (!_filePaths.TryGetValue(hash, out var filePath))
         {
@@ -32,7 +30,7 @@ public class FileSystemArchive : ICyberGameArchive
         fs.CopyTo(stream);
     }
 
-    public async Task CopyFileToStreamAsync(Stream stream, ulong hash, bool decompressBuffers, MemoryMappedFile mmf = null)
+    public async Task CopyFileToStreamAsync(Stream stream, ulong hash, bool decompressBuffers)
     {
         if (!_filePaths.TryGetValue(hash, out var filePath))
         {
