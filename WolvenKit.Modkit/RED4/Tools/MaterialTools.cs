@@ -76,87 +76,57 @@ namespace WolvenKit.Modkit.RED4
             {
                 string path = cmesh.ExternalMaterials[i].DepotPath;
 
-                var hash = FNV1A64HashAlgorithm.HashString(path);
-                foreach (var ar in archives)
+                if (TryFindFile(archives, path, out var result) == FindFileResult.NoError)
                 {
-                    if (ar.Files.TryGetValue(hash, out var gameFile))
+                    if (result.File.RootChunk is CMaterialInstance mi)
                     {
-                        var ms = new MemoryStream();
-                        gameFile.Extract(ms);
-                        ms.Seek(0, SeekOrigin.Begin);
-
-                        var isResource = _wolvenkitFileService.IsCR2WFile(ms);
-                        if (!isResource)
-                        {
-                            throw new InvalidParsingException("not a cr2w file");
-                        }
-
-                        using var reader = new CR2WReader(ms);
-                        _ = reader.ReadFile(out var matFile, false);
-
-                        var mi = matFile.RootChunk as CMaterialInstance;
-                        if (mi != null)
-                        {
-                            ExternalMaterial.Add(mi);
-                        } else
-                        {
-                            // The external materials can also directly reference MaterialTemplates. To keep it easier for the exporter we can expose these as material instances
-                            var fakeMaterialInstance = new CMaterialInstance()
-                            {
-                                BaseMaterial = new CResourceReference<IMaterial> { DepotPath = path },
-                                Values = new CArray<CKeyValuePair>()
-                            };
-
-                            ExternalMaterial.Add(fakeMaterialInstance);
-                        }
-
-
-                        foreach (var import in reader.ImportsList)
-                        {
-                            if (!primaryDependencies.Contains(import.DepotPath))
-                            {
-                                primaryDependencies.Add(import.DepotPath);
-                            }
-                        }
-
-                        break;
+                        ExternalMaterial.Add(mi);
                     }
+                    else
+                    {
+                        // The external materials can also directly reference MaterialTemplates. To keep it easier for the exporter we can expose these as material instances
+                        var fakeMaterialInstance = new CMaterialInstance()
+                        {
+                            BaseMaterial = new CResourceReference<IMaterial> { DepotPath = path },
+                            Values = new CArray<CKeyValuePair>()
+                        };
+
+                        ExternalMaterial.Add(fakeMaterialInstance);
+                    }
+
+
+                    foreach (var import in result.Imports)
+                    {
+                        if (!primaryDependencies.Contains(import.DepotPath))
+                        {
+                            primaryDependencies.Add(import.DepotPath);
+                        }
+                    }
+                }
+                else
+                {
+                    throw new InvalidParsingException("not a cr2w file");
                 }
             }
             for (var i = 0; i < cmesh.PreloadExternalMaterials.Count; i++)
             {
                 string path = cmesh.PreloadExternalMaterials[i].DepotPath;
 
-                var hash = FNV1A64HashAlgorithm.HashString(path);
-                foreach (var ar in archives)
+                if (TryFindFile(archives, path, out var result) == FindFileResult.NoError)
                 {
-                    if (ar.Files.TryGetValue(hash, out var gameFile))
+                    ExternalMaterial.Add(result.File.RootChunk as CMaterialInstance);
+
+                    foreach (var import in result.Imports)
                     {
-                        var ms = new MemoryStream();
-                        gameFile.Extract(ms);
-                        ms.Seek(0, SeekOrigin.Begin);
-
-                        var isResource = _wolvenkitFileService.IsCR2WFile(ms);
-                        if (!isResource)
+                        if (!primaryDependencies.Contains(import.DepotPath))
                         {
-                            throw new InvalidParsingException("not a cr2w file");
+                            primaryDependencies.Add(import.DepotPath);
                         }
-
-                        using var reader = new CR2WReader(ms);
-                        _ = reader.ReadFile(out var mi, false);
-
-                        ExternalMaterial.Add(mi.RootChunk as CMaterialInstance);
-
-                        foreach (var import in reader.ImportsList)
-                        {
-                            if (!primaryDependencies.Contains(import.DepotPath))
-                            {
-                                primaryDependencies.Add(import.DepotPath);
-                            }
-                        }
-
-                        break;
                     }
+                }
+                else
+                {
+                    throw new InvalidParsingException("not a cr2w file");
                 }
             }
 
@@ -236,67 +206,43 @@ namespace WolvenKit.Modkit.RED4
                 string path = m.BaseMaterial.DepotPath;
                 while (!Path.GetExtension(path).Contains("mt"))
                 {
-                    var hash = FNV1A64HashAlgorithm.HashString(path);
-                    foreach (var ar in archives)
+                    if (TryFindFile(archives, path, out var result) == FindFileResult.NoError)
                     {
-                        if (ar.Files.TryGetValue(hash, out var gameFile))
-                        {
-                            var ms = new MemoryStream();
-                            gameFile.Extract(ms);
-                            ms.Seek(0, SeekOrigin.Begin);
+                        path = (result.File.RootChunk as CMaterialInstance).BaseMaterial.DepotPath;
 
-                            var isResource = _wolvenkitFileService.IsCR2WFile(ms);
-                            if (!isResource)
-                            {
-                                throw new InvalidParsingException("not a cr2w file");
-                            }
-
-                            using var reader = new CR2WReader(ms);
-                            _ = reader.ReadFile(out var mi, false);
-
-                            path = (mi.RootChunk as CMaterialInstance).BaseMaterial.DepotPath;
-
-                            foreach (var import in reader.ImportsList)
-                            {
-                                if (!primaryDependencies.Contains(import.DepotPath))
-                                {
-                                    primaryDependencies.Add(import.DepotPath);
-                                }
-                            }
-                            break;
-                        }
-                    }
-                }
-                var mt = FNV1A64HashAlgorithm.HashString(path);
-                foreach (var ar in archives)
-                {
-                    if (ar.Files.TryGetValue(mt, out var gameFile))
-                    {
-                        var ms = new MemoryStream();
-                        gameFile.Extract(ms);
-                        ms.Seek(0, SeekOrigin.Begin);
-
-                        var isResource = _wolvenkitFileService.IsCR2WFile(ms);
-                        if (!isResource)
-                        {
-                            throw new InvalidParsingException("not a cr2w file");
-                        }
-                        using var reader = new CR2WReader(ms);
-                        _ = reader.ReadFile(out var mi, false);
-
-
-                        foreach (var import in reader.ImportsList)
+                        foreach (var import in result.Imports)
                         {
                             if (!primaryDependencies.Contains(import.DepotPath))
                             {
                                 primaryDependencies.Add(import.DepotPath);
                             }
                         }
-                        break;
                     }
+                    else
+                    {
+                        throw new InvalidParsingException("not a cr2w file");
+                    }
+                }
+
+                var mt = FNV1A64HashAlgorithm.HashString(path);
+
+                if (TryFindFile(archives, path, out var result2) == FindFileResult.NoError)
+                {
+                    foreach (var import in result2.Imports)
+                    {
+                        if (!primaryDependencies.Contains(import.DepotPath))
+                        {
+                            primaryDependencies.Add(import.DepotPath);
+                        }
+                    }
+                }
+                else
+                {
+                    throw new InvalidParsingException("not a cr2w file");
                 }
             }
         }
+
         private void ParseMaterials(CR2WFile cr2w, Stream meshStream, FileInfo outfile, List<ICyberGameArchive> archives, string matRepo, EUncookExtension eUncookExtension = EUncookExtension.dds)
         {
             var primaryDependencies = new List<string>();
@@ -322,278 +268,8 @@ namespace WolvenKit.Modkit.RED4
 
             for (var i = 0; i < primaryDependencies.Count; i++)
             {
-
-                if (Path.GetExtension(primaryDependencies[i]) == ".xbm")
-                {
-                    if (!TexturesList.Contains(primaryDependencies[i]))
-                    {
-                        TexturesList.Add(primaryDependencies[i]);
-                    }
-
-                    var hash = FNV1A64HashAlgorithm.HashString(primaryDependencies[i]);
-                    foreach (var ar in archives)
-                    {
-                        if (ar.Files.ContainsKey(hash))
-                        {
-                            if (!File.Exists(Path.Combine(matRepo, Path.ChangeExtension(primaryDependencies[i], "." + exportArgs.Get<XbmExportArgs>().UncookExtension.ToString()))))
-                            {
-                                if (Directory.Exists(matRepo))
-                                {
-                                    UncookSingle(ar, hash, new DirectoryInfo(matRepo), exportArgs);
-                                }
-                            }
-                            break;
-                        }
-
-                    }
-                }
-                if (Path.GetExtension(primaryDependencies[i]) == ".mlmask")
-                {
-                    if (!TexturesList.Contains(primaryDependencies[i]))
-                    {
-                        TexturesList.Add(primaryDependencies[i]);
-                    }
-
-                    var hash = FNV1A64HashAlgorithm.HashString(primaryDependencies[i]);
-                    foreach (var ar in archives)
-                    {
-                        if (ar.Files.ContainsKey(hash))
-                        {
-                            if (!File.Exists(Path.Combine(matRepo, primaryDependencies[i].Replace(".mlmask", $"_0.{exportArgs.Get<XbmExportArgs>().UncookExtension.ToString()}"))))
-                            {
-                                if (Directory.Exists(matRepo))
-                                {
-                                    exportArgs.Get<MlmaskExportArgs>().AsList = false;
-                                    UncookSingle(ar, hash, new DirectoryInfo(matRepo), exportArgs);
-                                }
-                            }
-                            break;
-                        }
-                    }
-
-                }
-
-                if (Path.GetExtension(primaryDependencies[i]) == ".hp")
-                {
-                    if (!HairProfileNames.Contains(primaryDependencies[i]))
-                    {
-                        var hash = FNV1A64HashAlgorithm.HashString(primaryDependencies[i]);
-                        foreach (var ar in archives)
-                        {
-                            if (ar.Files.TryGetValue(hash, out var gameFile))
-                            {
-                                var ms = new MemoryStream();
-                                gameFile.Extract(ms);
-                                ms.Seek(0, SeekOrigin.Begin);
-
-                                HairProfileNames.Add(primaryDependencies[i]);
-                                var path = Path.Combine(matRepo, Path.ChangeExtension(primaryDependencies[i], ".hp.json"));
-                                if (!File.Exists(path))
-                                {
-                                    if (!new FileInfo(path).Directory.Exists)
-                                    {
-                                        Directory.CreateDirectory(new FileInfo(path).Directory.FullName);
-                                    }
-                                    var hp = _wolvenkitFileService.ReadRed4File(ms);
-                                    //hp.FileName = primaryDependencies[i];
-                                    var dto = new RedFileDto(hp);
-                                    var doc = RedJsonSerializer.Serialize(dto);
-                                    File.WriteAllText(path, doc);
-                                }
-                                break;
-                            }
-                        }
-                    }
-                }
-
-                if (Path.GetExtension(primaryDependencies[i]) == ".mlsetup")
-                {
-                    if (!mlSetupNames.Contains(primaryDependencies[i]))
-                    {
-                        var hash = FNV1A64HashAlgorithm.HashString(primaryDependencies[i]);
-                        foreach (var ar in archives)
-                        {
-                            if (ar.Files.TryGetValue(hash, out var gameFile))
-                            {
-                                var ms = new MemoryStream();
-                                gameFile.Extract(ms);
-                                ms.Seek(0, SeekOrigin.Begin);
-
-                                var isResource = _wolvenkitFileService.IsCR2WFile(ms);
-                                if (!isResource)
-                                {
-                                    throw new InvalidParsingException("not a cr2w file");
-                                }
-                                using var reader = new CR2WReader(ms);
-                                _ = reader.ReadFile(out var mls, false);
-
-                                mlSetupNames.Add(primaryDependencies[i]);
-
-                                var path = Path.Combine(matRepo, Path.ChangeExtension(primaryDependencies[i], ".mlsetup.json"));
-                                if (!File.Exists(path))
-                                {
-                                    if (!new FileInfo(path).Directory.Exists)
-                                    {
-                                        Directory.CreateDirectory(new FileInfo(path).Directory.FullName);
-                                    }
-                                    //mls.FileName = primaryDependencies[i];
-                                    var dto = new RedFileDto(mls);
-                                    var doc = RedJsonSerializer.Serialize(dto);
-                                    File.WriteAllText(path, doc);
-                                }
-
-                                for (var e = 0; e < reader.ImportsList.Count; e++)
-                                {
-                                    if (Path.GetExtension(reader.ImportsList[e].DepotPath) == ".xbm")
-                                    {
-                                        if (!TexturesList.Contains(reader.ImportsList[e].DepotPath))
-                                        {
-                                            TexturesList.Add(reader.ImportsList[e].DepotPath);
-                                        }
-
-                                        var hash1 = FNV1A64HashAlgorithm.HashString(reader.ImportsList[e].DepotPath);
-                                        foreach (var arr in archives)
-                                        {
-                                            if (arr.Files.ContainsKey(hash1))
-                                            {
-                                                if (!File.Exists(Path.Combine(matRepo, Path.ChangeExtension(reader.ImportsList[e].DepotPath, "." + exportArgs.Get<XbmExportArgs>().UncookExtension.ToString()))))
-                                                {
-                                                    if (Directory.Exists(matRepo))
-                                                    {
-                                                        UncookSingle(arr, hash1, new DirectoryInfo(matRepo), exportArgs);
-                                                    }
-                                                }
-                                                break;
-                                            }
-                                        }
-                                    }
-                                    if (Path.GetExtension(reader.ImportsList[e].DepotPath) == ".mltemplate")
-                                    {
-                                        if (!mlTemplateNames.Contains(reader.ImportsList[e].DepotPath))
-                                        {
-                                            var hash2 = FNV1A64HashAlgorithm.HashString(reader.ImportsList[e].DepotPath);
-                                            foreach (var arr in archives)
-                                            {
-                                                if (arr.Files.TryGetValue(hash2, out var gameFile2))
-                                                {
-                                                    var mss = new MemoryStream();
-                                                    gameFile2.Extract(mss);
-                                                    mss.Seek(0, SeekOrigin.Begin);
-
-                                                    var mlt = _wolvenkitFileService.ReadRed4File(mss);
-                                                    mlTemplateNames.Add(reader.ImportsList[e].DepotPath);
-
-                                                    var path1 = Path.Combine(matRepo, Path.ChangeExtension(reader.ImportsList[e].DepotPath, ".mltemplate.json"));
-                                                    if (!File.Exists(path1))
-                                                    {
-                                                        if (!new FileInfo(path1).Directory.Exists)
-                                                        {
-                                                            Directory.CreateDirectory(new FileInfo(path1).Directory.FullName);
-                                                        }
-                                                        //mlt.FileName = mls.Imports[e].DepotPath;
-                                                        var dto1 = new RedFileDto(mlt);
-                                                        var doc1 = RedJsonSerializer.Serialize(dto1);
-                                                        File.WriteAllText(path1, doc1);
-
-                                                        // import all textures included in the mltemplate
-                                                        var mlTemplateMats = dto1.Data.RootChunk.FindType(typeof(CResourceReference<CBitmapTexture>));
-
-                                                        for (var eye = 0; eye < mlTemplateMats.Count; eye++)
-                                                        {
-                                                            var mat = (CResourceReference<CBitmapTexture>)mlTemplateMats[eye].Value;
-                                                            if (!TexturesList.Contains(mat.DepotPath))
-                                                            {
-                                                                TexturesList.Add(mat.DepotPath);
-                                                            }
-
-                                                            var hash3 = FNV1A64HashAlgorithm.HashString(mat.DepotPath);
-                                                            foreach (var arrr in archives)
-                                                            {
-                                                                if (arrr.Files.ContainsKey(hash3))
-                                                                {
-                                                                    if (!File.Exists(Path.Combine(matRepo, Path.ChangeExtension(mat.DepotPath, "." + exportArgs.Get<XbmExportArgs>().UncookExtension.ToString()))))
-                                                                    {
-                                                                        if (Directory.Exists(matRepo))
-                                                                        {
-                                                                            UncookSingle(arrr, hash3, new DirectoryInfo(matRepo), exportArgs);
-                                                                        }
-                                                                    }
-                                                                    break;
-                                                                }
-                                                            }
-                                                        }
-                                                    }
-
-                                                    for (var eye = 0; eye < reader.ImportsList.Count; eye++)
-                                                    {
-                                                        if (!TexturesList.Contains(reader.ImportsList[eye].DepotPath))
-                                                        {
-                                                            TexturesList.Add(reader.ImportsList[eye].DepotPath);
-                                                        }
-
-                                                        var hash3 = FNV1A64HashAlgorithm.HashString(reader.ImportsList[eye].DepotPath);
-                                                        foreach (var arrr in archives)
-                                                        {
-                                                            if (arrr.Files.ContainsKey(hash3))
-                                                            {
-                                                                if (!File.Exists(Path.Combine(matRepo, Path.ChangeExtension(reader.ImportsList[eye].DepotPath, "." + exportArgs.Get<XbmExportArgs>().UncookExtension.ToString()))))
-                                                                {
-                                                                    if (Directory.Exists(matRepo))
-                                                                    {
-                                                                        UncookSingle(arrr, hash3, new DirectoryInfo(matRepo), exportArgs);
-                                                                    }
-                                                                }
-                                                                break;
-                                                            }
-                                                        }
-                                                    }
-                                                    break;
-                                                }
-                                            }
-                                        }
-                                    }
-
-                                }
-                                break;
-                            }
-                        }
-                    }
-                }
-
-                if (Path.GetExtension(primaryDependencies[i]) == ".gradient")
-                {
-                    if (!TexturesList.Contains(primaryDependencies[i]))
-                    {
-                        var hash = FNV1A64HashAlgorithm.HashString(primaryDependencies[i]);
-                        foreach (var ar in archives)
-                        {
-                            if (ar.Files.TryGetValue(hash, out var gameFile))
-                            {
-                                var ms = new MemoryStream();
-                                gameFile.Extract(ms);
-                                ms.Seek(0, SeekOrigin.Begin);
-
-                                TexturesList.Add(primaryDependencies[i]);
-                                var path = Path.Combine(matRepo, Path.ChangeExtension(primaryDependencies[i], ".gradient.json"));
-                                if (!File.Exists(path))
-                                {
-                                    if (!new FileInfo(path).Directory.Exists)
-                                    {
-                                        Directory.CreateDirectory(new FileInfo(path).Directory.FullName);
-                                    }
-                                    var hp = _wolvenkitFileService.ReadRed4File(ms);
-                                    var dto = new RedFileDto(hp);
-                                    var doc = RedJsonSerializer.Serialize(dto);
-                                    File.WriteAllText(path, doc);
-                                }
-                                break;
-                            }
-                        }
-                    }
-                }
+                ExtractFile(primaryDependencies[i]);
             }
-
-
 
             var RawMaterials = new List<RawMaterial>();
             var usedMts = GetEmbeddedMaterialTemplates(ref cr2w);
@@ -633,9 +309,197 @@ namespace WolvenKit.Modkit.RED4
             var str = RedJsonSerializer.Serialize(matData);
 
             File.WriteAllText(Path.ChangeExtension(outfile.FullName, ".Material.json"), str);
+
+            void ExtractFile(string path)
+            {
+                var extension = Path.GetExtension(path).ToLower();
+
+                switch (extension)
+                {
+                    case ".xbm":
+                        ExtractXBM(path);
+                        break;
+
+                    case ".mlmask":
+                        ExtractMlMask(path);
+                        break;
+
+                    case ".hp":
+                        ExtractHP(path);
+                        break;
+
+                    case ".mlsetup":
+                        ExtractMlSetup(path);
+                        break;
+
+                    case ".mltemplate":
+                        ExtractMlTemplate(path);
+                        break;
+
+                    case ".gradient":
+                        ExtractGradient(path);
+                        break;
+                }
+
+                void ExtractXBM(string path)
+                {
+                    if (!TexturesList.Contains(path))
+                    {
+                        TexturesList.Add(path);
+                    }
+
+                    var destFileName = Path.Combine(matRepo, Path.ChangeExtension(path, "." + exportArgs.Get<XbmExportArgs>().UncookExtension));
+                    if (!File.Exists(destFileName))
+                    {
+                        UncookFile(archives, path, matRepo, exportArgs);
+                    }
+                }
+
+                void ExtractMlMask(string path)
+                {
+                    if (!TexturesList.Contains(path))
+                    {
+                        TexturesList.Add(path);
+                    }
+
+                    var destFileName = Path.Combine(matRepo, path.Replace(".mlmask", $"_0.{exportArgs.Get<XbmExportArgs>().UncookExtension}"));
+                    if (!File.Exists(destFileName))
+                    {
+                        exportArgs.Get<MlmaskExportArgs>().AsList = false;
+                        UncookFile(archives, path, matRepo, exportArgs);
+                    }
+                }
+
+                void ExtractHP(string path)
+                {
+                    if (!HairProfileNames.Contains(path))
+                    {
+                        if (TryFindFile(archives, path, out var result) == FindFileResult.NoError)
+                        {
+                            HairProfileNames.Add(path);
+
+                            var fi = new FileInfo(Path.Combine(matRepo, Path.ChangeExtension(path, ".hp.json")));
+                            if (!fi.Exists)
+                            {
+                                if (!fi.Directory.Exists)
+                                {
+                                    fi.Directory.Create();
+                                }
+
+                                var dto = new RedFileDto(result.File);
+                                var doc = RedJsonSerializer.Serialize(dto);
+                                File.WriteAllText(path, doc);
+                            }
+                        }
+                        else
+                        {
+                            throw new InvalidParsingException("not a cr2w file");
+                        }
+                    }
+                }
+
+                void ExtractMlSetup(string path)
+                {
+                    if (!mlSetupNames.Contains(path))
+                    {
+                        if (TryFindFile(archives, path, out var result) == FindFileResult.NoError)
+                        {
+                            mlSetupNames.Add(path);
+
+                            var fi = new FileInfo(Path.Combine(matRepo, Path.ChangeExtension(path, ".gradient.json")));
+                            if (!fi.Exists)
+                            {
+                                if (!fi.Directory.Exists)
+                                {
+                                    fi.Directory.Create();
+                                }
+
+                                var dto = new RedFileDto(result.File);
+                                var doc = RedJsonSerializer.Serialize(dto);
+                                File.WriteAllText(path, doc);
+
+                                foreach (var import in result.Imports)
+                                {
+                                    ExtractFile(import.DepotPath);
+                                }
+                            }
+                        }
+                        else
+                        {
+                            throw new InvalidParsingException("not a cr2w file");
+                        }
+                    }
+                }
+
+                void ExtractMlTemplate(string path)
+                {
+                    if (!mlTemplateNames.Contains(path))
+                    {
+                        if (TryFindFile(archives, path, out var result) == FindFileResult.NoError)
+                        {
+                            mlTemplateNames.Add(path);
+
+                            var fi = new FileInfo(Path.Combine(matRepo, Path.ChangeExtension(path, ".gradient.json")));
+                            if (!fi.Exists)
+                            {
+                                if (!fi.Directory.Exists)
+                                {
+                                    fi.Directory.Create();
+                                }
+
+                                var dto = new RedFileDto(result.File);
+                                var doc = RedJsonSerializer.Serialize(dto);
+                                File.WriteAllText(path, doc);
+
+                                var mlTemplateMats = result.File.RootChunk.FindType(typeof(CResourceReference<CBitmapTexture>));
+                                foreach (var mlTemplateMat in mlTemplateMats)
+                                {
+                                    var mat = (CResourceReference<CBitmapTexture>)mlTemplateMat.Value;
+                                    ExtractXBM(mat.DepotPath);
+                                }
+                            }
+
+                            foreach (var import in result.Imports)
+                            {
+                                ExtractFile(import.DepotPath);
+                            }
+                        }
+                        else
+                        {
+                            throw new InvalidParsingException("not a cr2w file");
+                        }
+                    }
+                }
+
+                void ExtractGradient(string path)
+                {
+                    if (!TexturesList.Contains(path))
+                    {
+                        if (TryFindFile(archives, path, out var result) == FindFileResult.NoError)
+                        {
+                            TexturesList.Add(path);
+
+                            var fi = new FileInfo(Path.Combine(matRepo, Path.ChangeExtension(path, ".gradient.json")));
+                            if (!fi.Exists)
+                            {
+                                if (!fi.Directory.Exists)
+                                {
+                                    fi.Directory.Create();
+                                }
+
+                                var dto = new RedFileDto(result.File);
+                                var doc = RedJsonSerializer.Serialize(dto);
+                                File.WriteAllText(path, doc);
+                            }
+                        }
+                        else
+                        {
+                            throw new InvalidParsingException("not a cr2w file");
+                        }
+                    }
+                }
+            }
         }
-
-
 
         private IRedType GetMaterialParameterValue(Type materialParameterType, object obj)
         {
