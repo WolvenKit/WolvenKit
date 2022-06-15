@@ -23,8 +23,8 @@ namespace WolvenKit.RED4.Archive.IO
 
         static CR2WReader()
         {
-            s_bufferReaders.Add("appearanceAppearanceDefinition.compiledData", typeof(RedPackageReader));
-            s_bufferReaders.Add("entEntityTemplate.compiledData", typeof(RedPackageReader));
+            s_bufferReaders.Add("appearanceAppearanceDefinition.compiledData", typeof(appearanceAppearanceDefinitionReader));
+            s_bufferReaders.Add("entEntityTemplate.compiledData", typeof(entEntityTemplateReader));
             s_bufferReaders.Add("inkWidgetLibraryItem.packageData", typeof(RedPackageReader));
             s_bufferReaders.Add("entEntityInstanceData.buffer", typeof(RedPackageReader));
             s_bufferReaders.Add("gamePersistentStateDataResource.buffer", typeof(RedPackageReader));

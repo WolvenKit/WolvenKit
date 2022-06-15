@@ -19,7 +19,7 @@ namespace WolvenKit.RED4.Archive.IO
         private RedPackageHeader header;
         private IHashService _hashService;
 
-        public EFileReadErrorCodes ReadBuffer(RedBuffer buffer)
+        public virtual EFileReadErrorCodes ReadBuffer(RedBuffer buffer)
         {
             _hashService = Locator.Current.GetService<IHashService>();
 
