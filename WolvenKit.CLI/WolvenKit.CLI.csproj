@@ -7,7 +7,6 @@
       <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
       <StartupObject>WolvenKit.CLI.Program</StartupObject>
     <SatelliteResourceLanguages>en</SatelliteResourceLanguages>
-    <DebugType>embedded</DebugType>
   </PropertyGroup>
 
     <PropertyGroup>
