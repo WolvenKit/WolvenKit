@@ -5,8 +5,6 @@ namespace CP77Tools.Tasks
 {
     public partial class ConsoleFunctions
     {
-        #region Methods
-
         public int WwiseTask(string path, string outpath, bool wem)
         {
             if (string.IsNullOrEmpty(path))
@@ -41,7 +39,5 @@ namespace CP77Tools.Tasks
 
             return 1;
         }
-
-        #endregion Methods
     }
 }
