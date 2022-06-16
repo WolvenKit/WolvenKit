@@ -14,13 +14,7 @@ public static class RedJsonSerializer
     private static readonly ReferenceResolver<RedBuffer> s_bufferResolver;
     private static readonly ReferenceResolver<RedBaseClass> s_classResolver;
 
-    private static readonly ConcurrentDictionary<int, SemVersion> _threadedVersionStorage = new();
-
-    internal static SemVersion JsonVersion
-    {
-        get => _threadedVersionStorage[Environment.CurrentManagedThreadId];
-        set => _threadedVersionStorage[Environment.CurrentManagedThreadId] = value;
-    }
+    private static readonly ConcurrentDictionary<int, SemVersion> s_threadedVersionStorage = new();
 
     static RedJsonSerializer()
     {
@@ -72,10 +66,10 @@ public static class RedJsonSerializer
     }
 
     internal static void SetVersion(SemVersion version) =>
-        _threadedVersionStorage[Environment.CurrentManagedThreadId] = version;
+        s_threadedVersionStorage[Environment.CurrentManagedThreadId] = version;
 
     internal static bool IsVersion(string verStr) =>
-        _threadedVersionStorage[Environment.CurrentManagedThreadId] == SemVersion.Parse(verStr, SemVersionStyles.Strict);
+        s_threadedVersionStorage[Environment.CurrentManagedThreadId] == SemVersion.Parse(verStr, SemVersionStyles.Strict);
 
     public static JsonSerializerOptions Options { get; }
 
@@ -122,6 +116,6 @@ public static class RedJsonSerializer
         s_bufferResolver.End();
         s_classResolver.End();
 
-        _threadedVersionStorage.TryRemove(Environment.CurrentManagedThreadId, out _);
+        s_threadedVersionStorage.TryRemove(Environment.CurrentManagedThreadId, out _);
     }
 }
