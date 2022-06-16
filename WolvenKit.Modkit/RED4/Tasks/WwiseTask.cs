@@ -19,11 +19,7 @@ namespace CP77Tools.Tasks
 
             if (wem)
             {
-                var file = File.ReadAllBytes(path);
-                using var ms = new MemoryStream(file);
-                using var br = new BinaryReader(ms);
-
-                var inBuffer = br.ReadBytes(file.Length);
+                var inBuffer = File.ReadAllBytes(path);
                 var oggBuffer = Wem.Convert(inBuffer);
 
                 if (oggBuffer.Length == 0)
