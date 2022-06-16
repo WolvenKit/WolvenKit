@@ -388,7 +388,7 @@ namespace WolvenKit.Modkit.RED4
 
                                 var dto = new RedFileDto(result.File);
                                 var doc = RedJsonSerializer.Serialize(dto);
-                                File.WriteAllText(path, doc);
+                                File.WriteAllText(fi.FullName, doc);
                             }
                         }
                         else
@@ -416,7 +416,7 @@ namespace WolvenKit.Modkit.RED4
 
                                 var dto = new RedFileDto(result.File);
                                 var doc = RedJsonSerializer.Serialize(dto);
-                                File.WriteAllText(path, doc);
+                                File.WriteAllText(fi.FullName, doc);
 
                                 foreach (var import in result.Imports)
                                 {
@@ -449,7 +449,7 @@ namespace WolvenKit.Modkit.RED4
 
                                 var dto = new RedFileDto(result.File);
                                 var doc = RedJsonSerializer.Serialize(dto);
-                                File.WriteAllText(path, doc);
+                                File.WriteAllText(fi.FullName, doc);
 
                                 var mlTemplateMats = result.File.RootChunk.FindType(typeof(CResourceReference<CBitmapTexture>));
                                 foreach (var mlTemplateMat in mlTemplateMats)
@@ -489,7 +489,7 @@ namespace WolvenKit.Modkit.RED4
 
                                 var dto = new RedFileDto(result.File);
                                 var doc = RedJsonSerializer.Serialize(dto);
-                                File.WriteAllText(path, doc);
+                                File.WriteAllText(fi.FullName, doc);
                             }
                         }
                         else
