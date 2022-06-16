@@ -372,24 +372,26 @@ namespace WolvenKit.Modkit.RED4
 
                 void ExtractHP(string path)
                 {
-                    if (!HairProfileNames.Contains(path))
+                    if (HairProfileNames.Contains(path))
+                    {
+                        return;
+                    }
+
+                    HairProfileNames.Add(path);
+
+                    var fi = new FileInfo(Path.Combine(matRepo, Path.ChangeExtension(path, ".hp.json")));
+                    if (!fi.Exists)
                     {
                         if (TryFindFile(archives, path, out var result) == FindFileResult.NoError)
                         {
-                            HairProfileNames.Add(path);
-
-                            var fi = new FileInfo(Path.Combine(matRepo, Path.ChangeExtension(path, ".hp.json")));
-                            if (!fi.Exists)
+                            if (!fi.Directory.Exists)
                             {
-                                if (!fi.Directory.Exists)
-                                {
-                                    fi.Directory.Create();
-                                }
-
-                                var dto = new RedFileDto(result.File);
-                                var doc = RedJsonSerializer.Serialize(dto);
-                                File.WriteAllText(fi.FullName, doc);
+                                fi.Directory.Create();
                             }
+
+                            var dto = new RedFileDto(result.File);
+                            var doc = RedJsonSerializer.Serialize(dto);
+                            File.WriteAllText(fi.FullName, doc);
                         }
                         else
                         {
@@ -400,64 +402,26 @@ namespace WolvenKit.Modkit.RED4
 
                 void ExtractMlSetup(string path)
                 {
-                    if (!mlSetupNames.Contains(path))
+                    if (mlSetupNames.Contains(path))
                     {
-                        if (TryFindFile(archives, path, out var result) == FindFileResult.NoError)
-                        {
-                            mlSetupNames.Add(path);
-
-                            var fi = new FileInfo(Path.Combine(matRepo, Path.ChangeExtension(path, ".gradient.json")));
-                            if (!fi.Exists)
-                            {
-                                if (!fi.Directory.Exists)
-                                {
-                                    fi.Directory.Create();
-                                }
-
-                                var dto = new RedFileDto(result.File);
-                                var doc = RedJsonSerializer.Serialize(dto);
-                                File.WriteAllText(fi.FullName, doc);
-
-                                foreach (var import in result.Imports)
-                                {
-                                    ExtractFile(import.DepotPath);
-                                }
-                            }
-                        }
-                        else
-                        {
-                            throw new InvalidParsingException("not a cr2w file");
-                        }
+                        return;
                     }
-                }
 
-                void ExtractMlTemplate(string path)
-                {
-                    if (!mlTemplateNames.Contains(path))
+                    mlSetupNames.Add(path);
+
+                    var fi = new FileInfo(Path.Combine(matRepo, Path.ChangeExtension(path, ".mlsetup.json")));
+                    if (!fi.Exists)
                     {
                         if (TryFindFile(archives, path, out var result) == FindFileResult.NoError)
                         {
-                            mlTemplateNames.Add(path);
-
-                            var fi = new FileInfo(Path.Combine(matRepo, Path.ChangeExtension(path, ".gradient.json")));
-                            if (!fi.Exists)
+                            if (!fi.Directory.Exists)
                             {
-                                if (!fi.Directory.Exists)
-                                {
-                                    fi.Directory.Create();
-                                }
-
-                                var dto = new RedFileDto(result.File);
-                                var doc = RedJsonSerializer.Serialize(dto);
-                                File.WriteAllText(fi.FullName, doc);
-
-                                var mlTemplateMats = result.File.RootChunk.FindType(typeof(CResourceReference<CBitmapTexture>));
-                                foreach (var mlTemplateMat in mlTemplateMats)
-                                {
-                                    var mat = (CResourceReference<CBitmapTexture>)mlTemplateMat.Value;
-                                    ExtractXBM(mat.DepotPath);
-                                }
+                                fi.Directory.Create();
                             }
+
+                            var dto = new RedFileDto(result.File);
+                            var doc = RedJsonSerializer.Serialize(dto);
+                            File.WriteAllText(fi.FullName, doc);
 
                             foreach (var import in result.Imports)
                             {
@@ -471,26 +435,70 @@ namespace WolvenKit.Modkit.RED4
                     }
                 }
 
-                void ExtractGradient(string path)
+                void ExtractMlTemplate(string path)
                 {
-                    if (!TexturesList.Contains(path))
+                    if (mlTemplateNames.Contains(path))
+                    {
+                        return;
+                    }
+
+                    mlTemplateNames.Add(path);
+
+                    var fi = new FileInfo(Path.Combine(matRepo, Path.ChangeExtension(path, ".mltemplate.json")));
+                    if (!fi.Exists)
                     {
                         if (TryFindFile(archives, path, out var result) == FindFileResult.NoError)
                         {
-                            TexturesList.Add(path);
-
-                            var fi = new FileInfo(Path.Combine(matRepo, Path.ChangeExtension(path, ".gradient.json")));
-                            if (!fi.Exists)
+                            if (!fi.Directory.Exists)
                             {
-                                if (!fi.Directory.Exists)
-                                {
-                                    fi.Directory.Create();
-                                }
-
-                                var dto = new RedFileDto(result.File);
-                                var doc = RedJsonSerializer.Serialize(dto);
-                                File.WriteAllText(fi.FullName, doc);
+                                fi.Directory.Create();
                             }
+
+                            var dto = new RedFileDto(result.File);
+                            var doc = RedJsonSerializer.Serialize(dto);
+                            File.WriteAllText(fi.FullName, doc);
+
+                            foreach (var import in result.Imports)
+                            {
+                                ExtractFile(import.DepotPath);
+                            }
+
+                            var mlTemplateMats = result.File.RootChunk.FindType(typeof(CResourceReference<CBitmapTexture>));
+                            foreach (var mlTemplateMat in mlTemplateMats)
+                            {
+                                var mat = (CResourceReference<CBitmapTexture>)mlTemplateMat.Value;
+                                ExtractXBM(mat.DepotPath);
+                            }
+                        }
+                        else
+                        {
+                            throw new InvalidParsingException("not a cr2w file");
+                        }
+                    }
+                }
+
+                void ExtractGradient(string path)
+                {
+                    if (TexturesList.Contains(path))
+                    {
+                        return;
+                    }
+
+                    TexturesList.Add(path);
+
+                    var fi = new FileInfo(Path.Combine(matRepo, Path.ChangeExtension(path, ".gradient.json")));
+                    if (!fi.Exists)
+                    {
+                        if (TryFindFile(archives, path, out var result) == FindFileResult.NoError)
+                        {
+                            if (!fi.Directory.Exists)
+                            {
+                                fi.Directory.Create();
+                            }
+
+                            var dto = new RedFileDto(result.File);
+                            var doc = RedJsonSerializer.Serialize(dto);
+                            File.WriteAllText(fi.FullName, doc);
                         }
                         else
                         {
