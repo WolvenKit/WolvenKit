@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Text.Json;
+using Splat;
 using WolvenKit.Common.FNV1A;
+using WolvenKit.Common.Services;
 using WolvenKit.RED4.Archive;
 
 namespace WolvenKit.Modkit.RED4.Opus
@@ -140,7 +142,7 @@ namespace WolvenKit.Modkit.RED4.Opus
                     var idddd = Convert.ToUInt32(Path.GetFileNameWithoutExtension(wav));
                     foundids.Add(idddd);
                 }
-                catch { }
+                catch (Exception ex){Locator.Current.GetService<ILoggerService>().Error(ex);}
             }
 
             var validids = new List<uint>();

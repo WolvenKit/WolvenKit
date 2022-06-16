@@ -135,13 +135,13 @@ namespace WolvenKit.Views.Editors
             }
         }
 
-        private string GetValueFromIValue() => ((float)((Quaternion)cvm.Data).I).ToString("R");
+        private string GetValueFromIValue() => ((float)((Quaternion)cvm.Data).I).ToString("G9");
 
-        private string GetValueFromJValue() => ((float)((Quaternion)cvm.Data).J).ToString("R");
+        private string GetValueFromJValue() => ((float)((Quaternion)cvm.Data).J).ToString("G9");
 
-        private string GetValueFromKValue() => ((float)((Quaternion)cvm.Data).K).ToString("R");
+        private string GetValueFromKValue() => ((float)((Quaternion)cvm.Data).K).ToString("G9");
 
-        private string GetValueFromRValue() => ((float)((Quaternion)cvm.Data).R).ToString("R");
+        private string GetValueFromRValue() => ((float)((Quaternion)cvm.Data).R).ToString("G9");
 
 
         private void NumberValidationTextBox(object sender, TextCompositionEventArgs e)

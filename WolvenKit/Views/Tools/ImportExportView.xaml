@@ -14,6 +14,7 @@
     xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
     xmlns:system="clr-namespace:System;assembly=System.Runtime"
     xmlns:tools="clr-namespace:WolvenKit.ViewModels.Tools;assembly=WolvenKit.App"
+    xmlns:layout="clr-namespace:WolvenKit.Layout"
     d:DataContext="{d:DesignInstance Type=tools:ImportExportViewModel}"
     mc:Ignorable="d">
 
@@ -93,7 +94,7 @@
                         <syncfusion:GridCheckBoxColumn.HeaderTemplate>
                             <DataTemplate>
                                 <CheckBox
-                                    Command="local:SFDataGridCommands.CheckAndUnCheck"
+                                    Command="layout:SFDataGridCommands.CheckAndUnCheck"
                                     CommandParameter="{Binding ElementName=ConvertGrid}"
                                     IsChecked="{Binding Path=IsHeaderChecked}" />
                             </DataTemplate>
@@ -113,7 +114,7 @@
                         MappingName="Properties" />
                 </syncfusion:SfDataGrid.Columns>
                 <I:Interaction.Behaviors>
-                    <local:Behaviour />
+                    <layout:Behaviour />
                 </I:Interaction.Behaviors>
             </syncfusion:SfDataGrid>
 
@@ -141,7 +142,7 @@
                         <syncfusion:GridCheckBoxColumn.HeaderTemplate>
                             <DataTemplate>
                                 <CheckBox
-                                    Command="local:SFDataGridCommands.CheckAndUnCheck"
+                                    Command="layout:SFDataGridCommands.CheckAndUnCheck"
                                     CommandParameter="{Binding ElementName=ExportGrid}"
                                     />
                             </DataTemplate>
@@ -165,7 +166,7 @@
                 </syncfusion:SfDataGrid.Columns>
                 
                 <I:Interaction.Behaviors>
-                    <local:Behaviour />
+                    <layout:Behaviour />
                 </I:Interaction.Behaviors>
                 
             </syncfusion:SfDataGrid>
@@ -194,7 +195,7 @@
                         <syncfusion:GridCheckBoxColumn.HeaderTemplate>
                             <DataTemplate>
                                 <CheckBox
-                                    Command="local:SFDataGridCommands.CheckAndUnCheck"
+                                    Command="layout:SFDataGridCommands.CheckAndUnCheck"
                                     CommandParameter="{Binding ElementName=ImportGrid}"
                                     IsChecked="{Binding Path=IsHeaderChecked}" />
                             </DataTemplate>
@@ -214,7 +215,7 @@
                         MappingName="Properties" />
                 </syncfusion:SfDataGrid.Columns>
                 <I:Interaction.Behaviors>
-                    <local:Behaviour />
+                    <layout:Behaviour />
                 </I:Interaction.Behaviors>
             </syncfusion:SfDataGrid>
 

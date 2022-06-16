@@ -32,8 +32,6 @@ namespace WolvenKit.MVVM.Model
 {
     public static class ProcessHelper
     {
-        #region Methods
-
         public static int RunCommandLine(string workingDirectory = "", params string[] commands) => RunProcess(Path.Combine(Environment.SystemDirectory, "cmd.exe"), workingDirectory, commands);
 
         public static async Task<int> RunCommandLineAsync(ILoggerService loggerService, string workingDirectory = "", params string[] commands) => await RunProcessAsync(loggerService,
@@ -67,8 +65,7 @@ namespace WolvenKit.MVVM.Model
         /// <param name="cancellationToken">A cancellation token. If invoked, the task will return
         /// immediately as canceled.</param>
         /// <returns>A Task representing waiting for the process to end.</returns>
-        public static Task WaitForExitAsync(this Process process,
-            CancellationToken cancellationToken = default(CancellationToken))
+        public static Task WaitForExitAsync(this Process process, CancellationToken cancellationToken = default(CancellationToken))
         {
             var tcs = new TaskCompletionSource<object>();
             process.EnableRaisingEvents = true;
@@ -104,7 +101,8 @@ namespace WolvenKit.MVVM.Model
                     stream.Close();
                 }
 
-                process.WaitForExit(1000 * 60 * 5);
+                var fiveMinutes = new TimeSpan(0, 5, 0);
+                process.WaitForExit(fiveMinutes.Milliseconds);
                 return process.ExitCode;
             }
         }
@@ -187,7 +185,5 @@ namespace WolvenKit.MVVM.Model
             };
             return await RunProcessAsync(loggerService, process, commands).ConfigureAwait(false);
         }
-
-        #endregion Methods
     }
 }

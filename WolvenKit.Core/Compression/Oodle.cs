@@ -4,7 +4,6 @@ using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
-using Serilog;
 using WolvenKit.Core.Exceptions;
 using WolvenKit.Core.Extensions;
 
@@ -80,7 +79,7 @@ public static class Oodle
     public const uint KARK = 1263681867; // 0x4b, 0x41, 0x52, 0x4b
 
     public static bool Load()
-    {   
+    {
         if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
         {
             // try get oodle dll from game
@@ -113,10 +112,7 @@ public static class Oodle
     public static bool IsCompressed(byte[] buf) => buf.Length >= 4 && buf[0] == 0x4B && buf[1] == 0x41 && buf[2] == 0x52 && buf[3] == 0x4B;
     public static bool IsCompressed(Stream stream) => stream.PeekFourCC() == 0x4B52414B;
 
-    public static Status CompressBuffer(byte[] rawBuf, out byte[] compBuf)
-    {
-        return CompressBuffer(rawBuf, out compBuf, CompressionSettings.Get().CompressionLevel);
-    }
+    public static Status CompressBuffer(byte[] rawBuf, out byte[] compBuf) => CompressBuffer(rawBuf, out compBuf, CompressionSettings.Get().CompressionLevel);
 
     public static Status CompressBuffer(byte[] rawBuf, out byte[] compBuf, CompressionLevel compressionLevel)
     {
@@ -386,8 +382,8 @@ public static class Oodle
     /// <returns></returns>
     public static int GetCompressedBufferSizeNeeded(int count)
     {
-        var n = ((count + 0x3ffff + ((uint)(count + 0x3ffff >> 0x3f) & 0x3ffff))
-                 >> 0x12) * 0x112 + count;
+        var n = (((count + 0x3ffff + ((uint)((count + 0x3ffff) >> 0x3f) & 0x3ffff))
+                 >> 0x12) * 0x112) + count;
         //var n  = OodleNative.GetCompressedBufferSizeNeeded((long)count);
         return (int)n;
     }
@@ -449,7 +445,7 @@ public static class Oodle
         const string gameName = "Cyberpunk 2077";
         const string exeName = "Cyberpunk2077.exe";
         var exePath = "";
-        StrDelegate strDelegate = msg => cp77exe = msg;
+        void strDelegate(string msg) => cp77exe = msg;
 
         try
         {
@@ -469,7 +465,7 @@ public static class Oodle
                     }
                 }
 
-                strDelegate.Invoke(exePath);
+                strDelegate(exePath);
             });
             Parallel.ForEach(Microsoft.Win32.Registry.LocalMachine.OpenSubKey(uninstallkey2)?.GetSubKeyNames(), item =>
             {
@@ -490,7 +486,7 @@ public static class Oodle
                     }
                 }
 
-                strDelegate.Invoke(exePath);
+                strDelegate(exePath);
             });
 
             if (File.Exists(cp77exe))

@@ -49,7 +49,7 @@ namespace WolvenKit.Functionality.Extensions
 
             public static Tree<T> FromLookup(ILookup<T, T> lookup)
             {
-                var rootData = lookup.Count == 1 ? lookup.First().Key : default(T);
+                var rootData = lookup.Count == 1 ? lookup.First().Key : default;
                 var root = new Tree<T>(rootData);
                 root.LoadChildren(lookup);
                 return root;

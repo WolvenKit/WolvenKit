@@ -3,8 +3,8 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows.Input;
+using Prism.Commands;
 using WolvenKit.Common.Annotations;
-using WolvenKit.Functionality.Commands;
 using WolvenKit.RED4.Types;
 
 namespace WolvenKit.ViewModels
@@ -18,9 +18,9 @@ namespace WolvenKit.ViewModels
 
         public RedCollectionEditorViewModel()
         {
-            AddElementCommand = new RelayCommand(AddElement);
+            AddElementCommand = new DelegateCommand(AddElement);
 
-            RemoveElementCommand = new RelayCommand(RemoveElement);
+            RemoveElementCommand = new DelegateCommand(RemoveElement);
         }
 
         #region properties

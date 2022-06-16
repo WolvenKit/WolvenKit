@@ -7,8 +7,6 @@ namespace WolvenKit.Functionality.Converters
     [ValueConversion(typeof(bool), typeof(SolidColorBrush))]
     public class BoolToBrushConverter : IValueConverter
     {
-        #region Methods
-
         public object
             Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
         {
@@ -18,7 +16,7 @@ namespace WolvenKit.Functionality.Converters
             var colorIfFalse = Colors.Transparent;
 
             // Creating Color Brush
-            if (value != null && (bool)value)
+            if (value is not null and true)
             {
                 color = new SolidColorBrush(colorIfTrue);
             }
@@ -32,7 +30,5 @@ namespace WolvenKit.Functionality.Converters
         public object ConvertBack(object value, Type targetType, object parameter,
             System.Globalization.CultureInfo culture) =>
             throw new NotImplementedException();
-
-        #endregion Methods
     }
 }
