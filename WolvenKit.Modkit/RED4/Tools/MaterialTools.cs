@@ -150,6 +150,8 @@ namespace WolvenKit.Modkit.RED4
                     }
 
                     using var reader = new CR2WReader(ms);
+                    reader.ParsingError += args => args is InvalidDefaultValueEventArgs;
+
                     _ = reader.ReadFile(out var mi, false);
 
                     //MemoryStream ms = new MemoryStream(bytes, (int)offset, (int)size);

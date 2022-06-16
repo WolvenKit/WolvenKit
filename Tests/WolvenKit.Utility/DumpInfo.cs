@@ -276,6 +276,8 @@ namespace WolvenKit.Utility
                         ms.Seek(0, SeekOrigin.Begin);
 
                         using var reader = new CR2WReader(ms);
+                        reader.ParsingError += args => true;
+
                         reader.CollectData = true;
 
                         if (reader.ReadFile(out _) == EFileReadErrorCodes.NoError)
