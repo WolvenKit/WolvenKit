@@ -12,6 +12,7 @@ using DynamicData;
 using Prism.Commands;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
+using WolvenKit.App.Models;
 using WolvenKit.Common;
 using WolvenKit.Common.Extensions;
 using WolvenKit.Common.FNV1A;
@@ -27,6 +28,7 @@ using WolvenKit.Models;
 using WolvenKit.Models.Docking;
 using WolvenKit.Modkit.RED4.Opus;
 using WolvenKit.Modkit.RED4.Tools;
+using WolvenKit.ProjectManagement.Project;
 using WolvenKit.RED4.Archive;
 
 namespace WolvenKit.ViewModels.Tools
@@ -673,7 +675,12 @@ namespace WolvenKit.ViewModels.Tools
             {
                 if (item.Properties is GltfImportArgs gltfImportArgs)
                 {
-                    gltfImportArgs.Archives = _archiveManager.Archives.Items.Cast<Archive>().ToList();
+                    gltfImportArgs.Archives = _archiveManager.Archives.Items.Cast<ICyberGameArchive>().ToList();
+
+                    if (_projectManager.ActiveProject is Cp77Project cp77Proj)
+                    {
+                        gltfImportArgs.Archives.Insert(0, new FileSystemArchive(cp77Proj.ModDirectory));
+                    }
                 }
                 var settings = new GlobalImportArgs().Register(item.Properties as ImportArgs);
                 var rawDir = new DirectoryInfo(proj.RawDirectory);
@@ -696,17 +703,24 @@ namespace WolvenKit.ViewModels.Tools
             {
                 if (item.Properties is MeshExportArgs meshExportArgs)
                 {
+                    meshExportArgs.Archives.Clear();
                     if (_gameController.GetController() is RED4Controller cp77Controller)
                     {
-                        meshExportArgs.Archives = _archiveManager.Archives.Items.Cast<Archive>().ToList();
+                        meshExportArgs.Archives.AddRange(_archiveManager.Archives.Items.Cast<ICyberGameArchive>().ToList());
                     }
+
+                    if (_projectManager.ActiveProject is Cp77Project cp77Proj)
+                    {
+                        meshExportArgs.Archives.Insert(0, new FileSystemArchive(cp77Proj.ModDirectory));
+                    }
+
                     meshExportArgs.MaterialRepo = _settingsManager.MaterialRepositoryPath;
                 }
                 if (item.Properties is MorphTargetExportArgs morphTargetExportArgs)
                 {
                     if (_gameController.GetController() is RED4Controller cp77Controller)
                     {
-                        morphTargetExportArgs.Archives = _archiveManager.Archives.Items.Cast<Archive>().ToList();
+                        morphTargetExportArgs.Archives = _archiveManager.Archives.Items.Cast<ICyberGameArchive>().ToList();
                     }
                     morphTargetExportArgs.ModFolderPath = _projectManager.ActiveProject.ModDirectory;
                 }
@@ -726,14 +740,14 @@ namespace WolvenKit.ViewModels.Tools
                 {
                     if (_gameController.GetController() is RED4Controller cp77Controller)
                     {
-                        entExportArgs.Archives = _archiveManager.Archives.Items.Cast<Archive>().ToList();
+                        entExportArgs.Archives = _archiveManager.Archives.Items.Cast<ICyberGameArchive>().ToList();
                     }
                 }
                 if (item.Properties is AnimationExportArgs animationExportArgs)
                 {
                     if (_gameController.GetController() is RED4Controller cp77Controller)
                     {
-                        animationExportArgs.Archives = _archiveManager.Archives.Items.Cast<Archive>().ToList();
+                        animationExportArgs.Archives = _archiveManager.Archives.Items.Cast<ICyberGameArchive>().ToList();
                     }
                 }
                 var settings = new GlobalExportArgs().Register(item.Properties as ExportArgs);

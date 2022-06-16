@@ -1,15 +1,11 @@
-using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using WolvenKit.RED4.Archive.Buffer;
 using WolvenKit.RED4.Types;
 
 namespace WolvenKit.RED4.Archive.IO
 {
-    public class CR2WListReader : IBufferReader
+    public class CR2WListReader : IBufferReader, IErrorHandler
     {
         private MemoryStream _ms;
 
@@ -25,6 +21,8 @@ namespace WolvenKit.RED4.Archive.IO
             while (result != EFileReadErrorCodes.NoCr2w)
             {
                 var reader = new CR2WReader(_ms);
+                reader.ParsingError += HandleParsingError;
+
                 result = reader.ReadFile(out var cr2wFile, false);
                 if (cr2wFile != null)
                 {
@@ -48,5 +46,12 @@ namespace WolvenKit.RED4.Archive.IO
 
             return EFileReadErrorCodes.NoError;
         }
+
+        #region ErrorHandler
+
+        public event ParsingErrorEventHandler ParsingError;
+        protected virtual bool HandleParsingError(ParsingErrorEventArgs e) => ParsingError != null && ParsingError.Invoke(e);
+
+        #endregion
     }
 }

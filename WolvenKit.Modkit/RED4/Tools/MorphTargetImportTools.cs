@@ -34,9 +34,9 @@ namespace WolvenKit.Modkit.RED4
                 var meshStream = new MemoryStream();
                 foreach (var ar in args.Archives)
                 {
-                    if (ar.Files.ContainsKey(hash))
+                    if (ar.Files.TryGetValue(hash, out var gameFile))
                     {
-                        ExtractSingleToStream(ar, hash, meshStream);
+                        gameFile.Extract(meshStream);
                         break;
                     }
                 }

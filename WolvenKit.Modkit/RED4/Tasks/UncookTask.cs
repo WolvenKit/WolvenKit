@@ -87,9 +87,9 @@ namespace CP77Tools.Tasks
             if (!string.IsNullOrEmpty(archiveDepot) && Directory.Exists(archiveDepot))
             {
                 _archiveManager.LoadFromFolder(new DirectoryInfo(archiveDepot));
-                exportArgs.Get<MeshExportArgs>().Archives = _archiveManager.Archives.Items.Cast<Archive>().ToList();
-                exportArgs.Get<MorphTargetExportArgs>().Archives = _archiveManager.Archives.Items.Cast<Archive>().ToList();
-                exportArgs.Get<AnimationExportArgs>().Archives = _archiveManager.Archives.Items.Cast<Archive>().ToList();
+                exportArgs.Get<MeshExportArgs>().Archives = _archiveManager.Archives.Items.Cast<ICyberGameArchive>().ToList();
+                exportArgs.Get<MorphTargetExportArgs>().Archives = _archiveManager.Archives.Items.Cast<ICyberGameArchive>().ToList();
+                exportArgs.Get<AnimationExportArgs>().Archives = _archiveManager.Archives.Items.Cast<ICyberGameArchive>().ToList();
             }
             else
             {
@@ -97,9 +97,9 @@ namespace CP77Tools.Tasks
                 if (!string.IsNullOrEmpty(archiveDepot) && Directory.Exists(archiveDepot))
                 {
                     _archiveManager.LoadFromFolder(new DirectoryInfo(archiveDepot));
-                    exportArgs.Get<MeshExportArgs>().Archives = _archiveManager.Archives.Items.Cast<Archive>().ToList();
-                    exportArgs.Get<MorphTargetExportArgs>().Archives = _archiveManager.Archives.Items.Cast<Archive>().ToList();
-                    exportArgs.Get<AnimationExportArgs>().Archives = _archiveManager.Archives.Items.Cast<Archive>().ToList();
+                    exportArgs.Get<MeshExportArgs>().Archives = _archiveManager.Archives.Items.Cast<ICyberGameArchive>().ToList();
+                    exportArgs.Get<MorphTargetExportArgs>().Archives = _archiveManager.Archives.Items.Cast<ICyberGameArchive>().ToList();
+                    exportArgs.Get<AnimationExportArgs>().Archives = _archiveManager.Archives.Items.Cast<ICyberGameArchive>().ToList();
                 }
                 else
                 {
@@ -107,9 +107,9 @@ namespace CP77Tools.Tasks
                     if (!string.IsNullOrEmpty(archiveDepot) && Directory.Exists(archiveDepot))
                     {
                         _archiveManager.LoadFromFolder(new DirectoryInfo(archiveDepot));
-                        exportArgs.Get<MeshExportArgs>().Archives = _archiveManager.Archives.Items.Cast<Archive>().ToList();
-                        exportArgs.Get<MorphTargetExportArgs>().Archives = _archiveManager.Archives.Items.Cast<Archive>().ToList();
-                        exportArgs.Get<AnimationExportArgs>().Archives = _archiveManager.Archives.Items.Cast<Archive>().ToList();
+                        exportArgs.Get<MeshExportArgs>().Archives = _archiveManager.Archives.Items.Cast<ICyberGameArchive>().ToList();
+                        exportArgs.Get<MorphTargetExportArgs>().Archives = _archiveManager.Archives.Items.Cast<ICyberGameArchive>().ToList();
+                        exportArgs.Get<AnimationExportArgs>().Archives = _archiveManager.Archives.Items.Cast<ICyberGameArchive>().ToList();
                     }
                 }
             }

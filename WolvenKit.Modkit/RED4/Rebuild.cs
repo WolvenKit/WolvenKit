@@ -7,9 +7,8 @@ using System.Threading;
 using WolvenKit.Common.Extensions;
 using WolvenKit.Common.Model;
 using WolvenKit.Core.Extensions;
-using WolvenKit.RED4;
 using WolvenKit.RED4.Archive.IO;
-using WolvenKit.RED4.Types.Exceptions;
+using WolvenKit.RED4.Types;
 
 namespace WolvenKit.Modkit.RED4
 {
@@ -35,6 +34,8 @@ namespace WolvenKit.Modkit.RED4
             }
 
             using var reader = new CR2WReader(redfileStream);
+            reader.ParsingError += args => args is InvalidDefaultValueEventArgs;
+
             _ = reader.ReadFile(out var cr2w, false);
 
             var existingBuffers = cr2w.GetBuffers();
@@ -80,6 +81,8 @@ namespace WolvenKit.Modkit.RED4
                 }
 
                 using var reader = new CR2WReader(redfileStream);
+                reader.ParsingError += args => args is InvalidDefaultValueEventArgs;
+
                 _ = reader.ReadFile(out var cr2w, false);
 
                 var existingBuffers = cr2w.GetBuffers();

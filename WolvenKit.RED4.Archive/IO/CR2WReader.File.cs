@@ -302,14 +302,22 @@ namespace WolvenKit.RED4.Archive.IO
             if (s_bufferReaders.ContainsKey(parentType))
             {
                 var ms = new MemoryStream(buffer.GetBytes());
-                var reader = (IBufferReader)System.Activator.CreateInstance(s_bufferReaders[parentType], ms);
-                var baseReader = reader as Red4Reader;
-                if (baseReader != null)
+                if (System.Activator.CreateInstance(s_bufferReaders[parentType], ms) is not IBufferReader reader)
                 {
-                    baseReader.CollectData = CollectData;
+                    return;
                 }
 
-                if (baseReader is RedPackageReader pReader)
+                if (reader is IErrorHandler err)
+                {
+                    err.ParsingError += HandleParsingError;
+                }
+
+                if (reader is Red4Reader red4Reader)
+                {
+                    red4Reader.CollectData = CollectData;
+                }
+
+                if (reader is RedPackageReader pReader)
                 {
                     var rootType = _cr2wFile.RootChunk.GetType();
 
@@ -329,10 +337,10 @@ namespace WolvenKit.RED4.Archive.IO
 
                 reader.ReadBuffer(buffer);
 
-                if (baseReader is { CollectData: true })
+                if (reader is Red4Reader { CollectData: true } red4Reader2)
                 {
                     DataCollection.Buffers ??= new List<DataCollection>();
-                    DataCollection.Buffers.Add(baseReader.DataCollection);
+                    DataCollection.Buffers.Add(red4Reader2.DataCollection);
                 }
             }
         }

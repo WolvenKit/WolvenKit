@@ -32,14 +32,14 @@ namespace WolvenKit.Modkit.RED4
         /// <param name="forcebuffers"></param>
         /// <returns></returns>
         public bool UncookSingle(
-            Archive archive,
+            ICyberGameArchive archive,
             ulong hash,
             DirectoryInfo outDir,
             GlobalExportArgs args,
             DirectoryInfo rawOutDir = null,
             ECookedFileFormat[] forcebuffers = null)
         {
-            if (!archive.Files.ContainsKey(hash))
+            if (!archive.Files.TryGetValue(hash, out var gameFile))
             {
                 return false;
             }
@@ -47,7 +47,7 @@ namespace WolvenKit.Modkit.RED4
             #region unbundle main file
 
             using var cr2WStream = new MemoryStream();
-            ExtractSingleToStream(archive, hash, cr2WStream);
+            gameFile.Extract(cr2WStream);
 
             if (archive.Files[hash] is FileEntry entry)
             {
@@ -124,7 +124,7 @@ namespace WolvenKit.Modkit.RED4
         /// <param name="forcebuffers"></param>
         /// <returns></returns>
         public void UncookAll(
-            Archive ar,
+            ICyberGameArchive ar,
             DirectoryInfo outDir,
             GlobalExportArgs args,
             bool unbundle = false,
@@ -138,7 +138,7 @@ namespace WolvenKit.Modkit.RED4
 
             // check search pattern then regex
             var finalmatches = ar.Files.Values.Cast<FileEntry>();
-            var totalInArchiveCount = ar.FileCount;
+            var totalInArchiveCount = ar.Files?.Count ?? 0;
             if (!string.IsNullOrEmpty(pattern))
             {
                 finalmatches = ar.Files.Values.Cast<FileEntry>().MatchesWildcard(item => item.FileName, pattern);

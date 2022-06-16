@@ -25,17 +25,17 @@ namespace WolvenKit.Common.Interfaces
 
         bool RebuildBuffer(RedRelativePath rawRelativePath, DirectoryInfo outDir = null);
 
-        void ExtractAll(Archive ar, DirectoryInfo outDir, string pattern = "", string regex = "", bool decompressBuffers = false);
-        Task ExtractAllAsync(Archive ar, DirectoryInfo outDir, string pattern = "", string regex = "", bool decompressBuffers = false);
+        void ExtractAll(ICyberGameArchive ar, DirectoryInfo outDir, string pattern = "", string regex = "", bool decompressBuffers = false);
+        Task ExtractAllAsync(ICyberGameArchive ar, DirectoryInfo outDir, string pattern = "", string regex = "", bool decompressBuffers = false);
 
         public bool UncookSingle(
-            Archive archive,
+            ICyberGameArchive archive,
             ulong hash,
             DirectoryInfo outDir,
             GlobalExportArgs args,
             DirectoryInfo rawOutDir = null,
             ECookedFileFormat[] forcebuffers = null);
-        void UncookAll(Archive ar, DirectoryInfo outDir, GlobalExportArgs args, bool unbundle = false, string pattern = "", string regex = "", DirectoryInfo rawOutDir = null, ECookedFileFormat[] forcebuffers = null);
+        void UncookAll(ICyberGameArchive ar, DirectoryInfo outDir, GlobalExportArgs args, bool unbundle = false, string pattern = "", string regex = "", DirectoryInfo rawOutDir = null, ECookedFileFormat[] forcebuffers = null);
 
         public bool ConvertToAndWrite(ETextConvertFormat format, string infile, DirectoryInfo outputDirInfo);
 
