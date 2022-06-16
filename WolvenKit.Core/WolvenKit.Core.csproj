@@ -37,6 +37,11 @@
     <None Remove="lib\libkraken.dylib" />
   </ItemGroup>
 
+    <ItemGroup>
+      <None Remove="lib\wwtools.dll" />
+      <None Remove="lib\libwwtools.so" />
+    </ItemGroup>
+
   <ItemGroup>
     <ContentWithTargetPath Include="lib\kraken.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
@@ -51,6 +56,17 @@
       <TargetPath>libkraken.dylib</TargetPath>
     </ContentWithTargetPath>
   </ItemGroup>
+
+    <ItemGroup>
+        <ContentWithTargetPath Include="lib\wwtools.dll">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+            <TargetPath>wwtools.dll</TargetPath>
+        </ContentWithTargetPath>
+        <ContentWithTargetPath Include="lib\libwwtools.so">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+            <TargetPath>libwwtools.so</TargetPath>
+        </ContentWithTargetPath>
+    </ItemGroup>
 
     <ItemGroup>
         <PackageReference Include="DynamicData" Version="7.8.6" />
