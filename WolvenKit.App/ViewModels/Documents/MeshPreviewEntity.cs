@@ -191,29 +191,32 @@ namespace WolvenKit.ViewModels.Documents
                             Models = LoadMeshs(appPkg.Chunks),
                         };
 
-                        foreach (var model in a.Models)
+                        if (a.Models is not null)
                         {
-                            if (a.Models.FirstOrDefault(x => x.Name == model.BindName) is var parentModel && parentModel is not null)
+                            foreach (var model in a.Models)
                             {
-                                parentModel.AddModel(model);
-                            }
-                            else
-                            {
-                                a.BindableModels.Add(model);
-                            }
-                            foreach (var material in model.Materials)
-                            {
-                                a.RawMaterials[material.Name] = material;
-                            }
-                            model.Meshes = MakeMesh((CMesh)model.MeshFile.RootChunk, model.ChunkMask, model.AppearanceIndex);
-
-                            foreach (var m in model.Meshes)
-                            {
-                                if (!a.LODLUT.ContainsKey(m.LOD))
+                                if (a.Models.FirstOrDefault(x => x.Name == model.BindName) is var parentModel && parentModel is not null)
                                 {
-                                    a.LODLUT[m.LOD] = new List<SubmeshComponent>();
+                                    parentModel.AddModel(model);
                                 }
-                                a.LODLUT[m.LOD].Add(m);
+                                else
+                                {
+                                    a.BindableModels.Add(model);
+                                }
+                                foreach (var material in model.Materials)
+                                {
+                                    a.RawMaterials[material.Name] = material;
+                                }
+                                model.Meshes = MakeMesh((CMesh)model.MeshFile.RootChunk, model.ChunkMask, model.AppearanceIndex);
+
+                                foreach (var m in model.Meshes)
+                                {
+                                    if (!a.LODLUT.ContainsKey(m.LOD))
+                                    {
+                                        a.LODLUT[m.LOD] = new List<SubmeshComponent>();
+                                    }
+                                    a.LODLUT[m.LOD].Add(m);
+                                }
                             }
                         }
 

@@ -15,7 +15,6 @@
       <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
       <Version>1.4</Version>
       <PackageOutputPath>./nupkg</PackageOutputPath>
-      <DebugType>embedded</DebugType>
       <Platforms>x64</Platforms>
       <SatelliteResourceLanguages>en</SatelliteResourceLanguages>
       <AllowUnsafeBlocks>true</AllowUnsafeBlocks>

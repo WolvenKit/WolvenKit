@@ -19,12 +19,10 @@ public class ArchiveReader
             ArchiveAbsolutePath = path
         };
 
-        using var mmf = ar.GetMemoryMappedFile();
-
         // read header
         uint customDataLength;
 
-        using (var vs = mmf.CreateViewStream(0, Header.EXTENDED_SIZE, MemoryMappedFileAccess.Read))
+        using (var vs = ar.GetViewStream(0, Header.EXTENDED_SIZE))
         using (var br = new BinaryReader(vs))
         {
             ar.Header = ReadHeader(br);
@@ -36,7 +34,7 @@ public class ArchiveReader
         {
             if (customDataLength != 0)
             {
-                using var vs = mmf.CreateViewStream(Header.EXTENDED_SIZE, customDataLength, MemoryMappedFileAccess.Read);
+                using var vs = ar.GetViewStream(Header.EXTENDED_SIZE, customDataLength);
                 using var br = new BinaryReader(vs);
                 if (br.BaseStream.Length >= LxrsFooter.MIN_LENGTH)
                 {
@@ -54,8 +52,7 @@ public class ArchiveReader
         }
 
         // read files
-        using (var vs = mmf.CreateViewStream((long)ar.Header.IndexPosition, ar.Header.IndexSize,
-        MemoryMappedFileAccess.Read))
+        using (var vs = ar.GetViewStream(ar.Header.IndexPosition, ar.Header.IndexSize))
         using (var br = new BinaryReader(vs))
         {
             ar.Index = ReadIndex(br, hashService);
@@ -70,7 +67,7 @@ public class ArchiveReader
             {
                 var segment = ar.Index.FileSegments[(int)file.SegmentsStart];
 
-                using var vs = mmf.CreateViewStream((long)segment.Offset, segment.ZSize, MemoryMappedFileAccess.Read);
+                using var vs = ar.GetViewStream(segment.Offset, segment.ZSize);
                 BinaryReader br;
 
                 if (segment.ZSize != segment.Size)

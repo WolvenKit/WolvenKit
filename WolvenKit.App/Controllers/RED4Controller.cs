@@ -283,6 +283,17 @@ namespace WolvenKit.Functionality.Controllers
             return true;
         }
 
+        public List<string> GetModFiles()
+        {
+            if (_projectManager.ActiveProject is not Cp77Project cp77Proj)
+            {
+                _loggerService.Error("Can't pack project (no project/not cyberpunk project)!");
+                return new List<string>();
+            }
+
+            return cp77Proj.ModFiles;
+        }
+
         /// <summary>
         /// pack mod to mod workspace folder
         /// </summary>
