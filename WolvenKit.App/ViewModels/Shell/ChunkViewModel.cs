@@ -173,71 +173,6 @@ namespace WolvenKit.ViewModels.Shell
         }
 
 
-        public ICommand DeleteSelectionCommand { get; private set; }
-        private bool CanDeleteSelection() => IsInArray;
-        private void ExecuteDeleteSelection()
-        {
-            var selection = Parent.DisplayProperties
-                            .Where(_ => _.IsSelected)
-                            .Select(_ => _.Data)
-                            .ToList();
-
-            var ts = Parent.DisplayProperties
-                            .Where(_ => _.IsSelected)
-                            .Select(_ => _)
-                            .ToList();
-            try
-            {
-                if (Parent.Data is IRedBufferPointer db3 && db3.GetValue().Data is worldNodeDataBuffer dict)
-                {
-                    var indices = selection.Select(_ => (int)((worldNodeData)_).NodeIndex).ToList();
-                    if (indices.Count == 0)
-                    { throw new Exception("Please select something first"); }
-                    var (start, end) = (indices.Min(), indices.Max());
-
-                    var fullselection = Parent.DisplayProperties
-                        .Where(_ => Enumerable.Range(start, end - start + 1)
-                           .Contains((int)((worldNodeData)_.Data).NodeIndex))
-                        .Select(_ => _.Data)
-                        .ToList();
-
-                    foreach (var i in fullselection)
-                    { try { dict.Remove(i); } catch (Exception ex) { Locator.Current.GetService<ILoggerService>().Error(ex); } }
-
-                    Tab.File.SetIsDirty(true);
-                    Parent.RecalculateProperties();
-                }
-                else if (Parent.Data is IRedArray db4)
-                {
-                    var indices = ts.Select(_ => int.Parse(_.Name)).ToList();
-                    var (start, end) = (indices.Min(), indices.Max());
-
-                    var fullselection = Parent.DisplayProperties
-                        .Where(_ => Enumerable.Range(start, end - start + 1)
-                           .Contains(int.Parse(_.Name)))
-                        .Select(_ => _.Data)
-                        .ToList();
-
-                    foreach (var i in fullselection)
-                    { try { db4.Remove(i); } catch (Exception ex) { Locator.Current.GetService<ILoggerService>().Error(ex); } }
-
-                    Tab.File.SetIsDirty(true);
-                    Parent.RecalculateProperties();
-                }
-                else
-                {
-                    var t = Parent.Data.GetType().Name;
-                    Locator.Current.GetService<ILoggerService>().Warning($"Handle this type {t} wen ._. ");
-                }
-            }
-            catch (Exception ex)
-            {
-                Locator.Current.GetService<ILoggerService>().Warning
-                    ($"Something went wrong while trying to delete the selection : {ex}");
-            }
-
-            Tab.SelectedChunk = Parent;
-        }
 
         public ChunkViewModel(IRedType export, RDTDataViewModel tab) : this(export)
         {
@@ -1901,6 +1836,88 @@ namespace WolvenKit.ViewModels.Shell
             }
             catch (Exception ex) { Locator.Current.GetService<ILoggerService>().Error(ex); }
         }
+
+
+        private void DeleteFullSelection(List<IRedType> l, IRedArray a)
+        {
+            foreach (var i in l)
+            {
+                try
+                { a.Remove(i); }
+                catch (Exception ex)
+                { Locator.Current.GetService<ILoggerService>().Error(ex); }
+            }
+
+            Tab.File.SetIsDirty(true);
+            Parent.RecalculateProperties();
+        }
+
+        public ICommand DeleteSelectionCommand { get; private set; }
+        private bool CanDeleteSelection() => IsInArray;
+        private void ExecuteDeleteSelection()
+        {
+            var selection = Parent.DisplayProperties
+                            .Where(_ => _.IsSelected)
+                            .Select(_ => _.Data)
+                            .ToList();
+
+            var ts = Parent.DisplayProperties
+                            .Where(_ => _.IsSelected)
+                            .Select(_ => _)
+                            .ToList();
+
+            try
+            {
+                if (Parent.Data is IRedBufferPointer db3 && db3.GetValue().Data is IRedArray dict)
+                {
+                    //var indices = selection.Select(_ => (int)((worldNodeData)_).NodeIndex).ToList();
+                    var indices = ts.Select(_ => _.Name).ToList().ConvertAll(int.Parse);
+                    if (indices.Count == 0)
+                    {
+                        Locator.Current.GetService<ILoggerService>().Warning("Please select something first");
+                    }
+                    else
+                    {
+                        var (start, end) = (indices.Min(), indices.Max());
+
+                        var fullselection = Parent.DisplayProperties
+                            .Where(_ => Enumerable.Range(start, end - start + 1)
+                               .Contains(int.Parse(_.Name)))
+                            .Select(_ => _.Data)
+                            .ToList();
+
+                        DeleteFullSelection(fullselection, dict);
+                    }
+                }
+                else if (Parent.Data is IRedArray db4)
+                {
+                    var indices = ts.Select(_ => int.Parse(_.Name)).ToList();
+                    var (start, end) = (indices.Min(), indices.Max());
+
+                    var fullselection = Parent.DisplayProperties
+                        .Where(_ => Enumerable.Range(start, end - start + 1)
+                           .Contains(int.Parse(_.Name)))
+                        .Select(_ => _.Data)
+                        .ToList();
+
+                    DeleteFullSelection(fullselection, db4);
+                }
+                else
+                {
+                    var t = Parent.Data.GetType().Name;
+                    Locator.Current.GetService<ILoggerService>().Warning($"Unsupported type : {t}");
+                }
+            }
+            catch (Exception ex)
+            {
+                Locator.Current.GetService<ILoggerService>().Warning
+                    ($"Something went wrong while trying to delete the selection : {ex}");
+            }
+
+            Tab.SelectedChunk = Parent;
+        }
+
+
 
         public bool ShouldShowExportNodeData => Parent is not null && Parent.Data is DataBuffer rb && rb.Data is worldNodeDataBuffer;
 
