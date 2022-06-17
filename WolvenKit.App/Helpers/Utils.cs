@@ -327,7 +327,7 @@ namespace WolvenKit.ViewModels.Shell
 
         private void AddEntity(string tr, Prop line, bool updatecoords = true, bool visible = true)
         {
-            if (line.template_path is not null)
+            if (line.template_path is not null && Parent.Parent.Data is worldStreamingSector wss)
             {
                 var wss = (worldStreamingSector)Parent.Parent.Data;
                 var current = RedJsonSerializer.Deserialize<worldNodeData>(tr);
