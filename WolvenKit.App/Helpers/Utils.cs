@@ -329,7 +329,7 @@ namespace WolvenKit.ViewModels.Shell
         {
             if (line.template_path is not null && Parent.Parent.Data is worldStreamingSector wss)
             {
-                var wss = (worldStreamingSector)Parent.Parent.Data;
+                //var wss = (worldStreamingSector)Parent.Parent.Data;
                 var current = RedJsonSerializer.Deserialize<worldNodeData>(tr);
 
                 var wen = new worldEntityNode();
