@@ -2,7 +2,6 @@ using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
-using System.IO.MemoryMappedFiles;
 using System.Linq;
 using System.Text.Json;
 using System.Threading.Tasks;
@@ -317,8 +316,6 @@ namespace WolvenKit.Utility
                     continue;
                 }
 
-                using var mmf = archive.GetMemoryMappedFile();
-
                 Parallel.ForEach(archive.Files, pair =>
                 {
                     if (pair.Value is not FileEntry fileEntry)
@@ -335,10 +332,12 @@ namespace WolvenKit.Utility
                     try
                     {
                         using var ms = new MemoryStream();
-                        archive.CopyFileToStream(ms, fileEntry.NameHash64, false, mmf);
+                        archive.CopyFileToStream(ms, fileEntry.NameHash64, false);
                         ms.Seek(0, SeekOrigin.Begin);
 
                         using var reader = new CR2WReader(ms);
+                        reader.ParsingError += args => true;
+
                         reader.CollectData = true;
 
                         if (reader.ReadFile(out _) == EFileReadErrorCodes.NoError)

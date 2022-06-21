@@ -23,7 +23,7 @@ namespace CP77Tools.Tasks
         public void PackTask(string[] path, string outpath);
         public void UncookTask(string[] path, string outpath, string rawOutDir,
             EUncookExtension? uext, bool? flip, ulong hash, string pattern, string regex, bool unbundle,
-            ECookedFileFormat[] forcebuffers);
+            ECookedFileFormat[] forcebuffers, bool? serialize);
     }
 
     public partial class ConsoleFunctions : IConsoleFunctions

@@ -1,13 +1,11 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using WolvenKit.Common.FNV1A;
 using WolvenKit.Core.Extensions;
 using WolvenKit.RED4.IO;
-using WolvenKit.RED4.TweakDB.Helper;
 using WolvenKit.RED4.Types;
 using WolvenKit.RED4.Types.Exceptions;
 
@@ -252,13 +250,21 @@ public class TweakDBReader : Red4Reader
             }
             else
             {
+                value = Read(valueType, 0, valueFlags);
+
                 if (valueType != propertyInfo.Type)
                 {
-                    var propName = $"{RedReflection.GetRedTypeFromCSType(instance.GetType())}.{varName}";
-                    throw new InvalidRTTIException(propName, propertyInfo.Type, valueType);
+                    var args = new InvalidRTTIEventArgs(propertyInfo.Type, valueType, value);
+                    if (!HandleParsingError(args))
+                    {
+                        var propName = $"{RedReflection.GetRedTypeFromCSType(instance.GetType())}.{varName}";
+                        throw new InvalidRTTIException(propName, propertyInfo.Type, valueType);
+
+                    }
+                    value = args.Value;
                 }
 
-                value = Read(propertyInfo.Type, 0, propertyInfo.Flags);
+                
                 instance.SetProperty(propertyInfo.RedName, value);
             }
         }

@@ -134,7 +134,18 @@ public class CVariantConverter : JsonConverter<CVariant>, ICustomRedConverter
             {
                 case "Type":
                 {
-                    if (reader.TokenType != JsonTokenType.String)
+                    if (!RedJsonSerializer.IsVersion("0.0.1") || reader.TokenType != JsonTokenType.String)
+                    {
+                        throw new JsonException();
+                    }
+
+                    (type, _) = RedReflection.GetCSTypeFromRedType(reader.GetString());
+                    break;
+                }
+
+                case "$type":
+                {
+                    if (!RedJsonSerializer.IsVersion("0.0.2") || reader.TokenType != JsonTokenType.String)
                     {
                         throw new JsonException();
                     }
@@ -178,7 +189,7 @@ public class CVariantConverter : JsonConverter<CVariant>, ICustomRedConverter
         writer.WriteStartObject();
 
         var redTypeName = RedReflection.GetRedTypeFromCSType(value.Value.GetType());
-        writer.WriteString("Type", redTypeName);
+        writer.WriteString("$type", redTypeName);
 
         writer.WritePropertyName("Value");
 

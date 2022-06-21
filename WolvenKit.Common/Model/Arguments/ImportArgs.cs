@@ -3,6 +3,7 @@ using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.IO;
 using SharpGLTF.Validation;
+using WolvenKit.Core.Interfaces;
 using WolvenKit.RED4.Archive;
 using WolvenKit.RED4.Types;
 
@@ -126,7 +127,7 @@ namespace WolvenKit.Common.Model.Arguments
         /// List of Archives for Morphtarget Import.
         /// </summary>
         [Browsable(false)]
-        public List<Archive> Archives { get; set; } = new();
+        public List<ICyberGameArchive> Archives { get; set; } = new();
         /// <summary>
         /// String Override to display info in datagrid.
         /// </summary>

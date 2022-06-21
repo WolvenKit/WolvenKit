@@ -55,7 +55,13 @@ public class CKeyValuePairConverter : JsonConverter<CKeyValuePair>, ICustomRedCo
         }
 
         var propertyName = reader.GetString();
-        if (propertyName != "Type")
+
+        if (RedJsonSerializer.IsVersion("0.0.1") && propertyName != "Type")
+        {
+            throw new JsonException();
+        }
+
+        if (RedJsonSerializer.IsVersion("0.0.2") && propertyName != "$type")
         {
             throw new JsonException();
         }
@@ -110,7 +116,7 @@ public class CKeyValuePairConverter : JsonConverter<CKeyValuePair>, ICustomRedCo
         writer.WriteStartObject();
 
         var valType = RedReflection.GetRedTypeFromCSType(value.Value.GetType());
-        writer.WriteString("Type", valType);
+        writer.WriteString("$type", valType);
 
         writer.WritePropertyName(value.Key);
         JsonSerializer.Serialize(writer, (object)value.Value, options);
@@ -448,6 +454,21 @@ public class RedClassConverter : JsonConverter<RedBaseClass>, ICustomRedConverte
 
     public RedBaseClass? CustomRead(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options, string? refId)
     {
+        if (RedJsonSerializer.IsVersion("0.0.1"))
+        {
+            return CustomReadV1(ref reader, typeToConvert, options, refId);
+        }
+
+        if (RedJsonSerializer.IsVersion("0.0.2"))
+        {
+            return CustomReadV2(ref reader, typeToConvert, options, refId);
+        }
+
+        throw new JsonException("Unsupported version");
+    }
+
+    public RedBaseClass? CustomReadV1(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options, string? refId)
+    {
         if (reader.TokenType == JsonTokenType.Null)
         {
             return null;
@@ -538,7 +559,7 @@ public class RedClassConverter : JsonConverter<RedBaseClass>, ICustomRedConverte
                             throw new JsonException();
                         }
 
-                        var valInfo = typeInfo.PropertyInfos.FirstOrDefault(x => x.RedName == key /*|| x.Name == key)*/);
+                        var valInfo = typeInfo.PropertyInfos.FirstOrDefault(x => x.RedName == key);
                         if (valInfo == null)
                         {
                             throw new JsonException();
@@ -555,17 +576,7 @@ public class RedClassConverter : JsonConverter<RedBaseClass>, ICustomRedConverte
                         {
                             val = JsonSerializer.Deserialize(ref reader, valInfo.Type, options);
                         }
-                        /*
-                                                static string? FirstCharToLowerCase( string? str)
-                                                {
-                                                    if (!string.IsNullOrEmpty(str) && char.IsUpper(str[0]))
-                                                        return str.Length == 1 ? char.ToLower(str[0]).ToString() : char.ToLower(str[0]) + str[1..];
 
-                                                    return str;
-                                                }
-                        */
-                        //what's the difference between RedName and Name ?!
-                        //var name = valInfo.RedName ?? FirstCharToLowerCase(valInfo.Name);
                         if (!typeInfo.SerializeDefault && RedReflection.IsDefault(cls.GetType(), valInfo.RedName, val))
                         {
                             continue;
@@ -587,16 +598,112 @@ public class RedClassConverter : JsonConverter<RedBaseClass>, ICustomRedConverte
         throw new JsonException();
     }
 
-    public override RedBaseClass? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options) => CustomRead(ref reader, typeToConvert, options, null);
+    public RedBaseClass? CustomReadV2(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options, string? refId)
+    {
+        if (reader.TokenType == JsonTokenType.Null)
+        {
+            return null;
+        }
+
+        if (reader.TokenType != JsonTokenType.StartObject)
+        {
+            throw new JsonException();
+        }
+
+        reader.Read();
+
+        if (reader.TokenType != JsonTokenType.PropertyName)
+        {
+            throw new JsonException();
+        }
+        var propertyName = reader.GetString();
+        if (propertyName != "$type")
+        {
+            throw new JsonException();
+        }
+        reader.Read();
+
+        var clsType = reader.GetString();
+
+        RedBaseClass? cls;
+        if (refId != null && _referenceResolver.HasReference(refId))
+        {
+            cls = _referenceResolver.ResolveReference(refId);
+        }
+        else
+        {
+            cls = RedTypeManager.Create(clsType);
+        }
+
+        if (refId != null && !_referenceResolver.HasReference(refId))
+        {
+            _referenceResolver.AddReference(refId, cls);
+        }
+
+        var typeInfo = RedReflection.GetTypeInfo(cls);
+
+        if (cls == null || typeInfo == null)
+        {
+            throw new JsonException();
+        }
+
+        while (reader.Read())
+        {
+            if (reader.TokenType == JsonTokenType.EndObject)
+            {
+                return cls;
+            }
+
+            if (reader.TokenType != JsonTokenType.PropertyName)
+            {
+                throw new JsonException();
+            }
+
+            var key = reader.GetString();
+            if (key == null)
+            {
+                throw new JsonException();
+            }
+
+            var valInfo = typeInfo.PropertyInfos.FirstOrDefault(x => x.RedName == key);
+            if (valInfo == null)
+            {
+                throw new JsonException();
+            }
+
+            object? val;
+            var converter = options.GetConverter(valInfo.Type);
+            if (converter is ICustomRedConverter conv)
+            {
+                reader.Read();
+                val = conv.ReadRedType(ref reader, valInfo.Type, options);
+            }
+            else
+            {
+                val = JsonSerializer.Deserialize(ref reader, valInfo.Type, options);
+            }
+
+            if (!typeInfo.SerializeDefault && RedReflection.IsDefault(cls.GetType(), valInfo.RedName, val))
+            {
+                continue;
+            }
+
+            cls.SetProperty(valInfo.RedName, (IRedType?)val);
+        }
+
+        throw new JsonException();
+    }
+
+    public override RedBaseClass? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+    {
+        return CustomRead(ref reader, typeToConvert, options, null);
+    }
 
     public override void Write(Utf8JsonWriter writer, RedBaseClass value, JsonSerializerOptions options)
     {
         writer.WriteStartObject();
 
-        writer.WriteString("Type", RedReflection.GetRedTypeFromCSType(value.GetType()));
-
-        writer.WritePropertyName("Properties");
-        writer.WriteStartObject();
+        writer.WriteString("$type", RedReflection.GetRedTypeFromCSType(value.GetType()));
 
         var typeInfo = RedReflection.GetTypeInfo(value);
         foreach (var propertyInfo in typeInfo.PropertyInfos.OrderBy(x => x.RedName))
@@ -608,7 +715,7 @@ public class RedClassConverter : JsonConverter<RedBaseClass>, ICustomRedConverte
                     writer.WritePropertyName(propertyInfo.RedName);
                     JsonSerializer.Serialize(writer, (object)value.GetProperty(propertyInfo.RedName), options);
                 }
-                else if (propertyInfo is RedReflection.ExtendedPropertyInfo Extpr && Extpr.Name is not null)
+                else if (propertyInfo is { Name: { } })
                 {
                     writer.WritePropertyName(propertyInfo.Name);
                     JsonSerializer.Serialize(writer, (object)value.GetProperty(propertyInfo.Name), options);
@@ -619,8 +726,6 @@ public class RedClassConverter : JsonConverter<RedBaseClass>, ICustomRedConverte
                 Locator.Current.GetService<ILoggerService>()?.Error($"propertyInfo was null i guess");
             }
         }
-
-        writer.WriteEndObject();
 
         writer.WriteEndObject();
     }
