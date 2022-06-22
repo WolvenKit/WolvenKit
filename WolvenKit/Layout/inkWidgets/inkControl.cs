@@ -77,7 +77,7 @@ namespace WolvenKit.Functionality.Layout.inkWidgets
 
         public SkewTransform Skew { get; set; } = new();
 
-        private bool _debug = false;
+        private bool _debug = true;
 
         public bool Debug
         {
@@ -382,32 +382,59 @@ namespace WolvenKit.Functionality.Layout.inkWidgets
                 drawOpacity = IsMouseOver ? 1.0 : 0.1;
                 var debugOpacity = (byte)(IsMouseOver ? 255 : 100);
 
-                dc.DrawText(new FormattedText(Name, CultureInfo.CurrentCulture, FlowDirection.LeftToRight, new Typeface("Arial"), 4D, new SolidColorBrush(Color.FromArgb(debugOpacity, 255, 255, 255)), 96D), new Point(0, -6));
-                dc.DrawRectangle(new SolidColorBrush(Color.FromArgb(10, 0, 0, 0)), new Pen(new SolidColorBrush(Color.FromArgb(debugOpacity, 0, 255, 255)), lineThickness), new Rect(0, 0, RenderSize.Width, RenderSize.Height));
+                dc.DrawText(new FormattedText(Name, CultureInfo.CurrentCulture, FlowDirection.LeftToRight, new Typeface("Arial"), 4D, new SolidColorBrush(Color.FromArgb(debugOpacity, 255, 255, 255)), 96D)
+                {
+                    TextAlignment = TextAlignment.Left
+                }, new Point(0, -6));
+                dc.DrawRectangle(new SolidColorBrush(Color.FromArgb(10, 0, 0, 0)), new Pen(new SolidColorBrush(Color.FromArgb(debugOpacity, 255, 255, 255)), lineThickness), new Rect(0, 0, RenderSize.Width, RenderSize.Height));
                 if (Margin != new Thickness())
                 {
+                    var brush = new SolidColorBrush(Color.FromArgb(debugOpacity, 255, 0, 255));
+                    dc.DrawRectangle(null, new Pen(brush, lineThickness), new Rect(-Margin.Left, -Margin.Top, Math.Max(RenderSize.Width + Margin.Left + Margin.Right, 0), Math.Max(RenderSize.Height + Margin.Top + Margin.Bottom, 0)));
                     if (Margin.Top != 0)
                     {
-                        dc.DrawLine(new Pen(new SolidColorBrush(Color.FromArgb(debugOpacity, 255, 0, 255)), lineThickness), new Point(Margin.Left, Margin.Top), new Point(RenderSize.Width * AnchorToX(this), Margin.Top));
-                        dc.DrawLine(new Pen(new SolidColorBrush(Color.FromArgb(debugOpacity, 255, 0, 255)), lineThickness), new Point(RenderSize.Width * AnchorToX(this), Margin.Top), new Point(RenderSize.Width * AnchorToX(this), 0));
+                        dc.DrawLine(new Pen(brush, lineThickness), new Point(RenderSize.Width / 2, -Margin.Top), new Point(RenderSize.Width / 2, -Margin.Top / 2 - 2.5));
+                        dc.DrawLine(new Pen(brush, lineThickness), new Point(RenderSize.Width / 2, 0), new Point(RenderSize.Width / 2, -Margin.Top / 2 + 2.5));
+                        dc.DrawText(new FormattedText($"{Margin.Top}px", CultureInfo.CurrentCulture, FlowDirection.LeftToRight, new Typeface("Arial"), 4D, brush, 96D)
+                        {
+                            TextAlignment = TextAlignment.Center
+                        }, new Point(RenderSize.Width / 2, -Margin.Top / 2 - 2.5));
                     }
                     if (Margin.Bottom != 0)
                     {
-                        dc.DrawLine(new Pen(new SolidColorBrush(Color.FromArgb(debugOpacity, 255, 0, 0)), lineThickness), new Point(Margin.Left, RenderSize.Height + Margin.Bottom), new Point(Margin.Left + RenderSize.Width + Margin.Right, RenderSize.Height + Margin.Bottom));
-                        dc.DrawLine(new Pen(new SolidColorBrush(Color.FromArgb(debugOpacity, 255, 0, 0)), lineThickness), new Point(RenderSize.Width * AnchorToX(this), RenderSize.Width + Margin.Bottom), new Point(RenderSize.Width * AnchorToX(this), RenderSize.Height + Margin.Bottom));
+                        dc.DrawLine(new Pen(brush, lineThickness), new Point(RenderSize.Width / 2, RenderSize.Height + Margin.Bottom / 2 + 2.5), new Point(RenderSize.Width / 2, RenderSize.Height + Margin.Bottom));
+                        dc.DrawLine(new Pen(brush, lineThickness), new Point(RenderSize.Width / 2, RenderSize.Height + Margin.Bottom / 2 - 2.5), new Point(RenderSize.Width / 2, RenderSize.Height));
+                        dc.DrawText(new FormattedText($"{Margin.Bottom}px", CultureInfo.CurrentCulture, FlowDirection.LeftToRight, new Typeface("Arial"), 4D, brush, 96D)
+                        {
+                            TextAlignment = TextAlignment.Center
+                        }, new Point(RenderSize.Width / 2, RenderSize.Height + Margin.Bottom / 2 - 2.5));
                     }
                     if (Margin.Left != 0)
                     {
-                        dc.DrawLine(new Pen(new SolidColorBrush(Color.FromArgb(debugOpacity, 0, 0, 255)), lineThickness), new Point(Margin.Left, RenderSize.Height + Margin.Bottom), new Point(Margin.Left, Margin.Top));
-                        dc.DrawLine(new Pen(new SolidColorBrush(Color.FromArgb(debugOpacity, 0, 0, 255)), lineThickness), new Point(Margin.Left, RenderSize.Height * AnchorToY(this)), new Point(0, RenderSize.Height * AnchorToY(this)));
+                        if (Margin.Left > 10)
+                        {
+                            dc.DrawLine(new Pen(brush, lineThickness), new Point(0, RenderSize.Height / 2), new Point(-Margin.Left / 2 + 5, RenderSize.Height / 2));
+                            dc.DrawLine(new Pen(brush, lineThickness), new Point(-Margin.Left, RenderSize.Height / 2), new Point(-Margin.Left / 2 - 5, RenderSize.Height / 2));
+                        }
+                        dc.DrawText(new FormattedText($"{Margin.Left}px", CultureInfo.CurrentCulture, FlowDirection.LeftToRight, new Typeface("Arial"), 4D, brush, 96D)
+                        {
+                            TextAlignment = TextAlignment.Center
+                        }, new Point(-Margin.Left / 2, RenderSize.Height / 2 - 2.5));
                     }
                     if (Margin.Right != 0)
                     {
-                        dc.DrawLine(new Pen(new SolidColorBrush(Color.FromArgb(debugOpacity, 255, 255, 0)), lineThickness), new Point(RenderSize.Width + Margin.Right, RenderSize.Height + Margin.Bottom), new Point(RenderSize.Width + Margin.Right, Margin.Top));
-                        dc.DrawLine(new Pen(new SolidColorBrush(Color.FromArgb(debugOpacity, 255, 255, 0)), lineThickness), new Point(RenderSize.Width + Margin.Right, RenderSize.Height * AnchorToX(this)), new Point(0, RenderSize.Height * AnchorToY(this)));
+                        if (Margin.Right > 10)
+                        {
+                            dc.DrawLine(new Pen(brush, lineThickness), new Point(RenderSize.Width + Margin.Right / 2 - 5, RenderSize.Height / 2), new Point(RenderSize.Width, RenderSize.Height / 2));
+                            dc.DrawLine(new Pen(brush, lineThickness), new Point(RenderSize.Width + Margin.Right / 2 + 5, RenderSize.Height / 2), new Point(RenderSize.Width + Margin.Right, RenderSize.Height / 2));
+                        }
+                        dc.DrawText(new FormattedText($"{Margin.Right}px", CultureInfo.CurrentCulture, FlowDirection.LeftToRight, new Typeface("Arial"), 4D, brush, 96D)
+                        {
+                            TextAlignment = TextAlignment.Center
+                        }, new Point(RenderSize.Width + Margin.Right / 2, RenderSize.Height / 2 - 2.5));
                     }
-                    //dc.DrawRectangle(null, new Pen(new SolidColorBrush(Color.FromArgb(16, 255, 0, 255)), 1), new Rect(Margin.Left, Margin.Top, Math.Max(RenderSize.Width + Margin.Left + Margin.Right, 0), Math.Max(RenderSize.Height + Margin.Top + Margin.Bottom, 0)));
                 }
+                dc.DrawEllipse(null, new Pen(new SolidColorBrush(Color.FromArgb(debugOpacity, 0, 255, 255)), lineThickness), new Point(RenderSize.Width * AnchorToX(this), RenderSize.Height * AnchorToY(this)), 5, 5);
             }
             dc.PushOpacity(drawOpacity);
 
