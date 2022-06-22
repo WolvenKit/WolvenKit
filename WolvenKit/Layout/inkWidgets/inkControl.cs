@@ -91,9 +91,9 @@ namespace WolvenKit.Functionality.Layout.inkWidgets
         // Summary:
         //     Identifies the WolvenKit.Functionality.Layout.inkWidgets.inkControl.Margin dependency property.
         public static readonly DependencyProperty MarginProperty = DependencyProperty.Register(nameof(Margin), typeof(Thickness), typeof(inkControl),
-            new FrameworkPropertyMetadata(new Thickness(), FrameworkPropertyMetadataOptions.AffectsMeasure, OnMarginChanged));
+            new FrameworkPropertyMetadata(new Thickness(), FrameworkPropertyMetadataOptions.AffectsArrange));
 
-        private static void OnMarginChanged(DependencyObject d, DependencyPropertyChangedEventArgs e) => ((inkControl)d).InvalidateMeasure();//((inkControl)d).Render();
+        //private static void OnMarginChanged(DependencyObject d, DependencyPropertyChangedEventArgs e) => ((inkControl)d).InvalidateMeasure();//((inkControl)d).Render();
 
         public Thickness Margin
         {
@@ -105,9 +105,9 @@ namespace WolvenKit.Functionality.Layout.inkWidgets
         // Summary:
         //     Identifies the WolvenKit.Functionality.Layout.inkWidgets.inkControl.Width dependency property.
         public static readonly DependencyProperty WidthProperty = DependencyProperty.Register(nameof(Width), typeof(double), typeof(inkControl),
-            new FrameworkPropertyMetadata(0D, FrameworkPropertyMetadataOptions.AffectsMeasure, OnWidthChanged));
+            new FrameworkPropertyMetadata(0D, FrameworkPropertyMetadataOptions.AffectsParentMeasure));
 
-        private static void OnWidthChanged(DependencyObject d, DependencyPropertyChangedEventArgs e) => ((inkControl)d).InvalidateMeasure();//((inkControl)d).Render();
+        //private static void OnWidthChanged(DependencyObject d, DependencyPropertyChangedEventArgs e) => ((inkControl)d).InvalidateMeasure();//((inkControl)d).Render();
 
         public double Width
         {
@@ -119,9 +119,9 @@ namespace WolvenKit.Functionality.Layout.inkWidgets
         // Summary:
         //     Identifies the WolvenKit.Functionality.Layout.inkWidgets.inkControl.Height dependency property.
         public static readonly DependencyProperty HeightProperty = DependencyProperty.Register(nameof(Height), typeof(double), typeof(inkControl),
-            new FrameworkPropertyMetadata(0D, FrameworkPropertyMetadataOptions.AffectsMeasure, OnHeightChanged));
+            new FrameworkPropertyMetadata(0D, FrameworkPropertyMetadataOptions.AffectsParentMeasure));
 
-        private static void OnHeightChanged(DependencyObject d, DependencyPropertyChangedEventArgs e) => ((inkControl)d).InvalidateMeasure();//((inkControl)d).Render();
+        //private static void OnHeightChanged(DependencyObject d, DependencyPropertyChangedEventArgs e) => ((inkControl)d).InvalidateMeasure();//((inkControl)d).Render();
 
         public double Height
         {
@@ -156,6 +156,7 @@ namespace WolvenKit.Functionality.Layout.inkWidgets
             MouseLeave += MouseLeaveCore;
             MouseDown += MouseDownCore;
             MouseUp += MouseUpCore;
+            MouseMove += MouseMoveCore;
 
             RenderTransform = new TransformGroup()
             {
@@ -265,14 +266,53 @@ namespace WolvenKit.Functionality.Layout.inkWidgets
             }
         }
 
-
         public void MouseEnterCore(object sender, MouseEventArgs e) => Render();
 
         public void MouseLeaveCore(object sender, MouseEventArgs e) => Render();
 
-        public void MouseDownCore(object sender, MouseButtonEventArgs e) => Render();
+        Point start;
+        inkMargin initial;
 
-        public void MouseUpCore(object sender, MouseButtonEventArgs e) => Render();
+        public void MouseDownCore(object sender, MouseButtonEventArgs e)
+        {
+            if (e.LeftButton == MouseButtonState.Pressed && Parent != null && sender == this)
+            {
+                start = e.GetPosition(Parent);
+                initial = (inkMargin)Widget.Layout.Margin.DeepCopy();
+                CaptureMouse();
+                Render();
+                e.Handled = true;
+            }
+            //Render();
+        }
+
+        public void MouseUpCore(object sender, MouseButtonEventArgs e)
+        {
+            if (e.LeftButton == MouseButtonState.Released && sender == this)
+            {
+                ReleaseMouseCapture();
+                Render();
+                e.Handled = true;
+            }
+            //Render();
+        }
+
+        public void MouseMoveCore(object sender, MouseEventArgs e)
+        {
+            if (e.LeftButton == MouseButtonState.Pressed && IsMouseCaptured && sender == this)
+            {
+                var change = start - e.GetPosition(Parent);
+                Widget.Layout.Margin.Left = initial.Left - (float)Math.Round(change.X);
+                Widget.Layout.Margin.Top = initial.Top - (float)Math.Round(change.Y);
+                SetCurrentValue(MarginProperty, ToThickness(Widget.Layout.Margin));
+                if (VisualParent is inkControl ic)
+                {
+                    ic.InvalidateArrange();
+                }
+                Render();
+                e.Handled = true;
+            }
+        }
 
 
         public virtual void MouseEnterControl(object sender, MouseEventArgs e)
@@ -379,8 +419,18 @@ namespace WolvenKit.Functionality.Layout.inkWidgets
             if (Debug)
             {
                 var lineThickness = 0.1;
-                drawOpacity = IsMouseOver ? 1.0 : 0.1;
-                var debugOpacity = (byte)(IsMouseOver ? 255 : 100);
+                drawOpacity = 0.1;
+                var debugOpacity = (byte)50;
+                if (IsMouseCaptured)
+                {
+                    drawOpacity = 1.0;
+                    debugOpacity = 255;
+                }
+                else if (IsMouseOver)
+                {
+                    drawOpacity = 0.5;
+                    debugOpacity = 100;
+                }
 
                 dc.DrawText(new FormattedText(Name, CultureInfo.CurrentCulture, FlowDirection.LeftToRight, new Typeface("Arial"), 4D, new SolidColorBrush(Color.FromArgb(debugOpacity, 255, 255, 255)), 96D)
                 {
@@ -435,6 +485,7 @@ namespace WolvenKit.Functionality.Layout.inkWidgets
                     }
                 }
                 dc.DrawEllipse(null, new Pen(new SolidColorBrush(Color.FromArgb(debugOpacity, 0, 255, 255)), lineThickness), new Point(RenderSize.Width * AnchorToX(this), RenderSize.Height * AnchorToY(this)), 5, 5);
+                dc.DrawEllipse(new SolidColorBrush(Color.FromArgb(debugOpacity, 0, 255, 255)), null, new Point(RenderSize.Width * AnchorToX(this), RenderSize.Height * AnchorToY(this)), 2, 2);
             }
             dc.PushOpacity(drawOpacity);
 
