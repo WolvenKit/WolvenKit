@@ -334,94 +334,97 @@ namespace WolvenKit.ViewModels.Documents
         {
             CR2WFile cr2wFile = null;
 
-            try
+            if (!original)
             {
-                if (!original)
+                var projectManager = Locator.Current.GetService<IProjectManager>();
+                if (projectManager.ActiveProject != null)
                 {
-                    var projectManager = Locator.Current.GetService<IProjectManager>();
-                    if (projectManager.ActiveProject != null)
+                    string path = null;
+                    if ((string)depotPath != null)
                     {
-                        string path = null;
-                        if ((string)depotPath != null)
+                        path = Path.Combine(projectManager.ActiveProject.ModDirectory, (string)depotPath);
+                    }
+                    else
+                    {
+                        var fm = Locator.Current.GetService<IWatcherService>().GetFileModelFromHash(depotPath.GetRedHash());
+                        if (fm != null)
                         {
-                            path = Path.Combine(projectManager.ActiveProject.ModDirectory, (string)depotPath);
-                        }
-                        else
-                        {
-                            var fm = Locator.Current.GetService<IWatcherService>().GetFileModelFromHash(depotPath.GetRedHash());
-                            if (fm != null)
-                            {
-                                path = fm.FullName;
-                            }
-                        }
-
-                        if (path != null && File.Exists(path))
-                        {
-                            using (var stream = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
-                            {
-                                using var reader = new BinaryReader(stream);
-                                cr2wFile = _parser.ReadRed4File(reader);
-                            }
-
-                            cr2wFile.MetaData.FileName = depotPath;
-
-                            lock (Files)
-                            {
-                                foreach (var res in cr2wFile.EmbeddedFiles)
-                                {
-                                    if (!Files.ContainsKey(res.FileName))
-                                    {
-                                        Files.Add(res.FileName, new CR2WFile()
-                                        {
-                                            RootChunk = res.Content
-                                        });
-                                    }
-                                }
-                            }
-
-                            return cr2wFile;
+                            path = fm.FullName;
                         }
                     }
-                }
-            }
-            catch (NullReferenceException)
-            {
-                var _archiveManager = Locator.Current.GetService<IArchiveManager>();
-                var file = _archiveManager.Lookup(depotPath.GetRedHash());
-                if (file.HasValue && file.Value is FileEntry fe)
-                {
-                    using (var stream = new MemoryStream())
+
+                    if (path != null && File.Exists(path))
                     {
-                        fe.Extract(stream);
-                        using var reader = new BinaryReader(stream);
-                        cr2wFile = _parser.ReadRed4File(reader);
+                        using (var stream = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
+                        {
+                            using var reader = new BinaryReader(stream);
+                            cr2wFile = _parser.ReadRed4File(reader);
+                        }
+
                         if (cr2wFile == null)
                         {
-                            return null;
+                            goto BadFile;
                         }
-                        if ((string)depotPath != null)
-                        {
-                            cr2wFile.MetaData.FileName = depotPath;
-                        }
-                    }
 
-                    lock (Files)
-                    {
-                        foreach (var res in cr2wFile.EmbeddedFiles)
+                        cr2wFile.MetaData.FileName = depotPath;
+
+                        lock (Files)
                         {
-                            if (!Files.ContainsKey(res.FileName))
+                            foreach (var res in cr2wFile.EmbeddedFiles)
                             {
-                                Files.Add(res.FileName, new CR2WFile()
+                                if (!Files.ContainsKey(res.FileName))
                                 {
-                                    RootChunk = res.Content
-                                });
+                                    Files.Add(res.FileName, new CR2WFile()
+                                    {
+                                        RootChunk = res.Content
+                                    });
+                                }
                             }
                         }
+
+                        return cr2wFile;
                     }
                 }
             }
 
-            return cr2wFile;
+        BadFile:
+
+            var _archiveManager = Locator.Current.GetService<IArchiveManager>();
+            var file = _archiveManager.Lookup(depotPath.GetRedHash());
+            if (file.HasValue && file.Value is FileEntry fe)
+            {
+                using (var stream = new MemoryStream())
+                {
+                    fe.Extract(stream);
+                    using var reader = new BinaryReader(stream);
+                    cr2wFile = _parser.ReadRed4File(reader);
+                    if (cr2wFile == null)
+                    {
+                        return null;
+                    }
+                    if ((string)depotPath != null)
+                    {
+                        cr2wFile.MetaData.FileName = depotPath;
+                    }
+                }
+
+                lock (Files)
+                {
+                    foreach (var res in cr2wFile.EmbeddedFiles)
+                    {
+                        if (!Files.ContainsKey(res.FileName))
+                        {
+                            Files.Add(res.FileName, new CR2WFile()
+                            {
+                                RootChunk = res.Content
+                            });
+                        }
+                    }
+                }
+
+                return cr2wFile;
+            }
+            return null;
         }
 
         public RedDocumentTabViewModel OpenRefAsTab(string path)
