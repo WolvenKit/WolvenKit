@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Drawing.Text;
 using System.IO;
 using System.Runtime.InteropServices;
@@ -270,7 +271,9 @@ namespace WolvenKit.ViewModels.Documents
 
         [Reactive] public ImageSource Image { get; set; }
 
-        [Reactive] public object SelectedItem { get; set; }
+        [Reactive] public ObservableCollection<CHandle<inkWidget>> Widgets { get; set; } = new();
+
+        [Reactive] public CHandle<inkWidget> SelectedItem { get; set; }
 
         [Reactive] public bool IsDragging { get; set; }
 

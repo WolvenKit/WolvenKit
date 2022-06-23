@@ -58,7 +58,7 @@ namespace WolvenKit.Functionality.Layout.inkWidgets
                     continue;
                 }
 
-                foreach (var root in WidgetView.Widgets)
+                foreach (inkControl root in WidgetView.Widgets)
                 {
                     var element = root;
                     foreach (var index in info.Path)
@@ -96,7 +96,7 @@ namespace WolvenKit.Functionality.Layout.inkWidgets
                                     Interpolator = animTrnsp,
                                     Timelines = new List<AnimationTimeline>(new[] { timeline }),
                                     Paths = new List<PropertyPath>(new[] { new PropertyPath(UIElement.OpacityProperty) }),
-                                    Target = "element" + element.GetHashCode()
+                                    Target = "element" + element.Widget.GetHashCode()
                                 });
                             }
                             else
@@ -125,7 +125,7 @@ namespace WolvenKit.Functionality.Layout.inkWidgets
                                     Interpolator = animMargin,
                                     Timelines = new List<AnimationTimeline>(new[] { timeline }),
                                     Paths = new List<PropertyPath>(new[] { new PropertyPath(inkControl.MarginProperty) }),
-                                    Target = "element" + element.GetHashCode()
+                                    Target = "element" + element.Widget.GetHashCode()
                                 });
                             }
                             else
@@ -156,7 +156,7 @@ namespace WolvenKit.Functionality.Layout.inkWidgets
                                     Interpolator = animSize,
                                     Timelines = new List<AnimationTimeline>(new[] { widthTimeline, heightTimeline }),
                                     Paths = new List<PropertyPath>(new[] { new PropertyPath(inkControl.WidthProperty), new PropertyPath(inkControl.HeightProperty) }),
-                                    Target = "element" + element.GetHashCode()
+                                    Target = "element" + element.Widget.GetHashCode()
                                 });
                             }
                             else

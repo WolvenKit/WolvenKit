@@ -238,7 +238,8 @@ namespace WolvenKit.Functionality.Layout.inkWidgets
                 //ClipToBounds = true;
             }
 
-            WidgetView.RegisterName("element" + GetHashCode(), this);
+            WidgetView.RegisterName("element" + Widget.GetHashCode(), this);
+            //WidgetView.ViewModel.Widgets.Add(Widget);
 
             RenderTransformOrigin = ToPoint(Widget.RenderTransformPivot);
 
@@ -280,6 +281,16 @@ namespace WolvenKit.Functionality.Layout.inkWidgets
                 start = e.GetPosition(Parent);
                 initial = (inkMargin)Widget.Layout.Margin.DeepCopy();
                 CaptureMouse();
+                object oldWidget = null;
+                if (WidgetView.ViewModel.SelectedItem is CHandle<inkWidget> iwh)
+                {
+                    oldWidget = WidgetView.FindName("element" + iwh.GetHashCode());
+                }
+                WidgetView.ViewModel.SelectedItem = new CHandle<inkWidget>(Widget);
+                if (oldWidget is inkControl ic)
+                {
+                    ic.Render();
+                }
                 Render();
                 e.Handled = true;
             }
@@ -426,10 +437,15 @@ namespace WolvenKit.Functionality.Layout.inkWidgets
                     drawOpacity = 1.0;
                     debugOpacity = 255;
                 }
+                else if ((WidgetView.ViewModel.SelectedItem?.Chunk ?? null) == Widget)
+                {
+                    drawOpacity = 0.9;
+                    debugOpacity = 240;
+                }
                 else if (IsMouseOver)
                 {
-                    drawOpacity = 0.5;
-                    debugOpacity = 100;
+                    drawOpacity = 0.75;
+                    debugOpacity = 127;
                 }
 
                 dc.DrawText(new FormattedText(Name, CultureInfo.CurrentCulture, FlowDirection.LeftToRight, new Typeface("Arial"), 4D, new SolidColorBrush(Color.FromArgb(debugOpacity, 255, 255, 255)), 96D)

@@ -12,6 +12,7 @@ using System.Windows.Media.Imaging;
 using Microsoft.Win32;
 using Prism.Commands;
 using ReactiveUI;
+using Syncfusion.UI.Xaml.TreeGrid;
 using WolvenKit.Functionality.Layout.inkWidgets;
 using WolvenKit.RED4.Archive.Buffer;
 using WolvenKit.RED4.Types;
@@ -69,6 +70,7 @@ namespace WolvenKit.Views.Documents
                 }
                 var stack = new StackPanel();
                 Widgets.Clear();
+                ViewModel.Widgets.Clear();
                 WidgetPreview.Children.Clear();
                 WidgetPreview.Children.Add(stack);
 
@@ -110,6 +112,7 @@ namespace WolvenKit.Views.Documents
 
                     var widget = root.CreateControl(this);
                     Widgets.Add(widget);
+                    ViewModel.Widgets.Add(new CHandle<inkWidget>(root));
                     stack.Children.Add(widget);
                 }
 
@@ -315,6 +318,102 @@ namespace WolvenKit.Views.Documents
             foreach (var widget in Widgets)
             {
                 widget.RenderRecursive();
+            }
+        }
+
+        private void SfTreeGrid_SelectionChanged(object sender, Syncfusion.UI.Xaml.Grid.GridSelectionChangedEventArgs e)
+        {
+            foreach (TreeGridRowInfo info in e.RemovedItems)
+            {
+                if (FindName("element" + info.RowData.GetHashCode()) is inkControl ic)
+                {
+                    ic.Render();
+                }
+            }
+            foreach (TreeGridRowInfo info in e.AddedItems)
+            {
+                if (FindName("element" + info.RowData.GetHashCode()) is inkControl ic)
+                {
+                    ic.Render();
+                }
+            }
+        }
+
+        private void SfTreeView_SelectionChanged(object sender, Syncfusion.UI.Xaml.TreeView.ItemSelectionChangedEventArgs e)
+        {
+            foreach (CHandle<inkWidget> iwh in e.RemovedItems)
+            {
+                if (FindInkControl(iwh) is inkControl ic)
+                {
+                    ic.Render();
+                }
+            }
+            foreach (CHandle<inkWidget> iwh in e.AddedItems)
+            {
+                if (FindInkControl(iwh) is inkControl ic)
+                {
+                    ic.Render();
+
+                }
+            }
+        }
+
+        private void TreeViewAdv_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            foreach (CHandle<inkWidget> iwh in e.RemovedItems)
+            {
+                if (FindInkControl(iwh) is inkControl ic)
+                {
+                    ic.Render();
+                }
+            }
+            foreach (CHandle<inkWidget> iwh in e.AddedItems)
+            {
+                if (FindInkControl(iwh) is inkControl ic)
+                {
+                    ic.Render();
+
+                }
+            }
+        }
+
+        public inkControl FindInkControl(CHandle<inkWidget> iwh)
+        {
+            if (FindName("element" + iwh.Chunk.GetHashCode()) is inkControl ic)
+            {
+                return ic;
+            } else
+            {
+                return null;
+            }
+        }
+
+        private void CheckBox_Checked(object sender, RoutedEventArgs e)
+        {
+            if (sender is CheckBox cb && cb.DataContext is CHandle<inkWidget> iwh) 
+            {
+                if (FindInkControl(iwh) is inkControl ic)
+                {
+                    ic.Visibility = Visibility.Visible;
+                }
+            }
+        }
+
+        private void CheckBox_Unchecked(object sender, RoutedEventArgs e)
+        {
+            if (sender is CheckBox cb && cb.DataContext is CHandle<inkWidget> iwh)
+            {
+                if (FindInkControl(iwh) is inkControl ic)
+                {
+                    if (iwh.Chunk.AffectsLayoutWhenHidden)
+                    {
+                        ic.Visibility = Visibility.Hidden;
+                    }
+                    else
+                    {
+                        ic.Visibility = Visibility.Collapsed;
+                    }
+                }
             }
         }
     }
