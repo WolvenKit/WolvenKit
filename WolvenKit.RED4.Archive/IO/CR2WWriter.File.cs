@@ -444,14 +444,9 @@ namespace WolvenKit.RED4.Archive.IO
 
         private string GetClassName(RedBaseClass cls)
         {
-            if (cls is DynamicResource dres)
+            if (cls is DynamicRedClass drc)
             {
-                return dres.ClassName;
-            }
-
-            if (cls is DynamicBaseClass dbc)
-            {
-                return dbc.ClassName;
+                return drc.ClassName;
             }
 
             return RedReflection.GetTypeRedName(cls.GetType());

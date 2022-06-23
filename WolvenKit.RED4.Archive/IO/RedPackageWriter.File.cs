@@ -109,9 +109,9 @@ namespace WolvenKit.RED4.Archive.IO
                     foreach (var chunk in _file.Chunks)
                     {
                         ulong hash;
-                        if (chunk is DynamicBaseClass dbc)
+                        if (chunk is DynamicRedClass drc)
                         {
-                            hash = FNV1A64HashAlgorithm.HashString(dbc.ClassName);
+                            hash = FNV1A64HashAlgorithm.HashString(drc.ClassName);
                         }
                         else
                         {
@@ -298,9 +298,9 @@ namespace WolvenKit.RED4.Archive.IO
 
         private string GetClassName(RedBaseClass cls)
         {
-            if (cls is DynamicBaseClass dbc)
+            if (cls is DynamicRedClass drc)
             {
-                return dbc.ClassName;
+                return drc.ClassName;
             }
 
             return RedReflection.GetTypeRedName(cls.GetType());
