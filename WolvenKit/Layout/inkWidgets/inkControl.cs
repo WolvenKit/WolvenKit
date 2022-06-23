@@ -315,6 +315,7 @@ namespace WolvenKit.Functionality.Layout.inkWidgets
                 var change = start - e.GetPosition(Parent);
                 Widget.Layout.Margin.Left = initial.Left - (float)Math.Round(change.X);
                 Widget.Layout.Margin.Top = initial.Top - (float)Math.Round(change.Y);
+                
                 SetCurrentValue(MarginProperty, ToThickness(Widget.Layout.Margin));
                 if (VisualParent is inkControl ic)
                 {

@@ -3,18 +3,12 @@ using System.Globalization;
 using System.Windows;
 using System.Windows.Data;
 using WolvenKit.RED4.Types;
+using System.Windows.Media;
 
 namespace WolvenKit.Functionality.Converters
 {
-    /// <summary>
-    /// Source: http://stackoverflow.com/questions/534575/how-do-i-invert-booleantovisibilityconverter
-    ///
-    /// Implements a Boolean to Visibility converter
-    /// Use ConverterParameter=true to negate the visibility - boolean interpretation.
-    /// </summary>
-
-    [ValueConversion(typeof(CBool), typeof(System.Boolean))]
-    public sealed class CBoolToBooleanConverter : IValueConverter
+    [ValueConversion(typeof(HDRColor), typeof(Color))]
+    public sealed class HDRColorConverter : IValueConverter
     {
         /// <summary>
         /// Converts a <seealso cref="CBool"/> value
@@ -27,12 +21,13 @@ namespace WolvenKit.Functionality.Converters
         /// <returns></returns>
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            if (value is CBool cb)
+            if (value is HDRColor hdr)
             {
-                bool b = (bool)cb;
-                return (bool?)b;
+                return Color.FromArgb((byte)(hdr.Alpha * 255), (byte)(hdr.Red * 255), (byte)(hdr.Green * 255), (byte)(hdr.Blue * 255));
+            } else
+            {
+                return null;
             }
-            return (bool?)false;
         }
 
         /// <summary>
@@ -46,7 +41,20 @@ namespace WolvenKit.Functionality.Converters
         /// <returns></returns>
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            return (CBool)(bool)value;
+            if (value is Color color)
+            {
+                return new HDRColor()
+                {
+                    Red = color.R / 255F,
+                    Green = color.G / 255F,
+                    Blue = color.B / 255F,
+                    Alpha = color.A / 255F
+                };
+            }
+            else
+            {
+                return null;
+            }
         }
     }
 }

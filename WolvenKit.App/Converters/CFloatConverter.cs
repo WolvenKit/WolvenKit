@@ -13,8 +13,8 @@ namespace WolvenKit.Functionality.Converters
     /// Use ConverterParameter=true to negate the visibility - boolean interpretation.
     /// </summary>
 
-    [ValueConversion(typeof(CBool), typeof(System.Boolean))]
-    public sealed class CBoolToBooleanConverter : IValueConverter
+    [ValueConversion(typeof(CFloat), typeof(double))]
+    public sealed class CFloatConverter : IValueConverter
     {
         /// <summary>
         /// Converts a <seealso cref="CBool"/> value
@@ -27,12 +27,11 @@ namespace WolvenKit.Functionality.Converters
         /// <returns></returns>
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            if (value is CBool cb)
+            if (value is CFloat f)
             {
-                bool b = (bool)cb;
-                return (bool?)b;
+                return (double)(float)f;
             }
-            return (bool?)false;
+            return 0.0;
         }
 
         /// <summary>
@@ -46,7 +45,7 @@ namespace WolvenKit.Functionality.Converters
         /// <returns></returns>
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            return (CBool)(bool)value;
+            return (CFloat)System.Convert.ToSingle(value);
         }
     }
 }

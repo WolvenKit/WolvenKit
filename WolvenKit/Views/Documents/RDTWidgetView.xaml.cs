@@ -17,6 +17,7 @@ using WolvenKit.Functionality.Layout.inkWidgets;
 using WolvenKit.RED4.Archive.Buffer;
 using WolvenKit.RED4.Types;
 using WolvenKit.ViewModels.Documents;
+using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.Views.Documents
 {
@@ -43,10 +44,12 @@ namespace WolvenKit.Views.Documents
 
                 //}).DisposeWith(disposables);
 
-                this.OneWayBind(ViewModel,
-                        x => x.TextWidgets.Values,
-                        x => x.TextWidgetList.ItemsSource)
-                    .DisposeWith(disposables);
+                //this.OneWayBind(ViewModel,
+                //        x => x.TextWidgets.Values,
+                //        x => x.TextWidgetList.ItemsSource)
+                //    .DisposeWith(disposables);
+
+                inkEAnchorComboBox.SetCurrentValue(ItemsControl.ItemsSourceProperty, Enum.GetValues(typeof(inkEAnchor)));
 
                 ExportWidgetCommand = new DelegateCommand<object>((w) => ViewModel.ExportWidget((inkWidget)w));
 
@@ -115,6 +118,7 @@ namespace WolvenKit.Views.Documents
                     ViewModel.Widgets.Add(new CHandle<inkWidget>(root));
                     stack.Children.Add(widget);
                 }
+                WidgetTreeView.ExpandAll();
 
                 WidgetExportButtons.SetCurrentValue(ItemsControl.ItemsSourceProperty, Widgets.Select(x => x.Widget));
 
@@ -321,6 +325,15 @@ namespace WolvenKit.Views.Documents
             }
         }
 
+        private void ChangedAnchor(object sender, SelectionChangedEventArgs e)
+        {
+            if (TryFindInkControl(ViewModel.SelectedItem, out var ic) && ic.Parent is not null)
+            {
+                ic.Parent.InvalidateArrange();
+                ic.Render();
+            }
+        }
+
         private void SfTreeGrid_SelectionChanged(object sender, Syncfusion.UI.Xaml.Grid.GridSelectionChangedEventArgs e)
         {
             foreach (TreeGridRowInfo info in e.RemovedItems)
@@ -362,14 +375,14 @@ namespace WolvenKit.Views.Documents
         {
             foreach (CHandle<inkWidget> iwh in e.RemovedItems)
             {
-                if (FindInkControl(iwh) is inkControl ic)
+                if (TryFindInkControl(iwh, out var ic))
                 {
                     ic.Render();
                 }
             }
             foreach (CHandle<inkWidget> iwh in e.AddedItems)
             {
-                if (FindInkControl(iwh) is inkControl ic)
+                if (TryFindInkControl(iwh, out var ic))
                 {
                     ic.Render();
 
@@ -382,9 +395,24 @@ namespace WolvenKit.Views.Documents
             if (FindName("element" + iwh.Chunk.GetHashCode()) is inkControl ic)
             {
                 return ic;
-            } else
+            }
+            else
             {
                 return null;
+            }
+        }
+
+        public bool TryFindInkControl(CHandle<inkWidget> iwh, out inkControl ic)
+        {
+            if (iwh is not null && FindName("element" + iwh.Chunk.GetHashCode()) is inkControl tempIc && tempIc is not null)
+            {
+                ic = tempIc;
+                return true;
+            }
+            else
+            {
+                ic = null;
+                return false;
             }
         }
 
@@ -392,7 +420,7 @@ namespace WolvenKit.Views.Documents
         {
             if (sender is CheckBox cb && cb.DataContext is CHandle<inkWidget> iwh) 
             {
-                if (FindInkControl(iwh) is inkControl ic)
+                if (TryFindInkControl(iwh, out var ic))
                 {
                     ic.Visibility = Visibility.Visible;
                 }
@@ -403,7 +431,7 @@ namespace WolvenKit.Views.Documents
         {
             if (sender is CheckBox cb && cb.DataContext is CHandle<inkWidget> iwh)
             {
-                if (FindInkControl(iwh) is inkControl ic)
+                if (TryFindInkControl(iwh, out var ic))
                 {
                     if (iwh.Chunk.AffectsLayoutWhenHidden)
                     {
@@ -414,6 +442,46 @@ namespace WolvenKit.Views.Documents
                         ic.Visibility = Visibility.Collapsed;
                     }
                 }
+            }
+        }
+
+        private void ColorEdit_ColorChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            if (TryFindInkControl(ViewModel.SelectedItem, out var ic))
+            {
+                ic.Render();
+            }
+        }
+
+        private void WidthChanged(object sender, TextChangedEventArgs e)
+        {
+
+        }
+
+        private void WidthChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            if (TryFindInkControl(ViewModel.SelectedItem, out var ic) && ic.Parent is not null)
+            {
+                ic.Width = e.NewValue;
+                ic.InvalidateMeasure();
+                ic.Parent.InvalidateArrange();
+                ic.Render();
+            }
+        }
+
+        private void HeightChanged(object sender, TextChangedEventArgs e)
+        {
+
+        }
+
+        private void HeightChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            if (TryFindInkControl(ViewModel.SelectedItem, out var ic) && ic.Parent is not null)
+            {
+                ic.Height = e.NewValue;
+                ic.InvalidateMeasure();
+                ic.Parent.InvalidateArrange();
+                ic.Render();
             }
         }
     }

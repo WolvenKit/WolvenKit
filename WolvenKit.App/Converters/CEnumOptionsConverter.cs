@@ -3,18 +3,13 @@ using System.Globalization;
 using System.Windows;
 using System.Windows.Data;
 using WolvenKit.RED4.Types;
+using System.Windows.Media;
+using System.Collections.Generic;
 
 namespace WolvenKit.Functionality.Converters
 {
-    /// <summary>
-    /// Source: http://stackoverflow.com/questions/534575/how-do-i-invert-booleantovisibilityconverter
-    ///
-    /// Implements a Boolean to Visibility converter
-    /// Use ConverterParameter=true to negate the visibility - boolean interpretation.
-    /// </summary>
-
-    [ValueConversion(typeof(CBool), typeof(System.Boolean))]
-    public sealed class CBoolToBooleanConverter : IValueConverter
+    [ValueConversion(typeof(CEnum), typeof(List<string>))]
+    public sealed class CEnumOptionsConverter : IValueConverter
     {
         /// <summary>
         /// Converts a <seealso cref="CBool"/> value
@@ -27,12 +22,16 @@ namespace WolvenKit.Functionality.Converters
         /// <returns></returns>
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            if (value is CBool cb)
+            var list = new List<string>();
+            if (value.GetType().IsGenericType)
             {
-                bool b = (bool)cb;
-                return (bool?)b;
+                var type = value.GetType().GenericTypeArguments[0];
+                foreach (var v in type.GetEnumValues())
+                {
+                    list.Add(v.ToString());
+                }
             }
-            return (bool?)false;
+            return list;
         }
 
         /// <summary>
@@ -46,7 +45,7 @@ namespace WolvenKit.Functionality.Converters
         /// <returns></returns>
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            return (CBool)(bool)value;
+            return null;
         }
     }
 }

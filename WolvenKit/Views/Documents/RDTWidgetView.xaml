@@ -35,18 +35,58 @@
                     <ResourceDictionary Source="pack://application:,,,/AdonisUI.ClassicTheme;component/Resources.xaml" />
                 </ResourceDictionary.MergedDictionaries-->
                 <converters:CBoolToBooleanConverter x:Key="cBoolToBool" />
+                <converters:TypeNameConverter x:Key="typeName" />
+                <converters:HDRColorConverter x:Key="hdrColor" />
+                <converters:CEnumConverter x:Key="cenum" />
+                <converters:CEnumOptionsConverter x:Key="cenumOptions" />
+                <converters:CFloatConverter x:Key="cfloat" />
+                <converters:CNameConverter x:Key="cname" />
             </ResourceDictionary>
         </Grid.Resources>
         <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="1*" />
+            <ColumnDefinition Width="5" />
             <ColumnDefinition Width="4*" />
             <ColumnDefinition Width="5" />
             <ColumnDefinition Width="1*" />
         </Grid.ColumnDefinitions>
 
 
-        <syncfusion:SfGridSplitter Grid.Column="1" HorizontalAlignment="Stretch" />
-        <Border
+
+        <ScrollViewer
             Grid.Column="0"
+            Margin="-1,-1,-1,-1"
+            Padding="0"
+            VerticalScrollBarVisibility="Auto">
+            <syncfusion:SfTreeView
+                x:Name="WidgetTreeView"
+                AutoExpandMode="AllNodes"
+                ChildPropertyName="Chunk.Children.Chunk.Children"
+                ItemsSource="{Binding Widgets}"
+                NodePopulationMode="Instant"
+                SelectedItem="{Binding SelectedItem, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                SelectionChanged="SfTreeView_SelectionChanged"
+                ShowLines="True">
+                <syncfusion:SfTreeView.ItemTemplate>
+                    <HierarchicalDataTemplate ItemsSource="{Binding Chunk.Children.Chunk.Children}">
+                        <StackPanel Orientation="Horizontal">
+                            <CheckBox
+                                Margin="0,0,5,0"
+                                Checked="CheckBox_Checked"
+                                IsChecked="{Binding Chunk.Visible, Mode=TwoWay, Converter={StaticResource cBoolToBool}}"
+                                Unchecked="CheckBox_Unchecked" />
+                            <TextBlock Text="{Binding Chunk.Name, StringFormat='\{0} '}" />
+                            <TextBlock Foreground="{StaticResource WolvenKitTan}" Text="{Binding Chunk, Converter={StaticResource typeName}}" />
+                        </StackPanel>
+                    </HierarchicalDataTemplate>
+                </syncfusion:SfTreeView.ItemTemplate>
+            </syncfusion:SfTreeView>
+        </ScrollViewer>
+
+        <syncfusion:SfGridSplitter Grid.Column="1" HorizontalAlignment="Stretch" />
+
+        <Border
+            Grid.Column="2"
             Padding="0"
             Background="{StaticResource ContentBackground}"
             BorderThickness="1"
@@ -65,12 +105,193 @@
             </Border>
         </Border>
 
+        <syncfusion:SfGridSplitter Grid.Column="3" HorizontalAlignment="Stretch" />
+
         <ScrollViewer
-            Grid.Column="2"
-            Margin="0,-1,0,0"
+            Grid.Column="4"
+            Margin="-1,-1,-1,-1"
             Padding="0"
             VerticalScrollBarVisibility="Auto">
             <StackPanel Orientation="Vertical">
+                <!--
+                    TextBlock
+                    Margin="5,5"
+                    FontSize="12"
+                    Foreground="{StaticResource WolvenKitTan}"
+                    Text="{Binding SelectedItem.Chunk, Converter={StaticResource typeName}, StringFormat='{} Properties', UpdateSourceTrigger=PropertyChanged}" /
+                -->
+                <TextBlock
+                    Margin="5,5"
+                    Foreground="{StaticResource WolvenKitTan}"
+                    Text="inkWidget Properties" />
+                <Border BorderBrush="{StaticResource BorderAlt}" BorderThickness="0,1,0,0" />
+
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition />
+                        <ColumnDefinition />
+                    </Grid.ColumnDefinitions>
+                    <TextBlock
+                        Margin="5,5"
+                        VerticalAlignment="Center"
+                        FontWeight="Bold"
+                        Text="Name" />
+                    <TextBox
+                        Grid.Column="1"
+                        Margin="5,5"
+                        Text="{Binding SelectedItem.Chunk.Name, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource cname}}" />
+
+                </Grid>
+
+                <!--TextBlock
+                    Margin="5,5"
+                    VerticalAlignment="Center"
+                    FontWeight="Bold"
+                    Text="Text" />
+                <TextBox Margin="5,5" Text="{Binding SelectedItem.Chunk.Text, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource cname}}" /-->
+
+
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition />
+                        <ColumnDefinition Width="30" />
+                    </Grid.ColumnDefinitions>
+                    <TextBlock
+                        Margin="5,5"
+                        VerticalAlignment="Center"
+                        FontWeight="Bold"
+                        Text="Affects layout when hidden" />
+                    <CheckBox
+                        Grid.ColumnSpan="2"
+                        Margin="5,5"
+                        HorizontalAlignment="Right"
+                        IsChecked="{Binding SelectedItem.Chunk.AffectsLayoutWhenHidden, Mode=TwoWay, Converter={StaticResource cBoolToBool}}" />
+                </Grid>
+                <TextBlock
+                    Margin="5,5"
+                    VerticalAlignment="Center"
+                    FontWeight="Bold"
+                    Text="Margin" />
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition />
+                        <ColumnDefinition />
+                        <ColumnDefinition />
+                        <ColumnDefinition />
+                    </Grid.ColumnDefinitions>
+                    <TextBox
+                        Grid.Column="0"
+                        Margin="5,0,2.5,0"
+                        Text="{Binding SelectedItem.Chunk.Layout.Margin.Left, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource cfloat}}" />
+                    <TextBox
+                        Grid.Column="1"
+                        Margin="2.5,0,2.5,0"
+                        Text="{Binding SelectedItem.Chunk.Layout.Margin.Top, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource cfloat}}" />
+                    <TextBox
+                        Grid.Column="2"
+                        Margin="2.5,0,2.5,0"
+                        Text="{Binding SelectedItem.Chunk.Layout.Margin.Right, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource cfloat}}" />
+                    <TextBox
+                        Grid.Column="3"
+                        Margin="2.5,0,5,0"
+                        Text="{Binding SelectedItem.Chunk.Layout.Margin.Bottom, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource cfloat}}" />
+                </Grid>
+
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition />
+                        <ColumnDefinition />
+                    </Grid.ColumnDefinitions>
+                    <TextBlock
+                        Margin="5,5"
+                        VerticalAlignment="Center"
+                        FontWeight="Bold"
+                        Text="Anchor" />
+                    <ComboBox
+                        x:Name="inkEAnchorComboBox"
+                        Grid.Column="1"
+                        SelectedItem="{Binding SelectedItem.Chunk.Layout.Anchor, Mode=TwoWay, Converter={StaticResource cenum}, UpdateSourceTrigger=PropertyChanged}"
+                        SelectionChanged="ChangedAnchor" />
+                </Grid>
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition />
+                        <ColumnDefinition />
+                    </Grid.ColumnDefinitions>
+                    <TextBlock
+                        Margin="5,5"
+                        VerticalAlignment="Center"
+                        FontWeight="Bold"
+                        Text="Width" />
+                    <TextBox
+                        Grid.Column="1"
+                        Text="{Binding SelectedItem.Chunk.Size.X, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource cfloat}}"
+                        TextChanged="WidthChanged" />
+                </Grid>
+                <syncfusion:SfRangeSlider
+                    Margin="5"
+                    Maximum="3840"
+                    Minimum="0"
+                    MinorTickFrequency="4"
+                    SnapsTo="StepValues"
+                    StepFrequency="1"
+                    TickFrequency="480"
+                    ValueChanged="WidthChanged"
+                    Value="{Binding SelectedItem.Chunk.Size.X, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource cfloat}}" />
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition />
+                        <ColumnDefinition />
+                    </Grid.ColumnDefinitions>
+                    <TextBlock
+                        Margin="5,5"
+                        VerticalAlignment="Center"
+                        FontWeight="Bold"
+                        Text="Height" />
+                    <TextBox
+                        Grid.Column="1"
+                        Text="{Binding SelectedItem.Chunk.Size.Y, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource cfloat}}"
+                        TextChanged="HeightChanged" />
+                </Grid>
+                <syncfusion:SfRangeSlider
+                    Margin="5"
+                    Maximum="2160"
+                    Minimum="0"
+                    MinorTickFrequency="4"
+                    SnapsTo="StepValues"
+                    StepFrequency="1"
+                    TickFrequency="270"
+                    ValueChanged="HeightChanged"
+                    Value="{Binding SelectedItem.Chunk.Size.Y, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource cfloat}}" />
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock
+                        Margin="5,5"
+                        FontWeight="Bold"
+                        Text="TintColor" />
+                    <TextBlock
+                        Margin="2.5,5"
+                        Foreground="Red"
+                        Text="{Binding SelectedItem.Chunk.TintColor.Red, UpdateSourceTrigger=PropertyChanged}" />
+                    <TextBlock
+                        Margin="2.5,5"
+                        Foreground="Green"
+                        Text="{Binding SelectedItem.Chunk.TintColor.Green, UpdateSourceTrigger=PropertyChanged}" />
+                    <TextBlock
+                        Margin="2.5,5"
+                        Foreground="Blue"
+                        Text="{Binding SelectedItem.Chunk.TintColor.Blue, UpdateSourceTrigger=PropertyChanged}" />
+                </StackPanel>
+                <syncfusion:ColorEdit
+                    ColorChanged="ColorEdit_ColorChanged"
+                    EnableGradientToSolidSwitch="False"
+                    IsGradientPropertyEnabled="False"
+                    Color="{Binding SelectedItem.Chunk.TintColor, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource hdrColor}}" />
+
+                <TextBlock
+                    Margin="5,5"
+                    Foreground="{StaticResource WolvenKitTan}"
+                    Text="Global Properties" />
+                <Border BorderBrush="{StaticResource BorderAlt}" BorderThickness="0,1,0,0" />
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition />
@@ -178,7 +399,7 @@
                         Text="inkTextWidgets" />
                 </StackPanel>
                 <Border BorderBrush="{StaticResource BorderAlt}" BorderThickness="0,1,0,0" />
-                <ItemsControl x:Name="TextWidgetList">
+                <ItemsControl ItemsSource="{Binding TextWidgets.Values, UpdateSourceTrigger=PropertyChanged}">
                     <ItemsControl.ItemsPanel>
                         <ItemsPanelTemplate>
                             <StackPanel Orientation="Vertical" />
@@ -224,7 +445,7 @@
                         Text="Style Bindings" />
                 </StackPanel>
                 <Border BorderBrush="{StaticResource BorderAlt}" BorderThickness="0,1,0,0" />
-                <ItemsControl ItemsSource="{Binding Bindings}">
+                <ItemsControl ItemsSource="{Binding Bindings, UpdateSourceTrigger=PropertyChanged}">
                     <ItemsControl.ItemsPanel>
                         <ItemsPanelTemplate>
                             <StackPanel Orientation="Vertical" />
@@ -252,7 +473,7 @@
                         Text="Effects" />
                 </StackPanel>
                 <Border BorderBrush="{StaticResource BorderAlt}" BorderThickness="0,1,0,0" />
-                <ItemsControl ItemsSource="{Binding inkEffects}">
+                <ItemsControl ItemsSource="{Binding inkEffects, UpdateSourceTrigger=PropertyChanged}">
                     <ItemsControl.ItemsPanel>
                         <ItemsPanelTemplate>
                             <StackPanel Orientation="Vertical" />
@@ -318,29 +539,12 @@
                         <syncfusion:TreeGridTextColumn ValueBinding="{Binding Name}" />
                     </syncfusion:SfTreeGrid.Columns>
                 </syncfusion:SfTreeGrid-->
-                <syncfusion:SfTreeView
-                    AutoExpandMode="AllNodes"
-                    ChildPropertyName="Chunk.Children.Chunk.Children"
-                    ItemsSource="{Binding Widgets}"
-                    SelectedItem="{Binding SelectedItem, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                    SelectionChanged="SfTreeView_SelectionChanged"
-                    ShowLines="True">
-                    <syncfusion:SfTreeView.ItemTemplate>
-                        <HierarchicalDataTemplate ItemsSource="{Binding Chunk.Children.Chunk.Children}">
-                            <StackPanel Orientation="Horizontal">
-                                <CheckBox
-                                    Margin="0,0,5,0"
-                                    Checked="CheckBox_Checked"
-                                    IsChecked="{Binding Chunk.Visible, Converter={StaticResource cBoolToBool}}"
-                                    Unchecked="CheckBox_Unchecked" />
-                                <TextBlock Text="{Binding Chunk.Name}" />
-                            </StackPanel>
-                        </HierarchicalDataTemplate>
-                    </syncfusion:SfTreeView.ItemTemplate>
-                </syncfusion:SfTreeView>
             </StackPanel>
         </ScrollViewer>
-        <StackPanel HorizontalAlignment="Right" VerticalAlignment="Top">
+        <StackPanel
+            Grid.Column="2"
+            HorizontalAlignment="Right"
+            VerticalAlignment="Top">
             <Button
                 Margin="5,5,5,0"
                 Padding="7,2"
@@ -355,6 +559,7 @@
         </StackPanel>
         <TextBlock
             x:Name="ZoomText"
+            Grid.Column="2"
             Margin="4,4"
             HorizontalAlignment="Right"
             VerticalAlignment="Bottom"
