@@ -74,7 +74,17 @@ namespace WolvenKit.RED4.Types
 
 
         public RedBaseClass GetValue() => Chunk;
-        public void SetValue(RedBaseClass cls) => Chunk = (T)cls;
+        public void SetValue(RedBaseClass cls)
+        {
+            if (cls is DynamicBaseClass dbc)
+            {
+                Chunk = dbc.Convert<T>();
+            }
+            else
+            {
+                Chunk = (T)cls;
+            }
+        }
 
 
         public CHandle(){}

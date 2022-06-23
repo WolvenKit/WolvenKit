@@ -1,11 +1,63 @@
 namespace WolvenKit.RED4.Types;
 
-public class DynamicBaseClass : RedBaseClass
+public interface DynamicRedClass
 {
-    public string ClassName;
+    public CName ClassName { get; set; }
 }
 
-public class DynamicResource : CResource
+public class DynamicBaseClass : RedBaseClass, DynamicRedClass
 {
-    public string ClassName;
+    //public string ClassName;
+    [RED("className")]
+    [REDProperty(IsIgnored = true)]
+    public CName ClassName
+    {
+        get => GetPropertyValue<CName>();
+        set => SetPropertyValue<CName>(value);
+    }
+
+    public T Convert<T>() where T : RedBaseClass
+    {
+        if (typeof(T) == typeof(inkIWidgetController))
+        {
+            return (T)(RedBaseClass)ToDynamicWidgetController();
+        }
+        else
+        {
+            return default(T);
+        }
+    }
+
+    public DynamicWidgetController ToDynamicWidgetController()
+    {
+        var dwc = new DynamicWidgetController();
+        foreach (var prop in GetDynamicPropertyNames())
+        {
+            dwc.SetProperty(prop, GetProperty(prop));
+        } 
+        dwc.ClassName = ClassName;
+        return dwc;
+    }
+}
+
+public class DynamicResource : CResource, DynamicRedClass
+{
+    [RED("className")]
+    [REDProperty(IsIgnored = true)]
+    public CName ClassName
+    {
+        get => GetPropertyValue<CName>();
+        set => SetPropertyValue<CName>(value);
+    }
+}
+
+public class DynamicWidgetController : inkIWidgetController, DynamicRedClass
+{
+    [RED("className")]
+    [REDProperty(IsIgnored = true)]
+    public CName ClassName
+    {
+        get => GetPropertyValue<CName>();
+        set => SetPropertyValue<CName>(value);
+    }
 }

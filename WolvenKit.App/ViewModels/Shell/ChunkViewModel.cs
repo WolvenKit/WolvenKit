@@ -367,11 +367,11 @@ namespace WolvenKit.ViewModels.Shell
                     }
                 }
             }
-            else if (obj is inkWidgetReference iwr)
-            {
-                // need to add XPath somewhere in the data structure
-                Properties.Add(new ChunkViewModel((CString)"TODO", this));
-            }
+            //else if (obj is inkWidgetReference iwr)
+            //{
+            //    // need to add XPath somewhere in the data structure
+            //    Properties.Add(new ChunkViewModel((CString)"TODO", this));
+            //}
             else if (obj is RedBaseClass redClass)
             {
                 var pis = GetTypeInfo(redClass).PropertyInfos.Sort((a, b) => a.Name.CompareTo(b.Name));
@@ -381,12 +381,12 @@ namespace WolvenKit.ViewModels.Shell
 
                 for (var i = 0; i < pis.Count + dps.Count; i++)
                 {
-                    if (s_hiddenProperties.Contains(obj.GetType().Name + "." + pis[i].RedName))
-                    {
-                        continue;
-                    }
                     if (pis.Count > i)
                     {
+                        if (s_hiddenProperties.Contains(obj.GetType().Name + "." + pis[i].RedName))
+                        {
+                            continue;
+                        }
                         var name = !string.IsNullOrEmpty(pis[i].RedName) ? pis[i].RedName : pis[i].Name;
 
                         Properties.Add(new ChunkViewModel(redClass.GetProperty(name), this, pis[i].RedName)
@@ -785,7 +785,23 @@ namespace WolvenKit.ViewModels.Shell
             }
         }
 
-        public string ResolvedType => ResolvedPropertyType is not null ? (GetTypeRedName(ResolvedPropertyType) ?? ResolvedPropertyType.Name) : "";
+        public string ResolvedType {
+            get {
+                if (ResolvedData is DynamicRedClass drc)
+                {
+                    return drc.ClassName;
+                }
+                else if (ResolvedPropertyType is not null)
+                {
+                    var redType = GetTypeRedName(ResolvedPropertyType);
+                    return redType ?? "";
+                }
+                else
+                {
+                    return ResolvedPropertyType.Name;
+                }
+            }
+        }
 
         public bool TypesDiffer => PropertyType != ResolvedPropertyType;
 
@@ -814,10 +830,10 @@ namespace WolvenKit.ViewModels.Shell
                     {
                         count += 2;
                     }
-                    else if (ResolvedData is inkWidgetReference)
-                    {
-                        count += 1; // TODO
-                    }
+                    //else if (ResolvedData is inkWidgetReference)
+                    //{
+                    //    count += 1; // TODO
+                    //}
                     else if (Data is TweakDBID tdb)
                     {
                         // not actual
