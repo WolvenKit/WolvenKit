@@ -677,6 +677,24 @@ public class RedClassConverter : JsonConverter<RedBaseClass>, ICustomRedConverte
             {
                 reader.Read();
                 val = conv.ReadRedType(ref reader, valInfo.Type, options);
+
+                if (val is IRedBufferPointer buf)
+                {
+                    buf.GetValue().ParentTypes.Add($"{cls.GetType().Name}.{key}");
+                    buf.GetValue().Parent = cls;
+                }
+
+                if (val is IRedArray arr)
+                {
+                    if (typeof(IRedBufferPointer).IsAssignableFrom(arr.InnerType))
+                    {
+                        foreach (IRedBufferPointer entry in arr)
+                        {
+                            entry.GetValue().ParentTypes.Add($"{cls.GetType().Name}.{key}");
+                            entry.GetValue().Parent = cls;
+                        }
+                    }
+                }
             }
             else
             {
