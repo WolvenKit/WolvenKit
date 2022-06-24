@@ -28,8 +28,6 @@ namespace WolvenKit.RED4.Archive.IO
             var result = new RedPackage();
             _outputFile = result;
 
-            result.Settings = Settings;
-
             header.version = BaseReader.ReadUInt16();
             if (header.version < 2 || header.version > 4)
             {
