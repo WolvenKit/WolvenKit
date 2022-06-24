@@ -18,6 +18,7 @@ using WolvenKit.Common;
 using WolvenKit.Common.Services;
 using WolvenKit.Functionality.Commands;
 using WolvenKit.Functionality.Controllers;
+using WolvenKit.Interaction;
 using WolvenKit.Models;
 using WolvenKit.RED4;
 using WolvenKit.RED4.Archive.Buffer;
@@ -170,6 +171,7 @@ namespace WolvenKit.ViewModels.Shell
             PasteHandleCommand = new DelegateCommand(ExecutePasteHandle, CanPasteHandle);
             PasteSelectionCommand = new DelegateCommand(ExecutePasteSelection, CanPasteSelection);
             CopyHandleCommand = new DelegateCommand(ExecuteCopyHandle, CanCopyHandle);
+            CreateDynamicPropertyCommand = new DelegateCommand(ExecuteCreateDynamicProperty, CanCreateDynamicProperty);
         }
 
 
@@ -2515,6 +2517,47 @@ namespace WolvenKit.ViewModels.Shell
                         break;
                     }
                 }
+            }
+        }
+
+        // Dynamic Properties
+
+        public ICommand CreateDynamicPropertyCommand { get; private set; }
+        private bool CanCreateDynamicProperty() => ResolvedData is DynamicRedClass;
+        private void ExecuteCreateDynamicProperty()
+        {
+            if (ResolvedData is RedBaseClass rbc)
+            {
+                var existing = new ObservableCollection<string>();
+                foreach (var prop in rbc.GetDynamicPropertyNames()) {
+                    existing.Add(rbc.GetProperty(prop).RedType);
+                }
+                var app = Locator.Current.GetService<AppViewModel>();
+                app.SetActiveDialog(new CreateClassDialogViewModel(existing, true)
+                {
+                    DialogHandler = HandleNewDynamicProperty
+                });
+            }
+        }
+
+        public async void HandleNewDynamicProperty(DialogViewModel sender)
+        {
+            var app = Locator.Current.GetService<AppViewModel>();
+            app.CloseDialogCommand.Execute(null);
+            if (sender is not null && ResolvedData is RedBaseClass rbc)
+            {
+                var propertyName = await Interactions.Rename.Handle("");
+
+                var vm = sender as CreateClassDialogViewModel;
+                var instance = RedTypeManager.Create(vm.SelectedClass);
+                var info = RedReflection.GetTypeInfo(rbc);
+                info.AddDynamicProperty(propertyName, vm.SelectedClass);
+                rbc.SetProperty(propertyName, instance);
+                //if (Data is IRedBaseHandle handle)
+                //{
+                //    handle.SetValue(rbc);
+                //}
+                RecalculateProperties(instance);
             }
         }
 
