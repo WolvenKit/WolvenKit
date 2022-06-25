@@ -41,6 +41,7 @@
                 <converters:CEnumOptionsConverter x:Key="cenumOptions" />
                 <converters:CFloatConverter x:Key="cfloat" />
                 <converters:CNameConverter x:Key="cname" />
+                <converters:CStringConverter x:Key="cstring" />
             </ResourceDictionary>
         </Grid.Resources>
         <Grid.ColumnDefinitions>
@@ -143,12 +144,12 @@
 
                 </Grid>
 
-                <!--TextBlock
+                <TextBlock
                     Margin="5,5"
                     VerticalAlignment="Center"
                     FontWeight="Bold"
                     Text="Text" />
-                <TextBox Margin="5,5" Text="{Binding SelectedItem.Chunk.Text, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource cname}}" /-->
+                <TextBox Margin="5,5" Text="{Binding SelectedItem.Chunk.Text, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource cstring}}" />
 
 
                 <Grid>
@@ -287,6 +288,30 @@
                     IsGradientPropertyEnabled="False"
                     Color="{Binding SelectedItem.Chunk.TintColor, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource hdrColor}}" />
 
+
+                <TextBlock
+                    Margin="5,5"
+                    FontWeight="Bold"
+                    Text="Property Bindings" />
+                <ItemsControl ItemsSource="{Binding SelectedItem.Chunk.PropertyManager.Chunk.Bindings}">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition />
+                                    <ColumnDefinition />
+                                </Grid.ColumnDefinitions>
+                                <TextBox Margin="5" Text="{Binding PropertyName, Mode=TwoWay, Converter={StaticResource cname}, UpdateSourceTrigger=PropertyChanged}" />
+                                <TextBox
+                                    Grid.Column="1"
+                                    Margin="5"
+                                    Text="{Binding StylePath, Mode=TwoWay, Converter={StaticResource cname}, UpdateSourceTrigger=PropertyChanged}" />
+                            </Grid>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+
+                <Border BorderBrush="{StaticResource BorderAlt}" BorderThickness="0,1,0,0" />
                 <TextBlock
                     Margin="5,5"
                     Foreground="{StaticResource WolvenKitTan}"
