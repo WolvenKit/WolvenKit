@@ -186,7 +186,7 @@ namespace WolvenKit.Functionality.Services
         [Category("Cyberpunk")]
         [Display(Name = "Show File Preview")]
         [Reactive]
-        public bool ShowFilePreview { get; set; }
+        public bool ShowFilePreview { get; set; } = true;
 
         [Browsable(false)]
         public string ReddbHash { get; set; }
