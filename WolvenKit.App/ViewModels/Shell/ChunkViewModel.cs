@@ -150,26 +150,29 @@ namespace WolvenKit.ViewModels.Shell
 
             //DoSubscribe();
 
-            OpenRefCommand = new DelegateCommand(ExecuteOpenRef, CanOpenRef);
-            AddRefCommand = new DelegateCommand(ExecuteAddRef, CanAddRef);
-            ExportChunkCommand = new DelegateCommand(ExecuteExportChunk, CanExportChunk);
-            ImportWorldNodeDataCommand = new DelegateCommand(ExecuteImportWorldNodeData, CanImportWorldNodeData);
-            ImportWorldNodeDataWithoutCoordsCommand = new DelegateCommand(ExecuteImportWorldNodeDataWithoutCoords, CanImportWorldNodeData);
-            AddItemToArrayCommand = new DelegateCommand(ExecuteAddItemToArray, CanAddItemToArray);
-            AddHandleCommand = new DelegateCommand(ExecuteAddHandle, CanAddHandle);
-            AddItemToCompiledDataCommand = new DelegateCommand(ExecuteAddItemToCompiledData, CanAddItemToCompiledData);
-            DeleteItemCommand = new DelegateCommand(ExecuteDeleteItem, CanDeleteItem);
-            DeleteAllCommand = new DelegateCommand(ExecuteDeleteAll, CanDeleteAll);
-            DeleteSelectionCommand = new DelegateCommand(ExecuteDeleteSelection, CanDeleteSelection);
-            OpenChunkCommand = new DelegateCommand(ExecuteOpenChunk, CanOpenChunk);
-            CopyChunkCommand = new DelegateCommand(ExecuteCopyChunk, CanCopyChunk);
-            CopySelectionCommand = new DelegateCommand(ExecuteCopySelection, CanCopySelection);
-            DuplicateChunkCommand = new DelegateCommand(ExecuteDuplicateChunk, CanDuplicateChunk);
-            ExportNodeDataCommand = new DelegateCommand(ExecuteExportNodeData, CanExportNodeData);
-            PasteChunkCommand = new DelegateCommand(ExecutePasteChunk, CanPasteChunk);
+            OpenRefCommand = new DelegateCommand(ExecuteOpenRef, CanOpenRef).ObservesProperty(() => Data);
+            AddRefCommand = new DelegateCommand(ExecuteAddRef, CanAddRef).ObservesProperty(() => Data);
+            ExportChunkCommand = new DelegateCommand(ExecuteExportChunk, CanExportChunk).ObservesProperty(() => PropertyCount);
+            ImportWorldNodeDataCommand = new DelegateCommand(ExecuteImportWorldNodeData, CanImportWorldNodeData).ObservesProperty(() => Data).ObservesProperty(() => PropertyCount);
+            ImportWorldNodeDataWithoutCoordsCommand = new DelegateCommand(ExecuteImportWorldNodeDataWithoutCoords, CanImportWorldNodeData).ObservesProperty(() => Data).ObservesProperty(() => PropertyCount);
+            AddItemToArrayCommand = new DelegateCommand(ExecuteAddItemToArray, CanAddItemToArray).ObservesProperty(() => PropertyType);
+            AddHandleCommand = new DelegateCommand(ExecuteAddHandle, CanAddHandle).ObservesProperty(() => PropertyType);
+            AddItemToCompiledDataCommand = new DelegateCommand(ExecuteAddItemToCompiledData, CanAddItemToCompiledData).ObservesProperty(() => PropertyType).ObservesProperty(() => ResolvedPropertyType);
+            DeleteItemCommand = new DelegateCommand(ExecuteDeleteItem, CanDeleteItem).ObservesProperty(() => IsInArray);
+            DeleteAllCommand = new DelegateCommand(ExecuteDeleteAll, CanDeleteAll).ObservesProperty(() => IsArray).ObservesProperty(() => PropertyCount).ObservesProperty(() => IsInArray).ObservesProperty(() => Parent);
+            DeleteSelectionCommand = new DelegateCommand(ExecuteDeleteSelection, CanDeleteSelection).ObservesProperty(() => IsInArray);
+            OpenChunkCommand = new DelegateCommand(ExecuteOpenChunk, CanOpenChunk).ObservesProperty(() => Data).ObservesProperty(() => Parent);
+            CopyChunkCommand = new DelegateCommand(ExecuteCopyChunk, CanCopyChunk).ObservesProperty(() => IsInArray);
+            CopySelectionCommand = new DelegateCommand(ExecuteCopySelection, CanCopySelection).ObservesProperty(() => IsInArray);
+            DuplicateChunkCommand = new DelegateCommand(ExecuteDuplicateChunk, CanDuplicateChunk).ObservesProperty(() => IsInArray);
+            ExportNodeDataCommand = new DelegateCommand(ExecuteExportNodeData, CanExportNodeData).ObservesProperty(() => IsInArray).ObservesProperty(() => Parent);
+            PasteChunkCommand = new DelegateCommand(ExecutePasteChunk, CanPasteChunk).ObservesProperty(() => Parent);
             PasteHandleCommand = new DelegateCommand(ExecutePasteHandle, CanPasteHandle);
-            PasteSelectionCommand = new DelegateCommand(ExecutePasteSelection, CanPasteSelection);
-            CopyHandleCommand = new DelegateCommand(ExecuteCopyHandle, CanCopyHandle);
+            PasteSelectionCommand = new DelegateCommand(ExecutePasteSelection, CanPasteSelection)
+                .ObservesProperty(() => ArraySelfOrParent)
+                .ObservesProperty(() => IsArray)
+                .ObservesProperty(() => IsInArray);
+            CopyHandleCommand = new DelegateCommand(ExecuteCopyHandle, CanCopyHandle).ObservesProperty(() => Data);
         }
 
 

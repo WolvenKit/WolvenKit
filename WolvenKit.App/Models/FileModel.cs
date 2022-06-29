@@ -89,9 +89,9 @@ namespace WolvenKit.Models
             Hash = GenerateKey(FullName, project);
             ParentHash = GenerateKey(parentfullname, project);
             RelativePath = GetRelativeName(FullName, project);
-            OpenFileCommand = new DelegateCommand(ExecuteOpenFile, CanOpenFile);
-            DeleteFileCommand = new DelegateCommand(ExecuteDeleteFile, CanDeleteFile);
-            RenameFileCommand = new DelegateCommand(ExecuteRenameFile, CanRenameFile);
+            OpenFileCommand = new DelegateCommand(ExecuteOpenFile);
+            DeleteFileCommand = new DelegateCommand(ExecuteDeleteFile);
+            RenameFileCommand = new DelegateCommand(ExecuteRenameFile, CanRenameFile).ObservesProperty(() => IsDirectory);
         }
 
         #region properties
