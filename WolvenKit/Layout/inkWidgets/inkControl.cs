@@ -278,6 +278,7 @@ namespace WolvenKit.Functionality.Layout.inkWidgets
         {
             if (e.LeftButton == MouseButtonState.Pressed && Parent != null && sender == this)
             {
+                _debug = true;
                 start = e.GetPosition(Parent);
                 initial = (inkMargin)Widget.Layout.Margin.DeepCopy();
                 CaptureMouse();
@@ -301,6 +302,7 @@ namespace WolvenKit.Functionality.Layout.inkWidgets
         {
             if (e.LeftButton == MouseButtonState.Released && sender == this)
             {
+                _debug = false;
                 ReleaseMouseCapture();
                 Render();
                 e.Handled = true;
@@ -312,6 +314,7 @@ namespace WolvenKit.Functionality.Layout.inkWidgets
         {
             if (e.LeftButton == MouseButtonState.Pressed && IsMouseCaptured && sender == this)
             {
+                WidgetView.ViewModel.File.SetIsDirty(true);
                 var change = start - e.GetPosition(Parent);
                 Widget.Layout.Margin.Left = initial.Left - (float)Math.Round(change.X);
                 Widget.Layout.Margin.Top = initial.Top - (float)Math.Round(change.Y);
