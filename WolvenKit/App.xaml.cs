@@ -166,7 +166,13 @@ namespace WolvenKit
             finally
             {
                 _logger.Error(exception);
-                Application.Current.Shutdown();
+                MessageBoxResult result = MessageBox.Show($"WolvenKit encountered an unhandle exception:\n\n{exception.Message}\n\nThe application may need to be restarted for things to work. Would you like to close WolvenKit?", "Unhandled " + exception.GetType().Name,
+                                          MessageBoxButton.YesNo,
+                                          MessageBoxImage.Question);
+                if (result == MessageBoxResult.Yes)
+                {
+                    Application.Current.Shutdown();
+                }
             }
         }
     }
