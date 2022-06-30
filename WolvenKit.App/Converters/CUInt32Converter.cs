@@ -13,12 +13,12 @@ namespace WolvenKit.Functionality.Converters
     /// Use ConverterParameter=true to negate the visibility - boolean interpretation.
     /// </summary>
 
-    [ValueConversion(typeof(CFloat), typeof(double))]
-    public sealed class CFloatConverter : IValueConverter
+    [ValueConversion(typeof(CUInt32), typeof(string))]
+    public sealed class CUInt32Converter : IValueConverter
     {
         /// <summary>
         /// Converts a <seealso cref="CFloat"/> value
-        /// into a <seealso cref="double"/> value.
+        /// into a <seealso cref="string"/> value.
         /// </summary>
         /// <param name="value"></param>
         /// <param name="targetType"></param>
@@ -27,15 +27,15 @@ namespace WolvenKit.Functionality.Converters
         /// <returns></returns>
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            if (value is CFloat f)
+            if (value is CUInt32 f)
             {
-                return (double)(float)f;
+                return ((uint)f).ToString();
             }
-            return 0.0;
+            return "0";
         }
 
         /// <summary>
-        /// Converts a <seealso cref="double"/> value
+        /// Converts a <seealso cref="string"/> value
         /// into a <seealso cref="CFloat"/> value.
         /// </summary>
         /// <param name="value"></param>
@@ -45,13 +45,13 @@ namespace WolvenKit.Functionality.Converters
         /// <returns></returns>
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            if (value is string vs && vs == "")
+            if (value is string s)
             {
-                return (CFloat)0F;
+                return (CUInt32)uint.Parse(s);
             }
-            else 
+            else
             {
-                return (CFloat)System.Convert.ToSingle(value);
+                return (CUInt32)0;
             } 
         }
     }

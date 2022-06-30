@@ -484,5 +484,32 @@ namespace WolvenKit.Views.Documents
                 ic.Render();
             }
         }
+
+        private void TextChangedLayout(object sender, TextChangedEventArgs e)
+        {
+            if (TryFindInkControl(ViewModel.SelectedItem, out var ic) && ic.Parent is not null)
+            {
+                ic.InvalidateMeasure();
+                ic.Parent.InvalidateArrange();
+                ic.Render();
+            }
+        }
+
+        private void OpacityChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            if (TryFindInkControl(ViewModel.SelectedItem, out var ic) && ic.Parent is not null)
+            {
+                ic.Opacity = e.NewValue;
+                ic.Render();
+            }
+        }
+
+        private void CheckBoxRenderAll(object sender, RoutedEventArgs e)
+        {
+            foreach (var widget in Widgets)
+            {
+                widget.RenderRecursive();
+            }
+        }
     }
 }

@@ -77,11 +77,11 @@ namespace WolvenKit.Functionality.Layout.inkWidgets
 
         public SkewTransform Skew { get; set; } = new();
 
-        private bool _debug = true;
+        private bool _debug = false;
 
         public bool Debug
         {
-            get => _debug || (Parent != null && Parent.Debug);
+            get => _debug || (Parent != null && Parent.Debug) || WidgetView.ViewModel.Editing;
             set => _debug = value;
         }
 

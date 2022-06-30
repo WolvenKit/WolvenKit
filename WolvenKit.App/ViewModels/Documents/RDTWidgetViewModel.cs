@@ -43,6 +43,8 @@ namespace WolvenKit.ViewModels.Documents
 
         [Reactive] public List<inkIEffect> inkEffects { get; set; } = new();
 
+        [Reactive] public bool Editing { get; set; }
+
         public RDTWidgetViewModel(RedBaseClass data, RedDocumentViewModel file)
         {
             Header = "Widget Preview";
