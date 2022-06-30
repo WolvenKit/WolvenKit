@@ -59,7 +59,7 @@ namespace WolvenKit.Functionality.Layout.inkWidgets
         public int LineHeight => (int)Math.Round(_fontSize * TextWidget.LineHeightPercentage);
 
         // not totally sure why this is required - some dpi issue?
-        public uint FontSize => (uint)Math.Round(_fontSize * 0.85);
+        public uint FontSize => _fontSize / 2;
 
         public double CorrectionY => (FontFamily.GetCellDescent(System.Drawing.FontStyle.Regular)) / 2000.0 * LineHeight;
 
