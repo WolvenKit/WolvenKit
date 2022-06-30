@@ -101,20 +101,20 @@ namespace WolvenKit.ViewModels.Shell
 
             #region commands
 
-            ShowLogCommand = new DelegateCommand(ExecuteShowLog, CanShowLog);
-            ShowProjectExplorerCommand = new DelegateCommand(ExecuteShowProjectExplorer, CanShowProjectExplorer);
+            ShowLogCommand = new DelegateCommand(ExecuteShowLog, CanShowLog).ObservesProperty(() => ActiveProject);
+            ShowProjectExplorerCommand = new DelegateCommand(ExecuteShowProjectExplorer, CanShowProjectExplorer).ObservesProperty(() => ActiveProject);
             //ShowImportUtilityCommand = new DelegateCommand(ExecuteShowImportUtility, CanShowImportUtility);
-            ShowPropertiesCommand = new DelegateCommand(ExecuteShowProperties, CanShowProperties);
+            ShowPropertiesCommand = new DelegateCommand(ExecuteShowProperties, CanShowProperties).ObservesProperty(() => ActiveProject);
             ShowAssetsCommand = new DelegateCommand(ExecuteAssetBrowser, CanShowAssetBrowser);
             //ShowVisualEditorCommand = new DelegateCommand(ExecuteVisualEditor, CanShowVisualEditor);
             //ShowAudioToolCommand = new DelegateCommand(ExecuteAudioTool, CanShowAudioTool);
             //ShowVideoToolCommand = new DelegateCommand(ExecuteVideoTool, CanShowVideoTool);
             //ShowCodeEditorCommand = new DelegateCommand(ExecuteCodeEditor, CanShowCodeEditor);
 
-            ShowImportExportToolCommand = new DelegateCommand(ExecuteImportExportTool, CanShowImportExportTool);
+            ShowImportExportToolCommand = new DelegateCommand(ExecuteImportExportTool, CanShowImportExportTool).ObservesProperty(() => ActiveProject);
             //ShowPackageInstallerCommand = new DelegateCommand(ExecuteShowInstaller, CanShowInstaller);
 
-            ShowPluginCommand = new DelegateCommand(ExecuteShowPlugin, CanShowPlugin);
+            ShowPluginCommand = new DelegateCommand(ExecuteShowPlugin, CanShowPlugin).ObservesProperty(() => IsDialogShown);
 
             OpenFileCommand = new DelegateCommand<FileModel>(p => ExecuteOpenFile(p));
             OpenFileAsyncCommand = ReactiveCommand.CreateFromTask<FileModel, Unit>(OpenFileAsync);
@@ -138,14 +138,14 @@ namespace WolvenKit.ViewModels.Shell
             DeleteProjectCommand = ReactiveCommand.Create<string>(DeleteProject);
             NewProjectCommand = ReactiveCommand.Create(ExecuteNewProject);
 
-            ShowHomePageCommand = new DelegateCommand(ExecuteShowHomePage, CanShowHomePage);
-            ShowSettingsCommand = new DelegateCommand(ExecuteShowSettings, CanShowSettings);
+            ShowHomePageCommand = new DelegateCommand(ExecuteShowHomePage, CanShowHomePage).ObservesProperty(() => IsDialogShown);
+            ShowSettingsCommand = new DelegateCommand(ExecuteShowSettings, CanShowSettings).ObservesProperty(() => IsDialogShown);
 
             LaunchGameCommand = ReactiveCommand.CreateFromTask(ExecuteLaunchGame);
 
-            CloseModalCommand = new DelegateCommand(ExecuteCloseModal, CanCloseModal);
-            CloseOverlayCommand = new DelegateCommand(ExecuteCloseOverlay, CanCloseOverlay);
-            CloseDialogCommand = new DelegateCommand(ExecuteCloseDialog, CanCloseDialog);
+            CloseModalCommand = new DelegateCommand(ExecuteCloseModal, CanCloseModal).ObservesProperty(() => IsDialogShown).ObservesProperty(() => IsOverlayShown);
+            CloseOverlayCommand = new DelegateCommand(ExecuteCloseOverlay, CanCloseOverlay).ObservesProperty(() => IsOverlayShown);
+            CloseDialogCommand = new DelegateCommand(ExecuteCloseDialog, CanCloseDialog).ObservesProperty(() => IsDialogShown);
 
 
             OpenFileAsyncCommand.ThrownExceptions.Subscribe(ex => LogExtended(ex));
@@ -862,11 +862,11 @@ namespace WolvenKit.ViewModels.Shell
         //}
 
         public ICommand ShowImportExportToolCommand { get; private set; }
-        private bool CanShowImportExportTool() => _projectManager.ActiveProject is not null;
+        private bool CanShowImportExportTool() => ActiveProject is not null;
         private void ExecuteImportExportTool() => ImportExportToolVM.IsVisible = !ImportExportToolVM.IsVisible;
 
         public ICommand ShowLogCommand { get; private set; }
-        private bool CanShowLog() => _projectManager.ActiveProject is not null;
+        private bool CanShowLog() => ActiveProject is not null;
         private void ExecuteShowLog() => Log.IsVisible = !Log.IsVisible;
 
         //public ICommand ShowPackageInstallerCommand { get; private set; }
@@ -884,11 +884,11 @@ namespace WolvenKit.ViewModels.Shell
 
 
         public ICommand ShowProjectExplorerCommand { get; private set; }
-        private bool CanShowProjectExplorer() => _projectManager.ActiveProject is not null;
+        private bool CanShowProjectExplorer() => ActiveProject is not null;
         private void ExecuteShowProjectExplorer() => ProjectExplorer.IsVisible = !ProjectExplorer.IsVisible;
 
         public ICommand ShowPropertiesCommand { get; private set; }
-        private bool CanShowProperties() => _projectManager.ActiveProject is not null;
+        private bool CanShowProperties() => ActiveProject is not null;
         private void ExecuteShowProperties() => PropertiesViewModel.IsVisible = !PropertiesViewModel.IsVisible;
 
         //public ICommand ShowVisualEditorCommand { get; private set; }
