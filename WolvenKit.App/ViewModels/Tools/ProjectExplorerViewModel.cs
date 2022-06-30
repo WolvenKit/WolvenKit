@@ -9,7 +9,6 @@ using System.Reactive.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
-using AsyncAwaitBestPractices.MVVM;
 using DynamicData;
 using DynamicData.Binding;
 using Prism.Commands;
@@ -440,16 +439,14 @@ namespace WolvenKit.ViewModels.Tools
             process?.WaitForInputIdle();
         }
 
-        public AsyncAwaitBestPractices.MVVM.IAsyncCommand ConvertToJsonCommand { get; private set; }
-        public AsyncAwaitBestPractices.MVVM.IAsyncCommand ConvertToXmlCommand { get; private set; }
+        public ICommand ConvertToJsonCommand { get; private set; }
+        public ICommand ConvertToXmlCommand { get; private set; }
 
-        private bool CanConvertTo(object arg) => SelectedItem != null
+        private bool CanConvertTo() => SelectedItem != null
                 && !IsInRawFolder(SelectedItem)
                 //&& Enum.GetNames<ERedExtension>().Contains(SelectedItem.Extension.ToLower())
                 ;
 
-        private async Task ExecuteConvertToJsonAsync() => await ExecuteConvertToAsync(ETextConvertFormat.json);
-        private async Task ExecuteConvertToXmlAsync() => await ExecuteConvertToAsync(ETextConvertFormat.xml);
         private async Task ExecuteConvertToAsync(ETextConvertFormat fmt)
         {
             if (SelectedItem.IsDirectory)
@@ -680,12 +677,12 @@ namespace WolvenKit.ViewModels.Tools
             Bk2ImportCommand = new DelegateCommand(ExecuteBk2Import, CanBk2Import).ObservesProperty(() => SelectedItem);
             Bk2ExportCommand = new DelegateCommand(ExecuteBk2Export, CanBk2Export).ObservesProperty(() => SelectedItem);
 
-            //CountUrlBytesCommand = new AsyncCommand(async () =>
+            //CountUrlBytesCommand = new DelegateCommand(async () =>
             //{
             //    ByteCount = await MyService.DownloadAndCountBytesAsync(Url);
             //});
-            ConvertToJsonCommand = new AsyncCommand(ExecuteConvertToJsonAsync, CanConvertTo);
-            ConvertToXmlCommand = new AsyncCommand(ExecuteConvertToXmlAsync, CanConvertTo);
+            ConvertToJsonCommand = new DelegateCommand(async () => await ExecuteConvertToAsync(ETextConvertFormat.json), CanConvertTo).ObservesProperty(() => SelectedItem);
+            ConvertToXmlCommand = new DelegateCommand(async () => await ExecuteConvertToAsync(ETextConvertFormat.xml), CanConvertTo).ObservesProperty(() => SelectedItem);
             ConvertFromJsonCommand = new DelegateCommand(ExecuteConvertFromJson, CanConvertFromJson).ObservesProperty(() => SelectedItem);
 
             //PESearchStartedCommand = new DelegateCommand<object>(ExecutePESearchStartedCommand, CanPESearchStartedCommand);
