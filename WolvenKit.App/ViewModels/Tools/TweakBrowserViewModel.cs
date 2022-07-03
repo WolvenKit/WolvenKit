@@ -96,10 +96,10 @@ namespace WolvenKit.ViewModels.Tools
                 _searchText = value;
                 if (!string.IsNullOrEmpty(_searchText))
                 {
-                    Records.Filter = o => o.ToString().Contains(_searchText);
-                    Flats.Filter = o => o.ToString().Contains(_searchText);
-                    Queries.Filter = o => o.ToString().Contains(_searchText);
-                    GroupTags.Filter = o => o.ToString().Contains(_searchText);
+                    Records.Filter = o => o.ToString().Contains(_searchText, StringComparison.InvariantCultureIgnoreCase);
+                    Flats.Filter = o => o.ToString().Contains(_searchText, StringComparison.InvariantCultureIgnoreCase);
+                    Queries.Filter = o => o.ToString().Contains(_searchText, StringComparison.InvariantCultureIgnoreCase);
+                    GroupTags.Filter = o => o.ToString().Contains(_searchText, StringComparison.InvariantCultureIgnoreCase);
                 }
                 else
                 {
