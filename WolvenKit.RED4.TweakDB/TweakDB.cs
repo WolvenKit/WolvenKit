@@ -34,8 +34,8 @@ namespace WolvenKit.RED4.TweakDB
 
         public FlatsPool Flats { get; set; } = new();
         public RecordsPool Records { get; set; } = new();
-        public Dictionary<TweakDBID, List<TweakDBID>> Queries { get; set; } = new();
-        public Dictionary<TweakDBID, byte> GroupTags { get; set; } = new();
+        public QueriesPool Queries { get; set; } = new();
+        public GroupTagsPool GroupTags { get; set; } = new();
 
 
         /// <summary>
@@ -89,6 +89,9 @@ namespace WolvenKit.RED4.TweakDB
         }
 
         public List<TweakDBID> GetRecords() => Records.GetResolvableRecords(true);
+        public List<TweakDBID> GetFlats() => Flats.GetResolvableRecords(true);
+        public List<TweakDBID> GetQueries() => Queries.GetResolvableRecords(true);
+        public List<TweakDBID> GetGroupTags() => GroupTags.GetResolvableRecords(true);
 
         public Type GetRecordType(string path)
         {

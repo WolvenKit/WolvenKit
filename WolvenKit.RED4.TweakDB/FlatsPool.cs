@@ -3,6 +3,7 @@ using System.Buffers;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using Microsoft.IO;
 using WolvenKit.Common.FNV1A;
 using WolvenKit.Core.CRC;
@@ -80,6 +81,21 @@ namespace WolvenKit.RED4.TweakDB
         public bool Exists(ulong id)
         {
             return _flatDictionary.ContainsKey(id);
+        }
+
+        public List<TweakDBID> GetResolvableRecords(bool sortByName = false)
+        {
+            var list = _flatDictionary.Keys
+                .Select(x => (TweakDBID)x)
+                .Where(x => x.GetResolvedText() != null)
+                .ToList();
+
+            if (sortByName)
+            {
+                list.Sort((a, b) => string.Compare(a.GetResolvedText(), b.GetResolvedText(), StringComparison.InvariantCulture));
+            }
+
+            return list;
         }
 
         public IRedType GetValue(string name)

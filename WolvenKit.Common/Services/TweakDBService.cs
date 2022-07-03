@@ -54,6 +54,8 @@ namespace WolvenKit.Common.Services
         public string GetString(ulong key) => s_stringHelper.GetString(key);
 
         public IRedType GetFlat(TweakDBID tdb) => s_tweakDb.Flats.GetValue((ulong)tdb);
+        public List<TweakDBID> GetQuery(TweakDBID tdb) => s_tweakDb.Queries.GetQuery((ulong)tdb);
+        public byte? GetGroupTag(TweakDBID tdb) => s_tweakDb.GroupTags.GetGroupTag((ulong)tdb);
 
         public Type GetType(TweakDBID tdb)
         {
@@ -75,6 +77,9 @@ namespace WolvenKit.Common.Services
         }
 
         public List<TweakDBID> GetRecords() => s_tweakDb.GetRecords();
+        public List<TweakDBID> GetFlats() => s_tweakDb.GetFlats();
+        public List<TweakDBID> GetQueries() => s_tweakDb.GetQueries();
+        public List<TweakDBID> GetGroupTags() => s_tweakDb.GetGroupTags();
 
         public gamedataTweakDBRecord GetRecord(TweakDBID tdb) => s_tweakDb.GetFullRecord(tdb.GetResolvedText());
         public gamedataTweakDBRecord GetRecord(SAsciiString path) => s_tweakDb.GetFullRecord(path.ToString());

@@ -126,7 +126,7 @@ public class TweakDBWriter : Red4Writer
         }
     }
 
-    private void WriteQueries(Dictionary<TweakDBID, List<TweakDBID>> tweakDbQueries)
+    private void WriteQueries(QueriesPool tweakDbQueries)
     {
         BaseWriter.Write(tweakDbQueries.Count);
         foreach (var (id, values) in tweakDbQueries)
@@ -140,7 +140,7 @@ public class TweakDBWriter : Red4Writer
         }
     }
 
-    private void WriteGroupTags(Dictionary<TweakDBID, byte> tweakDbGroupTags)
+    private void WriteGroupTags(GroupTagsPool tweakDbGroupTags)
     {
         BaseWriter.Write(tweakDbGroupTags.Count);
         foreach (var (id, value) in tweakDbGroupTags)
