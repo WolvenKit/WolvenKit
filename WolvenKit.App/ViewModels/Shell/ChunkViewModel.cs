@@ -2393,7 +2393,7 @@ namespace WolvenKit.ViewModels.Shell
                 {
                     ira = Data as IRedArray;
                 }
-                if (ira.InnerType.IsAssignableTo(item.GetType()))
+                if (ira.InnerType.IsAssignableFrom(item.GetType()))
                 {
                     var iraType = ira.GetType();
                     if (iraType.IsGenericType)
