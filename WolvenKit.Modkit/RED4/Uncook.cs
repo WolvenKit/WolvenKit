@@ -7,6 +7,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using WolvenKit.Common;
+using WolvenKit.Common.Conversion;
 using WolvenKit.Common.DDS;
 using WolvenKit.Common.Extensions;
 using WolvenKit.Common.Model.Arguments;
@@ -15,6 +16,7 @@ using WolvenKit.Modkit.Extensions;
 using WolvenKit.Modkit.RED4.Opus;
 using WolvenKit.RED4.Archive;
 using WolvenKit.RED4.CR2W;
+using WolvenKit.RED4.CR2W.JSON;
 using WolvenKit.RED4.Types;
 
 namespace WolvenKit.Modkit.RED4
@@ -32,14 +34,15 @@ namespace WolvenKit.Modkit.RED4
         /// <param name="forcebuffers"></param>
         /// <returns></returns>
         public bool UncookSingle(
-            Archive archive,
+            ICyberGameArchive archive,
             ulong hash,
             DirectoryInfo outDir,
             GlobalExportArgs args,
             DirectoryInfo rawOutDir = null,
-            ECookedFileFormat[] forcebuffers = null)
+            ECookedFileFormat[] forcebuffers = null,
+            bool serialize = false)
         {
-            if (!archive.Files.ContainsKey(hash))
+            if (!archive.Files.TryGetValue(hash, out var gameFile))
             {
                 return false;
             }
@@ -47,7 +50,7 @@ namespace WolvenKit.Modkit.RED4
             #region unbundle main file
 
             using var cr2WStream = new MemoryStream();
-            ExtractSingleToStream(archive, hash, cr2WStream);
+            gameFile.Extract(cr2WStream);
 
             if (archive.Files[hash] is FileEntry entry)
             {
@@ -77,6 +80,27 @@ namespace WolvenKit.Modkit.RED4
                 }
 
                 #endregion unbundle main file
+
+                #region serialize
+
+                if (serialize)
+                {
+                    try
+                    {
+                        var jsonOutput = SerializeMainFile(cr2WStream);
+                        var outpath = Path.Combine(outDir.FullName, $"{relFileFullName.Replace('\\', Path.DirectorySeparatorChar)}.json");
+                        File.WriteAllText(outpath, jsonOutput);
+                        return true;
+                    }
+                    catch (Exception e)
+                    {
+                        _loggerService.Error($"{relFileFullName} And unexpected error occured while converting to json: {e.Message}");
+                        _loggerService.Error(e);
+                        return false;
+                    }
+                }
+
+                #endregion serialize
 
                 #region extract buffers
 
@@ -124,21 +148,22 @@ namespace WolvenKit.Modkit.RED4
         /// <param name="forcebuffers"></param>
         /// <returns></returns>
         public void UncookAll(
-            Archive ar,
+            ICyberGameArchive ar,
             DirectoryInfo outDir,
             GlobalExportArgs args,
             bool unbundle = false,
             string pattern = "",
             string regex = "",
             DirectoryInfo rawOutDir = null,
-            ECookedFileFormat[] forcebuffers = null)
+            ECookedFileFormat[] forcebuffers = null,
+            bool serialize = false)
         {
             var extractedList = new ConcurrentBag<string>();
             var failedList = new ConcurrentBag<string>();
 
             // check search pattern then regex
             var finalmatches = ar.Files.Values.Cast<FileEntry>();
-            var totalInArchiveCount = ar.FileCount;
+            var totalInArchiveCount = ar.Files?.Count ?? 0;
             if (!string.IsNullOrEmpty(pattern))
             {
                 finalmatches = ar.Files.Values.Cast<FileEntry>().MatchesWildcard(item => item.FileName, pattern);
@@ -181,7 +206,7 @@ namespace WolvenKit.Modkit.RED4
             //foreach (var info in finalMatchesList)
             Parallel.ForEach(finalMatchesList, info =>
             {
-                if (UncookSingle(ar, info.NameHash64, outDir, args, rawOutDir, forcebuffers))
+                if (UncookSingle(ar, info.NameHash64, outDir, args, rawOutDir, forcebuffers, serialize))
                 {
                     extractedList.Add(info.FileName);
                 }
@@ -462,6 +487,15 @@ namespace WolvenKit.Modkit.RED4
             }
 
             return true;
+        }
+
+        private string SerializeMainFile(Stream redstream)
+        {
+            var cr2w = _wolvenkitFileService.ReadRed4File(redstream);
+            var dto = new RedFileDto(cr2w);
+            var json = RedJsonSerializer.Serialize(dto);
+
+            return json;
         }
 
         private bool UncookFont(Stream redstream, Stream outstream)

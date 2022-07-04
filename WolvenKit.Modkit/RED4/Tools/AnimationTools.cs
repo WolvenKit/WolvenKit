@@ -18,7 +18,7 @@ namespace WolvenKit.Modkit.RED4
 {
     public partial class ModTools
     {
-        public bool ExportAnim(Stream animStream, List<Archive> archives, FileInfo outfile, bool isGLBinary = true, bool incRootMotion = true)
+        public bool ExportAnim(Stream animStream, List<ICyberGameArchive> archives, FileInfo outfile, bool isGLBinary = true, bool incRootMotion = true)
         {
             var animsFile = _wolvenkitFileService.ReadRed4File(animStream);
             if (animsFile == null || animsFile.RootChunk is not animAnimSet anims)
@@ -28,7 +28,7 @@ namespace WolvenKit.Modkit.RED4
             return ExportAnim(animsFile, archives, outfile, isGLBinary,incRootMotion);
         }
 
-        public bool ExportAnim(CR2WFile animsFile, List<Archive> archives, FileInfo outfile, bool isGLBinary = true, bool incRootMotion = true, ValidationMode vmode = ValidationMode.TryFix)
+        public bool ExportAnim(CR2WFile animsFile, List<ICyberGameArchive> archives, FileInfo outfile, bool isGLBinary = true, bool incRootMotion = true, ValidationMode vmode = ValidationMode.TryFix)
         {
             if (animsFile == null || animsFile.RootChunk is not animAnimSet anims)
             {
@@ -48,10 +48,10 @@ namespace WolvenKit.Modkit.RED4
             var hash = FNV1A64HashAlgorithm.HashString(anims.Rig.DepotPath);
             foreach (var ar in archives)
             {
-                if (ar.Files.ContainsKey(hash))
+                if (ar.Files.TryGetValue(hash, out var gameFile))
                 {
                     var ms = new MemoryStream();
-                    ModTools.ExtractSingleToStream(ar, hash, ms);
+                    gameFile.Extract(ms);
                     rigFile = _wolvenkitFileService.ReadRed4File(ms);
                     break;
                 }
@@ -71,7 +71,7 @@ namespace WolvenKit.Modkit.RED4
 
             return true;
         }
-        public bool ImportAnims(FileInfo gltfFile, Stream animStream, List<Archive> archives)
+        public bool ImportAnims(FileInfo gltfFile, Stream animStream, List<ICyberGameArchive> archives)
         {
             var animsFile = _wolvenkitFileService.ReadRed4File(animStream);
             if (animsFile == null || animsFile.RootChunk is not animAnimSet anims)
@@ -83,10 +83,10 @@ namespace WolvenKit.Modkit.RED4
             var hash = FNV1A64HashAlgorithm.HashString(anims.Rig.DepotPath);
             foreach (var ar in archives)
             {
-                if (ar.Files.ContainsKey(hash))
+                if (ar.Files.TryGetValue(hash, out var gameFile))
                 {
                     var ms = new MemoryStream();
-                    ExtractSingleToStream(ar, hash, ms);
+                    gameFile.Extract(ms);
                     Rig = RIG.ProcessRig(_wolvenkitFileService.ReadRed4File(ms));
                     if (Rig is null || Rig.BoneCount < 1)
                     {

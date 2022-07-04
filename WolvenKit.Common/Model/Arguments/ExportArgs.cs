@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using WolvenKit.Core.Interfaces;
 using WolvenKit.RED4.Archive;
 using SharpGLTF.Validation;
 
@@ -63,7 +64,7 @@ namespace WolvenKit.Common.Model.Arguments
         /// List of Archives for Morphtarget Export.
         /// </summary>
         [Browsable(false)]
-        public List<Archive> Archives { get; set; } = new();
+        public List<ICyberGameArchive> Archives { get; set; } = new();
         /// <summary>
         /// Archive path for Console Morphtarget Export.
         /// </summary>
@@ -150,7 +151,7 @@ namespace WolvenKit.Common.Model.Arguments
         /// List of Archives for Gltf Mesh Export.
         /// </summary>
         [Browsable(false)]
-        public List<Archive> Archives { get; set; } = new();
+        public List<ICyberGameArchive> Archives { get; set; } = new();
         /// <summary>
         /// String Override to display info in datagrid.
         /// </summary>
@@ -243,7 +244,7 @@ namespace WolvenKit.Common.Model.Arguments
         /// List of Archives for WithMaterials Mesh Export.
         /// </summary>
         [Browsable(false)]
-        public List<Archive> Archives { get; set; } = new();
+        public List<ICyberGameArchive> Archives { get; set; } = new();
 
         /// <summary>
         /// Optional archive path for WithMaterials Mesh Export.
@@ -309,7 +310,7 @@ namespace WolvenKit.Common.Model.Arguments
         /// List of Archives for Animations Export.
         /// </summary>
         [Browsable(false)]
-        public List<Archive> Archives { get; set; } = new();
+        public List<ICyberGameArchive> Archives { get; set; } = new();
         /// <summary>
         /// Archive path for Console Anims Export.
         /// </summary>

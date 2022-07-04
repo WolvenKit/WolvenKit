@@ -1,4 +1,4 @@
-﻿#nullable enable
+#nullable enable
 using System;
 using System.Buffers;
 using System.Collections.Generic;
@@ -52,6 +52,7 @@ public class RedFileDtoConverter : JsonConverter<RedFileDto>, ICustomRedConverte
         {
             throw new JsonException("This JSON was created with a newer version of WKit!");
         }
+        RedJsonSerializer.SetVersion(result.Header!.WKitJsonVersion);
 
         reader.Read();
         if (reader.TokenType != JsonTokenType.PropertyName)
@@ -283,7 +284,22 @@ public class RedFileDtoConverter : JsonConverter<RedFileDto>, ICustomRedConverte
 
                     for (var i = 0; i < chunkList.Count; i++)
                     {
-                        var type = chunkList[i].GetProperty("Type").GetString();
+                        string? type = null;
+                        if (RedJsonSerializer.IsVersion("0.0.1"))
+                        {
+                            type = chunkList[i].GetProperty("Type").GetString();
+                        }
+
+                        if (RedJsonSerializer.IsVersion("0.0.2"))
+                        {
+                            type = chunkList[i].GetProperty("$type").GetString();
+                        }
+
+                        if (type == null)
+                        {
+                            throw new JsonException();
+                        }
+
                         _referenceResolver.AddReference(i.ToString(), RedTypeManager.Create(type));
                     }
 

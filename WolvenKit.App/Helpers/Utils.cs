@@ -327,41 +327,44 @@ namespace WolvenKit.ViewModels.Shell
 
         private void AddEntity(string tr, Prop line, bool updatecoords = true, bool visible = true)
         {
-            var wss = (worldStreamingSector)Parent.Parent.Data;
-            var current = RedJsonSerializer.Deserialize<worldNodeData>(tr);
-
-            var wen = new worldEntityNode();
-            var wenh = new CHandle<worldNode>(wen);
-            var index = wss.Nodes.Count;
-
-            //gotta figure out colliders
-            wen.IsVisibleInGame = visible;
-            wen.EntityTemplate.DepotPath = line.template_path;
-            wen.AppearanceName = string.IsNullOrEmpty(line.app) ? "default" : line.app;
-            wen.DebugName = Path.GetFileNameWithoutExtension(line.template_path) + "_" + index.ToString();
-
-            if (line.isdoor is bool b && b)
+            if (line.template_path is not null && Parent.Parent.Data is worldStreamingSector wss)
             {
-                var eeid = new entEntityInstanceData();
-                var eeidh = new CHandle<entEntityInstanceData>(eeid);
+                //var wss = (worldStreamingSector)Parent.Parent.Data;
+                var current = RedJsonSerializer.Deserialize<worldNodeData>(tr);
 
-                wen.InstanceData = eeidh;
-                eeid.Buffer = new DataBuffer();
+                var wen = new worldEntityNode();
+                var wenh = new CHandle<worldNode>(wen);
+                var index = wss.Nodes.Count;
 
-                var pk = new RedPackage();
-                var dc = new DoorController();
-                pk.Chunks = new List<RedBaseClass>();
+                //gotta figure out colliders
+                wen.IsVisibleInGame = visible;
+                wen.EntityTemplate.DepotPath = line.template_path;
+                wen.AppearanceName = string.IsNullOrEmpty(line.app) ? "default" : line.app;
+                wen.DebugName = Path.GetFileNameWithoutExtension(line.template_path) + "_" + index.ToString();
 
-                dc.PersistentState = new DoorControllerPS()
+                if (line.isdoor is bool b && b)
                 {
-                    IsInteractive = true
-                };
-                pk.Chunks.Add(dc);
-                eeid.Buffer.Data = pk;
-            }
+                    var eeid = new entEntityInstanceData();
+                    var eeidh = new CHandle<entEntityInstanceData>(eeid);
+
+                    wen.InstanceData = eeidh;
+                    eeid.Buffer = new DataBuffer();
+
+                    var pk = new RedPackage();
+                    var dc = new DoorController();
+                    pk.Chunks = new List<RedBaseClass>();
+
+                    dc.PersistentState = new DoorControllerPS()
+                    {
+                        IsInteractive = true
+                    };
+                    pk.Chunks.Add(dc);
+                    eeid.Buffer.Data = pk;
+                }
 
             ((IRedArray)wss.Nodes).Insert(index, wenh);
-            SetCoords(current, index, line, updatecoords);
+                SetCoords(current, index, line, updatecoords);
+            }
         }
 
         private void AddMesh(string tr, Prop line, bool updatecoords = true, Vec4 pos = default, Quat rot = default)

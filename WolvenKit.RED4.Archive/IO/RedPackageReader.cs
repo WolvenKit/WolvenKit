@@ -2,8 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
-using Splat;
-using WolvenKit.Common.Services;
 using WolvenKit.Core.Extensions;
 using WolvenKit.RED4.Archive.Buffer;
 using WolvenKit.RED4.IO;
@@ -55,13 +53,20 @@ namespace WolvenKit.RED4.Archive.IO
                 }
                 else
                 {
+                    value = Read(fieldType, 0, flags);
+
                     if (fieldType != prop.Type)
                     {
-                        var propName = $"{RedReflection.GetRedTypeFromCSType(cls.GetType())}.{varName}";
-                        throw new InvalidRTTIException(propName, prop.Type, fieldType);
+                        var args = new InvalidRTTIEventArgs(prop.Type, fieldType, value);
+                        if (!HandleParsingError(args))
+                        {
+                            var propName = $"{RedReflection.GetRedTypeFromCSType(cls.GetType())}.{varName}";
+                            throw new InvalidRTTIException(propName, prop.Type, fieldType);
+                            
+                        }
+                        value = args.Value;
                     }
 
-                    value = Read(prop.Type, 0, flags);
                     cls.SetProperty(prop.RedName, value);
                 }
             }

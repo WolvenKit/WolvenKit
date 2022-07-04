@@ -1,8 +1,10 @@
-﻿#nullable enable
+#nullable enable
 using System;
+using System.Collections.Concurrent;
 using System.Text.Encodings.Web;
 using System.Text.Json;
 using System.Text.Unicode;
+using Semver;
 using WolvenKit.RED4.Types;
 
 namespace WolvenKit.RED4.CR2W.JSON;
@@ -11,6 +13,8 @@ public static class RedJsonSerializer
 {
     private static readonly ReferenceResolver<RedBuffer> s_bufferResolver;
     private static readonly ReferenceResolver<RedBaseClass> s_classResolver;
+
+    private static readonly ConcurrentDictionary<int, SemVersion> s_threadedVersionStorage = new();
 
     static RedJsonSerializer()
     {
@@ -61,6 +65,12 @@ public static class RedJsonSerializer
         };
     }
 
+    internal static void SetVersion(SemVersion version) =>
+        s_threadedVersionStorage[Environment.CurrentManagedThreadId] = version;
+
+    internal static bool IsVersion(string verStr) =>
+        s_threadedVersionStorage[Environment.CurrentManagedThreadId] == SemVersion.Parse(verStr, SemVersionStyles.Strict);
+
     public static JsonSerializerOptions Options { get; }
 
     public static string Serialize(object value)
@@ -70,8 +80,7 @@ public static class RedJsonSerializer
 
         var result = JsonSerializer.Serialize(value, Options);
 
-        s_bufferResolver.End();
-        s_classResolver.End();
+        CleanUp();
 
         return result;
     }
@@ -96,8 +105,17 @@ public static class RedJsonSerializer
         s_bufferResolver.Begin();
         s_classResolver.Begin();
         var result = JsonSerializer.Deserialize<T>(json, Options);
+
+        CleanUp();
+
+        return result;
+    }
+
+    private static void CleanUp()
+    {
         s_bufferResolver.End();
         s_classResolver.End();
-        return result;
+
+        s_threadedVersionStorage.TryRemove(Environment.CurrentManagedThreadId, out _);
     }
 }

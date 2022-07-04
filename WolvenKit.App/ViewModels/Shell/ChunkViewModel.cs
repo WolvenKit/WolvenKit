@@ -150,94 +150,32 @@ namespace WolvenKit.ViewModels.Shell
 
             //DoSubscribe();
 
-            OpenRefCommand = new DelegateCommand(ExecuteOpenRef, CanOpenRef);
-            AddRefCommand = new DelegateCommand(ExecuteAddRef, CanAddRef);
-            ExportChunkCommand = new DelegateCommand(ExecuteExportChunk, CanExportChunk);
-            ImportWorldNodeDataCommand = new DelegateCommand(ExecuteImportWorldNodeData, CanImportWorldNodeData);
-            ImportWorldNodeDataWithoutCoordsCommand = new DelegateCommand(ExecuteImportWorldNodeDataWithoutCoords, CanImportWorldNodeData);
-            AddItemToArrayCommand = new DelegateCommand(ExecuteAddItemToArray, CanAddItemToArray);
-            AddHandleCommand = new DelegateCommand(ExecuteAddHandle, CanAddHandle);
-            AddItemToCompiledDataCommand = new DelegateCommand(ExecuteAddItemToCompiledData, CanAddItemToCompiledData);
-            DeleteItemCommand = new DelegateCommand(ExecuteDeleteItem, CanDeleteItem);
-            DeleteAllCommand = new DelegateCommand(ExecuteDeleteAll, CanDeleteAll);
-            DeleteSelectionCommand = new DelegateCommand(ExecuteDeleteSelection, CanDeleteSelection);
-            OpenChunkCommand = new DelegateCommand(ExecuteOpenChunk, CanOpenChunk);
-            CopyChunkCommand = new DelegateCommand(ExecuteCopyChunk, CanCopyChunk);
-            CopySelectionCommand = new DelegateCommand(ExecuteCopySelection, CanCopySelection);
-            DuplicateChunkCommand = new DelegateCommand(ExecuteDuplicateChunk, CanDuplicateChunk);
-            ExportNodeDataCommand = new DelegateCommand(ExecuteExportNodeData, CanExportNodeData);
-            PasteChunkCommand = new DelegateCommand(ExecutePasteChunk, CanPasteChunk);
+            OpenRefCommand = new DelegateCommand(ExecuteOpenRef, CanOpenRef).ObservesProperty(() => Data);
+            AddRefCommand = new DelegateCommand(ExecuteAddRef, CanAddRef).ObservesProperty(() => Data);
+            ExportChunkCommand = new DelegateCommand(ExecuteExportChunk, CanExportChunk).ObservesProperty(() => PropertyCount);
+            ImportWorldNodeDataCommand = new DelegateCommand(ExecuteImportWorldNodeData, CanImportWorldNodeData).ObservesProperty(() => Data).ObservesProperty(() => PropertyCount);
+            ImportWorldNodeDataWithoutCoordsCommand = new DelegateCommand(ExecuteImportWorldNodeDataWithoutCoords, CanImportWorldNodeData).ObservesProperty(() => Data).ObservesProperty(() => PropertyCount);
+            AddItemToArrayCommand = new DelegateCommand(ExecuteAddItemToArray, CanAddItemToArray).ObservesProperty(() => PropertyType);
+            AddHandleCommand = new DelegateCommand(ExecuteAddHandle, CanAddHandle).ObservesProperty(() => PropertyType);
+            AddItemToCompiledDataCommand = new DelegateCommand(ExecuteAddItemToCompiledData, CanAddItemToCompiledData).ObservesProperty(() => PropertyType).ObservesProperty(() => ResolvedPropertyType);
+            DeleteItemCommand = new DelegateCommand(ExecuteDeleteItem, CanDeleteItem).ObservesProperty(() => IsInArray);
+            DeleteAllCommand = new DelegateCommand(ExecuteDeleteAll, CanDeleteAll).ObservesProperty(() => IsArray).ObservesProperty(() => PropertyCount).ObservesProperty(() => IsInArray).ObservesProperty(() => Parent);
+            DeleteSelectionCommand = new DelegateCommand(ExecuteDeleteSelection, CanDeleteSelection).ObservesProperty(() => IsInArray);
+            OpenChunkCommand = new DelegateCommand(ExecuteOpenChunk, CanOpenChunk).ObservesProperty(() => Data).ObservesProperty(() => Parent);
+            CopyChunkCommand = new DelegateCommand(ExecuteCopyChunk, CanCopyChunk).ObservesProperty(() => IsInArray);
+            CopySelectionCommand = new DelegateCommand(ExecuteCopySelection, CanCopySelection).ObservesProperty(() => IsInArray);
+            DuplicateChunkCommand = new DelegateCommand(ExecuteDuplicateChunk, CanDuplicateChunk).ObservesProperty(() => IsInArray);
+            ExportNodeDataCommand = new DelegateCommand(ExecuteExportNodeData, CanExportNodeData).ObservesProperty(() => IsInArray).ObservesProperty(() => Parent);
+            PasteChunkCommand = new DelegateCommand(ExecutePasteChunk, CanPasteChunk).ObservesProperty(() => Parent);
             PasteHandleCommand = new DelegateCommand(ExecutePasteHandle, CanPasteHandle);
-            PasteSelectionCommand = new DelegateCommand(ExecutePasteSelection, CanPasteSelection);
-            CopyHandleCommand = new DelegateCommand(ExecuteCopyHandle, CanCopyHandle);
+            PasteSelectionCommand = new DelegateCommand(ExecutePasteSelection, CanPasteSelection)
+                .ObservesProperty(() => ArraySelfOrParent)
+                .ObservesProperty(() => IsArray)
+                .ObservesProperty(() => IsInArray);
+            CopyHandleCommand = new DelegateCommand(ExecuteCopyHandle, CanCopyHandle).ObservesProperty(() => Data);
         }
 
 
-        public ICommand DeleteSelectionCommand { get; private set; }
-        private bool CanDeleteSelection() => IsInArray;
-        private void ExecuteDeleteSelection()
-        {
-            var selection = Parent.DisplayProperties
-                            .Where(_ => _.IsSelected)
-                            .Select(_ => _.Data)
-                            .ToList();
-
-            var ts = Parent.DisplayProperties
-                            .Where(_ => _.IsSelected)
-                            .Select(_ => _)
-                            .ToList();
-            try
-            {
-                if (Parent.Data is IRedBufferPointer db3 && db3.GetValue().Data is worldNodeDataBuffer dict)
-                {
-                    var indices = selection.Select(_ => (int)((worldNodeData)_).NodeIndex).ToList();
-                    if (indices.Count == 0)
-                    { throw new Exception("Please select something first"); }
-                    var (start, end) = (indices.Min(), indices.Max());
-
-                    var fullselection = Parent.DisplayProperties
-                        .Where(_ => Enumerable.Range(start, end - start + 1)
-                           .Contains((int)((worldNodeData)_.Data).NodeIndex))
-                        .Select(_ => _.Data)
-                        .ToList();
-
-                    foreach (var i in fullselection)
-                    { try { dict.Remove(i); } catch (Exception ex) { Locator.Current.GetService<ILoggerService>().Error(ex); } }
-
-                    Tab.File.SetIsDirty(true);
-                    Parent.RecalculateProperties();
-                }
-                else if (Parent.Data is IRedArray db4)
-                {
-                    var indices = ts.Select(_ => int.Parse(_.Name)).ToList();
-                    var (start, end) = (indices.Min(), indices.Max());
-
-                    var fullselection = Parent.DisplayProperties
-                        .Where(_ => Enumerable.Range(start, end - start + 1)
-                           .Contains(int.Parse(_.Name)))
-                        .Select(_ => _.Data)
-                        .ToList();
-
-                    foreach (var i in fullselection)
-                    { try { db4.Remove(i); } catch (Exception ex) { Locator.Current.GetService<ILoggerService>().Error(ex); } }
-
-                    Tab.File.SetIsDirty(true);
-                    Parent.RecalculateProperties();
-                }
-                else
-                {
-                    var t = Parent.Data.GetType().Name;
-                    Locator.Current.GetService<ILoggerService>().Warning($"Handle this type {t} wen ._. ");
-                }
-            }
-            catch (Exception ex)
-            {
-                Locator.Current.GetService<ILoggerService>().Warning
-                    ($"Something went wrong while trying to delete the selection : {ex}");
-            }
-
-            Tab.SelectedChunk = Parent;
-        }
 
         public ChunkViewModel(IRedType export, RDTDataViewModel tab) : this(export)
         {
@@ -1901,6 +1839,88 @@ namespace WolvenKit.ViewModels.Shell
             }
             catch (Exception ex) { Locator.Current.GetService<ILoggerService>().Error(ex); }
         }
+
+
+        private void DeleteFullSelection(List<IRedType> l, IRedArray a)
+        {
+            foreach (var i in l)
+            {
+                try
+                { a.Remove(i); }
+                catch (Exception ex)
+                { Locator.Current.GetService<ILoggerService>().Error(ex); }
+            }
+
+            Tab.File.SetIsDirty(true);
+            Parent.RecalculateProperties();
+        }
+
+        public ICommand DeleteSelectionCommand { get; private set; }
+        private bool CanDeleteSelection() => IsInArray;
+        private void ExecuteDeleteSelection()
+        {
+            var selection = Parent.DisplayProperties
+                            .Where(_ => _.IsSelected)
+                            .Select(_ => _.Data)
+                            .ToList();
+
+            var ts = Parent.DisplayProperties
+                            .Where(_ => _.IsSelected)
+                            .Select(_ => _)
+                            .ToList();
+
+            try
+            {
+                if (Parent.Data is IRedBufferPointer db3 && db3.GetValue().Data is IRedArray dict)
+                {
+                    //var indices = selection.Select(_ => (int)((worldNodeData)_).NodeIndex).ToList();
+                    var indices = ts.Select(_ => _.Name).ToList().ConvertAll(int.Parse);
+                    if (indices.Count == 0)
+                    {
+                        Locator.Current.GetService<ILoggerService>().Warning("Please select something first");
+                    }
+                    else
+                    {
+                        var (start, end) = (indices.Min(), indices.Max());
+
+                        var fullselection = Parent.DisplayProperties
+                            .Where(_ => Enumerable.Range(start, end - start + 1)
+                               .Contains(int.Parse(_.Name)))
+                            .Select(_ => _.Data)
+                            .ToList();
+
+                        DeleteFullSelection(fullselection, dict);
+                    }
+                }
+                else if (Parent.Data is IRedArray db4)
+                {
+                    var indices = ts.Select(_ => int.Parse(_.Name)).ToList();
+                    var (start, end) = (indices.Min(), indices.Max());
+
+                    var fullselection = Parent.DisplayProperties
+                        .Where(_ => Enumerable.Range(start, end - start + 1)
+                           .Contains(int.Parse(_.Name)))
+                        .Select(_ => _.Data)
+                        .ToList();
+
+                    DeleteFullSelection(fullselection, db4);
+                }
+                else
+                {
+                    var t = Parent.Data.GetType().Name;
+                    Locator.Current.GetService<ILoggerService>().Warning($"Unsupported type : {t}");
+                }
+            }
+            catch (Exception ex)
+            {
+                Locator.Current.GetService<ILoggerService>().Warning
+                    ($"Something went wrong while trying to delete the selection : {ex}");
+            }
+
+            Tab.SelectedChunk = Parent;
+        }
+
+
 
         public bool ShouldShowExportNodeData => Parent is not null && Parent.Data is DataBuffer rb && rb.Data is worldNodeDataBuffer;
 

@@ -7,6 +7,7 @@ using Splat;
 using WolvenKit.Common.Services;
 using WolvenKit.RED4.Archive.CR2W;
 using WolvenKit.RED4.Archive.IO;
+using WolvenKit.RED4.Types;
 
 namespace WolvenKit.RED4.CR2W
 {
@@ -58,6 +59,8 @@ namespace WolvenKit.RED4.CR2W
                 // TODO: Shouldn't be done here...
                 stream.Seek(0, SeekOrigin.Begin);
                 using var reader = new CR2WReader(stream, Encoding.Default, true);
+                reader.ParsingError += OnParsingError;
+
                 return reader.ReadFile(out redFile) == EFileReadErrorCodes.NoError;
             }
             catch (Exception e)
@@ -83,6 +86,8 @@ namespace WolvenKit.RED4.CR2W
                 // TODO: Shouldn't be done here...
                 br.BaseStream.Seek(0, SeekOrigin.Begin);
                 using var reader = new CR2WReader(br);
+                reader.ParsingError += OnParsingError;
+
                 return reader.ReadFile(out redFile) == EFileReadErrorCodes.NoError;
             }
             catch (Exception e)
@@ -93,6 +98,37 @@ namespace WolvenKit.RED4.CR2W
                 redFile = null;
                 return false;
             }
+        }
+
+        private bool OnParsingError(ParsingErrorEventArgs e)
+        {
+            if (e is InvalidDefaultValueEventArgs)
+            {
+                return true;
+            }
+
+            if (e is InvalidRTTIEventArgs e1)
+            {
+                if (e1.ExpectedType == typeof(redResourceReferenceScriptToken) && e1.ActualType == typeof(CString))
+                {
+                    var orgStr = (string)(CString)e1.Value;
+
+                    e1.Value = new redResourceReferenceScriptToken
+                    {
+                        Resource = new CResourceAsyncReference<CResource>
+                        {
+                            DepotPath = orgStr
+                        }
+                    };
+
+                    var logger = Locator.Current.GetService<ILoggerService>();
+                    logger?.Warning($"Invalid in wolven rtti: [Expected: \"{e1.ExpectedType.Name}\" | Got: \"{e1.ActualType.Name}\"]");
+
+                    return true;
+                }
+            }
+
+            return false;
         }
 
         /// <summary>

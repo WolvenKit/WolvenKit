@@ -20,7 +20,7 @@ namespace WolvenKit.Modkit.RED4
 {
     public partial class ModTools
     {
-        public bool ExportMorphTargets(Stream targetStream, FileInfo outfile, List<Archive> archives, string modFolder, bool isGLBinary = true, ValidationMode vmode = ValidationMode.TryFix)
+        public bool ExportMorphTargets(Stream targetStream, FileInfo outfile, List<ICyberGameArchive> archives, string modFolder, bool isGLBinary = true, ValidationMode vmode = ValidationMode.TryFix)
         {
             var cr2w = _wolvenkitFileService.ReadRed4File(targetStream);
             if (cr2w == null || cr2w.RootChunk is not MorphTargetMesh morphBlob || morphBlob.Blob.Chunk is not rendRenderMorphTargetMeshBlob blob || blob.BaseBlob.Chunk is not rendRenderMeshBlob rendblob)
@@ -34,9 +34,9 @@ namespace WolvenKit.Modkit.RED4
                 var meshStream = new MemoryStream();
                 foreach (var ar in archives)
                 {
-                    if (ar.Files.ContainsKey(hash))
+                    if (ar.Files.TryGetValue(hash, out var gameFile))
                     {
-                        ExtractSingleToStream(ar, hash, meshStream);
+                        gameFile.Extract(meshStream);
                         break;
                     }
                 }

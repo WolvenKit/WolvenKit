@@ -136,7 +136,8 @@ image.SetTexturePart(n""{PartName}"");";
                 Width = Math.Round(itam.ClippingRectInUVCoords.Right * xbm.Width) - Left;
                 Height = Math.Round(itam.ClippingRectInUVCoords.Bottom * xbm.Height) - Top;
                 Name = $"{itam.PartName} ({(uint)Width}x{(uint)Height})";
-                SaveImageCommand = new DelegateCommand(ExecuteSaveImage, CanSaveImage);
+                SaveImageCommand = new DelegateCommand(ExecuteSaveImage, CanSaveImage).ObservesProperty(() => Image);
+
                 try
                 {
                     Image = new CroppedBitmap(image, new Int32Rect((int)Left, (int)Top, (int)Width, (int)Height));
