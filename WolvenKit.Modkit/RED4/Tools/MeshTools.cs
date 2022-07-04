@@ -8,16 +8,19 @@ using SharpGLTF.Materials;
 using SharpGLTF.Scenes;
 using SharpGLTF.Schema2;
 using SharpGLTF.Validation;
+using SharpGLTF.Transforms;
 using WolvenKit.Common.Services;
 using WolvenKit.Modkit.RED4.GeneralStructs;
 using WolvenKit.Modkit.RED4.RigFile;
 using WolvenKit.RED4.Archive.CR2W;
 using WolvenKit.RED4.CR2W;
 using WolvenKit.RED4.Types;
+
 using static WolvenKit.RED4.Types.Enums;
 using Vec2 = System.Numerics.Vector2;
 using Vec3 = System.Numerics.Vector3;
 using Vec4 = System.Numerics.Vector4;
+using Mat44 = System.Numerics.Matrix4x4;
 
 namespace WolvenKit.Modkit.RED4.Tools
 {
@@ -254,7 +257,7 @@ namespace WolvenKit.Modkit.RED4.Tools
 
             return true;
         }
-        public bool ExportMeshWithRig(Stream meshStream, Stream rigStream, FileInfo outfile, bool lodFilter = true, bool isGLBinary = true, ValidationMode vmode = ValidationMode.TryFix)
+        public bool ExportMeshWithRig(Stream meshStream, Stream rigStream, FileInfo outfile, bool lodFilter = true, bool isGLBinary = true, ValidationMode vmode = ValidationMode.TryFix, bool useAposeRig = true)
         {
             var cr2w = _red4ParserService.ReadRed4File(meshStream);
 
@@ -270,13 +273,21 @@ namespace WolvenKit.Modkit.RED4.Tools
             var expMeshes = ContainRawMesh(ms, meshesinfo, lodFilter);
             UpdateSkinningParamCloth(ref expMeshes, meshStream, cr2w);
 
-            var meshRig = GetOrphanRig(cMesh);
+            var meshRig = GetOrphanRig(cMesh,true);
 
             var Rig = RIG.ProcessRig(_red4ParserService.ReadRed4File(rigStream));
 
-            UpdateMeshJoints(ref expMeshes, Rig, meshRig);
+            var temp = ModelRoot.CreateModel();
+            var nodesBinding = RIG.ExportNodes(ref temp, Rig, true).Values.ToArray();
 
-            var model = RawMeshesToGLTF(expMeshes, Rig);
+            var meshBoneNameTemp = meshRig.Names.ToList();
+            for (int i = 0; i < Rig.BoneCount; i++)
+            {
+                if (meshRig.MeshInverseBinding != null && meshBoneNameTemp.Contains(Rig.Names[i]))
+                    Rig.MeshInverseBinding[i] = meshRig.MeshInverseBinding[meshBoneNameTemp.IndexOf(Rig.Names[i])];
+            }
+            UpdateMeshJoints(ref expMeshes, Rig, meshRig);
+            var model = RawMeshesToGLTF(expMeshes, Rig,useAposeRig);
 
 
             if (WolvenTesting.IsTesting)
@@ -800,40 +811,40 @@ namespace WolvenKit.Modkit.RED4.Tools
 
                 if (mesh.weightCount > 0)
                 {
-                    //if (skin != null)
-                    //{
-                    for (var i = 0; i < mesh.positions.Length; i++)
-                    {
-                        bw.Write(mesh.boneindices[i, 0]);
-                        bw.Write(mesh.boneindices[i, 1]);
-                        bw.Write(mesh.boneindices[i, 2]);
-                        bw.Write(mesh.boneindices[i, 3]);
-                    }
-                    for (var i = 0; i < mesh.positions.Length; i++)
-                    {
-                        bw.Write(mesh.weights[i, 0]);
-                        bw.Write(mesh.weights[i, 1]);
-                        bw.Write(mesh.weights[i, 2]);
-                        bw.Write(mesh.weights[i, 3]);
-                    }
-                    if (mesh.weightCount > 4)
+                    if (skin != null)
                     {
                         for (var i = 0; i < mesh.positions.Length; i++)
                         {
-                            bw.Write(mesh.boneindices[i, 4]);
-                            bw.Write(mesh.boneindices[i, 5]);
-                            bw.Write(mesh.boneindices[i, 6]);
-                            bw.Write(mesh.boneindices[i, 7]);
+                            bw.Write(mesh.boneindices[i, 0]);
+                            bw.Write(mesh.boneindices[i, 1]);
+                            bw.Write(mesh.boneindices[i, 2]);
+                            bw.Write(mesh.boneindices[i, 3]);
                         }
                         for (var i = 0; i < mesh.positions.Length; i++)
                         {
-                            bw.Write(mesh.weights[i, 4]);
-                            bw.Write(mesh.weights[i, 5]);
-                            bw.Write(mesh.weights[i, 6]);
-                            bw.Write(mesh.weights[i, 7]);
+                            bw.Write(mesh.weights[i, 0]);
+                            bw.Write(mesh.weights[i, 1]);
+                            bw.Write(mesh.weights[i, 2]);
+                            bw.Write(mesh.weights[i, 3]);
+                        }
+                        if (mesh.weightCount > 4)
+                        {
+                            for (var i = 0; i < mesh.positions.Length; i++)
+                            {
+                                bw.Write(mesh.boneindices[i, 4]);
+                                bw.Write(mesh.boneindices[i, 5]);
+                                bw.Write(mesh.boneindices[i, 6]);
+                                bw.Write(mesh.boneindices[i, 7]);
+                            }
+                            for (var i = 0; i < mesh.positions.Length; i++)
+                            {
+                                bw.Write(mesh.weights[i, 4]);
+                                bw.Write(mesh.weights[i, 5]);
+                                bw.Write(mesh.weights[i, 6]);
+                                bw.Write(mesh.weights[i, 7]);
+                            }
                         }
                     }
-                    //}
                 }
                 for (var i = 0; i < mesh.indices.Length; i += 3)
                 {
@@ -923,40 +934,40 @@ namespace WolvenKit.Modkit.RED4.Tools
                 }
                 if (mesh.weightCount > 0)
                 {
-                    //if (skin != null)
-                    //{
-                    {
-                        var acc = model.CreateAccessor();
-                        var buff = model.UseBufferView(buffer, BuffViewoffset, mesh.positions.Length * 8);
-                        acc.SetData(buff, 0, mesh.positions.Length, DimensionType.VEC4, EncodingType.UNSIGNED_SHORT, false);
-                        prim.SetVertexAccessor("JOINTS_0", acc);
-                        BuffViewoffset += mesh.positions.Length * 8;
-                    }
-                    {
-                        var acc = model.CreateAccessor();
-                        var buff = model.UseBufferView(buffer, BuffViewoffset, mesh.positions.Length * 16);
-                        acc.SetData(buff, 0, mesh.positions.Length, DimensionType.VEC4, EncodingType.FLOAT, false);
-                        prim.SetVertexAccessor("WEIGHTS_0", acc);
-                        BuffViewoffset += mesh.positions.Length * 16;
-                    }
-                    if (mesh.weightCount > 4)
+                    if (skin != null)
                     {
                         {
                             var acc = model.CreateAccessor();
                             var buff = model.UseBufferView(buffer, BuffViewoffset, mesh.positions.Length * 8);
                             acc.SetData(buff, 0, mesh.positions.Length, DimensionType.VEC4, EncodingType.UNSIGNED_SHORT, false);
-                            prim.SetVertexAccessor("JOINTS_1", acc);
+                            prim.SetVertexAccessor("JOINTS_0", acc);
                             BuffViewoffset += mesh.positions.Length * 8;
                         }
                         {
                             var acc = model.CreateAccessor();
                             var buff = model.UseBufferView(buffer, BuffViewoffset, mesh.positions.Length * 16);
                             acc.SetData(buff, 0, mesh.positions.Length, DimensionType.VEC4, EncodingType.FLOAT, false);
-                            prim.SetVertexAccessor("WEIGHTS_1", acc);
+                            prim.SetVertexAccessor("WEIGHTS_0", acc);
                             BuffViewoffset += mesh.positions.Length * 16;
                         }
+                        if (mesh.weightCount > 4)
+                        {
+                            {
+                                var acc = model.CreateAccessor();
+                                var buff = model.UseBufferView(buffer, BuffViewoffset, mesh.positions.Length * 8);
+                                acc.SetData(buff, 0, mesh.positions.Length, DimensionType.VEC4, EncodingType.UNSIGNED_SHORT, false);
+                                prim.SetVertexAccessor("JOINTS_1", acc);
+                                BuffViewoffset += mesh.positions.Length * 8;
+                            }
+                            {
+                                var acc = model.CreateAccessor();
+                                var buff = model.UseBufferView(buffer, BuffViewoffset, mesh.positions.Length * 16);
+                                acc.SetData(buff, 0, mesh.positions.Length, DimensionType.VEC4, EncodingType.FLOAT, false);
+                                prim.SetVertexAccessor("WEIGHTS_1", acc);
+                                BuffViewoffset += mesh.positions.Length * 16;
+                            }
+                        }
                     }
-                    //}
                 }
                 {
                     var acc = model.CreateAccessor();
@@ -999,15 +1010,31 @@ namespace WolvenKit.Modkit.RED4.Tools
             }
         }
 
-        public static ModelRoot RawMeshesToGLTF(List<RawMeshContainer> meshes, RawArmature rig)
+        public static ModelRoot RawMeshesToGLTF(List<RawMeshContainer> meshes, RawArmature rig, bool useAposeRig = true)
         {
             var model = ModelRoot.CreateModel();
-
             Skin skin = null;
+
             if (rig != null)
             {
                 skin = model.CreateSkin();
-                skin.BindJoints(RIG.ExportNodes(ref model, rig).Values.ToArray());
+                var nodesRig = RIG.ExportNodes(ref model, rig, useAposeRig).Values.ToArray();
+                if(rig.MeshInverseBinding != null)
+                {
+                    (Node, Mat44)[] values = new (Node, Mat44)[rig.BoneCount];
+
+                    for (int i = 0; i < rig.BoneCount; i++)
+                    {
+                        values[i].Item1 = nodesRig[i];
+                        values[i].Item2 = rig.MeshInverseBinding[i];
+                    }
+                    skin.BindJoints(values);
+                }
+                else
+                {
+                    skin.BindJoints(nodesRig);
+                }
+
             }
 
             AddSubmeshesToModel(meshes, skin, ref model, model.UseScene(0));
@@ -1051,9 +1078,19 @@ namespace WolvenKit.Modkit.RED4.Tools
             var model = scene.ToGltf2();
             return model;
         }
-        public static RawArmature GetOrphanRig(CMesh meshBlob)
+        public static RawArmature GetOrphanRig(CMesh meshBlob, bool includeBindings = false)
         {
             var rendmeshblob = meshBlob.RenderResourceBlob.Chunk as rendRenderMeshBlob;
+
+            static Mat44 CMatrixToMat44(CMatrix cmat)
+            {
+                var mat44 = new Mat44(cmat.X.X, cmat.X.Z, -cmat.X.Y, cmat.X.W,
+                                      cmat.Z.X, cmat.Z.Z, -cmat.Z.Y, cmat.Z.W,
+                                      -cmat.Y.X, -cmat.Y.Z, cmat.Y.Y, cmat.Y.W,
+                                      cmat.W.X, cmat.W.Z, -cmat.W.Y, cmat.W.W);
+                return mat44;
+            }
+
             if (rendmeshblob.Header.BonePositions.Count != 0)
             {
                 var boneCount = rendmeshblob.Header.BonePositions.Count;
@@ -1064,8 +1101,10 @@ namespace WolvenKit.Modkit.RED4.Tools
                     LocalRot = Enumerable.Repeat(System.Numerics.Quaternion.Identity, boneCount).ToArray(),
                     LocalScale = Enumerable.Repeat(Vec3.One, boneCount).ToArray(),
                     Parent = Enumerable.Repeat<short>(-1, boneCount).ToArray(),
-                    Names = meshBlob.BoneNames.Select(x => x.GetResolvedText()).ToArray()
+                    Names = meshBlob.BoneNames.Select(x => x.GetResolvedText()).ToArray(),
+                    MeshInverseBinding = includeBindings ? meshBlob.BoneRigMatrices.Select(_ => CMatrixToMat44(_)).ToArray() : null
                 };
+
                 return Rig;
             }
             return null;

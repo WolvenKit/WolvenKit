@@ -24,6 +24,8 @@ namespace WolvenKit.Modkit.RED4.GeneralStructs
         public Vector3[] AposeLSTrans;
         public Quaternion[] AposeLSRot;
         public Vector3[] AposeLSScale;
+
+        public Matrix4x4[] MeshInverseBinding;
         public int baseTendencyCount;
     }
     public class MeshesInfo

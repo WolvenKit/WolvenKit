@@ -504,7 +504,7 @@ namespace WolvenKit.Modkit.RED4
                     using var ms = new MemoryStream();
                     ar?.CopyFileToStream(ms, entry.NameHash64, false);
 
-                    return _meshTools.ExportMeshWithRig(cr2wStream, ms, cr2wFileName, meshargs.LodFilter, meshargs.isGLBinary);
+                    return _meshTools.ExportMeshWithRig(cr2wStream, ms, cr2wFileName, meshargs.LodFilter, meshargs.isGLBinary,meshargs.validationMode,meshargs.useAposeRig);
                 }
                 case MeshExportType.Multimesh:
                 {
