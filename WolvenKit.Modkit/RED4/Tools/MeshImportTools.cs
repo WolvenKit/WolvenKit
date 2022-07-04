@@ -83,7 +83,7 @@ namespace WolvenKit.Modkit.RED4
                 var rootindex = jointnames.IndexOf("Root");
                 var treelevel = new int[jointnames.Count];
 
-                if (jointparentnames[rootindex].Contains( "Armature"))
+                if (jointparentnames[rootindex].Contains("Armature"))
                 {
                     void rec(string parent, int level)
                     {
@@ -333,16 +333,9 @@ namespace WolvenKit.Modkit.RED4
 
             var model = ModelRoot.Load(inGltfFile.FullName, new ReadSettings(args.validationMode));
 
-            if (model.LogicalSkins.Count > 0)
+            if (model.LogicalSkins.Count > 0 && originalRig != null)
             {
-
-                var joints = Enumerable.Range(0, model.LogicalSkins[0].JointsCount).Select(_ => model.LogicalSkins[0].GetJoint(_)).ToArray();
-
                 var jointarray = Enumerable.Range(0, model.LogicalSkins[0].JointsCount).Select(_ => model.LogicalSkins[0].GetJoint(_).Joint).ToArray();
-                var jointnames = Enumerable.Range(0, model.LogicalSkins[0].JointsCount).Select(_ => model.LogicalSkins[0].GetJoint(_).Joint.Name).ToArray();
-
-                var ibm = Enumerable.Range(0, model.LogicalSkins[0].JointsCount).Select(_ => model.LogicalSkins[0].GetJoint(_).InverseBindMatrix).ToArray();
-                var wm = Enumerable.Range(0, model.LogicalSkins[0].JointsCount).Select(_ => model.LogicalSkins[0].GetJoint(_).Joint.WorldMatrix).ToArray();
 
                 if (cr2w.RootChunk is CMesh root)
                 {
@@ -351,56 +344,7 @@ namespace WolvenKit.Modkit.RED4
                         var foundbone = jointarray.FirstOrDefault(x => root.BoneNames[i] == x.Name);
                         if (foundbone is not null)
                         {
-                            var inversedWorldMatrix = new System.Numerics.Matrix4x4();
-                            System.Numerics.Matrix4x4.Invert(foundbone.WorldMatrix, out inversedWorldMatrix);
-
-
-                            root.BoneRigMatrices[i] = inversedWorldMatrix;
-                            root.BoneRigMatrices[i].W.Y = -inversedWorldMatrix.M43;
-                            root.BoneRigMatrices[i].W.Z = inversedWorldMatrix.M42;
-                            //component Y and -Z are being swapped in vector W
-                            //should probably figure out why
-                        }
-                    }
-                }
-            }
-
-            var tt = model.LogicalSkins.Count >= 2 ?
-                Enumerable.Range(0, model.LogicalSkins[1].JointsCount).Select(_ => model.LogicalSkins[1].GetJoint(_).Joint.WorldMatrix).ToArray()
-                : null;
-
-            var tjointnames = model.LogicalSkins.Count >= 2 ?
-                Enumerable.Range(0, model.LogicalSkins[1].JointsCount).Select(_ => model.LogicalSkins[1].GetJoint(_).Joint.Name).ToArray()
-                : null;
-
-
-            /*
-                        var somerig = MeshTools.GetOrphanRig(model);
-                        var newmodel = ModelRoot.CreateModel();
-                        var tempdict = RIG.ExportNodes(ref newmodel, somerig);
-            */
-
-            if (model.LogicalSkins.Count > 0)
-            {
-
-                var joints = Enumerable.Range(0, model.LogicalSkins[0].JointsCount).Select(_ => model.LogicalSkins[0].GetJoint(_)).ToArray();
-
-                var jointarray = Enumerable.Range(0, model.LogicalSkins[0].JointsCount).Select(_ => model.LogicalSkins[0].GetJoint(_).Joint).ToArray();
-                var jointnames = Enumerable.Range(0, model.LogicalSkins[0].JointsCount).Select(_ => model.LogicalSkins[0].GetJoint(_).Joint.Name).ToArray();
-
-                var ibm = Enumerable.Range(0, model.LogicalSkins[0].JointsCount).Select(_ => model.LogicalSkins[0].GetJoint(_).InverseBindMatrix).ToArray();
-                var wm = Enumerable.Range(0, model.LogicalSkins[0].JointsCount).Select(_ => model.LogicalSkins[0].GetJoint(_).Joint.WorldMatrix).ToArray();
-
-                if (cr2w.RootChunk is CMesh root)
-                {
-                    for (int i = 0; i < root.BoneNames.Count; i++)
-                    {
-                        var foundbone = jointarray.FirstOrDefault(x => root.BoneNames[i] == x.Name);
-                        if (foundbone is not null)
-                        {
-                            var inversedWorldMatrix = new Mat4();
-                            Mat4.Invert(foundbone.WorldMatrix, out inversedWorldMatrix);
-
+                            System.Numerics.Matrix4x4.Invert(foundbone.WorldMatrix, out var inversedWorldMatrix);
 
                             root.BoneRigMatrices[i] = inversedWorldMatrix;
                             root.BoneRigMatrices[i].W.Y = -inversedWorldMatrix.M43;
@@ -492,22 +436,23 @@ namespace WolvenKit.Modkit.RED4
             meshesInfo.quantScale = QuantScale;
             meshesInfo.quantTrans = QuantTrans;
 
-            var ms = (originalRig != null) ? GetEditedCr2wFile(cr2w, meshesInfo, meshBuffer, tt, tjointnames) :
-                                             GetEditedCr2wFile(cr2w, meshesInfo, meshBuffer);
+            var ms = new MemoryStream();
 
-
-            /*
-             var ms = new MemoryStream();
             if (originalRig != null)
             {
+                var tt = model.LogicalSkins.Count >= 2 ?
+                Enumerable.Range(0, model.LogicalSkins[1].JointsCount).Select(_ => model.LogicalSkins[1].GetJoint(_).Joint.WorldMatrix).ToArray()
+                : null;
+
+                var tjointnames = model.LogicalSkins.Count >= 2 ?
+                    Enumerable.Range(0, model.LogicalSkins[1].JointsCount).Select(_ => model.LogicalSkins[1].GetJoint(_).Joint.Name).ToArray()
+                    : null;
                 ms = GetEditedCr2wFile(cr2w, meshesInfo, meshBuffer, tt, tjointnames);
             }
             else
             {
                 ms = GetEditedCr2wFile(cr2w, meshesInfo, meshBuffer);
-
             }
-             */
 
             ms.Seek(0, SeekOrigin.Begin);
             if (outStream != null)
@@ -777,7 +722,14 @@ namespace WolvenKit.Modkit.RED4
             Re4Mesh.indices = new ushort[mesh.indices.Length];
             for (var i = 0; i < mesh.indices.Length; i++)
             {
-                Re4Mesh.indices[i] = Convert.ToUInt16(mesh.indices[i]);
+                if (mesh.indices[i] <= ushort.MaxValue)
+                {
+                    Re4Mesh.indices[i] = Convert.ToUInt16(mesh.indices[i]);
+                }
+                else
+                {
+                    throw new Exception($"Too many vertices ({mesh.indices[i]}) in submesh - max is {ushort.MaxValue}");
+                }
             }
 
             return Re4Mesh;

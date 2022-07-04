@@ -24,14 +24,8 @@ namespace WolvenKit.ViewModels.Documents
         public ViewModelActivator Activator { get; } = new();
 
         protected readonly IRedType _data;
-        /*
-                [Reactive] public RedDocumentViewModel File { get; set; }
 
-                public static IRedType CopiedChunk;*/
-
-        [Reactive] public RedDocumentViewModel File { get; set; }
-
-        //public static IRedType CopiedChunk;
+        public bool IsEmbeddedFile { get; set; }
 
         public RDTDataViewModel(IRedType data, RedDocumentViewModel file)
         {
@@ -43,6 +37,7 @@ namespace WolvenKit.ViewModels.Documents
             {
                 OnDemandLoadingCommand = new DelegateCommand<TreeViewNode>(ExecuteOnDemandLoading, CanExecuteOnDemandLoading);
                 OpenImportCommand = new DelegateCommand<ICR2WImport>(ExecuteOpenImport);
+
                 if (SelectedChunk == null)
                 {
                     SelectedChunk = Chunks[0];
@@ -65,6 +60,8 @@ namespace WolvenKit.ViewModels.Documents
             //}
             //_file.WhenAnyValue(x => x).Subscribe(x => IsDirty |= true);
         }
+
+        public RedBaseClass GetData() => (RedBaseClass)_data;
 
         public RDTDataViewModel(string header, IRedType data, RedDocumentViewModel file) : this(data, file)
         {

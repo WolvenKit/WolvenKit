@@ -7,6 +7,7 @@
     xmlns:docV="clr-namespace:WolvenKit.Views.Documents"
     xmlns:docVM="clr-namespace:WolvenKit.ViewModels.Documents;assembly=WolvenKit.App"
     xmlns:hc="https://handyorg.github.io/handycontrol"
+    xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:reactiveUi="http://reactiveui.net"
     xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
@@ -51,17 +52,96 @@
             BorderThickness="0,0,0,0"
             CloseButtonType="Hide"
             EnableLabelEdit="False"
+            IsNewButtonEnabled="True"
             ItemsSource="{Binding TabItemViewModels, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
             SelectedIndex="{Binding SelectedIndex, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
             SelectedItem="{Binding SelectedTabItemViewModel, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
             ShowTabItemContextMenu="False"
             Style="{StaticResource WolvenKitTabControl}"
-            TabPanelBackground="#313131">
+            TabPanelBackground="#313131"
+            Tag="{Binding}">
+            <syncfusion:TabControlExt.NewButtonTemplate>
+                <ControlTemplate>
+                    <Button
+                        Margin="0"
+                        Padding="5,5"
+                        Background="Transparent"
+                        Command="{Binding Tag.NewEmbeddedFileCommand, RelativeSource={RelativeSource AncestorType=syncfusion:TabControlExt}}"
+                        ToolTip="New Embedded File">
+                        <Button.Content>
+                            <iconPacks:PackIconCodicons
+                                Width="11"
+                                Height="11"
+                                Padding="0,0,0,0"
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Center"
+                                Kind="Add" />
+                        </Button.Content>
+                    </Button>
+                </ControlTemplate>
+            </syncfusion:TabControlExt.NewButtonTemplate>
             <syncfusion:TabControlExt.ItemTemplate>
                 <DataTemplate>
-                    <TextBlock Text="{Binding Header}" />
+                    <Grid Margin="-5" Tag="{Binding}">
+                        <TextBlock
+                            Padding="5"
+                            Text="{Binding Header}"
+                            ToolTip="{Binding FilePath}" />
+                        <Grid.ContextMenu>
+                            <ContextMenu DataContext="{Binding Path=PlacementTarget, RelativeSource={RelativeSource Self}}">
+                                <TextBlock
+                                    Foreground="Gray"
+                                    IsEnabled="False"
+                                    Text="{Binding Path=PlacementTarget.Tag.FilePath, RelativeSource={RelativeSource AncestorType=ContextMenu}}"
+                                    Visibility="{Binding Path=PlacementTarget.Tag.IsEmbeddedFile, RelativeSource={RelativeSource AncestorType=ContextMenu}, Converter={StaticResource Boolean2VisibilityConverter}}" />
+                                <MenuItem
+                                    Command="{Binding PlacementTarget.Tag.RenameEmbeddedFileCommand, RelativeSource={RelativeSource AncestorType=ContextMenu}}"
+                                    Header="Rename Embedded File"
+                                    Visibility="{Binding Path=PlacementTarget.Tag.IsEmbeddedFile, RelativeSource={RelativeSource AncestorType=ContextMenu}, Converter={StaticResource Boolean2VisibilityConverter}}">
+                                    <MenuItem.Icon>
+                                        <iconPacks:PackIconCodicons
+                                            Width="13"
+                                            Height="13"
+                                            Padding="0,0,0,0"
+                                            HorizontalAlignment="Center"
+                                            VerticalAlignment="Center"
+                                            Kind="Edit" />
+                                    </MenuItem.Icon>
+                                </MenuItem>
+                                <MenuItem
+                                    Command="{Binding PlacementTarget.Tag.DeleteEmbeddedFileCommand, RelativeSource={RelativeSource AncestorType=ContextMenu}}"
+                                    Header="Delete Embedded File"
+                                    Visibility="{Binding Path=PlacementTarget.Tag.IsEmbeddedFile, RelativeSource={RelativeSource AncestorType=ContextMenu}, Converter={StaticResource Boolean2VisibilityConverter}}">
+                                    <MenuItem.Icon>
+                                        <iconPacks:PackIconCodicons
+                                            Width="13"
+                                            Height="13"
+                                            Padding="0,0,0,0"
+                                            HorizontalAlignment="Center"
+                                            VerticalAlignment="Center"
+                                            Kind="Trash" />
+                                    </MenuItem.Icon>
+                                </MenuItem>
+                            </ContextMenu>
+                        </Grid.ContextMenu>
+                    </Grid>
                 </DataTemplate>
             </syncfusion:TabControlExt.ItemTemplate>
+            <syncfusion:TabControlExt.ContextMenu>
+                <ContextMenu DataContext="{Binding Path=PlacementTarget, RelativeSource={RelativeSource Self}}">
+                    <MenuItem Command="{Binding PlacementTarget.Tag.NewEmbeddedFileCommand, RelativeSource={RelativeSource AncestorType=ContextMenu}}" Header="New Embedded File">
+                        <MenuItem.Icon>
+                            <iconPacks:PackIconCodicons
+                                Width="13"
+                                Height="13"
+                                Padding="0,0,0,0"
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Center"
+                                Kind="Add" />
+                        </MenuItem.Icon>
+                    </MenuItem>
+                </ContextMenu>
+            </syncfusion:TabControlExt.ContextMenu>
         </syncfusion:TabControlExt>
 
 
