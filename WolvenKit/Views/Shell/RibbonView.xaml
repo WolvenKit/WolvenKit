@@ -613,18 +613,7 @@
                             <TextBlock Padding="5,0,0,0" Text="Settings" />
                         </StackPanel>
                     </Button>
-                    <Button Command="{Binding ShowBugReportCommand}" ToolTip="Bug Report">
-                        <StackPanel Orientation="Horizontal">
-                            <iconPacks:PackIconCodicons Kind="Bug" Style="{StaticResource WolvenKitToolBarButtonIcon}" />
-                            <TextBlock Padding="5,0,0,0" Text="Report Bug" />
-                        </StackPanel>
-                    </Button>
-                    <Button Command="{Binding ShowFeedbackCommand}" ToolTip="Feedback">
-                        <StackPanel Orientation="Horizontal">
-                            <iconPacks:PackIconCodicons Kind="Feedback" Style="{StaticResource WolvenKitToolBarButtonIcon}" />
-                            <TextBlock Padding="5,0,0,0" Text="Feedback" />
-                        </StackPanel>
-                    </Button>
+                   
                 </ToolBar>
             </ToolBarTray>
 
@@ -2393,75 +2382,6 @@
                         </syncfusion:RibbonButton>
 
                     </syncfusion:RibbonBar>
-
-                    <!--  Help bar  -->
-                    <syncfusion:RibbonBar
-                        Name="Help"
-                        Width="auto"
-                        Header="Help"
-                        Visibility="Visible">
-
-                        <!--  BugReport Button  -->
-                        <syncfusion:RibbonButton
-                            x:Name="OptionsShowBugReportButton"
-                            Padding="12,0"
-                            IconStretch="Fill"
-                            IconType="Icon"
-                            Label="Bug Report"
-                            SizeForm="Large">
-                            <syncfusion:RibbonButton.IconTemplate>
-                                <DataTemplate>
-                                    <iconPacks:PackIconCodicons
-                                        Width="auto"
-                                        Height="auto"
-                                        HorizontalAlignment="Center"
-                                        VerticalAlignment="Stretch"
-                                        Kind="Bug" />
-                                </DataTemplate>
-                            </syncfusion:RibbonButton.IconTemplate>
-                        </syncfusion:RibbonButton>
-
-                        <!--  Feedback Button  -->
-                        <syncfusion:RibbonButton
-                            x:Name="OptionsShowFeedbackButton"
-                            Padding="12,0"
-                            IconStretch="Fill"
-                            IconType="Icon"
-                            Label="Feedback"
-                            SizeForm="Large">
-                            <syncfusion:RibbonButton.IconTemplate>
-                                <DataTemplate>
-                                    <iconPacks:PackIconCodicons
-                                        Width="auto"
-                                        Height="auto"
-                                        HorizontalAlignment="Center"
-                                        VerticalAlignment="Stretch"
-                                        Kind="Feedback" />
-                                </DataTemplate>
-                            </syncfusion:RibbonButton.IconTemplate>
-                        </syncfusion:RibbonButton>
-
-                        <!--  About Button  -->
-                        <!--<syncfusion:RibbonButton
-                        Command="{catel:CommandManagerBinding Application.ShowAbout}"
-                        IconStretch="Fill"
-                        IconType="Icon"
-                        Label="About"
-                        SizeForm="Large"
-                        Visibility="Collapsed">
-                        <syncfusion:RibbonButton.IconTemplate>
-                            <DataTemplate>
-                                <iconPacks:PackIconCodicons
-                                    Width="auto"
-                                    Height="auto"
-                                    HorizontalAlignment="Center"
-                                    VerticalAlignment="Stretch"
-                                    Kind="Info" />
-                            </DataTemplate>
-                        </syncfusion:RibbonButton.IconTemplate>
-                    </syncfusion:RibbonButton>-->
-                    </syncfusion:RibbonBar>
-
                 </syncfusion:RibbonTab>
 
 
