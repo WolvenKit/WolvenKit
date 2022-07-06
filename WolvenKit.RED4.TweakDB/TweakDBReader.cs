@@ -11,6 +11,9 @@ using WolvenKit.RED4.Types.Exceptions;
 
 namespace WolvenKit.RED4.TweakDB;
 
+/// <summary>
+/// TODO logging?
+/// </summary>
 public class TweakDBReader : Red4Reader
 {
     private const uint s_recordSeed = 0x5EEDBA5E;
@@ -90,7 +93,7 @@ public class TweakDBReader : Red4Reader
 
         var flatTypeCounts = new Dictionary<ulong, uint>();
         var numFlatTypes = BaseReader.ReadInt32();
-        for (int i = 0; i < numFlatTypes; i++)
+        for (var i = 0; i < numFlatTypes; i++)
         {
             var typeHash = BaseReader.ReadUInt64();
             var typeCount = BaseReader.ReadUInt32();
@@ -104,13 +107,13 @@ public class TweakDBReader : Red4Reader
             var type = s_typeHashes[typeHash];
 
             var numValues = BaseReader.ReadUInt32();
-            for (int j = 0; j < numValues; j++)
+            for (var j = 0; j < numValues; j++)
             {
                 flatTypeValues[typeHash].Add(Read(type));
             }
 
             var numKeys = BaseReader.ReadUInt32();
-            for (int j = 0; j < numKeys; j++)
+            for (var j = 0; j < numKeys; j++)
             {
                 var keyHash = ReadTweakDBID();
                 var valueIndex = BaseReader.ReadInt32();
@@ -125,9 +128,13 @@ public class TweakDBReader : Red4Reader
         Position = offset;
 
         var numRecords = BaseReader.ReadInt32();
-        for (int i = 0; i < numRecords; i++)
+        for (var i = 0; i < numRecords; i++)
         {
-            pool.Add(BaseReader.ReadUInt64(), s_recordHashes[BaseReader.ReadUInt32()]);
+            var key = BaseReader.ReadUInt32();
+            if (s_recordHashes.ContainsKey(key))
+            {
+                pool.Add(BaseReader.ReadUInt64(), s_recordHashes[key]);
+            }
         }
     }
 
@@ -139,13 +146,13 @@ public class TweakDBReader : Red4Reader
         Position = offset;
 
         var numQueries = BaseReader.ReadInt32();
-        for (int i = 0; i < numQueries; i++)
+        for (var i = 0; i < numQueries; i++)
         {
             var tdbName = ReadTweakDBID();
             result.Add(tdbName, new List<TweakDBID>());
 
             var numResults = BaseReader.ReadUInt32();
-            for (int j = 0; j < numResults; j++)
+            for (var j = 0; j < numResults; j++)
             {
                 result[tdbName].Add(ReadTweakDBID());
             }
@@ -162,7 +169,7 @@ public class TweakDBReader : Red4Reader
         Position = offset;
 
         var numGroupTags = BaseReader.ReadInt32();
-        for (int i = 0; i < numGroupTags; i++)
+        for (var i = 0; i < numGroupTags; i++)
         {
             result.Add(ReadTweakDBID(), BaseReader.ReadByte());
         }
@@ -203,7 +210,7 @@ public class TweakDBReader : Red4Reader
         var array = new CArray<T>();
 
         var cnt = BaseReader.ReadInt32();
-        for (int i = 0; i < cnt; i++)
+        for (var i = 0; i < cnt; i++)
         {
             array.Add(Read(typeof(T)));
         }
@@ -260,7 +267,7 @@ public class TweakDBReader : Red4Reader
                     value = args.Value;
                 }
 
-                
+
                 instance.SetProperty(propertyInfo.RedName, value);
             }
         }
