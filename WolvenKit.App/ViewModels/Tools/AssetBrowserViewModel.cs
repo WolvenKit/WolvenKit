@@ -72,6 +72,7 @@ namespace WolvenKit.ViewModels.Tools
         private readonly ReadOnlyObservableCollection<RedFileSystemModel> _boundRootNodes;
         private bool _manuallyLoading = false;
         [Reactive] private bool _projectLoaded { get; set; } = false;
+        [Reactive] private bool _archiveDirNotFound { get; set; } = true;
 
         #endregion fields
 
@@ -119,6 +120,8 @@ namespace WolvenKit.ViewModels.Tools
             FindUsingCommand = ReactiveCommand.CreateFromTask(FindUsing);
             LoadAssetBrowserCommand = ReactiveCommand.CreateFromTask(LoadAssetBrowser);
 
+            OpenWolvenKitSettingsCommand = new DelegateCommand(OpenWolvenKitSettings, CanOpenWolvenKitSettings);
+
             archiveManager.ConnectGameRoot()
                 .ObserveOn(RxApp.MainThreadScheduler)
                 .Bind(out _boundRootNodes)
@@ -138,12 +141,31 @@ namespace WolvenKit.ViewModels.Tools
                         NoProjectBorderVisibility = Visibility.Collapsed;
                     }
                 });
+
             _projectManager
                 .WhenAnyValue(_ => _.IsProjectLoaded)
                 .Subscribe(loaded =>
                 {
                     _projectLoaded = loaded;
-                    ShouldShowLoadButton = !_manuallyLoading && !_projectLoaded;
+                    ShouldShowLoadButton = !_manuallyLoading && !_projectLoaded && !_archiveDirNotFound;
+                });
+
+            _settings
+                .WhenAnyValue(_ => _.CP77ExecutablePath)
+                .Subscribe(execPath =>
+                {
+                    if (string.IsNullOrEmpty(execPath))
+                    {
+                        _archiveDirNotFound = true;
+                    }
+                    else
+                    {
+                        var execDirInfo = new DirectoryInfo(Path.GetDirectoryName(execPath));
+
+                        _archiveDirNotFound = execDirInfo.Parent.Parent.GetDirectories("archive").Length == 0;
+                    }
+                    ShouldShowExecutablePathWarning = _archiveDirNotFound;
+                    ShouldShowLoadButton = !_manuallyLoading && !_projectLoaded && !_archiveDirNotFound;
                 });
 
 
@@ -165,6 +187,7 @@ namespace WolvenKit.ViewModels.Tools
         [Reactive] public Visibility NoProjectBorderVisibility { get; set; } = Visibility.Visible;
 
         [Reactive] public bool ShouldShowLoadButton { get; set; }
+        [Reactive] public bool ShouldShowExecutablePathWarning { get; set; } = true;
 
         [Reactive] public ObservableCollection<RedFileSystemModel> LeftItems { get; set; } = new();
 
@@ -194,9 +217,20 @@ namespace WolvenKit.ViewModels.Tools
         private async Task<Unit> LoadAssetBrowser()
         {
             _manuallyLoading = true;
-            ShouldShowLoadButton = !_manuallyLoading && !_projectLoaded;
+            ShouldShowLoadButton = !_manuallyLoading && !_projectLoaded && !_archiveDirNotFound;
             await _gameController.GetRed4Controller().HandleStartup();
             return Unit.Default;
+        }
+
+        private bool CanOpenWolvenKitSettings() => true;
+        public ICommand OpenWolvenKitSettingsCommand { get; private set; }
+        private void OpenWolvenKitSettings()
+        {
+            var homepageViewModel = Locator.Current.GetService<HomePage.HomePageViewModel>();
+            var appViewModel = Locator.Current.GetService<AppViewModel>();
+
+            homepageViewModel.SelectedIndex = 1;
+            appViewModel.SetActiveOverlay(homepageViewModel);
         }
 
         public ReactiveCommand<string, Unit> AddSearchKeyCommand { get; set; }
