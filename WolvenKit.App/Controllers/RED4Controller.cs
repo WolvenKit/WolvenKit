@@ -240,13 +240,7 @@ namespace WolvenKit.Functionality.Controllers
             _loggerService.Info("Loading Archive Manager ... ");
             try
             {
-                var sw = new Stopwatch();
-                sw.Start();
-
                 _archiveManager.LoadGameArchives(new FileInfo(_settingsManager.CP77ExecutablePath));
-
-                sw.Stop();
-                var ms = sw.ElapsedMilliseconds;
             }
             catch (Exception e)
             {
