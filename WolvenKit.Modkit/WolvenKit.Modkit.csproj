@@ -10,10 +10,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-      <PackageReference Include="BigGustave" Version="1.0.6" />
-      <PackageReference Include="Microsoft.Extensions.Options" Version="6.0.0" />
       <PackageReference Include="AsyncEnumerator" Version="4.0.2" />
-      <PackageReference Include="SharpGLTF.Core" Version="1.0.0-alpha0023" />
       <PackageReference Include="SharpGLTF.Toolkit" Version="1.0.0-alpha0023" />
       <PackageReference Include="ReactiveUI.Fody" Version="18.2.9" />
       <PackageReference Include="YamlDotNet" Version="11.2.1" />
