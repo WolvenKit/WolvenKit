@@ -58,31 +58,31 @@
     <PackageReference Include="NodeNetwork" Version="6.0.0" />
     <PackageReference Include="NodeNetworkToolkit" Version="6.0.0" />
     <PackageReference Include="Octokit" Version="0.52.0" />
-    <PackageReference Include="Syncfusion.Edit.WPF" Version="19.4.0.38" />
+    <PackageReference Include="Syncfusion.Edit.WPF" Version="20.2.0.36" />
 
-    <PackageReference Include="Syncfusion.Tools.WPF" Version="19.4.0.38" />
-    <PackageReference Include="Syncfusion.PropertyGrid.WPF" Version="19.4.0.38" />
-    <PackageReference Include="Syncfusion.SfInput.WPF" Version="19.4.0.38" />
-    <PackageReference Include="Syncfusion.SfImageEditor.WPF" Version="19.4.0.38" />
+    <PackageReference Include="Syncfusion.Tools.WPF" Version="20.2.0.36" />
+    <PackageReference Include="Syncfusion.PropertyGrid.WPF" Version="20.2.0.36" />
+    <PackageReference Include="Syncfusion.SfInput.WPF" Version="20.2.0.36" />
+    <PackageReference Include="Syncfusion.SfImageEditor.WPF" Version="20.2.0.36" />
 
-    <PackageReference Include="Syncfusion.SfProgressBar.WPF" Version="19.4.0.38" />
+    <PackageReference Include="Syncfusion.SfProgressBar.WPF" Version="20.2.0.36" />
 
-    <PackageReference Include="Syncfusion.SfAccordion.WPF" Version="19.4.0.38" />
+    <PackageReference Include="Syncfusion.SfAccordion.WPF" Version="20.2.0.36" />
 
-    <PackageReference Include="Syncfusion.SfBarcode.WPF" Version="19.4.0.38" />
-    <PackageReference Include="Syncfusion.SfBusyIndicator.WPF" Version="19.4.0.38" />
-    <PackageReference Include="Syncfusion.SfGrid.WPF" Version="19.4.0.38" />
-    <PackageReference Include="Syncfusion.SfHubTile.WPF" Version="19.4.0.38" />
-    <PackageReference Include="Syncfusion.SfKanban.WPF" Version="19.4.0.38" />
-    <PackageReference Include="Syncfusion.SfNavigationDrawer.WPF" Version="19.4.0.38" />
-    <PackageReference Include="Syncfusion.SfRadialMenu.WPF" Version="19.4.0.38" />
-    <PackageReference Include="Syncfusion.SfRichTextBoxAdv.WPF" Version="19.4.0.38" />
-    <PackageReference Include="Syncfusion.SfTextInputLayout.WPF" Version="19.4.0.38" />
-    <PackageReference Include="Syncfusion.SfTreeNavigator.WPF" Version="19.4.0.38" />
-    <PackageReference Include="Syncfusion.SfTreeView.WPF" Version="19.4.0.38" />
+    <PackageReference Include="Syncfusion.SfBarcode.WPF" Version="20.2.0.36" />
+    <PackageReference Include="Syncfusion.SfBusyIndicator.WPF" Version="20.2.0.36" />
+    <PackageReference Include="Syncfusion.SfGrid.WPF" Version="20.2.0.36" />
+    <PackageReference Include="Syncfusion.SfHubTile.WPF" Version="20.2.0.36" />
+    <PackageReference Include="Syncfusion.SfKanban.WPF" Version="20.2.0.36" />
+    <PackageReference Include="Syncfusion.SfNavigationDrawer.WPF" Version="20.2.0.36" />
+    <PackageReference Include="Syncfusion.SfRadialMenu.WPF" Version="20.2.0.36" />
+    <PackageReference Include="Syncfusion.SfRichTextBoxAdv.WPF" Version="20.2.0.36" />
+    <PackageReference Include="Syncfusion.SfTextInputLayout.WPF" Version="20.2.0.36" />
+    <PackageReference Include="Syncfusion.SfTreeNavigator.WPF" Version="20.2.0.36" />
+    <PackageReference Include="Syncfusion.SfTreeView.WPF" Version="20.2.0.36" />
 
-    <PackageReference Include="Syncfusion.SfSkinManager.WPF" Version="19.4.0.38" />
-    <PackageReference Include="Syncfusion.Themes.MaterialDark.WPF" Version="19.4.0.38" />
+    <PackageReference Include="Syncfusion.SfSkinManager.WPF" Version="20.2.0.36" />
+    <PackageReference Include="Syncfusion.Themes.MaterialDark.WPF" Version="20.2.0.36" />
 
 
 
