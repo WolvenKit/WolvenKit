@@ -3,15 +3,12 @@ using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
-using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Media.Media3D;
 using System.Windows.Threading;
-using HelixToolkit.Wpf.SharpDX;
 using ReactiveUI;
 using Splat;
 using Syncfusion.Windows.PropertyGrid;
@@ -355,6 +352,20 @@ namespace WolvenKit.Views.Tools
 
         #endregion AudioPreview
 
-        private void CopyMenuItem_Click(object sender, RoutedEventArgs e) => Clipboard.SetText((DataContext as PropertiesViewModel).PE_SelectedItem.FullName);
+        private void CopyMenuItem_Click(object sender, RoutedEventArgs e)
+        {
+            if (DataContext is PropertiesViewModel model)
+            {
+                if (model.PE_SelectedItem is not null)
+                {
+                    Clipboard.SetText(model.PE_SelectedItem.FullName);
+                }
+                else if (model.AB_SelectedItem is not null)
+                {
+                    Clipboard.SetText(model.AB_SelectedItem.FullName);
+                }
+
+            }
+        }
     }
 }
