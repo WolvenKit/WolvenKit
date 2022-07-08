@@ -38,28 +38,26 @@
     <PackageReference Include="Fluent.Ribbon" Version="9.0.4" />
     <PackageReference Include="Discord.Net" Version="3.7.2" />
     <PackageReference Include="DrawStringLineHeight" Version="1.0.0" />
-    <PackageReference Include="HelixToolkit.SharpDX.Assimp" Version="2.21.0" />
-    <PackageReference Include="HelixToolkit.SharpDX.Core.Wpf" Version="2.21.0" />
     <PackageReference Include="PixiEditor.ColorPicker" Version="3.3.1" />
 
-    <PackageReference Include="ReactiveUI" Version="18.0.10" />
+    <PackageReference Include="ReactiveUI" Version="18.2.9" />
     <PackageReference Include="ReactiveUI.Events.WPF" Version="15.1.1" />
-    <PackageReference Include="ReactiveUI.Fody" Version="18.0.10" />
-    <PackageReference Include="ReactiveUI.WPF" Version="18.0.10" />
-    <PackageReference Include="ScottPlot.WPF" Version="4.1.47" />
-    <PackageReference Include="Splat" Version="14.2.8" />
+    <PackageReference Include="ReactiveUI.Fody" Version="18.2.9" />
+    <PackageReference Include="ReactiveUI.WPF" Version="18.2.9" />
+    <PackageReference Include="ScottPlot.WPF" Version="4.1.51" />
+    <PackageReference Include="Splat" Version="14.3.4" />
     <PackageReference Include="Microsoft.Extensions.Hosting" Version="6.0.1" />
     <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="6.0.0" />
-    <PackageReference Include="Splat.Microsoft.Extensions.DependencyInjection" Version="14.2.8" />
-    <PackageReference Include="Splat.Microsoft.Extensions.Logging" Version="14.2.8" />
+    <PackageReference Include="Splat.Microsoft.Extensions.DependencyInjection" Version="14.3.4" />
+    <PackageReference Include="Splat.Microsoft.Extensions.Logging" Version="14.3.4" />
 
     <PackageReference Include="MahApps.Metro" Version="2.4.9" />
     <PackageReference Include="MahApps.Metro.IconPacks" Version="4.11.0" />
-    <PackageReference Include="Microsoft.Web.WebView2" Version="1.0.1210.39" />
+    <PackageReference Include="Microsoft.Web.WebView2" Version="1.0.1264.42" />
     <PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.39" />
     <PackageReference Include="NodeNetwork" Version="6.0.0" />
     <PackageReference Include="NodeNetworkToolkit" Version="6.0.0" />
-    <PackageReference Include="Octokit" Version="0.51.0" />
+    <PackageReference Include="Octokit" Version="0.52.0" />
     <PackageReference Include="Syncfusion.Edit.WPF" Version="19.4.0.38" />
 
     <PackageReference Include="Syncfusion.Tools.WPF" Version="19.4.0.38" />

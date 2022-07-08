@@ -19,7 +19,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="EFCore.BulkExtensions" Version="6.5.0" />
+    <PackageReference Include="EFCore.BulkExtensions" Version="6.5.3" />
     <PackageReference Include="Microsoft.Extensions.Hosting" Version="6.0.1" />
     <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="6.0.0" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.2.0" />
@@ -30,7 +30,7 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
       <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="6.0.0" />
-      <PackageReference Include="Splat.Microsoft.Extensions.DependencyInjection" Version="14.2.8" />
+      <PackageReference Include="Splat.Microsoft.Extensions.DependencyInjection" Version="14.3.4" />
   </ItemGroup>
 
   <ItemGroup>
