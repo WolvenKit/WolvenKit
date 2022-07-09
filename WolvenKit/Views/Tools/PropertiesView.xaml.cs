@@ -71,13 +71,9 @@ namespace WolvenKit.Views.Tools
                 }
             };
 
-            this.WhenActivated(disposables =>
-            {
-                ViewModel.PreviewAudioCommand
+            this.WhenActivated(disposables => ViewModel.PreviewAudioCommand
                     .ObserveOn(RxApp.MainThreadScheduler)
-                    .Subscribe(async path => await TempConvertToWemWavAsync(path));
-
-            });
+                    .Subscribe(async path => await TempConvertToWemWavAsync(path)));
         }
 
         #region properties
@@ -274,8 +270,8 @@ namespace WolvenKit.Views.Tools
             DispatcherHelper.RunOnMainThread(() =>
             {
                 mediaPlayer.Open(new Uri(outf));
-            
-            
+
+
 
                 var timer = new DispatcherTimer
                 {
@@ -360,21 +356,5 @@ namespace WolvenKit.Views.Tools
         }
 
         #endregion AudioPreview
-
-        private void CopyMenuItem_Click(object sender, RoutedEventArgs e)
-        {
-            if (DataContext is PropertiesViewModel model)
-            {
-                if (model.PE_SelectedItem is not null)
-                {
-                    Clipboard.SetText(model.PE_SelectedItem.FullName);
-                }
-                else if (model.AB_SelectedItem is not null)
-                {
-                    Clipboard.SetText(model.AB_SelectedItem.FullName);
-                }
-
-            }
-        }
     }
 }

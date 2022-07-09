@@ -352,12 +352,6 @@
                         SearchBoxVisibility="Collapsed"
                         SelectedObject="{Binding PE_SelectedItem, Mode=OneWay}"
                         Visibility="{Binding PE_FileInfoVisible, Converter={StaticResource ToggleVisibilityConverter}}">
-
-                        <syncfusion:PropertyGrid.ContextMenu>
-                            <ContextMenu>
-                                <MenuItem Click="CopyMenuItem_Click" Header="Copy Relative Path" />
-                            </ContextMenu>
-                        </syncfusion:PropertyGrid.ContextMenu>
                     </syncfusion:PropertyGrid>
 
                     <!--StackPanel Orientation="Vertical" Background="{StaticResource ContentBackground}" Opacity="1">
@@ -438,11 +432,6 @@
                         SearchBoxVisibility="Collapsed"
                         SelectedObject="{Binding AB_SelectedItem, Mode=OneWay}"
                         Visibility="{Binding AB_FileInfoVisible, Converter={StaticResource ToggleVisibilityConverter}}">
-                        <syncfusion:PropertyGrid.ContextMenu>
-                            <ContextMenu>
-                                <MenuItem Click="CopyMenuItem_Click" Header="Copy Relative Path" />
-                            </ContextMenu>
-                        </syncfusion:PropertyGrid.ContextMenu>
                     </syncfusion:PropertyGrid>
                 </Grid>
             </syncfusion:TabItemExt>
