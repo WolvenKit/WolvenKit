@@ -5,10 +5,8 @@ using System.Windows;
 using ReactiveUI;
 using Splat;
 using Syncfusion.Windows.Tools.Controls;
-using WolvenKit.Interaction;
 using WolvenKit.ViewModels.Shell;
 using WolvenKit.ViewModels.Tools;
-using WolvenKit.ViewModels.Wizards;
 using WolvenKit.Views.Dialogs;
 
 namespace WolvenKit.Views.Shell
@@ -41,25 +39,25 @@ namespace WolvenKit.Views.Shell
 
                 // asset browser
                 this.BindCommand(ViewModel,
-                        viewModel => viewModel._mainViewModel.AssetBrowserVM.AddSelectedCommand,
+                        viewModel => viewModel.MainViewModel.AssetBrowserVM.AddSelectedCommand,
                         view => view.AddSelectedItemsButton).DisposeWith(disposables);
                 this.BindCommand(ViewModel,
-                        viewModel => viewModel._mainViewModel.AssetBrowserVM.ToggleModBrowserCommand,
+                        viewModel => viewModel.MainViewModel.AssetBrowserVM.ToggleModBrowserCommand,
                         view => view.ModBrowserButton).DisposeWith(disposables);
                 this.BindCommand(ViewModel,
-                        viewModel => viewModel._mainViewModel.AssetBrowserVM.OpenFileLocationCommand,
+                        viewModel => viewModel.MainViewModel.AssetBrowserVM.OpenFileLocationCommand,
                         view => view.SearchOpenFileLocation).DisposeWith(disposables);
                 this.BindCommand(ViewModel,
-                        viewModel => viewModel._mainViewModel.AssetBrowserVM.AddSearchKeyCommand,
+                        viewModel => viewModel.MainViewModel.AssetBrowserVM.AddSearchKeyCommand,
                         view => view.SearchKindButton).DisposeWith(disposables);
                 this.BindCommand(ViewModel,
-                        viewModel => viewModel._mainViewModel.AssetBrowserVM.AddSearchKeyCommand,
+                        viewModel => viewModel.MainViewModel.AssetBrowserVM.AddSearchKeyCommand,
                         view => view.SearchKindButton).DisposeWith(disposables);
                 this.BindCommand(ViewModel,
-                        viewModel => viewModel._mainViewModel.AssetBrowserVM.AddSearchKeyCommand,
+                        viewModel => viewModel.MainViewModel.AssetBrowserVM.AddSearchKeyCommand,
                         view => view.SearchKindButton).DisposeWith(disposables);
                 this.BindCommand(ViewModel,
-                        viewModel => viewModel._mainViewModel.AssetBrowserVM.AddSearchKeyCommand,
+                        viewModel => viewModel.MainViewModel.AssetBrowserVM.AddSearchKeyCommand,
                         view => view.SearchKindButton).DisposeWith(disposables);
 
                 #endregion
@@ -76,7 +74,7 @@ namespace WolvenKit.Views.Shell
                 #region commands
 
                 this.BindCommand(ViewModel,
-                        viewModel => viewModel._mainViewModel.ShowHomePageCommand,
+                        viewModel => viewModel.MainViewModel.ShowHomePageCommand,
                         view => view.HomePageButton)
                     .DisposeWith(disposables);
 
@@ -86,7 +84,7 @@ namespace WolvenKit.Views.Shell
                         view => view.AppMenuOpenProjectButton)
                     .DisposeWith(disposables);
                 this.BindCommand(ViewModel,
-                        viewModel => viewModel._mainViewModel.NewProjectCommand,
+                        viewModel => viewModel.MainViewModel.NewProjectCommand,
                         view => view.AppMenuNewProjectButton)
                     .DisposeWith(disposables);
                 this.BindCommand(ViewModel,
@@ -94,7 +92,7 @@ namespace WolvenKit.Views.Shell
                         view => view.AppMenuPackProjectButton)
                     .DisposeWith(disposables);
                 this.BindCommand(ViewModel,
-                        viewModel => viewModel._mainViewModel.PackInstallModCommand,
+                        viewModel => viewModel.MainViewModel.PackInstallModCommand,
                         view => view.AppMenuPackInstallButton)
                     .DisposeWith(disposables);
                 this.BindCommand(ViewModel,
@@ -120,7 +118,7 @@ namespace WolvenKit.Views.Shell
                         view => view.GeneralOpenProjectButton)
                     .DisposeWith(disposables);
                 this.BindCommand(ViewModel,
-                        viewModel => viewModel._mainViewModel.NewProjectCommand,
+                        viewModel => viewModel.MainViewModel.NewProjectCommand,
                         view => view.GeneralNewProjectButton)
                     .DisposeWith(disposables);
                 this.BindCommand(ViewModel,
@@ -128,7 +126,7 @@ namespace WolvenKit.Views.Shell
                         view => view.GeneralPackProjectButton)
                     .DisposeWith(disposables);
                 this.BindCommand(ViewModel,
-                        viewModel => viewModel._mainViewModel.PackInstallModCommand,
+                        viewModel => viewModel.MainViewModel.PackInstallModCommand,
                         view => view.GeneralPackInstallButton)
                     .DisposeWith(disposables);
                 this.BindCommand(ViewModel,
@@ -172,16 +170,8 @@ namespace WolvenKit.Views.Shell
 
                 //Options
                 this.BindCommand(ViewModel,
-                        viewModel => viewModel._mainViewModel.ShowSettingsCommand,
+                        viewModel => viewModel.MainViewModel.ShowSettingsCommand,
                         view => view.OptionsShowSettingsButton)
-                    .DisposeWith(disposables);
-                this.BindCommand(ViewModel,
-                        viewModel => viewModel.ShowBugReportCommand,
-                        view => view.OptionsShowBugReportButton)
-                    .DisposeWith(disposables);
-                this.BindCommand(ViewModel,
-                        viewModel => viewModel.ShowFeedbackCommand,
-                        view => view.OptionsShowFeedbackButton)
                     .DisposeWith(disposables);
 
                 // Utilities
@@ -192,111 +182,83 @@ namespace WolvenKit.Views.Shell
 
                 // toolbar
                 this.BindCommand(ViewModel,
-                        viewModel => viewModel._mainViewModel.NewFileCommand,
+                        viewModel => viewModel.MainViewModel.NewFileCommand,
                         view => view.ToolbarNewButton)
                     .DisposeWith(disposables);
                 this.BindCommand(ViewModel,
-                        viewModel => viewModel._mainViewModel.SaveFileCommand,
+                        viewModel => viewModel.MainViewModel.SaveFileCommand,
                         view => view.ToolbarSaveButton)
                     .DisposeWith(disposables);
                 this.BindCommand(ViewModel,
-                        viewModel => viewModel._mainViewModel.SaveAsCommand,
+                        viewModel => viewModel.MainViewModel.SaveAsCommand,
                         view => view.ToolbarSaveAsButton)
                     .DisposeWith(disposables);
                 this.BindCommand(ViewModel,
-                        viewModel => viewModel._mainViewModel.SaveAllCommand,
+                        viewModel => viewModel.MainViewModel.SaveAllCommand,
                         view => view.ToolbarSaveAllButton)
                     .DisposeWith(disposables);
                 this.BindCommand(ViewModel,
-                        viewModel => viewModel._mainViewModel.NewProjectCommand,
+                        viewModel => viewModel.MainViewModel.NewProjectCommand,
                         view => view.ToolbarNewProjectButton)
                     .DisposeWith(disposables);
                 this.BindCommand(ViewModel,
-                        viewModel => viewModel._mainViewModel.PackModCommand,
+                        viewModel => viewModel.MainViewModel.PackModCommand,
                         view => view.ToolbarPackProjectButton)
                     .DisposeWith(disposables);
                 this.BindCommand(ViewModel,
-                        viewModel => viewModel._mainViewModel.PackInstallModCommand,
+                        viewModel => viewModel.MainViewModel.PackInstallModCommand,
                         view => view.ToolbarPackInstallButton)
                     .DisposeWith(disposables);
 
                 this.BindCommand(ViewModel,
-                        viewModel => viewModel._mainViewModel.LaunchGameCommand,
+                        viewModel => viewModel.MainViewModel.LaunchGameCommand,
                         view => view.ToolbarLaunchButton)
                     .DisposeWith(disposables);
 
                 this.Bind(ViewModel,
-                        viewModel => viewModel._mainViewModel.SelectedGameCommandIdx,
+                        viewModel => viewModel.MainViewModel.SelectedGameCommandIdx,
                         view => view.ToolbarLaunchCombobox.SelectedIndex)
                     .DisposeWith(disposables);
                 this.OneWayBind(ViewModel,
-                        viewModel => viewModel._mainViewModel.SelectedGameCommands,
+                        viewModel => viewModel.MainViewModel.SelectedGameCommands,
                         view => view.ToolbarLaunchCombobox.ItemsSource)
                     .DisposeWith(disposables);
 
                 this.BindCommand(ViewModel,
-                        viewModel => viewModel._mainViewModel.ShowSettingsCommand,
+                        viewModel => viewModel.MainViewModel.ShowSettingsCommand,
                         view => view.ToolbarSettingsButton)
                     .DisposeWith(disposables);
 
                 this.Bind(ViewModel,
-                        viewModel => viewModel._mainViewModel.ProjectExplorer.IsVisible,
+                        viewModel => viewModel.MainViewModel.ProjectExplorer.IsVisible,
                         view => view.ProjectExplorerCheckbox.IsChecked)
                     .DisposeWith(disposables);
                 this.Bind(ViewModel,
-                        viewModel => viewModel._mainViewModel.AssetBrowserVM.IsVisible,
+                        viewModel => viewModel.MainViewModel.AssetBrowserVM.IsVisible,
                         view => view.AssetBrowserCheckbox.IsChecked)
                     .DisposeWith(disposables);
                 this.Bind(ViewModel,
-                    viewModel => viewModel._mainViewModel.PropertiesViewModel.IsVisible,
+                    viewModel => viewModel.MainViewModel.PropertiesViewModel.IsVisible,
                         view => view.PropertiesCheckbox.IsChecked)
                     .DisposeWith(disposables);
                 this.Bind(ViewModel,
-                        viewModel => viewModel._mainViewModel.Log.IsVisible,
+                        viewModel => viewModel.MainViewModel.Log.IsVisible,
                         view => view.LogCheckbox.IsChecked)
                     .DisposeWith(disposables);
                 this.Bind(ViewModel,
-                        viewModel => viewModel._mainViewModel.ImportExportToolVM.IsVisible,
+                        viewModel => viewModel.MainViewModel.ImportExportToolVM.IsVisible,
                         view => view.ImportExportCheckbox.IsChecked)
                     .DisposeWith(disposables);
                 this.Bind(ViewModel,
-                        viewModel => viewModel._mainViewModel.TweakBrowserVM.IsVisible,
+                        viewModel => viewModel.MainViewModel.TweakBrowserVM.IsVisible,
                         view => view.TweakBrowserCheckbox.IsChecked)
                     .DisposeWith(disposables);
                 this.Bind(ViewModel,
-                        viewModel => viewModel._mainViewModel.LocKeyBrowserVM.IsVisible,
+                        viewModel => viewModel.MainViewModel.LocKeyBrowserVM.IsVisible,
                         view => view.LocKeyBrowserCheckbox.IsChecked)
                     .DisposeWith(disposables);
 
                 #endregion
-
-                Interactions.ShowBugReport.RegisterHandler(interaction =>
-                {
-                    var dialog = new DialogHostView();
-                    dialog.ViewModel.HostedViewModel = Locator.Current.GetService<BugReportWizardViewModel>();
-                    dialog.Owner = Application.Current.MainWindow;
-                    dialog.WindowStartupLocation = WindowStartupLocation.CenterOwner;
-
-                    return Observable.Start(() =>
-                    {
-                        var result = dialog.ShowDialog() == true;
-                        interaction.SetOutput(result);
-                    }, RxApp.MainThreadScheduler);
-                });
-                Interactions.ShowFeedback.RegisterHandler(interaction =>
-                {
-                    var dialog = new DialogHostView();
-                    dialog.ViewModel.HostedViewModel = Locator.Current.GetService<FeedbackWizardViewModel>();
-                    dialog.Owner = Application.Current.MainWindow;
-                    dialog.WindowStartupLocation = WindowStartupLocation.CenterOwner;
-
-                    return Observable.Start(() =>
-                    {
-                        var result = dialog.ShowDialog() == true;
-                        interaction.SetOutput(result);
-                    }, RxApp.MainThreadScheduler);
-                });
-
             });
         }
 
