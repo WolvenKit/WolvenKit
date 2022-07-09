@@ -358,7 +358,8 @@ namespace WolvenKit.ViewModels.Documents
                 }
                 appIndex++;
             }
-            SelectedAppearance = Appearances[0];
+
+            SelectedAppearance = Appearances.FirstOrDefault();
         }
 
 

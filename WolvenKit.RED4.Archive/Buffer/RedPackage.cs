@@ -22,8 +22,6 @@ namespace WolvenKit.RED4.Archive.Buffer
         public ushort Version = 4;
         public ushort Sections = 7;
 
-        public RedPackageSettings Settings { get; set; } = new();
-
         public short CruidIndex;
         public IList<CRUID> RootCruids;
 
