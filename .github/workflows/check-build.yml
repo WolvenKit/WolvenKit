@@ -1,7 +1,7 @@
 name: wkit-check-builds
 on:
   push:
-    branches: [master, main]
+    branches: [main]
 
 jobs:
   desktop-win:
