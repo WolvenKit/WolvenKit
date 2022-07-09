@@ -87,6 +87,7 @@
     <PackageReference Include="DiscordRichPresence" Version="1.0.175" />
     <PackageReference Include="NAudio" Version="2.1.0" />
     <PackageReference Include="Pfim" Version="0.10.3" />
+    <PackageReference Include="Nodify" Version="1.8.0" />
   </ItemGroup>
 
   <ItemGroup>

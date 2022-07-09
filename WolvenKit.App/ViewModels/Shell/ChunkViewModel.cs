@@ -1914,7 +1914,10 @@ namespace WolvenKit.ViewModels.Shell
                     ($"Something went wrong while trying to delete the selection : {ex}");
             }
 
-            Tab.SelectedChunk = Parent;
+            if (Tab is RDTDataViewModel dvm)
+            {
+                dvm.SelectedChunk = Parent;
+            }
         }
 
 
