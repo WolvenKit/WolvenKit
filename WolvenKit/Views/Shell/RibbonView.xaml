@@ -529,8 +529,81 @@
                 </Button>
             </ToolBar>
         </ToolBarTray>
+                        </StackPanel>
+                    </Button>
+                </ToolBar>
 
-    </Grid>
 
+            </syncfusion:Ribbon>
+
+            <!--<StackPanel
+            Width="auto"
+            Height="20"
+            Margin="75,-22,0,0"
+            HorizontalAlignment="Left"
+            VerticalAlignment="Top"
+            Orientation="Horizontal">
+            <TextBlock Background="{x:Null}" Text="RED Modding Tools - WolvenKit" />
+        </StackPanel>-->
+
+            <!--<Border
+            Width="70"
+            Height="28"
+            Margin="0,-2,0,0"
+            HorizontalAlignment="Left"
+            VerticalAlignment="top"
+            Background="{DynamicResource ContentBackgroundAlt2}"
+            CornerRadius="0,5,0,0" />-->
+
+            <!--  Sammy Container  -->
+            <Grid HorizontalAlignment="Left" VerticalAlignment="Top">
+                <Grid.Style>
+                    <Style TargetType="Grid">
+                        <Setter Property="Width" Value="58" />
+                        <Setter Property="Margin" Value="0,-2,0,0" />
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding IsChecked, ElementName=ribbonEnabled}" Value="False">
+                                <Setter Property="Width" Value="38" />
+                                <Setter Property="Margin" Value="0,-1,0,0" />
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Grid.Style>
+
+                <!--  Sammy Size  -->
+                <Grid>
+                    <Grid.Style>
+                        <Style TargetType="Grid">
+                            <Setter Property="Width" Value="42" />
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding IsChecked, ElementName=ribbonEnabled}" Value="False">
+                                    <Setter Property="Width" Value="20" />
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Grid.Style>
+
+                    <Button
+                        x:Name="HomePageButton"
+                        Background="Transparent"
+                        Style="{StaticResource ButtonCustom}">
+                        <Image Source="pack://application:,,,/Resources/Media/Images/Application/Sammy_Home.png">
+                            <Image.Style>
+                                <Style TargetType="Image">
+                                    <Setter Property="Opacity" Value="1" />
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding IsMouseOver, ElementName=HomePageButton}" Value="True">
+                                            <Setter Property="Opacity" Value="0.8" />
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Image.Style>
+                        </Image>
+                    </Button>
+
+                </Grid>
+
+            </Grid>
+        </Grid>
     </Border>
 </reactiveUi:ReactiveUserControl>
