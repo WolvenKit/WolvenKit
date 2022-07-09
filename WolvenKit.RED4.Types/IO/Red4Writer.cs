@@ -269,8 +269,15 @@ namespace WolvenKit.RED4.IO
 
         public List<RedBuffer> BufferStack = new();
 
+        protected virtual void GenerateBufferBytes(RedBuffer buffer)
+        {
+
+        }
+
         public virtual void Write(DataBuffer val)
         {
+            GenerateBufferBytes(val.Buffer);
+
             if (val.Buffer.IsEmpty)
             {
                 _writer.Write(0x80000000);
@@ -299,11 +306,19 @@ namespace WolvenKit.RED4.IO
         public virtual void Write(NodeRef val) => _writer.WriteLengthPrefixedString(val);
         public virtual void Write(SerializationDeferredDataBuffer val)
         {
+            GenerateBufferBytes(val.Buffer);
+
             BufferRef.Add(_writer.BaseStream.Position, val.Buffer);
             _writer.Write((ushort)(GetRedBufferIndex(val.Buffer) + 1));
         }
 
-        public virtual void Write(SharedDataBuffer val) => _writer.Write(val.Buffer.GetBytes());
+        public virtual void Write(SharedDataBuffer val)
+        {
+            GenerateBufferBytes(val.Buffer);
+
+            _writer.Write(val.Buffer.GetBytes());
+        }
+
         public virtual void Write(TweakDBID val) => _writer.Write((ulong)val);
         public virtual void Write(gamedataLocKeyWrapper val) => _writer.Write((ulong)val);
 
@@ -480,6 +495,11 @@ namespace WolvenKit.RED4.IO
         {
             var typeInfo = RedReflection.GetEnumTypeInfo(instance.GetInnerType());
             var valueName = typeInfo.GetRedNameFromCSName(instance.ToEnumString());
+
+            if (valueName == "None")
+            {
+                valueName = "";
+            }
             
             CNameRef.Add(_writer.BaseStream.Position, valueName);
             _writer.Write(GetStringIndex(valueName));
@@ -645,7 +665,7 @@ namespace WolvenKit.RED4.IO
 
         public virtual void WriteFixedClass(RedBaseClass instance)
         {
-            var typeInfo = RedReflection.GetTypeInfo(instance.GetType());
+            var typeInfo = RedReflection.GetTypeInfo(instance);
             foreach (var propertyInfo in typeInfo.GetWritableProperties())
             {
                 var value = instance.GetProperty(propertyInfo.RedName);

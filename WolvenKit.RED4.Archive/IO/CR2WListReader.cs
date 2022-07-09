@@ -1,14 +1,11 @@
-using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using WolvenKit.RED4.Archive.Buffer;
+using WolvenKit.RED4.Types;
 
 namespace WolvenKit.RED4.Archive.IO
 {
-    public class CR2WListReader : IBufferReader
+    public class CR2WListReader : IBufferReader, IErrorHandler
     {
         private MemoryStream _ms;
 
@@ -17,13 +14,15 @@ namespace WolvenKit.RED4.Archive.IO
             _ms = ms;
         }
 
-        public EFileReadErrorCodes ReadBuffer(RedBuffer buffer, Type fileRootType)
+        public EFileReadErrorCodes ReadBuffer(RedBuffer buffer)
         {
             var list = new CR2WList();
             var result = EFileReadErrorCodes.NoError;
             while (result != EFileReadErrorCodes.NoCr2w)
             {
                 var reader = new CR2WReader(_ms);
+                reader.ParsingError += HandleParsingError;
+
                 result = reader.ReadFile(out var cr2wFile, false);
                 if (cr2wFile != null)
                 {
@@ -36,7 +35,23 @@ namespace WolvenKit.RED4.Archive.IO
 
             buffer.Data = list;
 
+            if (buffer.Parent is meshMeshMaterialBuffer mmmb)
+            {
+                mmmb.Materials = new();
+                foreach (var material in list.Files)
+                {
+                    mmmb.Materials.Add(material.RootChunk);
+                }
+            }
+
             return EFileReadErrorCodes.NoError;
         }
+
+        #region ErrorHandler
+
+        public event ParsingErrorEventHandler ParsingError;
+        protected virtual bool HandleParsingError(ParsingErrorEventArgs e) => ParsingError != null && ParsingError.Invoke(e);
+
+        #endregion
     }
 }

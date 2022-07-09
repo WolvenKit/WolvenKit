@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Reactive.Disposables;
 using System.Windows;
 using System.Windows.Input;
@@ -24,9 +25,7 @@ namespace WolvenKit.ViewModels.Documents
 
         protected readonly IRedType _data;
 
-        [Reactive] public RedDocumentViewModel File { get; set; }
-
-        public static IRedType CopiedChunk;
+        public bool IsEmbeddedFile { get; set; }
 
         public RDTDataViewModel(IRedType data, RedDocumentViewModel file)
         {
@@ -37,11 +36,14 @@ namespace WolvenKit.ViewModels.Documents
             this.WhenActivated((CompositeDisposable disposables) =>
             {
                 OnDemandLoadingCommand = new DelegateCommand<TreeViewNode>(ExecuteOnDemandLoading, CanExecuteOnDemandLoading);
-                OpenImportCommand = new Functionality.Commands.DelegateCommand<ICR2WImport>(ExecuteOpenImport);
+                OpenImportCommand = new DelegateCommand<ICR2WImport>(ExecuteOpenImport);
+
                 if (SelectedChunk == null)
                 {
                     SelectedChunk = Chunks[0];
+                    SelectedChunks.Add(Chunks[0]);
                 }
+
                 //ExportChunkCommand = new DelegateCommand<ChunkViewModel>((p) => ExecuteExportChunk(p), (p) => CanExportChunk(p));
 
                 //this.HandleActivation()
@@ -58,6 +60,8 @@ namespace WolvenKit.ViewModels.Documents
             //}
             //_file.WhenAnyValue(x => x).Subscribe(x => IsDirty |= true);
         }
+
+        public RedBaseClass GetData() => (RedBaseClass)_data;
 
         public RDTDataViewModel(string header, IRedType data, RedDocumentViewModel file) : this(data, file)
         {
@@ -94,9 +98,12 @@ namespace WolvenKit.ViewModels.Documents
             set => _chunks = value;
         }
 
-        public virtual ChunkViewModel GenerateChunks() => new ChunkViewModel(_data, this);
+        public virtual ChunkViewModel GenerateChunks() => new(_data, this);
 
         [Reactive] public ChunkViewModel SelectedChunk { get; set; }
+
+        [Reactive] public ObservableCollection<ChunkViewModel> SelectedChunks { get; set; } = new ObservableCollection<ChunkViewModel>();
+
 
         [Reactive] public ChunkViewModel RootChunk { get; set; }
 

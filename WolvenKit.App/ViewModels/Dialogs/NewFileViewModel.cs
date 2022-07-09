@@ -34,7 +34,7 @@ namespace WolvenKit.ViewModels.Dialogs
                 x => x.FileName, x => x.FullPath, x => x.IsCreating,
                 (file, path, isCreating) =>
                     !isCreating &&
-                    file != null &&
+                    file is not null &&
                     !string.IsNullOrEmpty(file) &&
                     !File.Exists(path)));
 
@@ -45,26 +45,24 @@ namespace WolvenKit.ViewModels.Dialogs
             try
             {
                 var serializer = new XmlSerializer(typeof(WolvenKitFileDefinitions));
-                using (var stream = Assembly.GetExecutingAssembly()
-                    .GetManifestResourceStream(@"WolvenKit.App.Resources.WolvenKitFileDefinitions.xml"))
+                using var stream = Assembly.GetExecutingAssembly()
+                    .GetManifestResourceStream(@"WolvenKit.App.Resources.WolvenKitFileDefinitions.xml");
+                var newdef = (WolvenKitFileDefinitions)serializer.Deserialize(stream);
+                foreach (ERedExtension ext in Enum.GetValues(typeof(ERedExtension)))
                 {
-                    var newdef = (WolvenKitFileDefinitions)serializer.Deserialize(stream);
-                    foreach (ERedExtension ext in Enum.GetValues(typeof(ERedExtension)))
+                    if (CommonFunctions.GetResourceClassesFromExtension(ext) is not null)
                     {
-                        if (CommonFunctions.GetResourceClassesFromExtension(ext) != null)
+                        newdef.Categories[2].Files.Add(new AddFileModel()
                         {
-                            newdef.Categories[2].Files.Add(new AddFileModel()
-                            {
-                                Name = CommonFunctions.GetResourceClassesFromExtension(ext),
-                                Description = $"A .{ext} File",
-                                Extension = ext.ToString(),
-                                Type = EWolvenKitFile.Cr2w,
-                                Template = ""
-                            });
-                        }
+                            Name = CommonFunctions.GetResourceClassesFromExtension(ext),
+                            Description = $"A .{ext} File",
+                            Extension = ext.ToString(),
+                            Type = EWolvenKitFile.Cr2w,
+                            Template = ""
+                        });
                     }
-                    Categories = new ObservableCollection<FileCategoryModel>(newdef.Categories);
                 }
+                Categories = new ObservableCollection<FileCategoryModel>(newdef.Categories);
 
             }
             catch (Exception e)
@@ -81,7 +79,7 @@ namespace WolvenKit.ViewModels.Dialogs
             this.WhenAnyValue(x => x.SelectedFile)
                 .Subscribe(x =>
                 {
-                    if (x != null)
+                    if (x is not null)
                     {
                         FileName = $"{x.Name.Split(' ').First()}1.{x.Extension.ToLower()}";
                     }
@@ -93,7 +91,7 @@ namespace WolvenKit.ViewModels.Dialogs
             this.WhenAnyValue(x => x.FileName)
                 .Subscribe(x =>
                 {
-                    if (SelectedFile != null && x != null)
+                    if (SelectedFile is not null && x is not null)
                     {
                         FullPath = Path.Combine(GetDefaultDir(SelectedFile.Type), x);
                         WhyNotCreate = File.Exists(FullPath) ? "Filename already in use" : "";

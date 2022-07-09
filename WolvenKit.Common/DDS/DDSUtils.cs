@@ -1,6 +1,5 @@
 using System;
 using System.IO;
-using BCnEncoder.Shared;
 using WolvenKit.Core.Extensions;
 
 namespace WolvenKit.Common.DDS
@@ -93,7 +92,7 @@ namespace WolvenKit.Common.DDS
 
         #region Methods
 
-        private static uint MAKEFOURCC(char ch0, char ch1, char ch2, char ch3) => (uint)(ch0 | ch1 << 8 | ch2 << 16 | ch3 << 24);
+        private static uint MAKEFOURCC(char ch0, char ch1, char ch2, char ch3) => (uint)(ch0 | (ch1 << 8) | (ch2 << 16) | (ch3 << 24));
 
         private static void SetPixelmask(Func<uint[]> pfmtfactory, ref DDS_PIXELFORMAT pfmt)
         {
@@ -329,7 +328,7 @@ namespace WolvenKit.Common.DDS
             switch (format)
             {
                 case DXGI_FORMAT.DXGI_FORMAT_R8_UNORM:
-                    header.dwPitchOrLinearSize = (width * bpp + 7) / 8;
+                    header.dwPitchOrLinearSize = ((width * bpp) + 7) / 8;
                     break;
 
                 case DXGI_FORMAT.DXGI_FORMAT_R32G32B32A32_FLOAT:
@@ -341,7 +340,7 @@ namespace WolvenKit.Common.DDS
                 case DXGI_FORMAT.DXGI_FORMAT_R16_FLOAT:
                 case DXGI_FORMAT.DXGI_FORMAT_A8_UNORM:
                 case DXGI_FORMAT.DXGI_FORMAT_R8G8B8A8_UNORM:
-                    header.dwPitchOrLinearSize = (width * bpp + 7) / 8;
+                    header.dwPitchOrLinearSize = ((width * bpp) + 7) / 8;
                     header.dwFlags |= DDSD_PITCH;
                     break;
 

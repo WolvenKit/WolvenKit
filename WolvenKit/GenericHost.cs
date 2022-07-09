@@ -167,9 +167,6 @@ namespace WolvenKit
                     services.AddSingleton<HomePageViewModel>();
                     services.AddTransient<IViewFor<HomePageViewModel>, HomePageView>();
 
-                    services.AddTransient<DebugPageViewModel>();
-                    services.AddTransient<IViewFor<DebugPageViewModel>, DebugPageView>();
-
                     services.AddTransient<GithubPageViewModel>();
                     services.AddTransient<IViewFor<GithubPageViewModel>, GithubPageView>();
 
@@ -195,12 +192,6 @@ namespace WolvenKit
                     #endregion
 
                     #region wizards
-
-                    services.AddTransient<BugReportWizardViewModel>();
-                    services.AddTransient<IViewFor<BugReportWizardViewModel>, BugReportWizardView>();
-
-                    services.AddTransient<FeedbackWizardViewModel>();
-                    services.AddTransient<IViewFor<FeedbackWizardViewModel>, FeedbackWizardView>();
 
                     services.AddTransient<FirstSetupWizardViewModel>();
                     services.AddTransient<IViewFor<FirstSetupWizardViewModel>, FirstSetupWizardView>();

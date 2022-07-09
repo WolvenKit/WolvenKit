@@ -57,18 +57,18 @@ namespace WolvenKit.RED4.Types
 
         [RED("persistentNodes")]
         [REDProperty(IsIgnored = true)]
-        public CArray<IRedType> PersistentNodes
+        public CArray<RedBaseClass> PersistentNodes
         {
-            get => GetPropertyValue<CArray<IRedType>>();
-            set => SetPropertyValue<CArray<IRedType>>(value);
+            get => GetPropertyValue<CArray<RedBaseClass>>();
+            set => SetPropertyValue<CArray<RedBaseClass>>(value);
         }
 
         [RED("variantNodes")]
         [REDProperty(IsIgnored = true)]
-        public CArray<CArray<IRedType>> VariantNodes
+        public CArray<CArray<RedBaseClass>> VariantNodes
         {
-            get => GetPropertyValue<CArray<CArray<IRedType>>>();
-            set => SetPropertyValue<CArray<CArray<IRedType>>>(value);
+            get => GetPropertyValue<CArray<CArray<RedBaseClass>>>();
+            set => SetPropertyValue<CArray<CArray<RedBaseClass>>>(value);
         }
 
         public void Read(Red4Reader reader, uint size)

@@ -22,19 +22,19 @@ using WolvenKit.Views.Dialogs;
 
 namespace WolvenKit
 {
-    public partial class App //: Application
+    public partial class AppImpl //: Application
     {
         // Determines if the application is in design mode.
         //public static bool IsInDesignMode => !(Current is App) || (bool)DesignerProperties.IsInDesignModeProperty.GetMetadata(typeof(DependencyObject)).DefaultValue;
 
         // Constructor #1
-        static App()
+        static AppImpl()
         {
 
         }
 
         // Constructor #2
-        public App()
+        public AppImpl()
         {
             Directory.SetCurrentDirectory(AppContext.BaseDirectory);
 

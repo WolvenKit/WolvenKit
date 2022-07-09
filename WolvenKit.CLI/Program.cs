@@ -39,6 +39,8 @@ namespace WolvenKit.CLI
                 new TweakCommand(),
 
                 new SettingsCommand(),
+
+                new WwiseCommand(),
             };
 
             var parser = new CommandLineBuilder(rootCommand)

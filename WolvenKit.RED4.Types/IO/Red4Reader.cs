@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Data;
 using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
@@ -11,7 +10,7 @@ using WolvenKit.RED4.Types.Exceptions;
 
 namespace WolvenKit.RED4.IO
 {
-    public partial class Red4Reader : IDisposable
+    public partial class Red4Reader : IErrorHandler, IDisposable
     {
         protected readonly BinaryReader _reader;
 
@@ -24,6 +23,7 @@ namespace WolvenKit.RED4.IO
         public bool CollectData { get; set; } = false;
         public DataCollection DataCollection { get; } = new();
 
+        
         public Red4Reader(Stream input) : this(input, Encoding.UTF8, false)
         {
         }
@@ -555,6 +555,10 @@ namespace WolvenKit.RED4.IO
             throw new NotSupportedException($"{nameof(Red4Reader)}.{callerMemberName}");
         }
 
+        public event ParsingErrorEventHandler ParsingError;
+
+        protected virtual bool HandleParsingError(ParsingErrorEventArgs e) => ParsingError != null && ParsingError.Invoke(e);
+
         #endregion
 
         public virtual RedBaseClass ReadClass(Type type, uint size)
@@ -576,9 +580,9 @@ namespace WolvenKit.RED4.IO
 
         public virtual RedBaseClass ReadFixedClass(Type type, uint size)
         {
-            var typeInfo = RedReflection.GetTypeInfo(type);
-
             var instance = RedTypeManager.Create(type);
+            var typeInfo = RedReflection.GetTypeInfo(instance);
+
             foreach (var propertyInfo in typeInfo.GetWritableProperties())
             {
                 var value = Read(propertyInfo.Type, 0, Flags.Empty);

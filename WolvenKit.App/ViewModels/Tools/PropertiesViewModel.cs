@@ -6,7 +6,6 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Media.Media3D;
 using HelixToolkit.SharpDX.Core;
 using HelixToolkit.Wpf.SharpDX;
 using ReactiveUI;
@@ -14,20 +13,19 @@ using ReactiveUI.Fody.Helpers;
 using WolvenKit.Common;
 using WolvenKit.Common.Interfaces;
 using WolvenKit.Common.Services;
-using WolvenKit.Functionality.Ab4d;
 using WolvenKit.Functionality.Commands;
 using WolvenKit.Functionality.Extensions;
-using WolvenKit.Functionality.Helpers;
+using WolvenKit.Functionality.Other;
 using WolvenKit.Functionality.Services;
 using WolvenKit.Models;
 using WolvenKit.Models.Docking;
 using WolvenKit.Modkit.RED4;
+using WolvenKit.Modkit.RED4.Tools;
 using WolvenKit.RED4.Archive.CR2W;
 using WolvenKit.RED4.CR2W;
 using WolvenKit.RED4.Types;
 using WolvenKit.ViewModels.Documents;
 using static WolvenKit.ViewModels.Documents.RDTMeshViewModel;
-using WolvenKit.Modkit.RED4.Tools;
 
 namespace WolvenKit.ViewModels.Tools
 {
@@ -143,6 +141,11 @@ namespace WolvenKit.ViewModels.Tools
 
         private bool CanOpenFile(FileModel model) => model != null;
 
+        /// <summary>
+        /// Called from Assetbrowser
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
         public async Task ExecuteSelectFile(IFileSystemViewModel model)
         {
             if (model == null)
@@ -186,15 +189,23 @@ namespace WolvenKit.ViewModels.Tools
                 {
                     var selectedGameFile = selectedItem.GetGameFile();
                     selectedGameFile.Extract(stream);
-                    _parser.TryReadRed4File(stream, out cr2w);
+                    if (!_parser.TryReadRed4File(stream, out cr2w))
+                    {
+                        PreviewStream(stream, model.FullName);
+                    }
                 }
                 if (cr2w != null)
                 {
-                    await ExecuteSelectFile(cr2w, model.FullName);
+                    await PreviewCr2wFile(cr2w);
                 }
             }
         }
 
+        /// <summary>
+        /// Called from PropertyExplorer
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
         public async Task ExecuteSelectFile(FileModel model)
         {
             if (model == null)
@@ -238,17 +249,50 @@ namespace WolvenKit.ViewModels.Tools
                 {
                     if (!_parser.TryReadRed4File(stream, out cr2w))
                     {
-                        await ExecuteSelectFile(stream, model.FullName);
+                        await PreviewPhysicalFile(model.FullName);
                     }
                 }
                 if (cr2w != null)
                 {
-                    await ExecuteSelectFile(cr2w, model.FullName);
+                    await PreviewCr2wFile(cr2w);
                 }
             }
         }
 
-        public async Task ExecuteSelectFile(Stream stream, string filename)
+        /// <summary>
+        /// Internal
+        /// </summary>
+        /// <param name="stream"></param>
+        /// <param name="filename"></param>
+        /// <returns></returns>
+        private void PreviewStream(Stream stream, string filename)
+        {
+            var extension = Path.GetExtension(filename).TrimStart('.');
+            stream.Seek(0, SeekOrigin.Begin);
+
+            if (Enum.TryParse<AudioPreviewExtensions>(extension, true, out _))
+            {
+                IsAudioPreviewVisible = true;
+                SelectedIndex = 2;
+
+                // extract to temp path
+                var outfile = Path.Combine(Path.GetTempPath(), Path.GetFileName(filename));
+                using (var fs = new FileStream(outfile, FileMode.Create, FileAccess.Write))
+                {
+                    stream.CopyTo(fs);
+                }
+
+                PreviewAudioCommand.SafeExecute(outfile);
+            }
+        }
+
+        /// <summary>
+        /// Internal
+        /// </summary>
+        /// <param name="stream"></param>
+        /// <param name="filename"></param>
+        /// <returns></returns>
+        private async Task PreviewPhysicalFile(string filename)
         {
             var extension = Path.GetExtension(filename).TrimStart('.');
 
@@ -262,11 +306,12 @@ namespace WolvenKit.ViewModels.Tools
                 IsAudioPreviewVisible = true;
                 SelectedIndex = 2;
 
+                // extract to temp path
+                var tempFolder = Path.GetTempPath();
+
                 PreviewAudioCommand.SafeExecute(filename);
             }
-
-            // textures
-            if (Enum.TryParse<EUncookExtension>(extension, true, out _))
+            else if (Enum.TryParse<EUncookExtension>(extension, true, out _))
             {
                 var q = await ImageDecoder.RenderToBitmapSource(filename);
                 if (q != null)
@@ -279,7 +324,7 @@ namespace WolvenKit.ViewModels.Tools
             }
         }
 
-        public Task ExecuteSelectFile(CR2WFile cr2w, string filename)
+        private async Task PreviewCr2wFile(CR2WFile cr2w)
         {
             //if (string.Equals(extension, ERedExtension.bk2.ToString(),
             //   System.StringComparison.OrdinalIgnoreCase))
@@ -297,37 +342,35 @@ namespace WolvenKit.ViewModels.Tools
                 cbt.RenderTextureResource.RenderResourceBlobPC != null &&
                 cbt.RenderTextureResource.RenderResourceBlobPC.GetValue() is rendRenderTextureBlobPC)
             {
-                SetupImage(cbt);
+                await SetupImage(cbt);
             }
 
             if (cr2w.RootChunk is CMesh cm && cm.RenderResourceBlob != null &&
                 cm.RenderResourceBlob.GetValue() is rendRenderTextureBlobPC)
             {
-                SetupImage(cm);
+                await SetupImage(cm);
             }
 
             if (cr2w.RootChunk is CReflectionProbeDataResource crpdr &&
                 crpdr.TextureData.RenderResourceBlobPC.GetValue() is rendRenderTextureBlobPC)
             {
-                SetupImage(crpdr);
+                await SetupImage(crpdr);
             }
-
-            return Task.CompletedTask;
         }
 
-        public void SetupImage(RedBaseClass cls)
+        public async Task SetupImage(RedBaseClass cls)
         {
             using var ddsstream = new MemoryStream();
             try
             {
                 if (ModTools.ConvertRedClassToDdsStream(cls, ddsstream, out _))
                 {
-                    _ = LoadImageFromStream(ddsstream);
+                    await LoadImageFromStream(ddsstream);
                 }
             }
             catch (Exception e)
             {
-                Console.WriteLine(e.Message);
+                _loggerService.Error(e);
                 //throw;
             }
         }
@@ -347,19 +390,27 @@ namespace WolvenKit.ViewModels.Tools
 
         public void LoadModel(RedBaseClass cls)
         {
-            var meshes = MakePreviewMesh(cls);
-
-            IsMeshPreviewVisible = true;
-            SelectedIndex = 1;
-
-            var bounds = new SharpDX.BoundingBox();
-            foreach (var mesh in meshes)
+            try
             {
-                bounds = SharpDX.BoundingBox.Merge(bounds, mesh.BoundsWithTransform);
+                var meshes = MakePreviewMesh(cls);
+
+                IsMeshPreviewVisible = true;
+                SelectedIndex = 1;
+
+                var bounds = new SharpDX.BoundingBox();
+                foreach (var mesh in meshes)
+                {
+                    bounds = SharpDX.BoundingBox.Merge(bounds, mesh.BoundsWithTransform);
+                }
+
+                ModelGroupBounds = bounds;
+                ModelGroup.Reset(meshes);
+            }
+            catch
+            {
+
             }
 
-            ModelGroupBounds = bounds;
-            ModelGroup.Reset(meshes);
         }
 
         public void LoadImage(BitmapSource p0) => LoadedBitmapFrame = p0;
@@ -372,10 +423,7 @@ namespace WolvenKit.ViewModels.Tools
 
         public bool ShowWireFrame
         {
-            get
-            {
-                return _showWireFrame;
-            }
+            get => _showWireFrame;
             set
             {
                 _showWireFrame = value;
@@ -452,8 +500,8 @@ namespace WolvenKit.ViewModels.Tools
                 {
                     Name = $"submesh_{index:D2}_LOD_{meshesinfo.LODLvl[index]:D2}",
                     LOD = meshesinfo.LODLvl[index],
-                    IsRendering = (chunkMask & 1UL << index) > 0 && meshesinfo.LODLvl[index] == SelectedLOD,
-                    EnabledWithMask = (chunkMask & 1UL << index) > 0,
+                    IsRendering = (chunkMask & (1UL << index)) > 0 && meshesinfo.LODLvl[index] == SelectedLOD,
+                    EnabledWithMask = (chunkMask & (1UL << index)) > 0,
                     Geometry = new HelixToolkit.SharpDX.Core.MeshGeometry3D()
                     {
                         Positions = positions,

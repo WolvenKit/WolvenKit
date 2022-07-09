@@ -2,26 +2,20 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Drawing;
-using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
 using System.Reactive.Disposables;
-using System.Threading.Tasks;
 using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
 using System.Windows.Media.Media3D;
 using HelixToolkit.SharpDX.Core;
 using HelixToolkit.Wpf.SharpDX;
+using Prism.Commands;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using Splat;
-using WolvenKit.Common.DDS;
 using WolvenKit.Common.Services;
-using WolvenKit.Functionality.Ab4d;
-using WolvenKit.Functionality.Commands;
 using WolvenKit.Functionality.Services;
-using WolvenKit.Modkit.RED4;
 using WolvenKit.RED4.Archive.Buffer;
 using WolvenKit.RED4.Archive.CR2W;
 using WolvenKit.RED4.Archive.IO;
@@ -37,11 +31,11 @@ namespace WolvenKit.ViewModels.Documents
         public string SlotName { get; set; }
     }
 
-    public interface Node
+    public interface INode
     {
         public string Name { get; set; }
         public SeparateMatrix Matrix { get; set; }
-        public Node Parent { get; set; }
+        public INode Parent { get; set; }
         public List<LoadableModel> Models { get; set; }
 
         public void AddModel(LoadableModel child);
@@ -52,7 +46,8 @@ namespace WolvenKit.ViewModels.Documents
         public Dictionary<uint, List<SubmeshComponent>> LODLUT { get; set; } = new();
 
         private uint _selectedLOD = 1;
-        public uint SelectedLOD {
+        public uint SelectedLOD
+        {
             get => _selectedLOD;
             set
             {
@@ -61,14 +56,7 @@ namespace WolvenKit.ViewModels.Documents
                 {
                     foreach (var submesh in LODLUT[lod])
                     {
-                        if (lod == _selectedLOD)
-                        {
-                            submesh.IsRendering = submesh.EnabledWithMask;
-                        }
-                        else
-                        {
-                            submesh.IsRendering = false;
-                        }
+                        submesh.IsRendering = lod == _selectedLOD && submesh.EnabledWithMask;
                     }
                 }
             }
@@ -77,13 +65,13 @@ namespace WolvenKit.ViewModels.Documents
         public string Name { get; set; }
         public List<LoadableModel> Models { get; set; } = new();
         public CName Resource { get; set; }
-        public List<Node> Nodes { get; set; } = new();
+        public List<INode> Nodes { get; set; } = new();
         public SmartElement3DCollection ModelGroup { get; set; } = new();
         public List<LoadableModel> BindableModels { get; set; } = new();
         public Dictionary<string, Material> RawMaterials { get; set; } = new();
     }
 
-    public class LoadableModel : IBindable, Node
+    public class LoadableModel : IBindable, INode
     {
         public int AppearanceIndex { get; set; }
         public string AppearanceName { get; set; }
@@ -102,12 +90,12 @@ namespace WolvenKit.ViewModels.Documents
         public string BindName { get; set; }
         public string SlotName { get; set; }
 
-        public UInt64 ChunkMask { get; set; } = 18446744073709551615;
+        public ulong ChunkMask { get; set; } = ulong.MaxValue;
         public List<bool> ChunkList { get; set; } = new(64);
         public ObservableCollection<int> AllChunks { get; set; } = new();
         public ObservableCollection<int> EnabledChunks { get; set; } = new();
 
-        public Node Parent { get; set; }
+        public INode Parent { get; set; }
         public List<LoadableModel> Models { get; set; } = new();
         public void AddModel(LoadableModel child)
         {
@@ -116,7 +104,7 @@ namespace WolvenKit.ViewModels.Documents
         }
     }
 
-    public class Rig : IBindable, Node
+    public class Rig : IBindable, INode
     {
         public string Name { get; set; }
         public List<RigBone> Bones { get; set; } = new();
@@ -132,7 +120,7 @@ namespace WolvenKit.ViewModels.Documents
             Children.Add(child);
         }
 
-        public Node Parent { get; set; }
+        public INode Parent { get; set; }
         public List<LoadableModel> Models { get; set; } = new();
         public void AddModel(LoadableModel child)
         {
@@ -141,7 +129,7 @@ namespace WolvenKit.ViewModels.Documents
         }
     }
 
-    public class RigBone : Node
+    public class RigBone : INode
     {
         public string Name { get; set; }
         public List<RigBone> Children { get; set; } = new();
@@ -153,7 +141,7 @@ namespace WolvenKit.ViewModels.Documents
             Children.Add(child);
         }
 
-        public Node Parent { get; set; }
+        public INode Parent { get; set; }
         public List<LoadableModel> Models { get; set; } = new();
         public void AddModel(LoadableModel child)
         {
@@ -190,9 +178,9 @@ namespace WolvenKit.ViewModels.Documents
         public ViewModelActivator Activator { get; } = new();
 
         protected readonly RedBaseClass _data;
-        public RedDocumentViewModel File;
-        private Dictionary<string, LoadableModel> _modelList = new();
-        private Dictionary<string, SlotSet> _slotSets = new();
+
+        private readonly Dictionary<string, LoadableModel> _modelList = new();
+        private readonly Dictionary<string, SlotSet> _slotSets = new();
 
         public EffectsManager EffectsManager { get; }
 
@@ -209,34 +197,40 @@ namespace WolvenKit.ViewModels.Documents
 
         public RDTMeshViewModel(RedDocumentViewModel file)
         {
-            if (Header == null)
+            try
             {
-                Header = "Mesh Preview";
-            }
-
-            File = file;
-
-            foreach (var res in File.Cr2wFile.EmbeddedFiles)
-            {
-                if (!File.Files.ContainsKey(res.FileName))
+                if (Header == null)
                 {
-                    File.Files.Add(res.FileName, new CR2WFile()
-                    {
-                        RootChunk = res.Content
-                    });
+                    Header = "Mesh Preview";
                 }
+
+                File = file;
+
+                foreach (var res in File.Cr2wFile.EmbeddedFiles)
+                {
+                    if (!File.Files.ContainsKey(res.FileName))
+                    {
+                        File.Files.Add(res.FileName, new CR2WFile()
+                        {
+                            RootChunk = res.Content
+                        });
+                    }
+                }
+
+                EffectsManager = new DefaultEffectsManager();
+
+                //EnvironmentMap = TextureModel.Create(Path.Combine(ISettingsManager.GetTemp_OBJPath(), "Cubemap_Grandcanyon.dds"));
+                Camera = new HelixToolkit.Wpf.SharpDX.PerspectiveCamera()
+                {
+                    FarPlaneDistance = 1E+8,
+                    LookDirection = new System.Windows.Media.Media3D.Vector3D(1f, -1f, -1f)
+                };
+
+                ExtractShadersCommand = new DelegateCommand(ExtractShaders);
+                LoadMaterialsCommand = new DelegateCommand(LoadMaterials);
             }
+            catch (Exception ex) { Locator.Current.GetService<ILoggerService>().Error(ex); }
 
-            EffectsManager = new DefaultEffectsManager();
-            //EnvironmentMap = TextureModel.Create(Path.Combine(ISettingsManager.GetTemp_OBJPath(), "Cubemap_Grandcanyon.dds"));
-            Camera = new HelixToolkit.Wpf.SharpDX.PerspectiveCamera()
-            {
-                FarPlaneDistance = 1E+8,
-                LookDirection = new System.Windows.Media.Media3D.Vector3D(1f, -1f, -1f)
-            };
-
-            ExtractShadersCommand = new RelayCommand(ExtractShaders);
-            LoadMaterialsCommand = new RelayCommand(LoadMaterials);
         }
 
         public RDTMeshViewModel(CMesh data, RedDocumentViewModel file) : this(file)
@@ -244,10 +238,7 @@ namespace WolvenKit.ViewModels.Documents
             _data = data;
             //Render = RenderMesh;
 
-            this.WhenActivated((CompositeDisposable disposables) =>
-            {
-                RenderMesh();
-            });
+            this.WhenActivated((CompositeDisposable disposables) => RenderMesh());
         }
 
         public void RenderMesh()
@@ -368,7 +359,8 @@ namespace WolvenKit.ViewModels.Documents
                 }
                 appIndex++;
             }
-            SelectedAppearance = Appearances[0];
+
+            SelectedAppearance = Appearances.FirstOrDefault();
         }
 
 
@@ -396,14 +388,19 @@ namespace WolvenKit.ViewModels.Documents
 
         public GroupModel3D GroupFromModel(LoadableModel model)
         {
-            var group = new MeshComponent()
+            var group = new MeshComponent();
+            try
             {
-                Name = !string.IsNullOrEmpty(model.Name) && char.IsDigit(model.Name[0]) ? $"_{model.Name}" : $"{model.Name}",
-                AppearanceName = model.AppearanceName,
-                Transform = model.Transform,
-                IsRendering = model.IsEnabled,
-                DepotPath = model.DepotPath
-            };
+                group.Name = !string.IsNullOrEmpty(model.Name) && char.IsDigit(model.Name[0]) ? $"_{model.Name}" : $"{model.Name}";
+                group.AppearanceName = model.AppearanceName;
+                group.Transform = model.Transform;
+                group.IsRendering = model.IsEnabled;
+                group.DepotPath = model.DepotPath;
+            }
+            catch (Exception ex)
+            {
+                Console.Write(ex);
+            }
 
             foreach (var mesh in model.Meshes)
             {
@@ -430,7 +427,7 @@ namespace WolvenKit.ViewModels.Documents
                 };
                 group.Children.Add(GroupFromRigBone(rig, rig.Bones[0], groups));
                 groups.Add(name, group);
-               modelGroups.Add(group);
+                modelGroups.Add(group);
             }
 
             foreach (var model in app.BindableModels)
@@ -460,7 +457,7 @@ namespace WolvenKit.ViewModels.Documents
                 }
                 else
                 {
-                   modelGroups.Add(group);
+                    modelGroups.Add(group);
                 }
             }
             return modelGroups;
@@ -469,17 +466,19 @@ namespace WolvenKit.ViewModels.Documents
         private List<LoadableModel> LoadMeshs(IList<RedBaseClass> chunks)
         {
             if (chunks == null)
+            {
                 return null;
+            }
 
             var appModels = new Dictionary<string, LoadableModel>();
 
             foreach (var component in chunks)
             {
-                Vector3 scale = new Vector3() { X = 1, Y = 1, Z = 1 };
+                var scale = new Vector3() { X = 1, Y = 1, Z = 1 };
                 CName depotPath = null;
-                bool enabled = true;
-                string meshApp = "default";
-                UInt64 chunkMask = 18446744073709551615;
+                var enabled = true;
+                var meshApp = "default";
+                var chunkMask = 18446744073709551615;
                 var chunkList = new List<bool>(new bool[64]);
 
                 if (component is entMeshComponent emc)
@@ -498,10 +497,12 @@ namespace WolvenKit.ViewModels.Documents
                 var enabledChunks = new ObservableCollection<int>();
 
                 for (var i = 0; i < 64; i++)
-                { 
+                {
                     chunkList[i] = (chunkMask & (1UL << i)) > 0;
                     if (chunkList[i])
+                    {
                         enabledChunks.Add(i);
+                    }
                 }
 
                 if (component is entIPlacedComponent epc && depotPath != null && depotPath.GetRedHash() != 0)
@@ -572,7 +573,7 @@ namespace WolvenKit.ViewModels.Documents
                         {
                             material.Values[pair.Key] = pair.Value;
                         }
-                        
+
                         materials[name] = material;
                     }
                     var apps = new List<string>();
@@ -679,7 +680,10 @@ namespace WolvenKit.ViewModels.Documents
             {
                 SelectedAppearance.Nodes.Add(model);
                 if (model.BindName == null)
+                {
                     continue;
+                }
+
                 if (models.ContainsKey(model.BindName))
                 {
                     models[model.BindName].AddModel(model);
@@ -757,7 +761,7 @@ namespace WolvenKit.ViewModels.Documents
 
 
         public ICommand ExtractShadersCommand { get; set; }
-        public void ExtractShaders()
+        public static void ExtractShaders()
         {
             var _settingsManager = Locator.Current.GetService<ISettingsManager>();
             ShaderCacheReader.ExtractShaders(new FileInfo(_settingsManager.CP77ExecutablePath), ISettingsManager.GetTemp_OBJPath());
@@ -815,8 +819,8 @@ namespace WolvenKit.ViewModels.Documents
 
         //public static System.Windows.Media.Media3D.Quaternion ToQuaternion(RED4.Types.Quaternion q) => new System.Windows.Media.Media3D.Quaternion(q.I, q.J, q.K, q.R);
 
-        public static System.Windows.Media.Media3D.Quaternion ToQuaternion(RED4.Types.Quaternion q) => new System.Windows.Media.Media3D.Quaternion(q.I, q.K, -q.J, q.R);
-        public static System.Windows.Media.Media3D.Quaternion ToQuaternionOG(RED4.Types.Quaternion q) => new System.Windows.Media.Media3D.Quaternion(q.I, q.J, q.K, q.R);
+        public static System.Windows.Media.Media3D.Quaternion ToQuaternion(RED4.Types.Quaternion q) => new(q.I, q.K, -q.J, q.R);
+        public static System.Windows.Media.Media3D.Quaternion ToQuaternionOG(RED4.Types.Quaternion q) => new(q.I, q.J, q.K, q.R);
 
         //public static Vector3D ToVector3D(WorldPosition v) => new Vector3D(v.X, v.Y, v.Z);
 
@@ -824,17 +828,17 @@ namespace WolvenKit.ViewModels.Documents
 
         //public static Vector3D ToVector3D(Vector3 v) => new Vector3D(v.X, v.Y, v.Z);
 
-        public static Vector3D ToVector3D(WorldPosition v) => new Vector3D((float)v.X, (float)v.Z, -(float)v.Y);
+        public static Vector3D ToVector3D(WorldPosition v) => new((float)v.X, (float)v.Z, -(float)v.Y);
 
-        public static Vector3D ToVector3D(Vector4 v) => new Vector3D(v.X, v.Z, -v.Y);
+        public static Vector3D ToVector3D(Vector4 v) => new(v.X, v.Z, -v.Y);
 
-        public static Vector3D ToVector3D(Vector3 v) => new Vector3D(v.X, v.Z, -v.Y);
+        public static Vector3D ToVector3D(Vector3 v) => new(v.X, v.Z, -v.Y);
 
-        public static Vector3D ToScaleVector3D(Vector4 v) => new Vector3D(v.X, v.Z, v.Y);
+        public static Vector3D ToScaleVector3D(Vector4 v) => new(v.X, v.Z, v.Y);
 
-        public static Vector3D ToScaleVector3D(Vector3 v) => new Vector3D(v.X, v.Z, v.Y);
+        public static Vector3D ToScaleVector3D(Vector3 v) => new(v.X, v.Z, v.Y);
 
-        public static Matrix3D ToMatrix3D(CMatrix matrix) => new Matrix3D(matrix.X.X, matrix.Y.X, matrix.Z.X, matrix.W.X,
+        public static Matrix3D ToMatrix3D(CMatrix matrix) => new(matrix.X.X, matrix.Y.X, matrix.Z.X, matrix.W.X,
                                                                           matrix.X.Y, matrix.Y.Y, matrix.Z.Y, matrix.W.Y,
                                                                           matrix.X.Z, matrix.Y.Z, matrix.Z.Z, matrix.W.Z,
                                                                           matrix.X.W, matrix.Y.W, matrix.Z.W, matrix.W.W);
@@ -859,7 +863,8 @@ namespace WolvenKit.ViewModels.Documents
         public Matrix3D scale = new();
         public Matrix3D post = new();
 
-        public SeparateMatrix() {
+        public SeparateMatrix()
+        {
 
         }
 
@@ -882,22 +887,11 @@ namespace WolvenKit.ViewModels.Documents
             post.Append(matrix.translation);
         }
 
-        public void Scale(Vector3D v)
-        {
-            scale.Scale(v);
-        }
+        public void Scale(Vector3D v) => scale.Scale(v);
 
-        public void Rotate(System.Windows.Media.Media3D.Quaternion q)
-        {
-            rotation.Rotate(q);
-            //scale.Rotate(q);
-        }
+        public void Rotate(System.Windows.Media.Media3D.Quaternion q) => rotation.Rotate(q);//scale.Rotate(q);
 
-        public void Translate(Vector3D v)
-        {
-            translation.Translate(v);
-            //scale.Translate(v);
-        }
+        public void Translate(Vector3D v) => translation.Translate(v);//scale.Translate(v);
 
         public Matrix3D ToMatrix3D()
         {

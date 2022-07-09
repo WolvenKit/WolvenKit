@@ -18,7 +18,7 @@ namespace WolvenKit.Modkit.RED4
 {
     public partial class ModTools
     {
-        public bool ExportAnim(Stream animStream, List<Archive> archives, FileInfo outfile, bool isGLBinary = true, bool incRootMotion = true)
+        public bool ExportAnim(Stream animStream, List<ICyberGameArchive> archives, FileInfo outfile, bool isGLBinary = true, bool incRootMotion = true)
         {
             var animsFile = _wolvenkitFileService.ReadRed4File(animStream);
             if (animsFile == null || animsFile.RootChunk is not animAnimSet anims)
@@ -28,7 +28,7 @@ namespace WolvenKit.Modkit.RED4
             return ExportAnim(animsFile, archives, outfile, isGLBinary,incRootMotion);
         }
 
-        public bool ExportAnim(CR2WFile animsFile, List<Archive> archives, FileInfo outfile, bool isGLBinary = true, bool incRootMotion = true)
+        public bool ExportAnim(CR2WFile animsFile, List<ICyberGameArchive> archives, FileInfo outfile, bool isGLBinary = true, bool incRootMotion = true, ValidationMode vmode = ValidationMode.TryFix)
         {
             if (animsFile == null || animsFile.RootChunk is not animAnimSet anims)
             {
@@ -48,10 +48,10 @@ namespace WolvenKit.Modkit.RED4
             var hash = FNV1A64HashAlgorithm.HashString(anims.Rig.DepotPath);
             foreach (var ar in archives)
             {
-                if (ar.Files.ContainsKey(hash))
+                if (ar.Files.TryGetValue(hash, out var gameFile))
                 {
                     var ms = new MemoryStream();
-                    ModTools.ExtractSingleToStream(ar, hash, ms);
+                    gameFile.Extract(ms);
                     rigFile = _wolvenkitFileService.ReadRed4File(ms);
                     break;
                 }
@@ -62,16 +62,16 @@ namespace WolvenKit.Modkit.RED4
 
             if (isGLBinary)
             {
-                model.SaveGLB(outfile.FullName);
+                model.SaveGLB(outfile.FullName, new WriteSettings(vmode));
             }
             else
             {
-                model.SaveGLTF(outfile.FullName);
+                model.SaveGLTF(outfile.FullName, new WriteSettings(vmode));
             }
 
             return true;
         }
-        public bool ImportAnims(FileInfo gltfFile, Stream animStream, List<Archive> archives)
+        public bool ImportAnims(FileInfo gltfFile, Stream animStream, List<ICyberGameArchive> archives)
         {
             var animsFile = _wolvenkitFileService.ReadRed4File(animStream);
             if (animsFile == null || animsFile.RootChunk is not animAnimSet anims)
@@ -83,10 +83,10 @@ namespace WolvenKit.Modkit.RED4
             var hash = FNV1A64HashAlgorithm.HashString(anims.Rig.DepotPath);
             foreach (var ar in archives)
             {
-                if (ar.Files.ContainsKey(hash))
+                if (ar.Files.TryGetValue(hash, out var gameFile))
                 {
                     var ms = new MemoryStream();
-                    ExtractSingleToStream(ar, hash, ms);
+                    gameFile.Extract(ms);
                     Rig = RIG.ProcessRig(_wolvenkitFileService.ReadRed4File(ms));
                     if (Rig is null || Rig.BoneCount < 1)
                     {
@@ -180,7 +180,7 @@ namespace WolvenKit.Modkit.RED4
                     var dict = positions[bone];
                     foreach (var time in dict.Keys)
                     {
-                        var timeNormalized = time / srcAnim.Duration;
+                        var timeNormalized = NormalizeTime(time, srcAnim.Duration);
                         UInt16 t = Convert.ToUInt16(Math.Clamp(timeNormalized, 0, 1.0f) * UInt16.MaxValue);
                         bw.Write(t);
                         bw.Write(bone);
@@ -196,7 +196,7 @@ namespace WolvenKit.Modkit.RED4
                     var dict = rotations[bone];
                     foreach (var time in dict.Keys)
                     {
-                        var timeNormalized = time / srcAnim.Duration;
+                        var timeNormalized = NormalizeTime(time, srcAnim.Duration);
                         UInt16 t = Convert.ToUInt16(Math.Clamp(timeNormalized, 0, 1.0f) * UInt16.MaxValue);
                         bw.Write(t);
 
@@ -235,7 +235,7 @@ namespace WolvenKit.Modkit.RED4
                     var dict = scales[bone];
                     foreach (var time in dict.Keys)
                     {
-                        var timeNormalized = time / srcAnim.Duration;
+                        var timeNormalized = NormalizeTime(time, srcAnim.Duration);
                         UInt16 t = Convert.ToUInt16(Math.Clamp(timeNormalized, 0, 1.0f) * UInt16.MaxValue);
                         bw.Write(t);
 
@@ -273,6 +273,8 @@ namespace WolvenKit.Modkit.RED4
             outMs.CopyTo(animStream);
 
             return true;
+
+            static float NormalizeTime(float time, float scene_length) => (0 == time * scene_length) ? 0 : time / scene_length;
         }
         public static bool GetAnimation(CR2WFile animsFile, CR2WFile rigFile, ref ModelRoot model, bool includeRig = true,bool incRootMotion = true)
         {

@@ -49,7 +49,7 @@ namespace WolvenKit.Modkit.RED4
                 return false;
             }
 
-            if (eet.CompiledData.Data is not Package04 entPkg)
+            if (eet.CompiledData.Data is not RedPackage entPkg)
             {
                 return false;
             }
@@ -125,7 +125,7 @@ namespace WolvenKit.Modkit.RED4
 
                 foreach (var appApp in aar.Appearances)
                 {
-                    if (appApp.GetValue() is not appearanceAppearanceDefinition aad || (aad.Name != appearance && appearance != "default") || aad.CompiledData.Data is not Package04 appPkg)
+                    if (appApp.GetValue() is not appearanceAppearanceDefinition aad || (aad.Name != appearance && appearance != "default") || aad.CompiledData.Data is not RedPackage appPkg)
                     {
                         continue;
                     }

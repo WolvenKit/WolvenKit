@@ -6,7 +6,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
-using WolvenKit.Functionality.Ab4d;
+using WolvenKit.Functionality.Other;
 using WolvenKit.Modkit.RED4;
 using WolvenKit.RED4.Types;
 
@@ -15,7 +15,6 @@ namespace WolvenKit.ViewModels.Documents
     public class RDTTextureViewModel : RedDocumentTabViewModel
     {
         protected readonly RedBaseClass _data;
-        public RedDocumentViewModel File;
         //protected Stream ImageStream;
 
         public delegate void RenderDelegate();
@@ -80,7 +79,7 @@ namespace WolvenKit.ViewModels.Documents
             {
                 xbm.Width = (uint)Image.Width;
                 xbm.Height = (uint)Image.Height;
-                File.GetMainFile().Value.Chunks[0].Properties.Where(x => x.Name == "Width" || x.Name == "Height").ToList().ForEach(x => x.RaisePropertyChanged("Data"));
+                File.GetMainFile().Value.Chunks[0].Properties.Where(x => x.Name is "Width" or "Height").ToList().ForEach(x => x.RaisePropertyChanged("Data"));
             }
         }
 

@@ -95,9 +95,16 @@ namespace WolvenKit.RED4.Archive.IO
 
             var (type, flags) = RedReflection.GetCSTypeFromRedType(typename);
 
+            var typeInfo = RedReflection.GetTypeInfo(cls);
+
             IRedType value;
             var prop = RedReflection.GetPropertyByRedName(cls.GetType(), varName);
             if (prop == null)
+            {
+                prop = typeInfo.AddDynamicProperty(varName, typename);
+            }
+
+            if (prop.IsDynamic)
             {
                 value = Read(type, size - 4, flags);
                 cls.SetProperty(varName, value);
@@ -106,20 +113,25 @@ namespace WolvenKit.RED4.Archive.IO
             {
                 value = Read(prop.Type, size - 4, prop.Flags.Clone());
 
-                var typeInfo = RedReflection.GetTypeInfo(cls.GetType());
-
                 var propName = $"{RedReflection.GetRedTypeFromCSType(cls.GetType())}.{varName}";
                 if (type != prop.Type)
                 {
-                    throw new InvalidRTTIException(propName, prop.Type, type);
+                    var args = new InvalidRTTIEventArgs(prop.Type, type, value);
+                    if (!HandleParsingError(args))
+                    {
+                        throw new InvalidRTTIException(propName, prop.Type, type);
+                    }
+                    value = args.Value;
                 }
 
-#if DEBUG
                 if (!typeInfo.SerializeDefault && !prop.SerializeDefault && RedReflection.IsDefault(cls.GetType(), varName, value))
                 {
-                    throw new InvalidParsingException($"Invalid default val for: \"{propName}\"");
+                    var args = new InvalidDefaultValueEventArgs();
+                    if (!HandleParsingError(args))
+                    {
+                        throw new InvalidParsingException($"Invalid default val for: \"{propName}\"");
+                    }
                 }
-#endif
 
                 cls.SetProperty(prop.RedName, value);
             }
@@ -166,6 +178,8 @@ namespace WolvenKit.RED4.Archive.IO
                 using var br = new BinaryReader(ms, Encoding.Default, true);
 
                 using var cr2wReader = new CR2WReader(br);
+                cr2wReader.ParsingError += HandleParsingError;
+
                 var readResult = cr2wReader.ReadFile(out var c, true);
                 if (readResult == EFileReadErrorCodes.NoCr2w)
                 {

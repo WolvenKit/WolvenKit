@@ -93,7 +93,7 @@ namespace WolvenKit.Common.Services
             }
             if (_missing.Contains(key))
             {
-                return "";
+                return string.Empty;
             }
 
 
@@ -104,7 +104,7 @@ namespace WolvenKit.Common.Services
                 return _additionalhashes[key].ToString();
             }
 
-            return "";
+            return string.Empty;
         }
 
         public string GetNodeRef(ulong key)
