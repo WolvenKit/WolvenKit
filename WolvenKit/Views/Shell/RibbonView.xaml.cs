@@ -4,9 +4,7 @@ using System.Reactive.Linq;
 using System.Windows;
 using ReactiveUI;
 using Splat;
-using Syncfusion.Windows.Tools.Controls;
 using WolvenKit.ViewModels.Shell;
-using WolvenKit.ViewModels.Tools;
 using WolvenKit.Views.Dialogs;
 
 namespace WolvenKit.Views.Shell
@@ -27,157 +25,14 @@ namespace WolvenKit.Views.Shell
 
             this.WhenActivated(disposables =>
             {
-                #region contextual tab bindings
-
-                // project explorer
-                CPEOpenFileButton.DataContext = Locator.Current.GetService<ProjectExplorerViewModel>();
-                OpeninFileContext.DataContext = Locator.Current.GetService<ProjectExplorerViewModel>();
-                CopyFileContext.DataContext = Locator.Current.GetService<ProjectExplorerViewModel>();
-                PasteFileContext.DataContext = Locator.Current.GetService<ProjectExplorerViewModel>();
-                DeleteFileContext.DataContext = Locator.Current.GetService<ProjectExplorerViewModel>();
-                RenameFileContext.DataContext = Locator.Current.GetService<ProjectExplorerViewModel>();
-
-                // asset browser
-                this.BindCommand(ViewModel,
-                        viewModel => viewModel.MainViewModel.AssetBrowserVM.AddSelectedCommand,
-                        view => view.AddSelectedItemsButton).DisposeWith(disposables);
-                this.BindCommand(ViewModel,
-                        viewModel => viewModel.MainViewModel.AssetBrowserVM.ToggleModBrowserCommand,
-                        view => view.ModBrowserButton).DisposeWith(disposables);
-                this.BindCommand(ViewModel,
-                        viewModel => viewModel.MainViewModel.AssetBrowserVM.OpenFileLocationCommand,
-                        view => view.SearchOpenFileLocation).DisposeWith(disposables);
-                this.BindCommand(ViewModel,
-                        viewModel => viewModel.MainViewModel.AssetBrowserVM.AddSearchKeyCommand,
-                        view => view.SearchKindButton).DisposeWith(disposables);
-                this.BindCommand(ViewModel,
-                        viewModel => viewModel.MainViewModel.AssetBrowserVM.AddSearchKeyCommand,
-                        view => view.SearchKindButton).DisposeWith(disposables);
-                this.BindCommand(ViewModel,
-                        viewModel => viewModel.MainViewModel.AssetBrowserVM.AddSearchKeyCommand,
-                        view => view.SearchKindButton).DisposeWith(disposables);
-                this.BindCommand(ViewModel,
-                        viewModel => viewModel.MainViewModel.AssetBrowserVM.AddSearchKeyCommand,
-                        view => view.SearchKindButton).DisposeWith(disposables);
-
-                #endregion
 
                 _mainViewModel = Locator.Current.GetService<AppViewModel>();
-
-                _mainViewModel.ProjectExplorer.WhenAnyValue(x => x.IsActive).Subscribe(b =>
-                    projectexplorercontextab.SetCurrentValue(ContextTabGroup.IsGroupVisibleProperty, b));
-                _mainViewModel.AssetBrowserVM.WhenAnyValue(x => x.IsActive).Subscribe(b =>
-                    abcontextab.SetCurrentValue(ContextTabGroup.IsGroupVisibleProperty, b));
-                //_mainViewModel.ActiveDocument.WhenAnyValue(x => x != null && x.IsActive).Subscribe(b =>
-                //    documentContextTab.SetCurrentValue(ContextTabGroup.IsGroupVisibleProperty, b));
 
                 #region commands
 
                 this.BindCommand(ViewModel,
                         viewModel => viewModel.MainViewModel.ShowHomePageCommand,
-                        view => view.HomePageButton)
-                    .DisposeWith(disposables);
-
-                // App Menu
-                this.BindCommand(ViewModel,
-                        viewModel => viewModel.OpenProjectCommand,
-                        view => view.AppMenuOpenProjectButton)
-                    .DisposeWith(disposables);
-                this.BindCommand(ViewModel,
-                        viewModel => viewModel.MainViewModel.NewProjectCommand,
-                        view => view.AppMenuNewProjectButton)
-                    .DisposeWith(disposables);
-                this.BindCommand(ViewModel,
-                        viewModel => viewModel.PackProjectCommand,
-                        view => view.AppMenuPackProjectButton)
-                    .DisposeWith(disposables);
-                this.BindCommand(ViewModel,
-                        viewModel => viewModel.MainViewModel.PackInstallModCommand,
-                        view => view.AppMenuPackInstallButton)
-                    .DisposeWith(disposables);
-                this.BindCommand(ViewModel,
-                        viewModel => viewModel.NewFileCommand,
-                        view => view.AppMenuNewFileButton)
-                    .DisposeWith(disposables);
-                this.BindCommand(ViewModel,
-                        viewModel => viewModel.SaveFileCommand,
-                        view => view.AppMenuSaveFileButton)
-                    .DisposeWith(disposables);
-                this.BindCommand(ViewModel,
-                        viewModel => viewModel.SaveAsCommand,
-                        view => view.AppMenuSaveAsFileButton)
-                    .DisposeWith(disposables);
-                this.BindCommand(ViewModel,
-                        viewModel => viewModel.SaveAllCommand,
-                        view => view.AppMenuSaveAllFileButton)
-                    .DisposeWith(disposables);
-
-                // General
-                this.BindCommand(ViewModel,
-                        viewModel => viewModel.OpenProjectCommand,
-                        view => view.GeneralOpenProjectButton)
-                    .DisposeWith(disposables);
-                this.BindCommand(ViewModel,
-                        viewModel => viewModel.MainViewModel.NewProjectCommand,
-                        view => view.GeneralNewProjectButton)
-                    .DisposeWith(disposables);
-                this.BindCommand(ViewModel,
-                        viewModel => viewModel.PackProjectCommand,
-                        view => view.GeneralPackProjectButton)
-                    .DisposeWith(disposables);
-                this.BindCommand(ViewModel,
-                        viewModel => viewModel.MainViewModel.PackInstallModCommand,
-                        view => view.GeneralPackInstallButton)
-                    .DisposeWith(disposables);
-                this.BindCommand(ViewModel,
-                        viewModel => viewModel.NewFileCommand,
-                        view => view.GeneralNewFileButton)
-                    .DisposeWith(disposables);
-                this.BindCommand(ViewModel,
-                        viewModel => viewModel.SaveFileCommand,
-                        view => view.GeneralSaveFileButton)
-                    .DisposeWith(disposables);
-                this.BindCommand(ViewModel,
-                        viewModel => viewModel.SaveAsCommand,
-                        view => view.GeneralSaveAsButton)
-                    .DisposeWith(disposables);
-                this.BindCommand(ViewModel,
-                        viewModel => viewModel.SaveAllCommand,
-                        view => view.GeneralSaveAllButton)
-                    .DisposeWith(disposables);
-
-                //View
-                this.BindCommand(ViewModel,
-                        viewModel => viewModel.ViewProjectExplorerCommand,
-                        view => view.ViewProjectExplorerButton)
-                    .DisposeWith(disposables);
-                this.BindCommand(ViewModel,
-                        viewModel => viewModel.ViewAssetBrowserCommand,
-                        view => view.ViewAssetBrowserButton)
-                    .DisposeWith(disposables);
-                this.BindCommand(ViewModel,
-                        viewModel => viewModel.ViewPropertiesCommand,
-                        view => view.ViewPropertiesButton)
-                    .DisposeWith(disposables);
-                this.BindCommand(ViewModel,
-                        viewModel => viewModel.ViewLogCommand,
-                        view => view.ViewLogButton)
-                    .DisposeWith(disposables);
-                //this.BindCommand(ViewModel,
-                //        viewModel => viewModel.ViewCodeEditorCommand,
-                //        view => view.ViewCodeEditorButton)
-                //    .DisposeWith(disposables);
-
-                //Options
-                this.BindCommand(ViewModel,
-                        viewModel => viewModel.MainViewModel.ShowSettingsCommand,
-                        view => view.OptionsShowSettingsButton)
-                    .DisposeWith(disposables);
-
-                // Utilities
-                this.BindCommand(ViewModel,
-                        viewModel => viewModel.ShowImportExportToolCommand,
-                        view => view.UtilitiesShowImportExportToolButton)
+                        view => view.HomeButton)
                     .DisposeWith(disposables);
 
                 // toolbar
@@ -262,20 +117,6 @@ namespace WolvenKit.Views.Shell
             });
         }
 
-        #region properties
-
-
-        #endregion
-
-        //private void SetRibbonUI()
-        //{
-        //    while (_ribbon.BackStageButton.IsVisible)
-        //    {
-        //        _ribbon.BackStageButton.SetCurrentValue(VisibilityProperty, Visibility.Collapsed);
-        //    }
-        //    Trace.WriteLine("Disabled File Button");
-        //}
-
         public int MaxBackgroundThreadsCount { get; set; }
 
         public static MaterialsRepositoryDialog MaterialsRepositoryDia { get; set; }
@@ -325,11 +166,5 @@ namespace WolvenKit.Views.Shell
             }
         }
 
-        ///// <summary>
-        ///// Closes material drawer
-        ///// </summary>
-        ///// <param name="sender"></param>
-        ///// <param name="e"></param>
-        //private void Button_Click_2(object sender, RoutedEventArgs e) => MatRepoDrawer.SetCurrentValue(HandyControl.Controls.Drawer.IsOpenProperty, false);
     }
 }
