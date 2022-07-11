@@ -364,7 +364,7 @@ namespace WolvenKit.Functionality.Controllers
                 _loggerService.Error(e);
             }
 
-            var tweakFiles = Directory.GetFiles(cp77Proj.TweakDirectory, "*.tweak", SearchOption.AllDirectories);
+            var tweakFiles = Directory.GetFiles(cp77Proj.TweakDirectory, "*.yaml", SearchOption.AllDirectories);
             foreach (var f in tweakFiles)
             {
                 var text = File.ReadAllText(f);
@@ -374,30 +374,30 @@ namespace WolvenKit.Functionality.Controllers
                 {
                     Directory.CreateDirectory(outDirectory);
                 }
-                var filename = Path.GetFileNameWithoutExtension(f) + ".bin";
+                var filename = Path.GetFileName(f);
                 var outPath = Path.Combine(outDirectory, filename);
 
                 try
                 {
-                    if (!Serialization.Deserialize(text, out var dict))
-                    {
-                        continue;
-                    }
-                    var db = new TweakDB();
+                    //if (!Serialization.Deserialize(text, out var dict))
+                    //{
+                        //continue;
+                    //}
+                    //var db = new TweakDB();
                     //flats
-                    foreach (var (key, value) in dict.Flats)
-                    {
-                        db.Add(key, value);
-                    }
+                    //foreach (var (key, value) in dict.Flats)
+                    //{
+                        //db.Add(key, value);
+                    //}
                     //groups
-                    foreach (var (key, value) in dict.Groups)
-                    {
-                        db.Add(key, value);
-                    }
+                    //foreach (var (key, value) in dict.Groups)
+                    //{
+                        //db.Add(key, value);
+                    //}
 
                     using var ms = new MemoryStream();
                     using var writer = new TweakDBWriter(ms);
-                    writer.WriteFile(db);
+                  //writer.WriteFile(db);
                     File.WriteAllBytes(outPath, ms.ToArray());
                 }
                 catch (Exception e)
