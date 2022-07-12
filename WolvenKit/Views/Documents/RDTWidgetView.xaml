@@ -111,452 +111,552 @@
             Margin="-1,-1,-1,-1"
             Padding="0"
             VerticalScrollBarVisibility="Auto">
-
-            <Grid Height="24" Margin="0,4,0,4">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition />
-                    <ColumnDefinition Width="30" />
-                </Grid.ColumnDefinitions>
-                <TextBlock
-                    Margin="5,0,0,0"
-                    VerticalAlignment="Center"
-                    FontWeight="Bold"
-                    Text="Edit Mode" />
-                <CheckBox
-                    Grid.ColumnSpan="2"
-                    Margin="5,0,0,0"
-                    HorizontalAlignment="Right"
-                    VerticalAlignment="Center"
-                    Checked="CheckBoxRenderAll"
-                    IsChecked="{Binding Editing, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                    Unchecked="CheckBoxRenderAll" />
-            </Grid>
-            <Border
-                Margin="0,0,0,5"
-                BorderBrush="{StaticResource BorderAlt}"
-                BorderThickness="0,1,0,0" />
-            <TextBlock
-                Margin="5,0,0,5"
-                Foreground="{StaticResource WolvenKitTan}"
-                Text="inkWidget Properties" />
-            <Border
-                Margin="0,0,0,5"
-                BorderBrush="{StaticResource BorderAlt}"
-                BorderThickness="0,1,0,0" />
-
-            <Grid Height="24" Margin="0,0,0,4">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition />
-                    <ColumnDefinition />
-                </Grid.ColumnDefinitions>
-                <TextBlock
-                    Margin="5,0,0,0"
-                    VerticalAlignment="Center"
-                    FontWeight="Bold"
-                    Text="Name" />
-                <TextBox
-                    Grid.Column="1"
-                    Margin="0,0,0,0"
-                    Style="{StaticResource TextBox.Small}"
-                    Text="{Binding SelectedItem.Chunk.Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource cname}}" />
-
-            </Grid>
+            <StackPanel Orientation="Vertical">
 
 
-            <Grid Height="24" Margin="0,0,0,4">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition />
-                    <ColumnDefinition Width="30" />
-                </Grid.ColumnDefinitions>
+                <Grid Height="24" Margin="0,4,0,4">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition />
+                        <ColumnDefinition Width="30" />
+                    </Grid.ColumnDefinitions>
+                    <TextBlock
+                        Margin="5,0,0,0"
+                        VerticalAlignment="Center"
+                        FontWeight="Bold"
+                        Text="Edit Mode" />
+                    <CheckBox
+                        Grid.ColumnSpan="2"
+                        Margin="5,0,0,0"
+                        HorizontalAlignment="Right"
+                        VerticalAlignment="Center"
+                        Checked="CheckBoxRenderAll"
+                        IsChecked="{Binding Editing, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                        Unchecked="CheckBoxRenderAll" />
+                </Grid>
+                <Border
+                    Margin="0,0,0,5"
+                    BorderBrush="{StaticResource BorderAlt}"
+                    BorderThickness="0,1,0,0" />
                 <TextBlock
-                    Margin="5,0,0,0"
-                    VerticalAlignment="Center"
-                    FontWeight="Bold"
-                    Text="Visible" />
-                <CheckBox
-                    Grid.ColumnSpan="2"
-                    Margin="5,0,0,0"
-                    HorizontalAlignment="Right"
-                    VerticalAlignment="Center"
-                    IsChecked="{Binding SelectedItem.Chunk.Visible, Mode=TwoWay, Converter={StaticResource cBoolToBool}}" />
-            </Grid>
-            <Grid Height="24" Margin="0,0,0,4">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition />
-                    <ColumnDefinition Width="30" />
-                </Grid.ColumnDefinitions>
-                <TextBlock
-                    Margin="5,0,0,0"
-                    VerticalAlignment="Center"
-                    FontWeight="Bold"
-                    Text="Affects layout when hidden" />
-                <CheckBox
-                    Grid.ColumnSpan="2"
-                    Margin="0,0,0,0"
-                    HorizontalAlignment="Right"
-                    VerticalAlignment="Center"
-                    IsChecked="{Binding SelectedItem.Chunk.AffectsLayoutWhenHidden, Mode=TwoWay, Converter={StaticResource cBoolToBool}}" />
-            </Grid>
-            <Grid Height="24" Margin="0,0,0,4">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition />
-                    <ColumnDefinition Width="30" />
-                </Grid.ColumnDefinitions>
-                <TextBlock
-                    Margin="5,0,0,0"
-                    VerticalAlignment="Center"
-                    FontWeight="Bold"
-                    Text="Fit To Content" />
-                <CheckBox
-                    Grid.ColumnSpan="2"
-                    HorizontalAlignment="Right"
-                    VerticalAlignment="Center"
-                    IsChecked="{Binding SelectedItem.Chunk.FitToContent, Mode=TwoWay, Converter={StaticResource cBoolToBool}}" />
-            </Grid>
-            <Grid Height="24" Margin="0,0,0,4">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="3*" />
-                    <ColumnDefinition Width="*" />
-                </Grid.ColumnDefinitions>
-                <TextBlock
-                    Margin="5,2,0,2"
-                    VerticalAlignment="Center"
-                    FontWeight="Bold"
-                    Text="Opacity" />
-                <TextBox
-                    Grid.Column="1"
-                    Margin="0,0,0,0"
-                    Style="{StaticResource TextBox.Small}"
-                    Text="{Binding SelectedItem.Chunk.Opacity, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource cfloat}}"
-                    TextChanged="TextChangedLayout" />
-            </Grid>
-            <syncfusion:SfRangeSlider
-                Margin="5,0,5,0"
-                Maximum="1.0"
-                Minimum="0"
-                SnapsTo="StepValues"
-                StepFrequency="0.01"
-                ValueChanged="OpacityChanged"
-                Value="{Binding SelectedItem.Chunk.Opacity, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource cfloat}}" />
-            <TextBlock
-                Margin="5,5"
-                VerticalAlignment="Center"
-                FontWeight="Bold"
-                Text="Margin" />
-            <Grid Height="24" Margin="0,0,0,4">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition />
-                    <ColumnDefinition />
-                    <ColumnDefinition />
-                    <ColumnDefinition />
-                </Grid.ColumnDefinitions>
-                <TextBox
-                    Grid.Column="0"
-                    Margin="3,0,1,0"
-                    Style="{StaticResource TextBox.Small}"
-                    Text="{Binding SelectedItem.Chunk.Layout.Margin.Left, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource cfloat}}"
-                    TextChanged="TextChangedLayout" />
-                <TextBox
-                    Grid.Column="1"
-                    Margin="1,0,1,0"
-                    Style="{StaticResource TextBox.Small}"
-                    Text="{Binding SelectedItem.Chunk.Layout.Margin.Top, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource cfloat}}"
-                    TextChanged="TextChangedLayout" />
-                <TextBox
-                    Grid.Column="2"
-                    Margin="1,0,1,0"
-                    Style="{StaticResource TextBox.Small}"
-                    Text="{Binding SelectedItem.Chunk.Layout.Margin.Right, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource cfloat}}"
-                    TextChanged="TextChangedLayout" />
-                <TextBox
-                    Grid.Column="3"
-                    Margin="1,0,0,0"
-                    Style="{StaticResource TextBox.Small}"
-                    Text="{Binding SelectedItem.Chunk.Layout.Margin.Bottom, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource cfloat}}"
-                    TextChanged="TextChangedLayout" />
-            </Grid>
+                    Margin="5,0,0,5"
+                    Foreground="{StaticResource WolvenKitTan}"
+                    Text="inkWidget Properties" />
+                <Border
+                    Margin="0,0,0,5"
+                    BorderBrush="{StaticResource BorderAlt}"
+                    BorderThickness="0,1,0,0" />
 
-            <Grid Height="24" Margin="0,0,0,4">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="2*" />
-                    <ColumnDefinition Width="*" />
-                    <ColumnDefinition Width="*" />
-                </Grid.ColumnDefinitions>
-                <TextBlock
-                    Margin="5,0,0,0"
-                    VerticalAlignment="Center"
-                    FontWeight="Bold"
-                    Text="Anchor Point" />
-                <TextBox
-                    Grid.Column="1"
-                    Margin="0,0,2.5,0"
-                    Style="{StaticResource TextBox.Small}"
-                    Text="{Binding SelectedItem.Chunk.Layout.AnchorPoint.X, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource cfloat}}"
-                    TextChanged="TextChangedLayout" />
-                <TextBox
-                    Grid.Column="2"
-                    Margin="2.5,0,0,0"
-                    Style="{StaticResource TextBox.Small}"
-                    Text="{Binding SelectedItem.Chunk.Layout.AnchorPoint.Y, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource cfloat}}"
-                    TextChanged="TextChangedLayout" />
-            </Grid>
+                <Grid Height="24" Margin="0,0,0,4">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition />
+                        <ColumnDefinition />
+                    </Grid.ColumnDefinitions>
+                    <TextBlock
+                        Margin="5,0,0,0"
+                        VerticalAlignment="Center"
+                        FontWeight="Bold"
+                        Text="Name" />
+                    <TextBox
+                        Grid.Column="1"
+                        Margin="0,0,0,0"
+                        Style="{StaticResource TextBox.Small}"
+                        Text="{Binding SelectedItem.Chunk.Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource cname}}" />
 
-            <Grid Height="24" Margin="0,0,0,4">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition />
-                    <ColumnDefinition />
-                </Grid.ColumnDefinitions>
-                <TextBlock
-                    Margin="5,2,0,2"
-                    VerticalAlignment="Center"
-                    FontWeight="Bold"
-                    Text="Anchor" />
-                <ComboBox
-                    x:Name="inkEAnchorComboBox"
-                    Grid.Column="1"
-                    SelectedItem="{Binding SelectedItem.Chunk.Layout.Anchor, Mode=TwoWay, Converter={StaticResource cenum}, UpdateSourceTrigger=PropertyChanged}"
-                    SelectionChanged="ChangedAnchor"
-                    Style="{StaticResource ComboBox.Small}" />
-            </Grid>
-            <Grid Height="24" Margin="0,0,0,4">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="2*" />
-                    <ColumnDefinition Width="*" />
-                    <ColumnDefinition Width="*" />
-                </Grid.ColumnDefinitions>
-                <TextBlock
-                    Margin="5,2,0,2"
-                    VerticalAlignment="Center"
-                    FontWeight="Bold"
-                    Text="Transform Pivot" />
-                <TextBox
-                    Grid.Column="1"
-                    Margin="0,0,2.5,0"
-                    Style="{StaticResource TextBox.Small}"
-                    Text="{Binding SelectedItem.Chunk.RenderTransformPivot.X, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource cfloat}}"
-                    TextChanged="TextChangedLayout" />
-                <TextBox
-                    Grid.Column="2"
-                    Margin="2.5,0,0,0"
-                    Style="{StaticResource TextBox.Small}"
-                    Text="{Binding SelectedItem.Chunk.RenderTransformPivot.Y, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource cfloat}}"
-                    TextChanged="TextChangedLayout" />
-            </Grid>
-            <Grid Height="24" Margin="0,0,0,4">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="3*" />
-                    <ColumnDefinition Width="*" />
-                </Grid.ColumnDefinitions>
-                <TextBlock
-                    Margin="5,0,0,0"
-                    VerticalAlignment="Center"
-                    FontWeight="Bold"
-                    Text="Width" />
-                <TextBox
-                    Grid.Column="1"
-                    Style="{StaticResource TextBox.Small}"
-                    Text="{Binding SelectedItem.Chunk.Size.X, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource cfloat}}"
-                    TextChanged="WidthChanged" />
-            </Grid>
-            <syncfusion:SfRangeSlider
-                Margin="5"
-                Maximum="3840"
-                Minimum="0"
-                MinorTickFrequency="4"
-                SnapsTo="StepValues"
-                StepFrequency="1"
-                TickFrequency="480"
-                ValueChanged="WidthChanged"
-                Value="{Binding SelectedItem.Chunk.Size.X, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource cfloat}}" />
-            <Grid Height="24" Margin="0,0,0,4">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="3*" />
-                    <ColumnDefinition Width="*" />
-                </Grid.ColumnDefinitions>
-                <TextBlock
-                    Margin="5,0,0,0"
-                    VerticalAlignment="Center"
-                    FontWeight="Bold"
-                    Text="Height" />
-                <TextBox
-                    Grid.Column="1"
-                    Style="{StaticResource TextBox.Small}"
-                    Text="{Binding SelectedItem.Chunk.Size.Y, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource cfloat}}"
-                    TextChanged="HeightChanged" />
-            </Grid>
-            <syncfusion:SfRangeSlider
-                Margin="5,5,5,0"
-                Maximum="2160"
-                Minimum="0"
-                MinorTickFrequency="4"
-                SnapsTo="StepValues"
-                StepFrequency="1"
-                TickFrequency="270"
-                ValueChanged="HeightChanged"
-                Value="{Binding SelectedItem.Chunk.Size.Y, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource cfloat}}" />
-            <StackPanel Orientation="Horizontal">
-                <TextBlock
-                    Margin="5,5"
-                    FontWeight="Bold"
-                    Text="TintColor" />
-                <TextBlock
-                    Margin="2.5,5"
-                    Foreground="Red"
-                    Text="{Binding SelectedItem.Chunk.TintColor.Red, UpdateSourceTrigger=PropertyChanged}" />
-                <TextBlock
-                    Margin="2.5,5"
-                    Foreground="Green"
-                    Text="{Binding SelectedItem.Chunk.TintColor.Green, UpdateSourceTrigger=PropertyChanged}" />
-                <TextBlock
-                    Margin="2.5,5"
-                    Foreground="Blue"
-                    Text="{Binding SelectedItem.Chunk.TintColor.Blue, UpdateSourceTrigger=PropertyChanged}" />
-            </StackPanel>
-            <syncfusion:ColorEdit
-                ColorChanged="ColorEdit_ColorChanged"
-                EnableGradientToSolidSwitch="False"
-                IsGradientPropertyEnabled="False"
-                Color="{Binding SelectedItem.Chunk.TintColor, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource hdrColor}}" />
+                </Grid>
 
 
-            <TextBlock
-                Margin="5,5"
-                FontWeight="Bold"
-                Text="Property Bindings" />
-            <ItemsControl ItemsSource="{Binding SelectedItem.Chunk.PropertyManager.Chunk.Bindings}">
-                <ItemsControl.ItemTemplate>
-                    <DataTemplate>
-                        <Grid>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition />
-                                <ColumnDefinition />
-                            </Grid.ColumnDefinitions>
-                            <TextBox
-                                Margin="5,0,3,4"
-                                Style="{StaticResource TextBox.Small}"
-                                Text="{Binding PropertyName, Mode=TwoWay, Converter={StaticResource cname}, UpdateSourceTrigger=PropertyChanged}" />
-                            <TextBox
-                                Grid.Column="1"
-                                Margin="3,0,3,4"
-                                Style="{StaticResource TextBox.Small}"
-                                Text="{Binding StylePath, Mode=TwoWay, Converter={StaticResource cname}, UpdateSourceTrigger=PropertyChanged}" />
-                        </Grid>
-                    </DataTemplate>
-                </ItemsControl.ItemTemplate>
-            </ItemsControl>
-
-
-
-            <Border BorderBrush="{StaticResource BorderAlt}" BorderThickness="0,1,0,0" />
-            <TextBlock
-                Margin="5,5"
-                Foreground="{StaticResource WolvenKitTan}"
-                Text="inkTextWidget Properties" />
-            <Border BorderBrush="{StaticResource BorderAlt}" BorderThickness="0,1,0,0" />
-            <TextBlock
-                Margin="5,5"
-                VerticalAlignment="Center"
-                FontWeight="Bold"
-                Text="Text" />
-            <TextBox
-                Margin="5,0,0,3"
-                Style="{StaticResource TextBox.Small}"
-                Text="{Binding SelectedItem.Chunk.Text, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource cstring}}" />
-            <Grid Height="24" Margin="0,0,0,4">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="3*" />
-                    <ColumnDefinition Width="*" />
-                </Grid.ColumnDefinitions>
-                <TextBlock
-                    Margin="5,0,0,0"
-                    VerticalAlignment="Center"
-                    FontWeight="Bold"
-                    Text="Font Size" />
-                <TextBox
-                    Grid.Column="1"
-                    Style="{StaticResource TextBox.Small}"
-                    Text="{Binding SelectedItem.Chunk.FontSize, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource cuint32}}"
-                    TextChanged="WidthChanged" />
-            </Grid>
-            <Grid Height="24" Margin="0,0,0,4">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*" />
-                    <ColumnDefinition Width="*" />
-                </Grid.ColumnDefinitions>
-                <TextBlock
-                    Margin="5,0,0,0"
-                    VerticalAlignment="Center"
-                    FontWeight="Bold"
-                    Text="Font Style" />
-                <TextBox
-                    Grid.Column="1"
-                    Style="{StaticResource TextBox.Small}"
-                    Text="{Binding SelectedItem.Chunk.FontStyle, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource cname}}"
-                    TextChanged="WidthChanged" />
-            </Grid>
-            <Grid Height="24" Margin="0,0,0,4">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*" />
-                    <ColumnDefinition Width="*" />
-                </Grid.ColumnDefinitions>
-                <TextBlock
-                    Margin="5,0,0,0"
-                    VerticalAlignment="Center"
-                    FontWeight="Bold"
-                    Text="Letter Case" />
-                <TextBox
-                    Grid.Column="1"
-                    Style="{StaticResource TextBox.Small}"
-                    Text="{Binding SelectedItem.Chunk.LetterCase, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource cenum}}"
-                    TextChanged="WidthChanged" />
-            </Grid>
-
-
-
-            <Border BorderBrush="{StaticResource BorderAlt}" BorderThickness="0,1,0,0" />
-            <TextBlock
-                Margin="5,5"
-                Foreground="{StaticResource WolvenKitTan}"
-                Text="Global Properties" />
-            <Border
-                Margin="0,0,0,3"
-                BorderBrush="{StaticResource BorderAlt}"
-                BorderThickness="0,1,0,0" />
-            <Grid Margin="0,0,0,3">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition />
-                    <ColumnDefinition />
-                </Grid.ColumnDefinitions>
+                <Grid Height="24" Margin="0,0,0,4">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition />
+                        <ColumnDefinition Width="30" />
+                    </Grid.ColumnDefinitions>
+                    <TextBlock
+                        Margin="5,0,0,0"
+                        VerticalAlignment="Center"
+                        FontWeight="Bold"
+                        Text="Visible" />
+                    <CheckBox
+                        Grid.ColumnSpan="2"
+                        Margin="5,0,0,0"
+                        HorizontalAlignment="Right"
+                        VerticalAlignment="Center"
+                        IsChecked="{Binding SelectedItem.Chunk.Visible, Mode=TwoWay, Converter={StaticResource cBoolToBool}}" />
+                </Grid>
+                <Grid Height="24" Margin="0,0,0,4">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition />
+                        <ColumnDefinition Width="30" />
+                    </Grid.ColumnDefinitions>
+                    <TextBlock
+                        Margin="5,0,0,0"
+                        VerticalAlignment="Center"
+                        FontWeight="Bold"
+                        Text="Affects layout when hidden" />
+                    <CheckBox
+                        Grid.ColumnSpan="2"
+                        Margin="0,0,0,0"
+                        HorizontalAlignment="Right"
+                        VerticalAlignment="Center"
+                        IsChecked="{Binding SelectedItem.Chunk.AffectsLayoutWhenHidden, Mode=TwoWay, Converter={StaticResource cBoolToBool}}" />
+                </Grid>
+                <Grid Height="24" Margin="0,0,0,4">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition />
+                        <ColumnDefinition Width="30" />
+                    </Grid.ColumnDefinitions>
+                    <TextBlock
+                        Margin="5,0,0,0"
+                        VerticalAlignment="Center"
+                        FontWeight="Bold"
+                        Text="Fit To Content" />
+                    <CheckBox
+                        Grid.ColumnSpan="2"
+                        HorizontalAlignment="Right"
+                        VerticalAlignment="Center"
+                        IsChecked="{Binding SelectedItem.Chunk.FitToContent, Mode=TwoWay, Converter={StaticResource cBoolToBool}}" />
+                </Grid>
+                <Grid Height="24" Margin="0,0,0,4">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="3*" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+                    <TextBlock
+                        Margin="5,2,0,2"
+                        VerticalAlignment="Center"
+                        FontWeight="Bold"
+                        Text="Opacity" />
+                    <TextBox
+                        Grid.Column="1"
+                        Margin="0,0,0,0"
+                        Style="{StaticResource TextBox.Small}"
+                        Text="{Binding SelectedItem.Chunk.Opacity, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource cfloat}}"
+                        TextChanged="TextChangedLayout" />
+                </Grid>
+                <syncfusion:SfRangeSlider
+                    Margin="5,0,5,0"
+                    Maximum="1.0"
+                    Minimum="0"
+                    SnapsTo="StepValues"
+                    StepFrequency="0.01"
+                    ValueChanged="OpacityChanged"
+                    Value="{Binding SelectedItem.Chunk.Opacity, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource cfloat}}" />
                 <TextBlock
                     Margin="5,5"
                     VerticalAlignment="Center"
                     FontWeight="Bold"
-                    Text="Style" />
-                <ComboBox
-                    Grid.Column="1"
-                    ItemsSource="{Binding StyleStates, Mode=OneWay}"
-                    SelectedItem="{Binding CurrentStyleState, Mode=TwoWay}"
-                    SelectionChanged="ComboBox_SelectionChanged"
-                    Style="{StaticResource ComboBox.Small}" />
-            </Grid>
-            <Grid Margin="0,0,0,3">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition />
-                    <ColumnDefinition />
-                </Grid.ColumnDefinitions>
+                    Text="Margin" />
+                <Grid Height="24" Margin="0,0,0,4">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition />
+                        <ColumnDefinition />
+                        <ColumnDefinition />
+                        <ColumnDefinition />
+                    </Grid.ColumnDefinitions>
+                    <TextBox
+                        Grid.Column="0"
+                        Margin="3,0,1,0"
+                        Style="{StaticResource TextBox.Small}"
+                        Text="{Binding SelectedItem.Chunk.Layout.Margin.Left, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource cfloat}}"
+                        TextChanged="TextChangedLayout" />
+                    <TextBox
+                        Grid.Column="1"
+                        Margin="1,0,1,0"
+                        Style="{StaticResource TextBox.Small}"
+                        Text="{Binding SelectedItem.Chunk.Layout.Margin.Top, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource cfloat}}"
+                        TextChanged="TextChangedLayout" />
+                    <TextBox
+                        Grid.Column="2"
+                        Margin="1,0,1,0"
+                        Style="{StaticResource TextBox.Small}"
+                        Text="{Binding SelectedItem.Chunk.Layout.Margin.Right, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource cfloat}}"
+                        TextChanged="TextChangedLayout" />
+                    <TextBox
+                        Grid.Column="3"
+                        Margin="1,0,0,0"
+                        Style="{StaticResource TextBox.Small}"
+                        Text="{Binding SelectedItem.Chunk.Layout.Margin.Bottom, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource cfloat}}"
+                        TextChanged="TextChangedLayout" />
+                </Grid>
+
+                <Grid Height="24" Margin="0,0,0,4">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="2*" />
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+                    <TextBlock
+                        Margin="5,0,0,0"
+                        VerticalAlignment="Center"
+                        FontWeight="Bold"
+                        Text="Anchor Point" />
+                    <TextBox
+                        Grid.Column="1"
+                        Margin="0,0,2.5,0"
+                        Style="{StaticResource TextBox.Small}"
+                        Text="{Binding SelectedItem.Chunk.Layout.AnchorPoint.X, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource cfloat}}"
+                        TextChanged="TextChangedLayout" />
+                    <TextBox
+                        Grid.Column="2"
+                        Margin="2.5,0,0,0"
+                        Style="{StaticResource TextBox.Small}"
+                        Text="{Binding SelectedItem.Chunk.Layout.AnchorPoint.Y, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource cfloat}}"
+                        TextChanged="TextChangedLayout" />
+                </Grid>
+
+                <Grid Height="24" Margin="0,0,0,4">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition />
+                        <ColumnDefinition />
+                    </Grid.ColumnDefinitions>
+                    <TextBlock
+                        Margin="5,2,0,2"
+                        VerticalAlignment="Center"
+                        FontWeight="Bold"
+                        Text="Anchor" />
+                    <ComboBox
+                        x:Name="inkEAnchorComboBox"
+                        Grid.Column="1"
+                        SelectedItem="{Binding SelectedItem.Chunk.Layout.Anchor, Mode=TwoWay, Converter={StaticResource cenum}, UpdateSourceTrigger=PropertyChanged}"
+                        SelectionChanged="ChangedAnchor"
+                        Style="{StaticResource ComboBox.Small}" />
+                </Grid>
+                <Grid Height="24" Margin="0,0,0,4">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition />
+                        <ColumnDefinition />
+                    </Grid.ColumnDefinitions>
+                    <TextBlock
+                        Margin="5,2,0,2"
+                        VerticalAlignment="Center"
+                        FontWeight="Bold"
+                        Text="HAlign" />
+                    <ComboBox
+                        x:Name="inkEHAlignComboBox"
+                        Grid.Column="1"
+                        SelectedItem="{Binding SelectedItem.Chunk.Layout.HAlign, Mode=TwoWay, Converter={StaticResource cenum}, UpdateSourceTrigger=PropertyChanged}"
+                        SelectionChanged="ChangedAnchor"
+                        Style="{StaticResource ComboBox.Small}" />
+                </Grid>
+                <Grid Height="24" Margin="0,0,0,4">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition />
+                        <ColumnDefinition />
+                    </Grid.ColumnDefinitions>
+                    <TextBlock
+                        Margin="5,2,0,2"
+                        VerticalAlignment="Center"
+                        FontWeight="Bold"
+                        Text="VAlign" />
+                    <ComboBox
+                        x:Name="inkEVAlignComboBox"
+                        Grid.Column="1"
+                        SelectedItem="{Binding SelectedItem.Chunk.Layout.VAlign, Mode=TwoWay, Converter={StaticResource cenum}, UpdateSourceTrigger=PropertyChanged}"
+                        SelectionChanged="ChangedAnchor"
+                        Style="{StaticResource ComboBox.Small}" />
+                </Grid>
+                <Grid Height="24" Margin="0,0,0,4">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="2*" />
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+                    <TextBlock
+                        Margin="5,2,0,2"
+                        VerticalAlignment="Center"
+                        FontWeight="Bold"
+                        Text="Transform Pivot" />
+                    <TextBox
+                        Grid.Column="1"
+                        Margin="0,0,2.5,0"
+                        Style="{StaticResource TextBox.Small}"
+                        Text="{Binding SelectedItem.Chunk.RenderTransformPivot.X, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource cfloat}}"
+                        TextChanged="TextChangedLayout" />
+                    <TextBox
+                        Grid.Column="2"
+                        Margin="2.5,0,0,0"
+                        Style="{StaticResource TextBox.Small}"
+                        Text="{Binding SelectedItem.Chunk.RenderTransformPivot.Y, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource cfloat}}"
+                        TextChanged="TextChangedLayout" />
+                </Grid>
+                <Grid Height="24" Margin="0,0,0,4">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="3*" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+                    <TextBlock
+                        Margin="5,0,0,0"
+                        VerticalAlignment="Center"
+                        FontWeight="Bold"
+                        Text="Width" />
+                    <TextBox
+                        Grid.Column="1"
+                        Style="{StaticResource TextBox.Small}"
+                        Text="{Binding SelectedItem.Chunk.Size.X, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource cfloat}}"
+                        TextChanged="WidthChanged" />
+                </Grid>
+                <syncfusion:SfRangeSlider
+                    Margin="5"
+                    Maximum="3840"
+                    Minimum="0"
+                    MinorTickFrequency="4"
+                    SnapsTo="StepValues"
+                    StepFrequency="1"
+                    TickFrequency="480"
+                    ValueChanged="WidthChanged"
+                    Value="{Binding SelectedItem.Chunk.Size.X, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource cfloat}}" />
+                <Grid Height="24" Margin="0,0,0,4">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="3*" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+                    <TextBlock
+                        Margin="5,0,0,0"
+                        VerticalAlignment="Center"
+                        FontWeight="Bold"
+                        Text="Height" />
+                    <TextBox
+                        Grid.Column="1"
+                        Style="{StaticResource TextBox.Small}"
+                        Text="{Binding SelectedItem.Chunk.Size.Y, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource cfloat}}"
+                        TextChanged="HeightChanged" />
+                </Grid>
+                <syncfusion:SfRangeSlider
+                    Margin="5,5,5,0"
+                    Maximum="2160"
+                    Minimum="0"
+                    MinorTickFrequency="4"
+                    SnapsTo="StepValues"
+                    StepFrequency="1"
+                    TickFrequency="270"
+                    ValueChanged="HeightChanged"
+                    Value="{Binding SelectedItem.Chunk.Size.Y, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource cfloat}}" />
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock
+                        Margin="5,5"
+                        FontWeight="Bold"
+                        Text="TintColor" />
+                    <TextBlock
+                        Margin="2.5,5"
+                        Foreground="Red"
+                        Text="{Binding SelectedItem.Chunk.TintColor.Red, UpdateSourceTrigger=PropertyChanged}" />
+                    <TextBlock
+                        Margin="2.5,5"
+                        Foreground="Green"
+                        Text="{Binding SelectedItem.Chunk.TintColor.Green, UpdateSourceTrigger=PropertyChanged}" />
+                    <TextBlock
+                        Margin="2.5,5"
+                        Foreground="Blue"
+                        Text="{Binding SelectedItem.Chunk.TintColor.Blue, UpdateSourceTrigger=PropertyChanged}" />
+                </StackPanel>
+                <syncfusion:ColorEdit
+                    ColorChanged="ColorEdit_ColorChanged"
+                    EnableGradientToSolidSwitch="False"
+                    IsGradientPropertyEnabled="False"
+                    Color="{Binding SelectedItem.Chunk.TintColor, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource hdrColor}}" />
+
+
+                <TextBlock
+                    Margin="5,5"
+                    FontWeight="Bold"
+                    Text="Property Bindings" />
+                <ItemsControl ItemsSource="{Binding SelectedItem.Chunk.PropertyManager.Chunk.Bindings}">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition />
+                                    <ColumnDefinition />
+                                </Grid.ColumnDefinitions>
+                                <TextBox
+                                    Margin="5,0,3,4"
+                                    Style="{StaticResource TextBox.Small}"
+                                    Text="{Binding PropertyName, Mode=TwoWay, Converter={StaticResource cname}, UpdateSourceTrigger=PropertyChanged}" />
+                                <TextBox
+                                    Grid.Column="1"
+                                    Margin="3,0,3,4"
+                                    Style="{StaticResource TextBox.Small}"
+                                    Text="{Binding StylePath, Mode=TwoWay, Converter={StaticResource cname}, UpdateSourceTrigger=PropertyChanged}" />
+                            </Grid>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+
+
+
+                <Border BorderBrush="{StaticResource BorderAlt}" BorderThickness="0,1,0,0" />
+                <TextBlock
+                    Margin="5,5"
+                    Foreground="{StaticResource WolvenKitTan}"
+                    Text="inkTextWidget Properties" />
+                <Border BorderBrush="{StaticResource BorderAlt}" BorderThickness="0,1,0,0" />
                 <TextBlock
                     Margin="5,5"
                     VerticalAlignment="Center"
                     FontWeight="Bold"
-                    Text="Theme" />
-                <ComboBox
-                    Grid.Column="1"
-                    ItemsSource="{Binding Themes, Mode=OneWay}"
-                    SelectedItem="{Binding CurrentTheme, Mode=TwoWay}"
-                    SelectionChanged="ComboBox_SelectionChanged"
-                    Style="{StaticResource ComboBox.Small}" />
-            </Grid>
-            <!--Border BorderBrush="{StaticResource BorderAlt}" BorderThickness="0,1,0,0" />
+                    Text="Text" />
+                <TextBox
+                    Margin="5,0,0,3"
+                    Style="{StaticResource TextBox.Small}"
+                    Text="{Binding SelectedItem.Chunk.Text, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource cstring}}" />
+                <Grid Height="24" Margin="0,0,0,4">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="3*" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+                    <TextBlock
+                        Margin="5,0,0,0"
+                        VerticalAlignment="Center"
+                        FontWeight="Bold"
+                        Text="Font Size" />
+                    <TextBox
+                        Grid.Column="1"
+                        Style="{StaticResource TextBox.Small}"
+                        Text="{Binding SelectedItem.Chunk.FontSize, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource cuint32}}"
+                        TextChanged="WidthChanged" />
+                </Grid>
+                <Grid Height="24" Margin="0,0,0,4">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+                    <TextBlock
+                        Margin="5,0,0,0"
+                        VerticalAlignment="Center"
+                        FontWeight="Bold"
+                        Text="Font Style" />
+                    <TextBox
+                        Grid.Column="1"
+                        Style="{StaticResource TextBox.Small}"
+                        Text="{Binding SelectedItem.Chunk.FontStyle, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource cname}}"
+                        TextChanged="WidthChanged" />
+                </Grid>
+                <Grid Height="24" Margin="0,0,0,4">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+                    <TextBlock
+                        Margin="5,0,0,0"
+                        VerticalAlignment="Center"
+                        FontWeight="Bold"
+                        Text="Letter Case" />
+                    <TextBox
+                        Grid.Column="1"
+                        Style="{StaticResource TextBox.Small}"
+                        Text="{Binding SelectedItem.Chunk.LetterCase, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource cenum}}"
+                        TextChanged="WidthChanged" />
+                </Grid>
+                <Grid Height="24" Margin="0,0,0,4">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="3*" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+                    <TextBlock
+                        Margin="5,0,0,0"
+                        VerticalAlignment="Center"
+                        FontWeight="Bold"
+                        Text="Line Height Percentage" />
+                    <TextBox
+                        Grid.Column="1"
+                        Style="{StaticResource TextBox.Small}"
+                        Text="{Binding SelectedItem.Chunk.LineHeightPercentage, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource cfloat}}"
+                        TextChanged="WidthChanged" />
+                </Grid>
+
+
+
+
+
+                <Border BorderBrush="{StaticResource BorderAlt}" BorderThickness="0,1,0,0" />
+                <TextBlock
+                    Margin="5,5"
+                    Foreground="{StaticResource WolvenKitTan}"
+                    Text="inkImageWidget Properties" />
+                <Border
+                    Margin="0,0,0,4"
+                    BorderBrush="{StaticResource BorderAlt}"
+                    BorderThickness="0,1,0,0" />
+                <Grid Height="24" Margin="0,0,0,4">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+                    <TextBlock
+                        Margin="5,0,0,0"
+                        VerticalAlignment="Center"
+                        FontWeight="Bold"
+                        Text="Texture Atlas" />
+                    <TextBox
+                        Grid.Column="1"
+                        Style="{StaticResource TextBox.Small}"
+                        Text="{Binding SelectedItem.Chunk.TextureAtlas.DepotPath, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource cname}}"
+                        TextChanged="WidthChanged" />
+                </Grid>
+                <Grid Height="24" Margin="0,0,0,4">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+                    <TextBlock
+                        Margin="5,0,0,0"
+                        VerticalAlignment="Center"
+                        FontWeight="Bold"
+                        Text="Texture Part" />
+                    <TextBox
+                        Grid.Column="1"
+                        Style="{StaticResource TextBox.Small}"
+                        Text="{Binding SelectedItem.Chunk.TexturePart, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource cname}}"
+                        TextChanged="WidthChanged" />
+                </Grid>
+
+
+
+
+
+                <Border BorderBrush="{StaticResource BorderAlt}" BorderThickness="0,1,0,0" />
+                <TextBlock
+                    Margin="5,5"
+                    Foreground="{StaticResource WolvenKitTan}"
+                    Text="Global Properties" />
+                <Border
+                    Margin="0,0,0,3"
+                    BorderBrush="{StaticResource BorderAlt}"
+                    BorderThickness="0,1,0,0" />
+                <Grid Margin="0,0,0,3">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition />
+                        <ColumnDefinition />
+                    </Grid.ColumnDefinitions>
+                    <TextBlock
+                        Margin="5,5"
+                        VerticalAlignment="Center"
+                        FontWeight="Bold"
+                        Text="Style" />
+                    <ComboBox
+                        Grid.Column="1"
+                        ItemsSource="{Binding StyleStates, Mode=OneWay}"
+                        SelectedItem="{Binding CurrentStyleState, Mode=TwoWay}"
+                        SelectionChanged="ComboBox_SelectionChanged"
+                        Style="{StaticResource ComboBox.Small}" />
+                </Grid>
+                <Grid Margin="0,0,0,3">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition />
+                        <ColumnDefinition />
+                    </Grid.ColumnDefinitions>
+                    <TextBlock
+                        Margin="5,5"
+                        VerticalAlignment="Center"
+                        FontWeight="Bold"
+                        Text="Theme" />
+                    <ComboBox
+                        Grid.Column="1"
+                        ItemsSource="{Binding Themes, Mode=OneWay}"
+                        SelectedItem="{Binding CurrentTheme, Mode=TwoWay}"
+                        SelectionChanged="ComboBox_SelectionChanged"
+                        Style="{StaticResource ComboBox.Small}" />
+                </Grid>
+                <!--Border BorderBrush="{StaticResource BorderAlt}" BorderThickness="0,1,0,0" />
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition />
@@ -568,197 +668,197 @@
                         Text="Background" />
                     <syncfusion:ColorPicker x:Name="WidgetBackgroundColorEditor" Grid.Column="1" />
                 </Grid-->
-            <TextBlock
-                Margin="5,5"
-                VerticalAlignment="Center"
-                FontWeight="Bold"
-                Text="Animations" />
-            <Border BorderBrush="{StaticResource BorderAlt}" BorderThickness="0,1,0,0" />
-            <ItemsControl x:Name="AnimationList">
-                <ItemsControl.ItemsPanel>
-                    <ItemsPanelTemplate>
-                        <StackPanel Orientation="Vertical" />
-                    </ItemsPanelTemplate>
-                </ItemsControl.ItemsPanel>
-                <ItemsControl.Template>
-                    <ControlTemplate>
-                        <ItemsPresenter />
-                    </ControlTemplate>
-                </ItemsControl.Template>
-                <ItemsControl.ItemTemplate>
-                    <DataTemplate DataType="{x:Type inkControls:inkControlAnimation}">
-                        <Grid>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="1*" />
-                                <ColumnDefinition Width="3" />
-                                <ColumnDefinition Width="2*" />
-                            </Grid.ColumnDefinitions>
-                            <TextBlock
-                                Margin="15,0,5,0"
-                                VerticalAlignment="Center"
-                                Text="{Binding Name}" />
-                            <GridSplitter
-                                Grid.Column="1"
-                                HorizontalAlignment="Stretch"
-                                Background="{StaticResource WolvenKitCyan}" />
-                            <StackPanel
-                                Grid.Column="2"
-                                Margin="3"
-                                Orientation="Horizontal">
-                                <Button
-                                    Margin="5,0,0,0"
-                                    Padding="5,2"
-                                    Command="{Binding PlayCommand}"
-                                    Content="Play" />
-                                <Button
-                                    Margin="5,0,0,0"
-                                    Padding="5,2"
-                                    Command="{Binding StopCommand}"
-                                    Content="Stop" />
-                            </StackPanel>
-                        </Grid>
-                    </DataTemplate>
-                </ItemsControl.ItemTemplate>
-            </ItemsControl>
-            <Border BorderBrush="{StaticResource BorderAlt}" BorderThickness="0,1,0,0" />
-            <StackPanel Orientation="Horizontal">
                 <TextBlock
                     Margin="5,5"
                     VerticalAlignment="Center"
                     FontWeight="Bold"
-                    Text="inkTextWidgets" />
-            </StackPanel>
-            <Border BorderBrush="{StaticResource BorderAlt}" BorderThickness="0,1,0,0" />
-            <ItemsControl ItemsSource="{Binding TextWidgets.Values, UpdateSourceTrigger=PropertyChanged}">
-                <ItemsControl.ItemsPanel>
-                    <ItemsPanelTemplate>
-                        <StackPanel Orientation="Vertical" />
-                    </ItemsPanelTemplate>
-                </ItemsControl.ItemsPanel>
-                <ItemsControl.Template>
-                    <ControlTemplate>
-                        <ItemsPresenter />
-                    </ControlTemplate>
-                </ItemsControl.Template>
-                <ItemsControl.ItemTemplate>
-                    <DataTemplate>
-                        <Grid>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="1*" />
-                                <ColumnDefinition Width="3" />
-                                <ColumnDefinition Width="2*" />
-                            </Grid.ColumnDefinitions>
-                            <StackPanel>
+                    Text="Animations" />
+                <Border BorderBrush="{StaticResource BorderAlt}" BorderThickness="0,1,0,0" />
+                <ItemsControl x:Name="AnimationList">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <StackPanel Orientation="Vertical" />
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                    <ItemsControl.Template>
+                        <ControlTemplate>
+                            <ItemsPresenter />
+                        </ControlTemplate>
+                    </ItemsControl.Template>
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate DataType="{x:Type inkControls:inkControlAnimation}">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="1*" />
+                                    <ColumnDefinition Width="3" />
+                                    <ColumnDefinition Width="2*" />
+                                </Grid.ColumnDefinitions>
                                 <TextBlock
-                                    Margin="15,2,5,2"
+                                    Margin="15,0,5,0"
                                     VerticalAlignment="Center"
                                     Text="{Binding Name}" />
+                                <GridSplitter
+                                    Grid.Column="1"
+                                    HorizontalAlignment="Stretch"
+                                    Background="{StaticResource WolvenKitCyan}" />
+                                <StackPanel
+                                    Grid.Column="2"
+                                    Margin="3"
+                                    Orientation="Horizontal">
+                                    <Button
+                                        Margin="5,0,0,0"
+                                        Padding="5,2"
+                                        Command="{Binding PlayCommand}"
+                                        Content="Play" />
+                                    <Button
+                                        Margin="5,0,0,0"
+                                        Padding="5,2"
+                                        Command="{Binding StopCommand}"
+                                        Content="Stop" />
+                                </StackPanel>
+                            </Grid>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+                <Border BorderBrush="{StaticResource BorderAlt}" BorderThickness="0,1,0,0" />
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock
+                        Margin="5,5"
+                        VerticalAlignment="Center"
+                        FontWeight="Bold"
+                        Text="inkTextWidgets" />
+                </StackPanel>
+                <Border BorderBrush="{StaticResource BorderAlt}" BorderThickness="0,1,0,0" />
+                <ItemsControl ItemsSource="{Binding TextWidgets.Values, UpdateSourceTrigger=PropertyChanged}">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <StackPanel Orientation="Vertical" />
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                    <ItemsControl.Template>
+                        <ControlTemplate>
+                            <ItemsPresenter />
+                        </ControlTemplate>
+                    </ItemsControl.Template>
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="1*" />
+                                    <ColumnDefinition Width="3" />
+                                    <ColumnDefinition Width="2*" />
+                                </Grid.ColumnDefinitions>
+                                <StackPanel>
+                                    <TextBlock
+                                        Margin="15,2,5,2"
+                                        VerticalAlignment="Center"
+                                        Text="{Binding Name}" />
+                                </StackPanel>
+                                <GridSplitter
+                                    Grid.Column="1"
+                                    HorizontalAlignment="Stretch"
+                                    Background="{StaticResource WolvenKitCyan}" />
+                                <editors:RedStringEditor Grid.Column="2" RedString="{Binding Text, Mode=TwoWay}" />
+                                <Border
+                                    Grid.ColumnSpan="3"
+                                    BorderBrush="{StaticResource BorderAlt}"
+                                    BorderThickness="0,0,0,1" />
+                            </Grid>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock
+                        Margin="5,5"
+                        VerticalAlignment="Center"
+                        FontWeight="Bold"
+                        Text="Style Bindings" />
+                </StackPanel>
+                <Border BorderBrush="{StaticResource BorderAlt}" BorderThickness="0,1,0,0" />
+                <ItemsControl ItemsSource="{Binding Bindings, UpdateSourceTrigger=PropertyChanged}">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <StackPanel Orientation="Vertical" />
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                    <ItemsControl.Template>
+                        <ControlTemplate>
+                            <ItemsPresenter />
+                        </ControlTemplate>
+                    </ItemsControl.Template>
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <StackPanel Orientation="Vertical">
+                                <TextBlock Margin="15,2,5,2" Text="{Binding}" />
+                                <Border BorderBrush="{StaticResource BorderAlt}" BorderThickness="0,0,0,1" />
                             </StackPanel>
-                            <GridSplitter
-                                Grid.Column="1"
-                                HorizontalAlignment="Stretch"
-                                Background="{StaticResource WolvenKitCyan}" />
-                            <editors:RedStringEditor Grid.Column="2" RedString="{Binding Text, Mode=TwoWay}" />
-                            <Border
-                                Grid.ColumnSpan="3"
-                                BorderBrush="{StaticResource BorderAlt}"
-                                BorderThickness="0,0,0,1" />
-                        </Grid>
-                    </DataTemplate>
-                </ItemsControl.ItemTemplate>
-            </ItemsControl>
-            <StackPanel Orientation="Horizontal">
-                <TextBlock
-                    Margin="5,5"
-                    VerticalAlignment="Center"
-                    FontWeight="Bold"
-                    Text="Style Bindings" />
-            </StackPanel>
-            <Border BorderBrush="{StaticResource BorderAlt}" BorderThickness="0,1,0,0" />
-            <ItemsControl ItemsSource="{Binding Bindings, UpdateSourceTrigger=PropertyChanged}">
-                <ItemsControl.ItemsPanel>
-                    <ItemsPanelTemplate>
-                        <StackPanel Orientation="Vertical" />
-                    </ItemsPanelTemplate>
-                </ItemsControl.ItemsPanel>
-                <ItemsControl.Template>
-                    <ControlTemplate>
-                        <ItemsPresenter />
-                    </ControlTemplate>
-                </ItemsControl.Template>
-                <ItemsControl.ItemTemplate>
-                    <DataTemplate>
-                        <StackPanel Orientation="Vertical">
-                            <TextBlock Margin="15,2,5,2" Text="{Binding}" />
-                            <Border BorderBrush="{StaticResource BorderAlt}" BorderThickness="0,0,0,1" />
-                        </StackPanel>
-                    </DataTemplate>
-                </ItemsControl.ItemTemplate>
-            </ItemsControl>
-            <StackPanel Orientation="Horizontal">
-                <TextBlock
-                    Margin="5,5"
-                    VerticalAlignment="Center"
-                    FontWeight="Bold"
-                    Text="Effects" />
-            </StackPanel>
-            <Border BorderBrush="{StaticResource BorderAlt}" BorderThickness="0,1,0,0" />
-            <ItemsControl ItemsSource="{Binding inkEffects, UpdateSourceTrigger=PropertyChanged}">
-                <ItemsControl.ItemsPanel>
-                    <ItemsPanelTemplate>
-                        <StackPanel Orientation="Vertical" />
-                    </ItemsPanelTemplate>
-                </ItemsControl.ItemsPanel>
-                <ItemsControl.Template>
-                    <ControlTemplate>
-                        <ItemsPresenter />
-                    </ControlTemplate>
-                </ItemsControl.Template>
-                <ItemsControl.ItemTemplate>
-                    <DataTemplate>
-                        <StackPanel Orientation="Vertical">
-                            <TextBlock Margin="15,2,5,2" Text="{Binding EffectName}" />
-                            <Border BorderBrush="{StaticResource BorderAlt}" BorderThickness="0,0,0,1" />
-                        </StackPanel>
-                    </DataTemplate>
-                </ItemsControl.ItemTemplate>
-            </ItemsControl>
-            <StackPanel Orientation="Horizontal">
-                <TextBlock
-                    Margin="5,5"
-                    VerticalAlignment="Center"
-                    FontWeight="Bold"
-                    Text="Export inkWidget as XML" />
-            </StackPanel>
-            <Border BorderBrush="{StaticResource BorderAlt}" BorderThickness="0,1,0,0" />
-            <ItemsControl x:Name="WidgetExportButtons">
-                <ItemsControl.ItemsPanel>
-                    <ItemsPanelTemplate>
-                        <StackPanel Orientation="Vertical" />
-                    </ItemsPanelTemplate>
-                </ItemsControl.ItemsPanel>
-                <ItemsControl.Template>
-                    <ControlTemplate>
-                        <ItemsPresenter />
-                    </ControlTemplate>
-                </ItemsControl.Template>
-                <ItemsControl.ItemTemplate>
-                    <DataTemplate>
-                        <StackPanel Margin="5" Orientation="Horizontal">
-                            <TextBlock
-                                Margin="10,0,5,0"
-                                VerticalAlignment="Center"
-                                Text="{Binding Name}" />
-                            <Button
-                                Padding="5,2"
-                                Command="{Binding ExportWidgetCommand, RelativeSource={RelativeSource AncestorType={x:Type local:RDTWidgetView}}}"
-                                CommandParameter="{Binding}"
-                                Content="Export" />
-                        </StackPanel>
-                    </DataTemplate>
-                </ItemsControl.ItemTemplate>
-            </ItemsControl>
-            <!--syncfusion:SfTreeGrid
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock
+                        Margin="5,5"
+                        VerticalAlignment="Center"
+                        FontWeight="Bold"
+                        Text="Effects" />
+                </StackPanel>
+                <Border BorderBrush="{StaticResource BorderAlt}" BorderThickness="0,1,0,0" />
+                <ItemsControl ItemsSource="{Binding inkEffects, UpdateSourceTrigger=PropertyChanged}">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <StackPanel Orientation="Vertical" />
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                    <ItemsControl.Template>
+                        <ControlTemplate>
+                            <ItemsPresenter />
+                        </ControlTemplate>
+                    </ItemsControl.Template>
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <StackPanel Orientation="Vertical">
+                                <TextBlock Margin="15,2,5,2" Text="{Binding EffectName}" />
+                                <Border BorderBrush="{StaticResource BorderAlt}" BorderThickness="0,0,0,1" />
+                            </StackPanel>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock
+                        Margin="5,5"
+                        VerticalAlignment="Center"
+                        FontWeight="Bold"
+                        Text="Export inkWidget as XML" />
+                </StackPanel>
+                <Border BorderBrush="{StaticResource BorderAlt}" BorderThickness="0,1,0,0" />
+                <ItemsControl x:Name="WidgetExportButtons">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <StackPanel Orientation="Vertical" />
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                    <ItemsControl.Template>
+                        <ControlTemplate>
+                            <ItemsPresenter />
+                        </ControlTemplate>
+                    </ItemsControl.Template>
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <StackPanel Margin="5" Orientation="Horizontal">
+                                <TextBlock
+                                    Margin="10,0,5,0"
+                                    VerticalAlignment="Center"
+                                    Text="{Binding Name}" />
+                                <Button
+                                    Padding="5,2"
+                                    Command="{Binding ExportWidgetCommand, RelativeSource={RelativeSource AncestorType={x:Type local:RDTWidgetView}}}"
+                                    CommandParameter="{Binding}"
+                                    Content="Export" />
+                            </StackPanel>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+                <!--syncfusion:SfTreeGrid
                     Width="Auto"
                     ChildPropertyName=""
                     ItemsSource="{Binding Widgets}"
@@ -769,6 +869,7 @@
                         <syncfusion:TreeGridTextColumn ValueBinding="{Binding Name}" />
                     </syncfusion:SfTreeGrid.Columns>
                 </syncfusion:SfTreeGrid-->
+            </StackPanel>
         </ScrollViewer>
         <StackPanel
             Grid.Column="2"

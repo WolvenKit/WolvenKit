@@ -389,7 +389,12 @@ namespace WolvenKit.ViewModels.Documents
 
         BadFile:
 
-            var _archiveManager = Locator.Current.GetService<IArchiveManager>();
+            // maybe we should be using the material depot?
+            // would need to update files on game update
+            //var settings = Locator.Current.GetService<ISettingsManager>();
+            //if (!string.IsNullOrEmpty(settings.MaterialRepositoryPath))
+
+                var _archiveManager = Locator.Current.GetService<IArchiveManager>();
             var file = _archiveManager.Lookup(depotPath.GetRedHash());
             if (file.HasValue && file.Value is FileEntry fe)
             {

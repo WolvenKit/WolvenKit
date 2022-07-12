@@ -51,6 +51,9 @@ namespace WolvenKit.Views.Documents
 
                 inkEAnchorComboBox.SetCurrentValue(ItemsControl.ItemsSourceProperty, Enum.GetValues(typeof(inkEAnchor)));
 
+                inkEHAlignComboBox.SetCurrentValue(ItemsControl.ItemsSourceProperty, Enum.GetValues(typeof(inkEHorizontalAlign)));
+                inkEVAlignComboBox.SetCurrentValue(ItemsControl.ItemsSourceProperty, Enum.GetValues(typeof(inkEVerticalAlign)));
+
                 ExportWidgetCommand = new DelegateCommand<object>((w) => ViewModel.ExportWidget((inkWidget)w));
 
                 if (!ResourcesLoaded)
