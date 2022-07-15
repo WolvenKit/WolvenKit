@@ -8,7 +8,6 @@ using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using System.Windows.Media;
 using Microsoft.Web.WebView2.Core;
-using Octokit;
 using ReactiveUI;
 using Splat;
 using Syncfusion.SfSkinManager;
@@ -93,16 +92,6 @@ namespace WolvenKit
             Directory.CreateDirectory(webViewData);
             WebView2Helper.objCoreWebView2Environment = await CoreWebView2Environment.CreateAsync(null, webViewData, null);
         }
-
-        /// <summary>
-        /// Initialize Github RPC
-        /// </summary>
-        public static void InitializeGitHub() =>
-            StaticReferences.Githubclient =
-                new GitHubClient(new ProductHeaderValue("WolvenKit"))
-                {
-                    Credentials = Github_Helpers.GhubAuth("wolvenbot", "botwolven1")
-                };
 
         /// <summary>
         /// Initialize everything related to Theming.

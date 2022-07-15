@@ -3,8 +3,6 @@ using System.IO;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
-using gpm.Core.Models;
-using gpm.Core.Services;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using WolvenKit.Functionality.Services;
@@ -13,32 +11,20 @@ namespace WolvenKit.ViewModels.Dialogs
 {
     public class PluginViewModel : ReactiveObject
     {
-        private readonly ITaskService _taskService;
-
         public EPlugin Plugin { get; private set; }
         public string InstallPath { get; private set; }
-        public Package Package { get; private set; }
 
         public PluginViewModel(
             EPlugin plugin,
-            Package package,
-            ReleaseModel releaseModel,
-            ITaskService taskService,
             string installPath)
         {
-            _taskService = taskService;
             Plugin = plugin;
 
             InstallPath = installPath;
-            ReleaseModel = releaseModel;
-            Package = package;
-
-            Name = package.Name;
-            Description = package.Description;
 
             InstallCommand = ReactiveCommand.Create(InstallAsync,
-                this.WhenAnyValue(x => x.IsBusy, x => x.ReleaseModel,
-                (busy, model) => !busy && model != null));
+                this.WhenAnyValue(x => x.IsBusy,
+                (busy) => !busy));
             OpenCommand = ReactiveCommand.Create(OpenAsync);
             RemoveCommand = ReactiveCommand.Create(RemoveAsync);
 
@@ -68,7 +54,6 @@ namespace WolvenKit.ViewModels.Dialogs
             });
         }
 
-        [Reactive] public ReleaseModel ReleaseModel { get; set; }
         public string Name { get; }
         public string Description { get; }
         [Reactive] public string Version { get; set; }
@@ -80,25 +65,18 @@ namespace WolvenKit.ViewModels.Dialogs
         [Reactive] public bool IsNotInstalled { get; set; }
         [Reactive] public bool IsOpenEnabled { get; set; } // = IsInstalled
 
-        
+
         public ICommand OpenCommand { get; private set; }
-        private async Task OpenAsync()
-        {
+        private async Task OpenAsync() =>
             // TODO
             await Task.Delay(1);
-        }
 
         public ICommand RemoveCommand { get; private set; }
         private async Task RemoveAsync()
         {
             IsBusy = true;
 
-            var result = await _taskService.Remove(Package.Id, false, InstallPath, null);
-            if (result)
-            {
-                Status = EPluginStatus.NotInstalled;
-                Version = "";
-            }
+            await Task.Delay(1);
 
             IsBusy = false;
         }
@@ -106,10 +84,7 @@ namespace WolvenKit.ViewModels.Dialogs
         public ICommand InstallCommand { get; private set; }
         private async Task InstallAsync()
         {
-            if (ReleaseModel == null)
-            {
-                return;
-            }
+
 
             IsBusy = true;
 
@@ -121,22 +96,12 @@ namespace WolvenKit.ViewModels.Dialogs
                     {
                         Directory.CreateDirectory(InstallPath);
                     }
-                    var result = await _taskService.Install(Package.Id, "", InstallPath, false);
-                    if (result)
-                    {
-                        Status = EPluginStatus.Latest;
-                        Version = ReleaseModel.TagName;
-                    }
+                    await Task.Delay(1);
                     break;
                 }
                 case EPluginStatus.Outdated:
                 {
-                    var result = await _taskService.Update(Package.Id, false, InstallPath, null, "");
-                    if (result)
-                    {
-                        Status = EPluginStatus.Latest;
-                        Version = ReleaseModel.TagName;
-                    }
+                    await Task.Delay(1);
                     break;
                 }
                 case EPluginStatus.Latest:
