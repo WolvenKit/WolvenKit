@@ -84,8 +84,6 @@
     <PackageReference Include="WinCopies.WindowsAPICodePack" Version="2.11.0" />
     <PackageReference Include="WinCopies.WindowsAPICodePack.Shell" Version="2.11.0" />
     <PackageReference Include="Discord.Net" Version="3.7.2" />
-    <PackageReference Include="Magick.NET-Q16-HDRI-AnyCPU" Version="11.2.1" />
-    <PackageReference Include="Magick.NET.SystemWindowsMedia" Version="5.0.3" />
     <PackageReference Include="DiscordRichPresence" Version="1.0.175" />
     <PackageReference Include="NAudio" Version="2.1.0" />
     <PackageReference Include="Pfim" Version="0.10.3" />
