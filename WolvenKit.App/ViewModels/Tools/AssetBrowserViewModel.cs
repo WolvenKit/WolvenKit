@@ -68,6 +68,7 @@ namespace WolvenKit.ViewModels.Tools
         private readonly IProgressService<double> _progressService;
 
         private readonly ILoggerService _loggerService;
+        private readonly IPluginService _pluginService;
 
         private readonly ReadOnlyObservableCollection<RedFileSystemModel> _boundRootNodes;
         private bool _manuallyLoading = false;
@@ -84,7 +85,9 @@ namespace WolvenKit.ViewModels.Tools
             IGameControllerFactory gameController,
             IArchiveManager archiveManager,
             ISettingsManager settings,
-            IProgressService<double> progressService
+            IProgressService<double> progressService,
+            ILoggerService loggerService,
+            IPluginService pluginService
         ) : base(ToolTitle)
         {
             _projectManager = projectManager;
@@ -93,8 +96,8 @@ namespace WolvenKit.ViewModels.Tools
             _archiveManager = archiveManager;
             _settings = settings;
             _progressService = progressService;
-
-            _loggerService = Splat.Locator.Current.GetService<ILoggerService>();
+            _pluginService = pluginService;
+            _loggerService = loggerService;
 
             ContentId = ToolContentId;
 
@@ -237,6 +240,12 @@ namespace WolvenKit.ViewModels.Tools
         public ReactiveCommand<Unit, Unit> FindUsingCommand { get; }
         private async Task FindUsing()
         {
+            if (!_pluginService.IsInstalled(EPlugin.wolvenkit_resources))
+            {
+                _loggerService.Warning("Wolvenkit-Resources plugin is not installed and is needed for this functionality.");
+                return;
+            }
+
             _progressService.IsIndeterminate = true;
 
             await Task.Run(async () =>
@@ -276,6 +285,12 @@ namespace WolvenKit.ViewModels.Tools
         public ReactiveCommand<Unit, Unit> FindUsesCommand { get; }
         private async Task FindUses()
         {
+            if (!_pluginService.IsInstalled(EPlugin.wolvenkit_resources))
+            {
+                _loggerService.Warning("Wolvenkit-Resources plugin is not installed and is needed for this functionality.");
+                return;
+            }
+
             _progressService.IsIndeterminate = true;
 
             await Task.Run(async () =>

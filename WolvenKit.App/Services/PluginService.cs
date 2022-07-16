@@ -12,6 +12,8 @@ using System.Threading.Tasks;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using WolvenKit.Common.Services;
+using WolvenKit.Core;
+using WolvenKit.Core.Compression;
 using WolvenKit.ViewModels.Dialogs;
 
 namespace WolvenKit.Functionality.Services
@@ -106,20 +108,25 @@ namespace WolvenKit.Functionality.Services
 
         private void InitPlugins()
         {
-            // Add plugins
-            if (!_pluginIds.ContainsKey(EPlugin.redscript))
-            {
-                _pluginIds.Add(EPlugin.redscript, Path.Combine(_settings.GetRED4GameRootDir()));
-            }
+            _pluginIds.Clear();
 
-            if (!_pluginIds.ContainsKey(EPlugin.cyberenginetweaks))
+            foreach (var item in Enum.GetValues<EPlugin>())
             {
-                _pluginIds.Add(EPlugin.cyberenginetweaks, Path.Combine(_settings.GetRED4GameRootDir()));
-            }
-
-            if (!_pluginIds.ContainsKey(EPlugin.mlsetupbuilder))
-            {
-                _pluginIds.Add(EPlugin.mlsetupbuilder, Path.Combine(_settings.GetRED4GameRootDir(), "tools", "neurolinked", "mlsetupbuilder"));
+                switch (item)
+                {
+                    case EPlugin.cyberenginetweaks:
+                    case EPlugin.redscript:
+                        _pluginIds.Add(item, Path.Combine(_settings.GetRED4GameRootDir()));
+                        break;
+                    case EPlugin.mlsetupbuilder:
+                        _pluginIds.Add(item, Path.Combine(_settings.GetRED4GameRootDir(), "tools", "neurolinked", "mlsetupbuilder"));
+                        break;
+                    case EPlugin.wolvenkit_resources:
+                        _pluginIds.Add(item, Path.Combine(_settings.GetRED4GameRootDir(), "tools", "wolvenkit", "wolvenkit-resources"));
+                        break;
+                    default:
+                        break;
+                }
             }
         }
 
@@ -186,6 +193,7 @@ namespace WolvenKit.Functionality.Services
             contentUrl = $@"https://github.com{contentUrl}";
             var zipPath = Path.Combine(Path.GetTempPath(), contentUrl.Split('/').Last());
 
+            // TODO plugins remove this check it is ambigous
             if (!File.Exists(zipPath))
             {
                 response = await _client.GetAsync(new Uri(contentUrl));
@@ -205,9 +213,21 @@ namespace WolvenKit.Functionality.Services
             }
 
             var pluginViewModel = Plugins.FirstOrDefault(x => x.Id == id);
-
+            var installedFiles = new List<string>();
             // extract zip file
-            var installedFiles = await Task.Run(() => ExtractZip(pluginViewModel, zipPath));
+            switch (id)
+            {
+                case EPlugin.cyberenginetweaks:
+                case EPlugin.redscript:
+                case EPlugin.mlsetupbuilder:
+                    installedFiles = await Task.Run(() => ExtractZip(zipPath, pluginViewModel.InstallPath));
+                    break;
+                case EPlugin.wolvenkit_resources:
+                    installedFiles = await Task.Run(() => InstallResources(zipPath, pluginViewModel.InstallPath));
+                    break;
+                default:
+                    break;
+            }
 
             // update list
             if (installedFiles.Count > 0)
@@ -220,6 +240,104 @@ namespace WolvenKit.Functionality.Services
 
             // save
             await SerializeAsync();
+        }
+
+        private List<string> InstallResources(string zipPath, string extractPath)
+        {
+
+            // unzip multiple resources
+            var resources = ExtractZip(zipPath, extractPath);
+            var result = new List<string>(resources);
+
+            foreach (var resource in resources)
+            {
+                // TODO plugins refactor this
+                switch (Path.GetFileName(resource))
+                {
+                    case Common.Constants.RedDbKark:
+
+                        // unkark reddb
+                        var destinationPath = Path.Combine(ISettingsManager.GetAppData(), Common.Constants.RedDb);
+
+                        var (hash, _) = CommonFunctions.HashFileSHA512(resource);
+
+                        if (!File.Exists(destinationPath))
+                        {
+                            Oodle.OodleTask(resource, destinationPath, true, false);
+                            _settings.ReddbHash = hash;
+                            _settings.Save();
+                        }
+                        else
+                        {
+                            if (!hash.Equals(_settings.ReddbHash))
+                            {
+                                _loggerService.Info($"old hash: {_settings.ReddbHash}, new hash: {hash}. Updating reddb");
+                                Oodle.OodleTask(resource, destinationPath, true, false);
+                                _settings.ReddbHash = hash;
+                                _settings.Save();
+                            }
+                        }
+
+                        result.Add(destinationPath);
+                        break;
+                    default:
+                        break;
+                }
+            }
+
+            return result;
+        }
+
+        private List<string> ExtractZip(string zipPath, string extractPath)
+        {
+            // extract from temp path
+            var files = new List<string>();
+
+            if (!Directory.Exists(extractPath))
+            {
+                Directory.CreateDirectory(extractPath);
+            }
+
+            try
+            {
+                if (!extractPath.EndsWith(Path.DirectorySeparatorChar.ToString(), StringComparison.Ordinal))
+                {
+                    extractPath += Path.DirectorySeparatorChar;
+                }
+
+                using var archive = ZipFile.OpenRead(zipPath);
+                foreach (var entry in archive.Entries)
+                {
+                    // Gets the full path to ensure that relative segments are removed.
+                    var destinationPath = Path.GetFullPath(Path.Combine(extractPath, entry.FullName));
+
+                    if (destinationPath.EndsWith(Path.DirectorySeparatorChar))
+                    {
+                        if (!Directory.Exists(destinationPath))
+                        {
+                            Directory.CreateDirectory(destinationPath);
+                        }
+                    }
+                    else
+                    {
+                        // Ordinal match is safest, case-sensitive volumes can be mounted within volumes that are case-insensitive.
+                        if (destinationPath.StartsWith(extractPath, StringComparison.Ordinal))
+                        {
+                            entry.ExtractToFile(destinationPath, true);
+                            files.Add(destinationPath);
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                _loggerService.Error($"Failed to extract plugin zip: {zipPath}");
+                _loggerService.Error(ex);
+
+                files.Clear();
+            }
+
+            return files;
         }
 
         public async Task RemovePluginAsync(EPlugin id)
@@ -288,62 +406,6 @@ namespace WolvenKit.Functionality.Services
             var pluginManifestPath = Path.Combine(pluginManifestDir, _pluginFileName);
             using var fs = new FileStream(pluginManifestPath, FileMode.Create);
             await JsonSerializer.SerializeAsync(fs, pluginManifestDict, new JsonSerializerOptions() { WriteIndented = true });
-        }
-
-        private List<string> ExtractZip(PluginViewModel pluginViewModel, string zipPath)
-        {
-            // extract from temp path
-            var files = new List<string>();
-
-            if (pluginViewModel is not null)
-            {
-                if (!Directory.Exists(pluginViewModel.InstallPath))
-                {
-                    Directory.CreateDirectory(pluginViewModel.InstallPath);
-                }
-            }
-
-            try
-            {
-                var extractPath = pluginViewModel.InstallPath;
-                if (!extractPath.EndsWith(Path.DirectorySeparatorChar.ToString(), StringComparison.Ordinal))
-                {
-                    extractPath += Path.DirectorySeparatorChar;
-                }
-
-                using var archive = ZipFile.OpenRead(zipPath);
-                foreach (var entry in archive.Entries)
-                {
-                    // Gets the full path to ensure that relative segments are removed.
-                    var destinationPath = Path.GetFullPath(Path.Combine(extractPath, entry.FullName));
-
-                    if (destinationPath.EndsWith(Path.DirectorySeparatorChar))
-                    {
-                        if (!Directory.Exists(destinationPath))
-                        {
-                            Directory.CreateDirectory(destinationPath);
-                        }
-                    }
-                    else
-                    {
-                        // Ordinal match is safest, case-sensitive volumes can be mounted within volumes that are case-insensitive.
-                        if (destinationPath.StartsWith(extractPath, StringComparison.Ordinal))
-                        {
-                            entry.ExtractToFile(destinationPath, true);
-                            files.Add(entry.FullName);
-                        }
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                _loggerService.Error($"Failed to extract plugin zip: {zipPath}");
-                _loggerService.Error(ex);
-
-                files.Clear();
-            }
-
-            return files;
         }
 
         private async Task<HttpResponseMessage> CheckForUpdateAsync(EPlugin id)

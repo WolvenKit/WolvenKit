@@ -14,7 +14,7 @@ public class RedDBContext : DbContext
             Directory.CreateDirectory(dir);
         }
 
-        DbPath = Path.Combine(dir, "red.db");
+        DbPath = Path.Combine(dir, Constants.RedDb);
     }
 
     public DbSet<RedArchive> Archives { get; set; }
@@ -63,19 +63,14 @@ public class RedDBContext : DbContext
                 .HasMany(x => x.Uses);
         });
 
-        modelBuilder.Entity<RedFileUse>(entity =>
-        {
-            entity
-                .HasKey(nameof(RedFileUse.RedFileId), nameof(RedFileUse.Hash));
-        });
+        modelBuilder.Entity<RedFileUse>(entity => entity
+                .HasKey(nameof(RedFileUse.RedFileId), nameof(RedFileUse.Hash)));
     }
 
     public static void ClearDatabase()
     {
-        using (var client = new RedDBContext())
-        {
-            client.Database.EnsureDeleted();
-            client.Database.EnsureCreated();
-        }
+        using var client = new RedDBContext();
+        client.Database.EnsureDeleted();
+        client.Database.EnsureCreated();
     }
 }

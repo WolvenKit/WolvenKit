@@ -25,12 +25,14 @@ namespace WolvenKit.Functionality.Services
 
     public enum EPlugin
     {
-        [Id("CyberEngineTweaks", "yamashi/cyberenginetweaks", @"cet.*\.zip")]
+        [Id("CyberEngineTweaks", "yamashi/cyberenginetweaks", @"cet.*\.zip", "Cyberpunk 2077 tweaks, hacks and scripting framework.")]
         cyberenginetweaks,
-        [Id("Redscript", "jac3km4/redscript", @"redscript-mod.*\.zip")]
+        [Id("Redscript", "jac3km4/redscript", @"redscript-mod.*\.zip", "Compiler/decompiler toolkit for redscript.")]
         redscript,
-        [Id("MlsetupBuilder", "neurolinked/mlsetupbuilder", @"MlsetupBuilder-.*\.zip", "Cyberpunk 2077 modding tool to build json version of .mlsetup files")]
+        [Id("MlsetupBuilder", "neurolinked/mlsetupbuilder", @"MlsetupBuilder-.*\.zip", "Cyberpunk 2077 modding tool to build json version of .mlsetup files.")]
         mlsetupbuilder,
+        [Id("Wolvenkit Resources", "WolvenKit/Wolvenkit-Resources", @"resources.zip", "Resource depot for Wolvenkit.")]
+        wolvenkit_resources,
     }
 
     [AttributeUsage(AttributeTargets.Field)]
