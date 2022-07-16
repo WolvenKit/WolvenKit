@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using WolvenKit.Common.FNV1A;
+using WolvenKit.Core.CRC;
 using WolvenKit.RED4.Types;
 
 namespace WolvenKit.RED4.TweakDB
@@ -88,22 +90,16 @@ namespace WolvenKit.RED4.TweakDB
             return null;
         }
 
-        public List<TweakDBID> GetRecords() => Records.GetResolvableRecords(true);
-        public List<TweakDBID> GetFlats() => Flats.GetResolvableRecords(true);
-        public List<TweakDBID> GetQueries() => Queries.GetResolvableRecords(true);
-        public List<TweakDBID> GetGroupTags() => GroupTags.GetResolvableRecords(true);
+        public List<TweakDBID> GetRecords() => Records.GetRecords(true);
+        public List<TweakDBID> GetFlats() => Flats.GetRecords(true);
+        public List<TweakDBID> GetQueries() => Queries.GetRecords(true);
+        public List<TweakDBID> GetGroupTags() => GroupTags.GetRecords(true);
 
-        public Type GetRecordType(string path)
+        public Type GetRecordType(TweakDBID targetId)
         {
             foreach (var (id, type) in Records)
             {
-                var resolvedName = id.GetResolvedText();
-                if (resolvedName == null)
-                {
-                    continue;
-                }
-
-                if (resolvedName == path)
+                if (id == targetId)
                 {
                     return type;
                 }
@@ -112,23 +108,45 @@ namespace WolvenKit.RED4.TweakDB
             return null;
         }
 
-        public gamedataTweakDBRecord GetFullRecord(string path)
+        public gamedataTweakDBRecord GetFullRecord(TweakDBID targetId)
         {
-            var type = GetRecordType(path);
+            var type = GetRecordType(targetId);
             if (type == null)
             {
                 return null;
             }
 
             var instance = RedTypeManager.Create(type);
-            var values = Flats.GetRecordValues(path);
+
+            var values = new Dictionary<string, IRedType>();
+            if (targetId.ResolvedText != null)
+            {
+                values = Flats.GetRecordValues(targetId.ResolvedText);
+            }
 
             var typeInfo = RedReflection.GetTypeInfo(instance);
             foreach (var propertyInfo in typeInfo.PropertyInfos)
             {
-                if (values.ContainsKey(propertyInfo.RedName))
+                if (targetId.ResolvedText != null)
                 {
-                    instance.SetProperty(propertyInfo.RedName, values[propertyInfo.RedName]);
+                    if (values.ContainsKey(propertyInfo.RedName))
+                    {
+                        instance.SetProperty(propertyInfo.RedName, values[propertyInfo.RedName]);
+                    }
+                }
+                else
+                {
+                    var crc = ((uint)targetId & 0xFFFFFFFF);
+                    var length = (uint)(targetId >> 32);
+                    var add = System.Text.Encoding.ASCII.GetBytes("." + propertyInfo.RedName);
+
+                    var newHash = Crc32Algorithm.Append(crc, add) + ((ulong)(length + add.Length) << 32);
+
+                    var value = Flats.GetValue(newHash);
+                    if (value != null)
+                    {
+                        instance.SetProperty(propertyInfo.RedName, value);
+                    }
                 }
             }
 

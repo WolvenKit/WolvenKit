@@ -44,11 +44,10 @@ public class QueriesPool : IEnumerable<(TweakDBID id, List<TweakDBID> val)>
         return _queries.ContainsKey(hash);
     }
 
-    public List<TweakDBID> GetResolvableRecords(bool sortByName = false)
+    public List<TweakDBID> GetRecords(bool sortByName = false)
     {
         var list = _queries.Keys
             .Select(x => (TweakDBID)x)
-            .Where(x => x.GetResolvedText() != null)
             .ToList();
 
         if (sortByName)

@@ -44,11 +44,10 @@ public class GroupTagsPool : IEnumerable<(TweakDBID id, byte val)>
         return _groupTags.ContainsKey(hash);
     }
 
-    public List<TweakDBID> GetResolvableRecords(bool sortByName = false)
+    public List<TweakDBID> GetRecords(bool sortByName = false)
     {
         var list = _groupTags.Keys
             .Select(x => (TweakDBID)x)
-            .Where(x => x.GetResolvedText() != null)
             .ToList();
 
         if (sortByName)

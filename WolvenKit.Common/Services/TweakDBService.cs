@@ -81,7 +81,7 @@ namespace WolvenKit.Common.Services
         public List<TweakDBID> GetQueries() => s_tweakDb.GetQueries();
         public List<TweakDBID> GetGroupTags() => s_tweakDb.GetGroupTags();
 
-        public gamedataTweakDBRecord GetRecord(TweakDBID tdb) => s_tweakDb.GetFullRecord(tdb.GetResolvedText());
+        public gamedataTweakDBRecord GetRecord(TweakDBID tdb) => s_tweakDb.GetFullRecord(tdb);
         public gamedataTweakDBRecord GetRecord(SAsciiString path) => s_tweakDb.GetFullRecord(path.ToString());
 
         public IRedType GetFlat(SAsciiString path) => s_tweakDb.GetFlatValue(path.ToString());

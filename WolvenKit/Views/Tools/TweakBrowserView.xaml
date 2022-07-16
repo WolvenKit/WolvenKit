@@ -13,6 +13,7 @@
     xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
     xmlns:tools="clr-namespace:WolvenKit.ViewModels.Tools;assembly=WolvenKit.App"
     xmlns:templates="clr-namespace:WolvenKit.Views.Templates"
+    xmlns:converters1="clr-namespace:WolvenKit.Converters"
     d:DataContext="{d:DesignInstance Type=tools:TweakBrowserViewModel}"
     d:DesignHeight="450"
     d:DesignWidth="800"
@@ -21,6 +22,7 @@
     <Grid Background="{StaticResource ContentBackground}">
         <Grid.Resources>
             <converters:StringPathToItemStringConverter x:Key="stringPathToItemStringConverter" />
+            <converters1:TweakDBIDConverter x:Key="TweakDBIDConverter" />
         </Grid.Resources>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
@@ -60,7 +62,7 @@
                         SelectedItem="{Binding SelectedRecordEntry, Mode=TwoWay}">
                         <ListBox.ItemTemplate>
                             <DataTemplate>
-                                <TextBlock Margin="2,0" Text="{Binding Path=ResolvedText}" />
+                                <TextBlock Margin="2,0" Text="{Binding Converter={StaticResource TweakDBIDConverter}}" />
                             </DataTemplate>
                         </ListBox.ItemTemplate>
                     </ListBox>
@@ -90,7 +92,7 @@
                         SelectedItem="{Binding SelectedFlatEntry, Mode=TwoWay}">
                         <ListBox.ItemTemplate>
                             <DataTemplate>
-                                <TextBlock Margin="2,0" Text="{Binding Path=ResolvedText}" />
+                                <TextBlock Margin="2,0" Text="{Binding Converter={StaticResource TweakDBIDConverter}}" />
                             </DataTemplate>
                         </ListBox.ItemTemplate>
                     </ListBox>
@@ -118,7 +120,7 @@
                         SelectedItem="{Binding SelectedQueryEntry, Mode=TwoWay}">
                         <ListBox.ItemTemplate>
                             <DataTemplate>
-                                <TextBlock Margin="2,0" Text="{Binding Path=ResolvedText}" />
+                                <TextBlock Margin="2,0" Text="{Binding Converter={StaticResource TweakDBIDConverter}}" />
                             </DataTemplate>
                         </ListBox.ItemTemplate>
                     </ListBox>
@@ -146,7 +148,7 @@
                         SelectedItem="{Binding SelectedGroupTagEntry, Mode=TwoWay}">
                         <ListBox.ItemTemplate>
                             <DataTemplate>
-                                <TextBlock Margin="2,0" Text="{Binding Path=ResolvedText}" />
+                                <TextBlock Margin="2,0" Text="{Binding Converter={StaticResource TweakDBIDConverter}}" />
                             </DataTemplate>
                         </ListBox.ItemTemplate>
                     </ListBox>

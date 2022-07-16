@@ -79,11 +79,10 @@ namespace WolvenKit.RED4.TweakDB
             return _flatDictionary.ContainsKey(id);
         }
 
-        public List<TweakDBID> GetResolvableRecords(bool sortByName = false)
+        public List<TweakDBID> GetRecords(bool sortByName = false)
         {
             var list = _flatDictionary.Keys
                 .Select(x => (TweakDBID)x)
-                .Where(x => x.GetResolvedText() != null)
                 .ToList();
 
             if (sortByName)
