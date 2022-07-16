@@ -3,19 +3,19 @@ using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
-using System.Linq;
+using System.Reactive.Linq;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Media.Media3D;
 using System.Windows.Threading;
-using HelixToolkit.Wpf.SharpDX;
 using ReactiveUI;
 using Splat;
 using Syncfusion.Windows.PropertyGrid;
 using WolvenKit.Common.Extensions;
+using WolvenKit.Functionality.Helpers;
 using WolvenKit.Functionality.Services;
 using WolvenKit.ViewModels.Tools;
 using WolvenKit.Views.Editor.AudioTool;
@@ -71,16 +71,9 @@ namespace WolvenKit.Views.Tools
                 }
             };
 
-            this.WhenActivated(disposables =>
-                //ViewModel.WhenAnyValue(x => x.LoadedBitmapFrame).Subscribe(source =>
-                //{
-                //    if (source is { } frame)
-                //    {
-                //        LoadImage(frame);
-                //    }
-                //});
-
-                ViewModel.PreviewAudioCommand.Subscribe(path => TempConvertToWemWav(path)));
+            this.WhenActivated(disposables => ViewModel.PreviewAudioCommand
+                    .ObserveOn(RxApp.MainThreadScheduler)
+                    .Subscribe(async path => await TempConvertToWemWavAsync(path)));
         }
 
         #region properties
@@ -232,7 +225,9 @@ namespace WolvenKit.Views.Tools
         /// convert a file to wav to preview it.
         /// </summary>
         /// <param name="path"></param>
-        public void TempConvertToWemWav(string path)
+        private async Task TempConvertToWemWavAsync(string path) => await Task.Run(() => TempConvertToWemWav(path));
+
+        private void TempConvertToWemWav(string path)
         {
             var ManagerCacheDir = Path.Combine(ISettingsManager.GetTemp_AudioPath());
 
@@ -272,29 +267,33 @@ namespace WolvenKit.Views.Tools
             proc.WaitForExit();
             Trace.WriteLine(proc.StandardOutput.ReadToEnd());
 
-            mediaPlayer.Open(new Uri(outf));
-
-            var timer = new DispatcherTimer
+            DispatcherHelper.RunOnMainThread(() =>
             {
-                Interval = TimeSpan.FromSeconds(1)
-            };
-            timer.Tick += Timer_Tick;
+                mediaPlayer.Open(new Uri(outf));
 
-            timer.Start();
 
-            var ChannelPositionTimer = new DispatcherTimer
-            {
-                Interval = TimeSpan.FromMilliseconds(1)
-            };
-            ChannelPositionTimer.Tick += ChannelPositionTimer_Tick;
-            ;
 
-            ChannelPositionTimer.Start();
+                var timer = new DispatcherTimer
+                {
+                    Interval = TimeSpan.FromSeconds(1)
+                };
+                timer.Tick += Timer_Tick;
 
-            //ChannelLength = $"{mediaPlayer.Position.TotalMinutes} : {mediaPlayer.Position.TotalSeconds} : {mediaPlayer.Position.TotalMilliseconds}";
-            NAudioSimpleEngine.Instance.OpenFile(outf);
-            RunnerText.SetCurrentValue(ContentProperty, Path.GetFileNameWithoutExtension(outf));
+                timer.Start();
 
+                var ChannelPositionTimer = new DispatcherTimer
+                {
+                    Interval = TimeSpan.FromMilliseconds(1)
+                };
+                ChannelPositionTimer.Tick += ChannelPositionTimer_Tick;
+                ;
+
+                ChannelPositionTimer.Start();
+
+                //ChannelLength = $"{mediaPlayer.Position.TotalMinutes} : {mediaPlayer.Position.TotalSeconds} : {mediaPlayer.Position.TotalMilliseconds}";
+                NAudioSimpleEngine.Instance.OpenFile(outf);
+                RunnerText.SetCurrentValue(ContentProperty, Path.GetFileNameWithoutExtension(outf));
+            });
 
             //AudioFileList.Add(lvi);
         }
@@ -335,14 +334,17 @@ namespace WolvenKit.Views.Tools
 
         private void PlayButton_Click_1(object sender, RoutedEventArgs e)
         {
-            //Call Stop Playing if the media player is at the end of the track
-            if (mediaPlayer.Position >= mediaPlayer.NaturalDuration.TimeSpan)
+            if (mediaPlayer.NaturalDuration.HasTimeSpan)
             {
-                mediaPlayer.Stop();
-                mediaPlayer.Position = new TimeSpan(0);
-            }
+                //Call Stop Playing if the media player is at the end of the track
+                if (mediaPlayer.Position >= mediaPlayer.NaturalDuration.TimeSpan)
+                {
+                    mediaPlayer.Stop();
+                    mediaPlayer.Position = new TimeSpan(0);
+                }
 
-            mediaPlayer.Play();
+                mediaPlayer.Play();
+            }
         }
 
         private void PauseButton_Click_1(object sender, RoutedEventArgs e) => mediaPlayer.Pause();
@@ -354,7 +356,5 @@ namespace WolvenKit.Views.Tools
         }
 
         #endregion AudioPreview
-
-        private void CopyMenuItem_Click(object sender, RoutedEventArgs e) => Clipboard.SetText((DataContext as PropertiesViewModel).PE_SelectedItem.FullName);
     }
 }

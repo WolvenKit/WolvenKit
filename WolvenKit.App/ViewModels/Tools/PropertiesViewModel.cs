@@ -141,6 +141,11 @@ namespace WolvenKit.ViewModels.Tools
 
         private bool CanOpenFile(FileModel model) => model != null;
 
+        /// <summary>
+        /// Called from Assetbrowser
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
         public async Task ExecuteSelectFile(IFileSystemViewModel model)
         {
             if (model == null)
@@ -184,15 +189,23 @@ namespace WolvenKit.ViewModels.Tools
                 {
                     var selectedGameFile = selectedItem.GetGameFile();
                     selectedGameFile.Extract(stream);
-                    _parser.TryReadRed4File(stream, out cr2w);
+                    if (!_parser.TryReadRed4File(stream, out cr2w))
+                    {
+                        PreviewStream(stream, model.FullName);
+                    }
                 }
                 if (cr2w != null)
                 {
-                    await ExecuteSelectFile(cr2w, model.FullName);
+                    await PreviewCr2wFile(cr2w);
                 }
             }
         }
 
+        /// <summary>
+        /// Called from PropertyExplorer
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
         public async Task ExecuteSelectFile(FileModel model)
         {
             if (model == null)
@@ -236,17 +249,50 @@ namespace WolvenKit.ViewModels.Tools
                 {
                     if (!_parser.TryReadRed4File(stream, out cr2w))
                     {
-                        await ExecuteSelectFile(stream, model.FullName);
+                        await PreviewPhysicalFile(model.FullName);
                     }
                 }
                 if (cr2w != null)
                 {
-                    await ExecuteSelectFile(cr2w, model.FullName);
+                    await PreviewCr2wFile(cr2w);
                 }
             }
         }
 
-        public async Task ExecuteSelectFile(Stream stream, string filename)
+        /// <summary>
+        /// Internal
+        /// </summary>
+        /// <param name="stream"></param>
+        /// <param name="filename"></param>
+        /// <returns></returns>
+        private void PreviewStream(Stream stream, string filename)
+        {
+            var extension = Path.GetExtension(filename).TrimStart('.');
+            stream.Seek(0, SeekOrigin.Begin);
+
+            if (Enum.TryParse<AudioPreviewExtensions>(extension, true, out _))
+            {
+                IsAudioPreviewVisible = true;
+                SelectedIndex = 2;
+
+                // extract to temp path
+                var outfile = Path.Combine(Path.GetTempPath(), Path.GetFileName(filename));
+                using (var fs = new FileStream(outfile, FileMode.Create, FileAccess.Write))
+                {
+                    stream.CopyTo(fs);
+                }
+
+                PreviewAudioCommand.SafeExecute(outfile);
+            }
+        }
+
+        /// <summary>
+        /// Internal
+        /// </summary>
+        /// <param name="stream"></param>
+        /// <param name="filename"></param>
+        /// <returns></returns>
+        private async Task PreviewPhysicalFile(string filename)
         {
             var extension = Path.GetExtension(filename).TrimStart('.');
 
@@ -260,11 +306,12 @@ namespace WolvenKit.ViewModels.Tools
                 IsAudioPreviewVisible = true;
                 SelectedIndex = 2;
 
+                // extract to temp path
+                var tempFolder = Path.GetTempPath();
+
                 PreviewAudioCommand.SafeExecute(filename);
             }
-
-            // textures
-            if (Enum.TryParse<EUncookExtension>(extension, true, out _))
+            else if (Enum.TryParse<EUncookExtension>(extension, true, out _))
             {
                 var q = await ImageDecoder.RenderToBitmapSource(filename);
                 if (q != null)
@@ -277,7 +324,7 @@ namespace WolvenKit.ViewModels.Tools
             }
         }
 
-        public Task ExecuteSelectFile(CR2WFile cr2w, string filename)
+        private async Task PreviewCr2wFile(CR2WFile cr2w)
         {
             //if (string.Equals(extension, ERedExtension.bk2.ToString(),
             //   System.StringComparison.OrdinalIgnoreCase))
@@ -295,37 +342,35 @@ namespace WolvenKit.ViewModels.Tools
                 cbt.RenderTextureResource.RenderResourceBlobPC != null &&
                 cbt.RenderTextureResource.RenderResourceBlobPC.GetValue() is rendRenderTextureBlobPC)
             {
-                SetupImage(cbt);
+                await SetupImage(cbt);
             }
 
             if (cr2w.RootChunk is CMesh cm && cm.RenderResourceBlob != null &&
                 cm.RenderResourceBlob.GetValue() is rendRenderTextureBlobPC)
             {
-                SetupImage(cm);
+                await SetupImage(cm);
             }
 
             if (cr2w.RootChunk is CReflectionProbeDataResource crpdr &&
                 crpdr.TextureData.RenderResourceBlobPC.GetValue() is rendRenderTextureBlobPC)
             {
-                SetupImage(crpdr);
+                await SetupImage(crpdr);
             }
-
-            return Task.CompletedTask;
         }
 
-        public void SetupImage(RedBaseClass cls)
+        public async Task SetupImage(RedBaseClass cls)
         {
             using var ddsstream = new MemoryStream();
             try
             {
                 if (ModTools.ConvertRedClassToDdsStream(cls, ddsstream, out _))
                 {
-                    _ = LoadImageFromStream(ddsstream);
+                    await LoadImageFromStream(ddsstream);
                 }
             }
             catch (Exception e)
             {
-                Console.WriteLine(e.Message);
+                _loggerService.Error(e);
                 //throw;
             }
         }

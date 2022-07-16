@@ -136,7 +136,7 @@ image.SetTexturePart(n""{PartName}"");";
                 Width = Math.Round(itam.ClippingRectInUVCoords.Right * xbm.Width) - Left;
                 Height = Math.Round(itam.ClippingRectInUVCoords.Bottom * xbm.Height) - Top;
                 Name = $"{itam.PartName} ({(uint)Width}x{(uint)Height})";
-                SaveImageCommand = new DelegateCommand(ExecuteSaveImage, CanSaveImage).ObservesProperty(() => Image);
+                SaveImageCommand = new DelegateCommand(ExecuteSaveImage, CanSaveImage); // .ObservesProperty(() => Image); WKit crashs when using this, don't know why...
 
                 try
                 {

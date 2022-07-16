@@ -193,12 +193,6 @@ namespace WolvenKit
 
                     #region wizards
 
-                    services.AddTransient<BugReportWizardViewModel>();
-                    services.AddTransient<IViewFor<BugReportWizardViewModel>, BugReportWizardView>();
-
-                    services.AddTransient<FeedbackWizardViewModel>();
-                    services.AddTransient<IViewFor<FeedbackWizardViewModel>, FeedbackWizardView>();
-
                     services.AddTransient<FirstSetupWizardViewModel>();
                     services.AddTransient<IViewFor<FirstSetupWizardViewModel>, FirstSetupWizardView>();
 

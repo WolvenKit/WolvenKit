@@ -374,6 +374,14 @@ namespace WolvenKit.ViewModels.Shell
 
                 ActiveProject = _projectManager.ActiveProject;
 
+                // If the assets can't be found, stop here and notify the user in the log
+                if (!File.Exists(_settingsManager.CP77ExecutablePath))
+                {
+                    UpdateTitle();
+                    _loggerService.Warning($"Cyberpunk 2077 executable path is not set. Asset browser disabled.");
+                    return Unit.Default;
+                }
+
                 await _gameControllerFactory.GetController().HandleStartup().ContinueWith(_ =>
                 {
                     UpdateTitle();
@@ -430,11 +438,20 @@ namespace WolvenKit.ViewModels.Shell
 
                 DispatcherHelper.RunOnMainThread(() => ActiveProject = _projectManager.ActiveProject);
 
-                await _gameControllerFactory.GetController().HandleStartup().ContinueWith(_ =>
+                // If the assets can't be found, stop here and notify the user in the log
+                if (!File.Exists(_settingsManager.CP77ExecutablePath))
                 {
                     UpdateTitle();
-                    _notificationService.Success("Project " + project.ProjectName + " loaded!");
-                }, TaskContinuationOptions.OnlyOnRanToCompletion);
+                    _loggerService.Warning($"Cyberpunk 2077 executable path is not set. Asset browser disabled.");
+                }
+                else
+                {
+                    await _gameControllerFactory.GetController().HandleStartup().ContinueWith(_ =>
+                    {
+                        UpdateTitle();
+                        _notificationService.Success("Project " + project.ProjectName + " loaded!");
+                    }, TaskContinuationOptions.OnlyOnRanToCompletion);
+                }
             }
             catch (Exception ex)
             {

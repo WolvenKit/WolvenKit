@@ -1,9 +1,9 @@
 name: check-only
 on:
   pull_request:
-    branches: [develop, master, main]
+    branches: [main]
   push:
-    branches: [develop]
+    branches: [main]
 
 jobs:
   desktop-win:

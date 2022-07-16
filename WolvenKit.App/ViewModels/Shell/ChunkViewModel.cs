@@ -149,7 +149,7 @@ namespace WolvenKit.ViewModels.Shell
                 });
 
             //DoSubscribe();
-
+            // TODO INPC 
             OpenRefCommand = new DelegateCommand(ExecuteOpenRef, CanOpenRef).ObservesProperty(() => Data);
             AddRefCommand = new DelegateCommand(ExecuteAddRef, CanAddRef).ObservesProperty(() => Data);
             ExportChunkCommand = new DelegateCommand(ExecuteExportChunk, CanExportChunk).ObservesProperty(() => PropertyCount);
@@ -926,7 +926,11 @@ namespace WolvenKit.ViewModels.Shell
                 }
                 return _propertyCountCache;
             }
-            set => _propertyCountCache = -1;
+            set
+            {
+                _propertyCountCache = -1;
+                this.RaisePropertyChanged(nameof(PropertyCount));
+            }
         }
 
         public int ArrayIndexWidth
@@ -1006,21 +1010,11 @@ namespace WolvenKit.ViewModels.Shell
             if (PropertyType.IsAssignableTo(typeof(BaseStringType)))
             {
                 var value = (BaseStringType)Data;
-                if (value is NodeRef rn)
-                {
-                    if (rn.GetResolvedText() is var text && !string.IsNullOrEmpty(text))
-                    {
-                        Value = text;
-                    }
-                    else
-                    {
-                        Value = rn.GetRedHash() != 0 ? rn.GetRedHash().ToString() : "null";
-                    }
-                }
-                else
-                {
-                    Value = "null";
-                }
+                Value = value is NodeRef rn
+                    ? rn.GetResolvedText() is var text && !string.IsNullOrEmpty(text)
+                        ? text
+                        : rn.GetRedHash() != 0 ? rn.GetRedHash().ToString() : "null"
+                    : "null";
                 if (!string.IsNullOrEmpty(value))
                 {
                     Value = value;
@@ -1326,23 +1320,15 @@ namespace WolvenKit.ViewModels.Shell
                 {
                     return "DebugBreakpointConditionalUnverified";
                 }
-                if (PropertyType.IsAssignableTo(typeof(IRedPrimitive)))
-                {
-                    return "DebugBreakpointDataUnverified";
-                }
-                if (PropertyType.IsAssignableTo(typeof(WorldTransform)))
-                {
-                    return "Compass";
-                }
-                if (PropertyType.IsAssignableTo(typeof(WorldPosition)))
-                {
-                    return "Move";
-                }
-                if (PropertyType.IsAssignableTo(typeof(Quaternion)))
-                {
-                    return "IssueReopened";
-                }
-                return PropertyType.IsAssignableTo(typeof(CColor)) ? "SymbolColor" : "SymbolClass";
+                return PropertyType.IsAssignableTo(typeof(IRedPrimitive))
+                    ? "DebugBreakpointDataUnverified"
+                    : PropertyType.IsAssignableTo(typeof(WorldTransform))
+                    ? "Compass"
+                    : PropertyType.IsAssignableTo(typeof(WorldPosition))
+                    ? "Move"
+                    : PropertyType.IsAssignableTo(typeof(Quaternion))
+                    ? "IssueReopened"
+                    : PropertyType.IsAssignableTo(typeof(CColor)) ? "SymbolColor" : "SymbolClass";
             }
         }
 
@@ -2293,17 +2279,7 @@ namespace WolvenKit.ViewModels.Shell
             catch (Exception ex) { Locator.Current.GetService<ILoggerService>().Error(ex); }
         }
 
-        public IRedArray ArraySelfOrParent
-        {
-            get
-            {
-                if (Parent.ResolvedData is IRedArray ira)
-                {
-                    return ira;
-                }
-                return ResolvedData as IRedArray;
-            }
-        }
+        public IRedArray ArraySelfOrParent => Parent.ResolvedData is IRedArray ira ? ira : ResolvedData as IRedArray;
 
 
         public void MoveChild(int index, ChunkViewModel item)
@@ -2393,7 +2369,7 @@ namespace WolvenKit.ViewModels.Shell
                 {
                     ira = Data as IRedArray;
                 }
-                if (ira.InnerType.IsAssignableTo(item.GetType()))
+                if (ira.InnerType.IsAssignableFrom(item.GetType()))
                 {
                     var iraType = ira.GetType();
                     if (iraType.IsGenericType)

@@ -1,4 +1,3 @@
-using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Input;
@@ -27,12 +26,14 @@ namespace WolvenKit.Views.Tools
         {
             if (e.Key == Key.Enter)
             {
-                TextBox tBox = (TextBox)sender;
-                DependencyProperty prop = TextBox.TextProperty;
+                var tBox = (TextBox)sender;
+                var prop = TextBox.TextProperty;
 
-                BindingExpression binding = BindingOperations.GetBindingExpression(tBox, prop);
+                var binding = BindingOperations.GetBindingExpression(tBox, prop);
                 if (binding != null)
-                { binding.UpdateSource(); }
+                {
+                    binding.UpdateSource();
+                }
             }
         }
     }

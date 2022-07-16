@@ -53,8 +53,6 @@ namespace WolvenKit.ViewModels.Tools
         private readonly IGameControllerFactory _gameController;
         private readonly IPluginService _pluginService;
         private readonly ISettingsManager _settingsManager;
-
-        private EditorProject ActiveProject => _projectManager.ActiveProject;
         private readonly IObservableList<FileModel> _observableList;
 
         #endregion fields
@@ -99,18 +97,27 @@ namespace WolvenKit.ViewModels.Tools
 
             this.WhenAnyValue(x => x.SelectedItem).Subscribe(model =>
             {
-                if (model != null)
+                if (model is not null)
                 {
                     Locator.Current.GetService<AppViewModel>().FileSelectedCommand.SafeExecute(model);
                 }
             });
 
+            this.WhenAnyValue(x => x._projectManager.ActiveProject).Subscribe(proj =>
+            {
+                if (proj is not null)
+                {
+                    ActiveProject = proj;
+                }
+            });
         }
 
 
         #endregion constructors
 
         #region properties
+
+        [Reactive] private EditorProject ActiveProject { get; set; }
 
         public ReactiveCommand<Unit, Unit> ExpandAll { get; private set; }
         public ReactiveCommand<Unit, Unit> CollapseAll { get; private set; }
