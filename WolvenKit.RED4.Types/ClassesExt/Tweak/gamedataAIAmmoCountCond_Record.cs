@@ -3,14 +3,6 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class gamedataAIAmmoCountCond_Record
 	{
-		[RED("invert")]
-		[REDProperty(IsIgnored = true)]
-		public CBool Invert
-		{
-			get => GetPropertyValue<CBool>();
-			set => SetPropertyValue<CBool>(value);
-		}
-		
 		[RED("max")]
 		[REDProperty(IsIgnored = true)]
 		public CInt32 Max

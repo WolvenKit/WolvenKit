@@ -83,22 +83,6 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 		
-		[RED("isFlatheadAction")]
-		[REDProperty(IsIgnored = true)]
-		public CBool IsFlatheadAction
-		{
-			get => GetPropertyValue<CBool>();
-			set => SetPropertyValue<CBool>(value);
-		}
-		
-		[RED("isQuickHack")]
-		[REDProperty(IsIgnored = true)]
-		public CBool IsQuickHack
-		{
-			get => GetPropertyValue<CBool>();
-			set => SetPropertyValue<CBool>(value);
-		}
-		
 		[RED("objectActionType")]
 		[REDProperty(IsIgnored = true)]
 		public TweakDBID ObjectActionType

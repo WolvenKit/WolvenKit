@@ -11,6 +11,14 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 		
+		[RED("comparisonType")]
+		[REDProperty(IsIgnored = true)]
+		public CName ComparisonType
+		{
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
+		}
+		
 		[RED("listenConstantly")]
 		[REDProperty(IsIgnored = true)]
 		public CBool ListenConstantly

@@ -3,12 +3,12 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class gamedataStatPrereq_Record
 	{
-		[RED("fireAndForget")]
+		[RED("comparisonType")]
 		[REDProperty(IsIgnored = true)]
-		public CBool FireAndForget
+		public CName ComparisonType
 		{
-			get => GetPropertyValue<CBool>();
-			set => SetPropertyValue<CBool>(value);
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
 		}
 		
 		[RED("statModifiers")]

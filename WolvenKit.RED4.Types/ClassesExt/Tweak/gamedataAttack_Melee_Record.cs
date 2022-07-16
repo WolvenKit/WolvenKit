@@ -19,62 +19,6 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 		
-		[RED("addedImpulse")]
-		[REDProperty(IsIgnored = true)]
-		public CFloat AddedImpulse
-		{
-			get => GetPropertyValue<CFloat>();
-			set => SetPropertyValue<CFloat>(value);
-		}
-		
-		[RED("addedImpulseDelay")]
-		[REDProperty(IsIgnored = true)]
-		public CFloat AddedImpulseDelay
-		{
-			get => GetPropertyValue<CFloat>();
-			set => SetPropertyValue<CFloat>(value);
-		}
-		
-		[RED("adjustmentCurve")]
-		[REDProperty(IsIgnored = true)]
-		public CName AdjustmentCurve
-		{
-			get => GetPropertyValue<CName>();
-			set => SetPropertyValue<CName>(value);
-		}
-		
-		[RED("adjustmentDistanceRadiusOffset")]
-		[REDProperty(IsIgnored = true)]
-		public CFloat AdjustmentDistanceRadiusOffset
-		{
-			get => GetPropertyValue<CFloat>();
-			set => SetPropertyValue<CFloat>(value);
-		}
-		
-		[RED("adjustmentDuration")]
-		[REDProperty(IsIgnored = true)]
-		public CFloat AdjustmentDuration
-		{
-			get => GetPropertyValue<CFloat>();
-			set => SetPropertyValue<CFloat>(value);
-		}
-		
-		[RED("adjustmentRadius")]
-		[REDProperty(IsIgnored = true)]
-		public CFloat AdjustmentRadius
-		{
-			get => GetPropertyValue<CFloat>();
-			set => SetPropertyValue<CFloat>(value);
-		}
-		
-		[RED("adjustmentRange")]
-		[REDProperty(IsIgnored = true)]
-		public CFloat AdjustmentRange
-		{
-			get => GetPropertyValue<CFloat>();
-			set => SetPropertyValue<CFloat>(value);
-		}
-		
 		[RED("attackDirection")]
 		[REDProperty(IsIgnored = true)]
 		public TweakDBID AttackDirection
@@ -94,30 +38,6 @@ namespace WolvenKit.RED4.Types
 		[RED("attackEffectDuration")]
 		[REDProperty(IsIgnored = true)]
 		public CFloat AttackEffectDuration
-		{
-			get => GetPropertyValue<CFloat>();
-			set => SetPropertyValue<CFloat>(value);
-		}
-		
-		[RED("attackGameEffectDelay")]
-		[REDProperty(IsIgnored = true)]
-		public CFloat AttackGameEffectDelay
-		{
-			get => GetPropertyValue<CFloat>();
-			set => SetPropertyValue<CFloat>(value);
-		}
-		
-		[RED("attackGameEffectDuration")]
-		[REDProperty(IsIgnored = true)]
-		public CFloat AttackGameEffectDuration
-		{
-			get => GetPropertyValue<CFloat>();
-			set => SetPropertyValue<CFloat>(value);
-		}
-		
-		[RED("attackRange")]
-		[REDProperty(IsIgnored = true)]
-		public CFloat AttackRange
 		{
 			get => GetPropertyValue<CFloat>();
 			set => SetPropertyValue<CFloat>(value);
@@ -171,22 +91,6 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 		
-		[RED("cooldown")]
-		[REDProperty(IsIgnored = true)]
-		public CFloat Cooldown
-		{
-			get => GetPropertyValue<CFloat>();
-			set => SetPropertyValue<CFloat>(value);
-		}
-		
-		[RED("disableAdjustingPlayerPositionToTarget")]
-		[REDProperty(IsIgnored = true)]
-		public CBool DisableAdjustingPlayerPositionToTarget
-		{
-			get => GetPropertyValue<CBool>();
-			set => SetPropertyValue<CBool>(value);
-		}
-		
 		[RED("dontScaleWithAttackSpeed")]
 		[REDProperty(IsIgnored = true)]
 		public CBool DontScaleWithAttackSpeed
@@ -206,22 +110,6 @@ namespace WolvenKit.RED4.Types
 		[RED("enableAdjustingPlayerPositionToTarget")]
 		[REDProperty(IsIgnored = true)]
 		public CBool EnableAdjustingPlayerPositionToTarget
-		{
-			get => GetPropertyValue<CBool>();
-			set => SetPropertyValue<CBool>(value);
-		}
-		
-		[RED("enableMoveAssistOnLightAimAssist")]
-		[REDProperty(IsIgnored = true)]
-		public CBool EnableMoveAssistOnLightAimAssist
-		{
-			get => GetPropertyValue<CBool>();
-			set => SetPropertyValue<CBool>(value);
-		}
-		
-		[RED("forcePlayerToStand")]
-		[REDProperty(IsIgnored = true)]
-		public CBool ForcePlayerToStand
 		{
 			get => GetPropertyValue<CBool>();
 			set => SetPropertyValue<CBool>(value);
@@ -299,14 +187,6 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 		
-		[RED("minimumDistanceToTargetToAddImpulse")]
-		[REDProperty(IsIgnored = true)]
-		public CFloat MinimumDistanceToTargetToAddImpulse
-		{
-			get => GetPropertyValue<CFloat>();
-			set => SetPropertyValue<CFloat>(value);
-		}
-		
 		[RED("radius")]
 		[REDProperty(IsIgnored = true)]
 		public CFloat Radius
@@ -329,22 +209,6 @@ namespace WolvenKit.RED4.Types
 		{
 			get => GetPropertyValue<CFloat>();
 			set => SetPropertyValue<CFloat>(value);
-		}
-		
-		[RED("recoveryDuration")]
-		[REDProperty(IsIgnored = true)]
-		public CFloat RecoveryDuration
-		{
-			get => GetPropertyValue<CFloat>();
-			set => SetPropertyValue<CFloat>(value);
-		}
-		
-		[RED("shouldAdjust")]
-		[REDProperty(IsIgnored = true)]
-		public CBool ShouldAdjust
-		{
-			get => GetPropertyValue<CBool>();
-			set => SetPropertyValue<CBool>(value);
 		}
 		
 		[RED("spawnDistance")]
@@ -414,14 +278,6 @@ namespace WolvenKit.RED4.Types
 		[RED("useAdjustmentInsteadOfImpulse")]
 		[REDProperty(IsIgnored = true)]
 		public CBool UseAdjustmentInsteadOfImpulse
-		{
-			get => GetPropertyValue<CBool>();
-			set => SetPropertyValue<CBool>(value);
-		}
-		
-		[RED("useAttackSlot")]
-		[REDProperty(IsIgnored = true)]
-		public CBool UseAttackSlot
 		{
 			get => GetPropertyValue<CBool>();
 			set => SetPropertyValue<CBool>(value);

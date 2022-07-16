@@ -10,5 +10,13 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CArray<CName>>();
 			set => SetPropertyValue<CArray<CName>>(value);
 		}
+		
+		[RED("invert")]
+		[REDProperty(IsIgnored = true)]
+		public CBool Invert
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
 	}
 }

@@ -69,9 +69,16 @@ namespace WolvenKit.ViewModels.Tools
             _tweakDB.Loaded += (_, args) =>
             {
                 Records = CollectionViewSource.GetDefaultView(_tweakDB.GetRecords());
+                Records.Filter = Filter;
+
                 Flats = CollectionViewSource.GetDefaultView(_tweakDB.GetFlats());
+                Flats.Filter = Filter;
+
                 Queries = CollectionViewSource.GetDefaultView(_tweakDB.GetQueries());
+                Queries.Filter = Filter;
+
                 GroupTags = CollectionViewSource.GetDefaultView(_tweakDB.GetGroupTags());
+                GroupTags.Filter = Filter;
             };
         }
 
@@ -94,27 +101,51 @@ namespace WolvenKit.ViewModels.Tools
             set
             {
                 _searchText = value;
-                if (!string.IsNullOrEmpty(_searchText))
-                {
-                    Records.Filter = o => o.ToString().Contains(_searchText, StringComparison.InvariantCultureIgnoreCase);
-                    Flats.Filter = o => o.ToString().Contains(_searchText, StringComparison.InvariantCultureIgnoreCase);
-                    Queries.Filter = o => o.ToString().Contains(_searchText, StringComparison.InvariantCultureIgnoreCase);
-                    GroupTags.Filter = o => o.ToString().Contains(_searchText, StringComparison.InvariantCultureIgnoreCase);
-                }
-                else
-                {
-                    Records.Filter = null;
-                    Flats.Filter = null;
-                    Queries.Filter = null;
-                    GroupTags.Filter = null;
-                }
                 this.RaisePropertyChanged(nameof(SearchText));
 
+                Records.Refresh();
                 this.RaisePropertyChanged(nameof(RecordsHeader));
+
+                Flats.Refresh();
                 this.RaisePropertyChanged(nameof(FlatsHeader));
+
+                Queries.Refresh();
                 this.RaisePropertyChanged(nameof(QueriesHeader));
+
+                GroupTags.Refresh();
                 this.RaisePropertyChanged(nameof(GroupTagsHeader));
             }
+        }
+
+        private bool Filter(object obj)
+        {
+            if (string.IsNullOrEmpty(SearchText))
+            {
+                return true;
+            }
+
+            var id = (TweakDBID)obj;
+
+            if (SearchText.Contains(":"))
+            {
+                var parts = SearchText.Split(':');
+
+                if (parts[0] == "class")
+                {
+                    var type = _tweakDB.GetType(id);
+
+                    return type != null && type.Name == $"gamedata{parts[1]}_Record";
+                }
+            }
+            else
+            {
+                if (id.ToString().Contains(SearchText, StringComparison.InvariantCultureIgnoreCase))
+                {
+                    return true;
+                }
+            }
+
+            return false;
         }
 
         private TweakDBID _selectedRecordEntry;

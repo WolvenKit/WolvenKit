@@ -26,5 +26,13 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CFloat>();
 			set => SetPropertyValue<CFloat>(value);
 		}
+		
+		[RED("statusEffect")]
+		[REDProperty(IsIgnored = true)]
+		public TweakDBID StatusEffect
+		{
+			get => GetPropertyValue<TweakDBID>();
+			set => SetPropertyValue<TweakDBID>(value);
+		}
 	}
 }
