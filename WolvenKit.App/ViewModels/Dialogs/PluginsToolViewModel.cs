@@ -1,4 +1,5 @@
 using System;
+using System.Reactive;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using ReactiveUI;
@@ -26,9 +27,7 @@ namespace WolvenKit.ViewModels.Dialogs
             _pluginService = Locator.Current.GetService<IPluginService>();
 
             CancelCommand = ReactiveCommand.Create(() => FileHandler(null));
-            SyncCommand = ReactiveCommand.Create(SyncAsync);
-
-            _pluginService.Init();
+            SyncCommand = ReactiveCommand.CreateFromTask(SyncAsync);
         }
 
 
@@ -36,18 +35,8 @@ namespace WolvenKit.ViewModels.Dialogs
 
 
         public ICommand CancelCommand { get; private set; }
-
-        //public ICommand StartCommand { get; private set; }
-        public ICommand SyncCommand { get; private set; }
-        public async Task SyncAsync()
-        {
-            await Task.Delay(1);
-
-            // TODO
-
-            _logger.Info("Check for updates finished");
-        }
-
+        public ReactiveCommand<Unit, Unit> SyncCommand { get; set; }
+        public async Task SyncAsync() => await _pluginService.CheckForUpdatesAsync();
 
     }
 
