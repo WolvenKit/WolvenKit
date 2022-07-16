@@ -380,6 +380,11 @@ namespace WolvenKit.Utility
 
             foreach (var (className, props) in rts)
             {
+                if (props.Count == 0)
+                {
+                    continue;
+                }
+
                 var sortedProps = props.OrderBy(obj => obj.Key).ToDictionary(obj => obj.Key, obj => obj.Value);
 
                 var lines = new List<string>();
