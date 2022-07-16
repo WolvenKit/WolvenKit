@@ -128,10 +128,7 @@ namespace WolvenKit.ViewModels.Tools
                 if (_selectedRecordEntry != null)
                 {
                     SelectedRecord.Clear();
-                    SelectedRecord.Add(new ChunkViewModel(_tweakDB.GetRecord(_selectedRecordEntry), null)
-                    {
-                        IsReadOnly = true
-                    });
+                    SelectedRecord.Add(new ChunkViewModel(_tweakDB.GetRecord(_selectedRecordEntry), null, true));
                 }
                 else
                 {
@@ -153,10 +150,7 @@ namespace WolvenKit.ViewModels.Tools
                 this.RaisePropertyChanged(nameof(SelectedFlatEntry));
                 if (_selectedFlatEntry != null)
                 {
-                    SelectedFlat = new ChunkViewModel(_tweakDB.GetFlat(_selectedFlatEntry), null)
-                    {
-                        IsReadOnly = true
-                    };
+                    SelectedFlat = new ChunkViewModel(_tweakDB.GetFlat(_selectedFlatEntry), null, true);
                 }
                 else
                 {
@@ -185,10 +179,7 @@ namespace WolvenKit.ViewModels.Tools
                         arr.Add(query);
                     }
 
-                    SelectedQuery = new ChunkViewModel(arr, null)
-                    {
-                        IsReadOnly = true
-                    };
+                    SelectedQuery = new ChunkViewModel(arr, null, true);
                 }
                 else
                 {
@@ -211,10 +202,7 @@ namespace WolvenKit.ViewModels.Tools
                 this.RaisePropertyChanged(nameof(SelectedGroupTagEntry));
                 if (_selectedGroupTagEntry != null)
                 {
-                    SelectedGroupTag = new ChunkViewModel((CUInt8)_tweakDB.GetGroupTag(_selectedGroupTagEntry), null)
-                    {
-                        IsReadOnly = true
-                    };
+                    SelectedGroupTag = new ChunkViewModel((CUInt8)_tweakDB.GetGroupTag(_selectedGroupTagEntry), null, true);
                 }
                 else
                 {

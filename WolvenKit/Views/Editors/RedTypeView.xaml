@@ -105,7 +105,7 @@
                 </Button>
             </DataTemplate>
             <DataTemplate x:Key="DeleteButton">
-                <StackPanel Orientation="Horizontal" Visibility="{Binding IsInArray, Converter={StaticResource Boolean2VisibilityConverter}}">
+                <StackPanel Orientation="Horizontal" Visibility="{Binding IsDeletable, Converter={StaticResource Boolean2VisibilityConverter}}">
                     <ToggleButton
                         x:Name="DeleteButton"
                         Margin="0,0,0,0"
