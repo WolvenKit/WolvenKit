@@ -9,11 +9,11 @@
   <Identity
     Name="f6c36f15-6d51-44af-96bd-010bdf997342"
     Publisher="CN=moritz.baron"
-    Version="1.0.0.0" />
+    Version="8.7.0.0" />
 
   <Properties>
     <DisplayName>WolvenKit.Package</DisplayName>
-    <PublisherDisplayName>moritz.baron</PublisherDisplayName>
+    <PublisherDisplayName>Wolvenkit</PublisherDisplayName>
     <Logo>Images\StoreLogo.png</Logo>
   </Properties>
 
