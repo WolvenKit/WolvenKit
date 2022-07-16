@@ -42,8 +42,16 @@ namespace WolvenKit.Common.Services
             if (reader.ReadFile(out var tweakDb) == WolvenKit.RED4.TweakDB.EFileReadErrorCodes.NoError)
             {
                 s_tweakDb = tweakDb;
+                AddCustomRecords();
                 OnLoadDB();
             }
+        }
+
+        // just for fun...
+        private void AddCustomRecords()
+        {
+            s_tweakDb.Records.Add("Items.trigger_inline3", typeof(gamedataVehicleWheelRole_Record));
+            s_tweakDb.Records.Add("weapons.E3_grenade", typeof(gamedataGrenade_Record));
         }
 
         public bool Exists(TweakDBID key)
