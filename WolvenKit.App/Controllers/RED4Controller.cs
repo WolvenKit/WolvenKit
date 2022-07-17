@@ -380,27 +380,27 @@ namespace WolvenKit.Functionality.Controllers
 
 //                try
 //                {
-
-                    //if (!Serialization.Deserialize(text, out var dict))
-                    //{
-                        //continue;
-                    //}
-                    //var db = new TweakDB();
-                    //flats
-                    //foreach (var (key, value) in dict.Flats)
-                    //{
-                        //db.Add(key, value);
-                    //}
-                    //groups
-                    //foreach (var (key, value) in dict.Groups)
-                    //{
-                        //db.Add(key, value);
-                    //}
+//  
+//                    if (!Serialization.Deserialize(text, out var dict))
+//                    {
+//                        continue;
+//                    }
+//                    var db = new TweakDB();
+//                    flats
+//                    foreach (var (key, value) in dict.Flats)
+//                    {
+//                        db.Add(key, value);
+//                    }
+//                    groups
+//                    foreach (var (key, value) in dict.Groups)
+//                    {
+//                        db.Add(key, value);
+//                    }
 
 //                    using var ms = new MemoryStream();
 //                    using var writer = new TweakDBWriter(ms);
 //                    writer.WriteFile(db);
-                //    File.WriteAllBytes(outPath, ms.ToArray());
+//                    File.WriteAllBytes(outPath, ms.ToArray());
 //                }
 //                catch (Exception e)
 //                {
