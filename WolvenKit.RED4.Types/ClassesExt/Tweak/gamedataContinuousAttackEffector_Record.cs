@@ -3,12 +3,12 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class gamedataContinuousAttackEffector_Record
 	{
-		[RED("delayTime")]
+		[RED("attackRecord")]
 		[REDProperty(IsIgnored = true)]
-		public CFloat DelayTime
+		public TweakDBID AttackRecord
 		{
-			get => GetPropertyValue<CFloat>();
-			set => SetPropertyValue<CFloat>(value);
+			get => GetPropertyValue<TweakDBID>();
+			set => SetPropertyValue<TweakDBID>(value);
 		}
 	}
 }

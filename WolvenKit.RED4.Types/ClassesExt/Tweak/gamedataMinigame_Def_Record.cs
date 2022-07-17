@@ -59,14 +59,6 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 		
-		[RED("forbiddenPrograms")]
-		[REDProperty(IsIgnored = true)]
-		public CArray<TweakDBID> ForbiddenPrograms
-		{
-			get => GetPropertyValue<CArray<TweakDBID>>();
-			set => SetPropertyValue<CArray<TweakDBID>>(value);
-		}
-		
 		[RED("forbiddenProgramsList")]
 		[REDProperty(IsIgnored = true)]
 		public CArray<TweakDBID> ForbiddenProgramsList

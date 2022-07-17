@@ -3,14 +3,6 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class gamedataAIStatPoolCond_Record
 	{
-		[RED("invert")]
-		[REDProperty(IsIgnored = true)]
-		public CBool Invert
-		{
-			get => GetPropertyValue<CBool>();
-			set => SetPropertyValue<CBool>(value);
-		}
-		
 		[RED("isIncreasing")]
 		[REDProperty(IsIgnored = true)]
 		public CInt32 IsIncreasing

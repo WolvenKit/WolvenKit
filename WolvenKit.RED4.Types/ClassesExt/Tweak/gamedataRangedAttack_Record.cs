@@ -3,22 +3,6 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class gamedataRangedAttack_Record
 	{
-		[RED("explosionAttack")]
-		[REDProperty(IsIgnored = true)]
-		public CName ExplosionAttack
-		{
-			get => GetPropertyValue<CName>();
-			set => SetPropertyValue<CName>(value);
-		}
-		
-		[RED("hitCooldown")]
-		[REDProperty(IsIgnored = true)]
-		public CFloat HitCooldown
-		{
-			get => GetPropertyValue<CFloat>();
-			set => SetPropertyValue<CFloat>(value);
-		}
-		
 		[RED("NPCAttack")]
 		[REDProperty(IsIgnored = true)]
 		public TweakDBID NPCAttack

@@ -12,6 +12,8 @@
     xmlns:reactiveUi="http://reactiveui.net"
     xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
     xmlns:tools="clr-namespace:WolvenKit.ViewModels.Tools;assembly=WolvenKit.App"
+    xmlns:templates="clr-namespace:WolvenKit.Views.Templates"
+    xmlns:converters1="clr-namespace:WolvenKit.Converters"
     d:DataContext="{d:DesignInstance Type=tools:TweakBrowserViewModel}"
     d:DesignHeight="450"
     d:DesignWidth="800"
@@ -20,12 +22,8 @@
     <Grid Background="{StaticResource ContentBackground}">
         <Grid.Resources>
             <converters:StringPathToItemStringConverter x:Key="stringPathToItemStringConverter" />
+            <converters1:TweakDBIDConverter x:Key="TweakDBIDConverter" />
         </Grid.Resources>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="300" />
-            <ColumnDefinition Width="5" />
-            <ColumnDefinition Width="*" />
-        </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
@@ -36,40 +34,172 @@
             BorderBrush="{StaticResource BorderAlt}"
             BorderThickness="1,1,0,1">
             <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
                 <hc:SearchBar
+                    Grid.Row="0"
+                    IsRealTime="True"
                     Margin="3"
                     VerticalAlignment="Top"
                     hc:InfoElement.Placeholder="Search all TweakDB Records"
-                    FlowDirection="LeftToRight"
                     KeyUp="TextBox_KeyEnterUpdate"
+                    FlowDirection="LeftToRight"
                     ShowClearButton="False"
                     Style="{StaticResource SearchBarPlus}"
                     Text="{Binding SearchText}" />
+                <Expander Header="Filter..."
+                    Grid.Row="1">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition />
+                            <ColumnDefinition />
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition />
+                            <RowDefinition />
+                        </Grid.RowDefinitions>
+                        <CheckBox
+                            Grid.Row="0"
+                            Grid.Column="0"
+                            IsChecked="{Binding ShowNonResolvableEntries}">Show non-resolvable entries</CheckBox>
+                        <StackPanel
+                            Grid.Row="0"
+                            Grid.Column="1"
+                            Orientation="Horizontal">
+                            <Label>Filter record type:</Label>
+                            <ComboBox
+                                IsEditable="True"
+                                IsTextSearchEnabled="True"
+                                Width="300"
+                                ItemsSource="{Binding RecordTypes}"
+                                SelectedItem="{Binding SelectedRecordType}"/>
+                        </StackPanel>
+                        <CheckBox
+                            Grid.Row="1"
+                            Grid.Column="0"
+                            IsChecked="{Binding ShowInlineEntries}">Show inline records</CheckBox>
+                    </Grid>
+                </Expander>
             </Grid>
         </Border>
-        <ListBox
-            x:Name="DataGrid"
-            Grid.Row="1"
-            Margin="-3,0,0,-3"
-            BorderThickness="1,0,0,1"
-            ItemsSource="{Binding TweakDBIDs}"
-            SelectedItem="{Binding SelectedTweakDBID, Mode=TwoWay}">
-            <ListBox.ItemTemplate>
-                <DataTemplate>
-                    <TextBlock Margin="2,0" Text="{Binding Path=ResolvedText}" />
-                </DataTemplate>
-            </ListBox.ItemTemplate>
-        </ListBox>
-        <syncfusion:SfGridSplitter
-            Grid.RowSpan="2"
-            Grid.Column="1"
-            Margin="0,-2,0,-3"
-            HorizontalAlignment="Stretch" />
-        <local:RedTreeView
-            x:Name="redTreeView"
-            Grid.RowSpan="2"
-            Grid.Column="2"
-            Margin="-3,-2,-3,-3"
-            ItemsSource="{Binding SelectedRecord}" />
+        <TabControl
+            Grid.Row="1">
+            <TabItem Header="{Binding RecordsHeader}">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="300" />
+                        <ColumnDefinition Width="5" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+
+                    <ListBox
+                        Margin="-3,0,0,-3"
+                        BorderThickness="1,0,0,1"
+                        ItemsSource="{Binding Records}"
+                        SelectedItem="{Binding SelectedRecordEntry, Mode=TwoWay}">
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <TextBlock Margin="2,0" Text="{Binding DisplayName}" />
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+                    <syncfusion:SfGridSplitter
+                        Grid.Column="1"
+                        Margin="0,-2,0,-3"
+                        HorizontalAlignment="Stretch" />
+                    <local:RedTreeView
+                        Grid.RowSpan="2"
+                        Grid.Column="2"
+                        Margin="-3,-2,-3,-3"
+                        ItemsSource="{Binding SelectedRecord}" />
+                </Grid>
+            </TabItem>
+            <TabItem Header="{Binding FlatsHeader}">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="300" />
+                        <ColumnDefinition Width="5" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+
+                    <ListBox
+                        Margin="-3,0,0,-3"
+                        BorderThickness="1,0,0,1"
+                        ItemsSource="{Binding Flats}"
+                        SelectedItem="{Binding SelectedFlatEntry, Mode=TwoWay}">
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <TextBlock Margin="2,0" Text="{Binding DisplayName}" />
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+                    <syncfusion:SfGridSplitter
+                        Grid.Column="1"
+                        Margin="0,-2,0,-3"
+                        HorizontalAlignment="Stretch" />
+                    <editors:RedTypeView
+                        Grid.Column="2"
+                        DataContext="{Binding SelectedFlat}"/>
+                </Grid>
+            </TabItem>
+            <TabItem Header="{Binding QueriesHeader}">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="300" />
+                        <ColumnDefinition Width="5" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+
+                    <ListBox
+                        Margin="-3,0,0,-3"
+                        BorderThickness="1,0,0,1"
+                        ItemsSource="{Binding Queries}"
+                        SelectedItem="{Binding SelectedQueryEntry, Mode=TwoWay}">
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <TextBlock Margin="2,0" Text="{Binding DisplayName}" />
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+                    <syncfusion:SfGridSplitter
+                        Grid.Column="1"
+                        Margin="0,-2,0,-3"
+                        HorizontalAlignment="Stretch" />
+                    <editors:RedTypeView
+                        Grid.Column="2"
+                        DataContext="{Binding SelectedQuery}"/>
+                </Grid>
+            </TabItem>
+            <TabItem Header="{Binding GroupTagsHeader}">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="300" />
+                        <ColumnDefinition Width="5" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+
+                    <ListBox
+                        Margin="-3,0,0,-3"
+                        BorderThickness="1,0,0,1"
+                        ItemsSource="{Binding GroupTags}"
+                        SelectedItem="{Binding SelectedGroupTagEntry, Mode=TwoWay}">
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <TextBlock Margin="2,0" Text="{Binding DisplayName}" />
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+                    <syncfusion:SfGridSplitter
+                        Grid.Column="1"
+                        Margin="0,-2,0,-3"
+                        HorizontalAlignment="Stretch" />
+                    <editors:RedTypeView
+                        Grid.Column="2"
+                        DataContext="{Binding SelectedGroupTag}"/>
+                </Grid>
+            </TabItem>
+        </TabControl>
     </Grid>
 </reactiveUi:ReactiveUserControl>
