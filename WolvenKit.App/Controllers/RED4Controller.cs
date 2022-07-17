@@ -367,7 +367,7 @@ namespace WolvenKit.Functionality.Controllers
             var tweakFiles = Directory.GetFiles(cp77Proj.TweakDirectory, "*.yaml", SearchOption.AllDirectories);
             foreach (var f in tweakFiles)
             {
-                var text = File.ReadAllText(f);
+//                var text = File.ReadAllText(f);
                 var folder = Path.GetDirectoryName(Path.GetRelativePath(cp77Proj.TweakDirectory, f));
                 var outDirectory = Path.Combine(cp77Proj.PackedTweakDirectory, folder);
                 if (!Directory.Exists(outDirectory))
@@ -376,9 +376,11 @@ namespace WolvenKit.Functionality.Controllers
                 }
                 var filename = Path.GetFileName(f);
                 var outPath = Path.Combine(outDirectory, filename);
+                File.Copy(f, outPath, true);
 
-                try
-                {
+//                try
+//                {
+
                     //if (!Serialization.Deserialize(text, out var dict))
                     //{
                         //continue;
@@ -395,16 +397,16 @@ namespace WolvenKit.Functionality.Controllers
                         //db.Add(key, value);
                     //}
 
-                    using var ms = new MemoryStream();
-                    using var writer = new TweakDBWriter(ms);
-                  //writer.WriteFile(db);
-                    File.WriteAllBytes(outPath, ms.ToArray());
-                }
-                catch (Exception e)
-                {
-                    _loggerService.Error(e);
-                    continue;
-                }
+//                    using var ms = new MemoryStream();
+//                    using var writer = new TweakDBWriter(ms);
+//                    writer.WriteFile(db);
+                //    File.WriteAllBytes(outPath, ms.ToArray());
+//                }
+//                catch (Exception e)
+//                {
+//                    _loggerService.Error(e);
+//                    continue;
+//                }
             }
         }
 
