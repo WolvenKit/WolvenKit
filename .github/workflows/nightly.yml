@@ -113,11 +113,11 @@ jobs:
     #    path: ${{env.OUTC}}
 
     # RELEASE
-    #- name: Release
-    #  run: |
-    #      gh release create ${{ env.VERSION }} -n "${{ env.MESSAGE }}" -t "${{ env.VERSION }}" -R ${{ env.REPO }} ${{ env.FILES }}
-    #  env:
-    #    MESSAGE: "This is a beta release so you may encounter bugs. Please report them. The latest commit this release is based on is: [#${{env.SHA}}](https://github.com/${{env.MREPO}}/commit/${{env.SHA}})"
-    #    FILES: ${{env.FINALOUT}}/${{env.PORTABLE}} ${{env.FINALOUT}}/${{env.CONSOLE}}
-    #    REPO: WolvenKit/WolvenKit-nightly-releases
-    #    GITHUB_TOKEN: ${{ secrets.RELEASE_TOKEN }}
+    - name: Release
+      run: |
+          gh release create ${{ env.VERSION }} -n "${{ env.MESSAGE }}" -t "${{ env.VERSION }}" -R ${{ env.REPO }} ${{ env.FILES }}
+      env:
+        MESSAGE: "This is a beta release so you may encounter bugs. Please report them. The latest commit this release is based on is: [#${{env.SHA}}](https://github.com/${{env.MREPO}}/commit/${{env.SHA}})"
+        FILES: ${{env.FINALOUT}}/${{env.PORTABLE}} ${{env.FINALOUT}}/${{env.CONSOLE}}
+        REPO: WolvenKit/WolvenKit-nightly-releases
+        GITHUB_TOKEN: ${{ secrets.RELEASE_TOKEN }}
