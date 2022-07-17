@@ -19,14 +19,6 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<TweakDBID>(value);
 		}
 		
-		[RED("statGroup")]
-		[REDProperty(IsIgnored = true)]
-		public TweakDBID StatGroup
-		{
-			get => GetPropertyValue<TweakDBID>();
-			set => SetPropertyValue<TweakDBID>(value);
-		}
-		
 		[RED("statPoolType")]
 		[REDProperty(IsIgnored = true)]
 		public CString StatPoolType

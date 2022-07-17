@@ -34,21 +34,5 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CInt32>();
 			set => SetPropertyValue<CInt32>(value);
 		}
-		
-		[RED("scoreOnlyForCombatTarget")]
-		[REDProperty(IsIgnored = true)]
-		public CBool ScoreOnlyForCombatTarget
-		{
-			get => GetPropertyValue<CBool>();
-			set => SetPropertyValue<CBool>(value);
-		}
-		
-		[RED("vaidateOnlyForCombatTarget")]
-		[REDProperty(IsIgnored = true)]
-		public CBool VaidateOnlyForCombatTarget
-		{
-			get => GetPropertyValue<CBool>();
-			set => SetPropertyValue<CBool>(value);
-		}
 	}
 }

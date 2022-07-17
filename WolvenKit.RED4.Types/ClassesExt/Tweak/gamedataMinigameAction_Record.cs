@@ -75,14 +75,6 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 		
-		[RED("targetClass")]
-		[REDProperty(IsIgnored = true)]
-		public CName TargetClass
-		{
-			get => GetPropertyValue<CName>();
-			set => SetPropertyValue<CName>(value);
-		}
-		
 		[RED("type")]
 		[REDProperty(IsIgnored = true)]
 		public TweakDBID Type

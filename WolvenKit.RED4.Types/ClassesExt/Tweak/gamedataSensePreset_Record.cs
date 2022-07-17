@@ -99,14 +99,6 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<TweakDBID>>(value);
 		}
 		
-		[RED("objectType")]
-		[REDProperty(IsIgnored = true)]
-		public TweakDBID ObjectType
-		{
-			get => GetPropertyValue<TweakDBID>();
-			set => SetPropertyValue<TweakDBID>(value);
-		}
-		
 		[RED("shapes")]
 		[REDProperty(IsIgnored = true)]
 		public CArray<TweakDBID> Shapes

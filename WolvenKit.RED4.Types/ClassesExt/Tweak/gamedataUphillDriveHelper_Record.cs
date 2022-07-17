@@ -18,13 +18,5 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CFloat>();
 			set => SetPropertyValue<CFloat>(value);
 		}
-		
-		[RED("type")]
-		[REDProperty(IsIgnored = true)]
-		public TweakDBID Type
-		{
-			get => GetPropertyValue<TweakDBID>();
-			set => SetPropertyValue<TweakDBID>(value);
-		}
 	}
 }

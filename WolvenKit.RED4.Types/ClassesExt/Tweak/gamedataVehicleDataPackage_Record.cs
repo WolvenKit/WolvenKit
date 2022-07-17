@@ -75,14 +75,6 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 		
-		[RED("exiting")]
-		[REDProperty(IsIgnored = true)]
-		public CFloat Exiting
-		{
-			get => GetPropertyValue<CFloat>();
-			set => SetPropertyValue<CFloat>(value);
-		}
-		
 		[RED("fppCameraOverride")]
 		[REDProperty(IsIgnored = true)]
 		public CName FppCameraOverride

@@ -43,28 +43,12 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 		
-		[RED("scoreOnlyForCombatTarget")]
-		[REDProperty(IsIgnored = true)]
-		public CBool ScoreOnlyForCombatTarget
-		{
-			get => GetPropertyValue<CBool>();
-			set => SetPropertyValue<CBool>(value);
-		}
-		
 		[RED("spatialHintMults")]
 		[REDProperty(IsIgnored = true)]
 		public Vector3 SpatialHintMults
 		{
 			get => GetPropertyValue<Vector3>();
 			set => SetPropertyValue<Vector3>(value);
-		}
-		
-		[RED("vaidateOnlyForCombatTarget")]
-		[REDProperty(IsIgnored = true)]
-		public CBool VaidateOnlyForCombatTarget
-		{
-			get => GetPropertyValue<CBool>();
-			set => SetPropertyValue<CBool>(value);
 		}
 	}
 }

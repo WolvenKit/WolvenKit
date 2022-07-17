@@ -43,28 +43,12 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<CName>>(value);
 		}
 		
-		[RED("displayName")]
-		[REDProperty(IsIgnored = true)]
-		public CName DisplayName
-		{
-			get => GetPropertyValue<CName>();
-			set => SetPropertyValue<CName>(value);
-		}
-		
 		[RED("filterOutForGarmentTags")]
 		[REDProperty(IsIgnored = true)]
 		public CArray<CName> FilterOutForGarmentTags
 		{
 			get => GetPropertyValue<CArray<CName>>();
 			set => SetPropertyValue<CArray<CName>>(value);
-		}
-		
-		[RED("locked")]
-		[REDProperty(IsIgnored = true)]
-		public CBool Locked
-		{
-			get => GetPropertyValue<CBool>();
-			set => SetPropertyValue<CBool>(value);
 		}
 		
 		[RED("lookAtPreset")]

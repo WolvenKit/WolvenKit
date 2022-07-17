@@ -11,25 +11,9 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<TweakDBID>(value);
 		}
 		
-		[RED("backPreset")]
-		[REDProperty(IsIgnored = true)]
-		public TweakDBID BackPreset
-		{
-			get => GetPropertyValue<TweakDBID>();
-			set => SetPropertyValue<TweakDBID>(value);
-		}
-		
 		[RED("F")]
 		[REDProperty(IsIgnored = true)]
 		public TweakDBID F
-		{
-			get => GetPropertyValue<TweakDBID>();
-			set => SetPropertyValue<TweakDBID>(value);
-		}
-		
-		[RED("frontPreset")]
-		[REDProperty(IsIgnored = true)]
-		public TweakDBID FrontPreset
 		{
 			get => GetPropertyValue<TweakDBID>();
 			set => SetPropertyValue<TweakDBID>(value);
