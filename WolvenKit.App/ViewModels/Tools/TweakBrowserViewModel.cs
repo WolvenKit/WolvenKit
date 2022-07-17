@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Globalization;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Windows.Data;
@@ -303,21 +304,19 @@ namespace WolvenKit.ViewModels.Tools
                 return true;
             }
 
-            if (SearchText.Contains(":"))
+            if (ulong.TryParse(SearchText, out var u1) && entry.Item == u1)
             {
-                var parts = SearchText.Split(':');
-
-                if (parts[0] == "class")
-                {
-                    return entry.RecordTypeName == parts[1];
-                }
+                return true;
             }
-            else
+
+            if (ulong.TryParse(SearchText, NumberStyles.HexNumber, CultureInfo.CurrentCulture, out var u2) && entry.Item == u2)
             {
-                if (entry.Item.ToString().Contains(SearchText, StringComparison.InvariantCultureIgnoreCase))
-                {
-                    return true;
-                }
+                return true;
+            }
+
+            if (entry.IsResolved && entry.DisplayName.Contains(SearchText, StringComparison.InvariantCultureIgnoreCase))
+            {
+                return true;
             }
 
             return false;
