@@ -130,10 +130,12 @@ public class TweakDBReader : Red4Reader
         var numRecords = BaseReader.ReadInt32();
         for (var i = 0; i < numRecords; i++)
         {
+            var id = BaseReader.ReadUInt64();
             var key = BaseReader.ReadUInt32();
+
             if (s_recordHashes.ContainsKey(key))
             {
-                pool.Add(BaseReader.ReadUInt64(), s_recordHashes[key]);
+                pool.Add(id, s_recordHashes[key]);
             }
         }
     }

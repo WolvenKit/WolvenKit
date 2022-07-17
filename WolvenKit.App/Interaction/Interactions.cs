@@ -33,11 +33,6 @@ namespace WolvenKit.Interaction
 
         //custom views
         public static readonly Interaction<Unit, bool> ShowFirstTimeSetup = new();
-        public static readonly Interaction<Unit, bool> ShowBugReport = new();
-        public static readonly Interaction<Unit, bool> ShowFeedback = new();
-
-
-
 
     }
 

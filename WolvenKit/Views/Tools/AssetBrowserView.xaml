@@ -466,5 +466,32 @@
             </Grid>
         </Border>
 
+        <Border
+            x:Name="NoExecutableBorder"
+            Grid.RowSpan="3"
+            Background="{StaticResource ContentBackgroundAlt2}"
+            Visibility="{Binding Path=ShouldShowExecutablePathWarning, Mode=OneWay, Converter={StaticResource Boolean2VisibilityConverter}}">
+            <Grid>
+                <StackPanel VerticalAlignment="Center">
+                    <TextBlock
+                        Margin="0,15"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        FontSize="18"
+                        FontWeight="Bold"
+                        Foreground="#7EFFFFFF"
+                        Text="The Cyberpunk 2077 game archives could not be found.&#x0a;Please verify the Cyberpunk 2077.exe path in WolvenKit settings."
+                        TextAlignment="Center"
+                        TextWrapping="Wrap" />
+                    <Button HorizontalAlignment="Center" Command="{Binding OpenWolvenKitSettingsCommand}">
+                        <TextBlock
+                            Margin="20,10"
+                            FontSize="16"
+                            Text="Open Settings" />
+                    </Button>
+                </StackPanel>
+            </Grid>
+        </Border>
+
     </Grid>
 </reactiveUi:ReactiveUserControl>
