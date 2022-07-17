@@ -48,7 +48,7 @@ public class RedFileDtoConverter : JsonConverter<RedFileDto>, ICustomRedConverte
             throw new JsonException("Invalid JSON format");
         }
 
-        if (result.Header!.WKitJsonVersion.ComparePrecedenceTo(new JsonHeader().WKitJsonVersion) < 0)
+        if (result.Header!.WKitJsonVersion.ComparePrecedenceTo(new JsonHeader().WKitJsonVersion) > 0)
         {
             throw new JsonException("This JSON was created with a newer version of WKit!");
         }
