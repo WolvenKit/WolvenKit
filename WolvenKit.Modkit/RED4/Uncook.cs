@@ -777,9 +777,23 @@ namespace WolvenKit.Modkit.RED4
 
             var width = blob.Header.SizeInfo.Width;
             var height = blob.Header.SizeInfo.Height;
-            var mipCount = blob.Header.TextureInfo.MipCount;
+            var depth = blob.Header.SizeInfo.Depth;
             var sliceCount = blob.Header.TextureInfo.SliceCount;
+            var mipCount = blob.Header.TextureInfo.MipCount;
             var alignment = blob.Header.TextureInfo.DataAlignment;
+
+            TEX_DIMENSION dimension;
+            switch ((Enums.GpuWrapApieTextureType)blob.Header.TextureInfo.Type)
+            {
+                case Enums.GpuWrapApieTextureType.TEXTYPE_2D:
+                    dimension = TEX_DIMENSION.TEX_DIMENSION_TEXTURE2D;
+                    break;
+                case Enums.GpuWrapApieTextureType.TEXTYPE_3D:
+                    dimension = TEX_DIMENSION.TEX_DIMENSION_TEXTURE3D;
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
 
             texformat = CommonFunctions.GetDXGIFormat(compression, rawfmt, null);
 
@@ -787,8 +801,8 @@ namespace WolvenKit.Modkit.RED4
 
             // extract and write dds to stream
             DDSUtils.GenerateAndWriteHeader(outstream,
-                new DDSMetadata(width, height, 1, sliceCount, mipCount,
-                    0, 0, texformat, TEX_DIMENSION.TEX_DIMENSION_TEXTURE2D, alignment, true));
+                new DDSMetadata(width, height, depth, sliceCount, mipCount,
+                    0, 0, texformat, dimension, alignment, true));
 
             outstream.Write(blob.TextureData.Buffer.GetBytes());
 

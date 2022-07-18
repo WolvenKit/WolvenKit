@@ -88,6 +88,8 @@ namespace WolvenKit.Common.DDS
         private const uint DDS_ALPHA_MODE_UNKNOWN = 0x00000000;
         private const uint DDS_RESOURCE_MISC_TEXTURECUBE = 0x00000004;
 
+        private const uint DDS_ALPHA_MODE_STRAIGHT = 0x00000001;
+
         #endregion DDS_HEADER_DXT10
 
         #region Methods
@@ -165,6 +167,7 @@ namespace WolvenKit.Common.DDS
         {
             var height = metadata.Height;
             var width = metadata.Width;
+            var depth = metadata.Depth;
             var mipscount = metadata.Mipscount;
             var iscubemap = metadata.IsCubeMap();
             var format = metadata.Format;
@@ -189,8 +192,8 @@ namespace WolvenKit.Common.DDS
                 dwHeight = height,
                 dwWidth = width,
                 dwPitchOrLinearSize = 0,
-                dwDepth = 0,
-                dwMipMapCount = 0,
+                dwDepth = depth,
+                dwMipMapCount = mipscount,
                 dwReserved1 = 0,
                 dwReserved2 = 0,
                 dwReserved3 = 0,
@@ -216,12 +219,12 @@ namespace WolvenKit.Common.DDS
                 resourceDimension = D3D10_RESOURCE_DIMENSION.D3D10_RESOURCE_DIMENSION_TEXTURE2D,
                 miscFlag = 0,
                 arraySize = metadata.Slicecount,
-                miscFlags2 = 0
+                miscFlags2 = DDS_ALPHA_MODE_STRAIGHT
             };
 
-            if (mipscount > 0)
+            if (metadata.Dimensions == TEX_DIMENSION.TEX_DIMENSION_TEXTURE3D)
             {
-                header.dwMipMapCount = mipscount;
+                dx10header.resourceDimension = D3D10_RESOURCE_DIMENSION.D3D10_RESOURCE_DIMENSION_TEXTURE3D;
             }
 
             // pixelformat
@@ -371,12 +374,12 @@ namespace WolvenKit.Common.DDS
             //    header.dwDepth = slicecount;
 
             // caps
-            if (iscubemap || mipscount > 0)
+            if (iscubemap || mipscount > 1)
             {
                 header.dwCaps |= DDSCAPS_COMPLEX;
             }
 
-            if (mipscount > 0)
+            if (mipscount > 1)
             {
                 header.dwCaps |= DDSCAPS_MIPMAP;
             }
@@ -395,6 +398,11 @@ namespace WolvenKit.Common.DDS
             if (mipscount > 0)
             {
                 header.dwFlags |= DDSD_MIPMAPCOUNT;
+            }
+
+            if (depth > 0)
+            {
+                header.dwFlags |= DDSD_DEPTH;
             }
 
             // DXT10
