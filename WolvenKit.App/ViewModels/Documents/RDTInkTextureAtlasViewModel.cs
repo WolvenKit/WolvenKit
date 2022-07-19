@@ -117,7 +117,7 @@ namespace WolvenKit.ViewModels.Documents
             public string RedscriptExample
             {
                 get => $@"let image = new inkImage();
-image.SetAtlasResource(r""{AtlasPath}"");
+image.SetAtlasResource(r""{AtlasPath.Replace("\\", "\\\\")}"");
 image.SetTexturePart(n""{PartName}"");";
                 set
                 {
