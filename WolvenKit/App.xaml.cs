@@ -86,9 +86,6 @@ namespace WolvenKit
             loggerService.Info("Initializing Discord RPC API");
             DiscordHelper.InitializeDiscordRPC();
 
-            loggerService.Info("Initializing Github API");
-            Initializations.InitializeGitHub();
-
             // Some things can only be initialized after base.OnStartup(e);
             base.OnStartup(e);
 

@@ -1,47 +1,39 @@
 using System;
-using System.IO;
+using System.Collections.Generic;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
-using gpm.Core.Models;
-using gpm.Core.Services;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
+using WolvenKit.Common.Services;
 using WolvenKit.Functionality.Services;
+using WolvenKit.Models;
 
 namespace WolvenKit.ViewModels.Dialogs
 {
+    public record PluginModel(EPlugin Id, string Version, List<string> Files);
+
+
     public class PluginViewModel : ReactiveObject
     {
-        private readonly ITaskService _taskService;
+        private readonly IPluginService _pluginService;
+        private readonly ILoggerService _loggerService;
 
-        public EPlugin Plugin { get; private set; }
-        public string InstallPath { get; private set; }
-        public Package Package { get; private set; }
+        private PluginModel _pluginModel;
 
-        public PluginViewModel(
-            EPlugin plugin,
-            Package package,
-            ReleaseModel releaseModel,
-            ITaskService taskService,
-            string installPath)
+        public PluginViewModel(IPluginService pluginService, ILoggerService loggerService, PluginModel plugin, string installPath)
         {
-            _taskService = taskService;
-            Plugin = plugin;
+            _pluginService = pluginService;
+            _loggerService = loggerService;
+
+            _pluginModel = plugin;
 
             InstallPath = installPath;
-            ReleaseModel = releaseModel;
-            Package = package;
+            Version = plugin.Version;
 
-            Name = package.Name;
-            Description = package.Description;
-
-            InstallCommand = ReactiveCommand.Create(InstallAsync,
-                this.WhenAnyValue(x => x.IsBusy, x => x.ReleaseModel,
-                (busy, model) => !busy && model != null));
-            OpenCommand = ReactiveCommand.Create(OpenAsync);
+            InstallCommand = ReactiveCommand.CreateFromTask(InstallAsync, this.WhenAnyValue(x => x.IsBusy, (busy) => !busy));
+            OpenCommand = ReactiveCommand.Create(Open);
             RemoveCommand = ReactiveCommand.Create(RemoveAsync);
-
 
             this.WhenAnyValue(x => x.Status).Subscribe(status =>
             {
@@ -68,95 +60,66 @@ namespace WolvenKit.ViewModels.Dialogs
             });
         }
 
-        [Reactive] public ReleaseModel ReleaseModel { get; set; }
-        public string Name { get; }
-        public string Description { get; }
-        [Reactive] public string Version { get; set; }
+        public EPlugin Id => _pluginModel.Id;
+        public string Name => Id.GetDisplayName();
+        public string Description => Id.GetDescription();
 
+        public string InstallPath { get; init; }
+
+        [Reactive] public string Version { get; set; }
         [Reactive] public EPluginStatus Status { get; set; }
         [Reactive] public string Label { get; set; }
-
         [Reactive] public bool IsBusy { get; set; }
         [Reactive] public bool IsNotInstalled { get; set; }
         [Reactive] public bool IsOpenEnabled { get; set; } // = IsInstalled
 
-        
-        public ICommand OpenCommand { get; private set; }
-        private async Task OpenAsync()
-        {
-            // TODO
-            await Task.Delay(1);
-        }
 
-        public ICommand RemoveCommand { get; private set; }
+        public ICommand OpenCommand { get; init; }
+        private void Open() => Commonfunctions.ShowFolderInExplorer(InstallPath);
+
+        public ICommand RemoveCommand { get; init; }
         private async Task RemoveAsync()
         {
             IsBusy = true;
 
-            var result = await _taskService.Remove(Package.Id, false, InstallPath, null);
-            if (result)
-            {
-                Status = EPluginStatus.NotInstalled;
-                Version = "";
-            }
+            await _pluginService.RemovePluginAsync(Id);
 
             IsBusy = false;
         }
 
-        public ICommand InstallCommand { get; private set; }
+        public ICommand InstallCommand { get; init; }
         private async Task InstallAsync()
         {
-            if (ReleaseModel == null)
-            {
-                return;
-            }
-
             IsBusy = true;
 
             switch (Status)
             {
                 case EPluginStatus.NotInstalled:
                 {
-                    if (!Directory.Exists(InstallPath))
-                    {
-                        Directory.CreateDirectory(InstallPath);
-                    }
-                    var result = await _taskService.Install(Package.Id, "", InstallPath, false);
-                    if (result)
-                    {
-                        Status = EPluginStatus.Latest;
-                        Version = ReleaseModel.TagName;
-                    }
+                    await _pluginService.InstallPluginAsync(Id);
                     break;
                 }
                 case EPluginStatus.Outdated:
                 {
-                    var result = await _taskService.Update(Package.Id, false, InstallPath, null, "");
-                    if (result)
-                    {
-                        Status = EPluginStatus.Latest;
-                        Version = ReleaseModel.TagName;
-                    }
+                    await _pluginService.InstallPluginAsync(Id);
                     break;
                 }
                 case EPluginStatus.Latest:
-                    // repair
-                    // TODO
+                    //repair
+                    // delete
+                    await _pluginService.RemovePluginAsync(Id);
+                    // reinstall
+                    await _pluginService.InstallPluginAsync(Id);
                     break;
                 default:
                     break;
             }
 
-            //await Task.Run(async () =>
-            //{
-
-            //    IsBusy = true;
-            //    await Task.Delay(1);
-
-            //});
-
             IsBusy = false;
         }
+
+        internal PluginModel GetModel() => _pluginModel;
+        internal void SetModel(PluginModel model) => _pluginModel = model;
     }
 
 

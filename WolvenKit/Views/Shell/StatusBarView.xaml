@@ -57,21 +57,6 @@
                     </TextBlock>
                 </StackPanel>
             </Fluent:StatusBarItem>
-
-            <Fluent:StatusBarItem  HorizontalAlignment="Right"
-                                   x:Name="StatusBarItemUpdate" ToolTip="Update available">
-               
-                <Button Margin="20,0,0,0" x:Name="UpdateButton">
-                    <Button.Content>
-                        <iconPacks:PackIconCodicons
-                            Foreground="DarkOrange"
-                            HorizontalAlignment="Center"
-                            VerticalAlignment="Stretch"
-                            Kind="ArrowUp" />
-                    </Button.Content>
-                </Button>
-            </Fluent:StatusBarItem >
-
         </Fluent:StatusBar>
     </Grid>
 </reactiveUi:ReactiveUserControl>

@@ -12,7 +12,6 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
-using gpm.Installer;
 using Microsoft.Win32;
 using Microsoft.WindowsAPICodePack.Dialogs;
 using Prism.Commands;
@@ -61,7 +60,6 @@ namespace WolvenKit.ViewModels.Shell
         private readonly IWatcherService _watcherService;
         private readonly IPluginService _pluginService;
         private readonly TweakDBService _tweakDBService;
-        private readonly AutoInstallerService _autoInstallerService;
         private readonly HomePageViewModel _homePageViewModel;
 
         #endregion fields
@@ -81,8 +79,7 @@ namespace WolvenKit.ViewModels.Shell
             IProgressService<double> progressService,
             IWatcherService watcherService,
             IPluginService pluginService,
-            TweakDBService tweakDBService,
-            AutoInstallerService autoInstallerService
+            TweakDBService tweakDBService
         )
         {
             _projectManager = projectManager;
@@ -93,7 +90,6 @@ namespace WolvenKit.ViewModels.Shell
             _recentlyUsedItemsService = recentlyUsedItemsService;
             _progressService = progressService;
             _watcherService = watcherService;
-            _autoInstallerService = autoInstallerService;
             _pluginService = pluginService;
             _tweakDBService = tweakDBService;
 
@@ -186,27 +182,6 @@ namespace WolvenKit.ViewModels.Shell
                     _tweakDBService.LoadDB(Path.Combine(_settingsManager.GetRED4GameRootDir(), "r6", "cache", "tweakdb.bin"));
                 });
 
-            _settingsManager
-                .WhenAnyValue(x => x.UpdateChannel)
-                .Subscribe(async x =>
-                {
-                    _autoInstallerService.UseChannel(x.ToString());
-
-                    // 1 API call
-                    if (!(await _autoInstallerService.CheckForUpdate())
-                        .Out(out var release))
-                    {
-                        return;
-                    }
-
-                    if (release.TagName.Equals(_settingsManager.GetVersionNumber()))
-                    {
-                        return;
-                    }
-
-                    _settingsManager.IsUpdateAvailable = true;
-                    _loggerService.Success($"WolvenKit update available: {release.TagName}");
-                });
         }
 
         #endregion constructors
@@ -250,22 +225,8 @@ namespace WolvenKit.ViewModels.Shell
 
         private void OnStartup()
         {
-            InitUpdateService();
-
             ShowFirstTimeSetup();
         }
-
-
-        private void InitUpdateService() => _autoInstallerService
-               .UseWPF()
-               .WithVersion(_settingsManager.GetVersionNumber())
-               //.WithVersion("8.4.2") //DBG
-               .WithRestart("WolvenKit.exe")
-               .WithChannel(EUpdateChannel.Nightly.ToString(), "wolvenkit/wolvenkit-nightly-releases")
-               .WithChannel(EUpdateChannel.Stable.ToString(), "wolvenkit/wolvenkit")
-               .UseChannel(_settingsManager.UpdateChannel.ToString())
-               .Build();
-
 
         private async void ShowFirstTimeSetup()
         {

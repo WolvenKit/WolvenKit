@@ -11,7 +11,6 @@ using ReactiveUI;
 using WolvenKit.Common;
 using WolvenKit.Common.Interfaces;
 using WolvenKit.Common.Services;
-using WolvenKit.Core;
 using WolvenKit.Core.Compression;
 using WolvenKit.Core.Interfaces;
 using WolvenKit.Core.Services;
@@ -83,9 +82,6 @@ namespace WolvenKit.Functionality.Controllers
 
                 // requires oodle
                 InitializeBk();
-                InitializeRedDB();
-
-                // export soundbanksinfo
 
             }
 
@@ -109,7 +105,7 @@ namespace WolvenKit.Functionality.Controllers
                     case @"Resources\Media\t1.kark":
                         if (!File.Exists(Path.Combine(ISettingsManager.GetWorkDir(), "test.exe")))
                         {
-                            _ = OodleTask(path, Path.Combine(ISettingsManager.GetWorkDir(), "test.exe"), true,
+                            _ = Oodle.OodleTask(path, Path.Combine(ISettingsManager.GetWorkDir(), "test.exe"), true,
                                 false);
                         }
 
@@ -118,7 +114,7 @@ namespace WolvenKit.Functionality.Controllers
                     case @"Resources\Media\t2.kark":
                         if (!File.Exists(Path.Combine(ISettingsManager.GetWorkDir(), "testconv.exe")))
                         {
-                            _ = OodleTask(path, Path.Combine(ISettingsManager.GetWorkDir(), "testconv.exe"), true,
+                            _ = Oodle.OodleTask(path, Path.Combine(ISettingsManager.GetWorkDir(), "testconv.exe"), true,
                                 false);
                         }
 
@@ -127,7 +123,7 @@ namespace WolvenKit.Functionality.Controllers
                     case @"Resources\Media\t3.kark":
                         if (!File.Exists(Path.Combine(ISettingsManager.GetWorkDir(), "testc.exe")))
                         {
-                            _ = OodleTask(path, Path.Combine(ISettingsManager.GetWorkDir(), "testc.exe"), true,
+                            _ = Oodle.OodleTask(path, Path.Combine(ISettingsManager.GetWorkDir(), "testc.exe"), true,
                                 false);
                         }
 
@@ -136,7 +132,7 @@ namespace WolvenKit.Functionality.Controllers
                     case @"Resources\Media\t4.kark":
                         if (!File.Exists(Path.Combine(ISettingsManager.GetWorkDir(), "radutil.dll")))
                         {
-                            _ = OodleTask(path, Path.Combine(ISettingsManager.GetWorkDir(), "radutil.dll"), true,
+                            _ = Oodle.OodleTask(path, Path.Combine(ISettingsManager.GetWorkDir(), "radutil.dll"), true,
                                 false);
                         }
 
@@ -145,89 +141,13 @@ namespace WolvenKit.Functionality.Controllers
                     case @"Resources\Media\t5.kark":
                         if (!File.Exists(Path.Combine(ISettingsManager.GetWorkDir(), "bink2make.dll")))
                         {
-                            _ = OodleTask(path, Path.Combine(ISettingsManager.GetWorkDir(), "bink2make.dll"), true,
+                            _ = Oodle.OodleTask(path, Path.Combine(ISettingsManager.GetWorkDir(), "bink2make.dll"), true,
                                 false);
                         }
 
                         break;
                 }
             }
-        }
-
-        private void InitializeRedDB()
-        {
-            var resourcePath = Path.GetFullPath(Path.Combine("Resources", "red.kark"));
-            var destinationPath = Path.Combine(ISettingsManager.GetAppData(), "red.db");
-
-            var (hash, size) = CommonFunctions.HashFileSHA512(resourcePath);
-
-            if (!File.Exists(destinationPath))
-            {
-                OodleTask(resourcePath, destinationPath, true, false);
-                _settingsManager.ReddbHash = hash;
-                _settingsManager.Save();
-            }
-            else
-            {
-                if (!hash.Equals(_settingsManager.ReddbHash))
-                {
-                    _loggerService.Info($"old hash: {_settingsManager.ReddbHash}, new hash: {hash}. Updating reddb");
-                    OodleTask(resourcePath, destinationPath, true, false);
-                    _settingsManager.ReddbHash = hash;
-                    _settingsManager.Save();
-                }
-            }
-        }
-
-        private static int OodleTask(string path, string outpath, bool decompress, bool compress)
-        {
-            if (string.IsNullOrEmpty(path))
-            {
-                return 0;
-            }
-
-            if (string.IsNullOrEmpty(outpath))
-            {
-                outpath = Path.ChangeExtension(path, ".kark");
-            }
-
-            if (decompress)
-            {
-                var file = File.ReadAllBytes(path);
-                using var ms = new MemoryStream(file);
-                using var br = new BinaryReader(ms);
-
-                var oodleCompression = br.ReadBytes(4);
-                if (!(oodleCompression.SequenceEqual(new byte[] { 0x4b, 0x41, 0x52, 0x4b })))
-                {
-                    throw new NotImplementedException();
-                }
-
-                var size = br.ReadUInt32();
-
-                var buffer = br.ReadBytes(file.Length - 8);
-
-                var unpacked = new byte[size];
-                var unpackedSize = Oodle.Decompress(buffer, unpacked);
-
-                using var msout = new MemoryStream();
-                using var bw = new BinaryWriter(msout);
-                bw.Write(unpacked);
-
-                File.WriteAllBytes($"{outpath}", msout.ToArray());
-            }
-
-            if (compress)
-            {
-                var inbuffer = File.ReadAllBytes(path);
-                IEnumerable<byte> outBuffer = new List<byte>();
-
-                var r = Oodle.Compress(inbuffer, ref outBuffer, true);
-
-                File.WriteAllBytes(outpath, outBuffer.ToArray());
-            }
-
-            return 1;
         }
 
         private IArchiveManager LoadArchiveManager()
