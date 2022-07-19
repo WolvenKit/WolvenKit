@@ -30,6 +30,8 @@ namespace WolvenKit.Modkit.RED4.Animation
         public static void AddAnimation(ref ModelRoot model, animAnimation animAnimDes,bool incRootMotion = true)
         {
             var blob = animAnimDes.AnimBuffer.GetValue() as animAnimationBufferCompressed;
+            blob.ReadBuffer();
+
             //boneidx time value
             var positions = new Dictionary<ushort, Dictionary<float, Vec3>>();
             var rotations = new Dictionary<ushort, Dictionary<float, Quat>>();
