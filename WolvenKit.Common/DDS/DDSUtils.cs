@@ -1,6 +1,7 @@
 using System;
 using System.IO;
 using WolvenKit.Core.Extensions;
+using WolvenKit.RED4.Types;
 
 namespace WolvenKit.Common.DDS
 {
@@ -156,6 +157,157 @@ namespace WolvenKit.Common.DDS
         #endregion DDS_PIXELFORMAT
 
         #region Writing
+
+        public static void GenerateAndWriteHeader(Stream stream, STextureGroupSetup setup, rendRenderTextureBlobHeader header)
+        {
+            var (ddsHeader, dxt10Header) = GenerateHeader(setup, header);
+            WriteHeader(stream, ddsHeader, dxt10Header);
+        }
+
+        private static (DDS_HEADER, DDS_HEADER_DXT10) GenerateHeader(STextureGroupSetup setup, rendRenderTextureBlobHeader header)
+        {
+            var ddsHeader = new DDS_HEADER()
+            {
+                dwSize = HEADER_SIZE,
+                dwFlags = DDSD_CAPS | DDSD_HEIGHT | DDSD_WIDTH | DDSD_PIXELFORMAT,
+                dwHeight = header.SizeInfo.Height,
+                dwWidth = header.SizeInfo.Width,
+                dwPitchOrLinearSize = 0,
+                dwDepth = header.SizeInfo.Depth,
+                dwMipMapCount = header.TextureInfo.MipCount,
+                dwReserved1 = 0,
+                dwReserved2 = 0,
+                dwReserved3 = 0,
+                dwReserved4 = 0,
+                dwReserved5 = 0,
+                dwReserved6 = 0,
+                dwReserved7 = 0,
+                dwReserved8 = 0,
+                dwReserved9 = 0,
+                dwReserved10 = 0,
+                dwReserved11 = 0,
+                ddspf = new DDS_PIXELFORMAT
+                {
+                    dwSize = PIXELFORMAT_SIZE,
+                    dwFlags = DDPF_FOURCC,
+                    dwFourCC = MAKEFOURCC('D', 'X', '1', '0'),
+                    dwRGBBitCount = 0,
+                    dwRBitMask = 0,
+                    dwGBitMask = 0,
+                    dwBBitMask = 0,
+                    dwABitMask = 0
+                },
+                dwCaps = DDSCAPS_TEXTURE,
+                dwCaps2 = 0,
+                dwCaps3 = 0,
+                dwCaps4 = 0,
+                dwReserved12 = 0,
+            };
+
+            var dx10Header = new DDS_HEADER_DXT10()
+            {
+                dxgiFormat = DXGI_FORMAT.DXGI_FORMAT_UNKNOWN,
+                resourceDimension = D3D10_RESOURCE_DIMENSION.D3D10_RESOURCE_DIMENSION_UNKNOWN,
+                miscFlag = 0,
+                arraySize = header.TextureInfo.SliceCount,
+                miscFlags2 = DDS_ALPHA_MODE_STRAIGHT
+            };
+
+            dx10Header.dxgiFormat = (Enums.ETextureCompression)setup.Compression switch
+            {
+                Enums.ETextureCompression.TCM_None => (Enums.ETextureRawFormat)setup.RawFormat switch
+                {
+                    Enums.ETextureRawFormat.TRF_Invalid => DXGI_FORMAT.DXGI_FORMAT_R8G8B8A8_UNORM,
+                    Enums.ETextureRawFormat.TRF_TrueColor => DXGI_FORMAT.DXGI_FORMAT_R8G8B8A8_UNORM,
+                    // Enums.ETextureRawFormat.TRF_DeepColor => DXGI_FORMAT.DXGI_FORMAT_R10G10B10A2_UNORM, // seems wrong
+                    Enums.ETextureRawFormat.TRF_Grayscale => DXGI_FORMAT.DXGI_FORMAT_R8_UINT,
+                    Enums.ETextureRawFormat.TRF_HDRFloat => DXGI_FORMAT.DXGI_FORMAT_R32G32B32A32_FLOAT,
+                    Enums.ETextureRawFormat.TRF_HDRHalf => DXGI_FORMAT.DXGI_FORMAT_R16G16B16A16_FLOAT,
+                    Enums.ETextureRawFormat.TRF_HDRFloatGrayscale => DXGI_FORMAT.DXGI_FORMAT_R16_FLOAT,
+                    Enums.ETextureRawFormat.TRF_R8G8 => DXGI_FORMAT.DXGI_FORMAT_R8G8_UNORM,
+                    Enums.ETextureRawFormat.TRF_AlphaGrayscale => DXGI_FORMAT.DXGI_FORMAT_A8_UNORM,
+                    _ => throw new ArgumentOutOfRangeException()
+                },
+                Enums.ETextureCompression.TCM_DXTNoAlpha => DXGI_FORMAT.DXGI_FORMAT_BC1_UNORM,
+                Enums.ETextureCompression.TCM_DXTAlpha => DXGI_FORMAT.DXGI_FORMAT_BC3_UNORM,
+                Enums.ETextureCompression.TCM_Normalmap => DXGI_FORMAT.DXGI_FORMAT_BC5_UNORM,
+                Enums.ETextureCompression.TCM_Normals_DEPRECATED => DXGI_FORMAT.DXGI_FORMAT_BC1_UNORM,
+                Enums.ETextureCompression.TCM_NormalsHigh_DEPRECATED => DXGI_FORMAT.DXGI_FORMAT_BC3_UNORM,
+                Enums.ETextureCompression.TCM_DXTAlphaLinear => DXGI_FORMAT.DXGI_FORMAT_BC3_UNORM,
+                Enums.ETextureCompression.TCM_QualityR => DXGI_FORMAT.DXGI_FORMAT_BC4_UNORM,
+                Enums.ETextureCompression.TCM_QualityRG => DXGI_FORMAT.DXGI_FORMAT_BC5_UNORM,
+                Enums.ETextureCompression.TCM_QualityColor => DXGI_FORMAT.DXGI_FORMAT_BC7_UNORM,
+                _ => throw new NotSupportedException()
+            };
+
+            dx10Header.resourceDimension = (Enums.GpuWrapApieTextureType)header.TextureInfo.Type switch
+            {
+                Enums.GpuWrapApieTextureType.TEXTYPE_2D => D3D10_RESOURCE_DIMENSION.D3D10_RESOURCE_DIMENSION_TEXTURE2D,
+                Enums.GpuWrapApieTextureType.TEXTYPE_3D => D3D10_RESOURCE_DIMENSION.D3D10_RESOURCE_DIMENSION_TEXTURE3D,
+                _ => throw new NotSupportedException()
+            };
+
+            var bpp = (uint)TexconvNative.BitsPerPixel(dx10Header.dxgiFormat);
+
+            switch (dx10Header.dxgiFormat)
+            {
+                case DXGI_FORMAT.DXGI_FORMAT_BC1_UNORM:
+                case DXGI_FORMAT.DXGI_FORMAT_BC4_UNORM:
+                    var nbw1 = Math.Max(1, (ddsHeader.dwWidth + 3) / 4);
+                    var nbh1 = Math.Max(1, (ddsHeader.dwHeight + 3) / 4);
+                    ddsHeader.dwPitchOrLinearSize = nbw1 * nbh1 * 8;
+                    ddsHeader.dwFlags |= DDSD_LINEARSIZE;
+                    // var b1 = ddsHeader.dwPitchOrLinearSize == header.MipMapInfo[1 - setup.PlatformMipBiasPC].Layout.SlicePitch;
+                    break;
+
+                case DXGI_FORMAT.DXGI_FORMAT_BC3_UNORM:
+                case DXGI_FORMAT.DXGI_FORMAT_BC5_UNORM:
+                case DXGI_FORMAT.DXGI_FORMAT_BC7_UNORM:
+                    var nbw2 = Math.Max(1, (ddsHeader.dwWidth + 3) / 4);
+                    var nbh2 = Math.Max(1, (ddsHeader.dwHeight + 3) / 4);
+                    ddsHeader.dwPitchOrLinearSize = nbw2 * nbh2 * 16;
+                    ddsHeader.dwFlags |= DDSD_LINEARSIZE;
+                    // var b2 = ddsHeader.dwPitchOrLinearSize == header.MipMapInfo[0].Layout.SlicePitch;
+                    break;
+
+                default:
+                    ddsHeader.dwPitchOrLinearSize = ((ddsHeader.dwWidth * bpp) + 7) / header.TextureInfo.DataAlignment;
+                    ddsHeader.dwFlags |= DDSD_PITCH;
+                    // var b3 = ddsHeader.dwPitchOrLinearSize == header.MipMapInfo[0].Layout.RowPitch;
+                    break;
+            }
+
+            if (ddsHeader.dwMipMapCount > 0)
+            {
+                ddsHeader.dwFlags |= DDSD_MIPMAPCOUNT;
+
+                if (ddsHeader.dwMipMapCount > 1)
+                {
+                    ddsHeader.dwCaps |= DDSCAPS_MIPMAP | DDSCAPS_COMPLEX;
+                }
+            }
+
+            if (dx10Header.resourceDimension == D3D10_RESOURCE_DIMENSION.D3D10_RESOURCE_DIMENSION_TEXTURE2D)
+            {
+                ddsHeader.dwDepth = 1;
+
+                // if (IsCubemap())
+                // {
+                //     ddsHeader.dwCaps |= DDSCAPS_COMPLEX;
+                //     ddsHeader.dwCaps2 |= DDSCAPS2_CUBEMAP_ALL_FACES;
+                // }
+            }
+
+            if (dx10Header.resourceDimension == D3D10_RESOURCE_DIMENSION.D3D10_RESOURCE_DIMENSION_TEXTURE3D)
+            {
+                ddsHeader.dwDepth = header.SizeInfo.Depth;
+
+                ddsHeader.dwFlags |= DDSD_DEPTH;
+                ddsHeader.dwCaps2 |= DDSCAPS2_VOLUME;
+            }
+
+            return (ddsHeader, dx10Header);
+        }
 
         public static void GenerateAndWriteHeader(Stream stream, DDSMetadata metadata)
         {
