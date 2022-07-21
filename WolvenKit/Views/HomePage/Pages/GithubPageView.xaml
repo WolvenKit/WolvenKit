@@ -38,7 +38,8 @@
                  VerticalAlignment="Center"
                  Orientation="Vertical"
                  />
-                <hc:AnimationPath
+                <!-- This animation casues a leak on GPU! />-->
+                <!--<hc:AnimationPath
                  Width="45"
                  Height="45"
                  Margin="5"
@@ -50,7 +51,7 @@
                  Stroke="{DynamicResource MahApps.Brushes.ThemeForeground}"
                  StrokeThickness="1.5"
                  Duration="00:00:08"
-                 />
+                 />/>-->
             </StackPanel>
     </Grid>
 </reactiveUi:ReactiveUserControl>

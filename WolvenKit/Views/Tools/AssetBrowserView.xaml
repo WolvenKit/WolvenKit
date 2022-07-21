@@ -430,10 +430,11 @@
             BorderThickness="0"
             Visibility="{Binding Path=LoadVisibility, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}">
             <Grid>
-                <syncfusion:SfBusyIndicator
+                <!-- This busy indicator casues a leak on GPU! />-->
+                <!--<syncfusion:SfBusyIndicator
                     AnimationType="Ball"
                     Foreground="{DynamicResource MahApps.Brushes.Accent}"
-                    Visibility="{Binding Path=LoadVisibility, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" />
+                    Visibility="{Binding Path=LoadVisibility, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" />/>-->
 
                 <StackPanel VerticalAlignment="Center">
                     <TextBlock

@@ -63,7 +63,8 @@
                 </Style>
             </StackPanel.Resources>
 
-            <hc:AnimationPath
+            <!-- This animation casues a leak on GPU! />-->
+            <!--<hc:AnimationPath
                 Width="45"
                 Height="45"
                 Data="{DynamicResource SettingsGeo}"
@@ -82,20 +83,20 @@
                         <TranslateTransform />
                     </TransformGroup>
                 </hc:AnimationPath.RenderTransform>
-            </hc:AnimationPath>
-            <hc:Divider
-                Height="50"
-                Margin="15"
-                HorizontalAlignment="Center"
-                VerticalAlignment="Center"
-                Orientation="Vertical"
-                />
+            </hc:AnimationPath>/>-->
             <TextBlock
                 HorizontalAlignment="Center"
                 VerticalAlignment="Center"
                 FontSize="20"
                 Text="Settings"
                 Foreground="White"
+                />
+            <hc:Divider
+                Height="50"
+                Margin="15"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                Orientation="Vertical"
                 />
 
             <Button x:Name="CheckForUpdatesButton" Margin="15" Height="40">

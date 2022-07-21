@@ -39,7 +39,8 @@
                 VerticalAlignment="Center"
                 Orientation="Vertical"
                 />
-            <hc:AnimationPath
+            <!-- This animation casues a leak on GPU! />-->
+            <!--<hc:AnimationPath
                 Width="45"
                 Height="45"
                 Data="{DynamicResource WikiGeo}"
@@ -58,7 +59,7 @@
                         <TranslateTransform />
                     </TransformGroup>
                 </hc:AnimationPath.RenderTransform>
-            </hc:AnimationPath>
+            </hc:AnimationPath>/>-->
         </StackPanel>
     </Grid>
 </reactiveUi:ReactiveUserControl>

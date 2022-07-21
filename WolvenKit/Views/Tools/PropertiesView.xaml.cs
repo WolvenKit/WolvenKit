@@ -125,6 +125,8 @@ namespace WolvenKit.Views.Tools
             };
         }
 
+        private void ReloadModels(object sender, RoutedEventArgs e) => hxViewport.ZoomExtents();
+
         #region AudioPreview
 
         private void BrowseButton_Click(object sender, RoutedEventArgs e) => OpenFile();
@@ -356,5 +358,6 @@ namespace WolvenKit.Views.Tools
         }
 
         #endregion AudioPreview
+
     }
 }
