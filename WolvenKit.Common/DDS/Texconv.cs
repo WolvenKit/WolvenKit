@@ -193,6 +193,7 @@ namespace WolvenKit.Common.DDS
                         outStream = image.SaveToWICMemory(0, WIC_FLAGS.NONE, TexHelper.Instance.GetWICCodec(WICCodecs.PNG));
                         break;
                     case TexconvNative.ESaveFileTypes.TGA:
+                        image = image.Convert(DirectXTexNet.DXGI_FORMAT.R8G8B8A8_UNORM, TEX_FILTER_FLAGS.DEFAULT, 0.5F);
                         outStream = image.SaveToTGAMemory(0);
                         break;
                     case TexconvNative.ESaveFileTypes.TIFF:
@@ -201,6 +202,8 @@ namespace WolvenKit.Common.DDS
                     default:
                         throw new ArgumentOutOfRangeException(nameof(filetype), filetype, null);
                 }
+
+                image.Dispose();
 
                 //TexconvNative.ConvertAndSaveDdsImage(rentedBuffer, newpath, filetype, vflip, hflip);
                 var outBuffer = new byte[outStream.Length];
@@ -282,6 +285,7 @@ namespace WolvenKit.Common.DDS
                         outStream = image.SaveToWICMemory(0, WIC_FLAGS.NONE, TexHelper.Instance.GetWICCodec(WICCodecs.PNG));
                         break;
                     case TexconvNative.ESaveFileTypes.TGA:
+                        image = image.Convert(DirectXTexNet.DXGI_FORMAT.R8G8B8A8_UNORM, TEX_FILTER_FLAGS.DEFAULT, 0.5F);
                         outStream = image.SaveToTGAMemory(0);
                         break;
                     case TexconvNative.ESaveFileTypes.TIFF:
@@ -293,6 +297,8 @@ namespace WolvenKit.Common.DDS
                     default:
                         throw new ArgumentOutOfRangeException(nameof(filetype), filetype, null);
                 }
+
+                image.Dispose();
 
                 //TexconvNative.ConvertAndSaveDdsImage(rentedBuffer, newpath, filetype, vflip, hflip);
                 var outBuffer = new byte[outStream.Length];
@@ -381,9 +387,11 @@ namespace WolvenKit.Common.DDS
                     image = image.FlipRotate(flip);
                 }
 
-                image.OverrideFormat((DirectXTexNet.DXGI_FORMAT)format);
+                image = image.Convert((DirectXTexNet.DXGI_FORMAT)format, TEX_FILTER_FLAGS.DEFAULT, 0.5F);
 
                 var outStream = image.SaveToDDSMemory(DDS_FLAGS.NONE);
+
+                image.Dispose();
 
                 var outBuffer = new byte[outStream.Length];
                 outStream.Read(outBuffer, 0, outBuffer.Length);
