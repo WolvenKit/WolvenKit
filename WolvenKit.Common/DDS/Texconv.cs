@@ -2,9 +2,9 @@ using System;
 using System.Buffers;
 using System.IO;
 using System.Runtime.InteropServices;
+using DirectXTexNet;
 using WolvenKit.Common.Extensions;
 using WolvenKit.Common.Model.Arguments;
-using static WolvenKit.Common.DDS.TexconvNative;
 
 namespace WolvenKit.Common.DDS
 {
@@ -14,9 +14,9 @@ namespace WolvenKit.Common.DDS
         {
             if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
             {
-                var md = TexconvNative.GetMetadataFromTGAFile(path, TGA_FLAGS.TGA_FLAGS_NONE);
-                var bpp = TexconvNative.BitsPerPixel(md.format);
-                return new DDSMetadata(md, (uint)bpp, true);
+                var md = TexHelper.Instance.GetMetadataFromTGAFile(path);
+                var bpp = TexHelper.Instance.BitsPerPixel(md.Format);
+                return new DDSMetadata((uint)md.Width, (uint)md.Height, (uint)md.Depth, (uint)md.ArraySize, (uint)md.MipLevels, (uint)md.MiscFlags, (uint)md.MiscFlags2, (DXGI_FORMAT)md.Format, (TEX_DIMENSION)md.Dimension, (uint)bpp, true);
             }
             else
             {
@@ -32,9 +32,9 @@ namespace WolvenKit.Common.DDS
         {
             if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
             {
-                var md = TexconvNative.GetMetadataFromDDSFile(path, DDSFLAGS.DDS_FLAGS_NONE);
-                var bpp = TexconvNative.BitsPerPixel(md.format);
-                return new DDSMetadata(md, (uint)bpp, true);
+                var md = TexHelper.Instance.GetMetadataFromDDSFile(path, DDS_FLAGS.NONE);
+                var bpp = TexHelper.Instance.BitsPerPixel(md.Format);
+                return new DDSMetadata((uint)md.Width, (uint)md.Height, (uint)md.Depth, (uint)md.ArraySize, (uint)md.MipLevels, (uint)md.MiscFlags, (uint)md.MiscFlags2, (DXGI_FORMAT)md.Format, (TEX_DIMENSION)md.Dimension, (uint)bpp, true);
             }
             else
             {
@@ -42,13 +42,16 @@ namespace WolvenKit.Common.DDS
             }
         }
 
-        public static DDSMetadata GetMetadataFromDDSMemory(byte[] buffer)
+        public static unsafe DDSMetadata GetMetadataFromDDSMemory(byte[] buffer)
         {
             if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
             {
-                var md = TexconvNative.GetMetadataFromDDSMemory(buffer, DDSFLAGS.DDS_FLAGS_NONE);
-                var bpp = TexconvNative.BitsPerPixel(md.format);
-                return new DDSMetadata(md, (uint)bpp, true);
+                fixed (byte* pIn = buffer)
+                {
+                    var md = TexHelper.Instance.GetMetadataFromDDSMemory((IntPtr)pIn, buffer.Length, DDS_FLAGS.NONE);
+                    var bpp = TexHelper.Instance.BitsPerPixel(md.Format);
+                    return new DDSMetadata((uint)md.Width, (uint)md.Height, (uint)md.Depth, (uint)md.ArraySize, (uint)md.MipLevels, (uint)md.MiscFlags, (uint)md.MiscFlags2, (DXGI_FORMAT)md.Format, (TEX_DIMENSION)md.Dimension, (uint)bpp, true);
+                }
             }
             else
             {
@@ -60,7 +63,8 @@ namespace WolvenKit.Common.DDS
         {
             if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
             {
-                return (int)TexconvNative.ComputeRowPitch(format, width, height);
+                TexHelper.Instance.ComputePitch((DirectXTexNet.DXGI_FORMAT)format, width, height, out var rowPitch, out _, CP_FLAGS.NONE);
+                return (int)rowPitch;
             }
             else
             {
@@ -72,7 +76,8 @@ namespace WolvenKit.Common.DDS
         {
             if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
             {
-                return (int)TexconvNative.ComputeSlicePitch(format, width, height);
+                TexHelper.Instance.ComputePitch((DirectXTexNet.DXGI_FORMAT)format, width, height, out _, out var slicePitch, CP_FLAGS.NONE);
+                return (int)slicePitch;
             }
             else
             {
@@ -80,14 +85,14 @@ namespace WolvenKit.Common.DDS
             }
         }
 
-        public static ESaveFileTypes ToSaveFormat(EUncookExtension extension) =>
+        public static TexconvNative.ESaveFileTypes ToSaveFormat(EUncookExtension extension) =>
             extension switch
             {
-                EUncookExtension.bmp => ESaveFileTypes.BMP,
-                EUncookExtension.jpg => ESaveFileTypes.JPEG,
-                EUncookExtension.png => ESaveFileTypes.PNG,
-                EUncookExtension.tga => ESaveFileTypes.TGA,
-                EUncookExtension.tiff => ESaveFileTypes.TIFF,
+                EUncookExtension.bmp => TexconvNative.ESaveFileTypes.BMP,
+                EUncookExtension.jpg => TexconvNative.ESaveFileTypes.JPEG,
+                EUncookExtension.png => TexconvNative.ESaveFileTypes.PNG,
+                EUncookExtension.tga => TexconvNative.ESaveFileTypes.TGA,
+                EUncookExtension.tiff => TexconvNative.ESaveFileTypes.TIFF,
                 _ => throw new ArgumentOutOfRangeException(nameof(extension), extension, null)
             };
 
@@ -128,8 +133,13 @@ namespace WolvenKit.Common.DDS
 
             return uext != EUncookExtension.dds && ConvertFromDdsAndSave(ms, outfilename, ToSaveFormat(uext), vflip);
         }
-        public static bool ConvertFromDdsAndSave(Stream ms, string outfilename, ESaveFileTypes filetype, bool vflip = false, bool hflip = false)
+        public static bool ConvertFromDdsAndSave(Stream ms, string outfilename, TexconvNative.ESaveFileTypes filetype, bool vflip = false, bool hflip = false)
         {
+            if (!RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+            {
+                throw new NotImplementedException();
+            }
+
             byte[] rentedBuffer = null;
             try
             {
@@ -151,21 +161,51 @@ namespace WolvenKit.Common.DDS
                 var extension = filetype.ToString().ToLower();
                 var newpath = Path.Combine(outDir, $"{fileName}.{extension}");
 
+                var image = TexHelper.Instance.LoadFromDDSMemory(rentedBuffer, DDS_FLAGS.NONE, out var metadata);
+                if (TexHelper.Instance.IsCompressed(metadata.Format))
+                {
+                    image = image.Decompress(DirectXTexNet.DXGI_FORMAT.UNKNOWN);
+                }
+
+                var flip = TEX_FR_FLAGS.ROTATE0;
+                if (vflip)
+                {
+                    flip |= TEX_FR_FLAGS.FLIP_VERTICAL;
+                }
+
+                if (hflip)
+                {
+                    flip |= TEX_FR_FLAGS.FLIP_HORIZONTAL;
+                }
+
+                if (flip != 0)
+                {
+                    image = image.FlipRotate(flip);
+                }
+
+                UnmanagedMemoryStream outStream;
+                switch (filetype)
+                {
+                    case TexconvNative.ESaveFileTypes.BMP:
+                        outStream = image.SaveToWICMemory(0, WIC_FLAGS.NONE, TexHelper.Instance.GetWICCodec(WICCodecs.BMP));
+                        break;
+                    case TexconvNative.ESaveFileTypes.PNG:
+                        outStream = image.SaveToWICMemory(0, WIC_FLAGS.NONE, TexHelper.Instance.GetWICCodec(WICCodecs.PNG));
+                        break;
+                    case TexconvNative.ESaveFileTypes.TGA:
+                        outStream = image.SaveToTGAMemory(0);
+                        break;
+                    case TexconvNative.ESaveFileTypes.TIFF:
+                        outStream = image.SaveToWICMemory(0, WIC_FLAGS.NONE, TexHelper.Instance.GetWICCodec(WICCodecs.TIFF));
+                        break;
+                    default:
+                        throw new ArgumentOutOfRangeException(nameof(filetype), filetype, null);
+                }
+
                 //TexconvNative.ConvertAndSaveDdsImage(rentedBuffer, newpath, filetype, vflip, hflip);
-                if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
-                {
-                    var buffer = Array.Empty<byte>();
-                    using (var blob = new ManagedBlob())
-                    {
-                        var l = TexconvNative.ConvertFromDds(rentedBuffer, blob.GetBlob(), filetype, vflip, hflip);
-                        buffer = blob.GetBytes();
-                    }
-                    File.WriteAllBytes(newpath, buffer);
-                }
-                else
-                {
-                    throw new NotImplementedException();
-                }
+                var outBuffer = new byte[outStream.Length];
+                outStream.Read(outBuffer, 0, outBuffer.Length);
+                File.WriteAllBytes(newpath, outBuffer);
             }
             finally
             {
@@ -183,6 +223,11 @@ namespace WolvenKit.Common.DDS
         /// </summary>
         public static byte[] ConvertFromDds(Stream stream, EUncookExtension textureType, bool vflip = false, bool hflip = false)
         {
+            if (!RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+            {
+                throw new NotImplementedException();
+            }
+
             if (textureType == EUncookExtension.dds)
             {
                 throw new NotSupportedException("texture to convert from dds must not be dds iteslf");
@@ -203,20 +248,57 @@ namespace WolvenKit.Common.DDS
                     offset += readBytes;
                 }
 
-                if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+                var filetype = ToSaveFormat(textureType);
+
+                var image = TexHelper.Instance.LoadFromDDSMemory(rentedBuffer, DDS_FLAGS.NONE, out var metadata);
+                if (TexHelper.Instance.IsCompressed(metadata.Format))
                 {
-                    var buffer = Array.Empty<byte>();
-                    using (var blob = new ManagedBlob())
-                    {
-                        var l = TexconvNative.ConvertFromDds(rentedBuffer, blob.GetBlob(), ToSaveFormat(textureType), vflip, hflip);
-                        buffer = blob.GetBytes();
-                    }
-                    return buffer;
+                    image = image.Decompress(DirectXTexNet.DXGI_FORMAT.UNKNOWN);
                 }
-                else
+
+                var flip = TEX_FR_FLAGS.ROTATE0;
+                if (vflip)
                 {
-                    throw new NotImplementedException();
+                    flip |= TEX_FR_FLAGS.FLIP_VERTICAL;
                 }
+
+                if (hflip)
+                {
+                    flip |= TEX_FR_FLAGS.FLIP_HORIZONTAL;
+                }
+
+                if (flip != 0)
+                {
+                    image = image.FlipRotate(flip);
+                }
+
+                UnmanagedMemoryStream outStream;
+                switch (filetype)
+                {
+                    case TexconvNative.ESaveFileTypes.BMP:
+                        outStream = image.SaveToWICMemory(0, WIC_FLAGS.NONE, TexHelper.Instance.GetWICCodec(WICCodecs.BMP));
+                        break;
+                    case TexconvNative.ESaveFileTypes.PNG:
+                        outStream = image.SaveToWICMemory(0, WIC_FLAGS.NONE, TexHelper.Instance.GetWICCodec(WICCodecs.PNG));
+                        break;
+                    case TexconvNative.ESaveFileTypes.TGA:
+                        outStream = image.SaveToTGAMemory(0);
+                        break;
+                    case TexconvNative.ESaveFileTypes.TIFF:
+                        outStream = image.SaveToWICMemory(0, WIC_FLAGS.NONE, TexHelper.Instance.GetWICCodec(WICCodecs.TIFF));
+                        break;
+                    case TexconvNative.ESaveFileTypes.JPEG:
+                        outStream = image.SaveToWICMemory(0, WIC_FLAGS.NONE, TexHelper.Instance.GetWICCodec(WICCodecs.JPEG));
+                        break;
+                    default:
+                        throw new ArgumentOutOfRangeException(nameof(filetype), filetype, null);
+                }
+
+                //TexconvNative.ConvertAndSaveDdsImage(rentedBuffer, newpath, filetype, vflip, hflip);
+                var outBuffer = new byte[outStream.Length];
+                outStream.Read(outBuffer, 0, outBuffer.Length);
+
+                return outBuffer;
             }
             finally
             {
@@ -232,6 +314,11 @@ namespace WolvenKit.Common.DDS
         /// </summary>
         public static byte[] ConvertToDds(Stream stream, EUncookExtension inExtension, DXGI_FORMAT? outFormat = null, bool vflip = false, bool hflip = false)
         {
+            if (!RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+            {
+                throw new NotImplementedException();
+            }
+
             if (inExtension == EUncookExtension.dds)
             {
                 throw new NotSupportedException("texture to convert to dds must not be dds iteslf");
@@ -254,21 +341,54 @@ namespace WolvenKit.Common.DDS
 
                 var format = outFormat ?? DXGI_FORMAT.DXGI_FORMAT_UNKNOWN;
 
-                if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+                var fileType = ToSaveFormat(inExtension);
+
+                ScratchImage image;
+                switch (fileType)
                 {
-                    var buffer = Array.Empty<byte>();
-                    using (var blob = new ManagedBlob())
-                    {
-                        var l = TexconvNative.ConvertToDds(rentedBuffer, blob.GetBlob(), ToSaveFormat(inExtension),
-                        format, vflip, hflip);
-                        buffer = blob.GetBytes();
-                    }
-                    return buffer;
+                    case TexconvNative.ESaveFileTypes.BMP:
+                        image = TexHelper.Instance.LoadFromWICMemory(rentedBuffer, WIC_FLAGS.NONE);
+                        break;
+                    case TexconvNative.ESaveFileTypes.JPEG:
+                        image = TexHelper.Instance.LoadFromWICMemory(rentedBuffer, WIC_FLAGS.NONE);
+                        break;
+                    case TexconvNative.ESaveFileTypes.PNG:
+                        image = TexHelper.Instance.LoadFromWICMemory(rentedBuffer, WIC_FLAGS.NONE);
+                        break;
+                    case TexconvNative.ESaveFileTypes.TGA:
+                        image = TexHelper.Instance.LoadFromTGAMemory(rentedBuffer);
+                        break;
+                    case TexconvNative.ESaveFileTypes.TIFF:
+                        image = TexHelper.Instance.LoadFromWICMemory(rentedBuffer, WIC_FLAGS.NONE);
+                        break;
+                    default:
+                        throw new ArgumentOutOfRangeException();
                 }
-                else
+
+                var flip = TEX_FR_FLAGS.ROTATE0;
+                if (vflip)
                 {
-                    throw new NotImplementedException();
+                    flip |= TEX_FR_FLAGS.FLIP_VERTICAL;
                 }
+
+                if (hflip)
+                {
+                    flip |= TEX_FR_FLAGS.FLIP_HORIZONTAL;
+                }
+
+                if (flip != 0)
+                {
+                    image = image.FlipRotate(flip);
+                }
+
+                image.OverrideFormat((DirectXTexNet.DXGI_FORMAT)format);
+
+                var outStream = image.SaveToDDSMemory(DDS_FLAGS.NONE);
+
+                var outBuffer = new byte[outStream.Length];
+                outStream.Read(outBuffer, 0, outBuffer.Length);
+
+                return outBuffer;
             }
             finally
             {
