@@ -363,7 +363,7 @@ namespace WolvenKit.ViewModels.Tools
             using var ddsstream = new MemoryStream();
             try
             {
-                if (ModTools.ConvertRedClassToDdsStream(cls, ddsstream, out _))
+                if (ModTools.ConvertRedClassToDdsStream(cls, ddsstream, out _, out _))
                 {
                     await LoadImageFromStream(ddsstream);
                 }

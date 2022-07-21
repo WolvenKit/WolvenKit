@@ -371,7 +371,7 @@ namespace WolvenKit.Modkit.RED4
                 {
                     var xbm = (CBitmapTexture)cr2w.RootChunk;
 
-                    format = CommonFunctions.GetDXGIFormat(xbm.Setup.Compression, xbm.Setup.RawFormat, _loggerService);
+                    format = CommonFunctions.GetDXGIFormat(xbm.Setup.Compression, xbm.Setup.RawFormat, xbm.Setup.IsGamma, _loggerService);
                 }
                 else
                 {

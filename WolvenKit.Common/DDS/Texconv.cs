@@ -104,7 +104,7 @@ namespace WolvenKit.Common.DDS
         /// <param name="outfilename">The output filename. Extension will be overwritten with the correct filetype</param>
         /// <param name="args"></param>
         /// <returns></returns>
-        public static bool ConvertFromDdsAndSave(Stream ms, string outfilename, ExportArgs args)
+        public static bool ConvertFromDdsAndSave(Stream ms, string outfilename, ExportArgs args, DXGI_FORMAT decompressedFormat = DXGI_FORMAT.DXGI_FORMAT_UNKNOWN)
         {
             // check if stream is dds
             if (!DDSUtils.IsDdsFile(ms))
@@ -131,9 +131,9 @@ namespace WolvenKit.Common.DDS
                     break;
             }
 
-            return uext != EUncookExtension.dds && ConvertFromDdsAndSave(ms, outfilename, ToSaveFormat(uext), vflip);
+            return uext != EUncookExtension.dds && ConvertFromDdsAndSave(ms, outfilename, ToSaveFormat(uext), vflip, false, decompressedFormat);
         }
-        public static bool ConvertFromDdsAndSave(Stream ms, string outfilename, TexconvNative.ESaveFileTypes filetype, bool vflip = false, bool hflip = false)
+        public static bool ConvertFromDdsAndSave(Stream ms, string outfilename, TexconvNative.ESaveFileTypes filetype, bool vflip = false, bool hflip = false, DXGI_FORMAT decompressedFormat = DXGI_FORMAT.DXGI_FORMAT_UNKNOWN)
         {
             if (!RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
             {
@@ -164,7 +164,8 @@ namespace WolvenKit.Common.DDS
                 var image = TexHelper.Instance.LoadFromDDSMemory(rentedBuffer, DDS_FLAGS.NONE, out var metadata);
                 if (TexHelper.Instance.IsCompressed(metadata.Format))
                 {
-                    image = image.Decompress(DirectXTexNet.DXGI_FORMAT.UNKNOWN);
+                    image = image.Decompress((DirectXTexNet.DXGI_FORMAT)decompressedFormat);
+                    metadata = image.GetMetadata();
                 }
 
                 var flip = TEX_FR_FLAGS.ROTATE0;
@@ -193,7 +194,20 @@ namespace WolvenKit.Common.DDS
                         outStream = image.SaveToWICMemory(0, WIC_FLAGS.NONE, TexHelper.Instance.GetWICCodec(WICCodecs.PNG));
                         break;
                     case TexconvNative.ESaveFileTypes.TGA:
-                        image = image.Convert(DirectXTexNet.DXGI_FORMAT.R8G8B8A8_UNORM, TEX_FILTER_FLAGS.DEFAULT, 0.5F);
+                        if (TexHelper.Instance.IsSRGB(metadata.Format))
+                        {
+                            if (metadata.Format != DirectXTexNet.DXGI_FORMAT.R8G8B8A8_UNORM_SRGB)
+                            {
+                                image = image.Convert(DirectXTexNet.DXGI_FORMAT.R8G8B8A8_UNORM_SRGB, TEX_FILTER_FLAGS.DEFAULT, 0.5F);
+                            }
+                        }
+                        else
+                        {
+                            if (metadata.Format != DirectXTexNet.DXGI_FORMAT.R8G8B8A8_UNORM)
+                            {
+                                image = image.Convert(DirectXTexNet.DXGI_FORMAT.R8G8B8A8_UNORM, TEX_FILTER_FLAGS.DEFAULT, 0.5F);
+                            }
+                        }
                         outStream = image.SaveToTGAMemory(0);
                         break;
                     case TexconvNative.ESaveFileTypes.TIFF:
@@ -257,6 +271,7 @@ namespace WolvenKit.Common.DDS
                 if (TexHelper.Instance.IsCompressed(metadata.Format))
                 {
                     image = image.Decompress(DirectXTexNet.DXGI_FORMAT.UNKNOWN);
+                    metadata = image.GetMetadata();
                 }
 
                 var flip = TEX_FR_FLAGS.ROTATE0;
@@ -285,7 +300,20 @@ namespace WolvenKit.Common.DDS
                         outStream = image.SaveToWICMemory(0, WIC_FLAGS.NONE, TexHelper.Instance.GetWICCodec(WICCodecs.PNG));
                         break;
                     case TexconvNative.ESaveFileTypes.TGA:
-                        image = image.Convert(DirectXTexNet.DXGI_FORMAT.R8G8B8A8_UNORM, TEX_FILTER_FLAGS.DEFAULT, 0.5F);
+                        if (TexHelper.Instance.IsSRGB(metadata.Format))
+                        {
+                            if (metadata.Format != DirectXTexNet.DXGI_FORMAT.R8G8B8A8_UNORM_SRGB)
+                            {
+                                image = image.Convert(DirectXTexNet.DXGI_FORMAT.R8G8B8A8_UNORM_SRGB, TEX_FILTER_FLAGS.DEFAULT, 0.5F);
+                            }
+                        }
+                        else
+                        {
+                            if (metadata.Format != DirectXTexNet.DXGI_FORMAT.R8G8B8A8_UNORM)
+                            {
+                                image = image.Convert(DirectXTexNet.DXGI_FORMAT.R8G8B8A8_UNORM, TEX_FILTER_FLAGS.DEFAULT, 0.5F);
+                            }
+                        }
                         outStream = image.SaveToTGAMemory(0);
                         break;
                     case TexconvNative.ESaveFileTypes.TIFF:
@@ -387,7 +415,11 @@ namespace WolvenKit.Common.DDS
                     image = image.FlipRotate(flip);
                 }
 
-                image = image.Convert((DirectXTexNet.DXGI_FORMAT)format, TEX_FILTER_FLAGS.DEFAULT, 0.5F);
+                var metadata = image.GetMetadata();
+                if (metadata.Format != (DirectXTexNet.DXGI_FORMAT)format)
+                {
+                    image = image.Convert((DirectXTexNet.DXGI_FORMAT)format, TEX_FILTER_FLAGS.DEFAULT, 0.5F);
+                }
 
                 var outStream = image.SaveToDDSMemory(DDS_FLAGS.NONE);
 

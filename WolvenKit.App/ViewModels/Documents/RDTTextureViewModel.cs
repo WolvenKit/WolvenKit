@@ -50,7 +50,7 @@ namespace WolvenKit.ViewModels.Documents
             using var ddsstream = new MemoryStream();
             try
             {
-                if (ModTools.ConvertRedClassToDdsStream(_data, ddsstream, out _))
+                if (ModTools.ConvertRedClassToDdsStream(_data, ddsstream, out _, out _))
                 {
                     _ = LoadImageFromStream(ddsstream);
                     IsRendered = true;

@@ -174,12 +174,12 @@ namespace WolvenKit.Common.DDS
             Convert(inBuffer, inType, out outBuffer, outType, DirectXTexNet.DXGI_FORMAT.UNKNOWN);
         }
 
-        public static void Convert(byte[] inBuffer, ConvertableFileTypes inType, out byte[] outBuffer, ConvertableFileTypes outType, Enums.ETextureRawFormat decompressedFormat)
+        public static void Convert(byte[] inBuffer, ConvertableFileTypes inType, out byte[] outBuffer, ConvertableFileTypes outType, Enums.ETextureRawFormat decompressedFormat, bool isGamma)
         {
             var targetFormat = decompressedFormat switch
             {
                 Enums.ETextureRawFormat.TRF_Invalid => DirectXTexNet.DXGI_FORMAT.R8G8B8A8_UNORM,
-                Enums.ETextureRawFormat.TRF_TrueColor => DirectXTexNet.DXGI_FORMAT.R8G8B8A8_UNORM,
+                Enums.ETextureRawFormat.TRF_TrueColor => isGamma ? DirectXTexNet.DXGI_FORMAT.R8G8B8A8_UNORM_SRGB : DirectXTexNet.DXGI_FORMAT.R8G8B8A8_UNORM,
                 Enums.ETextureRawFormat.TRF_DeepColor => DirectXTexNet.DXGI_FORMAT.R16G16B16A16_UNORM, // seems wrong
                 Enums.ETextureRawFormat.TRF_Grayscale => DirectXTexNet.DXGI_FORMAT.R8_UINT,
                 Enums.ETextureRawFormat.TRF_HDRFloat => DirectXTexNet.DXGI_FORMAT.R32G32B32A32_FLOAT,
@@ -198,13 +198,16 @@ namespace WolvenKit.Common.DDS
             fixed (byte* pIn = inBuffer)
             {
                 ScratchImage image;
+                TexMetadata metadata = null;
+
                 switch (inType)
                 {
                     case ConvertableFileTypes.dds:
-                        image = TexHelper.Instance.LoadFromDDSMemory((IntPtr)pIn, inBuffer.Length, DDS_FLAGS.NONE, out var metadata);
+                        image = TexHelper.Instance.LoadFromDDSMemory((IntPtr)pIn, inBuffer.Length, DDS_FLAGS.NONE, out metadata);
                         if (TexHelper.Instance.IsCompressed(metadata.Format))
                         {
                             image = image.Decompress(decompressedFormat);
+                            metadata = image.GetMetadata();
                         }
                         break;
                     case ConvertableFileTypes.tga:
@@ -227,6 +230,23 @@ namespace WolvenKit.Common.DDS
                         outStream = image.SaveToDDSMemory(DDS_FLAGS.NONE);
                         break;
                     case ConvertableFileTypes.tga:
+                        if (metadata != null)
+                        {
+                            if (TexHelper.Instance.IsSRGB(metadata.Format))
+                            {
+                                if (metadata.Format != DirectXTexNet.DXGI_FORMAT.R8G8B8A8_UNORM_SRGB)
+                                {
+                                    image = image.Convert(DirectXTexNet.DXGI_FORMAT.R8G8B8A8_UNORM_SRGB, TEX_FILTER_FLAGS.DEFAULT, 0.5F);
+                                }
+                            }
+                            else
+                            {
+                                if (metadata.Format != DirectXTexNet.DXGI_FORMAT.R8G8B8A8_UNORM)
+                                {
+                                    image = image.Convert(DirectXTexNet.DXGI_FORMAT.R8G8B8A8_UNORM, TEX_FILTER_FLAGS.DEFAULT, 0.5F);
+                                }
+                            }
+                        }
                         outStream = image.SaveToTGAMemory(0);
                         break;
                     case ConvertableFileTypes.bmp:
@@ -314,7 +334,7 @@ namespace WolvenKit.Common.DDS
                 Enums.ETextureCompression.TCM_None => (Enums.ETextureRawFormat)setup.RawFormat switch
                 {
                     Enums.ETextureRawFormat.TRF_Invalid => DXGI_FORMAT.DXGI_FORMAT_R8G8B8A8_UNORM,
-                    Enums.ETextureRawFormat.TRF_TrueColor => DXGI_FORMAT.DXGI_FORMAT_R8G8B8A8_UNORM,
+                    Enums.ETextureRawFormat.TRF_TrueColor => setup.IsGamma ? DXGI_FORMAT.DXGI_FORMAT_R8G8B8A8_UNORM_SRGB : DXGI_FORMAT.DXGI_FORMAT_R8G8B8A8_UNORM,
                     Enums.ETextureRawFormat.TRF_DeepColor => DXGI_FORMAT.DXGI_FORMAT_R16G16B16A16_UNORM, // seems wrong
                     Enums.ETextureRawFormat.TRF_Grayscale => DXGI_FORMAT.DXGI_FORMAT_R8_UINT,
                     Enums.ETextureRawFormat.TRF_HDRFloat => DXGI_FORMAT.DXGI_FORMAT_R32G32B32A32_FLOAT,
@@ -324,15 +344,15 @@ namespace WolvenKit.Common.DDS
                     Enums.ETextureRawFormat.TRF_AlphaGrayscale => DXGI_FORMAT.DXGI_FORMAT_A8_UNORM,
                     _ => throw new ArgumentOutOfRangeException()
                 },
-                Enums.ETextureCompression.TCM_DXTNoAlpha => DXGI_FORMAT.DXGI_FORMAT_BC1_UNORM,
-                Enums.ETextureCompression.TCM_DXTAlpha => DXGI_FORMAT.DXGI_FORMAT_BC3_UNORM,
+                Enums.ETextureCompression.TCM_DXTNoAlpha => setup.IsGamma ? DXGI_FORMAT.DXGI_FORMAT_BC1_UNORM_SRGB : DXGI_FORMAT.DXGI_FORMAT_BC1_UNORM,
+                Enums.ETextureCompression.TCM_DXTAlpha => setup.IsGamma ? DXGI_FORMAT.DXGI_FORMAT_BC3_UNORM_SRGB : DXGI_FORMAT.DXGI_FORMAT_BC3_UNORM,
                 Enums.ETextureCompression.TCM_Normalmap => DXGI_FORMAT.DXGI_FORMAT_BC5_UNORM,
                 Enums.ETextureCompression.TCM_Normals_DEPRECATED => DXGI_FORMAT.DXGI_FORMAT_BC1_UNORM,
                 Enums.ETextureCompression.TCM_NormalsHigh_DEPRECATED => DXGI_FORMAT.DXGI_FORMAT_BC3_UNORM,
-                Enums.ETextureCompression.TCM_DXTAlphaLinear => DXGI_FORMAT.DXGI_FORMAT_BC3_UNORM,
+                Enums.ETextureCompression.TCM_DXTAlphaLinear => setup.IsGamma ? DXGI_FORMAT.DXGI_FORMAT_BC3_UNORM_SRGB : DXGI_FORMAT.DXGI_FORMAT_BC3_UNORM,
                 Enums.ETextureCompression.TCM_QualityR => DXGI_FORMAT.DXGI_FORMAT_BC4_UNORM,
                 Enums.ETextureCompression.TCM_QualityRG => DXGI_FORMAT.DXGI_FORMAT_BC5_UNORM,
-                Enums.ETextureCompression.TCM_QualityColor => DXGI_FORMAT.DXGI_FORMAT_BC7_UNORM,
+                Enums.ETextureCompression.TCM_QualityColor => setup.IsGamma ? DXGI_FORMAT.DXGI_FORMAT_BC7_UNORM_SRGB : DXGI_FORMAT.DXGI_FORMAT_BC7_UNORM,
                 _ => throw new NotSupportedException()
             };
 
@@ -597,11 +617,13 @@ namespace WolvenKit.Common.DDS
                 case DXGI_FORMAT.DXGI_FORMAT_R16_FLOAT:
                 case DXGI_FORMAT.DXGI_FORMAT_A8_UNORM:
                 case DXGI_FORMAT.DXGI_FORMAT_R8G8B8A8_UNORM:
+                case DXGI_FORMAT.DXGI_FORMAT_R8G8B8A8_UNORM_SRGB:
                     header.dwPitchOrLinearSize = ((width * bpp) + 7) / 8;
                     header.dwFlags |= DDSD_PITCH;
                     break;
 
                 case DXGI_FORMAT.DXGI_FORMAT_BC1_UNORM:
+                case DXGI_FORMAT.DXGI_FORMAT_BC1_UNORM_SRGB:
                 case DXGI_FORMAT.DXGI_FORMAT_BC4_UNORM:
                     p = width * height / 2; //max(1,width ?4)x max(1,height ?4)x 8 (DXT1)
                     header.dwPitchOrLinearSize = p;
@@ -610,8 +632,10 @@ namespace WolvenKit.Common.DDS
 
                 case DXGI_FORMAT.DXGI_FORMAT_BC2_UNORM:
                 case DXGI_FORMAT.DXGI_FORMAT_BC3_UNORM:
+                case DXGI_FORMAT.DXGI_FORMAT_BC3_UNORM_SRGB:
                 case DXGI_FORMAT.DXGI_FORMAT_BC5_UNORM:
                 case DXGI_FORMAT.DXGI_FORMAT_BC7_UNORM:
+                case DXGI_FORMAT.DXGI_FORMAT_BC7_UNORM_SRGB:
                     p = width * height;     //max(1,width ?4)x max(1,height ?4)x 16 (DXT2-5)
                     header.dwPitchOrLinearSize = p;
                     header.dwFlags |= DDSD_LINEARSIZE;
@@ -673,10 +697,6 @@ namespace WolvenKit.Common.DDS
                         dx10header.dxgiFormat = DXGI_FORMAT.DXGI_FORMAT_R16G16B16A16_FLOAT;
                         break;
 
-                    case DXGI_FORMAT.DXGI_FORMAT_R10G10B10A2_UNORM:
-                        dx10header.dxgiFormat = DXGI_FORMAT.DXGI_FORMAT_R10G10B10A2_UNORM;
-                        break;
-
                     case DXGI_FORMAT.DXGI_FORMAT_R8G8B8A8_UNORM:
                         dx10header.dxgiFormat = DXGI_FORMAT.DXGI_FORMAT_R8G8B8A8_UNORM;
                         break;
@@ -727,6 +747,22 @@ namespace WolvenKit.Common.DDS
 
                     case DXGI_FORMAT.DXGI_FORMAT_BC5_UNORM:
                         dx10header.dxgiFormat = DXGI_FORMAT.DXGI_FORMAT_BC5_UNORM;
+                        break;
+
+                    case DXGI_FORMAT.DXGI_FORMAT_R8G8B8A8_UNORM_SRGB:
+                        dx10header.dxgiFormat = DXGI_FORMAT.DXGI_FORMAT_R8G8B8A8_UNORM_SRGB;
+                        break;
+
+                    case DXGI_FORMAT.DXGI_FORMAT_BC1_UNORM_SRGB:
+                        dx10header.dxgiFormat = DXGI_FORMAT.DXGI_FORMAT_BC1_UNORM_SRGB;
+                        break;
+
+                    case DXGI_FORMAT.DXGI_FORMAT_BC3_UNORM_SRGB:
+                        dx10header.dxgiFormat = DXGI_FORMAT.DXGI_FORMAT_BC3_UNORM_SRGB;
+                        break;
+
+                    case DXGI_FORMAT.DXGI_FORMAT_BC7_UNORM_SRGB:
+                        dx10header.dxgiFormat = DXGI_FORMAT.DXGI_FORMAT_BC7_UNORM_SRGB;
                         break;
 
                     default:

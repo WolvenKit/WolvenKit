@@ -356,12 +356,12 @@ namespace WolvenKit.Modkit.RED4
                     if (WolvenTesting.IsTesting)
                     {
                         using var ms = new MemoryStream();
-                        return ConvertXbmToDdsStream(cr2wStream, ms, out texformat);
+                        return ConvertXbmToDdsStream(cr2wStream, ms, out texformat, out _);
                     }
 
                     using (var ms = new MemoryStream())
                     {
-                        if (!ConvertXbmToDdsStream(cr2wStream, ms, out texformat))
+                        if (!ConvertXbmToDdsStream(cr2wStream, ms, out texformat, out var decompressedFormat))
                         {
                             return false;
                         }
@@ -371,7 +371,7 @@ namespace WolvenKit.Modkit.RED4
                         if (xbmargs.UncookExtension != EUncookExtension.dds)
                         {
                             ms.Seek(0, SeekOrigin.Begin);
-                            return Texconv.ConvertFromDdsAndSave(ms, ddsPath, xbmargs);
+                            return Texconv.ConvertFromDdsAndSave(ms, ddsPath, xbmargs, decompressedFormat);
                         }
                         else
                         {
@@ -637,7 +637,7 @@ namespace WolvenKit.Modkit.RED4
             var height = blob.Header.SizeInfo.Height;
             var width = blob.Header.SizeInfo.Width;
 
-            var texformat = CommonFunctions.GetDXGIFormat(texa.Setup.Compression, texa.Setup.RawFormat, _loggerService);
+            var texformat = CommonFunctions.GetDXGIFormat(texa.Setup.Compression, texa.Setup.RawFormat, texa.Setup.IsGamma, _loggerService);
 
             DDSUtils.GenerateAndWriteHeader(outstream,
                 new DDSMetadata(width, height, 1, sliceCount, mipCount,
@@ -691,7 +691,7 @@ namespace WolvenKit.Modkit.RED4
             var height = blob.Header.SizeInfo.Height;
             var width = blob.Header.SizeInfo.Width;
 
-            var texformat = CommonFunctions.GetDXGIFormat(ctex.Setup.Compression, ctex.Setup.RawFormat, _loggerService);
+            var texformat = CommonFunctions.GetDXGIFormat(ctex.Setup.Compression, ctex.Setup.RawFormat, ctex.Setup.IsGamma, _loggerService);
 
             DDSUtils.GenerateAndWriteHeader(outstream,
                 new DDSMetadata(width, height, 1, sliceCount, mipCount,
@@ -720,9 +720,10 @@ namespace WolvenKit.Modkit.RED4
             return true;
         }
 
-        public bool ConvertXbmToDdsStream(Stream redInFile, Stream outstream, out DXGI_FORMAT texformat)
+        public bool ConvertXbmToDdsStream(Stream redInFile, Stream outstream, out DXGI_FORMAT texformat, out DXGI_FORMAT decompressedFormat)
         {
             texformat = DXGI_FORMAT.DXGI_FORMAT_R8G8B8A8_UNORM;
+            decompressedFormat = DXGI_FORMAT.DXGI_FORMAT_UNKNOWN;
 
             // read the cr2wfile
             if (!_wolvenkitFileService.TryReadRed4File(redInFile, out var cr2w))
@@ -730,16 +731,18 @@ namespace WolvenKit.Modkit.RED4
                 return false;
             }
 
-            return ConvertRedClassToDdsStream(cr2w.RootChunk, outstream, out texformat);
+            return ConvertRedClassToDdsStream(cr2w.RootChunk, outstream, out texformat, out decompressedFormat);
         }
 
-        public static bool ConvertRedClassToDdsStream(RedBaseClass cls, Stream outstream, out DXGI_FORMAT texformat)
+        public static bool ConvertRedClassToDdsStream(RedBaseClass cls, Stream outstream, out DXGI_FORMAT texformat, out DXGI_FORMAT decompressedFormat)
         {
             texformat = DXGI_FORMAT.DXGI_FORMAT_R8G8B8A8_UNORM;
+            decompressedFormat = DXGI_FORMAT.DXGI_FORMAT_UNKNOWN;
 
             rendRenderTextureBlobPC blob = null;
             var rawfmt = Enums.ETextureRawFormat.TRF_Invalid;
             var compression = Enums.ETextureCompression.TCM_None;
+            var isGamma = false;
 
             if (cls is CBitmapTexture xbm)
             {
@@ -750,6 +753,7 @@ namespace WolvenKit.Modkit.RED4
                 }
                 rawfmt = xbm.Setup.RawFormat;
                 compression = xbm.Setup.Compression;
+                isGamma = xbm.Setup.IsGamma;
             }
 
             if (cls is CMesh mesh)
@@ -795,7 +799,12 @@ namespace WolvenKit.Modkit.RED4
                     throw new ArgumentOutOfRangeException();
             }
 
-            texformat = CommonFunctions.GetDXGIFormat(compression, rawfmt, null);
+            texformat = CommonFunctions.GetDXGIFormat(compression, rawfmt, isGamma, null);
+            decompressedFormat = texformat;
+            if (compression != Enums.ETextureCompression.TCM_None)
+            {
+                decompressedFormat = CommonFunctions.GetDXGIFormat(Enums.ETextureCompression.TCM_None, rawfmt, isGamma, null);
+            }
 
             #endregion get xbm data
 

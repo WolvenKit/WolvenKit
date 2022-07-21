@@ -209,7 +209,7 @@ namespace WolvenKit.Views.Tools
             var expargs = new XbmExportArgs { Flip = false, UncookExtension = EUncookExtension.tga };
             if (man != null)
             {
-                man.ConvertXbmToDdsStream(cr2wstream, ddsstream, out _);
+                man.ConvertXbmToDdsStream(cr2wstream, ddsstream, out _, out _);
             }
 
             // try loading it in pfim
