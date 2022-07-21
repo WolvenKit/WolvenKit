@@ -130,6 +130,18 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Reference Include="DirectXTexNet">
+      <HintPath>lib\DirectXTexNet.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="lib\DirectXTexNetImpl.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="lib\Ijwhost.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Update="lib\vgmstream\COPYING">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
