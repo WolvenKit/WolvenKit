@@ -1,10 +1,12 @@
 using System;
+using System.IO;
 using System.Reactive;
 using System.Threading.Tasks;
 using ReactiveUI;
 using Splat;
 using WolvenKit.Common.Services;
 using WolvenKit.Functionality.Services;
+using WolvenKit.Models;
 using WolvenKit.ViewModels.HomePage;
 using WolvenKit.ViewModels.Shell;
 
@@ -35,7 +37,13 @@ namespace WolvenKit.ViewModels
 
         public ReactiveCommand<Unit, Unit> CheckForUpdatesCommand { get; }
         // todo update task 
-        private async Task CheckForUpdates() => await Task.CompletedTask;
+        private async Task CheckForUpdates()
+        {
+            _loggerService.Warning(ISettingsManager.GetAppData());
+            Commonfunctions.ShowFolderInExplorer(ISettingsManager.GetAppData());
+
+            await Task.CompletedTask;
+        }
 
         private async Task SaveClose() => await Task.Run(() => _main.CloseModalCommand.Execute(null));
 

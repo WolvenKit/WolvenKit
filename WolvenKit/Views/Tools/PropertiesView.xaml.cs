@@ -114,17 +114,6 @@ namespace WolvenKit.Views.Tools
             return bmp;
         }
 
-        public void LoadButton_OnClick(object sender, RoutedEventArgs e)
-        {
-            var openFileDialog = new Microsoft.Win32.OpenFileDialog
-            {
-                InitialDirectory = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Resources"),
-
-                Filter = "3D model file (*.*)|*.*",
-                Title = "Open 3D model file file"
-            };
-        }
-
         private void ReloadModels(object sender, RoutedEventArgs e) => hxViewport.ZoomExtents();
 
         #region AudioPreview

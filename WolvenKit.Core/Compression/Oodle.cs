@@ -85,7 +85,7 @@ public static class Oodle
             // try get oodle dll from game
             if (TryCopyOodleLib())
             {
-                var result = OodleLib.Load(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "oo2ext_7_win64.dll"));
+                var result = OodleLib.Load(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "oo2ext_7_win64.dll"));
                 if (result)
                 {
                     CompressionSettings.Get().CompressionLevel = CompressionLevel.Optimal2;
@@ -362,8 +362,7 @@ public static class Oodle
 
     private static bool TryCopyOodleLib()
     {
-        var ass = AppDomain.CurrentDomain.BaseDirectory;
-        var destFileName = Path.Combine(ass, "oo2ext_7_win64.dll");
+        var destFileName = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "oo2ext_7_win64.dll");
         if (File.Exists(destFileName))
         {
             return true;
