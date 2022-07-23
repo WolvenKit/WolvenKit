@@ -163,7 +163,6 @@ namespace WolvenKit.Functionality.Layout
             TweakBrowserViewModel _ => TweakBrowserToolTemplate,
 
             CodeEditorViewModel _ => CodeEditorTemplate,
-            VisualEditorViewModel _ => VisualEditorTemplate,
 
 
             _ => base.SelectTemplate(item, container)

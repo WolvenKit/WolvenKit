@@ -7,12 +7,12 @@
   IgnorableNamespaces="uap rescap">
 
   <Identity
-    Name="f6c36f15-6d51-44af-96bd-010bdf997342"
-    Publisher="CN=moritz.baron"
+    Name="26499Wolvenkit.WolvenKit"
+    Publisher="CN=AF3D6159-5B23-4518-A2E2-FFE986563DE4"
     Version="8.7.0.0" />
 
   <Properties>
-    <DisplayName>WolvenKit.Package</DisplayName>
+    <DisplayName>WolvenKit</DisplayName>
     <PublisherDisplayName>Wolvenkit</PublisherDisplayName>
     <Logo>Images\StoreLogo.png</Logo>
   </Properties>

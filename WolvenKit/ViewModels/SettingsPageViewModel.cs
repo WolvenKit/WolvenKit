@@ -34,6 +34,7 @@ namespace WolvenKit.ViewModels
         public ReactiveCommand<Unit, Unit> SaveCloseCommand { get; }
 
         public ReactiveCommand<Unit, Unit> CheckForUpdatesCommand { get; }
+        // todo update task 
         private async Task CheckForUpdates() => await Task.CompletedTask;
 
         private async Task SaveClose() => await Task.Run(() => _main.CloseModalCommand.Execute(null));
