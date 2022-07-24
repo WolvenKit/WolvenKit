@@ -18,9 +18,9 @@ jobs:
         dotnet-version: 6.x
 
     - name: Restore dependencies
-      run: dotnet restore .\All.sln
+      run: dotnet restore .\WolvenKit\WolvenKit.csproj
     - name: Build
-      run: dotnet build .\All.sln --no-restore
+      run: dotnet build .\WolvenKit\WolvenKit.csproj --no-restore
 
   console-linux:
     runs-on: ubuntu-latest
