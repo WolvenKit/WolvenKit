@@ -325,7 +325,7 @@ namespace WolvenKit.Common.DDS
                 dxgiFormat = DXGI_FORMAT.DXGI_FORMAT_UNKNOWN,
                 resourceDimension = D3D10_RESOURCE_DIMENSION.D3D10_RESOURCE_DIMENSION_UNKNOWN,
                 miscFlag = 0,
-                arraySize = header.TextureInfo.SliceCount,
+                arraySize = 1,
                 miscFlags2 = DDS_ALPHA_MODE_STRAIGHT
             };
 
@@ -356,42 +356,85 @@ namespace WolvenKit.Common.DDS
                 _ => throw new NotSupportedException()
             };
 
-            dx10Header.resourceDimension = (Enums.GpuWrapApieTextureType)header.TextureInfo.Type switch
+            var dxFormat = (DirectXTexNet.DXGI_FORMAT)(int)dx10Header.dxgiFormat;
+
+            switch ((Enums.GpuWrapApieTextureType)header.TextureInfo.Type)
             {
-                Enums.GpuWrapApieTextureType.TEXTYPE_2D => D3D10_RESOURCE_DIMENSION.D3D10_RESOURCE_DIMENSION_TEXTURE2D,
-                Enums.GpuWrapApieTextureType.TEXTYPE_3D => D3D10_RESOURCE_DIMENSION.D3D10_RESOURCE_DIMENSION_TEXTURE3D,
-                _ => throw new NotSupportedException()
-            };
+                
+                case Enums.GpuWrapApieTextureType.TEXTYPE_2D:
+                    dx10Header.resourceDimension = D3D10_RESOURCE_DIMENSION.D3D10_RESOURCE_DIMENSION_TEXTURE2D;
+                    break;
+                case Enums.GpuWrapApieTextureType.TEXTYPE_CUBE:
+                    dx10Header.arraySize = header.TextureInfo.SliceCount;
+                    dx10Header.resourceDimension = D3D10_RESOURCE_DIMENSION.D3D10_RESOURCE_DIMENSION_TEXTURE2D;
+                    break;
+                case Enums.GpuWrapApieTextureType.TEXTYPE_ARRAY:
+                    dx10Header.arraySize = header.TextureInfo.SliceCount;
+                    dx10Header.resourceDimension = D3D10_RESOURCE_DIMENSION.D3D10_RESOURCE_DIMENSION_TEXTURE2D;
+                    break;
+                case Enums.GpuWrapApieTextureType.TEXTYPE_3D:
+                    dx10Header.resourceDimension = D3D10_RESOURCE_DIMENSION.D3D10_RESOURCE_DIMENSION_TEXTURE3D;
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
 
             var bpp = (uint)TexconvNative.BitsPerPixel(dx10Header.dxgiFormat);
 
-            switch (dx10Header.dxgiFormat)
+            TexHelper.Instance.ComputePitch(dxFormat, (int)ddsHeader.dwWidth, (int)ddsHeader.dwHeight, out var row, out var slice, CP_FLAGS.NONE);
+            if (TexHelper.Instance.IsCompressed(dxFormat))
             {
-                case DXGI_FORMAT.DXGI_FORMAT_BC1_UNORM:
-                case DXGI_FORMAT.DXGI_FORMAT_BC4_UNORM:
-                    var nbw1 = Math.Max(1, (ddsHeader.dwWidth + 3) / 4);
-                    var nbh1 = Math.Max(1, (ddsHeader.dwHeight + 3) / 4);
-                    ddsHeader.dwPitchOrLinearSize = nbw1 * nbh1 * 8;
-                    ddsHeader.dwFlags |= DDSD_LINEARSIZE;
-                    // var b1 = ddsHeader.dwPitchOrLinearSize == header.MipMapInfo[1 - setup.PlatformMipBiasPC].Layout.SlicePitch;
-                    break;
-
-                case DXGI_FORMAT.DXGI_FORMAT_BC3_UNORM:
-                case DXGI_FORMAT.DXGI_FORMAT_BC5_UNORM:
-                case DXGI_FORMAT.DXGI_FORMAT_BC7_UNORM:
-                    var nbw2 = Math.Max(1, (ddsHeader.dwWidth + 3) / 4);
-                    var nbh2 = Math.Max(1, (ddsHeader.dwHeight + 3) / 4);
-                    ddsHeader.dwPitchOrLinearSize = nbw2 * nbh2 * 16;
-                    ddsHeader.dwFlags |= DDSD_LINEARSIZE;
-                    // var b2 = ddsHeader.dwPitchOrLinearSize == header.MipMapInfo[0].Layout.SlicePitch;
-                    break;
-
-                default:
-                    ddsHeader.dwPitchOrLinearSize = ((ddsHeader.dwWidth * bpp) + 7) / header.TextureInfo.DataAlignment;
-                    ddsHeader.dwFlags |= DDSD_PITCH;
-                    // var b3 = ddsHeader.dwPitchOrLinearSize == header.MipMapInfo[0].Layout.RowPitch;
-                    break;
+                ddsHeader.dwPitchOrLinearSize = (uint)slice;
+                ddsHeader.dwFlags |= DDSD_LINEARSIZE;
             }
+            else
+            {
+                ddsHeader.dwPitchOrLinearSize = (uint)row;
+                ddsHeader.dwFlags |= DDSD_PITCH;
+            }
+
+            //switch (dx10Header.dxgiFormat)
+            //{
+            //    case DXGI_FORMAT.DXGI_FORMAT_BC1_UNORM:
+            //    case DXGI_FORMAT.DXGI_FORMAT_BC4_UNORM:
+            //        var nbw1 = Math.Max(1, (ddsHeader.dwWidth + 3) / 4);
+            //        var nbh1 = Math.Max(1, (ddsHeader.dwHeight + 3) / 4);
+            //        ddsHeader.dwPitchOrLinearSize = nbw1 * nbh1 * 8;
+            //        ddsHeader.dwFlags |= DDSD_LINEARSIZE;
+            //        if (ddsHeader.dwPitchOrLinearSize != slice)
+            //        {
+            //
+            //        }
+            //
+            //        // var b1 = ddsHeader.dwPitchOrLinearSize == header.MipMapInfo[1 - setup.PlatformMipBiasPC].Layout.SlicePitch;
+            //        break;
+            //
+            //    case DXGI_FORMAT.DXGI_FORMAT_BC3_UNORM:
+            //    case DXGI_FORMAT.DXGI_FORMAT_BC5_UNORM:
+            //    case DXGI_FORMAT.DXGI_FORMAT_BC7_UNORM:
+            //        var nbw2 = Math.Max(1, (ddsHeader.dwWidth + 3) / 4);
+            //        var nbh2 = Math.Max(1, (ddsHeader.dwHeight + 3) / 4);
+            //        ddsHeader.dwPitchOrLinearSize = nbw2 * nbh2 * 16;
+            //        ddsHeader.dwFlags |= DDSD_LINEARSIZE;
+            //        if (ddsHeader.dwPitchOrLinearSize != slice)
+            //        {
+            //
+            //        }
+            //
+            //        // var b2 = ddsHeader.dwPitchOrLinearSize == header.MipMapInfo[0].Layout.SlicePitch;
+            //        break;
+            //
+            //    default:
+            //        ddsHeader.dwPitchOrLinearSize = ((ddsHeader.dwWidth * bpp) + 7) / header.TextureInfo.DataAlignment;
+            //        ddsHeader.dwFlags |= DDSD_PITCH;
+            //        if (ddsHeader.dwPitchOrLinearSize != row)
+            //        {
+            //
+            //        }
+            //
+            //        // var b3 = ddsHeader.dwPitchOrLinearSize == header.MipMapInfo[0].Layout.RowPitch;
+            //        break;
+            //}
 
             if (ddsHeader.dwMipMapCount > 0)
             {
@@ -407,11 +450,11 @@ namespace WolvenKit.Common.DDS
             {
                 ddsHeader.dwDepth = 1;
 
-                // if (IsCubemap())
-                // {
-                //     ddsHeader.dwCaps |= DDSCAPS_COMPLEX;
-                //     ddsHeader.dwCaps2 |= DDSCAPS2_CUBEMAP_ALL_FACES;
-                // }
+                if (header.TextureInfo.Type == Enums.GpuWrapApieTextureType.TEXTYPE_CUBE)
+                {
+                    ddsHeader.dwCaps |= DDSCAPS_COMPLEX;
+                    ddsHeader.dwCaps2 |= DDSCAPS2_CUBEMAP_ALL_FACES;
+                }
             }
 
             if (dx10Header.resourceDimension == D3D10_RESOURCE_DIMENSION.D3D10_RESOURCE_DIMENSION_TEXTURE3D)
