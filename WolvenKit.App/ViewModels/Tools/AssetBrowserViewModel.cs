@@ -505,137 +505,115 @@ namespace WolvenKit.ViewModels.Tools
             _progressService.IsIndeterminate = false;
         }
 
+        // Asset search impl
+
+        // Safer regexps
+        private static readonly RegexOptions RegexpOpts = RegexOptions.Compiled | RegexOptions.IgnoreCase;
+        private static readonly TimeSpan RegexpSafetyTimeout = TimeSpan.FromSeconds(60);
+
         private enum TermType
         {
             Unknown,
             Include,
             Exclude,
-            Hash,
-            Verbatim
         }
 
         private readonly record struct Term(TermType Type, string Pattern, string NegationPattern);
 
+        // Refinement types
         private interface SearchRefinement { }
         private readonly record struct PatternRefinement(Term[] Terms) : SearchRefinement;
         private readonly record struct HashRefinement(ulong Hash) : SearchRefinement;
+        private readonly record struct RegexRefinement(Regex Regex) : SearchRefinement;
+        private readonly record struct VerbatimRefinement(string Verbatim) : SearchRefinement;
+
+        // Refinement type matchers
+        private static readonly Regex RefinementSeparator = new("\\s+>\\s+", RegexpOpts, RegexpSafetyTimeout);
+        private static readonly Regex IsHashRefinement = new("^hash:(?<numbers>\\d+)$", RegexpOpts, RegexpSafetyTimeout);
+        private static readonly Regex IsRegexRefinement = new("^r:(?<pattern>.*)$", RegexpOpts, RegexpSafetyTimeout);
+        private static readonly Regex IsVerbatimRefinement = new("^@(?<verbatim>.*)$", RegexpOpts, RegexpSafetyTimeout);
 
         private readonly record struct CyberSearch(Func<IGameFile, bool> Match, SearchRefinement SourceRefinement);
 
         // Term to refinement pattern conversion regexps
 
-        private static readonly RegexOptions RegexpOpts = RegexOptions.Compiled | RegexOptions.IgnoreCase;
-        private static readonly TimeSpan RegexpSafetyTimeout = TimeSpan.FromSeconds(60);
-
-        private static readonly Regex RefinementSeparator = new("\\s+>\\s+", RegexpOpts, RegexpSafetyTimeout);
-        private static readonly Regex Hash = new("^hash:(?<num>\\d+)$", RegexpOpts, RegexpSafetyTimeout);
-        private static readonly Regex Verbatim = new("^@(?<verb>.*)$", RegexpOpts, RegexpSafetyTimeout);
-        private static readonly Regex IsRegex = new("^r:(?<pat>.*)$", RegexpOpts, RegexpSafetyTimeout);
         private static readonly Regex Whitespace = new("\\s+", RegexpOpts, RegexpSafetyTimeout);
         private static readonly Regex Or = new("\\|", RegexpOpts, RegexpSafetyTimeout);
         private static readonly Regex Negation = new("^(?'Open'\\(\\?:)*\\!(?<term>.+?)(?'Close-Open'\\))*$", RegexpOpts, RegexpSafetyTimeout);
         private static readonly Regex SquashExtraWilds = new("((\\(\\?:)?\\.\\*\\??\\)?){2,}", RegexpOpts, RegexpSafetyTimeout);
 
-        private static readonly Func<Term, Term> HonorFileExtension = (Term term) => term.Type == TermType.Verbatim ? term : term with { Pattern = Regex.Replace(term.Pattern, "(^|\\W)\\.(?<term>\\w+?)", "$1\\.${term}") };
+        private static readonly Func<Term, Term> HonorFileExtension =
+            (Term term) =>
+                term with {
+                    Pattern = Regex.Replace(term.Pattern, "(^|\\W)\\.(?<term>\\w+?)", "$1\\.${term}")
+                };
 
-        private static readonly Func<Term, Term> DropUnnecessaryGlobStars = (Term term) => term;
-
-        private static readonly Func<Term, Term> LimitOrToOneTerm = (Term term) => term.Type == TermType.Verbatim ? term : Or.IsMatch(term.Pattern) ? term with { Pattern = $"(?:{term.Pattern})" } : term;
+        private static readonly Func<Term, Term> LimitOrToOneTerm =
+            (Term term) =>
+                Or.IsMatch(term.Pattern)
+                    ? term with {
+                        Pattern = $"(?:{term.Pattern})"
+                    }
+                    : term;
 
         // Negative regexps are extremely fraught even when not synthesized,
         // so instead we simply fail on a negative match (with the corresponding
         // positive match so that we know the refinement is otherwise satisfied).
         private static readonly Func<Term, Term> AllowExcludingTerm = (Term term) =>
-        {
-            return term.Type == TermType.Verbatim
-                ? term
-                : !Negation.IsMatch(term.Pattern)
-                    ? term with { Type = TermType.Include }
-                    : term with
-                    {
-                        Type = TermType.Exclude,
-                        Pattern = Negation.Replace(term.Pattern, "(?:${term})"),
-                        NegationPattern = Negation.Replace(term.Pattern, "")
-                    };
-        };
-
-        private static readonly Func<Term, Term> IsVerbatimString = (Term term) =>
-        {
-            switch (Verbatim.Match(term.Pattern).Groups["verb"].Value)
-            {
-                case string v when !string.IsNullOrEmpty(v):
+            !Negation.IsMatch(term.Pattern)
+                ? term with { Type = TermType.Include }
+                : term with
                 {
-                    return term with { Type = TermType.Verbatim, Pattern = v };
-                }
-                default:
-                {
-                    // make regex or verbatim default?
-                    return IsRegex.Match(term.Pattern).Groups["pat"].Value switch
-                    {
-                        string p when !string.IsNullOrEmpty(p) => term with { Pattern = p },
-                        _ => term with { Type = TermType.Verbatim },
-                    };
-                }
-            }
-        };
-
-        private static readonly Func<Term, Term> FixSeparators = (Term term) =>
-        {
-            if (term.Type == TermType.Verbatim)
-            {
-                var replaced = term.Pattern.Replace(Path.AltDirectorySeparatorChar, Path.DirectorySeparatorChar);
-                return term with { Pattern = replaced };
-            }
-            else
-            {
-                return term;
-            }
-        };
+                    Type = TermType.Exclude,
+                    Pattern = Negation.Replace(term.Pattern, "(?:${term})"),
+                    NegationPattern = Negation.Replace(term.Pattern, "")
+                };
 
 
         // Pipeline
 
-        private static readonly Func<string, SearchRefinement> s_termsIntoSequentialPipeline = (string refinementString) =>
+        private static readonly Func<string, SearchRefinement> s_intoTypedRefinements = (string refinementString) =>
         {
-            return Hash.Match(refinementString).Groups["num"].Value switch
+            var hashMatch = IsHashRefinement.Match(refinementString).Groups["numbers"].Value;
+
+            if (!string.IsNullOrEmpty(hashMatch))
             {
-                "" =>
-                    new PatternRefinement
+                return new HashRefinement { Hash = ulong.Parse(hashMatch) };
+            }
+
+            var regexMatch = IsRegexRefinement.Match(refinementString).Groups["pattern"].Value;
+
+            if (!string.IsNullOrEmpty(regexMatch))
+            {
+                return new RegexRefinement { Regex = new Regex(regexMatch, RegexpOpts, RegexpSafetyTimeout) };
+            }
+
+            var verbatimMatch = IsVerbatimRefinement.Match(refinementString).Groups["verbatim"].Value;
+
+            if (!string.IsNullOrEmpty(verbatimMatch))
+            {
+                return new VerbatimRefinement
                     {
-                        Terms = Whitespace
-                        .Split(refinementString)
-                        .Select(term => new Term { Type = TermType.Unknown, Pattern = term })
-                        .ToArray(),
-                    },
-                string num =>
-                    // let it fail, caught at the top
-                    new HashRefinement { Hash = ulong.Parse(num) },
+                        Verbatim = verbatimMatch.Replace(Path.AltDirectorySeparatorChar, Path.DirectorySeparatorChar)
+                    };
+            }
+
+            return new PatternRefinement
+            {
+                Terms = Whitespace
+                    .Split(refinementString)
+                    .Select(term => new Term
+                    {
+                        Type = TermType.Unknown,
+                        Pattern = term
+                    })
+                    .Select(HonorFileExtension)
+                    .Select(LimitOrToOneTerm)
+                    .Select(AllowExcludingTerm)
+                    .ToArray()
             };
         };
 
-        private static readonly Func<SearchRefinement, SearchRefinement> s_pipelineIntoSpecificTypedRefinements = (searchRefinement) =>
-        {
-            switch (searchRefinement)
-            {
-                case PatternRefinement patternRefinement:
-                {
-                    return patternRefinement with
-                    {
-                        Terms = patternRefinement.Terms
-                               .Select(IsVerbatimString)
-                               .Select(FixSeparators)
-                               .Select(HonorFileExtension)
-                               .Select(DropUnnecessaryGlobStars)
-                               .Select(LimitOrToOneTerm)
-                               .Select(AllowExcludingTerm)
-                               .ToArray()
-                    };
-                }
-
-                default:
-                    return searchRefinement;
-            }
-        };
 
         private static readonly Func<SearchRefinement, CyberSearch> s_refinementsIntoMatchFunctions =
             (SearchRefinement searchRefinement) =>
@@ -649,46 +627,51 @@ namespace WolvenKit.ViewModels.Tools
                             SourceRefinement = hashRefinement,
                         };
 
+                    case RegexRefinement regexRefinement:
+                        return new CyberSearch
+                        {
+                            Match = (IGameFile candidate) => regexRefinement.Regex.IsMatch(candidate.Name)
+                        };
+
+                    case VerbatimRefinement verbatimRefinement:
+                        return new CyberSearch
+                        {
+                            Match = (IGameFile candidate) => candidate.Name.Contains(verbatimRefinement.Verbatim)
+                        };
+
                     case PatternRefinement patternRefinement:
-                    {
-                        var patternWithMaybeExtraWilds = $"^.*?{string.Join(".*?", patternRefinement.Terms.Select(term => term.Type == TermType.Verbatim ? Escape(term.Pattern) : term.Pattern))}.*$";
+                        var searchContainsExclusion =
+                            patternRefinement.Terms.Any(term => term.Type == TermType.Exclude);
 
-                        var pattern = SquashExtraWilds.Replace(patternWithMaybeExtraWilds, ".*?");
+                        var patternWithMaybeExtraWilds =
+                            $"^.*?{string.Join(".*?", patternRefinement.Terms.Select(term => term.Pattern))}.*$";
 
-                        if (patternRefinement.Terms.Any(term => term.Type == TermType.Exclude))
+                        var pattern =
+                            SquashExtraWilds.Replace(patternWithMaybeExtraWilds, ".*?");
+
+                        var exclusionPatternWithMaybeExtraWilds =
+                            $"^.*?{string.Join(".*?", patternRefinement.Terms.Select(term => term.NegationPattern ?? term.Pattern))}.*$";
+
+                        var patternWithoutExcludedTerms =
+                            SquashExtraWilds.Replace(exclusionPatternWithMaybeExtraWilds, ".*?");
+
+                        return new CyberSearch
                         {
-                            var exclusionPatternWithMaybeExtraWilds = $"^.*?{string.Join(".*?", patternRefinement.Terms.Select(term => term.NegationPattern ?? term.Pattern))}.*$";
+                            Match =
+                                searchContainsExclusion
+                                ? (IGameFile candidate) =>
+                                    !Regex.IsMatch(candidate.Name, pattern, RegexpOpts, RegexpSafetyTimeout) &&
+                                    Regex.IsMatch(candidate.Name, patternWithoutExcludedTerms, RegexpOpts, RegexpSafetyTimeout)
+                                : (IGameFile candidate) =>
+                                    Regex.IsMatch(candidate.Name, pattern, RegexpOpts, RegexpSafetyTimeout),
 
-                            var patternWithoutExcludedTerms = SquashExtraWilds.Replace(exclusionPatternWithMaybeExtraWilds, ".*?");
+                            SourceRefinement = patternRefinement
+                        };
 
-                            return new CyberSearch
-                            {
-                                Match = (IGameFile candidate) => !Regex.IsMatch(candidate.Name, pattern, RegexpOpts, RegexpSafetyTimeout)
-                                && Regex.IsMatch(candidate.Name, patternWithoutExcludedTerms, RegexpOpts, RegexpSafetyTimeout),
-                                SourceRefinement = patternRefinement
-                            };
-                        }
-                        else
-                        {
-                            return new CyberSearch
-                            {
-                                Match = (IGameFile candidate) => Regex.IsMatch(candidate.Name, pattern, RegexpOpts, RegexpSafetyTimeout),
-                                SourceRefinement = patternRefinement
-                            };
-                        }
-                    }
                     default:
                         throw new ArgumentException($"Unknown refinement, shouldn't ever happen. Refinement: {searchRefinement}");
                 }
             };
-
-        private static string Escape(string pattern)
-        {
-            var reg = Regex.Escape(pattern);
-
-            // kinda dumb way to turn back on simple pattern matching
-            return reg.Replace("\\*", ".*");
-        }
 
         private void CyberEnhancedSearch()
         {
@@ -708,8 +691,7 @@ namespace WolvenKit.ViewModels.Tools
             var searchAsSequentialRefinements =
                 RefinementSeparator
                     .Split(SearchBarText)
-                    .Select(s_termsIntoSequentialPipeline)
-                    .Select(s_pipelineIntoSpecificTypedRefinements)
+                    .Select(s_intoTypedRefinements)
                     .Select(s_refinementsIntoMatchFunctions)
                     .ToArray();
 
