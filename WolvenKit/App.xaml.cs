@@ -72,6 +72,7 @@ namespace WolvenKit
             //ApplicationHelper.StartProfileOptimization();
 
             loggerService.Info("Starting application");
+            loggerService.Info($"Version: {settings.GetVersionNumber()}");
             await Initializations.InitializeWebview2(loggerService);
 
             loggerService.Info("Initializing red database");
