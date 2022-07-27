@@ -529,26 +529,36 @@ namespace WolvenKit.ViewModels.Tools
 
         // Refinement type matchers
         private static readonly Regex RefinementSeparator = new("\\s+>\\s+", RegexpOpts, RegexpSafetyTimeout);
-        private static readonly Regex IsHashRefinement = new("^hash:(?<numbers>\\d+)$", RegexpOpts, RegexpSafetyTimeout);
-        private static readonly Regex IsRegexRefinement = new("^r:(?<pattern>.*)$", RegexpOpts, RegexpSafetyTimeout);
-        private static readonly Regex IsVerbatimRefinement = new("^@(?<verbatim>.*)$", RegexpOpts, RegexpSafetyTimeout);
+        private static readonly Regex IsHashRefinement = new("^h(?:ash)?:(?<numbers>\\d+)$", RegexpOpts, RegexpSafetyTimeout);
+        private static readonly Regex IsRegexRefinement = new("^r(?:egexp?)?:(?<pattern>.*)$", RegexpOpts, RegexpSafetyTimeout);
+        private static readonly Regex IsVerbatimRefinement = new("^(?:@:?|path:)(?<verbatim>.*)$", RegexpOpts, RegexpSafetyTimeout);
 
         private readonly record struct CyberSearch(Func<IGameFile, bool> Match, SearchRefinement SourceRefinement);
 
         // Term to refinement pattern conversion regexps
 
         private static readonly Regex Whitespace = new("\\s+", RegexpOpts, RegexpSafetyTimeout);
+        private static readonly Regex PathSeparator = new ("(^|\\G|\\w)(?:\\\\|/)(\\w+|$)", RegexpOpts, RegexpSafetyTimeout);
+        private static readonly string PathNormalized = "$1\\\\$2";
+        private static readonly Regex ExtensionDot = new("(^|\\G|\\||\\w)\\.(?<term>\\w+?)", RegexpOpts, RegexpSafetyTimeout);
+        private static readonly string ExtensionDotEscaped = "$1\\.${term}";
         private static readonly Regex Or = new("\\|", RegexpOpts, RegexpSafetyTimeout);
         private static readonly Regex Negation = new("^(?'Open'\\(\\?:)*\\!(?<term>.+?)(?'Close-Open'\\))*$", RegexpOpts, RegexpSafetyTimeout);
         private static readonly Regex SquashExtraWilds = new("((\\(\\?:)?\\.\\*\\??\\)?){2,}", RegexpOpts, RegexpSafetyTimeout);
 
-        private static readonly Func<Term, Term> HonorFileExtension =
+        private static readonly Func<Term, Term> NormalizePathSeparators =
             (Term term) =>
                 term with {
-                    Pattern = Regex.Replace(term.Pattern, "(^|\\W)\\.(?<term>\\w+?)", "$1\\.${term}")
+                    Pattern = PathSeparator.Replace(term.Pattern, PathNormalized)
                 };
 
-        private static readonly Func<Term, Term> LimitOrToOneTerm =
+        private static readonly Func<Term, Term> PreserveExtensionDotMatch =
+            (Term term) =>
+                term with {
+                    Pattern = ExtensionDot.Replace(term.Pattern, ExtensionDotEscaped)
+                };
+
+        private static readonly Func<Term, Term> LimitOrToOneTermOnly =
             (Term term) =>
                 Or.IsMatch(term.Pattern)
                     ? term with {
@@ -607,8 +617,9 @@ namespace WolvenKit.ViewModels.Tools
                         Type = TermType.Unknown,
                         Pattern = term
                     })
-                    .Select(HonorFileExtension)
-                    .Select(LimitOrToOneTerm)
+                    .Select(NormalizePathSeparators)
+                    .Select(PreserveExtensionDotMatch)
+                    .Select(LimitOrToOneTermOnly)
                     .Select(AllowExcludingTerm)
                     .ToArray()
             };
