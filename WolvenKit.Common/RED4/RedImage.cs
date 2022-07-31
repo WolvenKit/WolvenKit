@@ -2,6 +2,7 @@ using System;
 using System.IO;
 using System.Runtime.InteropServices;
 using DirectXTexNet;
+using SharpDX.Direct3D;
 using WolvenKit.Common.DDS;
 using WolvenKit.RED4.Archive.CR2W;
 using WolvenKit.RED4.Types;
@@ -14,6 +15,8 @@ namespace WolvenKit.RED4.CR2W;
 
 public class RedImage : IDisposable
 {
+    private static SharpDX.Direct3D11.Device s_device = null;
+
     private ScratchImage _scratchImage;
 
     private DXGI_FORMAT? _compressionFormat;
@@ -27,6 +30,15 @@ public class RedImage : IDisposable
 
     public TexMetadata Metadata => _scratchImage.GetMetadata();
 
+    private static IntPtr GetDevicePtr()
+    {
+        if (s_device == null)
+        {
+            s_device = new SharpDX.Direct3D11.Device(DriverType.Hardware);
+        }
+
+        return s_device.NativePointer;
+    }
 
     public void SaveToDDS(string szFile) =>
         _scratchImage.SaveToDDSFile(DDS_FLAGS.NONE, szFile);
@@ -63,7 +75,7 @@ public class RedImage : IDisposable
         if (_compressionFormat != null && !TexHelper.Instance.IsCompressed(Metadata.Format))
         {
             tmpImage = true;
-            img = _scratchImage.Compress((DXGI_FORMAT)_compressionFormat, TEX_COMPRESS_FLAGS.DEFAULT, 0.5F);
+            img = _scratchImage.Compress(GetDevicePtr(), (DXGI_FORMAT)_compressionFormat, TEX_COMPRESS_FLAGS.DEFAULT, 1.0F);
         }
         else
         {
