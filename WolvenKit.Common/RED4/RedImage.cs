@@ -23,9 +23,6 @@ public class RedImage : IDisposable
 
     private bool _disposed = false;
 
-    private STextureGroupSetup _debugSetup;
-    private rendRenderTextureBlobPC _debugBlob;
-
     private RedImage(){}
 
     public TexMetadata Metadata => _scratchImage.GetMetadata();
@@ -40,10 +37,17 @@ public class RedImage : IDisposable
         }
     }
 
+    public Enums.GpuWrapApieTextureGroup Group { get; set; }
+    public bool IsStreamable { get; set; }
     public bool GenerateMipMaps { get; set; }
+    public byte PlatformMipBiasPC { get; set; }
+    public bool AllowTextureDowngrade { get; set; }
+
+    public uint Flags { get; set; } = 1;
+    public uint Version { get; set; } = 2;
 
     public void SaveToDDS(string szFile) =>
-        _scratchImage.SaveToDDSFile(DDS_FLAGS.NONE, szFile);
+        _scratchImage.SaveToDDSFile(DDS_FLAGS.FORCE_DX10_EXT, szFile);
 
     public void SaveToJPEG(string szFile) =>
         _scratchImage.SaveToWICFile(0, WIC_FLAGS.NONE, TexHelper.Instance.GetWICCodec(WICCodecs.JPEG), szFile);
@@ -67,9 +71,48 @@ public class RedImage : IDisposable
         return buffer;
     }
 
-    public void SaveToXBM()
+    public CBitmapTexture SaveToXBM()
     {
-        var root = new CBitmapTexture();
+        var (setup, blob) = GetSetupAndBlob();
+
+        return new CBitmapTexture
+        {
+            CookingPlatform = Enums.ECookingPlatform.PLATFORM_PC,
+            Width = (uint)blob.Header.SizeInfo.Width,
+            Height = (uint)blob.Header.SizeInfo.Height,
+            Depth = (uint)blob.Header.SizeInfo.Depth,
+            RenderTextureResource = { RenderResourceBlobPC = new CHandle<IRenderResourceBlob>(blob) },
+            Setup = setup
+        };
+    }
+
+    public CTextureArray SaveToTexArray()
+    {
+        var (setup, blob) = GetSetupAndBlob();
+
+        return new CTextureArray
+        {
+            CookingPlatform = Enums.ECookingPlatform.PLATFORM_PC,
+            RenderTextureResource = { RenderResourceBlobPC = new CHandle<IRenderResourceBlob>(blob) },
+            Setup = setup
+        };
+    }
+
+    public CCubeTexture SaveToCubeMap()
+    {
+        var (setup, blob) = GetSetupAndBlob();
+
+        return new CCubeTexture()
+        {
+            CookingPlatform = Enums.ECookingPlatform.PLATFORM_PC,
+            RenderTextureResource = { RenderResourceBlobPC = new CHandle<IRenderResourceBlob>(blob) },
+            Setup = setup
+        };
+    }
+
+    private (STextureGroupSetup, rendRenderTextureBlobPC) GetSetupAndBlob()
+    {
+        var setup = new STextureGroupSetup();
         var blob = new rendRenderTextureBlobPC();
 
         var tmpImage = false;
@@ -115,27 +158,34 @@ public class RedImage : IDisposable
             metadata = img.GetMetadata();
         }
 
+
+
         #region STextureGroupSetup
 
-        root.Setup.HasMipchain = metadata.MipLevels > 1;
+        setup.HasMipchain = metadata.MipLevels > 1;
 
         var (rawFormat, isGamma1) = CommonFunctions.GetRedTextureFromDXGI(Metadata.Format);
-        root.Setup.RawFormat = rawFormat;
-        root.Setup.IsGamma = isGamma1;
+        setup.RawFormat = rawFormat;
+        setup.IsGamma = isGamma1;
 
         if (_compressionFormat != null)
         {
             var (compression, isGamma2) = CommonFunctions.GetRedCompressionFromDXGI((DXGI_FORMAT)_compressionFormat);
-            root.Setup.Compression = compression;
-            root.Setup.IsGamma = isGamma2;
+            setup.Compression = compression;
+            setup.IsGamma = isGamma2;
         }
+
+        setup.Group = Group;
+        setup.IsStreamable = IsStreamable;
+        setup.PlatformMipBiasPC = PlatformMipBiasPC;
+        setup.AllowTextureDowngrade = AllowTextureDowngrade;
 
         #endregion STextureGroupSetup
 
         #region rendRenderTextureBlobPC
 
-        blob.Header.Flags = 1; // always 1?
-        blob.Header.Version = 2; // need to check, 1 or 2
+        blob.Header.Flags = Flags; // always 1?
+        blob.Header.Version = Version; // need to check, 1 or 2
 
         blob.Header.SizeInfo.Width = (CUInt16)metadata.Width;
         blob.Header.SizeInfo.Height = (CUInt16)metadata.Height;
@@ -197,7 +247,7 @@ public class RedImage : IDisposable
 
         #endregion rendRenderTextureBlobPC
 
-        using var ms = img.SaveToDDSMemory(DDS_FLAGS.NONE);
+        using var ms = img.SaveToDDSMemory(DDS_FLAGS.FORCE_DX10_EXT);
 
         var buffer = new byte[ms.Length];
         var readBytes = ms.Read(buffer, 0, buffer.Length);
@@ -209,12 +259,13 @@ public class RedImage : IDisposable
         }
 
         blob.TextureData = new SerializationDeferredDataBuffer(buffer[148..]);
-        
 
         if (tmpImage)
         {
             img.Dispose();
         }
+
+        return (setup, blob);
     }
 
     public static RedImage FromRedFile(CR2WFile cr2wFile)
@@ -247,6 +298,11 @@ public class RedImage : IDisposable
         if (cls is CCubeTexture cCubeTexture)
         {
             return FromCubeMap(cCubeTexture);
+        }
+
+        if (cls is CReflectionProbeDataResource cReflectionProbeDataResource)
+        {
+            return FromEnvProbe(cReflectionProbeDataResource);
         }
 
         throw new NotSupportedException();
@@ -292,19 +348,7 @@ public class RedImage : IDisposable
             throw new ArgumentException(nameof(reflectionProbeDataResource));
         }
 
-        throw new NotImplementedException();
-        // return Create(setup, blob);
-    }
-
-    public static RedImage FromMesh(CMesh cMesh)
-    {
-        if (cMesh.RenderResourceBlob.Chunk is not rendRenderTextureBlobPC blob)
-        {
-            throw new ArgumentException(nameof(cMesh));
-        }
-
-        throw new NotImplementedException();
-        // return Create(setup, blob);
+        return Create(new STextureGroupSetup(), blob);
     }
 
     private static unsafe RedImage Create(STextureGroupSetup setup, rendRenderTextureBlobPC blob)
@@ -341,8 +385,13 @@ public class RedImage : IDisposable
         
         result._scratchImage = result._scratchImage.FlipRotate(TEX_FR_FLAGS.FLIP_VERTICAL);
 
-        result._debugSetup = setup;
-        result._debugBlob = blob;
+        result.Group = setup.Group;
+        result.IsStreamable = setup.IsStreamable;
+        result.PlatformMipBiasPC = setup.PlatformMipBiasPC;
+        result.AllowTextureDowngrade = setup.AllowTextureDowngrade;
+
+        result.Flags = blob.Header.Flags;
+        result.Version = blob.Header.Version;
 
         return result;
     }
