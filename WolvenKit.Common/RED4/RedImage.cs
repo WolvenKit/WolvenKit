@@ -30,15 +30,17 @@ public class RedImage : IDisposable
 
     public TexMetadata Metadata => _scratchImage.GetMetadata();
 
-    private static IntPtr GetDevicePtr()
+    static RedImage()
     {
-        if (s_device == null)
+        s_device = new SharpDX.Direct3D11.Device(DriverType.Hardware);
+        if (s_device.FeatureLevel < FeatureLevel.Level_10_0)
         {
-            s_device = new SharpDX.Direct3D11.Device(DriverType.Hardware);
+            s_device.Dispose();
+            s_device = null;
         }
-
-        return s_device.NativePointer;
     }
+
+    public bool GenerateMipMaps { get; set; }
 
     public void SaveToDDS(string szFile) =>
         _scratchImage.SaveToDDSFile(DDS_FLAGS.NONE, szFile);
@@ -71,18 +73,47 @@ public class RedImage : IDisposable
         var blob = new rendRenderTextureBlobPC();
 
         var tmpImage = false;
-        ScratchImage img;
-        if (_compressionFormat != null && !TexHelper.Instance.IsCompressed(Metadata.Format))
+        var img = _scratchImage;
+        var metadata = img.GetMetadata();
+
+        if (GenerateMipMaps)
         {
             tmpImage = true;
-            img = _scratchImage.Compress(GetDevicePtr(), (DXGI_FORMAT)_compressionFormat, TEX_COMPRESS_FLAGS.DEFAULT, 1.0F);
-        }
-        else
-        {
-            img = _scratchImage;
+
+            if (Metadata.Dimension == TEX_DIMENSION.TEXTURE3D)
+            {
+                img = img.GenerateMipMaps3D(TEX_FILTER_FLAGS.DEFAULT, 0);
+            }
+            else
+            {
+                img = img.GenerateMipMaps(TEX_FILTER_FLAGS.DEFAULT, 0);
+            }
+
+            metadata = img.GetMetadata();
         }
 
-        var metadata = img.GetMetadata();
+        if (_compressionFormat is { } compFmt && !TexHelper.Instance.IsCompressed(metadata.Format))
+        {
+            tmpImage = true;
+
+            if (compFmt is DXGI_FORMAT.BC6H_UF16 or DXGI_FORMAT.BC6H_SF16 or DXGI_FORMAT.BC7_UNORM or DXGI_FORMAT.BC7_UNORM_SRGB)
+            {
+                if (s_device != null)
+                {
+                    img = img.Compress(s_device.NativePointer, compFmt, TEX_COMPRESS_FLAGS.DEFAULT, 1.0F);
+                }
+                else
+                {
+                    img = img.Compress(compFmt, TEX_COMPRESS_FLAGS.PARALLEL, 0.5F);
+                }
+            }
+            else
+            {
+                img = img.Compress(compFmt, TEX_COMPRESS_FLAGS.PARALLEL, 0.5F);
+            }
+
+            metadata = img.GetMetadata();
+        }
 
         #region STextureGroupSetup
 
@@ -129,15 +160,10 @@ public class RedImage : IDisposable
                 throw new ArgumentOutOfRangeException();
         }
 
+        blob.Header.TextureInfo.TextureDataSize = (CUInt32)img.GetPixelsSize();
         blob.Header.TextureInfo.SliceCount = (CUInt16)metadata.ArraySize;
 
-        if (blob.Header.TextureInfo.SliceCount > 1 && blob.Header.TextureInfo.MipCount > 1)
-        {
-
-        }
-
         uint mipMapOffset = 0;
-        uint sliceSize = 0;
         for (var i = 0; i < metadata.ArraySize; i++)
         {
             for (var j = 0; j < metadata.MipLevels; j++)
@@ -146,6 +172,7 @@ public class RedImage : IDisposable
                 
                 if (i == 0)
                 {
+                    // TODO: Some mipMaps have a different SlicePitch in the original xbm
                     var mipMapInfo = new rendRenderTextureBlobMipMapInfo
                     {
                         Layout =
@@ -155,7 +182,7 @@ public class RedImage : IDisposable
                         },
                         Placement = {
                             Offset = mipMapOffset,
-                            Size = (uint)(tmpImg.Width * tmpImg.Height) // need to check
+                            Size = (CUInt32)(tmpImg.SlicePitch * metadata.Depth)
                         }
                     };
 
@@ -163,39 +190,26 @@ public class RedImage : IDisposable
 
                     mipMapOffset += mipMapInfo.Placement.Size;
                 }
-
-                sliceSize += (uint)(tmpImg.Width * tmpImg.Height);
             }
         }
 
         blob.Header.TextureInfo.SliceSize = blob.Header.MipMapInfo[^1].Placement.Offset + blob.Header.MipMapInfo[^1].Placement.Size;
-        blob.Header.TextureInfo.TextureDataSize = sliceSize;
-
-        if (blob.Header.TextureInfo.MipCount > 1)
-        {
-            blob.Header.TextureInfo.SliceSize += 27;
-        }
-
-        if (blob.Header.TextureInfo.SliceCount > 1)
-        {
-            blob.Header.TextureInfo.TextureDataSize += 162;
-        }
-
-        var m1 = _debugBlob.Header.TextureInfo.SliceSize == blob.Header.TextureInfo.SliceSize;
-        var m2 = _debugBlob.Header.TextureInfo.TextureDataSize == blob.Header.TextureInfo.TextureDataSize;
-
-        if (!m1 || !m2)
-        {
-
-        }
-        else
-        {
-            
-        }
-
-        
 
         #endregion rendRenderTextureBlobPC
+
+        using var ms = img.SaveToDDSMemory(DDS_FLAGS.NONE);
+
+        var buffer = new byte[ms.Length];
+        var readBytes = ms.Read(buffer, 0, buffer.Length);
+        ms.Dispose();
+
+        if (readBytes != buffer.Length)
+        {
+            throw new Exception();
+        }
+
+        blob.TextureData = new SerializationDeferredDataBuffer(buffer[148..]);
+        
 
         if (tmpImage)
         {
@@ -317,6 +331,14 @@ public class RedImage : IDisposable
             result._scratchImage = result._scratchImage.Decompress(textureFormat);
         }
 
+        if (result.Metadata.MipLevels > 1)
+        {
+            result.GenerateMipMaps = true;
+
+            result._scratchImage = result._scratchImage.CreateCopyWithEmptyMipMaps(1, result.Metadata.Format, CP_FLAGS.NONE, false);
+        }
+
+        
         result._scratchImage = result._scratchImage.FlipRotate(TEX_FR_FLAGS.FLIP_VERTICAL);
 
         result._debugSetup = setup;
