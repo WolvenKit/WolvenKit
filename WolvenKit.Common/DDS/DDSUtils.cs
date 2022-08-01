@@ -379,8 +379,6 @@ namespace WolvenKit.Common.DDS
                     throw new ArgumentOutOfRangeException();
             }
 
-            var bpp = (uint)TexconvNative.BitsPerPixel(dx10Header.dxgiFormat);
-
             TexHelper.Instance.ComputePitch(dxFormat, (int)ddsHeader.dwWidth, (int)ddsHeader.dwHeight, out var row, out var slice, CP_FLAGS.NONE);
             if (TexHelper.Instance.IsCompressed(dxFormat))
             {

@@ -5,6 +5,8 @@ using System.Runtime.InteropServices;
 using DirectXTexNet;
 using WolvenKit.Common.Extensions;
 using WolvenKit.Common.Model.Arguments;
+using WolvenKit.RED4.CR2W;
+using WolvenKit.RED4.Types;
 
 namespace WolvenKit.Common.DDS
 {
@@ -140,6 +142,7 @@ namespace WolvenKit.Common.DDS
                 throw new NotImplementedException();
             }
 
+            RedImage image = null;
             byte[] rentedBuffer = null;
             try
             {
@@ -161,71 +164,33 @@ namespace WolvenKit.Common.DDS
                 var extension = filetype.ToString().ToLower();
                 var newpath = Path.Combine(outDir, $"{fileName}.{extension}");
 
-                var image = TexHelper.Instance.LoadFromDDSMemory(rentedBuffer, DDS_FLAGS.NONE, out var metadata);
-                if (TexHelper.Instance.IsCompressed(metadata.Format))
-                {
-                    image = image.Decompress((DirectXTexNet.DXGI_FORMAT)decompressedFormat);
-                    metadata = image.GetMetadata();
-                }
+                image = RedImage.FromDDSBuffer(rentedBuffer, Enums.ETextureRawFormat.TRF_HDRFloat); // forcing best?
 
-                var flip = TEX_FR_FLAGS.ROTATE0;
-                if (vflip)
-                {
-                    flip |= TEX_FR_FLAGS.FLIP_VERTICAL;
-                }
-
-                if (hflip)
-                {
-                    flip |= TEX_FR_FLAGS.FLIP_HORIZONTAL;
-                }
-
-                if (flip != 0)
-                {
-                    image = image.FlipRotate(flip);
-                }
-
-                UnmanagedMemoryStream outStream;
                 switch (filetype)
                 {
                     case TexconvNative.ESaveFileTypes.BMP:
-                        outStream = image.SaveToWICMemory(0, WIC_FLAGS.NONE, TexHelper.Instance.GetWICCodec(WICCodecs.BMP));
+                        image.SaveToBMP(newpath);
                         break;
                     case TexconvNative.ESaveFileTypes.PNG:
-                        outStream = image.SaveToWICMemory(0, WIC_FLAGS.NONE, TexHelper.Instance.GetWICCodec(WICCodecs.PNG));
+                        image.SaveToPNG(newpath);
                         break;
                     case TexconvNative.ESaveFileTypes.TGA:
-                        if (TexHelper.Instance.IsSRGB(metadata.Format))
-                        {
-                            if (metadata.Format != DirectXTexNet.DXGI_FORMAT.R8G8B8A8_UNORM_SRGB)
-                            {
-                                image = image.Convert(DirectXTexNet.DXGI_FORMAT.R8G8B8A8_UNORM_SRGB, TEX_FILTER_FLAGS.DEFAULT, 0.5F);
-                            }
-                        }
-                        else
-                        {
-                            if (metadata.Format != DirectXTexNet.DXGI_FORMAT.R8G8B8A8_UNORM)
-                            {
-                                image = image.Convert(DirectXTexNet.DXGI_FORMAT.R8G8B8A8_UNORM, TEX_FILTER_FLAGS.DEFAULT, 0.5F);
-                            }
-                        }
-                        outStream = image.SaveToTGAMemory(0);
+                        image.SaveToTGA(newpath);
                         break;
                     case TexconvNative.ESaveFileTypes.TIFF:
-                        outStream = image.SaveToWICMemory(0, WIC_FLAGS.NONE, TexHelper.Instance.GetWICCodec(WICCodecs.TIFF));
+                        image.SaveToTIFF(newpath);
+                        break;
+                    case TexconvNative.ESaveFileTypes.JPEG:
+                        image.SaveToJPEG(newpath);
                         break;
                     default:
                         throw new ArgumentOutOfRangeException(nameof(filetype), filetype, null);
                 }
-
-                image.Dispose();
-
-                //TexconvNative.ConvertAndSaveDdsImage(rentedBuffer, newpath, filetype, vflip, hflip);
-                var outBuffer = new byte[outStream.Length];
-                outStream.Read(outBuffer, 0, outBuffer.Length);
-                File.WriteAllBytes(newpath, outBuffer);
             }
             finally
             {
+                image?.Dispose();
+
                 if (rentedBuffer is object)
                 {
                     ArrayPool<byte>.Shared.Return(rentedBuffer);
@@ -250,6 +215,7 @@ namespace WolvenKit.Common.DDS
                 throw new NotSupportedException("texture to convert from dds must not be dds iteslf");
             }
 
+            RedImage image = null;
             byte[] rentedBuffer = null;
             try
             {
@@ -265,77 +231,30 @@ namespace WolvenKit.Common.DDS
                     offset += readBytes;
                 }
 
+                image = RedImage.FromDDSBuffer(rentedBuffer);
+
                 var filetype = ToSaveFormat(textureType);
 
-                var image = TexHelper.Instance.LoadFromDDSMemory(rentedBuffer, DDS_FLAGS.NONE, out var metadata);
-                if (TexHelper.Instance.IsCompressed(metadata.Format))
-                {
-                    image = image.Decompress(DirectXTexNet.DXGI_FORMAT.UNKNOWN);
-                    metadata = image.GetMetadata();
-                }
-
-                var flip = TEX_FR_FLAGS.ROTATE0;
-                if (vflip)
-                {
-                    flip |= TEX_FR_FLAGS.FLIP_VERTICAL;
-                }
-
-                if (hflip)
-                {
-                    flip |= TEX_FR_FLAGS.FLIP_HORIZONTAL;
-                }
-
-                if (flip != 0)
-                {
-                    image = image.FlipRotate(flip);
-                }
-
-                UnmanagedMemoryStream outStream;
                 switch (filetype)
                 {
                     case TexconvNative.ESaveFileTypes.BMP:
-                        outStream = image.SaveToWICMemory(0, WIC_FLAGS.NONE, TexHelper.Instance.GetWICCodec(WICCodecs.BMP));
-                        break;
+                        return image.SaveToBMPMemory();
                     case TexconvNative.ESaveFileTypes.PNG:
-                        outStream = image.SaveToWICMemory(0, WIC_FLAGS.NONE, TexHelper.Instance.GetWICCodec(WICCodecs.PNG));
-                        break;
+                        return image.SaveToPNGMemory();
                     case TexconvNative.ESaveFileTypes.TGA:
-                        if (TexHelper.Instance.IsSRGB(metadata.Format))
-                        {
-                            if (metadata.Format != DirectXTexNet.DXGI_FORMAT.R8G8B8A8_UNORM_SRGB)
-                            {
-                                image = image.Convert(DirectXTexNet.DXGI_FORMAT.R8G8B8A8_UNORM_SRGB, TEX_FILTER_FLAGS.DEFAULT, 0.5F);
-                            }
-                        }
-                        else
-                        {
-                            if (metadata.Format != DirectXTexNet.DXGI_FORMAT.R8G8B8A8_UNORM)
-                            {
-                                image = image.Convert(DirectXTexNet.DXGI_FORMAT.R8G8B8A8_UNORM, TEX_FILTER_FLAGS.DEFAULT, 0.5F);
-                            }
-                        }
-                        outStream = image.SaveToTGAMemory(0);
-                        break;
+                        return image.SaveToTGAMemory();
                     case TexconvNative.ESaveFileTypes.TIFF:
-                        outStream = image.SaveToWICMemory(0, WIC_FLAGS.NONE, TexHelper.Instance.GetWICCodec(WICCodecs.TIFF));
-                        break;
+                        return image.SaveToTIFFMemory();
                     case TexconvNative.ESaveFileTypes.JPEG:
-                        outStream = image.SaveToWICMemory(0, WIC_FLAGS.NONE, TexHelper.Instance.GetWICCodec(WICCodecs.JPEG));
-                        break;
+                        return image.SaveToJPEGMemory();
                     default:
                         throw new ArgumentOutOfRangeException(nameof(filetype), filetype, null);
                 }
-
-                image.Dispose();
-
-                //TexconvNative.ConvertAndSaveDdsImage(rentedBuffer, newpath, filetype, vflip, hflip);
-                var outBuffer = new byte[outStream.Length];
-                outStream.Read(outBuffer, 0, outBuffer.Length);
-
-                return outBuffer;
             }
             finally
             {
+                image?.Dispose();
+
                 if (rentedBuffer is object)
                 {
                     ArrayPool<byte>.Shared.Return(rentedBuffer);
@@ -358,6 +277,7 @@ namespace WolvenKit.Common.DDS
                 throw new NotSupportedException("texture to convert to dds must not be dds iteslf");
             }
 
+            RedImage image = null;
             byte[] rentedBuffer = null;
             try
             {
@@ -373,65 +293,29 @@ namespace WolvenKit.Common.DDS
                     offset += readBytes;
                 }
 
-                var format = outFormat ?? DXGI_FORMAT.DXGI_FORMAT_UNKNOWN;
-
                 var fileType = ToSaveFormat(inExtension);
 
-                ScratchImage image;
                 switch (fileType)
                 {
                     case TexconvNative.ESaveFileTypes.BMP:
-                        image = TexHelper.Instance.LoadFromWICMemory(rentedBuffer, WIC_FLAGS.NONE);
-                        break;
                     case TexconvNative.ESaveFileTypes.JPEG:
-                        image = TexHelper.Instance.LoadFromWICMemory(rentedBuffer, WIC_FLAGS.NONE);
-                        break;
                     case TexconvNative.ESaveFileTypes.PNG:
-                        image = TexHelper.Instance.LoadFromWICMemory(rentedBuffer, WIC_FLAGS.NONE);
+                    case TexconvNative.ESaveFileTypes.TIFF:
+                        image = RedImage.FromWICBuffer(rentedBuffer);
                         break;
                     case TexconvNative.ESaveFileTypes.TGA:
-                        image = TexHelper.Instance.LoadFromTGAMemory(rentedBuffer);
-                        break;
-                    case TexconvNative.ESaveFileTypes.TIFF:
-                        image = TexHelper.Instance.LoadFromWICMemory(rentedBuffer, WIC_FLAGS.NONE);
+                        image = RedImage.FromTGABuffer(rentedBuffer);
                         break;
                     default:
                         throw new ArgumentOutOfRangeException();
                 }
-
-                var flip = TEX_FR_FLAGS.ROTATE0;
-                if (vflip)
-                {
-                    flip |= TEX_FR_FLAGS.FLIP_VERTICAL;
-                }
-
-                if (hflip)
-                {
-                    flip |= TEX_FR_FLAGS.FLIP_HORIZONTAL;
-                }
-
-                if (flip != 0)
-                {
-                    image = image.FlipRotate(flip);
-                }
-
-                var metadata = image.GetMetadata();
-                if (metadata.Format != (DirectXTexNet.DXGI_FORMAT)format)
-                {
-                    image = image.Convert((DirectXTexNet.DXGI_FORMAT)format, TEX_FILTER_FLAGS.DEFAULT, 0.5F);
-                }
-
-                var outStream = image.SaveToDDSMemory(DDS_FLAGS.NONE);
-
-                image.Dispose();
-
-                var outBuffer = new byte[outStream.Length];
-                outStream.Read(outBuffer, 0, outBuffer.Length);
-
-                return outBuffer;
+                
+                return image.SaveToDDSMemory();
             }
             finally
             {
+                image?.Dispose();
+
                 if (rentedBuffer is object)
                 {
                     ArrayPool<byte>.Shared.Return(rentedBuffer);

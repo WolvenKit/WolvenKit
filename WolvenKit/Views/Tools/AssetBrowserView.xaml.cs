@@ -5,6 +5,7 @@ using System.Linq;
 using System.Reactive.Disposables;
 using System.Text.RegularExpressions;
 using System.Windows;
+using System.Windows.Media.Imaging;
 using DynamicData;
 using HandyControl.Data;
 using ReactiveUI;
@@ -20,6 +21,7 @@ using WolvenKit.Functionality.Commands;
 using WolvenKit.Functionality.Helpers;
 using WolvenKit.Functionality.Other;
 using WolvenKit.Functionality.Services;
+using WolvenKit.RED4.CR2W;
 using WolvenKit.ViewModels.Tools;
 
 namespace WolvenKit.Views.Tools
@@ -204,26 +206,17 @@ namespace WolvenKit.Views.Tools
             await using var cr2wstream = new MemoryStream();
             selectedGameFile.Extract(cr2wstream);
 
-            // convert xbm to dds stream
-            await using var ddsstream = new MemoryStream();
-            var expargs = new XbmExportArgs { Flip = false, UncookExtension = EUncookExtension.tga };
-            if (man != null)
+            var parser = Locator.Current.GetService<Red4ParserService>();
+            if (parser != null && parser.TryReadRed4File(cr2wstream, out var cr2w))
             {
-                man.ConvertXbmToDdsStream(cr2wstream, ddsstream, out _, out _);
-            }
+                var img = RedImage.FromRedFile(cr2w);
 
-            // try loading it in pfim
-            try
-            {
-                var qa = await ImageDecoder.RenderToBitmapSourceDds(ddsstream);
-                if (qa != null)
-                {
-                    propertiesViewModel.LoadImage(qa);
-                }
-            }
-            catch (Exception)
-            {
-                // ignored
+                var bitmapImage = new BitmapImage();
+                bitmapImage.BeginInit();
+                bitmapImage.StreamSource = new MemoryStream(img.SaveToPNGMemory());
+                bitmapImage.EndInit();
+
+                propertiesViewModel.LoadImage(bitmapImage);
             }
         }
 
@@ -316,7 +309,7 @@ namespace WolvenKit.Views.Tools
 
             var propertiesViewModel = Locator.Current.GetService<PropertiesViewModel>();
 
-            _ = propertiesViewModel.ExecuteSelectFile(vm.RightSelectedItem);
+            propertiesViewModel.ExecuteSelectFile(vm.RightSelectedItem);
 
             /*
 

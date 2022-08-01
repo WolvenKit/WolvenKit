@@ -146,7 +146,7 @@ namespace WolvenKit.ViewModels.Tools
         /// </summary>
         /// <param name="model"></param>
         /// <returns></returns>
-        public async Task ExecuteSelectFile(IFileSystemViewModel model)
+        public void ExecuteSelectFile(IFileSystemViewModel model)
         {
             if (model == null)
             {
@@ -196,7 +196,7 @@ namespace WolvenKit.ViewModels.Tools
                 }
                 if (cr2w != null)
                 {
-                    await PreviewCr2wFile(cr2w);
+                    PreviewCr2wFile(cr2w);
                 }
             }
         }
@@ -254,7 +254,7 @@ namespace WolvenKit.ViewModels.Tools
                 }
                 if (cr2w != null)
                 {
-                    await PreviewCr2wFile(cr2w);
+                    PreviewCr2wFile(cr2w);
                 }
             }
         }
@@ -324,7 +324,7 @@ namespace WolvenKit.ViewModels.Tools
             }
         }
 
-        private async Task PreviewCr2wFile(CR2WFile cr2w)
+        private void PreviewCr2wFile(CR2WFile cr2w)
         {
             //if (string.Equals(extension, ERedExtension.bk2.ToString(),
             //   System.StringComparison.OrdinalIgnoreCase))
@@ -342,37 +342,35 @@ namespace WolvenKit.ViewModels.Tools
                 cbt.RenderTextureResource.RenderResourceBlobPC != null &&
                 cbt.RenderTextureResource.RenderResourceBlobPC.GetValue() is rendRenderTextureBlobPC)
             {
-                await SetupImage(cbt);
+                SetupImage(cbt);
             }
 
             if (cr2w.RootChunk is CMesh cm && cm.RenderResourceBlob != null &&
                 cm.RenderResourceBlob.GetValue() is rendRenderTextureBlobPC)
             {
-                await SetupImage(cm);
+                SetupImage(cm);
             }
 
             if (cr2w.RootChunk is CReflectionProbeDataResource crpdr &&
                 crpdr.TextureData.RenderResourceBlobPC.GetValue() is rendRenderTextureBlobPC)
             {
-                await SetupImage(crpdr);
+                SetupImage(crpdr);
             }
         }
 
-        public async Task SetupImage(RedBaseClass cls)
+        public void SetupImage(RedBaseClass cls)
         {
-            using var ddsstream = new MemoryStream();
-            try
-            {
-                if (ModTools.ConvertRedClassToDdsStream(cls, ddsstream, out _, out _))
-                {
-                    await LoadImageFromStream(ddsstream);
-                }
-            }
-            catch (Exception e)
-            {
-                _loggerService.Error(e);
-                //throw;
-            }
+            var image = RedImage.FromRedClass(cls);
+
+            var bitmapImage = new BitmapImage();
+            bitmapImage.BeginInit();
+            bitmapImage.StreamSource = new MemoryStream(image.SaveToPNGMemory());
+            bitmapImage.EndInit();
+
+            LoadedBitmapFrame = bitmapImage;
+
+            IsImagePreviewVisible = true;
+            SelectedIndex = 3;
         }
 
         public async Task LoadImageFromStream(Stream stream)
