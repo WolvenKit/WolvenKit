@@ -47,7 +47,6 @@
     <None Remove="lib\vgmstream\xmp-vgmstream.dll" />
     <None Remove="Resources\missinghashes.txt" />
     <None Remove="Resources\noderefs.kark" />
-    <None Remove="Resources\red.kark" />
     <None Remove="Resources\tweakdbstr.kark" />
     <None Remove="Resources\tweakdbstr_add.kark" />
     <None Remove="Resources\unusedhashes.kark" />
@@ -102,9 +101,6 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="lib\vgmstream\xmp-vgmstream.dll">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Resources\red.kark">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>

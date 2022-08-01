@@ -3,6 +3,7 @@ using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Reactive;
+using System.Reactive.Joins;
 using System.Reactive.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -68,6 +69,7 @@ namespace WolvenKit.ViewModels.Tools
         private readonly IProgressService<double> _progressService;
 
         private readonly ILoggerService _loggerService;
+        private readonly IPluginService _pluginService;
 
         private readonly ReadOnlyObservableCollection<RedFileSystemModel> _boundRootNodes;
         private bool _manuallyLoading = false;
@@ -84,7 +86,9 @@ namespace WolvenKit.ViewModels.Tools
             IGameControllerFactory gameController,
             IArchiveManager archiveManager,
             ISettingsManager settings,
-            IProgressService<double> progressService
+            IProgressService<double> progressService,
+            ILoggerService loggerService,
+            IPluginService pluginService
         ) : base(ToolTitle)
         {
             _projectManager = projectManager;
@@ -93,8 +97,8 @@ namespace WolvenKit.ViewModels.Tools
             _archiveManager = archiveManager;
             _settings = settings;
             _progressService = progressService;
-
-            _loggerService = Splat.Locator.Current.GetService<ILoggerService>();
+            _pluginService = pluginService;
+            _loggerService = loggerService;
 
             ContentId = ToolContentId;
 
@@ -237,6 +241,12 @@ namespace WolvenKit.ViewModels.Tools
         public ReactiveCommand<Unit, Unit> FindUsingCommand { get; }
         private async Task FindUsing()
         {
+            if (!_pluginService.IsInstalled(EPlugin.wolvenkit_resources))
+            {
+                _loggerService.Warning("Wolvenkit-Resources plugin is not installed and is needed for this functionality.");
+                return;
+            }
+
             _progressService.IsIndeterminate = true;
 
             await Task.Run(async () =>
@@ -276,6 +286,12 @@ namespace WolvenKit.ViewModels.Tools
         public ReactiveCommand<Unit, Unit> FindUsesCommand { get; }
         private async Task FindUses()
         {
+            if (!_pluginService.IsInstalled(EPlugin.wolvenkit_resources))
+            {
+                _loggerService.Warning("Wolvenkit-Resources plugin is not installed and is needed for this functionality.");
+                return;
+            }
+
             _progressService.IsIndeterminate = true;
 
             await Task.Run(async () =>
@@ -489,94 +505,128 @@ namespace WolvenKit.ViewModels.Tools
             _progressService.IsIndeterminate = false;
         }
 
+        // Asset search impl
+
+        // Safer regexps
+        private static readonly RegexOptions RegexpOpts = RegexOptions.Compiled | RegexOptions.IgnoreCase;
+        private static readonly TimeSpan RegexpSafetyTimeout = TimeSpan.FromSeconds(60);
+
         private enum TermType
         {
             Unknown,
             Include,
             Exclude,
-            Hash,
         }
 
         private readonly record struct Term(TermType Type, string Pattern, string NegationPattern);
 
+        // Refinement types
         private interface SearchRefinement { }
         private readonly record struct PatternRefinement(Term[] Terms) : SearchRefinement;
         private readonly record struct HashRefinement(ulong Hash) : SearchRefinement;
+        private readonly record struct RegexRefinement(Regex Regex) : SearchRefinement;
+        private readonly record struct VerbatimRefinement(string Verbatim) : SearchRefinement;
+
+        // Refinement type matchers
+        private static readonly Regex RefinementSeparator = new("\\s+>\\s+", RegexpOpts, RegexpSafetyTimeout);
+        private static readonly Regex IsHashRefinement = new("^h(?:ash)?:(?<numbers>\\d+)$", RegexpOpts, RegexpSafetyTimeout);
+        private static readonly Regex IsRegexRefinement = new("^r(?:egexp?)?:(?<pattern>.*)$", RegexpOpts, RegexpSafetyTimeout);
+        private static readonly Regex IsVerbatimRefinement = new("^(?:@:?|path:)(?<verbatim>.*)$", RegexpOpts, RegexpSafetyTimeout);
 
         private readonly record struct CyberSearch(Func<IGameFile, bool> Match, SearchRefinement SourceRefinement);
 
         // Term to refinement pattern conversion regexps
 
-        private static readonly RegexOptions RegexpOpts = RegexOptions.Compiled | RegexOptions.IgnoreCase;
-        private static readonly TimeSpan RegexpSafetyTimeout = TimeSpan.FromSeconds(60);
-
-        private static readonly Regex RefinementSeparator = new("\\s+>\\s+", RegexpOpts, RegexpSafetyTimeout);
-        private static readonly Regex Hash = new("^hash:(?<num>\\d+)$", RegexpOpts, RegexpSafetyTimeout);
         private static readonly Regex Whitespace = new("\\s+", RegexpOpts, RegexpSafetyTimeout);
+        private static readonly Regex PathSeparator = new ("(^|\\G|\\w)(?:\\\\|/)(\\w+|$)", RegexpOpts, RegexpSafetyTimeout);
+        private static readonly string PathNormalized = "$1\\\\$2";
+        private static readonly Regex ExtensionDot = new("(^|\\G|\\||\\w)\\.(?<term>\\w+?)", RegexpOpts, RegexpSafetyTimeout);
+        private static readonly string ExtensionDotEscaped = "$1\\.${term}";
         private static readonly Regex Or = new("\\|", RegexpOpts, RegexpSafetyTimeout);
         private static readonly Regex Negation = new("^(?'Open'\\(\\?:)*\\!(?<term>.+?)(?'Close-Open'\\))*$", RegexpOpts, RegexpSafetyTimeout);
         private static readonly Regex SquashExtraWilds = new("((\\(\\?:)?\\.\\*\\??\\)?){2,}", RegexpOpts, RegexpSafetyTimeout);
 
-        private static readonly Func<Term, Term> HonorFileExtension =
+        private static readonly Func<Term, Term> NormalizePathSeparators =
             (Term term) =>
-                term with { Pattern = Regex.Replace(term.Pattern, "(^|\\W)\\.(?<term>\\w+?)", "$1\\.${term}") };
+                term with {
+                    Pattern = PathSeparator.Replace(term.Pattern, PathNormalized)
+                };
 
-        private static readonly Func<Term, Term> DropUnnecessaryGlobStars =
-            (Term term) => term;
+        private static readonly Func<Term, Term> PreserveExtensionDotMatch =
+            (Term term) =>
+                term with {
+                    Pattern = ExtensionDot.Replace(term.Pattern, ExtensionDotEscaped)
+                };
 
-        private static readonly Func<Term, Term> LimitOrToOneTerm =
+        private static readonly Func<Term, Term> LimitOrToOneTermOnly =
             (Term term) =>
                 Or.IsMatch(term.Pattern)
-                ? term with { Pattern = $"(?:{term.Pattern})" }
-                : term;
+                    ? term with {
+                        Pattern = $"(?:{term.Pattern})"
+                    }
+                    : term;
 
         // Negative regexps are extremely fraught even when not synthesized,
         // so instead we simply fail on a negative match (with the corresponding
         // positive match so that we know the refinement is otherwise satisfied).
-        private static readonly Func<Term, Term> AllowExcludingTerm =
-            (Term term) =>
-                !Negation.IsMatch(term.Pattern)
-                    ? term with { Type = TermType.Include }
-                    : term with
-                    {
-                        Type = TermType.Exclude,
-                        Pattern = Negation.Replace(term.Pattern, "(?:${term})"),
-                        NegationPattern = Negation.Replace(term.Pattern, "")
-                    };
+        private static readonly Func<Term, Term> AllowExcludingTerm = (Term term) =>
+            !Negation.IsMatch(term.Pattern)
+                ? term with { Type = TermType.Include }
+                : term with
+                {
+                    Type = TermType.Exclude,
+                    Pattern = Negation.Replace(term.Pattern, "(?:${term})"),
+                    NegationPattern = Negation.Replace(term.Pattern, "")
+                };
+
 
         // Pipeline
 
-        private static readonly Func<string, SearchRefinement> TermsIntoSequentialPipeline =
-            (string refinementString) =>
-                Hash.Match(refinementString).Groups["num"].Value switch
-                {
-                    "" =>
-                        new PatternRefinement
-                        {
-                            Terms = Whitespace.Split(refinementString).Select(term => new Term { Type = TermType.Unknown, Pattern = term }).ToArray(),
-                        },
-                    string num =>
-                        // let it fail, caught at the top
-                        new HashRefinement { Hash = ulong.Parse(num) },
-                };
+        private static readonly Func<string, SearchRefinement> s_intoTypedRefinements = (string refinementString) =>
+        {
+            var hashMatch = IsHashRefinement.Match(refinementString).Groups["numbers"].Value;
 
-        private static readonly Func<SearchRefinement, SearchRefinement> PipelineIntoSpecificTypedRefinements =
-            (searchRefinement) => searchRefinement switch
+            if (!string.IsNullOrEmpty(hashMatch))
             {
-                PatternRefinement patternRefinement =>
-                    patternRefinement with
-                    {
-                        Terms = patternRefinement.Terms
-                            .Select(HonorFileExtension)
-                            .Select(DropUnnecessaryGlobStars)
-                            .Select(LimitOrToOneTerm)
-                            .Select(AllowExcludingTerm)
-                            .ToArray()
-                    },
-                _ => searchRefinement
-            };
+                return new HashRefinement { Hash = ulong.Parse(hashMatch) };
+            }
 
-        private static readonly Func<SearchRefinement, CyberSearch> RefinementsIntoMatchFunctions =
+            var regexMatch = IsRegexRefinement.Match(refinementString).Groups["pattern"].Value;
+
+            if (!string.IsNullOrEmpty(regexMatch))
+            {
+                return new RegexRefinement { Regex = new Regex(regexMatch, RegexpOpts, RegexpSafetyTimeout) };
+            }
+
+            var verbatimMatch = IsVerbatimRefinement.Match(refinementString).Groups["verbatim"].Value;
+
+            if (!string.IsNullOrEmpty(verbatimMatch))
+            {
+                return new VerbatimRefinement
+                    {
+                        Verbatim = verbatimMatch.Replace(Path.AltDirectorySeparatorChar, Path.DirectorySeparatorChar)
+                    };
+            }
+
+            return new PatternRefinement
+            {
+                Terms = Whitespace
+                    .Split(refinementString)
+                    .Select(term => new Term
+                    {
+                        Type = TermType.Unknown,
+                        Pattern = term
+                    })
+                    .Select(NormalizePathSeparators)
+                    .Select(PreserveExtensionDotMatch)
+                    .Select(LimitOrToOneTermOnly)
+                    .Select(AllowExcludingTerm)
+                    .ToArray()
+            };
+        };
+
+
+        private static readonly Func<SearchRefinement, CyberSearch> s_refinementsIntoMatchFunctions =
             (SearchRefinement searchRefinement) =>
             {
                 switch (searchRefinement)
@@ -586,6 +636,18 @@ namespace WolvenKit.ViewModels.Tools
                         {
                             Match = (IGameFile candidate) => candidate.Key == hashRefinement.Hash,
                             SourceRefinement = hashRefinement,
+                        };
+
+                    case RegexRefinement regexRefinement:
+                        return new CyberSearch
+                        {
+                            Match = (IGameFile candidate) => regexRefinement.Regex.IsMatch(candidate.Name)
+                        };
+
+                    case VerbatimRefinement verbatimRefinement:
+                        return new CyberSearch
+                        {
+                            Match = (IGameFile candidate) => candidate.Name.Contains(verbatimRefinement.Verbatim)
                         };
 
                     case PatternRefinement patternRefinement:
@@ -640,9 +702,8 @@ namespace WolvenKit.ViewModels.Tools
             var searchAsSequentialRefinements =
                 RefinementSeparator
                     .Split(SearchBarText)
-                    .Select(TermsIntoSequentialPipeline)
-                    .Select(PipelineIntoSpecificTypedRefinements)
-                    .Select(RefinementsIntoMatchFunctions)
+                    .Select(s_intoTypedRefinements)
+                    .Select(s_refinementsIntoMatchFunctions)
                     .ToArray();
 
             var gameFilesOrMods =

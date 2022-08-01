@@ -430,11 +430,6 @@
             BorderThickness="0"
             Visibility="{Binding Path=LoadVisibility, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}">
             <Grid>
-                <syncfusion:SfBusyIndicator
-                    AnimationType="Ball"
-                    Foreground="{DynamicResource MahApps.Brushes.Accent}"
-                    Visibility="{Binding Path=LoadVisibility, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" />
-
                 <StackPanel VerticalAlignment="Center">
                     <TextBlock
                         Margin="0,75,0,0"

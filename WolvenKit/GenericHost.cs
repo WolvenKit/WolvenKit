@@ -1,4 +1,3 @@
-using gpm.Installer;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using ReactiveUI;
@@ -87,7 +86,6 @@ namespace WolvenKit
                     services.AddSingleton<AppViewModel>();
                     services.AddSingleton<IViewFor<AppViewModel>, MainView>();
 
-                    services.AddGpmInstaller();
                     services.AddSingleton<IPluginService, PluginService>();
 
 

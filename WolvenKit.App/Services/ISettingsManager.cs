@@ -3,6 +3,7 @@ using System.ComponentModel;
 using System.IO;
 using System.Windows.Media;
 using WolvenKit.Common;
+using WolvenKit.Common.DDS;
 
 namespace WolvenKit.Functionality.Services
 {
@@ -71,8 +72,7 @@ namespace WolvenKit.Functionality.Services
 
         public static string GetAppData()
         {
-            var dir = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "REDModding",
-                "WolvenKit");
+            var dir = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "REDModding", "WolvenKit");
             if (!Directory.Exists(dir))
             {
                 Directory.CreateDirectory(dir);
@@ -102,8 +102,6 @@ namespace WolvenKit.Functionality.Services
 
             return dir;
         }
-
-        public static string GetXBMDumpPath() => Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Config", "__xbmdump_3768555366.csv");
 
         public static string GetTemp_AudioPath()
         {

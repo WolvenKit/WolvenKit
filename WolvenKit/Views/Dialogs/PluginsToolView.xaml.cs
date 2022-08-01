@@ -1,4 +1,3 @@
-using System.Reactive.Disposables;
 using ReactiveUI;
 using WolvenKit.ViewModels.Dialogs;
 
@@ -13,15 +12,9 @@ namespace WolvenKit.Views.Dialogs
         {
             InitializeComponent();
 
-
-            this.WhenActivated(disposables =>
-            {
-                //this.Bind(ViewModel,
-                //    vm => vm.Plugins,
-                //    v => v.PluginList.ItemsSource)
-                //    .DisposeWith(disposables);
-                
-            });
+            this.WhenActivated(disposables => this.BindCommand(ViewModel,
+                    viewModel => viewModel.SyncCommand,
+                    view => view.CheckButton));
 
         }
     }

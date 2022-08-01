@@ -52,7 +52,7 @@
                     <MenuItem Command="{Binding FastRenderCommand}" Header="Fast render" />
                 </MenuItem>
 
-                <MenuItem Command="{Binding OpenInMlsbCommand}" Header="Open in MlSetupbuilder"/>
+                <MenuItem Command="{Binding OpenInMlsbCommand}" Header="Open in MlSetupbuilder" />
 
                 <Separator />
 
@@ -124,7 +124,7 @@
                     Visibility="{Binding Path=IsEnabled, RelativeSource={RelativeSource Self}, Mode=OneWay, Converter={StaticResource Boolean2VisibilityConverter}}" />
 
                 <Separator />
-                
+
                 <MenuItem Command="{Binding DeleteFileCommand}" Header="Delete">
                     <MenuItem.Icon>
                         <iconPacks:PackIconForkAwesome
@@ -168,7 +168,8 @@
                 <Separator />
 
                 <MenuItem Command="{Binding CopyRelPathCommand}" Header="Copy relative path" />
-                <MenuItem Command="{Binding OpenInAssetBrowserCommand}"
+                <MenuItem
+                    Command="{Binding OpenInAssetBrowserCommand}"
                     Header="Open in Asset Browser"
                     Visibility="{Binding Path=IsEnabled, RelativeSource={RelativeSource Self}, Mode=OneWay, Converter={StaticResource Boolean2VisibilityConverter}}">
                     <MenuItem.Icon>
@@ -180,7 +181,8 @@
                             Kind="ArrowCircleRight" />
                     </MenuItem.Icon>
                 </MenuItem>
-                <MenuItem Command="{Binding ReimportFileCommand}"
+                <MenuItem
+                    Command="{Binding ReimportFileCommand}"
                     Header="Replace with original"
                     Visibility="{Binding Path=IsEnabled, RelativeSource={RelativeSource Self}, Mode=OneWay, Converter={StaticResource Boolean2VisibilityConverter}}">
                     <MenuItem.Icon>
@@ -196,7 +198,7 @@
                 <Separator />
 
                 <MenuItem Command="{Binding OpenInFileExplorerCommand}" Header="Open in File Explorer" />
-               
+
             </ContextMenu>
 
             <DataTemplate x:Key="TreeGridCellTemplate">
