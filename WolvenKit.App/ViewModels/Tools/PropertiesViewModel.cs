@@ -362,6 +362,11 @@ namespace WolvenKit.ViewModels.Tools
         {
             var image = RedImage.FromRedClass(cls);
 
+            if (!image.IsConvertible())
+            {
+                return;
+            }
+
             var bitmapImage = new BitmapImage();
             bitmapImage.BeginInit();
             bitmapImage.StreamSource = new MemoryStream(image.SaveToPNGMemory());

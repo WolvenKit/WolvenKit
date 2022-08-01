@@ -211,6 +211,11 @@ namespace WolvenKit.Views.Tools
             {
                 var img = RedImage.FromRedFile(cr2w);
 
+                if (!img.IsConvertible())
+                {
+                    return;
+                }
+
                 var bitmapImage = new BitmapImage();
                 bitmapImage.BeginInit();
                 bitmapImage.StreamSource = new MemoryStream(img.SaveToPNGMemory());

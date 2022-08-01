@@ -155,11 +155,10 @@ public class RedImage : IDisposable
 
     #endregion SaveToFileFormat
 
-
-
-
-
-
+    public bool IsConvertible()
+    {
+        return Metadata.Format != DXGI_FORMAT.R8G8_UNORM;
+    }
 
     public CBitmapTexture SaveToXBM()
     {
