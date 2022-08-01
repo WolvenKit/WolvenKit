@@ -47,6 +47,27 @@ public class RedImage : IDisposable
     public uint Flags { get; set; } = 1;
     public uint Version { get; set; } = 2;
 
+    public WolvenKit.Common.DDS.DXGI_FORMAT RawFormat
+    {
+        get
+        {
+            return (WolvenKit.Common.DDS.DXGI_FORMAT)(uint)Metadata.Format;
+        }
+    }
+
+    public WolvenKit.Common.DDS.DXGI_FORMAT? CompressionFormat
+    {
+        get
+        {
+            if (_compressionFormat != null)
+            {
+                return (WolvenKit.Common.DDS.DXGI_FORMAT)(uint)_compressionFormat;
+            }
+
+            return null;
+        }
+    }
+
     #region SaveToFileFormat
 
     private byte[] SaveToMemory(UnmanagedMemoryStream ms)

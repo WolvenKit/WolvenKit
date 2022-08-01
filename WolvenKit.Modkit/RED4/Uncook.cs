@@ -739,83 +739,25 @@ namespace WolvenKit.Modkit.RED4
             texformat = DXGI_FORMAT.DXGI_FORMAT_R8G8B8A8_UNORM;
             decompressedFormat = DXGI_FORMAT.DXGI_FORMAT_UNKNOWN;
 
-            rendRenderTextureBlobPC blob = null;
-            var rawfmt = Enums.ETextureRawFormat.TRF_Invalid;
-            var compression = Enums.ETextureCompression.TCM_None;
-            var isGamma = false;
-
-            if (cls is CBitmapTexture xbm)
+            try
             {
-                if (xbm.RenderTextureResource.RenderResourceBlobPC != null &&
-                    xbm.RenderTextureResource.RenderResourceBlobPC.GetValue() is rendRenderTextureBlobPC xbmBlob)
-                {
-                    blob = xbmBlob;
-                }
-                rawfmt = xbm.Setup.RawFormat;
-                compression = xbm.Setup.Compression;
-                isGamma = xbm.Setup.IsGamma;
-            }
+                var img = RedImage.FromRedClass(cls);
 
-            if (cls is CMesh mesh)
-            {
-                if (mesh.RenderResourceBlob.GetValue() is rendRenderTextureBlobPC meshBlob)
+                texformat = img.RawFormat;
+                decompressedFormat = img.RawFormat;
+                if (img.CompressionFormat != null)
                 {
-                    blob = meshBlob;
+                    texformat = (DXGI_FORMAT)img.CompressionFormat;
                 }
-            }
 
-            if (cls is CReflectionProbeDataResource probe)
-            {
-                if (probe.TextureData.RenderResourceBlobPC.GetValue() is rendRenderTextureBlobPC probeBlob)
-                {
-                    blob = probeBlob;
-                }
-            }
+                outstream.Write(img.SaveToDDSMemory());
 
-            if (blob == null)
+                return true;
+            }
+            catch (Exception)
             {
                 return false;
             }
-
-            #region get xbm data
-
-            var width = blob.Header.SizeInfo.Width;
-            var height = blob.Header.SizeInfo.Height;
-            var depth = blob.Header.SizeInfo.Depth;
-            var sliceCount = blob.Header.TextureInfo.SliceCount;
-            var mipCount = blob.Header.TextureInfo.MipCount;
-            var alignment = blob.Header.TextureInfo.DataAlignment;
-
-            TEX_DIMENSION dimension;
-            switch ((Enums.GpuWrapApieTextureType)blob.Header.TextureInfo.Type)
-            {
-                case Enums.GpuWrapApieTextureType.TEXTYPE_2D:
-                    dimension = TEX_DIMENSION.TEX_DIMENSION_TEXTURE2D;
-                    break;
-                case Enums.GpuWrapApieTextureType.TEXTYPE_3D:
-                    dimension = TEX_DIMENSION.TEX_DIMENSION_TEXTURE3D;
-                    break;
-                default:
-                    throw new ArgumentOutOfRangeException();
-            }
-
-            texformat = CommonFunctions.GetDXGIFormat(compression, rawfmt, isGamma, null);
-            decompressedFormat = texformat;
-            if (compression != Enums.ETextureCompression.TCM_None)
-            {
-                decompressedFormat = CommonFunctions.GetDXGIFormat(Enums.ETextureCompression.TCM_None, rawfmt, isGamma, null);
-            }
-
-            #endregion get xbm data
-
-            // extract and write dds to stream
-            DDSUtils.GenerateAndWriteHeader(outstream,
-                new DDSMetadata(width, height, depth, sliceCount, mipCount,
-                    0, 0, texformat, dimension, alignment, true));
-
-            outstream.Write(blob.TextureData.Buffer.GetBytes());
-
-            return true;
         }
     }
 }
