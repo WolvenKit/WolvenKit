@@ -351,17 +351,15 @@ namespace WolvenKit.Modkit.RED4
                         return false;
                     }
 
-                    DXGI_FORMAT texformat;
-
                     if (WolvenTesting.IsTesting)
                     {
                         using var ms = new MemoryStream();
-                        return ConvertXbmToDdsStream(cr2wStream, ms, out texformat, out _);
+                        return ConvertXbmToDdsStream(cr2wStream, ms, out _, out _);
                     }
 
                     using (var ms = new MemoryStream())
                     {
-                        if (!ConvertXbmToDdsStream(cr2wStream, ms, out texformat, out var decompressedFormat))
+                        if (!ConvertXbmToDdsStream(cr2wStream, ms, out _, out var decompressedFormat))
                         {
                             return false;
                         }

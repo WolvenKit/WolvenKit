@@ -269,17 +269,23 @@ namespace WolvenKit.Modkit.RED4
                     continue;
                 }
 
-                var ms = new MemoryStream();
-                DDSUtils.GenerateAndWriteHeader(ms, new DDSMetadata(maskWidth, maskHeight,
-                    1, 1, 0, 0, 0, DXGI_FORMAT.DXGI_FORMAT_R8_UNORM, TEX_DIMENSION.TEX_DIMENSION_TEXTURE2D, 8, true));
-                ms.Write(maskData);
-                ms.Seek(0, SeekOrigin.Begin);
-                //var stream = new MemoryStream(DDSUtils.ConvertToDdsMemory(ms, EUncookExtension.tga, DXGI_FORMAT.DXGI_FORMAT_BC4_UNORM, false, false));
-                ms = new MemoryStream(
-                    Texconv.ConvertToDds(
-                        new MemoryStream(Texconv.ConvertFromDds(ms, EUncookExtension.tga)),
-                        EUncookExtension.tga, DXGI_FORMAT.DXGI_FORMAT_BC4_UNORM));
-                streams.Add(ms);
+                var info = new DDSUtils.DDSInfo
+                {
+                    Compression = Enums.ETextureCompression.TCM_None,
+                    RawFormat = Enums.ETextureRawFormat.TRF_Grayscale,
+                    IsGamma = false,
+                    Width = maskWidth,
+                    Height = maskHeight,
+                    Depth = 1,
+                    MipCount = 1,
+                    SliceCount = 1,
+                    TextureType = Enums.GpuWrapApieTextureType.TEXTYPE_2D,
+                    FlipV = false
+                };
+
+                var img = RedImage.Create(info, maskData);
+
+                streams.Add(new MemoryStream(img.SaveToDDSMemory()));
             }
             return true;
         }
@@ -328,7 +334,7 @@ namespace WolvenKit.Modkit.RED4
             return count;
         }
 
-        public static void Decode(ref byte[] maskData, uint maskWidth, uint maskHeight, uint mWidthLow, uint mHeightLow, byte[] atlasData, uint atlasWidth, uint atlasHeight, uint[] tileData, uint maskTileSize, int maskIndex)
+        private static void Decode(ref byte[] maskData, uint maskWidth, uint maskHeight, uint mWidthLow, uint mHeightLow, byte[] atlasData, uint atlasWidth, uint atlasHeight, uint[] tileData, uint maskTileSize, int maskIndex)
         {
             var widthInTiles0 = DivCeil(maskWidth, maskTileSize);
             var heightInTiles0 = DivCeil(maskHeight, maskTileSize);

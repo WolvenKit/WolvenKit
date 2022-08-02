@@ -327,6 +327,94 @@ namespace WolvenKit.Modkit.RED4
 
         private bool ImportXbm(RedRelativePath rawRelative, DirectoryInfo outDir, XbmImportArgs args)
         {
+            var infile = rawRelative.FullName;
+
+            CBitmapTexture oldBitmap = null;
+            if (args.Keep)
+            {
+                var redfile = FindRedFile(rawRelative, outDir, ERedExtension.xbm.ToString());
+
+                if (string.IsNullOrEmpty(redfile))
+                {
+                    _loggerService.Warning($"No existing redfile found to rebuild for {rawRelative.Name}");
+                    return false;
+                }
+
+                using var redstream = new FileStream(redfile, FileMode.Open);
+                using var fileReader = new BinaryReader(redstream);
+
+                var cr2w = _wolvenkitFileService.ReadRed4File(fileReader);
+                if (cr2w == null || cr2w.RootChunk is not CBitmapTexture xbm || xbm.RenderTextureResource == null || xbm.RenderTextureResource.RenderResourceBlobPC.Chunk is not rendRenderTextureBlobPC)
+                {
+                    return false;
+                }
+
+                oldBitmap = xbm;
+            }
+
+            RedImage image;
+
+            switch (Enum.Parse<EUncookExtension>(rawRelative.Extension))
+            {
+                case EUncookExtension.dds:
+                    image = RedImage.LoadFromDDSFile(infile);
+                    break;
+                case EUncookExtension.tga:
+                    image = RedImage.LoadFromTGAFile(infile);
+                    break;
+                case EUncookExtension.bmp:
+                    image = RedImage.LoadFromBMPFile(infile);
+                    break;
+                case EUncookExtension.jpg:
+                    image = RedImage.LoadFromJPGFile(infile);
+                    break;
+                case EUncookExtension.png:
+                    image = RedImage.LoadFromPNGFile(infile);
+                    break;
+                case EUncookExtension.tiff:
+                    image = RedImage.LoadFromTIFFFile(infile);
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
+
+            image.Group = args.TextureGroup;
+            if (oldBitmap != null)
+            {
+                image.Group = oldBitmap.Setup.Group;
+                image.IsStreamable = oldBitmap.Setup.IsStreamable;
+                image.GenerateMipMaps = oldBitmap.Setup.HasMipchain;
+                image.PlatformMipBiasPC = oldBitmap.Setup.PlatformMipBiasPC;
+                image.AllowTextureDowngrade = oldBitmap.Setup.AllowTextureDowngrade;
+
+                image.CompressionFormat = CommonFunctions.GetDXGIFormat(oldBitmap.Setup.Compression, Enums.ETextureRawFormat.TRF_Invalid, image.IsGamma, null);
+
+                var rawFmt = CommonFunctions.GetDXGIFormat(Enums.ETextureCompression.TCM_None, oldBitmap.Setup.RawFormat, image.IsGamma, null);
+                if (image.Metadata.Format != rawFmt)
+                {
+                    image.Convert(rawFmt);
+                }
+            }
+
+            var bitmap = image.SaveToXBM();
+
+            var outpath = new RedRelativePath(rawRelative)
+                .ChangeBaseDir(outDir)
+                .ChangeExtension(ERedExtension.xbm.ToString());
+            if (!File.Exists(outpath.FullPath))
+            {
+                Directory.CreateDirectory(outpath.ToFileInfo().Directory.FullName);
+            }
+
+            using var fs = new FileStream(outpath.FullPath, FileMode.Create, FileAccess.ReadWrite);
+            using var writer = new CR2WWriter(fs);
+            writer.WriteFile(new CR2WFile {RootChunk = bitmap});
+
+            return true;
+        }
+
+        private bool ImportXbm2(RedRelativePath rawRelative, DirectoryInfo outDir, XbmImportArgs args)
+        {
             var rawExt = rawRelative.Extension;
             var redfile = "";
             var infile = rawRelative.FullName;

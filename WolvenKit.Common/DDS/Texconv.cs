@@ -309,6 +309,11 @@ namespace WolvenKit.Common.DDS
                     default:
                         throw new ArgumentOutOfRangeException();
                 }
+
+                if (outFormat != null && image.Metadata.Format != outFormat)
+                {
+                    image.Convert((DXGI_FORMAT)outFormat);
+                }
                 
                 return image.SaveToDDSMemory();
             }
