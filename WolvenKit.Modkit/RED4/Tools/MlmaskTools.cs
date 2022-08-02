@@ -137,7 +137,7 @@ namespace WolvenKit.Modkit.RED4
 
                 switch (args.UncookExtension)
                 {
-                    case EMlmaskUncookExtension.dds:
+                    case EUncookExtension.dds:
                         img.SaveToDDS(newpath + ".dds");
 
                         if (args.AsList)
@@ -145,31 +145,31 @@ namespace WolvenKit.Modkit.RED4
                             masks.Add($"{subdir.Name}/{mFilename}.dds");
                         }
                         break;
-                    //case EMlmaskUncookExtension.tga:
-                    //    img.SaveToTGA(newpath + ".tga");
-                    //
-                    //    if (args.AsList)
-                    //    {
-                    //        masks.Add($"{subdir.Name}/{mFilename}.tga");
-                    //    }
-                    //    break;
-                    //case EMlmaskUncookExtension.bmp:
-                    //    img.SaveToBMP(newpath + ".bmp");
-                    //
-                    //    if (args.AsList)
-                    //    {
-                    //        masks.Add($"{subdir.Name}/{mFilename}.bmp");
-                    //    }
-                    //    break;
-                    //case EMlmaskUncookExtension.jpg:
-                    //    img.SaveToJPEG(newpath + ".jpg");
-                    //
-                    //    if (args.AsList)
-                    //    {
-                    //        masks.Add($"{subdir.Name}/{mFilename}.jpg");
-                    //    }
-                    //    break;
-                    case EMlmaskUncookExtension.png:
+                    case EUncookExtension.tga:
+                        img.SaveToTGA(newpath + ".tga");
+                    
+                        if (args.AsList)
+                        {
+                            masks.Add($"{subdir.Name}/{mFilename}.tga");
+                        }
+                        break;
+                    case EUncookExtension.bmp:
+                        img.SaveToBMP(newpath + ".bmp");
+                    
+                        if (args.AsList)
+                        {
+                            masks.Add($"{subdir.Name}/{mFilename}.bmp");
+                        }
+                        break;
+                    case EUncookExtension.jpg:
+                        img.SaveToJPEG(newpath + ".jpg");
+                    
+                        if (args.AsList)
+                        {
+                            masks.Add($"{subdir.Name}/{mFilename}.jpg");
+                        }
+                        break;
+                    case EUncookExtension.png:
                         img.SaveToPNG(newpath + ".png");
 
                         if (args.AsList)
@@ -177,14 +177,14 @@ namespace WolvenKit.Modkit.RED4
                             masks.Add($"{subdir.Name}/{mFilename}.png");
                         }
                         break;
-                    //case EMlmaskUncookExtension.tiff:
-                    //    img.SaveToTIFF(newpath + ".tiff");
-                    //
-                    //    if (args.AsList)
-                    //    {
-                    //        masks.Add($"{subdir.Name}/{mFilename}.tiff");
-                    //    }
-                    //    break;
+                    case EUncookExtension.tiff:
+                        img.SaveToTIFF(newpath + ".tiff");
+                    
+                        if (args.AsList)
+                        {
+                            masks.Add($"{subdir.Name}/{mFilename}.tiff");
+                        }
+                        break;
                     default:
                         throw new ArgumentOutOfRangeException();
                 }
@@ -328,7 +328,7 @@ namespace WolvenKit.Modkit.RED4
             return count;
         }
 
-        private static void Decode(ref byte[] maskData, uint maskWidth, uint maskHeight, uint mWidthLow, uint mHeightLow, byte[] atlasData, uint atlasWidth, uint atlasHeight, uint[] tileData, uint maskTileSize, int maskIndex)
+        public static void Decode(ref byte[] maskData, uint maskWidth, uint maskHeight, uint mWidthLow, uint mHeightLow, byte[] atlasData, uint atlasWidth, uint atlasHeight, uint[] tileData, uint maskTileSize, int maskIndex)
         {
             var widthInTiles0 = DivCeil(maskWidth, maskTileSize);
             var heightInTiles0 = DivCeil(maskHeight, maskTileSize);

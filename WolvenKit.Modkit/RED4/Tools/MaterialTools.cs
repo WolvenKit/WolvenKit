@@ -265,7 +265,7 @@ namespace WolvenKit.Modkit.RED4
             var exportArgs =
                 new GlobalExportArgs().Register(
                     new XbmExportArgs() { UncookExtension = eUncookExtension },
-                    new MlmaskExportArgs() { UncookExtension = eUncookExtension.ToMlmaskUncookExtension() }
+                    new MlmaskExportArgs() { UncookExtension = eUncookExtension }
                 );
 
             for (var i = 0; i < primaryDependencies.Count; i++)

@@ -129,7 +129,7 @@ namespace WolvenKit.Common.DDS
                     vflip = xbm.Flip;
                     break;
                 case MlmaskExportArgs ml:
-                    uext = ml.UncookExtension.FromMlMaskExtension();
+                    uext = ml.UncookExtension;
                     break;
             }
 

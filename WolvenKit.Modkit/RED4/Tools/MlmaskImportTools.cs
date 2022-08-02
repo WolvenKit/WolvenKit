@@ -25,20 +25,25 @@ namespace WolvenKit.Modkit.RED4.MLMask
             // relative and absolute paths
             var paths = File.ReadAllLines(txtimageList.FullName);
             var baseDir = txtimageList.Directory;
-            var files = paths.Select(x => Path.Combine(baseDir.FullName, x));
+            var files = paths.Select(x => Path.Combine(baseDir.FullName, x)).OrderBy(x => x).ToList();
 
             #region InitandVerify
 
             _mlmask = new MlMaskContainer();
             var textures = new List<RawTexContainer>();
-            var white = new RawTexContainer
+            
+            var firstLayerName = Path.GetFileNameWithoutExtension(files[0]);
+            if (!firstLayerName.EndsWith("_0"))
             {
-                Pixels = new byte[16],
-                Width = 4,
-                Height = 4
-            };
-            Array.Fill<byte>(white.Pixels, 255);
-            textures.Add(white);
+                var white = new RawTexContainer
+                {
+                    Pixels = new byte[16],
+                    Width = 4,
+                    Height = 4
+                };
+                Array.Fill<byte>(white.Pixels, 255);
+                textures.Add(white);
+            }
 
             var lineIdx = 1;
             foreach (var f in files)
@@ -102,19 +107,20 @@ namespace WolvenKit.Modkit.RED4.MLMask
                 using var br = new BinaryReader(ms);
                 ms.Seek(s_headerLength, SeekOrigin.Begin);
                 var bytes = br.ReadBytes(image.Metadata.Width * image.Metadata.Height);
-                var whiteCheck = true;
-                for (var i = 0; i < bytes.Length; i++)
-                {
-                    if (bytes[i] != 255)
-                    {
-                        whiteCheck = false;
-                        break;
-                    }
-                }
-                if (whiteCheck)
-                {
-                    throw new Exception("No need to provide the 1st/any blank white mask layer, tool will generate 1st blank white layer automatically");
-                }
+
+                //var whiteCheck = true;
+                //for (var i = 0; i < bytes.Length; i++)
+                //{
+                //    if (bytes[i] != 255)
+                //    {
+                //        whiteCheck = false;
+                //        break;
+                //    }
+                //}
+                //if (whiteCheck)
+                //{
+                //    throw new Exception("No need to provide the 1st/any blank white mask layer, tool will generate 1st blank white layer automatically");
+                //}
 
                 var tex = new RawTexContainer
                 {
