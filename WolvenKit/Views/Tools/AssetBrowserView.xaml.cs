@@ -13,6 +13,7 @@ using Splat;
 using Syncfusion.UI.Xaml.Grid;
 using Syncfusion.UI.Xaml.TreeGrid;
 using WolvenKit.Common;
+using WolvenKit.Common.DDS;
 using WolvenKit.Common.Interfaces;
 using WolvenKit.Common.Model;
 using WolvenKit.Common.Model.Arguments;
@@ -211,7 +212,7 @@ namespace WolvenKit.Views.Tools
             {
                 var img = RedImage.FromRedFile(cr2w);
 
-                if (!img.IsConvertible())
+                if (img.Metadata.Format == DXGI_FORMAT.DXGI_FORMAT_R8G8_UNORM)
                 {
                     return;
                 }

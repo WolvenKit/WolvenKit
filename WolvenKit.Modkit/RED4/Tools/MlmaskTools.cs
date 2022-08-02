@@ -6,6 +6,7 @@ using WolvenKit.Common;
 using WolvenKit.Common.DDS;
 using WolvenKit.Common.Model.Arguments;
 using WolvenKit.Common.Services;
+using WolvenKit.RED4.CR2W;
 using WolvenKit.RED4.Types;
 
 namespace WolvenKit.Modkit.RED4
@@ -106,76 +107,86 @@ namespace WolvenKit.Modkit.RED4
                     continue;
                 }
 
-                // create dds stream
-                using var ms = new MemoryStream();
-                DDSUtils.GenerateAndWriteHeader(ms, new DDSMetadata(
-                    maskWidth, maskHeight,
-                    1, 1, 0, 0, 0, DXGI_FORMAT.DXGI_FORMAT_R8_UNORM, TEX_DIMENSION.TEX_DIMENSION_TEXTURE2D, 8, true));
-                ms.Write(maskData);
+                var info = new DDSUtils.DDSInfo
+                {
+                    Compression = Enums.ETextureCompression.TCM_None,
+                    RawFormat = Enums.ETextureRawFormat.TRF_Grayscale,
+                    IsGamma = false,
+                    Width = maskWidth,
+                    Height = maskHeight,
+                    Depth = 1,
+                    MipCount = 1,
+                    SliceCount = 1,
+                    TextureType = Enums.GpuWrapApieTextureType.TEXTYPE_2D,
+                    FlipV = false
+                };
 
-                string newpath;
+                var img = RedImage.Create(info, maskData);
+
 
                 var mFilename = Path.GetFileNameWithoutExtension(outfile.FullName) + $"_{i}";
+                string newpath;
                 if (args.AsList)
                 {
-                    newpath = Path.Combine(subdir.FullName, $"{mFilename}.dds");
+                    newpath = Path.Combine(subdir.FullName, $"{mFilename}");
                 }
                 else
                 {
-                    newpath = Path.Combine(outfile.Directory.FullName, $"{mFilename}.dds");
+                    newpath = Path.Combine(outfile.Directory.FullName, $"{mFilename}");
                 }
 
-                if (args.UncookExtension == EMlmaskUncookExtension.dds)
+                switch (args.UncookExtension)
                 {
-                    using var ddsStream = new FileStream($"{newpath}", FileMode.Create, FileAccess.Write);
-                    ms.Seek(0, SeekOrigin.Begin);
-                    ms.CopyTo(ddsStream);
+                    case EMlmaskUncookExtension.dds:
+                        img.SaveToDDS(newpath + ".dds");
 
-                    if (args.AsList)
-                    {
-                        masks.Add($"{subdir.Name}/{mFilename}.dds");
-                    }
-                }
-                //else if (args.UncookExtension == EUncookExtension.tga)
-                //{
-                //    using (var ddsStream = new FileStream($"{newpath}.tga", FileMode.Create, FileAccess.Write))
-                //    {
-                //        ms.Seek(0, SeekOrigin.Begin);
-                //        using (var ms2 = new MemoryStream(DDSUtils.ConvertFromDdsMemory(ms, EUncookExtension.tga)))
-                //        {
-                //            var br = new BinaryReader(ms2);
-                //            br.BaseStream.Seek(14, SeekOrigin.Begin);
-                //            ushort height = br.ReadUInt16();
-                //            br.BaseStream.Seek(17, SeekOrigin.Begin);
-                //            byte descriptor = br.ReadByte();
+                        if (args.AsList)
+                        {
+                            masks.Add($"{subdir.Name}/{mFilename}.dds");
+                        }
+                        break;
+                    //case EMlmaskUncookExtension.tga:
+                    //    img.SaveToTGA(newpath + ".tga");
+                    //
+                    //    if (args.AsList)
+                    //    {
+                    //        masks.Add($"{subdir.Name}/{mFilename}.tga");
+                    //    }
+                    //    break;
+                    //case EMlmaskUncookExtension.bmp:
+                    //    img.SaveToBMP(newpath + ".bmp");
+                    //
+                    //    if (args.AsList)
+                    //    {
+                    //        masks.Add($"{subdir.Name}/{mFilename}.bmp");
+                    //    }
+                    //    break;
+                    //case EMlmaskUncookExtension.jpg:
+                    //    img.SaveToJPEG(newpath + ".jpg");
+                    //
+                    //    if (args.AsList)
+                    //    {
+                    //        masks.Add($"{subdir.Name}/{mFilename}.jpg");
+                    //    }
+                    //    break;
+                    case EMlmaskUncookExtension.png:
+                        img.SaveToPNG(newpath + ".png");
 
-                //            var bw = new BinaryWriter(ms2);
-                //            bw.BaseStream.Seek(10, SeekOrigin.Begin);
-                //            bw.Write(height);
-
-                //            bw.BaseStream.Seek(17, SeekOrigin.Begin);
-                //            bw.Write(descriptor ^ 0b00001000);
-
-                //            bw.Flush();
-
-                //            ms2.Position = 0;
-                //            ms2.CopyTo(ddsStream);
-                //        }
-                //    }
-                //}
-                else
-                {
-                    // convert
-                    ms.Seek(0, SeekOrigin.Begin);
-                    if (!Texconv.ConvertFromDdsAndSave(ms, newpath, args))
-                    {
-                        return false;
-                    }
-
-                    if (args.AsList)
-                    {
-                        masks.Add($"{subdir.Name}/{mFilename}.png");
-                    }
+                        if (args.AsList)
+                        {
+                            masks.Add($"{subdir.Name}/{mFilename}.png");
+                        }
+                        break;
+                    //case EMlmaskUncookExtension.tiff:
+                    //    img.SaveToTIFF(newpath + ".tiff");
+                    //
+                    //    if (args.AsList)
+                    //    {
+                    //        masks.Add($"{subdir.Name}/{mFilename}.tiff");
+                    //    }
+                    //    break;
+                    default:
+                        throw new ArgumentOutOfRangeException();
                 }
             }
 

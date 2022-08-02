@@ -11,6 +11,7 @@ using HelixToolkit.Wpf.SharpDX;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using WolvenKit.Common;
+using WolvenKit.Common.DDS;
 using WolvenKit.Common.Interfaces;
 using WolvenKit.Common.Services;
 using WolvenKit.Functionality.Commands;
@@ -362,7 +363,7 @@ namespace WolvenKit.ViewModels.Tools
         {
             var image = RedImage.FromRedClass(cls);
 
-            if (!image.IsConvertible())
+            if (image.Metadata.Format == DXGI_FORMAT.DXGI_FORMAT_R8G8_UNORM)
             {
                 return;
             }

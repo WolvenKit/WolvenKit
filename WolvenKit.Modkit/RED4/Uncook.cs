@@ -743,8 +743,8 @@ namespace WolvenKit.Modkit.RED4
             {
                 var img = RedImage.FromRedClass(cls);
 
-                texformat = img.RawFormat;
-                decompressedFormat = img.RawFormat;
+                texformat = img.Metadata.Format;
+                decompressedFormat = img.Metadata.Format;
                 if (img.CompressionFormat != null)
                 {
                     texformat = (DXGI_FORMAT)img.CompressionFormat;

@@ -274,23 +274,39 @@ namespace WolvenKit.Common.DDS
 
         #region Writing
 
-        public static void GenerateAndWriteHeader(Stream stream, STextureGroupSetup setup, rendRenderTextureBlobHeader header)
+        public class DDSInfo
         {
-            var (ddsHeader, dxt10Header) = GenerateHeader(setup, header);
+            public Enums.ETextureCompression Compression { get; set; }
+            public Enums.ETextureRawFormat RawFormat { get; set; }
+            public bool IsGamma { get; set; }
+
+            public uint Width { get; set; }
+            public uint Height { get; set; }
+            public uint Depth { get; set; }
+            public uint MipCount { get; set; }
+            public uint SliceCount { get; set; }
+            public Enums.GpuWrapApieTextureType TextureType { get; set; }
+
+            public bool FlipV { get; set; }
+        }
+
+        public static void GenerateAndWriteHeader(Stream stream, DDSInfo info)
+        {
+            var (ddsHeader, dxt10Header) = GenerateHeader(info);
             WriteHeader(stream, ddsHeader, dxt10Header);
         }
 
-        private static (DDS_HEADER, DDS_HEADER_DXT10) GenerateHeader(STextureGroupSetup setup, rendRenderTextureBlobHeader header)
+        private static (DDS_HEADER, DDS_HEADER_DXT10) GenerateHeader(DDSInfo info)
         {
             var ddsHeader = new DDS_HEADER()
             {
                 dwSize = HEADER_SIZE,
                 dwFlags = DDSD_CAPS | DDSD_HEIGHT | DDSD_WIDTH | DDSD_PIXELFORMAT,
-                dwHeight = header.SizeInfo.Height,
-                dwWidth = header.SizeInfo.Width,
+                dwHeight = info.Height,
+                dwWidth = info.Width,
                 dwPitchOrLinearSize = 0,
-                dwDepth = header.SizeInfo.Depth,
-                dwMipMapCount = header.TextureInfo.MipCount,
+                dwDepth = info.Depth,
+                dwMipMapCount = info.MipCount,
                 dwReserved1 = 0,
                 dwReserved2 = 0,
                 dwReserved3 = 0,
@@ -329,14 +345,14 @@ namespace WolvenKit.Common.DDS
                 miscFlags2 = DDS_ALPHA_MODE_STRAIGHT
             };
 
-            dx10Header.dxgiFormat = (Enums.ETextureCompression)setup.Compression switch
+            dx10Header.dxgiFormat = info.Compression switch
             {
-                Enums.ETextureCompression.TCM_None => (Enums.ETextureRawFormat)setup.RawFormat switch
+                Enums.ETextureCompression.TCM_None => info.RawFormat switch
                 {
                     Enums.ETextureRawFormat.TRF_Invalid => DXGI_FORMAT.DXGI_FORMAT_R8G8B8A8_UNORM,
-                    Enums.ETextureRawFormat.TRF_TrueColor => setup.IsGamma ? DXGI_FORMAT.DXGI_FORMAT_R8G8B8A8_UNORM_SRGB : DXGI_FORMAT.DXGI_FORMAT_R8G8B8A8_UNORM,
+                    Enums.ETextureRawFormat.TRF_TrueColor => info.IsGamma ? DXGI_FORMAT.DXGI_FORMAT_R8G8B8A8_UNORM_SRGB : DXGI_FORMAT.DXGI_FORMAT_R8G8B8A8_UNORM,
                     Enums.ETextureRawFormat.TRF_DeepColor => DXGI_FORMAT.DXGI_FORMAT_R16G16B16A16_UNORM, // seems wrong
-                    Enums.ETextureRawFormat.TRF_Grayscale => DXGI_FORMAT.DXGI_FORMAT_R8_UINT,
+                    Enums.ETextureRawFormat.TRF_Grayscale => DXGI_FORMAT.DXGI_FORMAT_R8_UNORM,
                     Enums.ETextureRawFormat.TRF_HDRFloat => DXGI_FORMAT.DXGI_FORMAT_R32G32B32A32_FLOAT,
                     Enums.ETextureRawFormat.TRF_HDRHalf => DXGI_FORMAT.DXGI_FORMAT_R16G16B16A16_FLOAT,
                     Enums.ETextureRawFormat.TRF_HDRFloatGrayscale => DXGI_FORMAT.DXGI_FORMAT_R16_FLOAT,
@@ -344,32 +360,32 @@ namespace WolvenKit.Common.DDS
                     Enums.ETextureRawFormat.TRF_AlphaGrayscale => DXGI_FORMAT.DXGI_FORMAT_A8_UNORM,
                     _ => throw new ArgumentOutOfRangeException()
                 },
-                Enums.ETextureCompression.TCM_DXTNoAlpha => setup.IsGamma ? DXGI_FORMAT.DXGI_FORMAT_BC1_UNORM_SRGB : DXGI_FORMAT.DXGI_FORMAT_BC1_UNORM,
-                Enums.ETextureCompression.TCM_DXTAlpha => setup.IsGamma ? DXGI_FORMAT.DXGI_FORMAT_BC3_UNORM_SRGB : DXGI_FORMAT.DXGI_FORMAT_BC3_UNORM,
+                Enums.ETextureCompression.TCM_DXTNoAlpha => info.IsGamma ? DXGI_FORMAT.DXGI_FORMAT_BC1_UNORM_SRGB : DXGI_FORMAT.DXGI_FORMAT_BC1_UNORM,
+                Enums.ETextureCompression.TCM_DXTAlpha => info.IsGamma ? DXGI_FORMAT.DXGI_FORMAT_BC3_UNORM_SRGB : DXGI_FORMAT.DXGI_FORMAT_BC3_UNORM,
                 Enums.ETextureCompression.TCM_Normalmap => DXGI_FORMAT.DXGI_FORMAT_BC5_UNORM,
                 Enums.ETextureCompression.TCM_Normals_DEPRECATED => DXGI_FORMAT.DXGI_FORMAT_BC1_UNORM,
                 Enums.ETextureCompression.TCM_NormalsHigh_DEPRECATED => DXGI_FORMAT.DXGI_FORMAT_BC3_UNORM,
-                Enums.ETextureCompression.TCM_DXTAlphaLinear => setup.IsGamma ? DXGI_FORMAT.DXGI_FORMAT_BC3_UNORM_SRGB : DXGI_FORMAT.DXGI_FORMAT_BC3_UNORM,
+                Enums.ETextureCompression.TCM_DXTAlphaLinear => info.IsGamma ? DXGI_FORMAT.DXGI_FORMAT_BC3_UNORM_SRGB : DXGI_FORMAT.DXGI_FORMAT_BC3_UNORM,
                 Enums.ETextureCompression.TCM_QualityR => DXGI_FORMAT.DXGI_FORMAT_BC4_UNORM,
                 Enums.ETextureCompression.TCM_QualityRG => DXGI_FORMAT.DXGI_FORMAT_BC5_UNORM,
-                Enums.ETextureCompression.TCM_QualityColor => setup.IsGamma ? DXGI_FORMAT.DXGI_FORMAT_BC7_UNORM_SRGB : DXGI_FORMAT.DXGI_FORMAT_BC7_UNORM,
+                Enums.ETextureCompression.TCM_QualityColor => info.IsGamma ? DXGI_FORMAT.DXGI_FORMAT_BC7_UNORM_SRGB : DXGI_FORMAT.DXGI_FORMAT_BC7_UNORM,
                 _ => throw new NotSupportedException()
             };
 
             var dxFormat = (DirectXTexNet.DXGI_FORMAT)(int)dx10Header.dxgiFormat;
 
-            switch ((Enums.GpuWrapApieTextureType)header.TextureInfo.Type)
+            switch (info.TextureType)
             {
                 
                 case Enums.GpuWrapApieTextureType.TEXTYPE_2D:
                     dx10Header.resourceDimension = D3D10_RESOURCE_DIMENSION.D3D10_RESOURCE_DIMENSION_TEXTURE2D;
                     break;
                 case Enums.GpuWrapApieTextureType.TEXTYPE_CUBE:
-                    dx10Header.arraySize = header.TextureInfo.SliceCount;
+                    dx10Header.arraySize = info.SliceCount;
                     dx10Header.resourceDimension = D3D10_RESOURCE_DIMENSION.D3D10_RESOURCE_DIMENSION_TEXTURE2D;
                     break;
                 case Enums.GpuWrapApieTextureType.TEXTYPE_ARRAY:
-                    dx10Header.arraySize = header.TextureInfo.SliceCount;
+                    dx10Header.arraySize = info.SliceCount;
                     dx10Header.resourceDimension = D3D10_RESOURCE_DIMENSION.D3D10_RESOURCE_DIMENSION_TEXTURE2D;
                     break;
                 case Enums.GpuWrapApieTextureType.TEXTYPE_3D:
@@ -448,7 +464,7 @@ namespace WolvenKit.Common.DDS
             {
                 ddsHeader.dwDepth = 1;
 
-                if (header.TextureInfo.Type == Enums.GpuWrapApieTextureType.TEXTYPE_CUBE)
+                if (info.TextureType == Enums.GpuWrapApieTextureType.TEXTYPE_CUBE)
                 {
                     ddsHeader.dwCaps |= DDSCAPS_COMPLEX;
                     ddsHeader.dwCaps2 |= DDSCAPS2_CUBEMAP_ALL_FACES;
@@ -457,7 +473,7 @@ namespace WolvenKit.Common.DDS
 
             if (dx10Header.resourceDimension == D3D10_RESOURCE_DIMENSION.D3D10_RESOURCE_DIMENSION_TEXTURE3D)
             {
-                ddsHeader.dwDepth = header.SizeInfo.Depth;
+                ddsHeader.dwDepth = info.Depth;
 
                 ddsHeader.dwFlags |= DDSD_DEPTH;
                 ddsHeader.dwCaps2 |= DDSCAPS2_VOLUME;

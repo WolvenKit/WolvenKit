@@ -7,6 +7,7 @@ using WolvenKit.Common;
 using WolvenKit.Common.DDS;
 using WolvenKit.RED4.Archive.CR2W;
 using WolvenKit.RED4.Archive.IO;
+using WolvenKit.RED4.CR2W;
 using WolvenKit.RED4.Types;
 
 namespace WolvenKit.Modkit.RED4.MLMask
@@ -47,29 +48,47 @@ namespace WolvenKit.Modkit.RED4.MLMask
                     throw new FileNotFoundException($"Line{{lineIdx}}: \"{f}\" Make sure the file path is valid and exists (paths are specified line by line in ascending layer order in masklist)");
                 }
 
-                var ms = new MemoryStream(File.ReadAllBytes(f));
-                var s = Path.GetExtension(f).ToLower();
+                RedImage image;
+
                 var euncook = Enum.Parse<EUncookExtension>(Path.GetExtension(f).ToLower().TrimStart('.'));
-                if (euncook != EUncookExtension.dds)
+                switch (euncook)
                 {
-                    ms = new MemoryStream(Texconv.ConvertToDds(ms, euncook, DXGI_FORMAT.DXGI_FORMAT_R8_UNORM));
+                    case EUncookExtension.dds:
+                        image = RedImage.LoadFromDDSFile(f);
+                        break;
+                    case EUncookExtension.tga:
+                        image = RedImage.LoadFromTGAFile(f);
+                        break;
+                    case EUncookExtension.bmp:
+                        image = RedImage.LoadFromBMPFile(f);
+                        break;
+                    case EUncookExtension.jpg:
+                        image = RedImage.LoadFromJPGFile(f);
+                        break;
+                    case EUncookExtension.png:
+                        image = RedImage.LoadFromPNGFile(f);
+                        break;
+                    case EUncookExtension.tiff:
+                        image = RedImage.LoadFromTIFFFile(f);
+                        break;
+                    default:
+                        throw new ArgumentOutOfRangeException();
                 }
-                else
+
+                if (image.Metadata.Format != DXGI_FORMAT.DXGI_FORMAT_R8_UNORM)
                 {
-                    // why dds to dds?, to make sure format is r8_unorm
-                    ms = new MemoryStream(Texconv.ConvertToDds(new MemoryStream(Texconv.ConvertFromDds(ms, EUncookExtension.tga)), EUncookExtension.tga, DXGI_FORMAT.DXGI_FORMAT_R8_UNORM));
+                    image.Convert(DXGI_FORMAT.DXGI_FORMAT_R8_UNORM);
                 }
-                ms.Seek(0, SeekOrigin.Begin);
-                DDSUtils.TryReadDdsHeader(ms, out var header);
-                if (header.dwWidth != header.dwHeight)
+
+                if (image.Metadata.Width != image.Metadata.Height)
                 {
-                    throw new Exception($"Texture {f}: width={header.dwWidth},height={header.dwHeight} must have an aspect ratio of 1:1");
+                    throw new Exception($"Texture {f}: width={image.Metadata.Width},height={image.Metadata.Height} must have an aspect ratio of 1:1");
                 }
 
                 // One bitset check
-                if (((header.dwWidth - 1) & header.dwHeight) != 0 || header.dwWidth == 0)
+                if (((image.Metadata.Width - 1) & image.Metadata.Height) != 0 || image.Metadata.Width == 0)
                 {
-                    throw new Exception($"Texture {f}: width={header.dwWidth},height={header.dwHeight} must have dimensions in powers of 2");
+                    throw new Exception($"Texture {f}: width={image.Metadata.Height},height={image.Metadata.Height} must have dimensions in powers of 2");
                 }
 
 
@@ -79,9 +98,10 @@ namespace WolvenKit.Modkit.RED4.MLMask
                 //if ((ms.Length - headerLength) != (header.dwWidth * header.dwHeight))
                 //    throw new Exception("Not R8_UNORM 8bpp image format or more than 1mipmaps or rowstride is not equal to width or its a dx10 dds(unsupported)");
 
-                var br = new BinaryReader(ms);
+                using var ms = new MemoryStream(image.SaveToDDSMemory());
+                using var br = new BinaryReader(ms);
                 ms.Seek(s_headerLength, SeekOrigin.Begin);
-                var bytes = br.ReadBytes((int)(header.dwWidth * header.dwHeight));
+                var bytes = br.ReadBytes(image.Metadata.Width * image.Metadata.Height);
                 var whiteCheck = true;
                 for (var i = 0; i < bytes.Length; i++)
                 {
@@ -98,8 +118,8 @@ namespace WolvenKit.Modkit.RED4.MLMask
 
                 var tex = new RawTexContainer
                 {
-                    Width = header.dwWidth,
-                    Height = header.dwHeight,
+                    Width = (uint)image.Metadata.Width,
+                    Height = (uint)image.Metadata.Height,
                     Pixels = bytes
                 };
                 textures.Add(tex);

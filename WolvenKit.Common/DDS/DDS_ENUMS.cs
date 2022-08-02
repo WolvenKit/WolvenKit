@@ -6,6 +6,11 @@ namespace WolvenKit.Common.DDS
         TEX_MISC_TEXTURECUBE = 0x4,
     };
 
+    public enum TEX_MISC_FLAG2
+    {
+        ALPHA_MODE_MASK = 0x7,
+    };
+
     public enum TEX_DIMENSION
     // Subset here matches D3D10_RESOURCE_DIMENSION and D3D11_RESOURCE_DIMENSION
     {
@@ -13,6 +18,15 @@ namespace WolvenKit.Common.DDS
         TEX_DIMENSION_TEXTURE2D = 3,
         TEX_DIMENSION_TEXTURE3D = 4,
     };
+
+    public enum TEX_ALPHA_MODE
+    {
+        UNKNOWN = 0,
+        STRAIGHT = 1,
+        PREMULTIPLIED = 2,
+        OPAQUE = 3,
+        CUSTOM = 4,
+    }
 
     public enum DDSFLAGS
     {
