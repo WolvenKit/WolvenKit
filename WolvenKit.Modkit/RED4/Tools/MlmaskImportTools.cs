@@ -286,23 +286,15 @@ namespace WolvenKit.Modkit.RED4.MLMask
         {
             _mlmask.WidthHigh = 0;
             _mlmask.HeightHigh = 0;
-            _mlmask.WidthLow = 0;
-            _mlmask.HeightLow = 0;
+            _mlmask.WidthLow = uint.MaxValue;
+            _mlmask.HeightLow = uint.MaxValue;
             foreach (var lay in _mlmask.Layers)
             {
-                if (lay.Width < _mlmask.WidthHigh)
-                {
-                    _mlmask.WidthLow = Math.Max(_mlmask.WidthLow, lay.Width);
-                    _mlmask.HeightLow = Math.Max(_mlmask.HeightLow, lay.Height);
-                }
-                else if (lay.Width > _mlmask.WidthHigh)
-                {
-                    _mlmask.WidthLow = Math.Max(_mlmask.WidthLow, _mlmask.WidthHigh);
-                    _mlmask.HeightLow = Math.Max(_mlmask.HeightLow, _mlmask.HeightHigh);
+                _mlmask.WidthLow = Math.Min(_mlmask.WidthLow, lay.Width);
+                _mlmask.HeightLow = Math.Min(_mlmask.HeightLow, lay.Height);
 
-                    _mlmask.WidthHigh = Math.Max(_mlmask.WidthHigh, lay.Width);
-                    _mlmask.HeightHigh = Math.Max(_mlmask.HeightHigh, lay.Height);
-                }
+                _mlmask.WidthHigh = Math.Max(_mlmask.WidthHigh, lay.Width);
+                _mlmask.HeightHigh = Math.Max(_mlmask.HeightHigh, lay.Height);
             }
 
             for (var i = 0; i < _mlmask.Layers.Length; i++)
