@@ -48,6 +48,8 @@ namespace WolvenKit.ViewModels.Documents
             Render = SetupImage;
         }
 
+        public override void OnSelected() => Render?.Invoke();
+
         protected void SetupImage()
         {
             if (IsRendered)
