@@ -10,10 +10,12 @@ using HelixToolkit.SharpDX.Core;
 using HelixToolkit.Wpf.SharpDX;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
+using WolvenKit.App.Helpers;
 using WolvenKit.Common;
 using WolvenKit.Common.DDS;
 using WolvenKit.Common.Interfaces;
 using WolvenKit.Common.Services;
+using WolvenKit.Core.Extensions;
 using WolvenKit.Functionality.Commands;
 using WolvenKit.Functionality.Extensions;
 using WolvenKit.Functionality.Other;
@@ -87,7 +89,7 @@ namespace WolvenKit.ViewModels.Tools
 
             SetToNullAndResetVisibility();
 
-            PreviewAudioCommand = ReactiveCommand.Create<string, string>(str => str);
+            PreviewAudioCommand = ReactiveCommand.Create<AudioObject, AudioObject>(obj => obj);
 
             EffectsManager = new DefaultEffectsManager();
             Camera = new HelixToolkit.Wpf.SharpDX.PerspectiveCamera()
@@ -136,7 +138,7 @@ namespace WolvenKit.ViewModels.Tools
 
         #region commands
 
-        public ReactiveCommand<string, string> PreviewAudioCommand { get; set; }
+        public ReactiveCommand<AudioObject, AudioObject> PreviewAudioCommand { get; set; }
 
         public ICommand FileSelectedCommand { get; private set; }
 
@@ -277,14 +279,7 @@ namespace WolvenKit.ViewModels.Tools
                 IsAudioPreviewVisible = true;
                 SelectedIndex = 2;
 
-                // extract to temp path
-                var outfile = Path.Combine(Path.GetTempPath(), Path.GetFileName(filename));
-                using (var fs = new FileStream(outfile, FileMode.Create, FileAccess.Write))
-                {
-                    stream.CopyTo(fs);
-                }
-
-                PreviewAudioCommand.SafeExecute(outfile);
+                PreviewAudioCommand.SafeExecute(new AudioObject(Path.GetFileNameWithoutExtension(filename), stream.ToByteArray()));
             }
         }
 
@@ -308,10 +303,7 @@ namespace WolvenKit.ViewModels.Tools
                 IsAudioPreviewVisible = true;
                 SelectedIndex = 2;
 
-                // extract to temp path
-                var tempFolder = Path.GetTempPath();
-
-                PreviewAudioCommand.SafeExecute(filename);
+                PreviewAudioCommand.SafeExecute(new AudioObject(Path.GetFileNameWithoutExtension(filename), File.ReadAllBytes(filename)));
             }
             else if (Enum.TryParse<EUncookExtension>(extension, true, out var ext))
             {

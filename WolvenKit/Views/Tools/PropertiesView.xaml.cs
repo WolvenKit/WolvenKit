@@ -14,6 +14,7 @@ using System.Windows.Threading;
 using ReactiveUI;
 using Splat;
 using Syncfusion.Windows.PropertyGrid;
+using WolvenKit.App.Helpers;
 using WolvenKit.Common.Extensions;
 using WolvenKit.Functionality.Helpers;
 using WolvenKit.Functionality.Services;
@@ -41,12 +42,6 @@ namespace WolvenKit.Views.Tools
 
             //var themeResources = Application.LoadComponent(new Uri("Resources/Styles/ExpressionDark.xaml", UriKind.Relative)) as ResourceDictionary;
             //Resources.MergedDictionaries.Add(themeResources);
-
-            spectrumAnalyzer.RegisterSoundPlayer(NAudioSimpleEngine.Instance);
-            waveformTimeline.RegisterSoundPlayer(NAudioSimpleEngine.Instance);
-
-            nAudioSimple = NAudioSimpleEngine.Instance;
-            NAudioSimpleEngine.Instance.PropertyChanged += NAudioEngine_PropertyChanged;
 
             //appControl.ExeName = "binkpl64.exe";
             //appControl.Args = "test2.bk2 /J /I2 /P";
@@ -77,8 +72,6 @@ namespace WolvenKit.Views.Tools
         }
 
         #region properties
-
-        public NAudioSimpleEngine nAudioSimple { get; set; }
 
         //public TimeSpan ChannelPosition { get; set; }
 
@@ -118,232 +111,18 @@ namespace WolvenKit.Views.Tools
 
         #region AudioPreview
 
-        private void BrowseButton_Click(object sender, RoutedEventArgs e) => OpenFile();
-
-        private void Button_Click(object sender, System.Windows.RoutedEventArgs e)
-        {
-            NAudioSimpleEngine.Instance.Dispose();
-            if (NAudioSimpleEngine.Instance.CanStop)
-            {
-                NAudioSimpleEngine.Instance.Stop();
-            }
-        }
-
-        private void Button_Click_1(object sender, System.Windows.RoutedEventArgs e)
-        {
-        }
-
-        private void CloseMenuItem_Click(object sender, RoutedEventArgs e)
-        {
-        }
-
-        private void DefaultThemeMenuItem_Checked(object sender, RoutedEventArgs e)
-        {
-            //LoadDefaultTheme();
-        }
-
-        private void DraggableTitleBar_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e) => base.OnMouseLeftButtonDown(e);
-
-        private void ExpressionDarkMenuItem_Checked(object sender, RoutedEventArgs e)
-        {
-            //LoadExpressionDarkTheme();
-        }
-
-        private void ExpressionLightMenuItem_Checked(object sender, RoutedEventArgs e)
-        {
-            //  LoadExpressionLightTheme();
-        }
-
-        private void OpenFile()
-        {
-            var openDialog = new Microsoft.Win32.OpenFileDialog
-            {
-                Filter = "(*.mp3)|*.mp3"
-            };
-            if (openDialog.ShowDialog() == true)
-            {
-                NAudioSimpleEngine.Instance.OpenFile(openDialog.FileName);
-                //FileText.SetCurrentValue(TextBox.TextProperty, openDialog.FileName);
-                RunnerText.SetCurrentValue(ContentProperty, openDialog.FileName);
-            }
-        }
-
-        private void OpenFileMenuItem_Click(object sender, RoutedEventArgs e) => OpenFile();
-
-        private void PauseButton_Click(object sender, RoutedEventArgs e)
-        {
-            if (NAudioSimpleEngine.Instance.CanPause)
-            {
-                NAudioSimpleEngine.Instance.Pause();
-            }
-        }
-
-        private void PlayButton_Click(object sender, RoutedEventArgs e)
-        {
-            if (NAudioSimpleEngine.Instance.CanPlay)
-            {
-                NAudioSimpleEngine.Instance.Play();
-            }
-        }
-
-        // Begin dragging the window
-        private void PlayListView_OnPreviewMouseLeftButtonUp(object sender, MouseButtonEventArgs e)
-        {
-            var item = (sender as ListBox).SelectedItem;
-            if (item != null)
-            {
-                if (NAudioSimpleEngine.Instance.CanStop)
-                {
-                    NAudioSimpleEngine.Instance.Stop();
-                }
-
-                var path = (item as TextBlock).Text;
-                NAudioSimpleEngine.Instance.OpenFile(path);
-                //FileText.SetCurrentValue(TextBox.TextProperty, openDialog.FileName);
-                NAudioSimpleEngine.Instance.Play();
-            }
-        }
-
-        private void StopButton_Click(object sender, RoutedEventArgs e)
-        {
-            if (NAudioSimpleEngine.Instance.CanStop)
-            {
-                NAudioSimpleEngine.Instance.Stop();
-            }
-        }
-
         /// <summary>
         /// convert a file to wav to preview it.
         /// </summary>
         /// <param name="path"></param>
-        private async Task TempConvertToWemWavAsync(string path) => await Task.Run(() => TempConvertToWemWav(path));
+        private async Task TempConvertToWemWavAsync(AudioObject obj) => await Task.Run(() => TempConvertToWemWav(obj));
 
-        private void TempConvertToWemWav(string path)
+        private void TempConvertToWemWav(AudioObject obj)
         {
-            var ManagerCacheDir = Path.Combine(ISettingsManager.GetTemp_AudioPath());
-
-            //Clean directory
-            Directory.CreateDirectory(ManagerCacheDir);
-
-            foreach (var f in Directory.GetFiles(ManagerCacheDir))
-            {
-                try
-                {
-                    File.Delete(f);
-                }
-                catch
-                {
-                }
-            }
-
-            var outf = Path.Combine(ManagerCacheDir, Path.GetFileNameWithoutExtension(path) + ".wav");
-            Trace.WriteLine(outf);
-            Trace.WriteLine(path);
-
-            var arg = path.ToEscapedPath() + " -o " + outf.ToEscapedPath();
-            var p = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "lib", "vgmstream", "test.exe");
-            var si = new ProcessStartInfo(
-                    p,
-                    arg
-                )
-            {
-                CreateNoWindow = true,
-                WindowStyle = ProcessWindowStyle.Hidden,
-                UseShellExecute = false,
-                RedirectStandardError = true,
-                RedirectStandardOutput = true,
-                Verb = "runas"
-            };
-            var proc = Process.Start(si);
-            proc.WaitForExit();
-            Trace.WriteLine(proc.StandardOutput.ReadToEnd());
-
             DispatcherHelper.RunOnMainThread(() =>
             {
-                mediaPlayer.Open(new Uri(outf));
-
-
-
-                var timer = new DispatcherTimer
-                {
-                    Interval = TimeSpan.FromSeconds(1)
-                };
-                timer.Tick += Timer_Tick;
-
-                timer.Start();
-
-                var ChannelPositionTimer = new DispatcherTimer
-                {
-                    Interval = TimeSpan.FromMilliseconds(1)
-                };
-                ChannelPositionTimer.Tick += ChannelPositionTimer_Tick;
-                ;
-
-                ChannelPositionTimer.Start();
-
-                //ChannelLength = $"{mediaPlayer.Position.TotalMinutes} : {mediaPlayer.Position.TotalSeconds} : {mediaPlayer.Position.TotalMilliseconds}";
-                NAudioSimpleEngine.Instance.OpenFile(outf);
-                RunnerText.SetCurrentValue(ContentProperty, Path.GetFileNameWithoutExtension(outf));
+                AudioPlayer.OpenAudioObject(obj);
             });
-
-            //AudioFileList.Add(lvi);
-        }
-
-
-        /// <summary>
-        /// property changed for naudio
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void NAudioEngine_PropertyChanged(object sender, PropertyChangedEventArgs e)
-        {
-            switch (e.PropertyName)
-            {
-                case "ChannelPosition":
-                    clockDisplay.SetCurrentValue(DigitalClock.TimeProperty, TimeSpan.FromSeconds(NAudioSimpleEngine.Instance.ChannelPosition));
-                    break;
-
-                default:
-                    // Do Nothing
-                    break;
-            }
-        }
-
-        private void Timer_Tick(object sender, EventArgs e)
-        {
-            if (mediaPlayer.Source != null)
-            {
-                clockDisplay.SetCurrentValue(DigitalClock.TimeProperty, mediaPlayer.Position);
-            }
-            else
-            {
-                //AudioPositionText = "No file selected...";
-            }
-        }
-
-        private void ChannelPositionTimer_Tick(object sender, EventArgs e) => NAudioSimpleEngine.Instance.ChannelPosition = mediaPlayer.Position.TotalSeconds;
-
-        private void PlayButton_Click_1(object sender, RoutedEventArgs e)
-        {
-            if (mediaPlayer.NaturalDuration.HasTimeSpan)
-            {
-                //Call Stop Playing if the media player is at the end of the track
-                if (mediaPlayer.Position >= mediaPlayer.NaturalDuration.TimeSpan)
-                {
-                    mediaPlayer.Stop();
-                    mediaPlayer.Position = new TimeSpan(0);
-                }
-
-                mediaPlayer.Play();
-            }
-        }
-
-        private void PauseButton_Click_1(object sender, RoutedEventArgs e) => mediaPlayer.Pause();
-
-        private void StopButton_Click_1(object sender, RoutedEventArgs e)
-        {
-            mediaPlayer.Stop();
-            mediaPlayer.Position = new TimeSpan(0);
         }
 
         #endregion AudioPreview

@@ -12,6 +12,7 @@ using ReactiveUI;
 using Splat;
 using Syncfusion.UI.Xaml.Grid;
 using Syncfusion.UI.Xaml.TreeGrid;
+using WolvenKit.App.Helpers;
 using WolvenKit.Common;
 using WolvenKit.Common.DDS;
 using WolvenKit.Common.Interfaces;
@@ -185,15 +186,14 @@ namespace WolvenKit.Views.Tools
                 }
             }
 
-            using (var fs = new FileStream(endPath, FileMode.Create, FileAccess.Write))
+            var buffer = Array.Empty<byte>();
+            using (var ms = new MemoryStream())
             {
-                selectedGameFile.Extract(fs);
+                selectedGameFile.Extract(ms);
+                buffer = ms.ToArray();
             }
 
-            if (File.Exists(endPath))
-            {
-                propertiesViewModel.PreviewAudioCommand.SafeExecute(endPath);
-            }
+            propertiesViewModel.PreviewAudioCommand.SafeExecute(new AudioObject(Path.GetFileNameWithoutExtension(endPath), buffer));
         }
 
         private async void PreviewTexture(PropertiesViewModel propertiesViewModel, RedFileViewModel selectedItem, IGameFile selectedGameFile)

@@ -6,6 +6,7 @@ using System.IO;
 using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Windows.Threading;
+using NAudio.Vorbis;
 using NAudio.Wave;
 using WolvenKit.Functionality.Helpers;
 using WolvenKit.MVVM.Views.Components.Tools.AudioTool;
@@ -39,8 +40,7 @@ namespace WolvenKit.Views.Editor.AudioTool
         /// <summary>
         /// 是否允许播放
         /// </summary>
-        public bool CanPlay => !string.IsNullOrEmpty(_currentFilePath) && File.Exists(_currentFilePath) &&
-                       WaveOutDevice != null && _activeStream != null && _inputStream != null;
+        public bool CanPlay => WaveOutDevice != null && _activeStream != null && _inputStream != null;
 
         /// <summary>
         /// 是否允许暂停
@@ -157,18 +157,17 @@ namespace WolvenKit.Views.Editor.AudioTool
             }
         }
 
-        private void GenerateWaveformData(string path)
+        private void GenerateWaveformData()
         {
             if (waveformGenerateWorker.IsBusy)
             {
-                pendingWaveformPath = path;
                 waveformGenerateWorker.CancelAsync();
                 return;
             }
 
             if (!waveformGenerateWorker.IsBusy && waveformCompressedPointCount != 0)
             {
-                waveformGenerateWorker.RunWorkerAsync(new WaveformGenerationParams(waveformCompressedPointCount, path));
+                waveformGenerateWorker.RunWorkerAsync(new WaveformGenerationParams(waveformCompressedPointCount));
             }
         }
         private void waveStream_Sample(object sender, SampleEventArgs e) => waveformAggregator.Add(e.Left, e.Right);
@@ -176,8 +175,7 @@ namespace WolvenKit.Views.Editor.AudioTool
         private void waveformGenerateWorker_DoWork(object sender, DoWorkEventArgs e)
         {
             var waveformParams = e.Argument as WaveformGenerationParams;
-            var waveformMp3Stream = new WaveFileReader(waveformParams.Path);
-            var waveformInputStream = new WaveChannel32(waveformMp3Stream);
+            var waveformInputStream = new WaveChannel32(_activeStream);
             waveformInputStream.Sample += waveStream_Sample;
 
             var frameLength = fftDataSize;
@@ -253,9 +251,6 @@ namespace WolvenKit.Views.Editor.AudioTool
             waveformInputStream.Close();
             waveformInputStream.Dispose();
             waveformInputStream = null;
-            waveformMp3Stream.Close();
-            waveformMp3Stream.Dispose();
-            waveformMp3Stream = null;
         }
 
         private void waveformGenerateWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
@@ -264,23 +259,19 @@ namespace WolvenKit.Views.Editor.AudioTool
             {
                 if (!waveformGenerateWorker.IsBusy && waveformCompressedPointCount != 0)
                 {
-                    waveformGenerateWorker.RunWorkerAsync(new WaveformGenerationParams(waveformCompressedPointCount, pendingWaveformPath));
+                    waveformGenerateWorker.RunWorkerAsync(new WaveformGenerationParams(waveformCompressedPointCount));
                 }
             }
         }
 
         private class WaveformGenerationParams
         {
-
-            public WaveformGenerationParams(int points, string path)
+            public WaveformGenerationParams(int points)
             {
                 Points = points;
-                Path = path;
             }
-
-            public string Path { get; protected set; }
-            public int Points { get; protected set; }
-
+            
+            public int Points { get; }
         }
 
         public float[] WaveformData
@@ -299,7 +290,6 @@ namespace WolvenKit.Views.Editor.AudioTool
 
         private float[] fullLevelData;
         private float[] waveformData;
-        private string pendingWaveformPath;
         private SampleAggregator waveformAggregator;
         private readonly int fftDataSize = (int)FFTDataSize.FFT2048;
 
@@ -374,8 +364,7 @@ namespace WolvenKit.Views.Editor.AudioTool
                 else if (GetTypeWithExtension(filePath) == AudioFileType.Wav)
                 {
                     _activeStream = new WaveFileReader(filePath);
-                    GenerateWaveformData(filePath);
-
+                    GenerateWaveformData();
                 }
                 else
                 {
@@ -388,6 +377,38 @@ namespace WolvenKit.Views.Editor.AudioTool
                 _inputStream.Sample += InputStreamOnSampleChanged;
                 WaveOutDevice.Init(_inputStream);
                 _currentFilePath = filePath;
+
+                RefreshPlayingState();
+
+                return true;
+            }
+            catch (Exception e)
+            {
+                _activeStream = null;
+                Debug.WriteLine(e);
+                throw;
+            }
+        }
+
+        public bool OpenOggStream(Stream stream)
+        {
+            StopAndCloseStream();
+
+            try
+            {
+                WaveOutDevice = new WaveOut()
+                {
+                    DesiredLatency = 100
+                };
+
+                _activeStream = new VorbisWaveReader(stream);
+                GenerateWaveformData();
+
+                _inputStream = new WaveChannel32(_activeStream);
+
+                _sampleAggregator = new SampleAggregator(_fftDataSize);
+                _inputStream.Sample += InputStreamOnSampleChanged;
+                WaveOutDevice.Init(_inputStream);
 
                 RefreshPlayingState();
 
@@ -500,17 +521,17 @@ namespace WolvenKit.Views.Editor.AudioTool
                 OnPropertyChanged("CanStop");
             }
 
-            if (_channelLength != ChannelLength)
-            {
-                _channelLength = ChannelLength;
-                OnPropertyChanged("ChannelLength");
-            }
-
-            if (_channelPosition != ChannelPosition)
-            {
-                _channelPosition = ChannelPosition;
-                OnPropertyChanged("ChannelPosition");
-            }
+            //if (_channelLength != ChannelLength)
+            //{
+            //    _channelLength = ChannelLength;
+            //    OnPropertyChanged("ChannelLength");
+            //}
+            //
+            //if (_channelPosition != ChannelPosition)
+            //{
+            //    _channelPosition = ChannelPosition;
+            //    OnPropertyChanged("ChannelPosition");
+            //}
         }
 
         private void StopAndCloseStream()
