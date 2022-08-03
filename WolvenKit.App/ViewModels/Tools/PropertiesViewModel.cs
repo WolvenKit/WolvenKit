@@ -207,7 +207,7 @@ namespace WolvenKit.ViewModels.Tools
         /// </summary>
         /// <param name="model"></param>
         /// <returns></returns>
-        public async Task ExecuteSelectFile(FileModel model)
+        public void ExecuteSelectFile(FileModel model)
         {
             if (model == null)
             {
@@ -243,14 +243,15 @@ namespace WolvenKit.ViewModels.Tools
 
             if (Enum.TryParse<TexturePreviewExtensions>(extension, true, out _) ||
                 Enum.TryParse<MeshPreviewExtensions>(extension, true, out _) ||
-                Enum.TryParse<AudioPreviewExtensions>(extension, true, out _))
+                Enum.TryParse<AudioPreviewExtensions>(extension, true, out _) ||
+                Enum.TryParse<EUncookExtension>(extension, true, out _))
             {
                 CR2WFile cr2w = null;
                 using (var stream = new FileStream(model.FullName, FileMode.Open, FileAccess.Read, FileShare.ReadWrite, 4096, FileOptions.SequentialScan))
                 {
                     if (!_parser.TryReadRed4File(stream, out cr2w))
                     {
-                        await PreviewPhysicalFile(model.FullName);
+                        PreviewPhysicalFile(model.FullName);
                     }
                 }
                 if (cr2w != null)
@@ -293,7 +294,7 @@ namespace WolvenKit.ViewModels.Tools
         /// <param name="stream"></param>
         /// <param name="filename"></param>
         /// <returns></returns>
-        private async Task PreviewPhysicalFile(string filename)
+        private void PreviewPhysicalFile(string filename)
         {
             var extension = Path.GetExtension(filename).TrimStart('.');
 
@@ -312,16 +313,9 @@ namespace WolvenKit.ViewModels.Tools
 
                 PreviewAudioCommand.SafeExecute(filename);
             }
-            else if (Enum.TryParse<EUncookExtension>(extension, true, out _))
+            else if (Enum.TryParse<EUncookExtension>(extension, true, out var ext))
             {
-                var q = await ImageDecoder.RenderToBitmapSource(filename);
-                if (q != null)
-                {
-                    var g = BitmapFrame.Create(q);
-                    LoadImage(g);
-                    IsImagePreviewVisible = true;
-                    SelectedIndex = 3;
-                }
+                SetupRawImage(filename, ext);
             }
         }
 
@@ -362,6 +356,50 @@ namespace WolvenKit.ViewModels.Tools
         public void SetupImage(RedBaseClass cls)
         {
             var image = RedImage.FromRedClass(cls);
+
+            if (image.Metadata.Format == DXGI_FORMAT.DXGI_FORMAT_R8G8_UNORM)
+            {
+                return;
+            }
+
+            var bitmapImage = new BitmapImage();
+            bitmapImage.BeginInit();
+            bitmapImage.StreamSource = new MemoryStream(image.SaveToPNGMemory());
+            bitmapImage.EndInit();
+
+            LoadedBitmapFrame = bitmapImage;
+
+            IsImagePreviewVisible = true;
+            SelectedIndex = 3;
+        }
+
+        public void SetupRawImage(string fileName, EUncookExtension ext)
+        {
+            RedImage image;
+
+            switch (ext)
+            {
+                case EUncookExtension.dds:
+                    image = RedImage.LoadFromDDSFile(fileName);
+                    break;
+                case EUncookExtension.tga:
+                    image = RedImage.LoadFromTGAFile(fileName);
+                    break;
+                case EUncookExtension.bmp:
+                    image = RedImage.LoadFromBMPFile(fileName);
+                    break;
+                case EUncookExtension.jpg:
+                    image = RedImage.LoadFromJPGFile(fileName);
+                    break;
+                case EUncookExtension.png:
+                    image = RedImage.LoadFromPNGFile(fileName);
+                    break;
+                case EUncookExtension.tiff:
+                    image = RedImage.LoadFromTIFFFile(fileName);
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(ext), ext, null);
+            }
 
             if (image.Metadata.Format == DXGI_FORMAT.DXGI_FORMAT_R8G8_UNORM)
             {

@@ -468,7 +468,7 @@ namespace WolvenKit.Views.Shell
                     propertiesViewModel.PE_FileInfoVisible = true;
                     propertiesViewModel.AB_FileInfoVisible = false;
                     //propertiesViewModel.PE_SelectedItem = pevm.SelectedItem;
-                    _ = propertiesViewModel.ExecuteSelectFile(pevm.SelectedItem);
+                    propertiesViewModel.ExecuteSelectFile(pevm.SelectedItem);
                 }
                 else if (content.Content is AssetBrowserViewModel abvm)
                 {
