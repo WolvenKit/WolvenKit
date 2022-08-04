@@ -120,7 +120,7 @@ namespace WolvenKit.Common.Model.Arguments
         /// </summary>
         [Category("Export Type")]
         [Display(Name = "XBM Export Type")]
-        public EUncookExtension UncookExtension { get; set; } = EUncookExtension.tga;
+        public EUncookExtension UncookExtension { get; set; } = EUncookExtension.png;
 
         /// <summary>
         /// Flip Image argument
