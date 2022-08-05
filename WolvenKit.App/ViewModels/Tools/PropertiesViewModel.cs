@@ -10,9 +10,12 @@ using HelixToolkit.SharpDX.Core;
 using HelixToolkit.Wpf.SharpDX;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
+using WolvenKit.App.Helpers;
 using WolvenKit.Common;
+using WolvenKit.Common.DDS;
 using WolvenKit.Common.Interfaces;
 using WolvenKit.Common.Services;
+using WolvenKit.Core.Extensions;
 using WolvenKit.Functionality.Commands;
 using WolvenKit.Functionality.Extensions;
 using WolvenKit.Functionality.Other;
@@ -86,7 +89,7 @@ namespace WolvenKit.ViewModels.Tools
 
             SetToNullAndResetVisibility();
 
-            PreviewAudioCommand = ReactiveCommand.Create<string, string>(str => str);
+            PreviewAudioCommand = ReactiveCommand.Create<AudioObject, AudioObject>(obj => obj);
 
             EffectsManager = new DefaultEffectsManager();
             Camera = new HelixToolkit.Wpf.SharpDX.PerspectiveCamera()
@@ -135,7 +138,7 @@ namespace WolvenKit.ViewModels.Tools
 
         #region commands
 
-        public ReactiveCommand<string, string> PreviewAudioCommand { get; set; }
+        public ReactiveCommand<AudioObject, AudioObject> PreviewAudioCommand { get; set; }
 
         public ICommand FileSelectedCommand { get; private set; }
 
@@ -146,7 +149,7 @@ namespace WolvenKit.ViewModels.Tools
         /// </summary>
         /// <param name="model"></param>
         /// <returns></returns>
-        public async Task ExecuteSelectFile(IFileSystemViewModel model)
+        public void ExecuteSelectFile(IFileSystemViewModel model)
         {
             if (model == null)
             {
@@ -196,7 +199,7 @@ namespace WolvenKit.ViewModels.Tools
                 }
                 if (cr2w != null)
                 {
-                    await PreviewCr2wFile(cr2w);
+                    PreviewCr2wFile(cr2w);
                 }
             }
         }
@@ -206,7 +209,7 @@ namespace WolvenKit.ViewModels.Tools
         /// </summary>
         /// <param name="model"></param>
         /// <returns></returns>
-        public async Task ExecuteSelectFile(FileModel model)
+        public void ExecuteSelectFile(FileModel model)
         {
             if (model == null)
             {
@@ -242,19 +245,20 @@ namespace WolvenKit.ViewModels.Tools
 
             if (Enum.TryParse<TexturePreviewExtensions>(extension, true, out _) ||
                 Enum.TryParse<MeshPreviewExtensions>(extension, true, out _) ||
-                Enum.TryParse<AudioPreviewExtensions>(extension, true, out _))
+                Enum.TryParse<AudioPreviewExtensions>(extension, true, out _) ||
+                Enum.TryParse<EUncookExtension>(extension, true, out _))
             {
                 CR2WFile cr2w = null;
                 using (var stream = new FileStream(model.FullName, FileMode.Open, FileAccess.Read, FileShare.ReadWrite, 4096, FileOptions.SequentialScan))
                 {
                     if (!_parser.TryReadRed4File(stream, out cr2w))
                     {
-                        await PreviewPhysicalFile(model.FullName);
+                        PreviewPhysicalFile(model.FullName);
                     }
                 }
                 if (cr2w != null)
                 {
-                    await PreviewCr2wFile(cr2w);
+                    PreviewCr2wFile(cr2w);
                 }
             }
         }
@@ -275,14 +279,7 @@ namespace WolvenKit.ViewModels.Tools
                 IsAudioPreviewVisible = true;
                 SelectedIndex = 2;
 
-                // extract to temp path
-                var outfile = Path.Combine(Path.GetTempPath(), Path.GetFileName(filename));
-                using (var fs = new FileStream(outfile, FileMode.Create, FileAccess.Write))
-                {
-                    stream.CopyTo(fs);
-                }
-
-                PreviewAudioCommand.SafeExecute(outfile);
+                PreviewAudioCommand.SafeExecute(new AudioObject(Path.GetFileNameWithoutExtension(filename), stream.ToByteArray()));
             }
         }
 
@@ -292,7 +289,7 @@ namespace WolvenKit.ViewModels.Tools
         /// <param name="stream"></param>
         /// <param name="filename"></param>
         /// <returns></returns>
-        private async Task PreviewPhysicalFile(string filename)
+        private void PreviewPhysicalFile(string filename)
         {
             var extension = Path.GetExtension(filename).TrimStart('.');
 
@@ -306,25 +303,15 @@ namespace WolvenKit.ViewModels.Tools
                 IsAudioPreviewVisible = true;
                 SelectedIndex = 2;
 
-                // extract to temp path
-                var tempFolder = Path.GetTempPath();
-
-                PreviewAudioCommand.SafeExecute(filename);
+                PreviewAudioCommand.SafeExecute(new AudioObject(Path.GetFileNameWithoutExtension(filename), File.ReadAllBytes(filename)));
             }
-            else if (Enum.TryParse<EUncookExtension>(extension, true, out _))
+            else if (Enum.TryParse<EUncookExtension>(extension, true, out var ext))
             {
-                var q = await ImageDecoder.RenderToBitmapSource(filename);
-                if (q != null)
-                {
-                    var g = BitmapFrame.Create(q);
-                    LoadImage(g);
-                    IsImagePreviewVisible = true;
-                    SelectedIndex = 3;
-                }
+                SetupRawImage(filename, ext);
             }
         }
 
-        private async Task PreviewCr2wFile(CR2WFile cr2w)
+        private void PreviewCr2wFile(CR2WFile cr2w)
         {
             //if (string.Equals(extension, ERedExtension.bk2.ToString(),
             //   System.StringComparison.OrdinalIgnoreCase))
@@ -342,37 +329,84 @@ namespace WolvenKit.ViewModels.Tools
                 cbt.RenderTextureResource.RenderResourceBlobPC != null &&
                 cbt.RenderTextureResource.RenderResourceBlobPC.GetValue() is rendRenderTextureBlobPC)
             {
-                await SetupImage(cbt);
+                SetupImage(cbt);
             }
 
             if (cr2w.RootChunk is CMesh cm && cm.RenderResourceBlob != null &&
                 cm.RenderResourceBlob.GetValue() is rendRenderTextureBlobPC)
             {
-                await SetupImage(cm);
+                SetupImage(cm);
             }
 
             if (cr2w.RootChunk is CReflectionProbeDataResource crpdr &&
                 crpdr.TextureData.RenderResourceBlobPC.GetValue() is rendRenderTextureBlobPC)
             {
-                await SetupImage(crpdr);
+                SetupImage(crpdr);
             }
         }
 
-        public async Task SetupImage(RedBaseClass cls)
+        public void SetupImage(RedBaseClass cls)
         {
-            using var ddsstream = new MemoryStream();
-            try
+            var image = RedImage.FromRedClass(cls);
+
+            if (image.Metadata.Format == DXGI_FORMAT.DXGI_FORMAT_R8G8_UNORM)
             {
-                if (ModTools.ConvertRedClassToDdsStream(cls, ddsstream, out _))
-                {
-                    await LoadImageFromStream(ddsstream);
-                }
+                return;
             }
-            catch (Exception e)
+
+            var bitmapImage = new BitmapImage();
+            bitmapImage.BeginInit();
+            bitmapImage.StreamSource = new MemoryStream(image.SaveToPNGMemory());
+            bitmapImage.EndInit();
+
+            LoadedBitmapFrame = bitmapImage;
+
+            IsImagePreviewVisible = true;
+            SelectedIndex = 3;
+        }
+
+        public void SetupRawImage(string fileName, EUncookExtension ext)
+        {
+            RedImage image;
+
+            switch (ext)
             {
-                _loggerService.Error(e);
-                //throw;
+                case EUncookExtension.dds:
+                    image = RedImage.LoadFromDDSFile(fileName);
+                    break;
+                case EUncookExtension.tga:
+                    image = RedImage.LoadFromTGAFile(fileName);
+                    break;
+                case EUncookExtension.bmp:
+                    image = RedImage.LoadFromBMPFile(fileName);
+                    break;
+                case EUncookExtension.jpg:
+                    image = RedImage.LoadFromJPGFile(fileName);
+                    break;
+                case EUncookExtension.png:
+                    image = RedImage.LoadFromPNGFile(fileName);
+                    break;
+                case EUncookExtension.tiff:
+                    image = RedImage.LoadFromTIFFFile(fileName);
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(ext), ext, null);
             }
+
+            if (image.Metadata.Format == DXGI_FORMAT.DXGI_FORMAT_R8G8_UNORM)
+            {
+                return;
+            }
+
+            var bitmapImage = new BitmapImage();
+            bitmapImage.BeginInit();
+            bitmapImage.StreamSource = new MemoryStream(image.SaveToPNGMemory());
+            bitmapImage.EndInit();
+
+            LoadedBitmapFrame = bitmapImage;
+
+            IsImagePreviewVisible = true;
+            SelectedIndex = 3;
         }
 
         public async Task LoadImageFromStream(Stream stream)

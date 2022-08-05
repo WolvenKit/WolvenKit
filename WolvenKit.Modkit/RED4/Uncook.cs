@@ -351,17 +351,15 @@ namespace WolvenKit.Modkit.RED4
                         return false;
                     }
 
-                    DXGI_FORMAT texformat;
-
                     if (WolvenTesting.IsTesting)
                     {
                         using var ms = new MemoryStream();
-                        return ConvertXbmToDdsStream(cr2wStream, ms, out texformat);
+                        return ConvertXbmToDdsStream(cr2wStream, ms, out _, out _);
                     }
 
                     using (var ms = new MemoryStream())
                     {
-                        if (!ConvertXbmToDdsStream(cr2wStream, ms, out texformat))
+                        if (!ConvertXbmToDdsStream(cr2wStream, ms, out _, out var decompressedFormat))
                         {
                             return false;
                         }
@@ -371,7 +369,7 @@ namespace WolvenKit.Modkit.RED4
                         if (xbmargs.UncookExtension != EUncookExtension.dds)
                         {
                             ms.Seek(0, SeekOrigin.Begin);
-                            return Texconv.ConvertFromDdsAndSave(ms, ddsPath, xbmargs);
+                            return Texconv.ConvertFromDdsAndSave(ms, ddsPath, xbmargs, decompressedFormat);
                         }
                         else
                         {
@@ -637,7 +635,7 @@ namespace WolvenKit.Modkit.RED4
             var height = blob.Header.SizeInfo.Height;
             var width = blob.Header.SizeInfo.Width;
 
-            var texformat = CommonFunctions.GetDXGIFormat(texa.Setup.Compression, texa.Setup.RawFormat, _loggerService);
+            var texformat = CommonFunctions.GetDXGIFormat(texa.Setup.Compression, texa.Setup.RawFormat, texa.Setup.IsGamma, _loggerService);
 
             DDSUtils.GenerateAndWriteHeader(outstream,
                 new DDSMetadata(width, height, 1, sliceCount, mipCount,
@@ -691,7 +689,7 @@ namespace WolvenKit.Modkit.RED4
             var height = blob.Header.SizeInfo.Height;
             var width = blob.Header.SizeInfo.Width;
 
-            var texformat = CommonFunctions.GetDXGIFormat(ctex.Setup.Compression, ctex.Setup.RawFormat, _loggerService);
+            var texformat = CommonFunctions.GetDXGIFormat(ctex.Setup.Compression, ctex.Setup.RawFormat, ctex.Setup.IsGamma, _loggerService);
 
             DDSUtils.GenerateAndWriteHeader(outstream,
                 new DDSMetadata(width, height, 1, sliceCount, mipCount,
@@ -720,9 +718,10 @@ namespace WolvenKit.Modkit.RED4
             return true;
         }
 
-        public bool ConvertXbmToDdsStream(Stream redInFile, Stream outstream, out DXGI_FORMAT texformat)
+        public bool ConvertXbmToDdsStream(Stream redInFile, Stream outstream, out DXGI_FORMAT texformat, out DXGI_FORMAT decompressedFormat)
         {
             texformat = DXGI_FORMAT.DXGI_FORMAT_R8G8B8A8_UNORM;
+            decompressedFormat = DXGI_FORMAT.DXGI_FORMAT_UNKNOWN;
 
             // read the cr2wfile
             if (!_wolvenkitFileService.TryReadRed4File(redInFile, out var cr2w))
@@ -730,69 +729,33 @@ namespace WolvenKit.Modkit.RED4
                 return false;
             }
 
-            return ConvertRedClassToDdsStream(cr2w.RootChunk, outstream, out texformat);
+            return ConvertRedClassToDdsStream(cr2w.RootChunk, outstream, out texformat, out decompressedFormat);
         }
 
-        public static bool ConvertRedClassToDdsStream(RedBaseClass cls, Stream outstream, out DXGI_FORMAT texformat)
+        public static bool ConvertRedClassToDdsStream(RedBaseClass cls, Stream outstream, out DXGI_FORMAT texformat, out DXGI_FORMAT decompressedFormat)
         {
             texformat = DXGI_FORMAT.DXGI_FORMAT_R8G8B8A8_UNORM;
+            decompressedFormat = DXGI_FORMAT.DXGI_FORMAT_UNKNOWN;
 
-            rendRenderTextureBlobPC blob = null;
-            var rawfmt = Enums.ETextureRawFormat.TRF_Invalid;
-            var compression = Enums.ETextureCompression.TCM_None;
-
-            if (cls is CBitmapTexture xbm)
+            try
             {
-                if (xbm.RenderTextureResource.RenderResourceBlobPC != null &&
-                    xbm.RenderTextureResource.RenderResourceBlobPC.GetValue() is rendRenderTextureBlobPC xbmBlob)
-                {
-                    blob = xbmBlob;
-                }
-                rawfmt = xbm.Setup.RawFormat;
-                compression = xbm.Setup.Compression;
-            }
+                var img = RedImage.FromRedClass(cls);
 
-            if (cls is CMesh mesh)
-            {
-                if (mesh.RenderResourceBlob.GetValue() is rendRenderTextureBlobPC meshBlob)
+                texformat = img.Metadata.Format;
+                decompressedFormat = img.Metadata.Format;
+                if (img.CompressionFormat != null)
                 {
-                    blob = meshBlob;
+                    texformat = (DXGI_FORMAT)img.CompressionFormat;
                 }
-            }
 
-            if (cls is CReflectionProbeDataResource probe)
-            {
-                if (probe.TextureData.RenderResourceBlobPC.GetValue() is rendRenderTextureBlobPC probeBlob)
-                {
-                    blob = probeBlob;
-                }
-            }
+                outstream.Write(img.SaveToDDSMemory());
 
-            if (blob == null)
+                return true;
+            }
+            catch (Exception)
             {
                 return false;
             }
-
-            #region get xbm data
-
-            var width = blob.Header.SizeInfo.Width;
-            var height = blob.Header.SizeInfo.Height;
-            var mipCount = blob.Header.TextureInfo.MipCount;
-            var sliceCount = blob.Header.TextureInfo.SliceCount;
-            var alignment = blob.Header.TextureInfo.DataAlignment;
-
-            texformat = CommonFunctions.GetDXGIFormat(compression, rawfmt, null);
-
-            #endregion get xbm data
-
-            // extract and write dds to stream
-            DDSUtils.GenerateAndWriteHeader(outstream,
-                new DDSMetadata(width, height, 1, sliceCount, mipCount,
-                    0, 0, texformat, TEX_DIMENSION.TEX_DIMENSION_TEXTURE2D, alignment, true));
-
-            outstream.Write(blob.TextureData.Buffer.GetBytes());
-
-            return true;
         }
     }
 }

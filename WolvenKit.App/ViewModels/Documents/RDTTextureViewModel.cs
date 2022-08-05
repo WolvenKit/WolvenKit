@@ -6,8 +6,10 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
+using WolvenKit.Common.DDS;
 using WolvenKit.Functionality.Other;
 using WolvenKit.Modkit.RED4;
+using WolvenKit.RED4.CR2W;
 using WolvenKit.RED4.Types;
 
 namespace WolvenKit.ViewModels.Documents
@@ -15,7 +17,9 @@ namespace WolvenKit.ViewModels.Documents
     public class RDTTextureViewModel : RedDocumentTabViewModel
     {
         protected readonly RedBaseClass _data;
-        //protected Stream ImageStream;
+        protected readonly RedImage _image;
+
+        
 
         public delegate void RenderDelegate();
         public RenderDelegate Render;
@@ -26,6 +30,7 @@ namespace WolvenKit.ViewModels.Documents
             Header = "Texture Preview";
             File = file;
             _data = data;
+            _image = RedImage.FromRedClass(data);
 
             Render = SetupImage;
         }
@@ -34,11 +39,16 @@ namespace WolvenKit.ViewModels.Documents
         {
             Header = "Texture Preview";
             File = file;
-            //_data = data;
-            //ImageStream = stream;
 
-            _ = LoadImageFromStream(stream);
+            var buffer = new byte[stream.Length];
+            stream.Read(buffer, 0, buffer.Length);
+
+            _image = RedImage.LoadFromDDSMemory(buffer);
+
+            Render = SetupImage;
         }
+
+        public override void OnSelected() => Render?.Invoke();
 
         protected void SetupImage()
         {
@@ -47,20 +57,18 @@ namespace WolvenKit.ViewModels.Documents
                 return;
             }
 
-            using var ddsstream = new MemoryStream();
-            try
+            if (_image.Metadata.Format == DXGI_FORMAT.DXGI_FORMAT_R8G8_UNORM)
             {
-                if (ModTools.ConvertRedClassToDdsStream(_data, ddsstream, out _))
-                {
-                    _ = LoadImageFromStream(ddsstream);
-                    IsRendered = true;
-                }
+                return;
             }
-            catch (Exception e)
-            {
-                Console.WriteLine(e.Message);
-                throw;
-            }
+
+            var bitmapImage = new BitmapImage();
+            bitmapImage.BeginInit();
+            bitmapImage.StreamSource = new MemoryStream(_image.SaveToPNGMemory());
+            bitmapImage.EndInit();
+
+            Image = bitmapImage;
+            IsRendered = true;
         }
 
         protected async Task LoadImageFromStream(Stream stream)

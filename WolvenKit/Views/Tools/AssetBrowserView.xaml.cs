@@ -5,13 +5,16 @@ using System.Linq;
 using System.Reactive.Disposables;
 using System.Text.RegularExpressions;
 using System.Windows;
+using System.Windows.Media.Imaging;
 using DynamicData;
 using HandyControl.Data;
 using ReactiveUI;
 using Splat;
 using Syncfusion.UI.Xaml.Grid;
 using Syncfusion.UI.Xaml.TreeGrid;
+using WolvenKit.App.Helpers;
 using WolvenKit.Common;
+using WolvenKit.Common.DDS;
 using WolvenKit.Common.Interfaces;
 using WolvenKit.Common.Model;
 using WolvenKit.Common.Model.Arguments;
@@ -20,6 +23,7 @@ using WolvenKit.Functionality.Commands;
 using WolvenKit.Functionality.Helpers;
 using WolvenKit.Functionality.Other;
 using WolvenKit.Functionality.Services;
+using WolvenKit.RED4.CR2W;
 using WolvenKit.ViewModels.Tools;
 
 namespace WolvenKit.Views.Tools
@@ -182,15 +186,14 @@ namespace WolvenKit.Views.Tools
                 }
             }
 
-            using (var fs = new FileStream(endPath, FileMode.Create, FileAccess.Write))
+            var buffer = Array.Empty<byte>();
+            using (var ms = new MemoryStream())
             {
-                selectedGameFile.Extract(fs);
+                selectedGameFile.Extract(ms);
+                buffer = ms.ToArray();
             }
 
-            if (File.Exists(endPath))
-            {
-                propertiesViewModel.PreviewAudioCommand.SafeExecute(endPath);
-            }
+            propertiesViewModel.PreviewAudioCommand.SafeExecute(new AudioObject(Path.GetFileNameWithoutExtension(endPath), buffer));
         }
 
         private async void PreviewTexture(PropertiesViewModel propertiesViewModel, RedFileViewModel selectedItem, IGameFile selectedGameFile)
@@ -204,26 +207,22 @@ namespace WolvenKit.Views.Tools
             await using var cr2wstream = new MemoryStream();
             selectedGameFile.Extract(cr2wstream);
 
-            // convert xbm to dds stream
-            await using var ddsstream = new MemoryStream();
-            var expargs = new XbmExportArgs { Flip = false, UncookExtension = EUncookExtension.tga };
-            if (man != null)
+            var parser = Locator.Current.GetService<Red4ParserService>();
+            if (parser != null && parser.TryReadRed4File(cr2wstream, out var cr2w))
             {
-                man.ConvertXbmToDdsStream(cr2wstream, ddsstream, out _);
-            }
+                var img = RedImage.FromRedFile(cr2w);
 
-            // try loading it in pfim
-            try
-            {
-                var qa = await ImageDecoder.RenderToBitmapSourceDds(ddsstream);
-                if (qa != null)
+                if (img.Metadata.Format == DXGI_FORMAT.DXGI_FORMAT_R8G8_UNORM)
                 {
-                    propertiesViewModel.LoadImage(qa);
+                    return;
                 }
-            }
-            catch (Exception)
-            {
-                // ignored
+
+                var bitmapImage = new BitmapImage();
+                bitmapImage.BeginInit();
+                bitmapImage.StreamSource = new MemoryStream(img.SaveToPNGMemory());
+                bitmapImage.EndInit();
+
+                propertiesViewModel.LoadImage(bitmapImage);
             }
         }
 
@@ -316,7 +315,7 @@ namespace WolvenKit.Views.Tools
 
             var propertiesViewModel = Locator.Current.GetService<PropertiesViewModel>();
 
-            _ = propertiesViewModel.ExecuteSelectFile(vm.RightSelectedItem);
+            propertiesViewModel.ExecuteSelectFile(vm.RightSelectedItem);
 
             /*
 

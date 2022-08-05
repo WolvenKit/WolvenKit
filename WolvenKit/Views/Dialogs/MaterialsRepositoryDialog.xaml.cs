@@ -116,7 +116,7 @@ namespace WolvenKit.Views.Dialogs
             var exportArgs =
                 new GlobalExportArgs().Register(
                     new XbmExportArgs() { UncookExtension = texturesExtension },
-                    new MlmaskExportArgs() { UncookExtension = texturesExtension.ToMlmaskUncookExtension() }
+                    new MlmaskExportArgs() { UncookExtension = texturesExtension }
                 );
 
             foreach (var (key, fileEntries) in groupedFiles)

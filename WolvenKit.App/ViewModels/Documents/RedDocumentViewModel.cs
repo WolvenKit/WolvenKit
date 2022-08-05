@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 using DynamicData.Kernel;
 using Prism.Commands;
+using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using Splat;
 using WolvenKit.Common;
@@ -61,6 +62,9 @@ namespace WolvenKit.ViewModels.Documents
 
             Extension = Path.GetExtension(path) != "" ? Path.GetExtension(path)[1..] : "";
             NewEmbeddedFileCommand = new DelegateCommand(ExecuteNewEmbeddedFile);
+
+            this.WhenAnyValue(x => x.SelectedTabItemViewModel)
+                .Subscribe(x => x?.OnSelected());
         }
 
         #region properties

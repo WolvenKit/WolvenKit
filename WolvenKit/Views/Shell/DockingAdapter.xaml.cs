@@ -468,7 +468,7 @@ namespace WolvenKit.Views.Shell
                     propertiesViewModel.PE_FileInfoVisible = true;
                     propertiesViewModel.AB_FileInfoVisible = false;
                     //propertiesViewModel.PE_SelectedItem = pevm.SelectedItem;
-                    _ = propertiesViewModel.ExecuteSelectFile(pevm.SelectedItem);
+                    propertiesViewModel.ExecuteSelectFile(pevm.SelectedItem);
                 }
                 else if (content.Content is AssetBrowserViewModel abvm)
                 {
@@ -476,7 +476,7 @@ namespace WolvenKit.Views.Shell
                     propertiesViewModel.AB_FileInfoVisible = true;
                     propertiesViewModel.PE_FileInfoVisible = false;
                     //propertiesViewModel.AB_SelectedItem = abvm.RightSelectedItem;
-                    _ = propertiesViewModel.ExecuteSelectFile(abvm.RightSelectedItem);
+                    propertiesViewModel.ExecuteSelectFile(abvm.RightSelectedItem);
                 }
 
                 if (content.Content != null)
