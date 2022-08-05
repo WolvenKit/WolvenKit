@@ -22,6 +22,10 @@ public class DynamicBaseClass : RedBaseClass, DynamicRedClass
         {
             return (T)(RedBaseClass)ToDynamicWidgetController();
         }
+        else if(typeof(T) == typeof(inkWidgetLogicController))
+        {
+            return (T)(RedBaseClass)ToDynamicWidgetLogicController();
+        }
         else
         {
             return default(T);
@@ -34,7 +38,18 @@ public class DynamicBaseClass : RedBaseClass, DynamicRedClass
         foreach (var prop in GetDynamicPropertyNames())
         {
             dwc.SetProperty(prop, GetProperty(prop));
-        } 
+        }
+        dwc.ClassName = ClassName;
+        return dwc;
+    }
+
+    public DynamicWidgetLogicController ToDynamicWidgetLogicController()
+    {
+        var dwc = new DynamicWidgetLogicController();
+        foreach (var prop in GetDynamicPropertyNames())
+        {
+            dwc.SetProperty(prop, GetProperty(prop));
+        }
         dwc.ClassName = ClassName;
         return dwc;
     }
@@ -52,6 +67,17 @@ public class DynamicResource : CResource, DynamicRedClass
 }
 
 public class DynamicWidgetController : inkIWidgetController, DynamicRedClass
+{
+    [RED("className")]
+    [REDProperty(IsIgnored = true)]
+    public CName ClassName
+    {
+        get => GetPropertyValue<CName>();
+        set => SetPropertyValue<CName>(value);
+    }
+}
+
+public class DynamicWidgetLogicController : inkWidgetLogicController, DynamicRedClass
 {
     [RED("className")]
     [REDProperty(IsIgnored = true)]
