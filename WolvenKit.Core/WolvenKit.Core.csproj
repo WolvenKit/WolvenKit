@@ -30,16 +30,6 @@
         <DefineConstants>_OSX</DefineConstants>
     </PropertyGroup>
 
-  <ItemGroup>
-    <None Remove="lib\kraken.dll" />
-    <None Remove="lib\libkraken.so" />
-    <None Remove="lib\libkraken.dylib" />
-  </ItemGroup>
-
-    <ItemGroup>
-      <None Remove="lib\wwtools.dll" />
-      <None Remove="lib\libwwtools.so" />
-    </ItemGroup>
 
   <ItemGroup>
     <ContentWithTargetPath Include="lib\kraken.dll">
@@ -54,30 +44,22 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <TargetPath>libkraken.dylib</TargetPath>
     </ContentWithTargetPath>
-  </ItemGroup>
-
-    <ItemGroup>
-        <ContentWithTargetPath Include="lib\wwtools.dll">
-            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-            <TargetPath>wwtools.dll</TargetPath>
-        </ContentWithTargetPath>
-        <ContentWithTargetPath Include="lib\libwwtools.so">
-            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-            <TargetPath>libwwtools.so</TargetPath>
-        </ContentWithTargetPath>
+    <ContentWithTargetPath Include="lib\wwtools.dll">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        <TargetPath>wwtools.dll</TargetPath>
+    </ContentWithTargetPath>
+    <ContentWithTargetPath Include="lib\libwwtools.so">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        <TargetPath>libwwtools.so</TargetPath>
+    </ContentWithTargetPath>
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="DynamicData" Version="7.8.6" />
-        <PackageReference Include="CsvHelper" Version="27.2.1" />
-        <PackageReference Include="Microsoft.Win32.Registry" Version="5.0.0" />
-        <PackageReference Include="protobuf-net.Core" Version="3.1.4" />
-        <PackageReference Include="ReactiveUI" Version="18.0.10" />
-        <PackageReference Include="semver" Version="2.1.0" />
+        <PackageReference Include="protobuf-net.Core" Version="3.1.17" />
+        <PackageReference Include="ReactiveUI" Version="18.2.9" />
+        <PackageReference Include="semver" Version="2.2.0" />
         <PackageReference Include="System.Reflection.MetadataLoadContext" Version="6.0.0" />
         <PackageReference Include="Serilog" Version="2.11.0" />
-        <PackageReference Include="Serilog.Settings.Configuration" Version="3.3.0" />
-        <PackageReference Include="Serilog.Sinks.Console" Version="4.0.1" />
     </ItemGroup>
 
 </Project>

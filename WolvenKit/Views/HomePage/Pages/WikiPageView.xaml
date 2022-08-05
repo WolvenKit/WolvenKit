@@ -39,26 +39,6 @@
                 VerticalAlignment="Center"
                 Orientation="Vertical"
                 />
-            <hc:AnimationPath
-                Width="45"
-                Height="45"
-                Data="{DynamicResource WikiGeo}"
-                PathLength="250"
-                RenderTransformOrigin="0.5,0.5"
-                Stretch="Uniform"
-                Stroke="{DynamicResource MahApps.Brushes.ThemeForeground}"
-                StrokeThickness="1.5"
-                Duration="00:00:08"
-                >
-                <hc:AnimationPath.RenderTransform>
-                    <TransformGroup>
-                        <ScaleTransform />
-                        <SkewTransform />
-                        <RotateTransform Angle="180" />
-                        <TranslateTransform />
-                    </TransformGroup>
-                </hc:AnimationPath.RenderTransform>
-            </hc:AnimationPath>
         </StackPanel>
     </Grid>
 </reactiveUi:ReactiveUserControl>

@@ -2,9 +2,9 @@
 
 on:
   push:
-    branches: [develop, master, main]
+    branches: [main]
   pull_request:
-    branches: [develop, master, main]
+    branches: [main]
 
 jobs:
   analyze:

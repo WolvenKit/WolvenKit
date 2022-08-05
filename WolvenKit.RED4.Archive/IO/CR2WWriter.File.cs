@@ -289,20 +289,36 @@ namespace WolvenKit.RED4.Archive.IO
                 if (buffer.Parent is appearanceAppearanceDefinition aad)
                 {
                     using var packageWriter = new appearanceAppearanceDefinitionWriter(ms) { IsRoot = false };
-                    packageWriter.WritePackage(aad, p4);
+                    packageWriter.Settings.ImportsAsHash = true;
 
-                } else if (buffer.Parent is entEntityTemplate eet)
+                    packageWriter.WritePackage(aad, p4);
+                }
+                else if (buffer.Parent is entEntityTemplate eet)
                 {
                     using var packageWriter = new entEntityTemplateWriter(ms) { IsRoot = false };
-                    packageWriter.WritePackage(eet, p4);
 
+                    if (_file.RootChunk.GetType() == typeof(appearanceAppearanceResource))
+                    {
+                        packageWriter.Settings.ImportsAsHash = true;
+                    }
+
+                    packageWriter.WritePackage(eet, p4);
                 }
                 else
                 {
                     using var packageWriter = new RedPackageWriter(ms) { IsRoot = false };
+
+                    if (_file.RootChunk.GetType() == typeof(gamePersistentStateDataResource))
+                    {
+                        packageWriter.Settings.RedPackageType = RedPackageType.SaveResource;
+                    }
+                    else if (_file.RootChunk.GetType() == typeof(inkWidgetLibraryResource))
+                    {
+                        packageWriter.Settings.RedPackageType = RedPackageType.InkLibResource;
+                    }
+
                     packageWriter.WritePackage(p4);
                 }
-
 
                 buffer.SetBytes(ms.ToArray());
             }

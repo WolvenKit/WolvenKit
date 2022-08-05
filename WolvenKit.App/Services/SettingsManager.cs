@@ -41,7 +41,6 @@ namespace WolvenKit.Functionality.Services
 
             _ = this.WhenAnyPropertyChanged(
                 nameof(ShowGuidedTour),
-                nameof(UpdateChannel),
                 nameof(MaterialRepositoryPath),
                 nameof(ThemeAccentString),
                 nameof(CheckForUpdates),
@@ -142,7 +141,7 @@ namespace WolvenKit.Functionality.Services
         [Category("General")]
         [Display(Name = "Update Channel")]
         [Reactive]
-        public EUpdateChannel UpdateChannel { get; set; }
+        public EUpdateChannel UpdateChannel { get; set; } // deprecated
 
         [Category("General")]
         [Display(Name = "Theme Accent")]
@@ -186,7 +185,7 @@ namespace WolvenKit.Functionality.Services
         [Category("Cyberpunk")]
         [Display(Name = "Show File Preview")]
         [Reactive]
-        public bool ShowFilePreview { get; set; }
+        public bool ShowFilePreview { get; set; } = true;
 
         [Browsable(false)]
         public string ReddbHash { get; set; }

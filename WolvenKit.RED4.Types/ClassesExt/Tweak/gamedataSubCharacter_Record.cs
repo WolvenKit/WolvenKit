@@ -19,14 +19,6 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 		
-		[RED("humanoid")]
-		[REDProperty(IsIgnored = true)]
-		public CBool Humanoid
-		{
-			get => GetPropertyValue<CBool>();
-			set => SetPropertyValue<CBool>(value);
-		}
-		
 		[RED("isPrevention")]
 		[REDProperty(IsIgnored = true)]
 		public CBool IsPrevention

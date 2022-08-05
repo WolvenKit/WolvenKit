@@ -34,7 +34,7 @@ namespace WolvenKit.RED4.Archive.IO
             WriteHeader();
 
             var chunkList = file.Chunks;
-            if (_file.Settings.RedPackageType == RedPackageType.Default)
+            if (Settings.RedPackageType == RedPackageType.Default)
             {
                 short cruidsIndex = -1;
                 var cruids = new List<CRUID>();
@@ -83,10 +83,10 @@ namespace WolvenKit.RED4.Archive.IO
                 }
             }
 
-            if (_file.Settings.RedPackageType is RedPackageType.SaveResource or RedPackageType.ScriptableSystem)
+            if (Settings.RedPackageType is RedPackageType.SaveResource or RedPackageType.ScriptableSystem)
             {
                 IList<CRUID> cruids = new List<CRUID>();
-                if (_file.Settings.RedPackageType is RedPackageType.SaveResource)
+                if (Settings.RedPackageType is RedPackageType.SaveResource)
                 {
                     foreach (var chunk in file.Chunks)
                     {
@@ -102,7 +102,7 @@ namespace WolvenKit.RED4.Archive.IO
                     }
                 }
 
-                if (_file.Settings.RedPackageType is RedPackageType.ScriptableSystem)
+                if (Settings.RedPackageType is RedPackageType.ScriptableSystem)
                 {
                     var chunkDict = new Dictionary<ulong, RedBaseClass>();
 
@@ -227,7 +227,7 @@ namespace WolvenKit.RED4.Archive.IO
             var refData = new List<byte>();
             foreach (var reff in refs)
             {
-                if (_file.Settings.ImportsAsHash)
+                if (Settings.ImportsAsHash)
                 {
                     refDesc.Add(new RedPackageImportHeader
                     {

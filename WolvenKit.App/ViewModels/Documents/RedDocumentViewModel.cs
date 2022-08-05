@@ -332,39 +332,57 @@ namespace WolvenKit.ViewModels.Documents
 
         public CR2WFile GetFileFromDepotPath(CName depotPath, bool original = false)
         {
-            CR2WFile cr2wFile = null;
-
-            if (!original)
+            try
             {
-                var projectManager = Locator.Current.GetService<IProjectManager>();
-                if (projectManager.ActiveProject != null)
+                CR2WFile cr2wFile = null;
+
+                if (!original)
                 {
                     string path = null;
                     if ((string)depotPath != null)
                     {
-                        path = Path.Combine(projectManager.ActiveProject.ModDirectory, (string)depotPath);
-                    }
-                    else
-                    {
-                        var fm = Locator.Current.GetService<IWatcherService>().GetFileModelFromHash(depotPath.GetRedHash());
-                        if (fm != null)
+                        string path = null;
+                        if (!string.IsNullOrEmpty(depotPath))
                         {
-                            path = fm.FullName;
+                            path = Path.Combine(projectManager.ActiveProject.ModDirectory, (string)depotPath);
                         }
-                    }
-
-                    if (path != null && File.Exists(path))
-                    {
-                        using (var stream = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
+                        else
                         {
+                            var fm = Locator.Current.GetService<IWatcherService>().GetFileModelFromHash(depotPath.GetRedHash());
+                            if (fm != null)
+                            {
+                                path = fm.FullName;
+                            }
+                        }
+
+                        if (path != null && File.Exists(path))
+                        {
+                            using var stream = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
                             using var reader = new BinaryReader(stream);
                             cr2wFile = _parser.ReadRed4File(reader);
                         }
+                    }
+                }
 
-                        if (cr2wFile == null)
-                        {
-                            goto BadFile;
-                        }
+                if (cr2wFile == null)
+                {
+                    var _archiveManager = Locator.Current.GetService<IArchiveManager>();
+                    var file = _archiveManager.Lookup(depotPath.GetRedHash());
+                    if (file.HasValue && file.Value is FileEntry fe)
+                    {
+                        using var stream = new MemoryStream();
+                        fe.Extract(stream);
+
+                        cr2wFile = _parser.ReadRed4File(stream);
+                    }
+                }
+
+                if (cr2wFile != null)
+                {
+                    if (!string.IsNullOrEmpty(depotPath))
+                    {
+                        cr2wFile.MetaData.FileName = depotPath;
+                    }
 
                         cr2wFile.MetaData.FileName = depotPath;
 
@@ -384,51 +402,15 @@ namespace WolvenKit.ViewModels.Documents
 
                         return cr2wFile;
                     }
+
+                    return cr2wFile;
                 }
             }
-
-        BadFile:
-
-            // maybe we should be using the material depot?
-            // would need to update files on game update
-            //var settings = Locator.Current.GetService<ISettingsManager>();
-            //if (!string.IsNullOrEmpty(settings.MaterialRepositoryPath))
-
-                var _archiveManager = Locator.Current.GetService<IArchiveManager>();
-            var file = _archiveManager.Lookup(depotPath.GetRedHash());
-            if (file.HasValue && file.Value is FileEntry fe)
+            catch (Exception)
             {
-                using (var stream = new MemoryStream())
-                {
-                    fe.Extract(stream);
-                    using var reader = new BinaryReader(stream);
-                    cr2wFile = _parser.ReadRed4File(reader);
-                    if (cr2wFile == null)
-                    {
-                        return null;
-                    }
-                    if ((string)depotPath != null)
-                    {
-                        cr2wFile.MetaData.FileName = depotPath;
-                    }
-                }
-
-                lock (Files)
-                {
-                    foreach (var res in cr2wFile.EmbeddedFiles)
-                    {
-                        if (!Files.ContainsKey(res.FileName))
-                        {
-                            Files.Add(res.FileName, new CR2WFile()
-                            {
-                                RootChunk = res.Content
-                            });
-                        }
-                    }
-                }
-
-                return cr2wFile;
+                // ignore
             }
+
             return null;
         }
 

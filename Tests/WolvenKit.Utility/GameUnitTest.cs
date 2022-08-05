@@ -30,6 +30,7 @@ namespace WolvenKit.Utility
         internal const string s_testResultsDirectory = "_CR2WTestResults";
         internal static Dictionary<string, IEnumerable<FileEntry>> s_groupedFiles = new();
         internal static IArchiveManager? s_bm;
+        internal static string? s_tweakDbPath;
         internal static bool s_writeToFile;
         private const string s_gameDirectorySetting = "GameDirectory";
         private const string s_writeToFileSetting = "WriteToFile";
@@ -124,8 +125,11 @@ namespace WolvenKit.Utility
 
 
             Locator.CurrentMutable.RegisterConstant(new TweakDBService(), typeof(ITweakDBService));
-            var tweakService = _host.Services.GetRequiredService<ITweakDBService>();
-            tweakService.LoadDB(Path.Combine(gameDirectory.FullName, "r6", "cache", "tweakdb.bin"));
+
+            s_tweakDbPath = Path.Combine(gameDirectory.FullName, "r6", "cache", "tweakdb.bin");
+            //var tweakService = _host.Services.GetRequiredService<ITweakDBService>();
+            //tweakService.LoadDB(s_tweakDbPath);
+
             s_bm = _host.Services.GetRequiredService<IArchiveManager>();
 
             var archivedir = new DirectoryInfo(Path.Combine(gameDirectory.FullName, "archive", "pc", "content"));

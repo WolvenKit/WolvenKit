@@ -11,14 +11,6 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<TweakDBID>(value);
 		}
 		
-		[RED("appearanceName")]
-		[REDProperty(IsIgnored = true)]
-		public CName AppearanceName
-		{
-			get => GetPropertyValue<CName>();
-			set => SetPropertyValue<CName>(value);
-		}
-		
 		[RED("archetypeName")]
 		[REDProperty(IsIgnored = true)]
 		public CName ArchetypeName
@@ -57,14 +49,6 @@ namespace WolvenKit.RED4.Types
 		{
 			get => GetPropertyValue<TweakDBID>();
 			set => SetPropertyValue<TweakDBID>(value);
-		}
-		
-		[RED("crackLockDifficulty")]
-		[REDProperty(IsIgnored = true)]
-		public CString CrackLockDifficulty
-		{
-			get => GetPropertyValue<CString>();
-			set => SetPropertyValue<CString>(value);
 		}
 		
 		[RED("crowdMemberSettings")]
@@ -139,36 +123,12 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<TweakDBID>(value);
 		}
 		
-		[RED("effectors")]
-		[REDProperty(IsIgnored = true)]
-		public CArray<TweakDBID> Effectors
-		{
-			get => GetPropertyValue<CArray<TweakDBID>>();
-			set => SetPropertyValue<CArray<TweakDBID>>(value);
-		}
-		
 		[RED("enableDestruction")]
 		[REDProperty(IsIgnored = true)]
 		public CBool EnableDestruction
 		{
 			get => GetPropertyValue<CBool>();
 			set => SetPropertyValue<CBool>(value);
-		}
-		
-		[RED("entityTemplatePath")]
-		[REDProperty(IsIgnored = true)]
-		public CResourceAsyncReference<CResource> EntityTemplatePath
-		{
-			get => GetPropertyValue<CResourceAsyncReference<CResource>>();
-			set => SetPropertyValue<CResourceAsyncReference<CResource>>(value);
-		}
-		
-		[RED("fullDisplayName")]
-		[REDProperty(IsIgnored = true)]
-		public CString FullDisplayName
-		{
-			get => GetPropertyValue<CString>();
-			set => SetPropertyValue<CString>(value);
 		}
 		
 		[RED("fxCollision")]
@@ -201,14 +161,6 @@ namespace WolvenKit.RED4.Types
 		{
 			get => GetPropertyValue<CArray<CInt32>>();
 			set => SetPropertyValue<CArray<CInt32>>(value);
-		}
-		
-		[RED("hijackDifficulty")]
-		[REDProperty(IsIgnored = true)]
-		public CString HijackDifficulty
-		{
-			get => GetPropertyValue<CString>();
-			set => SetPropertyValue<CString>(value);
 		}
 		
 		[RED("icon")]
@@ -291,30 +243,6 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<TweakDBID>(value);
 		}
 		
-		[RED("multiplayerTemplatePaths")]
-		[REDProperty(IsIgnored = true)]
-		public CArray<CResourceAsyncReference<CResource>> MultiplayerTemplatePaths
-		{
-			get => GetPropertyValue<CArray<CResourceAsyncReference<CResource>>>();
-			set => SetPropertyValue<CArray<CResourceAsyncReference<CResource>>>(value);
-		}
-		
-		[RED("objectActions")]
-		[REDProperty(IsIgnored = true)]
-		public CArray<TweakDBID> ObjectActions
-		{
-			get => GetPropertyValue<CArray<TweakDBID>>();
-			set => SetPropertyValue<CArray<TweakDBID>>(value);
-		}
-		
-		[RED("persistentName")]
-		[REDProperty(IsIgnored = true)]
-		public CName PersistentName
-		{
-			get => GetPropertyValue<CName>();
-			set => SetPropertyValue<CName>(value);
-		}
-		
 		[RED("player_audio_resource")]
 		[REDProperty(IsIgnored = true)]
 		public CString Player_audio_resource
@@ -329,14 +257,6 @@ namespace WolvenKit.RED4.Types
 		{
 			get => GetPropertyValue<CArray<TweakDBID>>();
 			set => SetPropertyValue<CArray<TweakDBID>>(value);
-		}
-		
-		[RED("priority")]
-		[REDProperty(IsIgnored = true)]
-		public TweakDBID Priority
-		{
-			get => GetPropertyValue<TweakDBID>();
-			set => SetPropertyValue<TweakDBID>(value);
 		}
 		
 		[RED("queryOnlyExceptions")]
@@ -401,46 +321,6 @@ namespace WolvenKit.RED4.Types
 		{
 			get => GetPropertyValue<Vector3>();
 			set => SetPropertyValue<Vector3>(value);
-		}
-		
-		[RED("savable")]
-		[REDProperty(IsIgnored = true)]
-		public CBool Savable
-		{
-			get => GetPropertyValue<CBool>();
-			set => SetPropertyValue<CBool>(value);
-		}
-		
-		[RED("statModifierGroups")]
-		[REDProperty(IsIgnored = true)]
-		public CArray<TweakDBID> StatModifierGroups
-		{
-			get => GetPropertyValue<CArray<TweakDBID>>();
-			set => SetPropertyValue<CArray<TweakDBID>>(value);
-		}
-		
-		[RED("statModifiers")]
-		[REDProperty(IsIgnored = true)]
-		public CArray<TweakDBID> StatModifiers
-		{
-			get => GetPropertyValue<CArray<TweakDBID>>();
-			set => SetPropertyValue<CArray<TweakDBID>>(value);
-		}
-		
-		[RED("statPools")]
-		[REDProperty(IsIgnored = true)]
-		public CArray<TweakDBID> StatPools
-		{
-			get => GetPropertyValue<CArray<TweakDBID>>();
-			set => SetPropertyValue<CArray<TweakDBID>>(value);
-		}
-		
-		[RED("tags")]
-		[REDProperty(IsIgnored = true)]
-		public CArray<CName> Tags
-		{
-			get => GetPropertyValue<CArray<CName>>();
-			set => SetPropertyValue<CArray<CName>>(value);
 		}
 		
 		[RED("tppCameraParams")]
@@ -681,22 +561,6 @@ namespace WolvenKit.RED4.Types
 		{
 			get => GetPropertyValue<TweakDBID>();
 			set => SetPropertyValue<TweakDBID>(value);
-		}
-		
-		[RED("visualTags")]
-		[REDProperty(IsIgnored = true)]
-		public CArray<CName> VisualTags
-		{
-			get => GetPropertyValue<CArray<CName>>();
-			set => SetPropertyValue<CArray<CName>>(value);
-		}
-		
-		[RED("weakspots")]
-		[REDProperty(IsIgnored = true)]
-		public CArray<TweakDBID> Weakspots
-		{
-			get => GetPropertyValue<CArray<TweakDBID>>();
-			set => SetPropertyValue<CArray<TweakDBID>>(value);
 		}
 		
 		[RED("weapons")]

@@ -3,14 +3,6 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class gamedataItemQuery_Record
 	{
-		[RED("recordType")]
-		[REDProperty(IsIgnored = true)]
-		public CName RecordType
-		{
-			get => GetPropertyValue<CName>();
-			set => SetPropertyValue<CName>(value);
-		}
-		
 		[RED("tags")]
 		[REDProperty(IsIgnored = true)]
 		public CArray<CName> Tags

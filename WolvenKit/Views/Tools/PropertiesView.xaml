@@ -352,12 +352,6 @@
                         SearchBoxVisibility="Collapsed"
                         SelectedObject="{Binding PE_SelectedItem, Mode=OneWay}"
                         Visibility="{Binding PE_FileInfoVisible, Converter={StaticResource ToggleVisibilityConverter}}">
-
-                        <syncfusion:PropertyGrid.ContextMenu>
-                            <ContextMenu>
-                                <MenuItem Click="CopyMenuItem_Click" Header="Copy Relative Path" />
-                            </ContextMenu>
-                        </syncfusion:PropertyGrid.ContextMenu>
                     </syncfusion:PropertyGrid>
 
                     <!--StackPanel Orientation="Vertical" Background="{StaticResource ContentBackground}" Opacity="1">
@@ -438,11 +432,6 @@
                         SearchBoxVisibility="Collapsed"
                         SelectedObject="{Binding AB_SelectedItem, Mode=OneWay}"
                         Visibility="{Binding AB_FileInfoVisible, Converter={StaticResource ToggleVisibilityConverter}}">
-                        <syncfusion:PropertyGrid.ContextMenu>
-                            <ContextMenu>
-                                <MenuItem Click="CopyMenuItem_Click" Header="Copy Relative Path" />
-                            </ContextMenu>
-                        </syncfusion:PropertyGrid.ContextMenu>
                     </syncfusion:PropertyGrid>
                 </Grid>
             </syncfusion:TabItemExt>
@@ -455,28 +444,34 @@
                             Camera="{Binding Camera}"
                             CoordinateSystemLabelForeground="White"
                             EffectsManager="{Binding EffectsManager}"
-                            EnableSSAO="True"
-                            FXAALevel="Ultra"
-                            FixedRotationPointEnabled="True"
-                            SSAOQuality="High"
-                            SSAOSamplingRadius="1"
+                            EnableRenderFrustum="True"
+                            EnableRenderOrder="True"
+                            FXAALevel="High"
                             ShowCoordinateSystem="True"
-                            ShowViewCube="False"
-                            UseDefaultGestures="False">
+                            UseDefaultGestures="False"
+                            ZoomExtentsWhenLoaded="True">
                             <hx:Viewport3DX.InputBindings>
                                 <MouseBinding Command="hx:ViewportCommands.Rotate" Gesture="LeftClick" />
                                 <MouseBinding Command="hx:ViewportCommands.Pan" Gesture="MiddleClick" />
                                 <MouseBinding Command="hx:ViewportCommands.Rotate" Gesture="Shift+MiddleClick" />
                             </hx:Viewport3DX.InputBindings>
                             <hx:DirectionalLight3D Direction="0, -1, 0" Color="White" />
-                            <hx:AmbientLight3D Color="Gray" />
+                            <hx:DirectionalLight3D Direction="0, 0, 1" Color="White" />
+                            <hx:DirectionalLight3D Direction="0, 0, -1" Color="White" />
+                            <hx:DirectionalLight3D Direction="1, 0, 0" Color="White" />
+                            <hx:DirectionalLight3D Direction="-1, 0, 0" Color="White" />
                             <hx:DynamicReflectionMap3D>
                                 <hx:ItemsModel3D x:Name="hxContentVisual" ItemsSource="{Binding ModelGroup}" />
                             </hx:DynamicReflectionMap3D>
-                            <!--hx:DirectionalLight3D Direction="0, 0, 1" Color="White" />
-                            <hx:DirectionalLight3D Direction="0, 0, -1" Color="White" />
-                            <hx:DirectionalLight3D Direction="1, 0, 0" Color="White" />
-                            <hx:DirectionalLight3D Direction="-1, 0, 0" Color="White" /-->
+                            <hx:Viewport3DX.ContextMenu>
+                                <ContextMenu>
+                                    <MenuItem Click="ReloadModels" Header="Zoom to extents">
+                                        <MenuItem.Icon>
+                                            <iconPacks:PackIconCodicons Margin="5,0,0,0" Kind="ZoomOut" />
+                                        </MenuItem.Icon>
+                                    </MenuItem>
+                                </ContextMenu>
+                            </hx:Viewport3DX.ContextMenu>
                         </hx:Viewport3DX>
                     </Border>
 
