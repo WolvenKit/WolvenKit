@@ -176,7 +176,7 @@ namespace WolvenKit.ViewModels.Shell
                 .ObservesProperty(() => IsArray)
                 .ObservesProperty(() => IsInArray);
             CopyHandleCommand = new DelegateCommand(ExecuteCopyHandle, CanCopyHandle).ObservesProperty(() => Data);
-            CreateDynamicPropertyCommand = new DelegateCommand(ExecuteCreateDynamicProperty, CanCreateDynamicProperty).ObservesProperty(() => DataResolvedData);
+            CreateDynamicPropertyCommand = new DelegateCommand(ExecuteCreateDynamicProperty, CanCreateDynamicProperty).ObservesProperty(() => ResolvedData);
         }
 
 

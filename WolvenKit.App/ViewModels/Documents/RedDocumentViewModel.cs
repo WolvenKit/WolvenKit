@@ -338,8 +338,8 @@ namespace WolvenKit.ViewModels.Documents
 
                 if (!original)
                 {
-                    string path = null;
-                    if ((string)depotPath != null)
+                    var projectManager = Locator.Current.GetService<IProjectManager>();
+                    if (projectManager.ActiveProject != null)
                     {
                         string path = null;
                         if (!string.IsNullOrEmpty(depotPath))
@@ -384,23 +384,18 @@ namespace WolvenKit.ViewModels.Documents
                         cr2wFile.MetaData.FileName = depotPath;
                     }
 
-                        cr2wFile.MetaData.FileName = depotPath;
-
-                        lock (Files)
+                    lock (Files)
+                    {
+                        foreach (var res in cr2wFile.EmbeddedFiles)
                         {
-                            foreach (var res in cr2wFile.EmbeddedFiles)
+                            if (!Files.ContainsKey(res.FileName))
                             {
-                                if (!Files.ContainsKey(res.FileName))
+                                Files.Add(res.FileName, new CR2WFile()
                                 {
-                                    Files.Add(res.FileName, new CR2WFile()
-                                    {
-                                        RootChunk = res.Content
-                                    });
-                                }
+                                    RootChunk = res.Content
+                                });
                             }
                         }
-
-                        return cr2wFile;
                     }
 
                     return cr2wFile;
