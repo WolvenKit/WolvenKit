@@ -102,6 +102,8 @@ namespace WolvenKit.RED4.CR2W
 
         private bool OnParsingError(ParsingErrorEventArgs e)
         {
+            var logger = Locator.Current.GetService<ILoggerService>();
+
             if (e is InvalidDefaultValueEventArgs)
             {
                 return true;
@@ -121,7 +123,23 @@ namespace WolvenKit.RED4.CR2W
                         }
                     };
 
-                    var logger = Locator.Current.GetService<ILoggerService>();
+                    
+                    logger?.Warning($"Invalid in wolven rtti: [Expected: \"{e1.ExpectedType.Name}\" | Got: \"{e1.ActualType.Name}\"]");
+
+                    return true;
+                }
+
+                if (e1.ExpectedType == typeof(CResourceAsyncReference<inkWidgetLibraryResource>) &&
+                    e1.ActualType == typeof(CResourceReference<inkWidgetLibraryResource>))
+                {
+                    var orgVal = (CResourceReference<inkWidgetLibraryResource>)e1.Value;
+
+                    e1.Value = new CResourceAsyncReference<inkWidgetLibraryResource>
+                    {
+                        DepotPath = orgVal.DepotPath,
+                        Flags = orgVal.Flags,
+                    };
+
                     logger?.Warning($"Invalid in wolven rtti: [Expected: \"{e1.ExpectedType.Name}\" | Got: \"{e1.ActualType.Name}\"]");
 
                     return true;
