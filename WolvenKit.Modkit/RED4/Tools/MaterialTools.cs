@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text.Json;
+using Semver;
 using SharpGLTF.Validation;
 using SharpGLTF.Schema2;
 using WolvenKit.Common;
@@ -1179,7 +1180,7 @@ namespace WolvenKit.Modkit.RED4
                                 var wrapper = ((JsonElement)value).Deserialize<MaterialValueWrapper>();
                                 var (type, _) = RedReflection.GetCSTypeFromRedType(wrapper.Type);
 
-                                var nValue = ((JsonElement)wrapper.Value).Deserialize(type, RedJsonSerializer.Options);
+                                var nValue = RedJsonSerializer.Deserialize(type, (JsonElement)wrapper.Value);
                                 chunk.Values.Add(new CKeyValuePair(key, (IRedType)nValue));
                             }
                         }
