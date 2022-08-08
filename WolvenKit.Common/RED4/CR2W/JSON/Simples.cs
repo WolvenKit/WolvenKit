@@ -482,7 +482,13 @@ public class DataBufferConverter : JsonConverter<DataBuffer>, ICustomRedConverte
                     {
                         throw new JsonException();
                     }
+                    reader.Read();
 
+                    propertyName = reader.GetString();
+                    if (propertyName != "Data")
+                    {
+                        throw new JsonException();
+                    }
                     reader.Read();
 
                     var type = Type.GetType(bufferType);

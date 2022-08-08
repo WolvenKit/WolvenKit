@@ -19,6 +19,12 @@ public class ParseableBufferConverter : JsonConverter<IParseableBuffer>
             return;
         }
 
+        if (value is RedPackage rp)
+        {
+            JsonSerializer.Serialize(writer, rp, options);
+            return;
+        }
+
         writer.WriteStartObject();
 
         foreach (var propertyInfo in value.GetType().GetProperties())
