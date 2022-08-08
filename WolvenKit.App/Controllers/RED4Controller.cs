@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Xml.Linq;
 using ReactiveUI;
+using Splat;
 using WolvenKit.Common;
 using WolvenKit.Common.Interfaces;
 using WolvenKit.Common.Services;
@@ -16,9 +17,9 @@ using WolvenKit.Core.Interfaces;
 using WolvenKit.Core.Services;
 using WolvenKit.Functionality.Services;
 using WolvenKit.Models;
-using WolvenKit.Modkit.RED4.Serialization;
 using WolvenKit.ProjectManagement.Project;
-using WolvenKit.RED4.TweakDB;
+using WolvenKit.RED4.CR2W;
+using WolvenKit.RED4.Types;
 
 namespace WolvenKit.Functionality.Controllers
 {
@@ -86,6 +87,52 @@ namespace WolvenKit.Functionality.Controllers
             }
 
             return Task.CompletedTask;
+        }
+
+        // TODO: Move this somewhere else
+        private void LoadCustomHashes()
+        {
+            var parser = Locator.Current.GetService<Red4ParserService>();
+
+            CName physMatLibPath = "base\\physics\\physicsmaterials.physmatlib";
+            CName presetPath = "engine\\physics\\collision_presets.json";
+
+            var physMatLib = _archiveManager.Lookup(physMatLibPath);
+            if (physMatLib.HasValue)
+            {
+                using var ms = new MemoryStream();
+                physMatLib.Value.Extract(ms);
+                ms.Position = 0;
+
+                if (parser.TryReadRed4File(ms, out var file))
+                {
+                    var root = (physicsMaterialLibraryResource)file.RootChunk;
+
+                    foreach (var physMat in root.Unk1)
+                    {
+                        _hashService.AddCustom(physMat);
+                    }
+                }
+            }
+
+            var preset = _archiveManager.Lookup(presetPath);
+            if (preset.HasValue)
+            {
+                using var ms = new MemoryStream();
+                preset.Value.Extract(ms);
+                ms.Position = 0;
+
+                if (parser.TryReadRed4File(ms, out var file))
+                {
+                    var root = (JsonResource)file.RootChunk;
+                    var res = (physicsCollisionPresetsResource)root.Root.Chunk;
+
+                    foreach (var presetEntry in res.Presets)
+                    {
+                        _hashService.AddCustom(presetEntry.Name);
+                    }
+                }
+            }
         }
 
         private void InitializeBk()
@@ -171,6 +218,8 @@ namespace WolvenKit.Functionality.Controllers
             {
                 _loggerService.Success("Finished loading Archive Manager.");
             }
+
+            LoadCustomHashes();
 
 #pragma warning disable 162
             return _archiveManager;

@@ -17,7 +17,7 @@ public abstract class BaseStringType : IRedPrimitive<string>, IEquatable<BaseStr
         _value = value;
     }
 
-    public static implicit operator string(BaseStringType value) => value._value;
+    public static implicit operator string(BaseStringType value) => value.ToString();
 
     public int CompareTo(object value)
     {

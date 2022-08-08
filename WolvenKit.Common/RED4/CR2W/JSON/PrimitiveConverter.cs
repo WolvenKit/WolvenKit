@@ -454,17 +454,14 @@ public class RedClassConverter : JsonConverter<RedBaseClass>, ICustomRedConverte
 
     public RedBaseClass? CustomRead(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options, string? refId)
     {
-        if (RedJsonSerializer.IsVersion("0.0.1"))
+        if (RedJsonSerializer.IsOlderThen("0.0.2"))
         {
             return CustomReadV1(ref reader, typeToConvert, options, refId);
         }
-
-        if (RedJsonSerializer.IsVersion("0.0.2"))
+        else
         {
             return CustomReadV2(ref reader, typeToConvert, options, refId);
         }
-
-        throw new JsonException("Unsupported version");
     }
 
     public RedBaseClass? CustomReadV1(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options, string? refId)

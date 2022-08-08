@@ -348,6 +348,20 @@ namespace WolvenKit.RED4.Archive.IO
                 buffer.SetBytes(newData);
             }
 
+            if (buffer.Data is CollisionBuffer cb)
+            {
+                using var ms = new MemoryStream();
+                using var collisionWriter = new CollisionWriter(ms);
+
+                collisionWriter.WriteBuffer(cb, (worldCollisionNode)buffer.Parent);
+
+                var newData = ms.ToArray();
+
+                File.WriteAllBytes(@"C:\Dev\ColDump\test.bin", newData);
+
+                buffer.SetBytes(newData);
+            }
+
             if (buffer is RedBuffer wsb && buffer.Data is WorldTransformsBuffer wtb)
             {
                 using var ms = new MemoryStream();
