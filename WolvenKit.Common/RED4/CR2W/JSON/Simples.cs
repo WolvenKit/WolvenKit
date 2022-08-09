@@ -54,9 +54,10 @@ public class CNameConverter : JsonConverter<CName>, ICustomRedConverter
 
     public override void Write(Utf8JsonWriter writer, CName value, JsonSerializerOptions options)
     {
-        if (!string.IsNullOrEmpty(value))
+        var resolved = value.GetResolvedText();
+        if (!string.IsNullOrEmpty(resolved))
         {
-            writer.WriteStringValue(value);
+            writer.WriteStringValue(resolved);
         }
         else
         {
@@ -1372,9 +1373,10 @@ public class NodeRefConverter : JsonConverter<NodeRef>, ICustomRedConverter
 
     public override void Write(Utf8JsonWriter writer, NodeRef value, JsonSerializerOptions options)
     {
-        if ((string)value != null)
+        var resolved = value.GetResolvedText();
+        if (!string.IsNullOrEmpty(resolved))
         {
-            writer.WriteStringValue(value);
+            writer.WriteStringValue(resolved);
         }
         else
         {
