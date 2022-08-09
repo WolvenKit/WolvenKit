@@ -783,11 +783,22 @@ public class RedPackageConverter : JsonConverter<RedPackage>, ICustomRedConverte
             throw new JsonException();
         }
 
+        Dictionary<int, CRUID>? cruidDict = null;
+
         var result = new RedPackage();
         while (reader.Read())
         {
             if (reader.TokenType == JsonTokenType.EndObject)
             {
+                if (cruidDict != null)
+                {
+                    foreach (var (index, cruid) in cruidDict)
+                    {
+                        result.RootCruids.Add(cruid);
+                        result.ChunkDictionary.Add(result.Chunks[index], cruid);
+                    }
+                }
+
                 return result;
             }
 
@@ -832,6 +843,18 @@ public class RedPackageConverter : JsonConverter<RedPackage>, ICustomRedConverte
                     }
 
                     result.CruidIndex = reader.GetInt16();
+                    break;
+                }
+
+                case "CruidDict":
+                {
+                    reader.Read();
+                    if (reader.TokenType != JsonTokenType.StartObject)
+                    {
+                        throw new JsonException();
+                    }
+
+                    cruidDict = JsonSerializer.Deserialize<Dictionary<int, CRUID>>(ref reader, options);
                     break;
                 }
 
@@ -904,13 +927,19 @@ public class RedPackageConverter : JsonConverter<RedPackage>, ICustomRedConverte
         writer.WriteNumber("Sections", value.Sections);
         writer.WriteNumber("CruidIndex", value.CruidIndex);
 
-        writer.WritePropertyName("RootCruids");
-        writer.WriteStartArray();
-        foreach (var cruid in value.RootCruids)
+        var cruidToChunkDict = new Dictionary<int, CRUID>();
+        foreach (var (chunk, cruid) in value.ChunkDictionary)
         {
-            writer.WriteNumberValue(cruid);
+            var index = value.Chunks.IndexOf((RedBaseClass)chunk);
+            if (index == -1)
+            {
+                throw new JsonException();
+            }
+
+            cruidToChunkDict.Add(index, cruid);
         }
-        writer.WriteEndArray();
+        writer.WritePropertyName("CruidDict");
+        JsonSerializer.Serialize(writer, cruidToChunkDict, options);
 
         writer.WritePropertyName("Chunks");
         writer.WriteStartArray();

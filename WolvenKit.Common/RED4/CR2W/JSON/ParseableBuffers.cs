@@ -70,6 +70,7 @@ public class CollisionShapeConverter : JsonConverter<CollisionShape>
         {
             collisionShape = new CollisionShapeSimple();
         }
+        collisionShape.ShapeType = shapeType;
 
         while (reader.Read())
         {

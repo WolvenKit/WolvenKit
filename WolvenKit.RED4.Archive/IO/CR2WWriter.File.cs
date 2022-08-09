@@ -357,7 +357,17 @@ namespace WolvenKit.RED4.Archive.IO
 
                 var newData = ms.ToArray();
 
-                File.WriteAllBytes(@"C:\Dev\ColDump\test.bin", newData);
+                buffer.SetBytes(newData);
+            }
+
+            if (buffer.Data is CookedInstanceTransformsBuffer citb)
+            {
+                using var ms = new MemoryStream();
+                using var cookedInstanceTransformsWriter = new CookedInstanceTransformsWriter(ms);
+
+                cookedInstanceTransformsWriter.WriteBuffer(citb);
+
+                var newData = ms.ToArray();
 
                 buffer.SetBytes(newData);
             }
