@@ -1,17 +1,27 @@
 using System;
+using System.ComponentModel;
+using System.IO;
 using System.Reactive.Disposables;
+using System.Text.RegularExpressions;
 using System.Windows;
 using ReactiveUI;
 using Splat;
 using Syncfusion.Windows.PropertyGrid;
 using WolvenKit.Common;
+using WolvenKit.Common.Model.Arguments;
+using WolvenKit.Common.Services;
+using WolvenKit.Core.Interfaces;
 using WolvenKit.Functionality.Commands;
+using WolvenKit.RED4.CR2W;
+using WolvenKit.RED4.Types;
 using WolvenKit.ViewModels.Tools;
 
 namespace WolvenKit.Views.Tools
 {
     public partial class ImportExportView : ReactiveUserControl<ImportExportViewModel>
     {
+        private object _selectedObject;
+
         /// <summary>
         /// Constructor I/E Tool.
         /// </summary>
@@ -69,10 +79,13 @@ namespace WolvenKit.Views.Tools
         /// <param name="e"></param>
         private void SfDataGrid_CellDoubleTapped(object sender, Syncfusion.UI.Xaml.Grid.GridCellDoubleTappedEventArgs e)
         {
-            if (ViewModel is not ImportExportViewModel vm)
+            if (ViewModel is not { } vm)
             {
                 return;
             }
+
+            _selectedObject = vm.SelectedObject.Properties;
+
             if (vm.IsImportsSelected)
             {
                 if (ImportGrid.SelectedItem is ImportExportItemViewModel selectedImport)
@@ -82,6 +95,8 @@ namespace WolvenKit.Views.Tools
                         XAML_AdvancedOptionsOverlay.SetCurrentValue(VisibilityProperty, System.Windows.Visibility.Visible);
                         XAML_AdvancedOptionsExtension.SetCurrentValue(System.Windows.Controls.TextBlock.TextProperty, selectedImport.Extension);
                         XAML_AdvancedOptionsFileName.SetCurrentValue(System.Windows.Controls.TextBlock.TextProperty, selectedImport.Name);
+
+                        selectedImport.Properties.PropertyChanged += OnPropertyValueChanged;
                     }
                     else
                     {
@@ -98,6 +113,8 @@ namespace WolvenKit.Views.Tools
                         XAML_AdvancedOptionsOverlay.SetCurrentValue(VisibilityProperty, System.Windows.Visibility.Visible);
                         XAML_AdvancedOptionsExtension.SetCurrentValue(System.Windows.Controls.TextBlock.TextProperty, selectedExport.Extension);
                         XAML_AdvancedOptionsFileName.SetCurrentValue(System.Windows.Controls.TextBlock.TextProperty, selectedExport.Name);
+
+                        selectedExport.Properties.PropertyChanged += OnPropertyValueChanged;
                     }
                     else
                     { throw new ArgumentOutOfRangeException(); }
@@ -112,6 +129,8 @@ namespace WolvenKit.Views.Tools
                         XAML_AdvancedOptionsOverlay.SetCurrentValue(VisibilityProperty, System.Windows.Visibility.Visible);
                         XAML_AdvancedOptionsExtension.SetCurrentValue(System.Windows.Controls.TextBlock.TextProperty, selectedconvert.Extension);
                         XAML_AdvancedOptionsFileName.SetCurrentValue(System.Windows.Controls.TextBlock.TextProperty, selectedconvert.Name);
+
+                        selectedconvert.Properties.PropertyChanged += OnPropertyValueChanged;
                     }
                     else
                     { throw new ArgumentOutOfRangeException(); }
@@ -119,6 +138,13 @@ namespace WolvenKit.Views.Tools
 
             }
 
+        }
+
+        private void OnPropertyValueChanged(object sender, PropertyChangedEventArgs e)
+        {
+            _selectedObject = sender;
+
+            OverlayPropertyGrid.RefreshPropertygrid();
         }
 
         /// <summary>
@@ -202,7 +228,142 @@ namespace WolvenKit.Views.Tools
                 case nameof(ReactiveObject.Changing):
                 case nameof(ReactiveObject.ThrownExceptions):
                     e.Cancel = true;
-                    break;
+                    return;
+            }
+
+            if (_selectedObject is XbmImportArgs xbmImportArgs)
+            {
+                if (e.DisplayName == "Use existing file")
+                {
+                    e.Cancel = true;
+                    return;
+                }
+
+                if (xbmImportArgs.Keep)
+                {
+                    if (e.Category == "Image Import Settings" || e.Category == "XBM Import Settings")
+                    {
+                        e.ReadOnly = true;
+                        return;
+                    }
+                }
+            }
+        }
+
+        private bool FileExists()
+        {
+            if (_selectedObject is XbmImportArgs xbmImportArgs)
+            {
+                if (ViewModel?.SelectedObject.GetModFile("xbm") != null)
+                {
+                    return true;
+                }
+
+                if (ViewModel?.SelectedObject.GetArchiveFile("xbm") != null)
+                {
+                    return true;
+                }
+
+                return false;
+            }
+
+            return true;
+        }
+
+        private void ResetSelectedSettings_Click(object sender, RoutedEventArgs e)
+        {
+            if (ViewModel != null)
+            {
+                foreach (var importableItem in ViewModel.ImportableItems)
+                {
+                    if (!importableItem.IsChecked)
+                    {
+                        continue;
+                    }
+
+                    importableItem.Properties = (ImportExportArgs)System.Activator.CreateInstance(importableItem.Properties.GetType());
+                }
+            }
+        }
+
+        private void LoadSelectedSettings_Click(object sender, RoutedEventArgs e)
+        {
+            if (ViewModel != null)
+            {
+                var logger = Locator.Current.GetService<ILoggerService>();
+                var parser = Locator.Current.GetService<Red4ParserService>();
+                var gammaRegex = new Regex(".*_[de][0-9]*$");
+
+                foreach (var importableItem in ViewModel.ImportableItems)
+                {
+                    if (!importableItem.IsChecked)
+                    {
+                        continue;
+                    }
+
+                    if (importableItem.Properties is not XbmImportArgs xbmImportArgs)
+                    {
+                        continue;
+                    }
+
+                    if (parser != null)
+                    {
+                        if (importableItem.GetModFile("xbm") is { } modFile)
+                        {
+                            using var fs = File.OpenRead(modFile);
+
+                            if (parser.TryReadRed4File(fs, out var cr2w) && cr2w.RootChunk is CBitmapTexture bitmap)
+                            {
+                                xbmImportArgs.RawFormat = bitmap.Setup.RawFormat;
+                                xbmImportArgs.Compression = bitmap.Setup.Compression;
+                                xbmImportArgs.HasMipchain = bitmap.Setup.HasMipchain;
+                                xbmImportArgs.IsGamma = bitmap.Setup.IsGamma;
+                                xbmImportArgs.TextureGroup = bitmap.Setup.Group;
+                                xbmImportArgs.IsStreamable = bitmap.Setup.IsStreamable;
+                                xbmImportArgs.PlatformMipBiasPC = bitmap.Setup.PlatformMipBiasPC;
+                                xbmImportArgs.PlatformMipBiasConsole = bitmap.Setup.PlatformMipBiasConsole;
+                                xbmImportArgs.AllowTextureDowngrade = bitmap.Setup.AllowTextureDowngrade;
+                                xbmImportArgs.AlphaToCoverageThreshold = bitmap.Setup.AlphaToCoverageThreshold;
+
+                                logger?.Info($"Load settings for \"{importableItem.Name}\": Loaded from project file");
+
+                                continue;
+                            }
+
+                            logger?.Warning($"Load settings for \"{importableItem.Name}\": Project file couldn't be read");
+                        }
+
+                        if (importableItem.GetArchiveFile("xbm") is { } archiveFile)
+                        {
+                            using var ms = new MemoryStream();
+                            archiveFile.Extract(ms);
+
+                            if (parser.TryReadRed4File(ms, out var cr2w) && cr2w.RootChunk is CBitmapTexture bitmap)
+                            {
+                                xbmImportArgs.RawFormat = bitmap.Setup.RawFormat;
+                                xbmImportArgs.Compression = bitmap.Setup.Compression;
+                                xbmImportArgs.HasMipchain = bitmap.Setup.HasMipchain;
+                                xbmImportArgs.IsGamma = bitmap.Setup.IsGamma;
+                                xbmImportArgs.TextureGroup = bitmap.Setup.Group;
+                                xbmImportArgs.IsStreamable = bitmap.Setup.IsStreamable;
+                                xbmImportArgs.PlatformMipBiasPC = bitmap.Setup.PlatformMipBiasPC;
+                                xbmImportArgs.PlatformMipBiasConsole = bitmap.Setup.PlatformMipBiasConsole;
+                                xbmImportArgs.AllowTextureDowngrade = bitmap.Setup.AllowTextureDowngrade;
+                                xbmImportArgs.AlphaToCoverageThreshold = bitmap.Setup.AlphaToCoverageThreshold;
+
+                                logger?.Info($"Load settings for \"{importableItem.Name}\": Loaded from archive file");
+
+                                continue;
+                            }
+
+                            logger?.Warning($"Load settings for \"{importableItem.Name}\": Archive file couldn't be read");
+                        }
+                    }
+
+                    xbmImportArgs.IsGamma = gammaRegex.IsMatch(Path.GetFileNameWithoutExtension(importableItem.Name));
+
+                    logger?.Info($"Load settings for \"{importableItem.Name}\": Parsed filename");
+                }
             }
         }
     }

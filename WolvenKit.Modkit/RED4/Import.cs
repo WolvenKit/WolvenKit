@@ -329,31 +329,7 @@ namespace WolvenKit.Modkit.RED4
         {
             var infile = rawRelative.FullName;
 
-            CBitmapTexture oldBitmap = null;
-            if (args.Keep)
-            {
-                var redfile = FindRedFile(rawRelative, outDir, ERedExtension.xbm.ToString());
-
-                if (string.IsNullOrEmpty(redfile))
-                {
-                    _loggerService.Warning($"No existing redfile found to rebuild for {rawRelative.Name}");
-                    return false;
-                }
-
-                using var redstream = new FileStream(redfile, FileMode.Open);
-                using var fileReader = new BinaryReader(redstream);
-
-                var cr2w = _wolvenkitFileService.ReadRed4File(fileReader);
-                if (cr2w == null || cr2w.RootChunk is not CBitmapTexture xbm || xbm.RenderTextureResource == null || xbm.RenderTextureResource.RenderResourceBlobPC.Chunk is not rendRenderTextureBlobPC)
-                {
-                    return false;
-                }
-
-                oldBitmap = xbm;
-            }
-
             RedImage image;
-
             switch (Enum.Parse<EUncookExtension>(rawRelative.Extension))
             {
                 case EUncookExtension.dds:
@@ -377,26 +353,7 @@ namespace WolvenKit.Modkit.RED4
                 default:
                     throw new ArgumentOutOfRangeException();
             }
-
-            image.Group = args.TextureGroup;
-            if (oldBitmap != null)
-            {
-                image.Group = oldBitmap.Setup.Group;
-                image.IsStreamable = oldBitmap.Setup.IsStreamable;
-                image.GenerateMipMaps = oldBitmap.Setup.HasMipchain;
-                image.PlatformMipBiasPC = oldBitmap.Setup.PlatformMipBiasPC;
-                image.AllowTextureDowngrade = oldBitmap.Setup.AllowTextureDowngrade;
-
-                image.CompressionFormat = CommonFunctions.GetDXGIFormat(oldBitmap.Setup.Compression, Enums.ETextureRawFormat.TRF_Invalid, image.IsGamma, null);
-
-                var rawFmt = CommonFunctions.GetDXGIFormat(Enums.ETextureCompression.TCM_None, oldBitmap.Setup.RawFormat, image.IsGamma, null);
-                if (image.Metadata.Format != rawFmt)
-                {
-                    image.Convert(rawFmt);
-                }
-            }
-
-            var bitmap = image.SaveToXBM();
+            var bitmap = image.SaveToXBM(args);
 
             var outpath = new RedRelativePath(rawRelative)
                 .ChangeBaseDir(outDir)
@@ -553,7 +510,7 @@ namespace WolvenKit.Modkit.RED4
                                 Group = args.TextureGroup,
                                 Compression = compression,
                                 RawFormat = rawFormat,
-                                IsGamma = args.IsGamma
+                                // IsGamma = args.IsGamma
                             }
                 };
 
@@ -674,7 +631,7 @@ namespace WolvenKit.Modkit.RED4
                 setup.Group = args.TextureGroup;
                 setup.Compression = Enums.ETextureCompression.TCM_None;
                 setup.RawFormat = Enums.ETextureRawFormat.TRF_TrueColor;
-                setup.IsGamma = args.IsGamma;
+                // setup.IsGamma = args.IsGamma;
 
                 //if (flags is CommonFunctions.ETexGroupFlags.Both or CommonFunctions.ETexGroupFlags.CompressionOnly)
                 //{
