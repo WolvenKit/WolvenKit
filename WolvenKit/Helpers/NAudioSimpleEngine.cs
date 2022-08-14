@@ -489,8 +489,6 @@ namespace WolvenKit.Views.Editor.AudioTool
         private bool _canPause;
         private bool _canPlay;
         private bool _canStop;
-        private double _channelLength;
-        private double _channelPosition;
 
         /// <summary>
         /// 刷新播放状态

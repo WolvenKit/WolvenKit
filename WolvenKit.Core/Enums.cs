@@ -255,6 +255,13 @@ namespace WolvenKit.Common
         Raw
     }
 
+    public enum EBool : byte
+    {
+        False,
+        True,
+        Automatic
+    }
+
     /// IMPORT FLAGS
     [System.Flags]
     public enum EImportFlags

@@ -372,6 +372,11 @@ namespace WolvenKit.Common.DDS
                 _ => throw new NotSupportedException()
             };
 
+            if (info.Compression == Enums.ETextureCompression.TCM_DXTAlpha)
+            {
+                dx10Header.miscFlags2 = 2;
+            }
+
             var dxFormat = (DirectXTexNet.DXGI_FORMAT)(int)dx10Header.dxgiFormat;
 
             switch (info.TextureType)

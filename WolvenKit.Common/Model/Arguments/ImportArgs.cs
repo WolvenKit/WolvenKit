@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using SharpGLTF.Validation;
+using Splat;
 using WolvenKit.Core.Interfaces;
 using WolvenKit.RED4.Archive;
 using WolvenKit.RED4.Types;
@@ -13,18 +14,10 @@ namespace WolvenKit.Common.Model.Arguments
     /// </summary>
     public abstract class ImportArgs : ImportExportArgs
     {
-        [Category("Default Import Settings")]
-        [Display(Name = "Use existing file")]
+        [Category("General Import Settings")]
+        [Display(Name = "Use existing file", Order = 0)]
         [Description("If checked the corresponding archive file will be used for importing.")]
         public bool Keep { get; set; } = true;
-        [Category("Default Import Settings")]
-        [Display(Name = "Use selected base mesh")]
-        [Description("If checked the specified mesh file will be used for importing.")]
-        public bool SelectBase { get; set; } = false;
-        [Category("Default Import Settings")]
-        [Display(Name = "Use selected rig")]
-        [Description("If selected the corresponding archive file will be used for importing.")]
-        public bool KeepRig { get; set; } = false;
     }
 
 
@@ -58,10 +51,40 @@ namespace WolvenKit.Common.Model.Arguments
     /// </summary>
     public class XbmImportArgs : ImportArgs
     {
-        public Enums.GpuWrapApieTextureGroup TextureGroup { get; internal set; } =
+        [Category("General Import Settings")]
+        [Description("If true, the file will be handled as a SRGB file")]
+        public bool IsGamma { get; set; } = false;
+
+        [Category("Image Import Settings")]
+        public Enums.ETextureRawFormat RawFormat { get; set; } = Enums.ETextureRawFormat.TRF_TrueColor;
+
+        [Category("Image Import Settings")]
+        public Enums.ETextureCompression Compression { get; set; }
+
+        [Category("Image Import Settings")]
+        [Description("If true, mipMaps will be generated")]
+        public bool HasMipchain { get; set; } = true;
+
+
+        [Category("XBM Import Settings")]
+        [Description("Select the texture group of the imported item")]
+        public Enums.GpuWrapApieTextureGroup TextureGroup { get; set; } =
             Enums.GpuWrapApieTextureGroup.TEXG_Generic_Color;
 
-        public bool IsGamma { get; set; }
+        [Category("XBM Import Settings")]
+        public bool IsStreamable { get; set; } = true;
+
+        [Category("XBM Import Settings")]
+        public byte PlatformMipBiasPC { get; set; }
+
+        [Category("XBM Import Settings")]
+        public byte PlatformMipBiasConsole { get; set; }
+
+        [Category("XBM Import Settings")]
+        public bool AllowTextureDowngrade { get; set; } = true;
+
+        [Category("XBM Import Settings")]
+        public byte AlphaToCoverageThreshold { get; set; }
 
         public XbmImportArgs()
         {
@@ -80,6 +103,11 @@ namespace WolvenKit.Common.Model.Arguments
     /// </summary>
     public class GltfImportArgs : ImportArgs
     {
+        [Category("Default Import Settings")]
+        [Display(Name = "Use selected base mesh")]
+        [Description("If checked the specified mesh file will be used for importing.")]
+        public bool SelectBase { get; set; } = false;
+
         [Category("Import Settings")]
         [Display(Name = "Import Material.Json Only")]
         [Description("If selected only materials will be updated from a Material.json file. Mesh geometry will remain unchanged.")] public bool importMaterialOnly { get; set; } = false;
