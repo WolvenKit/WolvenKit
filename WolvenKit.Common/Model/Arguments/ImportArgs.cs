@@ -180,6 +180,4 @@ namespace WolvenKit.Common.Model.Arguments
         /// <returns>String</returns>
         public override string ToString() => "MLMASK";
     }
-
-
 }

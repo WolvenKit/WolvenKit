@@ -9,18 +9,23 @@ using Syncfusion.Windows.PropertyGrid;
 using WolvenKit.Common;
 using WolvenKit.Common.Model.Arguments;
 using WolvenKit.Functionality.Commands;
+using WolvenKit.Functionality.Services;
 using WolvenKit.ViewModels.Tools;
 
 namespace WolvenKit.Views.Tools
 {
     public partial class ImportExportView : ReactiveUserControl<ImportExportViewModel>
     {
+        private ISettingsManager _settingsManager;
+
         /// <summary>
         /// Constructor I/E Tool.
         /// </summary>
         public ImportExportView()
         {
             InitializeComponent();
+
+            _settingsManager = Locator.Current.GetService<ISettingsManager>();
 
             ViewModel = Locator.Current.GetService<ImportExportViewModel>();
             DataContext = ViewModel;
@@ -75,6 +80,12 @@ namespace WolvenKit.Views.Tools
                     {
                         newValue.Properties.PropertyChanged += OnPropertyValueChanged;
                     }
+                });
+
+            this.WhenAnyValue(x => x._settingsManager.ShowAdvancedOptions)
+                .Subscribe(_ =>
+                {
+                    OverlayPropertyGrid.RefreshPropertygrid();
                 });
         }
 
@@ -230,7 +241,7 @@ namespace WolvenKit.Views.Tools
                     return;
             }
 
-            if (ViewModel?.SelectedObject.Properties is XbmImportArgs xbmImportArgs)
+            if (ViewModel?.SelectedObject.Properties is XbmImportArgs)
             {
                 if (e.DisplayName == "Use existing file")
                 {
@@ -238,11 +249,11 @@ namespace WolvenKit.Views.Tools
                     return;
                 }
 
-                if (xbmImportArgs.Keep)
+                if (!_settingsManager.ShowAdvancedOptions)
                 {
-                    if (e.Category == "Image Import Settings" || e.Category == "XBM Import Settings")
+                    if (e.Category is "Image Import Settings" or "XBM Import Settings")
                     {
-                        e.ReadOnly = true;
+                        e.Cancel = true;
                         return;
                     }
                 }
