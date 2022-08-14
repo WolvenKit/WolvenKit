@@ -6,8 +6,10 @@ using System.IO;
 using System.Linq;
 using System.Reactive;
 using System.Reactive.Linq;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using CommunityToolkit.Mvvm.Input;
 using DynamicData;
 using Prism.Commands;
 using ReactiveUI;
@@ -30,10 +32,12 @@ using WolvenKit.Modkit.RED4.Opus;
 using WolvenKit.Modkit.RED4.Tools;
 using WolvenKit.ProjectManagement.Project;
 using WolvenKit.RED4.Archive;
+using WolvenKit.RED4.CR2W;
+using WolvenKit.RED4.Types;
 
 namespace WolvenKit.ViewModels.Tools
 {
-    public class ImportExportViewModel : ToolViewModel
+    public partial class ImportExportViewModel : ToolViewModel
     {
         #region fields
 
@@ -63,6 +67,7 @@ namespace WolvenKit.ViewModels.Tools
         private readonly MeshTools _meshTools;
         private readonly ISettingsManager _settingsManager;
         private readonly IArchiveManager _archiveManager;
+        private readonly Red4ParserService _parserService;
 
         /// <summary>
         /// Private NameOf Selected Item in Grid.
@@ -101,7 +106,8 @@ namespace WolvenKit.ViewModels.Tools
            ISettingsManager settingsManager,
            IModTools modTools,
            MeshTools meshTools,
-           IArchiveManager archiveManager
+           IArchiveManager archiveManager,
+           Red4ParserService parserService
            ) : base(ToolTitle)
         {
             _projectManager = projectManager;
@@ -114,6 +120,7 @@ namespace WolvenKit.ViewModels.Tools
             _settingsManager = settingsManager;
             _meshTools = meshTools;
             _archiveManager = archiveManager;
+            _parserService = parserService;
 
             SetupToolDefaults();
             SideInDockedMode = DockSide.Tabbed;
@@ -163,7 +170,7 @@ namespace WolvenKit.ViewModels.Tools
             //});
 
 
-            this.WhenAnyValue(x => x.SelectedExport, y => y.SelectedImport, z => z.SelectedConvert)
+            this.WhenAnyValue(x => x.SelectedExport, x => x.IsExportsSelected, y => y.SelectedImport, y => y.IsImportsSelected, z => z.SelectedConvert, z => z.IsConvertsSelected)
                 .Subscribe(b =>
                 {
                     var x = b.Item1;
@@ -914,5 +921,100 @@ namespace WolvenKit.ViewModels.Tools
         /// Setup Tool defaults for tool window.
         /// </summary>
         private void SetupToolDefaults() => ContentId = ToolContentId;
+
+        #region Commands
+
+        [RelayCommand]
+        private void ResetSettings()
+        {
+            foreach (var importableItem in ImportableItems)
+            {
+                if (!importableItem.IsChecked)
+                {
+                    continue;
+                }
+
+                importableItem.Properties = (ImportExportArgs)System.Activator.CreateInstance(importableItem.Properties.GetType());
+            }
+        }
+
+        [RelayCommand]
+        private void LoadSettings()
+        {
+            var gammaRegex = new Regex(".*_[de][0-9]*$");
+
+            foreach (var importableItem in ImportableItems)
+            {
+                if (!importableItem.IsChecked)
+                {
+                    continue;
+                }
+
+                if (importableItem.Properties is not XbmImportArgs xbmImportArgs)
+                {
+                    continue;
+                }
+
+                if (_parserService != null)
+                {
+                    if (importableItem.GetModFile("xbm") is { } modFile)
+                    {
+                        using var fs = File.OpenRead(modFile);
+
+                        if (_parserService.TryReadRed4File(fs, out var cr2w) && cr2w.RootChunk is CBitmapTexture bitmap)
+                        {
+                            xbmImportArgs.RawFormat = bitmap.Setup.RawFormat;
+                            xbmImportArgs.Compression = bitmap.Setup.Compression;
+                            xbmImportArgs.HasMipchain = bitmap.Setup.HasMipchain;
+                            xbmImportArgs.IsGamma = bitmap.Setup.IsGamma;
+                            xbmImportArgs.TextureGroup = bitmap.Setup.Group;
+                            xbmImportArgs.IsStreamable = bitmap.Setup.IsStreamable;
+                            xbmImportArgs.PlatformMipBiasPC = bitmap.Setup.PlatformMipBiasPC;
+                            xbmImportArgs.PlatformMipBiasConsole = bitmap.Setup.PlatformMipBiasConsole;
+                            xbmImportArgs.AllowTextureDowngrade = bitmap.Setup.AllowTextureDowngrade;
+                            xbmImportArgs.AlphaToCoverageThreshold = bitmap.Setup.AlphaToCoverageThreshold;
+
+                            _loggerService?.Info($"Load settings for \"{importableItem.Name}\": Loaded from project file");
+
+                            continue;
+                        }
+
+                        _loggerService?.Warning($"Load settings for \"{importableItem.Name}\": Project file couldn't be read");
+                    }
+
+                    if (importableItem.GetArchiveFile("xbm") is { } archiveFile)
+                    {
+                        using var ms = new MemoryStream();
+                        archiveFile.Extract(ms);
+
+                        if (_parserService.TryReadRed4File(ms, out var cr2w) && cr2w.RootChunk is CBitmapTexture bitmap)
+                        {
+                            xbmImportArgs.RawFormat = bitmap.Setup.RawFormat;
+                            xbmImportArgs.Compression = bitmap.Setup.Compression;
+                            xbmImportArgs.HasMipchain = bitmap.Setup.HasMipchain;
+                            xbmImportArgs.IsGamma = bitmap.Setup.IsGamma;
+                            xbmImportArgs.TextureGroup = bitmap.Setup.Group;
+                            xbmImportArgs.IsStreamable = bitmap.Setup.IsStreamable;
+                            xbmImportArgs.PlatformMipBiasPC = bitmap.Setup.PlatformMipBiasPC;
+                            xbmImportArgs.PlatformMipBiasConsole = bitmap.Setup.PlatformMipBiasConsole;
+                            xbmImportArgs.AllowTextureDowngrade = bitmap.Setup.AllowTextureDowngrade;
+                            xbmImportArgs.AlphaToCoverageThreshold = bitmap.Setup.AlphaToCoverageThreshold;
+
+                            _loggerService?.Info($"Load settings for \"{importableItem.Name}\": Loaded from archive file");
+
+                            continue;
+                        }
+
+                        _loggerService?.Warning($"Load settings for \"{importableItem.Name}\": Archive file couldn't be read");
+                    }
+                }
+
+                xbmImportArgs.IsGamma = gammaRegex.IsMatch(Path.GetFileNameWithoutExtension(importableItem.Name));
+
+                _loggerService?.Info($"Load settings for \"{importableItem.Name}\": Parsed filename");
+            }
+        }
+
+        #endregion Commands
     }
 }
