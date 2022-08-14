@@ -204,7 +204,7 @@
                         Background="{DynamicResource ContentBackground}"
                         BorderBrush="{DynamicResource ContentBackgroundAlt}"
                         BorderThickness="1"
-                        Command="{Binding LoadSettingsCommand}"
+                        Command="{Binding ImportSettingsCommand}"
                         FontSize="12"
                         Style="{DynamicResource ButtonCustom}">
                         <TextBlock Margin="1" Text="Load Settings" />

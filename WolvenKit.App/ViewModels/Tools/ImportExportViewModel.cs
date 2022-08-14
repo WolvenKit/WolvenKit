@@ -1,16 +1,21 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Collections.Specialized;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reactive;
 using System.Reactive.Linq;
+using System.Text.Json;
+using System.Text.Json.Nodes;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using CommunityToolkit.Mvvm.Input;
 using DynamicData;
+using DynamicData.Binding;
 using Prism.Commands;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
@@ -84,6 +89,8 @@ namespace WolvenKit.ViewModels.Tools
         private readonly ReadOnlyObservableCollection<ImportableItemViewModel> _importableItems;
 
         private readonly ReadOnlyObservableCollection<ExportableItemViewModel> _exportableItems;
+
+        private Dictionary<string, Dictionary<string, JsonObject>> _loadedSettings;
 
         #endregion fields
 
@@ -169,6 +176,33 @@ namespace WolvenKit.ViewModels.Tools
             //    SelectedObject = IsImportsSelected ? SelectedImport : IsExportsSelected ? SelectedExport : SelectedConvert;
             //});
 
+            this.WhenAnyValue(x => x._projectManager.ActiveProject)
+                .Subscribe(project =>
+                {
+                    _loadedSettings = null;
+                    if (project != null)
+                    {
+                        LoadSettings();
+                    }
+                });
+
+            ImportableItems.ObserveCollectionChanges()
+                .Subscribe(item =>
+                {
+                    SetSetting("import", item);
+                });
+
+            ExportableItems.ObserveCollectionChanges()
+                .Subscribe(item =>
+                {
+                    SetSetting("export", item);
+                });
+
+            ConvertableItems.ObserveCollectionChanges()
+                .Subscribe(item =>
+                {
+                    SetSetting("convert", item);
+                });
 
             this.WhenAnyValue(x => x.SelectedExport, x => x.IsExportsSelected, y => y.SelectedImport, y => y.IsImportsSelected, z => z.SelectedConvert, z => z.IsConvertsSelected)
                 .Subscribe(b =>
@@ -579,6 +613,7 @@ namespace WolvenKit.ViewModels.Tools
                 }
             }
 
+            SaveSettings();
             _notificationService.Success($"Template has been copied to the selected items.");
         }
 
@@ -936,10 +971,12 @@ namespace WolvenKit.ViewModels.Tools
 
                 importableItem.Properties = (ImportExportArgs)System.Activator.CreateInstance(importableItem.Properties.GetType());
             }
+
+            SaveSettings();
         }
 
         [RelayCommand]
-        private void LoadSettings()
+        private void ImportSettings()
         {
             var gammaRegex = new Regex(".*_[de][0-9]*$");
 
@@ -1013,8 +1050,99 @@ namespace WolvenKit.ViewModels.Tools
 
                 _loggerService?.Info($"Load settings for \"{importableItem.Name}\": Parsed filename");
             }
+
+            SaveSettings();
         }
 
         #endregion Commands
+
+        public void LoadSettings()
+        {
+            var fileName = Path.Combine(_projectManager.ActiveProject.ProjectDirectory, "ImportExportSettings.json");
+            if (!File.Exists(fileName))
+            {
+                return;
+            }
+
+            var json = File.ReadAllText(fileName);
+            _loadedSettings = JsonSerializer.Deserialize<Dictionary<string, Dictionary<string, JsonObject>>>(json);
+        }
+
+        private void SetSetting(string type, IEventPattern<object, NotifyCollectionChangedEventArgs> item)
+        {
+            if (_loadedSettings == null)
+            {
+                return;
+            }
+
+            if (item.EventArgs.Action == NotifyCollectionChangedAction.Reset && item.Sender is IList list)
+            {
+                foreach (var entry in list)
+                {
+                    if (entry is ImportExportItemViewModel vm && _loadedSettings[type].TryGetValue(vm.GetBaseFile().RelativePath, out var args))
+                    {
+                        vm.Properties = (ImportExportArgs)args.Deserialize(vm.Properties.GetType());
+                    }
+                }
+            }
+
+            if (item.EventArgs.Action == NotifyCollectionChangedAction.Add && item.EventArgs.NewItems[0] is ImportExportItemViewModel vm2)
+            {
+                if (_loadedSettings[type].TryGetValue(vm2.GetBaseFile().RelativePath, out var args))
+                {
+                    vm2.Properties = (ImportExportArgs)args.Deserialize(vm2.Properties.GetType());
+                }
+            }
+        }
+
+        public void SaveSettings()
+        {
+            var importSettings = new Dictionary<string, JsonObject>();
+            var exportSettings = new Dictionary<string, JsonObject>();
+            var convertSettings = new Dictionary<string, JsonObject>();
+
+            foreach (var importableItem in ImportableItems)
+            {
+                var node = (JsonObject)JsonSerializer.SerializeToNode(importableItem.Properties, importableItem.Properties.GetType());
+
+                node.Remove("Changing");
+                node.Remove("Changed");
+                node.Remove("ThrownExceptions");
+
+                importSettings.Add(importableItem.GetBaseFile().RelativePath, node);
+            }
+
+            foreach (var exportableItem in ExportableItems)
+            {
+                var node = (JsonObject)JsonSerializer.SerializeToNode(exportableItem.Properties, exportableItem.Properties.GetType());
+
+                node.Remove("Changing");
+                node.Remove("Changed");
+                node.Remove("ThrownExceptions");
+
+                exportSettings.Add(exportableItem.GetBaseFile().RelativePath, node);
+            }
+
+            foreach (var convertableItem in ConvertableItems)
+            {
+                var node = (JsonObject)JsonSerializer.SerializeToNode(convertableItem.Properties, convertableItem.Properties.GetType());
+
+                node.Remove("Changing");
+                node.Remove("Changed");
+                node.Remove("ThrownExceptions");
+
+                convertSettings.Add(convertableItem.GetBaseFile().RelativePath, node);
+            }
+
+            var settings = new Dictionary<string, Dictionary<string, JsonObject>>
+            {
+                { "import", importSettings },
+                { "export", exportSettings },
+                { "convert", convertSettings },
+            };
+
+            var json = JsonSerializer.Serialize(settings, new JsonSerializerOptions {WriteIndented = true});
+            File.WriteAllText(Path.Combine(_projectManager.ActiveProject.ProjectDirectory, "ImportExportSettings.json"), json);
+        }
     }
 }

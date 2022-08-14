@@ -89,6 +89,7 @@ namespace WolvenKit.Common.Model.Arguments
         public XbmImportArgs()
         {
             Keep = false;
+            HasMipchain = true;
         }
 
         /// <summary>

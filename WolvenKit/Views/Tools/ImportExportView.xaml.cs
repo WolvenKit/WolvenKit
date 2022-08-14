@@ -158,6 +158,8 @@ namespace WolvenKit.Views.Tools
                     ViewModel.CopyArgumentsTemplateToCommand.SafeExecute("All in Grid");
                     ApplyToAllCheckbox.SetCurrentValue(System.Windows.Controls.Primitives.ToggleButton.IsCheckedProperty, false);
                 }
+
+                ViewModel.SaveSettings();
             }
             XAML_AdvancedOptionsOverlay.SetCurrentValue(VisibilityProperty, Visibility.Collapsed);
         }
