@@ -111,7 +111,7 @@ namespace WolvenKit.Functionality.Services
                 {
                     var plugin = Plugins.FirstOrDefault(x => x.Id == id);
                     var redModLocalversion = "";
-                    var redModManifest = Path.Combine(new FileInfo(plugin.InstallPath).Directory.FullName, "version.txt");
+                    var redModManifest = Path.Combine(plugin.InstallPath, "version.txt");
                     if (File.Exists(redModManifest))
                     {
                         redModLocalversion = File.ReadAllText(redModManifest);
@@ -131,8 +131,6 @@ namespace WolvenKit.Functionality.Services
                             plugin.Version = redModLocalversion;
                         }
                     }
-
-                    continue;
                 }
             }
         }
@@ -178,7 +176,7 @@ namespace WolvenKit.Functionality.Services
                     //var version = "";
                     if (File.Exists(redmodPath))
                     {
-                        var redModManifest = Path.Combine(plugin.InstallPath, "manifest.txt");
+                        var redModManifest = Path.Combine(plugin.InstallPath, "version.txt");
                         if (File.Exists(redModManifest))
                         {
                             plugin.Version = File.ReadAllText(redModManifest);
