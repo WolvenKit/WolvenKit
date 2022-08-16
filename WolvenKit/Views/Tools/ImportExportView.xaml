@@ -484,7 +484,6 @@
             Grid.ColumnSpan="4"
             Background="Gray"
             Visibility="{Binding IsProcessing, Converter={StaticResource boolToVisibilityConverter}}">
-            <syncfusion:SfBusyIndicator AnimationType="Gear" />
             <TextBlock
                 x:Name="ImportExportOverlayText"
                 Margin="0,65,0,0"

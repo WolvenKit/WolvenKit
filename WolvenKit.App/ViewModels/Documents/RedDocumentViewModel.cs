@@ -332,17 +332,17 @@ namespace WolvenKit.ViewModels.Documents
 
         public CR2WFile GetFileFromDepotPath(CName depotPath, bool original = false)
         {
-            CR2WFile cr2wFile = null;
-
             try
             {
+                CR2WFile cr2wFile = null;
+
                 if (!original)
                 {
                     var projectManager = Locator.Current.GetService<IProjectManager>();
                     if (projectManager.ActiveProject != null)
                     {
                         string path = null;
-                        if ((string)depotPath != null)
+                        if (!string.IsNullOrEmpty(depotPath))
                         {
                             path = Path.Combine(projectManager.ActiveProject.ModDirectory, (string)depotPath);
                         }
@@ -357,52 +357,31 @@ namespace WolvenKit.ViewModels.Documents
 
                         if (path != null && File.Exists(path))
                         {
-                            using (var stream = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
-                            {
-                                using var reader = new BinaryReader(stream);
-                                cr2wFile = _parser.ReadRed4File(reader);
-                            }
-
-                            cr2wFile.MetaData.FileName = depotPath;
-
-                            lock (Files)
-                            {
-                                foreach (var res in cr2wFile.EmbeddedFiles)
-                                {
-                                    if (!Files.ContainsKey(res.FileName))
-                                    {
-                                        Files.Add(res.FileName, new CR2WFile()
-                                        {
-                                            RootChunk = res.Content
-                                        });
-                                    }
-                                }
-                            }
-
-                            return cr2wFile;
+                            using var stream = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
+                            using var reader = new BinaryReader(stream);
+                            cr2wFile = _parser.ReadRed4File(reader);
                         }
                     }
                 }
-            }
-            catch (NullReferenceException)
-            {
-                var _archiveManager = Locator.Current.GetService<IArchiveManager>();
-                var file = _archiveManager.Lookup(depotPath.GetRedHash());
-                if (file.HasValue && file.Value is FileEntry fe)
+
+                if (cr2wFile == null)
                 {
-                    using (var stream = new MemoryStream())
+                    var _archiveManager = Locator.Current.GetService<IArchiveManager>();
+                    var file = _archiveManager.Lookup(depotPath.GetRedHash());
+                    if (file.HasValue && file.Value is FileEntry fe)
                     {
+                        using var stream = new MemoryStream();
                         fe.Extract(stream);
-                        using var reader = new BinaryReader(stream);
-                        cr2wFile = _parser.ReadRed4File(reader);
-                        if (cr2wFile == null)
-                        {
-                            return null;
-                        }
-                        if ((string)depotPath != null)
-                        {
-                            cr2wFile.MetaData.FileName = depotPath;
-                        }
+
+                        cr2wFile = _parser.ReadRed4File(stream);
+                    }
+                }
+
+                if (cr2wFile != null)
+                {
+                    if (!string.IsNullOrEmpty(depotPath))
+                    {
+                        cr2wFile.MetaData.FileName = depotPath;
                     }
 
                     lock (Files)
@@ -418,10 +397,16 @@ namespace WolvenKit.ViewModels.Documents
                             }
                         }
                     }
+
+                    return cr2wFile;
                 }
             }
+            catch (Exception)
+            {
+                // ignore
+            }
 
-            return cr2wFile;
+            return null;
         }
 
         public RedDocumentTabViewModel OpenRefAsTab(string path)

@@ -11,14 +11,6 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CResourceAsyncReference<CResource>>(value);
 		}
 		
-		[RED("curve")]
-		[REDProperty(IsIgnored = true)]
-		public TweakDBID Curve
-		{
-			get => GetPropertyValue<TweakDBID>();
-			set => SetPropertyValue<TweakDBID>(value);
-		}
-		
 		[RED("displayName")]
 		[REDProperty(IsIgnored = true)]
 		public CString DisplayName
@@ -78,14 +70,6 @@ namespace WolvenKit.RED4.Types
 		[RED("perkIcon")]
 		[REDProperty(IsIgnored = true)]
 		public TweakDBID PerkIcon
-		{
-			get => GetPropertyValue<TweakDBID>();
-			set => SetPropertyValue<TweakDBID>(value);
-		}
-		
-		[RED("proficiency")]
-		[REDProperty(IsIgnored = true)]
-		public TweakDBID Proficiency
 		{
 			get => GetPropertyValue<TweakDBID>();
 			set => SetPropertyValue<TweakDBID>(value);

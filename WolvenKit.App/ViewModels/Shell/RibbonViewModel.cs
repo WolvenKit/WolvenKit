@@ -7,11 +7,9 @@ using System.Threading.Tasks;
 using ReactiveUI;
 using WolvenKit.Common;
 using WolvenKit.Common.Interfaces;
-using WolvenKit.Common.Services;
 using WolvenKit.Core.Services;
 using WolvenKit.Functionality.Commands;
 using WolvenKit.Functionality.Services;
-using WolvenKit.Interaction;
 using WolvenKit.Models;
 using WolvenKit.RED4.Archive;
 
@@ -22,13 +20,11 @@ namespace WolvenKit.ViewModels.Shell
     {
         #region fields
 
-        private readonly ILoggerService _loggerService;
-        private readonly IProjectManager _projectManager;
         private readonly IProgressService<double> _progressService;
         private readonly IArchiveManager _archiveManager;
         private readonly IModTools _modTools;
-        public ISettingsManager _settingsManager { get; }
-        public AppViewModel _mainViewModel { get; }
+        public ISettingsManager SettingsManager { get; }
+        public AppViewModel MainViewModel { get; }
 
         #endregion fields
 
@@ -38,60 +34,43 @@ namespace WolvenKit.ViewModels.Shell
             ISettingsManager settingsManager,
             IProgressService<double> progressService,
             IArchiveManager archiveManager,
-            IProjectManager projectManager,
-            ILoggerService loggerService,
             IModTools modTools,
             AppViewModel appViewModel
         )
         {
-            _mainViewModel = appViewModel;
+            MainViewModel = appViewModel;
 
             _archiveManager = archiveManager;
             _progressService = progressService;
-            _projectManager = projectManager;
             _modTools = modTools;
-            _loggerService = loggerService;
-            _settingsManager = settingsManager;
+            SettingsManager = settingsManager;
 
             //ViewSelectedCommand = new DelegateCommand<object>(ExecuteViewSelected, CanViewSelected);
             //AssetBrowserAddCommand = new RelayCommand(ExecuteAssetBrowserAdd, CanAssetBrowserAdd);
             //AssetBrowserOpenFileLocation = new RelayCommand(ExecuteAssetBrowserOpenFileLocation, CanAssetBrowserOpenFileLocation);
 
-            OpenProjectCommand = ReactiveCommand.Create<string>(s => _mainViewModel.OpenProjectCommand.Execute(s).Subscribe());
+            OpenProjectCommand = ReactiveCommand.Create<string>(s => MainViewModel.OpenProjectCommand.Execute(s).Subscribe());
             //NewProjectCommand = ReactiveCommand.Create(() => _mainViewModel.NewProjectCommand.Execute().Subscribe());
-            PackProjectCommand = ReactiveCommand.Create(() => _mainViewModel.PackModCommand.SafeExecute());
-            PackInstallProjectCommand = ReactiveCommand.Create(() => _mainViewModel.PackInstallModCommand.SafeExecute());
+            PackProjectCommand = ReactiveCommand.Create(() => MainViewModel.PackModCommand.SafeExecute());
+            PackInstallProjectCommand = ReactiveCommand.Create(() => MainViewModel.PackInstallModCommand.SafeExecute());
 
-            NewFileCommand = ReactiveCommand.Create(() => _mainViewModel.NewFileCommand.SafeExecute(null));
-            SaveFileCommand = ReactiveCommand.Create(() => _mainViewModel.SaveFileCommand.SafeExecute());
-            SaveAsCommand = ReactiveCommand.Create(() => _mainViewModel.SaveAsCommand.SafeExecute());
-            SaveAllCommand = ReactiveCommand.Create(() => _mainViewModel.SaveAllCommand.SafeExecute());
+            NewFileCommand = ReactiveCommand.Create(() => MainViewModel.NewFileCommand.SafeExecute(null));
+            SaveFileCommand = ReactiveCommand.Create(() => MainViewModel.SaveFileCommand.SafeExecute());
+            SaveAsCommand = ReactiveCommand.Create(() => MainViewModel.SaveAsCommand.SafeExecute());
+            SaveAllCommand = ReactiveCommand.Create(() => MainViewModel.SaveAllCommand.SafeExecute());
 
-            ViewProjectExplorerCommand = ReactiveCommand.Create(() => _mainViewModel.ShowProjectExplorerCommand.SafeExecute());
-            ViewAssetBrowserCommand = ReactiveCommand.Create(() => _mainViewModel.ShowAssetsCommand.SafeExecute());
-            ViewPropertiesCommand = ReactiveCommand.Create(() => _mainViewModel.ShowPropertiesCommand.SafeExecute());
-            ViewLogCommand = ReactiveCommand.Create(() => _mainViewModel.ShowLogCommand.SafeExecute());
+            ViewProjectExplorerCommand = ReactiveCommand.Create(() => MainViewModel.ShowProjectExplorerCommand.SafeExecute());
+            ViewAssetBrowserCommand = ReactiveCommand.Create(() => MainViewModel.ShowAssetsCommand.SafeExecute());
+            ViewPropertiesCommand = ReactiveCommand.Create(() => MainViewModel.ShowPropertiesCommand.SafeExecute());
+            ViewLogCommand = ReactiveCommand.Create(() => MainViewModel.ShowLogCommand.SafeExecute());
             //ViewCodeEditorCommand = ReactiveCommand.Create(() => _mainViewModel.ShowCodeEditorCommand.SafeExecute());
-            ShowImportExportToolCommand = ReactiveCommand.Create(() => _mainViewModel.ShowImportExportToolCommand.SafeExecute());
+            ShowImportExportToolCommand = ReactiveCommand.Create(() => MainViewModel.ShowImportExportToolCommand.SafeExecute());
 
-            ShowPluginToolCommand = ReactiveCommand.Create(() => _mainViewModel.ShowPluginCommand.SafeExecute());
             ShowSoundModdingToolCommand = ReactiveCommand.Create(() => _mainViewModel.ShowSoundModdingToolCommand.SafeExecute());
-
             ShowModsViewCommand = ReactiveCommand.Create(() => _mainViewModel.ShowModsViewCommand.SafeExecute());
 
-            ShowBugReportCommand = ReactiveCommand.CreateFromTask(async () =>
-            {
-                var result = await Interactions.ShowBugReport.Handle(Unit.Default);
-            });
-            ShowFeedbackCommand = ReactiveCommand.CreateFromTask(async () =>
-            {
-                var result = await Interactions.ShowFeedback.Handle(Unit.Default);
-            });
-
-            OpenMaterialRepositoryCommand = ReactiveCommand.Create(() =>
-            {
-                Commonfunctions.ShowFolderInExplorer(_settingsManager.MaterialRepositoryPath);
-            });
+            ShowPluginToolCommand = ReactiveCommand.Create(() => MainViewModel.ShowPluginCommand.SafeExecute());
+            OpenMaterialRepositoryCommand = ReactiveCommand.Create(() => Commonfunctions.ShowFolderInExplorer(SettingsManager.MaterialRepositoryPath));
 
             UnbundleGameCommand = ReactiveCommand.CreateFromTask(UnbundleGame);
 
@@ -100,7 +79,7 @@ namespace WolvenKit.ViewModels.Shell
 
         private async Task UnbundleGame()
         {
-            var depotPath = new DirectoryInfo(_settingsManager.MaterialRepositoryPath);
+            var depotPath = new DirectoryInfo(SettingsManager.MaterialRepositoryPath);
             if (depotPath.Exists)
             {
                 await Task.Run(() =>
@@ -149,9 +128,6 @@ namespace WolvenKit.ViewModels.Shell
         public ReactiveCommand<Unit, Unit> ShowSoundModdingToolCommand { get; }
 
         public ReactiveCommand<Unit, Unit> ShowModsViewCommand { get; }
-
-        public ReactiveCommand<Unit, Unit> ShowBugReportCommand { get; }
-        public ReactiveCommand<Unit, Unit> ShowFeedbackCommand { get; }
 
         public ReactiveCommand<Unit, Unit> OpenMaterialRepositoryCommand { get; }
         public ReactiveCommand<Unit, Unit> UnbundleGameCommand { get; }

@@ -35,14 +35,6 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 		
-		[RED("scoreOnlyForCombatTarget")]
-		[REDProperty(IsIgnored = true)]
-		public CBool ScoreOnlyForCombatTarget
-		{
-			get => GetPropertyValue<CBool>();
-			set => SetPropertyValue<CBool>(value);
-		}
-		
 		[RED("threatMaxDistance")]
 		[REDProperty(IsIgnored = true)]
 		public CFloat ThreatMaxDistance
@@ -78,14 +70,6 @@ namespace WolvenKit.RED4.Types
 		[RED("useThreatMaxDistanceFiltering")]
 		[REDProperty(IsIgnored = true)]
 		public CBool UseThreatMaxDistanceFiltering
-		{
-			get => GetPropertyValue<CBool>();
-			set => SetPropertyValue<CBool>(value);
-		}
-		
-		[RED("vaidateOnlyForCombatTarget")]
-		[REDProperty(IsIgnored = true)]
-		public CBool VaidateOnlyForCombatTarget
 		{
 			get => GetPropertyValue<CBool>();
 			set => SetPropertyValue<CBool>(value);

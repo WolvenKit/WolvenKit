@@ -27,14 +27,6 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<TweakDBID>(value);
 		}
 		
-		[RED("partType")]
-		[REDProperty(IsIgnored = true)]
-		public TweakDBID PartType
-		{
-			get => GetPropertyValue<TweakDBID>();
-			set => SetPropertyValue<TweakDBID>(value);
-		}
-		
 		[RED("texturePartID")]
 		[REDProperty(IsIgnored = true)]
 		public TweakDBID TexturePartID

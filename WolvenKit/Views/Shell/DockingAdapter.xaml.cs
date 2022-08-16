@@ -16,7 +16,6 @@ using Syncfusion.Windows.Tools.Controls;
 using WolvenKit.Functionality.Layout;
 using WolvenKit.Functionality.Services;
 using WolvenKit.Functionality.WKitGlobal.Helpers;
-using WolvenKit.Models;
 using WolvenKit.Models.Docking;
 using WolvenKit.ViewModels.Documents;
 using WolvenKit.ViewModels.Shell;

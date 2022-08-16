@@ -6,14 +6,9 @@ using System.Threading.Tasks;
 using System.Windows.Data;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using ImageMagick;
 using Pfim;
 using Splat;
 using WolvenKit.Common.Services;
-
-//using SkiaSharp;
-//using SkiaSharp.Views.WPF;
-
 
 namespace WolvenKit.Functionality.Other
 {
@@ -58,13 +53,34 @@ namespace WolvenKit.Functionality.Other
                 FileStream filestream;
                 switch (ext)
                 {
-                    //case ".JPG":
-                    //case ".JPEG":
-                    //case ".JPE":
-                    //case ".PNG":
-                    //case ".BMP":
-                    //case ".TIF":
-                    //case ".TIFF":
+                    case ".JPG":
+                    case ".JPEG":
+                    case ".JPE":
+                    {
+                        Stream imageStreamSource = new FileStream(file, FileMode.Open, FileAccess.Read, FileShare.Read);
+                        var decoder = new JpegBitmapDecoder(imageStreamSource, BitmapCreateOptions.PreservePixelFormat, BitmapCacheOption.Default);
+                        return decoder.Frames[0];
+                    }
+                    case ".PNG":
+                    {
+                        Stream imageStreamSource = new FileStream("smiley.png", FileMode.Open, FileAccess.Read, FileShare.Read);
+                        var decoder = new PngBitmapDecoder(imageStreamSource, BitmapCreateOptions.PreservePixelFormat, BitmapCacheOption.Default);
+                        return decoder.Frames[0];
+                    }
+                    case ".BMP":
+                    {
+                        var myUri = new Uri("tulipfarm.bmp", UriKind.RelativeOrAbsolute);
+                        var decoder = new BmpBitmapDecoder(myUri, BitmapCreateOptions.PreservePixelFormat, BitmapCacheOption.Default);
+                        return decoder.Frames[0];
+                    }
+
+                    case ".TIF":
+                    case ".TIFF":
+                    {
+                        Stream imageStreamSource = new FileStream("tulipfarm.tif", FileMode.Open, FileAccess.Read, FileShare.Read);
+                        var decoder = new TiffBitmapDecoder(imageStreamSource, BitmapCreateOptions.PreservePixelFormat, BitmapCacheOption.Default);
+                        return decoder.Frames[0];
+                    }
                     //case ".GIF":
                     //case ".ICO":
                     //case ".JFIF":
@@ -97,36 +113,39 @@ namespace WolvenKit.Functionality.Other
                         pfimPic.Freeze();
                         return pfimPic;
 
-                    case ".PSD":
-                    case ".PSB":
-                    case ".SVG":
-                    case ".XCF":
-                        filestream = new FileStream(file, FileMode.Open, FileAccess.Read, FileShare.ReadWrite, 4096, FileOptions.SequentialScan);
-                        var transMagick = new MagickImage();
-                        transMagick.Read(filestream);
-                        await filestream.DisposeAsync().ConfigureAwait(false);
+                    //case ".PSD":
+                    //case ".PSB":
+                    //case ".SVG":
+                    //case ".XCF":
+                    //    filestream = new FileStream(file, FileMode.Open, FileAccess.Read, FileShare.ReadWrite, 4096, FileOptions.SequentialScan);
+                    //    var transMagick = new MagickImage();
+                    //    transMagick.Read(filestream);
+                    //    await filestream.DisposeAsync().ConfigureAwait(false);
 
-                        transMagick.Quality = 100;
-                        transMagick.ColorSpace = ColorSpace.Transparent;
+                    //    transMagick.Quality = 100;
+                    //    transMagick.ColorSpace = ColorSpace.Transparent;
 
-                        var psd = transMagick.ToBitmapSource();
-                        transMagick.Dispose();
-                        psd.Freeze();
+                    //    var psd = transMagick.ToBitmapSource();
+                    //    transMagick.Dispose();
+                    //    psd.Freeze();
 
-                        return psd;
+                    //    return psd;
 
                     default: // some formats cause exceptions when using filestream, so defaulting to reading from file
-                        var magick = new MagickImage();
-                        magick.Read(file);
+                        //var magick = new MagickImage();
+                        //magick.Read(file);
 
-                        // Set values for maximum quality
-                        magick.Quality = 100;
+                        //// Set values for maximum quality
+                        //magick.Quality = 100;
 
-                        var pic = magick.ToBitmapSource();
-                        magick.Dispose();
-                        pic.Freeze();
+                        //var pic = magick.ToBitmapSource();
+                        //magick.Dispose();
+                        //pic.Freeze();
 
-                        return pic;
+                        //return pic;
+
+                        throw new NotImplementedException();
+
                 }
             }
             catch

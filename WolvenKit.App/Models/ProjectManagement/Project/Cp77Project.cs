@@ -125,7 +125,7 @@ namespace WolvenKit.ProjectManagement.Project
         {
             get
             {
-                var dir = Path.Combine(PackedRootDirectory, "r6", "tweakdbs");
+                var dir = Path.Combine(PackedRootDirectory, "r6", "tweaks");
                 if (!Directory.Exists(dir))
                 {
                     Directory.CreateDirectory(dir);

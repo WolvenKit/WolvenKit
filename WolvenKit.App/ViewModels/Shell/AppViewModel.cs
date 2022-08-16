@@ -12,7 +12,6 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
-using gpm.Installer;
 using Microsoft.Win32;
 using Microsoft.WindowsAPICodePack.Dialogs;
 using Prism.Commands;
@@ -61,7 +60,6 @@ namespace WolvenKit.ViewModels.Shell
         private readonly IWatcherService _watcherService;
         private readonly IPluginService _pluginService;
         private readonly TweakDBService _tweakDBService;
-        private readonly AutoInstallerService _autoInstallerService;
         private readonly HomePageViewModel _homePageViewModel;
 
         #endregion fields
@@ -81,8 +79,7 @@ namespace WolvenKit.ViewModels.Shell
             IProgressService<double> progressService,
             IWatcherService watcherService,
             IPluginService pluginService,
-            TweakDBService tweakDBService,
-            AutoInstallerService autoInstallerService
+            TweakDBService tweakDBService
         )
         {
             _projectManager = projectManager;
@@ -93,7 +90,6 @@ namespace WolvenKit.ViewModels.Shell
             _recentlyUsedItemsService = recentlyUsedItemsService;
             _progressService = progressService;
             _watcherService = watcherService;
-            _autoInstallerService = autoInstallerService;
             _pluginService = pluginService;
             _tweakDBService = tweakDBService;
 
@@ -101,23 +97,22 @@ namespace WolvenKit.ViewModels.Shell
 
             #region commands
 
-            ShowLogCommand = new DelegateCommand(ExecuteShowLog, CanShowLog);
-            ShowProjectExplorerCommand = new DelegateCommand(ExecuteShowProjectExplorer, CanShowProjectExplorer);
+            ShowLogCommand = new DelegateCommand(ExecuteShowLog, CanShowLog).ObservesProperty(() => ActiveProject);
+            ShowProjectExplorerCommand = new DelegateCommand(ExecuteShowProjectExplorer, CanShowProjectExplorer).ObservesProperty(() => ActiveProject);
             //ShowImportUtilityCommand = new DelegateCommand(ExecuteShowImportUtility, CanShowImportUtility);
-            ShowPropertiesCommand = new DelegateCommand(ExecuteShowProperties, CanShowProperties);
+            ShowPropertiesCommand = new DelegateCommand(ExecuteShowProperties, CanShowProperties).ObservesProperty(() => ActiveProject);
             ShowAssetsCommand = new DelegateCommand(ExecuteAssetBrowser, CanShowAssetBrowser);
             //ShowVisualEditorCommand = new DelegateCommand(ExecuteVisualEditor, CanShowVisualEditor);
             //ShowAudioToolCommand = new DelegateCommand(ExecuteAudioTool, CanShowAudioTool);
             //ShowVideoToolCommand = new DelegateCommand(ExecuteVideoTool, CanShowVideoTool);
             //ShowCodeEditorCommand = new DelegateCommand(ExecuteCodeEditor, CanShowCodeEditor);
 
-            ShowImportExportToolCommand = new DelegateCommand(ExecuteImportExportTool, CanShowImportExportTool);
+            ShowImportExportToolCommand = new DelegateCommand(ExecuteImportExportTool, CanShowImportExportTool).ObservesProperty(() => ActiveProject);
             //ShowPackageInstallerCommand = new DelegateCommand(ExecuteShowInstaller, CanShowInstaller);
 
-            ShowSoundModdingToolCommand = new DelegateCommand(ExecuteShowSoundModdingTool, CanShowSoundModdingTool);
-
-            ShowModsViewCommand = new DelegateCommand(ExecuteShowModsView, CanShowModsView);
-            ShowPluginCommand = new DelegateCommand(ExecuteShowPlugin, CanShowPlugin);
+            ShowSoundModdingToolCommand = new DelegateCommand(ExecuteShowSoundModdingTool, CanShowSoundModdingTool).ObservesProperty(() => IsDialogShown);
+            ShowModsViewCommand = new DelegateCommand(ExecuteShowModsView, CanShowModsView).ObservesProperty(() => IsDialogShown);
+            ShowPluginCommand = new DelegateCommand(ExecuteShowPlugin, CanShowPlugin).ObservesProperty(() => IsDialogShown);
 
             OpenFileCommand = new DelegateCommand<FileModel>(p => ExecuteOpenFile(p));
             OpenFileAsyncCommand = ReactiveCommand.CreateFromTask<FileModel, Unit>(OpenFileAsync);
@@ -141,14 +136,14 @@ namespace WolvenKit.ViewModels.Shell
             DeleteProjectCommand = ReactiveCommand.Create<string>(DeleteProject);
             NewProjectCommand = ReactiveCommand.Create(ExecuteNewProject);
 
-            ShowHomePageCommand = new DelegateCommand(ExecuteShowHomePage, CanShowHomePage);
-            ShowSettingsCommand = new DelegateCommand(ExecuteShowSettings, CanShowSettings);
+            ShowHomePageCommand = new DelegateCommand(ExecuteShowHomePage, CanShowHomePage).ObservesProperty(() => IsDialogShown);
+            ShowSettingsCommand = new DelegateCommand(ExecuteShowSettings, CanShowSettings).ObservesProperty(() => IsDialogShown);
 
             LaunchGameCommand = ReactiveCommand.CreateFromTask(ExecuteLaunchGame);
 
-            CloseModalCommand = new DelegateCommand(ExecuteCloseModal, CanCloseModal);
-            CloseOverlayCommand = new DelegateCommand(ExecuteCloseOverlay, CanCloseOverlay);
-            CloseDialogCommand = new DelegateCommand(ExecuteCloseDialog, CanCloseDialog);
+            CloseModalCommand = new DelegateCommand(ExecuteCloseModal, CanCloseModal).ObservesProperty(() => IsDialogShown).ObservesProperty(() => IsOverlayShown);
+            CloseOverlayCommand = new DelegateCommand(ExecuteCloseOverlay, CanCloseOverlay).ObservesProperty(() => IsOverlayShown);
+            CloseDialogCommand = new DelegateCommand(ExecuteCloseDialog, CanCloseDialog).ObservesProperty(() => IsDialogShown);
 
 
             OpenFileAsyncCommand.ThrownExceptions.Subscribe(ex => LogExtended(ex));
@@ -189,27 +184,6 @@ namespace WolvenKit.ViewModels.Shell
                     _tweakDBService.LoadDB(Path.Combine(_settingsManager.GetRED4GameRootDir(), "r6", "cache", "tweakdb.bin"));
                 });
 
-            _settingsManager
-                .WhenAnyValue(x => x.UpdateChannel)
-                .Subscribe(async x =>
-                {
-                    _autoInstallerService.UseChannel(x.ToString());
-
-                    // 1 API call
-                    if (!(await _autoInstallerService.CheckForUpdate())
-                        .Out(out var release))
-                    {
-                        return;
-                    }
-
-                    if (release.TagName.Equals(_settingsManager.GetVersionNumber()))
-                    {
-                        return;
-                    }
-
-                    _settingsManager.IsUpdateAvailable = true;
-                    _loggerService.Success($"WolvenKit update available: {release.TagName}");
-                });
         }
 
         #endregion constructors
@@ -253,22 +227,8 @@ namespace WolvenKit.ViewModels.Shell
 
         private void OnStartup()
         {
-            InitUpdateService();
-
             ShowFirstTimeSetup();
         }
-
-
-        private void InitUpdateService() => _autoInstallerService
-               .UseWPF()
-               .WithVersion(_settingsManager.GetVersionNumber())
-               //.WithVersion("8.4.2") //DBG
-               .WithRestart("WolvenKit.exe")
-               .WithChannel(EUpdateChannel.Nightly.ToString(), "wolvenkit/wolvenkit-nightly-releases")
-               .WithChannel(EUpdateChannel.Stable.ToString(), "wolvenkit/wolvenkit")
-               .UseChannel(_settingsManager.UpdateChannel.ToString())
-               .Build();
-
 
         private async void ShowFirstTimeSetup()
         {
@@ -377,6 +337,14 @@ namespace WolvenKit.ViewModels.Shell
 
                 ActiveProject = _projectManager.ActiveProject;
 
+                // If the assets can't be found, stop here and notify the user in the log
+                if (!File.Exists(_settingsManager.CP77ExecutablePath))
+                {
+                    UpdateTitle();
+                    _loggerService.Warning($"Cyberpunk 2077 executable path is not set. Asset browser disabled.");
+                    return Unit.Default;
+                }
+
                 await _gameControllerFactory.GetController().HandleStartup().ContinueWith(_ =>
                 {
                     UpdateTitle();
@@ -433,11 +401,20 @@ namespace WolvenKit.ViewModels.Shell
 
                 DispatcherHelper.RunOnMainThread(() => ActiveProject = _projectManager.ActiveProject);
 
-                await _gameControllerFactory.GetController().HandleStartup().ContinueWith(_ =>
+                // If the assets can't be found, stop here and notify the user in the log
+                if (!File.Exists(_settingsManager.CP77ExecutablePath))
                 {
                     UpdateTitle();
-                    _notificationService.Success("Project " + project.ProjectName + " loaded!");
-                }, TaskContinuationOptions.OnlyOnRanToCompletion);
+                    _loggerService.Warning($"Cyberpunk 2077 executable path is not set. Asset browser disabled.");
+                }
+                else
+                {
+                    await _gameControllerFactory.GetController().HandleStartup().ContinueWith(_ =>
+                    {
+                        UpdateTitle();
+                        _notificationService.Success("Project " + project.ProjectName + " loaded!");
+                    }, TaskContinuationOptions.OnlyOnRanToCompletion);
+                }
             }
             catch (Exception ex)
             {
@@ -881,11 +858,11 @@ namespace WolvenKit.ViewModels.Shell
         //}
 
         public ICommand ShowImportExportToolCommand { get; private set; }
-        private bool CanShowImportExportTool() => _projectManager.ActiveProject is not null;
+        private bool CanShowImportExportTool() => ActiveProject is not null;
         private void ExecuteImportExportTool() => ImportExportToolVM.IsVisible = !ImportExportToolVM.IsVisible;
 
         public ICommand ShowLogCommand { get; private set; }
-        private bool CanShowLog() => _projectManager.ActiveProject is not null;
+        private bool CanShowLog() => ActiveProject is not null;
         private void ExecuteShowLog() => Log.IsVisible = !Log.IsVisible;
 
         //public ICommand ShowPackageInstallerCommand { get; private set; }
@@ -903,11 +880,11 @@ namespace WolvenKit.ViewModels.Shell
 
 
         public ICommand ShowProjectExplorerCommand { get; private set; }
-        private bool CanShowProjectExplorer() => _projectManager.ActiveProject is not null;
+        private bool CanShowProjectExplorer() => ActiveProject is not null;
         private void ExecuteShowProjectExplorer() => ProjectExplorer.IsVisible = !ProjectExplorer.IsVisible;
 
         public ICommand ShowPropertiesCommand { get; private set; }
-        private bool CanShowProperties() => _projectManager.ActiveProject is not null;
+        private bool CanShowProperties() => ActiveProject is not null;
         private void ExecuteShowProperties() => PropertiesViewModel.IsVisible = !PropertiesViewModel.IsVisible;
 
         //public ICommand ShowVisualEditorCommand { get; private set; }

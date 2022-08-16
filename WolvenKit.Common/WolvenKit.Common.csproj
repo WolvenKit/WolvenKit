@@ -47,7 +47,6 @@
     <None Remove="lib\vgmstream\xmp-vgmstream.dll" />
     <None Remove="Resources\missinghashes.txt" />
     <None Remove="Resources\noderefs.kark" />
-    <None Remove="Resources\red.kark" />
     <None Remove="Resources\tweakdbstr.kark" />
     <None Remove="Resources\tweakdbstr_add.kark" />
     <None Remove="Resources\unusedhashes.kark" />
@@ -104,30 +103,18 @@
     <Content Include="lib\vgmstream\xmp-vgmstream.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Resources\red.kark">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="BCnEncoder.Net" Version="2.1.0" />
-    <PackageReference Include="BCnEncoder.Net.ImageSharp" Version="1.1.1" />
-    <PackageReference Include="FastMember" Version="1.5.0" />
-    <PackageReference Include="FmodAudio" Version="2.2.5" />
-    <PackageReference Include="PropertyChanged.Fody" Version="3.4.1">
-        <PrivateAssets>all</PrivateAssets>
-    </PackageReference>
-    <PackageReference Include="protobuf-net" Version="3.1.4" />
     <PackageReference Include="SharpGLTF.Core" Version="1.0.0-alpha0023" />
     <PackageReference Include="SharpZipLib" Version="1.3.3" />
-    <PackageReference Include="DotNetHelper.FastMember.Extension" Version="2.0.0" />
-    <PackageReference Include="SixLabors.ImageSharp" Version="2.1.2" />
-    <PackageReference Include="System.Collections.Concurrent" Version="4.3.0" />
-    <PackageReference Include="System.Reflection.MetadataLoadContext" Version="6.0.0" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="6.0.5" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="6.0.5">
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="6.0.6" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="6.0.6">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="PropertyChanged.Fody" Version="3.4.1">
+        <PrivateAssets>all</PrivateAssets>
     </PackageReference>
   </ItemGroup>
 

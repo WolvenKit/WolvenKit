@@ -43,14 +43,6 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 		
-		[RED("finishingEnabled")]
-		[REDProperty(IsIgnored = true)]
-		public CBool FinishingEnabled
-		{
-			get => GetPropertyValue<CBool>();
-			set => SetPropertyValue<CBool>(value);
-		}
-		
 		[RED("fullStickThreshold")]
 		[REDProperty(IsIgnored = true)]
 		public CFloat FullStickThreshold

@@ -1,11 +1,11 @@
 <reactiveUi:ReactiveUserControl
-    x:TypeArguments="homepage:PluginsToolViewModel"
-    x:Class="WolvenKit.Views.HomePage.Pages.PluginsToolView"
+    x:TypeArguments="dialogs:PluginsToolViewModel"
+    x:Class="WolvenKit.Views.Dialogs.PluginsToolView"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-    xmlns:homepage="clr-namespace:WolvenKit.ViewModels.HomePage;assembly=WolvenKit.App"
+    xmlns:local="clr-namespace:WolvenKit.Views.Dialogs"
     xmlns:others="clr-namespace:WolvenKit.Views.Others"
     xmlns:reactiveUi="http://reactiveui.net"
     xmlns:hc="https://handyorg.github.io/handycontrol"
@@ -14,77 +14,39 @@
     xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
     mc:Ignorable="d" 
     d:DesignHeight="600" d:DesignWidth="800"
+    Width="800"
+    Height="600"
     Background="{StaticResource ContentBackgroundAlt3}"
-    d:DataContext="{d:DesignInstance Type=homepage:PluginsToolViewModel}"
+    d:DataContext="{d:DesignInstance Type=dialogs:PluginsToolViewModel}"
     >
 
-    <Grid>
-        
+    <Grid Margin="20">
+
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
         <!-- Header -->
-        <StackPanel  Grid.Row="0"
-            Margin="25,0,5,0"
-            Height="85"
-            HorizontalAlignment="Left"
-            VerticalAlignment="Top"
-            Orientation="Horizontal" >
-
-            <hc:AnimationPath
-                Width="45"
-                Height="45"
-                Data="{DynamicResource SettingsGeo}"
-                PathLength="250"
-                RenderTransformOrigin="0.5,0.5"
-                Stretch="Uniform"
-                Stroke="{DynamicResource MahApps.Brushes.ThemeForeground}"
-                StrokeThickness="1.5"
-                Duration="00:00:08"
-                >
-                <hc:AnimationPath.RenderTransform>
-                    <TransformGroup>
-                        <ScaleTransform />
-                        <SkewTransform />
-                        <RotateTransform Angle="180" />
-                        <TranslateTransform />
-                    </TransformGroup>
-                </hc:AnimationPath.RenderTransform>
-            </hc:AnimationPath>
-
-            <hc:Divider
-                Height="50"
-                Margin="15"
-                HorizontalAlignment="Center"
-                VerticalAlignment="Center"
-                Orientation="Vertical"
-                />
-            <TextBlock Text="Plugins"
-                HorizontalAlignment="Center"
-                VerticalAlignment="Center"
-                FontSize="20"
-                Foreground="White" />
-
-        </StackPanel>
+        <TextBlock Text="WolvenKit Plugins" FontSize="24" Grid.Row="0"/>
 
         <!-- Separator -->
         <Separator Grid.Row="1"/>
 
         <!-- Buttons -->
-        <Grid Grid.Row="2" Margin="10,0,0,0">
+        <Grid Grid.Row="2">
             
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="Auto"/>
             </Grid.ColumnDefinitions>
-
-            <Button Grid.Column="0" Command="{Binding SyncCommand}" Margin="0,10,0,0"  >
-                <StackPanel Orientation="Horizontal" >
-                    <iconPacks:PackIconMaterial Kind="Sync"  Foreground="CadetBlue" />
+            
+            <Button Grid.Column="0" x:Name="CheckButton" Margin="0,10,0,0" >
+                <StackPanel Orientation="Horizontal">
+                    <iconPacks:PackIconMaterial Kind="Sync" Width="30" Height="30" Foreground="CadetBlue" />
                     <TextBlock Text="Check for Updates" FontSize="16" VerticalAlignment="Center" Margin="5,0,10,0"/>
                 </StackPanel>
             </Button>
@@ -92,14 +54,14 @@
         </Grid>
 
         <!-- Main grid -->
-        <ListBox Grid.Row="3" x:Name="PluginList" HorizontalContentAlignment="Stretch" Margin="10"
+        <ListBox Grid.Row="3" x:Name="PluginList" HorizontalContentAlignment="Stretch" Margin="25"
                  ItemsSource="{Binding _pluginService.Plugins, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
                  d:ItemsSource="{d:SampleData ItemCount=5}"
                  SelectedItem="{Binding SelectedPlugin}">
-
+            
             <ListBox.ItemTemplate>
                 <DataTemplate>
-                    <Grid IsEnabled="{Binding IsEnabled}" >
+                    <Grid Height="85" >
                         <Grid.RowDefinitions>
                             <RowDefinition Height="*"/>
                             <RowDefinition Height="Auto"/>
@@ -108,9 +70,10 @@
                         <Grid Grid.Row="0">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="4*"/>
-                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="50"/>
                                 <ColumnDefinition Width="*"/>
                             </Grid.ColumnDefinitions>
+
 
                             <StackPanel Grid.Column="0">
                                 <TextBlock Text="{Binding Name}" FontSize="20"/>
@@ -118,28 +81,25 @@
                                 <TextBlock Text="{Binding Description}" FontSize="14"/>
                             </StackPanel>
 
-                            <Button Grid.Column="1" Command="{Binding InstallCommand}" 
-                                    Padding="1" Height="50" Width="50" Margin="0"
-                                    Visibility="{Binding IsUpdateAvailable, Converter={StaticResource boolToVisibilityConverter}}"
-                                    Background="Transparent" BorderBrush="Transparent">
-                                <iconPacks:PackIconMaterial Kind="Download" Foreground="CadetBlue"
-                                                            Height="30" Width="30"/>
+                            <Button Grid.Column="1" Command="{Binding InstallCommand}"
+                                    Visibility="{Binding IsNotInstalled, Converter={StaticResource boolToVisibilityConverter}}"
+                                    Background="Transparent" BorderBrush="Transparent"
+                                    syncfusion:FocusManagerHelper.FocusedElement="True">
+                                <iconPacks:PackIconMaterial Kind="Download" Width="30" Height="30"
+                                                            Foreground="CadetBlue" />
                             </Button>
                             <Button Grid.Column="1"
-                                    Padding="1" Height="50" Width="50" Margin="0"
-                                    Visibility="{Binding IsNoUpdateAvailable, Converter={StaticResource boolToVisibilityConverter}}"
-                                    Background="Transparent" BorderBrush="Transparent">
-                                <iconPacks:PackIconMaterial Kind="Check" Foreground="LawnGreen"
-                                                            Height="30" Width="30"/>
+                                    Visibility="{Binding IsOpenEnabled, Converter={StaticResource boolToVisibilityConverter}}"
+                                    Background="Transparent" BorderBrush="Transparent"
+                                    syncfusion:FocusManagerHelper.FocusedElement="True">
+                                <iconPacks:PackIconMaterial Kind="Check" Width="30" Height="30"
+                                                            Foreground="LawnGreen" />
                             </Button>
 
-                            <StackPanel Grid.Column="2" Margin="5">
-                                <Button Padding="1" Margin="1" Height="20" Width="110"
-                                        Content="{Binding Label}" Command="{Binding InstallCommand}"/>
-                                <Button Padding="1" Margin="1" Height="20" Width="110"
-                                        Content="Open"  IsEnabled="{Binding IsOpenEnabled}" Command="{Binding OpenCommand}"/>
-                                <Button Padding="1" Margin="1" Height="20" Width="110"
-                                        Content="Remove"  IsEnabled="{Binding IsOpenEnabled}" Command="{Binding RemoveCommand}"/>
+                            <StackPanel Grid.Column="2">
+                                <Button Content="{Binding Label}" Margin="4" Command="{Binding InstallCommand}"/>
+                                <Button Content="Open" Margin="4" IsEnabled="{Binding IsOpenEnabled}" Command="{Binding OpenCommand}"/>
+                                <Button Content="Remove" Margin="4" IsEnabled="{Binding IsOpenEnabled}" Command="{Binding RemoveCommand}"/>
                             </StackPanel>
                         </Grid>
 
@@ -152,9 +112,19 @@
                     </Grid>
                 </DataTemplate>
             </ListBox.ItemTemplate>
-
+           
         </ListBox>
 
+        <!-- Footer -->
+        <Grid Grid.Row="4"  Height="28" Margin="0,10,0,0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+
+            <Button Grid.Column="2" Content="Cancel" Command="{Binding CancelCommand}" Margin="10,0,0,0" Padding="12,0" HorizontalAlignment="Right"/>
+
+        </Grid>
     </Grid>
-    
 </reactiveUi:ReactiveUserControl>

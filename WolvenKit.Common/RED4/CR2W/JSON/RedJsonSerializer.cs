@@ -111,6 +111,25 @@ public static class RedJsonSerializer
         return result;
     }
 
+    public static object? Deserialize(Type type, JsonElement element)
+    {
+        s_bufferResolver.Begin();
+        s_classResolver.Begin();
+
+        if (element.ValueKind == JsonValueKind.Object)
+        {
+            SetVersion(element.TryGetProperty("$type", out _)
+                ? SemVersion.Parse("0.0.2", SemVersionStyles.Strict)
+                : SemVersion.Parse("0.0.1", SemVersionStyles.Strict));
+        }
+
+        var result = element.Deserialize(type, Options);
+
+        CleanUp();
+
+        return result;
+    }
+
     private static void CleanUp()
     {
         s_bufferResolver.End();

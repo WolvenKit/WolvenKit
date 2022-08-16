@@ -37,6 +37,7 @@ namespace WolvenKit.ViewModels.Documents
             {
                 OnDemandLoadingCommand = new DelegateCommand<TreeViewNode>(ExecuteOnDemandLoading, CanExecuteOnDemandLoading);
                 OpenImportCommand = new DelegateCommand<ICR2WImport>(ExecuteOpenImport);
+
                 if (SelectedChunk == null)
                 {
                     SelectedChunk = Chunks[0];

@@ -11,6 +11,9 @@ using WolvenKit.RED4.Types.Exceptions;
 
 namespace WolvenKit.RED4.TweakDB;
 
+/// <summary>
+/// TODO logging?
+/// </summary>
 public class TweakDBReader : Red4Reader
 {
     private const uint s_recordSeed = 0x5EEDBA5E;
@@ -78,8 +81,8 @@ public class TweakDBReader : Red4Reader
 
         ReadFlats(fileHeader.flatsOffset, file.Flats);
         ReadRecords(fileHeader.recordsOffset, file.Records);
-        file.Queries = ReadQueries(fileHeader.queriesOffset);
-        file.GroupTags = ReadGroupTags(fileHeader.groupTagsOffset);
+        ReadQueries(fileHeader.queriesOffset, file.Queries);
+        ReadGroupTags(fileHeader.groupTagsOffset, file.GroupTags);
 
         return EFileReadErrorCodes.NoError;
     }
@@ -127,51 +130,45 @@ public class TweakDBReader : Red4Reader
         var numRecords = BaseReader.ReadInt32();
         for (var i = 0; i < numRecords; i++)
         {
+            var id = BaseReader.ReadUInt64();
             var key = BaseReader.ReadUInt32();
+
             if (s_recordHashes.ContainsKey(key))
             {
-                pool.Add(BaseReader.ReadUInt64(), s_recordHashes[key]);
+                pool.Add(id, s_recordHashes[key]);
             }
         }
     }
 
-    private Dictionary<TweakDBID, List<TweakDBID>> ReadQueries(int offset)
+    private void ReadQueries(int offset, QueriesPool pool)
     {
-        var result = new Dictionary<TweakDBID, List<TweakDBID>>();
-
-
         Position = offset;
 
         var numQueries = BaseReader.ReadInt32();
         for (var i = 0; i < numQueries; i++)
         {
-            var tdbName = ReadTweakDBID();
-            result.Add(tdbName, new List<TweakDBID>());
+            var entries = new List<TweakDBID>();
 
+            var tdbName = ReadTweakDBID();
             var numResults = BaseReader.ReadUInt32();
             for (var j = 0; j < numResults; j++)
             {
-                result[tdbName].Add(ReadTweakDBID());
+                entries.Add(ReadTweakDBID());
             }
-        }
 
-        return result;
+            pool.Add((ulong)tdbName, entries);
+        }
     }
 
-    private Dictionary<TweakDBID, byte> ReadGroupTags(int offset)
+    private void ReadGroupTags(int offset, GroupTagsPool pool)
     {
-        var result = new Dictionary<TweakDBID, byte>();
-
-
         Position = offset;
 
         var numGroupTags = BaseReader.ReadInt32();
         for (var i = 0; i < numGroupTags; i++)
         {
-            result.Add(ReadTweakDBID(), BaseReader.ReadByte());
+            pool.Add((ulong)ReadTweakDBID(), BaseReader.ReadByte());
         }
-
-        return result;
     }
 
     private static Type GetTypeFromEnum(ETweakType enumType)
@@ -264,7 +261,7 @@ public class TweakDBReader : Red4Reader
                     value = args.Value;
                 }
 
-                
+
                 instance.SetProperty(propertyInfo.RedName, value);
             }
         }

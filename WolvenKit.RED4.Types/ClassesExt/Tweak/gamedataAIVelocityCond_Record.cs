@@ -3,14 +3,6 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class gamedataAIVelocityCond_Record
 	{
-		[RED("invert")]
-		[REDProperty(IsIgnored = true)]
-		public CBool Invert
-		{
-			get => GetPropertyValue<CBool>();
-			set => SetPropertyValue<CBool>(value);
-		}
-		
 		[RED("range")]
 		[REDProperty(IsIgnored = true)]
 		public Vector2 Range

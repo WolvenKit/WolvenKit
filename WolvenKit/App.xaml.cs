@@ -72,6 +72,7 @@ namespace WolvenKit
             //ApplicationHelper.StartProfileOptimization();
 
             loggerService.Info("Starting application");
+            loggerService.Info($"Version: {settings.GetVersionNumber()}");
             await Initializations.InitializeWebview2(loggerService);
 
             loggerService.Info("Initializing red database");
@@ -85,9 +86,6 @@ namespace WolvenKit
 
             loggerService.Info("Initializing Discord RPC API");
             DiscordHelper.InitializeDiscordRPC();
-
-            loggerService.Info("Initializing Github API");
-            Initializations.InitializeGitHub();
 
             // Some things can only be initialized after base.OnStartup(e);
             base.OnStartup(e);
@@ -166,7 +164,7 @@ namespace WolvenKit
             finally
             {
                 _logger.Error(exception);
-                Application.Current.Shutdown();
+                //Application.Current.Shutdown();
             }
         }
     }

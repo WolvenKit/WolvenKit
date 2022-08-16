@@ -3,30 +3,6 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class gamedataGrenade_Record
 	{
-		[RED("addAxisRotationDelay")]
-		[REDProperty(IsIgnored = true)]
-		public CFloat AddAxisRotationDelay
-		{
-			get => GetPropertyValue<CFloat>();
-			set => SetPropertyValue<CFloat>(value);
-		}
-		
-		[RED("addAxisRotationSpeedMax")]
-		[REDProperty(IsIgnored = true)]
-		public CFloat AddAxisRotationSpeedMax
-		{
-			get => GetPropertyValue<CFloat>();
-			set => SetPropertyValue<CFloat>(value);
-		}
-		
-		[RED("addAxisRotationSpeedMin")]
-		[REDProperty(IsIgnored = true)]
-		public CFloat AddAxisRotationSpeedMin
-		{
-			get => GetPropertyValue<CFloat>();
-			set => SetPropertyValue<CFloat>(value);
-		}
-		
 		[RED("additionalAttack")]
 		[REDProperty(IsIgnored = true)]
 		public TweakDBID AdditionalAttack
@@ -35,12 +11,12 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<TweakDBID>(value);
 		}
 		
-		[RED("additionalAttackOnDetonate")]
+		[RED("attack")]
 		[REDProperty(IsIgnored = true)]
-		public CBool AdditionalAttackOnDetonate
+		public TweakDBID Attack
 		{
-			get => GetPropertyValue<CBool>();
-			set => SetPropertyValue<CBool>(value);
+			get => GetPropertyValue<TweakDBID>();
+			set => SetPropertyValue<TweakDBID>(value);
 		}
 		
 		[RED("attackDuration")]
@@ -67,9 +43,9 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<TweakDBID>(value);
 		}
 		
-		[RED("delayToDetonate")]
+		[RED("deepWaterDepth")]
 		[REDProperty(IsIgnored = true)]
-		public CFloat DelayToDetonate
+		public CFloat DeepWaterDepth
 		{
 			get => GetPropertyValue<CFloat>();
 			set => SetPropertyValue<CFloat>(value);
@@ -115,14 +91,6 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<TweakDBID>(value);
 		}
 		
-		[RED("effectCooldown")]
-		[REDProperty(IsIgnored = true)]
-		public CFloat EffectCooldown
-		{
-			get => GetPropertyValue<CFloat>();
-			set => SetPropertyValue<CFloat>(value);
-		}
-		
 		[RED("enemyAttack")]
 		[REDProperty(IsIgnored = true)]
 		public TweakDBID EnemyAttack
@@ -131,52 +99,12 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<TweakDBID>(value);
 		}
 		
-		[RED("freezeDelayAfterBounce")]
-		[REDProperty(IsIgnored = true)]
-		public CFloat FreezeDelayAfterBounce
-		{
-			get => GetPropertyValue<CFloat>();
-			set => SetPropertyValue<CFloat>(value);
-		}
-		
-		[RED("freezingDuration")]
-		[REDProperty(IsIgnored = true)]
-		public CFloat FreezingDuration
-		{
-			get => GetPropertyValue<CFloat>();
-			set => SetPropertyValue<CFloat>(value);
-		}
-		
-		[RED("isContinuousEffect")]
-		[REDProperty(IsIgnored = true)]
-		public CBool IsContinuousEffect
-		{
-			get => GetPropertyValue<CBool>();
-			set => SetPropertyValue<CBool>(value);
-		}
-		
-		[RED("minimumDistanceFromFloor")]
-		[REDProperty(IsIgnored = true)]
-		public CFloat MinimumDistanceFromFloor
-		{
-			get => GetPropertyValue<CFloat>();
-			set => SetPropertyValue<CFloat>(value);
-		}
-		
 		[RED("npcHitReactionAttack")]
 		[REDProperty(IsIgnored = true)]
 		public TweakDBID NpcHitReactionAttack
 		{
 			get => GetPropertyValue<TweakDBID>();
 			set => SetPropertyValue<TweakDBID>(value);
-		}
-		
-		[RED("numberOfHitsForAdditionalAttack")]
-		[REDProperty(IsIgnored = true)]
-		public CInt32 NumberOfHitsForAdditionalAttack
-		{
-			get => GetPropertyValue<CInt32>();
-			set => SetPropertyValue<CInt32>(value);
 		}
 		
 		[RED("randomRotationAxes")]
@@ -259,14 +187,6 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CInt32>(value);
 		}
 		
-		[RED("setStickyTracker")]
-		[REDProperty(IsIgnored = true)]
-		public CBool SetStickyTracker
-		{
-			get => GetPropertyValue<CBool>();
-			set => SetPropertyValue<CBool>(value);
-		}
-		
 		[RED("shallowWaterAttack")]
 		[REDProperty(IsIgnored = true)]
 		public TweakDBID ShallowWaterAttack
@@ -299,28 +219,20 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 		
+		[RED("sinkingDetonationDelay")]
+		[REDProperty(IsIgnored = true)]
+		public CFloat SinkingDetonationDelay
+		{
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
+		}
+		
 		[RED("spawnFxAtWaterSurface")]
 		[REDProperty(IsIgnored = true)]
 		public CBool SpawnFxAtWaterSurface
 		{
 			get => GetPropertyValue<CBool>();
 			set => SetPropertyValue<CBool>(value);
-		}
-		
-		[RED("stickyTrackerTimeout")]
-		[REDProperty(IsIgnored = true)]
-		public CFloat StickyTrackerTimeout
-		{
-			get => GetPropertyValue<CFloat>();
-			set => SetPropertyValue<CFloat>(value);
-		}
-		
-		[RED("stopAttackDelay")]
-		[REDProperty(IsIgnored = true)]
-		public CFloat StopAttackDelay
-		{
-			get => GetPropertyValue<CFloat>();
-			set => SetPropertyValue<CFloat>(value);
 		}
 		
 		[RED("underwaterDetonationRumbleName")]
@@ -350,6 +262,30 @@ namespace WolvenKit.RED4.Types
 		[RED("waterDetonationImpulseRadiusCoef")]
 		[REDProperty(IsIgnored = true)]
 		public CFloat WaterDetonationImpulseRadiusCoef
+		{
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
+		}
+		
+		[RED("waterDetonationImpulseStrength")]
+		[REDProperty(IsIgnored = true)]
+		public CFloat WaterDetonationImpulseStrength
+		{
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
+		}
+		
+		[RED("waterSurfaceImpactImpulseRadius")]
+		[REDProperty(IsIgnored = true)]
+		public CFloat WaterSurfaceImpactImpulseRadius
+		{
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
+		}
+		
+		[RED("waterSurfaceImpactImpulseStrength")]
+		[REDProperty(IsIgnored = true)]
+		public CFloat WaterSurfaceImpactImpulseStrength
 		{
 			get => GetPropertyValue<CFloat>();
 			set => SetPropertyValue<CFloat>(value);

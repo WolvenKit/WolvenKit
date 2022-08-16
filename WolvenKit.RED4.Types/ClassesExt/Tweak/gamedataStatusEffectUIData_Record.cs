@@ -43,14 +43,6 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CString>(value);
 		}
 		
-		[RED("iconPAth")]
-		[REDProperty(IsIgnored = true)]
-		public CString IconPAth
-		{
-			get => GetPropertyValue<CString>();
-			set => SetPropertyValue<CString>(value);
-		}
-		
 		[RED("intValues")]
 		[REDProperty(IsIgnored = true)]
 		public CArray<CInt32> IntValues

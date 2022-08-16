@@ -3,6 +3,7 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Text.Json;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
@@ -10,12 +11,16 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using WolvenKit.Common.FNV1A;
 using WolvenKit.Common.Services;
 using WolvenKit.Core.Compression;
+using WolvenKit.Core.CRC;
 using WolvenKit.Modkit.RED4;
 using WolvenKit.Modkit.RED4.Sounds;
 using WolvenKit.RED4.Archive;
 using WolvenKit.RED4.Archive.IO;
 using WolvenKit.RED4.CR2W;
+using WolvenKit.RED4.TweakDB;
+using WolvenKit.RED4.TweakDB.Helper;
 using WolvenKit.RED4.Types;
+using EFileReadErrorCodes = WolvenKit.RED4.Archive.IO.EFileReadErrorCodes;
 
 namespace WolvenKit.Utility
 {
@@ -356,6 +361,151 @@ namespace WolvenKit.Utility
                         // ignore
                     }
                 });
+            }
+        }
+
+        [TestMethod]
+        public void RecordGenerator()
+        {
+            ArgumentNullException.ThrowIfNull(s_tweakDbPath);
+
+            var tweakDbStrPath = Path.Combine(Environment.CurrentDirectory, "..", "..", "..", "..", "..", "..", "WolvenKit.Common", "Resources", "tweakdbstr.kark");
+            if (!File.Exists(tweakDbStrPath))
+            {
+                throw new ArgumentNullException(nameof(tweakDbStrPath));
+            }
+
+            var resultDir = Path.Combine(Environment.CurrentDirectory, s_testResultsDirectory, "records");
+            Directory.CreateDirectory(resultDir);
+
+            var stringHelper = new TweakDBStringHelper();
+            stringHelper.Load(tweakDbStrPath);
+            TweakDBID.ResolveHashHandler = stringHelper.GetString;
+
+            using var fh = File.OpenRead(s_tweakDbPath);
+            using var reader2 = new TweakDBReader(fh);
+
+            if (reader2.ReadFile(out var tweakDb) != WolvenKit.RED4.TweakDB.EFileReadErrorCodes.NoError)
+            {
+                return;
+            }
+
+            var ass = typeof(gamedataTweakDBRecord).Assembly;
+
+            var rts = new Dictionary<string, Dictionary<string, string>>();
+            foreach (var (id, value) in tweakDb.Flats)
+            {
+                if (id.ResolvedText != null)
+                {
+                    if (id.ResolvedText.StartsWith("RTDB"))
+                    {
+                        var parts = id.ResolvedText.Split('.');
+
+                        var className = $"gamedata{parts[1]}_Record";
+                        if (!rts.ContainsKey(className))
+                        {
+                            rts.Add(className, new Dictionary<string, string>());
+                        }
+
+                        var typeName = GetTypeName(value.GetType());
+
+                        rts[className].Add(parts[2], typeName);
+                    }
+                }
+            }
+
+            foreach (var (className, properties) in rts)
+            {
+                var classType = ass.GetType($"WolvenKit.RED4.Types.{className}");
+                if (classType == null)
+                {
+                    throw new NotImplementedException();
+                }
+
+                var baseType = classType.BaseType;
+                while (baseType != null && baseType != typeof(gamedataTweakDBRecord))
+                {
+                    if (rts.ContainsKey(baseType.Name))
+                    {
+                        foreach (var key in rts[baseType.Name].Keys)
+                        {
+                            properties.Remove(key);
+                        }
+                    }
+
+                    baseType = baseType.BaseType;
+                }
+            }
+
+            foreach (var (className, props) in rts)
+            {
+                if (props.Count == 0)
+                {
+                    continue;
+                }
+
+                var sortedProps = props.OrderBy(obj => obj.Key).ToDictionary(obj => obj.Key, obj => obj.Value);
+
+                var lines = new List<string>();
+
+                lines.Add("");
+                lines.Add("namespace WolvenKit.RED4.Types");
+                lines.Add("{");
+                lines.Add($"\tpublic partial class {className}");
+                lines.Add("\t{");
+
+                var firstProp = true;
+                foreach (var (propName, typeName) in sortedProps)
+                {
+                    if (!firstProp)
+                    {
+                        lines.Add("\t\t");
+                    }
+
+                    var nName = char.ToUpper(propName[0]) + propName.Substring(1);
+
+                    lines.Add($"\t\t[RED(\"{propName}\")]");
+                    lines.Add("\t\t[REDProperty(IsIgnored = true)]");
+                    lines.Add($"\t\tpublic {typeName} {nName}");
+                    lines.Add("\t\t{");
+                    lines.Add($"\t\t\tget => GetPropertyValue<{typeName}>();");
+                    lines.Add($"\t\t\tset => SetPropertyValue<{typeName}>(value);");
+                    lines.Add("\t\t}");
+
+                    firstProp = false;
+                }
+
+                lines.Add("\t}");
+                lines.Add("}");
+
+                File.WriteAllLines(Path.Combine(resultDir, $"{className}.cs"), lines);
+            }
+
+            string GetTypeName(Type type)
+            {
+                if (type.IsGenericType)
+                {
+                    if (type.GetGenericTypeDefinition() == typeof(CArray<>))
+                    {
+                        return $"CArray<{GetTypeName(type.GetGenericArguments()[0])}>";
+                    }
+
+                    if (type.GetGenericTypeDefinition() == typeof(CResourceReference<>))
+                    {
+                        return $"CResourceReference<{GetTypeName(type.GetGenericArguments()[0])}>";
+                    }
+
+                    if (type.GetGenericTypeDefinition() == typeof(CResourceAsyncReference<>))
+                    {
+                        return $"CResourceAsyncReference<{GetTypeName(type.GetGenericArguments()[0])}>";
+                    }
+                }
+                else
+                {
+                    return type.Name;
+                }
+
+                throw new NotSupportedException();
             }
         }
     }

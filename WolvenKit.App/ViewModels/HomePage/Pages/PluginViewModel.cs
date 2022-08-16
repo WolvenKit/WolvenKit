@@ -1,56 +1,38 @@
 using System;
-using System.IO;
-using System.Linq;
+using System.Collections.Generic;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
-using gpm.Core.Models;
-using gpm.Core.Services;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
-using Splat;
 using WolvenKit.Common.Services;
 using WolvenKit.Functionality.Services;
 using WolvenKit.Models;
 
-namespace WolvenKit.ViewModels.HomePage
+namespace WolvenKit.ViewModels.Dialogs
 {
+    public record PluginModel(EPlugin Id, string Version, List<string> Files);
+
+
     public class PluginViewModel : ReactiveObject
     {
-        private readonly ITaskService _taskService;
-        private readonly ILoggerService _logger;
+        private readonly IPluginService _pluginService;
+        private readonly ILoggerService _loggerService;
 
-        public PluginViewModel(EPlugin plugin, string installPath,
-            EPluginStatus status, string version,
-            string name, string description)
+        private PluginModel _pluginModel;
+
+        public PluginViewModel(IPluginService pluginService, ILoggerService loggerService, PluginModel plugin, string installPath)
         {
-            _taskService = Locator.Current.GetService<ITaskService>();
-            _logger = Locator.Current.GetService<ILoggerService>();
+            _pluginService = pluginService;
+            _loggerService = loggerService;
 
-            Plugin = plugin;
+            _pluginModel = plugin;
+
             InstallPath = installPath;
-            Status = status;
-            Version = version;
-            Name = name;
-            Description = description;
+            Version = plugin.Version;
 
-            InstallCommand = ReactiveCommand.Create(InstallAsync,
-                this.WhenAnyValue(x => x.IsBusy, x => x.ReleaseModel,
-                (busy, model) =>
-                {
-                    if (busy)
-                    {
-                        return false;
-                    }
-
-                    if (Plugin == EPlugin.redmod)
-                    {
-                        return true;
-                    }
-
-                    return model != null;
-                }));
-            OpenCommand = ReactiveCommand.Create(OpenAsync);
+            InstallCommand = ReactiveCommand.CreateFromTask(InstallAsync, this.WhenAnyValue(x => x.IsBusy, (busy) => !busy));
+            OpenCommand = ReactiveCommand.Create(Open);
             RemoveCommand = ReactiveCommand.Create(RemoveAsync);
 
             this.WhenAnyValue(x => x.Status).Subscribe(status =>
@@ -58,27 +40,18 @@ namespace WolvenKit.ViewModels.HomePage
                 switch (status)
                 {
                     case EPluginStatus.NotInstalled:
-                        IsUpdateAvailable = true;
-
-                        IsNoUpdateAvailable = !IsUpdateAvailable;
+                        IsOpenEnabled = false;
+                        IsNotInstalled = true;
                         Label = "Install";
                         break;
                     case EPluginStatus.Outdated:
-                        IsUpdateAvailable = true;
-
-                        IsNoUpdateAvailable = !IsUpdateAvailable;
+                        IsOpenEnabled = true;
+                        IsNotInstalled = false;
                         Label = "Update";
                         break;
-                    case EPluginStatus.Installed:
-                        IsUpdateAvailable = false;
-
-                        IsNoUpdateAvailable = !IsUpdateAvailable;
-                        Label = "Check for Updates";
-                        break;
                     case EPluginStatus.Latest:
-                        IsUpdateAvailable = false;
-
-                        IsNoUpdateAvailable = !IsUpdateAvailable;
+                        IsOpenEnabled = true;
+                        IsNotInstalled = false;
                         Label = "Repair";
                         break;
                     default:
@@ -87,159 +60,56 @@ namespace WolvenKit.ViewModels.HomePage
             });
         }
 
-        public PluginViewModel(
-            EPlugin plugin, string installPath,
-            EPluginStatus status, string version,
-            string name, string description,
-            Package package, ReleaseModel releaseModel)
-            : this(plugin, installPath, status, version, name, description)
-        {
-            ReleaseModel = releaseModel;
-            Package = package;
-        }
+        public EPlugin Id => _pluginModel.Id;
+        public string Name => Id.GetDisplayName();
+        public string Description => Id.GetDescription();
 
-        public EPlugin Plugin { get; private set; }
-        public string InstallPath { get; private set; }
-
-
-        public Package Package { get; private set; }
-        [Reactive] public ReleaseModel ReleaseModel { get; set; }
-        public string Name { get; }
-        public string Description { get; }
-
+        public string InstallPath { get; init; }
 
         [Reactive] public string Version { get; set; }
-
         [Reactive] public EPluginStatus Status { get; set; }
         [Reactive] public string Label { get; set; }
-
-        [Reactive] public bool IsEnabled { get; set; }
         [Reactive] public bool IsBusy { get; set; }
+        [Reactive] public bool IsNotInstalled { get; set; }
+        [Reactive] public bool IsOpenEnabled { get; set; } // = IsInstalled
 
-        [Reactive] public bool IsUpdateAvailable { get; set; }
-        [Reactive] public bool IsNoUpdateAvailable { get; set; }
 
+        public ICommand OpenCommand { get; init; }
+        private void Open() => Commonfunctions.ShowFolderInExplorer(InstallPath);
 
-        public ICommand OpenCommand { get; private set; }
-        private void OpenAsync()
-        {
-            switch (Plugin)
-            {
-                case EPlugin.cyberenginetweaks:
-                    _logger.Info("Cannot open cyberenginetweaks.");
-                    break;
-                case EPlugin.redscript:
-                    _logger.Info("Cannot open redscript.");
-                    break;
-                case EPlugin.mlsetupbuilder:
-                    Commonfunctions.ShowFolderInExplorer(InstallPath);
-                    break;
-                case EPlugin.redmod:
-                    _logger.Info("Cannot open redmod - it is a commandline tool.");
-                    break;
-                default:
-                    break;
-            }
-        }
-
-        public ICommand RemoveCommand { get; private set; }
+        public ICommand RemoveCommand { get; init; }
         private async Task RemoveAsync()
         {
-            // hack for redmod
-            if (Plugin == EPlugin.redmod)
-            {
-                IsBusy = true;
-
-                var dir = new FileInfo(InstallPath).Directory;
-                foreach (var f in dir.GetFiles())
-                {
-                    try
-                    {
-                        f.Delete();
-                    }
-                    catch (Exception)
-                    {
-                        continue;
-                    }
-                }
-
-                if (!dir.GetFiles().Any())
-                {
-                    dir.Delete();
-                }
-
-                IsBusy = false;
-                return;
-            }
-
             IsBusy = true;
 
-            var result = await _taskService.Remove(Package.Id, false, InstallPath, null);
-            if (result)
-            {
-                Status = EPluginStatus.NotInstalled;
-                Version = "";
-            }
+            await _pluginService.RemovePluginAsync(Id);
 
             IsBusy = false;
         }
 
-        public ICommand InstallCommand { get; private set; }
+        public ICommand InstallCommand { get; init; }
         private async Task InstallAsync()
         {
-            // hack for redmod
-            if (Plugin == EPlugin.redmod)
-            {
-                IsBusy = true;
-
-                // REDMODTODO
-
-                // get from cdn
-
-
-                // install
-
-
-                IsBusy = false;
-                return;
-            }
-
-            if (ReleaseModel == null)
-            {
-                return;
-            }
-
             IsBusy = true;
 
             switch (Status)
             {
                 case EPluginStatus.NotInstalled:
                 {
-                    if (!Directory.Exists(InstallPath))
-                    {
-                        Directory.CreateDirectory(InstallPath);
-                    }
-                    var result = await _taskService.Install(Package.Id, "", InstallPath, false);
-                    if (result)
-                    {
-                        Status = EPluginStatus.Latest;
-                        Version = ReleaseModel.TagName;
-                    }
+                    await _pluginService.InstallPluginAsync(Id);
                     break;
                 }
                 case EPluginStatus.Outdated:
                 {
-                    var result = await _taskService.Update(Package.Id, false, InstallPath, null, "");
-                    if (result)
-                    {
-                        Status = EPluginStatus.Latest;
-                        Version = ReleaseModel.TagName;
-                    }
+                    await _pluginService.InstallPluginAsync(Id);
                     break;
                 }
                 case EPluginStatus.Latest:
-                    // repair
-                    // TODO
+                    //repair
+                    // delete
+                    await _pluginService.RemovePluginAsync(Id);
+                    // reinstall
+                    await _pluginService.InstallPluginAsync(Id);
                     break;
                 default:
                     break;
@@ -247,6 +117,9 @@ namespace WolvenKit.ViewModels.HomePage
 
             IsBusy = false;
         }
+
+        internal PluginModel GetModel() => _pluginModel;
+        internal void SetModel(PluginModel model) => _pluginModel = model;
     }
 
 
