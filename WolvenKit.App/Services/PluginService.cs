@@ -14,6 +14,7 @@ using ReactiveUI.Fody.Helpers;
 using WolvenKit.Common.Services;
 using WolvenKit.Core;
 using WolvenKit.Core.Compression;
+using WolvenKit.Interaction;
 using WolvenKit.ViewModels.Dialogs;
 using WolvenKit.ViewModels.HomePage;
 
@@ -222,6 +223,7 @@ namespace WolvenKit.Functionality.Services
         {
             if (id == EPlugin.redmod)
             {
+                var res = await Interactions.ShowMessageBoxAsync("Please install RedMod with GOG or Steam.", "RedMod", WMessageBoxButtons.Ok);
                 _loggerService.Warning("Install RedMod with GOG or Steam.");
                 return;
             }
@@ -409,6 +411,8 @@ namespace WolvenKit.Functionality.Services
         {
             if (id == EPlugin.redmod)
             {
+                var res = await Interactions.ShowMessageBoxAsync("Please remove RedMod with GOG or Steam.", "RedMod", WMessageBoxButtons.Ok);
+
                 _loggerService.Warning("Remove RedMod with GOG or Steam.");
                 return;
             }
