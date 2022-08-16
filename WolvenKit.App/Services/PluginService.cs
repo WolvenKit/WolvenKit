@@ -12,10 +12,10 @@ using System.Threading.Tasks;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using WolvenKit.Common.Services;
-using WolvenKit.ViewModels.HomePage;
 using WolvenKit.Core;
 using WolvenKit.Core.Compression;
 using WolvenKit.ViewModels.Dialogs;
+using WolvenKit.ViewModels.HomePage;
 
 namespace WolvenKit.Functionality.Services
 {
@@ -104,6 +104,36 @@ namespace WolvenKit.Functionality.Services
                         Status = EPluginStatus.NotInstalled
                     });
                 }
+
+
+                // Redmod
+                if (id == EPlugin.redmod)
+                {
+                    var plugin = Plugins.FirstOrDefault(x => x.Id == id);
+                    var redModLocalversion = "";
+                    var redModManifest = Path.Combine(new FileInfo(plugin.InstallPath).Directory.FullName, "version.txt");
+                    if (File.Exists(redModManifest))
+                    {
+                        redModLocalversion = File.ReadAllText(redModManifest);
+
+                        // remoteVersion
+                        // REDMODTODO
+                        var redModRemoteVersion = "1.0";
+
+                        if (redModLocalversion != redModRemoteVersion)
+                        {
+                            plugin.Status = EPluginStatus.Outdated;
+                            plugin.Version = redModLocalversion;
+                        }
+                        else
+                        {
+                            plugin.Status = EPluginStatus.Latest;
+                            plugin.Version = redModLocalversion;
+                        }
+                    }
+
+                    continue;
+                }
             }
         }
 
@@ -125,6 +155,9 @@ namespace WolvenKit.Functionality.Services
                     case EPlugin.wolvenkit_resources:
                         _pluginIds.Add(item, Path.Combine(_settings.GetRED4GameRootDir(), "tools", "wolvenkit", "wolvenkit-resources"));
                         break;
+                    case EPlugin.redmod:
+                        _pluginIds.Add(item, Path.Combine(_settings.GetRED4GameRootDir(), "tools", "redmod", "bin"));
+                        break;
                     default:
                         break;
                 }
@@ -135,6 +168,33 @@ namespace WolvenKit.Functionality.Services
         {
             foreach (var plugin in Plugins)
             {
+                if (plugin.Id == EPlugin.redmod)
+                {
+                    // handle redmod differently for now
+                    var redmodPath = Path.Combine(plugin.InstallPath, "redmod.exe");
+
+                    // get version and status
+                    //var rmStatus = EPluginStatus.NotInstalled;
+                    //var version = "";
+                    if (File.Exists(redmodPath))
+                    {
+                        var redModManifest = Path.Combine(plugin.InstallPath, "manifest.txt");
+                        if (File.Exists(redModManifest))
+                        {
+                            plugin.Version = File.ReadAllText(redModManifest);
+                            var redModRemoteVersion = "1.0";
+
+                            plugin.Status = plugin.Version != redModRemoteVersion ? EPluginStatus.Outdated : EPluginStatus.Latest;
+                        }
+                        else
+                        {
+                            plugin.Status = EPluginStatus.Outdated;
+                        }
+                    }
+
+                    continue;
+                }
+
                 if (plugin.Status == EPluginStatus.NotInstalled)
                 {
                     continue;
@@ -152,41 +212,6 @@ namespace WolvenKit.Functionality.Services
                     plugin.Status = EPluginStatus.Outdated;
                 }
             }
-
-            // handle redmod differently for now
-            var redmodPath = Path.Combine(_settings.GetRED4GameRootDir(), "tools", "redmod", "bin", "redmod.exe");
-
-            // get version and status
-            var rmStatus = EPluginStatus.NotInstalled;
-            var version = "";
-            if (File.Exists(redmodPath))
-            {
-                var redModManifest = Path.Combine(new FileInfo(redmodPath).Directory.FullName, "manifest.txt");
-                if (File.Exists(redModManifest))
-                {
-                    version = File.ReadAllText(redModManifest);
-                    var redModRemoteVersion = "1.0";
-
-                    if (version != redModRemoteVersion)
-                    {
-                        rmStatus = EPluginStatus.Outdated;
-                    }
-                    else
-                    {
-                        rmStatus = EPluginStatus.Latest;
-                    }
-                }
-                else
-                {
-                    rmStatus = EPluginStatus.Outdated;
-                }
-            }
-
-            // check for update manually
-            Plugins.Add(new PluginViewModel(EPlugin.redmod, redmodPath, rmStatus, version, "Redmod", "CP77 modding tools")
-            {
-                IsEnabled = true
-            });
         }
 
         public bool IsInstalled(EPlugin pluginName)
@@ -197,6 +222,12 @@ namespace WolvenKit.Functionality.Services
 
         public async Task InstallPluginAsync(EPlugin id)
         {
+            if (id == EPlugin.redmod)
+            {
+                _loggerService.Warning("Install RedMod with GOG or Steam.");
+                return;
+            }
+
             var response = await CheckForUpdateAsync(id);
             if (response is null)
             {
@@ -378,6 +409,12 @@ namespace WolvenKit.Functionality.Services
 
         public async Task RemovePluginAsync(EPlugin id)
         {
+            if (id == EPlugin.redmod)
+            {
+                _loggerService.Warning("Remove RedMod with GOG or Steam.");
+                return;
+            }
+
             var vm = Plugins.FirstOrDefault(x => x.Id == id);
             if (vm is null)
             {

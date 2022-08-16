@@ -34,34 +34,6 @@
             VerticalAlignment="Top"
             Orientation="Horizontal" >
 
-            <hc:AnimationPath
-                Width="45"
-                Height="45"
-                Data="{DynamicResource SettingsGeo}"
-                PathLength="250"
-                RenderTransformOrigin="0.5,0.5"
-                Stretch="Uniform"
-                Stroke="{DynamicResource MahApps.Brushes.ThemeForeground}"
-                StrokeThickness="1.5"
-                Duration="00:00:08"
-                >
-                <hc:AnimationPath.RenderTransform>
-                    <TransformGroup>
-                        <ScaleTransform />
-                        <SkewTransform />
-                        <RotateTransform Angle="180" />
-                        <TranslateTransform />
-                    </TransformGroup>
-                </hc:AnimationPath.RenderTransform>
-            </hc:AnimationPath>
-
-            <hc:Divider
-                Height="50"
-                Margin="15"
-                HorizontalAlignment="Center"
-                VerticalAlignment="Center"
-                Orientation="Vertical"
-                />
             <TextBlock Text="Mod Manager"
                 HorizontalAlignment="Center"
                 VerticalAlignment="Center"

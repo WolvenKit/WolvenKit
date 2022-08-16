@@ -16,6 +16,10 @@ namespace WolvenKit.Views.HomePage.Pages
 
             ViewModel = Locator.Current.GetService<PluginsToolViewModel>();
             DataContext = ViewModel;
+
+            this.WhenActivated(disposables => this.BindCommand(ViewModel,
+                    viewModel => viewModel.SyncCommand,
+                    view => view.CheckButton));
         }
     }
 }

@@ -66,8 +66,8 @@ namespace WolvenKit.ViewModels.Shell
             //ViewCodeEditorCommand = ReactiveCommand.Create(() => _mainViewModel.ShowCodeEditorCommand.SafeExecute());
             ShowImportExportToolCommand = ReactiveCommand.Create(() => MainViewModel.ShowImportExportToolCommand.SafeExecute());
 
-            ShowSoundModdingToolCommand = ReactiveCommand.Create(() => _mainViewModel.ShowSoundModdingToolCommand.SafeExecute());
-            ShowModsViewCommand = ReactiveCommand.Create(() => _mainViewModel.ShowModsViewCommand.SafeExecute());
+            ShowSoundModdingToolCommand = ReactiveCommand.Create(() => MainViewModel.ShowSoundModdingToolCommand.SafeExecute());
+            ShowModsViewCommand = ReactiveCommand.Create(() => MainViewModel.ShowModsViewCommand.SafeExecute());
 
             ShowPluginToolCommand = ReactiveCommand.Create(() => MainViewModel.ShowPluginCommand.SafeExecute());
             OpenMaterialRepositoryCommand = ReactiveCommand.Create(() => Commonfunctions.ShowFolderInExplorer(SettingsManager.MaterialRepositoryPath));

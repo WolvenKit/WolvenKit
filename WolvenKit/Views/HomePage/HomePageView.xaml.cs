@@ -94,7 +94,7 @@ namespace WolvenKit.Views.HomePage
         {
             if (sender is TabItem tab && tab.Content is Pages.PluginsToolView view && view.DataContext is PluginsToolViewModel vm)
             {
-                vm.ReloadCommand.SafeExecute();
+                //vm.ReloadCommand.SafeExecute();
             }
         }
 
