@@ -113,9 +113,13 @@
                         HorizontalHeaderContentAlignment="Left"
                         MappingName="Properties" />
                 </syncfusion:SfDataGrid.Columns>
-                <I:Interaction.Behaviors>
-                    <layout:Behaviour />
-                </I:Interaction.Behaviors>
+
+                <syncfusion:SfDataGrid.RecordContextMenu>
+                    <ContextMenu>
+                        <MenuItem Click="ShowSettings_OnClick" Header="Show settings" />
+                    </ContextMenu>
+                </syncfusion:SfDataGrid.RecordContextMenu>
+
             </syncfusion:SfDataGrid>
 
             <!--  Data Grid Exports  -->
@@ -162,9 +166,11 @@
 
                 </syncfusion:SfDataGrid.Columns>
 
-                <I:Interaction.Behaviors>
-                    <layout:Behaviour />
-                </I:Interaction.Behaviors>
+                <syncfusion:SfDataGrid.RecordContextMenu>
+                    <ContextMenu>
+                        <MenuItem Click="ShowSettings_OnClick" Header="Show settings" />
+                    </ContextMenu>
+                </syncfusion:SfDataGrid.RecordContextMenu>
 
             </syncfusion:SfDataGrid>
 
@@ -186,7 +192,7 @@
                         Background="{DynamicResource ContentBackground}"
                         BorderBrush="{DynamicResource ContentBackgroundAlt}"
                         BorderThickness="1"
-                        Click="ResetSelectedSettings_Click"
+                        Command="{Binding ResetSettingsCommand}"
                         FontSize="12"
                         Style="{DynamicResource ButtonCustom}">
                         <TextBlock Margin="1" Text="Reset Settings" />
@@ -198,7 +204,7 @@
                         Background="{DynamicResource ContentBackground}"
                         BorderBrush="{DynamicResource ContentBackgroundAlt}"
                         BorderThickness="1"
-                        Click="LoadSelectedSettings_Click"
+                        Command="{Binding ImportSettingsCommand}"
                         FontSize="12"
                         Style="{DynamicResource ButtonCustom}">
                         <TextBlock Margin="1" Text="Load Settings" />
@@ -246,9 +252,13 @@
                             HorizontalHeaderContentAlignment="Left"
                             MappingName="Properties" />
                     </syncfusion:SfDataGrid.Columns>
-                    <I:Interaction.Behaviors>
-                        <layout:Behaviour />
-                    </I:Interaction.Behaviors>
+
+                    <syncfusion:SfDataGrid.RecordContextMenu>
+                        <ContextMenu>
+                            <MenuItem Click="ShowSettings_OnClick" Header="Show settings" />
+                        </ContextMenu>
+                    </syncfusion:SfDataGrid.RecordContextMenu>
+
                 </syncfusion:SfDataGrid>
             </Grid>
 

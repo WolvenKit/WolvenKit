@@ -89,6 +89,7 @@ namespace WolvenKit.Common.Model.Arguments
         public XbmImportArgs()
         {
             Keep = false;
+            HasMipchain = true;
         }
 
         /// <summary>
@@ -179,6 +180,4 @@ namespace WolvenKit.Common.Model.Arguments
         /// <returns>String</returns>
         public override string ToString() => "MLMASK";
     }
-
-
 }
