@@ -289,7 +289,40 @@ public class RedImage : IDisposable
 
         var internalFormat = (DXGI_FORMAT)(uint)format;
 
-        InternalScratchImage = InternalScratchImage.Convert(internalFormat, TEX_FILTER_FLAGS.DEFAULT, 0.5F);
+        if (TexHelper.Instance.IsCompressed(internalFormat))
+        {
+            Compress(internalFormat);
+        }
+        else
+        {
+            InternalScratchImage = InternalScratchImage.Convert(internalFormat, TEX_FILTER_FLAGS.DEFAULT, 0.5F);
+        }
+    }
+
+    private void Compress(DXGI_FORMAT format)
+    {
+        if (!TexHelper.Instance.IsCompressed(format))
+        {
+            throw new ArgumentOutOfRangeException(nameof(format));
+        }
+
+        if (TexHelper.Instance.IsSRGB(_metadata.Format) != TexHelper.Instance.IsSRGB(format))
+        {
+            throw new ArgumentOutOfRangeException(nameof(format));
+        }
+
+        if (format is DXGI_FORMAT.BC6H_UF16
+                or DXGI_FORMAT.BC6H_SF16
+                or DXGI_FORMAT.BC7_UNORM
+                or DXGI_FORMAT.BC7_UNORM_SRGB &&
+            s_device != null)
+        {
+            InternalScratchImage = InternalScratchImage.Compress(s_device.NativePointer, format, TEX_COMPRESS_FLAGS.DEFAULT, 1.0F);
+        }
+        else
+        {
+            InternalScratchImage = InternalScratchImage.Compress(format, TEX_COMPRESS_FLAGS.PARALLEL, 0.5F);
+        }
     }
 
     public CBitmapTexture SaveToXBM(XbmImportArgs args)
