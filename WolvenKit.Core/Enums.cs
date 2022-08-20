@@ -128,7 +128,8 @@ namespace WolvenKit.Common
         fnt,
         opusinfo,
         anims,
-        ent
+        ent,
+        inkatlas
     }
 
     /// <summary>

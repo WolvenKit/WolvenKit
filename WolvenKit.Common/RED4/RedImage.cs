@@ -275,6 +275,15 @@ public class RedImage : IDisposable
 
     #endregion SaveToFileFormat
 
+    public RedImage Crop(int x, int y, int width, int height)
+    {
+        var croppedImage = TexHelper.Instance.Initialize2D(_metadata.Format, width, height, 1, 1, CP_FLAGS.NONE);
+
+        TexHelper.Instance.CopyRectangle(InternalScratchImage.GetImage(0), x, y, width, height, croppedImage.GetImage(0), TEX_FILTER_FLAGS.DEFAULT, 0, 0);
+
+        return new RedImage {InternalScratchImage = croppedImage};
+    }
+
     public void Convert(Common.DDS.DXGI_FORMAT format)
     {
         if (TexHelper.Instance.IsCompressed(_metadata.Format))

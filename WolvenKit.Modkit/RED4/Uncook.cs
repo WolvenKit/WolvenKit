@@ -2,8 +2,10 @@ using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Threading;
 using System.Threading.Tasks;
 using WolvenKit.Common;
@@ -440,6 +442,10 @@ namespace WolvenKit.Modkit.RED4
                     using var ttfStream = new FileStream($"{newpath}", FileMode.Create, FileAccess.Write);
                     return UncookFont(cr2wStream, ttfStream);
                 }
+                case ECookedFileFormat.inkatlas:
+                {
+                    return UncookInkAtlas(cr2wStream, outfile);
+                }
                 default:
                     throw new ArgumentOutOfRangeException($"Uncooking failed for extension: {extAsEnum}.");
             }
@@ -494,6 +500,78 @@ namespace WolvenKit.Modkit.RED4
             var json = RedJsonSerializer.Serialize(dto);
 
             return json;
+        }
+
+        private bool UncookInkAtlas(Stream redStream, FileInfo outFile)
+        {
+            if (!RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+            {
+                return false;
+            }
+
+            if (!_wolvenkitFileService.TryReadRed4File(redStream, out var cr2w))
+            {
+                return false;
+            }
+
+            if (cr2w.RootChunk is not inkTextureAtlas inkTextureAtlas)
+            {
+                return false;
+            }
+
+            if (inkTextureAtlas.ActiveTexture != Enums.inkTextureType.StaticTexture)
+            {
+                // only static for now
+                return false;
+            }
+
+            if (inkTextureAtlas.Texture.DepotPath != 0)
+            {
+                ExtractParts(inkTextureAtlas.Texture.DepotPath, inkTextureAtlas.Parts, Path.Combine(outFile.FullName, "main"));
+            }
+
+            if (inkTextureAtlas.Slots[0] != null && inkTextureAtlas.Slots[0].Texture.DepotPath != 0)
+            {
+                ExtractParts(inkTextureAtlas.Slots[0].Texture.DepotPath, inkTextureAtlas.Slots[0].Parts, Path.Combine(outFile.FullName, "2160p"));
+            }
+
+            if (inkTextureAtlas.Slots[1] != null && inkTextureAtlas.Slots[1].Texture.DepotPath != 0)
+            {
+                ExtractParts(inkTextureAtlas.Slots[1].Texture.DepotPath, inkTextureAtlas.Slots[1].Parts, Path.Combine(outFile.FullName, "1080p"));
+            }
+
+            if (inkTextureAtlas.Slots[2] != null && inkTextureAtlas.Slots[2].Texture.DepotPath != 0)
+            {
+                ExtractParts(inkTextureAtlas.Slots[2].Texture.DepotPath, inkTextureAtlas.Slots[2].Parts, Path.Combine(outFile.FullName, "720p"));
+            }
+
+            return false;
+
+            void ExtractParts(CName texturePath, CArray<inkTextureAtlasMapper> parts, string outDir)
+            {
+                var xbmFile = _archiveManager.Lookup(texturePath);
+                if (xbmFile.HasValue)
+                {
+                    Directory.CreateDirectory(outDir);
+
+                    using var ms = new MemoryStream();
+                    xbmFile.Value.Extract(ms);
+                    ms.Seek(0, SeekOrigin.Begin);
+
+                    var img = RedImage.FromRedFile(_wolvenkitFileService.ReadRed4File(ms));
+
+                    foreach (var part in parts)
+                    {
+                        var x = Math.Round(part.ClippingRectInUVCoords.Left * img.Metadata.Width);
+                        var y = Math.Round(part.ClippingRectInUVCoords.Top * img.Metadata.Height);
+                        var width = Math.Round(part.ClippingRectInUVCoords.Right * img.Metadata.Width) - x;
+                        var height = Math.Round(part.ClippingRectInUVCoords.Bottom * img.Metadata.Height) - y;
+
+                        var croppedImg = img.Crop((int)x, (int)y, (int)width, (int)height);
+                        croppedImg.SaveToPNG(Path.Combine(outDir, $"{part.PartName}.png"));
+                    }
+                }
+            }
         }
 
         private bool UncookFont(Stream redstream, Stream outstream)
