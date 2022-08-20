@@ -263,11 +263,14 @@ namespace WolvenKit.ViewModels.Tools
 
             GroupTags = CollectionViewSource.GetDefaultView(_tweakDB.GetGroupTags().Select(x => new TweakEntry(x, _tweakDB)).ToList());
             GroupTags.Filter = Filter;
+
+            Refresh();
         }
 
         private void Refresh()
         {
             Records.Refresh();
+            this.RaisePropertyChanged(nameof(Records));
             this.RaisePropertyChanged(nameof(RecordsHeader));
 
             Flats.Refresh();

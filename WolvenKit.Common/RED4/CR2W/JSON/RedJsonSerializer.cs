@@ -60,13 +60,20 @@ public static class RedJsonSerializer
                 new ClassConverterFactory(s_classResolver),
                 new Red4FileConverterFactory(),
                 new SemVersionConverter(),
-                new RedFileDtoConverter(s_classResolver)
+                new RedFileDtoConverter(s_classResolver),
+
+                new ParseableBufferConverter(),
+                new CollisionShapeConverter()
             }
         };
     }
 
     internal static void SetVersion(SemVersion version) =>
         s_threadedVersionStorage[Environment.CurrentManagedThreadId] = version;
+
+    internal static bool IsOlderThen(string version) =>
+        s_threadedVersionStorage[Environment.CurrentManagedThreadId]
+            .CompareSortOrderTo(SemVersion.Parse(version, SemVersionStyles.Strict)) < 0;
 
     internal static bool IsVersion(string verStr) =>
         s_threadedVersionStorage[Environment.CurrentManagedThreadId] == SemVersion.Parse(verStr, SemVersionStyles.Strict);
@@ -104,7 +111,31 @@ public static class RedJsonSerializer
     {
         s_bufferResolver.Begin();
         s_classResolver.Begin();
-        var result = JsonSerializer.Deserialize<T>(json, Options);
+
+        try
+        {
+            var result = JsonSerializer.Deserialize<T>(json, Options);
+            return result;
+        }
+        finally
+        {
+            CleanUp();
+        }
+    }
+
+    public static object? Deserialize(Type type, JsonElement element)
+    {
+        s_bufferResolver.Begin();
+        s_classResolver.Begin();
+
+        if (element.ValueKind == JsonValueKind.Object)
+        {
+            SetVersion(element.TryGetProperty("$type", out _)
+                ? SemVersion.Parse("0.0.2", SemVersionStyles.Strict)
+                : SemVersion.Parse("0.0.1", SemVersionStyles.Strict));
+        }
+
+        var result = element.Deserialize(type, Options);
 
         CleanUp();
 

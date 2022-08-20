@@ -14,6 +14,7 @@ using WolvenKit.Core.Compression;
 using WolvenKit.Core.CRC;
 using WolvenKit.Modkit.RED4;
 using WolvenKit.RED4.Archive;
+using WolvenKit.RED4.Archive.Buffer;
 using WolvenKit.RED4.Archive.IO;
 using WolvenKit.RED4.CR2W;
 using WolvenKit.RED4.TweakDB;
