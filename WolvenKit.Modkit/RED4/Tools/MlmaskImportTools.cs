@@ -25,7 +25,7 @@ namespace WolvenKit.Modkit.RED4.MLMask
             // relative and absolute paths
             var paths = File.ReadAllLines(txtimageList.FullName);
             var baseDir = txtimageList.Directory;
-            var files = paths.Select(x => Path.Combine(baseDir.FullName, x)).OrderBy(x => x).ToList();
+            var files = paths.Select(x => Path.Combine(baseDir.FullName, x)).ToList();
 
             #region InitandVerify
 
