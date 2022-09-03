@@ -1000,8 +1000,8 @@ namespace WolvenKit.ViewModels.Tools
 
                         if (_parserService.TryReadRed4File(fs, out var cr2w) && cr2w.RootChunk is CBitmapTexture bitmap)
                         {
-                            xbmImportArgs.RawFormat = bitmap.Setup.RawFormat;
-                            xbmImportArgs.Compression = bitmap.Setup.Compression;
+                            xbmImportArgs.RawFormat = Enum.Parse<SupportedRawFormats>(bitmap.Setup.RawFormat.ToString());
+                            xbmImportArgs.Compression = Enum.Parse<SupportedCompressionFormats>(bitmap.Setup.Compression.ToString());
                             xbmImportArgs.HasMipchain = bitmap.Setup.HasMipchain;
                             xbmImportArgs.IsGamma = bitmap.Setup.IsGamma;
                             xbmImportArgs.TextureGroup = bitmap.Setup.Group;
@@ -1026,8 +1026,8 @@ namespace WolvenKit.ViewModels.Tools
 
                         if (_parserService.TryReadRed4File(ms, out var cr2w) && cr2w.RootChunk is CBitmapTexture bitmap)
                         {
-                            xbmImportArgs.RawFormat = bitmap.Setup.RawFormat;
-                            xbmImportArgs.Compression = bitmap.Setup.Compression;
+                            xbmImportArgs.RawFormat = Enum.Parse<SupportedRawFormats>(bitmap.Setup.RawFormat.ToString());
+                            xbmImportArgs.Compression = Enum.Parse<SupportedCompressionFormats>(bitmap.Setup.Compression.ToString());
                             xbmImportArgs.HasMipchain = bitmap.Setup.HasMipchain;
                             xbmImportArgs.IsGamma = bitmap.Setup.IsGamma;
                             xbmImportArgs.TextureGroup = bitmap.Setup.Group;

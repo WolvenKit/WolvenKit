@@ -351,13 +351,13 @@ namespace WolvenKit.Modkit.RED4
                 args = new XbmImportArgs();
                 args.AllowTextureDowngrade = xbm.Setup.AllowTextureDowngrade;
                 args.AlphaToCoverageThreshold = xbm.Setup.AlphaToCoverageThreshold;
-                args.Compression = xbm.Setup.Compression;
+                args.Compression = Enum.Parse<SupportedCompressionFormats>(xbm.Setup.Compression.ToString());
                 args.HasMipchain = xbm.Setup.HasMipchain;
                 args.IsGamma = xbm.Setup.IsGamma;
                 args.IsStreamable = xbm.Setup.IsStreamable;
                 args.PlatformMipBiasConsole = xbm.Setup.PlatformMipBiasConsole;
                 args.PlatformMipBiasPC = xbm.Setup.PlatformMipBiasPC;
-                args.RawFormat = xbm.Setup.RawFormat;
+                args.RawFormat = Enum.Parse<SupportedRawFormats>(xbm.Setup.RawFormat.ToString());
                 args.TextureGroup = xbm.Setup.Group;
             }
 

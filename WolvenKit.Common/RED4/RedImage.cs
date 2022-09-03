@@ -337,17 +337,17 @@ public class RedImage : IDisposable
     public CBitmapTexture SaveToXBM(XbmImportArgs args)
     {
         var settings = new RedImageTransformSettings();
-        settings.RawFormat = CommonFunctions.GetDXGIFormat2(Enums.ETextureCompression.TCM_None, args.RawFormat, args.IsGamma, null);
+        settings.RawFormat = CommonFunctions.GetDXGIFormat3(SupportedCompressionFormats.TCM_None, args.RawFormat, args.IsGamma, null);
 
-        if (args.Compression != Enums.ETextureCompression.TCM_None)
+        if (args.Compression != SupportedCompressionFormats.TCM_None)
         {
-            settings.CompressionFormat = CommonFunctions.GetDXGIFormat2(args.Compression, Enums.ETextureRawFormat.TRF_Invalid, args.IsGamma, null);
+            settings.CompressionFormat = CommonFunctions.GetDXGIFormat3(args.Compression, SupportedRawFormats.TRF_Invalid, args.IsGamma, null);
         }
         
         settings.IsGamma = args.IsGamma;
         settings.GenerateMipMaps = args.HasMipchain;
 
-        if (args.Compression == Enums.ETextureCompression.TCM_DXTAlpha)
+        if (args.Compression == SupportedCompressionFormats.TCM_DXTAlpha)
         {
             settings.PremultiplyAlpha = true;
         }
