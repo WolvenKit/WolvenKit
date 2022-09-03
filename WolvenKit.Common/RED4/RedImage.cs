@@ -338,7 +338,12 @@ public class RedImage : IDisposable
     {
         var settings = new RedImageTransformSettings();
         settings.RawFormat = CommonFunctions.GetDXGIFormat2(Enums.ETextureCompression.TCM_None, args.RawFormat, args.IsGamma, null);
-        settings.CompressionFormat = CommonFunctions.GetDXGIFormat2(args.Compression, Enums.ETextureRawFormat.TRF_Invalid, args.IsGamma, null);
+
+        if (args.Compression != Enums.ETextureCompression.TCM_None)
+        {
+            settings.CompressionFormat = CommonFunctions.GetDXGIFormat2(args.Compression, Enums.ETextureRawFormat.TRF_Invalid, args.IsGamma, null);
+        }
+        
         settings.IsGamma = args.IsGamma;
         settings.GenerateMipMaps = args.HasMipchain;
 
