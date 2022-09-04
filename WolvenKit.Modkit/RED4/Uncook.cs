@@ -20,6 +20,7 @@ using WolvenKit.RED4.Archive;
 using WolvenKit.RED4.CR2W;
 using WolvenKit.RED4.CR2W.JSON;
 using WolvenKit.RED4.Types;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace WolvenKit.Modkit.RED4
 {
@@ -706,20 +707,8 @@ namespace WolvenKit.Modkit.RED4
                 return false;
             }
 
-            var sliceCount = blob.Header.TextureInfo.SliceCount;
-            var mipCount = blob.Header.TextureInfo.MipCount;
-            var alignment = blob.Header.TextureInfo.DataAlignment;
-
-            var height = blob.Header.SizeInfo.Height;
-            var width = blob.Header.SizeInfo.Width;
-
-            var texformat = CommonFunctions.GetDXGIFormat(texa.Setup.Compression, texa.Setup.RawFormat, texa.Setup.IsGamma, _loggerService);
-
-            DDSUtils.GenerateAndWriteHeader(outstream,
-                new DDSMetadata(width, height, 1, sliceCount, mipCount,
-                    0, 0, texformat, TEX_DIMENSION.TEX_DIMENSION_TEXTURE2D, alignment, true));
-
-            outstream.Write(blob.TextureData.Buffer.GetBytes());
+            var image = RedImage.FromTexArray(texa);
+            outstream.Write(image.SaveToDDSMemory());
 
             return true;
         }
@@ -733,20 +722,8 @@ namespace WolvenKit.Modkit.RED4
                 return false;
             }
 
-            var sliceCount = blob.Header.TextureInfo.SliceCount;
-            var mipCount = blob.Header.TextureInfo.MipCount;
-            var alignment = blob.Header.TextureInfo.DataAlignment;
-
-            var height = blob.Header.SizeInfo.Height;
-            var width = blob.Header.SizeInfo.Width;
-
-            const DXGI_FORMAT texformat = DXGI_FORMAT.DXGI_FORMAT_R8G8B8A8_UNORM;
-
-            DDSUtils.GenerateAndWriteHeader(outstream,
-                new DDSMetadata(width, height, 1, sliceCount, mipCount,
-                    0, 0, texformat, TEX_DIMENSION.TEX_DIMENSION_TEXTURE2D, alignment, true));
-
-            outstream.Write(blob.TextureData.Buffer.GetBytes());
+            var image = RedImage.FromEnvProbe(refl);
+            outstream.Write(image.SaveToDDSMemory());
 
             return true;
         }
@@ -760,20 +737,8 @@ namespace WolvenKit.Modkit.RED4
                 return false;
             }
 
-            var sliceCount = blob.Header.TextureInfo.SliceCount;
-            var mipCount = blob.Header.TextureInfo.MipCount;
-            var alignment = blob.Header.TextureInfo.DataAlignment;
-
-            var height = blob.Header.SizeInfo.Height;
-            var width = blob.Header.SizeInfo.Width;
-
-            var texformat = CommonFunctions.GetDXGIFormat(ctex.Setup.Compression, ctex.Setup.RawFormat, ctex.Setup.IsGamma, _loggerService);
-
-            DDSUtils.GenerateAndWriteHeader(outstream,
-                new DDSMetadata(width, height, 1, sliceCount, mipCount,
-                    0, 0, texformat, TEX_DIMENSION.TEX_DIMENSION_TEXTURE2D, alignment, true));
-
-            outstream.Write(blob.TextureData.Buffer.GetBytes());
+            var image = RedImage.FromCubeMap(ctex);
+            outstream.Write(image.SaveToDDSMemory());
 
             return true;
         }

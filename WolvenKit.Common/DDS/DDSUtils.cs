@@ -369,6 +369,7 @@ namespace WolvenKit.Common.DDS
                 Enums.ETextureCompression.TCM_QualityR => DXGI_FORMAT.DXGI_FORMAT_BC4_UNORM,
                 Enums.ETextureCompression.TCM_QualityRG => DXGI_FORMAT.DXGI_FORMAT_BC5_UNORM,
                 Enums.ETextureCompression.TCM_QualityColor => info.IsGamma ? DXGI_FORMAT.DXGI_FORMAT_BC7_UNORM_SRGB : DXGI_FORMAT.DXGI_FORMAT_BC7_UNORM,
+                Enums.ETextureCompression.TCM_HalfHDR_Unsigned => DXGI_FORMAT.DXGI_FORMAT_BC6H_UF16,
                 _ => throw new NotSupportedException()
             };
 
@@ -473,6 +474,13 @@ namespace WolvenKit.Common.DDS
                 {
                     ddsHeader.dwCaps |= DDSCAPS_COMPLEX;
                     ddsHeader.dwCaps2 |= DDSCAPS2_CUBEMAP_ALL_FACES;
+
+                    dx10Header.miscFlag |= 0x04;
+                    if (dx10Header.arraySize % 6 != 0)
+                    {
+                        throw new Exception();
+                    }
+                    dx10Header.arraySize /= 6;
                 }
             }
 
