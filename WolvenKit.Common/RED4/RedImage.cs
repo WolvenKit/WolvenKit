@@ -383,8 +383,8 @@ public class RedImage : IDisposable
         var (setup, blob) = GetSetupAndBlob(settings);
 
         setup.Group = args.TextureGroup;
-        setup.RawFormat = args.RawFormat;
-        setup.Compression = args.Compression;
+        setup.RawFormat = Enum.Parse<Enums.ETextureRawFormat>(args.RawFormat.ToString());
+        setup.Compression = Enum.Parse<Enums.ETextureCompression>(args.Compression.ToString());
         setup.IsStreamable = args.IsStreamable;
         setup.HasMipchain = args.HasMipchain;
         setup.IsGamma = args.IsGamma;
