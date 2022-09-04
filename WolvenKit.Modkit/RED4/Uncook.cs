@@ -400,6 +400,7 @@ namespace WolvenKit.Modkit.RED4
                 //case ECookedFileFormat.json:
                 //    return true;
                 case ECookedFileFormat.cubemap:
+                case ECookedFileFormat.xcube:
                 {
                     if (WolvenTesting.IsTesting)
                     {
