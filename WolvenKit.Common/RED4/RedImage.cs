@@ -817,7 +817,7 @@ public class RedImage : IDisposable
         }
 
 
-        if (info.FlipV)
+        if (!result._metadata.IsCubemap() && info.FlipV)
         {
             result.InternalScratchImage = result.InternalScratchImage.FlipRotate(TEX_FR_FLAGS.FLIP_VERTICAL);
         }

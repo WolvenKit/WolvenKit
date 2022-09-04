@@ -46,7 +46,7 @@ namespace WolvenKit.ViewModels.Tools
         public const string ToolContentId = "Properties_Tool";
         public const string ToolTitle = "File Information";
 
-        public enum TexturePreviewExtensions { xbm, envprobe, mesh, cubemap, xcube };
+        public enum TexturePreviewExtensions { xbm, envprobe, mesh, cubemap, xcube, texarray };
         public enum MeshPreviewExtensions { mesh, ent, w2mesh, physicalscene };
         public enum AudioPreviewExtensions { wem };
 
