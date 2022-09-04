@@ -46,7 +46,7 @@ namespace WolvenKit.ViewModels.Tools
         public const string ToolContentId = "Properties_Tool";
         public const string ToolTitle = "File Information";
 
-        public enum TexturePreviewExtensions { xbm, envprobe, mesh };
+        public enum TexturePreviewExtensions { xbm, envprobe, mesh, cubemap, xcube };
         public enum MeshPreviewExtensions { mesh, ent, w2mesh, physicalscene };
         public enum AudioPreviewExtensions { wem };
 
@@ -332,6 +332,20 @@ namespace WolvenKit.ViewModels.Tools
                 SetupImage(cbt);
             }
 
+            if (cr2w.RootChunk is CCubeTexture cct &&
+                cct.RenderTextureResource.RenderResourceBlobPC != null &&
+                cct.RenderTextureResource.RenderResourceBlobPC.GetValue() is rendRenderTextureBlobPC)
+            {
+                SetupImage(cct);
+            }
+
+            if (cr2w.RootChunk is CTextureArray cta &&
+                cta.RenderTextureResource.RenderResourceBlobPC != null &&
+                cta.RenderTextureResource.RenderResourceBlobPC.GetValue() is rendRenderTextureBlobPC)
+            {
+                SetupImage(cta);
+            }
+
             if (cr2w.RootChunk is CMesh cm && cm.RenderResourceBlob != null &&
                 cm.RenderResourceBlob.GetValue() is rendRenderTextureBlobPC)
             {
@@ -356,7 +370,7 @@ namespace WolvenKit.ViewModels.Tools
 
             var bitmapImage = new BitmapImage();
             bitmapImage.BeginInit();
-            bitmapImage.StreamSource = new MemoryStream(image.SaveToPNGMemory());
+            bitmapImage.StreamSource = new MemoryStream(image.GetPreview());
             bitmapImage.EndInit();
 
             LoadedBitmapFrame = bitmapImage;
@@ -400,7 +414,7 @@ namespace WolvenKit.ViewModels.Tools
 
             var bitmapImage = new BitmapImage();
             bitmapImage.BeginInit();
-            bitmapImage.StreamSource = new MemoryStream(image.SaveToPNGMemory());
+            bitmapImage.StreamSource = new MemoryStream(image.GetPreview());
             bitmapImage.EndInit();
 
             LoadedBitmapFrame = bitmapImage;

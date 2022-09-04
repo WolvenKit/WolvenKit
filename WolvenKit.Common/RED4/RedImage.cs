@@ -273,6 +273,34 @@ public class RedImage : IDisposable
     public byte[] SaveToTIFFMemory() =>
         SaveToMemory(InternalScratchImage.SaveToWICMemory(0, WIC_FLAGS.NONE, TexHelper.Instance.GetWICCodec(WICCodecs.TIFF)));
 
+    public byte[] GetPreview()
+    {
+        if (_metadata.IsCubemap())
+        {
+            var s_offsetx = new[] { 2, 0, 1, 1, 1, 3 };
+            var s_offsety = new[] { 1, 1, 0, 2, 1, 1 };
+
+            var result = TexHelper.Instance.Initialize2D(_metadata.Format, _metadata.Width * 4, _metadata.Height * 3, 1, 1, CP_FLAGS.NONE);
+            var dest = result.GetImage(0, 0, 0);
+
+            for (int i = 0; i < 6; i++)
+            {
+                var img = InternalScratchImage.GetImage(0, i, 0);
+
+                var offsetx = s_offsetx[i] * _metadata.Width;
+                var offsety = s_offsety[i] * _metadata.Height;
+
+                TexHelper.Instance.CopyRectangle(img, 0, 0, _metadata.Width, _metadata.Height, dest, TEX_FILTER_FLAGS.DEFAULT, offsetx, offsety);
+            }
+
+            return SaveToMemory(result.SaveToWICMemory(0, WIC_FLAGS.FORCE_RGB, TexHelper.Instance.GetWICCodec(WICCodecs.PNG)));
+        }
+        else
+        {
+            return SaveToMemory(InternalScratchImage.SaveToWICMemory(0, WIC_FLAGS.FORCE_RGB, TexHelper.Instance.GetWICCodec(WICCodecs.PNG)));
+        }
+    }
+
     #endregion SaveToFileFormat
 
     public RedImage Crop(int x, int y, int width, int height)
