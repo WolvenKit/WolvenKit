@@ -45,6 +45,14 @@ namespace WolvenKit.Functionality.Controllers
             //Nothing to do here :)
             new Task<bool>(new Func<bool>(() => true));
 
+        public Task<bool> PackAndInstallRunProject() =>
+            //Nothing to do here :)
+            new Task<bool>(new Func<bool>(() => true));
+
+        public Task<bool> HotInstallProject() =>
+            //Nothing to do here :)
+            new Task<bool>(new Func<bool>(() => true));
+
         #endregion Methods
     }
 }
