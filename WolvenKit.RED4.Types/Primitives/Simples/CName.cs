@@ -8,7 +8,6 @@ namespace WolvenKit.RED4.Types
 {
     [RED("CName")]
     [REDType(IsValueType = true)]
-    [DebuggerDisplay("{_value}", Type = "CName")]
     public sealed class CName : BaseStringType, IEquatable<CName>
     {
         private static readonly ConcurrentDictionary<string, ulong> s_cNameCache = new();
@@ -53,7 +52,7 @@ namespace WolvenKit.RED4.Types
         public uint GetOldRedHash() => (uint)(_hash & 0xFFFFFFFF);
 
         public static implicit operator CName(string value) => new(value);
-        public static implicit operator string(CName value) => value?._value; 
+        public static implicit operator string(CName value) => value?.ToString(); 
 
         public static implicit operator CName(ulong value) => new(value);
         public static implicit operator ulong(CName value) => value?._hash ?? 0;
