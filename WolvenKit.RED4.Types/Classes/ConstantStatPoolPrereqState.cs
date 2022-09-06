@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class ConstantStatPoolPrereqState : StatPoolPrereqState
 	{
-		[Ordinal(1)] 
+		[Ordinal(5)] 
 		[RED("listenConstantly")] 
 		public CBool ListenConstantly
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(2)] 
+		[Ordinal(6)] 
 		[RED("owner")] 
 		public CWeakHandle<gameObject> Owner
 		{

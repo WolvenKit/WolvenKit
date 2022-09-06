@@ -36,10 +36,19 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gameItemID>(value);
 		}
 
+		[Ordinal(4)] 
+		[RED("appearanceItemID")] 
+		public gameItemID AppearanceItemID
+		{
+			get => GetPropertyValue<gameItemID>();
+			set => SetPropertyValue<gameItemID>(value);
+		}
+
 		public gameAttachmentSlotData()
 		{
 			ActiveItemID = new();
 			PrevItemID = new();
+			AppearanceItemID = new();
 
 			PostConstruct();
 		}

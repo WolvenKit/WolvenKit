@@ -14,10 +14,10 @@ namespace WolvenKit.RED4.Types
 
 		[Ordinal(1)] 
 		[RED("items")] 
-		public CArray<InventoryItemData> Items
+		public CArray<gameInventoryItemData> Items
 		{
-			get => GetPropertyValue<CArray<InventoryItemData>>();
-			set => SetPropertyValue<CArray<InventoryItemData>>(value);
+			get => GetPropertyValue<CArray<gameInventoryItemData>>();
+			set => SetPropertyValue<CArray<gameInventoryItemData>>(value);
 		}
 
 		public TypeComparableItemsCache()

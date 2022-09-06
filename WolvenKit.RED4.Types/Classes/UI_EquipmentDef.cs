@@ -20,10 +20,37 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gamebbScriptID_Variant>(value);
 		}
 
+		[Ordinal(2)] 
+		[RED("areaChanged")] 
+		public gamebbScriptID_Int32 AreaChanged
+		{
+			get => GetPropertyValue<gamebbScriptID_Int32>();
+			set => SetPropertyValue<gamebbScriptID_Int32>(value);
+		}
+
+		[Ordinal(3)] 
+		[RED("areaChangedSlotIndex")] 
+		public gamebbScriptID_Int32 AreaChangedSlotIndex
+		{
+			get => GetPropertyValue<gamebbScriptID_Int32>();
+			set => SetPropertyValue<gamebbScriptID_Int32>(value);
+		}
+
+		[Ordinal(4)] 
+		[RED("EquipmentInProgress")] 
+		public gamebbScriptID_Bool EquipmentInProgress
+		{
+			get => GetPropertyValue<gamebbScriptID_Bool>();
+			set => SetPropertyValue<gamebbScriptID_Bool>(value);
+		}
+
 		public UI_EquipmentDef()
 		{
 			ItemEquipped = new();
 			LastModifiedArea = new();
+			AreaChanged = new();
+			AreaChangedSlotIndex = new();
+			EquipmentInProgress = new();
 
 			PostConstruct();
 		}

@@ -21,6 +21,30 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(5)] 
+		[RED("gogButtonWidgetRef")] 
+		public inkWidgetReference GogButtonWidgetRef
+		{
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
+		}
+
+		[Ordinal(6)] 
+		[RED("gogContainer")] 
+		public inkWidgetReference GogContainer
+		{
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
+		}
+
+		[Ordinal(7)] 
+		[RED("scrollbar")] 
+		public inkWidgetReference Scrollbar
+		{
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
+		}
+
+		[Ordinal(8)] 
 		[RED("eventDispatcher")] 
 		public CWeakHandle<inkMenuEventDispatcher> EventDispatcher
 		{
@@ -28,15 +52,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<inkMenuEventDispatcher>>(value);
 		}
 
-		[Ordinal(6)] 
-		[RED("loadComplete")] 
-		public CBool LoadComplete
-		{
-			get => GetPropertyValue<CBool>();
-			set => SetPropertyValue<CBool>(value);
-		}
-
-		[Ordinal(7)] 
+		[Ordinal(9)] 
 		[RED("handler")] 
 		public CWeakHandle<inkISystemRequestsHandler> Handler
 		{
@@ -44,15 +60,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<inkISystemRequestsHandler>>(value);
 		}
 
-		[Ordinal(8)] 
-		[RED("saveInfo")] 
-		public CHandle<inkSaveMetadataInfo> SaveInfo
-		{
-			get => GetPropertyValue<CHandle<inkSaveMetadataInfo>>();
-			set => SetPropertyValue<CHandle<inkSaveMetadataInfo>>(value);
-		}
-
-		[Ordinal(9)] 
+		[Ordinal(10)] 
 		[RED("buttonHintsController")] 
 		public CWeakHandle<ButtonHints> ButtonHintsController
 		{
@@ -60,7 +68,31 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<ButtonHints>>(value);
 		}
 
-		[Ordinal(10)] 
+		[Ordinal(11)] 
+		[RED("saveInfo")] 
+		public CHandle<inkSaveMetadataInfo> SaveInfo
+		{
+			get => GetPropertyValue<CHandle<inkSaveMetadataInfo>>();
+			set => SetPropertyValue<CHandle<inkSaveMetadataInfo>>(value);
+		}
+
+		[Ordinal(12)] 
+		[RED("saves")] 
+		public CArray<CString> Saves
+		{
+			get => GetPropertyValue<CArray<CString>>();
+			set => SetPropertyValue<CArray<CString>>(value);
+		}
+
+		[Ordinal(13)] 
+		[RED("pendingRegistration")] 
+		public CBool PendingRegistration
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(14)] 
 		[RED("hasEmptySlot")] 
 		public CBool HasEmptySlot
 		{
@@ -68,9 +100,33 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(11)] 
+		[Ordinal(15)] 
 		[RED("saveInProgress")] 
 		public CBool SaveInProgress
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(16)] 
+		[RED("loadComplete")] 
+		public CBool LoadComplete
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(17)] 
+		[RED("saveFilesReady")] 
+		public CBool SaveFilesReady
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(18)] 
+		[RED("cloudSynced")] 
+		public CBool CloudSynced
 		{
 			get => GetPropertyValue<CBool>();
 			set => SetPropertyValue<CBool>(value);
@@ -80,6 +136,10 @@ namespace WolvenKit.RED4.Types
 		{
 			List = new();
 			ButtonHintsManagerRef = new();
+			GogButtonWidgetRef = new();
+			GogContainer = new();
+			Scrollbar = new();
+			Saves = new();
 
 			PostConstruct();
 		}

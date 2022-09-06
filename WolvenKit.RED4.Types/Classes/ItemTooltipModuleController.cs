@@ -12,6 +12,22 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
+		[Ordinal(2)] 
+		[RED("tooltipDisplayContext")] 
+		public CEnum<InventoryTooltipDisplayContext> TooltipDisplayContext
+		{
+			get => GetPropertyValue<CEnum<InventoryTooltipDisplayContext>>();
+			set => SetPropertyValue<CEnum<InventoryTooltipDisplayContext>>(value);
+		}
+
+		[Ordinal(3)] 
+		[RED("itemDisplayContext")] 
+		public CEnum<gameItemDisplayContext> ItemDisplayContext
+		{
+			get => GetPropertyValue<CEnum<gameItemDisplayContext>>();
+			set => SetPropertyValue<CEnum<gameItemDisplayContext>>(value);
+		}
+
 		public ItemTooltipModuleController()
 		{
 			LineWidget = new();

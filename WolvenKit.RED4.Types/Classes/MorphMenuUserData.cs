@@ -2,7 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class MorphMenuUserData : IScriptable
+	public partial class MorphMenuUserData : inkUserData
 	{
 		[Ordinal(0)] 
 		[RED("optionsListInitialized")] 
