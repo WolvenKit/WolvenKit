@@ -152,7 +152,6 @@ namespace WolvenKit.ViewModels.HomePage
                     FileName = _settings.GetRED4GameLaunchCommand(),
                     Arguments = $"{_settings.GetRED4GameLaunchOptions()} -modded",
                     ErrorDialog = true,
-                    UseShellExecute = true,
                 });
             }
             catch (Exception ex)
