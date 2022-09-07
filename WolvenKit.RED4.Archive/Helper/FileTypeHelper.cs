@@ -29,6 +29,7 @@ namespace WolvenKit.RED4.Archive
         ccstate,
         cfoliage,
         charcustpreset,
+        chromaset,
         cminimap,
         community,
         conversations,
@@ -190,6 +191,7 @@ namespace WolvenKit.RED4.Archive
             FileTypes.Add(new FileType(ERedExtension.ccstate, "Character Customization State", typeof(gameuiCharacterCustomizationPreset)));
             FileTypes.Add(new FileType(ERedExtension.cfoliage, "Foliage Compiled Resource", typeof(worldFoliageCompiledResource)));
             FileTypes.Add(new FileType(ERedExtension.charcustpreset, "UI Character Customization Preset", typeof(gameuiCharacterCustomizationUiPreset)));
+            FileTypes.Add(new FileType(ERedExtension.chromaset, "Razer Chroma Animation Set", typeof(gameRazerChromaAnimationDatabase)));
             FileTypes.Add(new FileType(ERedExtension.cminimap, "Minimap Compiled Resource", typeof(minimapEncodedShapes)));
             FileTypes.Add(new FileType(ERedExtension.community, "", typeof(communityCommunityTemplate)));
             FileTypes.Add(new FileType(ERedExtension.conversations, "Conversations Group", typeof(scnInterestingConversationsResource)));
