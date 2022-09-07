@@ -139,6 +139,14 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<TweakDBID>>(value);
 		}
 		
+		[RED("cpoItemCategory")]
+		[REDProperty(IsIgnored = true)]
+		public TweakDBID CpoItemCategory
+		{
+			get => GetPropertyValue<TweakDBID>();
+			set => SetPropertyValue<TweakDBID>(value);
+		}
+		
 		[RED("CraftingData")]
 		[REDProperty(IsIgnored = true)]
 		public TweakDBID CraftingData
@@ -473,6 +481,14 @@ namespace WolvenKit.RED4.Types
 		{
 			get => GetPropertyValue<CBool>();
 			set => SetPropertyValue<CBool>(value);
+		}
+		
+		[RED("previewBBoxOverride")]
+		[REDProperty(IsIgnored = true)]
+		public CArray<Vector3> PreviewBBoxOverride
+		{
+			get => GetPropertyValue<CArray<Vector3>>();
+			set => SetPropertyValue<CArray<Vector3>>(value);
 		}
 		
 		[RED("quality")]

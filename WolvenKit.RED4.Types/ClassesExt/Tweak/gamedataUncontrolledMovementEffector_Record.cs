@@ -3,6 +3,14 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class gamedataUncontrolledMovementEffector_Record
 	{
+		[RED("debugSourceName")]
+		[REDProperty(IsIgnored = true)]
+		public CName DebugSourceName
+		{
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
+		}
+        
 		[RED("ragdollNoGroundThreshold")]
 		[REDProperty(IsIgnored = true)]
 		public CFloat RagdollNoGroundThreshold

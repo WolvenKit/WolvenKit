@@ -134,7 +134,7 @@ namespace WolvenKit.RED4.Types
 
 		[Ordinal(20)] 
 		[RED("proxyScale")] 
-		public Vector3 ProxyScale
+		public new Vector3 ProxyScale
 		{
 			get => GetPropertyValue<Vector3>();
 			set => SetPropertyValue<Vector3>(value);

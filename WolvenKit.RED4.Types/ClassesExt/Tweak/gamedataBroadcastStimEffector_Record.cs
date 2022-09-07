@@ -1,19 +1,19 @@
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class gamedataContinuousEffector_Record
+	public partial class gamedataBroadcastStimEffector_Record
 	{
-		[RED("delayTime")]
+        [RED("radius")]
 		[REDProperty(IsIgnored = true)]
-		public CFloat DelayTime
+		public CFloat Radius
 		{
 			get => GetPropertyValue<CFloat>();
 			set => SetPropertyValue<CFloat>(value);
 		}
 		
-		[RED("timeDilationDriver")]
+		[RED("type")]
 		[REDProperty(IsIgnored = true)]
-		public TweakDBID TimeDilationDriver
+		public TweakDBID Type
 		{
 			get => GetPropertyValue<TweakDBID>();
 			set => SetPropertyValue<TweakDBID>(value);

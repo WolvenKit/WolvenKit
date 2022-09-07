@@ -83,6 +83,14 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 		
+		[RED("debugName")]
+		[REDProperty(IsIgnored = true)]
+		public CName DebugName
+		{
+			get => GetPropertyValue<CName>();
+			set => SetPropertyValue<CName>(value);
+		}
+		
 		[RED("destinationOrientationPosition")]
 		[REDProperty(IsIgnored = true)]
 		public TweakDBID DestinationOrientationPosition

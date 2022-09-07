@@ -27,6 +27,14 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 		
+		[RED("animationTime")]
+		[REDProperty(IsIgnored = true)]
+		public CFloat AnimationTime
+		{
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
+		}
+		
 		[RED("category")]
 		[REDProperty(IsIgnored = true)]
 		public CName Category
@@ -78,6 +86,14 @@ namespace WolvenKit.RED4.Types
 		[RED("positionOffset")]
 		[REDProperty(IsIgnored = true)]
 		public Vector3 PositionOffset
+		{
+			get => GetPropertyValue<Vector3>();
+			set => SetPropertyValue<Vector3>(value);
+		}
+		
+		[RED("rotation")]
+		[REDProperty(IsIgnored = true)]
+		public Vector3 Rotation
 		{
 			get => GetPropertyValue<Vector3>();
 			set => SetPropertyValue<Vector3>(value);
