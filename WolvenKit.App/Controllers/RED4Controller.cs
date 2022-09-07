@@ -258,7 +258,6 @@ namespace WolvenKit.Functionality.Controllers
                 return false;
             }
 
-            var result = false;
             // compile with redmod
             var redmodPath = Path.Combine(_settingsManager.GetRED4GameRootDir(), "tools", "redmod", "bin", "redmod.exe");
             if (File.Exists(redmodPath))
@@ -268,14 +267,10 @@ namespace WolvenKit.Functionality.Controllers
 
                 _loggerService.Info($"WorkDir: {redmodPath}");
                 _loggerService.Info($"Running commandlet: {args}");
-                result = await ProcessUtil.RunProcessAsync(redmodPath, args);
-            }
-            else
-            {
-                result = await Task.FromResult(true);
+                return await ProcessUtil.RunProcessAsync(redmodPath, args);
             }
 
-            return result;
+            return true;
         }
 
         public List<string> GetModFiles()
@@ -432,7 +427,7 @@ namespace WolvenKit.Functionality.Controllers
             var tweakFiles = Directory.GetFiles(cp77Proj.TweakDirectory, "*.yaml", SearchOption.AllDirectories);
             foreach (var f in tweakFiles)
             {
-//                var text = File.ReadAllText(f);
+                //                var text = File.ReadAllText(f);
                 var folder = Path.GetDirectoryName(Path.GetRelativePath(cp77Proj.TweakDirectory, f));
                 var outDirectory = Path.Combine(cp77Proj.PackedTweakDirectory, folder);
                 if (!Directory.Exists(outDirectory))
@@ -443,35 +438,35 @@ namespace WolvenKit.Functionality.Controllers
                 var outPath = Path.Combine(outDirectory, filename);
                 File.Copy(f, outPath, true);
 
-//                try
-//                {
-//  
-//                    if (!Serialization.Deserialize(text, out var dict))
-//                    {
-//                        continue;
-//                    }
-//                    var db = new TweakDB();
-//                    flats
-//                    foreach (var (key, value) in dict.Flats)
-//                    {
-//                        db.Add(key, value);
-//                    }
-//                    groups
-//                    foreach (var (key, value) in dict.Groups)
-//                    {
-//                        db.Add(key, value);
-//                    }
+                //                try
+                //                {
+                //  
+                //                    if (!Serialization.Deserialize(text, out var dict))
+                //                    {
+                //                        continue;
+                //                    }
+                //                    var db = new TweakDB();
+                //                    flats
+                //                    foreach (var (key, value) in dict.Flats)
+                //                    {
+                //                        db.Add(key, value);
+                //                    }
+                //                    groups
+                //                    foreach (var (key, value) in dict.Groups)
+                //                    {
+                //                        db.Add(key, value);
+                //                    }
 
-//                    using var ms = new MemoryStream();
-//                    using var writer = new TweakDBWriter(ms);
-//                    writer.WriteFile(db);
-//                    File.WriteAllBytes(outPath, ms.ToArray());
-//                }
-//                catch (Exception e)
-//                {
-//                    _loggerService.Error(e);
-//                    continue;
-//                }
+                //                    using var ms = new MemoryStream();
+                //                    using var writer = new TweakDBWriter(ms);
+                //                    writer.WriteFile(db);
+                //                    File.WriteAllBytes(outPath, ms.ToArray());
+                //                }
+                //                catch (Exception e)
+                //                {
+                //                    _loggerService.Error(e);
+                //                    continue;
+                //                }
             }
         }
 

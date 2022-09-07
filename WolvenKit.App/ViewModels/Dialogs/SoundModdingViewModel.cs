@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Reactive.Linq;
 using System.Text.Json;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Prism.Commands;
@@ -25,13 +26,13 @@ namespace WolvenKit.ViewModels.Dialogs
         private readonly ILoggerService _logger;
         private readonly IProjectManager _projectManager;
 
-        private readonly SoundEventMetadata _metadata;
-        private readonly ModInfo _info;
+        private SoundEventMetadata _metadata;
+        private ModInfo _info;
 
         private readonly JsonSerializerOptions _options = new()
         {
             WriteIndented = true,
-            DefaultIgnoreCondition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull,
+            DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,
             PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
             IgnoreReadOnlyProperties = true,
         };
@@ -49,7 +50,13 @@ namespace WolvenKit.ViewModels.Dialogs
 
             AddCommand = new DelegateCommand(AddEvents, CanAddEvents);
 
-            // load events
+            LoadEvents();
+            LoadInfo();
+            PopulateFiles();
+        }
+
+        private void LoadEvents()
+        {
             var path = Path.Combine(Environment.CurrentDirectory, "Resources", "soundEvents.json");
             if (File.Exists(path))
             {
@@ -69,8 +76,11 @@ namespace WolvenKit.ViewModels.Dialogs
                 }
                 Tags = _metadata.Events.SelectMany(x => x.Tags).Distinct().OrderBy(x => x).ToList();
             }
+        }
 
-            // load info.json
+        private void LoadInfo()
+        {
+            var path = Path.Combine(Environment.CurrentDirectory, "Resources", "soundEvents.json");
             path = Path.Combine(_projectManager.ActiveProject.PackedModDirectory, "info.json");
             if (File.Exists(path))
             {
@@ -91,8 +101,10 @@ namespace WolvenKit.ViewModels.Dialogs
                     _logger.Error(e);
                 }
             }
+        }
 
-            // populate Files
+        private void PopulateFiles()
+        {
             var modProj = _projectManager.ActiveProject as Cp77Project;
             var modfiles = Directory.GetFiles(modProj.SoundDirectory, "*.wav", SearchOption.AllDirectories);
             foreach (var modfile in modfiles)
@@ -101,7 +113,6 @@ namespace WolvenKit.ViewModels.Dialogs
                 Files.Add(relPath);
             }
         }
-
 
         public delegate Task ReturnHandler(NewFileViewModel file);
         public ReturnHandler FileHandler;

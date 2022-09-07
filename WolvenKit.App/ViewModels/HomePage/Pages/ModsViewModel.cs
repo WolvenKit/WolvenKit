@@ -28,7 +28,7 @@ namespace WolvenKit.ViewModels.HomePage
         private readonly IPluginService _pluginService;
         private readonly AppViewModel _mainViewModel;
 
-        private readonly JsonSerializerOptions _options = new JsonSerializerOptions
+        private readonly JsonSerializerOptions _options = new()
         {
             WriteIndented = true,
             DefaultIgnoreCondition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull,
@@ -71,7 +71,9 @@ namespace WolvenKit.ViewModels.HomePage
             if (!_pluginService.IsInstalled(EPlugin.redmod))
             {
                 _logger.Error("Redmod needs to be installed to deploy mods.");
-                switch (await Interactions.ShowMessageBoxAsync("The RedMod tools are not installed. Would you like to install them?", "RedMod not found"))
+                var response = await Interactions.ShowMessageBoxAsync("The RedMod tools are not installed. Would you like to install them?", "RedMod not found");
+
+                switch (response)
                 {
                     case WMessageBoxResult.OK:
                     case WMessageBoxResult.Yes:
@@ -82,18 +84,17 @@ namespace WolvenKit.ViewModels.HomePage
                 return false;
             }
 
-            var result = false;
+
             // compile with redmod
             var redmodPath = Path.Combine(_settings.GetRED4GameRootDir(), "tools", "redmod", "bin", "redmod.exe");
             if (!File.Exists(redmodPath))
             {
                 _logger.Error("RedMod tools are not installed. Please go to WolvenKit plugins and install RedMod.");
-                result = await Task.FromResult(false);
+                return false;
             }
             else
             {
-
-
+                var result = false;
                 var enabledMods = GetEnabledMods().ToList();
                 if (enabledMods.Any())
                 {
@@ -131,9 +132,8 @@ namespace WolvenKit.ViewModels.HomePage
                 {
                     _logger.Warning("No mods enabled.");
                 }
+                return result;
             }
-
-            return result;
         }
 
         public ICommand RefreshCommand { get; private set; }
@@ -150,7 +150,7 @@ namespace WolvenKit.ViewModels.HomePage
                 Process.Start(new ProcessStartInfo
                 {
                     FileName = _settings.GetRED4GameLaunchCommand(),
-                    Arguments = _settings.GetRED4GameLaunchOptions() ?? "-modded",
+                    Arguments = $"{_settings.GetRED4GameLaunchOptions()} -modded",
                     ErrorDialog = true,
                     UseShellExecute = true,
                 });
@@ -200,7 +200,7 @@ namespace WolvenKit.ViewModels.HomePage
 
                 Mods.Remove(SelectedMod);
             }
-            catch (System.Exception)
+            catch (Exception)
             {
                 _logger.Error($"Could not delete mod: {SelectedMod.Path}");
             }
@@ -210,30 +210,13 @@ namespace WolvenKit.ViewModels.HomePage
 
         private void LoadMods()
         {
-            Mods.Clear();
-
-            var di = new DirectoryInfo(_settings.GetRED4GameModDir());
-            var infos = di.GetFiles("info.json", SearchOption.AllDirectories);
-            foreach (var item in infos)
-            {
-                try
-                {
-                    var info = JsonSerializer.Deserialize<ModInfo>(File.ReadAllText(item.FullName), _options);
-                    var folder = item.Directory.FullName;
-                    Mods.Add(new ModInfoViewModel(info, folder, _logger));
-                }
-                catch (Exception)
-                {
-                    _logger.Warning($"Could not read mod file: {item.FullName}");
-                }
-
-            }
+            LoadModsInfo();
 
             // parse existing mods.info and update enabled
             // also update load order
             var modsInfoPath = Path.Combine(_settings.GetRED4GameRootDir(), "r6", "cache", "modded", "mods.json");
             ModsInfo modsInfo = null;
-            var foundmods = new List<ModInfoViewModel>();
+            var foundMods = new List<ModInfoViewModel>();
             if (File.Exists(modsInfoPath))
             {
                 try
@@ -256,7 +239,7 @@ namespace WolvenKit.ViewModels.HomePage
                     {
                         local.IsEnabled = mod.enabled;
                         local.LoadOrder = i;
-                        foundmods.Add(local);
+                        foundMods.Add(local);
                     }
                 }
             }
@@ -265,15 +248,37 @@ namespace WolvenKit.ViewModels.HomePage
             // reorder according to modsInfo
             // first come all the mods in mods.info
             // then the rest
-            var rest = Mods.Where(x => !foundmods.Contains(x)).ToList();
+            var rest = Mods.Where(x => !foundMods.Contains(x)).ToList();
             for (var i = 0; i < rest.Count; i++)
             {
                 var mod = rest[i];
-                mod.LoadOrder = i + foundmods.Count;
+                mod.LoadOrder = i + foundMods.Count;
             }
 
             _logger.Info($"Found {Mods.Count} mods.");
 
+        }
+
+        private void LoadModsInfo()
+        {
+            Mods.Clear();
+
+            var di = new DirectoryInfo(_settings.GetRED4GameModDir());
+            var infos = di.GetFiles("info.json", SearchOption.AllDirectories);
+            foreach (var item in infos)
+            {
+                try
+                {
+                    var info = JsonSerializer.Deserialize<ModInfo>(File.ReadAllText(item.FullName), _options);
+                    var folder = item.Directory.FullName;
+                    Mods.Add(new ModInfoViewModel(info, folder, _logger));
+                }
+                catch (Exception)
+                {
+                    _logger.Warning($"Could not read mod file: {item.FullName}");
+                }
+
+            }
         }
     }
 }

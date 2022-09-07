@@ -82,6 +82,8 @@ namespace WolvenKit.Views.HomePage
             }
         }
 
+        //        Can't you bind this directly in XAML? -wopss
+
         private void ModsPageTab_Selected(object sender, RoutedEventArgs e)
         {
             if (sender is TabItem tab && tab.Content is Pages.ModsView view && view.DataContext is ModsViewModel vm)

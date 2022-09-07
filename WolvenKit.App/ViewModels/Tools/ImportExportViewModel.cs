@@ -646,7 +646,7 @@ namespace WolvenKit.ViewModels.Tools
             {
                 var soundbanksArchive = _archiveManager.Archives.Items
                     .Cast<Archive>()
-                    .FirstOrDefault(_ => _.Name.Equals($"{EVanillaArchives.audio_2_soundbanks.ToString()}.archive"));
+                    .FirstOrDefault(_ => _.Name.Equals($"{EVanillaArchives.audio_2_soundbanks}.archive"));
 
                 OpusTools opusTools = new(
                     soundbanksArchive,
@@ -690,7 +690,7 @@ namespace WolvenKit.ViewModels.Tools
                     if (!_pluginService.IsInstalled(EPlugin.redmod))
                     {
                         _loggerService.Error("Redmod plugin needs to be installed to import animations");
-                        //return;
+                        return false;
                     }
 
                     reImportArgs.Depot = proj.ModDirectory;

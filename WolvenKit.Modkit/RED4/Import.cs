@@ -78,24 +78,20 @@ namespace WolvenKit.Modkit.RED4
             var ext = rawRelative.Extension;
             if (Enum.TryParse(ext, true, out ERawFileFormat extAsEnum))
             {
-                var result = false;
                 var redModPath = importArgs.RedMod;
                 if (File.Exists(redModPath))
                 {
                     importArgs.Input = rawRelative.FullPath;
                     var args = importArgs.GetReImportArgs();
- 
+
                     _loggerService.Info($"WorkDir: {redModPath}");
                     _loggerService.Info($"Running commandlet: {args}");
-                    result = await ProcessUtil.RunProcessAsync(redModPath, args);
+                    return await ProcessUtil.RunProcessAsync(redModPath, args);
                 }
                 else
                 {
                     _loggerService.Error("redmod.exe not found");
                 }
-
-
-                return result;
             }
 
             return false;
@@ -276,7 +272,7 @@ namespace WolvenKit.Modkit.RED4
                 }
 
                 var redrelative = new RedRelativePath(inDir, fi.GetRelativePath(inDir));
-                if (! (await Import(redrelative, args, outDir)))
+                if (!(await Import(redrelative, args, outDir)))
                 {
                     failsCount++;
                 }
@@ -402,16 +398,14 @@ namespace WolvenKit.Modkit.RED4
                     }
                     else if (rawExt == EUncookExtension.png.ToString())
                     {
-                        using (var stream = new FileStream(infile, FileMode.Open, FileAccess.Read, FileShare.Read))
-                        {
-                            // need to figure out how to decide format/etc from png header
-                            //var image = Png.Open(stream);
-                            //image.Header.ColorType;
-                            //var md = new DDSMetadata(new DirectXTexSharp.TexMetadata(), image.Header.BitDepth, true);
+                        using var stream = new FileStream(infile, FileMode.Open, FileAccess.Read, FileShare.Read);
+                        // need to figure out how to decide format/etc from png header
+                        //var image = Png.Open(stream);
+                        //image.Header.ColorType;
+                        //var md = new DDSMetadata(new DirectXTexSharp.TexMetadata(), image.Header.BitDepth, true);
 
-                            //format = md.Format;
-                            format = DXGI_FORMAT.DXGI_FORMAT_R8G8B8A8_UNORM;
-                        }
+                        //format = md.Format;
+                        format = DXGI_FORMAT.DXGI_FORMAT_R8G8B8A8_UNORM;
                     }
                     else
                     {

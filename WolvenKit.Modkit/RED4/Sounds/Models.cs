@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.Reactive.Linq;
 using System.Text.Json.Serialization;
 using ReactiveUI;
@@ -19,27 +18,12 @@ namespace WolvenKit.Modkit.RED4.Sounds
         mod_skip
     }
 
-    //public enum ECustomSoundType
-    //{
-    //    sfx_2D,
-    //    sfx_City,
-    //    sfx_low_occlusion,
-    //    sfx_occlusion,
-    //    sfx_radio,
-    //    sfx_room,
-    //    sfx_street,
-    //    skip
-    //}
-
     public class CustomSoundsModel : ReactiveObject
     {
         public CustomSoundsModel()
         {
             this.WhenAnyValue(x => x.Type)
-                .Subscribe(type =>
-                {
-                    IsEnabled = type != ECustomSoundType.mod_skip.ToString();
-                });
+                .Subscribe(type => IsEnabled = type != ECustomSoundType.mod_skip.ToString());
         }
 
         public string Name { get; set; }
@@ -51,17 +35,5 @@ namespace WolvenKit.Modkit.RED4.Sounds
         [JsonIgnore]
         [Reactive] public bool IsEnabled { get; set; }
 
-    }
-
-    public class SoundEventMetadata
-    {
-        public string GameVersion { get; set; } = "1.31";
-        public List<SoundEvent> Events { get; set; } = new();
-    }
-
-    public class SoundEvent
-    {
-        public string Name { get; set; }
-        public List<string> Tags { get; set; } = new();
     }
 }

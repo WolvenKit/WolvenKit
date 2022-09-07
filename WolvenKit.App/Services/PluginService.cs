@@ -111,10 +111,10 @@ namespace WolvenKit.Functionality.Services
                 if (id == EPlugin.redmod)
                 {
                     var plugin = Plugins.FirstOrDefault(x => x.Id == id);
-                    var redModLocalversion = "";
                     var redModManifest = Path.Combine(plugin.InstallPath, "version.txt");
                     if (File.Exists(redModManifest))
                     {
+                        var redModLocalversion = "";
                         redModLocalversion = File.ReadAllText(redModManifest);
 
                         // remoteVersion

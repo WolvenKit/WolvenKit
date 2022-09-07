@@ -15,19 +15,4 @@ namespace WolvenKit.Models
 
     }
 
-    public class ModInfoEntry
-    {
-        public string folder { get; set; }
-        public bool enabled { get; set; }
-        public bool deployed { get; set; }
-        public string deployedVersion { get; set; }
-        public object[] customSounds { get; set; }
-    }
-
-    public class ModsInfo
-    {
-        public List<ModInfoEntry> Mods { get; set; } = new();
-
-    }
-
 }
