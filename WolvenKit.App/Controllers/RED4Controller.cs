@@ -290,7 +290,7 @@ namespace WolvenKit.Functionality.Controllers
             }
 
             // compile with redmod
-            var redmodPath = Path.Combine(_settingsManager.GetRED4GameRootDir(), "tools", "redmod", "bin", "redmod.exe");
+            var redmodPath = Path.Combine(_settingsManager.GetRED4GameRootDir(), "tools", "redmod", "bin", "redMod.exe");
             if (File.Exists(redmodPath))
             {
                 var rttiSchemaPath = Path.Combine(_settingsManager.GetRED4GameRootDir(), "tools", "redmod", "metadata.json");

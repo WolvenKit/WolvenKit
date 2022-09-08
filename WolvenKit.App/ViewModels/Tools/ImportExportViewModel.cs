@@ -694,7 +694,7 @@ namespace WolvenKit.ViewModels.Tools
                     }
 
                     reImportArgs.Depot = proj.ModDirectory;
-                    reImportArgs.RedMod = Path.Combine(_settingsManager.GetRED4GameRootDir(), "tools", "redmod", "bin", "redmod.exe");
+                    reImportArgs.RedMod = Path.Combine(_settingsManager.GetRED4GameRootDir(), "tools", "redmod", "bin", "redMod.exe");
                 }
 
                 var settings = new GlobalImportArgs().Register(item.Properties as ImportArgs);

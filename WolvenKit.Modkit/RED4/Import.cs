@@ -90,7 +90,7 @@ namespace WolvenKit.Modkit.RED4
                 }
                 else
                 {
-                    _loggerService.Error("redmod.exe not found");
+                    _loggerService.Error("redMod.exe not found");
                 }
             }
 
