@@ -82,7 +82,7 @@ namespace WolvenKit.Views.HomePage
             }
         }
 
-        //        Can't you bind this directly in XAML? -wopss
+        // TODO: Can't you bind this directly in XAML? -wopss
 
         private void ModsPageTab_Selected(object sender, RoutedEventArgs e)
         {

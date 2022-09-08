@@ -51,12 +51,18 @@ namespace WolvenKit.Functionality.Services
 
             InitPlugins();
 
+            PopulatePlugins();
+        }
+
+        private void PopulatePlugins()
+        {
             // check installed plugins json
             var pluginManifestDir = Path.Combine(_settings.GetRED4GameRootDir(), "tools");
             if (!Directory.Exists(pluginManifestDir))
             {
                 Directory.CreateDirectory(pluginManifestDir);
             }
+
             var pluginManifestPath = Path.Combine(pluginManifestDir, _pluginFileName);
             var pluginManifestDict = new Dictionary<EPlugin, PluginModel>();
             if (File.Exists(pluginManifestPath))

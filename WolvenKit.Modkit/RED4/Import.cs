@@ -191,16 +191,11 @@ namespace WolvenKit.Modkit.RED4
                 {
                     // find the first matching redfile
                     var redfile = FindRedFile(rawRelative, outDir, cookedTextureFormat.ToString());
-                    if (!string.IsNullOrEmpty(redfile))
-                    {
-                        return cookedTextureFormat == ECookedTextureFormat.xbm
+                    return !string.IsNullOrEmpty(redfile)
+                        ? cookedTextureFormat == ECookedTextureFormat.xbm
                             ? ImportXbm(rawRelative, outDir, args.Get<XbmImportArgs>())
-                            : RebuildTexture(redfile);
-                    }
-                    else
-                    {
-                        return ImportXbm(rawRelative, outDir, args.Get<XbmImportArgs>());
-                    }
+                            : RebuildTexture(redfile)
+                        : ImportXbm(rawRelative, outDir, args.Get<XbmImportArgs>());
                 }
             }
 
@@ -272,7 +267,7 @@ namespace WolvenKit.Modkit.RED4
                 }
 
                 var redrelative = new RedRelativePath(inDir, fi.GetRelativePath(inDir));
-                if (!(await Import(redrelative, args, outDir)))
+                if (!await Import(redrelative, args, outDir))
                 {
                     failsCount++;
                 }

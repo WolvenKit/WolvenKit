@@ -2,7 +2,7 @@ using WolvenKit.Common.Model.Arguments;
 
 namespace WolvenKit.Modkit.RED4
 {
-    //    I have a feeling this could be somewhere else, but I don't know where to move these funcs for now. -wopss
+    // TODO:  I have a feeling this could be somewhere else, but I don't know where to move these funcs for now. -wopss
 
     public static class RedMod
     {
