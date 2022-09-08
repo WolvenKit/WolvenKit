@@ -416,6 +416,19 @@
 
                 </MenuItem>
 
+                <MenuItem Header="Tools" Padding="12,0" Margin="1,0">
+                    <MenuItem Command="{Binding ShowSoundModdingToolCommand}" Header="Sound Modding Tool">
+                        <MenuItem.Icon>
+                            <iconPacks:PackIconForkAwesome
+                                Padding="0,1,0,1"
+                                Margin="6,0"
+                                Foreground="{StaticResource WolvenKitCyan}"
+                                Kind="VolumeUp" />
+                        </MenuItem.Icon>
+                    </MenuItem>
+                    
+                </MenuItem>
+
                 <MenuItem Header="Game" Padding="12,0" Margin="1,0">
 
                     <MenuItem Header="Launch Game" Margin="2,1">
@@ -488,17 +501,22 @@
                 </MenuItem>
 
                 <MenuItem Header="Extensions" Padding="12,0" Margin="1,0">
-                    <MenuItem
-                        Command="{Binding ShowPluginToolCommand}"
-                        Header="Plugin Manager"
-                        IsCheckable="False">
+                    <MenuItem Command="{Binding ShowPluginToolCommand}" Header="Plugin Manager">
                         <MenuItem.Icon>
-                            <iconPacks:PackIconForkAwesome
+                            <iconPacks:PackIconCodicons
                                 Padding="0,1,0,1"
                                 Margin="6,0"
-                                Foreground="{StaticResource WolvenKitRed}"
-                                Kind="PuzzlePiece"
-                                Style="{StaticResource WolvenKitToolBarButtonIcon}"/>
+                                Foreground="{StaticResource WolvenKitCyan}"
+                                Kind="Extensions" />
+                        </MenuItem.Icon>
+                    </MenuItem>
+                    <MenuItem Command="{Binding ShowModsViewCommand}" Header="Mod Manager">
+                        <MenuItem.Icon>
+                            <iconPacks:PackIconCodicons
+                                Padding="0,1,0,1"
+                                Margin="6,0"
+                                Foreground="{StaticResource WolvenKitYellow}"
+                                Kind="Package" />
                         </MenuItem.Icon>
                     </MenuItem>
                 </MenuItem>
