@@ -446,6 +446,7 @@
                                     Margin="2,5,-8,0"
                                     Kind="TriangleDown" />
                             </MenuItem.Icon>
+
                             <MenuItem
                                 x:Name="ProjectExplorerCheckbox"
                                 Header="Project Explorer"
@@ -466,6 +467,9 @@
                                 x:Name="ImportExportCheckbox"
                                 Header="Import / Export"
                                 IsCheckable="True" />
+
+                            <Separator Margin="0,5,0,3" Background="{StaticResource BorderAlt}" />
+                            
                             <MenuItem
                                 x:Name="TweakBrowserCheckbox"
                                 Header="Tweak Browser"
@@ -474,12 +478,24 @@
                                 x:Name="LocKeyBrowserCheckbox"
                                 Header="LocKey Browser"
                                 IsCheckable="True" />
+                            <MenuItem 
+                                Command="{Binding ShowSoundModdingToolCommand}" 
+                                Header="Sound Modding Tool"
+                                IsCheckable="False" />
+
                             <Separator Margin="0,5,0,3" Background="{StaticResource BorderAlt}" />
+
                             <MenuItem
                                 Command="{Binding ShowPluginToolCommand}"
                                 Header="Plugins"
                                 IsCheckable="False" />
+                            <MenuItem 
+                                Command="{Binding ShowModsViewCommand}" 
+                                Header="Mod Manager"
+                                IsCheckable="False" />
+
                             <Separator Margin="0,5,0,3" Background="{StaticResource BorderAlt}" />
+
                             <MenuItem Click="SaveLayoutToProject" Header="Save Layout to Project">
                                 <MenuItem.Icon>
                                     <iconPacks:PackIconMaterialDesign Padding="7,1,-2,0" Kind="Save" />
@@ -491,20 +507,17 @@
                                 </MenuItem.Icon>
                             </MenuItem>
                             <Separator Margin="0,5,0,3" Background="{StaticResource BorderAlt}" />
-                            <MenuItem
-                                Header="Show File Preview"
+                            <MenuItem Header="Show File Preview"
                                 IsCheckable="True"
                                 IsChecked="{Binding _settingsManager.ShowFilePreview, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                 ToolTip="Toggle interactive file preview for improved performance" />
                             <Separator Margin="0,5,0,3" Background="{StaticResource BorderAlt}" />
                             <!--  MenuItem x:Name="lockTop" Header="Lock Toolbar" IsCheckable="True" IsChecked="True" /  -->
                             <!--  MenuItem x:Name="toolbarIcons" Header="Show Toolbar Icons" IsCheckable="True" IsChecked="True" /  -->
-                            <MenuItem
-                                x:Name="toolbarLabels"
-                                Header="Show Toolbar Labels"
+                            <MenuItem Header="Show Toolbar Labels"
+                                x:Name="toolbarLabels"                        
                                 IsCheckable="True"
                                 IsChecked="True" />
-
                         </MenuItem>
                     </Menu>
                     <TextBlock

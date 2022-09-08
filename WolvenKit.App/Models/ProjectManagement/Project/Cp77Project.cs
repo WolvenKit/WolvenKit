@@ -18,6 +18,19 @@ namespace WolvenKit.ProjectManagement.Project
 
         public override GameType GameType => GameType.Cyberpunk2077;
 
+        public string SoundDirectory
+        {
+            get
+            {
+                var dir = Path.Combine(FileDirectory, "customSounds");
+                if (!Directory.Exists(dir))
+                {
+                    Directory.CreateDirectory(dir);
+                }
+
+                return dir;
+            }
+        }
         public string ScriptDirectory
         {
             get
@@ -65,11 +78,40 @@ namespace WolvenKit.ProjectManagement.Project
             }
         }
 
+        public override string PackedModDirectory
+        {
+            get
+            {
+                var dir = Path.Combine(PackedRootDirectory, "mods", Name);
+                if (!Directory.Exists(dir))
+                {
+                    Directory.CreateDirectory(dir);
+                }
+
+                return dir;
+            }
+        }
+
         public override string PackedArchiveDirectory
         {
             get
             {
-                var dir = Path.Combine(PackedRootDirectory, "archive", "pc", "mod"/*, $"mod{Name}"*/);
+                //var dir = Path.Combine(PackedRootDirectory, "archive", "pc", "mod"/*, $"mod{Name}"*/);
+                var dir = Path.Combine(PackedModDirectory, "archives");
+                if (!Directory.Exists(dir))
+                {
+                    Directory.CreateDirectory(dir);
+                }
+
+                return dir;
+            }
+        }
+
+        public string PackedSoundsDirectory
+        {
+            get
+            {
+                var dir = Path.Combine(PackedModDirectory, "customSounds");
                 if (!Directory.Exists(dir))
                 {
                     Directory.CreateDirectory(dir);

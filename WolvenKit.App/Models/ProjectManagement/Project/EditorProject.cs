@@ -39,6 +39,7 @@ namespace WolvenKit.ProjectManagement.Project
         public abstract GameType GameType { get; }
 
         public abstract string PackedRootDirectory { get; }
+        public abstract string PackedModDirectory { get; }
         public abstract string PackedArchiveDirectory { get; }
 
 
@@ -228,6 +229,16 @@ namespace WolvenKit.ProjectManagement.Project
         }
 
         public override int GetHashCode() => Location != null ? Location.GetHashCode() : 0;
+        public ModInfo GetInfo()
+        {
+            var modInfo = new ModInfo()
+            {
+                Name = Name,
+                Description = Description,
+                Version = Version
+            };
+            return modInfo;
+        }
 
         #endregion implements IEquatable
 

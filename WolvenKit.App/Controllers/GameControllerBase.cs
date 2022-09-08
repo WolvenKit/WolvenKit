@@ -55,6 +55,7 @@ namespace WolvenKit.Functionality.Controllers
         Task<bool> PackProject();
 
         void InstallMod();
+        Task<bool> DeployRedmod();
 
         #endregion Methods
     }

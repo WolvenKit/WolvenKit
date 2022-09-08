@@ -1,5 +1,6 @@
 using System.CommandLine;
 using System.CommandLine.Invocation;
+using System.Threading.Tasks;
 using CP77Tools.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -30,11 +31,11 @@ namespace CP77Tools.Commands
             Handler = CommandHandler.Create<string[], string, bool, bool, IHost>(Action);
         }
 
-        private void Action(string[] path, string outpath, bool keep, bool clean, IHost host)
+        private async Task Action(string[] path, string outpath, bool keep, bool clean, IHost host)
         {
             var serviceProvider = host.Services;
             var consoleFunctions = serviceProvider.GetRequiredService<ConsoleFunctions>();
-            consoleFunctions.ImportTask(path, outpath, keep);
+            await consoleFunctions.ImportTask(path, outpath, keep);
         }
 
         #endregion Constructors

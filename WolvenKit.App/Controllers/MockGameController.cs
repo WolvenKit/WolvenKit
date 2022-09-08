@@ -44,6 +44,7 @@ namespace WolvenKit.Functionality.Controllers
         public Task<bool> PackAndInstallProject() =>
             //Nothing to do here :)
             new Task<bool>(new Func<bool>(() => true));
+        public Task<bool> DeployRedmod() => throw new NotImplementedException();
 
         #endregion Methods
     }
