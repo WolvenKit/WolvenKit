@@ -38,7 +38,7 @@ namespace WolvenKit.FunctionalTests
         [DataRow(ECookedFileFormat.texarray)]
         [DataRow(ECookedFileFormat.wem)]
         [DataRow(ECookedFileFormat.xbm)]
-        public void Test_ImportExport(ECookedFileFormat extension)
+        public async Task Test_ImportExport(ECookedFileFormat extension)
         {
             var ext = $".{extension.ToString()}";
             var infiles = s_groupedFiles[ext].ToList();
@@ -110,7 +110,7 @@ namespace WolvenKit.FunctionalTests
                 }
 
                 var redrelative = new RedRelativePath(rawfile.Directory, rawfile.Name);
-                var resImport = modtools.Import(redrelative, isettings);
+                var resImport = await modtools.Import(redrelative, isettings);
                 if (!resImport)
                 {
                     importfails.Add(fileEntry);

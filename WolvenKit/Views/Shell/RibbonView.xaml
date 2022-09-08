@@ -649,6 +649,7 @@
                     </Button>
 
                     <Button x:Name="ToolbarHotInstallButton" ToolTip="Pack archives &amp; install directly to hot directory">
+
                         <StackPanel Orientation="Horizontal">
                             <Grid>
                                 <iconPacks:PackIconForkAwesome

@@ -68,6 +68,9 @@ namespace WolvenKit.ViewModels.Shell
             //ViewCodeEditorCommand = ReactiveCommand.Create(() => _mainViewModel.ShowCodeEditorCommand.SafeExecute());
             ShowImportExportToolCommand = ReactiveCommand.Create(() => MainViewModel.ShowImportExportToolCommand.SafeExecute());
 
+            ShowSoundModdingToolCommand = ReactiveCommand.Create(() => MainViewModel.ShowSoundModdingToolCommand.SafeExecute());
+            ShowModsViewCommand = ReactiveCommand.Create(() => MainViewModel.ShowModsViewCommand.SafeExecute());
+
             ShowPluginToolCommand = ReactiveCommand.Create(() => MainViewModel.ShowPluginCommand.SafeExecute());
             OpenMaterialRepositoryCommand = ReactiveCommand.Create(() => Commonfunctions.ShowFolderInExplorer(SettingsManager.MaterialRepositoryPath));
 
@@ -127,6 +130,9 @@ namespace WolvenKit.ViewModels.Shell
         public ReactiveCommand<Unit, Unit> ShowImportExportToolCommand { get; }
 
         public ReactiveCommand<Unit, Unit> ShowPluginToolCommand { get; }
+        public ReactiveCommand<Unit, Unit> ShowSoundModdingToolCommand { get; }
+
+        public ReactiveCommand<Unit, Unit> ShowModsViewCommand { get; }
 
         public ReactiveCommand<Unit, Unit> OpenMaterialRepositoryCommand { get; }
         public ReactiveCommand<Unit, Unit> UnbundleGameCommand { get; }

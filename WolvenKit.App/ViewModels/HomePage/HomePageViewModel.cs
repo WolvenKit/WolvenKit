@@ -10,6 +10,17 @@ using WolvenKit.ViewModels.Shell;
 
 namespace WolvenKit.ViewModels.HomePage
 {
+    public enum EHomePage
+    {
+        Welcome,
+        Mods,
+        Plugins,
+        Settings,
+        Wiki,
+        Github,
+        Website
+    }
+
     public class HomePageViewModel : ReactiveObject
     {
         // #needs_MVVM
@@ -17,14 +28,16 @@ namespace WolvenKit.ViewModels.HomePage
         #region Fields
 
         private readonly ISettingsManager _settingsManager;
+        private readonly IPluginService _pluginService;
 
         #endregion Fields
 
         #region Constructors
 
-        public HomePageViewModel(ISettingsManager settingsManager)
+        public HomePageViewModel(ISettingsManager settingsManager, IPluginService pluginService)
         {
             _settingsManager = settingsManager;
+            _pluginService = pluginService;
 
             CloseHomePage = new DelegateCommand(ExecuteHome, CanHome);
             RestoreWindow = new DelegateCommand(ExecuteRestoreWindow);
@@ -86,6 +99,8 @@ namespace WolvenKit.ViewModels.HomePage
             var main = Locator.Current.GetService<AppViewModel>();
             main.CloseModalCommand.Execute(null);
         }
+
+        public void NavigateTo(EHomePage page) => SelectedIndex = (int)page;
 
         #endregion Methods
     }

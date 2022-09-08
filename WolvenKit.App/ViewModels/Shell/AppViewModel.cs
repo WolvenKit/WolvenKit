@@ -110,6 +110,8 @@ namespace WolvenKit.ViewModels.Shell
             ShowImportExportToolCommand = new DelegateCommand(ExecuteImportExportTool, CanShowImportExportTool).ObservesProperty(() => ActiveProject);
             //ShowPackageInstallerCommand = new DelegateCommand(ExecuteShowInstaller, CanShowInstaller);
 
+            ShowSoundModdingToolCommand = new DelegateCommand(ExecuteShowSoundModdingTool, CanShowSoundModdingTool).ObservesProperty(() => IsDialogShown);
+            ShowModsViewCommand = new DelegateCommand(ExecuteShowModsView, CanShowModsView).ObservesProperty(() => IsDialogShown);
             ShowPluginCommand = new DelegateCommand(ExecuteShowPlugin, CanShowPlugin).ObservesProperty(() => IsDialogShown);
 
             OpenFileCommand = new DelegateCommand<FileModel>(p => ExecuteOpenFile(p));
@@ -456,7 +458,7 @@ namespace WolvenKit.ViewModels.Shell
         private bool CanShowHomePage() => !IsDialogShown;
         private void ExecuteShowHomePage()
         {
-            _homePageViewModel.SelectedIndex = 0;
+            _homePageViewModel.NavigateTo(EHomePage.Welcome);
             SetActiveOverlay(_homePageViewModel);
         }
 
@@ -465,7 +467,7 @@ namespace WolvenKit.ViewModels.Shell
         private void ExecuteShowSettings()
         {
 
-            _homePageViewModel.SelectedIndex = 1;
+            _homePageViewModel.NavigateTo(EHomePage.Settings);
             SetActiveOverlay(_homePageViewModel);
         }
 
@@ -554,12 +556,28 @@ namespace WolvenKit.ViewModels.Shell
             _loggerService.Success("Game launching.");
         }
 
-        public ICommand ShowPluginCommand { get; private set; }
-        private bool CanShowPlugin() => !IsDialogShown;
-        private void ExecuteShowPlugin() => SetActiveDialog(new PluginsToolViewModel
+        public ICommand ShowSoundModdingToolCommand { get; private set; }
+        private bool CanShowSoundModdingTool() => !IsDialogShown;
+        private void ExecuteShowSoundModdingTool() => SetActiveDialog(new SoundModdingViewModel
         {
             FileHandler = OpenFromNewFile
         });
+
+        public ICommand ShowPluginCommand { get; private set; }
+        private bool CanShowPlugin() => !IsDialogShown;
+        private void ExecuteShowPlugin()
+        {
+            _homePageViewModel.NavigateTo(EHomePage.Plugins);
+            SetActiveOverlay(_homePageViewModel);
+        }
+
+        public ICommand ShowModsViewCommand { get; private set; }
+        private bool CanShowModsView() => !IsDialogShown;
+        private void ExecuteShowModsView()
+        {
+            _homePageViewModel.NavigateTo(EHomePage.Mods);
+            SetActiveOverlay(_homePageViewModel);
+        }
 
         public ICommand NewFileCommand { get; private set; }
         private bool CanNewFile(string inputDir) => ActiveProject is not null && !IsDialogShown;

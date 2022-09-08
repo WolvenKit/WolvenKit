@@ -1,7 +1,9 @@
 using ReactiveUI;
-using WolvenKit.ViewModels.Dialogs;
+using Splat;
+using WolvenKit.ViewModels.HomePage;
 
-namespace WolvenKit.Views.Dialogs
+
+namespace WolvenKit.Views.HomePage.Pages
 {
     /// <summary>
     /// Interaction logic for NewFileView.xaml
@@ -12,10 +14,12 @@ namespace WolvenKit.Views.Dialogs
         {
             InitializeComponent();
 
+            ViewModel = Locator.Current.GetService<PluginsToolViewModel>();
+            DataContext = ViewModel;
+
             this.WhenActivated(disposables => this.BindCommand(ViewModel,
                     viewModel => viewModel.SyncCommand,
                     view => view.CheckButton));
-
         }
     }
 }

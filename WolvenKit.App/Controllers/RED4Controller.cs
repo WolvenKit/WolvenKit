@@ -4,6 +4,8 @@ using System.Diagnostics;
 using System.IO;
 using System.IO.Compression;
 using System.Linq;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Xml.Linq;
@@ -16,6 +18,7 @@ using WolvenKit.Core.Compression;
 using WolvenKit.Core.Interfaces;
 using WolvenKit.Core.Services;
 using WolvenKit.Functionality.Services;
+using WolvenKit.Helpers;
 using WolvenKit.Models;
 using WolvenKit.ProjectManagement.Project;
 using WolvenKit.RED4.CR2W;
@@ -242,6 +245,8 @@ namespace WolvenKit.Functionality.Controllers
 
             InstallMod();
 
+            await DeployRedmod();
+
             _progressService.IsIndeterminate = false;
             return true;
         }
@@ -273,6 +278,29 @@ namespace WolvenKit.Functionality.Controllers
             }
 
             _progressService.IsIndeterminate = false;
+
+            return true;
+        }
+
+        public async Task<bool> DeployRedmod()
+        {
+            if (!_pluginService.IsInstalled(EPlugin.redmod))
+            {
+                return false;
+            }
+
+            // compile with redmod
+            var redmodPath = Path.Combine(_settingsManager.GetRED4GameRootDir(), "tools", "redmod", "bin", "redmod.exe");
+            if (File.Exists(redmodPath))
+            {
+                var rttiSchemaPath = Path.Combine(_settingsManager.GetRED4GameRootDir(), "tools", "redmod", "metadata.json");
+                var args = $"deploy -root=\"{_settingsManager.GetRED4GameRootDir()}\" -rttiSchemaPath=\"{rttiSchemaPath}\"";
+
+                _loggerService.Info($"WorkDir: {redmodPath}");
+                _loggerService.Info($"Running commandlet: {args}");
+                return await ProcessUtil.RunProcessAsync(redmodPath, args);
+            }
+
             return true;
         }
 
@@ -330,7 +358,23 @@ namespace WolvenKit.Functionality.Controllers
             // compile tweak files
             CompileTweakFiles(cp77Proj);
 
+            DeploySoundFiles();
+
             var activeMod = _projectManager.ActiveProject;
+
+            // write info.json file if it not exists
+            var modInfoJsonPath = Path.Combine(activeMod.PackedModDirectory, "info.json");
+            if (!File.Exists(modInfoJsonPath))
+            {
+                var options = new JsonSerializerOptions
+                {
+                    WriteIndented = true,
+                    DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,
+                    PropertyNamingPolicy = JsonNamingPolicy.CamelCase
+                };
+                var jsonString = JsonSerializer.Serialize(activeMod.GetInfo(), options);
+                File.WriteAllText(modInfoJsonPath, jsonString);
+            }
 
             // create mod zip file
             var zipPathRoot = new DirectoryInfo(activeMod.PackedRootDirectory).Parent.FullName;
@@ -349,7 +393,55 @@ namespace WolvenKit.Functionality.Controllers
             }
             _loggerService.Success($"{cp77Proj.Name} zip available at {zipPath}");
 
-            return await Task.FromResult(true);
+            return true;
+        }
+
+        private void DeploySoundFiles()
+        {
+            var path = Path.Combine(_projectManager.ActiveProject.PackedModDirectory, "info.json");
+            if (!File.Exists(path))
+            {
+                return;
+            }
+
+            // read info
+            var modProj = _projectManager.ActiveProject as Cp77Project;
+            var files = new List<string>();
+            try
+            {
+                // clean packed sounds dir
+                foreach (var f in Directory.GetFiles(modProj.PackedSoundsDirectory))
+                {
+                    File.Delete(f);
+                }
+
+                var options = new JsonSerializerOptions
+                {
+                    WriteIndented = true,
+                    DefaultIgnoreCondition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull,
+                    PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+                    IgnoreReadOnlyProperties = true,
+                };
+                var info = JsonSerializer.Deserialize<ModInfo>(File.ReadAllText(path), options);
+                foreach (var e in info.CustomSounds)
+                {
+                    if (!string.IsNullOrEmpty(e.File))
+                    {
+                        files.Add(e.File);
+
+                        var rawFile = Path.Combine(modProj.SoundDirectory, e.File);
+                        var packedFile = Path.Combine(modProj.PackedSoundsDirectory, e.File);
+                        if (File.Exists(rawFile))
+                        {
+                            File.Copy(rawFile, packedFile, true);
+                        }
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                _loggerService.Error(e);
+            }
         }
 
         public async Task<bool> PackProjectNoBackup()
@@ -440,7 +532,6 @@ namespace WolvenKit.Functionality.Controllers
             var tweakFiles = Directory.GetFiles(cp77Proj.TweakDirectory, "*.yaml", SearchOption.AllDirectories);
             foreach (var f in tweakFiles)
             {
-                //                var text = File.ReadAllText(f);
                 var folder = Path.GetDirectoryName(Path.GetRelativePath(cp77Proj.TweakDirectory, f));
                 var outDirectory = Path.Combine(cp77Proj.PackedTweakDirectory, folder);
                 if (!Directory.Exists(outDirectory))
@@ -450,8 +541,6 @@ namespace WolvenKit.Functionality.Controllers
                 var filename = Path.GetFileName(f);
                 var outPath = Path.Combine(outDirectory, filename);
                 File.Copy(f, outPath, true);
-
-
             }
         }
 

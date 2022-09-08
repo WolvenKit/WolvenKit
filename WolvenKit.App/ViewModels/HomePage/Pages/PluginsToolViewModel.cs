@@ -7,8 +7,9 @@ using ReactiveUI.Fody.Helpers;
 using Splat;
 using WolvenKit.Common.Services;
 using WolvenKit.Functionality.Services;
+using WolvenKit.ViewModels.Dialogs;
 
-namespace WolvenKit.ViewModels.Dialogs
+namespace WolvenKit.ViewModels.HomePage
 {
 
 
