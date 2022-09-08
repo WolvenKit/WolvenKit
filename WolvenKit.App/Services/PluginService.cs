@@ -176,7 +176,7 @@ namespace WolvenKit.Functionality.Services
                 if (plugin.Id == EPlugin.redmod)
                 {
                     // handle redmod differently for now
-                    var redmodPath = Path.Combine(plugin.InstallPath, "redmod.exe");
+                    var redmodPath = Path.Combine(plugin.InstallPath, "redMod.exe");
 
                     // get version and status
                     //var rmStatus = EPluginStatus.NotInstalled;

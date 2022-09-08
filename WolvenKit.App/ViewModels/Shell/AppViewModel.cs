@@ -121,6 +121,8 @@ namespace WolvenKit.ViewModels.Shell
             var hasActiveProject = this.WhenAny(x => x._projectManager.ActiveProject, (p) => p is not null);
             PackModCommand = ReactiveCommand.CreateFromTask(ExecutePackMod, hasActiveProject);
             PackInstallModCommand = ReactiveCommand.CreateFromTask(ExecutePackInstallMod, hasActiveProject);
+            PackInstallRunModCommand = ReactiveCommand.CreateFromTask(ExecutePackInstallRunMod, hasActiveProject);
+            HotInstallModCommand = ReactiveCommand.CreateFromTask(ExecuteHotInstallMod, hasActiveProject);
             //BackupModCommand = new DelegateCommand(ExecuteBackupMod, CanBackupMod);
             //PublishModCommand = new DelegateCommand(ExecutePublishMod, CanPublishMod);
 
@@ -820,6 +822,24 @@ namespace WolvenKit.ViewModels.Shell
 
         public ReactiveCommand<Unit, Unit> PackInstallModCommand { get; private set; }
         private async Task ExecutePackInstallMod() => await Task.Run(async () => await _gameControllerFactory.GetController().PackAndInstallProject());
+
+        public ReactiveCommand<Unit, Unit> PackInstallRunModCommand { get; private set; }
+        private async Task ExecutePackInstallRunMod()
+        {
+            if (await Task.Run(() => _gameControllerFactory.GetController().PackAndInstallRunProject()))
+            {
+                Process.Start(new ProcessStartInfo
+                {
+                    FileName = _settingsManager.GetRED4GameLaunchCommand(),
+                    Arguments = _settingsManager.GetRED4GameLaunchOptions() ?? "",
+                    ErrorDialog = true,
+                    UseShellExecute = true,
+                });
+            }
+        }
+
+        public ReactiveCommand<Unit, Unit> HotInstallModCommand { get; private set; }
+        private async Task ExecuteHotInstallMod() => await Task.Run(async () => await _gameControllerFactory.GetController().HotInstallProject());
 
         //public ICommand PublishModCommand { get; private set; }
         //private bool CanPublishMod() => _projectManager.ActiveProject != null;

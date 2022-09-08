@@ -64,6 +64,14 @@ namespace WolvenKit.Views.Shell
                         viewModel => viewModel.MainViewModel.PackInstallModCommand,
                         view => view.ToolbarPackInstallButton)
                     .DisposeWith(disposables);
+                this.BindCommand(ViewModel,
+                        viewModel => viewModel.MainViewModel.PackInstallRunModCommand,
+                        view => view.ToolbarInstallRunButton)
+                    .DisposeWith(disposables);
+                this.BindCommand(ViewModel,
+                        viewModel => viewModel.MainViewModel.HotInstallModCommand,
+                        view => view.ToolbarHotInstallButton)
+                    .DisposeWith(disposables);
 
                 this.BindCommand(ViewModel,
                         viewModel => viewModel.MainViewModel.LaunchGameCommand,

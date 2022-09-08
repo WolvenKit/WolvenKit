@@ -251,6 +251,37 @@ namespace WolvenKit.Functionality.Controllers
             return true;
         }
 
+        public async Task<bool> PackAndInstallRunProject()
+        {
+            _progressService.IsIndeterminate = true;
+
+            if (!await PackProjectNoBackup())
+            {
+                _progressService.IsIndeterminate = false;
+                return false;
+            }
+
+            InstallMod();
+
+            _progressService.IsIndeterminate = false;
+            return true;
+        }
+
+        public async Task<bool> HotInstallProject()
+        {
+            _progressService.IsIndeterminate = true;
+
+            if (!await PackProjectHot())
+            {
+                _progressService.IsIndeterminate = false;
+                return false;
+            }
+
+            _progressService.IsIndeterminate = false;
+
+            return true;
+        }
+
         public async Task<bool> DeployRedmod()
         {
             if (!_pluginService.IsInstalled(EPlugin.redmod))
@@ -259,7 +290,7 @@ namespace WolvenKit.Functionality.Controllers
             }
 
             // compile with redmod
-            var redmodPath = Path.Combine(_settingsManager.GetRED4GameRootDir(), "tools", "redmod", "bin", "redmod.exe");
+            var redmodPath = Path.Combine(_settingsManager.GetRED4GameRootDir(), "tools", "redmod", "bin", "redMod.exe");
             if (File.Exists(redmodPath))
             {
                 var rttiSchemaPath = Path.Combine(_settingsManager.GetRED4GameRootDir(), "tools", "redmod", "metadata.json");
@@ -411,6 +442,80 @@ namespace WolvenKit.Functionality.Controllers
             {
                 _loggerService.Error(e);
             }
+        }
+
+        public async Task<bool> PackProjectNoBackup()
+        {
+
+            if (_projectManager.ActiveProject is not Cp77Project cp77Proj)
+            {
+                _loggerService.Error("Can't pack project (no project/not cyberpunk project)!");
+                return await Task.FromResult(false);
+            }
+
+            // cleanup
+            try
+            {
+                var archives = Directory.GetFiles(cp77Proj.PackedArchiveDirectory, "*.archive");
+                foreach (var archive in archives)
+                {
+                    File.Delete(archive);
+                }
+            }
+            catch (Exception e)
+            {
+                _loggerService.Error(e);
+            }
+
+            // pack mod
+            var modfiles = Directory.GetFiles(cp77Proj.ModDirectory, "*", SearchOption.AllDirectories);
+            if (modfiles.Any())
+            {
+                _modTools.Pack(
+                    new DirectoryInfo(cp77Proj.ModDirectory),
+                    new DirectoryInfo(cp77Proj.PackedArchiveDirectory),
+                    cp77Proj.Name);
+                _loggerService.Info("Packing archives complete!");
+            }
+            _loggerService.Success($"{cp77Proj.Name} packed into {cp77Proj.PackedArchiveDirectory}");
+
+            // compile tweak files
+            CompileTweakFiles(cp77Proj);
+
+            return await Task.FromResult(true);
+        }
+
+        public async Task<bool> PackProjectHot()
+        {
+
+            if (_projectManager.ActiveProject is not Cp77Project cp77Proj)
+            {
+                _loggerService.Error("Can't pack project (no project/not cyberpunk project)!");
+                return await Task.FromResult(false);
+            }
+
+            var hotdirectory = Path.Combine(_settingsManager.GetRED4GameRootDir(), "archive", "pc", "hot");
+
+            // create hot directory
+            if (!Directory.Exists(hotdirectory))
+            {
+                Directory.CreateDirectory(hotdirectory);
+                _loggerService.Info($"Created hot directory at {hotdirectory}");
+            }
+
+            // pack mod
+            var modfiles = Directory.GetFiles(cp77Proj.ModDirectory, "*", SearchOption.AllDirectories);
+            if (modfiles.Any())
+            {
+                _modTools.Pack(
+                    new DirectoryInfo(cp77Proj.ModDirectory),
+                    new DirectoryInfo(hotdirectory),
+                    cp77Proj.Name);
+                _loggerService.Info("Hot archive installation complete!");
+            }
+            _loggerService.Success($"{cp77Proj.Name} packed into {hotdirectory}");
+
+            return await Task.FromResult(true);
         }
 
         private void CompileTweakFiles(Cp77Project cp77Proj)

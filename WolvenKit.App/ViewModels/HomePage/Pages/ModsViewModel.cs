@@ -86,7 +86,7 @@ namespace WolvenKit.ViewModels.HomePage
 
 
             // compile with redmod
-            var redmodPath = Path.Combine(_settings.GetRED4GameRootDir(), "tools", "redmod", "bin", "redmod.exe");
+            var redmodPath = Path.Combine(_settings.GetRED4GameRootDir(), "tools", "redmod", "bin", "redMod.exe");
             if (!File.Exists(redmodPath))
             {
                 _logger.Error("RedMod tools are not installed. Please go to WolvenKit plugins and install RedMod.");
