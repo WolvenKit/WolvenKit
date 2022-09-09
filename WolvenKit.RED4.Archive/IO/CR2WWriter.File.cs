@@ -204,77 +204,82 @@ namespace WolvenKit.RED4.Archive.IO
             BaseStream.WriteStruct(fileHeader);
             BaseStream.WriteStructs(tableHeaders);
 
-            //for (int i = 0; i < dataCollection.ChunkInfoList.Count; i++)
-            //{
-            //    var newInfo = dataCollection.ChunkInfoList[i];
-            //    var oldInfo = _file.Info.ExportInfo[i];
-            //
-            //    if ((newInfo.dataOffset + afterHeaderPosition) != oldInfo.dataOffset)
-            //    {
-            //
-            //    }
-            //
-            //    if (newInfo.dataSize != oldInfo.dataSize)
-            //    {
-            //
-            //    }
-            //
-            //    if (newInfo.parentID != oldInfo.parentID)
-            //    {
-            //        throw new TodoException("Invalid parent id");
-            //    }
-            //
-            //    if (newInfo.className != oldInfo.className)
-            //    {
-            //
-            //    }
-            //
-            //    if (newInfo.objectFlags != oldInfo.objectFlags)
-            //    {
-            //
-            //    }
-            //
-            //    if (newInfo.template != oldInfo.template)
-            //    {
-            //
-            //    }
-            //}
-            //
-            //for (int i = 0; i < dataCollection.BufferInfoList.Count; i++)
-            //{
-            //    var newInfo = dataCollection.BufferInfoList[i];
-            //    var oldInfo = _file.Info.BufferInfo[i];
-            //
-            //    if (newInfo.index != oldInfo.index)
-            //    {
-            //
-            //    }
-            //
-            //    if (newInfo.crc32 != oldInfo.crc32)
-            //    {
-            //
-            //    }
-            //
-            //    if (newInfo.diskSize != oldInfo.diskSize)
-            //    {
-            //
-            //    }
-            //
-            //    if (newInfo.flags != oldInfo.flags)
-            //    {
-            //
-            //    }
-            //
-            //    if (newInfo.memSize != oldInfo.memSize)
-            //    {
-            //
-            //    }
-            //
-            //    if (newInfo.offset != oldInfo.offset)
-            //    {
-            //
-            //    }
-            //}
+            // CheckData(dataCollection, afterHeaderPosition);
+        }
+
+        private void CheckData(DataCollection dataCollection, int afterHeaderPosition)
+        {
+            for (int i = 0; i < dataCollection.ChunkInfoList.Count; i++)
+            {
+                var newInfo = dataCollection.ChunkInfoList[i];
+                var oldInfo = _file.Info.ExportInfo[i];
+
+                if ((newInfo.dataOffset + afterHeaderPosition) != oldInfo.dataOffset)
+                {
+
+                }
+
+                if (newInfo.dataSize != oldInfo.dataSize)
+                {
+
+                }
+
+                if (newInfo.parentID != oldInfo.parentID)
+                {
+                    throw new TodoException("Invalid parent id");
+                }
+
+                if (newInfo.className != oldInfo.className)
+                {
+
+                }
+
+                if (newInfo.objectFlags != oldInfo.objectFlags)
+                {
+
+                }
+
+                if (newInfo.template != oldInfo.template)
+                {
+
+                }
+            }
+
+            for (int i = 0; i < dataCollection.BufferInfoList.Count; i++)
+            {
+                var newInfo = dataCollection.BufferInfoList[i];
+                var oldInfo = _file.Info.BufferInfo[i];
+
+                if (newInfo.index != oldInfo.index)
+                {
+
+                }
+
+                if (newInfo.crc32 != oldInfo.crc32)
+                {
+
+                }
+
+                if (newInfo.diskSize != oldInfo.diskSize)
+                {
+
+                }
+
+                if (newInfo.flags != oldInfo.flags)
+                {
+
+                }
+
+                if (newInfo.memSize != oldInfo.memSize)
+                {
+
+                }
+
+                if (newInfo.offset != oldInfo.offset)
+                {
+
+                }
+            }
         }
 
         #region Write Sections
