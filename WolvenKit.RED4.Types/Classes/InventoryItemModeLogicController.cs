@@ -45,6 +45,14 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(6)] 
+		[RED("outfitsFilterInfoText")] 
+		public inkTextWidgetReference OutfitsFilterInfoText
+		{
+			get => GetPropertyValue<inkTextWidgetReference>();
+			set => SetPropertyValue<inkTextWidgetReference>(value);
+		}
+
+		[Ordinal(7)] 
 		[RED("itemGridContainer")] 
 		public inkWidgetReference ItemGridContainer
 		{
@@ -52,7 +60,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(7)] 
+		[Ordinal(8)] 
 		[RED("cyberwareGridContainer")] 
 		public inkWidgetReference CyberwareGridContainer
 		{
@@ -60,7 +68,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(8)] 
+		[Ordinal(9)] 
 		[RED("itemGridScrollControllerWidget")] 
 		public inkWidgetReference ItemGridScrollControllerWidget
 		{
@@ -68,7 +76,23 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(9)] 
+		[Ordinal(10)] 
+		[RED("wardrobeSlotsContainer")] 
+		public inkWidgetReference WardrobeSlotsContainer
+		{
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
+		}
+
+		[Ordinal(11)] 
+		[RED("wardrobeSlotsLabel")] 
+		public inkTextWidgetReference WardrobeSlotsLabel
+		{
+			get => GetPropertyValue<inkTextWidgetReference>();
+			set => SetPropertyValue<inkTextWidgetReference>(value);
+		}
+
+		[Ordinal(12)] 
 		[RED("buttonHintsController")] 
 		public CWeakHandle<ButtonHints> ButtonHintsController
 		{
@@ -76,7 +100,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<ButtonHints>>(value);
 		}
 
-		[Ordinal(10)] 
+		[Ordinal(13)] 
 		[RED("TooltipsManager")] 
 		public CWeakHandle<gameuiTooltipsManager> TooltipsManager
 		{
@@ -84,7 +108,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<gameuiTooltipsManager>>(value);
 		}
 
-		[Ordinal(11)] 
+		[Ordinal(14)] 
 		[RED("InventoryManager")] 
 		public CHandle<InventoryDataManagerV2> InventoryManager
 		{
@@ -92,7 +116,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<InventoryDataManagerV2>>(value);
 		}
 
-		[Ordinal(12)] 
+		[Ordinal(15)] 
 		[RED("player")] 
 		public CWeakHandle<PlayerPuppet> Player
 		{
@@ -100,7 +124,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<PlayerPuppet>>(value);
 		}
 
-		[Ordinal(13)] 
+		[Ordinal(16)] 
 		[RED("equipmentSystem")] 
 		public CWeakHandle<EquipmentSystem> EquipmentSystem
 		{
@@ -108,7 +132,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<EquipmentSystem>>(value);
 		}
 
-		[Ordinal(14)] 
+		[Ordinal(17)] 
 		[RED("transactionSystem")] 
 		public CWeakHandle<gameTransactionSystem> TransactionSystem
 		{
@@ -116,7 +140,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<gameTransactionSystem>>(value);
 		}
 
-		[Ordinal(15)] 
+		[Ordinal(18)] 
 		[RED("uiScriptableSystem")] 
 		public CWeakHandle<UIScriptableSystem> UiScriptableSystem
 		{
@@ -124,7 +148,15 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<UIScriptableSystem>>(value);
 		}
 
-		[Ordinal(16)] 
+		[Ordinal(19)] 
+		[RED("wardrobeSystem")] 
+		public CWeakHandle<gameWardrobeSystem> WardrobeSystem
+		{
+			get => GetPropertyValue<CWeakHandle<gameWardrobeSystem>>();
+			set => SetPropertyValue<CWeakHandle<gameWardrobeSystem>>(value);
+		}
+
+		[Ordinal(20)] 
 		[RED("itemChooser")] 
 		public CWeakHandle<InventoryGenericItemChooser> ItemChooser
 		{
@@ -132,7 +164,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<InventoryGenericItemChooser>>(value);
 		}
 
-		[Ordinal(17)] 
+		[Ordinal(21)] 
 		[RED("lastEquipmentAreas")] 
 		public CArray<CEnum<gamedataEquipmentArea>> LastEquipmentAreas
 		{
@@ -140,7 +172,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<CEnum<gamedataEquipmentArea>>>(value);
 		}
 
-		[Ordinal(18)] 
+		[Ordinal(22)] 
 		[RED("currentHotkey")] 
 		public CEnum<gameEHotkey> CurrentHotkey
 		{
@@ -148,7 +180,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CEnum<gameEHotkey>>(value);
 		}
 
-		[Ordinal(19)] 
+		[Ordinal(23)] 
 		[RED("inventoryController")] 
 		public CWeakHandle<gameuiInventoryGameController> InventoryController
 		{
@@ -156,7 +188,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<gameuiInventoryGameController>>(value);
 		}
 
-		[Ordinal(20)] 
+		[Ordinal(24)] 
 		[RED("itemsPositionProvider")] 
 		public CHandle<ItemPositionProvider> ItemsPositionProvider
 		{
@@ -164,7 +196,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<ItemPositionProvider>>(value);
 		}
 
-		[Ordinal(21)] 
+		[Ordinal(25)] 
 		[RED("equipmentBlackboard")] 
 		public CWeakHandle<gameIBlackboard> EquipmentBlackboard
 		{
@@ -172,7 +204,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<gameIBlackboard>>(value);
 		}
 
-		[Ordinal(22)] 
+		[Ordinal(26)] 
 		[RED("itemModsBlackboard")] 
 		public CWeakHandle<gameIBlackboard> ItemModsBlackboard
 		{
@@ -180,7 +212,15 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<gameIBlackboard>>(value);
 		}
 
-		[Ordinal(23)] 
+		[Ordinal(27)] 
+		[RED("disassembleBlackboard")] 
+		public CWeakHandle<gameIBlackboard> DisassembleBlackboard
+		{
+			get => GetPropertyValue<CWeakHandle<gameIBlackboard>>();
+			set => SetPropertyValue<CWeakHandle<gameIBlackboard>>(value);
+		}
+
+		[Ordinal(28)] 
 		[RED("equipmentBlackboardCallback")] 
 		public CHandle<redCallbackObject> EquipmentBlackboardCallback
 		{
@@ -188,7 +228,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
-		[Ordinal(24)] 
+		[Ordinal(29)] 
 		[RED("itemModsBlackboardCallback")] 
 		public CHandle<redCallbackObject> ItemModsBlackboardCallback
 		{
@@ -196,7 +236,23 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
-		[Ordinal(25)] 
+		[Ordinal(30)] 
+		[RED("disassembleBlackboardCallback")] 
+		public CHandle<redCallbackObject> DisassembleBlackboardCallback
+		{
+			get => GetPropertyValue<CHandle<redCallbackObject>>();
+			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
+		}
+
+		[Ordinal(31)] 
+		[RED("equipmentInProgressCallback")] 
+		public CHandle<redCallbackObject> EquipmentInProgressCallback
+		{
+			get => GetPropertyValue<CHandle<redCallbackObject>>();
+			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
+		}
+
+		[Ordinal(32)] 
 		[RED("itemGridClassifier")] 
 		public CHandle<ItemModeGridClassifier> ItemGridClassifier
 		{
@@ -204,7 +260,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<ItemModeGridClassifier>>(value);
 		}
 
-		[Ordinal(26)] 
+		[Ordinal(33)] 
 		[RED("itemGridDataView")] 
 		public CHandle<ItemModeGridView> ItemGridDataView
 		{
@@ -212,7 +268,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<ItemModeGridView>>(value);
 		}
 
-		[Ordinal(27)] 
+		[Ordinal(34)] 
 		[RED("itemGridDataSource")] 
 		public CHandle<inkScriptableDataSourceWrapper> ItemGridDataSource
 		{
@@ -220,7 +276,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<inkScriptableDataSourceWrapper>>(value);
 		}
 
-		[Ordinal(28)] 
+		[Ordinal(35)] 
 		[RED("activeFilter")] 
 		public CWeakHandle<BackpackFilterButtonController> ActiveFilter
 		{
@@ -228,7 +284,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<BackpackFilterButtonController>>(value);
 		}
 
-		[Ordinal(29)] 
+		[Ordinal(36)] 
 		[RED("filterManager")] 
 		public CHandle<ItemCategoryFliterManager> FilterManager
 		{
@@ -236,7 +292,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<ItemCategoryFliterManager>>(value);
 		}
 
-		[Ordinal(30)] 
+		[Ordinal(37)] 
 		[RED("savedFilter")] 
 		public CEnum<ItemFilterCategory> SavedFilter
 		{
@@ -244,7 +300,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CEnum<ItemFilterCategory>>(value);
 		}
 
-		[Ordinal(31)] 
+		[Ordinal(38)] 
 		[RED("lastSelectedDisplay")] 
 		public CWeakHandle<InventoryItemDisplayController> LastSelectedDisplay
 		{
@@ -252,7 +308,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<InventoryItemDisplayController>>(value);
 		}
 
-		[Ordinal(32)] 
+		[Ordinal(39)] 
 		[RED("itemModeInventoryListenerCallback")] 
 		public CHandle<ItemModeInventoryListenerCallback> ItemModeInventoryListenerCallback
 		{
@@ -260,7 +316,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<ItemModeInventoryListenerCallback>>(value);
 		}
 
-		[Ordinal(33)] 
+		[Ordinal(40)] 
 		[RED("itemModeInventoryListener")] 
 		public CHandle<gameInventoryScriptListener> ItemModeInventoryListener
 		{
@@ -268,7 +324,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<gameInventoryScriptListener>>(value);
 		}
 
-		[Ordinal(34)] 
+		[Ordinal(41)] 
 		[RED("itemModeInventoryListenerRegistered")] 
 		public CBool ItemModeInventoryListenerRegistered
 		{
@@ -276,7 +332,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(35)] 
+		[Ordinal(42)] 
 		[RED("itemGridContainerController")] 
 		public CWeakHandle<ItemModeGridContainer> ItemGridContainerController
 		{
@@ -284,7 +340,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<ItemModeGridContainer>>(value);
 		}
 
-		[Ordinal(36)] 
+		[Ordinal(43)] 
 		[RED("cyberwareGridContainerController")] 
 		public CWeakHandle<ItemModeGridContainer> CyberwareGridContainerController
 		{
@@ -292,7 +348,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<ItemModeGridContainer>>(value);
 		}
 
-		[Ordinal(37)] 
+		[Ordinal(44)] 
 		[RED("comparisonResolver")] 
 		public CHandle<ItemPreferredComparisonResolver> ComparisonResolver
 		{
@@ -300,7 +356,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<ItemPreferredComparisonResolver>>(value);
 		}
 
-		[Ordinal(38)] 
+		[Ordinal(45)] 
 		[RED("isE3Demo")] 
 		public CBool IsE3Demo
 		{
@@ -308,7 +364,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(39)] 
+		[Ordinal(46)] 
 		[RED("isShown")] 
 		public CBool IsShown
 		{
@@ -316,7 +372,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(40)] 
+		[Ordinal(47)] 
 		[RED("itemDropQueue")] 
 		public CArray<gameItemModParams> ItemDropQueue
 		{
@@ -324,7 +380,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<gameItemModParams>>(value);
 		}
 
-		[Ordinal(41)] 
+		[Ordinal(48)] 
 		[RED("confirmationPopupToken")] 
 		public CHandle<inkGameNotificationToken> ConfirmationPopupToken
 		{
@@ -332,7 +388,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<inkGameNotificationToken>>(value);
 		}
 
-		[Ordinal(42)] 
+		[Ordinal(49)] 
 		[RED("lastItemHoverOverEvent")] 
 		public CHandle<ItemDisplayHoverOverEvent> LastItemHoverOverEvent
 		{
@@ -340,7 +396,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<ItemDisplayHoverOverEvent>>(value);
 		}
 
-		[Ordinal(43)] 
+		[Ordinal(50)] 
 		[RED("isComparisionDisabled")] 
 		public CBool IsComparisionDisabled
 		{
@@ -348,7 +404,55 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(44)] 
+		[Ordinal(51)] 
+		[RED("outfitWardrobeSpawned")] 
+		public CBool OutfitWardrobeSpawned
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(52)] 
+		[RED("wardrobeOutfitSlotControllers")] 
+		public CArray<CWeakHandle<WardrobeOutfitSlotController>> WardrobeOutfitSlotControllers
+		{
+			get => GetPropertyValue<CArray<CWeakHandle<WardrobeOutfitSlotController>>>();
+			set => SetPropertyValue<CArray<CWeakHandle<WardrobeOutfitSlotController>>>(value);
+		}
+
+		[Ordinal(53)] 
+		[RED("delayedItemEquippedRequested")] 
+		public CBool DelayedItemEquippedRequested
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(54)] 
+		[RED("delaySystem")] 
+		public CWeakHandle<gameDelaySystem> DelaySystem
+		{
+			get => GetPropertyValue<CWeakHandle<gameDelaySystem>>();
+			set => SetPropertyValue<CWeakHandle<gameDelaySystem>>(value);
+		}
+
+		[Ordinal(55)] 
+		[RED("delayedTimeoutCallbackId")] 
+		public gameDelayID DelayedTimeoutCallbackId
+		{
+			get => GetPropertyValue<gameDelayID>();
+			set => SetPropertyValue<gameDelayID>(value);
+		}
+
+		[Ordinal(56)] 
+		[RED("timeoutPeroid")] 
+		public CFloat TimeoutPeroid
+		{
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
+		}
+
+		[Ordinal(57)] 
 		[RED("replaceModNotification")] 
 		public CHandle<inkGameNotificationToken> ReplaceModNotification
 		{
@@ -356,7 +460,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<inkGameNotificationToken>>(value);
 		}
 
-		[Ordinal(45)] 
+		[Ordinal(58)] 
 		[RED("installModData")] 
 		public CHandle<InstallModConfirmationData> InstallModData
 		{
@@ -364,7 +468,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<InstallModConfirmationData>>(value);
 		}
 
-		[Ordinal(46)] 
+		[Ordinal(59)] 
 		[RED("HACK_lastItemDisplayEvent")] 
 		public CHandle<ItemDisplayClickEvent> HACK_lastItemDisplayEvent
 		{
@@ -379,12 +483,18 @@ namespace WolvenKit.RED4.Types
 			MainWrapper = new();
 			EmptyInventoryText = new();
 			FilterButtonsGrid = new();
+			OutfitsFilterInfoText = new();
 			ItemGridContainer = new();
 			CyberwareGridContainer = new();
 			ItemGridScrollControllerWidget = new();
+			WardrobeSlotsContainer = new();
+			WardrobeSlotsLabel = new();
 			LastEquipmentAreas = new();
 			CurrentHotkey = Enums.gameEHotkey.INVALID;
 			ItemDropQueue = new();
+			WardrobeOutfitSlotControllers = new();
+			DelayedTimeoutCallbackId = new();
+			TimeoutPeroid = 0.500000F;
 
 			PostConstruct();
 		}

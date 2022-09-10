@@ -1,11 +1,11 @@
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class gamedataGameplayRestrictionStatusEffect_Record
+	public partial class gamedataItemObjectToCheck_Record
 	{
-		[RED("actionRestriction")]
+		[RED("item")]
 		[REDProperty(IsIgnored = true)]
-		public TweakDBID ActionRestriction
+		public TweakDBID Item
 		{
 			get => GetPropertyValue<TweakDBID>();
 			set => SetPropertyValue<TweakDBID>(value);

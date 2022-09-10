@@ -165,6 +165,14 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(20)] 
+		[RED("ownerGlobalTimeDilation")] 
+		public gamebbScriptID_Float OwnerGlobalTimeDilation
+		{
+			get => GetPropertyValue<gamebbScriptID_Float>();
+			set => SetPropertyValue<gamebbScriptID_Float>(value);
+		}
+
+		[Ordinal(21)] 
 		[RED("operationHasBeenProcessed")] 
 		public gamebbScriptID_Bool OperationHasBeenProcessed
 		{
@@ -172,7 +180,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gamebbScriptID_Bool>(value);
 		}
 
-		[Ordinal(21)] 
+		[Ordinal(22)] 
 		[RED("weaponTrailInitialised")] 
 		public gamebbScriptID_Bool WeaponTrailInitialised
 		{
@@ -180,7 +188,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gamebbScriptID_Bool>(value);
 		}
 
-		[Ordinal(22)] 
+		[Ordinal(23)] 
 		[RED("weaponTrailAborted")] 
 		public gamebbScriptID_Bool WeaponTrailAborted
 		{
@@ -188,7 +196,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gamebbScriptID_Bool>(value);
 		}
 
-		[Ordinal(23)] 
+		[Ordinal(24)] 
 		[RED("netrunner")] 
 		public gamebbScriptID_Variant Netrunner
 		{
@@ -196,7 +204,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gamebbScriptID_Variant>(value);
 		}
 
-		[Ordinal(24)] 
+		[Ordinal(25)] 
 		[RED("netrunnerProxy")] 
 		public gamebbScriptID_Variant NetrunnerProxy
 		{
@@ -204,7 +212,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gamebbScriptID_Variant>(value);
 		}
 
-		[Ordinal(25)] 
+		[Ordinal(26)] 
 		[RED("netrunnerTarget")] 
 		public gamebbScriptID_Variant NetrunnerTarget
 		{
@@ -212,7 +220,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gamebbScriptID_Variant>(value);
 		}
 
-		[Ordinal(26)] 
+		[Ordinal(27)] 
 		[RED("ignoreInCombatMoveCommand")] 
 		public gamebbScriptID_Bool IgnoreInCombatMoveCommand
 		{
@@ -220,7 +228,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gamebbScriptID_Bool>(value);
 		}
 
-		[Ordinal(27)] 
+		[Ordinal(28)] 
 		[RED("avoidLOSTimeStamp")] 
 		public gamebbScriptID_Float AvoidLOSTimeStamp
 		{
@@ -228,7 +236,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gamebbScriptID_Float>(value);
 		}
 
-		[Ordinal(28)] 
+		[Ordinal(29)] 
 		[RED("attackBlocked")] 
 		public gamebbScriptID_Bool AttackBlocked
 		{
@@ -236,7 +244,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<gamebbScriptID_Bool>(value);
 		}
 
-		[Ordinal(29)] 
+		[Ordinal(30)] 
 		[RED("attackParried")] 
 		public gamebbScriptID_Bool AttackParried
 		{
@@ -266,6 +274,7 @@ namespace WolvenKit.RED4.Types
 			DropItemOnUnequip = new();
 			ArchetypeEffectorsApplied = new();
 			OwnerTimeDilation = new();
+			OwnerGlobalTimeDilation = new();
 			OperationHasBeenProcessed = new();
 			WeaponTrailInitialised = new();
 			WeaponTrailAborted = new();

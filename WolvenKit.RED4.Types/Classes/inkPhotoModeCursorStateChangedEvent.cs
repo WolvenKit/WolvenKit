@@ -12,6 +12,14 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
+		[Ordinal(1)] 
+		[RED("keepCursorPosition")] 
+		public CBool KeepCursorPosition
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
 		public inkPhotoModeCursorStateChangedEvent()
 		{
 			PostConstruct();

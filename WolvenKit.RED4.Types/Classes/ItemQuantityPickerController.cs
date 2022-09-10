@@ -166,13 +166,21 @@ namespace WolvenKit.RED4.Types
 
 		[Ordinal(22)] 
 		[RED("gameData")] 
-		public InventoryItemData GameData
+		public gameInventoryItemData GameData
 		{
-			get => GetPropertyValue<InventoryItemData>();
-			set => SetPropertyValue<InventoryItemData>(value);
+			get => GetPropertyValue<gameInventoryItemData>();
+			set => SetPropertyValue<gameInventoryItemData>(value);
 		}
 
 		[Ordinal(23)] 
+		[RED("inventoryItem")] 
+		public CWeakHandle<UIInventoryItem> InventoryItem
+		{
+			get => GetPropertyValue<CWeakHandle<UIInventoryItem>>();
+			set => SetPropertyValue<CWeakHandle<UIInventoryItem>>(value);
+		}
+
+		[Ordinal(24)] 
 		[RED("actionType")] 
 		public CEnum<QuantityPickerActionType> ActionType
 		{
@@ -180,7 +188,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CEnum<QuantityPickerActionType>>(value);
 		}
 
-		[Ordinal(24)] 
+		[Ordinal(25)] 
 		[RED("sliderController")] 
 		public CWeakHandle<inkSliderController> SliderController
 		{
@@ -188,7 +196,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<inkSliderController>>(value);
 		}
 
-		[Ordinal(25)] 
+		[Ordinal(26)] 
 		[RED("choosenQuantity")] 
 		public CInt32 ChoosenQuantity
 		{
@@ -196,7 +204,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CInt32>(value);
 		}
 
-		[Ordinal(26)] 
+		[Ordinal(27)] 
 		[RED("itemPrice")] 
 		public CInt32 ItemPrice
 		{
@@ -204,7 +212,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CInt32>(value);
 		}
 
-		[Ordinal(27)] 
+		[Ordinal(28)] 
 		[RED("itemWeight")] 
 		public CFloat ItemWeight
 		{
@@ -212,7 +220,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(28)] 
+		[Ordinal(29)] 
 		[RED("isBuyback")] 
 		public CBool IsBuyback
 		{
@@ -220,7 +228,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(29)] 
+		[Ordinal(30)] 
 		[RED("sendQuantityChangedEvent")] 
 		public CBool SendQuantityChangedEvent
 		{
@@ -228,7 +236,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(30)] 
+		[Ordinal(31)] 
 		[RED("data")] 
 		public CHandle<QuantityPickerPopupData> Data
 		{
@@ -236,7 +244,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<QuantityPickerPopupData>>(value);
 		}
 
-		[Ordinal(31)] 
+		[Ordinal(32)] 
 		[RED("isNegativeHovered")] 
 		public CBool IsNegativeHovered
 		{
@@ -244,7 +252,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(32)] 
+		[Ordinal(33)] 
 		[RED("quantityChangedEvent")] 
 		public CHandle<PickerChoosenQuantityChangedEvent> QuantityChangedEvent
 		{
@@ -252,7 +260,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<PickerChoosenQuantityChangedEvent>>(value);
 		}
 
-		[Ordinal(33)] 
+		[Ordinal(34)] 
 		[RED("closeData")] 
 		public CHandle<QuantityPickerPopupCloseData> CloseData
 		{
@@ -281,7 +289,7 @@ namespace WolvenKit.RED4.Types
 			ButtonLess = new();
 			ButtonMore = new();
 			LibraryPath = new() { WidgetLibrary = new() };
-			GameData = new() { Empty = true, ID = new(), DamageType = Enums.gamedataDamageType.Invalid, EquipmentArea = Enums.gamedataEquipmentArea.Invalid, ComparedQuality = Enums.gamedataQuality.Invalid, IsAvailable = true, PositionInBackpack = 4294967295, IsRequirementMet = true, IsEquippable = true, Requirement = new() { StatType = Enums.gamedataStatType.Invalid }, EquipRequirement = new() { StatType = Enums.gamedataStatType.Invalid }, EquipRequirements = new(), Attachments = new(), Abilities = new(), PlacementSlots = new(), PrimaryStats = new(), SecondaryStats = new(), SortData = new() };
+			GameData = new() { ID = new(), DamageType = Enums.gamedataDamageType.Invalid, EquipmentArea = Enums.gamedataEquipmentArea.Invalid, ComparedQuality = Enums.gamedataQuality.Invalid, Empty = true, IsAvailable = true, PositionInBackpack = 4294967295, IsRequirementMet = true, IsEquippable = true, Requirement = new() { StatType = Enums.gamedataStatType.Invalid }, EquipRequirement = new() { StatType = Enums.gamedataStatType.Invalid }, EquipRequirements = new(), Attachments = new(), Abilities = new(), PlacementSlots = new(), PrimaryStats = new(), SecondaryStats = new(), SortData = new() };
 
 			PostConstruct();
 		}

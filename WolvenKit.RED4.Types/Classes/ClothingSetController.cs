@@ -5,34 +5,80 @@ namespace WolvenKit.RED4.Types
 	public partial class ClothingSetController : BaseButtonView
 	{
 		[Ordinal(2)] 
-		[RED("setEmptyIcon")] 
-		public inkImageWidgetReference SetEmptyIcon
+		[RED("setName")] 
+		public inkTextWidgetReference SetName
 		{
-			get => GetPropertyValue<inkImageWidgetReference>();
-			set => SetPropertyValue<inkImageWidgetReference>(value);
+			get => GetPropertyValue<inkTextWidgetReference>();
+			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
 		[Ordinal(3)] 
-		[RED("setIcon")] 
-		public inkImageWidgetReference SetIcon
+		[RED("clothingSet")] 
+		public CHandle<gameClothingSet> ClothingSet
 		{
-			get => GetPropertyValue<inkImageWidgetReference>();
-			set => SetPropertyValue<inkImageWidgetReference>(value);
+			get => GetPropertyValue<CHandle<gameClothingSet>>();
+			set => SetPropertyValue<CHandle<gameClothingSet>>(value);
 		}
 
 		[Ordinal(4)] 
-		[RED("ClothingSet")] 
-		public ClothingSet ClothingSet
+		[RED("equipped")] 
+		public CBool Equipped
 		{
-			get => GetPropertyValue<ClothingSet>();
-			set => SetPropertyValue<ClothingSet>(value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(5)] 
+		[RED("selected")] 
+		public CBool Selected
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(6)] 
+		[RED("defined")] 
+		public CBool Defined
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(7)] 
+		[RED("isHovered")] 
+		public CBool IsHovered
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(8)] 
+		[RED("hasChanges")] 
+		public CBool HasChanges
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(9)] 
+		[RED("disabled")] 
+		public CBool Disabled
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(10)] 
+		[RED("styleWidget")] 
+		public CWeakHandle<inkWidget> StyleWidget
+		{
+			get => GetPropertyValue<CWeakHandle<inkWidget>>();
+			set => SetPropertyValue<CWeakHandle<inkWidget>>(value);
 		}
 
 		public ClothingSetController()
 		{
-			SetEmptyIcon = new();
-			SetIcon = new();
-			ClothingSet = new() { SetID = -1, ClothingList = new() };
+			SetName = new();
 
 			PostConstruct();
 		}

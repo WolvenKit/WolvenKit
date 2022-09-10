@@ -100,6 +100,14 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<inkWidget>>(value);
 		}
 
+		[Ordinal(13)] 
+		[RED("inputDisabled")] 
+		public CBool InputDisabled
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
 		public characterCreationVoiceOverSwitcher()
 		{
 			SelectedLabel = new();

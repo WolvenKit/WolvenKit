@@ -381,6 +381,14 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(49)] 
+		[RED("scenarioEvt")] 
+		public CHandle<TimeSkipFinishEvent> ScenarioEvt
+		{
+			get => GetPropertyValue<CHandle<TimeSkipFinishEvent>>();
+			set => SetPropertyValue<CHandle<TimeSkipFinishEvent>>(value);
+		}
+
+		[Ordinal(50)] 
 		[RED("hoveredOver")] 
 		public CBool HoveredOver
 		{

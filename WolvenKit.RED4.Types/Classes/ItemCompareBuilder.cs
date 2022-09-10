@@ -6,18 +6,18 @@ namespace WolvenKit.RED4.Types
 	{
 		[Ordinal(0)] 
 		[RED("sortData1")] 
-		public InventoryItemSortData SortData1
+		public gameInventoryItemSortData SortData1
 		{
-			get => GetPropertyValue<InventoryItemSortData>();
-			set => SetPropertyValue<InventoryItemSortData>(value);
+			get => GetPropertyValue<gameInventoryItemSortData>();
+			set => SetPropertyValue<gameInventoryItemSortData>(value);
 		}
 
 		[Ordinal(1)] 
 		[RED("sortData2")] 
-		public InventoryItemSortData SortData2
+		public gameInventoryItemSortData SortData2
 		{
-			get => GetPropertyValue<InventoryItemSortData>();
-			set => SetPropertyValue<InventoryItemSortData>(value);
+			get => GetPropertyValue<gameInventoryItemSortData>();
+			set => SetPropertyValue<gameInventoryItemSortData>(value);
 		}
 
 		[Ordinal(2)] 

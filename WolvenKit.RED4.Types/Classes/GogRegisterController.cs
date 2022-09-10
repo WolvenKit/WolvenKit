@@ -20,10 +20,19 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
+		[Ordinal(3)] 
+		[RED("textDescription")] 
+		public inkTextWidgetReference TextDescription
+		{
+			get => GetPropertyValue<inkTextWidgetReference>();
+			set => SetPropertyValue<inkTextWidgetReference>(value);
+		}
+
 		public GogRegisterController()
 		{
 			LinkWidget = new();
 			QrImageWidget = new();
+			TextDescription = new();
 
 			PostConstruct();
 		}

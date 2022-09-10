@@ -147,6 +147,14 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<TweakDBID>(value);
 		}
 		
+		[RED("fxWheelsDecalsFrontOverride")]
+		[REDProperty(IsIgnored = true)]
+		public TweakDBID FxWheelsDecalsFrontOverride
+		{
+			get => GetPropertyValue<TweakDBID>();
+			set => SetPropertyValue<TweakDBID>(value);
+		}
+		
 		[RED("fxWheelsParticles")]
 		[REDProperty(IsIgnored = true)]
 		public TweakDBID FxWheelsParticles
@@ -369,6 +377,14 @@ namespace WolvenKit.RED4.Types
 		{
 			get => GetPropertyValue<Vector3>();
 			set => SetPropertyValue<Vector3>(value);
+		}
+		
+		[RED("utilityLightColor")]
+		[REDProperty(IsIgnored = true)]
+		public CArray<CInt32> UtilityLightColor
+		{
+			get => GetPropertyValue<CArray<CInt32>>();
+			set => SetPropertyValue<CArray<CInt32>>(value);
 		}
 		
 		[RED("vehAirControl")]

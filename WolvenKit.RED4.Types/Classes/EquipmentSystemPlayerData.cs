@@ -54,53 +54,37 @@ namespace WolvenKit.RED4.Types
 
 		[Ordinal(6)] 
 		[RED("clothingVisualsInfo")] 
-		public CArray<SSlotVisualInfo> ClothingVisualsInfo
+		public CArray<gameSSlotVisualInfo> ClothingVisualsInfo
 		{
-			get => GetPropertyValue<CArray<SSlotVisualInfo>>();
-			set => SetPropertyValue<CArray<SSlotVisualInfo>>(value);
+			get => GetPropertyValue<CArray<gameSSlotVisualInfo>>();
+			set => SetPropertyValue<CArray<gameSSlotVisualInfo>>(value);
 		}
 
 		[Ordinal(7)] 
-		[RED("wardrobeSets")] 
-		public CArray<ClothingSet> WardrobeSets
+		[RED("visualUnequipTransition")] 
+		public CBool VisualUnequipTransition
 		{
-			get => GetPropertyValue<CArray<ClothingSet>>();
-			set => SetPropertyValue<CArray<ClothingSet>>(value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(8)] 
-		[RED("activeWardrobeSet")] 
-		public CInt32 ActiveWardrobeSet
+		[RED("wardrobeDisabled")] 
+		public CBool WardrobeDisabled
 		{
-			get => GetPropertyValue<CInt32>();
-			set => SetPropertyValue<CInt32>(value);
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
 		}
 
 		[Ordinal(9)] 
-		[RED("isPartialVisualTagActive")] 
-		public CBool IsPartialVisualTagActive
+		[RED("lastActiveWardrobeSet")] 
+		public CEnum<gameWardrobeClothingSetIndex> LastActiveWardrobeSet
 		{
-			get => GetPropertyValue<CBool>();
-			set => SetPropertyValue<CBool>(value);
+			get => GetPropertyValue<CEnum<gameWardrobeClothingSetIndex>>();
+			set => SetPropertyValue<CEnum<gameWardrobeClothingSetIndex>>(value);
 		}
 
 		[Ordinal(10)] 
-		[RED("isHeadSlotHidden")] 
-		public CBool IsHeadSlotHidden
-		{
-			get => GetPropertyValue<CBool>();
-			set => SetPropertyValue<CBool>(value);
-		}
-
-		[Ordinal(11)] 
-		[RED("isFaceSlotHidden")] 
-		public CBool IsFaceSlotHidden
-		{
-			get => GetPropertyValue<CBool>();
-			set => SetPropertyValue<CBool>(value);
-		}
-
-		[Ordinal(12)] 
 		[RED("visualTagProcessingInfo")] 
 		public CArray<gameSVisualTagProcessing> VisualTagProcessingInfo
 		{
@@ -108,7 +92,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<gameSVisualTagProcessing>>(value);
 		}
 
-		[Ordinal(13)] 
+		[Ordinal(11)] 
 		[RED("eventsSent")] 
 		public CInt32 EventsSent
 		{
@@ -116,7 +100,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CInt32>(value);
 		}
 
-		[Ordinal(14)] 
+		[Ordinal(12)] 
 		[RED("hotkeys")] 
 		public CArray<CHandle<Hotkey>> Hotkeys
 		{
@@ -124,12 +108,36 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<CHandle<Hotkey>>>(value);
 		}
 
-		[Ordinal(15)] 
+		[Ordinal(13)] 
 		[RED("inventoryManager")] 
 		public CHandle<InventoryDataManagerV2> InventoryManager
 		{
 			get => GetPropertyValue<CHandle<InventoryDataManagerV2>>();
 			set => SetPropertyValue<CHandle<InventoryDataManagerV2>>(value);
+		}
+
+		[Ordinal(14)] 
+		[RED("wardrobeSystem")] 
+		public CHandle<gameWardrobeSystem> WardrobeSystem
+		{
+			get => GetPropertyValue<CHandle<gameWardrobeSystem>>();
+			set => SetPropertyValue<CHandle<gameWardrobeSystem>>(value);
+		}
+
+		[Ordinal(15)] 
+		[RED("equipPending")] 
+		public CBool EquipPending
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(16)] 
+		[RED("equipAreaIndexCache")] 
+		public CArray<CInt32> EquipAreaIndexCache
+		{
+			get => GetPropertyValue<CArray<CInt32>>();
+			set => SetPropertyValue<CArray<CInt32>>(value);
 		}
 
 		public EquipmentSystemPlayerData()
@@ -140,10 +148,10 @@ namespace WolvenKit.RED4.Types
 			SlotActiveItemsInHands = new() { RightHandItem = new(), LeftHandItem = new() };
 			ClothingSlotsInfo = new();
 			ClothingVisualsInfo = new();
-			WardrobeSets = new();
-			ActiveWardrobeSet = -1;
+			LastActiveWardrobeSet = Enums.gameWardrobeClothingSetIndex.INVALID;
 			VisualTagProcessingInfo = new();
 			Hotkeys = new();
+			EquipAreaIndexCache = new();
 
 			PostConstruct();
 		}

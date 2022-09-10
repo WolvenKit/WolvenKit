@@ -52,6 +52,14 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
+		[Ordinal(6)] 
+		[RED("isTargetPuppetHead")] 
+		public CBool IsTargetPuppetHead
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
 		public gameaudioeventsHitEvent()
 		{
 			AttackType = Enums.gamedataAttackType.Direct;

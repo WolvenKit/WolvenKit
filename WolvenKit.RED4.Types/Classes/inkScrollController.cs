@@ -85,6 +85,22 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(11)] 
+		[RED("desiredSetupPosition")] 
+		public CFloat DesiredSetupPosition
+		{
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
+		}
+
+		[Ordinal(12)] 
+		[RED("contentSmallerThanViewport")] 
+		public CBool ContentSmallerThanViewport
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(13)] 
 		[RED("scrollDelta")] 
 		public CFloat ScrollDelta
 		{
@@ -92,7 +108,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(12)] 
+		[Ordinal(14)] 
 		[RED("viewportSize")] 
 		public Vector2 ViewportSize
 		{
@@ -100,7 +116,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<Vector2>(value);
 		}
 
-		[Ordinal(13)] 
+		[Ordinal(15)] 
 		[RED("contentSize")] 
 		public Vector2 ContentSize
 		{
@@ -117,6 +133,7 @@ namespace WolvenKit.RED4.Types
 			AutoHideVertical = true;
 			ScrollSpeedGamepad = 75.000000F;
 			ScrollSpeedMouse = 75.000000F;
+			ContentSmallerThanViewport = true;
 			ViewportSize = new();
 			ContentSize = new();
 

@@ -6,24 +6,22 @@ namespace WolvenKit.RED4.Types
 	{
 		[Ordinal(7)] 
 		[RED("item")] 
-		public InventoryItemData Item
+		public CWeakHandle<UIInventoryItem> Item
 		{
-			get => GetPropertyValue<InventoryItemData>();
-			set => SetPropertyValue<InventoryItemData>(value);
+			get => GetPropertyValue<CWeakHandle<UIInventoryItem>>();
+			set => SetPropertyValue<CWeakHandle<UIInventoryItem>>(value);
 		}
 
 		[Ordinal(8)] 
-		[RED("inventoryManager")] 
-		public CHandle<InventoryDataManagerV2> InventoryManager
+		[RED("inventoryScriptableSystem")] 
+		public CHandle<UIInventoryScriptableSystem> InventoryScriptableSystem
 		{
-			get => GetPropertyValue<CHandle<InventoryDataManagerV2>>();
-			set => SetPropertyValue<CHandle<InventoryDataManagerV2>>(value);
+			get => GetPropertyValue<CHandle<UIInventoryScriptableSystem>>();
+			set => SetPropertyValue<CHandle<UIInventoryScriptableSystem>>(value);
 		}
 
 		public BackpackEquipSlotChooserData()
 		{
-			Item = new() { Empty = true, ID = new(), DamageType = Enums.gamedataDamageType.Invalid, EquipmentArea = Enums.gamedataEquipmentArea.Invalid, ComparedQuality = Enums.gamedataQuality.Invalid, IsAvailable = true, PositionInBackpack = 4294967295, IsRequirementMet = true, IsEquippable = true, Requirement = new() { StatType = Enums.gamedataStatType.Invalid }, EquipRequirement = new() { StatType = Enums.gamedataStatType.Invalid }, EquipRequirements = new(), Attachments = new(), Abilities = new(), PlacementSlots = new(), PrimaryStats = new(), SecondaryStats = new(), SortData = new() };
-
 			PostConstruct();
 		}
 

@@ -12,6 +12,14 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<gameIBlackboard>>(value);
 		}
 
+		[Ordinal(1)] 
+		[RED("CYBMETA1695")] 
+		public CBool CYBMETA1695
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
 		public ItemModificationSystem()
 		{
 			PostConstruct();

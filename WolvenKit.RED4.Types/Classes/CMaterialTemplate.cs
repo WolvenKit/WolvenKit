@@ -80,7 +80,6 @@ namespace WolvenKit.RED4.Types
 		{
 			ParamBlockSize = new(3);
 			CanBeMasked = true;
-			AllowVariableRateShading = true;
 			VertexFactories = new();
 			Parameters = new(3);
 			Techniques = new();

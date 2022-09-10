@@ -44,6 +44,22 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
+		[Ordinal(5)] 
+		[RED("itemTDBID")] 
+		public TweakDBID ItemTDBID
+		{
+			get => GetPropertyValue<TweakDBID>();
+			set => SetPropertyValue<TweakDBID>(value);
+		}
+
+		[Ordinal(6)] 
+		[RED("checkItem")] 
+		public CBool CheckItem
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
 		public StatPoolPrereq()
 		{
 			PostConstruct();

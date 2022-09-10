@@ -62,10 +62,10 @@ namespace WolvenKit.RED4.Types
 
 		[Ordinal(7)] 
 		[RED("description")] 
-		public CName Description
+		public CString Description
 		{
-			get => GetPropertyValue<CName>();
-			set => SetPropertyValue<CName>(value);
+			get => GetPropertyValue<CString>();
+			set => SetPropertyValue<CString>(value);
 		}
 
 		[Ordinal(8)] 
@@ -317,6 +317,14 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(39)] 
+		[RED("hasRarity")] 
+		public CBool HasRarity
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(40)] 
 		[RED("displayContext")] 
 		public CEnum<InventoryTooltipDisplayContext> DisplayContext
 		{
@@ -324,7 +332,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CEnum<InventoryTooltipDisplayContext>>(value);
 		}
 
-		[Ordinal(40)] 
+		[Ordinal(41)] 
 		[RED("DEBUG_iconErrorInfo")] 
 		public CHandle<DEBUG_IconErrorInfo> DEBUG_iconErrorInfo
 		{
