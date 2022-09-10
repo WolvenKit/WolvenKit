@@ -13,38 +13,6 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(2)] 
-		[RED("savebuttonText")] 
-		public inkTextWidgetReference SavebuttonText
-		{
-			get => GetPropertyValue<inkTextWidgetReference>();
-			set => SetPropertyValue<inkTextWidgetReference>(value);
-		}
-
-		[Ordinal(3)] 
-		[RED("saveButton")] 
-		public inkWidgetReference SaveButton
-		{
-			get => GetPropertyValue<inkWidgetReference>();
-			set => SetPropertyValue<inkWidgetReference>(value);
-		}
-
-		[Ordinal(4)] 
-		[RED("setSlotWidget")] 
-		public inkWidgetReference SetSlotWidget
-		{
-			get => GetPropertyValue<inkWidgetReference>();
-			set => SetPropertyValue<inkWidgetReference>(value);
-		}
-
-		[Ordinal(5)] 
-		[RED("setNameText")] 
-		public inkTextWidgetReference SetNameText
-		{
-			get => GetPropertyValue<inkTextWidgetReference>();
-			set => SetPropertyValue<inkTextWidgetReference>(value);
-		}
-
-		[Ordinal(6)] 
 		[RED("itemGridText")] 
 		public inkTextWidgetReference ItemGridText
 		{
@@ -52,7 +20,71 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
+		[Ordinal(3)] 
+		[RED("sortingDropdown")] 
+		public inkWidgetReference SortingDropdown
+		{
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
+		}
+
+		[Ordinal(4)] 
+		[RED("sortingButton")] 
+		public inkWidgetReference SortingButton
+		{
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
+		}
+
+		[Ordinal(5)] 
+		[RED("hideFaceButton")] 
+		public inkWidgetReference HideFaceButton
+		{
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
+		}
+
+		[Ordinal(6)] 
+		[RED("hideHeadButton")] 
+		public inkWidgetReference HideHeadButton
+		{
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
+		}
+
 		[Ordinal(7)] 
+		[RED("emptyGridText")] 
+		public inkWidgetReference EmptyGridText
+		{
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
+		}
+
+		[Ordinal(8)] 
+		[RED("wearButton")] 
+		public inkWidgetReference WearButton
+		{
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
+		}
+
+		[Ordinal(9)] 
+		[RED("takeOffButton")] 
+		public inkWidgetReference TakeOffButton
+		{
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
+		}
+
+		[Ordinal(10)] 
+		[RED("resetButton")] 
+		public inkWidgetReference ResetButton
+		{
+			get => GetPropertyValue<inkWidgetReference>();
+			set => SetPropertyValue<inkWidgetReference>(value);
+		}
+
+		[Ordinal(11)] 
 		[RED("itemGridClassifier")] 
 		public CHandle<ItemModeGridClassifier> ItemGridClassifier
 		{
@@ -60,15 +92,15 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<ItemModeGridClassifier>>(value);
 		}
 
-		[Ordinal(8)] 
+		[Ordinal(12)] 
 		[RED("itemGridDataView")] 
-		public CHandle<ItemModeGridView> ItemGridDataView
+		public CHandle<WardrobeItemGridView> ItemGridDataView
 		{
-			get => GetPropertyValue<CHandle<ItemModeGridView>>();
-			set => SetPropertyValue<CHandle<ItemModeGridView>>(value);
+			get => GetPropertyValue<CHandle<WardrobeItemGridView>>();
+			set => SetPropertyValue<CHandle<WardrobeItemGridView>>(value);
 		}
 
-		[Ordinal(9)] 
+		[Ordinal(13)] 
 		[RED("itemGridDataSource")] 
 		public CHandle<inkScriptableDataSourceWrapper> ItemGridDataSource
 		{
@@ -76,7 +108,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<inkScriptableDataSourceWrapper>>(value);
 		}
 
-		[Ordinal(10)] 
+		[Ordinal(14)] 
 		[RED("tooltipsManager")] 
 		public CWeakHandle<gameuiTooltipsManager> TooltipsManager
 		{
@@ -84,7 +116,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<gameuiTooltipsManager>>(value);
 		}
 
-		[Ordinal(11)] 
+		[Ordinal(15)] 
 		[RED("buttonHintsController")] 
 		public CWeakHandle<ButtonHints> ButtonHintsController
 		{
@@ -92,7 +124,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<ButtonHints>>(value);
 		}
 
-		[Ordinal(12)] 
+		[Ordinal(16)] 
 		[RED("player")] 
 		public CWeakHandle<PlayerPuppet> Player
 		{
@@ -100,7 +132,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<PlayerPuppet>>(value);
 		}
 
-		[Ordinal(13)] 
+		[Ordinal(17)] 
 		[RED("InventoryManager")] 
 		public CHandle<InventoryDataManagerV2> InventoryManager
 		{
@@ -108,7 +140,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<InventoryDataManagerV2>>(value);
 		}
 
-		[Ordinal(14)] 
+		[Ordinal(18)] 
 		[RED("uiScriptableSystem")] 
 		public CWeakHandle<UIScriptableSystem> UiScriptableSystem
 		{
@@ -116,7 +148,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<UIScriptableSystem>>(value);
 		}
 
-		[Ordinal(15)] 
+		[Ordinal(19)] 
 		[RED("equipmentSystem")] 
 		public CWeakHandle<EquipmentSystem> EquipmentSystem
 		{
@@ -124,7 +156,15 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<EquipmentSystem>>(value);
 		}
 
-		[Ordinal(16)] 
+		[Ordinal(20)] 
+		[RED("wardrobeSystem")] 
+		public CWeakHandle<gameWardrobeSystem> WardrobeSystem
+		{
+			get => GetPropertyValue<CWeakHandle<gameWardrobeSystem>>();
+			set => SetPropertyValue<CWeakHandle<gameWardrobeSystem>>(value);
+		}
+
+		[Ordinal(21)] 
 		[RED("equipmentAreaCategoryEventQueue")] 
 		public CArray<CHandle<EquipmentAreaCategoryCreated>> EquipmentAreaCategoryEventQueue
 		{
@@ -132,7 +172,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<CHandle<EquipmentAreaCategoryCreated>>>(value);
 		}
 
-		[Ordinal(17)] 
+		[Ordinal(22)] 
 		[RED("equipmentAreaCategories")] 
 		public CArray<CHandle<EquipmentAreaCategory>> EquipmentAreaCategories
 		{
@@ -140,7 +180,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<CHandle<EquipmentAreaCategory>>>(value);
 		}
 
-		[Ordinal(18)] 
+		[Ordinal(23)] 
 		[RED("itemsPositionProvider")] 
 		public CHandle<ItemPositionProvider> ItemsPositionProvider
 		{
@@ -148,7 +188,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<ItemPositionProvider>>(value);
 		}
 
-		[Ordinal(19)] 
+		[Ordinal(24)] 
 		[RED("comparisonResolver")] 
 		public CHandle<ItemPreferredComparisonResolver> ComparisonResolver
 		{
@@ -156,23 +196,15 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<ItemPreferredComparisonResolver>>(value);
 		}
 
-		[Ordinal(20)] 
-		[RED("equipmentBlackboard")] 
-		public CWeakHandle<gameIBlackboard> EquipmentBlackboard
+		[Ordinal(25)] 
+		[RED("wardrobeGameController")] 
+		public CWeakHandle<WardrobeUIGameController> WardrobeGameController
 		{
-			get => GetPropertyValue<CWeakHandle<gameIBlackboard>>();
-			set => SetPropertyValue<CWeakHandle<gameIBlackboard>>(value);
+			get => GetPropertyValue<CWeakHandle<WardrobeUIGameController>>();
+			set => SetPropertyValue<CWeakHandle<WardrobeUIGameController>>(value);
 		}
 
-		[Ordinal(21)] 
-		[RED("equipmentBlackboardCallback")] 
-		public CHandle<redCallbackObject> EquipmentBlackboardCallback
-		{
-			get => GetPropertyValue<CHandle<redCallbackObject>>();
-			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
-		}
-
-		[Ordinal(22)] 
+		[Ordinal(26)] 
 		[RED("areaSlotControllers")] 
 		public CArray<CWeakHandle<InventoryItemDisplayController>> AreaSlotControllers
 		{
@@ -180,7 +212,15 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<CWeakHandle<InventoryItemDisplayController>>>(value);
 		}
 
-		[Ordinal(23)] 
+		[Ordinal(27)] 
+		[RED("hiddenEquipmentAreas")] 
+		public CArray<CEnum<gamedataEquipmentArea>> HiddenEquipmentAreas
+		{
+			get => GetPropertyValue<CArray<CEnum<gamedataEquipmentArea>>>();
+			set => SetPropertyValue<CArray<CEnum<gamedataEquipmentArea>>>(value);
+		}
+
+		[Ordinal(28)] 
 		[RED("currentEquipmentArea")] 
 		public CEnum<gamedataEquipmentArea> CurrentEquipmentArea
 		{
@@ -188,34 +228,72 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CEnum<gamedataEquipmentArea>>(value);
 		}
 
-		[Ordinal(24)] 
-		[RED("currentItemDisplay")] 
-		public CWeakHandle<InventoryItemDisplayController> CurrentItemDisplay
+		[Ordinal(29)] 
+		[RED("currentSet")] 
+		public CHandle<gameClothingSet> CurrentSet
 		{
-			get => GetPropertyValue<CWeakHandle<InventoryItemDisplayController>>();
-			set => SetPropertyValue<CWeakHandle<InventoryItemDisplayController>>(value);
+			get => GetPropertyValue<CHandle<gameClothingSet>>();
+			set => SetPropertyValue<CHandle<gameClothingSet>>(value);
 		}
 
-		[Ordinal(25)] 
-		[RED("currentSet")] 
-		public ClothingSet CurrentSet
+		[Ordinal(30)] 
+		[RED("setButtonController")] 
+		public CWeakHandle<ClothingSetController> SetButtonController
 		{
-			get => GetPropertyValue<ClothingSet>();
-			set => SetPropertyValue<ClothingSet>(value);
+			get => GetPropertyValue<CWeakHandle<ClothingSetController>>();
+			set => SetPropertyValue<CWeakHandle<ClothingSetController>>(value);
+		}
+
+		[Ordinal(31)] 
+		[RED("previewController")] 
+		public CWeakHandle<gameuiWardrobeSetPreviewGameController> PreviewController
+		{
+			get => GetPropertyValue<CWeakHandle<gameuiWardrobeSetPreviewGameController>>();
+			set => SetPropertyValue<CWeakHandle<gameuiWardrobeSetPreviewGameController>>(value);
+		}
+
+		[Ordinal(32)] 
+		[RED("delaySystem")] 
+		public CWeakHandle<gameDelaySystem> DelaySystem
+		{
+			get => GetPropertyValue<CWeakHandle<gameDelaySystem>>();
+			set => SetPropertyValue<CWeakHandle<gameDelaySystem>>(value);
+		}
+
+		[Ordinal(33)] 
+		[RED("delayedTimeoutCallbackId")] 
+		public gameDelayID DelayedTimeoutCallbackId
+		{
+			get => GetPropertyValue<gameDelayID>();
+			set => SetPropertyValue<gameDelayID>(value);
+		}
+
+		[Ordinal(34)] 
+		[RED("timeoutPeroid")] 
+		public CFloat TimeoutPeroid
+		{
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		public WardrobeSetEditorUIController()
 		{
 			ItemsGridWidget = new();
-			SavebuttonText = new();
-			SaveButton = new();
-			SetSlotWidget = new();
-			SetNameText = new();
 			ItemGridText = new();
+			SortingDropdown = new();
+			SortingButton = new();
+			HideFaceButton = new();
+			HideHeadButton = new();
+			EmptyGridText = new();
+			WearButton = new();
+			TakeOffButton = new();
+			ResetButton = new();
 			EquipmentAreaCategoryEventQueue = new();
 			EquipmentAreaCategories = new();
 			AreaSlotControllers = new();
-			CurrentSet = new() { SetID = -1, ClothingList = new() };
+			HiddenEquipmentAreas = new();
+			DelayedTimeoutCallbackId = new();
+			TimeoutPeroid = 0.500000F;
 
 			PostConstruct();
 		}

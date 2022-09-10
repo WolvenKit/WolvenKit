@@ -156,15 +156,20 @@ namespace WolvenKit.Common.Services
             LoadAdditional();
 
             // user hashes
-            var assemblyPath = Path.GetDirectoryName(AppContext.BaseDirectory);
-            var userHashesPath = Path.Combine(assemblyPath ?? throw new InvalidOperationException(), s_userHashes);
+            LoadUserHashesFrom(Path.GetDirectoryName(AppContext.BaseDirectory));
+            LoadUserHashesFrom(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "REDModding", "WolvenKit"));
+
+            LoadMissingHashes();
+        }
+
+        private void LoadUserHashesFrom(string path)
+        {
+            var userHashesPath = Path.Combine(path ?? throw new InvalidOperationException(), s_userHashes);
             if (File.Exists(userHashesPath))
             {
                 using var userFs = new FileStream(userHashesPath, FileMode.Open, FileAccess.Read);
                 ReadHashes(userFs, _userHashes);
             }
-
-            LoadMissingHashes();
         }
 
         private void LoadEmbeddedHashes(string resourceName, Dictionary<ulong, SAsciiString> hashDictionary)

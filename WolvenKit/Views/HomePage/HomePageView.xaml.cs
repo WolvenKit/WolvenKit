@@ -1,6 +1,9 @@
 using System.Reactive.Disposables;
+using System.Windows;
+using System.Windows.Controls;
 using ReactiveUI;
 using Splat;
+using WolvenKit.Functionality.Commands;
 using WolvenKit.Functionality.Services;
 using WolvenKit.ViewModels.HomePage;
 using WolvenKit.ViewModels.Shell;
@@ -23,16 +26,31 @@ namespace WolvenKit.Views.HomePage
             _settingsManager = Locator.Current.GetService<ISettingsManager>();
             _ribbon = Locator.Current.GetService<RibbonViewModel>();
 
-            this.WhenActivated(disposables => this.Bind(ViewModel,
-                      viewmodel => viewmodel.SelectedIndex,
-                      view => view.HomeTabs.SelectedIndex)
-                  .DisposeWith(disposables));
+            this.WhenActivated(disposables =>
+            {
+                this.Bind(ViewModel,
+                        viewmodel => viewmodel.SelectedIndex,
+                        view => view.HomeTabs.SelectedIndex)
+                    .DisposeWith(disposables);
+
+                this.BindCommand(ViewModel,
+                        viewModel => viewModel.CloseHomePage,
+                        view => view.ToEditorButton)
+                    .DisposeWith(disposables);
+            });
 
         }
 
         private void Grid_MouseLeftButtonDown_1(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
             base.OnMouseLeftButtonDown(e);
+
+            // dumb hack
+            if (ViewModel.SelectedIndex == (int)EHomePage.Mods)
+            {
+                return;
+            }
+
             if (!e.Handled)
             {
                 var mainWindow = (MainView)Locator.Current.GetService<IViewFor<AppViewModel>>();
@@ -63,5 +81,30 @@ namespace WolvenKit.Views.HomePage
                 mainWindow?.DragMove();
             }
         }
+
+        // TODO: Can't you bind this directly in XAML? -wopss
+
+        private void ModsPageTab_Selected(object sender, RoutedEventArgs e)
+        {
+            if (sender is TabItem tab && tab.Content is Pages.ModsView view && view.DataContext is ModsViewModel vm)
+            {
+                vm.CheckRedModCommand.SafeExecute();
+            }
+        }
+
+        private void PluginsPageTab_Selected(object sender, RoutedEventArgs e)
+        {
+            if (sender is TabItem tab && tab.Content is Pages.PluginsToolView view && view.DataContext is PluginsToolViewModel vm)
+            {
+                //vm.ReloadCommand.SafeExecute();
+            }
+        }
+
+        //private void MenuItem_Click(object sender, RoutedEventArgs e)
+        //{
+        //    guide.SetCurrentValue(VisibilityProperty, Visibility.Visible);
+        //    guide.Reset();
+        //}
+
     }
 }

@@ -70,6 +70,10 @@ namespace WolvenKit.RED4.Types
 
 		public PSODescRenderTarget()
 		{
+			WriteMask = Enums.PSODescBlendModeWriteMask.MASK_RGBA;
+			DestFactor = Enums.PSODescBlendModeFactor.FAC_One;
+			DestAlphaFactor = Enums.PSODescBlendModeFactor.FAC_One;
+
 			PostConstruct();
 		}
 

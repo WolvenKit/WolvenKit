@@ -52,6 +52,7 @@ namespace WolvenKit.ViewModels.Shared
 
             OpenProjectCommand = ReactiveCommand.Create<string>(s => _mainViewModel.OpenProjectCommand.Execute(s).Subscribe());
             DeleteProjectCommand = ReactiveCommand.Create<string>(s => _mainViewModel.DeleteProjectCommand.Execute(s).Subscribe());
+
 #pragma warning disable IDE0053 // Doesn't compile with lambda expressions
             NewProjectCommand = ReactiveCommand.Create(() =>
             {
@@ -254,11 +255,7 @@ namespace WolvenKit.ViewModels.Shared
 
         private bool CanHome() => true;
 
-        private void ExecuteHome()
-        {
-            var main = Locator.Current.GetService<AppViewModel>();
-            main.CloseModalCommand.Execute(null);
-        }
+        private void ExecuteHome() => _mainViewModel.CloseModalCommand.Execute(null);
 
         //private void OnRecentlyUsedItemsServiceUpdated(object sender, EventArgs e)
         //{

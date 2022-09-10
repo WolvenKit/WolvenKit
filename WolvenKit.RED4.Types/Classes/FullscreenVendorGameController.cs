@@ -229,6 +229,14 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(31)] 
+		[RED("uiInventorySystem")] 
+		public CWeakHandle<UIInventoryScriptableSystem> UiInventorySystem
+		{
+			get => GetPropertyValue<CWeakHandle<UIInventoryScriptableSystem>>();
+			set => SetPropertyValue<CWeakHandle<UIInventoryScriptableSystem>>(value);
+		}
+
+		[Ordinal(32)] 
 		[RED("menuEventDispatcher")] 
 		public CWeakHandle<inkMenuEventDispatcher> MenuEventDispatcher
 		{
@@ -236,7 +244,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<inkMenuEventDispatcher>>(value);
 		}
 
-		[Ordinal(32)] 
+		[Ordinal(33)] 
 		[RED("playerInventoryitemControllers")] 
 		public CArray<CWeakHandle<InventoryItemDisplayController>> PlayerInventoryitemControllers
 		{
@@ -244,7 +252,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<CWeakHandle<InventoryItemDisplayController>>>(value);
 		}
 
-		[Ordinal(33)] 
+		[Ordinal(34)] 
 		[RED("vendorInventoryitemControllers")] 
 		public CArray<CWeakHandle<InventoryItemDisplayController>> VendorInventoryitemControllers
 		{
@@ -252,7 +260,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<CWeakHandle<InventoryItemDisplayController>>>(value);
 		}
 
-		[Ordinal(34)] 
+		[Ordinal(35)] 
 		[RED("vendorSpecialOfferInventoryitemControllers")] 
 		public CArray<CWeakHandle<InventoryItemDisplayController>> VendorSpecialOfferInventoryitemControllers
 		{
@@ -260,7 +268,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<CWeakHandle<InventoryItemDisplayController>>>(value);
 		}
 
-		[Ordinal(35)] 
+		[Ordinal(36)] 
 		[RED("playerDataSource")] 
 		public CHandle<inkScriptableDataSourceWrapper> PlayerDataSource
 		{
@@ -268,7 +276,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<inkScriptableDataSourceWrapper>>(value);
 		}
 
-		[Ordinal(36)] 
+		[Ordinal(37)] 
 		[RED("virtualPlayerListController")] 
 		public CWeakHandle<inkVirtualGridController> VirtualPlayerListController
 		{
@@ -276,7 +284,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<inkVirtualGridController>>(value);
 		}
 
-		[Ordinal(37)] 
+		[Ordinal(38)] 
 		[RED("vendorDataSource")] 
 		public CHandle<inkScriptableDataSourceWrapper> VendorDataSource
 		{
@@ -284,7 +292,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<inkScriptableDataSourceWrapper>>(value);
 		}
 
-		[Ordinal(38)] 
+		[Ordinal(39)] 
 		[RED("virtualVendorListController")] 
 		public CWeakHandle<inkVirtualGridController> VirtualVendorListController
 		{
@@ -292,7 +300,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<inkVirtualGridController>>(value);
 		}
 
-		[Ordinal(39)] 
+		[Ordinal(40)] 
 		[RED("playerItemsDataView")] 
 		public CHandle<VendorDataView> PlayerItemsDataView
 		{
@@ -300,7 +308,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<VendorDataView>>(value);
 		}
 
-		[Ordinal(40)] 
+		[Ordinal(41)] 
 		[RED("vendorItemsDataView")] 
 		public CHandle<VendorDataView> VendorItemsDataView
 		{
@@ -308,7 +316,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<VendorDataView>>(value);
 		}
 
-		[Ordinal(41)] 
+		[Ordinal(42)] 
 		[RED("itemsClassifier")] 
 		public CHandle<ItemDisplayTemplateClassifier> ItemsClassifier
 		{
@@ -316,7 +324,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<ItemDisplayTemplateClassifier>>(value);
 		}
 
-		[Ordinal(42)] 
+		[Ordinal(43)] 
 		[RED("totalBuyCost")] 
 		public CFloat TotalBuyCost
 		{
@@ -324,7 +332,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(43)] 
+		[Ordinal(44)] 
 		[RED("totalSellCost")] 
 		public CFloat TotalSellCost
 		{
@@ -332,7 +340,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(44)] 
+		[Ordinal(45)] 
 		[RED("root")] 
 		public CWeakHandle<inkWidget> Root
 		{
@@ -340,7 +348,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<inkWidget>>(value);
 		}
 
-		[Ordinal(45)] 
+		[Ordinal(46)] 
 		[RED("vendorUserData")] 
 		public CHandle<VendorUserData> VendorUserData
 		{
@@ -348,7 +356,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<VendorUserData>>(value);
 		}
 
-		[Ordinal(46)] 
+		[Ordinal(47)] 
 		[RED("storageUserData")] 
 		public CHandle<StorageUserData> StorageUserData
 		{
@@ -356,15 +364,15 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<StorageUserData>>(value);
 		}
 
-		[Ordinal(47)] 
+		[Ordinal(48)] 
 		[RED("comparisonResolver")] 
-		public CHandle<ItemPreferredComparisonResolver> ComparisonResolver
+		public CHandle<InventoryItemPreferredComparisonResolver> ComparisonResolver
 		{
-			get => GetPropertyValue<CHandle<ItemPreferredComparisonResolver>>();
-			set => SetPropertyValue<CHandle<ItemPreferredComparisonResolver>>(value);
+			get => GetPropertyValue<CHandle<InventoryItemPreferredComparisonResolver>>();
+			set => SetPropertyValue<CHandle<InventoryItemPreferredComparisonResolver>>(value);
 		}
 
-		[Ordinal(48)] 
+		[Ordinal(49)] 
 		[RED("sellJunkPopupToken")] 
 		public CHandle<inkGameNotificationToken> SellJunkPopupToken
 		{
@@ -372,7 +380,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<inkGameNotificationToken>>(value);
 		}
 
-		[Ordinal(49)] 
+		[Ordinal(50)] 
 		[RED("quantityPickerPopupToken")] 
 		public CHandle<inkGameNotificationToken> QuantityPickerPopupToken
 		{
@@ -380,7 +388,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<inkGameNotificationToken>>(value);
 		}
 
-		[Ordinal(50)] 
+		[Ordinal(51)] 
 		[RED("confirmationPopupToken")] 
 		public CHandle<inkGameNotificationToken> ConfirmationPopupToken
 		{
@@ -388,7 +396,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<inkGameNotificationToken>>(value);
 		}
 
-		[Ordinal(51)] 
+		[Ordinal(52)] 
 		[RED("itemPreviewPopupToken")] 
 		public CHandle<inkGameNotificationToken> ItemPreviewPopupToken
 		{
@@ -396,7 +404,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<inkGameNotificationToken>>(value);
 		}
 
-		[Ordinal(52)] 
+		[Ordinal(53)] 
 		[RED("VendorBlackboard")] 
 		public CWeakHandle<gameIBlackboard> VendorBlackboard
 		{
@@ -404,7 +412,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<gameIBlackboard>>(value);
 		}
 
-		[Ordinal(53)] 
+		[Ordinal(54)] 
 		[RED("VendorBlackboardDef")] 
 		public CHandle<UI_VendorDef> VendorBlackboardDef
 		{
@@ -412,7 +420,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<UI_VendorDef>>(value);
 		}
 
-		[Ordinal(54)] 
+		[Ordinal(55)] 
 		[RED("VendorUpdatedCallbackID")] 
 		public CHandle<redCallbackObject> VendorUpdatedCallbackID
 		{
@@ -420,7 +428,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
-		[Ordinal(55)] 
+		[Ordinal(56)] 
 		[RED("craftingBlackboard")] 
 		public CWeakHandle<gameIBlackboard> CraftingBlackboard
 		{
@@ -428,7 +436,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<gameIBlackboard>>(value);
 		}
 
-		[Ordinal(56)] 
+		[Ordinal(57)] 
 		[RED("craftingBlackboardDef")] 
 		public CHandle<UI_CraftingDef> CraftingBlackboardDef
 		{
@@ -436,7 +444,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<UI_CraftingDef>>(value);
 		}
 
-		[Ordinal(57)] 
+		[Ordinal(58)] 
 		[RED("craftingCallbackID")] 
 		public CHandle<redCallbackObject> CraftingCallbackID
 		{
@@ -444,7 +452,39 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
-		[Ordinal(58)] 
+		[Ordinal(59)] 
+		[RED("InventoryBlackboard")] 
+		public CWeakHandle<gameIBlackboard> InventoryBlackboard
+		{
+			get => GetPropertyValue<CWeakHandle<gameIBlackboard>>();
+			set => SetPropertyValue<CWeakHandle<gameIBlackboard>>(value);
+		}
+
+		[Ordinal(60)] 
+		[RED("InventoryCallback")] 
+		public CHandle<UI_InventoryDef> InventoryCallback
+		{
+			get => GetPropertyValue<CHandle<UI_InventoryDef>>();
+			set => SetPropertyValue<CHandle<UI_InventoryDef>>(value);
+		}
+
+		[Ordinal(61)] 
+		[RED("InventoryAddedBBID")] 
+		public CHandle<redCallbackObject> InventoryAddedBBID
+		{
+			get => GetPropertyValue<CHandle<redCallbackObject>>();
+			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
+		}
+
+		[Ordinal(62)] 
+		[RED("InventoryRemovedBBID")] 
+		public CHandle<redCallbackObject> InventoryRemovedBBID
+		{
+			get => GetPropertyValue<CHandle<redCallbackObject>>();
+			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
+		}
+
+		[Ordinal(63)] 
 		[RED("playerFilterManager")] 
 		public CHandle<ItemCategoryFliterManager> PlayerFilterManager
 		{
@@ -452,7 +492,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<ItemCategoryFliterManager>>(value);
 		}
 
-		[Ordinal(59)] 
+		[Ordinal(64)] 
 		[RED("vendorFilterManager")] 
 		public CHandle<ItemCategoryFliterManager> VendorFilterManager
 		{
@@ -460,7 +500,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<ItemCategoryFliterManager>>(value);
 		}
 
-		[Ordinal(60)] 
+		[Ordinal(65)] 
 		[RED("lastPlayerFilter")] 
 		public CEnum<ItemFilterCategory> LastPlayerFilter
 		{
@@ -468,7 +508,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CEnum<ItemFilterCategory>>(value);
 		}
 
-		[Ordinal(61)] 
+		[Ordinal(66)] 
 		[RED("lastVendorFilter")] 
 		public CEnum<ItemFilterCategory> LastVendorFilter
 		{
@@ -476,7 +516,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CEnum<ItemFilterCategory>>(value);
 		}
 
-		[Ordinal(62)] 
+		[Ordinal(67)] 
 		[RED("uiScriptableSystem")] 
 		public CWeakHandle<UIScriptableSystem> UiScriptableSystem
 		{
@@ -484,7 +524,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<UIScriptableSystem>>(value);
 		}
 
-		[Ordinal(63)] 
+		[Ordinal(68)] 
 		[RED("uiSystem")] 
 		public CHandle<gameuiGameSystemUI> UiSystem
 		{
@@ -492,7 +532,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<gameuiGameSystemUI>>(value);
 		}
 
-		[Ordinal(64)] 
+		[Ordinal(69)] 
 		[RED("storageDef")] 
 		public CHandle<StorageBlackboardDef> StorageDef
 		{
@@ -500,7 +540,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<StorageBlackboardDef>>(value);
 		}
 
-		[Ordinal(65)] 
+		[Ordinal(70)] 
 		[RED("storageBlackboard")] 
 		public CWeakHandle<gameIBlackboard> StorageBlackboard
 		{
@@ -508,7 +548,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<gameIBlackboard>>(value);
 		}
 
-		[Ordinal(66)] 
+		[Ordinal(71)] 
 		[RED("itemDropQueue")] 
 		public CArray<gameItemModParams> ItemDropQueue
 		{
@@ -516,7 +556,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<gameItemModParams>>(value);
 		}
 
-		[Ordinal(67)] 
+		[Ordinal(72)] 
 		[RED("soldItems")] 
 		public CHandle<SoldItemsCache> SoldItems
 		{
@@ -524,7 +564,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<SoldItemsCache>>(value);
 		}
 
-		[Ordinal(68)] 
+		[Ordinal(73)] 
 		[RED("isActivePanel")] 
 		public CBool IsActivePanel
 		{
@@ -532,7 +572,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(69)] 
+		[Ordinal(74)] 
 		[RED("lastItemHoverOverEvent")] 
 		public CHandle<ItemDisplayHoverOverEvent> LastItemHoverOverEvent
 		{
@@ -540,7 +580,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<ItemDisplayHoverOverEvent>>(value);
 		}
 
-		[Ordinal(70)] 
+		[Ordinal(75)] 
 		[RED("isComparisionDisabled")] 
 		public CBool IsComparisionDisabled
 		{
@@ -548,7 +588,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(71)] 
+		[Ordinal(76)] 
 		[RED("lastRequestId")] 
 		public CInt32 LastRequestId
 		{
@@ -556,7 +596,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CInt32>(value);
 		}
 
-		[Ordinal(72)] 
+		[Ordinal(77)] 
 		[RED("sellQueue")] 
 		public CArray<CHandle<VenodrRequestQueueEntry>> SellQueue
 		{
@@ -564,12 +604,36 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<CHandle<VenodrRequestQueueEntry>>>(value);
 		}
 
-		[Ordinal(73)] 
+		[Ordinal(78)] 
 		[RED("buyQueue")] 
 		public CArray<CHandle<VenodrRequestQueueEntry>> BuyQueue
 		{
 			get => GetPropertyValue<CArray<CHandle<VenodrRequestQueueEntry>>>();
 			set => SetPropertyValue<CArray<CHandle<VenodrRequestQueueEntry>>>(value);
+		}
+
+		[Ordinal(79)] 
+		[RED("vendorUIInventoryItems")] 
+		public CArray<CHandle<UIInventoryItem>> VendorUIInventoryItems
+		{
+			get => GetPropertyValue<CArray<CHandle<UIInventoryItem>>>();
+			set => SetPropertyValue<CArray<CHandle<UIInventoryItem>>>(value);
+		}
+
+		[Ordinal(80)] 
+		[RED("playerItemDisplayContext")] 
+		public CHandle<ItemDisplayContextData> PlayerItemDisplayContext
+		{
+			get => GetPropertyValue<CHandle<ItemDisplayContextData>>();
+			set => SetPropertyValue<CHandle<ItemDisplayContextData>>(value);
+		}
+
+		[Ordinal(81)] 
+		[RED("vendorItemDisplayContext")] 
+		public CHandle<ItemDisplayContextData> VendorItemDisplayContext
+		{
+			get => GetPropertyValue<CHandle<ItemDisplayContextData>>();
+			set => SetPropertyValue<CHandle<ItemDisplayContextData>>(value);
 		}
 
 		public FullscreenVendorGameController()
@@ -603,6 +667,7 @@ namespace WolvenKit.RED4.Types
 			ItemDropQueue = new();
 			SellQueue = new();
 			BuyQueue = new();
+			VendorUIInventoryItems = new();
 
 			PostConstruct();
 		}

@@ -28,6 +28,14 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CUInt16>(value);
 		}
 
+		[Ordinal(3)] 
+		[RED("flags")] 
+		public CUInt8 Flags
+		{
+			get => GetPropertyValue<CUInt8>();
+			set => SetPropertyValue<CUInt8>(value);
+		}
+
 		public gameItemID()
 		{
 			PostConstruct();

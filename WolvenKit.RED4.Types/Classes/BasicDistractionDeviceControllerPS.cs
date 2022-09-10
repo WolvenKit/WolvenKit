@@ -21,8 +21,8 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(106)] 
-		[RED("effectOnSartNames")] 
-		public CArray<CName> EffectOnSartNames
+		[RED("effectOnStartNames")] 
+		public CArray<CName> EffectOnStartNames
 		{
 			get => GetPropertyValue<CArray<CName>>();
 			set => SetPropertyValue<CArray<CName>>(value);
@@ -50,7 +50,7 @@ namespace WolvenKit.RED4.Types
 			TweakDBRecord = 97438729774;
 			TweakDBDescriptionRecord = 147273950574;
 			DistractorType = Enums.EPlaystyleType.NETRUNNER;
-			EffectOnSartNames = new();
+			EffectOnStartNames = new();
 			AnimationType = Enums.EAnimationType.TRANSFORM;
 
 			PostConstruct();

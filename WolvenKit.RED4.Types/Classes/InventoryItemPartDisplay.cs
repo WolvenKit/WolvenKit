@@ -30,17 +30,16 @@ namespace WolvenKit.RED4.Types
 
 		[Ordinal(4)] 
 		[RED("attachmentData")] 
-		public InventoryItemAttachments AttachmentData
+		public CHandle<gameInventoryItemAttachments> AttachmentData
 		{
-			get => GetPropertyValue<InventoryItemAttachments>();
-			set => SetPropertyValue<InventoryItemAttachments>(value);
+			get => GetPropertyValue<CHandle<gameInventoryItemAttachments>>();
+			set => SetPropertyValue<CHandle<gameInventoryItemAttachments>>(value);
 		}
 
 		public InventoryItemPartDisplay()
 		{
 			PartIconImage = new();
 			Rarity = new();
-			AttachmentData = new() { ItemData = new() { Empty = true, ID = new(), DamageType = Enums.gamedataDamageType.Invalid, EquipmentArea = Enums.gamedataEquipmentArea.Invalid, ComparedQuality = Enums.gamedataQuality.Invalid, IsAvailable = true, PositionInBackpack = 4294967295, IsRequirementMet = true, IsEquippable = true, Requirement = new() { StatType = Enums.gamedataStatType.Invalid }, EquipRequirement = new() { StatType = Enums.gamedataStatType.Invalid }, EquipRequirements = new(), Attachments = new(), Abilities = new(), PlacementSlots = new(), PrimaryStats = new(), SecondaryStats = new(), SortData = new() } };
 
 			PostConstruct();
 		}

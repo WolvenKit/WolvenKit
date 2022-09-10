@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class ItemTooltipRequirementsModule : ItemTooltipModuleController
 	{
-		[Ordinal(2)] 
+		[Ordinal(4)] 
 		[RED("levelRequirementsWrapper")] 
 		public inkWidgetReference LevelRequirementsWrapper
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(3)] 
+		[Ordinal(5)] 
 		[RED("strenghtOrReflexWrapper")] 
 		public inkWidgetReference StrenghtOrReflexWrapper
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(4)] 
+		[Ordinal(6)] 
 		[RED("smartlinkGunWrapper")] 
 		public inkWidgetReference SmartlinkGunWrapper
 		{
@@ -28,7 +28,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkWidgetReference>(value);
 		}
 
-		[Ordinal(5)] 
+		[Ordinal(7)] 
 		[RED("anyAttributeWrapper")] 
 		public inkCompoundWidgetReference AnyAttributeWrapper
 		{
@@ -36,7 +36,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkCompoundWidgetReference>(value);
 		}
 
-		[Ordinal(6)] 
+		[Ordinal(8)] 
 		[RED("levelRequirementsText")] 
 		public inkTextWidgetReference LevelRequirementsText
 		{
@@ -44,7 +44,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
-		[Ordinal(7)] 
+		[Ordinal(9)] 
 		[RED("strenghtOrReflexText")] 
 		public inkTextWidgetReference StrenghtOrReflexText
 		{
@@ -52,7 +52,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkTextWidgetReference>(value);
 		}
 
-		[Ordinal(8)] 
+		[Ordinal(10)] 
 		[RED("perkText")] 
 		public inkTextWidgetReference PerkText
 		{

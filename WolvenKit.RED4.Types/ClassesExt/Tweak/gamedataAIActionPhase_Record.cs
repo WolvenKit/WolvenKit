@@ -51,6 +51,14 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<TweakDBID>(value);
 		}
 		
+		[RED("maxDuration")]
+		[REDProperty(IsIgnored = true)]
+		public CFloat MaxDuration
+		{
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
+		}
+		
 		[RED("movePolicy")]
 		[REDProperty(IsIgnored = true)]
 		public TweakDBID MovePolicy

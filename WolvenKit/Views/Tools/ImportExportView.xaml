@@ -369,6 +369,7 @@
             Grid.ColumnSpan="4"
             Background="{DynamicResource ContentBackgroundAlt2}"
             Visibility="Collapsed">
+            
             <Grid.RowDefinitions>
                 <RowDefinition Height="80" />
                 <RowDefinition Height="5*" />
@@ -440,13 +441,31 @@
                     Style="{DynamicResource MahApps.Styles.Button.ToolBar}" />
             </Grid>
 
-            <Grid
-                x:Name="ContentLinkForSpecialExportOrImportOptions"
+            <Grid x:Name="ContentLinkForSpecialExportOrImportOptions"
                 Grid.Row="1"
                 Margin="2"
                 Background="{DynamicResource ContentBackgroundAlt}">
-                <syncfusion:PropertyGrid
-                    x:Name="OverlayPropertyGrid"
+
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+
+                <!-- Additional options -->
+                <StackPanel Orientation="Vertical" Grid.Row="0" Visibility="Collapsed" x:Name="AddSettingsRe">
+                    <hc:ComboBox hc:TitleElement.Title="Animset" x:Name="AnimsetComboBox"
+                                 SelectionChanged="AnimsetComboBox_SelectionChanged"
+                                 >
+                        
+                    </hc:ComboBox>
+
+                    <hc:ComboBox hc:TitleElement.Title="Animation to rename" x:Name="AnimNameComboBox" SelectionChanged="AnimNameComboBox_SelectionChanged">
+
+                    </hc:ComboBox>
+                </StackPanel>
+                
+                <!-- PropertyGrid -->
+                <syncfusion:PropertyGrid x:Name="OverlayPropertyGrid" Grid.Row="1"
                     ButtonPanelVisibility="Hidden"
                     SearchBoxVisibility="Hidden"
                     CategoryForeground="{DynamicResource MahApps.Brushes.Accent}"
@@ -473,6 +492,7 @@
                 Text="Files are being processed..." />
         </Grid>
 
+        <!-- Help Overlay -->
         <Grid
             x:Name="HelpOverlay"
             Grid.RowSpan="4"

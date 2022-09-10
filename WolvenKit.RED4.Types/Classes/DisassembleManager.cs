@@ -30,10 +30,10 @@ namespace WolvenKit.RED4.Types
 
 		[Ordinal(6)] 
 		[RED("listOfAddedInventoryItems")] 
-		public CArray<InventoryItemData> ListOfAddedInventoryItems
+		public CArray<gameInventoryItemData> ListOfAddedInventoryItems
 		{
-			get => GetPropertyValue<CArray<InventoryItemData>>();
-			set => SetPropertyValue<CArray<InventoryItemData>>(value);
+			get => GetPropertyValue<CArray<gameInventoryItemData>>();
+			set => SetPropertyValue<CArray<gameInventoryItemData>>(value);
 		}
 
 		[Ordinal(7)] 

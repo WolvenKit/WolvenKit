@@ -204,6 +204,30 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<InventoryTooltipData_QuickhackData>(value);
 		}
 
+		[Ordinal(27)] 
+		[RED("itemData")] 
+		public CWeakHandle<UIInventoryItem> ItemData
+		{
+			get => GetPropertyValue<CWeakHandle<UIInventoryItem>>();
+			set => SetPropertyValue<CWeakHandle<UIInventoryItem>>(value);
+		}
+
+		[Ordinal(28)] 
+		[RED("displayContext")] 
+		public CEnum<InventoryTooltipDisplayContext> DisplayContext
+		{
+			get => GetPropertyValue<CEnum<InventoryTooltipDisplayContext>>();
+			set => SetPropertyValue<CEnum<InventoryTooltipDisplayContext>>(value);
+		}
+
+		[Ordinal(29)] 
+		[RED("itemDisplayContext")] 
+		public CEnum<gameItemDisplayContext> ItemDisplayContext
+		{
+			get => GetPropertyValue<CEnum<gameItemDisplayContext>>();
+			set => SetPropertyValue<CEnum<gameItemDisplayContext>>(value);
+		}
+
 		public ProgramTooltipController()
 		{
 			BackgroundContainer = new();

@@ -36,6 +36,22 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
+		[Ordinal(4)] 
+		[RED("settingVar")] 
+		public CHandle<userSettingsVar> SettingVar
+		{
+			get => GetPropertyValue<CHandle<userSettingsVar>>();
+			set => SetPropertyValue<CHandle<userSettingsVar>>(value);
+		}
+
+		[Ordinal(5)] 
+		[RED("isPreGame")] 
+		public CBool IsPreGame
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
 		public DlcDescriptionData()
 		{
 			PostConstruct();

@@ -94,18 +94,18 @@ namespace WolvenKit.RED4.Types
 
 		[Ordinal(20)] 
 		[RED("consSlotCachedData")] 
-		public InventoryItemData ConsSlotCachedData
+		public gameInventoryItemData ConsSlotCachedData
 		{
-			get => GetPropertyValue<InventoryItemData>();
-			set => SetPropertyValue<InventoryItemData>(value);
+			get => GetPropertyValue<gameInventoryItemData>();
+			set => SetPropertyValue<gameInventoryItemData>(value);
 		}
 
 		[Ordinal(21)] 
 		[RED("gadgetSlotCachedData")] 
-		public InventoryItemData GadgetSlotCachedData
+		public gameInventoryItemData GadgetSlotCachedData
 		{
-			get => GetPropertyValue<InventoryItemData>();
-			set => SetPropertyValue<InventoryItemData>(value);
+			get => GetPropertyValue<gameInventoryItemData>();
+			set => SetPropertyValue<gameInventoryItemData>(value);
 		}
 
 		[Ordinal(22)] 
@@ -280,8 +280,8 @@ namespace WolvenKit.RED4.Types
 		{
 			RadialWeapons = new();
 			PointerRef = new();
-			ConsSlotCachedData = new() { Empty = true, ID = new(), DamageType = Enums.gamedataDamageType.Invalid, EquipmentArea = Enums.gamedataEquipmentArea.Invalid, ComparedQuality = Enums.gamedataQuality.Invalid, IsAvailable = true, PositionInBackpack = 4294967295, IsRequirementMet = true, IsEquippable = true, Requirement = new() { StatType = Enums.gamedataStatType.Invalid }, EquipRequirement = new() { StatType = Enums.gamedataStatType.Invalid }, EquipRequirements = new(), Attachments = new(), Abilities = new(), PlacementSlots = new(), PrimaryStats = new(), SecondaryStats = new(), SortData = new() };
-			GadgetSlotCachedData = new() { Empty = true, ID = new(), DamageType = Enums.gamedataDamageType.Invalid, EquipmentArea = Enums.gamedataEquipmentArea.Invalid, ComparedQuality = Enums.gamedataQuality.Invalid, IsAvailable = true, PositionInBackpack = 4294967295, IsRequirementMet = true, IsEquippable = true, Requirement = new() { StatType = Enums.gamedataStatType.Invalid }, EquipRequirement = new() { StatType = Enums.gamedataStatType.Invalid }, EquipRequirements = new(), Attachments = new(), Abilities = new(), PlacementSlots = new(), PrimaryStats = new(), SecondaryStats = new(), SortData = new() };
+			ConsSlotCachedData = new() { ID = new(), DamageType = Enums.gamedataDamageType.Invalid, EquipmentArea = Enums.gamedataEquipmentArea.Invalid, ComparedQuality = Enums.gamedataQuality.Invalid, Empty = true, IsAvailable = true, PositionInBackpack = 4294967295, IsRequirementMet = true, IsEquippable = true, Requirement = new() { StatType = Enums.gamedataStatType.Invalid }, EquipRequirement = new() { StatType = Enums.gamedataStatType.Invalid }, EquipRequirements = new(), Attachments = new(), Abilities = new(), PlacementSlots = new(), PrimaryStats = new(), SecondaryStats = new(), SortData = new() };
+			GadgetSlotCachedData = new() { ID = new(), DamageType = Enums.gamedataDamageType.Invalid, EquipmentArea = Enums.gamedataEquipmentArea.Invalid, ComparedQuality = Enums.gamedataQuality.Invalid, Empty = true, IsAvailable = true, PositionInBackpack = 4294967295, IsRequirementMet = true, IsEquippable = true, Requirement = new() { StatType = Enums.gamedataStatType.Invalid }, EquipRequirement = new() { StatType = Enums.gamedataStatType.Invalid }, EquipRequirements = new(), Attachments = new(), Abilities = new(), PlacementSlots = new(), PrimaryStats = new(), SecondaryStats = new(), SortData = new() };
 			RegisteredInputHints = new();
 			ApplyInputHint = new();
 			CycleInputHintDataLeft = new();

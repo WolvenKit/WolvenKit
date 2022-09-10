@@ -38,6 +38,12 @@ namespace WolvenKit.RED4
             return result;
         }
 
+        public byte[] GetCompressedBytes(Oodle.CompressionLevel compressionLevel)
+        {
+            Oodle.CompressBuffer(_bytes, out var result, compressionLevel);
+            return result;
+        }
+
         public void SetBytes(byte[] data)
         {
             if (Oodle.IsCompressed(data))

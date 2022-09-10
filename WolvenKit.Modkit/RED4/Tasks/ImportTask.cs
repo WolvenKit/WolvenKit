@@ -16,10 +16,7 @@ namespace CP77Tools.Tasks
         /// <param name="path">Files or folders to import</param>
         /// <param name="outDir">Outdirectory to create redengine files in</param>
         /// <param name="keep">use existing redengine files in outdirectory</param>
-        public void ImportTask(string[] path,
-            string outDir,
-            bool keep
-            )
+        public async Task ImportTask(string[] path, string outDir, bool keep )
         {
             if (path == null || path.Length < 1)
             {
@@ -27,15 +24,13 @@ namespace CP77Tools.Tasks
                 return;
             }
 
-            Parallel.ForEach(path, p =>
+            foreach (var p in path)
             {
-                ImportTaskInner(p, outDir, keep);
-            });
+                await ImportTaskInner(p, outDir, keep);
+            }
         }
 
-        private void ImportTaskInner(string path,
-            string outDir,
-            bool keep)
+        private async Task ImportTaskInner(string path, string outDir, bool keep)
         {
             #region checks
 
@@ -84,7 +79,7 @@ namespace CP77Tools.Tasks
             // a directory was selected to import
             if (isDirectory)
             {
-                _modTools.ImportFolder(basedir, settings, outDirectory);
+                await _modTools.ImportFolder(basedir, settings, outDirectory);
             }
             // just a single file was selected
             else
@@ -114,7 +109,7 @@ namespace CP77Tools.Tasks
                 else
                 {
 
-                    if (_modTools.Import(rawRelative, settings, outDirectory))
+                    if (await _modTools.Import(rawRelative, settings, outDirectory))
                     {
                         _loggerService.Success($"Successfully imported {path}");
                     }
