@@ -24,11 +24,13 @@ public class InventoryHelper
         public List<ItemData> Items { get; set; } = new();
     }
 
+    // TODO [WolvenKit.RED4.Save]: Probably gameItemID, will check later
     public class HeaderThing : IEquatable<HeaderThing>
     {
         public uint Seed { get; set; }
         public byte UnknownByte1 { get; set; }
         public ushort UnknownBytes2 { get; set; }
+        public byte UnknownByte3 { get; set; }
 
         public byte Kind =>
             UnknownByte1 switch
@@ -51,7 +53,7 @@ public class InventoryHelper
                 return true;
             }
 
-            return Seed == other.Seed && UnknownByte1 == other.UnknownByte1 && UnknownBytes2 == other.UnknownBytes2;
+            return Seed == other.Seed && UnknownByte1 == other.UnknownByte1 && UnknownBytes2 == other.UnknownBytes2 && UnknownByte3 == other.UnknownByte3;
         }
 
         public override bool Equals(object? obj)
@@ -81,6 +83,7 @@ public class InventoryHelper
                 var hashCode = (int)Seed;
                 hashCode = (hashCode * 397) ^ UnknownByte1.GetHashCode();
                 hashCode = (hashCode * 397) ^ UnknownBytes2.GetHashCode();
+                hashCode = (hashCode * 397) ^ UnknownByte3.GetHashCode();
                 return hashCode;
             }
         }
@@ -191,7 +194,8 @@ public class InventoryHelper
         {
             Seed = reader.ReadUInt32(),
             UnknownByte1 = reader.ReadByte(),
-            UnknownBytes2 = reader.ReadUInt16()
+            UnknownBytes2 = reader.ReadUInt16(),
+            UnknownByte3 = reader.ReadByte()
         };
 
     private static void WriteHeaderThing(BinaryWriter writer, HeaderThing itemHeader)
@@ -199,6 +203,7 @@ public class InventoryHelper
         writer.Write(itemHeader.Seed);
         writer.Write(itemHeader.UnknownByte1);
         writer.Write(itemHeader.UnknownBytes2);
+        writer.Write(itemHeader.UnknownByte3);
     }
 
     public static NextItemEntry ReadNextItemEntry(byte[] bytes)
