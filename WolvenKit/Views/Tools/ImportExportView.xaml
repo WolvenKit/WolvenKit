@@ -415,6 +415,7 @@
             Grid.ColumnSpan="4"
             Background="{DynamicResource ContentBackgroundAlt2}"
             Visibility="Collapsed">
+
             <Grid.RowDefinitions>
                 <RowDefinition Height="80" />
                 <RowDefinition Height="5*" />
@@ -489,8 +490,33 @@
                 Grid.Row="1"
                 Margin="2"
                 Background="{DynamicResource ContentBackgroundAlt}">
+
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+
+                <!--  Additional options  -->
+                <StackPanel
+                    x:Name="AddSettingsRe"
+                    Grid.Row="0"
+                    Orientation="Vertical"
+                    Visibility="Collapsed">
+                    <hc:ComboBox
+                        x:Name="AnimsetComboBox"
+                        hc:TitleElement.Title="Animset"
+                        SelectionChanged="AnimsetComboBox_SelectionChanged" />
+
+                    <hc:ComboBox
+                        x:Name="AnimNameComboBox"
+                        hc:TitleElement.Title="Animation to rename"
+                        SelectionChanged="AnimNameComboBox_SelectionChanged" />
+                </StackPanel>
+
+                <!--  PropertyGrid  -->
                 <syncfusion:PropertyGrid
                     x:Name="OverlayPropertyGrid"
+                    Grid.Row="1"
                     AutoGeneratingPropertyGridItem="OverlayPropertyGrid_AutoGeneratingPropertyGridItem"
                     ButtonPanelVisibility="Hidden"
                     CategoryForeground="{DynamicResource MahApps.Brushes.Accent}"
@@ -518,6 +544,7 @@
                 Text="Files are being processed..." />
         </Grid>
 
+        <!--  Help Overlay  -->
         <Grid
             x:Name="HelpOverlay"
             Grid.RowSpan="4"

@@ -27,6 +27,14 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 		
+		[RED("objectToCheck")]
+		[REDProperty(IsIgnored = true)]
+		public TweakDBID ObjectToCheck
+		{
+			get => GetPropertyValue<TweakDBID>();
+			set => SetPropertyValue<TweakDBID>(value);
+		}
+        
 		[RED("skipOnApply")]
 		[REDProperty(IsIgnored = true)]
 		public CBool SkipOnApply

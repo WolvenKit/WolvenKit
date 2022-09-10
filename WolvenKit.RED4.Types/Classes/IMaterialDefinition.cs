@@ -45,11 +45,11 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(6)] 
-		[RED("allowVariableRateShading")] 
-		public CBool AllowVariableRateShading
+		[RED("shadingRateMode")] 
+		public CEnum<EMaterialShadingRateMode> ShadingRateMode
 		{
-			get => GetPropertyValue<CBool>();
-			set => SetPropertyValue<CBool>(value);
+			get => GetPropertyValue<CEnum<EMaterialShadingRateMode>>();
+			set => SetPropertyValue<CEnum<EMaterialShadingRateMode>>(value);
 		}
 
 		[Ordinal(7)] 

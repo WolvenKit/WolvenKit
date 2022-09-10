@@ -20,6 +20,22 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<inkCompoundWidgetReference>(value);
 		}
 
+		[Ordinal(5)] 
+		[RED("settings")] 
+		public CHandle<userSettingsUserSettings> Settings
+		{
+			get => GetPropertyValue<CHandle<userSettingsUserSettings>>();
+			set => SetPropertyValue<CHandle<userSettingsUserSettings>>(value);
+		}
+
+		[Ordinal(6)] 
+		[RED("dlcSettingsGroup")] 
+		public CHandle<userSettingsGroup> DlcSettingsGroup
+		{
+			get => GetPropertyValue<CHandle<userSettingsGroup>>();
+			set => SetPropertyValue<CHandle<userSettingsGroup>>(value);
+		}
+
 		public DlcMenuGameController()
 		{
 			ButtonHintsRef = new();

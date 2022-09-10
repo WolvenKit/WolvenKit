@@ -22,25 +22,25 @@ namespace WolvenKit.RED4.Types
 
 		[Ordinal(18)] 
 		[RED("itemData")] 
-		public InventoryItemData ItemData
+		public gameInventoryItemData ItemData
 		{
-			get => GetPropertyValue<InventoryItemData>();
-			set => SetPropertyValue<InventoryItemData>(value);
+			get => GetPropertyValue<gameInventoryItemData>();
+			set => SetPropertyValue<gameInventoryItemData>(value);
 		}
 
 		[Ordinal(19)] 
 		[RED("itemDatas")] 
-		public CArray<InventoryItemData> ItemDatas
+		public CArray<gameInventoryItemData> ItemDatas
 		{
-			get => GetPropertyValue<CArray<InventoryItemData>>();
-			set => SetPropertyValue<CArray<InventoryItemData>>(value);
+			get => GetPropertyValue<CArray<gameInventoryItemData>>();
+			set => SetPropertyValue<CArray<gameInventoryItemData>>(value);
 		}
 
 		public InventoryCyberwareItemChooser()
 		{
 			LeftSlotsContainer = new();
 			RightSlotsContainer = new();
-			ItemData = new() { Empty = true, ID = new(), DamageType = Enums.gamedataDamageType.Invalid, EquipmentArea = Enums.gamedataEquipmentArea.Invalid, ComparedQuality = Enums.gamedataQuality.Invalid, IsAvailable = true, PositionInBackpack = 4294967295, IsRequirementMet = true, IsEquippable = true, Requirement = new() { StatType = Enums.gamedataStatType.Invalid }, EquipRequirement = new() { StatType = Enums.gamedataStatType.Invalid }, EquipRequirements = new(), Attachments = new(), Abilities = new(), PlacementSlots = new(), PrimaryStats = new(), SecondaryStats = new(), SortData = new() };
+			ItemData = new() { ID = new(), DamageType = Enums.gamedataDamageType.Invalid, EquipmentArea = Enums.gamedataEquipmentArea.Invalid, ComparedQuality = Enums.gamedataQuality.Invalid, Empty = true, IsAvailable = true, PositionInBackpack = 4294967295, IsRequirementMet = true, IsEquippable = true, Requirement = new() { StatType = Enums.gamedataStatType.Invalid }, EquipRequirement = new() { StatType = Enums.gamedataStatType.Invalid }, EquipRequirements = new(), Attachments = new(), Abilities = new(), PlacementSlots = new(), PrimaryStats = new(), SecondaryStats = new(), SortData = new() };
 			ItemDatas = new();
 
 			PostConstruct();

@@ -60,6 +60,14 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
+		[Ordinal(101)] 
+		[RED("arcadeMinigameComponent")] 
+		public CHandle<workWorkspotResourceComponent> ArcadeMinigameComponent
+		{
+			get => GetPropertyValue<CHandle<workWorkspotResourceComponent>>();
+			set => SetPropertyValue<CHandle<workWorkspotResourceComponent>>(value);
+		}
+
 		public ArcadeMachine()
 		{
 			ControllerTypeName = "ArcadeMachineController";

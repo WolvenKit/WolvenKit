@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 
 namespace WolvenKit.Common.Model.Arguments
@@ -18,6 +18,7 @@ namespace WolvenKit.Common.Model.Arguments
             { typeof(GltfImportArgs), new GltfImportArgs() },
             { typeof(OpusImportArgs), new OpusImportArgs() },
             { typeof(MlmaskImportArgs), new MlmaskImportArgs() },
+            { typeof(ReImportArgs), new ReImportArgs() },
         };
 
         /// <summary>

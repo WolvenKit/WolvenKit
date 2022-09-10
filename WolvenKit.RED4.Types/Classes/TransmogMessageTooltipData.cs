@@ -20,6 +20,14 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 
+		[Ordinal(6)] 
+		[RED("NoIcon")] 
+		public CBool NoIcon
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
 		public TransmogMessageTooltipData()
 		{
 			TransmogItem = new();

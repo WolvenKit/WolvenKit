@@ -53,6 +53,8 @@ namespace WolvenKit.ViewModels.Shell
             //NewProjectCommand = ReactiveCommand.Create(() => _mainViewModel.NewProjectCommand.Execute().Subscribe());
             PackProjectCommand = ReactiveCommand.Create(() => MainViewModel.PackModCommand.SafeExecute());
             PackInstallProjectCommand = ReactiveCommand.Create(() => MainViewModel.PackInstallModCommand.SafeExecute());
+            PackInstallRunProjectCommand = ReactiveCommand.Create(() => MainViewModel.PackInstallRunModCommand.SafeExecute());
+            HotInstallProjectCommand = ReactiveCommand.Create(() => MainViewModel.HotInstallModCommand.SafeExecute());
 
             NewFileCommand = ReactiveCommand.Create(() => MainViewModel.NewFileCommand.SafeExecute(null));
             SaveFileCommand = ReactiveCommand.Create(() => MainViewModel.SaveFileCommand.SafeExecute());
@@ -65,6 +67,9 @@ namespace WolvenKit.ViewModels.Shell
             ViewLogCommand = ReactiveCommand.Create(() => MainViewModel.ShowLogCommand.SafeExecute());
             //ViewCodeEditorCommand = ReactiveCommand.Create(() => _mainViewModel.ShowCodeEditorCommand.SafeExecute());
             ShowImportExportToolCommand = ReactiveCommand.Create(() => MainViewModel.ShowImportExportToolCommand.SafeExecute());
+
+            ShowSoundModdingToolCommand = ReactiveCommand.Create(() => MainViewModel.ShowSoundModdingToolCommand.SafeExecute());
+            ShowModsViewCommand = ReactiveCommand.Create(() => MainViewModel.ShowModsViewCommand.SafeExecute());
 
             ShowPluginToolCommand = ReactiveCommand.Create(() => MainViewModel.ShowPluginCommand.SafeExecute());
             OpenMaterialRepositoryCommand = ReactiveCommand.Create(() => Commonfunctions.ShowFolderInExplorer(SettingsManager.MaterialRepositoryPath));
@@ -109,6 +114,9 @@ namespace WolvenKit.ViewModels.Shell
         public ReactiveCommand<Unit, Unit> PackProjectCommand { get; }
         public ReactiveCommand<Unit, Unit> PackInstallProjectCommand { get; }
 
+        public ReactiveCommand<Unit, Unit> PackInstallRunProjectCommand { get; }
+        public ReactiveCommand<Unit, Unit> HotInstallProjectCommand { get; }
+
         public ReactiveCommand<Unit, Unit> NewFileCommand { get; }
         public ReactiveCommand<Unit, Unit> SaveFileCommand { get; }
         public ReactiveCommand<Unit, Unit> SaveAsCommand { get; }
@@ -122,6 +130,9 @@ namespace WolvenKit.ViewModels.Shell
         public ReactiveCommand<Unit, Unit> ShowImportExportToolCommand { get; }
 
         public ReactiveCommand<Unit, Unit> ShowPluginToolCommand { get; }
+        public ReactiveCommand<Unit, Unit> ShowSoundModdingToolCommand { get; }
+
+        public ReactiveCommand<Unit, Unit> ShowModsViewCommand { get; }
 
         public ReactiveCommand<Unit, Unit> OpenMaterialRepositoryCommand { get; }
         public ReactiveCommand<Unit, Unit> UnbundleGameCommand { get; }

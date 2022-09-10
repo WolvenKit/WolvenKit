@@ -52,9 +52,14 @@ namespace WolvenKit.Functionality.Controllers
 
         public Task<bool> PackAndInstallProject();
 
+        public Task<bool> PackAndInstallRunProject();
+
+        public Task<bool> HotInstallProject();
+
         Task<bool> PackProject();
 
         void InstallMod();
+        Task<bool> DeployRedmod();
 
         #endregion Methods
     }

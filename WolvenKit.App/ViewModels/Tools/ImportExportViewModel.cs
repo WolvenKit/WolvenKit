@@ -72,6 +72,7 @@ namespace WolvenKit.ViewModels.Tools
         private readonly MeshTools _meshTools;
         private readonly ISettingsManager _settingsManager;
         private readonly IArchiveManager _archiveManager;
+        private readonly IPluginService _pluginService;
         private readonly Red4ParserService _parserService;
 
         /// <summary>
@@ -114,6 +115,7 @@ namespace WolvenKit.ViewModels.Tools
            IModTools modTools,
            MeshTools meshTools,
            IArchiveManager archiveManager,
+           IPluginService pluginService,
            Red4ParserService parserService
            ) : base(ToolTitle)
         {
@@ -127,6 +129,7 @@ namespace WolvenKit.ViewModels.Tools
             _settingsManager = settingsManager;
             _meshTools = meshTools;
             _archiveManager = archiveManager;
+            _pluginService = pluginService;
             _parserService = parserService;
 
             SetupToolDefaults();
@@ -686,7 +689,7 @@ namespace WolvenKit.ViewModels.Tools
             {
                 var soundbanksArchive = _archiveManager.Archives.Items
                     .Cast<Archive>()
-                    .FirstOrDefault(_ => _.Name.Equals("audio_2_soundbanks.archive"));
+                    .FirstOrDefault(_ => _.Name.Equals($"{EVanillaArchives.audio_2_soundbanks}.archive"));
 
                 OpusTools opusTools = new(
                     soundbanksArchive,
@@ -724,9 +727,23 @@ namespace WolvenKit.ViewModels.Tools
                         gltfImportArgs.Archives.Insert(0, new FileSystemArchive(cp77Proj.ModDirectory));
                     }
                 }
+
+                if (item.Properties is ReImportArgs reImportArgs)
+                {
+                    if (!_pluginService.IsInstalled(EPlugin.redmod))
+                    {
+                        _loggerService.Error("Redmod plugin needs to be installed to import animations");
+                        return false;
+                    }
+
+                    reImportArgs.Depot = proj.ModDirectory;
+                    reImportArgs.RedMod = Path.Combine(_settingsManager.GetRED4GameRootDir(), "tools", "redmod", "bin", "redMod.exe");
+                }
+
                 var settings = new GlobalImportArgs().Register(item.Properties as ImportArgs);
                 var rawDir = new DirectoryInfo(proj.RawDirectory);
                 var redrelative = new RedRelativePath(rawDir, fi.GetRelativePath(rawDir));
+
                 return await Task.Run(() => _modTools.Import(redrelative, settings, new DirectoryInfo(proj.ModDirectory)));
             }
 

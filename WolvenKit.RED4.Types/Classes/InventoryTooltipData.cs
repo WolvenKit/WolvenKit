@@ -318,18 +318,18 @@ namespace WolvenKit.RED4.Types
 
 		[Ordinal(39)] 
 		[RED("itemAttachments")] 
-		public CArray<InventoryItemAttachments> ItemAttachments
+		public CArray<CHandle<gameInventoryItemAttachments>> ItemAttachments
 		{
-			get => GetPropertyValue<CArray<InventoryItemAttachments>>();
-			set => SetPropertyValue<CArray<InventoryItemAttachments>>(value);
+			get => GetPropertyValue<CArray<CHandle<gameInventoryItemAttachments>>>();
+			set => SetPropertyValue<CArray<CHandle<gameInventoryItemAttachments>>>(value);
 		}
 
 		[Ordinal(40)] 
 		[RED("inventoryItemData")] 
-		public InventoryItemData InventoryItemData
+		public gameInventoryItemData InventoryItemData
 		{
-			get => GetPropertyValue<InventoryItemData>();
-			set => SetPropertyValue<InventoryItemData>(value);
+			get => GetPropertyValue<gameInventoryItemData>();
+			set => SetPropertyValue<gameInventoryItemData>(value);
 		}
 
 		[Ordinal(41)] 
@@ -408,7 +408,7 @@ namespace WolvenKit.RED4.Types
 			SpecialAbilities = new();
 			ItemType = Enums.gamedataItemType.Invalid;
 			ItemAttachments = new();
-			InventoryItemData = new() { Empty = true, ID = new(), DamageType = Enums.gamedataDamageType.Invalid, EquipmentArea = Enums.gamedataEquipmentArea.Invalid, ComparedQuality = Enums.gamedataQuality.Invalid, IsAvailable = true, PositionInBackpack = 4294967295, IsRequirementMet = true, IsEquippable = true, Requirement = new() { StatType = Enums.gamedataStatType.Invalid }, EquipRequirement = new() { StatType = Enums.gamedataStatType.Invalid }, EquipRequirements = new(), Attachments = new(), Abilities = new(), PlacementSlots = new(), PrimaryStats = new(), SecondaryStats = new(), SortData = new() };
+			InventoryItemData = new() { ID = new(), DamageType = Enums.gamedataDamageType.Invalid, EquipmentArea = Enums.gamedataEquipmentArea.Invalid, ComparedQuality = Enums.gamedataQuality.Invalid, Empty = true, IsAvailable = true, PositionInBackpack = 4294967295, IsRequirementMet = true, IsEquippable = true, Requirement = new() { StatType = Enums.gamedataStatType.Invalid }, EquipRequirement = new() { StatType = Enums.gamedataStatType.Invalid }, EquipRequirements = new(), Attachments = new(), Abilities = new(), PlacementSlots = new(), PrimaryStats = new(), SecondaryStats = new(), SortData = new() };
 			QuickhackData = new() { AttackEffects = new() };
 			TransmogItem = new();
 

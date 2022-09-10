@@ -132,10 +132,18 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
+		[Ordinal(57)] 
+		[RED("isModded")] 
+		public CBool IsModded
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
 		public saveMetadata()
 		{
-			SaveVersion = 220;
-			GameVersion = 1520;
+			SaveVersion = 224;
+			GameVersion = 1600;
 
 			PostConstruct();
 		}

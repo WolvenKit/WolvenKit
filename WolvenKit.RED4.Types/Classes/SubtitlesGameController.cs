@@ -4,7 +4,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class SubtitlesGameController : BaseSubtitlesGameController
 	{
-		[Ordinal(29)] 
+		[Ordinal(30)] 
 		[RED("sceneComment")] 
 		public CWeakHandle<inkTextWidget> SceneComment
 		{
@@ -12,7 +12,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<inkTextWidget>>(value);
 		}
 
-		[Ordinal(30)] 
+		[Ordinal(31)] 
 		[RED("subtitlesPanel")] 
 		public CWeakHandle<inkVerticalPanelWidget> SubtitlesPanel
 		{
@@ -20,7 +20,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<inkVerticalPanelWidget>>(value);
 		}
 
-		[Ordinal(31)] 
+		[Ordinal(32)] 
 		[RED("bbCbShowSceneComment")] 
 		public CHandle<redCallbackObject> BbCbShowSceneComment
 		{
@@ -28,7 +28,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
-		[Ordinal(32)] 
+		[Ordinal(33)] 
 		[RED("bbCbHideSceneComment")] 
 		public CHandle<redCallbackObject> BbCbHideSceneComment
 		{
@@ -36,7 +36,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<redCallbackObject>>(value);
 		}
 
-		[Ordinal(33)] 
+		[Ordinal(34)] 
 		[RED("uiSceneCommentsBlackboard")] 
 		public CWeakHandle<gameIBlackboard> UiSceneCommentsBlackboard
 		{

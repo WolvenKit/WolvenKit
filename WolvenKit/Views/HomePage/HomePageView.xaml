@@ -13,20 +13,16 @@
     mc:Ignorable="av"
     xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:homePage="clr-namespace:WolvenKit.ViewModels.HomePage;assembly=WolvenKit.App"
+    xmlns:homePage="clr-namespace:WolvenKit.ViewModels.HomePage;assembly=WolvenKit.App" xmlns:dialogs="clr-namespace:WolvenKit.Views.Dialogs"
     d:DataContext="{d:DesignInstance Type=homePage:HomePageViewModel}"
     MinWidth="960"
     BorderThickness="1"
     BorderBrush="{StaticResource ContentBackgroundAlt4}"
-        Background="{DynamicResource ContentBackgroundAlt2}"
-        MouseLeftButtonDown="Grid_MouseLeftButtonDown_1"
+    Background="{DynamicResource ContentBackgroundAlt2}"
+    MouseLeftButtonDown="Grid_MouseLeftButtonDown_1"
     >
 
-
-
-    <Grid
-        x:Name="FocusGrid"
-        hc:ThemeManager.RequestedAccentColor="{DynamicResource MahApps.Brushes.Accent3}">
+    <Grid x:Name="FocusGrid" hc:ThemeManager.RequestedAccentColor="{DynamicResource MahApps.Brushes.Accent3}">
 
         <Grid.Resources>
             <ResourceDictionary>
@@ -36,77 +32,16 @@
                 </ResourceDictionary.MergedDictionaries>
             </ResourceDictionary>
         </Grid.Resources>
+
         <Grid>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="1*" x:Name="HomePageSideBar" />
                 <ColumnDefinition Width="5*" x:Name="HomePageContent" />
             </Grid.ColumnDefinitions>
         </Grid>
-        <!--<Button
-                Margin="0,0,0,0"
-                HorizontalAlignment="Center"
-                VerticalAlignment="Bottom"
-                BorderBrush="Transparent"
-                Click="MenuItem_Click"
-                Style="{DynamicResource MahApps.Styles.Button.Chromeless}">
-                <StackPanel Margin="0,0,0,5">
-                    <TextBlock Foreground="White" Text="New? Take a guided tour!" />
 
-
-                </StackPanel>
-
-            </Button>-->
-            <!--Button
-                Grid.Row="2"
-                Width="55"
-                Height="55"
-                Margin="0,0,0,25"
-                HorizontalAlignment="Center"
-                VerticalAlignment="Bottom"
-                BorderBrush="{DynamicResource RegionBrush}"
-                BorderThickness="0"
-                Command="{Binding CloseHomePage}"
-                Effect="{DynamicResource MahApps.DropShadowEffect.Menu}"
-                Foreground="{DynamicResource MahApps.Brushes.ThemeForeground}"
-                Style="{StaticResource MahApps.Styles.Button.Chromeless}">
-                <iconPacks:PackIconBootstrapIcons
-                    Width="35"
-                    Height="35"
-                    Foreground="{DynamicResource Fluent.Ribbon.Brushes.Backstage.Foreground}"
-                    Kind="BoxArrowLeft">
-                    <iconPacks:PackIconBootstrapIcons.Effect>
-                        <DropShadowEffect />
-                    </iconPacks:PackIconBootstrapIcons.Effect>
-                </iconPacks:PackIconBootstrapIcons>
-            </Button-->
-
-        <Grid
-            Margin="0,0,25,18"
-            HorizontalAlignment="Right"
-            VerticalAlignment="Bottom">
-
-            <StackPanel Orientation="Horizontal">
-
-
-                <TextBlock
-                    Margin="5"
-                    VerticalAlignment="Center"
-                    FlowDirection="LeftToRight"
-                    FontSize="14"
-                    Foreground="{StaticResource WolvenKitRed}"
-                    IsEnabled="False"
-                    Text="{Binding VersionNumber}" />
-                <iconPacks:PackIconCodicons
-                    Width="20"
-                    Height="20"
-                    VerticalAlignment="Center"
-                    Foreground="{StaticResource WolvenKitRed}"
-                    Kind="Versions" />
-            </StackPanel>
-
-        </Grid>
-
-        <TabControl x:Name="HomeTabs" TabStripPlacement="Left" Margin="0">
+        <!-- Left Navigation -->
+        <TabControl Grid.Row="0" x:Name="HomeTabs" TabStripPlacement="Left" Margin="0">
             <TabControl.Resources>
                 <Style TargetType="{x:Type TabItem}">
                     <Setter Property="Background" Value="Transparent"/>
@@ -120,20 +55,20 @@
                                         <ColumnDefinition Width="11*" />
                                     </Grid.ColumnDefinitions>
                                     <Border Grid.Column="1"
-                                    x:Name="Border"
-                                    Margin="30,0,0,0"
-                                    Background="{TemplateBinding Background}"
-                                    BorderThickness="3,0,0,0"
-                                    BorderBrush="{TemplateBinding BorderBrush}">
-                                    <ContentPresenter
-                                        x:Name="ContentSite"
-                                        VerticalAlignment="Center"
-                                        HorizontalAlignment="Left"
-                                        ContentSource="Header"
-                                        Width="160"
-                                        Height="44"
-                                        Margin="8,0,0,0"
-                                        RecognizesAccessKey="True" />
+                                        x:Name="Border"
+                                        Margin="30,0,0,0"
+                                        Background="{TemplateBinding Background}"
+                                        BorderThickness="3,0,0,0"
+                                        BorderBrush="{TemplateBinding BorderBrush}">
+                                        <ContentPresenter
+                                            x:Name="ContentSite"
+                                            VerticalAlignment="Center"
+                                            HorizontalAlignment="Left"
+                                            ContentSource="Header"
+                                            Width="160"
+                                            Height="44"
+                                            Margin="8,0,0,0"
+                                            RecognizesAccessKey="True" />
                                     </Border>
                                 </Grid>
                             </ControlTemplate>
@@ -185,46 +120,46 @@
                                                 <RowDefinition Height="1*" />
                                             </Grid.RowDefinitions>
                                             <Image
-                                                Grid.Column="1"
-                                                Grid.Row="1"
-                                                x:Name="LogoNavi"
-                                                HorizontalAlignment="Stretch"
-                                                VerticalAlignment="Stretch"
-                                                Source="pack://application:,,,/Resources/Media/Images/Application/Sammy_Home.png" />
+                                                    Grid.Column="1"
+                                                    Grid.Row="1"
+                                                    x:Name="LogoNavi"
+                                                    HorizontalAlignment="Stretch"
+                                                    VerticalAlignment="Stretch"
+                                                    Source="pack://application:,,,/Resources/Media/Images/Application/Sammy_Home.png" />
                                             <Button
-                                                IsCancel="True"
-                                                Grid.Column="1"
-                                                Grid.Row="1"
-                                                HorizontalAlignment="Stretch"
-                                                VerticalAlignment="Stretch"
-                                                Width="Auto"
-                                                Height="Auto"
-                                                Style="{DynamicResource HeaderButtonStyle}"
-                                                Opacity=".15"
-                                                Background="{DynamicResource TransparentWhiteBrush}"
-                                                BorderBrush="{DynamicResource TransparentWhiteBrush}"
-                                                Foreground="{DynamicResource TransparentWhiteBrush}"
-                                                Command="{Binding CloseHomePage}"/>
+                                                    IsCancel="True"
+                                                    Grid.Column="1"
+                                                    Grid.Row="1"
+                                                    HorizontalAlignment="Stretch"
+                                                    VerticalAlignment="Stretch"
+                                                    Width="Auto"
+                                                    Height="Auto"
+                                                    Style="{DynamicResource HeaderButtonStyle}"
+                                                    Opacity=".15"
+                                                    Background="{DynamicResource TransparentWhiteBrush}"
+                                                    BorderBrush="{DynamicResource TransparentWhiteBrush}"
+                                                    Foreground="{DynamicResource TransparentWhiteBrush}"
+                                                    Command="{Binding CloseHomePage}"/>
                                         </Grid>
                                     </Border>
                                     <Grid
-                                        Grid.Column="0"
-                                        Grid.Row="1">
+                                            Grid.Column="0"
+                                            Grid.Row="1">
                                         <TabPanel
-                                            HorizontalAlignment="Stretch"
-                                            x:Name="HeaderPanel"
-                                            Panel.ZIndex="1"
-                                            IsItemsHost="True"
-                                            Background="Transparent" />
+                                                HorizontalAlignment="Stretch"
+                                                x:Name="HeaderPanel"
+                                                Panel.ZIndex="1"
+                                                IsItemsHost="True"
+                                                Background="Transparent" />
                                     </Grid>
 
                                     <Border
-                                        x:Name="Border"
-                                        Grid.RowSpan="2"
-                                        Grid.Column="1"
-                                        BorderThickness="0">
+                                            x:Name="Border"
+                                            Grid.RowSpan="2"
+                                            Grid.Column="1"
+                                            BorderThickness="0">
                                         <ContentPresenter x:Name="PART_SelectedContentHost"
-                                          Margin="0" ContentSource="SelectedContent" />
+                                              Margin="0" ContentSource="SelectedContent" />
                                     </Border>
                                 </Grid>
                             </ControlTemplate>
@@ -232,15 +167,16 @@
                     </Setter>
                 </Style>
             </TabControl.Style>
+
             <TabItem Name="WelcomePageTab">
                 <TabItem.Header>
                     <StackPanel Orientation="Horizontal">
                         <iconPacks:PackIconCodicons
-                            Foreground="White"
-                            VerticalAlignment="Center"
-                            Width="20"
-                            Height="20"
-                            Kind="Home" />
+                                Foreground="White"
+                                VerticalAlignment="Center"
+                                Width="20"
+                                Height="20"
+                                Kind="Home" />
                         <TextBlock Text="Welcome" Margin="8,0,0,0" VerticalAlignment="Center" FontSize="16"/>
                     </StackPanel>
                 </TabItem.Header>
@@ -249,15 +185,49 @@
                 </TabItem.Content>
             </TabItem>
 
+            <TabItem Name="ModsPageTab" Selector.Selected="ModsPageTab_Selected">
+                <TabItem.Header>
+                    <StackPanel Orientation="Horizontal">
+                        <iconPacks:PackIconCodicons
+                                Foreground="White"
+                                VerticalAlignment="Center"
+                                Width="20"
+                                Height="20"
+                                Kind="Package" />
+                        <TextBlock Text="Mod Manager" Margin="8,0,0,0" VerticalAlignment="Center" FontSize="16"/>
+                    </StackPanel>
+                </TabItem.Header>
+                <TabItem.Content>
+                    <pages:ModsView/>
+                </TabItem.Content>
+            </TabItem>
+
+            <TabItem Name="PluginsPageTab" Selector.Selected="PluginsPageTab_Selected">
+                <TabItem.Header>
+                    <StackPanel Orientation="Horizontal">
+                        <iconPacks:PackIconCodicons
+                                Foreground="White"
+                                VerticalAlignment="Center"
+                                Width="20"
+                                Height="20"
+                                Kind="Extensions" />
+                        <TextBlock Text="Plugins" Margin="8,0,0,0" VerticalAlignment="Center" FontSize="16"/>
+                    </StackPanel>
+                </TabItem.Header>
+                <TabItem.Content>
+                    <pages:PluginsToolView/>
+                </TabItem.Content>
+            </TabItem>
+
             <TabItem Name="SettingsPageTab">
                 <TabItem.Header>
                     <StackPanel Orientation="Horizontal">
                         <iconPacks:PackIconCodicons
-                            Foreground="White"
-                            VerticalAlignment="Center"
-                            Width="20"
-                            Height="20"
-                            Kind="Settings" />
+                                Foreground="White"
+                                VerticalAlignment="Center"
+                                Width="20"
+                                Height="20"
+                                Kind="Settings" />
                         <TextBlock Text="Settings" Margin="8,0,0,0" VerticalAlignment="Center" FontSize="16"/>
                     </StackPanel>
                 </TabItem.Header>
@@ -270,12 +240,12 @@
                 <TabItem.Header>
                     <StackPanel Orientation="Horizontal">
                         <iconPacks:PackIconBoxIcons
-                            Foreground="White"
-                            VerticalAlignment="Center"
-                            Width="20"
-                            Height="20"
-                            HorizontalAlignment="Center"
-                            Kind="LogosWikipedia" />
+                                Foreground="White"
+                                VerticalAlignment="Center"
+                                Width="20"
+                                Height="20"
+                                HorizontalAlignment="Center"
+                                Kind="LogosWikipedia" />
                         <TextBlock Text="Wiki" Margin="8,0,0,0" VerticalAlignment="Center" FontSize="16"/>
                     </StackPanel>
                 </TabItem.Header>
@@ -288,12 +258,12 @@
                 <TabItem.Header>
                     <StackPanel Orientation="Horizontal">
                         <iconPacks:PackIconBoxIcons
-                            Foreground="White"
-                            VerticalAlignment="Center"
-                            Width="20"
-                            Height="20"
-                            HorizontalAlignment="Center"
-                            Kind="LogosGithub" />
+                                Foreground="White"
+                                VerticalAlignment="Center"
+                                Width="20"
+                                Height="20"
+                                HorizontalAlignment="Center"
+                                Kind="LogosGithub" />
                         <TextBlock Text="Github" Margin="8,0,0,0" VerticalAlignment="Center" FontSize="16"/>
                     </StackPanel>
                 </TabItem.Header>
@@ -306,12 +276,12 @@
                 <TabItem.Header>
                     <StackPanel Orientation="Horizontal">
                         <iconPacks:PackIconCodicons
-                            Foreground="White"
-                            VerticalAlignment="Center"
-                            Width="20"
-                            Height="20"
-                            HorizontalAlignment="Center"
-                            Kind="Cloud" />
+                                Foreground="White"
+                                VerticalAlignment="Center"
+                                Width="20"
+                                Height="20"
+                                HorizontalAlignment="Center"
+                                Kind="Cloud" />
                         <TextBlock Text="Website" Margin="8,0,0,0" VerticalAlignment="Center" FontSize="16"/>
                     </StackPanel>
                 </TabItem.Header>
@@ -321,69 +291,45 @@
             </TabItem>
         </TabControl>
 
-        <!--  Min/Max/Close Buttons  -->
-        <!--Grid Grid.Column="2">
-            <Grid.OpacityMask>
-                <VisualBrush Visual="{Binding ElementName=ButtonsBackground}" />
-            </Grid.OpacityMask>
-        <Border
-            Name="ButtonsBackground"
-            Height="30"
-            Margin="0,28,28,0"
-            HorizontalAlignment="Right"
-            VerticalAlignment="Top"
-            Background="{StaticResource ContentBackgroundAlt}"
-            CornerRadius="5">
-            <StackPanel
-                Margin="0,0,0,0"
-                HorizontalAlignment="Right"
-                VerticalAlignment="Center"
-                Orientation="Horizontal">
-                <Button
-                    Width="63"
-                    VerticalAlignment="Center"
-                    BorderBrush="Transparent"
-                    Command="{Binding MinimizeWindow}"
-                    Style="{StaticResource ModernButtonStyle}">
-                        <iconPacks:PackIconCodicons
-                        Width="13"
-                        Height="13"
-                        Foreground="{StaticResource Fluent.Ribbon.Brushes.Backstage.Foreground}"
-                        Kind="ChromeMinimize">
-                        </iconPacks:PackIconCodicons>
-                </Button>
+        <!-- Left Bottom Button -->
+        <Grid HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="18,0,25,18">
+            <Button Grid.Row="1" x:Name="ToEditorButton"
+                    HorizontalAlignment="Stretch" BorderThickness="0" >
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
 
-                <Button
-                    Width="63"
-                    VerticalAlignment="Center"
-                    BorderBrush="Transparent"
-                    Command="{Binding RestoreWindow}"
-                    Style="{StaticResource ModernButtonStyle}">
-                        <iconPacks:PackIconCodicons
-                        Width="13"
-                        Height="13"
-                        Foreground="{StaticResource Fluent.Ribbon.Brushes.Backstage.Foreground}"
-                        Kind="ChromeRestore">
-                        </iconPacks:PackIconCodicons>
-                </Button>
+                    <TextBlock Text="Continue to editor" Width="150" FontSize="16" 
+                               HorizontalAlignment="Center" VerticalAlignment="Center" />
+                    <iconPacks:PackIconCodicons Grid.Column="1" Kind="ArrowRight" Height="30" Width="30" 
+                                        HorizontalAlignment="Right" VerticalAlignment="Center" />
+                </Grid>
+            </Button>
+        </Grid>
 
-                <Button
-                    Width="63"
+        <!-- Right Bottom Version Number -->
+        <Grid Margin="0,0,25,18" HorizontalAlignment="Right" VerticalAlignment="Bottom">
+
+            <StackPanel Orientation="Horizontal">
+                <TextBlock
+                    Margin="5"
                     VerticalAlignment="Center"
-                    Command="hc:ControlCommands.ShutdownApp"
-                    Style="{StaticResource ModernButtonStyle}">
-                        <iconPacks:PackIconCodicons
-                        Width="13"
-                        Height="13"
-                        HorizontalAlignment="Center"
-                        VerticalAlignment="Center"
-                        Foreground="{StaticResource Fluent.Ribbon.Brushes.Backstage.Foreground}"
-                        Kind="ChromeClose">
-                        </iconPacks:PackIconCodicons>
-                </Button>
+                    FlowDirection="LeftToRight"
+                    FontSize="14"
+                    Foreground="{StaticResource WolvenKitRed}"
+                    IsEnabled="False"
+                    Text="{Binding VersionNumber}" />
+                <iconPacks:PackIconCodicons
+                    Width="20"
+                    Height="20"
+                    VerticalAlignment="Center"
+                    Foreground="{StaticResource WolvenKitRed}"
+                    Kind="Versions" />
             </StackPanel>
-            </Border>
-        </Grid-->
+
+        </Grid>
 
     </Grid>
 </reactiveUi:ReactiveUserControl>

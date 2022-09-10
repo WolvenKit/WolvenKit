@@ -2,7 +2,7 @@ using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Types
 {
-	public partial class MeleeBlockEvents : MeleeEventsTransition
+	public partial class MeleeBlockEvents : MeleeRumblingEvents
 	{
 		[Ordinal(1)] 
 		[RED("blockStatFlag")] 

@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using System.IO;
 using SharpGLTF.Validation;
 using Splat;
 using WolvenKit.Core.Interfaces;
@@ -179,6 +180,32 @@ namespace WolvenKit.Common.Model.Arguments
         /// </summary>
         /// <returns>String</returns>
         public override string ToString() => "MLMASK";
+    }
+
+    /// <summary>
+    /// Re to Animset import arguments
+    /// </summary>
+    public class ReImportArgs : ImportArgs
+    {
+        [Browsable(false)]
+        public string RedMod { get; set; } = "";
+        [Browsable(false)]
+        public string Depot { get; set; } = "";
+        [Browsable(false)]
+        public string Input { get; set; } = "";
+        [Browsable(false)]
+        public string Animset { get; set; } = "";
+        [Browsable(false)]
+        public string AnimationToRename { get; set; } = "";
+        [Category("Import Settings")]
+        [Display(Name = "Outfile")]
+        [Description("resource .animset file name to write (resource path must start with base//)")]
+        public string Output { get; set; } = "";
+        /// <summary>
+        /// String Override to display info in datagrid.
+        /// </summary>
+        /// <returns>String</returns>
+        public override string ToString() => $"{Path.GetFileName(Animset)} - {AnimationToRename}";
     }
 
     // Formats used in the v1.52 game files

@@ -5,8 +5,8 @@ namespace WolvenKit.RED4.Types
 	public partial class MeleeThrowReloadEvents : MeleeEventsTransition
 	{
 		[Ordinal(1)] 
-		[RED("isPlayerAiming")] 
-		public CBool IsPlayerAiming
+		[RED("isSwitchingWeapon")] 
+		public CBool IsSwitchingWeapon
 		{
 			get => GetPropertyValue<CBool>();
 			set => SetPropertyValue<CBool>(value);

@@ -5,16 +5,16 @@ namespace WolvenKit.RED4.Types
 	public partial class animAnimNode_RagdollControl : animAnimNode_Base
 	{
 		[Ordinal(11)] 
-		[RED("canRequestInertialization")] 
-		public CBool CanRequestInertialization
+		[RED("blendInDuration")] 
+		public CFloat BlendInDuration
 		{
-			get => GetPropertyValue<CBool>();
-			set => SetPropertyValue<CBool>(value);
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
 		}
 
 		[Ordinal(12)] 
-		[RED("inertializationBlendDuration")] 
-		public CFloat InertializationBlendDuration
+		[RED("blendOutDuration")] 
+		public CFloat BlendOutDuration
 		{
 			get => GetPropertyValue<CFloat>();
 			set => SetPropertyValue<CFloat>(value);
@@ -31,7 +31,8 @@ namespace WolvenKit.RED4.Types
 		public animAnimNode_RagdollControl()
 		{
 			Id = 4294967295;
-			InertializationBlendDuration = 1.000000F;
+			BlendInDuration = 0.200000F;
+			BlendOutDuration = 0.500000F;
 			InputPoseNode = new();
 
 			PostConstruct();

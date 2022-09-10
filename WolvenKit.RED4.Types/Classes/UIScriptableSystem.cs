@@ -61,6 +61,22 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(7)] 
+		[RED("newWardrobeSets")] 
+		public CArray<CEnum<gameWardrobeClothingSetIndex>> NewWardrobeSets
+		{
+			get => GetPropertyValue<CArray<CEnum<gameWardrobeClothingSetIndex>>>();
+			set => SetPropertyValue<CArray<CEnum<gameWardrobeClothingSetIndex>>>(value);
+		}
+
+		[Ordinal(8)] 
+		[RED("newWardrobeItems")] 
+		public CArray<gameItemID> NewWardrobeItems
+		{
+			get => GetPropertyValue<CArray<gameItemID>>();
+			set => SetPropertyValue<CArray<gameItemID>>(value);
+		}
+
+		[Ordinal(9)] 
 		[RED("comparisionTooltipDisabled")] 
 		public CBool ComparisionTooltipDisabled
 		{
@@ -68,7 +84,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
-		[Ordinal(8)] 
+		[Ordinal(10)] 
 		[RED("attachedPlayer")] 
 		public CWeakHandle<PlayerPuppet> AttachedPlayer
 		{
@@ -76,7 +92,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<PlayerPuppet>>(value);
 		}
 
-		[Ordinal(9)] 
+		[Ordinal(11)] 
 		[RED("inventoryListenerCallback")] 
 		public CHandle<UIScriptableInventoryListenerCallback> InventoryListenerCallback
 		{
@@ -84,7 +100,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CHandle<UIScriptableInventoryListenerCallback>>(value);
 		}
 
-		[Ordinal(10)] 
+		[Ordinal(12)] 
 		[RED("inventoryListener")] 
 		public CHandle<gameInventoryScriptListener> InventoryListener
 		{
@@ -96,6 +112,8 @@ namespace WolvenKit.RED4.Types
 		{
 			NewItems = new();
 			DLCAddedItems = new();
+			NewWardrobeSets = new();
+			NewWardrobeItems = new();
 
 			PostConstruct();
 		}

@@ -10,5 +10,13 @@ namespace WolvenKit.RED4.Types
 			get => GetPropertyValue<CFloat>();
 			set => SetPropertyValue<CFloat>(value);
 		}
+		
+		[RED("timeDilationDriver")]
+		[REDProperty(IsIgnored = true)]
+		public TweakDBID TimeDilationDriver
+		{
+			get => GetPropertyValue<TweakDBID>();
+			set => SetPropertyValue<TweakDBID>(value);
+		}
 	}
 }

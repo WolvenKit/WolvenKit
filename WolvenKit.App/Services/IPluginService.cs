@@ -2,6 +2,7 @@ using System;
 using System.Collections.ObjectModel;
 using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
+using WolvenKit.ViewModels.HomePage;
 using System.Threading.Tasks;
 using WolvenKit.ViewModels.Dialogs;
 
@@ -33,6 +34,8 @@ namespace WolvenKit.Functionality.Services
         mlsetupbuilder,
         [Id("Wolvenkit Resources", "WolvenKit/Wolvenkit-Resources", @"resources.zip", "Resource depot for Wolvenkit.")]
         wolvenkit_resources,
+        [Id("RedMod", "yigsoft/redmod", @"redmod.zip", "RedMod tools.")]
+        redmod
     }
 
     [AttributeUsage(AttributeTargets.Field)]
@@ -54,6 +57,7 @@ namespace WolvenKit.Functionality.Services
 
     public enum EPluginStatus
     {
+        Installed,
         NotInstalled,
         Outdated,
         Latest
@@ -104,6 +108,7 @@ namespace WolvenKit.Functionality.Services
         /// <param name="plugin"></param>
         /// <param name="path"></param>
         /// <returns>false if not installed</returns>
+
         bool TryGetInstallPath(EPlugin plugin, [NotNullWhen(true)] out string path);
     }
 }

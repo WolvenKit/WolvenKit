@@ -6,10 +6,10 @@ namespace WolvenKit.RED4.Types
 	{
 		[Ordinal(1)] 
 		[RED("setID")] 
-		public CInt32 SetID
+		public CEnum<gameWardrobeClothingSetIndex> SetID
 		{
-			get => GetPropertyValue<CInt32>();
-			set => SetPropertyValue<CInt32>(value);
+			get => GetPropertyValue<CEnum<gameWardrobeClothingSetIndex>>();
+			set => SetPropertyValue<CEnum<gameWardrobeClothingSetIndex>>(value);
 		}
 
 		public EquipWardrobeSetRequest()

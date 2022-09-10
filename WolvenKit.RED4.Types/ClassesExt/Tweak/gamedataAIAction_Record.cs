@@ -75,6 +75,14 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 		
+		[RED("disableActionInMultiplayer")]
+		[REDProperty(IsIgnored = true)]
+		public CBool DisableActionInMultiplayer
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+		
 		[RED("failIfAnimationNotStreamedIn")]
 		[REDProperty(IsIgnored = true)]
 		public CBool FailIfAnimationNotStreamedIn
