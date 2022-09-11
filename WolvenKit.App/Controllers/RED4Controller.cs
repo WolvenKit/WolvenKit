@@ -4,10 +4,13 @@ using System.Diagnostics;
 using System.IO;
 using System.IO.Compression;
 using System.Linq;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Xml.Linq;
 using ReactiveUI;
+using Splat;
 using WolvenKit.Common;
 using WolvenKit.Common.Interfaces;
 using WolvenKit.Common.Services;
@@ -15,10 +18,11 @@ using WolvenKit.Core.Compression;
 using WolvenKit.Core.Interfaces;
 using WolvenKit.Core.Services;
 using WolvenKit.Functionality.Services;
+using WolvenKit.Helpers;
 using WolvenKit.Models;
-using WolvenKit.Modkit.RED4.Serialization;
 using WolvenKit.ProjectManagement.Project;
-using WolvenKit.RED4.TweakDB;
+using WolvenKit.RED4.CR2W;
+using WolvenKit.RED4.Types;
 
 namespace WolvenKit.Functionality.Controllers
 {
@@ -86,6 +90,52 @@ namespace WolvenKit.Functionality.Controllers
             }
 
             return Task.CompletedTask;
+        }
+
+        // TODO: Move this somewhere else
+        private void LoadCustomHashes()
+        {
+            var parser = Locator.Current.GetService<Red4ParserService>();
+
+            CName physMatLibPath = "base\\physics\\physicsmaterials.physmatlib";
+            CName presetPath = "engine\\physics\\collision_presets.json";
+
+            var physMatLib = _archiveManager.Lookup(physMatLibPath);
+            if (physMatLib.HasValue)
+            {
+                using var ms = new MemoryStream();
+                physMatLib.Value.Extract(ms);
+                ms.Position = 0;
+
+                if (parser.TryReadRed4File(ms, out var file))
+                {
+                    var root = (physicsMaterialLibraryResource)file.RootChunk;
+
+                    foreach (var physMat in root.Unk1)
+                    {
+                        _hashService.AddCustom(physMat);
+                    }
+                }
+            }
+
+            var preset = _archiveManager.Lookup(presetPath);
+            if (preset.HasValue)
+            {
+                using var ms = new MemoryStream();
+                preset.Value.Extract(ms);
+                ms.Position = 0;
+
+                if (parser.TryReadRed4File(ms, out var file))
+                {
+                    var root = (JsonResource)file.RootChunk;
+                    var res = (physicsCollisionPresetsResource)root.Root.Chunk;
+
+                    foreach (var presetEntry in res.Presets)
+                    {
+                        _hashService.AddCustom(presetEntry.Name);
+                    }
+                }
+            }
         }
 
         private void InitializeBk()
@@ -172,6 +222,8 @@ namespace WolvenKit.Functionality.Controllers
                 _loggerService.Success("Finished loading Archive Manager.");
             }
 
+            LoadCustomHashes();
+
 #pragma warning disable 162
             return _archiveManager;
 #pragma warning restore 162
@@ -193,7 +245,62 @@ namespace WolvenKit.Functionality.Controllers
 
             InstallMod();
 
+            await DeployRedmod();
+
             _progressService.IsIndeterminate = false;
+            return true;
+        }
+
+        public async Task<bool> PackAndInstallRunProject()
+        {
+            _progressService.IsIndeterminate = true;
+
+            if (!await PackProjectNoBackup())
+            {
+                _progressService.IsIndeterminate = false;
+                return false;
+            }
+
+            InstallMod();
+
+            _progressService.IsIndeterminate = false;
+            return true;
+        }
+
+        public async Task<bool> HotInstallProject()
+        {
+            _progressService.IsIndeterminate = true;
+
+            if (!await PackProjectHot())
+            {
+                _progressService.IsIndeterminate = false;
+                return false;
+            }
+
+            _progressService.IsIndeterminate = false;
+
+            return true;
+        }
+
+        public async Task<bool> DeployRedmod()
+        {
+            if (!_pluginService.IsInstalled(EPlugin.redmod))
+            {
+                return false;
+            }
+
+            // compile with redmod
+            var redmodPath = Path.Combine(_settingsManager.GetRED4GameRootDir(), "tools", "redmod", "bin", "redMod.exe");
+            if (File.Exists(redmodPath))
+            {
+                var rttiSchemaPath = Path.Combine(_settingsManager.GetRED4GameRootDir(), "tools", "redmod", "metadata.json");
+                var args = $"deploy -root=\"{_settingsManager.GetRED4GameRootDir()}\" -rttiSchemaPath=\"{rttiSchemaPath}\"";
+
+                _loggerService.Info($"WorkDir: {redmodPath}");
+                _loggerService.Info($"Running commandlet: {args}");
+                return await ProcessUtil.RunProcessAsync(redmodPath, args);
+            }
+
             return true;
         }
 
@@ -251,7 +358,23 @@ namespace WolvenKit.Functionality.Controllers
             // compile tweak files
             CompileTweakFiles(cp77Proj);
 
+            DeploySoundFiles();
+
             var activeMod = _projectManager.ActiveProject;
+
+            // write info.json file if it not exists
+            var modInfoJsonPath = Path.Combine(activeMod.PackedModDirectory, "info.json");
+            if (!File.Exists(modInfoJsonPath))
+            {
+                var options = new JsonSerializerOptions
+                {
+                    WriteIndented = true,
+                    DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,
+                    PropertyNamingPolicy = JsonNamingPolicy.CamelCase
+                };
+                var jsonString = JsonSerializer.Serialize(activeMod.GetInfo(), options);
+                File.WriteAllText(modInfoJsonPath, jsonString);
+            }
 
             // create mod zip file
             var zipPathRoot = new DirectoryInfo(activeMod.PackedRootDirectory).Parent.FullName;
@@ -270,6 +393,128 @@ namespace WolvenKit.Functionality.Controllers
             }
             _loggerService.Success($"{cp77Proj.Name} zip available at {zipPath}");
 
+            return true;
+        }
+
+        private void DeploySoundFiles()
+        {
+            var path = Path.Combine(_projectManager.ActiveProject.PackedModDirectory, "info.json");
+            if (!File.Exists(path))
+            {
+                return;
+            }
+
+            // read info
+            var modProj = _projectManager.ActiveProject as Cp77Project;
+            var files = new List<string>();
+            try
+            {
+                // clean packed sounds dir
+                foreach (var f in Directory.GetFiles(modProj.PackedSoundsDirectory))
+                {
+                    File.Delete(f);
+                }
+
+                var options = new JsonSerializerOptions
+                {
+                    WriteIndented = true,
+                    DefaultIgnoreCondition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull,
+                    PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+                    IgnoreReadOnlyProperties = true,
+                };
+                var info = JsonSerializer.Deserialize<ModInfo>(File.ReadAllText(path), options);
+                foreach (var e in info.CustomSounds)
+                {
+                    if (!string.IsNullOrEmpty(e.File))
+                    {
+                        files.Add(e.File);
+
+                        var rawFile = Path.Combine(modProj.SoundDirectory, e.File);
+                        var packedFile = Path.Combine(modProj.PackedSoundsDirectory, e.File);
+                        if (File.Exists(rawFile))
+                        {
+                            File.Copy(rawFile, packedFile, true);
+                        }
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                _loggerService.Error(e);
+            }
+        }
+
+        public async Task<bool> PackProjectNoBackup()
+        {
+
+            if (_projectManager.ActiveProject is not Cp77Project cp77Proj)
+            {
+                _loggerService.Error("Can't pack project (no project/not cyberpunk project)!");
+                return await Task.FromResult(false);
+            }
+
+            // cleanup
+            try
+            {
+                var archives = Directory.GetFiles(cp77Proj.PackedArchiveDirectory, "*.archive");
+                foreach (var archive in archives)
+                {
+                    File.Delete(archive);
+                }
+            }
+            catch (Exception e)
+            {
+                _loggerService.Error(e);
+            }
+
+            // pack mod
+            var modfiles = Directory.GetFiles(cp77Proj.ModDirectory, "*", SearchOption.AllDirectories);
+            if (modfiles.Any())
+            {
+                _modTools.Pack(
+                    new DirectoryInfo(cp77Proj.ModDirectory),
+                    new DirectoryInfo(cp77Proj.PackedArchiveDirectory),
+                    cp77Proj.Name);
+                _loggerService.Info("Packing archives complete!");
+            }
+            _loggerService.Success($"{cp77Proj.Name} packed into {cp77Proj.PackedArchiveDirectory}");
+
+            // compile tweak files
+            CompileTweakFiles(cp77Proj);
+
+            return await Task.FromResult(true);
+        }
+
+        public async Task<bool> PackProjectHot()
+        {
+
+            if (_projectManager.ActiveProject is not Cp77Project cp77Proj)
+            {
+                _loggerService.Error("Can't pack project (no project/not cyberpunk project)!");
+                return await Task.FromResult(false);
+            }
+
+            var hotdirectory = Path.Combine(_settingsManager.GetRED4GameRootDir(), "archive", "pc", "hot");
+
+            // create hot directory
+            if (!Directory.Exists(hotdirectory))
+            {
+                Directory.CreateDirectory(hotdirectory);
+                _loggerService.Info($"Created hot directory at {hotdirectory}");
+            }
+
+            // pack mod
+            var modfiles = Directory.GetFiles(cp77Proj.ModDirectory, "*", SearchOption.AllDirectories);
+            if (modfiles.Any())
+            {
+                _modTools.Pack(
+                    new DirectoryInfo(cp77Proj.ModDirectory),
+                    new DirectoryInfo(hotdirectory),
+                    cp77Proj.Name);
+                _loggerService.Info("Hot archive installation complete!");
+            }
+            _loggerService.Success($"{cp77Proj.Name} packed into {hotdirectory}");
+
             return await Task.FromResult(true);
         }
 
@@ -287,7 +532,6 @@ namespace WolvenKit.Functionality.Controllers
             var tweakFiles = Directory.GetFiles(cp77Proj.TweakDirectory, "*.yaml", SearchOption.AllDirectories);
             foreach (var f in tweakFiles)
             {
-//                var text = File.ReadAllText(f);
                 var folder = Path.GetDirectoryName(Path.GetRelativePath(cp77Proj.TweakDirectory, f));
                 var outDirectory = Path.Combine(cp77Proj.PackedTweakDirectory, folder);
                 if (!Directory.Exists(outDirectory))
@@ -297,36 +541,6 @@ namespace WolvenKit.Functionality.Controllers
                 var filename = Path.GetFileName(f);
                 var outPath = Path.Combine(outDirectory, filename);
                 File.Copy(f, outPath, true);
-
-//                try
-//                {
-//  
-//                    if (!Serialization.Deserialize(text, out var dict))
-//                    {
-//                        continue;
-//                    }
-//                    var db = new TweakDB();
-//                    flats
-//                    foreach (var (key, value) in dict.Flats)
-//                    {
-//                        db.Add(key, value);
-//                    }
-//                    groups
-//                    foreach (var (key, value) in dict.Groups)
-//                    {
-//                        db.Add(key, value);
-//                    }
-
-//                    using var ms = new MemoryStream();
-//                    using var writer = new TweakDBWriter(ms);
-//                    writer.WriteFile(db);
-//                    File.WriteAllBytes(outPath, ms.ToArray());
-//                }
-//                catch (Exception e)
-//                {
-//                    _loggerService.Error(e);
-//                    continue;
-//                }
             }
         }
 

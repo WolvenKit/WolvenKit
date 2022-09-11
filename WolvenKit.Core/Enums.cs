@@ -148,7 +148,8 @@ namespace WolvenKit.Common
         ttf,
         wav,
         masklist,
-        csv
+        csv,
+        re
     }
 
     public enum EConvertableOutput

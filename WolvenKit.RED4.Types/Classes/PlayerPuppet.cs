@@ -837,14 +837,6 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(196)] 
-		[RED("lastActiveWardrobeSet")] 
-		public CInt32 LastActiveWardrobeSet
-		{
-			get => GetPropertyValue<CInt32>();
-			set => SetPropertyValue<CInt32>(value);
-		}
-
-		[Ordinal(197)] 
 		[RED("bossThatTargetsPlayer")] 
 		public entEntityID BossThatTargetsPlayer
 		{
@@ -852,7 +844,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<entEntityID>(value);
 		}
 
-		[Ordinal(198)] 
+		[Ordinal(197)] 
 		[RED("choiceTokenTextLayerId")] 
 		public CUInt32 ChoiceTokenTextLayerId
 		{
@@ -860,7 +852,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CUInt32>(value);
 		}
 
-		[Ordinal(199)] 
+		[Ordinal(198)] 
 		[RED("choiceTokenTextDrawn")] 
 		public CBool ChoiceTokenTextDrawn
 		{
@@ -887,7 +879,6 @@ namespace WolvenKit.RED4.Types
 			InterestingFactsListenersFunctions = new();
 			CachedGameplayRestrictions = new();
 			DelayEndGracePeriodAfterSpawnEventID = new();
-			LastActiveWardrobeSet = -1;
 			BossThatTargetsPlayer = new();
 
 			PostConstruct();

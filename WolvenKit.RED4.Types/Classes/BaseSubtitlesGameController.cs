@@ -141,6 +141,14 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(26)] 
+		[RED("isRadioSubtitleEnabled")] 
+		public CBool IsRadioSubtitleEnabled
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(27)] 
 		[RED("backgroundOpacity")] 
 		public CFloat BackgroundOpacity
 		{
@@ -148,7 +156,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
-		[Ordinal(27)] 
+		[Ordinal(28)] 
 		[RED("fontSize")] 
 		public CInt32 FontSize
 		{
@@ -156,7 +164,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CInt32>(value);
 		}
 
-		[Ordinal(28)] 
+		[Ordinal(29)] 
 		[RED("factlistenerId")] 
 		public CUInt32 FactlistenerId
 		{

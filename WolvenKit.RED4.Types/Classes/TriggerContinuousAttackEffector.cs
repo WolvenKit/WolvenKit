@@ -36,6 +36,14 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CFloat>(value);
 		}
 
+		[Ordinal(4)] 
+		[RED("timeDilationDriver")] 
+		public CEnum<gamedataEffectorTimeDilationDriver> TimeDilationDriver
+		{
+			get => GetPropertyValue<CEnum<gamedataEffectorTimeDilationDriver>>();
+			set => SetPropertyValue<CEnum<gamedataEffectorTimeDilationDriver>>(value);
+		}
+
 		public TriggerContinuousAttackEffector()
 		{
 			PostConstruct();

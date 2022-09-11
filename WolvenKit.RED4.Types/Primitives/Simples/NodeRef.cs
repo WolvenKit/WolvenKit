@@ -8,7 +8,6 @@ namespace WolvenKit.RED4.Types
 {
     [RED("NodeRef")]
     [REDType(IsValueType = true)]
-    [DebuggerDisplay("{_value}", Type = "NodeRef")]
     public class NodeRef : BaseStringType
     {
         private static readonly ConcurrentDictionary<string, ulong> s_NodeRefStringCache = new();
@@ -69,7 +68,7 @@ namespace WolvenKit.RED4.Types
         public uint GetShortRedHash() => (uint)((_hash >> 32) ^ (uint)_hash);
 
         public static implicit operator NodeRef(string value) => new(value);
-        public static implicit operator string(NodeRef value) => value?._value;
+        public static implicit operator string(NodeRef value) => value?.ToString();
 
         public static implicit operator NodeRef(ulong value) => new(value);
         public static implicit operator ulong(NodeRef value) => value?._hash ?? 0;

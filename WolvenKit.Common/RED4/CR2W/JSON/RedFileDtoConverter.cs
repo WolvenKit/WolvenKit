@@ -284,13 +284,13 @@ public class RedFileDtoConverter : JsonConverter<RedFileDto>, ICustomRedConverte
 
                     for (var i = 0; i < chunkList.Count; i++)
                     {
-                        string? type = null;
-                        if (RedJsonSerializer.IsVersion("0.0.1"))
+                        string? type;
+
+                        if (RedJsonSerializer.IsOlderThen("0.0.2"))
                         {
                             type = chunkList[i].GetProperty("Type").GetString();
                         }
-
-                        if (RedJsonSerializer.IsVersion("0.0.2"))
+                        else
                         {
                             type = chunkList[i].GetProperty("$type").GetString();
                         }

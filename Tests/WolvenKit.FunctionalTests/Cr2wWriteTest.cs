@@ -94,6 +94,9 @@ namespace WolvenKit.FunctionalTests
         public void Write_charcustpreset() => Test_Extension(".charcustpreset");
 
         [TestMethod]
+        public void Write_chromaset() => Test_Extension(".chromaset");
+
+        [TestMethod]
         public void Write_cminimap() => Test_Extension(".cminimap");
 
         [TestMethod]
@@ -110,6 +113,9 @@ namespace WolvenKit.FunctionalTests
 
         [TestMethod]
         public void Write_cookedapp() => Test_Extension(".cookedapp");
+
+        [TestMethod]
+        public void Write_cookedprefab() => Test_Extension(".cookedprefab");
 
         [TestMethod]
         public void Write_credits() => Test_Extension(".credits");

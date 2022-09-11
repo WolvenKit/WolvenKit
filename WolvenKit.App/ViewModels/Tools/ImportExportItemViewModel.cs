@@ -116,6 +116,7 @@ namespace WolvenKit.ViewModels.Tools
                 ERawFileFormat.png => new XbmImportArgs(),
                 ERawFileFormat.tiff => new XbmImportArgs(),
                 ERawFileFormat.masklist => new MlmaskImportArgs(),
+                ERawFileFormat.re => new ReImportArgs(),
                 _ => new CommonImportArgs()
             };
         }

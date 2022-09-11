@@ -116,6 +116,22 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 
+		[Ordinal(15)] 
+		[RED("isPlusOrMinusBtnHoveredOver")] 
+		public CBool IsPlusOrMinusBtnHoveredOver
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
+		[Ordinal(16)] 
+		[RED("inputDisabled")] 
+		public CBool InputDisabled
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+
 		public characterCreationStatsAttributeBtn()
 		{
 			Value = new();

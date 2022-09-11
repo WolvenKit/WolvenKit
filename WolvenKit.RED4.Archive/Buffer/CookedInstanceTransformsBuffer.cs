@@ -11,7 +11,7 @@ namespace WolvenKit.RED4.Archive.Buffer
     {
         public IRedType Data => Transforms;
 
-        public CArray<Transform> Transforms = new();
+        public CArray<Transform> Transforms { get; set; } = new();
 
         public CookedInstanceTransformsBuffer()
         {

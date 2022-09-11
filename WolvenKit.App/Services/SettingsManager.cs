@@ -268,7 +268,8 @@ namespace WolvenKit.Functionality.Services
 
         public string GetRED4GameModDir()
         {
-            var dir = Path.Combine(GetRED4GameRootDir(), "archive", "pc", "mod");
+            //var dir = Path.Combine(GetRED4GameRootDir(), "archive", "pc", "mod");
+            var dir = Path.Combine(GetRED4GameRootDir(), "mods");
             if (!Directory.Exists(dir))
             {
                 Directory.CreateDirectory(dir);

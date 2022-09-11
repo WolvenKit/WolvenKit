@@ -147,6 +147,54 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CResourceAsyncReference<CResource>>(value);
 		}
 		
+		[RED("debug_boom_length")]
+		[REDProperty(IsIgnored = true)]
+		public CFloat Debug_boom_length
+		{
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
+		}
+		
+		[RED("debug_boom_pitch")]
+		[REDProperty(IsIgnored = true)]
+		public CFloat Debug_boom_pitch
+		{
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
+		}
+		
+		[RED("debug_boom_roll")]
+		[REDProperty(IsIgnored = true)]
+		public CFloat Debug_boom_roll
+		{
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
+		}
+		
+		[RED("debug_boom_yaw")]
+		[REDProperty(IsIgnored = true)]
+		public CFloat Debug_boom_yaw
+		{
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
+		}
+		
+		[RED("debug_fov")]
+		[REDProperty(IsIgnored = true)]
+		public CFloat Debug_fov
+		{
+			get => GetPropertyValue<CFloat>();
+			set => SetPropertyValue<CFloat>(value);
+		}
+		
+		[RED("debug_static_camera")]
+		[REDProperty(IsIgnored = true)]
+		public CBool Debug_static_camera
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+		
 		[RED("enable_camera_auto_center")]
 		[REDProperty(IsIgnored = true)]
 		public CBool Enable_camera_auto_center

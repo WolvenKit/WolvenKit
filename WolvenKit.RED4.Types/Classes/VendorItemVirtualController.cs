@@ -13,6 +13,14 @@ namespace WolvenKit.RED4.Types
 		}
 
 		[Ordinal(16)] 
+		[RED("newData")] 
+		public CHandle<VendorUIInventoryItemData> NewData
+		{
+			get => GetPropertyValue<CHandle<VendorUIInventoryItemData>>();
+			set => SetPropertyValue<CHandle<VendorUIInventoryItemData>>(value);
+		}
+
+		[Ordinal(17)] 
 		[RED("itemViewController")] 
 		public CWeakHandle<InventoryItemDisplayController> ItemViewController
 		{
@@ -20,7 +28,7 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CWeakHandle<InventoryItemDisplayController>>(value);
 		}
 
-		[Ordinal(17)] 
+		[Ordinal(18)] 
 		[RED("isSpawnInProgress")] 
 		public CBool IsSpawnInProgress
 		{

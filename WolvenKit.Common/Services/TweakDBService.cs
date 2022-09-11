@@ -11,8 +11,9 @@ namespace WolvenKit.Common.Services
 {
     public class TweakDBService : ITweakDBService
     {
-        private const string tweakdbstr = "WolvenKit.Common.Resources.tweakdbstr.kark";
-        private const string tweakdbstr_add = "WolvenKit.Common.Resources.tweakdbstr_add.kark";
+        private const string s_tweakdbstr = "WolvenKit.Common.Resources.tweakdbstr.kark";
+        private const string s_tweakdbstrAdd = "WolvenKit.Common.Resources.tweakdbstr_add.kark";
+        private const string s_userStrs = "userStrs.kark";
 
         private static readonly TweakDBStringHelper s_stringHelper = new();
         private static TweakDB s_tweakDb = new();
@@ -21,8 +22,21 @@ namespace WolvenKit.Common.Services
 
         public TweakDBService()
         {
-            s_stringHelper.LoadFromStream(Assembly.GetExecutingAssembly().GetManifestResourceStream(tweakdbstr));
-            s_stringHelper.LoadFromStream(Assembly.GetExecutingAssembly().GetManifestResourceStream(tweakdbstr_add));
+            s_stringHelper.LoadFromStream(Assembly.GetExecutingAssembly().GetManifestResourceStream(s_tweakdbstr));
+            s_stringHelper.LoadFromStream(Assembly.GetExecutingAssembly().GetManifestResourceStream(s_tweakdbstrAdd));
+
+            var userStrsPath = Path.Combine(Path.GetDirectoryName(AppContext.BaseDirectory) ?? throw new InvalidOperationException(), s_userStrs);
+            if (File.Exists(userStrsPath))
+            {
+                s_stringHelper.Load(userStrsPath);
+            }
+
+            userStrsPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "REDModding", "WolvenKit", s_userStrs);
+            if (File.Exists(userStrsPath))
+            {
+                s_stringHelper.Load(userStrsPath);
+            }
+
             TweakDBID.ResolveHashHandler = s_stringHelper.GetString;
         }
 

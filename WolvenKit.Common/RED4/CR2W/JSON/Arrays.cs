@@ -2,6 +2,7 @@
 using System;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using WolvenKit.RED4.Archive.Buffer;
 using WolvenKit.RED4.Types;
 
 namespace WolvenKit.RED4.CR2W.JSON;
@@ -16,6 +17,11 @@ public class ArrayConverterFactory : JsonConverterFactory
 
     public override JsonConverter CreateConverter(Type typeToConvert, JsonSerializerOptions options)
     {
+        if (typeToConvert == typeof(worldNodeDataBuffer))
+        {
+            return _cArrayConverter;
+        }
+
         if (typeToConvert.GetGenericTypeDefinition() == typeof(CArray<>))
         {
             return _cArrayConverter;

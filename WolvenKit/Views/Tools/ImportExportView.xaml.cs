@@ -1,5 +1,7 @@
 using System;
 using System.ComponentModel;
+using System.Linq;
+using System.IO;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Windows;
@@ -10,6 +12,9 @@ using WolvenKit.Common;
 using WolvenKit.Common.Model.Arguments;
 using WolvenKit.Functionality.Commands;
 using WolvenKit.Functionality.Services;
+using WolvenKit.ProjectManagement.Project;
+using WolvenKit.RED4.CR2W;
+using WolvenKit.RED4.Types;
 using WolvenKit.ViewModels.Tools;
 
 namespace WolvenKit.Views.Tools
@@ -17,6 +22,9 @@ namespace WolvenKit.Views.Tools
     public partial class ImportExportView : ReactiveUserControl<ImportExportViewModel>
     {
         private ISettingsManager _settingsManager;
+        private PropertyItem _propertyItem;
+        private readonly IProjectManager projectManager;
+        private readonly Red4ParserService parser;
 
         /// <summary>
         /// Constructor I/E Tool.
@@ -29,6 +37,10 @@ namespace WolvenKit.Views.Tools
 
             ViewModel = Locator.Current.GetService<ImportExportViewModel>();
             DataContext = ViewModel;
+
+            projectManager = Locator.Current.GetService<IProjectManager>();
+            parser = Locator.Current.GetService<Red4ParserService>();
+
 
             this.WhenActivated(disposables =>
             {
@@ -109,11 +121,50 @@ namespace WolvenKit.Views.Tools
             {
                 if (ImportGrid.SelectedItem is ImportExportItemViewModel selectedImport)
                 {
-                    if (Enum.TryParse(selectedImport.Extension.TrimStart('.'), out ERawFileFormat _))
+                    if (Enum.TryParse(selectedImport.Extension.TrimStart('.'), out ERawFileFormat rawExtension))
                     {
                         XAML_AdvancedOptionsOverlay.SetCurrentValue(VisibilityProperty, System.Windows.Visibility.Visible);
                         XAML_AdvancedOptionsExtension.SetCurrentValue(System.Windows.Controls.TextBlock.TextProperty, selectedImport.Extension);
                         XAML_AdvancedOptionsFileName.SetCurrentValue(System.Windows.Controls.TextBlock.TextProperty, selectedImport.Name);
+
+                        if (rawExtension == ERawFileFormat.re)
+                        {
+                            var mod = projectManager.ActiveProject;
+                            var animsets = Directory.GetFiles(mod.ModDirectory, "*.anims", SearchOption.AllDirectories);
+                            var depotPaths = animsets.Select(x => x.Substring(mod.ModDirectory.Length + 1));
+
+                            AddSettingsRe.SetCurrentValue(VisibilityProperty, Visibility.Visible);
+
+                            AnimsetComboBox.SetCurrentValue(System.Windows.Controls.ItemsControl.ItemsSourceProperty, depotPaths);
+
+                            // set defaults if no change in selection
+                            if (selectedImport.Properties is ReImportArgs args)
+                            {
+                                if (AnimsetComboBox.SelectedItem is not string selectedItem)
+                                {
+                                    return;
+                                }
+                                if (string.IsNullOrEmpty(selectedItem))
+                                {
+                                    return;
+                                }
+
+                                args.Animset = selectedItem;
+                                //args.Output = Path.ChangeExtension(selectedItem, "cooked.anims");
+
+                                if (AnimNameComboBox.SelectedItem is not string selectedName)
+                                {
+                                    return;
+                                }
+                                if (string.IsNullOrEmpty(selectedName))
+                                {
+                                    return;
+                                }
+
+                                args.AnimationToRename = selectedName;
+                            }
+
+                        }
                     }
                     else
                     {
@@ -182,7 +233,7 @@ namespace WolvenKit.Views.Tools
         /// <param name="e"></param>
         private void CancelSelectingClick(object sender, RoutedEventArgs e) => XAML_FileSelectingOverlay.SetCurrentValue(VisibilityProperty, Visibility.Collapsed);
 
-        private PropertyItem _propertyItem;
+        
 
         /// <summary>
         /// Override PG Collection Editor
@@ -257,6 +308,60 @@ namespace WolvenKit.Views.Tools
                         return;
                     }
                 }
+            }
+        }
+
+        private void AnimsetComboBox_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
+        {
+            if (ViewModel is not ImportExportViewModel vm)
+            {
+                return;
+            }
+            if (vm.IsImportsSelected
+                && ImportGrid.SelectedItem is ImportableItemViewModel selectedImport
+                && selectedImport.Properties is ReImportArgs args)
+            {
+                if (AnimsetComboBox.SelectedItem is not string selectedItem)
+                {
+                    return;
+                }
+
+                args.Animset = selectedItem;
+                //args.Output = Path.ChangeExtension(selectedItem, "cooked.anims");
+
+                // parse animset and populate the animnameBox
+                var path = Path.Combine(projectManager.ActiveProject.ModDirectory, selectedItem);
+                if (File.Exists(path))
+                {
+                    using var fs = new FileStream(path, FileMode.Open);
+                    if (parser.TryReadRed4File(fs, out var originalFile))
+                    {
+                        if (originalFile.RootChunk is animAnimSet animset)
+                        {
+                            var animnames = animset.Animations.Select(x => x.Chunk.Animation.Chunk.Name.ToString());
+                            AnimNameComboBox.SetCurrentValue(System.Windows.Controls.ItemsControl.ItemsSourceProperty, animnames);
+                        }
+                    }
+                }
+            }
+        }
+
+        private void AnimNameComboBox_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
+        {
+            if (ViewModel is not ImportExportViewModel vm)
+            {
+                return;
+            }
+            if (vm.IsImportsSelected
+                && ImportGrid.SelectedItem is ImportableItemViewModel selectedImport
+                && selectedImport.Properties is ReImportArgs args)
+            {
+                if (AnimNameComboBox.SelectedItem is not string selectedItem)
+                {
+                    return;
+                }
+
+                args.AnimationToRename = selectedItem;
             }
         }
     }

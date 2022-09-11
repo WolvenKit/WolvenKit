@@ -1,22 +1,16 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using WolvenKit.RED4.Archive.Buffer;
 using WolvenKit.RED4.IO;
 using WolvenKit.RED4.Types;
-using WolvenKit.Core.Extensions;
-using WolvenKit.Common.Services;
-using Splat;
 using static WolvenKit.RED4.Types.Enums;
 
 namespace WolvenKit.RED4.Archive.IO
 {
     public class CollisionReader : Red4Reader, IBufferReader
     {
-        public CollisionReader(MemoryStream ms) : base(ms)
+        public CollisionReader(Stream ms) : base(ms)
         {
 
         }
@@ -34,13 +28,17 @@ namespace WolvenKit.RED4.Archive.IO
 
             try
             { 
-                _reader.BaseStream.Seek(node.NumActors * 48 + node.NumShapeInfos * 32, SeekOrigin.Begin);
+                _reader.BaseStream.Seek((node.NumActors * 48) + (node.NumShapeInfos * 32), SeekOrigin.Begin);
+
+                var materials = new List<CName>();
+                var materialIndices = new List<byte>();
+                var presets = new List<CName>();
 
                 var positions = new List<Vector3>();
                 var rotations = new List<Quaternion>();
                 var scales = new List<Vector3>();
 
-                for (int i = 0; i < node.NumShapePositions; i++)
+                for (var i = 0; i < node.NumShapePositions; i++)
                 {
                     positions.Add(new Vector3()
                     {
@@ -50,7 +48,7 @@ namespace WolvenKit.RED4.Archive.IO
                     });
                 }
 
-                for (int i = 0; i < node.NumShapeRotations; i++)
+                for (var i = 0; i < node.NumShapeRotations; i++)
                 {
                     rotations.Add(new Quaternion()
                     {
@@ -61,7 +59,7 @@ namespace WolvenKit.RED4.Archive.IO
                     });
                 }
 
-                for (int i = 0; i < node.NumScales; i++)
+                for (var i = 0; i < node.NumScales; i++)
                 {
                     scales.Add(new Vector3()
                     {
@@ -71,30 +69,94 @@ namespace WolvenKit.RED4.Archive.IO
                     });
                 }
 
-                for (int i = 0; i < node.NumMaterials; i++)
+                for (var i = 0; i < node.NumMaterials; i++)
                 {
-                    data.Materials.Add(_reader.ReadUInt64());
+                    materials.Add(_reader.ReadUInt64());
                 }
 
-                for (int i = 0; i < node.NumPresets; i++)
+                for (var i = 0; i < node.NumPresets; i++)
                 {
-                    data.Presets.Add(_reader.ReadUInt64());
+                    presets.Add(_reader.ReadUInt64());
                 }
 
-                // not sure how this is suppose to be used
-                for (int i = 0; i < node.NumShapeIndices; i++)
+                // seems to be always 1:1, skip for now
+                for (var i = 0; i < node.NumShapeIndices; i++)
                 {
-                    data.ShapeIndices.Add(_reader.ReadUInt32());
+                    _reader.ReadUInt32();
                 }
 
-                for (int i = 0; i < node.NumMaterialIndices; i++)
+                for (var i = 0; i < node.NumMaterialIndices; i++)
                 {
-                    data.MaterialIndices.Add(_reader.ReadByte());
+                    materialIndices.Add(_reader.ReadByte());
+                }
+
+                _reader.BaseStream.Seek(node.NumActors * 48, SeekOrigin.Begin);
+
+                var shapes = new List<CollisionShape>();
+
+                for (var i = 0; i < node.NumShapeInfos; i++)
+                {
+                    // peek to get the type
+                    _reader.BaseStream.Seek(12, SeekOrigin.Current);
+                    var shapeType = (physicsShapeType)_reader.ReadInt16();
+                    _reader.BaseStream.Seek(-14, SeekOrigin.Current);
+
+                    CollisionShape s;
+                    if (shapeType is physicsShapeType.TriangleMesh or physicsShapeType.ConvexMesh)
+                    {
+                        s = new CollisionShapeMesh
+                        {
+                            Hash = _reader.ReadUInt64()
+                        };
+                        _reader.ReadSingle(); // always 0
+                    }
+                    else
+                    {
+                        s = new CollisionShapeSimple {
+                            Size =
+                            {
+                                X = _reader.ReadSingle(),
+                                Y = _reader.ReadSingle(),
+                                Z = _reader.ReadSingle()
+                            }
+                        };
+                    }
+
+                    s.ShapeType = (physicsShapeType)_reader.ReadInt16();
+
+                    s.Uk1 = _reader.ReadInt16(); // always 0
+
+                    var materialStartIndex = _reader.ReadInt16();
+                    var numMaterials = _reader.ReadInt16();
+                    for (var j = 0; j < numMaterials; j++)
+                    {
+                        s.Materials.Add(materials[materialIndices[materialStartIndex + j]]);
+                    }
+
+                    var positionIndex = _reader.ReadInt16();
+                    if (positionIndex != -1)
+                    {
+                        s.Position = positions[positionIndex];
+                    }
+
+                    var rotationIndex = _reader.ReadInt16();
+                    if (rotationIndex != -1)
+                    {
+                        s.Rotation = rotations[rotationIndex];
+                    }
+
+                    s.Preset = presets[_reader.ReadByte()];
+                    s.ProxyType = (physicsProxyType)_reader.ReadByte();
+
+                    s.Uk2 = _reader.ReadUInt16(); // always 0
+                    s.Uk3 = _reader.ReadUInt32(); // always 0
+
+                    shapes.Add(s);
                 }
 
                 _reader.BaseStream.Seek(0, SeekOrigin.Begin);
 
-                for (int i = 0; i < node.NumActors; i++)
+                for (var i = 0; i < node.NumActors; i++)
                 {
                     var a = new CollisionActor();
 
@@ -103,15 +165,19 @@ namespace WolvenKit.RED4.Archive.IO
                     a.Position.X.Bits = _reader.ReadInt32();
                     a.Position.Y.Bits = _reader.ReadInt32();
                     a.Position.Z.Bits = _reader.ReadInt32();
-                    _reader.ReadInt32();
+                    _reader.ReadInt32();  // always 0
 
                     a.Orientation.I = _reader.ReadSingle();
                     a.Orientation.J = _reader.ReadSingle();
                     a.Orientation.K = _reader.ReadSingle();
                     a.Orientation.R = _reader.ReadSingle();
 
-                    a.ShapeIndexStart = _reader.ReadUInt16();
-                    a.NumShapes = _reader.ReadUInt16();
+                    var shapeStartIndex = _reader.ReadUInt16();
+                    var shapeCount = _reader.ReadUInt16();
+                    for (int shapeIndex = shapeStartIndex; shapeIndex < shapeStartIndex + shapeCount; shapeIndex++)
+                    {
+                        data.Actors[i].Shapes.Add(shapes[shapeIndex]);
+                    }
 
                     var scaleIndex = _reader.ReadInt16();
 
@@ -131,81 +197,11 @@ namespace WolvenKit.RED4.Archive.IO
 
                     a.Uk1 = _reader.ReadInt16(); // EMaterialVertexFactory?
                     a.Uk2 = _reader.ReadUInt64();
-
                 }
-
-                for (int i = 0; i < node.NumShapeInfos; i++)
-                {
-                    var s = new CollisionShape();
-
-                    data.Shapes.Add(s);
-
-                    _reader.BaseStream.Seek(12, SeekOrigin.Current);
-
-                    s.ShapeType = (physicsShapeType)_reader.ReadByte();
-
-                    _reader.BaseStream.Seek(-13, SeekOrigin.Current);
-
-                    if (s.ShapeType == physicsShapeType.TriangleMesh || s.ShapeType == physicsShapeType.ConvexMesh)
-                    {
-                        s.Hash = _reader.ReadUInt64();
-                        _reader.ReadSingle();
-                    }
-                    else
-                    {
-                        s.Size.X = _reader.ReadSingle();
-                        s.Size.Y = _reader.ReadSingle();
-                        s.Size.Z = _reader.ReadSingle();
-                    } 
-
-                    var uk0 = _reader.ReadInt16(); // type
-                    var uk1 = _reader.ReadInt16(); 
-                    var uk2 = _reader.ReadInt16(); // materialIndexIndex
-                    var uk3 = _reader.ReadInt16(); // numMaterials
-                    var uk4 = _reader.ReadInt16(); // positionIndex
-                    var uk5 = _reader.ReadInt16(); // rotationIndex
-
-                    var uk6 = _reader.ReadByte(); // presetIndex
-                    var uk7 = _reader.ReadByte(); // physicsProxyType?
-                    var uk8 = _reader.ReadUInt16();
-                    var uk9 = _reader.ReadUInt32();
-
-                    s.Uks.Add((CInt16)uk1);
-                    s.Uks.Add((CInt16)uk3);
-                    s.Uks.Add((CUInt8)uk7);
-                    s.Uks.Add((CUInt16)uk8);
-                    s.Uks.Add((CUInt32)uk9);
-
-                    s.Index = (ushort)uk2;
-
-                    s.Preset = data.Presets[uk6];
-                    s.Material = data.Materials[data.MaterialIndices[s.Index]];
-
-                    if (uk4 != -1)
-                    {
-                        s.Position = positions[uk4];
-                    }
-
-                    if (uk5 != -1)
-                    {
-                        s.Rotation = rotations[uk5];
-                    }
-
-                    s.ProxyType = (physicsProxyType)uk7;
-                }
-
-                for (int i = 0; i < node.NumActors; i++)
-                {
-                    for (int shapeIndex = data.Actors[i].ShapeIndexStart; shapeIndex < data.Actors[i].ShapeIndexStart + data.Actors[i].NumShapes; shapeIndex++)
-                    {
-                        data.Actors[i].Shapes.Add(data.Shapes[shapeIndex]);
-                    }
-                }
-
             }
             catch (Exception)
             {
-
+                // ignore
             }
 
 
