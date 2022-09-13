@@ -23,6 +23,7 @@ using WolvenKit.Common.Exceptions;
 using WolvenKit.Common.Extensions;
 using WolvenKit.Common.FNV1A;
 using WolvenKit.Common.Services;
+using WolvenKit.Core.Interfaces;
 using WolvenKit.Core.Services;
 using WolvenKit.Functionality.Commands;
 using WolvenKit.Functionality.Controllers;

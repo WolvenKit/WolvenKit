@@ -24,3 +24,15 @@ public class InvalidDefaultValueEventArgs : ParsingErrorEventArgs
 {
 
 }
+
+public class InvalidEnumValueEventArgs<T> : ParsingErrorEventArgs where T : struct, Enum
+{
+    public string StringValue { get; }
+    public T Value { get; set; }
+
+    public InvalidEnumValueEventArgs(string stringValue)
+    {
+        StringValue = stringValue;
+        Value = default;
+    }
+}

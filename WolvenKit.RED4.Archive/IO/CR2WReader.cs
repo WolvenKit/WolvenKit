@@ -2,7 +2,7 @@ using System;
 using System.IO;
 using System.Text;
 using Splat;
-using WolvenKit.Common.Services;
+using WolvenKit.Core.Interfaces;
 using WolvenKit.RED4.IO;
 using WolvenKit.RED4.Types;
 using WolvenKit.RED4.Types.Exceptions;

@@ -1,8 +1,7 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using WolvenKit.Common.DDS;
-using WolvenKit.Common.Services;
+using WolvenKit.Core.Interfaces;
 using WolvenKit.RED4.Archive;
 using static WolvenKit.RED4.Types.Enums;
 

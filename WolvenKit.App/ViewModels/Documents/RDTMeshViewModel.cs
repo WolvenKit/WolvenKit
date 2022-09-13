@@ -14,7 +14,7 @@ using Prism.Commands;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using Splat;
-using WolvenKit.Common.Services;
+using WolvenKit.Core.Interfaces;
 using WolvenKit.Functionality.Services;
 using WolvenKit.RED4.Archive.Buffer;
 using WolvenKit.RED4.Archive.CR2W;

@@ -7,7 +7,7 @@ using ICSharpCode.AvalonEdit.Highlighting;
 using ICSharpCode.AvalonEdit.Utils;
 using ReactiveUI.Fody.Helpers;
 using Splat;
-using WolvenKit.Common.Services;
+using WolvenKit.Core.Interfaces;
 
 namespace WolvenKit.ViewModels.Documents
 {

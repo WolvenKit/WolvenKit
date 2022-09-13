@@ -5,7 +5,7 @@ using System.IO;
 using System.Text.Json;
 using Splat;
 using WolvenKit.Common.FNV1A;
-using WolvenKit.Common.Services;
+using WolvenKit.Core.Interfaces;
 using WolvenKit.RED4.Archive;
 
 namespace WolvenKit.Modkit.RED4.Opus
