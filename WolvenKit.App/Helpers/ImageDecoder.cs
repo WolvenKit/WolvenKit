@@ -19,7 +19,7 @@ namespace WolvenKit.Functionality.Other
             try
             {
                 stream.Seek(0, SeekOrigin.Begin);
-                var image = Pfim.Pfim.FromStream(stream);
+                var image = Pfimage.FromStream(stream);
                 await stream.DisposeAsync().ConfigureAwait(false);
                 var pinnedArray = GCHandle.Alloc(image.Data, GCHandleType.Pinned);
                 var addr = pinnedArray.AddrOfPinnedObject();
@@ -103,7 +103,7 @@ namespace WolvenKit.Functionality.Other
                     case ".DDS":
                     case ".TGA": // TODO some tga files are created upside down https://github.com/Ruben2776/PicView/issues/22
                         filestream = new FileStream(file, FileMode.Open, FileAccess.Read, FileShare.ReadWrite, 4096, FileOptions.SequentialScan);
-                        var image = Pfim.Pfim.FromStream(filestream);
+                        var image = Pfimage.FromStream(filestream);
                         await filestream.DisposeAsync().ConfigureAwait(false);
                         var pinnedArray = GCHandle.Alloc(image.Data, GCHandleType.Pinned);
                         var addr = pinnedArray.AddrOfPinnedObject();
