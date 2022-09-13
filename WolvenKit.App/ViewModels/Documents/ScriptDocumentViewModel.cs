@@ -56,13 +56,13 @@ namespace WolvenKit.ViewModels.Documents
         {
             _isInitialized = false;
 
-            LoadDocument(path);
+            await Task.Run(() => LoadDocument(path));
 
             ContentId = path;
             FilePath = path;
             _isInitialized = true;
 
-            return await Task.FromResult(true);
+            return true;
         }
 
         private void LoadDocument(string paramFilePath)

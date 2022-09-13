@@ -10,10 +10,7 @@ namespace WolvenKit.Functionality.Controllers
 {
     public class MockGameController : IGameController
     {
-        public MockGameController()
-        {
-            _rootCache = new SourceList<RedFileSystemModel>();
-        }
+        public MockGameController() => _rootCache = new SourceList<RedFileSystemModel>();
 
 
         #region Methods
@@ -24,35 +21,25 @@ namespace WolvenKit.Functionality.Controllers
 
         public IObservable<IChangeSet<RedFileSystemModel>> ConnectHierarchy() => _rootCache.Connect();
 
-        public List<IArchiveManager> GetArchiveManagers(bool loadmods) => new List<IArchiveManager>();
+        public List<IArchiveManager> GetArchiveManagers(bool loadmods) => new();
 
         public void AddToMod(IGameFile file) => throw new NotImplementedException();
         public void AddToMod(ulong hash) => throw new NotImplementedException();
 
-        public List<string> GetAvaliableClasses() => new List<string>();
+        public List<string> GetAvaliableClasses() => new();
 
         public async Task HandleStartup() => await Task.CompletedTask;//Nothing to do here :)
 
-        public Task<bool> PackProject() =>
-            //Nothing to do here :)
-            Task.FromResult(true);
+        public bool PackProject() => throw new NotImplementedException();
 
-        public void InstallMod()
-        {
-        }
+        public void InstallMod() => throw new NotImplementedException();
 
-        public Task<bool> PackAndInstallProject() =>
-            //Nothing to do here :)
-            new Task<bool>(new Func<bool>(() => true));
+        public Task<bool> PackAndInstallProject() => throw new NotImplementedException();
         public Task<bool> DeployRedmod() => throw new NotImplementedException();
 
-        public Task<bool> PackAndInstallRunProject() =>
-            //Nothing to do here :)
-            new Task<bool>(new Func<bool>(() => true));
+        public bool PackAndInstallRunProject() => throw new NotImplementedException();
 
-        public Task<bool> HotInstallProject() =>
-            //Nothing to do here :)
-            new Task<bool>(new Func<bool>(() => true));
+        public bool HotInstallProject() => throw new NotImplementedException();
 
         #endregion Methods
     }

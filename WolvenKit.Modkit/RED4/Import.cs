@@ -73,7 +73,7 @@ namespace WolvenKit.Modkit.RED4
             };
         }
 
-        private async Task<bool> ImportAnims(RedRelativePath rawRelative, DirectoryInfo outDir, ReImportArgs importArgs)
+        private Task<bool> ImportAnims(RedRelativePath rawRelative, DirectoryInfo outDir, ReImportArgs importArgs)
         {
             var ext = rawRelative.Extension;
             if (Enum.TryParse(ext, true, out ERawFileFormat extAsEnum))
@@ -87,7 +87,7 @@ namespace WolvenKit.Modkit.RED4
 
                     _loggerService.Info($"WorkDir: {redModPath}");
                     _loggerService.Info($"Running commandlet: {args}");
-                    return await ProcessUtil.RunProcessAsync(redModPath, args, workingDir);
+                    return ProcessUtil.RunProcessAsync(redModPath, args, workingDir);
                 }
                 else
                 {
@@ -95,7 +95,7 @@ namespace WolvenKit.Modkit.RED4
                 }
             }
 
-            return false;
+            return Task.FromResult(false);
         }
 
         private bool ImportCsv(RedRelativePath rawRelative, DirectoryInfo outDir, GlobalImportArgs args)

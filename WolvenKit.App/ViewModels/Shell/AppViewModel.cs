@@ -112,10 +112,10 @@ namespace WolvenKit.ViewModels.Shell
             OpenFileAsyncCommand = ReactiveCommand.CreateFromTask<FileModel, Unit>(OpenFileAsync);
             OpenRedFileAsyncCommand = ReactiveCommand.CreateFromTask<FileEntry, Unit>(OpenRedFileAsync);
 
-            PackModCommand = new DelegateCommand(async () => await ExecutePackModAsync(), HasActiveProject).ObservesProperty(() => ActiveProject);
+            PackModCommand = new DelegateCommand(ExecutePackMod, HasActiveProject).ObservesProperty(() => ActiveProject);
             PackInstallModCommand = new DelegateCommand(async () => await ExecutePackInstallModAsync(), HasActiveProject).ObservesProperty(() => ActiveProject);
             PackInstallRunModCommand = new DelegateCommand(ExecutePackInstallRunModAsync, HasActiveProject).ObservesProperty(() => ActiveProject);
-            HotInstallModCommand = new DelegateCommand(async () => await ExecuteHotInstallModAsync(), HasActiveProject).ObservesProperty(() => ActiveProject);
+            HotInstallModCommand = new DelegateCommand(ExecuteHotInstallMod, HasActiveProject).ObservesProperty(() => ActiveProject);
 
 
             NewFileCommand = new DelegateCommand<string>(ExecuteNewFile, CanNewFile).ObservesProperty(() => ActiveProject).ObservesProperty(() => IsDialogShown);
@@ -814,7 +814,7 @@ namespace WolvenKit.ViewModels.Shell
         private bool HasActiveProject() => ActiveProject is not null;
 
         public DelegateCommand PackModCommand { get; private set; }
-        private Task ExecutePackModAsync() => _gameControllerFactory.GetController().PackProject();
+        private void ExecutePackMod() => _gameControllerFactory.GetController().PackProject();
 
         public DelegateCommand PackInstallModCommand { get; private set; }
         private Task ExecutePackInstallModAsync() => Task.Run(async () => await _gameControllerFactory.GetController().PackAndInstallProject());
@@ -835,7 +835,7 @@ namespace WolvenKit.ViewModels.Shell
         }
 
         public DelegateCommand HotInstallModCommand { get; private set; }
-        private Task ExecuteHotInstallModAsync() => Task.Run(async () => await _gameControllerFactory.GetController().HotInstallProject());
+        private void ExecuteHotInstallMod() => _gameControllerFactory.GetController().HotInstallProject();
 
         //public ICommand PublishModCommand { get; private set; }
         //private bool CanPublishMod() => _projectManager.ActiveProject != null;

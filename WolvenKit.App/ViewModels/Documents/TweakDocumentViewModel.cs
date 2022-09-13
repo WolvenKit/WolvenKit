@@ -341,7 +341,7 @@ namespace WolvenKit.ViewModels.Documents
             FilePath = path;
             _isInitialized = true;
 
-            return await Task.FromResult(true);
+            return true;
         }
 
         private async Task LoadDocument(string paramFilePath)
