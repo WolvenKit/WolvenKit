@@ -183,7 +183,7 @@ namespace WolvenKit.ViewModels.Shell
                 .Subscribe(x =>
                 {
                     _pluginService.Init();
-                    _tweakDBService.LoadDB(Path.Combine(_settingsManager.GetRED4GameRootDir(), "r6", "cache", "tweakdb.bin"));
+                    // _tweakDBService.LoadDB(Path.Combine(_settingsManager.GetRED4GameRootDir(), "r6", "cache", "tweakdb.bin"));
                 });
 
         }
@@ -240,7 +240,7 @@ namespace WolvenKit.ViewModels.Shell
                 if (setupWasOk)
                 {
                     _pluginService.Init();
-                    _tweakDBService.LoadDB(Path.Combine(_settingsManager.GetRED4GameRootDir(), "r6", "cache", "tweakdb.bin"));
+                    // _tweakDBService.LoadDB(Path.Combine(_settingsManager.GetRED4GameRootDir(), "r6", "cache", "tweakdb.bin"));
                 }
             }
         }
