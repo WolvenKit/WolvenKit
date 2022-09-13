@@ -106,7 +106,7 @@ namespace WolvenKit.Modkit.RED4
                 }
                 else
                 {
-                    throw new InvalidParsingException("not a cr2w file");
+                    throw new InvalidParsingException("Error while extracting a file");
                 }
             }
             for (var i = 0; i < cmesh.PreloadExternalMaterials.Count; i++)
@@ -127,7 +127,7 @@ namespace WolvenKit.Modkit.RED4
                 }
                 else
                 {
-                    throw new InvalidParsingException("not a cr2w file");
+                    throw new InvalidParsingException("Error while extracting a file");
                 }
             }
 
@@ -223,7 +223,7 @@ namespace WolvenKit.Modkit.RED4
                     }
                     else
                     {
-                        throw new InvalidParsingException("not a cr2w file");
+                        throw new InvalidParsingException("Error while extracting a file");
                     }
                 }
 
@@ -241,7 +241,7 @@ namespace WolvenKit.Modkit.RED4
                 }
                 else
                 {
-                    throw new InvalidParsingException("not a cr2w file");
+                    throw new InvalidParsingException("Error while extracting a file");
                 }
             }
         }
@@ -398,7 +398,7 @@ namespace WolvenKit.Modkit.RED4
                         }
                         else
                         {
-                            throw new InvalidParsingException("not a cr2w file");
+                            throw new InvalidParsingException("Error while extracting a file");
                         }
                     }
                 }
@@ -433,7 +433,7 @@ namespace WolvenKit.Modkit.RED4
                         }
                         else
                         {
-                            throw new InvalidParsingException("not a cr2w file");
+                            throw new InvalidParsingException("Error while extracting a file");
                         }
                     }
                 }
@@ -475,7 +475,7 @@ namespace WolvenKit.Modkit.RED4
                         }
                         else
                         {
-                            throw new InvalidParsingException("not a cr2w file");
+                            throw new InvalidParsingException("Error while extracting a file");
                         }
                     }
                 }
@@ -505,7 +505,7 @@ namespace WolvenKit.Modkit.RED4
                         }
                         else
                         {
-                            throw new InvalidParsingException("not a cr2w file");
+                            throw new InvalidParsingException("Error while extracting a file");
                         }
                     }
                 }
