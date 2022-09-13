@@ -99,16 +99,10 @@ namespace WolvenKit.ViewModels.Shell
 
             ShowLogCommand = new DelegateCommand(ExecuteShowLog, CanShowLog).ObservesProperty(() => ActiveProject);
             ShowProjectExplorerCommand = new DelegateCommand(ExecuteShowProjectExplorer, CanShowProjectExplorer).ObservesProperty(() => ActiveProject);
-            //ShowImportUtilityCommand = new DelegateCommand(ExecuteShowImportUtility, CanShowImportUtility);
             ShowPropertiesCommand = new DelegateCommand(ExecuteShowProperties, CanShowProperties).ObservesProperty(() => ActiveProject);
             ShowAssetsCommand = new DelegateCommand(ExecuteAssetBrowser, CanShowAssetBrowser);
-            //ShowVisualEditorCommand = new DelegateCommand(ExecuteVisualEditor, CanShowVisualEditor);
-            //ShowAudioToolCommand = new DelegateCommand(ExecuteAudioTool, CanShowAudioTool);
-            //ShowVideoToolCommand = new DelegateCommand(ExecuteVideoTool, CanShowVideoTool);
-            //ShowCodeEditorCommand = new DelegateCommand(ExecuteCodeEditor, CanShowCodeEditor);
 
             ShowImportExportToolCommand = new DelegateCommand(ExecuteImportExportTool, CanShowImportExportTool).ObservesProperty(() => ActiveProject);
-            //ShowPackageInstallerCommand = new DelegateCommand(ExecuteShowInstaller, CanShowInstaller);
 
             ShowSoundModdingToolCommand = new DelegateCommand(ExecuteShowSoundModdingTool, CanShowSoundModdingTool).ObservesProperty(() => IsDialogShown);
             ShowModsViewCommand = new DelegateCommand(ExecuteShowModsView, CanShowModsView).ObservesProperty(() => IsDialogShown);
@@ -118,13 +112,11 @@ namespace WolvenKit.ViewModels.Shell
             OpenFileAsyncCommand = ReactiveCommand.CreateFromTask<FileModel, Unit>(OpenFileAsync);
             OpenRedFileAsyncCommand = ReactiveCommand.CreateFromTask<FileEntry, Unit>(OpenRedFileAsync);
 
-            var hasActiveProject = this.WhenAny(x => x._projectManager.ActiveProject, (p) => p is not null);
-            PackModCommand = ReactiveCommand.CreateFromTask(ExecutePackMod, hasActiveProject);
-            PackInstallModCommand = ReactiveCommand.CreateFromTask(ExecutePackInstallMod, hasActiveProject);
-            PackInstallRunModCommand = ReactiveCommand.CreateFromTask(ExecutePackInstallRunMod, hasActiveProject);
-            HotInstallModCommand = ReactiveCommand.CreateFromTask(ExecuteHotInstallMod, hasActiveProject);
-            //BackupModCommand = new DelegateCommand(ExecuteBackupMod, CanBackupMod);
-            //PublishModCommand = new DelegateCommand(ExecutePublishMod, CanPublishMod);
+            PackModCommand = new DelegateCommand(async () => await ExecutePackModAsync(), HasActiveProject).ObservesProperty(() => ActiveProject);
+            PackInstallModCommand = new DelegateCommand(async () => await ExecutePackInstallModAsync(), HasActiveProject).ObservesProperty(() => ActiveProject);
+            PackInstallRunModCommand = new DelegateCommand(ExecutePackInstallRunModAsync, HasActiveProject).ObservesProperty(() => ActiveProject);
+            HotInstallModCommand = new DelegateCommand(async () => await ExecuteHotInstallModAsync(), HasActiveProject).ObservesProperty(() => ActiveProject);
+
 
             NewFileCommand = new DelegateCommand<string>(ExecuteNewFile, CanNewFile).ObservesProperty(() => ActiveProject).ObservesProperty(() => IsDialogShown);
 
@@ -141,7 +133,7 @@ namespace WolvenKit.ViewModels.Shell
             ShowHomePageCommand = new DelegateCommand(ExecuteShowHomePage, CanShowHomePage).ObservesProperty(() => IsDialogShown);
             ShowSettingsCommand = new DelegateCommand(ExecuteShowSettings, CanShowSettings).ObservesProperty(() => IsDialogShown);
 
-            LaunchGameCommand = ReactiveCommand.CreateFromTask(ExecuteLaunchGame);
+            LaunchGameCommand = ReactiveCommand.CreateFromTask<string>(ExecuteLaunchGame);
 
             CloseModalCommand = new DelegateCommand(ExecuteCloseModal, CanCloseModal).ObservesProperty(() => IsDialogShown).ObservesProperty(() => IsOverlayShown);
             CloseOverlayCommand = new DelegateCommand(ExecuteCloseOverlay, CanCloseOverlay).ObservesProperty(() => IsOverlayShown);
@@ -150,8 +142,8 @@ namespace WolvenKit.ViewModels.Shell
 
             OpenFileAsyncCommand.ThrownExceptions.Subscribe(ex => LogExtended(ex));
             OpenRedFileAsyncCommand.ThrownExceptions.Subscribe(ex => LogExtended(ex));
-            PackModCommand.ThrownExceptions.Subscribe(ex => LogExtended(ex));
-            PackInstallModCommand.ThrownExceptions.Subscribe(ex => LogExtended(ex));
+            //PackModCommand.ThrownExceptions.Subscribe(ex => LogExtended(ex));
+            //PackInstallModCommand.ThrownExceptions.Subscribe(ex => LogExtended(ex));
             OpenProjectCommand.ThrownExceptions.Subscribe(ex => LogExtended(ex));
 
             #endregion commands
@@ -227,10 +219,7 @@ namespace WolvenKit.ViewModels.Shell
             return false;
         }
 
-        private void OnStartup()
-        {
-            ShowFirstTimeSetup();
-        }
+        private void OnStartup() => ShowFirstTimeSetup();
 
         private async void ShowFirstTimeSetup()
         {
@@ -488,10 +477,15 @@ namespace WolvenKit.ViewModels.Shell
             new GameLaunchCommand("Pack, Install and Launch Game", EGameLaunchCommand.PackInstallLaunch)
         };
 
-        public ReactiveCommand<Unit, Unit> LaunchGameCommand { get; private set; }
-        private async Task ExecuteLaunchGame()
+        public ReactiveCommand<string, Unit> LaunchGameCommand { get; private set; }
+        private async Task ExecuteLaunchGame(string stridx)
         {
-            var command = SelectedGameCommands[SelectedGameCommandIdx].Command;
+            if (!int.TryParse(stridx, out var idx))
+            {
+                return;
+            }
+
+            var command = SelectedGameCommands[idx].Command;
             switch (command)
             {
                 case EGameLaunchCommand.Launch:
@@ -817,14 +811,16 @@ namespace WolvenKit.ViewModels.Shell
             }
         }
 
-        public ReactiveCommand<Unit, Unit> PackModCommand { get; private set; }
-        private async Task ExecutePackMod() => await _gameControllerFactory.GetController().PackProject();
+        private bool HasActiveProject() => ActiveProject is not null;
 
-        public ReactiveCommand<Unit, Unit> PackInstallModCommand { get; private set; }
-        private async Task ExecutePackInstallMod() => await Task.Run(async () => await _gameControllerFactory.GetController().PackAndInstallProject());
+        public DelegateCommand PackModCommand { get; private set; }
+        private Task ExecutePackModAsync() => _gameControllerFactory.GetController().PackProject();
 
-        public ReactiveCommand<Unit, Unit> PackInstallRunModCommand { get; private set; }
-        private async Task ExecutePackInstallRunMod()
+        public DelegateCommand PackInstallModCommand { get; private set; }
+        private Task ExecutePackInstallModAsync() => Task.Run(async () => await _gameControllerFactory.GetController().PackAndInstallProject());
+
+        public DelegateCommand PackInstallRunModCommand { get; private set; }
+        private async void ExecutePackInstallRunModAsync()
         {
             if (await Task.Run(() => _gameControllerFactory.GetController().PackAndInstallRunProject()))
             {
@@ -838,8 +834,8 @@ namespace WolvenKit.ViewModels.Shell
             }
         }
 
-        public ReactiveCommand<Unit, Unit> HotInstallModCommand { get; private set; }
-        private async Task ExecuteHotInstallMod() => await Task.Run(async () => await _gameControllerFactory.GetController().HotInstallProject());
+        public DelegateCommand HotInstallModCommand { get; private set; }
+        private Task ExecuteHotInstallModAsync() => Task.Run(async () => await _gameControllerFactory.GetController().HotInstallProject());
 
         //public ICommand PublishModCommand { get; private set; }
         //private bool CanPublishMod() => _projectManager.ActiveProject != null;

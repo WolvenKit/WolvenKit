@@ -30,8 +30,6 @@ namespace WolvenKit.Views.Dialogs
         private readonly IModTools _modTools;
         private readonly ILoggerService _loggerService;
 
-        private readonly string _archivesFolderPath;
-
         public MaterialsRepositoryDialog()
         {
             InitializeComponent();
@@ -42,12 +40,12 @@ namespace WolvenKit.Views.Dialogs
             _progress = Locator.Current.GetService<IProgressService<double>>();
             _loggerService = Locator.Current.GetService<ILoggerService>();
 
-            _archivesFolderPath = Path.Combine(_settingsManager.GetRED4GameRootDir(), "archive", "pc", "content");
+            ArchivesFolderPath = Path.Combine(_settingsManager.GetRED4GameRootDir(), "archive", "pc", "content");
             MaterialsDepotPath = _settingsManager.MaterialRepositoryPath;
             MaterialsTextBox.SetCurrentValue(System.Windows.Controls.TextBox.TextProperty, _settingsManager.MaterialRepositoryPath);
         }
 
-        public string ArchivesFolderPath => _archivesFolderPath;
+        public string ArchivesFolderPath { get; }
 
         public string MaterialsDepotPath { get; set; }
 
@@ -170,6 +168,6 @@ namespace WolvenKit.Views.Dialogs
             //}
         }
 
-        private void Window_Closed(object sender, EventArgs e) => RibbonView.MaterialsRepositoryDia = null;
+        private void Window_Closed(object sender, EventArgs e) => MenuBarView.MaterialsRepositoryDia = null;
     }
 }

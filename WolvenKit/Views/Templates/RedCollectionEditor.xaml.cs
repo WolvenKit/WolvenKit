@@ -59,8 +59,7 @@ namespace WolvenKit.Views.Templates
                     var propertyType = propertyItem.PropertyType;
                     var propertyName = propertyItem.DisplayName;
 
-                    ITypeEditor customEditor = null;
-
+                    ITypeEditor customEditor;
                     if (propertyType == typeof(object) && propertyName.Equals("Element"))
                     {
                         var type = viewModel.SelectedElement.Element.GetType();
@@ -110,9 +109,7 @@ namespace WolvenKit.Views.Templates
         }
         private void PropertyGrid_Loaded(object sender, RoutedEventArgs e)
         {
-            var item1 = VisualUtils.FindDescendant(this, typeof(PropertyView)) as PropertyView;
-
-            if (item1 != null)
+            if (VisualUtils.FindDescendant(this, typeof(PropertyView)) is PropertyView item1)
             {
                 item1.ItemContainerGenerator.StatusChanged += ItemContainerGenerator_StatusChanged;
             }

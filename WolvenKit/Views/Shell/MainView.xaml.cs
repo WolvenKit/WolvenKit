@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.IO;
 using System.Linq;
@@ -17,6 +18,8 @@ using WolvenKit.Views.Dialogs;
 
 namespace WolvenKit.Views.Shell
 {
+    public class MyObservableCollection : ObservableCollection<object> { }
+
     public partial class MainView : IViewFor<AppViewModel>
     {
         public AppViewModel ViewModel { get; set; }
@@ -94,10 +97,7 @@ namespace WolvenKit.Views.Shell
                     }, RxApp.MainThreadScheduler);
                 });
 
-                Interactions.ShowConfirmation.RegisterHandler(interaction =>
-                {
-                    interaction.SetOutput(ShowConfirmation(interaction.Input));
-                });
+                Interactions.ShowConfirmation.RegisterHandler(interaction => interaction.SetOutput(ShowConfirmation(interaction.Input)));
 
 
 

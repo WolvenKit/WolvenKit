@@ -95,6 +95,9 @@ namespace WolvenKit
                     services.AddSingleton<RibbonViewModel>();
                     services.AddSingleton<IViewFor<RibbonViewModel>, RibbonView>();
 
+                    services.AddSingleton<MenuBarViewModel>();
+                    services.AddSingleton<IViewFor<MenuBarViewModel>, MenuBarView>();
+
                     services.AddSingleton<StatusBarViewModel>();
                     services.AddSingleton<IViewFor<StatusBarViewModel>, StatusBarView>();
 

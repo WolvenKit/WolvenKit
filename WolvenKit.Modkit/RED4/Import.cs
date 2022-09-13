@@ -83,10 +83,11 @@ namespace WolvenKit.Modkit.RED4
                 {
                     importArgs.Input = rawRelative.FullPath;
                     var args = importArgs.GetReImportArgs();
+                    var workingDir = Path.GetDirectoryName(redModPath);
 
                     _loggerService.Info($"WorkDir: {redModPath}");
                     _loggerService.Info($"Running commandlet: {args}");
-                    return await ProcessUtil.RunProcessAsync(redModPath, args);
+                    return await ProcessUtil.RunProcessAsync(redModPath, args, workingDir);
                 }
                 else
                 {
