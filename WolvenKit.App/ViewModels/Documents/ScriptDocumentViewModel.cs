@@ -52,17 +52,17 @@ namespace WolvenKit.ViewModels.Documents
             return true;
         }
 
-        public override async Task<bool> OpenFileAsync(string path)
+        public override Task<bool> OpenFileAsync(string path)
         {
             _isInitialized = false;
 
-            await Task.Run(() => LoadDocument(path));
+            LoadDocument(path);
 
             ContentId = path;
             FilePath = path;
             _isInitialized = true;
 
-            return true;
+            return Task.FromResult(true);
         }
 
         private void LoadDocument(string paramFilePath)

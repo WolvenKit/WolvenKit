@@ -7,6 +7,7 @@ using System.IO;
 using System.Linq;
 using System.Reactive.Linq;
 using System.Runtime.Serialization;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Windows.Input;
 using DynamicData.Binding;
@@ -62,10 +63,7 @@ namespace WolvenKit.ViewModels.Shell
 
         #region Constructors
 
-        public ChunkViewModel(ChunkViewModel parent = null)
-        {
-            Parent = parent;
-        }
+        public ChunkViewModel(ChunkViewModel parent = null) => Parent = parent;
 
         public ChunkViewModel(IRedType export, ChunkViewModel parent = null, string name = null, bool lazy = false, bool isReadOnly = false)
         {
@@ -155,8 +153,8 @@ namespace WolvenKit.ViewModels.Shell
             OpenRefCommand = new DelegateCommand(ExecuteOpenRef, CanOpenRef).ObservesProperty(() => Data);
             AddRefCommand = new DelegateCommand(ExecuteAddRef, CanAddRef).ObservesProperty(() => Data);
             ExportChunkCommand = new DelegateCommand(ExecuteExportChunk, CanExportChunk).ObservesProperty(() => PropertyCount);
-            ImportWorldNodeDataCommand = new DelegateCommand(ExecuteImportWorldNodeData, CanImportWorldNodeData).ObservesProperty(() => Data).ObservesProperty(() => PropertyCount);
-            ImportWorldNodeDataWithoutCoordsCommand = new DelegateCommand(ExecuteImportWorldNodeDataWithoutCoords, CanImportWorldNodeData).ObservesProperty(() => Data).ObservesProperty(() => PropertyCount);
+            ImportWorldNodeDataCommand = new DelegateCommand(async () => await ExecuteImportWorldNodeDataTask(), CanImportWorldNodeData).ObservesProperty(() => Data).ObservesProperty(() => PropertyCount);
+            ImportWorldNodeDataWithoutCoordsCommand = new DelegateCommand(async () => await ExecuteImportWorldNodeDataWithoutCoordsTask(), CanImportWorldNodeData).ObservesProperty(() => Data).ObservesProperty(() => PropertyCount);
             AddItemToArrayCommand = new DelegateCommand(ExecuteAddItemToArray, CanAddItemToArray).ObservesProperty(() => PropertyType);
             AddHandleCommand = new DelegateCommand(ExecuteAddHandle, CanAddHandle).ObservesProperty(() => PropertyType);
             AddItemToCompiledDataCommand = new DelegateCommand(ExecuteAddItemToCompiledData, CanAddItemToCompiledData).ObservesProperty(() => PropertyType).ObservesProperty(() => ResolvedPropertyType);
@@ -200,10 +198,7 @@ namespace WolvenKit.ViewModels.Shell
         public void NotifyChain(string property)
         {
             this.RaisePropertyChanged(property);
-            if (Parent is not null)
-            {
-                Parent.NotifyChain(property);
-            }
+            Parent?.NotifyChain(property);
         }
 
         private ObservableCollection<ISelectableTreeViewItemModel> SplitProperties(ObservableCollection<ChunkViewModel> locations, int nSize = 100)
@@ -261,10 +256,7 @@ namespace WolvenKit.ViewModels.Shell
                     else if (Data is TweakDBID tdb && PropertiesLoaded)
                     {
                         data = Locator.Current.GetService<TweakDBService>().GetFlat(tdb);
-                        if (data == null)
-                        {
-                            data = Locator.Current.GetService<TweakDBService>().GetRecord(tdb);
-                        }
+                        data ??= Locator.Current.GetService<TweakDBService>().GetRecord(tdb);
                     }
                     else if (Data is DataBuffer db && db.Buffer.Data is IRedType irt)
                     {
@@ -1248,23 +1240,15 @@ namespace WolvenKit.ViewModels.Shell
                 {
                     return "SymbolBoolean";
                 }
-                if (PropertyType.IsAssignableTo(typeof(IRedBaseHandle)))
-                {
-                    return "References";
-                }
-                if (PropertyType.IsAssignableTo(typeof(DataBuffer)) || PropertyType.IsAssignableTo(typeof(SerializationDeferredDataBuffer)))
-                {
-                    return "GroupByRefType";
-                }
-                if (PropertyType.IsAssignableTo(typeof(CResourceAsyncReference<>)) || PropertyType.IsAssignableTo(typeof(CResourceReference<>)))
-                {
-                    return "RepoPull";
-                }
-                if (PropertyType.IsAssignableTo(typeof(TweakDBID)))
-                {
-                    return "DebugBreakpointConditionalUnverified";
-                }
-                return PropertyType.IsAssignableTo(typeof(IRedPrimitive))
+                return PropertyType.IsAssignableTo(typeof(IRedBaseHandle))
+                    ? "References"
+                    : PropertyType.IsAssignableTo(typeof(DataBuffer)) || PropertyType.IsAssignableTo(typeof(SerializationDeferredDataBuffer))
+                    ? "GroupByRefType"
+                    : PropertyType.IsAssignableTo(typeof(CResourceAsyncReference<>)) || PropertyType.IsAssignableTo(typeof(CResourceReference<>))
+                    ? "RepoPull"
+                    : PropertyType.IsAssignableTo(typeof(TweakDBID))
+                    ? "DebugBreakpointConditionalUnverified"
+                    : PropertyType.IsAssignableTo(typeof(IRedPrimitive))
                     ? "DebugBreakpointDataUnverified"
                     : PropertyType.IsAssignableTo(typeof(WorldTransform))
                     ? "Compass"
@@ -1432,10 +1416,7 @@ namespace WolvenKit.ViewModels.Shell
 
             if (PropertyType.IsAssignableTo(typeof(IRedLegacySingleChannelCurve)))
             {
-                if (Data == null)
-                {
-                    Data = RedTypeManager.CreateRedType(PropertyType);
-                }
+                Data ??= RedTypeManager.CreateRedType(PropertyType);
 
                 var curve = (IRedLegacySingleChannelCurve)Data;
 
@@ -1641,10 +1622,10 @@ namespace WolvenKit.ViewModels.Shell
         public ICommand ImportWorldNodeDataWithoutCoordsCommand { get; private set; }
 
         private bool CanImportWorldNodeData() => Data is worldNodeData && PropertyCount > 0;
-        private void ExecuteImportWorldNodeData() => ImportWorldNodeData(true);
-        private void ExecuteImportWorldNodeDataWithoutCoords() => ImportWorldNodeData(false);
+        private Task ExecuteImportWorldNodeDataTask() => ImportWorldNodeDataTask(true);
+        private Task ExecuteImportWorldNodeDataWithoutCoordsTask() => ImportWorldNodeDataTask(false);
 
-        private bool ImportWorldNodeData(bool updatecoords)
+        private Task<bool> ImportWorldNodeDataTask(bool updatecoords)
         {
             var openFileDialog = new OpenFileDialog
             {
@@ -1657,14 +1638,18 @@ namespace WolvenKit.ViewModels.Shell
             if (openFileDialog.ShowDialog() == DialogResult.OK)
             {
                 try
-                { return AddFromJSON(openFileDialog, updatecoords); }
+                {
+                    return AddFromJSON(openFileDialog, updatecoords);
+                }
                 catch (Exception ex)
-                { Locator.Current.GetService<ILoggerService>().Error(ex); }
+                {
+                    Locator.Current.GetService<ILoggerService>().Error(ex);
+                }
             }
-            return false;
+            return Task.FromResult(false);
         }
 
-        public bool AddFromJSON(OpenFileDialog openFileDialog, bool updatecoords)
+        public async Task<bool> AddFromJSON(OpenFileDialog openFileDialog, bool updatecoords)
         {
             var tr = RedJsonSerializer.Serialize(Data);
             var current = RedJsonSerializer.Deserialize<worldNodeData>(tr);
@@ -1730,7 +1715,7 @@ namespace WolvenKit.ViewModels.Shell
 
             Locator.Current.GetService<AppViewModel>().SaveFileCommand.SafeExecute(currentfile);
             //QuickToJSON(Parent.Parent.Data);
-            Refresh();
+            await Refresh();
 
             Locator.Current.GetService<ILoggerService>().Success($"might have done the thing maybe, who knows really");
             return true;
@@ -1768,7 +1753,10 @@ namespace WolvenKit.ViewModels.Shell
                     }
                 }
             }
-            catch (Exception ex) { Locator.Current.GetService<ILoggerService>().Error(ex); }
+            catch (Exception ex)
+            {
+                Locator.Current.GetService<ILoggerService>().Error(ex);
+            }
         }
 
 

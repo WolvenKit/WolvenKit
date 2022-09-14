@@ -619,7 +619,7 @@ namespace WolvenKit.ViewModels.Tools
                 var toBeExported = ExportableItems.ToList();
                 foreach (var item in toBeExported)
                 {
-                    success = await Task.Run(() => ExportSingle(item));
+                    success = ExportSingle(item);
                 }
             }
             if (IsConvertsSelected)
@@ -627,7 +627,7 @@ namespace WolvenKit.ViewModels.Tools
                 var toBeConverted = ConvertableItems.ToList();
                 foreach (var itemViewModel in toBeConverted)
                 {
-                    success = await Task.Run(() => ConvertSingle(itemViewModel));
+                    success = await ConvertSingle(itemViewModel);
                 }
 
             }
