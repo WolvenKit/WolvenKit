@@ -50,14 +50,7 @@ namespace WolvenKit.ViewModels.Documents
             if (_projectManager.ActiveProject != null)
             {
                 // assume files that don't exist are relative paths
-                if (File.Exists(path))
-                {
-                    RelativePath = Path.GetRelativePath(_projectManager.ActiveProject.ModDirectory, path);
-                }
-                else
-                {
-                    RelativePath = path;
-                }
+                RelativePath = File.Exists(path) ? Path.GetRelativePath(_projectManager.ActiveProject.ModDirectory, path) : path;
             }
 
             Extension = Path.GetExtension(path) != "" ? Path.GetExtension(path)[1..] : "";
@@ -144,18 +137,18 @@ namespace WolvenKit.ViewModels.Documents
             return false;
         }
 
-        public override async Task<bool> OpenFileAsync(string path)
+        public override Task<bool> OpenFileAsync(string path)
         {
             _isInitialized = false;
 
             try
             {
-                await using (var stream = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
+                using (var stream = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
                 {
                     OpenStream(stream, path);
                 }
 
-                return true;
+                return Task.FromResult(true);
             }
             catch (Exception e)
             {
@@ -164,7 +157,7 @@ namespace WolvenKit.ViewModels.Documents
                 _isInitialized = false;
             }
 
-            return false;
+            return Task.FromResult(false);
         }
 
         public Optional<RDTDataViewModel> GetMainFile() => Optional<RDTDataViewModel>.ToOptional(TabItemViewModels
@@ -308,7 +301,7 @@ namespace WolvenKit.ViewModels.Documents
         {
             var app = Locator.Current.GetService<AppViewModel>();
             app.CloseDialogCommand.Execute(null);
-            if (sender is not null && sender is CreateClassDialogViewModel dvm)
+            if (sender is not null and CreateClassDialogViewModel dvm)
             {
                 var instance = RedTypeManager.Create(dvm.SelectedClass);
 

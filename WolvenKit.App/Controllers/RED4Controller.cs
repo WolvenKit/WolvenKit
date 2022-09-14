@@ -237,7 +237,7 @@ namespace WolvenKit.Functionality.Controllers
         {
             _progressService.IsIndeterminate = true;
 
-            if (!await PackProject())
+            if (!PackProject())
             {
                 _progressService.IsIndeterminate = false;
                 return false;
@@ -251,11 +251,11 @@ namespace WolvenKit.Functionality.Controllers
             return true;
         }
 
-        public async Task<bool> PackAndInstallRunProject()
+        public bool PackAndInstallRunProject()
         {
             _progressService.IsIndeterminate = true;
 
-            if (!await PackProjectNoBackup())
+            if (!PackProjectNoBackup())
             {
                 _progressService.IsIndeterminate = false;
                 return false;
@@ -267,11 +267,11 @@ namespace WolvenKit.Functionality.Controllers
             return true;
         }
 
-        public async Task<bool> HotInstallProject()
+        public bool HotInstallProject()
         {
             _progressService.IsIndeterminate = true;
 
-            if (!await PackProjectHot())
+            if (!PackProjectHot())
             {
                 _progressService.IsIndeterminate = false;
                 return false;
@@ -282,11 +282,11 @@ namespace WolvenKit.Functionality.Controllers
             return true;
         }
 
-        public async Task<bool> DeployRedmod()
+        public Task<bool> DeployRedmod()
         {
             if (!_pluginService.IsInstalled(EPlugin.redmod))
             {
-                return false;
+                return Task.FromResult(false);
             }
 
             // compile with redmod
@@ -298,10 +298,10 @@ namespace WolvenKit.Functionality.Controllers
 
                 _loggerService.Info($"WorkDir: {redmodPath}");
                 _loggerService.Info($"Running commandlet: {args}");
-                return await ProcessUtil.RunProcessAsync(redmodPath, args);
+                return ProcessUtil.RunProcessAsync(redmodPath, args);
             }
 
-            return true;
+            return Task.FromResult(true);
         }
 
         public List<string> GetModFiles()
@@ -319,13 +319,13 @@ namespace WolvenKit.Functionality.Controllers
         /// pack mod to mod workspace folder
         /// </summary>
         /// <returns></returns>
-        public async Task<bool> PackProject()
+        public bool PackProject()
         {
 
             if (_projectManager.ActiveProject is not Cp77Project cp77Proj)
             {
                 _loggerService.Error("Can't pack project (no project/not cyberpunk project)!");
-                return await Task.FromResult(false);
+                return false;
             }
 
             // cleanup
@@ -444,13 +444,13 @@ namespace WolvenKit.Functionality.Controllers
             }
         }
 
-        public async Task<bool> PackProjectNoBackup()
+        public bool PackProjectNoBackup()
         {
 
             if (_projectManager.ActiveProject is not Cp77Project cp77Proj)
             {
                 _loggerService.Error("Can't pack project (no project/not cyberpunk project)!");
-                return await Task.FromResult(false);
+                return false;
             }
 
             // cleanup
@@ -482,16 +482,16 @@ namespace WolvenKit.Functionality.Controllers
             // compile tweak files
             CompileTweakFiles(cp77Proj);
 
-            return await Task.FromResult(true);
+            return true;
         }
 
-        public async Task<bool> PackProjectHot()
+        public bool PackProjectHot()
         {
 
             if (_projectManager.ActiveProject is not Cp77Project cp77Proj)
             {
                 _loggerService.Error("Can't pack project (no project/not cyberpunk project)!");
-                return await Task.FromResult(false);
+                return false;
             }
 
             var hotdirectory = Path.Combine(_settingsManager.GetRED4GameRootDir(), "archive", "pc", "hot");
@@ -515,7 +515,7 @@ namespace WolvenKit.Functionality.Controllers
             }
             _loggerService.Success($"{cp77Proj.Name} packed into {hotdirectory}");
 
-            return await Task.FromResult(true);
+            return true;
         }
 
         private void CompileTweakFiles(Cp77Project cp77Proj)

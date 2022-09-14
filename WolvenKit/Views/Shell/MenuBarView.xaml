@@ -1,12 +1,15 @@
 <reactiveUi:ReactiveUserControl
-    x:Class="WolvenKit.Views.Shell.RibbonView"
+    x:Class="WolvenKit.Views.Shell.MenuBarView"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:reactiveUi="http://reactiveui.net"
     xmlns:shared="clr-namespace:Syncfusion.Windows.Shared;assembly=Syncfusion.Shared.WPF"
     xmlns:shell="clr-namespace:WolvenKit.ViewModels.Shell;assembly=WolvenKit.App"
-    x:TypeArguments="shell:RibbonViewModel">
+    x:TypeArguments="shell:MenuBarViewModel"
+    mc:Ignorable="d">
 
     <!--  Resources  -->
     <UserControl.Resources>
@@ -16,7 +19,7 @@
     </UserControl.Resources>
 
     <!--  Main Grid  -->
-    <Grid Background="{DynamicResource ContentBackgroundAlt2}">
+    <Grid>
         <Grid.Resources>
             <Style x:Key="WolvenKitToolBarButtonIcon" TargetType="{x:Type iconPacks:PackIconControlBase}">
                 <Style.Triggers>
@@ -165,21 +168,26 @@
             </Style>
         </Grid.Resources>
 
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
-        </Grid.RowDefinitions>
+        <Menu Background="Transparent">
+            <!--  Home  -->
+            <MenuItem
+                x:Name="HomeButton"
+                Margin="1,0"
+                Padding="12,5"
+                Header="HOME" />
 
-        <ToolBarTray
-            Grid.Row="1"
-            Height="Auto"
-            VerticalAlignment="Top"
-            IsLocked="True">
-
-            <ToolBar Background="Transparent">
-                <Button x:Name="ToolbarNewButton" ToolTip="New File">
-                    <StackPanel Orientation="Horizontal">
-                        <Grid>
+            <!--  File  -->
+            <MenuItem
+                Margin="1,0"
+                Padding="12,0"
+                Header="File">
+                <MenuItem
+                    x:Name="MenuItemNewFile"
+                    Margin="2,1"
+                    Header="New File"
+                    ToolTip="New File">
+                    <MenuItem.Icon>
+                        <Grid Margin="6,0">
                             <iconPacks:PackIconMaterial
                                 Padding="0,0,2,2"
                                 Foreground="{StaticResource WolvenKitYellow}"
@@ -191,58 +199,140 @@
                                 Style="{StaticResource WolvenKitToolBarButtonIconEraser}" />
                             <iconPacks:PackIconForkAwesome
                                 Padding="8,8,-1,-1"
+                                BorderBrush="Black"
                                 Kind="PlusCircle"
                                 Style="{StaticResource WolvenKitToolBarButtonIcon}" />
                         </Grid>
-                        <TextBlock Padding="5,0,0,0" Text="New File" />
-                    </StackPanel>
-                </Button>
-                <Button x:Name="ToolbarSaveButton" ToolTip="Save File">
-                    <StackPanel Orientation="Horizontal">
+                    </MenuItem.Icon>
+                </MenuItem>
+                <MenuItem
+                    x:Name="MenuItemSave"
+                    Margin="2,1"
+                    Header="Save"
+                    ToolTip="Save File">
+                    <MenuItem.Icon>
                         <iconPacks:PackIconMaterial
+                            Margin="6,0"
                             Padding="0,1,0,1"
                             Foreground="{StaticResource WolvenKitCyan}"
                             Kind="ContentSave"
                             Style="{StaticResource WolvenKitToolBarButtonIcon}" />
-                        <TextBlock Padding="5,0,0,0" Text="Save" />
-                    </StackPanel>
-                </Button>
-                <Button x:Name="ToolbarSaveAsButton" ToolTip="Save File">
-                    <StackPanel Orientation="Horizontal">
+                    </MenuItem.Icon>
+                </MenuItem>
+                <MenuItem
+                    x:Name="MenuItemSaveAs"
+                    Margin="2,1"
+                    Header="Save As"
+                    ToolTip="Save File">
+                    <MenuItem.Icon>
                         <iconPacks:PackIconMaterial
+                            Margin="6,0"
                             Padding="0,1,0,1"
                             Foreground="{StaticResource WolvenKitCyan}"
                             Kind="ContentSaveEdit"
                             Style="{StaticResource WolvenKitToolBarButtonIcon}" />
-                        <TextBlock Padding="5,0,0,0" Text="Save As" />
-                    </StackPanel>
-                </Button>
-                <Button x:Name="ToolbarSaveAllButton" ToolTip="Save All Files">
-                    <StackPanel Orientation="Horizontal">
+                    </MenuItem.Icon>
+                </MenuItem>
+                <MenuItem
+                    x:Name="MenuItemSaveAll"
+                    Margin="2,1"
+                    Header="Save All"
+                    ToolTip="Save All Files">
+                    <MenuItem.Icon>
                         <iconPacks:PackIconMaterial
+                            Margin="6,0"
                             Padding="0,1,0,1"
                             Foreground="{StaticResource WolvenKitCyan}"
                             Kind="ContentSaveAll"
                             Style="{StaticResource WolvenKitToolBarButtonIcon}" />
-                        <TextBlock Padding="5,0,0,0" Text="Save All" />
-                    </StackPanel>
-                </Button>
-                <Separator Margin="3" />
-                <Button x:Name="ToolbarPackProjectButton" ToolTip="Pack archives &amp; create mod package">
-                    <StackPanel Orientation="Horizontal">
-                        <Grid>
+                    </MenuItem.Icon>
+                </MenuItem>
+
+                <Separator Margin="0,10" />
+
+                <MenuItem
+                    x:Name="MenuItemNewProject"
+                    Margin="2,1"
+                    Header="New Project"
+                    ToolTip="Create new WolvenKit mod project">
+                    <MenuItem.Icon>
+                        <Grid Margin="6,0">
+                            <iconPacks:PackIconMaterialDesign
+                                Padding="0,0,2,2"
+                                Foreground="{StaticResource WolvenKitTan}"
+                                Kind="Folder"
+                                Style="{StaticResource WolvenKitToolBarButtonIcon}" />
+                            <iconPacks:PackIconForkAwesome
+                                Padding="6,6,-3,-3"
+                                Kind="Circle"
+                                Style="{StaticResource WolvenKitToolBarButtonIconEraser}" />
+                            <iconPacks:PackIconForkAwesome
+                                Padding="8,8,-1,-1"
+                                Kind="PlusCircle"
+                                Style="{StaticResource WolvenKitToolBarButtonIcon}" />
+                        </Grid>
+                    </MenuItem.Icon>
+                </MenuItem>
+                <MenuItem
+                    x:Name="MenuItemOpenProject"
+                    Margin="2,1"
+                    Header="Open Project"
+                    ToolTip="Open existing WolvenKit mod project">
+                    <MenuItem.Icon>
+                        <iconPacks:PackIconForkAwesome
+                            Margin="6,0"
+                            Foreground="{StaticResource WolvenKitTan}"
+                            Kind="FolderOpen"
+                            Style="{StaticResource WolvenKitToolBarButtonIcon}" />
+                    </MenuItem.Icon>
+                </MenuItem>
+            </MenuItem>
+
+            <!--  Edit  -->
+            <MenuItem
+                Margin="1,0"
+                Padding="12,0"
+                Header="Edit">
+                <MenuItem
+                    x:Name="ToolbarSettingsButton"
+                    Margin="2,1"
+                    Header="Settings">
+                    <MenuItem.Icon>
+                        <iconPacks:PackIconCodicons
+                            Margin="6,0"
+                            Kind="Settings"
+                            Style="{StaticResource WolvenKitToolBarButtonIcon}" />
+                    </MenuItem.Icon>
+                </MenuItem>
+            </MenuItem>
+
+            <!--  Build  -->
+            <MenuItem
+                Margin="1,0"
+                Padding="12,0"
+                Header="Build">
+                <MenuItem
+                    x:Name="MenuItemPackProject"
+                    Margin="2,1"
+                    Header="Pack Project"
+                    ToolTip="Pack archives &amp; create mod package">
+                    <MenuItem.Icon>
+                        <Grid Margin="6,0">
                             <iconPacks:PackIconForkAwesome
                                 Padding="0,0,2,2"
                                 Foreground="{StaticResource WolvenKitRed}"
                                 Kind="Archive"
                                 Style="{StaticResource WolvenKitToolBarButtonIcon}" />
                         </Grid>
-                        <TextBlock Padding="5,0,0,0" Text="Pack Project" />
-                    </StackPanel>
-                </Button>
-                <Button x:Name="ToolbarPackInstallButton" ToolTip="Pack archives, create mod package &amp; install project to game">
-                    <StackPanel Orientation="Horizontal">
-                        <Grid>
+                    </MenuItem.Icon>
+                </MenuItem>
+                <MenuItem
+                    x:Name="MenuItemPackInstallProject"
+                    Margin="2,1"
+                    Header="Pack &amp; Install"
+                    ToolTip="Pack archives, create mod package &amp; install project to game">
+                    <MenuItem.Icon>
+                        <Grid Margin="6,0">
                             <iconPacks:PackIconForkAwesome
                                 Padding="0,0,2,2"
                                 Foreground="{StaticResource WolvenKitRed}"
@@ -257,13 +347,15 @@
                                 Kind="ArrowRight"
                                 Style="{StaticResource WolvenKitToolBarButtonIcon}" />
                         </Grid>
-                        <TextBlock Padding="5,0,0,0" Text="Pack &amp; Install" />
-                    </StackPanel>
-                </Button>
-
-                <Button x:Name="ToolbarInstallRunButton" ToolTip="Pack archives, install project &amp; launch game">
-                    <StackPanel Orientation="Horizontal">
-                        <Grid>
+                    </MenuItem.Icon>
+                </MenuItem>
+                <MenuItem
+                    x:Name="MenuItemPackInstallRunProject"
+                    Margin="2,1"
+                    Header="Install and Run"
+                    ToolTip="Pack archives, install project &amp; launch game">
+                    <MenuItem.Icon>
+                        <Grid Margin="6,0">
                             <iconPacks:PackIconForkAwesome
                                 Padding="0,0,2,2"
                                 Foreground="LightGreen"
@@ -278,14 +370,15 @@
                                 Kind="ArrowRight"
                                 Style="{StaticResource WolvenKitToolBarButtonIcon}" />
                         </Grid>
-                        <TextBlock Padding="5,0,0,0" Text="Install &amp; Run" />
-                    </StackPanel>
-                </Button>
-
-                <Button x:Name="ToolbarHotInstallButton" ToolTip="Pack archives &amp; install directly to hot directory">
-
-                    <StackPanel Orientation="Horizontal">
-                        <Grid>
+                    </MenuItem.Icon>
+                </MenuItem>
+                <MenuItem
+                    x:Name="MenuItemHotInstallProject"
+                    Margin="2,1"
+                    Header="Hot Install"
+                    ToolTip="Pack archives &amp; install directly to hot directory">
+                    <MenuItem.Icon>
+                        <Grid Margin="6,0">
                             <iconPacks:PackIconForkAwesome
                                 Padding="0,0,2,2"
                                 Foreground="#f44b56"
@@ -300,12 +393,222 @@
                                 Kind="ArrowRight"
                                 Style="{StaticResource WolvenKitToolBarButtonIcon}" />
                         </Grid>
-                        <TextBlock Padding="5,0,0,0" Text="Hot Install" />
-                    </StackPanel>
-                </Button>
+                    </MenuItem.Icon>
+                </MenuItem>
 
-            </ToolBar>
-        </ToolBarTray>
+            </MenuItem>
+
+            <!--  View  -->
+            <MenuItem
+                Margin="1,0"
+                Padding="12,0"
+                Header="View">
+                <MenuItem
+                    x:Name="ProjectExplorerCheckbox"
+                    Margin="2,1"
+                    Header="Project Explorer"
+                    IsCheckable="True" />
+                <MenuItem
+                    x:Name="AssetBrowserCheckbox"
+                    Margin="2,1"
+                    Header="Asset Browser"
+                    IsCheckable="True" />
+                <MenuItem
+                    x:Name="PropertiesCheckbox"
+                    Margin="2,1"
+                    Header="Properties"
+                    IsCheckable="True" />
+                <MenuItem
+                    x:Name="LogCheckbox"
+                    Margin="2,1"
+                    Header="Log"
+                    IsCheckable="True" />
+                <MenuItem
+                    x:Name="ImportExportCheckbox"
+                    Margin="2,1"
+                    Header="Import / Export"
+                    IsCheckable="True" />
+                <MenuItem
+                    x:Name="TweakBrowserCheckbox"
+                    Margin="2,1"
+                    Header="Tweak Browser"
+                    IsCheckable="True" />
+                <MenuItem
+                    x:Name="LocKeyBrowserCheckbox"
+                    Margin="2,1"
+                    Header="LocKey Browser"
+                    IsCheckable="True" />
+
+                <Separator Margin="0,10" />
+
+                <MenuItem
+                    Margin="2,1"
+                    Header="Show File Preview"
+                    IsCheckable="True"
+                    IsChecked="{Binding _settingsManager.ShowFilePreview, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                    ToolTip="Toggle interactive file preview for improved performance" />
+                <MenuItem
+                    x:Name="toolbarLabels"
+                    Header="Show Toolbar Labels"
+                    IsCheckable="True"
+                    IsChecked="True" />
+
+                <Separator Margin="0,10" />
+
+                <MenuItem
+                    Margin="2,1"
+                    Click="SaveLayoutToProject"
+                    Header="Save Layout to Project">
+                    <MenuItem.Icon>
+                        <iconPacks:PackIconMaterialDesign Padding="7,1,-2,0" Kind="Save" />
+                    </MenuItem.Icon>
+                </MenuItem>
+                <MenuItem
+                    Margin="2,1"
+                    Click="SetLayoutToDefault"
+                    Header="Reset Layout">
+                    <MenuItem.Icon>
+                        <iconPacks:PackIconMaterialDesign Padding="7,1,-2,0" Kind="Refresh" />
+                    </MenuItem.Icon>
+                </MenuItem>
+
+            </MenuItem>
+
+            <!--  Tools  -->
+            <MenuItem
+                Margin="1,0"
+                Padding="12,0"
+                Header="Tools">
+                <MenuItem x:Name="MenuItemShowSoundModdingTool" Header="Sound Modding Tool">
+                    <MenuItem.Icon>
+                        <iconPacks:PackIconForkAwesome
+                            Margin="6,0"
+                            Padding="0,1,0,1"
+                            Foreground="{StaticResource WolvenKitCyan}"
+                            Kind="VolumeUp" />
+                    </MenuItem.Icon>
+                </MenuItem>
+
+            </MenuItem>
+
+            <!--  Game  -->
+            <MenuItem
+                Margin="1,0"
+                Padding="12,0"
+                Header="Game">
+
+                <MenuItem Margin="2,1" Header="Launch Game">
+
+
+                    <MenuItem
+                        x:Name="ToolbarLaunchButton"
+                        Margin="2,1"
+                        CommandParameter="0"
+                        Header="Launch Game">
+                        <MenuItem.Icon>
+                            <iconPacks:PackIconCodicons
+                                Margin="5,0,5,0"
+                                Foreground="{StaticResource WolvenKitYellow}"
+                                Kind="RunAll"
+                                Style="{StaticResource WolvenKitToolBarButtonIcon}" />
+                        </MenuItem.Icon>
+                    </MenuItem>
+
+                    <MenuItem
+                        x:Name="ToolbarLaunchSteamButton"
+                        Margin="2,1"
+                        CommandParameter="1"
+                        Header="Launch Game with Steam" />
+
+                    <MenuItem
+                        x:Name="ToolbarPackInstallLaunchButton"
+                        Margin="2,1"
+                        CommandParameter="2"
+                        Header="Pack, Install and Launch Game" />
+
+
+                </MenuItem>
+
+                <Separator Margin="0,10" />
+
+                <MenuItem x:Name="MenuItemUnbundleGame" Header="Unbundle Game to Depot">
+                    <MenuItem.Icon>
+                        <Grid Width="18" Margin="0,0,-8,0">
+                            <iconPacks:PackIconForkAwesome
+                                Padding="0,0,2,2"
+                                Foreground="{StaticResource WolvenKitTan}"
+                                Kind="Archive"
+                                Style="{StaticResource WolvenKitToolBarButtonIcon}" />
+                            <iconPacks:PackIconForkAwesome
+                                Padding="6,6,-3,-3"
+                                Foreground="{StaticResource ContentBackgroundAlt2}"
+                                Kind="Circle"
+                                Style="{StaticResource WolvenKitToolBarButtonIcon}" />
+                            <iconPacks:PackIconForkAwesome
+                                Padding="8,8,-1,-1"
+                                Kind="Cog"
+                                Style="{StaticResource WolvenKitToolBarButtonIcon}" />
+                        </Grid>
+                    </MenuItem.Icon>
+                </MenuItem>
+                <MenuItem Click="GenerateMaterialRepoButton_Click" Header="Extract Materials to Depot">
+                    <MenuItem.Icon>
+                        <Grid Width="18" Margin="0,0,-8,0">
+                            <iconPacks:PackIconForkAwesome
+                                Padding="0,0,2,2"
+                                Foreground="{StaticResource WolvenKitTan}"
+                                Kind="PictureOutline"
+                                Style="{StaticResource WolvenKitToolBarButtonIcon}" />
+                            <iconPacks:PackIconForkAwesome
+                                Padding="6,6,-3,-3"
+                                Foreground="{StaticResource ContentBackgroundAlt2}"
+                                Kind="Circle"
+                                Style="{StaticResource WolvenKitToolBarButtonIcon}" />
+                            <iconPacks:PackIconForkAwesome
+                                Padding="8,8,-1,-1"
+                                Kind="Cog"
+                                Style="{StaticResource WolvenKitToolBarButtonIcon}" />
+                        </Grid>
+                    </MenuItem.Icon>
+                </MenuItem>
+                <MenuItem x:Name="MenuItemOpenMaterialRepository" Header="Browse Game Depot">
+                    <MenuItem.Icon>
+                        <Grid Width="18" Margin="0,0,-8,0">
+                            <iconPacks:PackIconForkAwesome
+                                Foreground="{StaticResource WolvenKitTan}"
+                                Kind="List"
+                                Style="{StaticResource WolvenKitToolBarButtonIcon}" />
+                        </Grid>
+                    </MenuItem.Icon>
+                </MenuItem>
+            </MenuItem>
+
+            <!--  Extensions  -->
+            <MenuItem
+                Margin="1,0"
+                Padding="12,0"
+                Header="Extensions">
+                <MenuItem x:Name="MenuItemShowPluginTool" Header="Plugin Manager">
+                    <MenuItem.Icon>
+                        <iconPacks:PackIconCodicons
+                            Margin="6,0"
+                            Padding="0,1,0,1"
+                            Foreground="{StaticResource WolvenKitCyan}"
+                            Kind="Extensions" />
+                    </MenuItem.Icon>
+                </MenuItem>
+                <MenuItem x:Name="MenuItemShowModsView" Header="Mod Manager">
+                    <MenuItem.Icon>
+                        <iconPacks:PackIconCodicons
+                            Margin="6,0"
+                            Padding="0,1,0,1"
+                            Foreground="{StaticResource WolvenKitYellow}"
+                            Kind="Package" />
+                    </MenuItem.Icon>
+                </MenuItem>
+            </MenuItem>
+
+        </Menu>
 
     </Grid>
 

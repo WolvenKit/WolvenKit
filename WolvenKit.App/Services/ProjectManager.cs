@@ -114,7 +114,7 @@ namespace WolvenKit.Functionality.Services
                     _ => null
                 };
 
-                return await Task.FromResult(project);
+                return project;
             }
             catch (IOException ex)
             {
@@ -146,17 +146,15 @@ namespace WolvenKit.Functionality.Services
                 //    };
                 //}
                 /*else*/
-                if (typeof(T) == typeof(Cp77Project))
-                {
-                    return new Cp77Project(path)
+                return typeof(T) == typeof(Cp77Project)
+                    ? new Cp77Project(path)
                     {
                         Author = obj.Author,
                         Email = obj.Email,
                         Name = obj.Name,
                         Version = obj.Version,
-                    };
-                }
-                return null;
+                    }
+                    : (EditorProject)null;
             }
             catch (Exception e)
             {

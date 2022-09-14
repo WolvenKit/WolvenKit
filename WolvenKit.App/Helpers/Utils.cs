@@ -2,6 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Reactive.Linq;
+using System.Text.Json.Serialization;
+using System.Threading.Tasks;
 using DynamicData;
 using Splat;
 using WolvenKit.Common;
@@ -248,15 +251,13 @@ namespace WolvenKit.ViewModels.Shell
             return w;
         }
 
-        public void Refresh()
+        public async Task Refresh()
         {
-            var currentfile = new FileModel(Tab.File.FilePath,
-                Locator.Current.GetService<AppViewModel>().ActiveProject);
-            Tab.File.TabItemViewModels
-                .RemoveMany(Tab.File.TabItemViewModels.AsEnumerable());
+            var currentfile = new FileModel(Tab.File.FilePath, Locator.Current.GetService<AppViewModel>().ActiveProject);
+            Tab.File.TabItemViewModels.RemoveMany(Tab.File.TabItemViewModels.AsEnumerable());
 
             var ad = Locator.Current.GetService<AppViewModel>().ActiveDocument;
-            ad.OpenFileAsync(currentfile.FullName);
+            await ad.OpenFileAsync(currentfile.FullName);
         }
 
 
