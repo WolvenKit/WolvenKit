@@ -351,7 +351,20 @@ namespace WolvenKit.RED4.IO
                 enumString = GetStringValue(index);
             }
 
-            return CEnum.Parse<T>(enumString);
+            if (CEnum.TryParse<T>(enumString, out var val))
+            {
+                return val;
+            }
+            else
+            {
+                var args = new InvalidEnumValueEventArgs<T>(enumString);
+                if (!HandleParsingError(args))
+                {
+                    throw new Exception($"CEnum \"{typeof(T).Name}.{enumString}\" could not be found!");
+                }
+
+                return args.Value;
+            }
         }
 
         public virtual IRedHandle ReadCHandle(Type type)

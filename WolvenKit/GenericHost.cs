@@ -6,6 +6,7 @@ using Splat.Microsoft.Extensions.DependencyInjection;
 using WolvenKit.Common;
 using WolvenKit.Common.Interfaces;
 using WolvenKit.Common.Services;
+using WolvenKit.Core.Interfaces;
 using WolvenKit.Functionality.Controllers;
 using WolvenKit.Functionality.ProjectManagement;
 using WolvenKit.Functionality.Services;

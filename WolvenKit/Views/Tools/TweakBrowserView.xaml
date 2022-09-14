@@ -3,6 +3,7 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:converters="clr-namespace:WolvenKit.Functionality.Converters;assembly=WolvenKit.App"
+    xmlns:converters1="clr-namespace:WolvenKit.Converters"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:editors="clr-namespace:WolvenKit.Views.Editors"
     xmlns:hc="https://handyorg.github.io/handycontrol"
@@ -11,9 +12,8 @@
     xmlns:others="clr-namespace:WolvenKit.Views.Others"
     xmlns:reactiveUi="http://reactiveui.net"
     xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
-    xmlns:tools="clr-namespace:WolvenKit.ViewModels.Tools;assembly=WolvenKit.App"
     xmlns:templates="clr-namespace:WolvenKit.Views.Templates"
-    xmlns:converters1="clr-namespace:WolvenKit.Converters"
+    xmlns:tools="clr-namespace:WolvenKit.ViewModels.Tools;assembly=WolvenKit.App"
     d:DataContext="{d:DesignInstance Type=tools:TweakBrowserViewModel}"
     d:DesignHeight="450"
     d:DesignWidth="800"
@@ -40,17 +40,16 @@
                 </Grid.RowDefinitions>
                 <hc:SearchBar
                     Grid.Row="0"
-                    IsRealTime="True"
                     Margin="3"
                     VerticalAlignment="Top"
                     hc:InfoElement.Placeholder="Search all TweakDB Records"
-                    KeyUp="TextBox_KeyEnterUpdate"
                     FlowDirection="LeftToRight"
+                    IsRealTime="True"
+                    KeyUp="TextBox_KeyEnterUpdate"
                     ShowClearButton="False"
                     Style="{StaticResource SearchBarPlus}"
                     Text="{Binding SearchText}" />
-                <Expander Header="Filter..."
-                    Grid.Row="1">
+                <Expander Grid.Row="1" Header="Filter...">
                     <Grid>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition />
@@ -63,29 +62,32 @@
                         <CheckBox
                             Grid.Row="0"
                             Grid.Column="0"
-                            IsChecked="{Binding ShowNonResolvableEntries}">Show non-resolvable entries</CheckBox>
+                            IsChecked="{Binding ShowNonResolvableEntries}">
+                            Show non-resolvable entries
+                        </CheckBox>
                         <StackPanel
                             Grid.Row="0"
                             Grid.Column="1"
                             Orientation="Horizontal">
                             <Label>Filter record type:</Label>
                             <ComboBox
+                                Width="300"
                                 IsEditable="True"
                                 IsTextSearchEnabled="True"
-                                Width="300"
                                 ItemsSource="{Binding RecordTypes}"
-                                SelectedItem="{Binding SelectedRecordType}"/>
+                                SelectedItem="{Binding SelectedRecordType}" />
                         </StackPanel>
                         <CheckBox
                             Grid.Row="1"
                             Grid.Column="0"
-                            IsChecked="{Binding ShowInlineEntries}">Show inline records</CheckBox>
+                            IsChecked="{Binding ShowInlineEntries}">
+                            Show inline records
+                        </CheckBox>
                     </Grid>
                 </Expander>
             </Grid>
         </Border>
-        <TabControl
-            Grid.Row="1">
+        <TabControl Grid.Row="1">
             <TabItem Header="{Binding RecordsHeader}">
                 <Grid>
                     <Grid.ColumnDefinitions>
@@ -139,9 +141,7 @@
                         Grid.Column="1"
                         Margin="0,-2,0,-3"
                         HorizontalAlignment="Stretch" />
-                    <editors:RedTypeView
-                        Grid.Column="2"
-                        DataContext="{Binding SelectedFlat}"/>
+                    <editors:RedTypeView Grid.Column="2" DataContext="{Binding SelectedFlat}" />
                 </Grid>
             </TabItem>
             <TabItem Header="{Binding QueriesHeader}">
@@ -167,9 +167,7 @@
                         Grid.Column="1"
                         Margin="0,-2,0,-3"
                         HorizontalAlignment="Stretch" />
-                    <editors:RedTypeView
-                        Grid.Column="2"
-                        DataContext="{Binding SelectedQuery}"/>
+                    <editors:RedTypeView Grid.Column="2" DataContext="{Binding SelectedQuery}" />
                 </Grid>
             </TabItem>
             <TabItem Header="{Binding GroupTagsHeader}">
@@ -195,11 +193,31 @@
                         Grid.Column="1"
                         Margin="0,-2,0,-3"
                         HorizontalAlignment="Stretch" />
-                    <editors:RedTypeView
-                        Grid.Column="2"
-                        DataContext="{Binding SelectedGroupTag}"/>
+                    <editors:RedTypeView Grid.Column="2" DataContext="{Binding SelectedGroupTag}" />
                 </Grid>
             </TabItem>
         </TabControl>
+
+        <Border
+            x:Name="LoadingBorder"
+            Grid.RowSpan="3"
+            Background="{StaticResource ContentBackgroundAlt3}"
+            BorderBrush="Black"
+            BorderThickness="0"
+            Visibility="{Binding Path=LoadVisibility, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}">
+            <Grid>
+                <StackPanel VerticalAlignment="Center">
+                    <TextBlock
+                        Margin="0,75,0,0"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        FontSize="24"
+                        FontWeight="Bold"
+                        Foreground="#7EFFFFFF"
+                        Text="Loading TweakDB Browser..."
+                        TextWrapping="Wrap" />
+                </StackPanel>
+            </Grid>
+        </Border>
     </Grid>
 </reactiveUi:ReactiveUserControl>

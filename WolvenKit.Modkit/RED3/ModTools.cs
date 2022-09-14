@@ -1,4 +1,4 @@
-using WolvenKit.Common.Services;
+using WolvenKit.Core.Interfaces;
 
 namespace WolvenKit.Modkit.RED3
 {

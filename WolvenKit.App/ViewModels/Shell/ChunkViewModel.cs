@@ -17,6 +17,7 @@ using ReactiveUI.Fody.Helpers;
 using Splat;
 using WolvenKit.Common;
 using WolvenKit.Common.Services;
+using WolvenKit.Core.Interfaces;
 using WolvenKit.Functionality.Commands;
 using WolvenKit.Functionality.Controllers;
 using WolvenKit.Models;

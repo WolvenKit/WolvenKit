@@ -9,6 +9,7 @@ using WolvenKit.Common.Services;
 using WolvenKit.RED4.Types;
 using WolvenKit.ViewModels.Documents;
 using WolvenKit.ViewModels.Shell;
+using WolvenKit.Core.Interfaces;
 
 namespace WolvenKit.Views.Tools
 {

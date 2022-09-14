@@ -8,6 +8,7 @@ using HelixToolkit.Wpf.SharpDX;
 using ReactiveUI;
 using Splat;
 using WolvenKit.Common.Services;
+using WolvenKit.Core.Interfaces;
 using WolvenKit.Functionality.Extensions;
 using WolvenKit.RED4.Archive.Buffer;
 using WolvenKit.RED4.Types;

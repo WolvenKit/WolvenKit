@@ -7,6 +7,7 @@ using System.Xml.Serialization;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using WolvenKit.Common.Services;
+using WolvenKit.Core.Interfaces;
 using WolvenKit.Functionality.ProjectManagement;
 using WolvenKit.ProjectManagement.Project;
 

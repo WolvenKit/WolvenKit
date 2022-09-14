@@ -1,16 +1,14 @@
 using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Reactive.Linq;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using DynamicData;
-using MoreLinq;
 using Splat;
 using WolvenKit.Common;
-using WolvenKit.Common.Services;
+using WolvenKit.Core.Interfaces;
 using WolvenKit.Functionality.Services;
 using WolvenKit.Models;
 using WolvenKit.RED4.Archive;
@@ -18,7 +16,6 @@ using WolvenKit.RED4.Archive.Buffer;
 using WolvenKit.RED4.CR2W;
 using WolvenKit.RED4.CR2W.JSON;
 using WolvenKit.RED4.Types;
-using static WolvenKit.RED4.Types.Enums;
 
 using Mat4 = System.Numerics.Matrix4x4;
 using Quat = System.Numerics.Quaternion;

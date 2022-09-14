@@ -32,10 +32,39 @@ public partial class ModTools
 
     private FindFileResult TryFindFile(List<ICyberGameArchive> archives, string path, out FindFileEntry result, bool excludeCustomArchives = false)
     {
-        return TryFindFile(archives, FNV1A64HashAlgorithm.HashString(path), out result, excludeCustomArchives);
+        var status = InternalTryFindFile(archives, FNV1A64HashAlgorithm.HashString(path), out result, excludeCustomArchives);
+
+        if (status == FindFileResult.FileNotFound)
+        {
+            _loggerService?.Warning($"The file \"{path}\" could not be found!");
+        }
+
+        if (status == FindFileResult.NoCR2W)
+        {
+            _loggerService?.Error($"The file \"{path}\" could not be parsed!");
+        }
+
+        return status;
     }
 
     private FindFileResult TryFindFile(List<ICyberGameArchive> archives, ulong hash, out FindFileEntry result, bool excludeCustomArchives = false)
+    {
+        var status = InternalTryFindFile(archives, hash, out result, excludeCustomArchives);
+
+        if (status == FindFileResult.FileNotFound)
+        {
+            _loggerService?.Warning($"The file with the hash \"{hash}\" could not be found!");
+        }
+
+        if (status == FindFileResult.NoCR2W)
+        {
+            _loggerService?.Error($"The file with the hash \"{hash}\" could not be parsed!");
+        }
+
+        return status;
+    }
+
+    private FindFileResult InternalTryFindFile(List<ICyberGameArchive> archives, ulong hash, out FindFileEntry result, bool excludeCustomArchives = false)
     {
         result = null;
 

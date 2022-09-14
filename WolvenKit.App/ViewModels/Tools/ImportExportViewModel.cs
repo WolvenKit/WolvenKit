@@ -396,12 +396,13 @@ namespace WolvenKit.ViewModels.Tools
                 switch (argType)
                 {
                     case nameof(MeshExportArgs.MultiMeshMeshes):
-                        fetchExtension = ERedExtension.mesh;
                         selectedEntries = meshExportArgs.MultiMeshMeshes;
+                        fetchExtension = ERedExtension.mesh;
                         break;
 
                     case nameof(MeshExportArgs.MultiMeshRigs):
                         selectedEntries = meshExportArgs.MultiMeshRigs;
+                        fetchExtension = ERedExtension.rig;
                         break;
 
                     case nameof(MeshExportArgs.Rig):

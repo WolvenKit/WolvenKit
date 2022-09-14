@@ -9,8 +9,8 @@ using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using Splat;
 using WolvenKit.Common;
-using WolvenKit.Common.Services;
 using WolvenKit.Core;
+using WolvenKit.Core.Interfaces;
 
 namespace WolvenKit.Functionality.Services
 {
