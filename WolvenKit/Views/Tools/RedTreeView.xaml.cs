@@ -8,7 +8,7 @@ using Syncfusion.UI.Xaml.TreeView;
 using WolvenKit.RED4.Types;
 using WolvenKit.ViewModels.Shell;
 using WolvenKit.ViewModels.Documents;
-using WolvenKit.Common.Services;
+using WolvenKit.Core.Interfaces;
 
 namespace WolvenKit.Views.Tools
 {

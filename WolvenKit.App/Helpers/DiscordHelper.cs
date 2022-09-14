@@ -1,6 +1,6 @@
 using System;
 using Splat;
-using WolvenKit.Common.Services;
+using WolvenKit.Core.Interfaces;
 
 namespace WolvenKit.Functionality.WKitGlobal.Helpers
 {

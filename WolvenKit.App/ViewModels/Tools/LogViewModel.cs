@@ -1,6 +1,6 @@
 using System.Windows.Documents;
 using ReactiveUI.Fody.Helpers;
-using WolvenKit.Common.Services;
+using WolvenKit.Core.Interfaces;
 using WolvenKit.Models.Docking;
 
 namespace WolvenKit.ViewModels.Tools

@@ -39,7 +39,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Splat.Microsoft.Extensions.DependencyInjection" Version="14.3.4" />
+    <PackageReference Include="Splat.Microsoft.Extensions.DependencyInjection" Version="14.4.1" />
     <PackageReference Include="System.CommandLine.Hosting" Version="0.3.0-alpha.21216.1" />
 
   </ItemGroup>

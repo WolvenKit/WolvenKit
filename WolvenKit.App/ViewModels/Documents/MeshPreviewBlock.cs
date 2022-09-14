@@ -9,7 +9,7 @@ using HelixToolkit.Wpf.SharpDX;
 using Prism.Commands;
 using ReactiveUI;
 using Splat;
-using WolvenKit.Common.Services;
+using WolvenKit.Core.Interfaces;
 using WolvenKit.RED4.Types;
 
 namespace WolvenKit.ViewModels.Documents

@@ -2,7 +2,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using Prism.Commands;
 using ReactiveUI.Fody.Helpers;
-using WolvenKit.Common.Services;
+using WolvenKit.Core.Interfaces;
 using WolvenKit.Functionality.Services;
 using WolvenKit.ProjectManagement.Project;
 

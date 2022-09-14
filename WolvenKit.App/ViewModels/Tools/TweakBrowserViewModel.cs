@@ -3,16 +3,14 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Globalization;
+using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
+using System.Windows;
 using System.Windows.Data;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
-using Splat;
-using WolvenKit.Common.Interfaces;
 using WolvenKit.Common.Services;
-using WolvenKit.Core.Services;
-using WolvenKit.Functionality.Controllers;
 using WolvenKit.Functionality.Services;
 using WolvenKit.ProjectManagement.Project;
 using WolvenKit.RED4.Types;
@@ -34,12 +32,9 @@ namespace WolvenKit.ViewModels.Tools
         /// </summary>
         public const string ToolTitle = "Tweak Browser";
 
-        private readonly ILoggerService _loggerService;
+        private readonly ISettingsManager _settingsManager;
+        private readonly INotificationService _notificationService;
         private readonly IProjectManager _projectManager;
-        private readonly IWatcherService _watcherService;
-        private readonly IModTools _modTools;
-        private readonly IProgressService<double> _progressService;
-        private readonly IGameControllerFactory _gameController;
         private readonly TweakDBService _tweakDB;
 
         private EditorProject ActiveMod => _projectManager.ActiveProject;
@@ -62,23 +57,16 @@ namespace WolvenKit.ViewModels.Tools
         #region constructors
 
         public TweakBrowserViewModel(
+            ISettingsManager settingsManager,
+            INotificationService notificationService,
             IProjectManager projectManager,
-            ILoggerService loggerService,
-            IWatcherService watcherService,
-            IProgressService<double> progressService,
-            IModTools modTools,
-            IGameControllerFactory gameController
+            TweakDBService tweakDbService
         ) : base(ToolTitle)
         {
+            _settingsManager = settingsManager;
+            _notificationService = notificationService;
             _projectManager = projectManager;
-            _loggerService = loggerService;
-            _watcherService = watcherService;
-            _modTools = modTools;
-            _progressService = progressService;
-            _gameController = gameController;
-            _tweakDB = Locator.Current.GetService<TweakDBService>();
-
-            //State = DockState.Document;
+            _tweakDB = tweakDbService;
 
             _tweakDB.Loaded += Load;
         }
@@ -87,10 +75,12 @@ namespace WolvenKit.ViewModels.Tools
 
         #region Properties
 
-        public ICollectionView Records { get; set; }
-        public ICollectionView Flats { get; set; }
-        public ICollectionView Queries { get; set; }
-        public ICollectionView GroupTags { get; set; }
+        [Reactive] public Visibility LoadVisibility { get; set; } = Visibility.Visible;
+
+        public ICollectionView Records { get; set; } = new CollectionView(new List<object>());
+        public ICollectionView Flats { get; set; } = new CollectionView(new List<object>());
+        public ICollectionView Queries { get; set; } = new CollectionView(new List<object>());
+        public ICollectionView GroupTags { get; set; } = new CollectionView(new List<object>());
 
         public List<string> RecordTypes { get; set; }
 
@@ -239,6 +229,16 @@ namespace WolvenKit.ViewModels.Tools
 
         #region Methods
 
+        public void LoadTweakDB()
+        {
+            if (_tweakDB.IsLoaded)
+            {
+                return;
+            }
+
+            _tweakDB.LoadDB(Path.Combine(_settingsManager.GetRED4GameRootDir(), "r6", "cache", "tweakdb.bin"));
+        }
+
         private void Load(object sender, EventArgs eventArgs)
         {
             var records = _tweakDB.GetRecords().Select(x => new TweakEntry(x, _tweakDB, true)).ToList();
@@ -265,6 +265,9 @@ namespace WolvenKit.ViewModels.Tools
             GroupTags.Filter = Filter;
 
             Refresh();
+
+            LoadVisibility = Visibility.Collapsed;
+            _notificationService.Success($"Asset Browser is initialized");
         }
 
         private void Refresh()
