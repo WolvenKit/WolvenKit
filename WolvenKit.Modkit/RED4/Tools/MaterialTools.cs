@@ -77,7 +77,8 @@ namespace WolvenKit.Modkit.RED4
             {
                 string path = cmesh.ExternalMaterials[i].DepotPath;
 
-                if (TryFindFile(archives, path, out var result) == FindFileResult.NoError)
+                var findStatus = TryFindFile(archives, path, out var result);
+                if (findStatus == FindFileResult.NoError)
                 {
                     if (result.File.RootChunk is CMaterialInstance mi)
                     {
@@ -104,16 +105,18 @@ namespace WolvenKit.Modkit.RED4
                         }
                     }
                 }
-                else
+                else if (findStatus == FindFileResult.NoCR2W)
                 {
-                    throw new InvalidParsingException("Error while extracting a file");
+                    throw new InvalidParsingException("Error while parsing a file");
                 }
             }
+
             for (var i = 0; i < cmesh.PreloadExternalMaterials.Count; i++)
             {
                 string path = cmesh.PreloadExternalMaterials[i].DepotPath;
 
-                if (TryFindFile(archives, path, out var result) == FindFileResult.NoError)
+                var findStatus = TryFindFile(archives, path, out var result);
+                if (findStatus == FindFileResult.NoError)
                 {
                     ExternalMaterial.Add(result.File.RootChunk as CMaterialInstance);
 
@@ -125,9 +128,9 @@ namespace WolvenKit.Modkit.RED4
                         }
                     }
                 }
-                else
+                else if (findStatus == FindFileResult.NoCR2W)
                 {
-                    throw new InvalidParsingException("Error while extracting a file");
+                    throw new InvalidParsingException("Error while parsing a file");
                 }
             }
 
@@ -171,8 +174,6 @@ namespace WolvenKit.Modkit.RED4
             }
             else
             {
-
-
                 foreach (var handle in cmesh.PreloadLocalMaterialInstances)
                 {
                     if (handle.Chunk is CMaterialInstance mi1)
@@ -209,7 +210,8 @@ namespace WolvenKit.Modkit.RED4
                 string path = m.BaseMaterial.DepotPath;
                 while (!Path.GetExtension(path).Contains("mt"))
                 {
-                    if (TryFindFile(archives, path, out var result) == FindFileResult.NoError)
+                    var findStatus = TryFindFile(archives, path, out var result);
+                    if (findStatus == FindFileResult.NoError)
                     {
                         path = (result.File.RootChunk as CMaterialInstance).BaseMaterial.DepotPath;
 
@@ -221,15 +223,16 @@ namespace WolvenKit.Modkit.RED4
                             }
                         }
                     }
-                    else
+                    else if (findStatus == FindFileResult.NoCR2W)
                     {
-                        throw new InvalidParsingException("Error while extracting a file");
+                        throw new InvalidParsingException("Error while parsing a file");
                     }
                 }
 
                 var mt = FNV1A64HashAlgorithm.HashString(path);
 
-                if (TryFindFile(archives, path, out var result2) == FindFileResult.NoError)
+                var findStatus2 = TryFindFile(archives, path, out var result2);
+                if (findStatus2 == FindFileResult.NoError)
                 {
                     foreach (var import in result2.Imports)
                     {
@@ -239,9 +242,9 @@ namespace WolvenKit.Modkit.RED4
                         }
                     }
                 }
-                else
+                else if (findStatus2 == FindFileResult.NoCR2W)
                 {
-                    throw new InvalidParsingException("Error while extracting a file");
+                    throw new InvalidParsingException("Error while parsing a file");
                 }
             }
         }
@@ -385,7 +388,8 @@ namespace WolvenKit.Modkit.RED4
                     var fi = new FileInfo(Path.Combine(matRepo, Path.ChangeExtension(path, ".hp.json")));
                     if (!fi.Exists)
                     {
-                        if (TryFindFile(archives, path, out var result) == FindFileResult.NoError)
+                        var findStatus = TryFindFile(archives, path, out var result);
+                        if (findStatus == FindFileResult.NoError)
                         {
                             if (!fi.Directory.Exists)
                             {
@@ -396,9 +400,9 @@ namespace WolvenKit.Modkit.RED4
                             var doc = RedJsonSerializer.Serialize(dto);
                             File.WriteAllText(fi.FullName, doc);
                         }
-                        else
+                        else if (findStatus == FindFileResult.NoCR2W)
                         {
-                            throw new InvalidParsingException("Error while extracting a file");
+                            throw new InvalidParsingException("Error while parsing a file");
                         }
                     }
                 }
@@ -415,7 +419,8 @@ namespace WolvenKit.Modkit.RED4
                     var fi = new FileInfo(Path.Combine(matRepo, Path.ChangeExtension(path, ".mlsetup.json")));
                     if (!fi.Exists)
                     {
-                        if (TryFindFile(archives, path, out var result) == FindFileResult.NoError)
+                        var findStatus = TryFindFile(archives, path, out var result);
+                        if (findStatus == FindFileResult.NoError)
                         {
                             if (!fi.Directory.Exists)
                             {
@@ -431,9 +436,9 @@ namespace WolvenKit.Modkit.RED4
                                 ExtractFile(import.DepotPath);
                             }
                         }
-                        else
+                        else if (findStatus == FindFileResult.NoCR2W)
                         {
-                            throw new InvalidParsingException("Error while extracting a file");
+                            throw new InvalidParsingException("Error while parsing a file");
                         }
                     }
                 }
@@ -450,7 +455,8 @@ namespace WolvenKit.Modkit.RED4
                     var fi = new FileInfo(Path.Combine(matRepo, Path.ChangeExtension(path, ".mltemplate.json")));
                     if (!fi.Exists)
                     {
-                        if (TryFindFile(archives, path, out var result) == FindFileResult.NoError)
+                        var findStatus = TryFindFile(archives, path, out var result);
+                        if (findStatus == FindFileResult.NoError)
                         {
                             if (!fi.Directory.Exists)
                             {
@@ -473,9 +479,9 @@ namespace WolvenKit.Modkit.RED4
                                 ExtractXBM(mat.DepotPath);
                             }
                         }
-                        else
+                        else if (findStatus == FindFileResult.NoCR2W)
                         {
-                            throw new InvalidParsingException("Error while extracting a file");
+                            throw new InvalidParsingException("Error while parsing a file");
                         }
                     }
                 }
@@ -492,7 +498,8 @@ namespace WolvenKit.Modkit.RED4
                     var fi = new FileInfo(Path.Combine(matRepo, Path.ChangeExtension(path, ".gradient.json")));
                     if (!fi.Exists)
                     {
-                        if (TryFindFile(archives, path, out var result) == FindFileResult.NoError)
+                        var findStatus = TryFindFile(archives, path, out var result);
+                        if (findStatus == FindFileResult.NoError)
                         {
                             if (!fi.Directory.Exists)
                             {
@@ -503,9 +510,9 @@ namespace WolvenKit.Modkit.RED4
                             var doc = RedJsonSerializer.Serialize(dto);
                             File.WriteAllText(fi.FullName, doc);
                         }
-                        else
+                        else if (findStatus == FindFileResult.NoCR2W)
                         {
-                            throw new InvalidParsingException("Error while extracting a file");
+                            throw new InvalidParsingException("Error while parsing a file");
                         }
                     }
                 }

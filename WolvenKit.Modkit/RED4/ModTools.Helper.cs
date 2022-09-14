@@ -36,7 +36,7 @@ public partial class ModTools
 
         if (status == FindFileResult.FileNotFound)
         {
-            _loggerService?.Error($"The file \"{path}\" could not be found!");
+            _loggerService?.Warning($"The file \"{path}\" could not be found!");
         }
 
         if (status == FindFileResult.NoCR2W)
@@ -53,7 +53,7 @@ public partial class ModTools
 
         if (status == FindFileResult.FileNotFound)
         {
-            _loggerService?.Error($"The file with the hash \"{hash}\" could not be found!");
+            _loggerService?.Warning($"The file with the hash \"{hash}\" could not be found!");
         }
 
         if (status == FindFileResult.NoCR2W)
