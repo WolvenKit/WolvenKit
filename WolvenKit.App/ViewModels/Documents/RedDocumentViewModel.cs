@@ -181,6 +181,14 @@ namespace WolvenKit.ViewModels.Documents
             {
                 TabItemViewModels.Add(new RDTTextureViewModel(xbm, this));
             }
+            if (cls is CCubeTexture cube)
+            {
+                TabItemViewModels.Add(new RDTTextureViewModel(cube, this));
+            }
+            if (cls is CTextureArray texa)
+            {
+                TabItemViewModels.Add(new RDTTextureViewModel(texa, this));
+            }
             if (cls is CMesh mesh && mesh.RenderResourceBlob != null && mesh.RenderResourceBlob.GetValue() is rendRenderTextureBlobPC)
             {
                 TabItemViewModels.Add(new RDTTextureViewModel(mesh, this));

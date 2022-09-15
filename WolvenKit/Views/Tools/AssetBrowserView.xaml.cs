@@ -219,7 +219,7 @@ namespace WolvenKit.Views.Tools
 
                 var bitmapImage = new BitmapImage();
                 bitmapImage.BeginInit();
-                bitmapImage.StreamSource = new MemoryStream(img.SaveToPNGMemory());
+                bitmapImage.StreamSource = new MemoryStream(img.GetPreview());
                 bitmapImage.EndInit();
 
                 propertiesViewModel.LoadImage(bitmapImage);

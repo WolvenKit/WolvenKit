@@ -110,6 +110,11 @@ namespace WolvenKit.Common.Model.Arguments
         public override string ToString() => $"{UncookExtension}";
     }
 
+    public class InkAtlasExportArgs : ExportArgs
+    {
+
+    }
+
     /// <summary>
     /// XBM Export Arguments
     /// </summary>

@@ -64,7 +64,7 @@ namespace WolvenKit.ViewModels.Documents
 
             var bitmapImage = new BitmapImage();
             bitmapImage.BeginInit();
-            bitmapImage.StreamSource = new MemoryStream(_image.SaveToPNGMemory());
+            bitmapImage.StreamSource = new MemoryStream(_image.GetPreview());
             bitmapImage.EndInit();
 
             Image = bitmapImage;

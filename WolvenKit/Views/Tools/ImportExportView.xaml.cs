@@ -1,7 +1,7 @@
 using System;
-using System.ComponentModel;
 using System.Linq;
 using System.IO;
+using System.ComponentModel;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Windows;
@@ -21,10 +21,11 @@ namespace WolvenKit.Views.Tools
 {
     public partial class ImportExportView : ReactiveUserControl<ImportExportViewModel>
     {
-        private ISettingsManager _settingsManager;
+
         private PropertyItem _propertyItem;
         private readonly IProjectManager projectManager;
         private readonly Red4ParserService parser;
+        private ISettingsManager _settingsManager;
 
         /// <summary>
         /// Constructor I/E Tool.

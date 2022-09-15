@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using WolvenKit.Common.Model.Arguments;
 using WolvenKit.Common.Services;
 using WolvenKit.RED4.Archive;
 using static WolvenKit.RED4.Types.Enums;
@@ -147,6 +148,59 @@ namespace WolvenKit.RED4.CR2W
                     return DirectXTexNet.DXGI_FORMAT.BC5_UNORM;
                 case ETextureCompression.TCM_QualityColor:
                     return isGamma ? DirectXTexNet.DXGI_FORMAT.BC7_UNORM_SRGB : DirectXTexNet.DXGI_FORMAT.BC7_UNORM;
+                default:
+                    logger.Warning($"Unknown texture compression format: {compression.ToString()}");
+                    throw new ArgumentOutOfRangeException();
+            }
+        }
+
+        public static DirectXTexNet.DXGI_FORMAT GetDXGIFormat3(SupportedCompressionFormats compression, SupportedRawFormats rawFormat, bool isGamma, ILoggerService logger)
+        {
+            switch (compression)
+            {
+                case SupportedCompressionFormats.TCM_None:
+                    switch (rawFormat)
+                    {
+                        case SupportedRawFormats.TRF_Invalid:
+                            return DirectXTexNet.DXGI_FORMAT.R8G8B8A8_UNORM;
+                        case SupportedRawFormats.TRF_TrueColor:
+                            return isGamma ? DirectXTexNet.DXGI_FORMAT.R8G8B8A8_UNORM_SRGB : DirectXTexNet.DXGI_FORMAT.R8G8B8A8_UNORM;
+                        case SupportedRawFormats.TRF_DeepColor:
+                            return DirectXTexNet.DXGI_FORMAT.R16G16B16A16_UNORM;
+                        case SupportedRawFormats.TRF_Grayscale:
+                            return DirectXTexNet.DXGI_FORMAT.R8_UNORM;
+                        case SupportedRawFormats.TRF_HDRFloat:
+                            return DirectXTexNet.DXGI_FORMAT.R32G32B32A32_FLOAT;
+                        case SupportedRawFormats.TRF_HDRHalf:
+                            return DirectXTexNet.DXGI_FORMAT.R16G16B16A16_FLOAT;
+                        case SupportedRawFormats.TRF_HDRFloatGrayscale:
+                            return DirectXTexNet.DXGI_FORMAT.R32_FLOAT;
+                        case SupportedRawFormats.TRF_R8G8:
+                            return DirectXTexNet.DXGI_FORMAT.R8G8_UNORM;
+                        default:
+                            logger.Warning($"Unknown texture format: {rawFormat.ToString()}");
+                            throw new ArgumentOutOfRangeException();
+                    }
+                case SupportedCompressionFormats.TCM_DXTNoAlpha:
+                    return isGamma ? DirectXTexNet.DXGI_FORMAT.BC1_UNORM_SRGB : DirectXTexNet.DXGI_FORMAT.BC1_UNORM;
+                case SupportedCompressionFormats.TCM_DXTAlpha:
+                    return isGamma ? DirectXTexNet.DXGI_FORMAT.BC3_UNORM_SRGB : DirectXTexNet.DXGI_FORMAT.BC3_UNORM;
+                case SupportedCompressionFormats.TCM_Normalmap:
+                    return DirectXTexNet.DXGI_FORMAT.BC5_UNORM;
+                case SupportedCompressionFormats.TCM_Normals_DEPRECATED:
+                    return DirectXTexNet.DXGI_FORMAT.BC1_UNORM;
+                case SupportedCompressionFormats.TCM_NormalsHigh_DEPRECATED:
+                    return DirectXTexNet.DXGI_FORMAT.BC3_UNORM;
+                case SupportedCompressionFormats.TCM_DXTAlphaLinear:
+                    return isGamma ? DirectXTexNet.DXGI_FORMAT.BC3_UNORM_SRGB : DirectXTexNet.DXGI_FORMAT.BC3_UNORM;
+                case SupportedCompressionFormats.TCM_QualityR:
+                    return DirectXTexNet.DXGI_FORMAT.BC4_UNORM;
+                case SupportedCompressionFormats.TCM_QualityRG:
+                    return DirectXTexNet.DXGI_FORMAT.BC5_UNORM;
+                case SupportedCompressionFormats.TCM_QualityColor:
+                    return isGamma ? DirectXTexNet.DXGI_FORMAT.BC7_UNORM_SRGB : DirectXTexNet.DXGI_FORMAT.BC7_UNORM;
+                case SupportedCompressionFormats.TCM_HalfHDR_Unsigned:
+                    return DirectXTexNet.DXGI_FORMAT.BC6H_UF16;
                 default:
                     logger.Warning($"Unknown texture compression format: {compression.ToString()}");
                     throw new ArgumentOutOfRangeException();

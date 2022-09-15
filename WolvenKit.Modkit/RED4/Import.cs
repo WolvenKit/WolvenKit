@@ -339,6 +339,38 @@ namespace WolvenKit.Modkit.RED4
         {
             var infile = rawRelative.FullName;
 
+            if (ImportExportArgs.IsCLI && args.Keep)
+            {
+                var redfile = FindRedFile(rawRelative, outDir, ERedExtension.xbm.ToString());
+
+                if (string.IsNullOrEmpty(redfile))
+                {
+                    _loggerService.Warning($"No existing redfile found to rebuild for {rawRelative.Name}");
+                    return false;
+                }
+
+                using var redstream = new FileStream(redfile, FileMode.Open);
+                using var fileReader = new BinaryReader(redstream);
+
+                var cr2w = _wolvenkitFileService.ReadRed4File(fileReader);
+                if (cr2w == null || cr2w.RootChunk is not CBitmapTexture xbm || xbm.RenderTextureResource == null || xbm.RenderTextureResource.RenderResourceBlobPC.Chunk is not rendRenderTextureBlobPC)
+                {
+                    return false;
+                }
+
+                args = new XbmImportArgs();
+                args.AllowTextureDowngrade = xbm.Setup.AllowTextureDowngrade;
+                args.AlphaToCoverageThreshold = xbm.Setup.AlphaToCoverageThreshold;
+                args.Compression = Enum.Parse<SupportedCompressionFormats>(xbm.Setup.Compression.ToString());
+                args.HasMipchain = xbm.Setup.HasMipchain;
+                args.IsGamma = xbm.Setup.IsGamma;
+                args.IsStreamable = xbm.Setup.IsStreamable;
+                args.PlatformMipBiasConsole = xbm.Setup.PlatformMipBiasConsole;
+                args.PlatformMipBiasPC = xbm.Setup.PlatformMipBiasPC;
+                args.RawFormat = Enum.Parse<SupportedRawFormats>(xbm.Setup.RawFormat.ToString());
+                args.TextureGroup = xbm.Setup.Group;
+            }
+
             RedImage image;
             switch (Enum.Parse<EUncookExtension>(rawRelative.Extension))
             {

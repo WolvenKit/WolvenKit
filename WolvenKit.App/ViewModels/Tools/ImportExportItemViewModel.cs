@@ -165,6 +165,7 @@ namespace WolvenKit.ViewModels.Tools
                 //ECookedFileFormat.json => new CommonExportArgs(),
                 ECookedFileFormat.mlmask => new MlmaskExportArgs(),
                 ECookedFileFormat.cubemap => new CommonExportArgs(),
+                ECookedFileFormat.xcube => new CommonExportArgs(),
                 ECookedFileFormat.envprobe => new CommonExportArgs(),
                 ECookedFileFormat.texarray => new CommonExportArgs(),
                 ECookedFileFormat.ent => new EntityExportArgs(),
@@ -173,6 +174,7 @@ namespace WolvenKit.ViewModels.Tools
                 //ECookedFileFormat.ent => new EntityExportArgs(),
                 //ECookedFileFormat.app => new EntityExportArgs(),
                 ECookedFileFormat.anims => new AnimationExportArgs(),
+                ECookedFileFormat.inkatlas => new InkAtlasExportArgs(),
                 _ => throw new ArgumentOutOfRangeException()
             };
         }

@@ -4,6 +4,7 @@ using System.CommandLine.Builder;
 using System.CommandLine.Hosting;
 using System.CommandLine.Parsing;
 using CP77Tools.Commands;
+using WolvenKit.Common.Model.Arguments;
 using WolvenKit.Core.Compression;
 
 namespace WolvenKit.CLI
@@ -47,6 +48,8 @@ namespace WolvenKit.CLI
                 .UseDefaults()
                 .UseHost(GenericHost.CreateHostBuilder)
                 .Build();
+
+            ImportExportArgs.IsCLI = true;
 
             parser.Invoke(args);
         }

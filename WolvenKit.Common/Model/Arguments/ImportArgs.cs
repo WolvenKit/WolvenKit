@@ -57,10 +57,10 @@ namespace WolvenKit.Common.Model.Arguments
         public bool IsGamma { get; set; } = false;
 
         [Category("Image Import Settings")]
-        public Enums.ETextureRawFormat RawFormat { get; set; } = Enums.ETextureRawFormat.TRF_TrueColor;
+        public SupportedRawFormats RawFormat { get; set; } = SupportedRawFormats.TRF_TrueColor;
 
         [Category("Image Import Settings")]
-        public Enums.ETextureCompression Compression { get; set; }
+        public SupportedCompressionFormats Compression { get; set; }
 
         [Category("Image Import Settings")]
         [Description("If true, mipMaps will be generated")]
@@ -206,5 +206,46 @@ namespace WolvenKit.Common.Model.Arguments
         /// </summary>
         /// <returns>String</returns>
         public override string ToString() => $"{Path.GetFileName(Animset)} - {AnimationToRename}";
+    }
+
+    // Formats used in the v1.52 game files
+    public enum SupportedRawFormats
+    {
+        TRF_Invalid, // = 0,
+        TRF_TrueColor, // = 1,
+        TRF_DeepColor, // = 2,
+        TRF_Grayscale, // = 3,
+        TRF_HDRFloat, // = 4,
+        TRF_HDRHalf, // = 5,
+        TRF_HDRFloatGrayscale, // = 6,
+        // TRF_Grayscale_Font, // = 7,
+        TRF_R8G8, // = 8,
+        // TRF_R32UI, // = 9,
+        // TRF_AlphaGrayscale, // = 0
+    }
+
+    // Formats used in the v1.52 game files
+    public enum SupportedCompressionFormats
+    {
+        TCM_None, // = 0,
+        TCM_DXTNoAlpha, // = 1,
+        TCM_DXTAlpha, // = 2,
+        // TCM_RGBE, // = 3,
+        TCM_Normalmap, // = 4,
+        TCM_Normals_DEPRECATED, // = 5,
+        TCM_NormalsHigh_DEPRECATED, // = 6,
+        // TCM_NormalsGloss_DEPRECATED, // = 7,
+        // TCM_TileMap, // = 8,
+        TCM_DXTAlphaLinear, // = 9,
+        TCM_QualityR, // = 10,
+        TCM_QualityRG, // = 11,
+        TCM_QualityColor, // = 12,
+        TCM_HalfHDR_Unsigned, // = 13,
+        // TCM_HalfHDR_Signed, // = 14,
+        // TCM_Max, // = 15,
+        // TCM_Normals, // = 5,
+        // TCM_NormalsHigh, // = 6,
+        // TCM_NormalsGloss, // = 7,
+        // TCM_HalfHDR, // = 13
     }
 }

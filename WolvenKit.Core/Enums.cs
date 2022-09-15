@@ -122,13 +122,15 @@ namespace WolvenKit.Common
         //json,
         mlmask,
         cubemap,
+        xcube,
         envprobe,
         texarray,
         morphtarget,
         fnt,
         opusinfo,
         anims,
-        ent
+        ent,
+        inkatlas
     }
 
     /// <summary>
