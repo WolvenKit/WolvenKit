@@ -122,7 +122,7 @@ namespace WolvenKit.Functionality.Services
                     _ => null
                 };
 
-                return await Task.FromResult(project);
+                return project;
             }
             catch (IOException ex)
             {
@@ -154,29 +154,30 @@ namespace WolvenKit.Functionality.Services
                 //    };
                 //}
                 /*else*/
-                if (typeof(T) == typeof(Cp77Project))
+                if (typeof(T) != typeof(Cp77Project))
                 {
-                    var result = new Cp77Project(path)
-                    {
-                        Author = obj.Author,
-                        Email = obj.Email,
-                        Name = obj.Name,
-                        Version = obj.Version,
-                    };
-
-                    var projectHashesFile = Path.Combine(result.ProjectDirectory, "project_hashes.txt");
-                    if (File.Exists(projectHashesFile) && _hashService is HashService hashService)
-                    {
-                        var paths = await File.ReadAllLinesAsync(projectHashesFile);
-                        foreach (var p in paths)
-                        {
-                            hashService.AddProjectPath(p);
-                        }
-                    }
-
-                    return result;
+                    return null;
                 }
-                return null;
+
+                var result = new Cp77Project(path)
+                {
+                    Author = obj.Author,
+                    Email = obj.Email,
+                    Name = obj.Name,
+                    Version = obj.Version,
+                };
+
+                var projectHashesFile = Path.Combine(result.ProjectDirectory, "project_hashes.txt");
+                if (File.Exists(projectHashesFile) && _hashService is HashService hashService)
+                {
+                    var paths = await File.ReadAllLinesAsync(projectHashesFile);
+                    foreach (var p in paths)
+                    {
+                        hashService.AddProjectPath(p);
+                    }
+                }
+
+                return result;
             }
             catch (Exception e)
             {

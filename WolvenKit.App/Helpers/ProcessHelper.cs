@@ -166,7 +166,7 @@ namespace WolvenKit.MVVM.Model
             return result;
         }
 
-        private static async Task<int> RunProcessAsync(ILoggerService loggerService, string filePath, string workingDirectory = "", params string[] commands)
+        private static Task<int> RunProcessAsync(ILoggerService loggerService, string filePath, string workingDirectory = "", params string[] commands)
         {
             using var process = new Process
             {
@@ -183,7 +183,7 @@ namespace WolvenKit.MVVM.Model
 					//RedirectStandardOutput = true
 		}
             };
-            return await RunProcessAsync(loggerService, process, commands).ConfigureAwait(false);
+            return RunProcessAsync(loggerService, process, commands);
         }
     }
 }
