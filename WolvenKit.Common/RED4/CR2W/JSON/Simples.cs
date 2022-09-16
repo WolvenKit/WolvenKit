@@ -146,7 +146,7 @@ public class CVariantConverter : JsonConverter<CVariant>, ICustomRedConverter
 
                 case "$type":
                 {
-                    if (RedJsonSerializer.IsOlderThen("0.0.2") || reader.TokenType != JsonTokenType.String)
+                    if (!RedJsonSerializer.IsNewerThen("0.0.1") || reader.TokenType != JsonTokenType.String)
                     {
                         throw new JsonException();
                     }
@@ -492,22 +492,14 @@ public class DataBufferConverter : JsonConverter<DataBuffer>, ICustomRedConverte
                     }
                     reader.Read();
 
-                    var type = Type.GetType(bufferType);
-                    if (type == typeof(RedPackage))
+                    var converter = options.GetConverter(typeof(IParseableBuffer));
+                    if (converter is ICustomRedConverter conv)
                     {
-                        var converter = options.GetConverter(typeof(RedPackage));
-                        if (converter is ICustomRedConverter conv)
-                        {
-                            val.Data = (IParseableBuffer?)conv.ReadRedType(ref reader, typeof(RedPackage), options);
-                        }
-                        else
-                        {
-                            throw new JsonException();
-                        }
+                        val.Data = (IParseableBuffer?)conv.ReadRedType(ref reader, Type.GetType(bufferType)!, options);
                     }
                     else
                     {
-                        val.Data = (IParseableBuffer)JsonSerializer.Deserialize(ref reader, type!, options)!;
+                        throw new JsonException();
                     }
 
                     val.Buffer.Flags = flags;

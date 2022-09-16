@@ -47,12 +47,12 @@ public class RedFileDtoConverter : JsonConverter<RedFileDto>, ICustomRedConverte
         {
             throw new JsonException("Invalid JSON format");
         }
+        RedJsonSerializer.SetHeader(result.Header);
 
-        if (result.Header!.WKitJsonVersion.ComparePrecedenceTo(new JsonHeader().WKitJsonVersion) > 0)
+        if (RedJsonSerializer.IsNewerThen(new JsonHeader().WKitJsonVersion))
         {
             throw new JsonException("This JSON was created with a newer version of WKit!");
         }
-        RedJsonSerializer.SetVersion(result.Header!.WKitJsonVersion);
 
         reader.Read();
         if (reader.TokenType != JsonTokenType.PropertyName)
@@ -333,82 +333,15 @@ public class RedFileDtoConverter : JsonConverter<RedFileDto>, ICustomRedConverte
 
     public override void Write(Utf8JsonWriter writer, RedFileDto value, JsonSerializerOptions options)
     {
+        RedJsonSerializer.SetHeader(value.Header);
+
         writer.WriteStartObject();
 
         writer.WritePropertyName("Header");
         JsonSerializer.Serialize(writer, value.Header, options);
 
         writer.WritePropertyName("Data");
-        switch (value.Header.DataType)
-        {
-            case DataTypes.CR2W:
-            {
-                WriteRegular(writer, value.Data, options);
-                break;
-            }
-
-            case DataTypes.CR2WFlat:
-            {
-                WriteFlat(writer, value, options);
-                break;
-            }
-
-            default:
-            {
-                throw new JsonException();
-            }
-        }
-
-        writer.WriteEndObject();
-    }
-
-    private void WriteRegular(Utf8JsonWriter writer, CR2WFile value, JsonSerializerOptions options)
-    {
-        writer.WriteStartObject();
-
-        writer.WriteNumber("Version", value.MetaData.Version);
-        writer.WriteNumber("BuildVersion", value.MetaData.BuildVersion);
-
-        writer.WritePropertyName("RootChunk");
-        JsonSerializer.Serialize(writer, value.RootChunk, options);
-
-        writer.WritePropertyName("EmbeddedFiles");
-        writer.WriteStartArray();
-        foreach (var embeddedFile in value.EmbeddedFiles)
-        {
-            JsonSerializer.Serialize(writer, embeddedFile, options);
-        }
-        writer.WriteEndArray();
-
-        writer.WriteEndObject();
-    }
-
-    private void WriteFlat(Utf8JsonWriter writer, RedFileDto value, JsonSerializerOptions options)
-    {
-        var chunks = value.GetChunkList();
-        foreach (var chunk in chunks)
-        {
-            _referenceResolver.GetReference(chunk, out _);
-        }
-
-        writer.WriteStartObject();
-
-        writer.WriteNumber("Version", value.Data.MetaData.Version);
-        writer.WriteNumber("BuildVersion", value.Data.MetaData.BuildVersion);
-
-        writer.WritePropertyName("ChunkReferences");
-        JsonSerializer.Serialize(writer, chunks, options);
-
-        writer.WritePropertyName("RootChunk");
-        JsonSerializer.Serialize(writer, value.Data.RootChunk, options);
-
-        writer.WritePropertyName("EmbeddedFiles");
-        writer.WriteStartArray();
-        foreach (var embeddedFile in value.Data.EmbeddedFiles)
-        {
-            JsonSerializer.Serialize(writer, embeddedFile, options);
-        }
-        writer.WriteEndArray();
+        JsonSerializer.Serialize(writer, value.Data, options);
 
         writer.WriteEndObject();
     }
