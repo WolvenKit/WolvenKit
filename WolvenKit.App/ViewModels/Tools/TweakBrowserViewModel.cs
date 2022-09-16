@@ -8,6 +8,7 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Data;
+using System.Windows.Threading;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using WolvenKit.Common.Services;
@@ -31,6 +32,8 @@ namespace WolvenKit.ViewModels.Tools
         /// Identifies the caption string used for this tool window.
         /// </summary>
         public const string ToolTitle = "Tweak Browser";
+
+        private Dispatcher _dispatcher = Dispatcher.CurrentDispatcher;
 
         private readonly ISettingsManager _settingsManager;
         private readonly INotificationService _notificationService;
@@ -77,12 +80,12 @@ namespace WolvenKit.ViewModels.Tools
 
         [Reactive] public Visibility LoadVisibility { get; set; } = Visibility.Visible;
 
-        public ICollectionView Records { get; set; } = new CollectionView(new List<object>());
-        public ICollectionView Flats { get; set; } = new CollectionView(new List<object>());
-        public ICollectionView Queries { get; set; } = new CollectionView(new List<object>());
-        public ICollectionView GroupTags { get; set; } = new CollectionView(new List<object>());
+        [Reactive] public ICollectionView Records { get; set; } = new CollectionView(new List<object>());
+        [Reactive] public ICollectionView Flats { get; set; } = new CollectionView(new List<object>());
+        [Reactive] public ICollectionView Queries { get; set; } = new CollectionView(new List<object>());
+        [Reactive] public ICollectionView GroupTags { get; set; } = new CollectionView(new List<object>());
 
-        public List<string> RecordTypes { get; set; }
+        [Reactive] public List<string> RecordTypes { get; set; }
 
         public string RecordsHeader => $"Records ({Records.Cast<object>().Count()})";
         public string FlatsHeader => $"Flats ({Flats.Cast<object>().Count()})";
@@ -242,32 +245,43 @@ namespace WolvenKit.ViewModels.Tools
         private void Load(object sender, EventArgs eventArgs)
         {
             var records = _tweakDB.GetRecords().Select(x => new TweakEntry(x, _tweakDB, true)).ToList();
-            Records = CollectionViewSource.GetDefaultView(records);
-            Records.Filter = Filter;
+            var flats = _tweakDB.GetFlats().Select(x => new TweakEntry(x, _tweakDB)).ToList();
+            var queries = _tweakDB.GetQueries().Select(x => new TweakEntry(x, _tweakDB)).ToList();
+            var groupTags = _tweakDB.GetGroupTags().Select(x => new TweakEntry(x, _tweakDB)).ToList();
 
-            var classes = new HashSet<string>();
-            classes.Add("");
+            var classes = new List<string> { "" };
             foreach (var record in records)
             {
-                classes.Add(record.RecordTypeName);
+                if (!classes.Contains(record.RecordTypeName))
+                {
+                    classes.Add(record.RecordTypeName);
+                }
             }
+            classes.Sort();
 
-            RecordTypes = classes.ToList();
-            RecordTypes.Sort();
 
-            Flats = CollectionViewSource.GetDefaultView(_tweakDB.GetFlats().Select(x => new TweakEntry(x, _tweakDB)).ToList());
-            Flats.Filter = Filter;
+            _dispatcher.Invoke(() =>
+            {
+                RecordTypes = classes.ToList();
+                RecordTypes.Sort();
 
-            Queries = CollectionViewSource.GetDefaultView(_tweakDB.GetQueries().Select(x => new TweakEntry(x, _tweakDB)).ToList());
-            Queries.Filter = Filter;
+                Records = CollectionViewSource.GetDefaultView(records);
+                Records.Filter = Filter;
 
-            GroupTags = CollectionViewSource.GetDefaultView(_tweakDB.GetGroupTags().Select(x => new TweakEntry(x, _tweakDB)).ToList());
-            GroupTags.Filter = Filter;
+                Flats = CollectionViewSource.GetDefaultView(flats);
+                Flats.Filter = Filter;
 
-            Refresh();
+                Queries = CollectionViewSource.GetDefaultView(queries);
+                Queries.Filter = Filter;
 
-            LoadVisibility = Visibility.Collapsed;
-            _notificationService.Success($"Asset Browser is initialized");
+                GroupTags = CollectionViewSource.GetDefaultView(groupTags);
+                GroupTags.Filter = Filter;
+
+                Refresh();
+
+                LoadVisibility = Visibility.Collapsed;
+                _notificationService.Success($"Asset Browser is initialized");
+            });
         }
 
         private void Refresh()

@@ -111,11 +111,7 @@
                         Grid.Column="1"
                         Margin="0,-2,0,-3"
                         HorizontalAlignment="Stretch" />
-                    <local:RedTreeView
-                        Grid.RowSpan="2"
-                        Grid.Column="2"
-                        Margin="-3,-2,-3,-3"
-                        ItemsSource="{Binding SelectedRecord}" />
+                    <local:RedTreeView Grid.Column="2" ItemsSource="{Binding SelectedRecord}" />
                 </Grid>
             </TabItem>
             <TabItem Header="{Binding FlatsHeader}">
