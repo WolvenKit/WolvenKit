@@ -386,6 +386,13 @@ namespace WolvenKit.ViewModels.Shell
                     Email = project.Email,
                     Version = project.Version
                 };
+
+                if (_pluginService.IsInstalled(EPlugin.redmod))
+                {
+                    np.IsRedMod = true;
+                    np.ExecuteDeploy = true;
+                }
+
                 _projectManager.ActiveProject = np;
                 await _projectManager.SaveAsync();
                 np.CreateDefaultDirectories();
