@@ -367,22 +367,20 @@ namespace WolvenKit.ViewModels.Shell
                 var dps = redClass.GetDynamicPropertyNames();
                 dps.Sort();
 
-                for (var i = 0; i < pis.Count + dps.Count; i++)
+                foreach (var propertyInfo in pis)
                 {
-                    if (s_hiddenProperties.Contains(obj.GetType().Name + "." + pis[i].RedName))
+                    if (s_hiddenProperties.Contains(obj.GetType().Name + "." + propertyInfo.RedName))
                     {
                         continue;
                     }
-                    if (pis.Count > i)
-                    {
-                        var name = !string.IsNullOrEmpty(pis[i].RedName) ? pis[i].RedName : pis[i].Name;
 
-                        Properties.Add(new ChunkViewModel(redClass.GetProperty(name), this, pis[i].RedName, false, isreadonly));
-                    }
-                    else
-                    {
-                        Properties.Add(new ChunkViewModel(redClass.GetProperty(dps[i - pis.Count]), this, dps[i - pis.Count], false, isreadonly));
-                    }
+                    var name = !string.IsNullOrEmpty(propertyInfo.RedName) ? propertyInfo.RedName : propertyInfo.Name;
+                    Properties.Add(new ChunkViewModel(redClass.GetProperty(name), this, propertyInfo.RedName, false, isreadonly));
+                }
+
+                foreach (var dp in dps)
+                {
+                    Properties.Add(new ChunkViewModel(redClass.GetProperty(dp), this, dp, false, isreadonly));
                 }
             }
             else if (obj is SerializationDeferredDataBuffer sddb)
