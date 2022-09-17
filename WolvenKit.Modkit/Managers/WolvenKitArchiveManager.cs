@@ -43,7 +43,7 @@ namespace WolvenKit.Common.Model
 
         public abstract void LoadModArchive(string filename);
 
-        public abstract void LoadModsArchives(DirectoryInfo modsDir, DirectoryInfo dlcDir);
+        public abstract void LoadModsArchives(DirectoryInfo[] modsDir);
 
         protected static string GetModFolder(string path)
         {

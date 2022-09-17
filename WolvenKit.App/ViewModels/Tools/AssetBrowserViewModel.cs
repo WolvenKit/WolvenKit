@@ -363,7 +363,7 @@ namespace WolvenKit.ViewModels.Tools
         {
             if (!_archiveManager.IsModBrowserActive)
             {
-                _archiveManager.LoadModsArchives(new DirectoryInfo(_settings.GetRED4GameModDir()), null);
+                _archiveManager.LoadModsArchives(new []{ new DirectoryInfo(_settings.GetRED4GameLegacyModDir()), new DirectoryInfo(_settings.GetRED4GameModDir()) });
                 LeftItems = new ObservableCollection<RedFileSystemModel>(_archiveManager.ModRoots);
             }
             else
