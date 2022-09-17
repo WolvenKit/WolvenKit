@@ -28,10 +28,10 @@
         </Grid.ColumnDefinitions>
 
         <ListBox
+            x:Name="MenuListBox"
             Grid.Row="0"
             Grid.Column="0"
-            SelectedIndex="0"
-            SelectedItem="{Binding SelectedMenuItem, Mode=TwoWay}">
+            SelectedIndex="0">
             <ListBoxItem>General</ListBoxItem>
             <ListBoxItem>Deployment</ListBoxItem>
         </ListBox>
@@ -46,9 +46,9 @@
 
                     <Label Grid.Column="0">Project Name</Label>
                     <hc:TextBox
+                        x:Name="ProjectNameTextBox"
                         Grid.Column="1"
-                        IsReadOnly="True"
-                        Text="{Binding ProjectName, Mode=TwoWay}" />
+                        IsReadOnly="True" />
                 </Grid>
 
                 <Grid>
@@ -58,7 +58,7 @@
                     </Grid.ColumnDefinitions>
 
                     <Label Grid.Column="0">Author</Label>
-                    <hc:TextBox Grid.Column="1" Text="{Binding Author, Mode=TwoWay}" />
+                    <hc:TextBox x:Name="AuthorTextBox" Grid.Column="1" />
                 </Grid>
 
                 <Grid>
@@ -68,7 +68,7 @@
                     </Grid.ColumnDefinitions>
 
                     <Label Grid.Column="0">EMail</Label>
-                    <hc:TextBox Grid.Column="1" Text="{Binding EMail, Mode=TwoWay}" />
+                    <hc:TextBox x:Name="EmailTextBox" Grid.Column="1" />
                 </Grid>
 
                 <Grid>
@@ -78,7 +78,7 @@
                     </Grid.ColumnDefinitions>
 
                     <Label Grid.Column="0">Version</Label>
-                    <hc:TextBox Grid.Column="1" Text="{Binding Version, Mode=TwoWay}" />
+                    <hc:TextBox x:Name="VersionTextBox" Grid.Column="1" />
                 </Grid>
             </StackPanel>
 
@@ -90,10 +90,7 @@
                     </Grid.ColumnDefinitions>
 
                     <Label Grid.Column="0">Is RedMod?</Label>
-                    <CheckBox
-                        Grid.Column="1"
-                        IsChecked="{Binding IsRedMod, Mode=TwoWay}"
-                        IsEnabled="{Binding IsRedModEnabled, Mode=TwoWay}" />
+                    <CheckBox x:Name="IsRedModCheckBox" Grid.Column="1" />
                 </Grid>
                 <Grid>
                     <Grid.ColumnDefinitions>
@@ -102,10 +99,7 @@
                     </Grid.ColumnDefinitions>
 
                     <Label Grid.Column="0">Deploy on install?</Label>
-                    <CheckBox
-                        Grid.Column="1"
-                        IsChecked="{Binding ExecuteDeploy, Mode=TwoWay}"
-                        IsEnabled="{Binding ExecuteDeployEnabled, Mode=TwoWay}" />
+                    <CheckBox x:Name="ExecuteDeployCheckBox" Grid.Column="1" />
                 </Grid>
             </StackPanel>
         </Grid>
@@ -119,14 +113,14 @@
             FlowDirection="RightToLeft"
             Orientation="Horizontal">
             <Button
+                x:Name="SaveButton"
                 Margin="10,0,0,0"
                 Padding="12,0"
-                Command="{Binding SaveCommand}"
                 Content="Save" />
             <Button
+                x:Name="CancelButton"
                 Margin="10,0,0,0"
                 Padding="12,0"
-                Command="{Binding CancelCommand}"
                 Content="Cancel" />
         </StackPanel>
     </Grid>
