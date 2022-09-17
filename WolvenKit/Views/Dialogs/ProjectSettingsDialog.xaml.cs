@@ -47,6 +47,16 @@ public partial class ProjectSettingsDialog : ReactiveUserControl<ProjectSettings
                     }
                 }
             });
+
+        this.WhenAnyValue(x => x.IsRedMod)
+            .Subscribe(isRedMod =>
+            {
+                SetCurrentValue(ExecuteDeployEnabledProperty, isRedMod);
+                if (!isRedMod)
+                {
+                    SetCurrentValue(ExecuteDeployProperty, false);
+                }
+            });
     }
 
     #region DependencyProperties
@@ -110,6 +120,16 @@ public partial class ProjectSettingsDialog : ReactiveUserControl<ProjectSettings
         set => SetValue(IsRedModProperty, value);
     }
 
+    public static readonly DependencyProperty IsRedModEnabledProperty = DependencyProperty.Register(
+        nameof(IsRedModEnabled), typeof(bool), typeof(ProjectSettingsDialog),
+        new PropertyMetadata());
+
+    public bool IsRedModEnabled
+    {
+        get => (bool)GetValue(IsRedModEnabledProperty);
+        set => SetValue(IsRedModEnabledProperty, value);
+    }
+
     public static readonly DependencyProperty ExecuteDeployProperty = DependencyProperty.Register(
         nameof(ExecuteDeploy), typeof(bool), typeof(ProjectSettingsDialog),
         new PropertyMetadata());
@@ -118,6 +138,16 @@ public partial class ProjectSettingsDialog : ReactiveUserControl<ProjectSettings
     {
         get => (bool)GetValue(ExecuteDeployProperty);
         set => SetValue(ExecuteDeployProperty, value);
+    }
+
+    public static readonly DependencyProperty ExecuteDeployEnabledProperty = DependencyProperty.Register(
+        nameof(ExecuteDeployEnabled), typeof(bool), typeof(ProjectSettingsDialog),
+        new PropertyMetadata());
+
+    public bool ExecuteDeployEnabled
+    {
+        get => (bool)GetValue(ExecuteDeployEnabledProperty);
+        set => SetValue(ExecuteDeployEnabledProperty, value);
     }
 
     #endregion DependencyProperties
@@ -171,6 +201,9 @@ public partial class ProjectSettingsDialog : ReactiveUserControl<ProjectSettings
 
         SetCurrentValue(IsRedModProperty, project.IsRedMod);
         SetCurrentValue(ExecuteDeployProperty, project.ExecuteDeploy);
+
+        var isRedModInstalled = Locator.Current.GetService<IPluginService>().IsInstalled(EPlugin.redmod);
+        SetCurrentValue(IsRedModEnabledProperty, isRedModInstalled);
     }
 
     #endregion Methods

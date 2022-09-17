@@ -90,7 +90,10 @@
                     </Grid.ColumnDefinitions>
 
                     <Label Grid.Column="0">Is RedMod?</Label>
-                    <CheckBox Grid.Column="1" IsChecked="{Binding IsRedMod, Mode=TwoWay}" />
+                    <CheckBox
+                        Grid.Column="1"
+                        IsChecked="{Binding IsRedMod, Mode=TwoWay}"
+                        IsEnabled="{Binding IsRedModEnabled, Mode=TwoWay}" />
                 </Grid>
                 <Grid>
                     <Grid.ColumnDefinitions>
@@ -99,7 +102,10 @@
                     </Grid.ColumnDefinitions>
 
                     <Label Grid.Column="0">Deploy on install?</Label>
-                    <CheckBox Grid.Column="1" IsChecked="{Binding ExecuteDeploy, Mode=TwoWay}" />
+                    <CheckBox
+                        Grid.Column="1"
+                        IsChecked="{Binding ExecuteDeploy, Mode=TwoWay}"
+                        IsEnabled="{Binding ExecuteDeployEnabled, Mode=TwoWay}" />
                 </Grid>
             </StackPanel>
         </Grid>
