@@ -7,7 +7,6 @@
     xmlns:hc="https://handyorg.github.io/handycontrol"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:reactiveUi="http://reactiveui.net"
-    x:Name="uc"
     Width="800"
     Height="600"
     d:DesignHeight="600"
@@ -16,7 +15,7 @@
     Background="{StaticResource ContentBackgroundAlt3}"
     mc:Ignorable="d">
 
-    <Grid DataContext="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}">
+    <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="*" />
             <RowDefinition Height="Auto" />
