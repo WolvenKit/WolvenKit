@@ -96,8 +96,8 @@ namespace WolvenKit.ProjectManagement.Project
         {
             get
             {
-                //var dir = Path.Combine(PackedRootDirectory, "archive", "pc", "mod"/*, $"mod{Name}"*/);
-                var dir = Path.Combine(PackedModDirectory, "archives");
+                var dir = IsRedMod ? Path.Combine(PackedModDirectory, "archives") : Path.Combine(PackedRootDirectory, "archive", "pc", "mod");
+
                 if (!Directory.Exists(dir))
                 {
                     Directory.CreateDirectory(dir);
@@ -148,6 +148,9 @@ namespace WolvenKit.ProjectManagement.Project
                 return dir;
             }
         }
+
+        public bool IsRedMod { get; set; }
+        public bool ExecuteDeploy { get; set; }
 
         
 

@@ -235,6 +235,12 @@ namespace WolvenKit.Functionality.Controllers
         /// <returns></returns>
         public async Task<bool> PackAndInstallProject()
         {
+            if (_projectManager.ActiveProject is not Cp77Project cp77Proj)
+            {
+                _loggerService.Error("Can't pack project (no project/not cyberpunk project)!");
+                return false;
+            }
+
             _progressService.IsIndeterminate = true;
 
             if (!PackProject())
@@ -245,7 +251,10 @@ namespace WolvenKit.Functionality.Controllers
 
             InstallMod();
 
-            await DeployRedmod();
+            if (cp77Proj.IsRedMod && cp77Proj.ExecuteDeploy)
+            {
+                await DeployRedmod();
+            }
 
             _progressService.IsIndeterminate = false;
             return true;
@@ -358,34 +367,42 @@ namespace WolvenKit.Functionality.Controllers
             // compile tweak files
             CompileTweakFiles(cp77Proj);
 
-            DeploySoundFiles();
-
-            var activeMod = _projectManager.ActiveProject;
-
-            // write info.json file if it not exists
-            var modInfoJsonPath = Path.Combine(activeMod.PackedModDirectory, "info.json");
-            if (!File.Exists(modInfoJsonPath))
+            if (cp77Proj.IsRedMod)
             {
-                var options = new JsonSerializerOptions
+                DeploySoundFiles();
+
+                // write info.json file if it not exists
+                var modInfoJsonPath = Path.Combine(cp77Proj.PackedModDirectory, "info.json");
+                if (!File.Exists(modInfoJsonPath))
                 {
-                    WriteIndented = true,
-                    DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,
-                    PropertyNamingPolicy = JsonNamingPolicy.CamelCase
-                };
-                var jsonString = JsonSerializer.Serialize(activeMod.GetInfo(), options);
-                File.WriteAllText(modInfoJsonPath, jsonString);
+                    var options = new JsonSerializerOptions
+                    {
+                        WriteIndented = true,
+                        DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,
+                        PropertyNamingPolicy = JsonNamingPolicy.CamelCase
+                    };
+                    var jsonString = JsonSerializer.Serialize(cp77Proj.GetInfo(), options);
+                    File.WriteAllText(modInfoJsonPath, jsonString);
+                }
+            }
+            else
+            {
+                if (Directory.EnumerateFileSystemEntries(cp77Proj.SoundDirectory).Any())
+                {
+                    _loggerService.Warning("This project contains custom sound files but is packed as legacy mod!");
+                }
             }
 
             // create mod zip file
-            var zipPathRoot = new DirectoryInfo(activeMod.PackedRootDirectory).Parent.FullName;
-            var zipPath = Path.Combine(zipPathRoot, $"{activeMod.Name}.zip");
+            var zipPathRoot = new DirectoryInfo(cp77Proj.PackedRootDirectory).Parent.FullName;
+            var zipPath = Path.Combine(zipPathRoot, $"{cp77Proj.Name}.zip");
             try
             {
                 if (File.Exists(zipPath))
                 {
                     File.Delete(zipPath);
                 }
-                ZipFile.CreateFromDirectory(activeMod.PackedRootDirectory, zipPath);
+                ZipFile.CreateFromDirectory(cp77Proj.PackedRootDirectory, zipPath);
             }
             catch (Exception e)
             {
