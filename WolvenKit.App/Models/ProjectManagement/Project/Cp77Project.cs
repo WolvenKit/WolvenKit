@@ -1,6 +1,9 @@
 using System;
 using System.IO;
+using Splat;
 using WolvenKit.Common;
+using WolvenKit.Common.Services;
+using WolvenKit.Functionality.Services;
 
 
 namespace WolvenKit.ProjectManagement.Project
@@ -165,6 +168,26 @@ namespace WolvenKit.ProjectManagement.Project
             _ = RawDirectory;
             _ = TweakDirectory;
             _ = ScriptDirectory;
+        }
+
+        private void LoadProjectHashes()
+        {
+            if (Locator.Current.GetService<IHashService>() is HashService hashService)
+            {
+                hashService.ClearProjectHashes();
+
+                var hashPath = Path.Combine(FileDirectory, "project_hashes.txt");
+                if (!File.Exists(hashPath))
+                {
+                    return;
+                }
+
+                var paths = File.ReadAllLines(hashPath);
+                foreach (var path in paths)
+                {
+                    hashService.AddProjectPath(path);
+                }
+            }
         }
 
         public object Clone()

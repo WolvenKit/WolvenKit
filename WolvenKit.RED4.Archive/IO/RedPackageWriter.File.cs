@@ -229,6 +229,8 @@ namespace WolvenKit.RED4.Archive.IO
             {
                 if (Settings.ImportsAsHash)
                 {
+                    ImportHandler.AddPathHandler?.Invoke(reff.DepotPath);
+
                     refDesc.Add(new RedPackageImportHeader
                     {
                         offset = (uint)refData.Count + position,

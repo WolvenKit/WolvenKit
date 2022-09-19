@@ -261,36 +261,30 @@ namespace WolvenKit.RED4.CR2W.Archive
         /// <summary>
         /// Loads bundles from specified mods and dlc folder
         /// </summary>
-        public override void LoadModsArchives(DirectoryInfo modsDir, DirectoryInfo dlcDir)
+        public override void LoadModsArchives(DirectoryInfo[] modsDirs)
         {
             ModArchives.Clear();
 
-            if (!modsDir.Exists)
+            foreach (var modsDir in modsDirs)
             {
-                return;
-            }
-
-            //var sw = new Stopwatch();
-            //sw.Start();
-
-            foreach (var file in Directory.GetFiles(modsDir.FullName, "*.archive", SearchOption.AllDirectories))
-            {
-                LoadModArchive(file);
-            }
-
-            //sw.Stop();
-            //var ms = sw.ElapsedMilliseconds;
-
-            //if (rebuildtree)
-            {
-                RebuildModRoot();
-
-                _modCache.Edit(innerCache =>
+                if (!modsDir.Exists)
                 {
-                    innerCache.Clear();
-                    innerCache.Add(ModRoots);
-                });
+                    continue;
+                }
+
+                foreach (var file in Directory.GetFiles(modsDir.FullName, "*.archive", SearchOption.AllDirectories))
+                {
+                    LoadModArchive(file);
+                }
             }
+
+            RebuildModRoot();
+
+            _modCache.Edit(innerCache =>
+            {
+                innerCache.Clear();
+                innerCache.Add(ModRoots);
+            });
 
             IsManagerLoaded = true;
         }
