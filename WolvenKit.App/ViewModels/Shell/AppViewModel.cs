@@ -133,6 +133,7 @@ namespace WolvenKit.ViewModels.Shell
 
             ShowHomePageCommand = new DelegateCommand(ExecuteShowHomePage, CanShowHomePage).ObservesProperty(() => IsDialogShown);
             ShowSettingsCommand = new DelegateCommand(ExecuteShowSettings, CanShowSettings).ObservesProperty(() => IsDialogShown);
+            ShowProjectSettingsCommand = new DelegateCommand(ExecuteShowProjectSettings, CanShowProjectSettings).ObservesProperty(() => IsDialogShown).ObservesProperty(() => ActiveProject);
 
             LaunchGameCommand = ReactiveCommand.CreateFromTask<string>(ExecuteLaunchGame);
 
@@ -385,6 +386,13 @@ namespace WolvenKit.ViewModels.Shell
                     Email = project.Email,
                     Version = project.Version
                 };
+
+                if (_pluginService.IsInstalled(EPlugin.redmod))
+                {
+                    np.IsRedMod = true;
+                    np.ExecuteDeploy = true;
+                }
+
                 _projectManager.ActiveProject = np;
                 await _projectManager.SaveAsync();
                 np.CreateDefaultDirectories();
@@ -459,6 +467,14 @@ namespace WolvenKit.ViewModels.Shell
 
             _homePageViewModel.NavigateTo(EHomePage.Settings);
             SetActiveOverlay(_homePageViewModel);
+        }
+
+        public ICommand ShowProjectSettingsCommand { get; private set; }
+        private bool CanShowProjectSettings() => !IsDialogShown && ActiveProject != null;
+        private void ExecuteShowProjectSettings()
+        {
+            CloseModalCommand.Execute(null);
+            SetActiveDialog(new ProjectSettingsDialogViewModel());
         }
 
         [Reactive] public int SelectedGameCommandIdx { get; set; }

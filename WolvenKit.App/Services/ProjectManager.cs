@@ -165,6 +165,8 @@ namespace WolvenKit.Functionality.Services
                     Email = obj.Email,
                     Name = obj.Name,
                     Version = obj.Version,
+                    IsRedMod = obj.IsRedMod,
+                    ExecuteDeploy = obj.ExecuteDeploy
                 };
 
                 var projectHashesFile = Path.Combine(result.ProjectDirectory, "project_hashes.txt");
@@ -234,12 +236,19 @@ namespace WolvenKit.Functionality.Services
             {
 
             }
+
             public CP77Mod(EditorProject project)
             {
                 Author = project.Author;
                 Email = project.Email;
                 Name = project.Name;
                 Version = project.Version;
+
+                if (project is Cp77Project cp77Project)
+                {
+                    IsRedMod = cp77Project.IsRedMod;
+                    ExecuteDeploy = cp77Project.ExecuteDeploy;
+                }
             }
 
             public string Author { get; set; }
@@ -249,6 +258,8 @@ namespace WolvenKit.Functionality.Services
             public string Name { get; set; }
 
             public string Version { get; set; }
+            public bool IsRedMod { get; set; }
+            public bool ExecuteDeploy { get; set; }
         }
     }
 }

@@ -304,6 +304,17 @@
                             Style="{StaticResource WolvenKitToolBarButtonIcon}" />
                     </MenuItem.Icon>
                 </MenuItem>
+                <MenuItem
+                    x:Name="ToolbarProjectSettingsButton"
+                    Margin="2,1"
+                    Header="Project Settings">
+                    <MenuItem.Icon>
+                        <iconPacks:PackIconCodicons
+                            Margin="6,0"
+                            Kind="Settings"
+                            Style="{StaticResource WolvenKitToolBarButtonIcon}" />
+                    </MenuItem.Icon>
+                </MenuItem>
             </MenuItem>
 
             <!--  Build  -->

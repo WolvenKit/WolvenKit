@@ -20,24 +20,23 @@
     Background="Transparent"
     Icon="TaskBarIcon.ico"
     IconAlignment="Left"
+    LeftHeaderItemsSource="{DynamicResource leftHeaderItems}"
     ResizeMode="CanResizeWithGrip"
+    RightHeaderItemsSource="{DynamicResource rightHeaderItems}"
     ShowIcon="True"
     SizeToContent="Manual"
     TitleTextAlignment="Left"
     UseLayoutRounding="True"
-    UseNativeChrome="True"
-    RightHeaderItemsSource="{DynamicResource rightHeaderItems}"
-    LeftHeaderItemsSource="{DynamicResource leftHeaderItems}"
-    >
-    <!-- Title="WolvenKit"-->
+    UseNativeChrome="True">
+    <!--  Title="WolvenKit"  -->
     <!--  TextBlock Text="{Binding Title}" FontSize="{Binding TitileFontSize}" VerticalAlignment="Center" Margin="10,0,0,0" Opacity="{Binding Opacity, ElementName=ModalOverlay}"/  -->
 
     <syncfusion:ChromelessWindow.Resources>
         <shell:MyObservableCollection x:Key="leftHeaderItems">
-            <shell:MenuBarView/>
+            <shell:MenuBarView />
         </shell:MyObservableCollection>
     </syncfusion:ChromelessWindow.Resources>
-    
+
     <syncfusion:ChromelessWindow.InputBindings>
         <KeyBinding
             Key="N"
@@ -139,6 +138,9 @@
                     </DataTemplate>
                     <DataTemplate DataType="{x:Type hpvm:HomePageViewModel}">
                         <hpv:HomePageView ViewModel="{Binding}" />
+                    </DataTemplate>
+                    <DataTemplate DataType="{x:Type dialogVMs:ProjectSettingsDialogViewModel}">
+                        <dialogs:ProjectSettingsDialog ViewModel="{Binding}" />
                     </DataTemplate>
                     <Storyboard x:Key="OverlayFadeIn">
                         <DoubleAnimation

@@ -78,6 +78,10 @@ public partial class MenuBarView : ReactiveUserControl<MenuBarViewModel>
                     viewModel => viewModel.MainViewModel.ShowSettingsCommand,
                     view => view.ToolbarSettingsButton)
                 .DisposeWith(disposables);
+            this.BindCommand(ViewModel,
+                    viewModel => viewModel.MainViewModel.ShowProjectSettingsCommand,
+                    view => view.ToolbarProjectSettingsButton)
+                .DisposeWith(disposables);
 
             // Build
             this.BindCommand(ViewModel,
