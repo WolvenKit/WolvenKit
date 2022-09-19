@@ -256,6 +256,17 @@ namespace WolvenKit.Functionality.Services
 
         public string GetRED4GameLaunchOptions() => CP77LaunchOptions;
 
+        public string GetRED4GameLegacyModDir()
+        {
+            var dir = Path.Combine(GetRED4GameRootDir(), "archive", "pc", "mod");
+            if (!Directory.Exists(dir))
+            {
+                Directory.CreateDirectory(dir);
+            }
+
+            return dir;
+        }
+
         public string GetRED4GameModDir()
         {
             //var dir = Path.Combine(GetRED4GameRootDir(), "archive", "pc", "mod");

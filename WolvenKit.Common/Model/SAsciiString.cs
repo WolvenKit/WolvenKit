@@ -1,5 +1,6 @@
 using System.Linq;
 using System.Text;
+using WolvenKit.RED4.Types;
 
 namespace WolvenKit.Common.Model
 {
