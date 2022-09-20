@@ -25,10 +25,10 @@
     RightHeaderItemsSource="{DynamicResource rightHeaderItems}"
     ShowIcon="True"
     SizeToContent="Manual"
-    TitleTextAlignment="Left"
+    TitleTextAlignment="Right"
     UseLayoutRounding="True"
-    UseNativeChrome="True">
-    <!--  Title="WolvenKit"  -->
+    UseNativeChrome="True"
+    Title="{Binding Title}">
     <!--  TextBlock Text="{Binding Title}" FontSize="{Binding TitileFontSize}" VerticalAlignment="Center" Margin="10,0,0,0" Opacity="{Binding Opacity, ElementName=ModalOverlay}"/  -->
 
     <syncfusion:ChromelessWindow.Resources>
