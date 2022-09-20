@@ -1,5 +1,5 @@
 <p align="center">
-  <a href="https://wiki.redmodding.org/wolvenkit"><img src="https://cdn.discordapp.com/attachments/819016885239676978/847565560229527602/wkit_sammy_white_text_ffffff_800x200.png"/></a><br /><br />
+  <a href="https://wiki.redmodding.org/wolvenkit"><img src="https://user-images.githubusercontent.com/65016231/191120204-c8e08bb2-d68b-4919-91ec-f8c1aaef1e6a.png"/></a><br /><br />
   <a href="https://github.com/WolvenKit/Wolvenkit/releases"><img src="https://img.shields.io/github/downloads/WolvenKit/WolvenKit/total"></a>
   <a href="https://github.com/WolvenKit/Wolvenkit/actions?query=workflow%3AWolvenKit-Nightly"><img src="https://github.com/WolvenKit/WolvenKit/workflows/WolvenKit-Nightly/badge.svg"></a>
   <a href="https://github.com/WolvenKit/WolvenKit/issues"><img src="https://img.shields.io/github/issues/WolvenKit/WolvenKit.svg"></a>
