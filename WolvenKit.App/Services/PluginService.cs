@@ -238,31 +238,12 @@ namespace WolvenKit.Functionality.Services
             {
                 return;
             }
+
             var version = response.RequestMessage.RequestUri.LocalPath.Split('/').Last();
 
-            // get asset in a dumb way
-            var pat = $@"\/.*{id.GetFile()}";
-            var r = new Regex(pat, RegexOptions.IgnoreCase);
-            var content = await response.Content.ReadAsStringAsync();
-            var contentUrl = "";
-            foreach (var line in content.Split('\n'))
-            {
-                var m = r.Match(line);
-                if (m.Success)
-                {
-                    contentUrl = m.Value;
-                }
-            }
-
             // download asset
-            if (string.IsNullOrEmpty(contentUrl))
-            {
-                _loggerService.Error($"Failed to get any asset to download for: {id.GetDisplayName()}");
-                return;
-            }
-
-
-            contentUrl = $@"https://github.com{contentUrl}";
+            //https://github.com/WolvenKit/Wolvenkit-Resources/releases/download/ci/resources.zip
+            var contentUrl = $@"https://github.com/{id.GetUrl()}/releases/download/{version}/{id.GetFile()}";
             var zipPath = Path.Combine(Path.GetTempPath(), contentUrl.Split('/').Last());
 
             // TODO plugins remove this check it is ambigous
