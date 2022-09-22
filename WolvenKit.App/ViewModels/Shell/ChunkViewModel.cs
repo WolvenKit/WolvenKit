@@ -2292,48 +2292,59 @@ namespace WolvenKit.ViewModels.Shell
             }
         }
 
+        private bool InsertArrayItem(IRedArray ira, int index, IRedType item)
+        {
+            var iraType = ira.GetType();
+            if (iraType.IsGenericType)
+            {
+                var arrayType = iraType.GetGenericTypeDefinition();
+                if (arrayType == typeof(CArray<>) || (arrayType == typeof(CStatic<>) && ira.Count < ira.MaxSize))
+                {
+                    if (index == -1 || index > ira.Count)
+                    {
+                        index = ira.Count;
+                    }
+                    ira.Insert(index, item);
+
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            else if (Data is IRedBufferPointer db)
+            {
+                if (index == -1 || index > ira.Count)
+                {
+                    index = ira.Count;
+                }
+                ira.Insert(index, item);
+
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
         public bool InsertChild(int index, IRedType item)
         {
             try
             {
-                // update actual data
-                if (ResolvedData is not IRedArray ira)
+                if (ResolvedData is IRedArray ira && ira.InnerType.IsInstanceOfType(item))
                 {
-                    ira = Data as IRedArray;
+                    return InsertArrayItem(ira, index, item);
                 }
-                if (ira.InnerType.IsAssignableFrom(item.GetType()))
+
+                // Not sure why, but seems to be important^^
+                if (Data is IRedArray ira2 && ira2.InnerType.IsInstanceOfType(item))
                 {
-                    var iraType = ira.GetType();
-                    if (iraType.IsGenericType)
-                    {
-                        var arrayType = iraType.GetGenericTypeDefinition();
-                        if (arrayType == typeof(CArray<>) || (arrayType == typeof(CStatic<>) && ira.Count < ira.MaxSize))
-                        {
-                            if (index == -1 || index > ira.Count)
-                            {
-                                index = ira.Count;
-                            }
-                            ira.Insert(index, item);
-                        }
-                        else
-                        {
-                            return false;
-                        }
-                    }
-                    else if (Data is IRedBufferPointer db)
-                    {
-                        if (index == -1 || index > ira.Count)
-                        {
-                            index = ira.Count;
-                        }
-                        ira.Insert(index, item);
-                    }
-                    else
-                    {
-                        return false;
-                    }
+                    return InsertArrayItem(ira2, index, item);
                 }
-                else if (ResolvedData is IRedLegacySingleChannelCurve curve && curve.ElementType.IsAssignableTo(item.GetType()))
+
+                if (ResolvedData is IRedLegacySingleChannelCurve curve && curve.ElementType.IsAssignableTo(item.GetType()))
                 {
                     curve.Add(0F, item);
                 }
