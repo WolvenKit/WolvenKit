@@ -6,6 +6,7 @@ using System.IO;
 using System.IO.Compression;
 using System.Linq;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Text.Json;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -17,6 +18,7 @@ using WolvenKit.Core.Compression;
 using WolvenKit.Core.Interfaces;
 using WolvenKit.Interaction;
 using WolvenKit.ViewModels.Dialogs;
+using static Microsoft.WindowsAPICodePack.PortableDevices.PropertySystem.Properties;
 
 namespace WolvenKit.Functionality.Services
 {
@@ -242,8 +244,18 @@ namespace WolvenKit.Functionality.Services
             var version = response.RequestMessage.RequestUri.LocalPath.Split('/').Last();
 
             // download asset
-            //https://github.com/WolvenKit/Wolvenkit-Resources/releases/download/ci/resources.zip
-            var contentUrl = $@"https://github.com/{id.GetUrl()}/releases/download/{version}/{id.GetFile()}";
+            var client = new Octokit.GitHubClient(new Octokit.ProductHeaderValue("wolvenkit"));
+            var releases = await client.Repository.Release.GetAll(id.GetUrl().Split('/').First(), id.GetUrl().Split('/').Last());
+            var latest = releases[0];
+            var assets = latest.Assets.ToList();
+            var asset = assets.Where(x => Regex.IsMatch(x.Name, id.GetFile()));
+
+            if (!asset.Any())
+            {
+                return;
+            }
+            var contentUrl = asset.First().BrowserDownloadUrl;
+
             var zipPath = Path.Combine(Path.GetTempPath(), contentUrl.Split('/').Last());
 
             // TODO plugins remove this check it is ambigous

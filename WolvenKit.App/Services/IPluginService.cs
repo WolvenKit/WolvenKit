@@ -2,9 +2,9 @@ using System;
 using System.Collections.ObjectModel;
 using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
-using WolvenKit.ViewModels.HomePage;
 using System.Threading.Tasks;
 using WolvenKit.ViewModels.Dialogs;
+using WolvenKit.ViewModels.HomePage;
 
 namespace WolvenKit.Functionality.Services
 {
@@ -34,7 +34,7 @@ namespace WolvenKit.Functionality.Services
         mlsetupbuilder,
         [Id("Wolvenkit Resources", "WolvenKit/Wolvenkit-Resources", @"resources.zip", "Resource depot for Wolvenkit.")]
         wolvenkit_resources,
-        [Id("RedMod", "yigsoft/redmod", @"redmod.zip", "RedMod tools.")]
+        [Id("RedMod", "", @"redmod.zip", "RedMod tools.")]
         redmod
     }
 
