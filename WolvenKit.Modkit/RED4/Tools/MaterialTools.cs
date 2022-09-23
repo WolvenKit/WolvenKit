@@ -75,7 +75,11 @@ namespace WolvenKit.Modkit.RED4
 
             for (var i = 0; i < cmesh.ExternalMaterials.Count; i++)
             {
-                string path = cmesh.ExternalMaterials[i].DepotPath;
+                var path = cmesh.ExternalMaterials[i].DepotPath;
+                if (path == 0)
+                {
+                    continue;
+                }
 
                 var findStatus = TryFindFile(archives, path, out var result);
                 if (findStatus == FindFileResult.NoError)
@@ -109,11 +113,19 @@ namespace WolvenKit.Modkit.RED4
                 {
                     throw new InvalidParsingException("Error while parsing a file");
                 }
+                else
+                {
+                    throw new InvalidParsingException($"Error while finding the file: {(string)path}");
+                }
             }
 
             for (var i = 0; i < cmesh.PreloadExternalMaterials.Count; i++)
             {
-                string path = cmesh.PreloadExternalMaterials[i].DepotPath;
+                var path = cmesh.PreloadExternalMaterials[i].DepotPath;
+                if (path == 0)
+                {
+                    continue;
+                }
 
                 var findStatus = TryFindFile(archives, path, out var result);
                 if (findStatus == FindFileResult.NoError)
@@ -207,44 +219,53 @@ namespace WolvenKit.Modkit.RED4
             }
             foreach (var m in materialEntries)
             {
-                string path = m.BaseMaterial.DepotPath;
-                while (!Path.GetExtension(path).Contains("mt"))
+                var path = m.BaseMaterial.DepotPath;
+                if (path == 0)
+                {
+                    continue;
+                }
+
+                while (true)
                 {
                     var findStatus = TryFindFile(archives, path, out var result);
                     if (findStatus == FindFileResult.NoError)
                     {
-                        path = (result.File.RootChunk as CMaterialInstance).BaseMaterial.DepotPath;
-
-                        foreach (var import in result.Imports)
+                        if (result.File.RootChunk is CMaterialInstance mi)
                         {
-                            if (!primaryDependencies.Contains(import.DepotPath))
+                            path = mi.BaseMaterial.DepotPath;
+
+                            foreach (var import in result.Imports)
                             {
-                                primaryDependencies.Add(import.DepotPath);
+                                if (!primaryDependencies.Contains(import.DepotPath))
+                                {
+                                    primaryDependencies.Add(import.DepotPath);
+                                }
                             }
+                        }
+                        else if (result.File.RootChunk is CMaterialTemplate mt)
+                        {
+                            foreach (var import in result.Imports)
+                            {
+                                if (!primaryDependencies.Contains(import.DepotPath))
+                                {
+                                    primaryDependencies.Add(import.DepotPath);
+                                }
+                            }
+                            break;
+                        }
+                        else
+                        {
+                            throw new InvalidParsingException($"Unexpected class found: {(string)path}");
                         }
                     }
                     else if (findStatus == FindFileResult.NoCR2W)
                     {
                         throw new InvalidParsingException("Error while parsing a file");
                     }
-                }
-
-                var mt = FNV1A64HashAlgorithm.HashString(path);
-
-                var findStatus2 = TryFindFile(archives, path, out var result2);
-                if (findStatus2 == FindFileResult.NoError)
-                {
-                    foreach (var import in result2.Imports)
+                    else
                     {
-                        if (!primaryDependencies.Contains(import.DepotPath))
-                        {
-                            primaryDependencies.Add(import.DepotPath);
-                        }
+                        throw new InvalidParsingException($"Error while finding the file: {(string)path}");
                     }
-                }
-                else if (findStatus2 == FindFileResult.NoCR2W)
-                {
-                    throw new InvalidParsingException("Error while parsing a file");
                 }
             }
         }
