@@ -6,8 +6,8 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:hc="https://handyorg.github.io/handycontrol"
     xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
-    xmlns:local="clr-namespace:WolvenKit"
     xmlns:layout="clr-namespace:WolvenKit.Layout"
+    xmlns:local="clr-namespace:WolvenKit"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:others="clr-namespace:WolvenKit.Views.Others"
     xmlns:reactiveUi="http://reactiveui.net"
@@ -75,8 +75,8 @@
                         Grid.Column="0"
                         VerticalAlignment="Center"
                         Click="LeftNavigationHomeButton_OnClick"
-                        ToolTip="Back to top level"
                         Style="{StaticResource ButtonDefault}"
+                        ToolTip="Back to top level"
                         Visibility="Visible">
                         <iconPacks:PackIconCodicons Kind="FoldUp" />
                     </Button>
@@ -85,10 +85,8 @@
                         Grid.Column="1"
                         Margin="5,0,0,0"
                         VerticalAlignment="Center"
-
-                        IsChecked="{Binding IsModBrowserActive}"
-
-                        Command="{Binding ToggleModBrowserCommand}">
+                        Command="{Binding ToggleModBrowserCommand}"
+                        IsChecked="{Binding IsModBrowserActive}">
 
                         <ToggleButton.Style>
                             <Style BasedOn="{StaticResource {x:Type ToggleButton}}" TargetType="ToggleButton">

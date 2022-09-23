@@ -15,7 +15,7 @@
     Background="{StaticResource ContentBackgroundAlt3}"
     mc:Ignorable="d">
 
-    <Grid>
+    <Grid  Margin="20">
         <Grid.RowDefinitions>
             <RowDefinition Height="*" />
             <RowDefinition Height="Auto" />
@@ -23,9 +23,11 @@
 
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="150" />
+            <ColumnDefinition Width="5" />
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
 
+        <!-- Main Row -->
         <ListBox
             x:Name="MenuListBox"
             Grid.Row="0"
@@ -35,7 +37,7 @@
             <ListBoxItem>Deployment</ListBoxItem>
         </ListBox>
 
-        <Grid Grid.Row="0" Grid.Column="1">
+        <Grid Grid.Row="0" Grid.Column="2">
             <StackPanel x:Name="GeneralPanel" Visibility="Visible">
                 <Grid>
                     <Grid.ColumnDefinitions>
@@ -103,24 +105,33 @@
             </StackPanel>
         </Grid>
 
-        <StackPanel
+        <!-- Bottom Row -->
+        <Grid
             Grid.Row="1"
-            Grid.Column="0"
-            Grid.ColumnSpan="2"
+            Grid.ColumnSpan="3"
             Height="28"
-            Margin="5"
-            FlowDirection="RightToLeft"
-            Orientation="Horizontal">
+            Margin="5">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+           
             <Button
                 x:Name="SaveButton"
+                Grid.Column="2"
                 Margin="10,0,0,0"
                 Padding="12,0"
-                Content="Save" />
+                HorizontalAlignment="Right"
+                Content="Cancel" />
             <Button
                 x:Name="CancelButton"
+                Grid.Column="3"
                 Margin="10,0,0,0"
                 Padding="12,0"
-                Content="Cancel" />
-        </StackPanel>
+                HorizontalAlignment="Right"
+                Content="Save" />
+        </Grid>
     </Grid>
 </reactiveUi:ReactiveUserControl>

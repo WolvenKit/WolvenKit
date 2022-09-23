@@ -304,9 +304,7 @@
                 </converters:RedEditorTemplateSelector.RedCurveEditor>
                 <converters:RedEditorTemplateSelector.RedCurvePointEditor>
                     <DataTemplate>
-                        <editors:RedCurvePointEditor
-                            Point="{Binding Data.Point, Mode=TwoWay}"
-                            Value="{Binding Data.Value, Mode=TwoWay}" />
+                        <editors:RedCurvePointEditor Point="{Binding Data.Point, Mode=TwoWay}" Value="{Binding Data.Value, Mode=TwoWay}" />
                     </DataTemplate>
                 </converters:RedEditorTemplateSelector.RedCurvePointEditor>
                 <converters:RedEditorTemplateSelector.RedRefEditor>

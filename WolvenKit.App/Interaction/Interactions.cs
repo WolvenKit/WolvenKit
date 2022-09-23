@@ -28,8 +28,8 @@ namespace WolvenKit.Interaction
 
 
 
-        public static readonly Interaction<Unit, string> NewProjectInteraction = new();
-        public static readonly Interaction<Unit, (AddFileModel, string)> AddNewFile = new();
+        //public static readonly Interaction<Unit, string> NewProjectInteraction = new();
+        //public static readonly Interaction<Unit, (AddFileModel, string)> AddNewFile = new();
 
         //custom views
         public static readonly Interaction<Unit, bool> ShowFirstTimeSetup = new();

@@ -2,13 +2,12 @@ using System.Reactive.Disposables;
 using ReactiveUI;
 using Splat;
 using WolvenKit.ViewModels.Dialogs;
+using WolvenKit.ViewModels.Shell;
 
 namespace WolvenKit.Views.Dialogs
 {
-    public partial class RenameDialog : ReactiveUserControl<RenameDialogViewModel>
+    public partial class RenameDialog : IViewFor<RenameDialogViewModel>
     {
-        #region Constructors
-
         public RenameDialog()
         {
             InitializeComponent();
@@ -26,6 +25,7 @@ namespace WolvenKit.Views.Dialogs
             });
         }
 
-        #endregion Constructors
+        public RenameDialogViewModel ViewModel { get; set; }
+        object IViewFor.ViewModel { get => ViewModel; set => ViewModel = (RenameDialogViewModel)value; }
     }
 }

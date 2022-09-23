@@ -13,6 +13,7 @@
     xmlns:syncfusionskin="clr-namespace:Syncfusion.SfSkinManager;assembly=Syncfusion.SfSkinManager.WPF"
     xmlns:wizardVMs="clr-namespace:WolvenKit.ViewModels.Wizards;assembly=WolvenKit.App"
     xmlns:wizards="clr-namespace:WolvenKit.Views.Wizards"
+    Title="{Binding Title}"
     MinWidth="960"
     MinHeight="600"
     syncfusionskin:SfSkinManager.Theme="{syncfusionskin:SkinManagerExtension ThemeName=MaterialDark}"
@@ -27,8 +28,7 @@
     SizeToContent="Manual"
     TitleTextAlignment="Right"
     UseLayoutRounding="True"
-    UseNativeChrome="True"
-    Title="{Binding Title}">
+    UseNativeChrome="True">
     <!--  TextBlock Text="{Binding Title}" FontSize="{Binding TitileFontSize}" VerticalAlignment="Center" Margin="10,0,0,0" Opacity="{Binding Opacity, ElementName=ModalOverlay}"/  -->
 
     <syncfusion:ChromelessWindow.Resources>

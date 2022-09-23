@@ -1,40 +1,38 @@
-<adonisControls:AdonisWindow x:Class="WolvenKit.Views.Editors.CurveEditorWindow"
-                             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-                             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-                             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-                             xmlns:local="clr-namespace:WolvenKit.Views.Editors"
-                             xmlns:hc="https://handyorg.github.io/handycontrol"
-                             xmlns:adonisUi="clr-namespace:AdonisUI;assembly=AdonisUI"
-                             xmlns:adonisControls="clr-namespace:AdonisUI.Controls;assembly=AdonisUI"
-                             xmlns:syncfusion="http://schemas.syncfusion.com/wpf" xmlns:viewmodels="clr-namespace:WolvenKit.ViewModels"
-                             mc:Ignorable="d"
-
-                             Title="Curve Editor" 
-        
-                             Loaded="MainWindow1_OnLoaded"
-
-                             d:DesignWidth="600"
-                             d:DesignHeight="400"
->
+<adonisControls:AdonisWindow
+    x:Class="WolvenKit.Views.Editors.CurveEditorWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:adonisControls="clr-namespace:AdonisUI.Controls;assembly=AdonisUI"
+    xmlns:adonisUi="clr-namespace:AdonisUI;assembly=AdonisUI"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:hc="https://handyorg.github.io/handycontrol"
+    xmlns:local="clr-namespace:WolvenKit.Views.Editors"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
+    xmlns:viewmodels="clr-namespace:WolvenKit.ViewModels"
+    Title="Curve Editor"
+    d:DesignHeight="400"
+    d:DesignWidth="600"
+    Loaded="MainWindow1_OnLoaded"
+    mc:Ignorable="d">
     <Window.Style>
-        <Style TargetType="Window" BasedOn="{StaticResource {x:Type Window}}"/>
+        <Style BasedOn="{StaticResource {x:Type Window}}" TargetType="Window" />
     </Window.Style>
 
     <Window.DataContext>
-        <viewmodels:CurveEditorViewModel/>
+        <viewmodels:CurveEditorViewModel />
     </Window.DataContext>
 
     <Window.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="pack://application:,,,/AdonisUI;component/ColorSchemes/Dark.xaml"/>
-                <ResourceDictionary Source="pack://application:,,,/AdonisUI.ClassicTheme;component/Resources.xaml"/>
+                <ResourceDictionary Source="pack://application:,,,/AdonisUI;component/ColorSchemes/Dark.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/AdonisUI.ClassicTheme;component/Resources.xaml" />
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Window.Resources>
 
-    <Grid  Margin="3" Background="DimGray" >
+    <Grid Margin="3" Background="DimGray">
 
         <!--<Grid.Resources>
             <ResourceDictionary>
@@ -46,59 +44,80 @@
         </Grid.Resources>-->
 
         <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition  Height="*"/>
-            <RowDefinition  Height="Auto"/>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
-        <!-- Header -->
-        <StackPanel Grid.Row="0" Orientation="Horizontal"  Margin="0,10,0,0">
-            <TextBlock Text="EInterpolationType: " VerticalAlignment="Center" Margin="20,0,10,0"/>
-            <ComboBox Width="200" 
-                      SelectionChanged="Selector_OnSelectionChanged"
-                      ItemsSource="{Binding Path=InterpolationTypes}"    
-                      SelectedItem="{Binding Path=InterpolationType}"/>
+        <!--  Header  -->
+        <StackPanel
+            Grid.Row="0"
+            Margin="0,10,0,0"
+            Orientation="Horizontal">
+            <TextBlock
+                Margin="20,0,10,0"
+                VerticalAlignment="Center"
+                Text="EInterpolationType: " />
+            <ComboBox
+                Width="200"
+                ItemsSource="{Binding Path=InterpolationTypes}"
+                SelectedItem="{Binding Path=InterpolationType}"
+                SelectionChanged="Selector_OnSelectionChanged" />
             <Separator />
-            <Button Content="Reset Curve" Click="ButtonReload_OnClick"/>
+            <Button Click="ButtonReload_OnClick" Content="Reset Curve" />
             <Separator />
 
-            <TextBlock VerticalAlignment="Center" Margin="10,0,5,0" Text="MinT" />
-            <TextBox Width="50" Text="{Binding MinX}"/>
-            <TextBlock VerticalAlignment="Center" Margin="10,0,5,0" Text="MaxT" />
-            <TextBox Width="50" Text="{Binding MaxX}"/>
+            <TextBlock
+                Margin="10,0,5,0"
+                VerticalAlignment="Center"
+                Text="MinT" />
+            <TextBox Width="50" Text="{Binding MinX}" />
+            <TextBlock
+                Margin="10,0,5,0"
+                VerticalAlignment="Center"
+                Text="MaxT" />
+            <TextBox Width="50" Text="{Binding MaxX}" />
 
-            <TextBlock VerticalAlignment="Center" Margin="10,0,5,0" Text="MinV" />
-            <TextBox Width="50" Text="{Binding MinY}"/>
-            <TextBlock VerticalAlignment="Center" Margin="10,0,5,0" Text="MaxV" />
-            <TextBox Width="50" Text="{Binding MaxY}"/>
+            <TextBlock
+                Margin="10,0,5,0"
+                VerticalAlignment="Center"
+                Text="MinV" />
+            <TextBox Width="50" Text="{Binding MinY}" />
+            <TextBlock
+                Margin="10,0,5,0"
+                VerticalAlignment="Center"
+                Text="MaxV" />
+            <TextBox Width="50" Text="{Binding MaxY}" />
 
         </StackPanel>
 
-        <!-- Title -->
-        <TextBlock Grid.Row="1" Text="{Binding Text}"/>
+        <!--  Title  -->
+        <TextBlock Grid.Row="1" Text="{Binding Text}" />
 
-        <!-- Curve -->
-        <Grid Grid.Row="2"  >
+        <!--  Curve  -->
+        <Grid Grid.Row="2">
 
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto" />
-                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
 
-            <syncfusion:SfDataGrid Grid.Column="0" x:Name="CurvePointsList"
-                                   AutoGenerateColumns="False"
-                                   ItemsSource="{Binding Curve}"
-                                   AllowEditing="True"
-                                   CurrentCellEndEdit="CurvePointsList_CurrentCellEndEdit">
-                
+            <syncfusion:SfDataGrid
+                x:Name="CurvePointsList"
+                Grid.Column="0"
+                AllowEditing="True"
+                AutoGenerateColumns="False"
+                CurrentCellEndEdit="CurvePointsList_CurrentCellEndEdit"
+                ItemsSource="{Binding Curve}">
+
                 <syncfusion:SfDataGrid.Columns>
                     <syncfusion:GridNumericColumn HeaderText="Time" MappingName="T" />
                     <syncfusion:GridNumericColumn HeaderText="Value" MappingName="V" />
                 </syncfusion:SfDataGrid.Columns>
             </syncfusion:SfDataGrid>
 
-                <!--<ListView x:Name="CurvePointsList"
+            <!--<ListView x:Name="CurvePointsList"
                       ItemsSource="{Binding Curve, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}">
                 <ListView.View>
                     <GridView>
@@ -116,25 +135,27 @@
                                 </DataTemplate>
                             </GridViewColumn.CellTemplate>
                         </GridViewColumn>
-                        
+
                     </GridView>
                 </ListView.View>
             </ListView>-->
 
             <Grid Grid.Column="1" Margin="50,20,50,30">
 
-                <!-- GRID -->
-                <Canvas x:Name="CanvasGrid" >
+                <!--  GRID  -->
+                <Canvas x:Name="CanvasGrid">
                     <Canvas.Background>
-                        <DrawingBrush TileMode="Tile" Viewport="0,0,40,40" 
-                                  ViewportUnits="Absolute" >
+                        <DrawingBrush
+                            TileMode="Tile"
+                            Viewport="0,0,40,40"
+                            ViewportUnits="Absolute">
                             <DrawingBrush.Drawing>
                                 <GeometryDrawing>
                                     <GeometryDrawing.Geometry>
-                                        <RectangleGeometry Rect="0,0,50,50"/>
+                                        <RectangleGeometry Rect="0,0,50,50" />
                                     </GeometryDrawing.Geometry>
                                     <GeometryDrawing.Pen>
-                                        <Pen Brush="Gray" Thickness="1"/>
+                                        <Pen Brush="Gray" Thickness="1" />
                                     </GeometryDrawing.Pen>
                                 </GeometryDrawing>
                             </DrawingBrush.Drawing>
@@ -142,8 +163,8 @@
                     </Canvas.Background>
                 </Canvas>
 
-                <!-- Linear -->
-                <Border x:Name="CanvasLinearCurve" Visibility="Collapsed" >
+                <!--  Linear  -->
+                <Border x:Name="CanvasLinearCurve" Visibility="Collapsed">
                     <Path Stroke="Black" StrokeThickness="1">
                         <Path.Data>
                             <GeometryGroup>
@@ -153,7 +174,7 @@
                                             <PathFigure StartPoint="{Binding StartPoint, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}">
                                                 <PathFigure.Segments>
                                                     <PathSegmentCollection>
-                                                        <PolyLineSegment Points="{Binding RenderedPoints, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"/>
+                                                        <PolyLineSegment Points="{Binding RenderedPoints, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" />
                                                     </PathSegmentCollection>
                                                 </PathFigure.Segments>
                                             </PathFigure>
@@ -166,8 +187,8 @@
 
                 </Border>
 
-                <!-- Quadratic -->
-                <Border x:Name="CanvasQuadraticCurve" Visibility="Collapsed" >
+                <!--  Quadratic  -->
+                <Border x:Name="CanvasQuadraticCurve" Visibility="Collapsed">
                     <Path Stroke="Black" StrokeThickness="1">
                         <Path.Data>
                             <GeometryGroup>
@@ -177,7 +198,7 @@
                                             <PathFigure StartPoint="{Binding StartPoint, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}">
                                                 <PathFigure.Segments>
                                                     <PathSegmentCollection>
-                                                        <PolyQuadraticBezierSegment Points="{Binding RenderedPoints, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"/>
+                                                        <PolyQuadraticBezierSegment Points="{Binding RenderedPoints, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" />
                                                     </PathSegmentCollection>
                                                 </PathFigure.Segments>
                                             </PathFigure>
@@ -190,8 +211,8 @@
 
                 </Border>
 
-                <!-- Cubic -->
-                <Border x:Name="CanvasCubicCurve" Visibility="Collapsed" >
+                <!--  Cubic  -->
+                <Border x:Name="CanvasCubicCurve" Visibility="Collapsed">
                     <Path Stroke="Black" StrokeThickness="1">
                         <Path.Data>
                             <GeometryGroup>
@@ -201,7 +222,7 @@
                                             <PathFigure StartPoint="{Binding StartPoint, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}">
                                                 <PathFigure.Segments>
                                                     <PathSegmentCollection>
-                                                        <PolyBezierSegment Points="{Binding RenderedPoints, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"/>
+                                                        <PolyBezierSegment Points="{Binding RenderedPoints, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" />
                                                     </PathSegmentCollection>
                                                 </PathFigure.Segments>
                                             </PathFigure>
@@ -214,30 +235,44 @@
 
                 </Border>
 
-                <!-- POINTS OVERLAY -->
-                <Canvas x:Name="CanvasPoints"
+                <!--  POINTS OVERLAY  -->
+                <Canvas
+                    x:Name="CanvasPoints"
+                    Background="Transparent"
+                    MouseMove="CanvasPoints_OnMouseMove"
                     MouseWheel="CanvasPoints_MouseWheel"
                     PreviewMouseLeftButtonDown="Border_OnPreviewMouseLeftButtonDown"
-                    SizeChanged="CanvasPoints_OnSizeChanged"
-                    MouseMove="CanvasPoints_OnMouseMove"
-                    Background="Transparent"/>
+                    SizeChanged="CanvasPoints_OnSizeChanged" />
 
             </Grid>
         </Grid>
-        
-        <!-- Footer -->
+
+        <!--  Footer  -->
         <Grid Grid.Row="3" Background="{DynamicResource BorderBrush}">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto"/>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="Auto"/>
-                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
 
-            <TextBlock Grid.Column="0" VerticalAlignment="Center" Margin="20,0,0,0" Text="{Binding CursorPos}" Width="150" />
+            <TextBlock
+                Grid.Column="0"
+                Width="150"
+                Margin="20,0,0,0"
+                VerticalAlignment="Center"
+                Text="{Binding CursorPos}" />
 
-            <Button Grid.Column="2" Content="Save" Margin="5" Click="SaveButton_OnClick"/>
-            <Button Grid.Column="3" Content="Close" Margin="5" Click="CloseButton_OnClick" />
+            <Button
+                Grid.Column="2"
+                Margin="5"
+                Click="SaveButton_OnClick"
+                Content="Save" />
+            <Button
+                Grid.Column="3"
+                Margin="5"
+                Click="CloseButton_OnClick"
+                Content="Close" />
 
         </Grid>
 

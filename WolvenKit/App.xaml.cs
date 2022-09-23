@@ -19,6 +19,7 @@ using WolvenKit.Interaction;
 using WolvenKit.RED4.Archive;
 using WolvenKit.ViewModels.Wizards;
 using WolvenKit.Views.Dialogs;
+using WolvenKit.Views.Wizards;
 
 namespace WolvenKit
 {
@@ -54,8 +55,7 @@ namespace WolvenKit
         {
             Interactions.ShowFirstTimeSetup.RegisterHandler(interaction =>
             {
-                var dialog = new DialogHostView();
-                dialog.ViewModel.HostedViewModel = Locator.Current.GetService<FirstSetupWizardViewModel>();
+                var dialog = new FirstSetupWizardView();
 
                 return Observable.Start(() =>
                 {

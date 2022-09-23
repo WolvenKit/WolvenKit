@@ -1,33 +1,52 @@
-<colorpicker:PickerControlBase x:Class="WolvenKit.Views.Tools.RedColorPicker"
-             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:WolvenKit.Views.Tools"
-             xmlns:colorpicker="clr-namespace:ColorPicker;assembly=ColorPicker"
-             mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800" x:Name="rcp">
+<colorpicker:PickerControlBase
+    x:Class="WolvenKit.Views.Tools.RedColorPicker"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:colorpicker="clr-namespace:ColorPicker;assembly=ColorPicker"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:WolvenKit.Views.Tools"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    x:Name="rcp"
+    d:DesignHeight="450"
+    d:DesignWidth="800"
+    mc:Ignorable="d">
     <UserControl.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="/ColorPicker;component/Styles/Colors.xaml"/>
-                <ResourceDictionary Source="/ColorPicker;component/Styles/ColorToggleButtonStyle.xaml"/>
+                <ResourceDictionary Source="/ColorPicker;component/Styles/Colors.xaml" />
+                <ResourceDictionary Source="/ColorPicker;component/Styles/ColorToggleButtonStyle.xaml" />
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </UserControl.Resources>
     <Grid>
-        <Border BorderThickness="1" BorderBrush="Black" Panel.ZIndex="0"
-                CornerRadius="2.5"
-                Padding="0" Margin="0" RenderOptions.BitmapScalingMode="NearestNeighbor">
+        <Border
+            Margin="0"
+            Padding="0"
+            Panel.ZIndex="0"
+            BorderBrush="Black"
+            BorderThickness="1"
+            CornerRadius="2.5"
+            RenderOptions.BitmapScalingMode="NearestNeighbor">
             <Border.Background>
-                <ImageBrush ImageSource="/ColorPicker;component/Images/transparentbg_mini.png" TileMode="Tile" ViewportUnits="Absolute" Viewport="0,0,8,8"/>
+                <ImageBrush
+                    ImageSource="/ColorPicker;component/Images/transparentbg_mini.png"
+                    TileMode="Tile"
+                    Viewport="0,0,8,8"
+                    ViewportUnits="Absolute" />
             </Border.Background>
-            <ToggleButton Style="{StaticResource ColorToggleButtonStyle}" Padding="0" Margin="0"
-                          x:Name="ToggleButton" BorderThickness="0" Panel.ZIndex="1"
-                          Background="{Binding Path=Brush, ElementName=rcp}">
-            </ToggleButton>
+            <ToggleButton
+                x:Name="ToggleButton"
+                Margin="0"
+                Padding="0"
+                Panel.ZIndex="1"
+                Background="{Binding Path=Brush, ElementName=rcp}"
+                BorderThickness="0"
+                Style="{StaticResource ColorToggleButtonStyle}" />
         </Border>
-        <Popup Name="Popup" StaysOpen="False" IsOpen="{Binding Path=IsChecked, ElementName=ToggleButton, Mode=TwoWay}">
+        <Popup
+            Name="Popup"
+            IsOpen="{Binding Path=IsChecked, ElementName=ToggleButton, Mode=TwoWay}"
+            StaysOpen="False">
             <Border BorderBrush="Black" BorderThickness="2">
                 <Grid Background="{StaticResource ContentBackground}">
                     <Grid.RowDefinitions>
@@ -40,23 +59,23 @@
                     </Grid.ColumnDefinitions>
 
                     <colorpicker:SquarePicker
-                        Margin="5 5 5 15"
-                        VerticalAlignment="Stretch"
-                        Grid.Column="0"
                         Grid.Row="0"
                         Grid.RowSpan="2"
+                        Grid.Column="0"
+                        Margin="5,5,5,15"
+                        VerticalAlignment="Stretch"
                         ColorState="{Binding ElementName=rcp, Path=ColorState, Mode=TwoWay}" />
                     <DockPanel
                         Grid.Row="0"
                         Grid.Column="1"
-                        VerticalAlignment="Top"
-                        HorizontalAlignment="Left">
-                        <Label Content="Hex"/>
+                        HorizontalAlignment="Left"
+                        VerticalAlignment="Top">
+                        <Label Content="Hex" />
                         <colorpicker:HexColorTextBox ColorState="{Binding ElementName=rcp, Path=ColorState, Mode=TwoWay}" />
                     </DockPanel>
                     <colorpicker:ColorSliders
-                        Grid.Column="1"
                         Grid.Row="1"
+                        Grid.Column="1"
                         ColorState="{Binding ElementName=rcp, Path=ColorState, Mode=TwoWay}" />
                 </Grid>
             </Border>

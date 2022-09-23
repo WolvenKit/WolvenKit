@@ -40,25 +40,23 @@
             Text="You'll be able to adjust parameters once the class is created. Below are some available classes:"
             TextWrapping="Wrap" />
         <ScrollViewer Grid.Row="2">
-            <ItemsControl
-                Margin="-2,5,-2,5"
-                ItemsSource="{Binding ExistingClasses, Mode=OneWay}">
-                
-                    <ItemsControl.ItemsPanel>
-                        <ItemsPanelTemplate>
-                            <WrapPanel />
-                        </ItemsPanelTemplate>
-                    </ItemsControl.ItemsPanel>
-                    <ItemsControl.ItemTemplate>
-                        <DataTemplate>
-                            <Button
-                                Margin="2"
-                                Padding="5,3"
-                                Click="SetSelectedClass"
-                                Content="{Binding}" />
-                        </DataTemplate>
-                    </ItemsControl.ItemTemplate>
-                
+            <ItemsControl Margin="-2,5,-2,5" ItemsSource="{Binding ExistingClasses, Mode=OneWay}">
+
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <WrapPanel />
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Button
+                            Margin="2"
+                            Padding="5,3"
+                            Click="SetSelectedClass"
+                            Content="{Binding}" />
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+
             </ItemsControl>
         </ScrollViewer>
 
