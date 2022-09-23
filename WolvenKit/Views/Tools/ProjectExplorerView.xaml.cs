@@ -76,20 +76,20 @@ namespace WolvenKit.Views.Tools
                 Interactions.Rename.RegisterHandler(
                     interaction =>
                     {
-                        var dialog = new DialogHostView();
-                        var vm = Locator.Current.GetService<RenameDialogViewModel>();
-                        vm.Text = interaction.Input;
-                        dialog.ViewModel.HostedViewModel = vm;
+                        var dialog = new RenameDialog();
+                        //var vm = Locator.Current.GetService<RenameDialogViewModel>();
+                        dialog.ViewModel.Text = interaction.Input;
+                        // dialog.ViewModel.HostedViewModel = vm;
 
 
                         return Observable.Start(() =>
                         {
                             var result = "";
-                            dialog.Owner = Application.Current.MainWindow;
-                            dialog.WindowStartupLocation = WindowStartupLocation.CenterOwner;
+                            //dialog.Owner = Application.Current.MainWindow;
+                            //dialog.WindowStartupLocation = WindowStartupLocation.CenterOwner;
                             if (dialog.ShowDialog() == true)
                             {
-                                var innerVm = (RenameDialogViewModel)dialog.ViewModel.HostedViewModel;
+                                var innerVm = dialog.ViewModel;
 
                                 result = innerVm.Text;
                             }
@@ -243,14 +243,7 @@ namespace WolvenKit.Views.Tools
             return includeFile;
         }
 
-        private bool IsFileInFlat(object o)
-        {
-            if (tabControl != null && o is FileModel fm)
-            {
-                return IsFileIn(o) && !fm.IsDirectory;
-            }
-            return false;
-        }
+        private bool IsFileInFlat(object o) => tabControl != null && o is FileModel fm && IsFileIn(o) && !fm.IsDirectory;
 
         private void UpdateTreeGrid()
         {
@@ -401,8 +394,7 @@ namespace WolvenKit.Views.Tools
         {
             if (e.Data.GetDataPresent("Nodes"))
             {
-                var treeNodes = e.Data.GetData("Nodes") as ObservableCollection<TreeNode>;
-                if (treeNodes != null && treeNodes[0].Item is FileModel sourceFile)
+                if (e.Data.GetData("Nodes") is ObservableCollection<TreeNode> treeNodes && treeNodes[0].Item is FileModel sourceFile)
                 {
                     if (e.TargetNode.Item is FileModel targetFile)
                     {
@@ -545,7 +537,7 @@ namespace WolvenKit.Views.Tools
                     return;
                 }
 
-                var args = $"\"{ selected.FullName}\" /I102 /p";
+                var args = $"\"{selected.FullName}\" /I102 /p";
                 var procInfo =
                     new System.Diagnostics.ProcessStartInfo(Path.Combine(ISettingsManager.GetWorkDir(),
                         "test.exe"))

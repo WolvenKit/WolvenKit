@@ -106,9 +106,6 @@ namespace WolvenKit
 
                     #region dialogs
 
-                    services.AddTransient<DialogHostViewModel>();
-                    services.AddTransient<IViewFor<DialogHostViewModel>, DialogHostView>();
-
                     //services.AddTransient<CreateClassDialogViewModel>();
                     //services.AddTransient<IViewFor<CreateClassDialogViewModel>, CreateClassDialog>();
 

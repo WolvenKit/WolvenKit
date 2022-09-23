@@ -15,6 +15,7 @@ using WolvenKit.ViewModels.Dialogs;
 using WolvenKit.ViewModels.Shell;
 using WolvenKit.ViewModels.Wizards;
 using WolvenKit.Views.Dialogs;
+using WolvenKit.Views.Wizards;
 
 namespace WolvenKit.Views.Shell
 {
@@ -39,64 +40,6 @@ namespace WolvenKit.Views.Shell
 
             this.WhenActivated(disposables =>
             {
-                // interactions
-
-                Interactions.AddNewFile.RegisterHandler(interaction =>
-                {
-                    var dialog = new DialogHostView();
-                    dialog.ViewModel.HostedViewModel = Locator.Current.GetService<NewFileViewModel>();
-                    //dialog.Height = 600;
-                    //dialog.Width = 700;
-
-                    return Observable.Start(() =>
-                    {
-                        var result = dialog.ShowDialog() == true;
-                        if (result)
-                        {
-                            var innerVm = (NewFileViewModel)dialog.ViewModel.HostedViewModel;
-                            var model = innerVm.SelectedFile;
-                            var filename = innerVm.FileName;
-
-                            interaction.SetOutput((model, filename));
-                        }
-                        else
-                        {
-                            interaction.SetOutput((null, null));
-                        }
-                    }, RxApp.MainThreadScheduler);
-                });
-
-                Interactions.NewProjectInteraction.RegisterHandler(interaction =>
-                {
-                    var dialog = new DialogHostView();
-                    dialog.ViewModel.HostedViewModel = Locator.Current.GetService<ProjectWizardViewModel>();
-
-                    return Observable.Start(() =>
-                    {
-                        var result = "";
-                        if (dialog.ShowDialog() == true)
-                        {
-                            var innerVm = (ProjectWizardViewModel)dialog.ViewModel.HostedViewModel;
-                            var projectLocation = Path.Combine(innerVm.ProjectPath, innerVm.ProjectName);
-                            var projectFile = Path.Combine(projectLocation, innerVm.ProjectName);
-                            var type = innerVm.ProjectType.First();
-                            switch (type)
-                            {
-                                case ProjectWizardViewModel.WitcherGameName:
-                                    projectFile += ".w3modproj";
-                                    break;
-                                case ProjectWizardViewModel.CyberpunkGameName:
-                                    projectFile += ".cpmodproj";
-                                    break;
-                            }
-
-                            result = projectFile;
-                        }
-
-                        interaction.SetOutput(result);
-                    }, RxApp.MainThreadScheduler);
-                });
-
                 Interactions.ShowConfirmation.RegisterHandler(interaction => interaction.SetOutput(ShowConfirmation(interaction.Input)));
 
 

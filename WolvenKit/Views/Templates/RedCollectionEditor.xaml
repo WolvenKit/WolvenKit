@@ -1,95 +1,114 @@
-<adonisControls:AdonisWindow  x:Class="WolvenKit.Views.Templates.RedCollectionEditor"
-        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:WolvenKit.Views.Templates"
-        xmlns:adonisUi="clr-namespace:AdonisUI;assembly=AdonisUI"
-        xmlns:adonisControls="clr-namespace:AdonisUI.Controls;assembly=AdonisUI"
-        xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
-        xmlns:viewmodels="clr-namespace:WolvenKit.ViewModels"
-        mc:Ignorable="d"
-        Title="Collection Editor"
-        Height="640"
-        Width="960">
+<adonisControls:AdonisWindow
+    x:Class="WolvenKit.Views.Templates.RedCollectionEditor"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:adonisControls="clr-namespace:AdonisUI.Controls;assembly=AdonisUI"
+    xmlns:adonisUi="clr-namespace:AdonisUI;assembly=AdonisUI"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:WolvenKit.Views.Templates"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
+    xmlns:viewmodels="clr-namespace:WolvenKit.ViewModels"
+    Title="Collection Editor"
+    Width="960"
+    Height="640"
+    mc:Ignorable="d">
 
     <Window.Style>
-        <Style TargetType="Window" BasedOn="{StaticResource {x:Type Window}}"/>
+        <Style BasedOn="{StaticResource {x:Type Window}}" TargetType="Window" />
     </Window.Style>
 
     <Window.DataContext>
-        <viewmodels:RedCollectionEditorViewModel/>
+        <viewmodels:RedCollectionEditorViewModel />
     </Window.DataContext>
 
     <Window.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="pack://application:,,,/AdonisUI;component/ColorSchemes/Dark.xaml"/>
-                <ResourceDictionary Source="pack://application:,,,/AdonisUI.ClassicTheme;component/Resources.xaml"/>
+                <ResourceDictionary Source="pack://application:,,,/AdonisUI;component/ColorSchemes/Dark.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/AdonisUI.ClassicTheme;component/Resources.xaml" />
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Window.Resources>
 
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
-        
+
         <Grid Grid.Row="0" Margin="0">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="300" MinWidth="20"/>
-                <ColumnDefinition Width="5"/>
-                <ColumnDefinition Width="*" MinWidth="20"/>
+                <ColumnDefinition Width="300" MinWidth="20" />
+                <ColumnDefinition Width="5" />
+                <ColumnDefinition Width="*" MinWidth="20" />
             </Grid.ColumnDefinitions>
 
-            <!-- LeftSide -->
+            <!--  LeftSide  -->
             <Grid Grid.Column="0">
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="*"/>
-                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="Auto" />
                 </Grid.RowDefinitions>
 
-                <ListView Grid.Row="0" x:Name="ListView"
-                          ItemsSource="{Binding Elements, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                          SelectedItem="{Binding SelectedElement}">
+                <ListView
+                    x:Name="ListView"
+                    Grid.Row="0"
+                    ItemsSource="{Binding Elements, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                    SelectedItem="{Binding SelectedElement}">
                     <ListView.View>
                         <GridView>
-                            <GridViewColumn Header="Members" DisplayMemberBinding="{Binding}" Width="Auto" />
+                            <GridViewColumn
+                                Width="Auto"
+                                DisplayMemberBinding="{Binding}"
+                                Header="Members" />
                         </GridView>
                     </ListView.View>
                 </ListView>
 
                 <StackPanel Grid.Row="1" Orientation="Horizontal">
-                    <Button Content="Add" Margin="6,6,6,6" x:Name="AddElementButton" Command="{Binding AddElementCommand}" Padding="12,6,12,6" />
-                    <Button Content="Remove" Margin="0,6,6,6" x:Name="RemoveElementButton" Command="{Binding RemoveElementCommand}" Padding="12,6,12,6" />
+                    <Button
+                        x:Name="AddElementButton"
+                        Margin="6,6,6,6"
+                        Padding="12,6,12,6"
+                        Command="{Binding AddElementCommand}"
+                        Content="Add" />
+                    <Button
+                        x:Name="RemoveElementButton"
+                        Margin="0,6,6,6"
+                        Padding="12,6,12,6"
+                        Command="{Binding RemoveElementCommand}"
+                        Content="Remove" />
                 </StackPanel>
 
             </Grid>
 
-            <syncfusion:SfGridSplitter Grid.Column="1" Width="5" HorizontalAlignment="Stretch"/>
+            <syncfusion:SfGridSplitter
+                Grid.Column="1"
+                Width="5"
+                HorizontalAlignment="Stretch" />
 
-            <!-- RightSide -->
+            <!--  RightSide  -->
             <Grid Grid.Column="2">
 
                 <syncfusion:PropertyGrid
-                                         x:Name="PropertyGrid"
-                                         PropertyExpandMode="NestedMode"
-                                         AutoGeneratingPropertyGridItem="PropertyGrid_AutoGeneratingPropertyGridItem"
-                                         CollectionEditorOpening ="PropertyGrid_CollectionEditorOpening"
-                                         SelectedObject="{Binding SelectedElement}"
-                                         PropertyNameColumnDefinition="200" />
+                    x:Name="PropertyGrid"
+                    AutoGeneratingPropertyGridItem="PropertyGrid_AutoGeneratingPropertyGridItem"
+                    CollectionEditorOpening="PropertyGrid_CollectionEditorOpening"
+                    PropertyExpandMode="NestedMode"
+                    PropertyNameColumnDefinition="200"
+                    SelectedObject="{Binding SelectedElement}" />
 
             </Grid>
 
         </Grid>
 
-        
-        <!--Separator Grid.Row="1" Margin="10"/-->
 
-        <!-- Footer -->
+        <!--  Separator Grid.Row="1" Margin="10"/  -->
+
+        <!--  Footer  -->
         <!--<Grid Grid.Row="2" Background="{DynamicResource BorderBrush}">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>

@@ -351,8 +351,7 @@
                         PropertyNameColumnDefinition="150"
                         SearchBoxVisibility="Collapsed"
                         SelectedObject="{Binding PE_SelectedItem, Mode=OneWay}"
-                        Visibility="{Binding PE_FileInfoVisible, Converter={StaticResource ToggleVisibilityConverter}}">
-                    </syncfusion:PropertyGrid>
+                        Visibility="{Binding PE_FileInfoVisible, Converter={StaticResource ToggleVisibilityConverter}}" />
 
                     <!--StackPanel Orientation="Vertical" Background="{StaticResource ContentBackground}" Opacity="1">
                         <StackPanel.Resources>
@@ -431,8 +430,7 @@
                         PropertyNameColumnDefinition="150"
                         SearchBoxVisibility="Collapsed"
                         SelectedObject="{Binding AB_SelectedItem, Mode=OneWay}"
-                        Visibility="{Binding AB_FileInfoVisible, Converter={StaticResource ToggleVisibilityConverter}}">
-                    </syncfusion:PropertyGrid>
+                        Visibility="{Binding AB_FileInfoVisible, Converter={StaticResource ToggleVisibilityConverter}}" />
                 </Grid>
             </syncfusion:TabItemExt>
             <syncfusion:TabItemExt Header="Mesh" IsEnabled="{Binding IsMeshPreviewVisible}">
