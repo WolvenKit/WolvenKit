@@ -241,7 +241,7 @@ namespace WolvenKit.Views.Tools
             Trace.WriteLine(path);
 
             var arg = path.ToEscapedPath() + " -o " + outf.ToEscapedPath();
-            var p = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "lib", "vgmstream", "test.exe");
+            var p = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "lib", "test.exe");
             var si = new ProcessStartInfo(
                     p,
                     arg

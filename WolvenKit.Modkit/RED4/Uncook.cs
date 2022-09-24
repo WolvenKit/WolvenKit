@@ -327,10 +327,7 @@ namespace WolvenKit.Modkit.RED4
                     // settings.Get<MorphTargetExportArgs>().ModFolderPath.  In the context of the CLI, output directory
                     // (i.e. -o argument) can be used to provide the correct absolute pathname.
                     var modFolderPath = settings.Get<MorphTargetExportArgs>().ModFolderPath;
-                    if (modFolderPath == null)
-                    {
-                        modFolderPath = rawOutDir.FullName;
-                    }
+                    modFolderPath ??= rawOutDir.FullName;
                     return ExportMorphTargets(cr2wStream, outfile, settings.Get<MorphTargetExportArgs>().Archives, modFolderPath, settings.Get<MorphTargetExportArgs>().IsBinary);
                 case ECookedFileFormat.anims:
                     try
@@ -585,7 +582,7 @@ namespace WolvenKit.Modkit.RED4
 
             var arg = infile.ToEscapedPath() + " -o " + outfile.ToEscapedPath();
             var si = new ProcessStartInfo(
-                    Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "lib", "vgmstream", "test.exe"),
+                    Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "lib", "test.exe"),
                     arg
                 )
             {
@@ -725,12 +722,8 @@ namespace WolvenKit.Modkit.RED4
             texformat = DXGI_FORMAT.DXGI_FORMAT_R8G8B8A8_UNORM;
 
             // read the cr2wfile
-            if (!_wolvenkitFileService.TryReadRed4File(redInFile, out var cr2w))
-            {
-                return false;
-            }
-
-            return ConvertRedClassToDdsStream(cr2w.RootChunk, outstream, out texformat);
+            return _wolvenkitFileService.TryReadRed4File(redInFile, out var cr2w)
+&& ConvertRedClassToDdsStream(cr2w.RootChunk, outstream, out texformat);
         }
 
         public static bool ConvertRedClassToDdsStream(RedBaseClass cls, Stream outstream, out DXGI_FORMAT texformat)
