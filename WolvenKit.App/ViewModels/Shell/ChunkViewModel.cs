@@ -2335,16 +2335,13 @@ namespace WolvenKit.ViewModels.Shell
             {
                 if (ResolvedData is IRedArray ira && ira.InnerType.IsInstanceOfType(item))
                 {
-                    return InsertArrayItem(ira, index, item);
+                    InsertArrayItem(ira, index, item);
                 }
-
-                // Not sure why, but seems to be important^^
-                if (Data is IRedArray ira2 && ira2.InnerType.IsInstanceOfType(item))
+                else if (Data is IRedArray ira2 && ira2.InnerType.IsInstanceOfType(item)) // Not sure why, but seems to be important^^
                 {
-                    return InsertArrayItem(ira2, index, item);
+                    InsertArrayItem(ira2, index, item);
                 }
-
-                if (ResolvedData is IRedLegacySingleChannelCurve curve && curve.ElementType.IsAssignableTo(item.GetType()))
+                else if (ResolvedData is IRedLegacySingleChannelCurve curve && curve.ElementType.IsAssignableTo(item.GetType()))
                 {
                     curve.Add(0F, item);
                 }
