@@ -19,8 +19,8 @@ public class ProjectSettingsDialogViewModel : DialogViewModel, IActivatableViewM
 
 
     public ViewModelActivator Activator { get; } = new();
-    public ReactiveCommand<Unit, Unit> Save { get; }
-    public ReactiveCommand<Unit, Unit> Cancel { get; }
+    public override ReactiveCommand<Unit, Unit> OkCommand { get; }
+    public override ReactiveCommand<Unit, Unit> CancelCommand { get; }
 
 
     [Reactive] public Cp77Project Project { get; set; }
@@ -34,8 +34,8 @@ public class ProjectSettingsDialogViewModel : DialogViewModel, IActivatableViewM
         _pluginService = pluginService ?? Locator.Current.GetService<IPluginService>();
         _appViewModel = appViewModel ?? Locator.Current.GetService<AppViewModel>();
 
-        Save = ReactiveCommand.CreateFromTask(ExecuteSave);
-        Cancel = ReactiveCommand.Create(ExecuteCancel);
+        OkCommand = ReactiveCommand.CreateFromTask(ExecuteOk);
+        CancelCommand = ReactiveCommand.Create(ExecuteCancel);
 
         this.WhenActivated(disposables =>
         {
@@ -62,7 +62,7 @@ public class ProjectSettingsDialogViewModel : DialogViewModel, IActivatableViewM
 
     }
 
-    private async Task<Unit> ExecuteSave()
+    private async Task<Unit> ExecuteOk()
     {
         await _projectManager.SaveAsync();
 

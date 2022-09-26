@@ -3,12 +3,11 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
+using System.Reactive;
 using System.Reactive.Linq;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
-using System.Windows.Input;
-using Prism.Commands;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using Splat;
@@ -45,10 +44,12 @@ namespace WolvenKit.ViewModels.Dialogs
 
             _metadata = new SoundEventMetadata();
 
-            SaveCommand = ReactiveCommand.Create(() => Save());
-            CancelCommand = ReactiveCommand.Create(() => FileHandler(null));
+            OkCommand = ReactiveCommand.Create(Save);
+#pragma warning disable IDE0053 // Use expression body for lambda expressions
+            CancelCommand = ReactiveCommand.Create(() => { FileHandler(null); });
+#pragma warning restore IDE0053 // Use expression body for lambda expressions
 
-            AddCommand = new DelegateCommand(AddEvents, CanAddEvents);
+            AddCommand = ReactiveCommand.Create(AddEvents);
 
             LoadEvents();
             LoadInfo();
@@ -131,9 +132,10 @@ namespace WolvenKit.ViewModels.Dialogs
 
         #region commands
 
-        public ICommand CancelCommand { get; private set; }
+        public override ReactiveCommand<Unit, Unit> CancelCommand { get; }
 
-        public ICommand SaveCommand { get; private set; }
+        public override ReactiveCommand<Unit, Unit> OkCommand { get; }
+
         private void Save()
         {
             var modInfoJsonPath = Path.Combine(_projectManager.ActiveProject.PackedModDirectory, "info.json");
@@ -204,8 +206,7 @@ namespace WolvenKit.ViewModels.Dialogs
         //    return ECustomSoundTypeEngine.mod_sfx_2d.ToString();
         //}
 
-        public ICommand AddCommand { get; private set; }
-        private bool CanAddEvents() => true;
+        public ReactiveCommand<Unit, Unit> AddCommand { get; private set; }
         private void AddEvents()
         {
             foreach (var item in SelectedEvents)

@@ -97,26 +97,21 @@
     <Compile Remove="NewFolder1\**" />
     <Compile Remove="Resources\Styles\CustomBase\**" />
     <Compile Remove="Resources\Styles\Custom\**" />
-    <Compile Remove="Views\Wizards\PublishWizard\**" />
     <EmbeddedResource Remove="lib\**" />
     <EmbeddedResource Remove="NewFolder1\**" />
     <EmbeddedResource Remove="Resources\Styles\CustomBase\**" />
     <EmbeddedResource Remove="Resources\Styles\Custom\**" />
-    <EmbeddedResource Remove="Views\Wizards\PublishWizard\**" />
     <None Remove="lib\**" />
     <None Remove="NewFolder1\**" />
     <None Remove="Resources\Styles\CustomBase\**" />
     <None Remove="Resources\Styles\Custom\**" />
-    <None Remove="Views\Wizards\PublishWizard\**" />
     <Page Remove="lib\**" />
     <Page Remove="NewFolder1\**" />
     <Page Remove="Resources\Styles\CustomBase\**" />
     <Page Remove="Resources\Styles\Custom\**" />
-    <Page Remove="Views\Wizards\PublishWizard\**" />
   </ItemGroup>
   <ItemGroup>
     <Compile Remove="Views\Templates\RedFixedPointEditor.cs" />
-    <Compile Remove="Views\Wizards\PublishWizardView.xaml.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="DockStatesDefault.xml">
@@ -1768,10 +1763,6 @@
     <None Remove="sample.mp4" />
     <None Remove="SplashScreen1.png" />
     <None Remove="TaskBarIcon.ico" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Page Remove="Views\Wizards\PublishWizardView.xaml" />
   </ItemGroup>
 
   <ItemGroup>

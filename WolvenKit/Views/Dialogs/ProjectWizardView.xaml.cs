@@ -61,6 +61,11 @@ namespace WolvenKit.Views.Wizards
                     vm => vm.OpenProjectPathCommand,
                     v => v.ProjectPathButton).DisposeWith(disposables);
 
+                this.BindCommand(ViewModel, x => x.OkCommand, x => x.OkButton)
+               .DisposeWith(disposables);
+
+                this.BindCommand(ViewModel, x => x.CancelCommand, x => x.CancelButton)
+                    .DisposeWith(disposables);
 
 
                 Disposable.Create(() => StopTimer()).DisposeWith(disposables);
@@ -70,7 +75,7 @@ namespace WolvenKit.Views.Wizards
 
         private void TextBox_TextChanged(object sender, System.Windows.Controls.TextChangedEventArgs e)
         {
-            if(timer == null)
+            if (timer == null)
             {
                 StartTimer();
             }

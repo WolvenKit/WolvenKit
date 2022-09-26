@@ -40,10 +40,10 @@ public partial class ProjectSettingsDialog : ReactiveUserControl<ProjectSettings
                 .DisposeWith(disposables);
 
 
-            this.BindCommand(ViewModel, x => x.Save, x => x.SaveButton)
+            this.BindCommand(ViewModel, x => x.OkCommand, x => x.OkButton)
                 .DisposeWith(disposables);
 
-            this.BindCommand(ViewModel, x => x.Cancel, x => x.CancelButton)
+            this.BindCommand(ViewModel, x => x.CancelCommand, x => x.CancelButton)
                 .DisposeWith(disposables);
         });
 
@@ -67,9 +67,6 @@ public partial class ProjectSettingsDialog : ReactiveUserControl<ProjectSettings
             });
 
         this.WhenAnyValue(x => x.IsRedModCheckBox.IsChecked)
-            .Subscribe(isChecked =>
-            {
-                ExecuteDeployCheckBox.SetCurrentValue(IsEnabledProperty, isChecked == true);
-            });
+            .Subscribe(isChecked => ExecuteDeployCheckBox.SetCurrentValue(IsEnabledProperty, isChecked == true));
     }
 }
