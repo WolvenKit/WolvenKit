@@ -42,10 +42,7 @@ namespace WolvenKit.Views.Wizards
                     vm => vm.OpenDepotPathCommand,
                     v => v.matdepotButton).DisposeWith(disposables);
 
-            });
 
-            this.WhenActivated(disposables =>
-            {
                 this.BindCommand(
                     ViewModel,
                     vm => vm.OpenLinkCommand,

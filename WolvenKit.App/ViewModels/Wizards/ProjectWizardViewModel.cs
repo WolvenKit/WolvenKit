@@ -43,8 +43,8 @@ namespace WolvenKit.ViewModels.Wizards
         #endregion Constructors
 
         public ReactiveCommand<Unit, Unit> CloseCommand { get; set; }
-        public ReactiveCommand<Unit, Unit> CancelCommand { get; set; }
-        public ReactiveCommand<Unit, Unit> OkCommand { get; set; }
+        public override ReactiveCommand<Unit, Unit> CancelCommand { get; }
+        public override ReactiveCommand<Unit, Unit> OkCommand { get; }
 
         public ICommand CreateCommand { get; set; }
         public ICommand Cancel2Command { get; set; }

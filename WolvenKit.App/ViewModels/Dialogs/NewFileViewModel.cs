@@ -2,6 +2,7 @@ using System;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
+using System.Reactive;
 using System.Reflection;
 using System.Threading.Tasks;
 using System.Windows.Input;
@@ -26,7 +27,7 @@ namespace WolvenKit.ViewModels.Dialogs
 
         public NewFileViewModel()
         {
-            CreateCommand = ReactiveCommand.Create(() =>
+            OkCommand = ReactiveCommand.Create(() =>
             {
                 IsCreating = true;
                 FileHandler(this);
@@ -38,7 +39,9 @@ namespace WolvenKit.ViewModels.Dialogs
                     !string.IsNullOrEmpty(file) &&
                     !File.Exists(path)));
 
-            CancelCommand = ReactiveCommand.Create(() => FileHandler(null));
+#pragma warning disable IDE0053 // Use expression body for lambda expressions
+            CancelCommand = ReactiveCommand.Create(() => { FileHandler(null); });
+#pragma warning restore IDE0053 // Use expression body for lambda expressions
 
             Title = "Create new file";
 
@@ -77,17 +80,7 @@ namespace WolvenKit.ViewModels.Dialogs
 
 
             this.WhenAnyValue(x => x.SelectedFile)
-                .Subscribe(x =>
-                {
-                    if (x is not null)
-                    {
-                        FileName = $"{x.Name.Split(' ').First()}1.{x.Extension.ToLower()}";
-                    }
-                    else
-                    {
-                        FileName = null;
-                    }
-                });
+                .Subscribe(x => FileName = x is not null ? $"{x.Name.Split(' ').First()}1.{x.Extension.ToLower()}" : null);
             this.WhenAnyValue(x => x.FileName)
                 .Subscribe(x =>
                 {
@@ -118,8 +111,8 @@ namespace WolvenKit.ViewModels.Dialogs
 
         [Reactive] public AddFileModel SelectedFile { get; set; }
 
-        public ICommand CreateCommand { get; private set; }
-        public ICommand CancelCommand { get; private set; }
+        public override ReactiveCommand<Unit, Unit> OkCommand { get; }
+        public override ReactiveCommand<Unit, Unit> CancelCommand { get; }
         [Reactive] public string WhyNotCreate { get; set; }
         //private async Task ExecuteCreate()
         //{

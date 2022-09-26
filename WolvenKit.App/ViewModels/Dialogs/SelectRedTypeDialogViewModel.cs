@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Reactive;
 using System.Reflection;
 using System.Windows.Input;
 using ReactiveUI;
@@ -22,12 +23,12 @@ public class SelectRedTypeDialogViewModel : DialogViewModel
 
         Types = new ObservableCollection<string>(_types.Select(t => t.Key));
 
-        CreateCommand = ReactiveCommand.Create(() => DialogHandler(this), CanCreate);
+        OkCommand = ReactiveCommand.Create(() => DialogHandler(this), CanCreate);
         CancelCommand = ReactiveCommand.Create(() => DialogHandler(null));
     }
 
-    public ICommand CreateCommand { get; set; }
-    public ICommand CancelCommand { get; set; }
+    public override ReactiveCommand<Unit, Unit> OkCommand { get; }
+    public override ReactiveCommand<Unit, Unit> CancelCommand { get; }
 
     private IObservable<bool> CanCreate =>
         this.WhenAnyValue(
