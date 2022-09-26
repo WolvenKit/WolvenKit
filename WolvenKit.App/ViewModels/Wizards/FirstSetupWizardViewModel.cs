@@ -11,6 +11,7 @@ using Microsoft.WindowsAPICodePack.Dialogs;
 using Prism.Commands;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
+using WolvenKit.Core.Interfaces;
 using WolvenKit.Functionality.Services;
 using WolvenKit.ViewModels.Dialogs;
 
@@ -21,30 +22,17 @@ namespace WolvenKit.ViewModels.Wizards
     /// </summary>
     public class FirstSetupWizardViewModel : DialogViewModel
     {
-
-        #region Fields
-
-        private const string s_greenBg = "#9600ff00";
-        private const string s_redBg = "#96ff0000";
-        private const string s_wccSha256 = "fb20d7aa45b95446baac9b376533b06b86add732cbe40fd0620e4a4feffae47b";
-        private const string s_wccSha256Patched = "275faa214c6263287deea47ddbcd7afcf6c2503a76ff57f2799bc158f5af7c5d";
-        private const string s_wccSha256Patched2 = "104f50142fde883337d332d319d205701e8a302197360f5237e6bb426984212a";
-
         private readonly ISettingsManager _settingsManager;
-
+        private readonly ILoggerService _loggerService;
         private string _cp77Eexe = "";
-        //private string wccLiteexe = "";
-        //private string witcherexe = "";
-
-        #endregion Fields
-
-        #region Constructors
 
         public FirstSetupWizardViewModel(
-            ISettingsManager settingsManager
+            ISettingsManager settingsManager,
+            ILoggerService loggerService
         )
         {
             _settingsManager = settingsManager;
+            _loggerService = loggerService;
 
             Title = "Settings";
 
@@ -65,8 +53,6 @@ namespace WolvenKit.ViewModels.Wizards
             }
         }
 
-        #endregion Constructors
-
         #region Properties
 
         public string Title { get; set; }
@@ -85,8 +71,6 @@ namespace WolvenKit.ViewModels.Wizards
             );
 
 
-        //private string _wccLitePath;
-
         [Reactive] public bool CheckForUpdates { get; set; }
 
         [Reactive] public string CP77ExePath { get; set; }
@@ -104,42 +88,13 @@ namespace WolvenKit.ViewModels.Wizards
                 Process.Start(ps);
             });
 
-        // public string ExecutablePathBG => string.IsNullOrEmpty(W3ExePath) ? redBG : greenBG;
-        //public bool IsUpdateSystemAvailable { get; private set; }
-
-        //public string W3ExePath { get; set; }
-
-        //public string WccLitePath
-        //{
-        //    get => _wccLitePath;
-        //    set
-        //    {
-        //        _wccLitePath = value;
-
-        //        RaisePropertyChanged(nameof(WccLitePath));
-
-        //        // get the depot path
-        //        if (File.Exists(_wccLitePath) && Path.GetExtension(_wccLitePath) == ".exe" && _wccLitePath.Contains("wcc_lite.exe"))
-        //        {
-        //            var wccDir = new FileInfo(_wccLitePath).Directory.Parent.Parent;
-        //            var wcc_r4data = Path.Combine(wccDir.FullName, "r4data");
-        //            if (Directory.Exists(wcc_r4data))
-        //            {
-        //                _settingsManager.DepotPath = wcc_r4data;
-        //            }
-        //        }
-        //    }
-        //}
-
-        //public string WccLitePathBG => string.IsNullOrEmpty(WccLitePath) ? redBG : greenBG;
-
         #endregion Properties
 
         #region Commands
 
         public ReactiveCommand<Unit, Unit> CloseCommand { get; set; }
-        public ReactiveCommand<Unit, Unit> CancelCommand { get; set; }
-        public ReactiveCommand<Unit, Unit> OkCommand { get; set; }
+        public override ReactiveCommand<Unit, Unit> CancelCommand { get; }
+        public override ReactiveCommand<Unit, Unit> OkCommand { get; }
 
 
         private void ExecuteFinish()
@@ -152,20 +107,10 @@ namespace WolvenKit.ViewModels.Wizards
 
         public ICommand OpenDepotPathCommand { get; private set; }
         public ICommand OpenCP77GamePathCommand { get; private set; }
-        //public ICommand OpenDlcDirectoryCommand { get; private set; }
-        //public ICommand OpenModDirectoryCommand { get; private set; }
-        //public ICommand OpenW3GamePathCommand { get; private set; }
 
-        //public ICommand OpenWccPathCommand { get; private set; }
-
-        //private bool CanOpenDlc() => true;
 
         private bool CanOpenGamePath() => true;
         private bool CanOpenDepotPath() => true;
-
-        //private bool CanOpenMod() => true;
-
-        //private bool CanOpenWccPath() => true;
 
         private void ExecuteOpenCP77GamePath()
         {
@@ -215,44 +160,6 @@ namespace WolvenKit.ViewModels.Wizards
             MaterialDepotPath = result;
         }
 
-        //private void ExecuteOpenDlc()
-        //{
-        //}
-
-        //private async void ExecuteOpenGamePath()
-        //{
-        //    var result = await _openFileService.DetermineFileAsync(new DetermineOpenFileContext
-        //    {
-        //        Title = "Select Witcher 3 executable.",
-        //        Filter = "witcher3.exe|witcher3.exe",
-        //        IsMultiSelect = false
-        //    });
-
-        //    if (result.Result)
-        //    {
-        //        W3ExePath = result.FileName;
-        //    }
-        //}
-
-        //private void ExecuteOpenMod()
-        //{
-        //}
-
-        //private async void ExecuteOpenWccPath()
-        //{
-        //    var result = await _openFileService.DetermineFileAsync(new DetermineOpenFileContext
-        //    {
-        //        Title = "Select wcc_lite.exe.",
-        //        Filter = "wcc_lite.exe|wcc_lite.exe",
-        //        IsMultiSelect = false
-        //    });
-
-        //    if (result.Result)
-        //    {
-        //        WccLitePath = result.FileName;
-        //    }
-        //}
-
         #endregion Commands
 
         #region Methods
@@ -263,13 +170,10 @@ namespace WolvenKit.ViewModels.Wizards
         {
             const string uninstallkey = "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\";
             const string uninstallkey2 = "SOFTWARE\\Wow6432Node\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\";
-            //var w3 = "";
-            //var wcc = "";
+
             var cp77 = "";
             try
             {
-                //StrDelegate w3del = msg => witcherexe = msg;
-                //StrDelegate wccdel = msg => wccLiteexe = msg;
                 void cp77del(string msg) => _cp77Eexe = msg;
 
                 Parallel.ForEach(Registry.LocalMachine.OpenSubKey(uninstallkey)?.GetSubKeyNames(), item =>
@@ -280,24 +184,6 @@ namespace WolvenKit.ViewModels.Wizards
                         ?.GetValue("InstallLocation");
                     if (programName != null && installLocation != null)
                     {
-                        //if (programName.ToString().Contains("Witcher 3 Mod Tools"))
-                        //{
-                        //    if (File.Exists(installLocation.ToString()))
-                        //    {
-                        //        wcc = Directory.GetFiles(installLocation.ToString(), "wcc_lite.exe",
-                        //            SearchOption.AllDirectories).First();
-                        //    }
-                        //}
-
-                        //if (programName.ToString().Contains("The Witcher 3 - Wild Hunt") ||
-                        //    programName.ToString().Contains("The Witcher 3: Wild Hunt"))
-                        //{
-                        //    if (File.Exists(installLocation.ToString()))
-                        //    {
-                        //        w3 = Directory.GetFiles(installLocation.ToString(), "witcher3.exe",
-                        //            SearchOption.AllDirectories).First();
-                        //    }
-                        //}
 
                         if (programName.ToString().Contains("Cyberpunk 2077"))
                         {
@@ -311,9 +197,6 @@ namespace WolvenKit.ViewModels.Wizards
                             }
                         }
                     }
-
-                    //w3del.Invoke(w3);
-                    //wccdel.Invoke(wcc);
                 });
                 Parallel.ForEach(Registry.LocalMachine.OpenSubKey(uninstallkey2)?.GetSubKeyNames(), item =>
                 {
@@ -323,25 +206,6 @@ namespace WolvenKit.ViewModels.Wizards
                         ?.GetValue("InstallLocation");
                     if (programName != null && installLocation != null)
                     {
-                        //if (programName.ToString().Contains("Witcher 3 Mod Tools"))
-                        //{
-                        //    if (Directory.Exists(installLocation.ToString()))
-                        //    {
-                        //        wcc = Directory.GetFiles(installLocation.ToString(), "wcc_lite.exe",
-                        //            SearchOption.AllDirectories).First();
-                        //    }
-                        //}
-
-                        //if (programName.ToString().Contains("The Witcher 3 - Wild Hunt") ||
-                        //    programName.ToString().Contains("The Witcher 3: Wild Hunt"))
-                        //{
-                        //    if (Directory.Exists(installLocation.ToString()))
-                        //    {
-                        //        w3 = Directory.GetFiles(installLocation.ToString(), "witcher3.exe",
-                        //        SearchOption.AllDirectories).First();
-                        //    }
-                        //}
-
                         if (programName.ToString().Contains("Cyberpunk 2077"))
                         {
                             if (Directory.Exists(installLocation.ToString()))
@@ -351,50 +215,18 @@ namespace WolvenKit.ViewModels.Wizards
                             }
                         }
                     }
-
-                    //w3del.Invoke(w3);
-                    //wccdel.Invoke(wcc);
                     cp77del(cp77);
                 });
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                // TODO: Are we intentionally swallowing this?
+                _loggerService.Error(ex);
             }
-
-            //if (File.Exists(witcherexe))
-            //{
-            //    W3ExePath = witcherexe;
-            //}
-
-            //if (File.Exists(wccLiteexe))
-            //{
-            //    WccLitePath = wccLiteexe;
-            //}
 
             if (File.Exists(_cp77Eexe))
             {
                 CP77ExePath = _cp77Eexe;
             }
-
-            // get the depot path
-            // if depot path is empty, get the r4data from wcc_lite
-            //if (string.IsNullOrEmpty(_settingsManager.DepotPath) || !Directory.Exists(_settingsManager.DepotPath))
-            //{
-            //    if (File.Exists(wccLiteexe) && Path.GetExtension(wccLiteexe) == ".exe" && wccLiteexe.Contains("wcc_lite.exe"))
-            //    {
-            //        var directoryInfo = new FileInfo(wccLiteexe).Directory;
-            //        var wccDir = directoryInfo?.Parent?.Parent;
-            //        if (wccDir != null)
-            //        {
-            //            var wccR4data = Path.Combine(wccDir.FullName, "r4data");
-            //            if (Directory.Exists(wccR4data))
-            //            {
-            //                _settingsManager.DepotPath = wccR4data;
-            //            }
-            //        }
-            //    }
-            //}
         }
 
         #endregion Methods

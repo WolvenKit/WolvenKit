@@ -38,6 +38,12 @@ namespace WolvenKit.Views.Dialogs
                     vm => vm.FileName,
                     v => v.FileName.Text)
                     .DisposeWith(disposables);
+
+                this.BindCommand(ViewModel, x => x.OkCommand, x => x.OkButton)
+                    .DisposeWith(disposables);
+
+                this.BindCommand(ViewModel, x => x.CancelCommand, x => x.CancelButton)
+                    .DisposeWith(disposables);
             });
 
         }

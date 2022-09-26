@@ -136,19 +136,20 @@
                 Foreground="{StaticResource WolvenKitRed}"
                 Text="{Binding WhyNotCreate}" />
             <Button
+                x:Name="OkButton"
                 Grid.Column="2"
                 Margin="10,0,0,0"
                 Padding="12,0"
                 HorizontalAlignment="Right"
-                Command="{Binding Cancel2Command}"
-                Content="Cancel" />
+                Background="{StaticResource WolvenKitRed}"
+                Content="Create" />
             <Button
+                x:Name="CancelButton"
                 Grid.Column="3"
                 Margin="10,0,0,0"
                 Padding="12,0"
                 HorizontalAlignment="Right"
-                Command="{Binding CreateCommand}"
-                Content="Create" />
+                Content="Cancel" />
         </Grid>
 
     </Grid>

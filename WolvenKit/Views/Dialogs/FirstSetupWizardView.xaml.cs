@@ -4,6 +4,7 @@ using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Windows;
 using ReactiveUI;
+using Splat;
 using WolvenKit.Core;
 using WolvenKit.ViewModels.Wizards;
 
@@ -14,6 +15,9 @@ namespace WolvenKit.Views.Wizards
         public FirstSetupWizardView()
         {
             InitializeComponent();
+
+            ViewModel = Locator.Current.GetService<FirstSetupWizardViewModel>();
+            DataContext = ViewModel;
 
             this.WhenActivated(disposables =>
             {
@@ -42,10 +46,7 @@ namespace WolvenKit.Views.Wizards
                     vm => vm.OpenDepotPathCommand,
                     v => v.matdepotButton).DisposeWith(disposables);
 
-            });
 
-            this.WhenActivated(disposables =>
-            {
                 this.BindCommand(
                     ViewModel,
                     vm => vm.OpenLinkCommand,
