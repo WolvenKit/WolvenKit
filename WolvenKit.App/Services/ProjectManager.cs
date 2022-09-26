@@ -7,6 +7,7 @@ using System.Xml.Serialization;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using WolvenKit.Common.Services;
+using WolvenKit.Core.Interfaces;
 using WolvenKit.Functionality.ProjectManagement;
 using WolvenKit.ProjectManagement.Project;
 
@@ -20,16 +21,19 @@ namespace WolvenKit.Functionality.Services
         private readonly IRecentlyUsedItemsService _recentlyUsedItemsService;
         private readonly INotificationService _notificationService;
         private readonly ILoggerService _loggerService;
+        private readonly IHashService _hashService;
 
         public ProjectManager(
             IRecentlyUsedItemsService recentlyUsedItemsService,
             INotificationService notificationService,
-            ILoggerService loggerService
+            ILoggerService loggerService,
+            IHashService hashService
         )
         {
             _recentlyUsedItemsService = recentlyUsedItemsService;
             _notificationService = notificationService;
             _loggerService = loggerService;
+            _hashService = hashService;
 
             this.WhenAnyValue(x => x.ActiveProject).Subscribe(async _ =>
             {
@@ -67,6 +71,11 @@ namespace WolvenKit.Functionality.Services
 
         public async Task<bool> LoadAsync(string location)
         {
+            if (IsProjectLoaded)
+            {
+                await SaveAsync();
+            }
+
             IsProjectLoaded = false;
             await ReadFromLocationAsync(location).ContinueWith(_ =>
             {
@@ -113,7 +122,7 @@ namespace WolvenKit.Functionality.Services
                     _ => null
                 };
 
-                return await Task.FromResult(project);
+                return project;
             }
             catch (IOException ex)
             {
@@ -145,17 +154,32 @@ namespace WolvenKit.Functionality.Services
                 //    };
                 //}
                 /*else*/
-                if (typeof(T) == typeof(Cp77Project))
+                if (typeof(T) != typeof(Cp77Project))
                 {
-                    return new Cp77Project(path)
-                    {
-                        Author = obj.Author,
-                        Email = obj.Email,
-                        Name = obj.Name,
-                        Version = obj.Version,
-                    };
+                    return null;
                 }
-                return null;
+
+                var result = new Cp77Project(path)
+                {
+                    Author = obj.Author,
+                    Email = obj.Email,
+                    Name = obj.Name,
+                    Version = obj.Version,
+                    IsRedMod = obj.IsRedMod,
+                    ExecuteDeploy = obj.ExecuteDeploy
+                };
+
+                var projectHashesFile = Path.Combine(result.ProjectDirectory, "project_hashes.txt");
+                if (File.Exists(projectHashesFile) && _hashService is HashService hashService)
+                {
+                    var paths = await File.ReadAllLinesAsync(projectHashesFile);
+                    foreach (var p in paths)
+                    {
+                        hashService.AddProjectPath(p);
+                    }
+                }
+
+                return result;
             }
             catch (Exception e)
             {
@@ -178,6 +202,14 @@ namespace WolvenKit.Functionality.Services
                 var ser = new XmlSerializer(typeof(CP77Mod));
                 ser.Serialize(fs, new CP77Mod(ActiveProject));
 
+                if (_hashService is HashService hashService)
+                {
+                    var projectHashes = hashService.GetProjectHashes();
+                    if (projectHashes.Count > 0)
+                    {
+                        await File.WriteAllLinesAsync(Path.Combine(ActiveProject.ProjectDirectory, "project_hashes.txt"), projectHashes);
+                    }
+                }
             }
             catch (Exception e)
             {
@@ -204,12 +236,19 @@ namespace WolvenKit.Functionality.Services
             {
 
             }
+
             public CP77Mod(EditorProject project)
             {
                 Author = project.Author;
                 Email = project.Email;
                 Name = project.Name;
                 Version = project.Version;
+
+                if (project is Cp77Project cp77Project)
+                {
+                    IsRedMod = cp77Project.IsRedMod;
+                    ExecuteDeploy = cp77Project.ExecuteDeploy;
+                }
             }
 
             public string Author { get; set; }
@@ -219,6 +258,8 @@ namespace WolvenKit.Functionality.Services
             public string Name { get; set; }
 
             public string Version { get; set; }
+            public bool IsRedMod { get; set; }
+            public bool ExecuteDeploy { get; set; }
         }
     }
 }

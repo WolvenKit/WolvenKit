@@ -9,11 +9,8 @@ using WolvenKit.ViewModels.Wizards;
 
 namespace WolvenKit.Views.Wizards
 {
-    public partial class FirstSetupWizardView : ReactiveUserControl<FirstSetupWizardViewModel>
+    public partial class FirstSetupWizardView : IViewFor<FirstSetupWizardViewModel>
     {
-
-        #region Constructors
-
         public FirstSetupWizardView()
         {
             InitializeComponent();
@@ -58,41 +55,8 @@ namespace WolvenKit.Views.Wizards
 
         }
 
-        #endregion Constructors
-        //private void Circle_MouseEnter(object sender, MouseEventArgs e)
-        //{
-        //    var a = (Ellipse)sender;
-        //    _lastaccent = a.Fill;
-        //    //a.Fill = new SolidColorBrush(Colors.AliceBlue);
-        //}
-
-        //private void Circle_MouseLeave(object sender, MouseEventArgs e)
-        //{
-        //    var a = (Ellipse)sender;
-        //    a.Fill = _lastaccent;
-        //}
-
-        //private void Circle_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
-        //{
-        //    var a = (Ellipse)sender;
-        //    //a.Fill = new SolidColorBrush(Colors.Black);
-        //    //ThemeManager.Current.ChangeTheme(Application.Current, "Dark." + a.Name);
-
-        //    try
-        //    {
-        //        var color = ((SolidColorBrush)a.Fill).Color;
-        //        var settings = ServiceLocator.Default.ResolveType<ISettingsManager>();
-        //        settings.SetThemeAccent(color);
-        //    }
-        //    catch
-        //    {
-        //        // swallow
-        //    }
-        //}
-
-        #region Methods
-
-        #region Validation
+        public FirstSetupWizardViewModel ViewModel { get; set; }
+        object IViewFor.ViewModel { get => ViewModel; set => ViewModel = (FirstSetupWizardViewModel)value; }
 
         private void Field_TextChanged(object sender, System.Windows.Controls.TextChangedEventArgs e) => ValidateAllFields();
 
@@ -123,11 +87,6 @@ namespace WolvenKit.Views.Wizards
         private HandyControl.Data.OperationResult<bool> VerifyFolder(string str) => System.IO.Directory.Exists(str)
                 ? HandyControl.Data.OperationResult.Success()
                 : HandyControl.Data.OperationResult.Failed();
-
-        #endregion Methods
-
-
-        #endregion Methods
 
     }
 }

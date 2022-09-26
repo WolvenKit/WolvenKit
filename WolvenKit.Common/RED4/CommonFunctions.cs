@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using WolvenKit.Common.Model.Arguments;
-using WolvenKit.Common.Services;
+using WolvenKit.Core.Interfaces;
 using WolvenKit.RED4.Archive;
 using static WolvenKit.RED4.Types.Enums;
 using DXGI_FORMAT = WolvenKit.Common.DDS.DXGI_FORMAT;

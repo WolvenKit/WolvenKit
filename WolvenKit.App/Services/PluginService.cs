@@ -6,6 +6,7 @@ using System.IO;
 using System.IO.Compression;
 using System.Linq;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Text.Json;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -14,9 +15,10 @@ using ReactiveUI.Fody.Helpers;
 using WolvenKit.Common.Services;
 using WolvenKit.Core;
 using WolvenKit.Core.Compression;
+using WolvenKit.Core.Interfaces;
 using WolvenKit.Interaction;
 using WolvenKit.ViewModels.Dialogs;
-using WolvenKit.ViewModels.HomePage;
+using static Microsoft.WindowsAPICodePack.PortableDevices.PropertySystem.Properties;
 
 namespace WolvenKit.Functionality.Services
 {
@@ -238,31 +240,22 @@ namespace WolvenKit.Functionality.Services
             {
                 return;
             }
+
             var version = response.RequestMessage.RequestUri.LocalPath.Split('/').Last();
 
-            // get asset in a dumb way
-            var pat = $@"\/.*{id.GetFile()}";
-            var r = new Regex(pat, RegexOptions.IgnoreCase);
-            var content = await response.Content.ReadAsStringAsync();
-            var contentUrl = "";
-            foreach (var line in content.Split('\n'))
-            {
-                var m = r.Match(line);
-                if (m.Success)
-                {
-                    contentUrl = m.Value;
-                }
-            }
-
             // download asset
-            if (string.IsNullOrEmpty(contentUrl))
+            var client = new Octokit.GitHubClient(new Octokit.ProductHeaderValue("wolvenkit"));
+            var releases = await client.Repository.Release.GetAll(id.GetUrl().Split('/').First(), id.GetUrl().Split('/').Last());
+            var latest = releases[0];
+            var assets = latest.Assets.ToList();
+            var asset = assets.Where(x => Regex.IsMatch(x.Name, id.GetFile()));
+
+            if (!asset.Any())
             {
-                _loggerService.Error($"Failed to get any asset to download for: {id.GetDisplayName()}");
                 return;
             }
+            var contentUrl = asset.First().BrowserDownloadUrl;
 
-
-            contentUrl = $@"https://github.com{contentUrl}";
             var zipPath = Path.Combine(Path.GetTempPath(), contentUrl.Split('/').Last());
 
             // TODO plugins remove this check it is ambigous

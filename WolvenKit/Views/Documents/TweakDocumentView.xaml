@@ -1,24 +1,25 @@
 <reactiveUi:ReactiveUserControl
-    x:TypeArguments="documents:TweakDocumentViewModel"
     x:Class="WolvenKit.Views.Documents.TweakDocumentView"
-    xmlns:documents="clr-namespace:WolvenKit.ViewModels.Documents;assembly=WolvenKit.App"
-    xmlns:reactiveUi="http://reactiveui.net"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
-    xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
-    xmlns:hc="https://handyorg.github.io/handycontrol"
     xmlns:avalonEdit="http://icsharpcode.net/sharpdevelop/avalonedit"
-    mc:Ignorable="d"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:documents="clr-namespace:WolvenKit.ViewModels.Documents;assembly=WolvenKit.App"
+    xmlns:hc="https://handyorg.github.io/handycontrol"
+    xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:reactiveUi="http://reactiveui.net"
+    xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
+    Margin="-3"
     d:DataContext="{d:DesignInstance Type=documents:TweakDocumentViewModel}"
-    d:DesignHeight="450" d:DesignWidth="800"
-    BorderThickness="1,0,1,1"
+    d:DesignHeight="450"
+    d:DesignWidth="800"
+    x:TypeArguments="documents:TweakDocumentViewModel"
     BorderBrush="{StaticResource BorderAlt}"
-    Margin="-3">
+    BorderThickness="1,0,1,1"
+    mc:Ignorable="d">
 
-    <Grid hc:ThemeManager.RequestedAccentColor="{DynamicResource MahApps.Brushes.Accent3}" Margin="0" >
+    <Grid Margin="0" hc:ThemeManager.RequestedAccentColor="{DynamicResource MahApps.Brushes.Accent3}">
 
         <Grid.Resources>
             <ResourceDictionary>
@@ -33,130 +34,183 @@
             <RowDefinition Height="25" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
-        
+
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="5"/>
-            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="5" />
+            <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
 
         <Menu Background="{StaticResource ContentBackgroundAlt4}">
             <MenuItem />
         </Menu>
 
-        <!-- TEXT EDITOR -->
+        <!--  TEXT EDITOR  -->
         <avalonEdit:TextEditor
+            Name="textEditor"
             Grid.Row="1"
             Margin="0"
-            ShowLineNumbers="True"
+            Background="{StaticResource ContentBackground}"
+            Document="{Binding Document, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
             FontFamily="Consolas"
             FontSize="10pt"
-            Name="textEditor"
             Foreground="{StaticResource ContentForeground}"
-            Background="{StaticResource ContentBackground}"
-            Document = "{Binding Document, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
-            SyntaxHighlighting="{Binding HighlightingDefinition}"
-            />
+            ShowLineNumbers="True"
+            SyntaxHighlighting="{Binding HighlightingDefinition}" />
 
-        <!-- TEXT EDITOR -->
-        <syncfusion:SfGridSplitter Grid.Column="1" Grid.RowSpan="2" HorizontalAlignment="Stretch" BorderBrush="{StaticResource ContentBackgroundAlt4}"/>
+        <!--  TEXT EDITOR  -->
+        <syncfusion:SfGridSplitter
+            Grid.RowSpan="2"
+            Grid.Column="1"
+            HorizontalAlignment="Stretch"
+            BorderBrush="{StaticResource ContentBackgroundAlt4}" />
 
-        <!-- UI EDITOR -->
-        <Grid Grid.Column="2"
-            Grid.Row="0" Grid.RowSpan="2" Margin="0" Background="{StaticResource ContentBackgroundAlt4}">
+        <!--  UI EDITOR  -->
+        <Grid
+            Grid.Row="0"
+            Grid.RowSpan="2"
+            Grid.Column="2"
+            Margin="0"
+            Background="{StaticResource ContentBackgroundAlt4}">
             <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="1"/>
-                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="1" />
+                <RowDefinition Height="*" />
             </Grid.RowDefinitions>
 
             <Grid Grid.Row="0">
 
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="*" />
                 </Grid.RowDefinitions>
 
                 <Grid Grid.Row="1">
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="*" />
                     </Grid.ColumnDefinitions>
 
-                    <hc:TextBox Grid.Column="0"
-                            Margin="13,0,0,3"
-                            x:Name="ValueTextBox"
-                            hc:InfoElement.Title="Value: "
-                            hc:InfoElement.TitlePlacement="Left"/>
-                    
-                    <hc:ComboBox Grid.Column="1"
-                             Margin="10,0,3,3"
-                             x:Name="TypeComboBox"
-                             hc:InfoElement.Title="Type: "
-                             hc:InfoElement.TitlePlacement="Left"
-                             ItemsSource="{Binding Types}"
-                             SelectedItem="{Binding SelectedType}"/>
+                    <hc:TextBox
+                        x:Name="ValueTextBox"
+                        Grid.Column="0"
+                        Margin="13,0,0,3"
+                        hc:InfoElement.Title="Value: "
+                        hc:InfoElement.TitlePlacement="Left" />
+
+                    <hc:ComboBox
+                        x:Name="TypeComboBox"
+                        Grid.Column="1"
+                        Margin="10,0,3,3"
+                        hc:InfoElement.Title="Type: "
+                        hc:InfoElement.TitlePlacement="Left"
+                        ItemsSource="{Binding Types}"
+                        SelectedItem="{Binding SelectedType}" />
                 </Grid>
 
                 <Grid Grid.Row="0">
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="Auto"/>
-                        <ColumnDefinition Width="Auto"/>
-                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="Auto" />
                     </Grid.ColumnDefinitions>
 
-                    <hc:TextBox Grid.Column="0"
-                            Margin="10,5,3,3"
-                            x:Name="NameTextBox"
-                            hc:InfoElement.Title="Name: "
-                            hc:InfoElement.TitlePlacement="Left"/>
+                    <hc:TextBox
+                        x:Name="NameTextBox"
+                        Grid.Column="0"
+                        Margin="10,5,3,3"
+                        hc:InfoElement.Title="Name: "
+                        hc:InfoElement.TitlePlacement="Left" />
 
-                    <Button Grid.Column="1" x:Name="AddButton" ToolTip="Add new flat" Click="AddButton_Click" Margin="0,2,3,0">
-                        <iconPacks:PackIconMaterial Kind="Plus" Foreground="{StaticResource ContentForeground}" Height="13" Width="13" />
+                    <Button
+                        x:Name="AddButton"
+                        Grid.Column="1"
+                        Margin="0,2,3,0"
+                        Click="AddButton_Click"
+                        ToolTip="Add new flat">
+                        <iconPacks:PackIconMaterial
+                            Width="13"
+                            Height="13"
+                            Foreground="{StaticResource ContentForeground}"
+                            Kind="Plus" />
                     </Button>
 
-                    <Button Grid.Column="2" x:Name="AddArrayButton" ToolTip="Add new array" Click="AddButton_Click" Margin="0,2,3,0">
-                        <iconPacks:PackIconMaterial Kind="PlusBoxMultiple" Foreground="{StaticResource ContentForeground}" Height="13" Width="13" />
+                    <Button
+                        x:Name="AddArrayButton"
+                        Grid.Column="2"
+                        Margin="0,2,3,0"
+                        Click="AddButton_Click"
+                        ToolTip="Add new array">
+                        <iconPacks:PackIconMaterial
+                            Width="13"
+                            Height="13"
+                            Foreground="{StaticResource ContentForeground}"
+                            Kind="PlusBoxMultiple" />
                     </Button>
 
-                    <Button Grid.Column="3" x:Name="AddGroupButton" ToolTip="Add new group" Click="AddButton_Click" Margin="0,2,3,0">
-                        <iconPacks:PackIconMaterial Kind="SelectGroup" Foreground="{StaticResource ContentForeground}" Height="13" Width="13" />
+                    <Button
+                        x:Name="AddGroupButton"
+                        Grid.Column="3"
+                        Margin="0,2,3,0"
+                        Click="AddButton_Click"
+                        ToolTip="Add new group">
+                        <iconPacks:PackIconMaterial
+                            Width="13"
+                            Height="13"
+                            Foreground="{StaticResource ContentForeground}"
+                            Kind="SelectGroup" />
                     </Button>
                 </Grid>
-                
-                
-                
+
+
+
             </Grid>
 
-            <Border Grid.Row="1" BorderThickness="0,1,0,0" BorderBrush="{StaticResource BorderAlt}"/>
+            <Border
+                Grid.Row="1"
+                BorderBrush="{StaticResource BorderAlt}"
+                BorderThickness="0,1,0,0" />
 
-            <syncfusion:SfTreeView x:Name="FlatsTree" Grid.Row="2"
-                                   ChildPropertyName="Members"
-                                   BorderBrush="Transparent"
-                                   ShowLines="True"
-                                   ShowRootLines="True"
-                                   AutoExpandMode="AllNodes">
+            <syncfusion:SfTreeView
+                x:Name="FlatsTree"
+                Grid.Row="2"
+                AutoExpandMode="AllNodes"
+                BorderBrush="Transparent"
+                ChildPropertyName="Members"
+                ShowLines="True"
+                ShowRootLines="True">
                 <syncfusion:SfTreeView.ItemTemplate>
                     <DataTemplate>
-                        <Grid  Margin="0,0,0,0" VerticalAlignment="Center">
+                        <Grid Margin="0,0,0,0" VerticalAlignment="Center">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="*" />
                                 <ColumnDefinition Width="*" />
                                 <ColumnDefinition Width="Auto" />
                             </Grid.ColumnDefinitions>
 
-                            <TextBlock Grid.Column="0"  Text="{Binding Name}" VerticalAlignment="Center"/>
-                            <TextBlock Grid.Column="1" Text="{Binding DisplayString}" VerticalAlignment="Center" />
+                            <TextBlock
+                                Grid.Column="0"
+                                VerticalAlignment="Center"
+                                Text="{Binding Name}" />
+                            <TextBlock
+                                Grid.Column="1"
+                                VerticalAlignment="Center"
+                                Text="{Binding DisplayString}" />
 
-                            <Button Grid.Column="2" x:Name="DeleteButton"
-                                    Style="{StaticResource ButtonCustom}"
-                                    Click="DeleteButton_OnClick"
-                                    syncfusion:FocusManagerHelper.FocusedElement="True"
-                                    Padding="8,0"
-                                    Background="Transparent"
-                                    BorderBrush="Transparent">
-                                <iconPacks:PackIconMaterial Kind="Delete" Foreground="#DF2935" Height="12" />
+                            <Button
+                                x:Name="DeleteButton"
+                                Grid.Column="2"
+                                Padding="8,0"
+                                syncfusion:FocusManagerHelper.FocusedElement="True"
+                                Background="Transparent"
+                                BorderBrush="Transparent"
+                                Click="DeleteButton_OnClick"
+                                Style="{StaticResource ButtonCustom}">
+                                <iconPacks:PackIconMaterial
+                                    Height="12"
+                                    Foreground="#DF2935"
+                                    Kind="Delete" />
                             </Button>
                         </Grid>
                     </DataTemplate>

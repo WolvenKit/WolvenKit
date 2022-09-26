@@ -6,8 +6,9 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:hc="https://handyorg.github.io/handycontrol"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:other="clr-namespace:WolvenKit.Functionality.Other;assembly=WolvenKit.App"
     xmlns:svgc="http://sharpvectors.codeplex.com/svgc/"
-    xmlns:syncfusion="http://schemas.syncfusion.com/wpf" xmlns:other="clr-namespace:WolvenKit.Functionality.Other;assembly=WolvenKit.App"
+    xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
     d:DesignHeight="450"
     d:DesignWidth="800"
     mc:Ignorable="d">

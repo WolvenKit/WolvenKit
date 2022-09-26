@@ -1,6 +1,9 @@
 using System;
 using System.IO;
+using Splat;
 using WolvenKit.Common;
+using WolvenKit.Common.Services;
+using WolvenKit.Functionality.Services;
 
 
 namespace WolvenKit.ProjectManagement.Project
@@ -96,8 +99,8 @@ namespace WolvenKit.ProjectManagement.Project
         {
             get
             {
-                //var dir = Path.Combine(PackedRootDirectory, "archive", "pc", "mod"/*, $"mod{Name}"*/);
-                var dir = Path.Combine(PackedModDirectory, "archives");
+                var dir = IsRedMod ? Path.Combine(PackedModDirectory, "archives") : Path.Combine(PackedRootDirectory, "archive", "pc", "mod");
+
                 if (!Directory.Exists(dir))
                 {
                     Directory.CreateDirectory(dir);
@@ -149,6 +152,9 @@ namespace WolvenKit.ProjectManagement.Project
             }
         }
 
+        public bool IsRedMod { get; set; }
+        public bool ExecuteDeploy { get; set; }
+
         
 
         #region methods
@@ -162,6 +168,26 @@ namespace WolvenKit.ProjectManagement.Project
             _ = RawDirectory;
             _ = TweakDirectory;
             _ = ScriptDirectory;
+        }
+
+        private void LoadProjectHashes()
+        {
+            if (Locator.Current.GetService<IHashService>() is HashService hashService)
+            {
+                hashService.ClearProjectHashes();
+
+                var hashPath = Path.Combine(FileDirectory, "project_hashes.txt");
+                if (!File.Exists(hashPath))
+                {
+                    return;
+                }
+
+                var paths = File.ReadAllLines(hashPath);
+                foreach (var path in paths)
+                {
+                    hashService.AddProjectPath(path);
+                }
+            }
         }
 
         public object Clone()

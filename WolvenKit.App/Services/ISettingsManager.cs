@@ -69,6 +69,7 @@ namespace WolvenKit.Functionality.Services
 
         string GetRED4GameLaunchOptions();
 
+        public string GetRED4GameLegacyModDir();
         public string GetRED4GameModDir();
 
 

@@ -1,7 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using WolvenKit.Common.FNV1A;
 using WolvenKit.Core.CRC;
 using WolvenKit.RED4.Types;
 
@@ -132,6 +130,8 @@ namespace WolvenKit.RED4.TweakDB
                     if (values.ContainsKey(propertyInfo.RedName))
                     {
                         instance.SetProperty(propertyInfo.RedName, values[propertyInfo.RedName]);
+
+                        values.Remove(propertyInfo.RedName);
                     }
                 }
                 else
@@ -147,6 +147,15 @@ namespace WolvenKit.RED4.TweakDB
                     {
                         instance.SetProperty(propertyInfo.RedName, value);
                     }
+                }
+            }
+
+            if (values.Count > 0)
+            {
+                foreach (var pair in values)
+                {
+                    typeInfo.AddDynamicProperty(pair.Key, RedReflection.GetRedTypeFromCSType(pair.Value.GetType(), Flags.Empty));
+                    instance.SetProperty(pair.Key, pair.Value);
                 }
             }
 

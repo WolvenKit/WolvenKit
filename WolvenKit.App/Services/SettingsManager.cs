@@ -9,8 +9,8 @@ using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using Splat;
 using WolvenKit.Common;
-using WolvenKit.Common.Services;
 using WolvenKit.Core;
+using WolvenKit.Core.Interfaces;
 
 namespace WolvenKit.Functionality.Services
 {
@@ -265,6 +265,17 @@ namespace WolvenKit.Functionality.Services
         public string GetRED4GameLaunchCommand() => CP77LaunchCommand;
 
         public string GetRED4GameLaunchOptions() => CP77LaunchOptions;
+
+        public string GetRED4GameLegacyModDir()
+        {
+            var dir = Path.Combine(GetRED4GameRootDir(), "archive", "pc", "mod");
+            if (!Directory.Exists(dir))
+            {
+                Directory.CreateDirectory(dir);
+            }
+
+            return dir;
+        }
 
         public string GetRED4GameModDir()
         {

@@ -3,6 +3,7 @@ using DynamicData;
 using Microsoft.Extensions.Logging;
 using WolvenKit.Common;
 using WolvenKit.Common.Services;
+using WolvenKit.Core.Interfaces;
 
 namespace WolvenKit.CLI.Services
 {

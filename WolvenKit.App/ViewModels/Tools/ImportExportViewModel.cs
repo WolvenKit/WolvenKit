@@ -438,12 +438,13 @@ namespace WolvenKit.ViewModels.Tools
                 switch (argType)
                 {
                     case nameof(MeshExportArgs.MultiMeshMeshes):
-                        fetchExtension = ERedExtension.mesh;
                         selectedEntries = meshExportArgs.MultiMeshMeshes;
+                        fetchExtension = ERedExtension.mesh;
                         break;
 
                     case nameof(MeshExportArgs.MultiMeshRigs):
                         selectedEntries = meshExportArgs.MultiMeshRigs;
+                        fetchExtension = ERedExtension.rig;
                         break;
 
                     case nameof(MeshExportArgs.Rig):
@@ -662,7 +663,7 @@ namespace WolvenKit.ViewModels.Tools
                 var toBeExported = ExportableItems.ToList();
                 foreach (var item in toBeExported)
                 {
-                    success = await ExportSingle(item);
+                    success = ExportSingle(item);
                 }
             }
             if (IsConvertsSelected)
@@ -670,7 +671,7 @@ namespace WolvenKit.ViewModels.Tools
                 var toBeConverted = ConvertableItems.ToList();
                 foreach (var itemViewModel in toBeConverted)
                 {
-                    success = await Task.Run(() => ConvertSingle(itemViewModel));
+                    success = await ConvertSingle(itemViewModel);
                 }
 
             }
@@ -682,7 +683,7 @@ namespace WolvenKit.ViewModels.Tools
             }
         }
 
-        private async Task<bool> ImportWavs(List<string> wavs)
+        private Task<bool> ImportWavs(List<string> wavs)
         {
             var proj = _projectManager.ActiveProject;
             if (_gameController.GetController() is RED4Controller cp77Controller)
@@ -697,21 +698,21 @@ namespace WolvenKit.ViewModels.Tools
                     proj.RawDirectory,
                     true);
 
-                return await Task.Run(() => opusTools.ImportWavs(wavs.ToArray()));
+                return Task.Run(() => opusTools.ImportWavs(wavs.ToArray()));
             }
 
-            return false;
+            return Task.FromResult(false);
         }
 
         /// <summary>
         /// Import Single item
         /// </summary>
         /// <param name="item"></param>
-        private async Task<bool> ImportSingle(ImportableItemViewModel item)
+        private Task<bool> ImportSingle(ImportableItemViewModel item)
         {
             if (_gameController.GetController() is not RED4Controller cp77Controller)
             {
-                return false;
+                return Task.FromResult(false);
             }
 
             var proj = _projectManager.ActiveProject;
@@ -733,7 +734,7 @@ namespace WolvenKit.ViewModels.Tools
                     if (!_pluginService.IsInstalled(EPlugin.redmod))
                     {
                         _loggerService.Error("Redmod plugin needs to be installed to import animations");
-                        return false;
+                        return Task.FromResult(false);
                     }
 
                     reImportArgs.Depot = proj.ModDirectory;
@@ -744,17 +745,17 @@ namespace WolvenKit.ViewModels.Tools
                 var rawDir = new DirectoryInfo(proj.RawDirectory);
                 var redrelative = new RedRelativePath(rawDir, fi.GetRelativePath(rawDir));
 
-                return await Task.Run(() => _modTools.Import(redrelative, settings, new DirectoryInfo(proj.ModDirectory)));
+                return _modTools.Import(redrelative, settings, new DirectoryInfo(proj.ModDirectory));
             }
 
-            return false;
+            return Task.FromResult(false);
         }
 
         /// <summary>
         /// Export Single Item
         /// </summary>
         /// <param name="item"></param>
-        private async Task<bool> ExportSingle(ExportableItemViewModel item)
+        private bool ExportSingle(ExportableItemViewModel item)
         {
             var proj = _projectManager.ActiveProject;
             var fi = new FileInfo(item.FullName);
@@ -810,9 +811,9 @@ namespace WolvenKit.ViewModels.Tools
                     }
                 }
                 var settings = new GlobalExportArgs().Register(item.Properties as ExportArgs);
-                return await Task.Run(() => _modTools.Export(fi, settings,
+                return _modTools.Export(fi, settings,
                     new DirectoryInfo(proj.ModDirectory),
-                    new DirectoryInfo(proj.RawDirectory)));
+                    new DirectoryInfo(proj.RawDirectory));
             }
 
             return false;
@@ -862,7 +863,7 @@ namespace WolvenKit.ViewModels.Tools
                     var toBeConverted = ExportableItems.Where(_ => _.IsChecked).ToList();
                     foreach (var item in toBeConverted)
                     {
-                        success = await ExportSingle(item);
+                        success = await Task.Run(() => ExportSingle(item));
                     }
                 }
                 if (IsConvertsSelected)

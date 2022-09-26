@@ -105,14 +105,10 @@ namespace WolvenKit.Common.Model.Arguments
     /// </summary>
     public class GltfImportArgs : ImportArgs
     {
-        [Category("Default Import Settings")]
-        [Display(Name = "Use selected base mesh")]
-        [Description("If checked the specified mesh file will be used for importing.")]
-        public bool SelectBase { get; set; } = false;
-
         [Category("Import Settings")]
         [Display(Name = "Import Material.Json Only")]
-        [Description("If selected only materials will be updated from a Material.json file. Mesh geometry will remain unchanged.")] public bool importMaterialOnly { get; set; } = false;
+        [Description("If selected only materials will be updated from a Material.json file. Mesh geometry will remain unchanged.")]
+        public bool importMaterialOnly { get; set; } = false;
 
         /// <summary>
         /// Validation type for the selected GLB/GLTF.
@@ -129,29 +125,49 @@ namespace WolvenKit.Common.Model.Arguments
         [Display(Name = "Target File Format")]
         public GltfImportAsFormat importFormat { get; set; } = GltfImportAsFormat.Mesh;
 
-        /// <summary>
-        /// Selected Rig for Mesh WithRig Export. ALWAYS USE THE FIRST ENTRY IN THE LIST.
-        /// </summary>
-        [Category("WithRig Settings")]
-        [Display(Name = "Select Rig")]
-        [Description("Select a rig to import within the mesh.")]
-        public List<FileEntry> Rig { get; set; }
 
-        /// <summary>
-        /// Selected Rig for Mesh WithRig Export. ALWAYS USE THE FIRST ENTRY IN THE LIST.
-        /// </summary>
-        [Category("Import Settings")]
-        [Display(Name = "Select Base Mesh")]
-        [Description("Select a base mesh to import on.")]
-        public List<FileEntry> BaseMesh { get; set; }
 
         /// <summary>
         /// Fills empty sub meshes with dummy data
         /// </summary>
         [Category("Import Settings")]
-        [Display(Name = "Preserve Submesh Order")]
-        [Description("If selected empty submesh slots will be filled with placeholder data. This preserves the original submesh-material index. (Recommended)")]
-        public bool FillEmpty { get; set; } = true;
+        [Display(Name = "Preserve Submesh Order (experimental)")]
+        [Description("If selected empty submesh slots will be filled with placeholder data. This preserves the original submesh-material index.")]
+        public bool FillEmpty { get; set; } = false;
+
+        /// <summary>
+        /// Selected Rig for Mesh WithRig Export. ALWAYS USE THE FIRST ENTRY IN THE LIST.
+        /// </summary>
+        [Category("Import Settings")]
+        [Display(Name = "Select base mesh (experimental)")]
+        [Description("Select a base mesh to import on.")]
+        public List<FileEntry> BaseMesh { get; set; }
+
+        /// <summary>
+        /// Uses a selected mesh from archives as base mesh for import instead of mod project archive directory mesh
+        /// </summary>
+        [Category("Import Settings")]
+        [Display(Name = "Use selected base mesh (experimental)")]
+        [Description("If checked the specified mesh file will be used for importing.")]
+        public bool SelectBase { get; set; } = false;
+
+        /// <summary>
+        /// Selected Rig for Mesh WithRig Export. ALWAYS USE THE FIRST ENTRY IN THE LIST.
+        /// </summary>
+        [Category("WithRig Settings")]
+        [Display(Name = "Select rig (experimental)")]
+        [Description("Select a rig to import within the mesh.")]
+        public List<FileEntry> Rig { get; set; }
+
+
+        /// <summary>
+        /// UNKNOWN
+        /// </summary>
+        [Category("WithRig Settings")]
+        [Display(Name = "Use selected rig (experimental)")]
+        [Description("If selected the corresponding archive file will be used for importing.")]
+        public bool KeepRig { get; set; } = false;
+
         /// <summary>
         /// List of Archives for Morphtarget Import.
         /// </summary>

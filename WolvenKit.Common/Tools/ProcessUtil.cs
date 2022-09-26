@@ -13,7 +13,7 @@ public static class ProcessUtil
     /// <param name="fileName"></param>
     /// <param name="arguments"></param>
     /// <returns>true if exit code is 0</returns>
-    public static async Task<bool> RunProcessAsync(string fileName, params string[] arguments)
+    public static async Task<bool> RunProcessAsync(string fileName, string arguments, string workingDir = "")
     {
         Process p;
         var eventHandled = new TaskCompletionSource<bool>();
@@ -23,7 +23,11 @@ public static class ProcessUtil
             try
             {
                 p.StartInfo.FileName = fileName;
-                p.StartInfo.Arguments = string.Join(' ', arguments);
+                p.StartInfo.Arguments = arguments;
+                if (!string.IsNullOrEmpty(workingDir))
+                {
+                    p.StartInfo.WorkingDirectory = workingDir;
+                }
 
                 p.StartInfo.CreateNoWindow = true;
                 p.StartInfo.UseShellExecute = false;
@@ -32,14 +36,8 @@ public static class ProcessUtil
 
                 p.EnableRaisingEvents = true;
 
-                p.OutputDataReceived += (s, e) =>
-                {
-                    Log.Information(e.Data);
-                };
-                p.ErrorDataReceived += (s, e) =>
-                {
-                    Log.Error(e.Data);
-                };
+                p.OutputDataReceived += (s, e) => Log.Information(e.Data);
+                p.ErrorDataReceived += (s, e) => Log.Error(e.Data);
 
                 //p.Exited += new EventHandler(myProcess_Exited);
                 p.Exited += (s, e) =>

@@ -13,7 +13,7 @@ using System.Windows.Media.Imaging;
 using HelixToolkit.SharpDX.Core;
 using HelixToolkit.Wpf.SharpDX;
 using Splat;
-using WolvenKit.Common.Services;
+using WolvenKit.Core.Interfaces;
 using WolvenKit.Functionality.Extensions;
 using WolvenKit.Functionality.Helpers;
 using WolvenKit.Functionality.Other;

@@ -2,6 +2,7 @@ using System;
 using DynamicData;
 using WolvenKit.Common;
 using WolvenKit.Common.Services;
+using WolvenKit.Core.Interfaces;
 
 namespace WolvenKit
 {

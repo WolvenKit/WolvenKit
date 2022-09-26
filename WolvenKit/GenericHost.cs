@@ -6,6 +6,7 @@ using Splat.Microsoft.Extensions.DependencyInjection;
 using WolvenKit.Common;
 using WolvenKit.Common.Interfaces;
 using WolvenKit.Common.Services;
+using WolvenKit.Core.Interfaces;
 using WolvenKit.Functionality.Controllers;
 using WolvenKit.Functionality.ProjectManagement;
 using WolvenKit.Functionality.Services;
@@ -95,15 +96,15 @@ namespace WolvenKit
                     services.AddSingleton<RibbonViewModel>();
                     services.AddSingleton<IViewFor<RibbonViewModel>, RibbonView>();
 
+                    services.AddSingleton<MenuBarViewModel>();
+                    services.AddSingleton<IViewFor<MenuBarViewModel>, MenuBarView>();
+
                     services.AddSingleton<StatusBarViewModel>();
                     services.AddSingleton<IViewFor<StatusBarViewModel>, StatusBarView>();
 
                     #endregion
 
                     #region dialogs
-
-                    services.AddTransient<DialogHostViewModel>();
-                    services.AddTransient<IViewFor<DialogHostViewModel>, DialogHostView>();
 
                     //services.AddTransient<CreateClassDialogViewModel>();
                     //services.AddTransient<IViewFor<CreateClassDialogViewModel>, CreateClassDialog>();

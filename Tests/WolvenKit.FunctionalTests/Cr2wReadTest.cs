@@ -1,8 +1,9 @@
-#define IS_PARALLEL
+//#define IS_PARALLEL
 
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -25,6 +26,7 @@ namespace WolvenKit.FunctionalTests
         [ClassInitialize]
         public static void SetupClass(TestContext context) => Setup(context);
 
+        private const bool TEST_EXISTING = true;
         private const bool DECOMPRESS_BUFFERS = false;
 
         #endregion Methods
@@ -550,27 +552,52 @@ namespace WolvenKit.FunctionalTests
 
         private static void Test_Extension(string extension)
         {
+            ArgumentNullException.ThrowIfNull(s_bm);
             var resultDir = Path.Combine(Environment.CurrentDirectory, s_testResultsDirectory);
             Directory.CreateDirectory(resultDir);
 
             // Run Test
-            var results = Read_Archive_Items(s_groupedFiles[extension]).ToList();
+            List<ReadTestResult> results = new();
+            List<FileEntry> filesToTest = new();
+            var resultPath = Path.Combine(resultDir, $"{extension[1..]}.csv");
+            if (File.Exists(resultPath) && TEST_EXISTING)
+            {
+                ulong hash;
+                foreach (var line in File.ReadAllLines(resultPath)
+                             .Skip(1)
+                             .Where(_ => !string.IsNullOrEmpty(_)))
+                {
+                    var hashStr = line.Split(',').First();
+                    if (ulong.TryParse(hashStr, out hash) || ulong.TryParse(hashStr.TrimStart('0', 'x'), NumberStyles.HexNumber, null, out hash))
+                    {
+                        if (s_bm.Lookup(hash).Value is FileEntry entry)
+                        {
+                            filesToTest.Add(entry);
+                        }
+                    }
+                }
+            }
+            else
+            {
+                filesToTest = s_groupedFiles[extension].ToList();
+            }
+
+            results = Read_Archive_Items(filesToTest).ToList();
+
+            // Evaluate
+            var successCount = results.Count(r => r.Success);
 
             // Write
             if (s_writeToFile)
             {
                 if (results.Any(r => !r.Success))
                 {
-                    var resultPath = Path.Combine(resultDir, $"{extension[1..]}.csv");
                     var csv = TestResultAsCsv(results.Where(r => !r.Success));
                     File.WriteAllText(resultPath, csv);
-                    Console.Write(csv);
                 }
             }
 
             // Logging
-            // Evaluate
-            var successCount = results.Count(r => r.Success);
             var totalCount = s_groupedFiles[extension].Count();
             var sb = new StringBuilder();
             var msg = "";

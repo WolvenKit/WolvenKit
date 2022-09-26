@@ -7,7 +7,7 @@ using ICSharpCode.AvalonEdit.Highlighting;
 using ICSharpCode.AvalonEdit.Utils;
 using ReactiveUI.Fody.Helpers;
 using Splat;
-using WolvenKit.Common.Services;
+using WolvenKit.Core.Interfaces;
 
 namespace WolvenKit.ViewModels.Documents
 {
@@ -52,7 +52,7 @@ namespace WolvenKit.ViewModels.Documents
             return true;
         }
 
-        public override async Task<bool> OpenFileAsync(string path)
+        public override Task<bool> OpenFileAsync(string path)
         {
             _isInitialized = false;
 
@@ -62,7 +62,7 @@ namespace WolvenKit.ViewModels.Documents
             FilePath = path;
             _isInitialized = true;
 
-            return await Task.FromResult(true);
+            return Task.FromResult(true);
         }
 
         private void LoadDocument(string paramFilePath)

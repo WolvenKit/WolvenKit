@@ -203,7 +203,15 @@ public partial class RedBaseClass
         {
             if (property.Value is IRedCloneable cl)
             {
-                other._properties[property.Key] = (IRedType)cl.DeepCopy();
+                var copy = (IRedType)cl.DeepCopy();
+
+                // TODO do we need to set more parents like this?
+                if (copy is IRedBufferWrapper buffer)
+                {
+                    buffer.Buffer.Parent = other;
+                }
+
+                other._properties[property.Key] = copy;
             }
             else
             {

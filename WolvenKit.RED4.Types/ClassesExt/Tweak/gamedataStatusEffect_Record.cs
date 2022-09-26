@@ -3,15 +3,7 @@ namespace WolvenKit.RED4.Types
 {
 	public partial class gamedataStatusEffect_Record
 	{
-		[RED("actionRestriction")]
-		[REDProperty(IsIgnored = true)]
-		public TweakDBID ActionRestriction
-		{
-			get => GetPropertyValue<TweakDBID>();
-			set => SetPropertyValue<TweakDBID>(value);
-		}
-		
-		[RED("additionalParam")]
+        [RED("additionalParam")]
 		[REDProperty(IsIgnored = true)]
 		public CName AdditionalParam
 		{
@@ -19,7 +11,15 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CName>(value);
 		}
 		
-		[RED("duration")]
+		[RED("AIData")]
+		[REDProperty(IsIgnored = true)]
+		public TweakDBID AIData
+		{
+			get => GetPropertyValue<TweakDBID>();
+			set => SetPropertyValue<TweakDBID>(value);
+		}
+
+        [RED("duration")]
 		[REDProperty(IsIgnored = true)]
 		public TweakDBID Duration
 		{
@@ -43,9 +43,49 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CArray<CName>>(value);
 		}
 		
+		[RED("immunityStats")]
+		[REDProperty(IsIgnored = true)]
+		public CArray<TweakDBID> ImmunityStats
+		{
+			get => GetPropertyValue<CArray<TweakDBID>>();
+			set => SetPropertyValue<CArray<TweakDBID>>(value);
+		}
+		
+		[RED("isAffectedByTimeDilationNPC")]
+		[REDProperty(IsIgnored = true)]
+		public CBool IsAffectedByTimeDilationNPC
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+		
+		[RED("isAffectedByTimeDilationPlayer")]
+		[REDProperty(IsIgnored = true)]
+		public CBool IsAffectedByTimeDilationPlayer
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+		
 		[RED("maxStacks")]
 		[REDProperty(IsIgnored = true)]
 		public TweakDBID MaxStacks
+		{
+			get => GetPropertyValue<TweakDBID>();
+			set => SetPropertyValue<TweakDBID>(value);
+		}
+		
+		[RED("packages")]
+		[REDProperty(IsIgnored = true)]
+		public CArray<TweakDBID> Packages
+		{
+			get => GetPropertyValue<CArray<TweakDBID>>();
+			set => SetPropertyValue<CArray<TweakDBID>>(value);
+		}
+		
+		[RED("playerData")]
+		[REDProperty(IsIgnored = true)]
+		public TweakDBID PlayerData
 		{
 			get => GetPropertyValue<TweakDBID>();
 			set => SetPropertyValue<TweakDBID>(value);
@@ -91,12 +131,44 @@ namespace WolvenKit.RED4.Types
 			set => SetPropertyValue<CBool>(value);
 		}
 		
+		[RED("SFX")]
+		[REDProperty(IsIgnored = true)]
+		public CArray<TweakDBID> SFX
+		{
+			get => GetPropertyValue<CArray<TweakDBID>>();
+			set => SetPropertyValue<CArray<TweakDBID>>(value);
+		}
+		
 		[RED("statusEffectType")]
 		[REDProperty(IsIgnored = true)]
 		public TweakDBID StatusEffectType
 		{
 			get => GetPropertyValue<TweakDBID>();
 			set => SetPropertyValue<TweakDBID>(value);
+		}
+		
+		[RED("stopActiveSfxOnDeactivate")]
+		[REDProperty(IsIgnored = true)]
+		public CBool StopActiveSfxOnDeactivate
+		{
+			get => GetPropertyValue<CBool>();
+			set => SetPropertyValue<CBool>(value);
+		}
+		
+		[RED("uiData")]
+		[REDProperty(IsIgnored = true)]
+		public TweakDBID UiData
+		{
+			get => GetPropertyValue<TweakDBID>();
+			set => SetPropertyValue<TweakDBID>(value);
+		}
+		
+		[RED("VFX")]
+		[REDProperty(IsIgnored = true)]
+		public CArray<TweakDBID> VFX
+		{
+			get => GetPropertyValue<CArray<TweakDBID>>();
+			set => SetPropertyValue<CArray<TweakDBID>>(value);
 		}
 	}
 }

@@ -6,6 +6,7 @@ using WolvenKit.Common.Model;
 using WolvenKit.RED4.Types;
 using WolvenKit.RED4.TweakDB;
 using WolvenKit.RED4.TweakDB.Helper;
+using System.Threading.Tasks;
 
 namespace WolvenKit.Common.Services
 {
@@ -18,6 +19,9 @@ namespace WolvenKit.Common.Services
         private static readonly TweakDBStringHelper s_stringHelper = new();
         private static TweakDB s_tweakDb = new();
 
+        private bool _isLoading;
+
+        public bool IsLoaded;
         public event EventHandler Loaded;
 
         public TweakDBService()
@@ -48,17 +52,31 @@ namespace WolvenKit.Common.Services
             }
         }
 
-        public void LoadDB(string path)
+        public Task LoadDB(string path)
         {
-            using var fh = File.OpenRead(path);
-            using var reader = new TweakDBReader(fh);
-
-            if (reader.ReadFile(out var tweakDb) == WolvenKit.RED4.TweakDB.EFileReadErrorCodes.NoError)
+            if (IsLoaded || _isLoading)
             {
-                s_tweakDb = tweakDb;
-                AddCustomRecords();
-                OnLoadDB();
+                return Task.CompletedTask;
             }
+
+            _isLoading = true;
+
+            return Task.Run(() =>
+            {
+                using var fh = File.OpenRead(path);
+                using var reader = new TweakDBReader(fh);
+
+                if (reader.ReadFile(out var tweakDb) == WolvenKit.RED4.TweakDB.EFileReadErrorCodes.NoError)
+                {
+                    s_tweakDb = tweakDb;
+                    AddCustomRecords();
+                    OnLoadDB();
+
+                    IsLoaded = true;
+                }
+
+                _isLoading = false;
+            });
         }
 
         // just for fun...

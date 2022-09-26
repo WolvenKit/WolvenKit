@@ -1,20 +1,22 @@
-<UserControl x:Class="WolvenKit.Views.Editors.RedCurveEditor"
-             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:WolvenKit.Views.Editors"
-             xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
-             mc:Ignorable="d" 
-             d:DesignHeight="100" d:DesignWidth="400">
+<UserControl
+    x:Class="WolvenKit.Views.Editors.RedCurveEditor"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:WolvenKit.Views.Editors"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
+    d:DesignHeight="100"
+    d:DesignWidth="400"
+    mc:Ignorable="d">
 
     <Grid DataContext="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:RedCurveEditor}}}">
 
-        <Button x:Name="CurveEditorButton"
-                Content="Open Curve Editor"
-                syncfusion:FocusManagerHelper.FocusedElement="True"
-                Click="CurveEditorButton_OnClick"
-                />
+        <Button
+            x:Name="CurveEditorButton"
+            syncfusion:FocusManagerHelper.FocusedElement="True"
+            Click="CurveEditorButton_OnClick"
+            Content="Open Curve Editor" />
 
     </Grid>
 </UserControl>
