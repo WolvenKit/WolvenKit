@@ -30,25 +30,18 @@ namespace WolvenKit.ViewModels.Wizards
             Title = "Project Wizard";
 
 
-            OpenProjectPathCommand = new DelegateCommand(ExecuteOpenProjectPath, CanOpenProjectPath);
+            OpenProjectPathCommand = ReactiveCommand.Create(ExecuteOpenProjectPath);
 
             CloseCommand = ReactiveCommand.Create(() => { });
-            CreateCommand = ReactiveCommand.Create(() => FileHandler(this), CanExecute);
-            Cancel2Command = ReactiveCommand.Create(() => FileHandler(null));
+#pragma warning disable IDE0053 // Use expression body for lambda expressions
+            CreateCommand = ReactiveCommand.Create(() => { FileHandler(this); }, CanExecute);
+            CancelCommand = ReactiveCommand.Create(() => { FileHandler(null); });
+#pragma warning restore IDE0053 // Use expression body for lambda expressions
 
             ProjectType = new ObservableCollection<string> { "Cyberpunk 2077" };
-            //ProjectType.Add("Witcher 3");
         }
 
         #endregion Constructors
-
-        public ReactiveCommand<Unit, Unit> CloseCommand { get; set; }
-        public override ReactiveCommand<Unit, Unit> CancelCommand { get; }
-        public override ReactiveCommand<Unit, Unit> OkCommand { get; }
-
-        public ICommand CreateCommand { get; set; }
-        public ICommand Cancel2Command { get; set; }
-        [Reactive] public string WhyNotCreate { get; set; }
 
         #region Properties
 
@@ -84,11 +77,17 @@ namespace WolvenKit.ViewModels.Wizards
 
         #endregion Properties
 
-        public ICommand OpenProjectPathCommand { get; private set; }
+        public ReactiveCommand<Unit, Unit> CloseCommand { get; set; }
 
+        public override ReactiveCommand<Unit, Unit> CancelCommand { get; }
 
+        public override ReactiveCommand<Unit, Unit> OkCommand { get; }
 
-        private bool CanOpenProjectPath() => true;
+        public ReactiveCommand<Unit, Unit> CreateCommand { get; set; }
+
+        [Reactive] public string WhyNotCreate { get; set; }
+
+        public ReactiveCommand<Unit, Unit> OpenProjectPathCommand { get; private set; }
 
         private void ExecuteOpenProjectPath()
         {
