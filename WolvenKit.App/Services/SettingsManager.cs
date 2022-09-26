@@ -50,8 +50,9 @@ namespace WolvenKit.Functionality.Services
                 nameof(ShowFilePreview),
                 nameof(ReddbHash),
                 nameof(TreeViewGroups),
-                nameof(TreeViewGroupSize)
-              )
+                nameof(TreeViewGroupSize),
+                nameof(ShowAdvancedOptions)
+                )
               .Subscribe(_ =>
               {
                   if (_isLoaded)
@@ -224,6 +225,15 @@ namespace WolvenKit.Functionality.Services
 
         #endregion
 
+        #region Import / Export
+
+        [Category("Import / Export")]
+        [Display(Name = "Show advanced Options")]
+        [Reactive]
+        public bool ShowAdvancedOptions { get; set; }
+
+        #endregion Import / Export
+
         #endregion properties
 
         #region methods
@@ -332,6 +342,8 @@ namespace WolvenKit.Functionality.Services
             TreeViewGroups = settings.TreeViewGroups;
             TreeViewGroupSize = settings.TreeViewGroupSize;
 
+            ShowAdvancedOptions = settings.ShowAdvancedOptions;
+
             if (settings.SettingsVersion != 2)
             {
                 MigrateFromV1ToV2();
@@ -354,6 +366,8 @@ namespace WolvenKit.Functionality.Services
 
         public bool TreeViewGroups { get; set; }
         public uint TreeViewGroupSize { get; set; }
+
+        public bool ShowAdvancedOptions { get; set; }
 
         public SettingsManager ReconfigureSettingsManager(SettingsManager settingsManager)
         {
@@ -378,6 +392,8 @@ namespace WolvenKit.Functionality.Services
 
             settingsManager.TreeViewGroups = TreeViewGroups;
             settingsManager.TreeViewGroupSize = TreeViewGroupSize;
+
+            settingsManager.ShowAdvancedOptions = ShowAdvancedOptions;
 
             return settingsManager;
         }

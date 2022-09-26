@@ -11,7 +11,7 @@ namespace WolvenKit.Common.Interfaces
     {
         public Archive Pack(DirectoryInfo infolder, DirectoryInfo outpath, string modname = null);
 
-        public bool ConvertXbmToDdsStream(Stream redInFile, Stream outstream, out DXGI_FORMAT texformat);
+        public bool ConvertXbmToDdsStream(Stream redInFile, Stream outstream, out DXGI_FORMAT texformat, out DXGI_FORMAT decompressedFormat);
 
         //public bool ConvertCR2WToDdsStream(CR2WFile cr2w, Stream outstream, out DXGI_FORMAT texformat);
 

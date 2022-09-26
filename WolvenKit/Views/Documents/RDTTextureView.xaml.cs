@@ -26,7 +26,7 @@ namespace WolvenKit.Views.Documents
                 if (DataContext is RDTTextureViewModel vm)
                 {
                     SetCurrentValue(ViewModelProperty, vm);
-                    ViewModel.Render();
+                    // ViewModel.Render();
                 }
             });
         }

@@ -1,9 +1,10 @@
 using System;
 using System.Collections.Generic;
-using WolvenKit.Common.DDS;
+using WolvenKit.Common.Model.Arguments;
 using WolvenKit.Core.Interfaces;
 using WolvenKit.RED4.Archive;
 using static WolvenKit.RED4.Types.Enums;
+using DXGI_FORMAT = WolvenKit.Common.DDS.DXGI_FORMAT;
 
 namespace WolvenKit.RED4.CR2W
 {
@@ -47,86 +48,237 @@ namespace WolvenKit.RED4.CR2W
         /// <returns></returns>
         /// <exception cref="NotImplementedException"></exception>
         /// <exception cref="ArgumentOutOfRangeException"></exception>
-        public static DXGI_FORMAT GetDXGIFormat(ETextureCompression compression, ETextureRawFormat rawFormat, ILoggerService logger)
+        public static DXGI_FORMAT GetDXGIFormat(ETextureCompression compression, ETextureRawFormat rawFormat, bool isGamma, ILoggerService logger)
         {
             switch (compression)
             {
-                case ETextureCompression.TCM_QualityR:
-                    return DXGI_FORMAT.DXGI_FORMAT_BC4_UNORM;
-
-                case ETextureCompression.TCM_QualityRG:
-                case ETextureCompression.TCM_Normalmap:
-                    return DXGI_FORMAT.DXGI_FORMAT_BC5_UNORM;
-
-                case ETextureCompression.TCM_QualityColor:
-                    return DXGI_FORMAT.DXGI_FORMAT_BC7_UNORM;
-
-                case ETextureCompression.TCM_DXTNoAlpha:
-                case ETextureCompression.TCM_Normals_DEPRECATED:
-                    return DXGI_FORMAT.DXGI_FORMAT_BC1_UNORM;
-
-                case ETextureCompression.TCM_DXTAlphaLinear:
-                case ETextureCompression.TCM_DXTAlpha:
-                case ETextureCompression.TCM_NormalsHigh_DEPRECATED:
-                    return DXGI_FORMAT.DXGI_FORMAT_BC3_UNORM;
-
                 case ETextureCompression.TCM_None:
-                {
                     switch (rawFormat)
                     {
                         case ETextureRawFormat.TRF_Invalid:
-                        case ETextureRawFormat.TRF_TrueColor:
                             return DXGI_FORMAT.DXGI_FORMAT_R8G8B8A8_UNORM;
-
+                        case ETextureRawFormat.TRF_TrueColor:
+                            return isGamma ? DXGI_FORMAT.DXGI_FORMAT_R8G8B8A8_UNORM_SRGB : DXGI_FORMAT.DXGI_FORMAT_R8G8B8A8_UNORM;
                         case ETextureRawFormat.TRF_DeepColor:
-                            return DXGI_FORMAT.DXGI_FORMAT_R10G10B10A2_UNORM;
-
+                            return DXGI_FORMAT.DXGI_FORMAT_R16G16B16A16_UNORM;
+                        case ETextureRawFormat.TRF_Grayscale:
+                            return DXGI_FORMAT.DXGI_FORMAT_R8_UNORM;
                         case ETextureRawFormat.TRF_HDRFloat:
                             return DXGI_FORMAT.DXGI_FORMAT_R32G32B32A32_FLOAT;
-
                         case ETextureRawFormat.TRF_HDRHalf:
                             return DXGI_FORMAT.DXGI_FORMAT_R16G16B16A16_FLOAT;
-
                         case ETextureRawFormat.TRF_HDRFloatGrayscale:
-                            return DXGI_FORMAT.DXGI_FORMAT_R16_FLOAT;
-
+                            return DXGI_FORMAT.DXGI_FORMAT_R32_FLOAT;
                         case ETextureRawFormat.TRF_R8G8:
                             return DXGI_FORMAT.DXGI_FORMAT_R8G8_UNORM;
-
-                        case ETextureRawFormat.TRF_Grayscale:
-                            return DXGI_FORMAT.DXGI_FORMAT_R8_UINT;
-
                         case ETextureRawFormat.TRF_AlphaGrayscale:
                             return DXGI_FORMAT.DXGI_FORMAT_A8_UNORM;
-
-                        case ETextureRawFormat.TRF_Grayscale_Font:
-                        //throw new NotImplementedException($"{nameof(GetDXGIFormat)}: TRF_Grayscale_Font");
-                        case ETextureRawFormat.TRF_R32UI:
-                            //return DXGI_FORMAT.R32_UINT;
-                            //throw new NotImplementedException($"{nameof(GetDXGIFormat)}: TRF_R32UI");
-                            logger.Warning($"Unknown texture format: {rawFormat.ToString()}");
-                            return DXGI_FORMAT.DXGI_FORMAT_R8G8B8A8_UNORM;
                         default:
-                            throw new ArgumentOutOfRangeException(nameof(rawFormat), rawFormat, null);
+                            logger.Warning($"Unknown texture format: {rawFormat.ToString()}");
+                            throw new ArgumentOutOfRangeException();
+                    }
+                case ETextureCompression.TCM_DXTNoAlpha:
+                    return isGamma ? DXGI_FORMAT.DXGI_FORMAT_BC1_UNORM_SRGB : DXGI_FORMAT.DXGI_FORMAT_BC1_UNORM;
+                case ETextureCompression.TCM_DXTAlpha:
+                    return isGamma ? DXGI_FORMAT.DXGI_FORMAT_BC3_UNORM_SRGB : DXGI_FORMAT.DXGI_FORMAT_BC3_UNORM;
+                case ETextureCompression.TCM_Normalmap:
+                    return DXGI_FORMAT.DXGI_FORMAT_BC5_UNORM;
+                case ETextureCompression.TCM_Normals_DEPRECATED:
+                    return DXGI_FORMAT.DXGI_FORMAT_BC1_UNORM;
+                case ETextureCompression.TCM_NormalsHigh_DEPRECATED:
+                    return DXGI_FORMAT.DXGI_FORMAT_BC3_UNORM;
+                case ETextureCompression.TCM_DXTAlphaLinear:
+                    return isGamma ? DXGI_FORMAT.DXGI_FORMAT_BC3_UNORM_SRGB : DXGI_FORMAT.DXGI_FORMAT_BC3_UNORM;
+                case ETextureCompression.TCM_QualityR:
+                    return DXGI_FORMAT.DXGI_FORMAT_BC4_UNORM;
+                case ETextureCompression.TCM_QualityRG:
+                    return DXGI_FORMAT.DXGI_FORMAT_BC5_UNORM;
+                case ETextureCompression.TCM_QualityColor:
+                    return isGamma ? DXGI_FORMAT.DXGI_FORMAT_BC7_UNORM_SRGB : DXGI_FORMAT.DXGI_FORMAT_BC7_UNORM;
+                default:
+                    logger.Warning($"Unknown texture compression format: {compression.ToString()}");
+                    throw new ArgumentOutOfRangeException();
+            }
+        }
+
+        public static DirectXTexNet.DXGI_FORMAT GetDXGIFormat2(ETextureCompression compression, ETextureRawFormat rawFormat, bool isGamma, ILoggerService logger)
+        {
+            switch (compression)
+            {
+                case ETextureCompression.TCM_None:
+                    switch (rawFormat)
+                    {
+                        case ETextureRawFormat.TRF_Invalid:
+                            return DirectXTexNet.DXGI_FORMAT.R8G8B8A8_UNORM;
+                        case ETextureRawFormat.TRF_TrueColor:
+                            return isGamma ? DirectXTexNet.DXGI_FORMAT.R8G8B8A8_UNORM_SRGB : DirectXTexNet.DXGI_FORMAT.R8G8B8A8_UNORM;
+                        case ETextureRawFormat.TRF_DeepColor:
+                            return DirectXTexNet.DXGI_FORMAT.R16G16B16A16_UNORM;
+                        case ETextureRawFormat.TRF_Grayscale:
+                            return DirectXTexNet.DXGI_FORMAT.R8_UNORM;
+                        case ETextureRawFormat.TRF_HDRFloat:
+                            return DirectXTexNet.DXGI_FORMAT.R32G32B32A32_FLOAT;
+                        case ETextureRawFormat.TRF_HDRHalf:
+                            return DirectXTexNet.DXGI_FORMAT.R16G16B16A16_FLOAT;
+                        case ETextureRawFormat.TRF_HDRFloatGrayscale:
+                            return DirectXTexNet.DXGI_FORMAT.R32_FLOAT;
+                        case ETextureRawFormat.TRF_R8G8:
+                            return DirectXTexNet.DXGI_FORMAT.R8G8_UNORM;
+                        case ETextureRawFormat.TRF_AlphaGrayscale:
+                            return DirectXTexNet.DXGI_FORMAT.A8_UNORM;
+                        default:
+                            logger.Warning($"Unknown texture format: {rawFormat.ToString()}");
+                            throw new ArgumentOutOfRangeException();
+                    }
+                case ETextureCompression.TCM_DXTNoAlpha:
+                    return isGamma ? DirectXTexNet.DXGI_FORMAT.BC1_UNORM_SRGB : DirectXTexNet.DXGI_FORMAT.BC1_UNORM;
+                case ETextureCompression.TCM_DXTAlpha:
+                    return isGamma ? DirectXTexNet.DXGI_FORMAT.BC3_UNORM_SRGB : DirectXTexNet.DXGI_FORMAT.BC3_UNORM;
+                case ETextureCompression.TCM_Normalmap:
+                    return DirectXTexNet.DXGI_FORMAT.BC5_UNORM;
+                case ETextureCompression.TCM_Normals_DEPRECATED:
+                    return DirectXTexNet.DXGI_FORMAT.BC1_UNORM;
+                case ETextureCompression.TCM_NormalsHigh_DEPRECATED:
+                    return DirectXTexNet.DXGI_FORMAT.BC3_UNORM;
+                case ETextureCompression.TCM_DXTAlphaLinear:
+                    return isGamma ? DirectXTexNet.DXGI_FORMAT.BC3_UNORM_SRGB : DirectXTexNet.DXGI_FORMAT.BC3_UNORM;
+                case ETextureCompression.TCM_QualityR:
+                    return DirectXTexNet.DXGI_FORMAT.BC4_UNORM;
+                case ETextureCompression.TCM_QualityRG:
+                    return DirectXTexNet.DXGI_FORMAT.BC5_UNORM;
+                case ETextureCompression.TCM_QualityColor:
+                    return isGamma ? DirectXTexNet.DXGI_FORMAT.BC7_UNORM_SRGB : DirectXTexNet.DXGI_FORMAT.BC7_UNORM;
+                default:
+                    logger.Warning($"Unknown texture compression format: {compression.ToString()}");
+                    throw new ArgumentOutOfRangeException();
+            }
+        }
+
+        public static DirectXTexNet.DXGI_FORMAT GetDXGIFormat3(SupportedCompressionFormats compression, SupportedRawFormats rawFormat, bool isGamma, ILoggerService logger)
+        {
+            switch (compression)
+            {
+                case SupportedCompressionFormats.TCM_None:
+                    switch (rawFormat)
+                    {
+                        case SupportedRawFormats.TRF_Invalid:
+                            return DirectXTexNet.DXGI_FORMAT.R8G8B8A8_UNORM;
+                        case SupportedRawFormats.TRF_TrueColor:
+                            return isGamma ? DirectXTexNet.DXGI_FORMAT.R8G8B8A8_UNORM_SRGB : DirectXTexNet.DXGI_FORMAT.R8G8B8A8_UNORM;
+                        case SupportedRawFormats.TRF_DeepColor:
+                            return DirectXTexNet.DXGI_FORMAT.R16G16B16A16_UNORM;
+                        case SupportedRawFormats.TRF_Grayscale:
+                            return DirectXTexNet.DXGI_FORMAT.R8_UNORM;
+                        case SupportedRawFormats.TRF_HDRFloat:
+                            return DirectXTexNet.DXGI_FORMAT.R32G32B32A32_FLOAT;
+                        case SupportedRawFormats.TRF_HDRHalf:
+                            return DirectXTexNet.DXGI_FORMAT.R16G16B16A16_FLOAT;
+                        case SupportedRawFormats.TRF_HDRFloatGrayscale:
+                            return DirectXTexNet.DXGI_FORMAT.R32_FLOAT;
+                        case SupportedRawFormats.TRF_R8G8:
+                            return DirectXTexNet.DXGI_FORMAT.R8G8_UNORM;
+                        default:
+                            logger.Warning($"Unknown texture format: {rawFormat.ToString()}");
+                            throw new ArgumentOutOfRangeException();
+                    }
+                case SupportedCompressionFormats.TCM_DXTNoAlpha:
+                    return isGamma ? DirectXTexNet.DXGI_FORMAT.BC1_UNORM_SRGB : DirectXTexNet.DXGI_FORMAT.BC1_UNORM;
+                case SupportedCompressionFormats.TCM_DXTAlpha:
+                    return isGamma ? DirectXTexNet.DXGI_FORMAT.BC3_UNORM_SRGB : DirectXTexNet.DXGI_FORMAT.BC3_UNORM;
+                case SupportedCompressionFormats.TCM_Normalmap:
+                    return DirectXTexNet.DXGI_FORMAT.BC5_UNORM;
+                case SupportedCompressionFormats.TCM_Normals_DEPRECATED:
+                    return DirectXTexNet.DXGI_FORMAT.BC1_UNORM;
+                case SupportedCompressionFormats.TCM_NormalsHigh_DEPRECATED:
+                    return DirectXTexNet.DXGI_FORMAT.BC3_UNORM;
+                case SupportedCompressionFormats.TCM_DXTAlphaLinear:
+                    return isGamma ? DirectXTexNet.DXGI_FORMAT.BC3_UNORM_SRGB : DirectXTexNet.DXGI_FORMAT.BC3_UNORM;
+                case SupportedCompressionFormats.TCM_QualityR:
+                    return DirectXTexNet.DXGI_FORMAT.BC4_UNORM;
+                case SupportedCompressionFormats.TCM_QualityRG:
+                    return DirectXTexNet.DXGI_FORMAT.BC5_UNORM;
+                case SupportedCompressionFormats.TCM_QualityColor:
+                    return isGamma ? DirectXTexNet.DXGI_FORMAT.BC7_UNORM_SRGB : DirectXTexNet.DXGI_FORMAT.BC7_UNORM;
+                case SupportedCompressionFormats.TCM_HalfHDR_Unsigned:
+                    return DirectXTexNet.DXGI_FORMAT.BC6H_UF16;
+                default:
+                    logger.Warning($"Unknown texture compression format: {compression.ToString()}");
+                    throw new ArgumentOutOfRangeException();
+            }
+        }
+
+        public static ETextureCompression GetRedCompressionFromDXGI(DirectXTexNet.DXGI_FORMAT format, bool isPMA)
+        {
+            switch (format)
+            {
+                // could also be TCM_Normals_DEPRECATED
+                case DirectXTexNet.DXGI_FORMAT.BC1_UNORM:
+                case DirectXTexNet.DXGI_FORMAT.BC1_UNORM_SRGB:
+                    return ETextureCompression.TCM_DXTNoAlpha;
+
+                // could also be TCM_NormalsHigh_DEPRECATED
+                case DirectXTexNet.DXGI_FORMAT.BC3_UNORM:
+                case DirectXTexNet.DXGI_FORMAT.BC3_UNORM_SRGB:
+                {
+                    if (isPMA)
+                    {
+                        return ETextureCompression.TCM_DXTAlpha;
+                    }
+                    else
+                    {
+                        return ETextureCompression.TCM_DXTAlphaLinear; 
                     }
                 }
 
-                case ETextureCompression.TCM_RGBE:
-                case ETextureCompression.TCM_Normals:
-                case ETextureCompression.TCM_NormalsHigh:
-                case ETextureCompression.TCM_NormalsGloss_DEPRECATED:
-                case ETextureCompression.TCM_NormalsGloss:
-                case ETextureCompression.TCM_TileMap:
-                case ETextureCompression.TCM_HalfHDR_Unsigned:
-                case ETextureCompression.TCM_HalfHDR:
-                case ETextureCompression.TCM_HalfHDR_Signed:
-                case ETextureCompression.TCM_Max:
-                {
-                    logger.Warning($"Unknown texture compression format: {compression.ToString()}");
-                    return DXGI_FORMAT.DXGI_FORMAT_BC7_UNORM;
-                }
+                case DirectXTexNet.DXGI_FORMAT.BC4_UNORM:
+                    return ETextureCompression.TCM_QualityR;
+
+                // could also be TCM_QualityRG
+                case DirectXTexNet.DXGI_FORMAT.BC5_UNORM:
+                    return ETextureCompression.TCM_Normalmap;
+
+                case DirectXTexNet.DXGI_FORMAT.BC7_UNORM:
+                case DirectXTexNet.DXGI_FORMAT.BC7_UNORM_SRGB:
+                    return ETextureCompression.TCM_QualityColor;
+
                 default:
-                    throw new ArgumentOutOfRangeException(nameof(compression), compression, null);
+                    throw new NotSupportedException();
+            }
+        }
+
+        public static ETextureRawFormat GetRedTextureFromDXGI(DirectXTexNet.DXGI_FORMAT format)
+        {
+            switch (format)
+            {
+                
+                case DirectXTexNet.DXGI_FORMAT.R8G8B8A8_UNORM: // could also be TRF_Invalid
+                case DirectXTexNet.DXGI_FORMAT.R8G8B8A8_UNORM_SRGB:
+                    return ETextureRawFormat.TRF_TrueColor;
+
+                case DirectXTexNet.DXGI_FORMAT.R16G16B16A16_UNORM:
+                    return ETextureRawFormat.TRF_DeepColor;
+
+                case DirectXTexNet.DXGI_FORMAT.R8_UINT: // where does that come from?
+                case DirectXTexNet.DXGI_FORMAT.R8_UNORM:
+                    return ETextureRawFormat.TRF_Grayscale;
+
+                case DirectXTexNet.DXGI_FORMAT.R32G32B32A32_FLOAT:
+                    return ETextureRawFormat.TRF_HDRFloat;
+
+                case DirectXTexNet.DXGI_FORMAT.R16G16B16A16_FLOAT:
+                    return ETextureRawFormat.TRF_HDRHalf;
+
+                case DirectXTexNet.DXGI_FORMAT.R32_FLOAT:
+                    return ETextureRawFormat.TRF_HDRFloatGrayscale;
+
+                case DirectXTexNet.DXGI_FORMAT.R8G8_UNORM:
+                    return ETextureRawFormat.TRF_R8G8;
+
+                case DirectXTexNet.DXGI_FORMAT.A8_UNORM:
+                    return ETextureRawFormat.TRF_AlphaGrayscale; // same as TRF_Invalid (both 0)
+
+                default:
+                    throw new NotSupportedException();
             }
         }
 

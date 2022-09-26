@@ -113,9 +113,13 @@
                         HorizontalHeaderContentAlignment="Left"
                         MappingName="Properties" />
                 </syncfusion:SfDataGrid.Columns>
-                <I:Interaction.Behaviors>
-                    <layout:Behaviour />
-                </I:Interaction.Behaviors>
+
+                <syncfusion:SfDataGrid.RecordContextMenu>
+                    <ContextMenu>
+                        <MenuItem Click="ShowSettings_OnClick" Header="Show settings" />
+                    </ContextMenu>
+                </syncfusion:SfDataGrid.RecordContextMenu>
+
             </syncfusion:SfDataGrid>
 
             <!--  Data Grid Exports  -->
@@ -162,59 +166,101 @@
 
                 </syncfusion:SfDataGrid.Columns>
 
-                <I:Interaction.Behaviors>
-                    <layout:Behaviour />
-                </I:Interaction.Behaviors>
+                <syncfusion:SfDataGrid.RecordContextMenu>
+                    <ContextMenu>
+                        <MenuItem Click="ShowSettings_OnClick" Header="Show settings" />
+                    </ContextMenu>
+                </syncfusion:SfDataGrid.RecordContextMenu>
 
             </syncfusion:SfDataGrid>
 
             <!--  Data Grid Imports  -->
-            <syncfusion:SfDataGrid
-                x:Name="ImportGrid"
+            <Grid
                 Grid.Row="1"
-                AllowEditing="True"
-                AllowFiltering="True"
-                AllowResizingColumns="True"
-                AllowSorting="True"
-                AutoGenerateColumns="False"
-                BorderThickness="0,1,0,1"
-                CellDoubleTapped="SfDataGrid_CellDoubleTapped"
-                ColumnSizer="Auto"
-                SelectionMode="Extended"
+                Background="{DynamicResource ContentBackgroundAlt2}"
                 Visibility="{Binding IsImportsSelected, Converter={StaticResource boolToVisibilityConverter}}">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
 
-                <syncfusion:SfDataGrid.Columns>
-                    <syncfusion:GridCheckBoxColumn
-                        Width="50"
-                        AllowEditing="True"
-                        HeaderText="#"
-                        MappingName="IsChecked">
-                        <syncfusion:GridCheckBoxColumn.HeaderTemplate>
-                            <DataTemplate>
-                                <CheckBox
-                                    Command="layout:SFDataGridCommands.CheckAndUnCheck"
-                                    CommandParameter="{Binding ElementName=ImportGrid}"
-                                    IsChecked="{Binding Path=IsHeaderChecked}" />
-                            </DataTemplate>
-                        </syncfusion:GridCheckBoxColumn.HeaderTemplate>
-                    </syncfusion:GridCheckBoxColumn>
-                    <syncfusion:GridTextColumn
-                        AllowEditing="False"
-                        ColumnSizer="Star"
-                        HeaderText="Name"
-                        HorizontalHeaderContentAlignment="Left"
-                        MappingName="Name" />
-                    <syncfusion:GridTextColumn
-                        AllowEditing="False"
-                        ColumnSizer="AutoLastColumnFill"
-                        HeaderText="Import Task"
-                        HorizontalHeaderContentAlignment="Left"
-                        MappingName="Properties" />
-                </syncfusion:SfDataGrid.Columns>
-                <I:Interaction.Behaviors>
-                    <layout:Behaviour />
-                </I:Interaction.Behaviors>
-            </syncfusion:SfDataGrid>
+                <StackPanel Grid.Row="0" Orientation="Horizontal">
+                    <Button
+                        Margin="4"
+                        Padding="4"
+                        VerticalAlignment="Center"
+                        Background="{DynamicResource ContentBackground}"
+                        BorderBrush="{DynamicResource ContentBackgroundAlt}"
+                        BorderThickness="1"
+                        Command="{Binding ResetSettingsCommand}"
+                        FontSize="12"
+                        Style="{DynamicResource ButtonCustom}">
+                        <TextBlock Margin="1" Text="Reset Settings" />
+                    </Button>
+                    <Button
+                        Margin="4"
+                        Padding="4"
+                        VerticalAlignment="Center"
+                        Background="{DynamicResource ContentBackground}"
+                        BorderBrush="{DynamicResource ContentBackgroundAlt}"
+                        BorderThickness="1"
+                        Command="{Binding ImportSettingsCommand}"
+                        FontSize="12"
+                        Style="{DynamicResource ButtonCustom}">
+                        <TextBlock Margin="1" Text="Load Settings" />
+                    </Button>
+                </StackPanel>
+
+                <syncfusion:SfDataGrid
+                    x:Name="ImportGrid"
+                    Grid.Row="1"
+                    AllowEditing="True"
+                    AllowFiltering="True"
+                    AllowResizingColumns="True"
+                    AllowSorting="True"
+                    AutoGenerateColumns="False"
+                    BorderThickness="0,1,0,1"
+                    CellDoubleTapped="SfDataGrid_CellDoubleTapped"
+                    ColumnSizer="Auto"
+                    SelectionMode="Extended">
+
+                    <syncfusion:SfDataGrid.Columns>
+                        <syncfusion:GridCheckBoxColumn
+                            Width="50"
+                            AllowEditing="True"
+                            HeaderText="#"
+                            MappingName="IsChecked">
+                            <syncfusion:GridCheckBoxColumn.HeaderTemplate>
+                                <DataTemplate>
+                                    <CheckBox
+                                        Command="layout:SFDataGridCommands.CheckAndUnCheck"
+                                        CommandParameter="{Binding ElementName=ImportGrid}"
+                                        IsChecked="{Binding Path=IsHeaderChecked}" />
+                                </DataTemplate>
+                            </syncfusion:GridCheckBoxColumn.HeaderTemplate>
+                        </syncfusion:GridCheckBoxColumn>
+                        <syncfusion:GridTextColumn
+                            AllowEditing="False"
+                            ColumnSizer="Star"
+                            HeaderText="Name"
+                            HorizontalHeaderContentAlignment="Left"
+                            MappingName="Name" />
+                        <syncfusion:GridTextColumn
+                            AllowEditing="False"
+                            ColumnSizer="AutoLastColumnFill"
+                            HeaderText="Import Task"
+                            HorizontalHeaderContentAlignment="Left"
+                            MappingName="Properties" />
+                    </syncfusion:SfDataGrid.Columns>
+
+                    <syncfusion:SfDataGrid.RecordContextMenu>
+                        <ContextMenu>
+                            <MenuItem Click="ShowSettings_OnClick" Header="Show settings" />
+                        </ContextMenu>
+                    </syncfusion:SfDataGrid.RecordContextMenu>
+
+                </syncfusion:SfDataGrid>
+            </Grid>
 
             <!--  Bottom Button Panel Main  -->
             <Grid Grid.Row="2" Background="{DynamicResource ContentBackgroundAlt2}">
@@ -478,6 +524,7 @@
                     DescriptionPanelVisibility="Visible"
                     EnableGrouping="True"
                     PropertyExpandMode="NestedMode"
+                    ReadOnlyBackground="{DynamicResource ContentBackgroundAlt}"
                     SearchBoxVisibility="Hidden"
                     SortDirection="{x:Null}" />
             </Grid>

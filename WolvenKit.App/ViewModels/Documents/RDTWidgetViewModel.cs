@@ -225,7 +225,7 @@ namespace WolvenKit.ViewModels.Documents
             }
 
             using var ddsstream = new MemoryStream();
-            if (!ModTools.ConvertRedClassToDdsStream(xbm, ddsstream, out _))
+            if (!ModTools.ConvertRedClassToDdsStream(xbm, ddsstream, out _, out _))
             {
                 return;
             }

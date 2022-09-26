@@ -1,7 +1,9 @@
 using System;
 using System.Linq;
 using System.IO;
+using System.ComponentModel;
 using System.Reactive.Disposables;
+using System.Reactive.Linq;
 using System.Windows;
 using ReactiveUI;
 using Splat;
@@ -22,6 +24,7 @@ namespace WolvenKit.Views.Tools
         private PropertyItem _propertyItem;
         private readonly IProjectManager projectManager;
         private readonly Red4ParserService parser;
+        private ISettingsManager _settingsManager;
 
         /// <summary>
         /// Constructor I/E Tool.
@@ -29,6 +32,8 @@ namespace WolvenKit.Views.Tools
         public ImportExportView()
         {
             InitializeComponent();
+
+            _settingsManager = Locator.Current.GetService<ISettingsManager>();
 
             ViewModel = Locator.Current.GetService<ImportExportViewModel>();
             DataContext = ViewModel;
@@ -74,7 +79,26 @@ namespace WolvenKit.Views.Tools
 
             });
 
+            this.WhenAnyValue(x => x.ViewModel.SelectedObject)
+                .Buffer(2, 1)
+                .Subscribe(x =>
+                {
+                    if (x[0] is { } oldValue)
+                    {
+                        oldValue.Properties.PropertyChanged -= OnPropertyValueChanged;
+                    }
 
+                    if (x[1] is { } newValue)
+                    {
+                        newValue.Properties.PropertyChanged += OnPropertyValueChanged;
+                    }
+                });
+
+            this.WhenAnyValue(x => x._settingsManager.ShowAdvancedOptions)
+                .Subscribe(_ =>
+                {
+                    OverlayPropertyGrid.RefreshPropertygrid();
+                });
         }
 
         /// <summary>
@@ -82,13 +106,18 @@ namespace WolvenKit.Views.Tools
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void SfDataGrid_CellDoubleTapped(object sender, Syncfusion.UI.Xaml.Grid.GridCellDoubleTappedEventArgs e)
+        private void SfDataGrid_CellDoubleTapped(object sender, Syncfusion.UI.Xaml.Grid.GridCellDoubleTappedEventArgs e) => ShowSettings();
+
+        private void ShowSettings_OnClick(object sender, RoutedEventArgs e) => ShowSettings();
+
+        private void ShowSettings()
         {
-            if (ViewModel is not ImportExportViewModel vm)
+            if (ViewModel == null)
             {
                 return;
             }
-            if (vm.IsImportsSelected)
+
+            if (ViewModel.IsImportsSelected)
             {
                 if (ImportGrid.SelectedItem is ImportExportItemViewModel selectedImport)
                 {
@@ -143,7 +172,8 @@ namespace WolvenKit.Views.Tools
                     }
                 }
             }
-            if (vm.IsExportsSelected)
+
+            if (ViewModel.IsExportsSelected)
             {
                 if (ExportGrid.SelectedItem is ImportExportItemViewModel selectedExport)
                 {
@@ -157,7 +187,8 @@ namespace WolvenKit.Views.Tools
                     { throw new ArgumentOutOfRangeException(); }
                 }
             }
-            if (vm.IsConvertsSelected)
+
+            if (ViewModel.IsConvertsSelected)
             {
                 if (ConvertGrid.SelectedItem is ImportExportItemViewModel selectedconvert)
                 {
@@ -170,10 +201,10 @@ namespace WolvenKit.Views.Tools
                     else
                     { throw new ArgumentOutOfRangeException(); }
                 }
-
             }
-
         }
+
+        private void OnPropertyValueChanged(object sender, PropertyChangedEventArgs e) => OverlayPropertyGrid.RefreshPropertygrid();
 
         /// <summary>
         /// Confirm Button (Advanced Options)
@@ -182,13 +213,15 @@ namespace WolvenKit.Views.Tools
         /// <param name="e"></param>
         private void ButtonBase_OnClick(object sender, RoutedEventArgs e)
         {
-            if (ViewModel is ImportExportViewModel vm)
+            if (ViewModel != null)
             {
                 if (ApplyToAllCheckbox.IsChecked != null && ApplyToAllCheckbox.IsChecked.Value)
                 {
-                    vm.CopyArgumentsTemplateToCommand.SafeExecute("All in Grid");
+                    ViewModel.CopyArgumentsTemplateToCommand.SafeExecute("All in Grid");
                     ApplyToAllCheckbox.SetCurrentValue(System.Windows.Controls.Primitives.ToggleButton.IsCheckedProperty, false);
                 }
+
+                ViewModel.SaveSettings();
             }
             XAML_AdvancedOptionsOverlay.SetCurrentValue(VisibilityProperty, Visibility.Collapsed);
         }
@@ -256,7 +289,25 @@ namespace WolvenKit.Views.Tools
                 case nameof(ReactiveObject.Changing):
                 case nameof(ReactiveObject.ThrownExceptions):
                     e.Cancel = true;
-                    break;
+                    return;
+            }
+
+            if (ViewModel?.SelectedObject.Properties is XbmImportArgs)
+            {
+                if (e.DisplayName == "Use existing file")
+                {
+                    e.Cancel = true;
+                    return;
+                }
+
+                if (!_settingsManager.ShowAdvancedOptions)
+                {
+                    if (e.Category is "Image Import Settings" or "XBM Import Settings")
+                    {
+                        e.Cancel = true;
+                        return;
+                    }
+                }
             }
         }
 
