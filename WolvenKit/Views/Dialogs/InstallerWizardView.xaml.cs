@@ -6,8 +6,6 @@ namespace WolvenKit.Views.Wizards
 {
     public partial class InstallerWizardView : ReactiveUserControl<InstallerWizardViewModel>
     {
-        #region Constructors
-
         public InstallerWizardView()
         {
             InitializeComponent();
@@ -15,12 +13,5 @@ namespace WolvenKit.Views.Wizards
             ViewModel = Locator.Current.GetService<InstallerWizardViewModel>();
             DataContext = ViewModel;
         }
-
-        #endregion Constructors
-
-        #region Methods
-
-
-        #endregion Methods
     }
 }
