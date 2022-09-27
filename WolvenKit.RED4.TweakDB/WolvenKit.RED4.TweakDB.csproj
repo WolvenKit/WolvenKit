@@ -22,7 +22,7 @@
         <RepositoryType>git</RepositoryType>
         <PackageTags>wolvenkit, cyberpunk2077</PackageTags>
 
-        <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+        <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
         <PackageOutputPath>./nupkg</PackageOutputPath>
     </PropertyGroup>
 

@@ -19,6 +19,14 @@ jobs:
     - name: Publish with Dotnet
       run: dotnet publish .\WolvenKit\WolvenKit.csproj -o .\publish -c Release
 
+
+    # Pack and upload nugets for Types, Modkit
+    - run: dotnet pack ./WolvenKit.RED4.Types/WolvenKit.RED4.Types.csproj
+    - run: dotnet nuget push ./WolvenKit.RED4.Types/nupkg/*.nupkg --api-key ${{secrets.NUGET_KEY}} --source "https://api.nuget.org/v3/index.json" --skip-duplicate
+
+    - run: dotnet pack ./WolvenKit.Modkit/WolvenKit.Modkit.csproj
+    - run: dotnet nuget push ./WolvenKit.Modkit/nupkg/*.nupkg --api-key ${{secrets.NUGET_KEY}} --source "https://api.nuget.org/v3/index.json" --skip-duplicate
+
     - uses: actions/upload-artifact@v2
       with:
         name: WolvenKit Desktop
@@ -35,12 +43,11 @@ jobs:
       with:
         dotnet-version: 6.x
 
-    - name: build
-      run: dotnet build .\WolvenKit.CLI\WolvenKit.CLI.csproj
-    - name: publish package to NuGet
-      run: dotnet nuget push .\WolvenKit.CLI\nupkg\*.nupkg --api-key ${{secrets.NUGET_KEY}} --source "https://api.nuget.org/v3/index.json" --skip-duplicate
     - name: Publish with Dotnet
       run: dotnet publish .\WolvenKit.CLI\WolvenKit.CLI.csproj -o .\publish_cli -r win-x64 -c Release --no-self-contained
+
+    - run: dotnet pack ./WolvenKit.CLI/WolvenKit.CLI.csproj
+    - run: dotnet nuget push ./WolvenKit.CLI/nupkg/*.nupkg --api-key ${{secrets.NUGET_KEY}} --source "https://api.nuget.org/v3/index.json" --skip-duplicate
 
     - uses: actions/upload-artifact@v2
       with:
@@ -98,11 +105,10 @@ jobs:
     - run: echo "PORTABLE=${{env.NAME}}-${{env.VERSION}}.zip" >> $GITHUB_ENV
     - run: echo "CONSOLE=${{env.NAME}}.Console-${{env.VERSIONC}}.zip" >> $GITHUB_ENV
     - run: echo "CONSOLELINUX=${{env.NAME}}.ConsoleLinux-${{env.VERSIONC}}.zip" >> $GITHUB_ENV
-    # - run: echo "INSTALLER=${{env.NAME}}-installer-${{env.VERSION}}.exe" >> $GITHUB_ENV
 
     - name: Download artifacts
       uses: actions/download-artifact@v2
-    # Create assets
+
     # create zip
     - run: sudo apt-get install zip -y
     - run: mkdir -p ${{ env.FINALOUT }}
@@ -110,8 +116,7 @@ jobs:
     - run: zip -r ${{ env.FINALOUT }}/${{ env.PORTABLE }} "WolvenKit Desktop"
     - run: zip -r ${{ env.FINALOUT }}/${{ env.CONSOLE }} "WolvenKit CLI"
     - run: zip -r ${{ env.FINALOUT }}/${{ env.CONSOLELINUX }} "WolvenKit CLI Linux"
-    # create installer
-    # - run: .\Installers\ISCC\ISCC.exe /O"${{env.FINALOUT}}" /dMyAppBaseDir=".${{env.OUT}}" .\Installers\installer.iss
+
 
     # RELEASE
     - name: Release
