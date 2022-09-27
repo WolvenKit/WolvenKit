@@ -119,6 +119,8 @@ public class ArchiveReader
             }
         }
 
+        ar.ReleaseFileHandle();
+
         return EFileReadErrorCodes.NoError;
     }
 

@@ -116,12 +116,14 @@ namespace WolvenKit.ViewModels.Shell
 
                         if (propertyName is not null)
                         {
-                            var parentType = Parent.PropertyType;
                             var parentData = Parent.Data;
                             if (Parent.Data is IRedBaseHandle handle)
                             {
                                 parentData = handle.GetValue();
-                                parentType = handle.GetValue().GetType();
+                            }
+                            if (Parent.Data is CVariant cVariant)
+                            {
+                                parentData = cVariant.Value;
                             }
 
                             if (parentData is RedBaseClass rbc)

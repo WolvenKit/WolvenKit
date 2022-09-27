@@ -61,6 +61,15 @@ namespace WolvenKit.RED4.Archive
             return _mmf.CreateViewStream((long)offset, size, MemoryMappedFileAccess.Read);
         }
 
+        public void ReleaseFileHandle()
+        {
+            if (_mmf != null)
+            {
+                _mmf.Dispose();
+                _mmf = null;
+            }
+        }
+
         /// <summary>
         ///
         /// </summary>
@@ -174,6 +183,7 @@ namespace WolvenKit.RED4.Archive
                 vs.DecompressAndCopySegment(outStream, zSize, size);
             }
             vs.Dispose();
+            ReleaseFileHandle();
         }
 
         /// <summary>
@@ -196,6 +206,7 @@ namespace WolvenKit.RED4.Archive
                 var size = offsetEntry.Size;
                 await vs.DecompressAndCopySegmentAsync(outStream, zSize, size);
             }
+            ReleaseFileHandle();
         }
 
         #region IDisposable

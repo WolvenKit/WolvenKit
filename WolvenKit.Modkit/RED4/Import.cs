@@ -281,59 +281,33 @@ namespace WolvenKit.Modkit.RED4
 
         private bool ImportTtf(RedRelativePath rawRelative, DirectoryInfo outDir, CommonImportArgs args)
         {
-            if (args.Keep)
+            var inbuffer = File.ReadAllBytes(rawRelative.FullName);
+
+            // create redengine file
+            var red = new CR2WFile();
+            var font = new rendFont
             {
-                var buffer = new FileInfo(rawRelative.FullName);
-                var redfile = FindRedFile(rawRelative, outDir);
+                CookingPlatform = Enums.ECookingPlatform.PLATFORM_PC,
+                FontBuffer = new DataBuffer(inbuffer)
+            };
 
-                if (string.IsNullOrEmpty(redfile))
-                {
-                    _loggerService.Warning($"No existing redfile found to rebuild for {rawRelative.Name}");
-                    return false;
-                }
+            // add chunk
+            red.RootChunk = font;
 
-                using var fileStream = new FileStream(redfile, FileMode.Open, FileAccess.ReadWrite);
-                var result = Rebuild(fileStream, new List<FileInfo>() { buffer });
-
-                if (result)
-                {
-                    _loggerService.Success($"Rebuilt {redfile} with buffers");
-                }
-                else
-                {
-                    _loggerService.Error($"Failed to rebuild {redfile} with buffers");
-                }
-
-                return result;
-            }
-            else
+            // write to file
+            var redpath = new RedRelativePath(rawRelative)
+                .ChangeBaseDir(outDir)
+                .ChangeExtension(ERedExtension.fnt.ToString());
+            if (!File.Exists(redpath.FullPath))
             {
-                var inbuffer = File.ReadAllBytes(rawRelative.FullName);
-
-                // create redengine file
-                var red = new CR2WFile();
-                var font = new rendFont
-                {
-                    CookingPlatform = Enums.ECookingPlatform.PLATFORM_PC,
-                    FontBuffer = new DataBuffer(inbuffer)
-                };
-
-                // add chunk
-                red.RootChunk = font;
-
-                // write to file
-                var redpath = Path.ChangeExtension(rawRelative.FullName, ECookedFileFormat.fnt.ToString());
-                if (redpath == null)
-                {
-                    return false;
-                }
-
-                using var fs = new FileStream(redpath, FileMode.Create, FileAccess.Write);
-                using var writer = new CR2WWriter(fs);
-                writer.WriteFile(red);
-
-                return true;
+                Directory.CreateDirectory(redpath.ToFileInfo().Directory.FullName);
             }
+
+            using var fs = new FileStream(redpath.FullPath, FileMode.Create, FileAccess.Write);
+            using var writer = new CR2WWriter(fs);
+            writer.WriteFile(red);
+
+            return true;
         }
 
         private bool ImportXbm(RedRelativePath rawRelative, DirectoryInfo outDir, XbmImportArgs args)
