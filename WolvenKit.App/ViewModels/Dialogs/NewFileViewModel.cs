@@ -55,7 +55,8 @@ namespace WolvenKit.ViewModels.Dialogs
                 {
                     if (CommonFunctions.GetResourceClassesFromExtension(ext) is not null)
                     {
-                        newdef.Categories[2].Files.Add(new AddFileModel()
+                        var resourceFiles = newdef.Categories.FirstOrDefault(x => x.Name == "CR2W Files");
+                        resourceFiles.Files.Add(new AddFileModel()
                         {
                             Name = CommonFunctions.GetResourceClassesFromExtension(ext),
                             Description = $"A .{ext} File",
