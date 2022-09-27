@@ -77,17 +77,12 @@ namespace WolvenKit.Views.Tools
                     interaction =>
                     {
                         var dialog = new RenameDialog();
-                        //var vm = Locator.Current.GetService<RenameDialogViewModel>();
                         dialog.ViewModel.Text = interaction.Input;
-                        // dialog.ViewModel.HostedViewModel = vm;
-
 
                         return Observable.Start(() =>
                         {
                             var result = "";
-                            //dialog.Owner = Application.Current.MainWindow;
-                            //dialog.WindowStartupLocation = WindowStartupLocation.CenterOwner;
-                            if (dialog.ShowDialog() == true)
+                            if (dialog.ShowDialog(Application.Current.MainWindow) == true)
                             {
                                 var innerVm = dialog.ViewModel;
 

@@ -19,6 +19,8 @@ namespace WolvenKit.Views.Wizards
             ViewModel = Locator.Current.GetService<FirstSetupWizardViewModel>();
             DataContext = ViewModel;
 
+            Owner = Application.Current.MainWindow;
+
             this.WhenActivated(disposables =>
             {
                 Observable

@@ -22,6 +22,7 @@ using WolvenKit.Common;
 using WolvenKit.Common.Exceptions;
 using WolvenKit.Common.Extensions;
 using WolvenKit.Common.FNV1A;
+using WolvenKit.Common.RED4.Compiled;
 using WolvenKit.Common.Services;
 using WolvenKit.Core.Interfaces;
 using WolvenKit.Core.Services;
@@ -30,6 +31,7 @@ using WolvenKit.Functionality.Controllers;
 using WolvenKit.Functionality.Helpers;
 using WolvenKit.Functionality.ProjectManagement;
 using WolvenKit.Functionality.Services;
+using WolvenKit.Functionality.WKitGlobal;
 using WolvenKit.Interaction;
 using WolvenKit.Models;
 using WolvenKit.Models.Docking;
@@ -97,6 +99,8 @@ namespace WolvenKit.ViewModels.Shell
             _homePageViewModel = Locator.Current.GetService<HomePageViewModel>();
 
             #region commands
+
+            CheckForUpdatesCommand = ReactiveCommand.CreateFromTask(CheckForUpdate);
 
             ShowLogCommand = new DelegateCommand(ExecuteShowLog, CanShowLog).ObservesProperty(() => ActiveProject);
             ShowProjectExplorerCommand = new DelegateCommand(ExecuteShowProjectExplorer, CanShowProjectExplorer).ObservesProperty(() => ActiveProject);
@@ -174,17 +178,24 @@ namespace WolvenKit.ViewModels.Shell
                 .WhenAnyValue(x => x.CP77ExecutablePath)
                 .SkipWhile(x => string.IsNullOrWhiteSpace(x) || !File.Exists(x)) // -.-
                 .Take(1)
-                .Subscribe(x =>
-                {
-                    _pluginService.Init();
-                    // _tweakDBService.LoadDB(Path.Combine(_settingsManager.GetRED4GameRootDir(), "r6", "cache", "tweakdb.bin"));
-                });
+                .Subscribe(x => _pluginService.Init());
 
+            this
+                .WhenAnyValue(x => x.Status)
+                .Where(x => x == EAppStatus.Loaded)
+                .Subscribe(x => HandleActivation());
         }
 
         #endregion constructors
 
         #region init
+
+        private void HandleActivation()
+        {
+            Observable.Start(() => CheckForUpdatesCommand.Execute().Subscribe())
+                .ObserveOn(RxApp.MainThreadScheduler)
+                .Subscribe();
+        }
 
         private bool TryLoadingArguments()
         {
@@ -221,9 +232,9 @@ namespace WolvenKit.ViewModels.Shell
             return false;
         }
 
-        private void OnStartup() => ShowFirstTimeSetup();
+        private async void OnStartup() => await ShowFirstTimeSetup();
 
-        private async void ShowFirstTimeSetup()
+        private async Task ShowFirstTimeSetup()
         {
             if (!_settingsManager.IsHealthy())
             {
@@ -238,6 +249,50 @@ namespace WolvenKit.ViewModels.Shell
         #endregion init
 
         #region commands
+
+        public ReactiveCommand<Unit, Unit> CheckForUpdatesCommand { get; }
+        private async Task CheckForUpdate()
+        {
+            //if (!_settingsManager.CheckForUpdates)
+            //{
+            //    return;
+            //}
+
+            var owner = "WolvenKit";
+            var name = "WolvenKit";
+
+            switch (_settingsManager.UpdateChannel)
+            {
+                case EUpdateChannel.Nightly:
+                    name = "WolvenKit-nightly-releases";
+                    break;
+                case EUpdateChannel.Stable:
+                default:
+                    break;
+            }
+
+            // disabled for testing in debug
+#if DEBUG
+            var remoteVersion = "8.6";
+#else
+            var client = new Octokit.GitHubClient(new Octokit.ProductHeaderValue("wolvenkit"));
+            var releases = await client.Repository.Release.GetAll(owner, name);
+            var latest = releases[0];
+            var remoteVersion = latest.TagName;
+#endif
+
+            var thisVersion = _settingsManager.GetVersionNumber();
+
+            if (remoteVersion != thisVersion)
+            {
+                var url = $"https://github.com/{owner}/{name}/releases/latest";
+                var res = await Interactions.ShowMessageBoxAsync($"Update available: {remoteVersion}\nYou are on the {_settingsManager.UpdateChannel} release channel.\n\nVisit {url} ?", name, WMessageBoxButtons.OkCancel);
+                if (res == WMessageBoxResult.OK)
+                {
+                    Process.Start("explorer", url);
+                }
+            }
+        }
 
         public ReactiveCommand<string, Unit> DeleteProjectCommand { get; }
         private void DeleteProject(string parameter)
@@ -1058,7 +1113,7 @@ namespace WolvenKit.ViewModels.Shell
 
         #endregion ToolViewModels
 
-        [Reactive] public string Status { get; set; }
+        [Reactive] public EAppStatus Status { get; set; }
 
         [Reactive] public string Title { get; set; }
 
@@ -1402,6 +1457,8 @@ namespace WolvenKit.ViewModels.Shell
                 }
             }
         }
+
+        public void SetStatusReady() => Status = EAppStatus.Loaded;
 
         //private void OpenVideoFile(string fullpath)
         //{

@@ -12,7 +12,8 @@
     Closed="Window_Closed"
     ResizeMode="NoResize"
     SizeToContent="Height"
-    mc:Ignorable="d">
+    mc:Ignorable="d"
+    WindowStartupLocation="CenterOwner">
 
     <hc:Window.Resources>
         <ResourceDictionary>

@@ -6,11 +6,15 @@ using System.IO;
 using System.Linq;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
+using System.Threading.Tasks;
 using System.Windows;
 using AdonisUI.Controls;
 using ReactiveUI;
 using Splat;
+using WolvenKit.Functionality.Commands;
+using WolvenKit.Functionality.Helpers;
 using WolvenKit.Interaction;
+using WolvenKit.RED4.Types;
 using WolvenKit.ViewModels.Dialogs;
 using WolvenKit.ViewModels.Shell;
 using WolvenKit.ViewModels.Wizards;
@@ -42,9 +46,6 @@ namespace WolvenKit.Views.Shell
             {
                 Interactions.ShowConfirmation.RegisterHandler(interaction => interaction.SetOutput(ShowConfirmation(interaction.Input)));
 
-
-
-
                 this.Bind(ViewModel,
                     vm => vm.ActiveDocument,
                     v => v.dockingAdapter.ActiveDocument)
@@ -55,6 +56,9 @@ namespace WolvenKit.Views.Shell
                     .DisposeWith(disposables);
 
                 this.WhenAnyValue(x => x.ViewModel.ActiveProject).Subscribe(_ => dockingAdapter.OnActiveProjectChanged());
+
+                //set ready status
+                ViewModel.SetStatusReady();
             });
         }
 
@@ -77,9 +81,12 @@ namespace WolvenKit.Views.Shell
                 Buttons = GetAdonisButtons(buttons)
             };
 
-            return (WMessageBoxResult)AdonisUI.Controls.MessageBox.Show(messageBox);
+            var result = WMessageBoxResult.None;
+            DispatcherHelper.RunOnMainThread(() => result = (WMessageBoxResult)AdonisUI.Controls.MessageBox.Show(Application.Current.MainWindow, messageBox));
 
+            return result;
 
+            // local methods
             AdonisUI.Controls.MessageBoxImage GetAdonisImage(WMessageBoxImage image) => (AdonisUI.Controls.MessageBoxImage)image;
 
             IEnumerable<IMessageBoxButtonModel> GetAdonisButtons(WMessageBoxButtons buttons)
@@ -110,5 +117,11 @@ namespace WolvenKit.Views.Shell
         }
 
         protected override void OnClosing(CancelEventArgs e) => Application.Current.Shutdown();
+
+        // This is called before this.WhenActivated
+        private void ChromelessWindow_Loaded(object sender, RoutedEventArgs e)
+        {
+
+        }
     }
 }

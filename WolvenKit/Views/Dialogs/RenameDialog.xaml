@@ -8,7 +8,7 @@
     xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
     Title="Rename"
     SizeToContent="WidthAndHeight"
-    WindowStartupLocation="CenterScreen">
+    WindowStartupLocation="CenterOwner">
 
 
 
@@ -35,6 +35,7 @@
                 FinishVisibility="Visible"
                 HelpVisibility="Collapsed"
                 NextVisibility="Collapsed"
+                PreviewKeyDown="WizardPage_PreviewKeyDown"
                 PageType="Exterior">
                 <StackPanel Orientation="Vertical">
                     <hc:TextBox x:Name="TextBox" Style="{StaticResource TextBoxExtend}" />

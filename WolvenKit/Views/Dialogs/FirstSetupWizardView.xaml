@@ -10,7 +10,8 @@
     xmlns:wizards="clr-namespace:WolvenKit.ViewModels.Wizards;assembly=WolvenKit.App"
     MinWidth="700"
     MinHeight="200"
-    SizeToContent="WidthAndHeight">
+    SizeToContent="WidthAndHeight"
+    WindowStartupLocation="CenterOwner">
 
 
     <Grid

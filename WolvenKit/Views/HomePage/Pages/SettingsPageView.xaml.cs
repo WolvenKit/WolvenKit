@@ -30,7 +30,7 @@ namespace WolvenKit.Views.HomePage.Pages
                 .DisposeWith(disposables);
 
                 this.BindCommand(ViewModel,
-                      viewModel => viewModel.CheckForUpdatesCommand,
+                      viewModel => viewModel.MainViewModel.CheckForUpdatesCommand,
                       view => view.CheckForUpdatesButton)
                 .DisposeWith(disposables);
 
