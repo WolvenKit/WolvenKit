@@ -8,6 +8,7 @@ using System.Linq;
 using System.Reactive;
 using System.Reactive.Linq;
 using System.Reflection;
+using System.Security.Policy;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -17,6 +18,7 @@ using Microsoft.WindowsAPICodePack.Dialogs;
 using Prism.Commands;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
+using Semver;
 using Splat;
 using WolvenKit.Common;
 using WolvenKit.Common.Exceptions;
@@ -100,7 +102,7 @@ namespace WolvenKit.ViewModels.Shell
 
             #region commands
 
-            CheckForUpdatesCommand = ReactiveCommand.CreateFromTask(CheckForUpdate);
+            CheckForUpdatesCommand = ReactiveCommand.CreateFromTask<bool>(async x => await CheckForUpdate(x));
 
             ShowLogCommand = new DelegateCommand(ExecuteShowLog, CanShowLog).ObservesProperty(() => ActiveProject);
             ShowProjectExplorerCommand = new DelegateCommand(ExecuteShowProjectExplorer, CanShowProjectExplorer).ObservesProperty(() => ActiveProject);
@@ -192,7 +194,7 @@ namespace WolvenKit.ViewModels.Shell
 
         private void HandleActivation()
         {
-            Observable.Start(() => CheckForUpdatesCommand.Execute().Subscribe())
+            Observable.Start(() => CheckForUpdatesCommand.Execute(true).Subscribe())
                 .ObserveOn(RxApp.MainThreadScheduler)
                 .Subscribe();
         }
@@ -250,13 +252,16 @@ namespace WolvenKit.ViewModels.Shell
 
         #region commands
 
-        public ReactiveCommand<Unit, Unit> CheckForUpdatesCommand { get; }
-        private async Task CheckForUpdate()
+        public ReactiveCommand<bool, Unit> CheckForUpdatesCommand { get; }
+        private async Task CheckForUpdate(bool checkForCheckForUpdates)
         {
-            //if (!_settingsManager.CheckForUpdates)
-            //{
-            //    return;
-            //}
+            if (checkForCheckForUpdates)
+            {
+                if (!_settingsManager.CheckForUpdates)
+                {
+                    return;
+                }
+            }
 
             var owner = "WolvenKit";
             var name = "WolvenKit";
@@ -273,23 +278,30 @@ namespace WolvenKit.ViewModels.Shell
 
             // disabled for testing in debug
 #if DEBUG
-            var remoteVersion = "8.6";
+            var remoteVersion = SemVersion.Parse("8.6", SemVersionStyles.OptionalMinorPatch);
 #else
             var client = new Octokit.GitHubClient(new Octokit.ProductHeaderValue("wolvenkit"));
             var releases = await client.Repository.Release.GetAll(owner, name);
             var latest = releases[0];
-            var remoteVersion = latest.TagName;
+            var remoteVersion = SemVersion.Parse(latest.TagName, SemVersionStyles.OptionalMinorPatch);
 #endif
 
-            var thisVersion = _settingsManager.GetVersionNumber();
+            var thisVersion = WolvenKit.Core.CommonFunctions.GetAssemblyVersion(WolvenKit.Functionality.Constants.AssemblyName);
 
-            if (remoteVersion != thisVersion)
+            if (remoteVersion.CompareSortOrderTo(thisVersion) > 0)
             {
                 var url = $"https://github.com/{owner}/{name}/releases/latest";
                 var res = await Interactions.ShowMessageBoxAsync($"Update available: {remoteVersion}\nYou are on the {_settingsManager.UpdateChannel} release channel.\n\nVisit {url} ?", name, WMessageBoxButtons.OkCancel);
                 if (res == WMessageBoxResult.OK)
                 {
                     Process.Start("explorer", url);
+                }
+            }
+            else
+            {
+                if (!checkForCheckForUpdates)
+                {
+                    var res = await Interactions.ShowMessageBoxAsync($"No update available. You are on the latest version.", name, WMessageBoxButtons.Ok);
                 }
             }
         }

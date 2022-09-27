@@ -149,9 +149,9 @@ namespace WolvenKit.Functionality.Services
         [Reactive]
         public string ThemeAccentString { get; set; }
 
-        // unused
+        [Category("General")]
+        [Display(Name = "Check for Updates")]
         [Reactive]
-        [Browsable(false)]
         public bool CheckForUpdates { get; set; }
 
         [Reactive]
