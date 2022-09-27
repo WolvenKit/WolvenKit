@@ -33,6 +33,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="CommunityToolkit.Mvvm" Version="8.0.0" />
     <PackageReference Include="Microsoft.Extensions.Hosting" Version="6.0.1" />
     <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="6.0.0" />
     <PackageReference Include="protobuf-net" Version="3.1.17" />
@@ -1823,4 +1824,14 @@
       <SubType>Designer</SubType>
     </Page>
   </ItemGroup>
+
+    <Target Name="RemoveDuplicateAnalyzers" BeforeTargets="CoreCompile">
+        <!-- Work around https://github.com/dotnet/wpf/issues/6792 -->
+
+        <ItemGroup>
+            <FilteredAnalyzer Include="@(Analyzer-&gt;Distinct())" />
+            <Analyzer Remove="@(Analyzer)" />
+            <Analyzer Include="@(FilteredAnalyzer)" />
+        </ItemGroup>
+    </Target>
 </Project>

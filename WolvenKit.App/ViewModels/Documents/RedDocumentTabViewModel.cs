@@ -88,5 +88,10 @@ namespace WolvenKit.ViewModels.Documents
                 }
             }
         }
+
+        public virtual void OnSelected()
+        {
+
+        }
     }
 }

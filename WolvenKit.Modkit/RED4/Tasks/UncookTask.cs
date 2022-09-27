@@ -80,7 +80,7 @@ namespace CP77Tools.Tasks
             if (uext != null)
             {
                 exportArgs.Get<XbmExportArgs>().UncookExtension = uext.Value;
-                exportArgs.Get<MlmaskExportArgs>().UncookExtension = uext.Value.ToMlmaskUncookExtension();
+                exportArgs.Get<MlmaskExportArgs>().UncookExtension = uext.Value;
             }
 
             var archiveDepot = exportArgs.Get<MeshExportArgs>().ArchiveDepot;

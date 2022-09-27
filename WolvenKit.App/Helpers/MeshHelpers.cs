@@ -694,7 +694,7 @@ namespace WolvenKit.ViewModels.Documents
                     if (normalFile != null && normalFile.RootChunk is ITexture it)
                     {
                         var stream = new MemoryStream();
-                        ModTools.ConvertRedClassToDdsStream(it, stream, out var format);
+                        ModTools.ConvertRedClassToDdsStream(it, stream, out var format, out _);
 
                         var normal = await ImageDecoder.RenderToBitmapSourceDds(stream);
 
@@ -825,7 +825,7 @@ namespace WolvenKit.ViewModels.Documents
                 }
 
                 var stream = new FileStream(filename_d, FileMode.Create);
-                ModTools.ConvertRedClassToDdsStream(it, stream, out var format);
+                ModTools.ConvertRedClassToDdsStream(it, stream, out var format, out _);
                 stream.Dispose();
             }
 
@@ -839,7 +839,7 @@ namespace WolvenKit.ViewModels.Documents
                 }
 
                 var stream = new FileStream(filename_d, FileMode.Create);
-                ModTools.ConvertRedClassToDdsStream(it, stream, out var format);
+                ModTools.ConvertRedClassToDdsStream(it, stream, out var format, out _);
                 stream.Dispose();
             }
 
@@ -853,7 +853,7 @@ namespace WolvenKit.ViewModels.Documents
                 }
 
                 var stream = new FileStream(filename_d, FileMode.Create);
-                ModTools.ConvertRedClassToDdsStream(it, stream, out var format);
+                ModTools.ConvertRedClassToDdsStream(it, stream, out var format, out _);
                 stream.Dispose();
             }
 
@@ -880,7 +880,7 @@ namespace WolvenKit.ViewModels.Documents
                 //stream.Dispose();
 
                 var stream = new MemoryStream();
-                ModTools.ConvertRedClassToDdsStream(it, stream, out var format);
+                ModTools.ConvertRedClassToDdsStream(it, stream, out var format, out _);
 
                 var normal = await ImageDecoder.RenderToBitmapSourceDds(stream);
 
@@ -936,7 +936,7 @@ namespace WolvenKit.ViewModels.Documents
                 //stream.Dispose();
 
                 var stream = new MemoryStream();
-                ModTools.ConvertRedClassToDdsStream(it, stream, out var format);
+                ModTools.ConvertRedClassToDdsStream(it, stream, out var format, out _);
 
                 var normal = await ImageDecoder.RenderToBitmapSourceDds(stream);
 

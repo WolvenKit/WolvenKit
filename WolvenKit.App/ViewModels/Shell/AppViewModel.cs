@@ -125,7 +125,7 @@ namespace WolvenKit.ViewModels.Shell
             SaveAsCommand = new DelegateCommand(ExecuteSaveAs, CanSaveFile).ObservesProperty(() => ActiveDocument);
             SaveAllCommand = new DelegateCommand(ExecuteSaveAll, CanSaveAll).ObservesProperty(() => DockedViews);
 
-            FileSelectedCommand = new DelegateCommand<FileModel>(async (p) => await ExecuteSelectFile(p), CanSelectFile);
+            FileSelectedCommand = new DelegateCommand<FileModel>(ExecuteSelectFile, CanSelectFile);
 
             OpenProjectCommand = ReactiveCommand.CreateFromTask<string, Unit>(OpenProjectAsync);
             DeleteProjectCommand = ReactiveCommand.Create<string>(DeleteProject);
@@ -425,7 +425,7 @@ namespace WolvenKit.ViewModels.Shell
 
         public ICommand FileSelectedCommand { get; set; }
         private bool CanSelectFile(FileModel model) => true;
-        private async Task ExecuteSelectFile(FileModel model) => await PropertiesViewModel.ExecuteSelectFile(model);
+        private void ExecuteSelectFile(FileModel model) => PropertiesViewModel.ExecuteSelectFile(model);
 
         public ICommand SaveFileCommand { get; private set; }
         private bool CanSaveFile() => ActiveDocument is not null; // _projectManager.ActiveProject != null &&

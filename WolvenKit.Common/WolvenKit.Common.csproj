@@ -85,6 +85,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="SharpDX.Direct3D11" Version="4.2.0" />
     <PackageReference Include="SharpGLTF.Core" Version="1.0.0-alpha0023" />
     <PackageReference Include="SharpZipLib" Version="1.3.3" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="6.0.8" />
@@ -103,6 +104,18 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Reference Include="DirectXTexNet">
+      <HintPath>lib\DirectXTexNet.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="lib\DirectXTexNetImpl.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="lib\Ijwhost.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Update="lib\COPYING">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

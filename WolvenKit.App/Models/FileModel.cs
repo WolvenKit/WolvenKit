@@ -11,7 +11,9 @@ using ReactiveUI;
 using Splat;
 using WolvenKit.Common;
 using WolvenKit.Common.FNV1A;
+using WolvenKit.Core.Interfaces;
 using WolvenKit.Functionality.Commands;
+using WolvenKit.Functionality.Controllers;
 using WolvenKit.Interaction;
 using WolvenKit.ProjectManagement.Project;
 using WolvenKit.ViewModels.Shell;
@@ -145,8 +147,8 @@ namespace WolvenKit.Models
 
         [Browsable(false)]
         public bool IsExportable => !IsDirectory
-                                                       && !string.IsNullOrEmpty(GetExtension())
-                                                       && Enum.GetNames(typeof(ECookedFileFormat)).Contains(GetExtension());
+                                    && !string.IsNullOrEmpty(GetExtension())
+                                    && Enum.GetNames(typeof(ECookedFileFormat)).Contains(GetExtension());
 
         #endregion
 
@@ -325,6 +327,5 @@ namespace WolvenKit.Models
 
 
         }
-
     }
 }

@@ -685,7 +685,7 @@ namespace WolvenKit.Modkit.RED4
             for (var i = 0; i < mesh.texCoords0.Length; i++)
             {
                 Re4Mesh.uv0s[i, 0] = Converters.converthf(mesh.texCoords0[i].X);
-                Re4Mesh.uv0s[i, 1] = Converters.converthf(mesh.texCoords0[i].Y);
+                Re4Mesh.uv0s[i, 1] = Converters.converthf(mesh.texCoords0[i].Y * -1 + 1);
             }
 
             Re4Mesh.uv1s = new ushort[vertCount, 2];

@@ -21,12 +21,6 @@ namespace WolvenKit.Common.Extensions
                 Replace("\\*", ".*").
                 Replace("\\?", ".") + "$";
 
-        public static EUncookExtension FromMlMaskExtension(this EMlmaskUncookExtension mlmaskUncookExtension) => mlmaskUncookExtension switch
-        {
-            EMlmaskUncookExtension.dds => EUncookExtension.dds,
-            EMlmaskUncookExtension.png => EUncookExtension.png,
-            _ => throw new ArgumentOutOfRangeException(nameof(mlmaskUncookExtension), mlmaskUncookExtension, null),
-        };
 
         public static EMlmaskUncookExtension ToMlmaskUncookExtension(this EUncookExtension uncookExtension) => uncookExtension switch
         {

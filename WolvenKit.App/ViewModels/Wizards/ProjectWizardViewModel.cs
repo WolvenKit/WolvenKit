@@ -34,7 +34,7 @@ namespace WolvenKit.ViewModels.Wizards
 
             CloseCommand = ReactiveCommand.Create(() => { });
 #pragma warning disable IDE0053 // Use expression body for lambda expressions
-            CreateCommand = ReactiveCommand.Create(() => { FileHandler(this); }, CanExecute);
+            OkCommand = ReactiveCommand.Create(() => { FileHandler(this); }, CanExecute);
             CancelCommand = ReactiveCommand.Create(() => { FileHandler(null); });
 #pragma warning restore IDE0053 // Use expression body for lambda expressions
 
@@ -82,8 +82,6 @@ namespace WolvenKit.ViewModels.Wizards
         public override ReactiveCommand<Unit, Unit> CancelCommand { get; }
 
         public override ReactiveCommand<Unit, Unit> OkCommand { get; }
-
-        public ReactiveCommand<Unit, Unit> CreateCommand { get; set; }
 
         [Reactive] public string WhyNotCreate { get; set; }
 

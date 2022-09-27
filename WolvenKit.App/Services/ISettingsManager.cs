@@ -30,6 +30,8 @@ namespace WolvenKit.Functionality.Services
         public bool TreeViewGroups { get; set; }
         public uint TreeViewGroupSize { get; set; }
 
+        public bool ShowAdvancedOptions { get; set; }
+
         #endregion Properties
     }
 

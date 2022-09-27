@@ -98,7 +98,7 @@ namespace WolvenKit.Common.Model.Arguments
         /// </summary>
         [Category("Export Type")]
         [Display(Name = "MLmask Export Type")]
-        public EMlmaskUncookExtension UncookExtension { get; set; } = EMlmaskUncookExtension.png;
+        public EUncookExtension UncookExtension { get; set; } = EUncookExtension.png;
 
         [Browsable(false)]
         public bool AsList { get; set; } = true;
@@ -108,6 +108,11 @@ namespace WolvenKit.Common.Model.Arguments
         /// </summary>
         /// <returns>String</returns>
         public override string ToString() => $"{UncookExtension}";
+    }
+
+    public class InkAtlasExportArgs : ExportArgs
+    {
+
     }
 
     /// <summary>
@@ -120,7 +125,7 @@ namespace WolvenKit.Common.Model.Arguments
         /// </summary>
         [Category("Export Type")]
         [Display(Name = "XBM Export Type")]
-        public EUncookExtension UncookExtension { get; set; } = EUncookExtension.tga;
+        public EUncookExtension UncookExtension { get; set; } = EUncookExtension.png;
 
         /// <summary>
         /// Flip Image argument
