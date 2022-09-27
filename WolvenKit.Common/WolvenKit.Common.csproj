@@ -1,23 +1,15 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <Platforms>x64</Platforms>
-    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
-    <PackageLicenseExpression>MIT</PackageLicenseExpression>
-    <Description>Core functionality for the WolvenKit Mod Editor.</Description>
-    <Company>WolvenKit</Company>
-    <PackageProjectUrl>https://github.com/WolvenKit/WolvenKit</PackageProjectUrl>
-    <RepositoryUrl>https://github.com/WolvenKit/WolvenKit</RepositoryUrl>
-    <RepositoryType>git</RepositoryType>
-    <PackageTags>wolvenkit</PackageTags>
-    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
       <TargetFramework>net6.0</TargetFramework>
-      <AssemblyVersion>2.5</AssemblyVersion>
-      <PackageOutputPath>./nupkg</PackageOutputPath>
-      <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-     <SatelliteResourceLanguages>en</SatelliteResourceLanguages>
+      <Version>1.60.0</Version>
+      <Platforms>x64</Platforms>
+      <SatelliteResourceLanguages>en</SatelliteResourceLanguages>
 
+      <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+      <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
+
 
 
   <ItemGroup>
@@ -32,19 +24,6 @@
     <None Remove="RED3\**" />
     <None Remove="lib\texconv.dll" />
     <None Remove="lib\texconv.pdb" />
-    <None Remove="lib\vgmstream\avcodec-vgmstream-58.dll" />
-    <None Remove="lib\vgmstream\avformat-vgmstream-58.dll" />
-    <None Remove="lib\vgmstream\avutil-vgmstream-56.dll" />
-    <None Remove="lib\vgmstream\in_vgmstream.dll" />
-    <None Remove="lib\vgmstream\libatrac9.dll" />
-    <None Remove="lib\vgmstream\libcelt-0061.dll" />
-    <None Remove="lib\vgmstream\libcelt-0110.dll" />
-    <None Remove="lib\vgmstream\libg719_decode.dll" />
-    <None Remove="lib\vgmstream\libmpg123-0.dll" />
-    <None Remove="lib\vgmstream\libvorbis.dll" />
-    <None Remove="lib\vgmstream\swresample-vgmstream-3.dll" />
-    <None Remove="lib\vgmstream\test.exe" />
-    <None Remove="lib\vgmstream\xmp-vgmstream.dll" />
     <None Remove="Resources\missinghashes.txt" />
     <None Remove="Resources\noderefs.kark" />
     <None Remove="Resources\tweakdbstr.kark" />
@@ -64,43 +43,43 @@
         <Pack>true</Pack>
         <PackagePath>lib\net6.0</PackagePath>
     </Content>
-    <Content Include="lib\vgmstream\avcodec-vgmstream-58.dll">
+    <Content Include="lib\avcodec-vgmstream-58.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="lib\vgmstream\avformat-vgmstream-58.dll">
+    <Content Include="lib\avformat-vgmstream-58.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="lib\vgmstream\avutil-vgmstream-56.dll">
+    <Content Include="lib\avutil-vgmstream-56.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="lib\vgmstream\in_vgmstream.dll">
+    <Content Include="lib\in_vgmstream.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="lib\vgmstream\libatrac9.dll">
+    <Content Include="lib\libatrac9.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="lib\vgmstream\libcelt-0061.dll">
+    <Content Include="lib\libcelt-0061.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="lib\vgmstream\libcelt-0110.dll">
+    <Content Include="lib\libcelt-0110.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="lib\vgmstream\libg719_decode.dll">
+    <Content Include="lib\libg719_decode.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="lib\vgmstream\libmpg123-0.dll">
+    <Content Include="lib\libmpg123-0.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="lib\vgmstream\libvorbis.dll">
+    <Content Include="lib\libvorbis.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="lib\vgmstream\swresample-vgmstream-3.dll">
+    <Content Include="lib\swresample-vgmstream-3.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="lib\vgmstream\test.exe">
+    <Content Include="lib\test.exe">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="lib\vgmstream\xmp-vgmstream.dll">
+    <Content Include="lib\xmp-vgmstream.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
@@ -120,10 +99,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\WolvenKit.Core\WolvenKit.Core.csproj" />
     <ProjectReference Include="..\WolvenKit.RED4.Archive\WolvenKit.RED4.Archive.csproj" />
     <ProjectReference Include="..\WolvenKit.RED4.TweakDB\WolvenKit.RED4.TweakDB.csproj" />
-    <ProjectReference Include="..\WolvenKit.RED4.Types\WolvenKit.RED4.Types.csproj" />
   </ItemGroup>
 
   <ItemGroup>
@@ -139,10 +116,10 @@
     <None Update="lib\Ijwhost.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="lib\vgmstream\COPYING">
+    <None Update="lib\COPYING">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="lib\vgmstream\README.md">
+    <None Update="lib\README.md">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="Resources\tweakdb.str">

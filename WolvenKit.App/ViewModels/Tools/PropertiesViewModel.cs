@@ -599,7 +599,7 @@ namespace WolvenKit.ViewModels.Tools
         /// <summary>
         /// Working directory for audio preview.
         /// </summary>
-        //private const string wdir = "lib\\vgmstream\\AudioWorkingDir\\";
+        //private const string wdir = "lib\\AudioWorkingDir\\";
 
         /// <summary>
         /// audio file list for opuspak type files with multiple wems inside. (not visually implemented)

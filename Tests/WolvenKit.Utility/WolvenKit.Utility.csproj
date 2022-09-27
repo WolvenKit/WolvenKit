@@ -9,6 +9,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Resources\**" />
+    <EmbeddedResource Remove="Resources\**" />
+    <None Remove="Resources\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Remove="appsettings.json" />
   </ItemGroup>
 
@@ -37,10 +43,6 @@
   <ItemGroup>
     <ProjectReference Include="..\..\WolvenKit.Common\WolvenKit.Common.csproj" />
     <ProjectReference Include="..\..\WolvenKit.Modkit\WolvenKit.Modkit.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Resources\" />
   </ItemGroup>
 
 </Project>
