@@ -78,17 +78,6 @@ jobs:
     - run: dotnet publish ./WolvenKit/WolvenKit.csproj -o ./publish/app/ -c Release --version-suffix "nightly.${{env.ISODATE}}" -p:InformationalVersion="${{env.VERSION}}"
     - run: dotnet publish ./WolvenKit.CLI/WolvenKit.CLI.csproj -o ./publish/console/ -c Release --version-suffix "nightly.${{env.ISODATE}}"
 
-    # Pack and upload prerelease nugets for Types, Modkit and CLI
-    - run: dotnet pack ./WolvenKit.RED4.Types/WolvenKit.RED4.Types.csproj --version-suffix "nightly.${{env.ISODATE}}"
-    - run: dotnet nuget push .\WolvenKit.RED4.Types\nupkg\*.nupkg --api-key ${{secrets.NUGET_KEY}} --source "https://api.nuget.org/v3/index.json" --skip-duplicate
-
-    - run: dotnet pack ./WolvenKit.Modkit/WolvenKit.Modkit.csproj --version-suffix "nightly.${{env.ISODATE}}"
-    - run: dotnet nuget push .\WolvenKit.Modkit\nupkg\*.nupkg --api-key ${{secrets.NUGET_KEY}} --source "https://api.nuget.org/v3/index.json" --skip-duplicate
-
-    - run: dotnet pack ./WolvenKit.CLI/WolvenKit.CLI.csproj --version-suffix "nightly.${{env.ISODATE}}"
-    - run: dotnet nuget push .\WolvenKit.CLI\nupkg\*.nupkg --api-key ${{secrets.NUGET_KEY}} --source "https://api.nuget.org/v3/index.json" --skip-duplicate
-
-
     # create zip
     - run: Compress-Archive -Path ./publish/app/* -DestinationPath ${{env.FINALOUT}}/${{env.PORTABLE}}
     - run: Compress-Archive -Path ./publish/console/* -DestinationPath ${{env.FINALOUT}}/${{env.CONSOLE}}
@@ -103,3 +92,35 @@ jobs:
         FILES: ${{env.FINALOUT}}/${{env.PORTABLE}} ${{env.FINALOUT}}/${{env.CONSOLE}}
         REPO: WolvenKit/WolvenKit-nightly-releases
         GITHUB_TOKEN: ${{ secrets.RELEASE_TOKEN }}
+
+  nightly-nugets:
+    needs: check_date
+    if: ${{ needs.check_date.outputs.should_run != 'false' }}
+    runs-on: windows-2022
+
+    steps:
+    # setup
+    - name: checkout
+      uses: actions/checkout@v2
+      with:
+        ref: main
+
+    - name: Setup .NET Core
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: 6.0.x
+
+    - name: Get Date
+      run: |
+        $date = Get-Date -Format "yyyy-MM-dd"
+        echo "ISODATE=$date" >> $env:GITHUB_ENV
+
+    # Pack and upload prerelease nugets for Types, Modkit and CLI
+    - run: dotnet pack ./WolvenKit.RED4.Types/WolvenKit.RED4.Types.csproj --version-suffix "nightly.${{env.ISODATE}}"
+    - run: dotnet nuget push .\WolvenKit.RED4.Types\nupkg\*.nupkg --api-key ${{secrets.NUGET_KEY}} --source "https://api.nuget.org/v3/index.json" --skip-duplicate
+
+    - run: dotnet pack ./WolvenKit.Modkit/WolvenKit.Modkit.csproj --version-suffix "nightly.${{env.ISODATE}}"
+    - run: dotnet nuget push .\WolvenKit.Modkit\nupkg\*.nupkg --api-key ${{secrets.NUGET_KEY}} --source "https://api.nuget.org/v3/index.json" --skip-duplicate
+
+    - run: dotnet pack ./WolvenKit.CLI/WolvenKit.CLI.csproj --version-suffix "nightly.${{env.ISODATE}}"
+    - run: dotnet nuget push .\WolvenKit.CLI\nupkg\*.nupkg --api-key ${{secrets.NUGET_KEY}} --source "https://api.nuget.org/v3/index.json" --skip-duplicate
