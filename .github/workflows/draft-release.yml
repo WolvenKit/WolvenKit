@@ -19,14 +19,6 @@ jobs:
     - name: Publish with Dotnet
       run: dotnet publish .\WolvenKit\WolvenKit.csproj -o .\publish -c Release
 
-
-    # Pack and upload nugets for Types, Modkit
-    - run: dotnet pack ./WolvenKit.RED4.Types/WolvenKit.RED4.Types.csproj
-    - run: dotnet nuget push .\WolvenKit.RED4.Types\nupkg\*.nupkg --api-key ${{secrets.NUGET_KEY}} --source "https://api.nuget.org/v3/index.json" --skip-duplicate
-
-    - run: dotnet pack ./WolvenKit.Modkit/WolvenKit.Modkit.csproj
-    - run: dotnet nuget push .\WolvenKit.Modkit\nupkg\*.nupkg --api-key ${{secrets.NUGET_KEY}} --source "https://api.nuget.org/v3/index.json" --skip-duplicate
-
     - uses: actions/upload-artifact@v2
       with:
         name: WolvenKit Desktop
@@ -46,14 +38,10 @@ jobs:
     - name: Publish with Dotnet
       run: dotnet publish .\WolvenKit.CLI\WolvenKit.CLI.csproj -o .\publish_cli -r win-x64 -c Release --no-self-contained
 
-    - run: dotnet pack ./WolvenKit.CLI/WolvenKit.CLI.csproj
-    - run: dotnet nuget push .\WolvenKit.CLI\nupkg\*.nupkg --api-key ${{secrets.NUGET_KEY}} --source "https://api.nuget.org/v3/index.json" --skip-duplicate
-
     - uses: actions/upload-artifact@v2
       with:
         name: WolvenKit CLI
         path: ./publish_cli
-
 
   console-linux:
     runs-on: ubuntu-latest
@@ -127,3 +115,24 @@ jobs:
         artifacts: "${{ env.FINALOUT }}/*.zip"
         bodyFile: "RELEASE.md"
         token: ${{ secrets.GITHUB_TOKEN }}
+
+  publish-nugets:
+    runs-on: windows-latest
+
+    steps:
+    - name: checkout
+      uses: actions/checkout@v2
+    - name: Setup .NET Core
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: 6.x
+
+    # Pack and upload nugets for Types, Modkit and CLI
+    - run: dotnet pack .\WolvenKit.RED4.Types\WolvenKit.RED4.Types.csproj
+    - run: dotnet nuget push .\WolvenKit.RED4.Types\nupkg\*.nupkg --api-key ${{secrets.NUGET_KEY}} --source "https://api.nuget.org/v3/index.json" --skip-duplicate
+
+    - run: dotnet pack .\WolvenKit.Modkit\WolvenKit.Modkit.csproj
+    - run: dotnet nuget push .\WolvenKit.Modkit\nupkg\*.nupkg --api-key ${{secrets.NUGET_KEY}} --source "https://api.nuget.org/v3/index.json" --skip-duplicate
+
+    - run: dotnet pack .\WolvenKit.CLI\WolvenKit.CLI.csproj
+    - run: dotnet nuget push .\WolvenKit.CLI\nupkg\*.nupkg --api-key ${{secrets.NUGET_KEY}} --source "https://api.nuget.org/v3/index.json" --skip-duplicate

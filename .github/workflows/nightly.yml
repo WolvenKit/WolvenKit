@@ -82,7 +82,6 @@ jobs:
     - run: Compress-Archive -Path ./publish/app/* -DestinationPath ${{env.FINALOUT}}/${{env.PORTABLE}}
     - run: Compress-Archive -Path ./publish/console/* -DestinationPath ${{env.FINALOUT}}/${{env.CONSOLE}}
 
-
     # RELEASE
     - name: Release
       run: |
