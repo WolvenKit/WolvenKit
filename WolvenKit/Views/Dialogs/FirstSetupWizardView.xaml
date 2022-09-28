@@ -11,8 +11,10 @@
     MinWidth="700"
     MinHeight="200"
     SizeToContent="WidthAndHeight"
-    WindowStartupLocation="CenterOwner">
-
+    WindowStartupLocation="CenterOwner"
+    Title="First Setup"
+    >
+    
 
     <Grid
         Margin="1"

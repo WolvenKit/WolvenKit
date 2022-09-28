@@ -894,7 +894,7 @@ namespace WolvenKit.ViewModels.Shell
             }
         }
 
-        private bool HasActiveProject() => ActiveProject is not null;
+        public bool HasActiveProject() => ActiveProject is not null;
 
         public DelegateCommand PackModCommand { get; private set; }
         private void ExecutePackMod() => _gameControllerFactory.GetController().PackProject();

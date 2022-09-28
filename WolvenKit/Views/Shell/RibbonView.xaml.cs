@@ -38,7 +38,10 @@ namespace WolvenKit.Views.Shell
                         viewModel => viewModel.MainViewModel.SaveAllCommand,
                         view => view.ToolbarSaveAllButton)
                     .DisposeWith(disposables);
+
                 // project
+
+
 
                 // pack
                 this.BindCommand(ViewModel,
@@ -58,8 +61,26 @@ namespace WolvenKit.Views.Shell
                         view => view.ToolbarHotInstallButton)
                     .DisposeWith(disposables);
 
+
+                this.BindCommand(ViewModel,
+                        viewModel => viewModel.LaunchOptionsCommand,
+                        view => view.LaunchOptionsMenuItem)
+                    .DisposeWith(disposables);
+
+                this.BindCommand(ViewModel,
+                       viewModel => viewModel.LaunchProfileCommand,
+                       view => view.LaunchProfileButton)
+                   .DisposeWith(disposables);
+
+                this.OneWayBind(ViewModel, vm => vm.LaunchProfileText,
+                   view => view.LaunchProfileText.Text)
+                   .DisposeWith(disposables);
+
+                this.OneWayBind(ViewModel, vm => vm.MainViewModel.ActiveProject,
+                    view => view.LaunchMenu.IsEnabled,
+                    p => p is not null)
+                    .DisposeWith(disposables);
             });
         }
-
     }
 }
