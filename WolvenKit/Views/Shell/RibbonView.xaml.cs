@@ -107,9 +107,10 @@ namespace WolvenKit.Views.Shell
                 });
 
                 _settingsManager.LaunchProfiles = defaultprofiles;
+                _settingsManager.Save();
             }
 
-
+            var count = 0;
             foreach (var (name, value) in _settingsManager.LaunchProfiles)
             {
                 var item = new MenuItem
@@ -129,14 +130,20 @@ namespace WolvenKit.Views.Shell
 
                 item.Click += new RoutedEventHandler(LaunchMenu_MenuItem_Click);
 
-                LaunchMenuMainItem.Items.Insert(0, item);
+                LaunchMenuMainItem.Items.Insert(count, item);
+                count++;
             }
         }
 
         private void LaunchMenu_MenuItem_Click(object sender, RoutedEventArgs e)
         {
-
-
+            if (e.Source is MenuItem item)
+            {
+                if (item.Header is string header)
+                {
+                    ViewModel.LaunchProfileText = header;
+                }
+            }
         }
     }
 }

@@ -292,9 +292,17 @@
                                     x:Name="LaunchProfileButton"
                                     Margin="-2,-2,2,-2"
                                     Style="{StaticResource MahApps.Styles.Button.Chromeless}">
-                                    <TextBlock
-                                        x:Name="LaunchProfileText"
-                                        Padding="5,0,0,0" />
+                                    <StackPanel Orientation="Horizontal">
+                                        <Grid>
+                                            <iconPacks:PackIconForkAwesome
+                                                Padding="0,0,2,2"
+                                                Foreground="LightGreen"
+                                                Kind="Play"
+                                                Style="{StaticResource WolvenKitToolBarButtonIcon}" />
+                                        </Grid>
+                                        <TextBlock x:Name="LaunchProfileText" Padding="5,0,0,0" />
+                                    </StackPanel>
+
                                 </Button>
                                 <Separator />
                                 <iconPacks:PackIconCodicons
@@ -305,7 +313,7 @@
 
                         </MenuItem.Header>
 
-                        <!--  Added programmatically -->
+                        <!--  Added programmatically  -->
 
                         <Separator />
 
@@ -316,7 +324,7 @@
                                     Kind="SettingsGear"
                                     Style="{StaticResource WolvenKitToolBarButtonIcon}" />
                             </MenuItem.Icon>
-                        </MenuItem> 
+                        </MenuItem>
 
                     </MenuItem>
                 </Menu>

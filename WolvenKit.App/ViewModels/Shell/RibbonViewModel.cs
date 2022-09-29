@@ -72,19 +72,19 @@ namespace WolvenKit.ViewModels.Shell
         private void LaunchOptions()
         {
             // open launch profiles menu
+            //TODO
         }
 
         public ReactiveCommand<Unit, Unit> LaunchProfileCommand { get; }
-        private Task LaunchProfileAsync()
+        private async Task LaunchProfileAsync()
         {
             if (_settingsManager.LaunchProfiles.TryGetValue(LaunchProfileText, out var launchProfile))
             {
-                return _gameControllerFactory.GetController().LaunchProject(launchProfile);
+                await _gameControllerFactory.GetController().LaunchProject(launchProfile);
             }
             else
             {
                 _loggerService.Error($"No launchprofile with name \"{LaunchProfileText}\" found.");
-                return Task.CompletedTask;
             }
         }
 
