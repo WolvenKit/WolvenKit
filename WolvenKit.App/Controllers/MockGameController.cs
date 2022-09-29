@@ -22,7 +22,7 @@ namespace WolvenKit.Functionality.Controllers
         public Task<bool> PackAndInstallProject() => throw new NotImplementedException();
         public Task<bool> DeployRedmod() => throw new NotImplementedException();
 
-        public bool PackAndInstallRunProject() => throw new NotImplementedException();
+        public Task<bool> PackAndInstallRunProject() => throw new NotImplementedException();
 
         public bool HotInstallProject() => throw new NotImplementedException();
     }

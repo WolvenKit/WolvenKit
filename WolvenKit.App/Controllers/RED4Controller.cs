@@ -260,8 +260,14 @@ namespace WolvenKit.Functionality.Controllers
             return true;
         }
 
-        public bool PackAndInstallRunProject()
+        public async Task<bool> PackAndInstallRunProject()
         {
+            if (_projectManager.ActiveProject is not Cp77Project cp77Proj)
+            {
+                _loggerService.Error("Can't pack project (no project/not cyberpunk project)!");
+                return false;
+            }
+
             _progressService.IsIndeterminate = true;
 
             if (!PackProjectNoBackup())
@@ -271,6 +277,11 @@ namespace WolvenKit.Functionality.Controllers
             }
 
             InstallMod();
+
+            if (cp77Proj.IsRedMod && cp77Proj.ExecuteDeploy)
+            {
+                await DeployRedmod();
+            }
 
             _progressService.IsIndeterminate = false;
             return true;
@@ -496,8 +507,35 @@ namespace WolvenKit.Functionality.Controllers
             }
             _loggerService.Success($"{cp77Proj.Name} packed into {cp77Proj.PackedArchiveDirectory}");
 
+
             // compile tweak files
             CompileTweakFiles(cp77Proj);
+
+            if (cp77Proj.IsRedMod)
+            {
+                DeploySoundFiles();
+
+                // write info.json file if it not exists
+                var modInfoJsonPath = Path.Combine(cp77Proj.PackedModDirectory, "info.json");
+                if (!File.Exists(modInfoJsonPath))
+                {
+                    var options = new JsonSerializerOptions
+                    {
+                        WriteIndented = true,
+                        DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,
+                        PropertyNamingPolicy = JsonNamingPolicy.CamelCase
+                    };
+                    var jsonString = JsonSerializer.Serialize(cp77Proj.GetInfo(), options);
+                    File.WriteAllText(modInfoJsonPath, jsonString);
+                }
+            }
+            else
+            {
+                if (Directory.EnumerateFileSystemEntries(cp77Proj.SoundDirectory).Any())
+                {
+                    _loggerService.Warning("This project contains custom sound files but is packed as legacy mod!");
+                }
+            }
 
             return true;
         }

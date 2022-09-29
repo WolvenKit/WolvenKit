@@ -52,7 +52,7 @@ namespace WolvenKit.Functionality.Controllers
 
         public Task<bool> PackAndInstallProject();
 
-        public bool PackAndInstallRunProject();
+        public Task<bool> PackAndInstallRunProject();
 
         public bool HotInstallProject();
 
