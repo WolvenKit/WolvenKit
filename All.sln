@@ -138,6 +138,15 @@ Global
 		{9B8CF5A4-29BA-45E6-9BC2-DEDEB3A9EFB4}.Profile|x64.Build.0 = Debug|x64
 		{9B8CF5A4-29BA-45E6-9BC2-DEDEB3A9EFB4}.Release|x64.ActiveCfg = Release|x64
 		{9B8CF5A4-29BA-45E6-9BC2-DEDEB3A9EFB4}.Release|x64.Build.0 = Release|x64
+		{849A9683-78D3-4A05-8C76-A804DC79704A}.Debug|x64.ActiveCfg = Debug|x64
+		{849A9683-78D3-4A05-8C76-A804DC79704A}.Debug|x64.Build.0 = Debug|x64
+		{849A9683-78D3-4A05-8C76-A804DC79704A}.Debug|x64.Deploy.0 = Debug|x64
+		{849A9683-78D3-4A05-8C76-A804DC79704A}.Profile|x64.ActiveCfg = Debug|x64
+		{849A9683-78D3-4A05-8C76-A804DC79704A}.Profile|x64.Build.0 = Debug|x64
+		{849A9683-78D3-4A05-8C76-A804DC79704A}.Profile|x64.Deploy.0 = Debug|x64
+		{849A9683-78D3-4A05-8C76-A804DC79704A}.Release|x64.ActiveCfg = Release|x64
+		{849A9683-78D3-4A05-8C76-A804DC79704A}.Release|x64.Build.0 = Release|x64
+		{849A9683-78D3-4A05-8C76-A804DC79704A}.Release|x64.Deploy.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
