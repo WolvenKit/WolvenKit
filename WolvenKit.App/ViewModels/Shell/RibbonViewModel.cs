@@ -2,15 +2,19 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Reactive;
+using System.Reflection;
 using System.Threading.Tasks;
 using DynamicData.Binding;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
+using WinCopies.Linq;
 using WolvenKit.App.Models;
 using WolvenKit.Common;
 using WolvenKit.Common.Interfaces;
+using WolvenKit.Core.Interfaces;
 using WolvenKit.Core.Services;
 using WolvenKit.Functionality.Commands;
+using WolvenKit.Functionality.Controllers;
 using WolvenKit.Functionality.Services;
 using WolvenKit.Models;
 using WolvenKit.RED4.Archive;
@@ -19,21 +23,30 @@ namespace WolvenKit.ViewModels.Shell
 {
     public class RibbonViewModel : ReactiveObject
     {
+        private readonly ISettingsManager _settingsManager;
+        private readonly ILoggerService _loggerService;
+        private readonly IGameControllerFactory _gameControllerFactory;
+
         public RibbonViewModel(
+            ISettingsManager settingsManager,
+            ILoggerService loggerService,
+            IGameControllerFactory gameControllerFactory,
             AppViewModel appViewModel
         )
         {
+            _settingsManager = settingsManager;
+            _loggerService = loggerService;
+            _gameControllerFactory = gameControllerFactory;
             MainViewModel = appViewModel;
 
             LaunchProfileText = "Launch Profiles";
-            LaunchProfiles = GetLaunchProfiles();
 
             NewFileCommand = ReactiveCommand.Create(() => MainViewModel.NewFileCommand.SafeExecute(null));
             SaveFileCommand = ReactiveCommand.Create(() => MainViewModel.SaveFileCommand.SafeExecute());
             SaveAsCommand = ReactiveCommand.Create(() => MainViewModel.SaveAsCommand.SafeExecute());
             SaveAllCommand = ReactiveCommand.Create(() => MainViewModel.SaveAllCommand.SafeExecute());
             LaunchOptionsCommand = ReactiveCommand.Create(LaunchOptions);
-            LaunchProfileCommand = ReactiveCommand.Create(LaunchProfile);
+            LaunchProfileCommand = ReactiveCommand.CreateFromTask(async () => await LaunchProfileAsync());
 
             this.WhenAnyValue(x => x.MainViewModel.ActiveProject).WhereNotNull().Subscribe(p =>
             {
@@ -45,18 +58,7 @@ namespace WolvenKit.ViewModels.Shell
 
         }
 
-        private Dictionary<string, LaunchProfile> GetLaunchProfiles()
-        {
-            var profiles = new Dictionary<string, LaunchProfile>();
 
-            // deserialize
-
-            // and add MenuItems
-
-
-
-            return profiles;
-        }
 
         public AppViewModel MainViewModel { get; }
 
@@ -73,18 +75,22 @@ namespace WolvenKit.ViewModels.Shell
         }
 
         public ReactiveCommand<Unit, Unit> LaunchProfileCommand { get; }
-        private void LaunchProfile()
+        private Task LaunchProfileAsync()
         {
-            // launch the selected profile
-            // this would be by name
+            if (_settingsManager.LaunchProfiles.TryGetValue(LaunchProfileText, out var launchProfile))
+            {
+                return _gameControllerFactory.GetController().LaunchProject(launchProfile);
+            }
+            else
+            {
+                _loggerService.Error($"No launchprofile with name \"{LaunchProfileText}\" found.");
+                return Task.CompletedTask;
+            }
         }
 
 
 
         [Reactive] public string LaunchProfileText { get; set; }
-
-        public Dictionary<string, LaunchProfile> LaunchProfiles { get; set; }
-
 
     }
 }

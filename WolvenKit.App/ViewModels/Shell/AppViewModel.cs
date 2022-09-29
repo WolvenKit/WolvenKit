@@ -119,10 +119,11 @@ namespace WolvenKit.ViewModels.Shell
             OpenFileAsyncCommand = ReactiveCommand.CreateFromTask<FileModel, Unit>(OpenFileAsync);
             OpenRedFileAsyncCommand = ReactiveCommand.CreateFromTask<FileEntry, Unit>(OpenRedFileAsync);
 
-            PackModCommand = new DelegateCommand(ExecutePackMod, HasActiveProject).ObservesProperty(() => ActiveProject);
-            PackInstallModCommand = new DelegateCommand(async () => await ExecutePackInstallModAsync(), HasActiveProject).ObservesProperty(() => ActiveProject);
-            PackInstallRunModCommand = new DelegateCommand(ExecutePackInstallRunModAsync, HasActiveProject).ObservesProperty(() => ActiveProject);
-            HotInstallModCommand = new DelegateCommand(ExecuteHotInstallMod, HasActiveProject).ObservesProperty(() => ActiveProject);
+            PackModCommand = ReactiveCommand.CreateFromTask(async () => await ExecutePackModAsync());
+            PackInstallModCommand = ReactiveCommand.CreateFromTask(async () => await ExecutePackInstallModAsync());
+            PackInstallRunModCommand = ReactiveCommand.CreateFromTask(async () => await ExecutePackInstallRunModAsync());
+
+            HotInstallModCommand = ReactiveCommand.CreateFromTask(async () => await HotInstallModAsync());
 
 
             NewFileCommand = new DelegateCommand<string>(ExecuteNewFile, CanNewFile).ObservesProperty(() => ActiveProject).ObservesProperty(() => IsDialogShown);
@@ -141,7 +142,7 @@ namespace WolvenKit.ViewModels.Shell
             ShowSettingsCommand = new DelegateCommand(ExecuteShowSettings, CanShowSettings).ObservesProperty(() => IsDialogShown);
             ShowProjectSettingsCommand = new DelegateCommand(ExecuteShowProjectSettings, CanShowProjectSettings).ObservesProperty(() => IsDialogShown).ObservesProperty(() => ActiveProject);
 
-            LaunchGameCommand = ReactiveCommand.CreateFromTask<string>(ExecuteLaunchGame);
+            LaunchGameCommand = ReactiveCommand.Create<string>(ExecuteLaunchGame);
 
             CloseModalCommand = new DelegateCommand(ExecuteCloseModal, CanCloseModal).ObservesProperty(() => IsDialogShown).ObservesProperty(() => IsOverlayShown);
             CloseOverlayCommand = new DelegateCommand(ExecuteCloseOverlay, CanCloseOverlay).ObservesProperty(() => IsOverlayShown);
@@ -150,8 +151,6 @@ namespace WolvenKit.ViewModels.Shell
 
             OpenFileAsyncCommand.ThrownExceptions.Subscribe(ex => LogExtended(ex));
             OpenRedFileAsyncCommand.ThrownExceptions.Subscribe(ex => LogExtended(ex));
-            //PackModCommand.ThrownExceptions.Subscribe(ex => LogExtended(ex));
-            //PackInstallModCommand.ThrownExceptions.Subscribe(ex => LogExtended(ex));
             OpenProjectCommand.ThrownExceptions.Subscribe(ex => LogExtended(ex));
 
             #endregion commands
@@ -456,7 +455,6 @@ namespace WolvenKit.ViewModels.Shell
                 if (_pluginService.IsInstalled(EPlugin.redmod))
                 {
                     np.IsRedMod = true;
-                    np.ExecuteDeploy = true;
                 }
 
                 _projectManager.ActiveProject = np;
@@ -549,19 +547,17 @@ namespace WolvenKit.ViewModels.Shell
         public enum EGameLaunchCommand
         {
             Launch,
-            SteamLaunch,
-            PackInstallLaunch
+            SteamLaunch
         }
         [Reactive]
         public ObservableCollection<GameLaunchCommand> SelectedGameCommands { get; set; } = new()
         {
             new GameLaunchCommand("Launch Game", EGameLaunchCommand.Launch),
             new GameLaunchCommand("Launch Game with Steam", EGameLaunchCommand.SteamLaunch),
-            new GameLaunchCommand("Pack, Install and Launch Game", EGameLaunchCommand.PackInstallLaunch)
         };
 
         public ReactiveCommand<string, Unit> LaunchGameCommand { get; private set; }
-        private async Task ExecuteLaunchGame(string stridx)
+        private void ExecuteLaunchGame(string stridx)
         {
             if (!int.TryParse(stridx, out var idx))
             {
@@ -606,26 +602,7 @@ namespace WolvenKit.ViewModels.Shell
                         _loggerService.Info($"Launch: error debug info: {ex.Message}");
                     }
                     break;
-                case EGameLaunchCommand.PackInstallLaunch:
-                    try
-                    {
-                        if (await Task.Run(() => _gameControllerFactory.GetController().PackAndInstallProject()))
-                        {
-                            Process.Start(new ProcessStartInfo
-                            {
-                                FileName = _settingsManager.GetRED4GameLaunchCommand(),
-                                Arguments = _settingsManager.GetRED4GameLaunchOptions() ?? "",
-                                ErrorDialog = true,
-                                UseShellExecute = true,
-                            });
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        _loggerService.Error("Launch: error launching game! Please check your executable path in Settings.");
-                        _loggerService.Info($"Launch: error debug info: {ex.Message}");
-                    }
-                    break;
+
                 default:
                     break;
             }
@@ -896,65 +873,35 @@ namespace WolvenKit.ViewModels.Shell
 
         public bool HasActiveProject() => ActiveProject is not null;
 
-        public DelegateCommand PackModCommand { get; private set; }
-        private void ExecutePackMod() => _gameControllerFactory.GetController().PackProject();
 
-        public DelegateCommand PackInstallModCommand { get; private set; }
-        private Task ExecutePackInstallModAsync() => Task.Run(async () => await _gameControllerFactory.GetController().PackAndInstallProject());
-
-        public DelegateCommand PackInstallRunModCommand { get; private set; }
-        private async void ExecutePackInstallRunModAsync()
+        // Pack mod
+        public ReactiveCommand<Unit, Unit> PackModCommand { get; private set; }
+        private Task ExecutePackModAsync() => _gameControllerFactory.GetController().LaunchProject(new App.Models.LaunchProfile()
         {
-            if (await Task.Run(() => _gameControllerFactory.GetController().PackAndInstallRunProject()))
-            {
-                Process.Start(new ProcessStartInfo
-                {
-                    FileName = _settingsManager.GetRED4GameLaunchCommand(),
-                    Arguments = _settingsManager.GetRED4GameLaunchOptions() ?? "",
-                    ErrorDialog = true,
-                    UseShellExecute = true,
-                });
-            }
-        }
 
-        public DelegateCommand HotInstallModCommand { get; private set; }
-        private void ExecuteHotInstallMod() => _gameControllerFactory.GetController().HotInstallProject();
+        });
 
-        //public ICommand PublishModCommand { get; private set; }
-        //private bool CanPublishMod() => _projectManager.ActiveProject != null;
-        //private void ExecutePublishMod()
-        //{                // #convert2MVVMSoon
-        //    //  try
-        //    //  {
-        //    //      var vm = new UserControlHostWindowViewModel(new PublishWizardView(), 600, 1200);
+        public ReactiveCommand<Unit, Unit> PackInstallModCommand { get; private set; }
+        private Task ExecutePackInstallModAsync() => _gameControllerFactory.GetController().LaunchProject(new App.Models.LaunchProfile()
+        {
+            Install = true
+        });
 
-        //    //      ServiceLocator.Default.ResolveType<IUIVisualizerService>().ShowDialogAsync(vm);
-        //    // }
-        //    //  catch (Exception ex)
-        //    // {
-        //    //      _loggerService.LogString(ex.Message, Logtype.Error);
-        //    //     _loggerService.LogString("Failed to publish project!", Logtype.Error);
-        //    //  }
-        //}
+        public ReactiveCommand<Unit, Unit> PackInstallRunModCommand { get; private set; }
+        private Task ExecutePackInstallRunModAsync() => _gameControllerFactory.GetController().LaunchProject(new App.Models.LaunchProfile()
+        {
+            Install = true,
+            LaunchGame = true
+        });
 
-        //public ICommand ShowAnimationToolCommand { get; private set; }
+
+        public ReactiveCommand<Unit, Unit> HotInstallModCommand { get; private set; }
+        private async Task HotInstallModAsync() => await Task.Delay(1);
+
 
         public ICommand ShowAssetsCommand { get; private set; }
         private bool CanShowAssetBrowser() => true;//AssetBrowserVM != null && AssetBrowserVM.IsLoaded;
         private void ExecuteAssetBrowser() => AssetBrowserVM.IsVisible = !AssetBrowserVM.IsVisible;
-
-        //public ICommand ShowAudioToolCommand { get; private set; }
-        //private bool CanShowAudioTool() => _projectManager.ActiveProject != null;
-        // public void ExecuteAudioTool() => AudioToolVM.IsVisible = !AudioToolVM.IsVisible;
-
-        //public ICommand ShowVideoToolCommand { get; private set; }
-        //private bool CanShowVideoTool() => _projectManager.ActiveProject != null;
-        //public void ExecuteVideoTool()
-        //{
-        //    //var mediator = ServiceLocator.Default.ResolveType<IMessageMediator>();
-        //    //mediator.SendMessage<int>(0);
-        //    //mediator.SendMessage<bool>(true);
-        //}
 
         public ICommand ShowImportExportToolCommand { get; private set; }
         private bool CanShowImportExportTool() => ActiveProject is not null;
@@ -963,20 +910,6 @@ namespace WolvenKit.ViewModels.Shell
         public ICommand ShowLogCommand { get; private set; }
         private bool CanShowLog() => ActiveProject is not null;
         private void ExecuteShowLog() => Log.IsVisible = !Log.IsVisible;
-
-        //public ICommand ShowPackageInstallerCommand { get; private set; }
-        //private bool CanShowInstaller() => false;
-        //private void ExecuteShowInstaller()
-        //{                // #convert2MVVMSoon
-        //    //  var rpv = new InstallerWizardView();
-        //    //  var zxc = new UserControlHostWindowViewModel(rpv);
-        //    //  var uchwv = new UserControlHostWindowView(zxc);
-        //    //  uchwv.Show();
-        //}
-
-        //public ICommand ShowPluginManagerCommand { get; private set; }
-        //private bool CanShowPluginManagerTool() => false;
-
 
         public ICommand ShowProjectExplorerCommand { get; private set; }
         private bool CanShowProjectExplorer() => ActiveProject is not null;

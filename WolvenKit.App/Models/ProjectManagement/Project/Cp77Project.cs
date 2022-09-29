@@ -153,9 +153,7 @@ namespace WolvenKit.ProjectManagement.Project
         }
 
         public bool IsRedMod { get; set; }
-        public bool ExecuteDeploy { get; set; }
 
-        
 
         #region methods
 

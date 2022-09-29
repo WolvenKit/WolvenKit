@@ -47,9 +47,9 @@ namespace WolvenKit.ViewModels.Dialogs
 
             try
             {
+                using var stream = Assembly.GetExecutingAssembly().GetManifestResourceStream(@"WolvenKit.App.Resources.WolvenKitFileDefinitions.xml");
+
                 var serializer = new XmlSerializer(typeof(WolvenKitFileDefinitions));
-                using var stream = Assembly.GetExecutingAssembly()
-                    .GetManifestResourceStream(@"WolvenKit.App.Resources.WolvenKitFileDefinitions.xml");
                 var newdef = (WolvenKitFileDefinitions)serializer.Deserialize(stream);
                 foreach (ERedExtension ext in Enum.GetValues(typeof(ERedExtension)))
                 {

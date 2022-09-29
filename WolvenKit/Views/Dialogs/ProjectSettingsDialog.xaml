@@ -93,15 +93,7 @@
                     <Label Grid.Column="0">Is RedMod?</Label>
                     <CheckBox x:Name="IsRedModCheckBox" Grid.Column="1" />
                 </Grid>
-                <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="110" />
-                        <ColumnDefinition Width="*" />
-                    </Grid.ColumnDefinitions>
-
-                    <Label Grid.Column="0">Deploy on install?</Label>
-                    <CheckBox x:Name="ExecuteDeployCheckBox" Grid.Column="1" />
-                </Grid>
+               
             </StackPanel>
         </Grid>
 

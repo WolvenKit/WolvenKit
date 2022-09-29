@@ -285,7 +285,7 @@
                 </Button>
 
                 <Menu x:Name="LaunchMenu">
-                    <MenuItem>
+                    <MenuItem x:Name="LaunchMenuMainItem">
                         <MenuItem.Header>
                             <StackPanel Orientation="Horizontal">
                                 <Button
@@ -305,7 +305,7 @@
 
                         </MenuItem.Header>
 
-                        <!--  Added programmatically  -->
+                        <!--  Added programmatically -->
 
                         <Separator />
 
@@ -316,7 +316,7 @@
                                     Kind="SettingsGear"
                                     Style="{StaticResource WolvenKitToolBarButtonIcon}" />
                             </MenuItem.Icon>
-                        </MenuItem>
+                        </MenuItem> 
 
                     </MenuItem>
                 </Menu>

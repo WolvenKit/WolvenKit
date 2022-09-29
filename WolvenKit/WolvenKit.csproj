@@ -1590,6 +1590,7 @@
     <None Remove="distraction_generic.bk2" />
     <None Remove="DockStatesDefault.xml" />
     <None Remove="Obsolete.dll" />
+    <None Remove="Resources\launchprofiles.json" />
     <None Remove="Resources\Media\bkmk.kark" />
     <None Remove="Resources\Media\Images\Application\.cpmodproj.png" />
     <None Remove="Resources\Media\Images\Application\.w3modproj.png" />
@@ -1765,6 +1766,12 @@
     <None Remove="sample.mp4" />
     <None Remove="SplashScreen1.png" />
     <None Remove="TaskBarIcon.ico" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\launchprofiles.json">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </EmbeddedResource>
   </ItemGroup>
 
   <ItemGroup>

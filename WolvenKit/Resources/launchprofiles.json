@@ -1,0 +1,23 @@
+{
+    "Pack": {
+        "CreateBackup": false,
+        "Install": false,
+        "LaunchGame": false,
+        "GameArguments": "",
+        "DeployWithRedmod": false
+    },
+    "Pack and Install": {
+        "CreateBackup": false,
+        "Install": true,
+        "LaunchGame": false,
+        "GameArguments": "",
+        "DeployWithRedmod": false
+    },
+    "Pack Install Launch": {
+        "CreateBackup": false,
+        "Install": true,
+        "LaunchGame": true,
+        "GameArguments": "",
+        "DeployWithRedmod": false
+    }
+}

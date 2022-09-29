@@ -7,7 +7,18 @@ using System.Threading.Tasks;
 namespace WolvenKit.App.Models;
 public class LaunchProfile
 {
-    public string Name { get; set; }
+    public bool CreateBackup { get; set; }
+    public bool Install { get; set; }
+    // installsound files
+    // install tweak files
+    // install script files
 
+
+    public bool DeployWithRedmod { get; set; }
+
+    //hot reload
+
+    public bool LaunchGame { get; set; }
+    public string GameArguments { get; set; }
 
 }

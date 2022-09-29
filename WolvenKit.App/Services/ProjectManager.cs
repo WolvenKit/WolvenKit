@@ -143,17 +143,6 @@ namespace WolvenKit.Functionality.Services
                     return null;
                 }
 
-                //if (typeof(T) == typeof(Tw3Project))
-                //{
-                //    return new Tw3Project(path)
-                //    {
-                //        Author = obj.Author,
-                //        Email = obj.Email,
-                //        Name = obj.Name,
-                //        Version = obj.Version,
-                //    };
-                //}
-                /*else*/
                 if (typeof(T) != typeof(Cp77Project))
                 {
                     return null;
@@ -166,7 +155,6 @@ namespace WolvenKit.Functionality.Services
                     Name = obj.Name,
                     Version = obj.Version,
                     IsRedMod = obj.IsRedMod,
-                    ExecuteDeploy = obj.ExecuteDeploy
                 };
 
                 var projectHashesFile = Path.Combine(result.ProjectDirectory, "project_hashes.txt");
@@ -247,7 +235,6 @@ namespace WolvenKit.Functionality.Services
                 if (project is Cp77Project cp77Project)
                 {
                     IsRedMod = cp77Project.IsRedMod;
-                    ExecuteDeploy = cp77Project.ExecuteDeploy;
                 }
             }
 
