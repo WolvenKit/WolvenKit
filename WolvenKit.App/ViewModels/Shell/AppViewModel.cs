@@ -115,9 +115,8 @@ namespace WolvenKit.ViewModels.Shell
             ShowModsViewCommand = new DelegateCommand(ExecuteShowModsView, CanShowModsView).ObservesProperty(() => IsDialogShown);
             ShowPluginCommand = new DelegateCommand(ExecuteShowPlugin, CanShowPlugin).ObservesProperty(() => IsDialogShown);
 
-            OpenFileCommand = new DelegateCommand<FileModel>(p => ExecuteOpenFile(p));
-            OpenFileAsyncCommand = ReactiveCommand.CreateFromTask<FileModel, Unit>(OpenFileAsync);
-            OpenRedFileAsyncCommand = ReactiveCommand.CreateFromTask<FileEntry, Unit>(OpenRedFileAsync);
+            OpenFileCommand = ReactiveCommand.CreateFromTask<FileModel>(async (m) => await OpenFileAsync(m));
+            OpenRedFileCommand = ReactiveCommand.CreateFromTask<FileEntry, Unit>(OpenRedFileAsync);
 
             PackModCommand = ReactiveCommand.CreateFromTask(async () => await ExecutePackModAsync());
             PackInstallModCommand = ReactiveCommand.CreateFromTask(async () => await ExecutePackInstallModAsync());
@@ -149,8 +148,8 @@ namespace WolvenKit.ViewModels.Shell
             CloseDialogCommand = new DelegateCommand(ExecuteCloseDialog, CanCloseDialog).ObservesProperty(() => IsDialogShown);
 
 
-            OpenFileAsyncCommand.ThrownExceptions.Subscribe(ex => LogExtended(ex));
-            OpenRedFileAsyncCommand.ThrownExceptions.Subscribe(ex => LogExtended(ex));
+            OpenFileCommand.ThrownExceptions.Subscribe(ex => LogExtended(ex));
+            OpenRedFileCommand.ThrownExceptions.Subscribe(ex => LogExtended(ex));
             OpenProjectCommand.ThrownExceptions.Subscribe(ex => LogExtended(ex));
 
             #endregion commands
@@ -614,8 +613,18 @@ namespace WolvenKit.ViewModels.Shell
         private bool CanShowSoundModdingTool() => !IsDialogShown;
         private void ExecuteShowSoundModdingTool() => SetActiveDialog(new SoundModdingViewModel
         {
-            FileHandler = OpenFromNewFile
+            FileHandler = OpenSoundModdingView
         });
+
+        public async Task OpenSoundModdingView(SoundModdingViewModel file)
+        {
+            CloseModalCommand.Execute(null);
+            if (file == null)
+            {
+                return;
+            }
+            await Task.CompletedTask;
+        }
 
         public ICommand ShowPluginCommand { get; private set; }
         private bool CanShowPlugin() => !IsDialogShown;
@@ -640,7 +649,7 @@ namespace WolvenKit.ViewModels.Shell
             FileHandler = OpenFromNewFile
         });
 
-        public async Task OpenFromNewFile(NewFileViewModel file)
+        private async Task OpenFromNewFile(NewFileViewModel file)
         {
             CloseModalCommand.Execute(null);
             if (file == null)
@@ -657,7 +666,7 @@ namespace WolvenKit.ViewModels.Shell
             });
         }
 
-        public static async Task OpenFromNewFileTask(NewFileViewModel file)
+        private static async Task OpenFromNewFileTask(NewFileViewModel file)
         {
             Stream stream = null;
             switch (file.SelectedFile.Type)
@@ -690,74 +699,10 @@ namespace WolvenKit.ViewModels.Shell
                     break;
             }
             stream.Dispose();
-
-            //return Task.CompletedTask;
-
-            // Open file
-            //await Locator.Current.GetService<AppViewModel>().RequestFileOpen(file.FullPath);
-
-
-            //if (file != null)
-            //{
-            //    _progressService.IsIndeterminate = true;
-            //    try
-            //    {
-            //        var fileViewModel = new RedDocumentViewModel(file.FileName);
-            //        await using (var stream = new MemoryStream())
-            //        {
-            //            file.Extract(stream);
-            //            fileViewModel.OpenStream(stream, null);
-            //        }
-
-            //        if (!DockedViews.Contains(fileViewModel))
-            //            DockedViews.Add(fileViewModel);
-            //        ActiveDocument = fileViewModel;
-            //        UpdateTitle();
-            //    }
-            //    catch (Exception e)
-            //    {
-            //        _loggerService.Error(e.Message);
-            //    }
-            //    finally
-            //    {
-            //        _progressService.IsIndeterminate = false;
-            //    }
-            //}
-
         }
 
-        public ICommand OpenFileCommand { get; private set; }
-        private void ExecuteOpenFile(FileModel model)
-        {
-            if (model == null)
-            {
-                var dlg = new OpenFileDialog();
-                if (dlg.ShowDialog().GetValueOrDefault())
-                {
-                    //model = new FileViewModel(new FileModel(new FileInfo(dlg.FileName)));
-                    //TODO
-                    //ActiveDocument = await OpenAsync(model.FullName);
-                }
-            }
-            else
-            {
-                if (model.IsDirectory)
-                {
-                    model.IsExpanded = !model.IsExpanded;
-                }
-                else if (!model.IsDirectory)
-                {
-                    _progressService.IsIndeterminate = true;
-
-                    RequestFileOpen(model.FullName);
-
-                    _progressService.IsIndeterminate = false;
-                }
-            }
-        }
-
-        public ReactiveCommand<FileModel, Unit> OpenFileAsyncCommand { get; }
-        private async Task<Unit> OpenFileAsync(FileModel model)
+        public ReactiveCommand<FileModel, Unit> OpenFileCommand { get; }
+        private async Task OpenFileAsync(FileModel model)
         {
             if (model == null)
             {
@@ -792,11 +737,9 @@ namespace WolvenKit.ViewModels.Shell
                     }
                 }
             }
-
-            return Unit.Default;
         }
 
-        public ReactiveCommand<FileEntry, Unit> OpenRedFileAsyncCommand { get; }
+        public ReactiveCommand<FileEntry, Unit> OpenRedFileCommand { get; }
         private async Task<Unit> OpenRedFileAsync(FileEntry file)
         {
             if (file is not null)

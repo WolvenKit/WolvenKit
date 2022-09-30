@@ -352,7 +352,7 @@ namespace WolvenKit.ViewModels.Tools
         {
             if (RightSelectedItem is RedFileViewModel rfvm)
             {
-                Locator.Current.GetService<AppViewModel>().OpenRedFileAsyncCommand.SafeExecute(rfvm.GetGameFile());
+                Locator.Current.GetService<AppViewModel>().OpenRedFileCommand.SafeExecute(rfvm.GetGameFile());
             }
         }
 
@@ -363,7 +363,7 @@ namespace WolvenKit.ViewModels.Tools
         {
             if (!_archiveManager.IsModBrowserActive)
             {
-                _archiveManager.LoadModsArchives(new []{ new DirectoryInfo(_settings.GetRED4GameLegacyModDir()), new DirectoryInfo(_settings.GetRED4GameModDir()) });
+                _archiveManager.LoadModsArchives(new[] { new DirectoryInfo(_settings.GetRED4GameLegacyModDir()), new DirectoryInfo(_settings.GetRED4GameModDir()) });
                 LeftItems = new ObservableCollection<RedFileSystemModel>(_archiveManager.ModRoots);
             }
             else
@@ -538,7 +538,7 @@ namespace WolvenKit.ViewModels.Tools
         // Term to refinement pattern conversion regexps
 
         private static readonly Regex Whitespace = new("\\s+", RegexpOpts, RegexpSafetyTimeout);
-        private static readonly Regex PathSeparator = new ("(^|\\G|\\w)(?:\\\\|/)(\\w+|$)", RegexpOpts, RegexpSafetyTimeout);
+        private static readonly Regex PathSeparator = new("(^|\\G|\\w)(?:\\\\|/)(\\w+|$)", RegexpOpts, RegexpSafetyTimeout);
         private static readonly string PathNormalized = "$1\\\\$2";
         private static readonly Regex ExtensionDot = new("(^|\\G|\\||\\w)\\.(?<term>\\w+?)", RegexpOpts, RegexpSafetyTimeout);
         private static readonly string ExtensionDotEscaped = "$1\\.${term}";
@@ -548,20 +548,23 @@ namespace WolvenKit.ViewModels.Tools
 
         private static readonly Func<Term, Term> NormalizePathSeparators =
             (Term term) =>
-                term with {
+                term with
+                {
                     Pattern = PathSeparator.Replace(term.Pattern, PathNormalized)
                 };
 
         private static readonly Func<Term, Term> PreserveExtensionDotMatch =
             (Term term) =>
-                term with {
+                term with
+                {
                     Pattern = ExtensionDot.Replace(term.Pattern, ExtensionDotEscaped)
                 };
 
         private static readonly Func<Term, Term> LimitOrToOneTermOnly =
             (Term term) =>
                 Or.IsMatch(term.Pattern)
-                    ? term with {
+                    ? term with
+                    {
                         Pattern = $"(?:{term.Pattern})"
                     }
                     : term;
@@ -600,17 +603,14 @@ namespace WolvenKit.ViewModels.Tools
 
             var verbatimMatch = IsVerbatimRefinement.Match(refinementString).Groups["verbatim"].Value;
 
-            if (!string.IsNullOrEmpty(verbatimMatch))
-            {
-                return new VerbatimRefinement
-                    {
-                        Verbatim = verbatimMatch.Replace(Path.AltDirectorySeparatorChar, Path.DirectorySeparatorChar)
-                    };
-            }
-
-            return new PatternRefinement
-            {
-                Terms = Whitespace
+            return !string.IsNullOrEmpty(verbatimMatch)
+                ? new VerbatimRefinement
+                {
+                    Verbatim = verbatimMatch.Replace(Path.AltDirectorySeparatorChar, Path.DirectorySeparatorChar)
+                }
+                : new PatternRefinement
+                {
+                    Terms = Whitespace
                     .Split(refinementString)
                     .Select(term => new Term
                     {
@@ -622,7 +622,7 @@ namespace WolvenKit.ViewModels.Tools
                     .Select(LimitOrToOneTermOnly)
                     .Select(AllowExcludingTerm)
                     .ToArray()
-            };
+                };
         };
 
 

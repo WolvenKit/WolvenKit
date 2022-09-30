@@ -19,7 +19,7 @@ namespace WolvenKit.ViewModels.HomePage
         [Reactive] public IPluginService _pluginService { get; set; }
 
 
-        public delegate Task ReturnHandler(NewFileViewModel file);
+        public delegate Task ReturnHandler(PluginsToolViewModel file);
         public ReturnHandler FileHandler;
 
         public PluginsToolViewModel()

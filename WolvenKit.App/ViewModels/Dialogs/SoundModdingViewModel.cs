@@ -115,7 +115,7 @@ namespace WolvenKit.ViewModels.Dialogs
             }
         }
 
-        public delegate Task ReturnHandler(NewFileViewModel file);
+        public delegate Task ReturnHandler(SoundModdingViewModel file);
         public ReturnHandler FileHandler;
 
         public List<string> Files { get; set; } = new();

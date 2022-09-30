@@ -16,11 +16,12 @@ namespace WolvenKit.ViewModels
         private readonly ILoggerService _loggerService;
 
         public SettingsPageViewModel(
+            AppViewModel mainViewModel,
             ISettingsManager settingsManager,
             ILoggerService loggerService
         )
         {
-            MainViewModel = Locator.Current.GetService<AppViewModel>();
+            MainViewModel = mainViewModel;
             Settings = settingsManager;
             _loggerService = loggerService;
 

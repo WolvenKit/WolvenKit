@@ -119,11 +119,11 @@ namespace WolvenKit.Views.Tools
                         view => view.TreeGridFlat.ItemsSource)
                     .DisposeWith(disposables);
 
-                //ViewModel.WhenAnyValue(x => x.IsFlatModeEnabled).Subscribe(x => UpdateTreeGrid());
 
                 this.BindCommand(ViewModel,
                     viewModel => viewModel.OpenRootFolderCommand,
                     view => view.OpenFolderButton);
+
 
             });
 
@@ -132,7 +132,7 @@ namespace WolvenKit.Views.Tools
         private void OnCellDoubleTapped(object sender, TreeGridCellDoubleTappedEventArgs treeGridCellDoubleTappedEventArgs)
         {
             var model = treeGridCellDoubleTappedEventArgs.Node.Item;
-            ViewModel.OpenFileCommand.Execute(model);
+            //ViewModel.MainViewModel
         }
 
         private bool _isfirsttime { get; set; } = true;
@@ -231,37 +231,11 @@ namespace WolvenKit.Views.Tools
                     includeFile &= fm.FullName.StartsWith((fm.Project as Cp77Project).PackedRootDirectory);
                 }
 
-                //if (ViewModel != null && ViewModel.IsFlatModeEnabled)
-                //    includeFile &= !fm.IsDirectory;
-
             }
             return includeFile;
         }
 
         private bool IsFileInFlat(object o) => tabControl != null && o is FileModel fm && IsFileIn(o) && !fm.IsDirectory;
-
-        private void UpdateTreeGrid()
-        {
-            //if (ViewModel != null && TreeGrid != null)
-            //{
-            //    if (ViewModel.IsFlatModeEnabled)
-            //    {
-            //        TreeGrid.SetCurrentValue(SfTreeGrid.ChildPropertyNameProperty, null);
-            //        //TreeGrid.SetCurrentValue(SfTreeGrid.AllowSortingProperty, true);
-            //        //TreeGrid.SetCurrentValue(SfTreeGrid.AllowDropProperty, false);
-            //        //TreeGrid.SetCurrentValue(SfTreeGrid.AllowDraggingRowsProperty, false);
-            //    }
-            //    else
-            //    {
-            //        TreeGrid.SetCurrentValue(SfTreeGrid.ChildPropertyNameProperty, "ParentHash");
-            //        //TreeGrid.SetCurrentValue(SfTreeGrid.AllowSortingProperty, false);
-            //        //TreeGrid.SetCurrentValue(SfTreeGrid.AllowDropProperty, true);
-            //        //TreeGrid.SetCurrentValue(SfTreeGrid.AllowDraggingRowsProperty, true);
-            //    }
-            //    TreeGrid.RepopulateTree();
-            //    TreeGrid.View.RefreshFilter();
-            //}
-        }
 
         private void tabControl_SelectedIndexChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
@@ -275,58 +249,6 @@ namespace WolvenKit.Views.Tools
         }
 
 #pragma warning disable 1998
-
-
-        private async Task<bool> DisplayModSortDialog(IEnumerable<string> input) => false;//var inputDialog = new PackageResolverView(new PackageResolverViewModel(input))//{//    Owner = Application.Current.MainWindow//};//this.Overlay.Opacity = 0.5;//this.Overlay.Background = new SolidColorBrush(Colors.White);//var output = new Dictionary<string, string>();//if (inputDialog.ShowDialog() == true)//{//    output = inputDialog.GetOutput().ToDictionary(_ => _.Name, _ => _.ComputedFullName);//}//this.Overlay.Opacity = 1;//this.Overlay.Background = new SolidColorBrush(Colors.Transparent);//return new ZipModifyArgs(output);//var visualizerService = ServiceLocator.Default.ResolveType<IUIVisualizerService>();//var viewModel = new InputDialogViewModel() { Text = SelectedItem.Name };//await visualizerService.ShowDialogAsync(viewModel, delegate (object sender, UICompletedEventArgs args)//{//    if (args.Result != true)//    {//        return;//    }//    if (args.DataContext is not Dialogs.InputDialogViewModel vm)//    {//        return;//    }//    finally//    {//        SelectedItem.RaiseRequestRefresh();//    }//});
-
-        //private void View_NodeCollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
-        //{
-        //    Trace.WriteLine("hello");
-        //    //if (e.NewItems != null)
-        //    //{
-        //    //    foreach (var nerd in e.NewItems)
-        //    //    {
-        //    //        Trace.WriteLine(nerd.ToString());
-        //    //        TreeGrid.ExpandNode((TreeNode)nerd);
-        //    //    }
-        //    //}
-
-        //    if (ViewModel is not ProjectExplorerViewModel viewModel)
-        //    {
-        //        return;
-        //    }
-
-        //    //var rootnodes = TreeGrid.View.Nodes.RootNodes;
-        //    //foreach (var rootnode in rootnodes)
-        //    //{
-        //    //    TreeGrid.ExpandNode(rootnode);
-        //    //}
-
-        //    Trace.WriteLine(e.Action.ToString());
-        //}
-
-        //protected override void OnViewModelPropertyChanged(PropertyChangedEventArgs e)
-        //{
-        //    if (ViewModel is not ProjectExplorerViewModel viewModel)
-        //    {
-        //        return;
-        //    }
-
-        //    var name = e.PropertyName;
-        //    switch (name)
-        //    {
-        //        case nameof(viewModel.IsTreeBeingEdited):
-        //            if (viewModel.IsTreeBeingEdited)
-        //            {
-        //                TreeGrid.View.BeginInit(TreeViewRefreshMode.DeferRefresh);
-        //            }
-        //            else
-        //            {
-        //                TreeGrid.View.EndInit();
-        //            }
-        //            break;
-        //    }
-        //}
 
         #endregion Constructors
 
@@ -544,35 +466,6 @@ namespace WolvenKit.Views.Tools
 
                 var process = Process.Start(procInfo);
                 process?.WaitForInputIdle();
-                //var appControl = new AppControl();
-                //appControl.ExeName = x.Split('|')[0];
-                //appControl.Args = x.Split('|')[1];
-                //appControl.VisualPoint = new Point(0.0, 30.0);
-
-                //if (StaticReferences.XoWindow == null)
-                //{
-                //    StaticReferences.XoWindow = new HandyControl.Controls.GlowWindow();
-                //    StaticReferences.XoWindow.Closed += (sender, args) => StaticReferences.XoWindow = null;
-                //}
-
-                //if (StaticReferences.XoWindow.Content != null)
-                //{
-                //    return;
-                //}
-                //StaticReferences.XoWindow.Unloaded += new RoutedEventHandler((s, e) =>
-                //{
-                //    var q = s as HandyControl.Controls.GlowWindow;
-                //    q.Close();
-                //    StaticReferences.XoWindow = null;
-                //    StaticReferences.XoWindow = new HandyControl.Controls.GlowWindow();
-                //});
-
-                //Grid grid = new Grid();
-                //grid.Children.Add(appControl);
-                //StaticReferences.XoWindow.SetCurrentValue(ContentProperty, grid);
-                //StaticReferences.XoWindow.SetCurrentValue(Window.TopmostProperty, true);
-                //StaticReferences.XoWindow.WindowStartupLocation = WindowStartupLocation.CenterOwner;
-                //StaticReferences.XoWindow.Show();
             }
         }
     }
