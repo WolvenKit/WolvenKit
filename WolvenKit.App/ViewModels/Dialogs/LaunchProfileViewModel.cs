@@ -5,18 +5,10 @@ using WolvenKit.App.Models;
 
 namespace WolvenKit.ViewModels.Dialogs
 {
-    public class LaunchProfileViewModel : ReactiveObject
+    public class LaunchProfileViewModel
     {
-        [Reactive] public bool IsEditable { get; set; }
-        [Reactive] public bool IsNotEditable { get; set; } = true;
         public string Name { get; set; }
 
         public LaunchProfile Profile { get; set; }
-
-        public void SetEditable(bool v)
-        {
-            IsEditable = v;
-            IsNotEditable = !v;
-        }
     }
 }

@@ -16,6 +16,7 @@ namespace WolvenKit.Views.Shell
     public partial class RibbonView : ReactiveUserControl<RibbonViewModel>
     {
         private readonly ISettingsManager _settingsManager;
+        private bool _profilesLoaded;
 
         public RibbonView()
         {
@@ -90,6 +91,15 @@ namespace WolvenKit.Views.Shell
                     p => p is not null)
                     .DisposeWith(disposables);
             });
+
+            _settingsManager.WhenAnyValue(x => x.LaunchProfiles).WhereNotNull().Subscribe(dict =>
+            {
+                if (_profilesLoaded)
+                {
+                    GetLaunchProfiles();
+                }
+
+            });
         }
 
         private void GetLaunchProfiles()
@@ -108,9 +118,31 @@ namespace WolvenKit.Views.Shell
                 _settingsManager.Save();
             }
 
+
             int count = 0;
             foreach ((string name, LaunchProfile value) in _settingsManager.LaunchProfiles)
             {
+                bool found = false;
+                foreach (object obj in LaunchMenuMainItem.Items)
+                {
+                    if (obj is MenuItem menuitem)
+                    {
+                        if (menuitem.Header is string menuitemHeader)
+                        {
+                            if (menuitemHeader == name)
+                            {
+                                found = true;
+                            }
+                        }
+                    }
+                }
+
+                if (found)
+                {
+                    count++;
+                    continue;
+                }
+
                 MenuItem item = new()
                 {
                     Header = name
@@ -136,6 +168,8 @@ namespace WolvenKit.Views.Shell
             {
                 ViewModel.LaunchProfileText = _settingsManager.LaunchProfiles.First().Key;
             }
+
+            _profilesLoaded = true;
         }
 
         private void LaunchMenu_MenuItem_Click(object sender, RoutedEventArgs e)

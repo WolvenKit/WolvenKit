@@ -72,7 +72,7 @@
                                 <ColumnDefinition />
                                 <ColumnDefinition />
                                 <ColumnDefinition />
-                                <ColumnDefinition />
+                                <!--<ColumnDefinition />-->
                             </Grid.ColumnDefinitions>
 
                             <Button
@@ -117,7 +117,7 @@
                                 </StackPanel>
                             </Button>
 
-                            <Button
+                            <!--<Button
                                 x:Name="ToolbarRenameItem"
                                 Grid.Column="3"
                                 ToolTip="Rename Launch Profile">
@@ -129,7 +129,7 @@
                                         Style="{StaticResource WolvenKitToolBarButtonIcon}" />
                                     <TextBlock Padding="5,0,0,0" Text="Rename" />
                                 </StackPanel>
-                            </Button>
+                            </Button>-->
 
                         </Grid>
 
@@ -145,12 +145,8 @@
                                 <DataTemplate>
                                     <StackPanel Orientation="Horizontal">
                                         <TextBox
-                                            IsReadOnly="False"
-                                            KeyDown="TextBox_KeyDown"
-                                            LostFocus="TextBox_LostFocus"
-                                            Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}"
-                                            Visibility="{Binding IsEditable, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource Boolean2VisibilityConverter}}" />
-                                        <TextBlock Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}" Visibility="{Binding IsNotEditable, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource Boolean2VisibilityConverter}}" />
+                                            Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}"/>
+                                        <!--<TextBlock Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}" Visibility="{Binding IsNotEditable, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource Boolean2VisibilityConverter}}" />-->
                                     </StackPanel>
                                 </DataTemplate>
                             </ListView.ItemTemplate>

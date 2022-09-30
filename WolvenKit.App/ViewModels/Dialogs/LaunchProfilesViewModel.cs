@@ -16,7 +16,7 @@ namespace WolvenKit.ViewModels.Dialogs
     {
         private readonly ISettingsManager _settingsManager;
         private readonly ILoggerService _loggerService;
-        private string _lastName;
+        //private string _lastName;
 
         public LaunchProfilesViewModel(ISettingsManager settingsManager, ILoggerService loggerService)
         {
@@ -45,7 +45,7 @@ namespace WolvenKit.ViewModels.Dialogs
             NewItemCommand = ReactiveCommand.Create(NewItem);
             DuplicateItemCommand = ReactiveCommand.Create(DuplicateItem);
             DeleteItemCommand = ReactiveCommand.Create(DeleteItem);
-            RenameItemCommand = ReactiveCommand.Create(RenameItem);
+            //RenameItemCommand = ReactiveCommand.Create(RenameItem);
 
 
         }
@@ -64,35 +64,38 @@ namespace WolvenKit.ViewModels.Dialogs
 
         private void DuplicateItem()
         {
-            LaunchProfiles.Add(new LaunchProfileViewModel()
+            if (SelectedLaunchProfile != null)
             {
-                Name = $"{SelectedLaunchProfile.Name} Copy",
-                Profile = SelectedLaunchProfile.Profile.Copy()
-            });
+                LaunchProfiles.Add(new LaunchProfileViewModel()
+                {
+                    Name = $"{SelectedLaunchProfile.Name} Copy",
+                    Profile = SelectedLaunchProfile.Profile.Copy()
+                });
+            }
         }
 
         private void DeleteItem() => LaunchProfiles.Remove(SelectedLaunchProfile);
 
-        private void RenameItem()
-        {
-            _lastName = SelectedLaunchProfile.Name;
-            SelectedLaunchProfile.SetEditable(true);
-        }
+        //private void RenameItem()
+        //{
+        //    _lastName = SelectedLaunchProfile.Name;
+        //    SelectedLaunchProfile.SetEditable(true);
+        //}
 
-        public void SetEditableFalse(LaunchProfileViewModel viewModel)
-        {
-            if (!viewModel.IsEditable)
-            {
-                return;
-            }
+        //public void SetEditableFalse(LaunchProfileViewModel viewModel)
+        //{
+        //    if (!viewModel.IsEditable)
+        //    {
+        //        return;
+        //    }
 
-            if (LaunchProfiles.Where(x => x.Name == viewModel.Name).Count() > 1)
-            {
-                // duplicate Name
-                SelectedLaunchProfile.Name = _lastName;
-            }
-            SelectedLaunchProfile.SetEditable(false);
-        }
+        //    if (LaunchProfiles.Where(x => x.Name == viewModel.Name).Count() > 1)
+        //    {
+        //        // duplicate Name
+        //        SelectedLaunchProfile.Name = _lastName;
+        //    }
+        //    SelectedLaunchProfile.SetEditable(false);
+        //}
 
         [Reactive] public ObservableCollection<LaunchProfileViewModel> LaunchProfiles { get; set; } = new();
         [Reactive] public LaunchProfileViewModel SelectedLaunchProfile { get; set; }

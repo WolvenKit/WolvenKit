@@ -29,8 +29,8 @@ namespace WolvenKit.Views.Dialogs
                    .DisposeWith(disposables);
                 this.BindCommand(ViewModel, x => x.DeleteItemCommand, x => x.ToolbarDeleteItem)
                    .DisposeWith(disposables);
-                this.BindCommand(ViewModel, x => x.RenameItemCommand, x => x.ToolbarRenameItem)
-                   .DisposeWith(disposables);
+                //this.BindCommand(ViewModel, x => x.RenameItemCommand, x => x.ToolbarRenameItem)
+                //   .DisposeWith(disposables);
 
                 Observable
                     .FromEventPattern(WizardControl, nameof(Syncfusion.Windows.Tools.Controls.WizardControl.Finish))
@@ -51,17 +51,17 @@ namespace WolvenKit.Views.Dialogs
             return ShowDialog();
         }
 
-        private void TextBox_KeyDown(object sender, System.Windows.Input.KeyEventArgs e)
-        {
-            if (e.Key == System.Windows.Input.Key.Enter)
-            {
-                if (sender is TextBox textBox && textBox.DataContext is LaunchProfileViewModel viewModel)
-                {
+        //private void TextBox_KeyDown(object sender, System.Windows.Input.KeyEventArgs e)
+        //{
+        //    if (e.Key == System.Windows.Input.Key.Enter)
+        //    {
+        //        if (sender is TextBox textBox && textBox.DataContext is LaunchProfileViewModel viewModel)
+        //        {
 
-                    ViewModel.SetEditableFalse(viewModel);
-                }
-            }
-        }
+        //            ViewModel.SetEditableFalse(viewModel);
+        //        }
+        //    }
+        //}
 
         private void ProfilePropertyGrid_AutoGeneratingPropertyGridItem(object sender, Syncfusion.Windows.PropertyGrid.AutoGeneratingPropertyGridItemEventArgs e)
         {
@@ -75,12 +75,12 @@ namespace WolvenKit.Views.Dialogs
             }
         }
 
-        private void TextBox_LostFocus(object sender, RoutedEventArgs e)
-        {
-            if (sender is TextBox textBox && textBox.DataContext is LaunchProfileViewModel viewModel)
-            {
-                ViewModel.SetEditableFalse(viewModel);
-            }
-        }
+        //private void TextBox_LostFocus(object sender, RoutedEventArgs e)
+        //{
+        //    if (sender is TextBox textBox && textBox.DataContext is LaunchProfileViewModel viewModel)
+        //    {
+        //        ViewModel.SetEditableFalse(viewModel);
+        //    }
+        //}
     }
 }

@@ -20,6 +20,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
+using WolvenKit.App.Models;
 using WolvenKit.Common;
 using WolvenKit.Common.Exceptions;
 using WolvenKit.Common.Extensions;
@@ -1349,8 +1350,20 @@ namespace WolvenKit.ViewModels.Shell
         public void SetStatusReady() => Status = EAppStatus.Loaded;
         public void SetLaunchProfiles(ObservableCollection<LaunchProfileViewModel> launchProfiles)
         {
-            _settingsManager.LaunchProfiles = launchProfiles.ToDictionary(k => k.Name, x => x.Profile);
+            _settingsManager.LaunchProfiles.Clear();
+            var _launchProfiles = new Dictionary<string, LaunchProfile>();
+
+            foreach (LaunchProfileViewModel item in launchProfiles)
+            {
+                if (!_settingsManager.LaunchProfiles.ContainsKey(item.Name))
+                {
+                    _launchProfiles.Add(item.Name, item.Profile);
+                }
+            }
+
+            _settingsManager.LaunchProfiles = _launchProfiles;
             _settingsManager.Save();
+
         }
 
         #endregion methods
