@@ -8,13 +8,11 @@
     xmlns:reactiveUi="http://reactiveui.net"
     xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
     xmlns:wizards="clr-namespace:WolvenKit.ViewModels.Wizards;assembly=WolvenKit.App"
+    Title="First Setup"
     MinWidth="700"
     MinHeight="200"
     SizeToContent="WidthAndHeight"
-    WindowStartupLocation="CenterOwner"
-    Title="First Setup"
-    >
-    
+    WindowStartupLocation="CenterOwner">
 
     <Grid
         Margin="1"
@@ -41,8 +39,10 @@
                 HelpVisibility="Collapsed"
                 NextVisibility="Collapsed"
                 PageType="Exterior">
+
                 <Grid HorizontalAlignment="Left">
                     <StackPanel>
+
                         <StackPanel Orientation="Horizontal">
                             <hc:TextBox
                                 x:Name="cp77ExeTxtb"
@@ -80,6 +80,7 @@
                                     SpinAutoReverse="False" />
                             </Button>
                         </StackPanel>
+
                         <TextBlock
                             x:Name="ValidationText"
                             MaxWidth="{Binding ActualWidth, ElementName=cp77ExeTxtb}"
@@ -130,14 +131,19 @@
                                     SpinAutoReverse="False" />
                             </Button>
                         </StackPanel>
+
                         <StackPanel Margin="0,30" VerticalAlignment="Bottom">
                             <Button x:Name="helpButton" HorizontalAlignment="Right">
                                 <TextBlock Margin="12,0" Text="Get Help with WolvenKit" />
                             </Button>
                         </StackPanel>
+
                     </StackPanel>
                 </Grid>
+
             </syncfusion:WizardPage>
+
         </syncfusion:WizardControl>
     </Grid>
+
 </Window>

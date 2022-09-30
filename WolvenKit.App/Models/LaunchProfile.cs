@@ -21,4 +21,15 @@ public class LaunchProfile
     public bool LaunchGame { get; set; }
     public string GameArguments { get; set; }
 
+    internal LaunchProfile Copy()
+    {
+        return new LaunchProfile()
+        {
+            CreateBackup = CreateBackup,
+            Install = Install,
+            DeployWithRedmod = DeployWithRedmod,
+            LaunchGame = LaunchGame,
+            GameArguments = GameArguments
+        };
+    }
 }

@@ -1,8 +1,8 @@
+using ReactiveUI;
 using System.Collections.Generic;
 using System.Reactive;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
-using ReactiveUI;
 using WolvenKit.Common.Model;
 
 namespace WolvenKit.Interaction
@@ -22,17 +22,12 @@ namespace WolvenKit.Interaction
         // classic popups
         public static readonly Interaction<(string, string, WMessageBoxImage, WMessageBoxButtons), WMessageBoxResult> ShowConfirmation = new();
 
-        // ???
         public static readonly Interaction<IEnumerable<string>, bool> DeleteFiles = new();
         public static readonly Interaction<string, string> Rename = new();
 
-
-
-        //public static readonly Interaction<Unit, string> NewProjectInteraction = new();
-        //public static readonly Interaction<Unit, (AddFileModel, string)> AddNewFile = new();
-
         //custom views
         public static readonly Interaction<Unit, bool> ShowFirstTimeSetup = new();
+        public static readonly Interaction<Unit, bool> ShowLaunchProfilesView = new();
 
     }
 

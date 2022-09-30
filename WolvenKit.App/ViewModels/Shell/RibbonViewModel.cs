@@ -1,23 +1,14 @@
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Reactive;
-using System.Reflection;
-using System.Threading.Tasks;
-using DynamicData.Binding;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
-using WinCopies.Linq;
-using WolvenKit.App.Models;
-using WolvenKit.Common;
-using WolvenKit.Common.Interfaces;
+using System;
+using System.Reactive;
+using System.Reactive.Linq;
+using System.Threading.Tasks;
 using WolvenKit.Core.Interfaces;
-using WolvenKit.Core.Services;
 using WolvenKit.Functionality.Commands;
 using WolvenKit.Functionality.Controllers;
 using WolvenKit.Functionality.Services;
-using WolvenKit.Models;
-using WolvenKit.RED4.Archive;
+using WolvenKit.Interaction;
 
 namespace WolvenKit.ViewModels.Shell
 {
@@ -48,13 +39,13 @@ namespace WolvenKit.ViewModels.Shell
             LaunchOptionsCommand = ReactiveCommand.Create(LaunchOptions);
             LaunchProfileCommand = ReactiveCommand.CreateFromTask(async () => await LaunchProfileAsync());
 
-            this.WhenAnyValue(x => x.MainViewModel.ActiveProject).WhereNotNull().Subscribe(p =>
+            /*this.WhenAnyValue(x => x.MainViewModel.ActiveProject).WhereNotNull().Subscribe(p =>
             {
                 if (p is not null)
                 {
                     LaunchProfileText = p.Name;
                 }
-            });
+            });*/
 
         }
 
@@ -69,16 +60,14 @@ namespace WolvenKit.ViewModels.Shell
         public ReactiveCommand<Unit, Unit> SaveAllCommand { get; }
 
         public ReactiveCommand<Unit, Unit> LaunchOptionsCommand { get; }
-        private void LaunchOptions()
-        {
-            // open launch profiles menu
-            //TODO
-        }
+        private async void LaunchOptions() => await Interactions.ShowLaunchProfilesView.Handle(Unit.Default);
+
+
 
         public ReactiveCommand<Unit, Unit> LaunchProfileCommand { get; }
         private async Task LaunchProfileAsync()
         {
-            if (_settingsManager.LaunchProfiles.TryGetValue(LaunchProfileText, out var launchProfile))
+            if (_settingsManager.LaunchProfiles.TryGetValue(LaunchProfileText, out App.Models.LaunchProfile launchProfile))
             {
                 await _gameControllerFactory.GetController().LaunchProject(launchProfile);
             }

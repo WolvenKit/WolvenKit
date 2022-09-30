@@ -10,8 +10,6 @@
     SizeToContent="WidthAndHeight"
     WindowStartupLocation="CenterOwner">
 
-
-
     <Grid
         Margin="5,5,2,5"
         HorizontalAlignment="Stretch"
@@ -46,4 +44,5 @@
         </syncfusion:WizardControl>
 
     </Grid>
+    
 </Window>

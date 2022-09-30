@@ -118,6 +118,9 @@ namespace WolvenKit
                     services.AddTransient<RenameDialogViewModel>();
                     services.AddTransient<IViewFor<RenameDialogViewModel>, RenameDialog>();
 
+                    services.AddTransient<LaunchProfilesViewModel>();
+                    services.AddTransient<IViewFor<LaunchProfilesViewModel>, LaunchProfilesView>();
+
                     services.AddTransient<NewFileViewModel>();
                     services.AddTransient<IViewFor<NewFileViewModel>, NewFileView>();
 

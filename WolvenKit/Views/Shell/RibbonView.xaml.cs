@@ -1,17 +1,15 @@
+using ReactiveUI;
+using Splat;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reactive.Disposables;
-using System.Reactive.Linq;
 using System.Reflection;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Media.Imaging;
-using ReactiveUI;
-using Splat;
 using WolvenKit.App.Models;
 using WolvenKit.Functionality.Services;
 using WolvenKit.ViewModels.Shell;
-using WolvenKit.Views.Dialogs;
 
 namespace WolvenKit.Views.Shell
 {
@@ -99,8 +97,8 @@ namespace WolvenKit.Views.Shell
             // add default profiles
             if (_settingsManager.LaunchProfiles is null || _settingsManager.LaunchProfiles.Count == 0)
             {
-                using var stream = Assembly.GetExecutingAssembly().GetManifestResourceStream(@"WolvenKit.Resources.launchprofiles.json");
-                var defaultprofiles = System.Text.Json.JsonSerializer.Deserialize<Dictionary<string, LaunchProfile>>(stream, new System.Text.Json.JsonSerializerOptions()
+                using System.IO.Stream stream = Assembly.GetExecutingAssembly().GetManifestResourceStream(@"WolvenKit.Resources.launchprofiles.json");
+                Dictionary<string, LaunchProfile> defaultprofiles = System.Text.Json.JsonSerializer.Deserialize<Dictionary<string, LaunchProfile>>(stream, new System.Text.Json.JsonSerializerOptions()
                 {
                     WriteIndented = true,
                     DefaultIgnoreCondition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull
@@ -110,10 +108,10 @@ namespace WolvenKit.Views.Shell
                 _settingsManager.Save();
             }
 
-            var count = 0;
-            foreach (var (name, value) in _settingsManager.LaunchProfiles)
+            int count = 0;
+            foreach ((string name, LaunchProfile value) in _settingsManager.LaunchProfiles)
             {
-                var item = new MenuItem
+                MenuItem item = new()
                 {
                     Header = name
                 };
@@ -132,6 +130,11 @@ namespace WolvenKit.Views.Shell
 
                 LaunchMenuMainItem.Items.Insert(count, item);
                 count++;
+            }
+
+            if (_settingsManager.LaunchProfiles is not null || _settingsManager.LaunchProfiles.Count != 0)
+            {
+                ViewModel.LaunchProfileText = _settingsManager.LaunchProfiles.First().Key;
             }
         }
 
