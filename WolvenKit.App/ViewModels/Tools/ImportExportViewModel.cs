@@ -30,6 +30,7 @@ using WolvenKit.Common.Services;
 using WolvenKit.Core.Interfaces;
 using WolvenKit.Core.Services;
 using WolvenKit.Functionality.Controllers;
+using WolvenKit.Functionality.Converters;
 using WolvenKit.Functionality.Services;
 using WolvenKit.Models;
 using WolvenKit.Models.Docking;
@@ -93,18 +94,20 @@ namespace WolvenKit.ViewModels.Tools
 
         private Dictionary<string, Dictionary<string, JsonObject>> _loadedSettings;
 
-        #endregion fields
+        private static JsonSerializerOptions s_jsonSerializerSettings = new() { Converters = { new JsonFileEntryConverter() }, WriteIndented = true };
 
-        /// <summary>
-        /// Import Export ViewModel Constructor
-        /// </summary>
-        /// <param name="projectManager"></param>
-        /// <param name="loggerService"></param>
-        /// <param name="messageService"></param>
-        /// <param name="watcherService"></param>
-        /// <param name="gameController"></param>
-        /// <param name="modTools"></param>
-        public ImportExportViewModel(
+#endregion fields
+
+/// <summary>
+/// Import Export ViewModel Constructor
+/// </summary>
+/// <param name="projectManager"></param>
+/// <param name="loggerService"></param>
+/// <param name="messageService"></param>
+/// <param name="watcherService"></param>
+/// <param name="gameController"></param>
+/// <param name="modTools"></param>
+public ImportExportViewModel(
            IProjectManager projectManager,
            ILoggerService loggerService,
            IProgressService<double> progressService,
@@ -1083,7 +1086,7 @@ namespace WolvenKit.ViewModels.Tools
             }
 
             var json = File.ReadAllText(fileName);
-            _loadedSettings = JsonSerializer.Deserialize<Dictionary<string, Dictionary<string, JsonObject>>>(json);
+            _loadedSettings = JsonSerializer.Deserialize<Dictionary<string, Dictionary<string, JsonObject>>>(json, s_jsonSerializerSettings);
         }
 
         private void SetSetting(string type, IEventPattern<object, NotifyCollectionChangedEventArgs> item)
@@ -1099,7 +1102,7 @@ namespace WolvenKit.ViewModels.Tools
                 {
                     if (entry is ImportExportItemViewModel vm && _loadedSettings[type].TryGetValue(vm.GetBaseFile().RelativePath, out var args))
                     {
-                        vm.Properties = (ImportExportArgs)args.Deserialize(vm.Properties.GetType());
+                        vm.Properties = (ImportExportArgs)args.Deserialize(vm.Properties.GetType(), s_jsonSerializerSettings);
                     }
                 }
             }
@@ -1108,7 +1111,7 @@ namespace WolvenKit.ViewModels.Tools
             {
                 if (_loadedSettings[type].TryGetValue(vm2.GetBaseFile().RelativePath, out var args))
                 {
-                    vm2.Properties = (ImportExportArgs)args.Deserialize(vm2.Properties.GetType());
+                    vm2.Properties = (ImportExportArgs)args.Deserialize(vm2.Properties.GetType(), s_jsonSerializerSettings);
                 }
             }
         }
@@ -1121,7 +1124,7 @@ namespace WolvenKit.ViewModels.Tools
 
             foreach (var importableItem in ImportableItems)
             {
-                var node = (JsonObject)JsonSerializer.SerializeToNode(importableItem.Properties, importableItem.Properties.GetType());
+                var node = (JsonObject)JsonSerializer.SerializeToNode(importableItem.Properties, importableItem.Properties.GetType(), s_jsonSerializerSettings);
 
                 node.Remove("Changing");
                 node.Remove("Changed");
@@ -1132,7 +1135,7 @@ namespace WolvenKit.ViewModels.Tools
 
             foreach (var exportableItem in ExportableItems)
             {
-                var node = (JsonObject)JsonSerializer.SerializeToNode(exportableItem.Properties, exportableItem.Properties.GetType());
+                var node = (JsonObject)JsonSerializer.SerializeToNode(exportableItem.Properties, exportableItem.Properties.GetType(), s_jsonSerializerSettings);
 
                 node.Remove("Changing");
                 node.Remove("Changed");
@@ -1143,7 +1146,7 @@ namespace WolvenKit.ViewModels.Tools
 
             foreach (var convertableItem in ConvertableItems)
             {
-                var node = (JsonObject)JsonSerializer.SerializeToNode(convertableItem.Properties, convertableItem.Properties.GetType());
+                var node = (JsonObject)JsonSerializer.SerializeToNode(convertableItem.Properties, convertableItem.Properties.GetType(), s_jsonSerializerSettings);
 
                 node.Remove("Changing");
                 node.Remove("Changed");
@@ -1159,7 +1162,7 @@ namespace WolvenKit.ViewModels.Tools
                 { "convert", convertSettings },
             };
 
-            var json = JsonSerializer.Serialize(settings, new JsonSerializerOptions {WriteIndented = true});
+            var json = JsonSerializer.Serialize(settings, s_jsonSerializerSettings);
             File.WriteAllText(Path.Combine(_projectManager.ActiveProject.ProjectDirectory, "ImportExportSettings.json"), json);
         }
     }
