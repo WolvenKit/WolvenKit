@@ -4,7 +4,6 @@ using System.Runtime.InteropServices;
 using DirectXTexNet;
 using SharpDX.Direct3D;
 using SharpDX.Direct3D11;
-using WolvenKit.Common;
 using WolvenKit.Common.DDS;
 using WolvenKit.Common.Extensions;
 using WolvenKit.Common.Model.Arguments;
@@ -250,28 +249,59 @@ public class RedImage : IDisposable
     }
 
     public void SaveToBMP(string szFile) =>
-        InternalScratchImage.SaveToWICFile(0, WIC_FLAGS.NONE, TexHelper.Instance.GetWICCodec(WICCodecs.BMP), szFile);
+        SaveToWIC(szFile, TexHelper.Instance.GetWICCodec(WICCodecs.BMP));
 
     public byte[] SaveToBMPMemory() =>
-        SaveToMemory(InternalScratchImage.SaveToWICMemory(0, WIC_FLAGS.NONE, TexHelper.Instance.GetWICCodec(WICCodecs.BMP)));
+        SaveToWICMemory(TexHelper.Instance.GetWICCodec(WICCodecs.BMP));
 
     public void SaveToJPEG(string szFile) =>
-        InternalScratchImage.SaveToWICFile(0, WIC_FLAGS.NONE, TexHelper.Instance.GetWICCodec(WICCodecs.JPEG), szFile);
+        SaveToWIC(szFile, TexHelper.Instance.GetWICCodec(WICCodecs.JPEG));
 
     public byte[] SaveToJPEGMemory() =>
-        SaveToMemory(InternalScratchImage.SaveToWICMemory(0, WIC_FLAGS.NONE, TexHelper.Instance.GetWICCodec(WICCodecs.JPEG)));
+        SaveToWICMemory(TexHelper.Instance.GetWICCodec(WICCodecs.JPEG));
 
     public void SaveToPNG(string szFile) =>
-        InternalScratchImage.SaveToWICFile(0, WIC_FLAGS.NONE, TexHelper.Instance.GetWICCodec(WICCodecs.PNG), szFile);
+        SaveToWIC(szFile, TexHelper.Instance.GetWICCodec(WICCodecs.PNG));
 
     public byte[] SaveToPNGMemory() =>
-        SaveToMemory(InternalScratchImage.SaveToWICMemory(0, WIC_FLAGS.NONE, TexHelper.Instance.GetWICCodec(WICCodecs.PNG)));
+        SaveToWICMemory(TexHelper.Instance.GetWICCodec(WICCodecs.PNG));
 
     public void SaveToTIFF(string szFile) =>
-        InternalScratchImage.SaveToWICFile(0, WIC_FLAGS.NONE, TexHelper.Instance.GetWICCodec(WICCodecs.TIFF), szFile);
+        SaveToWIC(szFile, TexHelper.Instance.GetWICCodec(WICCodecs.TIFF));
 
     public byte[] SaveToTIFFMemory() =>
-        SaveToMemory(InternalScratchImage.SaveToWICMemory(0, WIC_FLAGS.NONE, TexHelper.Instance.GetWICCodec(WICCodecs.TIFF)));
+        SaveToWICMemory(TexHelper.Instance.GetWICCodec(WICCodecs.TIFF));
+
+    private void SaveToWIC(string szFile, Guid wicCodec)
+    {
+        if (_metadata.Format == DXGI_FORMAT.R8G8_UNORM)
+        {
+            var img = InternalScratchImage.Convert(DXGI_FORMAT.R8G8B8A8_UNORM, TEX_FILTER_FLAGS.FORCE_WIC, 0.5F);
+            img.SaveToWICFile(0, WIC_FLAGS.NONE, wicCodec, szFile);
+            img.Dispose();
+        }
+        else
+        {
+            InternalScratchImage.SaveToWICFile(0, WIC_FLAGS.NONE, wicCodec, szFile);
+        }
+    }
+
+    private byte[] SaveToWICMemory(Guid wicCodec)
+    {
+        byte[] buffer;
+        if (_metadata.Format == DXGI_FORMAT.R8G8_UNORM)
+        {
+            var img = InternalScratchImage.Convert(DXGI_FORMAT.R8G8B8A8_UNORM, TEX_FILTER_FLAGS.FORCE_WIC, 0.5F);
+            buffer = SaveToMemory(img.SaveToWICMemory(0, WIC_FLAGS.NONE, wicCodec));
+            img.Dispose();
+        }
+        else
+        {
+            buffer = SaveToMemory(InternalScratchImage.SaveToWICMemory(0, WIC_FLAGS.NONE, wicCodec));
+        }
+
+        return buffer;
+    }
 
     public byte[] GetPreview()
     {
