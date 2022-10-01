@@ -231,47 +231,6 @@ namespace WolvenKit.Functionality.Controllers
 
         #region Packing
 
-        private bool PackProjectNoBackup()
-        {
-
-            if (_projectManager.ActiveProject is not Cp77Project cp77Proj)
-            {
-                _loggerService.Error("Can't pack project (no project/not cyberpunk project)!");
-                return false;
-            }
-
-            // cleanup
-            try
-            {
-                string[] archives = Directory.GetFiles(cp77Proj.PackedArchiveDirectory, "*.archive");
-                foreach (string archive in archives)
-                {
-                    File.Delete(archive);
-                }
-            }
-            catch (Exception e)
-            {
-                _loggerService.Error(e);
-            }
-
-            // pack mod
-            string[] modfiles = Directory.GetFiles(cp77Proj.ModDirectory, "*", SearchOption.AllDirectories);
-            if (modfiles.Any())
-            {
-                _modTools.Pack(
-                    new DirectoryInfo(cp77Proj.ModDirectory),
-                    new DirectoryInfo(cp77Proj.PackedArchiveDirectory),
-                    cp77Proj.Name);
-                _loggerService.Info("Packing archives complete!");
-            }
-            _loggerService.Success($"{cp77Proj.Name} packed into {cp77Proj.PackedArchiveDirectory}");
-
-            // compile tweak files
-            PackTweakXlFiles(cp77Proj);
-
-            return true;
-        }
-
         private bool PackProjectHot()
         {
 
@@ -314,38 +273,52 @@ namespace WolvenKit.Functionality.Controllers
         {
             _progressService.IsIndeterminate = true;
 
-            // check
+            // checks
             if (_projectManager.ActiveProject is not Cp77Project cp77Proj)
             {
                 _progressService.IsIndeterminate = false;
                 _loggerService.Error("Cannot pack project (no project/not cyberpunk project)!");
+                _notificationService.Error("Cannot pack project (no project/not cyberpunk project)!");
+                return false;
+            }
+            if (!options.IsRedmod && Directory.EnumerateFileSystemEntries(cp77Proj.SoundDirectory).Any())
+            {
+                _loggerService.Warning("This project contains custom sound files but is packed as legacy mod!");
+                _notificationService.Warning($"This project contains custom sound files and needs to be packed as a REDmod!");
+
+                _progressService.IsIndeterminate = false;
                 return false;
             }
 
+
             // cleanup
-            if (!Cleanup(cp77Proj))
+            if (!Cleanup(cp77Proj, options))
             {
                 _progressService.IsIndeterminate = false;
                 _loggerService.Error("Cleanup failed, aborting.");
+                _notificationService.Error("Cleanup failed, aborting.");
                 return false;
             }
             _loggerService.Success($"{cp77Proj.Name} files cleaned up.");
 
+
             // copy files to packed dir
             // pack archives
-            if (!PackArchives(cp77Proj))
+            if (!PackArchives(cp77Proj, options))
             {
                 _progressService.IsIndeterminate = false;
                 _loggerService.Error("Packing archives failed, aborting.");
+                _notificationService.Error("Packing archives failed, aborting.");
                 return false;
             }
-            _loggerService.Success($"{cp77Proj.Name} archives packed into {cp77Proj.PackedArchiveDirectory}");
+            _loggerService.Success($"{cp77Proj.Name} archives packed into {cp77Proj.GetPackedArchiveDirectory(options.IsRedmod)}");
 
             // pack tweakXL files
             if (!PackTweakXlFiles(cp77Proj))
             {
                 _progressService.IsIndeterminate = false;
                 _loggerService.Error("Packing tweakXL files failed, aborting.");
+                _notificationService.Error("Packing tweakXL files failed, aborting.");
                 return false;
             }
             _loggerService.Success($"{cp77Proj.Name} tweakXL files packed into {cp77Proj.PackedTweakDirectory}");
@@ -355,9 +328,11 @@ namespace WolvenKit.Functionality.Controllers
             {
                 _progressService.IsIndeterminate = false;
                 _loggerService.Error("Packing redmod files failed, aborting.");
+                _notificationService.Error("Packing redmod files failed, aborting.");
                 return false;
             }
-            _loggerService.Success($"{cp77Proj.Name} redmod files packed into {cp77Proj.PackedModDirectory}");
+            _loggerService.Success($"{cp77Proj.Name} redmod files packed into {cp77Proj.PackedRedModDirectory}");
+
 
             // backup
             if (options.CreateBackup)
@@ -366,9 +341,11 @@ namespace WolvenKit.Functionality.Controllers
                 {
                     _progressService.IsIndeterminate = false;
                     _loggerService.Error("Creating backup failed, aborting.");
+                    _notificationService.Error("Creating backup failed, aborting.");
                     return false;
                 }
             }
+
 
             // install files
             if (options.Install)
@@ -377,10 +354,12 @@ namespace WolvenKit.Functionality.Controllers
                 {
                     _progressService.IsIndeterminate = false;
                     _loggerService.Error("Installing mod failed, aborting.");
+                    _notificationService.Error("Installing mod failed, aborting.");
                     return false;
                 }
                 _loggerService.Success($"{cp77Proj.Name} installed!");
             }
+
 
             // deploy redmod
             if (options.DeployWithRedmod)
@@ -389,10 +368,12 @@ namespace WolvenKit.Functionality.Controllers
                 {
                     _progressService.IsIndeterminate = false;
                     _loggerService.Error("Redmod deploy failed, aborting.");
+                    _notificationService.Error("Redmod deploy failed, aborting.");
                     return false;
                 }
                 _loggerService.Success($"{cp77Proj.Name} Redmod deployed!");
             }
+
 
             // success
             _notificationService.Success($"{cp77Proj.Name} installed!");
@@ -413,15 +394,19 @@ namespace WolvenKit.Functionality.Controllers
             return true;
         }
 
-        private bool Cleanup(Cp77Project cp77Proj)
+        private bool Cleanup(Cp77Project cp77Proj, LaunchProfile options)
         {
             try
             {
-                string[] archives = Directory.GetFiles(cp77Proj.PackedArchiveDirectory, "*.archive");
-                foreach (string archive in archives)
-                {
-                    File.Delete(archive);
-                }
+                // legacy
+                Directory.Delete(cp77Proj.GetPackedArchiveDirectory(!options.IsRedmod), true);
+
+                // tweakXL
+                Directory.Delete(cp77Proj.PackedTweakDirectory, true);
+
+                // redmod
+                Directory.Delete(cp77Proj.GetPackedArchiveDirectory(options.IsRedmod), true);
+                Directory.Delete(cp77Proj.PackedSoundsDirectory, true);
             }
             catch (Exception e)
             {
@@ -432,32 +417,21 @@ namespace WolvenKit.Functionality.Controllers
             return true;
         }
 
-        private bool PackArchives(Cp77Project cp77Proj)
+        private bool PackArchives(Cp77Project cp77Proj, LaunchProfile options)
         {
             string[] modfiles = Directory.GetFiles(cp77Proj.ModDirectory, "*", SearchOption.AllDirectories);
             if (modfiles.Any())
             {
                 _modTools.Pack(
                     new DirectoryInfo(cp77Proj.ModDirectory),
-                    new DirectoryInfo(cp77Proj.PackedArchiveDirectory),
+                    new DirectoryInfo(cp77Proj.GetPackedArchiveDirectory(options.IsRedmod)),
                     cp77Proj.Name);
-                _loggerService.Info("Packing archives complete!");
             }
 
             return true;
         }
-        private bool PackTweakXlFiles(Cp77Project cp77Proj)
+        private static bool PackTweakXlFiles(Cp77Project cp77Proj)
         {
-            try
-            {
-                Directory.Delete(cp77Proj.PackedTweakDirectory, true);
-            }
-            catch (Exception e)
-            {
-                _loggerService.Error(e);
-                return false;
-            }
-
             string[] tweakFiles = Directory.GetFiles(cp77Proj.TweakDirectory, "*.yaml", SearchOption.AllDirectories);
             foreach (string f in tweakFiles)
             {
@@ -475,44 +449,35 @@ namespace WolvenKit.Functionality.Controllers
         }
         private bool PackRedmodFiles(Cp77Project cp77Proj)
         {
-            if (cp77Proj.IsRedMod)
+            // sounds
+            PackSoundFiles();
+
+            // tweaks
+            // TODO
+
+            // scripts
+            // TODO
+
+            // write info.json file if it not exists
+            string modInfoJsonPath = Path.Combine(cp77Proj.PackedRedModDirectory, "info.json");
+            if (!File.Exists(modInfoJsonPath))
             {
-                // sounds
-                PackSoundFiles();
-
-                // tweaks
-                // TODO
-
-                // scripts
-                // TODO
-
-                // write info.json file if it not exists
-                string modInfoJsonPath = Path.Combine(cp77Proj.PackedModDirectory, "info.json");
-                if (!File.Exists(modInfoJsonPath))
+                JsonSerializerOptions jsonoptions = new()
                 {
-                    JsonSerializerOptions jsonoptions = new()
-                    {
-                        WriteIndented = true,
-                        DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,
-                        PropertyNamingPolicy = JsonNamingPolicy.CamelCase
-                    };
-                    string jsonString = JsonSerializer.Serialize(cp77Proj.GetInfo(), jsonoptions);
-                    File.WriteAllText(modInfoJsonPath, jsonString);
-                }
+                    WriteIndented = true,
+                    DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,
+                    PropertyNamingPolicy = JsonNamingPolicy.CamelCase
+                };
+                string jsonString = JsonSerializer.Serialize(cp77Proj.GetInfo(), jsonoptions);
+                File.WriteAllText(modInfoJsonPath, jsonString);
             }
-            else
-            {
-                if (Directory.EnumerateFileSystemEntries(cp77Proj.SoundDirectory).Any())
-                {
-                    _loggerService.Warning("This project contains custom sound files but is packed as legacy mod!");
-                    return false;
-                }
-            }
+
             return true;
         }
         private void PackSoundFiles()
         {
-            string path = Path.Combine(_projectManager.ActiveProject.PackedModDirectory, "info.json");
+            // nothing to pack if no info.json file exists
+            string path = Path.Combine(_projectManager.ActiveProject.PackedRedModDirectory, "info.json");
             if (!File.Exists(path))
             {
                 return;
@@ -523,12 +488,6 @@ namespace WolvenKit.Functionality.Controllers
             List<string> files = new();
             try
             {
-                // clean packed sounds dir
-                foreach (string f in Directory.GetFiles(modProj.PackedSoundsDirectory))
-                {
-                    File.Delete(f);
-                }
-
                 JsonSerializerOptions options = new()
                 {
                     WriteIndented = true,

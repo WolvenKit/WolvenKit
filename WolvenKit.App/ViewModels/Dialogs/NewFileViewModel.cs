@@ -1,3 +1,6 @@
+using ReactiveUI;
+using ReactiveUI.Fody.Helpers;
+using Splat;
 using System;
 using System.Collections.ObjectModel;
 using System.IO;
@@ -7,9 +10,6 @@ using System.Reflection;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using System.Xml.Serialization;
-using ReactiveUI;
-using ReactiveUI.Fody.Helpers;
-using Splat;
 using WolvenKit.Common;
 using WolvenKit.Common.Model;
 using WolvenKit.Functionality.Services;
@@ -39,23 +39,21 @@ namespace WolvenKit.ViewModels.Dialogs
                     !string.IsNullOrEmpty(file) &&
                     !File.Exists(path)));
 
-#pragma warning disable IDE0053 // Use expression body for lambda expressions
             CancelCommand = ReactiveCommand.Create(() => { FileHandler(null); });
-#pragma warning restore IDE0053 // Use expression body for lambda expressions
 
             Title = "Create new file";
 
             try
             {
-                using var stream = Assembly.GetExecutingAssembly().GetManifestResourceStream(@"WolvenKit.App.Resources.WolvenKitFileDefinitions.xml");
+                using Stream stream = Assembly.GetExecutingAssembly().GetManifestResourceStream(@"WolvenKit.App.Resources.WolvenKitFileDefinitions.xml");
 
-                var serializer = new XmlSerializer(typeof(WolvenKitFileDefinitions));
-                var newdef = (WolvenKitFileDefinitions)serializer.Deserialize(stream);
+                XmlSerializer serializer = new(typeof(WolvenKitFileDefinitions));
+                WolvenKitFileDefinitions newdef = (WolvenKitFileDefinitions)serializer.Deserialize(stream);
                 foreach (ERedExtension ext in Enum.GetValues(typeof(ERedExtension)))
                 {
                     if (CommonFunctions.GetResourceClassesFromExtension(ext) is not null)
                     {
-                        var resourceFiles = newdef.Categories.FirstOrDefault(x => x.Name == "CR2W Files");
+                        FileCategoryModel resourceFiles = newdef.Categories.FirstOrDefault(x => x.Name == "CR2W Files");
                         resourceFiles.Files.Add(new AddFileModel()
                         {
                             Name = CommonFunctions.GetResourceClassesFromExtension(ext),
@@ -74,10 +72,6 @@ namespace WolvenKit.ViewModels.Dialogs
                 Console.WriteLine(e);
                 throw;
             }
-
-            //CanCreate = Observable.Empty<bool>().StartsWith(false);
-
-            //=> FileName != null && !string.IsNullOrEmpty(FileName) && !File.Exists(FullPath);
 
 
             this.WhenAnyValue(x => x.SelectedFile)
@@ -115,42 +109,10 @@ namespace WolvenKit.ViewModels.Dialogs
         public override ReactiveCommand<Unit, Unit> OkCommand { get; }
         public override ReactiveCommand<Unit, Unit> CancelCommand { get; }
         [Reactive] public string WhyNotCreate { get; set; }
-        //private async Task ExecuteCreate()
-        //{
-
-        //    //var fullPath = string.IsNullOrEmpty(inputDir)
-        //    //? Path.Combine(GetDefaultDir(SelectedFile.Type), filename)
-        //    //: Path.Combine(inputDir, filename);
-
-        //    switch (SelectedFile.Type)
-        //    {
-        //        case EWolvenKitFile.Redscript:
-        //        case EWolvenKitFile.Tweak:
-        //            if (!string.IsNullOrEmpty(SelectedFile.Template))
-        //            {
-        //                await using (var resource = Assembly.GetExecutingAssembly().GetManifestResourceStream($"WolvenKit.App.Resources.{SelectedFile.Template}"))
-        //                {
-        //                    using var fileStream = new FileStream(FullPath, FileMode.Create, FileAccess.Write);
-        //                    resource.CopyTo(fileStream);
-        //                }
-        //            }
-        //            else
-        //            {
-        //                File.Create(FullPath);
-        //            }
-        //            break;
-        //        case EWolvenKitFile.Cr2w:
-        //            //CreateCr2wFile(SelectedFile);
-        //            break;
-        //    }
-
-        //    // Open file
-        //    await Locator.Current.GetService<AppViewModel>().RequestFileOpen(FullPath);
-        //}
 
         private string GetDefaultDir(EWolvenKitFile type)
         {
-            var project = Locator.Current.GetService<IProjectManager>().ActiveProject as Cp77Project;
+            Cp77Project project = Locator.Current.GetService<IProjectManager>().ActiveProject as Cp77Project;
             return type switch
             {
                 EWolvenKitFile.Redscript => project.ScriptDirectory,
