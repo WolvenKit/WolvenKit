@@ -24,6 +24,7 @@
     <SatelliteResourceLanguages>en</SatelliteResourceLanguages>
     <Product>WolvenKit</Product>
     <ApplicationManifest>app.manifest</ApplicationManifest>
+    <EnforceCodeStyleInBuild>False</EnforceCodeStyleInBuild>
   </PropertyGroup>
 
 
