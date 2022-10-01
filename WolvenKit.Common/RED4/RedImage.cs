@@ -262,10 +262,10 @@ public class RedImage : IDisposable
         SaveToMemory(InternalScratchImage.SaveToWICMemory(0, WIC_FLAGS.NONE, TexHelper.Instance.GetWICCodec(WICCodecs.JPEG)));
 
     public void SaveToPNG(string szFile) =>
-        InternalScratchImage.SaveToWICFile(0, WIC_FLAGS.FORCE_RGB, TexHelper.Instance.GetWICCodec(WICCodecs.PNG), szFile);
+        InternalScratchImage.SaveToWICFile(0, WIC_FLAGS.NONE, TexHelper.Instance.GetWICCodec(WICCodecs.PNG), szFile);
 
     public byte[] SaveToPNGMemory() =>
-        SaveToMemory(InternalScratchImage.SaveToWICMemory(0, WIC_FLAGS.FORCE_RGB, TexHelper.Instance.GetWICCodec(WICCodecs.PNG)));
+        SaveToMemory(InternalScratchImage.SaveToWICMemory(0, WIC_FLAGS.NONE, TexHelper.Instance.GetWICCodec(WICCodecs.PNG)));
 
     public void SaveToTIFF(string szFile) =>
         InternalScratchImage.SaveToWICFile(0, WIC_FLAGS.NONE, TexHelper.Instance.GetWICCodec(WICCodecs.TIFF), szFile);
@@ -461,7 +461,7 @@ public class RedImage : IDisposable
 
             tmpImage = true;
 
-            img = img.Convert(settings.RawFormat, TEX_FILTER_FLAGS.DEFAULT, 0.5F);
+            img = img.Convert(settings.RawFormat, TEX_FILTER_FLAGS.FORCE_WIC, 0.5F);
             metadata = img.GetMetadata();
         }
         else
@@ -470,7 +470,7 @@ public class RedImage : IDisposable
             {
                 tmpImage = true;
 
-                img = img.Convert(TexHelper.Instance.MakeSRGB(metadata.Format), TEX_FILTER_FLAGS.DEFAULT, 0.5F);
+                img = img.Convert(TexHelper.Instance.MakeSRGB(metadata.Format), TEX_FILTER_FLAGS.FORCE_WIC, 0.5F);
                 metadata = img.GetMetadata();
             }
 
@@ -478,7 +478,7 @@ public class RedImage : IDisposable
             {
                 tmpImage = true;
 
-                img = img.Convert(TexHelper.Instance.MakeTypelessUNORM(metadata.Format), TEX_FILTER_FLAGS.DEFAULT, 0.5F);
+                img = img.Convert(TexHelper.Instance.MakeTypelessUNORM(metadata.Format), TEX_FILTER_FLAGS.FORCE_WIC, 0.5F);
                 metadata = img.GetMetadata();
             }
         }
