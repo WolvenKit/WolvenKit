@@ -16,7 +16,7 @@ namespace WolvenKit.Views.Shell
     public partial class RibbonView : ReactiveUserControl<RibbonViewModel>
     {
         private readonly ISettingsManager _settingsManager;
-        private bool _profilesLoaded;
+        //private bool _profilesLoaded;
 
         public RibbonView()
         {
@@ -26,7 +26,7 @@ namespace WolvenKit.Views.Shell
 
             _settingsManager = Locator.Current.GetService<ISettingsManager>();
 
-            GetLaunchProfiles();
+            //GetLaunchProfiles();
 
             this.WhenActivated(disposables =>
             {
@@ -94,7 +94,7 @@ namespace WolvenKit.Views.Shell
 
             _settingsManager.WhenAnyValue(x => x.LaunchProfiles).WhereNotNull().Subscribe(dict =>
             {
-                if (_profilesLoaded)
+                //if (_profilesLoaded)
                 {
                     GetLaunchProfiles();
                 }
@@ -118,31 +118,29 @@ namespace WolvenKit.Views.Shell
                 _settingsManager.Save();
             }
 
+            // unsubscribe
+            foreach (object obj in LaunchMenuMainItem.Items)
+            {
+                if (obj is MenuItem menuitem && menuitem.Header is string menuitemHeader)
+                {
+                    if (menuitemHeader == "Launch Options")
+                    {
+                        continue;
+                    }
+                    menuitem.Click -= LaunchMenu_MenuItem_Click;
+                }
+            }
+            // delete all except for last two
+            int cntToRemove = LaunchMenuMainItem.Items.Count - 2;
+            for (int i = 0; i < cntToRemove; i++)
+            {
+                LaunchMenuMainItem.Items.RemoveAt(0);
+            }
+
 
             int count = 0;
             foreach ((string name, LaunchProfile value) in _settingsManager.LaunchProfiles)
             {
-                bool found = false;
-                foreach (object obj in LaunchMenuMainItem.Items)
-                {
-                    if (obj is MenuItem menuitem)
-                    {
-                        if (menuitem.Header is string menuitemHeader)
-                        {
-                            if (menuitemHeader == name)
-                            {
-                                found = true;
-                            }
-                        }
-                    }
-                }
-
-                if (found)
-                {
-                    count++;
-                    continue;
-                }
-
                 MenuItem item = new()
                 {
                     Header = name
@@ -169,7 +167,7 @@ namespace WolvenKit.Views.Shell
                 ViewModel.LaunchProfileText = _settingsManager.LaunchProfiles.First().Key;
             }
 
-            _profilesLoaded = true;
+            //_profilesLoaded = true;
         }
 
         private void LaunchMenu_MenuItem_Click(object sender, RoutedEventArgs e)
