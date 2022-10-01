@@ -183,7 +183,6 @@ namespace WolvenKit.RED4.Archive
                 vs.DecompressAndCopySegment(outStream, zSize, size);
             }
             vs.Dispose();
-            ReleaseFileHandle();
         }
 
         /// <summary>
@@ -206,7 +205,6 @@ namespace WolvenKit.RED4.Archive
                 var size = offsetEntry.Size;
                 await vs.DecompressAndCopySegmentAsync(outStream, zSize, size);
             }
-            ReleaseFileHandle();
         }
 
         #region IDisposable

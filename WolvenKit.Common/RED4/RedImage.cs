@@ -440,11 +440,6 @@ public class RedImage : IDisposable
 
     private (STextureGroupSetup, rendRenderTextureBlobPC) GetSetupAndBlob(RedImageTransformSettings settings)
     {
-        if (settings.RawFormat != DXGI_FORMAT.UNKNOWN && settings.IsGamma != TexHelper.Instance.IsSRGB(settings.RawFormat))
-        {
-            throw new ArgumentException("");
-        }
-
         var setup = new STextureGroupSetup();
         var blob = new rendRenderTextureBlobPC();
 
@@ -468,18 +463,26 @@ public class RedImage : IDisposable
         {
             if (settings.IsGamma && !TexHelper.Instance.IsSRGB(metadata.Format))
             {
-                tmpImage = true;
+                var srgbFormat = TexHelper.Instance.MakeSRGB(metadata.Format);
+                if (metadata.Format != srgbFormat)
+                {
+                    tmpImage = true;
 
-                img = img.Convert(TexHelper.Instance.MakeSRGB(metadata.Format), TEX_FILTER_FLAGS.FORCE_WIC, 0.5F);
-                metadata = img.GetMetadata();
+                    img = img.Convert(srgbFormat, TEX_FILTER_FLAGS.FORCE_WIC, 0.5F);
+                    metadata = img.GetMetadata();
+                }
             }
 
             if (!settings.IsGamma && TexHelper.Instance.IsSRGB(metadata.Format))
             {
-                tmpImage = true;
+                var linearFormat = TexHelper.Instance.MakeLinear(metadata.Format);
+                if (metadata.Format != linearFormat)
+                {
+                    tmpImage = true;
 
-                img = img.Convert(TexHelper.Instance.MakeTypelessUNORM(metadata.Format), TEX_FILTER_FLAGS.FORCE_WIC, 0.5F);
-                metadata = img.GetMetadata();
+                    img = img.Convert(linearFormat, TEX_FILTER_FLAGS.FORCE_WIC, 0.5F);
+                    metadata = img.GetMetadata();
+                }
             }
         }
 
