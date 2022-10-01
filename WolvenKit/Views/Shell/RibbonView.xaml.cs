@@ -92,7 +92,7 @@ namespace WolvenKit.Views.Shell
                     .DisposeWith(disposables);
             });
 
-            _settingsManager.WhenAnyValue(x => x.LaunchProfiles).WhereNotNull().Subscribe(dict =>
+            _settingsManager.WhenAnyValue(x => x.LaunchProfiles).Subscribe(dict =>
             {
                 //if (_profilesLoaded)
                 {

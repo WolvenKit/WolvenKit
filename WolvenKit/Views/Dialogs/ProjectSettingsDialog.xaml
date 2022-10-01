@@ -82,19 +82,6 @@
                     <hc:TextBox x:Name="VersionTextBox" Grid.Column="1" />
                 </Grid>
             </StackPanel>
-
-            <StackPanel x:Name="DeploymentPanel" Visibility="Collapsed">
-                <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="110" />
-                        <ColumnDefinition Width="*" />
-                    </Grid.ColumnDefinitions>
-
-                    <Label Grid.Column="0">Is RedMod?</Label>
-                    <CheckBox x:Name="IsRedModCheckBox" Grid.Column="1" />
-                </Grid>
-               
-            </StackPanel>
         </Grid>
 
         <!--  Bottom Row  -->
