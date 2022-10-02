@@ -1,9 +1,6 @@
 using System.IO;
 using System.Linq;
-using Microsoft.Win32;
-using System.Threading.Tasks;
 using static Microsoft.Win32.Registry;
-using System;
 
 namespace WolvenKit.App.Helpers;
 
