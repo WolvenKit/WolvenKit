@@ -11,6 +11,7 @@
     xmlns:reactiveUi="http://reactiveui.net"
     xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
     xmlns:tools="clr-namespace:WolvenKit.ViewModels.Tools;assembly=WolvenKit.App"
+    xmlns:local="clr-namespace:WolvenKit.Views.Tools"
     d:DataContext="{d:DesignInstance Type=tools:ProjectExplorerViewModel}"
     d:DesignHeight="450"
     d:DesignWidth="400"
@@ -18,11 +19,14 @@
     mc:Ignorable="d">
 
     <UserControl.Resources>
+
         <ResourceDictionary>
+
             <ResourceDictionary.MergedDictionaries>
                 <hc:ThemeResources RequestedTheme="Dark" />
                 <hc:Theme />
             </ResourceDictionary.MergedDictionaries>
+
             <DataTemplate x:Key="DragDropTemplate">
                 <Border
                     x:Name="border"
@@ -203,6 +207,7 @@
 
             <DataTemplate x:Key="TreeGridCellTemplate">
                 <Grid>
+
                     <Grid.Resources>
                         <Style x:Key="WolvenKitTreeGridButton" TargetType="{x:Type helpers:TreeGridButton}">
                             <Setter Property="Border.Background" Value="{Binding BorderBrush, RelativeSource={RelativeSource Self}}" />
@@ -272,11 +277,13 @@
                             </Style.Triggers>
                         </Style>
                     </Grid.Resources>
+
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="13" />
                         <ColumnDefinition Width="*" />
                         <ColumnDefinition Width="Auto" />
                     </Grid.ColumnDefinitions>
+
                     <others:FileIcon
                         Width="13"
                         Height="19"
@@ -292,9 +299,10 @@
                         Grid.Column="2"
                         Background="{StaticResource ContentBackground}"
                         Orientation="Horizontal">
+
                         <helpers:TreeGridButton
+                            Command="{Binding ViewModel.MainViewModel.OpenFileCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:ProjectExplorerView}}}"
                             BorderBrush="{StaticResource WolvenKitCyan}"
-                            Command="{Binding OpenFileCommand}"
                             HoverBackground="{StaticResource WolvenKitCyanShadow}"
                             Style="{StaticResource WolvenKitTreeGridButton}"
                             ToolTip="Open this file">
@@ -307,9 +315,10 @@
                                     Kind="OpenInNew" />
                             </helpers:TreeGridButton.Content>
                         </helpers:TreeGridButton>
+
                         <helpers:TreeGridButton
                             BorderBrush="{StaticResource WolvenKitRed}"
-                            Command="{Binding DeleteFileCommand}"
+                            Command="{Binding ViewModel.DeleteFileCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:ProjectExplorerView}}}"
                             HoverBackground="{StaticResource WolvenKitRedShadow}"
                             Style="{StaticResource WolvenKitTreeGridButtonDirectory}"
                             ToolTip="Delete this file/folder">
@@ -321,11 +330,14 @@
                                     Kind="Trash" />
                             </helpers:TreeGridButton.Content>
                         </helpers:TreeGridButton>
+
                         <helpers:TreeGridButton
                             Width="0"
                             Margin="0,0,10,0"
                             Style="{StaticResource WolvenKitTreeGridButtonDirectory}" />
+                        
                     </StackPanel>
+                    
                 </Grid>
             </DataTemplate>
 
@@ -363,6 +375,7 @@
                         TextTrimming="CharacterEllipsis" />
                 </Grid>
             </DataTemplate>
+
             <Style
                 x:Key="WolvenKitPESourceTabs"
                 BasedOn="{StaticResource SyncfusionTabItemExtStyle}"
@@ -408,10 +421,11 @@
             </Style>
 
         </ResourceDictionary>
+
     </UserControl.Resources>
 
     <Grid hc:ThemeManager.RequestedAccentColor="{DynamicResource MahApps.Brushes.Accent3}">
-        <Grid.Resources />
+
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
@@ -428,8 +442,9 @@
             CloseButtonType="Hide"
             SelectedIndex="{Binding SelectedTabIndex}"
             ShowTabItemContextMenu="False"
-            ShowTabListContextMenu="False"
-            Style="{StaticResource WolvenKitTabControl}">
+            Style="{StaticResource WolvenKitTabControl}"
+            TabListContextMenuOptions="Default">
+
             <syncfusion:TabItemExt>
                 <syncfusion:TabItemExt.Style>
                     <Style BasedOn="{StaticResource SyncfusionTabItemExtStyle}" TargetType="{x:Type syncfusion:TabItemExt}">
@@ -508,6 +523,7 @@
                     </Style>
                 </syncfusion:TabItemExt.Style>
             </syncfusion:TabItemExt>
+
         </syncfusion:TabControlExt>
 
         <Border
@@ -607,6 +623,7 @@
             </Grid>
         </Border>
 
+        <!-- Hierarchical Tree View -->
         <syncfusion:SfTreeGrid
             Name="TreeGrid"
             Grid.Row="2"
@@ -669,8 +686,7 @@
             </syncfusion:SfTreeGrid.Columns>
         </syncfusion:SfTreeGrid>
 
-
-
+        <!-- Flat Tree View -->
         <syncfusion:SfTreeGrid
             Name="TreeGridFlat"
             Grid.Row="2"
@@ -739,5 +755,6 @@
                     MappingName="Extension" />
             </syncfusion:SfTreeGrid.Columns>
         </syncfusion:SfTreeGrid>
+        
     </Grid>
 </reactiveUi:ReactiveUserControl>

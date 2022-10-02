@@ -22,14 +22,14 @@
     Icon="TaskBarIcon.ico"
     IconAlignment="Left"
     LeftHeaderItemsSource="{DynamicResource leftHeaderItems}"
+    Loaded="ChromelessWindow_Loaded"
     ResizeMode="CanResizeWithGrip"
     RightHeaderItemsSource="{DynamicResource rightHeaderItems}"
     ShowIcon="True"
     SizeToContent="Manual"
     TitleTextAlignment="Right"
     UseLayoutRounding="True"
-    UseNativeChrome="True"
-    Loaded="ChromelessWindow_Loaded">
+    UseNativeChrome="True">
     <!--  TextBlock Text="{Binding Title}" FontSize="{Binding TitileFontSize}" VerticalAlignment="Center" Margin="10,0,0,0" Opacity="{Binding Opacity, ElementName=ModalOverlay}"/  -->
 
     <syncfusion:ChromelessWindow.Resources>
@@ -55,6 +55,7 @@
     </syncfusion:ChromelessWindow.InputBindings>
 
     <Grid>
+
         <Border Margin="-6,-4,-6,-8" IsHitTestVisible="False">
             <Grid>
                 <Rectangle
@@ -107,8 +108,11 @@
                     Stroke="Black" />
             </Grid>
         </Border>
+
         <!--  Border Name="WindowMask" CornerRadius="0" Background="Black" BorderThickness="1" /  -->
+
         <Grid Background="{DynamicResource ContentBackgroundAlt2}">
+
             <Grid.Resources>
                 <converters:ActiveDocumentConverter x:Key="ActiveDocumentConverter" />
                 <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter" />
@@ -121,6 +125,7 @@
             </Grid.RowDefinitions>
 
             <Grid Grid.RowSpan="3" Panel.ZIndex="1000">
+
                 <Grid.Resources>
                     <DataTemplate DataType="{x:Type dialogVMs:NewFileViewModel}">
                         <dialogs:NewFileView ViewModel="{Binding}" />
@@ -143,6 +148,7 @@
                     <DataTemplate DataType="{x:Type dialogVMs:ProjectSettingsDialogViewModel}">
                         <dialogs:ProjectSettingsDialog ViewModel="{Binding}" />
                     </DataTemplate>
+
                     <Storyboard x:Key="OverlayFadeIn">
                         <DoubleAnimation
                             FillBehavior="HoldEnd"
@@ -157,6 +163,7 @@
                             <DiscreteBooleanKeyFrame KeyTime="0:0:0" Value="True" />
                         </BooleanAnimationUsingKeyFrames>
                     </Storyboard>
+
                     <Storyboard x:Key="OverlayFadeOut" Completed="FadeOut_Completed">
                         <DoubleAnimation
                             Storyboard.TargetProperty="Opacity"
@@ -171,7 +178,9 @@
                             <DiscreteBooleanKeyFrame KeyTime="0:0:0" Value="False" />
                         </BooleanAnimationUsingKeyFrames>
                     </Storyboard>
+
                 </Grid.Resources>
+
                 <ContentControl
                     Grid.RowSpan="5"
                     Grid.ColumnSpan="5"
@@ -192,7 +201,9 @@
                         </Style>
                     </ContentControl.Style>
                 </ContentControl>
+
                 <Border Name="ModalDialog">
+
                     <Border.Style>
                         <Style TargetType="{x:Type Border}">
                             <Style.Triggers>
@@ -207,6 +218,7 @@
                             </Style.Triggers>
                         </Style>
                     </Border.Style>
+
                     <Grid>
                         <Grid.RowDefinitions>
                             <RowDefinition Height="2*" />
@@ -360,7 +372,9 @@
                                 CornerRadius="8" />
                         </Grid>
                     </Grid>
+
                 </Border>
+
             </Grid>
 
             <shell:RibbonView Grid.Row="0" Margin="0,0,0,0" />

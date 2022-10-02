@@ -1,11 +1,11 @@
+using ReactiveUI;
+using ReactiveUI.Fody.Helpers;
 using System;
 using System.IO;
 using System.Linq;
 using System.Reactive;
 using System.Threading.Tasks;
 using System.Xml.Serialization;
-using ReactiveUI;
-using ReactiveUI.Fody.Helpers;
 using WolvenKit.Common.Services;
 using WolvenKit.Core.Interfaces;
 using WolvenKit.Functionality.ProjectManagement;
@@ -109,13 +109,13 @@ namespace WolvenKit.Functionality.Services
         {
             try
             {
-                var fi = new FileInfo(location);
+                FileInfo fi = new(location);
                 if (!fi.Exists)
                 {
                     return null;
                 }
 
-                var project = fi.Extension switch
+                EditorProject project = fi.Extension switch
                 {
                     //".w3modproj" => await Load<Tw3Project>(location),
                     ".cpmodproj" => await Load<Cp77Project>(location),
@@ -136,44 +136,31 @@ namespace WolvenKit.Functionality.Services
         {
             try
             {
-                await using var lf = new FileStream(path, FileMode.Open, FileAccess.Read);
-                var ser = new XmlSerializer(typeof(CP77Mod));
+                await using FileStream lf = new(path, FileMode.Open, FileAccess.Read);
+                XmlSerializer ser = new(typeof(CP77Mod));
                 if (ser.Deserialize(lf) is not CP77Mod obj)
                 {
                     return null;
                 }
 
-                //if (typeof(T) == typeof(Tw3Project))
-                //{
-                //    return new Tw3Project(path)
-                //    {
-                //        Author = obj.Author,
-                //        Email = obj.Email,
-                //        Name = obj.Name,
-                //        Version = obj.Version,
-                //    };
-                //}
-                /*else*/
                 if (typeof(T) != typeof(Cp77Project))
                 {
                     return null;
                 }
 
-                var result = new Cp77Project(path)
+                Cp77Project result = new(path)
                 {
                     Author = obj.Author,
                     Email = obj.Email,
                     Name = obj.Name,
                     Version = obj.Version,
-                    IsRedMod = obj.IsRedMod,
-                    ExecuteDeploy = obj.ExecuteDeploy
                 };
 
-                var projectHashesFile = Path.Combine(result.ProjectDirectory, "project_hashes.txt");
+                string projectHashesFile = Path.Combine(result.ProjectDirectory, "project_hashes.txt");
                 if (File.Exists(projectHashesFile) && _hashService is HashService hashService)
                 {
-                    var paths = await File.ReadAllLinesAsync(projectHashesFile);
-                    foreach (var p in paths)
+                    string[] paths = await File.ReadAllLinesAsync(projectHashesFile);
+                    foreach (string p in paths)
                     {
                         hashService.AddProjectPath(p);
                     }
@@ -198,13 +185,13 @@ namespace WolvenKit.Functionality.Services
                     Directory.CreateDirectory(ActiveProject.ProjectDirectory);
                 }
 
-                await using var fs = new FileStream(ActiveProject.Location, FileMode.Create, FileAccess.Write);
-                var ser = new XmlSerializer(typeof(CP77Mod));
+                await using FileStream fs = new(ActiveProject.Location, FileMode.Create, FileAccess.Write);
+                XmlSerializer ser = new(typeof(CP77Mod));
                 ser.Serialize(fs, new CP77Mod(ActiveProject));
 
                 if (_hashService is HashService hashService)
                 {
-                    var projectHashes = hashService.GetProjectHashes();
+                    System.Collections.Generic.List<string> projectHashes = hashService.GetProjectHashes();
                     if (projectHashes.Count > 0)
                     {
                         await File.WriteAllLinesAsync(Path.Combine(ActiveProject.ProjectDirectory, "project_hashes.txt"), projectHashes);
@@ -243,12 +230,6 @@ namespace WolvenKit.Functionality.Services
                 Email = project.Email;
                 Name = project.Name;
                 Version = project.Version;
-
-                if (project is Cp77Project cp77Project)
-                {
-                    IsRedMod = cp77Project.IsRedMod;
-                    ExecuteDeploy = cp77Project.ExecuteDeploy;
-                }
             }
 
             public string Author { get; set; }

@@ -227,7 +227,9 @@
                         <TextBlock Padding="5,0,0,0" Text="Save All" />
                     </StackPanel>
                 </Button>
+
                 <Separator Margin="3" />
+
                 <Button x:Name="ToolbarPackProjectButton" ToolTip="Pack archives &amp; create mod package">
                     <StackPanel Orientation="Horizontal">
                         <Grid>
@@ -282,25 +284,63 @@
                     </StackPanel>
                 </Button>
 
+                <Menu x:Name="LaunchMenu">
+                    <MenuItem x:Name="LaunchMenuMainItem">
+                        <MenuItem.Header>
+                            <StackPanel Orientation="Horizontal">
+                                <Button
+                                    x:Name="LaunchProfileButton"
+                                    Margin="-2,-2,2,-2"
+                                    Style="{StaticResource MahApps.Styles.Button.Chromeless}">
+                                    <StackPanel Orientation="Horizontal">
+                                        <Grid>
+                                            <iconPacks:PackIconForkAwesome
+                                                Padding="0,0,2,2"
+                                                Foreground="LightGreen"
+                                                Kind="Play"
+                                                Style="{StaticResource WolvenKitToolBarButtonIcon}" />
+                                        </Grid>
+                                        <TextBlock x:Name="LaunchProfileText" Padding="5,0,0,0" />
+                                    </StackPanel>
+
+                                </Button>
+                                <Separator />
+                                <iconPacks:PackIconCodicons
+                                    Padding="4"
+                                    Kind="TriangleDown"
+                                    Style="{StaticResource WolvenKitToolBarButtonIcon}" />
+                            </StackPanel>
+
+                        </MenuItem.Header>
+
+                        <!--  Added programmatically  -->
+
+                        <Separator />
+
+                        <MenuItem x:Name="LaunchOptionsMenuItem" Header="Launch Options">
+                            <MenuItem.Icon>
+                                <iconPacks:PackIconCodicons
+                                    Padding="1"
+                                    Kind="SettingsGear"
+                                    Style="{StaticResource WolvenKitToolBarButtonIcon}" />
+                            </MenuItem.Icon>
+                        </MenuItem>
+
+                    </MenuItem>
+                </Menu>
+
                 <Button x:Name="ToolbarHotInstallButton" ToolTip="Pack archives &amp; install directly to hot directory">
 
                     <StackPanel Orientation="Horizontal">
                         <Grid>
                             <iconPacks:PackIconForkAwesome
-                                Padding="0,0,2,2"
+                                Padding="0,1,0,1"
                                 Foreground="#f44b56"
                                 Kind="Fire"
                                 Style="{StaticResource WolvenKitToolBarButtonIcon}" />
-                            <iconPacks:PackIconForkAwesome
-                                Padding="7,7,-2,-2"
-                                Kind="ArrowRight"
-                                Style="{StaticResource WolvenKitToolBarButtonIconEraser}" />
-                            <iconPacks:PackIconCodicons
-                                Padding="9,8,-1,-1"
-                                Kind="ArrowRight"
-                                Style="{StaticResource WolvenKitToolBarButtonIcon}" />
+
                         </Grid>
-                        <TextBlock Padding="5,0,0,0" Text="Hot Install" />
+                        <TextBlock Padding="5,0,0,0" Text="Hot Reload" />
                     </StackPanel>
                 </Button>
 

@@ -258,6 +258,7 @@ namespace WolvenKit.Modkit.RED4
                 .Where(_ => Enum.GetNames<ERawFileFormat>().Contains(_.TrimmedExtension().ToLower()))
                 .ToList();
             var failsCount = 0;
+
             foreach (var fi in rawFilesList)
             {
                 var ext = fi.TrimmedExtension();
@@ -333,43 +334,31 @@ namespace WolvenKit.Modkit.RED4
                     return false;
                 }
 
-                args = new XbmImportArgs();
-                args.AllowTextureDowngrade = xbm.Setup.AllowTextureDowngrade;
-                args.AlphaToCoverageThreshold = xbm.Setup.AlphaToCoverageThreshold;
-                args.Compression = Enum.Parse<SupportedCompressionFormats>(xbm.Setup.Compression.ToString());
-                args.HasMipchain = xbm.Setup.HasMipchain;
-                args.IsGamma = xbm.Setup.IsGamma;
-                args.IsStreamable = xbm.Setup.IsStreamable;
-                args.PlatformMipBiasConsole = xbm.Setup.PlatformMipBiasConsole;
-                args.PlatformMipBiasPC = xbm.Setup.PlatformMipBiasPC;
-                args.RawFormat = Enum.Parse<SupportedRawFormats>(xbm.Setup.RawFormat.ToString());
-                args.TextureGroup = xbm.Setup.Group;
+                args = new XbmImportArgs
+                {
+                    AllowTextureDowngrade = xbm.Setup.AllowTextureDowngrade,
+                    AlphaToCoverageThreshold = xbm.Setup.AlphaToCoverageThreshold,
+                    Compression = Enum.Parse<SupportedCompressionFormats>(xbm.Setup.Compression.ToString()),
+                    HasMipchain = xbm.Setup.HasMipchain,
+                    IsGamma = xbm.Setup.IsGamma,
+                    IsStreamable = xbm.Setup.IsStreamable,
+                    PlatformMipBiasConsole = xbm.Setup.PlatformMipBiasConsole,
+                    PlatformMipBiasPC = xbm.Setup.PlatformMipBiasPC,
+                    RawFormat = Enum.Parse<SupportedRawFormats>(xbm.Setup.RawFormat.ToString()),
+                    TextureGroup = xbm.Setup.Group
+                };
             }
 
-            RedImage image;
-            switch (Enum.Parse<EUncookExtension>(rawRelative.Extension))
+            var image = Enum.Parse<EUncookExtension>(rawRelative.Extension) switch
             {
-                case EUncookExtension.dds:
-                    image = RedImage.LoadFromDDSFile(infile);
-                    break;
-                case EUncookExtension.tga:
-                    image = RedImage.LoadFromTGAFile(infile);
-                    break;
-                case EUncookExtension.bmp:
-                    image = RedImage.LoadFromBMPFile(infile);
-                    break;
-                case EUncookExtension.jpg:
-                    image = RedImage.LoadFromJPGFile(infile);
-                    break;
-                case EUncookExtension.png:
-                    image = RedImage.LoadFromPNGFile(infile);
-                    break;
-                case EUncookExtension.tiff:
-                    image = RedImage.LoadFromTIFFFile(infile);
-                    break;
-                default:
-                    throw new ArgumentOutOfRangeException();
-            }
+                EUncookExtension.dds => RedImage.LoadFromDDSFile(infile),
+                EUncookExtension.tga => RedImage.LoadFromTGAFile(infile),
+                EUncookExtension.bmp => RedImage.LoadFromBMPFile(infile),
+                EUncookExtension.jpg => RedImage.LoadFromJPGFile(infile),
+                EUncookExtension.png => RedImage.LoadFromPNGFile(infile),
+                EUncookExtension.tiff => RedImage.LoadFromTIFFFile(infile),
+                _ => throw new ArgumentOutOfRangeException(),
+            };
             var bitmap = image.SaveToXBM(args);
 
             var outpath = new RedRelativePath(rawRelative)
@@ -382,7 +371,7 @@ namespace WolvenKit.Modkit.RED4
 
             using var fs = new FileStream(outpath.FullPath, FileMode.Create, FileAccess.ReadWrite);
             using var writer = new CR2WWriter(fs);
-            writer.WriteFile(new CR2WFile {RootChunk = bitmap});
+            writer.WriteFile(new CR2WFile { RootChunk = bitmap });
 
             return true;
         }

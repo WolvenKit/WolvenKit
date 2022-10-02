@@ -9,7 +9,7 @@ using WolvenKit.ViewModels.Dialogs;
 namespace WolvenKit.Views.Dialogs
 {
     /// <summary>
-    /// Interaction logic for NewFileView.xaml
+    /// Interaction logic for SoundModdingView.xaml
     /// </summary>
     public partial class SoundModdingView : ReactiveUserControl<SoundModdingViewModel>
     {

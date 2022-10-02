@@ -1,3 +1,9 @@
+using DynamicData;
+using Microsoft.EntityFrameworkCore;
+using Prism.Commands;
+using ReactiveUI;
+using ReactiveUI.Fody.Helpers;
+using Splat;
 using System;
 using System.Collections.ObjectModel;
 using System.IO;
@@ -9,12 +15,6 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
-using DynamicData;
-using Microsoft.EntityFrameworkCore;
-using Prism.Commands;
-using ReactiveUI;
-using ReactiveUI.Fody.Helpers;
-using Splat;
 using WolvenKit.Common;
 using WolvenKit.Common.Interfaces;
 using WolvenKit.Common.Model;
@@ -26,8 +26,10 @@ using WolvenKit.Functionality;
 using WolvenKit.Functionality.Commands;
 using WolvenKit.Functionality.Controllers;
 using WolvenKit.Functionality.Services;
+using WolvenKit.Interaction;
 using WolvenKit.Models;
 using WolvenKit.Models.Docking;
+using WolvenKit.ViewModels.HomePage;
 using WolvenKit.ViewModels.Shell;
 
 namespace WolvenKit.ViewModels.Tools
@@ -164,7 +166,7 @@ namespace WolvenKit.ViewModels.Tools
                     }
                     else
                     {
-                        var execDirInfo = new DirectoryInfo(Path.GetDirectoryName(execPath));
+                        DirectoryInfo execDirInfo = new(Path.GetDirectoryName(execPath));
 
                         _archiveDirNotFound = execDirInfo.Parent.Parent.GetDirectories("archive").Length == 0;
                     }
@@ -230,8 +232,8 @@ namespace WolvenKit.ViewModels.Tools
         public ICommand OpenWolvenKitSettingsCommand { get; private set; }
         private void OpenWolvenKitSettings()
         {
-            var homepageViewModel = Locator.Current.GetService<HomePage.HomePageViewModel>();
-            var appViewModel = Locator.Current.GetService<AppViewModel>();
+            HomePage.HomePageViewModel homepageViewModel = Locator.Current.GetService<HomePage.HomePageViewModel>();
+            AppViewModel appViewModel = Locator.Current.GetService<AppViewModel>();
 
             homepageViewModel.SelectedIndex = 1;
             appViewModel.SetActiveOverlay(homepageViewModel);
@@ -244,6 +246,24 @@ namespace WolvenKit.ViewModels.Tools
             if (!_pluginService.IsInstalled(EPlugin.wolvenkit_resources))
             {
                 _loggerService.Warning("Wolvenkit-Resources plugin is not installed and is needed for this functionality.");
+
+                WMessageBoxResult response = await Interactions.ShowMessageBoxAsync("Wolvenkit-Resources plugin is not installed and is needed for this functionality. Would you like to install it now?", "Wolvenkit-Resources not found");
+
+                switch (response)
+                {
+                    case WMessageBoxResult.OK:
+                    case WMessageBoxResult.Yes:
+                        {
+                            HomePageViewModel homepage = Locator.Current.GetService<HomePageViewModel>();
+                            AppViewModel appViewModel = Locator.Current.GetService<AppViewModel>();
+
+                            homepage.NavigateTo(EHomePage.Plugins);
+                            appViewModel.SetActiveOverlay(homepage);
+                        }
+
+                        break;
+                }
+
                 return;
             }
 
@@ -251,13 +271,13 @@ namespace WolvenKit.ViewModels.Tools
 
             await Task.Run(async () =>
             {
-                using var db = new RedDBContext();
+                using RedDBContext db = new();
 
                 if (RightSelectedItem is RedFileViewModel file)
                 {
-                    var hash = file.GetGameFile().Key;
+                    ulong hash = file.GetGameFile().Key;
 
-                    var usedBy = await db.Files.Include("Uses")
+                    System.Collections.Generic.List<ulong> usedBy = await db.Files.Include("Uses")
                         .Where(x => x.Uses.Any(y => y.Hash == hash))
                         .Select(x => x.Hash)
                         .ToAsyncEnumerable()
@@ -269,7 +289,7 @@ namespace WolvenKit.ViewModels.Tools
                         .TransformMany(x => x.Files.Values, y => y.Key)
                         .Filter(x => usedBy.Contains(x.Key))
                         .Transform(x => new RedFileViewModel(x))
-                        .Bind(out var list)
+                        .Bind(out ReadOnlyObservableCollection<RedFileViewModel> list)
                         .Subscribe()
                         .Dispose();
 
@@ -289,6 +309,24 @@ namespace WolvenKit.ViewModels.Tools
             if (!_pluginService.IsInstalled(EPlugin.wolvenkit_resources))
             {
                 _loggerService.Warning("Wolvenkit-Resources plugin is not installed and is needed for this functionality.");
+
+                WMessageBoxResult response = await Interactions.ShowMessageBoxAsync("Wolvenkit-Resources plugin is not installed and is needed for this functionality. Would you like to install it now?", "Wolvenkit-Resources not found");
+
+                switch (response)
+                {
+                    case WMessageBoxResult.OK:
+                    case WMessageBoxResult.Yes:
+                        {
+                            HomePageViewModel homepage = Locator.Current.GetService<HomePageViewModel>();
+                            AppViewModel appViewModel = Locator.Current.GetService<AppViewModel>();
+
+                            homepage.NavigateTo(EHomePage.Plugins);
+                            appViewModel.SetActiveOverlay(homepage);
+                        }
+
+                        break;
+                }
+
                 return;
             }
 
@@ -296,13 +334,13 @@ namespace WolvenKit.ViewModels.Tools
 
             await Task.Run(async () =>
             {
-                using var db = new RedDBContext();
+                using RedDBContext db = new();
 
                 if (RightSelectedItem is RedFileViewModel file)
                 {
-                    var hash = file.GetGameFile().Key;
+                    ulong hash = file.GetGameFile().Key;
 
-                    var uses = await db.Files.Include("Archive").Include("Uses")
+                    System.Collections.Generic.List<System.Collections.Generic.IEnumerable<ulong>> uses = await db.Files.Include("Archive").Include("Uses")
                         .Where(x => x.Archive.Name == file.ArchiveName && x.Hash == hash)
                         .Select(x => x.Uses.Select(y => y.Hash))
                         .ToAsyncEnumerable()
@@ -314,7 +352,7 @@ namespace WolvenKit.ViewModels.Tools
                         .TransformMany(x => x.Files.Values, y => y.Key)
                         .Filter(x => uses.Any(y => y.Contains(x.Key)))
                         .Transform(x => new RedFileViewModel(x))
-                        .Bind(out var list)
+                        .Bind(out ReadOnlyObservableCollection<RedFileViewModel> list)
                         .Subscribe()
                         .Dispose();
 
@@ -332,7 +370,7 @@ namespace WolvenKit.ViewModels.Tools
         private bool CanAddSelected() => RightSelectedItems != null && RightSelectedItems.Any() && _projectLoaded;
         private void ExecuteAddSelected()
         {
-            foreach (var o in RightSelectedItems)
+            foreach (object o in RightSelectedItems)
             {
                 switch (o)
                 {
@@ -352,7 +390,7 @@ namespace WolvenKit.ViewModels.Tools
         {
             if (RightSelectedItem is RedFileViewModel rfvm)
             {
-                Locator.Current.GetService<AppViewModel>().OpenRedFileAsyncCommand.SafeExecute(rfvm.GetGameFile());
+                Locator.Current.GetService<AppViewModel>().OpenRedFileCommand.SafeExecute(rfvm.GetGameFile());
             }
         }
 
@@ -363,7 +401,7 @@ namespace WolvenKit.ViewModels.Tools
         {
             if (!_archiveManager.IsModBrowserActive)
             {
-                _archiveManager.LoadModsArchives(new []{ new DirectoryInfo(_settings.GetRED4GameLegacyModDir()), new DirectoryInfo(_settings.GetRED4GameModDir()) });
+                _archiveManager.LoadModsArchives(new[] { new DirectoryInfo(_settings.GetRED4GameLegacyModDir()), new DirectoryInfo(_settings.GetRED4GameModDir()) });
                 LeftItems = new ObservableCollection<RedFileSystemModel>(_archiveManager.ModRoots);
             }
             else
@@ -384,8 +422,8 @@ namespace WolvenKit.ViewModels.Tools
                 return;
             }
 
-            var parentPath = fileVm.GetParentPath();
-            var dir = _archiveManager.LookupDirectory(parentPath, true);
+            string parentPath = fileVm.GetParentPath();
+            RedFileSystemModel dir = _archiveManager.LookupDirectory(parentPath, true);
             if (dir != null)
             {
                 MoveToFolder(dir);
@@ -445,11 +483,11 @@ namespace WolvenKit.ViewModels.Tools
 
         private void AddFolderRecursive(RedFileSystemModel item)
         {
-            foreach (var (key, dir) in item.Directories)
+            foreach ((string key, RedFileSystemModel dir) in item.Directories)
             {
                 AddFolderRecursive(dir);
             }
-            foreach (var file in item.Files)
+            foreach (ulong file in item.Files)
             {
                 AddFile(file);
             }
@@ -466,7 +504,7 @@ namespace WolvenKit.ViewModels.Tools
                 .TransformMany(x => x.Files.Values, y => y.Key)
                 .Filter(x => x.Key == file.Hash)
                 .Transform(x => new RedFileViewModel(x))
-                .Bind(out var list)
+                .Bind(out ReadOnlyObservableCollection<RedFileViewModel> list)
                 .Subscribe()
                 .Dispose();
 
@@ -488,7 +526,7 @@ namespace WolvenKit.ViewModels.Tools
             }
             catch (AggregateException ae)
             {
-                foreach (var e in ae.Flatten().InnerExceptions)
+                foreach (Exception e in ae.Flatten().InnerExceptions)
                 {
                     if (e is RegexMatchTimeoutException rex)
                     {
@@ -538,7 +576,7 @@ namespace WolvenKit.ViewModels.Tools
         // Term to refinement pattern conversion regexps
 
         private static readonly Regex Whitespace = new("\\s+", RegexpOpts, RegexpSafetyTimeout);
-        private static readonly Regex PathSeparator = new ("(^|\\G|\\w)(?:\\\\|/)(\\w+|$)", RegexpOpts, RegexpSafetyTimeout);
+        private static readonly Regex PathSeparator = new("(^|\\G|\\w)(?:\\\\|/)(\\w+|$)", RegexpOpts, RegexpSafetyTimeout);
         private static readonly string PathNormalized = "$1\\\\$2";
         private static readonly Regex ExtensionDot = new("(^|\\G|\\||\\w)\\.(?<term>\\w+?)", RegexpOpts, RegexpSafetyTimeout);
         private static readonly string ExtensionDotEscaped = "$1\\.${term}";
@@ -548,20 +586,23 @@ namespace WolvenKit.ViewModels.Tools
 
         private static readonly Func<Term, Term> NormalizePathSeparators =
             (Term term) =>
-                term with {
+                term with
+                {
                     Pattern = PathSeparator.Replace(term.Pattern, PathNormalized)
                 };
 
         private static readonly Func<Term, Term> PreserveExtensionDotMatch =
             (Term term) =>
-                term with {
+                term with
+                {
                     Pattern = ExtensionDot.Replace(term.Pattern, ExtensionDotEscaped)
                 };
 
         private static readonly Func<Term, Term> LimitOrToOneTermOnly =
             (Term term) =>
                 Or.IsMatch(term.Pattern)
-                    ? term with {
+                    ? term with
+                    {
                         Pattern = $"(?:{term.Pattern})"
                     }
                     : term;
@@ -584,33 +625,30 @@ namespace WolvenKit.ViewModels.Tools
 
         private static readonly Func<string, SearchRefinement> s_intoTypedRefinements = (string refinementString) =>
         {
-            var hashMatch = IsHashRefinement.Match(refinementString).Groups["numbers"].Value;
+            string hashMatch = IsHashRefinement.Match(refinementString).Groups["numbers"].Value;
 
             if (!string.IsNullOrEmpty(hashMatch))
             {
                 return new HashRefinement { Hash = ulong.Parse(hashMatch) };
             }
 
-            var regexMatch = IsRegexRefinement.Match(refinementString).Groups["pattern"].Value;
+            string regexMatch = IsRegexRefinement.Match(refinementString).Groups["pattern"].Value;
 
             if (!string.IsNullOrEmpty(regexMatch))
             {
                 return new RegexRefinement { Regex = new Regex(regexMatch, RegexpOpts, RegexpSafetyTimeout) };
             }
 
-            var verbatimMatch = IsVerbatimRefinement.Match(refinementString).Groups["verbatim"].Value;
+            string verbatimMatch = IsVerbatimRefinement.Match(refinementString).Groups["verbatim"].Value;
 
-            if (!string.IsNullOrEmpty(verbatimMatch))
-            {
-                return new VerbatimRefinement
-                    {
-                        Verbatim = verbatimMatch.Replace(Path.AltDirectorySeparatorChar, Path.DirectorySeparatorChar)
-                    };
-            }
-
-            return new PatternRefinement
-            {
-                Terms = Whitespace
+            return !string.IsNullOrEmpty(verbatimMatch)
+                ? new VerbatimRefinement
+                {
+                    Verbatim = verbatimMatch.Replace(Path.AltDirectorySeparatorChar, Path.DirectorySeparatorChar)
+                }
+                : new PatternRefinement
+                {
+                    Terms = Whitespace
                     .Split(refinementString)
                     .Select(term => new Term
                     {
@@ -622,7 +660,7 @@ namespace WolvenKit.ViewModels.Tools
                     .Select(LimitOrToOneTermOnly)
                     .Select(AllowExcludingTerm)
                     .ToArray()
-            };
+                };
         };
 
 
@@ -651,19 +689,19 @@ namespace WolvenKit.ViewModels.Tools
                         };
 
                     case PatternRefinement patternRefinement:
-                        var searchContainsExclusion =
+                        bool searchContainsExclusion =
                             patternRefinement.Terms.Any(term => term.Type == TermType.Exclude);
 
-                        var patternWithMaybeExtraWilds =
+                        string patternWithMaybeExtraWilds =
                             $"^.*?{string.Join(".*?", patternRefinement.Terms.Select(term => term.Pattern))}.*$";
 
-                        var pattern =
+                        string pattern =
                             SquashExtraWilds.Replace(patternWithMaybeExtraWilds, ".*?");
 
-                        var exclusionPatternWithMaybeExtraWilds =
+                        string exclusionPatternWithMaybeExtraWilds =
                             $"^.*?{string.Join(".*?", patternRefinement.Terms.Select(term => term.NegationPattern ?? term.Pattern))}.*$";
 
-                        var patternWithoutExcludedTerms =
+                        string patternWithoutExcludedTerms =
                             SquashExtraWilds.Replace(exclusionPatternWithMaybeExtraWilds, ".*?");
 
                         return new CyberSearch
@@ -699,33 +737,33 @@ namespace WolvenKit.ViewModels.Tools
                 return;
             }
 
-            var searchAsSequentialRefinements =
+            CyberSearch[] searchAsSequentialRefinements =
                 RefinementSeparator
                     .Split(SearchBarText)
                     .Select(s_intoTypedRefinements)
                     .Select(s_refinementsIntoMatchFunctions)
                     .ToArray();
 
-            var gameFilesOrMods =
+            SourceCache<IGameArchive, string> gameFilesOrMods =
                 _archiveManager.IsModBrowserActive
                 ? _archiveManager.ModArchives
                 : _archiveManager.Archives;
 
-            var filesToSearch =
+            IObservable<IChangeSet<IGameFile, ulong>> filesToSearch =
                 gameFilesOrMods
                     .Connect()   // Maybe we could avoid reconnecting every time? Dunno if it makes a difference
                     .TransformMany(archive => archive.Files.Values, fileInArchive => fileInArchive.Key);
 
-            var filesMatchingQuery =
+            IObservable<IChangeSet<IGameFile, ulong>> filesMatchingQuery =
                 filesToSearch
                     .Filter((file) =>
                         searchAsSequentialRefinements.All(refinement => refinement.Match(file)));
 
-            var viewableFileList =
+            IObservable<IChangeSet<RedFileViewModel, ulong>> viewableFileList =
                 filesMatchingQuery
                     .Transform(matchingFile => new RedFileViewModel(matchingFile))
                     .Catch((Func<Exception, IObservable<IChangeSet<RedFileViewModel, ulong>>>)LogExceptionAndReturnEmpty)
-                    .Bind(out var list);
+                    .Bind(out ReadOnlyObservableCollection<RedFileViewModel> list);
 
             viewableFileList
                 .Subscribe()
@@ -741,7 +779,7 @@ namespace WolvenKit.ViewModels.Tools
 
         public IGameFile LookupGameFile(ulong hash)
         {
-            var f = _archiveManager.Lookup(hash);
+            DynamicData.Kernel.Optional<IGameFile> f = _archiveManager.Lookup(hash);
             return f.HasValue ? f.Value : null;
         }
 
