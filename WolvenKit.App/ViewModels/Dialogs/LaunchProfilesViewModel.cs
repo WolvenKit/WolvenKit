@@ -1,16 +1,17 @@
-using ReactiveUI;
-using ReactiveUI.Fody.Helpers;
 using System;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Reactive;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
+using ReactiveUI;
+using ReactiveUI.Fody.Helpers;
 using WolvenKit.App.Models;
 using WolvenKit.Core.Interfaces;
 using WolvenKit.Functionality.Services;
+using WolvenKit.ViewModels.Dialogs;
 
-namespace WolvenKit.ViewModels.Dialogs
+namespace WolvenKit.App.ViewModels.Dialogs
 {
     public class LaunchProfilesViewModel : DialogViewModel
     {
@@ -37,7 +38,7 @@ namespace WolvenKit.ViewModels.Dialogs
 
             // populate profiles
             LaunchProfiles = new();
-            foreach ((string key, LaunchProfile value) in _settingsManager.LaunchProfiles)
+            foreach ((var key, var value) in _settingsManager.LaunchProfiles)
             {
                 LaunchProfiles.Add(new LaunchProfileViewModel { Name = key, Profile = value });
             }

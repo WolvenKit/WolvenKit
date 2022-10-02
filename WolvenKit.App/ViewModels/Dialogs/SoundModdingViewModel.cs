@@ -1,6 +1,3 @@
-using ReactiveUI;
-using ReactiveUI.Fody.Helpers;
-using Splat;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -11,13 +8,17 @@ using System.Reactive.Linq;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
+using ReactiveUI;
+using ReactiveUI.Fody.Helpers;
+using Splat;
 using WolvenKit.Core.Interfaces;
 using WolvenKit.Functionality.Services;
 using WolvenKit.Models;
 using WolvenKit.Modkit.RED4.Sounds;
 using WolvenKit.ProjectManagement.Project;
+using WolvenKit.ViewModels.Dialogs;
 
-namespace WolvenKit.ViewModels.Dialogs
+namespace WolvenKit.App.ViewModels.Dialogs
 {
     public class SoundModdingViewModel : DialogViewModel
     {
@@ -58,7 +59,7 @@ namespace WolvenKit.ViewModels.Dialogs
 
         private void LoadEvents()
         {
-            string path = Path.Combine(Environment.CurrentDirectory, "Resources", "soundEvents.json");
+            var path = Path.Combine(Environment.CurrentDirectory, "Resources", "soundEvents.json");
             if (File.Exists(path))
             {
                 try
@@ -71,7 +72,7 @@ namespace WolvenKit.ViewModels.Dialogs
                 }
 
 
-                foreach (SoundEvent item in _metadata.Events.OrderBy(x => x.Name))
+                foreach (var item in _metadata.Events.OrderBy(x => x.Name))
                 {
                     SoundEvents.Add(item);
                 }
@@ -81,14 +82,14 @@ namespace WolvenKit.ViewModels.Dialogs
 
         private void LoadInfo()
         {
-            string path = Path.Combine(Environment.CurrentDirectory, "Resources", "soundEvents.json");
+            var path = Path.Combine(Environment.CurrentDirectory, "Resources", "soundEvents.json");
             path = Path.Combine(_projectManager.ActiveProject.PackedRedModDirectory, "info.json");
             if (File.Exists(path))
             {
                 try
                 {
                     _info = JsonSerializer.Deserialize<ModInfo>(File.ReadAllText(path), _options);
-                    foreach (CustomSoundsModel e in _info.CustomSounds)
+                    foreach (var e in _info.CustomSounds)
                     {
                         CustomEvents.Add(e);
                     }
@@ -106,11 +107,11 @@ namespace WolvenKit.ViewModels.Dialogs
 
         private void PopulateFiles()
         {
-            Cp77Project modProj = _projectManager.ActiveProject as Cp77Project;
-            string[] modfiles = Directory.GetFiles(modProj.SoundDirectory, "*.wav", SearchOption.AllDirectories);
-            foreach (string modfile in modfiles)
+            var modProj = _projectManager.ActiveProject as Cp77Project;
+            var modfiles = Directory.GetFiles(modProj.SoundDirectory, "*.wav", SearchOption.AllDirectories);
+            foreach (var modfile in modfiles)
             {
-                string relPath = modfile[(modProj.SoundDirectory.Length + 1)..];
+                var relPath = modfile[(modProj.SoundDirectory.Length + 1)..];
                 Files.Add(relPath);
             }
         }
@@ -138,20 +139,20 @@ namespace WolvenKit.ViewModels.Dialogs
 
         private void Save()
         {
-            string modInfoJsonPath = Path.Combine(_projectManager.ActiveProject.PackedRedModDirectory, "info.json");
+            var modInfoJsonPath = Path.Combine(_projectManager.ActiveProject.PackedRedModDirectory, "info.json");
             if (!File.Exists(modInfoJsonPath))
             {
-                string jsonString = JsonSerializer.Serialize(_projectManager.ActiveProject.GetInfo(), _options);
+                var jsonString = JsonSerializer.Serialize(_projectManager.ActiveProject.GetInfo(), _options);
                 File.WriteAllText(modInfoJsonPath, jsonString);
             }
             else
             {
-                ModInfo info = _projectManager.ActiveProject.GetInfo();
-                foreach (CustomSoundsModel e in CustomEvents)
+                var info = _projectManager.ActiveProject.GetInfo();
+                foreach (var e in CustomEvents)
                 {
                     if (info.CustomSounds.Any(x => x.Name.Equals(e.Name)))
                     {
-                        CustomSoundsModel existing = info.CustomSounds.First(x => x.Name.Equals(e.Name));
+                        var existing = info.CustomSounds.First(x => x.Name.Equals(e.Name));
                         info.CustomSounds.Remove(existing);
                     }
 
@@ -189,7 +190,7 @@ namespace WolvenKit.ViewModels.Dialogs
 
                 }
 
-                string jsonString = JsonSerializer.Serialize(info, _options);
+                var jsonString = JsonSerializer.Serialize(info, _options);
                 File.WriteAllText(modInfoJsonPath, jsonString);
                 _logger.Success($"Saved sound configuration to {modInfoJsonPath}");
             }
@@ -209,7 +210,7 @@ namespace WolvenKit.ViewModels.Dialogs
         public ReactiveCommand<Unit, Unit> AddCommand { get; private set; }
         private void AddEvents()
         {
-            foreach (SoundEvent item in SelectedEvents)
+            foreach (var item in SelectedEvents)
             {
                 if (!CustomEvents.Any(x => x.Name == item.Name))
                 {

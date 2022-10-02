@@ -8,8 +8,9 @@ using System.Windows.Input;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using WolvenKit.RED4.Types;
+using WolvenKit.ViewModels.Dialogs;
 
-namespace WolvenKit.ViewModels.Dialogs;
+namespace WolvenKit.App.ViewModels.Dialogs;
 
 public class SelectRedTypeDialogViewModel : DialogViewModel
 {

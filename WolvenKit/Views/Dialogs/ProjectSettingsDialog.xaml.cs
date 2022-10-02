@@ -1,9 +1,9 @@
-using ReactiveUI;
 using System;
 using System.Reactive.Disposables;
 using System.Windows;
 using System.Windows.Controls;
-using WolvenKit.ViewModels.Dialogs;
+using ReactiveUI;
+using WolvenKit.App.ViewModels.Dialogs;
 
 namespace WolvenKit.Views.Dialogs;
 /// <summary>

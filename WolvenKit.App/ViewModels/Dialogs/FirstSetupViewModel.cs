@@ -15,18 +15,18 @@ using WolvenKit.Core.Interfaces;
 using WolvenKit.Functionality.Services;
 using WolvenKit.ViewModels.Dialogs;
 
-namespace WolvenKit.ViewModels.Wizards
+namespace WolvenKit.App.ViewModels.Dialogs
 {
     /// <summary>
     /// During the first time setup it tries to automatically determine the missing paths and settings.
     /// </summary>
-    public class FirstSetupWizardViewModel : DialogViewModel
+    public class FirstSetupViewModel : DialogViewModel
     {
         private readonly ISettingsManager _settingsManager;
         private readonly ILoggerService _loggerService;
         private string _cp77Eexe = "";
 
-        public FirstSetupWizardViewModel(
+        public FirstSetupViewModel(
             ISettingsManager settingsManager,
             ILoggerService loggerService
         )

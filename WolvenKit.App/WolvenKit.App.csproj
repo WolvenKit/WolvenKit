@@ -13,16 +13,12 @@
   <ItemGroup>
     <Compile Remove="ViewModels\Others\**" />
     <Compile Remove="ViewModels\Shared\**" />
-    <Compile Remove="ViewModels\Wizards\PublishWizard\**" />
     <EmbeddedResource Remove="ViewModels\Others\**" />
     <EmbeddedResource Remove="ViewModels\Shared\**" />
-    <EmbeddedResource Remove="ViewModels\Wizards\PublishWizard\**" />
     <None Remove="ViewModels\Others\**" />
     <None Remove="ViewModels\Shared\**" />
-    <None Remove="ViewModels\Wizards\PublishWizard\**" />
     <Page Remove="ViewModels\Others\**" />
     <Page Remove="ViewModels\Shared\**" />
-    <Page Remove="ViewModels\Wizards\PublishWizard\**" />
   </ItemGroup>
 
   <ItemGroup>
@@ -35,7 +31,6 @@
     <Compile Remove="Models\IWolvenkitView.cs" />
     <Compile Remove="ViewModels\Documents\IDocumentViewModel_old.cs" />
     <Compile Remove="ViewModels\HomePage\Pages\RecentlyUsedItemsViewModel.cs" />
-    <Compile Remove="ViewModels\Wizards\PublishWizardViewModel.cs" />
   </ItemGroup>
 
   <ItemGroup>

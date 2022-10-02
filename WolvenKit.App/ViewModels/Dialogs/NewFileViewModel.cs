@@ -1,6 +1,3 @@
-using ReactiveUI;
-using ReactiveUI.Fody.Helpers;
-using Splat;
 using System;
 using System.Collections.ObjectModel;
 using System.IO;
@@ -10,14 +7,18 @@ using System.Reflection;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using System.Xml.Serialization;
+using ReactiveUI;
+using ReactiveUI.Fody.Helpers;
+using Splat;
 using WolvenKit.Common;
 using WolvenKit.Common.Model;
 using WolvenKit.Functionality.Services;
 using WolvenKit.ProjectManagement.Project;
 using WolvenKit.RED4.Archive;
 using WolvenKit.RED4.CR2W;
+using WolvenKit.ViewModels.Dialogs;
 
-namespace WolvenKit.ViewModels.Dialogs
+namespace WolvenKit.App.ViewModels.Dialogs
 {
     public class NewFileViewModel : DialogViewModel
     {
@@ -39,21 +40,23 @@ namespace WolvenKit.ViewModels.Dialogs
                     !string.IsNullOrEmpty(file) &&
                     !File.Exists(path)));
 
+#pragma warning disable IDE0053 // Use expression body for lambda expressions
             CancelCommand = ReactiveCommand.Create(() => { FileHandler(null); });
+#pragma warning restore IDE0053 // Use expression body for lambda expressions
 
             Title = "Create new file";
 
             try
             {
-                using Stream stream = Assembly.GetExecutingAssembly().GetManifestResourceStream(@"WolvenKit.App.Resources.WolvenKitFileDefinitions.xml");
+                using var stream = Assembly.GetExecutingAssembly().GetManifestResourceStream(@"WolvenKit.App.Resources.WolvenKitFileDefinitions.xml");
 
                 XmlSerializer serializer = new(typeof(WolvenKitFileDefinitions));
-                WolvenKitFileDefinitions newdef = (WolvenKitFileDefinitions)serializer.Deserialize(stream);
+                var newdef = (WolvenKitFileDefinitions)serializer.Deserialize(stream);
                 foreach (ERedExtension ext in Enum.GetValues(typeof(ERedExtension)))
                 {
                     if (CommonFunctions.GetResourceClassesFromExtension(ext) is not null)
                     {
-                        FileCategoryModel resourceFiles = newdef.Categories.FirstOrDefault(x => x.Name == "CR2W Files");
+                        var resourceFiles = newdef.Categories.FirstOrDefault(x => x.Name == "CR2W Files");
                         resourceFiles.Files.Add(new AddFileModel()
                         {
                             Name = CommonFunctions.GetResourceClassesFromExtension(ext),
@@ -112,7 +115,7 @@ namespace WolvenKit.ViewModels.Dialogs
 
         private string GetDefaultDir(EWolvenKitFile type)
         {
-            Cp77Project project = Locator.Current.GetService<IProjectManager>().ActiveProject as Cp77Project;
+            var project = Locator.Current.GetService<IProjectManager>().ActiveProject as Cp77Project;
             return type switch
             {
                 EWolvenKitFile.Redscript => project.ScriptDirectory,

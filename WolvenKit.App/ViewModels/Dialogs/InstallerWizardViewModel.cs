@@ -2,7 +2,7 @@
 
 using ReactiveUI;
 
-namespace WolvenKit.ViewModels.Wizards
+namespace WolvenKit.App.ViewModels.Dialogs
 {
     public class InstallerWizardViewModel : ReactiveObject
     {

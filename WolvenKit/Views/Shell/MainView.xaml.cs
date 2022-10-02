@@ -1,6 +1,3 @@
-using AdonisUI.Controls;
-using ReactiveUI;
-using Splat;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -11,14 +8,18 @@ using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
 using System.Windows;
+using AdonisUI.Controls;
+using ReactiveUI;
+using Splat;
+using WolvenKit.App.ViewModels.Dialogs;
 using WolvenKit.Functionality.Commands;
 using WolvenKit.Functionality.Helpers;
 using WolvenKit.Interaction;
 using WolvenKit.RED4.Types;
-using WolvenKit.ViewModels.Dialogs;
 using WolvenKit.ViewModels.Shell;
 using WolvenKit.ViewModels.Wizards;
 using WolvenKit.Views.Dialogs;
+using WolvenKit.Views.Dialogs.Windows;
 using WolvenKit.Views.Wizards;
 
 namespace WolvenKit.Views.Shell
@@ -54,7 +55,7 @@ namespace WolvenKit.Views.Shell
                         {
                             if (dialog.ShowDialog(Application.Current.MainWindow) == true)
                             {
-                                LaunchProfilesViewModel innerVm = dialog.ViewModel;
+                                var innerVm = dialog.ViewModel;
                                 ViewModel.SetLaunchProfiles(innerVm.LaunchProfiles);
                             }
 
@@ -84,10 +85,10 @@ namespace WolvenKit.Views.Shell
 
         private static WMessageBoxResult ShowConfirmation((string, string, WMessageBoxImage, WMessageBoxButtons) input)
         {
-            string text = input.Item1;
-            string caption = input.Item2;
-            WMessageBoxImage image = input.Item3;
-            WMessageBoxButtons buttons = input.Item4;
+            var text = input.Item1;
+            var caption = input.Item2;
+            var image = input.Item3;
+            var buttons = input.Item4;
 
             MessageBoxModel messageBox = new()
             {
@@ -97,16 +98,13 @@ namespace WolvenKit.Views.Shell
                 Buttons = GetAdonisButtons(buttons)
             };
 
-            WMessageBoxResult result = WMessageBoxResult.None;
+            var result = WMessageBoxResult.None;
             DispatcherHelper.RunOnMainThread(() => result = (WMessageBoxResult)AdonisUI.Controls.MessageBox.Show(Application.Current.MainWindow, messageBox));
 
             return result;
 
             // local methods
-            AdonisUI.Controls.MessageBoxImage GetAdonisImage(WMessageBoxImage image)
-            {
-                return (AdonisUI.Controls.MessageBoxImage)image;
-            }
+            AdonisUI.Controls.MessageBoxImage GetAdonisImage(WMessageBoxImage image) => (AdonisUI.Controls.MessageBoxImage)image;
 
             IEnumerable<IMessageBoxButtonModel> GetAdonisButtons(WMessageBoxButtons buttons)
             {
@@ -128,7 +126,7 @@ namespace WolvenKit.Views.Shell
         private void Overlay_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
             base.OnMouseLeftButtonDown(e);
-            MainView mainWindow = (MainView)Locator.Current.GetService<IViewFor<AppViewModel>>();
+            var mainWindow = (MainView)Locator.Current.GetService<IViewFor<AppViewModel>>();
             if (e.LeftButton == System.Windows.Input.MouseButtonState.Pressed)
             {
                 mainWindow?.DragMove();

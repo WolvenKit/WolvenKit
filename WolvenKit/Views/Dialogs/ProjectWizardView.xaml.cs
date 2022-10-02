@@ -1,8 +1,8 @@
 using System.Reactive.Disposables;
 using ReactiveUI;
-using WolvenKit.ViewModels.Wizards;
+using WolvenKit.App.ViewModels.Dialogs;
 
-namespace WolvenKit.Views.Wizards
+namespace WolvenKit.Views.Dialogs
 {
     public partial class ProjectWizardView : ReactiveUserControl<ProjectWizardViewModel>
     {

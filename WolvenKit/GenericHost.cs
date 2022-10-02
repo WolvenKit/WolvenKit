@@ -3,6 +3,7 @@ using Microsoft.Extensions.Hosting;
 using ReactiveUI;
 using Splat;
 using Splat.Microsoft.Extensions.DependencyInjection;
+using WolvenKit.App.ViewModels.Dialogs;
 using WolvenKit.Common;
 using WolvenKit.Common.Interfaces;
 using WolvenKit.Common.Services;
@@ -16,14 +17,13 @@ using WolvenKit.RED4.CR2W;
 using WolvenKit.RED4.CR2W.Archive;
 using WolvenKit.Services;
 using WolvenKit.ViewModels;
-using WolvenKit.ViewModels.Dialogs;
 using WolvenKit.ViewModels.HomePage;
 using WolvenKit.ViewModels.HomePage.Pages;
 using WolvenKit.ViewModels.Shared;
 using WolvenKit.ViewModels.Shell;
 using WolvenKit.ViewModels.Tools;
-using WolvenKit.ViewModels.Wizards;
 using WolvenKit.Views.Dialogs;
+using WolvenKit.Views.Dialogs.Windows;
 using WolvenKit.Views.HomePage;
 using WolvenKit.Views.HomePage.Pages;
 using WolvenKit.Views.Shell;
@@ -78,10 +78,6 @@ namespace WolvenKit
                     services.AddSingleton<IModTools>(x => x.GetRequiredService<ModTools>());
                     services.AddSingleton<RED4Controller>();
 
-                    // red3 modding tools
-                    //services.AddSingleton<Red3ModTools>();
-                    //services.AddSingleton<Tw3Controller>();
-
                     services.AddSingleton<IGameControllerFactory, GameControllerFactory>();
 
                     services.AddSingleton<AppViewModel>();
@@ -106,14 +102,8 @@ namespace WolvenKit
 
                     #region dialogs
 
-                    //services.AddTransient<CreateClassDialogViewModel>();
-                    //services.AddTransient<IViewFor<CreateClassDialogViewModel>, CreateClassDialog>();
-
                     services.AddTransient<InputDialogViewModel>();
                     services.AddTransient<IViewFor<InputDialogViewModel>, InputDialogView>();
-
-                    //services.AddSingleton<MaterialsRepositoryDialogViewModel>();
-                    //services.AddSingleton<IViewFor<MaterialsRepositoryDialogViewModel>, MaterialsRepositoryDialog>();
 
                     services.AddTransient<RenameDialogViewModel>();
                     services.AddTransient<IViewFor<RenameDialogViewModel>, RenameDialog>();
@@ -126,6 +116,15 @@ namespace WolvenKit
 
                     services.AddTransient<SoundModdingViewModel>();
                     services.AddTransient<IViewFor<SoundModdingViewModel>, SoundModdingView>();
+
+                    services.AddTransient<FirstSetupViewModel>();
+                    services.AddTransient<IViewFor<FirstSetupViewModel>, FirstSetupView>();
+
+                    services.AddTransient<InstallerWizardViewModel>();
+                    services.AddTransient<IViewFor<InstallerWizardViewModel>, InstallerWizardView>();
+
+                    services.AddTransient<ProjectWizardViewModel>();
+                    services.AddTransient<IViewFor<ProjectWizardViewModel>, ProjectWizardView>();
 
                     #endregion
 
@@ -196,19 +195,6 @@ namespace WolvenKit
 
                     //services.AddSingleton<RecentlyUsedItemsViewModel>();
                     //services.AddSingleton<IViewFor<RecentlyUsedItemsViewModel>, RecentlyUsedItemsView>();
-
-                    #endregion
-
-                    #region wizards
-
-                    services.AddTransient<FirstSetupWizardViewModel>();
-                    services.AddTransient<IViewFor<FirstSetupWizardViewModel>, FirstSetupWizardView>();
-
-                    services.AddTransient<InstallerWizardViewModel>();
-                    services.AddTransient<IViewFor<InstallerWizardViewModel>, InstallerWizardView>();
-
-                    services.AddTransient<ProjectWizardViewModel>();
-                    services.AddTransient<IViewFor<ProjectWizardViewModel>, ProjectWizardView>();
 
                     #endregion
 

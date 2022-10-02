@@ -5,18 +5,18 @@ using System.Reactive.Linq;
 using System.Windows;
 using ReactiveUI;
 using Splat;
+using WolvenKit.App.ViewModels.Dialogs;
 using WolvenKit.Core;
-using WolvenKit.ViewModels.Wizards;
 
-namespace WolvenKit.Views.Wizards
+namespace WolvenKit.Views.Dialogs.Windows
 {
-    public partial class FirstSetupWizardView : IViewFor<FirstSetupWizardViewModel>
+    public partial class FirstSetupView : IViewFor<FirstSetupViewModel>
     {
-        public FirstSetupWizardView()
+        public FirstSetupView()
         {
             InitializeComponent();
 
-            ViewModel = Locator.Current.GetService<FirstSetupWizardViewModel>();
+            ViewModel = Locator.Current.GetService<FirstSetupViewModel>();
             DataContext = ViewModel;
 
             this.WhenActivated(disposables =>
@@ -56,8 +56,8 @@ namespace WolvenKit.Views.Wizards
 
         }
 
-        public FirstSetupWizardViewModel ViewModel { get; set; }
-        object IViewFor.ViewModel { get => ViewModel; set => ViewModel = (FirstSetupWizardViewModel)value; }
+        public FirstSetupViewModel ViewModel { get; set; }
+        object IViewFor.ViewModel { get => ViewModel; set => ViewModel = (FirstSetupViewModel)value; }
 
         private void Field_TextChanged(object sender, System.Windows.Controls.TextChangedEventArgs e) => ValidateAllFields();
 

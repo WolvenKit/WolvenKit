@@ -15,6 +15,7 @@ using ReactiveUI;
 using Splat;
 using WolvenKit.ViewModels.Shell;
 using WolvenKit.Views.Dialogs;
+using WolvenKit.Views.Dialogs.Windows;
 
 namespace WolvenKit.Views.Shell;
 /// <summary>

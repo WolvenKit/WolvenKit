@@ -1,5 +1,3 @@
-using ReactiveUI;
-using Splat;
 using System;
 using System.IO;
 using System.Reactive;
@@ -7,10 +5,12 @@ using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Windows;
 using System.Windows.Controls;
+using ReactiveUI;
+using Splat;
+using WolvenKit.App.ViewModels.Dialogs;
 using WolvenKit.Core;
-using WolvenKit.ViewModels.Dialogs;
 
-namespace WolvenKit.Views.Dialogs
+namespace WolvenKit.Views.Dialogs.Windows
 {
     public partial class LaunchProfilesView : IViewFor<LaunchProfilesViewModel>
     {

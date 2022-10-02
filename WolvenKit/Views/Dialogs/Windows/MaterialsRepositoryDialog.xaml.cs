@@ -17,7 +17,7 @@ using WolvenKit.Functionality.Services;
 using WolvenKit.RED4.Archive;
 using WolvenKit.Views.Shell;
 
-namespace WolvenKit.Views.Dialogs
+namespace WolvenKit.Views.Dialogs.Windows
 {
     /// <summary>
     /// Interaction logic for MaterialsRepositoryDialog.xaml

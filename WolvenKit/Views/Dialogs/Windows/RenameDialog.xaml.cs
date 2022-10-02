@@ -5,10 +5,10 @@ using System.Windows;
 using System.Windows.Input;
 using ReactiveUI;
 using Splat;
+using WolvenKit.App.ViewModels.Dialogs;
 using WolvenKit.Functionality.Commands;
-using WolvenKit.ViewModels.Dialogs;
 
-namespace WolvenKit.Views.Dialogs
+namespace WolvenKit.Views.Dialogs.Windows
 {
     public partial class RenameDialog : IViewFor<RenameDialogViewModel>
     {

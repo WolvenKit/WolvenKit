@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reactive.Disposables;
 using ReactiveUI;
+using WolvenKit.App.ViewModels.Dialogs;
 using WolvenKit.Modkit.RED4.Sounds;
-using WolvenKit.ViewModels.Dialogs;
 
 namespace WolvenKit.Views.Dialogs
 {

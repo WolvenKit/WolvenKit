@@ -4,15 +4,13 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:converters="clr-namespace:WolvenKit.Functionality.Converters;assembly=WolvenKit.App"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:dialogVMs="clr-namespace:WolvenKit.ViewModels.Dialogs;assembly=WolvenKit.App"
+    xmlns:dialogVMs="clr-namespace:WolvenKit.App.ViewModels.Dialogs;assembly=WolvenKit.App"
     xmlns:dialogs="clr-namespace:WolvenKit.Views.Dialogs"
     xmlns:hpv="clr-namespace:WolvenKit.Views.HomePage"
     xmlns:hpvm="clr-namespace:WolvenKit.ViewModels.HomePage;assembly=WolvenKit.App"
     xmlns:shell="clr-namespace:WolvenKit.Views.Shell"
     xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
     xmlns:syncfusionskin="clr-namespace:Syncfusion.SfSkinManager;assembly=Syncfusion.SfSkinManager.WPF"
-    xmlns:wizardVMs="clr-namespace:WolvenKit.ViewModels.Wizards;assembly=WolvenKit.App"
-    xmlns:wizards="clr-namespace:WolvenKit.Views.Wizards"
     Title="{Binding Title}"
     MinWidth="960"
     MinHeight="600"
@@ -139,8 +137,8 @@
                     <DataTemplate DataType="{x:Type dialogVMs:SelectRedTypeDialogViewModel}">
                         <dialogs:SelectRedTypeDialog ViewModel="{Binding}" />
                     </DataTemplate>
-                    <DataTemplate DataType="{x:Type wizardVMs:ProjectWizardViewModel}">
-                        <wizards:ProjectWizardView ViewModel="{Binding}" />
+                    <DataTemplate DataType="{x:Type dialogVMs:ProjectWizardViewModel}">
+                        <dialogs:ProjectWizardView ViewModel="{Binding}" />
                     </DataTemplate>
                     <DataTemplate DataType="{x:Type hpvm:HomePageViewModel}">
                         <hpv:HomePageView ViewModel="{Binding}" />

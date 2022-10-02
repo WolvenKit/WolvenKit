@@ -7,9 +7,10 @@ using ReactiveUI.Fody.Helpers;
 using Splat;
 using WolvenKit.Functionality.Services;
 using WolvenKit.ProjectManagement.Project;
+using WolvenKit.ViewModels.Dialogs;
 using WolvenKit.ViewModels.Shell;
 
-namespace WolvenKit.ViewModels.Dialogs;
+namespace WolvenKit.App.ViewModels.Dialogs;
 
 public class ProjectSettingsDialogViewModel : DialogViewModel, IActivatableViewModel
 {

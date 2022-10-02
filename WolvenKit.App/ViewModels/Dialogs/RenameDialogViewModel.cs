@@ -1,8 +1,9 @@
 using System.Reactive;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
+using WolvenKit.ViewModels.Dialogs;
 
-namespace WolvenKit.ViewModels.Dialogs
+namespace WolvenKit.App.ViewModels.Dialogs
 {
     public class RenameDialogViewModel : DialogViewModel
     {

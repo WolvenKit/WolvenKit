@@ -9,7 +9,7 @@ using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using WolvenKit.ViewModels.Dialogs;
 
-namespace WolvenKit.ViewModels.Wizards
+namespace WolvenKit.App.ViewModels.Dialogs
 {
     public class ProjectWizardViewModel : DialogViewModel
     {

@@ -23,6 +23,7 @@ using WolvenKit.ProjectManagement.Project;
 using WolvenKit.ViewModels.Dialogs;
 using WolvenKit.ViewModels.Tools;
 using WolvenKit.Views.Dialogs;
+using WolvenKit.Views.Dialogs.Windows;
 
 namespace WolvenKit.Views.Tools
 {
