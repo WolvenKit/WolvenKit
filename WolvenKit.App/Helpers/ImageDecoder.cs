@@ -1,15 +1,10 @@
 using System;
 using System.Globalization;
 using System.IO;
-using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using System.Windows.Data;
-using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using Pfim;
-using Splat;
 using WolvenKit.Core.Extensions;
-using WolvenKit.Core.Interfaces;
 using WolvenKit.RED4.CR2W;
 using WolvenKit.RED4.Types;
 
