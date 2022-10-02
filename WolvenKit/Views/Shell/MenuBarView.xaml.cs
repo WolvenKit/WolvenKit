@@ -186,7 +186,7 @@ public partial class MenuBarView : ReactiveUserControl<MenuBarViewModel>
         });
     }
 
-    private void SetLayoutToDefault(object sender, RoutedEventArgs e) => DockingAdapter.G_Dock.SetLayoutToDefault();
+    private void SetLayoutToDefault(object sender, RoutedEventArgs e) => DockingAdapter.G_Dock.LoadLayoutDefault();
     private void SaveLayoutToProject(object sender, RoutedEventArgs e) => DockingAdapter.G_Dock.SaveLayoutToProject();
     private void GenerateMaterialRepoButton_Click(object sender, RoutedEventArgs e)
     {

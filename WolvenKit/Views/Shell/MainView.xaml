@@ -21,6 +21,7 @@
     IconAlignment="Left"
     LeftHeaderItemsSource="{DynamicResource leftHeaderItems}"
     Loaded="ChromelessWindow_Loaded"
+    Closing="ChromelessWindow_Closing"
     ResizeMode="CanResizeWithGrip"
     RightHeaderItemsSource="{DynamicResource rightHeaderItems}"
     ShowIcon="True"

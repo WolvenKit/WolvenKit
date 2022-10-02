@@ -133,12 +133,15 @@ namespace WolvenKit.Views.Shell
             }
         }
 
-        protected override void OnClosing(CancelEventArgs e) => Application.Current.Shutdown();
+        protected override void OnClosing(CancelEventArgs e)
+        {
+            dockingAdapter.SaveLayout();
+            Application.Current.Shutdown();
+        }
 
         // This is called before this.WhenActivated
-        private void ChromelessWindow_Loaded(object sender, RoutedEventArgs e)
-        {
-
-        }
+        private void ChromelessWindow_Loaded(object sender, RoutedEventArgs e) { }
+        // This is never called 
+        private void ChromelessWindow_Closing(object sender, CancelEventArgs e) { }
     }
 }
