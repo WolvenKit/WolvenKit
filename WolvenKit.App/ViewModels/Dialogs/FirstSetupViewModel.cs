@@ -11,6 +11,7 @@ using Microsoft.WindowsAPICodePack.Dialogs;
 using Prism.Commands;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
+using WolvenKit.App.Helpers;
 using WolvenKit.Core.Interfaces;
 using WolvenKit.Functionality.Services;
 using WolvenKit.ViewModels.Dialogs;
@@ -24,7 +25,6 @@ namespace WolvenKit.App.ViewModels.Dialogs
     {
         private readonly ISettingsManager _settingsManager;
         private readonly ILoggerService _loggerService;
-        private string _cp77Eexe = "";
 
         public FirstSetupViewModel(
             ISettingsManager settingsManager,
@@ -35,7 +35,6 @@ namespace WolvenKit.App.ViewModels.Dialogs
             _loggerService = loggerService;
 
             Title = "Settings";
-
 
             CloseCommand = ReactiveCommand.Create(() => { });
             OkCommand = ReactiveCommand.Create(ExecuteFinish, CanExecute);
@@ -121,6 +120,7 @@ namespace WolvenKit.App.ViewModels.Dialogs
                 IsFolderPicker = false,
                 Title = "Select Cyberpunk 2077 executable."
             };
+
             dlg.Filters.Add(new CommonFileDialogFilter("Cyberpunk2077.exe", "*.exe"));
 
             if (dlg.ShowDialog() != CommonFileDialogResult.Ok)
@@ -136,6 +136,7 @@ namespace WolvenKit.App.ViewModels.Dialogs
 
             CP77ExePath = result;
         }
+
         private void ExecuteOpenDepotPath()
         {
             var dlg = new CommonOpenFileDialog
@@ -166,66 +167,78 @@ namespace WolvenKit.App.ViewModels.Dialogs
 
         private delegate void StrDelegate(string value);
 
+        private const string _steamCommonInstallLocation = "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Cyberpunk 2077\\bin\\x64\\Cyberpunk2077.exe";
+        private const string _uninstallKey = "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\";
+        private const string _uninstallKey2 = "SOFTWARE\\Wow6432Node\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\";
+
         private void TryToFindCP77ExecutableAutomatically()
         {
-            const string uninstallkey = "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\";
-            const string uninstallkey2 = "SOFTWARE\\Wow6432Node\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\";
-
-            var cp77 = "";
-            try
+            // Try Steam Default
+            if (File.Exists(_steamCommonInstallLocation))
             {
-                void cp77del(string msg) => _cp77Eexe = msg;
-
-                Parallel.ForEach(Registry.LocalMachine.OpenSubKey(uninstallkey)?.GetSubKeyNames(), item =>
-                {
-                    var programName = Registry.LocalMachine.OpenSubKey(uninstallkey + item)
-                        ?.GetValue("DisplayName");
-                    var installLocation = Registry.LocalMachine.OpenSubKey(uninstallkey + item)
-                        ?.GetValue("InstallLocation");
-                    if (programName != null && installLocation != null)
-                    {
-
-                        if (programName.ToString().Contains("Cyberpunk 2077"))
-                        {
-                            if (Directory.Exists(installLocation.ToString()))
-                            {
-                                if (File.Exists(installLocation.ToString()))
-                                {
-                                    cp77 = Directory.GetFiles(installLocation.ToString(), "Cyberpunk2077.exe",
-                                        SearchOption.AllDirectories).First();
-                                }
-                            }
-                        }
-                    }
-                });
-                Parallel.ForEach(Registry.LocalMachine.OpenSubKey(uninstallkey2)?.GetSubKeyNames(), item =>
-                {
-                    var programName = Registry.LocalMachine.OpenSubKey(uninstallkey2 + item)
-                        ?.GetValue("DisplayName");
-                    var installLocation = Registry.LocalMachine.OpenSubKey(uninstallkey2 + item)
-                        ?.GetValue("InstallLocation");
-                    if (programName != null && installLocation != null)
-                    {
-                        if (programName.ToString().Contains("Cyberpunk 2077"))
-                        {
-                            if (Directory.Exists(installLocation.ToString()))
-                            {
-                                cp77 = Directory.GetFiles(installLocation.ToString(), "Cyberpunk2077.exe",
-                                    SearchOption.AllDirectories).First();
-                            }
-                        }
-                    }
-                    cp77del(cp77);
-                });
-            }
-            catch (Exception ex)
-            {
-                _loggerService.Error(ex);
+                CP77ExePath = _steamCommonInstallLocation;
+                return;
             }
 
-            if (File.Exists(_cp77Eexe))
+            // Parallel Lookup through Registry Uninstall SubKeys.
+            var fileNamePath = "";
+            var subKeys = Registry.LocalMachine.OpenSubKey(_uninstallKey)?.GetSubKeyNames();
+            if (subKeys?.Length > 0)
             {
-                CP77ExePath = _cp77Eexe;
+                Parallel.ForEach(
+                    subKeys,
+                    (subKeyName, state) =>
+                    {
+                        try
+                        {
+                            if (subKeyName is null)
+                            { return; }
+
+                            fileNamePath = RegistryHelpers.GetFileNamePathFromRegistrySubKey(
+                                _uninstallKey + subKeyName,
+                                "Cyberpunk",
+                                "Cyberpunk2077.exe");
+
+                            if (!string.IsNullOrWhiteSpace(fileNamePath))
+                            { state.Break(); } // Stop the parallel loop.
+                        }
+                        catch (Exception ex)
+                        { _loggerService.Error(ex); }
+                    });
+            }
+
+            // Keep Looking
+            if (string.IsNullOrWhiteSpace(fileNamePath))
+            {
+                subKeys = Registry.LocalMachine.OpenSubKey(_uninstallKey2)?.GetSubKeyNames();
+                if (subKeys?.Length > 0)
+                {
+                    Parallel.ForEach(
+                        subKeys,
+                        (subKeyName, state) =>
+                        {
+                            try
+                            {
+                                if (subKeyName is null)
+                                { return; }
+
+                                fileNamePath = RegistryHelpers.GetFileNamePathFromRegistrySubKey(
+                                    _uninstallKey2 + subKeyName,
+                                    "Cyberpunk",
+                                    "Cyberpunk2077.exe");
+
+                                if (!string.IsNullOrWhiteSpace(fileNamePath))
+                                { state.Break(); } // Stop the parallel loop.
+                            }
+                            catch (Exception ex)
+                            { _loggerService.Error(ex); }
+                        });
+                }
+            }
+
+            if (File.Exists(fileNamePath))
+            {
+                CP77ExePath = fileNamePath;
             }
         }
 
