@@ -141,7 +141,7 @@ namespace WolvenKit.ViewModels.Tools
 
         #region properties
 
-        public readonly AppViewModel MainViewModel;
+        public AppViewModel MainViewModel => Locator.Current.GetService<AppViewModel>();
         [Reactive] private EditorProject ActiveProject { get; set; }
 
         public ReactiveCommand<Unit, Unit> ExpandAll { get; private set; }

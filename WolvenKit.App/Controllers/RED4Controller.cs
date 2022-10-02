@@ -231,9 +231,8 @@ namespace WolvenKit.Functionality.Controllers
 
         #region Packing
 
-        private bool PackProjectHot()
+        public bool PackProjectHot()
         {
-
             if (_projectManager.ActiveProject is not Cp77Project cp77Proj)
             {
                 _loggerService.Error("Can't pack project (no project/not cyberpunk project)!");

@@ -16,5 +16,6 @@ namespace WolvenKit.Functionality.Controllers
         public Task HandleStartup();
 
         Task<bool> LaunchProject(LaunchProfile profile);
+        bool PackProjectHot();
     }
 }

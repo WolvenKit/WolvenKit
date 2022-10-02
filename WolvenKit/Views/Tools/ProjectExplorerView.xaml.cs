@@ -132,8 +132,10 @@ namespace WolvenKit.Views.Tools
 
         private void OnCellDoubleTapped(object sender, TreeGridCellDoubleTappedEventArgs treeGridCellDoubleTappedEventArgs)
         {
-            var model = treeGridCellDoubleTappedEventArgs.Node.Item;
-            //ViewModel.MainViewModel
+            if (treeGridCellDoubleTappedEventArgs.Node.Item is FileModel model)
+            {
+                ViewModel.MainViewModel.OpenFileCommand.Execute(model).Subscribe();
+            }
         }
 
         private bool _isfirsttime { get; set; } = true;
