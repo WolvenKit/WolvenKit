@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Reactive.Linq;
 using System.Text.Json;
 using System.Threading.Tasks;
 using System.Windows.Input;
@@ -52,7 +53,13 @@ namespace WolvenKit.ViewModels.HomePage
 
             RemoveCommand = ReactiveCommand.Create(() => Remove());
 
-            LoadMods();
+            // LoadMods when we're good and ready
+            _settings
+                .WhenAnyValue(x => x.CP77ExecutablePath)
+                .SkipWhile(x => string.IsNullOrWhiteSpace(x) || !File.Exists(x)) // -.-
+                .Take(1)
+                .Subscribe(x => LoadMods());
+
         }
 
         [Reactive] public ObservableCollection<ModInfoViewModel> Mods { get; set; } = new();
