@@ -1,5 +1,3 @@
-using ReactiveUI;
-using Splat;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -11,6 +9,8 @@ using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Xml.Linq;
+using ReactiveUI;
+using Splat;
 using WolvenKit.App.Models;
 using WolvenKit.Common;
 using WolvenKit.Common.Interfaces;
@@ -95,42 +95,42 @@ namespace WolvenKit.Functionality.Controllers
         // TODO: Move this somewhere else
         private void LoadCustomHashes()
         {
-            Red4ParserService parser = Locator.Current.GetService<Red4ParserService>();
+            var parser = Locator.Current.GetService<Red4ParserService>();
 
             CName physMatLibPath = "base\\physics\\physicsmaterials.physmatlib";
             CName presetPath = "engine\\physics\\collision_presets.json";
 
-            DynamicData.Kernel.Optional<IGameFile> physMatLib = _archiveManager.Lookup(physMatLibPath);
+            var physMatLib = _archiveManager.Lookup(physMatLibPath);
             if (physMatLib.HasValue)
             {
                 using MemoryStream ms = new();
                 physMatLib.Value.Extract(ms);
                 ms.Position = 0;
 
-                if (parser.TryReadRed4File(ms, out RED4.Archive.CR2W.CR2WFile file))
+                if (parser.TryReadRed4File(ms, out var file))
                 {
-                    physicsMaterialLibraryResource root = (physicsMaterialLibraryResource)file.RootChunk;
+                    var root = (physicsMaterialLibraryResource)file.RootChunk;
 
-                    foreach (CName physMat in root.Unk1)
+                    foreach (var physMat in root.Unk1)
                     {
                         _hashService.AddCustom(physMat);
                     }
                 }
             }
 
-            DynamicData.Kernel.Optional<IGameFile> preset = _archiveManager.Lookup(presetPath);
+            var preset = _archiveManager.Lookup(presetPath);
             if (preset.HasValue)
             {
                 using MemoryStream ms = new();
                 preset.Value.Extract(ms);
                 ms.Position = 0;
 
-                if (parser.TryReadRed4File(ms, out RED4.Archive.CR2W.CR2WFile file))
+                if (parser.TryReadRed4File(ms, out var file))
                 {
-                    JsonResource root = (JsonResource)file.RootChunk;
-                    physicsCollisionPresetsResource res = (physicsCollisionPresetsResource)root.Root.Chunk;
+                    var root = (JsonResource)file.RootChunk;
+                    var res = (physicsCollisionPresetsResource)root.Root.Chunk;
 
-                    foreach (physicsCollisionPresetDefinition presetEntry in res.Presets)
+                    foreach (var presetEntry in res.Presets)
                     {
                         _hashService.AddCustom(presetEntry.Name);
                     }
@@ -148,7 +148,7 @@ namespace WolvenKit.Functionality.Controllers
                 return;
             }
 
-            foreach (string path in binkhelpers)
+            foreach (var path in binkhelpers)
             {
                 switch (path)
                 {
@@ -240,7 +240,7 @@ namespace WolvenKit.Functionality.Controllers
                 return false;
             }
 
-            string hotdirectory = Path.Combine(_settingsManager.GetRED4GameRootDir(), "archive", "pc", "hot");
+            var hotdirectory = Path.Combine(_settingsManager.GetRED4GameRootDir(), "archive", "pc", "hot");
 
             // create hot directory
             if (!Directory.Exists(hotdirectory))
@@ -250,7 +250,7 @@ namespace WolvenKit.Functionality.Controllers
             }
 
             // pack mod
-            string[] modfiles = Directory.GetFiles(cp77Proj.ModDirectory, "*", SearchOption.AllDirectories);
+            var modfiles = Directory.GetFiles(cp77Proj.ModDirectory, "*", SearchOption.AllDirectories);
             if (modfiles.Any())
             {
                 _modTools.Pack(
@@ -332,7 +332,10 @@ namespace WolvenKit.Functionality.Controllers
                 return false;
             }
             _loggerService.Success($"{cp77Proj.Name} redmod files packed into {cp77Proj.PackedRedModDirectory}");
-
+            if (!options.Install)
+            {
+                _notificationService.Success($"{cp77Proj.Name} packed!");
+            }
 
             // backup
             if (options.CreateBackup)
@@ -358,6 +361,7 @@ namespace WolvenKit.Functionality.Controllers
                     return false;
                 }
                 _loggerService.Success($"{cp77Proj.Name} installed!");
+                _notificationService.Success($"{cp77Proj.Name} installed!");
             }
 
 
@@ -374,9 +378,6 @@ namespace WolvenKit.Functionality.Controllers
                 _loggerService.Success($"{cp77Proj.Name} Redmod deployed!");
             }
 
-
-            // success
-            _notificationService.Success($"{cp77Proj.Name} installed!");
             _progressService.IsIndeterminate = false;
 
             // launch game
@@ -419,7 +420,7 @@ namespace WolvenKit.Functionality.Controllers
 
         private bool PackArchives(Cp77Project cp77Proj, LaunchProfile options)
         {
-            string[] modfiles = Directory.GetFiles(cp77Proj.ModDirectory, "*", SearchOption.AllDirectories);
+            var modfiles = Directory.GetFiles(cp77Proj.ModDirectory, "*", SearchOption.AllDirectories);
             if (modfiles.Any())
             {
                 _modTools.Pack(
@@ -432,17 +433,17 @@ namespace WolvenKit.Functionality.Controllers
         }
         private static bool PackTweakXlFiles(Cp77Project cp77Proj)
         {
-            string[] tweakFiles = Directory.GetFiles(cp77Proj.TweakDirectory, "*.yaml", SearchOption.AllDirectories);
-            foreach (string f in tweakFiles)
+            var tweakFiles = Directory.GetFiles(cp77Proj.TweakDirectory, "*.yaml", SearchOption.AllDirectories);
+            foreach (var f in tweakFiles)
             {
-                string folder = Path.GetDirectoryName(Path.GetRelativePath(cp77Proj.TweakDirectory, f));
-                string outDirectory = Path.Combine(cp77Proj.PackedTweakDirectory, folder);
+                var folder = Path.GetDirectoryName(Path.GetRelativePath(cp77Proj.TweakDirectory, f));
+                var outDirectory = Path.Combine(cp77Proj.PackedTweakDirectory, folder);
                 if (!Directory.Exists(outDirectory))
                 {
                     Directory.CreateDirectory(outDirectory);
                 }
-                string filename = Path.GetFileName(f);
-                string outPath = Path.Combine(outDirectory, filename);
+                var filename = Path.GetFileName(f);
+                var outPath = Path.Combine(outDirectory, filename);
                 File.Copy(f, outPath, true);
             }
             return true;
@@ -459,7 +460,7 @@ namespace WolvenKit.Functionality.Controllers
             // TODO
 
             // write info.json file if it not exists
-            string modInfoJsonPath = Path.Combine(cp77Proj.PackedRedModDirectory, "info.json");
+            var modInfoJsonPath = Path.Combine(cp77Proj.PackedRedModDirectory, "info.json");
             if (!File.Exists(modInfoJsonPath))
             {
                 JsonSerializerOptions jsonoptions = new()
@@ -468,7 +469,7 @@ namespace WolvenKit.Functionality.Controllers
                     DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,
                     PropertyNamingPolicy = JsonNamingPolicy.CamelCase
                 };
-                string jsonString = JsonSerializer.Serialize(cp77Proj.GetInfo(), jsonoptions);
+                var jsonString = JsonSerializer.Serialize(cp77Proj.GetInfo(), jsonoptions);
                 File.WriteAllText(modInfoJsonPath, jsonString);
             }
 
@@ -477,14 +478,14 @@ namespace WolvenKit.Functionality.Controllers
         private void PackSoundFiles()
         {
             // nothing to pack if no info.json file exists
-            string path = Path.Combine(_projectManager.ActiveProject.PackedRedModDirectory, "info.json");
+            var path = Path.Combine(_projectManager.ActiveProject.PackedRedModDirectory, "info.json");
             if (!File.Exists(path))
             {
                 return;
             }
 
             // read info
-            Cp77Project modProj = _projectManager.ActiveProject as Cp77Project;
+            var modProj = _projectManager.ActiveProject as Cp77Project;
             List<string> files = new();
             try
             {
@@ -495,15 +496,15 @@ namespace WolvenKit.Functionality.Controllers
                     PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
                     IgnoreReadOnlyProperties = true,
                 };
-                ModInfo info = JsonSerializer.Deserialize<ModInfo>(File.ReadAllText(path), options);
-                foreach (Modkit.RED4.Sounds.CustomSoundsModel e in info.CustomSounds)
+                var info = JsonSerializer.Deserialize<ModInfo>(File.ReadAllText(path), options);
+                foreach (var e in info.CustomSounds)
                 {
                     if (!string.IsNullOrEmpty(e.File))
                     {
                         files.Add(e.File);
 
-                        string rawFile = Path.Combine(modProj.SoundDirectory, e.File);
-                        string packedFile = Path.Combine(modProj.PackedSoundsDirectory, e.File);
+                        var rawFile = Path.Combine(modProj.SoundDirectory, e.File);
+                        var packedFile = Path.Combine(modProj.PackedSoundsDirectory, e.File);
                         if (File.Exists(rawFile))
                         {
                             File.Copy(rawFile, packedFile, true);
@@ -519,8 +520,8 @@ namespace WolvenKit.Functionality.Controllers
 
         private bool BackupMod(Cp77Project cp77Proj)
         {
-            string zipPathRoot = new DirectoryInfo(cp77Proj.PackedRootDirectory).Parent.FullName;
-            string zipPath = Path.Combine(zipPathRoot, $"{cp77Proj.Name}.zip");
+            var zipPathRoot = new DirectoryInfo(cp77Proj.PackedRootDirectory).Parent.FullName;
+            var zipPath = Path.Combine(zipPathRoot, $"{cp77Proj.Name}.zip");
             try
             {
                 if (File.Exists(zipPath))
@@ -541,21 +542,21 @@ namespace WolvenKit.Functionality.Controllers
 
         private bool InstallMod(Cp77Project activeMod)
         {
-            string logPath = Path.Combine(activeMod.ProjectDirectory, "install_log.xml");
+            var logPath = Path.Combine(activeMod.ProjectDirectory, "install_log.xml");
 
             try
             {
                 //Check if we have installed this mod before. If so do a little cleanup.
                 if (File.Exists(logPath))
                 {
-                    XDocument log = XDocument.Load(logPath);
-                    List<XElement> dirs = log.Root.Element("Files")?.Descendants("Directory").ToList();
+                    var log = XDocument.Load(logPath);
+                    var dirs = log.Root.Element("Files")?.Descendants("Directory").ToList();
                     if (dirs != null)
                     {
                         //Loop throught dirs and delete the old files in them.
-                        foreach (XElement d in dirs)
+                        foreach (var d in dirs)
                         {
-                            foreach (XElement f in d.Elements("file"))
+                            foreach (var f in d.Elements("file"))
                             {
                                 if (File.Exists(f.Value))
                                 {
@@ -565,7 +566,7 @@ namespace WolvenKit.Functionality.Controllers
                             }
                         }
                         //Delete the empty directories.
-                        foreach (XElement d in dirs)
+                        foreach (var d in dirs)
                         {
                             if (d.Attribute("Path") != null
                                 && Directory.Exists(d.Attribute("Path").Value)
@@ -588,7 +589,7 @@ namespace WolvenKit.Functionality.Controllers
                 XElement fileroot = new("Files");
 
                 //Copy and log the files.
-                string packedmoddir = activeMod.PackedRootDirectory;
+                var packedmoddir = activeMod.PackedRootDirectory;
                 if (!Directory.Exists(packedmoddir))
                 {
                     _loggerService.Error("Failed to install the mod! The packed directory doesn't exist!");
@@ -624,11 +625,11 @@ namespace WolvenKit.Functionality.Controllers
             }
 
             // compile with redmod
-            string redmodPath = Path.Combine(_settingsManager.GetRED4GameRootDir(), "tools", "redmod", "bin", "redMod.exe");
+            var redmodPath = Path.Combine(_settingsManager.GetRED4GameRootDir(), "tools", "redmod", "bin", "redMod.exe");
             if (File.Exists(redmodPath))
             {
-                string rttiSchemaPath = Path.Combine(_settingsManager.GetRED4GameRootDir(), "tools", "redmod", "metadata.json");
-                string args = $"deploy -root=\"{_settingsManager.GetRED4GameRootDir()}\" -rttiSchemaPath=\"{rttiSchemaPath}\"";
+                var rttiSchemaPath = Path.Combine(_settingsManager.GetRED4GameRootDir(), "tools", "redmod", "metadata.json");
+                var args = $"deploy -root=\"{_settingsManager.GetRED4GameRootDir()}\" -rttiSchemaPath=\"{rttiSchemaPath}\"";
 
                 _loggerService.Info($"WorkDir: {redmodPath}");
                 _loggerService.Info($"Running commandlet: {args}");
@@ -642,7 +643,7 @@ namespace WolvenKit.Functionality.Controllers
 
         public void AddToMod(ulong hash)
         {
-            DynamicData.Kernel.Optional<IGameFile> file = _archiveManager.Lookup(hash);
+            var file = _archiveManager.Lookup(hash);
             if (file.HasValue)
             {
                 AddToMod(file.Value);
@@ -651,65 +652,65 @@ namespace WolvenKit.Functionality.Controllers
 
         public void AddToMod(IGameFile file)
         {
-            EditorProject project = _projectManager.ActiveProject;
+            var project = _projectManager.ActiveProject;
             switch (project.GameType)
             {
                 case GameType.Witcher3:
-                    {
-                        //if (project is Tw3Project witcherProject)
-                        //{
-                        //    var diskPathInfo = new FileInfo(Path.Combine(witcherProject.ModCookedDirectory, file.Name));
-                        //    if (diskPathInfo.Directory == null)
-                        //    {
-                        //        break;
-                        //    }
+                {
+                    //if (project is Tw3Project witcherProject)
+                    //{
+                    //    var diskPathInfo = new FileInfo(Path.Combine(witcherProject.ModCookedDirectory, file.Name));
+                    //    if (diskPathInfo.Directory == null)
+                    //    {
+                    //        break;
+                    //    }
 
-                        //    Directory.CreateDirectory(diskPathInfo.Directory.FullName);
-                        //    using var fs = new FileStream(diskPathInfo.FullName, FileMode.Create);
-                        //    file.Extract(fs);
-                        //}
-                        break;
-                    }
+                    //    Directory.CreateDirectory(diskPathInfo.Directory.FullName);
+                    //    using var fs = new FileStream(diskPathInfo.FullName, FileMode.Create);
+                    //    file.Extract(fs);
+                    //}
+                    break;
+                }
                 case GameType.Cyberpunk2077:
+                {
+                    if (project is Cp77Project cyberpunkProject)
                     {
-                        if (project is Cp77Project cyberpunkProject)
+                        var fileName = file.Name;
+                        if (file.Name == file.Key.ToString() && file.GuessedExtension != null)
                         {
-                            string fileName = file.Name;
-                            if (file.Name == file.Key.ToString() && file.GuessedExtension != null)
-                            {
-                                fileName += file.GuessedExtension;
-                            }
+                            fileName += file.GuessedExtension;
+                        }
 
-                            FileInfo diskPathInfo = new(Path.Combine(cyberpunkProject.ModDirectory, fileName));
-                            if (diskPathInfo.Directory == null)
-                            {
-                                break;
-                            }
+                        FileInfo diskPathInfo = new(Path.Combine(cyberpunkProject.ModDirectory, fileName));
+                        if (diskPathInfo.Directory == null)
+                        {
+                            break;
+                        }
 
-                            if (File.Exists(diskPathInfo.FullName))
+                        if (File.Exists(diskPathInfo.FullName))
+                        {
+                            if (MessageBox.Show($"The file {file.Name} already exists in project - overwrite it with game file?", $"Confirm overwrite: {file.Name}", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
                             {
-                                if (MessageBox.Show($"The file {file.Name} already exists in project - overwrite it with game file?", $"Confirm overwrite: {file.Name}", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
-                                {
-                                    using FileStream fs = new(diskPathInfo.FullName, FileMode.Create);
-                                    file.Extract(fs);
-                                    _loggerService.Success($"Overwrote existing file with game file: {file.Name}");
-                                }
-                                else
-                                {
-                                    _loggerService.Info($"Declined to overwrite existing file: {file.Name}");
-                                }
+                                using FileStream fs = new(diskPathInfo.FullName, FileMode.Create);
+                                file.Extract(fs);
+                                _loggerService.Success($"Overwrote existing file with game file: {file.Name}");
                             }
                             else
                             {
-                                Directory.CreateDirectory(diskPathInfo.Directory.FullName);
-                                using FileStream fs = new(diskPathInfo.FullName, FileMode.Create);
-                                file.Extract(fs);
-                                _loggerService.Success($"Added game file to project: {file.Name}");
+                                _loggerService.Info($"Declined to overwrite existing file: {file.Name}");
                             }
                         }
-
-                        break;
+                        else
+                        {
+                            Directory.CreateDirectory(diskPathInfo.Directory.FullName);
+                            using FileStream fs = new(diskPathInfo.FullName, FileMode.Create);
+                            file.Extract(fs);
+                            _loggerService.Success($"Added game file to project: {file.Name}");
+                        }
                     }
+
+                    break;
+                }
                 default:
                     throw new ArgumentOutOfRangeException();
             }

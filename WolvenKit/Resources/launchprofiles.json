@@ -1,17 +1,17 @@
 {
   "Install": {
     "CreateBackup": false,
-    "Install": false,
+    "Install": true,
     "LaunchGame": false,
     "GameArguments": "",
     "DeployWithRedmod": false
   },
   "Install as REDmod": {
     "CreateBackup": false,
-    "Install": false,
+    "Install": true,
     "LaunchGame": false,
     "GameArguments": "",
-    "DeployWithRedmod": false,
+    "DeployWithRedmod": true,
     "IsRedmod" :  true
   },
   "Install and Launch": {

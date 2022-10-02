@@ -45,7 +45,7 @@ namespace WolvenKit.Views.Dialogs
             }
 
             ViewModel.SelectedEvents = selectedtems;
-            ViewModel.AddCommand.Execute();
+            ViewModel.AddCommand.Execute().Subscribe();
         }
 
         private List<string> _selectedtems = new();
@@ -89,7 +89,7 @@ namespace WolvenKit.Views.Dialogs
                 item
             };
             ViewModel.SelectedEvents = selectedtems;
-            ViewModel.AddCommand.Execute();
+            ViewModel.AddCommand.Execute().Subscribe();
         }
 
         private void ButtonDel_Click(object sender, System.Windows.RoutedEventArgs e)

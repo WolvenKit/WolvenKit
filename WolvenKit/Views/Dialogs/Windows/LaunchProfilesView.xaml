@@ -158,6 +158,7 @@
                     <!--  Modded grid  -->
                     <Grid Grid.Column="2" Margin="5">
                         <syncfusion:PropertyGrid
+                            EnableGrouping="True"
                             x:Name="ProfilePropertyGrid"
                             AutoGeneratingPropertyGridItem="ProfilePropertyGrid_AutoGeneratingPropertyGridItem"
                             SelectedObject="{Binding SelectedLaunchProfile.Profile}" />
