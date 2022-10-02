@@ -2402,9 +2402,10 @@ namespace WolvenKit.ViewModels.Shell
         {
             PropertyCount = -1;
             // might not be needed
-            CalculateDescriptor();
             PropertiesLoaded = false;
+            ResolvedData = null;
             CalculateProperties();
+            CalculateDescriptor();
 
             this.RaisePropertyChanged("Data");
 
