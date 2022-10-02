@@ -71,16 +71,6 @@ namespace WolvenKit.ViewModels.Documents
             IsRendered = true;
         }
 
-        protected async Task LoadImageFromStream(Stream stream)
-        {
-            var qa = await ImageDecoder.RenderToBitmapSourceDds(stream);
-            if (qa != null)
-            {
-                //Image = qa;
-                Image = new TransformedBitmap(qa, new ScaleTransform(1, -1));
-            }
-        }
-
         public void UpdateFromImage()
         {
             if (_data is CBitmapTexture xbm)

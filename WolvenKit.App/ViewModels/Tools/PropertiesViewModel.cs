@@ -422,19 +422,6 @@ namespace WolvenKit.ViewModels.Tools
             SelectedIndex = 3;
         }
 
-        public async Task LoadImageFromStream(Stream stream)
-        {
-            var qa = await ImageDecoder.RenderToBitmapSourceDds(stream);
-            if (qa != null)
-            {
-                //Image = qa;
-                LoadedBitmapFrame = new TransformedBitmap(qa, new ScaleTransform(1, -1));
-
-                IsImagePreviewVisible = true;
-                SelectedIndex = 3;
-            }
-        }
-
         public void LoadModel(RedBaseClass cls)
         {
             try

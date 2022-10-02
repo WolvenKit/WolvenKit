@@ -57,7 +57,7 @@ namespace WolvenKit.Views.Others
                         Text = Path.GetFileNameWithoutExtension(z),
                         VerticalAlignment = System.Windows.VerticalAlignment.Center
                     };
-                    var q = await ImageDecoder.RenderToBitmapSource(z);
+                    var q = await ImageDecoder.RenderToBitmapImage(z);
                     image.Width = 50;
                     image.Height = 50;
                     image.Margin = new System.Windows.Thickness(5);
@@ -79,7 +79,7 @@ namespace WolvenKit.Views.Others
         private async void Image_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
             var q = sender as ListBoxItem;
-            var bmpsource = await ImageDecoder.RenderToBitmapSource(q.Tag.ToString());
+            var bmpsource = await ImageDecoder.RenderToBitmapImage(q.Tag.ToString());
 
             LoadImage(bmpsource);
         }
@@ -125,7 +125,7 @@ namespace WolvenKit.Views.Others
                 var qa = x.SelectedItem as ListBoxItem;
                 try
                 {
-                    var q = await ImageDecoder.RenderToBitmapSource(qa.Tag.ToString());
+                    var q = await ImageDecoder.RenderToBitmapImage(qa.Tag.ToString());
                     LoadImage(q);
                 }
                 catch

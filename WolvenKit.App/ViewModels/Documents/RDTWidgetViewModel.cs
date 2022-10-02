@@ -225,12 +225,12 @@ namespace WolvenKit.ViewModels.Documents
             }
 
             using var ddsstream = new MemoryStream();
-            if (!ModTools.ConvertRedClassToDdsStream(xbm, ddsstream, out _, out _))
+            if (!ModTools.ConvertRedClassToDdsStream(xbm, ddsstream, out _, out var decompressedFormat))
             {
                 return;
             }
 
-            var qa = ImageDecoder.RenderToBitmapSourceDds(ddsstream);
+            var qa = ImageDecoder.RenderToBitmapImageDds(ddsstream, decompressedFormat);
             if (qa.Result == null)
             {
                 return;
