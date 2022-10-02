@@ -401,7 +401,7 @@ namespace WolvenKit.ViewModels.Tools
         {
             if (!_archiveManager.IsModBrowserActive)
             {
-                _archiveManager.LoadModsArchives(new[] { new DirectoryInfo(_settings.GetRED4GameLegacyModDir()), new DirectoryInfo(_settings.GetRED4GameModDir()) });
+                _archiveManager.LoadModsArchives(new FileInfo(_settings.CP77ExecutablePath));
                 LeftItems = new ObservableCollection<RedFileSystemModel>(_archiveManager.ModRoots);
             }
             else

@@ -502,7 +502,7 @@ namespace WolvenKit.ViewModels.Shell
             {
                 var am = Locator.Current.GetService<IArchiveManager>();
                 var sm = Locator.Current.GetService<ISettingsManager>();
-                am.LoadModsArchives(new[] { new DirectoryInfo(sm.GetRED4GameLegacyModDir()), new DirectoryInfo(sm.GetRED4GameModDir()) });
+                am.LoadModsArchives(new FileInfo(sm.CP77ExecutablePath));
                 var af = am.GetGroupedFiles();
 
                 var tempbool = am.IsModBrowserActive;

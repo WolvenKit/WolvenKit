@@ -41,6 +41,8 @@ namespace WolvenKit.RED4.Archive
 
         [ProtoMember(3)] public Index Index { get; set; }
 
+        [ProtoMember(4)] public string ArchiveRelativePath { get; set; }
+
 
         public Dictionary<ulong, IGameFile> Files { get; }
 
