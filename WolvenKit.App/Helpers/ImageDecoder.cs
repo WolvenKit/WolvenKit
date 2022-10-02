@@ -22,23 +22,19 @@ namespace WolvenKit.Functionality.Other
             return bitmapImage;
         }
 
-        public static async Task<BitmapImage> RenderToBitmapImageDds(Stream stream, WolvenKit.Common.DDS.DXGI_FORMAT format)
-        {
-            return await Task.Run(() => CreateBitmapImage(RedImage.LoadFromDDSMemory(stream.ToByteArray(), format)));
-        }
+        public static Task<BitmapImage> RenderToBitmapImageDds(Stream stream, WolvenKit.Common.DDS.DXGI_FORMAT format) => 
+            Task.Run(() => CreateBitmapImage(RedImage.LoadFromDDSMemory(stream.ToByteArray(), format)));
 
-        public static async Task<BitmapImage> RenderToBitmapImageDds(Stream stream, Enums.ETextureRawFormat format)
-        {
-            return await Task.Run(() => CreateBitmapImage(RedImage.LoadFromDDSMemory(stream.ToByteArray(), format)));
-        }
+        public static Task<BitmapImage> RenderToBitmapImageDds(Stream stream, Enums.ETextureRawFormat format) => 
+            Task.Run(() => CreateBitmapImage(RedImage.LoadFromDDSMemory(stream.ToByteArray(), format)));
 
         /// <summary>
         /// Decodes image from file to BitMapSource
         /// </summary>
         /// <param name="file">Absolute path of the file</param>
         /// <returns></returns>
-        public static async Task<BitmapImage> RenderToBitmapImage(string file) =>
-            await Task.Run(() =>
+        public static Task<BitmapImage> RenderToBitmapImage(string file) =>
+            Task.Run(() =>
             {
                 try
                 {
