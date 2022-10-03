@@ -5,11 +5,18 @@ namespace WolvenKit.RED4.Types
 {
     [RED("rRef")]
     [REDType(IsValueType = true)]
-    public class CResourceReference<T> : IRedResourceReference<T>, IEquatable<CResourceReference<T>> where T : CResource
+    public class CResourceReference<T> : IRedResourceReference<T>, IEquatable<CResourceReference<T>>, IRedCloneable where T : CResource
     {
         public CName DepotPath { get; set; } = new();
         public InternalEnums.EImportFlags Flags { get; set; }
 
+        #region IRedCloneable
+
+        public object ShallowCopy() => MemberwiseClone();
+
+        public object DeepCopy() => new CResourceReference<T> { DepotPath = (CName)DepotPath.DeepCopy(), Flags = Flags };
+
+        #endregion IRedCloneable
 
         public bool Equals(CResourceReference<T> other)
         {
